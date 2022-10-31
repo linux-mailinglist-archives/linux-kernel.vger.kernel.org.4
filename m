@@ -2,99 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71BC16139E6
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 16:21:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A66466139EA
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 16:21:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231747AbiJaPVN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 11:21:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48532 "EHLO
+        id S231767AbiJaPVu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 11:21:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48876 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230045AbiJaPVK (ORCPT
+        with ESMTP id S230045AbiJaPVs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 11:21:10 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67441DE80
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 08:21:07 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e7cf329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7cf:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 18D761EC0430;
-        Mon, 31 Oct 2022 16:21:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1667229665;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=Db7WJVy4OeuTAMBJY1kZVmvASTWQFkOtfVPTdG7CobU=;
-        b=CoRTjjQGY6HfFTrvq5RPdbUZXzDnOhcO+WOaLet+LZKZhdYfvh56kDng1p7W8UOsC60OVc
-        cozEqZo5UEUTxt4CUApO0lo12I7q5HvU9+ozz0PT2rtU95dXZfxvhCq+Q2vBvaaK2r2eFc
-        R+Xg2qq+Fmz2PBcqAo0nPYa2e84T4UM=
-Date:   Mon, 31 Oct 2022 16:20:59 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Jiri Slaby <jslaby@suse.cz>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <masahiroy@kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/2]  x86/boot: fix relying on link order
-Message-ID: <Y1/n27HM/DTmLUiS@zn.tnic>
-References: <20221031151047.167288-1-alexandr.lobakin@intel.com>
+        Mon, 31 Oct 2022 11:21:48 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 192DF11472;
+        Mon, 31 Oct 2022 08:21:46 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29VFLe99008531;
+        Mon, 31 Oct 2022 10:21:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1667229700;
+        bh=ivwd/rVBE3ksKvYI9kBd9lldFarWaNKMhn52QAdm9ck=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=cEA/p5hSql10H8BCNeO6qZ1WWqv2CMamwYww/LhwVjvfvE1NGJFC1dU/qngCVWTzF
+         YBV+wUEc4jpxRModSLKm2auHKzKQWNTAO8m9hPO3LQqy0z6rPDsstrUEbVA3VSaQD7
+         zVRLK4lgOx8B3bqKB8Rv8htKvRa2M/4v8l8gXUPQ=
+Received: from DFLE105.ent.ti.com (dfle105.ent.ti.com [10.64.6.26])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29VFLeGj018433
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 31 Oct 2022 10:21:40 -0500
+Received: from DFLE112.ent.ti.com (10.64.6.33) by DFLE105.ent.ti.com
+ (10.64.6.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 31
+ Oct 2022 10:21:39 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Mon, 31 Oct 2022 10:21:39 -0500
+Received: from [10.250.35.234] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29VFLdlY036825;
+        Mon, 31 Oct 2022 10:21:39 -0500
+Message-ID: <e855fc1f-ea6d-71b7-db32-5f34b4802f63@ti.com>
+Date:   Mon, 31 Oct 2022 10:21:39 -0500
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221031151047.167288-1-alexandr.lobakin@intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2] arm64: dts: ti: k3-j721s2-main: Enable crypto
+ accelerator
+Content-Language: en-US
+To:     Jayesh Choudhary <j-choudhary@ti.com>, <nm@ti.com>,
+        <vigneshr@ti.com>
+CC:     <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221031135416.350010-1-j-choudhary@ti.com>
+From:   Andrew Davis <afd@ti.com>
+In-Reply-To: <20221031135416.350010-1-j-choudhary@ti.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-+ jslaby.
+On 10/31/22 8:54 AM, Jayesh Choudhary wrote:
+> Add the node for SA2UL for supporting hardware crypto algorithms,
+> including SHA1, SHA256, SHA512, AES, 3DES and AEAD suites.
+> Add rng node for hardware random number generator.
+> 
+> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+> ---
+> 
+> Changes have been tested on local j721s2-evm board. Tcrypt tests
+> and crypto self-tests were passing.
+> 
+> Changelog v1 -> v2:
+> - change the TI_SCI flag from shared to exclusive as OP-TEE uses MCU
+>    domain SA2UL instance and not the main domain instance
+> - remove the 'dma-coherent' property (Binding changes are merged)
+> - add the rng node which can be used as well for hwrng along with
+>    optee-rng
+>    
+> v1 patch: https://lore.kernel.org/all/20220628054518.350717-1-j-choudhary@ti.com/
+> 
+> Testing log: https://gist.github.com/Jayesh2000/26acf0e63f7edcd4b267122e4c73b9a8
+> 
+>   arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi | 20 ++++++++++++++++++++
+>   1 file changed, 20 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+> index d1ec26110376..7b828afc9280 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+> +++ b/arch/arm64/boot/dts/ti/k3-j721s2-main.dtsi
+> @@ -72,6 +72,26 @@ main_pmx0: pinctrl@11c000 {
+>   		pinctrl-single,function-mask = <0xffffffff>;
+>   	};
+>   
+> +	main_crypto: crypto@4e00000 {
+> +		compatible = "ti,j721e-sa2ul";
+> +		reg = <0x00 0x4e00000 0x00 0x1200>;
+> +		power-domains = <&k3_pds 297 TI_SCI_PD_EXCLUSIVE>;
+> +		#address-cells = <2>;
+> +		#size-cells = <2>;
+> +		ranges = <0x00 0x04e00000 0x00 0x04e00000 0x00 0x30000>;
+> +
+> +		dmas = <&main_udmap 0xca40>, <&main_udmap 0x4a40>,
+> +				<&main_udmap 0x4a41>;
+> +		dma-names = "tx", "rx1", "rx2";
+> +
+> +		rng: rng@4e10000 {
+> +			compatible = "inside-secure,safexcel-eip76";
+> +			reg = <0x0 0x4e10000 0x0 0x7d>;
+> +			interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
+> +			clocks = <&k3_clks 297 1>;
 
-On Mon, Oct 31, 2022 at 04:10:45PM +0100, Alexander Lobakin wrote:
-> The series contains stuff I caught last week while working on some
-> x86 code. It can be considered a material for fixes or for next,
-> I'm okay with either, although leaning more towards fixes :P
-> 
-> Notes on patches:
-> * 0001: I didn't put any "Fixes:" tag since it's not linear. The
->         lines changed with this patch came from the initial x86
->         KASLR series, but that unconditional jump to the kernel
->         beginning already was there. It goes at least from the set
->         that brought relocatable kernel support to x86, but this
->         is quite prehistoric already and might not look really
->         relatable. So up to you whether it needs any.
-> * 0002: doesn't fix anything, except that having any files listed
->         in that whitelist already is an architecture bug :D And
->         it wouldn't be convenient to decouple it from #0001, but
->         up to you as well.
-> 
-> Alexander Lobakin (2):
->   x86/boot: robustify calling startup_{32,64}() from the decompressor
->     code
->   scripts/head-object-list: remove x86 from the list
-> 
->  arch/x86/boot/compressed/head_32.S |  2 +-
->  arch/x86/boot/compressed/head_64.S |  2 +-
->  arch/x86/boot/compressed/misc.c    | 16 +++++++++++-----
->  scripts/head-object-list.txt       |  6 ------
->  4 files changed, 13 insertions(+), 13 deletions(-)
-> 
-> -- 
-> 2.38.1
-> 
+This "clocks" property can be dropped now [0].
 
--- 
-Regards/Gruss,
-    Boris.
+Otherwise, LGTM
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Acked-by: Andrew Davis <afd@ti.com>
+
+[0] d7e8c41016471 dt-bindings: rng: omap_rng: Drop requirement for clocks
+
+> +		};
+> +	};
+> +
+>   	main_uart0: serial@2800000 {
+>   		compatible = "ti,j721e-uart", "ti,am654-uart";
+>   		reg = <0x00 0x02800000 0x00 0x200>;
