@@ -2,207 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DE51613366
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 11:15:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F60613371
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 11:20:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229909AbiJaKP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 06:15:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39188 "EHLO
+        id S230364AbiJaKUV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 06:20:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40384 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229620AbiJaKPX (ORCPT
+        with ESMTP id S230259AbiJaKUS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 06:15:23 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B84FCE3B
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 03:15:21 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id ABBD533712;
-        Mon, 31 Oct 2022 10:15:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1667211315; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9NSYUTg7UfCJA+CQRR8S+uUBhAxqW3ri0yU6NXT2ryE=;
-        b=AcuKRECfDXYjYNPUktvOEBKP9Y0tVTVk7/3W1GHkRWddmNwa+8k91t+TV+ixrMuDqrhWHe
-        JmgdKjKRqcUIsk+465p6RwhRG+cBEnwkSRhfOvEF8LyyJG9HjcKSVYDx91JqFE1qngLuIz
-        GPiClrNoZyZN5SAp54aIZPTdNuV04jM=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1667211315;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=9NSYUTg7UfCJA+CQRR8S+uUBhAxqW3ri0yU6NXT2ryE=;
-        b=8Mm8FxEH+lKsazmIC1gH5khi2+2/lsvlozLz0q65Bnu54lqqrCrTZQFFUu96003BtRk+ln
-        on5jxT7ZxQb1L2DA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 807D713451;
-        Mon, 31 Oct 2022 10:15:15 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Z+pJHjOgX2N3dAAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Mon, 31 Oct 2022 10:15:15 +0000
-Message-ID: <f53653bd-aab1-637e-c034-62761f262a03@suse.cz>
-Date:   Mon, 31 Oct 2022 11:15:15 +0100
+        Mon, 31 Oct 2022 06:20:18 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E652DF31
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 03:20:17 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id g129so10292587pgc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 03:20:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=quanta-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/CtGnfpUoVcDjqfnqcJteWSP4xfI2BXBO2LF/caGshQ=;
+        b=B2IZAZrG+ncX6qy+AJqurgkHwYFbcSSEKTLfAHzB+P8rkHzCaMp479Eqo721glfxy5
+         x5UYRI5AMP3+RjAi7ZxuKgSrRVviD2hJ3F0J03YxizSkNO28rnd1SJTpY8UJIYqp7NRr
+         kxhQqwcP76u5NQ7el1QOhsh6Wv+xydv2tigrzJCDoUDeM+pC82TRZFHZ3kcKRpzbzgro
+         ZrhWHDW4UbzwSM3qW27lfs3GBNB8FxrDcbCMU/NA5UkPOQMmsQYHjfHZrj9VtP14oFHX
+         +gA4VRqya4V72FWrbuxMeXLioOkuAWbE7vyxMZBred/4j3w9rrwkNtIY4/7L+gJNyWe+
+         2JcA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/CtGnfpUoVcDjqfnqcJteWSP4xfI2BXBO2LF/caGshQ=;
+        b=qCIsGbyo87H8Ul/nV0HC0LxlD90k2DIXFQjtZAUKe0Qwsx6wl6KwQJylNaBvoGbL3O
+         6HHONAkBoC6rctq4cMa6zp8NVk9j8IlC2gz/hGVpACAj4SAEoXi/FPRkb/M9aiz8EtUD
+         YQoaFT46wbvBxrvzVWca4bkZro9nlDjfDf9g9UySxanX+kBdWGa1F/MHfevPSOVzGEXJ
+         O2wm6fD2xhC4baOcYbz5lOVm3DeN1AM+uNJG8q8cBQdG9e3LeRf72yzgzZs9dPd92YA2
+         bUsHgTJpl7GTvs0nXhKTnPNNcMCXCyo12LQOQq03qdUCgA+7een6apFt2HFzGkJ0TRme
+         Q6FQ==
+X-Gm-Message-State: ACrzQf1dNTv5olIo3M7NWmP1AoWpvD9ZRrCoXNZKXPbmXpaa7GTba1Kl
+        GdhyVAgfvOK/hSUEej7QkrGzHtZaEyOkgQ==
+X-Google-Smtp-Source: AMsMyM7V7Y2X2khFat8fRh7gfF/yB9PfTMJ97+3tSoNvJ40U8nSweIuOm5IDVLSSbfeYOoz3U17Bng==
+X-Received: by 2002:a63:1803:0:b0:46f:73ce:fe28 with SMTP id y3-20020a631803000000b0046f73cefe28mr12054349pgl.219.1667211616365;
+        Mon, 31 Oct 2022 03:20:16 -0700 (PDT)
+Received: from liang-Predator-PH517-52.. (60-250-232-247.hinet-ip.hinet.net. [60.250.232.247])
+        by smtp.gmail.com with ESMTPSA id k12-20020a170902c40c00b00186881e1feasm4136551plk.112.2022.10.31.03.20.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 03:20:16 -0700 (PDT)
+From:   Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>
+To:     LKML <linux-kernel@vger.kernel.org>
+Cc:     dianders@chromium.org,
+        Sheng-Liang Pan <sheng-liang.pan@quanta.corp-partner.google.com>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Subject: [PATCH v9 0/4] Add LTE SKU for sc7280-evoker family
+Date:   Mon, 31 Oct 2022 18:20:07 +0800
+Message-Id: <20221031102011.136945-1-sheng-liang.pan@quanta.corp-partner.google.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCHv3] mm: use stack_depot for recording kmemleak's backtrace
-Content-Language: en-US
-To:     "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Matthew Wilcox <willy@infradead.org>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
-        steve.kang@unisoc.com
-References: <1667101354-4669-1-git-send-email-zhaoyang.huang@unisoc.com>
-From:   Vlastimil Babka <vbabka@suse.cz>
-In-Reply-To: <1667101354-4669-1-git-send-email-zhaoyang.huang@unisoc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/30/22 04:42, zhaoyang.huang wrote:
-> From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> 
-> Using stack_depot to record kmemleak's backtrace which has been implemented
-> on slub for reducing redundant information.
-> 
-> Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
-> Acked-by: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: ke.wang <ke.wang@unisoc.com>
-> Cc: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Cc: Vlastimil Babka <vbabka@suse.cz>
-> Cc: Zhaoyang Huang <huangzhaoyang@gmail.com>
-> Signed-off-by: Andrew Morton <akpm@linux-foundation.org>
-> ---
-> changes of v2: fix bugs of stack_depot_init related issue
-> changes of v3: have DEBUG_KMEMLEAK select STACK_DEPOT by default
->                remove unuse functions
-> ---
-> ---
->  lib/Kconfig.debug |  1 +
->  mm/kmemleak.c     | 48 +++++++++++++++++++++++++++++-------------------
->  2 files changed, 30 insertions(+), 19 deletions(-)
-> 
-> diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-> index bcbe60d..0def8e0 100644
-> --- a/lib/Kconfig.debug
-> +++ b/lib/Kconfig.debug
-> @@ -717,6 +717,7 @@ config DEBUG_KMEMLEAK
->  	select STACKTRACE if STACKTRACE_SUPPORT
->  	select KALLSYMS
->  	select CRC32
-> +	select STACKDEPOT
+This patch add common dtsi and WIFI/LTE dts for evoker.
 
-Should be also "if STACKTRACE_SUPPORT" as for the "select STACKTRACE" above,
-but then you would have to deal with the case that stackdepot isn't
-available - e.g. like in mm/slub.c use #ifdef CONFIG_STACKDEPOT where needed.
+Changes in v9:
+- new patch for evoker include rt5682.dtsi
 
-However, the "select STACKTRACE if STACKTRACE_SUPPORT" above was AFAICS
-already subtly broken as the existing stacktrace handling calls in kmemleak
-would also fail to compile/link on architectures/configs where
-STACKTRACE_SUPPORT was not available and thus STACKTRACE not selected.
-I assume it all relies on "depends on DEBUG_KERNEL && HAVE_DEBUG_KMEMLEAK"
-where HAVE_DEBUG_KMEMLEAK is explicitly selected in a number of
-arch/$arch/Kconfig files, and I assume all those have STACKTRACE_SUPPORT
-selected as well.
+Changes in v8:
+- updated patch subjects
 
-But it's subtle and in that case we could just be more explicit, like
-page_owner is, which just requires STACKTRACE/STACKDEPOT explicitly on
-Kconfig level:
+Changes in v7:
+- goodix gt7986 dt bindings added in v7
+- add compiatable for gt7986
 
-depends on DEBUG_KERNEL && STACKTRACE_SUPPORT
-  (for kmemleak we would add HAVE_DEBUG_KMEMLEAK too)
-select STACKTRACE
-select STACKDEPOT
+Changes in v6:
+- add removed pinctrl and align touchscreen label with herobrine board
 
-bonus points for moving the kmemleak config from lib/Kconfig.debug to
-mm/Kconfig.debug - looks like we missed it in the cleanups earlier this year.
+Changes in v5:
+- recover whitespace change
+- new patch for Touchscreen/trackpad in v5
 
->  	help
->  	  Say Y here if you want to enable the memory leak
->  	  detector. The memory allocation/freeing is traced in a way
+Changes in v4:
+- fix typo in tittle and commit
+- recover change for trackpad and touchscreen
 
-...
+Changes in v3:
+- none
 
->  
-> -/*
-> - * Save stack trace to the given array of MAX_TRACE size.
-> - */
-> -static int __save_stack_trace(unsigned long *trace)
-> +static noinline depot_stack_handle_t set_track_prepare(void)
->  {
-> -	return stack_trace_save(trace, MAX_TRACE, 2);
-> +	depot_stack_handle_t trace_handle;
-> +	unsigned long entries[MAX_TRACE];
-> +	unsigned int nr_entries;
-> +
-> +	if (!kmemleak_initialized)
-> +		return 0;
+Changes in v2:
+- none
 
-I suspect this check might not be necessary if you switched from
-stack_depot_init() to stack_depot_want_early_init(), see how page_owner does
-this in early_page_owner_param().
+Sheng-Liang Pan (4):
+  dt-bindings: arm: qcom: Separate LTE/WIFI SKU for sc7280-evoker
+  arm64: dts: qcom: sc7280: Add LTE SKU for sc7280-evoker family
+  arm64: dts: qcom: sc7280: Add touchscreen and touchpad support for
+    evoker
+  arm64: dts: qcom: sc7280: include sc7280-herobrine-audio-rt5682.dtsi
+    in evoker
 
-Here we have kmemleak_boot_config() but it's more tricky as not having any
-kmemleak param means it should be enabled by default and then the function
-is not called at all, hm. Maybe use an early_initcall()?
+ .../devicetree/bindings/arm/qcom.yaml         |   5 +
+ arch/arm64/boot/dts/qcom/Makefile             |   3 +-
+ .../dts/qcom/sc7280-herobrine-evoker-lte.dts  |  14 ++
+ .../boot/dts/qcom/sc7280-herobrine-evoker.dts | 147 ++++++++++++++++++
+ ...er-r0.dts => sc7280-herobrine-evoker.dtsi} |  22 +--
+ 5 files changed, 175 insertions(+), 16 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker-lte.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sc7280-herobrine-evoker.dts
+ rename arch/arm64/boot/dts/qcom/{sc7280-herobrine-evoker-r0.dts => sc7280-herobrine-evoker.dtsi} (95%)
 
-> +	nr_entries = stack_trace_save(entries, ARRAY_SIZE(entries), 3);
-> +	trace_handle = stack_depot_save(entries, nr_entries, GFP_NOWAIT);
-> +
-> +	return trace_handle;
->  }
->  
->  /*
-> @@ -654,7 +664,7 @@ static struct kmemleak_object *__create_object(unsigned long ptr, size_t size,
->  	}
->  
->  	/* kernel backtrace */
-> -	object->trace_len = __save_stack_trace(object->trace);
-> +	object->trace_handle = set_track_prepare();
->  
->  	raw_spin_lock_irqsave(&kmemleak_lock, flags);
->  
-> @@ -694,7 +704,6 @@ static struct kmemleak_object *__create_object(unsigned long ptr, size_t size,
->  	rb_link_node(&object->rb_node, rb_parent, link);
->  	rb_insert_color(&object->rb_node, is_phys ? &object_phys_tree_root :
->  					  &object_tree_root);
-> -
->  	list_add_tail_rcu(&object->object_list, &object_list);
->  out:
->  	raw_spin_unlock_irqrestore(&kmemleak_lock, flags);
-> @@ -1094,7 +1103,7 @@ void __ref kmemleak_update_trace(const void *ptr)
->  	}
->  
->  	raw_spin_lock_irqsave(&object->lock, flags);
-> -	object->trace_len = __save_stack_trace(object->trace);
-> +	object->trace_handle = set_track_prepare();
->  	raw_spin_unlock_irqrestore(&object->lock, flags);
->  
->  	put_object(object);
-> @@ -2064,6 +2073,7 @@ void __init kmemleak_init(void)
->  	if (kmemleak_error)
->  		return;
->  
-> +	stack_depot_init();
->  	jiffies_min_age = msecs_to_jiffies(MSECS_MIN_AGE);
->  	jiffies_scan_wait = msecs_to_jiffies(SECS_SCAN_WAIT * 1000);
->  
+-- 
+2.34.1
 
