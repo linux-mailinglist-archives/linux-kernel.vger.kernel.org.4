@@ -2,357 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A69661361F
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 13:24:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 655FF61364F
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 13:27:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230471AbiJaMY3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 08:24:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51270 "EHLO
+        id S231354AbiJaM1u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 08:27:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52978 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiJaMY1 (ORCPT
+        with ESMTP id S231169AbiJaM1r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 08:24:27 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6402C106;
-        Mon, 31 Oct 2022 05:24:26 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29VCOCAu102315;
-        Mon, 31 Oct 2022 07:24:12 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1667219052;
-        bh=DFxvIFBON4S7AoXy9Wq0hEUAc0RJJRkwWvAXNulNVvQ=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=EPx9z4pfKcmO/bzpoLY4qmqHsvmGHYi33DuYUcd8Qtmuk2Cb+wvRbf00IRqvHWmn3
-         CSWtinTCRhtDxnBHyBSVH8c6pWdDn2iGTV70+e+cvBXXta1jT5GhOEZ/GvXwl3sVxT
-         AjGnSzT3wXdn1k7ZBnvUnsokXzxIn9XjjXmW0DyU=
-Received: from DFLE111.ent.ti.com (dfle111.ent.ti.com [10.64.6.32])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29VCOBgY044208
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 31 Oct 2022 07:24:11 -0500
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE111.ent.ti.com
- (10.64.6.32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 31
- Oct 2022 07:24:11 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Mon, 31 Oct 2022 07:24:11 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29VCOAS4025186;
-        Mon, 31 Oct 2022 07:24:11 -0500
-Date:   Mon, 31 Oct 2022 17:54:09 +0530
-From:   Rahul T R <r-ravikumar@ti.com>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-CC:     <dri-devel@lists.freedesktop.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>, <andrzej.hajda@intel.com>,
-        <narmstrong@baylibre.com>, <robert.foss@linaro.org>,
-        <jonas@kwiboo.se>, <jernej.skrabec@gmail.com>, <airlied@linux.ie>,
-        <daniel@ffwll.ch>, <p.zabel@pengutronix.de>,
-        <laurent.pinchart@ideasonboard.com>,
-        <linux-kernel@vger.kernel.org>, <jpawar@cadence.com>,
-        <sjakhade@cadence.com>, <mparab@cadence.com>, <a-bhatia1@ti.com>,
-        <devicetree@vger.kernel.org>, <vigneshr@ti.com>,
-        <lee.jones@linaro.org>
-Subject: Re: [PATCH v8 5/5] drm/bridge: cdns-dsi: Add support for J721E
- wrapper
-Message-ID: <20221031122409.mupjcvjyasn2w3q5@uda0490373>
-References: <20221021171820.15984-1-r-ravikumar@ti.com>
- <20221021171820.15984-6-r-ravikumar@ti.com>
- <ec3be93c-fcc1-e0f9-807e-d7fa790c60ad@ideasonboard.com>
+        Mon, 31 Oct 2022 08:27:47 -0400
+Received: from NAM04-MW2-obe.outbound.protection.outlook.com (mail-mw2nam04on2076.outbound.protection.outlook.com [40.107.101.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741D02AED;
+        Mon, 31 Oct 2022 05:27:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=khwlB00mANFJqDudT65byOp8whHdpgYLa3K2SSzjM9V2hiIQmxk8FxhHvJmDJw7PoaieHJx/WkEYsgWoZJO6Sj5Od5mnS0je3X/pRE7iWh9eGg5SwuMC+kEdHjsoTRKzGeQMe3WCdlzBUVhdEnK8/7YfxH+faW2VByqISF/exw1Nz/jQ1kMao82UNsCcwew3IPiYydrW+GchDHbV4GWPTJ+zahlRKTfmQIMiftYJ4g5vQmyjUqgcZMLBQITYNHvtfJSnYFDHYcWjwDbsKMnTn16vp7QyTdPkWZJsUmqVEZbVysW3q7315InNaRh1Umz/dy95TCm08/YjhSENJmILxw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=sEcweQWDCyWz3vkclOKJi24MgrM1JUIbG8v3G4VzlNE=;
+ b=QiWn4bY1dnonE7FqJnpIkp7SM8Svpla58Nb31L5LeiEYA8gDY6EFzJnS0xKtSGWZDaFrCU80txzNEmVWg9pUxdo4kxdbGcVDwwL4s75QysGNm0UY7zsGF+HaF/4myJWWqyCa+g20AnWkjj2K5ZfBI1vghHydHFNF16i6bddKDCnKRTv9iWZXqf5kjKCqnLBBvNWBpM16gAGiO7sFw0egDzE8ejD2fazLUS8GfltqPCZQl6NXY5yXQWpkVnMX/TbNJVdSOKGnqtys83tQgxUnfyHnGyGQFuexrMafIPIylQ97D6H1vBiIDb0RanXCtBhY0E5/bbxv100kHUrF4//bPQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 216.228.117.160) smtp.rcpttodomain=lists.infradead.org
+ smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
+ header.from=nvidia.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=sEcweQWDCyWz3vkclOKJi24MgrM1JUIbG8v3G4VzlNE=;
+ b=DYl8thb2XEcRh2UciQ8P4tl/T1UBQ22lohFd2L0AAL0uGEvsLNqw2i0lLHVDKD19qcvGzaGml/eDdVQ9ZjJ3sKnb4gx8eIuO0NsP/pfqNEN9Tr4Ni2yw+ezJ6sZp+9xkXriYCGW9+kbCiVwoN9pd79w7GxOyQ86FJGKKLehGdvzq8eHEMFPFi6hDQYdxG3uBTr5KGE8HUamOaOwsyM3Tvyn2R2Oy4i5upRguxIeKAmJ5EBu26FlxUsd+xRx/oifxYKbiHyj4waYHuilZgbHLFLd8Q5hDShHU6dh6Ga+vzDG8IzfNWy7myCJMEGR0FxisSUXm5+PMsyWRNn/86B7zZg==
+Received: from MW4PR03CA0126.namprd03.prod.outlook.com (2603:10b6:303:8c::11)
+ by MW4PR12MB7166.namprd12.prod.outlook.com (2603:10b6:303:224::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Mon, 31 Oct
+ 2022 12:27:04 +0000
+Received: from CO1NAM11FT051.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:8c:cafe::1) by MW4PR03CA0126.outlook.office365.com
+ (2603:10b6:303:8c::11) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.19 via Frontend
+ Transport; Mon, 31 Oct 2022 12:27:04 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
+ smtp.mailfrom=nvidia.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=nvidia.com;
+Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
+ 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
+ client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
+Received: from mail.nvidia.com (216.228.117.160) by
+ CO1NAM11FT051.mail.protection.outlook.com (10.13.174.114) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5769.14 via Frontend Transport; Mon, 31 Oct 2022 12:27:04 +0000
+Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
+ (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Mon, 31 Oct
+ 2022 05:26:56 -0700
+Received: from yaviefel (10.126.230.35) by rnnvmail201.nvidia.com
+ (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 31 Oct
+ 2022 05:26:51 -0700
+References: <20221028100320.786984-1-daniel.machon@microchip.com>
+ <20221028100320.786984-3-daniel.machon@microchip.com>
+User-agent: mu4e 1.6.6; emacs 28.1
+From:   Petr Machata <petrm@nvidia.com>
+To:     Daniel Machon <daniel.machon@microchip.com>
+CC:     <netdev@vger.kernel.org>, <davem@davemloft.net>,
+        <petrm@nvidia.com>, <maxime.chevallier@bootlin.com>,
+        <thomas.petazzoni@bootlin.com>, <edumazet@google.com>,
+        <kuba@kernel.org>, <pabeni@redhat.com>,
+        <lars.povlsen@microchip.com>, <Steen.Hegelund@microchip.com>,
+        <UNGLinuxDriver@microchip.com>, <joe@perches.com>,
+        <linux@armlinux.org.uk>, <horatiu.vultur@microchip.com>,
+        <Julia.Lawall@inria.fr>, <vladimir.oltean@nxp.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH net-next v4 2/6] net: dcb: add new apptrust attribute
+Date:   Mon, 31 Oct 2022 13:24:23 +0100
+In-Reply-To: <20221028100320.786984-3-daniel.machon@microchip.com>
+Message-ID: <87k04gw54m.fsf@nvidia.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <ec3be93c-fcc1-e0f9-807e-d7fa790c60ad@ideasonboard.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.126.230.35]
+X-ClientProxiedBy: rnnvmail202.nvidia.com (10.129.68.7) To
+ rnnvmail201.nvidia.com (10.129.68.8)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT051:EE_|MW4PR12MB7166:EE_
+X-MS-Office365-Filtering-Correlation-Id: 406a2bb9-81a2-4ee1-8928-08dabb3b3845
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 4PebtwDUYuuELhMtSnHOOvlHq5XlKZIKYZqKb0MWFET34Zc4WoP/BPbhns7711r2meAkJhI2NVGuKTjxYZILtGjSR2t5xPj8y2+kMdMuAup8uDWP9hLlHHRjvAua8dAUri1HTO9wpsi8qqNb2h4j/0RPN9IkJTPH0SkjVbzwKymhxOSeSh6X3itiZJJQ8we9xCqCnKOM/SzDmpSWoLBYBcXTUlW+Q6k+W5KpA4CVKjfZLMDtd46e9hcR8LcyFugSkQ/Asu516HS1cxxcpggS5I3S+MdeF3LisN6BAVx9YfULzT8Fb99pnIxLuHGsB5im9HA1kDT/QgRQMFc+d31DQ5imc+i1lR6iJxdxfLGME1tUzroOtmguF07CriJAvdxWwDnpoX8q77wO5TDSzTtAFaGAPDsbizdK8gn5mK1BtDcam/SB09nB/Lbc3MCEjWXoznptI4pUmngjfOFbH2LNtUzo129SI2C9NUmUm3PYJ/H1VdGXxOh5U2xYhTVlN8Q8oG0YrPC11jGRpLRUgK0En6lxo9rc1kYfyQD6YZdfQ+2j3CjUNt7OmxTXPy5bJkhW0z5QDlfXLaIAseeo0EOsFy6NpMYy7P1Cod+P5fVuUH1fdbxZQ1yCMR/SqHgxq38qj52fPzNJddiDkLJ9OkcXmbwojOiWdJJYD4AkmDfT8t87uQJfii0maZ7PYEtixF9dHoEWtFnRG+qd8aAXgfL/E2WBFq5rh0RoKSN1m+sJHcHuSnUJjUGtSJRvfSw1SH4LEZ5wTAcdbe3/XO0u4YjsxQ==
+X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(376002)(39860400002)(396003)(451199015)(36840700001)(40470700004)(46966006)(4326008)(41300700001)(70586007)(70206006)(82310400005)(8936002)(36860700001)(8676002)(40480700001)(36756003)(7416002)(2906002)(26005)(6666004)(47076005)(426003)(54906003)(316002)(186003)(6916009)(86362001)(478600001)(336012)(16526019)(2616005)(5660300002)(356005)(7636003)(82740400003)(40460700003);DIR:OUT;SFP:1101;
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Oct 2022 12:27:04.6954
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 406a2bb9-81a2-4ee1-8928-08dabb3b3845
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT051.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7166
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Tomi,
 
-On 09:12-20221026, Tomi Valkeinen wrote:
-> Hi,
-> 
-> On 21/10/2022 20:18, Rahul T R wrote:
-> > Add support for wrapper settings for DSI bridge on
-> > j721e. Also set the DPI input to DPI0
-> 
-> I think a few more words on the HW layout would be nice. What does the
-> wrapper do and how is it connected to the DSS.
-> 
-> > Signed-off-by: Rahul T R <r-ravikumar@ti.com>
-> > ---
-> >   drivers/gpu/drm/bridge/cadence/Kconfig        | 10 ++++
-> >   drivers/gpu/drm/bridge/cadence/Makefile       |  1 +
-> >   .../gpu/drm/bridge/cadence/cdns-dsi-core.c    | 37 +++++++++++++-
-> >   .../gpu/drm/bridge/cadence/cdns-dsi-core.h    | 13 +++++
-> >   .../gpu/drm/bridge/cadence/cdns-dsi-j721e.c   | 51 +++++++++++++++++++
-> >   .../gpu/drm/bridge/cadence/cdns-dsi-j721e.h   | 18 +++++++
-> >   6 files changed, 129 insertions(+), 1 deletion(-)
-> >   create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c
-> >   create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h
-> > 
-> > diff --git a/drivers/gpu/drm/bridge/cadence/Kconfig b/drivers/gpu/drm/bridge/cadence/Kconfig
-> > index 8fbb46c66094..663a02d96420 100644
-> > --- a/drivers/gpu/drm/bridge/cadence/Kconfig
-> > +++ b/drivers/gpu/drm/bridge/cadence/Kconfig
-> > @@ -36,3 +36,13 @@ config DRM_CDNS_DSI
-> >   	help
-> >   	  Support Cadence DPI to DSI bridge. This is an internal
-> >   	  bridge and is meant to be directly embedded in a SoC.
-> > +
-> > +if DRM_CDNS_DSI
-> > +
-> > +config DRM_CDNS_DSI_J721E
-> > +	bool "J721E Cadence DPI/DSI wrapper support"
-> > +	default y
-> > +	help
-> > +	  Support J721E Cadence DPI/DSI wrapper. This wrapper adds
-> > +	  support to select which DPI input to use for the bridge.
-> 
-> I'm not sure if the above is quite necessary here. If I understand right,
-> there's only one way on J721E to mux the DPI signal going to the DSI. If you
-> write "adds support to select DPI input" it sounds like there's something to
-> select, and this config somehow enables that selection for the user.
-> 
-> Perhaps instead just say something like "Support J721E Cadence DPI/DSI
-> wrapper. The wrapper manages the routing of the DSS DPI signal to the
-> Cadence DSI.", or something along those lines.
-> 
-> Also, you say "DPI/DSI wrapper". How does this wrap DPI? Isn't this just a
-> DSI wrapper?
-> 
-> > +endif
-> > diff --git a/drivers/gpu/drm/bridge/cadence/Makefile b/drivers/gpu/drm/bridge/cadence/Makefile
-> > index e3d8e9a40784..4cffc8ff71c4 100644
-> > --- a/drivers/gpu/drm/bridge/cadence/Makefile
-> > +++ b/drivers/gpu/drm/bridge/cadence/Makefile
-> > @@ -4,3 +4,4 @@ cdns-mhdp8546-y := cdns-mhdp8546-core.o cdns-mhdp8546-hdcp.o
-> >   cdns-mhdp8546-$(CONFIG_DRM_CDNS_MHDP8546_J721E) += cdns-mhdp8546-j721e.o
-> >   obj-$(CONFIG_DRM_CDNS_DSI) += cdns-dsi.o
-> >   cdns-dsi-y := cdns-dsi-core.o
-> > +cdns-dsi-$(CONFIG_DRM_CDNS_DSI_J721E) += cdns-dsi-j721e.o
-> > diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c
-> > index cba91247ab26..4b7de38ef1b0 100644
-> > --- a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c
-> > +++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.c
-> > @@ -15,12 +15,16 @@
-> >   #include <linux/iopoll.h>
-> >   #include <linux/module.h>
-> >   #include <linux/of_address.h>
-> > +#include <linux/of_device.h>
-> >   #include <linux/of_graph.h>
-> >   #include <linux/platform_device.h>
-> >   #include <linux/pm_runtime.h>
-> >   #include <linux/reset.h>
-> >   #include "cdns-dsi-core.h"
-> > +#ifdef CONFIG_DRM_CDNS_DSI_J721E
-> > +#include "cdns-dsi-j721e.h"
-> > +#endif
-> >   static inline struct cdns_dsi *input_to_dsi(struct cdns_dsi_input *input)
-> >   {
-> > @@ -265,6 +269,10 @@ static void cdns_dsi_bridge_disable(struct drm_bridge *bridge)
-> >   	val = readl(dsi->regs + MCTL_MAIN_EN) & ~IF_EN(input->id);
-> >   	writel(val, dsi->regs + MCTL_MAIN_EN);
-> > +
-> > +	if (dsi->platform_ops && dsi->platform_ops->disable)
-> > +		dsi->platform_ops->disable(dsi);
-> > +
-> >   	pm_runtime_put(dsi->base.dev);
-> >   }
-> > @@ -360,6 +368,9 @@ static void cdns_dsi_bridge_enable(struct drm_bridge *bridge)
-> >   	if (WARN_ON(pm_runtime_get_sync(dsi->base.dev) < 0))
-> >   		return;
-> > +	if (dsi->platform_ops && dsi->platform_ops->enable)
-> > +		dsi->platform_ops->enable(dsi);
-> > +
-> >   	mode = &bridge->encoder->crtc->state->adjusted_mode;
-> >   	nlanes = output->dev->lanes;
-> > @@ -800,6 +811,8 @@ static int cdns_dsi_drm_probe(struct platform_device *pdev)
-> >   		goto err_disable_pclk;
-> >   	}
-> > +	dsi->platform_ops = of_device_get_match_data(&pdev->dev);
-> > +
-> >   	val = readl(dsi->regs + IP_CONF);
-> >   	dsi->direct_cmd_fifo_depth = 1 << (DIRCMD_FIFO_DEPTH(val) + 2);
-> >   	dsi->rx_fifo_depth = RX_FIFO_DEPTH(val);
-> > @@ -835,14 +848,27 @@ static int cdns_dsi_drm_probe(struct platform_device *pdev)
-> >   	dsi->base.dev = &pdev->dev;
-> >   	dsi->base.ops = &cdns_dsi_ops;
-> > +	if (dsi->platform_ops && dsi->platform_ops->init) {
-> > +		ret = dsi->platform_ops->init(dsi);
-> > +		if (ret != 0) {
-> > +			dev_err(&pdev->dev, "platform initialization failed: %d\n",
-> > +				ret);
-> > +			goto err_disable_runtime_pm;
-> > +		}
-> > +	}
-> > +
-> >   	ret = mipi_dsi_host_register(&dsi->base);
-> >   	if (ret)
-> > -		goto err_disable_runtime_pm;
-> > +		goto err_deinit_platform;
-> >   	clk_disable_unprepare(dsi->dsi_p_clk);
-> >   	return 0;
-> > +err_deinit_platform:
-> > +	if (dsi->platform_ops && dsi->platform_ops->exit)
-> > +		dsi->platform_ops->exit(dsi);
-> > +
-> >   err_disable_runtime_pm:
-> >   	pm_runtime_disable(&pdev->dev);
-> > @@ -857,6 +883,10 @@ static int cdns_dsi_drm_remove(struct platform_device *pdev)
-> >   	struct cdns_dsi *dsi = platform_get_drvdata(pdev);
-> >   	mipi_dsi_host_unregister(&dsi->base);
-> > +
-> > +	if (dsi->platform_ops && dsi->platform_ops->exit)
-> > +		dsi->platform_ops->exit(dsi);
-> > +
-> >   	pm_runtime_disable(&pdev->dev);
-> >   	return 0;
-> > @@ -864,6 +894,11 @@ static int cdns_dsi_drm_remove(struct platform_device *pdev)
-> >   static const struct of_device_id cdns_dsi_of_match[] = {
-> >   	{ .compatible = "cdns,dsi" },
-> > +#ifdef CONFIG_DRM_CDNS_DSI_J721E
-> > +	{ .compatible = "ti,j721e-dsi",
-> > +	  .data = &dsi_ti_j721e_ops,
-> > +	},
-> 
-> I find the above formatting a bit odd. I think this should do fine:
-> 
-> { .compatible = "ti,j721e-dsi", .data = &dsi_ti_j721e_ops, },
-> 
-> If you want multi-line, then I think the opening { should be on its own
-> line, similarly to the closing }.
-> 
-> > +#endif
-> >   	{ },
-> >   };
-> >   MODULE_DEVICE_TABLE(of, cdns_dsi_of_match);
-> > diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h
-> > index 65cc77f19b39..37568b547fbe 100644
-> > --- a/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h
-> > +++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h
-> > @@ -439,9 +439,22 @@ struct cdns_dsi_input {
-> >   	struct drm_bridge bridge;
-> >   };
-> > +struct cdns_dsi;
-> > +
-> > +struct dsi_platform_ops {
-> > +	int (*init)(struct cdns_dsi *dsi);
-> > +	void (*exit)(struct cdns_dsi *dsi);
-> 
-> I don't think init and exit are the opposites, but rather init and
-> deinit/uninit.
-> 
-> > +	void (*enable)(struct cdns_dsi *dsi);
-> > +	void (*disable)(struct cdns_dsi *dsi);
-> > +};
-> > +
-> >   struct cdns_dsi {
-> >   	struct mipi_dsi_host base;
-> >   	void __iomem *regs;
-> > +#ifdef CONFIG_DRM_CDNS_DSI_J721E
-> > +	void __iomem *j721e_regs;
-> > +#endif
-> > +	const struct dsi_platform_ops *platform_ops;
-> >   	struct cdns_dsi_input input;
-> >   	struct cdns_dsi_output output;
-> >   	unsigned int direct_cmd_fifo_depth;
-> > diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c
-> > new file mode 100644
-> > index 000000000000..b5216acb333e
-> > --- /dev/null
-> > +++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c
-> > @@ -0,0 +1,51 @@
-> > +// SPDX-License-Identifier: GPL-2.0
-> > +/*
-> > + * TI j721e Cadence DSI wrapper
-> > + *
-> > + * Copyright (C) 2022 Texas Instruments Incorporated - http://www.ti.com/
-> > + * Author: Rahul T R <r-ravikumar@ti.com>
-> > + */
-> > +
-> > +#include <linux/io.h>
-> > +#include <linux/platform_device.h>
-> > +
-> > +#include "cdns-dsi-j721e.h"
-> > +
-> > +#define DSI_WRAP_REVISION		0x0
-> > +#define DSI_WRAP_DPI_CONTROL		0x4
-> > +#define DSI_WRAP_DSC_CONTROL		0x8
-> > +#define DSI_WRAP_DPI_SECURE		0xc
-> > +#define DSI_WRAP_DSI_0_ASF_STATUS	0x10
-> > +
-> > +#define DSI_WRAP_DPI_0_EN		BIT(0)
-> > +#define DSI_WRAP_DSI2_MUX_SEL		BIT(4)
-> > +
-> > +static int cdns_dsi_j721e_init(struct cdns_dsi *dsi)
-> > +{
-> > +	struct platform_device *pdev = to_platform_device(dsi->base.dev);
-> > +
-> > +	dsi->j721e_regs = devm_platform_ioremap_resource(pdev, 1);
-> > +	return PTR_ERR_OR_ZERO(dsi->j721e_regs);
-> > +}
-> > +
-> > +static void cdns_dsi_j721e_enable(struct cdns_dsi *dsi)
-> > +{
-> > +	/*
-> > +	 * Enable DPI0 as its input. DSS0 DPI2 is connected
-> > +	 * to DSI DPI0. This is the only supported configuration on
-> > +	 * J721E.
-> > +	 */
-> > +	writel(DSI_WRAP_DPI_0_EN, dsi->j721e_regs + DSI_WRAP_DPI_CONTROL);
-> > +}
-> > +
-> > +static void cdns_dsi_j721e_disable(struct cdns_dsi *dsi)
-> > +{
-> > +	/* Put everything to defaults  */
-> > +	writel(0, dsi->j721e_regs + DSI_WRAP_DPI_CONTROL);
-> > +}
-> > +
-> > +const struct dsi_platform_ops dsi_ti_j721e_ops = {
-> > +	.init = cdns_dsi_j721e_init,
-> > +	.enable = cdns_dsi_j721e_enable,
-> > +	.disable = cdns_dsi_j721e_disable,
-> > +};
-> > diff --git a/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h
-> > new file mode 100644
-> > index 000000000000..01f3dbd92db2
-> > --- /dev/null
-> > +++ b/drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h
-> > @@ -0,0 +1,18 @@
-> > +/* SPDX-License-Identifier: GPL-2.0 */
-> > +/*
-> > + * TI j721e Cadence DSI wrapper
-> > + *
-> > + * Copyright (C) 2022 Texas Instruments Incorporated - http://www.ti.com/
-> > + * Author: Rahul T R <r-ravikumar@ti.com>
-> > + */
-> > +
-> > +#ifndef CDNS_DSI_J721E_H
-> > +#define CDNS_DSI_J721E_H
-> > +
-> > +#include "cdns-dsi-core.h"
-> > +
-> > +struct dsi_platform_ops;
-> 
-> You don't need the above line as you already include the cdns-dsi-core.h
-> 
+Daniel Machon <daniel.machon@microchip.com> writes:
 
-Thanks for the detailed review
-I have addressed the review comments
-and sent a v9 of this series
+> +	if (ieee[DCB_ATTR_DCB_APP_TRUST_TABLE]) {
+> +		u8 selectors[IEEE_8021QAZ_APP_SEL_MAX + 1] = {0};
+> +		struct nlattr *attr;
+> +		int nselectors = 0;
+> +		u8 selector;
+> +		int rem, i;
+> +
+> +		if (!ops->dcbnl_setapptrust) {
+> +			err = -EOPNOTSUPP;
+> +			goto err;
+> +		}
+> +
+> +		nla_for_each_nested(attr, ieee[DCB_ATTR_DCB_APP_TRUST_TABLE],
+> +				    rem) {
+> +			if (nla_type(attr) != DCB_ATTR_DCB_APP_TRUST ||
+> +			    nla_len(attr) != 1 ||
+> +			    nselectors >= sizeof(selectors)) {
+> +				err = -EINVAL;
+> +				goto err;
+> +			}
+> +
+> +			selector = nla_get_u8(attr);
+> +			switch (selector) {
+> +			case IEEE_8021QAZ_APP_SEL_ETHERTYPE:
+> +			case IEEE_8021QAZ_APP_SEL_STREAM:
+> +			case IEEE_8021QAZ_APP_SEL_DGRAM:
+> +			case IEEE_8021QAZ_APP_SEL_ANY:
+> +			case IEEE_8021QAZ_APP_SEL_DSCP:
+> +			case DCB_APP_SEL_PCP:
 
-Regards
-Rahul T R
+This assumes that the range of DCB attributes will never overlap with
+the range of IEEE attributes. Wasn't the original reason for introducing
+the DCB nest to not have to make this assumption?
 
-> > +extern const struct dsi_platform_ops dsi_ti_j721e_ops;
-> > +
-> > +#endif /* !CDNS_DSI_J721E_H */
-> 
+I.e. now that we split DCB and IEEE attributes in the APP_TABLE
+attribute, shouldn't it be done here as well?
