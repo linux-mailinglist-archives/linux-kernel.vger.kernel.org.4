@@ -2,88 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3A1613860
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 14:49:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A8A2E613866
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 14:50:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230515AbiJaNtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 09:49:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47024 "EHLO
+        id S231208AbiJaNup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 09:50:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231153AbiJaNtb (ORCPT
+        with ESMTP id S229556AbiJaNun (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 09:49:31 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBEA7679;
-        Mon, 31 Oct 2022 06:49:30 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id AC9BB6602253;
-        Mon, 31 Oct 2022 13:49:28 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667224169;
-        bh=1CjDirYTveyInAKG0RQWqvIdW7a/AeUnGrEqY2Utiws=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=nA/Q+Sp2imNv4fxfZ/8CkIieGZNWmDpQT7s7l69lK6HIcn9v18xnHcI8h3ctbuHXv
-         RqZC9bQJGr8LEnitwh1/CoQQL1jrxdPIWUnqaTMwG6UAk5FH2MzWPFu2Z2SmefTKvV
-         Wc578sIxIrI9+D0oUJGo8fM+9CDWgrC8+gx7jy2Ctva1slyeikphBmMjUgrGTTHwGG
-         HGLX/KnM7b2QQn/Y4yRiSw7M2hUUUB6/19hZKzn5Q+18knP0dzdr6yeNKc+ZGfovE+
-         7gGSbGZCK+PcRY9DjYlFCnhvtUkF5AvStKLlp3Vq5u1mn+DaSGN5VXPKUEBuJpIFK7
-         29qzcCexoVc3w==
-Message-ID: <e0d37670-cb88-3a20-5230-9f14411edec1@collabora.com>
-Date:   Mon, 31 Oct 2022 14:49:26 +0100
+        Mon, 31 Oct 2022 09:50:43 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506921007D;
+        Mon, 31 Oct 2022 06:50:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=90l0xMDfoydDKFAg0A7yI5g7blQBB1Ycz7ypF56IvPI=; b=JZ1wlGEucLk4wUUQtrFa+KZtxR
+        rYuuKI/gQZOMXZkXU9Nj197NwMbtUAypqolSFHnd/MW649uEqnKbdz1TQsCM/esQcFTGMhdcUOg1e
+        3TA5pRZGSc7SCqnYKNoUZEs7v3yicIKM8CUjyW7vJhfbrmwkOrIET31YJrrXKJuA+xI6DApj98rYJ
+        iky1b4L667KN/KACCfaSHcVBkmWf/yoVCWtkqk/YphO+uAKCO2fnJUIhXcMLAs0wV/R7vtdhNiqan
+        hPGoVHNyTTOxtgXfNEdi3Lyi0ZPPGn7tU/UAGWL8a5oNKMsDRzPSW4qahlPAYiUDyjD1mekrfdtbq
+        iiPrqOOA==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1opVBQ-003ih3-Vx; Mon, 31 Oct 2022 13:50:33 +0000
+Date:   Mon, 31 Oct 2022 13:50:32 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     syzbot <syzbot+8edfa01e46fd9fe3fbfb@syzkaller.appspotmail.com>
+Cc:     akpm@linux-foundation.org, clm@fb.com, dsterba@suse.com,
+        hch@lst.de, josef@toxicpanda.com, linmiaohe@huawei.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org
+Subject: Re: [syzbot] WARNING in btrfs_space_info_update_bytes_may_use
+Message-ID: <Y1/SqIuP4tbszPAW@casper.infradead.org>
+References: <0000000000000d9d6f05ec498263@google.com>
+ <000000000000fa42c105ec5339ec@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v2 1/2] dt-bingings: gce: add gce header file for mt8188
-Content-Language: en-US
-To:     "Elvis.Wang" <Elvis.Wang@mediatek.com>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     Houlong Wei <houlong.wei@mediatek.com>,
-        "jason-jh . lin" <jason-jh.lin@mediatek.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        Bo-Chen Chen <rex-bc.chen@mediatek.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-References: <20221029105017.20734-1-Elvis.Wang@mediatek.com>
- <20221029105017.20734-2-Elvis.Wang@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221029105017.20734-2-Elvis.Wang@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <000000000000fa42c105ec5339ec@google.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 29/10/22 12:50, Elvis.Wang ha scritto:
-> From: Elvis Wang <Elvis.Wang@mediatek.com>
+Dmitry, I don't see a way to tell syzbot that its bisection has gone
+astray.  Can you add one or document it if it already exists?
+
+On Mon, Oct 31, 2022 at 04:51:22AM -0700, syzbot wrote:
+> syzbot has bisected this issue to:
 > 
-> add gce header file to define the gce thread priority, gce subsys id,
->   event and constant for mt8188.
-> v2 - use vendor in filename, use Dual license.
+> commit 0c7c575df56b957390206deb018c41acbb412159
+> Author: Matthew Wilcox (Oracle) <willy@infradead.org>
+> Date:   Wed Feb 24 20:01:52 2021 +0000
 > 
-> Signed-off-by: Elvis Wang <Elvis.Wang@mediatek.com>
-> Reviewed-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
-> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+>     mm/filemap: remove dynamically allocated array from filemap_read
+
+This change affects the read path.  The crash happens in the unmount
+path.  The data structure that's being checked is modified in the write
+path.  I just can't see how this commit is in any way related.
+
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=119e21b6880000
+> start commit:   b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
+> git tree:       upstream
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=139e21b6880000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=159e21b6880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=a66c6c673fb555e8
+> dashboard link: https://syzkaller.appspot.com/bug?extid=8edfa01e46fd9fe3fbfb
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17db9ab1880000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=124e21b6880000
 > 
-> Thanks for the reviews, I have fixed them.
-
-I can't see where/when Krzysztof gave you his R-b tag. Drop it.
-
-Also, please fix the typo in the commit title. s/bingings/bindings/g.
-
-Regards,
-Angelo
-
+> Reported-by: syzbot+8edfa01e46fd9fe3fbfb@syzkaller.appspotmail.com
+> Fixes: 0c7c575df56b ("mm/filemap: remove dynamically allocated array from filemap_read")
+> 
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
