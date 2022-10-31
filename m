@@ -2,121 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C113E613C7B
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:50:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EAF3613C8F
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:51:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231658AbiJaRu5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 13:50:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54978 "EHLO
+        id S231964AbiJaRvV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 13:51:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiJaRuy (ORCPT
+        with ESMTP id S231755AbiJaRvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 13:50:54 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1A360632F;
-        Mon, 31 Oct 2022 10:50:53 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        Mon, 31 Oct 2022 13:51:09 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6674A63F4;
+        Mon, 31 Oct 2022 10:51:03 -0700 (PDT)
+Received: from jupiter.universe (dyndsl-095-033-157-181.ewe-ip-backbone.de [95.33.157.181])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 9E2C81F45B;
-        Mon, 31 Oct 2022 17:50:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1667238651; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fGaXAxz7CkwLQu/39IaO5T1EcfCXLRmGolaSbwQbtTI=;
-        b=NvwlYs4xa/YUsKy+ffJtq9E/5zltj04v6GSbXqmET3FPakxT1u/YkIHNJ9pa0IEG2Rc+sg
-        jAJoT4GIRFHHyKOu8JVIOM/TeQwfFmjx0Lw9DGw5d/BPUC8wTycfzwA3HdfknxqAWzfnGR
-        2NuZXXs6wY/xrvZHKD0v52UXrhT7do8=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1667238651;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=fGaXAxz7CkwLQu/39IaO5T1EcfCXLRmGolaSbwQbtTI=;
-        b=SI+64C3q91ppKQfwnJXTA5Dp4vET8w57dZyf5ybaOzTLV7u4xm4f9cVvuz2CW+G9KvHUnu
-        ZzXT4uZ9AGCfxhBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 8F61E13AAD;
-        Mon, 31 Oct 2022 17:50:51 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id EOr2IvsKYGN0YgAAMHmgww
-        (envelope-from <jack@suse.cz>); Mon, 31 Oct 2022 17:50:51 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id CCC68A070B; Mon, 31 Oct 2022 18:50:50 +0100 (CET)
-Date:   Mon, 31 Oct 2022 18:50:50 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     syzbot <syzbot+06cc05ddc896f12b7ec5@syzkaller.appspotmail.com>
-Cc:     amir73il@gmail.com, jack@suse.cz, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        ntfs3@lists.linux.dev,
-        Konstantin Komarov <almaz.alexandrovich@paragon-software.com>,
-        Al Viro <viro@ZenIV.linux.org.uk>,
-        Christian Brauner <christian@brauner.io>
-Subject: Re: [syzbot] kernel BUG in dnotify_free_mark
-Message-ID: <20221031175050.xmhub66b6d4dvpcb@quack3>
-References: <0000000000008b529305ec20dacc@google.com>
+        (Authenticated sender: sre)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 67D0766028C0;
+        Mon, 31 Oct 2022 17:51:01 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667238661;
+        bh=LclkUUUuQEL6XWTDbjHN/M93uQibLqIJXoKjFuEGbjU=;
+        h=From:To:Cc:Subject:Date:From;
+        b=hte6YTXwfWRFfuipTNvRM0vUkZH2ZsvcAYCJui+c/S6n+HrHHVWg+xvej9zswIsKY
+         0zlWBz1gIhd5V1E94rG6dEzcFNJyqTNew+8FCf6GbGZpOYWvd+EVSfJNf+baD99L/1
+         NmDCuTWbg65Ws5w6mt+VvHb/aDw943mCsEodJeh5u7Y677/cPPni1lDdCHIQrigCBq
+         sgIGBqxWTufrBHww9REvEqMiUQN+pAGq6qTFpBwJ8V/Sxxd3lRU6N0VvXCEHRlPLjJ
+         di2b7va07Wo+Nh12A8olWkxj7CoptG6dc+mrAwZ5tlytzg4PJHcgqUc9kF+yZ3T3F1
+         0Km0E2YJ0gylA==
+Received: by jupiter.universe (Postfix, from userid 1000)
+        id 4B9214801B7; Mon, 31 Oct 2022 18:50:59 +0100 (CET)
+From:   Sebastian Reichel <sebastian.reichel@collabora.com>
+To:     Heiko Stuebner <heiko@sntech.de>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Sebastian Reichel <sebastian.reichel@collabora.com>,
+        kernel@collabora.com
+Subject: [PATCH 0/7] RK3588 Thermal Support
+Date:   Mon, 31 Oct 2022 18:50:51 +0100
+Message-Id: <20221031175058.175698-1-sebastian.reichel@collabora.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0000000000008b529305ec20dacc@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello!
+Hi,
 
-[added some CCs to gather more ideas]
+This adds thermal support for the new RK3588(s) SoC
+series. The series has been tested on the RK3588
+EVB1 board.
 
-On Fri 28-10-22 16:45:33, syzbot wrote:
-> syzbot found the following issue on:
-> 
-> HEAD commit:    247f34f7b803 Linux 6.1-rc2
-> git tree:       upstream
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=157f594a880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
-> dashboard link: https://syzkaller.appspot.com/bug?extid=06cc05ddc896f12b7ec5
-> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15585936880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=14ec85ba880000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/a5f39164dea4/disk-247f34f7.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/8d1b92f5a01f/vmlinux-247f34f7.xz
-> mounted in repro: https://storage.googleapis.com/syzbot-assets/1a4d2943796c/mount_0.gz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+06cc05ddc896f12b7ec5@syzkaller.appspotmail.com
-> 
-> ------------[ cut here ]------------
-> kernel BUG at fs/notify/dnotify/dnotify.c:136!
+Changes since PATCHv1:
+ * https://lore.kernel.org/all/20221021174721.92468-1-sebastian.reichel@collabora.com/
+ * Collect Reviewed-by/Acked-by
+ * Use TRM channel info in commit message (Daniel Lezcano)
+ * Add patch removing channel id lookup table (Daniel Lezcano)
+ * Add patch allocating sensors array dynamiccaly (Daniel Lezcano)
+ * I also added patches simplifying up the probe routine a bit
 
-OK, I've tracked this down to the problem in ntfs3 driver or maybe more
-exactly in bad inode handling. What the reproducer does is that it mounts
-ntfs3 image, places dnotify mark on filesystem's /, then accesses something
-which finds that / is corrupted.  This calls ntfs_bad_inode() which calls
-make_bad_inode() which sets inode->i_mode to S_IFREG. So when the file
-descriptor is closed, dnotify doesn't get properly shutdown because it
-works only on directories. Now calling make_bad_inode() on live inode is
-problematic because it can change inode type (e.g. from directory to
-regular file) and that tends to confuse things - dnotify in this case.
+-- Sebastian
 
-Now it is easy to blame filesystem driver for calling make_bad_inode() on
-live inode but given it seems to be relatively widespread maybe
-make_bad_inode() should be more careful not to screw VFS? What do other
-people think?
+Finley Xiao (1):
+  thermal: rockchip: Support RK3588 SoC in the thermal driver
 
-								Honza
+Sebastian Reichel (6):
+  thermal: rockchip: Simplify getting match data
+  thermal: rockchip: Simplify clock logic
+  thermal: rockchip: Use dev_err_probe
+  thermal: rockchip: Simplify channel id logic
+  thermal: rockchip: Support dynamic sized sensor array
+  dt-bindings: rockchip-thermal: Support the RK3588 SoC compatible
+
+ .../bindings/thermal/rockchip-thermal.yaml    |   1 +
+ drivers/thermal/rockchip_thermal.c            | 322 ++++++++++++------
+ 2 files changed, 226 insertions(+), 97 deletions(-)
+
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+2.35.1
+
