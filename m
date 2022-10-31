@@ -2,106 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E70AF613A5D
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 16:41:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DFE40613A63
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 16:41:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231970AbiJaPlT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 11:41:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47044 "EHLO
+        id S231874AbiJaPl5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 11:41:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231962AbiJaPlD (ORCPT
+        with ESMTP id S231638AbiJaPlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 11:41:03 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E4676598;
-        Mon, 31 Oct 2022 08:40:50 -0700 (PDT)
+        Mon, 31 Oct 2022 11:41:53 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49A236598;
+        Mon, 31 Oct 2022 08:41:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667230850; x=1698766850;
-  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=vsRtz59r9+hBD/aRtnV2XsZe5ltc86zFnduMHYgvoqU=;
-  b=jnZGJ/ou2d8Aa6BUdQroHFxQTTbDudOHV3OsAdmlWdO8+5CodKlFzauc
-   6aGW9bWC8dzMlG0uuGUjzsLl/MoDgyo78VXv91Sg9NNk3MDFeLLwHfb2G
-   Nlyvl9DLlq6i33rGeKM/YvCX0eHU62Hm/g1qRtUZCYL4XWXldu5cY72ak
-   MSHf8EgVsk59jlypiglIhhcXWnzynw+vtVzswcEYus/DlIavVm9z84Z4u
-   1u+l6xtQmvGXmhXSV7t1mqoR/wGpXSoYiAK1Kk73+RZVoFBWiTvr/dYTI
-   FL69HZ++H3mfk7+A6GpzjvxXZwWWcKpmKPkna5tUp8pYjFnfHVlyaScK1
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="395242924"
+  t=1667230912; x=1698766912;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=68I6eDd/kFkeEi9Qy+k/XReDJcYVdmk7+tcPhvWo6hM=;
+  b=IABGZubaNIMNPpmEpkjE+cMhDyp51rbMRXjQJa6LVhCZDFmvchoXUssZ
+   xSlfUZElDBg7pYSXiHL/79bxCPpKcvPnlOH2+bKHAVrIoAd6r+C8p4IMK
+   uJg4PVI+guxb9uCn7N9R0meO+YibIuGryEokykbuwDEPDS9HaxuVdKEAM
+   bYkZL5v1zhoiEJRsSdNayNuDtvk/mBOr5xdVtApXXhkok7gkiVcF+dDjy
+   DbPXzg9rHIBYSKWG2dSgFiwY5t5wZQrAVIz1cL8VcB4woGNvutdNkdwGE
+   rAb2tBVhtkhXXl8tAiS+lepJQj3lDIaCTuMIYqWpa0plBWRbioI61UM9R
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="306546323"
 X-IronPort-AV: E=Sophos;i="5.95,228,1661842800"; 
-   d="scan'208";a="395242924"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 08:40:50 -0700
+   d="scan'208";a="306546323"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 08:41:23 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="878774354"
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="633568904"
 X-IronPort-AV: E=Sophos;i="5.95,228,1661842800"; 
-   d="scan'208";a="878774354"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga006.fm.intel.com with ESMTP; 31 Oct 2022 08:40:49 -0700
-Received: from maheshgo-mobl.amr.corp.intel.com (unknown [10.255.229.142])
-        by linux.intel.com (Postfix) with ESMTP id 491C6580BDF;
-        Mon, 31 Oct 2022 08:40:49 -0700 (PDT)
-Message-ID: <ddd1c452d8843fa137bc294b04ee5195967e4b67.camel@linux.intel.com>
-Subject: Re: [PATCH V7 3/4] PCI: vmd: Add vmd_device_data
-From:   "David E. Box" <david.e.box@linux.intel.com>
-Reply-To: david.e.box@linux.intel.com
-To:     Christoph Hellwig <hch@infradead.org>,
-        Bjorn Helgaas <helgaas@kernel.org>
-Cc:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
-        lorenzo.pieralisi@arm.com, kw@linux.com, robh@kernel.org,
-        bhelgaas@google.com, michael.a.bottini@intel.com,
-        rafael@kernel.org, me@adhityamohan.in, linux-pci@vger.kernel.org,
+   d="scan'208";a="633568904"
+Received: from kanliang-dev.jf.intel.com ([10.165.154.102])
+  by orsmga002.jf.intel.com with ESMTP; 31 Oct 2022 08:41:23 -0700
+From:   kan.liang@linux.intel.com
+To:     peterz@infradead.org, mingo@redhat.com,
         linux-kernel@vger.kernel.org
-Date:   Mon, 31 Oct 2022 08:40:49 -0700
-In-Reply-To: <Y19zcYqxk7LcGQfG@infradead.org>
-References: <20221025004411.2910026-4-david.e.box@linux.intel.com>
-         <20221028191308.GA903098@bhelgaas> <Y19zcYqxk7LcGQfG@infradead.org>
-Organization: David E. Box
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+Cc:     eranian@google.com, namhyung@kernel.org, ak@linux.intel.com,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Jannis Klinkenberg <jannis.klinkenberg@rwth-aachen.de>,
+        stable@vger.kernel.org
+Subject: [PATCH 1/2] perf/x86/intel: Fix pebs event constraints for ICL
+Date:   Mon, 31 Oct 2022 08:41:18 -0700
+Message-Id: <20221031154119.571386-1-kan.liang@linux.intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE,UPPERCASE_50_75 autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-10-31 at 00:04 -0700, Christoph Hellwig wrote:
-> On Fri, Oct 28, 2022 at 02:13:08PM -0500, Bjorn Helgaas wrote:
-> > It looks like these devices come in families where several device IDs
-> > share the same features.  I think this would be more readable if you
-> > defined each family outside this table and simply referenced the
-> > family here.  E.g., you could do something like:
-> > 
-> >   static struct vmd_device_data vmd_v1 = {
-> >     .features = VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |
-> > 		VMD_FEAT_HAS_BUS_RESTRICTIONS |
-> > 		VMD_FEAT_OFFSET_FIRST_VECTOR,
-> >   };
-> > 
-> >   {PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_VMD_9A0B),
-> >     .driver_data = (kernel_ulong_t) &vmd_v1,
-> > 
-> > Then you can add VMD_FEAT_BIOS_PM_QUIRK and the .ltr value in one place
-> > instead of repeating it a half dozen times.
-> 
-> I wonder why we need the ltr field at all.  For those that set it
-> is always the same value, so it could just be a quirk flag to set it.
+From: Kan Liang <kan.liang@linux.intel.com>
 
-Yeah, this makes sense particularly since this isn't intended as a permanent
-fix. I'll get rid of it.
+According to the latest event list, update the MEM_INST_RETIRED events
+which support the DataLA facility.
 
-> 
-> Tat being said I think thegrouping makes a lot of sense, but I'd just
-> do it with a #define for the set of common quirk flags.
+Fixes: 6017608936c1 ("perf/x86/intel: Add Icelake support")
+Reported-by: Jannis Klinkenberg <jannis.klinkenberg@rwth-aachen.de>
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Cc: stable@vger.kernel.org
+---
+ arch/x86/events/intel/ds.c | 9 +++++++--
+ 1 file changed, 7 insertions(+), 2 deletions(-)
 
-Works for me. I'll create a VMD_FEATS_CLIENT group but I'll keep the ltr quirk
-separate since future client systems won't be using it.
-
-David
+diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
+index f141cc7b8847..26323fea3a65 100644
+--- a/arch/x86/events/intel/ds.c
++++ b/arch/x86/events/intel/ds.c
+@@ -982,8 +982,13 @@ struct event_constraint intel_icl_pebs_event_constraints[] = {
+ 	INTEL_FLAGS_UEVENT_CONSTRAINT(0x0400, 0x800000000ULL),	/* SLOTS */
+ 
+ 	INTEL_PLD_CONSTRAINT(0x1cd, 0xff),			/* MEM_TRANS_RETIRED.LOAD_LATENCY */
+-	INTEL_FLAGS_UEVENT_CONSTRAINT_DATALA_LD(0x1d0, 0xf),	/* MEM_INST_RETIRED.LOAD */
+-	INTEL_FLAGS_UEVENT_CONSTRAINT_DATALA_ST(0x2d0, 0xf),	/* MEM_INST_RETIRED.STORE */
++	INTEL_FLAGS_UEVENT_CONSTRAINT_DATALA_LD(0x11d0, 0xf),	/* MEM_INST_RETIRED.STLB_MISS_LOADS */
++	INTEL_FLAGS_UEVENT_CONSTRAINT_DATALA_ST(0x12d0, 0xf),	/* MEM_INST_RETIRED.STLB_MISS_STORES */
++	INTEL_FLAGS_UEVENT_CONSTRAINT_DATALA_LD(0x21d0, 0xf),	/* MEM_INST_RETIRED.LOCK_LOADS */
++	INTEL_FLAGS_UEVENT_CONSTRAINT_DATALA_LD(0x41d0, 0xf),	/* MEM_INST_RETIRED.SPLIT_LOADS */
++	INTEL_FLAGS_UEVENT_CONSTRAINT_DATALA_ST(0x42d0, 0xf),	/* MEM_INST_RETIRED.SPLIT_STORES */
++	INTEL_FLAGS_UEVENT_CONSTRAINT_DATALA_LD(0x81d0, 0xf),	/* MEM_INST_RETIRED.ALL_LOADS */
++	INTEL_FLAGS_UEVENT_CONSTRAINT_DATALA_ST(0x82d0, 0xf),	/* MEM_INST_RETIRED.ALL_STORES */
+ 
+ 	INTEL_FLAGS_EVENT_CONSTRAINT_DATALA_LD_RANGE(0xd1, 0xd4, 0xf), /* MEM_LOAD_*_RETIRED.* */
+ 
+-- 
+2.35.1
 
