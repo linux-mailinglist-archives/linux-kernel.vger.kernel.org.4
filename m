@@ -2,113 +2,221 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A99E6138A0
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 15:02:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 302576138A2
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 15:04:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230388AbiJaOCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 10:02:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52974 "EHLO
+        id S231483AbiJaOE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 10:04:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231194AbiJaOCt (ORCPT
+        with ESMTP id S230492AbiJaOEX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 10:02:49 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E67410565;
-        Mon, 31 Oct 2022 07:02:49 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id b29so10726216pfp.13;
-        Mon, 31 Oct 2022 07:02:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qqGCXhnHjIeBeODuGDUG/31qoicURkdlFqgbUPm7phc=;
-        b=kUJlruVeuLHmagJg6lHo+RtE0at2dvQYVh9zY5O+z9QdSD1eS0UJXC+8yxGJqdJEFM
-         Vo/2Rb9mVohZ0WHO/LmpJyRLGBYGdn0dMSc2fN9qghC8yS8hwcALOqRUkb/XDQTEs9yO
-         1hFqEkqe9d2Hd6fXsKiqsgUsEV04UhK+vxsBjhwbhHLhSir0nGgxQ6uYWXJv7MAy4RKA
-         JIYOGfjDLJwO/mqKN+eVpqD7obD7CH+0RlSdiaP7pLTXEvuXdSrvBYickaC05WHCi5Gp
-         aPVLRoard7eR6q+ZpSWjq5ZFNXAVrDTfiXpwFZNRkVcNJ8P7Tzlg97MHW4cOMLkZaBme
-         AR0w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qqGCXhnHjIeBeODuGDUG/31qoicURkdlFqgbUPm7phc=;
-        b=7tNqkf7vq1ux0wVOPna3og3KkdvVl361ozpXvvHvGLAWI5q/yBDl5osYW5kUvp9OqL
-         wopU8hBlNKotkCyp3h1ewVJuQnSJVMTzR2VEe5nnlUK2isrGpzN51yXIYgpekpwazg7C
-         JtDqBsY0JUg86W/iy6JstpzZMxgx0kvZzhTvuvFHUj5QdEp7v6UhocZrohhxxHb0PrkR
-         8UzEowdPaUHbBFsu9jXZ4Tc2gk/fSyh3GjzJzOzKq21cpSPvLlS+0K0R296TgLXzeY+A
-         nhGWiBb5NqDUPBIIStEWEDWe+j6uKeBFzsgDpFOCLgPQO5xtawX/MxknwqWKj8SRCGC7
-         kXMQ==
-X-Gm-Message-State: ACrzQf1X22pmver30QK/XLBzRQCdXLXgayx+rlz91UAGLW7XX9aL/wMC
-        YqQjBGUq6NCdf2nyTEGZZl5GzTcmN9fUMhjxEVT1JL+8WfY=
-X-Google-Smtp-Source: AMsMyM68rpWT035a3YOxPw13zlJ0a7C13U1cYSp1w/ZnczuRZyHbQ/DS1AaJXm+XCrYCZ8QSQBEDiSEQ0E8caJTNY8A=
-X-Received: by 2002:a63:5511:0:b0:439:12f6:fb9a with SMTP id
- j17-20020a635511000000b0043912f6fb9amr13190325pgb.197.1667224967855; Mon, 31
- Oct 2022 07:02:47 -0700 (PDT)
+        Mon, 31 Oct 2022 10:04:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C9310573;
+        Mon, 31 Oct 2022 07:04:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1F864B817C2;
+        Mon, 31 Oct 2022 14:04:20 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85DB9C433D6;
+        Mon, 31 Oct 2022 14:04:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667225058;
+        bh=WT/oM6yMv3E1f0+FE6QN2kC+ntZ+v8NTJw+qVfDbUnE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QcychxhkkcHBfy/LJKCP01W9g4E9lDNEwrWVJGUidFeVCNDxpqTv97LyHMQq3w5V0
+         liq8R8Nvk1s1xeHjo+Eya/579axzTGJLk3EeHWg80wZUVbm0p6RcpOYmnRIS3ZH2HT
+         nkNhTIosP+VKEDSOgJtG+tZEMUoPwYHebt3Z2ipF+jhyBkr0phzhLUqFJ5VXSUvH/y
+         AtmvcsEpxmL9esO7sv5rAhwSXxtt3Ihg4ghmUpdjaqw2b0sHjm/8VQBaS+gD47w5dq
+         yU59Xm9/uxrJZTp7vtxEhW62JXXYNy3HL5tF4KlpAbIlU8hCND33sw59He7M3DMtPG
+         FXqNdcfEqnUOQ==
+Date:   Mon, 31 Oct 2022 14:04:12 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel@collabora.com
+Subject: Re: [PATCHv4 09/13] mfd: rk8xx: add rk806 support
+Message-ID: <Y1/V3GOIPoqMgBUO@google.com>
+References: <20221020204251.108565-1-sebastian.reichel@collabora.com>
+ <20221020204251.108565-10-sebastian.reichel@collabora.com>
 MIME-Version: 1.0
-References: <20220415050003.3257645-1-mattst88@gmail.com> <20221019232952.2212729-1-mattst88@gmail.com>
-In-Reply-To: <20221019232952.2212729-1-mattst88@gmail.com>
-From:   Matt Turner <mattst88@gmail.com>
-Date:   Mon, 31 Oct 2022 10:02:35 -0400
-Message-ID: <CAEdQ38FO0SH80SLQKpLxadOBKn7cuRmZLd=xU8jJguq+MuD+Lw@mail.gmail.com>
-Subject: Re: [PATCH v2] tools: port perf ui from GTK 2 to GTK 3
-To:     linux-perf-users@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Jelle van der Waa <jvanderwaa@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221020204251.108565-10-sebastian.reichel@collabora.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Oct 19, 2022 at 7:30 PM Matt Turner <mattst88@gmail.com> wrote:
->
-> From: Jelle van der Waa <jvanderwaa@redhat.com>
->
-> GTK 2 is a legacy API and the newer version is GTK 3 which changes a few
-> API functions. gtk_tree_view_set_rules_hint is no longer required since
-> theme's are now responsible to handle this, gtk_vbox_new is deprecated
-> and replaced by passing the orientation to gtk_box_new. Apart from these
-> changes the accessing of the screen changed in GTK which requires using
-> new functions for getting geometry. Lastly the GTK_STOCK_OK define is
-> deprecated in GTK 3.
->
-> Signed-off-by: Jelle van der Waa <jvanderwaa@redhat.com>
-> Signed-off-by: Matt Turner <mattst88@gmail.com>
+On Thu, 20 Oct 2022, Sebastian Reichel wrote:
+
+> Add support for SPI connected rk806, which is used by the RK3588
+> evaluation boards. The PMIC is advertised to support I2C and SPI,
+> but the evaluation boards all use SPI. Thus only SPI support is
+> added here.
+> 
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 > ---
-> Originally sent in 2019. I've rebased it and given it a test.
->
-> One problem I've noticed is that C++ symbol names are often broken.
-> E.g.:
->
-> (perf:3254940): Gtk-WARNING **: 21:47:46.663: Failed to set text from
-> markup due to error parsing markup: Error on line 1 char 95:
-> =E2=80=9Cstd::char_traits<char=E2=80=9D is not a valid name: =E2=80=9C<=
-=E2=80=9D
->
-> Presumably we need to call g_markup_escape_text() somewhere, but I
-> struggled to find the right place.
->
-> Without the patch, the GTK-2 version repeatedly segfaults, so this is an
-> improvement regardless.
->
-> v2: Dropped changes to test-all.c. I don't know how to build that
->     apparently.
 
+Change log?  What happened over the previous 4 iterations?
 
-Arnaldo, does this work better for you?
+>  drivers/mfd/Kconfig       |  14 ++
+>  drivers/mfd/Makefile      |   1 +
+>  drivers/mfd/rk8xx-core.c  |  67 ++++++-
+>  drivers/mfd/rk8xx-spi.c   | 115 +++++++++++
+>  include/linux/mfd/rk808.h | 409 ++++++++++++++++++++++++++++++++++++++
+>  5 files changed, 604 insertions(+), 2 deletions(-)
+>  create mode 100644 drivers/mfd/rk8xx-spi.c
+
+[...]
+
+> @@ -0,0 +1,115 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Rockchip RK806 Core (SPI) driver
+> + *
+> + * Copyright (c) 2021 Rockchip Electronics Co., Ltd.
+> + *
+> + * Author: Xu Shengfei <xsf@rock-chips.com>
+> + */
+> +
+> +#include <linux/interrupt.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/mfd/rk808.h>
+> +#include <linux/module.h>
+> +#include <linux/regmap.h>
+> +#include <linux/spi/spi.h>
+> +
+> +static const struct regmap_range rk806_volatile_ranges[] = {
+> +	regmap_reg_range(RK806_POWER_EN0, RK806_POWER_EN5),
+> +	regmap_reg_range(RK806_DVS_START_CTRL, RK806_INT_MSK1),
+> +};
+> +
+> +static const struct regmap_access_table rk806_volatile_table = {
+> +	.yes_ranges = rk806_volatile_ranges,
+> +	.n_yes_ranges = ARRAY_SIZE(rk806_volatile_ranges),
+> +};
+> +
+> +static const struct regmap_config rk806_regmap_config_spi = {
+> +	.reg_bits = 8,
+> +	.val_bits = 8,
+> +	.cache_type = REGCACHE_RBTREE,
+> +	.volatile_table = &rk806_volatile_table,
+> +};
+> +
+> +static int rk806_spi_bus_write(void *context, const void *vdata, size_t count)
+> +{
+> +	struct device *dev = context;
+> +	struct spi_device *spi = to_spi_device(dev);
+> +	const char *data = vdata;
+> +	char buffer[4] = { 0 };
+> +
+> +	/* implementation currently only supports single write */
+> +	if (count != 2)
+> +		return -EINVAL;
+
+Is this a H/W limitation?
+
+> +	buffer[0] = RK806_CMD_WRITE | (count - 2);
+> +	buffer[1] = data[0]; /* register address */
+
+You can make these clearer by defining the indexes.
+
+> +	buffer[2] = RK806_REG_H;
+> +	buffer[3] = data[1]; /* register value */
+> +
+> +	return spi_write(spi, &buffer, sizeof(buffer));
+> +}
+> +
+> +static int rk806_spi_bus_read(void *context, const void *vreg, size_t reg_size,
+> +			      void *val, size_t val_size)
+> +{
+> +	struct device *dev = context;
+> +	struct spi_device *spi = to_spi_device(dev);
+> +	const char *reg = vreg;
+> +	char txbuf[3] = { 0 };
+> +
+> +	if (reg_size != sizeof(char) || val_size < 1)
+> +		return -EINVAL;
+> +
+> +	txbuf[0] = RK806_CMD_READ | (val_size - 1);
+> +	txbuf[1] = *reg;
+> +	txbuf[2] = RK806_REG_H;
+> +
+> +	return spi_write_then_read(spi, txbuf, sizeof(txbuf), val, val_size);
+> +}
+> +
+> +static const struct regmap_bus rk806_regmap_bus_spi = {
+> +	.write = rk806_spi_bus_write,
+> +	.read = rk806_spi_bus_read,
+> +	.reg_format_endian_default = REGMAP_ENDIAN_NATIVE,
+> +	.val_format_endian_default = REGMAP_ENDIAN_NATIVE,
+> +};
+> +
+> +static int rk8xx_spi_probe(struct spi_device *spi)
+> +{
+> +	struct regmap *regmap;
+> +
+> +	regmap = devm_regmap_init(&spi->dev, &rk806_regmap_bus_spi,
+> +				  &spi->dev, &rk806_regmap_config_spi);
+> +	if (IS_ERR(regmap))
+> +		return dev_err_probe(&spi->dev, PTR_ERR(regmap),
+> +				     "Failed to initialize register map\n");
+> +
+> +	return rk8xx_probe(&spi->dev, RK806_ID, spi->irq, regmap);
+> +}
+> +
+> +static const struct of_device_id rk8xx_spi_of_match[] = {
+> +	{ .compatible = "rockchip,rk806", },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, rk8xx_spi_of_match);
+> +
+> +static const struct spi_device_id rk8xx_spi_id_table[] = {
+> +	{ "rk806", 0 },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(spi, rk8xx_spi_id_table);
+
+Are these simple tables required for SPI?
+
+Is there anything akin to I2C's probe_new that you could use?
+
+> +static struct spi_driver rk8xx_spi_driver = {
+> +	.driver		= {
+> +		.name	= "rk8xx-spi",
+> +		.of_match_table = rk8xx_spi_of_match,
+> +	},
+> +	.probe		= rk8xx_spi_probe,
+> +	.id_table	= rk8xx_spi_id_table,
+> +};
+> +module_spi_driver(rk8xx_spi_driver);
+> +
+> +MODULE_AUTHOR("Xu Shengfei <xsf@rock-chips.com>");
+> +MODULE_DESCRIPTION("RK8xx SPI PMIC driver");
+> +MODULE_LICENSE("GPL v2");
+> diff --git a/include/linux/mfd/rk808.h b/include/linux/mfd/rk808.h
+> index 4183427a80fe..78e167a92483 100644
+> --- a/include/linux/mfd/rk808.h
+> +++ b/include/linux/mfd/rk808.h
+
+[...]
+
+-- 
+Lee Jones [李琼斯]
