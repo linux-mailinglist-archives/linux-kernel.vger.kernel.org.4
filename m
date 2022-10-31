@@ -2,120 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC69A6133BF
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 11:38:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 452EE6133B9
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 11:37:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229983AbiJaKiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 06:38:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52994 "EHLO
+        id S230253AbiJaKhG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 06:37:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230112AbiJaKhq (ORCPT
+        with ESMTP id S230024AbiJaKgz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 06:37:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9AFBAC77F
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 03:36:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667212609;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=D+yJAhJlKIwyVObb3U5f1g0DHLdpQkw0AnrikR08iAw=;
-        b=U4YM5+DGpVSIqfnwmcM1H4J+z1Poh0inU8lv8isKLGEAgya/LbmjuV/tQiMLj0y79g23PF
-        Beh5nwP8rTL1q94jVYKejRMDwBB21oTVplBvwN1Xqu4bUOZ6tvJOlKNfhgfpYe87YCrMQy
-        jBFSQ3pIbo2VP4QOVb0uWYwSD/eims8=
-Received: from mail-wr1-f71.google.com (mail-wr1-f71.google.com
- [209.85.221.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-86-F5QYUk7mNhWuVlMY4LrhyQ-1; Mon, 31 Oct 2022 06:36:48 -0400
-X-MC-Unique: F5QYUk7mNhWuVlMY4LrhyQ-1
-Received: by mail-wr1-f71.google.com with SMTP id m24-20020adfa3d8000000b00236774fd74aso2901583wrb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 03:36:48 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=D+yJAhJlKIwyVObb3U5f1g0DHLdpQkw0AnrikR08iAw=;
-        b=Vzs0gNQ+7gRE3wQD9ImaImCnLpC8An+71jdG7MDiO5AC/2ErVtFOlmKwPoF8P0bhPS
-         unX2ZA/ijm//aT4Gb5xu20tBOzyTvv2EiPuOc86SWWwCJzsNH8P4TVPCIeQgkPvlJ4wI
-         mQ8jZfwTHQO9r1ICYbqzEtiwf7elPj97AZ1ZWTNwwjiDtMvlRDqLw09V4tDd8LbfGMkl
-         Zt2DWlhkcMSm3OfkNDVsy/gMcCmif/6nVfIDEqufe8aL8WLAK15ws4DojT0TPD0qJEXI
-         6MzAsiMEKHfkT8oPqBZ3JoKdYA9aztppX2uPN+UYvyvcuwRkiN1HJUereHpqc58CETvf
-         43Tg==
-X-Gm-Message-State: ACrzQf1gkIBK/y7AEF4mDt7Fd4ABVO7UPH/haO5WrB8VdWs32K4vwJx5
-        wFQtPf0xc97akKkvZA4TKy/V2GE5ufI15e8dN2+iWRhiVef+RpPfi6FL2Ny+YCi8PhxuW3pY1vj
-        HaXkp3wN9OuSibK81VsV7byWt
-X-Received: by 2002:a5d:498f:0:b0:236:55e9:6c16 with SMTP id r15-20020a5d498f000000b0023655e96c16mr7720329wrq.331.1667212607245;
-        Mon, 31 Oct 2022 03:36:47 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4fWxZ8BrrJ+vmNkW0YIEyt96wS3ci6OrS8H1P0VFZX+HDXkI4lCRe5RGwRESBJ8B+kgY/IZw==
-X-Received: by 2002:a5d:498f:0:b0:236:55e9:6c16 with SMTP id r15-20020a5d498f000000b0023655e96c16mr7720311wrq.331.1667212606927;
-        Mon, 31 Oct 2022 03:36:46 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c705:b300:ab9a:1f1f:ddaf:3b1d? (p200300cbc705b300ab9a1f1fddaf3b1d.dip0.t-ipconnect.de. [2003:cb:c705:b300:ab9a:1f1f:ddaf:3b1d])
-        by smtp.gmail.com with ESMTPSA id e7-20020adff347000000b00226dba960b4sm6797609wrp.3.2022.10.31.03.36.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Oct 2022 03:36:46 -0700 (PDT)
-Message-ID: <c9a2f7a6-f121-8cf0-4624-b02deccdaead@redhat.com>
-Date:   Mon, 31 Oct 2022 11:36:45 +0100
+        Mon, 31 Oct 2022 06:36:55 -0400
+Received: from twspam01.aspeedtech.com (twspam01.aspeedtech.com [211.20.114.71])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F36FBD2FD
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 03:36:53 -0700 (PDT)
+Received: from mail.aspeedtech.com ([192.168.0.24])
+        by twspam01.aspeedtech.com with ESMTP id 29VADXEh074630;
+        Mon, 31 Oct 2022 18:13:33 +0800 (GMT-8)
+        (envelope-from billy_tsai@aspeedtech.com)
+Received: from BillyTsai-pc.aspeed.com (192.168.2.149) by TWMBX02.aspeed.com
+ (192.168.0.24) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Mon, 31 Oct
+ 2022 18:36:38 +0800
+From:   Billy Tsai <billy_tsai@aspeedtech.com>
+To:     <jdelvare@suse.com>, <linux@roeck-us.net>, <robh+dt@kernel.org>,
+        <joel@jms.id.au>, <andrew@aj.id.au>, <lee.jones@linaro.org>,
+        <thierry.reding@gmail.com>, <u.kleine-koenig@pengutronix.de>,
+        <p.zabel@pengutronix.de>, <billy_tsai@aspeedtech.com>,
+        <linux-hwmon@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-aspeed@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pwm@vger.kernel.org>, <BMC-SW@aspeedtech.com>,
+        <garnermic@meta.com>
+Subject: [PATCH 0/3] Support pwm/tach driver for aspeed ast26xx
+Date:   Mon, 31 Oct 2022 18:38:05 +0800
+Message-ID: <20221031103809.20225-1-billy_tsai@aspeedtech.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Content-Language: en-US
-To:     Rebecca Mckeever <remckee0@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1666203642.git.remckee0@gmail.com>
- <cf1f686743ff8f1da9618088b7f0ea0ba4ebaecb.1666203643.git.remckee0@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v3 2/5] memblock tests: add top-down NUMA tests for
- memblock_alloc_exact_nid_raw
-In-Reply-To: <cf1f686743ff8f1da9618088b7f0ea0ba4ebaecb.1666203643.git.remckee0@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [192.168.2.149]
+X-ClientProxiedBy: TWMBX02.aspeed.com (192.168.0.24) To TWMBX02.aspeed.com
+ (192.168.0.24)
+X-DNSRBL: 
+X-MAIL: twspam01.aspeedtech.com 29VADXEh074630
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.10.22 20:34, Rebecca Mckeever wrote:
-> Add tests for memblock_alloc_exact_nid_raw() where the simulated physical
-> memory is set up with multiple NUMA nodes. Additionally, all of these
-> tests set nid != NUMA_NO_NODE. These tests are run with a top-down
-> allocation direction.
-> 
-> The tested scenarios are:
-> 
-> Range unrestricted:
-> - region can be allocated in the specific node requested:
->        + there are no previously reserved regions
->        + the requested node is partially reserved but has enough space
-> 
-> Range restricted:
-> - region can be allocated in the specific node requested after dropping
->    min_addr:
->        + range partially overlaps with two different nodes, where the
->          first node is the requested node
->        + range partially overlaps with two different nodes, where the
->          requested node ends before min_addr
->        + range overlaps with multiple nodes along node boundaries, and
->          the requested node ends before min_addr
-> 
-> Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
-> ---
+Unlike the old design that the register setting of the TACH should based
+on the configure of the PWM. In ast26xx, the dependency between pwm and
+tach controller is eliminated and becomes a separate hardware block. One
+is used to provide pwm output and another is used to monitor the frequency
+of the input. Therefore, this patch serials implements them by writing the
+two driver "pwm-aspeed-ast2600.c" and "tach-aspeed-ast2600.c". The former
+is following the pwm subsystem which can apply the existed driver to
+controller the fan(pwm-fan.c), beeper(pwm-beeper.c) and so on. The latter
+is following the sysfs interface of hwmon to creat the node for fan
+monitor.
 
-Acked-by: David Hildenbrand <david@redhat.com>
+Billy Tsai (3):
+  dt-bindings: Add bindings for aspeed pwm-tach.
+  pwm: Add Aspeed ast2600 PWM support
+  hwmon: Add Aspeed ast2600 TACH support
 
+ .../bindings/hwmon/aspeed,ast2600-tach.yaml   |  48 ++
+ .../bindings/mfd/aspeed,ast2600-pwm-tach.yaml |  76 ++
+ .../bindings/pwm/aspeed,ast2600-pwm.yaml      |  64 ++
+ drivers/hwmon/Kconfig                         |   9 +
+ drivers/hwmon/Makefile                        |   1 +
+ drivers/hwmon/tach-aspeed-ast2600.c           | 692 ++++++++++++++++++
+ drivers/pwm/Kconfig                           |  10 +
+ drivers/pwm/Makefile                          |   1 +
+ drivers/pwm/pwm-aspeed-ast2600.c              | 325 ++++++++
+ 9 files changed, 1226 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed,ast2600-tach.yaml
+ create mode 100644 Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.yaml
+ create mode 100644 Documentation/devicetree/bindings/pwm/aspeed,ast2600-pwm.yaml
+ create mode 100644 drivers/hwmon/tach-aspeed-ast2600.c
+ create mode 100644 drivers/pwm/pwm-aspeed-ast2600.c
 
 -- 
-Thanks,
-
-David / dhildenb
+2.25.1
 
