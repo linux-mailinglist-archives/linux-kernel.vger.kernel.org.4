@@ -2,117 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3B6916131DF
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 09:45:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CD126131E9
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 09:49:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbiJaIpx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 04:45:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34380 "EHLO
+        id S229949AbiJaIt4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 04:49:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiJaIpu (ORCPT
+        with ESMTP id S229475AbiJaItz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 04:45:50 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80089.outbound.protection.outlook.com [40.107.8.89])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390DFB0F
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 01:45:49 -0700 (PDT)
+        Mon, 31 Oct 2022 04:49:55 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2057.outbound.protection.outlook.com [40.107.94.57])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D153965C2;
+        Mon, 31 Oct 2022 01:49:52 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dhdE8RE536rjSqQ/EolICH6pS6JbodIbi3AAZDEB7qksUi7uAJK9r6UywZPAEBPnN21DGy6JMWW+3YazG8Qr4g8susIsRaj/ad+pjRn7QYSsz7OK4ogMQPNZeFkO7QsafPCgydKrlh6Et6flvxwX1pXKGm4o/qzdXvDgUsOh/sN1NUi55ofMdBxORip1Hzssv0l1fSKlY/qsTgrPQPB3fgA4uOaYjL72nux3P45Q5fUN/3YQHZ6NZD+Dq5r2wLJYTHRw3b4t++E5GjH+z3o5Cj90iILbjh+30BcgGAri9d6cbVNSIi4BGu7fGyKfjaHrWh15K/ND0DDuxdMxqqbbBw==
+ b=k8MThUB7V6+abojPq8xOkceN1hif3cJfFCE8S8w1MNndahwYnR4ajJwJyd3pJX8/lBHOwQBmkzBDti5/Zo3UbH4Ig5Zh5Lmf3TJujpfez9C//ii8bSYn4eTxlvyw+jZ/GgwazHUMdzXw9cswmj463z10nddtfoR59xdiJPjXrTevBa9Ah2J8fDSPV7uO59X1gnO7tyYsGcyx0scyQfXLhjU/faNZHVZAZ58nA4cod4MDICzDenGDyfIOoNucwo5oUweW6V7ySJ+4olHe5YqxWeBJ9bxX0kVvtbIoG55fNmeOActEUv032LuzBJzGg8+hkhmKK8dzEZQIcuVaW9FACA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ODDQcKLt4G9CVZ+1hYxj8ZXKpc/9AzQnXbag4U380HM=;
- b=jHi4EV9JIP63XSZ7o4PejdT4K6mlqKecP7KFwz6xAvUQonwrzgYExsQ9KLC5dH2dx8/9XRxGGrSCwhvjwYckAZGDxzJy7mL5xSHz5m4aa/QMIbsRj71+wip4UQXVhoAIx+rB/fAzxRZUW451dgTYWjXJHOBtLKiZ7pe4gkq8i8hcXT8okZow3Lnk/6IMkKevjQ0M1CyQhfZy/6b1u8kXh1tIL8CKD0GFMgADcu9Y4TRiqPhvMvOO/4wrAHfy7mBxDfbimiX50SxCZPl/e4kKssz2sqmEbBjkyRFdu7jNZLyhwwFjHThvAoS7M/6caB3B/TXwrLcAyPOCSAtv8z54Xg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ bh=dOh1Hfr151hWESQAiOoIZIyy6xegKHTRKjuSbXcOhQ0=;
+ b=RaCCC0Tr6qOPVJfcSZdMr99eRkNt1yb6k8EByaGe2ySQkUaS0gqKqSS2ir/Cq872oY9cf5luwPjAGUUXKxKsEIGVoxmwdiGNzm3zdHFsM0wUbmt06x78fBpdIs/d6aY1CJzGIN52DfOL2QJ/yiRf1+bJhUMbZ/Um4RRh/c+z2wbPpAYcZ83p6PMIga3P7bgor5Vi+6SBQTZMYMImALIxQLfnrF6smJs0crHR/nlLUeGY5dPEknNmhjMrj1sHLKlxmwvlRqJN8rXlA/F/lYO1jYXwuiqUtJpMfnowKosa7lNi+9WjKpfEmJOW1TFHOPannWALsmgdGtQAYI8EHkVSZQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=linuxfoundation.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ODDQcKLt4G9CVZ+1hYxj8ZXKpc/9AzQnXbag4U380HM=;
- b=nK5YCdjk6LIMFfwbM2XZLIgOzikAvcB0FRol25bGlEGviK+fLntEEZGXYqU0xz/CqzEa6lmJh64EhZRwnffL0A+3OK8O8XlT/2H4wz/l0jW3Ej+2bfBlDOxb1Hfb39lMHhpavdndWBrRL5fIwtTkVR0zVD+TnFQYk5QaxMqO0kA=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
- by VE1PR04MB7453.eurprd04.prod.outlook.com (2603:10a6:800:1b0::9) with
+ bh=dOh1Hfr151hWESQAiOoIZIyy6xegKHTRKjuSbXcOhQ0=;
+ b=nefi7uoZHuR78B9t55bO8DmqvWizcM8IwnXE+V+4H70EAg7YKiHeUXewJm7iv72nJ4wx/tWh/Eu4Ff+bhNIiIzduOIeHh7Dh5uCVXHSfLm7AVsz7+92fvAEL5e8HpAT+LrPTGtK1KsszuSjvdzjH9har6WDlMLg1zArao9tQuHQ=
+Received: from CY5PR19CA0129.namprd19.prod.outlook.com (2603:10b6:930:64::27)
+ by CY8PR12MB7364.namprd12.prod.outlook.com (2603:10b6:930:50::20) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.15; Mon, 31 Oct
- 2022 08:45:46 +0000
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::dcca:b62f:206b:dcf8]) by AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::dcca:b62f:206b:dcf8%3]) with mapi id 15.20.5769.019; Mon, 31 Oct 2022
- 08:45:46 +0000
-Message-ID: <c7114aed1e21a6903137ba9288c4d6f6c429fded.camel@nxp.com>
-Subject: Re: [PATCH RESEND] mfd: Add Freescale i.MX8qxp Control and Status
- Registers (CSR) module driver
-From:   Liu Ying <victor.liu@nxp.com>
-To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Cc:     lee@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
-        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com
-Date:   Mon, 31 Oct 2022 16:44:54 +0800
-In-Reply-To: <20221017075702.4182846-1-victor.liu@nxp.com>
-References: <20221017075702.4182846-1-victor.liu@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.4-0ubuntu1 
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SI2PR04CA0018.apcprd04.prod.outlook.com
- (2603:1096:4:197::9) To AM7PR04MB7046.eurprd04.prod.outlook.com
- (2603:10a6:20b:113::22)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.16; Mon, 31 Oct
+ 2022 08:49:50 +0000
+Received: from CY4PEPF0000B8EF.namprd05.prod.outlook.com
+ (2603:10b6:930:64:cafe::5b) by CY5PR19CA0129.outlook.office365.com
+ (2603:10b6:930:64::27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.15 via Frontend
+ Transport; Mon, 31 Oct 2022 08:49:50 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000B8EF.mail.protection.outlook.com (10.167.241.11) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5791.17 via Frontend Transport; Mon, 31 Oct 2022 08:49:49 +0000
+Received: from jasmine-meng.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 31 Oct
+ 2022 03:49:38 -0500
+From:   Meng Li <li.meng@amd.com>
+To:     Shuah Khan <skhan@linuxfoundation.org>,
+        Huang Rui <ray.huang@amd.com>,
+        <linux-kselftest@vger.kernel.org>
+CC:     "Rafael J . Wysocki" <rafael.j.wysocki@intel.com>,
+        Nathan Fontenot <nathan.fontenot@amd.com>,
+        Deepak Sharma <deepak.sharma@amd.com>,
+        "Alex Deucher" <alexander.deucher@amd.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        Shimmer Huang <shimmer.huang@amd.com>,
+        "Perry Yuan" <Perry.Yuan@amd.com>,
+        Xiaojian Du <Xiaojian.Du@amd.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Borislav Petkov <bp@alien8.de>, <linux-kernel@vger.kernel.org>,
+        Meng Li <li.meng@amd.com>
+Subject: [PATCH V5 0/5] Add tbench/gitsource new test cases for amd-pstate-ut
+Date:   Mon, 31 Oct 2022 16:49:19 +0800
+Message-ID: <20221031084924.1742169-1-li.meng@amd.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|VE1PR04MB7453:EE_
-X-MS-Office365-Filtering-Correlation-Id: 92d03469-aa93-4df4-15f1-08dabb1c4da8
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000B8EF:EE_|CY8PR12MB7364:EE_
+X-MS-Office365-Filtering-Correlation-Id: c6288f55-8959-4063-b03c-08dabb1cdee4
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: NBHSjkuytQ9OELeT1vGr4BKi8fg7Y5cZS8Fek0gSjFtESNVck2Whfvagv4HAXE+zGwbfcjO0RfGYM4tANgbFvgvKlyzY8ra0wNnbSCOkGUI1k0cOSIcqNevqepKkQ+UmpBnpk/BvQGwSZBLNlkpcoG8VDfRFtQAAvVGS5Hd20RIhPLcuO3Qvn6zG0m4jpiHar9RW4Rb8ZoiiYohRq2d/4boxheYf56Gpfq27pTv2hmBKFyLatfCmruS0C9zKsLW3A1EfsUHJRgmAGZxECYCL03eNLKrk+FQJUlDqmCc2RrUbki5P8HbowOxdFTLP2qD+B6UqpeYnQB7jyk6y2DHwHsKhhef415/d0kU8dkJzluXfc1etP+Y/5GVr7JKmlX2gGrZBk6/vvdVSfidQisglZ4ReI7KNzVWfjNwjAfFv1elVq2yNAtbHj+hpj8Ekv2beR49/+CZbkTwbzhuUHxDjidDC4yg0Qi+Zn1Bi5gHK471j+FoCpAM+WFK7dFFHh0eOGoLtEX24VoHcr3AtbX+0ThLyvrt4ZcbVLqm6rRwP6qpdPm18yOHyVw/0UW2twpzszTtIOZS9ZfHhI4HUefjtTN7GsuHOMmzbPwakOTdd+kqYh5pbu06cm265iFY5L36gY4o+k85Rc4HkoD4v2EfLAjjFQg0Ux8ttvwrXb4romwXswnG/PiAomrouTta7azdLOPSEQl4e5CAnhZY81j9WaUV8LVuXgjJ1mlQkzzObB1dKRBgWc6ZPPLJGrMrzItaqlOHMngyybblezCjNDngG3Q==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(136003)(366004)(396003)(39860400002)(451199015)(186003)(2616005)(6666004)(6486002)(478600001)(6512007)(2906002)(6506007)(52116002)(38100700002)(38350700002)(4001150100001)(26005)(86362001)(36756003)(8936002)(316002)(66946007)(66556008)(8676002)(4326008)(66476007)(5660300002)(41300700001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?TzA0V29kVWk5T01DMWZjdytvekkwNmZBNGcvOWlGZ1pSNko3OXlwbjgydEFX?=
- =?utf-8?B?U1ZpRjZWbFI3ZitscUVkU3VOVzYyNTdiOU1MbUFxWERSeERKblhXeTY3bWhG?=
- =?utf-8?B?L3A1RVpTdVkzTzJ4aUpMb00wYm9iZFdzbWR0amt0V0Fqb1RsRUs5aVlaZ1pF?=
- =?utf-8?B?cmQ5alY3Nklac1FKL1hIclBGZThiRTRjT2dDUmszQnVMc2IyUWIxZ0Y2TTFr?=
- =?utf-8?B?ZmlKREM3bHdkR0pTd08xQzh3eCtBOU1UUnZWdkN4UVR3WjV6VzRkK2F3UUw0?=
- =?utf-8?B?blRuWlJaYy9KaFlST3lEcjNZQ3doWldUNE5uNkdtUk5hTjQ2N2x6WXhHTStH?=
- =?utf-8?B?TEJUMFBIbncyZm5sMkllbHQzOXM1QXV2YzBmWnZ0cngzU1hZSFordm9GNHFM?=
- =?utf-8?B?ZDExaStnVmNsS3ZHNUc4ZnJialpVL1Brb2Fadm9XaGtPYnhac011aGxLSEVS?=
- =?utf-8?B?WnFSQXlxS1MyVWEyeHFhNS9RRVNsMTRiUlAweHBQSlZ2a2ozUksvcHVjMUx0?=
- =?utf-8?B?alRCRWF6V3BDdVY5aHZqNnhFeGZOQThSa2dKWGRSQ1ErMGNzaGRlYUJCR1p1?=
- =?utf-8?B?bFZTUDBpTmd3aTl5K09kamVKQUNrdG9RaGJHNzBZUWFNRGdjQUVjRGYwRVFz?=
- =?utf-8?B?NEcrdVAyUk85eHRneTJlY2g0TEE0ZmtuaUdDaG5DTGcveloxaTdra2RlSUJi?=
- =?utf-8?B?UWZhUTdwdHo2elFEQ3llUnV5ajdxMjNoaHY3c2dESFhBZ1l0RmlEaHgvOXQ4?=
- =?utf-8?B?dXpHbnNuMzYzRFFhdUpoMVRRSG5ac2VhZG9Uc05PQVVZaXJDaER4RllKL0tL?=
- =?utf-8?B?ZFFJR0h5ZG1XQ1hNS2hzSWIzdHFyN05BdEJSZWxaQVRZSWk2bitVOGwvaGov?=
- =?utf-8?B?SlJSM2MzOVBaZjdVQmlmbUx3Mm9wWlFxa0lGRU8xWm02Q3VwdkFRbjFUZVN6?=
- =?utf-8?B?VWJLWjBkYTRHVXVLNVk5bmdYZjZVNHVlc2crak51aGlYYkNVaHozTXQ5K2hG?=
- =?utf-8?B?R2d0TXhISGJEL3lYdld1YW12SjZSZlAvY2xuR3BXOVRJSU5Xd25sK2RkMkl6?=
- =?utf-8?B?MEcxZmJPSlJ2b0NYQjZ2M05EcjNQWVRLaUZOMm1vcVNEM0gxWjd3YXo0bnpx?=
- =?utf-8?B?blorako3TGU5dmVVWm5OZFRoQ3VTRUtUNWMxTEhtY0k4NUs2Ym0wTVpDK1BZ?=
- =?utf-8?B?YWVwQkM0bVBsRGp4Ui83cFF3YkxseGQvSWtsWnZpOUJpekdwYnltY2NuL2Nz?=
- =?utf-8?B?UlU4SWZxQWV5SHVReHpMKzdCblF1dWFUVWRwcXZFZXZxaVA2UUtZWmJTZEFR?=
- =?utf-8?B?NWx0VDR5dVJ5K3pqd1pnUUtvK1JRT1hIbFpzSGpQaUZnQUxyU0NDa016enNS?=
- =?utf-8?B?aGcwOERwKzVmRkNKaGE5Qk5uNUdkWTR3UGVpMzBORDI0VUNMdFB3RE1JMFM3?=
- =?utf-8?B?NEc4QlVFckwraG1JdGVINDg1cDBTaWJyQ0VhMWZzS1owK2xDQ2gxRzVyMlR5?=
- =?utf-8?B?N1BlcFprdUxMUVB6N3YyY3hLaGJraktsQ3R6dmlZUWZweUhhRm9vZERIT2tt?=
- =?utf-8?B?d29rSHAwMFZ4QTRwMEd5VHhBbkEzTkEyZUQ4dE5aejhtdWZpZXNSUmhDeFUy?=
- =?utf-8?B?RXJCb0VmeHEzTWJpclA4OS9TVVhsT3BYSTJ5cG03dDlGcWFBeFZTMDJtbUxT?=
- =?utf-8?B?Snc4aDd4TTRUcXZNL0ZVSTl1bkpHTTM2d3lFeDJ0U2Y5NERDVklSbzJUcUZR?=
- =?utf-8?B?ZzczeXE2NG5JblN3MGVNaGxKS09qS1pkRkpjc0d3bUR1OERFN2NaQm5UWVBX?=
- =?utf-8?B?dWcrY1poL29hdjc4QlRGZlpVZHdKQnBUTSsyQlpEUDZOM3hsUHduR21CUzF2?=
- =?utf-8?B?ak1uVkxFZWlGcmk1M0FxUkxLdHdxWDFHS2xWWFRBVnh5NjAvZmhRKzlmS0xO?=
- =?utf-8?B?TXlkRm1RalZ5MVRKWlZva1JpVkpUWEJoNElNcXlsWkhIYTZNWUt3WnIya0F3?=
- =?utf-8?B?b0hQTWF6VjVudXlzaDZKdDFBMWlBU21tRFgrQXd1QUlPL2t5dXl6UXpCaENV?=
- =?utf-8?B?VFhRMlpXcGtQK1RubGRIcjRXMEVtQTZ5eVd2SUFvMm1RRzNCN1VwNFFjTFY2?=
- =?utf-8?Q?QacARiF6qWikhnGEYgWLuik5Y?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 92d03469-aa93-4df4-15f1-08dabb1c4da8
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Oct 2022 08:45:46.6278
+X-Microsoft-Antispam-Message-Info: SqWY2B816qi7FU8lnhYWrxtAsR3zmMa7/GMY1qvtGQWFdh/g88RQZXfSYJWAFPjelnfoYkK6IYFjBscoz+IHEPi1kCiuvBRv2/7mEsuzDszA+rliJHaCWVgCm3Cv9w+kk3i9LpRopLbtQBZO0YRD3s4JblrKY8R9eakUevz8W9rdftMd6S4AscLmeCNNiH95CLHUg7M6zaVBE42my1ZoXHynrPupE3xhijN3ro92BSQojd9sIht5LZYKHM9ZJRazNQfriMWpCAyXfcPiaKxDym75Wj6XMI5iDDrUxPILFpXgbXRF7FjxOLaK1INGZr4xK0VNH5KscJplUiv+QybJbkQpSu1S6+zfG0Bb47aVOzO9xq8AT7MeF0B+9XohL2o6RHbDeHrw4ZN1bzOsYZ4wfFSmx1OdZVQi23AjOUIpnGsqgVDfTI3yePdgBbQ68zC6RMMfJIxztsfUSUaxKjYXryZHAafHuYKRRM+qj2MLw/2GiVjqSjNEWzS3TU+Mvex4SJVM3cZ7856rWWXZvu5IN8n5kxLjaduTqzr2sttF4Tp+SrmZg9ytueuPGAbMr+vxI1XTvhyIiH7I1ATsPkWkANb4CBIqgIRmmT6HiuqN7xOsi6Qp1eCINuwI6RhWynVuCMO95cpGYY4LTnK1VVUdxtJuQwWn3+UnNYN9HDf6iC/+lByb8AHbBXZh3tx7r4gKe+4p9TcS3ix7lXyuAHFaTon/95T7bNL9baRJHowtsTYgLbsS1Ql5NyQOiigh8M7yHJMpYB64oGESabYz7reULHXFg8dJmo3xa53APHMyzDo4PTMLC4bqzLYx9h87vzwd+/6jCiXmJN5ocR77GQKlssDgUb7iRi8iD/Y+XMfy7CrL6cQLft4qEdWMpk5WVamy
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(376002)(39860400002)(136003)(396003)(451199015)(40470700004)(46966006)(36840700001)(2616005)(5660300002)(336012)(16526019)(186003)(426003)(2906002)(47076005)(1076003)(26005)(41300700001)(81166007)(8936002)(82310400005)(40460700003)(356005)(40480700001)(86362001)(36756003)(82740400003)(36860700001)(316002)(83380400001)(6666004)(54906003)(8676002)(4326008)(7696005)(478600001)(70586007)(70206006)(110136005)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Oct 2022 08:49:49.8259
  (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 2FAP2fSo5LAFi0IlFtIGgKvNabSum6teDqHKG/H6ZF160UDRTMG2i1e7GecQUXte8Sfhuq53xfvOy11E+3Qoiw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7453
+X-MS-Exchange-CrossTenant-Network-Message-Id: c6288f55-8959-4063-b03c-08dabb1cdee4
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CY4PEPF0000B8EF.namprd05.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY8PR12MB7364
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
@@ -123,39 +108,94 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 2022-10-17 at 15:57 +0800, Liu Ying wrote:
-> Freescale i.MX8qxp Control and Status Registers (CSR) module is a system
-> controller. It represents a set of miscellaneous registers of a specific
-> subsystem. It may provide control and/or status report interfaces to a
-> mix of standalone hardware devices within that subsystem.
-> 
-> The CSR module in i.MX8qm/qxp SoCs is a child node of a simple power-managed
-> bus(i.MX8qxp pixel link MSI bus). To propagate power management operations
-> of the CSR module's child devices to that simple power-managed bus, add a
-> dedicated driver for the CSR module. Also, the driver would populate the CSR
-> module's child devices.
-> 
-> Signed-off-by: Liu Ying <victor.liu@nxp.com>
-> ---
-> The Freescale i.MX8qxp CSR DT bindings is at
-> Documentation/devicetree/bindings/mfd/fsl,imx8qxp-csr.yaml.
-> 
-> Resend the patch based on v6.1-rc1.
-> 
->  drivers/mfd/Kconfig           | 10 +++++++
->  drivers/mfd/Makefile          |  1 +
->  drivers/mfd/fsl-imx8qxp-csr.c | 53 +++++++++++++++++++++++++++++++++++
->  3 files changed, 64 insertions(+)
->  create mode 100644 drivers/mfd/fsl-imx8qxp-csr.c
+Hi all:
 
-[...]
+First, rename amd-pstate-ut.sh to basic.sh as a basic test, mainly for
+AMD P-State kernel drivers. The purpose of this modification is to
+facilitate the subsequent addition of gitsource, tbench and other tests.
 
-Gentle ping...
+Second, split basic.sh into run.sh and basic.sh.
+The modification makes basic.sh more pure, just for test basic kernel
+functions. The file of run.sh mainly contains functions such as test
+entry, parameter check, prerequisite and log clearing etc.
 
-Any comments please?
+Third, add tbench.sh trigger the tbench testing and monitor the cpu.
 
-Thanks,
-Liu Ying
+Fourth, add gitsource.sh trigger the gitsource testing and monitor the cpu
+information.
+
+Finally, modify rst document to introduce test steps and results etc.
+
+See patch series in below git repo:
+V1:https://lore.kernel.org/lkml/20220706073622.672135-1-li.meng@amd.com/
+V2:https://lore.kernel.org/lkml/20220804054414.1510764-1-li.meng@amd.com/
+V3:https://lore.kernel.org/lkml/20220914061105.1982477-1-li.meng@amd.com/
+V4:https://lore.kernel.org/lkml/20221024013356.1639489-1-li.meng@amd.com/
+
+Changes from V1->V2:
+- selftests: amd-pstate: basic
+- - delete main.sh and merge funtions into run.sh
+- selftests: amd-pstate: tbench
+- - modify ppw to performance per watt for tbench.
+- - add comments for performance per watt for tbench.
+- - add comparative test on acpi-cpufreq for tbench.
+- - calculate drop between amd-pstate and acpi-cpufreq etc.
+- - plot images about perfrmance,energy and ppw for tbench.
+- selftests: amd-pstate: gitsource
+- - modify ppw to performance per watt for gitsource.
+- - add comments for performance per watt for gitsource.
+- - add comparative test on acpi-cpufreq for gitsource.
+- - calculate drop between amd-pstate and acpi-cpufreq etc.
+- - plot images about perfrmance,energy and ppw for gitsource.
+- Documentation: amd-pstate:
+- - modify rst doc, introduce comparative test etc.
+
+Changes from V2->V3:
+- selftests: amd-pstate:
+- - reduce print logs for governor.
+- - add a check to see if tbench and the perf tools are already installed.
+- - install tbench package from apt or yum.
+- - correct spelling errors from comprison to comparison.
+
+Changes from V3->V4:
+- selftests: amd-pstate:
+- - modify cover letter and commit logs.
+- Documentation: amd-pstate:
+- - modify some format questions.
+
+Changes from V4->V5:
+- selftests: amd-pstate:
+- - rename amd-pstate-ut.sh to basic.sh.
+- - split basic.sh into run.sh and basic.sh.
+- - modify tbench.sh to prompt to install tbench.
+- - modify commit messages and description informations of shell files.
+- Documentation: amd-pstate:
+- - correct spell errors.
+
+Thanks, 
+Jasmine 
+
+Meng Li (5):
+  selftests: amd-pstate: Rename amd-pstate-ut.sh to basic.sh.
+  selftests: amd-pstate: Split basic.sh into run.sh and basic.sh.
+  selftests: amd-pstate: Trigger tbench benchmark and test cpus
+  selftests: amd-pstate: Trigger gitsource benchmark and test cpus
+  Documentation: amd-pstate: Add tbench and gitsource test introduction
+
+ Documentation/admin-guide/pm/amd-pstate.rst   | 194 ++++++++-
+ tools/testing/selftests/amd-pstate/Makefile   |  11 +-
+ .../selftests/amd-pstate/amd-pstate-ut.sh     |  56 ---
+ tools/testing/selftests/amd-pstate/basic.sh   |  38 ++
+ .../testing/selftests/amd-pstate/gitsource.sh | 354 ++++++++++++++++
+ tools/testing/selftests/amd-pstate/run.sh     | 387 ++++++++++++++++++
+ tools/testing/selftests/amd-pstate/tbench.sh  | 339 +++++++++++++++
+ 7 files changed, 1302 insertions(+), 77 deletions(-)
+ delete mode 100755 tools/testing/selftests/amd-pstate/amd-pstate-ut.sh
+ create mode 100755 tools/testing/selftests/amd-pstate/basic.sh
+ create mode 100755 tools/testing/selftests/amd-pstate/gitsource.sh
+ create mode 100755 tools/testing/selftests/amd-pstate/run.sh
+ create mode 100755 tools/testing/selftests/amd-pstate/tbench.sh
+
 -- 
- Liu Ying
+2.34.1
 
