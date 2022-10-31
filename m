@@ -2,39 +2,35 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 190C861326E
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 10:19:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2574C613271
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 10:19:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbiJaJTj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 05:19:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50336 "EHLO
+        id S230302AbiJaJTp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 05:19:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230202AbiJaJTZ (ORCPT
+        with ESMTP id S229787AbiJaJTd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 05:19:25 -0400
+        Mon, 31 Oct 2022 05:19:33 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E92F6DF04;
-        Mon, 31 Oct 2022 02:19:23 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C477B1FB;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DCABDEE8;
         Mon, 31 Oct 2022 02:19:29 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 207FC1FB;
+        Mon, 31 Oct 2022 02:19:35 -0700 (PDT)
 Received: from pierre123.arm.com (unknown [10.57.7.107])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9D6633F703;
-        Mon, 31 Oct 2022 02:19:20 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D9B113F703;
+        Mon, 31 Oct 2022 02:19:26 -0700 (PDT)
 From:   Pierre Gondois <pierre.gondois@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     pierre.gondois@arm.com, Rob.Herring@arm.com,
+        Khuong Dinh <khuong@os.amperecomputing.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-amlogic@lists.infradead.org
-Subject: [PATCH 02/20] arm64: dts: Update cache properties for amlogic
-Date:   Mon, 31 Oct 2022 10:19:18 +0100
-Message-Id: <20221031091918.531607-1-pierre.gondois@arm.com>
+        devicetree@vger.kernel.org
+Subject: [PATCH 03/20] arm64: dts: Update cache properties for apm
+Date:   Mon, 31 Oct 2022 10:19:27 +0100
+Message-Id: <20221031091927.531688-1-pierre.gondois@arm.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -55,81 +51,53 @@ these properties. Add them if missing.
 
 Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 ---
- arch/arm64/boot/dts/amlogic/meson-a1.dtsi   | 1 +
- arch/arm64/boot/dts/amlogic/meson-axg.dtsi  | 1 +
- arch/arm64/boot/dts/amlogic/meson-g12a.dtsi | 1 +
- arch/arm64/boot/dts/amlogic/meson-g12b.dtsi | 1 +
- arch/arm64/boot/dts/amlogic/meson-gx.dtsi   | 1 +
- arch/arm64/boot/dts/amlogic/meson-sm1.dtsi  | 1 +
- 6 files changed, 6 insertions(+)
+ arch/arm64/boot/dts/apm/apm-shadowcat.dtsi | 4 ++++
+ arch/arm64/boot/dts/apm/apm-storm.dtsi     | 4 ++++
+ 2 files changed, 8 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-index b4000cf65a9a..d2f7cb4e5375 100644
---- a/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-a1.dtsi
-@@ -36,6 +36,7 @@ cpu1: cpu@1 {
- 
- 		l2: l2-cache0 {
+diff --git a/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi b/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi
+index a8526f8157ec..68ba865fcd58 100644
+--- a/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi
++++ b/arch/arm64/boot/dts/apm/apm-shadowcat.dtsi
+@@ -97,15 +97,19 @@ cpu@301 {
+ 		};
+ 		xgene_L2_0: l2-cache-0 {
+ 			compatible = "cache";
++			cache-level = <2>;
+ 		};
+ 		xgene_L2_1: l2-cache-1 {
+ 			compatible = "cache";
++			cache-level = <2>;
+ 		};
+ 		xgene_L2_2: l2-cache-2 {
+ 			compatible = "cache";
++			cache-level = <2>;
+ 		};
+ 		xgene_L2_3: l2-cache-3 {
  			compatible = "cache";
 +			cache-level = <2>;
  		};
  	};
  
-diff --git a/arch/arm64/boot/dts/amlogic/meson-axg.dtsi b/arch/arm64/boot/dts/amlogic/meson-axg.dtsi
-index 04f797b5a012..1648e67afbb6 100644
---- a/arch/arm64/boot/dts/amlogic/meson-axg.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-axg.dtsi
-@@ -105,6 +105,7 @@ cpu3: cpu@3 {
- 
- 		l2: l2-cache0 {
+diff --git a/arch/arm64/boot/dts/apm/apm-storm.dtsi b/arch/arm64/boot/dts/apm/apm-storm.dtsi
+index f56d687f772d..9ac7417f65eb 100644
+--- a/arch/arm64/boot/dts/apm/apm-storm.dtsi
++++ b/arch/arm64/boot/dts/apm/apm-storm.dtsi
+@@ -81,15 +81,19 @@ cpu@301 {
+ 		};
+ 		xgene_L2_0: l2-cache-0 {
  			compatible = "cache";
 +			cache-level = <2>;
  		};
- 	};
- 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12a.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12a.dtsi
-index fb0ab27d1f64..af23d7968181 100644
---- a/arch/arm64/boot/dts/amlogic/meson-g12a.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12a.dtsi
-@@ -50,6 +50,7 @@ cpu3: cpu@3 {
- 
- 		l2: l2-cache0 {
+ 		xgene_L2_1: l2-cache-1 {
  			compatible = "cache";
 +			cache-level = <2>;
  		};
- 	};
- 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-g12b.dtsi b/arch/arm64/boot/dts/amlogic/meson-g12b.dtsi
-index ee8fcae9f9f0..9978e619accc 100644
---- a/arch/arm64/boot/dts/amlogic/meson-g12b.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-g12b.dtsi
-@@ -105,6 +105,7 @@ cpu103: cpu@103 {
- 
- 		l2: l2-cache0 {
+ 		xgene_L2_2: l2-cache-2 {
  			compatible = "cache";
 +			cache-level = <2>;
  		};
- 	};
- };
-diff --git a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
-index 023a52005494..e3c12e0be99d 100644
---- a/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-gx.dtsi
-@@ -132,6 +132,7 @@ cpu3: cpu@3 {
- 
- 		l2: l2-cache0 {
- 			compatible = "cache";
-+			cache-level = <2>;
- 		};
- 	};
- 
-diff --git a/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi b/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
-index 80737731af3f..d845eb19d93d 100644
---- a/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
-+++ b/arch/arm64/boot/dts/amlogic/meson-sm1.dtsi
-@@ -88,6 +88,7 @@ cpu3: cpu@3 {
- 
- 		l2: l2-cache0 {
+ 		xgene_L2_3: l2-cache-3 {
  			compatible = "cache";
 +			cache-level = <2>;
  		};
