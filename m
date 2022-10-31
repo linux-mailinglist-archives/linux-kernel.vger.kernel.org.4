@@ -2,127 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3499612F74
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 05:13:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6ACF612F76
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 05:23:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiJaEND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 00:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56044 "EHLO
+        id S229629AbiJaEXv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 00:23:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiJaENC (ORCPT
+        with ESMTP id S229492AbiJaEXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 00:13:02 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8320E766B
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 21:13:00 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailout.west.internal (Postfix) with ESMTP id 2969232002E8;
-        Mon, 31 Oct 2022 00:12:57 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Mon, 31 Oct 2022 00:12:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1667189576; x=1667275976; bh=Wb
-        6JvakTobU0IToKDpm7eHKTZYBSLOu94yzyyjdx7E0=; b=Pirm+uJvHQ6vV7JdAP
-        q+gBq/nkrWjhPvN7d8bqjuTZwoEkPZ0kwV0rvHiluMaPxpSgCvYqKWM/LVcW0Dxo
-        cVmWO03e5CZzSe5gTvrcYffPPa9PnGYaFtEI4cscRhNbAIWAWdzAh+9+2pYi9jo7
-        HPpLVGqh0mJDYpMCiwVDGhDH/0F7xVtuzivYNXnZWy6M5oj79ObxtC0FBvqsoR9X
-        VZGlxylgA1iq1wuu7l95RnunCkwoHFDfvy2w0ZPKKZhDgFafP1KsgLoiM+cVixp3
-        agquzvIW3yx0UDouQ3ZSLrGm4Pgmfa1FOJmcWmq8td/TdqfUX5VFFm4DDMre6QA+
-        IEUQ==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1667189576; x=1667275976; bh=Wb6JvakTobU0IToKDpm7eHKTZYBS
-        LOu94yzyyjdx7E0=; b=a5OiLouFX3ylKx5tbp2PMGKP9ztB9Yh72UeWfERcvnZE
-        3ozmNphgyTgIc5JvqFORWrdIeKODJJ9GND4tLFPR3qbf8mCNov4dwHNKvlwaQrPD
-        va6bHpePS9o3unpRpgu4NSB31Qw7ecs3x4zR16Fqbseh3/SrwRd9S1x5C1HRSXX+
-        Dnjrr6HygrPJIaFzHu8ePTZo8HuWyuSPxWIm2gVRbK1jhsO1q31aHOgmbZ+j6dVj
-        Cy8tvu12kH94QowsKJtT+k8c/3ML+FL58tKbLG/e87d8iv3BkT+IK2Gbvylmz8y+
-        HUokmQBbDX20DlVL5aVoyjRfIRDtLRvvK0PxLB2n1w==
-X-ME-Sender: <xms:R0tfYwjkTuismYLqzMKAtRbWDm6JfowRr2h_F8FmxXLXWZu8VWUtHA>
-    <xme:R0tfY5BjzDmtWVUFNizWVNZCrLKcJGZ_dxCq6IehZ9sQe4XOR0XFdsKnnHwFzlpiy
-    fzB_LrLqIGLO6BTIb4>
-X-ME-Received: <xmr:R0tfY4Ecmt3ty2aE-AlCqV0sxI0eGQ3cLE5G1dQDIbYc7Iu78jne6qWBw4LvakzHKegxGw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedruddugdeiiecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
-    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
-    hmvgeqnecuggftrfgrthhtvghrnheplefghfefteelhfevffelveffgfetffefleefuddu
-    hfejudetgefgieehfeetheejnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucevlh
-    hushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehkihhrihhllhes
-    shhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:R0tfYxR1CTpEHVtOGhuWJRZw0bE93DhIleKtDNcA-x8R-QWk7Zl93w>
-    <xmx:R0tfY9yV6rcRl8uFkqJdcnvtMX4cafWML3PB7E6M3lk1HA-KvRgQHg>
-    <xmx:R0tfY_4SPIG8I5VENEWoawGLFfQJw13zk57e12ysj2ee5XK0689kyQ>
-    <xmx:SEtfY1Drmw8jc6vuUVuQdFWXB239euQ64XCuV_nb2EM0yyFwiDT0LA>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 31 Oct 2022 00:12:55 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id B0213109579; Mon, 31 Oct 2022 07:12:52 +0300 (+03)
-Date:   Mon, 31 Oct 2022 07:12:52 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Dave Hansen <dave.hansen@intel.com>
-Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
-        luto@kernel.org, peterz@infradead.org,
-        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
-        dan.j.williams@intel.com, david@redhat.com, hpa@zytor.com,
-        seanjc@google.com, thomas.lendacky@amd.com,
-        elena.reshetova@intel.com, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] x86/tdx: Extract GET_INFO call from get_cc_mask()
-Message-ID: <20221031041252.mdcjocqn6k4k4gvy@box.shutemov.name>
-References: <20221028141220.29217-1-kirill.shutemov@linux.intel.com>
- <20221028141220.29217-2-kirill.shutemov@linux.intel.com>
- <c97e9273-60b6-2ca7-1993-05bfbf471f3f@intel.com>
- <20221028235951.p2vdu7drbbf3ccg7@box.shutemov.name>
+        Mon, 31 Oct 2022 00:23:49 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E0347672;
+        Sun, 30 Oct 2022 21:23:48 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id o7so6184648pjj.1;
+        Sun, 30 Oct 2022 21:23:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=vH+u5Bvhhpd8c/WXOrPFjzMFEIOOOR91w47tMe67fvw=;
+        b=ZoF5wNrDtCndMrY5l1x5eCa5Xf6dlwImcvus3j/fwWhwYcSyeTw2p7+vl0mPJFVHRe
+         T/GUttK1LxvwUA36ZnzZRiWUikvAAouXVxoTHzHMHNVNz7M4CWKj7yBCV4kPmaLhDGX+
+         69g8BWNd99uZFqNXprg/s9UlKStqMT9L4/9dp9A7CZro6WecWVzQ3tjxKUHSAhGRVvfD
+         p2hah64j20nuGgkUFxaFnJlyDCERKaTbxF63gH98ngLiZYVVRxtG09zrYBBM8WFSOZdc
+         gUc0R/h5GhaV2QxKKGEh1gpc+O5r/cio8EWw/m8ARt7EMJi9AhEfuTDZnRrOZigbdJCK
+         COuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vH+u5Bvhhpd8c/WXOrPFjzMFEIOOOR91w47tMe67fvw=;
+        b=ii2xctD3goGdu4pRega59iAjyS9//PU//sOuIC4+Odnkp1Ytsj1UkGtDXl+v+xxDNy
+         ZIWTMuV2bu1ifzVL+8x3fwl5xhv86VOSy3opJq3d4JqNsINZ5qowUAqdZ0uHuZ4em2Of
+         vMwli1yKRknf82wwy3kWtNc/Y8J/+IFGPzk4iL3ujmvWcq2B4/m1gSacm4/WScKsE8x1
+         hoNYXIcxuBiI/LCtyJV46eYYptEhZxNjBaBM9g6qilA8HKHvVxghrSv/kyf/9v3xPvZX
+         xW7dqzBMhGNqJAOcx05KzA736W4/W/PL6s8i4WfGAtO+INAC7Z40XwJVl0h9h9Ok1JlJ
+         2h2A==
+X-Gm-Message-State: ACrzQf0799WNNDeBBz7VNEHrIpH9BHE+BOeq4fpboLUT2KpuMSpF4HPj
+        JmzjpiyetR6TkHsSdq6EyhQ=
+X-Google-Smtp-Source: AMsMyM7a+6pY9T+TrDG5O6IqlyTrShqEWuaBbhnkaJwUAEgEAUgldq0Ai1cKfy2rTHswY3+NdoG19Q==
+X-Received: by 2002:a17:90b:17c9:b0:213:32a9:465b with SMTP id me9-20020a17090b17c900b0021332a9465bmr12627095pjb.54.1667190227666;
+        Sun, 30 Oct 2022 21:23:47 -0700 (PDT)
+Received: from debian.me (subs09a-223-255-225-72.three.co.id. [223.255.225.72])
+        by smtp.gmail.com with ESMTPSA id u29-20020a63455d000000b0046faefad8a1sm1671086pgk.79.2022.10.30.21.23.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 30 Oct 2022 21:23:47 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id C9A6F100398; Mon, 31 Oct 2022 11:23:42 +0700 (WIB)
+Date:   Mon, 31 Oct 2022 11:23:42 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     isaku.yamahata@intel.com
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>
+Subject: Re: [PATCH v10 107/108] KVM: x86: design documentation on TDX
+ support of x86 KVM TDP MMU
+Message-ID: <Y19NzlQcwhV/2wl3@debian.me>
+References: <cover.1667110240.git.isaku.yamahata@intel.com>
+ <91062ba1b723d5b866b17447e3f8f8addaa334ee.1667110240.git.isaku.yamahata@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="Aew40JBmWCIbpsgg"
 Content-Disposition: inline
-In-Reply-To: <20221028235951.p2vdu7drbbf3ccg7@box.shutemov.name>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <91062ba1b723d5b866b17447e3f8f8addaa334ee.1667110240.git.isaku.yamahata@intel.com>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 29, 2022 at 02:59:51AM +0300, Kirill A. Shutemov wrote:
-> > Can you please take a look through this and make sure I didn't botch
-> > anything:
-> > 
-> > > https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git/log/?h=tdxbadve
-> > 
-> > The end result is about 50 lines less than what was there before.  Most
-> > of it is comment removal but the code is simpler too.
-> > 
-> > Acks and Tested-by's would be appreciated.
 
-One thing that I must bring up is that it seems that there's no way to get
-the panic message to user. I tried to convinced myself that it is qemu
-misconfiguration on my part or some race, but no: it is just too early for
-earlyprintk.
+--Aew40JBmWCIbpsgg
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-We only get earlyprintk working after parse_early_options() which happens
-well after tdx_early_init().
+On Sat, Oct 29, 2022 at 11:23:48PM -0700, isaku.yamahata@intel.com wrote:
+> +During TDX non-root operation (i.e. guest TD), memory accesses can be qu=
+alified
+> +as either shared or private, based on the value of a new SHARED bit in t=
+he Guest
+> +Physical Address (GPA).  The CPU translates shared GPAs using the usual =
+VMX EPT
+> +(Extended Page Table) or "Shared EPT" (in this document), which resides =
+in the
+> +host VMM memory.  The Shared EPT is directly managed by the host VMM - t=
+he same
+> +as with the current VMX.  Since guest TDs usually require I/O, and the d=
+ata
+> +exchange needs to be done via shared memory, thus KVM needs to use the c=
+urrent
+> +EPT functionality even for TDs.
 
-Moving panic() after earlyprintk working is not good idea as it exposes
-kernel more: by the time we already have full #VE handler.
+Strip the last "thus", so it becomes "... via shared memory, KVM needs to u=
+se ..."
 
-We can move it earlier into decompresser which has different earlyprintk
-implementation. Not sure if it worth this. What do you think?
+> +The following depicts the relationship.
+> +::
+> +
+> +                    KVM                             |       TDX module
+> +                     |                              |           |
+> +        -------------+----------                    |           |
+> +        |                      |                    |           |
+> +        V                      V                    |           |
+> +     shared GPA           private GPA               |           |
+> +  CPU shared EPT pointer  KVM private EPT pointer   |  CPU secure EPT po=
+inter
+> +        |                      |                    |           |
+> +        |                      |                    |           |
+> +        V                      V                    |           V
+> +  shared EPT                private EPT<-------mirror----->Secure EPT
+> +        |                      |                    |           |
+> +        |                      \--------------------+------\    |
+> +        |                                           |      |    |
+> +        V                                           |      V    V
+> +  shared guest page                                 |    private guest p=
+age
+> +                                                    |
+> +                                                    |
+> +                              non-encrypted memory  |    encrypted memory
+> +                                                    |
+> +
+> +shared EPT: CPU and KVM walk with shared GPA
+> +            Maintained by the existing code
+> +private EPT: KVM walks with private GPA
+> +             Maintained by the twisted existing code
+> +secure EPT: CPU walks with private GPA.
+> +            Maintained by TDX module with TDX SEAMCALLs via hooks
+> +
 
-"tdx: Guest detected" printed from the same tdx_early_init() is visible if
-boot goes far enough to initialize console (early or not) as printk adds
-the message to the buffer, but no so luck for panic().
+What about this legend below?
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+---- >8 ----
+
+diff --git a/Documentation/virt/kvm/tdx-tdp-mmu.rst b/Documentation/virt/kv=
+m/tdx-tdp-mmu.rst
+index 2d91c94e6d8fd7..9ddbf44725f212 100644
+--- a/Documentation/virt/kvm/tdx-tdp-mmu.rst
++++ b/Documentation/virt/kvm/tdx-tdp-mmu.rst
+@@ -236,12 +236,14 @@ The following depicts the relationship.
+                               non-encrypted memory  |    encrypted memory
+                                                     |
+=20
+-shared EPT: CPU and KVM walk with shared GPA
+-            Maintained by the existing code
+-private EPT: KVM walks with private GPA
+-             Maintained by the twisted existing code
+-secure EPT: CPU walks with private GPA.
+-            Maintained by TDX module with TDX SEAMCALLs via hooks
++Where:
++
++  * shared EPT: CPU and KVM walk with shared GPA (maintained by the existi=
+ng
++    code)
++  * private EPT: KVM walks with private GPA (maintained by the twisted exi=
+sting
++    code)
++  * secure EPT: CPU walks with private GPA (maintained by TDX module with =
+TDX
++    SEAMCALLs via hooks).
+=20
+=20
+ Tracking private EPT page
+
+> +Concurrent zapping
+> +------------------
+> +1. read lock
+> +2. freeze the EPT entry (atomically set the value to REMOVED_SPTE)
+> +   If other vcpu froze the entry, restart page fault.
+> +3. TLB shootdown
+> +
+> +   * send IPI to remote vcpus
+> +   * TLB flush (local and remote)
+> +
+> +   For each entry update, TLB shootdown is needed because of the
+> +   concurrency.
+
+Concurrency issues?
+
+Also, as I have iterated several times before, you need to add the
+documentation to KVM table of contents (index):
+
+---- >8 ----
+
+diff --git a/Documentation/virt/kvm/index.rst b/Documentation/virt/kvm/inde=
+x.rst
+index cdb8b43ce7970a..ff2db9ab428d3c 100644
+--- a/Documentation/virt/kvm/index.rst
++++ b/Documentation/virt/kvm/index.rst
+@@ -20,3 +20,4 @@ KVM
+    review-checklist
+=20
+    intel-tdx
++   tdx-tdp-mmu
+
+Thanks.
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--Aew40JBmWCIbpsgg
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY19NxwAKCRD2uYlJVVFO
+o9qaAQCVOIc3CkEyOCXd9prfp+jxgWKmQqj/u5tVMqLG3nnYKQEA0yqxAC5RW3KQ
+wh/SgCiIatrEzhbHk4ME/YxNwzFxIAc=
+=Dg1Z
+-----END PGP SIGNATURE-----
+
+--Aew40JBmWCIbpsgg--
