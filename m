@@ -2,57 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 49BD3613B76
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 17:40:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5FB03613B78
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 17:40:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231904AbiJaQkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 12:40:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57336 "EHLO
+        id S231921AbiJaQkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 12:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231894AbiJaQj7 (ORCPT
+        with ESMTP id S231908AbiJaQkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 12:39:59 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CFBE92BC3
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:39:58 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id D8B501FB;
-        Mon, 31 Oct 2022 09:40:04 -0700 (PDT)
-Received: from [192.168.178.6] (unknown [172.31.20.19])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 258FE3F703;
-        Mon, 31 Oct 2022 09:39:51 -0700 (PDT)
-Message-ID: <4e396924-c3be-1932-91a3-5f458cc843fe@arm.com>
-Date:   Mon, 31 Oct 2022 17:39:45 +0100
+        Mon, 31 Oct 2022 12:40:06 -0400
+Received: from mail-pg1-f180.google.com (mail-pg1-f180.google.com [209.85.215.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C0842BC3
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:40:06 -0700 (PDT)
+Received: by mail-pg1-f180.google.com with SMTP id g129so11163412pgc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:40:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=G5iO8KHmbbjpD0edAAD18XYUlbSGy4UU+ld7nxMCDFQ=;
+        b=f6sBbSTtkybqzueieI+VtnyYAa3mfvhUAoAPAXbX6KTa0VuF2Gj4VLvdcCI3yn+bjV
+         vygemIjVW+edZoc6IXpqrBLZv/cEN5vC1goTpcv48tP7rQXTiFwSXUBPlgvmHehDKV1z
+         wCJxVVYP5lYSA/iEdBm8RGzEWT2LLaxdy2Vv+D4kPE5dng7z0YX4fI5Grc0bhn0cyIoh
+         wEJjH5Dh3Dp6UUp7J4iX9NWbtkP7aY9k67y9iaS3QWetm1eF5m1kRWk31G41eX9A55PM
+         tffvF1cYYRgQpKGK6KLaPa6ZHQIs/vhTK7rVs6+Ps8cJrzLfto6b2vPi3kEJFNh1UWdK
+         l8dA==
+X-Gm-Message-State: ACrzQf2WJKdZ0yZshJ8miYR64EwfnAQXOykEiT4GuVsPay0VRSlho9/A
+        QGKTaZrP/yCCrdsCCxQX9B1OAQ==
+X-Google-Smtp-Source: AMsMyM4wbIhY06SY2nUR74pUKGuIl5gTFPk+xpQFABfA9XZzwdh1qCxm1jXpjY9c4HML23XPnl7EdQ==
+X-Received: by 2002:a63:c146:0:b0:46f:c9e8:777d with SMTP id p6-20020a63c146000000b0046fc9e8777dmr4645744pgi.459.1667234405901;
+        Mon, 31 Oct 2022 09:40:05 -0700 (PDT)
+Received: from localhost ([75.172.140.17])
+        by smtp.gmail.com with ESMTPSA id i63-20020a625442000000b0056be2a3c87csm4835445pfb.154.2022.10.31.09.40.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 09:40:05 -0700 (PDT)
+From:   Kevin Hilman <khilman@kernel.org>
+To:     bchihi@baylibre.com, sean.wang@kernel.org,
+        linus.walleij@linaro.org, matthias.bgg@gmail.com
+Cc:     linux-mediatek@lists.infradead.org, linux-gpio@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [v2, 0/2] Fix broken SET/CLR mode of a certain number of pins
+ for MediaTek MT8385 SoC
+In-Reply-To: <20221021084708.1109986-1-bchihi@baylibre.com>
+References: <20221021084708.1109986-1-bchihi@baylibre.com>
+Date:   Mon, 31 Oct 2022 09:40:04 -0700
+Message-ID: <7h5yg02bh7.fsf@baylibre.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [RFC PATCH 07/11] sched: Add proxy execution
-Content-Language: en-US
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Connor O'Brien <connoro@google.com>, linux-kernel@vger.kernel.org,
-        kernel-team@android.com, John Stultz <jstultz@google.com>,
-        Joel Fernandes <joelaf@google.com>,
-        Qais Yousef <qais.yousef@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Will Deacon <will@kernel.org>,
-        Waiman Long <longman@redhat.com>,
-        Boqun Feng <boqun.feng@gmail.com>,
-        "Paul E . McKenney" <paulmck@kernel.org>
-References: <dab347c1-3724-8ac6-c051-9d2caea20101@arm.com>
- <34B2D8B9-A0C1-4280-944D-17224FB24339@joelfernandes.org>
-From:   Dietmar Eggemann <dietmar.eggemann@arm.com>
-In-Reply-To: <34B2D8B9-A0C1-4280-944D-17224FB24339@joelfernandes.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,95 +60,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/10/2022 05:31, Joel Fernandes wrote:
-> Hello Dietmar,
-> 
->> On Oct 24, 2022, at 6:13 AM, Dietmar Eggemann <dietmar.eggemann@arm.com> wrote:
->>
->> ﻿On 03/10/2022 23:44, Connor O'Brien wrote:
->>> From: Peter Zijlstra <peterz@infradead.org>
-
-[...]
-
->>> +    put_prev_task(rq, next);
->>> +    if (curr_in_chain) {
->>> +        rq->proxy = rq->idle;
->>> +        set_tsk_need_resched(rq->idle);
->>> +        /*
->>> +         * XXX [juril] don't we still need to migrate @next to
->>> +         * @owner's CPU?
->>> +         */
->>> +        return rq->idle;
->>> +    }
->>
->> --> (1)
-> 
-> Sorry but what has this got to do with your comment below?
-
-This was the place where fake_task was used in:
-
-https://lkml.kernel.org/r/20181009092434.26221-6-juri.lelli@redhat.com
-
-+migrate_task:
-   ...
-+	 }
-+	 rq->proxy = &fake_task;           <-- !!!
-+
-+	 for (; p; p = p->blocked_task) {
-
->>> +    rq->proxy = rq->idle;
-
-We use `rq->idle` now,
-
-[...]
-
->>> +    rq_unpin_lock(rq, rf);
->>> +    raw_spin_rq_unlock(rq);
->>
->> Don't we run into rq_pin_lock()'s:
->>
->> SCHED_WARN_ON(rq->balance_callback && rq->balance_callback !=
->> &balance_push_callback)
->>
->> by releasing rq lock between queue_balance_callback(, push_rt/dl_tasks)
->> and __balance_callbacks()?
-> 
-> Apologies, I’m a bit lost here. The code you are responding to inline does not call rq_pin_lock, it calls rq_unpin_lock.  So what scenario does the warning trigger according to you?
-
-True, but the code which sneaks in between proxy()'s
-raw_spin_rq_unlock(rq) and raw_spin_rq_lock(rq) does.
+Hi Balsam,
 
 
-__schedule()
+bchihi@baylibre.com writes:
 
-  rq->proxy = next = pick_next_task()
+> From: Balsam CHIHI <bchihi@baylibre.com>
+>
+> On MT8365, the SET/CLR of the mode is broken and some pins won't set or clear the modes correctly.
+> To fix this issue, we add a specific callback mt8365_set_clr_mode() for this specific SoC.
+> This callback uses the main R/W register to read/update/write the modes instead of using the SET/CLR register.
+>
+> This is the original patch series proposed by Fabien Parent <fparent@baylibre.com>.
+> "https://lore.kernel.org/linux-arm-kernel/20220530123425.689459-1-fparent@baylibre.com/"
+>
+> Changelog:
+> Changes in v2 :
+>         - Rebase on top of 6.1.0-rc1-next-20221020
+>         - Delete MTK_PINCTRL_MODE_SET_CLR_BROKEN quirk
+>         - Add mt8365_set_clr_mode() callback
 
-    __pick_next_task()
+nit: subject of cover letter should also include "pinctrl: mediatek:"
+prefix.  Also note that you're missing the word "PATCH" in all of the
+subjects.
 
-      pick_next_task_rt()
+Tip: If you use `git format-patch`, you can just pass `-v2` on the
+cmdline and it will create the prefixes for you automatically.
 
-        set_next_task_rt()
-
-          rt_queue_push_tasks()
-
-            queue_balance_callback(..., push_rt_tasks); <-- queue rt cb
-
-  proxy()
-
-    raw_spin_rq_unlock(rq)
-
-                 ... <-- other thread does rq_lock_XXX(rq)
-                                              raw_spin_rq_lock_XXX(rq)
-                                                rq_pin_lock(rq)
-
-    raw_spin_rq_lock(rq)
-
-  context_switch()
-
-     finish_task_switch()
-
-       finish_lock_switch()
-
-         __balance_callbacks(rq) <-- run rt cb here
-
-  __balance_callbacks(rq)() <-- or run rt cb here
+Kevin
