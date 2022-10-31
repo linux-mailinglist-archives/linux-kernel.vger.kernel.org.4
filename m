@@ -2,47 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91B3C612EED
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 03:23:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82500612F04
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 03:29:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229711AbiJaCXm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 22:23:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38412 "EHLO
+        id S229717AbiJaC3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 22:29:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39424 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiJaCXk (ORCPT
+        with ESMTP id S229515AbiJaC3G (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 22:23:40 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 228772678;
-        Sun, 30 Oct 2022 19:23:38 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N0xln29whz4xFy;
-        Mon, 31 Oct 2022 13:23:33 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1667183013;
-        bh=07tdsqNe++J8/yzBiFrLHlBuVLMuqBEfXZItok9j7iI=;
-        h=Date:From:To:Cc:Subject:From;
-        b=D/P7CIX6+ZBmqnDmPh9rleF5+z0Qxx5HN4btcPPyBMloNYCRygrU3awRF8L2poUtc
-         L/z+Db6jcN5WviRGnhFjSbslzF0DqQafd2K4bRx0XdiZikLPAwLQLaz2WU4gTLvs/i
-         PTMclogQXLKfmUKU0rVuCxZoHUvnQIfnePUGzOG5ursupqRbButH7/i8VjIBVxZIl7
-         cwTLYo8JRJnbtd5LDqKA/Ci6BtzSIPwsEgR8JbyTyX6EQW2FnamrbWhr8EQyqOo5SE
-         igG4xYZfU70WsZqQzLwJ4cB/r/s0v4rW50RXSHyQNvDsWSlpM8Jht+McFxGvnYmNnS
-         dXwBdghT0u8bA==
-Date:   Mon, 31 Oct 2022 13:23:31 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Tejun Heo <tj@kernel.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the cgroup tree
-Message-ID: <20221031132331.76193df5@canb.auug.org.au>
-MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/CeH/UmCLq/GeI9VzD=+erx/";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        Sun, 30 Oct 2022 22:29:06 -0400
+Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C146A45D;
+        Sun, 30 Oct 2022 19:29:01 -0700 (PDT)
+Received: by mail-pg1-x52a.google.com with SMTP id 78so9526323pgb.13;
+        Sun, 30 Oct 2022 19:29:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ym7VlgsY2ND1TufftBYNXemLLzwPWb6Y/WuEGfjTql0=;
+        b=GZwxGwVscF6LN3u//xc+Xv3BdUt0QEiZ0RSRehwah11hGFQFQU1yH2u+q5Ce/z7BR4
+         3Kj0N1PxO1FMfk5SHRb801HoGBORzDI4S1VFLldMwnBXOrn2xw98+rBVsWF0aAw9q9kU
+         QYFZ2ms1UBCYXCa70rCVMtGtYz1K1GF06JKSD0n6lKCZwLrshoOtOVAolpdAyk1CrNYe
+         IwuNMwROcJKSLMsJgg8xpia6iz1slZJyNZEgwxR7O8gESy6YjRogJp4N0Te4tFm1k1/P
+         dwzRpSFTsf4aXUjNJRP6i8PtHC44triJpFPk4oICyS4Q7hPELabicG0LboqQOSbOg2xp
+         KwCw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ym7VlgsY2ND1TufftBYNXemLLzwPWb6Y/WuEGfjTql0=;
+        b=vRHXT/kJp05bmy63Wxtn2DBiENtmBrm7iwcs+zV5w+zS6os7Vnbc31pYyC7QdrpPTH
+         wssxqepiaDrAs02lRNwy+mdKrFVtF1bakI8YcraRVxWlhxykXyFTl+SYWuoFj0c/L3B6
+         2+ROb2AwCQt+pMfr+6osKCrZFhOK4pAUVvPzrlITU1dZdVOeuhrO9HFfQEaZxaV5Ye8N
+         e7cAguBPAWBWLkpMCaPbmNP6ppC46aueNJgNRhKb74/iG0LpTgJaYpUHa5qXoLYo79hA
+         fZ/iPoLm93YzHubCr/PLTo8a/5qgoj3SuYBp5bfe4TmeFdDSdR15nIU/riTmKf9TOZUA
+         Cqkw==
+X-Gm-Message-State: ACrzQf3YCrhC/h5rfkrt0WngPI3c8fr/Terw6VmE/NSyawV/tDoFkBd0
+        vi1ZT8ly6dzO1R1JUVb+P6DdM1D9TTw=
+X-Google-Smtp-Source: AMsMyM6ZUUAcJdycmC58Eeg3JYXtoSDDTfx/+SgW/Dl4cvYl2UBOCHKLa9P0nYQRJVswzmXIeoPKHw==
+X-Received: by 2002:a63:d313:0:b0:46b:2ea0:5b68 with SMTP id b19-20020a63d313000000b0046b2ea05b68mr10556487pgg.464.1667183340398;
+        Sun, 30 Oct 2022 19:29:00 -0700 (PDT)
+Received: from localhost.localdomain ([2402:7500:46a:ab6a:820:3d51:c22d:4bb5])
+        by smtp.gmail.com with ESMTPSA id q42-20020a17090a17ad00b0021282014066sm3064504pja.9.2022.10.30.19.28.57
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Sun, 30 Oct 2022 19:28:59 -0700 (PDT)
+From:   cy_huang <u0084500@gmail.com>
+To:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        broonie@kernel.org
+Cc:     lgirdwood@gmail.com, cy_huang@richtek.com,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/2] Add support for Richtek RT6190 36V 4-wwtich regulator
+Date:   Mon, 31 Oct 2022 10:28:52 +0800
+Message-Id: <1667183334-16511-1-git-send-email-u0084500@gmail.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,47 +67,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/CeH/UmCLq/GeI9VzD=+erx/
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+From: ChiYuan Huang <cy_huang@richtek.com>
 
-Hi all,
+The RT6190 is a 4-switch Buck-Boost controller designed for USB power delivery
+(USB PD). It operates with wide input voltage range from 4.5V to 36V, and the
+output voltage can be programmable between 3V and 36V. It implements peak
+current mode control mechanism to deliver up to 100W power with the
+programmable constant voltage and constant current output. It also has built-in
+charge pumps for driving external low-cost N-MOSFETs to control the power path.
 
-After merging the cgroup tree, today's linux-next build (x86_64
-allmodconfig) failed like this:
+Since v3:
+- Fix the typo 'upply' to 'supply'.
+- Declare 'enable-gpios' maxItems as 1.
+- Declare the 'maxItems' for the property 'regulator-allowed-modes'.
 
-ERROR: modpost: "css_tryget" [arch/x86/kvm/kvm-amd.ko] undefined!
-ERROR: modpost: "css_put" [arch/x86/kvm/kvm-amd.ko] undefined!
-ERROR: modpost: "css_put" [fs/btrfs/btrfs.ko] undefined!
-ERROR: modpost: "css_get" [fs/btrfs/btrfs.ko] undefined!
-ERROR: modpost: "css_put" [drivers/block/loop.ko] undefined!
-ERROR: modpost: "css_get" [drivers/block/loop.ko] undefined!
-ERROR: modpost: "css_put" [net/netfilter/xt_cgroup.ko] undefined!
+Since v2:
+- Rename binding filename to 'richtek,rt6190.yaml'
 
-Caused by commit
+ChiYuan Huang (2):
+  dt-bindings: regulator: Add bindings for Richtek RT6190 regulator
+  regulator: rt6190: Add support for Richtek RT6190 regulator
 
-  6ab428604f72 ("cgroup: Implement DEBUG_CGROUP_REF")
+ .../bindings/regulator/richtek,rt6190.yaml         |  79 ++++
+ drivers/regulator/Kconfig                          |  11 +
+ drivers/regulator/Makefile                         |   1 +
+ drivers/regulator/rt6190-regulator.c               | 495 +++++++++++++++++++++
+ 4 files changed, 586 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/regulator/richtek,rt6190.yaml
+ create mode 100644 drivers/regulator/rt6190-regulator.c
 
-I have used the cgroup tree from next-20221028 for today.
+-- 
+2.7.4
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/CeH/UmCLq/GeI9VzD=+erx/
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNfMaMACgkQAVBC80lX
-0GzSpQf/U0vlRo5t291zlYzb7OVa70jYeHV5ea992lQv6HRckE8+RxF7/43SA0Ja
-82i6KXYcNfWmTwkNi+vHccD1muPUVaIYHMr80VKxyhru6DVLPAe87n19Dvj/y1fd
-SpFdBwkzAn/oyiQJCzBzYWFXJHvsU3XV7T1uQ/QKau2PT4p6jCz5IkyDHwf+5bWt
-RSOtRGlnYuqbaCkGJzv56OtfZ0k+6cSugSnn1G5JXHDOZ2Grzlwi5JaYQ+eN8L50
-LVdjnrr+llij9EgLA8NnVcJorEwE3KWTj3MenViCh2w3jDyus41SOBb54jQyHwb7
-jRDJtVyBud33rxoSKy4j9xKPMAVSeQ==
-=LFI0
------END PGP SIGNATURE-----
-
---Sig_/CeH/UmCLq/GeI9VzD=+erx/--
