@@ -2,86 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A291B613FE6
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 22:29:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 838B9613FED
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 22:32:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230056AbiJaV33 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 17:29:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40880 "EHLO
+        id S229752AbiJaVcv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 17:32:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiJaV31 (ORCPT
+        with ESMTP id S229477AbiJaVcs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 17:29:27 -0400
-Received: from mail-oi1-f179.google.com (mail-oi1-f179.google.com [209.85.167.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 842BD101C8;
-        Mon, 31 Oct 2022 14:29:26 -0700 (PDT)
-Received: by mail-oi1-f179.google.com with SMTP id c129so2302080oia.0;
-        Mon, 31 Oct 2022 14:29:26 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=HeSIifTj6jENNWHhoSdY8aooxwuhS3bnKLvqLnQk6FM=;
-        b=O83JXc6Q7pEhEROwz1F1BwmKMNJoTK8Z38y+/8iWnMZGE0jzAwo+2txea5EUM4iKFv
-         6Z4F6/oMDKoYr7Qyoiy3OsIpUr4rREWIto8kWVyZLIEkhM4hYcSZcAoX9e5EVspdqaY8
-         7t0YTOdow/WydNEZKasBpGMvRIWHCLuxYl5sxlsn649H29/hCIcL84osz+4vNmuX4IDb
-         JXT/zMiSbwp6yNFmnZXh3qbLZM98KPsCLr9wsNDKzEkwEly43XaXJ6o7Ij8zMA3yf8D8
-         zCCVhcrODvCgsYzU5I8S47oqowTAwRJYz1GGveY5kpAbHr9fXr4kIJ4ruGOg09JTNDmn
-         WIgQ==
-X-Gm-Message-State: ACrzQf2pKzL+5PHuBQZ21ysnXOXcHxFx8JDi5bR7oXF9OijXdfomcyfF
-        XjCU3n6i0Xr3Fp3qCm8fJg==
-X-Google-Smtp-Source: AMsMyM6qEAaLeVn+yiCeyAv+duU6sO1sRWSWr15BGUoIMpYIzx+CIJrKX3SETaVHnmAJegD3ilgQ4A==
-X-Received: by 2002:a05:6808:2387:b0:355:2641:aff5 with SMTP id bp7-20020a056808238700b003552641aff5mr7687183oib.44.1667251765670;
-        Mon, 31 Oct 2022 14:29:25 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bx12-20020a0568081b0c00b003539686cb7bsm2733852oib.53.2022.10.31.14.29.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 14:29:25 -0700 (PDT)
-Received: (nullmailer pid 3605416 invoked by uid 1000);
-        Mon, 31 Oct 2022 21:29:27 -0000
-Date:   Mon, 31 Oct 2022 16:29:27 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, linux-gpio@vger.kernel.org,
-        zhanghongchen <zhanghongchen@loongson.cn>,
-        Linus Walleij <linus.walleij@linaro.org>
-Subject: Re: [PATCH v5 2/2] dt-bindings: pinctrl: add loongson-2 pinctrl
-Message-ID: <166725176639.3605360.416860963509021396.robh@kernel.org>
-References: <20221029022130.19914-1-zhuyinbo@loongson.cn>
- <20221029022130.19914-2-zhuyinbo@loongson.cn>
+        Mon, 31 Oct 2022 17:32:48 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B03D5101C8;
+        Mon, 31 Oct 2022 14:32:47 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29VLWeN3037547;
+        Mon, 31 Oct 2022 16:32:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1667251960;
+        bh=hyqPOve8K4dEXgmRmRXSf+ygMWtM+hnvpMCUdYeSWns=;
+        h=From:To:CC:Subject:Date;
+        b=OvP7zNQwZkEXSiIHaEmJNpCwt8koy2RDD80Rysh2GmrE204VcxX4VG56pcwa3nua1
+         QNNqwBIbSDhMqfWh9ogKhPBNxo6lM+TyVaQvXmzlsz8YHEwm14sUcyG75cdASbaxM3
+         qFdXjGx9soD3AWW76gI7V6ffelSg3r9r6TdNrOJs=
+Received: from DLEE111.ent.ti.com (dlee111.ent.ti.com [157.170.170.22])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29VLWej0077720
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 31 Oct 2022 16:32:40 -0500
+Received: from DLEE108.ent.ti.com (157.170.170.38) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 31
+ Oct 2022 16:32:40 -0500
+Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE108.ent.ti.com
+ (157.170.170.38) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Mon, 31 Oct 2022 16:32:39 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29VLWcRt051229;
+        Mon, 31 Oct 2022 16:32:39 -0500
+From:   Jayesh Choudhary <j-choudhary@ti.com>
+To:     <nm@ti.com>, <vigneshr@ti.com>
+CC:     <kristo@kernel.org>, <robh+dt@kernel.org>, <afd@ti.com>,
+        <j-keerthy@ti.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <s-anna@ti.com>, <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <j-choudhary@ti.com>
+Subject: [PATCH 0/3] RNG clock property cleanup
+Date:   Tue, 1 Nov 2022 03:02:34 +0530
+Message-ID: <20221031213237.52275-1-j-choudhary@ti.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221029022130.19914-2-zhuyinbo@loongson.cn>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+This series removes the clock property from the rng node of
+K3 devices for TI SoCs as that clock is not dedicated to RNG
+module and it cannot be controlled by the rng driver.
 
-On Sat, 29 Oct 2022 10:21:30 +0800, Yinbo Zhu wrote:
-> Add the Loongson-2 pinctrl binding with DT schema format using
-> json-schema.
-> 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> ---
-> Change in v5:
-> 		1. Drop dependencies.
-> 		2. Add spaces after '='.
-> 		3. Replace string loongson2 with loongson-2 in title.
-> 
->  .../pinctrl/loongson,ls2k-pinctrl.yaml        | 125 ++++++++++++++++++
->  MAINTAINERS                                   |   1 +
->  2 files changed, 126 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/pinctrl/loongson,ls2k-pinctrl.yaml
-> 
+DT binding fix:
+<https://lore.kernel.org/all/20220901171041.32056-1-afd@ti.com/>
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Jayesh Choudhary (3):
+  arm64: dts: ti: k3-am65-main: drop RNG clock
+  arm64: dts: ti: k3-j721e-main: drop RNG clock
+  arm64: dts: ti: k3-am64-main: drop RNG clock
+
+ arch/arm64/boot/dts/ti/k3-am64-main.dtsi  | 1 -
+ arch/arm64/boot/dts/ti/k3-am65-main.dtsi  | 1 -
+ arch/arm64/boot/dts/ti/k3-j721e-main.dtsi | 1 -
+ 3 files changed, 3 deletions(-)
+
+-- 
+2.25.1
+
