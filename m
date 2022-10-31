@@ -2,63 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC64A612F0A
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 03:36:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2755D612F09
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 03:36:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229726AbiJaCgN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 22:36:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46672 "EHLO
+        id S229678AbiJaCgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 22:36:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiJaCgE (ORCPT
+        with ESMTP id S229457AbiJaCgE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Sun, 30 Oct 2022 22:36:04 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D40F6543
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 19:35:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667183702;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type;
-        bh=e41sBJr/U8nwabsK/+TTxg0We0ijqyvL4glZWXndQlY=;
-        b=ZUcBexE/BEkYG4N5hBt4EktvH5Kdd4pLSl9xJihAeI4682lge7TmuGRhkM9z/eM/xJpIok
-        tRWsIfhuLawu6AV6YxtriWzHpdQYfuTPTtwV7h9E7kdE3+0OCcVivpfrAwTLhjk3tGl5wl
-        ExHE1KVmVXBXz3KQJOeYMPOUocrpI7Y=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-41-LO43A0KdPKKVUCGR5anRAA-1; Sun, 30 Oct 2022 22:34:58 -0400
-X-MC-Unique: LO43A0KdPKKVUCGR5anRAA-1
-Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id AE03987B2A0;
-        Mon, 31 Oct 2022 02:34:57 +0000 (UTC)
-Received: from localhost (unknown [10.22.18.117])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id EADFC40C2066;
-        Mon, 31 Oct 2022 02:34:56 +0000 (UTC)
-Date:   Sun, 30 Oct 2022 23:34:56 -0300
-From:   "Luis Claudio R. Goncalves" <lgoncalv@redhat.com>
-To:     LKML <linux-kernel@vger.kernel.org>,
-        linux-rt-users <linux-rt-users@vger.kernel.org>,
-        stable-rt <stable-rt@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Carsten Emde <C.Emde@osadl.org>,
-        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
-        Daniel Wagner <daniel.wagner@suse.com>,
-        Tom Zanussi <tom.zanussi@linux.intel.com>,
-        Clark Williams <williams@redhat.com>,
-        Mark Gross <markgross@kernel.org>,
-        Luis Goncalves <lgoncalv@redhat.com>
-Subject: [ANNOUNCE] 4.14.296-rt139
-Message-ID: <Y180UKeFSd2mZrlq@uudg.org>
+Received: from mail-lj1-x22c.google.com (mail-lj1-x22c.google.com [IPv6:2a00:1450:4864:20::22c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F16826547;
+        Sun, 30 Oct 2022 19:36:01 -0700 (PDT)
+Received: by mail-lj1-x22c.google.com with SMTP id h12so8449706ljg.9;
+        Sun, 30 Oct 2022 19:36:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5PfdcaHbK409/PjJykKyVzJZf3xmCOMU8c25nhLHBxY=;
+        b=SKcG3AFVwF4hYcc/EE2IjWL74lIAZlX/a65EZnlWHZ6J6J2KsfbclaguNsoddUdU8m
+         gabJU53NoZpbtSUoZr9zpdUSI6onTf/Ei4SeI13yfLrzZgxHEff57ca/qRw0YqM24hz0
+         Hw5DHOR+IZQsGyNZVZ1ZAErmlZJmG0WrbblGoyfKb/O5zEYoGRfHjwJDE4bahcoQWv41
+         5W4Hy1m0kGda0ak9heyZgLckCwQNrA4ORuzyy0MEyBQyt1LrA7hacBaOjKBeo3/w3sfy
+         DFs8jA9fXYASvVtH8f/AJr+p9Qc17lkvPwqCmHUE/hb4qcv/Ivy5tUM9sH7MUUv4yghs
+         FX8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5PfdcaHbK409/PjJykKyVzJZf3xmCOMU8c25nhLHBxY=;
+        b=TTewCiHXo2ScjPAd/ERJCLdqRkKBuGxEiDHPmd9mljCDFqy8JM2RLb2nDzUGqrGon9
+         H0FSkYOLhc6DbgtwJgq/qRE3L5Wi7yD+PpPxiAMk35tNwh39H29oGw38WmlqJilK6Lsd
+         +jSW66LeQQyo5FX37nhoOkCA0bRedYCXxoOwxub4dLZIV/g9VtIvY6gNvdQJPXsvIakl
+         VY4KdtBGjiWMC2GKe+t2M18JiJML/3eAINKQmyIJ4AtKqVbFzRF4GN3ilf2Lp6jp7Lbf
+         WL8vHZweOCgpK1K2gEqsmYR2EnQpWfZ3y0CK+042xVjw3/1WJE0QlQXqoP1h2xCGXgW4
+         lP8g==
+X-Gm-Message-State: ACrzQf1nxX1cS1kUYk+YoxgB9Ou7N1qipf4updlCb35quJKu9d9Ih6+4
+        Kr3GO3sMdn4qlkrXLLFOWm3cITrm1Mu8lPyRT7k=
+X-Google-Smtp-Source: AMsMyM7kV6hCwzToOKN2TCB/tUpz9cIitxH41CZ9m9wDB2ZiyTdi+ftKXzhhTKVILXgh4SQ9ZHn9bNOzqAKpA0gVoeY=
+X-Received: by 2002:a2e:bf23:0:b0:277:f54:f0fe with SMTP id
+ c35-20020a2ebf23000000b002770f54f0femr4333886ljr.440.1667183760269; Sun, 30
+ Oct 2022 19:36:00 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
-X-Spam-Status: No, score=-3.9 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <20221029130957.1292060-1-imagedong@tencent.com>
+ <20221029130957.1292060-2-imagedong@tencent.com> <CANn89iK60VLmy3Y_7TZC-pXMZCho=W=uKPV2uf2tUmLdzJ1oFg@mail.gmail.com>
+In-Reply-To: <CANn89iK60VLmy3Y_7TZC-pXMZCho=W=uKPV2uf2tUmLdzJ1oFg@mail.gmail.com>
+From:   Menglong Dong <menglong8.dong@gmail.com>
+Date:   Mon, 31 Oct 2022 10:35:48 +0800
+Message-ID: <CADxym3b1mj8pNO0RG_A=bWCyg0GDNDTZaTj3GPqtQFSRb8CZxg@mail.gmail.com>
+Subject: Re: [PATCH net-next 1/9] net: skb: introduce try_kfree_skb()
+To:     Eric Dumazet <edumazet@google.com>
+Cc:     kuba@kernel.org, davem@davemloft.net, pabeni@redhat.com,
+        yoshfuji@linux-ipv6.org, dsahern@kernel.org, imagedong@tencent.com,
+        kafai@fb.com, asml.silence@gmail.com, keescook@chromium.org,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,34 +70,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello RT-list!
+On Sat, Oct 29, 2022 at 11:30 PM Eric Dumazet <edumazet@google.com> wrote:
+>
+> On Sat, Oct 29, 2022 at 6:11 AM <menglong8.dong@gmail.com> wrote:
+> >
+> > From: Menglong Dong <imagedong@tencent.com>
+> >
+> > In order to simply the code, introduce try_kfree_skb(), which allow
+> > SKB_NOT_DROPPED_YET to be passed. When the reason is SKB_NOT_DROPPED_YET,
+> > consume_skb() will be called to free the skb normally. Otherwise,
+> > kfree_skb_reason() will be called.
+> >
+> > Signed-off-by: Menglong Dong <imagedong@tencent.com>
+> > ---
+> >  include/linux/skbuff.h | 9 +++++++++
+> >  1 file changed, 9 insertions(+)
+> >
+> > diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
+> > index 59c9fd55699d..f722accc054e 100644
+> > --- a/include/linux/skbuff.h
+> > +++ b/include/linux/skbuff.h
+> > @@ -1236,6 +1236,15 @@ static inline void consume_skb(struct sk_buff *skb)
+> >  }
+> >  #endif
+> >
+> > +static inline void try_kfree_skb(struct sk_buff *skb,
+> > +                                enum skb_drop_reason reason)
+> > +{
+> > +       if (reason != SKB_NOT_DROPPED_YET)
+> > +               kfree_skb_reason(skb, reason);
+> > +       else
+> > +               consume_skb(skb);
+> > +}
+> > +
+>
+> My proposal looks better IMO
+>
+> https://patchwork.kernel.org/project/netdevbpf/patch/20221028133043.2312984-2-edumazet@google.com/
 
-I'm pleased to announce the 4.14.296-rt139 stable release.
-
-You can get this release via the git tree at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/rt/linux-stable-rt.git
-
-  branch: v4.14-rt
-  Head SHA1: 49c3ad623ef5b25a0dda134024190677fa27672f
-
-Or to build 4.14.296-rt139 directly, the following patches should be applied:
-
-  https://www.kernel.org/pub/linux/kernel/v4.x/linux-4.14.tar.xz
-
-  https://www.kernel.org/pub/linux/kernel/v4.x/patch-4.14.296.xz
-
-  https://www.kernel.org/pub/linux/kernel/projects/rt/4.14/older/patch-4.14.296-rt139.patch.xz
-
-Signing key fingerprint:
-
-  9354 0649 9972 8D31 D464  D140 F394 A423 F8E6 7C26
-
-All keys used for the above files and repositories can be found on the
-following git repository:
-
-   git://git.kernel.org/pub/scm/docs/kernel/pgpkeys.git
-
-Enjoy!
-Luis
-
+Hnn...yeah, your idea seems fine, which wont
+affect the existing code.
