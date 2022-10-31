@@ -2,50 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EBC76134CD
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 12:45:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3D7856134D1
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 12:45:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231186AbiJaLp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 07:45:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43012 "EHLO
+        id S230513AbiJaLpy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 07:45:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231231AbiJaLpJ (ORCPT
+        with ESMTP id S231267AbiJaLpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 07:45:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B65CF02D;
-        Mon, 31 Oct 2022 04:45:03 -0700 (PDT)
+        Mon, 31 Oct 2022 07:45:13 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2C7B9EE1A;
+        Mon, 31 Oct 2022 04:45:11 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id BB05EB815DB;
-        Mon, 31 Oct 2022 11:45:01 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27B98C433C1;
-        Mon, 31 Oct 2022 11:44:57 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BC40B60FD3;
+        Mon, 31 Oct 2022 11:45:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8DB92C433C1;
+        Mon, 31 Oct 2022 11:45:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667216700;
-        bh=adfQlcnVctTBnUDpH4VOx1zBf1snHtulVQoBO8D5+xc=;
+        s=k20201202; t=1667216710;
+        bh=Z7a3Uy401OHjnzkVuyZzMaPtXD6RGqSJ3Gr9uE6GveA=;
         h=From:To:Cc:Subject:Date:From;
-        b=E8mdJOctRTx3d5d28JYRXP0Q56DDiwOmrgi06SHu2QHYho5Wf1Ba2oF0nADEsQbHO
-         9fFDDECbr3cusRdv/2yroG4W2Z0R8A9yS/5XoxWJSEgL3Hrjo5Rg/rP20ouW3a0hcz
-         UPk6myKUQUZzMdz++6Q9sScw1xQ+9y1rN9oqcuwOlFOhpvEs5Ds88wligNm7Mbin9f
-         p7IcO42Y3BwrbPd2nq+4vr7EyOVAgR5CjqqwPHjRY6EJ7wUHFDS1Ma75SuJaF2ldBd
-         91dHSnflIrItYRrTXwiDvNidTdlMuHZ66FCwr5EQJcxF/eF5M96MU+TFQ7plFQVN3f
-         iuCUpuhLJpNww==
+        b=Gg7cTrAgdQPxH+Hico6RhSNMP2l7ogese3Ca7q2zb9PlEtxD0PMtkIPLRpgYXZCNF
+         QJhjvqgY5BMI7W9R4GAif77YQgKEPb9nZQI7I3Wjx0TbWKLBaicHkwMe4fjRgvwXlp
+         9On2PRzeW+ryhnI3UFp5ZNFguRev0jN8GIFe5zUSvuI3AiYB7HMaaRc+RoT4E2EORf
+         ntrMWTeDiswV+NFXOMYQ+nqCYpYeIcu0o7ut0JO9tKMdH2IFGIbsW6uSi+ot42FGI6
+         W3M3IvcfWvNQNxqxudipEsyAesC4V6q/V8oe+gsL6Em5S3rn96x7pPaoFrzoNxGN0b
+         aKdWdH1oFbB0g==
 From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-To:     jesse.brandeburg@intel.com
+To:     bvanassche@acm.org
 Cc:     linux-kernel@vger.kernel.org,
         "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
-        Martin Liska <mliska@suse.cz>,
-        Tony Nguyen <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        intel-wired-lan@lists.osuosl.org, netdev@vger.kernel.org
-Subject: [PATCH] i40e (gcc13): synchronize allocate/free functions return type & values
-Date:   Mon, 31 Oct 2022 12:44:56 +0100
-Message-Id: <20221031114456.10482-1-jirislaby@kernel.org>
+        Martin Liska <mliska@suse.cz>, Jason Gunthorpe <jgg@ziepe.ca>,
+        Leon Romanovsky <leon@kernel.org>, linux-rdma@vger.kernel.org
+Subject: [PATCH] RDMA/srp (gcc13): force int types for max_send_sge and can_queue
+Date:   Mon, 31 Oct 2022 12:45:06 +0100
+Message-Id: <20221031114506.10501-1-jirislaby@kernel.org>
 X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -58,116 +53,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-i40e allocate/free functions generate a valid warning with gcc-13:
-  drivers/net/ethernet/intel/i40e/i40e_main.c:129:5: error: conflicting types for 'i40e_allocate_dma_mem_d' due to enum/integer mismatch; have 'int(struct i40e_hw *, struct i40e_dma_mem *, u64,  u32)' {aka 'int(struct i40e_hw *, struct i40e_dma_mem *, long long unsigned int,  unsigned int)'} [-Werror=enum-int-mismatch]
-  drivers/net/ethernet/intel/i40e/i40e_osdep.h:40:25: note: previous declaration of 'i40e_allocate_dma_mem_d' with type 'i40e_status(struct i40e_hw *, struct i40e_dma_mem *, u64,  u32)' {aka 'enum i40e_status_code(struct i40e_hw *, struct i40e_dma_mem *, long long unsigned int,  unsigned int)'}
-...
+Since gcc13, each member of an enum has the same type as the enum [1]. And
+that is inherited from its members. Provided "SRP_TAG_TSK_MGMT = 1U << 31",
+SRP_MAX_SGE and SRP_TSK_MGMT_SQ_SIZE are unsigned ints.
 
-I.e. the type of their return value in the definition is int, while the
-declaration spell enum i40e_status. Synchronize the definitions to the
-latter.
+This results in the following warnings:
+  include/linux/minmax.h:20:35: error: comparison of distinct pointer types lacks a cast
+  drivers/infiniband/ulp/srp/ib_srp.c:563:42: note: in expansion of macro 'min'
 
-And make sure proper values are returned. I.e. I40E_SUCCESS and not 0,
-I40E_ERR_NO_MEMORY and not -ENOMEM.
+  include/linux/minmax.h:20:35: error: comparison of distinct pointer types lacks a cast
+  drivers/infiniband/ulp/srp/ib_srp.c:2369:27: note: in expansion of macro 'min'
+
+Force the use of min_t() instead of min() to use int for all those, as
+this is what both targets
+  target->scsi_host->can_queue
+and
+  init_attr->cap.max_send_sge
+are.
+
+[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=36113
 
 Cc: Martin Liska <mliska@suse.cz>
-Cc: Jesse Brandeburg <jesse.brandeburg@intel.com>
-Cc: Tony Nguyen <anthony.l.nguyen@intel.com>
-Cc: "David S. Miller" <davem@davemloft.net>
-Cc: Eric Dumazet <edumazet@google.com>
-Cc: Jakub Kicinski <kuba@kernel.org>
-Cc: Paolo Abeni <pabeni@redhat.com>
-Cc: intel-wired-lan@lists.osuosl.org
-Cc: netdev@vger.kernel.org
+Cc: Bart Van Assche <bvanassche@acm.org>
+Cc: Jason Gunthorpe <jgg@ziepe.ca>
+Cc: Leon Romanovsky <leon@kernel.org>
+Cc: linux-rdma@vger.kernel.org
 Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
 ---
- drivers/net/ethernet/intel/i40e/i40e_main.c | 25 +++++++++++----------
- 1 file changed, 13 insertions(+), 12 deletions(-)
+ drivers/infiniband/ulp/srp/ib_srp.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/net/ethernet/intel/i40e/i40e_main.c b/drivers/net/ethernet/intel/i40e/i40e_main.c
-index 1a1fab94205d..92fd4db7195f 100644
---- a/drivers/net/ethernet/intel/i40e/i40e_main.c
-+++ b/drivers/net/ethernet/intel/i40e/i40e_main.c
-@@ -126,8 +126,9 @@ static void netdev_hw_addr_refcnt(struct i40e_mac_filter *f,
-  * @size: size of memory requested
-  * @alignment: what to align the allocation to
-  **/
--int i40e_allocate_dma_mem_d(struct i40e_hw *hw, struct i40e_dma_mem *mem,
--			    u64 size, u32 alignment)
-+i40e_status i40e_allocate_dma_mem_d(struct i40e_hw *hw,
-+				    struct i40e_dma_mem *mem, u64 size,
-+				    u32 alignment)
- {
- 	struct i40e_pf *pf = (struct i40e_pf *)hw->back;
- 
-@@ -135,9 +136,9 @@ int i40e_allocate_dma_mem_d(struct i40e_hw *hw, struct i40e_dma_mem *mem,
- 	mem->va = dma_alloc_coherent(&pf->pdev->dev, mem->size, &mem->pa,
- 				     GFP_KERNEL);
- 	if (!mem->va)
--		return -ENOMEM;
-+		return I40E_ERR_NO_MEMORY;
- 
--	return 0;
-+	return I40E_SUCCESS;
- }
- 
- /**
-@@ -145,7 +146,7 @@ int i40e_allocate_dma_mem_d(struct i40e_hw *hw, struct i40e_dma_mem *mem,
-  * @hw:   pointer to the HW structure
-  * @mem:  ptr to mem struct to free
-  **/
--int i40e_free_dma_mem_d(struct i40e_hw *hw, struct i40e_dma_mem *mem)
-+i40e_status i40e_free_dma_mem_d(struct i40e_hw *hw, struct i40e_dma_mem *mem)
- {
- 	struct i40e_pf *pf = (struct i40e_pf *)hw->back;
- 
-@@ -154,7 +155,7 @@ int i40e_free_dma_mem_d(struct i40e_hw *hw, struct i40e_dma_mem *mem)
- 	mem->pa = 0;
- 	mem->size = 0;
- 
--	return 0;
-+	return I40E_SUCCESS;
- }
- 
- /**
-@@ -163,16 +164,16 @@ int i40e_free_dma_mem_d(struct i40e_hw *hw, struct i40e_dma_mem *mem)
-  * @mem:  ptr to mem struct to fill out
-  * @size: size of memory requested
-  **/
--int i40e_allocate_virt_mem_d(struct i40e_hw *hw, struct i40e_virt_mem *mem,
--			     u32 size)
-+i40e_status i40e_allocate_virt_mem_d(struct i40e_hw *hw,
-+				     struct i40e_virt_mem *mem, u32 size)
- {
- 	mem->size = size;
- 	mem->va = kzalloc(size, GFP_KERNEL);
- 
- 	if (!mem->va)
--		return -ENOMEM;
-+		return I40E_ERR_NO_MEMORY;
- 
--	return 0;
-+	return I40E_SUCCESS;
- }
- 
- /**
-@@ -180,14 +181,14 @@ int i40e_allocate_virt_mem_d(struct i40e_hw *hw, struct i40e_virt_mem *mem,
-  * @hw:   pointer to the HW structure
-  * @mem:  ptr to mem struct to free
-  **/
--int i40e_free_virt_mem_d(struct i40e_hw *hw, struct i40e_virt_mem *mem)
-+i40e_status i40e_free_virt_mem_d(struct i40e_hw *hw, struct i40e_virt_mem *mem)
- {
- 	/* it's ok to kfree a NULL pointer */
- 	kfree(mem->va);
- 	mem->va = NULL;
- 	mem->size = 0;
- 
--	return 0;
-+	return I40E_SUCCESS;
- }
- 
- /**
+diff --git a/drivers/infiniband/ulp/srp/ib_srp.c b/drivers/infiniband/ulp/srp/ib_srp.c
+index 1075c2ac8fe2..7db487da8293 100644
+--- a/drivers/infiniband/ulp/srp/ib_srp.c
++++ b/drivers/infiniband/ulp/srp/ib_srp.c
+@@ -560,7 +560,8 @@ static int srp_create_ch_ib(struct srp_rdma_ch *ch)
+ 	init_attr->cap.max_send_wr     = m * target->queue_size;
+ 	init_attr->cap.max_recv_wr     = target->queue_size + 1;
+ 	init_attr->cap.max_recv_sge    = 1;
+-	init_attr->cap.max_send_sge    = min(SRP_MAX_SGE, attr->max_send_sge);
++	init_attr->cap.max_send_sge    = min_t(int, SRP_MAX_SGE,
++			attr->max_send_sge);
+ 	init_attr->sq_sig_type         = IB_SIGNAL_REQ_WR;
+ 	init_attr->qp_type             = IB_QPT_RC;
+ 	init_attr->send_cq             = send_cq;
+@@ -2366,7 +2367,7 @@ static void srp_cm_rep_handler(struct ib_cm_id *cm_id,
+ 		 * bounce requests back to the SCSI mid-layer.
+ 		 */
+ 		target->scsi_host->can_queue
+-			= min(ch->req_lim - SRP_TSK_MGMT_SQ_SIZE,
++			= min_t(int, ch->req_lim - SRP_TSK_MGMT_SQ_SIZE,
+ 			      target->scsi_host->can_queue);
+ 		target->scsi_host->cmd_per_lun
+ 			= min_t(int, target->scsi_host->can_queue,
 -- 
 2.38.1
 
