@@ -2,206 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E2A9613224
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 10:03:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3EA0613231
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 10:06:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230088AbiJaJDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 05:03:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42666 "EHLO
+        id S230103AbiJaJGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 05:06:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiJaJDG (ORCPT
+        with ESMTP id S229505AbiJaJGM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 05:03:06 -0400
-Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6C4A65F7;
-        Mon, 31 Oct 2022 02:03:04 -0700 (PDT)
-Received: by mail-pl1-x62e.google.com with SMTP id io19so10160527plb.8;
-        Mon, 31 Oct 2022 02:03:04 -0700 (PDT)
+        Mon, 31 Oct 2022 05:06:12 -0400
+Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7676020C;
+        Mon, 31 Oct 2022 02:06:11 -0700 (PDT)
+Received: by mail-ej1-x62c.google.com with SMTP id d26so27667741eje.10;
+        Mon, 31 Oct 2022 02:06:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ChbMXt+xoehX4fXeGrOcRMGK2hCdOvd4KQqiBDTJsxs=;
-        b=qbVoBN1RviJ7qU0bH0SrfrqNEzG974uF6Rt/htUzysoyahheBBAUuQHtl4x8dnt397
-         kvZi/Ka9fZaBnin/pAnCazDvOl4E1Uwy3dFxLzVmI/kJPd0/fCc24fSwLmOA6OIofv5Y
-         UHAtcD8lvcr01eIwt6Iw7QwuCBnPFuvJ1Wra/k1Jq2eD0JbK3JnNm/6oXH5AEjZY9oLE
-         PCoC/vAf2EUxKhKJc6NX1Kp99W0ZszlzGk0WNt/JToU6KYZKHQiV4SXc2EgkmfHHEH88
-         Fl4ipJkd5fVJE48hi1mc2T+J0Ko6eAavVKALACclSdLrkJDqdKGZ/1O7SeA20tjPPnkp
-         LTbw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=g0snT4n//h/2k97Qobb3JRu1DhhY5eqFOKQUrnEmwJA=;
+        b=EadVQDvXTd2a2c0lt8q3h3DJE69Qed2JO2ph+XpyOEsWL16C732jST4btYtzdn2prT
+         GBR/zf4c/Sc5wlSPe0lnAgDD/DhuKBTm3jE6FNHx3x/4/TxkJyrre16xDYCd056nLkKv
+         hSQy0iOkqLK8uMaWYFemSgXMeue6NXfSazQhL6EsF9gKVotozpakMkM03mKocbrL/FuZ
+         YU1OwhUCtHQMtfq96N58S9fFhSjoN7Ow6DsfPx5wYPKstLxFC1Lt0hiM9EIfY/kpdCiO
+         AtbWuIAE+a4VfUzcnTGoxGfh0/ZRsuSu3pzC4Bl3gzg89zDO0EisQG/+MbWB/HYnaWsc
+         a8JQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ChbMXt+xoehX4fXeGrOcRMGK2hCdOvd4KQqiBDTJsxs=;
-        b=205c0afYHrP889QUeP5JsG0oiio6Rr/7xEwAgYQN03MmxuDPoS19ieIR1miP93dW8H
-         SP+xIMbXS0ky4Y7alPkvCGZQcowx3ubNU8BPCqyrutUR3m4IsHe2SFDsmUfsBCcmNCUz
-         zT4N9vPMuOdjkwm8qNv2Z9T/iKBO3vHoP2GPdMPVY1Sl9qJLXJOSWaWAkJt0Oyzlf2yD
-         l2Xnj8Vv+SB1SFhul7ksJHdJatfmbLIQ7Czy03G2fCtoLp94k2qyC//XyYH4+OfznzY8
-         RGaF2VaYMGrZ9OoOOAvSgDLm3q33j+k0fB91IX88r/6Lod1k+xwuNrV3chujJaVzdaan
-         BSZA==
-X-Gm-Message-State: ACrzQf0D5NE67+LhTX6+8R+t5a4Ob9ZgMQE0AVDuZWXssHHblbye8bPa
-        67AEcksHE3yh2LwIiV7eV6BjwrHtLPhwxw==
-X-Google-Smtp-Source: AMsMyM4SXo0vmuZAxDh85Prh0JzNWlKNpZjZm9J7M7795hWmjbkyWT/zbYjSerZtxuec6Fct+gl0dw==
-X-Received: by 2002:a17:90b:1e0d:b0:213:ae0:fcf8 with SMTP id pg13-20020a17090b1e0d00b002130ae0fcf8mr13730986pjb.189.1667206984090;
-        Mon, 31 Oct 2022 02:03:04 -0700 (PDT)
-Received: from [192.168.43.80] (subs03-180-214-233-66.three.co.id. [180.214.233.66])
-        by smtp.gmail.com with ESMTPSA id i1-20020aa796e1000000b0056bcfe015c9sm4026309pfq.204.2022.10.31.02.03.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Oct 2022 02:03:03 -0700 (PDT)
-Message-ID: <0ad145ed-6287-be0e-32a8-348b76ccb15c@gmail.com>
-Date:   Mon, 31 Oct 2022 16:02:59 +0700
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=g0snT4n//h/2k97Qobb3JRu1DhhY5eqFOKQUrnEmwJA=;
+        b=0OZ3iidl3NFSD5D/EbQImErlzHuPp1XO6y5WTeEBv2d114CsCfZDThsKUnmOiwweog
+         KCI6uh2gv4UFqhOSBFw7/S3fSkb3hiKjLwaLQk7wP0YGCu8lUtRz77Nau98BunS5y3er
+         jggyVqnxWWgb8cJ0OQdVfZfRUyVXqvRV2eWz4XdNRuDKT2TeHbX5X5PK/TxEyE826xRH
+         XPHrfGhVGl3jSd3X00SMtdmdo5rnRVXtT3KXlqKvW90zWAi4VSbJXOL2GsIdqWYOjOMz
+         9l+mJ0+YQ9MgUmolcXDlwWC2P4Ci8vqNptHFjVINcJJZ3t/4/iy4BqsnbLyeZSjAkG8d
+         nQpQ==
+X-Gm-Message-State: ACrzQf16TqTzGYwKZuFah5TW2eHEauXXc8gcJU6/MxhEPpy8YfKwqG3x
+        TAInKFPWx4hLdifnmzjKHnrEIj6V/jo=
+X-Google-Smtp-Source: AMsMyM5L86KUeUMD4iAbsJdWgAWfeyjlYpqLNh5oE8wsCNG6E5CxxPG16p/8/6NFW/9K27pE18u3OA==
+X-Received: by 2002:a17:907:b07:b0:7a8:beb3:aa2a with SMTP id h7-20020a1709070b0700b007a8beb3aa2amr11742021ejl.459.1667207169941;
+        Mon, 31 Oct 2022 02:06:09 -0700 (PDT)
+Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id jx24-20020a170907761800b00730bfe6adc4sm2752122ejc.37.2022.10.31.02.06.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 02:06:09 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     Yong Deng <yong.deng@magewell.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v6 12/43] media: sun6i-csi: Remove controls handler from the driver
+Date:   Mon, 31 Oct 2022 10:06:07 +0100
+Message-ID: <2651862.mvXUDI8C0e@kista>
+In-Reply-To: <20220826183240.604834-13-paul.kocialkowski@bootlin.com>
+References: <20220826183240.604834-1-paul.kocialkowski@bootlin.com> <20220826183240.604834-13-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: linux-next: build warnings after merge of the jc_docs tree
-To:     Stephen Rothwell <sfr@canb.auug.org.au>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Binbin Zhou <zhoubinbin@loongson.cn>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        Linux Doc Mailing List <linux-doc@vger.kernel.org>
-References: <20221031170537.722220c4@canb.auug.org.au>
-Content-Language: en-US
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20221031170537.722220c4@canb.auug.org.au>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/31/22 13:05, Stephen Rothwell wrote:
-> Hi all,
+Dne petek, 26. avgust 2022 ob 20:32:09 CET je Paul Kocialkowski napisal(a):
+> The driver does not expose controls directly and thus does not need
+> a controls handler for its own use.
 > 
-> After merging the jc_docs tree, today's linux-next build (htmldocs)
-> produced these warnings:
+> Controls attached to subdevs used to be exposed that way, however this
+> can easily lead to issue when multiple subdevs attached to the same
+> v4l2 device expose the same controls. Subdev controls should be set
+> through each individual subdev node instead.
 > 
-> Documentation/core-api/timekeeping.rst:16: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:26.
-> Declaration is '.. c:function:: ktime_t ktime_get(void)'.
-> Documentation/core-api/timekeeping.rst:23: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:33.
-> Declaration is '.. c:function:: ktime_t ktime_get_boottime(void)'.
-> Documentation/core-api/timekeeping.rst:31: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:40.
-> Declaration is '.. c:function:: ktime_t ktime_get_real(void)'.
-> Documentation/core-api/timekeeping.rst:43: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:49.
-> Declaration is '.. c:function:: ktime_t ktime_get_clocktai(void)'.
-> Documentation/core-api/timekeeping.rst:51: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:56.
-> Declaration is '.. c:function:: ktime_t ktime_get_raw(void)'.
-> Documentation/core-api/timekeeping.rst:65: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:68.
-> Declaration is '.. c:function:: u64 ktime_get_ns(void)'.
-> Documentation/core-api/timekeeping.rst:65: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:68.
-> Declaration is '.. c:function:: u64 ktime_get_boottime_ns(void)'.
-> Documentation/core-api/timekeeping.rst:65: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:68.
-> Declaration is '.. c:function:: u64 ktime_get_real_ns(void)'.
-> Documentation/core-api/timekeeping.rst:65: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:68.
-> Declaration is '.. c:function:: u64 ktime_get_clocktai_ns(void)'.
-> Documentation/core-api/timekeeping.rst:65: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:68.
-> Declaration is '.. c:function:: u64 ktime_get_raw_ns(void)'.
-> Documentation/core-api/timekeeping.rst:75: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:77.
-> Declaration is '.. c:function:: void ktime_get_ts64(struct timespec64*)'.
-> Documentation/core-api/timekeeping.rst:75: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:77.
-> Declaration is '.. c:function:: void ktime_get_boottime_ts64(struct timespec64*)'.
-> Documentation/core-api/timekeeping.rst:75: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:77.
-> Declaration is '.. c:function:: void ktime_get_real_ts64(struct timespec64*)'.
-> Documentation/core-api/timekeeping.rst:75: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:77.
-> Declaration is '.. c:function:: void ktime_get_clocktai_ts64(struct timespec64*)'.
-> Documentation/core-api/timekeeping.rst:75: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:77.
-> Declaration is '.. c:function:: void ktime_get_raw_ts64(struct timespec64*)'.
-> Documentation/core-api/timekeeping.rst:86: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:87.
-> Declaration is '.. c:function:: time64_t ktime_get_seconds(void)'.
-> Documentation/core-api/timekeeping.rst:86: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:87.
-> Declaration is '.. c:function:: time64_t ktime_get_boottime_seconds(void)'.
-> Documentation/core-api/timekeeping.rst:86: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:87.
-> Declaration is '.. c:function:: time64_t ktime_get_real_seconds(void)'.
-> Documentation/core-api/timekeeping.rst:86: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:87.
-> Declaration is '.. c:function:: time64_t ktime_get_clocktai_seconds(void)'.
-> Documentation/core-api/timekeeping.rst:86: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:87.
-> Declaration is '.. c:function:: time64_t ktime_get_raw_seconds(void)'.
-> Documentation/core-api/timekeeping.rst:102: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:101.
-> Declaration is '.. c:function:: ktime_t ktime_get_coarse(void)'.
-> Documentation/core-api/timekeeping.rst:102: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:101.
-> Declaration is '.. c:function:: ktime_t ktime_get_coarse_boottime(void)'.
-> Documentation/core-api/timekeeping.rst:102: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:101.
-> Declaration is '.. c:function:: ktime_t ktime_get_coarse_real(void)'.
-> Documentation/core-api/timekeeping.rst:102: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:101.
-> Declaration is '.. c:function:: ktime_t ktime_get_coarse_clocktai(void)'.
-> Documentation/core-api/timekeeping.rst:107: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:106.
-> Declaration is '.. c:function:: u64 ktime_get_coarse_ns(void)'.
-> Documentation/core-api/timekeeping.rst:107: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:106.
-> Declaration is '.. c:function:: u64 ktime_get_coarse_boottime_ns(void)'.
-> Documentation/core-api/timekeeping.rst:107: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:106.
-> Declaration is '.. c:function:: u64 ktime_get_coarse_real_ns(void)'.
-> Documentation/core-api/timekeeping.rst:107: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:106.
-> Declaration is '.. c:function:: u64 ktime_get_coarse_clocktai_ns(void)'.
-> Documentation/core-api/timekeeping.rst:112: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:111.
-> Declaration is '.. c:function:: void ktime_get_coarse_ts64(struct timespec64*)'.
-> Documentation/core-api/timekeeping.rst:112: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:111.
-> Declaration is '.. c:function:: void ktime_get_coarse_boottime_ts64(struct timespec64*)'.
-> Documentation/core-api/timekeeping.rst:112: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:111.
-> Declaration is '.. c:function:: void ktime_get_coarse_real_ts64(struct timespec64*)'.
-> Documentation/core-api/timekeeping.rst:112: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:111.
-> Declaration is '.. c:function:: void ktime_get_coarse_clocktai_ts64(struct timespec64*)'.
-> Documentation/core-api/timekeeping.rst:132: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:126.
-> Declaration is '.. c:function:: u64 ktime_get_mono_fast_ns(void)'.
-> Documentation/core-api/timekeeping.rst:132: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:126.
-> Declaration is '.. c:function:: u64 ktime_get_raw_fast_ns(void)'.
-> Documentation/core-api/timekeeping.rst:132: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:126.
-> Declaration is '.. c:function:: u64 ktime_get_boot_fast_ns(void)'.
-> Documentation/core-api/timekeeping.rst:132: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:126.
-> Declaration is '.. c:function:: u64 ktime_get_tai_fast_ns(void)'.
-> Documentation/core-api/timekeeping.rst:132: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:126.
-> Declaration is '.. c:function:: u64 ktime_get_real_fast_ns(void)'.
-> Documentation/core-api/timekeeping.rst:154: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:144.
-> Declaration is '.. c:function:: void ktime_get_ts(struct timespec*)'.
-> Documentation/core-api/timekeeping.rst:158: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:148.
-> Declaration is '.. c:function:: void do_gettimeofday(struct timeval*)'.
-> Documentation/core-api/timekeeping.rst:158: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:148.
-> Declaration is '.. c:function:: void getnstimeofday(struct timespec*)'.
-> Documentation/core-api/timekeeping.rst:158: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:148.
-> Declaration is '.. c:function:: void getnstimeofday64(struct timespec64*)'.
-> Documentation/core-api/timekeeping.rst:158: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:148.
-> Declaration is '.. c:function:: void ktime_get_real_ts(struct timespec*)'.
-> Documentation/core-api/timekeeping.rst:167: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:157.
-> Declaration is '.. c:function:: struct timespec current_kernel_time(void)'.
-> Documentation/core-api/timekeeping.rst:167: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:157.
-> Declaration is '.. c:function:: struct timespec64 current_kernel_time64(void)'.
-> Documentation/core-api/timekeeping.rst:167: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:157.
-> Declaration is '.. c:function:: struct timespec get_monotonic_coarse(void)'.
-> Documentation/core-api/timekeeping.rst:167: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:157.
-> Declaration is '.. c:function:: struct timespec64 get_monotonic_coarse64(void)'.
-> Documentation/core-api/timekeeping.rst:178: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:166.
-> Declaration is '.. c:function:: struct timespec getrawmonotonic(void)'.
-> Documentation/core-api/timekeeping.rst:178: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:166.
-> Declaration is '.. c:function:: struct timespec64 getrawmonotonic64(void)'.
-> Documentation/core-api/timekeeping.rst:178: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:166.
-> Declaration is '.. c:function:: struct timespec timekeeping_clocktai(void)'.
-> Documentation/core-api/timekeeping.rst:178: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:166.
-> Declaration is '.. c:function:: struct timespec64 timekeeping_clocktai64(void)'.
-> Documentation/core-api/timekeeping.rst:178: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:166.
-> Declaration is '.. c:function:: struct timespec get_monotonic_boottime(void)'.
-> Documentation/core-api/timekeeping.rst:178: WARNING: Duplicate C declaration, also defined at translations/zh_CN/core-api/timekeeping:166.
-> Declaration is '.. c:function:: struct timespec64 get_monotonic_boottime64(void)'.
-> 
-> Presumably introduced by commit
-> 
->   d24c911bd031 ("docs/zh_CN: core-api: Add timekeeping Chinese translation")
-> 
-> but I have no idea why :-(
-> 
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 
-The only other place in Documentation/translations/zh_CN where
-Sphinx C domain syntax is used is in doc-guide/sphinx.rst, but it is under
-code block (since the doc is about writing the doc itself).
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Cc'ing linux-doc folks.
+Best regards,
+Jernej
 
--- 
-An old man doll... just what I always wanted! - Clara
 
