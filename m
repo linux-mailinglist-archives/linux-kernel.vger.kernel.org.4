@@ -2,95 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2F061302D
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 07:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94F4761303A
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 07:17:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229681AbiJaGKF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 02:10:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44460 "EHLO
+        id S229527AbiJaGRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 02:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229479AbiJaGKC (ORCPT
+        with ESMTP id S229505AbiJaGRa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 02:10:02 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6568F2DD2;
-        Sun, 30 Oct 2022 23:10:00 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N12n226cFz4xFy;
-        Mon, 31 Oct 2022 17:09:58 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1667196598;
-        bh=Iy+NcbbtfKfcj1OaC8AZXGNI5Dy79wNJ35iaLbsKO/U=;
-        h=Date:From:To:Cc:Subject:From;
-        b=d8++4rApKs+Wb4AFKLVynWb8XMVr0RRfV7W9C+aiUgMblQXzlEpEc/puYL5+1It+a
-         GZbd9MuKOdd8bVBr7n9IadD+fc+QeOnEHDrIKC01GkWTp+Jloo4vSLkzVRYtEUZAk5
-         GEAGyLTPVBlfCNM7i4rZZEhiJoKDJ9nd+5Iy0EFifDTJwjPMUxlTLO1rUDABM6icka
-         nVCtN+FFd2+xvoQc9i34TG62T8BvgJtrpGwtC6un7+UHIumLtMsrsO5+haj2215cM8
-         f/M5uwsIYCQa6C6Ng7uyPP5XTV2eFi83rXKdnsNvo8GFCHNMY9l9hgfk/IV9j+7d9I
-         201IcWK1+wvTA==
-Date:   Mon, 31 Oct 2022 17:09:56 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Theodore Ts'o <tytso@mit.edu>,
-        "Jason A. Donenfeld" <Jason@zx2c4.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: build failure after merge of the random tree
-Message-ID: <20221031170956.2cdf101a@canb.auug.org.au>
+        Mon, 31 Oct 2022 02:17:30 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5629B6406
+        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 23:17:25 -0700 (PDT)
+Received: from epcas1p2.samsung.com (unknown [182.195.41.46])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20221031061721epoutp03bceb5b561b6e023cebcc72d34a743dfb~jEuBMyIKG0721107211epoutp03C
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 06:17:21 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20221031061721epoutp03bceb5b561b6e023cebcc72d34a743dfb~jEuBMyIKG0721107211epoutp03C
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1667197041;
+        bh=zrcuyzlSiXoFgoqpUlNcrlJrfzSJzWIX6MW85Q5KClg=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=WTaZtki4V96+De/36Iip/kAB42efae7LjF2Q9kzBD195rxMJYddsrpMMmP6MmrKnG
+         mNMQ19nCIxMV130WXzbpJ5OCjqyrcaBcU2+anzI/YuJaDMz5ZKiTztv0x3dEK1egDY
+         pYC0tbzph2XRBZahAgCIDVneBc2vRWHKY+VcIB4k=
+Received: from epsnrtp2.localdomain (unknown [182.195.42.163]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20221031061721epcas1p4351b13048df38ba807e5620cd531f3f8~jEuAzq6L91417814178epcas1p4-;
+        Mon, 31 Oct 2022 06:17:21 +0000 (GMT)
+Received: from epsmges1p2.samsung.com (unknown [182.195.36.225]) by
+        epsnrtp2.localdomain (Postfix) with ESMTP id 4N12xX5lyYz4x9QC; Mon, 31 Oct
+        2022 06:17:20 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        9D.82.51827.0786F536; Mon, 31 Oct 2022 15:17:20 +0900 (KST)
+Received: from epsmtrp2.samsung.com (unknown [182.195.40.14]) by
+        epcas1p1.samsung.com (KnoxPortal) with ESMTPA id
+        20221031061720epcas1p1f95ab18b14a8e51bf064f0dcffbfea27~jEt-xLQ663011430114epcas1p1K;
+        Mon, 31 Oct 2022 06:17:20 +0000 (GMT)
+Received: from epsmgms1p2.samsung.com (unknown [182.195.42.42]) by
+        epsmtrp2.samsung.com (KnoxPortal) with ESMTP id
+        20221031061720epsmtrp26b5afaa63382726c70cd73a9fffc97c2~jEt-wcoFa0949709497epsmtrp2L;
+        Mon, 31 Oct 2022 06:17:20 +0000 (GMT)
+X-AuditID: b6c32a36-72a32a800000ca73-1b-635f6870f4ea
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        B5.68.18644.F686F536; Mon, 31 Oct 2022 15:17:19 +0900 (KST)
+Received: from W10PB11329 (unknown [10.253.152.129]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20221031061719epsmtip1580399a80943acad7222d74c8ec369ae~jEt-f5IUM1526715267epsmtip1W;
+        Mon, 31 Oct 2022 06:17:19 +0000 (GMT)
+From:   "Sungjong Seo" <sj1557.seo@samsung.com>
+To:     "'Namjae Jeon'" <linkinjeon@kernel.org>
+Cc:     "'linux-fsdevel'" <linux-fsdevel@vger.kernel.org>,
+        "'linux-kernel'" <linux-kernel@vger.kernel.org>,
+        <sj1557.seo@samsung.com>
+In-Reply-To: <PUZPR04MB631604A0BBD29713D3F8DAB0812B9@PUZPR04MB6316.apcprd04.prod.outlook.com>
+Subject: RE: [PATCH v1 2/2] exfat: hint the empty entry which at the end of
+ cluster chain
+Date:   Mon, 31 Oct 2022 15:17:19 +0900
+Message-ID: <014c01d8ecf0$6e74bc80$4b5e3580$@samsung.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/NcMbPBvSTx/AAHr4G9._57S";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQJbGVKlRTjGnAJr8oRiJ7knPGKj+wGohbknrRZoyDA=
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrKJsWRmVeSWpSXmKPExsWy7bCmvm5BRnyywbdeFYuJ05YyW+zZe5LF
+        4vKuOWwWW/4dYXVg8di0qpPNo2/LKkaPz5vkApijGhhtEouSMzLLUhVS85LzUzLz0m2VQkPc
+        dC2UFDLyi0tslaINDY30DA3M9YyMjPSMLWOtjEyVFPISc1NtlSp0oXqVFIqSC4BqcyuLgQbk
+        pOpBxfWKU/NSHLLyS0FO1CtOzC0uzUvXS87PVVIoS8wpBRqhpJ/wjTFj3sIb7AVr5SpanzWz
+        NzC2SXQxcnJICJhIzH90mamLkYtDSGAHo8TFa39YIZxPjBL7PxyHcj4zStx8+JgJpmXqvDY2
+        iMQuRonlqz8zQjgvGSW6LyxjBqliE9CVeHLjJ5DNwSEioC1x/0U6SA2zQBOjxITGlywgNZwC
+        sRLPb+xlA7GFBaIlNszdxgpiswioSsz42MIIYvMKWEosn/KbGcIWlDg58wlYL7OAvMT2t3OY
+        IS5SkNj96ShYr4iAlcTaHQuYIGpEJGZ3tjGDLJYQ+MkuMWfOLqgXXCQOnulghbCFJV4d38IO
+        YUtJfH4HcZCEQDejxJ9zvBDNExglWu6chWowlvj0GeRlDqANmhLrd+lDhBUldv6eywhhC0qc
+        vtbNDHEEn8S7rz2sIOUSArwSHW1CECUqEt8/7GSZwKg8C8lrs5C8NgvJC7MQli1gZFnFKJZa
+        UJybnlpsWGCEHOObGMEpVMtsB+Oktx/0DjEycTAeYpTgYFYS4a0/G50sxJuSWFmVWpQfX1Sa
+        k1p8iDEZGNgTmaVEk/OBSTyvJN7QxNjAwAiYEM0tzY2JELY0MDEzMrEwtjQ2UxLnbZihlSwk
+        kJ5YkpqdmlqQWgSzhYmDU6qBaWaA+8JtUpHivU2/TKxNEk+bzmVe8KxCcteN5LmWItU3Ui++
+        m/T85+s/k/Jm3nsgnb5cqVd+d/Uxd02fBSYm8rJrJDiCmutm7Lt4tf+kgGPnJpu5V9Kd3YS/
+        rxRnOrd86iv+jj8qQleOzwjX81N/stNLf9LFhu2vavfpTrzU+N7+VpPB+j2RGzVFC6piZhta
+        X//j+crls5jALAXmZ30HN30pvb4u+tvirWccjgukds/gdpY89+yIWUNP2rvLexfM+Xhh8c+4
+        gzy8M0XZ1lolN+64tufo/U3lm05pPmbn2sl2tp1rcrq9v3BUr82i+izPkwsjzrywkj9j6WnN
+        f3/d8v3r6s4y5UpOXSU6R8SltVCJpTgj0VCLuag4EQAzdltbWAQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrBLMWRmVeSWpSXmKPExsWy7bCSnG5+Rnyywc13FhYTpy1lttiz9ySL
+        xeVdc9gstvw7wurA4rFpVSebR9+WVYwenzfJBTBHcdmkpOZklqUW6dslcGXMW3iDvWCtXEXr
+        s2b2BsY2iS5GTg4JAROJqfPa2LoYuTiEBHYwSmxat5api5EDKCElcXCfJoQpLHH4cDFIuZDA
+        c0aJ7e0sIDabgK7Ekxs/mUFKRAS0Je6/SAeZwizQwijRsOskE8TIdYwS3T2r2EEaOAViJZ7f
+        2MsGYgsLREqcXfabFcRmEVCVmPGxhRHE5hWwlFg+5TczhC0ocXLmE7BlzEALnt58CmXLS2x/
+        O4cZ4n4Fid2fjoLNERGwkli7YwETRI2IxOzONuYJjMKzkIyahWTULCSjZiFpWcDIsopRMrWg
+        ODc9t9iwwCgvtVyvODG3uDQvXS85P3cTIzgytLR2MO5Z9UHvECMTB+MhRgkOZiUR3vqz0clC
+        vCmJlVWpRfnxRaU5qcWHGKU5WJTEeS90nYwXEkhPLEnNTk0tSC2CyTJxcEo1MFkL2qt9ZDi6
+        zHhlzWaJgMb+87PfbepNVlm37kdR5sljXTq5Mme5cztuvXh6SnAFy8TyY47JATvsDjxmatAt
+        12i5ISJ03ndv79N6t19bEp+tN95zSubWLDvdGpFJxnOjKhZUxv9Z+2TWMUWxR2sfBdidNZeO
+        v8y0Rb/CzrB20VF3nx+xa1dZyf/9NT2ubF59lvjmoNu3xW4aPHozwfbv8+Ptf4t+BVxT72aW
+        y5rbsDHntLsH68nbmzfdNVgoLqLX6ahy96KhnRz/08QX2stZlja95G7suct6LsVw8t6rjctZ
+        vf+rzGd4kO9YxPVpq3ahyjLrqNuu22S37PjyVsvyQ1a6MOeCDFGmIxuPnpdfPE+JpTgj0VCL
+        uag4EQBvL6JN+wIAAA==
+X-CMS-MailID: 20221031061720epcas1p1f95ab18b14a8e51bf064f0dcffbfea27
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+X-ArchiveUser: EV
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221019072854epcas1p2a2b272458803045b4dfa95b17fb4f547
+References: <CGME20221019072854epcas1p2a2b272458803045b4dfa95b17fb4f547@epcas1p2.samsung.com>
+        <PUZPR04MB631604A0BBD29713D3F8DAB0812B9@PUZPR04MB6316.apcprd04.prod.outlook.com>
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/NcMbPBvSTx/AAHr4G9._57S
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Hi, Yuezhang Mo,
 
-Hi all,
+> After traversing all directory entries, hint the empty directory
+> entry no matter whether or not there are enough empty directory
+> entries.
+> 
+> After this commit, hint the empty directory entries like this:
+> 
+> 1. Hint the deleted directory entries if enough;
+> 2. Hint the deleted and unused directory entries which at the
+>    end of the cluster chain no matter whether enough or not(Add
+>    by this commit);
+> 3. If no any empty directory entries, hint the empty directory
+>    entries in the new cluster(Add by this commit).
+> 
+> This avoids repeated traversal of directory entries, reduces CPU
+> usage, and improves the performance of creating files and
+> directories(especially on low-performance CPUs).
+> 
+> Test create 5000 files in a class 4 SD card on imx6q-sabrelite
+> with:
+> 
+> for ((i=0;i<5;i++)); do
+>    sync
+>    time (for ((j=1;j<=1000;j++)); do touch file$((i*1000+j)); done)
+> done
+> 
+> The more files, the more performance improvements.
+> 
+>             Before   After    Improvement
+>    1~1000   25.360s  22.168s  14.40%
+> 1001~2000   38.242s  28.72ss  33.15%
+> 2001~3000   49.134s  35.037s  40.23%
+> 3001~4000   62.042s  41.624s  49.05%
+> 4001~5000   73.629s  46.772s  57.42%
+> 
+> Signed-off-by: Yuezhang Mo <Yuezhang.Mo@sony.com>
+> Reviewed-by: Andy Wu <Andy.Wu@sony.com>
+> Reviewed-by: Aoyama Wataru <wataru.aoyama@sony.com>
+> ---
+>  fs/exfat/dir.c   | 26 ++++++++++++++++++++++----
+>  fs/exfat/namei.c | 22 ++++++++++++++--------
+>  2 files changed, 36 insertions(+), 12 deletions(-)
+> 
+> diff --git a/fs/exfat/dir.c b/fs/exfat/dir.c
+> index a569f285f4fd..7600f3521246 100644
+> --- a/fs/exfat/dir.c
+> +++ b/fs/exfat/dir.c
+> @@ -936,18 +936,25 @@ struct exfat_entry_set_cache
+> *exfat_get_dentry_set(struct super_block *sb,
+> 
+>  static inline void exfat_hint_empty_entry(struct exfat_inode_info *ei,
+>  		struct exfat_hint_femp *candi_empty, struct exfat_chain *clu,
+> -		int dentry, int num_entries)
+> +		int dentry, int num_entries, int entry_type)
+>  {
+>  	if (ei->hint_femp.eidx == EXFAT_HINT_NONE ||
+>  	    ei->hint_femp.count < num_entries ||
+>  	    ei->hint_femp.eidx > dentry) {
+> +		int total_entries = EXFAT_B_TO_DEN(i_size_read(&ei-
+> >vfs_inode));
+> +
+>  		if (candi_empty->count == 0) {
+>  			candi_empty->cur = *clu;
+>  			candi_empty->eidx = dentry;
+>  		}
+> 
+> -		candi_empty->count++;
+> -		if (candi_empty->count == num_entries)
+> +		if (entry_type == TYPE_UNUSED)
+> +			candi_empty->count += total_entries - dentry;
 
-After merging the random tree, today's linux-next build (arm64 defconfig)
-failed like this:
+This seems like a very good approach. Perhaps the key fix that improved
+performance seems to be the handling of cases where empty space was not
+found and ended with TYPE_UNUSED.
 
-arch/arm64/kernel/pi/kaslr_early.c: In function 'kaslr_early_init':
-arch/arm64/kernel/pi/kaslr_early.c:97:22: error: implicit declaration of fu=
-nction '__early_cpu_has_rndr' [-Werror=3Dimplicit-function-declaration]
-   97 |                 if (!__early_cpu_has_rndr() ||
-      |                      ^~~~~~~~~~~~~~~~~~~~
-cc1: some warnings being treated as errors
+However, there are concerns about trusting and using the number of free
+entries after TYPE_UNUSED calculated based on directory size. This is
+because, unlike exFAT Spec., in the real world, unexpected TYPE_UNUSED
+entries may exist. :( 
+That's why exfat_search_empty_slot() checks if there is any valid entry
+after TYPE_UNUSED. In my experience, they can be caused by a wrong FS driver
+and H/W defects, and the probability of occurrence is not low.
 
-Caused by commit
+Therefore, when the lookup ends with TYPE_UNUSED, if there are no empty
+entries found yet, it would be better to set the last empty entry to
+hint_femp.eidx and set hint_femp.count to 0.
+If so, even if the lookup ends with TYPE_UNUSED, exfat_search_empty_slot()
+can start searching from the position of the last empty entry and check
+whether there are actually empty entries as many as the required
+num_entries as now.
 
-  70ae866ab6b3 ("random: remove early archrandom abstraction")
+what do you think?
 
-I have used the ramdom tree from next-20221028 for today.
+> +		else
+> +			candi_empty->count++;
+> +
+> +		if (candi_empty->count == num_entries ||
+> +		    candi_empty->count + candi_empty->eidx == total_entries)
+>  			ei->hint_femp = *candi_empty;
+>  	}
+>  }
+[snip]
+> --
+> 2.25.1
 
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/NcMbPBvSTx/AAHr4G9._57S
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNfZrQACgkQAVBC80lX
-0GwzMgf+K63b3yP6dlffkiZ7whDFrbiD18CQ0xsXAk2SmmlujYoUgLV8Ca9XZ91Z
-31f9qhPx8KInfNP9LbWvqjQZ0FRnHEdxW5Mov6oooa7z0sSQJw/kGWBLO6Iou4do
-YiImRXOy+DWGePjU2+PQDLxrPxjU2nrb8lPe2f8rDTUs/Nv4YuQDBtmmAAOvvmv0
-X5lcC0MZEcHAvBV5WM51Tk8TBdp/rtStK5MibpQcVYXjuzxH3XVenwD0tUBiHB0f
-CxYc55rfSxqAgWsb3rU+zqe2b6s91ra1ZxOWleKKHFw6PGdYGeE67hN9+1eeTlXa
-4ZotHs8moQBxy+DEi1Hw7b5uCdnfog==
-=HuP6
------END PGP SIGNATURE-----
-
---Sig_/NcMbPBvSTx/AAHr4G9._57S--
