@@ -2,95 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77A71613DAD
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:48:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 09878613DAE
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:49:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiJaSsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 14:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42852 "EHLO
+        id S230031AbiJaStA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 14:49:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiJaSsb (ORCPT
+        with ESMTP id S229935AbiJaSs5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 14:48:31 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E1C07D2E5;
-        Mon, 31 Oct 2022 11:48:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=fuaMWNhnb5TiNUPZoY/TJFAbK2HLLTiwMddJQpgwTU8=; b=EA4XJo4GscWqo+/Kx110vWRkmZ
-        P+x7F27NAR4Mtrri5TigDt2S4/XhFyxGyrvubbM9VAaKUo4BYpIBuLWvx57MQAm1eaUSwZBzVqWe7
-        xJFChseG2hkbb6FKSQj7xWkwaqVHUQe0th+CWVEiJM7oGGtmIzd+chkdbsJDHzrmkM9PmGFgFfGme
-        o/55RUV44jPtbRBzge4dQQy8DNca1kN2b3mRuEKXanclFjdkQcBuAzFv+rCulH3dt3fjIGjQfXjY1
-        hzZo4ljhgh/tQ/zjlDrHWe9GkC3EnGq8PGwTN7PYa0jwbl2+bXhunAmo4pnFSQMKc557C1BmWEYG0
-        DxL0IuaA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1opZph-00Gle1-2n;
-        Mon, 31 Oct 2022 18:48:25 +0000
-Date:   Mon, 31 Oct 2022 18:48:25 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Jann Horn <jannh@google.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v2] fs: use acquire ordering in __fget_light()
-Message-ID: <Y2AYecOnLTkhmZB1@ZenIV>
-References: <20221031175256.2813280-1-jannh@google.com>
- <Y2APCmYNjYOYLf8G@ZenIV>
- <CAG48ez094n05c3QJMy7vZ5U=z87MzqYeKU97Na_R9O36_LJSXw@mail.gmail.com>
+        Mon, 31 Oct 2022 14:48:57 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7DB8D2C8
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 11:48:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 73DFC6140F
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 18:48:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82EA4C433C1;
+        Mon, 31 Oct 2022 18:48:53 +0000 (UTC)
+Date:   Mon, 31 Oct 2022 14:48:50 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Takashi Iwai <tiwai@suse.de>
+Cc:     regressions@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [REGRESSION 6.0.x / 6.1.x] NULL dereferencing at tracing
+Message-ID: <20221031144850.5522b036@rorschach.local.home>
+In-Reply-To: <87h6zklb6n.wl-tiwai@suse.de>
+References: <87h6zklb6n.wl-tiwai@suse.de>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG48ez094n05c3QJMy7vZ5U=z87MzqYeKU97Na_R9O36_LJSXw@mail.gmail.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 07:13:30PM +0100, Jann Horn wrote:
-> On Mon, Oct 31, 2022 at 7:08 PM Al Viro <viro@zeniv.linux.org.uk> wrote:
-> [...]
-> > No arch-specific instances, so...
-> > static __always_inline int
-> > arch_atomic_read_acquire(const atomic_t *v)
-> > {
-> >         int ret;
-> >
-> >         if (__native_word(atomic_t)) {
-> >                 ret = smp_load_acquire(&(v)->counter);
-> >         } else {
-> >                 ret = arch_atomic_read(v);
-> >                 __atomic_acquire_fence();
-> >         }
-> >
-> >         return ret;
-> > }
-> [...]
-> > Do we really have any architectures where a structure with one
-> > int field does *not* have a size that would satisfy that check?
-> >
-> > Is it future-proofing for masturbation sake, or am I missing something
-> > real here?
+On Mon, 31 Oct 2022 08:11:28 +0100
+Takashi Iwai <tiwai@suse.de> wrote:
+
+> Hi Steven,
 > 
-> include/linux/atomic/atomic-arch-fallback.h has a comment at the top that says:
+> we've got a bug report indicating the NULL dereference at the recent
+> tracing changes, showing at the start of KDE.  The details including
+> the dmesg are found at:
+>   https://bugzilla.opensuse.org/show_bug.cgi?id=1204705
 > 
-> // Generated by scripts/atomic/gen-atomic-fallback.sh
-> // DO NOT MODIFY THIS FILE DIRECTLY
+> It was reported at first for 6.0.3, and confirmed that the problem
+> persists with 6.1-rc, too.
+> 
+> The culprit seems to be the commit
+> f3ddb74ad0790030c9592229fb14d8c451f4e9a8
+>     tracing: Wake up ring buffer waiters on closing of the file
+> and reverting it seems fixing the problem.
+> 
+> Could you take a look?
+> 
+>
 
-Hmm...  Apparently, the source is shared for atomic and atomic64, and the
-check is intended for atomic64 counterpart of that thing on 32bit boxen.
-Might make sense to put a comment in there...
+Can you apply this to see if it fixes it?
 
-The question about architectures with non-default implementations still
-stands, though.
+I'm guessing there's a path to the release of the file descriptor where
+the ring buffer isn't allocated (and this expected it to be).
 
-Anyway, it's unrelated to the patch itself.  I'm fine with it in the current
-form.  Will apply for the next merge window, unless Linus wants it in right
-now.
+I'll investigate further to see if I can find that path.
+
+-- Steve
+
+diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+index 199759c73519..c1c7ce4c6ddb 100644
+--- a/kernel/trace/ring_buffer.c
++++ b/kernel/trace/ring_buffer.c
+@@ -937,6 +937,9 @@ void ring_buffer_wake_waiters(struct trace_buffer *buffer, int cpu)
+ 	struct ring_buffer_per_cpu *cpu_buffer;
+ 	struct rb_irq_work *rbwork;
+ 
++	if (!buffer)
++		return;
++
+ 	if (cpu == RING_BUFFER_ALL_CPUS) {
+ 
+ 		/* Wake up individual ones too. One level recursion */
