@@ -2,301 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3513D613C49
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:39:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B109613C4C
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:39:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231352AbiJaRiy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 13:38:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38506 "EHLO
+        id S231838AbiJaRjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 13:39:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231169AbiJaRiq (ORCPT
+        with ESMTP id S231829AbiJaRix (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 13:38:46 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC32E13D00
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 10:38:32 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-36bf9c132f9so108144117b3.8
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 10:38:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2E0KDpSiGS3oLmjRJZCFY9fLJv7/37jpr+PzAS0jGl8=;
-        b=VSKB5tKUCfPCxcxXaH6S6clJ426FNZJ7fk0zuqgVjdsm6Mi9yGHzTY1s/pKrMZSaz5
-         NW/qhp7/inK4u3aIH7Mx1uKGNQo+AWur4AmcXeRI5rfpg+jRuLlVvwMTV35AjGIzbLZP
-         OZHRRaCr6LIERVLk113A/XZtKL/SL54ET8t+yiQJYZzS+M5e/ip9IqJAAdE9AWn2PjaJ
-         BAeRgywzx4nHBJDF1j0+sjDadLIa5jfWN8167FGD4xKfRM9DMnOkApymu/+faKgJdWmx
-         Aj+yXMpToXf0f5dKzLA0dCeFKgJpm/L0Xt/bUw6zlGITGRznVyKgpCCslRrx3MyCk6o9
-         KRHw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2E0KDpSiGS3oLmjRJZCFY9fLJv7/37jpr+PzAS0jGl8=;
-        b=r3bMk4F4z3kjWu0vz0EyaVdvIPHo2bvv9LXeQRFq4QKsMaOhnEvGWcrkUD//wkxiT5
-         MGGylLbIka2Z2Mak2gSAkbHZUviK7QJiBKIByQJ18HDPu/zPySjg6RQ8fkB7GcDMqEgX
-         oTIFjZAC8KIL4xrO88shORMr1ybboYDYzoXDce2U5ehR7Ssp5nRkF6C6Rc2gpaE8i42n
-         sgzfBKJeZYXBN+qGVhHCL7J9H7T4X0pjByWPTSBf2lpP/vI+LsU+4jKR1F1rziVBk1zD
-         my3CLMHk4W2h/QhM6Lo43X4RTTKHuvdt1GVjCpwznViQ1RhVdvJQQJMbbGF3Ze84KNcS
-         3Ahw==
-X-Gm-Message-State: ACrzQf2rgdY5jm7I+7/+3Gh+bW5B9jtTfZJFnYIkHhxmys09e6ZU6Ten
-        roexIIPmZAqLuTopEtH2TEn1QE6Lwd1a
-X-Google-Smtp-Source: AMsMyM5n/zwOMk+KkdEOYixOsCR9RR1+5IktxDw0EIRMYXx/sQEUO+vYGbzJTXIB6aukOIk9sSZMbMIsQ7/1
-X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
- (user=vipinsh job=sendgmr) by 2002:a81:55c1:0:b0:370:950:10bb with SMTP id
- j184-20020a8155c1000000b00370095010bbmr14264177ywb.229.1667237911985; Mon, 31
- Oct 2022 10:38:31 -0700 (PDT)
+        Mon, 31 Oct 2022 13:38:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDAE13D40;
+        Mon, 31 Oct 2022 10:38:40 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 17017B819BA;
+        Mon, 31 Oct 2022 17:38:39 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38709C43147;
+        Mon, 31 Oct 2022 17:38:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667237917;
+        bh=P9CiTbFkLwYXgkEJtoE1pjsCHoI48SKWU5aipbF3igg=;
+        h=From:To:Cc:Subject:Date:From;
+        b=FWoSDZLAWEJZUT6mSbEXa8gW75M91KXEbFRnzgmaEPaVFzfP862DtwPc35OjioWj4
+         vFG/stMP+8m/M+TkH6HKIlUgBQ9FYWXbSvARZmvo6To5gL70wjkOHX6orXCFjdBmhD
+         xS/m5oOjcxexhDG0tJ+96hf9aJKgssVytSEDvVzMg410YPKKTf/58hEwcA+//8NAaI
+         ryWnBKa99eryMwamtaxUrn3YJWkCCeFYU/JOEl99g9AZLhAraPxrxb6DOE7WZOSRb+
+         9cp5p/hkjTkepOa4SW2CKlYlT5qRTftB9rkHvam03HxfVaTEAudlh4rLMtsk+F/ngt
+         H77toNMvDffKQ==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>
+Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, x86@kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH bpf] bpf: Mark bpf_arch_init_dispatcher_early() as __init_or_module
 Date:   Mon, 31 Oct 2022 10:38:19 -0700
-In-Reply-To: <20221031173819.1035684-1-vipinsh@google.com>
-Mime-Version: 1.0
-References: <20221031173819.1035684-1-vipinsh@google.com>
-X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
-Message-ID: <20221031173819.1035684-6-vipinsh@google.com>
-Subject: [PATCH v7 5/5] KVM: selftests: Allowing running dirty_log_perf_test
- on specific CPUs
-From:   Vipin Sharma <vipinsh@google.com>
-To:     seanjc@google.com, pbonzini@redhat.com, dmatlack@google.com
-Cc:     andrew.jones@linux.dev, wei.w.wang@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vipin Sharma <vipinsh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-Id: <20221031173819.2344270-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a command line option, -c, to pin vCPUs to physical CPUs (pCPUs),
-i.e.  to force vCPUs to run on specific pCPUs.
+After commit dbe69b299884 ("bpf: Fix dispatcher patchable function entry
+to 5 bytes nop"), building kernel/bpf/dispatcher.c in certain
+configurations with LLVM's integrated assembler results in a known
+recordmcount bug:
 
-Requirement to implement this feature came in discussion on the patch
-"Make page tables for eager page splitting NUMA aware"
-https://lore.kernel.org/lkml/YuhPT2drgqL+osLl@google.com/
+  Cannot find symbol for section 4: .init.text.
+  kernel/bpf/dispatcher.o: failed
 
-This feature is useful as it provides a way to analyze performance based
-on the vCPUs and dirty log worker locations, like on the different NUMA
-nodes or on the same NUMA nodes.
+This occurs when there are only weak symbols in a particular section in
+the translation unit; in this case, bpf_arch_init_dispatcher_early() is
+marked '__weak __init' and it is the only symbol in the .init.text
+section. recordmcount expects there to be a symbol for a particular
+section but LLVM's integrated assembler (and GNU as after 2.37) do not
+generated section symbols. This has been worked around in the kernel
+before in commit 55d5b7dd6451 ("initramfs: fix clang build failure")
+and commit 6e7b64b9dd6d ("elfcore: fix building with clang").
 
-To keep things simple, implementation is intentionally very limited,
-either all of the vCPUs will be pinned followed by an optional main
-thread or nothing will be pinned.
+Fixing recordmcount has been brought up before but there is no clear
+solution that does not break ftrace outright.
 
-Signed-off-by: Vipin Sharma <vipinsh@google.com>
-Suggested-by: David Matlack <dmatlack@google.com>
+Unfortunately, working around this issue by removing the '__init' from
+bpf_arch_init_dispatcher_early() is not an option, as the x86 version of
+bpf_arch_init_dispatcher_early() calls text_poke_early(), which is
+marked '__init_or_module', meaning that when CONFIG_MODULES is disabled,
+bpf_arch_init_dispatcher_early() has to be marked '__init' as well to
+avoid a section mismatch warning from modpost.
+
+However, bpf_arch_init_dispatcher_early() can be marked
+'__init_or_module' as well, which would resolve the recordmcount warning
+for configurations that support modules (i.e., the vast majority of
+them) while not introducing any new warnings for all configurations. Do
+so to clear up the build failure for CONFIG_MODULES=y configurations.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/981
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
- .../selftests/kvm/dirty_log_perf_test.c       | 25 ++++++++-
- .../selftests/kvm/include/kvm_util_base.h     |  4 ++
- .../selftests/kvm/include/perf_test_util.h    |  4 ++
- tools/testing/selftests/kvm/lib/kvm_util.c    | 54 +++++++++++++++++++
- .../selftests/kvm/lib/perf_test_util.c        |  8 ++-
- 5 files changed, 92 insertions(+), 3 deletions(-)
+ arch/x86/net/bpf_jit_comp.c | 2 +-
+ include/linux/bpf.h         | 2 +-
+ kernel/bpf/dispatcher.c     | 2 +-
+ 3 files changed, 3 insertions(+), 3 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-index 618598ddd993..a82fc51d57ca 100644
---- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
-+++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-@@ -353,7 +353,7 @@ static void help(char *name)
- 	puts("");
- 	printf("usage: %s [-h] [-i iterations] [-p offset] [-g] "
- 	       "[-m mode] [-n] [-b vcpu bytes] [-v vcpus] [-o] [-s mem type]"
--	       "[-x memslots]\n", name);
-+	       "[-x memslots] [-c physical cpus to run test on]\n", name);
- 	puts("");
- 	printf(" -i: specify iteration counts (default: %"PRIu64")\n",
- 	       TEST_HOST_LOOP_N);
-@@ -383,6 +383,17 @@ static void help(char *name)
- 	backing_src_help("-s");
- 	printf(" -x: Split the memory region into this number of memslots.\n"
- 	       "     (default: 1)\n");
-+	printf(" -c: Pin tasks to physical CPUs.  Takes a list of comma separated\n"
-+	       "     values (target pCPU), one for each vCPU, plus an optional\n"
-+	       "     entry for the main application task (specified via entry\n"
-+	       "     <nr_vcpus + 1>).  If used, entries must be provided for all\n"
-+	       "     vCPUs, i.e. pinning vCPUs is all or nothing.\n\n"
-+	       "     E.g. to create 3 vCPUs, pin vCPU0=>pCPU22, vCPU1=>pCPU23,\n"
-+	       "     vCPU2=>pCPU24, and pin the application task to pCPU50:\n\n"
-+	       "         ./dirty_log_perf_test -v 3 -c 22,23,24,50\n\n"
-+	       "     To leave the application task unpinned, drop the final entry:\n\n"
-+	       "         ./dirty_log_perf_test -v 3 -c 22,23,24\n\n"
-+	       "     (default: no pinning)\n");
- 	puts("");
- 	exit(0);
+diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+index 00127abd89ee..4145939bbb6a 100644
+--- a/arch/x86/net/bpf_jit_comp.c
++++ b/arch/x86/net/bpf_jit_comp.c
+@@ -389,7 +389,7 @@ static int __bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
+ 	return ret;
  }
-@@ -390,6 +401,7 @@ static void help(char *name)
- int main(int argc, char *argv[])
+ 
+-int __init bpf_arch_init_dispatcher_early(void *ip)
++int __init_or_module bpf_arch_init_dispatcher_early(void *ip)
  {
- 	int max_vcpus = kvm_check_cap(KVM_CAP_MAX_VCPUS);
-+	const char *pcpu_list = NULL;
- 	struct test_params p = {
- 		.iterations = TEST_HOST_LOOP_N,
- 		.wr_fract = 1,
-@@ -406,11 +418,14 @@ int main(int argc, char *argv[])
+ 	const u8 *nop_insn = x86_nops[5];
  
- 	guest_modes_append_default();
+diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+index 0566705c1d4e..4aa7bde406f5 100644
+--- a/include/linux/bpf.h
++++ b/include/linux/bpf.h
+@@ -971,7 +971,7 @@ struct bpf_trampoline *bpf_trampoline_get(u64 key,
+ 					  struct bpf_attach_target_info *tgt_info);
+ void bpf_trampoline_put(struct bpf_trampoline *tr);
+ int arch_prepare_bpf_dispatcher(void *image, void *buf, s64 *funcs, int num_funcs);
+-int __init bpf_arch_init_dispatcher_early(void *ip);
++int __init_or_module bpf_arch_init_dispatcher_early(void *ip);
  
--	while ((opt = getopt(argc, argv, "b:ef:ghi:m:nop:s:v:x:")) != -1) {
-+	while ((opt = getopt(argc, argv, "b:c:ef:ghi:m:nop:s:v:x:")) != -1) {
- 		switch (opt) {
- 		case 'b':
- 			guest_percpu_mem_size = parse_size(optarg);
- 			break;
-+		case 'c':
-+			pcpu_list = optarg;
-+			break;
- 		case 'e':
- 			/* 'e' is for evil. */
- 			run_vcpus_while_disabling_dirty_logging = true;
-@@ -456,6 +471,12 @@ int main(int argc, char *argv[])
- 		}
- 	}
- 
-+	if (pcpu_list) {
-+		kvm_parse_vcpu_pinning(pcpu_list, perf_test_args.vcpu_to_pcpu,
-+				       nr_vcpus);
-+		perf_test_args.pin_vcpus = true;
-+	}
-+
- 	TEST_ASSERT(p.iterations >= 2, "The test should have at least two iterations");
- 
- 	pr_info("Test iterations: %"PRIu64"\n",	p.iterations);
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index e42a09cd24a0..3bf2333ef95d 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -688,6 +688,10 @@ static inline struct kvm_vm *vm_create_with_one_vcpu(struct kvm_vcpu **vcpu,
- 
- struct kvm_vcpu *vm_recreate_with_one_vcpu(struct kvm_vm *vm);
- 
-+void kvm_pin_this_task_to_pcpu(uint32_t pcpu);
-+void kvm_parse_vcpu_pinning(const char *pcpus_string, uint32_t vcpu_to_pcpu[],
-+			    int nr_vcpus);
-+
- unsigned long vm_compute_max_gfn(struct kvm_vm *vm);
- unsigned int vm_calc_num_guest_pages(enum vm_guest_mode mode, size_t size);
- unsigned int vm_num_host_pages(enum vm_guest_mode mode, unsigned int num_guest_pages);
-diff --git a/tools/testing/selftests/kvm/include/perf_test_util.h b/tools/testing/selftests/kvm/include/perf_test_util.h
-index eaa88df0555a..849c875dd0ff 100644
---- a/tools/testing/selftests/kvm/include/perf_test_util.h
-+++ b/tools/testing/selftests/kvm/include/perf_test_util.h
-@@ -39,6 +39,10 @@ struct perf_test_args {
- 
- 	/* Run vCPUs in L2 instead of L1, if the architecture supports it. */
- 	bool nested;
-+	/* True if all vCPUs are pinned to pCPUs */
-+	bool pin_vcpus;
-+	/* The vCPU=>pCPU pinning map. Only valid if pin_vcpus is true. */
-+	uint32_t vcpu_to_pcpu[KVM_MAX_VCPUS];
- 
- 	struct perf_test_vcpu_args vcpu_args[KVM_MAX_VCPUS];
- };
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index f1cb1627161f..8292af9d7660 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -11,6 +11,7 @@
- #include "processor.h"
- 
- #include <assert.h>
-+#include <sched.h>
- #include <sys/mman.h>
- #include <sys/types.h>
- #include <sys/stat.h>
-@@ -443,6 +444,59 @@ struct kvm_vcpu *vm_recreate_with_one_vcpu(struct kvm_vm *vm)
- 	return vm_vcpu_recreate(vm, 0);
+ #define BPF_DISPATCHER_INIT(_name) {				\
+ 	.mutex = __MUTEX_INITIALIZER(_name.mutex),		\
+diff --git a/kernel/bpf/dispatcher.c b/kernel/bpf/dispatcher.c
+index 04f0a045dcaa..e14a68e9a74f 100644
+--- a/kernel/bpf/dispatcher.c
++++ b/kernel/bpf/dispatcher.c
+@@ -91,7 +91,7 @@ int __weak arch_prepare_bpf_dispatcher(void *image, void *buf, s64 *funcs, int n
+ 	return -ENOTSUPP;
  }
  
-+void kvm_pin_this_task_to_pcpu(uint32_t pcpu)
-+{
-+	cpu_set_t mask;
-+	int r;
-+
-+	CPU_ZERO(&mask);
-+	CPU_SET(pcpu, &mask);
-+	r = sched_setaffinity(0, sizeof(mask), &mask);
-+	TEST_ASSERT(!r, "sched_setaffinity() failed for pCPU '%u'.\n", pcpu);
-+}
-+
-+static uint32_t parse_pcpu(const char *cpu_str, const cpu_set_t *allowed_mask)
-+{
-+	uint32_t pcpu = atoi_non_negative(cpu_str);
-+
-+	TEST_ASSERT(CPU_ISSET(pcpu, allowed_mask),
-+		    "Not allowed to run on pCPU '%d', check cgroups?\n", pcpu);
-+	return pcpu;
-+}
-+
-+void kvm_parse_vcpu_pinning(const char *pcpus_string, uint32_t vcpu_to_pcpu[],
-+			    int nr_vcpus)
-+{
-+	cpu_set_t allowed_mask;
-+	char *cpu, *cpu_list;
-+	char delim[2] = ",";
-+	int i, r;
-+
-+	cpu_list = strdup(pcpus_string);
-+	TEST_ASSERT(cpu_list, "strdup() allocation failed.\n");
-+
-+	r = sched_getaffinity(0, sizeof(allowed_mask), &allowed_mask);
-+	TEST_ASSERT(!r, "sched_getaffinity() failed");
-+
-+	cpu = strtok(cpu_list, delim);
-+
-+	/* 1. Get all pcpus for vcpus. */
-+	for (i = 0; i < nr_vcpus; i++) {
-+		TEST_ASSERT(cpu, "pCPU not provided for vCPU '%d'\n", i);
-+		vcpu_to_pcpu[i] = parse_pcpu(cpu, &allowed_mask);
-+		cpu = strtok(NULL, delim);
-+	}
-+
-+	/* 2. Check if the main worker needs to be pinned. */
-+	if (cpu) {
-+		kvm_pin_this_task_to_pcpu(parse_pcpu(cpu, &allowed_mask));
-+		cpu = strtok(NULL, delim);
-+	}
-+
-+	TEST_ASSERT(!cpu, "pCPU list contains trailing garbage characters '%s'", cpu);
-+	free(cpu_list);
-+}
-+
- /*
-  * Userspace Memory Region Find
-  *
-diff --git a/tools/testing/selftests/kvm/lib/perf_test_util.c b/tools/testing/selftests/kvm/lib/perf_test_util.c
-index 9618b37c66f7..3a1d0a44419b 100644
---- a/tools/testing/selftests/kvm/lib/perf_test_util.c
-+++ b/tools/testing/selftests/kvm/lib/perf_test_util.c
-@@ -2,6 +2,8 @@
- /*
-  * Copyright (C) 2020, Google LLC.
-  */
-+#define _GNU_SOURCE
-+
- #include <inttypes.h>
- 
- #include "kvm_util.h"
-@@ -243,6 +245,10 @@ void __weak perf_test_setup_nested(struct kvm_vm *vm, int nr_vcpus, struct kvm_v
- static void *vcpu_thread_main(void *data)
+-int __weak __init bpf_arch_init_dispatcher_early(void *ip)
++int __weak __init_or_module bpf_arch_init_dispatcher_early(void *ip)
  {
- 	struct vcpu_thread *vcpu = data;
-+	int vcpu_idx = vcpu->vcpu_idx;
-+
-+	if (perf_test_args.pin_vcpus)
-+		kvm_pin_this_task_to_pcpu(perf_test_args.vcpu_to_pcpu[vcpu_idx]);
- 
- 	WRITE_ONCE(vcpu->running, true);
- 
-@@ -255,7 +261,7 @@ static void *vcpu_thread_main(void *data)
- 	while (!READ_ONCE(all_vcpu_threads_running))
- 		;
- 
--	vcpu_thread_fn(&perf_test_args.vcpu_args[vcpu->vcpu_idx]);
-+	vcpu_thread_fn(&perf_test_args.vcpu_args[vcpu_idx]);
- 
- 	return NULL;
+ 	return -ENOTSUPP;
  }
+
+base-commit: 8bdc2acd420c6f3dd1f1c78750ec989f02a1e2b9
 -- 
-2.38.1.273.g43a17bfeac-goog
+2.38.1
 
