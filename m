@@ -2,278 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9651614156
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 00:08:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF578614154
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 00:07:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229642AbiJaXIG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 19:08:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34244 "EHLO
+        id S229452AbiJaXH4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 19:07:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiJaXIE (ORCPT
+        with ESMTP id S229647AbiJaXHx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 19:08:04 -0400
-Received: from fudo.makrotopia.org (fudo.makrotopia.org [IPv6:2a07:2ec0:3002::71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8BE41580B;
-        Mon, 31 Oct 2022 16:08:00 -0700 (PDT)
-Received: from local
-        by fudo.makrotopia.org with esmtpsa (TLS1.3:TLS_AES_256_GCM_SHA384:256)
-         (Exim 4.94.2)
-        (envelope-from <daniel@makrotopia.org>)
-        id 1opdso-0001BB-Li; Tue, 01 Nov 2022 00:07:54 +0100
-Date:   Mon, 31 Oct 2022 23:07:48 +0000
-From:   Daniel Golle <daniel@makrotopia.org>
-To:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Subject: [PATCH 1/2] thermal: mediatek: add support for MT7986 and MT7981
-Message-ID: <136157bd1f94c64504f87ee2db6b3ed0a8dcc3de.1667254476.git.daniel@makrotopia.org>
+        Mon, 31 Oct 2022 19:07:53 -0400
+Received: from mail-oa1-x2f.google.com (mail-oa1-x2f.google.com [IPv6:2001:4860:4864:20::2f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2415013F20;
+        Mon, 31 Oct 2022 16:07:52 -0700 (PDT)
+Received: by mail-oa1-x2f.google.com with SMTP id 586e51a60fabf-13ba9a4430cso15091286fac.11;
+        Mon, 31 Oct 2022 16:07:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iIKNfIS9DJZ+OreDnkhjQEbBfQ5lKHnR+23wu5eNP+4=;
+        b=CFRw2KUOfNI618M5wfGr3VzUsoE6+rWut09ICvW0xZsQBJAlb5iRyuOIVZyW+cxhPN
+         FiLdQd+HvwAGMBpFpKXdwkY3UgbdJU8qQlttbtfn0+pDpMzG4GHywbVRKilsOiPyrXxn
+         jcjICLAvDvkydW2h6PGFJWcSFhkyv2KSUz/YaFzZlaNzZFV56/mIRyP7ZTnwk64y4n9q
+         Lv/zcPwIMiaDw5ylE2aXisFQ4lVq5UAkb7fCyQ0f6vcACiTcAaNvyZCiGr2a/snQEkUu
+         PHpymBsb+z8NIseqAyoBNWRvJ+pKanJFHgU007rivRmdTB0G5MNZ1TIjvu+SQCf5/HGt
+         az/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iIKNfIS9DJZ+OreDnkhjQEbBfQ5lKHnR+23wu5eNP+4=;
+        b=t+qEwnuRrhoym90w4n/gcE5eRuGc8zcLNze4nyfJkLZiYF6Qfsd9sF8kI+oM6ZJBhl
+         12XMqIIS7x+c0lIzyAERBCiMp3lnVQ8WosGHDq459ztqczKyBgmvqj4mek6bf9g6RtJc
+         luhwrbomJRMAIjn6gXTdZQVmQC+afpSEl8TFTTrE4ROZ/8+wFNAIgm6FdyNuwq5AVCVW
+         bgoiqPfY2CvhdFTzBk3yUUT47EFZdoQ5nmIwssuc9PQqVosgohQE40JZLVZlkGd0e/Tg
+         57LGn0B9hB94HtImH/LjrrAnDS/IbMsIGwtVuZUxBrsgFuUHMIqNbIWHvBbxXMKRbyJs
+         J97w==
+X-Gm-Message-State: ACrzQf1XHRYRlm/9U6h27NpCGzUpjZspJ8/3VQ5J4DdfY8l/e8QApfE6
+        L0clN/PjizgiJRvesJXS4Ec=
+X-Google-Smtp-Source: AMsMyM4jMrEtQxRZyChRGb9EEzYfviGe38pgCfAYpjEgP7S2SnvOLdFtOazIJKW1VuMSGW3gIp9RUQ==
+X-Received: by 2002:a05:6870:5894:b0:131:b25b:413e with SMTP id be20-20020a056870589400b00131b25b413emr18653062oab.192.1667257671404;
+        Mon, 31 Oct 2022 16:07:51 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a13-20020a4ad5cd000000b0049427725e62sm2844817oot.19.2022.10.31.16.07.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 16:07:50 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Mon, 31 Oct 2022 16:07:49 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Benson Leung <bleung@chromium.org>, linux-rtc@vger.kernel.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Brian Norris <briannorris@chromium.org>
+Subject: Re: [PATCH] rtc: cros-ec: Limit RTC alarm range if needed
+Message-ID: <20221031230749.GB2082109@roeck-us.net>
+References: <20221029005400.2712577-1-linux@roeck-us.net>
+ <Y2ABnbBGSJGM3gSS@mail.local>
+ <20221031181913.GA3841664@roeck-us.net>
+ <Y2BIv21U7lpN0z23@mail.local>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y2BIv21U7lpN0z23@mail.local>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for V3 generation thermal found in MT7986 and MT7981 SoCs.
-Brings code to assign values from efuse as well as new function to
-convert raw temperature to millidegree celsius, as found in MediaTek's
-SDK sources (but cleaned up and de-duplicated)
+On Mon, Oct 31, 2022 at 11:14:23PM +0100, Alexandre Belloni wrote:
+> On 31/10/2022 11:19:13-0700, Guenter Roeck wrote:
+> > On Mon, Oct 31, 2022 at 06:10:53PM +0100, Alexandre Belloni wrote:
+> > > Hello,
+> > > 
+> > > On 28/10/2022 17:54:00-0700, Guenter Roeck wrote:
+> > > > RTC chips on some older Chromebooks can only handle alarms less than 24
+> > > > hours in the future. Attempts to set an alarm beyond that range fails.
+> > > > The most severe impact of this limitation is that suspend requests fail
+> > > > if alarmtimer_suspend() tries to set an alarm for more than 24 hours
+> > > > in the future.
+> > > > 
+> > > > Try to set the real-time alarm to just below 24 hours if setting it to
+> > > > a larger value fails to work around the problem. While not perfect, it
+> > > > is better than just failing the call. A similar workaround is already
+> > > > implemented in the rtc-tps6586x driver.
+> > > 
+> > > I'm not super convinced this is actually better than failing the call
+> > > because your are implementing policy in the driver which is bad from a
+> > > user point of view. It would be way better to return -ERANGE and let
+> > > userspace select a better alarm time.
+> > 
+> > The failing call is from alarmtimer_suspend() which is called during suspend.
+> > It is not from userspace, and userspace has no chance to intervene.
+> > 
+> > It is also not just one userspace application which could request a large
+> > timeout, it is a variety of userspace applications, and not all of them are
+> > written by Google. Some are Android applications. I don't see how it would be
+> > realistic to expect all such applications to fix their code (if that is even
+> > possible - there might be an application which called sleep(100000) or
+> > something equivalent, which works just fine as long as the system is not
+> > suspended.
+> > 
+> > > Do you have to know in advance which are the "older" chromebooks that
+> > > are affected?
+> > 
+> > Not sure I understand the question. Technically we know, but the cros_ec
+> > rtc driver doesn't know because the EC doesn't have an API to report the
+> > maximum timeout to the Linux driver. Even if that existed, it would not
+> > help because the rtc API only supports absolute maximum clock values,
+> > not clock offsets relative to the current time. So ultimately there is no
+> > means for an RTC driver to tell the maximum possible alarm timer offset to 
+> > the RTC subsystem, and there is no means for a user such as
+> > alarmtimer_suspend() to obtain the maximum time offset. Does that answer
+> > your question ?
+> 
+> Yes, my question was missing a few words, sorry I wanted to know if you
+> had *a way* to know.
+> 
 
-The conversion formula as found in MediaTek's SDK has been refactored
-and the adc_oe offset value from the efuse was no longer taken into
-account as a result, while the goal was apparently to prevent the
-loss of floating point precission along the calculation[1].
+See below. It is doable, but there is no real good solution, or at least
+I don't see one right now.
 
-Hence I added back the adc_oe offset calibration value as it has also
-been present the calculation before the mentioned change.
+> > 
+> > On a side note, I tried an alternate implementation by adding a retry into
+> > alarmtimer_suspend(), where it would request a smaller timeout if the
+> > requested timeout failed. I did not pursue/submit this since it seemed
+> > hacky. To solve that problem, I'd rather discuss extending the RTC API
+> > to provide a maximum offset to its users. Such a solution would probably
+> > be desirable, but that it more longer term and would not solve the
+> > immediate problem.
+> 
+> Yes, this is what I was aiming for. This is something that is indeed
+> missing in the RTC API and that I already thought about. But indeed, it
+> would be great to have a way to set the alarm range separately from the
+> time keeping range. This would indeed have to be a range relative to the
+> current time.
+> 
+> alarmtimer_suspend() can then get the allowed alarm range for the RTC,
+> and set the alarm to max(alarm range, timer value) and loop until the
+> timer has expired. Once we have this API, userspace can do the same.
+> 
+> I guess that ultimately, this doesn't help your driver unless you are
+> wanting to wakeup all the chromebooks at least once a day regardless of
+> their EC.
 
-[1]: https://git01.mediatek.com/plugins/gitiles/openwrt/feeds/mtk-openwrt-feeds/+/baf36c7eef477aae1f8f2653b6c29e2caf48475b
-Signed-off-by: Daniel Golle <daniel@makrotopia.org>
----
- drivers/thermal/mtk_thermal.c | 122 +++++++++++++++++++++++++++++++++-
- 1 file changed, 119 insertions(+), 3 deletions(-)
+That is a no-go. It would reduce battery lifetime on all Chromebooks,
+including those not affected by the problem (that is, almost all of them).
 
-diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
-index 8440692e3890d2..5b60971323a49b 100644
---- a/drivers/thermal/mtk_thermal.c
-+++ b/drivers/thermal/mtk_thermal.c
-@@ -150,6 +150,21 @@
- #define CALIB_BUF1_VALID_V2(x)		(((x) >> 4) & 0x1)
- #define CALIB_BUF1_O_SLOPE_SIGN_V2(x)	(((x) >> 3) & 0x1)
- 
-+/*
-+ * Layout of the fuses providing the calibration data
-+ * These macros can be used for MT7981 and MT7986.
-+ */
-+#define CALIB_BUF0_ADC_GE_V3(x)		(((x) >> 0) & 0x3ff)
-+#define CALIB_BUF0_ADC_OE_V3(x)		(((x) >> 10) & 0x3ff)
-+#define CALIB_BUF0_DEGC_CALI_V3(x)	(((x) >> 20) & 0x3f)
-+#define CALIB_BUF0_O_SLOPE_V3(x)	(((x) >> 26) & 0x3f)
-+#define CALIB_BUF1_VTS_TS1_V3(x)	(((x) >> 0) & 0x1ff)
-+#define CALIB_BUF1_VTS_TS2_V3(x)	(((x) >> 21) & 0x1ff)
-+#define CALIB_BUF1_VTS_TSABB_V3(x)	(((x) >> 9) & 0x1ff)
-+#define CALIB_BUF1_VALID_V3(x)		(((x) >> 18) & 0x1)
-+#define CALIB_BUF1_O_SLOPE_SIGN_V3(x)	(((x) >> 19) & 0x1)
-+#define CALIB_BUF1_ID_V3(x)		(((x) >> 20) & 0x1)
-+
- enum {
- 	VTS1,
- 	VTS2,
-@@ -163,6 +178,7 @@ enum {
- enum mtk_thermal_version {
- 	MTK_THERMAL_V1 = 1,
- 	MTK_THERMAL_V2,
-+	MTK_THERMAL_V3,
- };
- 
- /* MT2701 thermal sensors */
-@@ -245,6 +261,27 @@ enum mtk_thermal_version {
- /* The calibration coefficient of sensor  */
- #define MT8183_CALIBRATION	153
- 
-+/* AUXADC channel 11 is used for the temperature sensors */
-+#define MT7986_TEMP_AUXADC_CHANNEL	11
-+
-+/* The total number of temperature sensors in the MT7986 */
-+#define MT7986_NUM_SENSORS		1
-+
-+/* The number of banks in the MT7986 */
-+#define MT7986_NUM_ZONES		1
-+
-+/* The number of sensing points per bank */
-+#define MT7986_NUM_SENSORS_PER_ZONE	1
-+
-+/* MT7986 thermal sensors */
-+#define MT7986_TS1			0
-+
-+/* The number of controller in the MT7986 */
-+#define MT7986_NUM_CONTROLLER		1
-+
-+/* The calibration coefficient of sensor  */
-+#define MT7986_CALIBRATION		165
-+
- struct mtk_thermal;
- 
- struct thermal_bank_cfg {
-@@ -386,6 +423,14 @@ static const int mt7622_mux_values[MT7622_NUM_SENSORS] = { 0, };
- static const int mt7622_vts_index[MT7622_NUM_SENSORS] = { VTS1 };
- static const int mt7622_tc_offset[MT7622_NUM_CONTROLLER] = { 0x0, };
- 
-+/* MT7986 thermal sensor data */
-+static const int mt7986_bank_data[MT7986_NUM_SENSORS] = { MT7986_TS1, };
-+static const int mt7986_msr[MT7986_NUM_SENSORS_PER_ZONE] = { TEMP_MSR0, };
-+static const int mt7986_adcpnp[MT7986_NUM_SENSORS_PER_ZONE] = { TEMP_ADCPNP0, };
-+static const int mt7986_mux_values[MT7986_NUM_SENSORS] = { 0, };
-+static const int mt7986_vts_index[MT7986_NUM_SENSORS] = { VTS1 };
-+static const int mt7986_tc_offset[MT7986_NUM_CONTROLLER] = { 0x0, };
-+
- /*
-  * The MT8173 thermal controller has four banks. Each bank can read up to
-  * four temperature sensors simultaneously. The MT8173 has a total of 5
-@@ -549,6 +594,30 @@ static const struct mtk_thermal_data mt8183_thermal_data = {
- 	.version = MTK_THERMAL_V1,
- };
- 
-+/*
-+ * MT7986 uses AUXADC Channel 11 for raw data access.
-+ */
-+static const struct mtk_thermal_data mt7986_thermal_data = {
-+	.auxadc_channel = MT7986_TEMP_AUXADC_CHANNEL,
-+	.num_banks = MT7986_NUM_ZONES,
-+	.num_sensors = MT7986_NUM_SENSORS,
-+	.vts_index = mt7986_vts_index,
-+	.cali_val = MT7986_CALIBRATION,
-+	.num_controller = MT7986_NUM_CONTROLLER,
-+	.controller_offset = mt7986_tc_offset,
-+	.need_switch_bank = true,
-+	.bank_data = {
-+		{
-+			.num_sensors = 1,
-+			.sensors = mt7986_bank_data,
-+		},
-+	},
-+	.msr = mt7986_msr,
-+	.adcpnp = mt7986_adcpnp,
-+	.sensor_mux_values = mt7986_mux_values,
-+	.version = MTK_THERMAL_V3,
-+};
-+
- /**
-  * raw_to_mcelsius - convert a raw ADC value to mcelsius
-  * @mt:	The thermal controller
-@@ -603,6 +672,22 @@ static int raw_to_mcelsius_v2(struct mtk_thermal *mt, int sensno, s32 raw)
- 	return (format_2 - tmp) * 100;
- }
- 
-+static int raw_to_mcelsius_v3(struct mtk_thermal *mt, int sensno, s32 raw)
-+{
-+	s32 tmp;
-+
-+	if (raw == 0)
-+		return 0;
-+
-+	raw &= 0xfff;
-+	tmp = 100000 * 15 / 16 * 10000;
-+	tmp /= 4096 - 512 + mt->adc_ge;
-+	tmp /= 1490;
-+	tmp *= raw - mt->vts[sensno] - 2900 - mt->adc_oe + 512;
-+
-+	return mt->degc_cali * 500 - tmp;
-+}
-+
- /**
-  * mtk_thermal_get_bank - get bank
-  * @bank:	The bank
-@@ -659,9 +744,12 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
- 		if (mt->conf->version == MTK_THERMAL_V1) {
- 			temp = raw_to_mcelsius_v1(
- 				mt, conf->bank_data[bank->id].sensors[i], raw);
--		} else {
-+		} else if (mt->conf->version == MTK_THERMAL_V2) {
- 			temp = raw_to_mcelsius_v2(
- 				mt, conf->bank_data[bank->id].sensors[i], raw);
-+		} else {
-+			temp = raw_to_mcelsius_v3(
-+				mt, conf->bank_data[bank->id].sensors[i], raw);
- 		}
- 
- 		/*
-@@ -887,6 +975,26 @@ static int mtk_thermal_extract_efuse_v2(struct mtk_thermal *mt, u32 *buf)
- 	return 0;
- }
- 
-+static int mtk_thermal_extract_efuse_v3(struct mtk_thermal *mt, u32 *buf)
-+{
-+	if (!CALIB_BUF1_VALID_V3(buf[1]))
-+		return -EINVAL;
-+
-+	mt->adc_oe = CALIB_BUF0_ADC_OE_V3(buf[0]);
-+	mt->adc_ge = CALIB_BUF0_ADC_GE_V3(buf[0]);
-+	mt->degc_cali = CALIB_BUF0_DEGC_CALI_V3(buf[0]);
-+	mt->o_slope = CALIB_BUF0_O_SLOPE_V3(buf[0]);
-+	mt->vts[VTS1] = CALIB_BUF1_VTS_TS1_V3(buf[1]);
-+	mt->vts[VTS2] = CALIB_BUF1_VTS_TS2_V3(buf[1]);
-+	mt->vts[VTSABB] = CALIB_BUF1_VTS_TSABB_V3(buf[1]);
-+	mt->o_slope_sign = CALIB_BUF1_O_SLOPE_SIGN_V3(buf[1]);
-+
-+	if (CALIB_BUF1_ID_V3(buf[1]) == 0)
-+		mt->o_slope = 0;
-+
-+	return 0;
-+}
-+
- static int mtk_thermal_get_calibration_data(struct device *dev,
- 					    struct mtk_thermal *mt)
- {
-@@ -897,6 +1005,7 @@ static int mtk_thermal_get_calibration_data(struct device *dev,
- 
- 	/* Start with default values */
- 	mt->adc_ge = 512;
-+	mt->adc_oe = 512;
- 	for (i = 0; i < mt->conf->num_sensors; i++)
- 		mt->vts[i] = 260;
- 	mt->degc_cali = 40;
-@@ -924,8 +1033,10 @@ static int mtk_thermal_get_calibration_data(struct device *dev,
- 
- 	if (mt->conf->version == MTK_THERMAL_V1)
- 		ret = mtk_thermal_extract_efuse_v1(mt, buf);
--	else
-+	else if (mt->conf->version == MTK_THERMAL_V2)
- 		ret = mtk_thermal_extract_efuse_v2(mt, buf);
-+	else
-+		ret = mtk_thermal_extract_efuse_v3(mt, buf);
- 
- 	if (ret) {
- 		dev_info(dev, "Device not calibrated, using default calibration values\n");
-@@ -955,6 +1066,10 @@ static const struct of_device_id mtk_thermal_of_match[] = {
- 		.compatible = "mediatek,mt7622-thermal",
- 		.data = (void *)&mt7622_thermal_data,
- 	},
-+	{
-+		.compatible = "mediatek,mt7986-thermal",
-+		.data = (void *)&mt7986_thermal_data,
-+	},
- 	{
- 		.compatible = "mediatek,mt8183-thermal",
- 		.data = (void *)&mt8183_thermal_data,
-@@ -1070,7 +1185,8 @@ static int mtk_thermal_probe(struct platform_device *pdev)
- 		goto err_disable_clk_auxadc;
- 	}
- 
--	if (mt->conf->version == MTK_THERMAL_V2) {
-+	if (mt->conf->version == MTK_THERMAL_V2 ||
-+	    mt->conf->version == MTK_THERMAL_V3) {
- 		mtk_thermal_turn_on_buffer(apmixed_base);
- 		mtk_thermal_release_periodic_ts(mt, auxadc_base);
- 	}
--- 
-2.38.1
+To implement reporting the maximum supported offset, I'd probably either
+try to identify affected Chromebooks using devicetree information,
+or by sending am alarm request > 24h in the future in the probe function
+and setting the maximum offset just below 24h if that request fails.
+We'd have to discuss the best approach internally.
 
+Either case, that doesn't help with the short term problem that we
+have to solve now and that can be backported to older kernels. It also
+won't help userspace - userspace alarm requests, as Brian has pointed out,
+are separate from limits supported by the RTC hardware. We can not change
+the API for CLOCK_xxx_ALARM to userspace, and doing so would not make
+sense anyway since it works just fine as long as the system isn't
+suspended. Besides, changing alarmtimer_suspend() as you suggest above
+would solve the problem for userspace, so I don't see a need for a
+userspace API/ABI change unless I am missing something.
+
+Thanks,
+Guenter
