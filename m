@@ -2,136 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9498061380C
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 14:29:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CDB661381B
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 14:32:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230296AbiJaN3E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 09:29:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38186 "EHLO
+        id S230461AbiJaNcQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 09:32:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiJaN3A (ORCPT
+        with ESMTP id S229785AbiJaNcN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 09:29:00 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E391FD31;
-        Mon, 31 Oct 2022 06:28:59 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 953686602040;
-        Mon, 31 Oct 2022 13:28:57 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667222938;
-        bh=9ps5B31edxR0GepExY4h3W2psR6P8vyTX43U+/2T3mo=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=oo5AyVFdBpKrzCOAmHR088kRNw8TfdgZCNvEVkfw3Lk6w2lGN3SdSqrfjz+yv4Cc8
-         9Nb/97sRv1Jnr57Ai+w25rn7yvWYIUsZELHaR+0gy2ZCwPv4MaAxPml749f6iCe4uD
-         HxwRDpnhl/vvg0fJPAIak8vfi+7ocXJBXkv05NpvfapoVkiP+XnHZXFe4qNgSdwZ+/
-         IuUlp8c7geAKrPFzzbDX6ZIt0sUVCuTQHBrQLjytDFbTuluMGh2j8ZC1j3JT3P+PNn
-         7VWil59o3jMeG86tqF9uf/riOSb+ZJt0ufmjcQROPeLjNx1PElFyyIRBWX0aW2uTJG
-         Abbok2EoW8H/Q==
-Message-ID: <9da05c64-87bb-39c7-6c23-e4918bd5024b@collabora.com>
-Date:   Mon, 31 Oct 2022 14:28:54 +0100
+        Mon, 31 Oct 2022 09:32:13 -0400
+Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 940BF10052
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 06:32:12 -0700 (PDT)
+Received: by mail-pj1-x102b.google.com with SMTP id o7so7201361pjj.1
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 06:32:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=q4Caka6+jliHYQg5uBcU6S8n+cjTKgZhOIgl/ZiyeC4=;
+        b=LWca2xBIGrpbxgMjif6KZcqGr0yCXVaBuCGQP7A6xxcliR5BlxM4FTavP++TnqkZV6
+         P2A9n2btoVznnOJlHL2nur8hKienST/+gRjvR/72oxpl7DYXC8kqubFmAGD5jofFmdTO
+         ZJxyTe1PWsJH+q6WNpsF8cptLuPiw68I2Zr7/dcVf/GH4Lx/Je74LGEA140tT+KgJdGq
+         cpbdMMLCU+GMJ47qwhTTZAnNfvRqZc9wSqR79aR/yl71SfRO1qwf3ilsJlxxts9KZCDN
+         dO9K84Wa2wotAQxfulML3xzcVWdsHEQfFI3dyJr8eV6KX2dLjfvn5SsteM+Qvod+heDW
+         dpaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=q4Caka6+jliHYQg5uBcU6S8n+cjTKgZhOIgl/ZiyeC4=;
+        b=11uHEPzdgffrrSSPXcCRhS6hL55M3uawziNVjyLhndDInRpQak9HBxsM3CQaWT9Ut+
+         K/Ot+dHedNH3sbO5eFQgeqI5dZ1tJxxxDLmriLrCmP+v+H74VgnSlUSClhecu3aDdESu
+         qFj/jFFCYY3Pp1q4HW5nVn0IappWv4VdKKg1adu1vNkbepb0cnA4VoTsWvGVUIAk8zCY
+         tYSZI1pn3K3ORDh06BqHU6wUB7VCr26IJPBbmgXxFfS41Rhgas7NjFOOCshwHvUa+Ivr
+         tjqoaRHG3y1pne9Fqn++J+FqOjk3/qneQXMubBlYtb3fVNMxo9o9kkEMRQncZKDqr8XX
+         at+A==
+X-Gm-Message-State: ACrzQf1f97aIP5caP0EN19LEG14rTDZ4LQl4Fez3ZcLvOIWe56fBIUr9
+        N8g5+RlcWJnDzi3ONXp31t3bAQrFXkgc0xdx
+X-Google-Smtp-Source: AMsMyM7neRX3blBajjm7QTcRJvZB5fGWSap2FlMkbO8MNYxCMNIhSBhjTUn10hyIE1k/XE1vFmgWYg==
+X-Received: by 2002:a17:902:c942:b0:187:3c1:ad3d with SMTP id i2-20020a170902c94200b0018703c1ad3dmr13882994pla.139.1667223131871;
+        Mon, 31 Oct 2022 06:32:11 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id t189-20020a6281c6000000b005668b26ade0sm4565791pfd.136.2022.10.31.06.32.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 06:32:11 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Jinlong Chen <nickyc975@zju.edu.cn>
+Cc:     linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        hch@lst.de
+In-Reply-To: <20221030094730.1275463-1-nickyc975@zju.edu.cn>
+References: <20221030094730.1275463-1-nickyc975@zju.edu.cn>
+Subject: Re: [PATCH] blk-mq: move queue_is_mq out of blk_mq_cancel_work_sync
+Message-Id: <166722313098.68022.8855320029749085471.b4-ty@kernel.dk>
+Date:   Mon, 31 Oct 2022 07:32:10 -0600
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v4 1/3] dt-bindings: PCI: mediatek-gen3: Support mt8195
-Content-Language: en-US
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Ryder Lee <ryder.lee@mediatek.com>,
-        Jianjun Wang <jianjun.wang@mediatek.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20221028094317.29270-1-tinghan.shen@mediatek.com>
- <20221028094317.29270-2-tinghan.shen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221028094317.29270-2-tinghan.shen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.11.0-dev-d9ed3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 28/10/22 11:43, Tinghan Shen ha scritto:
-> From: Jianjun Wang <jianjun.wang@mediatek.com>
+On Sun, 30 Oct 2022 17:47:30 +0800, Jinlong Chen wrote:
+> The only caller that needs queue_is_mq check is del_gendisk, so move the
+> check into it.
 > 
-> In order to support mt8195 pcie node, update the yaml to support new
-> properties of iommu and power-domain, and update the reset-names
-> property to allow only one 'mac' name.
 > 
-> Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
-> Signed-off-by: TingHan Shen <tinghan.shen@mediatek.com>
-> ---
->   .../bindings/pci/mediatek-pcie-gen3.yaml         | 16 +++++++++++++---
->   1 file changed, 13 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-> index c00be39af64e..a9013c10131a 100644
-> --- a/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-> +++ b/Documentation/devicetree/bindings/pci/mediatek-pcie-gen3.yaml
-> @@ -70,14 +70,21 @@ properties:
->       minItems: 1
->       maxItems: 8
->   
-> +  iommu-map:
-> +    maxItems: 1
-> +
-> +  iommu-map-mask:
-> +    const: 0
-> +
->     resets:
->       minItems: 1
->       maxItems: 2
->   
->     reset-names:
-> -    minItems: 1
-> -    items:
-> -      - const: phy
-> +    oneOf:
-> +      - items:
-> +          - const: phy
-> +          - const: mac
->         - const: mac
 
-Sorry, this looks a bit messy.
+Applied, thanks!
 
-I can propose two solutions, either:
+[1/1] blk-mq: move queue_is_mq out of blk_mq_cancel_work_sync
+      commit: 219cf43c552a49a7710b7b341bf616682a2643f0
 
-reset-names:
-   minItems: 1
-   items:
-     - const: mac
-     - const: phy
-... and change the order in mt8192.dtsi;
-
-otherwise, something like
-allOf:
-   - if:
-      properties:
-        compatible:
-          contains:
-            - const: mediatek,mt8195-pcie
-     ... invert reset-names
-
-I think that the first solution makes a bit more sense though, as the
-PHY reset may be moved in a PCIE-PHY specific driver instead of being
-managed here in pci-mediatek-gen3.
-
-Regards,
-Angelo
+Best regards,
+-- 
+Jens Axboe
 
 
