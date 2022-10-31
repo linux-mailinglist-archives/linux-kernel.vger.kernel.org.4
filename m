@@ -2,74 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2543613C6B
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:45:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95331613C6E
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:45:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231224AbiJaRpF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 13:45:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46786 "EHLO
+        id S230251AbiJaRpq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 13:45:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231342AbiJaRpB (ORCPT
+        with ESMTP id S231315AbiJaRpn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 13:45:01 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4564813D24
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 10:45:00 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id a14so17024219wru.5
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 10:45:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uYtKmfNhvFP9fjeZBd6sjzcvYV43BjS3uEVltPLZXlo=;
-        b=CP/OPsDiOO5oiXwe+KdK/PBb5uKYx61OOfMaWRqa2Bgcl5FaBr0wIhSH1k2qT+j+3o
-         I2fpPy74CcLqE0MkXZ5CSQ/FkQna5kXNaeWLKThePjZMvHB7ybbv9i/Fp9ZLndGFzdkc
-         tLzotgErj5cws74IhfXObgInf/HozgI3A8ZW57wHBV3KCs/SlzEcUQ3t2EdCq5EK8hh8
-         LPOeP3dbJ3rTAhx44cbgciknRC7gTGg8hymj1sqY5TsGgEugfXkySiRNpZq7rLyFHTGN
-         eUbUGGiuaZabCocIXsle5jbamXCjiWo0zN8yl5Dn5O3Pu2gh/S00xae3rZofqRKQNdXn
-         mVlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uYtKmfNhvFP9fjeZBd6sjzcvYV43BjS3uEVltPLZXlo=;
-        b=HWiGs/8I/IhnCrPs1Zuyj2SKYqwJROdWPH7t+H+guTaBxuPejDF7Jd3kqiw62M36vE
-         3Kl9PlgJFS3ZKq56GKnL+3YUfv1uTN2NRFQDIy0G3Sc8PBUVYNeNzByjvySEWKb4lz4n
-         vWedMdD4O64bi9EjdEOxgDtN2yPE2YzPD4e3C9oMhLx8tQy1oDhkNk4vbI0R8vn2Toms
-         IT221/tc5u4peppVJQjLnzKodbOkh0Ydxxx5iH7teJsZOpA4rtKTyeimGiEg0vz8OQM4
-         CitY+PBZN05fYtRHez2suELfVub9lYalus36hY9oHGZkTkoJkoInr+QoXVGRqs02EexK
-         LrWw==
-X-Gm-Message-State: ACrzQf0dOHAlNdaTYTRuJH+FuZdY5+QDI5al+7biFuMgsq8qkzVPT7OU
-        DU9keT6D7Qc6RzHHXxTpkI0jNw==
-X-Google-Smtp-Source: AMsMyM6LetfHCHnCEKA7eJHWyMthDihLQrGyAsqKozRudXi0o9xFBAFBq46R3WXtUvbxrKq9NDPndg==
-X-Received: by 2002:a05:6000:18a2:b0:22e:72fd:c5d0 with SMTP id b2-20020a05600018a200b0022e72fdc5d0mr8866232wri.682.1667238298855;
-        Mon, 31 Oct 2022 10:44:58 -0700 (PDT)
-Received: from [192.168.1.195] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id bg37-20020a05600c3ca500b003b477532e66sm25983788wmb.2.2022.10.31.10.44.57
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Oct 2022 10:44:58 -0700 (PDT)
-Message-ID: <bb2c0e45-e1cf-6105-a6ea-20a6085f6c89@linaro.org>
-Date:   Mon, 31 Oct 2022 17:44:57 +0000
+        Mon, 31 Oct 2022 13:45:43 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B88FE7A;
+        Mon, 31 Oct 2022 10:45:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id BA53361321;
+        Mon, 31 Oct 2022 17:45:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38E40C433C1;
+        Mon, 31 Oct 2022 17:45:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667238341;
+        bh=rjgTmcKDAxlJvcA5pJN0GLaEBlB1F2FJMD5/TrTeCcY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PlPNNrhZwkAPoXfoFBoHE24FZegbfX4RPmDLvF32wytSKL+5GayI9elwxUjb7hFye
+         sc/na08t+pYUHeBh3KzGckCFZ0BGPMCKITUMReinZsnonraMvgnACiin/Y3yCRPIcU
+         YTWszstpQzJnxxb5LzCXvqGssoB5Ne1nM17i3mZ3IJzALDhEvkgtAK5sZlEW+7rIOb
+         t2h/1Adjoot082UANFdXDUkWxMowwHGZ84+Lsrw3ZHmGdgOmre+y5lsKYaoZyHgkgs
+         daB8fQ5HE38Z2PLCTlK5m0PxAf7lrrcM4NQJUt26FrUgi2gg0Njspqi9EFYU2g3NA1
+         v+6QOh6nNACSw==
+Date:   Mon, 31 Oct 2022 17:45:34 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-arm-msm@vger.kernel.org,
+        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        afd@ti.com, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] regulator: dt-bindings: qcom,usb-vbus-regulator:
+ change node name
+Message-ID: <Y2AJvt0SnHTnU7G0@sirena.org.uk>
+References: <20221031173933.936147-1-luca@z3ntu.xyz>
+ <20221031173933.936147-2-luca@z3ntu.xyz>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] nvmem: stm32: fix spelling typo in comment
-Content-Language: en-US
-To:     Jiangshan Yi <13667453960@163.com>, mcoquelin.stm32@gmail.com,
-        alexandre.torgue@foss.st.com
-Cc:     linux-stm32@st-md-mailman.stormreply.com,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Jiangshan Yi <yijiangshan@kylinos.cn>,
-        k2ci <kernel-bot@kylinos.cn>
-References: <20221009082819.2662964-1-13667453960@163.com>
-From:   Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20221009082819.2662964-1-13667453960@163.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="iE2RTExTjAExk+11"
+Content-Disposition: inline
+In-Reply-To: <20221031173933.936147-2-luca@z3ntu.xyz>
+X-Cookie: Sign here without admitting guilt.
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,32 +66,36 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
+--iE2RTExTjAExk+11
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 09/10/2022 09:28, Jiangshan Yi wrote:
-> From: Jiangshan Yi <yijiangshan@kylinos.cn>
-> 
-> Fix spelling typo in comment.
-> 
-> Reported-by: k2ci <kernel-bot@kylinos.cn>
-> Signed-off-by: Jiangshan Yi <yijiangshan@kylinos.cn>
+On Mon, Oct 31, 2022 at 06:39:32PM +0100, Luca Weiss wrote:
+> usb-vbus-regulator is a better generic node name than dcdc to change the
+> example to match.
 
-Applied thanks,
+You've not copied me on the rest of the series so I've no idea what's
+going on with dependencies.  When sending a patch series it is important
+to ensure that all the various maintainers understand what the
+relationship between the patches as the expecation is that there will be
+interdependencies.  Either copy everyone on the whole series or at least
+copy them on the cover letter and explain what's going on.  If there are
+no strong interdependencies then it's generally simplest to just send
+the patches separately to avoid any possible confusion.
 
---srini
-> ---
->   drivers/nvmem/stm32-romem.c | 2 +-
->   1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/nvmem/stm32-romem.c b/drivers/nvmem/stm32-romem.c
-> index 354be526897f..0c206ad05be7 100644
-> --- a/drivers/nvmem/stm32-romem.c
-> +++ b/drivers/nvmem/stm32-romem.c
-> @@ -19,7 +19,7 @@
->   #define STM32_SMC_WRITE_SHADOW		0x03
->   #define STM32_SMC_READ_OTP		0x04
->   
-> -/* shadow registers offest */
-> +/* shadow registers offset */
->   #define STM32MP15_BSEC_DATA0		0x200
->   
->   /* 32 (x 32-bits) lower shadow registers */
+--iE2RTExTjAExk+11
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNgCb4ACgkQJNaLcl1U
+h9BikggAhJyyRzQkdokSQKyPACIFit3CNqmGUEgsngrl7YDroJ99vbkYS2XRV8xw
+GnrOvxJwKddDz9puHdwqjv/PTcXHVvxzC2WCd+o9Ml/ap5KPQI837SK3tXDiiYQ4
+tXfRB9Qa0cHBzXPWU/wlE69sgtJ3Mez8KmiY0hjVqmRyYmbjLuhX30L8Qpjyiz+t
+3mvDg9sARu/v+bigaAtI1LrNyklEIjCbTh9SK9VXz7DqouL102rWuoCx5/j7/YSh
+CxGHK0oatlE+weK2khC3tHYXlO/OhWlSOKzggl8X+tRivcT9E9A6k7zD+jdIHyJm
+i0+STwz8Jmp4TvewVdp1O9d2hrLIrQ==
+=yhLt
+-----END PGP SIGNATURE-----
+
+--iE2RTExTjAExk+11--
