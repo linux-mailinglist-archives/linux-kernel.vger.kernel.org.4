@@ -2,96 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D8B3A61385D
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 14:49:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB3A1613860
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 14:49:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229974AbiJaNtI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 09:49:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46790 "EHLO
+        id S230515AbiJaNtd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 09:49:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231265AbiJaNtA (ORCPT
+        with ESMTP id S231153AbiJaNtb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 09:49:00 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 177D4764E;
-        Mon, 31 Oct 2022 06:49:00 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1FE921FB;
-        Mon, 31 Oct 2022 06:49:06 -0700 (PDT)
-Received: from [10.57.3.132] (unknown [10.57.3.132])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A0BDC3F5A1;
-        Mon, 31 Oct 2022 06:48:57 -0700 (PDT)
-Message-ID: <133c2f4b-1ca5-2d0c-f4f4-e01ff5e028c8@arm.com>
-Date:   Mon, 31 Oct 2022 13:48:56 +0000
+        Mon, 31 Oct 2022 09:49:31 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECBEA7679;
+        Mon, 31 Oct 2022 06:49:30 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AC9BB6602253;
+        Mon, 31 Oct 2022 13:49:28 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667224169;
+        bh=1CjDirYTveyInAKG0RQWqvIdW7a/AeUnGrEqY2Utiws=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=nA/Q+Sp2imNv4fxfZ/8CkIieGZNWmDpQT7s7l69lK6HIcn9v18xnHcI8h3ctbuHXv
+         RqZC9bQJGr8LEnitwh1/CoQQL1jrxdPIWUnqaTMwG6UAk5FH2MzWPFu2Z2SmefTKvV
+         Wc578sIxIrI9+D0oUJGo8fM+9CDWgrC8+gx7jy2Ctva1slyeikphBmMjUgrGTTHwGG
+         HGLX/KnM7b2QQn/Y4yRiSw7M2hUUUB6/19hZKzn5Q+18knP0dzdr6yeNKc+ZGfovE+
+         7gGSbGZCK+PcRY9DjYlFCnhvtUkF5AvStKLlp3Vq5u1mn+DaSGN5VXPKUEBuJpIFK7
+         29qzcCexoVc3w==
+Message-ID: <e0d37670-cb88-3a20-5230-9f14411edec1@collabora.com>
+Date:   Mon, 31 Oct 2022 14:49:26 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2 1/1] perf arm64: Send pointer auth masks to ring buffer
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v2 1/2] dt-bingings: gce: add gce header file for mt8188
 Content-Language: en-US
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     linux-perf-users@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        broonie@kernel.org, acme@kernel.org,
-        Andrew Kilroy <andrew.kilroy@arm.com>,
-        Vince Weaver <vincent.weaver@maine.edu>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        kristina.martsenko@arm.com
-References: <20221020101921.1219533-1-james.clark@arm.com>
- <20221020101921.1219533-2-james.clark@arm.com>
- <Y1F8DUWaWhlh/phL@hirez.programming.kicks-ass.net>
- <4e50b890-0588-1551-fb7c-6cd8191d1054@arm.com>
- <Y1q914IVy6XgE1xq@hirez.programming.kicks-ass.net>
-From:   James Clark <james.clark@arm.com>
-In-Reply-To: <Y1q914IVy6XgE1xq@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
+To:     "Elvis.Wang" <Elvis.Wang@mediatek.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Houlong Wei <houlong.wei@mediatek.com>,
+        "jason-jh . lin" <jason-jh.lin@mediatek.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        Bo-Chen Chen <rex-bc.chen@mediatek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+References: <20221029105017.20734-1-Elvis.Wang@mediatek.com>
+ <20221029105017.20734-2-Elvis.Wang@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221029105017.20734-2-Elvis.Wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 27/10/2022 18:20, Peter Zijlstra wrote:
-> On Tue, Oct 25, 2022 at 04:28:12PM +0100, James Clark wrote:
+Il 29/10/22 12:50, Elvis.Wang ha scritto:
+> From: Elvis Wang <Elvis.Wang@mediatek.com>
 > 
->>> Why do we want the same mask repeated over and over with each sample;
->>> should this not be part of the address space (side-band) data?
->>
->> You are probably right that it could be done that way. The reason that
->> we did it this way was to be consistent with ptrace feature [1] where it
->> is delivered to userspace on a per-process basis. And there is also a
->> prctl for the enabled key types [2] which can be changed dynamically.
->> Particularly for the last reason is why it was done per sample.
->>
->> Having said that, the enabled keys field is not used by perf, only the
->> mask is used, so I can drop the per sample data until enabled keys is
->> needed, which may be never.
->>
->> I'm going to assume that perf shouldn't use ptrace because of
->> permissions and conflicts with debuggers, so I could put the mask
->> somewhere like PERF_RECORD_FORK instead of per sample.
+> add gce header file to define the gce thread priority, gce subsys id,
+>   event and constant for mt8188.
+> v2 - use vendor in filename, use Dual license.
 > 
-> Yeah, or create an new RECORD type which you can also send around at
-> prctl() time.
+> Signed-off-by: Elvis Wang <Elvis.Wang@mediatek.com>
+> Reviewed-by: Bo-Chen Chen <rex-bc.chen@mediatek.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 > 
-> The only thing that's needed on top of that is exposing the mask
-> somewhere in /proc for existing tasks; which is what perf also uses to
-> syntesize RECORD_MMAP events on startup etc..
-> 
+> Thanks for the reviews, I have fixed them.
 
-Hmm ok, in that case I can just add the /proc interface for now because
-the mask won't change and we can add the new record type at the point
-it's needed in the future.
+I can't see where/when Krzysztof gave you his R-b tag. Drop it.
 
-Thanks for the feedback.
+Also, please fix the typo in the commit title. s/bingings/bindings/g.
+
+Regards,
+Angelo
+
