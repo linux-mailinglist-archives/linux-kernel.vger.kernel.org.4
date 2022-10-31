@@ -2,104 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A145612F8D
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 05:55:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D47B7612F91
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 05:56:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229629AbiJaEzS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 00:55:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37436 "EHLO
+        id S229726AbiJaE4O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 00:56:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiJaEzQ (ORCPT
+        with ESMTP id S229546AbiJaE4H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 00:55:16 -0400
-Received: from mail-pg1-x529.google.com (mail-pg1-x529.google.com [IPv6:2607:f8b0:4864:20::529])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 606F6DC7
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 21:55:15 -0700 (PDT)
-Received: by mail-pg1-x529.google.com with SMTP id q1so9721534pgl.11
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 21:55:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6k9edOmi4jQnhndJM0oPHUDhd1xsqVU4YBKn2qnh9js=;
-        b=YJFdZOx751Fhpcy/3SpXXpJ9lMBzwaS3Y4XPbXFsxxKVC1htuaUPzC1iANIyKCJhKF
-         +KUL25Kv3HO+liKpWix91hA5OPOUONiFOf5CG1rVW88rislxfGhyZ1Y5PpZpL9UIhHr5
-         XYGzcgvbP1VtaHfpJ062p0YHy0zjg2payQtj+gIIuUUGAfNXoTtMCIVDGu0R6oVmGWOf
-         CZMz8Obq+T6pUk8ywudqdUD7ypyaKXPkh+uOeehzOhEvis3Hmfd2me+3uWJtditI4NjM
-         /AmqrNO+e8kfNSS+1OGg+27o3POPZToIwzp2QjYV04U7Vwo1pIyajIb0zP08WNyFKc4v
-         thsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6k9edOmi4jQnhndJM0oPHUDhd1xsqVU4YBKn2qnh9js=;
-        b=L26+qsl6QoWJhDr022utSvtEiGSUDzCcO+3jK2vUxwIiCqDL/4VnOPV+ok7RX9h1gs
-         BqbgMzUyEZA0oUPZcvGufgx74/qqLMBbaxI8dWbSmScbPDH3HkgjONiG4UPi+EX4ehDf
-         TZ+5cJzfwuIhlwYxnO3bQ5wvgsH2TFxPHCdG01TgaRsH2r13EYK6iL1OEksl31zB+Npj
-         WPR2bAK1e46jbkkwZvtc7IUQp2EyIt08ZM24aSlzWRebND5v+3mgb+fPNNZxNgTUyMan
-         j+2bf++Le5BPEzdHoZfrxmNFov9YHa3NBoPY/be6uEtxlAXWZ4IhJPDjnfTe2ilx1wv9
-         iHpA==
-X-Gm-Message-State: ACrzQf2B977SXfy9dKaF6gAC4dtyc1V1TEord728xIaEV3s+SiEvKALS
-        B2LlNduJXxm8BCzVd6nq+8E=
-X-Google-Smtp-Source: AMsMyM5NM8Ob+41DG0FBkvAYtjDNB2Y4hmQC4/wy+TDcNA3sURXm8nAhJ3/oEVv/Ukoc4UOV58FXkQ==
-X-Received: by 2002:a63:2ad8:0:b0:46e:bb8e:b343 with SMTP id q207-20020a632ad8000000b0046ebb8eb343mr10999760pgq.408.1667192114710;
-        Sun, 30 Oct 2022 21:55:14 -0700 (PDT)
-Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
-        by smtp.gmail.com with ESMTPSA id b3-20020a1709027e0300b00176b3c9693esm3409135plm.299.2022.10.30.21.55.12
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Sun, 30 Oct 2022 21:55:13 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH 01/13] mm: Update ptep_get_lockless()s comment
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <A48A5CEB-2C02-4101-B315-6792D042C605@gmail.com>
-Date:   Sun, 30 Oct 2022 21:55:11 -0700
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Jann Horn <jannh@google.com>,
-        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
+        Mon, 31 Oct 2022 00:56:07 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6F35115D;
+        Sun, 30 Oct 2022 21:56:03 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.57])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N112340HHzVjL5;
+        Mon, 31 Oct 2022 12:51:07 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 31 Oct 2022 12:56:01 +0800
+Received: from [10.174.178.55] (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 31 Oct 2022 12:56:01 +0800
+Subject: Re: [PATCH v7 00/11] kallsyms: Optimizes the performance of lookup
+ symbols
+From:   "Leizhen (ThunderTown)" <thunder.leizhen@huawei.com>
+To:     Luis Chamberlain <mcgrof@kernel.org>
+CC:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        jroedel@suse.de, ubizjak@gmail.com,
-        Alistair Popple <apopple@nvidia.com>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <DDF26E69-1FFF-40D6-802B-2A5DC5C3D4CE@gmail.com>
-References: <20221022111403.531902164@infradead.org>
- <20221022114424.515572025@infradead.org>
- <2c800ed1-d17a-def4-39e1-09281ee78d05@nvidia.com>
- <Y1ZGNwUEdm15W6Xz@hirez.programming.kicks-ass.net>
- <CAG48ez3fG=WnvbiE5mJaD66_gJj_hohnV8CqBG9eNdjd7pJW3A@mail.gmail.com>
- <Y1fsYwshJ93FT21r@hirez.programming.kicks-ass.net>
- <CAG48ez3VE+3dVdUMK+Pg_942gR+h_TCcSaFxGwCbNfh3W+mfOA@mail.gmail.com>
- <Y1f7YvKuwOl1XEwU@hirez.programming.kicks-ass.net>
- <CAG48ez05gBiB2w7bL_3O_OUoBWazmHnRwMiuni_wQyXBUcaxbQ@mail.gmail.com>
- <Y1oub9MvqwGBlHkq@hirez.programming.kicks-ass.net>
- <CAHk-=wihPdOtXgJ32pLB6Xd-UvnaZW9YvOOjM24JGYRjNHeykA@mail.gmail.com>
- <6C548A9A-3AF3-4EC1-B1E5-47A7FFBEB761@gmail.com>
- <CAHk-=wh8oi0qQtYDFTfm7d1s5C8mG7ig=NfzGWt4zbjXMzcdqQ@mail.gmail.com>
- <F9E42822-DA1D-4192-8410-3BAE42E9E4A9@gmail.com>
- <B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com>
- <CAHk-=wgzT1QsSCF-zN+eS06WGVTBg4sf=6oTMg95+AEq7QrSCQ@mail.gmail.com>
- <47678198-C502-47E1-B7C8-8A12352CDA95@gmail.com>
- <CAHk-=wjzngbbwHw4nAsqo_RpyOtUDk5G+Wus=O0w0A6goHvBWA@mail.gmail.com>
- <CAHk-=wijU_YHSZq5N7vYK+qHPX0aPkaePaGOyWk4aqMvvSXxJA@mail.gmail.com>
- <140B437E-B994-45B7-8DAC-E9B66885BEEF@gmail.com>
- <CAHk-=wjX_P78xoNcGDTjhkgffs-Bhzcwp-mdsE1maeF57Sh0MA@mail.gmail.com>
- <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
- <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
- <CAHk-=wiwt4LC-VmqvYrphraF0=yQV=CQimDCb0XhtXwk8oKCCA@mail.gmail.com>
- <A48A5CEB-2C02-4101-B315-6792D042C605@gmail.com>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        <linux-modules@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        "Ingo Molnar" <mingo@redhat.com>
+References: <20221017064950.2038-1-thunder.leizhen@huawei.com>
+ <Y0/nEngJF6bbINEx@bombadil.infradead.org>
+ <ad9e51c6-f77d-d9e9-9c13-42fcbbde7147@huawei.com>
+ <Y1gisUFzgt1D1Jle@bombadil.infradead.org>
+ <77f1c8f0-5e67-0e57-9285-15ba613044fb@huawei.com>
+ <Y1mEiIvbld4SX1lx@bombadil.infradead.org>
+ <4f06547b-456f-e1ec-c535-16577f502ff1@huawei.com>
+ <d7393d45-84bb-9e7b-99f4-412eb9223208@huawei.com>
+ <712fae84-aadc-7d29-f311-a3352bab6346@huawei.com>
+Message-ID: <b7215b83-11ab-6db6-bd7f-9729725eaaeb@huawei.com>
+Date:   Mon, 31 Oct 2022 12:55:49 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.0
+MIME-Version: 1.0
+In-Reply-To: <712fae84-aadc-7d29-f311-a3352bab6346@huawei.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Language: en-US
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -107,18 +75,184 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Oct 30, 2022, at 9:09 PM, Nadav Amit <nadav.amit@gmail.com> wrote:
 
-> I understand from the code that you decided to drop the deferring of
-> set_page_dirty(), which could - at least for the munmap case (where
-> mmap_lock is taken for write) - prevent the need for =E2=80=9Cforce_flus=
-h=E2=80=9D and
-> potentially save TLB flushes.
->=20
-> I was just wondering whether the reason for that is that you wanted
-> to have small backportable and conservative patches, or whether you
-> changed your mind about it.
 
-Please ignore this silly question. I understand - the buffers might =
-still be
-dropped.=
+On 2022/10/29 16:10, Leizhen (ThunderTown) wrote:
+> 
+> 
+> On 2022/10/27 14:27, Leizhen (ThunderTown) wrote:
+>>
+>>
+>> On 2022/10/27 11:26, Leizhen (ThunderTown) wrote:
+>>>
+>>>
+>>> On 2022/10/27 3:03, Luis Chamberlain wrote:
+>>>> On Wed, Oct 26, 2022 at 02:44:36PM +0800, Leizhen (ThunderTown) wrote:
+>>>>> On 2022/10/26 1:53, Luis Chamberlain wrote:
+>>>>>> This answers how we don't use a hash table, the question was *should* we
+>>>>>> use one?
+>>>>>
+>>>>> I'm not the original author, and I can only answer now based on my understanding. Maybe
+>>>>> the original author didn't think of the hash method, or he has weighed it out.
+>>>>>
+>>>>> Hash is a good solution if only performance is required and memory overhead is not
+>>>>> considered. Using hash will increase the memory size by up to "4 * kallsyms_num_syms +
+>>>>> 4 * ARRAY_SIZE(hashtable)" bytes, kallsyms_num_syms is about 1-2 million.
+>>
+>> Sorry, 1-2 million ==> 0.1~0.2 million
+>>
+>>>>>
+>>>>> Because I don't know what hash algorithm will be used, the cost of generating the
+>>>>> hash value corresponding to the symbol name is unknown now. But I think it's gonna
+>>>>> be small. But it definitely needs a simpler algorithm, the tool needs to implement
+>>>>> the same hash algorithm.
+>>>>
+>>>> For instance, you can look at evaluating if alloc_large_system_hash() would help.
+>>>
+> 
+> The following three hash algorithms are compared. The kernel is compiled by defconfig
+> on arm64.
+> 
+> |---------------------------------------------------------------------------------------|
+> |                           |             hash &= HASH_TABLE_SIZE - 1                   |
+> |                           |             number of conflicts >= 1000                   |
+> |---------------------------------------------------------------------------------------|
+> |   ARRAY_SIZE(hash_table)  |       crc16        | jhash_one_at_a_time | string hash_32 |
+> |---------------------------------------------------------------------------------------|
+> |                           |     345b: 3905     |     0d40: 1013      |   4a4c: 6548   |
+> |                           |     35bb: 1016     |     35ce: 6549      |   883a: 1015   |
+> |        0x10000            |     385b: 6548     |     4440: 19126     |   d05f: 19129  |
+> |                           |     f0ba: 19127    |     7ebe: 3916      |   ecda: 3903   |
+> |---------------------------------------------------------------------------------------|
+> |                           |      0ba: 19168    |      440: 19165     |    05f: 19170  |
+> |                           |      45b: 3955     |      5ce: 6577      |    83a: 1066   |
+> |        0x1000             |      5bb: 1069     |      d40: 1052      |    a4c: 6609   |
+> |                           |      85b: 6582     |      ebe: 3938      |    cda: 3924   |
+> |---------------------------------------------------------------------------------------|
+> 
+> Based on the above test results, I conclude that:
+> 1. For the worst-case scenario, the three algorithms are not much different. But the kernel
+>    only implements crc16 and string hash_32. The latter is not processed byte-by-byte, so
+>    it is coupled with byte order and sizeof(long). So crc16 is the best choice.
+> 2. For the worst-case scenario, there are almost 19K strings are mapped to the same hash
+>    value，just over 1/10 of the total. And with my current compression-then-comparison
+>    approach, it's 25-30 times faster. So there's still a need for my current approach, and
+>    they can be combined.
+>    if (nr_conflicts(key) >= CONST_N) {
+>        newname = compress(name);
+>        for_each_name_in_slot(key): compare(new_name)
+>    } else {
+>        for_each_name_in_slot(key): compare(name)
+>    }
+> 
+>    Above CONST_N can be roughly calculated:
+>    time_of_compress(name) + N * time_of_compare(new_name) <= N * time_of_compare(name)
+> 3. For the worst-case scenario, there is no obvious difference between ARRAY_SIZE(hash_table)
+>    0x10000 and 0x1000. So ARRAY_SIZE(hash_table)=0x1000 is enough.
+>    Statistic information:
+>    |------------------------------------------------------|
+>    |   nr_conflicts(key)  |     ARRAY_SIZE(hash_table)    |
+>    |------------------------------------------------------|
+>    |         <= ?         |     0x1000    |    0x10000    |
+>    |------------------------------------------------------|
+>    |             0        |         0     |      7821     |
+>    |            20        |        19     |     57375     |
+>    |            40        |      2419     |       124     |
+>    |            60        |      1343     |        70     |
+>    |            80        |       149     |        73     |
+>    |           100        |        38     |        49     |
+>    |           200        |       108     |        16     |
+>    |           400        |        14     |         2     |
+>    |           600        |         2     |         2     |
+>    |           800        |         0     |         0     |
+>    |          1000        |         0     |         0     |
+>    |        100000        |         4     |         4     |
+>    |------------------------------------------------------|
+> 
+> 
+> Also, I re-calculated:
+> Using hash will increase the memory size by up to "6 * kallsyms_num_syms + 4 * ARRAY_SIZE(hashtable)"
+>                                                    |---- What I said earlier was 4
+> The increased size is close to 1 MB if CONFIG_KALLSYMS_ALL=y.
+> 
+> Hi, Luis:
+>   For the reasons of the above-mentioned second conclusion. And except for patches 4-6,
+> even if only the hash method is used, other patches and option "--lto-clang" in patch 6/11
+> are also needed. If you don't mind, I'd like to use hash at the next stage. The current
+> patch set is already huge.
+
+I just had an update in response to David Laight's email. The hash solution is like
+a centrist. It doesn't seem very feasible.
+
+Now, we need to make a decision. Choose one of the two:
+1. Continue with my current approach. Improve the average performance of
+   kallsyms_lookup_name() by 20 to 30 times. The memory overhead is increased by:
+   arm64 (defconfig):
+     73.5KiB and 4.0% if CONFIG_KALLSYMS_ALL=y.
+     19.8KiB and 2.8% if CONFIG_KALLSYMS_ALL=n.
+   x86 (defconfig):
+     49.0KiB and 3.0% if CONFIG_KALLSYMS_ALL=y.
+     16.8KiB and 2.3% if CONFIG_KALLSYMS_ALL=n.
+2. Sort names, binary search (The static function causes duplicate names. Additional work is required）
+   2^18=262144, only up to 18 symbol expansions and comparisons are required.
+   The performance is definitely excellent, although I haven't tested it yet.
+   The memory overhead is increased by: 6 * kallsyms_num_syms
+   arm64 (defconfig):
+       1MiB if CONFIG_KALLSYMS_ALL=y.
+     362KiB if CONFIG_KALLSYMS_ALL=n.
+   x86 (defconfig):
+     770KiB if CONFIG_KALLSYMS_ALL=y.
+     356KiB if CONFIG_KALLSYMS_ALL=n.
+
+
+
+
+> 
+> 
+>>> OK, I found the right hash function. In this way, the tool does not need to consider
+>>> the byte order.
+>>
+>> https://en.wikipedia.org/wiki/Jenkins_hash_function
+>>
+>> Let's go with jenkins_one_at_a_time_hash(), which looks simpler and doesn't even
+>> have to think about sizeof(long). It seems to be closest to our current needs.
+>>
+>> uint32_t jenkins_one_at_a_time_hash(const uint8_t* key, size_t length) {
+>> 	size_t i = 0;
+>> 	uint32_t hash = 0;
+>>
+>> 	while (i != length) {
+>> 		hash += key[i++];
+>> 		hash += hash << 10;
+>> 		hash ^= hash >> 6;
+>> 	}
+>> 	hash += hash << 3;
+>> 	hash ^= hash >> 11;
+>> 	hash += hash << 15;
+>>
+>> 	return hash;
+>> }
+>>
+>>>
+>>> include/linux/stringhash.h
+>>>
+>>> /*
+>>>  * Version 1: one byte at a time.  Example of use:
+>>>  *
+>>>  * unsigned long hash = init_name_hash;
+>>>  * while (*p)
+>>>  *      hash = partial_name_hash(tolower(*p++), hash);
+>>>  * hash = end_name_hash(hash);
+>>>
+>>>
+>>>>
+>>>>   Luis
+>>>> .
+>>>>
+>>>
+>>
+> 
+
+-- 
+Regards,
+  Zhen Lei
