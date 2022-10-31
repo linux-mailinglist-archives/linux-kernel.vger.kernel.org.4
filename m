@@ -2,76 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 437ED613893
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 15:00:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A99E6138A0
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 15:02:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231420AbiJaOA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 10:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52116 "EHLO
+        id S230388AbiJaOCw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 10:02:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52974 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231149AbiJaOAY (ORCPT
+        with ESMTP id S231194AbiJaOCt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 10:00:24 -0400
-Received: from mail-ot1-x331.google.com (mail-ot1-x331.google.com [IPv6:2607:f8b0:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1A4510066;
-        Mon, 31 Oct 2022 07:00:23 -0700 (PDT)
-Received: by mail-ot1-x331.google.com with SMTP id 46-20020a9d0631000000b00666823da25fso6820840otn.0;
-        Mon, 31 Oct 2022 07:00:23 -0700 (PDT)
+        Mon, 31 Oct 2022 10:02:49 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1E67410565;
+        Mon, 31 Oct 2022 07:02:49 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id b29so10726216pfp.13;
+        Mon, 31 Oct 2022 07:02:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=nX78Pz0Vg/0l+qunKn+yXk41tg6RQwkAu3sKfKR7H3I=;
-        b=Px/n8IM4J7RfRRY+T6Q2LZF+5RX0xO/sh+r8BErlhfmEjt4sWNJUnzNF5Xe5+WEQZU
-         40W+UJcUTCNxoQArdD2MIxew01TpJXYcAGg8ujss9v5hQ9Lx7wJTLWuIhG81lm0MJSUe
-         A4VgVpsOZXp5c9xcRpfpZU3pHJIAAh3QSO09xsWJbRc6sRuGlxS60Q8JKELsA7QPxe7L
-         NBSs7++yGU50MPLH2XNaSpgK4WzI59krzaJlT0KZc3on3EbXbyvn8lG19Jxjumc6TPok
-         CFNwdfwdklzLdFP6TBDfXxi81VErpdVzR67Y4bWU8Me888jMrjpZ3QzoI4QbWjD2e2XS
-         Pftg==
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qqGCXhnHjIeBeODuGDUG/31qoicURkdlFqgbUPm7phc=;
+        b=kUJlruVeuLHmagJg6lHo+RtE0at2dvQYVh9zY5O+z9QdSD1eS0UJXC+8yxGJqdJEFM
+         Vo/2Rb9mVohZ0WHO/LmpJyRLGBYGdn0dMSc2fN9qghC8yS8hwcALOqRUkb/XDQTEs9yO
+         1hFqEkqe9d2Hd6fXsKiqsgUsEV04UhK+vxsBjhwbhHLhSir0nGgxQ6uYWXJv7MAy4RKA
+         JIYOGfjDLJwO/mqKN+eVpqD7obD7CH+0RlSdiaP7pLTXEvuXdSrvBYickaC05WHCi5Gp
+         aPVLRoard7eR6q+ZpSWjq5ZFNXAVrDTfiXpwFZNRkVcNJ8P7Tzlg97MHW4cOMLkZaBme
+         AR0w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=nX78Pz0Vg/0l+qunKn+yXk41tg6RQwkAu3sKfKR7H3I=;
-        b=06q9zHdgN+mypad5XByrFqTPwEYijde39X1fImek8qdpRGEiMo22zJ/XxhcdIiGTyP
-         ddMEICQe6n3s+q6vwFTt3X9sPNo2CvwLIntDVdbLdPPQvrv83nZaP6l0WFYyvbJOu8nt
-         NESRR5xciYDiKh9uSR41/ZxEmvU+tT2OulekCLGieE0ARlreX+heoZ9d+6V6PA7nq+D+
-         kxRo7uruwEJlqos100Vb2TqPuSxRCfD7Bkmhg7nUHi+jk7/rg5tIqwsoELAtmca6Wtz4
-         ShN+QT4pWIQy/E8jegxviuWKDFSjSZVwi392C7pTvF3HdvU3UfLZUyJ4/tMNsIUSqzkC
-         astA==
-X-Gm-Message-State: ACrzQf3fY5SsqVfn8DvQRMIgWeExhnFlMS/4Sed4zXVZjfo/xIHRg0rI
-        NyvfeSdPZcuFD9vhVllWVtE=
-X-Google-Smtp-Source: AMsMyM4frFeWE7yf6Fw6JkN8R+WGS7eT3XTx2n6blM1uU0uVpazW7WLBei+uCAl2xCgPNb2Nuj4H5Q==
-X-Received: by 2002:a9d:5911:0:b0:657:a6bd:372c with SMTP id t17-20020a9d5911000000b00657a6bd372cmr6835267oth.6.1667224823324;
-        Mon, 31 Oct 2022 07:00:23 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bb37-20020a056820162500b0049bd96ec131sm434116oob.8.2022.10.31.07.00.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 07:00:22 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 31 Oct 2022 07:00:21 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Sudeep Holla <sudeep.holla@arm.com>
-Cc:     Cristian Marussi <cristian.marussi@arm.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2 7/8] hwmon: (scmi) Register explicitly with Thermal
- Framework
-Message-ID: <20221031140021.GB948107@roeck-us.net>
-References: <7acc7a49-debb-abdb-f01c-f8adef4c1f0e@roeck-us.net>
- <20221031114018.59048-1-cristian.marussi@arm.com>
- <20221031132523.mfp7d5esk5hohldk@bogus>
+        bh=qqGCXhnHjIeBeODuGDUG/31qoicURkdlFqgbUPm7phc=;
+        b=7tNqkf7vq1ux0wVOPna3og3KkdvVl361ozpXvvHvGLAWI5q/yBDl5osYW5kUvp9OqL
+         wopU8hBlNKotkCyp3h1ewVJuQnSJVMTzR2VEe5nnlUK2isrGpzN51yXIYgpekpwazg7C
+         JtDqBsY0JUg86W/iy6JstpzZMxgx0kvZzhTvuvFHUj5QdEp7v6UhocZrohhxxHb0PrkR
+         8UzEowdPaUHbBFsu9jXZ4Tc2gk/fSyh3GjzJzOzKq21cpSPvLlS+0K0R296TgLXzeY+A
+         nhGWiBb5NqDUPBIIStEWEDWe+j6uKeBFzsgDpFOCLgPQO5xtawX/MxknwqWKj8SRCGC7
+         kXMQ==
+X-Gm-Message-State: ACrzQf1X22pmver30QK/XLBzRQCdXLXgayx+rlz91UAGLW7XX9aL/wMC
+        YqQjBGUq6NCdf2nyTEGZZl5GzTcmN9fUMhjxEVT1JL+8WfY=
+X-Google-Smtp-Source: AMsMyM68rpWT035a3YOxPw13zlJ0a7C13U1cYSp1w/ZnczuRZyHbQ/DS1AaJXm+XCrYCZ8QSQBEDiSEQ0E8caJTNY8A=
+X-Received: by 2002:a63:5511:0:b0:439:12f6:fb9a with SMTP id
+ j17-20020a635511000000b0043912f6fb9amr13190325pgb.197.1667224967855; Mon, 31
+ Oct 2022 07:02:47 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221031132523.mfp7d5esk5hohldk@bogus>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20220415050003.3257645-1-mattst88@gmail.com> <20221019232952.2212729-1-mattst88@gmail.com>
+In-Reply-To: <20221019232952.2212729-1-mattst88@gmail.com>
+From:   Matt Turner <mattst88@gmail.com>
+Date:   Mon, 31 Oct 2022 10:02:35 -0400
+Message-ID: <CAEdQ38FO0SH80SLQKpLxadOBKn7cuRmZLd=xU8jJguq+MuD+Lw@mail.gmail.com>
+Subject: Re: [PATCH v2] tools: port perf ui from GTK 2 to GTK 3
+To:     linux-perf-users@vger.kernel.org
+Cc:     linux-kernel@vger.kernel.org,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Jelle van der Waa <jvanderwaa@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,37 +76,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 01:25:23PM +0000, Sudeep Holla wrote:
-> On Mon, Oct 31, 2022 at 11:40:18AM +0000, Cristian Marussi wrote:
-> > Available sensors are enumerated and reported by the SCMI platform server
-> > using a 16bit identification number; not all such sensors are of a type
-> > supported by hwmon subsystem and, among the supported ones, only a subset
-> > could be temperature sensors that have to be registered with the Thermal
-> > Framework.
-> > Potential clashes between hwmon channels indexes and the underlying real
-> > sensors IDs do not play well with the hwmon<-->thermal bridge automatic
-> > registration routines and could need a sensible number of fake dummy
-> > sensors to be made up in order to keep indexes and IDs in sync.
-> > 
-> > Avoid to use the hwmon<-->thermal bridge dropping the HWMON_C_REGISTER_TZ
-> > attribute and instead explicit register temperature sensors directly with
-> > the Thermal Framework.
-> >
-> 
-> Hi Guenter,
-> 
-> FWIW from scmi perspective,
-> 
-> Acked-by: Sudeep Holla <sudeep.holla@arm.com>
-> 
-> I was about to ask for your ack to pickup myself but I see there is no
-> strict dependency for that. Not sure if you want to take this as fix for
-> v6.1 as the thermal changes broke the existing support in SCMI hwmon
-> or do you still prefer v6.2 ?
-> 
+On Wed, Oct 19, 2022 at 7:30 PM Matt Turner <mattst88@gmail.com> wrote:
+>
+> From: Jelle van der Waa <jvanderwaa@redhat.com>
+>
+> GTK 2 is a legacy API and the newer version is GTK 3 which changes a few
+> API functions. gtk_tree_view_set_rules_hint is no longer required since
+> theme's are now responsible to handle this, gtk_vbox_new is deprecated
+> and replaced by passing the orientation to gtk_box_new. Apart from these
+> changes the accessing of the screen changed in GTK which requires using
+> new functions for getting geometry. Lastly the GTK_STOCK_OK define is
+> deprecated in GTK 3.
+>
+> Signed-off-by: Jelle van der Waa <jvanderwaa@redhat.com>
+> Signed-off-by: Matt Turner <mattst88@gmail.com>
+> ---
+> Originally sent in 2019. I've rebased it and given it a test.
+>
+> One problem I've noticed is that C++ symbol names are often broken.
+> E.g.:
+>
+> (perf:3254940): Gtk-WARNING **: 21:47:46.663: Failed to set text from
+> markup due to error parsing markup: Error on line 1 char 95:
+> =E2=80=9Cstd::char_traits<char=E2=80=9D is not a valid name: =E2=80=9C<=
+=E2=80=9D
+>
+> Presumably we need to call g_markup_escape_text() somewhere, but I
+> struggled to find the right place.
+>
+> Without the patch, the GTK-2 version repeatedly segfaults, so this is an
+> improvement regardless.
+>
+> v2: Dropped changes to test-all.c. I don't know how to build that
+>     apparently.
 
-It is a regression and should be applied to 6.1. I'll pick it up and send
-a pull request to Linus later this week.
 
-Thanks,
-Guenter
+Arnaldo, does this work better for you?
