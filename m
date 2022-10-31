@@ -2,142 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE1096138FD
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 15:32:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8D3C161390E
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 15:34:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231144AbiJaOcj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 10:32:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49616 "EHLO
+        id S231645AbiJaOez (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 10:34:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52060 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiJaOch (ORCPT
+        with ESMTP id S231514AbiJaOew (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 10:32:37 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F89A65A6;
-        Mon, 31 Oct 2022 07:32:36 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id D944E1F893;
-        Mon, 31 Oct 2022 14:32:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1667226754; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=wVoDxS6PUHIpxcricZG+zBeWGoABJesgtPBdPuIWxgs=;
-        b=ADVD/L1pGDvFfcekCmppTqkmXcU+rjMdYyhg8mHnsMS8svmtsz6Elc3Var2Zm60DaTjzoz
-        6VshnsOVVIjhaLCLy9tavEkU8kFcf/5vobuAXe9oB1vvFXbqCdLYKQHoHXV6HPx6Go37d8
-        /dHwaSMM3TO2m2wVYZeeokpupX5y/hs=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id BACA213451;
-        Mon, 31 Oct 2022 14:32:34 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id 6UZZK4LcX2MhfQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 31 Oct 2022 14:32:34 +0000
-Date:   Mon, 31 Oct 2022 15:32:34 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Feng Tang <feng.tang@intel.com>
-Cc:     "Huang, Ying" <ying.huang@intel.com>,
-        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Tejun Heo <tj@kernel.org>, Zefan Li <lizefan.x@bytedance.com>,
-        Waiman Long <longman@redhat.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "Chen, Tim C" <tim.c.chen@intel.com>,
-        "Yin, Fengwei" <fengwei.yin@intel.com>
-Subject: Re: [PATCH] mm/vmscan: respect cpuset policy during page demotion
-Message-ID: <Y1/cgrgdVP+KdYzf@dhcp22.suse.cz>
-References: <Y1lZV6qHp3gIINGc@dhcp22.suse.cz>
- <87wn8lkbk5.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <Y1ou5DGHrEsKnhri@dhcp22.suse.cz>
- <87o7txk963.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <Y1o63SWD2KmQkT3v@dhcp22.suse.cz>
- <87fsf9k3yg.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <Y1p5vaN1AWhpNWZx@dhcp22.suse.cz>
- <87bkpwkg24.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <Y1+J7+1V1nJXF+3b@dhcp22.suse.cz>
- <Y1/XC+witPxFj04T@feng-clx>
+        Mon, 31 Oct 2022 10:34:52 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F12281C7;
+        Mon, 31 Oct 2022 07:34:51 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id i12so8460748qvs.2;
+        Mon, 31 Oct 2022 07:34:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=kKV7aE0TxR3j7oQ5UpL5QeWqb8LMrLP1KR71Ce0rJdQ=;
+        b=Rhf10q6s3JMCa80g+eJaEamzQZpN1yURXdbXndhTf19Lbs3ezO4iuqo9uCGZW7Qm5P
+         OHoKidMajn+7raOR+VijMDz1lfTx5Ij4kHzoiy5yHFJetjbXtPUKr40IOUzdPieqj/JQ
+         RIghApZkawv0hVCb5r00KXhtyRLVm2JqKOHXnh0tlHrGvUaBs8dJ5ilwrXDVyzSqewrV
+         w67gXZBGThncWtznOjXrW65E/z9KhCBsp5JNzgC5/hXUDVWl7jrlGaGrm9uD+lASH20f
+         eEVc2pKGC2je1ff8W3kyK9KtemtXtOpACjwljeIdHdw93OfVeDEmLhb8vp96rVVDZBTJ
+         MnoA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=kKV7aE0TxR3j7oQ5UpL5QeWqb8LMrLP1KR71Ce0rJdQ=;
+        b=IBbu/lQa6fVZhjRLtaleWndsn0qnLX6dqftGX3XdmJ0PeoZviDmkNod/mrZEfCetRA
+         IcdrApNr2peS4r80gDoahw9bKTQepMNZM5urHCYdn6VNGD2HYWYVA6VMlUGbWp+qWyII
+         +WTkEYqDsW1pTnHLfL+n9IQD96X6347EQtJFLAoYTlReQSkZiKCwmjS4SGt+niwJDNPt
+         UE7k9vIg672k/2oW9MeSrvSBDjjsqiOWbhz2QSb1mATnhiZJ+9R42Ogeizrq1KDRlbU2
+         2lxXln40sZ/D91BcQmAAeT2B771cgy0QBGIU1ilu7GyCwYvu+YVMgIsVnK7lA8rpvlse
+         +cfg==
+X-Gm-Message-State: ACrzQf1eoao/n5aGP7eqPIASrceRZ8ZqIG4H+RCfk1f8vtUyzH2Az06m
+        25SAFcU0/gHWX2nM+oVQhZaznopz5xaJwE14iWw=
+X-Google-Smtp-Source: AMsMyM4y1ykqVDED54Le5Jc1Sa/VyglNecTz9VeFpLkd8G+tt9SRPN/a7OQaD8oOiHi640FBB8gcp0b+oCBxz/xd/D4=
+X-Received: by 2002:a0c:f00f:0:b0:4bb:6167:d338 with SMTP id
+ z15-20020a0cf00f000000b004bb6167d338mr11256789qvk.11.1667226891093; Mon, 31
+ Oct 2022 07:34:51 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1/XC+witPxFj04T@feng-clx>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20211217115708.882525-1-tanureal@opensource.cirrus.com>
+ <20211217115708.882525-8-tanureal@opensource.cirrus.com> <CAHp75VdQGBixkUStPiq3VuoL+9TJo946ObfRA-L-D72DaFHnrw@mail.gmail.com>
+ <Y19fSL2Z6xq8TCFS@google.com>
+In-Reply-To: <Y19fSL2Z6xq8TCFS@google.com>
+From:   Andy Shevchenko <andy.shevchenko@gmail.com>
+Date:   Mon, 31 Oct 2022 16:34:14 +0200
+Message-ID: <CAHp75VfwqsiiRM-=BGii45-kX_6v4CHxDMTgwPnG5SBwu6655w@mail.gmail.com>
+Subject: Re: [PATCH v6 07/10] hda: cs35l41: Add support for CS35L41 in HDA systems
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Cc:     Lucas Tanure <tanureal@opensource.cirrus.com>,
+        "Rafael J . Wysocki" <rafael@kernel.org>,
+        Len Brown <lenb@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mark Gross <markgross@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Mark Brown <broonie@kernel.org>, Takashi Iwai <tiwai@suse.com>,
+        ALSA Development Mailing List <alsa-devel@alsa-project.org>,
+        ACPI Devel Maling List <linux-acpi@vger.kernel.org>,
+        patches@opensource.cirrus.com,
+        Platform Driver <platform-driver-x86@vger.kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 31-10-22 22:09:15, Feng Tang wrote:
-> On Mon, Oct 31, 2022 at 04:40:15PM +0800, Michal Hocko wrote:
-> > On Fri 28-10-22 07:22:27, Huang, Ying wrote:
-> > > Michal Hocko <mhocko@suse.com> writes:
-> > > 
-> > > > On Thu 27-10-22 17:31:35, Huang, Ying wrote:
-> > [...]
-> > > >> I think that it's possible for different processes have different
-> > > >> requirements.
-> > > >> 
-> > > >> - Some processes don't care about where the memory is placed, prefer
-> > > >>   local, then fall back to remote if no free space.
-> > > >> 
-> > > >> - Some processes want to avoid cross-socket traffic, bind to nodes of
-> > > >>   local socket.
-> > > >> 
-> > > >> - Some processes want to avoid to use slow memory, bind to fast memory
-> > > >>   node only.
-> > > >
-> > > > Yes, I do understand that. Do you have any specific examples in mind?
-> > > > [...]
-> > > 
-> > > Sorry, I don't have specific examples.
-> > 
-> > OK, then let's stop any complicated solution right here then. Let's
-> > start simple with a per-mm flag to disable demotion of an address space.
-> > Should there ever be a real demand for a more fine grained solution
-> > let's go further but I do not think we want a half baked solution
-> > without real usecases.
-> 
-> Yes, the concern about the high cost for mempolicy from you and Yang is
-> valid. 
-> 
-> How about the cpuset part?
+On Mon, Oct 31, 2022 at 7:38 AM Dmitry Torokhov
+<dmitry.torokhov@gmail.com> wrote:
+> On Thu, Jan 06, 2022 at 02:29:58PM +0200, Andy Shevchenko wrote:
+> > On Fri, Dec 17, 2021 at 5:45 PM Lucas Tanure
+> > <tanureal@opensource.cirrus.com> wrote:
 
-Cpusets fall into the same bucket as per task mempolicies wrt costs. Geting a
-cpuset requires knowing all tasks associated with a page. Or am I just
-missing any magic? And no memcg->cpuset association is not a proper
-solution at all.
+...
 
-> We've got bug reports from different channels
-> about using cpuset+docker to control meomry placement in memory tiering
-> system, leading to 2 commits solving them:
-> 
-> 2685027fca38 ("cgroup/cpuset: Remove cpus_allowed/mems_allowed setup in
-> cpuset_init_smp()") 
-> https://lore.kernel.org/all/20220419020958.40419-1-feng.tang@intel.com/
-> 
-> 8ca1b5a49885 ("mm/page_alloc: detect allocation forbidden by cpuset and
-> bail out early")
-> https://lore.kernel.org/all/1632481657-68112-1-git-send-email-feng.tang@intel.com/
-> 
-> >From these bug reports, I think it's reasonable to say there are quite
-> some real world users using cpuset+docker+memory-tiering-system.
+> > > +       cs35l41->reset_gpio = fwnode_gpiod_get_index(&adev->fwnode, "reset", cs35l41->index,
+> >
+> > Please, do not dereference fwnode pointers.
+> > Also, why can't you use the device instead of fwnode?
+>
+> We are doing "acpi_dev_put(adev);" a few lines above, so using adev in
+> the call to fwnode_gpiod_get_index() is technically use-after-free,
+> isn't it?
 
-I don't think anybody is questioning existence of those usecases. The
-primary question is whether any of them really require any non-trivial
-(read nodemask aware) demotion policies. In other words do we know of
-cpuset policy setups where demotion fallbacks are (partially) excluded?
+Right, but I believe this is in response to the author and not to me.
+
+> Also, why can't we do
+>
+>         cs35l41->reset_gpio = gpiod_get_index(acpi_dev, "reset",
+>                                               cs35l41->index,
+>                                               GPIOD_OUT_LOW);
+>
+> since acpi_dev is device structure corresponding to adev and we are
+> getting the rest of the properties from it?
+
+I remembered that I have also stumbled over that, but IIRC the point
+here is that ACPI tables might be broken (since the multi-instance
+device is a gray area to begin with). So we need clarification from
+Cirrus to understand what the cases they want to cover with this
+twisted code to get a GPIO.
+
+> I saw downthread that there was supposed to be a patch addressing
+> several issues raised by Andy, was it ever submitted?
+
 -- 
-Michal Hocko
-SUSE Labs
+With Best Regards,
+Andy Shevchenko
