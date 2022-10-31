@@ -2,73 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CED4D6132A4
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 10:22:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 249F26132A7
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 10:24:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230390AbiJaJWf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 05:22:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50772 "EHLO
+        id S230281AbiJaJYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 05:24:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230309AbiJaJWO (ORCPT
+        with ESMTP id S230395AbiJaJXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 05:22:14 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 24926DF4E;
-        Mon, 31 Oct 2022 02:21:27 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 30B51113E;
-        Mon, 31 Oct 2022 02:21:33 -0700 (PDT)
-Received: from pierre123.arm.com (unknown [10.57.7.107])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 9F9333F703;
-        Mon, 31 Oct 2022 02:21:24 -0700 (PDT)
-From:   Pierre Gondois <pierre.gondois@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     pierre.gondois@arm.com, Rob.Herring@arm.com,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Aswani Reddy <aswani.reddy@samsung.com>,
-        Shashank Prashar <s.prashar@samsung.com>,
-        Sriranjani P <sriranjani.p@samsung.com>,
-        devicetree@vger.kernel.org
-Subject: [PATCH 20/20] arm64: dts: Update cache properties for tesla
-Date:   Mon, 31 Oct 2022 10:21:19 +0100
-Message-Id: <20221031092125.533621-1-pierre.gondois@arm.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 31 Oct 2022 05:23:49 -0400
+Received: from mga12.intel.com (mga12.intel.com [192.55.52.136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A12FDF63;
+        Mon, 31 Oct 2022 02:22:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667208166; x=1698744166;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=Dk392vKLE9i7N1vmzYLQyKcqIsTeZR+TmuP19K/V+0o=;
+  b=JvliAE6/SFscSyOFremvahmR3HgXWgyAYI5PLzBte67nZgl3E4s+7PIW
+   PIJU9igcks8qSekAWtYajAL2RqdyOqFbVauIr6GB+8eiB19Gvhum8GX4R
+   9PIkk7NQt5YA1HcAKHAFx3Io6k2yvvOMPFAr+OIMplzfxzvEyEjN3rsZx
+   w1lNmlChxlvS7AMqZQw7trO4X+/2ctn89OcJQEs5JlVqoJcCJM5fa86q6
+   /T76uEGGnGj/p9twMqEPjfNQ1tHnFQQ5uLXgTaXPLekNCn3E2kYqluzjk
+   k561uB7k2YGUYN8NMEw2Oefo4imyjV4vbwts0e8afubTJD8q7ih6HtRyS
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="288570195"
+X-IronPort-AV: E=Sophos;i="5.95,227,1661842800"; 
+   d="scan'208";a="288570195"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 02:22:17 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="696941190"
+X-IronPort-AV: E=Sophos;i="5.95,227,1661842800"; 
+   d="scan'208";a="696941190"
+Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.255.28.35]) ([10.255.28.35])
+  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 02:22:15 -0700
+Message-ID: <f1fdc428-f407-9582-c392-579f873f7562@linux.intel.com>
+Date:   Mon, 31 Oct 2022 17:22:13 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v10 010/108] KVM: TDX: Add TDX "architectural" error codes
+To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
+        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
+        Sagi Shahar <sagis@google.com>,
+        David Matlack <dmatlack@google.com>,
+        Sean Christopherson <sean.j.christopherson@intel.com>
+References: <cover.1667110240.git.isaku.yamahata@intel.com>
+ <679bb45187dc54b82ebc9df5381a7d5de0b782d5.1667110240.git.isaku.yamahata@intel.com>
+From:   Binbin Wu <binbin.wu@linux.intel.com>
+In-Reply-To: <679bb45187dc54b82ebc9df5381a7d5de0b782d5.1667110240.git.isaku.yamahata@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The DeviceTree Specification v0.3 specifies that the cache node
-'compatible' and 'cache-level' properties are 'required'. Cf.
-s3.8 Multi-level and Shared Cache Nodes
 
-The recently added init_of_cache_level() function checks
-these properties. Add them if missing.
+On 2022/10/30 14:22, isaku.yamahata@intel.com wrote:
+> From: Sean Christopherson <sean.j.christopherson@intel.com>
+>
+> Add error codes for the TDX SEAMCALLs both for TDX VMM side for TDH
+> SEAMCALL and TDX guest side for TDG.VP.VMCALL.  KVM issues the TDX
+> SEAMCALLs and checks its error code.  KVM handles hypercall from the TDX
+> guest and may return an error.  So error code for the TDX guest is also
+> needed.
+>
+> TDX SEAMCALL uses bits 31:0 to return more information, so these error
+> codes will only exactly match RAX[63:32].  Error codes for TDG.VP.VMCALL is
+> defined by TDX Guest-Host-Communication interface spec.
+>
+> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
+> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+> Reviewed-by: Paolo Bonzini <pbonzini@redhat.com>
+> ---
+>   arch/x86/kvm/vmx/tdx_errno.h | 38 ++++++++++++++++++++++++++++++++++++
+>   1 file changed, 38 insertions(+)
+>   create mode 100644 arch/x86/kvm/vmx/tdx_errno.h
+>
+> diff --git a/arch/x86/kvm/vmx/tdx_errno.h b/arch/x86/kvm/vmx/tdx_errno.h
+> new file mode 100644
+> index 000000000000..ce246ba62454
+> --- /dev/null
+> +++ b/arch/x86/kvm/vmx/tdx_errno.h
+> @@ -0,0 +1,38 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/* architectural status code for SEAMCALL */
+> +
+> +#ifndef __KVM_X86_TDX_ERRNO_H
+> +#define __KVM_X86_TDX_ERRNO_H
+> +
+> +#define TDX_SEAMCALL_STATUS_MASK		0xFFFFFFFF00000000ULL
+> +
+> +/*
+> + * TDX SEAMCALL Status Codes (returned in RAX)
+> + */
+> +#define TDX_SUCCESS				0x0000000000000000ULL
+> +#define TDX_NON_RECOVERABLE_VCPU		0x4000000100000000ULL
+> +#define TDX_INTERRUPTED_RESUMABLE		0x8000000300000000ULL
+> +#define TDX_OPERAND_BUSY                        0x8000020000000000ULL
 
-Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
----
- arch/arm64/boot/dts/tesla/fsd.dtsi | 1 +
- 1 file changed, 1 insertion(+)
+one minor format issue, spaces are used  instread of tabs this line.
 
-diff --git a/arch/arm64/boot/dts/tesla/fsd.dtsi b/arch/arm64/boot/dts/tesla/fsd.dtsi
-index f35bc5a288c2..bfab040fc1e4 100644
---- a/arch/arm64/boot/dts/tesla/fsd.dtsi
-+++ b/arch/arm64/boot/dts/tesla/fsd.dtsi
-@@ -284,6 +284,7 @@ cpucl_l2: l2-cache0 {
- 			cache-size = <0x400000>;
- 			cache-line-size = <64>;
- 			cache-sets = <4096>;
-+			cache-level = <2>;
- 		};
- 
- 		idle-states {
--- 
-2.25.1
 
+> +#define TDX_VCPU_NOT_ASSOCIATED			0x8000070200000000ULL
+> +#define TDX_KEY_GENERATION_FAILED		0x8000080000000000ULL
+> +#define TDX_KEY_STATE_INCORRECT			0xC000081100000000ULL
+> +#define TDX_KEY_CONFIGURED			0x0000081500000000ULL
+> +#define TDX_NO_HKID_READY_TO_WBCACHE		0x0000082100000000ULL
+> +#define TDX_EPT_WALK_FAILED			0xC0000B0000000000ULL
+> +
+> +/*
+> + * TDG.VP.VMCALL Status Codes (returned in R10)
+> + */
+> +#define TDG_VP_VMCALL_SUCCESS			0x0000000000000000ULL
+> +#define TDG_VP_VMCALL_RETRY			0x0000000000000001ULL
+> +#define TDG_VP_VMCALL_INVALID_OPERAND		0x8000000000000000ULL
+> +#define TDG_VP_VMCALL_TDREPORT_FAILED		0x8000000000000001ULL
+> +
+> +/*
+> + * TDX module operand ID, appears in 31:0 part of error code as
+> + * detail information
+> + */
+> +#define TDX_OPERAND_ID_RCX			0x01
+> +#define TDX_OPERAND_ID_SEPT			0x92
+> +
+> +#endif /* __KVM_X86_TDX_ERRNO_H */
