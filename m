@@ -2,145 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 791F66133A2
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 11:29:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C95361339D
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 11:29:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230518AbiJaK3n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 06:29:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46308 "EHLO
+        id S230017AbiJaK3J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 06:29:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230486AbiJaK3Y (ORCPT
+        with ESMTP id S230473AbiJaK3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 06:29:24 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 349822FE
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 03:28:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667212100;
+        Mon, 31 Oct 2022 06:29:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3598B2B9
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 03:29:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DCCEEB815B3
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 10:29:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0B75C433D7;
+        Mon, 31 Oct 2022 10:28:59 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="jIWnLQ63"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1667212136;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
+         to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/hIeJVnchaNxDIQLVeOkkO5U18ich1B9OkG0LgN+vzo=;
-        b=i3lDS4IFRGMDaMUQu93N7YeMqN0tWMRsudw1EErSJMFtkVcgT9W6MRnXVrRiDSoT1xIlUi
-        giyE3mxHZgXuG1puv2kpcOY1ffB7FvR8+4Sn63QecD8qtNJyl/UzhFeoNQSTDN40fomOmL
-        ld04RkN5f9qpWlnxHhtjsoyqXdNw4Vk=
-Received: from mail-wr1-f69.google.com (mail-wr1-f69.google.com
- [209.85.221.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-589-tqpsWtyNOjeqCgfOgcNdAA-1; Mon, 31 Oct 2022 06:28:18 -0400
-X-MC-Unique: tqpsWtyNOjeqCgfOgcNdAA-1
-Received: by mail-wr1-f69.google.com with SMTP id t12-20020adfa2cc000000b0022adcbb248bso2898305wra.1
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 03:28:18 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/hIeJVnchaNxDIQLVeOkkO5U18ich1B9OkG0LgN+vzo=;
-        b=L+Fpgoxe5vTmPgdTYQSDZUwbjLgxDjdwD8jD707OasJwJDTm31/7L7CLdaP+0AwA8a
-         1FaIUutH+EUCyHhxagqvpDYM9rRdH/ALFf4ivknsMu3HvDLchSur/gdwEtgIuj2pIUrO
-         lKjBCb2bgKRQMXzDLoV53FQaR0FiF+km27WtiVjYiiCHCw3gUzs9INc9UDs914T4A1Fc
-         yw9+xQ6jc9PeN6kwMvazJ04ZjLTTlYOGnHXn12rLOvxEqOd3Yhgz/2wl9htuOFJvCWGz
-         4kk12ZA8dWtjSowDWrVYAg7qcuRTaGoxCOxAg7dRKoO6qGb2x+qGniUKlmIbvI2LNyxT
-         lbLQ==
-X-Gm-Message-State: ACrzQf1Cmw462ng/lL+4JbSD7RzB2utK0c0rBOLVAvukQwMdZcMav95W
-        ajKVpGjbmbnAzyiEUlc6+50zP4EHJCyfgD1iM5SDUS1OW7SaoI91gUtl7diPOB4SSyxhCwTzTsF
-        n1Xj4BKc6HfBJQ+LqIvPsaYhy
-X-Received: by 2002:adf:dd12:0:b0:236:6ef7:dacf with SMTP id a18-20020adfdd12000000b002366ef7dacfmr7421293wrm.204.1667212097621;
-        Mon, 31 Oct 2022 03:28:17 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5ydPFfgWp2fYwXo04xgnbDjn+PJoF9QYc3RViQ0SveCErN/DxpTH63zs/QvfNCPP/X+35XUA==
-X-Received: by 2002:adf:dd12:0:b0:236:6ef7:dacf with SMTP id a18-20020adfdd12000000b002366ef7dacfmr7421277wrm.204.1667212097269;
-        Mon, 31 Oct 2022 03:28:17 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c705:b300:ab9a:1f1f:ddaf:3b1d? (p200300cbc705b300ab9a1f1fddaf3b1d.dip0.t-ipconnect.de. [2003:cb:c705:b300:ab9a:1f1f:ddaf:3b1d])
-        by smtp.gmail.com with ESMTPSA id j18-20020a5d6192000000b00228692033dcsm6652894wru.91.2022.10.31.03.28.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Oct 2022 03:28:16 -0700 (PDT)
-Message-ID: <b60e55de-46b7-3eeb-4ad1-914d8cc5f25b@redhat.com>
-Date:   Mon, 31 Oct 2022 11:28:15 +0100
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Content-Language: en-US
-To:     Rebecca Mckeever <remckee0@gmail.com>,
-        Mike Rapoport <rppt@kernel.org>, linux-mm@kvack.org,
+        bh=0UXEPVUAG/ks2HswpgrTribc0cOtwroH75nU4iepnEM=;
+        b=jIWnLQ63I+uryCzoppKfVZLVlDRMGZnWpasUvvxlmChXzn640wphoZOta8Ak+hkObp9Rbm
+        0t/YFFw10cb7CYPPT9OJcODmygiC8qg7JYHOGwHiktilXbQApkWiduwY5AGKfzTFcgyxTq
+        x3FR/jgH9rYfeann+dhpqfUESC3mW08=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 264ea943 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Mon, 31 Oct 2022 10:28:55 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     catalin.marinas@arm.com, linux-arm-kernel@lists.infradead.org,
         linux-kernel@vger.kernel.org
-References: <cover.1666203642.git.remckee0@gmail.com>
- <d5481026b5b75e919e6497968453e86ab79b77d0.1666203643.git.remckee0@gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v3 1/5] memblock tests: introduce range tests for
- memblock_alloc_exact_nid_raw
-In-Reply-To: <d5481026b5b75e919e6497968453e86ab79b77d0.1666203643.git.remckee0@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>,
+        Will Deacon <will@kernel.org>,
+        Ard Biesheuvel <ardb@kernel.org>,
+        Jean-Philippe Brucker <jean-philippe@linaro.org>
+Subject: [PATCH v3] random: remove early archrandom abstraction
+Date:   Mon, 31 Oct 2022 11:28:40 +0100
+Message-Id: <20221031102840.85621-1-Jason@zx2c4.com>
+In-Reply-To: <20221030212123.1022049-1-Jason@zx2c4.com>
+References: <20221030212123.1022049-1-Jason@zx2c4.com>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 19.10.22 20:34, Rebecca Mckeever wrote:
-> Add TEST_F_EXACT flag, which specifies that tests should run
-> memblock_alloc_exact_nid_raw(). Introduce range tests for
-> memblock_alloc_exact_nid_raw() by using the TEST_F_EXACT flag to run the
-> range tests in alloc_nid_api.c, since memblock_alloc_exact_nid_raw() and
-> memblock_alloc_try_nid_raw() behave the same way when nid = NUMA_NO_NODE.
-> 
-> Rename tests and other functions in alloc_nid_api.c by removing "_try".
-> Since the test names will be displayed in verbose output, they need to
-> be general enough to refer to any of the memblock functions that the
-> tests may run.
-> 
-> Signed-off-by: Rebecca Mckeever <remckee0@gmail.com>
+The arch_get_random*_early() abstraction is not completely useful and
+adds complexity, because it's not a given that there will be no calls to
+arch_get_random*() between random_init_early(), which uses
+arch_get_random*_early(), and init_cpu_features(). During that gap,
+crng_reseed() might be called, which uses arch_get_random*(), since it's
+mostly not init code.
 
-[...]
+Instead we can test whether we're in the early phase in
+arch_get_random*() itself, and in doing so avoid all ambiguity about
+where we are. Fortunately, the only architecture that currently
+implements arch_get_random*_early() also has an alternatives-based cpu
+feature system, one flag of which determines whether the other flags
+have been initialized. This makes it possible to do the early check with
+zero cost once the system is initialized.
 
-> diff --git a/tools/testing/memblock/tests/alloc_nid_api.c b/tools/testing/memblock/tests/alloc_nid_api.c
-> index 2c2d60f4e3e3..df8e7e038cab 100644
-> --- a/tools/testing/memblock/tests/alloc_nid_api.c
-> +++ b/tools/testing/memblock/tests/alloc_nid_api.c
-> @@ -18,18 +18,27 @@ static const unsigned int node_fractions[] = {
->   	 625, /* 1/16 */
->   };
->   
-> -static inline const char * const get_memblock_alloc_try_nid_name(int flags)
-> +static inline const char * const get_memblock_alloc_nid_name(int flags)
->   {
-> +	if (flags & TEST_F_EXACT)
-> +		return "memblock_alloc_exact_nid_raw";
->   	if (flags & TEST_F_RAW)
->   		return "memblock_alloc_try_nid_raw";
->   	return "memblock_alloc_try_nid";
->   }
->   
-> -static inline void *run_memblock_alloc_try_nid(phys_addr_t size,
-> -					       phys_addr_t align,
-> -					       phys_addr_t min_addr,
-> -					       phys_addr_t max_addr, int nid)
-> +static inline void *run_memblock_alloc_nid(phys_addr_t size,
-> +					   phys_addr_t align,
-> +					   phys_addr_t min_addr,
-> +					   phys_addr_t max_addr, int nid)
->   {
+Cc: Catalin Marinas <catalin.marinas@arm.com>
+Cc: Will Deacon <will@kernel.org>
+Cc: Ard Biesheuvel <ardb@kernel.org>
+Cc: Jean-Philippe Brucker <jean-philippe@linaro.org>
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+Changes v2->v3:
+- Keep around __early_cpu_has_rndr() for kaslr usage.
+Changes v1->v2:
+- Also check early_boot_irqs_disabled, to make sure that the raw
+  capability check only runs during an early stage when we're only
+  running on the boot CPU and with IRQs off. This check disappears once
+  the system is up, because system_capabilities_finalized() is a static
+  branch.
 
-I think we want to assert here that TEST_F_EXACT without TEST_F_RAW is 
-not set --- because there is no API to support it.
+Catalin - Though this touches arm64's archrandom.h, I intend to take
+this through the random.git tree, if that's okay. I have other patches
+that will build off of this one. -Jason
 
-Apart from that
+ arch/arm64/include/asm/archrandom.h | 61 ++++++++---------------------
+ drivers/char/random.c               |  4 +-
+ include/linux/random.h              | 20 ----------
+ 3 files changed, 18 insertions(+), 67 deletions(-)
 
-Acked-by: David Hildenbrand <david@redhat.com>
-
-
-Thanks!
-
+diff --git a/arch/arm64/include/asm/archrandom.h b/arch/arm64/include/asm/archrandom.h
+index 109e2a4454be..4b0f28730ab2 100644
+--- a/arch/arm64/include/asm/archrandom.h
++++ b/arch/arm64/include/asm/archrandom.h
+@@ -58,6 +58,20 @@ static inline bool __arm64_rndrrs(unsigned long *v)
+ 	return ok;
+ }
+ 
++static inline bool __early_cpu_has_rndr(void)
++{
++	/* Open code as we run prior to the first call to cpufeature. */
++	unsigned long ftr = read_sysreg_s(SYS_ID_AA64ISAR0_EL1);
++	return (ftr >> ID_AA64ISAR0_EL1_RNDR_SHIFT) & 0xf;
++}
++
++static __always_inline bool __cpu_has_rng(void)
++{
++	if (!system_capabilities_finalized() && early_boot_irqs_disabled)
++		return __early_cpu_has_rndr();
++	return cpus_have_const_cap(ARM64_HAS_RNG);
++}
++
+ static inline size_t __must_check arch_get_random_longs(unsigned long *v, size_t max_longs)
+ {
+ 	/*
+@@ -66,7 +80,7 @@ static inline size_t __must_check arch_get_random_longs(unsigned long *v, size_t
+ 	 * cpufeature code and with potential scheduling between CPUs
+ 	 * with and without the feature.
+ 	 */
+-	if (max_longs && cpus_have_const_cap(ARM64_HAS_RNG) && __arm64_rndr(v))
++	if (max_longs && __cpu_has_rng() && __arm64_rndr(v))
+ 		return 1;
+ 	return 0;
+ }
+@@ -108,53 +122,10 @@ static inline size_t __must_check arch_get_random_seed_longs(unsigned long *v, s
+ 	 * reseeded after each invocation. This is not a 100% fit but good
+ 	 * enough to implement this API if no other entropy source exists.
+ 	 */
+-	if (cpus_have_const_cap(ARM64_HAS_RNG) && __arm64_rndrrs(v))
+-		return 1;
+-
+-	return 0;
+-}
+-
+-static inline bool __init __early_cpu_has_rndr(void)
+-{
+-	/* Open code as we run prior to the first call to cpufeature. */
+-	unsigned long ftr = read_sysreg_s(SYS_ID_AA64ISAR0_EL1);
+-	return (ftr >> ID_AA64ISAR0_EL1_RNDR_SHIFT) & 0xf;
+-}
+-
+-static inline size_t __init __must_check
+-arch_get_random_seed_longs_early(unsigned long *v, size_t max_longs)
+-{
+-	WARN_ON(system_state != SYSTEM_BOOTING);
+-
+-	if (!max_longs)
+-		return 0;
+-
+-	if (smccc_trng_available) {
+-		struct arm_smccc_res res;
+-
+-		max_longs = min_t(size_t, 3, max_longs);
+-		arm_smccc_1_1_invoke(ARM_SMCCC_TRNG_RND64, max_longs * 64, &res);
+-		if ((int)res.a0 >= 0) {
+-			switch (max_longs) {
+-			case 3:
+-				*v++ = res.a1;
+-				fallthrough;
+-			case 2:
+-				*v++ = res.a2;
+-				fallthrough;
+-			case 1:
+-				*v++ = res.a3;
+-				break;
+-			}
+-			return max_longs;
+-		}
+-	}
+-
+-	if (__early_cpu_has_rndr() && __arm64_rndr(v))
++	if (__cpu_has_rng() && __arm64_rndrrs(v))
+ 		return 1;
+ 
+ 	return 0;
+ }
+-#define arch_get_random_seed_longs_early arch_get_random_seed_longs_early
+ 
+ #endif /* _ASM_ARCHRANDOM_H */
+diff --git a/drivers/char/random.c b/drivers/char/random.c
+index 6f323344d0b9..e3cf4f51ed58 100644
+--- a/drivers/char/random.c
++++ b/drivers/char/random.c
+@@ -813,13 +813,13 @@ void __init random_init_early(const char *command_line)
+ #endif
+ 
+ 	for (i = 0, arch_bits = sizeof(entropy) * 8; i < ARRAY_SIZE(entropy);) {
+-		longs = arch_get_random_seed_longs_early(entropy, ARRAY_SIZE(entropy) - i);
++		longs = arch_get_random_seed_longs(entropy, ARRAY_SIZE(entropy) - i);
+ 		if (longs) {
+ 			_mix_pool_bytes(entropy, sizeof(*entropy) * longs);
+ 			i += longs;
+ 			continue;
+ 		}
+-		longs = arch_get_random_longs_early(entropy, ARRAY_SIZE(entropy) - i);
++		longs = arch_get_random_longs(entropy, ARRAY_SIZE(entropy) - i);
+ 		if (longs) {
+ 			_mix_pool_bytes(entropy, sizeof(*entropy) * longs);
+ 			i += longs;
+diff --git a/include/linux/random.h b/include/linux/random.h
+index 182780cafd45..2bdd3add3400 100644
+--- a/include/linux/random.h
++++ b/include/linux/random.h
+@@ -153,26 +153,6 @@ declare_get_random_var_wait(long, unsigned long)
+ 
+ #include <asm/archrandom.h>
+ 
+-/*
+- * Called from the boot CPU during startup; not valid to call once
+- * secondary CPUs are up and preemption is possible.
+- */
+-#ifndef arch_get_random_seed_longs_early
+-static inline size_t __init arch_get_random_seed_longs_early(unsigned long *v, size_t max_longs)
+-{
+-	WARN_ON(system_state != SYSTEM_BOOTING);
+-	return arch_get_random_seed_longs(v, max_longs);
+-}
+-#endif
+-
+-#ifndef arch_get_random_longs_early
+-static inline bool __init arch_get_random_longs_early(unsigned long *v, size_t max_longs)
+-{
+-	WARN_ON(system_state != SYSTEM_BOOTING);
+-	return arch_get_random_longs(v, max_longs);
+-}
+-#endif
+-
+ #ifdef CONFIG_SMP
+ int random_prepare_cpu(unsigned int cpu);
+ int random_online_cpu(unsigned int cpu);
 -- 
-Thanks,
-
-David / dhildenb
+2.38.1
 
