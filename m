@@ -2,154 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7DE50613E01
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 20:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 112F7613E05
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 20:08:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229959AbiJaTDe convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 31 Oct 2022 15:03:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60854 "EHLO
+        id S229692AbiJaTH6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 15:07:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35948 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229739AbiJaTDb (ORCPT
+        with ESMTP id S229468AbiJaTH4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 15:03:31 -0400
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A9A5D57;
-        Mon, 31 Oct 2022 12:03:30 -0700 (PDT)
-Received: by mail-oi1-f172.google.com with SMTP id r76so7197038oie.13;
-        Mon, 31 Oct 2022 12:03:30 -0700 (PDT)
+        Mon, 31 Oct 2022 15:07:56 -0400
+Received: from mail-qv1-xf32.google.com (mail-qv1-xf32.google.com [IPv6:2607:f8b0:4864:20::f32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BFDA11C2F
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 12:07:55 -0700 (PDT)
+Received: by mail-qv1-xf32.google.com with SMTP id o8so8945233qvw.5
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 12:07:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RIRCeB57mif3WLLjzHJdENrFUL9U/TfVQ593vGFl6q4=;
+        b=PzRtrjqO02eaWa33Zq3luOuXf6b8F5IN//bl0BoITVBRXmcMh7nbJhnqTYWRRryu5y
+         8iDxEI/HfGaS1+1tz8lnXx3Ny5EVlFEYhPErbdEJhiUGODUQeS5CyUWmCheYQW971isr
+         K+Mc3Us7oEuRSM2JN/G6i+LXwzXpZEIcmSr+o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PrACHCXTgI6KhnSmfV8BnCwgxOijfG3ClYDgUf87v8k=;
-        b=leqGdMZyv6qASgIS6PWWIsscN1+zSrY3hMUs1/qYgyjlyB7f9W1XP1Z4qia/AZlCyP
-         mlmatj8eqT3h8TwhdokcEA965Pz/MGTs52iTdwvrCXqm/AmHJO1PGPOc+8SWN9qPxEdd
-         3f/D4S/ZHjhWDCaZsfqytQS18ukuL8fZY1dF/6l+Dcp0GkVzFsL1oo9a70Qk7Xx2rjvn
-         RJujB5gGuG2dMn8YGsg4XJnDZcSbA20RnVe9UbS5L1XzSWYCjSaYXgivQtih73G3O5BJ
-         08V9eYNgyEZ1lwreaSRvhS2Blf8PeU1n8/GrkuC51cukRndo+0YyGW92yaGrNxhrUafF
-         JJcQ==
-X-Gm-Message-State: ACrzQf0DtRDBhjs5SPUCEuke3rGMlMLwROoFR1DSAPZrEgWz+wkpOiJq
-        cwQj+Ds84j+s1PfxGgj+vTDkPjiAv+ke38pRkdk=
-X-Google-Smtp-Source: AMsMyM7Ewupj28lX4TIsCjnUHYcWcTWdhJDDfDnpoy8k9qHa7VbtJcCz6IZu37ypGDnNMxAsMHgv6HNLREFScY0LeHI=
-X-Received: by 2002:aca:ac82:0:b0:359:d662:5bfb with SMTP id
- v124-20020acaac82000000b00359d6625bfbmr7726817oie.218.1667243009659; Mon, 31
- Oct 2022 12:03:29 -0700 (PDT)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RIRCeB57mif3WLLjzHJdENrFUL9U/TfVQ593vGFl6q4=;
+        b=hRo3O1eG0ih4hkXhPYcxJgB/6b8hdHGEWVyQnc/5PTshqGwsKgNPSigsbUifMNnvTx
+         Hk9DMqke7fqCbwBggEEd5dAhH2xt0gY1rvvS1y7ANMY5e4atI7Rquc7GOl9WXxdo4qlN
+         PJ8CjPXW5ENGux8tdiBWLgeiasFtqBhOc12my+8R+KsHxoYAq6BAC1L/4wvgpyGKPAiF
+         9kr2H2eTN2cYnPgGwCOZod5upXgNVV4eGdm4141hLGTk0npBNJmqjOhuXCbaTYpdyqcb
+         rEFMde6tjcIU81YpL4+DP5nJx7x3ciGRCZvs4xxZyvoA1xB1bazb9omIOXeGVCuVqzHT
+         Q0CA==
+X-Gm-Message-State: ACrzQf2epp5BQH0hpiw3tnCWdoo5GtHy4nMtsTKvICRpTzD3Uv2US+BE
+        efNd8MwFOfTDPH5GWqfXuFRTJd13kxZFZQ==
+X-Google-Smtp-Source: AMsMyM4Ee+TZhvFESxifDL5ZbYRMf3zJ0lb6HTgKveEGgF8voG8drknnCpgUM2yOpEkJV7laSI1VRw==
+X-Received: by 2002:a0c:e18f:0:b0:4bb:5b84:fb2c with SMTP id p15-20020a0ce18f000000b004bb5b84fb2cmr12651354qvl.28.1667243274274;
+        Mon, 31 Oct 2022 12:07:54 -0700 (PDT)
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com. [209.85.219.170])
+        by smtp.gmail.com with ESMTPSA id c17-20020ac853d1000000b0039cc944ebdasm4023765qtq.54.2022.10.31.12.07.53
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Oct 2022 12:07:53 -0700 (PDT)
+Received: by mail-yb1-f170.google.com with SMTP id 63so14813677ybq.4
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 12:07:53 -0700 (PDT)
+X-Received: by 2002:a25:bb02:0:b0:6ca:9345:b2ee with SMTP id
+ z2-20020a25bb02000000b006ca9345b2eemr2992665ybg.362.1667243272872; Mon, 31
+ Oct 2022 12:07:52 -0700 (PDT)
 MIME-Version: 1.0
-References: <20220415050003.3257645-1-mattst88@gmail.com> <20221019232952.2212729-1-mattst88@gmail.com>
-In-Reply-To: <20221019232952.2212729-1-mattst88@gmail.com>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Mon, 31 Oct 2022 12:03:18 -0700
-Message-ID: <CAM9d7cgxOmtw=djorzjBnfqgLm04r9bVoGm31C8uMA-SRQTa4w@mail.gmail.com>
-Subject: Re: [PATCH v2] tools: port perf ui from GTK 2 to GTK 3
-To:     Matt Turner <mattst88@gmail.com>
-Cc:     linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Jelle van der Waa <jvanderwaa@redhat.com>
+References: <20221031175256.2813280-1-jannh@google.com> <Y2APCmYNjYOYLf8G@ZenIV>
+ <CAG48ez094n05c3QJMy7vZ5U=z87MzqYeKU97Na_R9O36_LJSXw@mail.gmail.com> <Y2AYecOnLTkhmZB1@ZenIV>
+In-Reply-To: <Y2AYecOnLTkhmZB1@ZenIV>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Mon, 31 Oct 2022 12:07:36 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whynVDmGUG0qNLhGboUKXbTCnKudEr4R=GN5mH-Bz9gLg@mail.gmail.com>
+Message-ID: <CAHk-=whynVDmGUG0qNLhGboUKXbTCnKudEr4R=GN5mH-Bz9gLg@mail.gmail.com>
+Subject: Re: [PATCH v2] fs: use acquire ordering in __fget_light()
+To:     Al Viro <viro@zeniv.linux.org.uk>
+Cc:     Jann Horn <jannh@google.com>, Miklos Szeredi <mszeredi@redhat.com>,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Will Deacon <will@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Oct 31, 2022 at 11:48 AM Al Viro <viro@zeniv.linux.org.uk> wrote:
+>
+> Anyway, it's unrelated to the patch itself.  I'm fine with it in the current
+> form.  Will apply for the next merge window, unless Linus wants it in right
+> now.
 
-On Wed, Oct 19, 2022 at 4:30 PM Matt Turner <mattst88@gmail.com> wrote:
->
-> From: Jelle van der Waa <jvanderwaa@redhat.com>
->
-> GTK 2 is a legacy API and the newer version is GTK 3 which changes a few
-> API functions. gtk_tree_view_set_rules_hint is no longer required since
-> theme's are now responsible to handle this, gtk_vbox_new is deprecated
-> and replaced by passing the orientation to gtk_box_new. Apart from these
-> changes the accessing of the screen changed in GTK which requires using
-> new functions for getting geometry. Lastly the GTK_STOCK_OK define is
-> deprecated in GTK 3.
->
-> Signed-off-by: Jelle van der Waa <jvanderwaa@redhat.com>
-> Signed-off-by: Matt Turner <mattst88@gmail.com>
-> ---
-> Originally sent in 2019. I've rebased it and given it a test.
->
-> One problem I've noticed is that C++ symbol names are often broken.
-> E.g.:
->
-> (perf:3254940): Gtk-WARNING **: 21:47:46.663: Failed to set text from
-> markup due to error parsing markup: Error on line 1 char 95:
-> “std::char_traits<char” is not a valid name: “<”
->
-> Presumably we need to call g_markup_escape_text() somewhere, but I
-> struggled to find the right place.
->
-> Without the patch, the GTK-2 version repeatedly segfaults, so this is an
-> improvement regardless.
+It doesn't strike me as hugely critical, so I'm fine with it being put
+in any random pile of "fixes to be applied" as long as it doesn't get
+lost entirely. But if y ou have a "fixes" branch that may end up
+coming to me before this release is over, that's not the wrong place
+either.
 
-Thanks for working on this.
+I would tend to agree with Jann that the re-ordering doesn't look very
+likely because it's the same cacheline, so even an aggressively
+out-of-order core really doesn't seem to be very likely to trigger any
+issues. So you have a really unlikely situation to begin with, and
+even less reason for it then triggering the re-ordering.
 
->
-> v2: Dropped changes to test-all.c. I don't know how to build that
->     apparently.
->
->  tools/build/Makefile.feature                  |  5 +++--
->  tools/build/feature/Makefile                  | 12 +++++-----
->  ...est-gtk2-infobar.c => test-gtk3-infobar.c} |  0
->  .../feature/{test-gtk2.c => test-gtk3.c}      |  0
->  tools/perf/Documentation/perf-report.txt      |  2 +-
->  tools/perf/Makefile                           |  2 +-
->  tools/perf/Makefile.config                    | 22 +++++++++----------
->  tools/perf/Makefile.perf                      |  6 ++---
->  tools/perf/builtin-report.c                   |  2 +-
->  tools/perf/builtin-version.c                  |  1 +
->  tools/perf/tests/make                         | 12 +++++-----
->  tools/perf/ui/gtk/annotate.c                  |  2 +-
->  tools/perf/ui/gtk/browser.c                   | 16 ++++++++------
->  tools/perf/ui/gtk/hists.c                     |  6 +----
->  tools/perf/ui/gtk/progress.c                  |  2 +-
->  tools/perf/ui/setup.c                         |  2 +-
->  16 files changed, 46 insertions(+), 46 deletions(-)
->  rename tools/build/feature/{test-gtk2-infobar.c => test-gtk3-infobar.c} (100%)
->  rename tools/build/feature/{test-gtk2.c => test-gtk3.c} (100%)
->
-> diff --git a/tools/build/Makefile.feature b/tools/build/Makefile.feature
-> index 57619f240b56..967b8be96b65 100644
-> --- a/tools/build/Makefile.feature
-> +++ b/tools/build/Makefile.feature
-> @@ -80,8 +80,8 @@ FEATURE_TESTS_EXTRA :=                  \
->           compile-32                     \
->           compile-x32                    \
->           cplus-demangle                 \
-> -         gtk2                           \
-> -         gtk2-infobar                   \
-> +         gtk3                           \
-> +         gtk3-infobar                   \
+The "original situation is unlikely" can probably be made quite likely
+with an active attack, but that active attacker would then also also
+have to rely on "that re-ordering looks sketchy", and actively hunt
+for hardware where it can happen.
 
-I don't think gtk3-inforbar check is necessary anymore.  IIRC the infobar
-was introduced in the middle of gtk2 so it needs to check if the current
-version supports it or not.  But I guess gtk3 should support it by default.
+And said hardware may simply not exist, even if the race is certainly
+theoretically possible on any weakly ordered CPU.
 
-Thanks,
-Namhyung
-
-
->           hello                          \
->           libbabeltrace                  \
->           libbfd-liberty                 \
-> @@ -119,6 +119,7 @@ FEATURE_DISPLAY ?=              \
->           dwarf                  \
->           dwarf_getlocations     \
->           glibc                  \
-> +         gtk3                   \
->           libbfd                 \
->           libbfd-buildid                \
->           libcap                 \
+             Linus
