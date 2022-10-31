@@ -2,114 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B14AB6134D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 12:46:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB3506134E3
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 12:48:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231213AbiJaLqD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 07:46:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43422 "EHLO
+        id S230500AbiJaLse (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 07:48:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47268 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231204AbiJaLpk (ORCPT
+        with ESMTP id S230466AbiJaLsb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 07:45:40 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD1CF023;
-        Mon, 31 Oct 2022 04:45:27 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id AE1A0CE134C;
-        Mon, 31 Oct 2022 11:45:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 09213C433D6;
-        Mon, 31 Oct 2022 11:45:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667216723;
-        bh=/nzQwQ7t8fEd/Xbji8T5TlBeyziGmIQJxHg8N9W/ml4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=di1R1BCGvDv5KIfYWJ/0WhYLVQzNM99ivj4PXRekT4VkQArg598dXS6df8fUPt/qy
-         PL7JlHCF5TrQNlt3ISUO9gHqjDWWpnPw59eVNi+FnE3fdzrdJwgelZYr/afK5L3XED
-         1pzWTJ7nkI2/uAXIJxOcL0Dav5rcI9YuEo0A+RLi4JgST/jFmnjJP01UiUjrVDVT+P
-         mVRYq+GU/7y1c+/YSLmuUlnkBzD0IB9LQH5DMOAhzOis2HHkm43zRFeUMhdJMxH5ST
-         yhcLFqhAA7VpSOeTeuObjthPMQHzBdvW3rwzZFb8ml+x7C9qatEeJXaez50ykda6cH
-         q+lcUjCfNPo/g==
-From:   "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
-To:     tj@kernel.org
-Cc:     linux-kernel@vger.kernel.org,
-        "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
-        Martin Liska <mliska@suse.cz>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
-        linux-block@vger.kernel.org
-Subject: [PATCH] block/blk-iocost (gcc13): cast enum members to int in prints
-Date:   Mon, 31 Oct 2022 12:45:20 +0100
-Message-Id: <20221031114520.10518-1-jirislaby@kernel.org>
-X-Mailer: git-send-email 2.38.1
+        Mon, 31 Oct 2022 07:48:31 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 72A73203
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 04:48:30 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1E8531FB;
+        Mon, 31 Oct 2022 04:48:36 -0700 (PDT)
+Received: from FVFF77S0Q05N (unknown [10.57.5.37])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B3F9B3F5A1;
+        Mon, 31 Oct 2022 04:48:28 -0700 (PDT)
+Date:   Mon, 31 Oct 2022 11:48:19 +0000
+From:   Mark Rutland <mark.rutland@arm.com>
+To:     Mukesh Ojha <quic_mojha@quicinc.com>
+Cc:     catalin.marinas@arm.com, will@kernel.org, broonie@kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] arm64: entry: Fix typo
+Message-ID: <Y1+2A7ecKZ8YG+nu@FVFF77S0Q05N>
+References: <1667027268-1255-1-git-send-email-quic_mojha@quicinc.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <1667027268-1255-1-git-send-email-quic_mojha@quicinc.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since gcc13, each member of an enum has the same type as the enum [1]. And
-that is inherited from its members. Provided:
-  VTIME_PER_SEC_SHIFT     = 37,
-  VTIME_PER_SEC           = 1LLU << VTIME_PER_SEC_SHIFT,
-the named type is unsigned long.
+On Sat, Oct 29, 2022 at 12:37:48PM +0530, Mukesh Ojha wrote:
+> Fix the following typo in entry-common.c
+> intrumentable => instrumentable
+> 
+> Signed-off-by: Mukesh Ojha <quic_mojha@quicinc.com>
 
-This generates warnings with gcc-13:
-  block/blk-iocost.c: In function 'ioc_weight_prfill':
-  block/blk-iocost.c:3037:37: error: format '%u' expects argument of type 'unsigned int', but argument 4 has type 'long unsigned int'
+Acked-by: Mark Rutland <mark.rutland@arm.com>
 
-  block/blk-iocost.c: In function 'ioc_weight_show':
-  block/blk-iocost.c:3047:34: error: format '%u' expects argument of type 'unsigned int', but argument 3 has type 'long unsigned int'
+Thanks,
+Mark.
 
-Cast the enum members to int when printing them.
-
-Alternatively, we can cast them to ulong (to silence gcc < 12) and use %lu.
-Alternatively, we can move VTIME_PER_SEC away from the enum.
-
-[1] https://gcc.gnu.org/bugzilla/show_bug.cgi?id=36113
-
-Cc: Martin Liska <mliska@suse.cz>
-Cc: Tejun Heo <tj@kernel.org>
-Cc: Josef Bacik <josef@toxicpanda.com>
-Cc: Jens Axboe <axboe@kernel.dk>
-Cc: cgroups@vger.kernel.org
-Cc: linux-block@vger.kernel.org
-Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
----
- block/blk-iocost.c | 6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
-diff --git a/block/blk-iocost.c b/block/blk-iocost.c
-index f01359906c83..a257ba17183b 100644
---- a/block/blk-iocost.c
-+++ b/block/blk-iocost.c
-@@ -3034,7 +3034,8 @@ static u64 ioc_weight_prfill(struct seq_file *sf, struct blkg_policy_data *pd,
- 	struct ioc_gq *iocg = pd_to_iocg(pd);
- 
- 	if (dname && iocg->cfg_weight)
--		seq_printf(sf, "%s %u\n", dname, iocg->cfg_weight / WEIGHT_ONE);
-+		seq_printf(sf, "%s %d\n", dname,
-+				iocg->cfg_weight / (int)WEIGHT_ONE);
- 	return 0;
- }
- 
-@@ -3044,7 +3045,8 @@ static int ioc_weight_show(struct seq_file *sf, void *v)
- 	struct blkcg *blkcg = css_to_blkcg(seq_css(sf));
- 	struct ioc_cgrp *iocc = blkcg_to_iocc(blkcg);
- 
--	seq_printf(sf, "default %u\n", iocc->dfl_weight / WEIGHT_ONE);
-+	seq_printf(sf, "default %d\n",
-+			iocc->dfl_weight / (int)WEIGHT_ONE);
- 	blkcg_print_blkgs(sf, blkcg, ioc_weight_prfill,
- 			  &blkcg_policy_iocost, seq_cft(sf)->private, false);
- 	return 0;
--- 
-2.38.1
-
+> ---
+>  arch/arm64/kernel/entry-common.c | 16 ++++++++--------
+>  1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/arch/arm64/kernel/entry-common.c b/arch/arm64/kernel/entry-common.c
+> index 9173fad..b694d8f 100644
+> --- a/arch/arm64/kernel/entry-common.c
+> +++ b/arch/arm64/kernel/entry-common.c
+> @@ -30,7 +30,7 @@
+>  /*
+>   * Handle IRQ/context state management when entering from kernel mode.
+>   * Before this function is called it is not safe to call regular kernel code,
+> - * intrumentable code, or any code which may trigger an exception.
+> + * instrumentable code, or any code which may trigger an exception.
+>   *
+>   * This is intended to match the logic in irqentry_enter(), handling the kernel
+>   * mode transitions only.
+> @@ -63,7 +63,7 @@ static void noinstr enter_from_kernel_mode(struct pt_regs *regs)
+>  /*
+>   * Handle IRQ/context state management when exiting to kernel mode.
+>   * After this function returns it is not safe to call regular kernel code,
+> - * intrumentable code, or any code which may trigger an exception.
+> + * instrumentable code, or any code which may trigger an exception.
+>   *
+>   * This is intended to match the logic in irqentry_exit(), handling the kernel
+>   * mode transitions only, and with preemption handled elsewhere.
+> @@ -97,7 +97,7 @@ static void noinstr exit_to_kernel_mode(struct pt_regs *regs)
+>  /*
+>   * Handle IRQ/context state management when entering from user mode.
+>   * Before this function is called it is not safe to call regular kernel code,
+> - * intrumentable code, or any code which may trigger an exception.
+> + * instrumentable code, or any code which may trigger an exception.
+>   */
+>  static __always_inline void __enter_from_user_mode(void)
+>  {
+> @@ -116,7 +116,7 @@ static __always_inline void enter_from_user_mode(struct pt_regs *regs)
+>  /*
+>   * Handle IRQ/context state management when exiting to user mode.
+>   * After this function returns it is not safe to call regular kernel code,
+> - * intrumentable code, or any code which may trigger an exception.
+> + * instrumentable code, or any code which may trigger an exception.
+>   */
+>  static __always_inline void __exit_to_user_mode(void)
+>  {
+> @@ -152,7 +152,7 @@ asmlinkage void noinstr asm_exit_to_user_mode(struct pt_regs *regs)
+>  /*
+>   * Handle IRQ/context state management when entering an NMI from user/kernel
+>   * mode. Before this function is called it is not safe to call regular kernel
+> - * code, intrumentable code, or any code which may trigger an exception.
+> + * code, instrumentable code, or any code which may trigger an exception.
+>   */
+>  static void noinstr arm64_enter_nmi(struct pt_regs *regs)
+>  {
+> @@ -170,7 +170,7 @@ static void noinstr arm64_enter_nmi(struct pt_regs *regs)
+>  /*
+>   * Handle IRQ/context state management when exiting an NMI from user/kernel
+>   * mode. After this function returns it is not safe to call regular kernel
+> - * code, intrumentable code, or any code which may trigger an exception.
+> + * code, instrumentable code, or any code which may trigger an exception.
+>   */
+>  static void noinstr arm64_exit_nmi(struct pt_regs *regs)
+>  {
+> @@ -192,7 +192,7 @@ static void noinstr arm64_exit_nmi(struct pt_regs *regs)
+>  /*
+>   * Handle IRQ/context state management when entering a debug exception from
+>   * kernel mode. Before this function is called it is not safe to call regular
+> - * kernel code, intrumentable code, or any code which may trigger an exception.
+> + * kernel code, instrumentable code, or any code which may trigger an exception.
+>   */
+>  static void noinstr arm64_enter_el1_dbg(struct pt_regs *regs)
+>  {
+> @@ -207,7 +207,7 @@ static void noinstr arm64_enter_el1_dbg(struct pt_regs *regs)
+>  /*
+>   * Handle IRQ/context state management when exiting a debug exception from
+>   * kernel mode. After this function returns it is not safe to call regular
+> - * kernel code, intrumentable code, or any code which may trigger an exception.
+> + * kernel code, instrumentable code, or any code which may trigger an exception.
+>   */
+>  static void noinstr arm64_exit_el1_dbg(struct pt_regs *regs)
+>  {
+> -- 
+> 2.7.4
+> 
