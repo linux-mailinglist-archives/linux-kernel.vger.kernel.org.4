@@ -2,127 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8B82613EC6
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 21:15:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 39213613ED0
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 21:16:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230027AbiJaUPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 16:15:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49646 "EHLO
+        id S230089AbiJaUQq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 16:16:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiJaUPG (ORCPT
+        with ESMTP id S230142AbiJaUQk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 16:15:06 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35DB06337;
-        Mon, 31 Oct 2022 13:15:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667247305; x=1698783305;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=IHbJOlvitpR4GGONJy+qLhQEFg8wxFTPAPEhDEJBvcI=;
-  b=Gbm1faOrlUqsBnNglUrYPOgFhzUG7psoc5fnpkUvlz4SNAUQMMIZ/2sv
-   ryPvpMudpHhL4ikWyr31ctVDZWoBbJPMf8ms+lwg6PF0zjL697FTLwN9u
-   mbEUeqvubfbk8jRbPgbVv9Kl1QxtIablCdDPwVTP2H4HGVWOW7q7XUatt
-   tlxi8poftOd1jFLjetgYzVn8jDXWvWZNKp+PqzwQE7QAx7t3neWc6Al56
-   CpHEnLWWDnDwl2Ehswu4kNybhWbK719WOwqJOlZrDqfcXWp28zPaHt41s
-   qlV+ejQDYKAexxA15nPzfdkD20itVN1imCYCdhuz8yRTm43Fn5ePBgbB3
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="308989799"
-X-IronPort-AV: E=Sophos;i="5.95,228,1661842800"; 
-   d="scan'208";a="308989799"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 13:15:04 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="758956171"
-X-IronPort-AV: E=Sophos;i="5.95,228,1661842800"; 
-   d="scan'208";a="758956171"
-Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
-  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 13:15:04 -0700
-Date:   Mon, 31 Oct 2022 13:15:06 -0700 (PDT)
-From:   matthew.gerlach@linux.intel.com
-X-X-Sender: mgerlach@rhweight-WRK1
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-cc:     Xu Yilun <yilun.xu@intel.com>, hao.wu@intel.com,
-        russell.h.weight@intel.com, basheer.ahmed.muddebihal@intel.com,
-        trix@redhat.com, mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tianfei.zhang@intel.com, corbet@lwn.net, jirislaby@kernel.org,
-        geert+renesas@glider.be, niklas.soderlund+renesas@ragnatech.se,
-        macro@orcam.me.uk, johan@kernel.org, lukas@wunner.de,
-        ilpo.jarvinen@linux.intel.com, marpagan@redhat.com
-Subject: Re: [PATCH v4 3/4] fpga: dfl: add basic support DFHv1
-In-Reply-To: <Y1/q/PDPNq7pNtda@smile.fi.intel.com>
-Message-ID: <alpine.DEB.2.22.394.2210311310560.2680729@rhweight-WRK1>
-References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com> <20221020212610.697729-4-matthew.gerlach@linux.intel.com> <Y10l3NkIn0gsdVZq@yilunxu-OptiPlex-7050> <Y171ZEHpOydtR4dW@smile.fi.intel.com> <Y18h4+ESJo+NQnOu@yilunxu-OptiPlex-7050>
- <Y1/q/PDPNq7pNtda@smile.fi.intel.com>
-User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
+        Mon, 31 Oct 2022 16:16:40 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D204EE06
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 13:15:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667247349;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=WIa9IfMzqilzK5MYtEhjp/n+BJxTQKIQoEPTpn72stw=;
+        b=VOYN1lTn/+KJqERnb7UOcez5RuzMcxx8EnNvlp6eOdNALJYTkkV/TbpHAhwy9AEgUp65gB
+        EUYiV2eii8bQvpwKjwsoj621HE4PkNRRCQ3J+v8z/XJPvbkkWTebZmjIlHwNS04WlhgHwU
+        sZVWwndWVAmHvldWaOP9uCETDv2SxuM=
+Received: from mail-ed1-f71.google.com (mail-ed1-f71.google.com
+ [209.85.208.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-657-tAlT8UvsNfKzmBfaEzZICA-1; Mon, 31 Oct 2022 16:15:47 -0400
+X-MC-Unique: tAlT8UvsNfKzmBfaEzZICA-1
+Received: by mail-ed1-f71.google.com with SMTP id z9-20020a05640235c900b0046358415c4fso2614736edc.9
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 13:15:47 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WIa9IfMzqilzK5MYtEhjp/n+BJxTQKIQoEPTpn72stw=;
+        b=KlrmjW+1wJPFuhwTgbwp1Wb3tIWxu7Q+4fzAPbLxpdP527kqQStBtRPzCplBmtNlUi
+         nsSRCllKRMT6NaXjRvZ39LkA4vlpNSqNOq0+K8HmkkmlQ/+bCSlVIjtbli0YDGMT0CLI
+         B8ZYlZICZnPYBtavQeU0mH4iYovoWvCO8vwh0I2paaHDpKqQS9feYhzfEphOyQLpGn8m
+         zMlC+E1rDhRX1b2No+czmbx4gRq/fXtPpkBfEN8P330CczZMTY9tzC5VAisRhbRIx6OM
+         aQzluYYPn+DEbfkzN8pd/2YAj4vPG+LlI1LpWuoJDuP7wC/2bBw5UK1Zc/l+/28C87bd
+         Z6nQ==
+X-Gm-Message-State: ACrzQf27I8YXSCtyyAShG4DAIzJddbglTQUFOlszkt2mNPaHMk1JIOmp
+        OpikIVmehqejArc4/qKAotm0E/UgvFYQd5uO1TkDM5EXRBSUBPGfIC+s+Rmmi8lOWZkymzF8tWK
+        vnu0V0hmN5tVkGEIch1hZ/u96
+X-Received: by 2002:a17:907:9602:b0:780:8c9f:f99a with SMTP id gb2-20020a170907960200b007808c9ff99amr14920942ejc.465.1667247346376;
+        Mon, 31 Oct 2022 13:15:46 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4/oXc0b1EOGJiYwMl/x5r8AyUg3lSAX6lCMTBQFtjCaizzEASZueiWCSYMo18A84SQ6+tidA==
+X-Received: by 2002:a17:907:9602:b0:780:8c9f:f99a with SMTP id gb2-20020a170907960200b007808c9ff99amr14920926ejc.465.1667247346215;
+        Mon, 31 Oct 2022 13:15:46 -0700 (PDT)
+Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
+        by smtp.gmail.com with ESMTPSA id sg43-20020a170907a42b00b007aa3822f4d2sm3479851ejc.17.2022.10.31.13.15.45
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Oct 2022 13:15:45 -0700 (PDT)
+Message-ID: <2124934d-a8f1-59fa-1958-28472d06d2d6@redhat.com>
+Date:   Mon, 31 Oct 2022 21:15:44 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII; format=flowed
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH v1] platform/x86: intel_pmc_core: promote S0ix failure
+ warn() to WARN()
+Content-Language: en-US, nl
+To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>,
+        Sven van Ashbrook <svenva@chromium.org>,
+        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>
+Cc:     LKML <linux-kernel@vger.kernel.org>,
+        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
+        "rrangel@chromium.org" <rrangel@chromium.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        Rajneesh Bhardwaj <rajneesh.bhardwaj@intel.com>,
+        Rafael J Wysocki <rjw@rjwysocki.net>,
+        Rajat Jain <rajatja@google.com>,
+        David E Box <david.e.box@intel.com>,
+        Mark Gross <markgross@kernel.org>
+References: <20221027151908.v1.1.I295e65357f06f162b46ea6fc6c03be37e3978bdc@changeid>
+ <4b7304c0-8dd5-9add-7c84-4e9f0aa9396b@redhat.com>
+ <MN0PR12MB6101BCCA364437A76FED924AE2339@MN0PR12MB6101.namprd12.prod.outlook.com>
+ <CAG-rBijvNoN3ppz6bdkEUofYPPBxCtFfo1nWBK5TdG69fcKMnA@mail.gmail.com>
+ <CAE2upjS6qRGRcuVYuAB5DMf66A7VcfCKKYEkpsr1My7RnKDFtQ@mail.gmail.com>
+ <CAG-rBihDRq1y61tAp56yYCoTOSZXO9OZNzn7gXb_y8XaiO_zqg@mail.gmail.com>
+ <MN0PR12MB610109F448E3FC8CE71FBA76E2379@MN0PR12MB6101.namprd12.prod.outlook.com>
+From:   Hans de Goede <hdegoede@redhat.com>
+In-Reply-To: <MN0PR12MB610109F448E3FC8CE71FBA76E2379@MN0PR12MB6101.namprd12.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-
-On Mon, 31 Oct 2022, Andy Shevchenko wrote:
-
-> On Mon, Oct 31, 2022 at 09:16:19AM +0800, Xu Yilun wrote:
->> On 2022-10-31 at 00:06:28 +0200, Andy Shevchenko wrote:
->>> On Sat, Oct 29, 2022 at 09:08:44PM +0800, Xu Yilun wrote:
->>>> On 2022-10-20 at 14:26:09 -0700, matthew.gerlach@linux.intel.com wrote:
->>>
->>>>>  struct dfl_feature_info {
->>>>>  	u16 fid;
->>>>>  	u8 revision;
->>>>> +	u8 dfh_version;
->>>>>  	struct resource mmio_res;
->>>>>  	void __iomem *ioaddr;
->>>>>  	struct list_head node;
->>>>>  	unsigned int irq_base;
->>>>>  	unsigned int nr_irqs;
->>>>> +	unsigned int param_size;
->>>>> +	u64 params[];
->>>>>  };
->>>
->>> ...
->>>
->>>>> +	finfo = kzalloc(sizeof(*finfo) + dfh_psize, GFP_KERNEL);
->>>
->>>
->>> This probably may use something from overflow.h.
->>>
->>>> The u64 flexible array in the structure, but seems dfh_get_psize could
->>>> not garantee 64bit aligned size.
->>>>
->>>> What's the mandatory alignment of param data? If 64bit aligned, bit 33-34
->>>> of PARAM_HDR should be reserved. If 32bit aligned, finfo:params should be
->>>> u32[].
->>>
->>> Isn't it guaranteed by the C standard / architecture ABI?
+On 10/31/22 20:39, Limonciello, Mario wrote:
+> [Public]
+> 
+>> -----Original Message-----
+>> From: Sven van Ashbrook <svenva@chromium.org>
+>> Sent: Friday, October 28, 2022 23:12
+>> To: Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>; Hans de Goede
+>> <hdegoede@redhat.com>
+>> Cc: Limonciello, Mario <Mario.Limonciello@amd.com>; LKML <linux-
+>> kernel@vger.kernel.org>; S-k, Shyam-sundar <Shyam-sundar.S-
+>> k@amd.com>; rrangel@chromium.org; platform-driver-
+>> x86@vger.kernel.org; Rajneesh Bhardwaj <rajneesh.bhardwaj@intel.com>;
+>> Rafael J Wysocki <rjw@rjwysocki.net>; Rajat Jain <rajatja@google.com>;
+>> David E Box <david.e.box@intel.com>; Mark Gross <markgross@kernel.org>
+>> Subject: Re: [PATCH v1] platform/x86: intel_pmc_core: promote S0ix failure
+>> warn() to WARN()
 >>
->> I'm referring to the malloc size of the structure. It reserved dfh_psize
->> bytes for this u64 array, but there is no garantee dfh_psize should be a
->> multiple of 8. So there may be memory leak when accessing the last
->> array element?
->
-> Have you looked at macros in the overflow.h? Would the use of it solve your
-> concern?
+>> On Thu, Oct 27, 2022 at 12:02 PM Rajneesh Bhardwaj
+>> <irenic.rajneesh@gmail.com> wrote:
+>>> I'd advise against this promotion based on my experience with S0ix entry
+>> failures.
+>>
+>> On Thu, Oct 27, 2022 at 11:40 AM Hans de Goede <hdegoede@redhat.com>
+>> wrote:
+>>> I'm not a fan of the change you are suggesting here.
+>>
+>> Thanks everyone for the feedback. Looks like there is consensus that it's
+>> not advisable to promote the warning. We will move forward with changes to
+>> our monitoring infrastructure instead.
+> 
+> Did you see the idea proposed by David Box to introduce some infrastructure in
+> the kernel for this?
+> 
+> Just thinking about it a little bit more, it could be a lot nicer to have something like:
+> 
+> /sys/power/suspend_stats/last_hw_deepest_state
+> 
+> During the resume process drivers such as amd_pmc and intel_pmc_core could
+> read the appropriate values for the hardware and call a function that would
+> populate it with either a "0" or "1" or maybe even the amount of time spent in
+> that state.
+> 
+> We could then retire the debugging messages from both drivers and instead of
+> your infrastructure relying upon scanning logs, userspace could read that sysfs
+> file after every suspend and raise the alarms when it's 0 (or if it's populated with
+> time smaller than X% of the total suspend time).
 
-By clarifying the definition of the next field in the parameter header 
-as the number of 8-byte words, dfh_get_psize is guaranteed to be a multiple of 8.
-This is fixed in the next revision of patches.
+Something like this does indeed sound like a nice solution for this.
 
-Matthew Gerlach
+Regards,
 
->
-> -- 
-> With Best Regards,
-> Andy Shevchenko
->
->
->
+Hans
+
