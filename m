@@ -2,44 +2,44 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D9B1613FF3
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 22:33:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59500613FF2
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 22:32:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiJaVc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 17:32:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41536 "EHLO
+        id S230071AbiJaVc5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 17:32:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229930AbiJaVcy (ORCPT
+        with ESMTP id S229872AbiJaVcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 17:32:54 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87088101C8;
-        Mon, 31 Oct 2022 14:32:53 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29VLWjhg085373;
-        Mon, 31 Oct 2022 16:32:45 -0500
+        Mon, 31 Oct 2022 17:32:53 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DF4C13F9E;
+        Mon, 31 Oct 2022 14:32:52 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29VLWlaT037564;
+        Mon, 31 Oct 2022 16:32:47 -0500
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1667251965;
-        bh=XSY2Jq3na/sl6Cc08QKpWff+LNu0kq5lKCtM8p4Bjyg=;
+        s=ti-com-17Q1; t=1667251967;
+        bh=okYAQNocPOrf/mnmbnOvbn2QALnYi6N0RA5PevMFYv0=;
         h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=pLlETx333+5lcnNUJgNnKvzrDxx9O+jIiuL+rLXEDcRzSIGgkYy66+Lfw8G931Axk
-         y01ZNtc2JX1jwnF9lsOoRbsveEGXODETfuJDZ6pk/oewTA1cTxfgcnkQhwFZiVs8XH
-         iQVilVKr0DwRg/zNirr3VYfIxNv+Zfc96c01+/3I=
-Received: from DLEE102.ent.ti.com (dlee102.ent.ti.com [157.170.170.32])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29VLWjXZ092344
+        b=Qw2E+1yyHOi8MCfNbt0uBMXSvQjghDEe7EprO1QuoWPfB2Qwu4w1Lk0YV56h8fSqn
+         h15jWh3+2EGMbMGeAqwKbi3sH+DrbE1RYknG4MPZk0LHtiPKMiKyOxo5hd34y2fkC5
+         0Ll7vZI05M9oalxSnP9H2mk6TsBr/ddHkBRFHR0E=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29VLWlkh023894
         (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 31 Oct 2022 16:32:45 -0500
-Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE102.ent.ti.com
- (157.170.170.32) with Microsoft SMTP Server (version=TLS1_2,
+        Mon, 31 Oct 2022 16:32:47 -0500
+Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 31
- Oct 2022 16:32:45 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE104.ent.ti.com
- (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ Oct 2022 16:32:47 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE100.ent.ti.com
+ (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Mon, 31 Oct 2022 16:32:44 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29VLWhWq007247;
-        Mon, 31 Oct 2022 16:32:44 -0500
+ Frontend Transport; Mon, 31 Oct 2022 16:32:47 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29VLWjso095050;
+        Mon, 31 Oct 2022 16:32:46 -0500
 From:   Jayesh Choudhary <j-choudhary@ti.com>
 To:     <nm@ti.com>, <vigneshr@ti.com>
 CC:     <kristo@kernel.org>, <robh+dt@kernel.org>, <afd@ti.com>,
@@ -47,9 +47,9 @@ CC:     <kristo@kernel.org>, <robh+dt@kernel.org>, <afd@ti.com>,
         <s-anna@ti.com>, <linux-arm-kernel@lists.infradead.org>,
         <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <j-choudhary@ti.com>
-Subject: [PATCH 2/3] arm64: dts: ti: k3-j721e-main: drop RNG clock
-Date:   Tue, 1 Nov 2022 03:02:36 +0530
-Message-ID: <20221031213237.52275-3-j-choudhary@ti.com>
+Subject: [PATCH 3/3] arm64: dts: ti: k3-am64-main: drop RNG clock
+Date:   Tue, 1 Nov 2022 03:02:37 +0530
+Message-ID: <20221031213237.52275-4-j-choudhary@ti.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221031213237.52275-1-j-choudhary@ti.com>
 References: <20221031213237.52275-1-j-choudhary@ti.com>
@@ -68,24 +68,24 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 Drop RNG clock property as it is not controlled by rng-driver.
 
-Fixes: 8ebcaaae8017 ("arm64: dts: ti: k3-j721e-main: Add crypto accelerator node")
+Fixes: e170ae6dd67a ("arm64: dts: ti: k3-am64-main: Enable crypto accelerator")
 Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
 ---
- arch/arm64/boot/dts/ti/k3-j721e-main.dtsi | 1 -
+ arch/arm64/boot/dts/ti/k3-am64-main.dtsi | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-index 5c4a0e28cde5..f1403b79e7f5 100644
---- a/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j721e-main.dtsi
-@@ -355,7 +355,6 @@ rng: rng@4e10000 {
+diff --git a/arch/arm64/boot/dts/ti/k3-am64-main.dtsi b/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
+index c96df4b9b3d7..ac04cf1d9c3e 100644
+--- a/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
++++ b/arch/arm64/boot/dts/ti/k3-am64-main.dtsi
+@@ -1359,7 +1359,6 @@ rng: rng@40910000 {
  			compatible = "inside-secure,safexcel-eip76";
- 			reg = <0x0 0x4e10000 0x0 0x7d>;
- 			interrupts = <GIC_SPI 11 IRQ_TYPE_LEVEL_HIGH>;
--			clocks = <&k3_clks 264 2>;
+ 			reg = <0x00 0x40910000 0x00 0x7d>;
+ 			interrupts = <GIC_SPI 168 IRQ_TYPE_LEVEL_HIGH>;
+-			clocks = <&k3_clks 133 1>;
+ 			status = "disabled"; /* Used by OP-TEE */
  		};
  	};
- 
 -- 
 2.25.1
 
