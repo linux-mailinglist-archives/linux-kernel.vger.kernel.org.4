@@ -2,69 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24B94613DDD
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D217D613DE3
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:57:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbiJaS5Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 14:57:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50166 "EHLO
+        id S229665AbiJaS5k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 14:57:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50364 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiJaS5O (ORCPT
+        with ESMTP id S229452AbiJaS5i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 14:57:14 -0400
-Received: from mail-vs1-xe36.google.com (mail-vs1-xe36.google.com [IPv6:2607:f8b0:4864:20::e36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B47C21020
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 11:57:12 -0700 (PDT)
-Received: by mail-vs1-xe36.google.com with SMTP id 3so11937061vsh.5
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 11:57:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MYV5cri+9HnK3IWri6K5wqHucbnY+96ft9BgHsjS9RI=;
-        b=W76/72RqBQtjLnPqgZ54ZmtlZopTmyDXgMrUGd97TGur1nfvPTIrCbLZaCGH6MNb9U
-         N1tim/PcJyN+2ZhG2ccBoIrQiSZfcKDV157X1Db/tti0An7B+C1A8k/pdgT+SQe58mGu
-         4V8ISOnQYo6qKqrUSrD2SF8MTyAichuKjSAm6+lZwBYdzs8GYf1H1U+OG0XBZY1WuK+U
-         p9AxrAn7CpUaEvV/opVaURLFDrXBEu4XukuDpWO2xZo9qgWwKI7gpO8pBFnkpYcNbV1B
-         6hPcpsWhY58zhP4p8sjnYJ72FCvYBQUGmCWNeMkxBaRSXftsKqcKeYvKSb7FnJgYO/yN
-         lSww==
+        Mon, 31 Oct 2022 14:57:38 -0400
+Received: from mail-ot1-f45.google.com (mail-ot1-f45.google.com [209.85.210.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B5DEE83;
+        Mon, 31 Oct 2022 11:57:37 -0700 (PDT)
+Received: by mail-ot1-f45.google.com with SMTP id r13-20020a056830418d00b0065601df69c0so7260678otu.7;
+        Mon, 31 Oct 2022 11:57:37 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MYV5cri+9HnK3IWri6K5wqHucbnY+96ft9BgHsjS9RI=;
-        b=F4aZo3QZRNM1Sc516oHLUnbfIivLQmC77+JFvIJ9+nWpPWvQwMDc0IHDNiZIS1fcMM
-         B9UP/h3YQGnrah7Fhw6M/lUbo60nykcKODEUQmpxQ3B6Ikkxp6cGi/Y5gjra0I06FAvl
-         JV2vyE0k3pgBtqPe+34OhG63uUeLVGAk5RxWU7v8NzPQGVWwfk7l03WifohKmx1ktgK0
-         vh8LwbFMyDonHdNvsHt8ZZqZX7Ms+CBWMRrb/DOZAbjx298ntbCDNFzKaaUQmrIF3QG5
-         DFlxKPWIJ2pjOmk8fkAUPaMmd0YSF1UqpuCMilt6NW83VSixW/HTl+A7musWL8Aqpkvm
-         2BRQ==
-X-Gm-Message-State: ACrzQf2Zr5/jptS0phbwps8/eMoTF1e+uvFC9nGwn+9ZHhIBvwZE5HJ9
-        zAaevM6v+22z0FNVm8DC8uvOL7n8HxPqMaaSaV5HKw==
-X-Google-Smtp-Source: AMsMyM4uj+RakYNC8icBKfPDn8ZRitjLBvfKlst7dEhYq+yOQu68BSAzB2n3pqMGfzMFF86CpR73qLnLG+KxXiFB7wQ=
-X-Received: by 2002:a05:6102:3714:b0:3ac:f4c2:436 with SMTP id
- s20-20020a056102371400b003acf4c20436mr686439vst.80.1667242631728; Mon, 31 Oct
- 2022 11:57:11 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FDlfsp4Z5dv3KOOJ8RIYeDVzw6SpbAuGhZbFngKWrh4=;
+        b=ApuCjdQGnAkYEw3aA45vxd0De/Gil+rj9tD0m/YWBgUkGcvsbx2I87/If8v+SiNwxb
+         D2aIP/kI/PsCppCc3exCPIXngc6x/8v5rplluP+Ao7CSJxI3Em/xMZpuhBeKs3PhEZ4d
+         QEAgQkuoROlbsJZLewmnlQaKb+32OXImbotim/l048xrFEzxWG9JmBojgu1xvAmiuJqU
+         fx+7mK7yLLzIIfsxKyNw/cUezt5D5dhTgRNR7VWNlxNaV7arWNwQCGI8W0gha0YnDgBu
+         US8ZgTOgj6u2V2QG9+jB2t3Oibz01vHhny5rJ6TybbRgBw2Hcwh9kj9KNFtV2VuHre4G
+         MGfw==
+X-Gm-Message-State: ACrzQf3JA9P2P0uqgKP+cltt5xQOl/vRZ7RzPhC/+fk2D99SOhpxZDeO
+        c2QYpcPhWtgZWCkDcP/pEcCGOcXsNA==
+X-Google-Smtp-Source: AMsMyM79yUDuGBea14DUf4Zuj8HFysGU8WkrzLwG32UPNQt2MnBJ3ULoUWcDy4y7qO1o86pkPKNvgw==
+X-Received: by 2002:a05:6830:1e97:b0:66c:52cc:8e9 with SMTP id n23-20020a0568301e9700b0066c52cc08e9mr3271198otr.113.1667242656487;
+        Mon, 31 Oct 2022 11:57:36 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t8-20020a4aadc8000000b00480e77f90f9sm2619242oon.41.2022.10.31.11.57.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 11:57:36 -0700 (PDT)
+Received: (nullmailer pid 3255352 invoked by uid 1000);
+        Mon, 31 Oct 2022 18:57:37 -0000
+Date:   Mon, 31 Oct 2022 13:57:37 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Bjorn Andersson <andersson@kernel.org>,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>,
+        Steen Hegelund <Steen.Hegelund@microchip.com>,
+        Daniel Machon <daniel.machon@microchip.com>,
+        UNGLinuxDriver@microchip.com, Sergey Shtylyov <s.shtylyov@omp.ru>,
+        Manivannan Sadhasivam <mani@kernel.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Jonathan Marek <jonathan@marek.ca>,
+        Martin Botka <martin.botka@somainline.org>,
+        Taniya Das <tdas@codeaurora.org>,
+        Christian Marangi <ansuelsmth@gmail.com>,
+        Stephan Gerhold <stephan@gerhold.net>,
+        Shawn Guo <shawn.guo@linaro.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        krishna Lanka <quic_vamslank@quicinc.com>,
+        Iskren Chernev <iskren.chernev@gmail.com>,
+        Del Regno <angelogioacchino.delregno@somainline.org>,
+        Robert Foss <robert.foss@linaro.org>,
+        Jeffrey Hugo <quic_jhugo@quicinc.com>,
+        Govind Singh <govinds@codeaurora.org>,
+        Loic Poulain <loic.poulain@linaro.org>,
+        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Vladimir Oltean <vladimir.oltean@nxp.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-renesas-soc@vger.kernel.org
+Subject: Re: [PATCH] dt-bindings: net: constrain number of 'reg' in ethernet
+ ports
+Message-ID: <20221031185737.GA3249912-robh@kernel.org>
+References: <20221028140326.43470-1-krzysztof.kozlowski@linaro.org>
+ <20221028140326.43470-2-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
-References: <0000000000000d9d6f05ec498263@google.com> <000000000000fa42c105ec5339ec@google.com>
- <Y1/SqIuP4tbszPAW@casper.infradead.org>
-In-Reply-To: <Y1/SqIuP4tbszPAW@casper.infradead.org>
-From:   Aleksandr Nogikh <nogikh@google.com>
-Date:   Mon, 31 Oct 2022 11:57:00 -0700
-Message-ID: <CANp29Y68VeE9NHM2ekCvuZNVVaEZkmaG_NhyaUTH5DMOu0=QgA@mail.gmail.com>
-Subject: Re: [syzbot] WARNING in btrfs_space_info_update_bytes_may_use
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     syzbot <syzbot+8edfa01e46fd9fe3fbfb@syzkaller.appspotmail.com>,
-        akpm@linux-foundation.org, clm@fb.com, dsterba@suse.com,
-        hch@lst.de, josef@toxicpanda.com, linmiaohe@huawei.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221028140326.43470-2-krzysztof.kozlowski@linaro.org>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,50 +104,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 6:50 AM Matthew Wilcox <willy@infradead.org> wrote:
->
-> Dmitry, I don't see a way to tell syzbot that its bisection has gone
-> astray.  Can you add one or document it if it already exists?
+On Fri, Oct 28, 2022 at 10:03:25AM -0400, Krzysztof Kozlowski wrote:
+> 'reg' without any constraints allows multiple items which is not the
+> intention for Ethernet controller's port number.
+> 
 
-No, unfortunately it's not possible now. I've filed an issue:
-https://github.com/google/syzkaller/issues/3491
+Shouldn't this constrained by dsa-port.yaml (or the under review 
+ethernet switch schemas that split out the DSA parts)?
 
->
-> On Mon, Oct 31, 2022 at 04:51:22AM -0700, syzbot wrote:
-> > syzbot has bisected this issue to:
-> >
-> > commit 0c7c575df56b957390206deb018c41acbb412159
-> > Author: Matthew Wilcox (Oracle) <willy@infradead.org>
-> > Date:   Wed Feb 24 20:01:52 2021 +0000
-> >
-> >     mm/filemap: remove dynamically allocated array from filemap_read
->
-> This change affects the read path.  The crash happens in the unmount
-> path.  The data structure that's being checked is modified in the write
-> path.  I just can't see how this commit is in any way related.
-
-Most likely the bisection pointed at your patch because it removed
-kmalloc while the reproducer for the bug does fault injection (see the
-"(fail_nth: 10)" line in syz repro). So it might have inadvertently
-made the issue more visible to the fuzzer.
-
->
-> > bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=119e21b6880000
-> > start commit:   b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
-> > git tree:       upstream
-> > final oops:     https://syzkaller.appspot.com/x/report.txt?x=139e21b6880000
-> > console output: https://syzkaller.appspot.com/x/log.txt?x=159e21b6880000
-> > kernel config:  https://syzkaller.appspot.com/x/.config?x=a66c6c673fb555e8
-> > dashboard link: https://syzkaller.appspot.com/bug?extid=8edfa01e46fd9fe3fbfb
-> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17db9ab1880000
-> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=124e21b6880000
-> >
-> > Reported-by: syzbot+8edfa01e46fd9fe3fbfb@syzkaller.appspotmail.com
-> > Fixes: 0c7c575df56b ("mm/filemap: remove dynamically allocated array from filemap_read")
-> >
-> > For information about bisection process see: https://goo.gl/tpsmEJ#bisection
->
-> --
-> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
-> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
-> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/Y1/SqIuP4tbszPAW%40casper.infradead.org.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> 
+> ---
+> 
+> Please give it a time for Rob's bot to process this.
+> ---
+>  Documentation/devicetree/bindings/net/asix,ax88178.yaml       | 4 +++-
+>  Documentation/devicetree/bindings/net/microchip,lan95xx.yaml  | 4 +++-
+>  .../devicetree/bindings/net/microchip,lan966x-switch.yaml     | 4 ++--
+>  .../devicetree/bindings/net/microchip,sparx5-switch.yaml      | 3 ++-
+>  .../devicetree/bindings/net/mscc,vsc7514-switch.yaml          | 3 ++-
+>  .../bindings/net/renesas,r8a779f0-ether-switch.yaml           | 4 ++--
+>  6 files changed, 14 insertions(+), 8 deletions(-)
