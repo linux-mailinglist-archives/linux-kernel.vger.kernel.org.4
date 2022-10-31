@@ -2,137 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 265AE6131D8
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 09:43:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71FE16131DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 09:44:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbiJaInn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 04:43:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
+        id S229939AbiJaIor (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 04:44:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbiJaInl (ORCPT
+        with ESMTP id S229475AbiJaIoo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 04:43:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A44710A8
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 01:43:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 16B0E61040
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 08:43:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06681C433D6;
-        Mon, 31 Oct 2022 08:43:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667205817;
-        bh=ZORsrJ+DI1lsCWe5MTS/iD4Fym79i/CO9pTJG5NNgoQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HGtiO1rrn5fISj2g8SbzKS1L2IFtrZ/5xVFdNzxLGc+il2TvvlrPA1ieXr1hxYo4D
-         f2p5Nwk/NuJxY3a5+YVakaNeS0V6VtA+k0EHwGDF9sw/MU49Ag2sFoE9Nt0lOhsAqO
-         774reLOCQpQZmJE0Rg43U+VqKhWdGLDS9JG+lvgG3dsMrNd641kpQqtQJxGGuSqtaU
-         inEwhnR4TM3ARuYXW39pbmC5p2+zmmeVFAkJnre7drgOhPHwE11mRDJlyD650C3oPn
-         HS8QwoM7xDROPlj83JLVmSBZLJX9brCgCuBP2wqOtVUybNX3uW086ny89Q03qM0XQV
-         O6pbOsMgj9bHg==
-Date:   Mon, 31 Oct 2022 10:43:24 +0200
-From:   Mike Rapoport <rppt@kernel.org>
-To:     Rebecca Mckeever <remckee0@gmail.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        David Hildenbrand <david@redhat.com>
-Subject: Re: [PATCH v3 0/5] memblock tests: add tests for
- memblock_alloc_exact_nid_raw
-Message-ID: <Y1+KrIyFAOZ/oNqp@kernel.org>
-References: <cover.1666203642.git.remckee0@gmail.com>
- <20221031050006.GA15612@sophie>
+        Mon, 31 Oct 2022 04:44:44 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 657A2B0F
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 01:43:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667205822;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0cVx55tetrN0slfUGsIN9YfNlhQLUs9MTDiVMp3ty/0=;
+        b=hwhlJb3t8YEGTriavJJ2Fx4WyqvFhF02RIOHycggR/d0yNC7KjDVRmIvFvc8K4CiCIje4t
+        nG2vHF1kqgHdO63YSyoczSCVkVRehlevMsk00M+Kxadb0ahgigDP3rr8bCn5raWxu0c90K
+        ArclCS9AQZ4uI2tnbvwIPiM4e82Z4CE=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-287-jxa-VrrZPiqenOuFez9mPg-1; Mon, 31 Oct 2022 04:43:33 -0400
+X-MC-Unique: jxa-VrrZPiqenOuFez9mPg-1
+Received: by mail-ed1-f70.google.com with SMTP id i17-20020a05640242d100b0044f18a5379aso7434587edc.21
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 01:43:33 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=0cVx55tetrN0slfUGsIN9YfNlhQLUs9MTDiVMp3ty/0=;
+        b=hJYfANTns31DIFtxhIvTHmQKo5RFhYp917N7LNEi5wHbf7su/Pj1XHEixpngf5SJR1
+         M5BPyKSMSs+qO6xdoiy1aWt4+vBH8Iyfkc3rbNLS+wy+v393oM2nIHLUiSw8odqy3r4Z
+         xRFaAYptwx/LQxhx3HE6j+iB5e2N6ygu08TOhGm8mZ/hFaPTuJA4FyCtwpToanEsYOaw
+         55r784rW04v1wrVU4lgOjBeFyPCoU+18Mh49bEv0SOyUOJza02Ho4jnHRmfbIzApIrsk
+         F83Di3dHVD3FgRQx84bIzBy/a8P1x7YrIm4vya3vm3XrlTwGCtktmTuhMuA5MBnP6JKJ
+         JNOA==
+X-Gm-Message-State: ACrzQf3qZtvPuXbg3Xi34ldFb09HAqeXUKSv9dgYeJvP648EetPZCU7b
+        4TcTnXL8ArqyesPlHejJb7Bx13Wsw8rrKzmP9D56yAaDRi6SePToexE4LEbxO2dTj69W7o2liGg
+        Bpdb42x/K9gp/3HPQrEIG8gXb
+X-Received: by 2002:a17:907:9609:b0:7ad:d7de:6090 with SMTP id gb9-20020a170907960900b007add7de6090mr2357875ejc.705.1667205812193;
+        Mon, 31 Oct 2022 01:43:32 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM78kesRA+qFkC4xT0N1dTMkPq+EZe+uIxAjrrmBRYnA8hqY50buMcYsM3zFLwBQ3G0S2t+fkg==
+X-Received: by 2002:a17:907:9609:b0:7ad:d7de:6090 with SMTP id gb9-20020a170907960900b007add7de6090mr2357859ejc.705.1667205811954;
+        Mon, 31 Oct 2022 01:43:31 -0700 (PDT)
+Received: from sgarzare-redhat (host-82-53-134-234.retail.telecomitalia.it. [82.53.134.234])
+        by smtp.gmail.com with ESMTPSA id m24-20020aa7c2d8000000b0044dbecdcd29sm2914807edp.12.2022.10.31.01.43.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 01:43:31 -0700 (PDT)
+Date:   Mon, 31 Oct 2022 09:43:27 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Dexuan Cui <decui@microsoft.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, arseny.krasnov@kaspersky.com,
+        netdev@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, kys@microsoft.com,
+        haiyangz@microsoft.com, stephen@networkplumber.org,
+        wei.liu@kernel.org, linux-hyperv@vger.kernel.org
+Subject: Re: [PATCH 2/2] vsock: fix possible infinite sleep in
+ vsock_connectible_wait_data()
+Message-ID: <20221031084327.63vikvodhs7aowhe@sgarzare-redhat>
+References: <20221028205646.28084-1-decui@microsoft.com>
+ <20221028205646.28084-3-decui@microsoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20221031050006.GA15612@sophie>
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221028205646.28084-3-decui@microsoft.com>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rebecca,
+On Fri, Oct 28, 2022 at 01:56:46PM -0700, Dexuan Cui wrote:
+>Currently vsock_connectible_has_data() may miss a wakeup operation
+>between vsock_connectible_has_data() == 0 and the prepare_to_wait().
+>
+>Fix the race by adding the process to the wait qeuue before checking
 
-On Mon, Oct 31, 2022 at 12:00:06AM -0500, Rebecca Mckeever wrote:
-> Hi Mike,
-> 
-> I noticed that the memblock tree has been updated since I sent this
-> patch set. Do you want me to send an updated patch set applied on top of
-> the current tree?
+s/qeuue/queue
 
-No need, the only actual conflict is in TODO, I'll fix it while applying.
- 
-> On Wed, Oct 19, 2022 at 01:34:07PM -0500, Rebecca Mckeever wrote:
-> > These patches add tests for memblock_alloc_exact_nid_raw(). There are two
-> > sets of tests: range tests and NUMA tests. The range tests use a normal
-> > (i.e., UMA) simulated physical memory and set the nid to NUMA_NO_NODE. The
-> > NUMA tests use a simulated physical memory that is set up with multiple
-> > NUMA nodes. Additionally, most of the NUMA tests set nid != NUMA_NO_NODE.
-> > 
-> > For the range tests, the TEST_F_EXACT flag is used to run the same set of
-> > range tests used for memblock_alloc_try_nid_raw(). The NUMA tests have the
-> > same setup as the corresponding test for memblock_alloc_try_nid_raw(), but
-> > several of the memblock_alloc_exact_nid_raw() tests fail to allocate
-> > memory in setups where the memblock_alloc_try_nid_raw() test would
-> > allocate memory. Also, some memblock_alloc_exact_nid_raw() tests drop the
-> > lower limit of the requested range in order to allocate within the
-> > requested node, but the same setup in a memblock_alloc_try_nid_raw() test
-> > allocates within the requested range.
-> > 
-> > ---
-> > Changelog
-> > 
-> > v1 -> v2
-> > PATCH 0:
-> > - Add missing memblock_alloc_exact_nid_raw to subject line
-> > 
-> > v2 -> v3
-> > Based on feedback from David Hildenbrand:
-> > PATCH 1:
-> > - alloc_nid_api.c, alloc_nid_api.h, common.h:
-> >     + Add TEST_F_EXACT flag so that tests in alloc_nid_api.c can be run
-> >       with that flag to test memblock_alloc_exact_nid_raw()
-> > - alloc_exact_nid_api.c:
-> >     + Update to run range tests in alloc_nid_api.c with TEST_F_EXACT flag
-> >       instead of using a separate set of tests
-> > - alloc_nid_api.c:
-> >     + Rename tests and other functions by removing "_try" so that the
-> >       function names are general enough to refer to any of the
-> >       memblock_alloc_*nid*() functions of the memblock API
-> > ---
-> > 
-> > Rebecca Mckeever (5):
-> >   memblock tests: introduce range tests for memblock_alloc_exact_nid_raw
-> >   memblock tests: add top-down NUMA tests for
-> >     memblock_alloc_exact_nid_raw
-> >   memblock tests: add bottom-up NUMA tests for
-> >     memblock_alloc_exact_nid_raw
-> >   memblock tests: add generic NUMA tests for
-> >     memblock_alloc_exact_nid_raw
-> >   memblock tests: remove completed TODO item
-> > 
-> >  tools/testing/memblock/Makefile               |    2 +-
-> >  tools/testing/memblock/TODO                   |    7 +-
-> >  tools/testing/memblock/main.c                 |    2 +
-> >  .../memblock/tests/alloc_exact_nid_api.c      | 1113 +++++++++++++++++
-> >  .../memblock/tests/alloc_exact_nid_api.h      |   25 +
-> >  tools/testing/memblock/tests/alloc_nid_api.c  |  542 ++++----
-> >  tools/testing/memblock/tests/alloc_nid_api.h  |    1 +
-> >  tools/testing/memblock/tests/common.h         |    2 +
-> >  8 files changed, 1425 insertions(+), 269 deletions(-)
-> >  create mode 100644 tools/testing/memblock/tests/alloc_exact_nid_api.c
-> >  create mode 100644 tools/testing/memblock/tests/alloc_exact_nid_api.h
-> > 
-> > -- 
-> > 2.25.1
-> > 
-> Thanks,
-> Rebecca
+>vsock_connectible_has_data().
+>
+>Fixes: b3f7fd54881b ("af_vsock: separate wait data loop")
+>Signed-off-by: Dexuan Cui <decui@microsoft.com>
+>---
+> net/vmw_vsock/af_vsock.c | 7 ++++++-
+> 1 file changed, 6 insertions(+), 1 deletion(-)
+>
+>diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>index d258fd43092e..03a6b5bc6ba7 100644
+>--- a/net/vmw_vsock/af_vsock.c
+>+++ b/net/vmw_vsock/af_vsock.c
+>@@ -1905,8 +1905,11 @@ static int vsock_connectible_wait_data(struct sock *sk,
+> 	err = 0;
+> 	transport = vsk->transport;
+>
+>-	while ((data = vsock_connectible_has_data(vsk)) == 0) {
+>+	while (1) {
+> 		prepare_to_wait(sk_sleep(sk), wait, TASK_INTERRUPTIBLE);
+>+		data = vsock_connectible_has_data(vsk);
+>+		if (data != 0)
+>+			break;
+>
+> 		if (sk->sk_err != 0 ||
+> 		    (sk->sk_shutdown & RCV_SHUTDOWN) ||
+>@@ -1937,6 +1940,8 @@ static int vsock_connectible_wait_data(struct sock *sk,
+> 			err = -EAGAIN;
+> 			break;
+> 		}
+>+
+>+		finish_wait(sk_sleep(sk), wait);
 
--- 
-Sincerely yours,
-Mike.
+Since we are going to call again prepare_to_wait() on top of the loop, 
+is finish_wait() call here really needed?
+
+What about following what we do in vsock_accept and vsock_connect?
+
+     prepare_to_wait()
+
+     while (condition) {
+         ...
+         prepare_to_wait();
+     }
+
+     finish_wait()
+
+I find it a little more readable, but your solution is fine too.
+
+Thanks,
+Stefano
+
