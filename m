@@ -2,235 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 74991613F22
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 21:42:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 30096613F2A
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 21:43:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230058AbiJaUmn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 16:42:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34250 "EHLO
+        id S230064AbiJaUno (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 16:43:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiJaUmk (ORCPT
+        with ESMTP id S229816AbiJaUnj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 16:42:40 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D8E213E9F;
-        Mon, 31 Oct 2022 13:42:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667248959; x=1698784959;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=7JmZd5Uj5itffLh5NvtGKdgGKInw8OcUyBiIL6nhYXk=;
-  b=fDBKLWPWOyGAFZg74TzFbcqM+6AceKM+bNpLfswE0HpSpKaUCUEypDTI
-   KminA7mSns9z/bph6rb9PRiGp9FMKpABMOphuCPEMqFfwUbr2nkW9hwkp
-   XMRn0cpmejOnrgYfoC6HbDJdT1EwwfCOsPUJrwDbEvEGkvJv+5bL80Hyd
-   VGZXmtEzdOWOwE9uOaTN0wFHSKlWC7vBWN5jTFaYjHtFK/p34LcJ21Qp6
-   gYLxc+AwD/WjYzZD3EcpOBteTgzOKwN875YoxSyO2pglN7k/Z2UQ7/+Z7
-   jv0lqd6S5DK/bL8WiajLN+7S5tRHmCUMFqshTUPl8wnl3D39aB6UXNFex
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="373206020"
-X-IronPort-AV: E=Sophos;i="5.95,228,1661842800"; 
-   d="scan'208";a="373206020"
-Received: from orsmga004.jf.intel.com ([10.7.209.38])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 13:42:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="758963536"
-X-IronPort-AV: E=Sophos;i="5.95,228,1661842800"; 
-   d="scan'208";a="758963536"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga004.jf.intel.com with ESMTP; 31 Oct 2022 13:42:38 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 31 Oct 2022 13:42:38 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Mon, 31 Oct 2022 13:42:38 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.171)
- by edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Mon, 31 Oct 2022 13:42:37 -0700
+        Mon, 31 Oct 2022 16:43:39 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2041.outbound.protection.outlook.com [40.107.236.41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 887BBDF65;
+        Mon, 31 Oct 2022 13:43:37 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=PmBGrhQWfdGjCzfuMCvi9Gc2K/Xwu3szS1cUYjHUtBTMha7zGkq9SpF+CJftKXQk756glfCjfhOX1+GqEOn6WgDvrjs0rLNJOaqqdgPTw9/X69/Rkq1DY+1rP6p6n+fmH2KZhbADznzGi6dV4HnLX6nl7yWDxgipFmZoDpP7ufFoBbp6HvXjg1iIVNrvxMqAiNstVcDs3XiqCN4tqbp902qbHOaQHJ8Fl9WvUIucEd2lrvVLlNF+wQolQWYD1HhaRqBPtqWcauZ59+YsFIkNH6Tq3EbZF5rqE5wQZGcEmdX77JLbJ9nVHPjR/0C82sxDC2IXx59WWMpvmuj/M+JrgA==
+ b=kcC/uNmdw37cq9AWZJisOmerWpM1laPXRFumNEqi1iZwQloBe6Cyp8f27x0GNM1P2l4aiTqh7ffIvKRCwm+3XhaY1KI2ATELekrS6YKW4ULCYn1Dud14Z7Jiw4c6arYeBhJHJAZzKuoEvTBLT44PuRaU3G5IWZM4iLVLP8r0t8QSchkOQHbluuL/0kvygIJh8FFIZkFqQNPH4DtphIUCd3TS9VQjbsqPbPX7oi1e/kIU8gYUs/rNovoRWtR2B4sxI7/mjhrbZiK0RgdDlZod0g3OiETgwEoQknN5KgpqMmeQMzn9SFVgiplAMt1USoGWq/hLDW+jbqPY0MGs9AUDQQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=qsNbgQ2gyvB+TzSr5wDNoprlDgM9rDf01jcJWXsoRpg=;
- b=OiQNktqDV+Kb5IoGMHHlFeMAlWMa4T90P2A7SIpKsVsJt8e/JwUfkKst4sXNF+EUhLw2wvvLpiWVqugVPdwUI7tnS+rnpf2AlNlOukedmLMtcQMqLhLDo6K94ftP8tiGMXbG01P9tKbup3DUkUMgSB71MmCaJ7Su9Q0MvbKNrR1U+KNr9iZZ4Rw2SJLhIMSRptS6J8r6/JGATolbbcma9Z+b+TUAXJbBmnVjU1vK7wsiYPtbckBHTyLBfGC7e6+U4eLwe1uWsev5gIZu/oOSAHbjlnqE0siuJY5Oqy2vIQ7+95fMaUS12JUyI7kIg+yVd5Jp45owR7VdngCiiHW3Ug==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM5PR11MB1324.namprd11.prod.outlook.com (2603:10b6:3:15::14) by
- IA0PR11MB7308.namprd11.prod.outlook.com (2603:10b6:208:436::12) with
+ bh=8Ujsy5ygMsHN93m56ZUiH/2+RClPJaNLGuoyy+LHimY=;
+ b=FaSO7gHZnulMf4YuifgxF34vpVecASDkNJxBgBjoVmN11UKDMdJSKPlPoSD2fXrWjp2Io6xOv1ER9Z9tVCQ7CiGe8lhOPA56lhWajARQ3Gc1SANXmixeiPmK0xSwzTBCo7kzgImWpDvs0xHrDpQbJdwrmVxb44KFXCm/dHIyEAPKTmx/McSt0nRSqCL2BlMnYBeYzria+zCL/DawDbQVfL4MdSwIiUx9j4joa8OClvkNM+bHQ+0/7f59PncqBAi1wS57Y0zXIpIZWZiqf2JSE0z+1ftoeefY6iTBsD5DB4rgvp3K/1HFLzAz8UsDgE2nfZdDbR58SkFBlg+x2F7D4A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=chromium.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8Ujsy5ygMsHN93m56ZUiH/2+RClPJaNLGuoyy+LHimY=;
+ b=Bux0Vn9pzkNtVOsZhOUtGn8zTjxluQWsPxOtKcAGYzQtV7G+mtQouWEYQ9b6hHetGi8yGHije3RPnJHa615Q9MIPJ5xZ7y7CiBdN8xvEaMHVVLrzwdHaxe4j/QwyRM7gU5JhsUUtjZMIUALH8dyAGpDZfaj8SgvXrHNaLOOJDzs=
+Received: from MW2PR2101CA0028.namprd21.prod.outlook.com (2603:10b6:302:1::41)
+ by SA1PR12MB6824.namprd12.prod.outlook.com (2603:10b6:806:25f::12) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5746.28; Mon, 31 Oct
- 2022 20:42:36 +0000
-Received: from DM5PR11MB1324.namprd11.prod.outlook.com
- ([fe80::793f:3870:4550:8aee]) by DM5PR11MB1324.namprd11.prod.outlook.com
- ([fe80::793f:3870:4550:8aee%8]) with mapi id 15.20.5769.019; Mon, 31 Oct 2022
- 20:42:36 +0000
-From:   "Ruhl, Michael J" <michael.j.ruhl@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-CC:     "Brandeburg, Jesse" <jesse.brandeburg@intel.com>,
-        "Nguyen, Anthony L" <anthony.l.nguyen@intel.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Eric Dumazet" <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "intel-wired-lan@lists.osuosl.org" <intel-wired-lan@lists.osuosl.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-hardening@vger.kernel.org" <linux-hardening@vger.kernel.org>
-Subject: RE: [PATCH v3 2/2] igb: Proactively round up to kmalloc bucket size
-Thread-Topic: [PATCH v3 2/2] igb: Proactively round up to kmalloc bucket size
-Thread-Index: AQHY60UEuvCQ5/6nqkOEi2jDwjCFAa4o+uNA
-Date:   Mon, 31 Oct 2022 20:42:36 +0000
-Message-ID: <DM5PR11MB1324802F3F2098CB3239CF36C1379@DM5PR11MB1324.namprd11.prod.outlook.com>
-References: <20221018092340.never.556-kees@kernel.org>
- <20221018092526.4035344-2-keescook@chromium.org>
- <202210282013.82F28AE92@keescook>
-In-Reply-To: <202210282013.82F28AE92@keescook>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-reaction: no-action
-dlp-version: 11.6.500.17
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM5PR11MB1324:EE_|IA0PR11MB7308:EE_
-x-ms-office365-filtering-correlation-id: 22ccda69-7be9-4a51-2fba-08dabb807195
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: in6LOzqzJc8skxjOH6x1MtEY1hn6VJHD7UMwlF1SCslNSL61lIFCPwcbk/Iqa8L9x0XhYw91YqYXenRlQw4EQa5KDIX0vdlGW4L9ZE1k3bqQNICaEja9zbH8nt4lMdIIpLk1Ld1pHmd6/PXptRt5oApcU6et2X9puy+tzqnBxthviH3Q8xPrySvD8/4xP8TwdGnxUDmO+r5gdMjn7TaNoWL+r1SWCIGnhcWBY0r61JeicyQGGOXizr4tl8eb6Add4UwbqFcW4LpFOU4Zripsk3bdWGzAcR/Rrc8g5FMFyqSthWl75VsMIUAoFyGFT6cxibWXLyvrZlUtupvaR+PaZae6prWRS1gFluxCzF0QPAg66xUecvsyDwvUHaecWiK3jjLTyDrrA46FE57Wp/N6nC3jO0oidJrvpZHlo7uz9qpK7bYJdXOi3pcwLEkchPl89/VXSJGkro8lVenaO64MYLW+cAJ9lFn6F7DWLZGsuA3Wa5q8wo/WpD3TUACPzPAL0yW1qSv6E8XsDmWUYaklme09OSVUjGMdC9msZkcCYKrnjARaLywPDWr1sdy60kq12qj9uAl8AwsXE385TPn2ciMR1O0x5liekeaE/u1ZTphcoswnFql/K5drEllXJiG8H4IlLaoVsg4EMr2tUE9NBnJIFdwn2tj3Z27DsdMcKdHeGv983VAaWIwGF+Piqdv9HGK3o+A7DG90ClVnesF4J6vrtwG9eMbWtPXH6aYB6QImZiSZGDVNBGeBoTR1DITcpo6Q+sD99Q/BHDJIDoIWlg==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM5PR11MB1324.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(366004)(376002)(346002)(136003)(39860400002)(451199015)(66446008)(33656002)(86362001)(6506007)(54906003)(38100700002)(64756008)(82960400001)(76116006)(66476007)(66946007)(38070700005)(8676002)(316002)(6916009)(4326008)(2906002)(9686003)(5660300002)(41300700001)(83380400001)(55016003)(66556008)(186003)(8936002)(26005)(71200400001)(7696005)(478600001)(52536014)(122000001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?FKTYgNaaEsiphb5sztbkXowSiWl7kv2Jq7vA7jys1ps9G4BQrez0RLtdaSXe?=
- =?us-ascii?Q?+5Fk+9U0OMIixbueS68Brr/1yxcM6MOkeUlZORPYh0Fe1nbORraPL45pkGZ7?=
- =?us-ascii?Q?3Qo9+E2I3Ck9RrQusy1rBLqDjDmVveG+EneBjTYye8uJRuIyLcV4BR81kOs0?=
- =?us-ascii?Q?58icYiAAXlQxuL92k8/hdHxNy1Nh4Fmvi4dVzIRIU9ZnHgE8ufCJlO4ghB7I?=
- =?us-ascii?Q?5K0Hool1BRbzRJ2YB74lj4ZR5Ihguw5GQOiiSlyPOzDOsx7rjhwltwsizWbn?=
- =?us-ascii?Q?ydoydOsy2NXf6IxE1jmVn+C7G+IahEEVyalqpM9OKPT76sxVKZnhFkAkq3e7?=
- =?us-ascii?Q?26VY6jAMJac/vrzk1CgPUHjb7lioZ+Z/Bk0B7fA4Vh2iqRLBkcb2G+UdfJ6W?=
- =?us-ascii?Q?UmaIihQR3tbfkjIPtUxMcPJLTrC40pljegBznzG0U9lUM2zNmnCw/sVRH0Ak?=
- =?us-ascii?Q?dPqi0Unz6xk7Xjh8W3PTtWV13cIwvHtwSWdyLDf3nK9Pd8fJJCDs6lgV5Xx/?=
- =?us-ascii?Q?8Fj8Z9SwFL0y0Ik8E8e8WjuVGClavjqqZp6U3/5oYZ2JORMdgDqTHl9UV6PN?=
- =?us-ascii?Q?8Pth90BsckzC+cMePu6jsGwO3fQnUMQ2ipCKEnsjbRt7F1ZKO3Cd3+j/jrJh?=
- =?us-ascii?Q?shwarUK7UfVNpOKMkZOCMjlCNxhbeGzLK2GsmP4I1Gq+oY4g9N7A2gErBsll?=
- =?us-ascii?Q?RTZeg8ZsjSp4xLy6SC1xl5UoFzO8an+vohyfrIx3ZhMGNScsKCxRzbunRXBC?=
- =?us-ascii?Q?d2zFbUqP94QHBjarq1c3oac4DKHyI9LEDxbJpUuyo54eRb+p3XXu6aYTufbb?=
- =?us-ascii?Q?tgw1CAKfiqq/7y97+eTNT7wTYazHH85pUEd3+Q/FOtnx5Zwb50g+8/YJoLkA?=
- =?us-ascii?Q?us7Sek/g4M4IIU7Vsy9t9Qp2cGUulFbRpTkeOs1ay9UhXLVaggywNq/f1pOO?=
- =?us-ascii?Q?CKnw0T60i09XSVqAczLY8HYj+VkWpVkDYGmXGck7q2GmLxdsJf+9otXToCjD?=
- =?us-ascii?Q?jZdj2pjnNWfUoFoF9r3iP8mdGh4QN9YsRBvNIcbODlDEtSmu3d9d4meKkq1g?=
- =?us-ascii?Q?0jPN9rF4Ot5FtpAbaeBXZM0iQRojKX2yGeuxEifLo9CemaiZs4l18H68H3t5?=
- =?us-ascii?Q?uxSCKCipor8n8wlPeu9exqI6DUtsDJ10X3Rg2k9PhdSxve0EK5XNuDi7VQq+?=
- =?us-ascii?Q?qu74vNxhlxCxcjJRgB1vtHxJKslTaT156vWRnqJmTZ9KyJK9Rr83tRkX85nO?=
- =?us-ascii?Q?WBlNxEwoF7mF8NqpP/r3BXbfTP0KJg7skoiNopH807oQgujij2CAjQsL2ftQ?=
- =?us-ascii?Q?NlaiIqRnVnj+albZhsDA2nF6yLkURd87HpaUf0SkqU51FCqwTXReoNRUOlOU?=
- =?us-ascii?Q?5dK8vpYLcHoWXvpD0JZikKCnZrmXCqJANllLM8wwn++txEqLqgteB2RKxeRV?=
- =?us-ascii?Q?AUoJs3f2m5A4XW/UnBz4urFszvMR6iece0o0qEV8OtXYSjtdC0vjnbAw/Kik?=
- =?us-ascii?Q?etK1h9ebSbOYloqfSqcLZFH6cjSDz3x1FxbPKKz+QirLWW+wFLV9tl54H237?=
- =?us-ascii?Q?Mzfla7UcNaF4dW3ZyiSCoKWJhklkV7wwP0lIjbH5?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.16; Mon, 31 Oct
+ 2022 20:43:34 +0000
+Received: from CO1NAM11FT093.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:302:1:cafe::8f) by MW2PR2101CA0028.outlook.office365.com
+ (2603:10b6:302:1::41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.1 via Frontend
+ Transport; Mon, 31 Oct 2022 20:43:33 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT093.mail.protection.outlook.com (10.13.175.59) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5769.21 via Frontend Transport; Mon, 31 Oct 2022 20:43:33 +0000
+Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 31 Oct
+ 2022 15:43:32 -0500
+From:   Mario Limonciello <mario.limonciello@amd.com>
+To:     Sven van Ashbrook <svenva@chromium.org>,
+        Rafael J Wysocki <rafael@kernel.org>,
+        <platform-driver-x86@vger.kernel.org>, <linux-pm@vger.kernel.org>
+CC:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        <rrangel@chromium.org>, Rajat Jain <rajatja@google.com>,
+        David E Box <david.e.box@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Mario Limonciello <mario.limonciello@amd.com>,
+        <linux-kernel@vger.kernel.org>
+Subject: [RFC 0/3] Introduce infrastructure to report time in deepest state
+Date:   Mon, 31 Oct 2022 15:43:16 -0500
+Message-ID: <20221031204320.22464-1-mario.limonciello@amd.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM5PR11MB1324.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 22ccda69-7be9-4a51-2fba-08dabb807195
-X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Oct 2022 20:42:36.1532
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT093:EE_|SA1PR12MB6824:EE_
+X-MS-Office365-Filtering-Correlation-Id: dbc44ec7-a780-4ad6-9036-08dabb8093c7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: hnPvM2D+c+A5qJF2pY6Wp0k9l37BTgfmyyYWnmwHKwYLZ2xQK6GlKRnvuyi0mIQpOrJpz2ENTy7F0D1xGt48C42Ohm68gwQEUPTBc9D0F6vA8mzIob2U9l472ZrqO8hsw1riJbsmgD0Sow2O4iAFWk3lvEKDOGAtdpOjD3tHMje7Ps3nVMESxOySiks43SZsZirp2OTB1xkC3Vr2VaI6KrFOhhQ+5deGusYZpF1q3MHIsB2BPYrt346V8mPof09qDdcZo0vna5qNOf9d/0WODGU3hbkGu+urDXE0ZwUx2DsBb2KnpfORsdA050hdXbHK5SfkNZNt7WwJi6/o4D9hsjg/WGDcaTemmUY8UwEHIbgzhzPmr0KbGxozRTY+qyV/5Jed5+z4xcmUL2X4Jb27z7WmRcl0eSmZh111KChanVOk5Bh3mHuamKixD4QmYbvm9jGM+LBoRNXIgWTbyZpLkze2w2zRywgn4UyTxrWcxLN88sB7PwfKvbMlXqLeqDqSmt1eotFaP13VPLcj50JXC6rcyNrG2bkEt+vAoXLkEL6WmuRFq+74x7vHSKLfM87J7gY1Jzhcy88G/+X+T3F2vprZPB5bhjUS1wW32i7z7UnI/mkDHNTuKuMYsxU4vHS9gGafPAyuqkWbr/TJurdSZZ2dQU+gTTmYYnjJwC7/7p7Ilt2vQNZk0skqxNldwDT8C8m4Yt977yDzZnYTT9EqKPV69lvsJrn83nDZ5MXtHVgzOkrNoGuV8GKJ1SiGbnL4q6ShLfUWqH7+lvR1e8JV9dGnDfC3qzlFIhm5PdLRL4NtKkrSh/QIfUM+qWehAUbO
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(136003)(376002)(396003)(451199015)(36840700001)(46966006)(40470700004)(82310400005)(478600001)(82740400003)(110136005)(86362001)(54906003)(44832011)(5660300002)(7416002)(70586007)(4326008)(8676002)(83380400001)(40460700003)(6666004)(36860700001)(70206006)(186003)(426003)(8936002)(1076003)(36756003)(316002)(16526019)(2616005)(47076005)(81166007)(2906002)(40480700001)(356005)(41300700001)(7696005)(26005)(336012)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Oct 2022 20:43:33.4165
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 45vzYJEP+rbvdCZa8CnTnP4y7HqkkXfDZk9jVSB83b0oP+bbO79sxcEpc+WUwmMstkx9oYHcZFIrY8elZJ6uyzWk/gtnGkE91wtbEIdRoEE=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA0PR11MB7308
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-Network-Message-Id: dbc44ec7-a780-4ad6-9036-08dabb8093c7
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT093.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB6824
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
->-----Original Message-----
->From: Kees Cook <keescook@chromium.org>
->Sent: Friday, October 28, 2022 11:18 PM
->To: Ruhl, Michael J <michael.j.ruhl@intel.com>
->Cc: Brandeburg, Jesse <jesse.brandeburg@intel.com>; Nguyen, Anthony L
-><anthony.l.nguyen@intel.com>; David S. Miller <davem@davemloft.net>;
->Eric Dumazet <edumazet@google.com>; Jakub Kicinski <kuba@kernel.org>;
->Paolo Abeni <pabeni@redhat.com>; intel-wired-lan@lists.osuosl.org;
->netdev@vger.kernel.org; linux-kernel@vger.kernel.org; linux-
->hardening@vger.kernel.org
->Subject: Re: [PATCH v3 2/2] igb: Proactively round up to kmalloc bucket si=
-ze
->
->On Tue, Oct 18, 2022 at 02:25:25AM -0700, Kees Cook wrote:
->> In preparation for removing the "silently change allocation size"
->> users of ksize(), explicitly round up all q_vector allocations so that
->> allocations can be correctly compared to ksize().
->>
->> Signed-off-by: Kees Cook <keescook@chromium.org>
->
->Hi! Any feedback on this part of the patch pair?
->
->> ---
->>  drivers/net/ethernet/intel/igb/igb_main.c | 2 +-
->>  1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/net/ethernet/intel/igb/igb_main.c
->b/drivers/net/ethernet/intel/igb/igb_main.c
->> index 6256855d0f62..7a3a41dc0276 100644
->> --- a/drivers/net/ethernet/intel/igb/igb_main.c
->> +++ b/drivers/net/ethernet/intel/igb/igb_main.c
->> @@ -1195,7 +1195,7 @@ static int igb_alloc_q_vector(struct igb_adapter
->*adapter,
->>  		return -ENOMEM;
->>
->>  	ring_count =3D txr_count + rxr_count;
->> -	size =3D struct_size(q_vector, ring, ring_count);
->> +	size =3D kmalloc_size_roundup(struct_size(q_vector, ring, ring_count))=
-;
->>
->>  	/* allocate q_vector and rings */
->>  	q_vector =3D adapter->q_vector[v_idx];
+Sven van Ashbrook brought a patch to the kernel mailing list that
+attempted to change the reporting level of a s0ix entry issue to a
+different debugging level so that infastructure used by Google could
+better scan logs to catch problems.
 
-Hi Kees,
+This approach was rejected, but during the conversation another
+suggestion was made by David E. Box to introduce some infrastructure
+into the kernel to report this information.
 
-Looking at the size usage (from elixir), I see:
+As it's information that is reported by both AMD and Intel platforms
+over s2idle, this seems to make sense.
 
---
-	if (!q_vector) {
-		q_vector =3D kzalloc(size, GFP_KERNEL);
-	} else if (size > ksize(q_vector)) {
-		kfree_rcu(q_vector, rcu);
-		q_vector =3D kzalloc(size, GFP_KERNEL);
-	} else {
-		memset(q_vector, 0, size);
-	}
---
+This series introduces a new sysfs file, a symbol for kernel modules to
+use to populate it and changes to both AMD and Intel drivers to utilize
+it.
 
-If the size is rounded up, will the (size > ksize()) check ever be true?
+The expectation is that userspace could read this file after s2idle
+occurred to infer how much of the s2idle cycle was spent in the deepest
+hardware state.
 
-I.e. have you eliminated this check (and maybe getting rid of the need for =
-first patch?)?
+Mario Limonciello (3):
+  PM: Add a sysfs file to represent whether hardware reached the deepest
+    state
+  platform/x86/amd: pmc: Report duration of time in deepest hw state
+  platform/x86/intel/pmc: core: Report duration of time in deepest HW
+    state
 
-Thanks,
+ Documentation/ABI/testing/sysfs-power |  8 ++++++++
+ drivers/platform/x86/amd/pmc.c        |  4 +---
+ drivers/platform/x86/intel/pmc/core.c |  2 ++
+ include/linux/suspend.h               |  2 ++
+ kernel/power/main.c                   | 14 ++++++++++++++
+ 5 files changed, 27 insertions(+), 3 deletions(-)
 
-Mike
+-- 
+2.34.1
 
-
->
->Thanks! :)
->
->-Kees
->
->--
->Kees Cook
