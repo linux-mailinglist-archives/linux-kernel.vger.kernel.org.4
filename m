@@ -2,173 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 354CF613D46
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:26:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 54E61613D4E
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:27:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229956AbiJaS0A (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 14:26:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57156 "EHLO
+        id S229988AbiJaS13 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 14:27:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiJaSZ6 (ORCPT
+        with ESMTP id S229766AbiJaS10 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 14:25:58 -0400
-Received: from smtpout.efficios.com (smtpout.efficios.com [IPv6:2607:5300:203:5aae::31e5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E3E8D80;
-        Mon, 31 Oct 2022 11:25:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
-        s=smtpout1; t=1667240754;
-        bh=m792KA+Pm5MDPwGhivRQlp6KvZ3pAaFVx83kQl5D0lg=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=Ds06VAy/Vy1ll4dkzG+xu4/gozz1gqvkrto6HPQElkhj6hKjXUrsNRiPwEmh4zjXE
-         Lwofqwo8AVK2pOjCLOPNR8xBNPApQfgPMg2dh/rBZ55tJT65pg7K0nTlw3zivKh+43
-         /MYAQRmDIJr8eAc6BDLEdaBWkhLeklJKMzK81UUq2C0pSWWghLU/WtHr9za22b+ea1
-         Rja39Ue1hB9T0oCSjEw5zmteEU+opPt9PCxpnQ8NMNXrVhSuOZTi53dev08gwauQMP
-         1vopuhHWTgrgOYQrk6e7wRlugcmU+WfegqDSenlzsU+OLuu+EephNH6hE1ySCTjWhF
-         gSVRuEpdVlgQA==
-Received: from [172.16.0.153] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
-        by smtpout.efficios.com (Postfix) with ESMTPSA id 4N1M6B5FVyz1RRJ;
-        Mon, 31 Oct 2022 14:25:54 -0400 (EDT)
-Message-ID: <16944a84-800b-f40a-8b46-23bae5e9b81c@efficios.com>
-Date:   Mon, 31 Oct 2022 14:25:59 -0400
+        Mon, 31 Oct 2022 14:27:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BBC4D80;
+        Mon, 31 Oct 2022 11:27:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E9CDC61277;
+        Mon, 31 Oct 2022 18:27:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AFB67C433C1;
+        Mon, 31 Oct 2022 18:27:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667240844;
+        bh=ysU1aPTGfdEz5odAft8BoDlg3O4d2ECMyJRKU6UM7+0=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=X+4t9iQNAuMOp5R+kn5W0/iDMkNQ7Q5pAytUREOILT9TWByk3Iqsvlm9EApkzvKEF
+         iz+0wfKJxETwZqiD1H9pGsBFaGrhZRl0g0aiL8zNZ5apLzLUexGpj7hjHgOutB1wvk
+         AQc0Q6txql3vRJn7sITC0HeJMWcDV+nCL756jxvi2l0hJ/Tk/MwQe+A/rnShiutJSB
+         CA9sRmRmQF9iAur4Y//KwrooT10Hg5YdVTwA/YlcAVcx+Q2Dfg/1l1O72uVntgxynw
+         KuMlbMNyFHNtxbA8qSKKu7onaNIlLyIyPpTNc8H9Uk75UNO9uHWEZDVoBCGfVJy/NA
+         vy3GckwVtzpjQ==
+Date:   Mon, 31 Oct 2022 11:27:21 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Oleksandr Tymoshenko <ovt@google.com>
+Cc:     gregkh@linuxfoundation.org, christophe.leroy@csgroup.eu,
+        davem@davemloft.net, edumazet@google.com,
+        linux-kernel@vger.kernel.org, sashal@kernel.org,
+        stable@vger.kernel.org, w@1wt.eu, llvm@lists.linux.dev
+Subject: Re: [PATCH 5.4 086/255] once: add DO_ONCE_SLOW() for sleepable
+ contexts
+Message-ID: <Y2ATiXtpwPxfsOUD@dev-arch.thelio-3990X>
+References: <20221024113005.376059449@linuxfoundation.org>
+ <20221029011211.4049810-1-ovt@google.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [RFC PATCH 0/2] tracing/user_events: Remote write ABI
-Content-Language: en-US
-To:     Beau Belgrave <beaub@linux.microsoft.com>,
-        Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     rostedt@goodmis.org, dcook@linux.microsoft.com,
-        alanau@linux.microsoft.com, linux-trace-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221027224011.2075-1-beaub@linux.microsoft.com>
- <20221031231556.a15846fd3513641d48820d5b@kernel.org>
- <20221031172706.GA196@W11-BEAU-MD.localdomain>
-From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-In-Reply-To: <20221031172706.GA196@W11-BEAU-MD.localdomain>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221029011211.4049810-1-ovt@google.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-31 13:27, Beau Belgrave wrote:
-> On Mon, Oct 31, 2022 at 11:15:56PM +0900, Masami Hiramatsu wrote:
-[...]
->> And what is the actual advantage of this change? Are there any issue
->> to use mmaped page? I would like to know more background of this
->> change.
->>
+Hi Oleksandr,
+
+On Sat, Oct 29, 2022 at 01:12:11AM +0000, Oleksandr Tymoshenko wrote:
+> Hello,
 > 
-> Without this change user tracers like LTTng will have to check 2 values
-> instead of 1 to tell if the kernel tracer is enabled or not. Mathieu is
-> working on a user side tracing library in an effort to align writing
-> tracing code in user processes that works well for both kernel and user
-> tracers without much effort.
+> This commit causes the following panic in kernel built with clang
+> (GCC build is not affected): 
 > 
-> See here:
-> https://github.com/compudj/side
+> [    8.320308] BUG: unable to handle page fault for address: ffffffff97216c6a                                        [26/4066]
+> [    8.330029] #PF: supervisor write access in kernel mode                                                                    
+> [    8.337263] #PF: error_code(0x0003) - permissions violation 
+> [    8.344816] PGD 12e816067 P4D 12e816067 PUD 12e817063 PMD 800000012e2001e1                                                 
+> [    8.354337] Oops: 0003 [#1] SMP PTI                
+> [    8.359178] CPU: 2 PID: 437 Comm: curl Not tainted 5.4.220 #15                                                             
+> [    8.367241] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06/2015                                   
+> [    8.378529] RIP: 0010:__do_once_slow_done+0xf/0xa0   
+> [    8.384962] Code: 1b 84 db 74 0c 48 c7 c7 80 ce 8d 97 e8 fa e9 4a 00 84 db 0f 94 c0 5b 5d c3 66 90 55 48 89 e5 41 57 41 56 
+> 53 49 89 d7 49 89 f6 <c6> 07 01 48 c7 c7 80 ce 8d 97 e8 d2 e9 4a 00 48 8b 3d 9b de c9 00                                      
+> [    8.409066] RSP: 0018:ffffb764c02d3c90 EFLAGS: 00010246
+> [    8.415697] RAX: 4f51d3d06bc94000 RBX: d474b86ddf7162eb RCX: 000000007229b1d6                                              
+> [    8.424805] RDX: 0000000000000000 RSI: ffffffff9791b4a0 RDI: ffffffff97216c6a                                              
+> [    8.434108] RBP: ffffb764c02d3ca8 R08: 0e81c130f1159fc1 R09: 1d19d60ce0b52c77                                              
+> [    8.443408] R10: 8ea59218e6892b1f R11: d5260237a3c1e35c R12: ffff9c3dadd42600                                              
+> [    8.452468] R13: ffffffff97910f80 R14: ffffffff9791b4a0 R15: 0000000000000000                                            
+> [    8.461416] FS:  00007eff855b40c0(0000) GS:ffff9c3db7a80000(0000) knlGS:0000000000000000                                   
+> [    8.471632] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033                                                              
+> [    8.478763] CR2: ffffffff97216c6a CR3: 000000022ded0000 CR4: 00000000000006a0                                              
+> [    8.487789] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000                                              
+> [    8.496684] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400                                              
+> [    8.505443] Call Trace:                                                                                                    
+> [    8.508568]  __inet_hash_connect+0x523/0x530                                                                               
+> [    8.513839]  ? inet_hash_connect+0x50/0x50                                                                                 
+> [    8.518818]  ? secure_ipv4_port_ephemeral+0x69/0xe0
+> [    8.525003]  tcp_v4_connect+0x2c5/0x410
+> [    8.529858]  __inet_stream_connect+0xd7/0x360
+> [    8.535329]  ? _raw_spin_unlock+0xe/0x10
+> ... skipped ...
 > 
-> Are you proposing we keep the bitmap approach and have side library just
-> hook another branch? Mathieu had issues with that approach during our
-> talks.
+> 
+> The root cause is the difference in __section macro semantics between 5.4 and
+> later LTS releases. On 5.4 it stringifies the argument so the ___done
+> symbol is created in a bogus section ".data.once", with double quotes:
+> 
+> % readelf -S vmlinux | grep data.once
+>   [ 5] ".data.once"      PROGBITS         ffffffff82216c6a  01416c6a
 
-As overhead of the disabled tracepoints was a key factor in having the Linux
-kernel adopt tracepoints when I created those back in 2008, I expect that having
-minimal overhead in the disabled case will also prove to be a key factor for
-adoption by user-space applications.
+Thanks for the report! The reason this does not happen in mainline is
+due to commit 33def8498fdd ("treewide: Convert macro and uses of
+__section(foo) to __section("foo")"), which came as a result of these
+issues:
 
-Another aspect that seems to be very important for wide adoption by user-space
-is that the instrumentation library needs to have a license that is very
-convenient for inclusion into statically linked software without additional
-license requirements. This therefore excludes GPL and LGPL. I've used the MIT
-license for the "side" project for that purpose.
+https://github.com/ClangBuiltLinux/linux/issues/619
+https://llvm.org/pr42950
 
-Indeed, my ideal scenario is to use asm goto and implement something similar
-to jump labels in user-space so the instrumentation only costs a no-op or a
-jump when instrumentation is disabled. That can only be used in contexts where
-code patching is allowed though (not for Runtime Integrity Checked (RIC) processes).
+To keep stable from diverging, it would probably be best to pick
+33def8498fdd and fight through whatever conflicts there are. If that is
+not a suitable solution, the next best thing would be to remove the
+quotes like was done in commit bfafddd8de42 ("include/linux/compiler.h:
+fix Oops for Clang-compiled kernels") for all instances of
+__section(...) or __attribute__((__section__(...))), which should
+resolve the specific problem you are seeing.
 
-My next-to-best scenario is to have a single load (from fixed offset), test and
-conditional branch in the userspace fast-path instead. This approach will need
-to be made available as a fall-back for processes which are flagged as RIC-protected.
+In the future, please feel free to cc issues that you see with clang to
+llvm@lists.linux.dev so that we can chime in sooner :)
 
-I currently focus my efforts on the load+test+conditional branch scheme, which is
-somewhat simpler than the code patching approach in terms of needed infrastructure.
-
-If we go for the current user events bitmap approach, then anything we do from
-userspace will have more overhead (additional pointer chasing, loads, and masks
-to apply). And it pretty much rules out code patching.
-
-In terms of missing pieces to allow code patching to be done in userspace, here
-is what I think we'd need:
-
-- Extend the "side" (MIT-licensed) library to implement gadgets which support
-code patching, but fall-back to load+test+conditional branch if code patching
-is not available. Roughly, those would look like (this is really just pseudo-code):
-
-.pushsection side_jmp
-/*
-  * &side_enabled_value is the key used to change the enabled/disabled state.
-  * 1f is the address of the code to patch.
-  * 3f is the address of branch target when disabled.
-  * 4f is the address of branch target when enabled.
-  */
-.quad &side_enabled_value, 1f, 3f, 4f
-.popsection
-
-/*
-  * Place all jump instructions that will be modified by code patching into a
-  * single section. Therefore, this will minimize the amount of COW required when
-  * patching code from executables and shared libraries that have instances in
-  * many processes.
-  */
-.pushsection side_jmp_modify_code (executable section)
-1:
-jump to 2f
-.popsection
-
-jump to 1b
-2:
-load side_enabled_value
-test
-cond. branch to 4
-3:
--> disabled
-4:
--> enabled
-
-When loading the .so or the executable, the initial states uses the load,
-test, conditional branch. Then in a constructor, if code patching is available,
-the jump at label (1) can be updated to target (3) instead. Then when enabled,
-it can be updated to target (4) instead.
-
-- Implement a code patching system call in the kernel which takes care of all the
-details associated with code patching that supports concurrent execution (breakpoint
-bypass, or stopping target processes if required by the architecture). This system
-call could check whether the target process has Runtime Integrity Check enforced,
-and refuse code patching as needed.
-
-As a nice side-effect, this could allow us to implement things like "alternative"
-assembler instruction selection in user-space.
-
-- Figure out a way to let a user-space process let the kernel know that it needs
-to enforce Runtime Integrity Check. It could be either a prctl(), or perhaps a
-clone flag if this needs to be known very early in the process lifetime.
-
-Thanks,
-
-Mathieu
-
-
-
-
--- 
-Mathieu Desnoyers
-EfficiOS Inc.
-https://www.efficios.com
-
+Cheers,
+Nathan
