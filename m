@@ -2,136 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1F71613F2C
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 21:43:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9749B613F2F
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 21:45:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230126AbiJaUnr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 16:43:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35340 "EHLO
+        id S230133AbiJaUpH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 16:45:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbiJaUnj (ORCPT
+        with ESMTP id S229629AbiJaUpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 16:43:39 -0400
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2073.outbound.protection.outlook.com [40.107.94.73])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B272213CFA;
-        Mon, 31 Oct 2022 13:43:38 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=TIvat2APr8i17l5KMr/KsLwZqbWoteXztSa19pLkAmqE6g50+1Lf/Hqd47iw1mv13Ig4JTqbSZBBvEmge/mBbpm5eCB8QS3lzWVPxxjtWijcrs5aTBHOEX3N+WMMxm+hd1/tPUV+TdJkRgQkgv1mJOgfpRfhavFWJq8NgyYhnxhbX+NgRXffluLJfTJDvhCh+x/SekDcKixcYI3hQvnXCP9l1nho86SwALYcHB2O9NUsZ/LLsTkookdvEU7+kjnA2AaPBbb9ke1cVW6yAoVBV02nAhvrTw944fDJeSYWGr8u4qW+ufApYCUUU5SKU4zWQh09Mo1tZJciJ9ptpkA0TQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=R8/CVtqFX12Xvux/sBSLE+MDq3anM+uG3XD6fHopQIg=;
- b=Z/M5c5x4Jn9++hJraL/wxrKFiJvGE1+1+EFUYmu4KHKs+Yd5agFhYtdlHaX7Ix0Ieg0/LQjHyHiqEf6IER+SvdLoFy4XcgQ7e1AhnErHmZmvFVmjc/TFAK6wY+ZMi9Cw9TMFdjAsf8tAAKszFS5inLbfZss/jOCXe77p61AQwYF/4vz4hk6E0mTufLeXsKnPgRyTzms8SqW6NB/qEJe+7PeS49eju+s+SbtCoJn7dSoyWo9XsHW3vTU0dFiwWTW7N2FGXqy0edjV4srvmfYowujMuME94MIvukJR0F9LmNHOxd5ckMXVs1s1rb65jmonH+t7xUbxixhPh6ZoaaXUSg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=chromium.org smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=R8/CVtqFX12Xvux/sBSLE+MDq3anM+uG3XD6fHopQIg=;
- b=IKfUasDHHQaj3SjPgn0TEtRq7uO0PaUkcxv8Y4uDronrOoSlu2ZqcGtEMkQwxHgmnjuQDN+ivDKLpXm2TBvWlEd4pTsTE9Z2xwK8/fonn9l2puaYlmfLqaVXxmk5LkeqFDyBUp83tzKZYCGvVKiyS03VaMHizLry2bPmXttT4rY=
-Received: from MW4PR04CA0188.namprd04.prod.outlook.com (2603:10b6:303:86::13)
- by PH8PR12MB7350.namprd12.prod.outlook.com (2603:10b6:510:216::12) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.16; Mon, 31 Oct
- 2022 20:43:36 +0000
-Received: from CO1NAM11FT097.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:86:cafe::c7) by MW4PR04CA0188.outlook.office365.com
- (2603:10b6:303:86::13) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.19 via Frontend
- Transport; Mon, 31 Oct 2022 20:43:36 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CO1NAM11FT097.mail.protection.outlook.com (10.13.175.185) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5769.14 via Frontend Transport; Mon, 31 Oct 2022 20:43:36 +0000
-Received: from AUS-LX-MLIMONCI.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 31 Oct
- 2022 15:43:35 -0500
-From:   Mario Limonciello <mario.limonciello@amd.com>
-To:     Sven van Ashbrook <svenva@chromium.org>,
-        Rafael J Wysocki <rafael@kernel.org>,
-        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-        "David E Box" <david.e.box@intel.com>
-CC:     S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
-        <rrangel@chromium.org>, <platform-driver-x86@vger.kernel.org>,
-        Rajat Jain <rajatja@google.com>,
-        "Hans de Goede" <hdegoede@redhat.com>,
-        Mario Limonciello <mario.limonciello@amd.com>,
-        Mark Gross <markgross@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [RFC 3/3] platform/x86/intel/pmc: core: Report duration of time in deepest HW state
-Date:   Mon, 31 Oct 2022 15:43:19 -0500
-Message-ID: <20221031204320.22464-4-mario.limonciello@amd.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221031204320.22464-1-mario.limonciello@amd.com>
-References: <20221031204320.22464-1-mario.limonciello@amd.com>
+        Mon, 31 Oct 2022 16:45:04 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C49F1DF65;
+        Mon, 31 Oct 2022 13:45:02 -0700 (PDT)
+Date:   Mon, 31 Oct 2022 20:44:59 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1667249100;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=XkDdGu72/P40astMLGgkv09ig0AakkD+rRXnY9q8B1M=;
+        b=E5uS4jAOQJx1nnAbdA1bYBIDsIbhVVtVH4SGAqZ10yeAk6kov5r4MMsKEBN9hBcl+S6Yux
+        0jOj1PdavRh4Tv95Li16e2RQurEextr3bD9V8lYWeqCxZ4PzioaGH141PrDyN7rSYEPD+i
+        uJBVzME0LGXdohA0N96hKvHkzC6FFDlyPxbW2ujqaFprCbIaPvbXrFQ/i+IGm7W7RUajVM
+        ydCFSQW5b7AeyYq4GNQDIcPCgVynmr8CX4UtjlsL1gM2/iYEbA9ACNOoeI7V2sURasSH2V
+        6KJu/LMMc7/iPzGG/ExRWn7Tl4aSjPtWLqlHGKADKw7g6d2Em4MqQH8X+ysM/A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1667249100;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
+        bh=XkDdGu72/P40astMLGgkv09ig0AakkD+rRXnY9q8B1M=;
+        b=oI96AXTdJQxnYfCj3hfVbTTVvEk+3NOXBGp6BH5kT7HSbeS6BXeY/38zg9Y4w6FI9TGMQc
+        OX3dmSwFfiDnqpAQ==
+From:   "tip-bot2 for Reinette Chatre" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/sgx] x86/sgx: Reduce delay and interference of enclave release
+Cc:     Md Iqbal Hossain <md.iqbal.hossain@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT097:EE_|PH8PR12MB7350:EE_
-X-MS-Office365-Filtering-Correlation-Id: 73edcbcd-38a3-4a0c-61a1-08dabb809588
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 58D0co4Mua9/Nh5rhr6k/gYz5FFDGRrHi7mkwsBHbpZCRO7dwbtUJZ+ZF4fZseARM7NOnFIAaaervW2NFiAkFBALND16r+jWKz5qhoF50Yczryb7Pm7Mr+XXaJB8ODpXBB2u0Ss8n8YJ+cRlZAlANu8UNIUfdRgl7rLe/1khz/0yk00M2xlJoiIvwwQ/hMCyju15J6Lud8ZC7AyMHagExFk7oZR8/ojrCwMCPosbApzPoDqnZEhHt4oBYO0bda94cqQsH56x599GN19gSgQ4T1Fz2xaLSuoltHMLQGKcqvQbBGpTCWAeR7mEUS3ri7Ru4ILirq18ExgiaKOesycOxBKgUjB5fOc7fFQ1CrwYo6MLquRHlOJ59ErAVcmH8/mGFJNyGteAw/DBjr6eRsdEcmRiqtpBVp32N/oYta3CS/Afnyc13kGoLNkA8wlfZIHZ+H+FuUPX4yPdtW7ByBY2fl5222tmtgymMepD8Cw+Jq9LyVsrzjTvH1msW2mQrEsiZq/RbrYP8NfJ/urIBkY7cVob/qU/YRG0B4cBqvUBCQiq8tZy45Dgcs/NokJAdVRlglc1aIt6e6VluTQ6Ok9GTryAZvwGg3sof1c9Osiz2y/OpVjrTdb8KwQKObiTJMWW7Uax7hNvtSnktKqhnwD3Q1lVuRjG1itvRSdCE9uyi8sVsLN41fnTloYw0+NVNUHPhDtrsvQoMv+sYslBvajE6eQglKA5lcc74jL31nP7aL+hcKOZ67RbpaJY9+XZ8MGB+DTNDgNS2wVWOop9CXAiqtfikp+tsqcNdvO5m2NN+m9649sm52nrh0e5S6obTx3x
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(346002)(39860400002)(136003)(376002)(396003)(451199015)(36840700001)(46966006)(40470700004)(82310400005)(478600001)(82740400003)(110136005)(86362001)(54906003)(44832011)(5660300002)(7416002)(70586007)(4326008)(8676002)(83380400001)(40460700003)(6666004)(36860700001)(70206006)(186003)(426003)(8936002)(4744005)(1076003)(36756003)(316002)(16526019)(2616005)(47076005)(81166007)(2906002)(40480700001)(356005)(41300700001)(7696005)(26005)(336012)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Oct 2022 20:43:36.3891
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 73edcbcd-38a3-4a0c-61a1-08dabb809588
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT097.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH8PR12MB7350
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <166724909921.7716.18230627806708514201.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-intel_pmc_core displays a warning when a suspend didn't get to the deepest
-state.
+The following commit has been merged into the x86/sgx branch of tip:
 
-This information is generally useful to userspace as well which may use
-it to collect further debugging data. Report this to the standard kernel
-reporting infrastructure that can be accessed from sysfs.
+Commit-ID:     7b72c823ddf8aaaec4e9fb28e6fbe4d511e7dad1
+Gitweb:        https://git.kernel.org/tip/7b72c823ddf8aaaec4e9fb28e6fbe4d511e7dad1
+Author:        Reinette Chatre <reinette.chatre@intel.com>
+AuthorDate:    Mon, 31 Oct 2022 10:29:58 -07:00
+Committer:     Dave Hansen <dave.hansen@linux.intel.com>
+CommitterDate: Mon, 31 Oct 2022 13:40:35 -07:00
 
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+x86/sgx: Reduce delay and interference of enclave release
+
+commit 8795359e35bc ("x86/sgx: Silence softlockup detection when
+releasing large enclaves") introduced a cond_resched() during enclave
+release where the EREMOVE instruction is applied to every 4k enclave
+page. Giving other tasks an opportunity to run while tearing down a
+large enclave placates the soft lockup detector but Iqbal found
+that the fix causes a 25% performance degradation of a workload
+run using Gramine.
+
+Gramine maintains a 1:1 mapping between processes and SGX enclaves.
+That means if a workload in an enclave creates a subprocess then
+Gramine creates a duplicate enclave for that subprocess to run in.
+The consequence is that the release of the enclave used to run
+the subprocess can impact the performance of the workload that is
+run in the original enclave, especially in large enclaves when
+SGX2 is not in use.
+
+The workload run by Iqbal behaves as follows:
+Create enclave (enclave "A")
+/* Initialize workload in enclave "A" */
+Create enclave (enclave "B")
+/* Run subprocess in enclave "B" and send result to enclave "A" */
+Release enclave (enclave "B")
+/* Run workload in enclave "A" */
+Release enclave (enclave "A")
+
+The performance impact of releasing enclave "B" in the above scenario
+is amplified when there is a lot of SGX memory and the enclave size
+matches the SGX memory. When there is 128GB SGX memory and an enclave
+size of 128GB, from the time enclave "B" starts the 128GB SGX memory
+is oversubscribed with a combined demand for 256GB from the two
+enclaves.
+
+Before commit 8795359e35bc ("x86/sgx: Silence softlockup detection when
+releasing large enclaves") enclave release was done in a tight loop
+without giving other tasks a chance to run. Even though the system
+experienced soft lockups the workload (run in enclave "A") obtained
+good performance numbers because when the workload started running
+there was no interference.
+
+Commit 8795359e35bc ("x86/sgx: Silence softlockup detection when
+releasing large enclaves") gave other tasks opportunity to run while an
+enclave is released. The impact of this in this scenario is that while
+enclave "B" is released and needing to access each page that belongs
+to it in order to run the SGX EREMOVE instruction on it, enclave "A"
+is attempting to run the workload needing to access the enclave
+pages that belong to it. This causes a lot of swapping due to the
+demand for the oversubscribed SGX memory. Longer latencies are
+experienced by the workload in enclave "A" while enclave "B" is
+released.
+
+Improve the performance of enclave release while still avoiding the
+soft lockup detector with two enhancements:
+- Only call cond_resched() after XA_CHECK_SCHED iterations.
+- Use the xarray advanced API to keep the xarray locked for
+  XA_CHECK_SCHED iterations instead of locking and unlocking
+  at every iteration.
+
+This batching solution is copied from sgx_encl_may_map() that
+also iterates through all enclave pages using this technique.
+
+With this enhancement the workload experiences a 5%
+performance degradation when compared to a kernel without
+commit 8795359e35bc ("x86/sgx: Silence softlockup detection when
+releasing large enclaves"), an improvement to the reported 25%
+degradation, while still placating the soft lockup detector.
+
+Scenarios with poor performance are still possible even with these
+enhancements. For example, short workloads creating sub processes
+while running in large enclaves. Further performance improvements
+are pursued in user space through avoiding to create duplicate enclaves
+for certain sub processes, and using SGX2 that will do lazy allocation
+of pages as needed so enclaves created for sub processes start quickly
+and release quickly.
+
+Fixes: 8795359e35bc ("x86/sgx: Silence softlockup detection when releasing large enclaves")
+Reported-by: Md Iqbal Hossain <md.iqbal.hossain@intel.com>
+Signed-off-by: Reinette Chatre <reinette.chatre@intel.com>
+Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
+Tested-by: Md Iqbal Hossain <md.iqbal.hossain@intel.com>
+Link: https://lore.kernel.org/all/00efa80dd9e35dc85753e1c5edb0344ac07bb1f0.1667236485.git.reinette.chatre%40intel.com
 ---
- drivers/platform/x86/intel/pmc/core.c | 2 ++
- 1 file changed, 2 insertions(+)
+ arch/x86/kernel/cpu/sgx/encl.c | 23 +++++++++++++++++++----
+ 1 file changed, 19 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
-index 17ec5825d13d7..9e58228b01f91 100644
---- a/drivers/platform/x86/intel/pmc/core.c
-+++ b/drivers/platform/x86/intel/pmc/core.c
-@@ -2116,6 +2116,8 @@ static __maybe_unused int pmc_core_resume(struct device *dev)
- 	if (!pmcdev->check_counters)
- 		return 0;
- 
-+	pm_set_hw_deepest_state(pmcdev->s0ix_counter);
+diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
+index 1ec2080..2c25825 100644
+--- a/arch/x86/kernel/cpu/sgx/encl.c
++++ b/arch/x86/kernel/cpu/sgx/encl.c
+@@ -680,11 +680,15 @@ const struct vm_operations_struct sgx_vm_ops = {
+ void sgx_encl_release(struct kref *ref)
+ {
+ 	struct sgx_encl *encl = container_of(ref, struct sgx_encl, refcount);
++	unsigned long max_page_index = PFN_DOWN(encl->base + encl->size - 1);
+ 	struct sgx_va_page *va_page;
+ 	struct sgx_encl_page *entry;
+-	unsigned long index;
++	unsigned long count = 0;
 +
- 	if (!pmc_core_is_s0ix_failed(pmcdev))
- 		return 0;
++	XA_STATE(xas, &encl->page_array, PFN_DOWN(encl->base));
  
--- 
-2.34.1
-
+-	xa_for_each(&encl->page_array, index, entry) {
++	xas_lock(&xas);
++	xas_for_each(&xas, entry, max_page_index) {
+ 		if (entry->epc_page) {
+ 			/*
+ 			 * The page and its radix tree entry cannot be freed
+@@ -699,9 +703,20 @@ void sgx_encl_release(struct kref *ref)
+ 		}
+ 
+ 		kfree(entry);
+-		/* Invoke scheduler to prevent soft lockups. */
+-		cond_resched();
++		/*
++		 * Invoke scheduler on every XA_CHECK_SCHED iteration
++		 * to prevent soft lockups.
++		 */
++		if (!(++count % XA_CHECK_SCHED)) {
++			xas_pause(&xas);
++			xas_unlock(&xas);
++
++			cond_resched();
++
++			xas_lock(&xas);
++		}
+ 	}
++	xas_unlock(&xas);
+ 
+ 	xa_destroy(&encl->page_array);
+ 
