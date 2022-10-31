@@ -2,103 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59BE161333B
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 11:07:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B2A361333D
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 11:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230181AbiJaKHE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 06:07:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33148 "EHLO
+        id S230203AbiJaKHa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 06:07:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230158AbiJaKHB (ORCPT
+        with ESMTP id S230158AbiJaKH1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 06:07:01 -0400
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0FAF9DF76;
-        Mon, 31 Oct 2022 03:06:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1667210786; bh=HVFcKalrqVMRbmdZAkMzLwZC0a2WrrG0XS7qk33EsGE=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=QCIc4XbmZ8KV7vNQ87djZ7QmPWllpqkFXsk8YI+xrr/sfBTIrJ202ch51OMWvTBxL
-         hI37h1K+9uJ7nLPz1whq4WgZksQzyLCv5amOiiOMp1IeSYMPDZZJnN5Qa1QuQ4XSbm
-         Tfqa9fzci/AcUmU55Vetwjp1SCjXdQB4+Cc68RFA=
-Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
-        via [213.182.55.206]
-        Mon, 31 Oct 2022 11:06:26 +0100 (CET)
-X-EA-Auth: 1a5viqWGMQ4L4O2TH9RfFTgPhO6OEceNDEDbuwFwr9bd6cvaPQrORviVhAVhWL9/eY4g/AIWOHuGtdXjKlYl6p/gFcutTA1d
-Date:   Mon, 31 Oct 2022 15:36:21 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     outreachy@lists.linux.dev, Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>, linux-iio@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: iio: ad5933: Use div64_ul instead of do_div
-Message-ID: <Y1+eHU9gcKcW2Zsf@ubunlion>
-References: <Y1r4EaDvEipzhaaf@ubunlion>
- <Y1zbyJPF+YUY6xIh@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1zbyJPF+YUY6xIh@kroah.com>
+        Mon, 31 Oct 2022 06:07:27 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.50])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4D27DF1E;
+        Mon, 31 Oct 2022 03:07:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1667210834;
+    s=strato-dkim-0002; d=goldelico.com;
+    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
+    From:Subject:Sender;
+    bh=BWR4o5dpQKvBN+fm6DmhC8rAzcoU8MEhcqlwh67HIAc=;
+    b=Kbj82e32WAQzh1fgTBwGex3R1D8Ce49LoBDtY4yF76VLRkghEw755Yg9oQrSntceGt
+    VhfNXXxORGkB9PbJlpjC+XyOE/oHvq49CwCJD8nhncwHe7jey22xPOFt63sbseQACS1W
+    qaXqL4NTyWymM/2GfOBUogCqmf0YJCMDwOa7ycnPxzHZY4YaTYXsoCL8V41yqCxjkavQ
+    NZqllXRIBkS/xlw8Nazd6ErDjiKAC6BKYUeJVud/7xNiNhldYG+TyYr4OHbx1j1ON6Xj
+    Ag7xv+bbtS4P8yOJIp4cCfMTRskUxxGTKap4vBS7L3eWTmT0NF8oO03khSLQInCvy0g2
+    p+jA==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMgPgp8VKxflSZ1P34KBj5Apz9PSN6LgsXcGerXQ="
+X-RZG-CLASS-ID: mo00
+Received: from imac.fritz.box
+    by smtp.strato.de (RZmta 48.2.1 DYNA|AUTH)
+    with ESMTPSA id v55d69y9VA7DNJI
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
+        (Client did not present a certificate);
+    Mon, 31 Oct 2022 11:07:13 +0100 (CET)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 12.4 \(3445.104.21\))
+Subject: Re: [PATCH 3/3] drm: omapdrm: Do no allocate non-scanout GEMs through
+ DMM/TILER
+From:   "H. Nikolaus Schaller" <hns@goldelico.com>
+In-Reply-To: <d4a5afcc-9ee0-208c-82ad-11ccd0e316b5@gmail.com>
+Date:   Mon, 31 Oct 2022 11:07:13 +0100
+Cc:     Tony Lindgren <tony@atomide.com>, tomba@kernel.org,
+        airlied@linux.ie, daniel@ffwll.ch, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-omap@vger.kernel.org,
+        merlijn@wizzup.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <A329FEC2-D7D1-42E4-B7A6-B0DC569D91C9@goldelico.com>
+References: <1642587791-13222-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
+ <1642587791-13222-4-git-send-email-ivo.g.dimitrov.75@gmail.com>
+ <4B3F8E50-3472-4AED-9A77-3E265DF8C928@goldelico.com>
+ <0000784a-ae89-1081-0ec7-fc77d3381545@gmail.com>
+ <F3F3E8E1-7907-46A4-A670-CAEF6C3DB083@goldelico.com>
+ <A2089A8A-69D3-4825-B400-8EB382DC9955@goldelico.com>
+ <d4a5afcc-9ee0-208c-82ad-11ccd0e316b5@gmail.com>
+To:     Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
+X-Mailer: Apple Mail (2.3445.104.21)
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_PASS,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 29, 2022 at 09:52:40AM +0200, Greg Kroah-Hartman wrote:
-> On Fri, Oct 28, 2022 at 02:58:49AM +0530, Deepak R Varma wrote:
-> > do_div() does a 64-by-32 division. Here the divisor is an unsigned long
-> > which on some platforms is 64 bit wide. So use div64_ul instead of do_div
-> > to avoid a possible truncation. Issue was identified using the
-> > coccicheck tool.
-> >
-> > Signed-off-by: Deepak R Varma <drv@mailo.com>
-> > ---
-> >  drivers/staging/iio/impedance-analyzer/ad5933.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/staging/iio/impedance-analyzer/ad5933.c b/drivers/staging/iio/impedance-analyzer/ad5933.c
-> > index f177b20f0f2d..730bb31a20d8 100644
-> > --- a/drivers/staging/iio/impedance-analyzer/ad5933.c
-> > +++ b/drivers/staging/iio/impedance-analyzer/ad5933.c
-> > @@ -196,7 +196,7 @@ static int ad5933_set_freq(struct ad5933_state *st,
-> >  	} dat;
-> >
-> >  	freqreg = (u64)freq * (u64)(1 << 27);
-> > -	do_div(freqreg, st->mclk_hz / 4);
-> > +	freqreg = div64_ul(freqreg, st->mclk_hz / 4);
-> >
-> >  	switch (reg) {
-> >  	case AD5933_REG_FREQ_START:
-> > --
-> > 2.34.1
->
-> No, this isn't ok, please read the mailing list archives for why these
-> changes are not going to be accepted:
-> 	https://lore.kernel.org/r/e2ec77060cc84a33b49d5fd11d7867f6@AcuMS.aculab.com
->
-> Please always at least look at the archives of the past few weeks as to
-> if changes like this are able to be accepted or not.
+Hi Ivaylo,
 
-Hello Greg,
-My apologies for not looking at the lore mailing archive. I only looked at the
-past git commits and found a few similar changes accepted in the past. My bad. I
-will always look at the mailing archive as well going forward.
+> Am 31.10.2022 um 10:58 schrieb Ivaylo Dimitrov =
+<ivo.g.dimitrov.75@gmail.com>:
+>=20
+>=20
+>=20
+> On 31.10.22 =D0=B3. 9:57 =D1=87., H. Nikolaus Schaller wrote:
+>>> Am 31.10.2022 um 08:44 schrieb H. Nikolaus Schaller =
+<hns@goldelico.com>:
+>>>=20
+>>> Hi Ivaylo,
+>>>=20
+>>>> Am 31.10.2022 um 08:05 schrieb Ivaylo Dimitrov =
+<ivo.g.dimitrov.75@gmail.com>:
+>>>>=20
+>>>> HI Nikolaus,
+>>>>=20
+>>>> On 31.10.22 =D0=B3. 0:08 =D1=87., H. Nikolaus Schaller wrote:
+>>>>> Hi Ivaylo,
+>>>>> it took a while until I found time to test newer kernels (mainline =
++ Letux additions)
+>>>>> on the OMAP5 Pyra but unfortunately I did not get screen display =
+for v6.1. Even worse,
+>>>>> the console was flooded by
+>>>>=20
+>>>> Could you elaborate on that - do you have anything on the display =
+(during boot or dunno). Do you have simplefb enabled, so boot log to be =
+visible on the display?
+>>>=20
+>>> No bootlog enabled but I have some printk in the panel driver. It is =
+initially enabled, then disabled and enabled again. Then the issues =
+start...
+>>>=20
+>>>> Is that wayland you are trying to run? Do you have PVR driver =
+enabled? Did you try to boot vanilla kernel?
+>>>=20
+>>> I have tested with Debian Stretch with standard Xorg with "omap" =
+driver. PVR is not enabled.
+>> Have cross-checked: my setup uses the fbdev driver.
+>=20
+> omapfb and not omapdrm? or I am missing something.
 
-There are other review comments from the experts on similar patches. I
-appreciate everyone's time and comment. I will look at those and revert
-accordingly.
+I just have "fbdev" in the xorg.conf. Certainly not the best choice but =
+it seems to be the most generic setup without having to tweak every =
+combination of user-space release and kernel version and hardware =
+variant.
 
-Thank you,
-./drv
->
-> thanks,
->
-> greg k-h
+Section "Monitor"
+                Identifier              "lcd"
+                VendorName              "BOE"
+                ModelName               "W677L"
+                Option                  "Rotate" "right"        # use =
+TILER rotation
+                DisplaySize             111 62          # LCD size in =
+millimeters
+EndSection
 
+Section "Device"
+                Identifier              "display0"
+                Driver                  "fbdev"
+                Option                  "Monitor-DSI-1" "lcd"
+                Option                  "HWcursor" "False"
+EndSection
+
+Of course the kernel config uses DRM_OMAP:
+
+root@letux:~# uname -a
+Linux letux 6.1.0-rc2-letux-lpae+ #11029 SMP PREEMPT Sun Oct 30 22:41:25 =
+CET 2022 armv7l GNU/Linux
+root@letux:~#=20
+root@letux:~# ls -l =
+/sys/devices/platform/omapdrm.0/drm/card1/card1-DSI-1
+total 0
+lrwxrwxrwx 1 root root    0 Oct 31 10:03 device -> ../../card1
+-r--r--r-- 1 root root 4096 Oct 31 10:03 dpms
+-r--r--r-- 1 root root    0 Oct 31 10:03 edid
+-r--r--r-- 1 root root 4096 Oct 31 10:03 enabled
+-r--r--r-- 1 root root 4096 Oct 31 10:03 modes
+drwxr-xr-x 2 root root    0 Oct 31 10:03 power
+-rw-r--r-- 1 root root 4096 Oct 31 10:03 status
+lrwxrwxrwx 1 root root    0 Oct 31 10:00 subsystem -> =
+../../../../../../class/drm
+-rw-r--r-- 1 root root 4096 Oct 31 10:00 uevent
+root@letux:~#=20
+root@letux:~# gunzip </proc/config.gz | fgrep DRM | fgrep =3D
+CONFIG_DRM=3Dm
+CONFIG_DRM_MIPI_DSI=3Dy
+CONFIG_DRM_KMS_HELPER=3Dm
+CONFIG_DRM_FBDEV_EMULATION=3Dy
+CONFIG_DRM_FBDEV_OVERALLOC=3D100
+CONFIG_DRM_LOAD_EDID_FIRMWARE=3Dy
+CONFIG_DRM_DISPLAY_HELPER=3Dm
+CONFIG_DRM_DISPLAY_HDMI_HELPER=3Dy
+CONFIG_DRM_GEM_DMA_HELPER=3Dm
+CONFIG_DRM_SCHED=3Dm
+CONFIG_DRM_I2C_NXP_TDA998X=3Dm
+CONFIG_DRM_ATMEL_HLCDC=3Dm
+CONFIG_DRM_OMAP=3Dm
+CONFIG_DRM_TILCDC=3Dm
+CONFIG_DRM_STM=3Dm
+CONFIG_DRM_PANEL=3Dy
+CONFIG_DRM_PANEL_DSI_CM=3Dm
+CONFIG_DRM_PANEL_SIMPLE=3Dm
+CONFIG_DRM_PANEL_BOE_BTL507212_W677L=3Dm
+CONFIG_DRM_PANEL_SONY_ACX565AKM=3Dm
+CONFIG_DRM_PANEL_TPO_TD028TTEC1=3Dm
+CONFIG_DRM_PANEL_TPO_TD043MTEA1=3Dm
+CONFIG_DRM_BRIDGE=3Dy
+CONFIG_DRM_PANEL_BRIDGE=3Dy
+CONFIG_DRM_DISPLAY_CONNECTOR=3Dm
+CONFIG_DRM_SIMPLE_BRIDGE=3Dm
+CONFIG_DRM_TI_TFP410=3Dm
+CONFIG_DRM_TI_TPD12S015=3Dm
+CONFIG_DRM_DW_HDMI=3Dm
+CONFIG_DRM_DW_HDMI_CEC=3Dm
+CONFIG_DRM_IMX=3Dm
+CONFIG_DRM_IMX_PARALLEL_DISPLAY=3Dm
+CONFIG_DRM_IMX_TVE=3Dm
+CONFIG_DRM_IMX_LDB=3Dm
+CONFIG_DRM_IMX_HDMI=3Dm
+CONFIG_DRM_VC4=3Dm
+CONFIG_DRM_VC4_HDMI_CEC=3Dy
+CONFIG_DRM_ETNAVIV=3Dm
+CONFIG_DRM_ETNAVIV_THERMAL=3Dy
+CONFIG_DRM_MXS=3Dy
+CONFIG_DRM_MXSFB=3Dm
+CONFIG_SGX_DRM=3Dy
+CONFIG_DRM_MXC_EPDC=3Dm
+CONFIG_DRM_LEGACY=3Dy
+CONFIG_DRM_PANEL_ORIENTATION_QUIRKS=3Dm
+CONFIG_DRM_NOMODESET=3Dy
+root@letux:~#=20
+root@letux:~# lsmod | fgrep drm
+omapdrm               225280  4
+cec                    45056  1 omapdrm
+drm_kms_helper        110592  2 display_connector,omapdrm
+syscopyarea            16384  1 drm_kms_helper
+sysfillrect            16384  1 drm_kms_helper
+sysimgblt              16384  1 drm_kms_helper
+fb_sys_fops            16384  1 drm_kms_helper
+drm                   380928  7 =
+panel_boe_btl507212_w677l,ti_tpd12s015,pvrsrvkm_omap5_sgx544_116,display_c=
+onnector,omapdrm,drm_kms_helper
+drm_panel_orientation_quirks    16384  1 drm
+root@letux:~#=20
+
+Hope this is useful information,
+Nikolaus
 
