@@ -2,210 +2,767 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C85E613976
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 15:57:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7F530613984
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 15:58:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231771AbiJaO5G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 10:57:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36134 "EHLO
+        id S231375AbiJaO6l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 10:58:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37478 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231736AbiJaO46 (ORCPT
+        with ESMTP id S230234AbiJaO6i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 10:56:58 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ADA861114C
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 07:56:56 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id g62so10880099pfb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 07:56:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=qfRWCQkOBm2MxnVgDK5v0Vn9xRjDYCGceLE5mq8RAWI=;
-        b=stVuBKmZrU7+ei+AFFBE+eKP4PINriYNYY5RsQGv1tc+A6WJ/s7pAKdcc7QZYF4+XO
-         QWS2lLzveBESkZroA6tZEavUJE03g62quWyzPY0QbB9S9Fn4ePHiMyvv7qiHILct2ilD
-         +dmu15gA+VXLxciUsRlhZw65iOYkZ6Lk8j36WixjIHf+1eqf+RajjtP3DfofZztb2SQc
-         0tBimU3mNeMZKv1ZT0LOkiQcQA9AY5OIQscOmqH2B3+LT8oxNq75BZKMlT3L6gep76Uv
-         NQGPc+iBjB+3bAG7L9vnZBqtR9QbTby81m4+c1vAT3Ir6uWvpVrzAMV800H5ZUQjoymv
-         KBAw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qfRWCQkOBm2MxnVgDK5v0Vn9xRjDYCGceLE5mq8RAWI=;
-        b=CPQ+cyvNlH6LZDJQHRMe3QxLRJIG7LEOqbd5SKlu3IHHzg/u4VpsvpK1YjL1abfy3T
-         bEXTRuk7jn8Ybr6UuKhykc+yVaOcka9hv03bwHKNegY5cH09K+ArirknCsNsXdN+jWDJ
-         UiDuTBAc6mPPQo5MD2npuU6MyzbZGMoSBT2tWLDQiO+ZKMsVOVHPupWNvvAiOaZ10IlH
-         neOEds4Hqkfu/kyNEYktw71vxIyaEH7TIr2uTkrczWYDCEiKas9cn1CshFnySondlfUK
-         Oglv9kBQ75BJStHcHwQ5mTsCibRHdjJ2774VAKh1kcPp0vzpbxyQ4m+LQ6tb2SIFcZK4
-         gHIA==
-X-Gm-Message-State: ACrzQf36Db558t+MMvEGXBUtRgyNZZI1Zwp0QATAGThKupCMRLQgEc7V
-        RtY8f9TKdFWnWQpIwBBcAX7Q
-X-Google-Smtp-Source: AMsMyM7SHU/9duW/QueVKxebwPeGGo51l3TZSSc9aXZpBWMnn19DzLxyNQfHIvbOJuiSkwcMuVYOrw==
-X-Received: by 2002:a05:6a00:230f:b0:53e:2c2c:5c03 with SMTP id h15-20020a056a00230f00b0053e2c2c5c03mr14699448pfh.11.1667228216041;
-        Mon, 31 Oct 2022 07:56:56 -0700 (PDT)
-Received: from thinkpad ([117.193.209.221])
-        by smtp.gmail.com with ESMTPSA id m12-20020a17090a414c00b002135fdfa995sm4235595pjg.25.2022.10.31.07.56.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 07:56:54 -0700 (PDT)
-Date:   Mon, 31 Oct 2022 20:26:47 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     martin.petersen@oracle.com, jejb@linux.ibm.com,
-        andersson@kernel.org, vkoul@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@somainline.org,
-        robh+dt@kernel.org, quic_cang@quicinc.com,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-scsi@vger.kernel.org
-Subject: Re: [PATCH 14/15] scsi: ufs: ufs-qcom: Add support for finding HS
- gear on new UFS versions
-Message-ID: <20221031145647.GC10515@thinkpad>
-References: <20221029141633.295650-1-manivannan.sadhasivam@linaro.org>
- <20221029141633.295650-15-manivannan.sadhasivam@linaro.org>
- <cf8dcf53-f131-68f4-c6aa-d41e02ac6d5c@linaro.org>
+        Mon, 31 Oct 2022 10:58:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87441FD2C;
+        Mon, 31 Oct 2022 07:58:36 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 135DB6129A;
+        Mon, 31 Oct 2022 14:58:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BF90C433C1;
+        Mon, 31 Oct 2022 14:58:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667228315;
+        bh=xKf/cPCTyp1qEiVTHgWxTY2DMEgM80Amt8DA3IJQs+4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=kZ5DeTjOYWcY0aTTNeaYGsHkAefsC4Rz0vYxecJjkJYR9RPNWnn3CnaVr3jyDgLSx
+         DPk0B2ojV0q8YxlgMYNRIB2hd4Jf9Sh+ACMkL1ZJv5/ABBi8M+Q+Jqynjyg5UtnhPj
+         txr3zf9kK746+BPAyXy5Zy9EaBs5xWH7er2alLIhkP3tav1g/jzEZ1WSbhqYcX1h+J
+         rvk163H3E2gmBgANEHybEkVts2D3kNTbyEXQbKgiXP5nSHdY8dP4PbhAp8Gtzh8VEJ
+         i8KoyVNUG1roPTGEuU+K2eD1B307860bF4nNAUreK+2iX+6kn+850poQI37Ef1tU3y
+         S8JbLYMcoesKQ==
+Date:   Mon, 31 Oct 2022 14:58:27 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     chengwei <foxfly.lai.tw@gmail.com>
+Cc:     broonie@kernel.org, rafael@kernel.org,
+        mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
+        linus.walleij@linaro.org, brgl@bgdev.pl,
+        linux-kernel@vger.kernel.org, gregkh@linuxfoundation.org,
+        lenb@kernel.org, linux-acpi@vger.kernel.org,
+        linux-gpio@vger.kernel.org, GaryWang@aaeon.com.tw,
+        musa.lin@yunjingtech.com, jack.chang@yunjingtech.com,
+        chengwei <larry.lai@yunjingtech.com>,
+        Javier Arteaga <javier@emutex.com>,
+        Nicola Lunghi <nicola.lunghi@emutex.com>
+Subject: Re: [PATCH 1/5] mfd: Add support for UP board CPLD/FPGA
+Message-ID: <Y1/ik4XGNWsOg5KH@google.com>
+References: <20221019022450.16851-1-larry.lai@yunjingtech.com>
+ <20221019022450.16851-2-larry.lai@yunjingtech.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <cf8dcf53-f131-68f4-c6aa-d41e02ac6d5c@linaro.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <20221019022450.16851-2-larry.lai@yunjingtech.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 30, 2022 at 12:48:21AM +0300, Dmitry Baryshkov wrote:
-> On 29/10/2022 17:16, Manivannan Sadhasivam wrote:
-> > Starting from UFS controller v4, Qcom supports dual gear mode (i.e., the
-> > controller/PHY can be configured to run in two gear speeds). But that
-> > requires an agreement between the UFS controller and the UFS device.
-> > This commit finds the max gear supported by both controller and device
-> > then decides which one to use.
-> > 
-> > UFS controller's max gear can be read from the REG_UFS_PARAM0 register and
-> > UFS device's max gear can be read from the "max-gear" devicetree property.
-> > 
-> > The UFS PHY also needs to be configured with the decided gear using the
-> > phy_set_mode_ext() API.
-> > 
-> > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > ---
-> >   drivers/ufs/host/ufs-qcom.c | 35 ++++++++++++++++++++++++++++++++---
-> >   drivers/ufs/host/ufs-qcom.h |  4 ++++
-> >   2 files changed, 36 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-> > index f952cc76919f..268463e92d67 100644
-> > --- a/drivers/ufs/host/ufs-qcom.c
-> > +++ b/drivers/ufs/host/ufs-qcom.c
-> > @@ -281,6 +281,9 @@ static int ufs_qcom_host_reset(struct ufs_hba *hba)
-> >   static u32 ufs_qcom_get_hs_gear(struct ufs_hba *hba, u32 hs_gear)
-> >   {
-> >   	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
-> > +	struct device *dev = hba->dev;
-> > +	u32 max_gear, hcd_max_gear, reg;
-> > +	int ret;
-> >   	if (host->hw_ver.major == 0x1) {
-> >   		/*
-> > @@ -292,8 +295,33 @@ static u32 ufs_qcom_get_hs_gear(struct ufs_hba *hba, u32 hs_gear)
-> >   		 */
-> >   		if (hs_gear > UFS_HS_G2)
-> >   			return UFS_HS_G2;
-> > +	} else if (host->hw_ver.major > 0x3) {
-> > +		/*
-> > +		 * Starting from UFS controller v4, Qcom supports dual gear mode (i.e., the
-> > +		 * controller/PHY can be configured to run in two gear speeds). But that
-> > +		 * requires an agreement between the UFS controller and the device. Below
-> > +		 * code tries to find the max gear of both and decides which gear to use.
-> > +		 *
-> > +		 * First get the max gear supported by the UFS device if available.
-> > +		 * If the property is not defined in devicetree, then use the default gear.
-> > +		 */
-> > +		ret = of_property_read_u32(dev->of_node, "max-gear", &max_gear);
-> > +		if (ret)
-> > +			goto err_out;
-> 
-> Can we detect the UFS device's max gear somehow? If not, the 'max-gear'
-> property name doesn't sound good. Maybe calling it 'device-gear' would be
-> better.
-> 
+On Wed, 19 Oct 2022, chengwei wrote:
 
-UFS device probing depends on PHY init sequence. So technically we cannot know
-the max gear of the device without using an init sequence, but this information
-is static and should be known to a board manufacturer. That's why I decided to
-use this property. Another option is to use a fixed init sequence for probing
-the device and do a re-init after knowing it's max gear but that is not
-recommended.
+> The UP Squared board <http://www.upboard.com> implements certain
+> features (pin control, onboard LEDs or CEC) through an on-board CPLD/FPGA.
+> 
+> This mfd driver implements the line protocol to read and write registers
+> from the FPGA through regmap. The register address map is also included.
+> 
+> The UP Boards provide a few I/O pin headers (for both GPIO and
+> functions), including a 40-pin Raspberry Pi compatible header.
+> 
+> This patch implements support for the FPGA-based pin controller that
+> manages direction and enable state for those header pins.
+> 
+> Partial support UP boards:
+> * UP core + CREX
+> * UP core + CRST02
+> 
+> Signed-off-by: Javier Arteaga <javier@emutex.com>
+> [merge various fixes]
+> Signed-off-by: Nicola Lunghi <nicola.lunghi@emutex.com>
+> Signed-off-by: chengwei <larry.lai@yunjingtech.com>
 
-We need "max" keyword because this property specifies the maximum gear at which
-the device could operate and not necessarily the gear at which it operates.
-Maybe, "max-device-gear" would make it clear.
+Why does your name not match your email?
 
-Thanks,
-Mani
+> ---
 
-> > +
-> > +		/* Next get the max gear supported by the UFS controller */
-> > +		reg = ufshcd_readl(hba, REG_UFS_PARAM0);
-> > +		hcd_max_gear = UFS_QCOM_MAX_GEAR(reg);
-> > +
-> > +		/*
-> > +		 * Now compare both the gears. If the max gear supported by the UFS device
-> > +		 * is compatible with UFS controller, then use the UFS device's max gear
-> > +		 * speed. Otherwise, use the UFS controller supported max gear speed.
-> > +		 */
-> > +		return (max_gear <= hcd_max_gear) ? max_gear : hcd_max_gear;
+What happened to all of the other versions?
+
+And the change-log?
+
+>  drivers/mfd/Kconfig              |  12 +
+>  drivers/mfd/Makefile             |   1 +
+>  drivers/mfd/upboard-fpga.c       | 482 +++++++++++++++++++++++++++++++
+>  include/linux/mfd/upboard-fpga.h |  49 ++++
+>  4 files changed, 544 insertions(+)
+>  create mode 100644 drivers/mfd/upboard-fpga.c
+>  create mode 100644 include/linux/mfd/upboard-fpga.h
 > 
-> return max(max_gear, hcd_max_gear); ?
-> 
-> >   	}
-> > +err_out:
-> >   	/* Default is HS-G3 */
-> >   	return UFS_HS_G3;
-> >   }
-> > @@ -303,7 +331,7 @@ static int ufs_qcom_power_up_sequence(struct ufs_hba *hba)
-> >   	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
-> >   	struct phy *phy = host->generic_phy;
-> >   	int ret;
-> > -	bool is_rate_B = UFS_QCOM_LIMIT_HS_RATE == PA_HS_MODE_B;
-> > +	u32 hs_gear;
-> >   	/* Reset UFS Host Controller and PHY */
-> >   	ret = ufs_qcom_host_reset(hba);
-> > @@ -311,8 +339,9 @@ static int ufs_qcom_power_up_sequence(struct ufs_hba *hba)
-> >   		dev_warn(hba->dev, "%s: host reset returned %d\n",
-> >   				  __func__, ret);
-> > -	if (is_rate_B)
-> > -		phy_set_mode(phy, PHY_MODE_UFS_HS_B);
-> > +	/* UFS_HS_G2 is used here since that's the least gear supported by legacy Qcom platforms */
-> > +	hs_gear = ufs_qcom_get_hs_gear(hba, UFS_HS_G2);
-> > +	phy_set_mode_ext(phy, PHY_MODE_UFS_HS_B, hs_gear);
-> >   	/* phy initialization - calibrate the phy */
-> >   	ret = phy_init(phy);
-> > diff --git a/drivers/ufs/host/ufs-qcom.h b/drivers/ufs/host/ufs-qcom.h
-> > index 214ea50acab9..c93bc52ea848 100644
-> > --- a/drivers/ufs/host/ufs-qcom.h
-> > +++ b/drivers/ufs/host/ufs-qcom.h
-> > @@ -89,6 +89,10 @@ enum {
-> >   #define TMRLUT_HW_CGC_EN	BIT(6)
-> >   #define OCSC_HW_CGC_EN		BIT(7)
-> > +/* bit definitions for REG_UFS_PARAM0 */
-> > +#define MAX_HS_GEAR_MASK	GENMASK(6, 4)
-> > +#define UFS_QCOM_MAX_GEAR(x)	FIELD_GET(MAX_HS_GEAR_MASK, (x))
-> > +
-> >   /* bit definition for UFS_UFS_TEST_BUS_CTRL_n */
-> >   #define TEST_BUS_SUB_SEL_MASK	GENMASK(4, 0)  /* All XXX_SEL fields are 5 bits wide */
-> 
-> -- 
-> With best wishes
-> Dmitry
-> 
+> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
+> index abb58ab1a1a4..c1d72a70e5f2 100644
+> --- a/drivers/mfd/Kconfig
+> +++ b/drivers/mfd/Kconfig
+> @@ -2104,6 +2104,18 @@ config MFD_QCOM_PM8008
+>  	  under it in the device tree. Additional drivers must be enabled in
+>  	  order to use the functionality of the device.
+>  
+> +config MFD_UPBOARD_FPGA
+> +	tristate "Support for the UP board FPGA"
+
+"Intel"?
+
+> +	select MFD_CORE
+> +	depends on X86 && ACPI
+> +	help
+> +	  Select this option to enable the Intel AAEON UP and UP^2 on-board FPGA.
+> +	  The UP board implements certain features (pin control, onboard LEDs or
+> +	  CEC) through an on-board FPGA.
+> +
+> +	  To compile this driver as a module, choose M here: the module will be
+> +	  called upboard-fpga.
+> +
+>  menu "Multimedia Capabilities Port drivers"
+>  	depends on ARCH_SA1100
+>  
+> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
+> index 858cacf659d6..d9d10e3664f7 100644
+> --- a/drivers/mfd/Makefile
+> +++ b/drivers/mfd/Makefile
+> @@ -250,6 +250,7 @@ obj-$(CONFIG_MFD_ALTERA_A10SR)	+= altera-a10sr.o
+>  obj-$(CONFIG_MFD_ALTERA_SYSMGR) += altera-sysmgr.o
+>  obj-$(CONFIG_MFD_STPMIC1)	+= stpmic1.o
+>  obj-$(CONFIG_MFD_SUN4I_GPADC)	+= sun4i-gpadc.o
+> +obj-$(CONFIG_MFD_UPBOARD_FPGA)	+= upboard-fpga.o
+>  
+>  obj-$(CONFIG_MFD_STM32_LPTIMER)	+= stm32-lptimer.o
+>  obj-$(CONFIG_MFD_STM32_TIMERS) 	+= stm32-timers.o
+> diff --git a/drivers/mfd/upboard-fpga.c b/drivers/mfd/upboard-fpga.c
+> new file mode 100644
+> index 000000000000..6f73c2fa6f4a
+> --- /dev/null
+> +++ b/drivers/mfd/upboard-fpga.c
+> @@ -0,0 +1,482 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * UP Board main platform driver and FPGA configuration support
+
+"Intel AAEON UP and UP^2"
+
+> + * Copyright (c) 2017, Emutex Ltd. All rights reserved.
+
+No changes since 2017?
+
+> + * Author: Javier Arteaga <javier@emutex.com>
+> + */
+> +
+> +#include <linux/acpi.h>
+> +#include <linux/dmi.h>
+> +#include <linux/gpio.h>
+> +#include <linux/kernel.h>
+> +#include <linux/leds.h>
+> +#include <linux/mfd/core.h>
+> +#include <linux/mfd/upboard-fpga.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/regmap.h>
+> +
+> +static int upboard_fpga_read(void *, unsigned int, unsigned int *);
+> +static int upboard_fpga_write(void *, unsigned int, unsigned int);
+
+No prototypes please.
+
+Reorder the file instead.
+
+> +struct upboard_fpga_data {
+> +	const struct regmap_config *regmapconf;
+
+> +	const struct mfd_cell *cells;
+> +	size_t ncells;
+
+This is unlikely to be acceptable.
+
+Please reference the tables where you use them, instead of passing
+MFD initialisation pointers through the ACPI API.
+
+> +};
+> +
+> +#define UPBOARD_LED_CELL(led_data, n)                   \
+> +	{                                               \
+> +		.name = "upboard-led",                  \
+> +		.id = (n),                              \
+> +		.platform_data = &led_data[(n)],        \
+> +		.pdata_size = sizeof(*(led_data)),      \
+> +	}
+
+We already have defines like this.  Please use them instead.
+
+> +/* UP board */
+> +
+> +static const struct regmap_range upboard_up_readable_ranges[] = {
+> +	regmap_reg_range(UPFPGA_REG_PLATFORM_ID, UPFPGA_REG_FIRMWARE_ID),
+> +	regmap_reg_range(UPFPGA_REG_FUNC_EN0, UPFPGA_REG_FUNC_EN0),
+> +	regmap_reg_range(UPFPGA_REG_GPIO_DIR0, UPFPGA_REG_GPIO_DIR1),
+> +};
+> +
+> +static const struct regmap_range upboard_up_writable_ranges[] = {
+> +	regmap_reg_range(UPFPGA_REG_FUNC_EN0, UPFPGA_REG_FUNC_EN0),
+> +	regmap_reg_range(UPFPGA_REG_GPIO_DIR0, UPFPGA_REG_GPIO_DIR1),
+> +};
+> +
+> +static const struct regmap_access_table upboard_up_readable_table = {
+> +	.yes_ranges = upboard_up_readable_ranges,
+> +	.n_yes_ranges = ARRAY_SIZE(upboard_up_readable_ranges),
+> +};
+> +
+> +static const struct regmap_access_table upboard_up_writable_table = {
+> +	.yes_ranges = upboard_up_writable_ranges,
+> +	.n_yes_ranges = ARRAY_SIZE(upboard_up_writable_ranges),
+> +};
+> +
+> +static const struct regmap_config upboard_up_regmap_config = {
+> +	.reg_bits = UPFPGA_ADDRESS_SIZE,
+> +	.val_bits = UPFPGA_REGISTER_SIZE,
+> +	.max_register = UPFPGA_REG_MAX,
+> +	.reg_read = upboard_fpga_read,
+> +	.reg_write = upboard_fpga_write,
+> +	.fast_io = false,
+> +	.cache_type = REGCACHE_RBTREE,
+> +	.rd_table = &upboard_up_readable_table,
+> +	.wr_table = &upboard_up_writable_table,
+> +};
+> +
+> +static struct upboard_led_data upboard_up_led_data[] = {
+> +	{ .bit = 0, .colour = "yellow" },
+> +	{ .bit = 1, .colour = "green" },
+> +	{ .bit = 2, .colour = "red" },
+> +};
+
+Not a big deal, but can't this info be derived from the ACPI tables?
+
+> +static const struct mfd_cell upboard_up_mfd_cells[] = {
+> +	{ .name = "upboard-pinctrl" },
+> +	UPBOARD_LED_CELL(upboard_up_led_data, 0),
+> +	UPBOARD_LED_CELL(upboard_up_led_data, 1),
+> +	UPBOARD_LED_CELL(upboard_up_led_data, 2),
+> +};
+> +
+> +static const struct upboard_fpga_data upboard_up_fpga_data = {
+> +	.regmapconf = &upboard_up_regmap_config,
+> +	.cells = upboard_up_mfd_cells,
+> +	.ncells = ARRAY_SIZE(upboard_up_mfd_cells),
+> +};
+> +
+> +/* UP^2 board */
+> +
+> +static const struct regmap_range upboard_up2_readable_ranges[] = {
+> +	regmap_reg_range(UPFPGA_REG_PLATFORM_ID, UPFPGA_REG_FIRMWARE_ID),
+> +	regmap_reg_range(UPFPGA_REG_FUNC_EN0, UPFPGA_REG_FUNC_EN1),
+> +	regmap_reg_range(UPFPGA_REG_GPIO_EN0, UPFPGA_REG_GPIO_EN2),
+> +	regmap_reg_range(UPFPGA_REG_GPIO_DIR0, UPFPGA_REG_GPIO_DIR2),
+> +};
+> +
+> +static const struct regmap_range upboard_up2_writable_ranges[] = {
+> +	regmap_reg_range(UPFPGA_REG_FUNC_EN0, UPFPGA_REG_FUNC_EN1),
+> +	regmap_reg_range(UPFPGA_REG_GPIO_EN0, UPFPGA_REG_GPIO_EN2),
+> +	regmap_reg_range(UPFPGA_REG_GPIO_DIR0, UPFPGA_REG_GPIO_DIR2),
+> +};
+> +
+> +static const struct regmap_access_table upboard_up2_readable_table = {
+> +	.yes_ranges = upboard_up2_readable_ranges,
+> +	.n_yes_ranges = ARRAY_SIZE(upboard_up2_readable_ranges),
+> +};
+> +
+> +static const struct regmap_access_table upboard_up2_writable_table = {
+> +	.yes_ranges = upboard_up2_writable_ranges,
+> +	.n_yes_ranges = ARRAY_SIZE(upboard_up2_writable_ranges),
+> +};
+> +
+> +static const struct regmap_config upboard_up2_regmap_config = {
+> +	.reg_bits = UPFPGA_ADDRESS_SIZE,
+> +	.val_bits = UPFPGA_REGISTER_SIZE,
+> +	.max_register = UPFPGA_REG_MAX,
+> +	.reg_read = upboard_fpga_read,
+> +	.reg_write = upboard_fpga_write,
+> +	.fast_io = false,
+> +	.cache_type = REGCACHE_RBTREE,
+> +	.rd_table = &upboard_up2_readable_table,
+> +	.wr_table = &upboard_up2_writable_table,
+> +};
+> +
+> +static struct upboard_led_data upboard_up2_led_data[] = {
+> +	{ .bit = 0, .colour = "blue" },
+> +	{ .bit = 1, .colour = "yellow" },
+> +	{ .bit = 2, .colour = "green" },
+> +	{ .bit = 3, .colour = "red" },
+> +};
+> +
+> +static const struct mfd_cell upboard_up2_mfd_cells[] = {
+> +	{ .name = "upboard-pinctrl" },
+> +	UPBOARD_LED_CELL(upboard_up2_led_data, 0),
+> +	UPBOARD_LED_CELL(upboard_up2_led_data, 1),
+> +	UPBOARD_LED_CELL(upboard_up2_led_data, 2),
+> +	UPBOARD_LED_CELL(upboard_up2_led_data, 3),
+> +};
+> +
+> +static const struct upboard_fpga_data upboard_up2_fpga_data = {
+> +	.regmapconf = &upboard_up2_regmap_config,
+> +	.cells = upboard_up2_mfd_cells,
+> +	.ncells = ARRAY_SIZE(upboard_up2_mfd_cells),
+> +};
+> +
+> +/* UP-CREX carrier board for UP Core */
+> +
+> +/* same MAXV config as UP1 (proto2 release) */
+> +#define upboard_upcore_crex_fpga_data upboard_up_fpga_data
+> +
+> +/* UP-CRST02 carrier board for UP Core */
+> +
+> +/* same MAX10 config as UP2, but same LED cells as UP1 */
+> +static const struct upboard_fpga_data upboard_upcore_crst02_fpga_data = {
+> +	.regmapconf = &upboard_up2_regmap_config,
+> +	.cells = upboard_up_mfd_cells,
+> +	.ncells = ARRAY_SIZE(upboard_up_mfd_cells),
+> +};
+> +
+> +static int upboard_fpga_read(void *context, unsigned int reg, unsigned int *val)
+> +{
+> +	struct upboard_fpga * const fpga = context;
+> +	int i;
+> +
+> +	gpiod_set_value(fpga->clear_gpio, 0);
+> +	gpiod_set_value(fpga->clear_gpio, 1);
+> +
+> +	reg |= UPFPGA_READ_FLAG;
+> +
+> +	for (i = UPFPGA_ADDRESS_SIZE; i >= 0; i--) {
+> +		gpiod_set_value(fpga->strobe_gpio, 0);
+> +		gpiod_set_value(fpga->datain_gpio, (reg >> i) & 0x1);
+> +		gpiod_set_value(fpga->strobe_gpio, 1);
+> +	}
+> +
+> +	gpiod_set_value(fpga->strobe_gpio, 0);
+> +	*val = 0;
+> +
+> +	for (i = UPFPGA_REGISTER_SIZE - 1; i >= 0; i--) {
+> +		gpiod_set_value(fpga->strobe_gpio, 1);
+> +		gpiod_set_value(fpga->strobe_gpio, 0);
+> +		*val |= gpiod_get_value(fpga->dataout_gpio) << i;
+> +	}
+> +
+> +	gpiod_set_value(fpga->strobe_gpio, 1);
+
+A little bit of commentary in here would help us understand how this
+works.
+
+> +	return 0;
+> +};
+> +
+> +static int upboard_fpga_write(void *context, unsigned int reg, unsigned int val)
+> +{
+> +	struct upboard_fpga * const fpga = context;
+> +	int i;
+> +
+> +	gpiod_set_value(fpga->clear_gpio, 0);
+> +	gpiod_set_value(fpga->clear_gpio, 1);
+> +
+> +	for (i = UPFPGA_ADDRESS_SIZE; i >= 0; i--) {
+> +		gpiod_set_value(fpga->strobe_gpio, 0);
+> +		gpiod_set_value(fpga->datain_gpio, (reg >> i) & 0x1);
+> +		gpiod_set_value(fpga->strobe_gpio, 1);
+> +	}
+> +
+> +	gpiod_set_value(fpga->strobe_gpio, 0);
+> +
+> +	for (i = UPFPGA_REGISTER_SIZE - 1; i >= 0; i--) {
+> +		gpiod_set_value(fpga->datain_gpio, (val >> i) & 0x1);
+> +		gpiod_set_value(fpga->strobe_gpio, 1);
+> +		gpiod_set_value(fpga->strobe_gpio, 0);
+> +	}
+> +
+> +	gpiod_set_value(fpga->strobe_gpio, 1);
+
+As above.
+
+> +	return 0;
+> +};
+> +
+> +static int __init upboard_fpga_gpio_init(struct upboard_fpga *fpga)
+> +{
+> +	enum gpiod_flags flags;
+> +
+> +	flags = fpga->uninitialised ? GPIOD_OUT_LOW : GPIOD_ASIS;
+
+Nit: '\n'
+
+> +	fpga->enable_gpio = devm_gpiod_get(fpga->dev, "enable", flags);
+> +	if (IS_ERR(fpga->enable_gpio))
+> +		return PTR_ERR(fpga->enable_gpio);
+> +
+> +	fpga->clear_gpio = devm_gpiod_get(fpga->dev, "clear", GPIOD_OUT_LOW);
+> +	if (IS_ERR(fpga->clear_gpio))
+> +		return PTR_ERR(fpga->clear_gpio);
+> +
+> +	fpga->strobe_gpio = devm_gpiod_get(fpga->dev, "strobe", GPIOD_OUT_LOW);
+> +	if (IS_ERR(fpga->strobe_gpio))
+> +		return PTR_ERR(fpga->strobe_gpio);
+> +
+> +	fpga->datain_gpio = devm_gpiod_get(fpga->dev, "datain", GPIOD_OUT_LOW);
+> +	if (IS_ERR(fpga->datain_gpio))
+> +		return PTR_ERR(fpga->datain_gpio);
+> +
+> +	fpga->dataout_gpio = devm_gpiod_get(fpga->dev, "dataout", GPIOD_IN);
+> +	if (IS_ERR(fpga->dataout_gpio))
+> +		return PTR_ERR(fpga->dataout_gpio);
+> +
+> +	/* The SoC pinctrl driver may not support reserving the GPIO line for
+> +	 * FPGA reset without causing an undesired reset pulse. This will clear
+> +	 * any settings on the FPGA, so only do it if we must.
+> +	 */
+
+Please use correctly formatted multi-line comments.
+
+> +	if (fpga->uninitialised) {
+> +		fpga->reset_gpio = devm_gpiod_get(fpga->dev, "reset",
+> +						  GPIOD_OUT_LOW);
+> +		if (IS_ERR(fpga->reset_gpio))
+> +			return PTR_ERR(fpga->reset_gpio);
+> +
+> +		gpiod_set_value(fpga->reset_gpio, 1);
+> +	}
+> +
+> +	gpiod_set_value(fpga->enable_gpio, 1);
+> +	fpga->uninitialised = false;
+> +
+> +	return 0;
+> +}
+> +
+> +static int __init upboard_fpga_detect_firmware(struct upboard_fpga *fpga)
+> +{
+> +	const unsigned int AAEON_MANUFACTURER_ID = 0x01;
+
+Please define these.
+
+Variables should be lower case.
+
+> +	const unsigned int SUPPORTED_FW_MAJOR = 0x0;
+> +	unsigned int platform_id, manufacturer_id;
+> +	unsigned int firmware_id, build, major, minor, patch;
+> +	int ret;
+> +
+> +	ret = regmap_read(fpga->regmap, UPFPGA_REG_PLATFORM_ID, &platform_id);
+> +	if (ret)
+> +		return ret;
+> +
+> +	manufacturer_id = platform_id & 0xff;
+
+#define the 0xff - perhaps MANUFACTURER_MASK.
+
+> +	if (manufacturer_id != AAEON_MANUFACTURER_ID) {
+> +		dev_dbg(fpga->dev,
+> +			"driver not compatible with custom FPGA FW from manufacturer id 0x%02x. Exiting",
+> +			manufacturer_id);
+> +		return -ENODEV;
+
+If this is an error, your print messages should be dev_err().
+
+> +	}
+> +
+> +	ret = regmap_read(fpga->regmap, UPFPGA_REG_FIRMWARE_ID, &firmware_id);
+> +	if (ret)
+> +		return ret;
+> +
+> +	build = (firmware_id >> 12) & 0xf;
+> +	major = (firmware_id >> 8) & 0xf;
+> +	minor = (firmware_id >> 4) & 0xf;
+> +	patch = firmware_id & 0xf;
+
+Nit: '\n'
+
+> +	if (major != SUPPORTED_FW_MAJOR) {
+> +		dev_dbg(fpga->dev, "unsupported FPGA FW v%u.%u.%u build 0x%02x",
+> +			major, minor, patch, build);
+> +		return -ENODEV;
+> +	}
+> +
+> +	dev_info(fpga->dev, "compatible FPGA FW v%u.%u.%u build 0x%02x",
+> +		 major, minor, patch, build);
+
+Nit: '\n'
+
+> +	return 0;
+> +}
+> +
+> +static const struct acpi_device_id upboard_fpga_acpi_match[] = {
+> +	{ "AANT0F00", (kernel_ulong_t)&upboard_up_fpga_data },
+> +	{ "AANT0F01", (kernel_ulong_t)&upboard_up2_fpga_data },
+> +	{ "AANT0F02", (kernel_ulong_t)&upboard_upcore_crex_fpga_data },
+> +	{ "AANT0F03", (kernel_ulong_t)&upboard_upcore_crst02_fpga_data },
+> +	{ "AANT0F04", (kernel_ulong_t)&upboard_up_fpga_data },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(acpi, upboard_fpga_acpi_match);
+
+Please don't mix platform registration strategies.
+
+Pass platform / hardware IDs instead and to the selecting in C.
+
+> +#define UPFPGA_QUIRK_UNINITIALISED  BIT(0)
+> +#define UPFPGA_QUIRK_HRV1_IS_PROTO2 BIT(1)
+> +#define UPFPGA_QUIRK_GPIO_LED       BIT(2)
+> +
+> +static const struct dmi_system_id upboard_dmi_table[] __initconst = {
+> +	{
+> +		.matches = { /* UP */
+> +			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "AAEON"),
+> +			DMI_EXACT_MATCH(DMI_BOARD_NAME, "UP-CHT01"),
+> +			DMI_EXACT_MATCH(DMI_BOARD_VERSION, "V0.4"),
+> +		},
+> +		.driver_data = (void *)UPFPGA_QUIRK_UNINITIALISED,
+> +	},
+> +	{
+> +		.matches = { /* UP2 */
+> +			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "AAEON"),
+> +			DMI_EXACT_MATCH(DMI_BOARD_NAME, "UP-APL01"),
+> +			DMI_EXACT_MATCH(DMI_BOARD_VERSION, "V0.3"),
+> +		},
+> +		.driver_data = (void *)(UPFPGA_QUIRK_UNINITIALISED |
+> +			UPFPGA_QUIRK_HRV1_IS_PROTO2),
+> +	},
+> +	{
+> +		.matches = { /* UP2 Pro*/
+> +			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "AAEON"),
+> +			DMI_EXACT_MATCH(DMI_BOARD_NAME, "UPN-APL01"),
+> +			DMI_EXACT_MATCH(DMI_BOARD_VERSION, "V1.0"),
+> +		},
+> +		.driver_data = (void *)UPFPGA_QUIRK_HRV1_IS_PROTO2,
+> +	},
+> +	{
+> +		.matches = { /* UP2 */
+> +			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "AAEON"),
+> +			DMI_EXACT_MATCH(DMI_BOARD_NAME, "UP-APL01"),
+> +			DMI_EXACT_MATCH(DMI_BOARD_VERSION, "V0.4"),
+> +		},
+> +		.driver_data = (void *)UPFPGA_QUIRK_HRV1_IS_PROTO2,
+> +	},
+> +	{
+> +		.matches = { /* UP Xtreme */
+> +			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "AAEON"),
+> +			DMI_EXACT_MATCH(DMI_BOARD_NAME, "UP-WHL01"),
+> +			DMI_EXACT_MATCH(DMI_BOARD_VERSION, "V0.1"),
+> +		},
+> +	},
+> +	{
+> +		.matches = { /* UP APL03 */
+> +			DMI_EXACT_MATCH(DMI_SYS_VENDOR, "AAEON"),
+> +			DMI_EXACT_MATCH(DMI_BOARD_NAME, "UP-APL03"),
+> +			DMI_EXACT_MATCH(DMI_BOARD_VERSION, "V1.0"),
+> +		},
+> +		.driver_data = (void *)(UPFPGA_QUIRK_HRV1_IS_PROTO2 |
+> +			UPFPGA_QUIRK_GPIO_LED),
+> +	},
+> +	{ },
+> +};
+> +
+> +#define UPFPGA_PROTOCOL_V2_HRV 2
+
+How does this differ from UPFPGA_QUIRK_HRV1_IS_PROTO2?
+
+> +static int __init upboard_fpga_probe(struct platform_device *pdev)
+> +{
+> +	struct upboard_fpga *fpga;
+
+This is more widely known as 'ddata'.
+
+> +	const struct acpi_device_id *id;
+> +	const struct upboard_fpga_data *fpga_data;
+> +	const struct dmi_system_id *system_id;
+> +	acpi_handle handle;
+> +	acpi_status status;
+> +	unsigned long long hrv;
+> +	unsigned long quirks = 0;
+> +	int ret;
+> +
+> +	id = acpi_match_device(upboard_fpga_acpi_match, &pdev->dev);
+> +	if (!id)
+> +		return -ENODEV;
+> +
+> +	handle = ACPI_HANDLE(&pdev->dev);
+> +	status = acpi_evaluate_integer(handle, "_HRV", NULL, &hrv);
+> +	if (ACPI_FAILURE(status)) {
+> +		dev_err(&pdev->dev, "failed to get PCTL revision");
+> +		return -ENODEV;
+> +	}
+> +
+> +	system_id = dmi_first_match(upboard_dmi_table);
+> +	if (system_id)
+> +		quirks = (unsigned long)system_id->driver_data;
+> +
+> +	if (hrv == 1 && (quirks & UPFPGA_QUIRK_HRV1_IS_PROTO2))
+
+What is HRV?  And what is 1?  Please define.
+
+> +		hrv = UPFPGA_PROTOCOL_V2_HRV;
+> +
+> +	if (hrv != UPFPGA_PROTOCOL_V2_HRV) {
+> +		dev_dbg(&pdev->dev, "unsupported PCTL revision: %llu", hrv);
+> +		return -ENODEV;
+> +	}
+> +
+> +	fpga_data = (const struct upboard_fpga_data *) id->driver_data;
+> +
+> +	fpga = devm_kzalloc(&pdev->dev, sizeof(*fpga), GFP_KERNEL);
+> +	if (!fpga)
+> +		return -ENOMEM;
+> +
+> +	if (quirks & UPFPGA_QUIRK_UNINITIALISED) {
+> +		dev_info(&pdev->dev, "FPGA not initialised by this BIOS");
+> +		fpga->uninitialised = true;
+> +	}
+> +
+> +	dev_set_drvdata(&pdev->dev, fpga);
+> +	fpga->dev = &pdev->dev;
+> +	fpga->regmap = devm_regmap_init(&pdev->dev, NULL, fpga,
+> +					fpga_data->regmapconf);
+> +	if (IS_ERR(fpga->regmap))
+> +		return PTR_ERR(fpga->regmap);
+> +
+> +	ret = upboard_fpga_gpio_init(fpga);
+> +	if (ret) {
+> +		dev_err(&pdev->dev, "failed to init FPGA comm GPIOs: %d", ret);
+
+Please expand 'init' and 'comm'.
+
+> +		return ret;
+> +	}
+> +
+> +	ret = upboard_fpga_detect_firmware(fpga);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (quirks & UPFPGA_QUIRK_GPIO_LED) {
+> +#define APL_GPIO_218	507
+
+Please define somewhere more central.
+
+> +		static struct gpio_led upboard_gpio_leds[] = {
+> +			{
+> +				.name = "upboard:blue:",
+> +				.gpio = APL_GPIO_218,
+> +				.default_state = LEDS_GPIO_DEFSTATE_KEEP,
+> +			},
+> +		};
+> +		static struct gpio_led_platform_data upboard_gpio_led_platform_data = {
+> +			.num_leds = ARRAY_SIZE(upboard_gpio_leds),
+> +			.leds = upboard_gpio_leds,
+> +		};
+> +		static const struct mfd_cell upboard_gpio_led_cells[] = {
+> +			{
+> +				.name = "leds-gpio",
+> +				.id = 0,
+> +				.platform_data = &upboard_gpio_led_platform_data,
+> +				.pdata_size = sizeof(upboard_gpio_led_platform_data),
+> +			},
+> +		};
+
+This is ugly and serves little purpose.
+
+Place all of these structs with the others above.
+
+> +		ret =  devm_mfd_add_devices(&pdev->dev, 0, upboard_gpio_led_cells,
+
+Not '0'.  Please use the defines provided.
+
+> +				    ARRAY_SIZE(upboard_gpio_led_cells), NULL, 0, NULL);
+> +		if (ret) {
+> +			dev_err(&pdev->dev, "Failed to add GPIO leds");
+> +			return ret;
+> +		}
+> +
+
+Superfluous line.
+
+> +	}
+> +
+> +	return devm_mfd_add_devices(&pdev->dev, 0, fpga_data->cells,
+
+As above.
+
+> +				    fpga_data->ncells, NULL, 0, NULL);
+> +}
+> +
+> +static struct platform_driver upboard_fpga_driver = {
+> +	.driver = {
+> +		.name = "upboard-fpga",
+> +		.acpi_match_table = upboard_fpga_acpi_match,
+> +	},
+> +};
+> +
+> +module_platform_driver_probe(upboard_fpga_driver, upboard_fpga_probe);
+> +
+> +MODULE_AUTHOR("Javier Arteaga <javier@emutex.com>");
+> +MODULE_DESCRIPTION("UP Board FPGA driver");
+> +MODULE_LICENSE("GPL v2");
+> diff --git a/include/linux/mfd/upboard-fpga.h b/include/linux/mfd/upboard-fpga.h
+> new file mode 100644
+> index 000000000000..e0940120514d
+> --- /dev/null
+> +++ b/include/linux/mfd/upboard-fpga.h
+> @@ -0,0 +1,49 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * UP Board FPGA MFD driver interface
+
+Please remove the term MFD.
+
+> + * Copyright (c) 2017, Emutex Ltd. All rights reserved.
+> + *
+> + * Author: Javier Arteaga <javier@emutex.com>
+> + */
+> +
+> +#ifndef __LINUX_MFD_UPBOARD_FPGA_H
+> +#define __LINUX_MFD_UPBOARD_FPGA_H
+> +
+> +#define UPFPGA_ADDRESS_SIZE  7
+> +#define UPFPGA_REGISTER_SIZE 16
+> +
+> +#define UPFPGA_READ_FLAG     (1 << UPFPGA_ADDRESS_SIZE)
+> +
+> +enum upboard_fpgareg {
+> +	UPFPGA_REG_PLATFORM_ID   = 0x10,
+> +	UPFPGA_REG_FIRMWARE_ID   = 0x11,
+> +	UPFPGA_REG_FUNC_EN0      = 0x20,
+> +	UPFPGA_REG_FUNC_EN1      = 0x21,
+> +	UPFPGA_REG_GPIO_EN0      = 0x30,
+> +	UPFPGA_REG_GPIO_EN1      = 0x31,
+> +	UPFPGA_REG_GPIO_EN2      = 0x32,
+> +	UPFPGA_REG_GPIO_DIR0     = 0x40,
+> +	UPFPGA_REG_GPIO_DIR1     = 0x41,
+> +	UPFPGA_REG_GPIO_DIR2     = 0x42,
+> +	UPFPGA_REG_MAX,
+> +};
+> +
+> +struct upboard_fpga {
+> +	struct device *dev;
+> +	struct regmap *regmap;
+> +	struct gpio_desc *enable_gpio;
+> +	struct gpio_desc *reset_gpio;
+> +	struct gpio_desc *clear_gpio;
+> +	struct gpio_desc *strobe_gpio;
+> +	struct gpio_desc *datain_gpio;
+> +	struct gpio_desc *dataout_gpio;
+> +	bool uninitialised;
+> +};
+> +
+> +struct upboard_led_data {
+> +	unsigned int bit;
+> +	const char *colour;
+> +};
+> +
+> +#endif /*  __LINUX_MFD_UPBOARD_FPGA_H */
 
 -- 
-மணிவண்ணன் சதாசிவம்
+Lee Jones [李琼斯]
