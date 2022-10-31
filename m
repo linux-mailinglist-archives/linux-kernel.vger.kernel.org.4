@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2168B613D01
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:04:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA815613D06
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:05:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230218AbiJaSEd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 14:04:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42552 "EHLO
+        id S229744AbiJaSFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 14:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230239AbiJaSEE (ORCPT
+        with ESMTP id S230288AbiJaSEH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 14:04:04 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB6410FD2
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 11:03:58 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id 130so11345692pfu.8
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 11:03:58 -0700 (PDT)
+        Mon, 31 Oct 2022 14:04:07 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99B4810FC7
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 11:04:05 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id h193so2661293pgc.10
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 11:04:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fvt/ooOFeIQi2DBt2IsAxWGkItH8ZOWcpqthZcxorNk=;
-        b=MRr8I4HdQhqgTo0yNOhsFOhZV/I9beGFFMFSzQ5/qewYPlKyDMnTu1cb8X2l7NnkBC
-         D/vh5oh44rVIq5XLoY3RWT0n8Gi6fqUYZT5lW0Njj1f9XpMLyDdrdPuqwwQ2R+tVXHuH
-         rxtTzBVxF+smBqHDdP89u/1etqmRaIfsrmFs52mjVHwSMlzKZxKs2FD05lRsJI5kHaAB
-         RNr++j1JU/y9a5A17NMz9hWSquiIaUzWCAlVD5m9he4b57+Qk7pxB4o/e2HXwHEpWxZo
-         M8PpwHV9IJ2M9SVifRB3jUkzQNQsmWty46csc0KPf1s7FR2ayyHnP2sF/ewS4uKr1gBG
-         wY3A==
+        bh=YE5rC5/HZ6deD3gc3XT/0TjMi23c/Z+tQRwUel8pEh4=;
+        b=ngJIar4cRFhRJ87WFHp+luxDgZu2MaxOeVJXEy03uFeynHfCGlgzi4+nVEms9Rrk/Q
+         ROcU3ieIa5E29iAolL6Yz77bfEMHKLh2mFIhoEnOubAUebbX3Dzmrq3EfuEWPqxXcGAn
+         +rBiHDSlorwin1D7vz7k0tIR9TXt2rDcpAzH0KgK7R9bo7hJdfwl2kDscvhpG21gRei3
+         12EO1W5NsPVUZGAi3n6ARvNOrJOdZDWH0wgCmOWRsDnRciNmsfVWUCRg64m1ovtl4KFd
+         WqilTAX+Qx8nkQbWp1fEc6ofx7HjegeZT9bzcabe1M2IwGmiYj98lf7yZUYxJEjmd7aJ
+         EkdA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=fvt/ooOFeIQi2DBt2IsAxWGkItH8ZOWcpqthZcxorNk=;
-        b=T6q7KYhg2uibhRhCywJERBX5hk8iEEwqf41g/2UsHU0a+jKfg0GwM+7Zhv7QPxGIAb
-         V3/UcWM/7njbojHEg397JPoip0uuRreVjr66MrNW9fwmKNQzqeuFpmIl2r+JQIQdiTfS
-         2UaMO0LUFt6cnmkCdoWo6uDzuqcPDOgbYAyKDtZK5LGWmV0+HT2ppr2uISj2iLxjk66z
-         TOdmOijPpk/H0f+nS7zQwN3mnQMGQgq6mwHMpCpSEgH8RiDS12aZfYD5Qt1CbT/ijDnI
-         IOSSbid8cWFqZOpInM/BFDQnlwg3ZMi2suMWzDT8c/gHgEAxS9XjpD1JeREW3ocmcAva
-         prbg==
-X-Gm-Message-State: ACrzQf0x2CwMzFMEEXGBlSvVMY9ETLjZgpDEv9JAt/N3Q51xv8qsuBSi
-        e20KyR26swnPGDshb+Je0702
-X-Google-Smtp-Source: AMsMyM7U31sdCQlnOqIi2pBNFs391BLTLFCHqOQ/hBImrmMpgUG5LDMLLefA9kc2/40q7k5hU0royQ==
-X-Received: by 2002:a63:f153:0:b0:46e:b0e3:547e with SMTP id o19-20020a63f153000000b0046eb0e3547emr14247127pgk.51.1667239438233;
-        Mon, 31 Oct 2022 11:03:58 -0700 (PDT)
+        bh=YE5rC5/HZ6deD3gc3XT/0TjMi23c/Z+tQRwUel8pEh4=;
+        b=z8ScCIUQN1y5Tv1OKcg6JOv+fPigw3ubLbG7BR3WWlI5Sgvayi5/VaiaHsVQ7PdpFF
+         dQzKy+kEiXti7TyQq21iRi79zxZw+xrk1tvNPek9gbPtMA/dDnJZzQOlCOgzmBUiLThT
+         QctBlD7HetR+Gelema+Zg9cZNb2boehtvSy9b+G3tPCRq1z4iBNu22855LdD9XprEk+H
+         ixx0TcsRJgITWD9b+0Dtr51UNMNzbLkcoTrFYH+eUIjs6IodBxJ2BcumRWo2SdaReRa9
+         W8ok0UQLCucNy04eO1ubLRBRIVxtb1r8j1/rRcdnckFuMMwfYKEkjCG+wtY99AhScG9m
+         SEEg==
+X-Gm-Message-State: ACrzQf2wb+nrJTHWz2LcbSP5zIxwyEA7P4PAIOrWnA63D80H3Ufgsij5
+        z14JwuJLKXtu2bANUSyjpDpg
+X-Google-Smtp-Source: AMsMyM6yyBG+NNnymIFV2d9Fi+RqjhDyAZ0khdcfg9ZdsJeRcnR/xBL9MobSoFweIhYMbnTUnxEfBA==
+X-Received: by 2002:a65:68cb:0:b0:460:b552:fbf4 with SMTP id k11-20020a6568cb000000b00460b552fbf4mr13750019pgt.457.1667239445056;
+        Mon, 31 Oct 2022 11:04:05 -0700 (PDT)
 Received: from localhost.localdomain ([117.193.209.221])
-        by smtp.gmail.com with ESMTPSA id q14-20020a170902a3ce00b00186c6d2e7e3sm4742224plb.26.2022.10.31.11.03.50
+        by smtp.gmail.com with ESMTPSA id q14-20020a170902a3ce00b00186c6d2e7e3sm4742224plb.26.2022.10.31.11.03.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 11:03:55 -0700 (PDT)
+        Mon, 31 Oct 2022 11:04:03 -0700 (PDT)
 From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 To:     martin.petersen@oracle.com, jejb@linux.ibm.com,
         andersson@kernel.org, vkoul@kernel.org,
@@ -60,9 +60,9 @@ Cc:     konrad.dybcio@somainline.org, robh+dt@kernel.org,
         linux-phy@lists.infradead.org, linux-scsi@vger.kernel.org,
         dmitry.baryshkov@linaro.org, ahalaney@redhat.com,
         Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Subject: [PATCH v2 11/15] scsi: ufs: ufs-qcom: Use dev_err_probe() for printing probe error
-Date:   Mon, 31 Oct 2022 23:32:13 +0530
-Message-Id: <20221031180217.32512-12-manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v2 12/15] scsi: ufs: ufs-qcom: Fix the Qcom register name for offset 0xD0
+Date:   Mon, 31 Oct 2022 23:32:14 +0530
+Message-Id: <20221031180217.32512-13-manivannan.sadhasivam@linaro.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221031180217.32512-1-manivannan.sadhasivam@linaro.org>
 References: <20221031180217.32512-1-manivannan.sadhasivam@linaro.org>
@@ -78,29 +78,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Make use of dev_err_probe() for printing the probe error.
+On newer UFS revisions, the register at offset 0xD0 is called,
+REG_UFS_PARAM0. Since the existing register, RETRY_TIMER_REG is not used
+anywhere, it is safe to use the new name.
 
 Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 ---
- drivers/ufs/host/ufs-qcom.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+ drivers/ufs/host/ufs-qcom.h | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-index 8bb0f4415f1a..38e2ed749d75 100644
---- a/drivers/ufs/host/ufs-qcom.c
-+++ b/drivers/ufs/host/ufs-qcom.c
-@@ -1441,9 +1441,9 @@ static int ufs_qcom_probe(struct platform_device *pdev)
- 	/* Perform generic probe */
- 	err = ufshcd_pltfrm_init(pdev, &ufs_hba_qcom_vops);
- 	if (err)
--		dev_err(dev, "ufshcd_pltfrm_init() failed %d\n", err);
-+		return dev_err_probe(dev, err, "ufshcd_pltfrm_init() failed\n");
- 
--	return err;
-+	return 0;
- }
- 
- /**
+diff --git a/drivers/ufs/host/ufs-qcom.h b/drivers/ufs/host/ufs-qcom.h
+index 9d96ac71b27f..7fe928b82753 100644
+--- a/drivers/ufs/host/ufs-qcom.h
++++ b/drivers/ufs/host/ufs-qcom.h
+@@ -33,7 +33,8 @@ enum {
+ 	REG_UFS_TX_SYMBOL_CLK_NS_US         = 0xC4,
+ 	REG_UFS_LOCAL_PORT_ID_REG           = 0xC8,
+ 	REG_UFS_PA_ERR_CODE                 = 0xCC,
+-	REG_UFS_RETRY_TIMER_REG             = 0xD0,
++	/* On older UFS revisions, this register is called "RETRY_TIMER_REG" */
++	REG_UFS_PARAM0                      = 0xD0,
+ 	REG_UFS_PA_LINK_STARTUP_TIMER       = 0xD8,
+ 	REG_UFS_CFG1                        = 0xDC,
+ 	REG_UFS_CFG2                        = 0xE0,
 -- 
 2.25.1
 
