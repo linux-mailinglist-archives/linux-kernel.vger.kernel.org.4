@@ -2,61 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA0536132FF
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 10:47:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C23C8613301
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 10:48:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbiJaJrg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 05:47:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52774 "EHLO
+        id S230092AbiJaJsF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 05:48:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiJaJrd (ORCPT
+        with ESMTP id S229517AbiJaJsC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 05:47:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE5A4CE24
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 02:47:32 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Mon, 31 Oct 2022 05:48:02 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E7DECE24;
+        Mon, 31 Oct 2022 02:48:00 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C693B81212
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:47:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EF220C433C1
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:47:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667209650;
-        bh=rad282IUjlavnJhQkjllJqEsmm5LKeYiYL25aKqwStY=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=A1AvzY2c+JfiDeu2NhcQ1u0/X2bsWxW3kzGFywUupIaxzt9IhAisHYtFobI0J14V5
-         QBVoIZuSXqgDc5oHuEAxfY2/idV9rWixlxHgipVQsNGAGbfkTfro5+fWBgZ+yjNXpc
-         9kUCiDlV9NljX5MbSmwVc75oOKpliO27MDcHnzoqhU/yW2PzEwBWW5wqj2kObrX3/H
-         9dEjqjGXb+v/VG69EAh+RVZuY28d9yTbMp3mxGW7w0N5ig9TRX7xRcdN65a3Z5E8pU
-         c/35lAPmIb368qv6Vz22NPzgmk4/2A3MDIjJy69mkJw0lIEDtx5AIrcB4nGyD1g6iN
-         WdafaKMlLfS0A==
-Received: by mail-lf1-f51.google.com with SMTP id f37so18352191lfv.8
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 02:47:29 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1ktbDotJEQhaoKjwYutM1qb0I5bcS0VDJnY0sx+j9yfIFgtNUE
-        lqYlcR59zSgNf32CnOQGTEYVcu1aq6YrZfo9giY=
-X-Google-Smtp-Source: AMsMyM60t45STS/opYgyo3fuMLm4g85mXQPHpvNdkREzVodd2siYaK2engkhU/8KML3/kEhwnkV/LCAWFriGNYuvSyg=
-X-Received: by 2002:a19:6512:0:b0:4a9:32dd:39a4 with SMTP id
- z18-20020a196512000000b004a932dd39a4mr5098090lfb.539.1667209648001; Mon, 31
- Oct 2022 02:47:28 -0700 (PDT)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 2BF661F91D;
+        Mon, 31 Oct 2022 09:47:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1667209679; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=raHgg7DtJH4uQgAjVjur0VNOZMIRN0IqMEXdCp7DJG0=;
+        b=MR2kiDjYDeoVxF05Qb+8FkdIr+BlbKMJDj4myz/T3udLivQJy31IqNp3YVoYd+Ihd2GhJP
+        C5VKQcxy4hMQdSygNKwFPhpmjDYWlameC2jzUNYK6dybC3WZwmKa0juEIftXdi0wj1xJku
+        cGvJagZCshYtjWpuaJn+WBTiQwm44Y4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1667209679;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=raHgg7DtJH4uQgAjVjur0VNOZMIRN0IqMEXdCp7DJG0=;
+        b=BRJ243cbEkbeCvyt7xfigOoyAEFqvgT6K6tTNq6y4ez3po5cHiptEQo5NkkAmez4lieTvj
+        FFnVmHWXx1OI8xBw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DDB6C13451;
+        Mon, 31 Oct 2022 09:47:58 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id k4trM86ZX2P/ZQAAMHmgww
+        (envelope-from <tzimmermann@suse.de>); Mon, 31 Oct 2022 09:47:58 +0000
+Message-ID: <7f76fb8c-50a5-02d2-02fd-1af0497d823f@suse.de>
+Date:   Mon, 31 Oct 2022 10:47:58 +0100
 MIME-Version: 1.0
-References: <20221031082421.1957288-1-anshuman.khandual@arm.com>
-In-Reply-To: <20221031082421.1957288-1-anshuman.khandual@arm.com>
-From:   Ard Biesheuvel <ardb@kernel.org>
-Date:   Mon, 31 Oct 2022 10:47:16 +0100
-X-Gmail-Original-Message-ID: <CAMj1kXHmt=_LWLZP-sce0uCV5GsxQCNL+9y6vERuPc3tM2FrQQ@mail.gmail.com>
-Message-ID: <CAMj1kXHmt=_LWLZP-sce0uCV5GsxQCNL+9y6vERuPc3tM2FrQQ@mail.gmail.com>
-Subject: Re: [PATCH] arm64/mm: Simplify and document pte_to_phys() for 52 bit addresses
-To:     Anshuman Khandual <anshuman.khandual@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2] drm/format-helper: Only advertise supported formats
+ for conversion
+Content-Language: en-US
+To:     Hector Martin <marcan@marcan.st>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>
+Cc:     Pekka Paalanen <pekka.paalanen@collabora.com>,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org, asahi@lists.linux.dev
+References: <20221027135711.24425-1-marcan@marcan.st>
+From:   Thomas Zimmermann <tzimmermann@suse.de>
+In-Reply-To: <20221027135711.24425-1-marcan@marcan.st>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+ protocol="application/pgp-signature";
+ boundary="------------ZcRpZwJjC5T9YfZ0di9GwKWA"
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -64,153 +79,207 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Anshuman,
+This is an OpenPGP/MIME signed message (RFC 4880 and 3156)
+--------------ZcRpZwJjC5T9YfZ0di9GwKWA
+Content-Type: multipart/mixed; boundary="------------V7FArZw6FPO00zI03BcuoUn3";
+ protected-headers="v1"
+From: Thomas Zimmermann <tzimmermann@suse.de>
+To: Hector Martin <marcan@marcan.st>,
+ Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+ Maxime Ripard <mripard@kernel.org>, David Airlie <airlied@gmail.com>,
+ Daniel Vetter <daniel@ffwll.ch>,
+ Javier Martinez Canillas <javierm@redhat.com>
+Cc: Pekka Paalanen <pekka.paalanen@collabora.com>,
+ dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ stable@vger.kernel.org, asahi@lists.linux.dev
+Message-ID: <7f76fb8c-50a5-02d2-02fd-1af0497d823f@suse.de>
+Subject: Re: [PATCH v2] drm/format-helper: Only advertise supported formats
+ for conversion
+References: <20221027135711.24425-1-marcan@marcan.st>
+In-Reply-To: <20221027135711.24425-1-marcan@marcan.st>
 
-On Mon, 31 Oct 2022 at 09:24, Anshuman Khandual
-<anshuman.khandual@arm.com> wrote:
->
-> pte_to_phys() assembly definition does multiple bits field transformations
-> to derive physical address, embedded inside a page table entry. Unlike its
-> C counter part i.e __pte_to_phys(), pte_to_phys() is not very apparent. It
-> simplifies these operations, by deriving all positions and widths in macro
-> format and documenting individual steps in the physical address extraction.
-> While here, this also updates __pte_to_phys() and __phys_to_pte_val().
->
-> Cc: Catalin Marinas <catalin.marinas@arm.com>
-> Cc: Will Deacon <will@kernel.org>
-> Cc: Mark Brown <broonie@kernel.org>
-> Cc: Mark Rutland <mark.rutland@arm.com>
-> Cc: Ard Biesheuvel <ardb@kernel.org>
-> Cc: linux-arm-kernel@lists.infradead.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
-> ---
-> This applies on v6.1-rc3.
->
->  arch/arm64/include/asm/assembler.h     | 37 +++++++++++++++++++++++---
->  arch/arm64/include/asm/pgtable-hwdef.h |  5 ++++
->  arch/arm64/include/asm/pgtable.h       |  4 +--
->  3 files changed, 41 insertions(+), 5 deletions(-)
->
-> diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
-> index e5957a53be39..aea320b04d85 100644
-> --- a/arch/arm64/include/asm/assembler.h
-> +++ b/arch/arm64/include/asm/assembler.h
-> @@ -661,9 +661,40 @@ alternative_endif
->
->         .macro  pte_to_phys, phys, pte
->  #ifdef CONFIG_ARM64_PA_BITS_52
-> -       ubfiz   \phys, \pte, #(48 - 16 - 12), #16
-> -       bfxil   \phys, \pte, #16, #32
-> -       lsl     \phys, \phys, #16
-> +       /*
-> +        * Physical address needs to be derived from the given page table
-> +        * entry according to the following formula.
-> +        *
-> +        *      phys = pte[47..16] | (pte[15..12] << 36)
-> +        *
-> +        * These instructions here retrieve the embedded 52 bits physical
-> +        * address in phys[51..0]. This involves copying over both higher
-> +        * and lower addresses into phys[35..0] which is then followed by
-> +        * 16 bit left shift.
-> +        *
-> +        * Get higher 4 bits
-> +        *
-> +        *      phys[35..20] = pte[15..0] i.e phys[35..32] = pte[15..12]
-> +        *
-> +        * Get lower 32 bits
-> +        *
-> +        *      phys[31..0] = pte[47..16]
-> +        *
-> +        * Till now
-> +        *
-> +        *      phys[35..0] = pte[51..16]
-> +        *
-> +        * Left shift
-> +        *
-> +        *      phys[51..0]  = phys[35..0] << 16
-> +        *
-> +        * Finally
-> +        *
-> +        *      phys[51..16] = pte[47..16] | (pte[15..12] << 36)
-> +        */
-> +       ubfiz   \phys, \pte, #HIGH_ADDR_SHIFT, #HIGH_ADDR_BITS_MAX
-> +       bfxil   \phys, \pte, #PAGE_SHIFT, #(LOW_ADDR_BITS_MAX - PAGE_SHIFT)
-> +       lsl     \phys, \phys, #PAGE_SHIFT
+--------------V7FArZw6FPO00zI03BcuoUn3
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: base64
 
+TWVyZ2VkIGludG8gZHJtLW1pc2MtZml4ZXMNCg0KQW0gMjcuMTAuMjIgdW0gMTU6NTcgc2No
+cmllYiBIZWN0b3IgTWFydGluOg0KPiBkcm1fZmJfYnVpbGRfZm91cmNjX2xpc3QoKSBjdXJy
+ZW50bHkgcmV0dXJucyBhbGwgZW11bGF0ZWQgZm9ybWF0cw0KPiB1bmNvbmRpdGlvbmFsbHkg
+YXMgbG9uZyBhcyB0aGUgbmF0aXZlIGZvcm1hdCBpcyBhbW9uZyB0aGVtLCBldmVuIHRob3Vn
+aA0KPiBub3QgYWxsIGNvbWJpbmF0aW9ucyBoYXZlIGNvbnZlcnNpb24gaGVscGVycy4gQWx0
+aG91Z2ggdGhlIGxpc3QgaXMNCj4gYXJndWFibHkgcHJvdmlkZWQgdG8gdXNlcnNwYWNlIGlu
+IHByZWNlZGVuY2Ugb3JkZXIsIHVzZXJzcGFjZSBjYW4gcGljaw0KPiBzb21ldGhpbmcgb3V0
+LW9mLW9yZGVyIChhbmQgdGh1cyBicmVhayB3aGVuIGl0IHNob3VsZG4ndCksIG9yIHNpbXBs
+eQ0KPiBvbmx5IHN1cHBvcnQgYSBmb3JtYXQgdGhhdCBpcyB1bnN1cHBvcnRlZCAoYW5kIHRo
+dXMgdGhpbmsgaXQgY2FuIHdvcmssDQo+IHdoaWNoIHJlc3VsdHMgaW4gdGhlIGFwcGVhcmFu
+Y2Ugb2YgYSBoYW5nIGFzIEZCIGJsaXRzIGZhaWwgbGF0ZXIgb24sDQo+IGluc3RlYWQgb2Yg
+dGhlIGluaXRpYWxpemF0aW9uIGVycm9yIHlvdSdkIGV4cGVjdCBpbiB0aGlzIGNhc2UpLg0K
+PiANCj4gQWRkIGNoZWNrcyB0byBmaWx0ZXIgdGhlIGxpc3Qgb2YgZW11bGF0ZWQgZm9ybWF0
+cyB0byBvbmx5IHRob3NlDQo+IHN1cHBvcnRlZCBmb3IgY29udmVyc2lvbiB0byB0aGUgbmF0
+aXZlIGZvcm1hdC4gVGhpcyBwcmVzdW1lcyB0aGF0IHRoZXJlDQo+IGlzIGEgc2luZ2xlIG5h
+dGl2ZSBmb3JtYXQgKG9ubHkgdGhlIGZpcnN0IGlzIGNoZWNrZWQsIGlmIHRoZXJlIGFyZQ0K
+PiBtdWx0aXBsZSkuIFJlZmFjdG9yaW5nIHRoaXMgQVBJIHRvIGRyb3AgdGhlIG5hdGl2ZSBs
+aXN0IG9yIHN1cHBvcnQgaXQNCj4gcHJvcGVybHkgKGJ5IHJldHVybmluZyB0aGUgYXBwcm9w
+cmlhdGUgZW11bGF0ZWQtPm5hdGl2ZSBtYXBwaW5nIHRhYmxlKQ0KPiBpcyBsZWZ0IGZvciBh
+IGZ1dHVyZSBwYXRjaC4NCj4gDQo+IFRoZSBzaW1wbGVkcm0gZHJpdmVyIGlzIGxlZnQgYXMt
+aXMgd2l0aCBhIGZ1bGwgdGFibGUgb2YgZW11bGF0ZWQNCj4gZm9ybWF0cy4gVGhpcyBrZWVw
+cyBhbGwgY3VycmVudGx5IHdvcmtpbmcgY29udmVyc2lvbnMgYXZhaWxhYmxlIGFuZA0KPiBk
+cm9wcyBhbGwgdGhlIGJyb2tlbiBvbmVzIChpLmUuIHRoaXMgYSBzdHJpY3QgYnVnZml4IHBh
+dGNoLCBhZGRpbmcgbm8NCj4gbmV3IHN1cHBvcnRlZCBmb3JtYXRzIG5vciByZW1vdmluZyBh
+bnkgYWN0dWFsbHkgd29ya2luZyBvbmVzKS4gSW4gb3JkZXINCj4gdG8gYXZvaWQgcHJvbGlm
+ZXJhdGlvbiBvZiBlbXVsYXRlZCBmb3JtYXRzLCBmdXR1cmUgZHJpdmVycyBzaG91bGQNCj4g
+YWR2ZXJ0aXNlIG9ubHkgWFJHQjg4ODggYXMgdGhlIHNvbGUgZW11bGF0ZWQgZm9ybWF0IChz
+aW5jZSBzb21lDQo+IHVzZXJzcGFjZSBhc3N1bWVzIGl0cyBwcmVzZW5jZSkuDQo+IA0KPiBU
+aGlzIGZpeGVzIGEgcmVhbCB1c2VyIHJlZ3Jlc3Npb24gd2hlcmUgdGhlID9SR0IyMTAxMDEw
+IHN1cHBvcnQgY29tbWl0DQo+IHN0YXJ0ZWQgYWR2ZXJ0aXNpbmcgaXQgdW5jb25kaXRpb25h
+bGx5IHdoZXJlIG5vdCBzdXBwb3J0ZWQsIGFuZCBLV2luDQo+IGRlY2lkZWQgdG8gc3RhcnQg
+dG8gdXNlIGl0IG92ZXIgdGhlIG5hdGl2ZSBmb3JtYXQgYW5kIGJyb2tlLCBidXQgYWxzbw0K
+PiB0aGUgZml4ZXMgdGhlIHNwdXJpb3VzIFJHQjU2NS9SR0I4ODggZm9ybWF0cyB3aGljaCBo
+YXZlIGJlZW4gd3JvbmdseQ0KPiB1bmNvbmRpdGlvbmFsbHkgYWR2ZXJ0aXNlZCBzaW5jZSB0
+aGUgZGF3biBvZiBzaW1wbGVkcm0uDQo+IA0KPiBGaXhlczogNmVhOTY2ZmNhMDg0ICgiZHJt
+L3NpbXBsZWRybTogQWRkIFtBWF1SR0IyMTAxMDEwIGZvcm1hdHMiKQ0KPiBGaXhlczogMTFl
+OGY1ZmQyMjNiICgiZHJtOiBBZGQgc2ltcGxlZHJtIGRyaXZlciIpDQo+IENjOiBzdGFibGVA
+dmdlci5rZXJuZWwub3JnDQo+IFNpZ25lZC1vZmYtYnk6IEhlY3RvciBNYXJ0aW4gPG1hcmNh
+bkBtYXJjYW4uc3Q+DQo+IC0tLQ0KPiBJJ20gcHJvcG9zaW5nIHRoaXMgYWx0ZXJuYXRpdmUg
+YXBwcm9hY2ggYWZ0ZXIgYSBoZWF0ZWQgZGlzY3Vzc2lvbiBvbg0KPiBJUkMuIEknbSBvdXQg
+b2YgaWRlYXMsIGlmIHknYWxsIGRvbid0IGxpa2UgdGhpcyBvbmUgeW91IGNhbiBmaWd1cmUg
+aXQNCj4gb3V0IGZvciB5b3Vyc2V2ZXMgOi0pDQo+IA0KPiBDaGFuZ2VzIHNpbmNlIHYxOg0K
+PiBUaGlzIHYyIG1vdmVzIGFsbCB0aGUgY2hhbmdlcyB0byB0aGUgaGVscGVyIChzbyB0aGV5
+IHdpbGwgYXBwbHkgdG8NCj4gdGhlIHVwY29taW5nIG9mZHJtLCB0aG91Z2ggb2Zkcm0gYWxz
+byBuZWVkcyB0byBiZSBmaXhlZCB0byB0cmltIGl0cw0KPiBmb3JtYXQgdGFibGUgdG8gb25s
+eSBmb3JtYXRzIHRoYXQgc2hvdWxkIGJlIGVtdWxhdGVkLCBwcm9iYWJseSBvbmx5DQo+IFhS
+R0I4ODg4LCB0byBhdm9pZCBmdXJ0aGVyIHByb2xpZmVyYXRpbmcgdGhlIHVzZSBvZiBjb252
+ZXJzaW9ucyksDQo+IGFuZCBhdm9pZHMgdG91Y2hpbmcgbW9yZSB0aGFuIG9uZSBmaWxlLiBU
+aGUgQVBJIHN0aWxsIG5lZWRzIGNsZWFudXANCj4gYXMgbWVudGlvbmVkIChzdXBwb3J0aW5n
+IG1vcmUgdGhhbiBvbmUgbmF0aXZlIGZvcm1hdCBpcyBmdW5kYW1lbnRhbGx5DQo+IGJyb2tl
+biwgc2luY2UgdGhlIGhlbHBlciB3b3VsZCBuZWVkIHRvIHRlbGwgdGhlIGRyaXZlciAqd2hh
+dCogbmF0aXZlDQo+IGZvcm1hdCB0byB1c2UgZm9yICplYWNoKiBlbXVsYXRlZCBmb3JtYXQg
+c29tZWhvdyksIGJ1dCBhbGwgY3VycmVudCBhbmQNCj4gcGxhbm5lZCB1c2VycyBvbmx5IHBh
+c3MgaW4gb25lIG5hdGl2ZSBmb3JtYXQsIHNvIHRoaXMgY2FuIChhbmQgc2hvdWxkKQ0KPiBi
+ZSBmaXhlZCBsYXRlci4NCj4gDQo+IEFzaWRlOiBBZnRlciBvdGhlciBJUkMgZGlzY3Vzc2lv
+biwgSSdtIHRlc3RpbmcgbnVraW5nIHRoZQ0KPiBYUkdCMjEwMTAxMCA8LT4gQVJHQjIxMDEw
+MTAgYWR2ZXJ0aXNlbWVudCAod2hpY2ggZG9lcyBub3QgaW52b2x2ZQ0KPiBjb252ZXJzaW9u
+KSBieSByZW1vdmluZyB0aG9zZSBlbnRyaWVzIGZyb20gc2ltcGxlZHJtIGluIHRoZSBBc2Fo
+aSBMaW51eA0KPiBkb3duc3RyZWFtIHRyZWUuIEFzIGZhciBhcyBJJ20gY29uY2VybmVkLCBp
+dCBjYW4gYmUgcmVtb3ZlZCBpZiBub2JvZHkNCj4gY29tcGxhaW5zIChieSByZW1vdmluZyB0
+aG9zZSBlbnRyaWVzIGZyb20gdGhlIHNpbXBsZWRybSBhcnJheSksIGlmDQo+IG1haW50YWlu
+ZXJzIGFyZSBnZW5lcmFsbHkgb2theSB3aXRoIHJlbW92aW5nIGFkdmVydGlzZWQgZm9ybWF0
+cyBhdCBhbGwuDQo+IElmIHNvLCB0aGVyZSBtaWdodCBiZSBvdGhlciBvcHBvcnR1bml0aWVz
+IGZvciBmdXJ0aGVyIHRyaW1taW5nIHRoZSBsaXN0DQo+IG5vbi1uYXRpdmUgZm9ybWF0cyBh
+ZHZlcnRpc2VkIHRvIHVzZXJzcGFjZS4NCj4gDQo+IFRlc3RlZCB3aXRoIEtXaW4tWDExLCBL
+V2luLVdheWxhbmQsIEdOT01FLVgxMSwgR05PTUUtV2F5bGFuZCwgYW5kIFdlc3Rvbg0KPiBv
+biBib3RoIFhSR0IyMTAxMDEwIGFuZCBSR0I4ODg4IHNpbXBsZWRybSBmcmFtZWJ1ZmZlcnMu
+DQo+IA0KPiAgIGRyaXZlcnMvZ3B1L2RybS9kcm1fZm9ybWF0X2hlbHBlci5jIHwgNjYgKysr
+KysrKysrKysrKysrKysrKystLS0tLS0tLS0NCj4gICAxIGZpbGUgY2hhbmdlZCwgNDcgaW5z
+ZXJ0aW9ucygrKSwgMTkgZGVsZXRpb25zKC0pDQo+IA0KPiBkaWZmIC0tZ2l0IGEvZHJpdmVy
+cy9ncHUvZHJtL2RybV9mb3JtYXRfaGVscGVyLmMgYi9kcml2ZXJzL2dwdS9kcm0vZHJtX2Zv
+cm1hdF9oZWxwZXIuYw0KPiBpbmRleCBlMmY3NjYyMTQ1M2MuLjNlZTU5YmFlOWQyZiAxMDA2
+NDQNCj4gLS0tIGEvZHJpdmVycy9ncHUvZHJtL2RybV9mb3JtYXRfaGVscGVyLmMNCj4gKysr
+IGIvZHJpdmVycy9ncHUvZHJtL2RybV9mb3JtYXRfaGVscGVyLmMNCj4gQEAgLTgwNyw2ICs4
+MDcsMzggQEAgc3RhdGljIGJvb2wgaXNfbGlzdGVkX2ZvdXJjYyhjb25zdCB1aW50MzJfdCAq
+Zm91cmNjcywgc2l6ZV90IG5mb3VyY2NzLCB1aW50MzJfdA0KPiAgIAlyZXR1cm4gZmFsc2U7
+DQo+ICAgfQ0KPiAgIA0KPiArc3RhdGljIGNvbnN0IHVpbnQzMl90IGNvbnZfZnJvbV94cmdi
+ODg4OFtdID0gew0KPiArCURSTV9GT1JNQVRfWFJHQjg4ODgsDQo+ICsJRFJNX0ZPUk1BVF9B
+UkdCODg4OCwNCj4gKwlEUk1fRk9STUFUX1hSR0IyMTAxMDEwLA0KPiArCURSTV9GT1JNQVRf
+QVJHQjIxMDEwMTAsDQo+ICsJRFJNX0ZPUk1BVF9SR0I1NjUsDQo+ICsJRFJNX0ZPUk1BVF9S
+R0I4ODgsDQo+ICt9Ow0KPiArDQo+ICtzdGF0aWMgY29uc3QgdWludDMyX3QgY29udl9mcm9t
+X3JnYjU2NV84ODhbXSA9IHsNCj4gKwlEUk1fRk9STUFUX1hSR0I4ODg4LA0KPiArCURSTV9G
+T1JNQVRfQVJHQjg4ODgsDQo+ICt9Ow0KPiArDQo+ICtzdGF0aWMgYm9vbCBpc19jb252ZXJz
+aW9uX3N1cHBvcnRlZCh1aW50MzJfdCBmcm9tLCB1aW50MzJfdCB0bykNCj4gK3sNCj4gKwlz
+d2l0Y2ggKGZyb20pIHsNCj4gKwljYXNlIERSTV9GT1JNQVRfWFJHQjg4ODg6DQo+ICsJY2Fz
+ZSBEUk1fRk9STUFUX0FSR0I4ODg4Og0KPiArCQlyZXR1cm4gaXNfbGlzdGVkX2ZvdXJjYyhj
+b252X2Zyb21feHJnYjg4ODgsIEFSUkFZX1NJWkUoY29udl9mcm9tX3hyZ2I4ODg4KSwgdG8p
+Ow0KPiArCWNhc2UgRFJNX0ZPUk1BVF9SR0I1NjU6DQo+ICsJY2FzZSBEUk1fRk9STUFUX1JH
+Qjg4ODoNCj4gKwkJcmV0dXJuIGlzX2xpc3RlZF9mb3VyY2MoY29udl9mcm9tX3JnYjU2NV84
+ODgsIEFSUkFZX1NJWkUoY29udl9mcm9tX3JnYjU2NV84ODgpLCB0byk7DQo+ICsJY2FzZSBE
+Uk1fRk9STUFUX1hSR0IyMTAxMDEwOg0KPiArCQlyZXR1cm4gdG8gPT0gRFJNX0ZPUk1BVF9B
+UkdCMjEwMTAxMDsNCj4gKwljYXNlIERSTV9GT1JNQVRfQVJHQjIxMDEwMTA6DQo+ICsJCXJl
+dHVybiB0byA9PSBEUk1fRk9STUFUX1hSR0IyMTAxMDEwOw0KPiArCWRlZmF1bHQ6DQo+ICsJ
+CXJldHVybiBmYWxzZTsNCj4gKwl9DQo+ICt9DQo+ICsNCj4gICAvKioNCj4gICAgKiBkcm1f
+ZmJfYnVpbGRfZm91cmNjX2xpc3QgLSBGaWx0ZXJzIGEgbGlzdCBvZiBzdXBwb3J0ZWQgY29s
+b3IgZm9ybWF0cyBhZ2FpbnN0DQo+ICAgICogICAgICAgICAgICAgICAgICAgICAgICAgICAg
+dGhlIGRldmljZSdzIG5hdGl2ZSBmb3JtYXRzDQo+IEBAIC04MjcsNyArODU5LDkgQEAgc3Rh
+dGljIGJvb2wgaXNfbGlzdGVkX2ZvdXJjYyhjb25zdCB1aW50MzJfdCAqZm91cmNjcywgc2l6
+ZV90IG5mb3VyY2NzLCB1aW50MzJfdA0KPiAgICAqIGJlIGhhbmRlZCBvdmVyIHRvIGRybV91
+bml2ZXJzYWxfcGxhbmVfaW5pdCgpIGV0IGFsLiBOYXRpdmUgZm9ybWF0cw0KPiAgICAqIHdp
+bGwgZ28gYmVmb3JlIGVtdWxhdGVkIGZvcm1hdHMuIE90aGVyIGhldXJpc3RpY3MgbWlnaHQg
+YmUgYXBwbGllZA0KPiAgICAqIHRvIG9wdGltaXplIHRoZSBvcmRlci4gRm9ybWF0cyBuZWFy
+IHRoZSBiZWdpbm5pbmcgb2YgdGhlIGxpc3QgYXJlDQo+IC0gKiB1c3VhbGx5IHByZWZlcnJl
+ZCBvdmVyIGZvcm1hdHMgbmVhciB0aGUgZW5kIG9mIHRoZSBsaXN0Lg0KPiArICogdXN1YWxs
+eSBwcmVmZXJyZWQgb3ZlciBmb3JtYXRzIG5lYXIgdGhlIGVuZCBvZiB0aGUgbGlzdC4gRm9y
+bWF0cw0KPiArICogd2l0aG91dCBjb252ZXJzaW9uIGhlbHBlcnMgd2lsbCBiZSBza2lwcGVk
+LiBOZXcgZHJpdmVycyBzaG91bGQgb25seQ0KPiArICogcGFzcyBpbiBYUkdCODg4OCBhbmQg
+YXZvaWQgZXhwb3NpbmcgYWRkaXRpb25hbCBlbXVsYXRlZCBmb3JtYXRzLg0KPiAgICAqDQo+
+ICAgICogUmV0dXJuczoNCj4gICAgKiBUaGUgbnVtYmVyIG9mIGNvbG9yLWZvcm1hdHMgNEND
+IGNvZGVzIHJldHVybmVkIGluIEBmb3VyY2NzX291dC4NCj4gQEAgLTgzOSw3ICs4NzMsNyBA
+QCBzaXplX3QgZHJtX2ZiX2J1aWxkX2ZvdXJjY19saXN0KHN0cnVjdCBkcm1fZGV2aWNlICpk
+ZXYsDQo+ICAgew0KPiAgIAl1MzIgKmZvdXJjY3MgPSBmb3VyY2NzX291dDsNCj4gICAJY29u
+c3QgdTMyICpmb3VyY2NzX2VuZCA9IGZvdXJjY3Nfb3V0ICsgbmZvdXJjY3Nfb3V0Ow0KPiAt
+CWJvb2wgZm91bmRfbmF0aXZlID0gZmFsc2U7DQo+ICsJdWludDMyX3QgbmF0aXZlX2Zvcm1h
+dCA9IDA7DQo+ICAgCXNpemVfdCBpOw0KPiAgIA0KPiAgIAkvKg0KPiBAQCAtODU4LDI2ICs4
+OTIsMTggQEAgc2l6ZV90IGRybV9mYl9idWlsZF9mb3VyY2NfbGlzdChzdHJ1Y3QgZHJtX2Rl
+dmljZSAqZGV2LA0KPiAgIA0KPiAgIAkJZHJtX2RiZ19rbXMoZGV2LCAiYWRkaW5nIG5hdGl2
+ZSBmb3JtYXQgJXA0Y2NcbiIsICZmb3VyY2MpOw0KPiAgIA0KPiAtCQlpZiAoIWZvdW5kX25h
+dGl2ZSkNCj4gLQkJCWZvdW5kX25hdGl2ZSA9IGlzX2xpc3RlZF9mb3VyY2MoZHJpdmVyX2Zv
+dXJjY3MsIGRyaXZlcl9uZm91cmNjcywgZm91cmNjKTsNCj4gKwkJLyoNCj4gKwkJICogVGhl
+cmUgc2hvdWxkIG9ubHkgYmUgb25lIG5hdGl2ZSBmb3JtYXQgd2l0aCB0aGUgY3VycmVudCBB
+UEkuDQo+ICsJCSAqIFRoaXMgQVBJIG5lZWRzIHRvIGJlIHJlZmFjdG9yZWQgdG8gY29ycmVj
+dGx5IHN1cHBvcnQgYXJiaXRyYXJ5DQo+ICsJCSAqIHNldHMgb2YgbmF0aXZlIGZvcm1hdHMs
+IHNpbmNlIGl0IG5lZWRzIHRvIHJlcG9ydCB3aGljaCBuYXRpdmUNCj4gKwkJICogZm9ybWF0
+IHRvIHVzZSBmb3IgZWFjaCBlbXVsYXRlZCBmb3JtYXQuDQo+ICsJCSAqLw0KPiArCQlpZiAo
+IW5hdGl2ZV9mb3JtYXQpDQo+ICsJCQluYXRpdmVfZm9ybWF0ID0gZm91cmNjOw0KPiAgIAkJ
+KmZvdXJjY3MgPSBmb3VyY2M7DQo+ICAgCQkrK2ZvdXJjY3M7DQo+ICAgCX0NCj4gICANCj4g
+LQkvKg0KPiAtCSAqIFRoZSBwbGFuZSdzIGF0b21pY191cGRhdGUgaGVscGVyIGNvbnZlcnRz
+IHRoZSBmcmFtZWJ1ZmZlcidzIGNvbG9yIGZvcm1hdA0KPiAtCSAqIHRvIGEgbmF0aXZlIGZv
+cm1hdCB3aGVuIGNvcHlpbmcgdG8gZGV2aWNlIG1lbW9yeS4NCj4gLQkgKg0KPiAtCSAqIElm
+IHRoZXJlIGlzIG5vdCBhIHNpbmdsZSBmb3JtYXQgc3VwcG9ydGVkIGJ5IGJvdGgsIGRldmlj
+ZSBhbmQNCj4gLQkgKiBkcml2ZXIsIHRoZSBuYXRpdmUgZm9ybWF0cyBhcmUgbGlrZWx5IG5v
+dCBzdXBwb3J0ZWQgYnkgdGhlIGNvbnZlcnNpb24NCj4gLQkgKiBoZWxwZXJzLiBUaGVyZWZv
+cmUgKm9ubHkqIHN1cHBvcnQgdGhlIG5hdGl2ZSBmb3JtYXRzIGFuZCBhZGQgYQ0KPiAtCSAq
+IGNvbnZlcnNpb24gaGVscGVyIEFTQVAuDQo+IC0JICovDQo+IC0JaWYgKCFmb3VuZF9uYXRp
+dmUpIHsNCj4gLQkJZHJtX3dhcm4oZGV2LCAiRm9ybWF0IGNvbnZlcnNpb24gaGVscGVycyBy
+ZXF1aXJlZCB0byBhZGQgZXh0cmEgZm9ybWF0cy5cbiIpOw0KPiAtCQlnb3RvIG91dDsNCj4g
+LQl9DQo+IC0NCj4gICAJLyoNCj4gICAJICogVGhlIGV4dHJhIGZvcm1hdHMsIGVtdWxhdGVk
+IGJ5IHRoZSBkcml2ZXIsIGdvIHNlY29uZC4NCj4gICAJICovDQo+IEBAIC04OTAsNiArOTE2
+LDkgQEAgc2l6ZV90IGRybV9mYl9idWlsZF9mb3VyY2NfbGlzdChzdHJ1Y3QgZHJtX2Rldmlj
+ZSAqZGV2LA0KPiAgIAkJfSBlbHNlIGlmIChmb3VyY2NzID09IGZvdXJjY3NfZW5kKSB7DQo+
+ICAgCQkJZHJtX3dhcm4oZGV2LCAiSWdub3JpbmcgZW11bGF0ZWQgZm9ybWF0ICVwNGNjXG4i
+LCAmZm91cmNjKTsNCj4gICAJCQljb250aW51ZTsgLyogZW5kIG9mIGF2YWlsYWJsZSBvdXRw
+dXQgYnVmZmVyICovDQo+ICsJCX0gZWxzZSBpZiAoIWlzX2NvbnZlcnNpb25fc3VwcG9ydGVk
+KGZvdXJjYywgbmF0aXZlX2Zvcm1hdCkpIHsNCj4gKwkJCWRybV9kYmdfa21zKGRldiwgIlVu
+c3VwcG9ydGVkIGVtdWxhdGVkIGZvcm1hdCAlcDRjY1xuIiwgJmZvdXJjYyk7DQo+ICsJCQlj
+b250aW51ZTsgLyogZm9ybWF0IGlzIG5vdCBzdXBwb3J0ZWQgZm9yIGNvbnZlcnNpb24gKi8N
+Cj4gICAJCX0NCj4gICANCj4gICAJCWRybV9kYmdfa21zKGRldiwgImFkZGluZyBlbXVsYXRl
+ZCBmb3JtYXQgJXA0Y2NcbiIsICZmb3VyY2MpOw0KPiBAQCAtODk4LDcgKzkyNyw2IEBAIHNp
+emVfdCBkcm1fZmJfYnVpbGRfZm91cmNjX2xpc3Qoc3RydWN0IGRybV9kZXZpY2UgKmRldiwN
+Cj4gICAJCSsrZm91cmNjczsNCj4gICAJfQ0KPiAgIA0KPiAtb3V0Og0KPiAgIAlyZXR1cm4g
+Zm91cmNjcyAtIGZvdXJjY3Nfb3V0Ow0KPiAgIH0NCj4gICBFWFBPUlRfU1lNQk9MKGRybV9m
+Yl9idWlsZF9mb3VyY2NfbGlzdCk7DQoNCi0tIA0KVGhvbWFzIFppbW1lcm1hbm4NCkdyYXBo
+aWNzIERyaXZlciBEZXZlbG9wZXINClNVU0UgU29mdHdhcmUgU29sdXRpb25zIEdlcm1hbnkg
+R21iSA0KTWF4ZmVsZHN0ci4gNSwgOTA0MDkgTsO8cm5iZXJnLCBHZXJtYW55DQooSFJCIDM2
+ODA5LCBBRyBOw7xybmJlcmcpDQpHZXNjaMOkZnRzZsO8aHJlcjogSXZvIFRvdGV2DQo=
 
-I think the wall of text is unnecessary, tbh. And substituting every
-occurrence of the constant value 16 with PAGE_SHIFT is slightly
-misleading, as the entire calculation only makes sense for 64k granule
-size, but that doesn't mean the constant is intrinsically tied to the
-page size.
+--------------V7FArZw6FPO00zI03BcuoUn3--
 
->  #else
->         and     \phys, \pte, #PTE_ADDR_MASK
->  #endif
+--------------ZcRpZwJjC5T9YfZ0di9GwKWA
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature"
 
+-----BEGIN PGP SIGNATURE-----
 
-If you want to clarify this and make it more self documenting, should
-we perhaps turn it into something like
+wsF5BAABCAAjFiEExndm/fpuMUdwYFFolh/E3EQov+AFAmNfmc4FAwAAAAAACgkQlh/E3EQov+BM
+VA//Wh+hG7KNEtIWZRePs+tgwX7/6UqF+VKbSD1GwZ7wyfrduX90hDZS3WosJ4xu/0ESXjjICG/l
+B6RDBPKVIuxhJhVUAfhlhDXnyQuaH1fYkwDUF7sCvuuxfmu9w7PZxdtossTEfxkm1HRBr7HnHIld
+97UAsE9WTCZ5m2YlfbMBC/W0im6//GZwzHVDXhQWbOT7t4xihL3beT+bZjhD+TpcD7/RjZ7DAxJB
+F+okG5XRsaAfYCTnQCFPYj6Y8DzN32K1UpbNs3maNpP+ZMJlJUtKBpkH7R/7Aj+EHmpVZ53yvYid
+GzdVFB3pv7Sw8x0FN13ucSS+MTLdsODkJQOUjJOmipEfjjC2DRjOUv+V4zOPERh6kv9mfJ36PGfX
+tTNuGw/+HAziM7LAa8vLg1M/6w0vD6FNBXtRs0TPGy813/eQOHx9saGboqijef2hfqyz6X+Pyo1b
+d4IykTpsFzNAG3O6IkkeaKoyF9ARbyM12xj28THAnJmCm/+La6MlJ0ztLVHXSGAHVya9qsyM01dK
+sZxYaL80K0mEAuiuO7v1Vtqj//NGgXxcFEUMWYANXAUDAY4SjBT/umwUnESgj8nid2/N98o7+yJ8
+d/kKuorqhbsXdFJsF+P3dl8tYkFWuzWjpTsekZXgZ595suTUvUtAWTbwkrnQkz45+XcNRGrlkEye
+PXU=
+=OJJa
+-----END PGP SIGNATURE-----
 
-  and \phys, \pte, #PTE_ADDR_MASK        // isolate PTE address bits
-#ifdef CONFIG_ARM64_PA_BITS_52
-  orr \phys, \phys, \phys, lsl #48 - 12  // copy bits [27:12] into [63:48]
-  and \phys, \phys, #0xfffffffff0000     // retain the address bits [51:16]
-#endif
-
-
-> diff --git a/arch/arm64/include/asm/pgtable-hwdef.h b/arch/arm64/include/asm/pgtable-hwdef.h
-> index 5ab8d163198f..683ca2378960 100644
-> --- a/arch/arm64/include/asm/pgtable-hwdef.h
-> +++ b/arch/arm64/include/asm/pgtable-hwdef.h
-> @@ -157,6 +157,11 @@
->
->  #define PTE_ADDR_LOW           (((_AT(pteval_t, 1) << (48 - PAGE_SHIFT)) - 1) << PAGE_SHIFT)
->  #ifdef CONFIG_ARM64_PA_BITS_52
-> +#define LOW_ADDR_BITS_MAX      48
-> +#define HIGH_ADDR_BITS_MAX     16
-> +#define HIGH_ADDR_BITS_MIN     12
-> +#define HIGH_ADDR_WIDTH                (HIGH_ADDR_BITS_MAX - HIGH_ADDR_BITS_MIN)
-> +#define HIGH_ADDR_SHIFT                (LOW_ADDR_BITS_MAX - PAGE_SHIFT - PAGE_SHIFT + HIGH_ADDR_WIDTH)
-
-Why are you subtracting PAGE_SHIFT twice here?
-
->  #define PTE_ADDR_HIGH          (_AT(pteval_t, 0xf) << 12)
->  #define PTE_ADDR_MASK          (PTE_ADDR_LOW | PTE_ADDR_HIGH)
->  #else
-> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
-> index 71a1af42f0e8..014bac4a69e9 100644
-> --- a/arch/arm64/include/asm/pgtable.h
-> +++ b/arch/arm64/include/asm/pgtable.h
-> @@ -77,11 +77,11 @@ extern unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)];
->  static inline phys_addr_t __pte_to_phys(pte_t pte)
->  {
->         return (pte_val(pte) & PTE_ADDR_LOW) |
-> -               ((pte_val(pte) & PTE_ADDR_HIGH) << 36);
-> +               ((pte_val(pte) & PTE_ADDR_HIGH) << (PHYS_MASK_SHIFT - PAGE_SHIFT));
-
-Same here. PHYS_MASK_SHIFT - PAGE_SHIFT happens to equal 36, but that
-does not mean the placement of the high address bits in the PTE is
-fundamentally tied to the dimensions of the granule or physical
-address space.
-
-I think it makes sense to have a macro somewhere that specifies the
-shift of the high address bits between a PTE and a physical address,
-but it is just a property of how the ARM ARM happens to define the PTE
-format, so I don't think it makes sense to define it in terms of
-PAGE_SHIFT or PHYS_MASK_SHIFT.
-
-
-
->  }
->  static inline pteval_t __phys_to_pte_val(phys_addr_t phys)
->  {
-> -       return (phys | (phys >> 36)) & PTE_ADDR_MASK;
-> +       return (phys | (phys >> (PHYS_MASK_SHIFT - PAGE_SHIFT))) & PTE_ADDR_MASK;
->  }
->  #else
->  #define __pte_to_phys(pte)     (pte_val(pte) & PTE_ADDR_MASK)
-> --
-> 2.25.1
->
+--------------ZcRpZwJjC5T9YfZ0di9GwKWA--
