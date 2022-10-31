@@ -2,83 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1AA7613D44
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:25:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0BFB613D4A
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:26:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiJaSZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 14:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56480 "EHLO
+        id S230026AbiJaS0N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 14:26:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229956AbiJaSZI (ORCPT
+        with ESMTP id S229457AbiJaS0K (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 14:25:08 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8AE5F86;
-        Mon, 31 Oct 2022 11:25:06 -0700 (PDT)
-Received: from g550jk.arnhem.chello.nl (31-151-115-246.dynamic.upc.nl [31.151.115.246])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id B08ACD03F3;
-        Mon, 31 Oct 2022 18:25:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1667240704; bh=2NOkdvJ8Ge9c2e/Icz9JKQLpA5Mwq6slCF87sedBtug=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=X7JEf6zZu7MqcKwoB4wzsYg9IopYsYZgcbSWgr20/SNB1yGNADuxsI4j3vKLqJueE
-         dfVyjHjCQi3VolwNEcij8uEx0PbFiM/0bnauPYlgGUbldwo2dyifrokSskSVQnba6x
-         ILuLEoSUQEG6lWeXwvwYGHEg/pDJH4Rm/ol7l12Q=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        afd@ti.com, Luca Weiss <luca@z3ntu.xyz>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] ARM: dts: qcom: pm8941: fix iadc node
-Date:   Mon, 31 Oct 2022 19:24:55 +0100
-Message-Id: <20221031182456.952648-2-luca@z3ntu.xyz>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221031182456.952648-1-luca@z3ntu.xyz>
-References: <20221031182456.952648-1-luca@z3ntu.xyz>
+        Mon, 31 Oct 2022 14:26:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6CE6110FC8;
+        Mon, 31 Oct 2022 11:26:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C0FFBB819DC;
+        Mon, 31 Oct 2022 18:26:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9C70C433C1;
+        Mon, 31 Oct 2022 18:26:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667240763;
+        bh=G91I60Ol4QydHlf0mecqvnzRJ7lAwY37ycd5EgIHiNA=;
+        h=From:To:Cc:Subject:Date:From;
+        b=mwkrMkEzxQ2aBJiRdepyeP5t5fLzY4CAtpKfH6JMCnHZ/VQ+dYxFX0iCcFO5gFDix
+         02rFZKQTxdKHR/Lv8Jlcv2w+ShC0DPpVcYM2H876SKCw/B5ufMRO9bzaAQsd7iIpzP
+         gUJ5v/jTtpxcpsrk8tH598uGrOb2BpzHxGQZafU/J2/QqS3D8D97kVy+K0Lt9b7Nf2
+         +A3s1Gu6nonRmiA5N7F+dp5FdSau3BRTLg4JaXOLU3PiDRT7bfDa01vdEK+l8oDm5R
+         C8do+DA6t2WbL0Lq3UMSEOopPedqr40+hIGrdo+LpmjTud6HHXLACzH8+00cNo7dMg
+         h14pnuSkhu3rw==
+From:   SeongJae Park <sj@kernel.org>
+To:     Andrew Morton <akpm@linux-foundation.org>
+Cc:     SeongJae Park <sj@kernel.org>, Shuah Khan <shuah@kernel.org>,
+        damon@lists.linux.dev, linux-mm@kvack.org,
+        linux-kselftest@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/2] Fix slab-out-of-bounds Write in dbgfs_rm_context_write
+Date:   Mon, 31 Oct 2022 18:25:52 +0000
+Message-Id: <20221031182554.7882-1-sj@kernel.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The spmi-pmic bindings require the iadc node to be named just 'adc'.
+This patchset is for fixing (patch 1) the syzbot-reported
+slab-out-of-bounds write in dbgfs_rm_context_write[1], and adding a
+selftest for the bug (patch 2).
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
----
-Changes in v2:
-* Drop changing double compatible, now bindings are adjusted
-* Pick up tags
+[1] https://lore.kernel.org/damon/000000000000ede3ac05ec4abf8e@google.com/
 
- arch/arm/boot/dts/qcom-pm8941.dtsi | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+SeongJae Park (2):
+  mm/damon/dbgfs: check if rm_contexts input is for a real context
+  selftests/damon: test non-context inputs to rm_contexts file
 
-diff --git a/arch/arm/boot/dts/qcom-pm8941.dtsi b/arch/arm/boot/dts/qcom-pm8941.dtsi
-index a9e83836bf86..cd957a1e7cdf 100644
---- a/arch/arm/boot/dts/qcom-pm8941.dtsi
-+++ b/arch/arm/boot/dts/qcom-pm8941.dtsi
-@@ -131,7 +131,7 @@ adc-chan@30 {
- 			};
- 		};
- 
--		pm8941_iadc: iadc@3600 {
-+		pm8941_iadc: adc@3600 {
- 			compatible = "qcom,pm8941-iadc", "qcom,spmi-iadc";
- 			reg = <0x3600>;
- 			interrupts = <0x0 0x36 0x0 IRQ_TYPE_EDGE_RISING>;
+ mm/damon/dbgfs.c                              |  7 +++++++
+ tools/testing/selftests/damon/Makefile        |  1 +
+ .../damon/debugfs_rm_non_contexts.sh          | 19 +++++++++++++++++++
+ 3 files changed, 27 insertions(+)
+ create mode 100755 tools/testing/selftests/damon/debugfs_rm_non_contexts.sh
+
 -- 
-2.38.1
+2.25.1
 
