@@ -2,110 +2,212 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 774F1613AF7
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 17:05:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05D8E613AFC
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 17:08:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231670AbiJaQFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 12:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36588 "EHLO
+        id S231688AbiJaQI1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 12:08:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231134AbiJaQFQ (ORCPT
+        with ESMTP id S230311AbiJaQIY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 12:05:16 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D00E6F;
-        Mon, 31 Oct 2022 09:05:15 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id j15so16649074wrq.3;
-        Mon, 31 Oct 2022 09:05:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=PxS8XgY58rZ4VDhvxJU0b70ZtHBRLLVJ+uq74m8Gs1k=;
-        b=hyack7EcpOyiPwyjHRIHKJLQhbUrLp0AJ0zvFdHUmhnIu1lDq9s3eCKQUGhvadB5BV
-         ciIzp2nvSz1F5UvDxW2KxqpNLj5SqNJX8SQoQpElrXCY2N7SYjwdRFl79IsJ19ekfRjv
-         /ZStuu/HNZExyVH6SclWWed1UgV/TbpIkE7i3zzXPV1aBhXwLEAqH5dJdOKp01kWmo8p
-         WamDMK/VUGacozrIBpoOkQKbb+TRLiADcsxJdlCsCX1QygqwcjaCZJG+mjEoJpvcyVWR
-         SUtyNdg2tM6VJOsFz1d4eylVu2dC1OTmnTxMY4tA6EVe6WC3zhcu+bGvf16V8CQH7NJk
-         a9GQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=PxS8XgY58rZ4VDhvxJU0b70ZtHBRLLVJ+uq74m8Gs1k=;
-        b=8NrzF1iqXem0jvKcXhOYAwmnjFP5YBzZLtGfMtVIdukqmVfU40uTqmjmJHqHhV0Tk/
-         whPa8Aa82VDWn1OaCGiyxsEL7UCID0u/jDDKIqrr2vlD1YVsu37dXJY2r5v6zWnPNN/n
-         3GYAvs6HKqb+N27wgX1wXWtOPffIi5hihdJhKyhVwn3WWNEiIvn/ozJo+FOzhWC4eCFg
-         t7ag7VWiEtYrbXtQgN1BMJGXsHdwuEQRXdYHPT37D52PpERoeXQIimrt6mLNpPBRYfvw
-         8BHA/NB48EaGKBvk5LukuVl5Xso/5oRAmeOVxIxLuRLmq41ooe/FQDwxsrQxqJBY7OaA
-         euLg==
-X-Gm-Message-State: ACrzQf1aQSiSq0DKJ6mDPainxDcmDfx8mnPM3kPgFnv8DMeIWXgW/RmG
-        8jky0x90YQ0A/SSyeOAXBYU=
-X-Google-Smtp-Source: AMsMyM64PHIVLvhZ0ao1bjSFCKEssEVa+yDVwEWtssjXxawjpYqunUVt2os8vbzvf+uoeZuASHGAeQ==
-X-Received: by 2002:adf:e288:0:b0:236:bf57:c2c6 with SMTP id v8-20020adfe288000000b00236bf57c2c6mr5719911wri.192.1667232313963;
-        Mon, 31 Oct 2022 09:05:13 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id f7-20020adff987000000b0022e6178bd84sm7478829wrr.8.2022.10.31.09.05.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 09:05:13 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Khalid Aziz <khalid@gonehiking.org>,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: BusLogic: remove variable adapter_count
-Date:   Mon, 31 Oct 2022 16:05:12 +0000
-Message-Id: <20221031160512.872153-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        Mon, 31 Oct 2022 12:08:24 -0400
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 541003A2
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:08:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1667232491; bh=5EkPScDX72GkCEG4LAOwMGll0UXL+JQdTsSUibmILmI=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=Iv0DpmE1aTGkZkQ6qlcF1ooPbEFh9uxFkW5oqVNoH96MxUO2kDD2ExU/eEoIXSuYQ
+         +mED5TVjDo/XM0PR+2fCxluFm41bU/GxhJKEN4n5Ux7o38GAl8GquAXMRO9sLGcEAk
+         FmeyiZtmte06yajrMMcc/HEkTFa5LNy18FokgG7o=
+Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
+        via [213.182.55.206]
+        Mon, 31 Oct 2022 17:08:11 +0100 (CET)
+X-EA-Auth: P5JcrFa6GKLN/QbfWpesGZ7fl1WEe/RoceVkCX+gwIIvcH6s1ftjBnHLh0Cr2fzhXb/znX4Nlt9Nn2gseV5AVIUG1c5IbUyL
+Date:   Mon, 31 Oct 2022 21:38:12 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        outreachy@lists.linux.dev, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] staging: rtl8192u: remove unused macro definition
+Message-ID: <Y1/y7J0RXqQOCit6@debian-BULLSEYE-live-builder-AMD64>
+References: <cover.1666754500.git.drv@mailo.com>
+ <b7053d8737c048d6a878609f0ec24d66b18c5abd.1666754500.git.drv@mailo.com>
+ <Y1kyr/hWqbKCzaaR@kroah.com>
+ <Y1k5y5PVT6t0+OIS@debian-BULLSEYE-live-builder-AMD64>
+ <Y1k8NWuTxOf6z5zL@kroah.com>
+ <Y1rdEE8HBb9CVwlq@ubunlion>
+ <Y1/fn1+cthIdPKl2@debian-BULLSEYE-live-builder-AMD64>
+ <b728f4b-3e20-87ac-c58e-8a567fadb02d@inria.fr>
+ <Y1/nk7SQApdNN5vQ@debian-BULLSEYE-live-builder-AMD64>
+ <58624e76-aea8-4ed4-d6e-106cf77d629b@inria.fr>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <58624e76-aea8-4ed4-d6e-106cf77d629b@inria.fr>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable adapter_count is just being incremented and it's never used
-anywhere else. The variable and the increment are redundant so
-remove it.
+On Mon, Oct 31, 2022 at 04:37:38PM +0100, Julia Lawall wrote:
+>
+>
+> On Mon, 31 Oct 2022, Deepak R Varma wrote:
+>
+> > On Mon, Oct 31, 2022 at 03:55:59PM +0100, Julia Lawall wrote:
+> > >
+> > >
+> > > On Mon, 31 Oct 2022, Deepak R Varma wrote:
+> > >
+> > > > On Fri, Oct 28, 2022 at 01:03:36AM +0530, Deepak Varma wrote:
+> > > > > On Wed, Oct 26, 2022 at 03:55:01PM +0200, Greg Kroah-Hartman wrote:
+> > > > > > On Wed, Oct 26, 2022 at 07:14:43PM +0530, Deepak R Varma wrote:
+> > > > > > > On Wed, Oct 26, 2022 at 03:14:23PM +0200, Greg Kroah-Hartman wrote:
+> > > > > > > > On Wed, Oct 26, 2022 at 08:58:44AM +0530, Deepak R Varma wrote:
+> > > > > > > > > Pre-processor macros that are defined but are never used should be
+> > > > > > > > > cleaned up to avoid unexpected usage.
+> > > > > > > > >
+> > > > > > > > > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> > > > > > > > > ---
+> > > > > > > > >  drivers/staging/rtl8192u/ieee80211/ieee80211.h | 2 --
+> > > > > > > > >  1 file changed, 2 deletions(-)
+> > > > > > > > >
+> > > > > > > > > diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211.h b/drivers/staging/rtl8192u/ieee80211/ieee80211.h
+> > > > > > > > > index 00c07455cbb3..0b3dda59d7c0 100644
+> > > > > > > > > --- a/drivers/staging/rtl8192u/ieee80211/ieee80211.h
+> > > > > > > > > +++ b/drivers/staging/rtl8192u/ieee80211/ieee80211.h
+> > > > > > > > > @@ -230,8 +230,6 @@ struct cb_desc {
+> > > > > > > > >  #define ieee80211_unregister_crypto_ops ieee80211_unregister_crypto_ops_rsl
+> > > > > > > > >  #define ieee80211_get_crypto_ops	ieee80211_get_crypto_ops_rsl
+> > > > > > > > >
+> > > > > > > > > -#define ieee80211_ccmp_null		ieee80211_ccmp_null_rsl
+> > > > > > > > > -
+> > > > > > > > >  #define free_ieee80211			free_ieee80211_rsl
+> > > > > > > > >  #define alloc_ieee80211			alloc_ieee80211_rsl
+> > > > > > > >
+> > > > > > > > These #defines are a mess, please look into unwinding them as they
+> > > > > > > > should not be needed at all.
+> > > > > > >
+> > > > > > > Hello Greg,
+> > > > > > > I would like to know what you mean by "unwind them". Is there a documentation or past
+> > > > > > > commit that I can review to understand the expectations better?
+> > > > > >
+> > > > > > Look at them and try to figure out why they are there, and then work to
+> > > > > > remove them entirely.  A define like this is very odd in the kernel, it
+> > > > > > should not be needed at all, right?
+> > > > >
+> > > > > Hello Greg,
+> > > > > I will look into these additional macros soon and send any further edits as a
+> > > > > separate patch (set). Is the current patch set with 2 patches acceptable?
+> > > > >
+> > > > > Also, I am trying to get Coccinelle to work on my machine. Trying to work
+> > > > > through strange issues. I will work on the macro unwinding task you suggested
+> > > > > once a get the Coccinelle task completed.
+> > > >
+> > > > Hello Greg,
+> > > > Most of these macro defines appear to be unused in the module anywhere.
+> > > > I can simply delete the #defines for these and let the original function
+> > > > names be retained.
+> > > > The other way is to rename the functions by the defined value. So, we will have
+> > > > to make the code change to use the foo_rsl symbol names at all places. This will
+> > > > be a bigger change involving the API name change itself.
+> > >
+> > > I'm not sure to understand.  In the case of
+> >
+> > My apologies for not being clear in my message.
+> > >
+> > > #define abc def
+> > >
+> > > If abc is never used, it would seem that you could just remove the macro
+> > > definition.
+> >
+> > The module uses abc at all places in the code. It gets simply replaced by
+> > abc_rsl symbol name at compile time. I am unable to determine the utility of
+> > this compile time conversion. So, to clean it up, we can continue to use abc
+> > in the code (by simply removing the #define line) or make code changes to use
+> > abc_rsl (makes the #define line redundant and be deleted).
+> >
+> > Hope this helps.
+> > My question: should we use abc or def in the code? The only hint I have form the
+> > code comment is this line:
+> > 	// added for kernel conflict
+> >
+> > >
+> > > If abc is used, one might consider whether the renaming is worth it, or
+> > > whether the abc's should be changed to def.  Or maybe def is a very simple
+> > > function, that just calls some standard kernel function like kfree, in
+> > > which can you could get rid of both abc and def everywhere and just use
+> > > kfree.
+> > >
+> > > It is often better to use standard functions, because it makes it easier
+> > > for people to understand immediately what is going on.
+> >
+> > Thank you so much for the explanation. Since the initial intention is not clear
+> > to me, I am unable to decide the go forward name for these functions.
+> >
+> > May I request to look at one of the macro implementations and make suggestion?
+>
+> Ah, ok I see, these macros replace both the names at the uses of eg
+> free_ieee80211, but also the name at the point of the definition.
+>
+> But the name free_ieee80211 isn't used elsewhere in the kernel source
+> tree, so it would seem that changing the name is useless.
+>
+> Maybe the purpose was to link this code with some other code that also
+> uses the name free_ieee80211, but that other code doesn't seem to be part
+> of the kernel.
+>
+> At least, you could propose a patch that removes these definitions and
+> explains clearly what the impact is, and see if the maintainers of the
+> driver complain.
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/scsi/BusLogic.c | 6 ++----
- 1 file changed, 2 insertions(+), 4 deletions(-)
+Thank you so much. I will send in the proposed patch shortly.
 
-diff --git a/drivers/scsi/BusLogic.c b/drivers/scsi/BusLogic.c
-index f2abffce2659..f7b7ffda1161 100644
---- a/drivers/scsi/BusLogic.c
-+++ b/drivers/scsi/BusLogic.c
-@@ -2198,7 +2198,7 @@ static int blogic_slaveconfig(struct scsi_device *dev)
- 
- static int __init blogic_init(void)
- {
--	int adapter_count = 0, drvr_optindex = 0, probeindex;
-+	int drvr_optindex = 0, probeindex;
- 	struct blogic_adapter *adapter;
- 	int ret = 0;
- 
-@@ -2368,10 +2368,8 @@ static int __init blogic_init(void)
- 					list_del(&myadapter->host_list);
- 					scsi_host_put(host);
- 					ret = -ENODEV;
--				} else {
-+				} else
- 					scsi_scan_host(host);
--					adapter_count++;
--				}
- 			}
- 		} else {
- 			/*
--- 
-2.37.3
+./drv
+
+>
+> julia
+>
+> >
+> > >
+> > > julia
+> > >
+> > >
+> > > >
+> > > > I am unable to determine the initial intention as to why these #defines were
+> > > > added. Can you please suggest what would be the recommended way for the clean up
+> > > > of these unused macros?
+> > > >
+> > > > Thank you,
+> > > > ./drv
+> > > >
+> > > > >
+> > > > > Thank you,
+> > > > > ./drv
+> > > > >
+> > > > > >
+> > > > > > thanks,
+> > > > > >
+> > > > > > greg k-h
+> > > > > >
+> > > > >
+> > > > >
+> > > > >
+> > > >
+> > > >
+> > > >
+> > > >
+> >
+> >
+> >
+>
+
 
