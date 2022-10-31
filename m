@@ -2,119 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08122613DAF
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:49:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7912E613DB2
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:49:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229545AbiJaStW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 14:49:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43448 "EHLO
+        id S229779AbiJaStg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 14:49:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229742AbiJaStT (ORCPT
+        with ESMTP id S229494AbiJaStf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 14:49:19 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E41FBD2C8
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 11:49:18 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so6654476pjk.1
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 11:49:18 -0700 (PDT)
+        Mon, 31 Oct 2022 14:49:35 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85F4BDEDA
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 11:49:34 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id r18so11428381pgr.12
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 11:49:34 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=I7OCJ+L+xgAJwntbzzIY7jIEAB6GsC4e1YXzlRewDDY=;
-        b=pkxGvmKZlfL1s4XFqRlTdmcQB8M6i8TS9MxG7lT1TGTaArCpnIDnwjS4VMZpmeoLhk
-         qGjJTp21+qSVHQ8t0Il+zMl1hFW59sX1LaKBMtQvviLmQhkLrhGP0gFdRYKWoC/x0UHw
-         OcKblEgkYJbSi7p9hYIUueVRf/hA3KI/MgJP7VuCvmDZWfgXYqrJlr9YSrmOW6QuyBG+
-         hHyeDpT6Ey7KdMuiJa50dad9pJBHatI75ayDPXvcGbTdCRWlbqIsUcRThiqBe7E/CyrU
-         ib06bsvWgndnrIyPZWP1ogK1jfNlTEiRVd//AQdUZr/sNd6mJBOsYKXFI0bznLX7qwI9
-         7zfg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=sYx3uN1xhiMhAnziXHSHnRo2dJBOaDo/NYyMf4DLx1M=;
+        b=QoSnwZ/B/liuYfGtfabdroBKsCRGncbY/5BM/crc///S+QhWCBt43aQ5r0Vmwhrcf/
+         WwOKEFKSiTqkmAHolYSLciwfxNgIzEpX3FXQ7aIgkd1kt3JcvZSl1W7Xd0J8ulfFoQj7
+         CDCI4G3lnoirhR/+pYe4r3hUmFmuyZS1LzdmfUmzPg0u70C+GxPIOMwiJyr4PhNYNnW3
+         0AoFUj4/dqZQIONeYqmjfj5Xf6oOuAywghZtb7bjE/ySGNQE6AtxLvZhGj7F0xclZh7B
+         WUeCMEZ5roRJ1a51ImZki8RwlFf+73wTHR2ceZn8IvT2ngdvWOvGW75SABwTiBOr4Ve2
+         sIEw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=I7OCJ+L+xgAJwntbzzIY7jIEAB6GsC4e1YXzlRewDDY=;
-        b=eqWSBTftURvcqjnlw3kQdobAij5tWb8FA4yY2nDLr6Kn/WWh7mnTULYGwRvxoXa9a1
-         OlSq+hIC5QbEWg6rNlunaUxbnYV8FU90kqSC1AKJbKqtwwHEZt89TTWxnqHGsupi0EUU
-         x/HDK/bj765f5pgJ5BtOididWp1VdCWZ2MmOf7TcdfKWvQh3Ht3qriu/k4aARpALCfAa
-         G/25fthCi5fL7Ts9uNt0zp5iT/snpW+FKI1XD1ekTdv1wN6ks/6bDU4CfCv/s2Xku7AL
-         u/qhycXU4DpxV3Ch9XvDYuO8GSR+g+2fmFyJuTQLA6AC1kh87+5scISAiYWis1/OIC9i
-         vIlQ==
-X-Gm-Message-State: ACrzQf1grydw7Ym47CpWMSuKWTDlvfH5JspwBvjBZRr3bm5AoXfxa5ZG
-        l3kBZ9g1ornwfOAeXMBTABI=
-X-Google-Smtp-Source: AMsMyM5f00sdEqaNBai09DERNEWeZnxN1bCdvSJngdGh5/ui/xSMeFxG1ata3lOqQ5OHLx2J/TsbEQ==
-X-Received: by 2002:a17:903:110f:b0:178:a07e:e643 with SMTP id n15-20020a170903110f00b00178a07ee643mr15194505plh.41.1667242158267;
-        Mon, 31 Oct 2022 11:49:18 -0700 (PDT)
-Received: from localhost ([2620:10d:c090:400::5:ba13])
-        by smtp.gmail.com with ESMTPSA id o6-20020a170902778600b001865c298588sm4732870pll.258.2022.10.31.11.49.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 11:49:17 -0700 (PDT)
-Sender: Tejun Heo <htejun@gmail.com>
-Date:   Mon, 31 Oct 2022 08:49:16 -1000
-From:   Tejun Heo <tj@kernel.org>
-To:     Valentin Schneider <vschneid@redhat.com>
-Cc:     linux-kernel@vger.kernel.org,
-        Lai Jiangshan <jiangshanlai@gmail.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Phil Auld <pauld@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>
-Subject: Re: [PATCH v4 3/4] workqueue: Convert the idle_timer to a
- delayed_work
-Message-ID: <Y2AYrG8q+I3VhHoF@slm.duckdns.org>
-References: <20221004150521.822266-1-vschneid@redhat.com>
- <20221004150521.822266-4-vschneid@redhat.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sYx3uN1xhiMhAnziXHSHnRo2dJBOaDo/NYyMf4DLx1M=;
+        b=vtomnMsh0vK6hXJDlb3c1CGUBkHFWA+UehyEStN3brNcL+PgGuf9rsOP3sGEMF32k1
+         hOlExEeEDUZ9HEhnEZXErMAhL/C6de4TknenDsI8FI6ZWMdfS6mFi+3A0PbX/XkeMkJw
+         fi/TTuZAGSJJe9uquVsLxz2DGxXLTyCCTgEnBBzSKY/inY+WYsANNcSwVca4VQIV0Tgk
+         i+mNts4n4sI/HFiBSUayQfFb6aR/thGYcuYprdPyWjmx/rqQNYNyZo0BzKLsvJHnDl71
+         W4pCxF0D/eeNdZN9bhTce1C8aUmTD6CaR9kpnURgmTFlq+DHBEWBFn6juD+/1H17WhIp
+         Vs7A==
+X-Gm-Message-State: ACrzQf1++V7ts0tEzB/BRJlI0IzULXPJwT6K+tL34M60CPkV/wxUFa9z
+        tJkRMDVtBobOctnNA/S/7K3Uct8Iq71VqqE7jwjCFw==
+X-Google-Smtp-Source: AMsMyM4S3tC7xPezSvjUTlfcIuqPLzX7yvUpVHeB36ca9UjD2xZfpbWrw4G+lSGyj0zJ8Sty6027mRMTVnhoCsLjKd0=
+X-Received: by 2002:a63:1f5c:0:b0:469:d0e6:dac0 with SMTP id
+ q28-20020a631f5c000000b00469d0e6dac0mr13505473pgm.427.1667242173802; Mon, 31
+ Oct 2022 11:49:33 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221004150521.822266-4-vschneid@redhat.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221020175655.1660864-1-ndesaulniers@google.com>
+ <Y1GV9sHyODVmBbFW@dev-arch.thelio-3990X> <CA+icZUW2tFR=xjJEXJDNARW1yd_vjOOA1etF6aMN3Cx5ReFgmg@mail.gmail.com>
+ <CAKwvOdn_mP8kVn5Bhe7bbC8R+VZxr8h02yWwKhvaTHW40ZJ_Uw@mail.gmail.com>
+In-Reply-To: <CAKwvOdn_mP8kVn5Bhe7bbC8R+VZxr8h02yWwKhvaTHW40ZJ_Uw@mail.gmail.com>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 31 Oct 2022 11:49:21 -0700
+Message-ID: <CAKwvOdkNBM2-pMm+fqzXpMxL5745p0Gzmw_+--P8RSqTk=v+VQ@mail.gmail.com>
+Subject: Re: [PATCH] Makefile.debug: support for -gz=zstd
+To:     Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Fangrui Song <maskray@google.com>,
+        Sedat Dilek <sedat.dilek@dhl.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Terrell <terrelln@fb.com>, Tom Rix <trix@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        David Gow <davidgow@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        llvm@lists.linux.dev, sedat.dilek@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Oct 24, 2022 at 10:44 AM Nick Desaulniers
+<ndesaulniers@google.com> wrote:
+>
+> On Sun, Oct 23, 2022 at 8:46 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> >
+> > On Thu, Oct 20, 2022 at 8:43 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > >
+> > > On Thu, Oct 20, 2022 at 10:56:49AM -0700, Nick Desaulniers wrote:
+> > > > +config DEBUG_INFO_UNCOMPRESSED
+> > > > +     bool "Don't compress debug information"
+> > > > +     help
+> > > > +       Don't compress debug info sections.
+> > > > +
+> > > >  config DEBUG_INFO_COMPRESSED
+> >
+> > Also, I prefer...
+> >
+> > DEBUG_INFO_COMPRESSED_NONE
+> > DEBUG_INFO_COMPRESSED_ZLIB
+> > DEBUG_INFO_COMPRESSED_ZSTD
+> >
+> > Following...
+> >
+> > $ ld.lld-16 -v
+> > Debian LLD 16.0.0 (compatible with GNU linkers)
+> >
+> > $ ld.lld-16 --help | grep compress-debug-sections
+> >  --compress-debug-sections=[none,zlib,zstd]
+>
+> It's a good suggestion, though I deliberately did not modify the
+> identifier used for the existing DEBUG_INFO_COMPRESSED.  No defconfigs
+> set DEBUG_INFO_COMPRESSED explicitly, but I think one issue with
+> changing the identifier of existing kconfigs is that upon upgrading to
+> newer kernel sources, if you run `make oldmodconfig` if you previously
+> had DEBUG_INFO_COMPRESSED=y, kconfig doesn't know that that option has
+> been renamed to DEBUG_INFO_COMPRESSED_ZLIB so it would be silently
+> disabled, and image sizes would increase due to uncompressed debug
+> info. That seems developer hostile.
+>
+> Masahiro, what are your thoughts on how to proceed? Should I change
+> the pre-existing Kconfig identifier, or "let sleeping dogs lie?"
 
-On Tue, Oct 04, 2022 at 04:05:20PM +0100, Valentin Schneider wrote:
-> +static void idle_reaper_fn(struct work_struct *work)
->  {
-> -	struct worker_pool *pool = from_timer(pool, t, idle_timer);
-> +	struct delayed_work *dwork = to_delayed_work(work);
-> +	struct worker_pool *pool = container_of(dwork, struct worker_pool, idle_reaper_work);
->  
->  	raw_spin_lock_irq(&pool->lock);
->  
->  	while (too_many_workers(pool)) {
->  		struct worker *worker;
->  		unsigned long expires;
-> +		unsigned long now = jiffies;
->  
-> -		/* idle_list is kept in LIFO order, check the last one */
-> +		/* idle_list is kept in LIFO order, check the oldest entry */
->  		worker = list_entry(pool->idle_list.prev, struct worker, entry);
->  		expires = worker->last_active + IDLE_WORKER_TIMEOUT;
->  
-> -		if (time_before(jiffies, expires)) {
-> -			mod_timer(&pool->idle_timer, expires);
+Hi Masahiro,
+What are your thoughts on the above?
 
-So, one thing which bothers me is that the idle timer is supposed to go off
-spuriously periodically. The idea being that letting it expire spuriously
-should usually be cheaper than trying to update it constantly as workers
-wake up and sleep. Converting the timer to a delayed work makes spurious
-wakeups significantly more expensive tho as it's now a full scheduling
-event.
+> --
+> Thanks,
+> ~Nick Desaulniers
 
-Can we separate the timer and work item out so that we can kick off the work
-item iff there actually are tasks to kill?
 
-Thanks.
 
 -- 
-tejun
+Thanks,
+~Nick Desaulniers
