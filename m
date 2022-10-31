@@ -2,63 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F0B5B614049
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 22:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 841B961404B
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 23:01:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229938AbiJaV7W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 17:59:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53188 "EHLO
+        id S229647AbiJaWBC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 18:01:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229636AbiJaV7T (ORCPT
+        with ESMTP id S229476AbiJaWA7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 17:59:19 -0400
-Received: from mail-ot1-f43.google.com (mail-ot1-f43.google.com [209.85.210.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD59F140D3;
-        Mon, 31 Oct 2022 14:59:18 -0700 (PDT)
-Received: by mail-ot1-f43.google.com with SMTP id c18-20020a056830349200b0066c47e192f0so2808968otu.12;
-        Mon, 31 Oct 2022 14:59:18 -0700 (PDT)
+        Mon, 31 Oct 2022 18:00:59 -0400
+Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD06F140F7
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 15:00:58 -0700 (PDT)
+Received: by mail-ej1-x629.google.com with SMTP id ud5so32858103ejc.4
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 15:00:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=TYmK8qj7euiKCTy77L+jTnVdwmHVwE99ZMrhhT9gdIQ=;
+        b=PH2PsoGijRgnfGZ3bijqOzE8hgcu+jGABXBogjxVuXnQhPJHHH1fikvzydt6pFJ6V7
+         Ky49+yWADDBa+bEVPa/ibd7jm4jgCvNxP1K3LHjuKkV8jDA/c+XkwjWtd7+kLXmP9e29
+         P1mPcrDAaKrWzjlyucuHFQaJmvRO9HaKnfH1Fk445TmQ/WLn2lqpkeS2wcLi0OAVGzpz
+         CkUEqxWwipbMfhnSEIQjpTiwJivIvV2bl70+F7QuGiMp+9vfqmdogcdJi9/rQbFgO+SM
+         E6nQSR61Gf4Z9Kb21UW2qIYB4lLOK2Qz2/rh4JjbQgF5jERTGj5lhEcWTp6nCoD6UEme
+         eqiA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TkdVTAXCDXe7ReBNTe2yFOz15PzoA3zLKrdNQ4Vf8OQ=;
-        b=VOTnc/KpxNA3oihXYGjWYqt38TxwOndb0rjgvibAhcgOzoUtqo15Iivq7X3vaZIvzm
-         2Rsj6S94ZgotnFfggOX7Xszn0IsFOh6lsaCh53TZKhcX72hWShnNR0qhTLFpoIThE00j
-         3gSkf1wy+ouT09DM2raZ4Oy9JD1rLge1OAE+Lr0R8Vqy67u+LBwYbBSpXeZLqfCwqf6O
-         8sdmzHXyiPgyeRyyyLS3QPctMjUtq8lsVr16JUGZDNkMS9glwkXqkGuMQcGsI/zCPODN
-         aFpzcOXWJOkPcAlRFss6laRlaGYb4uvmjfHRTOdF8GWVMfwNjAyBMuOC6A/cYQ9ESh/U
-         /Agw==
-X-Gm-Message-State: ACrzQf0Qc3KjJgYfEP/ZRkH4ZFCT59PYsuG4IY4LkdBKPN65gD2hSjH4
-        DOeZ/MMSDN8CrTzUz5fLGnjFAhFfNg==
-X-Google-Smtp-Source: AMsMyM7qXfBVn5FY18GmBmJGMZzpxZwKJ+wQQytn1101W33+9AcVgfbtHwIXXJtpXfujb3b3Q1TBYA==
-X-Received: by 2002:a05:6830:2786:b0:66c:349d:bb51 with SMTP id x6-20020a056830278600b0066c349dbb51mr7477938otu.292.1667253558042;
-        Mon, 31 Oct 2022 14:59:18 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id x5-20020a05683000c500b00662228a27d3sm3181986oto.57.2022.10.31.14.59.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 14:59:17 -0700 (PDT)
-Received: (nullmailer pid 3637501 invoked by uid 1000);
-        Mon, 31 Oct 2022 21:59:19 -0000
-Date:   Mon, 31 Oct 2022 16:59:19 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Paul Cercueil <paul@crapouillou.net>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Mark Brown <broonie@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/1] dt-bindings: Convert active-semi PMIC docs to YAML
- schemas
-Message-ID: <20221031215919.GA3622880-robh@kernel.org>
-References: <20221030113715.12067-1-paul@crapouillou.net>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TYmK8qj7euiKCTy77L+jTnVdwmHVwE99ZMrhhT9gdIQ=;
+        b=RlrE0ZShQoAbW0cd2olZalrzjeyenz8h2oUGLgRfD9GFF5CUloUHyx9Vsv+W/08eR+
+         Mlry29lXRvrxTtqmhCRQZ4P0oaVFkJnF5T+1+NnWdS8JLzXPEg+kN/3nsqQ5QJZS3Hwn
+         dHzOcFxchjkMID4CMbGcSeEWs40iNcB80pYOz4PApZKBoxFe3IDyZi7s13TNDI5GJAlG
+         g974DWfIHgc8cn0fZ/21FKYC1hUFL+5mR33XjY2yCxOhVvnCf6u97t7uAaNJGi5/+P7k
+         AqoRJ67/oEgGe+9ZXb5Wp1Zve+8rE3NQ6egnrja7B+D2LL2QMlCkr2Net1z1Jm7OemWH
+         zaNg==
+X-Gm-Message-State: ACrzQf1sWaSVlfeLPVYgKLL3s/Z5vtoMeMerP43rQ4nr5DN1aLSz4o2I
+        ZBnA4jukcsnja6/swVJtY2I=
+X-Google-Smtp-Source: AMsMyM4C7d4bA8v7ZFPNK9507ow2gzTi1GzZWQY11diWsBPM749ZVZRNa2Tt4VNgBNII2+X9mohBPw==
+X-Received: by 2002:a17:906:401:b0:73d:af73:b78 with SMTP id d1-20020a170906040100b0073daf730b78mr15708924eja.122.1667253657287;
+        Mon, 31 Oct 2022 15:00:57 -0700 (PDT)
+Received: from [192.168.1.102] (p57935738.dip0.t-ipconnect.de. [87.147.87.56])
+        by smtp.gmail.com with ESMTPSA id f14-20020a056402150e00b004610899742asm3692669edw.13.2022.10.31.15.00.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Oct 2022 15:00:56 -0700 (PDT)
+Message-ID: <3fc39e22-c352-ecd0-3caa-b2376747b505@gmail.com>
+Date:   Mon, 31 Oct 2022 23:00:55 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221030113715.12067-1-paul@crapouillou.net>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH] staging: r8188eu: use ether_addr_equal in OnAction
+Content-Language: en-US
+To:     Martin Kaiser <martin@kaiser.cx>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Michael Straube <straube.linux@gmail.com>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Joe Perches <joe@perches.com>
+References: <20221031205140.124682-1-martin@kaiser.cx>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20221031205140.124682-1-martin@kaiser.cx>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,232 +80,30 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 30, 2022 at 11:37:15AM +0000, Paul Cercueil wrote:
-> Create YAML bindings for the Active-semi PMICs and remove the old text
-> files.
+On 10/31/22 21:51, Martin Kaiser wrote:
+> Use ether_addr_equal to compare two mac addresses in OnAction.
 > 
-> The bindings aren't perfect, for instance I couldn't find good
-> descriptions for the vendor properties in the "charger" node of the
-> ACT8945A because I am not familiar with the hardware and these
-> properties were not documented anywhere.
+> Both struct ieee80211_mgmt and struct eeprom_priv's mac_addr component
+> are 2-byte aligned.
 > 
-> The YAML schemas are a bit different than what is described in the old
-> text files, because these were sometimes wrong or had missing
-> information. This is the case for the ACT8600 documentation, which
-> specified the valid node names for the regulators, while the driver was
-> expecting different names. This led to the current situation where we
-> have two different boards using different names for the regulators:
-> - arch/mips/boot/dts/ingenic/ci20.dts uses the names documented in the
->   text file,
-> - arch/mips/boot/dts/ingenic/gcw0.dts uses the names that the driver
->   expects.
-> In theory, the driver should be fixed to follow the documentation, and
-> accept both naming schemes. In practice though, when the PMIC node was
-> added to the ci20.dts board file, the names were already wrong in
-> regards to what the driver expected, so it never really worked
-> correctly and wasn't tested properly. Furthermore, in that board the
-> consumers of the regulators aren't working for various other reasons
-> (invalid GPIOs, etc.).
-> 
-> For that reason, for the ACT8600 bindings I decided to only use the node
-> names that the driver expects (and that gcw0.dts uses), instead of
-> accepting both old and new names. A follow-up patch will update the CI20
-> board to use the new regulator names.
-> 
-> Signed-off-by: Paul Cercueil <paul@crapouillou.net>
+> Suggested-by: Joe Perches <joe@perches.com>
+> Signed-off-by: Martin Kaiser <martin@kaiser.cx>
 > ---
+>   drivers/staging/r8188eu/core/rtw_mlme_ext.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
 > 
->  Note:
->  I set Liam Girdwood and Mark Brown as the maintainers by default, since
->  it doesn't appear that anybody is managing the Active-semi drivers, but
->  if anybody steps up I can update it.
-> 
->  Cheers,
->  -Paul
-> 
->  .../bindings/regulator/act8865-regulator.txt  | 117 --------
->  .../bindings/regulator/act8945a-regulator.txt | 113 --------
->  .../regulator/active-semi,act8600.yaml        | 143 ++++++++++
->  .../regulator/active-semi,act8846.yaml        | 209 ++++++++++++++
->  .../regulator/active-semi,act8865.yaml        | 162 +++++++++++
->  .../regulator/active-semi,act8945a.yaml       | 263 ++++++++++++++++++
->  6 files changed, 777 insertions(+), 230 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/regulator/act8865-regulator.txt
->  delete mode 100644 Documentation/devicetree/bindings/regulator/act8945a-regulator.txt
->  create mode 100644 Documentation/devicetree/bindings/regulator/active-semi,act8600.yaml
->  create mode 100644 Documentation/devicetree/bindings/regulator/active-semi,act8846.yaml
->  create mode 100644 Documentation/devicetree/bindings/regulator/active-semi,act8865.yaml
->  create mode 100644 Documentation/devicetree/bindings/regulator/active-semi,act8945a.yaml
+> diff --git a/drivers/staging/r8188eu/core/rtw_mlme_ext.c b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+> index e985fc5fc575..6679d4037d6b 100644
+> --- a/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+> +++ b/drivers/staging/r8188eu/core/rtw_mlme_ext.c
+> @@ -3823,7 +3823,7 @@ static void OnAction(struct adapter *padapter, struct recv_frame *precv_frame)
+>   {
+>   	struct ieee80211_mgmt *mgmt = (struct ieee80211_mgmt *)precv_frame->rx_data;
+>   
+> -	if (memcmp(myid(&padapter->eeprompriv), mgmt->da, ETH_ALEN))
+> +	if (!ether_addr_equal(myid(&padapter->eeprompriv), mgmt->da))
+>   		return;
+>   
+>   	switch (mgmt->u.action.category) {
 
-[...]
-
-> diff --git a/Documentation/devicetree/bindings/regulator/active-semi,act8600.yaml b/Documentation/devicetree/bindings/regulator/active-semi,act8600.yaml
-> new file mode 100644
-> index 000000000000..bf8c5145939e
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/regulator/active-semi,act8600.yaml
-> @@ -0,0 +1,143 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/regulator/active-semi,act8600.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Active-semi ACT8600 regulator
-> +
-> +maintainers:
-> +  - Liam Girdwood <lgirdwood@gmail.com>
-> +  - Mark Brown <broonie@kernel.org>
-> +
-> +properties:
-> +  compatible:
-> +    const: active-semi,act8600
-> +
-> +  reg:
-> +    description: I2C address
-> +    maxItems: 1
-> +
-> +  system-power-controller:
-> +    description: |
-
-Don't need '|'.
-
-> +      Indicates that the ACT8600 is responsible for powering OFF
-> +      the system.
-> +    type: boolean
-> +
-> +  active-semi,vsel-high:
-> +    description: |
-> +      Indicates the VSEL pin is high. If this property is missing,
-> +      the VSEL pin is assumed to be low.
-> +    type: boolean
-> +
-> +  regulators:
-> +    type: object
-> +    unevaluatedProperties: false
-
-Don't need both this and additionalProperties. As additionalProperties 
-is sufficient here, use it, but move it here. It's easier to read that 
-way IMO.
-
-> +
-> +    properties:
-> +      DCDC1:
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          vp1-supply:
-> +            description: Handle to the VP1 input supply
-> +
-> +      DCDC2:
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          vp2-supply:
-> +            description: Handle to the VP2 input supply
-> +
-> +      DCDC3:
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          vp3-supply:
-> +            description: Handle to the VP3 input supply
-> +
-> +    patternProperties:
-> +      "^((SUDCDC_REG4)|(LDO_REG9)|(LDO_REG10))$":
-
-You can drop the inner parenthesis.
-
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        unevaluatedProperties: false
-> +
-> +      "^LDO[5-8]$":
-> +        type: object
-> +        $ref: /schemas/regulator/regulator.yaml#
-> +        unevaluatedProperties: false
-> +
-> +        properties:
-> +          inl-supply:
-> +            description: Handle to the INL input supply
-> +
-> +    additionalProperties: false
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - reg
-> +  - compatible
-> +  - regulators
-> +
-> +examples:
-> +  - |
-> +    i2c3 {
-
-i2c {
-
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      act8600: pmic@5a {
-
-Drop unused labels.
-
-> +        compatible = "active-semi,act8600";
-> +        reg = <0x5a>;
-> +
-> +        regulators {
-> +          SUDCDC_REG4 {
-> +            regulator-min-microvolt = <5300000>;
-> +            regulator-max-microvolt = <5300000>;
-> +            inl-supply = <&vcc>;
-> +          };
-> +
-> +          LDO5 {
-> +            regulator-min-microvolt = <2500000>;
-> +            regulator-max-microvolt = <2500000>;
-> +            inl-supply = <&vcc>;
-> +          };
-> +
-> +          LDO6 {
-> +            regulator-min-microvolt = <3300000>;
-> +            regulator-max-microvolt = <3300000>;
-> +            inl-supply = <&vcc>;
-> +          };
-> +
-> +          LDO7 {
-> +            regulator-min-microvolt = <3300000>;
-> +            regulator-max-microvolt = <3300000>;
-> +            inl-supply = <&vcc>;
-> +          };
-> +
-> +          LDO8 {
-> +            regulator-min-microvolt = <1800000>;
-> +            regulator-max-microvolt = <1800000>;
-> +            regulator-always-on;
-> +            inl-supply = <&vcc>;
-> +          };
-> +
-> +          LDO_REG9 {
-> +            regulator-min-microvolt = <3300000>;
-> +            regulator-max-microvolt = <3300000>;
-> +            regulator-always-on;
-> +            inl-supply = <&vcc>;
-> +          };
-> +
-> +          LDO_REG10 {
-> +            inl-supply = <&vcc>;
-> +          };
-> +        };
-> +      };
-> +    };
-
-Similar comments on the rest.
-
-Rob
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
