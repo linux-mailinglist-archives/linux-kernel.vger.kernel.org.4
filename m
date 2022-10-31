@@ -2,151 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94837613CAB
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:56:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A374613CAE
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:56:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232080AbiJaR4S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 13:56:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35598 "EHLO
+        id S232089AbiJaR41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 13:56:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232062AbiJaR4Q (ORCPT
+        with ESMTP id S232081AbiJaR4U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 13:56:16 -0400
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 297FD12AE6
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 10:56:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1667238968; bh=aOtt4C+rUZiN07CbINVnZCOezF5iwOq3whPuF7n+d/k=;
-        h=X-EA-Auth:Date:From:To:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=gtbneUnhfA+lN3vZB0SRzsDMD9rVk4JkqJTZzCgm9zZayMfq+YYFe/JaTpWKXHRbo
-         krfQpWupvMPDHGdOfy2ZqoYeFfbKmHMT0nXWGF5xPiHkL+OkLKAlNC1aykMwFRx8X7
-         NvD0Z1JaC03m5MeIr0TeOjqWO7YM7N52TjzJixU8=
-Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
-        via [213.182.55.206]
-        Mon, 31 Oct 2022 18:56:07 +0100 (CET)
-X-EA-Auth: j/FgF5M8s+oz1krS6oB+hT1Y1Zz4ICDzarTe/XqJODSEsIIhQP+pN7ujH5XcAfZOWu/8rMUdAgrjl1nJ9GVCyrzcY+Sm6tTJ
-Date:   Mon, 31 Oct 2022 23:26:09 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     outreachy@lists.linux.dev, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] staging: rtl8192u: remove redundant macro definition
-Message-ID: <3908a0694102793f3130ba1202f1a3580aa9e187.1667237959.git.drv@mailo.com>
-References: <cover.1667237959.git.drv@mailo.com>
+        Mon, 31 Oct 2022 13:56:20 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB74913D43
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 10:56:19 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id y4so11434917plb.2
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 10:56:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=sxgPHQHNXTKXnyvhcje4Li+ofkcsjx3B5bd4RNfVWXk=;
+        b=dUXBx8hVozpOkOz977UeZcQxZgudAy0HoQ4H2Tw0+XOSTRQuxi0gfAAKF/KR/3suQO
+         vlamhWKFGb2GnqOWVpxMEQT2GFxMXfHOebjfJ568UBf6Mvfe0SAAGqTGOkzu3aFgptHM
+         YRDkPRop2GG5L8z1IUs6jkQb35ire4p/FR3Mw=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=sxgPHQHNXTKXnyvhcje4Li+ofkcsjx3B5bd4RNfVWXk=;
+        b=HbOriwkKqwdx+vYA0pnIY8pnF9QWarQ0T7HGl/XD5y/JWkGpfcaSGz3KrfHDyhheEg
+         4qV7iHW58lm7Qq1oVPb4alwnewflHp1pOBhkTNm/0PpvC/8wU4BlFilJlvRAT2FR2Yze
+         lsExKKFeyFnH4ZfWDAbvZSPbDsyYSzDufuqe0BKpNk+dSXxzJNNybXHuN8lFUQefuhde
+         3Jx/wJ28vJkTPxE2AbT2qrPSaQSraduNJsoInZNMLcK8IfxuFZg30tgTxHR1wT/pr2Ca
+         mpY5afldZQBfgFS27RAVOti9idQxjys07XZOyWF+0piVW0GMAk7XoCz6SYHuQMAhvbaL
+         pqmA==
+X-Gm-Message-State: ACrzQf3AyzhVh//DfPCN9kx8kuhOeXRG/VH3KZLmZ5gZGhr2p6Y0rbd8
+        +A0ku+31cBR+cDmMLdOI8vG3AQ==
+X-Google-Smtp-Source: AMsMyM7DDaxA1ZH4CAmtziKbAO8TUQb9uroHMUhTHF8xrbgyf1O2GjfuMdrRAWUOQnJYoyuW/vhisg==
+X-Received: by 2002:a17:90a:e20d:b0:212:ec76:6fc6 with SMTP id a13-20020a17090ae20d00b00212ec766fc6mr16361891pjz.0.1667238979435;
+        Mon, 31 Oct 2022 10:56:19 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:cf9d:6561:637d:2194])
+        by smtp.gmail.com with ESMTPSA id 62-20020a621641000000b00562a526cd2esm4863663pfw.55.2022.10.31.10.56.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 10:56:18 -0700 (PDT)
+Date:   Mon, 31 Oct 2022 10:56:16 -0700
+From:   Brian Norris <briannorris@chromium.org>
+To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
+Cc:     Guenter Roeck <linux@roeck-us.net>,
+        Alessandro Zummo <a.zummo@towertech.it>,
+        Benson Leung <bleung@chromium.org>, linux-rtc@vger.kernel.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        John Stultz <jstultz@google.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>
+Subject: Re: [PATCH] rtc: cros-ec: Limit RTC alarm range if needed
+Message-ID: <Y2AMQAf/nDGLNMcI@google.com>
+References: <20221029005400.2712577-1-linux@roeck-us.net>
+ <Y2ABnbBGSJGM3gSS@mail.local>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <cover.1667237959.git.drv@mailo.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y2ABnbBGSJGM3gSS@mail.local>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Several ieee80211_* symbol names are extended with _rsl tag using
-macros. This is done to avoid a conflict when a similar symbol is
-already in use in another part of kernel and may lead to conflicts.
-However, most of these base symbol names are not found to being used
-anywhere in the code and hence are not useful today. These symbols
-are not used outside of the module and hence can be safely removed.
-The code continues to use the original symbol names.
+CC kernel/time/alarmtimer.c maintainers
 
-Suggested-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
+On Mon, Oct 31, 2022 at 06:10:53PM +0100, Alexandre Belloni wrote:
+> On 28/10/2022 17:54:00-0700, Guenter Roeck wrote:
+> > RTC chips on some older Chromebooks can only handle alarms less than 24
+> > hours in the future. Attempts to set an alarm beyond that range fails.
+> > The most severe impact of this limitation is that suspend requests fail
+> > if alarmtimer_suspend() tries to set an alarm for more than 24 hours
+> > in the future.
+> > 
+> > Try to set the real-time alarm to just below 24 hours if setting it to
+> > a larger value fails to work around the problem. While not perfect, it
+> > is better than just failing the call. A similar workaround is already
+> > implemented in the rtc-tps6586x driver.
+> 
+> I'm not super convinced this is actually better than failing the call
+> because your are implementing policy in the driver which is bad from a
+> user point of view. It would be way better to return -ERANGE and let
+> userspace select a better alarm time.
 
-Changes in v2:
-   1. Review other similar macro defines and clean those up as well.
-      Suggested by gregkh@linuxfoundation.org
-   2. Revise patch log to explain impact of the patch
-      Suggested by julia.lawall@inria.fr
+There is no way to signal user space. alarmtimer_suspend() is doing this
+on behalf of CLOCK_BOOTTIME_ALARM or CLOCK_REALTIME_ALARM timers, which
+were set long ago. We could possibly figure out some way to change the
+clock API to signal some kind of error back to the timer handlers, but
+that seems destined to be overly complex and not really help anyone
+(stable ABI, etc.). The right answer for alarmtimer is to just wake up a
+little early, IMO. (And failing alarmtimer_suspend() is Bad.)
 
+I think Guenter considered some alternative change to teach
+drivers/rtc/* and alarmtimer_suspend() to agree on an error code
+(ERANGE? or EDOM?) to do some automatic backoff there. But given the
+existing example (rtc-tps6586x) and the inconsistent use of error codes
+in drivers/rtc/, this seemed just as good of an option to me.
 
- .../staging/rtl8192u/ieee80211/ieee80211.h    | 64 -------------------
- 1 file changed, 64 deletions(-)
+But if we want to shave more yaks, then we'll have a more complex /
+riskier patch set and a harder time backporting the fix. That's OK too.
 
-diff --git a/drivers/staging/rtl8192u/ieee80211/ieee80211.h b/drivers/staging/rtl8192u/ieee80211/ieee80211.h
-index 00c07455cbb3..a92f847f2394 100644
---- a/drivers/staging/rtl8192u/ieee80211/ieee80211.h
-+++ b/drivers/staging/rtl8192u/ieee80211/ieee80211.h
-@@ -223,72 +223,8 @@ struct cb_desc {
- #define MAX_IE_LEN  0xff
-
- // added for kernel conflict
--#define ieee80211_crypt_deinit_entries	ieee80211_crypt_deinit_entries_rsl
--#define ieee80211_crypt_deinit_handler	ieee80211_crypt_deinit_handler_rsl
--#define ieee80211_crypt_delayed_deinit	ieee80211_crypt_delayed_deinit_rsl
--#define ieee80211_register_crypto_ops	ieee80211_register_crypto_ops_rsl
--#define ieee80211_unregister_crypto_ops ieee80211_unregister_crypto_ops_rsl
--#define ieee80211_get_crypto_ops	ieee80211_get_crypto_ops_rsl
--
--#define ieee80211_ccmp_null		ieee80211_ccmp_null_rsl
--
--#define free_ieee80211			free_ieee80211_rsl
--#define alloc_ieee80211			alloc_ieee80211_rsl
--
--#define ieee80211_rx			ieee80211_rx_rsl
--#define ieee80211_rx_mgt		ieee80211_rx_mgt_rsl
--
--#define ieee80211_get_beacon		ieee80211_get_beacon_rsl
--#define ieee80211_wake_queue		ieee80211_wake_queue_rsl
--#define ieee80211_stop_queue		ieee80211_stop_queue_rsl
--#define ieee80211_reset_queue		ieee80211_reset_queue_rsl
--#define ieee80211_softmac_stop_protocol	ieee80211_softmac_stop_protocol_rsl
--#define ieee80211_softmac_start_protocol ieee80211_softmac_start_protocol_rsl
--#define ieee80211_is_shortslot		ieee80211_is_shortslot_rsl
--#define ieee80211_is_54g		ieee80211_is_54g_rsl
--#define ieee80211_wpa_supplicant_ioctl	ieee80211_wpa_supplicant_ioctl_rsl
--#define ieee80211_ps_tx_ack		ieee80211_ps_tx_ack_rsl
--#define ieee80211_softmac_xmit		ieee80211_softmac_xmit_rsl
--#define ieee80211_stop_send_beacons	ieee80211_stop_send_beacons_rsl
- #define notify_wx_assoc_event		notify_wx_assoc_event_rsl
- #define SendDisassociation		SendDisassociation_rsl
--#define ieee80211_disassociate		ieee80211_disassociate_rsl
--#define ieee80211_start_send_beacons	ieee80211_start_send_beacons_rsl
--#define ieee80211_stop_scan		ieee80211_stop_scan_rsl
--#define ieee80211_send_probe_requests	ieee80211_send_probe_requests_rsl
--#define ieee80211_softmac_scan_syncro	ieee80211_softmac_scan_syncro_rsl
--#define ieee80211_start_scan_syncro	ieee80211_start_scan_syncro_rsl
--
--#define ieee80211_wx_get_essid		ieee80211_wx_get_essid_rsl
--#define ieee80211_wx_set_essid		ieee80211_wx_set_essid_rsl
--#define ieee80211_wx_set_rate		ieee80211_wx_set_rate_rsl
--#define ieee80211_wx_get_rate		ieee80211_wx_get_rate_rsl
--#define ieee80211_wx_set_wap		ieee80211_wx_set_wap_rsl
--#define ieee80211_wx_get_wap		ieee80211_wx_get_wap_rsl
--#define ieee80211_wx_set_mode		ieee80211_wx_set_mode_rsl
--#define ieee80211_wx_get_mode		ieee80211_wx_get_mode_rsl
--#define ieee80211_wx_set_scan		ieee80211_wx_set_scan_rsl
--#define ieee80211_wx_get_freq		ieee80211_wx_get_freq_rsl
--#define ieee80211_wx_set_freq		ieee80211_wx_set_freq_rsl
--#define ieee80211_wx_set_rawtx		ieee80211_wx_set_rawtx_rsl
--#define ieee80211_wx_get_name		ieee80211_wx_get_name_rsl
--#define ieee80211_wx_set_power		ieee80211_wx_set_power_rsl
--#define ieee80211_wx_get_power		ieee80211_wx_get_power_rsl
--#define ieee80211_wlan_frequencies	ieee80211_wlan_frequencies_rsl
--#define ieee80211_wx_set_rts		ieee80211_wx_set_rts_rsl
--#define ieee80211_wx_get_rts		ieee80211_wx_get_rts_rsl
--
--#define ieee80211_txb_free		ieee80211_txb_free_rsl
--
--#define ieee80211_wx_set_gen_ie		ieee80211_wx_set_gen_ie_rsl
--#define ieee80211_wx_get_scan		ieee80211_wx_get_scan_rsl
--#define ieee80211_wx_set_encode		ieee80211_wx_set_encode_rsl
--#define ieee80211_wx_get_encode		ieee80211_wx_get_encode_rsl
--#define ieee80211_wx_set_mlme		ieee80211_wx_set_mlme_rsl
--#define ieee80211_wx_set_auth		ieee80211_wx_set_auth_rsl
--#define ieee80211_wx_set_encode_ext	ieee80211_wx_set_encode_ext_rsl
--#define ieee80211_wx_get_encode_ext	ieee80211_wx_get_encode_ext_rsl
--
-
- struct ieee_param {
- 	u32 cmd;
---
-2.30.2
-
-
-
+Brian
