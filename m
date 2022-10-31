@@ -2,100 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2FAFF613B6E
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 17:36:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE88F613B71
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 17:37:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231844AbiJaQgy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 12:36:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52262 "EHLO
+        id S231790AbiJaQhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 12:37:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231183AbiJaQgw (ORCPT
+        with ESMTP id S231183AbiJaQhU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 12:36:52 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 45C72E56
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:36:51 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id io19so11220218plb.8
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:36:51 -0700 (PDT)
+        Mon, 31 Oct 2022 12:37:20 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0015E56
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:37:19 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id k2so30884818ejr.2
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:37:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ktu8OH92DZspQ/EalzrzH2xRK2hDUy12EpR7qlAoKb0=;
-        b=cJOxA2b0uPiBCezL07Ov82tEB4jHsTf3Ta5PEIqG7TnX4XNfxyySy0wk6i+wDyySZj
-         i2+/m2JEoZUui7IU/AN9q1CbDBYhtHU1Ep/oFUbIYkB1PITOZjwszPoHhCTTLN/xE6Lr
-         FtMUFI5OTIUTPNNQ/FUTjCvTa88nV+YH7D03w=
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=OGDQThFOxauPDUbKkMnQ1WVxEo1L149BaHAo2/PIs94=;
+        b=jP/GNUvQTENsDaBdHVAlI7AfG4mal0HOq2Y3LVR3qDTk5EdDcfBxL/qwz1YXQUf7X5
+         NlH2gXW5xMoQqPWzBv6wKq+e3OGCGycAAkDhRY1gCDolIbKfCTCuNrThCN2oBFe5xyQG
+         OrFtT/5IBJiXBJKa01ZM2aUY7zfzE2pDz735px5sgA63NLS63B1+k+0m9i64ukpraY7h
+         jAxnODFQfVTrGEhvjISrbbWtE+RaHV6/0KbB5wTfU/GTlfgral0Y0oQjKZv6r9Ig2Cxx
+         sQTx2cwfcA4KBZbxsnwo9mw1oDRweYJMvS0WKLB4v7b0v5cC3g1YMhtca4bozPNbeoE3
+         gaxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ktu8OH92DZspQ/EalzrzH2xRK2hDUy12EpR7qlAoKb0=;
-        b=RsRIkuDIdvAkAFQad1QAMla0GmEAlZ+xPrX2g91xtO51GI2jez7T1a3Skegosd+/1u
-         21O/hSWPkc9QJtm6VSpPSyHKCtSrycab76UWhXazw788CDOlfW4sQXHmQODQmnjqzC/y
-         1jgDIG+iUU+enjrJ44kK8zBDT/107dYJpfew3lkR/lrSessp0cqk9SNQcL1FrBdIsRLA
-         a/Q5OECN4a4AhkgdvCimEf2JesEubn9Fkc0WconXLTDSHE1wiFs47/DAstvYLqfzxXQg
-         Z2l1UcDu/69fXrGDfN6ax1KdRCidJcT8Bs4xIY2RF+OCVLIEBmAw7URCY7nOk57QRt/o
-         X7Pg==
-X-Gm-Message-State: ACrzQf12k9ndiAbgqG4WfZm6jPIl5+lp7HoxzoWvDbHmfTrNX86xoJCT
-        MTg2qRNfC8TNyOs+n7vmVrmMyA==
-X-Google-Smtp-Source: AMsMyM6TSgLhlriqWZHeTadke/nSbx3vqmxUQeI1Dl0qdWWkCayFHXAce3dvg+tYvHkGMJ3J6ekueg==
-X-Received: by 2002:a17:903:234c:b0:187:28b2:85f6 with SMTP id c12-20020a170903234c00b0018728b285f6mr3796395plh.106.1667234210737;
-        Mon, 31 Oct 2022 09:36:50 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:cf9d:6561:637d:2194])
-        by smtp.gmail.com with ESMTPSA id m3-20020a17090a3f8300b0020a7d076bfesm4443584pjc.2.2022.10.31.09.36.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 09:36:50 -0700 (PDT)
-Date:   Mon, 31 Oct 2022 09:36:47 -0700
-From:   Brian Norris <briannorris@chromium.org>
-To:     Tzung-Bi Shih <tzungbi@kernel.org>
-Cc:     Guenter Roeck <linux@roeck-us.net>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Benson Leung <bleung@chromium.org>, linux-rtc@vger.kernel.org,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] rtc: cros-ec: Limit RTC alarm range if needed
-Message-ID: <Y1/5nyplwrxSLg+M@google.com>
-References: <20221029005400.2712577-1-linux@roeck-us.net>
- <Y19AdIntJZGnBh/y@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=OGDQThFOxauPDUbKkMnQ1WVxEo1L149BaHAo2/PIs94=;
+        b=wTgK8zysvpK24jwf9TdNAmMyLdc5IoAskqUeanRkQQ+oIEf6/JJz8R+UunXEu+27Q8
+         4U5/hugCNiaogOeAwc2FzI5zec8Vme/UlU7QNeneeELggJxHWyQ5hIN5GWi8K/a2Klq9
+         oeugjMkAfm7idomDWCzsJZEXiBxwitiBV+ATyO7VnIIVd2UlIjOZkfEQl1fqAraEXYWi
+         2kk6NJIgEcZMLW8GDqbErTd2l61velmjj5c7m/RuryGfhlQn5vkCGVvRu8emN0Pi2A4B
+         hS1leyGbxYR8IpyLo5Q5N4d2D63nT6SFyzmOLJT3Sm40MlXir8mfzW7x07/FQWOLJ31Z
+         EJ3A==
+X-Gm-Message-State: ACrzQf3AOsvK7wSu/Fvp8DaaifBGPRsOZaPNBR6hxLHl9GLlffyIumO1
+        nmTYBLOXzYxfER8QYTn/vNcCahbMMcDq2M5Ibuf/Dw==
+X-Google-Smtp-Source: AMsMyM734FMFQBz6kY12hhzgcNd2bLkfehsbGWPgKwUgXJztlzYXlNFwg3IovBEtfdf5nF/ppcqBfhXtOgTYIoSKgdY=
+X-Received: by 2002:a17:907:86a0:b0:78d:df8b:4d17 with SMTP id
+ qa32-20020a17090786a000b0078ddf8b4d17mr13518713ejc.254.1667234238076; Mon, 31
+ Oct 2022 09:37:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y19AdIntJZGnBh/y@google.com>
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221028210256.3776835-1-dlatypov@google.com> <CABVgOS=uAVc_nKRFYRiQtWFykyfWH6hWASK-yd+ZnH5UNmRgsw@mail.gmail.com>
+In-Reply-To: <CABVgOS=uAVc_nKRFYRiQtWFykyfWH6hWASK-yd+ZnH5UNmRgsw@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 31 Oct 2022 09:37:06 -0700
+Message-ID: <CAGS_qxpghJUj+R74SFPjq=VDoNdVp7Wq2b+AcWwmHHeCQVjmPg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] kunit: tool: make unit test not print parsed testdata
+ to stdout
+To:     David Gow <davidgow@google.com>
+Cc:     brendanhiggins@google.com, rmoar@google.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 11:26:44AM +0800, Tzung-Bi Shih wrote:
-> On Fri, Oct 28, 2022 at 05:54:00PM -0700, Guenter Roeck wrote:
-> > Drop error messages in cros_ec_rtc_get() and cros_ec_rtc_set() since the
-> > calling code also logs an error and to avoid spurious error messages if
-> > setting the alarm ultimately succeeds.
-> 
-> It only retries for cros_ec_rtc_set().  cros_ec_rtc_get() doesn't emit
-> spurious error messages.
+On Sat, Oct 29, 2022 at 8:31 PM David Gow <davidgow@google.com> wrote:
+>
+> On Sat, Oct 29, 2022 at 5:03 AM Daniel Latypov <dlatypov@google.com> wrote:
+> >
+> > Currently, if you run
+> > $ ./tools/testing/kunit/kunit_tool_test.py
+> > you'll see a lot of output from the parser as we feed it testdata.
+> >
+> > This makes the output hard to read and fairly confusing, esp. since our
+> > testdata includes example failures, which get printed out in red.
+> >
+> > Silence that output so real failures are easier to see.
+> >
+> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
+> > ---
+>
+> Thanks -- this has been annoying me for ages.
+>
+> That being said, this isn't a perfect fix, the "usage" text and
+> "Reconfiguring .config"  still show up for me:
+> ---
+> davidgow@slicestar:~/Development/linux-kselftest$
+> ./tools/testing/kunit/kunit_tool_test.py
+> ..............................usage: kunit_tool_test.py run [-h]
+> [--build_dir DIR] [--make_options X=Y] [--alltests] [--kunitconfig
+> PATHS] [--kconfig_add CONFIG_X=Y] [--arch ARCH] [--cross_compile
+> PREFIX] [--qemu_config FILE] [--qemu_ar
+> gs] [--jobs N]
+>                              [--timeout SECONDS] [--kernel_args]
+> [--run_isolated {suite,test}] [--raw_output [{all,kunit}]] [--json
+> [FILE]]
+>                              [filter_glob]
+> kunit_tool_test.py run: error: argument --raw_output: invalid choice:
+> 'invalid' (choose from 'all', 'kunit')
+> ..............................Generating .config ...
+> .Regenerating .config ...
+> .........
+> ----------------------------------------------------------------------
+> Ran 70 tests in 0.232s
+>
+> OK
+> ---
+>
+> That's still a significant improvement on what we had before, though, so:
 
-All of cros_ec_rtc_get()'s callers were also logging the same message.
-So it was redundant. I think the general strategy here was to log the
-error(s) in callers (last point before we "exit" the driver), to have
-the best chance at context-relevant error messages, or ignoring them
-where proper.
+Yeah, I was originally going to make this patch silence all the output.
+But I figured I would focus this patch on just the code using our
+kunit_printer abstraction, aka the parser.
 
-It's already a bit dubious to log kernel messages at all in response to
-normal sysfs operations. We probably want them in some cases, when
-things are particularly unexpected, but it shouldn't be a regular
-occurrence, and we certainly don't need *two* log lines for each error.
-
-Technically, if one wants to be super-nitpicky about one purpose per
-patch, then maybe a patch to trim the logging, and a patch to fix the
-alarm range issues...
-...but I think that would be a little silly, and perhaps even harmful.
-They are related concerns that should be patched (and probably
-backported) together.
-
-Brian
+We could address the other ones, but we'd have to mock out the
+built-in print function.
+As someone who is guilty of print(f) debugging, doing that means I no
+longer have an easy of way of adding debugging code to those test
+cases :P
