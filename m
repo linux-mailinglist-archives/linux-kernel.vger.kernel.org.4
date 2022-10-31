@@ -2,66 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1EE85613D63
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:31:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9127613D65
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:34:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbiJaSb2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 14:31:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33320 "EHLO
+        id S230024AbiJaSeI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 14:34:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229536AbiJaSb0 (ORCPT
+        with ESMTP id S229827AbiJaSeG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 14:31:26 -0400
-Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E451411A06
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 11:31:25 -0700 (PDT)
-Received: by mail-pj1-x1030.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso16669727pjg.5
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 11:31:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=gKVkobfuovv7qclKCKdX5gd2H7TOV0mQXBG/s5kJPMw=;
-        b=RskxV3GLPHbnnyOFxW/O0DgxzzLmOWNp7gGDZKFE7KcWWe87QrQtkuleHxdKp4ScSe
-         j85Fm5UincogEx4CZH5MRDFkEK+Tg4bVm6BOBvdUHfH5hBzljJp/G7Hzqklv5duoF1Ez
-         ROSCwt5PR3x69i56v7H9toJfXxT+o3GRrSJZkqMAcRsSkL+YoKG6gb0Fc20qZ/3yPrjL
-         7WBwYSrR1W4pDCDjNt13+oER7fWCK1NcErLvX/19Z+e97teF5pJklSzsyhC0Kj2UJ7ha
-         DwP7s21xWccRkirzTYOZP4eY46f6DtRs3qJ/0HWXIqls2Osz9JGZ2pGx4joK1TBjbdt/
-         8knQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gKVkobfuovv7qclKCKdX5gd2H7TOV0mQXBG/s5kJPMw=;
-        b=ULz+bEgx4gMtbYHmFu9UvfBDMxQzVdCLefSXutCsN9YAtvBpxURkyqGJhnUVhuxOFQ
-         ZL+iK1/evF57h9i/FUKRm8M8F0c5OG6tGiUuQuF79m6vDImgeAMxI/dvhk2bXRSAkuOE
-         ekuPdEhCq3HQcIvUwoKnE+sd3kaYNlN2J0CUorpVRm/0vgCg4OGJPSCdsyyHa5XTKaTd
-         bhItkHpAUhZLxDqt0hqlWflPY8lsvclZ47c1E0wLuJory8KSQ2RzGap/zww8S8zRV4WX
-         CdbTEzGouDY9+s8iEJMO8nmC55wAX5HZyXip/5RRqMN57FDOzffzoWUUIRCE0a7qRNPd
-         OLmQ==
-X-Gm-Message-State: ACrzQf336Gj0jl2vxkx3ST4hC9vorPCd+wbGCV6pwSWbOYDPcBDD5Yi/
-        AZeqD3y1yLuETNuq0E0hxkg=
-X-Google-Smtp-Source: AMsMyM7O7ZqnaiTJRIH7WRX/ezOHWIkj9BuagC5+sZLaZypIJGGFxSzlp5OCaFQFXL2uBTBChiZRtA==
-X-Received: by 2002:a17:902:b20a:b0:178:6f5b:f903 with SMTP id t10-20020a170902b20a00b001786f5bf903mr15895867plr.39.1667241085363;
-        Mon, 31 Oct 2022 11:31:25 -0700 (PDT)
-Received: from localhost.localdomain (c-67-174-241-145.hsd1.ca.comcast.net. [67.174.241.145])
-        by smtp.gmail.com with ESMTPSA id bc11-20020a656d8b000000b00462612c2699sm4443266pgb.86.2022.10.31.11.31.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 11:31:24 -0700 (PDT)
-From:   Yang Shi <shy828301@gmail.com>
-To:     zokeefe@google.com, mhocko@suse.com, akpm@linux-foundation.org
-Cc:     shy828301@gmail.com, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] mm: don't warn if the node is offlined
-Date:   Mon, 31 Oct 2022 11:31:22 -0700
-Message-Id: <20221031183122.470962-1-shy828301@gmail.com>
-X-Mailer: git-send-email 2.26.3
+        Mon, 31 Oct 2022 14:34:06 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70054.outbound.protection.outlook.com [40.107.7.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41B3C12626;
+        Mon, 31 Oct 2022 11:34:05 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ac5fLu2wTyu5ECP+ygv/bEWljQRZQX5IjHEelSsGGiMc94cItc0YaurnBoqC8sRbXcxXE8ekOwl0v0uU2pFka9Me49h89Bvk91laiq6YadvTd/ZXoMbAn6ehzVrNGotDkrXtD2b+Ig4fA3uOHCyCyGQLJ1jK7ytXrGvdJ03b7gC1O86JUn9pc+kM/Ip4Yp18ieKdnPHjGbNPhZl+ril7DRm4s3Pu1H3gqCvfnAmGvmtG9EI4WaFELhtghm3XrtKSFJscuBjrcyExarxq6gT8ngGbNp8tDH6R66sjJM+Uf5uipGwM+dobsNdLxhnCFX5Zav+RNapGtEXVDY+Tyn2isw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=c/C4kifzUKKsES+cooWq4imyJ5Evnkf6Cdz7TJh2Tkw=;
+ b=Hsm1iaKoPNuumRBXiRpdTFbPAC9fCGqvEM4uK1qi1pH3NCJho0rnI0xge27Q9AbCmJ3bXwPUpI5v6xNBQ+5yavW6yLpF1JXPFGR2LhaVgq6sspi+P8y7PsNzJUKSinxYCfZJZsYO7gOo5KtgTNvP3yiyhmLUmPhBuTEmc7NZwNI9uMzGBSXcB/9D3YYWPVOAdonF+cSVAce0Iy8fzkFPnmwU2H4zyVTOQFQhzC9cAe/EyzDxtFJT/WPQnXEvnCaIyb1omtxzIpbAaXc2P6Hgbj/M9YEgjAV+HfEf0EsOL3HeVRo+gUEC8Lkhy1sqSliR4C0IJCr1Nll3CM2fK4bOaA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=c/C4kifzUKKsES+cooWq4imyJ5Evnkf6Cdz7TJh2Tkw=;
+ b=T/QGBbQwe4F3YnY6Db4+hvpsPhEfBjAXcJ/LR3YK7doxiswWmbWyYrjbTLFSNEGa62i9XUVTpM+gyCTktKyruPJPTeW5hO3AZfUyEJ9ddbz4mvcsrQSCZkq9+qPDFS9naf/knFl9+o2JBB1beHnDlMeWpSUTwN+eRDrE7+uDLNk=
+Received: from PAXPR04MB9185.eurprd04.prod.outlook.com (2603:10a6:102:231::11)
+ by AS4PR04MB9292.eurprd04.prod.outlook.com (2603:10a6:20b:4e7::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.15; Mon, 31 Oct
+ 2022 18:34:02 +0000
+Received: from PAXPR04MB9185.eurprd04.prod.outlook.com
+ ([fe80::b1ab:dd4f:9237:d9f8]) by PAXPR04MB9185.eurprd04.prod.outlook.com
+ ([fe80::b1ab:dd4f:9237:d9f8%3]) with mapi id 15.20.5769.019; Mon, 31 Oct 2022
+ 18:34:02 +0000
+From:   Shenwei Wang <shenwei.wang@nxp.com>
+To:     Andrew Lunn <andrew@lunn.ch>
+CC:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Jesper Dangaard Brouer <hawk@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>,
+        kernel test robot <lkp@intel.com>
+Subject: RE: [EXT] Re: [PATCH v2 1/1] net: fec: add initial XDP support
+Thread-Topic: [EXT] Re: [PATCH v2 1/1] net: fec: add initial XDP support
+Thread-Index: AQHY7UT3Rg7ikccfbkSHV941HzNcma4ovLaAgAAVGBA=
+Date:   Mon, 31 Oct 2022 18:34:02 +0000
+Message-ID: <PAXPR04MB918581FFA58483608B3A7DCA89379@PAXPR04MB9185.eurprd04.prod.outlook.com>
+References: <20221031162200.1997788-1-shenwei.wang@nxp.com>
+ <Y2ABb+G+ykcUd413@lunn.ch>
+In-Reply-To: <Y2ABb+G+ykcUd413@lunn.ch>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PAXPR04MB9185:EE_|AS4PR04MB9292:EE_
+x-ms-office365-filtering-correlation-id: 633a0b81-c9d1-4f1b-30ea-08dabb6e7be7
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: lTU59zypKU1n1zI1uVBQ2BcdmsUvpPNkrsyJxsg5CM0yM9Qv8jwYgjnENTmA8tqJZTOgMRpleX1wgSNdQ1fhrLGhUnEYIilxkGGwR3TLA9o5Gow0qrX15vr2K+Bqd13HA2KlarmQKMDzP1BPkAwSlisS04gU27Alpw+lqk+hOvFbPafZm2katXDoaOjYUazPOKZ5wUt3d2PKpFJNGOK6dfgIXzVbyGVuXT+kaYV6r5kdTXPEC2BlYE/I3f0BwXQRA84ZFXwG++1Xmd+S3EgZsMwRwjM+inpIskYXs5z0BUcKZucGPB7MT+fnYSXFkTF3B4zrxqrvJORq4aONym/P2v/U0mS3wyXzGXyaO+TRPnGkYhjP4/+pEuJLaC2d/iyBMckYG8WnXLvAoYtl8iiEFtmTBknSeR/OFQ8wIacZI7gjWwHIcovdL+3MQYbI0vmgoEZsfY7tx1NPHvgPMsEM/R60TWqkqHm6FV+l1C4r0rPrVtQY4sLyKy7ey2r0N9O+2EbRer2XUf9Au80r3RwlgllcWzgnMC60Bz8ykyt2v1TOEX+yp+9Jk3/+bKpm/5EFuWM9UEI8NLq7hm0resyrKTB5Frc8IFlfUHie2S8qSsODMiApB7FBltvnWG1Z2o7Nva29Wz104eSJFBa/pvhxnNZ34kH0m3JXXM/5tIpp6nvZ0JTAZ1zODnFgGZMcqW3Dq/VP+XzcgEH/2HhkGA5XBrJWowOmYVWySFM2NlPxOvtPYnxgrsRE74Y43C72jbur14Bw+Rd8uvl9F22yUNd50Q==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB9185.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(376002)(136003)(39860400002)(396003)(346002)(451199015)(86362001)(33656002)(38070700005)(38100700002)(122000001)(71200400001)(186003)(2906002)(9686003)(44832011)(55016003)(83380400001)(478600001)(7696005)(26005)(53546011)(6506007)(55236004)(41300700001)(66446008)(64756008)(66476007)(4326008)(8676002)(54906003)(6916009)(4744005)(66556008)(316002)(5660300002)(76116006)(7416002)(66946007)(8936002)(52536014);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?VPlZFQI2yZKGZikmsHWTT4yMhsZahKi8FquyHJGIuAp5aLJkkuDTk4kLJdPk?=
+ =?us-ascii?Q?/Mm716wcEd8/Wi/2QMynXTaXhv0Am96g8YIGfiTmKetxywACcFAhwq8t8Ir4?=
+ =?us-ascii?Q?bVS0YGJHTCTaO4bJ2WOrwPJGTXrrXLtXs8D8zQDn1RyyMZp0kpl7JXgt6he5?=
+ =?us-ascii?Q?lpc9MNEUsIAPgAK1SlwLVMRklhsYpV0uMzipD+l8gYYhmAiciXKlD/X7yzgk?=
+ =?us-ascii?Q?HCLJwYc3p0Soj0tg5H08/knZ9VySZ1DZTzZl+iaPUNhO8XTRjW0I+eHNqDp6?=
+ =?us-ascii?Q?vO9vzh25dcZqrAbF8iPbDWFKnYs2ZB/SpmwfgfpWOmOPJtdorlgolZ/Yfzjn?=
+ =?us-ascii?Q?kjXREZTu0mkBZsYW3Hn/P6iWEq+SyzmK85/5RhtdFoBWj5a+0ft8Zgr9ilPe?=
+ =?us-ascii?Q?/lC2WBviErlhgnuM2R2G8ah4sp/vaenmwKUUxKtsEM7Iv5lv/VZuj88AsK/z?=
+ =?us-ascii?Q?DmxsUJQhlkYNgJoC+AlGGSQk3ECFpiXWaENlFit5m2Dsh91/igFB7Lyx+IF0?=
+ =?us-ascii?Q?TQPlg4UELoQ6fOaHmQsQvej0qwVE998qQorATRQayIHyyCbYocmZgon1pPUV?=
+ =?us-ascii?Q?PEEt18ipqRfLV4mF0+4wiBdOv+sDZ1issWDUaHFsmsJ7BpuNQTlmvbbMFDK6?=
+ =?us-ascii?Q?WHelKbuSF0P04nianBbLwctlzV1Tdd+18LBGq34sf1oqQ+uMrj2YnyPhOdGQ?=
+ =?us-ascii?Q?JV1zI8gdYiB1Ox+cVPqZLCT5zuDq541z39IzZJjZqhrH9jJRiaZ8H/8x6teO?=
+ =?us-ascii?Q?B9IonTulhR3vEO9fZjS83jEvfB+hSzpcYvtkIKH8Xj91BOCnh+8yGt5JhrW0?=
+ =?us-ascii?Q?tbzlZXLk+7KiqT0sR95u/96OM28nOK+7qtmyFWS/sCZqqtj3WcQcDbp2Kc5w?=
+ =?us-ascii?Q?/QgCOYHDW4dOR2ASxCB1CnPglFFi9aRy6gcj7R0tfnRlpDnI7/4Zcz9VgO39?=
+ =?us-ascii?Q?WKSNXMQ4JSHqHKzN2ojyfc9NRta+Df1M+LASmXNKf3gu4Gw8GFXqsyBZQlPB?=
+ =?us-ascii?Q?cGUHJftyU6g2trErzChKH4N/Ezn3q6+2qkCvFo9kspgYzt+usBWKwwb4TgEB?=
+ =?us-ascii?Q?LTpFk5stSsNw/4/6YfI00NiqRFCYizG+CHTCVJUZv0JqQR6HcWF4luT6TNZk?=
+ =?us-ascii?Q?Mpsa+EacHDdzlsUCjxWBbX9ZkXMGXRgGwYpBoQ9rldk8PudVAB98VIlvXGJD?=
+ =?us-ascii?Q?LJpZqQvaIpKMBDeSs3kf7skqLnUVIJ2RYqGdeD3GiDBr5aUZ2C2gJ+KV11VG?=
+ =?us-ascii?Q?VIbnRPFCkVBi65GJ38obvuLC3p8mtykJ7qV0Mv1+4D3IJDthT5n8AxV8/3v+?=
+ =?us-ascii?Q?xw1WiBFMKXM4oiYf9kM81WrAXX7vEZr6SBR2kqF7wBzUNkdvBFpaOE4SMHRn?=
+ =?us-ascii?Q?DZOXJq8uojCUp6QAa7jdequCNuW9aeBQHgv/2mXUV4HWqIuyvrpgtJjk69SM?=
+ =?us-ascii?Q?NrR9rwaZFFj8UAVhnrBUsDYlVcZOwhXYVJXs8EpkIlO6BnukeJ0LEqILwqlV?=
+ =?us-ascii?Q?EZORf1C0G8GJGCH9Llt70cu9xKHO5aNOqgZGEy6ifdLsJY7zbPocIo27xJFy?=
+ =?us-ascii?Q?jWY6HryaXbhQBefYMAr3sXJUqhSdn8SNKpdKw9xo?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB9185.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 633a0b81-c9d1-4f1b-30ea-08dabb6e7be7
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Oct 2022 18:34:02.5423
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: qRs5sMRvKUdyTV7vAbhNBlSn9gSi0DYT8tO8upzdrOfWZLEl0wkfGswC0CHn3I+EMV6Te6EY/E8MKRHOBu1aBw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS4PR04MB9292
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,152 +126,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Syzbot reported the below splat:
 
-WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 __alloc_pages_node include/linux/gfp.h:221 [inline]
-WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-Modules linked in:
-CPU: 1 PID: 3646 Comm: syz-executor210 Not tainted 6.1.0-rc1-syzkaller-00454-ga70385240892 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-RIP: 0010:__alloc_pages_node include/linux/gfp.h:221 [inline]
-RIP: 0010:hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-RIP: 0010:alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-Code: e5 01 4c 89 ee e8 6e f9 ae ff 4d 85 ed 0f 84 28 fc ff ff e8 70 fc ae ff 48 8d 6b ff 4c 8d 63 07 e9 16 fc ff ff e8 5e fc ae ff <0f> 0b e9 96 fa ff ff 41 bc 1a 00 00 00 e9 86 fd ff ff e8 47 fc ae
-RSP: 0018:ffffc90003fdf7d8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff888077f457c0 RSI: ffffffff81cd8f42 RDI: 0000000000000001
-RBP: ffff888079388c0c R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: dffffc0000000000 R14: 0000000000000000 R15: 0000000000000000
-FS:  00007f6b48ccf700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f6b48a819f0 CR3: 00000000171e7000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- collapse_file+0x1ca/0x5780 mm/khugepaged.c:1715
- hpage_collapse_scan_file+0xd6c/0x17a0 mm/khugepaged.c:2156
- madvise_collapse+0x53a/0xb40 mm/khugepaged.c:2611
- madvise_vma_behavior+0xd0a/0x1cc0 mm/madvise.c:1066
- madvise_walk_vmas+0x1c7/0x2b0 mm/madvise.c:1240
- do_madvise.part.0+0x24a/0x340 mm/madvise.c:1419
- do_madvise mm/madvise.c:1432 [inline]
- __do_sys_madvise mm/madvise.c:1432 [inline]
- __se_sys_madvise mm/madvise.c:1430 [inline]
- __x64_sys_madvise+0x113/0x150 mm/madvise.c:1430
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f6b48a4eef9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f6b48ccf318 EFLAGS: 00000246 ORIG_RAX: 000000000000001c
-RAX: ffffffffffffffda RBX: 00007f6b48af0048 RCX: 00007f6b48a4eef9
-RDX: 0000000000000019 RSI: 0000000000600003 RDI: 0000000020000000
-RBP: 00007f6b48af0040 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f6b48aa53a4
-R13: 00007f6b48bffcbf R14: 00007f6b48ccf400 R15: 0000000000022000
- </TASK>
 
-WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 __alloc_pages_node
-include/linux/gfp.h:221 [inline]
-WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221
-hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221
-alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-Modules linked in:
-CPU: 1 PID: 3646 Comm: syz-executor210 Not tainted
-6.1.0-rc1-syzkaller-00454-ga70385240892 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS
-Google 10/11/2022
-RIP: 0010:__alloc_pages_node include/linux/gfp.h:221 [inline]
-RIP: 0010:hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-RIP: 0010:alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-Code: e5 01 4c 89 ee e8 6e f9 ae ff 4d 85 ed 0f 84 28 fc ff ff e8 70 fc
-ae ff 48 8d 6b ff 4c 8d 63 07 e9 16 fc ff ff e8 5e fc ae ff <0f> 0b e9
-96 fa ff ff 41 bc 1a 00 00 00 e9 86 fd ff ff e8 47 fc ae
-RSP: 0018:ffffc90003fdf7d8 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-RDX: ffff888077f457c0 RSI: ffffffff81cd8f42 RDI: 0000000000000001
-RBP: ffff888079388c0c R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-R13: dffffc0000000000 R14: 0000000000000000 R15: 0000000000000000
-FS:  00007f6b48ccf700(0000) GS:ffff8880b9b00000(0000)
-knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f6b48a819f0 CR3: 00000000171e7000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- collapse_file+0x1ca/0x5780 mm/khugepaged.c:1715
- hpage_collapse_scan_file+0xd6c/0x17a0 mm/khugepaged.c:2156
- madvise_collapse+0x53a/0xb40 mm/khugepaged.c:2611
- madvise_vma_behavior+0xd0a/0x1cc0 mm/madvise.c:1066
- madvise_walk_vmas+0x1c7/0x2b0 mm/madvise.c:1240
- do_madvise.part.0+0x24a/0x340 mm/madvise.c:1419
- do_madvise mm/madvise.c:1432 [inline]
- __do_sys_madvise mm/madvise.c:1432 [inline]
- __se_sys_madvise mm/madvise.c:1430 [inline]
- __x64_sys_madvise+0x113/0x150 mm/madvise.c:1430
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f6b48a4eef9
-Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 15 00 00 90 48 89 f8 48 89
-f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01
-f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f6b48ccf318 EFLAGS: 00000246 ORIG_RAX: 000000000000001c
-RAX: ffffffffffffffda RBX: 00007f6b48af0048 RCX: 00007f6b48a4eef9
-RDX: 0000000000000019 RSI: 0000000000600003 RDI: 0000000020000000
-RBP: 00007f6b48af0040 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 00007f6b48aa53a4
-R13: 00007f6b48bffcbf R14: 00007f6b48ccf400 R15: 0000000000022000
- </TASK>
+> -----Original Message-----
+> From: Andrew Lunn <andrew@lunn.ch>
+> Sent: Monday, October 31, 2022 12:10 PM
+> To: Shenwei Wang <shenwei.wang@nxp.com>
+> > +                     cbd_base =3D rxq->bd.base;
+> > +                     if (bpf->prog)
+> > +                             rxq->bd.ring_size =3D XDP_RX_RING_SIZE;
+> > +                     else
+> > +                             rxq->bd.ring_size =3D RX_RING_SIZE;
+> > +                     size =3D dsize * rxq->bd.ring_size;
+> > +                     cbd_base =3D (struct bufdesc *)(((void *)cbd_base=
+) + size);
+> > +                     rxq->bd.last =3D (struct bufdesc *)(((void
+> > + *)cbd_base) - dsize);
+>=20
+> This does not look safe. netif_tx_disable(dev) will stop new transmission=
+s, but
+> the hardware can be busy receiving, DMAing frames, using the descriptors,=
+ etc.
+> Modifying rxq->bd.last in particular seems risky. I think you need to dis=
+able the
+> receiver, wait for it to indicate it really has stopped, and only then ma=
+ke these
+> modifications.
+>=20
 
-It is because khugepaged allocates pages with __GFP_THISNODE, but the
-preferred node is offlined.  The warning was even stronger before commit
-8addc2d00fe17 ("mm: do not warn on offline nodes unless the specific node
-is explicitly requested").  The commit softened the warning for
-__GFP_THISNODE.
+Sounds reasonable. How about moving the codes of updating ring size to the =
+place
+right after the enet reset inside the fec_restart? This should clear those =
+risky corner
+cases.
 
-But this warning seems not quite useful because:
-  * There is no guarantee the node is online for __GFP_THISNODE context
-    for all the callsites.
-  * Kernel just fails the allocation regardless the warning, and it looks
-    all callsites handle the allocation failure gracefully.
+Thanks,
+Shenwei
 
-So, removing the warning seems like the good move.
-
-Reported-by: syzbot+0044b22d177870ee974f@syzkaller.appspotmail.com
-Signed-off-by: Yang Shi <shy828301@gmail.com>
-Cc: Zach O'Keefe <zokeefe@google.com>
-Cc: Michal Hocko <mhocko@suse.com>
----
- include/linux/gfp.h | 2 --
- 1 file changed, 2 deletions(-)
-
-diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-index ef4aea3b356e..594d6dee5646 100644
---- a/include/linux/gfp.h
-+++ b/include/linux/gfp.h
-@@ -218,7 +218,6 @@ static inline struct page *
- __alloc_pages_node(int nid, gfp_t gfp_mask, unsigned int order)
- {
- 	VM_BUG_ON(nid < 0 || nid >= MAX_NUMNODES);
--	VM_WARN_ON((gfp_mask & __GFP_THISNODE) && !node_online(nid));
- 
- 	return __alloc_pages(gfp_mask, order, nid, NULL);
- }
-@@ -227,7 +226,6 @@ static inline
- struct folio *__folio_alloc_node(gfp_t gfp, unsigned int order, int nid)
- {
- 	VM_BUG_ON(nid < 0 || nid >= MAX_NUMNODES);
--	VM_WARN_ON((gfp & __GFP_THISNODE) && !node_online(nid));
- 
- 	return __folio_alloc(gfp, order, nid, NULL);
- }
--- 
-2.26.3
-
+>         Andrew
