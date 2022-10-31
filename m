@@ -2,177 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 439C5614081
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 23:13:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E78AF614083
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 23:14:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbiJaWNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 18:13:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60222 "EHLO
+        id S230008AbiJaWO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 18:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60730 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiJaWNW (ORCPT
+        with ESMTP id S229531AbiJaWO1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 18:13:22 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2B6213
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 15:13:20 -0700 (PDT)
-Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 29VLhgDx032352;
-        Mon, 31 Oct 2022 22:13:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=date : from : to : cc
- : subject : message-id : references : content-type : in-reply-to :
- mime-version; s=corp-2022-7-12;
- bh=ovHGtxz1vYOjBdNLzTK6ueC6fSY0xiTsUeFH89CQNQo=;
- b=JXmfevMCSzAWGYGyeIiW04TaqMThS7vkYbtliFOxs7GjS3Xvf+farByx/TbtM+6KjhlT
- H4Rg5Cz6aa8B2z9Prle3xCH0xEccQSQ/34ZzF/EVUFYsvgo5oU+I3YRuVITZ7bi5FWY6
- M6yzX8ELiA3SWlO/ge6/Tw7IfwSH0AhtXuwxK8TZ6RnewmZvs3E2blFL/6pqKOeQljod
- 6cJXSHcqW4nbgvefJcRJ9kpE4UigYkheAVq9NpY4s/w0ihlnHfPoVRKUXX/WCxNK+l8T
- tP4438SKQ779Guy5d4PVK5/x+5esFHia8Rxiqi4Ysw6txf7S773JUNmrMvpCAXIW3zy3 GA== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kgtkd5297-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 31 Oct 2022 22:13:14 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 29VK6Wor032825;
-        Mon, 31 Oct 2022 22:13:13 GMT
-Received: from nam04-mw2-obe.outbound.protection.outlook.com (mail-mw2nam04lp2175.outbound.protection.outlook.com [104.47.73.175])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kgtm3r5uu-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Mon, 31 Oct 2022 22:13:13 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=RVV4cuXzyj+3R9pufC/6HlOIJsXVcAq0Imk/wYay9ZpJtWe5CLK4AquzpNZno2vSHcKIj3RkCUStN15iZcRgScBh4f1qUa13wf8NYK6ig9T0FkA+XsOXo/0lvGPzfvyFOPjjxTYH9m8ZHfhO88hzJBgCRS+IqTf/jo/Bfy4ub2McCMtlRPMHeIQeCSU+4lzi9gFj4NmL6COTCuRr9g/wXxmuW6HiA7YW0Yfdf630gjD2A3u8h3L7WIOqqDMRUVPInqO8Xo8fCAbC9JZZPVseCKaK/aRqQ6Wf/KqMXFzPwuEUA2KCqqHB6+II79YFAxHd09nnEpR2QqVzJlmAJAhPZg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=ovHGtxz1vYOjBdNLzTK6ueC6fSY0xiTsUeFH89CQNQo=;
- b=JtsqnyPZJ4vhcsybVGPIgpVUybYAQu8b9PpQIGd8wKXUKT1weRGdFSwMoYEk9XRcKlzFbfX7SCOyEH4Ohyr31Cx3rClXZBh0FCwSG7paNLfyVQGvT0lQPKhodhJ7l91nIZj0k4XejHQA7KHlmlKxhhcZq9if+/b0SKs4sW22HsHeoG+fyq3o4Ys0XnimGeNGFYpHy2lhROpoZm7I1rh5jUUikC30/mxDDPG+vWkvT0+OUW03kfAJAv6cpR/uaipkHURJ1i3wVCR+bO6uIIti9Fr8vLFyVqR04NBzM++ge+2n1bQAcaZDhY4Q6hXUbd3G4UfiydJcEi54bluQby4zWA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=ovHGtxz1vYOjBdNLzTK6ueC6fSY0xiTsUeFH89CQNQo=;
- b=Cil2VDkfSUyfkHZrIVZcha5SSOBifWR9lVvQEz/UkCNEDOXp6cplotr445WguCx0n3+bajXZuYKWj96CZBjLIdT8fmdGrXSiDO9yRZ6vKwK/aFKuFJkZti0s09rRYMrkAy1lvFcMullkxRxJDQz/6Vv/05f+ezoy9t0RJ/4mnxQ=
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
- by BLAPR10MB4898.namprd10.prod.outlook.com (2603:10b6:208:327::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.19; Mon, 31 Oct
- 2022 22:13:11 +0000
-Received: from BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::58e9:95ba:d31e:ddd3]) by BY5PR10MB4196.namprd10.prod.outlook.com
- ([fe80::58e9:95ba:d31e:ddd3%6]) with mapi id 15.20.5769.019; Mon, 31 Oct 2022
- 22:13:11 +0000
-Date:   Mon, 31 Oct 2022 15:13:03 -0700
-From:   Mike Kravetz <mike.kravetz@oracle.com>
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     David Hildenbrand <david@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        Peter Xu <peterx@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        syzbot+f0b97304ef90f0d0b1dc@syzkaller.appspotmail.com
-Subject: Re: [PATCH v1] mm/gup: disallow FOLL_FORCE|FOLL_WRITE on hugetlb
- mappings
-Message-ID: <Y2BIbyxT0Bh6bCUr@monkey>
-References: <20221031152524.173644-1-david@redhat.com>
- <Y1/0e12ZJT6+N0kI@nvidia.com>
+        Mon, 31 Oct 2022 18:14:27 -0400
+Received: from relay5-d.mail.gandi.net (relay5-d.mail.gandi.net [217.70.183.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8357213;
+        Mon, 31 Oct 2022 15:14:25 -0700 (PDT)
+Received: (Authenticated sender: alexandre.belloni@bootlin.com)
+        by mail.gandi.net (Postfix) with ESMTPSA id 226121C0002;
+        Mon, 31 Oct 2022 22:14:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+        t=1667254464;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=g4PYqOd5SRr9ZuoCVtP2HbAo+y1WggE/ijdZao4BPJE=;
+        b=lBxsv9yTUr4PyHEPbZnozZrtBY4pkFdJYCDSFK6kwu4CPmz3rC7udy/qaHKVQ1eiUlmhQE
+        LAGN2Gc5hIHM4gttcJLqSTqcBgPRawC/iRbbrGtJEVka2t5OKM24wZabTQWaB1n3WCLCgr
+        gQe2FF/2JVKugfJkNnA5mX4GO/VjzG+8ef4360oysAdmmRDCVQ+0zgNvv5396WwEPFZpL6
+        0gDsYoSiEIyG5ryH5OchdSJbL1MnLnHyoe8Y/Q6lmV+M0muI2CFqHHpEySK4s41kO2xKGf
+        1snw+pA4xrduSm+q7UUySUl8620sqsUlF5bLy7Q884gBoUeJrB6GYXp8f+/5BA==
+Date:   Mon, 31 Oct 2022 23:14:23 +0100
+From:   Alexandre Belloni <alexandre.belloni@bootlin.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     Alessandro Zummo <a.zummo@towertech.it>,
+        Benson Leung <bleung@chromium.org>, linux-rtc@vger.kernel.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Brian Norris <briannorris@chromium.org>
+Subject: Re: [PATCH] rtc: cros-ec: Limit RTC alarm range if needed
+Message-ID: <Y2BIv21U7lpN0z23@mail.local>
+References: <20221029005400.2712577-1-linux@roeck-us.net>
+ <Y2ABnbBGSJGM3gSS@mail.local>
+ <20221031181913.GA3841664@roeck-us.net>
+MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y1/0e12ZJT6+N0kI@nvidia.com>
-X-ClientProxiedBy: MW2PR16CA0013.namprd16.prod.outlook.com (2603:10b6:907::26)
- To BY5PR10MB4196.namprd10.prod.outlook.com (2603:10b6:a03:20d::23)
-MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BY5PR10MB4196:EE_|BLAPR10MB4898:EE_
-X-MS-Office365-Filtering-Correlation-Id: 4baa2e00-e301-4f7a-e245-08dabb8d186f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 2WYlkWljG+KkBsAnJRy0LOAnjF2omP0va/eaepZWl8ufQcc2TRjvRgMfjjCznABDQJ6fuoi5lhRFfue4FjCQN1WMEBgOFXLQjqSxyQuBD1CI+PWsQ4C/VpwpcHsUcqRS1HoR6zOYqV/7PZ5iS/a+cEGZqADeRsomX3PIwPu1yMq779i9sS/pp1sIgCPA/Fiq+SYtEmHW770mx0YKc+woVIcACm8YzBSIawJlY6y8aI56Hgc2gNfp2bDRz9Oq/ChjaPkvJO80waR42gc7bQ3HEFJRTiaKgIQeYN+EDiusZSiF4Gg9irhnQe0NuZ9D4oi+Z0UJKy3/N6bZXArDE0dskEz1SoRr79Dt+izDCdmTrmvmHh9XbGg6pRamrPx/Ln+Uwsha7fwi7CW9BLEb5w0DPJIXaduCJCW9F0e4PMjGOjGsg4UrOfGXKp2eJRNR+YLd05eCsdlFbM2sPBuCi/Xb0hSPr6xLUKnG1fE09TtQ09LZlJD+UUm12XsF8c8lNyg/NNyL8yV/rFCQx1OqftRYFeC6Pk4DYfj/4rfhXlq8xrgk41FB5RPjMF7scVMxqkxv/yvz0qMmux5pRNASrHPDZOLLnVEocZpoRKEcLy+8NW/iR1+zvgPAY1rPTjfVzqc2Pux2MLTiRDLk72bMheO/9Ze2oRtiAHhKSU5Y5BtUv0F/GemcGc52XR3LPudXFtUFHdifkziGZG86eURqN96gbs/Ao6HVQa/A26OOos/+yvB8VRznCYGlWpbYoepoaIoW
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BY5PR10MB4196.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(366004)(396003)(136003)(39860400002)(346002)(376002)(451199015)(33716001)(66476007)(8676002)(6916009)(83380400001)(4326008)(66946007)(54906003)(66556008)(316002)(4744005)(44832011)(8936002)(2906002)(478600001)(41300700001)(6486002)(5660300002)(186003)(38100700002)(53546011)(6506007)(86362001)(6666004)(6512007)(26005)(9686003)(83133001);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?DZ5+KTH/9pf6DcVHr8A4DswNsELlIoGdMEQJpccLWQOUkLm8GNTpsruMxdC3?=
- =?us-ascii?Q?/HfGffeE/Qv41qUUtHqbZfQbD+dZNNJi5S73+xGYb0N9W1uOJtduSNsjUhiP?=
- =?us-ascii?Q?N7bTQF7fYvsQWp7iuKYuuNEWSNP3X/xV3Hoj/baApRoj8QinwXOA0w10+RqD?=
- =?us-ascii?Q?J+XPn15nXB/6PHO9acdGT9UQNAXcdwSBM31QTauB3uW/fpPE/PaOUBhkgfQf?=
- =?us-ascii?Q?jhdr1R8a8cfrqGaU4xUpiFY9sEIzQd2Y+7ZWbmHueVacftZySa/SZymuPfxs?=
- =?us-ascii?Q?QYprXyTDwIwQ877MUQLilXD1uyqY1LuC1kGv5ivbPMZS+DmzoU7SvqRpXLGW?=
- =?us-ascii?Q?LWaBoJVtw3y4Jssqfwog6/PyCSs+QwVeK7Q+VXu3H6JxX+MZWyjmlv/p7bQ4?=
- =?us-ascii?Q?GIf0CkDRQ/nGzCZv02icj0VpCb1nnxXDwEPT5hD5Uvd5BcVpK62jRbHjBVwt?=
- =?us-ascii?Q?6V2+vNH8yUw8HNcLPtyf5/PtavwmhP7Exgyx2D1oG5Hy9FN/X/SPsM2PEIQz?=
- =?us-ascii?Q?2/yMZw5BaRGEoiUdIcXBmeABS+vXe714PN4EZ3AIfoi0Ci0ZR4iIl+zmZCKW?=
- =?us-ascii?Q?pSEnWKQBy8TcqMWw6dezcJc0Ph96ajGqD5EbCnvBq53/sftUGbDzaAeBDOCe?=
- =?us-ascii?Q?/CNv4RI/PTiIFMi3LBTUNUnAn5Mi+JYxC7YNo7j5cwJg5tA1H3YPauV3z49j?=
- =?us-ascii?Q?paNPJTZonoZGfD+uTySLif3NAJO3wib28IL0ZAqsA4inWkqyqofn/j94YcrH?=
- =?us-ascii?Q?wcivHjGOd6SfSpRV0KqvzpuheeGCjszj5Uyq9fKhLIamOqyxl4qyH2NdYDDg?=
- =?us-ascii?Q?AQodSImOkKEGmtI+ah/n6JP3bBW36uwwtiYjpfa7UvH+RPfxmIItGwdP2pyb?=
- =?us-ascii?Q?E416qRJ2lyKcQ1TPNGUlSGLIrzVHE0X6feYza2FCAivYKZZA9PgF9hV4Ltg9?=
- =?us-ascii?Q?cPGYjHLneKRYBNwsz2w+ZwFRFVZfuR7oy0ZMrZuIhOXAlH9pztMcHCX2hxkQ?=
- =?us-ascii?Q?6ac2t50WQYhdcIQR7Q7x/I1VKOxmGLLdIVKpk1S4wEfdN/OIt156IcPgpbjK?=
- =?us-ascii?Q?rh70VH918PbZ9X7ybSgTa8ktiEJ6+Mfl6ttqLEGz8eSdmzSPoiQnFGgr38WV?=
- =?us-ascii?Q?RiyWLZdDq2027dLpk4UQq5/AHbqUZ/gm4kO6og+nz1B3Ijc7L3QeyFfBvHM7?=
- =?us-ascii?Q?berfDHh6pP6xq3Ho8y7hvyOfKOHRmmrHqvT17K7+mmk28o+jwKPf7NhB8qTO?=
- =?us-ascii?Q?UODFKSEnsUaiiRvG31xj+8uv8JVR1+L41lYecPHYvG26tIGeLy1uhhAaR+I9?=
- =?us-ascii?Q?hcDK/eMO6SQXBMRilLI74MiYzjng9xxteCSTSDCgDcdniVXr+FzfA54s7WbB?=
- =?us-ascii?Q?qU5cttEAYqPKfnZCrutH+szbRgmBGLYDg3agRM/hqr0V/DlZdtmqKAR54L0T?=
- =?us-ascii?Q?5Njt7uYSCf9Y8LAloJnwMslyAKhKkskhXgIcnul177i56jgcbGQ6NchFeG0j?=
- =?us-ascii?Q?O4LRKlnCKLaFaIs5A29WxO4Hq7EFLG7Xsx8TWnvZ2+74rlUwodcCoqsNBe0Z?=
- =?us-ascii?Q?Y8wz9SExUJFPFsbHwHS8eDDUQSjUYO1ChI1pZshkyboFheEhMxek4u7NSK41?=
- =?us-ascii?Q?wQ=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4baa2e00-e301-4f7a-e245-08dabb8d186f
-X-MS-Exchange-CrossTenant-AuthSource: BY5PR10MB4196.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 31 Oct 2022 22:13:10.9243
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 4A9vXF1S2EWkI8oe7GjXCUxqXvrIQvCz0+hD81hea0FQ1xCZPQpFCXweQLkBZcRPeMrMdfLwqrht+pEZ0/6bdQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BLAPR10MB4898
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-31_21,2022-10-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0 bulkscore=0
- suspectscore=0 phishscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2210310137
-X-Proofpoint-ORIG-GUID: nrEzBE6oq850TcgJXgCz_ycpQB2nmB9I
-X-Proofpoint-GUID: nrEzBE6oq850TcgJXgCz_ycpQB2nmB9I
+In-Reply-To: <20221031181913.GA3841664@roeck-us.net>
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/31/22 13:14, Jason Gunthorpe wrote:
-> On Mon, Oct 31, 2022 at 04:25:24PM +0100, David Hildenbrand wrote:
-> > Cc: Andrew Morton <akpm@linux-foundation.org>
-> > Cc: Mike Kravetz <mike.kravetz@oracle.com>
-> > Cc: Peter Xu <peterx@redhat.com>
-> > Cc: John Hubbard <jhubbard@nvidia.com>
-> > Cc: Jason Gunthorpe <jgg@nvidia.com>
-> > Reported-by: syzbot+f0b97304ef90f0d0b1dc@syzkaller.appspotmail.com
-> > Signed-off-by: David Hildenbrand <david@redhat.com>
-> > ---
+On 31/10/2022 11:19:13-0700, Guenter Roeck wrote:
+> On Mon, Oct 31, 2022 at 06:10:53PM +0100, Alexandre Belloni wrote:
+> > Hello,
 > > 
-> > I assume this has been broken at least since 2014, when mm/gup.c came to
-> > life. I failed to come up with a suitable Fixes tag quickly.
+> > On 28/10/2022 17:54:00-0700, Guenter Roeck wrote:
+> > > RTC chips on some older Chromebooks can only handle alarms less than 24
+> > > hours in the future. Attempts to set an alarm beyond that range fails.
+> > > The most severe impact of this limitation is that suspend requests fail
+> > > if alarmtimer_suspend() tries to set an alarm for more than 24 hours
+> > > in the future.
+> > > 
+> > > Try to set the real-time alarm to just below 24 hours if setting it to
+> > > a larger value fails to work around the problem. While not perfect, it
+> > > is better than just failing the call. A similar workaround is already
+> > > implemented in the rtc-tps6586x driver.
+> > 
+> > I'm not super convinced this is actually better than failing the call
+> > because your are implementing policy in the driver which is bad from a
+> > user point of view. It would be way better to return -ERANGE and let
+> > userspace select a better alarm time.
 > 
-> I'm worried this would break RDMA over hugetlbfs maps - which is a
-> real thing people do.
+> The failing call is from alarmtimer_suspend() which is called during suspend.
+> It is not from userspace, and userspace has no chance to intervene.
+> 
+> It is also not just one userspace application which could request a large
+> timeout, it is a variety of userspace applications, and not all of them are
+> written by Google. Some are Android applications. I don't see how it would be
+> realistic to expect all such applications to fix their code (if that is even
+> possible - there might be an application which called sleep(100000) or
+> something equivalent, which works just fine as long as the system is not
+> suspended.
+> 
+> > Do you have to know in advance which are the "older" chromebooks that
+> > are affected?
+> 
+> Not sure I understand the question. Technically we know, but the cros_ec
+> rtc driver doesn't know because the EC doesn't have an API to report the
+> maximum timeout to the Linux driver. Even if that existed, it would not
+> help because the rtc API only supports absolute maximum clock values,
+> not clock offsets relative to the current time. So ultimately there is no
+> means for an RTC driver to tell the maximum possible alarm timer offset to 
+> the RTC subsystem, and there is no means for a user such as
+> alarmtimer_suspend() to obtain the maximum time offset. Does that answer
+> your question ?
 
-Yes, it is a real thing.  Unfortunately, I do not know exactly how it is used.
+Yes, my question was missing a few words, sorry I wanted to know if you
+had *a way* to know.
 
 > 
-> MikeK do you have test cases?
+> On a side note, I tried an alternate implementation by adding a retry into
+> alarmtimer_suspend(), where it would request a smaller timeout if the
+> requested timeout failed. I did not pursue/submit this since it seemed
+> hacky. To solve that problem, I'd rather discuss extending the RTC API
+> to provide a maximum offset to its users. Such a solution would probably
+> be desirable, but that it more longer term and would not solve the
+> immediate problem.
 
-Sorry, I do not have any test cases.
+Yes, this is what I was aiming for. This is something that is indeed
+missing in the RTC API and that I already thought about. But indeed, it
+would be great to have a way to set the alarm range separately from the
+time keeping range. This would indeed have to be a range relative to the
+current time.
 
-I can ask one of our product groups about their usage.  But, that would
-certainly not be a comprehensive view.
+alarmtimer_suspend() can then get the allowed alarm range for the RTC,
+and set the alarm to max(alarm range, timer value) and loop until the
+timer has expired. Once we have this API, userspace can do the same.
+
+I guess that ultimately, this doesn't help your driver unless you are
+wanting to wakeup all the chromebooks at least once a day regardless of
+their EC.
+
+> If you see a better solution, please let me know. Again, the problem
+> is that alarmtimer_suspend() fails because the requested timeout is too
+> large.
+> 
+> Thanks,
+> Guenter
+> 
+> > 
+> > > 
+> > > Drop error messages in cros_ec_rtc_get() and cros_ec_rtc_set() since the
+> > > calling code also logs an error and to avoid spurious error messages if
+> > > setting the alarm ultimately succeeds.
+> > > 
+> > > Cc: Brian Norris <briannorris@chromium.org>
+> > > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+> > > ---
+> > >  drivers/rtc/rtc-cros-ec.c | 35 ++++++++++++++++++++---------------
+> > >  1 file changed, 20 insertions(+), 15 deletions(-)
+> > > 
+> > > diff --git a/drivers/rtc/rtc-cros-ec.c b/drivers/rtc/rtc-cros-ec.c
+> > > index 887f5193e253..a3ec066d8066 100644
+> > > --- a/drivers/rtc/rtc-cros-ec.c
+> > > +++ b/drivers/rtc/rtc-cros-ec.c
+> > > @@ -14,6 +14,8 @@
+> > >  
+> > >  #define DRV_NAME	"cros-ec-rtc"
+> > >  
+> > > +#define SECS_PER_DAY	(24 * 60 * 60)
+> > > +
+> > >  /**
+> > >   * struct cros_ec_rtc - Driver data for EC RTC
+> > >   *
+> > > @@ -43,13 +45,8 @@ static int cros_ec_rtc_get(struct cros_ec_device *cros_ec, u32 command,
+> > >  	msg.msg.insize = sizeof(msg.data);
+> > >  
+> > >  	ret = cros_ec_cmd_xfer_status(cros_ec, &msg.msg);
+> > > -	if (ret < 0) {
+> > > -		dev_err(cros_ec->dev,
+> > > -			"error getting %s from EC: %d\n",
+> > > -			command == EC_CMD_RTC_GET_VALUE ? "time" : "alarm",
+> > > -			ret);
+> > > +	if (ret < 0)
+> > >  		return ret;
+> > > -	}
+> > >  
+> > >  	*response = msg.data.time;
+> > >  
+> > > @@ -59,7 +56,7 @@ static int cros_ec_rtc_get(struct cros_ec_device *cros_ec, u32 command,
+> > >  static int cros_ec_rtc_set(struct cros_ec_device *cros_ec, u32 command,
+> > >  			   u32 param)
+> > >  {
+> > > -	int ret = 0;
+> > > +	int ret;
+> > >  	struct {
+> > >  		struct cros_ec_command msg;
+> > >  		struct ec_response_rtc data;
+> > > @@ -71,13 +68,8 @@ static int cros_ec_rtc_set(struct cros_ec_device *cros_ec, u32 command,
+> > >  	msg.data.time = param;
+> > >  
+> > >  	ret = cros_ec_cmd_xfer_status(cros_ec, &msg.msg);
+> > > -	if (ret < 0) {
+> > > -		dev_err(cros_ec->dev, "error setting %s on EC: %d\n",
+> > > -			command == EC_CMD_RTC_SET_VALUE ? "time" : "alarm",
+> > > -			ret);
+> > > +	if (ret < 0)
+> > >  		return ret;
+> > > -	}
+> > > -
+> > >  	return 0;
+> > >  }
+> > >  
+> > > @@ -190,8 +182,21 @@ static int cros_ec_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
+> > >  
+> > >  	ret = cros_ec_rtc_set(cros_ec, EC_CMD_RTC_SET_ALARM, alarm_offset);
+> > >  	if (ret < 0) {
+> > > -		dev_err(dev, "error setting alarm: %d\n", ret);
+> > > -		return ret;
+> > > +		if (ret == -EINVAL && alarm_offset >= SECS_PER_DAY) {
+> > > +			/*
+> > > +			 * RTC chips on some older Chromebooks can only handle
+> > > +			 * alarms up to 24h in the future. Try to set an alarm
+> > > +			 * below that limit to avoid suspend failures.
+> > > +			 */
+> > > +			ret = cros_ec_rtc_set(cros_ec, EC_CMD_RTC_SET_ALARM,
+> > > +					      SECS_PER_DAY - 1);
+> > > +		}
+> > > +
+> > > +		if (ret < 0) {
+> > > +			dev_err(dev, "error setting alarm in %u seconds: %d\n",
+> > > +				alarm_offset, ret);
+> > > +			return ret;
+> > > +		}
+> > >  	}
+> > >  
+> > >  	return 0;
+> > > -- 
+> > > 2.36.2
+> > > 
+> > 
+> > -- 
+> > Alexandre Belloni, co-owner and COO, Bootlin
+> > Embedded Linux and Kernel engineering
+> > https://bootlin.com
+
 -- 
-Mike Kravetz
+Alexandre Belloni, co-owner and COO, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
