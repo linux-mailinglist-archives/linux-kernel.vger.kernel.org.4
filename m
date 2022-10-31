@@ -2,39 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EDB01613284
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 10:20:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B8CD9613286
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 10:20:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbiJaJUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 05:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50272 "EHLO
+        id S230264AbiJaJUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 05:20:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50946 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230165AbiJaJUa (ORCPT
+        with ESMTP id S230214AbiJaJUf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 05:20:30 -0400
+        Mon, 31 Oct 2022 05:20:35 -0400
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DC095DEE1;
-        Mon, 31 Oct 2022 02:20:21 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EF5E723A;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 01D4BDEE7;
         Mon, 31 Oct 2022 02:20:27 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 16EA11FB;
+        Mon, 31 Oct 2022 02:20:33 -0700 (PDT)
 Received: from pierre123.arm.com (unknown [10.57.7.107])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id DF00E3F703;
-        Mon, 31 Oct 2022 02:20:18 -0700 (PDT)
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 8A0E13F703;
+        Mon, 31 Oct 2022 02:20:24 -0700 (PDT)
 From:   Pierre Gondois <pierre.gondois@arm.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     pierre.gondois@arm.com, Rob.Herring@arm.com,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Vadym Kochan <vadym.kochan@plvision.eu>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH 10/20] arm64: dts: Update cache properties for marvell
-Date:   Mon, 31 Oct 2022 10:20:16 +0100
-Message-Id: <20221031092020.532456-1-pierre.gondois@arm.com>
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+Subject: [PATCH 11/20] arm64: dts: Update cache properties for mediatek
+Date:   Mon, 31 Oct 2022 10:20:25 +0100
+Message-Id: <20221031092025.533051-1-pierre.gondois@arm.com>
 X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
@@ -55,76 +52,58 @@ these properties. Add them if missing.
 
 Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 ---
- arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi      | 1 +
- arch/arm64/boot/dts/marvell/armada-ap806-dual.dtsi | 1 +
- arch/arm64/boot/dts/marvell/armada-ap806-quad.dtsi | 2 ++
- arch/arm64/boot/dts/marvell/armada-ap807-quad.dtsi | 2 ++
- 4 files changed, 6 insertions(+)
+ arch/arm64/boot/dts/mediatek/mt8192.dtsi | 3 +++
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi | 3 +++
+ 2 files changed, 6 insertions(+)
 
-diff --git a/arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi b/arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi
-index 80b44c7df56a..d4770acec6ac 100644
---- a/arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi
-+++ b/arch/arm64/boot/dts/marvell/ac5-98dx25xx.dtsi
-@@ -49,6 +49,7 @@ cpu1: cpu@1 {
+diff --git a/arch/arm64/boot/dts/mediatek/mt8192.dtsi b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+index cbae5a5ee4a0..9a20055ec1fe 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8192.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8192.dtsi
+@@ -159,16 +159,19 @@ core3 {
  
- 		l2: l2-cache {
+ 		l2_0: l2-cache0 {
  			compatible = "cache";
 +			cache-level = <2>;
- 		};
- 	};
- 
-diff --git a/arch/arm64/boot/dts/marvell/armada-ap806-dual.dtsi b/arch/arm64/boot/dts/marvell/armada-ap806-dual.dtsi
-index fcab5173fe67..990f70303fe6 100644
---- a/arch/arm64/boot/dts/marvell/armada-ap806-dual.dtsi
-+++ b/arch/arm64/boot/dts/marvell/armada-ap806-dual.dtsi
-@@ -51,6 +51,7 @@ l2: l2-cache {
- 			cache-size = <0x80000>;
- 			cache-line-size = <64>;
- 			cache-sets = <512>;
-+			cache-level = <2>;
- 		};
- 	};
- 
-diff --git a/arch/arm64/boot/dts/marvell/armada-ap806-quad.dtsi b/arch/arm64/boot/dts/marvell/armada-ap806-quad.dtsi
-index 3db427122f9e..a7b8e001cc9c 100644
---- a/arch/arm64/boot/dts/marvell/armada-ap806-quad.dtsi
-+++ b/arch/arm64/boot/dts/marvell/armada-ap806-quad.dtsi
-@@ -81,6 +81,7 @@ l2_0: l2-cache0 {
- 			cache-size = <0x80000>;
- 			cache-line-size = <64>;
- 			cache-sets = <512>;
-+			cache-level = <2>;
+ 			next-level-cache = <&l3_0>;
  		};
  
  		l2_1: l2-cache1 {
-@@ -88,6 +89,7 @@ l2_1: l2-cache1 {
- 			cache-size = <0x80000>;
- 			cache-line-size = <64>;
- 			cache-sets = <512>;
+ 			compatible = "cache";
 +			cache-level = <2>;
+ 			next-level-cache = <&l3_0>;
  		};
- 	};
- };
-diff --git a/arch/arm64/boot/dts/marvell/armada-ap807-quad.dtsi b/arch/arm64/boot/dts/marvell/armada-ap807-quad.dtsi
-index 68782f161f12..7740098fd108 100644
---- a/arch/arm64/boot/dts/marvell/armada-ap807-quad.dtsi
-+++ b/arch/arm64/boot/dts/marvell/armada-ap807-quad.dtsi
-@@ -81,6 +81,7 @@ l2_0: l2-cache0 {
- 			cache-size = <0x80000>;
- 			cache-line-size = <64>;
- 			cache-sets = <512>;
+ 
+ 		l3_0: l3-cache {
+ 			compatible = "cache";
++			cache-level = <3>;
+ 		};
+ 
+ 		idle-states {
+diff --git a/arch/arm64/boot/dts/mediatek/mt8195.dtsi b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+index 066c14989708..2e73db4229d5 100644
+--- a/arch/arm64/boot/dts/mediatek/mt8195.dtsi
++++ b/arch/arm64/boot/dts/mediatek/mt8195.dtsi
+@@ -197,16 +197,19 @@ cluster_off_b: cluster-off-b {
+ 
+ 		l2_0: l2-cache0 {
+ 			compatible = "cache";
 +			cache-level = <2>;
+ 			next-level-cache = <&l3_0>;
  		};
  
  		l2_1: l2-cache1 {
-@@ -88,6 +89,7 @@ l2_1: l2-cache1 {
- 			cache-size = <0x80000>;
- 			cache-line-size = <64>;
- 			cache-sets = <512>;
+ 			compatible = "cache";
 +			cache-level = <2>;
+ 			next-level-cache = <&l3_0>;
+ 		};
+ 
+ 		l3_0: l3-cache {
+ 			compatible = "cache";
++			cache-level = <3>;
  		};
  	};
- };
+ 
 -- 
 2.25.1
 
