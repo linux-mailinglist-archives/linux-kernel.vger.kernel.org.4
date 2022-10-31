@@ -2,110 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55542613D7A
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:39:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16F84613D5C
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229845AbiJaSj3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 14:39:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36978 "EHLO
+        id S229905AbiJaSaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 14:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiJaSj1 (ORCPT
+        with ESMTP id S229536AbiJaSaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 14:39:27 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B309DDF77
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 11:39:26 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 69A53B819A9
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 18:39:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F2632C433C1;
-        Mon, 31 Oct 2022 18:39:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667241564;
-        bh=It14nDJvTqCUwHf/PuycyXWi6Kbor6f6XNY4NSVwgLE=;
-        h=From:To:Cc:Subject:Date:From;
-        b=BjgfbnyQkRTF0+PkDkOegY6LaF3LwWV0vcYyqsL3bgIUuoftJO1AgskCxUc/LvLSI
-         lazDQKYdKatIhtRYHTVuw+X6AFDD77Lyt4q1Y/SL6I/JX5ELPVSSz9Z71+9UrYP1zX
-         yoYqsnCZFcs7RWp91IiXeSphXoUaimfoHtLHjKYBkginNuaa203nnreCe0/bx4aEor
-         bd4n2WrOnXiP2fP+ucM6f1vNqmPENJI71T19HHkxNPJLLylilyeRKtg3YREQvtpAjw
-         NRxBoDsnrHiW9c/W8ghfPvqdv9zYLUDaj7ChG6MmNFT8x+pjT4v68iO8vxVE1/mPx0
-         Ivtd/6+a33yzA==
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] riscv: vdso: fix build with llvm
-Date:   Tue,  1 Nov 2022 02:29:43 +0800
-Message-Id: <20221031182943.2453-1-jszhang@kernel.org>
-X-Mailer: git-send-email 2.37.2
+        Mon, 31 Oct 2022 14:30:09 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F3E81261B
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 11:30:07 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so16687144pjc.3
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 11:30:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=5k2kjKOqFGzBefe+qr3Mti/d55gJgmafgGT79rRaih4=;
+        b=aLhbg1SM+r0TJCwZqdXrjOKx+go3Pxe8gLFFimbfOa13DPJTsknJu7n+RauUt6dKMO
+         qFq25d8J0EP6eSxDV3DrV7t9/GmLiMUOFcmpmjDK3arA0JY+Y9Waj2i5jGdTjs5/a1ne
+         6O1euWSNbi6Sw5RG9cF1gBRwaJpcPBE2jSzAS6qwvJMxA89br7wTHh6lmiPWhvYyw72Z
+         VGrgzEfnRno49PJ/w68CTpniF/iEBt2ykBh/WlQdW5szgCt3nbeSBaQmlnSHc2k/qYgn
+         THJiPUn4QKeT7/LYLNgNHdfEHfjByZ6TRAsPvfpuCXlBbNiDdcsPU/bBIx/Y+vcjK02j
+         pi9A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=5k2kjKOqFGzBefe+qr3Mti/d55gJgmafgGT79rRaih4=;
+        b=UVgF1DvJUmn+YS4aXbvOJ3UIWVWgNzkNwyjLy2isDdtC2ixM8wqa1HR98++mGZpVII
+         ds43wdcp9znU6kBjaldPh0W7OgIZaljlaTd5RZlL9UuNJHGwK9C4H9aB7SkheVypmRoK
+         ZA3B0+ZrNC0baduF6Z7pMZAKs0h6F0/1MIWA8WrOul44mdiJa9ukIKOSJYNSLL8gzsTg
+         FJu9r4ZYHvPHnKcgdUoOlLRef0f2SRIgqE1kCKV13vf+2SrZCnF9Cfq6Rz+6RVuDF//i
+         cBRtvieu2VoxolbEvsS4siLS9Dm/hr5us0C4CcokwXqv2oy39A/geJbMDNL1YU+J9TI2
+         FhwQ==
+X-Gm-Message-State: ACrzQf2/iFEFLqgNnMBttRRFWA77G6f9o4Wd7EUG3Sn4I51dmRRr7HQ1
+        3Dg8AZuRbriNXD5fpItWloM0M0UCRX+fKFF6+Jw6tw==
+X-Google-Smtp-Source: AMsMyM4K2fFgyIy0JkUBXL8VCWQd/QWs7sP3V2nyHYeDbuPas57cKZcI9jh+b9f8MwIvPtuw0pKYIUrtdbeuY/DueJ0=
+X-Received: by 2002:a17:902:b218:b0:184:710c:8c52 with SMTP id
+ t24-20020a170902b21800b00184710c8c52mr15596285plr.95.1667241006751; Mon, 31
+ Oct 2022 11:30:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221006141442.2475978-1-me@inclyc.cn> <20221029122552.2855941-1-me@inclyc.cn>
+In-Reply-To: <20221029122552.2855941-1-me@inclyc.cn>
+From:   Nick Desaulniers <ndesaulniers@google.com>
+Date:   Mon, 31 Oct 2022 11:29:54 -0700
+Message-ID: <CAKwvOdkyJycxTUR8rUoLCspat+qMdVC9zrw0odcQyxzG8qFUag@mail.gmail.com>
+Subject: Re: [PATCH RESEND v3] x86/fpu: use _Alignof to avoid UB in TYPE_ALIGN
+To:     YingChi Long <me@inclyc.cn>
+Cc:     bp@alien8.de, chang.seok.bae@intel.com,
+        dave.hansen@linux.intel.com, david.laight@aculab.com,
+        hpa@zytor.com, linux-kernel@vger.kernel.org, mingo@redhat.com,
+        pbonzini@redhat.com, tglx@linutronix.de, x86@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Even after commit 89fd4a1df829 ("riscv: jump_label: mark arguments as
-const to satisfy asm constraints"), building with CC_OPTIMIZE_FOR_SIZE
-+ LLVM=1 can reproduce below build error:
+On Sat, Oct 29, 2022 at 5:27 AM YingChi Long <me@inclyc.cn> wrote:
+>
+> WG14 N2350 made very clear that it is an UB having type definitions with
+> in "offsetof". This patch change the implementation of macro
+> "TYPE_ALIGN" to builtin "_Alignof" to avoid undefined behavior.
+>
+> I've grepped all source files to find any type definitions within
+> "offsetof".
+>
+>     offsetof\(struct .*\{ .*,
+>
+> This implementation of macro "TYPE_ALIGN" seemes to be the only case of
+> type definitions within offsetof in the kernel codebase.
+>
+> I've made a clang patch that rejects any definitions within
+> __builtin_offsetof (usually #defined with "offsetof"), and tested
+> compiling with this patch, there are no error if this patch applied.
+>
+> ISO C11 _Alignof is subtly different from the GNU C extension
+> __alignof__. __alignof__ is the preferred alignment and _Alignof the
+> minimal alignment. For 'long long' on x86 these are 8 and 4
+> respectively.
+>
+> The macro TYPE_ALIGN we're replacing has behavior that matches
+> _Alignof rather than __alignof__.
+>
+> Signed-off-by: YingChi Long <me@inclyc.cn>
+> Link: https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2350.htm
+> Link: https://godbolt.org/z/sPs1GEhbT
+> Link: https://gcc.gnu.org/onlinedocs/gcc/Alignment.html
+> Link: https://reviews.llvm.org/D133574
 
-  CC      arch/riscv/kernel/vdso/vgettimeofday.o
-In file included from <built-in>:4:
-In file included from lib/vdso/gettimeofday.c:5:
-In file included from include/vdso/datapage.h:17:
-In file included from
-include/vdso/processor.h:10:
-In file included from
-arch/riscv/include/asm/vdso/processor.h:7:
-In file included from
-include/linux/jump_label.h:112:
-arch/riscv/include/asm/jump_label.h:42:3: error:
-invalid operand fo
-r inline asm constraint 'i'
-                "       .option push                            \n\t"
-                ^
-1 error generated.
+YingChi,
+You may retain my reviewed by tag when resending a rebased patch that
+hasn't changed significantly.
 
-I think the problem is when "-Os" is passed as CFLAGS, it's removed by
-"CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) -Os" which is
-introduced in commit e05d57dcb8c7 ("riscv: Fixup __vdso_gettimeofday
-broke dynamic ftrace"), thus no optimization at all for vgettimeofday.c
-arm64 does remove "-Os" as well, but it forces "-O2" after removing
-"-Os".
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
 
-I compared the generated vgettimeofday.o with "-O2" and "-Os",
-I think no big performance difference. So let's tell the kbuild not
-to remove "-Os" rather than follow arm64 style.
+That reminds me, I need to resend one of my own patches; the x86
+maintainers must be very busy.
 
-vdso related performance can be improved a lot when building kernel with
-CC_OPTIMIZE_FOR_SIZE after this commit, ("-Os" VS no optimization)
+> ---
+> v3:
+> - commit message changes suggested by Nick and David
+>
+> v2: https://lore.kernel.org/all/20220927153338.4177854-1-me@inclyc.cn/
+> Signed-off-by: YingChi Long <me@inclyc.cn>
+> ---
+>  arch/x86/kernel/fpu/init.c | 7 ++-----
+>  1 file changed, 2 insertions(+), 5 deletions(-)
+>
+> diff --git a/arch/x86/kernel/fpu/init.c b/arch/x86/kernel/fpu/init.c
+> index 8946f89761cc..851eb13edc01 100644
+> --- a/arch/x86/kernel/fpu/init.c
+> +++ b/arch/x86/kernel/fpu/init.c
+> @@ -133,9 +133,6 @@ static void __init fpu__init_system_generic(void)
+>         fpu__init_system_mxcsr();
+>  }
+>
+> -/* Get alignment of the TYPE. */
+> -#define TYPE_ALIGN(TYPE) offsetof(struct { char x; TYPE test; }, test)
+> -
+>  /*
+>   * Enforce that 'MEMBER' is the last field of 'TYPE'.
+>   *
+> @@ -143,8 +140,8 @@ static void __init fpu__init_system_generic(void)
+>   * because that's how C aligns structs.
+>   */
+>  #define CHECK_MEMBER_AT_END_OF(TYPE, MEMBER) \
+> -       BUILD_BUG_ON(sizeof(TYPE) != ALIGN(offsetofend(TYPE, MEMBER), \
+> -                                          TYPE_ALIGN(TYPE)))
+> +       BUILD_BUG_ON(sizeof(TYPE) !=         \
+> +                    ALIGN(offsetofend(TYPE, MEMBER), _Alignof(TYPE)))
+>
+>  /*
+>   * We append the 'struct fpu' to the task_struct:
+> --
+> 2.37.4
+>
 
-Fixes: e05d57dcb8c7 ("riscv: Fixup __vdso_gettimeofday broke dynamic ftrace")
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
----
- arch/riscv/kernel/vdso/Makefile | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
-index f2e065671e4d..84ac0fe612e7 100644
---- a/arch/riscv/kernel/vdso/Makefile
-+++ b/arch/riscv/kernel/vdso/Makefile
-@@ -30,7 +30,7 @@ obj-y += vdso.o
- CPPFLAGS_vdso.lds += -P -C -U$(ARCH)
- 
- # Disable -pg to prevent insert call site
--CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE) -Os
-+CFLAGS_REMOVE_vgettimeofday.o = $(CC_FLAGS_FTRACE)
- 
- # Disable profiling and instrumentation for VDSO code
- GCOV_PROFILE := n
 -- 
-2.37.2
-
+Thanks,
+~Nick Desaulniers
