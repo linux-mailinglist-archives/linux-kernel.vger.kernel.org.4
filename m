@@ -2,86 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3688B613A78
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 16:44:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF063613A95
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 16:45:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231993AbiJaPoV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 11:44:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
+        id S232036AbiJaPpk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 11:45:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232034AbiJaPoK (ORCPT
+        with ESMTP id S232107AbiJaPpU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 11:44:10 -0400
-Received: from mail-ot1-f50.google.com (mail-ot1-f50.google.com [209.85.210.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BD8C11A2B;
-        Mon, 31 Oct 2022 08:44:09 -0700 (PDT)
-Received: by mail-ot1-f50.google.com with SMTP id cy15-20020a056830698f00b0065c530585afso6973985otb.2;
-        Mon, 31 Oct 2022 08:44:09 -0700 (PDT)
+        Mon, 31 Oct 2022 11:45:20 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7118312636;
+        Mon, 31 Oct 2022 08:44:41 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id a5so18001753edb.11;
+        Mon, 31 Oct 2022 08:44:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8qnWhdk0VieEk7vh40EvWTR4LqDHki8+24nSogRUOBk=;
+        b=AKmfodvpGGhDyczCVn0UzETDdsnhtuif8sA89BFNygohnecF4CxxpHdmxfIDUBGoeI
+         4JNPGcP7IUPqjUSX4cykw42mYx44Uju1O/th/tux5SxK0JFNUykJDiAsKHswqky5Hty0
+         o3LxnxwEA5/DAzMlqwM+yFEJU7Mv+JCMUuRv10NXZOb7Ao3WIAgkOClE3ZkLTnYWAWSJ
+         /1vAhqVflV1v6V2piKbPOBIBOxARk1dswLFb3BSHWneKfXlmt7FXQz0MSXvwe1dM0kHH
+         jQkeuE2agWCT47tCj4JpzhYp+5SqaC73275F9AIVLi9KMBNLTdiXySPeFxfKwmBW/gIp
+         230g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ifwpmU7A0PMQ06MNBDvyGSIa8Sixxnkraic/SyG2pxo=;
-        b=xWeqNRs+xYaVY6pJ0/6AED+LI0KlGpT8/Xej8vjW1SbOIFob2Q0qJ+a5dioCyt/Yxt
-         gm0dOWhC8OMIlV2sYNDHIuT0xA8W1pL8spyDAuILElCVkPviCwMvr9QycUzy1WM+v//6
-         nPr1kpc4E7wQejg4hElLXbSKYwji1hjkzJkjDmu1neZIMZLjgng+Gs2jiBFN3zY0MiHJ
-         Dl8kYNZyajMlkeiZ5gfO7yxF2RmEB/Mk4YHvNV70COLtCVPAdP/+kONOkCmCJ2Hu3iiC
-         hC591Fp1e+2Lks/oP9/IP29GsLLtlCdAdsKF/yyB6GGw0Ae4b0Rrv/IJVrn6pzBauKmZ
-         fqvg==
-X-Gm-Message-State: ACrzQf0ZS/65EJSTloq4f3J+kB2WM2YBySsA6UVVeQmsv1AjIGxmEWgL
-        1DxsVIRyrTbczj2N8aTkXQ==
-X-Google-Smtp-Source: AMsMyM4dyhQJfUihmItaQeAe7EzaxUEKtl/G0crodesYYunz1GQ0UewMwDpLQSlnR0+F3iiPt9nM5A==
-X-Received: by 2002:a9d:7384:0:b0:66c:42ae:a3da with SMTP id j4-20020a9d7384000000b0066c42aea3damr5180443otk.220.1667231048700;
-        Mon, 31 Oct 2022 08:44:08 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id v13-20020a056870708d00b0013c955f64dbsm3147424oae.41.2022.10.31.08.44.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 08:44:08 -0700 (PDT)
-Received: (nullmailer pid 2922103 invoked by uid 1000);
-        Mon, 31 Oct 2022 15:44:09 -0000
-Date:   Mon, 31 Oct 2022 10:44:09 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Vladimir Oltean <olteanv@gmail.com>
-Cc:     Colin Foster <colin.foster@in-advantage.com>,
-        linux-mediatek@lists.infradead.org,
-        linux-arm-kernel@lists.infradead.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        John Crispin <john@phrozen.org>,
-        Sean Wang <sean.wang@mediatek.com>,
-        DENG Qingfang <dqfext@gmail.com>,
-        Landen Chao <Landen.Chao@mediatek.com>,
-        =?iso-8859-1?Q?n=E7_=DCNAL?= <arinc.unal@arinc9.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Eric Dumazet <edumazet@google.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Lee Jones <lee@kernel.org>
-Subject: Re: [PATCH v1 net-next 3/7] dt-bindings: net: dsa: qca8k: utilize
- shared dsa.yaml
-Message-ID: <20221031154409.GA2861119-robh@kernel.org>
-References: <20221025050355.3979380-1-colin.foster@in-advantage.com>
- <20221025050355.3979380-4-colin.foster@in-advantage.com>
- <20221025050355.3979380-1-colin.foster@in-advantage.com>
- <20221025050355.3979380-4-colin.foster@in-advantage.com>
- <20221025212114.GA3322299-robh@kernel.org>
- <20221025212114.GA3322299-robh@kernel.org>
- <20221027012553.zb3zjwmw3x6kw566@skbuf>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8qnWhdk0VieEk7vh40EvWTR4LqDHki8+24nSogRUOBk=;
+        b=bUAOVyVY/WHoI6eG716WkEclL153yx2wMoTnAsUKR3Gd7nTbtym1qlM831/Mmq9KgF
+         mX3Tr5f92K1esiprf1+i95ekkgbcRkS1Ze4zhmNT1HWV6Llb4vu5wu3yK6hY5mx5Le3A
+         9bxqjypmUMCIa4Ya1YzR9z27TXF/G9g24gznsq3I0zMLyZv6+nemKie04SLSMiHLGZTY
+         gDDeGRHafJzc7MrSyhPeT5Bki2g8cKcD3BUk7Non+b1lcPtEl36sez4k8b6OinK9x8Xn
+         9OoCRhvGEW8BiMAdSqGJ7Q7fY+e9x2GkF3ExjOlLk9IbJLp85GLXDQeX6V6LwyprGW68
+         ebjQ==
+X-Gm-Message-State: ACrzQf10XOlCXdCX9ALtWP0BfCkEZusOVF8pTsnMGFe9fFKvdtziXnkY
+        AxmNfdyWjjxhYVtwTxzPAYLx2KZgcsdID2DLIV0=
+X-Google-Smtp-Source: AMsMyM4iTooOaldZ34X1S42+O4GreKSu6ywKipaEwi2Teo6hZUOtkY+bKKL1EcMIc2KUw7+Rp1WFYByAFgYnD9N8aKc=
+X-Received: by 2002:a05:6402:f2a:b0:461:eff7:bae8 with SMTP id
+ i42-20020a0564020f2a00b00461eff7bae8mr14300620eda.322.1667231080002; Mon, 31
+ Oct 2022 08:44:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221027012553.zb3zjwmw3x6kw566@skbuf>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+References: <20221030162223.25970-1-yin31149@gmail.com> <Y1/lvgHE4JKvxsi8@localhost.localdomain>
+In-Reply-To: <Y1/lvgHE4JKvxsi8@localhost.localdomain>
+From:   Hawkins Jiawei <yin31149@gmail.com>
+Date:   Mon, 31 Oct 2022 23:44:28 +0800
+Message-ID: <CAKrof1NNK=BAUoTb0cP+8N+68NsSRfHuJ7k47UVv_h-hW_GKGA@mail.gmail.com>
+Subject: Re: [PATCH] btrfs: update bytes_may_use in btrfs_free_reserved_bytes()
+To:     Josef Bacik <josef@toxicpanda.com>
+Cc:     Chris Mason <clm@fb.com>, David Sterba <dsterba@suse.com>,
+        18801353760@163.com, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev,
+        nathan@kernel.org, ndesaulniers@google.com,
+        syzbot+dde7e853812ed57835ea@syzkaller.appspotmail.com,
+        syzkaller-bugs@googlegroups.com, trix@redhat.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,73 +71,78 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 04:25:53AM +0300, Vladimir Oltean wrote:
-> Hi Rob,
-> 
-> On Tue, Oct 25, 2022 at 04:21:14PM -0500, Rob Herring wrote:
-> > On Mon, Oct 24, 2022 at 10:03:51PM -0700, Colin Foster wrote:
-> > > The dsa.yaml binding contains duplicated bindings for address and size
-> > > cells, as well as the reference to dsa-port.yaml. Instead of duplicating
-> > > this information, remove the reference to dsa-port.yaml and include the
-> > > full reference to dsa.yaml.
-> > 
-> > I don't think this works without further restructuring. Essentially, 
-> > 'unevaluatedProperties' on works on a single level. So every level has 
-> > to define all properties at that level either directly in 
-> > properties/patternProperties or within a $ref.
-> > 
-> > See how graph.yaml is structured and referenced for an example how this 
-> > has to work.
-> > 
-> > > @@ -104,8 +98,6 @@ patternProperties:
-> > >                SGMII on the QCA8337, it is advised to set this unless a communication
-> > >                issue is observed.
-> > >  
-> > > -        unevaluatedProperties: false
-> > > -
-> > 
-> > Dropping this means any undefined properties in port nodes won't be an 
-> > error. Once I fix all the issues related to these missing, there will be 
-> > a meta-schema checking for this (this could be one I fixed already).
-> 
-> I may be misreading, but here, "unevaluatedProperties: false" from dsa.yaml
-> (under patternProperties: "^(ethernet-)?port@[0-9]+$":) is on the same
-> level as the "unevaluatedProperties: false" that Colin is deleting.
-> 
-> In fact, I believe that it is precisely due to the "unevaluatedProperties: false"
-> from dsa.yaml that this is causing a failure now:
-> 
-> net/dsa/qca8k.example.dtb: switch@10: ports:port@6: Unevaluated properties are not allowed ('qca,sgmii-rxclk-falling-edge' was unexpected)
-> 
-> Could you please explain why is the 'qca,sgmii-rxclk-falling-edge'
-> property not evaluated from the perspective of dsa.yaml in the example?
-> It's a head scratcher to me.
+Hi Josef,
 
-A schema with unevaluatedProperties can "see" into a $ref, but the 
-ref'ed schema having unevaluatedProperties can't see back to the 
-referring schema for properties defined there.
+On Mon, 31 Oct 2022 at 23:12, Josef Bacik <josef@toxicpanda.com> wrote:
+>
+> On Mon, Oct 31, 2022 at 12:22:24AM +0800, Hawkins Jiawei wrote:
+> > Syzkaller reports warning as follows:
+> > =====================================
+> > WARNING: CPU: 0 PID: 3612 at fs/btrfs/space-info.h:122
+> >   btrfs_space_info_free_bytes_may_use fs/btrfs/space-info.h:154 [inline]
+> > WARNING: CPU: 0 PID: 3612 at fs/btrfs/space-info.h:122
+> >   block_rsv_release_bytes fs/btrfs/block-rsv.c:151 [inline]
+> > WARNING: CPU: 0 PID: 3612 at fs/btrfs/space-info.h:122
+> >   btrfs_block_rsv_release+0x5d1/0x730 fs/btrfs/block-rsv.c:295
+> > Modules linked in:
+> > [...]
+> > RIP: 0010:btrfs_space_info_update_bytes_may_use
+> >   fs/btrfs/space-info.h:122 [inline]
+> > RIP: 0010:btrfs_space_info_free_bytes_may_use
+> >   fs/btrfs/space-info.h:154 [inline]
+> > RIP: 0010:block_rsv_release_bytes
+> >   fs/btrfs/block-rsv.c:151 [inline]
+> > RIP: 0010:btrfs_block_rsv_release+0x5d1/0x730
+> >   fs/btrfs/block-rsv.c:295
+> > [...]
+> > Call Trace:
+> >  <TASK>
+> >  btrfs_release_global_block_rsv+0x2f/0x250 fs/btrfs/block-rsv.c:463
+> >  btrfs_free_block_groups+0xb67/0xfd0 fs/btrfs/block-group.c:4053
+> >  close_ctree+0x6c5/0xbde fs/btrfs/disk-io.c:4710
+> >  generic_shutdown_super+0x130/0x310 fs/super.c:491
+> >  kill_anon_super+0x36/0x60 fs/super.c:1085
+> >  btrfs_kill_super+0x3d/0x50 fs/btrfs/super.c:2441
+> >  deactivate_locked_super+0xa7/0xf0 fs/super.c:331
+> >  cleanup_mnt+0x4ce/0x560 fs/namespace.c:1186
+> >  task_work_run+0x146/0x1c0 kernel/task_work.c:177
+> >  ptrace_notify+0x29a/0x340 kernel/signal.c:2354
+> >  ptrace_report_syscall include/linux/ptrace.h:420 [inline]
+> >  ptrace_report_syscall_exit include/linux/ptrace.h:482 [inline]
+> >  syscall_exit_work+0x8c/0xe0 kernel/entry/common.c:249
+> >  syscall_exit_to_user_mode_prepare+0x63/0xc0 kernel/entry/common.c:276
+> >  __syscall_exit_to_user_mode_work kernel/entry/common.c:281 [inline]
+> >  syscall_exit_to_user_mode+0xa/0x60 kernel/entry/common.c:294
+> >  do_syscall_64+0x49/0xb0 arch/x86/entry/common.c:86
+> >  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> >  [...]
+> >  </TASK>
+> > =====================================
+> >
+> > In btrfs_new_extent_direct(), kernel will reserves space for extent
+> > by btrfs_reserve_extent(), and frees those space by
+> > btrfs_free_reserved_extent() if btrfs_create_dio_extent() fails.
+> >
+> > Yet the problem is that, it may not update the space
+> > info correctly. To be more specific, kernel will
+> > converts space from ->bytes_may_use to ->bytes_reserved, in
+> > btrfs_add_reserved_bytes() when reserving space.
+> > But when freeing those space in btrfs_free_reserved_bytes(),
+> > kernel does not convert space from ->bytes_reserved back to
+> > ->bytes_may_use, which triggers the above warning.
+> >
+> > This patch solves it by converting space from ->bytes_reserved
+> > back to ->bytes_may_use in btrfs_free_reserved_bytes().
+> >
+>
+> This isn't correct.  I haven't looked at the code yet, but reservations go into
+> ->bytes_may_use, and then when we reserve the space we subtract the reservation
+> from ->bytes_may_use and add it to ->bytes_reserved.  If we free the reserved
+> extent we only have to update ->bytes_reserved.  What may be happening here is
+> we're failing to free the rest of our ->bytes_may_use resrvation, and that part
+> needs to be addressed.  This fix as it stands however is incorrect.  Thanks,
+Thanks for your explanation! I will re-analyse this bug in the way you
+suggested.
 
-So if a schema is referenced by other schemas which can define their own 
-additional properties, that schema cannot have 'unevaluatedProperties: 
-false'. If both schemas have 'unevaluatedProperties: false', then it's 
-just redundant. We may end up doing that just because it's not obvious 
-when we have both or not, and no unevaluatedProperties/ 
-additionalProperties at all is a bigger issue. I'm working on a 
-meta-schema to check this.
-
-
-> May it have something to do with the fact that Colin's addition:
-> 
-> $ref: "dsa.yaml#"
-> 
-> is not expressed as:
-> 
-> allOf:
->   - $ref: "dsa.yaml#"
-> 
-> ?
-
-No. Either way behaves the same. We generally only use 'allOf' when 
-there might be more than 1 entry. That is mostly just at the top-level.
-
-Rob
+>
+> Josef
