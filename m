@@ -2,206 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A93C86139FC
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 16:26:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3560B6139FE
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 16:27:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231823AbiJaP0t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 11:26:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54344 "EHLO
+        id S231835AbiJaP1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 11:27:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231187AbiJaP0q (ORCPT
+        with ESMTP id S231187AbiJaP1N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 11:26:46 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC40411833
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 08:25:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667229934;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=I0sj0FfT7pFyQZ8RINQyH9lTKMjGLK5Ms5n++8SYAkw=;
-        b=cXoDCHMq12842LbCC6CCkxpmxoa1G7Wl43ANDTpDBiSMd9jOSFi5k2maxBXduWdYocMYML
-        8EU1ov4Gp/vFil9kS+hwdE+y1cYym2L5+CX8hUEJpWSDMSt0JI4XPTJ68yWeAhTIqw739E
-        TArTYSxWNOq5Ov1twGGvdKm5W9FnjXs=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-350-DQLF5aPTPTOv6DL5bMJe5w-1; Mon, 31 Oct 2022 11:25:32 -0400
-X-MC-Unique: DQLF5aPTPTOv6DL5bMJe5w-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 1BFEF3826A43;
-        Mon, 31 Oct 2022 15:25:32 +0000 (UTC)
-Received: from t480s.redhat.com (unknown [10.39.194.172])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D6802FD48;
-        Mon, 31 Oct 2022 15:25:25 +0000 (UTC)
-From:   David Hildenbrand <david@redhat.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     linux-mm@kvack.org, David Hildenbrand <david@redhat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Peter Xu <peterx@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        syzbot+f0b97304ef90f0d0b1dc@syzkaller.appspotmail.com
-Subject: [PATCH v1] mm/gup: disallow FOLL_FORCE|FOLL_WRITE on hugetlb mappings
-Date:   Mon, 31 Oct 2022 16:25:24 +0100
-Message-Id: <20221031152524.173644-1-david@redhat.com>
+        Mon, 31 Oct 2022 11:27:13 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EEE426F7
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 08:27:11 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-116-ZgOqlFTPPOq0OlbjIZXOPQ-1; Mon, 31 Oct 2022 15:27:09 +0000
+X-MC-Unique: ZgOqlFTPPOq0OlbjIZXOPQ-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 31 Oct
+ 2022 15:27:07 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.042; Mon, 31 Oct 2022 15:27:07 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Horatiu Vultur' <horatiu.vultur@microchip.com>
+CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>
+Subject: RE: [PATCH net v2 0/3] net: lan966x: Fixes for when MTU is changed
+Thread-Topic: [PATCH net v2 0/3] net: lan966x: Fixes for when MTU is changed
+Thread-Index: AQHY7Kcu7Ao/FHDvc0OFOxRqKUrPo64oT9IwgABKM4CAAAFVEA==
+Date:   Mon, 31 Oct 2022 15:27:07 +0000
+Message-ID: <219ebe83a5ad4467937545ee5a0e77e4@AcuMS.aculab.com>
+References: <20221030213636.1031408-1-horatiu.vultur@microchip.com>
+ <b75a7136030846f587e555763ef2750e@AcuMS.aculab.com>
+ <20221031150133.2be5xr7cmuhr4gng@soft-dev3-1>
+In-Reply-To: <20221031150133.2be5xr7cmuhr4gng@soft-dev3-1>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-hugetlb does not support fake write-faults (write faults without write
-permissions). However, we are currently able to trigger a FAULT_FLAG_WRITE
-fault on a VMA without VM_WRITE.
-
-If we'd ever want to support FOLL_FORCE|FOLL_WRITE, we'd have to teach
-hugetlb to:
-
-(1) Leave the page mapped R/O after the fake write-fault, like
-    maybe_mkwrite() does.
-(2) Allow writing to an exclusive anon page that's mapped R/O when
-    FOLL_FORCE is set, like can_follow_write_pte(). E.g.,
-    __follow_hugetlb_must_fault() needs adjustment.
-
-For now, it's not clear if that added complexity is really required.
-History tolds us that FOLL_FORCE is dangerous and that we better
-limit its use to a bare minimum.
-
---------------------------------------------------------------------------
-  #include <stdio.h>
-  #include <stdlib.h>
-  #include <fcntl.h>
-  #include <unistd.h>
-  #include <errno.h>
-  #include <stdint.h>
-  #include <sys/mman.h>
-  #include <linux/mman.h>
-
-  int main(int argc, char **argv)
-  {
-          char *map;
-          int mem_fd;
-
-          map = mmap(NULL, 2 * 1024 * 1024u, PROT_READ,
-                     MAP_PRIVATE|MAP_ANON|MAP_HUGETLB|MAP_HUGE_2MB, -1, 0);
-          if (map == MAP_FAILED) {
-                  fprintf(stderr, "mmap() failed: %d\n", errno);
-                  return 1;
-          }
-
-          mem_fd = open("/proc/self/mem", O_RDWR);
-          if (mem_fd < 0) {
-                  fprintf(stderr, "open(/proc/self/mem) failed: %d\n", errno);
-                  return 1;
-          }
-
-          if (pwrite(mem_fd, "0", 1, (uintptr_t) map) == 1) {
-                  fprintf(stderr, "write() succeeded, which is unexpected\n");
-                  return 1;
-          }
-
-          printf("write() failed as expected: %d\n", errno);
-          return 0;
-  }
---------------------------------------------------------------------------
-
-Fortunately, we have a sanity check in hugetlb_wp() in place ever since
-commit 1d8d14641fd9 ("mm/hugetlb: support write-faults in shared
-mappings"), that bails out instead of silently mapping a page writable in
-a !PROT_WRITE VMA.
-
-Consequently, above reproducer triggers a warning, similar to the one
-reported by szsbot:
-
-------------[ cut here ]------------
-WARNING: CPU: 1 PID: 3612 at mm/hugetlb.c:5313 hugetlb_wp+0x20a/0x1af0 mm/hugetlb.c:5313
-Modules linked in:
-CPU: 1 PID: 3612 Comm: syz-executor250 Not tainted 6.1.0-rc2-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-RIP: 0010:hugetlb_wp+0x20a/0x1af0 mm/hugetlb.c:5313
-Code: ea 03 80 3c 02 00 0f 85 31 14 00 00 49 8b 5f 20 31 ff 48 89 dd 83 e5 02 48 89 ee e8 70 ab b7 ff 48 85 ed 75 5b e8 76 ae b7 ff <0f> 0b 41 bd 40 00 00 00 e8 69 ae b7 ff 48 b8 00 00 00 00 00 fc ff
-RSP: 0018:ffffc90003caf620 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000008640070 RCX: 0000000000000000
-RDX: ffff88807b963a80 RSI: ffffffff81c4ed2a RDI: 0000000000000007
-RBP: 0000000000000000 R08: 0000000000000007 R09: 0000000000000000
-R10: 0000000000000000 R11: 000000000008c07e R12: ffff888023805800
-R13: 0000000000000000 R14: ffffffff91217f38 R15: ffff88801d4b0360
-FS:  0000555555bba300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007fff7a47a1b8 CR3: 000000002378d000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- hugetlb_no_page mm/hugetlb.c:5755 [inline]
- hugetlb_fault+0x19cc/0x2060 mm/hugetlb.c:5874
- follow_hugetlb_page+0x3f3/0x1850 mm/hugetlb.c:6301
- __get_user_pages+0x2cb/0xf10 mm/gup.c:1202
- __get_user_pages_locked mm/gup.c:1434 [inline]
- __get_user_pages_remote+0x18f/0x830 mm/gup.c:2187
- get_user_pages_remote+0x84/0xc0 mm/gup.c:2260
- __access_remote_vm+0x287/0x6b0 mm/memory.c:5517
- ptrace_access_vm+0x181/0x1d0 kernel/ptrace.c:61
- generic_ptrace_pokedata kernel/ptrace.c:1323 [inline]
- ptrace_request+0xb46/0x10c0 kernel/ptrace.c:1046
- arch_ptrace+0x36/0x510 arch/x86/kernel/ptrace.c:828
- __do_sys_ptrace kernel/ptrace.c:1296 [inline]
- __se_sys_ptrace kernel/ptrace.c:1269 [inline]
- __x64_sys_ptrace+0x178/0x2a0 kernel/ptrace.c:1269
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-[...]
-
-So let's silence that warning by teaching GUP code that FOLL_FORCE -- so far
--- does not apply to hugetlb.
-
-Note that FOLL_FORCE for read-access seems to be working as expected.
-The assumption is that this has been broken forever, only ever since
-above commit, we actually detect the wrong handling and WARN_ON_ONCE().
-
-Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Mike Kravetz <mike.kravetz@oracle.com>
-Cc: Peter Xu <peterx@redhat.com>
-Cc: John Hubbard <jhubbard@nvidia.com>
-Cc: Jason Gunthorpe <jgg@nvidia.com>
-Reported-by: syzbot+f0b97304ef90f0d0b1dc@syzkaller.appspotmail.com
-Signed-off-by: David Hildenbrand <david@redhat.com>
----
-
-I assume this has been broken at least since 2014, when mm/gup.c came to
-life. I failed to come up with a suitable Fixes tag quickly.
-
----
- mm/gup.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/mm/gup.c b/mm/gup.c
-index 5182abaaecde..381a8a12916e 100644
---- a/mm/gup.c
-+++ b/mm/gup.c
-@@ -944,6 +944,9 @@ static int check_vma_flags(struct vm_area_struct *vma, unsigned long gup_flags)
- 		if (!(vm_flags & VM_WRITE)) {
- 			if (!(gup_flags & FOLL_FORCE))
- 				return -EFAULT;
-+			/* hugetlb does not support FOLL_FORCE|FOLL_WRITE. */
-+			if (is_vm_hugetlb_page(vma))
-+				return -EFAULT;
- 			/*
- 			 * We used to let the write,force case do COW in a
- 			 * VM_MAYWRITE VM_SHARED !VM_WRITE vma, so ptrace could
--- 
-2.38.1
+RnJvbTogJ0hvcmF0aXUgVnVsdHVyJw0KPiBTZW50OiAzMSBPY3RvYmVyIDIwMjIgMTU6MDINCj4g
+DQo+IFRoZSAxMC8zMS8yMDIyIDEwOjQzLCBEYXZpZCBMYWlnaHQgd3JvdGU6DQo+ID4NCj4gPiBG
+cm9tOiBIb3JhdGl1IFZ1bHR1cg0KPiA+ID4gU2VudDogMzAgT2N0b2JlciAyMDIyIDIxOjM3DQo+
+IA0KPiBIaSBEYXZpZCwNCj4gDQo+ID4gPg0KPiA+ID4gVGhlcmUgd2VyZSBtdWx0aXBsZSBwcm9i
+bGVtcyBpbiBkaWZmZXJlbnQgcGFydHMgb2YgdGhlIGRyaXZlciB3aGVuDQo+ID4gPiB0aGUgTVRV
+IHdhcyBjaGFuZ2VkLg0KPiA+ID4gVGhlIGZpcnN0IHByb2JsZW0gd2FzIHRoYXQgdGhlIEhXIHdh
+cyBtaXNzaW5nIHRvIGNvbmZpZ3VyZSB0aGUgY29ycmVjdA0KPiA+ID4gdmFsdWUsIGl0IHdhcyBt
+aXNzaW5nIEVUSF9ITEVOIGFuZCBFVEhfRkNTX0xFTi4gVGhlIHNlY29uZCBwcm9ibGVtIHdhcw0K
+PiA+ID4gd2hlbiB2bGFuIGZpbHRlcmluZyB3YXMgZW5hYmxlZC9kaXNhYmxlZCwgdGhlIE1SVSB3
+YXMgbm90IGFkanVzdGVkDQo+ID4gPiBjb3JyZXRseS4gV2hpbGUgdGhlIGxhc3QgaXNzdWUgd2Fz
+IHRoYXQgdGhlIEZETUEgd2FzIGNhbGN1bGF0ZWQgd3JvbmdseQ0KPiA+ID4gdGhlIGNvcnJlY3Qg
+bWF4aW11bSBNVFUuDQo+ID4NCj4gPiBJSVJDIGFsbCB0aGVzZSBsZW5ndGhzIGFyZSAxNTE0LCAx
+NTE4IGFuZCBtYXliZSAxNTIyPw0KPiANCj4gQW5kIGFsc28gMTUyNiwgaWYgdGhlIGZyYW1lIGhh
+cyAyIHZsYW4gdGFncy4NCj4gDQo+ID4gSG93IGxvbmcgYXJlIHRoZSBhY3R1YWwgcmVjZWl2ZSBi
+dWZmZXJzPw0KPiA+IEknZCBndWVzcyB0aGV5IGhhdmUgdG8gYmUgcm91bmRlZCB1cCB0byBhIHdo
+b2xlIG51bWJlciBvZiBjYWNoZSBsaW5lcw0KPiA+IChlc3BlY2lhbGx5IG9uIG5vbi1jb2hlcmVu
+dCBzeXN0ZW1zKSBzbyBhcmUgcHJvYmFibHkgMTUzNiBieXRlcy4NCj4gDQo+IFRoZSByZWNlaXZl
+IGJ1ZmZlcnMgY2FuIGJlIGRpZmZlcmVudCBzaXplcywgaXQgY2FuIGJlIHVwIHRvIDY1ay4NCj4g
+VGhleSBhcmUgY3VycmVudGx5IGFsbGlnbiB0byBwYWdlIHNpemUuDQoNCklzIHRoYXQgbmVjZXNz
+YXJ5Pw0KSSBkb24ndCBrbm93IHdoZXJlIHRoZSBidWZmZXJzIGFyZSBhbGxvY2F0ZWQsIGJ1dCBl
+dmVuIDRrIHNlZW1zDQphIGJpdCBwcm9mbGlnYXRlIGZvciBub3JtYWwgZXRoZXJuZXQgbXR1Lg0K
+SWYgdGhlIHBhZ2Ugc2l6ZSBpZiBsYXJnZXIgaXQgaXMgZXZlbiBzaWxsaWVyLg0KDQpJZiB0aGUg
+YnVmZmVyIGlzIGVtYmVkZGVkIGluIGFuIHNrYiB5b3UgcmVhbGx5IHdhbnQgdGhlIHNrYg0KdG8g
+YmUgdW5kZXIgNGsgKEkgZG9uJ3QgdGhpbmsgYSAxNTAwIGJ5dGUgbXR1IGNhbiBmaXQgaW4gMmsp
+Lg0KDQpCdXQgeW91IG1pZ2h0IGFzIHdlbGwgdGVsbCB0aGUgaGFyZHdhcmUgdGhlIGFjdHVhbCBi
+dWZmZXIgbGVuZ3RoDQoocmVtZW1iZXIgdG8gYWxsb3cgZm9yIHRoZSBjcmMgYW5kIGFueSBhbGln
+bm1lbnQgaGVhZGVyKS4NCg0KPiA+DQo+ID4gSWYgZHJpdmVyIGRvZXMgc3VwcG9ydCA4aysganVt
+Ym8gZnJhbWVzIGp1c3Qgc2V0IHRoZSBoYXJkd2FyZQ0KPiA+IGZyYW1lIGxlbmd0aCB0byBtYXRj
+aCB0aGUgcmVjZWl2ZSBidWZmZXIgc2l6ZS4NCj4gDQo+IEluIHRoYXQgY2FzZSBJIHNob3VsZCBh
+bHdheXMgYWxsb2NhdGUgbWF4aW11bSBmcmFtZSBzaXplKDY1aykgZm9yIGFsbA0KPiByZWdhcmRs
+ZXNzIG9mIHRoZSBNVFU/DQoNClRoYXQgd291bGQgYmUgdmVyeSB3YXN0ZWZ1bC4gSSdkIHNldCB0
+aGUgYnVmZmVyIGxhcmdlIGVub3VnaCBmb3INCnRoZSBtdHUgYnV0IGxldCB0aGUgaGFyZHdhcmUg
+ZmlsbCB0aGUgZW50aXJlIGJ1ZmZlci4NCg0KQWxsb2NhdGluZyA2NGsgYnVmZmVycyBmb3IgYmln
+IGp1bWJvIGZyYW1lcyBkb2Vzbid0IHNlZW0gcmlnaHQuDQpJZiB0aGUgbXR1IGlzIDY0ayB0aGVu
+IGttYWxsb2MoKSB3aWxsIGFsbG9jYXRlIDEyOGsuDQpUaGlzIGlzIGdvaW5nIHRvIGNhdXNlICdv
+ZGRpdGllcycgd2l0aCBzbWFsbCBwYWNrZXRzIHdoZXJlDQp0aGUgJ3RydWVfc2l6ZScgaXMgbWFz
+c2l2ZWx5IG1vcmUgdGhhbiB0aGUgZGF0YSBzaXplLg0KDQpJc24ndCB0aGVyZSBhIHNjaGVtZSB3
+aGVyZSB5b3UgY2FuIGNyZWF0ZSBhbiBza2IgZnJvbSBhIHBhZ2UNCmxpc3QgdGhhdCBjb250YWlu
+cyBmcmFnbWVudHMgb2YgdGhlIGV0aGVybmV0IGZyYW1lPw0KSW4gd2hpY2ggY2FzZSBJJ2QgaGF2
+ZSB0aG91Z2h0IHlvdSdkIHdhbnQgdG8gZmlsbCB0aGUgcmluZw0Kd2l0aCBwYWdlIHNpemUgYnVm
+ZmVycyBhbmQgdGhlbiBoYW5kbGUgdGhlIGhhcmR3YXJlIHdyaXRpbmcNCmEgbG9uZyBmcmFtZSB0
+byBtdWx0aXBsZSBidWZmZXJzL2Rlc2NyaXB0b3JzLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJl
+ZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXlu
+ZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
 
