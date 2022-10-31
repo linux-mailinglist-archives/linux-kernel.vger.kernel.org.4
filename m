@@ -2,57 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 32B0861406E
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 23:08:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 14007614076
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 23:10:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229973AbiJaWIx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 18:08:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58156 "EHLO
+        id S229988AbiJaWKW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 18:10:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229915AbiJaWIv (ORCPT
+        with ESMTP id S229531AbiJaWKT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 18:08:51 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70B97D46
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 15:08:50 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 0A41E21E96;
-        Mon, 31 Oct 2022 22:08:49 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1667254129; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=JmBSXW3Nr6eF5gprMDxeS0kpY70axpecH+1jkM0zg9Q=;
-        b=tN/0awz4edDVWZyby+vR2QExQ1zAP79I59n9LABHamlvNWPii7WO5p7CEgSz3No34ovpPH
-        2mlPmrL6Lwy117CrbPeMhgbdwjDLjeHAl/XtOvIR541w5shnB2JW3nDY6mERQl9LkT5F1X
-        VO6Wma9vm5EKBBlgJFmupXd2+zz0hpo=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DD00113AAD;
-        Mon, 31 Oct 2022 22:08:48 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id ip7AM3BHYGMnSgAAMHmgww
-        (envelope-from <mhocko@suse.com>); Mon, 31 Oct 2022 22:08:48 +0000
-Date:   Mon, 31 Oct 2022 23:08:48 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     zokeefe@google.com, akpm@linux-foundation.org, linux-mm@kvack.org,
+        Mon, 31 Oct 2022 18:10:19 -0400
+Received: from out5-smtp.messagingengine.com (out5-smtp.messagingengine.com [66.111.4.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF45D46
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 15:10:18 -0700 (PDT)
+Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
+        by mailout.nyi.internal (Postfix) with ESMTP id 0AB395C015E;
+        Mon, 31 Oct 2022 18:10:15 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute2.internal (MEProxy); Mon, 31 Oct 2022 18:10:15 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1667254215; x=1667340615; bh=P2
+        To8pd8U1V8Fl4iGAG6PjXd2z9/oOB21lRwtDYJXYE=; b=AApxNhdrnS1G4ghZSF
+        vMgogKKMEYRJyUXBm+X1ZAOgn4iVLYYc9DhpiDoM0gDP+VEKfjQyxjnzCOXDVoHe
+        GhiRU0RulH1aLpOQPEgDaJofX8LuhSoLAVd0ivJ/034gDuGGW13nmAT2icnQetSf
+        po1mTbrOR5D/6UmJ2hogFFjjDX+aLwu+k42E7VhfErSzRv3pTsekAstmdaI/NVdV
+        4V/R4566NXcw1uLGPqOYCPCiPzxYlVhFJnQICDSTiQ2b6MqaihtGjPgHzhI7ZVb5
+        a5QE2C9h5GEqSvlS71ez6geeu+ywwmXVATiNIlGaaCYsmZ3Bwtx7eBaGyJlvmbxQ
+        S7WQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1667254215; x=1667340615; bh=P2To8pd8U1V8Fl4iGAG6PjXd2z9/
+        oOB21lRwtDYJXYE=; b=QovQ7ytSfiTGTMgM0KEw6Ys+gcWj21ujz/vyxzcJyyoX
+        /8+WgRiIeLlj4RaoD49HoaUZufMUeGJ3a9k02deq4hVkVBYoi+CV5Ts1ROZ820zC
+        3DfIg2I5ApeRH4TQS8DieelcbJ7LXkqiiPG3QSJ5RndE2oojlQt4ZFVLZ4wzCwk4
+        yRFkEztYoV2BmblwMh/CG6uFFQ7QqyFJeIp0bNfZpKLOFmshAZtWiXGo6Bh3bNlE
+        QusWlN/bA0RkvrFPB56MZ+90tpqJnBA3/WxmXI0UQkAt+UgQP3C2zu8bkdrIT1fY
+        LDmIfDuHLRF4xsd4KDIIaRVTHN7h94MHWw3+8GqjZw==
+X-ME-Sender: <xms:xkdgY1l3JuFr_4FSsh5K9WGymPT46iRiqlcGaHCIAOwZi90c3zt7og>
+    <xme:xkdgYw3jnOj6L6FIqGdsdcD2iDmCz5EV_l5MxLRbPPYufWhxNTWm0LavybuUnW89k
+    h7EiA9k1aYnBCWvUqE>
+X-ME-Received: <xmr:xkdgY7qyJowmAKPxDOPvwQHLcKECg2Ci04LZZVJp9ieSu0z59PqlGSScARF6kJbYsJrFjQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudefgdduheekucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:xkdgY1mhaMV_LbbXRleLEcLZUM0u7XGxl30SEL31Wpfk1fTUDnDi4g>
+    <xmx:xkdgYz1t0jZu6s57ZfiTMoK9imUKCNOSUqvxN-2TfXRLIvroBUqFjw>
+    <xmx:xkdgY0vt34CyYKr-PZBAPtYN08TgIPzC7rZvVFlWkw4EuXijQuyJkg>
+    <xmx:x0dgY62-CIXqGCbiy_Lf3_8A8az07_pSE9wLkC5PAQTB1QTtb4VLnQ>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
+ 31 Oct 2022 18:10:13 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 4DFB210444A; Tue,  1 Nov 2022 01:10:11 +0300 (+03)
+Date:   Tue, 1 Nov 2022 01:10:11 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Dave Hansen <dave.hansen@intel.com>
+Cc:     Andi Kleen <ak@linux.intel.com>,
+        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        dan.j.williams@intel.com, david@redhat.com, hpa@zytor.com,
+        seanjc@google.com, thomas.lendacky@amd.com,
+        elena.reshetova@intel.com, x86@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: don't warn if the node is offlined
-Message-ID: <Y2BHcBCR2FIJgU4w@dhcp22.suse.cz>
-References: <20221031183122.470962-1-shy828301@gmail.com>
+Subject: Re: [PATCH 1/2] x86/tdx: Extract GET_INFO call from get_cc_mask()
+Message-ID: <20221031221011.maiizaqbo3x37n2b@box.shutemov.name>
+References: <20221028141220.29217-1-kirill.shutemov@linux.intel.com>
+ <20221028141220.29217-2-kirill.shutemov@linux.intel.com>
+ <c97e9273-60b6-2ca7-1993-05bfbf471f3f@intel.com>
+ <20221028235951.p2vdu7drbbf3ccg7@box.shutemov.name>
+ <20221031041252.mdcjocqn6k4k4gvy@box.shutemov.name>
+ <8887d182-a3e3-f62a-8b8f-36db1da75b19@linux.intel.com>
+ <d3469e0b-32a5-d130-41b1-facdf0d91a92@intel.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221031183122.470962-1-shy828301@gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+In-Reply-To: <d3469e0b-32a5-d130-41b1-facdf0d91a92@intel.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -60,101 +98,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 31-10-22 11:31:22, Yang Shi wrote:
-> Syzbot reported the below splat:
+On Mon, Oct 31, 2022 at 12:44:15PM -0700, Dave Hansen wrote:
+> On 10/31/22 12:27, Andi Kleen wrote:
+> >> Moving panic() after earlyprintk working is not good idea as it exposes
+> >> kernel more: by the time we already have full #VE handler.
+> > 
+> > It should be fine to move since there is no user land at this point (the
+> > attack requires user land)
 > 
-> WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 __alloc_pages_node include/linux/gfp.h:221 [inline]
-> WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-> WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-> Modules linked in:
-> CPU: 1 PID: 3646 Comm: syz-executor210 Not tainted 6.1.0-rc1-syzkaller-00454-ga70385240892 #0
-> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-> RIP: 0010:__alloc_pages_node include/linux/gfp.h:221 [inline]
-> RIP: 0010:hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-> RIP: 0010:alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-> Code: e5 01 4c 89 ee e8 6e f9 ae ff 4d 85 ed 0f 84 28 fc ff ff e8 70 fc ae ff 48 8d 6b ff 4c 8d 63 07 e9 16 fc ff ff e8 5e fc ae ff <0f> 0b e9 96 fa ff ff 41 bc 1a 00 00 00 e9 86 fd ff ff e8 47 fc ae
-> RSP: 0018:ffffc90003fdf7d8 EFLAGS: 00010293
-> RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> RDX: ffff888077f457c0 RSI: ffffffff81cd8f42 RDI: 0000000000000001
-> RBP: ffff888079388c0c R08: 0000000000000001 R09: 0000000000000000
-> R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-> R13: dffffc0000000000 R14: 0000000000000000 R15: 0000000000000000
-> FS:  00007f6b48ccf700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> CR2: 00007f6b48a819f0 CR3: 00000000171e7000 CR4: 00000000003506e0
-> DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> Call Trace:
->  <TASK>
->  collapse_file+0x1ca/0x5780 mm/khugepaged.c:1715
-
-This is quite weird, isn't it? alloc_charge_hpage is selecting the most
-busy node (as per collapse_control). How come this can be an offline
-node? Is a parallel memory hotplug happening?
-
-[...]
-
-> It is because khugepaged allocates pages with __GFP_THISNODE, but the
-> preferred node is offlined.  The warning was even stronger before commit
-> 8addc2d00fe17 ("mm: do not warn on offline nodes unless the specific node
-> is explicitly requested").  The commit softened the warning for
-> __GFP_THISNODE.
+> Maybe I'm misunderstanding the exposure.  A normal MMIO #VE goes
+> something like this:
 > 
-> But this warning seems not quite useful because:
->   * There is no guarantee the node is online for __GFP_THISNODE context
->     for all the callsites.
-
-The original idea IIRC was to catch a buggy code which mishandled node
-assignment. But this looks like a perfectly valid code. There is no
-synchronization with the memory hotplug so it is possible that memory
-gets offline during a longer taking scanning.
-
-I do agree that the warning is not really helpful in this case. It is
-actually even harmful for those running in panic-on-warn mode.
-
->   * Kernel just fails the allocation regardless the warning, and it looks
->     all callsites handle the allocation failure gracefully.
+> 	1. %rax points to some MMIO
+> 	2. Kernel executes: mov (%rax),%rbx, trying to read MMIO
+> 	3. #VE handler is triggered
+> 	4. Handler emulates the 'mov' with instruction decoding
+> 	5. Handler asks the VMM what the value of %rax should be
+> 	6. Handler puts VMM value in %rax
+> 	7. Return from #VE
 > 
-> So, removing the warning seems like the good move.
+> I think the attack scenario subverts a normal MMIO to the following
+> (changes from the normal flow are marked with *):
 > 
-> Reported-by: syzbot+0044b22d177870ee974f@syzkaller.appspotmail.com
-> Signed-off-by: Yang Shi <shy828301@gmail.com>
-> Cc: Zach O'Keefe <zokeefe@google.com>
-> Cc: Michal Hocko <mhocko@suse.com>
-
-Unless I am wrong in my above statement I would appreciate extending the
-changelog to describe the actual code is correct so the warning is
-harmful.
-
-Acked-by: Michal Hocko <mhocko@suse.com>
-
-> ---
->  include/linux/gfp.h | 2 --
->  1 file changed, 2 deletions(-)
+> 	*1. %rax points to some private kernel memory, VMM removes
+> 	    Secure-EPT entry for that memory.
+> 	 2. Kernel executes: mov (%rax),%rbx as part of normal kernel
+> 	    execution, not an MMIO read.
+> 	 3. #VE handler is triggered, assuming a MMIO read
+> 	 4. Handler emulates the 'mov' with instruction decoding
+> 	 5. Handler asks the VMM what the value of %rax should be
+> 	*6. Handler puts (malicious) VMM value in %rax
+> 	 7. Return from #VE
+> 	*8. Now the guest kernel is running with an attacker-controlled
+> 	    %rax
 > 
-> diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-> index ef4aea3b356e..594d6dee5646 100644
-> --- a/include/linux/gfp.h
-> +++ b/include/linux/gfp.h
-> @@ -218,7 +218,6 @@ static inline struct page *
->  __alloc_pages_node(int nid, gfp_t gfp_mask, unsigned int order)
->  {
->  	VM_BUG_ON(nid < 0 || nid >= MAX_NUMNODES);
-> -	VM_WARN_ON((gfp_mask & __GFP_THISNODE) && !node_online(nid));
->  
->  	return __alloc_pages(gfp_mask, order, nid, NULL);
->  }
-> @@ -227,7 +226,6 @@ static inline
->  struct folio *__folio_alloc_node(gfp_t gfp, unsigned int order, int nid)
->  {
->  	VM_BUG_ON(nid < 0 || nid >= MAX_NUMNODES);
-> -	VM_WARN_ON((gfp & __GFP_THISNODE) && !node_online(nid));
->  
->  	return __folio_alloc(gfp, order, nid, NULL);
->  }
-> -- 
-> 2.26.3
+> This effectively gives the attacker the ability to override the contents
+> of a memory read.
+> 
+> Am I misunderstanding the attack scenario?  I don't see guest userspace
+> needing to be involved at all.
+
+Looks correct to me.
+
+I think Andi refers to attack against syscall gap that also addressed by
+the patch.
 
 -- 
-Michal Hocko
-SUSE Labs
+  Kiryl Shutsemau / Kirill A. Shutemov
