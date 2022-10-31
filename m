@@ -2,213 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77874613DFE
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 20:02:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C8B9613E00
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 20:03:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229964AbiJaTCm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 15:02:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59690 "EHLO
+        id S229574AbiJaTDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 15:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229925AbiJaTCh (ORCPT
+        with ESMTP id S229980AbiJaTC7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 15:02:37 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5E8C6464;
-        Mon, 31 Oct 2022 12:02:36 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id l14so17317508wrw.2;
-        Mon, 31 Oct 2022 12:02:36 -0700 (PDT)
+        Mon, 31 Oct 2022 15:02:59 -0400
+Received: from mail-vs1-xe35.google.com (mail-vs1-xe35.google.com [IPv6:2607:f8b0:4864:20::e35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD242EE00
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 12:02:58 -0700 (PDT)
+Received: by mail-vs1-xe35.google.com with SMTP id 3so11951778vsh.5
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 12:02:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=zavMHsSj3e/dCc/hkXC9bPGYtn7phryrRvHhVepuECA=;
-        b=Go1kXz3Z1LNi9yomLF4YaQQGN0y/OKFhYwPQ5+Ef51gvcICz6enDy8oxYVs62pbLyx
-         JLM6xCl3L4NsPrAEdJV9kjYPb/t9fZjlhhhXEVwK0OLkk7ovn7HJlgCjVvIU6IJAryKW
-         EW3cvwQSjDVH6UcPVMkR+3So1Oef22dQW8OgXN/yqG12LiA6wVQELqB5/ff6sFuVlSu3
-         7UOrVeghwVnR+5KztQxsg4uyVavjCdtv0EeXZ/tT7sKySiIqQ3Lga8Z6B4UgN4RlTocL
-         q5Ti0NxnQYPDb7qjgRnZxZ6DFK1Yh94EB1Rst2nEc+kvBxhn+xU+wLVMRfw69TWxcfSu
-         tZ6A==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=jytlMYvhJQjrLv8FH/BZXcaALzpvSyQDQVcBaFAmhUc=;
+        b=ZPeLcxmbqZJp4xxRLC05vZOPyccNK2SLdZjVUgUgXXVYbyaMvGzNr6Vwp0UL61jJDU
+         GrmovCwP1/SePxE4Oqgsn5gA1diq8IwdQrcPgwaUd/d4sfusITfyIXs+hdOk+P093kmg
+         o1CFMihpeXjZOpecS9Se2/jLGW6fHYfnpqOFaG5MLZalxJ0IJKjev2XHAXgrfLkmyAfL
+         y6uPYbA1MNPfUkNUQaXoFUgchzIl19hSk1cTFzFKPXQmNYfT7yP68lUc5sDRFNHjRRfR
+         E154fs9NUHjyt8Wm0P37jZatM3M9vqLcBM6OeByyFjgoj//GhL0blWkZD2hlTMhHk60S
+         Qaew==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=zavMHsSj3e/dCc/hkXC9bPGYtn7phryrRvHhVepuECA=;
-        b=z6FEWoy28C8kwjzq5EIhWb4RLVR9qxQOBQQSwoEfQsIoCRYboJpJtchlClhxiV4KEo
-         Pwzv8n9vpgzwVMKwJfZuzpxQgJrkFeedaAd6cx6O5WGVzzqHJBzN7QvmLlbcpZgePVPn
-         Fufqgq4fJ6Q87x9rPSd2UEVHwzIIAIccyiIneszLXUO+dusIIrrwP5vS2cIYxVAcJenG
-         UWVCB11izz9dYLV8zQoIFYsI0w4IFts7Ql5V8Ud5Y3iX4VuZZ75rnxa2wqMBeNSaPc66
-         8Bz/Um33oAVEcj+p2cPwRcs3MZDMz6Y/w4vDy5XsL/P/+Jc2IGpon2DsHPWxJaO8/jXQ
-         9tvw==
-X-Gm-Message-State: ACrzQf1kaRUW6bzmk+7MDz9Rj9+93FiftKPYlhVVnHT3wGDoEPK+o0vm
-        ina4t6heNTHwVgd1qBXx75d5sRzQ2IyL/vTu
-X-Google-Smtp-Source: AMsMyM5lhnhuAEt9zL5fyRMdKem53TI6oRNzm9wxiTea3f3t0q+GWz/2qQf+R9GdX1tyWluwRcA36w==
-X-Received: by 2002:adf:a4cc:0:b0:235:f41c:aa1e with SMTP id h12-20020adfa4cc000000b00235f41caa1emr9271250wrb.515.1667242955237;
-        Mon, 31 Oct 2022 12:02:35 -0700 (PDT)
-Received: from hp-power-15.localdomain (mm-167-8-212-37.vitebsk.dynamic.pppoe.byfly.by. [37.212.8.167])
-        by smtp.gmail.com with ESMTPSA id l13-20020a05600c2ccd00b003a2f2bb72d5sm9141750wmc.45.2022.10.31.12.02.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 12:02:34 -0700 (PDT)
-From:   Siarhei Volkau <lis8215@gmail.com>
-Cc:     Paul Cercueil <paul@crapouillou.net>,
-        Siarhei Volkau <lis8215@gmail.com>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Artur Rojek <contact@artur-rojek.eu>,
-        linux-input@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [RFC PATCH 2/2] Input: adc-joystick - add detachable devices support
-Date:   Mon, 31 Oct 2022 22:01:59 +0300
-Message-Id: <20221031190159.1341027-3-lis8215@gmail.com>
-X-Mailer: git-send-email 2.36.1
-In-Reply-To: <20221031190159.1341027-1-lis8215@gmail.com>
-References: <20221031190159.1341027-1-lis8215@gmail.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jytlMYvhJQjrLv8FH/BZXcaALzpvSyQDQVcBaFAmhUc=;
+        b=65waoZQSf3bS0vD9OOVC5+zsIym8mIaT0xa+EzMEc9F8++pn12YiSOmrnGCWtDLLXy
+         XAq0LFEzmFpMKIm2/Kmex8LrOieqY0ecydmRq9YTlcy0lQ48vO+sDkiNY5sTTrMBwRA7
+         t3LXIxmmq58lygQZVDPT4NQu+MLvrM732lQOUe27MrQM/JpyNnWr6EtZpavkWFXIKCK7
+         e4pXs1jd7siCg30eDfXgWbbTT3t5lQakqKVmrYKmBYWgc0Kht67HqC+/nu62hdt9m0hh
+         dXj0jeJ1cL2YuZ6frqICwpCR5AtF6Oua4I7HXX56GyXQTMuXgd7GY2qkRCx1+Ix3ddgc
+         6EBg==
+X-Gm-Message-State: ACrzQf2BBddPqNhKWJuuxHyXvOUQPmsZihhB+HO33Qi1Yvjd4CG8RzTu
+        FPUVEuUkzJZPwwpSWDyypkn591kkC51aALMat+AJCQ==
+X-Google-Smtp-Source: AMsMyM5cuaw9B19VStYRTe1gre0nVjmKqp30Tj68r8vlb11gJKRKmlyCzGsIibHKfQ25VwIYsv/8nwWZGDEuwJKKCsY=
+X-Received: by 2002:a05:6102:3714:b0:3ac:f4c2:436 with SMTP id
+ s20-20020a056102371400b003acf4c20436mr708334vst.80.1667242977908; Mon, 31 Oct
+ 2022 12:02:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <0000000000000d9d6f05ec498263@google.com>
+In-Reply-To: <0000000000000d9d6f05ec498263@google.com>
+From:   Aleksandr Nogikh <nogikh@google.com>
+Date:   Mon, 31 Oct 2022 12:02:46 -0700
+Message-ID: <CANp29Y7NBk8XrwiuiqiUprPKtShHGaFG4d_P4qn6MnxiHVwhyg@mail.gmail.com>
+Subject: Re: [syzbot] WARNING in btrfs_space_info_update_bytes_may_use
+To:     syzbot <syzbot+8edfa01e46fd9fe3fbfb@syzkaller.appspotmail.com>
+Cc:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com, yin31149@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For detachable or lock-able joysticks the ADC lanes might
-be biased to GND or AVDD when the joystick is detached/locked.
+FWIW there's an attempt to fix a very similarly looking problem
+(https://lore.kernel.org/all/0000000000002a909705eb841dda@google.com/)
+by Hawkins Jiawei (cc'd):
+https://lore.kernel.org/linux-btrfs/20221030162223.25970-1-yin31149@gmail.com/t/
 
-One such kind of joystick is found in the Ritmix RZX-50 device.
-The joystick is non-detachable, although ADC lane biased to power
-supply when the "Hold" switch is activated.
+If the bugs are indeed related, we might want to tell the bot to
+deduplicate one to another.
 
-To avoid reporting old/broken measurements valid-range is used.
-When measured value is outside valid-range the driver reports
-safe center position for corresponding axis.
-
-Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
----
- drivers/input/joystick/adc-joystick.c | 58 ++++++++++++++++++++++++++-
- 1 file changed, 57 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/input/joystick/adc-joystick.c b/drivers/input/joystick/adc-joystick.c
-index c0deff5d4..6a143dc38 100644
---- a/drivers/input/joystick/adc-joystick.c
-+++ b/drivers/input/joystick/adc-joystick.c
-@@ -18,6 +18,8 @@ struct adc_joystick_axis {
- 	s32 range[2];
- 	s32 fuzz;
- 	s32 flat;
-+	s32 valid[2];
-+	s32 center;
- };
- 
- struct adc_joystick {
-@@ -29,6 +31,14 @@ struct adc_joystick {
- 	bool polled;
- };
- 
-+static inline bool is_in_range(const s32 *range, int val)
-+{
-+	s32 min = range[0];
-+	s32 max = range[1];
-+
-+	return (min == 0 && max == 0) || (val >= min && val <= max);
-+}
-+
- static void adc_joystick_poll(struct input_dev *input)
- {
- 	struct adc_joystick *joy = input_get_drvdata(input);
-@@ -38,6 +48,10 @@ static void adc_joystick_poll(struct input_dev *input)
- 		ret = iio_read_channel_raw(&joy->chans[i], &val);
- 		if (ret < 0)
- 			return;
-+
-+		if (!is_in_range(joy->axes[i].valid, val))
-+			val = joy->axes[i].center;
-+
- 		input_report_abs(input, joy->axes[i].code, val);
- 	}
- 	input_sync(input);
-@@ -86,6 +100,10 @@ static int adc_joystick_handle(const void *data, void *private)
- 			val = sign_extend32(val, msb);
- 		else
- 			val &= GENMASK(msb, 0);
-+
-+		if (!is_in_range(joy->axes[i].valid, val))
-+			val = joy->axes[i].center;
-+
- 		input_report_abs(joy->input, joy->axes[i].code, val);
- 	}
- 
-@@ -119,6 +137,21 @@ static void adc_joystick_cleanup(void *data)
- 	iio_channel_release_all_cb(data);
- }
- 
-+static bool valid_range_covers_abs_range(struct adc_joystick_axis *axis)
-+{
-+	s32 abs_min, abs_max;
-+
-+	if (axis->range[0] > axis->range[1]) {
-+		abs_min = axis->range[1];
-+		abs_max = axis->range[0];
-+	} else {
-+		abs_min = axis->range[0];
-+		abs_max = axis->range[1];
-+	}
-+
-+	return axis->valid[0] <= abs_min && axis->valid[1] >= abs_max;
-+}
-+
- static int adc_joystick_set_axes(struct device *dev, struct adc_joystick *joy)
- {
- 	struct adc_joystick_axis *axes;
-@@ -137,7 +170,7 @@ static int adc_joystick_set_axes(struct device *dev, struct adc_joystick *joy)
- 		return -EINVAL;
- 	}
- 
--	axes = devm_kmalloc_array(dev, num_axes, sizeof(*axes), GFP_KERNEL);
-+	axes = devm_kcalloc(dev, num_axes, sizeof(*axes), GFP_KERNEL);
- 	if (!axes)
- 		return -ENOMEM;
- 
-@@ -167,10 +200,33 @@ static int adc_joystick_set_axes(struct device *dev, struct adc_joystick *joy)
- 			dev_err(dev, "abs-range invalid or missing\n");
- 			goto err_fwnode_put;
- 		}
-+		axes[i].center = (axes[i].range[0] + axes[i].range[1]) / 2;
- 
- 		fwnode_property_read_u32(child, "abs-fuzz", &axes[i].fuzz);
- 		fwnode_property_read_u32(child, "abs-flat", &axes[i].flat);
- 
-+		if (fwnode_property_present(child, "valid-range")) {
-+			error = fwnode_property_read_u32_array(child,
-+						       "valid-range",
-+						       axes[i].valid, 2);
-+			if (error) {
-+				dev_err(dev, "valid-range invalid\n");
-+				goto err_fwnode_put;
-+			}
-+
-+			if (axes[i].valid[0] > axes[i].valid[1]) {
-+				dev_err(dev,
-+					"valid-range invalid (min > max)\n");
-+				goto err_fwnode_put;
-+			}
-+
-+			if (!valid_range_covers_abs_range(&axes[i])) {
-+				dev_err(dev,
-+					"valid-range must cover abs-range\n");
-+				goto err_fwnode_put;
-+			}
-+		}
-+
- 		input_set_abs_params(joy->input, axes[i].code,
- 				     axes[i].range[0], axes[i].range[1],
- 				     axes[i].fuzz, axes[i].flat);
--- 
-2.36.1
-
+On Sun, Oct 30, 2022 at 5:15 PM syzbot
+<syzbot+8edfa01e46fd9fe3fbfb@syzkaller.appspotmail.com> wrote:
+>
+> Hello,
+>
+> syzbot found the following issue on:
+>
+> HEAD commit:    b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
+> git tree:       upstream
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=158eaff6880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=a66c6c673fb555e8
+> dashboard link: https://syzkaller.appspot.com/bug?extid=8edfa01e46fd9fe3fbfb
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17db9ab1880000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=124e21b6880000
+>
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/ba5b49fa77de/disk-b229b6ca.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/7c061f2ae4dc/vmlinux-b229b6ca.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/bc45c1300e9b/bzImage-b229b6ca.xz
+> mounted in repro: https://storage.googleapis.com/syzbot-assets/17cf7ba1084e/mount_0.gz
+>
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+8edfa01e46fd9fe3fbfb@syzkaller.appspotmail.com
+>
+> BTRFS info (device loop0): enabling ssd optimizations
+> ------------[ cut here ]------------
+> WARNING: CPU: 0 PID: 3604 at fs/btrfs/space-info.h:122 btrfs_space_info_update_bytes_may_use+0x524/0x820 fs/btrfs/space-info.h:122
+> Modules linked in:
+> CPU: 0 PID: 3604 Comm: syz-executor245 Not tainted 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+> RIP: 0010:btrfs_space_info_update_bytes_may_use+0x524/0x820 fs/btrfs/space-info.h:122
+> Code: fd e9 77 fb ff ff e8 3b 4b fd fd 4d 89 e6 48 89 de 49 f7 de 4c 89 f7 e8 9a 47 fd fd 49 39 de 0f 86 b5 fc ff ff e8 1c 4b fd fd <0f> 0b 31 db e9 af fc ff ff e8 0e 4b fd fd 48 8d 7d 18 be ff ff ff
+> RSP: 0018:ffffc90003f4f9c0 EFLAGS: 00010293
+> RAX: 0000000000000000 RBX: 00000000000d0000 RCX: 0000000000000000
+> RDX: ffff888021f78000 RSI: ffffffff837f5164 RDI: 0000000000000006
+> RBP: ffff88807da53000 R08: 0000000000000006 R09: 00000000000e0000
+> R10: 00000000000d0000 R11: 000000000008c07e R12: fffffffffff20000
+> R13: ffff88807da53060 R14: 00000000000e0000 R15: 0000000000000002
+> FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+> CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> CR2: 00007faff6153690 CR3: 000000000bc8e000 CR4: 0000000000350ef0
+> Call Trace:
+>  <TASK>
+>  btrfs_space_info_free_bytes_may_use fs/btrfs/space-info.h:154 [inline]
+>  block_rsv_release_bytes fs/btrfs/block-rsv.c:151 [inline]
+>  btrfs_block_rsv_release+0x515/0x650 fs/btrfs/block-rsv.c:295
+>  btrfs_release_global_block_rsv+0x22/0x2e0 fs/btrfs/block-rsv.c:463
+>  btrfs_free_block_groups+0x954/0x1100 fs/btrfs/block-group.c:4051
+>  close_ctree+0xd17/0xdc3 fs/btrfs/disk-io.c:4710
+>  generic_shutdown_super+0x154/0x410 fs/super.c:491
+>  kill_anon_super+0x36/0x60 fs/super.c:1085
+>  btrfs_kill_super+0x38/0x50 fs/btrfs/super.c:2441
+>  deactivate_locked_super+0x94/0x160 fs/super.c:331
+>  deactivate_super+0xad/0xd0 fs/super.c:362
+>  cleanup_mnt+0x2ae/0x3d0 fs/namespace.c:1186
+>  task_work_run+0x16b/0x270 kernel/task_work.c:179
+>  exit_task_work include/linux/task_work.h:38 [inline]
+>  do_exit+0xb35/0x2a20 kernel/exit.c:820
+>  do_group_exit+0xd0/0x2a0 kernel/exit.c:950
+>  __do_sys_exit_group kernel/exit.c:961 [inline]
+>  __se_sys_exit_group kernel/exit.c:959 [inline]
+>  __x64_sys_exit_group+0x3a/0x50 kernel/exit.c:959
+>  do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>  do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+>  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> RIP: 0033:0x7f87197f03e9
+> Code: Unable to access opcode bytes at 0x7f87197f03bf.
+> RSP: 002b:00007ffebfd5c0d8 EFLAGS: 00000246 ORIG_RAX: 00000000000000e7
+> RAX: ffffffffffffffda RBX: 00007f871987d470 RCX: 00007f87197f03e9
+> RDX: 000000000000003c RSI: 00000000000000e7 RDI: 0000000000000001
+> RBP: 0000000000000001 R08: ffffffffffffffb8 R09: 00007ffebf003031
+> R10: 0000000080000009 R11: 0000000000000246 R12: 00007f871987d470
+> R13: 0000000000000001 R14: 0000000000000000 R15: 0000000000000001
+>  </TASK>
+>
+>
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+>
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
+>
+> --
+> You received this message because you are subscribed to the Google Groups "syzkaller-bugs" group.
+> To unsubscribe from this group and stop receiving emails from it, send an email to syzkaller-bugs+unsubscribe@googlegroups.com.
+> To view this discussion on the web visit https://groups.google.com/d/msgid/syzkaller-bugs/0000000000000d9d6f05ec498263%40google.com.
