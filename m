@@ -2,66 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E5F561379F
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 14:15:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 823246137AC
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 14:17:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231475AbiJaNPn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 09:15:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59828 "EHLO
+        id S231482AbiJaNRi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 09:17:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231461AbiJaNPk (ORCPT
+        with ESMTP id S231365AbiJaNRg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 09:15:40 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14CAA60C7;
-        Mon, 31 Oct 2022 06:15:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=IGoilmK91RhEEXcDDjLoScAYGtZO0SjZXqnGMsah/9M=; b=zUdWXkWxOcDFwpH6bgp0SA2FUf
-        YL4M43p8pqwPiDjvRyV1bUGB7VDbGMyN+/cH7XpzfVcN7/o8wVebyBH7aXJxoJ40OkGcsUtmgaeFY
-        V3/k4e8Scg13R1v3OLg3FQTu7cLwImXeaT+jayzw4C94tcl1ZHN8hpp2ySXsUGMnE+KZdOX4ZN/CM
-        BtK7IxJcKvYENab6OMfZ4qWV2l5uAfFV4jFVbXHyH3CDLQNWI//bOWjOSIamGxTaJEOok4Hch5fYF
-        sdvS9OO/SNms/w4Ap5gRPTJCqVT4N8arECslXeEgCMeYN+OU9/qfrM6kFRoR5pTMDRtTY2C8UqN0U
-        GiVpdJuw==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1opUdY-00BwK5-Vr; Mon, 31 Oct 2022 13:15:32 +0000
-Date:   Mon, 31 Oct 2022 06:15:32 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Gaosheng Cui <cuigaosheng1@huawei.com>
-Cc:     viro@zeniv.linux.org.uk, dhowells@redhat.com,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] fs: fix undefined behavior in bit shift for SB_NOUSER
-Message-ID: <Y1/KdOyExwCdfCqb@infradead.org>
-References: <20221029071745.2836665-1-cuigaosheng1@huawei.com>
+        Mon, 31 Oct 2022 09:17:36 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F096C632D;
+        Mon, 31 Oct 2022 06:17:35 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 362D3660036D;
+        Mon, 31 Oct 2022 13:17:34 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667222254;
+        bh=ZmPmZv72wbYQvxzOvTCOXp+TPJj41VSYJO29iqOZ//o=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=KYROdDtJRqd5mFhg8RKdHIF6Fh6pJCaZ0IjRgBZZyvg1agyrVjRmoCYbHYeapj02g
+         3/oiCJzKv0+OU3pNDx7JL7HCml7gYzWJX+2fIokgSlg47GQ/nvZZeJ+Blinpp0DCoO
+         C3c5VK7AF2H7sHZfR9RYU9OOH5g8gzaCc6XNostRPLqrj+OFc18mIg10MHJ+iWk6lK
+         CSD5PruhyEthiTQA1B+WpafUme0VGm/2Y2z200hrF1lfq7z52sjCNBig98NnbHY/Pf
+         59+J5tH/g3v9l1B72StI3IJml8vAuJOOoGFaBmYcpJYrMqC0vvAJDGm5rUCB3EfMqM
+         18rr2tSW0gg3A==
+Message-ID: <bc2e7eec-d78a-dfc5-b7f5-cf5bab001593@collabora.com>
+Date:   Mon, 31 Oct 2022 14:17:31 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221029071745.2836665-1-cuigaosheng1@huawei.com>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 2/2] dt-bindings: mailbox: mediatek,gce-mailbox: add
+ mt8188 compatible name
+Content-Language: en-US
+To:     "Elvis.Wang" <Elvis.Wang@mediatek.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Houlong Wei <houlong.wei@mediatek.com>,
+        "jason-jh . lin" <jason-jh.lin@mediatek.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20221029105017.20734-1-Elvis.Wang@mediatek.com>
+ <20221029105017.20734-3-Elvis.Wang@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221029105017.20734-3-Elvis.Wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 29, 2022 at 03:17:45PM +0800, Gaosheng Cui wrote:
-> --- a/include/linux/fs.h
-> +++ b/include/linux/fs.h
-> @@ -1396,7 +1396,7 @@ extern int send_sigurg(struct fown_struct *fown);
->  #define SB_NOSEC	(1<<28)
->  #define SB_BORN		(1<<29)
->  #define SB_ACTIVE	(1<<30)
-> -#define SB_NOUSER	(1<<31)
-> +#define SB_NOUSER	(1U<<31)
+Il 29/10/22 12:50, Elvis.Wang ha scritto:
+> From: Elvis Wang <Elvis.Wang@mediatek.com>
+> 
+> Add mt8188 compatible name.
+> 
+> Signed-off-by: Elvis Wang <Elvis.Wang@mediatek.com>
 
-Let's mark all of the flags as unsigned instead of just one so that
-we don't mix types.  s_flags is already unsigned (although for some
-reason long) already.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-And while you touch this please add the proper whitespaces around the
-shift operator everywhere.
