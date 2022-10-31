@@ -2,147 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A55A2613207
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 09:56:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8641461320C
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 09:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230047AbiJaI4z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 04:56:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39664 "EHLO
+        id S230074AbiJaI5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 04:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39850 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbiJaI4y (ORCPT
+        with ESMTP id S230081AbiJaI5I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 04:56:54 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CDE8CE37
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 01:56:53 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id t4so5087712lfp.2
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 01:56:53 -0700 (PDT)
+        Mon, 31 Oct 2022 04:57:08 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BFC41D2DF
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 01:57:07 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id sc25so27598619ejc.12
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 01:57:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=SIwL+GzxaLPi/piTRLicQ7NbL6+Ua5ZxLU8Xp7eDTmY=;
-        b=QNm5YNzhj88W83pKDzoNtQ8xvO3RGXblw+wh5SX78WBq9Fg982WvWh7L2MXE3QPveb
-         G50s9QAe69+juty5HUvyC5oECuSi2n9aZED6/stnYjlwimnDJEK+7ha9LTOG5hpcNkAm
-         b2CkVH0gPxHn0d8Sq7uxUKSrvVcRpR/XR+PyuiXo/2fQWs5rjrNEacF9JPmSzToZ8Xv9
-         KEi1XpuXeuYso35I9Q9UO89WgMdja4PwFS3kU8hXdBvAXaWoF7rYeaAXrByNbr258eY4
-         r1rR4ES0gLtAMCSyV2n4WPy4tnFBj4TK3fEqhUkEr/kvoE9EhKLaq2aQ3+FHAxMUlljs
-         4zJw==
+        d=fairphone.com; s=fair;
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/Vtw4OpHZk9Ob2MsTgTuIb/CtLxYKY/hRYURfQhdTAc=;
+        b=yoLJWPG7IV8EKls3S+16cBmJT+D/mWQ6vpko6wiS039qoDSGn4oKGS1qLk6/ysyPzm
+         A2vS8N9/SltB0t0ok8AH++bhVolO1+AoM5uXnw3aKM/tYR8ZALlPzk21GBG6gWxq983B
+         oH+HDIRquwJopXP/2W0dIuRjQd92lwIecIrMdfL6Y5bjAcSWH6LDjCYmjrWf7ZV02K2Y
+         4RgJFNa6ZcVS678T9Gxbxr4M1WzNSwFdVM4+Vc25t/pZa8DpB1JXIZAsAw8oF5yvokdh
+         FD3OhYmQushDHs523+g0HWcS4QZFDy03HVb49MbKh/8LT4tb3RJ4HPydGkeGeBjjWdXB
+         nFgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SIwL+GzxaLPi/piTRLicQ7NbL6+Ua5ZxLU8Xp7eDTmY=;
-        b=L8ietpIZdmQN9PFEqMjL8woIqZDOA182nQhEz+r9njfhE+y49qEtzy0vWnY5/Zhcup
-         9l+Kr394qfqhwT1WmJxKkbQLrGHtBpXlOYBfzJsRX4/uKGISXveyhRGiLxn746Vrv5t4
-         JbPGS7UiJYgHzoswTeTCVSagmzSSEPvqK4JE4hXsXqFCGU7EXkq683nwy6bViK4hGrrG
-         UN4CzPTYUAkJDe2gyaCk7ob27XtYccV6lRMOd/htmsoFsJ4tAO+v38diFBDK+eQNZ1GV
-         BtvmKgd7xgWaMRVJjCjSpSE5h04oEwTXyQt8ZkBijj05ufbK90VHmSabcd7kO/CvlKKR
-         8JLg==
-X-Gm-Message-State: ACrzQf0HD1ncpqGNM8bhqvsNfaFA/gHt2aCMdBC/sZBLMtr05CNUH7Qn
-        xSdg3tKCsVrgPRQw8dCQTvc=
-X-Google-Smtp-Source: AMsMyM6i1N65jzyU8PTAdT69lVCgMMnmiVnC8yqbKFPVx+wVmVMsvbCAvryiiYNpittgJPJlO5s9gw==
-X-Received: by 2002:ac2:58ca:0:b0:4a2:7bb1:ad61 with SMTP id u10-20020ac258ca000000b004a27bb1ad61mr4973514lfo.212.1667206611510;
-        Mon, 31 Oct 2022 01:56:51 -0700 (PDT)
-Received: from dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi (dc75zzyyyyyyyyyyyyyby-3.rev.dnainternet.fi. [2001:14ba:16f3:4a00::2])
-        by smtp.gmail.com with ESMTPSA id p2-20020ac24ec2000000b00494603953b6sm1204714lfr.6.2022.10.31.01.56.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 01:56:50 -0700 (PDT)
-Date:   Mon, 31 Oct 2022 10:56:46 +0200
-From:   Matti Vaittinen <mazziesaccount@gmail.com>
-To:     Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
-        Matti Vaittinen <mazziesaccount@gmail.com>
-Cc:     Mark Brown <broonie@kernel.org>,
-        Matti Vaittinen <mazziesaccount@gmail.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] lib/test_linear_ranges: Use LINEAR_RANGE()
-Message-ID: <2678c1902df3d568232507530f0df39cd8733944.1667206528.git.mazziesaccount@gmail.com>
-MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="rhioquSZyJktzLNE"
-Content-Disposition: inline
+        h=in-reply-to:references:subject:cc:to:from:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=/Vtw4OpHZk9Ob2MsTgTuIb/CtLxYKY/hRYURfQhdTAc=;
+        b=cHqVhCOId1CkUU/GDGSKrCe3OcAr1GKTi+0j2RHjUHkP3PNeheWsv6ZqyNohRK5V4u
+         iUwXC+uAavPsQIV6lxKpQ4o6+Zd3SrRqsygijuWg82TRXGtd/WxtFTsjjzmVvvaXCivm
+         c6NpN2Z+FSBWPDrASEh8Pap9e2pRl5JdT6NDrCCeFBAhEnuLHpw1mXe8Q08Pnm83qOuv
+         ilZ3hWiAvg2UbEYVXhvSWGDeMU9mxvcmZnymRtysuy19PkccfmNqlI28frwjIMCySgDe
+         jLg31rqE1aYXsxwxqu5HbpdWfDFAmv1e4u7SW+E8LP4fID9Q8UOnFCaF/43CIC/aim0r
+         R8ig==
+X-Gm-Message-State: ACrzQf0xLk18JSGFOkZCwYm2DpRWbJL6kYRukBNFOA+mhhqjFbU37g4Q
+        aVs/pTMUePIWZ2eW03qUDqW8RQ==
+X-Google-Smtp-Source: AMsMyM4WFYGV3H8V7JnQGlBRkPZbqZmePn1YREUndJY7KOkYPaNePxn7cbtP/WuBWyWDzqZBbEkl/A==
+X-Received: by 2002:a17:906:9b87:b0:733:1795:2855 with SMTP id dd7-20020a1709069b8700b0073317952855mr12045923ejc.156.1667206626330;
+        Mon, 31 Oct 2022 01:57:06 -0700 (PDT)
+Received: from localhost (31-151-115-246.dynamic.upc.nl. [31.151.115.246])
+        by smtp.gmail.com with ESMTPSA id w9-20020aa7da49000000b00461a98a2128sm2968199eds.26.2022.10.31.01.57.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Oct 2022 01:57:06 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 31 Oct 2022 09:57:05 +0100
+Message-Id: <CNZZFA8BSZG7.27R0S7MZV50IX@otso>
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Marijn Suijten" <marijn.suijten@somainline.org>,
+        <phone-devel@vger.kernel.org>
+Cc:     <~postmarketos/upstreaming@lists.sr.ht>,
+        "AngeloGioacchino Del Regno" 
+        <angelogioacchino.delregno@somainline.org>,
+        "Konrad Dybcio" <konrad.dybcio@somainline.org>,
+        "Martin Botka" <martin.botka@somainline.org>,
+        "Jami Kettunen" <jami.kettunen@somainline.org>,
+        "Andy Gross" <agross@kernel.org>,
+        "Bjorn Andersson" <andersson@kernel.org>,
+        "Rob Herring" <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        "Luca Weiss" <luca@z3ntu.xyz>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH 04/10] arm64: dts: qcom: pm6350: Include header for
+ KEY_POWER
+X-Mailer: aerc 0.12.0
+References: <20221030073232.22726-1-marijn.suijten@somainline.org>
+ <20221030073232.22726-5-marijn.suijten@somainline.org>
+In-Reply-To: <20221030073232.22726-5-marijn.suijten@somainline.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Sun Oct 30, 2022 at 8:32 AM CET, Marijn Suijten wrote:
+> Make pm6350.dtsi self-contained by including input.h, needed for the
+> KEY_POWER constant used to define the power key.
+>
+> Fixes: d8a3c775d7cd ("arm64: dts: qcom: Add PM6350 PMIC")
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
 
---rhioquSZyJktzLNE
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Thanks for fixing!
 
-New initialization macro for linear ranges was added. Slightly simplify
-the test code by using this macro - and at the same time also verify the
-macro is working as intended.
+Reviewed-by: Luca Weiss <luca.weiss@fairphone.com>
 
-Use the newly added LINEAR_RANGE() initialization macro for linear range
-test.
+Regards
+Luca
 
-Signed-off-by: Matti Vaittinen <mazziesaccount@gmail.com>
----
- lib/test_linear_ranges.c | 13 ++-----------
- 1 file changed, 2 insertions(+), 11 deletions(-)
+> ---
+>  arch/arm64/boot/dts/qcom/pm6350.dtsi | 1 +
+>  1 file changed, 1 insertion(+)
+>
+> diff --git a/arch/arm64/boot/dts/qcom/pm6350.dtsi b/arch/arm64/boot/dts/q=
+com/pm6350.dtsi
+> index 18c14257e2c1..111f4c1c56ae 100644
+> --- a/arch/arm64/boot/dts/qcom/pm6350.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/pm6350.dtsi
+> @@ -3,6 +3,7 @@
+>   * Copyright (c) 2021, Luca Weiss <luca@z3ntu.xyz>
+>   */
+> =20
+> +#include <dt-bindings/input/input.h>
+>  #include <dt-bindings/spmi/spmi.h>
+> =20
+>  &spmi_bus {
+> --=20
+> 2.38.1
 
-diff --git a/lib/test_linear_ranges.c b/lib/test_linear_ranges.c
-index 676e0b8abcdd..c18f9c0f1f25 100644
---- a/lib/test_linear_ranges.c
-+++ b/lib/test_linear_ranges.c
-@@ -107,17 +107,8 @@ static const unsigned int range2_vals[] =3D { RANGE2_M=
-IN, RANGE2_MIN +
- #define SMALLEST_VAL RANGE1_MIN
-=20
- static struct linear_range testr[] =3D {
--	{
--		.min =3D RANGE1_MIN,
--		.min_sel =3D RANGE1_MIN_SEL,
--		.max_sel =3D RANGE1_MAX_SEL,
--		.step =3D RANGE1_STEP,
--	}, {
--		.min =3D RANGE2_MIN,
--		.min_sel =3D RANGE2_MIN_SEL,
--		.max_sel =3D RANGE2_MAX_SEL,
--		.step =3D RANGE2_STEP
--	},
-+	LINEAR_RANGE(RANGE1_MIN, RANGE1_MIN_SEL, RANGE1_MAX_SEL, RANGE1_STEP),
-+	LINEAR_RANGE(RANGE2_MIN, RANGE2_MIN_SEL, RANGE2_MAX_SEL, RANGE2_STEP),
- };
-=20
- static void range_test_get_value(struct kunit *test)
---=20
-2.37.3
-
-
---=20
-Matti Vaittinen, Linux device drivers
-ROHM Semiconductors, Finland SWDC
-Kiviharjunlenkki 1E
-90220 OULU
-FINLAND
-
-~~~ "I don't think so," said Rene Descartes. Just then he vanished ~~~
-Simon says - in Latin please.
-~~~ "non cogito me" dixit Rene Descarte, deinde evanescavit ~~~
-Thanks to Simon Glass for the translation =3D]=20
-
---rhioquSZyJktzLNE
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEEIx+f8wZb28fLKEhTeFA3/03aocUFAmNfjb8ACgkQeFA3/03a
-ocXPeggApk0mva0OoBmp6SyqVg1GGayAP1t2f15e8bEjY/lTd1WJcqgddQNorf9h
-MrSCQZvd7q3LvyU9HfYjlkxIW9GZizOmfaLJkDrCyumnEHpyVkR7nt3jpareJFbl
-G46d0QWkTT20IXUD0+AnAYaa1gztJLZ+cPzl6wZUWVR57dLYPMcbwfyZ3/1OPbNa
-ok25cMCx7Q0B10Oj8OnFs4bdivD540x/3O9gz1nyl1h/FWeECL6ILdEyVFp3Ih+I
-9A2jCfCnIc8nErwlWY2li1w4HfgSlhWNAsmhT+7bMLl4Wp+2OfcvmSVVD8XadH7g
-coyhrU+ctDmcq+fxoTgWaa+279Cs2A==
-=lcfT
------END PGP SIGNATURE-----
-
---rhioquSZyJktzLNE--
