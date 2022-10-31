@@ -2,99 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8556F6135AA
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 13:17:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0370A6135D6
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 13:19:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231308AbiJaMRX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 08:17:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44682 "EHLO
+        id S231317AbiJaMT5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 08:19:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231276AbiJaMRV (ORCPT
+        with ESMTP id S230467AbiJaMTy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 08:17:21 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5468EE23;
-        Mon, 31 Oct 2022 05:17:20 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id z18so12141707edb.9;
-        Mon, 31 Oct 2022 05:17:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=hsqRH+vO+rjaZ62MIoRDwiYLhcjXqUkBqkIdEzd2p0M=;
-        b=E/YrgHrgTe/w6zX/2SRunSlHYpdYElXZLU3AxNYI9hIKs7kK/7v7QXPBv9BO2EV7Kr
-         rk+1HLKp1TJrN85hH3TCVY1ZLiMu2sOon3qSs73rNYAoPgy+dBa9uYSWeeVD/82jcHTw
-         u5r0RB+Pgc+0d6kqyX8CPfF9LGe3syTzl/6UW+tEPOSnGB99mqdb/hVKzqtLA1msNm2M
-         lgQFsVFRq+03z80r6kWF8iWynJxI8u0ywI/mQ42QEo0yo1udMQ10L58I2uJJea8SuJZH
-         kBdAdL/mrqBvDy8Px7IuMzxUoVJy2FAwf1Y2mud6ekY3UOmdqXK+HG3lMbsdrRdifoys
-         PPCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hsqRH+vO+rjaZ62MIoRDwiYLhcjXqUkBqkIdEzd2p0M=;
-        b=6XDrV8z3m5T4ZuIKyKmfLiBua+YchIbLJ0fj9QwXViYw0JWQ+dUEpYMRxXG+CIYqlU
-         bPDQ3qayD7297kF3epIS6BAv8nuR1Ufh35R2rIRjtU4+4T5gjQGewnVspnLD6Jzx/2Go
-         ef4R2GO9bwQY/ueGqm5OydpuMUdCV0aSsRRZ2fJz/+uWzrgBwqem0R+8tUDUHBf3FLNA
-         Prd17oEz25GZlcIJdO8470uKLObQW9msATKpKwLlSg0ZaihNsNtGkxXiFS+nCgt070zH
-         ozMoqtPwmhOl4aeMcEskUpQaEC4msyl8ZPkV1MByNYlv0yCKIIw0rCkDQxAkivHAawYX
-         R6Bg==
-X-Gm-Message-State: ACrzQf3QunuTI+DZGeKdtmzfcYdu4sI+9z+dXzgeVlqeaqYxW1QEQLiE
-        UYi/dnRUHm/AA3EpMfKGbfokJCEtHVQ=
-X-Google-Smtp-Source: AMsMyM5TO/yroXBvW7mBAHSZW1VulWAGl6IrIbfHHyTNKIkkU4cRW0BdOhbAJsSi76S7Kn9Y+dgMxA==
-X-Received: by 2002:a05:6402:1619:b0:462:b059:9655 with SMTP id f25-20020a056402161900b00462b0599655mr13049228edv.316.1667218639338;
-        Mon, 31 Oct 2022 05:17:19 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id o17-20020aa7dd51000000b004637489cf08sm723801edw.88.2022.10.31.05.17.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 05:17:18 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Mon, 31 Oct 2022 13:17:16 +0100
-To:     David Laight <David.Laight@aculab.com>
-Cc:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>
-Subject: Re: Linux 6.1-rc3 build fail in include/linux/bpf.h
-Message-ID: <Y1+8zIdf8mgQXwHg@krava>
-References: <439d8dc735bb4858875377df67f1b29a@AcuMS.aculab.com>
+        Mon, 31 Oct 2022 08:19:54 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E479562CF;
+        Mon, 31 Oct 2022 05:19:52 -0700 (PDT)
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29VCJRa0052972;
+        Mon, 31 Oct 2022 07:19:27 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1667218767;
+        bh=uOCHiSxsSvLq9cqkTvEuyLAzP3fo56xpUetIl2heAr0=;
+        h=From:To:CC:Subject:Date;
+        b=xw0eUPAmRoLiAjXRr94X7ItrlO0gm0g71OaZQ8cbdKxdF8Yg7PziSpEeq5tMaPY77
+         CKZPzBUIRGum6H4HNhDkaVmO06o3ZG61K+qrpUTC+acpFkWmLvkYzDB5PFSbCE0dV8
+         sw8954nakUVmvX45jg7anFAQ59FTXnovSsIjPbFM=
+Received: from DLEE105.ent.ti.com (dlee105.ent.ti.com [157.170.170.35])
+        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29VCJRpe005423
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 31 Oct 2022 07:19:27 -0500
+Received: from DLEE103.ent.ti.com (157.170.170.33) by DLEE105.ent.ti.com
+ (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 31
+ Oct 2022 07:19:26 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Mon, 31 Oct 2022 07:19:26 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29VCJPse017206;
+        Mon, 31 Oct 2022 07:19:26 -0500
+From:   Rahul T R <r-ravikumar@ti.com>
+To:     <dri-devel@lists.freedesktop.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <tomi.valkeinen@ideasonboard.com>
+CC:     <andrzej.hajda@intel.com>, <narmstrong@baylibre.com>,
+        <robert.foss@linaro.org>, <jonas@kwiboo.se>,
+        <jernej.skrabec@gmail.com>, <airlied@linux.ie>, <daniel@ffwll.ch>,
+        <p.zabel@pengutronix.de>, <laurent.pinchart@ideasonboard.com>,
+        <linux-kernel@vger.kernel.org>, <jpawar@cadence.com>,
+        <sjakhade@cadence.com>, <mparab@cadence.com>, <a-bhatia1@ti.com>,
+        <devicetree@vger.kernel.org>, <vigneshr@ti.com>,
+        <lee.jones@linaro.org>, Rahul T R <r-ravikumar@ti.com>
+Subject: [PATCH v9 0/5] Add support for CDNS DSI J721E wrapper
+Date:   Mon, 31 Oct 2022 17:49:19 +0530
+Message-ID: <20221031121924.29974-1-r-ravikumar@ti.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <439d8dc735bb4858875377df67f1b29a@AcuMS.aculab.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 11:14:31AM +0000, David Laight wrote:
-> The 6.1-rc3 sources fail to build because bpf.h unconditionally
-> #define BPF_DISPATCHER_ATTRIBUTES __attribute__((patchable_function_entry(5)))
-> for X86_64 builds.
-> 
-> I'm pretty sure that should depend on some other options
-> since the compiler isn't required to support it.
-> (The gcc 7.5.0 on my Ubunti 18.04 system certainly doesn't)
-> 
-> The only other reference to that attribute is in the definition
-> of 'notrace' in compiler.h.
+Following series of patches adds supports for CDNS DSI
+bridge on j721e.
 
-I guess we need to make some __has_attribute check and make all that conditional
+v9:
+ - Fixed below based on review comments in v8
+ - Added more info on wrapper in the commit message
+ - Fixed the description in Kconfig
+ - Fixed the formatting of of_match table
+ - exit -> deinit in platform ops
+ - Remove duplicate of struct declaration in cdns-dsi-j721e.h
 
-cc-ing Peter
+v8:
+ - Rebased to 6.1-rc1
 
-jirka
+v7:
+ - Rebased to next-20220920
+ - Accumulated the Reviewed-by acks
 
-> 
-> 	David
-> 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
-> 
+v6:
+ - Dropped generic definations for properties like reg, resets etc..
+ - Fixed the defination for port@0 and port@1
+ - removed the ti,sn65dsi86 node from the example, which is not related
+
+v5:
+ - Remove power-domain property in the conversion commit
+ - Add power-domain only for j721e compatible
+ - Fix white space error in one of the commit
+
+v4:
+ - split conversion txt to yaml
+ - seperate commit for addinig new compatible
+ - conditionally limit the items for reg property, based on the compatible
+
+v3:
+ - Convert cdns-dsi.txt binding to yaml
+ - Move the bridge under display/bridge/cadence
+ - Add new compatible to enable the wrapper module
+
+v2:
+ - Moved setting DPI0 to bridge_enable, since it
+   should be done after pm_runtime_get
+
+Rahul T R (5):
+  dt-bindings: display: bridge: Convert cdns,dsi.txt to yaml
+  dt-bindings: display: bridge: cdns,dsi: Add compatible for dsi on
+    j721e
+  drm/bridge: cdns-dsi: Move to drm/bridge/cadence
+  drm/bridge: cdns-dsi: Create a header file
+  drm/bridge: cdns-dsi: Add support for J721E wrapper
+
+ .../bindings/display/bridge/cdns,dsi.txt      | 112 ----
+ .../bindings/display/bridge/cdns,dsi.yaml     | 180 +++++++
+ drivers/gpu/drm/bridge/Kconfig                |  11 -
+ drivers/gpu/drm/bridge/Makefile               |   1 -
+ drivers/gpu/drm/bridge/cadence/Kconfig        |  21 +
+ drivers/gpu/drm/bridge/cadence/Makefile       |   3 +
+ .../{cdns-dsi.c => cadence/cdns-dsi-core.c}   | 481 ++----------------
+ .../gpu/drm/bridge/cadence/cdns-dsi-core.h    | 471 +++++++++++++++++
+ .../gpu/drm/bridge/cadence/cdns-dsi-j721e.c   |  51 ++
+ .../gpu/drm/bridge/cadence/cdns-dsi-j721e.h   |  16 +
+ 10 files changed, 777 insertions(+), 570 deletions(-)
+ delete mode 100644 Documentation/devicetree/bindings/display/bridge/cdns,dsi.txt
+ create mode 100644 Documentation/devicetree/bindings/display/bridge/cdns,dsi.yaml
+ rename drivers/gpu/drm/bridge/{cdns-dsi.c => cadence/cdns-dsi-core.c} (65%)
+ create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-core.h
+ create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.c
+ create mode 100644 drivers/gpu/drm/bridge/cadence/cdns-dsi-j721e.h
+
+-- 
+2.38.0
+
