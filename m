@@ -2,156 +2,172 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 768176140E3
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 23:52:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6059D6140E4
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 23:53:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229597AbiJaWw5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 18:52:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57112 "EHLO
+        id S229835AbiJaWxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 18:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiJaWwz (ORCPT
+        with ESMTP id S229827AbiJaWxF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 18:52:55 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 679362DC2
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 15:52:53 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id ud5so33101145ejc.4
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 15:52:53 -0700 (PDT)
+        Mon, 31 Oct 2022 18:53:05 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1B9140BE
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 15:53:04 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id g129so11931972pgc.7
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 15:53:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UJIs643oAL5c/63LTolWUa5z+l7GDyqyf25JL0+db0E=;
-        b=mBFIrX7TMv9ObbTZdo12IujkhmRytwBezp5HbgU1xl8eyQ7ss1XehZrk9Oc58S5xcp
-         IuijQcvHRlMLRvTPbyd2+QX7iVyaecue/RyDvEry2UydgycpwAO1W5cyfxg9N/UM8vsN
-         jlb+z5rmAnyVRtPzbT3mGLMzw417S/KO8wKEjwSbBjzSeDN7Wm/6BK+smBJ8h1K2aMK2
-         MbzXMd3jNG5w+lh2sekm4NTNohB5X9shwYTvYEMLkpkXKddMKGm/Ir19zitmEmwa2UXF
-         Sm9KfWkYejUwbqAKh1WSmp7u9iIG0uAPA8o5qlt3xf7ql7tTRt+QsMUqQC0nQnYVr0w/
-         uEPA==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vIhxAHEvGp1AmipgOU4ochFbfH4MLAxumap99RbQ2Kg=;
+        b=UPE14pLYmbjc8vK+oNlYzitPk2hVcQc9fyMjBjMNL3lMtWLp5mPEYdnj1YewxG2IDR
+         mvBKdr3TPNUaauzFfJHjRwXt7tYn404a2JDAmRMliWzgTZ+zQ30XE+RXtPU0KS9QfypK
+         Z5QRFasxHH4n4wp9pgu1cTRNqIjxT2G6xdWqNW0dhlJQiMOgptSNo5J2WmBGpETo3Lkh
+         eIJhFt1JeOE7v7dLX7k6waqhfiJ6A+HyR04D270OJ2nrbToO5E9/09Ur8qVxPIMUZs0/
+         mS2SiOEdP0rId+02YhU5xReYM6gPuK/AWgSQw7PSshW9i5TzxLGodxtrqqDYaU3kckp8
+         E0Eg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UJIs643oAL5c/63LTolWUa5z+l7GDyqyf25JL0+db0E=;
-        b=c6icTMCb2ZsVY6e7REDZVdU2VSAags5S2Bm3h0snMHkQhM5Bx6rX5j31GjzE3OJeQ4
-         RNk0W+ASCZNK5Kgb1KfjvgZaeqVbuc48rqVCHQNKSTEx1VDQpNWUBTOIyYorhzO4iF4p
-         kzcJhO1eLsLDs+iIiY44nE/+r5hH3sMAfPNTO4SBqXA9ulepQPKm3m+8aWaLZzjtJRDe
-         IRuMLexYJNo4Ccy7oKLwR7W7t2yaRZ28KLBJHf/iO7XY6sHjMPR5wPvXuIAlwncz3+ab
-         hqD/vm8Hw65JKAmHzskgZiT0oE3a/ybh0ILpuDhjLK/7wV2Bf+IblBVEhn67cjhG/7kC
-         cKZA==
-X-Gm-Message-State: ACrzQf3W67Hy9NY+CszY5NxaEJCfxutk/hnHZvFTNxFrzsGg8VQ/q9nc
-        MIDI2QYhzxwKxZWHJBlCHJLM59IFMeHDfw==
-X-Google-Smtp-Source: AMsMyM7w8AzoadH2iGc6rbisb33dUQKpQylrnzfErOQ3aori+DoHmWVMutfUtFCxETGVgzKP5oMNSw==
-X-Received: by 2002:a17:907:761b:b0:7a3:86dd:d330 with SMTP id jx27-20020a170907761b00b007a386ddd330mr15142348ejc.34.1667256771828;
-        Mon, 31 Oct 2022 15:52:51 -0700 (PDT)
-Received: from ZBook.localdomain (86-90-194-80.fixed.kpn.net. [86.90.194.80])
-        by smtp.gmail.com with ESMTPSA id ux8-20020a170907cf8800b0078194737761sm3462098ejc.124.2022.10.31.15.52.51
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vIhxAHEvGp1AmipgOU4ochFbfH4MLAxumap99RbQ2Kg=;
+        b=wd3BgUYWQ6d5ocfz0Kiq2r6jR296GlxYso6CxUUtym7lyP8AFIeMY7kM8wRsytjoxb
+         PS2nUagxq6iMTAKeYoPNPqXQ+arawd5jH8FiWZ/5RkeFF3FlfFN8JvUORYH56XgWkWY9
+         kUw8QAFRrPXmlCT5gp6w7ddS5VpU7xvHa1ZWiWL1BIXclHyaJZVlWlQliZycwQZCBMYT
+         oejIkTTDw3RnIbLznMeVNrtWmF/v62lHuodMM8bEgQU1JG0vMeDQfpMouN+6JUAlGQx+
+         zKHJj/5BFnZhRnsmh3LJJm3Ul8C9qcgFPZ5gHPkn+RImFM6vMK3vwFqb0exQ7FgqFpQZ
+         7/rQ==
+X-Gm-Message-State: ACrzQf2zAJ+4JYG9zXnZDr8hXYxXRGu0coaXXxEW0Yh6XNUNU+EPG4xb
+        dLGHPII2ybLeV2wBdhdSy1M=
+X-Google-Smtp-Source: AMsMyM4CQF1f4+QOl/cQc8qddvsKJANCOpAlsnArL7MZPxmTSV8Puv5bwA65pCKIokdNSHJMI1F6Pw==
+X-Received: by 2002:a62:d412:0:b0:56c:6f25:8b12 with SMTP id a18-20020a62d412000000b0056c6f258b12mr16566301pfh.60.1667256783549;
+        Mon, 31 Oct 2022 15:53:03 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:ba13])
+        by smtp.gmail.com with ESMTPSA id l10-20020a170903120a00b0017b69f99321sm4951844plh.219.2022.10.31.15.53.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 15:52:51 -0700 (PDT)
-From:   Jerom van der Sar <jerom.vandersar@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     philip.g.hortmann@gmail.com, error27@gmail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Jerom van der Sar <jerom.vandersar@gmail.com>
-Subject: [PATCH] staging: rtl8192e: cleanup coding style issues with spacing
-Date:   Mon, 31 Oct 2022 23:51:55 +0100
-Message-Id: <20221031225155.15678-1-jerom.vandersar@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 31 Oct 2022 15:53:02 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Mon, 31 Oct 2022 12:53:00 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Hillf Danton <hdanton@sina.com>
+Cc:     syzbot <syzbot+6bc35f3913193fe7f0d3@syzkaller.appspotmail.com>,
+        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
+        "Luis R. Rodriguez" <mcgrof@kernel.org>
+Subject: Re: [syzbot] KASAN: use-after-free Read in
+ kernfs_next_descendant_post (2)
+Message-ID: <Y2BRzPxroVylPLan@slm.duckdns.org>
+References: <000000000000c183f505eb721745@google.com>
+ <20221021225228.1750-1-hdanton@sina.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221021225228.1750-1-hdanton@sina.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixed several coding style issues in rtl_cam.c such as double blank lines
-and lack of spaces around binary operators. It passes without trivial
-warnings about spaces. Some other warnings still remain.
+(cc'ing Luis for firmware loader and quoting the whole body)
 
-Signed-off-by: Jerom van der Sar <jerom.vandersar@gmail.com>
----
- drivers/staging/rtl8192e/rtl8192e/rtl_cam.c | 25 +++++++++------------
- 1 file changed, 11 insertions(+), 14 deletions(-)
+On Sat, Oct 22, 2022 at 06:52:28AM +0800, Hillf Danton wrote:
+> On 20 Oct 2022 00:15:40 -0700
+> > syzbot has found a reproducer for the following issue on:
+> > 
+> > HEAD commit:    55be6084c8e0 Merge tag 'timers-core-2022-10-05' of git://g..
+> > git tree:       upstream
+> > console+strace: https://syzkaller.appspot.com/x/log.txt?x=1449d53c880000
+> > kernel config:  https://syzkaller.appspot.com/x/.config?x=df75278aabf0681a
+> > dashboard link: https://syzkaller.appspot.com/bug?extid=6bc35f3913193fe7f0d3
+> > compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> > syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=14e01c72880000
+> > C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1128908c880000
+> 
+> See if the change to ueagle driver alone can survive syzbot test.
+> 
+> #syz test https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git  aae703b02f92
+> 
+> --- a/include/linux/netdevice.h
+> +++ b/include/linux/netdevice.h
+> @@ -3663,8 +3663,9 @@ static inline bool netif_attr_test_online(unsigned long j,
+>  static inline unsigned int netif_attrmask_next(int n, const unsigned long *srcp,
+>  					       unsigned int nr_bits)
+>  {
+> -	/* n is a prior cpu */
+> -	cpu_max_bits_warn(n + 1, nr_bits);
+> +	/* -1 is a legal arg here. */
+> +	if (n != -1)
+> +		cpu_max_bits_warn(n, nr_bits);
+>  
+>  	if (srcp)
+>  		return find_next_bit(srcp, nr_bits, n + 1);
+> @@ -3685,8 +3686,9 @@ static inline int netif_attrmask_next_and(int n, const unsigned long *src1p,
+>  					  const unsigned long *src2p,
+>  					  unsigned int nr_bits)
+>  {
+> -	/* n is a prior cpu */
+> -	cpu_max_bits_warn(n + 1, nr_bits);
+> +	/* -1 is a legal arg here. */
+> +	if (n != -1)
+> +		cpu_max_bits_warn(n, nr_bits);
+>  
+>  	if (src1p && src2p)
+>  		return find_next_and_bit(src1p, src2p, nr_bits, n + 1);
+> --- a/drivers/usb/atm/ueagle-atm.c
+> +++ b/drivers/usb/atm/ueagle-atm.c
+> @@ -597,9 +597,8 @@ static int uea_send_modem_cmd(struct usb
+>  }
+>  
+>  static void uea_upload_pre_firmware(const struct firmware *fw_entry,
+> -								void *context)
+> +					struct usb_device *usb)
+>  {
+> -	struct usb_device *usb = context;
+>  	const u8 *pfw;
+>  	u8 value;
+>  	u32 crc = 0;
+> @@ -679,6 +678,7 @@ static int uea_load_firmware(struct usb_
+>  {
+>  	int ret;
+>  	char *fw_name = EAGLE_FIRMWARE;
+> +	const struct firmware *fw;
+>  
+>  	uea_enters(usb);
+>  	uea_info(usb, "pre-firmware device, uploading firmware\n");
+> @@ -701,13 +701,13 @@ static int uea_load_firmware(struct usb_
+>  		break;
+>  	}
+>  
+> -	ret = request_firmware_nowait(THIS_MODULE, 1, fw_name, &usb->dev,
+> -					GFP_KERNEL, usb,
+> -					uea_upload_pre_firmware);
+> +	ret = request_firmware(&fw, fw_name, &usb->dev);
+>  	if (ret)
+>  		uea_err(usb, "firmware %s is not available\n", fw_name);
+> -	else
+> +	else {
+>  		uea_info(usb, "loading firmware %s\n", fw_name);
+> +		uea_upload_pre_firmware(fw, usb);
+> +	}
+>  
+>  	uea_leaves(usb);
+>  	return ret;
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c b/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c
-index 41faeb4b9b9b..aeef735679db 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c
-@@ -17,7 +17,7 @@ void rtl92e_cam_reset(struct net_device *dev)
- {
- 	u32 ulcommand = 0;
- 
--	ulcommand |= BIT31|BIT30;
-+	ulcommand |= BIT31 | BIT30;
- 	rtl92e_writel(dev, RWCAM, ulcommand);
- }
- 
-@@ -40,7 +40,6 @@ void rtl92e_enable_hw_security_config(struct net_device *dev)
- 		SECR_value |= SCR_TxUseDK;
- 	}
- 
--
- 	ieee->hwsec_active = 1;
- 	if ((ieee->pHTInfo->iot_action & HT_IOT_ACT_PURE_N_MODE) || !hwwep) {
- 		ieee->hwsec_active = 0;
-@@ -100,33 +99,32 @@ void rtl92e_set_key(struct net_device *dev, u8 EntryNo, u8 KeyIndex,
- 	}
- 
- 	if (DefaultKey)
--		usConfig |= BIT15 | (KeyType<<2);
-+		usConfig |= BIT15 | (KeyType << 2);
- 	else
--		usConfig |= BIT15 | (KeyType<<2) | KeyIndex;
--
-+		usConfig |= BIT15 | (KeyType << 2) | KeyIndex;
- 
- 	for (i = 0; i < CAM_CONTENT_COUNT; i++) {
- 		TargetCommand  = i + CAM_CONTENT_COUNT * EntryNo;
--		TargetCommand |= BIT31|BIT16;
-+		TargetCommand |= BIT31 | BIT16;
- 
- 		if (i == 0) {
--			TargetContent = (u32)(*(MacAddr+0)) << 16 |
--				(u32)(*(MacAddr+1)) << 24 |
-+			TargetContent = (u32)(*(MacAddr + 0)) << 16 |
-+				(u32)(*(MacAddr + 1)) << 24 |
- 				(u32)usConfig;
- 
- 			rtl92e_writel(dev, WCAMI, TargetContent);
- 			rtl92e_writel(dev, RWCAM, TargetCommand);
- 		} else if (i == 1) {
--			TargetContent = (u32)(*(MacAddr+2)) |
--				(u32)(*(MacAddr+3)) <<  8 |
--				(u32)(*(MacAddr+4)) << 16 |
--				(u32)(*(MacAddr+5)) << 24;
-+			TargetContent = (u32)(*(MacAddr + 2)) |
-+				(u32)(*(MacAddr + 3)) <<  8 |
-+				(u32)(*(MacAddr + 4)) << 16 |
-+				(u32)(*(MacAddr + 5)) << 24;
- 			rtl92e_writel(dev, WCAMI, TargetContent);
- 			rtl92e_writel(dev, RWCAM, TargetCommand);
- 		} else {
- 			if (KeyContent != NULL) {
- 				rtl92e_writel(dev, WCAMI,
--					      (u32)(*(KeyContent+i-2)));
-+					      (u32)(*(KeyContent + i - 2)));
- 				rtl92e_writel(dev, RWCAM, TargetCommand);
- 				udelay(100);
- 			}
-@@ -152,7 +150,6 @@ void rtl92e_cam_restore(struct net_device *dev)
- 
- 	if ((priv->rtllib->pairwise_key_type == KEY_TYPE_WEP40) ||
- 	    (priv->rtllib->pairwise_key_type == KEY_TYPE_WEP104)) {
--
- 		for (EntryId = 0; EntryId < 4; EntryId++) {
- 			MacAddr = CAM_CONST_ADDR[EntryId];
- 			if (priv->rtllib->swcamtable[EntryId].bused) {
+So, the problem is that while request_firmware_nowait() inc's the ref on the
+device, if the device gets removed later, having a ref isn't sufficient for
+adding stuff to the device. A relatively easy solution would be putting
+these firmware load work items into its own workqueue and flushing it on
+device removal path. Luis, what do you think?
+
+Thanks.
+
 -- 
-2.34.1
-
+tejun
