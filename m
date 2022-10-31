@@ -2,116 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 627D1613D1A
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:08:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13AFA613D22
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:11:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229819AbiJaSIW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 14:08:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
+        id S229827AbiJaSLF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 14:11:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229891AbiJaSIP (ORCPT
+        with ESMTP id S229469AbiJaSLD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 14:08:15 -0400
-Received: from zeniv.linux.org.uk (zeniv.linux.org.uk [IPv6:2a03:a000:7:0:5054:ff:fe1c:15ff])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F093411833;
-        Mon, 31 Oct 2022 11:08:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=linux.org.uk; s=zeniv-20220401; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=XHJb5hgteMMf8oWdHH3UbrzQUbWcwhng1DESNpIa9ME=; b=sCHkX071CI2vNwJvjvz/IoWkcN
-        ADZhjlKi3s+qAi+OeDPueaYMKvPl9xxiKGHvwhehsVrvIiopIbVvImNKmnQzelxKhVbzUUAS4WF4s
-        0ZNdABnkGR9TSZAu+OY+XBG+5mVEjOHZhJbUSEtlRPmgGNBRcWBxKVEaGEBICVc9wy5ih557UbOia
-        /2kr63WLCzZWhoWohGxigHkxpFMNV46/HvYkp9L/6A0oK+n5feu9dqWmKrJ2q2jqujOzOB7vSFpaC
-        XYa5o/pkPFoCEWl9Vli0mAqemnP9ZpzmFHQw47lSfx9qBo3cAf8vkdWWE0aMzOoG+hScqiDlbLOil
-        RByfCFwA==;
-Received: from viro by zeniv.linux.org.uk with local (Exim 4.96 #2 (Red Hat Linux))
-        id 1opZCk-00GlEc-2D;
-        Mon, 31 Oct 2022 18:08:10 +0000
-Date:   Mon, 31 Oct 2022 18:08:10 +0000
-From:   Al Viro <viro@zeniv.linux.org.uk>
-To:     Jann Horn <jannh@google.com>
-Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>
-Subject: Re: [PATCH v2] fs: use acquire ordering in __fget_light()
-Message-ID: <Y2APCmYNjYOYLf8G@ZenIV>
-References: <20221031175256.2813280-1-jannh@google.com>
+        Mon, 31 Oct 2022 14:11:03 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 465CFF14;
+        Mon, 31 Oct 2022 11:11:03 -0700 (PDT)
+Received: from g550jk.arnhem.chello.nl (31-151-115-246.dynamic.upc.nl [31.151.115.246])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 9CB72CFEA4;
+        Mon, 31 Oct 2022 18:10:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1667239831; bh=i42qv3Hr7FKl1J9sbq/JpgJ5uEkM4T+MkVM2bNzRhiM=;
+        h=From:To:Cc:Subject:Date;
+        b=p4AKdEyMBjJaQy6L/iBRhDsawnvL23pKZa9JuT2DiGgCQWcuMHAPZu0Hl2/5/moCQ
+         E184udnL7SwQCbg5AVRNgd/QsnfnDuhy6XkZxP8aW8kgQzLa86zLVjjo16mikNVE+p
+         /ZpbMe8M8gsumqZbyIoIy0TnWXrDzvjsikkC6ksM=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        afd@ti.com, Luca Weiss <luca@z3ntu.xyz>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/2] ARM: dts: qcom-pma8084: fix vadc channel node names
+Date:   Mon, 31 Oct 2022 19:10:21 +0100
+Message-Id: <20221031181022.947412-1-luca@z3ntu.xyz>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221031175256.2813280-1-jannh@google.com>
-Sender: Al Viro <viro@ftp.linux.org.uk>
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 06:52:56PM +0100, Jann Horn wrote:
-> We must prevent the CPU from reordering the files->count read with the
-> FD table access like this, on architectures where read-read reordering is
-> possible:
-> 
->     files_lookup_fd_raw()
->                                   close_fd()
->                                   put_files_struct()
->     atomic_read(&files->count)
-> 
-> I would like to mark this for stable, but the stable rules explicitly say
-> "no theoretical races", and given that the FD table pointer and
-> files->count are explicitly stored in the same cacheline, this sort of
-> reordering seems quite unlikely in practice...
+The spmi-vadc bindings require the '@' in the node.
 
-Looks sane, but looking at the definition of atomic_read_acquire...  ouch.
+Additionally change the node name to adc-chan which both makes it a
+generic node name and also removes the underscore from it.
 
-static __always_inline int
-atomic_read_acquire(const atomic_t *v)
-{
-        instrument_atomic_read(v, sizeof(*v));
-	return arch_atomic_read_acquire(v);
-}
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+---
+Changes in v2:
+* Make commit message more accurate
+* Make number actually hex in node address (made it decimal before)
 
-OK...
+ arch/arm/boot/dts/qcom-pma8084.dtsi | 17 +++++++++++------
+ 1 file changed, 11 insertions(+), 6 deletions(-)
 
-; git grep -n -w arch_atomic_read_acquire
-include/linux/atomic/atomic-arch-fallback.h:220:#ifndef arch_atomic_read_acquire
-include/linux/atomic/atomic-arch-fallback.h:222:arch_atomic_read_acquire(const atomic_t *v)
-include/linux/atomic/atomic-arch-fallback.h:235:#define arch_atomic_read_acquire arch_atomic_read_acquire
-include/linux/atomic/atomic-instrumented.h:35:  return arch_atomic_read_acquire(v);
-include/linux/atomic/atomic-long.h:529: return arch_atomic_read_acquire(v);
+diff --git a/arch/arm/boot/dts/qcom-pma8084.dtsi b/arch/arm/boot/dts/qcom-pma8084.dtsi
+index 0da6c1a5d547..2dd4c6aa71c9 100644
+--- a/arch/arm/boot/dts/qcom-pma8084.dtsi
++++ b/arch/arm/boot/dts/qcom-pma8084.dtsi
+@@ -64,22 +64,27 @@ pma8084_vadc: adc@3100 {
+ 			#size-cells = <0>;
+ 			#io-channel-cells = <1>;
+ 
+-			die_temp {
++			adc-chan@8 {
+ 				reg = <VADC_DIE_TEMP>;
+ 			};
+-			ref_625mv {
++
++			adc-chan@9 {
+ 				reg = <VADC_REF_625MV>;
+ 			};
+-			ref_1250v {
++
++			adc-chan@a {
+ 				reg = <VADC_REF_1250MV>;
+ 			};
+-			ref_buf_625mv {
++
++			adc-chan@c {
+ 				reg = <VADC_SPARE1>;
+ 			};
+-			ref_gnd {
++
++			adc-chan@e {
+ 				reg = <VADC_GND_REF>;
+ 			};
+-			ref_vdd {
++
++			adc-chan@f {
+ 				reg = <VADC_VDD_VADC>;
+ 			};
+ 		};
+-- 
+2.38.1
 
-No arch-specific instances, so...
-static __always_inline int
-arch_atomic_read_acquire(const atomic_t *v)
-{
-	int ret;
-
-	if (__native_word(atomic_t)) {
-		ret = smp_load_acquire(&(v)->counter);
-	} else {
-		ret = arch_atomic_read(v);
-		__atomic_acquire_fence();
-	}
-
-	return ret;
-}
-
-OK, but when would that test not be true?  We have unconditional
-typedef struct {
-        int counter;
-} atomic_t;
-and
-#define __native_word(t) \
-        (sizeof(t) == sizeof(char) || sizeof(t) == sizeof(short) || \
-         sizeof(t) == sizeof(int) || sizeof(t) == sizeof(long))
-
-Do we really have any architectures where a structure with one
-int field does *not* have a size that would satisfy that check?
-
-Is it future-proofing for masturbation sake, or am I missing something
-real here?
