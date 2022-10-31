@@ -2,79 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 225A8613C54
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:40:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 66640613C58
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:40:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230243AbiJaRk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 13:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38464 "EHLO
+        id S231378AbiJaRkc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 13:40:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230347AbiJaRkJ (ORCPT
+        with ESMTP id S231224AbiJaRkN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 13:40:09 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3B7113DCE;
-        Mon, 31 Oct 2022 10:39:49 -0700 (PDT)
-Received: from g550jk.arnhem.chello.nl (31-151-115-246.dynamic.upc.nl [31.151.115.246])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 372A3D03F3;
-        Mon, 31 Oct 2022 17:39:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1667237988; bh=bj+OfITge66Pd2VrekTMzTS9h8Rrw+YQRU9RDhOw/TM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=s5wi+pPmEzmUWRPz8Sd2NsgpNcnJQkuCqckioEnelV7anVoedB7eAsx+l7npnQYxa
-         iuIRFXbU831AKwqS0KF6nvGSnIDjl+MF0Eo7vHChZ0kVChWmVlhkS48dKk+jy6Iy0C
-         WUEU2XCnlWEV0N2przDqOl67SuLMki7f6P2U0LLE=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        afd@ti.com, Luca Weiss <luca@z3ntu.xyz>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 3/3] arm64: dts: qcom: pm8150b: change vbus-regulator node name
-Date:   Mon, 31 Oct 2022 18:39:33 +0100
-Message-Id: <20221031173933.936147-3-luca@z3ntu.xyz>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221031173933.936147-1-luca@z3ntu.xyz>
-References: <20221031173933.936147-1-luca@z3ntu.xyz>
+        Mon, 31 Oct 2022 13:40:13 -0400
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::226])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D88113CD4;
+        Mon, 31 Oct 2022 10:39:58 -0700 (PDT)
+Received: (Authenticated sender: i.maximets@ovn.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id AB716C0007;
+        Mon, 31 Oct 2022 17:39:55 +0000 (UTC)
+From:   Ilya Maximets <i.maximets@ovn.org>
+To:     netdev@vger.kernel.org
+Cc:     Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org,
+        Ilya Maximets <i.maximets@ovn.org>
+Subject: [PATCH net-next] net: tun: bump the link speed from 10Mbps to 10Gbps
+Date:   Mon, 31 Oct 2022 18:39:53 +0100
+Message-Id: <20221031173953.614577-1-i.maximets@ovn.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NEUTRAL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Use the node name as now defined in the spmi-pmic bindings.
+The 10Mbps link speed was set in 2004 when the ethtool interface was
+initially added to the tun driver.  It might have been a good
+assumption 18 years ago, but CPUs and network stack came a long way
+since then.
 
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+Other virtual ports typically report much higher speeds.  For example,
+veth reports 10Gbps since its introduction in 2007.
+
+Some userspace applications rely on the current link speed in
+certain situations.  For example, Open vSwitch is using link speed
+as an upper bound for QoS configuration if user didn't specify the
+maximum rate.  Advertised 10Mbps doesn't match reality in a modern
+world, so users have to always manually override the value with
+something more sensible to avoid configuration issues, e.g. limiting
+the traffic too much.  This also creates additional confusion among
+users.
+
+Bump the advertised speed to at least match the veth.
+
+Alternative might be to explicitly report UNKNOWN and let the user
+decide on a right value for them.  And it is indeed "the right way"
+of fixing the problem.  However, that may cause issues with bonding
+or with some userspace applications that may rely on speed value to
+be reported (even though they should not).  Just changing the speed
+value should be a safer option.
+
+Users can still override the speed with ethtool, if necessary.
+
+RFC discussion is linked below.
+
+Link: https://lore.kernel.org/lkml/20221021114921.3705550-1-i.maximets@ovn.org/
+Link: https://mail.openvswitch.org/pipermail/ovs-discuss/2022-July/051958.html
+Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
 ---
-Changes in v2:
-* New patch
-
- arch/arm64/boot/dts/qcom/pm8150b.dtsi | 2 +-
+ drivers/net/tun.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/pm8150b.dtsi b/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-index cdded791d96e..66752cc063d6 100644
---- a/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-+++ b/arch/arm64/boot/dts/qcom/pm8150b.dtsi
-@@ -53,7 +53,7 @@ pon@800 {
- 			status = "disabled";
- 		};
- 
--		pm8150b_vbus: dcdc@1100 {
-+		pm8150b_vbus: usb-vbus-regulator@1100 {
- 			compatible = "qcom,pm8150b-vbus-reg";
- 			status = "disabled";
- 			reg = <0x1100>;
+diff --git a/drivers/net/tun.c b/drivers/net/tun.c
+index 27c6d235cbda..48bb4a166ad4 100644
+--- a/drivers/net/tun.c
++++ b/drivers/net/tun.c
+@@ -3514,7 +3514,7 @@ static void tun_default_link_ksettings(struct net_device *dev,
+ {
+ 	ethtool_link_ksettings_zero_link_mode(cmd, supported);
+ 	ethtool_link_ksettings_zero_link_mode(cmd, advertising);
+-	cmd->base.speed		= SPEED_10;
++	cmd->base.speed		= SPEED_10000;
+ 	cmd->base.duplex	= DUPLEX_FULL;
+ 	cmd->base.port		= PORT_TP;
+ 	cmd->base.phy_address	= 0;
 -- 
-2.38.1
+2.37.3
 
