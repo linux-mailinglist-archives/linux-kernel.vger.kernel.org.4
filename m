@@ -2,105 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 263D1613F37
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 21:48:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC39B613F39
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 21:48:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbiJaUr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 16:47:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37858 "EHLO
+        id S229980AbiJaUsJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 16:48:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38022 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229494AbiJaUrz (ORCPT
+        with ESMTP id S229494AbiJaUsH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 16:47:55 -0400
-Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E23A13D05
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 13:47:54 -0700 (PDT)
-Received: by mail-ed1-x52d.google.com with SMTP id z18so14168432edb.9
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 13:47:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=S3e58SrwemEHObjbJRryliS78Tw/s51FyjKv68TB348=;
-        b=NwR2uyx1qYJ/OSkczGov1yrbCJlfZUHLYc7V80K7fR6Av4E/lkgvgC2N4c5Jjha+Z5
-         jaH2OsFlychVzGjLZkDKKA02W15tzyC4R3ZhbXPcrf/hLHnsec36Y/qabgv+YnYTDEEk
-         FfKNYvFz07Rqw9iXXQr2rs6+LBN22FWPN/B2rCm8elKjyvC+/UTQtxuRIyxn5SZryt0Z
-         CYMLCSr0gXaFSr/UvoIjxpIkW/zlOmFGnnuBQI+3hk4wGqIe1QB7OCfiiAZevLtUy5Z5
-         edJXeuMrBikg5uAIbnndvotxaGLwTcqhL3fduOekboSXt7Gxh9Y6NfjsZ7jAPUk/nSZp
-         AT2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=S3e58SrwemEHObjbJRryliS78Tw/s51FyjKv68TB348=;
-        b=3FrtaOvwNwew8fOKtfTC2D8dq0hdelN7F3kZ5DlkNgkLHrbf3ZZlSHCRer8y1ZKYqd
-         +4izHb/VoQQIAXcp06DMKT3tXGN01ZXHwGLd+f6sgMKdq0+7OdWcUXTBgtorPIJDKm6k
-         E4cZdqtllWTmgBC+ZbDwVQK+PM+//lLsH2TtSxmEfyjl7/vDr51swZGmydqFGyii6B0t
-         2WqUoRgK9ZDN0i1vSOVrWN59O7JRpjTwAeP2Db9MQcc3t1FKdRHgifzFeTCcu27bly6N
-         f5JVTToIIH1Brk9qXKZTAPv5qAmS++9+SvQNfu+rcDHsropi8TEp9BM4NkcbcJprVas8
-         stPA==
-X-Gm-Message-State: ACrzQf1cWWyXlraQTUZK27ntiJ4IRoyO1m78mUPgmFhr4SoT+AzpgzM6
-        pusOQzRBFrNGKv8V5Lng8NMDMwFqRmiq5e5zsw7ox0JLthE=
-X-Google-Smtp-Source: AMsMyM7gemIDs/xPxH55ukVoeGlszx5qd67EmMr1IOA6vi7/xHbMpqS4UBKJUmU6eG8KCtG6Z7qDJOGGolDtrXqF3vo=
-X-Received: by 2002:aa7:cfda:0:b0:461:9d22:3484 with SMTP id
- r26-20020aa7cfda000000b004619d223484mr16043612edy.142.1667249272975; Mon, 31
- Oct 2022 13:47:52 -0700 (PDT)
+        Mon, 31 Oct 2022 16:48:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B56E413F82;
+        Mon, 31 Oct 2022 13:48:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5F97AB81A5F;
+        Mon, 31 Oct 2022 20:48:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25DF4C433D6;
+        Mon, 31 Oct 2022 20:48:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667249283;
+        bh=O1v863hX945DEcIME2b4UEzO+vPVa0QHCHXH0He84SE=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=lKpgE8UBzPnYE8ZIlS9EGGNr9CAT9sceJxbPtgUhThoajOrAecoZ0vPcZ8ah1tWo1
+         hwwfXUyEGcWhpin0jwG2LpHUKnLoWDkeEinaP8h1zHn1wjd108e3It0LMrjKFaKPuB
+         kEH+FKBQl3Mpu6OG6PU0OI0bpDhsuv5dthQFr70iA5QuxE1hdHRHNHkU205EX/ZBCF
+         Ir1vIX7jv80QzH/dGbThZzXqy0evDjw2D5OVZEUYL8y1yNAuybCgA016r4lax0U8fB
+         XJcXsFZrCfM89PUTMI1reDy2MKSlWcp7+qbo4FiOEwPVWw4wgv2M3nWJBZ7g4Bw08w
+         RVOvVfQdjVhEA==
+Date:   Mon, 31 Oct 2022 20:47:57 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Rob Herring <robh@kernel.org>
+Cc:     Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
+        linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shengjiu Wang <shengjiu.wang@nxp.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        angelogioacchino.delregno@collabora.corp-partner.google.com,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: Re: [PATCH v1 1/2] ASoC: dt-bindings: Document dmic_sel-gpios
+ optional prop for two DMICs case
+Message-ID: <Y2A0fdwnHTqw/NDw@sirena.org.uk>
+References: <20221028102450.1161382-1-ajye_huang@compal.corp-partner.google.com>
+ <20221028102450.1161382-2-ajye_huang@compal.corp-partner.google.com>
+ <Y1vDYNOwZNOco1hq@sirena.org.uk>
+ <20221031184343.GA3235956-robh@kernel.org>
 MIME-Version: 1.0
-References: <20221028144241.634012-1-her0gyugyu@gmail.com> <CABVgOSmtD3GRV3hDoMw9EgMG4DPFWWK1SEDJT_yGDs7-CnwveA@mail.gmail.com>
-In-Reply-To: <CABVgOSmtD3GRV3hDoMw9EgMG4DPFWWK1SEDJT_yGDs7-CnwveA@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 31 Oct 2022 13:47:41 -0700
-Message-ID: <CAGS_qxqWcD6wsncncqtFR00QO1QcLPm3e1Vzjto3ah-NoE3+jg@mail.gmail.com>
-Subject: Re: [PATCH] kunit: alloc_string_stream_fragment error handling bug fix
-To:     David Gow <davidgow@google.com>
-Cc:     "YoungJun.park" <her0gyugyu@gmail.com>,
-        Brendan Higgins <brendan.higgins@linux.dev>,
-        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="pRY+kIEVcpKIGhxD"
+Content-Disposition: inline
+In-Reply-To: <20221031184343.GA3235956-robh@kernel.org>
+X-Cookie: Are you still an ALCOHOLIC?
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 29, 2022 at 8:20 PM 'David Gow' via KUnit Development
-<kunit-dev@googlegroups.com> wrote:
->
-> On Fri, Oct 28, 2022 at 10:43 PM YoungJun.park <her0gyugyu@gmail.com> wro=
-te:
-> >
-> > When it fails to allocate fragment, it does not free and return error.
-> > And check the pointer inappropriately.
-> >
-> > Signed-off-by: YoungJun.park <her0gyugyu@gmail.com>
-> > ---
->
-> Thanks! As Ma=C3=ADra points out, the added kunit_kfree() call isn't
-> strictly necessary, though it definitely doesn't hurt (and it's
-> probably a nice thing to free memory early if we're already in a
-> pretty dire memory situation). So I think it's an improvement.
->
-> The IS_ERR check is definitely a fix, though.
 
-Note: the IS_ERR check was fixed already in
-https://patchwork.kernel.org/project/linux-kselftest/patch/Y0kt1aCTHO4r2CmL=
-@kili/
-That change has made its way into torvalds/master.
-So we could rebase this patch and reword it to talk just about the
-early kfree().
+--pRY+kIEVcpKIGhxD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Re free memory early:
-It'll save us sizeof(struct string_stream_fragment) + sizeof(struct
-kunit_resource), i.e. 24 + 56 =3D 80 bytes (on UML/x86_64).
-So it's not much, but I guess it could help in edge cases.
+On Mon, Oct 31, 2022 at 01:43:43PM -0500, Rob Herring wrote:
+> On Fri, Oct 28, 2022 at 12:56:16PM +0100, Mark Brown wrote:
 
-Daniel
+> > If we're going to do this we should also allow the bindings to label the
+> > mics appropriately so that the control presented can reflect the actual
+> > hardware.  It does feel like it might fit better to do this separately
+> > to the DMIC driver as a mux between the DMIC and the DAI it's connected
+> > to but equally with the way things are at the minute that feels like
+> > it's probably disproportionate effort.
+
+> Are there other needs for DAI muxes? We already have a mux binding, so=20
+> defining a DAI mux would work for any type of muxing control, not just=20
+> GPIO.
+
+I suspect that anything that is more complex than a GPIO should be a
+full fledged CODEC with the muxing internal to the CODEC and just
+described that way.
+
+--pRY+kIEVcpKIGhxD
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNgNH0ACgkQJNaLcl1U
+h9CPiQf+LUWw1ke44xSDRkole2tffbqEgGrQ0COXYU/ML5N5/q7uaKxeDi1B+9d6
+d1ApwJ8uynaEU6uxxoBlgI1DECj4+1nKYVTujWBinU9jHlqNqbHld6urtcqC/CLC
+eNUAl/BvuvlgbPDnZVuRL5452ra73bPqZShjx3ZHEgDRBvBQ0Rk5sAms8TGIdg51
+yI4FY9XhHr3XCF/4GfZj2wKjip1mszPFOTvvwlmu6Dm1GQtTHffyMH5N2/u59MAy
+7F0qRipL6HTKkJ0aiPPOULHJfWX72vCik1o5VvlDTRGswbw/+9UWR2rM9Mj00F2F
+sv6gCaIhR0tvygxrEokN2LZkfFK9Lg==
+=gzmB
+-----END PGP SIGNATURE-----
+
+--pRY+kIEVcpKIGhxD--
