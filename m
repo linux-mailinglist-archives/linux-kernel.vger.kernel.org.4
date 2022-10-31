@@ -2,79 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 33D486138CC
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 15:15:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 262496138CD
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 15:16:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231264AbiJaOPk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 10:15:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60736 "EHLO
+        id S231206AbiJaOQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 10:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32810 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiJaOPg (ORCPT
+        with ESMTP id S229628AbiJaOQD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 10:15:36 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB6AF1131
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 07:14:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667225683;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=LTs94zq/shOCy359RmNZp+4/qUMkgxFrS5T5YTdFLQE=;
-        b=iadQHgxjWA4nOg4uP/1tWX9jxran0mRwmZw+3tdbMepB97epsMXjVDvj9ORfAaNWN3ME70
-        W9gMfmy19CEvcAlqlGdc27JizvSyPxklnwqtbvwFRZ924SQE97d1TjnsKfJ4PUwNmjaGf6
-        YjsX6nILAZlMqYrYUGUI/6I748UKxfE=
-Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
- [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-530-X0rTXUj4M66BU4ZaXuR86w-1; Mon, 31 Oct 2022 10:14:41 -0400
-X-MC-Unique: X0rTXUj4M66BU4ZaXuR86w-1
-Received: by mail-qk1-f199.google.com with SMTP id i11-20020a05620a404b00b006eeb0791c1aso9543891qko.10
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 07:14:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LTs94zq/shOCy359RmNZp+4/qUMkgxFrS5T5YTdFLQE=;
-        b=KfXMumS53x8/QRIh22jBR1UmtVFO/8llE7mRSpJmkO71WuDZsyHGFRDWGFkMRmqDRa
-         PZWZ58pxwO/NclMR2DWXea+JwAFHZs+GvxXNGTHYs+oYh73Lryugi5G0oUYusUU8ILZh
-         2FpjmGkJWvarDeLhhVCTncNA3dVxD76G2U7t+zjmPD/FNDBQRycmUfh5J4/2TC5XrEMt
-         xXcmaTLZnv0sanyvqBMsb+v8ybaIzllKCmQnd2HJfiT9bBhEqHgJf4Dq70bUpjUSqTDn
-         IZweAi2qf51XMjOm7z/YDmcDgSpkO2s/YMt5qb2y4ttTo0SQTy9V1xn72qV0j7sM7fyR
-         xUbQ==
-X-Gm-Message-State: ACrzQf2cpoq9nSx9iTpXiUdfRr9QC5fPKk0s+cT6sampdtEZ3ck4h8NK
-        HD57fNx2C/zVcmTA9Y9RUhYncvwTX2XpL474ifzWcjyILRma8tSH6Nuoz0AzN09kSiG+VQ4rRBn
-        5RkF3XDVW5kgyUOWL4m9NHvYp
-X-Received: by 2002:a05:620a:215e:b0:6e7:dafb:a71a with SMTP id m30-20020a05620a215e00b006e7dafba71amr9315729qkm.61.1667225681459;
-        Mon, 31 Oct 2022 07:14:41 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7bVyEw/34BP+lHFL+RXtnVPg+QNYFQTs2hEwQOQ7unwXixqknY5SeloWiMVBGh7TYvquRTlw==
-X-Received: by 2002:a05:620a:215e:b0:6e7:dafb:a71a with SMTP id m30-20020a05620a215e00b006e7dafba71amr9315706qkm.61.1667225681219;
-        Mon, 31 Oct 2022 07:14:41 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id h4-20020a05620a284400b006b615cd8c13sm4665283qkp.106.2022.10.31.07.14.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 07:14:40 -0700 (PDT)
-Date:   Mon, 31 Oct 2022 10:14:39 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        HORIGUCHI NAOYA <naoya.horiguchi@nec.com>,
-        Andrea Arcangeli <aarcange@redhat.com>
-Subject: Re: [PATCH 0/2] mm: Use pte marker for swapin errors
-Message-ID: <Y1/YT9/PcF6kx/gq@x1n>
-References: <20221030214151.402274-1-peterx@redhat.com>
- <87h6zkepog.fsf@yhuang6-desk2.ccr.corp.intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <87h6zkepog.fsf@yhuang6-desk2.ccr.corp.intel.com>
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        Mon, 31 Oct 2022 10:16:03 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D3CC1F19;
+        Mon, 31 Oct 2022 07:16:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 85281B8188F;
+        Mon, 31 Oct 2022 14:16:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 034ACC433D6;
+        Mon, 31 Oct 2022 14:15:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667225759;
+        bh=1NjzKCQeF90TceJVq9hppXxp0Gw2AH3DhTZPPlIhx/k=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qN0fneNmbZyBOAFNqYgzoXle0JuK84BF72xRAqDhcP1O+rNNLEE175NkKZRHrCJhk
+         cIIwHGA8DLqpCUYDMyB2qTRZhVplP5Vu1boT9VhROGwU8Rx0o7rGfkjIwca9CX3/XJ
+         U7ykerBYilVfbQXg63zyjVKTpudXDyR/kA3ABHyZmvkS6LRRJTj10hWTa7/IOv4PBs
+         i5XXV4KYPZoT0RnxbigwJaOeR2SLocGNTJWEudw4nqYBW3saRl0w16dhCvVxgpII8l
+         RECe2WIQro1nycClbeLMXdgruy00yx+4v/mtMizkZVYDJwEm9IRrt/PV3vTX9A5OGV
+         0Pt0dKE1BDgyg==
+Date:   Mon, 31 Oct 2022 23:15:56 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     rostedt@goodmis.org, mathieu.desnoyers@efficios.com,
+        dcook@linux.microsoft.com, alanau@linux.microsoft.com,
+        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/2] tracing/user_events: Remote write ABI
+Message-Id: <20221031231556.a15846fd3513641d48820d5b@kernel.org>
+In-Reply-To: <20221027224011.2075-1-beaub@linux.microsoft.com>
+References: <20221027224011.2075-1-beaub@linux.microsoft.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -82,28 +56,75 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 09:40:15AM +0800, Huang, Ying wrote:
-> Peter Xu <peterx@redhat.com> writes:
-> 
-> > rfc->v1:
-> > - Rename SWAP_ERROR -> SWAPIN_ERROR [David, Miaohe]
-> > - Added r-bs for Ying and Miaohe
-> >
-> > Hi,
-> >
-> > This series uses the pte marker to replace the swapin error swap entry,
-> > then we save one more swap entry slot for swap devices.  A new pte marker
-> > bit is defined.
-> 
-> Per my understanding, "swap entry" describes one swap page (4KB on x86)
-> in one swap device.  So, the original swapin error implementation uses
-> one swap file (or swap device) instead of one swap entry.  So your patch
-> saves one swap file (or swap device).
+Hi Beau,
 
-Yeah I was definitely not accurate enough, I wanted to use "slot" to mean
-"type" here but obviously I didn't make it, sorry.  Hopefully the whole
-patchset is still clear enough anyway so no reader will get confused by it.
+On Thu, 27 Oct 2022 15:40:09 -0700
+Beau Belgrave <beaub@linux.microsoft.com> wrote:
+
+> As part of the discussions for user_events aligned with user space
+> tracers, it was determined that user programs should register a 32-bit
+> value to set or clear a bit when an event becomes enabled. Currently a
+> shared page is being used that requires mmap().
+> 
+> In this new model during the event registration from user programs 2 new
+> values are specified. The first is the address to update when the event
+> is either enabled or disabled. The second is the bit to set/clear to
+> reflect the event being enabled. This allows for a local 32-bit value in
+> user programs to support both kernel and user tracers. As an example,
+> setting bit 31 for kernel tracers when the event becomes enabled allows
+> for user tracers to use the other bits for ref counts or other flags.
+> The kernel side updates the bit atomically, user programs need to also
+> update these values atomically.
+
+I think you means the kernel tracer (ftrace/perf) and user tracers (e.g. 
+LTTng) use the same 32bit data so that traced user-application only checks
+that data for checking an event is enabled, right?
+
+If so, who the user tracer threads updates the data bit? Is that thread
+safe to update both kernel tracer and user tracers at the same time?
+
+And what is the actual advantage of this change? Are there any issue
+to use mmaped page? I would like to know more background of this
+change.
+
+Could you also provide any sample program which I can play it? :)
+
+> User provided addresses must be aligned on a 32-bit boundary, this
+> allows for single page checking and prevents odd behaviors such as a
+> 32-bit value straddling 2 pages instead of a single page.
+> 
+> When page faults are encountered they are done asyncly via a workqueue.
+> If the page faults back in, the write update is attempted again. If the
+> page cannot fault-in, then we log and wait until the next time the event
+> is enabled/disabled. This is to prevent possible infinite loops resulting
+> from bad user processes unmapping or changing protection values after
+> registering the address.
+> 
+> NOTE:
+> User programs that wish to have the enable bit shared across forks
+> either need to use a MAP_SHARED allocated address or register a new
+> address and file descriptor. If MAP_SHARED cannot be used or new
+> registrations cannot be done, then it's allowable to use MAP_PRIVATE
+> as long as the forked children never update the page themselves. Once
+> the page has been updated, the page from the parent will be copied over
+> to the child. This new copy-on-write page will not receive updates from
+> the kernel until another registration has been performed with this new
+> address.
+> 
+> Beau Belgrave (2):
+>   tracing/user_events: Use remote writes for event enablement
+>   tracing/user_events: Fixup enable faults asyncly
+> 
+>  include/linux/user_events.h      |  10 +-
+>  kernel/trace/trace_events_user.c | 396 ++++++++++++++++++++-----------
+>  2 files changed, 270 insertions(+), 136 deletions(-)
+> 
+> 
+> base-commit: 23758867219c8d84c8363316e6dd2f9fd7ae3049
+> -- 
+> 2.25.1
+> 
+
 
 -- 
-Peter Xu
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
