@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1EAF614188
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 00:22:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5E79461418A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 00:22:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229691AbiJaXWU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 19:22:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40470 "EHLO
+        id S229907AbiJaXWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 19:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229798AbiJaXWN (ORCPT
+        with ESMTP id S229846AbiJaXWO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 19:22:13 -0400
-Received: from mail-wr1-x42a.google.com (mail-wr1-x42a.google.com [IPv6:2a00:1450:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0429915808;
-        Mon, 31 Oct 2022 16:22:12 -0700 (PDT)
-Received: by mail-wr1-x42a.google.com with SMTP id a14so18049534wru.5;
-        Mon, 31 Oct 2022 16:22:11 -0700 (PDT)
+        Mon, 31 Oct 2022 19:22:14 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B2C15810;
+        Mon, 31 Oct 2022 16:22:13 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id y16so18011105wrt.12;
+        Mon, 31 Oct 2022 16:22:13 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=kyD58U8XfTPLhP8L6dYQRdSftQvUir8wfXrJ1EL57to=;
-        b=TNYP7upQ+XliKy6Oy7PDt04rpganc5iZE4z0navqKYlnSR/R7ix1GtEMsNLSqDj2QI
-         AmXDEXzES5/rm9GUZmpRVlG+ZQhuTCFtsOQZUnqU2EJ6vEN7ShTffbPl91t58QJSb/8J
-         kZQk8XH8CzIxBQf9OxHSxdyz0FAMuyyZqLTvCcd2oDa656OiEFZp/lwgyl2aI3Gtpmti
-         rgiPkhc8Ok6ayKY8i0evCl7Mhp/flXoBlBlrdR3HDVFjPEB99hEX0ZnYOvm9EPx/iKur
-         XuCMtg+RKWWU3UpoAcQoD43iZ9IBy3I7jMAe9ViZ/TLqB0cyDwt5ZLaGN+YxHSYjXdY4
-         Mn5w==
+        bh=r9VHYXuPl7lW+Y4lOtJuafMlo94cKBcVsHf9qYkj+B8=;
+        b=qf0tMMl7snTqw2mpt9fryEeYpgvyZJbJ0NM8T0rxZudbdjYlSSzz2Y/dp35RwtmISC
+         up1dW4cn2X+ky4dtt75aP5ApvwXapf8dnzExcC6lwQ/PhSIMXfy5YVBjt0tcbZCp5f5J
+         CbsWgcSeYSkWwZihcpbq/7ycY1sT63Ppdt5oaHWPbBWuzfGScxt/9S1Yj7We+BAbZEaT
+         gOtp3Y3mLD+pfcFrNMpijr5V6FbCf7J6J2xwDMFraC/B/eTWTwKjGp/3cuSo9dTHL9HD
+         XCq8jqtREWmnYLszNnJsTQMNx748mzLtK0DtQM10PWho2gJE0+Y5yfC74H7Bw3Jsb4eu
+         Lo2A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=kyD58U8XfTPLhP8L6dYQRdSftQvUir8wfXrJ1EL57to=;
-        b=LcHPQY0YQ83/LNb2f68u9LANbOVoe0W4YLij8JCqzhB+3RZRyTRweTw55y63xyrmNO
-         vbGnSVKBm16XJMts6BcurY0Zeyjt2M5TsOJwOr7SJNXqmUcLn3cZlvWjApeOANdAqaAc
-         j8D1HwBjc0eHV+ZUibu20w80lOQ5+uJNKlkEoEauBEQ4PKOkYQ+2RwOWZqHVfBeztXJU
-         2UAmyDigNSTbQthL5skKKWjUI+Fe/fC7/+0ov/sAqNQ/E0yUHcWeZlI6LNYHl0goyzoq
-         JKUlfHiA35IVo5GJP/XzixTM6dosnW9AQjLBD5UWzcEETeKGduLZhBpswk2p8hc7EXzK
-         97YA==
-X-Gm-Message-State: ACrzQf2dAhK4cj4uD+fYB6OgCcdhzp8T/TVvuNKHKSliiaIzOHUlU2+d
-        jiqhmTQkZdE/BjiMx9JJ498=
-X-Google-Smtp-Source: AMsMyM4+nWVJ22rNl4L7Cw61VJfAK+GGQ3uEGtoGTMf8OXpswZoCAsaKIvLrAZEGv01WVC3JFOsbVw==
-X-Received: by 2002:a5d:44d2:0:b0:236:d8c5:122e with SMTP id z18-20020a5d44d2000000b00236d8c5122emr3142672wrr.611.1667258530433;
-        Mon, 31 Oct 2022 16:22:10 -0700 (PDT)
+        bh=r9VHYXuPl7lW+Y4lOtJuafMlo94cKBcVsHf9qYkj+B8=;
+        b=jV/oKax3QRoOVFAtvBAAwXnBIvr3jhbeSi58iVqmYwpipKlb0Ub6DnBO7u5QoCvO6Y
+         zEqOqPcp/f8Y+CzaV4PQd573f/l97iGTkOAPayboz/1/N+w6TVoet/0BjmJRuXq440fc
+         b8ynSidvl8W5U88LX6aOFE32dT/yLu7+l5d4T/30gq6Oo/bBFYQrARg+YSCz7j6v35lZ
+         gxWW64PmauD+VEWbCEFJTYzdCr2l4h5pixY0gZT8WoQvZXw32clv6FEMlyj8I6qlcM27
+         3aJ5Xmg8e2M4wYLORbiEbp8/v/PJUBpx0VSQOpFrIpCRw3l9NeUavVzQQZd40Sfpii25
+         ncEg==
+X-Gm-Message-State: ACrzQf22JeF7KPl3wYs7dlKM6t6w57MvckltUNj8aKVME0CBx/iPgi/m
+        4JzOEhtDjC9Akg362M/UP0Y=
+X-Google-Smtp-Source: AMsMyM5232K+NHOFlqCTn5WLGMbE8QDMZMvrRDvJqDG488x9XN1/k8JSsvrExIamD5sOLVNyAJzIwQ==
+X-Received: by 2002:adf:cd86:0:b0:236:6056:14d3 with SMTP id q6-20020adfcd86000000b00236605614d3mr10035142wrj.30.1667258531659;
+        Mon, 31 Oct 2022 16:22:11 -0700 (PDT)
 Received: from prasmi.home ([2a00:23c8:2501:c701:15da:d6ab:ec79:436])
-        by smtp.gmail.com with ESMTPSA id l24-20020a1c7918000000b003cf7928e731sm2190343wme.9.2022.10.31.16.22.09
+        by smtp.gmail.com with ESMTPSA id l24-20020a1c7918000000b003cf7928e731sm2190343wme.9.2022.10.31.16.22.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 16:22:09 -0700 (PDT)
+        Mon, 31 Oct 2022 16:22:11 -0700 (PDT)
 From:   Prabhakar <prabhakar.csengg@gmail.com>
 X-Google-Original-From: Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
 To:     Sakari Ailus <sakari.ailus@linux.intel.com>,
@@ -72,9 +72,9 @@ Cc:     Shawn Tu <shawnx.tu@intel.com>, Jacopo Mondi <jacopo@jmondi.org>,
         Prabhakar <prabhakar.csengg@gmail.com>,
         Biju Das <biju.das.jz@bp.renesas.com>,
         Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: [PATCH v4 3/9] ARM: dts: imx6qdl-wandboard: Drop clock-names property
-Date:   Mon, 31 Oct 2022 23:21:56 +0000
-Message-Id: <20221031232202.131945-4-prabhakar.mahadev-lad.rj@bp.renesas.com>
+Subject: [PATCH v4 4/9] arm64: dts: renesas: aistarvision-mipi-adapter-2.1: Drop clock-names property
+Date:   Mon, 31 Oct 2022 23:21:57 +0000
+Message-Id: <20221031232202.131945-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221031232202.131945-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
 References: <20221031232202.131945-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
@@ -99,29 +99,30 @@ This is in preparation for removal for clock-names property from the DT
 binding.
 
 Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Acked-by: Shawn Guo <shawnguo@kernel.org>
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+Acked-by: Geert Uytterhoeven <geert+renesas@glider.be>
 ---
 v3->V4
-* Included Ack from Shawn
+* Included Ack/RB from Geert
 
 v3
 * New patch
 ---
- arch/arm/boot/dts/imx6qdl-wandboard.dtsi | 1 -
+ arch/arm64/boot/dts/renesas/aistarvision-mipi-adapter-2.1.dtsi | 1 -
  1 file changed, 1 deletion(-)
 
-diff --git a/arch/arm/boot/dts/imx6qdl-wandboard.dtsi b/arch/arm/boot/dts/imx6qdl-wandboard.dtsi
-index ec6fba5ee8fd..e4f63423d8ee 100644
---- a/arch/arm/boot/dts/imx6qdl-wandboard.dtsi
-+++ b/arch/arm/boot/dts/imx6qdl-wandboard.dtsi
-@@ -131,7 +131,6 @@ camera@3c {
- 		pinctrl-0 = <&pinctrl_ov5645>;
+diff --git a/arch/arm64/boot/dts/renesas/aistarvision-mipi-adapter-2.1.dtsi b/arch/arm64/boot/dts/renesas/aistarvision-mipi-adapter-2.1.dtsi
+index 7ce986f0a06f..7cb5c958aece 100644
+--- a/arch/arm64/boot/dts/renesas/aistarvision-mipi-adapter-2.1.dtsi
++++ b/arch/arm64/boot/dts/renesas/aistarvision-mipi-adapter-2.1.dtsi
+@@ -65,7 +65,6 @@ &MIPI_OV5645_PARENT_I2C {
+ 	ov5645: ov5645@3c {
+ 		compatible = "ovti,ov5645";
  		reg = <0x3c>;
- 		clocks = <&clks IMX6QDL_CLK_CKO2>;
 -		clock-names = "xclk";
+ 		clocks = <&osc25250_clk>;
  		clock-frequency = <24000000>;
- 		vdddo-supply = <&reg_1p8v>;
- 		vdda-supply = <&reg_2p8v>;
+ 		vdddo-supply = <&ov5645_vdddo_1v8>;
 -- 
 2.25.1
 
