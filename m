@@ -2,90 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BF192613601
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 13:22:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A94FA6136FB
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 13:53:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231362AbiJaMWx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 08:22:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48772 "EHLO
+        id S231285AbiJaMx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 08:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36896 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231336AbiJaMWt (ORCPT
+        with ESMTP id S230527AbiJaMx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 08:22:49 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2574F039
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 05:22:15 -0700 (PDT)
-Received: from dggpeml500026.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N1Bwv2Wv0zVjBx;
-        Mon, 31 Oct 2022 20:17:19 +0800 (CST)
-Received: from dggpeml500018.china.huawei.com (7.185.36.186) by
- dggpeml500026.china.huawei.com (7.185.36.106) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 31 Oct 2022 20:22:14 +0800
-Received: from huawei.com (10.67.174.191) by dggpeml500018.china.huawei.com
- (7.185.36.186) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 31 Oct
- 2022 20:22:13 +0800
-From:   Zhang Qiao <zhangqiao22@huawei.com>
-To:     <mingo@redhat.com>, <peterz@infradead.org>,
-        <juri.lelli@redhat.com>, <vincent.guittot@linaro.org>
-CC:     <zhangqiao22@huawei.com>, <dietmar.eggemann@arm.com>,
-        <rostedt@goodmis.org>, <bsegall@google.com>, <mgorman@suse.de>,
-        <bristot@redhat.com>, <vschneid@redhat.com>, <brauner@kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH next 2/2] sched: Fix sched_child_runs_first
-Date:   Mon, 31 Oct 2022 20:51:13 +0800
-Message-ID: <20221031125113.72980-3-zhangqiao22@huawei.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221031125113.72980-1-zhangqiao22@huawei.com>
-References: <20221031125113.72980-1-zhangqiao22@huawei.com>
+        Mon, 31 Oct 2022 08:53:26 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF707F59B
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 05:53:25 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id AD4D76602387;
+        Mon, 31 Oct 2022 12:53:23 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667220804;
+        bh=hnFiepKNZT31pHoNxZvk70yYkyK1gU+Ahp8W5ZKMecw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=delCIGyAXICYlknRExX3yUmYgdvpSSFiye1VZi9PmAXRVGN3+4X/NPbOFkSEpV4yr
+         bbv7pMmCDjA/74wp3ERVA2wEi1NAuP/4Gi9fQkdLokJgvMM12gXXVlnbkyiZJaXZaO
+         SgPeQETwgnE5beJSkWmm3fw1SPFZ2R9m3lMsQ0zFep0Q0HGmxRR0/FXjcgiUPcSIx8
+         y9aEqN4bN4hNb+pk8TYdWU7NZtVQfiko4mX+Aj8dYKpZji5mbmEVu22hlqmdPRD03z
+         CBdjrx19qRfvyDcChYl01vuU4ZwlrVTo2bCxmU7EiqItzNijHnnHSzbetETTSUsSHL
+         IOqRNUR9WPPOQ==
+Message-ID: <f36e8fa1-4c53-32b8-a569-99cb07f288be@collabora.com>
+Date:   Mon, 31 Oct 2022 13:53:21 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.191]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- dggpeml500018.china.huawei.com (7.185.36.186)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH 5/8] ASoC: rt5682s: Support dbvdd and ldo1-in supplies
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     kernel@collabora.com, Jaroslav Kysela <perex@perex.cz>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Oder Chiou <oder_chiou@realtek.com>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        linux-kernel@vger.kernel.org
+References: <20221028205540.3197304-1-nfraprado@collabora.com>
+ <20221028205540.3197304-6-nfraprado@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221028205540.3197304-6-nfraprado@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are two cases that the sched_child_runs_first maybe not
-work fine:
-1) when call clone3() with CLONE_INTO_CGROUP flags, will creating
-the child task into a cgroup different from the parent's cgroup,
-so that child and parent's cfs_rq is diffent.
-2) Assign a different cpu to the new task when fork balancing.
+Il 28/10/22 22:55, Nícolas F. R. A. Prado ha scritto:
+> Add support for the dbvdd and ldo1-in supplies.
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-Above two case, the child and the parent will attach to different
-cpu and cfs_rq. At this time, we can't swap the child and parent's
-vruntime, and i think only do swap vruntime when the parent and
-child in the same cfs_rq. This patch will add the cfs_rq check
-before swap vruntime.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Signed-off-by: Zhang Qiao <zhangqiao22@huawei.com>
----
- kernel/sched/fair.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
-
-diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-index 34845d425180..6061ceb1b7cb 100644
---- a/kernel/sched/fair.c
-+++ b/kernel/sched/fair.c
-@@ -11612,7 +11612,9 @@ static void task_fork_fair(struct task_struct *p)
- 	}
- 	place_entity(cfs_rq, se, 1);
- 
--	if (sysctl_sched_child_runs_first && curr && entity_before(curr, se)) {
-+	if (sysctl_sched_child_runs_first &&
-+		cfs_rq == task_cfs_rq(current) &&
-+		curr && entity_before(curr, se)) {
- 		/*
- 		 * Upon rescheduling, sched_class::put_prev_task() will place
- 		 * 'current' within the tree based on its new key value.
--- 
-2.17.1
 
