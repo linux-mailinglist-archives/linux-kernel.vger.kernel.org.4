@@ -2,109 +2,169 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3560B6139FE
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 16:27:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A99066139FF
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 16:27:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231835AbiJaP1P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 11:27:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55446 "EHLO
+        id S231609AbiJaP1r (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 11:27:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231187AbiJaP1N (ORCPT
+        with ESMTP id S230394AbiJaP1o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 11:27:13 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EEE426F7
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 08:27:11 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-116-ZgOqlFTPPOq0OlbjIZXOPQ-1; Mon, 31 Oct 2022 15:27:09 +0000
-X-MC-Unique: ZgOqlFTPPOq0OlbjIZXOPQ-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Mon, 31 Oct
- 2022 15:27:07 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.042; Mon, 31 Oct 2022 15:27:07 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Horatiu Vultur' <horatiu.vultur@microchip.com>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>
-Subject: RE: [PATCH net v2 0/3] net: lan966x: Fixes for when MTU is changed
-Thread-Topic: [PATCH net v2 0/3] net: lan966x: Fixes for when MTU is changed
-Thread-Index: AQHY7Kcu7Ao/FHDvc0OFOxRqKUrPo64oT9IwgABKM4CAAAFVEA==
-Date:   Mon, 31 Oct 2022 15:27:07 +0000
-Message-ID: <219ebe83a5ad4467937545ee5a0e77e4@AcuMS.aculab.com>
-References: <20221030213636.1031408-1-horatiu.vultur@microchip.com>
- <b75a7136030846f587e555763ef2750e@AcuMS.aculab.com>
- <20221031150133.2be5xr7cmuhr4gng@soft-dev3-1>
-In-Reply-To: <20221031150133.2be5xr7cmuhr4gng@soft-dev3-1>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Mon, 31 Oct 2022 11:27:44 -0400
+Received: from smtpout.efficios.com (smtpout.efficios.com [IPv6:2607:5300:203:5aae::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2751D1183E;
+        Mon, 31 Oct 2022 08:27:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1667230061;
+        bh=XQF0uYZeFpRGxhzIxZGFTrUIoIKqhTBlJXlq0c+4Msw=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=snV9JjA6JkELDZZqSCfTmGDyl5d7DjN0REsSuQGgbekuXqi4NWonFkUlvf/zCzHD8
+         uk2GI6yslbAxmYLkIF5hQCAceabvqCv9uWe6PLbibP6HSfTvGHX7BInL3H24FIQUiz
+         8HUW4/qJ9qBovHkEgbQFCZGTUfqWFDAZmtwLxtABJgX71bUAmzed6sRgdG6G4OlDQA
+         iHaj5Ajvr++qUgGMZ4XplhycMfaD/eEfenpZbSSiijViSHItqApqJSnpjSCpi/G+Bv
+         hUaiuRvd6sJRQ3wMTKPn7wOYwbeCxX/2bwb70XN4V4wxdHWoW/MmNPRpsn7tBtNHTg
+         D2Q2SQwdrhcVA==
+Received: from [172.16.0.153] (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4N1H8Y2mB2z11ZY;
+        Mon, 31 Oct 2022 11:27:41 -0400 (EDT)
+Message-ID: <bdb09819-6aaf-c879-56fc-3d795d94dde7@efficios.com>
+Date:   Mon, 31 Oct 2022 11:27:46 -0400
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [RFC PATCH 0/2] tracing/user_events: Remote write ABI
 Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>,
+        Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     rostedt@goodmis.org, dcook@linux.microsoft.com,
+        alanau@linux.microsoft.com, linux-trace-devel@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221027224011.2075-1-beaub@linux.microsoft.com>
+ <20221031231556.a15846fd3513641d48820d5b@kernel.org>
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+In-Reply-To: <20221031231556.a15846fd3513641d48820d5b@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogJ0hvcmF0aXUgVnVsdHVyJw0KPiBTZW50OiAzMSBPY3RvYmVyIDIwMjIgMTU6MDINCj4g
-DQo+IFRoZSAxMC8zMS8yMDIyIDEwOjQzLCBEYXZpZCBMYWlnaHQgd3JvdGU6DQo+ID4NCj4gPiBG
-cm9tOiBIb3JhdGl1IFZ1bHR1cg0KPiA+ID4gU2VudDogMzAgT2N0b2JlciAyMDIyIDIxOjM3DQo+
-IA0KPiBIaSBEYXZpZCwNCj4gDQo+ID4gPg0KPiA+ID4gVGhlcmUgd2VyZSBtdWx0aXBsZSBwcm9i
-bGVtcyBpbiBkaWZmZXJlbnQgcGFydHMgb2YgdGhlIGRyaXZlciB3aGVuDQo+ID4gPiB0aGUgTVRV
-IHdhcyBjaGFuZ2VkLg0KPiA+ID4gVGhlIGZpcnN0IHByb2JsZW0gd2FzIHRoYXQgdGhlIEhXIHdh
-cyBtaXNzaW5nIHRvIGNvbmZpZ3VyZSB0aGUgY29ycmVjdA0KPiA+ID4gdmFsdWUsIGl0IHdhcyBt
-aXNzaW5nIEVUSF9ITEVOIGFuZCBFVEhfRkNTX0xFTi4gVGhlIHNlY29uZCBwcm9ibGVtIHdhcw0K
-PiA+ID4gd2hlbiB2bGFuIGZpbHRlcmluZyB3YXMgZW5hYmxlZC9kaXNhYmxlZCwgdGhlIE1SVSB3
-YXMgbm90IGFkanVzdGVkDQo+ID4gPiBjb3JyZXRseS4gV2hpbGUgdGhlIGxhc3QgaXNzdWUgd2Fz
-IHRoYXQgdGhlIEZETUEgd2FzIGNhbGN1bGF0ZWQgd3JvbmdseQ0KPiA+ID4gdGhlIGNvcnJlY3Qg
-bWF4aW11bSBNVFUuDQo+ID4NCj4gPiBJSVJDIGFsbCB0aGVzZSBsZW5ndGhzIGFyZSAxNTE0LCAx
-NTE4IGFuZCBtYXliZSAxNTIyPw0KPiANCj4gQW5kIGFsc28gMTUyNiwgaWYgdGhlIGZyYW1lIGhh
-cyAyIHZsYW4gdGFncy4NCj4gDQo+ID4gSG93IGxvbmcgYXJlIHRoZSBhY3R1YWwgcmVjZWl2ZSBi
-dWZmZXJzPw0KPiA+IEknZCBndWVzcyB0aGV5IGhhdmUgdG8gYmUgcm91bmRlZCB1cCB0byBhIHdo
-b2xlIG51bWJlciBvZiBjYWNoZSBsaW5lcw0KPiA+IChlc3BlY2lhbGx5IG9uIG5vbi1jb2hlcmVu
-dCBzeXN0ZW1zKSBzbyBhcmUgcHJvYmFibHkgMTUzNiBieXRlcy4NCj4gDQo+IFRoZSByZWNlaXZl
-IGJ1ZmZlcnMgY2FuIGJlIGRpZmZlcmVudCBzaXplcywgaXQgY2FuIGJlIHVwIHRvIDY1ay4NCj4g
-VGhleSBhcmUgY3VycmVudGx5IGFsbGlnbiB0byBwYWdlIHNpemUuDQoNCklzIHRoYXQgbmVjZXNz
-YXJ5Pw0KSSBkb24ndCBrbm93IHdoZXJlIHRoZSBidWZmZXJzIGFyZSBhbGxvY2F0ZWQsIGJ1dCBl
-dmVuIDRrIHNlZW1zDQphIGJpdCBwcm9mbGlnYXRlIGZvciBub3JtYWwgZXRoZXJuZXQgbXR1Lg0K
-SWYgdGhlIHBhZ2Ugc2l6ZSBpZiBsYXJnZXIgaXQgaXMgZXZlbiBzaWxsaWVyLg0KDQpJZiB0aGUg
-YnVmZmVyIGlzIGVtYmVkZGVkIGluIGFuIHNrYiB5b3UgcmVhbGx5IHdhbnQgdGhlIHNrYg0KdG8g
-YmUgdW5kZXIgNGsgKEkgZG9uJ3QgdGhpbmsgYSAxNTAwIGJ5dGUgbXR1IGNhbiBmaXQgaW4gMmsp
-Lg0KDQpCdXQgeW91IG1pZ2h0IGFzIHdlbGwgdGVsbCB0aGUgaGFyZHdhcmUgdGhlIGFjdHVhbCBi
-dWZmZXIgbGVuZ3RoDQoocmVtZW1iZXIgdG8gYWxsb3cgZm9yIHRoZSBjcmMgYW5kIGFueSBhbGln
-bm1lbnQgaGVhZGVyKS4NCg0KPiA+DQo+ID4gSWYgZHJpdmVyIGRvZXMgc3VwcG9ydCA4aysganVt
-Ym8gZnJhbWVzIGp1c3Qgc2V0IHRoZSBoYXJkd2FyZQ0KPiA+IGZyYW1lIGxlbmd0aCB0byBtYXRj
-aCB0aGUgcmVjZWl2ZSBidWZmZXIgc2l6ZS4NCj4gDQo+IEluIHRoYXQgY2FzZSBJIHNob3VsZCBh
-bHdheXMgYWxsb2NhdGUgbWF4aW11bSBmcmFtZSBzaXplKDY1aykgZm9yIGFsbA0KPiByZWdhcmRs
-ZXNzIG9mIHRoZSBNVFU/DQoNClRoYXQgd291bGQgYmUgdmVyeSB3YXN0ZWZ1bC4gSSdkIHNldCB0
-aGUgYnVmZmVyIGxhcmdlIGVub3VnaCBmb3INCnRoZSBtdHUgYnV0IGxldCB0aGUgaGFyZHdhcmUg
-ZmlsbCB0aGUgZW50aXJlIGJ1ZmZlci4NCg0KQWxsb2NhdGluZyA2NGsgYnVmZmVycyBmb3IgYmln
-IGp1bWJvIGZyYW1lcyBkb2Vzbid0IHNlZW0gcmlnaHQuDQpJZiB0aGUgbXR1IGlzIDY0ayB0aGVu
-IGttYWxsb2MoKSB3aWxsIGFsbG9jYXRlIDEyOGsuDQpUaGlzIGlzIGdvaW5nIHRvIGNhdXNlICdv
-ZGRpdGllcycgd2l0aCBzbWFsbCBwYWNrZXRzIHdoZXJlDQp0aGUgJ3RydWVfc2l6ZScgaXMgbWFz
-c2l2ZWx5IG1vcmUgdGhhbiB0aGUgZGF0YSBzaXplLg0KDQpJc24ndCB0aGVyZSBhIHNjaGVtZSB3
-aGVyZSB5b3UgY2FuIGNyZWF0ZSBhbiBza2IgZnJvbSBhIHBhZ2UNCmxpc3QgdGhhdCBjb250YWlu
-cyBmcmFnbWVudHMgb2YgdGhlIGV0aGVybmV0IGZyYW1lPw0KSW4gd2hpY2ggY2FzZSBJJ2QgaGF2
-ZSB0aG91Z2h0IHlvdSdkIHdhbnQgdG8gZmlsbCB0aGUgcmluZw0Kd2l0aCBwYWdlIHNpemUgYnVm
-ZmVycyBhbmQgdGhlbiBoYW5kbGUgdGhlIGhhcmR3YXJlIHdyaXRpbmcNCmEgbG9uZyBmcmFtZSB0
-byBtdWx0aXBsZSBidWZmZXJzL2Rlc2NyaXB0b3JzLg0KDQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJl
-ZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQsIE1vdW50IEZhcm0sIE1pbHRvbiBLZXlu
-ZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86IDEzOTczODYgKFdhbGVzKQ0K
+On 2022-10-31 10:15, Masami Hiramatsu (Google) wrote:
+> Hi Beau,
+> 
+> On Thu, 27 Oct 2022 15:40:09 -0700
+> Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> 
+>> As part of the discussions for user_events aligned with user space
+>> tracers, it was determined that user programs should register a 32-bit
+>> value to set or clear a bit when an event becomes enabled. Currently a
+>> shared page is being used that requires mmap().
+>>
+>> In this new model during the event registration from user programs 2 new
+>> values are specified. The first is the address to update when the event
+>> is either enabled or disabled. The second is the bit to set/clear to
+>> reflect the event being enabled. This allows for a local 32-bit value in
+>> user programs to support both kernel and user tracers. As an example,
+>> setting bit 31 for kernel tracers when the event becomes enabled allows
+>> for user tracers to use the other bits for ref counts or other flags.
+>> The kernel side updates the bit atomically, user programs need to also
+>> update these values atomically.
+> 
+> I think you means the kernel tracer (ftrace/perf) and user tracers (e.g.
+> LTTng) use the same 32bit data so that traced user-application only checks
+> that data for checking an event is enabled, right?
+> 
+> If so, who the user tracer threads updates the data bit? Is that thread
+> safe to update both kernel tracer and user tracers at the same time?
+
+Yes, my plan is to have userspace tracer agent threads use atomic 
+increments/decrements to update the "enabled" state, and the kernel use 
+atomic bit set/clear to update the top bit. This should allow the state 
+to be updated concurrently without issues.
+
+> 
+> And what is the actual advantage of this change? Are there any issue
+> to use mmaped page? I would like to know more background of this
+> change.
+
+With this change we can allow a user-space process to manage userspace 
+tracing on its own, without any kernel support. Registering to user 
+events becomes entirely optional. So if a kernel does not provide user 
+events (either an old kernel or a kernel with CONFIG_USER_EVENTS=n), 
+userspace tracing still works.
+
+This also allows user-space tracers to co-exist with the user events ABI.
+
+> 
+> Could you also provide any sample program which I can play it? :)
+
+I've been working on a user-space static instrumentation library in the 
+recent weeks. I've left "TODO" items for integration with user events 
+ioctl/writev in the userspace code. See
+
+https://github.com/compudj/side
+
+There is now a build dependency on librseq to provide fast RCU read-side 
+to iterate on the array of userspace tracer callbacks:
+
+https://github.com/compudj/librseq
+
+(this dependency could be made optional in the future)
+
+I know Doug is working on his own private repository for userspace 
+instrumentation, and we share a lot of common goals.
+
+Thanks,
+
+Mathieu
+
+> 
+>> User provided addresses must be aligned on a 32-bit boundary, this
+>> allows for single page checking and prevents odd behaviors such as a
+>> 32-bit value straddling 2 pages instead of a single page.
+>>
+>> When page faults are encountered they are done asyncly via a workqueue.
+>> If the page faults back in, the write update is attempted again. If the
+>> page cannot fault-in, then we log and wait until the next time the event
+>> is enabled/disabled. This is to prevent possible infinite loops resulting
+>> from bad user processes unmapping or changing protection values after
+>> registering the address.
+>>
+>> NOTE:
+>> User programs that wish to have the enable bit shared across forks
+>> either need to use a MAP_SHARED allocated address or register a new
+>> address and file descriptor. If MAP_SHARED cannot be used or new
+>> registrations cannot be done, then it's allowable to use MAP_PRIVATE
+>> as long as the forked children never update the page themselves. Once
+>> the page has been updated, the page from the parent will be copied over
+>> to the child. This new copy-on-write page will not receive updates from
+>> the kernel until another registration has been performed with this new
+>> address.
+>>
+>> Beau Belgrave (2):
+>>    tracing/user_events: Use remote writes for event enablement
+>>    tracing/user_events: Fixup enable faults asyncly
+>>
+>>   include/linux/user_events.h      |  10 +-
+>>   kernel/trace/trace_events_user.c | 396 ++++++++++++++++++++-----------
+>>   2 files changed, 270 insertions(+), 136 deletions(-)
+>>
+>>
+>> base-commit: 23758867219c8d84c8363316e6dd2f9fd7ae3049
+>> -- 
+>> 2.25.1
+>>
+> 
+> 
+
+-- 
+Mathieu Desnoyers
+EfficiOS Inc.
+https://www.efficios.com
 
