@@ -2,238 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7C833613B93
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 17:43:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 38520613B89
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 17:42:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231974AbiJaQni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 12:43:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36610 "EHLO
+        id S231661AbiJaQmV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 12:42:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbiJaQnd (ORCPT
+        with ESMTP id S230440AbiJaQmS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 12:43:33 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59C7ECD4;
-        Mon, 31 Oct 2022 09:43:32 -0700 (PDT)
-Received: from g550jk.arnhem.chello.nl (31-151-115-246.dynamic.upc.nl [31.151.115.246])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id BA143C6FDC;
-        Mon, 31 Oct 2022 16:43:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1667234610; bh=M53toyw0XjOLokY+OGsj+ziubQl095Z+dltFG/nkEnY=;
-        h=From:To:Cc:Subject:Date;
-        b=gFL/XGPsApW1UnCQGDwnDD1UCUp8MJELdkzcN781/Q/H3PYyVaD0h6z7BkO+y8WHm
-         sqcT6iHZNqFEz+Z1HqfzEkEKuvGErJpQpRkyol3WJoBlXoSZsROlqUQwmUZ/zEhuu2
-         FIgXr2prD8cr+QKtsUvZbgeYJC8XNT+IE5LBVYao=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     linux-input@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        afd@ti.com, Luca Weiss <luca@z3ntu.xyz>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] dt-bindings: input: Convert ti,drv260x to DT schema
-Date:   Mon, 31 Oct 2022 17:41:41 +0100
-Message-Id: <20221031164141.919134-1-luca@z3ntu.xyz>
-X-Mailer: git-send-email 2.38.1
+        Mon, 31 Oct 2022 12:42:18 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 986692AC2
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:42:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667234537; x=1698770537;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=4Bordm8n7C3xVeQBvOSrA59fGvKoYiwKyVINkpri/O0=;
+  b=VZIdpQkZxS2b3gM5m5ijvAsBfn4X9j3pShvxgUmJEnXOzxWqsdIwVgGd
+   YytZXDzD8jh3kDAa6gm25vGAvjwY1q5Zfzp2dIRsp3CRj9AHRum6XDKGg
+   vliTfP31ArQ2u3R5AJr7hWGUsHmpsB+b8eQkLs9v6c3r5oNNKRu1AU8/6
+   IZvGLTxABWgHlj7x+PxlTlij0Wqc3+2Gq2aNHeYBjKYyKTr49mFiqMCxI
+   2sXifC2Nn2aIwd9j5ueLKj69wgIgUaddUYMcKfIdoQ5bBfSP7UiPoqY4q
+   3ioOh95X56Q7Pk/i+StYf/E4bIkBvikTZu16MbLhSTh0iNbs3rsjXu5Uh
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="310033805"
+X-IronPort-AV: E=Sophos;i="5.95,228,1661842800"; 
+   d="scan'208";a="310033805"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 09:42:17 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="808611623"
+X-IronPort-AV: E=Sophos;i="5.95,228,1661842800"; 
+   d="scan'208";a="808611623"
+Received: from jfbondi-mobl1.amr.corp.intel.com (HELO [10.212.163.129]) ([10.212.163.129])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 09:42:16 -0700
+Message-ID: <812cb868-1729-8d78-cf91-1e63c7933fae@intel.com>
+Date:   Mon, 31 Oct 2022 09:42:15 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 1/2] x86/tdx: Extract GET_INFO call from get_cc_mask()
+Content-Language: en-US
+To:     "Kirill A. Shutemov" <kirill@shutemov.name>
+Cc:     "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
+        tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        luto@kernel.org, peterz@infradead.org,
+        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
+        dan.j.williams@intel.com, david@redhat.com, hpa@zytor.com,
+        seanjc@google.com, thomas.lendacky@amd.com,
+        elena.reshetova@intel.com, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221028141220.29217-1-kirill.shutemov@linux.intel.com>
+ <20221028141220.29217-2-kirill.shutemov@linux.intel.com>
+ <c97e9273-60b6-2ca7-1993-05bfbf471f3f@intel.com>
+ <20221028235951.p2vdu7drbbf3ccg7@box.shutemov.name>
+ <20221031041252.mdcjocqn6k4k4gvy@box.shutemov.name>
+From:   Dave Hansen <dave.hansen@intel.com>
+In-Reply-To: <20221031041252.mdcjocqn6k4k4gvy@box.shutemov.name>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert the drv260x haptics binding to DT schema format.
+On 10/30/22 21:12, Kirill A. Shutemov wrote:
+> On Sat, Oct 29, 2022 at 02:59:51AM +0300, Kirill A. Shutemov wrote:
+>>> Can you please take a look through this and make sure I didn't botch
+>>> anything:
+>>>
+>>>> https://git.kernel.org/pub/scm/linux/kernel/git/daveh/devel.git/log/?h=tdxbadve
+>>>
+>>> The end result is about 50 lines less than what was there before.  Most
+>>> of it is comment removal but the code is simpler too.
+>>>
+>>> Acks and Tested-by's would be appreciated.
+> 
+> One thing that I must bring up is that it seems that there's no way to get
+> the panic message to user. I tried to convinced myself that it is qemu
+> misconfiguration on my part or some race, but no: it is just too early for
+> earlyprintk.
+> 
+> We only get earlyprintk working after parse_early_options() which happens
+> well after tdx_early_init().
+> 
+> Moving panic() after earlyprintk working is not good idea as it exposes
+> kernel more: by the time we already have full #VE handler.
 
-The only notable change from .txt format is that vbat-supply is not
-actually required, so don't make it a required property.
+How about we soften the panic() to a pr_err() if it's a debug guest?
 
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
----
-@Andrew Davis: You maintain some other TI bindings, would you be willing
-to also maintain this one? It was originally written by Dan Murphy but
-apparently Dan no longer works for TI.
+The first thing a user is going to do if they get an early boot failure
+is flip the debug switch and try it again.  That gets us safe,
+well-defined behavior when we need security and also lets us figure out
+what went wrong.
 
-Changes since v1:
-* add $ref to types as suggested by Rob
-* change maintainer
+Also, did anyone ever actually implement that TDX earlyprintk simple
+console thing?  A TDCALL up to the host with some characters in a
+register or two is as dirt simple of a console as you can get.  It would
+be very easy to improve the user experience here if there were a:
 
- .../devicetree/bindings/input/ti,drv260x.txt  |  50 ---------
- .../devicetree/bindings/input/ti,drv260x.yaml | 102 ++++++++++++++++++
- 2 files changed, 102 insertions(+), 50 deletions(-)
- delete mode 100644 Documentation/devicetree/bindings/input/ti,drv260x.txt
- create mode 100644 Documentation/devicetree/bindings/input/ti,drv260x.yaml
+	tdx_puts("uh oh");
 
-diff --git a/Documentation/devicetree/bindings/input/ti,drv260x.txt b/Documentation/devicetree/bindings/input/ti,drv260x.txt
-deleted file mode 100644
-index 4c5312eaaa85..000000000000
---- a/Documentation/devicetree/bindings/input/ti,drv260x.txt
-+++ /dev/null
-@@ -1,50 +0,0 @@
--* Texas Instruments - drv260x Haptics driver family
--
--Required properties:
--	- compatible - One of:
--		"ti,drv2604" - DRV2604
--		"ti,drv2605" - DRV2605
--		"ti,drv2605l" - DRV2605L
--	- reg -  I2C slave address
--	- vbat-supply - Required supply regulator
--	- mode - Power up mode of the chip (defined in include/dt-bindings/input/ti-drv260x.h)
--		DRV260X_LRA_MODE - Linear Resonance Actuator mode (Piezoelectric)
--		DRV260X_LRA_NO_CAL_MODE - This is a LRA Mode but there is no calibration
--				sequence during init.  And the device is configured for real
--				time playback mode (RTP mode).
--		DRV260X_ERM_MODE - Eccentric Rotating Mass mode (Rotary vibrator)
--	- library-sel - These are ROM based waveforms pre-programmed into the IC.
--				This should be set to set the library to use at power up.
--				(defined in include/dt-bindings/input/ti-drv260x.h)
--		DRV260X_LIB_EMPTY - Do not use a pre-programmed library
--		DRV260X_ERM_LIB_A - Pre-programmed Library
--		DRV260X_ERM_LIB_B - Pre-programmed Library
--		DRV260X_ERM_LIB_C - Pre-programmed Library
--		DRV260X_ERM_LIB_D - Pre-programmed Library
--		DRV260X_ERM_LIB_E - Pre-programmed Library
--		DRV260X_ERM_LIB_F - Pre-programmed Library
--		DRV260X_LIB_LRA - Pre-programmed LRA Library
--
--Optional properties:
--	- enable-gpio - gpio pin to enable/disable the device.
--	- vib-rated-mv - The rated voltage of the actuator in millivolts.
--			  If this is not set then the value will be defaulted to
--			  3.2 v.
--	- vib-overdrive-mv - The overdrive voltage of the actuator in millivolts.
--			  If this is not set then the value will be defaulted to
--			  3.2 v.
--Example:
--
--haptics: haptics@5a {
--	compatible = "ti,drv2605l";
--	reg = <0x5a>;
--	vbat-supply = <&vbat>;
--	enable-gpio = <&gpio1 28 GPIO_ACTIVE_HIGH>;
--	mode = <DRV260X_LRA_MODE>;
--	library-sel = <DRV260X_LIB_LRA>;
--	vib-rated-mv = <3200>;
--	vib-overdrive-mv = <3200>;
--}
--
--For more product information please see the link below:
--http://www.ti.com/product/drv2605
-diff --git a/Documentation/devicetree/bindings/input/ti,drv260x.yaml b/Documentation/devicetree/bindings/input/ti,drv260x.yaml
-new file mode 100644
-index 000000000000..d8b9b9d5d9d9
---- /dev/null
-+++ b/Documentation/devicetree/bindings/input/ti,drv260x.yaml
-@@ -0,0 +1,102 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/input/ti,drv260x.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Texas Instruments - drv260x Haptics driver family
-+
-+maintainers:
-+  - Andrew Davis <afd@ti.com>
-+
-+properties:
-+  compatible:
-+    enum:
-+      - ti,drv2604
-+      - ti,drv2605
-+      - ti,drv2605l
-+
-+  reg:
-+    maxItems: 1
-+
-+  vbat-supply:
-+    description: Power supply to the haptic motor
-+
-+  mode:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      Power up mode of the chip
-+      (defined in include/dt-bindings/input/ti-drv260x.h)
-+
-+      DRV260X_LRA_MODE
-+        Linear Resonance Actuator mode (Piezoelectric)
-+
-+      DRV260X_LRA_NO_CAL_MODE
-+        This is a LRA Mode but there is no calibration sequence during init.
-+        And the device is configured for real time playback mode (RTP mode).
-+
-+      DRV260X_ERM_MODE
-+        Eccentric Rotating Mass mode (Rotary vibrator)
-+    enum: [ 0, 1, 2 ]
-+
-+  library-sel:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      These are ROM based waveforms pre-programmed into the IC.
-+      This should be set to set the library to use at power up.
-+      (defined in include/dt-bindings/input/ti-drv260x.h)
-+
-+      DRV260X_LIB_EMPTY - Do not use a pre-programmed library
-+      DRV260X_ERM_LIB_A - Pre-programmed Library
-+      DRV260X_ERM_LIB_B - Pre-programmed Library
-+      DRV260X_ERM_LIB_C - Pre-programmed Library
-+      DRV260X_ERM_LIB_D - Pre-programmed Library
-+      DRV260X_ERM_LIB_E - Pre-programmed Library
-+      DRV260X_ERM_LIB_F - Pre-programmed Library
-+      DRV260X_LIB_LRA - Pre-programmed LRA Library
-+    enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
-+
-+  enable-gpio:
-+    maxItems: 1
-+
-+  vib-rated-mv:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      The rated voltage of the actuator in millivolts.
-+      If this is not set then the value will be defaulted to 3200 mV.
-+
-+  vib-overdrive-mv:
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description: |
-+      The overdrive voltage of the actuator in millivolts.
-+      If this is not set then the value will be defaulted to 3200 mV.
-+
-+required:
-+  - compatible
-+  - reg
-+  - enable-gpio
-+  - mode
-+  - library-sel
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/gpio/gpio.h>
-+    #include <dt-bindings/input/ti-drv260x.h>
-+
-+    i2c {
-+        #address-cells = <1>;
-+        #size-cells = <0>;
-+
-+        haptics@5a {
-+            compatible = "ti,drv2605l";
-+            reg = <0x5a>;
-+            vbat-supply = <&vbat>;
-+            enable-gpio = <&gpio1 28 GPIO_ACTIVE_HIGH>;
-+            mode = <DRV260X_LRA_MODE>;
-+            library-sel = <DRV260X_LIB_LRA>;
-+            vib-rated-mv = <3200>;
-+            vib-overdrive-mv = <3200>;
-+        };
-+    };
--- 
-2.38.1
+interface.  It's a shame if it didn't get done by now.  I asked for it
+years ago.
+
+And, yeah, I know it wouldn't help us in this precise situation because
+earlyprintk doesn't work yet.  But, it *would* be one of those really,
+really early bitbanging-style consoles that _could_ be in use very, very
+early if the printk() infrastructure could take advantage of it.
+
+> We can move it earlier into decompresser which has different earlyprintk
+> implementation. Not sure if it worth this. What do you think?
+
+There's the puts()/printf() gunk that's really early like in
+validate_cpu().  Is that what you were thinking of?
 
