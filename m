@@ -2,51 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0B1096131D5
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 09:41:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 265AE6131D8
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 09:43:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbiJaIlt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 04:41:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32778 "EHLO
+        id S229933AbiJaInn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 04:43:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33778 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229711AbiJaIlo (ORCPT
+        with ESMTP id S229927AbiJaInl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 04:41:44 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DBB2AF5
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 01:41:40 -0700 (PDT)
-Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=bjornoya.blackshift.org)
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <mkl@pengutronix.de>)
-        id 1opQMK-0003sM-US; Mon, 31 Oct 2022 09:41:28 +0100
-Received: from pengutronix.de (unknown [IPv6:2a03:f580:87bc:d400:3c2a:13d:f861:4564])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        (Authenticated sender: mkl-all@blackshift.org)
-        by smtp.blackshift.org (Postfix) with ESMTPSA id 5A6AC10E681;
-        Mon, 31 Oct 2022 08:41:27 +0000 (UTC)
-Date:   Mon, 31 Oct 2022 09:41:19 +0100
-From:   Marc Kleine-Budde <mkl@pengutronix.de>
-To:     kernel test robot <lkp@intel.com>
-Cc:     Kenneth Lee <klee33@uw.edu>, oe-kbuild-all@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-Subject: Re: drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c:489:65:
- warning: array subscript 'struct kvaser_cmd_ext[0]' is partly outside array
- bounds of 'unsigned char[32]'
-Message-ID: <20221031084119.bt73s33ps5naz4eh@pengutronix.de>
-References: <202210310759.iwMoLzLT-lkp@intel.com>
+        Mon, 31 Oct 2022 04:43:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A44710A8
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 01:43:38 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16B0E61040
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 08:43:38 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 06681C433D6;
+        Mon, 31 Oct 2022 08:43:35 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667205817;
+        bh=ZORsrJ+DI1lsCWe5MTS/iD4Fym79i/CO9pTJG5NNgoQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=HGtiO1rrn5fISj2g8SbzKS1L2IFtrZ/5xVFdNzxLGc+il2TvvlrPA1ieXr1hxYo4D
+         f2p5Nwk/NuJxY3a5+YVakaNeS0V6VtA+k0EHwGDF9sw/MU49Ag2sFoE9Nt0lOhsAqO
+         774reLOCQpQZmJE0Rg43U+VqKhWdGLDS9JG+lvgG3dsMrNd641kpQqtQJxGGuSqtaU
+         inEwhnR4TM3ARuYXW39pbmC5p2+zmmeVFAkJnre7drgOhPHwE11mRDJlyD650C3oPn
+         HS8QwoM7xDROPlj83JLVmSBZLJX9brCgCuBP2wqOtVUybNX3uW086ny89Q03qM0XQV
+         O6pbOsMgj9bHg==
+Date:   Mon, 31 Oct 2022 10:43:24 +0200
+From:   Mike Rapoport <rppt@kernel.org>
+To:     Rebecca Mckeever <remckee0@gmail.com>
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        David Hildenbrand <david@redhat.com>
+Subject: Re: [PATCH v3 0/5] memblock tests: add tests for
+ memblock_alloc_exact_nid_raw
+Message-ID: <Y1+KrIyFAOZ/oNqp@kernel.org>
+References: <cover.1666203642.git.remckee0@gmail.com>
+ <20221031050006.GA15612@sophie>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="u63tyxrcg47sgpwk"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <202210310759.iwMoLzLT-lkp@intel.com>
-X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
-X-SA-Exim-Mail-From: mkl@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+In-Reply-To: <20221031050006.GA15612@sophie>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,109 +55,84 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Rebecca,
 
---u63tyxrcg47sgpwk
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+On Mon, Oct 31, 2022 at 12:00:06AM -0500, Rebecca Mckeever wrote:
+> Hi Mike,
+> 
+> I noticed that the memblock tree has been updated since I sent this
+> patch set. Do you want me to send an updated patch set applied on top of
+> the current tree?
 
-On 31.10.2022 07:35:36, kernel test robot wrote:
-> tree:   https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t master
-> head:   30a0b95b1335e12efef89dd78518ed3e4a71a763
-> commit: 00784da3e6b8c1f0e58d813272503d014de8f64b can: kvaser_usb: kvaser_=
-usb_hydra: Use kzalloc for allocating only one element
-> date:   8 weeks ago
-> config: i386-randconfig-r021-20221031
-> compiler: gcc-11 (Debian 11.3.0-8) 11.3.0
-> reproduce (this is a W=3D1 build):
->         # https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.=
-git/commit/?id=3D00784da3e6b8c1f0e58d813272503d014de8f64b
->         git remote add linus https://git.kernel.org/pub/scm/linux/kernel/=
-git/torvalds/linux.git
->         git fetch --no-tags linus master
->         git checkout 00784da3e6b8c1f0e58d813272503d014de8f64b
->         # save the config file
->         mkdir build_dir && cp config build_dir/.config
->         make W=3D1 O=3Dbuild_dir ARCH=3Di386 SHELL=3D/bin/bash
->=20
-> If you fix the issue, kindly add following tag where applicable
-> | Reported-by: kernel test robot <lkp@intel.com>
->=20
-> All warnings (new ones prefixed by >>):
->=20
->    In file included from include/linux/byteorder/little_endian.h:5,
->                     from arch/x86/include/uapi/asm/byteorder.h:5,
->                     from include/asm-generic/bitops/le.h:6,
->                     from arch/x86/include/asm/bitops.h:416,
->                     from include/linux/bitops.h:68,
->                     from include/linux/kernel.h:22,
->                     from arch/x86/include/asm/percpu.h:27,
->                     from arch/x86/include/asm/preempt.h:6,
->                     from include/linux/preempt.h:78,
->                     from include/linux/spinlock.h:55,
->                     from include/linux/swait.h:7,
->                     from include/linux/completion.h:12,
->                     from drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.=
-c:16:
->    drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c: In function 'kvaser=
-_usb_hydra_send_simple_cmd':
-> >> drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c:489:65: warning: arr=
-ay subscript 'struct kvaser_cmd_ext[0]' is partly outside array bounds of '=
-unsigned char[32]' [-Warray-bounds]
->      489 |                 ret =3D le16_to_cpu(((struct kvaser_cmd_ext *)=
-cmd)->len);
->    include/uapi/linux/byteorder/little_endian.h:37:51: note: in definitio=
-n of macro '__le16_to_cpu'
->       37 | #define __le16_to_cpu(x) ((__force __u16)(__le16)(x))
->          |                                                   ^
->    drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c:489:23: note: in exp=
-ansion of macro 'le16_to_cpu'
->      489 |                 ret =3D le16_to_cpu(((struct kvaser_cmd_ext *)=
-cmd)->len);
->          |                       ^~~~~~~~~~~
->    drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c:537:15: note: refere=
-ncing an object of size 32 allocated by 'kzalloc'
->      537 |         cmd =3D kzalloc(sizeof(*cmd), GFP_KERNEL);
->          |               ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+No need, the only actual conflict is in TODO, I'll fix it while applying.
+ 
+> On Wed, Oct 19, 2022 at 01:34:07PM -0500, Rebecca Mckeever wrote:
+> > These patches add tests for memblock_alloc_exact_nid_raw(). There are two
+> > sets of tests: range tests and NUMA tests. The range tests use a normal
+> > (i.e., UMA) simulated physical memory and set the nid to NUMA_NO_NODE. The
+> > NUMA tests use a simulated physical memory that is set up with multiple
+> > NUMA nodes. Additionally, most of the NUMA tests set nid != NUMA_NO_NODE.
+> > 
+> > For the range tests, the TEST_F_EXACT flag is used to run the same set of
+> > range tests used for memblock_alloc_try_nid_raw(). The NUMA tests have the
+> > same setup as the corresponding test for memblock_alloc_try_nid_raw(), but
+> > several of the memblock_alloc_exact_nid_raw() tests fail to allocate
+> > memory in setups where the memblock_alloc_try_nid_raw() test would
+> > allocate memory. Also, some memblock_alloc_exact_nid_raw() tests drop the
+> > lower limit of the requested range in order to allocate within the
+> > requested node, but the same setup in a memblock_alloc_try_nid_raw() test
+> > allocates within the requested range.
+> > 
+> > ---
+> > Changelog
+> > 
+> > v1 -> v2
+> > PATCH 0:
+> > - Add missing memblock_alloc_exact_nid_raw to subject line
+> > 
+> > v2 -> v3
+> > Based on feedback from David Hildenbrand:
+> > PATCH 1:
+> > - alloc_nid_api.c, alloc_nid_api.h, common.h:
+> >     + Add TEST_F_EXACT flag so that tests in alloc_nid_api.c can be run
+> >       with that flag to test memblock_alloc_exact_nid_raw()
+> > - alloc_exact_nid_api.c:
+> >     + Update to run range tests in alloc_nid_api.c with TEST_F_EXACT flag
+> >       instead of using a separate set of tests
+> > - alloc_nid_api.c:
+> >     + Rename tests and other functions by removing "_try" so that the
+> >       function names are general enough to refer to any of the
+> >       memblock_alloc_*nid*() functions of the memblock API
+> > ---
+> > 
+> > Rebecca Mckeever (5):
+> >   memblock tests: introduce range tests for memblock_alloc_exact_nid_raw
+> >   memblock tests: add top-down NUMA tests for
+> >     memblock_alloc_exact_nid_raw
+> >   memblock tests: add bottom-up NUMA tests for
+> >     memblock_alloc_exact_nid_raw
+> >   memblock tests: add generic NUMA tests for
+> >     memblock_alloc_exact_nid_raw
+> >   memblock tests: remove completed TODO item
+> > 
+> >  tools/testing/memblock/Makefile               |    2 +-
+> >  tools/testing/memblock/TODO                   |    7 +-
+> >  tools/testing/memblock/main.c                 |    2 +
+> >  .../memblock/tests/alloc_exact_nid_api.c      | 1113 +++++++++++++++++
+> >  .../memblock/tests/alloc_exact_nid_api.h      |   25 +
+> >  tools/testing/memblock/tests/alloc_nid_api.c  |  542 ++++----
+> >  tools/testing/memblock/tests/alloc_nid_api.h  |    1 +
+> >  tools/testing/memblock/tests/common.h         |    2 +
+> >  8 files changed, 1425 insertions(+), 269 deletions(-)
+> >  create mode 100644 tools/testing/memblock/tests/alloc_exact_nid_api.c
+> >  create mode 100644 tools/testing/memblock/tests/alloc_exact_nid_api.h
+> > 
+> > -- 
+> > 2.25.1
+> > 
+> Thanks,
+> Rebecca
 
-I think this is a false positive.
-
-The commit you're building 00784da3e6b8 ("can: kvaser_usb:
-kvaser_usb_hydra: Use kzalloc for allocating only one element") contains
-3e88445a3a5a ("can: kvaser_usb: silence a GCC 12 -Warray-bounds
-warning").
-
-In the latter commit, the -Warray-bounds warning was disabled, as gcc-12
-has some problem with it. However you're using gcc-11 (Debian 11.3.0-8)
-11.3.0 here. Don't know the status of gcc-11 with regards to that
-warning.
-
-In the mean time in 26117d92d001 ("can: kvaser_usb: Remove
--Warray-bounds exception") that was removed, as gcc-13 should be fixed.
-
-regards,
-Marc
-
---=20
-Pengutronix e.K.                 | Marc Kleine-Budde           |
-Embedded Linux                   | https://www.pengutronix.de  |
-Vertretung West/Dortmund         | Phone: +49-231-2826-924     |
-Amtsgericht Hildesheim, HRA 2686 | Fax:   +49-5121-206917-5555 |
-
---u63tyxrcg47sgpwk
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEBsvAIBsPu6mG7thcrX5LkNig010FAmNfiisACgkQrX5LkNig
-011hdQgArjtMO7ZspDwL/AFmWmY5KiCDgnwlDiH5Ic13zvPjWYgGImjm0/cC1wV0
-G13QgNe/NSoFgb77gSatWdhqCtZznYZB4tyWx6aezsWf6RE/NaI/I/kMadKlgmbd
-zgIvW7VwVOaLQmsH/eyXyhYLwoFPbF6RdLQknsKNSzFF5V0yki6G6ohmV3vpBzwc
-u0tvTeyjmH/GRm1kvPZMSttyaivBi7KJTwthxfURWpW0DatGUkY04E36ulOa328/
-HzTe1fkFPAUQtwdmNuc14b9xSPD17RY0DzJBLax3qJ7pUD1Xpzro4IKa++wEl5VY
-aQZN0xvRYTja3NI31xotpJIEy62tIA==
-=8rhB
------END PGP SIGNATURE-----
-
---u63tyxrcg47sgpwk--
+-- 
+Sincerely yours,
+Mike.
