@@ -2,174 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85994613AF4
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 17:05:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 774F1613AF7
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 17:05:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231621AbiJaQFP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 12:05:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36562 "EHLO
+        id S231670AbiJaQFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 12:05:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231134AbiJaQFN (ORCPT
+        with ESMTP id S231134AbiJaQFQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 12:05:13 -0400
-Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 050FDFCA
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:05:12 -0700 (PDT)
-Received: by mail-wr1-x434.google.com with SMTP id v1so16620776wrt.11
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:05:11 -0700 (PDT)
+        Mon, 31 Oct 2022 12:05:16 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89D00E6F;
+        Mon, 31 Oct 2022 09:05:15 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id j15so16649074wrq.3;
+        Mon, 31 Oct 2022 09:05:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=to:message-id:content-transfer-encoding:mime-version:subject:date
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vMcMEvm8w0Wh/uUg9tQfpvnyjGSnqr3OvUHb1KDw93o=;
-        b=wECf1T/hIprOVUIsVIa0UREMNhSTOAIqnqQYSEFB80mGeffnIa89iRuURvIgPdJyld
-         l/SMCaMmg3AwsliTcYeVdiCk90bnMY0lOEeiBrJyTWSROPB5CxWzSJzPpsPwnH33pRDF
-         uh3FcEUhf0UBDW0OB0W9Qt7hLGixoq4mqE1GlXSQzSa0wMHuWhcMfsbNFujkQ9f3wCn+
-         IXTsAhJqU7VdngqVFdCrOSShclp5ClEubDIAxTmt/4xGK5a75ag1HD+RYHN6v2WcUNmH
-         ebP5VjvN66Ecq5e4amJuj1w2bkPuzk/FpC4kc3Qkb+FK/h4Mn2VzWvgmrINM5Muhijfe
-         dbhw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=PxS8XgY58rZ4VDhvxJU0b70ZtHBRLLVJ+uq74m8Gs1k=;
+        b=hyack7EcpOyiPwyjHRIHKJLQhbUrLp0AJ0zvFdHUmhnIu1lDq9s3eCKQUGhvadB5BV
+         ciIzp2nvSz1F5UvDxW2KxqpNLj5SqNJX8SQoQpElrXCY2N7SYjwdRFl79IsJ19ekfRjv
+         /ZStuu/HNZExyVH6SclWWed1UgV/TbpIkE7i3zzXPV1aBhXwLEAqH5dJdOKp01kWmo8p
+         WamDMK/VUGacozrIBpoOkQKbb+TRLiADcsxJdlCsCX1QygqwcjaCZJG+mjEoJpvcyVWR
+         SUtyNdg2tM6VJOsFz1d4eylVu2dC1OTmnTxMY4tA6EVe6WC3zhcu+bGvf16V8CQH7NJk
+         a9GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:message-id:content-transfer-encoding:mime-version:subject:date
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vMcMEvm8w0Wh/uUg9tQfpvnyjGSnqr3OvUHb1KDw93o=;
-        b=JhR4NRUYRglk8HUjYCYeqHhG9BHNVtnIipxn9YwrcmQmWcBcGn9nhYypv0YUreVVxo
-         vLx2/kiE+IRSJSke6abi8vdTF/mW93fUtOIPQJma11T5bQ3bC6yTm8ea9N+mWBXHa86E
-         TAC8tbpcniy4sbdLXppKEX4ULObb6Qwp9CxVeqvzBo30WuI6dZXet5HOftyMCH5SVWwd
-         NIWZ/n527gKWw9lXcwvBE7B4gAU/wApMbWTe+YSnRH8IMWt3WrTX5emYV/WjKfP1dqrt
-         OH6pEUn5FCIcfyvOyXLTCvxuNn7LQgWJ1ynkUw18D1JIVBFlUJNM/ErlYOpZFQmA00xF
-         QaLg==
-X-Gm-Message-State: ACrzQf0rjjalmV7z6cCDYhYX5vTTwMDVz4lcko1oNRSIS8XoEe5zqpVX
-        TSN+2ocjX9GQCXTIcBb5rJFhww==
-X-Google-Smtp-Source: AMsMyM590cIRFkjODWNxwVVGHGZd5giq9uN++iUfG9ZTF7Xn08soE9JcRIp5EBhS977RbaA9zasSYA==
-X-Received: by 2002:adf:f5c4:0:b0:236:c419:710f with SMTP id k4-20020adff5c4000000b00236c419710fmr4787510wrp.56.1667232310598;
-        Mon, 31 Oct 2022 09:05:10 -0700 (PDT)
-Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id f18-20020a1cc912000000b003cf5ec79bf9sm7701997wmb.40.2022.10.31.09.05.09
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=PxS8XgY58rZ4VDhvxJU0b70ZtHBRLLVJ+uq74m8Gs1k=;
+        b=8NrzF1iqXem0jvKcXhOYAwmnjFP5YBzZLtGfMtVIdukqmVfU40uTqmjmJHqHhV0Tk/
+         whPa8Aa82VDWn1OaCGiyxsEL7UCID0u/jDDKIqrr2vlD1YVsu37dXJY2r5v6zWnPNN/n
+         3GYAvs6HKqb+N27wgX1wXWtOPffIi5hihdJhKyhVwn3WWNEiIvn/ozJo+FOzhWC4eCFg
+         t7ag7VWiEtYrbXtQgN1BMJGXsHdwuEQRXdYHPT37D52PpERoeXQIimrt6mLNpPBRYfvw
+         8BHA/NB48EaGKBvk5LukuVl5Xso/5oRAmeOVxIxLuRLmq41ooe/FQDwxsrQxqJBY7OaA
+         euLg==
+X-Gm-Message-State: ACrzQf1aQSiSq0DKJ6mDPainxDcmDfx8mnPM3kPgFnv8DMeIWXgW/RmG
+        8jky0x90YQ0A/SSyeOAXBYU=
+X-Google-Smtp-Source: AMsMyM64PHIVLvhZ0ao1bjSFCKEssEVa+yDVwEWtssjXxawjpYqunUVt2os8vbzvf+uoeZuASHGAeQ==
+X-Received: by 2002:adf:e288:0:b0:236:bf57:c2c6 with SMTP id v8-20020adfe288000000b00236bf57c2c6mr5719911wri.192.1667232313963;
+        Mon, 31 Oct 2022 09:05:13 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id f7-20020adff987000000b0022e6178bd84sm7478829wrr.8.2022.10.31.09.05.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 09:05:10 -0700 (PDT)
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Date:   Mon, 31 Oct 2022 17:05:07 +0100
-Subject: [PATCH v2] mfd: rk808: permit having multiple PMIC instances
+        Mon, 31 Oct 2022 09:05:13 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Khalid Aziz <khalid@gonehiking.org>,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: BusLogic: remove variable adapter_count
+Date:   Mon, 31 Oct 2022 16:05:12 +0000
+Message-Id: <20221031160512.872153-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20221025-rk808-multi-v2-0-d292d51ada81@linaro.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>,
-        Lee Jones <lee@kernel.org>, linux-kernel@vger.kernel.org
-X-Mailer: b4 0.10.1
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This set each cells id to PLATFORM_DEVID_NONE to allow multiple
-instances of each cell in case multiple PMICs handled by the rk808
-driver are probed.
+Variable adapter_count is just being incremented and it's never used
+anywhere else. The variable and the increment are redundant so
+remove it.
 
-This fixes probing a RK818 and a RK817 on the Odroid Go Ultra
-devices.
-
-Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
 ---
-Cc: Lee Jones <lee@kernel.org>
-Cc: linux-kernel@vger.kernel.org
----
-Changes in v2:
-- replaced -1 by PLATFORM_DEVID_NONE
-- Link to v1: https://lore.kernel.org/r/20221025-rk808-multi-v1-0-c07b7cf3fd67@linaro.org
----
- drivers/mfd/rk808.c | 26 ++++++++++++++++----------
- 1 file changed, 16 insertions(+), 10 deletions(-)
+ drivers/scsi/BusLogic.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/mfd/rk808.c b/drivers/mfd/rk808.c
-index e00da7c7e3b1..c9337c1fd748 100644
---- a/drivers/mfd/rk808.c
-+++ b/drivers/mfd/rk808.c
-@@ -137,58 +137,64 @@ static const struct resource rk817_charger_resources[] = {
- };
+diff --git a/drivers/scsi/BusLogic.c b/drivers/scsi/BusLogic.c
+index f2abffce2659..f7b7ffda1161 100644
+--- a/drivers/scsi/BusLogic.c
++++ b/drivers/scsi/BusLogic.c
+@@ -2198,7 +2198,7 @@ static int blogic_slaveconfig(struct scsi_device *dev)
  
- static const struct mfd_cell rk805s[] = {
--	{ .name = "rk808-clkout", },
--	{ .name = "rk808-regulator", },
--	{ .name = "rk805-pinctrl", },
-+	{ .name = "rk808-clkout", .id = PLATFORM_DEVID_NONE, },
-+	{ .name = "rk808-regulator", .id = PLATFORM_DEVID_NONE, },
-+	{ .name = "rk805-pinctrl", .id = PLATFORM_DEVID_NONE, },
- 	{
- 		.name = "rk808-rtc",
- 		.num_resources = ARRAY_SIZE(rtc_resources),
- 		.resources = &rtc_resources[0],
-+		.id = PLATFORM_DEVID_NONE,
- 	},
- 	{	.name = "rk805-pwrkey",
- 		.num_resources = ARRAY_SIZE(rk805_key_resources),
- 		.resources = &rk805_key_resources[0],
-+		.id = PLATFORM_DEVID_NONE,
- 	},
- };
+ static int __init blogic_init(void)
+ {
+-	int adapter_count = 0, drvr_optindex = 0, probeindex;
++	int drvr_optindex = 0, probeindex;
+ 	struct blogic_adapter *adapter;
+ 	int ret = 0;
  
- static const struct mfd_cell rk808s[] = {
--	{ .name = "rk808-clkout", },
--	{ .name = "rk808-regulator", },
-+	{ .name = "rk808-clkout", .id = PLATFORM_DEVID_NONE, },
-+	{ .name = "rk808-regulator", .id = PLATFORM_DEVID_NONE, },
- 	{
- 		.name = "rk808-rtc",
- 		.num_resources = ARRAY_SIZE(rtc_resources),
- 		.resources = rtc_resources,
-+		.id = PLATFORM_DEVID_NONE,
- 	},
- };
- 
- static const struct mfd_cell rk817s[] = {
--	{ .name = "rk808-clkout",},
--	{ .name = "rk808-regulator",},
-+	{ .name = "rk808-clkout", .id = PLATFORM_DEVID_NONE, },
-+	{ .name = "rk808-regulator", .id = PLATFORM_DEVID_NONE, },
- 	{
- 		.name = "rk805-pwrkey",
- 		.num_resources = ARRAY_SIZE(rk817_pwrkey_resources),
- 		.resources = &rk817_pwrkey_resources[0],
-+		.id = PLATFORM_DEVID_NONE,
- 	},
- 	{
- 		.name = "rk808-rtc",
- 		.num_resources = ARRAY_SIZE(rk817_rtc_resources),
- 		.resources = &rk817_rtc_resources[0],
-+		.id = PLATFORM_DEVID_NONE,
- 	},
--	{ .name = "rk817-codec",},
-+	{ .name = "rk817-codec", .id = PLATFORM_DEVID_NONE, },
- 	{
- 		.name = "rk817-charger",
- 		.num_resources = ARRAY_SIZE(rk817_charger_resources),
- 		.resources = &rk817_charger_resources[0],
-+		.id = PLATFORM_DEVID_NONE,
- 	},
- };
- 
- static const struct mfd_cell rk818s[] = {
--	{ .name = "rk808-clkout", },
--	{ .name = "rk808-regulator", },
-+	{ .name = "rk808-regulator", .id = PLATFORM_DEVID_NONE, },
- 	{
- 		.name = "rk808-rtc",
- 		.num_resources = ARRAY_SIZE(rtc_resources),
- 		.resources = rtc_resources,
-+		.id = PLATFORM_DEVID_NONE,
- 	},
- };
- 
-
----
-base-commit: 247f34f7b80357943234f93f247a1ae6b6c3a740
-change-id: 20221025-rk808-multi-65dd03a92705
-
-Best regards,
+@@ -2368,10 +2368,8 @@ static int __init blogic_init(void)
+ 					list_del(&myadapter->host_list);
+ 					scsi_host_put(host);
+ 					ret = -ENODEV;
+-				} else {
++				} else
+ 					scsi_scan_host(host);
+-					adapter_count++;
+-				}
+ 			}
+ 		} else {
+ 			/*
 -- 
-Neil Armstrong <neil.armstrong@linaro.org>
+2.37.3
+
