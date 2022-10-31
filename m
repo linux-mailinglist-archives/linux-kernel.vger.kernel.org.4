@@ -2,82 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6141A6141A6
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 00:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 545C76141BB
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 00:27:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbiJaXZV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 19:25:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44744 "EHLO
+        id S229926AbiJaX1h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 19:27:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiJaXZT (ORCPT
+        with ESMTP id S229469AbiJaX13 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 19:25:19 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 439A91115D;
-        Mon, 31 Oct 2022 16:25:18 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 29VNKdCk019914;
-        Mon, 31 Oct 2022 23:25:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : from : to : cc : references : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=JYksKW9i/ivZ02ZoqaKVZvP/OXs9/T1SBPtTC1ZwuPw=;
- b=oaupJA/+jYihECyTaKyLBvSSiyvJM8GtqGm1a1mD3l9/OLOIlarTwOCqxJowYSJVNY/5
- eP+OzhSZltt4iNXvhRz7OFvwt5ZWkHTLT8a7+26cA6y11CP+qKEzvoLhP2QH1S7aL/CC
- ILn/lwQIwh+eATR4YCkFIsO1jRly7ovqZOwjmeRpZD1rHqBJ9p7kCE8ocfUdk2t2adQJ
- nMhe1i52pvGujZulVXyPppQQgfHbB3nqnfVKXbHkg/PEkcI5b9omwRgGJrWhB3XlsAMF
- GrRl+mhWQTIAFXztzkjEgkvDdTjVPHkJ8gUvjUXlX2BeF53kfK7bPVVIjvVYsJ+y+BXT pQ== 
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kjqxcr07r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 31 Oct 2022 23:25:14 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29VNPEJG024490
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Mon, 31 Oct 2022 23:25:14 GMT
-Received: from [10.110.115.41] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 31 Oct
- 2022 16:25:13 -0700
-Message-ID: <5314f33d-dba0-ad86-0db8-9c1d16faec41@quicinc.com>
-Date:   Mon, 31 Oct 2022 16:25:13 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 3/4] arm64: dts: qcom: Add base QDU1000/QRU1000 DTSIs
-Content-Language: en-US
-From:   Melody Olvera <quic_molvera@quicinc.com>
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
+        Mon, 31 Oct 2022 19:27:29 -0400
+Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DED1116F;
+        Mon, 31 Oct 2022 16:27:26 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29VNRG2B106682;
+        Mon, 31 Oct 2022 18:27:16 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1667258836;
+        bh=jHI/aUgR1+2a2pnP1o8nAy+4Uo7MUyI0XA794KwZzDc=;
+        h=From:To:CC:Subject:Date;
+        b=aUCQeAJ6u73EtsHbgbsl8EYEJw2zIZiDVCQb0h9/C6UgIld3qxVOfamNW/chbnBN3
+         Z0UvlsG84Mw2d5IawyIgKhE+oIIKOnU/iPLpypk9IhnY/T9Gb3SNqkUtijlU2Uq5f2
+         dKKLhRh4/Ui97Vw9vs7uv4UHO4mehBxT+FXCY70c=
+Received: from DLEE110.ent.ti.com (dlee110.ent.ti.com [157.170.170.21])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29VNRGBR022956
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 31 Oct 2022 18:27:16 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE110.ent.ti.com
+ (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 31
+ Oct 2022 18:27:15 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Mon, 31 Oct 2022 18:27:15 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29VNRFrc080580;
+        Mon, 31 Oct 2022 18:27:15 -0500
+From:   Bryan Brattlof <bb@ti.com>
+To:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
         Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221026200429.162212-1-quic_molvera@quicinc.com>
- <20221026200429.162212-4-quic_molvera@quicinc.com>
- <ae4b2333-d243-17ee-1ebd-6b1c89eef9f3@linaro.org>
- <d109cbdf-1b0e-ff67-879c-d0955da4898e@quicinc.com>
-In-Reply-To: <d109cbdf-1b0e-ff67-879c-d0955da4898e@quicinc.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: ju0lmPWNIqTBiUW4THkEBfx-ZjpsCIyW
-X-Proofpoint-GUID: ju0lmPWNIqTBiUW4THkEBfx-ZjpsCIyW
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-10-31_21,2022-10-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 phishscore=0
- suspectscore=0 bulkscore=0 mlxlogscore=999 lowpriorityscore=0 adultscore=0
- clxscore=1015 impostorscore=0 mlxscore=0 priorityscore=1501 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2210310146
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Nishanth Menon <nm@ti.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Tero Kristo <kristo@kernel.org>
+CC:     Keerthy <j-keerthy@ti.com>, Linux PM <linux-pm@vger.kernel.org>,
+        Device Trees <devicetree@vger.kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        LKML ARM <linux-arm-kernel@lists.infradead.org>,
+        Bryan Brattlof <bb@ti.com>
+Subject: [PATCH v3 00/11] enable VTM node for all TI's K3 SoCs
+Date:   Mon, 31 Oct 2022 18:26:51 -0500
+Message-ID: <20221031232702.10339-1-bb@ti.com>
+X-Mailer: git-send-email 2.38.1
+MIME-Version: 1.0
+X-Developer-Signature: v=1; a=openpgp-sha256; l=3235; h=from:subject; bh=t48eTWhyQ1Ndm6/aGrh+jMu8C0oPX2tNXAsQQAQZpko=; b=owNCWmg5MUFZJlNZAFsGLgAAZP///n9/N7Wj/87+x34jWn7X6X+63H3s//vvxVvZ+dT7+9ywARmy iHqABo9QA0AGnqANAANAAANqAD1GgDQAAGjRoDRp+qaHqNNHqNAA02pvSYoZBGmgaGgGQaMmmnqNBo yA09Q0GmhkyBoABkBkMgAB6mQ00aZNDEaGhpo0yek0YhoyMRo2oyaMEA0ZDIyAxABoNAxHqBkDJkNB oGENAZAPRBo0DTBGI0yAAgRxCziCNE5BK6EgNv4DjHrKKcFK/aOIARBnc7w3M+FysEnvz8xDo5RE+D Amfc3VYerIQSIVX97CQ7I/U8D3aziK0unGjzVmdC08LRpQjh4ijWReyP+deGC4/VZNIrbhB8fVdGWB DJ38Fql2A83KTs0YK5NvWAS98JagKqyN++AAzolE5R58ArLO+nvIVrwEHoQ3YtamA6qLadYgstRgTt j7GlcU/3+lcbuukjAmyxK33Y7jA6JGQbSxoqyk/gUU4wLb4rAEy84Kjje1FoZajnxg7zgJ39BZF6lc 2S5aODhHFXr+S/i/zvf0an3QYVWAfpp56CIrEEoElzuE3oUSlRrCS0mPf5D4Vi+o8Vjf4bx3bs2hz6 MyqbGvOEVs2w8y7VpTeK8TBekQcw2rG7qxGY8qfqzLoFIDek48sIhCQ8/rVef+LuSKcKEgALYMXA==
+X-Developer-Key: i=bb@ti.com; a=openpgp; fpr=D3D177E40A38DF4D1853FEEF41B90D5D71D56CE0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,148 +74,81 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello again everyone!
+
+This series enables the VTM nodes for all of Texas Instrument's K3 SoCs
+
+Most of this series updates the k3_j72xx_bandgap driver to conditionally 
+map an eFuse region used by the j721e to work around an issue in its VTM 
+implementation and allows us to save the SPARE_FUSE region on other SoCs
+
+We can then update the device tree bindings for the driver and finally 
+define the VTM nodes for each device
+
+Thanks for reviewing again
+~Bryan
+
+****
+
+v2 -> v3 changes[0]:
+
+- removed a errant devm_iounmap() I introduced between patches in v2
+
+- collected tags
+
+v1 -> v2 changes[1]:
+
+- when removing 'fuse_base' from the 'k3_j72xx_bandgap' structure, I 
+  forgot to pass 'fuse_base' to get_efuse_values() 
+
+- removed the descriptions to the generic 'power-domains' property
+
+- incorporated Krzysztof's suggestions to the binding description
+
+- refactored binding to use allOf: if: {min,max}Items over what I was 
+  doing :) Thanks Krzysztof
 
 
-On 10/31/2022 2:49 PM, Melody Olvera wrote:
->
-> On 10/27/2022 8:21 AM, Krzysztof Kozlowski wrote:
->> On 26/10/2022 16:04, Melody Olvera wrote:
->>> Add the base DTSI files for QDU1000 and QRU1000 SoCs, including base
->>> descriptions of CPUs, GCC, RPMHCC, QUP, TLMM, and interrupt-controller
->>> to boot to shell with console on these SoCs.
->>>
->>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
->>> ---
->>>  arch/arm64/boot/dts/qcom/qdu1000.dtsi | 1406 +++++++++++++++++++++++++
->> Please use scripts/get_maintainers.pl to get a list of necessary people
->> and lists to CC.  It might happen, that command when run on an older
->> kernel, gives you outdated entries.  Therefore please be sure you base
->> your patches on recent Linux kernel.
-> Sure thing; we talked about this on a different patch.
->>>  arch/arm64/boot/dts/qcom/qru1000.dtsi |   27 +
->>>  2 files changed, 1433 insertions(+)
->>>  create mode 100644 arch/arm64/boot/dts/qcom/qdu1000.dtsi
->>>  create mode 100644 arch/arm64/boot/dts/qcom/qru1000.dtsi
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/qdu1000.dtsi b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
->>> new file mode 100644
->>> index 000000000000..76474106e931
->>> --- /dev/null
->>> +++ b/arch/arm64/boot/dts/qcom/qdu1000.dtsi
->>> @@ -0,0 +1,1406 @@
->>> +// SPDX-License-Identifier: BSD-3-Clause
->>> +/*
->>> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
->>> + */
->> (...)
->>
->>> +
->>> +	soc: soc@0 {
->>> +		#address-cells = <2>;
->>> +		#size-cells = <2>;
->>> +		ranges = <0 0 0 0 0x10 0>;
->>> +		dma-ranges = <0 0 0 0 0x10 0>;
->>> +		compatible = "simple-bus";
->>> +
->>> +		gcc: clock-controller@80000 {
->>> +			compatible = "qcom,gcc-qdu1000", "syscon";
->>> +			reg = <0x0 0x80000 0x0 0x1f4200>;
->>> +			#clock-cells = <1>;
->>> +			#reset-cells = <1>;
->>> +			#power-domain-cells = <1>;
->>> +			clocks = <&rpmhcc RPMH_CXO_CLK>, <&sleep_clk>;
->>> +			clock-names = "bi_tcxo", "sleep_clk";
->>> +		};
->>> +
->>> +		gpi_dma0: dma-controller@900000  {
->>> +			compatible = "qcom,sm6350-gpi-dma";
->> You should add here a specific compatible as well. Same in other places.
->> All places. I had impression we talked about this few times, so I don't
->> know what is missing on your side.
->>
->> This must be:
->> "qcom,qdu1000-gpi-dma", "qcom,sm6350-gpi-dma"
-> Got it. I talked to Stephan and he said either your suggestion or just using
-> preexisting compatibles would be ok. I thought it might be cleaner to not
-> have the qdu compats, but I'm fine either way.
-Coming back to this, it looks like this will fail dtb_check since compatible field is too long.
-Is there an adjustment to the binding which needs to be made here?
->>> +			#dma-cells = <3>;
->>> +			reg = <0x0 0x900000 0x0 0x60000>;
->>> +			interrupts = <GIC_SPI 244 IRQ_TYPE_LEVEL_HIGH>,
->>> +				     <GIC_SPI 245 IRQ_TYPE_LEVEL_HIGH>,
->>> +				     <GIC_SPI 246 IRQ_TYPE_LEVEL_HIGH>,
->>> +				     <GIC_SPI 247 IRQ_TYPE_LEVEL_HIGH>,
->>> +				     <GIC_SPI 248 IRQ_TYPE_LEVEL_HIGH>,
->>> +				     <GIC_SPI 249 IRQ_TYPE_LEVEL_HIGH>,
->>> +				     <GIC_SPI 250 IRQ_TYPE_LEVEL_HIGH>,
->>> +				     <GIC_SPI 251 IRQ_TYPE_LEVEL_HIGH>,
->>> +				     <GIC_SPI 252 IRQ_TYPE_LEVEL_HIGH>,
->>> +				     <GIC_SPI 253 IRQ_TYPE_LEVEL_HIGH>,
->>> +				     <GIC_SPI 254 IRQ_TYPE_LEVEL_HIGH>,
->>> +				     <GIC_SPI 255 IRQ_TYPE_LEVEL_HIGH>;
->>> +			dma-channels = <12>;
->>> +			dma-channel-mask = <0x3f>;
->>> +			iommus = <&apps_smmu 0xf6 0x0>;
->>> +		};
->>> +
->> (...)
->>
->>
->>> +
->>> +		tlmm: pinctrl@f000000 {
->>> +			compatible = "qcom,qdu1000-tlmm";
->>> +			reg = <0x0 0xf000000 0x0 0x1000000>;
->>> +			interrupts = <GIC_SPI 208 IRQ_TYPE_LEVEL_HIGH>;
->>> +			gpio-controller;
->>> +			#gpio-cells = <2>;
->>> +			interrupt-controller;
->>> +			#interrupt-cells = <2>;
->>> +			gpio-ranges = <&tlmm 0 0 151>;
->>> +			wakeup-parent = <&pdc>;
->>> +
->>> +			qup_uart0_default: qup-uart0-default-state {
->>> +				pins = "gpio6", "gpio7", "gpio8", "gpio9";
->>> +				function = "qup00";
->>> +			};
->>> +
->>> +			qup_i2c1_data_clk: qup-i2c1-data-clk-state {
->>> +				pins = "gpio10", "gpio11";
->>> +				function = "qup01";
->>> +				drive-strength = <2>;
->> Can we have some generic agreement where to put drive-strengths and bias?
->>
->> See also:
->> https://lore.kernel.org/linux-devicetree/20221026200357.391635-2-krzysztof.kozlowski@linaro.org/
->>
->> https://lore.kernel.org/lkml/CAD=FV=VUL4GmjaibAMhKNdpEso_Hg_R=XeMaqah1LSj_9-Ce4Q@mail.gmail.com/
-> Not sure how much two-sense I have for the conversation at large, but generally I agree with Doug's
-> point in the first paragraph. Pulls for this soc are consistent across boards so I don't think it makes
-> sense to move them to the board files here. I vote that these stay here.
->>> +				bias-pull-up;
->>> +			};
->> (...)
->>
->>> +		};
->>> +
->>> +		cpufreq_hw: cpufreq@17d90000 {
->>> +			compatible = "qcom,sm8250-cpufreq-epss", "qcom,cpufreq-epss";
->> This is not sm8250...
-> Ack.
->>> +			reg = <0x0 0x17d90000 0x0 0x1000>, <0x0 0x17d91000 0x0 0x1000>;
->>> +			reg-names = "freq-domain0", "freq-domain1";
->>> +			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
->>> +			clock-names = "xo", "alternate";
->>> +			#freq-domain-cells = <1>;
->>> +		};
->>> +
->>> +		gem_noc: interconnect@19100000 {
->>> +			reg = <0x0 0x19100000 0x0 0xB8080>;
->>> +			compatible = "qcom,qdu1000-gem-noc";
->>> +			#interconnect-cells = <1>;
->>> +			qcom,bcm-voters = <&apps_bcm_voter>;
->>> +		};
->>> +	};
->>>
-Thanks,
-Melody
+[0] https://lore.kernel.org/lkml/20221025191515.9151-1-bb@ti.com/
+[1] https://lore.kernel.org/lkml/20221011231727.8090-1-bb@ti.com/
+
+Bryan Brattlof (11):
+  thermal: k3_j72xx_bandgap: simplify k3_thermal_get_temp() function
+  thermal: k3_j72xx_bandgap: use bool for i2128 erratum flag
+  thermal: k3_j72xx_bandgap: remove fuse_base from structure
+  thermal: k3_j72xx_bandgap: map fuse_base only for erratum workaround
+  dt-bindings: thermal: k3-j72xx: elaborate on binding description
+  dt-bindings: thermal: k3-j72xx: conditionally require efuse reg range
+  arm64: dts: ti: k3-am64-main: add VTM node
+  arm64: dts: ti: k3-am62-wakeup: add VTM node
+  arm64: dts: ti: k3-j721e-mcu-wakeup: add VTM node
+  arm64: dts: ti: k3-j721s2-mcu-wakeup: add VTM node
+  arm64: dts: ti: k3-j7200-mcu-wakeup: add VTM node
+
+ .../bindings/thermal/ti,j72xx-thermal.yaml    |  35 +++++-
+ arch/arm64/boot/dts/ti/k3-am62-thermal.dtsi   |  33 ++++++
+ arch/arm64/boot/dts/ti/k3-am62-wakeup.dtsi    |   8 ++
+ arch/arm64/boot/dts/ti/k3-am62.dtsi           |   7 +-
+ arch/arm64/boot/dts/ti/k3-am64-main.dtsi      |   8 ++
+ arch/arm64/boot/dts/ti/k3-am64-thermal.dtsi   |  33 ++++++
+ arch/arm64/boot/dts/ti/k3-am64.dtsi           |   4 +
+ .../boot/dts/ti/k3-j7200-mcu-wakeup.dtsi      |   8 ++
+ arch/arm64/boot/dts/ti/k3-j7200-thermal.dtsi  |  47 ++++++++
+ arch/arm64/boot/dts/ti/k3-j7200.dtsi          |   3 +
+ .../boot/dts/ti/k3-j721e-mcu-wakeup.dtsi      |   9 ++
+ arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi  |  75 +++++++++++++
+ arch/arm64/boot/dts/ti/k3-j721e.dtsi          |   3 +
+ .../boot/dts/ti/k3-j721s2-mcu-wakeup.dtsi     |   8 ++
+ arch/arm64/boot/dts/ti/k3-j721s2-thermal.dtsi | 103 ++++++++++++++++++
+ arch/arm64/boot/dts/ti/k3-j721s2.dtsi         |   3 +
+ drivers/thermal/k3_j72xx_bandgap.c            |  67 ++++++------
+ 17 files changed, 420 insertions(+), 34 deletions(-)
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am62-thermal.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-am64-thermal.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j7200-thermal.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j721e-thermal.dtsi
+ create mode 100644 arch/arm64/boot/dts/ti/k3-j721s2-thermal.dtsi
+
+-- 
+2.38.1
+
