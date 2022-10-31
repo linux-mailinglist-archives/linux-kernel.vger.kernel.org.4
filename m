@@ -2,83 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E28FB613A0B
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 16:31:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88565613A12
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 16:33:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231820AbiJaPbw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 11:31:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37694 "EHLO
+        id S231702AbiJaPc7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 11:32:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231500AbiJaPbu (ORCPT
+        with ESMTP id S231313AbiJaPcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 11:31:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BEA2EE0C;
-        Mon, 31 Oct 2022 08:31:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id DCD23612CE;
-        Mon, 31 Oct 2022 15:31:48 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5173EC433D6;
-        Mon, 31 Oct 2022 15:31:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667230308;
-        bh=BMMxQzRtp0/nturtlwUebCCckGXZgOIXStC5INUt4Wc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=CqHJPzrYFCSFFf/lpPRROOPr4SeOsbXvWbOyJmFGfnDbPDqKNexEufBFRjOlT3/9e
-         Fd7Vmku4erJDalY2VikqCNHLCaYc6VYA6AXktbkZ2abZedDThhD8VBU2sAIAdG4jc+
-         GplHL7IwYP/R1CUCVr78o15wVngFIsAnwdBIouWojayG4e0MLr0mJmorQZhhr8+6EI
-         eNc9Y6aiNWtu9NZ1rAqf4aIlJz7dMUgGceyDNnSvzsrq4V2PE1Csp9J0s/XFskGZvC
-         hmCHbvrBFjaOBRsUrejtKZOGL9rJtf9fk3kSMk5MVYXruHXuZkDJhc25ZNAH+6UIOg
-         80m1XvZeBDYHw==
-Date:   Mon, 31 Oct 2022 15:31:41 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andy Gross <agross@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 05/11] dt-bindings: mfd: qcom-pm8xxx: document
- qcom,pm8921 as fallback of qcom,pm8018
-Message-ID: <Y1/qXQxVQce246Ct@google.com>
-References: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
- <20220928-mdm9615-dt-schema-fixes-v4-5-dac2dfaac703@linaro.org>
+        Mon, 31 Oct 2022 11:32:53 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBF311180C;
+        Mon, 31 Oct 2022 08:32:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667230373; x=1698766373;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=njbyewzlB0I61UcEx1gvn+c62w1UHRxU4mCpMpRMQrs=;
+  b=BGjKoZZzymt0S+u2dDNjrPIjUxF9104QNVg9JNSr5aCsrBOuUT+g6vnT
+   Clc5CFiQ/Z/6oTmVLo+ZRQFqBCZpYIuDTRCRKcSj+JGnqK99IPVVEtwpO
+   HDSzSHijiAh0iHitSlTYc+iGAoVUl5/9/pxJGQpRsZ0JSfyucGR4wAkdS
+   77n2Sn+hY8UedT+o77sT+dnQla1dQFwxwPNq8wyzPH49scuK2OuAzn30i
+   /ROPn2gZARyuoNpPbxp6gP7oO4NkedZCR4C6FeMdRPH+kUr6nvBFXhuDJ
+   vc25iYuEka0yQX+Ho35pP08+p23gz0yEw/G3q0s1xMU5B4HDMgEt8DVMc
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="292220951"
+X-IronPort-AV: E=Sophos;i="5.95,228,1661842800"; 
+   d="scan'208";a="292220951"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 08:32:34 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="611527071"
+X-IronPort-AV: E=Sophos;i="5.95,228,1661842800"; 
+   d="scan'208";a="611527071"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga006.jf.intel.com with ESMTP; 31 Oct 2022 08:32:29 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1opWm2-005Av2-1x;
+        Mon, 31 Oct 2022 17:32:26 +0200
+Date:   Mon, 31 Oct 2022 17:32:26 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Lee Jones <lee@kernel.org>
+Cc:     Gene Chen <gene_chen@richtek.com>,
+        Andrew Jeffery <andrew@aj.id.au>, linux-leds@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, Pavel Machek <pavel@ucw.cz>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sean Wang <sean.wang@mediatek.com>,
+        Kurt Kanzenbach <kurt@linutronix.de>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: Re: [PATCH v3 00/11] leds: deduplicate led_init_default_state_get()
+Message-ID: <Y1/qisszTjUL9ngU@smile.fi.intel.com>
+References: <20220906135004.14885-1-andriy.shevchenko@linux.intel.com>
+ <Y1gZ/zBtc2KgXlbw@smile.fi.intel.com>
+ <Y1+NHVS5ZJLFTBke@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220928-mdm9615-dt-schema-fixes-v4-5-dac2dfaac703@linaro.org>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <Y1+NHVS5ZJLFTBke@google.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 21 Oct 2022, Neil Armstrong wrote:
-
-> The PM8018 is used as compatible with PM8921 on the MDM9615, document this situation,
-> and an example section to validate this change.
+On Mon, Oct 31, 2022 at 08:53:49AM +0000, Lee Jones wrote:
+> On Tue, 25 Oct 2022, Andy Shevchenko wrote:
 > 
-> Reviewed-by: Rob Herring <robh@kernel.org>
-> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> ---
->  .../devicetree/bindings/mfd/qcom-pm8xxx.yaml       | 33 ++++++++++++++++++----
->  1 file changed, 28 insertions(+), 5 deletions(-)
+> > On Tue, Sep 06, 2022 at 04:49:53PM +0300, Andy Shevchenko wrote:
+> > > There are several users of LED framework that reimplement the
+> > > functionality of led_init_default_state_get(). In order to
+> > > deduplicate them move the declaration to the global header
+> > > (patch 2) and convert users (patche 3-11).
+> > 
+> > Dear LED maintainers, is there any news on this series? It's hanging around
+> > for almost 2 months now...
+> 
+> My offer still stands if help is required.
 
-Applied, thanks.
+From my point of view the LED subsystem is quite laggish lately (as shown by
+this patch series, for instance), which means that _in practice_ the help is
+needed, but I haven't got if we have any administrative agreement on that.
+
+Pavel?
 
 -- 
-Lee Jones [李琼斯]
+With Best Regards,
+Andy Shevchenko
+
+
