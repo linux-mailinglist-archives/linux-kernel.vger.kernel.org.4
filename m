@@ -2,125 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AE88F613B71
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 17:37:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B66F5613B72
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 17:38:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231790AbiJaQhX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 12:37:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52606 "EHLO
+        id S231601AbiJaQiX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 12:38:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52838 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231183AbiJaQhU (ORCPT
+        with ESMTP id S230244AbiJaQiL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 12:37:20 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B0015E56
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:37:19 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id k2so30884818ejr.2
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 09:37:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=OGDQThFOxauPDUbKkMnQ1WVxEo1L149BaHAo2/PIs94=;
-        b=jP/GNUvQTENsDaBdHVAlI7AfG4mal0HOq2Y3LVR3qDTk5EdDcfBxL/qwz1YXQUf7X5
-         NlH2gXW5xMoQqPWzBv6wKq+e3OGCGycAAkDhRY1gCDolIbKfCTCuNrThCN2oBFe5xyQG
-         OrFtT/5IBJiXBJKa01ZM2aUY7zfzE2pDz735px5sgA63NLS63B1+k+0m9i64ukpraY7h
-         jAxnODFQfVTrGEhvjISrbbWtE+RaHV6/0KbB5wTfU/GTlfgral0Y0oQjKZv6r9Ig2Cxx
-         sQTx2cwfcA4KBZbxsnwo9mw1oDRweYJMvS0WKLB4v7b0v5cC3g1YMhtca4bozPNbeoE3
-         gaxw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OGDQThFOxauPDUbKkMnQ1WVxEo1L149BaHAo2/PIs94=;
-        b=wTgK8zysvpK24jwf9TdNAmMyLdc5IoAskqUeanRkQQ+oIEf6/JJz8R+UunXEu+27Q8
-         4U5/hugCNiaogOeAwc2FzI5zec8Vme/UlU7QNeneeELggJxHWyQ5hIN5GWi8K/a2Klq9
-         oeugjMkAfm7idomDWCzsJZEXiBxwitiBV+ATyO7VnIIVd2UlIjOZkfEQl1fqAraEXYWi
-         2kk6NJIgEcZMLW8GDqbErTd2l61velmjj5c7m/RuryGfhlQn5vkCGVvRu8emN0Pi2A4B
-         hS1leyGbxYR8IpyLo5Q5N4d2D63nT6SFyzmOLJT3Sm40MlXir8mfzW7x07/FQWOLJ31Z
-         EJ3A==
-X-Gm-Message-State: ACrzQf3AOsvK7wSu/Fvp8DaaifBGPRsOZaPNBR6hxLHl9GLlffyIumO1
-        nmTYBLOXzYxfER8QYTn/vNcCahbMMcDq2M5Ibuf/Dw==
-X-Google-Smtp-Source: AMsMyM734FMFQBz6kY12hhzgcNd2bLkfehsbGWPgKwUgXJztlzYXlNFwg3IovBEtfdf5nF/ppcqBfhXtOgTYIoSKgdY=
-X-Received: by 2002:a17:907:86a0:b0:78d:df8b:4d17 with SMTP id
- qa32-20020a17090786a000b0078ddf8b4d17mr13518713ejc.254.1667234238076; Mon, 31
- Oct 2022 09:37:18 -0700 (PDT)
+        Mon, 31 Oct 2022 12:38:11 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id B32B1E56;
+        Mon, 31 Oct 2022 09:38:10 -0700 (PDT)
+Received: from W11-BEAU-MD.localdomain (unknown [76.135.50.127])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 56CB4205D39E;
+        Mon, 31 Oct 2022 09:38:10 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 56CB4205D39E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1667234290;
+        bh=eoB4WIcVJxPnSUB2SBUQtuVwlD4VPrTLUjgkauX4264=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E6b6v6xjfkWF3YvhPRtC6lYkPj6z+j71JyQ0vvi+thFmm/jv9oulWMVes63NV5UWL
+         aEaGd6Mvt5XZsIjIgcCIJhouU6Q1Fs1JRxTOl5cMOo1+lMNuWCs08aAYjqUS6A/f4U
+         fr1HAiPuUUtELRWFu7x2iQUBdpX84G36cpdd2Xv0=
+Date:   Mon, 31 Oct 2022 09:38:01 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Cc:     rostedt@goodmis.org, mhiramat@kernel.org,
+        dcook@linux.microsoft.com, alanau@linux.microsoft.com,
+        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/2] tracing/user_events: Use remote writes for event
+ enablement
+Message-ID: <20221031163749.GA69@W11-BEAU-MD.localdomain>
+References: <20221027224011.2075-1-beaub@linux.microsoft.com>
+ <20221027224011.2075-2-beaub@linux.microsoft.com>
+ <7cad3dde-b1c5-935d-23bc-61e98c3a7b07@efficios.com>
 MIME-Version: 1.0
-References: <20221028210256.3776835-1-dlatypov@google.com> <CABVgOS=uAVc_nKRFYRiQtWFykyfWH6hWASK-yd+ZnH5UNmRgsw@mail.gmail.com>
-In-Reply-To: <CABVgOS=uAVc_nKRFYRiQtWFykyfWH6hWASK-yd+ZnH5UNmRgsw@mail.gmail.com>
-From:   Daniel Latypov <dlatypov@google.com>
-Date:   Mon, 31 Oct 2022 09:37:06 -0700
-Message-ID: <CAGS_qxpghJUj+R74SFPjq=VDoNdVp7Wq2b+AcWwmHHeCQVjmPg@mail.gmail.com>
-Subject: Re: [PATCH 1/2] kunit: tool: make unit test not print parsed testdata
- to stdout
-To:     David Gow <davidgow@google.com>
-Cc:     brendanhiggins@google.com, rmoar@google.com,
-        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
-        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7cad3dde-b1c5-935d-23bc-61e98c3a7b07@efficios.com>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 29, 2022 at 8:31 PM David Gow <davidgow@google.com> wrote:
->
-> On Sat, Oct 29, 2022 at 5:03 AM Daniel Latypov <dlatypov@google.com> wrote:
-> >
-> > Currently, if you run
-> > $ ./tools/testing/kunit/kunit_tool_test.py
-> > you'll see a lot of output from the parser as we feed it testdata.
-> >
-> > This makes the output hard to read and fairly confusing, esp. since our
-> > testdata includes example failures, which get printed out in red.
-> >
-> > Silence that output so real failures are easier to see.
-> >
-> > Signed-off-by: Daniel Latypov <dlatypov@google.com>
-> > ---
->
-> Thanks -- this has been annoying me for ages.
->
-> That being said, this isn't a perfect fix, the "usage" text and
-> "Reconfiguring .config"  still show up for me:
-> ---
-> davidgow@slicestar:~/Development/linux-kselftest$
-> ./tools/testing/kunit/kunit_tool_test.py
-> ..............................usage: kunit_tool_test.py run [-h]
-> [--build_dir DIR] [--make_options X=Y] [--alltests] [--kunitconfig
-> PATHS] [--kconfig_add CONFIG_X=Y] [--arch ARCH] [--cross_compile
-> PREFIX] [--qemu_config FILE] [--qemu_ar
-> gs] [--jobs N]
->                              [--timeout SECONDS] [--kernel_args]
-> [--run_isolated {suite,test}] [--raw_output [{all,kunit}]] [--json
-> [FILE]]
->                              [filter_glob]
-> kunit_tool_test.py run: error: argument --raw_output: invalid choice:
-> 'invalid' (choose from 'all', 'kunit')
-> ..............................Generating .config ...
-> .Regenerating .config ...
-> .........
-> ----------------------------------------------------------------------
-> Ran 70 tests in 0.232s
->
-> OK
-> ---
->
-> That's still a significant improvement on what we had before, though, so:
+On Sat, Oct 29, 2022 at 10:44:32AM -0400, Mathieu Desnoyers wrote:
+> On 2022-10-27 18:40, Beau Belgrave wrote:
+> 
+> [...]
+> > diff --git a/include/linux/user_events.h b/include/linux/user_events.h
+> > index 592a3fbed98e..4c3bd16395a9 100644
+> > --- a/include/linux/user_events.h
+> > +++ b/include/linux/user_events.h
+> > @@ -33,12 +33,16 @@ struct user_reg {
+> >   	/* Input: Size of the user_reg structure being used */
+> >   	__u32 size;
+> > +	/* Input: Flags/common settings */
+> > +	__u32 enable_bit : 5, /* Bit in enable address to use (0-31) */
+> > +	      __reserved : 27;
+> 
+> I'm always worried about using C/C++ bitfields in uapi, because some
+> compilers (e.g. MS Windows Compiler) have different implementation of the
+> bitfields. See
+> 
+> gcc(1)
+> 
+> -Wnopacked-bitfield-compat
+> -mms-bitfields / -mno-ms-bitfields
+> 
 
-Yeah, I was originally going to make this patch silence all the output.
-But I figured I would focus this patch on just the code using our
-kunit_printer abstraction, aka the parser.
+Sure, I'll change this __u8.
 
-We could address the other ones, but we'd have to mock out the
-built-in print function.
-As someone who is guilty of print(f) debugging, doing that means I no
-longer have an easy of way of adding debugging code to those test
-cases :P
+> Thanks,
+> 
+> Mathieu
+> 
+> > +
+> > +	/* Input: Address to update when enabled */
+> > +	__u64 enable_addr;
+> > +
+> >   	/* Input: Pointer to string with event name, description and flags */
+> >   	__u64 name_args;
+> > -	/* Output: Bitwise index of the event within the status page */
+> > -	__u32 status_bit;
+> > -
+> >   	/* Output: Index of the event to use when writing data */
+> >   	__u32 write_index;
+> >   } __attribute__((__packed__));
+> > diff --git a/kernel/trace/trace_events_user.c
+> > b/kernel/trace/trace_events_user.c--
+> Mathieu Desnoyers
+> EfficiOS Inc.
+> https://www.efficios.com
