@@ -2,64 +2,39 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB4986134A3
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 12:40:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 95AE46134A5
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 12:40:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230452AbiJaLj5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 07:39:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38660 "EHLO
+        id S230124AbiJaLkf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 07:40:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230209AbiJaLjw (ORCPT
+        with ESMTP id S229588AbiJaLkc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 07:39:52 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA456E0A1;
-        Mon, 31 Oct 2022 04:39:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667216391; x=1698752391;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=Z1DISDG3lFnXlT+QMl/xIitOF4FDYmEw68146wJjXWA=;
-  b=PkQfGTpJGqq94Ul++EQRCl0z0hECK5Qw3ssWrEdZjL9m9TSpgsnB04xI
-   8k2HljyFZP2YQNj7+GEuyc/Z7FujrNIrcwQBo+Uiet/x72+tVDOsnYChE
-   8Getadp1COvksFLhcgBWZjzM0fOhHLuQPJUIQL1fuzNJEt3fUhTXsdsgk
-   Ai+tIYoqv6IzCUFQ5OF+fxCEF6GZv4XnFFAZSEK3W0UOvEcQGZe8V824n
-   0rsrQbx2hsIy2au1UuCF2aL6G34a/kKIrDuYbnO3SMOR5L1X5ZR5T37e7
-   rsRqao+BAGBjEiGnYHVUW4OlA8rrZ7cMQu5ruIS+nQdQWjznstCyLeNri
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="373088367"
-X-IronPort-AV: E=Sophos;i="5.95,227,1661842800"; 
-   d="scan'208";a="373088367"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 04:39:51 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="611461271"
-X-IronPort-AV: E=Sophos;i="5.95,227,1661842800"; 
-   d="scan'208";a="611461271"
-Received: from binbinwu-mobl.ccr.corp.intel.com (HELO [10.255.28.35]) ([10.255.28.35])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 04:39:48 -0700
-Message-ID: <e1cb3dd0-796b-73d5-ddb8-38e807c061df@linux.intel.com>
-Date:   Mon, 31 Oct 2022 19:39:46 +0800
+        Mon, 31 Oct 2022 07:40:32 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9EA05E0AE;
+        Mon, 31 Oct 2022 04:40:31 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8E4521FB;
+        Mon, 31 Oct 2022 04:40:37 -0700 (PDT)
+Received: from e120937-lin.fritz.box (unknown [172.31.20.19])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8EE3D3F534;
+        Mon, 31 Oct 2022 04:40:29 -0700 (PDT)
+From:   Cristian Marussi <cristian.marussi@arm.com>
+To:     Guenter Roeck <linux@roeck-us.net>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, Daniel Lezcano <daniel.lezcano@linaro.org>,
+        linux-hwmon@vger.kernel.org, cristian.marussi@arm.com
+Subject: [PATCH v2 7/8] hwmon: (scmi) Register explicitly with Thermal Framework
+Date:   Mon, 31 Oct 2022 11:40:18 +0000
+Message-Id: <20221031114018.59048-1-cristian.marussi@arm.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <7acc7a49-debb-abdb-f01c-f8adef4c1f0e@roeck-us.net>
+References: <7acc7a49-debb-abdb-f01c-f8adef4c1f0e@roeck-us.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v10 014/108] KVM: TDX: Stub in tdx.h with structs,
- accessors, and VMCS helpers
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Sean Christopherson <sean.j.christopherson@intel.com>
-References: <cover.1667110240.git.isaku.yamahata@intel.com>
- <75ac959fddbfd057d3ae8ad73e91708a2da60965.1667110240.git.isaku.yamahata@intel.com>
-From:   Binbin Wu <binbin.wu@linux.intel.com>
-In-Reply-To: <75ac959fddbfd057d3ae8ad73e91708a2da60965.1667110240.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,167 +42,221 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Available sensors are enumerated and reported by the SCMI platform server
+using a 16bit identification number; not all such sensors are of a type
+supported by hwmon subsystem and, among the supported ones, only a subset
+could be temperature sensors that have to be registered with the Thermal
+Framework.
+Potential clashes between hwmon channels indexes and the underlying real
+sensors IDs do not play well with the hwmon<-->thermal bridge automatic
+registration routines and could need a sensible number of fake dummy
+sensors to be made up in order to keep indexes and IDs in sync.
 
-On 2022/10/30 14:22, isaku.yamahata@intel.com wrote:
-> From: Sean Christopherson <sean.j.christopherson@intel.com>
->
-> Stub in kvm_tdx, vcpu_tdx, and their various accessors.  TDX defines
-> SEAMCALL APIs to access TDX control structures corresponding to the VMX
-> VMCS.  Introduce helper accessors to hide its SEAMCALL ABI details.
->
-> Signed-off-by: Sean Christopherson <sean.j.christopherson@intel.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
-> ---
->   arch/x86/kvm/vmx/tdx.h | 118 ++++++++++++++++++++++++++++++++++++++++-
->   1 file changed, 116 insertions(+), 2 deletions(-)
->
-> diff --git a/arch/x86/kvm/vmx/tdx.h b/arch/x86/kvm/vmx/tdx.h
-> index 473013265bd8..98999bf3f188 100644
-> --- a/arch/x86/kvm/vmx/tdx.h
-> +++ b/arch/x86/kvm/vmx/tdx.h
-> @@ -3,14 +3,27 @@
->   #define __KVM_X86_TDX_H
->   
->   #ifdef CONFIG_INTEL_TDX_HOST
-> +
-> +#include "tdx_ops.h"
-> +
-> +struct tdx_td_page {
-> +	unsigned long va;
-> +	hpa_t pa;
-> +	bool added;
-> +};
-> +
->   struct kvm_tdx {
->   	struct kvm kvm;
-> -	/* TDX specific members follow. */
-> +
-> +	struct tdx_td_page tdr;
-> +	struct tdx_td_page *tdcs;
->   };
->   
->   struct vcpu_tdx {
->   	struct kvm_vcpu	vcpu;
-> -	/* TDX specific members follow. */
-> +
-> +	struct tdx_td_page tdvpr;
-> +	struct tdx_td_page *tdvpx;
->   };
->   
->   static inline bool is_td(struct kvm *kvm)
-> @@ -32,6 +45,107 @@ static inline struct vcpu_tdx *to_tdx(struct kvm_vcpu *vcpu)
->   {
->   	return container_of(vcpu, struct vcpu_tdx, vcpu);
->   }
-> +
-> +static __always_inline void tdvps_vmcs_check(u32 field, u8 bits)
-> +{
-> +#define VMCS_ENC_ACCESS_TYPE_MASK	0x1UL
-> +#define VMCS_ENC_ACCESS_TYPE_FULL	0x0UL
-> +#define VMCS_ENC_ACCESS_TYPE_HIGH	0x1UL
-> +#define VMCS_ENC_ACCESS_TYPE(field)	((field) & VMCS_ENC_ACCESS_TYPE_MASK)
-> +
-> +	/* TDX is 64bit only.  HIGH field isn't supported. */
-> +	BUILD_BUG_ON_MSG(__builtin_constant_p(field) &&
-> +			 VMCS_ENC_ACCESS_TYPE(field) == VMCS_ENC_ACCESS_TYPE_HIGH,
-> +			 "Read/Write to TD VMCS *_HIGH fields not supported");
-> +
-> +	BUILD_BUG_ON(bits != 16 && bits != 32 && bits != 64);
-> +
-> +#define VMCS_ENC_WIDTH_MASK	GENMASK(14, 13)
-> +#define VMCS_ENC_WIDTH_16BIT	(0UL << 13)
-> +#define VMCS_ENC_WIDTH_64BIT	(1UL << 13)
-> +#define VMCS_ENC_WIDTH_32BIT	(2UL << 13)
-> +#define VMCS_ENC_WIDTH_NATURAL	(3UL << 13)
-> +#define VMCS_ENC_WIDTH(field)	((field) & VMCS_ENC_WIDTH_MASK)
-> +
-> +	/* TDX is 64bit only.  i.e. natural width = 64bit. */
-> +	BUILD_BUG_ON_MSG(bits != 64 && __builtin_constant_p(field) &&
-> +			 (VMCS_ENC_WIDTH(field) == VMCS_ENC_WIDTH_64BIT ||
-> +			  VMCS_ENC_WIDTH(field) == VMCS_ENC_WIDTH_NATURAL),
-> +			 "Invalid TD VMCS access for 64-bit field");
-> +	BUILD_BUG_ON_MSG(bits != 32 && __builtin_constant_p(field) &&
-> +			 VMCS_ENC_WIDTH(field) == VMCS_ENC_WIDTH_32BIT,
-> +			 "Invalid TD VMCS access for 32-bit field");
-> +	BUILD_BUG_ON_MSG(bits != 16 && __builtin_constant_p(field) &&
-> +			 VMCS_ENC_WIDTH(field) == VMCS_ENC_WIDTH_16BIT,
-> +			 "Invalid TD VMCS access for 16-bit field");
-> +}
-> +
-> +static __always_inline void tdvps_state_non_arch_check(u64 field, u8 bits) {}
-> +static __always_inline void tdvps_management_check(u64 field, u8 bits) {}
-> +
-> +#define TDX_BUILD_TDVPS_ACCESSORS(bits, uclass, lclass)				\
-> +static __always_inline u##bits td_##lclass##_read##bits(struct vcpu_tdx *tdx,	\
-> +							u32 field)		\
-> +{										\
-> +	struct tdx_module_output out;						\
-> +	u64 err;								\
-> +										\
-> +	tdvps_##lclass##_check(field, bits);					\
-> +	err = tdh_vp_rd(tdx->tdvpr.pa, TDVPS_##uclass(field), &out);		\
-> +	if (unlikely(err)) {							\
-> +		pr_err("TDH_VP_RD["#uclass".0x%x] failed: 0x%llx\n",		\
-> +		       field, err);						\
-> +		return 0;							\
-> +	}									\
-> +	return (u##bits)out.r8;							\
-> +}										\
-> +static __always_inline void td_##lclass##_write##bits(struct vcpu_tdx *tdx,	\
-> +						      u32 field, u##bits val)	\
-> +{										\
-> +	struct tdx_module_output out;						\
-> +	u64 err;								\
-> +										\
-> +	tdvps_##lclass##_check(field, bits);					\
-> +	err = tdh_vp_wr(tdx->tdvpr.pa, TDVPS_##uclass(field), val,		\
-> +		      GENMASK_ULL(bits - 1, 0), &out);				\
-> +	if (unlikely(err))							\
-> +		pr_err("TDH_VP_WR["#uclass".0x%x] = 0x%llx failed: 0x%llx\n",	\
-> +		       field, (u64)val, err);					\
-> +}										\
-> +static __always_inline void td_##lclass##_setbit##bits(struct vcpu_tdx *tdx,	\
-> +						       u32 field, u64 bit)	\
-> +{										\
-> +	struct tdx_module_output out;						\
-> +	u64 err;								\
-> +										\
-> +	tdvps_##lclass##_check(field, bits);					\
-> +	err = tdh_vp_wr(tdx->tdvpr.pa, TDVPS_##uclass(field), bit, bit,		\
-> +			&out);							\
-> +	if (unlikely(err))							\
-> +		pr_err("TDH_VP_WR["#uclass".0x%x] |= 0x%llx failed: 0x%llx\n",	\
-> +		       field, bit, err);					\
-> +}										\
-> +static __always_inline void td_##lclass##_clearbit##bits(struct vcpu_tdx *tdx,	\
-> +							 u32 field, u64 bit)	\
-> +{										\
-> +	struct tdx_module_output out;						\
-> +	u64 err;								\
-> +										\
-> +	tdvps_##lclass##_check(field, bits);					\
-> +	err = tdh_vp_wr(tdx->tdvpr.pa, TDVPS_##uclass(field), 0, bit,		\
-> +			&out);							\
-> +	if (unlikely(err))							\
-> +		pr_err("TDH_VP_WR["#uclass".0x%x] &= ~0x%llx failed: 0x%llx\n",	\
-> +		       field, bit,  err);					\
-> +}
+Avoid to use the hwmon<-->thermal bridge dropping the HWMON_C_REGISTER_TZ
+attribute and instead explicit register temperature sensors directly with
+the Thermal Framework.
 
-For the set of accessors, although there will be kernel errer message 
-when tdh_vp_{rd,wr} fails,
-the caller doesn't know these function calls succeed or not. Won't this 
-cause any unexpected
-behavior?
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Guenter Roeck <linux@roeck-us.net>
+Cc: linux-hwmon@vger.kernel.org
+Signed-off-by: Cristian Marussi <cristian.marussi@arm.com>
+---
+v1 --> v2
+- refactor if conditions on thermal sensor registration
+- changed dev_info to dev_dbg for message about sensors not attached
+  to any thermal zone
+---
+ drivers/hwmon/scmi-hwmon.c | 116 ++++++++++++++++++++++++++++++++-----
+ 1 file changed, 103 insertions(+), 13 deletions(-)
 
+diff --git a/drivers/hwmon/scmi-hwmon.c b/drivers/hwmon/scmi-hwmon.c
+index b1329a58ce40..e192f0c67146 100644
+--- a/drivers/hwmon/scmi-hwmon.c
++++ b/drivers/hwmon/scmi-hwmon.c
+@@ -20,6 +20,11 @@ struct scmi_sensors {
+ 	const struct scmi_sensor_info **info[hwmon_max];
+ };
+ 
++struct scmi_thermal_sensor {
++	const struct scmi_protocol_handle *ph;
++	const struct scmi_sensor_info *info;
++};
++
+ static inline u64 __pow10(u8 x)
+ {
+ 	u64 r = 1;
+@@ -64,16 +69,14 @@ static int scmi_hwmon_scale(const struct scmi_sensor_info *sensor, u64 *value)
+ 	return 0;
+ }
+ 
+-static int scmi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+-			   u32 attr, int channel, long *val)
++static int scmi_hwmon_read_scaled_value(const struct scmi_protocol_handle *ph,
++					const struct scmi_sensor_info *sensor,
++					long *val)
+ {
+ 	int ret;
+ 	u64 value;
+-	const struct scmi_sensor_info *sensor;
+-	struct scmi_sensors *scmi_sensors = dev_get_drvdata(dev);
+ 
+-	sensor = *(scmi_sensors->info[type] + channel);
+-	ret = sensor_ops->reading_get(scmi_sensors->ph, sensor->id, &value);
++	ret = sensor_ops->reading_get(ph, sensor->id, &value);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -84,6 +87,17 @@ static int scmi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
+ 	return ret;
+ }
+ 
++static int scmi_hwmon_read(struct device *dev, enum hwmon_sensor_types type,
++			   u32 attr, int channel, long *val)
++{
++	const struct scmi_sensor_info *sensor;
++	struct scmi_sensors *scmi_sensors = dev_get_drvdata(dev);
++
++	sensor = *(scmi_sensors->info[type] + channel);
++
++	return scmi_hwmon_read_scaled_value(scmi_sensors->ph, sensor, val);
++}
++
+ static int
+ scmi_hwmon_read_string(struct device *dev, enum hwmon_sensor_types type,
+ 		       u32 attr, int channel, const char **str)
+@@ -122,6 +136,25 @@ static struct hwmon_chip_info scmi_chip_info = {
+ 	.info = NULL,
+ };
+ 
++static int scmi_hwmon_thermal_get_temp(struct thermal_zone_device *tz,
++				       int *temp)
++{
++	int ret;
++	long value;
++	struct scmi_thermal_sensor *th_sensor = tz->devdata;
++
++	ret = scmi_hwmon_read_scaled_value(th_sensor->ph, th_sensor->info,
++					   &value);
++	if (!ret)
++		*temp = value;
++
++	return ret;
++}
++
++static const struct thermal_zone_device_ops scmi_hwmon_thermal_ops = {
++	.get_temp = scmi_hwmon_thermal_get_temp,
++};
++
+ static int scmi_hwmon_add_chan_info(struct hwmon_channel_info *scmi_hwmon_chan,
+ 				    struct device *dev, int num,
+ 				    enum hwmon_sensor_types type, u32 config)
+@@ -149,7 +182,6 @@ static enum hwmon_sensor_types scmi_types[] = {
+ };
+ 
+ static u32 hwmon_attributes[hwmon_max] = {
+-	[hwmon_chip] = HWMON_C_REGISTER_TZ,
+ 	[hwmon_temp] = HWMON_T_INPUT | HWMON_T_LABEL,
+ 	[hwmon_in] = HWMON_I_INPUT | HWMON_I_LABEL,
+ 	[hwmon_curr] = HWMON_C_INPUT | HWMON_C_LABEL,
+@@ -157,6 +189,43 @@ static u32 hwmon_attributes[hwmon_max] = {
+ 	[hwmon_energy] = HWMON_E_INPUT | HWMON_E_LABEL,
+ };
+ 
++static int scmi_thermal_sensor_register(struct device *dev,
++					const struct scmi_protocol_handle *ph,
++					const struct scmi_sensor_info *sensor)
++{
++	struct scmi_thermal_sensor *th_sensor;
++	struct thermal_zone_device *tzd;
++
++	th_sensor = devm_kzalloc(dev, sizeof(*th_sensor), GFP_KERNEL);
++	if (!th_sensor)
++		return -ENOMEM;
++
++	th_sensor->ph = ph;
++	th_sensor->info = sensor;
++
++	/*
++	 * Try to register a temperature sensor with the Thermal Framework:
++	 * skip sensors not defined as part of any thermal zone (-ENODEV) but
++	 * report any other errors related to misconfigured zones/sensors.
++	 */
++	tzd = devm_thermal_of_zone_register(dev, th_sensor->info->id, th_sensor,
++					    &scmi_hwmon_thermal_ops);
++	if (IS_ERR(tzd)) {
++		devm_kfree(dev, th_sensor);
++
++		if (PTR_ERR(tzd) != -ENODEV)
++			return PTR_ERR(tzd);
++
++		dev_dbg(dev, "Sensor '%s' not attached to any thermal zone.\n",
++			sensor->name);
++	} else {
++		dev_dbg(dev, "Sensor '%s' attached to thermal zone ID:%d\n",
++			sensor->name, tzd->id);
++	}
++
++	return 0;
++}
++
+ static int scmi_hwmon_probe(struct scmi_device *sdev)
+ {
+ 	int i, idx;
+@@ -164,7 +233,7 @@ static int scmi_hwmon_probe(struct scmi_device *sdev)
+ 	enum hwmon_sensor_types type;
+ 	struct scmi_sensors *scmi_sensors;
+ 	const struct scmi_sensor_info *sensor;
+-	int nr_count[hwmon_max] = {0}, nr_types = 0;
++	int nr_count[hwmon_max] = {0}, nr_types = 0, nr_count_temp = 0;
+ 	const struct hwmon_chip_info *chip_info;
+ 	struct device *hwdev, *dev = &sdev->dev;
+ 	struct hwmon_channel_info *scmi_hwmon_chan;
+@@ -208,10 +277,8 @@ static int scmi_hwmon_probe(struct scmi_device *sdev)
+ 		}
+ 	}
+ 
+-	if (nr_count[hwmon_temp]) {
+-		nr_count[hwmon_chip]++;
+-		nr_types++;
+-	}
++	if (nr_count[hwmon_temp])
++		nr_count_temp = nr_count[hwmon_temp];
+ 
+ 	scmi_hwmon_chan = devm_kcalloc(dev, nr_types, sizeof(*scmi_hwmon_chan),
+ 				       GFP_KERNEL);
+@@ -262,8 +329,31 @@ static int scmi_hwmon_probe(struct scmi_device *sdev)
+ 	hwdev = devm_hwmon_device_register_with_info(dev, "scmi_sensors",
+ 						     scmi_sensors, chip_info,
+ 						     NULL);
++	if (IS_ERR(hwdev))
++		return PTR_ERR(hwdev);
+ 
+-	return PTR_ERR_OR_ZERO(hwdev);
++	for (i = 0; i < nr_count_temp; i++) {
++		int ret;
++
++		sensor = *(scmi_sensors->info[hwmon_temp] + i);
++		if (!sensor)
++			continue;
++
++		/*
++		 * Warn on any misconfiguration related to thermal zones but
++		 * bail out of probing only on memory errors.
++		 */
++		ret = scmi_thermal_sensor_register(dev, ph, sensor);
++		if (ret) {
++			if (ret == -ENOMEM)
++				return ret;
++			dev_warn(dev,
++				 "Thermal zone misconfigured for %s. err=%d\n",
++				 sensor->name, ret);
++		}
++	}
++
++	return 0;
+ }
+ 
+ static const struct scmi_device_id scmi_id_table[] = {
+-- 
+2.34.1
 
-> +
-> +TDX_BUILD_TDVPS_ACCESSORS(16, VMCS, vmcs);
-> +TDX_BUILD_TDVPS_ACCESSORS(32, VMCS, vmcs);
-> +TDX_BUILD_TDVPS_ACCESSORS(64, VMCS, vmcs);
-> +
-> +TDX_BUILD_TDVPS_ACCESSORS(64, STATE_NON_ARCH, state_non_arch);
-> +TDX_BUILD_TDVPS_ACCESSORS(8, MANAGEMENT, management);
-> +
->   #else
->   struct kvm_tdx {
->   	struct kvm kvm;
