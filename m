@@ -2,69 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9FDE61314D
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 08:38:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22880613152
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 08:41:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229610AbiJaHii (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 03:38:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58856 "EHLO
+        id S229651AbiJaHlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 03:41:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229728AbiJaHiZ (ORCPT
+        with ESMTP id S229487AbiJaHlp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 03:38:25 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B5B81224;
-        Mon, 31 Oct 2022 00:38:24 -0700 (PDT)
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29V7cIV5045496;
-        Mon, 31 Oct 2022 02:38:18 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1667201898;
-        bh=aBZmix5mN78scg9hnkAbo7v44ywBJRDrxSXesTutH9k=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=f4dit9c1m4JcN7o+hJkHSxgEINtVl02oLqy+9zOcVgF6r6gAzYnL4yhxFrPMqIbeM
-         ymfaxrsoGMbCBfP6D10jYEeD3AHrnDwHrVysv/REfKWdLmQgCUy2wTNBvhtQoG97o2
-         UtkqHExsPQH3Ka+Pqc9/vKUwfWGaDEindhJPtX7k=
-Received: from DFLE100.ent.ti.com (dfle100.ent.ti.com [10.64.6.21])
-        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29V7cIrI015546
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 31 Oct 2022 02:38:18 -0500
-Received: from DFLE108.ent.ti.com (10.64.6.29) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 31
- Oct 2022 02:38:18 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DFLE108.ent.ti.com
- (10.64.6.29) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Mon, 31 Oct 2022 02:38:18 -0500
-Received: from fllv0122.itg.ti.com (fllv0122.itg.ti.com [10.247.120.72])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29V7cIgL104913;
-        Mon, 31 Oct 2022 02:38:18 -0500
-Received: from localhost (a0501179-pc.dhcp.ti.com [10.24.69.114])
-        by fllv0122.itg.ti.com (8.14.7/8.14.7) with ESMTP id 29V7cGJm004447;
-        Mon, 31 Oct 2022 02:38:17 -0500
-From:   MD Danish Anwar <danishanwar@ti.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>
-CC:     Suman Anna <s-anna@ti.com>, Roger Quadros <rogerq@kernel.org>,
-        "Andrew F . Davis" <afd@ti.com>, <nm@ti.com>, <vigneshr@ti.com>,
-        <srk@ti.com>, <linux-remoteproc@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        MD Danish Anwar <danishanwar@ti.com>
-Subject: [PATCH v7 5/5] remoteproc: pru: Configure firmware based on client setup
-Date:   Mon, 31 Oct 2022 13:08:01 +0530
-Message-ID: <20221031073801.130541-6-danishanwar@ti.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221031073801.130541-1-danishanwar@ti.com>
-References: <20221031073801.130541-1-danishanwar@ti.com>
+        Mon, 31 Oct 2022 03:41:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63E68224;
+        Mon, 31 Oct 2022 00:41:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 006BB60FD3;
+        Mon, 31 Oct 2022 07:41:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 121D8C433C1;
+        Mon, 31 Oct 2022 07:41:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667202103;
+        bh=5GUPDbtRVJ0TdbVPO/0lip/6bMyybFgnGpqeW2jqJAA=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=CPkwUIkzvxDJl0PcNlRCuDPG6gRWL0+vaGss+8g0F99tK2uGeZUyv1nKt6qkMe8Ox
+         P3r66+AGy8EysoubZvg7AD7Aqf97ml/RkvBPiWW6pHey566oHarmdE3YHIgR9u0anA
+         3t+/zY6vLFFWs6gV+GzP90cfX5EYqQgLYVq965m8=
+Date:   Mon, 31 Oct 2022 08:39:28 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     Yuanzheng Song <songyuanzheng@huawei.com>,
+        akpm@linux-foundation.org, david@redhat.com, hughd@google.com,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        stable@vger.kernel.org
+Subject: Re: [PATCH STABLE 5.10 v2] mm/memory: add non-anonymous page check
+ in the copy_present_page()
+Message-ID: <Y197sOOefgM1Wpvh@kroah.com>
+References: <20221028030705.2840539-1-songyuanzheng@huawei.com>
+ <Y1vWDbRhXd8jTw8N@x1n>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1vWDbRhXd8jTw8N@x1n>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,94 +54,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tero Kristo <t-kristo@ti.com>
+On Fri, Oct 28, 2022 at 09:15:57AM -0400, Peter Xu wrote:
+> On Fri, Oct 28, 2022 at 03:07:05AM +0000, Yuanzheng Song wrote:
+> > The vma->anon_vma of the child process may be NULL because
+> > the entire vma does not contain anonymous pages. In this
+> > case, a BUG will occur when the copy_present_page() passes
+> > a copy of a non-anonymous page of that vma to the
+> > page_add_new_anon_rmap() to set up new anonymous rmap.
+> > 
+> > ------------[ cut here ]------------
+> > kernel BUG at mm/rmap.c:1044!
+> > Internal error: Oops - BUG: 0 [#1] SMP
+> > Modules linked in:
+> > CPU: 2 PID: 3617 Comm: test Not tainted 5.10.149 #1
+> > Hardware name: linux,dummy-virt (DT)
+> > pstate: 80000005 (Nzcv daif -PAN -UAO -TCO BTYPE=--)
+> > pc : __page_set_anon_rmap+0xbc/0xf8
+> > lr : __page_set_anon_rmap+0xbc/0xf8
+> > sp : ffff800014c1b870
+> > x29: ffff800014c1b870 x28: 0000000000000001
+> > x27: 0000000010100073 x26: ffff1d65c517baa8
+> > x25: ffff1d65cab0f000 x24: ffff1d65c416d800
+> > x23: ffff1d65cab5f248 x22: 0000000020000000
+> > x21: 0000000000000001 x20: 0000000000000000
+> > x19: fffffe75970023c0 x18: 0000000000000000
+> > x17: 0000000000000000 x16: 0000000000000000
+> > x15: 0000000000000000 x14: 0000000000000000
+> > x13: 0000000000000000 x12: 0000000000000000
+> > x11: 0000000000000000 x10: 0000000000000000
+> > x9 : ffffc3096d5fb858 x8 : 0000000000000000
+> > x7 : 0000000000000011 x6 : ffff5a5c9089c000
+> > x5 : 0000000000020000 x4 : ffff5a5c9089c000
+> > x3 : ffffc3096d200000 x2 : ffffc3096e8d0000
+> > x1 : ffff1d65ca3da740 x0 : 0000000000000000
+> > Call trace:
+> >  __page_set_anon_rmap+0xbc/0xf8
+> >  page_add_new_anon_rmap+0x1e0/0x390
+> >  copy_pte_range+0xd00/0x1248
+> >  copy_page_range+0x39c/0x620
+> >  dup_mmap+0x2e0/0x5a8
+> >  dup_mm+0x78/0x140
+> >  copy_process+0x918/0x1a20
+> >  kernel_clone+0xac/0x638
+> >  __do_sys_clone+0x78/0xb0
+> >  __arm64_sys_clone+0x30/0x40
+> >  el0_svc_common.constprop.0+0xb0/0x308
+> >  do_el0_svc+0x48/0xb8
+> >  el0_svc+0x24/0x38
+> >  el0_sync_handler+0x160/0x168
+> >  el0_sync+0x180/0x1c0
+> > Code: 97f8ff85 f9400294 17ffffeb 97f8ff82 (d4210000)
+> > ---[ end trace a972347688dc9bd4 ]---
+> > Kernel panic - not syncing: Oops - BUG: Fatal exception
+> > SMP: stopping secondary CPUs
+> > Kernel Offset: 0x43095d200000 from 0xffff800010000000
+> > PHYS_OFFSET: 0xffffe29a80000000
+> > CPU features: 0x08200022,61806082
+> > Memory Limit: none
+> > ---[ end Kernel panic - not syncing: Oops - BUG: Fatal exception ]---
+> > 
+> > This problem has been fixed by the commit <fb3d824d1a46>
+> > ("mm/rmap: split page_dup_rmap() into page_dup_file_rmap()
+> > and page_try_dup_anon_rmap()"), but still exists in the
+> > linux-5.10.y branch.
+> > 
+> > This patch is not applicable to this version because
+> > of the large version differences. Therefore, fix it by
+> > adding non-anonymous page check in the copy_present_page().
+> > 
+> > Cc: stable@vger.kernel.org
+> > Fixes: 70e806e4e645 ("mm: Do early cow for pinned pages during fork() for ptes")
+> > Signed-off-by: Yuanzheng Song <songyuanzheng@huawei.com>
+> 
+> Acked-by: Peter Xu <peterx@redhat.com>
 
-Client device node property firmware-name is now used to configure
-firmware for the PRU instances. The default firmware is also
-restored once releasing the PRU resource.
+Now queued up, thanks.
 
-Co-developed-by: Suman Anna <s-anna@ti.com>
-Signed-off-by: Suman Anna <s-anna@ti.com>
-Signed-off-by: Tero Kristo <t-kristo@ti.com>
-Co-developed-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-Signed-off-by: Grzegorz Jaszczyk <grzegorz.jaszczyk@linaro.org>
-Signed-off-by: Puranjay Mohan <p-mohan@ti.com>
-Signed-off-by: MD Danish Anwar <danishanwar@ti.com>
----
- drivers/remoteproc/pru_rproc.c | 34 ++++++++++++++++++++++++++++++++++
- 1 file changed, 34 insertions(+)
-
-diff --git a/drivers/remoteproc/pru_rproc.c b/drivers/remoteproc/pru_rproc.c
-index 3d1870e6b13b..15ffaeddd963 100644
---- a/drivers/remoteproc/pru_rproc.c
-+++ b/drivers/remoteproc/pru_rproc.c
-@@ -172,6 +172,23 @@ void pru_control_set_reg(struct pru_rproc *pru, unsigned int reg,
- 	spin_unlock_irqrestore(&pru->rmw_lock, flags);
- }
- 
-+/**
-+ * pru_rproc_set_firmware() - set firmware for a pru core
-+ * @rproc: the rproc instance of the PRU
-+ * @fw_name: the new firmware name, or NULL if default is desired
-+ *
-+ * Return: 0 on success, or errno in error case.
-+ */
-+static int pru_rproc_set_firmware(struct rproc *rproc, const char *fw_name)
-+{
-+	struct pru_rproc *pru = rproc->priv;
-+
-+	if (!fw_name)
-+		fw_name = pru->fw_name;
-+
-+	return rproc_set_firmware(rproc, fw_name);
-+}
-+
- static struct rproc *__pru_rproc_get(struct device_node *np, int index)
- {
- 	struct rproc *rproc;
-@@ -230,6 +247,7 @@ struct rproc *pru_rproc_get(struct device_node *np, int index,
- 	struct rproc *rproc;
- 	struct pru_rproc *pru;
- 	struct device *dev;
-+	const char *fw_name;
- 	int ret;
- 
- 	rproc = __pru_rproc_get(np, index);
-@@ -256,11 +274,25 @@ struct rproc *pru_rproc_get(struct device_node *np, int index,
- 	if (pru_id)
- 		*pru_id = pru->id;
- 
-+	ret = of_property_read_string_index(np, "firmware-name", index,
-+					    &fw_name);
-+	if (!ret) {
-+		ret = pru_rproc_set_firmware(rproc, fw_name);
-+		if (ret) {
-+			dev_err(dev, "failed to set firmware: %d\n", ret);
-+			goto err;
-+		}
-+	}
-+
- 	return rproc;
- 
- err_no_rproc_handle:
- 	rproc_put(rproc);
- 	return ERR_PTR(ret);
-+
-+err:
-+	pru_rproc_put(rproc);
-+	return ERR_PTR(ret);
- }
- EXPORT_SYMBOL_GPL(pru_rproc_get);
- 
-@@ -280,6 +312,8 @@ void pru_rproc_put(struct rproc *rproc)
- 
- 	pru = rproc->priv;
- 
-+	pru_rproc_set_firmware(rproc, NULL);
-+
- 	mutex_lock(&pru->lock);
- 
- 	if (!pru->client_np) {
--- 
-2.25.1
-
+greg k-h
