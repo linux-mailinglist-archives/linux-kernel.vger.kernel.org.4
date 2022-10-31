@@ -2,77 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E380613B02
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 17:11:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4E7F613B05
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 17:11:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231435AbiJaQLQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 12:11:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38794 "EHLO
+        id S231485AbiJaQLy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 12:11:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229947AbiJaQLO (ORCPT
+        with ESMTP id S229719AbiJaQLw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 12:11:14 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7367DF61;
-        Mon, 31 Oct 2022 09:11:13 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id 21so18166550edv.3;
-        Mon, 31 Oct 2022 09:11:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=iCzM+z8lbU3sUbT7i4WqD5Kg67j9Dyb20Cc1XCa8sRM=;
-        b=qKqmZWqo0DkJvx0vYCMHgc8guzN8iVhj59dDHl16HPXO4yL9xeYSfmTVB87fLCXkds
-         /q0gAMJ3hYKLh/JC2740UsBREiIvBWInMT8We1fJapvSCu2k9WvdFpDG5O16LMPH/qYC
-         u8Ia8txchf1OK2lP0+LYcYa0PvD3EMSyJVkgrf85D7gQ1lTdgbzTVbqOWi6llu9mJSKe
-         5BlUQSGfj9enWi8ecWCwMouY5FFuqy45snE6um9sh/TJPGfu+yCS0C8IGRKjyUSapizZ
-         ARgl3abqhJTrr8ctR/z8vuF06gMSFbZ7EEgNrzrQtZwvlmb4ObZ02BI07zvN7zCpefQo
-         ouxg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iCzM+z8lbU3sUbT7i4WqD5Kg67j9Dyb20Cc1XCa8sRM=;
-        b=xr7jQ3+3JNkpmGtbQBzhpgP3CXS4mCyeYFVPyqjYdyQ75yQTvWTzpye68cbp3ri/yD
-         uNVEzAMsi3wF7jdCz5YveWZ4U5bXOEcM287pYUD881kzLHbO45Drg+X0b0BJC/umin9Z
-         fwBAzTzoULKYqjVClzp+m3Fqj/rpsyq1A4b5/2PosI64BvV2S6Wj6gSNTPIR3OtQoTHe
-         VSozrosLBydiIn0SLRDNOY+RvFWBCE4hUbfny0oh6keqRf4JpqddzDLAFAEx4ASYU4O4
-         dbTzt8XKNn6YwNVwqL2kcmkBbS8PRzyPILPnh1HbjGgBc25orKZcj7h2eNjzJOoozM4m
-         o16A==
-X-Gm-Message-State: ACrzQf3Q42wwpCizkIJGsQsB+8gKqQwoTk7DXzpZpZyqTXMdp+04WXlB
-        xyydiqOf64WeEVRFr7AFquQJXaFB/SiuPdsEaOo=
-X-Google-Smtp-Source: AMsMyM6PFq7Zt3THHm08ReMXUZEYl5HsciKAwxHOZtB+/CwtOnuYr2XqM5HB9OrJs8TZ9T7qLnN4DLpUwpo8LGtnLQA=
-X-Received: by 2002:aa7:de0a:0:b0:462:d2a0:93a with SMTP id
- h10-20020aa7de0a000000b00462d2a0093amr13865340edv.275.1667232672211; Mon, 31
- Oct 2022 09:11:12 -0700 (PDT)
+        Mon, 31 Oct 2022 12:11:52 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6F750DF61;
+        Mon, 31 Oct 2022 09:11:51 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7D2CF1FB;
+        Mon, 31 Oct 2022 09:11:57 -0700 (PDT)
+Received: from [10.57.38.12] (unknown [10.57.38.12])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C6E153F5A1;
+        Mon, 31 Oct 2022 09:11:48 -0700 (PDT)
+Message-ID: <e789fcbe-fa3a-0286-c0f7-361762764a3e@arm.com>
+Date:   Mon, 31 Oct 2022 16:11:43 +0000
 MIME-Version: 1.0
-References: <20221014183459.181567-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221014183459.181567-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <Y1pphVPw0J97AmW4@paasikivi.fi.intel.com> <CA+V-a8szaPjwumrBgOT9gzMKBjY7hk0zfP8RgzUUDfY+BAsogA@mail.gmail.com>
- <Y1p91+XxPCB9NWwh@paasikivi.fi.intel.com> <CA+V-a8uhYymEVg7jdLVGNLsVD3=O1mk-_NVERu00W+gsv-7QXg@mail.gmail.com>
- <Y1rQBmXj71C1RrwB@paasikivi.fi.intel.com> <Y1/a4QUQpykhuXwh@paasikivi.fi.intel.com>
-In-Reply-To: <Y1/a4QUQpykhuXwh@paasikivi.fi.intel.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Mon, 31 Oct 2022 16:10:45 +0000
-Message-ID: <CA+V-a8vQkvO5k=b169SfiD5qdn9hNOJk6y2GHns1OkrnxHXeXQ@mail.gmail.com>
-Subject: Re: [PATCH v2 2/5] media: i2c: ov5645: Use runtime PM
-To:     Sakari Ailus <sakari.ailus@linux.intel.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Hans Verkuil <hverkuil@xs4all.nl>,
-        Shawn Tu <shawnx.tu@intel.com>,
-        Jacopo Mondi <jacopo@jmondi.org>, linux-media@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 2/5] iommu/s390: Add I/O TLB ops
+To:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Niklas Schnelle <schnelle@linux.ibm.com>,
+        iommu@lists.linux.dev, Joerg Roedel <joro@8bytes.org>,
+        Will Deacon <will@kernel.org>, Jason Gunthorpe <jgg@nvidia.com>
+Cc:     Gerd Bayer <gbayer@linux.ibm.com>,
+        Pierre Morel <pmorel@linux.ibm.com>,
+        linux-s390@vger.kernel.org, borntraeger@linux.ibm.com,
+        hca@linux.ibm.com, gor@linux.ibm.com,
+        gerald.schaefer@linux.ibm.com, agordeev@linux.ibm.com,
+        svens@linux.ibm.com, linux-kernel@vger.kernel.org
+References: <20221018145132.998866-1-schnelle@linux.ibm.com>
+ <20221018145132.998866-3-schnelle@linux.ibm.com>
+ <7da1ab0b-e78a-2ed1-0263-e9174c3af256@linux.ibm.com>
+Content-Language: en-GB
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <7da1ab0b-e78a-2ed1-0263-e9174c3af256@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,82 +54,166 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sakari,
+On 2022-10-28 17:03, Matthew Rosato wrote:
+> On 10/18/22 10:51 AM, Niklas Schnelle wrote:
+>> Currently s390-iommu does an I/O TLB flush (RPCIT) for every update of
+>> the I/O translation table explicitly. For one this is wasteful since
+>> RPCIT can be skipped after a mapping operation if zdev->tlb_refresh is
+>> unset. Moreover we can do a single RPCIT for a range of pages including
+>> whne doing lazy unmapping.
+>>
+>> Thankfully both of these optimizations can be achieved by implementing
+>> the IOMMU operations common code provides for the different types of I/O
+>> tlb flushes:
+>>
+>>   * flush_iotlb_all: Flushes the I/O TLB for the entire IOVA space
+>>   * iotlb_sync:  Flushes the I/O TLB for a range of pages that can be
+>>     gathered up, for example to implement lazy unmapping.
+>>   * iotlb_sync_map: Flushes the I/O TLB after a mapping operation
+>>
+>> Signed-off-by: Niklas Schnelle <schnelle@linux.ibm.com>
+>> ---
+>>   drivers/iommu/s390-iommu.c | 76 ++++++++++++++++++++++++++++++++------
+>>   1 file changed, 65 insertions(+), 11 deletions(-)
+>>
+>> diff --git a/drivers/iommu/s390-iommu.c b/drivers/iommu/s390-iommu.c
+>> index ee88e717254b..a4c2e9bc6d83 100644
+>> --- a/drivers/iommu/s390-iommu.c
+>> +++ b/drivers/iommu/s390-iommu.c
+>> @@ -199,14 +199,72 @@ static void s390_iommu_release_device(struct device *dev)
+>>   		__s390_iommu_detach_device(zdev);
+>>   }
+>>   
+>> +static void s390_iommu_flush_iotlb_all(struct iommu_domain *domain)
+>> +{
+>> +	struct s390_domain *s390_domain = to_s390_domain(domain);
+>> +	struct zpci_dev *zdev;
+>> +	unsigned long flags;
+>> +	int rc;
+>> +
+>> +	spin_lock_irqsave(&s390_domain->list_lock, flags);
+>> +	list_for_each_entry(zdev, &s390_domain->devices, iommu_list) {
+>> +		rc = zpci_refresh_trans((u64)zdev->fh << 32, zdev->start_dma,
+>> +					zdev->end_dma - zdev->start_dma + 1);
+>> +		if (rc)
+>> +			break;
+>> +	}
+>> +	spin_unlock_irqrestore(&s390_domain->list_lock, flags);
+>> +}
+>> +
+>> +static void s390_iommu_iotlb_sync(struct iommu_domain *domain,
+>> +				  struct iommu_iotlb_gather *gather)
+>> +{
+>> +	struct s390_domain *s390_domain = to_s390_domain(domain);
+>> +	size_t size = gather->end - gather->start + 1;
+>> +	struct zpci_dev *zdev;
+>> +	unsigned long flags;
+>> +	int rc;
+>> +
+>> +	/* If gather was never added to there is nothing to flush */
+>> +	if (gather->start == ULONG_MAX)
+>> +		return;
+> 
+> Hmm, this seems a little awkward in that it depends on the init value in iommu_iotlb_gather_init never changing.  I don't see any other iommu drivers doing this -- Is there no other way to tell there's nothing to flush?
+> 
+> If we really need to do this, maybe some shared #define in iommu.h that is used in iommu_iotlb_gather_init and here?
 
-On Mon, Oct 31, 2022 at 2:25 PM Sakari Ailus
-<sakari.ailus@linux.intel.com> wrote:
->
-> Hi Prabhakar,
->
-> On Thu, Oct 27, 2022 at 06:37:58PM +0000, Sakari Ailus wrote:
-> > Hi Prabhakar,
-> >
-> > On Thu, Oct 27, 2022 at 05:32:07PM +0100, Lad, Prabhakar wrote:
-> > > Hi Sakari,
-> > >
-> > > On Thu, Oct 27, 2022 at 1:47 PM Sakari Ailus
-> > > <sakari.ailus@linux.intel.com> wrote:
-> > > >
-> > > > Hi Prabhakar,
-> > > >
-> > > > On Thu, Oct 27, 2022 at 01:01:52PM +0100, Lad, Prabhakar wrote:
-> > > > > Hi Sakari,
-> > > > >
-> > > > > On Thu, Oct 27, 2022 at 12:20 PM Sakari Ailus
-> > > > > <sakari.ailus@linux.intel.com> wrote:
-> > > > > >
-> > > > > > Hi Prabhakar,
-> > > > > >
-> > > > > > One more comment.
-> > > > > >
-> > > > > > On Fri, Oct 14, 2022 at 07:34:56PM +0100, Prabhakar wrote:
-> > > > > > > @@ -1209,12 +1190,16 @@ static int ov5645_probe(struct i2c_client *client)
-> > > > > > >
-> > > > > > >       dev_info(dev, "OV5645 detected at address 0x%02x\n", client->addr);
-> > > > > > >
-> > > > > > > +     pm_runtime_set_active(dev);
-> > > > > > > +     pm_runtime_get_noresume(dev);
-> > > > > > > +     pm_runtime_enable(dev);
-> > > > > >
-> > > > > > You won't gain anything by eanbling runtime PM here. Just move it to the
-> > > > > > end of the function before the rest of the calls. Error handling becomes
-> > > > > > more simple.
-> > > > > >
-> > > > > If I move the above calls below I get the below warning:
-> > > > >
-> > > > > [    2.633386] ov5645 0-003c: Runtime PM usage count underflow!
-> > > > >
-> > > > > This is because of the last patch which moves ov5645_entity_init_cfg()
-> > > > > before registering the subdev. ov5645_entity_init_cfg() calls s_ctrl
-> > > > > due to which we are seeing the above message. Please let me know how
-> > > > > to proceed on this.
-> > > >
-> > > > Ah. Yes, this is a problem with the usage pattern of
-> > > > pm_runtime_get_if_in_use(). But please don't change that.
-> > > >
-> > > > You can still move enabling runtime PM later in the function.
-> > > >
-> > > Agreed, the final version looks like below:
-> > >
-> > >     pm_runtime_set_active(dev);
-> > >     pm_runtime_get_noresume(dev);
-> > >
-> >
-> > You'll have to enable runtime PM here, before pm_runtime_get_if_in_use()
-> > gets called.
-> >
-> > I'll see if it could be made to work in a sensible way when runtime PM
-> > isn't enabled yet.
->
-> There are various ways how runtime PM interface functions generally work,
-> and generally return an error when runtime PM is disabled. Incrementing the
-> usage_count when runtime PM is disabled would make
-> pm_runtime_get_if_in_use() very special and not match what the rest would
-> do. Therefore I think it's best to keep this in the driver. After all, mo
-> other driver needs this in the media tree, which is the major user of the
-> function.
->
-Thank you for digging deep into this. I'll keep it as is and send a v3.
+If you can trust yourselves to never gather a single byte (which by 
+construction should be impossible), "!gather->end" is perhaps a tiny bit 
+more robust (and consistent with iommu_iotlb_gather_is_disjoint()), 
+although given the way that iommu_iotlb_gather_add_*() work I don't 
+think either initial value has much chance of changing in practice, 
+short of some larger refactoring that would likely have to touch all the 
+users anyway. If you still want to be as foolproof as possible, using 
+"gather->start > gather->end" would represent the most general form of 
+the initial conditions.
 
-Cheers,
-Prabhakar
+FWIW, SMMUv3 does also check for an empty range, but using 
+gather->pgsize that is only relevant with add_page(). The other gather 
+users seem happy to go ahead and just issue whatever wacky invalidation 
+command those initial values end up looking like. I think an empty sync 
+should really only happen in unexpected conditions like an unmap 
+failing, so it shouldn't be a case that deserves a great deal of 
+optimisation effort.
+
+Thanks,
+Robin.
+
+>> +
+>> +	spin_lock_irqsave(&s390_domain->list_lock, flags);
+>> +	list_for_each_entry(zdev, &s390_domain->devices, iommu_list) {
+>> +		rc = zpci_refresh_trans((u64)zdev->fh << 32, gather->start,
+>> +					size);
+>> +		if (rc)
+>> +			break;
+>> +	}
+>> +	spin_unlock_irqrestore(&s390_domain->list_lock, flags);
+>> +}
+>> +
+>> +static void s390_iommu_iotlb_sync_map(struct iommu_domain *domain,
+>> +				      unsigned long iova, size_t size)
+>> +{
+>> +	struct s390_domain *s390_domain = to_s390_domain(domain);
+>> +	struct zpci_dev *zdev;
+>> +	unsigned long flags;
+>> +	int rc;
+>> +
+>> +	spin_lock_irqsave(&s390_domain->list_lock, flags);
+>> +	list_for_each_entry(zdev, &s390_domain->devices, iommu_list) {
+>> +		if (!zdev->tlb_refresh)
+>> +			continue;
+>> +		rc = zpci_refresh_trans((u64)zdev->fh << 32,
+>> +					iova, size);
+>> +		if (rc)
+>> +			break;
+>> +	}
+>> +	spin_unlock_irqrestore(&s390_domain->list_lock, flags);
+>> +}
+>> +
+>>   static int s390_iommu_update_trans(struct s390_domain *s390_domain,
+>>   				   phys_addr_t pa, dma_addr_t dma_addr,
+>>   				   unsigned long nr_pages, int flags)
+>>   {
+>>   	phys_addr_t page_addr = pa & PAGE_MASK;
+>> -	dma_addr_t start_dma_addr = dma_addr;
+>>   	unsigned long irq_flags, i;
+>> -	struct zpci_dev *zdev;
+>>   	unsigned long *entry;
+>>   	int rc = 0;
+>>   
+>> @@ -225,15 +283,6 @@ static int s390_iommu_update_trans(struct s390_domain *s390_domain,
+>>   		dma_addr += PAGE_SIZE;
+>>   	}
+>>   
+>> -	spin_lock(&s390_domain->list_lock);
+>> -	list_for_each_entry(zdev, &s390_domain->devices, iommu_list) {
+>> -		rc = zpci_refresh_trans((u64)zdev->fh << 32,
+>> -					start_dma_addr, nr_pages * PAGE_SIZE);
+>> -		if (rc)
+>> -			break;
+>> -	}
+>> -	spin_unlock(&s390_domain->list_lock);
+>> -
+>>   undo_cpu_trans:
+>>   	if (rc && ((flags & ZPCI_PTE_VALID_MASK) == ZPCI_PTE_VALID)) {
+>>   		flags = ZPCI_PTE_INVALID;
+>> @@ -340,6 +389,8 @@ static size_t s390_iommu_unmap_pages(struct iommu_domain *domain,
+>>   	if (rc)
+>>   		return 0;
+>>   
+>> +	iommu_iotlb_gather_add_range(gather, iova, size);
+>> +
+>>   	return size;
+>>   }
+>>   
+>> @@ -384,6 +435,9 @@ static const struct iommu_ops s390_iommu_ops = {
+>>   		.detach_dev	= s390_iommu_detach_device,
+>>   		.map_pages	= s390_iommu_map_pages,
+>>   		.unmap_pages	= s390_iommu_unmap_pages,
+>> +		.flush_iotlb_all = s390_iommu_flush_iotlb_all,
+>> +		.iotlb_sync      = s390_iommu_iotlb_sync,
+>> +		.iotlb_sync_map  = s390_iommu_iotlb_sync_map,
+>>   		.iova_to_phys	= s390_iommu_iova_to_phys,
+>>   		.free		= s390_domain_free,
+>>   	}
+> 
