@@ -2,90 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 422CF613F34
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 21:47:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 263D1613F37
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 21:48:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbiJaUrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 16:47:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37460 "EHLO
+        id S230132AbiJaUr6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 16:47:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37858 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiJaUrE (ORCPT
+        with ESMTP id S229494AbiJaUrz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 16:47:04 -0400
-Received: from mout01.posteo.de (mout01.posteo.de [185.67.36.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0CD12AC9
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 13:47:03 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout01.posteo.de (Postfix) with ESMTPS id 918B9240029
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 21:47:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.eu; s=2017;
-        t=1667249222; bh=14ImJoriqviYQaubYTW2HWYoZcV6WuztfnCI0NZQ2Bc=;
-        h=Date:From:Subject:To:Cc:From;
-        b=gej8Gn2LSjg738qmxy8uVtlwf9JsIbOnvnfrCwfjY+h5gegHfJyfxWrd15e7Jkk1f
-         QBbOwJW1v4MvyEVdu6T31zOI9Phhexk5056aP0lDnsQtHzxzmtVxzaHkxuSsAzQi7X
-         fH9y6aSM0B7ilKPyXA/Vm9gVXgkbhMa8UrX1CDAlNMPYmXdDs0jBLqXVJQ//Ai8nTY
-         APMTRjk7szb7F8SNb1UZHZSHp5+uK+WPm87U8yN5H/6w7DFXmmY3+ejuAYV7puizJ/
-         8ohSH/N1Q4p0V6iHe4cIjk5KW9TdNPLrJSbMqzHbVNoMBY2CpCaZxX93HS9KbnRy7F
-         4MBVgvUgFAujg==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4N1QF20DLqz9rxB;
-        Mon, 31 Oct 2022 21:47:02 +0100 (CET)
-Message-ID: <71829e56-a13f-0462-37a7-a4d64c16f561@posteo.de>
-Date:   Mon, 31 Oct 2022 20:47:01 +0000
+        Mon, 31 Oct 2022 16:47:55 -0400
+Received: from mail-ed1-x52d.google.com (mail-ed1-x52d.google.com [IPv6:2a00:1450:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E23A13D05
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 13:47:54 -0700 (PDT)
+Received: by mail-ed1-x52d.google.com with SMTP id z18so14168432edb.9
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 13:47:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S3e58SrwemEHObjbJRryliS78Tw/s51FyjKv68TB348=;
+        b=NwR2uyx1qYJ/OSkczGov1yrbCJlfZUHLYc7V80K7fR6Av4E/lkgvgC2N4c5Jjha+Z5
+         jaH2OsFlychVzGjLZkDKKA02W15tzyC4R3ZhbXPcrf/hLHnsec36Y/qabgv+YnYTDEEk
+         FfKNYvFz07Rqw9iXXQr2rs6+LBN22FWPN/B2rCm8elKjyvC+/UTQtxuRIyxn5SZryt0Z
+         CYMLCSr0gXaFSr/UvoIjxpIkW/zlOmFGnnuBQI+3hk4wGqIe1QB7OCfiiAZevLtUy5Z5
+         edJXeuMrBikg5uAIbnndvotxaGLwTcqhL3fduOekboSXt7Gxh9Y6NfjsZ7jAPUk/nSZp
+         AT2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S3e58SrwemEHObjbJRryliS78Tw/s51FyjKv68TB348=;
+        b=3FrtaOvwNwew8fOKtfTC2D8dq0hdelN7F3kZ5DlkNgkLHrbf3ZZlSHCRer8y1ZKYqd
+         +4izHb/VoQQIAXcp06DMKT3tXGN01ZXHwGLd+f6sgMKdq0+7OdWcUXTBgtorPIJDKm6k
+         E4cZdqtllWTmgBC+ZbDwVQK+PM+//lLsH2TtSxmEfyjl7/vDr51swZGmydqFGyii6B0t
+         2WqUoRgK9ZDN0i1vSOVrWN59O7JRpjTwAeP2Db9MQcc3t1FKdRHgifzFeTCcu27bly6N
+         f5JVTToIIH1Brk9qXKZTAPv5qAmS++9+SvQNfu+rcDHsropi8TEp9BM4NkcbcJprVas8
+         stPA==
+X-Gm-Message-State: ACrzQf1cWWyXlraQTUZK27ntiJ4IRoyO1m78mUPgmFhr4SoT+AzpgzM6
+        pusOQzRBFrNGKv8V5Lng8NMDMwFqRmiq5e5zsw7ox0JLthE=
+X-Google-Smtp-Source: AMsMyM7gemIDs/xPxH55ukVoeGlszx5qd67EmMr1IOA6vi7/xHbMpqS4UBKJUmU6eG8KCtG6Z7qDJOGGolDtrXqF3vo=
+X-Received: by 2002:aa7:cfda:0:b0:461:9d22:3484 with SMTP id
+ r26-20020aa7cfda000000b004619d223484mr16043612edy.142.1667249272975; Mon, 31
+ Oct 2022 13:47:52 -0700 (PDT)
 MIME-Version: 1.0
-From:   postix@posteo.eu
-Subject: Fwd: [REGRESSION 6.0.x / 6.1.x] NULL dereferencing at tracing
-Reply-To: 20221031144850.5522b036@rorschach.local.home
-To:     rostedt@goodmis.org
-Cc:     linux-kernel@vger.kernel.org, regressions@lists.linux.dev,
-        tiwai@suse.de
-References: <e693eb6b-28d0-d091-3df3-60f2b591c0e7@posteo.de>
-Content-Language: en-US, de-DE
-In-Reply-To: <e693eb6b-28d0-d091-3df3-60f2b591c0e7@posteo.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221028144241.634012-1-her0gyugyu@gmail.com> <CABVgOSmtD3GRV3hDoMw9EgMG4DPFWWK1SEDJT_yGDs7-CnwveA@mail.gmail.com>
+In-Reply-To: <CABVgOSmtD3GRV3hDoMw9EgMG4DPFWWK1SEDJT_yGDs7-CnwveA@mail.gmail.com>
+From:   Daniel Latypov <dlatypov@google.com>
+Date:   Mon, 31 Oct 2022 13:47:41 -0700
+Message-ID: <CAGS_qxqWcD6wsncncqtFR00QO1QcLPm3e1Vzjto3ah-NoE3+jg@mail.gmail.com>
+Subject: Re: [PATCH] kunit: alloc_string_stream_fragment error handling bug fix
+To:     David Gow <davidgow@google.com>
+Cc:     "YoungJun.park" <her0gyugyu@gmail.com>,
+        Brendan Higgins <brendan.higgins@linux.dev>,
+        linux-kselftest@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Can you apply this to see if it fixes it?
+On Sat, Oct 29, 2022 at 8:20 PM 'David Gow' via KUnit Development
+<kunit-dev@googlegroups.com> wrote:
 >
-> I'm guessing there's a path to the release of the file descriptor where
-> the ring buffer isn't allocated (and this expected it to be).
+> On Fri, Oct 28, 2022 at 10:43 PM YoungJun.park <her0gyugyu@gmail.com> wro=
+te:
+> >
+> > When it fails to allocate fragment, it does not free and return error.
+> > And check the pointer inappropriately.
+> >
+> > Signed-off-by: YoungJun.park <her0gyugyu@gmail.com>
+> > ---
 >
-> I'll investigate further to see if I can find that path.
+> Thanks! As Ma=C3=ADra points out, the added kunit_kfree() call isn't
+> strictly necessary, though it definitely doesn't hurt (and it's
+> probably a nice thing to free memory early if we're already in a
+> pretty dire memory situation). So I think it's an improvement.
 >
-> -- Steve
->
-> diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c 
-> index 199759c73519..c1c7ce4c6ddb 100644 --- 
-> a/kernel/trace/ring_buffer.c +++ b/kernel/trace/ring_buffer.c @@ 
-> -937,6 +937,9 @@ void ring_buffer_wake_waiters(struct trace_buffer 
-> *buffer, int cpu)   	struct ring_buffer_per_cpu *cpu_buffer;
->   	struct rb_irq_work *rbwork;
->   
-> + if (!buffer) + return; +   	if (cpu == RING_BUFFER_ALL_CPUS) {
->   
->   		/* Wake up individual ones too. One level recursion */
+> The IS_ERR check is definitely a fix, though.
 
-Dear Steve,
+Note: the IS_ERR check was fixed already in
+https://patchwork.kernel.org/project/linux-kselftest/patch/Y0kt1aCTHO4r2CmL=
+@kili/
+That change has made its way into torvalds/master.
+So we could rebase this patch and reword it to talk just about the
+early kfree().
 
+Re free memory early:
+It'll save us sizeof(struct string_stream_fragment) + sizeof(struct
+kunit_resource), i.e. 24 + 56 =3D 80 bytes (on UML/x86_64).
+So it's not much, but I guess it could help in edge cases.
 
-I have tested your suggested patch using kernel 6.1.0-rc2, but 
-unfortunately it didn't fix the issue for me.
-
-Thank you for looking into it though!
-
-
-Best Regards
-
---AD
-
-
-
-
+Daniel
