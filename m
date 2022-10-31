@@ -2,112 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC11614038
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 22:58:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DD1B261403A
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 22:58:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbiJaV6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 17:58:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51696 "EHLO
+        id S229536AbiJaV6b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 17:58:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiJaV5y (ORCPT
+        with ESMTP id S229477AbiJaV61 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 17:57:54 -0400
-Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B8E140D0;
-        Mon, 31 Oct 2022 14:57:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
-  t=1667253474; x=1698789474;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=lrb22HZ6Jnm7ozydurS59fLEB2TfDlJmL+nE6nHtD1o=;
-  b=KlWg00NJzwIfwmIH+Pyqpstpz8GpgLSkSAokvqABg0aDo3WGDXCpCzLb
-   dZXXcrM2nizSL9P5eiWnDpSXApu4mVdd3zaTNoEERy5dW5ZdnXHmCynJT
-   sYxH7DsFMahaHW80eK+EBJHzL0EU3SwCSSqFPmBnTLBVw9SP8Y7tLeqVc
-   w=;
-X-IronPort-AV: E=Sophos;i="5.95,228,1661817600"; 
-   d="scan'208";a="258282981"
-Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-1box-2bm6-32cf6363.us-west-2.amazon.com) ([10.43.8.6])
-  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 21:57:50 +0000
-Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
-        by email-inbound-relay-pdx-1box-2bm6-32cf6363.us-west-2.amazon.com (Postfix) with ESMTPS id D08A681A6C;
-        Mon, 31 Oct 2022 21:57:47 +0000 (UTC)
-Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
- EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
- id 15.0.1497.42; Mon, 31 Oct 2022 21:57:46 +0000
-Received: from 88665a182662.ant.amazon.com (10.43.160.223) by
- EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.15;
- Mon, 31 Oct 2022 21:57:44 +0000
-From:   Kuniyuki Iwashima <kuniyu@amazon.com>
-To:     Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>
-CC:     Akihiro HARAI <jharai0815@gmail.com>, Jiri Olsa <jolsa@kernel.org>,
-        Kuniyuki Iwashima <kuniyu@amazon.com>,
-        Kuniyuki Iwashima <kuni1840@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
-Subject: [PATCH] arm64/syscall: Include asm/ptrace.h in syscall_wrapper header.
-Date:   Mon, 31 Oct 2022 14:57:28 -0700
-Message-ID: <20221031215728.50389-1-kuniyu@amazon.com>
-X-Mailer: git-send-email 2.30.2
+        Mon, 31 Oct 2022 17:58:27 -0400
+Received: from mx-out.tlen.pl (mx-out.tlen.pl [193.222.135.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAFA39FF1
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 14:58:22 -0700 (PDT)
+Received: (wp-smtpd smtp.tlen.pl 11469 invoked from network); 31 Oct 2022 22:58:18 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=o2.pl; s=1024a;
+          t=1667253498; bh=1KcDlAJydwsD6iBxe2zLcIj/QaQqPMYu3avBARGdTDE=;
+          h=Subject:To:Cc:From;
+          b=ml+ldyWhxTB2iNZmeR7Iq+R1NcEIQUPpwnz+1HnyqjMfs/X2Ek9XzC4h8F/779xg4
+           c1qr9v/HpclUStvbjDTCY9RHj+cLy0CxloIEofcx5pRZGwOjadqs2szgK56x3/h4+j
+           ugI2dv/C2PkGp+PUTbQUBHpyobiL3qO3hi7K/cUM=
+Received: from aaew218.neoplus.adsl.tpnet.pl (HELO [192.168.1.22]) (mat.jonczyk@o2.pl@[83.4.126.218])
+          (envelope-sender <mat.jonczyk@o2.pl>)
+          by smtp.tlen.pl (WP-SMTPD) with ECDHE-RSA-AES256-GCM-SHA384 encrypted SMTP
+          for <brian.gix@intel.com>; 31 Oct 2022 22:58:18 +0100
+Message-ID: <58ab7693-b98a-6714-d6cf-f8e188bae254@o2.pl>
+Date:   Mon, 31 Oct 2022 22:58:17 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: "Bluetooth: hci0: HCI_REQ-0xfcf0" errors in dmesg
+Content-Language: en-GB
+To:     "Gix, Brian" <brian.gix@intel.com>,
+        "luiz.dentz@gmail.com" <luiz.dentz@gmail.com>
+Cc:     "Von Dentz, Luiz" <luiz.von.dentz@intel.com>,
+        "johan.hedberg@gmail.com" <johan.hedberg@gmail.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-bluetooth@vger.kernel.org" <linux-bluetooth@vger.kernel.org>,
+        "marcel@holtmann.org" <marcel@holtmann.org>
+References: <aac93511-d5e5-7a1b-6b1c-65e008ce068e@o2.pl>
+ <CABBYNZKXYaRT_N9YTHX2aKRBRVHhORejT=+LJNvrJgL2QYjSLA@mail.gmail.com>
+ <beb8dcdc3aee4c5c833aa382f35995f17e7961a1.camel@intel.com>
+From:   =?UTF-8?Q?Mateusz_Jo=c5=84czyk?= <mat.jonczyk@o2.pl>
+In-Reply-To: <beb8dcdc3aee4c5c833aa382f35995f17e7961a1.camel@intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Originating-IP: [10.43.160.223]
-X-ClientProxiedBy: EX13D23UWC003.ant.amazon.com (10.43.162.81) To
- EX19D004ANA001.ant.amazon.com (10.37.240.138)
-X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-WP-MailID: 78f8c89d63433d3137dcbe83300b425f
+X-WP-AV: skaner antywirusowy Poczty o2
+X-WP-SPAM: NO 0000000 [QVN0]                               
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the same change for ARM64 as done in the commit 9440c4294160
-("x86/syscall: Include asm/ptrace.h in syscall_wrapper header") to
-make sure all syscalls see 'struct pt_regs' definition and resulted
-BTF for '__arm64_sys_*(struct pt_regs *regs)' functions point to
-actual struct.
+W dniu 31.10.2022 o 22:08, Gix, Brian pisze:
+> On Mon, 2022-10-31 at 13:37 -0700, Luiz Augusto von Dentz wrote:
+>> On Mon, Oct 31, 2022 at 1:15 PM Mateusz Jończyk <mat.jonczyk@o2.pl>
+>> wrote:
+>>> On 6.1.0-rc3, I have been seeing this error message in dmesg:
+>>>
+>>>         Bluetooth: hci0: HCI_REQ-0xfcf0
+>>>
+>>> It is printed on every boot, resume from suspend and rfkill unblock
+>>> of the Bluetooth device.
+>>> The device seems to be functioning normally though (but I have done
+>>> limited testing only).
+>>>
+>>> After some investigation, it turned out to be caused by
+>>>         commit dd50a864ffae ("Bluetooth: Delete unreferenced
+>>> hci_request code")
+>>> which modified hci_req_add() in net/bluetooth/hci_request.c to
+>>> always print an error message
+>>> when that function is executed.
+[...]
+> This, I suspect, will be an ongoing issue, particularily with Vender
+> Opcodes, which we don't have much direct visability and testing
+> capabilities.  The error gets logged because it is using a deprecated
+> (but still working) mechanism to issue HCI opcodes.
+>
+> If I can get the source code path of the call as it is being
+> contructed, I can try making you a patch Mateusz...  But you will
+> probably need to do the testing/verification for me.
 
-Without this patch, the BPF verifier refuses to load a tracing prog
-which accesses pt_regs.
+Sure, what info would you like me to provide? The MSFT
+Vendor Opcode 0xFCF0 is defined in drivers/bluetooth/btrtl.c, line 725.
 
-  bpf(BPF_PROG_LOAD, {prog_type=0x1a, ...}, 128) = -1 EACCES
+I'm not sure if I have any additional Bluetooth LE devices around, unfortunately.
 
-With this patch, we can see the correct error, which saves us time
-in debugging the prog.
+Additionally, I think that the error message is a bit cryptic, and perhaps could
+be changed and/or demoted to a notice for kernel 6.1.
 
-  bpf(BPF_PROG_LOAD, {prog_type=0x1a, ...}, 128) = 4
-  bpf(BPF_RAW_TRACEPOINT_OPEN, {raw_tracepoint={name=NULL, prog_fd=4}}, 128) = -1 ENOTSUPP
+Greetings,
 
-Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
----
-Note the cited commit only exists in the tip tree for now.
-https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=9440c42941606af4c379afa3cf8624f0dc43a629
----
- arch/arm64/include/asm/syscall_wrapper.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/arch/arm64/include/asm/syscall_wrapper.h b/arch/arm64/include/asm/syscall_wrapper.h
-index b383b4802a7b..d30217c21eff 100644
---- a/arch/arm64/include/asm/syscall_wrapper.h
-+++ b/arch/arm64/include/asm/syscall_wrapper.h
-@@ -8,7 +8,7 @@
- #ifndef __ASM_SYSCALL_WRAPPER_H
- #define __ASM_SYSCALL_WRAPPER_H
- 
--struct pt_regs;
-+#include <asm/ptrace.h>
- 
- #define SC_ARM64_REGS_TO_ARGS(x, ...)				\
- 	__MAP(x,__SC_ARGS					\
--- 
-2.30.2
+Mateusz
 
