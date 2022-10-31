@@ -2,148 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B109613C4C
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:39:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5CC14613C52
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:40:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231838AbiJaRjU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 13:39:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39148 "EHLO
+        id S231768AbiJaRkZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 13:40:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231829AbiJaRix (ORCPT
+        with ESMTP id S231942AbiJaRkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 13:38:53 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFDAE13D40;
-        Mon, 31 Oct 2022 10:38:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 17017B819BA;
-        Mon, 31 Oct 2022 17:38:39 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 38709C43147;
-        Mon, 31 Oct 2022 17:38:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667237917;
-        bh=P9CiTbFkLwYXgkEJtoE1pjsCHoI48SKWU5aipbF3igg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=FWoSDZLAWEJZUT6mSbEXa8gW75M91KXEbFRnzgmaEPaVFzfP862DtwPc35OjioWj4
-         vFG/stMP+8m/M+TkH6HKIlUgBQ9FYWXbSvARZmvo6To5gL70wjkOHX6orXCFjdBmhD
-         xS/m5oOjcxexhDG0tJ+96hf9aJKgssVytSEDvVzMg410YPKKTf/58hEwcA+//8NAaI
-         ryWnBKa99eryMwamtaxUrn3YJWkCCeFYU/JOEl99g9AZLhAraPxrxb6DOE7WZOSRb+
-         9cp5p/hkjTkepOa4SW2CKlYlT5qRTftB9rkHvam03HxfVaTEAudlh4rLMtsk+F/ngt
-         H77toNMvDffKQ==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>
-Cc:     Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, x86@kernel.org, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev, patches@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH bpf] bpf: Mark bpf_arch_init_dispatcher_early() as __init_or_module
-Date:   Mon, 31 Oct 2022 10:38:19 -0700
-Message-Id: <20221031173819.2344270-1-nathan@kernel.org>
+        Mon, 31 Oct 2022 13:40:09 -0400
+Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2266613D73;
+        Mon, 31 Oct 2022 10:39:49 -0700 (PDT)
+Received: from g550jk.arnhem.chello.nl (31-151-115-246.dynamic.upc.nl [31.151.115.246])
+        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 325DED019C;
+        Mon, 31 Oct 2022 17:39:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
+        t=1667237987; bh=2Gi0EKJdVgf4UQs0CB/NSQnG2y/0R6oOHuiW0D9biC8=;
+        h=From:To:Cc:Subject:Date;
+        b=KXmF94VbM5DR089XGQaH3c2n6/JW657iwEtLEGFAwaRlFPQrt/lVVSqKjYCg7y2H6
+         kmyBUYFh7t1TzdfRZBglmCeThI583SQtPUQDwlubPNhgtOMi/u4FpHpS1KBXZ9ADZT
+         bLScWcHmHGRPRUXHcd3oKZUYe1nvhxqzGDT8QUbU=
+From:   Luca Weiss <luca@z3ntu.xyz>
+To:     linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        afd@ti.com, Luca Weiss <luca@z3ntu.xyz>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 1/3] dt-bindings: mfd: qcom,spmi-pmic: support more types
+Date:   Mon, 31 Oct 2022 18:39:31 +0100
+Message-Id: <20221031173933.936147-1-luca@z3ntu.xyz>
 X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
+        FROM_SUSPICIOUS_NTLD_FP,PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After commit dbe69b299884 ("bpf: Fix dispatcher patchable function entry
-to 5 bytes nop"), building kernel/bpf/dispatcher.c in certain
-configurations with LLVM's integrated assembler results in a known
-recordmcount bug:
+* 'adc@' is either spmi-iadc or spmi-vadc
+* 'charger@' is either pm8941-charger or pm8941-coincell
+* 'usb-vbus-regulator@' is usb-vbus-regulator
+* 'vibrator@' is now in yaml format, so add it
 
-  Cannot find symbol for section 4: .init.text.
-  kernel/bpf/dispatcher.o: failed
-
-This occurs when there are only weak symbols in a particular section in
-the translation unit; in this case, bpf_arch_init_dispatcher_early() is
-marked '__weak __init' and it is the only symbol in the .init.text
-section. recordmcount expects there to be a symbol for a particular
-section but LLVM's integrated assembler (and GNU as after 2.37) do not
-generated section symbols. This has been worked around in the kernel
-before in commit 55d5b7dd6451 ("initramfs: fix clang build failure")
-and commit 6e7b64b9dd6d ("elfcore: fix building with clang").
-
-Fixing recordmcount has been brought up before but there is no clear
-solution that does not break ftrace outright.
-
-Unfortunately, working around this issue by removing the '__init' from
-bpf_arch_init_dispatcher_early() is not an option, as the x86 version of
-bpf_arch_init_dispatcher_early() calls text_poke_early(), which is
-marked '__init_or_module', meaning that when CONFIG_MODULES is disabled,
-bpf_arch_init_dispatcher_early() has to be marked '__init' as well to
-avoid a section mismatch warning from modpost.
-
-However, bpf_arch_init_dispatcher_early() can be marked
-'__init_or_module' as well, which would resolve the recordmcount warning
-for configurations that support modules (i.e., the vast majority of
-them) while not introducing any new warnings for all configurations. Do
-so to clear up the build failure for CONFIG_MODULES=y configurations.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/981
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
 ---
- arch/x86/net/bpf_jit_comp.c | 2 +-
- include/linux/bpf.h         | 2 +-
- kernel/bpf/dispatcher.c     | 2 +-
- 3 files changed, 3 insertions(+), 3 deletions(-)
+Changes since v1:
+* Change dcdc@ to usb-vbus-regulator@
+* Link to pm8xxx-vib.yaml
 
-diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
-index 00127abd89ee..4145939bbb6a 100644
---- a/arch/x86/net/bpf_jit_comp.c
-+++ b/arch/x86/net/bpf_jit_comp.c
-@@ -389,7 +389,7 @@ static int __bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
- 	return ret;
- }
- 
--int __init bpf_arch_init_dispatcher_early(void *ip)
-+int __init_or_module bpf_arch_init_dispatcher_early(void *ip)
- {
- 	const u8 *nop_insn = x86_nops[5];
- 
-diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-index 0566705c1d4e..4aa7bde406f5 100644
---- a/include/linux/bpf.h
-+++ b/include/linux/bpf.h
-@@ -971,7 +971,7 @@ struct bpf_trampoline *bpf_trampoline_get(u64 key,
- 					  struct bpf_attach_target_info *tgt_info);
- void bpf_trampoline_put(struct bpf_trampoline *tr);
- int arch_prepare_bpf_dispatcher(void *image, void *buf, s64 *funcs, int num_funcs);
--int __init bpf_arch_init_dispatcher_early(void *ip);
-+int __init_or_module bpf_arch_init_dispatcher_early(void *ip);
- 
- #define BPF_DISPATCHER_INIT(_name) {				\
- 	.mutex = __MUTEX_INITIALIZER(_name.mutex),		\
-diff --git a/kernel/bpf/dispatcher.c b/kernel/bpf/dispatcher.c
-index 04f0a045dcaa..e14a68e9a74f 100644
---- a/kernel/bpf/dispatcher.c
-+++ b/kernel/bpf/dispatcher.c
-@@ -91,7 +91,7 @@ int __weak arch_prepare_bpf_dispatcher(void *image, void *buf, s64 *funcs, int n
- 	return -ENOTSUPP;
- }
- 
--int __weak __init bpf_arch_init_dispatcher_early(void *ip)
-+int __weak __init_or_module bpf_arch_init_dispatcher_early(void *ip)
- {
- 	return -ENOTSUPP;
- }
+ .../devicetree/bindings/mfd/qcom,spmi-pmic.yaml  | 16 ++++++++++++++--
+ 1 file changed, 14 insertions(+), 2 deletions(-)
 
-base-commit: 8bdc2acd420c6f3dd1f1c78750ec989f02a1e2b9
+diff --git a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+index 777f2da52f1e..cf10d62ace54 100644
+--- a/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
++++ b/Documentation/devicetree/bindings/mfd/qcom,spmi-pmic.yaml
+@@ -105,7 +105,9 @@ properties:
+ patternProperties:
+   "^adc@[0-9a-f]+$":
+     type: object
+-    $ref: /schemas/iio/adc/qcom,spmi-vadc.yaml#
++    oneOf:
++      - $ref: /schemas/iio/adc/qcom,spmi-iadc.yaml#
++      - $ref: /schemas/iio/adc/qcom,spmi-vadc.yaml#
+ 
+   "^adc-tm@[0-9a-f]+$":
+     type: object
+@@ -115,6 +117,12 @@ patternProperties:
+     type: object
+     additionalProperties: true # FIXME qcom,pm8916-wcd-analog-codec binding not converted yet
+ 
++  "^charger@[0-9a-f]+$":
++    type: object
++    oneOf:
++      - $ref: /schemas/power/supply/qcom,pm8941-charger.yaml#
++      - $ref: /schemas/power/supply/qcom,pm8941-coincell.yaml#
++
+   "extcon@[0-9a-f]+$":
+     type: object
+     $ref: /schemas/extcon/qcom,pm8941-misc.yaml#
+@@ -135,9 +143,13 @@ patternProperties:
+     type: object
+     $ref: /schemas/thermal/qcom,spmi-temp-alarm.yaml#
+ 
++  "^usb-vbus-regulator@[0-9a-f]+$":
++    type: object
++    $ref: /schemas/regulator/qcom,usb-vbus-regulator.yaml#
++
+   "^vibrator@[0-9a-f]+$":
+     type: object
+-    additionalProperties: true # FIXME qcom,pm8916-vib binding not converted yet
++    $ref: /schemas/input/qcom,pm8xxx-vib.yaml#
+ 
+   "^mpps@[0-9a-f]+$":
+     type: object
 -- 
 2.38.1
 
