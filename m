@@ -2,65 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD4BA613268
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 10:19:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFCDB613261
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 10:18:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbiJaJTS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 05:19:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49014 "EHLO
+        id S229926AbiJaJSW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 05:18:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229851AbiJaJTL (ORCPT
+        with ESMTP id S229457AbiJaJSU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 05:19:11 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9FF6D132
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 02:18:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667207891;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aLHvMkuWIJwngK3NBqM0wFdXKT6mSNzSHXzmL6Bj96E=;
-        b=jHoythdixBeE7SJnfMzijK3/1HtTsuQDV9H6caMtYtbc51PqpjDMMNSBSGOkflT9KyeuZr
-        LcAYVyS6jCOr5tAW2hYwKrnC2Zfjbnm30eW/Bh43rHCS01j3c9kDL7Sx0A9oSg/rD55W/O
-        K2WTqEECV5ntYNdBYEXBh0yox70BSFk=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-62-OGUxiIqqPTmXZzuAWZ_2pQ-1; Mon, 31 Oct 2022 05:18:04 -0400
-X-MC-Unique: OGUxiIqqPTmXZzuAWZ_2pQ-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 33625882828;
-        Mon, 31 Oct 2022 09:18:03 +0000 (UTC)
-Received: from localhost (ovpn-12-152.pek2.redhat.com [10.72.12.152])
-        by smtp.corp.redhat.com (Postfix) with ESMTPS id 600E31121320;
-        Mon, 31 Oct 2022 09:18:02 +0000 (UTC)
-Date:   Mon, 31 Oct 2022 17:17:58 +0800
-From:   Baoquan He <bhe@redhat.com>
-To:     Xianting Tian <xianting.tian@linux.alibaba.com>
-Cc:     paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, anup@brainfault.org, heiko@sntech.de,
-        guoren@kernel.org, mick@ics.forth.gr,
-        alexandre.ghiti@canonical.com, vgoyal@redhat.com,
-        dyoung@redhat.com, corbet@lwn.net, Conor.Dooley@microchip.com,
-        bagasdotme@gmail.com, kexec@lists.infradead.org,
-        linux-doc@vger.kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org, crash-utility@redhat.com,
-        heinrich.schuchardt@canonical.com, k-hagio-ab@nec.com,
-        hschauhan@nulltrace.org, yixun.lan@gmail.com
-Subject: Re: [PATCH V5 0/2] Support VMCOREINFO export for RISCV64
-Message-ID: <Y1+SxuC8qFWQStSe@MiWiFi-R3L-srv>
-References: <20221026144208.373504-1-xianting.tian@linux.alibaba.com>
+        Mon, 31 Oct 2022 05:18:20 -0400
+Received: from mail-ed1-x532.google.com (mail-ed1-x532.google.com [IPv6:2a00:1450:4864:20::532])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 886B1D2CD;
+        Mon, 31 Oct 2022 02:18:19 -0700 (PDT)
+Received: by mail-ed1-x532.google.com with SMTP id x2so16534883edd.2;
+        Mon, 31 Oct 2022 02:18:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ecCahP3NbGV/UrWYeJFBrd6bWsq75pHnaHwN/pqPc2U=;
+        b=kKG6/ZIXiMapVlg3cGF3ZZBd8ugJEee+EQqOsiTFaCYHiCfxXJ53zmY5lieEH8sI75
+         UPpFYhJk6gW1gUTL7EdPujVDA8hN3BlQSr/qYK8u41jJXsoTOdgwXCUTEMHallx35sX0
+         Cmko9AmEYE6Np3DBfULf6QwXAUXoF4B+hCWwINHnp/1pWeo6JqwpPkncVJnXxgXD8HmN
+         p5v9jLyNTjEjjLn8EEl4R/ckRl/9FpVUDAtHaJwaez2saO2727gJkXN1tgBmaL8Oh3Eb
+         wA5c2Pu0+fK7AAjSmPi6iHwftOswU044EryL81nETC8U8remaxDV69Fjk8AJiclbZo3D
+         t2yg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ecCahP3NbGV/UrWYeJFBrd6bWsq75pHnaHwN/pqPc2U=;
+        b=y9ID1nCq9n20TIcS4eoawdopEuiTTbaHtJNhr47Y4Ccsa4AGEu5snZGIH9eCSl4NOc
+         oZit4mQ03Fg7SM/PClHuquioPkr+odBqUS+zuGHpDynVihiUPOaJNAhZtqt2pY7yRXGy
+         qBeuw8SSxTwoAa/iXyjNHd3Nop4E9X504vaydVEfs2nXYptDXU0kaIdmyj5QXrxru6mn
+         p/7hb9RPmJHaWB17TApMP9XNgKed19GkRBfW+gCUL2505hJMZf+tvaPL6kee+9u6GWX+
+         lbFuEkM9//e22nOFLm+Keb5WoSl1COfofS5W+DQnleOgvhBKEqsAmwW2zvRhOme1eXc0
+         9UhQ==
+X-Gm-Message-State: ACrzQf0XzNO2QwwcteFCUHwckcumvG78ondg6zOMgk0okYLcuaP24w4M
+        OPgEhIkBerdVpkT0T0nb5fZdyxw1f8g=
+X-Google-Smtp-Source: AMsMyM63sIee6jJUO+QTZM8eD94QlMVcR1aUAVyeVWqhd61IiQpO3wxZvuGEssEFhsz6dRiZfPUcdw==
+X-Received: by 2002:aa7:d458:0:b0:45b:ddbf:39fa with SMTP id q24-20020aa7d458000000b0045bddbf39famr12714032edr.335.1667207898047;
+        Mon, 31 Oct 2022 02:18:18 -0700 (PDT)
+Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id a15-20020aa7cf0f000000b004616b006871sm2968662edy.82.2022.10.31.02.18.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 02:18:17 -0700 (PDT)
+From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
+To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
+Cc:     Yong Deng <yong.deng@magewell.com>,
+        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Chen-Yu Tsai <wens@csie.org>,
+        Samuel Holland <samuel@sholland.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
+Subject: Re: [PATCH v6 36/43] media: sun6i-csi: Move hardware control to the bridge
+Date:   Mon, 31 Oct 2022 10:18:16 +0100
+Message-ID: <2257327.ElGaqSPkdT@kista>
+In-Reply-To: <20220826183240.604834-37-paul.kocialkowski@bootlin.com>
+References: <20220826183240.604834-1-paul.kocialkowski@bootlin.com> <20220826183240.604834-37-paul.kocialkowski@bootlin.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221026144208.373504-1-xianting.tian@linux.alibaba.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,31 +80,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/26/22 at 10:42pm, Xianting Tian wrote:
-> As disscussed in below patch set, the patch of 'describe VMCOREINFO export in Documentation'
-> need to update according to Bagas's comments. 
-> https://lore.kernel.org/linux-riscv/22AAF52E-8CC8-4D11-99CB-88DE4D113444@kernel.org/
+Dne petek, 26. avgust 2022 ob 20:32:33 CET je Paul Kocialkowski napisal(a):
+> In order to support the isp workflow, we need to be able to configure
+> the hardware from the bridge when the capture device is not used.
 > 
-> As others patches in above patch set already applied, so this patch set only contains below two
-> patches.
+> As a result, move all hardware configuration calls from capture to
+> the bridge. Only the window configuration part (which is specific
+> to using capture) remains there.
 > 
-> ------
-> Changes:
->    Fix commit message in patch 2: use "Document these RISCV64 exports above" instead of
->    "This patch just add the description of VMCOREINFO export for RISCV64."
-> V1 -> V2:
->    Remove unnecessary overline above header text in patch 2.
-> V2 -> V3:
->    Fix commit message in patch 1,2; 
->    Use 'space' instead of 'region' for vmemmap description in patch 2.
-> V3 -> V4:
->    Remove unnecessary kernel space export:
->    KASAN_SHADOW_START ~ KASAN_SHADOW_END,
->    ADDRESS_SPACE_END
-> V4 -> V5:
->    Remove IS_ENABLED() judgement for KERNEL_LINK_ADDR in patch 1.
+> This effectively opens the way for hooking the bridge to the
+> isp in the future.
+> 
+> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
 
-This series looks good to me, thanks.
+Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
 
-Acked-by: Baoquan He <bhe@redhat.com>
+Best regards,
+Jernej
+
 
