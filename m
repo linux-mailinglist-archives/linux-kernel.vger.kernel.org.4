@@ -2,100 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6F202613BE4
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:08:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 47EB9613BE9
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:10:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231991AbiJaRIs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 13:08:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51450 "EHLO
+        id S231887AbiJaRKG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 13:10:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230234AbiJaRIo (ORCPT
+        with ESMTP id S231574AbiJaRKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 13:08:44 -0400
-Received: from mail-oa1-x31.google.com (mail-oa1-x31.google.com [IPv6:2001:4860:4864:20::31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CF6B12D08
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 10:08:41 -0700 (PDT)
-Received: by mail-oa1-x31.google.com with SMTP id 586e51a60fabf-13bd19c3b68so14102746fac.7
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 10:08:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=C7QyndEJfzTQZtJYUGQNW9nMNPikJDsHRWnpG2pdH0A=;
-        b=K6/WUZRjViIDQIAfkzMVEOUsDuPwr0JFtCcs7Ug3FFb9N7TNoka4TcO8no3Lo2ohtf
-         XZrQnY3BvV+uUuxjPiOAigJTIn/6lj66lAodSA0TiLC2uYfkA1sC15HQa63t2xOI+62z
-         CsMHqDobXYIGzAVqZ/BYOznKbkBGtEqSXPZvzFCYYnaY8d9iEwYv2SRVyUrljvKK/Dlj
-         iWfOWpbvTGrQ2fTvqfL1AouIv0qPNtjkNz1lKYn2G1dqeSJVa0inw6UJxu6rHMgukY0B
-         azFdAhGzRJ43KS2j6EYeCEhWLdbvNfJnFPpjgPOF7k1dmxzAx0cnzVvXEs6vcBFfXHtN
-         FE1Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=C7QyndEJfzTQZtJYUGQNW9nMNPikJDsHRWnpG2pdH0A=;
-        b=03PDGPD9Vfz8P0k6wXCk2aI3n5ULa3eV6UqcJfYnsxFcukNCj66aT7gGRMcepaNfS5
-         L/eUa/q1DVYlySJlzSo516AIy5XSHgTYSc57/GgUhqBF7973ZRFqbancs/nAVBgpw4+r
-         cMQj9cYwqPp/JK0TE8kXNm7A+6l4drlZVEeAJUnQO0nOibSZ3r85C9qjpLSqdM9b0nCq
-         568axWv01Ds32V5rQ3nuDeWV8yDVZfEEqmIW0R0GPKulj7lUW+kxU3nN9rIarzsC9HDu
-         UwJplA91CWxEoUaeQG+3+maUBlsitZqItWAggUyPJwxfLGPz4t31sdTX9fTVg3pTF/Q8
-         F0DA==
-X-Gm-Message-State: ACrzQf1TubVcb4SzRI7zpHmdX6b7R8ZC02Cq5TAEBXDv4ZeN0lFLq4Fk
-        GvLkxxJK9gO4CACtf7xydm+nK0mShEKi6rBZJPvztplY
-X-Google-Smtp-Source: AMsMyM5IY5vpz+/q6V8WNAJQ6H0ALrDJzjTwaVsyeomBJ9o8rzHrta9TQuJyRBS0P6+4ovIzDWQrwXwPeNTG6lrOfOs=
-X-Received: by 2002:a05:6870:a116:b0:13a:f9de:6fd0 with SMTP id
- m22-20020a056870a11600b0013af9de6fd0mr17947325oae.46.1667236120523; Mon, 31
- Oct 2022 10:08:40 -0700 (PDT)
+        Mon, 31 Oct 2022 13:10:04 -0400
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8974B12D08;
+        Mon, 31 Oct 2022 10:10:02 -0700 (PDT)
+Received: (Authenticated sender: i.maximets@ovn.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id 6D5E4E0007;
+        Mon, 31 Oct 2022 17:09:59 +0000 (UTC)
+Message-ID: <eeb28c10-63ab-ecf6-7938-40257dfd12b2@ovn.org>
+Date:   Mon, 31 Oct 2022 18:09:58 +0100
 MIME-Version: 1.0
-References: <20221031165834.GA10150@duo.ucw.cz>
-In-Reply-To: <20221031165834.GA10150@duo.ucw.cz>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Mon, 31 Oct 2022 13:08:28 -0400
-Message-ID: <CADnq5_O0BotfaaMGz1oPiQno=g10DBygB2F6gfOuWd13M0C2LA@mail.gmail.com>
-Subject: Re: 6.1-rc: names of video outputs changed?
-To:     Pavel Machek <pavel@ucw.cz>
-Cc:     airlied@redhat.com, dri-devel@lists.freedesktop.org,
-        daniel@ffwll.ch, kernel list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Cc:     i.maximets@ovn.org, Jakub Kicinski <kuba@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>, linux-kernel@vger.kernel.org
+Content-Language: en-US
+To:     netdev@vger.kernel.org
+References: <20221021114921.3705550-1-i.maximets@ovn.org>
+From:   Ilya Maximets <i.maximets@ovn.org>
+Subject: Re: [RFE net-next] net: tun: 1000x speed up
+In-Reply-To: <20221021114921.3705550-1-i.maximets@ovn.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Did you change which xorg DDX you are using?  E.g., between
-xf86-video-modesetting and a xf86-video-[i915/radeon/amdgpu/etc.]?
-They may have different naming conventions.
+On 10/21/22 13:49, Ilya Maximets wrote:
+> The 10Mbps link speed was set in 2004 when the ethtool interface was
+> initially added to the tun driver.  It might have been a good
+> assumption 18 years ago, but CPUs and network stack came a long way
+> since then.
+> 
+> Other virtual ports typically report much higher speeds.  For example,
+> veth reports 10Gbps since its introduction in 2007.
+> 
+> Some userspace applications rely on the current link speed in
+> certain situations.  For example, Open vSwitch is using link speed
+> as an upper bound for QoS configuration if user didn't specify the
+> maximum rate.  Advertised 10Mbps doesn't match reality in a modern
+> world, so users have to always manually override the value with
+> something more sensible to avoid configuration issues, e.g. limiting
+> the traffic too much.  This also creates additional confusion among
+> users.
+> 
+> Bump the advertised speed to at least match the veth.  10Gbps also
+> seems like a more or less fair assumption these days, even though
+> CPUs can do more.  Alternative might be to explicitly report UNKNOWN
+> and let the application/user decide on a right value for them.
+> 
+> Link: https://mail.openvswitch.org/pipermail/ovs-discuss/2022-July/051958.html
+> Signed-off-by: Ilya Maximets <i.maximets@ovn.org>
+> ---
+> 
+> Sorry for the clickbait subject line.  Can change it to something more
+> sensible while posting non-RFE patch.  Something like:
+> 
+>   'net: tun: bump the link speed from 10Mbps to 10Gbps'
+> 
+> This patch is RFE just to start a conversation.
 
-Alex
+OK.  There seems to be no more discussions around the topic, so
+I'll make a conclusion.
 
-On Mon, Oct 31, 2022 at 1:04 PM Pavel Machek <pavel@ucw.cz> wrote:
->
-> Hi!
->
-> I used to be able to do:
->
-> pavel@duo:~$     xrandr --output HDMI1 --mode 1920x1080 --primary
-> warning: output HDMI1 not found; ignoring
-> pavel@duo:~$     xrandr --output VGA1 --mode 1280x1024 --below HDMI1
-> warning: output VGA1 not found; ignoring
->
-> ...but now I have to do:
->
-> pavel@duo:~$     xrandr --output VGA-1 --mode 1280x1024 --below HDMI-1
-> xrandr: cannot find crtc for output VGA-1
-> pavel@duo:~$     xrandr --output LVDS-1 --off
-> pavel@duo:~$     xrandr --output VGA-1 --mode 1280x1024 --below HDMI-1
->
-> Notice the change from HDMI1 to HDMI-1. I believe that's new in 6.1 or
-> so. Who did it and why? Hardware is thinkpad x220, and this breaks my
-> scripts :-(.
->
-> Best regards,
->                                                                 Pavel
-> --
-> People of Russia, stop Putin before his war on Ukraine escalates.
+General understanding is that reporting UNKNOWN will cause problems
+with bonding (not sure why anyone will add tap into bonding outside
+of just for testing reasons, but that's a different topic) and will
+potentially cause problems with userpsace applications that do not
+handle that case for some reason.  So, this is a risky option at the
+moment.
+
+There was no strong opinion against equalizing speeds between veth
+and tun/tap.  Sounds like a safe option in general and there are no
+known use cases that will be negatively affected.
+
+So, I think, I'll go ahead and post the non-RFC version of the
+proposed change.
+
+Thanks!
+
+Best regards, Ilya Maximets.
