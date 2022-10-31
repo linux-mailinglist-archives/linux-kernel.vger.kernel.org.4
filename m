@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 198FC613E29
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 20:24:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 34F24613E2A
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 20:24:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230022AbiJaTY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 15:24:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43564 "EHLO
+        id S229948AbiJaTYb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 15:24:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43570 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiJaTYZ (ORCPT
+        with ESMTP id S229955AbiJaTY0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 15:24:25 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68A6F12A91
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 12:24:24 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id i3so11498093pfc.11
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 12:24:24 -0700 (PDT)
+        Mon, 31 Oct 2022 15:24:26 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F2DD12A93
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 12:24:25 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id k15so3466713pfg.2
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 12:24:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fhiMhg63rIh6GuOq1veFLUIx15LHFqS7BPNdeDxmDo0=;
-        b=mK0/ehHT4mnQ3Nce8InbFGbqAhEvpKCqA4O5AxRm494Y1sSIBsp1Sa9bU/tYxcF0IJ
-         4NEOMw1hJm9aYcj4tiO9VDIm6k9rKCKb3mNeeM7H0j7K9ZqO/lUAliidZEpt8zLr6vSU
-         qU2+22HmPmyEJPY+Z/4+S8euddoKKhWUF56TdNbHhCR1bQg+p4fwC4ojEN/U1oaNrdwW
-         zgLTmSpI+RS2uVVfPEjAbleBnvb98sObWkKsKyy+DTpvpL7P9b5O8tV62lFwbtyQscTq
-         7dwppVXZdwextuHnEVkohopEDDSWOUUMYBW++G8iw+UfYfH4cg4j9dboZ6gdbw9P3Q+u
-         mb9w==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=es/0kWvvQxEpWUALVTo4G3gGn6qEo4PAzN7S5DlZtZc=;
+        b=NzFvo3fTSk/jdPwbm7bOJ99+KIFmYROJ9EOzeCc6qjy0CQCXx9RXavb4qDZIKFfgQV
+         uDA/PNGEHbwhjR6zdtzuhq8PmIBebvcCOudD09W7Iukh5d7GbFOjivEK2Qxere6J/VPc
+         WejJk13gNI5hFc8jgdjTZaI0Dd/GbagbVkKx5KwptxQtTmbIlD9BqswfUTPskbBLmJwh
+         CjO/cjoZZeb5zl0yT2VKCLRzkbXZexxuGJLRw3pM6G/GtNkJlFpKPJb1kg11dMGUL8Ha
+         hxucXzQAojJcJqqh2679+Tteo9hi5UagfDl1QhU7j4eIyHHO7p8ZQOApvMuKAIVNQ0HA
+         z9mA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fhiMhg63rIh6GuOq1veFLUIx15LHFqS7BPNdeDxmDo0=;
-        b=bvrejIXFe2rB7kqCA03I+/sabHq5FiB2ZEmbNzftLNLS1X3ryCKeDBdWl+WlsTyMtG
-         Be9m+Emfu5sSouZh785qnApltM/EYRfVbtQz+keMYRz4T9RtIWVc+DQBKpWlbvLpL+Wg
-         oTSrHftloQ/NNB/NN0hnCqUr9uhumi9XfxmFzyCdC6EerNUFF5nfYMR5xjBKN2tNAHxT
-         1cz8cYcjXWH3AfT4YBVyaNLtpWhNHx7RGZX5WYhmVs/m8DZQRFmwsnz5tbq85XmmqHg8
-         glcBgoIdV7b7FnBYbnunMGe2U4gR6vSxmaAUFM1rSBQPGg1jX7PR5YwlGlwyZP2czEQs
-         3jRg==
-X-Gm-Message-State: ACrzQf0ZmdCPB41En0i3R+sLu7Z7U0cu/Pgo/gUXeuvYiuu//3WyFtxN
-        ZouW7xrVtIQXSxruFm0es7xDrMrf5ng=
-X-Google-Smtp-Source: AMsMyM5QvcTA+CYkYDPuNftclkdTNzjm/dGgQXJ+csUotuEAg57KdO252M9edVlmQ4nXW5Isuv+qlg==
-X-Received: by 2002:a62:fb0f:0:b0:56d:78af:993 with SMTP id x15-20020a62fb0f000000b0056d78af0993mr6680165pfm.7.1667244263028;
-        Mon, 31 Oct 2022 12:24:23 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=es/0kWvvQxEpWUALVTo4G3gGn6qEo4PAzN7S5DlZtZc=;
+        b=fS7s0TyD4kDSjv1QeY5JMdtoeyXrvNJkgIav0fYtX9v5ZXCAZdXIgqGq13EyczgK/8
+         rfu9n2EbDgPStjBnpFlY9sxcZ3X4ptma6aiQHN0zwMOo2B9mNk5I3BTGFflA+mYbCIRF
+         MNS5lVa/pY30CVxN2hm7nEhsVGntJjxjZ2mJNj+nAdmFGu/Df+6BhZqHENWn3FjzEDT3
+         PB3Ox/P0wWnrkhT0g7h/JMUIwTNNd3J4RHmG7uAEpURFrlgJ5bPe5693X7bjHcXyR/G+
+         r+veDtLL96WkLB6Uu+ymaX6CssduKh/nJy8y/QyrG05i4oxUeV3QCrtWGLcotWRc85eC
+         A0lw==
+X-Gm-Message-State: ACrzQf3wSFRHxgx8WFQJenrTzYe4/umTUgiWkpsavITEy5AsHfzyMOan
+        mt29pGw+Hm8+38sL8ayL750MGPtkHxg=
+X-Google-Smtp-Source: AMsMyM7jVdA9xD4GBwm93f9Y8o6pYjy0rhZWd/Htp/CAcygwG1AHLNPs8cefLPsJUpApg+3yz/zlrg==
+X-Received: by 2002:a65:58cf:0:b0:46f:ba32:2eb9 with SMTP id e15-20020a6558cf000000b0046fba322eb9mr6960074pgu.590.1667244264833;
+        Mon, 31 Oct 2022 12:24:24 -0700 (PDT)
 Received: from daehojeong-desktop.mtv.corp.google.com ([2620:15c:211:201:769d:1a73:1fb:944e])
-        by smtp.gmail.com with ESMTPSA id r11-20020aa7988b000000b0056babe4fb8asm4950466pfl.49.2022.10.31.12.24.22
+        by smtp.gmail.com with ESMTPSA id r11-20020aa7988b000000b0056babe4fb8asm4950466pfl.49.2022.10.31.12.24.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 12:24:22 -0700 (PDT)
+        Mon, 31 Oct 2022 12:24:24 -0700 (PDT)
 From:   Daeho Jeong <daeho43@gmail.com>
 To:     linux-kernel@vger.kernel.org,
         linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
 Cc:     Daeho Jeong <daehojeong@google.com>
-Subject: [PATCH v6 1/2] f2fs: correct i_size change for atomic writes
-Date:   Mon, 31 Oct 2022 12:24:15 -0700
-Message-Id: <20221031192416.32917-1-daeho43@gmail.com>
+Subject: [PATCH v6 2/2] f2fs: introduce F2FS_IOC_START_ATOMIC_REPLACE
+Date:   Mon, 31 Oct 2022 12:24:16 -0700
+Message-Id: <20221031192416.32917-2-daeho43@gmail.com>
 X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
+In-Reply-To: <20221031192416.32917-1-daeho43@gmail.com>
+References: <20221031192416.32917-1-daeho43@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -71,168 +74,146 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Daeho Jeong <daehojeong@google.com>
 
-We need to make sure i_size doesn't change until atomic write commit is
-successful and restore it when commit is failed.
+introduce a new ioctl to replace the whole content of a file atomically,
+which means it induces truncate and content update at the same time.
+We can start it with F2FS_IOC_START_ATOMIC_REPLACE and complete it with
+F2FS_IOC_COMMIT_ATOMIC_WRITE. Or abort it with
+F2FS_IOC_ABORT_ATOMIC_WRITE.
 
 Signed-off-by: Daeho Jeong <daehojeong@google.com>
 ---
-v6: change FI_ATOMIC_COMMIT to FI_ATOMIC_COMMITTED
-v5: prevent only i_size update for atomic files when dirtying inode
-v4: move i_size update after clearing atomic file flag in
-    f2fs_abort_atomic_write()
-v3: make sure inode is clean while atomic writing
+v3: move i_size change after setting atomic write flag
+v2: add undefined ioctl number reported by <lkp@intel.com>
 ---
- fs/f2fs/f2fs.h    |  8 ++++++++
- fs/f2fs/file.c    | 18 +++++++++++-------
- fs/f2fs/inode.c   |  5 ++++-
- fs/f2fs/segment.c | 14 ++++++++++----
- 4 files changed, 33 insertions(+), 12 deletions(-)
+ fs/f2fs/data.c            |  3 +++
+ fs/f2fs/f2fs.h            |  1 +
+ fs/f2fs/file.c            | 20 ++++++++++++++------
+ fs/f2fs/segment.c         | 14 +++++++++++++-
+ include/uapi/linux/f2fs.h |  1 +
+ 5 files changed, 32 insertions(+), 7 deletions(-)
 
+diff --git a/fs/f2fs/data.c b/fs/f2fs/data.c
+index 5f895ddcd64a..bce4dcc3ad78 100644
+--- a/fs/f2fs/data.c
++++ b/fs/f2fs/data.c
+@@ -3457,6 +3457,9 @@ static int prepare_atomic_write_begin(struct f2fs_sb_info *sbi,
+ 	else if (*blk_addr != NULL_ADDR)
+ 		return 0;
+ 
++	if (is_inode_flag_set(inode, FI_ATOMIC_REPLACE))
++		goto reserve_block;
++
+ 	/* Look for the block in the original inode */
+ 	err = __find_data_block(inode, index, &ori_blk_addr);
+ 	if (err)
 diff --git a/fs/f2fs/f2fs.h b/fs/f2fs/f2fs.h
-index e7e750e6b332..e29f9adf60ca 100644
+index e29f9adf60ca..d513ecd17550 100644
 --- a/fs/f2fs/f2fs.h
 +++ b/fs/f2fs/f2fs.h
-@@ -764,6 +764,7 @@ enum {
- 	FI_COMPRESS_RELEASED,	/* compressed blocks were released */
+@@ -765,6 +765,7 @@ enum {
  	FI_ALIGNED_WRITE,	/* enable aligned write */
  	FI_COW_FILE,		/* indicate COW file */
-+	FI_ATOMIC_COMMITTED,	/* indicate atomic commit completed except disk sync */
+ 	FI_ATOMIC_COMMITTED,	/* indicate atomic commit completed except disk sync */
++	FI_ATOMIC_REPLACE,	/* indicate atomic replace */
  	FI_MAX,			/* max flag, never be used */
  };
  
-@@ -822,6 +823,7 @@ struct f2fs_inode_info {
- 	unsigned int i_cluster_size;		/* cluster size */
- 
- 	unsigned int atomic_write_cnt;
-+	loff_t original_i_size;		/* original i_size before atomic write */
- };
- 
- static inline void get_extent_info(struct extent_info *ext,
-@@ -3072,6 +3074,8 @@ static inline void f2fs_i_blocks_write(struct inode *inode,
- 		set_inode_flag(inode, FI_AUTO_RECOVER);
- }
- 
-+static inline bool f2fs_is_atomic_file(struct inode *inode);
-+
- static inline void f2fs_i_size_write(struct inode *inode, loff_t i_size)
- {
- 	bool clean = !is_inode_flag_set(inode, FI_DIRTY_INODE);
-@@ -3081,6 +3085,10 @@ static inline void f2fs_i_size_write(struct inode *inode, loff_t i_size)
- 		return;
- 
- 	i_size_write(inode, i_size);
-+
-+	if (f2fs_is_atomic_file(inode))
-+		return;
-+
- 	f2fs_mark_inode_dirty_sync(inode, true);
- 	if (clean || recover)
- 		set_inode_flag(inode, FI_AUTO_RECOVER);
 diff --git a/fs/f2fs/file.c b/fs/f2fs/file.c
-index ec9ee0f6d502..7ce629c95f4a 100644
+index 7ce629c95f4a..7b2d956bc52f 100644
 --- a/fs/f2fs/file.c
 +++ b/fs/f2fs/file.c
-@@ -1991,6 +1991,7 @@ static int f2fs_ioc_start_atomic_write(struct file *filp)
- 	struct f2fs_inode_info *fi = F2FS_I(inode);
- 	struct f2fs_sb_info *sbi = F2FS_I_SB(inode);
- 	struct inode *pinode;
-+	loff_t isize;
- 	int ret;
+@@ -1984,7 +1984,7 @@ static int f2fs_ioc_getversion(struct file *filp, unsigned long arg)
+ 	return put_user(inode->i_generation, (int __user *)arg);
+ }
  
- 	if (!inode_owner_or_capable(mnt_userns, inode))
-@@ -2049,7 +2050,12 @@ static int f2fs_ioc_start_atomic_write(struct file *filp)
- 		f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
- 		goto out;
- 	}
--	f2fs_i_size_write(fi->cow_inode, i_size_read(inode));
-+
-+	f2fs_write_inode(inode, NULL);
-+
-+	isize = i_size_read(inode);
-+	fi->original_i_size = isize;
-+	f2fs_i_size_write(fi->cow_inode, isize);
+-static int f2fs_ioc_start_atomic_write(struct file *filp)
++static int f2fs_ioc_start_atomic_write(struct file *filp, bool truncate)
+ {
+ 	struct inode *inode = file_inode(filp);
+ 	struct user_namespace *mnt_userns = file_mnt_user_ns(filp);
+@@ -2053,10 +2053,6 @@ static int f2fs_ioc_start_atomic_write(struct file *filp)
  
+ 	f2fs_write_inode(inode, NULL);
+ 
+-	isize = i_size_read(inode);
+-	fi->original_i_size = isize;
+-	f2fs_i_size_write(fi->cow_inode, isize);
+-
  	stat_inc_atomic_inode(inode);
  
-@@ -2087,16 +2093,14 @@ static int f2fs_ioc_commit_atomic_write(struct file *filp)
+ 	set_inode_flag(inode, FI_ATOMIC_FILE);
+@@ -2064,6 +2060,16 @@ static int f2fs_ioc_start_atomic_write(struct file *filp)
+ 	clear_inode_flag(fi->cow_inode, FI_INLINE_DATA);
+ 	f2fs_up_write(&fi->i_gc_rwsem[WRITE]);
  
- 	if (f2fs_is_atomic_file(inode)) {
- 		ret = f2fs_commit_atomic_write(inode);
--		if (ret)
--			goto unlock_out;
--
--		ret = f2fs_do_sync_file(filp, 0, LLONG_MAX, 0, true);
- 		if (!ret)
--			f2fs_abort_atomic_write(inode, false);
-+			ret = f2fs_do_sync_file(filp, 0, LLONG_MAX, 0, true);
++	isize = i_size_read(inode);
++	fi->original_i_size = isize;
++	if (truncate) {
++		set_inode_flag(inode, FI_ATOMIC_REPLACE);
++		truncate_inode_pages_final(inode->i_mapping);
++		f2fs_i_size_write(inode, 0);
++		isize = 0;
++	}
++	f2fs_i_size_write(fi->cow_inode, isize);
 +
-+		f2fs_abort_atomic_write(inode, ret);
- 	} else {
- 		ret = f2fs_do_sync_file(filp, 0, LLONG_MAX, 1, false);
- 	}
--unlock_out:
-+
- 	inode_unlock(inode);
- 	mnt_drop_write_file(filp);
- 	return ret;
-diff --git a/fs/f2fs/inode.c b/fs/f2fs/inode.c
-index 9f0d3864d9f1..577f109b4e1d 100644
---- a/fs/f2fs/inode.c
-+++ b/fs/f2fs/inode.c
-@@ -621,9 +621,12 @@ void f2fs_update_inode(struct inode *inode, struct page *node_page)
- 	ri->i_uid = cpu_to_le32(i_uid_read(inode));
- 	ri->i_gid = cpu_to_le32(i_gid_read(inode));
- 	ri->i_links = cpu_to_le32(inode->i_nlink);
--	ri->i_size = cpu_to_le64(i_size_read(inode));
- 	ri->i_blocks = cpu_to_le64(SECTOR_TO_BLOCK(inode->i_blocks) + 1);
- 
-+	if (!f2fs_is_atomic_file(inode) ||
-+			is_inode_flag_set(inode, FI_ATOMIC_COMMITTED))
-+		ri->i_size = cpu_to_le64(i_size_read(inode));
-+
- 	if (et) {
- 		read_lock(&et->lock);
- 		set_raw_extent(&et->largest, &ri->i_ext);
+ 	f2fs_update_time(sbi, REQ_TIME);
+ 	fi->atomic_write_task = current;
+ 	stat_update_max_atomic_write(inode);
+@@ -4089,7 +4095,9 @@ static long __f2fs_ioctl(struct file *filp, unsigned int cmd, unsigned long arg)
+ 	case FS_IOC_GETVERSION:
+ 		return f2fs_ioc_getversion(filp, arg);
+ 	case F2FS_IOC_START_ATOMIC_WRITE:
+-		return f2fs_ioc_start_atomic_write(filp);
++		return f2fs_ioc_start_atomic_write(filp, false);
++	case F2FS_IOC_START_ATOMIC_REPLACE:
++		return f2fs_ioc_start_atomic_write(filp, true);
+ 	case F2FS_IOC_COMMIT_ATOMIC_WRITE:
+ 		return f2fs_ioc_commit_atomic_write(filp);
+ 	case F2FS_IOC_ABORT_ATOMIC_WRITE:
 diff --git a/fs/f2fs/segment.c b/fs/f2fs/segment.c
-index 289bcb7ca300..9cbf88092c78 100644
+index 9cbf88092c78..7f62118cbe6e 100644
 --- a/fs/f2fs/segment.c
 +++ b/fs/f2fs/segment.c
-@@ -192,14 +192,18 @@ void f2fs_abort_atomic_write(struct inode *inode, bool clean)
- 	if (!f2fs_is_atomic_file(inode))
- 		return;
+@@ -261,14 +261,26 @@ static void __complete_revoke_list(struct inode *inode, struct list_head *head,
+ 					bool revoke)
+ {
+ 	struct revoke_entry *cur, *tmp;
++	pgoff_t start_index = 0;
++	bool truncate = is_inode_flag_set(inode, FI_ATOMIC_REPLACE);
  
--	if (clean)
--		truncate_inode_pages_final(inode->i_mapping);
- 	clear_inode_flag(fi->cow_inode, FI_COW_FILE);
- 	iput(fi->cow_inode);
- 	fi->cow_inode = NULL;
- 	release_atomic_write_cnt(inode);
-+	clear_inode_flag(inode, FI_ATOMIC_COMMITTED);
- 	clear_inode_flag(inode, FI_ATOMIC_FILE);
- 	stat_dec_atomic_inode(inode);
+ 	list_for_each_entry_safe(cur, tmp, head, list) {
+-		if (revoke)
++		if (revoke) {
+ 			__replace_atomic_write_block(inode, cur->index,
+ 						cur->old_addr, NULL, true);
++		} else if (truncate) {
++			f2fs_truncate_hole(inode, start_index, cur->index);
++			start_index = cur->index + 1;
++		}
 +
-+	if (clean) {
-+		truncate_inode_pages_final(inode->i_mapping);
-+		f2fs_i_size_write(inode, fi->original_i_size);
+ 		list_del(&cur->list);
+ 		kmem_cache_free(revoke_entry_slab, cur);
+ 	}
++
++	if (!revoke && truncate) {
++		f2fs_do_truncate_blocks(inode, start_index * PAGE_SIZE, false);
++		clear_inode_flag(inode, FI_ATOMIC_REPLACE);
 +	}
  }
  
- static int __replace_atomic_write_block(struct inode *inode, pgoff_t index,
-@@ -335,10 +339,12 @@ static int __f2fs_commit_atomic_write(struct inode *inode)
- 	}
+ static int __f2fs_commit_atomic_write(struct inode *inode)
+diff --git a/include/uapi/linux/f2fs.h b/include/uapi/linux/f2fs.h
+index 3121d127d5aa..955d440be104 100644
+--- a/include/uapi/linux/f2fs.h
++++ b/include/uapi/linux/f2fs.h
+@@ -42,6 +42,7 @@
+ 						struct f2fs_comp_option)
+ #define F2FS_IOC_DECOMPRESS_FILE	_IO(F2FS_IOCTL_MAGIC, 23)
+ #define F2FS_IOC_COMPRESS_FILE		_IO(F2FS_IOCTL_MAGIC, 24)
++#define F2FS_IOC_START_ATOMIC_REPLACE	_IO(F2FS_IOCTL_MAGIC, 25)
  
- out:
--	if (ret)
-+	if (ret) {
- 		sbi->revoked_atomic_block += fi->atomic_write_cnt;
--	else
-+	} else {
- 		sbi->committed_atomic_block += fi->atomic_write_cnt;
-+		set_inode_flag(inode, FI_ATOMIC_COMMITTED);
-+	}
- 
- 	__complete_revoke_list(inode, &revoke_list, ret ? true : false);
- 
+ /*
+  * should be same as XFS_IOC_GOINGDOWN.
 -- 
 2.38.1.273.g43a17bfeac-goog
 
