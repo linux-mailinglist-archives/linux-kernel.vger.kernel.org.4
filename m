@@ -2,177 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71CB861387B
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 14:56:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1237461387E
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 14:57:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231344AbiJaN4i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 09:56:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50114 "EHLO
+        id S231318AbiJaN46 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 09:56:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50436 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230327AbiJaN4e (ORCPT
+        with ESMTP id S231347AbiJaN4z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 09:56:34 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 259DE2C4;
-        Mon, 31 Oct 2022 06:56:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B8E3461253;
-        Mon, 31 Oct 2022 13:56:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 89213C433D6;
-        Mon, 31 Oct 2022 13:56:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667224593;
-        bh=iOmwncQH3Y6yGSTU4hQSdlvIACqmymxsbpgLTMPTEXc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=o1HwHqpejoRdZazFe/wHCMougeuGQsGEvil2CCRBhvGFEYwLiNy/lMHZ5ruhOxgt7
-         gtxr4WUQGv9FdirbR1EqGLW/G3JU2zjWh5/N6qM268ISdVk2MwkUKf4qbWSwZ6n03Y
-         M1oG4mHPLYU+ESN2TvpLb456hu3OMrd32THrmbQqHT+OaBKE6oeQPWqR+lffMFqTHe
-         NknKuplIC2G/yb3yTmG2+LVFQK1x22o/QCYKiXz1OkOxZeZmkjnbn3hLoltZi7SfC/
-         zTx/LVo0xVKVgMvXtKIcxR1NMy9e5lTC9RwaEK6S5uUL734R79Q2+t357WNi5yyW6H
-         l+TAGisiuyi0Q==
-Date:   Mon, 31 Oct 2022 13:56:26 +0000
-From:   Lee Jones <lee@kernel.org>
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Mark Brown <broonie@kernel.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCHv4 07/13] mfd: rk808: split into core and i2c
-Message-ID: <Y1/UCkQQXOb38VW+@google.com>
-References: <20221020204251.108565-1-sebastian.reichel@collabora.com>
- <20221020204251.108565-8-sebastian.reichel@collabora.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221020204251.108565-8-sebastian.reichel@collabora.com>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 31 Oct 2022 09:56:55 -0400
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43AD11055D
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 06:56:54 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id f7so11869669edc.6
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 06:56:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fairphone.com; s=fair;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZcCKYUH9Lbw/pHPSk6/2WqMZQyQUMyuhsXpUiDfOF6A=;
+        b=MHShAiwKTrTKgezu8b/h1HoWiKmRbMo2Se7Cqp0JBdChjeixK+L0le1H3GXkvigB+s
+         tl1nb+Pnb1oJjdpb/LjPiD9TJUKR7TUUPFUHxlwjWN1j2ruklEG3lDaWN19Q5V7o8i2Q
+         9ae1VwZkDTRFRsksktZlCLJ7ukCegJxsj2IP1C3+23KdkS872MiAqMHYUaA0Y8tj5X4m
+         pZxEweYicWfz1f3HCYMGqWP4u+oouDxlrGb0/RU3S8kFR02V3F6lk405m4PmD4WUR2LO
+         CsbLxLDBTKjBBFeQBWhgZz7hrFJuiMpeZOa+wHqM5IfSZLG4v481jSWye7Gm9kURvhmJ
+         Gl3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:references:to:from:subject:cc:message-id:date
+         :content-transfer-encoding:mime-version:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=ZcCKYUH9Lbw/pHPSk6/2WqMZQyQUMyuhsXpUiDfOF6A=;
+        b=CIcUb8Tqmm6rp0IALW+7fQXkCdvspCelAyWHMoGXrETAVCUThYbBDOaxqjJmP9Zhdv
+         Ku1Booke7zAPu/KVQTMGIc73Fb/utGYDACo+057QkNpe5Bqx2as5vv62eCf1h/dNQW3/
+         QQi/ZdK10cKP34RN70SC9KX1OdZqMXjZ3eviKT79ZMrD0Bd7hi7FlesmEPM8g08aeTsK
+         ObIp4sKzQa93KrBQkBaWRTwVvsgvsbrO66RQPCM4sv9nF6sBgS021qnn3PbECLxODlYE
+         2+Ys2foGA6TWrBP1UwZrYBunKBWFKksFQk/5sv03xlZ8HKTzWWwmGYfrJvUHHDgbMVsr
+         /oTw==
+X-Gm-Message-State: ACrzQf2jzJPpUf5IaGymRt3WMBusN7Z9T7H/6pwCL8b/rmSh/nHuT9ey
+        cNRGA8IpF1C4lYKLw6Q/bW4Z/w==
+X-Google-Smtp-Source: AMsMyM6u3JAX6R+7QqE3QY18S43gVSOpaUsIoIZwvU1h8v4fcdHEBIhKdyE7CRGMaOBEy+diJLl18Q==
+X-Received: by 2002:a50:ec99:0:b0:462:2c1c:8764 with SMTP id e25-20020a50ec99000000b004622c1c8764mr13656055edr.325.1667224612782;
+        Mon, 31 Oct 2022 06:56:52 -0700 (PDT)
+Received: from localhost (31-151-115-246.dynamic.upc.nl. [31.151.115.246])
+        by smtp.gmail.com with ESMTPSA id t31-20020a056402241f00b00459cd13fd34sm3214246eda.85.2022.10.31.06.56.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Oct 2022 06:56:52 -0700 (PDT)
+Mime-Version: 1.0
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Date:   Mon, 31 Oct 2022 14:56:50 +0100
+Message-Id: <CO05SSJUFW72.1PUZJ0FMJH3DF@otso>
+Cc:     <quic_collinsd@quicinc.com>, <quic_subbaram@quicinc.com>,
+        "Dylan Van Assche" <me@dylanvanassche.be>
+Subject: Re: [PATCH v4 1/2] leds: flash: add driver to support flash LED
+ module in QCOM PMICs
+From:   "Luca Weiss" <luca.weiss@fairphone.com>
+To:     "Fenglin Wu" <quic_fenglinw@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <krzysztof.kozlowski@linaro.org>, "Pavel Machek" <pavel@ucw.cz>,
+        "Gene Chen" <gene_chen@richtek.com>,
+        "Jacek Anaszewski" <jacek.anaszewski@gmail.com>,
+        <linux-leds@vger.kernel.org>
+X-Mailer: aerc 0.12.0
+References: <20221025073802.2662564-1-quic_fenglinw@quicinc.com>
+ <20221025073802.2662564-2-quic_fenglinw@quicinc.com>
+In-Reply-To: <20221025073802.2662564-2-quic_fenglinw@quicinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 20 Oct 2022, Sebastian Reichel wrote:
+Hi Fenglin,
 
-> Split rk808 into a core and an i2c part in preperation for
-> SPI support.
-> 
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+On Tue Oct 25, 2022 at 9:38 AM CEST, Fenglin Wu wrote:
+> Add initial driver to support flash LED module found in Qualcomm
+> Technologies, Inc. PMICs. The flash module can have 3 or 4 channels
+> and each channel can be controlled indepedently and support full scale
+> current up to 1.5 A. It also supports connecting two channels together
+> to supply one LED component with full scale current up to 2 A. In that
+> case, the current will be split on each channel symmetrically and the
+> channels will be enabled and disabled at the same time.
+>
+> Signed-off-by: Fenglin Wu <quic_fenglinw@quicinc.com>
+> Tested-by: Luca Weiss <luca.weiss@fairphone.com> # sm7225-fairphone-fp4 +=
+ pm6150l
 > ---
->  drivers/clk/Kconfig                   |   2 +-
->  drivers/input/misc/Kconfig            |   2 +-
->  drivers/mfd/Kconfig                   |   7 +-
->  drivers/mfd/Makefile                  |   3 +-
->  drivers/mfd/{rk808.c => rk8xx-core.c} | 210 ++++----------------------
->  drivers/mfd/rk8xx-i2c.c               | 209 +++++++++++++++++++++++++
->  drivers/pinctrl/Kconfig               |   2 +-
->  drivers/power/supply/Kconfig          |   2 +-
->  drivers/regulator/Kconfig             |   2 +-
->  drivers/rtc/Kconfig                   |   2 +-
->  include/linux/mfd/rk808.h             |   6 +
->  sound/soc/codecs/Kconfig              |   2 +-
->  12 files changed, 263 insertions(+), 186 deletions(-)
->  rename drivers/mfd/{rk808.c => rk8xx-core.c} (75%)
->  create mode 100644 drivers/mfd/rk8xx-i2c.c
-> 
-> diff --git a/drivers/clk/Kconfig b/drivers/clk/Kconfig
-> index d79905f3e174..8448d616b9aa 100644
-> --- a/drivers/clk/Kconfig
-> +++ b/drivers/clk/Kconfig
-> @@ -83,7 +83,7 @@ config COMMON_CLK_MAX9485
->  
->  config COMMON_CLK_RK808
->  	tristate "Clock driver for RK805/RK808/RK809/RK817/RK818"
-> -	depends on MFD_RK808
-> +	depends on MFD_RK8XX
->  	help
->  	  This driver supports RK805, RK809 and RK817, RK808 and RK818 crystal oscillator clock.
->  	  These multi-function devices have two fixed-rate oscillators, clocked at 32KHz each.
-> diff --git a/drivers/input/misc/Kconfig b/drivers/input/misc/Kconfig
-> index 9f088900f863..1899afeaec47 100644
-> --- a/drivers/input/misc/Kconfig
-> +++ b/drivers/input/misc/Kconfig
-> @@ -588,7 +588,7 @@ config INPUT_PWM_VIBRA
->  
->  config INPUT_RK805_PWRKEY
->  	tristate "Rockchip RK805 PMIC power key support"
-> -	depends on MFD_RK808
-> +	depends on MFD_RK8XX
->  	help
->  	  Select this option to enable power key driver for RK805.
->  
-> diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-> index 8b93856de432..8e3de443cc3d 100644
-> --- a/drivers/mfd/Kconfig
-> +++ b/drivers/mfd/Kconfig
-> @@ -1201,12 +1201,17 @@ config MFD_RC5T583
->  	  Additional drivers must be enabled in order to use the
->  	  different functionality of the device.
->  
-> -config MFD_RK808
-> +config MFD_RK8XX
-> +	bool
-> +	select MFD_CORE
+>  drivers/leds/flash/Kconfig           |  15 +
+>  drivers/leds/flash/Makefile          |   1 +
+>  drivers/leds/flash/leds-qcom-flash.c | 700 +++++++++++++++++++++++++++
+>  3 files changed, 716 insertions(+)
+>  create mode 100644 drivers/leds/flash/leds-qcom-flash.c
+>
+
+<snip>
+
+> +static const struct of_device_id qcom_flash_led_match_table[] =3D {
+> +	{ .compatible =3D "qcom,spmi-flash-led" },
+> +	{ }
+> +};
+
+Dylan has noticed that auto-loading the module based on dt match doesn't
+work currently. It seems that this line is missing here to enable that:
+
+  MODULE_DEVICE_TABLE(of, qcom_flash_led_match_table);
+
+Please add it for v5!
+
+Regards
+Luca
+
 > +
-> +config MFD_RK8XX_I2C
->  	tristate "Rockchip RK805/RK808/RK809/RK817/RK818 Power Management Chip"
->  	depends on I2C && OF
->  	select MFD_CORE
->  	select REGMAP_I2C
->  	select REGMAP_IRQ
-> +	select MFD_RK8XX
->  	help
->  	  If you say yes here you get support for the RK805, RK808, RK809,
->  	  RK817 and RK818 Power Management chips.
-> diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-> index 7ed3ef4a698c..edf84e870f98 100644
-> --- a/drivers/mfd/Makefile
-> +++ b/drivers/mfd/Makefile
-> @@ -223,7 +223,8 @@ obj-$(CONFIG_MFD_PALMAS)	+= palmas.o
->  obj-$(CONFIG_MFD_VIPERBOARD)    += viperboard.o
->  obj-$(CONFIG_MFD_NTXEC)		+= ntxec.o
->  obj-$(CONFIG_MFD_RC5T583)	+= rc5t583.o rc5t583-irq.o
-> -obj-$(CONFIG_MFD_RK808)		+= rk808.o
-> +obj-$(CONFIG_MFD_RK8XX)		+= rk8xx-core.o
-> +obj-$(CONFIG_MFD_RK8XX_I2C)	+= rk8xx-i2c.o
->  obj-$(CONFIG_MFD_RN5T618)	+= rn5t618.o
->  obj-$(CONFIG_MFD_SEC_CORE)	+= sec-core.o sec-irq.o
->  obj-$(CONFIG_MFD_SYSCON)	+= syscon.o
-> diff --git a/drivers/mfd/rk808.c b/drivers/mfd/rk8xx-core.c
-> similarity index 75%
-> rename from drivers/mfd/rk808.c
-> rename to drivers/mfd/rk8xx-core.c
-> index b154ca96d812..098506972710 100644
-> --- a/drivers/mfd/rk808.c
-> +++ b/drivers/mfd/rk8xx-core.c
-> @@ -3,16 +3,9 @@
->   * MFD core driver for Rockchip RK808/RK818
->   *
->   * Copyright (c) 2014, Fuzhou Rockchip Electronics Co., Ltd
-> - *
-> - * Author: Chris Zhong <zyw@rock-chips.com>
-> - * Author: Zhang Qing <zhangqing@rock-chips.com>
-> - *
->   * Copyright (C) 2016 PHYTEC Messtechnik GmbH
-> - *
-> - * Author: Wadim Egorov <w.egorov@phytec.de>
->   */
+> +static struct platform_driver qcom_flash_led_driver =3D {
+> +	.driver =3D {
+> +		.name =3D "leds-qcom-flash",
+> +		.of_match_table =3D qcom_flash_led_match_table,
+> +	},
+> +	.probe =3D qcom_flash_led_probe,
+> +	.remove =3D qcom_flash_led_remove,
+> +};
+> +
+> +module_platform_driver(qcom_flash_led_driver);
+> +
+> +MODULE_DESCRIPTION("QCOM Flash LED driver");
+> +MODULE_LICENSE("GPL");
+> --=20
+> 2.25.1
 
-The patch and the premise behind it look reasonable.
-
-What's the reason for taking out the Author tags?
-
--- 
-Lee Jones [李琼斯]
