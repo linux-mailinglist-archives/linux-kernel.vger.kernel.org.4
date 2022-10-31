@@ -2,106 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7F556136D1
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 13:47:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D6E06136DB
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 13:49:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231410AbiJaMrG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 08:47:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34334 "EHLO
+        id S231445AbiJaMsz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 08:48:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbiJaMq6 (ORCPT
+        with ESMTP id S231281AbiJaMsv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 08:46:58 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 445A3F59B;
-        Mon, 31 Oct 2022 05:46:40 -0700 (PDT)
-X-UUID: 4c2ba30807c348b8bb80ca325cea4ea4-20221031
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=0eyPwIID5QTj89ySOKRfQtfyf9Um1CmzCups6XoDQNc=;
-        b=GqCl7f9mh0Oy5KQWzuF8l/zeDd648Tb7sPd951Dbhvsgyla2NgY9ROGcC919saKOUEFNsz/2BRnlwuiaDGIe0VWWJBdCuB/l6N5sdthKbrcVsuOIdCb/0MJ0MSLFTTF6tKdR/V0FYH9YaVjXLgmCqe/wWfOLhN/S8L44da5k764=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:24768b0c-6e17-4c87-9457-21404d6a9ab5,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:90
-X-CID-INFO: VERSION:1.1.12,REQID:24768b0c-6e17-4c87-9457-21404d6a9ab5,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:90
-X-CID-META: VersionHash:62cd327,CLOUDID:3cce2981-3116-4fbc-b86b-83475c3df513,B
-        ulkID:22103120463714YYF5YR,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:0,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 4c2ba30807c348b8bb80ca325cea4ea4-20221031
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-        (envelope-from <allen-kh.cheng@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 920886206; Mon, 31 Oct 2022 20:46:36 +0800
-Received: from mtkcas11.mediatek.inc (172.21.101.40) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- 15.2.792.15; Mon, 31 Oct 2022 20:46:35 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by mtkcas11.mediatek.inc
- (172.21.101.73) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Mon, 31 Oct 2022 20:46:35 +0800
-From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-To:     Tudor Ambarus <tudor.ambarus@microchip.com>,
-        Pratyush Yadav <pratyush@kernel.org>,
-        Michael Walle <michael@walle.cc>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        <linux-mtd@lists.infradead.org>
-CC:     <linux-spi@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Allen-KH Cheng <allen-kh.cheng@mediatek.com>,
-        Bayi Cheng <bayi.cheng@mediatek.com>
-Subject: [PATCH] mtd: spi-nor: Fix the number of bytes for the dummy cycles
-Date:   Mon, 31 Oct 2022 20:46:33 +0800
-Message-ID: <20221031124633.13189-1-allen-kh.cheng@mediatek.com>
-X-Mailer: git-send-email 2.18.0
+        Mon, 31 Oct 2022 08:48:51 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0EE3EE15;
+        Mon, 31 Oct 2022 05:48:50 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 48DEA6602387;
+        Mon, 31 Oct 2022 12:48:48 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667220528;
+        bh=ETLcOC6RqGvMLvwInB/+hn555B0YojoNFYRHkoq15ys=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=IVJTu5Kmw6Bx3dBbjqANAxFC42H8FCVyp7y5hDD88QU6z/8dffprYyNN7wg7NfQlL
+         VPdKu/AIXrBedGLMVMl3rUzDrlqCQqD2ZqcwvNUO0UcAiUTm6wZgH7CQaa4Fg+KQUi
+         r1SkLpU5f9hR4yku37q7q8UdrVoV15MFT0mPGwUoM+ReQhPO+Yb8Xxqh/gQ6whADPm
+         zXBQiS24Qsl81Jhx19reqEmL47I7O4vR5T0QqaKuR14Ufy0/VKJ3wWW1kVlaMmgXGR
+         XlKzP9qSY8bWQjxIwh9B3zgiUqYpeWlqLdnFbnqyxS0ML3bvk1kDRl+C02Q7/uOLvP
+         ijCjc4NCnI0iw==
+Message-ID: <2fbf35b9-3cad-4211-db5b-501d5eb14a2e@collabora.com>
+Date:   Mon, 31 Oct 2022 13:48:45 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH] vcodec: mediatek: add check for NULL for
+ vsi->frm_bufs[vsi->new_fb_idx].buf.fb in vp9_swap_frm_bufs
+Content-Language: en-US
+To:     Nicolas Dufresne <nicolas.dufresne@collabora.com>,
+        Anastasia Belova <abelova@astralinux.ru>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Tiffany Lin <tiffany.lin@mediatek.com>,
+        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
+        Yunfei Dong <yunfei.dong@mediatek.com>,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, lvc-project@linuxtesting.org
+References: <20221028125811.11340-1-abelova@astralinux.ru>
+ <664bd195bdde7fd740572c4981c60b32de1465aa.camel@collabora.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <664bd195bdde7fd740572c4981c60b32de1465aa.camel@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The number of bytes used by spi_nor_spimem_check_readop() may be
-incorrect for the dummy cycles. Since nor->read_dummy is not initialized
-before spi_nor_spimem_adjust_hwcaps().
+Il 28/10/22 15:02, Nicolas Dufresne ha scritto:
+> Hi,
+> 
+> Le vendredi 28 octobre 2022 à 15:58 +0300, Anastasia Belova a écrit :
+>> If vsi->frm_bufs[vsi->new_fb_idx].buf.fb == NULL while cleaning
+>> fb_free_list NULL-pointer is dereferenced.
+>>
+>> Found by Linux Verification Center (linuxtesting.org) with SVACE.
+>>
+>> Fixes: f77e89854b3e ("[media] vcodec: mediatek: Add Mediatek VP9 Video Decoder Driver")
+>>
+>> Signed-off-by: Anastasia Belova <abelova@astralinux.ru>
+>> ---
+>>   drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_if.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_if.c b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_if.c
+>> index 70b8383f7c8e..b0679aaf6192 100644
+>> --- a/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_if.c
+>> +++ b/drivers/media/platform/mediatek/vcodec/vdec/vdec_vp9_if.c
+>> @@ -512,7 +512,7 @@ static void vp9_swap_frm_bufs(struct vdec_vp9_inst *inst)
+>>   	 * clean fb_free_list
+>>   	 */
+>>   	if (vsi->frm_bufs[vsi->new_fb_idx].ref_cnt == 0) {
+>> -		if (!vp9_is_sf_ref_fb(
+>> +		if (vsi->frm_bufs[vsi->new_fb_idx].buf.fb != NULL && !vp9_is_sf_ref_fb(
+>>   			inst, vsi->frm_bufs[vsi->new_fb_idx].buf.fb)) {
+>>   			struct vdec_fb *fb;
+> 
+> Perhaps we could try and maintain some readability ? I'd suggest to move the
+> check into vp9_is_sf_ref_fb() as an early return.
+> 
 
-We use both mode and wait state clock cycles instead of nor->read_dummy.
+I don't think that this will ever happen, as the check was omitted because of being
+totally sure that vsi->frm_bufs[vsi->new_fb_idx].buf.fb is not NULL.
 
-Fixes: 0e30f47232ab ("mtd: spi-nor: add support for DTR protocol")
-Co-developed-by: Bayi Cheng <bayi.cheng@mediatek.com>
-Signed-off-by: Bayi Cheng <bayi.cheng@mediatek.com>
-Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
----
- drivers/mtd/spi-nor/core.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+In any case, it doesn't really cost anything to add a check... in which case, I
+agree with Nicolas about moving that to vp9_is_sf_ref_fb().
 
-diff --git a/drivers/mtd/spi-nor/core.c b/drivers/mtd/spi-nor/core.c
-index 6c921eb3fadb..8b9c318a0ad4 100644
---- a/drivers/mtd/spi-nor/core.c
-+++ b/drivers/mtd/spi-nor/core.c
-@@ -1914,7 +1914,8 @@ static int spi_nor_spimem_check_readop(struct spi_nor *nor,
- 	spi_nor_spimem_setup_op(nor, &op, read->proto);
- 
- 	/* convert the dummy cycles to the number of bytes */
--	op.dummy.nbytes = (nor->read_dummy * op.dummy.buswidth) / 8;
-+	op.dummy.nbytes = (read->num_mode_clocks + read->num_wait_states) *
-+			  op.dummy.buswidth / 8;
- 	if (spi_nor_protocol_is_dtr(nor->read_proto))
- 		op.dummy.nbytes *= 2;
- 
--- 
-2.18.0
+	if (!fb)
+		return false
+	for .....
+
+Regards,
+Angelo
 
