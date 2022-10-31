@@ -2,160 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD3BC613F0D
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 21:32:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C68E613F0E
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 21:34:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbiJaUcn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 16:32:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58440 "EHLO
+        id S229950AbiJaUec (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 16:34:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbiJaUck (ORCPT
+        with ESMTP id S229637AbiJaUea (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 16:32:40 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAE12102E
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 13:31:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667248299;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=6iglFbtxmswy6Wel7/DoB7/VCgHF3PqnZ3i1JdiWSK0=;
-        b=L2QrKSSNLcUy5R6qkvBtlx30SzEUyHQezcsvCteXNgWJQI5ugAwgFRQQN4cPqIUgh6esPv
-        UInB80q4aNyOgCzQE0u2RxMSQqP0cmWrJL2cx3CwMcxCO4fm34e9Gsso9Cc5kwpcg9UTTV
-        UDVjgfQKIi7iLV9AyZu1d8FYc/Ogp6M=
-Received: from mail-oo1-f69.google.com (mail-oo1-f69.google.com
- [209.85.161.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-385-atHEuvfnPyieQXdCqGdt7g-1; Mon, 31 Oct 2022 16:31:37 -0400
-X-MC-Unique: atHEuvfnPyieQXdCqGdt7g-1
-Received: by mail-oo1-f69.google.com with SMTP id e9-20020a4a9b49000000b00475ea4651fcso4373852ook.17
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 13:31:37 -0700 (PDT)
+        Mon, 31 Oct 2022 16:34:30 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58AAC12D21
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 13:34:29 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id n12so32272815eja.11
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 13:34:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Dsp3vKZHMgvy2ZaBOBHTAANbpVIvX0BBnL2C4mQELqE=;
+        b=BkSeJCIgiNSHZmpS3d19qfP33bZMAbAn1YH2THLYyH+QzW2ocW2cmLJaKhPOVe2Df+
+         YoFtsWQ4saN0WcQJ8Sp3Y2YEp4PatkaL+Te9PyV3nmg7StrDm7XbBtgB83+/lDCZBu3E
+         U644kx4TFBSnda4mdPcx87BIJrwSYY/CV/lPCkDr11JEHJtWI5YwgtQQgLg9Ou4g4Nfn
+         6J4wUUtyz7+UQDguDWa95sbs38sA7qV5Q/711+i0BmxEa+xD6CKFewJEw35OA9BodeE5
+         GaBOArTKjg0kwFCZMN/85qml0TyFDYDgD7xDT9VYKtbYj1qRNSwRMsBiO0dBWwE2EDuf
+         lNsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6iglFbtxmswy6Wel7/DoB7/VCgHF3PqnZ3i1JdiWSK0=;
-        b=2imGLbRymuYm4oYPzAlxRJSC+Qu3aCA4ISUVmjSH+AEFtVam2jnNG95E6Wegb9TpCs
-         I6GSOPv9StZ0ZmKW4H/eodwgkANmThU92UUI13fT1FZSSKKyAApH1/2k5AwInBDHM81K
-         aUvddJsmEETipC4JPEZXfFWm3yNIYYQcYVtnzwQm34l8n9gQ1LkfFkfnlqzlsnayOO6H
-         zcGMf70KDkY962H761NkDporv0zal6n7eOHr2IvwtEQrC/SnNe1K4QaqnLIgqPwrf8RF
-         kHZEbPQ6y7I2WeWY3I7lPwp17MY+XAjF3XuyPnqESvPOO96bnafNxhUdMZtlZPoILFxV
-         kmfQ==
-X-Gm-Message-State: ACrzQf0kkSu/lWke+LETwx2+KghHe4aCzc5Bvu4Du7E67KgwiACFtVPx
-        E7bUhqb7lRBDNE2rHdKSDKaTMGyUJ/LGyya5XnyAsMEXKOOnX/eyL0f1pGocxCLzc8KALCkX+JX
-        /bMJRMUxmVP2uFsQ+TwYIXx17
-X-Received: by 2002:a05:6808:1693:b0:353:e980:30bf with SMTP id bb19-20020a056808169300b00353e98030bfmr7619333oib.206.1667248296673;
-        Mon, 31 Oct 2022 13:31:36 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6B6/z0lcd7D5OLl9WDtE+Mx0BJBDVllYVLYSG10XWz2v15lMdxxewtOH4kYWzU7mQ+tcnlRQ==
-X-Received: by 2002:a05:6808:1693:b0:353:e980:30bf with SMTP id bb19-20020a056808169300b00353e98030bfmr7619312oib.206.1667248296393;
-        Mon, 31 Oct 2022 13:31:36 -0700 (PDT)
-Received: from halaney-x13s ([2600:1700:1ff0:d0e0::41])
-        by smtp.gmail.com with ESMTPSA id x13-20020a056830114d00b0066c34486aa7sm3113890otq.73.2022.10.31.13.31.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 13:31:35 -0700 (PDT)
-Date:   Mon, 31 Oct 2022 15:31:33 -0500
-From:   Andrew Halaney <ahalaney@redhat.com>
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     martin.petersen@oracle.com, jejb@linux.ibm.com,
-        andersson@kernel.org, vkoul@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@somainline.org,
-        robh+dt@kernel.org, quic_cang@quicinc.com,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-        linux-scsi@vger.kernel.org, dmitry.baryshkov@linaro.org
-Subject: Re: [PATCH v2 13/15] scsi: ufs: ufs-qcom: Factor out the logic
- finding the HS Gear
-Message-ID: <20221031203133.vmqqig7wlryrgiwv@halaney-x13s>
-References: <20221031180217.32512-1-manivannan.sadhasivam@linaro.org>
- <20221031180217.32512-14-manivannan.sadhasivam@linaro.org>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Dsp3vKZHMgvy2ZaBOBHTAANbpVIvX0BBnL2C4mQELqE=;
+        b=cR/Con+Q55TYYNKpbJmevilvW9lu+jRATGYdSKw0RnLibBCq0cjvTZCstWzwdXfawp
+         DlBsgpiBXOnRXvXXSUcl84BzUaIH2bV0toNJGjeIYTcw/eD+fTCFGaWCT/TLR2BYu5zn
+         PsUspieLwN3uv0lpSsbY4pkNt1pkyUeIyujgxpcIm9UZani9tE6IYbG+114zNLBkc/Dd
+         3gCOD40TnaRsSKBRLQazFq/j2pXSda7tPrgRijE0QUgRM1N5T+Qk9OopStU63HKsglRI
+         dRI770KNKG4pDYisJQlT2BXanx3ijaGEuecx40Gi+7mGT3zSdA53w+yQcBRyzbfx4bS4
+         KErQ==
+X-Gm-Message-State: ACrzQf3LttVS8B0Dvn5uwIyvPPYpgiTh0GViNr4H7yGPh8S0xpumOQtX
+        Y8pWgunkiltmnpy+HRAxCSb9+svrQXm0Knt4l8w3aw==
+X-Google-Smtp-Source: AMsMyM4h4xR8ejfUMsp5LserMBr0wwRu/+V7iszigRYVIhPUXULQ15K0r0Udv6GSb7nVVqLh75MTsvmcFRTdo6kkGsI=
+X-Received: by 2002:a17:906:3394:b0:78e:11ea:8528 with SMTP id
+ v20-20020a170906339400b0078e11ea8528mr2901eja.190.1667248467919; Mon, 31 Oct
+ 2022 13:34:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221031180217.32512-14-manivannan.sadhasivam@linaro.org>
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+References: <20221024121601.156514-1-ulf.hansson@linaro.org>
+In-Reply-To: <20221024121601.156514-1-ulf.hansson@linaro.org>
+From:   Linus Walleij <linus.walleij@linaro.org>
+Date:   Mon, 31 Oct 2022 21:34:16 +0100
+Message-ID: <CACRpkdacfO5DEbRpg94koMDgHrOkn1vpymzP91OeLg3h3B5sHQ@mail.gmail.com>
+Subject: Re: [PATCH] amba: Drop redundant assignments of the system PM callbacks
+To:     Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     Russell King <linux@arm.linux.org.uk>,
+        linux-arm-kernel@lists.infradead.org,
+        Saravana Kannan <saravanak@google.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 11:32:15PM +0530, Manivannan Sadhasivam wrote:
-> In the preparation of adding support for new gears, let's move the
-> logic that finds the gear for each platform to a new function. This helps
-> with code readability and also allows the logic to be used in other places
-> of the driver in future.
-> 
-> While at it, let's make it clear that this driver only supports symmetric
-> gear setting (hs_tx_gear == hs_rx_gear).
-> 
-> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+On Mon, Oct 24, 2022 at 2:16 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
 
-Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
+> If the system PM callbacks haven't been assigned, the PM core falls back to
+> invoke the corresponding the pm_generic_* helpers for the device. Let's
+> rely on this behaviour and drop the redundant assignments.
+>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-> ---
->  drivers/ufs/host/ufs-qcom.c | 36 +++++++++++++++++++++++-------------
->  1 file changed, 23 insertions(+), 13 deletions(-)
-> 
-> diff --git a/drivers/ufs/host/ufs-qcom.c b/drivers/ufs/host/ufs-qcom.c
-> index 38e2ed749d75..c93d2d38b43e 100644
-> --- a/drivers/ufs/host/ufs-qcom.c
-> +++ b/drivers/ufs/host/ufs-qcom.c
-> @@ -278,6 +278,26 @@ static int ufs_qcom_host_reset(struct ufs_hba *hba)
->  	return 0;
->  }
->  
-> +static u32 ufs_qcom_get_hs_gear(struct ufs_hba *hba, u32 hs_gear)
-> +{
-> +	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
-> +
-> +	if (host->hw_ver.major == 0x1) {
-> +		/*
-> +		 * HS-G3 operations may not reliably work on legacy QCOM
-> +		 * UFS host controller hardware even though capability
-> +		 * exchange during link startup phase may end up
-> +		 * negotiating maximum supported gear as G3.
-> +		 * Hence downgrade the maximum supported gear to HS-G2.
-> +		 */
-> +		if (hs_gear > UFS_HS_G2)
-> +			return UFS_HS_G2;
-> +	}
-> +
-> +	/* Default is HS-G3 */
-> +	return UFS_HS_G3;
-> +}
-> +
->  static int ufs_qcom_power_up_sequence(struct ufs_hba *hba)
->  {
->  	struct ufs_qcom_host *host = ufshcd_get_variant(hba);
-> @@ -692,19 +712,9 @@ static int ufs_qcom_pwr_change_notify(struct ufs_hba *hba,
->  		ufshcd_init_pwr_dev_param(&ufs_qcom_cap);
->  		ufs_qcom_cap.hs_rate = UFS_QCOM_LIMIT_HS_RATE;
->  
-> -		if (host->hw_ver.major == 0x1) {
-> -			/*
-> -			 * HS-G3 operations may not reliably work on legacy QCOM
-> -			 * UFS host controller hardware even though capability
-> -			 * exchange during link startup phase may end up
-> -			 * negotiating maximum supported gear as G3.
-> -			 * Hence downgrade the maximum supported gear to HS-G2.
-> -			 */
-> -			if (ufs_qcom_cap.hs_tx_gear > UFS_HS_G2)
-> -				ufs_qcom_cap.hs_tx_gear = UFS_HS_G2;
-> -			if (ufs_qcom_cap.hs_rx_gear > UFS_HS_G2)
-> -				ufs_qcom_cap.hs_rx_gear = UFS_HS_G2;
-> -		}
-> +		/* This driver only supports symmetic gear setting i.e., hs_tx_gear == hs_rx_gear */
-> +		ufs_qcom_cap.hs_tx_gear = ufs_qcom_cap.hs_rx_gear = ufs_qcom_get_hs_gear(hba,
-> +									ufs_qcom_cap.hs_tx_gear);
->  
->  		ret = ufshcd_get_pwr_dev_param(&ufs_qcom_cap,
->  					       dev_max_params,
-> -- 
-> 2.25.1
-> 
+Acked-by: Linus Walleij <linus.walleij@linaro.org>
 
+I think the AMBA patches normally go in through Russell's
+patch tracker.
+
+Yours,
+Linus Walleij
