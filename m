@@ -2,131 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 809D3613A21
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 16:35:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B6E9613A32
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 16:36:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231725AbiJaPft (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 11:35:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41376 "EHLO
+        id S231618AbiJaPgl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 11:36:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbiJaPfp (ORCPT
+        with ESMTP id S231881AbiJaPg3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 11:35:45 -0400
-Received: from mail-wr1-x436.google.com (mail-wr1-x436.google.com [IPv6:2a00:1450:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3C4B634E
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 08:35:44 -0700 (PDT)
-Received: by mail-wr1-x436.google.com with SMTP id v1so16497054wrt.11
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 08:35:44 -0700 (PDT)
+        Mon, 31 Oct 2022 11:36:29 -0400
+Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34B5A11805
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 08:36:21 -0700 (PDT)
+Received: by mail-oi1-x22e.google.com with SMTP id p127so13122481oih.9
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 08:36:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:reply-to:organization:from
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=TsXJSVmpsfRwUaoUkQeZoN5vrNGuaXJ+yHnFyn7q25I=;
-        b=kNDVSruV16A9lm4yIH6ED5p3NglZj4zIWm6IWzCXkUhLysu/9kFqTnjIKo0B5mdWtE
-         bVkze8vz56g3cNUjHYUhdd2HSRi3Lr77pdsuZdu/ZSMft7E+XFsIZcNWXo6s6H0+dMVH
-         x5hy2kxnN7LVX3Yki1W5sEdlWJRu5LnLP0Z30WQ5M4r6Xw4Aq0ROJk3qcBp2JfWxarBl
-         zZTGvO9QBblm1HmA+daQtS4fyx7f1QGrlVWeziluZvNx7LQ0REWS2xw6IZ/EyUs2cjDK
-         ZxxhWhPVf2FcTxe9wbNDK87W4N6DD4Gjf4lnkHIyHwncXHxqgu0zsO1XLUNAzjCI0n2i
-         /RwA==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=NZ9svVcqEpoCn/DRJRtqGJnzFfLnvgvZgnnPVTMjw9w=;
+        b=LppIxaq+KxX4U647wlKAZCyxF03zXuJNg1ni4I2k2e8rpayHjUK+wZ3YxWl7pUcOvk
+         xBa8PBokMuuYaZ9DTovzP1y4UV4vLCS0vAUffMLEXZdMHCbrpkPjv0LrcsNEpO3cHpyH
+         AGXvBWE7uM0TDg26hKlpAqEJBAitI77xH1AZWH7LY/OqIA7qwoQ4o+0mgiKpYvoyWFVh
+         /SJKdO3bSfLJzt4gGGrXTLIfJg10qqe023mBgY2uA5I1bTHcOT4pak8bG6wM7dnUNqFw
+         Q4iWYA4zrS4zdDGOCzMMlM+px0g8tgN6ge7Vw6d7+4VRPmKDkvRL0d2WFiZD9IoWG3ag
+         I16g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:reply-to:organization:from
-         :references:cc:to:content-language:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TsXJSVmpsfRwUaoUkQeZoN5vrNGuaXJ+yHnFyn7q25I=;
-        b=v0qwN/DRuNaczIAWPai0sbgshjKbTgg+XIlnVFq0hA4dE1GOVGVGfgi5v6WP8BE/xF
-         yq+1imJaAri2BWfHIctAuBrCGMru3MzYC+AQMeabRU5G++y9sS4jUXGr7r8vwZL0BQQv
-         pO9TqBNoufWuVAOtIkmeFBhFqld0vxLQzBPD95cRGn6zJ3OPv4GqyQMs9mY+9BPnSBFX
-         lU2eDCaRCk+q1FICPVAcvNtLU55qcuT10LiY4iSwzKtAqIjpOORghO9wNAjHftgxb+Wr
-         9mCmxA6q48FDDAWlMI1O/SPjJeA1qXXd4EaMeKejj6qOLu1oN1fTKglFLE/aFY29dTd2
-         Dhsg==
-X-Gm-Message-State: ACrzQf3aLvvNLSLv1sHHeDsx4YALvNbLCc9EZfZRdCRpZT7sp1/65aus
-        z6UV/6rvkjx9O5LYDtjsKbWb7A==
-X-Google-Smtp-Source: AMsMyM73Wi/PfFl19dSX+YB0TWP0LDVvL+RVag0yoxDj3CQC07pDBzEctGykPU2rWEpvK1FkJgWkuQ==
-X-Received: by 2002:adf:f4c7:0:b0:236:c415:c707 with SMTP id h7-20020adff4c7000000b00236c415c707mr5202241wrp.24.1667230543206;
-        Mon, 31 Oct 2022 08:35:43 -0700 (PDT)
-Received: from ?IPV6:2a0d:e487:34f:ed70:97ca:71f8:f780:5cf1? ([2a0d:e487:34f:ed70:97ca:71f8:f780:5cf1])
-        by smtp.gmail.com with ESMTPSA id i6-20020a05600c070600b003cf483ee8e0sm7306730wmn.24.2022.10.31.08.35.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Oct 2022 08:35:42 -0700 (PDT)
-Message-ID: <6858acf3-eb90-41aa-b714-a2ceb6afe9db@linaro.org>
-Date:   Mon, 31 Oct 2022 16:35:38 +0100
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=NZ9svVcqEpoCn/DRJRtqGJnzFfLnvgvZgnnPVTMjw9w=;
+        b=op73arBM8Qh1S8bvnIxpblI5pXYSYW5sAkDZKDtU3V9AsneEdoCbY11wKe9sfzORh9
+         R94iNgw0mUVhNloXyBLDx+Ed0UTHvZr4WfCZD8tQh7kh8vTE6e2hQy9MHCTaOzRTVB0x
+         DA+tbjVWCdA+RANMpsagCl5JpDc47QzOHRqsE5Fi7qhhT/xWdEuhl+BtLEY9GAoGrU4J
+         behFKPRPE4bec/5vBaNtEXtSXmQoauJhaAnNCfWKo/wG0cL9vBylgJnJfLpOa0Ol/xbN
+         TOLQtOpBESnX741Kwu5tUHRxILFcfy2AmGabpxVLblM9yAYdsQi5h2VHWzWvRytAHTPw
+         5sSQ==
+X-Gm-Message-State: ACrzQf1zyCIYrguAOfV66rZGX8Iz4MhzNP0SZAyy1E3bzvO6iDYFmAmE
+        CYR0OFM2hxGura2oVZNp/VdZY/fhbK85RSzGdB9GFPdU
+X-Google-Smtp-Source: AMsMyM7B0fndfG6nvizJp5E8j9Eh9Le4tnJvOWEdVadHUUjC2xmpwJzBNVXw9O/HZO/DkEoWrnPYXbaklDdIYB7rCT4=
+X-Received: by 2002:a05:6808:998:b0:359:c7f3:1ef8 with SMTP id
+ a24-20020a056808099800b00359c7f31ef8mr11258816oic.46.1667230580537; Mon, 31
+ Oct 2022 08:36:20 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v4 08/11] mfd: qcom-pm8xxx: drop unused PM8018 compatible
-Content-Language: en-US
-To:     Lee Jones <lee@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andy Gross <agross@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
- <20220928-mdm9615-dt-schema-fixes-v4-8-dac2dfaac703@linaro.org>
- <Y1/qnCyav/S35mRo@google.com>
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Organization: Linaro Developer Services
-Reply-To: neil.armstrong@linaro.org
-In-Reply-To: <Y1/qnCyav/S35mRo@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <Y117XNaSP6/8bH+3@moc6.cz>
+In-Reply-To: <Y117XNaSP6/8bH+3@moc6.cz>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Mon, 31 Oct 2022 11:36:09 -0400
+Message-ID: <CADnq5_Muegi+dvmrg5U=Cau_oeXQFjv_h2Pdn_j9AG0mRgE4=g@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/display: add parameter backlight_min
+To:     Filip Moc <dev@moc6.cz>
+Cc:     Harry Wentland <harry.wentland@amd.com>,
+        Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Sun, Oct 30, 2022 at 5:26 AM Filip Moc <dev@moc6.cz> wrote:
+>
+> There are some devices on which amdgpu won't allow user to set brightness
+> to sufficiently low values even though the hardware would support it just
+> fine.
+>
+> This usually happens in two cases when either configuration of brightness
+> levels via ACPI/ATIF is not available and amdgpu falls back to defaults
+> (currently 12 for minimum level) which may be too high for some devices or
+> even the configuration via ATIF is available but the minimum brightness
+> level provided by the manufacturer is set to unreasonably high value.
+>
+> In either case user can use this new module parameter to adjust the
+> minimum allowed backlight brightness level.
+>
+> Link: https://bugzilla.kernel.org/show_bug.cgi?id=203439
+> Signed-off-by: Filip Moc <dev@moc6.cz>
 
-On 31/10/2022 16:32, Lee Jones wrote:
-> On Fri, 21 Oct 2022, Neil Armstrong wrote:
-> 
->> The PM8018 compatible is always used with PM8921 fallback, so PM8018
->> compatible can be safely removed from device ID table
->>
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> 
-> Tags should appear chronologically.
+Does your system require an override and if so, what is it?  It would
+be good to add a quirk for your system as well so that other users of
+the same system wouldn't need to manually figure out an apply the
+settings.
 
-Indeed, they were added by b4, I'll report this.
+Alex
 
-Thanks,
-Neil
 
-> 
-> I've fixed this up and applied the patch, thanks.
-> 
->> ---
->>   drivers/mfd/qcom-pm8xxx.c | 1 -
->>   1 file changed, 1 deletion(-)
->>
->> diff --git a/drivers/mfd/qcom-pm8xxx.c b/drivers/mfd/qcom-pm8xxx.c
->> index 2f2734ba5273..601106580e2e 100644
->> --- a/drivers/mfd/qcom-pm8xxx.c
->> +++ b/drivers/mfd/qcom-pm8xxx.c
->> @@ -497,7 +497,6 @@ static const struct pm_irq_data pm8821_data = {
->>   };
->>   
->>   static const struct of_device_id pm8xxx_id_table[] = {
->> -	{ .compatible = "qcom,pm8018", .data = &pm8xxx_data},
->>   	{ .compatible = "qcom,pm8058", .data = &pm8xxx_data},
->>   	{ .compatible = "qcom,pm8821", .data = &pm8821_data},
->>   	{ .compatible = "qcom,pm8921", .data = &pm8xxx_data},
->>
-> 
-
+> ---
+>  drivers/gpu/drm/amd/amdgpu/amdgpu.h               |  3 +++
+>  drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c           | 15 +++++++++++++++
+>  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 15 +++++++++++++++
+>  3 files changed, 33 insertions(+)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu.h b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+> index 0e6ddf05c23c..c5445402c49d 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+> @@ -200,6 +200,9 @@ extern uint amdgpu_dc_debug_mask;
+>  extern uint amdgpu_dc_visual_confirm;
+>  extern uint amdgpu_dm_abm_level;
+>  extern int amdgpu_backlight;
+> +#ifdef CONFIG_DRM_AMD_DC
+> +extern int amdgpu_backlight_override_min[];
+> +#endif
+>  extern struct amdgpu_mgpu_info mgpu_info;
+>  extern int amdgpu_ras_enable;
+>  extern uint amdgpu_ras_mask;
+> diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> index 16f6a313335e..f2fb549ac52f 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> @@ -43,6 +43,7 @@
+>  #include "amdgpu_irq.h"
+>  #include "amdgpu_dma_buf.h"
+>  #include "amdgpu_sched.h"
+> +#include "amdgpu_dm.h"
+>  #include "amdgpu_fdinfo.h"
+>  #include "amdgpu_amdkfd.h"
+>
+> @@ -853,6 +854,20 @@ int amdgpu_backlight = -1;
+>  MODULE_PARM_DESC(backlight, "Backlight control (0 = pwm, 1 = aux, -1 auto (default))");
+>  module_param_named(backlight, amdgpu_backlight, bint, 0444);
+>
+> +/**
+> + * DOC: backlight_min (array of int)
+> + * Override minimum allowed backlight brightness signal (per display).
+> + * Must be less than the maximum brightness signal.
+> + * Negative value means no override.
+> + *
+> + * Defaults to all -1 (no override on any display).
+> + */
+> +#ifdef CONFIG_DRM_AMD_DC
+> +int amdgpu_backlight_override_min[AMDGPU_DM_MAX_NUM_EDP] = {[0 ... (AMDGPU_DM_MAX_NUM_EDP-1)] = -1};
+> +MODULE_PARM_DESC(backlight_min, "Override minimum backlight brightness signal (0..max-1, -1 = no override (default))");
+> +module_param_array_named(backlight_min, amdgpu_backlight_override_min, int, NULL, 0444);
+> +#endif
+> +
+>  /**
+>   * DOC: tmz (int)
+>   * Trusted Memory Zone (TMZ) is a method to protect data being written
+> diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> index eb4ce7216104..e2c36ba93d05 100644
+> --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> @@ -3911,6 +3911,21 @@ static void amdgpu_dm_update_backlight_caps(struct amdgpu_display_manager *dm,
+>         dm->backlight_caps[bl_idx].min_input_signal = AMDGPU_DM_DEFAULT_MIN_BACKLIGHT;
+>         dm->backlight_caps[bl_idx].max_input_signal = AMDGPU_DM_DEFAULT_MAX_BACKLIGHT;
+>  #endif
+> +
+> +       if (amdgpu_backlight_override_min[bl_idx] >= 0) {
+> +               if (amdgpu_backlight_override_min[bl_idx] < dm->backlight_caps[bl_idx].max_input_signal) {
+> +                       DRM_INFO("amdgpu: backlight[%i]: overriding minimum brightness from %i to %i\n",
+> +                                 bl_idx,
+> +                                 dm->backlight_caps[bl_idx].min_input_signal,
+> +                                 amdgpu_backlight_override_min[bl_idx]);
+> +                       dm->backlight_caps[bl_idx].min_input_signal = amdgpu_backlight_override_min[bl_idx];
+> +               } else {
+> +                       DRM_ERROR("amdgpu: backlight[%i]: minimum brightness override (%i) is not below maximum (%i)\n",
+> +                                 bl_idx,
+> +                                 amdgpu_backlight_override_min[bl_idx],
+> +                                 dm->backlight_caps[bl_idx].max_input_signal);
+> +               }
+> +       }
+>  }
+>
+>  static int get_brightness_range(const struct amdgpu_dm_backlight_caps *caps,
+>
+> base-commit: d8c03bfe146fd5e081a252cd34f3f12ca0255357
+> --
+> 2.30.2
+>
