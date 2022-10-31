@@ -2,47 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 526B26132C8
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 10:34:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 350DF6132C5
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 10:33:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230122AbiJaJeU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 05:34:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37296 "EHLO
+        id S230226AbiJaJdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 05:33:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229500AbiJaJeS (ORCPT
+        with ESMTP id S229648AbiJaJdC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 05:34:18 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8AD52FB;
-        Mon, 31 Oct 2022 02:34:16 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N17C42K5RzVjKr;
-        Mon, 31 Oct 2022 17:29:20 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 31 Oct 2022 17:34:14 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.61) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 31 Oct 2022 17:34:14 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <acme@redhat.com>, <tadeusz.struk@linaro.org>,
-        <keescook@chromium.org>, <linux-kernel@vger.kernel.org>,
-        <pf@vger.kernel.org>
-CC:     <yangjihong1@huawei.com>
-Subject: [PATCH] tools headers UAPI: Sync linux/stddef.h with the kernel sources
-Date:   Mon, 31 Oct 2022 17:30:57 +0800
-Message-ID: <20221031093057.29050-1-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
+        Mon, 31 Oct 2022 05:33:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD554CE20;
+        Mon, 31 Oct 2022 02:33:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5D493B81232;
+        Mon, 31 Oct 2022 09:33:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0C760C433C1;
+        Mon, 31 Oct 2022 09:32:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667208779;
+        bh=w/3KNfzjLA7QkRXDTQiecgRoc2V898KDK8Z4fbHT+Lc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=oAdqKcT8Iy8q+bTtPhxtWaugmvg91tNc7D/CaXE9/zxtqxuOIHuSAD7Fw8o8hDHiq
+         5zquXXZERE7pObCQlmgKfo761sGPhNMm9AFpQS16rLSFCytllreNjcV503x701PI++
+         Ey7vK5SbaEpviS65Pc1lIb6uL2Nd0ldl4j5ddZH7le3+dAiK/XphL1XN/gdSiCsQcK
+         v66NjXhThb27u3hDb67DGeBGCRBXdYQHdQIvke2NX+L2/sCkQDGchwy3hwSdCjbqLA
+         aJDv+qeO6vaXxhCLq6V4Hq0WJEac+vpAKiINuQqzGj1H8oZ1f415pJKb7j05Tc90jx
+         9tDJjRwWu1qog==
+Date:   Mon, 31 Oct 2022 09:32:51 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     Colin Foster <colin.foster@in-advantage.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Russell King <linux@armlinux.org.uk>,
+        UNGLinuxDriver@microchip.com,
+        Alexandre Belloni <alexandre.belloni@bootlin.com>,
+        Claudiu Manoil <claudiu.manoil@nxp.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Eric Dumazet <edumazet@google.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Andrew Lunn <andrew@lunn.ch>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>
+Subject: Re: [RFC v4 net-next 11/17] mfd: ocelot: prepend resource size
+ macros to be 32-bit
+Message-ID: <Y1+WQ2ebtoBw0AgB@google.com>
+References: <20221008185152.2411007-1-colin.foster@in-advantage.com>
+ <20221008185152.2411007-12-colin.foster@in-advantage.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.61]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221008185152.2411007-12-colin.foster@in-advantage.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,99 +69,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 036b8f5b8970 ("tools headers uapi: Update linux/in.h copy") modify
-tools/include/uapi/linux/in.h, and __DECLARE_FLEX_ARRAY is introduced.
-Macro is not defined in tools/include, compilation fails:
+On Sat, 08 Oct 2022, Colin Foster wrote:
 
-    CLNG-BPF [test_maps] bind4_prog.bpf.o
-  In file included from progs/bind4_prog.c:7:
-  /root/linux-mainline-new/linux/tools/include/uapi/linux/in.h:199:3: error: type name requires a specifier or qualifier
-                  __DECLARE_FLEX_ARRAY(__be32, imsf_slist_flex);
-                  ^
-  /root/linux-mainline-new/linux/tools/include/uapi/linux/in.h:199:32: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-                  __DECLARE_FLEX_ARRAY(__be32, imsf_slist_flex);
-                                               ^
-  2 errors generated.
+> The *_RES_SIZE macros are initally <= 0x100. Future resource sizes will be
+> upwards of 0x200000 in size.
+> 
+> To keep things clean, fully align the RES_SIZE macros to 32-bit to do
+> nothing more than make the code more consistent.
+> 
+> Signed-off-by: Colin Foster <colin.foster@in-advantage.com>
+> ---
+> 
+> v3-v4
+>     * No change
+> 
+> v2
+>     * New patch - broken out from a different one
+> 
+> ---
+>  drivers/mfd/ocelot-core.c | 8 ++++----
+>  1 file changed, 4 insertions(+), 4 deletions(-)
 
-Synchronize include/uapi/linux/stddef.h to tools headers directory,
-and delete the line "#include <linux/compiler_types.h>":
+I'm guessing some of the other patches depend on this?
 
-  # cp ./include/uapi/linux/stddef.h tools/include/uapi/linux/stddef.h
-  # sed -i '/#include <linux\/compiler_types.h>/,+1d' tools/include/uapi/linux/stddef.h
+How should it be handled?
 
-And add missed <linux/stddef.h> header in tools/include/uapi/linux/in.h.
+For my own reference (apply this as-is to your sign-off block):
 
-Fixes: 036b8f5b8970 (tools headers uapi: Update linux/in.h copy)
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
----
- tools/include/uapi/linux/in.h     |  1 +
- tools/include/uapi/linux/stddef.h | 45 +++++++++++++++++++++++++++++++
- 2 files changed, 46 insertions(+)
- create mode 100644 tools/include/uapi/linux/stddef.h
+  Acked-for-MFD-by: Lee Jones <lee@kernel.org>
 
-diff --git a/tools/include/uapi/linux/in.h b/tools/include/uapi/linux/in.h
-index f243ce665f74..79015665daf1 100644
---- a/tools/include/uapi/linux/in.h
-+++ b/tools/include/uapi/linux/in.h
-@@ -22,6 +22,7 @@
- #include <linux/types.h>
- #include <linux/libc-compat.h>
- #include <linux/socket.h>
-+#include <linux/stddef.h>
- 
- #if __UAPI_DEF_IN_IPPROTO
- /* Standard well-defined IP protocols.  */
-diff --git a/tools/include/uapi/linux/stddef.h b/tools/include/uapi/linux/stddef.h
-new file mode 100644
-index 000000000000..72bcdf96999f
---- /dev/null
-+++ b/tools/include/uapi/linux/stddef.h
-@@ -0,0 +1,45 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+#ifndef _UAPI_LINUX_STDDEF_H
-+#define _UAPI_LINUX_STDDEF_H
-+
-+#ifndef __always_inline
-+#define __always_inline inline
-+#endif
-+
-+/**
-+ * __struct_group() - Create a mirrored named and anonyomous struct
-+ *
-+ * @TAG: The tag name for the named sub-struct (usually empty)
-+ * @NAME: The identifier name of the mirrored sub-struct
-+ * @ATTRS: Any struct attributes (usually empty)
-+ * @MEMBERS: The member declarations for the mirrored structs
-+ *
-+ * Used to create an anonymous union of two structs with identical layout
-+ * and size: one anonymous and one named. The former's members can be used
-+ * normally without sub-struct naming, and the latter can be used to
-+ * reason about the start, end, and size of the group of struct members.
-+ * The named struct can also be explicitly tagged for layer reuse, as well
-+ * as both having struct attributes appended.
-+ */
-+#define __struct_group(TAG, NAME, ATTRS, MEMBERS...) \
-+	union { \
-+		struct { MEMBERS } ATTRS; \
-+		struct TAG { MEMBERS } ATTRS NAME; \
-+	}
-+
-+/**
-+ * __DECLARE_FLEX_ARRAY() - Declare a flexible array usable in a union
-+ *
-+ * @TYPE: The type of each flexible array element
-+ * @NAME: The name of the flexible array member
-+ *
-+ * In order to have a flexible array member in a union or alone in a
-+ * struct, it needs to be wrapped in an anonymous struct with at least 1
-+ * named member, but that member can be empty.
-+ */
-+#define __DECLARE_FLEX_ARRAY(TYPE, NAME)	\
-+	struct { \
-+		struct { } __empty_ ## NAME; \
-+		TYPE NAME[]; \
-+	}
-+#endif
 -- 
-2.30.GIT
-
+Lee Jones [李琼斯]
