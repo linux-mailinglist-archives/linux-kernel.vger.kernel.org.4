@@ -2,113 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8855C61349C
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 12:38:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B79C61349E
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 12:39:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbiJaLie (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 07:38:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37842 "EHLO
+        id S230387AbiJaLjV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 07:39:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38196 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230118AbiJaLic (ORCPT
+        with ESMTP id S229482AbiJaLjS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 07:38:32 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88C56DFD4
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 04:38:31 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.53])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N1B025lVczpW9B;
-        Mon, 31 Oct 2022 19:34:58 +0800 (CST)
-Received: from cgs.huawei.com (10.244.148.83) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 31 Oct 2022 19:38:29 +0800
-From:   Gaosheng Cui <cuigaosheng1@huawei.com>
-To:     <adaplas@gmail.com>, <akpm@linux-foundation.org>,
-        <cuigaosheng1@huawei.com>
-CC:     <linux-kernel@vger.kernel.org>
-Subject: [PATCH] lib/fonts: fix undefined behavior in bit shift for get_default_font
-Date:   Mon, 31 Oct 2022 19:38:29 +0800
-Message-ID: <20221031113829.4183153-1-cuigaosheng1@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Mon, 31 Oct 2022 07:39:18 -0400
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 75C3BDFD4;
+        Mon, 31 Oct 2022 04:39:17 -0700 (PDT)
+Received: (Authenticated sender: i.maximets@ovn.org)
+        by mail.gandi.net (Postfix) with ESMTPSA id A8326FF803;
+        Mon, 31 Oct 2022 11:39:09 +0000 (UTC)
+Message-ID: <7f118c0f-c79a-7f26-aefc-afae00483233@ovn.org>
+Date:   Mon, 31 Oct 2022 12:39:08 +0100
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.244.148.83]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Cc:     linux-kernel@vger.kernel.org, i.maximets@ovn.org
+Subject: Re: [ovs-dev] [PATCH net] openvswitch: add missing resv_start_op
+ initialization for dp_vport_genl_family
+Content-Language: en-US
+To:     Ziyang Xuan <william.xuanziyang@huawei.com>, pshelar@ovn.org,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, netdev@vger.kernel.org, dev@openvswitch.org
+References: <20221031081210.2852708-1-william.xuanziyang@huawei.com>
+From:   Ilya Maximets <i.maximets@ovn.org>
+In-Reply-To: <20221031081210.2852708-1-william.xuanziyang@huawei.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Shifting signed 32-bit value by 31 bits is undefined, so changing
-significant bit to unsigned. The UBSAN warning calltrace like below:
+On 10/31/22 09:12, Ziyang Xuan via dev wrote:
+> I got a warning using the latest mainline codes to start vms as following:
+> 
+> ===================================================
+> WARNING: CPU: 1 PID: 1 at net/netlink/genetlink.c:383 genl_register_family+0x6c/0x76c
+> CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc2-00886-g882ad2a2a8ff #43
+> ...
+> Call trace:
+>  genl_register_family+0x6c/0x76c
+>  dp_init+0xa8/0x124
+>  do_one_initcall+0x84/0x450
+> 
+> It is because that commit 9c5d03d36251 ("genetlink: start to validate
+> reserved header bytes") has missed the resv_start_op initialization
+> for dp_vport_genl_family, and commit ce48ebdd5651 ("genetlink: limit
+> the use of validation workarounds to old ops") add checking warning.
+> 
+> Add resv_start_op initialization for dp_vport_genl_family to fix it.
+> 
+> Fixes: 9c5d03d36251 ("genetlink: start to validate reserved header bytes")
+> Signed-off-by: Ziyang Xuan <william.xuanziyang@huawei.com>
+> ---
 
-UBSAN: shift-out-of-bounds in lib/fonts/fonts.c:139:20
-left shift of 1 by 31 places cannot be represented in type 'int'
- <TASK>
- dump_stack_lvl+0x7d/0xa5
- dump_stack+0x15/0x1b
- ubsan_epilogue+0xe/0x4e
- __ubsan_handle_shift_out_of_bounds+0x1e7/0x20c
- get_default_font+0x1c7/0x1f0
- fbcon_startup+0x347/0x3a0
- do_take_over_console+0xce/0x270
- do_fbcon_takeover+0xa1/0x170
- do_fb_registered+0x2a8/0x340
- fbcon_fb_registered+0x47/0xe0
- register_framebuffer+0x294/0x4a0
- __drm_fb_helper_initial_config_and_unlock+0x43c/0x880 [drm_kms_helper]
- drm_fb_helper_initial_config+0x52/0x80 [drm_kms_helper]
- drm_fbdev_client_hotplug+0x156/0x1b0 [drm_kms_helper]
- drm_fbdev_generic_setup+0xfc/0x290 [drm_kms_helper]
- bochs_pci_probe+0x6ca/0x772 [bochs]
- local_pci_probe+0x4d/0xb0
- pci_device_probe+0x119/0x320
- really_probe+0x181/0x550
- __driver_probe_device+0xc6/0x220
- driver_probe_device+0x32/0x100
- __driver_attach+0x195/0x200
- bus_for_each_dev+0xbb/0x120
- driver_attach+0x27/0x30
- bus_add_driver+0x22e/0x2f0
- driver_register+0xa9/0x190
- __pci_register_driver+0x90/0xa0
- bochs_pci_driver_init+0x52/0x1000 [bochs]
- do_one_initcall+0x76/0x430
- do_init_module+0x61/0x28a
- load_module+0x1f82/0x2e50
- __do_sys_finit_module+0xf8/0x190
- __x64_sys_finit_module+0x23/0x30
- do_syscall_64+0x58/0x80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
- </TASK>
+Hi, Ziyang Xuan.  Thanks for the patch!
 
-Fixes: c81f717cb9e0 ("fbcon: Fix typo and bogus logic in get_default_font")
-Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
----
- lib/fonts/fonts.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+But it looks like Jakub already fixed that issue a couple of days ago:
+  https://git.kernel.org/netdev/net/c/e4ba4554209f
 
-diff --git a/lib/fonts/fonts.c b/lib/fonts/fonts.c
-index 5f4b07b56cd9..973866438608 100644
---- a/lib/fonts/fonts.c
-+++ b/lib/fonts/fonts.c
-@@ -135,8 +135,8 @@ const struct font_desc *get_default_font(int xres, int yres, u32 font_w,
- 		if (res > 20)
- 			c += 20 - res;
- 
--		if ((font_w & (1 << (f->width - 1))) &&
--		    (font_h & (1 << (f->height - 1))))
-+		if ((font_w & (1U << (f->width - 1))) &&
-+		    (font_h & (1U << (f->height - 1))))
- 			c += 1000;
- 
- 		if (c > cc) {
--- 
-2.25.1
-
+Best regards, Ilya Maximets.
