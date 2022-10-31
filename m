@@ -2,71 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05A586140BD
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 23:37:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 689006140C1
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 23:40:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229955AbiJaWhh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 18:37:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51444 "EHLO
+        id S229648AbiJaWkC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 18:40:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52822 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiJaWhf (ORCPT
+        with ESMTP id S229505AbiJaWj7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 18:37:35 -0400
-Received: from mail-wm1-x333.google.com (mail-wm1-x333.google.com [IPv6:2a00:1450:4864:20::333])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 491D115718
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 15:37:34 -0700 (PDT)
-Received: by mail-wm1-x333.google.com with SMTP id l32so7958372wms.2
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 15:37:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=32Qe8bmBZ7pII79RFwCpK+3GOxPstNnomF/ebeGJTnM=;
-        b=CEkFr1Q5rbPhDsqDTgm8r/bNCNZ2IRwU43A4d21qT+qUEzXwGlsns1GuxihgRS+Pws
-         TzR92Rq4M5egbl4trrR5Y+bdxlT/2ZQTmDA6tEgG8SKQxKOwpMuS8SYUS160BLI5+JXW
-         kI2n80wBXzoB/T/4Ay3Ka2M2RNALkRSRnuuznv65HBGL0FNihkzQ1T2py5vEjGT4Qoaz
-         rLpMhvFaxBDO6R149nSyARMA66BqF/Y9HVEhrZ1HhoZ/smqrzGvWUUzjgQ3CSDOukCXU
-         Fi2Xsk0F7b9242+1vg6wg9OpgmFDW77KmMx3UwbTvRcNwJmcUrhFL7Aljxi4kwvpOk3V
-         wu9w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=32Qe8bmBZ7pII79RFwCpK+3GOxPstNnomF/ebeGJTnM=;
-        b=nZO35QiaznRU0xieRondWNSWw4K8lekPW9EE7C2NYvzF2xc5vOwIC28YibnMTmPzBa
-         z4YbdnzWa2edilf/+E1DIC45rdPiboqrranZ+XWiTjAMMNPZGmr0P7AVdj0CvoyaAPYT
-         EoTUEZi8Ug2KmnDPbMq47qzcv83eqsVkwz+GpEXBqWrTCIL0OTI3iFvMLEj5yFhI323F
-         fL48QsPttX0xKbyu5IaDz7uyj+MUjy4RTcHhQktSA3S+aWAkny5WcFwjJ4C/fKaQX1N7
-         Hxr8YQS5cPQrh6bRJTDMbh8IWki04/4MGAFyfdb4dUKKRLjzu1y2AKyfs3rYurICiMBu
-         /x5A==
-X-Gm-Message-State: ACrzQf18PnoqMAiWaz9+tBsjQ/MaqWjMT5ytH4owmpz4d4DaPt7IQbgW
-        xpnarje5ClsGqfHt4hlWOdw4lgui90oaNCQfKYmANA==
-X-Google-Smtp-Source: AMsMyM7cK3nFA6pExpB9Vrej4Pi0gdqIDS+AN4fCmL3iZmDnlUygCnYRwGljLiTBMyqyyHpkS6CWBRtcfARwtAK8PhE=
-X-Received: by 2002:a05:600c:310b:b0:3cf:33c4:bc7 with SMTP id
- g11-20020a05600c310b00b003cf33c40bc7mr9725643wmo.25.1667255852653; Mon, 31
- Oct 2022 15:37:32 -0700 (PDT)
+        Mon, 31 Oct 2022 18:39:59 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE9825FE4
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 15:39:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1667255972; bh=iaIFSLNn0yklCqLnafJqQ+I6bFLTwxIwEcdTu4zodc8=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=cHEJakU6fkM5wIsPEmw3aDN7OSZVbdkfWaMzkn94/Z6Qpgxqdr+SiSqw1GH/3QEUN
+         2zk7KFS5WN3u2PJ0ER7hEq8nbRy4DOs0pKY1LOBL9sdeX85Cny4ajcFLiZ17Zd52lC
+         N8C/BqFHunjXlIYn2sM4A8o0+Fod49xsYEsxH0ZZnyDTNOa87kmUiCU8zPeecVMyqs
+         OsOYI60WaHD7GeX2xFM37IUoaD4UmLb4nzYWHw6Cdi9fnQ9MdbI/ERKjBgLBCLn8I1
+         cmnuBZP650THyVNhSgxiNe3UAohjCepKdq4Wf7eobWTnpT5Z6E3aISyg5ZHo0Jok6e
+         8gUtPZDQbMlVQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([78.35.189.154]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MXp9Y-1oWuGO2FcS-00Y6YV; Mon, 31
+ Oct 2022 23:39:32 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     openbmc@lists.ozlabs.org
+Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Joel Stanley <joel@jms.id.au>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Hector Martin <marcan@marcan.st>,
+        Robert Jarzmik <robert.jarzmik@free.fr>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Brian Norris <briannorris@chromium.org>,
+        Sven Peter <sven@svenpeter.dev>, linux-kernel@vger.kernel.org
+Subject: [PATCH v5 RESEND] soc: nuvoton: Add SoC info driver for WPCM450
+Date:   Mon, 31 Oct 2022 23:39:22 +0100
+Message-Id: <20221031223926.241641-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20221027202603.670616-1-avagin@google.com> <Y1/GO1eWt+oTNA24@hirez.programming.kicks-ass.net>
-In-Reply-To: <Y1/GO1eWt+oTNA24@hirez.programming.kicks-ass.net>
-From:   Andrei Vagin <avagin@google.com>
-Date:   Mon, 31 Oct 2022 15:37:21 -0700
-Message-ID: <CAEWA0a7jDTGs3uYY6FyAeOYWgvhQDdGs+bUFi_4S92eoOCa+Rg@mail.gmail.com>
-Subject: Re: [PATCH] sched: consider WF_SYNC to find idle siblings
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Ingo Molnar <mingo@redhat.com>, Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        linux-kernel@vger.kernel.org, Andrei Vagin <avagin@gmail.com>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:ah+jqvgbx5xPMC9n7Czjp7kSIE65GdnQvjQ2bQ+HTbvy8OpTXm6
+ iQvrZmyqpo7Sjz911FGrlbUurY5EXg39VsIC3xMLwMDo3PjU4k7JJMXV8xupx6j99k5O1K9
+ BvgM+ZNvgIbkFOm1aPFtHrQ6IKUvIzLPZ4oWFueE8lDOEBR2jgZDutQ17zC2rT1pUenALzT
+ B1xVaVh/EuGU38qBALnMA==
+UI-OutboundReport: notjunk:1;M01:P0:XLF7s+/qqLs=;wNs07tZ2By4ZRVFnOMr+HEVEVZB
+ fR87zVEth83LVIVPWPQLjtFd3nRfhcrJIHTQukzHt7+sSkcblZZ+Hku1BTQAJ2b5/gS8Mql12
+ jcDWq4tQyXDFhXKo+DwjBVYFxRbzvY1+Rg0IwZRQSw2pkWr1cuChjVlKd2bvfTHtDJPHUtdtP
+ 9Qgf5tBSh+9xB2NR1DNlfhMJA0rQNKU2BSAdKeEtjK4851/5sgheFHrsxMgdf86EKIjOe7Do5
+ hWpROpn6AgsxX0H4knKoutbmD3LlW51Xafob+bv4o0LBDHmnSiiGle4INWZW1acwTfXm/gFyp
+ g334ISJ3/ZZlvi/+4lTTwYs9yu+MaPnY+RXFcOghJCBtNgsxSuOjFCDh147v1WsKoQwOqhyuK
+ uCe26xlu7xQ3AM2MaItMQ4eBk6wkrVnwuFREdu58fJQs5cQ2de+bogOs4M0ymuMuzcL4a1xCt
+ 5GjvEAwJJnEHvFi8eVY63HvidOLFrWw33az+b63ScTym9OZVKa9+8xe1mz21tXXC4CUGegGCu
+ tFPoRN3m0Gn3Rr2ZUw4uz3CXU8rNlBrkbyi+9KQtZ7qLee1wd/aD6jZMQDQsQjSI4SJamauc9
+ fPGzcZLFTTysMTHU4ptY1HIFxwlWk8kgJ9iaOX4Mz/nk24mgcabUu+i9xiYeBQKOA9DwNKjtJ
+ otvjT4cTOWA7a6Vu7CkoFGlpA99hBPEX9bIJAIbD7lNo/mga9R8x2kEWqTWvZSLeywtflSnUN
+ 7gss2h4Pf9zNuamRaybBZ24EPqI86ogF+9VqcYvWfJCcp+XwyZmQiusfj/83bX8+1k54vCpim
+ aj9qDS1qN0z6yb1eecpnPfvIHH3kzmv7uCoy5H4tMMmmzc8T+NlL42UInm31Yy9cqNmZlWm1t
+ KNGXypQSbN9WIeu5nv2onpi41pLYedKrVRliO73fwgNi67ihyNroiO//aCImF1w55x/aGwsfP
+ A/WrcjcFt9APZAMV9dc0+v1dyCA=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,72 +78,218 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 5:57 AM Peter Zijlstra <peterz@infradead.org> wrote:
->
-> On Thu, Oct 27, 2022 at 01:26:03PM -0700, Andrei Vagin wrote:
-> > From: Andrei Vagin <avagin@gmail.com>
-> >
-> > WF_SYNC means that the waker goes to sleep after wakeup, so the current
-> > cpu can be considered idle if the waker is the only process that is
-> > running on it.
-> >
-> > The perf pipe benchmark shows that this change reduces the average time
-> > per operation from 8.8 usecs/op to 3.7 usecs/op.
-> >
-> > Before:
-> >  $ ./tools/perf/perf bench sched pipe
-> >  # Running 'sched/pipe' benchmark:
-> >  # Executed 1000000 pipe operations between two processes
-> >
-> >      Total time: 8.813 [sec]
-> >
-> >        8.813985 usecs/op
-> >          113456 ops/sec
-> >
-> > After:
-> >  $ ./tools/perf/perf bench sched pipe
-> >  # Running 'sched/pipe' benchmark:
-> >  # Executed 1000000 pipe operations between two processes
-> >
-> >      Total time: 3.743 [sec]
-> >
-> >        3.743971 usecs/op
-> >          267096 ops/sec
->
-> But what; if anything, does it do for the myrad of other benchmarks we
-> run?
+Add a SoC information driver for Nuvoton WPCM450 SoCs. It provides
+information such as the SoC revision.
 
-I've run these set of benchmarks:
-* perf bench sched messaging
-* perf bench epoll all
-* perf bench futex all
-* schbench
-* tbench
-*  kernel compilation
+Usage example:
 
-Results look the same with and without this change for all benchmarks except
-tbench.  tbench shows improvements when a number of processes is less than a
-number of cpu-s.
+  # grep . /sys/devices/soc0/*
+  /sys/devices/soc0/family:Nuvoton NPCM
+  /sys/devices/soc0/revision:A3
+  /sys/devices/soc0/soc_id:WPCM450
 
-Here are results from my test host with 8 cpu-s.
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+Reviewed-by: Joel Stanley <joel@jms.id.au>
+Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+=2D--
+v5:
+- Change Kconfig option from bool to tristate
 
-$ tbench_srv &  "tbench" "-t" "15" "1" "127.0.0.1"
-Before: Throughput 260.498 MB/sec  1 clients  1 procs  max_latency=1.301 ms
-After:  Throughput 462.047 MB/sec  1 clients  1 procs  max_latency=1.066 ms
+v4:
+- rebase on 5.19-rc1
 
-$ tbench_srv &  "tbench" "-t" "15" "4" "127.0.0.1"
-Before: Throughput 733.44 MB/sec  4 clients  4 procs  max_latency=0.935 ms
-After:  Throughput 1778.94 MB/sec  4 clients  4 procs  max_latency=0.882 ms
+v3:
+- Declare revisions array as static
+- Change get_revision parameter to `unsigned int`
+- Add Paul's R-b tag
+- Add usage example
+- Sort includes
 
-$ tbench_srv &  "tbench" "-t" "15" "8" "127.0.0.1"
-Before: Throughput 1965.41 MB/sec  8 clients  8 procs  max_latency=2.145 ms
-After:  Throughput 2002.96 MB/sec  8 clients  8 procs  max_latency=1.881 ms
+v2:
+- https://lore.kernel.org/lkml/20220409173319.2491196-1-j.neuschaefer@gmx.=
+net/
+- Add R-b tag
+- rebase on 5.18-rc1
 
-$ tbench_srv &  "tbench" "-t" "15" "32" "127.0.0.1"
-Before: Throughput 1881.79 MB/sec  32 clients  32 procs  max_latency=16.365 ms
-After:  Throughput 1891.87 MB/sec  32 clients  32 procs  max_latency=4.050 ms
+v1:
+- https://lore.kernel.org/lkml/20220129143316.2321460-1-j.neuschaefer@gmx.=
+net/
+=2D--
+ drivers/soc/Kconfig               |   1 +
+ drivers/soc/Makefile              |   1 +
+ drivers/soc/nuvoton/Kconfig       |  11 +++
+ drivers/soc/nuvoton/Makefile      |   2 +
+ drivers/soc/nuvoton/wpcm450-soc.c | 109 ++++++++++++++++++++++++++++++
+ 5 files changed, 124 insertions(+)
+ create mode 100644 drivers/soc/nuvoton/Kconfig
+ create mode 100644 drivers/soc/nuvoton/Makefile
+ create mode 100644 drivers/soc/nuvoton/wpcm450-soc.c
 
-Let me know if you want to see results for any other specific benchmark.
+diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
+index 86ccf5970bc1b..cca3dfa5c6aea 100644
+=2D-- a/drivers/soc/Kconfig
++++ b/drivers/soc/Kconfig
+@@ -14,6 +14,7 @@ source "drivers/soc/ixp4xx/Kconfig"
+ source "drivers/soc/litex/Kconfig"
+ source "drivers/soc/mediatek/Kconfig"
+ source "drivers/soc/microchip/Kconfig"
++source "drivers/soc/nuvoton/Kconfig"
+ source "drivers/soc/pxa/Kconfig"
+ source "drivers/soc/qcom/Kconfig"
+ source "drivers/soc/renesas/Kconfig"
+diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+index 919716e0e7001..b9eb3c75e551a 100644
+=2D-- a/drivers/soc/Makefile
++++ b/drivers/soc/Makefile
+@@ -19,6 +19,7 @@ obj-$(CONFIG_SOC_XWAY)		+=3D lantiq/
+ obj-$(CONFIG_LITEX_SOC_CONTROLLER) +=3D litex/
+ obj-y				+=3D mediatek/
+ obj-y				+=3D microchip/
++obj-y				+=3D nuvoton/
+ obj-y				+=3D pxa/
+ obj-y				+=3D amlogic/
+ obj-y				+=3D qcom/
+diff --git a/drivers/soc/nuvoton/Kconfig b/drivers/soc/nuvoton/Kconfig
+new file mode 100644
+index 0000000000000..df46182088ec2
+=2D-- /dev/null
++++ b/drivers/soc/nuvoton/Kconfig
+@@ -0,0 +1,11 @@
++# SPDX-License-Identifier: GPL-2.0
++menuconfig WPCM450_SOC
++	tristate "Nuvoton WPCM450 SoC driver"
++	default y if ARCH_WPCM450
++	select SOC_BUS
++	help
++	  Say Y here to compile the SoC information driver for Nuvoton
++	  WPCM450 SoCs.
++
++	  This driver provides information such as the SoC model and
++	  revision.
+diff --git a/drivers/soc/nuvoton/Makefile b/drivers/soc/nuvoton/Makefile
+new file mode 100644
+index 0000000000000..e30317b4e8290
+=2D-- /dev/null
++++ b/drivers/soc/nuvoton/Makefile
+@@ -0,0 +1,2 @@
++# SPDX-License-Identifier: GPL-2.0-only
++obj-$(CONFIG_WPCM450_SOC)	+=3D wpcm450-soc.o
+diff --git a/drivers/soc/nuvoton/wpcm450-soc.c b/drivers/soc/nuvoton/wpcm4=
+50-soc.c
+new file mode 100644
+index 0000000000000..c5e0d11c383b1
+=2D-- /dev/null
++++ b/drivers/soc/nuvoton/wpcm450-soc.c
+@@ -0,0 +1,109 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * Nuvoton WPCM450 SoC Identification
++ *
++ * Copyright (C) 2022 Jonathan Neusch=C3=A4fer
++ */
++
++#include <linux/mfd/syscon.h>
++#include <linux/of.h>
++#include <linux/regmap.h>
++#include <linux/slab.h>
++#include <linux/sys_soc.h>
++
++#define GCR_PDID	0
++#define PDID_CHIP(x)	((x) & 0x00ffffff)
++#define CHIP_WPCM450	0x926450
++#define PDID_REV(x)	((x) >> 24)
++
++struct revision {
++	u8 number;
++	const char *name;
++};
++
++static const struct revision revisions[] __initconst =3D {
++	{ 0x00, "Z1" },
++	{ 0x03, "Z2" },
++	{ 0x04, "Z21" },
++	{ 0x08, "A1" },
++	{ 0x09, "A2" },
++	{ 0x0a, "A3" },
++	{}
++};
++
++static const char * __init get_revision(unsigned int rev)
++{
++	int i;
++
++	for (i =3D 0; revisions[i].name; i++)
++		if (revisions[i].number =3D=3D rev)
++			return revisions[i].name;
++	return NULL;
++}
++
++static struct soc_device_attribute *wpcm450_attr;
++static struct soc_device *wpcm450_soc;
++
++static int __init wpcm450_soc_init(void)
++{
++	struct soc_device_attribute *attr;
++	struct soc_device *soc;
++	const char *revision;
++	struct regmap *gcr;
++	u32 pdid;
++	int ret;
++
++	if (!of_machine_is_compatible("nuvoton,wpcm450"))
++		return 0;
++
++	gcr =3D syscon_regmap_lookup_by_compatible("nuvoton,wpcm450-gcr");
++	if (IS_ERR(gcr))
++		return PTR_ERR(gcr);
++	ret =3D regmap_read(gcr, GCR_PDID, &pdid);
++	if (ret)
++		return ret;
++
++	if (PDID_CHIP(pdid) !=3D CHIP_WPCM450) {
++		pr_warn("Unknown chip ID in GCR.PDID: 0x%06x\n", PDID_CHIP(pdid));
++		return -ENODEV;
++	}
++
++	revision =3D get_revision(PDID_REV(pdid));
++	if (!revision) {
++		pr_warn("Unknown chip revision in GCR.PDID: 0x%02x\n", PDID_REV(pdid));
++		return -ENODEV;
++	}
++
++	attr =3D kzalloc(sizeof(*attr), GFP_KERNEL);
++	if (!attr)
++		return -ENOMEM;
++
++	attr->family =3D "Nuvoton NPCM";
++	attr->soc_id =3D "WPCM450";
++	attr->revision =3D revision;
++	soc =3D soc_device_register(attr);
++	if (IS_ERR(soc)) {
++		kfree(attr);
++		pr_warn("Could not register SoC device\n");
++		return PTR_ERR(soc);
++	}
++
++	wpcm450_soc =3D soc;
++	wpcm450_attr =3D attr;
++	return 0;
++}
++module_init(wpcm450_soc_init);
++
++static void __exit wpcm450_soc_exit(void)
++{
++	if (wpcm450_soc) {
++		soc_device_unregister(wpcm450_soc);
++		wpcm450_soc =3D NULL;
++		kfree(wpcm450_attr);
++	}
++}
++module_exit(wpcm450_soc_exit);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Jonathan Neusch=C3=A4fer");
++MODULE_DESCRIPTION("Nuvoton WPCM450 SoC Identification driver");
+=2D-
+2.35.1
 
-Thanks,
-Andrei
