@@ -2,180 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8D93613BF6
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:11:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0436D613BF9
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 18:13:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231523AbiJaRLh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 13:11:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53016 "EHLO
+        id S231938AbiJaRM7 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Mon, 31 Oct 2022 13:12:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53986 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232090AbiJaRLQ (ORCPT
+        with ESMTP id S231437AbiJaRM4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 13:11:16 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C41A413CD1
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 10:11:14 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id 17so6969276pfv.4
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 10:11:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=CkUMnMVKvzE+p/CRDEzav12+PQBdsh0ERBJzkQePF9Q=;
-        b=cn9lSzDjeAimVb8ApMPS7mI3xEZyntNjDjGnRDQD4aANEi0Z7iFJWxPclfigiXZBvb
-         MssYz75PElmDx1Ojh7yPu2ZdwDPS3yDQNegQDM8hwHDUbGLkmwLKmLpoK3ipVkLnxRqY
-         MhAWeo64f17EfwGKlN1cCzALx3BnNcB0fod+4AUEnaTnPOPHtLq8JrggLG1oEZAA7hIe
-         fmIqX7VPx2qXuYmURYD8HDDR3nal7EohCaHqKIXb3SLJXSuAYgNvp9xHB1ffkjvknsKa
-         dUU5e/F8aLsC64bR3iqe1/0f9JcPQFuCjCpV6gtK+qNoJi6Gkfn0Insy7zNDxBHyb4XA
-         JTlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=CkUMnMVKvzE+p/CRDEzav12+PQBdsh0ERBJzkQePF9Q=;
-        b=f5cbbN5O+agHXpjUMEGCDEYL4kF5yZe7bNHLHIYja/i1q9IsfRGRRbKLmtX/3tX91U
-         CErAsQYqQWBdyGTYpgvIGKYANTE6/T3cxZ8bKNDGsfEQDqQj0Z4a5m5rJ9MtGhiVyELI
-         HxtraOrcDNbGToaaJOFvvTQ8vaeBeskjcGt6/K+IYoURYrE/i9fCSwrzdual+OeGyVne
-         HHmsTTrGFHddLo5JHERy1pSzAPmDT2ABI/WA+nPnhrwcJRlBys6YX6C3CnbixDZL4EvD
-         CQZVdG4NPHTQlDAVHGlwA8+1ViMdGYmHMPf58OloC5oQpLtS3a2YG/sLgyFwDjGB/5KE
-         MPzQ==
-X-Gm-Message-State: ACrzQf3NOwN0OwZI9zugkPlx5hUYhxwLgJPoFoDxCnqF5MMEs5h5VGVk
-        arx16sxwj0S9pmZtYFyLAszC6g==
-X-Google-Smtp-Source: AMsMyM4Q1Y7F8REea+pQ9CB2GCAgjQ+aGMVaeNlbucBqRkoWq2c74ZBmf4HZgUC4sTnXXalbvoL/Uw==
-X-Received: by 2002:a63:242:0:b0:46f:357f:ac75 with SMTP id 63-20020a630242000000b0046f357fac75mr13694507pgc.575.1667236274122;
-        Mon, 31 Oct 2022 10:11:14 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id d16-20020a170903231000b00177efb56475sm4749198plh.85.2022.10.31.10.11.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 10:11:13 -0700 (PDT)
-Date:   Mon, 31 Oct 2022 17:11:10 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yu Zhang <yu.c.zhang@linux.intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Eric Li <ercli@ucdavis.edu>,
-        David Matlack <dmatlack@google.com>,
-        Oliver Upton <oupton@google.com>
-Subject: Re: [PATCH v5 05/15] KVM: nVMX: Let userspace set nVMX MSR to any
- _host_ supported value
-Message-ID: <Y2ABrnRzg729ZZNI@google.com>
-References: <20220607213604.3346000-1-seanjc@google.com>
- <20220607213604.3346000-6-seanjc@google.com>
- <20221031163907.w64vyg5twzvv2nho@linux.intel.com>
+        Mon, 31 Oct 2022 13:12:56 -0400
+Received: from mail.inka.de (mail.inka.de [IPv6:2a04:c9c7:0:1073:217:a4ff:fe3b:e77c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 966E112D0E;
+        Mon, 31 Oct 2022 10:12:54 -0700 (PDT)
+Received: from mail3.berkhan-weisser.de ([2a03:4000:54:b9a::4])
+        by mail.inka.de with esmtpsa 
+        id 1opYLE-003szj-4W; Mon, 31 Oct 2022 18:12:52 +0100
+Received: from 127.0.0.1 (helo=localhost.localdomain)
+        by mail3.berkhan-weisser.de with esmtpsa (TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256)
+        (Exim 4.94.2)
+        (envelope-from <Enrik.Berkhan@inka.de>)
+        id 1opYLE-003e4Z-8i; Mon, 31 Oct 2022 18:12:51 +0100
+Message-ID: <dd07edbd62c7600996c7e7291c8ab819b8799319.camel@inka.de>
+Subject: Re: [PATCH v3 10/12] HID: ft260: wake up device from power saving
+ mode
+From:   Enrik Berkhan <Enrik.Berkhan@inka.de>
+To:     Michael Zaidman <michael.zaidman@gmail.com>, jikos@kernel.org
+Cc:     linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        linux-i2c@vger.kernel.org, germain.hebert@ca.abb.com
+Date:   Mon, 31 Oct 2022 18:12:51 +0100
+In-Reply-To: <20221030203403.4637-11-michael.zaidman@gmail.com>
+References: <20221030203403.4637-1-michael.zaidman@gmail.com>
+         <20221030203403.4637-11-michael.zaidman@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221031163907.w64vyg5twzvv2nho@linux.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022, Yu Zhang wrote:
-> Hi Sean & Paolo,
+Hi Michael,
+
+On Sun, 2022-10-30 at 22:34 +0200, Michael Zaidman wrote:
+> The FT260 can enter a power saving mode after being idle for longer than
+> 5 seconds.
 > 
-> On Tue, Jun 07, 2022 at 09:35:54PM +0000, Sean Christopherson wrote:
-> > Restrict the nVMX MSRs based on KVM's config, not based on the guest's
-> > current config.  Using the guest's config to audit the new config
-> > prevents userspace from restoring the original config (KVM's config) if
-> > at any point in the past the guest's config was restricted in any way.
-> 
-> May I ask for an example here, to explain why we use the KVM config
-> here, instead of the guest's? I mean, the guest's config can be
-> adjusted after cpuid updates by vmx_vcpu_after_set_cpuid(). Yet the
-> msr settings in vmcs_config.nested might be outdated by then.
+> When being woken up from power saving mode by an I2C write request, it
+> looks like a possible NACK will not be correctly reported back. As a
+> workaround, the driver will request an I2C status report before starting
+> the next I2C transfer if the FT260 has been idle for longer than 4800ms.
 
-vmcs_config.nested never becomes out-of-date, it's read-only after __init (not
-currently marked as such, that will be remedied soon).
+Unfortunately, I have found issues with this patch as it is. When I
+tested from an installation running in KVM, I saw missed NACKs again.
 
-The auditing performed by KVM is purely to guard against userspace enabling
-features that KVM doesn't support.  KVM is not responsible for ensuring that the
-vCPU's CPUID model match the VMX MSR model.
+A possible fix seems to be to send the extra status request after the
+output report triggering the write. See
+https://github.com/MichaelZaidman/hid-ft260/pull/7.
 
-An example would be if userspace loaded the VMX MSRs with a default model, and
-then enabled features one-by-one.  In practice this doesn't happen because it's
-more performant to gather all features and do a single KVM_SET_MSRS, but it's a
-legitimate approach that KVM should allow.
-
-> Another question is about the setting of secondary_ctls_high in
-> nested_vmx_setup_ctls_msrs().  I saw there's a comment saying:
-> 	"Do not include those that depend on CPUID bits, they are
-> 	added later by vmx_vcpu_after_set_cpuid.".
-
-That's a stale comment, see the very next commit, 8805875aa473 ("Revert "KVM: nVMX:
-Do not expose MPX VMX controls when guest MPX disabled""), as well as the slightly
-later commit 9389d5774aca ("Revert "KVM: nVMX: Expose load IA32_PERF_GLOBAL_CTRL
-VM-{Entry,Exit} control"").
-
-> But since cpuid updates can adjust the vmx->nested.msrs.secondary_ctls_high,
-> do we really need to clear those flags for secondary_ctls_high in this
-> global config?
-
-As above, the comment is stale, KVM should not manipulate the VMX MSRs in response
-to guest CPUID changes.  The one exception to this is reserved CR0/CR4 bits.  We
-discussed quirking that behavior, but ultimately decided not to because (a) no
-userspace actually cares and and (b) KVM would effectively need to make up behavior
-if userspace allowed the guest to load CR4 bits via VM-Enter or VM-Exit that are
-disallowed by CPUID, e.g. L1 could end up running with a CR4 that is supposed to
-be impossible according to CPUID.
-
-> Could we just set 
-> 	msrs->secondary_ctls_high = vmcs_conf->cpu_based_2nd_exec_ctrl?
-
-KVM already does that in upstream (with further sanitization).  See commit
-bcdf201f8a4d ("KVM: nVMX: Use sanitized allowed-1 bits for VMX control MSRs").
-
-> If yes, code(in nested_vmx_setup_ctls_msrs()) such as
-> 	if (enable_ept) {
-> 		/* nested EPT: emulate EPT also to L1 */
-> 		msrs->secondary_ctls_high |=
-> 			SECONDARY_EXEC_ENABLE_EPT;
-
-This can't be completely removed, though unless I'm missing something, it can and
-should be shifted to the sanitization code, e.g.
-
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 8f67a9c4a287..0c41d5808413 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -6800,6 +6800,7 @@ void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps)
- 
-        msrs->secondary_ctls_high = vmcs_conf->cpu_based_2nd_exec_ctrl;
-        msrs->secondary_ctls_high &=
-+               SECONDARY_EXEC_ENABLE_EPT |
-                SECONDARY_EXEC_DESC |
-                SECONDARY_EXEC_ENABLE_RDTSCP |
-                SECONDARY_EXEC_VIRTUALIZE_X2APIC_MODE |
-@@ -6820,9 +6821,6 @@ void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps)
-                SECONDARY_EXEC_SHADOW_VMCS;
- 
-        if (enable_ept) {
--               /* nested EPT: emulate EPT also to L1 */
--               msrs->secondary_ctls_high |=
--                       SECONDARY_EXEC_ENABLE_EPT;
-                msrs->ept_caps =
-                        VMX_EPT_PAGE_WALK_4_BIT |
-                        VMX_EPT_PAGE_WALK_5_BIT |
-
-
-> or 
-> 	if (cpu_has_vmx_vmfunc()) {
-> 		msrs->secondary_ctls_high |=
-> 			SECONDARY_EXEC_ENABLE_VMFUNC;
-
-This one is still required.  KVM never enables VMFUNC for itself, i.e. it won't
-be set in KVM's VMCS configuration.
-
-> and other similar ones may also be uncessary.
-
-
+Cheers,
+Enrik
