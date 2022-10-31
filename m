@@ -2,74 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D3EA0613231
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 10:06:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E529961323E
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 10:08:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230103AbiJaJGO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 05:06:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43560 "EHLO
+        id S230121AbiJaJI5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 05:08:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229505AbiJaJGM (ORCPT
+        with ESMTP id S229505AbiJaJI4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 05:06:12 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7676020C;
-        Mon, 31 Oct 2022 02:06:11 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id d26so27667741eje.10;
-        Mon, 31 Oct 2022 02:06:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g0snT4n//h/2k97Qobb3JRu1DhhY5eqFOKQUrnEmwJA=;
-        b=EadVQDvXTd2a2c0lt8q3h3DJE69Qed2JO2ph+XpyOEsWL16C732jST4btYtzdn2prT
-         GBR/zf4c/Sc5wlSPe0lnAgDD/DhuKBTm3jE6FNHx3x/4/TxkJyrre16xDYCd056nLkKv
-         hSQy0iOkqLK8uMaWYFemSgXMeue6NXfSazQhL6EsF9gKVotozpakMkM03mKocbrL/FuZ
-         YU1OwhUCtHQMtfq96N58S9fFhSjoN7Ow6DsfPx5wYPKstLxFC1Lt0hiM9EIfY/kpdCiO
-         AtbWuIAE+a4VfUzcnTGoxGfh0/ZRsuSu3pzC4Bl3gzg89zDO0EisQG/+MbWB/HYnaWsc
-         a8JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=g0snT4n//h/2k97Qobb3JRu1DhhY5eqFOKQUrnEmwJA=;
-        b=0OZ3iidl3NFSD5D/EbQImErlzHuPp1XO6y5WTeEBv2d114CsCfZDThsKUnmOiwweog
-         KCI6uh2gv4UFqhOSBFw7/S3fSkb3hiKjLwaLQk7wP0YGCu8lUtRz77Nau98BunS5y3er
-         jggyVqnxWWgb8cJ0OQdVfZfRUyVXqvRV2eWz4XdNRuDKT2TeHbX5X5PK/TxEyE826xRH
-         XPHrfGhVGl3jSd3X00SMtdmdo5rnRVXtT3KXlqKvW90zWAi4VSbJXOL2GsIdqWYOjOMz
-         9l+mJ0+YQ9MgUmolcXDlwWC2P4Ci8vqNptHFjVINcJJZ3t/4/iy4BqsnbLyeZSjAkG8d
-         nQpQ==
-X-Gm-Message-State: ACrzQf16TqTzGYwKZuFah5TW2eHEauXXc8gcJU6/MxhEPpy8YfKwqG3x
-        TAInKFPWx4hLdifnmzjKHnrEIj6V/jo=
-X-Google-Smtp-Source: AMsMyM5L86KUeUMD4iAbsJdWgAWfeyjlYpqLNh5oE8wsCNG6E5CxxPG16p/8/6NFW/9K27pE18u3OA==
-X-Received: by 2002:a17:907:b07:b0:7a8:beb3:aa2a with SMTP id h7-20020a1709070b0700b007a8beb3aa2amr11742021ejl.459.1667207169941;
-        Mon, 31 Oct 2022 02:06:09 -0700 (PDT)
-Received: from kista.localnet (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id jx24-20020a170907761800b00730bfe6adc4sm2752122ejc.37.2022.10.31.02.06.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 02:06:09 -0700 (PDT)
-From:   Jernej =?utf-8?B?xaBrcmFiZWM=?= <jernej.skrabec@gmail.com>
-To:     linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Cc:     Yong Deng <yong.deng@magewell.com>,
-        Paul Kocialkowski <paul.kocialkowski@bootlin.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Chen-Yu Tsai <wens@csie.org>,
-        Samuel Holland <samuel@sholland.org>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>
-Subject: Re: [PATCH v6 12/43] media: sun6i-csi: Remove controls handler from the driver
-Date:   Mon, 31 Oct 2022 10:06:07 +0100
-Message-ID: <2651862.mvXUDI8C0e@kista>
-In-Reply-To: <20220826183240.604834-13-paul.kocialkowski@bootlin.com>
-References: <20220826183240.604834-1-paul.kocialkowski@bootlin.com> <20220826183240.604834-13-paul.kocialkowski@bootlin.com>
+        Mon, 31 Oct 2022 05:08:56 -0400
+Received: from m13110.mail.163.com (m13110.mail.163.com [220.181.13.110])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4140C764F;
+        Mon, 31 Oct 2022 02:08:53 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=KeBEt
+        PRBjJu2aojXJFEa7CWPaJM5bjIAmqL0ScS+3Fg=; b=N20e9PL7PlaAHCOuU4CNt
+        ay9WbbGrMbr1m6RIhXJ5LmmWDeZCtpO966Tmty4kxC28MGrzfH/lMngN4WAHI6lh
+        Tf34KQO72Pey+By8+DXTVEiCr0TPFJKvCBYq+s63X5hlT8PagHUNXG2s0+45+Dht
+        yhiQuJ/WRHH8oJeOhPkOMc=
+Received: from slark_xiao$163.com ( [223.104.77.211] ) by
+ ajax-webmail-wmsvr110 (Coremail) ; Mon, 31 Oct 2022 17:08:18 +0800 (CST)
+X-Originating-IP: [223.104.77.211]
+Date:   Mon, 31 Oct 2022 17:08:18 +0800 (CST)
+From:   "Slark Xiao" <slark_xiao@163.com>
+To:     "Bjorn Helgaas" <helgaas@kernel.org>
+Cc:     bhelgaas@google.com, linux-pci@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re:Re: [PATCH v2] PCI: Add vendor ID for Quectel and Cinterion
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 163com
+In-Reply-To: <20221028160621.GA892468@bhelgaas>
+References: <20221028160621.GA892468@bhelgaas>
+X-NTES-SC: AL_QuydBf6buEoi7iKcZekWkkcRjuo+UMC0vfgh249fPJs0pCvO6zs+WFBlBkf/+smIMRuUnze3VQBL48BfRY9zfK2EL38cInWozauHOO4WnNVx
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Message-ID: <7a4b4099.3628.1842d4c7cc5.Coremail.slark_xiao@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: bsGowAAHSwSCkF9jQzRCAA--.53186W
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiGRurZFyPfKWSXAAAsJ
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -80,20 +54,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dne petek, 26. avgust 2022 ob 20:32:09 CET je Paul Kocialkowski napisal(a):
-> The driver does not expose controls directly and thus does not need
-> a controls handler for its own use.
-> 
-> Controls attached to subdevs used to be exposed that way, however this
-> can easily lead to issue when multiple subdevs attached to the same
-> v4l2 device expose the same controls. Subdev controls should be set
-> through each individual subdev node instead.
-> 
-> Signed-off-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-
-Acked-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-
-Best regards,
-Jernej
-
+CgoKCgoKCgoKCgoKCgoKCkF0IDIwMjItMTAtMjkgMDA6MDY6MjEsICJCam9ybiBIZWxnYWFzIiA8
+aGVsZ2Fhc0BrZXJuZWwub3JnPiB3cm90ZToKPk9uIEZyaSwgT2N0IDI4LCAyMDIyIGF0IDEwOjM3
+OjExQU0gKzA4MDAsIFNsYXJrIFhpYW8gd3JvdGU6Cj4+IEluIE1ISSBkcml2ZXIsIHRoZXJlIGFy
+ZSBzb21lIGNvbXBhbmllcyBwcm9kdWN0IHN0aWxsIGRvIG5vdCBoYXZlIHRoZWlyCj4+ICBvd24g
+UENJIHZlbmRvciBtYWNyby4gU28gd2UgYWRkIGl0IGhlcmUgdG8gbWFrZSB0aGUgY29kZSBuZWF0
+LiBSZWYgSUQKPj4gIGNvdWxkIGJlIGZvdW5kIGluIGxpbmsgaHR0cHM6Ly9wY2lzaWcuY29tL21l
+bWJlcnNoaXAvbWVtYmVyLWNvbXBhbmllcwo+PiAgYW5kIGh0dHBzOi8vcGNpaWRzLnNvdXJjZWZv
+cmdlLm5ldC9wY2kuaWRzIC4gVGhhbGVzIHVzZSBDaW50ZXJpb24gYXMKPj4gdGhlaXIgSU9UIG1v
+ZGVtIGNhcmQncyB0cmFkZW1hcmsuIFNvIHlvdSB3aWxsIGZpbmQgMHgxMjY5IGJlbG9uZ3MgdG8K
+Pj4gVGhhbGVzLiBBY3R1YWxseSwgQ2ludGVyaW9uIGJlbG9uZ3MgdG8gR2VtYWx0bywgYW5kIEdl
+bWFsdG8gYmVsb25ncyB0bwo+PiAgVGhhbGVzLgo+Cj5UaGVyZSBzaG91bGQgbm90IGJlIHNwYWNl
+cyBhdCB0aGUgYmVnaW5uaW5nIG9mIHRoZXNlIGxpbmVzLgo+Cj5Eb24ndCBib3RoZXIgd2l0aCB0
+aGUgc291cmNlZm9yZ2UgVVJMOyBJIGRvbid0IHRoaW5rIHRoYXQncyByZWFsbHkKPnVzZWZ1bCBo
+ZXJlLgogVGhlIHNwYWNlIGlzc3VlIHdpbGwgYmUgZml4ZWQgaW4gbmV4dCBwYXRjaC4KPgo+PiBT
+aWduZWQtb2ZmLWJ5OiBTbGFyayBYaWFvIDxzbGFya194aWFvQDE2My5jb20+Cj4+IC0tLQo+PiAg
+aW5jbHVkZS9saW51eC9wY2lfaWRzLmggfCA0ICsrKysKPj4gIDEgZmlsZSBjaGFuZ2VkLCA0IGlu
+c2VydGlvbnMoKykKPj4gCj4+IGRpZmYgLS1naXQgYS9pbmNsdWRlL2xpbnV4L3BjaV9pZHMuaCBi
+L2luY2x1ZGUvbGludXgvcGNpX2lkcy5oCj4+IGluZGV4IGIzNjJkOTBlYjliMC4uOWUyYjYyODZm
+NTNmIDEwMDY0NAo+PiAtLS0gYS9pbmNsdWRlL2xpbnV4L3BjaV9pZHMuaAo+PiArKysgYi9pbmNs
+dWRlL2xpbnV4L3BjaV9pZHMuaAo+PiBAQCAtMTc2NSw2ICsxNzY1LDggQEAKPj4gICNkZWZpbmUg
+UENJX1ZFTkRPUl9JRF9TQVRTQUdFTQkJMHgxMjY3Cj4+ICAjZGVmaW5lIFBDSV9ERVZJQ0VfSURf
+U0FUU0FHRU1fTklDQ1kJMHgxMDE2Cj4+ICAKPj4gKyNkZWZpbmUgUENJX1ZFTkRPUl9JRF9DSU5U
+RVJJT04JCTB4MTI2OQkvKiBDZWxsdWFyIE1vZHVsZXMqLwo+Cj5UaGlzIHNob3VsZCBpZGVudGlm
+eSB0aGUgKnZlbmRvciosIG5vdCBhIHRyYWRlbWFyayBmb3IgYSBzcGVjaWZpYwo+cHJvZHVjdCBs
+aW5lLiAgQW5kIGl0IHNob3VsZCBjb3JyZXNwb25kIHNvbWVob3cgd2l0aCB0aGUgUENJLVNJRwo+
+cmVnaXN0cmF0aW9uLiAgU28gSSB0aGluayBQQ0lfVkVORE9SX0lEX1RIQUxFUyB3b3VsZCBiZSBt
+b3JlCj5hcHByb3ByaWF0ZSBoZXJlLgo+ClllYWgsIGN1cnJlbnRseSBpdCdzIHVzZWQgYnkgSU9U
+IG1vZHVsZXMgd2hpY2ggc3VwcG9ydCBQQ0lFLiBCdXQgd2UKY2FuJ3Qga25vdyBpZiB0aGV5IHdp
+bGwgdXNlIHRoaXMgVklEIGZvciBvdGhlciBub24tSU9UIG1vZHVsZXMgcHJvZHVjdC4KVGhhbGVz
+IHdvdWxkIGJlIGJldHRlci4KCj5JIHRoaW5rIHRoZSBiZXN0IHRoaW5nIGhlcmUgd291bGQgYmUg
+dHdvIHBhdGNoZXMuICBPbmUgcGF0Y2ggd291bGQgYWRkCj5QQ0lfVkVORE9SX0lEX1RIQUxFUyB0
+byBwY2lfaWRzLmggYW5kIGFsc28gYWRkIGEgdXNlIG9mIGl0IGluIHRoZSBNSEkKPmRyaXZlci4g
+IFRoZSBzZWNvbmQgcGF0Y2ggd291bGQgZG8gdGhlIHNhbWUgZm9yIFBDSV9WRU5ET1JfSURfUVVF
+Q1RFTC4KPgo+VGhlbiBlYWNoIG9uZSBpcyBsb2dpY2FsbHkgc2VsZi1jb250YWluZWQuCkkgbXVz
+dCBtYWtlIHN1cmUgdGhlc2UgaWRzIGFyZSBhcHBsaWVkLCB0aGVuIEkgY291bGQgY29tbWl0IHRo
+ZSBjaGFuZ2VzIGluIE1ISQpkcml2ZXIgc2lkZS4gT3RoZXJ3aXNlIGl0IHdpbGwgY2F1c2UgYnVp
+bGQgZXJyb3IuClNvIEkgY29tYmluZSBRVUVDVEVMIHdpdGggVEhBTEVTIGFzIGEgc2luZ2xlIHBh
+dGNoLiBTaGFsbCBJIHNlcGFyYXRlIGl0IGZyb20KZWFjaCBvdGhlcj8gMSBmb3IgUENJIElEcywg
+YW5kIGFub3RoZXIgZm9yIE1ISSBjaGFuZ2UuIEl0IHdvdWxkIGJlIGJldHRlciwgSSB0aGluay4K
+Pgo+PiAgI2RlZmluZSBQQ0lfVkVORE9SX0lEX0VOU09OSVEJCTB4MTI3NAo+PiAgI2RlZmluZSBQ
+Q0lfREVWSUNFX0lEX0VOU09OSVFfQ1Q1ODgwCTB4NTg4MAo+PiAgI2RlZmluZSBQQ0lfREVWSUNF
+X0lEX0VOU09OSVFfRVMxMzcwCTB4NTAwMAo+PiBAQCAtMjU4NSw2ICsyNTg3LDggQEAKPj4gICNk
+ZWZpbmUgUENJX1ZFTkRPUl9JRF9URUtSQU0JCTB4MWRlMQo+PiAgI2RlZmluZSBQQ0lfREVWSUNF
+X0lEX1RFS1JBTV9EQzI5MAkweGRjMjkKPj4gIAo+PiArI2RlZmluZSBQQ0lfVkVORE9SX0lEX1FV
+RUNURUwJCTB4MWVhYwo+PiArCj4+ICAjZGVmaW5lIFBDSV9WRU5ET1JfSURfVEVIVVRJCQkweDFm
+YzkKPj4gICNkZWZpbmUgUENJX0RFVklDRV9JRF9URUhVVElfMzAwOQkweDMwMDkKPj4gICNkZWZp
+bmUgUENJX0RFVklDRV9JRF9URUhVVElfMzAxMAkweDMwMTAKPj4gLS0gCj4+IDIuMzQuMQo+PiAK
 
