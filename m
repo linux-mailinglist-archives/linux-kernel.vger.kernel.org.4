@@ -2,221 +2,378 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84BB2612E82
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 02:07:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3672612E8A
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 02:08:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbiJaBH0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 21:07:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37216 "EHLO
+        id S229750AbiJaBIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 21:08:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229786AbiJaBGw (ORCPT
+        with ESMTP id S229935AbiJaBI3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 21:06:52 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49CD9C746
-        for <linux-kernel@vger.kernel.org>; Sun, 30 Oct 2022 18:06:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667178390; x=1698714390;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=SlITOTwQPXc6NRO9eB+eaUJaWMyo11OeGNe/DYXmsHw=;
-  b=ANSIZGVKiNDlQ122wurzXrY2FIyFVkawvyuB4PhU7p5GFHPf/Om6wAmM
-   WMTeDoOBREDSD67tjcFClV+pYbU1ngLBwVH4GzQN2D2dHcConUDgjZBVh
-   8+io+4hcXIrug5Y9Kggo126QCS3gQ990ibXROH1IV7NN8jcZ6lKNAjFyF
-   TKrvhALy4UFClYzhWfS1NZ6YL+YjdcT42teHuamMHCn5umlDc/ySRARSb
-   fIl1UPz5FFJ2KOtbOXDkz1XVeFV/lobE+XM9zQcngHXhvg1DUa2YsxDsa
-   h+2vjVgufm+9KmVyrM4M0y1AFrM0EosNB0DwVP5Ler4YjxomU4pOGRZH0
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="373001726"
-X-IronPort-AV: E=Sophos;i="5.95,227,1661842800"; 
-   d="scan'208";a="373001726"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Oct 2022 18:06:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="584496312"
-X-IronPort-AV: E=Sophos;i="5.95,227,1661842800"; 
-   d="scan'208";a="584496312"
-Received: from allen-box.sh.intel.com ([10.239.159.48])
-  by orsmga003.jf.intel.com with ESMTP; 30 Oct 2022 18:06:27 -0700
-From:   Lu Baolu <baolu.lu@linux.intel.com>
-To:     Joerg Roedel <joro@8bytes.org>
-Cc:     Jason Gunthorpe <jgg@nvidia.com>,
-        Kevin Tian <kevin.tian@intel.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Jean-Philippe Brucker <jean-philippe@linaro.com>,
-        iommu@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [RESEND PATCH v14 13/13] iommu: Rename iommu-sva-lib.{c,h}
-Date:   Mon, 31 Oct 2022 08:59:17 +0800
-Message-Id: <20221031005917.45690-14-baolu.lu@linux.intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221031005917.45690-1-baolu.lu@linux.intel.com>
-References: <20221031005917.45690-1-baolu.lu@linux.intel.com>
+        Sun, 30 Oct 2022 21:08:29 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F54EB1F7;
+        Sun, 30 Oct 2022 18:08:16 -0700 (PDT)
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 29V18B9o026082;
+        Mon, 31 Oct 2022 01:08:11 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=PeolC2rJSqgZiAemHRlpKxTblhT+Z2NpAf92p9HILVQ=;
+ b=mNjjOgGKlCdti2JU4Na/d2WM4DGBr7fZy3sD/e54tyccYQzVsh+h6B7HoNXFHeyABP+P
+ P8RLOimTQ2FWzazMJbtg4T728r05gYw36Ojbfs4uS0Fb5XN5cQ67Txzo29YWuYeDEbbr
+ sbraYwqkCj6PTZR/7iDyRp06RQ51jDdXqV0e5H1mDeN7uXzUhaPYAQs/b2PARspCWotx
+ CN6chFsUDhWd2dLTSTPJG7YTnygkQ5muTibN5IPEmJ2YW6igRAzb00k45X3v7hS6CpFu
+ njZdtcxwja8MLFC7Ea02YPpFmuXeqtIIvTWX0as7XNQ8195B5KzUgcrPd1hYrP9aHFi9 Kg== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3khcsc1dp0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Oct 2022 01:08:11 +0000
+Received: from nasanex01a.na.qualcomm.com ([10.52.223.231])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 29V18AfD030789
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Mon, 31 Oct 2022 01:08:10 GMT
+Received: from [10.239.133.73] (10.80.80.8) by nasanex01a.na.qualcomm.com
+ (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Sun, 30 Oct
+ 2022 18:08:08 -0700
+Message-ID: <84dcd7d5-c017-ce35-2db5-0ec0c4ace2ce@quicinc.com>
+Date:   Mon, 31 Oct 2022 09:08:05 +0800
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.0
+Subject: Re: [PATCH v4] remoteproc: core: do pm relax when in RPROC_OFFLINE
+To:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>,
+        Mathieu Poirier <mathieu.poirier@linaro.org>
+CC:     <linux-remoteproc@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <quic_clew@quicinc.com>
+References: <128dc161-8949-1146-bf8b-310aa33c06a8@quicinc.com>
+ <1663312351-28476-1-git-send-email-quic_aiquny@quicinc.com>
+ <20221012204344.GA1178915@p14s>
+ <792f05fc-995e-9a87-ab7d-bee03f15bc79@quicinc.com>
+ <20221013173442.GA1279972@p14s> <20221013180334.GB1279972@p14s>
+ <8807a9a6-d93d-aef5-15f4-88648a6ecbe2@quicinc.com>
+ <CANLsYkx8Vcha9FpfRvJEkq2pd+mSYFeZQBXj65YoiSBv+WEY4A@mail.gmail.com>
+ <70828854-8427-8ce1-1535-e14261fd122d@quicinc.com>
+ <420faf00-d59e-57c6-55a5-fae08a411517@foss.st.com>
+From:   "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com>
+In-Reply-To: <420faf00-d59e-57c6-55a5-fae08a411517@foss.st.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Ei9v3v2Xi_gG9kcnOImcZjTKmi4dR0Qw
+X-Proofpoint-ORIG-GUID: Ei9v3v2Xi_gG9kcnOImcZjTKmi4dR0Qw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-30_16,2022-10-27_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
+ impostorscore=0 priorityscore=1501 lowpriorityscore=0 mlxlogscore=999
+ bulkscore=0 clxscore=1015 spamscore=0 phishscore=0 suspectscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2210310005
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rename iommu-sva-lib.c[h] to iommu-sva.c[h] as it contains all code
-for SVA implementation in iommu core.
+Hi,
 
-Signed-off-by: Lu Baolu <baolu.lu@linux.intel.com>
-Reviewed-by: Jean-Philippe Brucker <jean-philippe@linaro.org>
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
-Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-Tested-by: Zhangfei Gao <zhangfei.gao@linaro.org>
-Tested-by: Tony Zhu <tony.zhu@intel.com>
----
- drivers/iommu/{iommu-sva-lib.h => iommu-sva.h}  | 6 +++---
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c | 2 +-
- drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c     | 2 +-
- drivers/iommu/intel/iommu.c                     | 2 +-
- drivers/iommu/intel/svm.c                       | 2 +-
- drivers/iommu/io-pgfault.c                      | 2 +-
- drivers/iommu/{iommu-sva-lib.c => iommu-sva.c}  | 2 +-
- drivers/iommu/iommu.c                           | 2 +-
- drivers/iommu/Makefile                          | 2 +-
- 9 files changed, 11 insertions(+), 11 deletions(-)
- rename drivers/iommu/{iommu-sva-lib.h => iommu-sva.h} (95%)
- rename drivers/iommu/{iommu-sva-lib.c => iommu-sva.c} (99%)
+Thx for the detailed comments, here is my updated comments in below as well:
 
-diff --git a/drivers/iommu/iommu-sva-lib.h b/drivers/iommu/iommu-sva.h
-similarity index 95%
-rename from drivers/iommu/iommu-sva-lib.h
-rename to drivers/iommu/iommu-sva.h
-index 1b3ace4b5863..7215a761b962 100644
---- a/drivers/iommu/iommu-sva-lib.h
-+++ b/drivers/iommu/iommu-sva.h
-@@ -2,8 +2,8 @@
- /*
-  * SVA library for IOMMU drivers
-  */
--#ifndef _IOMMU_SVA_LIB_H
--#define _IOMMU_SVA_LIB_H
-+#ifndef _IOMMU_SVA_H
-+#define _IOMMU_SVA_H
- 
- #include <linux/ioasid.h>
- #include <linux/mm_types.h>
-@@ -72,4 +72,4 @@ iommu_sva_handle_iopf(struct iommu_fault *fault, void *data)
- 	return IOMMU_PAGE_RESP_INVALID;
- }
- #endif /* CONFIG_IOMMU_SVA */
--#endif /* _IOMMU_SVA_LIB_H */
-+#endif /* _IOMMU_SVA_H */
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-index 9541afbba73c..a5a63b1c947e 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3-sva.c
-@@ -10,7 +10,7 @@
- #include <linux/slab.h>
- 
- #include "arm-smmu-v3.h"
--#include "../../iommu-sva-lib.h"
-+#include "../../iommu-sva.h"
- #include "../../io-pgtable-arm.h"
- 
- struct arm_smmu_mmu_notifier {
-diff --git a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-index 891e87ea54db..94a2e53368af 100644
---- a/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-+++ b/drivers/iommu/arm/arm-smmu-v3/arm-smmu-v3.c
-@@ -29,7 +29,7 @@
- 
- #include "arm-smmu-v3.h"
- #include "../../dma-iommu.h"
--#include "../../iommu-sva-lib.h"
-+#include "../../iommu-sva.h"
- 
- static bool disable_bypass = true;
- module_param(disable_bypass, bool, 0444);
-diff --git a/drivers/iommu/intel/iommu.c b/drivers/iommu/intel/iommu.c
-index 5a41b10593b7..a934a46bb9e6 100644
---- a/drivers/iommu/intel/iommu.c
-+++ b/drivers/iommu/intel/iommu.c
-@@ -27,7 +27,7 @@
- #include "iommu.h"
- #include "../dma-iommu.h"
- #include "../irq_remapping.h"
--#include "../iommu-sva-lib.h"
-+#include "../iommu-sva.h"
- #include "pasid.h"
- #include "cap_audit.h"
- 
-diff --git a/drivers/iommu/intel/svm.c b/drivers/iommu/intel/svm.c
-index fceae9387018..f32de15da61a 100644
---- a/drivers/iommu/intel/svm.c
-+++ b/drivers/iommu/intel/svm.c
-@@ -24,7 +24,7 @@
- #include "iommu.h"
- #include "pasid.h"
- #include "perf.h"
--#include "../iommu-sva-lib.h"
-+#include "../iommu-sva.h"
- #include "trace.h"
- 
- static irqreturn_t prq_event_thread(int irq, void *d);
-diff --git a/drivers/iommu/io-pgfault.c b/drivers/iommu/io-pgfault.c
-index d046d89cec55..e5b8b9110c13 100644
---- a/drivers/iommu/io-pgfault.c
-+++ b/drivers/iommu/io-pgfault.c
-@@ -11,7 +11,7 @@
- #include <linux/slab.h>
- #include <linux/workqueue.h>
- 
--#include "iommu-sva-lib.h"
-+#include "iommu-sva.h"
- 
- /**
-  * struct iopf_queue - IO Page Fault queue
-diff --git a/drivers/iommu/iommu-sva-lib.c b/drivers/iommu/iommu-sva.c
-similarity index 99%
-rename from drivers/iommu/iommu-sva-lib.c
-rename to drivers/iommu/iommu-sva.c
-index 089fd61ff453..24bf9b2b58aa 100644
---- a/drivers/iommu/iommu-sva-lib.c
-+++ b/drivers/iommu/iommu-sva.c
-@@ -6,7 +6,7 @@
- #include <linux/sched/mm.h>
- #include <linux/iommu.h>
- 
--#include "iommu-sva-lib.h"
-+#include "iommu-sva.h"
- 
- static DEFINE_MUTEX(iommu_sva_lock);
- static DECLARE_IOASID_SET(iommu_sva_pasid);
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index 9e0fb18e1b34..c50f68b2b656 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -33,7 +33,7 @@
- 
- #include "dma-iommu.h"
- 
--#include "iommu-sva-lib.h"
-+#include "iommu-sva.h"
- 
- static struct kset *iommu_group_kset;
- static DEFINE_IDA(iommu_group_ida);
-diff --git a/drivers/iommu/Makefile b/drivers/iommu/Makefile
-index cc9f381013c3..7fbf6a337662 100644
---- a/drivers/iommu/Makefile
-+++ b/drivers/iommu/Makefile
-@@ -28,6 +28,6 @@ obj-$(CONFIG_FSL_PAMU) += fsl_pamu.o fsl_pamu_domain.o
- obj-$(CONFIG_S390_IOMMU) += s390-iommu.o
- obj-$(CONFIG_HYPERV_IOMMU) += hyperv-iommu.o
- obj-$(CONFIG_VIRTIO_IOMMU) += virtio-iommu.o
--obj-$(CONFIG_IOMMU_SVA) += iommu-sva-lib.o io-pgfault.o
-+obj-$(CONFIG_IOMMU_SVA) += iommu-sva.o io-pgfault.o
- obj-$(CONFIG_SPRD_IOMMU) += sprd-iommu.o
- obj-$(CONFIG_APPLE_DART) += apple-dart.o
+For the contention of export function of rproc_detach and crash 
+interrupt handler is never take condition and well handlered in current 
+driver.
+
+If this condition wanted to be take into consideration, what about we 
+have an extra change to support rproc_detach and crash contention senarios?
+
+other use cases should be already well handler per my understanding.
+Let me know if there is any mis-understanding.
+
+
+On 10/28/2022 11:31 PM, Arnaud POULIQUEN wrote:
+> Hi,
+> 
+> On 10/24/22 05:17, Aiqun(Maria) Yu wrote:
+>> On 10/22/2022 3:34 AM, Mathieu Poirier wrote:
+>>> On Wed, 19 Oct 2022 at 23:52, Aiqun(Maria) Yu <quic_aiquny@quicinc.com> wrote:
+>>>>
+>>>> On 10/14/2022 2:03 AM, Mathieu Poirier wrote:
+>>>>> On Thu, Oct 13, 2022 at 11:34:42AM -0600, Mathieu Poirier wrote:
+>>>>>> On Thu, Oct 13, 2022 at 09:40:09AM +0800, Aiqun(Maria) Yu wrote:
+>>>>>>> Hi Mathieu,
+>>>>>>>
+>>>>>>> On 10/13/2022 4:43 AM, Mathieu Poirier wrote:
+>>>>>>>> Please add what has changed from one version to another, either in a cover
+>>>>>>>> letter or after the "Signed-off-by".  There are many examples on how to
+>>>>>>>> do that
+>>>>>>>> on the mailing list.
+>>>>>>>>
+>>>>>>> Thx for the information, will take a note and benefit for next time.
+>>>>>>>
+>>>>>>>> On Fri, Sep 16, 2022 at 03:12:31PM +0800, Maria Yu wrote:
+>>>>>>>>> RPROC_OFFLINE state indicate there is no recovery process
+>>>>>>>>> is in progress and no chance to do the pm_relax.
+>>>>>>>>> Because when recovering from crash, rproc->lock is held and
+>>>>>>>>> state is RPROC_CRASHED -> RPROC_OFFLINE -> RPROC_RUNNING,
+>>>>>>>>> and then unlock rproc->lock.
+>>>>>>>>
+>>>>>>>> You are correct - because the lock is held rproc->state should be set to
+>>>>>>>> RPROC_RUNNING
+>>>>>>>> when rproc_trigger_recovery() returns.  If that is not the case then
+>>>>>>>> something
+>>>>>>>> went wrong.
+>>>>>>>>
+>>>>>>>> Function rproc_stop() sets rproc->state to RPROC_OFFLINE just before
+>>>>>>>> returning,
+>>>>>>>> so we know the remote processor was stopped.  Therefore if rproc->state
+>>>>>>>> is set
+>>>>>>>> to RPROC_OFFLINE something went wrong in either request_firmware() or
+>>>>>>>> rproc_start().  Either way the remote processor is offline and the system
+>>>>>>>> probably
+>>>>>>>> in an unknown/unstable.  As such I don't see how calling pm_relax() can help
+>>>>>>>> things along.
+>>>>>>>>
+>>>>>>> PROC_OFFLINE is possible that rproc_shutdown is triggered and successfully
+>>>>>>> finished.
+>>>>>>> Even if it is multi crash rproc_crash_handler_work contention issue, and
+>>>>>>> last rproc_trigger_recovery bailed out with only
+>>>>>>> rproc->state==RPROC_OFFLINE, it is still worth to do pm_relax in pair.
+>>>>>>> Since the subsystem may still can be recovered with customer's next trigger
+>>>>>>> of rproc_start, and we can make each error out path clean with pm resources.
+>>>>>>>
+>>>>>>>> I suggest spending time understanding what leads to the failure when
+>>>>>>>> recovering
+>>>>>>>> from a crash and address that problem(s).
+>>>>>>>>
+>>>>>>> In current case, the customer's information is that the issue happened when
+>>>>>>> rproc_shutdown is triggered at similar time. So not an issue from error out
+>>>>>>> of rproc_trigger_recovery.
+>>>>>>
+>>>>>> That is a very important element to consider and should have been mentioned
+>>>>>> from
+>>>>>> the beginning.  What I see happening is the following:
+>>>>>>
+>>>>>> rproc_report_crash()
+>>>>>>            pm_stay_awake()
+>>>>>>            queue_work() // current thread is suspended
+>>>>>>
+>>>>>> rproc_shutdown()
+>>>>>>            rproc_stop()
+>>>>>>                    rproc->state = RPROC_OFFLINE;
+>>>>>>
+>>>>>> rproc_crash_handler_work()
+>>>>>>            if (rproc->state == RPROC_OFFLINE)
+>>>>>>                    return // pm_relax() is not called
+>>>>>>
+>>>>>> The right way to fix this is to add a pm_relax() in rproc_shutdown() and
+>>>>>> rproc_detach(), along with a very descriptive comment as to why it is needed.
+>>>>>
+>>>>> Thinking about this further there are more ramifications to consider.  Please
+>>>>> confirm the above scenario is what you are facing.  I will advise on how to
+>>>>> move
+>>>>> forward if that is the case.
+>>>>>
+>>>> Not sure if the situation is clear or not. So resend the email again.
+>>>>
+>>>> The above senario is what customer is facing. crash hanppened while at
+>>>> the same time shutdown is triggered.
+>>>
+>>> Unfortunately this is not enough details to address a problem as
+>>> complex as this one.
+>>>
+>>>> And the device cannto goes to suspend state after that.
+>>>> the subsystem can still be start normally after this.
+>>>
+>>> If the code flow I pasted above reflects the problem at hand, the
+>>> current patch will not be sufficient to address the issue.  If Arnaud
+>>> confirms my suspicions we will have to think about a better solution.
+>>>
+>>
+>> Hi Mathiew,
+>>
+>> Could you pls have more details of any side effects other then power issue of
+>> the current senario?
+>> Why the current patch is not sufficient pls?
+>>
+>>
+>> Have the current senario in details with rproc->lock information in details:
+>>
+>> | subsystem crashed interrupt issued      | user trigger shutdown
+>> | rproc_report_crash()                    |
+>> |          pm_stay_awake()                |
+>> |          queue_work()                   |
+>> |                                         |rproc_shutdown
+>> |                                         |mutex_lock(&rproc->lock);
+>> |                                         |rproc_stop()
+>> |rproc_crash_handler_work()               |rproc->state = RPROC_OFFLINE;
+>> |                                         |mutex_unlock(&rproc->lock);
+>> |mutex_lock(&rproc->lock);                |
+>> |if (rproc->state == RPROC_OFFLINE)       |
+>> |return // pm_relax() is not called       |rproc_boot
+>> |mutex_unlock(&rproc->lock);              |
+>> |                                         |mutex_lock(&rproc->lock);
+>> |                                         |rproc_start()
+>> |                                         |mutex_unlock(&rproc->lock);
+>>
+>>
+> 
+> Agree with Mathieu, this is not so simple.
+> 
+> Here is my view  hoping I haven't missed a point in your discussion or
+> an other corner cases.
+> 
+> I tried to analyze the issues (in what follows, the term "condition" means
+> the "if" condition in which Aiqun proposes to add the fix) :
+> 
+> I can see 4 use cases with race condition
+> 
+> 1) crash report while already one is treated (rproc_boot_recovery called)
+>       => not a real use case as if the remote processor is crashed we
+> 	      should not have a second crash report
+>   	
+The second crash report can be avoid via the current rproc->state check 
+within the protection of rproc->lock.
+> 2) rproc_stop executed between the queuing of the crash work and the call of
+>    rproc_crash_handler_work
+>     => rproc->state = RPROC_OFFLINE
+>     => we enter in the "condition" and the pm_relax has to be called
+>     => This commit fix should solve this use case
+> 
+> 3) rproc_detach executed between the queue of the crash work and the call of
+>    rproc_crash_handler_work
+>     => rproc->state = RPROC_DETACHED;
+>     => we don't go in "the condition" and issue because the recovery reattach
+>        to the remote processor
+>     => but pm_relax is called
+>     => probably need an extra fix to avoid to re-attach
+> 
+The RPROC_DETACHED state is never considered with crash contention in 
+current driver.
+if the subsystem is in RPROC_DETACHED state while it still received a 
+crash intterupt, should it ignore the current crash interrupt or 
+continue to do a rproc_boot and continue to attach?
+
+> 4) crash report while already one is treated (rproc_attach_recovery called)
+>     this one corresponds to an auto reboot of the remote processor, with a
+>     new crash
+>     => rproc->state = RPROC_CRASHED or rproc->state = RPROC_DETACHED;
+>     4)a) rproc->state = RPROC_CRASHED if rproc->recovery_disabled = true
+> 	=> should call pm_relax if rproc->recovery_disabled = true
+> 	=> commit does not work for this use case
+> 
+In the recovery_disabled==true case rproc_crash_handler_work will call 
+pm_relax directly.
+The senario was well handled.
+>     4)b) rproc->state = RPROC_DETACHED if recovery fails
+>         => error case with an unstable state
+>         => how to differentiate it from the use case 3) ?
+>         => introduce a RPROC_RECOVERY_FAIL state?		
+> 
+For every recvery fails senario, function rproc_crash_handler_work will 
+call pm_relax always.
+The senario was well handled.
+> 
+> Then pm_stay_awake is called when the crash work is queued.
+> It seems to me coherent to call the pm_relax in the work handler.
+> 
+> 
+> 
+> Here is a quick and dirty patch (not tested) that should take into account the
+> main use cases ( except 1) and 4)b) )
+> 
+> @@ -2009,8 +2009,18 @@ static void rproc_crash_handler_work(struct work_struct *work)
+>   
+>   	mutex_lock(&rproc->lock);
+>   
+> -	if (rproc->state == RPROC_CRASHED || rproc->state == RPROC_OFFLINE) {
+> +	if (rproc->state == RPROC_CRASHED || rproc->state == RPROC_OFFLINE ||
+> +	    rproc->state == RPROC_DETACHED) {
+>   		/* handle only the first crash detected */
+> +
+> +		/*
+> +		 * call pm-relax in following use cases:
+> +		 * - the remote processor has been stopped by the user
+> +		 * - the remote processor is detached
+> +		 + - the remote proc has an autonomous reset but recovery_disabled is true.
+> +		 */
+> +		if(rproc->state != RPROC_CRASHED || rproc->recovery_disabled)
+> +			pm_relax(rproc->dev.parent);
+>   		mutex_unlock(&rproc->lock);
+>   		return;
+>   	}
+> 
+> Regards,
+> Arnaud
+> 
+>>>>
+>>>>>>
+>>>>>>
+>>>>>>>> Thanks,
+>>>>>>>> Mathieu
+>>>>>>>>
+>>>>>>>>
+>>>>>>>>> When the state is in RPROC_OFFLINE it means separate request
+>>>>>>>>> of rproc_stop was done and no need to hold the wakeup source
+>>>>>>>>> in crash handler to recover any more.
+>>>>>>>>>
+>>>>>>>>> Signed-off-by: Maria Yu <quic_aiquny@quicinc.com>
+>>>>>>>>> ---
+>>>>>>>>>      drivers/remoteproc/remoteproc_core.c | 11 +++++++++++
+>>>>>>>>>      1 file changed, 11 insertions(+)
+>>>>>>>>>
+>>>>>>>>> diff --git a/drivers/remoteproc/remoteproc_core.c
+>>>>>>>>> b/drivers/remoteproc/remoteproc_core.c
+>>>>>>>>> index e5279ed9a8d7..6bc7b8b7d01e 100644
+>>>>>>>>> --- a/drivers/remoteproc/remoteproc_core.c
+>>>>>>>>> +++ b/drivers/remoteproc/remoteproc_core.c
+>>>>>>>>> @@ -1956,6 +1956,17 @@ static void rproc_crash_handler_work(struct
+>>>>>>>>> work_struct *work)
+>>>>>>>>>             if (rproc->state == RPROC_CRASHED || rproc->state ==
+>>>>>>>>> RPROC_OFFLINE) {
+>>>>>>>>>                     /* handle only the first crash detected */
+>>>>>>>>>                     mutex_unlock(&rproc->lock);
+>>>>>>>>> +         /*
+>>>>>>>>> +          * RPROC_OFFLINE state indicate there is no recovery process
+>>>>>>>>> +          * is in progress and no chance to have pm_relax in place.
+>>>>>>>>> +          * Because when recovering from crash, rproc->lock is held and
+>>>>>>>>> +          * state is RPROC_CRASHED -> RPROC_OFFLINE -> RPROC_RUNNING,
+>>>>>>>>> +          * and then unlock rproc->lock.
+>>>>>>>>> +          * RPROC_OFFLINE is only an intermediate state in recovery
+>>>>>>>>> +          * process.
+>>>>>>>>> +          */
+>>>>>>>>> +         if (rproc->state == RPROC_OFFLINE)
+>>>>>>>>> +                 pm_relax(rproc->dev.parent);
+>>>>>>>>>                     return;
+>>>>>>>>>             }
+>>>>>>>>> -- 
+>>>>>>>>> 2.7.4
+>>>>>>>>>
+>>>>>>>
+>>>>>>>
+>>>>>>> -- 
+>>>>>>> Thx and BRs,
+>>>>>>> Aiqun(Maria) Yu
+>>>>
+>>>>
+>>>> -- 
+>>>> Thx and BRs,
+>>>> Aiqun(Maria) Yu
+>>
+>>
+
+
 -- 
-2.34.1
-
+Thx and BRs,
+Aiqun(Maria) Yu
