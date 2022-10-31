@@ -2,174 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E4C8613F11
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 21:37:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 068B9613F12
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 21:38:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229971AbiJaUhZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 16:37:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60258 "EHLO
+        id S230000AbiJaUiQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 16:38:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229824AbiJaUhS (ORCPT
+        with ESMTP id S229973AbiJaUiN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 16:37:18 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70E6013D7F;
-        Mon, 31 Oct 2022 13:37:17 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id t4so7925555lfp.2;
-        Mon, 31 Oct 2022 13:37:17 -0700 (PDT)
+        Mon, 31 Oct 2022 16:38:13 -0400
+Received: from mailrelay3-1.pub.mailoutpod1-cph3.one.com (mailrelay3-1.pub.mailoutpod1-cph3.one.com [46.30.210.184])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B58B113D22
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 13:38:11 -0700 (PDT)
+Received: from mailrelay2.pub.mailoutpod2-cph3.one.com (mailrelay2.pub.mailoutpod2-cph3.one.com [104.37.34.7])
+        by mailrelay3.pub.mailoutpod1-cph3.one.com (Halon) with ESMTPS
+        id ee750666-595b-11ed-be8b-d0431ea8bb03;
+        Mon, 31 Oct 2022 20:38:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OEuILt375Kw/g/rl5LYUxYeoh6illHaCRAd/FWiXGcc=;
-        b=dceawVHMgDJ8mJRDpyTjb0FUColgU/gZtA0lTbGynB0lIzoMyQ2cXk0gRVNVSud3t9
-         8tc864Uc7iGJHL4kRN02YtogOBvNEAmep4gf+0uEUwSiz4y2jHsfaAgr0S0z7RIf06I1
-         +bd1W2BfRf8w0EAW9aRm0HGFMg2jH3N81ri7Zw3+RSENvuwRDRFdb6AtFKr6rBD1ck7k
-         jxYkPfVW6NNpRw0/zfOgPGD8jC7/3T+3CQdfJE9xjNuaaX3OEM0a7EByb1CCw0NiCbJ5
-         x4gxPtIz4OP7moZnhopICG4LdEYWK2TYkU4vhhAUrGAdT+V8UyVMKMseFhO5MSaPNHgq
-         JjOg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OEuILt375Kw/g/rl5LYUxYeoh6illHaCRAd/FWiXGcc=;
-        b=yphtUd8OWGVEowdaoy9A+vpswE5WXur4wyFPtXz8xbrhj5w44xaacXTyUUyILZvHl7
-         ItM6qaBsr5psHXdrtFZxyQMsFxAE14GfXQzJC8+nyq+lZdyNd+/XYXbkIL5HjHIUYAus
-         FJgQZILmnUZNWBoEjWNhigg+5YSjll1CnmE77TDUC/Wjw6LLQYMDH3YCL2/szcLsyZXZ
-         GWyA/gSekM0i/NSp7H30VkbCT/C6VLmMe51x6aoJt7r85MKfA0mCxN+hwhP/R7O+cqn3
-         ceOuZvoY8JzjzuaZo521iKjyUTr55hA4NR+4+IW96e2dvCiEQ0Qjz0H8NDsAaBiZaGR+
-         UDIg==
-X-Gm-Message-State: ACrzQf0B3yGZM14+J0gBbYbgc6kBewl1ecBsTUKf/pmcgYKuC35Ibh0S
-        +OfqtgOPVPmhhkjGyBurh/yAp3UsJug+WirA8U0S3s6bGHY=
-X-Google-Smtp-Source: AMsMyM6ugRz/XCGpnD/1ZSaMq58hkhm8hYQDXmbHXrhmE081KbPtwW4u7JK98FCDAG6PK4wtlh9ffFly+a/ZZNMc+ZA=
-X-Received: by 2002:a05:6512:483:b0:4a2:6905:dfae with SMTP id
- v3-20020a056512048300b004a26905dfaemr6372774lfq.57.1667248635563; Mon, 31 Oct
- 2022 13:37:15 -0700 (PDT)
+        d=berginkonsult.se; s=rsa1;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
+         from;
+        bh=LZgWzj1DV2YwhApqlnR9pyjFzmdX/olcHYd6kth181k=;
+        b=cw2wtB63eQ+YbjTSWFVI8qwuoAoCJohU00hA1XaMa2wXrQu3zg25SPFjm4GGlsXrMLgBNpGqd330d
+         dHtflKrhHaNMLn+JSoQbAxSGT4Tohjem9mssfmPp/NDhfJE0f2Yke5qYXTsViEkfSHn13tmeO/HhLW
+         5QcZ1VOCZ1ZrgRj8+OCvhmN0moTXy4dc/aK3UuO8/Xuwoj9bvn4DEbAkYRA9exkjo5ddjsxjSrZsJn
+         Z1bjpztiRvE3rNZPk74c+hYESJkZQ4ayGCQzwZ7BLMCWOCeD52ZeOOB3qrAyAUS2VIL416ddxgE4D8
+         pfaVe3GtG/AD1nURqI/QKRMY5Q86h1A==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed;
+        d=berginkonsult.se; s=ed1;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc:to:from:
+         from;
+        bh=LZgWzj1DV2YwhApqlnR9pyjFzmdX/olcHYd6kth181k=;
+        b=UUbWdtHD61jjgMwJMFUmB3eL3k7QZloqeKzvNRGODN8Lc60htWCV6rB42a0H1XAKOJuNFgaggEZQm
+         98DANqXDQ==
+X-HalOne-ID: ec594405-595b-11ed-a68e-335755252108
+Received: from pbergin-7420.. (ua-213-113-159-147.bbcust.telenor.se [213.113.159.147])
+        by mailrelay2 (Halon) with ESMTPSA
+        id ec594405-595b-11ed-a68e-335755252108;
+        Mon, 31 Oct 2022 20:38:09 +0000 (UTC)
+From:   Peter Bergin <peter@berginkonsult.se>
+To:     james.schulman@cirrus.com, david.rhodes@cirrus.com,
+        tanureal@opensource.cirrus.com, rf@opensource.cirrus.com,
+        broonie@kernel.org, ckeepax@opensource.cirrus.com
+Cc:     Peter Bergin <peter@berginkonsult.se>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        patches@opensource.cirrus.com, linux-kernel@vger.kernel.org
+Subject: [PATCH v3] ASoC: cs42xx8-i2c.c: add module device table for of
+Date:   Mon, 31 Oct 2022 21:37:23 +0100
+Message-Id: <20221031203723.168177-1-peter@berginkonsult.se>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-References: <aac93511-d5e5-7a1b-6b1c-65e008ce068e@o2.pl>
-In-Reply-To: <aac93511-d5e5-7a1b-6b1c-65e008ce068e@o2.pl>
-From:   Luiz Augusto von Dentz <luiz.dentz@gmail.com>
-Date:   Mon, 31 Oct 2022 13:37:04 -0700
-Message-ID: <CABBYNZKXYaRT_N9YTHX2aKRBRVHhORejT=+LJNvrJgL2QYjSLA@mail.gmail.com>
-Subject: Re: "Bluetooth: hci0: HCI_REQ-0xfcf0" errors in dmesg
-To:     =?UTF-8?Q?Mateusz_Jo=C5=84czyk?= <mat.jonczyk@o2.pl>
-Cc:     Brian Gix <brian.gix@intel.com>,
-        Luiz Augusto von Dentz <luiz.von.dentz@intel.com>,
-        linux-bluetooth@vger.kernel.org,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+When trying to connect the device with the driver through
+device-tree it is not working. The of_device_id is defined in
+cs42xx8.c but is not correctly included in cs42xx8-i2c.c.
 
-On Mon, Oct 31, 2022 at 1:15 PM Mateusz Jo=C5=84czyk <mat.jonczyk@o2.pl> wr=
-ote:
->
-> Hello,
->
-> On 6.1.0-rc3, I have been seeing this error message in dmesg:
->
->         Bluetooth: hci0: HCI_REQ-0xfcf0
->
-> It is printed on every boot, resume from suspend and rfkill unblock of th=
-e Bluetooth device.
-> The device seems to be functioning normally though (but I have done limit=
-ed testing only).
->
-> After some investigation, it turned out to be caused by
->         commit dd50a864ffae ("Bluetooth: Delete unreferenced hci_request =
-code")
-> which modified hci_req_add() in net/bluetooth/hci_request.c to always pri=
-nt an error message
-> when that function is executed.
->
-> I have added dump_stack() to hci_req_add() and got the following backtrac=
-es:
->
-> On boot:
->
-> [   18.487766] Bluetooth: hci0: RTL: fw version 0xab6b705c
-> [   18.548951] Bluetooth: hci0: HCI_REQ-0xfcf0
-> [   18.548961] CPU: 3 PID: 108 Comm: kworker/u9:0 Not tainted 6.1.0-rc3un=
-if4-00001-gb33a0948e932 #86
-> [   18.548965] Hardware name: HP HP Laptop 17-by0xxx/84CA, BIOS F.66 03/2=
-9/2022
-> [   18.548968] Workqueue: hci0 hci_power_on [bluetooth]
-> [   18.549018] Call Trace:
-> [   18.549020]  <TASK>
-> [   18.549022]  dump_stack_lvl+0x38/0x4d
-> [   18.549030]  dump_stack+0x10/0x16
-> [   18.549035]  hci_req_add+0x47/0x70 [bluetooth]
-> [   18.549093]  msft_set_filter_enable+0x59/0x90 [bluetooth]
-> [   18.549147]  msft_do_open+0x131/0x220 [bluetooth]
-> [   18.549198]  hci_dev_open_sync+0x646/0xc20 [bluetooth]
-> [   18.549249]  hci_dev_do_open+0x2a/0x60 [bluetooth]
-> [   18.549282]  hci_power_on+0x53/0x210 [bluetooth]
-> [   18.549317]  process_one_work+0x21f/0x3f0
-> [   18.549323]  worker_thread+0x4a/0x3c0
-> [   18.549328]  ? process_one_work+0x3f0/0x3f0
-> [   18.549332]  kthread+0xff/0x130
-> [   18.549336]  ? kthread_complete_and_exit+0x20/0x20
-> [   18.549340]  ret_from_fork+0x22/0x30
-> [   18.549347]  </TASK>
-> [   21.165060] EXT4-fs (dm-7): mounted filesystem with ordered data mode.=
- Quota mode: none.
->
-> on rfkill unblock:
->
-> [ 1671.040970] Bluetooth: hci0: HCI_REQ-0xfcf0
-> [ 1671.040992] CPU: 3 PID: 5006 Comm: kworker/u9:2 Not tainted 6.1.0-rc3u=
-nif4-00001-gb33a0948e932 #86
-> [ 1671.041005] Hardware name: HP HP Laptop 17-by0xxx/84CA, BIOS F.66 03/2=
-9/2022
-> [ 1671.041012] Workqueue: hci0 hci_cmd_sync_work [bluetooth]
-> [ 1671.041194] Call Trace:
-> [ 1671.041200]  <TASK>
-> [ 1671.041208]  dump_stack_lvl+0x38/0x4d
-> [ 1671.041227]  dump_stack+0x10/0x16
-> [ 1671.041241]  hci_req_add+0x47/0x70 [bluetooth]
-> [ 1671.041408]  msft_set_filter_enable+0x59/0x90 [bluetooth]
-> [ 1671.041579]  msft_do_open+0x131/0x220 [bluetooth]
-> [ 1671.041683]  hci_dev_open_sync+0x646/0xc20 [bluetooth]
-> [ 1671.041787]  hci_set_powered_sync+0xd4/0x240 [bluetooth]
-> [ 1671.041887]  set_powered_sync+0x20/0x60 [bluetooth]
-> [ 1671.041975]  hci_cmd_sync_work+0xa8/0x150 [bluetooth]
-> [ 1671.042079]  process_one_work+0x21f/0x3f0
-> [ 1671.042092]  worker_thread+0x4a/0x3c0
-> [ 1671.042102]  ? process_one_work+0x3f0/0x3f0
-> [ 1671.042111]  kthread+0xff/0x130
-> [ 1671.042119]  ? kthread_complete_and_exit+0x20/0x20
-> [ 1671.042128]  ret_from_fork+0x22/0x30
-> [ 1671.042142]  </TASK>
->
-> My hardware: HP laptop 17-by0001nw, device is a Realtek combo card:
->
-> "Realtek RTL8822BE 802.11 ac 2=C3=972 WiFi + Bluetooth 4.2 Combo Adapter =
-(MU-MIMO supported)"
->
-> I am ready to provide additional information and testing, if need be.
+Move of_device_id table to cs42xx8-i2c.c. Get cs42xx8_driver_data
+in cs42xx8_i2c_probe() and pass as argument to cs42xx8_probe(). Move
+error check if no driver data found to cs42xx8_i2c_probe().
 
-@Gix, Brian Can you give a look, we should probably convert the
-msft_set_filter_enable to use the cmd_sync instead.
+Signed-off-by: Peter Bergin <peter@berginkonsult.se>
+---
+v3: Revert new funtionality in _probe and not changing behavior.
+    Move back data structs to common module to be able to use
+    for other interfaces later.
 
-> Greetings,
->
-> Mateusz Jo=C5=84czyk
->
+v2: reworked and removed duplication of cs42xx8_of_match
 
+ sound/soc/codecs/cs42xx8-i2c.c | 28 +++++++++++++++++++++++++---
+ sound/soc/codecs/cs42xx8.c     | 22 +++-------------------
+ sound/soc/codecs/cs42xx8.h     |  3 +--
+ 3 files changed, 29 insertions(+), 24 deletions(-)
 
---=20
-Luiz Augusto von Dentz
+diff --git a/sound/soc/codecs/cs42xx8-i2c.c b/sound/soc/codecs/cs42xx8-i2c.c
+index bd80e9fc907f..052ffb7dcfc6 100644
+--- a/sound/soc/codecs/cs42xx8-i2c.c
++++ b/sound/soc/codecs/cs42xx8-i2c.c
+@@ -12,15 +12,30 @@
+ 
+ #include <linux/i2c.h>
+ #include <linux/module.h>
++#include <linux/of_device.h>
+ #include <linux/pm_runtime.h>
+ #include <sound/soc.h>
+ 
+ #include "cs42xx8.h"
+ 
++static const struct of_device_id cs42xx8_of_match[];
++
+ static int cs42xx8_i2c_probe(struct i2c_client *i2c)
+ {
+-	int ret = cs42xx8_probe(&i2c->dev,
+-			devm_regmap_init_i2c(i2c, &cs42xx8_regmap_config));
++	int ret;
++	struct cs42xx8_driver_data *drvdata;
++	const struct of_device_id *of_id;
++
++	of_id = of_match_device(cs42xx8_of_match, &i2c->dev);
++	if (!of_id) {
++		dev_err(&i2c->dev, "failed to find driver data\n");
++		return -EINVAL;
++	}
++
++	drvdata = (struct cs42xx8_driver_data *)of_id->data;
++
++	ret = cs42xx8_probe(&i2c->dev,
++		devm_regmap_init_i2c(i2c, &cs42xx8_regmap_config), drvdata);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -35,7 +50,14 @@ static void cs42xx8_i2c_remove(struct i2c_client *i2c)
+ 	pm_runtime_disable(&i2c->dev);
+ }
+ 
+-static struct i2c_device_id cs42xx8_i2c_id[] = {
++static const struct of_device_id cs42xx8_of_match[] = {
++	{ .compatible = "cirrus,cs42448", .data = &cs42448_data, },
++	{ .compatible = "cirrus,cs42888", .data = &cs42888_data, },
++	{ /* sentinel */ }
++};
++MODULE_DEVICE_TABLE(of, cs42xx8_of_match);
++
++static const struct i2c_device_id cs42xx8_i2c_id[] = {
+ 	{"cs42448", (kernel_ulong_t)&cs42448_data},
+ 	{"cs42888", (kernel_ulong_t)&cs42888_data},
+ 	{}
+diff --git a/sound/soc/codecs/cs42xx8.c b/sound/soc/codecs/cs42xx8.c
+index d14eb2f6e1dd..4558ec38a7ac 100644
+--- a/sound/soc/codecs/cs42xx8.c
++++ b/sound/soc/codecs/cs42xx8.c
+@@ -13,7 +13,6 @@
+ #include <linux/clk.h>
+ #include <linux/delay.h>
+ #include <linux/module.h>
+-#include <linux/of_device.h>
+ #include <linux/gpio/consumer.h>
+ #include <linux/pm_runtime.h>
+ #include <linux/regulator/consumer.h>
+@@ -511,17 +510,8 @@ const struct cs42xx8_driver_data cs42888_data = {
+ };
+ EXPORT_SYMBOL_GPL(cs42888_data);
+ 
+-const struct of_device_id cs42xx8_of_match[] = {
+-	{ .compatible = "cirrus,cs42448", .data = &cs42448_data, },
+-	{ .compatible = "cirrus,cs42888", .data = &cs42888_data, },
+-	{ /* sentinel */ }
+-};
+-MODULE_DEVICE_TABLE(of, cs42xx8_of_match);
+-EXPORT_SYMBOL_GPL(cs42xx8_of_match);
+-
+-int cs42xx8_probe(struct device *dev, struct regmap *regmap)
++int cs42xx8_probe(struct device *dev, struct regmap *regmap, struct cs42xx8_driver_data *drvdata)
+ {
+-	const struct of_device_id *of_id;
+ 	struct cs42xx8_priv *cs42xx8;
+ 	int ret, val, i;
+ 
+@@ -535,17 +525,11 @@ int cs42xx8_probe(struct device *dev, struct regmap *regmap)
+ 	if (cs42xx8 == NULL)
+ 		return -ENOMEM;
+ 
+-	cs42xx8->regmap = regmap;
+ 	dev_set_drvdata(dev, cs42xx8);
+ 
+-	of_id = of_match_device(cs42xx8_of_match, dev);
+-	if (of_id)
+-		cs42xx8->drvdata = of_id->data;
++	cs42xx8->regmap = regmap;
+ 
+-	if (!cs42xx8->drvdata) {
+-		dev_err(dev, "failed to find driver data\n");
+-		return -EINVAL;
+-	}
++	cs42xx8->drvdata = drvdata;
+ 
+ 	cs42xx8->gpiod_reset = devm_gpiod_get_optional(dev, "reset",
+ 							GPIOD_OUT_HIGH);
+diff --git a/sound/soc/codecs/cs42xx8.h b/sound/soc/codecs/cs42xx8.h
+index d36c61b6df74..342389e8b1a8 100644
+--- a/sound/soc/codecs/cs42xx8.h
++++ b/sound/soc/codecs/cs42xx8.h
+@@ -22,8 +22,7 @@ extern const struct dev_pm_ops cs42xx8_pm;
+ extern const struct cs42xx8_driver_data cs42448_data;
+ extern const struct cs42xx8_driver_data cs42888_data;
+ extern const struct regmap_config cs42xx8_regmap_config;
+-extern const struct of_device_id cs42xx8_of_match[];
+-int cs42xx8_probe(struct device *dev, struct regmap *regmap);
++int cs42xx8_probe(struct device *dev, struct regmap *regmap, struct cs42xx8_driver_data *drvdata);
+ 
+ /* CS42888 register map */
+ #define CS42XX8_CHIPID				0x01	/* Chip ID */
+-- 
+2.34.1
+
