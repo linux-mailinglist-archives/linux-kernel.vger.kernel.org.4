@@ -2,233 +2,288 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E309613D36
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:19:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5682613D3D
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 19:23:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229933AbiJaSTT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 14:19:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54658 "EHLO
+        id S229982AbiJaSXP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 14:23:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229905AbiJaSTR (ORCPT
+        with ESMTP id S229781AbiJaSXN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 14:19:17 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4186F1260C;
-        Mon, 31 Oct 2022 11:19:16 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-13bd19c3b68so14319689fac.7;
-        Mon, 31 Oct 2022 11:19:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Han0v1EhipVx7nXZczOxjKPxO/ttPTla8BXRUI4e1t0=;
-        b=ZIGCw/I8CRv8qnxHdy2zHqoXF4NhUV92icLrcjFKpOx8SBhmbg+BMqkFQ/BluQ1hnd
-         EAemG5Tu7kux/ZPsZMORRotT893ZYH/10qoWz/56otSiQFW9NGEXZdLtVAacJkWtoMQ9
-         eJv6J37p/1cxgeoK2j+nmOzfuPv4se9YsSyMDYXYq2xaSq7VhS97r4k3U9FN1clPI53v
-         TbdBxI0BuKT/hC7559pb6zYhaLK38kWZxiJJUHBSscyrq5STRZ1VK313T/sRtd9SBVSa
-         8qBraYTwhTrkI1WqJspllK2pIlEynjn7zhHrPTyus4LtXb+Qh0P3IFkhNo1sOs32ccHq
-         n4jQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Han0v1EhipVx7nXZczOxjKPxO/ttPTla8BXRUI4e1t0=;
-        b=DKITw2xTz0rrw9PoRmd4d50zO9TLo9lvBcHl90T3Aw7TNTQuX8EWpvwCPfDp/vpWf4
-         TOFVLjBH4SpTYKdQGJiW61+F1UL1EL4idCRPEEE+QaV9yARQDHkm6iKEuevVkjfxZxwX
-         PwuuzPieIzeys918A8S5DL3jRZoxzvEnWfRc/BmnWJFE1wTwS4YDp0DPAwWtrUmdCw8J
-         78bLd+eFCIdw8/F5bfEfMJkUt33rbzWm18/CrERk6a4ZHstIBEKb+FU2fcQ+UYE3hy0L
-         ZaC1oXmkKmRg/vtHF1yv027tSTmDn5/12XQ1fDxQT5EuXxEmCV3bA6p723ZO1d3bqYj7
-         ZRSA==
-X-Gm-Message-State: ACrzQf2SHOVi6u2iZfXXoZpV7i38tm2d2Mm4xoENrA6bf6ZfhwA7U/Tc
-        AN2SIppBlf9Zd25QAm35GY8egPAI0Rc=
-X-Google-Smtp-Source: AMsMyM6ozqYVxjMlPEwFQwgN4h90rZGlLmimbGZJaLGw4qUFywktjtGVa0j6x6mD/1b23gtG6XyHeg==
-X-Received: by 2002:a05:6870:e88a:b0:13b:6e13:a9a5 with SMTP id q10-20020a056870e88a00b0013b6e13a9a5mr8230404oan.264.1667240355394;
-        Mon, 31 Oct 2022 11:19:15 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w67-20020acadf46000000b0035770fc6ca9sm2551579oig.16.2022.10.31.11.19.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 11:19:14 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Mon, 31 Oct 2022 11:19:13 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Alexandre Belloni <alexandre.belloni@bootlin.com>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Benson Leung <bleung@chromium.org>, linux-rtc@vger.kernel.org,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Brian Norris <briannorris@chromium.org>
-Subject: Re: [PATCH] rtc: cros-ec: Limit RTC alarm range if needed
-Message-ID: <20221031181913.GA3841664@roeck-us.net>
-References: <20221029005400.2712577-1-linux@roeck-us.net>
- <Y2ABnbBGSJGM3gSS@mail.local>
+        Mon, 31 Oct 2022 14:23:13 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFE48120B7;
+        Mon, 31 Oct 2022 11:23:11 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29VIMsA5049177;
+        Mon, 31 Oct 2022 13:22:54 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1667240574;
+        bh=xoJ/VUXEd4r6VOHzjfDayb4vSbZyALZLwmCpIY5F/U8=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=RYkcPFkoat3AbA7VNFlnjyPy8x1FcKGjU/37UYMRkaaPh7vVs5t6AEnQszowuzVLP
+         2fFL1a74obIn6Sv3rBvjcu2MRfW+bfb51rSjzq297WLQKZXdb9vErSa56ju83o5cJP
+         ep/dfdmPdd61NJlhqDo0JhOrCqwFfMpLn7fVE+Qc=
+Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29VIMsvt119734
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Mon, 31 Oct 2022 13:22:54 -0500
+Received: from DLEE112.ent.ti.com (157.170.170.23) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 31
+ Oct 2022 13:22:53 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DLEE112.ent.ti.com
+ (157.170.170.23) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Mon, 31 Oct 2022 13:22:53 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29VIMq4K129219;
+        Mon, 31 Oct 2022 13:22:53 -0500
+Date:   Mon, 31 Oct 2022 23:52:52 +0530
+From:   Prasanth Mantena <p-mantena@ti.com>
+To:     Sebastian Fricke <sebastian.fricke@collabora.com>
+CC:     <linux-media@vger.kernel.org>, <kernel@collabora.com>,
+        <nas.chung@chipsnmedia.com>, <hverkuil@xs4all.nl>,
+        <ezequiel@vanguardiasur.com.ar>, <linux-kernel@vger.kernel.org>,
+        <nicolas.dufresne@collabora.com>, <p.zabel@pengutronix.de>,
+        <dafna@fastmail.com>
+Subject: Re: [PATCH v10 0/7] Wave5 codec driver
+Message-ID: <20221031182251.lt34qthivjyxmrvq@uda0496754>
+References: <20221022000506.221933-1-sebastian.fricke@collabora.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <Y2ABnbBGSJGM3gSS@mail.local>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221022000506.221933-1-sebastian.fricke@collabora.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 06:10:53PM +0100, Alexandre Belloni wrote:
-> Hello,
+On 02:04-20221022, Sebastian Fricke wrote:
+> The Wave5 codec driver is a stateful encoder/decoder.
+> It is found on the J721S2 SoC, JH7100 SoC, ssd202d SoC. Etc.
+> But current test report is based on J721S2 SoC and pre-silicon FPGA.
 > 
-> On 28/10/2022 17:54:00-0700, Guenter Roeck wrote:
-> > RTC chips on some older Chromebooks can only handle alarms less than 24
-> > hours in the future. Attempts to set an alarm beyond that range fails.
-> > The most severe impact of this limitation is that suspend requests fail
-> > if alarmtimer_suspend() tries to set an alarm for more than 24 hours
-> > in the future.
-> > 
-> > Try to set the real-time alarm to just below 24 hours if setting it to
-> > a larger value fails to work around the problem. While not perfect, it
-> > is better than just failing the call. A similar workaround is already
-> > implemented in the rtc-tps6586x driver.
+> The driver currently supports V4L2_PIX_FMT_HEVC, V4L2_PIX_FMT_H264.
 > 
-> I'm not super convinced this is actually better than failing the call
-> because your are implementing policy in the driver which is bad from a
-> user point of view. It would be way better to return -ERANGE and let
-> userspace select a better alarm time.
-
-The failing call is from alarmtimer_suspend() which is called during suspend.
-It is not from userspace, and userspace has no chance to intervene.
-
-It is also not just one userspace application which could request a large
-timeout, it is a variety of userspace applications, and not all of them are
-written by Google. Some are Android applications. I don't see how it would be
-realistic to expect all such applications to fix their code (if that is even
-possible - there might be an application which called sleep(100000) or
-something equivalent, which works just fine as long as the system is not
-suspended.
-
-> Do you have to know in advance which are the "older" chromebooks that
-> are affected?
-
-Not sure I understand the question. Technically we know, but the cros_ec
-rtc driver doesn't know because the EC doesn't have an API to report the
-maximum timeout to the Linux driver. Even if that existed, it would not
-help because the rtc API only supports absolute maximum clock values,
-not clock offsets relative to the current time. So ultimately there is no
-means for an RTC driver to tell the maximum possible alarm timer offset to 
-the RTC subsystem, and there is no means for a user such as
-alarmtimer_suspend() to obtain the maximum time offset. Does that answer
-your question ?
-
-On a side note, I tried an alternate implementation by adding a retry into
-alarmtimer_suspend(), where it would request a smaller timeout if the
-requested timeout failed. I did not pursue/submit this since it seemed
-hacky. To solve that problem, I'd rather discuss extending the RTC API
-to provide a maximum offset to its users. Such a solution would probably
-be desirable, but that it more longer term and would not solve the
-immediate problem.
-
-If you see a better solution, please let me know. Again, the problem
-is that alarmtimer_suspend() fails because the requested timeout is too
-large.
-
-Thanks,
-Guenter
-
+> This driver has so far been tested on J721S2 EVM board and pre-silicon
+> FPGA.
 > 
-> > 
-> > Drop error messages in cros_ec_rtc_get() and cros_ec_rtc_set() since the
-> > calling code also logs an error and to avoid spurious error messages if
-> > setting the alarm ultimately succeeds.
-> > 
-> > Cc: Brian Norris <briannorris@chromium.org>
-> > Signed-off-by: Guenter Roeck <linux@roeck-us.net>
-> > ---
-> >  drivers/rtc/rtc-cros-ec.c | 35 ++++++++++++++++++++---------------
-> >  1 file changed, 20 insertions(+), 15 deletions(-)
-> > 
-> > diff --git a/drivers/rtc/rtc-cros-ec.c b/drivers/rtc/rtc-cros-ec.c
-> > index 887f5193e253..a3ec066d8066 100644
-> > --- a/drivers/rtc/rtc-cros-ec.c
-> > +++ b/drivers/rtc/rtc-cros-ec.c
-> > @@ -14,6 +14,8 @@
-> >  
-> >  #define DRV_NAME	"cros-ec-rtc"
-> >  
-> > +#define SECS_PER_DAY	(24 * 60 * 60)
-> > +
-> >  /**
-> >   * struct cros_ec_rtc - Driver data for EC RTC
-> >   *
-> > @@ -43,13 +45,8 @@ static int cros_ec_rtc_get(struct cros_ec_device *cros_ec, u32 command,
-> >  	msg.msg.insize = sizeof(msg.data);
-> >  
-> >  	ret = cros_ec_cmd_xfer_status(cros_ec, &msg.msg);
-> > -	if (ret < 0) {
-> > -		dev_err(cros_ec->dev,
-> > -			"error getting %s from EC: %d\n",
-> > -			command == EC_CMD_RTC_GET_VALUE ? "time" : "alarm",
-> > -			ret);
-> > +	if (ret < 0)
-> >  		return ret;
-> > -	}
-> >  
-> >  	*response = msg.data.time;
-> >  
-> > @@ -59,7 +56,7 @@ static int cros_ec_rtc_get(struct cros_ec_device *cros_ec, u32 command,
-> >  static int cros_ec_rtc_set(struct cros_ec_device *cros_ec, u32 command,
-> >  			   u32 param)
-> >  {
-> > -	int ret = 0;
-> > +	int ret;
-> >  	struct {
-> >  		struct cros_ec_command msg;
-> >  		struct ec_response_rtc data;
-> > @@ -71,13 +68,8 @@ static int cros_ec_rtc_set(struct cros_ec_device *cros_ec, u32 command,
-> >  	msg.data.time = param;
-> >  
-> >  	ret = cros_ec_cmd_xfer_status(cros_ec, &msg.msg);
-> > -	if (ret < 0) {
-> > -		dev_err(cros_ec->dev, "error setting %s on EC: %d\n",
-> > -			command == EC_CMD_RTC_SET_VALUE ? "time" : "alarm",
-> > -			ret);
-> > +	if (ret < 0)
-> >  		return ret;
-> > -	}
-> > -
-> >  	return 0;
-> >  }
-> >  
-> > @@ -190,8 +182,21 @@ static int cros_ec_rtc_set_alarm(struct device *dev, struct rtc_wkalrm *alrm)
-> >  
-> >  	ret = cros_ec_rtc_set(cros_ec, EC_CMD_RTC_SET_ALARM, alarm_offset);
-> >  	if (ret < 0) {
-> > -		dev_err(dev, "error setting alarm: %d\n", ret);
-> > -		return ret;
-> > +		if (ret == -EINVAL && alarm_offset >= SECS_PER_DAY) {
-> > +			/*
-> > +			 * RTC chips on some older Chromebooks can only handle
-> > +			 * alarms up to 24h in the future. Try to set an alarm
-> > +			 * below that limit to avoid suspend failures.
-> > +			 */
-> > +			ret = cros_ec_rtc_set(cros_ec, EC_CMD_RTC_SET_ALARM,
-> > +					      SECS_PER_DAY - 1);
-> > +		}
-> > +
-> > +		if (ret < 0) {
-> > +			dev_err(dev, "error setting alarm in %u seconds: %d\n",
-> > +				alarm_offset, ret);
-> > +			return ret;
-> > +		}
-> >  	}
-> >  
-> >  	return 0;
-> > -- 
-> > 2.36.2
-> > 
+> Testing on J721S2 EVM board shows it working fine both decoder and
+> encoder.
+> The driver is successfully working with gstreamer v4l2 good-plugin
+> without any modification.
+> 
+> # v4l2-compliance -d0
+> Total for wave5-dec device /dev/video0: 44, Succeeded: 44, Failed: 0, Warnings: 0
+> 
+> # v4l2-compliance -d1
+> Buffer ioctls:
+> 		fail: ../../../v4l-utils-1.18.1/utils/v4l2-compliance/v4l2-test-buffers.cpp(610): q.reqbufs(node, 1)
+> 	test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: FAIL
+> 		fail: ../../../v4l-utils-1.18.1/utils/v4l2-compliance/v4l2-test-buffers.cpp(753): q.reqbufs(node, 2)
+> 	test VIDIOC_EXPBUF: FAIL
+> 	test Requests: OK (Not Supported)
+> 
+> Total for wave5-enc device /dev/video1: 44, Succeeded: 42, Failed: 2, Warnings: 2
+> 
+> changes since v9:
+> 
+> * Move from staging to the media directory
+>   * Move coda driver to sub-directory
+> 
+> * Fixes:
+>   * Use platform_get_irq instead of platform_get_resource to fetch the IRQ
+> 
+> * General cleanups:
+>   * Add missing error messages to error conditions
+>   * Improve messages/variable names/comments, align parameter names across the driver
+>   * Use macros instead of magic numbers in multiple occassions
+>   * Reduce code duplication in multiple places
+>   * Fix whitespace, newline and tab alignment issues
+>   * Remove unused struct fields & commented out code
+>   * Convert signed integers to unsigned if signed is not necessary
+>   * Convert int/unsigned int to s32/u32, when the variable is assigned to the
+>     return of a register read or provided as a parameter for a register write
+>     (and vice versa)
+>   * Fix incorrect bitwise operators where logical operators are appropriate
+>   * Multiple smaller changes
+> 
+> * Generalization:
+>   * Add new helper file providing generalized routines for vpu-dec & vpu-enc
+>   * Generalize luma & chroma table size calculation and stride calculation
+> 
+> * Resource cleanup and error handling:
+>   * Add error handling to all calls with ignored return codes
+>   * Handle DMA resource cleanup properly
+>   * Fix insufficient instance cleanup while opening dec/enc
+> 
+> changes since v8:
+> 
+> * add 'wave5' to DEV_NAME
+> * update to support Multi-stream
+> * update to support loop test/dynamic resolution change
+> * remove unnecessary memset, g_volatile, old version option
+> 
+> changes since v7:
+> 
+> * update v4l2-compliance test report
+> * fix build error on linux-kernel 5.18.0-rc4
+> 
+> changes since v6:
+> 
+> * update TODO file
+> * get sram info from device tree
+> 
+> changes since v5:
+> 
+> * support NV12/NV21 pixelformat for encoder and decoder
+> * handle adnormal exit and EOS
+> 
+> changes since v4:
+> 
+> * refactor functions in wave5-hw and fix bug reported by Daniel Palmer
+> * rename functions and variables to better names
+> * change variable types such as replacing s32 with u32 and int with bool
+> * as appropriate
+> 
+> changes since v3:
+> 
+> * Fixing all issues commented by Dan Carpenter
+> * Change file names to have wave5- prefix
+> * In wave5_vpu_probe, enable the clocks before reading registers, as
+> * commented from Daniel Palmer
+> * Add more to the TODO list,
+> 
+> changes since v2:
+> 
+> Main fixes includes:
+> * change the yaml and dirver code to support up to 4 clks (instead of
+> * one)
+> * fix Kconfig format
+> * remove unneeded cast,
+> * change var types
+> * change var names, func names
+> * checkpatch fixes
+> 
+> changes since v1:
+> 
+> Fix changes due to comments from Ezequiel and Dan Carpenter. Main fixes
+> inclueds:
+> * move all files to one dir 'wave5'
+> * replace private error codes with standard error codes
+> * fix extra spaces
+> * various checkpatch fixes
+> * replace private 'DPRINTK' macro with standard 'dev_err/dbg ..'
+> * fix error handling
+> * add more possible fixes to the TODO file
+>
+
+We see issues with the patchset. The decoder output contains garbage
+data randomly in the image. This is seen more for higher
+resolutions(>=1080p).
+The gstreamer pipeline for encoder fails with negotiation error as
+stated below.
+
+"vdec 4210000.video-codec: Invalid intra refresh mode: 0 (valid: 1-4)"
+
+
+> Dafna Hirschfeld (1):
+>   media: chips-media: wave5: Add the vdi layer
+> 
+> Nas Chung (3):
+>   media: chips-media: wave5: Add vpuapi layer
+>   media: chips-media: wave5: Add the v4l2 layer
+>   media: chips-media: wave5: Add TODO file
+> 
+> Robert Beckett (2):
+>   dt-bindings: media: wave5: add yaml devicetree bindings
+>   media: chips-media: wave5: Add wave5 driver to maintainers file
+> 
+> Sebastian Fricke (1):
+>   media: platform: chips-media: Move Coda to separate folder
+> 
+>  .../devicetree/bindings/media/wave5.yml       |   73 +
+>  MAINTAINERS                                   |   11 +-
+>  drivers/media/platform/chips-media/Kconfig    |   18 +-
+>  drivers/media/platform/chips-media/Makefile   |    6 +-
+>  .../media/platform/chips-media/coda/Kconfig   |   18 +
+>  .../media/platform/chips-media/coda/Makefile  |    6 +
+>  .../chips-media/{ => coda}/coda-bit.c         |    0
+>  .../chips-media/{ => coda}/coda-common.c      |    0
+>  .../chips-media/{ => coda}/coda-gdi.c         |    0
+>  .../chips-media/{ => coda}/coda-h264.c        |    0
+>  .../chips-media/{ => coda}/coda-jpeg.c        |    0
+>  .../chips-media/{ => coda}/coda-mpeg2.c       |    0
+>  .../chips-media/{ => coda}/coda-mpeg4.c       |    0
+>  .../platform/chips-media/{ => coda}/coda.h    |    0
+>  .../chips-media/{ => coda}/coda_regs.h        |    0
+>  .../chips-media/{ => coda}/imx-vdoa.c         |    0
+>  .../chips-media/{ => coda}/imx-vdoa.h         |    0
+>  .../platform/chips-media/{ => coda}/trace.h   |    0
+>  .../media/platform/chips-media/wave5/Kconfig  |   12 +
+>  .../media/platform/chips-media/wave5/Makefile |   10 +
+>  drivers/media/platform/chips-media/wave5/TODO |   25 +
+>  .../platform/chips-media/wave5/wave5-helper.c |  175 +
+>  .../platform/chips-media/wave5/wave5-helper.h |   28 +
+>  .../platform/chips-media/wave5/wave5-hw.c     | 3459 +++++++++++++++++
+>  .../chips-media/wave5/wave5-regdefine.h       |  654 ++++
+>  .../platform/chips-media/wave5/wave5-vdi.c    |  261 ++
+>  .../platform/chips-media/wave5/wave5-vdi.h    |   67 +
+>  .../chips-media/wave5/wave5-vpu-dec.c         | 1399 +++++++
+>  .../chips-media/wave5/wave5-vpu-enc.c         | 1454 +++++++
+>  .../platform/chips-media/wave5/wave5-vpu.c    |  362 ++
+
+io.h is needed for devm_ioremap to work.
+
+>  .../platform/chips-media/wave5/wave5-vpu.h    |   72 +
+>  .../platform/chips-media/wave5/wave5-vpuapi.c | 1115 ++++++
+>  .../platform/chips-media/wave5/wave5-vpuapi.h | 1198 ++++++
+>  .../chips-media/wave5/wave5-vpuconfig.h       |   90 +
+>  .../chips-media/wave5/wave5-vpuerror.h        |  454 +++
+>  .../media/platform/chips-media/wave5/wave5.h  |   94 +
+>  36 files changed, 11040 insertions(+), 21 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/media/wave5.yml
+>  create mode 100644 drivers/media/platform/chips-media/coda/Kconfig
+>  create mode 100644 drivers/media/platform/chips-media/coda/Makefile
+>  rename drivers/media/platform/chips-media/{ => coda}/coda-bit.c (100%)
+>  rename drivers/media/platform/chips-media/{ => coda}/coda-common.c (100%)
+>  rename drivers/media/platform/chips-media/{ => coda}/coda-gdi.c (100%)
+>  rename drivers/media/platform/chips-media/{ => coda}/coda-h264.c (100%)
+>  rename drivers/media/platform/chips-media/{ => coda}/coda-jpeg.c (100%)
+>  rename drivers/media/platform/chips-media/{ => coda}/coda-mpeg2.c (100%)
+>  rename drivers/media/platform/chips-media/{ => coda}/coda-mpeg4.c (100%)
+>  rename drivers/media/platform/chips-media/{ => coda}/coda.h (100%)
+>  rename drivers/media/platform/chips-media/{ => coda}/coda_regs.h (100%)
+>  rename drivers/media/platform/chips-media/{ => coda}/imx-vdoa.c (100%)
+>  rename drivers/media/platform/chips-media/{ => coda}/imx-vdoa.h (100%)
+>  rename drivers/media/platform/chips-media/{ => coda}/trace.h (100%)
+>  create mode 100644 drivers/media/platform/chips-media/wave5/Kconfig
+>  create mode 100644 drivers/media/platform/chips-media/wave5/Makefile
+>  create mode 100644 drivers/media/platform/chips-media/wave5/TODO
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-helper.c
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-helper.h
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-hw.c
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-regdefine.h
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vdi.c
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vdi.h
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpu-dec.c
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpu-enc.c
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpu.c
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpu.h
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpuapi.c
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpuapi.h
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpuconfig.h
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5-vpuerror.h
+>  create mode 100644 drivers/media/platform/chips-media/wave5/wave5.h
 > 
 > -- 
-> Alexandre Belloni, co-owner and COO, Bootlin
-> Embedded Linux and Kernel engineering
-> https://bootlin.com
+> 2.25.1
+> 
