@@ -2,176 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E05656141CA
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 00:28:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F34986141CE
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 00:29:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229954AbiJaX2J (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 19:28:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45378 "EHLO
+        id S229970AbiJaX3l (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 19:29:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47532 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229787AbiJaX1c (ORCPT
+        with ESMTP id S229707AbiJaX3X (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 19:27:32 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D83FD12095;
-        Mon, 31 Oct 2022 16:27:30 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 29VNRGWX108487;
-        Mon, 31 Oct 2022 18:27:16 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1667258836;
-        bh=5ei+T2sIfAKZXLx4GUkSoCxdo3May+AmglUqcXsO3Q8=;
-        h=From:To:CC:Subject:Date:In-Reply-To:References;
-        b=IxIYhJF5aHhtyf0S2qk+sE/UD+Ou3cRF3YV+MT3u72SQfE/CVo/A2CXPfU/jKB1Pm
-         9qXU9VftMmy9jI6dTG5Cc3SSWglOuAWPO/wcXCnAmO2RiFTvJYUCwCuKxRWuwNHaWw
-         n5TADnp59RAIFUPk/PMBaoc1WGAUEyXkjsb6uQKg=
-Received: from DLEE101.ent.ti.com (dlee101.ent.ti.com [157.170.170.31])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 29VNRG3O023432
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Mon, 31 Oct 2022 18:27:16 -0500
-Received: from DLEE110.ent.ti.com (157.170.170.21) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Mon, 31
- Oct 2022 18:27:16 -0500
-Received: from lelv0327.itg.ti.com (10.180.67.183) by DLEE110.ent.ti.com
- (157.170.170.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Mon, 31 Oct 2022 18:27:16 -0500
-Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by lelv0327.itg.ti.com (8.15.2/8.15.2) with ESMTP id 29VNRGrY037194;
-        Mon, 31 Oct 2022 18:27:16 -0500
-From:   Bryan Brattlof <bb@ti.com>
-To:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>
-CC:     Keerthy <j-keerthy@ti.com>, Linux PM <linux-pm@vger.kernel.org>,
-        Device Trees <devicetree@vger.kernel.org>,
-        LKML <linux-kernel@vger.kernel.org>,
-        LKML ARM <linux-arm-kernel@lists.infradead.org>,
-        Bryan Brattlof <bb@ti.com>
-Subject: [PATCH v3 11/11] arm64: dts: ti: k3-j7200-mcu-wakeup: add VTM node
-Date:   Mon, 31 Oct 2022 18:27:02 -0500
-Message-ID: <20221031232702.10339-12-bb@ti.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221031232702.10339-1-bb@ti.com>
-References: <20221031232702.10339-1-bb@ti.com>
+        Mon, 31 Oct 2022 19:29:23 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1CF015FFC;
+        Mon, 31 Oct 2022 16:28:53 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N1Tqh6gmWz4xG6;
+        Tue,  1 Nov 2022 10:28:48 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1667258929;
+        bh=EobGCR5OS2bog5PZfGzOEYsmFg5dsfh7cCbyk4MhpG8=;
+        h=Date:From:To:Cc:Subject:From;
+        b=TY6YGwrCCzMunKpwsSnRYSg3y2HrCLb9BaLICyw15/W04SIBxaORLcFS9hXAmRuXT
+         H/SQlGm9z7NHE/MzrEQilKHo9Gz0hLHUG/dBhQxnxh8Edbj6o0Wle6vdN96TGCgpvP
+         tqRzsGxQqe7hGM7fMRv2euFBpmEZbnvDGybqsTQ6NXBxYUbHp3VuF7S91dooIPfUrD
+         VX/CiQBlOvBLNNsRIAjvr4cg2NzrlNhtUYG1cE9DsS4A360DWsDF7sFgWOa9ahNCjf
+         gZsrLJQhyVCgxtNtXkVa/E0ZLEij5qGwLYdQ2XcxZv1BiNpYIaN7lotMnhFoo2+6xw
+         AtymNNjaqJnBg==
+Date:   Tue, 1 Nov 2022 10:28:28 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     David Sterba <dsterba@suse.cz>
+Cc:     David Sterba <dsterba@suse.com>, Filipe Manana <fdmanana@suse.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the btrfs tree with the btrfs-fixes
+ tree
+Message-ID: <20221101102828.7c6e1597@canb.auug.org.au>
 MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=3069; h=from:subject; bh=/KShhWi5jQQedZMyH6niU354AAmxTCGEnVimVHPNn8c=; b=owNCWmg5MUFZJlNZDN/x1QAAYv///7/9Ui+/3zv/Uuf92M7f0LN/4e337H7P3m3ftZ3D1v+wARmY IeoAHpDygABo0AGgDJiBoGagDQNBkAAANBkABoBmpo9QNAPUDZJ5HqhkmhoMmg0GQNBtQ00BiaZDRo D1GgDIaGTQGmIxDRkHqZND1PSAA0ZHqDRpoDQ0AdNNpGjTTQBkaaZHqGTQ00yDIaaMgbUBkANNDIyA yGjIaaAMEDQaAGIYAgAAByRoUxFZAA0rHHjUmn5qTALR4sFsfUSF8xHyoa7On+8NBD6HuDBD47XqbB esQOqfo9AXupZ1V4NdSrbe/4EdAw3Z3nN3AS757lkBpIoNLKMcVmysXAL1hiFqEucunQOgzbn9KXlG imPFDysLwn130UqL4VyweQmPqgN6u9G5nAgBatoQrT+Jb/t+snCqkED8dlNBhqCWMztXb5tdvBBQgX 73Drq/jGfrcsDcU9Ww7BbdPXflH2nULFjzsWq29r2PanJ9BL4YAaX8/h+gsgln4MPnslQtdKZ7EWh6 RXqups4MDv6UKVzdbr5L6NqIaDdOJNpQSdRw7kudy1CsNNQeLVlUp1KrTrQi5S6PsilYRnuILBDh76 Fo33GwTPDR5sUpPYCRcNNck8DRFGbrTIU/L4zRiZnmpgGugRoAEDgQ5YM4H+LuSKcKEgGb/jqg
-X-Developer-Key: i=bb@ti.com; a=openpgp; fpr=D3D177E40A38DF4D1853FEEF41B90D5D71D56CE0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/AuxTFf5vpZqD2Bfakwc9L3/";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The j7200 supports a single Voltage and Thermal Management (VTM) device
-located in the wakeup domain with three associated temperature monitors
-located in various hot spots on the die.
+--Sig_/AuxTFf5vpZqD2Bfakwc9L3/
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Bryan Brattlof <bb@ti.com>
+Hi all,
+
+Today's linux-next merge of the btrfs tree got a conflict in:
+
+  fs/btrfs/ctree.h
+
+between commit:
+
+  8184620ae212 ("btrfs: fix lost file sync on direct IO write with nowait a=
+nd dsync iocb")
+
+from the btrfs-fixes tree and commit:
+
+  d98f802c975e ("btrfs: move inode prototypes to btrfs_inode.h")
+
+from the btrfs tree.
+
+I fixed it up (I used the latter version of this file and applied the
+following merge fix patch) and can carry the fix as necessary. This is
+now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your
+tree is submitted for merging.  You may also want to consider
+cooperating with the maintainer of the conflicting tree to minimise any
+particularly complex conflicts.
+
+From: Stephen Rothwell <sfr@canb.auug.org.au>
+Date: Tue, 1 Nov 2022 10:24:24 +1100
+Subject: [PATCH] fix up for "btrfs: fix lost file sync on direct IO write w=
+ith nowait and dsync iocb"
+
+Signed-off-by: Stephen Rothwell <sfr@canb.auug.org.au>
 ---
- .../boot/dts/ti/k3-j7200-mcu-wakeup.dtsi      |  8 ++++
- arch/arm64/boot/dts/ti/k3-j7200-thermal.dtsi  | 47 +++++++++++++++++++
- arch/arm64/boot/dts/ti/k3-j7200.dtsi          |  3 ++
- 3 files changed, 58 insertions(+)
- create mode 100644 arch/arm64/boot/dts/ti/k3-j7200-thermal.dtsi
+ fs/btrfs/btrfs_inode.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
 
-diff --git a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
-index e5be78a58682d..651d17dd20663 100644
---- a/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j7200-mcu-wakeup.dtsi
-@@ -395,4 +395,12 @@ rng: rng@40910000 {
- 			status = "disabled"; /* Used by OP-TEE */
- 		};
- 	};
-+
-+	vtm0: temperature-sensor@42040000 {
-+		compatible = "ti,j7200-vtm";
-+		reg = <0x00 0x42040000 0x00 0x350>,
-+		      <0x00 0x42050000 0x00 0x350>;
-+		power-domains = <&k3_pds 154 TI_SCI_PD_EXCLUSIVE>;
-+		#thermal-sensor-cells = <1>;
-+	};
- };
-diff --git a/arch/arm64/boot/dts/ti/k3-j7200-thermal.dtsi b/arch/arm64/boot/dts/ti/k3-j7200-thermal.dtsi
-new file mode 100644
-index 0000000000000..0bf52c93c3f9a
---- /dev/null
-+++ b/arch/arm64/boot/dts/ti/k3-j7200-thermal.dtsi
-@@ -0,0 +1,47 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <dt-bindings/thermal/thermal.h>
-+
-+thermal_zones: thermal-zones {
-+	mcu_thermal: mcu-thermal {
-+		polling-delay-passive = <250>;	/* milliSeconds */
-+		polling-delay = <500>;		/* milliSeconds */
-+		thermal-sensors = <&vtm0 0>;
-+
-+		trips {
-+			wkup_crit: wkup-crit {
-+				temperature = <125000>;	/* milliCelsius */
-+				hysteresis = <2000>;	/* milliCelsius */
-+				type = "critical";
-+			};
-+		};
-+	};
-+
-+	mpu_thermal: mpu-thermal {
-+		polling-delay-passive = <250>;	/* milliSeconds */
-+		polling-delay = <500>;		/* milliSeconds */
-+		thermal-sensors = <&vtm0 1>;
-+
-+		trips {
-+			mpu_crit: mpu-crit {
-+				temperature = <125000>;	/* milliCelsius */
-+				hysteresis = <2000>;	/* milliCelsius */
-+				type = "critical";
-+			};
-+		};
-+	};
-+
-+	main_thermal: main-thermal {
-+		polling-delay-passive = <250>;	/* milliSeconds */
-+		polling-delay = <500>;		/* milliSeconds */
-+		thermal-sensors = <&vtm0 2>;
-+
-+		trips {
-+			c7x_crit: c7x-crit {
-+				temperature = <125000>;	/* milliCelsius */
-+				hysteresis = <2000>;	/* milliCelsius */
-+				type = "critical";
-+			};
-+		};
-+	};
-+};
-diff --git a/arch/arm64/boot/dts/ti/k3-j7200.dtsi b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-index b6da0454cc5bd..9368a6e3d4a62 100644
---- a/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-+++ b/arch/arm64/boot/dts/ti/k3-j7200.dtsi
-@@ -168,6 +168,9 @@ cbass_mcu_wakeup: bus@28380000 {
- 				 <0x07 0x00000000 0x07 0x00000000 0x01 0x00000000>; /* FSS OSPI1 data region 3 */
- 		};
- 	};
-+
-+	#include "k3-j7200-thermal.dtsi"
-+
- };
- 
- /* Now include the peripherals for each bus segments */
--- 
-2.38.1
+diff --git a/fs/btrfs/btrfs_inode.h b/fs/btrfs/btrfs_inode.h
+index 79a9f06c2434..d21c30bf7053 100644
+--- a/fs/btrfs/btrfs_inode.h
++++ b/fs/btrfs/btrfs_inode.h
+@@ -526,7 +526,10 @@ ssize_t btrfs_encoded_read(struct kiocb *iocb, struct =
+iov_iter *iter,
+ ssize_t btrfs_do_encoded_write(struct kiocb *iocb, struct iov_iter *from,
+ 			       const struct btrfs_ioctl_encoded_io_args *encoded);
+=20
+-ssize_t btrfs_dio_rw(struct kiocb *iocb, struct iov_iter *iter, size_t don=
+e_before);
++ssize_t btrfs_dio_read(struct kiocb *iocb, struct iov_iter *iter,
++		       size_t done_before);
++struct iomap_dio *btrfs_dio_write(struct kiocb *iocb, struct iov_iter *ite=
+r,
++				  size_t done_before);
+=20
+ extern const struct dentry_operations btrfs_dentry_operations;
+=20
+--=20
+2.35.1
 
+--=20
+Cheers,
+Stephen Rothwell
+
+--Sig_/AuxTFf5vpZqD2Bfakwc9L3/
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNgWhwACgkQAVBC80lX
+0Gx20gf/TXJ/+Ec7eGO7JJvwaR5oh8UHMcgnaaNkDITZKlzmooFg+IGWnGagnveK
+WyD5cJpiUXerKa0wq49OkuPv2rM2Y4YueyyvxHIcVWE55sVo4uYC/vcXRcq5ysd1
+lmzRLWIjxh6Jo0Ft9z99zMQhpFDI7wROY82j1HuR6hWIramouFCAPt0UYrKGWJ6N
+yIsmEzJHhzzaACIUJvU41cubxOg5grXOWIZ7bjQfB03ozOhJ4jomgSpBwkSi1hX/
+1e19xpxCGazgO++HQhrNJrXZK54rD8U51h3+3x8vGMS42x9lVUBu4n7S2Q9D5Dnk
+EjCrIthbXtNNb+thWmV9YAAJkL4kcw==
+=P/BP
+-----END PGP SIGNATURE-----
+
+--Sig_/AuxTFf5vpZqD2Bfakwc9L3/--
