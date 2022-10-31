@@ -2,82 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8A2E613866
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 14:50:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DC4B61386E
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 14:53:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbiJaNup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 09:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47596 "EHLO
+        id S231238AbiJaNxJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 09:53:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiJaNun (ORCPT
+        with ESMTP id S229556AbiJaNxH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 09:50:43 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506921007D;
-        Mon, 31 Oct 2022 06:50:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=90l0xMDfoydDKFAg0A7yI5g7blQBB1Ycz7ypF56IvPI=; b=JZ1wlGEucLk4wUUQtrFa+KZtxR
-        rYuuKI/gQZOMXZkXU9Nj197NwMbtUAypqolSFHnd/MW649uEqnKbdz1TQsCM/esQcFTGMhdcUOg1e
-        3TA5pRZGSc7SCqnYKNoUZEs7v3yicIKM8CUjyW7vJhfbrmwkOrIET31YJrrXKJuA+xI6DApj98rYJ
-        iky1b4L667KN/KACCfaSHcVBkmWf/yoVCWtkqk/YphO+uAKCO2fnJUIhXcMLAs0wV/R7vtdhNiqan
-        hPGoVHNyTTOxtgXfNEdi3Lyi0ZPPGn7tU/UAGWL8a5oNKMsDRzPSW4qahlPAYiUDyjD1mekrfdtbq
-        iiPrqOOA==;
-Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1opVBQ-003ih3-Vx; Mon, 31 Oct 2022 13:50:33 +0000
-Date:   Mon, 31 Oct 2022 13:50:32 +0000
-From:   Matthew Wilcox <willy@infradead.org>
-To:     syzbot <syzbot+8edfa01e46fd9fe3fbfb@syzkaller.appspotmail.com>
-Cc:     akpm@linux-foundation.org, clm@fb.com, dsterba@suse.com,
-        hch@lst.de, josef@toxicpanda.com, linmiaohe@huawei.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com, torvalds@linux-foundation.org
-Subject: Re: [syzbot] WARNING in btrfs_space_info_update_bytes_may_use
-Message-ID: <Y1/SqIuP4tbszPAW@casper.infradead.org>
-References: <0000000000000d9d6f05ec498263@google.com>
- <000000000000fa42c105ec5339ec@google.com>
+        Mon, 31 Oct 2022 09:53:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1ED6D1054C;
+        Mon, 31 Oct 2022 06:53:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id A418161234;
+        Mon, 31 Oct 2022 13:53:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D5920C433C1;
+        Mon, 31 Oct 2022 13:53:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667224385;
+        bh=L+f9q+7arbkRsu3om4S7s3pvQcwEFSDo9OD2UXdL+YI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=YVm6mCIoQSKHGVK0lw6agZNIgY/5U+amyGkJ1TWE6u/kIcOIGCR3AY8qge4B84BYb
+         OhZD4ExqRb3YKG3ocrcwIDZ+5ArzkBt6wWRtbphEg/ceaQ/pIW70lXCc8IDkB/WmjP
+         RDN2FEsOwIE9O57xKg7v+nyUwZOpO46xUVKq/1B/Fs8xccwhp5I2Ot+Kgji5LcdVsa
+         PggXqSl8fCMh/1++kF7nFrBLsfKnxyFKp7n8/wh0Y9kxXp/0RwZOZz4VcMnxv8H+b3
+         X2fe855JdpR+QWL05TrteDAUfq66l7SnlHjm/Q2Iz7xjxdvMrPufg3+nfZwOQmOnFA
+         ofAhsByK0yccA==
+Date:   Mon, 31 Oct 2022 13:52:59 +0000
+From:   Lee Jones <lee@kernel.org>
+To:     cy_huang <u0084500@gmail.com>
+Cc:     matthias.bgg@gmail.com, gene_chen@richtek.com,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        ChiYuan Huang <cy_huang@richtek.com>, stable@vger.kernel.org
+Subject: Re: [PATCH v2] mfd: mt6360: add bound check in regmap read/write
+ function
+Message-ID: <Y1/TO+mOrwjj3D33@google.com>
+References: <1664416817-31590-1-git-send-email-u0084500@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <000000000000fa42c105ec5339ec@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SORTED_RECIPS,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1664416817-31590-1-git-send-email-u0084500@gmail.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dmitry, I don't see a way to tell syzbot that its bisection has gone
-astray.  Can you add one or document it if it already exists?
+On Thu, 29 Sep 2022, cy_huang wrote:
 
-On Mon, Oct 31, 2022 at 04:51:22AM -0700, syzbot wrote:
-> syzbot has bisected this issue to:
+> From: ChiYuan Huang <cy_huang@richtek.com>
 > 
-> commit 0c7c575df56b957390206deb018c41acbb412159
-> Author: Matthew Wilcox (Oracle) <willy@infradead.org>
-> Date:   Wed Feb 24 20:01:52 2021 +0000
+> Fix the potential risk for null pointer if bank index is over the maximum.
 > 
->     mm/filemap: remove dynamically allocated array from filemap_read
+> Refer to the discussion list for the experiment result on mt6370.
+> https://lore.kernel.org/all/20220914013345.GA5802@cyhuang-hp-elitebook-840-g3.rt/
+> If not to check the bound, there is the same issue on mt6360.
+> 
+> Fixes: 3b0850440a06c (mfd: mt6360: Merge different sub-devices I2C read/write)
+> Cc: stable@vger.kernel.org
+> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
+> ---
+> Since v2:
+> - Assign i2c bank variable after bank index is already checked.
+> 
+> ---
+>  drivers/mfd/mt6360-core.c | 14 ++++++++++++--
+>  1 file changed, 12 insertions(+), 2 deletions(-)
 
-This change affects the read path.  The crash happens in the unmount
-path.  The data structure that's being checked is modified in the write
-path.  I just can't see how this commit is in any way related.
+Applied, thanks.
 
-> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=119e21b6880000
-> start commit:   b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
-> git tree:       upstream
-> final oops:     https://syzkaller.appspot.com/x/report.txt?x=139e21b6880000
-> console output: https://syzkaller.appspot.com/x/log.txt?x=159e21b6880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=a66c6c673fb555e8
-> dashboard link: https://syzkaller.appspot.com/bug?extid=8edfa01e46fd9fe3fbfb
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17db9ab1880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=124e21b6880000
-> 
-> Reported-by: syzbot+8edfa01e46fd9fe3fbfb@syzkaller.appspotmail.com
-> Fixes: 0c7c575df56b ("mm/filemap: remove dynamically allocated array from filemap_read")
-> 
-> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+-- 
+Lee Jones [李琼斯]
