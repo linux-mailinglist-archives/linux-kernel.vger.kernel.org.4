@@ -2,118 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E8851614036
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 22:56:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FC11614038
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 22:58:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229495AbiJaV4V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 17:56:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51134 "EHLO
+        id S229887AbiJaV6D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 17:58:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229477AbiJaV4S (ORCPT
+        with ESMTP id S229477AbiJaV5y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 17:56:18 -0400
-Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36D4E140CA
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 14:56:18 -0700 (PDT)
-Received: by mail-pj1-x1036.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so17129029pjc.3
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 14:56:18 -0700 (PDT)
+        Mon, 31 Oct 2022 17:57:54 -0400
+Received: from smtp-fw-2101.amazon.com (smtp-fw-2101.amazon.com [72.21.196.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0B8E140D0;
+        Mon, 31 Oct 2022 14:57:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=uvYZNQDziAHvtHngpIip5+ezNIS5JG1pvAy9dd4TxpE=;
-        b=DfJlDLVLgorokxki2nr8OZDvus4mEGdtGrLBfEMqr8bKzjbkxiC/oPs5WocqyL7oNY
-         9zSjcbNxoKpQzJDJnJ8F98odXZg7OKKk4ZSIVhpGR7WxAZt3Q110UOLmgtsPIWJx1xUh
-         yuD9pZIqpwkTHfm4XQxf9Q01/RQ6hOMPsxQBhIcDAikCJQQZq0d3bw+41mgDpN9AHQQX
-         lnomkO+ZOSvJwzqxt+JcJIfNMgUhIkSPuRy0+vZlpgEods02PuT/kfPYrFqaJUTH8A6+
-         0q1CfYK52FGE2xXuI18qtH/t5hXFm1mpY0o0FUpAhFrGpqbT4rAzPiCJGQozMwSGnh3j
-         IaeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:user-agent:message-id:in-reply-to:date:references
-         :subject:cc:to:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=uvYZNQDziAHvtHngpIip5+ezNIS5JG1pvAy9dd4TxpE=;
-        b=w+sCh+k6TT++UWDZ5VuZ7YiAPA2E3gWj78GFMhhro+KO5+NXqu8b84a2tKz83BgkwV
-         RYboxHQJDosPQuEUUdk+aBwHIyLTz0rFqC0P3xG/jOaZoILhwyTsxL/36D54y5xUUNc2
-         dDApCiNqVTYUvTNP1ie7Ko1+wmM4x/hpeHISZTV/3KuHoKP8u2QkchPbsDDwwN2Nmm3z
-         RDXEzCv69F7m2aN6z13XnTukwUwOBWGntFxOKv00V39KpygZcf5l0fITeLi967/SewrZ
-         iMD5o2T5VTvYe3ZRLTafSrSXUQq674NIRcUqJyluXr2MzMWFFglKw/+T3EubZ7JRWFv7
-         z15g==
-X-Gm-Message-State: ACrzQf3ZuivXma5M8weWE1hkaTvv0vnFRxY/BFENZRnJOkSXjYhkVw0+
-        Je7dm2WDlJ+kojGgNrz0C+EwOQ==
-X-Google-Smtp-Source: AMsMyM70dzmWPWuPQ93zYfsHtMAwMAe1akN99tiCGkXzDC6yjdc6KuLr30SZXqJxnFvhCM9PUJeLEw==
-X-Received: by 2002:a17:90a:680d:b0:213:d200:e992 with SMTP id p13-20020a17090a680d00b00213d200e992mr9893924pjj.220.1667253377626;
-        Mon, 31 Oct 2022 14:56:17 -0700 (PDT)
-Received: from bsegall-glaptop.localhost (c-67-188-112-16.hsd1.ca.comcast.net. [67.188.112.16])
-        by smtp.gmail.com with ESMTPSA id b9-20020aa78ec9000000b0056abfa74eddsm5235937pfr.147.2022.10.31.14.56.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 14:56:16 -0700 (PDT)
-From:   Benjamin Segall <bsegall@google.com>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     Josh Don <joshdon@google.com>, Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org, Tejun Heo <tj@kernel.org>
-Subject: Re: [PATCH v2] sched: async unthrottling for cfs bandwidth
-References: <20221026224449.214839-1-joshdon@google.com>
-        <Y1/HzzA1FIawYM11@hirez.programming.kicks-ass.net>
-Date:   Mon, 31 Oct 2022 14:56:13 -0700
-In-Reply-To: <Y1/HzzA1FIawYM11@hirez.programming.kicks-ass.net> (Peter
-        Zijlstra's message of "Mon, 31 Oct 2022 14:04:15 +0100")
-Message-ID: <xm26fsf3wtc2.fsf@google.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/28.1 (gnu/linux)
+  d=amazon.com; i=@amazon.com; q=dns/txt; s=amazon201209;
+  t=1667253474; x=1698789474;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=lrb22HZ6Jnm7ozydurS59fLEB2TfDlJmL+nE6nHtD1o=;
+  b=KlWg00NJzwIfwmIH+Pyqpstpz8GpgLSkSAokvqABg0aDo3WGDXCpCzLb
+   dZXXcrM2nizSL9P5eiWnDpSXApu4mVdd3zaTNoEERy5dW5ZdnXHmCynJT
+   sYxH7DsFMahaHW80eK+EBJHzL0EU3SwCSSqFPmBnTLBVw9SP8Y7tLeqVc
+   w=;
+X-IronPort-AV: E=Sophos;i="5.95,228,1661817600"; 
+   d="scan'208";a="258282981"
+Received: from iad12-co-svc-p1-lb1-vlan3.amazon.com (HELO email-inbound-relay-pdx-1box-2bm6-32cf6363.us-west-2.amazon.com) ([10.43.8.6])
+  by smtp-border-fw-2101.iad2.amazon.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 21:57:50 +0000
+Received: from EX13MTAUWB001.ant.amazon.com (pdx1-ws-svc-p6-lb9-vlan2.pdx.amazon.com [10.236.137.194])
+        by email-inbound-relay-pdx-1box-2bm6-32cf6363.us-west-2.amazon.com (Postfix) with ESMTPS id D08A681A6C;
+        Mon, 31 Oct 2022 21:57:47 +0000 (UTC)
+Received: from EX19D004ANA001.ant.amazon.com (10.37.240.138) by
+ EX13MTAUWB001.ant.amazon.com (10.43.161.207) with Microsoft SMTP Server (TLS)
+ id 15.0.1497.42; Mon, 31 Oct 2022 21:57:46 +0000
+Received: from 88665a182662.ant.amazon.com (10.43.160.223) by
+ EX19D004ANA001.ant.amazon.com (10.37.240.138) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA) id 15.2.1118.15;
+ Mon, 31 Oct 2022 21:57:44 +0000
+From:   Kuniyuki Iwashima <kuniyu@amazon.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>
+CC:     Akihiro HARAI <jharai0815@gmail.com>, Jiri Olsa <jolsa@kernel.org>,
+        Kuniyuki Iwashima <kuniyu@amazon.com>,
+        Kuniyuki Iwashima <kuni1840@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>
+Subject: [PATCH] arm64/syscall: Include asm/ptrace.h in syscall_wrapper header.
+Date:   Mon, 31 Oct 2022 14:57:28 -0700
+Message-ID: <20221031215728.50389-1-kuniyu@amazon.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Originating-IP: [10.43.160.223]
+X-ClientProxiedBy: EX13D23UWC003.ant.amazon.com (10.43.162.81) To
+ EX19D004ANA001.ant.amazon.com (10.37.240.138)
+X-Spam-Status: No, score=-5.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Peter Zijlstra <peterz@infradead.org> writes:
+Add the same change for ARM64 as done in the commit 9440c4294160
+("x86/syscall: Include asm/ptrace.h in syscall_wrapper header") to
+make sure all syscalls see 'struct pt_regs' definition and resulted
+BTF for '__arm64_sys_*(struct pt_regs *regs)' functions point to
+actual struct.
 
-> On Wed, Oct 26, 2022 at 03:44:49PM -0700, Josh Don wrote:
->> CFS bandwidth currently distributes new runtime and unthrottles cfs_rq's
->> inline in an hrtimer callback. Runtime distribution is a per-cpu
->> operation, and unthrottling is a per-cgroup operation, since a tg walk
->> is required. On machines with a large number of cpus and large cgroup
->> hierarchies, this cpus*cgroups work can be too much to do in a single
->> hrtimer callback: since IRQ are disabled, hard lockups may easily occur.
->> Specifically, we've found this scalability issue on configurations with
->> 256 cpus, O(1000) cgroups in the hierarchy being throttled, and high
->> memory bandwidth usage.
->> 
->> To fix this, we can instead unthrottle cfs_rq's asynchronously via a
->> CSD. Each cpu is responsible for unthrottling itself, thus sharding the
->> total work more fairly across the system, and avoiding hard lockups.
->
-> So, TJ has been complaining about us throttling in kernel-space, causing
-> grief when we also happen to hold a mutex or some other resource and has
-> been prodding us to only throttle at the return-to-user boundary.
->
-> Would this be an opportune moment to do this? That is, what if we
-> replace this CSD with a task_work that's ran on the return-to-user path
-> instead?
+Without this patch, the BPF verifier refuses to load a tracing prog
+which accesses pt_regs.
 
-This is unthrottle, not throttle, but it would probably be
-straightfoward enough to do what you said for throttle. I'd expect this
-to not help all that much though, because throttle hits the entire
-cfs_rq, not individual threads.
+  bpf(BPF_PROG_LOAD, {prog_type=0x1a, ...}, 128) = -1 EACCES
 
-I'm currently trying something more invasive, which doesn't throttle a
-cfs_rq while it has any kernel tasks, and prioritizes kernel tasks / ses
-containing kernel tasks when a cfs_rq "should" be throttled. "Invasive"
-is a key word though, as it needs to do the sort of h_nr_kernel_tasks
-tracking on put_prev/set_next in ways we currently only need to do on
-enqueue/dequeue.
+With this patch, we can see the correct error, which saves us time
+in debugging the prog.
+
+  bpf(BPF_PROG_LOAD, {prog_type=0x1a, ...}, 128) = 4
+  bpf(BPF_RAW_TRACEPOINT_OPEN, {raw_tracepoint={name=NULL, prog_fd=4}}, 128) = -1 ENOTSUPP
+
+Signed-off-by: Kuniyuki Iwashima <kuniyu@amazon.com>
+---
+Note the cited commit only exists in the tip tree for now.
+https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git/commit/?id=9440c42941606af4c379afa3cf8624f0dc43a629
+---
+ arch/arm64/include/asm/syscall_wrapper.h | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/arm64/include/asm/syscall_wrapper.h b/arch/arm64/include/asm/syscall_wrapper.h
+index b383b4802a7b..d30217c21eff 100644
+--- a/arch/arm64/include/asm/syscall_wrapper.h
++++ b/arch/arm64/include/asm/syscall_wrapper.h
+@@ -8,7 +8,7 @@
+ #ifndef __ASM_SYSCALL_WRAPPER_H
+ #define __ASM_SYSCALL_WRAPPER_H
+ 
+-struct pt_regs;
++#include <asm/ptrace.h>
+ 
+ #define SC_ARM64_REGS_TO_ARGS(x, ...)				\
+ 	__MAP(x,__SC_ARGS					\
+-- 
+2.30.2
+
