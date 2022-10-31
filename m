@@ -2,53 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1621612F50
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 04:26:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FEB8612F54
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 04:34:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229647AbiJaD0w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Sun, 30 Oct 2022 23:26:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35352 "EHLO
+        id S229691AbiJaDeS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Sun, 30 Oct 2022 23:34:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36108 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229476AbiJaD0v (ORCPT
+        with ESMTP id S229476AbiJaDeQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Sun, 30 Oct 2022 23:26:51 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 387AD267;
-        Sun, 30 Oct 2022 20:26:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 40D7960F55;
-        Mon, 31 Oct 2022 03:26:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3C938C433C1;
-        Mon, 31 Oct 2022 03:26:47 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667186808;
-        bh=K7fJIDBZ9sghIrX7z558eOwkI5MBy/4uAVIbC63i3HQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=HJbnJPZvaYXQ/oydCCLVqh1oWpWjOXpPn4ApRW1LLeaeVIWPVIgAckcg6H2Cgr8LA
-         gLrWvEqZj0ePI1OsBS5Y3eREQyrwCJvX5/oB8Lkj0fgP+L7CaxiKRDg7c6l8EREbxU
-         jLZGLB082BhHA3RiEE1R456go4l7OCAmZGWcbGffI0Ve+DugbRf40XpPbih+DL4g7t
-         H/GnAxx32ItKm/nN2+H0e/p9rO64R2Pzv/guK7+33KQBx0xjRsJib8OfAV6vie78hZ
-         MQkXcX/JoUjo/qUa+ccKAfnCdlPxYTrR7YRWOY3qHE7b+2XTVIz8wGhmlWx5Nu6ki3
-         u6kdvPgk/AiFQ==
-Date:   Mon, 31 Oct 2022 11:26:44 +0800
-From:   Tzung-Bi Shih <tzungbi@kernel.org>
-To:     Guenter Roeck <linux@roeck-us.net>
-Cc:     Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Benson Leung <bleung@chromium.org>, linux-rtc@vger.kernel.org,
-        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Brian Norris <briannorris@chromium.org>
-Subject: Re: [PATCH] rtc: cros-ec: Limit RTC alarm range if needed
-Message-ID: <Y19AdIntJZGnBh/y@google.com>
-References: <20221029005400.2712577-1-linux@roeck-us.net>
+        Sun, 30 Oct 2022 23:34:16 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9E89596;
+        Sun, 30 Oct 2022 20:34:12 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N0zCW5BjvzmVYJ;
+        Mon, 31 Oct 2022 11:29:11 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 31 Oct 2022 11:34:11 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Mon, 31 Oct 2022 11:34:10 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <linux-can@vger.kernel.org>,
+        <netdev@vger.kernel.org>
+CC:     <socketcan@hartkopp.net>, <mkl@pengutronix.de>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <mailhol.vincent@wanadoo.fr>,
+        <chenzhongjin@huawei.com>
+Subject: [PATCH] can: canxl: Fix unremoved canxl_packet in can_exit()
+Date:   Mon, 31 Oct 2022 11:30:53 +0800
+Message-ID: <20221031033053.37849-1-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221029005400.2712577-1-linux@roeck-us.net>
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,19 +51,39 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 05:54:00PM -0700, Guenter Roeck wrote:
-> Drop error messages in cros_ec_rtc_get() and cros_ec_rtc_set() since the
-> calling code also logs an error and to avoid spurious error messages if
-> setting the alarm ultimately succeeds.
+In can_init(), dev_add_pack(&canxl_packet) is added but not removed in
+can_exit(). It break the packet handler list and can make kernel panic
+when can_init() for the second time.
 
-It only retries for cros_ec_rtc_set().  cros_ec_rtc_get() doesn't emit
-spurious error messages.
+> modprobe can && rmmod can
+> rmmod xxx && modprobe can
 
-cros_ec_rtc_get() could preserve the error log; cros_ec_rtc_set() could change
-from using dev_err() to dev_warn() since cros_ec_rtc_set_alarm() calls
-dev_err() if cros_ec_rtc_set() fails.  But this is quite nitpick so anyway.
+BUG: unable to handle page fault for address: fffffbfff807d7f4
+RIP: 0010:dev_add_pack+0x133/0x1f0
+Call Trace:
+ <TASK>
+ can_init+0xaa/0x1000 [can]
+ do_one_initcall+0xd3/0x4e0
+ ...
 
-> Cc: Brian Norris <briannorris@chromium.org>
-> Signed-off-by: Guenter Roeck <linux@roeck-us.net>
+Fixes: fb08cba12b52 ("can: canxl: update CAN infrastructure for CAN XL frames")
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+---
+ net/can/af_can.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
+diff --git a/net/can/af_can.c b/net/can/af_can.c
+index 9503ab10f9b8..5e9e3e1e9825 100644
+--- a/net/can/af_can.c
++++ b/net/can/af_can.c
+@@ -902,6 +902,7 @@ static __init int can_init(void)
+ static __exit void can_exit(void)
+ {
+ 	/* protocol unregister */
++	dev_remove_pack(&canxl_packet);
+ 	dev_remove_pack(&canfd_packet);
+ 	dev_remove_pack(&can_packet);
+ 	sock_unregister(PF_CAN);
+-- 
+2.17.1
+
