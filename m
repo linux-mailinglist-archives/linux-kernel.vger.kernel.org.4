@@ -2,112 +2,88 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 178E86143D0
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 05:04:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B0576143D3
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 05:09:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbiKAEEp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 00:04:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43816 "EHLO
+        id S229469AbiKAEJf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 00:09:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiKAEEo (ORCPT
+        with ESMTP id S229452AbiKAEJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 00:04:44 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C47B313F9A;
-        Mon, 31 Oct 2022 21:04:42 -0700 (PDT)
-Received: from canpemm500005.china.huawei.com (unknown [172.30.72.56])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N1brK2f6GzVj3y;
-        Tue,  1 Nov 2022 11:59:45 +0800 (CST)
-Received: from huawei.com (10.175.104.82) by canpemm500005.china.huawei.com
- (7.192.104.229) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 1 Nov
- 2022 12:04:40 +0800
-From:   Baisong Zhong <zhongbaisong@huawei.com>
-To:     <edumazet@google.com>, <davem@davemloft.net>, <kuba@kernel.org>,
-        <pabeni@redhat.com>
-CC:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <zhongbaisong@huawei.com>,
-        <ast@kernel.org>, <song@kernel.org>, <yhs@fb.com>,
-        <haoluo@google.com>
-Subject: [PATCH -next] bpf, test_run: fix alignment problem in bpf_prog_test_run_skb()
-Date:   Tue, 1 Nov 2022 12:04:40 +0800
-Message-ID: <20221101040440.3637007-1-zhongbaisong@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 1 Nov 2022 00:09:32 -0400
+Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD4F81581A
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 21:09:31 -0700 (PDT)
+Received: by mail-lj1-x236.google.com with SMTP id j14so19235948ljh.12
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 21:09:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=cF8Xdl9bnZMP6PM/jkktbmXgdydLrtVZtbsNWEfml5U=;
+        b=FcYPBsVGNwpLUaVZpBQpN2jDmWuSOvdtv3EXZzTUOoN03N+zmje8U7oXs61ElaPtPc
+         dBR1CYPcPTURxarJfA7S56CUEQ/2MP4Tux6zXOszbp4ve9bgY8/mZdAdhP2eNrvpVl9C
+         dGPMuLTkIMQfhsddoP3qJeaRx5X7OfqNoMo0EXrQyltiVmFmom7y/iCvztaUJLQsUXcl
+         HaLw05/mY4FyYMDGibztfm9W+6OnvIipOLkiiUTO8b/d1eHs1I993fUuJmD/SC8wCXlP
+         NSEIZfIfxYVhtLhBdaDB6IRvqZmT1fSkMiP0SbrsIdtydu5RqX+quAS202TEzQ2HcQdf
+         fR9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=cF8Xdl9bnZMP6PM/jkktbmXgdydLrtVZtbsNWEfml5U=;
+        b=rTyr0CxqV76wDPtXcgLScabR7j8E+fCnv/cWIXRl9pHLS18Lx7ojhln2gtsJmPnFXH
+         ZWdZb6PpA3CwRjWHCAAwP39oT1us363j9Tz2hYSa1gyTm/KfT/5i+AMx54ACAW63DOsd
+         Nm1aHMRa6jgbJwCQVOTKG//SnC3N2S435DP3mYvZLKsu8tkyZPjCJuhBzRnBiSggWch3
+         vYm4tmVlXYESkgjYwaoWoO4cSBzvFPJj/tKnDGusRygLcX2gdVm7AhYSQmoCCTZK9dVu
+         2t7xfq5rKllERJv/YFyiVbEtGPsyGNa6htbCfkT0dzWlGMDvn/c6R+WpQJWTtxPouHRi
+         PR4Q==
+X-Gm-Message-State: ACrzQf1GshxcSUWZUKPpoa7NEmMGJhS+lANy2UU/d2zKri05I3jMyIru
+        8c8VyRqD1ZfRAOJwkJrRCF4iYddmBloyWNm300kaLY6Q
+X-Google-Smtp-Source: AMsMyM6UH75Sposa99DLgTit3IWe9pM+Mo8+QmlB6OHJ9TnMMhQsA5EnFYZqHUFNE6jOlDug3KLBAccTWhk0vmihMmY=
+X-Received: by 2002:a2e:7c02:0:b0:277:54ee:e8d9 with SMTP id
+ x2-20020a2e7c02000000b0027754eee8d9mr3497137ljc.309.1667275769528; Mon, 31
+ Oct 2022 21:09:29 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- canpemm500005.china.huawei.com (7.192.104.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Sijie Lan <sijielan@gmail.com>
+Date:   Tue, 1 Nov 2022 00:09:18 -0400
+Message-ID: <CAGAHmYA=QPJZy-NCRFF_17y-3HLb4UxcXVRiw=6c-1N7Fa7kQQ@mail.gmail.com>
+Subject: Mkfs.f2fs on null_blk device
+To:     linux-kernel@vger.kernel.org,
+        linux-f2fs-devel@lists.sourceforge.net, kernel-team@android.com
+Cc:     chao@kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recently, we got a syzkaller problem because of aarch64
-alignment fault if KFENCE enabled.
+When I try to make f2fs on null_blk device, it always shows "Device
+size is not sufficient for F2FS volume",
+I am I gave enough space for the file system, i.e, 20GiB. I just want
+to know hot to fix it.
+this is the output message:
+[sijie@fedora null_blk]$ sudo mkfs.f2fs -f -m  /dev/nullb1
 
-When the size from user bpf program is an odd number, like
-399, 407, etc, it will cause skb shard info's alignment access,
-as seen below:
+    F2FS-tools: mkfs.f2fs Ver: 1.15.0 (2022-05-13)
 
-BUG: KFENCE: use-after-free read in __skb_clone+0x23c/0x2a0 net/core/skbuff.c:1032
-
-Use-after-free read at 0xffff6254fffac077 (in kfence-#213):
- __lse_atomic_add arch/arm64/include/asm/atomic_lse.h:26 [inline]
- arch_atomic_add arch/arm64/include/asm/atomic.h:28 [inline]
- arch_atomic_inc include/linux/atomic-arch-fallback.h:270 [inline]
- atomic_inc include/asm-generic/atomic-instrumented.h:241 [inline]
- __skb_clone+0x23c/0x2a0 net/core/skbuff.c:1032
- skb_clone+0xf4/0x214 net/core/skbuff.c:1481
- ____bpf_clone_redirect net/core/filter.c:2433 [inline]
- bpf_clone_redirect+0x78/0x1c0 net/core/filter.c:2420
- bpf_prog_d3839dd9068ceb51+0x80/0x330
- bpf_dispatcher_nop_func include/linux/bpf.h:728 [inline]
- bpf_test_run+0x3c0/0x6c0 net/bpf/test_run.c:53
- bpf_prog_test_run_skb+0x638/0xa7c net/bpf/test_run.c:594
- bpf_prog_test_run kernel/bpf/syscall.c:3148 [inline]
- __do_sys_bpf kernel/bpf/syscall.c:4441 [inline]
- __se_sys_bpf+0xad0/0x1634 kernel/bpf/syscall.c:4381
-
-kfence-#213: 0xffff6254fffac000-0xffff6254fffac196, size=407, cache=kmalloc-512
-
-allocated by task 15074 on cpu 0 at 1342.585390s:
- kmalloc include/linux/slab.h:568 [inline]
- kzalloc include/linux/slab.h:675 [inline]
- bpf_test_init.isra.0+0xac/0x290 net/bpf/test_run.c:191
- bpf_prog_test_run_skb+0x11c/0xa7c net/bpf/test_run.c:512
- bpf_prog_test_run kernel/bpf/syscall.c:3148 [inline]
- __do_sys_bpf kernel/bpf/syscall.c:4441 [inline]
- __se_sys_bpf+0xad0/0x1634 kernel/bpf/syscall.c:4381
- __arm64_sys_bpf+0x50/0x60 kernel/bpf/syscall.c:4381
-
-To fix the problem, we round up allocations with kmalloc_size_roundup()
-so that build_skb()'s use of kize() is always alignment and no special
-handling of the memory is needed by KFENCE.
-
-Fixes: 1cf1cae963c2 ("bpf: introduce BPF_PROG_TEST_RUN command")
-Signed-off-by: Baisong Zhong <zhongbaisong@huawei.com>
----
- net/bpf/test_run.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 13d578ce2a09..058b67108873 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -774,6 +774,7 @@ static void *bpf_test_init(const union bpf_attr *kattr, u32 user_size,
- 	if (user_size > size)
- 		return ERR_PTR(-EMSGSIZE);
- 
-+	size = kmalloc_size_roundup(size);
- 	data = kzalloc(size + headroom + tailroom, GFP_USER);
- 	if (!data)
- 		return ERR_PTR(-ENOMEM);
--- 
-2.25.1
-
+Info: Disable heap-based policy
+Info: Debug level = 0
+Info: Trim is enabled
+Info: Host-managed zoned block device:
+      20 zones, 2147483648 zone size(bytes), 10 randomly writeable zones
+      524288 blocks per zone
+Info: Segments per section = 1024
+Info: Sections per zone = 1
+Info: sector size = 4096
+Info: total sectors = 10485760 (40960 MB)
+Info: zone aligned segment0 blkaddr: 524288
+Error: Device size is not sufficient for F2FS volume
+Error: Failed to prepare a super block!!!
+Error: Could not format the device!!!
