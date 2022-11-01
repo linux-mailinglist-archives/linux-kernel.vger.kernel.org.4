@@ -2,90 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 66AC96150D7
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 18:36:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 714546150D9
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 18:37:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbiKARgd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 13:36:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37286 "EHLO
+        id S230161AbiKARh0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 13:37:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbiKARga (ORCPT
+        with ESMTP id S229926AbiKARhX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 13:36:30 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7D5C61D640;
-        Tue,  1 Nov 2022 10:36:29 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3B323B81E7B;
-        Tue,  1 Nov 2022 17:36:28 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A8937C433C1;
-        Tue,  1 Nov 2022 17:36:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667324186;
-        bh=l2/BGInigMpzUkkvNeiIzvRne5n+cAy/QymsCTZKTCU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UVyk91WQE58CYUvXZDLz3pczrjmayQOVsgd5oArv0+VSYem0mvtE7Gd4SyQhQG2SI
-         pNtTXmBLmCIvYNSJXH5YzIgl7VZQeUvfd/ocSDtQO9ILQPU/1YG00sXOEOaYNkMvd/
-         LYUk4O+G4HV5nwkPwJ+rdisrqVBnrg4jDfLC/5uQ3BTUwVrBQxjdelaPi3S7AhsWzf
-         68DqVN7ZVYu9VNKztjpyUGIdQVIDex/HCuRmeHWapSawAiXJCqyN1cis7PkV39FnX4
-         8Z+3acGsfNk32BTHxd/6JNxjmyrRq7F23cdkb4zUTsQLKPNZ7MCyUggR2dsbZk8yBt
-         HXN3kurnKhFcg==
-Date:   Tue, 1 Nov 2022 17:36:22 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Jonathan =?iso-8859-1?Q?Neusch=E4fer?= <j.neuschaefer@gmx.net>
-Cc:     linux-doc@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] docs: driver-api: spi: Update reference to struct
- spi_controller
-Message-ID: <Y2FZFuAvLCRmnhFo@sirena.org.uk>
-References: <20221101173252.1069294-1-j.neuschaefer@gmx.net>
+        Tue, 1 Nov 2022 13:37:23 -0400
+Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09150B0A
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 10:37:23 -0700 (PDT)
+Received: by mail-qt1-x831.google.com with SMTP id hh9so9744291qtb.13
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 10:37:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tX7lXOSIub172na59yiJaG9z+L0LtRtj1M1pVvgYKsY=;
+        b=M/CX+v3Wlg81iz3RgKnwiosfu4e8RY466GrEZiJWm2gbSMY8mUliKIGOGqlKPw2yQP
+         8awES2xSVll6TRzUIdTDUi4NH0jgIoFsYwJgNLvJXq1lusf0VYx3aD6xSavqzkdkOjjx
+         0lkBkpleN7Z7Tlpo3VCp3gzjxukaBJMAwC68M=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tX7lXOSIub172na59yiJaG9z+L0LtRtj1M1pVvgYKsY=;
+        b=5IxgQu1fapJjZaQiRR6fZKhvzon4vMqIIg8b3vYBkulY+QKE/yrJugcGLtRREWb5Jb
+         u5KH6BVxFFt3HknsIx5+mo7gNPV6yk7uXOueTQfMJOss8wKSU7uzwE/P7hbKF/J+pz6E
+         4AByZWPjyPMY0gZF+AqINm2OzS2kobbpOrJsrA0N2vL4zrdOMs7YeOUYrDs7d/bC4nkm
+         3fPxizGVuX63OiaXEhIxYBEIe4MHEkwPM93wMjExCk4qWDRqlZQ0RDpFsdMwtXtpOGh0
+         HfQtc1GRy95OJl3To0cxh6swoqeMrMMdOznGk9vR4oKLqqZqPKidJjuHnuHCFe5vJxkg
+         e/ig==
+X-Gm-Message-State: ACrzQf2RHq+B/cerKact+5v/3GvIWk4qwr5YR+VJcNKdMv//BwyT9/cX
+        ilTXWZ2x4dCsB0XNsqRGn+NmeHCybCum4A==
+X-Google-Smtp-Source: AMsMyM4m1Mvn+cql26lRZSq7fiYvS7iEL3hrNIUczCkKhGcHFHGPNvrru/NIrrUsyJoSnIOCq408DQ==
+X-Received: by 2002:ac8:7d4e:0:b0:39c:d73a:dbc5 with SMTP id h14-20020ac87d4e000000b0039cd73adbc5mr16315318qtb.650.1667324241834;
+        Tue, 01 Nov 2022 10:37:21 -0700 (PDT)
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com. [209.85.219.175])
+        by smtp.gmail.com with ESMTPSA id dm45-20020a05620a1d6d00b006e8f8ca8287sm7038500qkb.120.2022.11.01.10.37.21
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Nov 2022 10:37:21 -0700 (PDT)
+Received: by mail-yb1-f175.google.com with SMTP id 185so18200764ybc.3
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 10:37:21 -0700 (PDT)
+X-Received: by 2002:a25:bb02:0:b0:6ca:9345:b2ee with SMTP id
+ z2-20020a25bb02000000b006ca9345b2eemr7214795ybg.362.1667324240766; Tue, 01
+ Nov 2022 10:37:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="gBGaeP68nRHPkeus"
-Content-Disposition: inline
-In-Reply-To: <20221101173252.1069294-1-j.neuschaefer@gmx.net>
-X-Cookie: Do not write below this line.
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CAHk-=wgJVNe4mUxGJE5B-_GMg0oOgxkZz3UxehVRiCT3QvoZ0w@mail.gmail.com>
+ <20221101170015.GA1314742@roeck-us.net> <CAHk-=wi+5sRXL9fTHQRiR9zVEFDPhQceWACBG3QQ=9xoRVmR8g@mail.gmail.com>
+In-Reply-To: <CAHk-=wi+5sRXL9fTHQRiR9zVEFDPhQceWACBG3QQ=9xoRVmR8g@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Tue, 1 Nov 2022 10:37:04 -0700
+X-Gmail-Original-Message-ID: <CAHk-=whNVbdynjJTe8vdpNZyXZ9Aqr9KppXdD4ZioCETtLeziw@mail.gmail.com>
+Message-ID: <CAHk-=whNVbdynjJTe8vdpNZyXZ9Aqr9KppXdD4ZioCETtLeziw@mail.gmail.com>
+Subject: Re: Linux 6.1-rc3
+To:     Guenter Roeck <linux@roeck-us.net>, Arnd Bergmann <arnd@arndb.de>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Masahiro Yamada <masahiroy@kernel.org>
+Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Nov 1, 2022 at 10:29 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> The random "Inconsistent kallsyms data" issue is something that we've
+> had for over a decade.
 
---gBGaeP68nRHPkeus
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Actually, it's more like two decades at least.
 
-On Tue, Nov 01, 2022 at 06:32:51PM +0100, Jonathan Neusch=E4fer wrote:
-> struct spi_master has been renamed to struct spi_controller. Update the
-> reference in spi.rst to make it clickable again.
+I had to go back to the BK archives just to see, but that
+"Inconsistent kallsyms data" goes back to at least 2004, and that's
+just when the warning (and that KALLSYMS_EXTRA_PASS workaround) was
+introduced.
 
-Please submit patches using subject lines reflecting the style for the
-subsystem, this makes it easier for people to identify relevant patches.
-Look at what existing commits in the area you're changing are doing and
-make sure your subject lines visually resemble what they're doing.
-There's no need to resubmit to fix this alone.
+The problem itself predates it. The bitkeeper commit from June 2004 by
+Keith Owens optimistically states
 
---gBGaeP68nRHPkeus
-Content-Type: application/pgp-signature; name="signature.asc"
+    Add CONFIG_KALLSYMS_EXTRA_PASS as a temporary workaround for unstable maps,
+    so users can proceed while waiting for kallsyms to be fixed.
 
------BEGIN PGP SIGNATURE-----
+and here we are, almost two decades later, and that "temporary"
+KALLSYMS_EXTRA_PASS thing still exists.
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNhWRUACgkQJNaLcl1U
-h9BRlwf7B0mnc1fXywUeFOn6ugStBKXYFIOvrouynvHyJGp/8iQtjyPe0+kmQ6rK
-aZl8LUVpUFG2n2YUbkMUL+0wRmo+JFM9/gycnZ+sAgyCu7tPnEhHhpTg5YXSo1JZ
-5kjqa6WLvEw5ZEMCKVO+VWLuEsGPeOVcfZqQy6k3T2/knk0PtoBHG1ApvDAfz3jg
-0FRfgTcyoC6+bvaNz1o1hAaHwJO7JZxrYOk9UgyIMCUsNKxEEuS+EqK7Kt1CS1jO
-mpF32w93t+DqfBIAG/HLu7F2HbkRAVx/C8DjHZIPPtGUAg/7px+xrfSzjaIdBeZ5
-FlSoPTjpCmU0ZPtdZNzspeoHQ6joug==
-=gAQ/
------END PGP SIGNATURE-----
+But yeah, it has always been this low-grade annoying randomness with
+symbols that move around when re-linking.
 
---gBGaeP68nRHPkeus--
+             Linus
