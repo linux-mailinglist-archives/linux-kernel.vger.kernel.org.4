@@ -2,109 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F274614497
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 07:20:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 885A0614498
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 07:22:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiKAGUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 02:20:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45486 "EHLO
+        id S229907AbiKAGWp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 02:22:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiKAGUl (ORCPT
+        with ESMTP id S229817AbiKAGWm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 02:20:41 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F7815FC8
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 23:20:41 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id g62so12623819pfb.10
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 23:20:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=MkD/xxnuw0GgTenGbcmw3AVr/END4d5U7VG4R1TARoU=;
-        b=bFeRwG8hlbuLO/bCUD4jEyAyFP2SVgNhVNdT/5NkRd5H92OOXB6nERYL8ZHq8uFDWR
-         C3XN8gJlFZuRZCnwkc7DxZBHenFGIkByik88nEqVfoZLFjziZpgo/Ky3HYcH0UkVCpvE
-         AQ1XB90kBfSVZn5IYbhLCD4wqliT3+ZxBccmmZ7vS26RB5/keVaggpIFK7IX3GKntFJC
-         4BZeHERCuGraWfmIwAF0PVNj+Qwddpu9+ioDMHnxynhah2pi+9I2xPbCUXbY8yVOGcCE
-         xRblYxfZWzxaTzovm2+ID3Fcdqbq45Zfbnw3JNYR2hUWdoSjVzn3iFkCKOnlQpGEpG1B
-         KDlg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=MkD/xxnuw0GgTenGbcmw3AVr/END4d5U7VG4R1TARoU=;
-        b=hxTeLH3GKr5kis+NkQbTtEnxr/vnED0oGjE4PCSJMKRplZwQctDRmRukpOt1I1cGQu
-         /P9FfKaP0NQBTjOkQi9DHDshqV1I8QRJXoJKII91PeFr5lcdwZ1/uYEbnLfwffpE6ED7
-         Ciyu25byaLSwlXfWLvdwx1tQS+NX5zxTUBagaW+A5R8qWprSC/odBP0XYgg+je67y6cO
-         +/qrS5CHPOkk2GLSsmnP0k0BODMJ/i6KhD3CVRRX2McOR/0DuCybxIgemgqD9e7AaPH9
-         N68GgenGHi8dBZGLaD7ZshNGDN/2v19sdT7ugDDqGnNRm+QYOxo942f95Ep8sJWyC470
-         1E0Q==
-X-Gm-Message-State: ACrzQf1hpplsMW+O8mE57t/KHL6jT/2U3OTyWzhqi/261rY3aqCKDgHg
-        0EP0mJji7uSLYWDueioVpRzew8ruJQWaEsTVxywzug==
-X-Google-Smtp-Source: AMsMyM6AR4ITiLmDUPQU1HoAap1WR+dknQ4LQoDLtHS1f24GPxGn2qvLasi1in527JX914XXmHpd8KMyi9Zuhx4Cf+E=
-X-Received: by 2002:aa7:8502:0:b0:56c:349e:c18b with SMTP id
- v2-20020aa78502000000b0056c349ec18bmr18171715pfn.1.1667283640583; Mon, 31 Oct
- 2022 23:20:40 -0700 (PDT)
+        Tue, 1 Nov 2022 02:22:42 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC8F515FC8
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 23:22:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667283761; x=1698819761;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=FHNWw3yNYbnjvEUD6v5MeX3IamjwsD8jl6R6ZXAIZWg=;
+  b=UyAkC0Ck9H15p5jGbZnhlv2BkjE5px+qlyKw8qsze7dOtt/UeR/KERkH
+   qmHlexE9loKBvjowFRve77a9S6WYBAtapWcNVoE6qVxDk3GuMk1a+L/eY
+   nYNnaYhi94zQy5zFkgYh+0Q/dOC8EUYn2nRxbMcTf1YbKsknacA2dn5Kl
+   gSA+uRWGqLRByqGLVyqPmkV1oXZDiRnzR3BMZg9BFVgoEmxtz9NqdcG5Q
+   thrME5G7MwIveljKVffSrihjsaerZPl3Wfwa3qiQfuHB62s6JUImpKlhw
+   zp/qQfzoe8NiA6fweRiCkoaHwJpiwSZaCkaAfBlRl5uoXMu64ktUkiO8s
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="395388675"
+X-IronPort-AV: E=Sophos;i="5.95,229,1661842800"; 
+   d="scan'208";a="395388675"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 23:22:41 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="878998335"
+X-IronPort-AV: E=Sophos;i="5.95,229,1661842800"; 
+   d="scan'208";a="878998335"
+Received: from yhuang6-mobl2.sh.intel.com ([10.238.6.69])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 23:22:38 -0700
+From:   Huang Ying <ying.huang@intel.com>
+To:     linux-mm@kvack.org
+Cc:     Matthew Wilcox <willy@infradead.org>, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Huang Ying <ying.huang@intel.com>, Zi Yan <ziy@nvidia.com>,
+        Yang Shi <shy828301@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Oscar Salvador <osalvador@suse.de>
+Subject: [RFC 0/2] migrate: convert migrate_pages()/unmap_and_move() to use folios
+Date:   Tue,  1 Nov 2022 14:21:35 +0800
+Message-Id: <20221101062137.83649-1-ying.huang@intel.com>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-References: <20221016121406.co3qixzcbfke4ye7@proprietary-killer.gsrm.network>
-In-Reply-To: <20221016121406.co3qixzcbfke4ye7@proprietary-killer.gsrm.network>
-From:   Haojian Zhuang <haojian.zhuang@linaro.org>
-Date:   Tue, 1 Nov 2022 14:20:27 +0800
-Message-ID: <CAD6h2NSahYuqg1T2oW7tHmAeAfqircfeokYhvJYNRVi5TXEDAA@mail.gmail.com>
-Subject: Re: pinconf-single: pinctrl-single,bias-pull{up,down} bits help/explanation
-To:     "Marty E. Plummer" <hanetzer@startmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, tony@atomide.com,
-        linus.walleij@linaro.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, 16 Oct 2022 at 20:14, Marty E. Plummer <hanetzer@startmail.com> wrote:
->
-> Greetings.
->
-> What I'm having issue with is the pinctrl-single,bias-pull values. From
-> commit abe4e4675dfc62b7f2328e2c4bce8b5bdcdff7c0 I get a bit of it, and I
-> think I have it mostly figured out:
->
-> // <[input] [enabled] [disabled] [mask]>;
-> pinctrl-single,bias-pullup = <? 1 0 0x100>;
-> pinctrl-single,bias-pulldown = <? 1 0 0x200>;
->
-> using mask 0x100 to single out bit 8 and mask 0x200 to single out bit 9,
-> enable values being simple binary on/off. What I don't get is how the
-> input value is determined/calculated.
->
-> Aside from the above mentioned commit for the am335x-pocketbeagle.dts,
-> which uses a differing pullup control scheme, the only users I can find
-> in the tree are a handful of hisi socs which I don't have a datasheet
-> for to map their usage to register definitions and puzzle this out.
->
-Excuse me for just noticing the email.
+The conversion is quite straightforward, just replace the page API to
+the corresponding folio API.  migrate_pages() and unmap_and_move()
+mostly work with folios (head pages) only.
 
-#define  PULL_DIS     0
-#define  PULL_UP        0x100
-#define  PULL_DOWN  0x200
+One question is about THP.  Which is converted to large folio in the
+patchset.  This is generally OK, because the code can work with
+arbitrary order large folio at most times.  But some THP related
+statistics (such as THP_MIGRATION_SUCCESS, etc.) are converted for
+large folio with arbitrary order too.  Do we really care about the
+order of large folio?  Do we need to be backward compatible strictly?
 
-// <[input] [enabled] [disabled] [mask]>
-
-// If you want to pull-up, configure the pin as below.
-pinctrl-single,bias-pullup = <PULL_UP  PULL_UP  0  PULL_UP>
-// If you want to disable pull-up, configure the pin as below.
-pinctrl-single,bias-pullup = <0  PULL_UP  0  PULL_UP>
-
-It seems that the pin configuration in am335x-pocketbeagle.dts is wrong.
-But I don't have the board to verify it.
-
-And you can check the logic in pcs_pinconf_set().
-
-Best Regards
-Haojian
+Best Regards,
+Huang, Ying
