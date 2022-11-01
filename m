@@ -2,72 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D89E26143F2
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 05:42:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 621FC6143FE
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 05:53:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229562AbiKAEmr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 00:42:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60082 "EHLO
+        id S229767AbiKAExG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 00:53:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiKAEmp (ORCPT
+        with ESMTP id S229457AbiKAExE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 00:42:45 -0400
-X-Greylist: delayed 13913 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 31 Oct 2022 21:42:43 PDT
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF75815704;
-        Mon, 31 Oct 2022 21:42:43 -0700 (PDT)
-Date:   Tue, 1 Nov 2022 05:42:36 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1667277761;
-        bh=e9z0cElkVGMTLnQzPC9CHfMFa2dDT0eoWbLJwxOR+sE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VYWrKe0SvzIM0tLIk8qEyUaAG6jvI2FywxbcT4qO0PQ86GqhyjT4vIsMAR8rZGEZA
-         mvmzBXwUybDHCJsu0eua6QxXNQ0pFWIlzYyJvbr72Qi8p37T7x1cikhAEuGjwbhUQR
-         cMXvQ60dkUvCDckDbbvxjD7rOfQ/3W2cVBzbCV3o=
-From:   Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Karel Zak <kzak@redhat.com>,
-        Masatake YAMATO <yamato@redhat.com>, linux-api@vger.kernel.org
-Subject: Re: [PATCH] proc: add byteorder file
-Message-ID: <cb411513-9cb0-482f-8642-43704c2bfa52@t-8ch.de>
-References: <20221101005043.1791-1-linux@weissschuh.net>
- <Y2Chv8uO04ahV9W8@kroah.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Y2Chv8uO04ahV9W8@kroah.com>
-Jabber-ID: thomas@t-8ch.de
-X-Accept: text/plain, text/html;q=0.2, text/*;q=0.1
-X-Accept-Language: en-us, en;q=0.8, de-de;q=0.7, de;q=0.6
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 1 Nov 2022 00:53:04 -0400
+X-Greylist: delayed 473 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Mon, 31 Oct 2022 21:53:00 PDT
+Received: from azure-sdnproxy.icoremail.net (azure-sdnproxy.icoremail.net [20.232.28.96])
+        by lindbergh.monkeyblade.net (Postfix) with SMTP id B54C217425;
+        Mon, 31 Oct 2022 21:53:00 -0700 (PDT)
+Received: from jleng.ambarella.net (unknown [116.246.37.178])
+        by mail-app2 (Coremail) with SMTP id by_KCgCnrSE3pGBjEghXBw--.5587S2;
+        Tue, 01 Nov 2022 12:44:58 +0800 (CST)
+From:   Jing Leng <3090101217@zju.edu.cn>
+To:     3090101217@zju.edu.cn
+Cc:     gregkh@linuxfoundation.org, jleng@ambarella.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        pawell@cadence.com
+Subject: [PATCH v2] usb: cdnsp: Fix wrong transmission direction of EP0
+Date:   Tue,  1 Nov 2022 12:44:33 +0800
+Message-Id: <20221101044433.5627-1-3090101217@zju.edu.cn>
+X-Mailer: git-send-email 2.17.1
+In-Reply-To: <20220926075902.7390-1-3090101217@zju.edu.cn>
+References: <20220926075902.7390-1-3090101217@zju.edu.cn>
+X-CM-TRANSID: by_KCgCnrSE3pGBjEghXBw--.5587S2
+X-Coremail-Antispam: 1UD129KBjvJXoW7Ar1fGFy5XFWUZr1kAFW5Jrb_yoW8tryrpr
+        4UCFZIkrs5Xr45ArnFgF4DZa13CFs7AFy7Jr92k3ZxZrn3W3yvyFn8KFyjgF47uFZ5Ar4j
+        ga1DGFs7XF4jvFDanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDU0xBIdaVrnRJUUUkl14x267AKxVWUJVW8JwAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
+        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2ocxC64kIII0Yj41l84x0c7CEw4AK67xGY2AK02
+        1l84ACjcxK6xIIjxv20xvE14v26w1j6s0DM28EF7xvwVC0I7IYx2IY6xkF7I0E14v26F4U
+        JVW0owA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
+        rcIFxwCF04k20xvY0x0EwIxGrwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14
+        v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAFwI0_JF0_Jw1lIxkG
+        c2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI
+        0_Jr0_Gr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2jsIE14v26r1j6r4U
+        MIIF0xvEx4A2jsIEc7CjxVAFwI0_Jr0_GrUvcSsGvfC2KfnxnUUI43ZEXa7VUb0PfJUUUU
+        U==
+X-CM-SenderInfo: qtqziiyqrsilo62m3hxhgxhubq/1tbiAwQRBVNG3IY6XAAKsw
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-11-01 05:34+0100, Greg KH wrote:
-> On Tue, Nov 01, 2022 at 01:50:43AM +0100, Thomas Weißschuh wrote:
-> > Certain files in procfs are formatted in byteorder dependent ways. For
-> > example the IP addresses in /proc/net/udp.
-> > 
-> > Assuming the byteorder of the userspace program is not guaranteed to be
-> > correct in the face of emulation as for example with qemu-user.
-> > 
-> > Also this makes it easier for non-compiled applications like
-> > shellscripts to discover the byteorder.
-> > 
-> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> 
-> Why not put this in /sys/kernel/ instead?  What does this have to do
-> with /proc/ other than it's traditionally been the dumping ground for
-> stuff like this?  :)
+EP0 transfer is bi-directional, but in the cdnsp gadget, the
+transmission direction of EP0 is not changed after it is
+initialized to IN, so the OUT data from EP0 received by the host
+is invalid.
 
-The main reason to put it in /proc was because the data it helps to interpret
-is also in /proc.
+The value of ep0_expect_in will change according to the value of
+bRequestType in the SETUP transaction of control transfer, so we
+can use it as the transmission direction of EP0.
 
-But /sys/kernel looks good, too. I'll change it to that.
+Signed-off-by: Jing Leng <3090101217@zju.edu.cn>
+Signed-off-by: Jing Leng <jleng@ambarella.com>
+---
+ChangeLog v1->v2:
+- Rebase the patch.
+- Make email addresses ('From' and 'Signed-off-by') consistent.
+---
+ drivers/usb/cdns3/cdnsp-gadget.c | 11 +++++++----
+ 1 file changed, 7 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/usb/cdns3/cdnsp-gadget.c b/drivers/usb/cdns3/cdnsp-gadget.c
+index c67715f6f756..526f80651d35 100644
+--- a/drivers/usb/cdns3/cdnsp-gadget.c
++++ b/drivers/usb/cdns3/cdnsp-gadget.c
+@@ -345,6 +345,7 @@ int cdnsp_ep_enqueue(struct cdnsp_ep *pep, struct cdnsp_request *preq)
+ {
+ 	struct cdnsp_device *pdev = pep->pdev;
+ 	struct usb_request *request;
++	u8 direction;
+ 	int ret;
+ 
+ 	if (preq->epnum == 0 && !list_empty(&pep->pending_list)) {
+@@ -355,11 +356,14 @@ int cdnsp_ep_enqueue(struct cdnsp_ep *pep, struct cdnsp_request *preq)
+ 	request = &preq->request;
+ 	request->actual = 0;
+ 	request->status = -EINPROGRESS;
+-	preq->direction = pep->direction;
++
++	direction = usb_endpoint_xfer_control(pep->endpoint.desc) ?
++		    pdev->ep0_expect_in : pep->direction;
++	preq->direction = direction;
+ 	preq->epnum = pep->number;
+ 	preq->td.drbl = 0;
+ 
+-	ret = usb_gadget_map_request_by_dev(pdev->dev, request, pep->direction);
++	ret = usb_gadget_map_request_by_dev(pdev->dev, request, direction);
+ 	if (ret) {
+ 		trace_cdnsp_request_enqueue_error(preq);
+ 		return ret;
+@@ -387,8 +391,7 @@ int cdnsp_ep_enqueue(struct cdnsp_ep *pep, struct cdnsp_request *preq)
+ 	return 0;
+ 
+ unmap:
+-	usb_gadget_unmap_request_by_dev(pdev->dev, &preq->request,
+-					pep->direction);
++	usb_gadget_unmap_request_by_dev(pdev->dev, &preq->request, direction);
+ 	list_del(&preq->list);
+ 	trace_cdnsp_request_enqueue_error(preq);
+ 
+-- 
+2.17.1
+
