@@ -2,109 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D90636146FE
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 10:41:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2A7A61474D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 10:57:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230428AbiKAJli (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 05:41:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41960 "EHLO
+        id S230294AbiKAJ5W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 05:57:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230229AbiKAJkT (ORCPT
+        with ESMTP id S229628AbiKAJ5T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 05:40:19 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39DC319291
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 02:40:07 -0700 (PDT)
-Received: from ptx.hi.pengutronix.de ([2001:67c:670:100:1d::c0])
-        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1opnka-0007Kh-Ma; Tue, 01 Nov 2022 10:40:04 +0100
-Received: from sha by ptx.hi.pengutronix.de with local (Exim 4.92)
-        (envelope-from <sha@pengutronix.de>)
-        id 1opnka-0003Bi-D9; Tue, 01 Nov 2022 10:40:04 +0100
-Date:   Tue, 1 Nov 2022 10:40:04 +0100
-From:   Sascha Hauer <s.hauer@pengutronix.de>
-To:     Bjorn Helgaas <bhelgaas@google.com>
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>, stable@vger.kernel.org
-Subject: Re: [PATCH] PCI/sysfs: Fix double free in error path
-Message-ID: <20221101094004.GD9130@pengutronix.de>
-References: <20221007065618.2169880-1-s.hauer@pengutronix.de>
+        Tue, 1 Nov 2022 05:57:19 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D6013F79
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 02:57:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6D3596158C
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 09:57:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8CF2EC433C1;
+        Tue,  1 Nov 2022 09:57:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667296637;
+        bh=1Bxrnk+9FXXmhGagERBq1YQ+2rMQximZy39dIJDtQpc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=e2N9RCz2VCHu1rPbXfsv82ufhgj2dGpJuJ4fmdHYF2iujo048kuXV7qwTgc0TT0Xv
+         F1QO5aH7XeJOAJ3aTrSxozQBszzGmbLEznYEGwOa0Nnggz3UlxoVEv2Tn61iMUhLip
+         cR46D+Oti2dhldvP1gzs93z75PBXrvIlbFE9JmZU=
+Date:   Tue, 1 Nov 2022 10:40:14 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Subject: Re: [PATCH v2] staging: vt6655: change variable name wTimeStampOff
+Message-ID: <Y2DpfhfnZMFh/Ysn@kroah.com>
+References: <Y2DXsnrQjQeP2PfO@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221007065618.2169880-1-s.hauer@pengutronix.de>
-X-Sent-From: Pengutronix Hildesheim
-X-URL:  http://www.pengutronix.de/
-X-Accept-Language: de,en
-X-Accept-Content-Type: text/plain
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-SA-Exim-Connect-IP: 2001:67c:670:100:1d::c0
-X-SA-Exim-Mail-From: sha@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+In-Reply-To: <Y2DXsnrQjQeP2PfO@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bjorn,
-
-On Fri, Oct 07, 2022 at 08:56:18AM +0200, Sascha Hauer wrote:
-> When pci_create_attr() fails then pci_remove_resource_files() is called
-> which will iterate over the res_attr[_wc] arrays and frees every non
-> NULL entry. To avoid a double free here we have to set the failed entry
-> to NULL in pci_create_attr() when freeing it.
+On Tue, Nov 01, 2022 at 08:24:18AM +0000, Tanjuate Brunostar wrote:
+> Change the variable name wTimeStampOff to adhear to Linux kernel coding
+> style, which does not allow naming variables in CamelCase. error is
+> reported by checkpatch
 > 
-> Fixes: b562ec8f74e4 ("PCI: Don't leak memory if sysfs_create_bin_file() fails")
-> Signed-off-by: Sascha Hauer <s.hauer@pengutronix.de>
-> Cc: <stable@vger.kernel.org>
+> Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
 > ---
->  drivers/pci/pci-sysfs.c | 7 ++++++-
->  1 file changed, 6 insertions(+), 1 deletion(-)
-
-Any input to this one? There's this long unfixed race condition
-described here:
-
-https://patchwork.kernel.org/project/linux-pci/patch/20200716110423.xtfyb3n6tn5ixedh@pali/#23547255
-
-And this patch at least prevents my system from crashing when this race
-condition occurs.
-
-Sascha
-
+>  drivers/staging/vt6655/rxtx.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/pci/pci-sysfs.c b/drivers/pci/pci-sysfs.c
-> index fc804e08e3cb5..a07381d46ddae 100644
-> --- a/drivers/pci/pci-sysfs.c
-> +++ b/drivers/pci/pci-sysfs.c
-> @@ -1196,8 +1196,13 @@ static int pci_create_attr(struct pci_dev *pdev, int num, int write_combine)
->  	res_attr->size = pci_resource_len(pdev, num);
->  	res_attr->private = (void *)(unsigned long)num;
->  	retval = sysfs_create_bin_file(&pdev->dev.kobj, res_attr);
-> -	if (retval)
-> +	if (retval) {
-> +		if (write_combine)
-> +			pdev->res_attr_wc[num] = NULL;
-> +		else
-> +			pdev->res_attr[num] = NULL;
->  		kfree(res_attr);
-> +	}
+> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+> index 1e5036121665..9bdcf2337235 100644
+> --- a/drivers/staging/vt6655/rxtx.c
+> +++ b/drivers/staging/vt6655/rxtx.c
+> @@ -54,7 +54,7 @@
+>   */
+>  #define CRITICAL_PACKET_LEN      256
 >  
->  	return retval;
+> -static const unsigned short wTimeStampOff[2][MAX_RATE] = {
+> +static const unsigned short time_stamp_off[2][MAX_RATE] = {
+>  	{384, 288, 226, 209, 54, 43, 37, 31, 28, 25, 24, 23}, /* Long Preamble */
+>  	{384, 192, 130, 113, 54, 43, 37, 31, 28, 25, 24, 23}, /* Short Preamble */
+>  };
+> @@ -130,7 +130,7 @@ static __le16 s_uFillDataHead(struct vnt_private *pDevice,
+>  
+>  static __le16 vnt_time_stamp_off(struct vnt_private *priv, u16 rate)
+>  {
+> -	return cpu_to_le16(wTimeStampOff[priv->preamble_type % 2]
+> +	return cpu_to_le16(time_stamp_off[priv->preamble_type % 2]
+>  							[rate % MAX_RATE]);
 >  }
+>  
 > -- 
-> 2.30.2
+> 2.34.1
 > 
 > 
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+Hi,
+
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
