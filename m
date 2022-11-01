@@ -2,234 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BBB8B614576
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 09:08:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C92BD614577
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 09:08:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbiKAIIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 04:08:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46526 "EHLO
+        id S229983AbiKAIIM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 04:08:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229961AbiKAIIH (ORCPT
+        with ESMTP id S229511AbiKAIIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 1 Nov 2022 04:08:07 -0400
-Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63508183AE
+Received: from laurent.telenet-ops.be (laurent.telenet-ops.be [IPv6:2a02:1800:110:4::f00:19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6A8183B1
         for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 01:08:05 -0700 (PDT)
-Received: by mail-ed1-x530.google.com with SMTP id z97so20685344ede.8
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 01:08:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=64mtFI8kiMJTqgi+qPiL317s+1K5P7hJj88eWZIQK3U=;
-        b=GhNj2AXjtnL+Nd8dz/L4xBusn0WUYFf9FxVqaTONNJykKKRwWl6stYQxdwzJZ/RIQs
-         uUuB0Fe4mTE2N9AfE6Au/DMYUNQxDph7E1mfyltsvWxOyuWb8VudXU9rgYD9cN4jbkAs
-         2VSPdSy7PL3gO4nD47eoyP2t6a5D1ztEXrvLqCB6y5GBvR/vM22U+7GohmHAacYX0rwt
-         FcKxN738bwIA4FXTEJMgMQe+0JDE6Z/U0H3UcheKLKGHXG9QnjaNDwhVT4mrrB2gI6Kj
-         6B9J4Pr8KHkOe2VtdrCkK1uJuSrRu25X0Bi/hrvIw3CzuYmKHTVvrI/16ULT4AKm2vZc
-         M6Rw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=64mtFI8kiMJTqgi+qPiL317s+1K5P7hJj88eWZIQK3U=;
-        b=m0Q71tuKBSXdwiZPAfagakQSuEGuRlUYdERt/ul0oM9VMzHFlpyWGqPXKDMH0WLmGx
-         lmEaupi4zjy+kp1U8kQFENETpfsJEOAoLqONCWv7HdRFcJwgv0PNNE/hOiPk2+kGP+aE
-         Pxu0muvh17rwK6qqNMSTRKtgZuUN1GfDjtRpAAdGxyFu6lRbg3T+uFwCUD4YD8d4edMg
-         WH5BCffh6VUXDXsycoBQbGFHZx7vdqM8/tt8dJXVT43+KpcOAOpRIlGo2do0u3zbROmV
-         8NBXjwZAh69XsXPD2r72esJdZlYNADoYx+ixzt1pUCc+t9pIzxsYGwO+eZ0UAph9a0IA
-         Z3Mg==
-X-Gm-Message-State: ACrzQf3tQcQXSsYNxyn3OYfntSWYXsaDZJOYubek9jZrgAhAOQ5kAOOK
-        8PkAg2gSxZ8OkFW3ayRnPdTqQc1hc3NjmscUhad92g==
-X-Google-Smtp-Source: AMsMyM4RXefnX7pojq4NXpKhpBvJ/pDRGnapGDjzVq8wDnSODdrOLu6hb5mVWnm7YZF4N/IGPEVl2PuYMYnj1E31H/g=
-X-Received: by 2002:a05:6402:254f:b0:45d:3044:d679 with SMTP id
- l15-20020a056402254f00b0045d3044d679mr18515635edb.137.1667290083694; Tue, 01
- Nov 2022 01:08:03 -0700 (PDT)
+Received: from ramsan.of.borg ([IPv6:2a02:1810:ac12:ed10:cd8a:284a:a448:1949])
+        by laurent.telenet-ops.be with bizsmtp
+        id ew832800N2kye1T01w84Ru; Tue, 01 Nov 2022 09:08:04 +0100
+Received: from geert (helo=localhost)
+        by ramsan.of.borg with local-esmtp (Exim 4.93)
+        (envelope-from <geert@linux-m68k.org>)
+        id 1opmJX-002GBw-KJ; Tue, 01 Nov 2022 09:08:03 +0100
+Date:   Tue, 1 Nov 2022 09:08:03 +0100 (CET)
+From:   Geert Uytterhoeven <geert@linux-m68k.org>
+X-X-Sender: geert@ramsan.of.borg
+To:     linux-kernel@vger.kernel.org
+cc:     linux-mips@vger.kernel.org, linux-rdma@vger.kernel.org,
+        linux-um@lists.infradead.org
+Subject: Re: Build regressions/improvements in v6.1-rc3
+In-Reply-To: <20221101080246.795789-1-geert@linux-m68k.org>
+Message-ID: <alpine.DEB.2.22.394.2211010906390.538850@ramsan.of.borg>
+References: <CAHk-=wgJVNe4mUxGJE5B-_GMg0oOgxkZz3UxehVRiCT3QvoZ0w@mail.gmail.com> <20221101080246.795789-1-geert@linux-m68k.org>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-References: <20221031070140.108124105@linuxfoundation.org>
-In-Reply-To: <20221031070140.108124105@linuxfoundation.org>
-From:   Naresh Kamboju <naresh.kamboju@linaro.org>
-Date:   Tue, 1 Nov 2022 13:37:52 +0530
-Message-ID: <CA+G9fYusnMsOJgmAKL5X1NrtZuUSeWePd3_cvMU-6G22fgeV3A@mail.gmail.com>
-Subject: Re: [PATCH 4.14 00/34] 4.14.297-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 31 Oct 2022 at 12:32, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> This is the start of the stable review cycle for the 4.14.297 release.
-> There are 34 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Wed, 02 Nov 2022 07:01:32 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
->         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.297-rc1.gz
-> or in the git tree and branch at:
->         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On Tue, 1 Nov 2022, Geert Uytterhoeven wrote:
+> JFYI, when comparing v6.1-rc3[1] to v6.1-rc2[3], the summaries are:
+>  - build errors: +4/-0
 
+   + /kisskb/src/arch/sh/include/asm/io.h: error: cast to pointer from integer of different size [-Werror=int-to-pointer-cast]:  => 239:34
 
-Results from Linaro's test farm.
-No regressions on arm64, arm, x86_64, and i386.
+sh4-gcc11/sh-allmodconfig
+cvmx_ptr_to_phys() should return physaddr_t instead (patch sent)
 
-Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
+   + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: 'struct cpuinfo_um' has no member named 'x86_cache_size':  => 88:22
+   + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: control reaches end of non-void function [-Werror=return-type]:  => 89:1
+   + /kisskb/src/drivers/infiniband/sw/rdmavt/qp.c: error: implicit declaration of function '__copy_user_nocache' [-Werror=implicit-function-declaration]:  => 100:2
 
-## Build
-* kernel: 4.14.297-rc1
-* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
-* git branch: linux-4.14.y
-* git commit: fa618ab2d638c19252de8ff8b2091cc2b5314353
-* git describe: v4.14.296-36-gfa618ab2d638
-* test details:
-https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.14.y/build/v4.14.296-36-gfa618ab2d638
+um-x86_64/um-all{mod,yes}config
 
-## No Test Regressions (compared to v4.14.296)
+Gr{oetje,eeting}s,
 
-## No Metric Regressions (compared to v4.14.296)
-
-## No Test Fixes (compared to v4.14.296)
-
-## No Metric Fixes (compared to v4.14.296)
-
-## Test result summary
-total: 115178, pass: 96662, fail: 1962, skip: 15618, xfail: 936
-
-## Build Summary
-* arc: 10 total, 10 passed, 0 failed
-* arm: 313 total, 308 passed, 5 failed
-* arm64: 53 total, 50 passed, 3 failed
-* i386: 29 total, 28 passed, 1 failed
-* mips: 41 total, 41 passed, 0 failed
-* parisc: 12 total, 12 passed, 0 failed
-* powerpc: 20 total, 19 passed, 1 failed
-* s390: 15 total, 11 passed, 4 failed
-* sh: 24 total, 24 passed, 0 failed
-* sparc: 12 total, 12 passed, 0 failed
-* x86_64: 51 total, 50 passed, 1 failed
-
-## Test suites summary
-* fwts
-* igt-gpu-tools
-* kselftest-android
-* kselftest-arm64
-* kselftest-arm64/arm64.btitest.bti_c_func
-* kselftest-arm64/arm64.btitest.bti_j_func
-* kselftest-arm64/arm64.btitest.bti_jc_func
-* kselftest-arm64/arm64.btitest.bti_none_func
-* kselftest-arm64/arm64.btitest.nohint_func
-* kselftest-arm64/arm64.btitest.paciasp_func
-* kselftest-arm64/arm64.nobtitest.bti_c_func
-* kselftest-arm64/arm64.nobtitest.bti_j_func
-* kselftest-arm64/arm64.nobtitest.bti_jc_func
-* kselftest-arm64/arm64.nobtitest.bti_none_func
-* kselftest-arm64/arm64.nobtitest.nohint_func
-* kselftest-arm64/arm64.nobtitest.paciasp_func
-* kselftest-breakpoints
-* kselftest-capabilities
-* kselftest-drivers-dma-buf
-* kselftest-efivarfs
-* kselftest-filesystems
-* kselftest-filesystems-binderfs
-* kselftest-firmware
-* kselftest-fpu
-* kselftest-futex
-* kselftest-gpio
-* kselftest-intel_pstate
-* kselftest-ipc
-* kselftest-ir
-* kselftest-kcmp
-* kselftest-kexec
-* kselftest-kvm
-* kselftest-lib
-* kselftest-livepatch
-* kselftest-membarrier
-* kselftest-net
-* kselftest-net-forwarding
-* kselftest-netfilter
-* kselftest-nsfs
-* kselftest-openat2
-* kselftest-pid_namespace
-* kselftest-pidfd
-* kselftest-proc
-* kselftest-pstore
-* kselftest-ptrace
-* kselftest-seccomp
-* kselftest-sigaltstack
-* kselftest-size
-* kselftest-splice
-* kselftest-static_keys
-* kselftest-sync
-* kselftest-sysctl
-* kselftest-tc-testing
-* kselftest-timens
-* kselftest-timers
-* kselftest-tmpfs
-* kselftest-tpm2
-* kselftest-user
-* kselftest-vm
-* kselftest-x86
-* kselftest-zram
-* kunit
-* kvm-unit-tests
-* libhugetlbfs
-* log-parser-boot
-* log-parser-test
-* ltp-cap_bounds
-* ltp-commands
-* ltp-containers
-* ltp-controllers
-* ltp-cpuhotplug
-* ltp-crypto
-* ltp-cve
-* ltp-dio
-* ltp-fcntl-locktests
-* ltp-filecaps
-* ltp-fs
-* ltp-fs_bind
-* ltp-fs_perms_simple
-* ltp-fsx
-* ltp-hugetlb
-* ltp-io
-* ltp-ipc
-* ltp-math
-* ltp-mm
-* ltp-nptl
-* ltp-open-posix-tests
-* ltp-pty
-* ltp-sched
-* ltp-securebits
-* ltp-smoke
-* ltp-syscalls
-* ltp-tracing
-* network-basic-tests
-* packetdrill
-* rcutorture
-* v4l2-compliance
-* vdso
+ 						Geert
 
 --
-Linaro LKFT
-https://lkft.linaro.org
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+ 							     - Linus Torvalds
