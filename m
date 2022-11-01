@@ -2,106 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BA39614E04
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 16:14:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2678614E13
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 16:15:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbiKAPOP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 11:14:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36728 "EHLO
+        id S231555AbiKAPP1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 11:15:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36744 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230442AbiKAPNz (ORCPT
+        with ESMTP id S231517AbiKAPPG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 11:13:55 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B35A1F9FB;
-        Tue,  1 Nov 2022 08:09:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667315371; x=1698851371;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=ak/4T+4EA30gwIfd/EobbLy7FhELRXx6beNhV222/eY=;
-  b=MjqRdx90Blmf/E8VlqBSK5+63Ko/vsPuSuOK8b07rhYzK7j4Sldql67u
-   q9lzSxTJz7TEEMwyyoCO1ytVe4t93djNiV17mB7EtIZLQaq/2s2JJ/n6j
-   9zXistURKbCoqyazR3vkat1bS5CCkBfD3AlbFRAjHsWzFVHqZz3yM5shL
-   dyXMbvYzhesHdwD7cX8enBPsAXEauu+Sr/6k20p+P6NOU89lWRliXAtc8
-   hvc1tf8J4DSx8KCGgBMlVX1ZITdu74+9ZHDNcA8xBJibS8REGF+c9q2iE
-   vDXPIaX4Xn6niBaEjaScAHVZLjnLI70gEjzUvpyXSd1tkbMl7IWzbKGaa
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="395468736"
-X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
-   d="scan'208";a="395468736"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 08:09:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="667221091"
-X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
-   d="scan'208";a="667221091"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orsmga001.jf.intel.com with ESMTP; 01 Nov 2022 08:09:29 -0700
-Received: by black.fi.intel.com (Postfix, from userid 1003)
-        id 61770D0; Tue,  1 Nov 2022 17:09:52 +0200 (EET)
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Javier Martinez Canillas <javierm@redhat.com>,
-        linux-fbdev@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org
-Cc:     Helge Deller <deller@gmx.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 2/2] fbdev: ssd1307fb: Drop duplicate NULL checks for PWM APIs
-Date:   Tue,  1 Nov 2022 17:09:47 +0200
-Message-Id: <20221101150947.67377-2-andriy.shevchenko@linux.intel.com>
-X-Mailer: git-send-email 2.35.1
-In-Reply-To: <20221101150947.67377-1-andriy.shevchenko@linux.intel.com>
-References: <20221101150947.67377-1-andriy.shevchenko@linux.intel.com>
+        Tue, 1 Nov 2022 11:15:06 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 440EF1BE89;
+        Tue,  1 Nov 2022 08:12:04 -0700 (PDT)
+Received: from localhost.localdomain (unknown [10.14.30.251])
+        by mail-app4 (Coremail) with SMTP id cS_KCgCH_k0qN2FjsHmtBw--.39315S2;
+        Tue, 01 Nov 2022 23:11:59 +0800 (CST)
+From:   Jinlong Chen <nickyc975@zju.edu.cn>
+To:     axboe@kernel.dk
+Cc:     hch@lst.de, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, nickyc975@zju.edu.cn
+Subject: [PATCH 0/4] some random cleanups for blk-mq.c
+Date:   Tue,  1 Nov 2022 23:11:33 +0800
+Message-Id: <cover.1667314759.git.nickyc975@zju.edu.cn>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: cS_KCgCH_k0qN2FjsHmtBw--.39315S2
+X-Coremail-Antispam: 1UD129KBjDUn29KB7ZKAUJUUUUU529EdanIXcx71UUUUU7v73
+        VFW2AGmfu7bjvjm3AaLaJ3UjIYCTnIWjp_UUUYV7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAac4AC62xK8xCEY4vEwIxC4wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC
+        0VAKzVAqx4xG6I80ewAv7VC0I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr
+        1lOx8S6xCaFVCjc4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IE
+        rcIFxwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26r4fKr1UJr1l4I8I3I0E4I
+        kC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWU
+        WwC2zVAF1VAY17CE14v26r126r1DMIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Jr
+        0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0rVWU
+        JVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v26r1j6r4UYx
+        BIdaVFxhVjvjDU0xZFpf9x0JUQZ23UUUUU=
+X-CM-SenderInfo: qssqjiaqqzq6lmxovvfxof0/1tbiAgIAB1ZdtcLuXwAEsO
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-pwm_disable() and pwm_put() are NULL-aware, no need to
-duplicate the check in the caller.
+Patch 1 updates the outdated comment of blk_mq_quiesce_queue_nowait().
+Patch 2 improves the error handling blk_mq_alloc_rq_map(). Patch 3 and 4
+improve readability of request alloc routines.
 
-Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
----
- drivers/video/fbdev/ssd1307fb.c | 12 ++++--------
- 1 file changed, 4 insertions(+), 8 deletions(-)
+Jinlong Chen (4):
+  blk-mq: update comment for blk_mq_quiesce_queue_nowait()
+  blk-mq: improve error handling in blk_mq_alloc_rq_map()
+  blk-mq: use if-else instead of goto in blk_mq_alloc_cached_request()
+  blk-mq: improve readability of blk_mq_alloc_request()
 
-diff --git a/drivers/video/fbdev/ssd1307fb.c b/drivers/video/fbdev/ssd1307fb.c
-index 5c891aa00d59..046b9990d27c 100644
---- a/drivers/video/fbdev/ssd1307fb.c
-+++ b/drivers/video/fbdev/ssd1307fb.c
-@@ -803,10 +803,8 @@ static int ssd1307fb_probe(struct i2c_client *client)
- bl_init_error:
- 	unregister_framebuffer(info);
- panel_init_error:
--	if (par->device_info->need_pwm) {
--		pwm_disable(par->pwm);
--		pwm_put(par->pwm);
--	}
-+	pwm_disable(par->pwm);
-+	pwm_put(par->pwm);
- regulator_enable_error:
- 	if (par->vbat_reg)
- 		regulator_disable(par->vbat_reg);
-@@ -827,10 +825,8 @@ static void ssd1307fb_remove(struct i2c_client *client)
- 	backlight_device_unregister(info->bl_dev);
- 
- 	unregister_framebuffer(info);
--	if (par->device_info->need_pwm) {
--		pwm_disable(par->pwm);
--		pwm_put(par->pwm);
--	}
-+	pwm_disable(par->pwm);
-+	pwm_put(par->pwm);
- 	if (par->vbat_reg)
- 		regulator_disable(par->vbat_reg);
- 	fb_deferred_io_cleanup(info);
+ block/blk-mq.c | 105 ++++++++++++++++++++++++++++---------------------
+ 1 file changed, 61 insertions(+), 44 deletions(-)
+
 -- 
-2.35.1
+2.31.1
 
