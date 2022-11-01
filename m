@@ -2,59 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56EA9615070
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 18:19:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2BAA615077
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 18:20:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbiKARTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 13:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52474 "EHLO
+        id S230481AbiKARUN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 13:20:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52968 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbiKARTT (ORCPT
+        with ESMTP id S230208AbiKARUK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 13:19:19 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EACF31ADB1;
-        Tue,  1 Nov 2022 10:19:16 -0700 (PDT)
+        Tue, 1 Nov 2022 13:20:10 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98D4E120BC;
+        Tue,  1 Nov 2022 10:20:09 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 99D99B81E94;
-        Tue,  1 Nov 2022 17:19:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2301C433C1;
-        Tue,  1 Nov 2022 17:19:11 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 3AE1C616C5;
+        Tue,  1 Nov 2022 17:20:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55712C433D6;
+        Tue,  1 Nov 2022 17:20:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667323154;
-        bh=lfPoEEftUZlMenC9khV7toov5g+JQfpa6hsi3HYXnUg=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=ME2eDAtxCFdnCDNfuEQb9c1pt6pxplc9tNMzA+vmQsRiwmso4dmmOvfXqpUfzxoQk
-         o4+FZPj8GExOPlPooJj3rNSLcQxaxSaHUydjkJkAZNiEwrewPmfSwTWGH0iff8QMKZ
-         2w2S9XRZ/5Wac9g6GOpVUK07l6DNX/RE9dpm2f/tTEFigSsh8EQasTACRL8JXzKQ/m
-         WixTo3iyIX7x3aSLLKAX4IPMdQ526yuAbC3RDKfIScrFSub2Pf2JXrxsXuH+zUoEZP
-         xQy31M9YU5/zbrOMcMl1BJorfPef/2p+hJQoN5h6bLSCEAXs5skEt0W8ItwCj+S8nG
-         Bhj2P8ytFhtGQ==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Randy Dunlap <rdunlap@infradead.org>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Jeff Johnson <quic_jjohnson@quicinc.com>,
-        linux-kernel@vger.kernel.org, Martin Liska <mliska@suse.cz>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-Subject: Re: [PATCH] ath11k (gcc13): synchronize ath11k_mac_he_gi_to_nl80211_he_gi()'s return type
-References: <20221031114341.10377-1-jirislaby@kernel.org>
-        <55c4d139-0f22-e7ba-398a-e3e0d8919220@quicinc.com>
-        <833c7f2f-c140-5a0b-1efc-b858348206ec@kernel.org>
-        <87bkprgj0b.fsf@kernel.org>
-        <503a3b36-2256-a9ce-cffe-5c0ed51f6f62@infradead.org>
-Date:   Tue, 01 Nov 2022 19:19:08 +0200
-In-Reply-To: <503a3b36-2256-a9ce-cffe-5c0ed51f6f62@infradead.org> (Randy
-        Dunlap's message of "Tue, 1 Nov 2022 07:54:16 -0700")
-Message-ID: <87tu3ifv8z.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        s=k20201202; t=1667323208;
+        bh=6Ox0RK2nHYNTq+CojRZxn6uouOLCK0z2hofyLg6s9pw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=aEqSnZK9GHE9Ki2EeNO3PXNWlzGZ7ienJ9IatNJOFvk+GT03v5syVeix1XS5mmdKl
+         pAhtLIAzKWp5sm/4HLiTb9CyhE7Waqey4R16fVfN1xD9/Z/aV55mr4xoEiSDjpUeH8
+         CuOLWXpZNN660V8VvgPKTZL2dTeQtHFuabJboFzb9fopg0KWQZi1AwNIV/JeqzOBi3
+         71LBPx6Z4p+oeZhyAWcs/NOVIFus1/2/nb2EQ3TGqvYcR5Yg3dK5nQIxuZqum53WRs
+         R/PHg9t8yc7vjcYyDgOsQe+fnNwAmNgIId38CkIUyS2QdD0eDf2JrD0MOaS5+DPbLa
+         hSEpz/bqUKpeg==
+Date:   Tue, 1 Nov 2022 12:20:06 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Frank Li <Frank.Li@nxp.com>
+Cc:     mani@kernel.org, allenbh@gmail.com, bhelgaas@google.com,
+        dave.jiang@intel.com, imx@lists.linux.dev, jdmason@kudzu.us,
+        kw@linux.com, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, lpieralisi@kernel.org,
+        ntb@lists.linux.dev
+Subject: Re: [PATCH v15 0/7]  pci-epf-vntb clean up
+Message-ID: <20221101172006.GA1264778@bhelgaas>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221101165709.983416-1-Frank.Li@nxp.com>
 X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -64,56 +55,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Randy Dunlap <rdunlap@infradead.org> writes:
+On Tue, Nov 01, 2022 at 12:57:02PM -0400, Frank Li wrote:
+> continue patch series https://www.spinics.net/lists/linux-pci/msg130372.html
+> https://www.spinics.net/lists/linux-pci/msg130924.html
+> 
+> Lorenzo suggest create new series. Version number continue from old one
+> 
+> Change from v14-v15
+>   Fixed according to Manivannan Sadhasivam's comments, except endian
+> problem. Endian problem is out of this patch series scope.
+>   kernel test robot report sparse build warning problem already fixed
+> at patch 6 and 7.
+> 
+> Change from v13-v14
+>   split spare warning fix to two patch
+>   remove local variable reorder
+> 
+> Frank Li (7):
+>   PCI: endpoint: pci-epf-vntb: Clean up kernel_doc warning
+>   PCI: endpoint: pci-epf-vntb: Fix indentation of the struct
+>     epf_ntb_ctrl
+>   PCI: endpoint: pci-epf-vntb: fix call pci_epc_mem_free_addr at err
+>     path
+>   PCI: endpoint: pci-epf-vntb: remove unused field epf_db_phy
+>   PCI: endpoint: pci-epf-vntb: replace hardcode 4 with sizeof(u32)
+>   PCI: endpoint: pci-epf-vntb: fix sparse build warning at epf_db
+>   PCI: endpoint: pci-epf-vntb: fix sparse build warning at ntb->reg
 
-> On 11/1/22 01:45, Kalle Valo wrote:
->> Jiri Slaby <jirislaby@kernel.org> writes:
->> 
->>> On 31. 10. 22, 22:16, Jeff Johnson wrote:
->>>
->>>> On 10/31/2022 4:43 AM, Jiri Slaby (SUSE) wrote:
->
->>>> Suggest the subject should be
->>>> wifi: ath11k: synchronize ath11k_mac_he_gi_to_nl80211_he_gi()'s return type
->>>
->>> FWIW I copied from:
->>> $ git log --format=%s  drivers/net/wireless/ath/ath11k/mac.h
->>> ath11k: Handle keepalive during WoWLAN suspend and resume
->>> ath11k: reduce the wait time of 11d scan and hw scan while add interface
->>> ath11k: Add basic WoW functionalities
->>> ath11k: add support for hardware rfkill for QCA6390
->>> ath11k: report tx bitrate for iw wlan station dump
->>> ath11k: add 11d scan offload support
->>> ath11k: fix read fail for htt_stats and htt_peer_stats for single pdev
->>> ath11k: add support for BSS color change
->>> ath11k: add support for 80P80 and 160 MHz bandwidth
->>> ath11k: Add support for STA to handle beacon miss
->>> ath11k: add support to configure spatial reuse parameter set
->>> ath11k: remove "ath11k_mac_get_ar_vdev_stop_status" references
->>> ath11k: Perform per-msdu rx processing
->>> ath11k: fix incorrect peer stats counters update
->>> ath11k: Move mac80211 hw allocation before wmi_init command
->>> ath11k: fix missed bw conversion in tx completion
->>> ath11k: driver for Qualcomm IEEE 802.11ax devices
->> 
->> Yeah, using "wifi:" is a new prefix we started using with wireless
->> patches this year.
->> 
->
-> It would be nice if that was documented somewhere...
+Please capitalize your subject lines consistently.  You have two
+capitalized:
 
-It is mentioned on our wiki but I doubt anyone reads it :)
+> PCI: endpoint: pci-epf-vntb: Clean up ...
+> PCI: endpoint: pci-epf-vntb: Fix indentation ...
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches#subject
+and a bunch that aren't:
 
-Do let me know if there are other places which should have this info.
+> PCI: endpoint: pci-epf-vntb: fix call ...
+> PCI: endpoint: pci-epf-vntb: remove unused ...
+> ...
 
-I did assume it will take at least a year or two before people get used
-to the new prefix, but my patchwork script has a check for this and it's
-trivial to fix the subject before I commit the patch. So hopefully the
-switch goes smoothly.
+Also add "()" after function names:
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
-
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+  PCI: endpoint: pci-epf-vntb: fix call pci_epc_mem_free_addr() ...
