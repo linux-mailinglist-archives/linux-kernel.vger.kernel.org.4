@@ -2,40 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4F7615411
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 22:16:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC710615414
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 22:17:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231177AbiKAVQo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 17:16:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33248 "EHLO
+        id S231183AbiKAVQ4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 17:16:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34068 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230442AbiKAVQG (ORCPT
+        with ESMTP id S230324AbiKAVQG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 1 Nov 2022 17:16:06 -0400
-Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D83B1F629
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 14:15:27 -0700 (PDT)
+Received: from smtp.smtpout.orange.fr (smtp-15.smtpout.orange.fr [80.12.242.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 923E91DDDD
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 14:15:28 -0700 (PDT)
 Received: from pop-os.home ([86.243.100.34])
         by smtp.orange.fr with ESMTPA
-        id pyanoKD2rsfCIpybVoWfKn; Tue, 01 Nov 2022 22:15:26 +0100
+        id pyanoKD2rsfCIpybWoWfL4; Tue, 01 Nov 2022 22:15:26 +0100
 X-ME-Helo: pop-os.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
 X-ME-Date: Tue, 01 Nov 2022 22:15:26 +0100
 X-ME-IP: 86.243.100.34
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Marcel Holtmann <marcel@holtmann.org>,
-        Johan Hedberg <johan.hedberg@gmail.com>,
-        Luiz Augusto von Dentz <luiz.dentz@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-bluetooth@vger.kernel.org, netdev@vger.kernel.org
-Subject: [PATCH 22/30] Bluetooth: hci_debugfs: Use kstrtobool() instead of strtobool()
-Date:   Tue,  1 Nov 2022 22:14:10 +0100
-Message-Id: <b180bd1dea7b7561039f52cdbde6bcbe8688442c.1667336095.git.christophe.jaillet@wanadoo.fr>
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH 23/30] test_firmware: Use kstrtobool() instead of strtobool()
+Date:   Tue,  1 Nov 2022 22:14:11 +0100
+Message-Id: <ecbf29715074cc3c06f388f8e4f629ac44d3c550.1667336095.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
 References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
@@ -46,6 +38,7 @@ X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
@@ -70,30 +63,30 @@ at [1].
 
 [1]: https://lore.kernel.org/all/cover.1667336095.git.christophe.jaillet@wanadoo.fr/
 ---
- net/bluetooth/hci_debugfs.c | 3 ++-
+ lib/test_firmware.c | 3 ++-
  1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/net/bluetooth/hci_debugfs.c b/net/bluetooth/hci_debugfs.c
-index b7f682922a16..f1ef60ddd4a6 100644
---- a/net/bluetooth/hci_debugfs.c
-+++ b/net/bluetooth/hci_debugfs.c
+diff --git a/lib/test_firmware.c b/lib/test_firmware.c
+index c82b65947ce6..b147dc687e92 100644
+--- a/lib/test_firmware.c
++++ b/lib/test_firmware.c
 @@ -22,6 +22,7 @@
- */
- 
- #include <linux/debugfs.h>
+ #include <linux/slab.h>
+ #include <linux/uaccess.h>
+ #include <linux/delay.h>
 +#include <linux/kstrtox.h>
+ #include <linux/kthread.h>
+ #include <linux/vmalloc.h>
+ #include <linux/efi_embedded_fw.h>
+@@ -358,7 +359,7 @@ static int test_dev_config_update_bool(const char *buf, size_t size,
+ 	int ret;
  
- #include <net/bluetooth/bluetooth.h>
- #include <net/bluetooth/hci_core.h>
-@@ -1152,7 +1153,7 @@ static ssize_t force_no_mitm_write(struct file *file,
- 		return -EFAULT;
- 
- 	buf[buf_size] = '\0';
--	if (strtobool(buf, &enable))
-+	if (kstrtobool(buf, &enable))
- 		return -EINVAL;
- 
- 	if (enable == hci_dev_test_flag(hdev, HCI_FORCE_NO_MITM))
+ 	mutex_lock(&test_fw_mutex);
+-	if (strtobool(buf, cfg) < 0)
++	if (kstrtobool(buf, cfg) < 0)
+ 		ret = -EINVAL;
+ 	else
+ 		ret = size;
 -- 
 2.34.1
 
