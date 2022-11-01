@@ -2,89 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BA13614F1D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 17:23:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2539C614F31
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 17:28:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiKAQXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 12:23:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
+        id S230030AbiKAQ2f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 12:28:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiKAQXt (ORCPT
+        with ESMTP id S229996AbiKAQ2d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 12:23:49 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6A91A213;
-        Tue,  1 Nov 2022 09:23:48 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id n12so38231554eja.11;
-        Tue, 01 Nov 2022 09:23:48 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QjE9lTE++fclwFa7yMAIrErfvE6I/XCjhnbSuMJSadI=;
-        b=HuednwKGDdGrvaUJCdekwxP+OyuF405/uycgqP4ZZkDWTkegfIrL6QXKivPLKzxEVy
-         ytOGI0Id3iUMsMWl/bkBr5NDfTZPbO2QNldy621TP7TABjsoofQX0EG58gr2heBwejNO
-         624qNm4sfn17mtTtVVml/7uON5U97fFeCmQ5gbPyG1Kd9Qv1oV3rt5Aw4cudGr6DDIj+
-         lLKKcSztI0bOhFnZbkJrm1iiUQePy0hU6QRdNco59DVmD/GycjvQZc2FM5FA2eBNSfn6
-         mHg9+fF09heSEwonV9UmXI5v7P6t7nNq9mIvhbAQpAOJkFOr2unyC15xgCIiaKDoXBWP
-         V5bA==
+        Tue, 1 Nov 2022 12:28:33 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E23591C908
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 09:27:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667320055;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0AbHCvMc1vq6ZTia1yRY1TXl4yRSTxvVwe8opekaGTY=;
+        b=Ibv9xuvwMvcR9djApHIre0ckjXK1Is4Z601+KUbSiA+y4K1HIzWjk9tOOQfAD9QpcImbc9
+        EeWNZtqrzZig4xXqsGN/Gch3ayqwI4RUOLtWTbb4aKgLKuZct1mut6g73Kh+D/xP2hXYzq
+        UYDlq5jZGo70ynK+90+WWVmkHy3/VW8=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-649-j28rkzvDOTqmPf3PITU3fg-1; Tue, 01 Nov 2022 12:27:34 -0400
+X-MC-Unique: j28rkzvDOTqmPf3PITU3fg-1
+Received: by mail-qt1-f197.google.com with SMTP id fz10-20020a05622a5a8a00b003a4f466998cso10130199qtb.16
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 09:27:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QjE9lTE++fclwFa7yMAIrErfvE6I/XCjhnbSuMJSadI=;
-        b=V+eYBzCFSgFJ96Wi+O+iNOBpvHjgoeVLsY0Jxe9ndp0F20tISRYd8SkVvDmcE8fjTx
-         wi2NT6lpZApMGpbQXPj6M5B5MnGDs7/UsPXN25PHm4kLMXG2CIi0e+99EiqFX/KRMb6K
-         wQs0hZBmt8g+I2v+L6ZSfXApfrngRT2bJ80xKQ92tk3DXrDh7qLAg5JD2aItFUWtKwOA
-         cfHkdcnBy5ujhj8y2/odrvsbjRGynhsy4EfycTmCDeiRwvUSPIJW5xSw0CBqIrGhVxAc
-         hQsTdtjOVsIgYapC2bslY5ASpKf0ibB3mRe18UeXNG74TqCWlqzfpT63nry6oI9cS6hG
-         9eLw==
-X-Gm-Message-State: ACrzQf1XSHYl/jWWastj31elQSOnQWJ2n1qjJ1M1pq8lGO+1LAOofxDT
-        3l+toPgC7XeMofCvN1p+Bjy+BOQZRWCpx9PJxGI=
-X-Google-Smtp-Source: AMsMyM6yCCYE1jRfdc2k7pNZy6hR1Yn704uJKgDoSiQVMAtUpptyljIOsw2MSx8YH4+AHoDsO+yCTAU/SxHwxZmdR2w=
-X-Received: by 2002:a17:906:2ad3:b0:78d:b88c:5e35 with SMTP id
- m19-20020a1709062ad300b0078db88c5e35mr149386eje.157.1667319826948; Tue, 01
- Nov 2022 09:23:46 -0700 (PDT)
+        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=0AbHCvMc1vq6ZTia1yRY1TXl4yRSTxvVwe8opekaGTY=;
+        b=WFX/nWj/PGuzVOQDyjansidW3i+/u72mIdiC0P6otNq8YufFS12Sckha9PNVHa2T84
+         nWWxjpku0d+0cR3zJpX1xa7oNhVi9wP2LbUSALD93tLVIngwAOL4mUKak8XEEU2Ca2IC
+         fBvAThdyptkpbAXpG5wfxz2Q2Rrb3F8CO8LkgMm9eXTUSf95ocY8Zb4GCHgNNCHLwAKw
+         RDur4NqxTX/82k+lzhNaloEbHkzPKzWDCKuP5x9jIa70iZSl1PeRY5aCnp5wwuwaGVwZ
+         tcns32YebCMJMzjgJ5mSJmFNHh+9tgfQSAOv2vN5DOgWq3r0lYdmwCixQjTHnuWIwEc+
+         Kayw==
+X-Gm-Message-State: ACrzQf0moaZiFCc3oqVpg0uGtsVzG5ilhy+1ndiaD6FXCiPyKt6lYNKm
+        4wJXhIJDf0tHzbXJsLCpednIW645cYyvsngQMa78Gs3jOFty/wrDiHiIJFtOZm1UGhKNdW2Zzen
+        ovG/iksyIeiQIAn86QIHnAe5qz1WfDJukQfkI/Plp1J3cBwKgjANwAY7D5BgSeTQuxMgbNBRHCa
+        gg
+X-Received: by 2002:a37:44cc:0:b0:6fa:35d6:f5ef with SMTP id r195-20020a3744cc000000b006fa35d6f5efmr6032104qka.364.1667320054353;
+        Tue, 01 Nov 2022 09:27:34 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4Hm1MAU6xhK5BGu+YKaf3h5HOo2br+U+K9EH88KvDDia/UuQS9ctFk5X6BH8Yi2mvOgm2tWQ==
+X-Received: by 2002:a37:44cc:0:b0:6fa:35d6:f5ef with SMTP id r195-20020a3744cc000000b006fa35d6f5efmr6032075qka.364.1667320054055;
+        Tue, 01 Nov 2022 09:27:34 -0700 (PDT)
+Received: from ovpn-194-149.brq.redhat.com (nat-2.ign.cz. [91.219.240.2])
+        by smtp.gmail.com with ESMTPSA id v1-20020a05620a440100b006fa2dde9db8sm4257678qkp.95.2022.11.01.09.27.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 09:27:33 -0700 (PDT)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v13 45/48] KVM: selftests: Introduce rdmsr_from_l2() and
+ use it for MSR-Bitmap tests
+In-Reply-To: <Y2FFNO3Bu9Z3LtCW@google.com>
+References: <20221101145426.251680-1-vkuznets@redhat.com>
+ <20221101145426.251680-46-vkuznets@redhat.com>
+ <Y2FFNO3Bu9Z3LtCW@google.com>
+Date:   Tue, 01 Nov 2022 17:27:29 +0100
+Message-ID: <87bkpqskr2.fsf@ovpn-194-149.brq.redhat.com>
 MIME-Version: 1.0
-References: <20221026185846.3983888-1-quic_eberman@quicinc.com>
- <20221026185846.3983888-3-quic_eberman@quicinc.com> <CABb+yY3JVNPG3dcyHNFxEeGEu3MN_pAOh3+cwexPPe2YG6SNUg@mail.gmail.com>
- <fb7e101f-8de0-d77e-30e1-74b882b19583@quicinc.com>
-In-Reply-To: <fb7e101f-8de0-d77e-30e1-74b882b19583@quicinc.com>
-From:   Jassi Brar <jassisinghbrar@gmail.com>
-Date:   Tue, 1 Nov 2022 11:23:35 -0500
-Message-ID: <CABb+yY08jP+Q5xvzLf=7F1tULP6-eZz5EDiK9mBj2fAv=iZa_A@mail.gmail.com>
-Subject: Re: [PATCH v6 02/21] dt-bindings: Add binding for gunyah hypervisor
-To:     Elliot Berman <quic_eberman@quicinc.com>
-Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Kalle Valo <kvalo@kernel.org>, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -92,37 +85,50 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 10:20 PM Elliot Berman <quic_eberman@quicinc.com> wrote:
->
-> Hi Jassi,
->
-> On 10/27/2022 7:33 PM, Jassi Brar wrote:
->  > On Wed, Oct 26, 2022 at 1:59 PM Elliot Berman
-> <quic_eberman@quicinc.com> wrote:
->  > .....
->  >> +
->  >> +        gunyah-resource-mgr@0 {
->  >> +            compatible = "gunyah-resource-manager-1-0",
-> "gunyah-resource-manager";
->  >> +            interrupts = <GIC_SPI 3 IRQ_TYPE_EDGE_RISING>, /* TX
-> full IRQ */
->  >> +                         <GIC_SPI 4 IRQ_TYPE_EDGE_RISING>; /* RX
-> empty IRQ */
->  >> +            reg = <0x00000000 0x00000000>, <0x00000000 0x00000001>;
->  >> +                  /* TX, RX cap ids */
->  >> +        };
->  >>
->  > All these resources are used only by the mailbox controller driver.
->  > So, this should be the mailbox controller node, rather than the
->  > mailbox user.> One option is to load gunyah-resource-manager as a
-> module that relies
->  > on the gunyah-mailbox provider. That would also avoid the "Allow
->  > direct registration to a channel" hack patch.
->
-> A message queue to another guest VM wouldn't be known at boot time and
-> thus couldn't be described on the devicetree.
->
-I think you need to implement of_xlate() ... or please tell me what
-exactly you need to specify in the dt.
+Sean Christopherson <seanjc@google.com> writes:
 
-thnx.
+> On Tue, Nov 01, 2022, Vitaly Kuznetsov wrote:
+>> Hyper-V MSR-Bitmap tests do RDMSR from L2 to exit to L1. While 'evmcs_test'
+>> correctly clobbers all GPRs (which are not preserved), 'hyperv_svm_test'
+>> does not. Introduce and use common rdmsr_from_l2() to avoid code
+>> duplication and remove hardcoding of MSRs.
+>> 
+>> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+>> ---
+>>  .../selftests/kvm/include/x86_64/processor.h  |  9 +++++++
+>>  .../testing/selftests/kvm/x86_64/evmcs_test.c | 24 ++++---------------
+>>  .../selftests/kvm/x86_64/hyperv_svm_test.c    |  8 +++----
+>>  3 files changed, 17 insertions(+), 24 deletions(-)
+>> 
+>> diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+>> index fbaf0b6cec4b..a14b7e4ea7c4 100644
+>> --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
+>> +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+>> @@ -520,6 +520,15 @@ static inline void cpu_relax(void)
+>>  		"hlt\n"	\
+>>  		)
+>>  
+>> +/* Exit to L1 from L2 with RDMSR instruction */
+>> +static inline void rdmsr_from_l2(uint32_t msr)
+>
+> I would prefer keeping this helper out of common x86-64 code, even if it means
+> duplicating code across multiple Hyper-V tests until the L1 VM-Enter/VM-Exit
+> sequences get cleaned up.  The name is misleading, e.g. it doesn't really read
+> the MSR since there are no outputs
+
+It's somewhat similar to vmcall()/vmmcall() which are only used to exit
+from L2 to L1 (and thus nobody complained that all the register values
+are random) and not issue a hypercall and return some value.
+
+> and while we could obviously fix that with a
+> rename or a generic DO_VMEXIT_FROM_L2() macro, I would rather fix the underlying
+> problem of the world switches clobbering L2 state.  That way all the helpers that
+> exist for L1 can be used verbatim for L2 instead of needing dedicated helpers for
+> every instruction that is used to trigger a VM-Exit.
+>
+
+I'm fine with keeping two copies of this in Hyper-V tests for now, of course.
+
+-- 
+Vitaly
+
