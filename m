@@ -2,96 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 81445614B6B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:13:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D73B614B6C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:14:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230133AbiKANNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 09:13:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47374 "EHLO
+        id S230159AbiKANOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 09:14:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47674 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbiKANNj (ORCPT
+        with ESMTP id S229841AbiKANOH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 09:13:39 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B09E635A;
-        Tue,  1 Nov 2022 06:13:34 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id h9so20106782wrt.0;
-        Tue, 01 Nov 2022 06:13:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QwhanQKRbqrvvgXUmj5gq6ZtQDr1OrntJTB30vFuuTY=;
-        b=e0kRdjU5SzSF2BOua3Yow1NZ+w0vOGAZlt+p/2ZhBUXewN7KZEr2dyZkYJtXiZQsyx
-         FWpQBlWjpc/zZlLTHY9rvvzVJk+/ecYZUqwW7wrBBi8HnsCZ55DMQd+jvby3snvRfdiA
-         SpOapgjH02XgFcJ2pGRLolxiAD13mkkxmy8cS2V/PkkYmOSxcUlpp8conIALYFbNN3Hb
-         8ekg98g8AlPsdxPyFfeGQHsotzfUPVkb9EAC1RjwTHzaZDJxv3E4f4jqOekJNJvvzFNd
-         7rMpffBtf+VAFzYXdDwjfSusW2RWe+PQafx9KRiAJcGlYcB1biPH+VwJindyjoCRhvYn
-         nKww==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QwhanQKRbqrvvgXUmj5gq6ZtQDr1OrntJTB30vFuuTY=;
-        b=wG24oZFo5kuZHebk1/X9YkdJYi4a+AuU1uobgiI6HQNuKUZrMHRXUIdYnBloBAxkOi
-         V9Q0gLBWaVhGaVUasbZ5FsqY9pbR9bPrRTiwwlGhTCryM48OC7H2Vbp3z3qLQla1DW55
-         mkXWGNRsZ4JXUOgNhlDkcR6AZsPs2RUHip967jPuBcggKpgC8Rac/SnQQ7G7CgzlPcbl
-         l9GJu/xVdg9QIzO9QhC0bpJVpVA5p0n8xaIqBIOW+uJLgeDQkFhEF5LiZLkvNCR5OkZQ
-         SH8WUMTV1y+AofDtUC3hk6nyjxoCmAKVO//mAt8/lgDJTLXdXCk5BkRcdjCl8Q6I4j0B
-         UbTA==
-X-Gm-Message-State: ACrzQf1bPul2vdR4hSxBqisyJ/kE3HEvJOOLBlyVmdj3rQmI5U1enD1x
-        zoUAhK5OH9lDx3khqUCfjhGGsNMjU0f3qACYg1s=
-X-Google-Smtp-Source: AMsMyM5DlQ7Km2bCUVKYm8RKj16TKBqKXaqi9AjkrKlt0+HhahmyUiEE6I44GCC/vgYreiDs7lxMcPQrvm+BZr/JQAQ=
-X-Received: by 2002:a5d:4648:0:b0:236:c0da:a4f6 with SMTP id
- j8-20020a5d4648000000b00236c0daa4f6mr8515976wrs.134.1667308412714; Tue, 01
- Nov 2022 06:13:32 -0700 (PDT)
+        Tue, 1 Nov 2022 09:14:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5173D63A4;
+        Tue,  1 Nov 2022 06:14:06 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFCE560B08;
+        Tue,  1 Nov 2022 13:14:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8FE1BC433D6;
+        Tue,  1 Nov 2022 13:14:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667308445;
+        bh=HdynqWV3zJNf8wdpTZitVUjqPw4u0VHzGnPqRvKGnUQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=rCHiuN2j57z89+8MVaN1hHdTlBE/bmvPjcB3strnvvklfUWxRM8IEn7BIusFozlso
+         fudevNRSh2d/IoNPnePTiaEEDG6jAFw0UUUbboC60c4hQdY28btkbzTNad62DVhCja
+         wza6p4y9+047PTpA8qRoMKWIuTAST3ctw6V9R6KoZO6oUCgEf236TQHy6lrKM5Zsag
+         afgps7gF67A62waXTnJfznUGlFalWtiqiVU8Ps7t12nSCvf94N1SwudHgqhCc9cca0
+         Ssyev8f0uu66j7SN676ruZNJfForqolgXbWUR5M/9CnJrJdfrUSO13s4yLDniBkJI3
+         vjPXU/fJPMzmA==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [PATCH 0/3] tools/perf: Fix perf probe crash by broken DWARF file
+Date:   Tue,  1 Nov 2022 22:14:01 +0900
+Message-Id: <166730844138.2095228.4225918836201778608.stgit@devnote3>
+X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-References: <20220811161331.37055-1-peterx@redhat.com> <20220811161331.37055-5-peterx@redhat.com>
- <20221021160603.GA23307@u164.east.ru> <Y1Wbi4yyVvDtg4zN@x1n>
- <CADxRZqy+cMHN4FjtDr7-LOyVf0y+G8MPiBoGiTEsSj48jBfVnw@mail.gmail.com> <Y1f2IR+h4i2+/swj@x1n>
-In-Reply-To: <Y1f2IR+h4i2+/swj@x1n>
-From:   Anatoly Pugachev <matorola@gmail.com>
-Date:   Tue, 1 Nov 2022 16:13:20 +0300
-Message-ID: <CADxRZqz+Sk=yxrJQ8B7UVkrcct9w6nUeiaaVn7QTFL59isFLDA@mail.gmail.com>
-Subject: Re: dpkg fails on sparc64 (was: [PATCH v4 4/7] mm/thp: Carry over
- dirty bit when thp splits on pmd)
-To:     Peter Xu <peterx@redhat.com>
-Cc:     David Miller <davem@davemloft.net>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
-        "Kirill A . Shutemov" <kirill@shutemov.name>,
-        Alistair Popple <apopple@nvidia.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Minchan Kim <minchan@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Andi Kleen <andi.kleen@intel.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Huang Ying <ying.huang@intel.com>,
-        Vlastimil Babka <vbabka@suse.cz>, sparclinux@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 5:43 PM Peter Xu <peterx@redhat.com> wrote:
->
-> On Tue, Oct 25, 2022 at 01:22:45PM +0300, Anatoly Pugachev wrote:
-> > On Sun, Oct 23, 2022 at 10:53 PM Peter Xu <peterx@redhat.com> wrote:
-> > > On Fri, Oct 21, 2022 at 07:06:03PM +0300, Anatoly Pugachev wrote:
-> > > >
-> > > >     Link: https://lkml.kernel.org/r/20220811161331.37055-5-peterx@redhat.com
->
-> Maybe we need to have the minimum revert for v6.1 before we have more
-> clues.
+Hi,
 
-Just a quick update on 6.1.0-rc3
+Here is a series of patches for perf probe which improves the robustness
+against broken DWARF file.
 
-Tested again with 6.1.0-rc3, segfaults dpkg... applied patch - no dpkg
-segfaults.
+Since the Clang generates the out of standard DWARF5 file, the perf probe
+crashes or failed to analyze it. There are actually fragile code against
+it, so I fixed it ([1/3]) to avoid crash by SEGV. And make it accepts
+Clang's DWARF5 file ([2/3],[3/3]).
+
+Without this series, the perf probe crashes with the DWARF5 file
+which generated by clang as below;
+ 
+  $ ./perf probe -k $BIN_PATH/vmlinux -s $SRC_PATH -L vfs_read:10
+  Segmentation fault
+
+This series fixes it to handle such file correctly;
+
+  $ ./perf probe -k $BIN_PATH/vmlinux -s $SRC_PATH -L vfs_read:10
+  <vfs_read@$SRC_PATH/fs/read_write.c:10>
+ 
+       11         ret = rw_verify_area(READ, file, pos, count);
+       12         if (ret)
+                           return ret;
+
+This issue is reported on LLVM ML;
+https://www.mail-archive.com/dwarf-discuss@lists.dwarfstd.org/msg00884.html
+
+Thank you,
+
+---
+
+Masami Hiramatsu (Google) (3):
+      tools/perf: Fix to avoid crashing with a broken DWARF file
+      tools/perf: Fix to use dwarf_attr_integrate for generic attr accessor
+      tools/perf: Fix to get declared file name from broken DWARF5
+
+
+ tools/perf/util/dwarf-aux.c    |   58 ++++++++++++++++++++++++++++------------
+ tools/perf/util/dwarf-aux.h    |    3 ++
+ tools/perf/util/probe-finder.c |   37 +++++++++++++++++---------
+ 3 files changed, 68 insertions(+), 30 deletions(-)
+
+--
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
