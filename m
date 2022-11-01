@@ -2,170 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1615A6143FB
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 05:49:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2FF706143FF
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 05:53:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229761AbiKAEte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 00:49:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34702 "EHLO
+        id S229785AbiKAExL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 00:53:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35256 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiKAEtc (ORCPT
+        with ESMTP id S229770AbiKAExH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 00:49:32 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F971FD12;
-        Mon, 31 Oct 2022 21:49:31 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id q9so34499892ejd.0;
-        Mon, 31 Oct 2022 21:49:31 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=7WqRNDbAUlJ0O3/34AOe0TVDEPlr0UlTZFj5VM45W9Q=;
-        b=iYtIw1Eq8dpSU+eEwDdnHE7hg6LUSp40eXnzR9aB7OZrL2moWt+99Mm6bMst7tEP9J
-         ZavOkhBsDRBmNzpMw8FtDfmIx9d5jgx9Hg9LILR7CGNM70EydWvXvKUl/7mi+83/kxOm
-         b1lfPhxaKC1XAzCEtC3aw8R6Yp0MWSFHq9OpLr8CpjWRI5xiekNJsKoI9h08wkWLoGih
-         e5P+9h5hyyqBGq0IxYkYVX8RPN9xLhFW7/BEg14hu8HLFoW9nqTyMGxVIFh9yA05tUPi
-         LtimMo8hHLo4uZcWcYN9XgegcC7mqG8uKGjoLpqoOe9SxVfjRWhRu9JIBEL1qW7TSdFJ
-         Kp7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=7WqRNDbAUlJ0O3/34AOe0TVDEPlr0UlTZFj5VM45W9Q=;
-        b=G2sF6rW7yv7uwX80VaEX2E4+xdoUot8a4FduHiXnXvmPrD2xeLDxUdoeRyS9zRHXFZ
-         xdg6a6JSOwmDVQqO6fabTrYsREV3BrGPc4tMzdr1qFXMCiYTYIVZZBcGcO2Fw9jUQf3Q
-         jn9OVjJco/fvHINVQi4Jt5pTWFilaE9Zio6vhyS7tDQMwrP+2WorRXeLvJp3xEb03dIo
-         H5K20eY7aKbwB7VNNADCZa9VIyGYXNxamtVRx1qfandxtc5SD2kjvmvHoNH0ALZL5yLY
-         sT+sxfHJk+QmhJRlzugWmZJUP7uK5H3o4dstOk6glg3smC66W71BJciKXQBG2Z3xX19H
-         VYkQ==
-X-Gm-Message-State: ACrzQf3PgaHWVPcXckq9oIowQeP0bTelJACBq1MyJGun224HrZ01Krm9
-        DwCzV2NDFNMJ6wVIqqg79WYm8aVRydk=
-X-Google-Smtp-Source: AMsMyM7pHRAEfENB1OAVTQn74jeAN1OqeQnMUo4lZuM/uovIxovpq9/9cvKjgs9e/LJtG+hpPFyskA==
-X-Received: by 2002:a17:907:9627:b0:78d:a7d8:9407 with SMTP id gb39-20020a170907962700b0078da7d89407mr16026062ejc.675.1667278169936;
-        Mon, 31 Oct 2022 21:49:29 -0700 (PDT)
-Received: from pc636 ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id 17-20020a170906211100b0078d9b967962sm3780601ejt.65.2022.10.31.21.49.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 21:49:29 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Tue, 1 Nov 2022 05:49:27 +0100
-To:     Joel Fernandes <joel@joelfernandes.org>
-Cc:     Uladzislau Rezki <urezki@gmail.com>,
-        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com,
-        rostedt@goodmis.org
-Subject: Re: [PATCH rcu 13/14] workqueue: Make queue_rcu_work() use
- call_rcu_flush()
-Message-ID: <Y2ClV/i9ongBosna@pc636>
-References: <20221024031540.GU5600@paulmck-ThinkPad-P17-Gen-1>
- <Y1ZtyjxKCcV0Hfjn@pc636>
- <Y1aDy3maaO39ClSU@pc636>
- <Y1ahs83258Lok9+O@google.com>
- <20221024153958.GY5600@paulmck-ThinkPad-P17-Gen-1>
- <Y1a8ei1h7SzyYZx9@pc636>
- <20221024164819.GA5600@paulmck-ThinkPad-P17-Gen-1>
- <Y1xIY77sFTyxgAsU@google.com>
- <Y1/LwKz60iU2izOZ@pc636>
- <CAEXW_YTmtm2yb0MVvNV9C1jPEs=5K9PaEFsWEG7pAmPAyWJ_qQ@mail.gmail.com>
+        Tue, 1 Nov 2022 00:53:07 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 35C8E17425
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 21:53:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id C81E0B81B9F
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 04:53:05 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0872C433D6;
+        Tue,  1 Nov 2022 04:53:02 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667278384;
+        bh=c5uB2a3E/LYa5L/Er0rR/6WTHDtnfj9MnFRKHgSmjHc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=2Ectvr5JmpE0Tw9FFp1vSi9V4HxsjxoIqsPPAw53WckXD9Y11kbGNdTHq2Yq/jZWo
+         cc/Vywfc1H5+hx/sEU8TSzoyDKZaxdWhe+9c5CzcVb8yAgVwj5m49sG6/DREqLwy5N
+         HXxnovnb7BeciBXejEn0ey7jpjS5xO7S8prJe010=
+Date:   Tue, 1 Nov 2022 05:53:52 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Gabhyun Kim <kimgaby415@gmail.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: rtl8192e: Remove line breaks to match coding
+ style
+Message-ID: <Y2CmYKLzKTVqKqcP@kroah.com>
+References: <20221101011507.GA3802@ubuntu>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAEXW_YTmtm2yb0MVvNV9C1jPEs=5K9PaEFsWEG7pAmPAyWJ_qQ@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221101011507.GA3802@ubuntu>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Mon, Oct 31, 2022 at 9:21 AM Uladzislau Rezki <urezki@gmail.com> wrote:
-> >
-> > On Fri, Oct 28, 2022 at 09:23:47PM +0000, Joel Fernandes wrote:
-> > > On Mon, Oct 24, 2022 at 09:48:19AM -0700, Paul E. McKenney wrote:
-> > > > On Mon, Oct 24, 2022 at 06:25:30PM +0200, Uladzislau Rezki wrote:
-> > > > > >
-> > > > > > You guys might need to agree on the definition of "good" here.  Or maybe
-> > > > > > understand the differences in your respective platforms' definitions of
-> > > > > > "good".  ;-)
-> > > > > >
-> > > > > Indeed. Bad is when once per-millisecond infinitely :) At least in such use
-> > > > > workload a can detect a power delta and power gain. Anyway, below is a new
-> > > > > trace where i do not use "flush" variant for the kvfree_rcu():
-> > > > >
-> > > > > <snip>
-> > > > > 1. Home screen swipe:
-> [...]
-> > > > > 2. App launches:
-> [...]
-> > > > > <snip>
-> > > > >
-> > > > > it is much more better. But. As i wrote earlier there is a patch that i have submitted
-> > > > > some time ago improving kvfree_rcu() batching:
-> > > > >
-> > > > > <snip>
-> > > > > commit 51824b780b719c53113dc39e027fbf670dc66028
-> > > > > Author: Uladzislau Rezki (Sony) <urezki@gmail.com>
-> > > > > Date:   Thu Jun 30 18:33:35 2022 +0200
-> > > > >
-> > > > >     rcu/kvfree: Update KFREE_DRAIN_JIFFIES interval
-> > > > >
-> > > > >     Currently the monitor work is scheduled with a fixed interval of HZ/20,
-> > > > >     which is roughly 50 milliseconds. The drawback of this approach is
-> > > > >     low utilization of the 512 page slots in scenarios with infrequence
-> > > > >     kvfree_rcu() calls.  For example on an Android system:
-> > > > > <snip>
-> > > > >
-> > > > > The trace that i posted was taken without it.
-> > > >
-> > > > And if I am not getting too confused, that patch is now in mainline.
-> > > > So it does make sense to rely on it, then.  ;-)
-> > >
-> > > Vlad's patch to change the KFREE_DRAIN_JIFFIES to 5 seconds seems reasonable
-> > > to me. However, can we unify KFREE_DRAIN_JIFFIES and LAZY_FLUSH_JIFFIES ?
-> > >
-> > This is very good.
-> >
-> > Below is a plot that i have taken during one use-case. It is about three
-> > apps usage in parallel. It was done by running "monkey" test:
-> >
-> > wget ftp://vps418301.ovh.net/incoming/monkey_3_apps_slab_usage_5_minutes.png
-> >
-> > i set up three apps as usage scenario: Google Chrome, YoTube and Camera.
-> > I logged the Slab metric from the /proc/meminfo. Sampling rate is 0.1 second.
-> >
-> > Please have a look at results. It reflects what i am saying. non-flush
-> > kvfree RCU variant makes a memory usage higher. What is not acceptable
-> > for our mobile devices and workloads.
-> 
-> That does look higher, though honestly about ~5%. But that's just the
-> effect of more "laziness". The graph itself does not show a higher
-> number of shrinker invocations, in fact I think shrinker invocations
-> are not happening much that's why the slab holds more memory. The
-> system may not be under memory pressure?
-> 
-The idea is to minimize a possibility of entering into a low memory
-condition mode. This is bad from a sluggishness point of view for users.
-I am saying it in a context of android devices.
+On Tue, Nov 01, 2022 at 10:15:07AM +0900, Gabhyun Kim wrote:
+> Remove redundant line breaks between function definitions to correct the coding style
 
-> Anyway, I agree with your point of view and I think my concern does
-> not even occur with the latest patch on avoiding RCU that I posted
-> [1], so I come in peace.
-> 
-> [1] https://lore.kernel.org/rcu/20221029132856.3752018-1-joel@joelfernandes.org/
-> 
-I will have a look at it.
+Nit, your changelog text is too wide, please properly wrap your lines at
+72 columns.
 
->
-> I am going to start merging all the lazy patches to ChromeOS 5.10 now
-> including your kfree updates, except for [1] while we discuss it.
->
-Good for ChromeOS users :)
+> 
+> Signed-off-by: Gabhyun Kim <kimgaby415@gmail.com>
+> ---
+>  drivers/staging/rtl8192e/rtllib_softmac.c | 5 +----
+>  1 file changed, 1 insertion(+), 4 deletions(-)
+> 
+> diff --git a/drivers/staging/rtl8192e/rtllib_softmac.c b/drivers/staging/rtl8192e/rtllib_softmac.c
+> index 1a3ca3e57623..78828ecac28a 100644
+> --- a/drivers/staging/rtl8192e/rtllib_softmac.c
+> +++ b/drivers/staging/rtl8192e/rtllib_softmac.c
+> @@ -22,7 +22,6 @@
+>  
+>  static void rtllib_sta_wakeup(struct rtllib_device *ieee, short nl);
+>  
+> -
+>  static short rtllib_is_54g(struct rtllib_network *net)
+>  {
+>  	return (net->rates_ex_len > 0) || (net->rates_len > 4);
+> @@ -147,9 +146,7 @@ static void init_mgmt_queue(struct rtllib_device *ieee)
+>  	ieee->mgmt_queue_tail = ieee->mgmt_queue_head = 0;
+>  }
+>  
+> -
+> -u8
+> -MgntQuery_TxRateExcludeCCKRates(struct rtllib_device *ieee)
+> +u8 MgntQuery_TxRateExcludeCCKRates(struct rtllib_device *ieee)
+>  {
 
---
-Uladzislau Rezki
+You are doing two different types of things here, please only do one
+"logical" type of thing at a time in a patch.
+
+thanks,
+
+greg k-h
