@@ -2,100 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6506F61562D
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 00:39:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4A6D1615631
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 00:40:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbiKAXj4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 19:39:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58738 "EHLO
+        id S229941AbiKAXkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 19:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiKAXjw (ORCPT
+        with ESMTP id S229628AbiKAXkI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 19:39:52 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0DDA1AD8C
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 16:39:51 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id k19so22763271lji.2
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 16:39:51 -0700 (PDT)
+        Tue, 1 Nov 2022 19:40:08 -0400
+Received: from mail-pl1-x62d.google.com (mail-pl1-x62d.google.com [IPv6:2607:f8b0:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C12F01BEA9
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 16:40:07 -0700 (PDT)
+Received: by mail-pl1-x62d.google.com with SMTP id p3so15002532pld.10
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 16:40:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=XVE8df/LmNSzpfTgJgBEeCPlA2Al+KApjI2VylZLJqw=;
-        b=NYNZLq/lb7zvRGRcy311Vi/70AhjYWjIUDwfmocLlD/OX6i1vJfPsL30HUVv77KioE
-         ziVq6V2dJT5uaX0Qj8OH+j4Q68D3a4Z7ezEhrxgCikcwAdT73BbDUpZz0Xx4tVa2QTsU
-         QQ3beVk+rAoYmyTZNG/Ca4ihfmtU6d4x1uQumv5vl9ktNCqKuLvopmO6CoV9VTolLsWL
-         gT5f25lBD0hQtzVv8s7zIMiRV7eCFWrL3Wc3YWDpGmT70rz8qnHYkjDc9ZgIRUCJOUdM
-         JNg+OVDNnF5X+fcgQJvuHonHZW8Wmt0UYc8RTXOcpO8jE91WrC0GKnh+KGuCUsFzQh0E
-         h39g==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=HMjoSMseYo9dv+OYtpDQcotuckgj0OnEhXYZObymQfA=;
+        b=N4bCntNKJyNrCrWRnxFbKWGV538e38A/akJR4zZz/OuvuV1Bx92CKGBWkW4XIkb+mg
+         at2PxLtvS+9V8fzxowpA0pMEHI/pFRmIUoF3dIlw96H4BwhgK79jOTHaNSb4ib3bQqJE
+         AjvoxglA+JnoO3xYI+DkujScXt/j12hqgfLIs=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XVE8df/LmNSzpfTgJgBEeCPlA2Al+KApjI2VylZLJqw=;
-        b=wCRMwh1iutaewN3kTP86RbRAivKpoqyFKPL9sgVREwGUtO9gMnxMj3Yb/w8q6Q9dSM
-         DuwpKT0YyM4OxMZl99nGhwhXz+02LMU86hnuy7V9TUMRURKiClkM5HpmigdGccVnVr8L
-         FbrocDxTU7+b4O8RgWOPYn+Fy7sCbhh0c8oPb5Bz4Znd0QfioEA2YUxxQbhjMgwcAeJH
-         saV8HeQPSR5FKQ9Se4hduAC/33+mjo94YEUYD9J78jGnjsn5iMmQi/eg4TM+r0nsxg39
-         GnYarscy/XA2omk0OtG63/vd7ZhHMHjXs5Yxew+wv2CtTWiCn1TDLRTHRHtWjlpkga+y
-         Cafw==
-X-Gm-Message-State: ACrzQf3Cf26Sn/1J7HegJ/c7w4i0Ax5FEyLLLkICQUqBu6iWJy6JhGqg
-        WRWcF5ou8avOQOLmrQxfXAUZdBv4j/+QWy27oBeVhw==
-X-Google-Smtp-Source: AMsMyM7GlNQ9oNlElESY6O5G6stvzHa27GzQi/JydzRL7UIZIcoLTCA3OrTJITVZQCx+644XFDOBzfzn4XI93EfM4To=
-X-Received: by 2002:a2e:3e14:0:b0:277:a3b:49dd with SMTP id
- l20-20020a2e3e14000000b002770a3b49ddmr7454438lja.342.1667345989783; Tue, 01
- Nov 2022 16:39:49 -0700 (PDT)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HMjoSMseYo9dv+OYtpDQcotuckgj0OnEhXYZObymQfA=;
+        b=BO9Dp8/IYws9S9PzPKor9eBn4k4VkGjqwaS/HOv6/MYsK/kxjupzaG3ePWfN0CRZQr
+         RpxX88xKuaXwZILdiJXPhk2GOqYS6MPAxgb4nUbxVka+rEK7hbYxLrrVPiGuo1/0MyxV
+         PAAkLye0DLV5OF7kF2XSiG8ziGNtXt9MQ9GGUtFscY88jdAzo6/kTEM5tvFOa/Ig4ZSD
+         z7pm0qHrh11/hvOMraD5101tyiSmTB/c4Dz7FnElydxXwVEd/EzV3W+C3q4r1C7U7JTb
+         FtXvqulHOHdn1DMZne06SLpkfzpVA2M0VS7ve0RFbhBrDQNhzXq062BjddH4QjqsE7E3
+         ZvPg==
+X-Gm-Message-State: ACrzQf1aSsw2fQEX9hoz8jLm+utS8bPqXEjItSin/oZSlxspzBdxy9nS
+        FIY9/+4xdyjCjtfUOL5QHfPJqQ==
+X-Google-Smtp-Source: AMsMyM4P4eIG6ZNPzEizuQdoi/YqYr8KPBMw3NArEJ1RJ/GARU4RtwCb2NPtiryMlgBp+ThPDf6xZw==
+X-Received: by 2002:a17:90b:33c3:b0:213:f5be:c3ad with SMTP id lk3-20020a17090b33c300b00213f5bec3admr9845989pjb.123.1667346007336;
+        Tue, 01 Nov 2022 16:40:07 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 20-20020a621714000000b0056ded8d5918sm636830pfx.134.2022.11.01.16.40.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 16:40:06 -0700 (PDT)
+Date:   Tue, 1 Nov 2022 16:40:05 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
+Cc:     Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        Alex Deucher <alexdeucher@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Christian Brauner <brauner@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
+        linux-hwmon@vger.kernel.org, linux-hardening@vger.kernel.org,
+        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>
+Subject: Re: [PATCH] drm/radeon: Replace kmap() with kmap_local_page()
+Message-ID: <202211011639.4938CC9@keescook>
+References: <20221013210714.16320-1-fmdefrancesco@gmail.com>
+ <fb0b7389-7121-04f8-176d-1ababe0ad8f2@amd.com>
+ <CADnq5_PP3VCXQ5rbC0-8Qsi5W7Ew87U_bRknz4=qxbrPxVQ+qA@mail.gmail.com>
+ <1942083.usQuhbGJ8B@suse>
 MIME-Version: 1.0
-References: <20221027081630.34081-1-zhouchuyi@bytedance.com>
- <CABk29NtDny9qKZbZZ_i8Brwjtqs5GA0G4_SffzK4HzG3RrXVhQ@mail.gmail.com>
- <64d963b6-2d9c-3f93-d427-a1ff705fb65a@bytedance.com> <CABk29NsbGuMPcA8NJagMfPyHij3864F3DVQ6wpCj3UAo8tbFNQ@mail.gmail.com>
- <5af26ac9-3bdb-32d2-77a7-6cd8feca97aa@bytedance.com> <CABk29Nt38d31LnazbcSVB036jUYemC1KRpR2Dn7YgLmXkp-QBQ@mail.gmail.com>
- <8142b5db-f543-57e6-0f68-f62274c0e379@bytedance.com>
-In-Reply-To: <8142b5db-f543-57e6-0f68-f62274c0e379@bytedance.com>
-From:   Josh Don <joshdon@google.com>
-Date:   Tue, 1 Nov 2022 16:39:37 -0700
-Message-ID: <CABk29Nsnx=PfeLMEsD0qsnh5-QTHLT4xVB3HmBgGAqqmWnkmvg@mail.gmail.com>
-Subject: Re: [PATCH] sched/fair: favor non-idle group in tick preemption
-To:     Chuyi Zhou <zhouchuyi@bytedance.com>
-Cc:     peterz@infradead.org, juri.lelli@redhat.com, mingo@redhat.com,
-        vincent.guittot@linaro.org, linux-kernel@vger.kernel.org,
-        Abel Wu <wuyun.abel@bytedance.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <1942083.usQuhbGJ8B@suse>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > Some weirdness about this change though, is that if there is a
-> > non-idle current entity, and the two next entities on the cfs_rq are
-> > idle and non-idle respectively, we'll now take longer to preempt the
-> > on-cpu non-idle entity, because the non-idle entity on the cfs_rq is
-> > 'hidden' by the idle 'first' entity. Wakeup preemption is different
-> > because we're always directly comparing the current entity with the
-> > newly woken entity.
-> >
-> You are right, this can happen with high probability.
-> This patch just compared the curr with the first entity in
-> the tick, and it seems hard to consider all the other entity
-> in cfs_rq.
->
-> So, what specific negative effects this situation would cause?
-> For example, the "hidden" non-idle entity's latency will be worse
-> than before?
+On Wed, Nov 02, 2022 at 12:11:53AM +0100, Fabio M. De Francesco wrote:
+> On lunedì 17 ottobre 2022 18:52:10 CET Alex Deucher wrote:
+> > Applied.  Thanks!
+> 
+> Many thanks to you!
+> 
+> However, about a week ago, I received a report saying that this patch is "Not 
+> Applicable". 
+> 
+> That email was also referring to another patch, for which I'll reply in its 
+> own thread.
+> 
+> That report has a link to https://patchwork.linuxtv.org/project/linux-media/
+> patch/20221013210714.16320-1-fmdefrancesco@gmail.com/
+> 
+> Can you please let me understand why, despite it was applied, this patch later 
+> shifted "State" to "Not Applicable"?
 
-As Abel points out in his email, it can push out the time it'll take
-to switch to the other non-idle entity. The change might boost some
-benchmarks numbers, but I don't think it is conclusive enough to say
-it is a generically beneficial improvement that should be integrated.
+The kernel has multiple patchwork instances, so you got an "N/A" from
+linux-media, but it was applied to the drm tree. (Yes, confusing. :P)
 
-By the way, I'm curious if you modified any of the sched_idle_cpu()
-and related load balancing around idle entities given that you've made
-it so that idle entities can have arbitrary weight (since, as I
-described in my prior email, this can otherwise cause issues there).
+-- 
+Kees Cook
