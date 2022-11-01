@@ -2,99 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E894615093
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 18:25:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81F3B61509A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 18:26:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230118AbiKARZf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 13:25:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56132 "EHLO
+        id S230197AbiKAR0g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 13:26:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56432 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229964AbiKARZc (ORCPT
+        with ESMTP id S229516AbiKAR0b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 13:25:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF965178B6;
-        Tue,  1 Nov 2022 10:25:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8BF2961640;
-        Tue,  1 Nov 2022 17:25:31 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F0D31C433D7;
-        Tue,  1 Nov 2022 17:25:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667323531;
-        bh=8+n4wVebR2DVuEojd5dP66y68blMgawXTlygiHM3C3U=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=VwC1XIFZ/6uv0ZpIYTUWUsrPvE1JXB/r6SNROi2qkbPIsLwxBcscmulwu6trYeRpu
-         p9okHSDGs3VJT+v5l3Wmo8NRhB1HZAFi7F+qWWc4E6xgC7im4J2begb3ugdQNta32J
-         0hZnktyZz3xC40Rs7OIbA4GDjW4scoxf2xktW/MZEUCUb/l1wxI5RNM27NGwwGZOLY
-         ZCUOzujCkavRzvrLHpZezmZXRdIPWG39t/nmWcBzTD6DYaYItZDJ6F+q6nBJ4vG1TX
-         fBt6xSxepbFXEWlrQRpcy27oSzP0Kc+pCMD0SL5UxIVRR3iJq+La8wKB7J6S9L3Zuq
-         zN9AhImTjDWhQ==
-Received: by mail-lj1-f170.google.com with SMTP id z24so21899695ljn.4;
-        Tue, 01 Nov 2022 10:25:30 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2ck3qZy5yP3ZeXltyDH90VLoccnT6BOh9/ldUHFBTfu51ZYMPW
-        w4NF0KCNMcVykkZIv682ZofrlmsLIsfFNwtHfA==
-X-Google-Smtp-Source: AMsMyM76Gx3gpIDmB0YWloxakt3kNIrl0ft6hshAFByvsLqfn6Hp/4L00+ft8BqwrQoWEk8oeG8xE59btzfpwteVooE=
-X-Received: by 2002:a2e:b16b:0:b0:277:3946:7611 with SMTP id
- a11-20020a2eb16b000000b0027739467611mr8104831ljm.392.1667323528960; Tue, 01
- Nov 2022 10:25:28 -0700 (PDT)
+        Tue, 1 Nov 2022 13:26:31 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3E8C91A215
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 10:26:31 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso19436337pjg.5
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 10:26:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=A4QtUNj00AFef6/SLaxc9/EwfiEMk/XY7VysTIRCNPk=;
+        b=GsJToAMuJ29wa7MEmx4mYyei/7wv80A0LVzK56seJd3rF4Iza7U3ZPb2voZV21TLTN
+         RxpDgA2RSMWks/aF2G1p1yac9G/1umJFalIjnM0nXDpvs8UOdNk7V54bFdBfr34nX38e
+         IQXZHEYQL81ulw6Uymt/PPeYXF0F3z62tB5HDbR5bjJHaCzZOtdxavohIZJCCqGp8dq3
+         lWca2/vOzct4CEreWPEW2kTLPa1KAz6yPdkGtc+Nyc71IcwQcGBbEb8l8yakRNIBUKEn
+         9YvwySYx/6EYUSNoFfcEHRtZd7HxydbrpvsFNsDcM6LomZIXAmeUXQpZo3bOdnz84whe
+         TtaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=A4QtUNj00AFef6/SLaxc9/EwfiEMk/XY7VysTIRCNPk=;
+        b=iOw2pJMmjizub3KYxNFWlAdn0ypVF/im9nQyTCLC1WjjqjAIQh4HRGMgTLqgkdzbY7
+         oNhXgI+Oe60DT1CcoGeSZTAR9G1lMG0iSLLgbju/qBaASM85ztVJjFILT1nHZ4boaGdu
+         V5MxmlW81xwbr2K5WlvahJOY6Lnd/dWwM7IsOzLkI1cFRngSN0cGvmQ7kuJGZvfMO0bY
+         dxyRHYj9gGxjkbAKA7oa1GmLx6NnUdn7dSzxNcncEBDT+ORk8kt70TSRZcCRTrI4MjXo
+         wqLQpFGfKNg1aYcOe4tugPMezOadRAAUhm8timL1AkY6R+W/AHc5VqWkcKKFQKL6Sr6/
+         8jtg==
+X-Gm-Message-State: ACrzQf24xk8N9XvVGrUyd51RviNOgNULLkrIlz6RPFRcE/De4fbYo6ZW
+        tG9phT7zQRnslFXAGNmgOgj20g==
+X-Google-Smtp-Source: AMsMyM5Vb6UFf34QgXTQptO3wBNpsNlppGWrjixPl4a14JL9LAnJyPI67XMAeJtoT1oJDK1obuG8+g==
+X-Received: by 2002:a17:902:d54a:b0:186:a43b:8e with SMTP id z10-20020a170902d54a00b00186a43b008emr21216723plf.36.1667323590558;
+        Tue, 01 Nov 2022 10:26:30 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id r7-20020aa79ec7000000b0056da63c8515sm2984440pfq.91.2022.11.01.10.26.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 10:26:30 -0700 (PDT)
+Date:   Tue, 1 Nov 2022 17:26:26 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v13 45/48] KVM: selftests: Introduce rdmsr_from_l2() and
+ use it for MSR-Bitmap tests
+Message-ID: <Y2FWwkq1kv9uXLwt@google.com>
+References: <20221101145426.251680-1-vkuznets@redhat.com>
+ <20221101145426.251680-46-vkuznets@redhat.com>
+ <Y2FFNO3Bu9Z3LtCW@google.com>
+ <87bkpqskr2.fsf@ovpn-194-149.brq.redhat.com>
 MIME-Version: 1.0
-References: <20221028231309.565451-1-krzysztof.kozlowski@linaro.org>
- <Y1+MNL+fCfreAqMh@google.com> <20221031192658.GA3286587-robh@kernel.org> <Y2D0As4ezi/031lL@google.com>
-In-Reply-To: <Y2D0As4ezi/031lL@google.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Tue, 1 Nov 2022 12:25:19 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqJUx2FtpYWSkx3cOFcywSux7P2sPpvbVmaryMdo1+xA_Q@mail.gmail.com>
-Message-ID: <CAL_JsqJUx2FtpYWSkx3cOFcywSux7P2sPpvbVmaryMdo1+xA_Q@mail.gmail.com>
-Subject: Re: [PATCH] dt-bindings: mfd: Expect specific type for monitored-battery
-To:     Lee Jones <lee@kernel.org>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Dmitry Osipenko <digetx@gmail.com>,
-        Chris Zhong <zyw@rock-chips.com>,
-        Zhang Qing <zhangqing@rock-chips.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-rockchip@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87bkpqskr2.fsf@ovpn-194-149.brq.redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 1, 2022 at 5:25 AM Lee Jones <lee@kernel.org> wrote:
->
-> On Mon, 31 Oct 2022, Rob Herring wrote:
->
-> > On Mon, Oct 31, 2022 at 08:49:56AM +0000, Lee Jones wrote:
-> > > On Fri, 28 Oct 2022, Krzysztof Kozlowski wrote:
-> > >
-> > > > Core schema does not define type of monitored-battery, so the schemas
-> > > > are expected to reference proper type.
-> > > >
-> > > > Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > > > ---
-> > > >  Documentation/devicetree/bindings/mfd/ene-kb930.yaml      | 4 +++-
-> > > >  Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml | 1 +
-> > > >  2 files changed, 4 insertions(+), 1 deletion(-)
-> > >
-> > > Applied, thanks.
+On Tue, Nov 01, 2022, Vitaly Kuznetsov wrote:
+> Sean Christopherson <seanjc@google.com> writes:
+> 
+> > On Tue, Nov 01, 2022, Vitaly Kuznetsov wrote:
+> >> Hyper-V MSR-Bitmap tests do RDMSR from L2 to exit to L1. While 'evmcs_test'
+> >> correctly clobbers all GPRs (which are not preserved), 'hyperv_svm_test'
+> >> does not. Introduce and use common rdmsr_from_l2() to avoid code
+> >> duplication and remove hardcoding of MSRs.
+> >> 
+> >> Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+> >> ---
+> >>  .../selftests/kvm/include/x86_64/processor.h  |  9 +++++++
+> >>  .../testing/selftests/kvm/x86_64/evmcs_test.c | 24 ++++---------------
+> >>  .../selftests/kvm/x86_64/hyperv_svm_test.c    |  8 +++----
+> >>  3 files changed, 17 insertions(+), 24 deletions(-)
+> >> 
+> >> diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
+> >> index fbaf0b6cec4b..a14b7e4ea7c4 100644
+> >> --- a/tools/testing/selftests/kvm/include/x86_64/processor.h
+> >> +++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
+> >> @@ -520,6 +520,15 @@ static inline void cpu_relax(void)
+> >>  		"hlt\n"	\
+> >>  		)
+> >>  
+> >> +/* Exit to L1 from L2 with RDMSR instruction */
+> >> +static inline void rdmsr_from_l2(uint32_t msr)
 > >
-> > NAK. Please drop or revert.
->
-> Dropping is not a problem.
->
-> Would you mind providing some context?
+> > I would prefer keeping this helper out of common x86-64 code, even if it means
+> > duplicating code across multiple Hyper-V tests until the L1 VM-Enter/VM-Exit
+> > sequences get cleaned up.  The name is misleading, e.g. it doesn't really read
+> > the MSR since there are no outputs
+> 
+> It's somewhat similar to vmcall()/vmmcall() which are only used to exit
+> from L2 to L1 (and thus nobody complained that all the register values
+> are random) and not issue a hypercall and return some value.
 
-I did elsewhere in the series, but simply we don't want to define a
-type for a property multiple times. It should be defined once
-somewhere common.
+Sort of.  VMCALL/VMMCALL are unique in that they have no meaning (ignoring VMX's
+STM) other than what is given to them by the hypervisor/software on VM-Exit.  RDMSR
+on the other hand (and literally every other instruction), has architecturally
+defined behavior and thus expectations beyond generating a VM-Exit.
 
-Rob
+I do think we should clean up the VMCALL/VMMCALL code to remove the clobbers
+if/when the VM-Enter/VM-Exit sequences are fixed, and maybe make them more generic,
+e.g. to allow reusing helpers for L1 and L2.  But, because the meaning of VMCALL/VMMCALL
+is software-defined, we'll always need a selftests specific L2=>L1 hypercall,
+e.g. to ensure L0 forwards the hypercall to L1.
