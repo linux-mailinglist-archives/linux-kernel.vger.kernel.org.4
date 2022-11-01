@@ -2,159 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED282614B3D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:54:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C6A9614B3E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230464AbiKAMyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 08:54:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38458 "EHLO
+        id S229487AbiKAMyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 08:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230019AbiKAMyg (ORCPT
+        with ESMTP id S230387AbiKAMyi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 08:54:36 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A499C1B9D3;
-        Tue,  1 Nov 2022 05:54:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667307275; x=1698843275;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=/2AoikK0W8w5NML5eDaXWNLf++sjzy7BGwh04ld7jzA=;
-  b=aecTX7DcR6fR2S8L8gxBbt27F6Dk1JZtG68h0oit9nBYEr+eY1kA5CsF
-   zBJnct8/2YAfSivU3Aq5lMEhnIC2ks9Y8qz/OlbJ2xiiwxfU1NU3x26Se
-   i2KwPeVTTlrSSUgxoTwk/nVTO8AyS4Q86YLZ4O6ptiBTnCp5OtqOEOi8a
-   7+J3lnw29bbuntcm+A7VjwdkHLzDqakjm47XehypdWBpVMFfp1DXS8WLJ
-   PRMY0UuxK1EOtxP/ZnmZDblx4PTqhYjxbaPthYLBot2bzf2PMqLfiYdlb
-   46gecV2Zd6hFXr3w2hSpc6JAbhZQc0KlXScMsZNGwbfDCc5QnYTqA0u1i
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="371208207"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="371208207"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 05:54:35 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="633863354"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="633863354"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga002.jf.intel.com with ESMTP; 01 Nov 2022 05:54:35 -0700
-Received: from maurocar-mobl2 (maurocar-mobl2.ger.corp.intel.com [10.252.29.141])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id BE3D9580B9D;
-        Tue,  1 Nov 2022 05:54:28 -0700 (PDT)
-Date:   Tue, 1 Nov 2022 13:54:25 +0100
-From:   Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
-To:     Petri Latvala <petri.latvala@intel.com>
-Cc:     Isabella Basso <isabbasso@riseup.net>, twoerner@gmail.com,
-        linux-kselftest@vger.kernel.org, magalilemes00@gmail.com,
-        maira.canal@usp.br, dlatypov@google.com, tales.aparecida@gmail.com,
-        brendanhiggins@google.com, linux-kernel@vger.kernel.org,
-        leandro.ribeiro@collabora.com, igt-dev@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, daniel@ffwll.ch, n@nfraprado.net,
-        davidgow@google.com, skhan@linuxfoundation.org,
-        andrealmeid@riseup.net, kunit-dev@googlegroups.com
-Subject: Re: [igt-dev] [PATCH i-g-t v2 4/4] tests: DRM selftests: switch to
- KUnit
-Message-ID: <20221101135425.3ee12c9c@maurocar-mobl2>
-In-Reply-To: <Yyl3UXvLd3Jyr9uP@platvala-desk.ger.corp.intel.com>
-References: <20220829000920.38185-1-isabbasso@riseup.net>
-        <20220829000920.38185-5-isabbasso@riseup.net>
-        <Yyl3UXvLd3Jyr9uP@platvala-desk.ger.corp.intel.com>
+        Tue, 1 Nov 2022 08:54:38 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E966CE35;
+        Tue,  1 Nov 2022 05:54:36 -0700 (PDT)
+Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N1qjN5lRtz15MFl;
+        Tue,  1 Nov 2022 20:54:32 +0800 (CST)
+Received: from [10.67.102.169] (10.67.102.169) by
+ canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 1 Nov 2022 20:54:34 +0800
+CC:     <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <jdelvare@suse.de>, <semen.protsenko@linaro.org>,
+        <jarkko.nikula@linux.intel.com>,
+        <tharunkumar.pasumarthi@microchip.com>,
+        <linux-kernel@vger.kernel.org>, <f.fainelli@gmail.com>,
+        <yangyicong@hisilicon.com>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <andriy.shevchenko@linux.intel.com>, <wsa@kernel.org>,
+        <william.zhang@broadcom.com>, <conor.dooley@microchip.com>,
+        <jsd@semihalf.com>, <phil.edworthy@renesas.com>,
+        <kfting@nuvoton.com>
+Subject: Re: [PATCH next v10 2/2] dt-bindings: i2c: add entry for
+ hisilicon,ascend910-i2c
+To:     Weilong Chen <chenweilong@huawei.com>
+References: <20221101080728.143639-1-chenweilong@huawei.com>
+ <20221101080728.143639-2-chenweilong@huawei.com>
+From:   Yicong Yang <yangyicong@huawei.com>
+Message-ID: <50934335-b088-ae36-490c-e48a74fb755e@huawei.com>
+Date:   Tue, 1 Nov 2022 20:54:34 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.5.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+In-Reply-To: <20221101080728.143639-2-chenweilong@huawei.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.102.169]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ canpemm500009.china.huawei.com (7.192.105.203)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 20 Sep 2022 11:18:25 +0300
-Petri Latvala <petri.latvala@intel.com> wrote:
-
-> On Sun, Aug 28, 2022 at 09:09:20PM -0300, Isabella Basso wrote:
-> > As the DRM selftests are now using KUnit [1], update IGT tests as well.
-> > 
-> > [1] - https://lore.kernel.org/all/20220708203052.236290-1-maira.canal@usp.br/
-> > 
-> > Signed-off-by: Isabella Basso <isabbasso@riseup.net>
-> > ---
-> >  tests/drm_buddy.c    |  7 ++++---
-> >  tests/drm_mm.c       |  7 ++++---
-> >  tests/kms_selftest.c | 12 +++++++++---
-> >  3 files changed, 17 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/tests/drm_buddy.c b/tests/drm_buddy.c
-> > index 06876e0c..74c06dce 100644
-> > --- a/tests/drm_buddy.c
-> > +++ b/tests/drm_buddy.c
-> > @@ -6,9 +6,10 @@
-> >  #include "igt.h"
-> >  #include "igt_kmod.h"
-> >  
-> > -IGT_TEST_DESCRIPTION("Basic sanity check of DRM's buddy allocator (struct drm_buddy)");
-> > +IGT_TEST_DESCRIPTION("Basic sanity check of DRM's buddy allocator (struct \
-> > +		      drm_buddy) using KUnit");
-> >  
-> > -igt_main
-> > +igt_simple_main
-> >  {
-> > -	igt_kselftests("test-drm_buddy", NULL, NULL, NULL);
-> > +	igt_kunit("drm_buddy_test", NULL);
-> >  }  
+On 2022/11/1 16:07, Weilong Chen wrote:
+> Add the new compatible for HiSilicon i2c.
 > 
-> With kselftests we had the ability to only run a specified set of
-> tests, and with or without selection, we had sub-results for each
-> through dynamic subtests. Does kunit have that possibility? I mean I
-> know kunit itself does but what about igt_kunit()?
 
-I don't think so. I created a KUnit with the mock selftests:
+Reviewed-by: Yicong Yang <yangyicong@hisilicon.com>
 
-	$ modinfo test-i915-mock
-	filename:       /lib/modules/6.1.0-rc2-drm-b1cab854a639+/kernel/drivers/gpu/drm/i915/test-i915-mock.ko
-	import_ns:      I915_SELFTEST
-	license:        GPL v2
-	depends:        i915
-	retpoline:      Y
-	intree:         Y
-	name:           test_i915_mock
-	vermagic:       6.1.0-rc2-drm-b1cab854a639+ SMP preempt mod_unload 
-
-There's no module parameters. Just loading it makes all tests
-there to run.
-
-OK, with the current implementation, we could have one module per subtest, 
-but that sounds overkill. 
-
-Another possibility would be to implement it like:
-
-	test-i915-mock-fences
-	test-i915-mock-hugepages
-	...
-
-which would allow a finer control. Another possibility would be to
-change kunit_suite and kunit_test_suites() to optionally create
-a modprobe parameter to allow specifying what tests from the test
-suites would run.
-
-On the other hand, not sure if are there any gains implementing it,
-at least for the hardware-independent tests. I mean, if one of such
-tests fail after a patch, the change is broken and should be reverted,
-as this is a regression.
-
-> Orthogonal to that question, drm_mm and test-drm_modeset are _now_
-> using kunit but in LTS kernels they're not, and we'd like to be able
-> to keep testing those. That means having both launchers here and just
-> letting the "incorrect" one produce a 'skip'.
-
-Agreed. Patch 4/4 should be checking if the test module is there.
-If not, fall back to selftest.
-
-Regards,
-Mauro
-
+> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+> Reviewed-by: Rob Herring <robh@kernel.org>
+> ---
+> Change since v9:
+> - No change
+> Link: https://lore.kernel.org/lkml/20221029115937.179788-2-chenweilong@huawei.com/
+> 
+> Change since v8:
+> - Use vendor,soc-ipblock format.
+> - Drop quotes.
+> - Drop "Device Tree bindings".
+> - Description goes to top level description.
+> - Use defines for constants.
+> Link: https://lore.kernel.org/lkml/20221024015151.342651-2-chenweilong@huawei.com/
+> 
+>  .../bindings/i2c/hisilicon,ascend910-i2c.yaml | 73 +++++++++++++++++++
+>  MAINTAINERS                                   |  1 +
+>  2 files changed, 74 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/i2c/hisilicon,ascend910-i2c.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/i2c/hisilicon,ascend910-i2c.yaml b/Documentation/devicetree/bindings/i2c/hisilicon,ascend910-i2c.yaml
+> new file mode 100644
+> index 000000000000..7d7a8de7bcd8
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/i2c/hisilicon,ascend910-i2c.yaml
+> @@ -0,0 +1,73 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/i2c/hisilicon,ascend910-i2c.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: HiSilicon common I2C controller
+> +
+> +maintainers:
+> +  - Yicong Yang <yangyicong@hisilicon.com>
+> +
+> +description:
+> +  The HiSilicon common I2C controller can be used for many different
+> +  types of SoC such as Huawei Ascend AI series chips.
+> +
+> +allOf:
+> +  - $ref: /schemas/i2c/i2c-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: hisilicon,ascend910-i2c
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  clocks:
+> +    maxItems: 1
+> +
+> +  clock-frequency:
+> +    default: 400000
+> +
+> +  i2c-sda-falling-time-ns:
+> +    default: 343
+> +
+> +  i2c-scl-falling-time-ns:
+> +    default: 203
+> +
+> +  i2c-sda-hold-time-ns:
+> +    default: 830
+> +
+> +  i2c-scl-rising-time-ns:
+> +    default: 365
+> +
+> +  i2c-digital-filter-width-ns:
+> +    default: 0
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +
+> +unevaluatedProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
+> +
+> +    i2c@38b0000 {
+> +      compatible = "hisilicon,ascend910-i2c";
+> +      reg = <0x38b0000 0x10000>;
+> +      interrupts = <GIC_SPI 120 IRQ_TYPE_LEVEL_HIGH>;
+> +      i2c-sda-falling-time-ns = <56>;
+> +      i2c-scl-falling-time-ns = <56>;
+> +      i2c-sda-hold-time-ns = <56>;
+> +      i2c-scl-rising-time-ns = <56>;
+> +      i2c-digital-filter;
+> +      i2c-digital-filter-width-ns = <0x0>;
+> +      clocks = <&alg_clk>;
+> +      clock-frequency = <400000>;
+> +    };
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index d1214d83c2df..d42e34d1e8e2 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -9228,6 +9228,7 @@ M:	Yicong Yang <yangyicong@hisilicon.com>
+>  L:	linux-i2c@vger.kernel.org
+>  S:	Maintained
+>  W:	https://www.hisilicon.com
+> +F:	Documentation/devicetree/bindings/i2c/hisilicon,ascend910-i2c.yaml
+>  F:	drivers/i2c/busses/i2c-hisi.c
+>  
+>  HISILICON LPC BUS DRIVER
+> 
