@@ -2,91 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71D0D615167
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 19:19:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 458CA61516A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 19:19:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbiKASTF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 14:19:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36086 "EHLO
+        id S230155AbiKASTe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 14:19:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229761AbiKASTD (ORCPT
+        with ESMTP id S230129AbiKASTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 14:19:03 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36744272E
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 11:19:01 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id p184so13019771iof.11
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 11:19:01 -0700 (PDT)
+        Tue, 1 Nov 2022 14:19:31 -0400
+Received: from mail-yb1-xb2e.google.com (mail-yb1-xb2e.google.com [IPv6:2607:f8b0:4864:20::b2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC19C26D6
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 11:19:30 -0700 (PDT)
+Received: by mail-yb1-xb2e.google.com with SMTP id 187so18338699ybe.1
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 11:19:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2yIMEyIdM9BFDMzy8xupZjUmRK55OQN/jxJjTBfmY5U=;
-        b=byGLyGcJKLOMhhsYAQFyqJgNnvmQuTaMJQnsrFQK//IAZfxxe+xgXEs+28NOOOYHHH
-         P3N1E7F8M5Qg1/BsI4pmCP49cuq6ySdvXOMOHoWE1E5wS81OUbvo9uRZyL31R2zHRHp4
-         lqh1Se/P+OPv+OlJ8BHfH3YNvIi/j6Yj0GfMA2/pY1j28kb0EbyxGQNfr9LCP0gIx/i4
-         6GAXOXVkQssZuJ7+Fd4EKtfhXm4HKZz6uTB4zGzozInOGnx6fM4lxvbDbTBnXu6qrJlo
-         0HcGlZI2DmfGX3Pfi8+9F39NPJFrRbvbKlfztyNk60Ng5aE1Ex0uyLrVrYignOIwK6VA
-         Mv5w==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=4TnCmLeSoENzoZRIjU5Wiq8PjPF0LUus2GJeeWfkVJY=;
+        b=kvsow79txoZ0AdG1HJRvn4Z/Ru0en7xmqh5/Z9ynWsbL85Bl+EmyaBtNLeJSTJVDyf
+         1IFLauuxyk8D4SDyELaQ3yskIcmRG17UCLS8ITHq49UgFNuTecrIilfplhlEoOVfXyMy
+         F9vkVjhOGea0W2H2eG1S8jC7fiDH+9pzJrX8VdAD4pzLwMMkRAIZOgQmWqcpDjhBLeil
+         cwmFRb+WTQKTcqFApbj8ccRmrS+si3ss0jz6jYMuMgrQaokAzLMSOTBV9f6NqccfE2gc
+         q+SilIUpPX7UHn6c0QtEtKp0QaPkXxyGVzqFuukeJH27UClOM/QqvqemJW/+9dtHhRB/
+         tY8w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2yIMEyIdM9BFDMzy8xupZjUmRK55OQN/jxJjTBfmY5U=;
-        b=uke/CKqgRGUtiw3Iea4E6bpfS2ENx4Zo1vX+SYme4yuZ4yhji8R47gq5thfhxnTtxp
-         dO5tRNd6Vl6DrBmEQQQTtp/QzvMQzeOYp7adYvQBh7AakkqluYn8esX2FK4JzNRQewp1
-         UPzb+IOMen6xKS9GvmZKAfn6QHfsAlCK/5iDXpIsghqxI2GfGkoWLJRSujLdskTR2hKo
-         oGAFUTiIw6zCjhu7vsxGC0aM4CoBY0HSxNXs3GsbCjfVfwAKiDAb4lcjk0kMuqNeFk0J
-         oo+eO0GCF4n1AltX48jVALNiThJdzsr2Bvw+CsA94H7slog6+K+d/mGU+whI/quybW9v
-         067w==
-X-Gm-Message-State: ACrzQf2jOu+pft2rbi6BYk0M+vvfxz47dcoLHhtgxC40sSCuMsaLDSFH
-        C6Ajrp38kwXpd8cGFENTLW696Q==
-X-Google-Smtp-Source: AMsMyM5iqTn0JiWuPyYF+ArhsuAQdoP0+FUNeulzs4XTkBmK6csGrqZ0zEZNaXySRPU5rceoVtrAog==
-X-Received: by 2002:a6b:ba8a:0:b0:6d3:c907:63c3 with SMTP id k132-20020a6bba8a000000b006d3c90763c3mr1750723iof.15.1667326740519;
-        Tue, 01 Nov 2022 11:19:00 -0700 (PDT)
-Received: from [192.168.1.94] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id bg3-20020a0566383c4300b00375217ea9b6sm4108469jab.45.2022.11.01.11.18.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Nov 2022 11:18:59 -0700 (PDT)
-Message-ID: <37138d05-c2b2-a106-416c-6be134d94046@kernel.dk>
-Date:   Tue, 1 Nov 2022 12:18:58 -0600
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=4TnCmLeSoENzoZRIjU5Wiq8PjPF0LUus2GJeeWfkVJY=;
+        b=X0pwR6+S3F542teO+5P+5oAXR9jdP1WHUuiX9wu7k6GbKMpXIyEAz4KZZzUI3VLwfF
+         vMWV/ItbCe0cD3EynkJR+qKNzl79qGwAYvsNf6Su2IX/tji2A0y+sz8WwfD7iY0oZNHl
+         rlaeX95N8gyO9XYpRN2xFCbgxeqg/JKsMYRHpBQ7fdC+wmj1o6div3pb9UoLwqtvM2Qb
+         AlsfOHOdt4GyasmA8sPwub/x6jAID/QtibCve0X8Y2VTtHbe2wyiokwQVFTQ0pjQ88V8
+         99wsEvKTZ73ts3Ei5jUuOo9nucvBRtSafMipBMKXJFusPyjKv3jI7iEPxUk19GuaEBAd
+         DyGA==
+X-Gm-Message-State: ACrzQf226Fgr+yUYGBHw3Xw46qvIGxWXAR/bFoTLTjptcntJPdXNA3J8
+        TE7towUUGgUchL7uqqaFnZO0oVEmLQMybT++WkqaViX84XO8zYxB
+X-Google-Smtp-Source: AMsMyM5swjKbEzL5izsma0aorLlPbQjH/f8MmwmlzJlIFiA7inMcl7zmQRiRlplGQGkSjgqOWLp6u9q6NlX5ToXdWBs=
+X-Received: by 2002:a05:6902:1022:b0:6ca:6d5b:94f with SMTP id
+ x2-20020a056902102200b006ca6d5b094fmr19352152ybt.328.1667326769909; Tue, 01
+ Nov 2022 11:19:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 2/4] blk-mq: improve error handling in
- blk_mq_alloc_rq_map()
-Content-Language: en-US
-To:     Christoph Hellwig <hch@lst.de>, Jinlong Chen <nickyc975@zju.edu.cn>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1667314759.git.nickyc975@zju.edu.cn>
- <992db53bdeaba35d37de3784fe6f80879c9bbb35.1667314759.git.nickyc975@zju.edu.cn>
- <20221101173401.GA20690@lst.de>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20221101173401.GA20690@lst.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CAHk-=wgJVNe4mUxGJE5B-_GMg0oOgxkZz3UxehVRiCT3QvoZ0w@mail.gmail.com>
+ <20221101170015.GA1314742@roeck-us.net> <CAHk-=wi+5sRXL9fTHQRiR9zVEFDPhQceWACBG3QQ=9xoRVmR8g@mail.gmail.com>
+ <29d07648-29a9-432a-a666-f9c9e55c32f6@app.fastmail.com>
+In-Reply-To: <29d07648-29a9-432a-a666-f9c9e55c32f6@app.fastmail.com>
+From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date:   Tue, 1 Nov 2022 19:19:18 +0100
+Message-ID: <CANiq72nfpdhPgEgWbz2T7C3GOk94mPbcqfvXTp3Lp=qRvtON9g@mail.gmail.com>
+Subject: Re: Linux 6.1-rc3
+To:     Arnd Bergmann <arnd@arndb.de>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/1/22 11:34 AM, Christoph Hellwig wrote:
->>  	if (!tags)
->> -		return NULL;
->> +		goto err_out;
-> 
-> Using a label just for the direct error return here is a bit silly.
+On Tue, Nov 1, 2022 at 6:58 PM Arnd Bergmann <arnd@arndb.de> wrote:
+>
+> Linker-generated symbols are usually the cause, but those tend to
+> be fixed with the extra pass, and Guenter said that doing an extra
+> pass does not avoid the issue here.
 
-Plus that's not idiomatic code for cleanup, just keep the NULL
-return if there's no cleanup to be done.
+I have been trying to reproduce the issue on my side, trying to match
+Guenter's environment, but so far I have not been successful, even
+when running the toolchain binaries he sent me (thanks a lot!).
 
--- 
-Jens Axboe
+What I could reproduce easily, though, was one from the kernel test
+robot, powerpc as well, in 5.15.y [1] It requires 4 passes (i.e.
+KALLSYMS_EXTRA_PASS is not enough), but it is not an oscillating one.
 
+[1] https://lore.kernel.org/lkml/202209241418.35P6OMjS-lkp@intel.com/
 
+> What I've done in the past to debug this was to change
+> scripts/link-vmlinux.sh to use a larger number of steps,
+> mainly to see if it eventually converges, grows indefinitely
+> or oscillates.
+
+Does that mean you saw the oscillating one in the past? Guenter thinks
+it is a new issue, since he never saw the oscillating case.
+
+If you did see it, then it may be the case that the kallsyms changes
+make some edge case more likely -- at least this is what Boqun and I
+originally thought.
+
+Cheers,
+Miguel
