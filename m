@@ -2,205 +2,292 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0492A615299
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 20:54:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CCD5C61529E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 20:55:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229993AbiKATyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 15:54:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44196 "EHLO
+        id S229997AbiKATzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 15:55:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbiKATyL (ORCPT
+        with ESMTP id S229475AbiKATyv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 15:54:11 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F32918E27;
-        Tue,  1 Nov 2022 12:54:09 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id a11-20020a05600c2d4b00b003cf6f5fd9f1so4342512wmg.2;
-        Tue, 01 Nov 2022 12:54:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=DqgDcLSZNA5Saaon/Fmk29zadvFURd3kHj533JQMAZI=;
-        b=L3wtkvYXHlDG15kqSgQX9OEeEdTYNSkh7poQs18k8dBe/Uz6uEfZIzt16BhbzPKd2p
-         RTz32NgKZY16G9g2S8SMpAqi8L/9Lp+yyq1nNeIKhwP1seuGjpowo1Tz7RDQnZY2ssA6
-         haFJkb603fzoXpaGGzFWPtaTvQ0rP8lG2xyFUZHYjSgIGg9LRom+F51XEcU1cq4/Nbhu
-         ATrgsKgpyZp2vhT/MARL3WVLhEsrHbWfUoIPb3cjfHwCrOyU+080G75vMs2UCmyV6tpM
-         5o6TwpDMjQK8zWChJxJaWF1lf3GPBdtQPcPUeht+lmwvI2DJd6hOuLhbpNhnpwdnCMw9
-         2Fcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DqgDcLSZNA5Saaon/Fmk29zadvFURd3kHj533JQMAZI=;
-        b=acStzKqrC6EQnA0j6Kvhg6NJQNAWQ4WdIFMVrxsN+H1fRemJRr2j16qqSOGLlxE22o
-         DEbU4X+TI19tGDbVDYRIHdZBn4KI9ZI3L328n/eeExQZ4lPL5iUnxDC2dZ8DkjyR9bK0
-         5PxgZil9gFB3S/aUHkNEl3g08yUuffyBn6R5t4Y94HFCcAASd4Wlq0sghxYgpd6Fq5BQ
-         ExgvhxhSx1U75m4n1aEV80nThQnZNCbHNV2xyBV7tRWSU0hDrOpaTI5TJsj0Rct1NOXL
-         ssvcF77jeBAkonElSkMkBn9KI5ymHXK8feCbSSOpQ7dqlPY76lnFwJen1bOlkb6E7UDM
-         9KoA==
-X-Gm-Message-State: ACrzQf1r5qOgmkC0ULZalFXwMUh/cKhtQNR/Uv05BohfdSG9JURSnsiI
-        tB49viW9AByOstsWDT+Wkiw=
-X-Google-Smtp-Source: AMsMyM4scvnGtmJEI6L/0Q7Wcs3P0BW9nd6Ahkk/Xzw4ydDyis0Wsxx+GDBffAi2z+KCbeDkRKseLQ==
-X-Received: by 2002:a05:600c:3147:b0:3c6:f860:9610 with SMTP id h7-20020a05600c314700b003c6f8609610mr23655070wmo.170.1667332448210;
-        Tue, 01 Nov 2022 12:54:08 -0700 (PDT)
-Received: from localhost.localdomain ([46.249.74.23])
-        by smtp.gmail.com with ESMTPSA id p11-20020a05600c468b00b003cf75213bb9sm6092617wmo.8.2022.11.01.12.54.07
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Tue, 01 Nov 2022 12:54:07 -0700 (PDT)
-From:   Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-To:     sre@kernel.org
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        tony@atomide.com, philipp@uvos.xyz,
-        Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
-Subject: [PATCH 3/3] power: supply: cpcap_battery: Read battery parameters from nvram
-Date:   Tue,  1 Nov 2022 21:53:45 +0200
-Message-Id: <1667332425-12536-4-git-send-email-ivo.g.dimitrov.75@gmail.com>
-X-Mailer: git-send-email 1.9.1
-In-Reply-To: <1667332425-12536-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
-References: <1667332425-12536-1-git-send-email-ivo.g.dimitrov.75@gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Tue, 1 Nov 2022 15:54:51 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040EA1BEA5;
+        Tue,  1 Nov 2022 12:54:49 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A1JsfFZ025427;
+        Tue, 1 Nov 2022 19:54:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=6zxzczJROcEEGeZcE8UuaeXsk7nWV0majcan5zRwn0E=;
+ b=DUKuKruHRhJNq/45ObDtqGsJi60nX7PnGiidoQjyzuRNPIDDb3boSaykFLGzgp2HPSWs
+ hMhHqUnkFk59PEJ7znYJAVANTZoLTqVOxCgfggRAWeEDXx0ziDQ9AXPPxK/hLJvgWbaT
+ ZeahVf4Z2uAibNOMs8EwJdB0trAT9REulJvJ0v0PKRCRWTzU8QAQj1iko03pLHBco0MX
+ 8iN/dkoHsUWoy0vcXotaGmbOKO90Cmvi1nkcWuYQkXXSRo6ee0+6rf3xSb1iVkmIZioX
+ LTJN1S9R5Ym2Z9Ms9/omZJOuVuBqJl0alka25oDzVeqO3qMyKfXocp5hW7SXOfSAgevt ZA== 
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kk7qng8kk-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Nov 2022 19:54:40 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A1JsdhX005617
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 1 Nov 2022 19:54:39 GMT
+Received: from [10.216.52.223] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 1 Nov 2022
+ 12:54:12 -0700
+Message-ID: <fa56debb-41cb-6b91-3f22-f41ffca98fdc@quicinc.com>
+Date:   Wed, 2 Nov 2022 01:24:08 +0530
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.3.2
+Subject: Re: [PATCH 2/2] drm/msm: Hangcheck progress detection
+Content-Language: en-US
+To:     Rob Clark <robdclark@gmail.com>, <dri-devel@lists.freedesktop.org>
+CC:     <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
+        "Rob Clark" <robdclark@chromium.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, Chia-I Wu <olvaffe@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Douglas Anderson" <dianders@chromium.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20221031225414.1280169-1-robdclark@gmail.com>
+ <20221031225414.1280169-3-robdclark@gmail.com>
+From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
+In-Reply-To: <20221031225414.1280169-3-robdclark@gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: BdB8hmq7x0ki3f4p7LzCxtiayf25gJFa
+X-Proofpoint-GUID: BdB8hmq7x0ki3f4p7LzCxtiayf25gJFa
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-01_09,2022-11-01_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ mlxlogscore=999 malwarescore=0 lowpriorityscore=0 spamscore=0
+ priorityscore=1501 impostorscore=0 clxscore=1011 adultscore=0 bulkscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211010141
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Formulas were taken from android blob
+On 11/1/2022 4:24 AM, Rob Clark wrote:
+> From: Rob Clark <robdclark@chromium.org>
+>
+> If the hangcheck timer expires, check if the fw's position in the
+> cmdstream has advanced (changed) since last timer expiration, and
+> allow it up to three additional "extensions" to it's alotted time.
+> The intention is to continue to catch "shader stuck in a loop" type
+> hangs quickly, but allow more time for things that are actually
+> making forward progress.
+>
+> Because we need to sample the CP state twice to detect if there has
+> not been progress, this also cuts the the timer's duration in half.
+>
+> Signed-off-by: Rob Clark <robdclark@chromium.org>
+> ---
+>   drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 34 +++++++++++++++++++++++++++
+>   drivers/gpu/drm/msm/msm_drv.h         |  8 ++++++-
+>   drivers/gpu/drm/msm/msm_gpu.c         | 20 +++++++++++++++-
+>   drivers/gpu/drm/msm/msm_gpu.h         |  5 +++-
+>   drivers/gpu/drm/msm/msm_ringbuffer.h  | 24 +++++++++++++++++++
+>   5 files changed, 88 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> index 1ff605c18ee6..3b8fb7a11dff 100644
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
+> @@ -1843,6 +1843,39 @@ static uint32_t a6xx_get_rptr(struct msm_gpu *gpu, struct msm_ringbuffer *ring)
+>   	return ring->memptrs->rptr = gpu_read(gpu, REG_A6XX_CP_RB_RPTR);
+>   }
+>   
+> +static bool a6xx_progress(struct msm_gpu *gpu, struct msm_ringbuffer *ring)
+> +{
+> +	struct msm_cp_state cp_state = {
+> +		.ib1_base = gpu_read64(gpu, REG_A6XX_CP_IB1_BASE),
+> +		.ib2_base = gpu_read64(gpu, REG_A6XX_CP_IB2_BASE),
+> +		.ib1_rem  = gpu_read(gpu, REG_A6XX_CP_IB1_REM_SIZE),
+> +		.ib2_rem  = gpu_read(gpu, REG_A6XX_CP_IB2_REM_SIZE),
+> +	};
+> +	bool progress;
+> +
+> +	/*
+> +	 * Adjust the remaining data to account for what has already been
+> +	 * fetched from memory, but not yet consumed by the SQE.
+> +	 *
+> +	 * This is not *technically* correct, the amount buffered could
+> +	 * exceed the IB size due to hw prefetching ahead, but:
+> +	 *
+> +	 * (1) We aren't trying to find the exact position, just whether
+> +	 *     progress has been made
+> +	 * (2) The CP_REG_TO_MEM at the end of a submit should be enough
+> +	 *     to prevent prefetching into an unrelated submit.  (And
+> +	 *     either way, at some point the ROQ will be full.)
+> +	 */
+> +	cp_state.ib1_rem += gpu_read(gpu, REG_A6XX_CP_CSQ_IB1_STAT) >> 16;
+> +	cp_state.ib2_rem += gpu_read(gpu, REG_A6XX_CP_CSQ_IB1_STAT) >> 16;
+REG_A6XX_CP_CSQ_IB1_STAT -> REG_A6XX_CP_CSQ_IB2_STAT
 
-Signed-off-by: Ivaylo Dimitrov <ivo.g.dimitrov.75@gmail.com>
----
- drivers/power/supply/cpcap-battery.c | 88 ++++++++++++++++++++----------------
- 1 file changed, 48 insertions(+), 40 deletions(-)
+With that, Reviewed-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
 
-diff --git a/drivers/power/supply/cpcap-battery.c b/drivers/power/supply/cpcap-battery.c
-index 4cfc325..5c51685 100644
---- a/drivers/power/supply/cpcap-battery.c
-+++ b/drivers/power/supply/cpcap-battery.c
-@@ -74,9 +74,6 @@
- 
- #define CPCAP_BATTERY_CC_SAMPLE_PERIOD_MS	250
- 
--#define CPCAP_BATTERY_EB41_HW4X_ID 0x9E
--#define CPCAP_BATTERY_BW8X_ID 0x98
--
- enum {
- 	CPCAP_BATTERY_IIO_BATTDET,
- 	CPCAP_BATTERY_IIO_VOLTAGE,
-@@ -388,22 +385,9 @@ static int cpcap_battery_cc_to_ua(struct cpcap_battery_ddata *ddata,
-  * kernel on droid 4, full is 4351000 and software initiates shutdown
-  * at 3078000. The device will die around 2743000.
-  */
--static const struct cpcap_battery_config cpcap_battery_eb41_data = {
--	.cd_factor = 0x3cc,
--	.info.technology = POWER_SUPPLY_TECHNOLOGY_LION,
--	.info.voltage_max_design = 4351000,
--	.info.voltage_min_design = 3100000,
--	.info.charge_full_design = 1740000,
--	.bat.constant_charge_voltage_max_uv = 4200000,
--};
--
--/* Values for the extended Droid Bionic battery bw8x. */
--static const struct cpcap_battery_config cpcap_battery_bw8x_data = {
-+static struct cpcap_battery_config cpcap_battery_mot_data = {
- 	.cd_factor = 0x3cc,
- 	.info.technology = POWER_SUPPLY_TECHNOLOGY_LION,
--	.info.voltage_max_design = 4200000,
--	.info.voltage_min_design = 3200000,
--	.info.charge_full_design = 2760000,
- 	.bat.constant_charge_voltage_max_uv = 4200000,
- };
- 
-@@ -431,39 +415,63 @@ static int cpcap_battery_match_nvmem(struct device *dev, const void *data)
- static void cpcap_battery_detect_battery_type(struct cpcap_battery_ddata *ddata)
- {
- 	struct nvmem_device *nvmem;
--	u8 battery_id = 0;
-+	char buf[24];
-+	u8 capacity;
-+	u8 mul_idx;
-+	u8 charge_voltage;
-+	u32 v;
-+	static const u32 multipliers[] = {20, 10, 10, 10, 10, 40, 10, 20, 40};
- 
- 	ddata->check_nvmem = false;
- 
- 	nvmem = nvmem_device_find(NULL, &cpcap_battery_match_nvmem);
- 	if (IS_ERR_OR_NULL(nvmem)) {
--		ddata->check_nvmem = true;
- 		dev_info_once(ddata->dev, "Can not find battery nvmem device. Assuming generic lipo battery\n");
--	} else {
--		char buf[24];
--
--		if (nvmem_device_read(nvmem, 96, 4, buf) < 0 ||
--		    strncmp(buf, "COPR", 4) != 0 ||
--		    nvmem_device_read(nvmem, 104, 24, buf) < 0 ||
--		    strncmp(buf, "MOTOROLA E.P CHARGE ONLY", 24) != 0 ||
--		    nvmem_device_read(nvmem, 2, 1, &battery_id) < 0) {
--			battery_id = 0;
--			ddata->check_nvmem = true;
--			dev_warn(ddata->dev, "Can not read battery nvmem device. Assuming generic lipo battery\n");
--		}
-+		goto unknown;
-+	}
- 
-+	if (nvmem_device_read(nvmem, 96, 4, buf) < 0 ||
-+	    strncmp(buf, "COPR", 4) != 0 ||
-+	    nvmem_device_read(nvmem, 104, 24, buf) < 0 ||
-+	    strncmp(buf, "MOTOROLA E.P CHARGE ONLY", 24) != 0) {
-+		dev_warn(ddata->dev, "Unknown battery nvmem device. Assuming generic lipo battery\n");
-+		goto unknown;
- 	}
- 
--	switch (battery_id) {
--	case CPCAP_BATTERY_EB41_HW4X_ID:
--		ddata->config = cpcap_battery_eb41_data;
--		break;
--	case CPCAP_BATTERY_BW8X_ID:
--		ddata->config = cpcap_battery_bw8x_data;
--		break;
--	default:
--		ddata->config = cpcap_battery_unkown_data;
-+	if (nvmem_device_read(nvmem, 49, 1, &mul_idx) < 0 ||
-+	    nvmem_device_read(nvmem, 34, 1, &capacity) < 0 ||
-+	    nvmem_device_read(nvmem, 65, 1, &charge_voltage) < 0) {
-+		dev_warn(ddata->dev, "Can not read battery nvmem device. Assuming generic lipo battery\n");
-+		goto unknown;
- 	}
-+
-+	/* design capacity */
-+	mul_idx -= 2;
-+
-+	if (mul_idx < ARRAY_SIZE(multipliers))
-+		v = multipliers[mul_idx];
-+	else
-+		v = 10;
-+
-+	cpcap_battery_mot_data.info.charge_full_design = 1000 * v * capacity;
-+
-+	/* design max voltage */
-+	v = 1000 * ((16702 * charge_voltage) / 1000 + 1260);
-+	cpcap_battery_mot_data.info.voltage_max_design = v;
-+
-+	/* design min voltage */
-+	if (v > 4200000)
-+		cpcap_battery_mot_data.info.voltage_min_design = 3100000;
-+	else
-+		cpcap_battery_mot_data.info.voltage_min_design = 3200000;
-+
-+	ddata->config = cpcap_battery_mot_data;
-+
-+	return;
-+
-+unknown:
-+	ddata->check_nvmem = true;
-+	ddata->config = cpcap_battery_unkown_data;
- }
- 
- /**
--- 
-1.9.1
+-Akhil.
+> +
+> +	progress = !!memcmp(&cp_state, &ring->last_cp_state, sizeof(cp_state));
+> +
+> +	ring->last_cp_state = cp_state;
+> +
+> +	return progress;
+> +}
+> +
+>   static u32 a618_get_speed_bin(u32 fuse)
+>   {
+>   	if (fuse == 0)
+> @@ -1961,6 +1994,7 @@ static const struct adreno_gpu_funcs funcs = {
+>   		.create_address_space = a6xx_create_address_space,
+>   		.create_private_address_space = a6xx_create_private_address_space,
+>   		.get_rptr = a6xx_get_rptr,
+> +		.progress = a6xx_progress,
+>   	},
+>   	.get_timestamp = a6xx_get_timestamp,
+>   };
+> diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
+> index efcd7260f428..970a1a0ab34f 100644
+> --- a/drivers/gpu/drm/msm/msm_drv.h
+> +++ b/drivers/gpu/drm/msm/msm_drv.h
+> @@ -226,7 +226,13 @@ struct msm_drm_private {
+>   
+>   	struct drm_atomic_state *pm_state;
+>   
+> -	/* For hang detection, in ms */
+> +	/**
+> +	 * hangcheck_period: For hang detection, in ms
+> +	 *
+> +	 * Note that in practice, a submit/job will get at least two hangcheck
+> +	 * periods, due to checking for progress being implemented as simply
+> +	 * "have the CP position registers changed since last time?"
+> +	 */
+>   	unsigned int hangcheck_period;
+>   
+>   	/**
+> diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
+> index 3dffee54a951..136f5977b0bf 100644
+> --- a/drivers/gpu/drm/msm/msm_gpu.c
+> +++ b/drivers/gpu/drm/msm/msm_gpu.c
+> @@ -500,6 +500,21 @@ static void hangcheck_timer_reset(struct msm_gpu *gpu)
+>   			round_jiffies_up(jiffies + msecs_to_jiffies(priv->hangcheck_period)));
+>   }
+>   
+> +static bool made_progress(struct msm_gpu *gpu, struct msm_ringbuffer *ring)
+> +{
+> +	if (ring->hangcheck_progress_retries >= DRM_MSM_HANGCHECK_PROGRESS_RETRIES)
+> +		return false;
+> +
+> +	if (!gpu->funcs->progress)
+> +		return false;
+> +
+> +	if (!gpu->funcs->progress(gpu, ring))
+> +		return false;
+> +
+> +	ring->hangcheck_progress_retries++;
+> +	return true;
+> +}
+> +
+>   static void hangcheck_handler(struct timer_list *t)
+>   {
+>   	struct msm_gpu *gpu = from_timer(gpu, t, hangcheck_timer);
+> @@ -511,9 +526,12 @@ static void hangcheck_handler(struct timer_list *t)
+>   	if (fence != ring->hangcheck_fence) {
+>   		/* some progress has been made.. ya! */
+>   		ring->hangcheck_fence = fence;
+> -	} else if (fence_before(fence, ring->fctx->last_fence)) {
+> +		ring->hangcheck_progress_retries = 0;
+> +	} else if (fence_before(fence, ring->fctx->last_fence) &&
+> +			!made_progress(gpu, ring)) {
+>   		/* no progress and not done.. hung! */
+>   		ring->hangcheck_fence = fence;
+> +		ring->hangcheck_progress_retries = 0;
+>   		DRM_DEV_ERROR(dev->dev, "%s: hangcheck detected gpu lockup rb %d!\n",
+>   				gpu->name, ring->id);
+>   		DRM_DEV_ERROR(dev->dev, "%s:     completed fence: %u\n",
+> diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
+> index 585fd9c8d45a..d8f355e9f0b2 100644
+> --- a/drivers/gpu/drm/msm/msm_gpu.h
+> +++ b/drivers/gpu/drm/msm/msm_gpu.h
+> @@ -78,6 +78,8 @@ struct msm_gpu_funcs {
+>   	struct msm_gem_address_space *(*create_private_address_space)
+>   		(struct msm_gpu *gpu);
+>   	uint32_t (*get_rptr)(struct msm_gpu *gpu, struct msm_ringbuffer *ring);
+> +
+> +	bool (*progress)(struct msm_gpu *gpu, struct msm_ringbuffer *ring);
+>   };
+>   
+>   /* Additional state for iommu faults: */
+> @@ -236,7 +238,8 @@ struct msm_gpu {
+>   	 */
+>   #define DRM_MSM_INACTIVE_PERIOD   66 /* in ms (roughly four frames) */
+>   
+> -#define DRM_MSM_HANGCHECK_DEFAULT_PERIOD 500 /* in ms */
+> +#define DRM_MSM_HANGCHECK_DEFAULT_PERIOD 250 /* in ms */
+> +#define DRM_MSM_HANGCHECK_PROGRESS_RETRIES 3
+>   	struct timer_list hangcheck_timer;
+>   
+>   	/* Fault info for most recent iova fault: */
+> diff --git a/drivers/gpu/drm/msm/msm_ringbuffer.h b/drivers/gpu/drm/msm/msm_ringbuffer.h
+> index 2a5045abe46e..e3d33bae3380 100644
+> --- a/drivers/gpu/drm/msm/msm_ringbuffer.h
+> +++ b/drivers/gpu/drm/msm/msm_ringbuffer.h
+> @@ -35,6 +35,11 @@ struct msm_rbmemptrs {
+>   	volatile u64 ttbr0;
+>   };
+>   
+> +struct msm_cp_state {
+> +	uint64_t ib1_base, ib2_base;
+> +	uint32_t ib1_rem, ib2_rem;
+> +};
+> +
+I think we can add CP_RB_RPTR too here.
+>   struct msm_ringbuffer {
+>   	struct msm_gpu *gpu;
+>   	int id;
+> @@ -64,6 +69,25 @@ struct msm_ringbuffer {
+>   	uint64_t memptrs_iova;
+>   	struct msm_fence_context *fctx;
+>   
+> +	/**
+> +	 * hangcheck_progress_retries:
+> +	 *
+> +	 * The number of extra hangcheck duration cycles that we have given
+> +	 * due to it appearing that the GPU is making forward progress.
+> +	 *
+> +	 * If the GPU appears to be making progress (ie. the CP has advanced
+> +	 * in the command stream, we'll allow up to DRM_MSM_HANGCHECK_PROGRESS_RETRIES
+> +	 * expirations of the hangcheck timer before killing the job.  In other
+> +	 * words we'll let the submit run for up to
+> +	 * DRM_MSM_HANGCHECK_DEFAULT_PERIOD *  DRM_MSM_HANGCHECK_PROGRESS_RETRIES
+> +	 */
+> +	int hangcheck_progress_retries;
+> +
+> +	/**
+> +	 * last_cp_state: The state of the CP at the last call to gpu->progress()
+> +	 */
+> +	struct msm_cp_state last_cp_state;
+> +
+>   	/*
+>   	 * preempt_lock protects preemption and serializes wptr updates against
+>   	 * preemption.  Can be aquired from irq context.
 
