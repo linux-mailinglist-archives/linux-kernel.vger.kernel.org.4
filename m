@@ -2,267 +2,587 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3E3B66151A9
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 19:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2E7E615159
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 19:15:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230169AbiKASkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 14:40:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54208 "EHLO
+        id S229739AbiKASPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 14:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbiKASkE (ORCPT
+        with ESMTP id S229452AbiKASPl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 14:40:04 -0400
-X-Greylist: delayed 1595 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 01 Nov 2022 11:40:02 PDT
-Received: from mx0a-003ede02.pphosted.com (mx0a-003ede02.pphosted.com [205.220.169.153])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA26E1C10B
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 11:40:02 -0700 (PDT)
-Received: from pps.filterd (m0286615.ppops.net [127.0.0.1])
-        by mx0b-003ede02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A1IDQIn028254
-        for <linux-kernel@vger.kernel.org>; Tue, 1 Nov 2022 11:13:26 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=getcruise.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding;
- s=ppemail; bh=TZN+nxD29A/mXjM1cTiRY1RyYzHigm/eAkBELU0CF14=;
- b=PBHgMfUWCAyWU+BS9eg7YzTm9ZpaAWRdUFPUe3AbTXdG9277ibb7aYz6LP2C+JW38sNt
- +RShb638WNFPMBblaBb0ov0DM7lRc9HUi1ihzHVyW6bIN6uzuHLuSYwbePPDnnjShLH/
- XO3ui/uthf28h7KkwyyZWPucah2FYIWYRzMSD2dTgMicQcRhC2VFFXj6biwxY+gmgOPr
- Y9WMTK/kiqOi/oUt7tjmUIofofxArczYB981kZNKts+jNyPh7JWrHHWgUd7HGz32Ly/o
- 8nnvQRCg1YDQvLwTIF13w9Ryvbcyu5Tliw+MF5UCaQdnCHpv4XaaRCYZ7y2foj8MwpDa cg== 
-Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
-        by mx0b-003ede02.pphosted.com (PPS) with ESMTPS id 3kh0ckrufj-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 11:13:26 -0700
-Received: by mail-pg1-f197.google.com with SMTP id e125-20020a636983000000b0046ed15a8212so8169711pgc.19
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 11:13:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=getcruise.com; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=TZN+nxD29A/mXjM1cTiRY1RyYzHigm/eAkBELU0CF14=;
-        b=B9YUrfo7zTLPpIvcViTkY5ihrai3NrkPOR9Me2X6e/5VjqOEorTYmYKytewk8j5Whh
-         VOrVciNBdVse5KYJzaGbd4iSdC/KfI9Hrzpx/o2rNOY7hdOTkLyjWc6W3axBFzbnFa5T
-         NZuNVao5FcNNiAQP+woknoddrhEZkRiV7C2XonIybKVRC5p+SYICfCtsmBKWpJALQ90c
-         UDSc4gX9deqGyEV/IrPWO/96WsipmOy5U71WwlNg8GaDii+IFcyPvCwcHgkDlPc8Mg44
-         lZcmvzDKj1lKYv2VvSxrCH7m9r/ZwU0VT3p8Nup5+8yGfUQasJenSyIrY4scjlm4jNSf
-         iPlw==
+        Tue, 1 Nov 2022 14:15:41 -0400
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CA56140;
+        Tue,  1 Nov 2022 11:15:38 -0700 (PDT)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-13ba86b5ac0so17732471fac.1;
+        Tue, 01 Nov 2022 11:15:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=TZN+nxD29A/mXjM1cTiRY1RyYzHigm/eAkBELU0CF14=;
-        b=opEKzGBbShfM2bn71/kVpx1mU5/2QJ8MRSohzrZqrMr/n58a5OALp9Tr2jo8H73xsm
-         CY6INGwPWG/5LGjHgX9V2z1Sx2vIncM25DE9m2BG/u5ievrTSwCKsHpXT+bXlzl7YBNn
-         7hn34DeYLMTLSus8QIk7P1yXWJiEKiMqLjOs6u0aUuvnqxmGxPIAuNw6qqWabFbcX+rJ
-         NT8XDTKrtqq4kasGrRFOqQT01HqEcXql82Mi0w6r8RpG0/jC54jrifN1tqKtuR8sFeQE
-         jfNBwfQj9sw0y+DQRzcZvaw0XhDB6hVNakpXeBonWsNCVRaZZIWt5nYvtW+2bRwCbB2Z
-         7OPg==
-X-Gm-Message-State: ACrzQf2vq5hWyZevftxZG2i6xKaOcH09zsEuJbZZSJa/br0BAJISsuAH
-        bYqOXKwEnqT0KC6xaG43VGpS4C3OEFB8mpplfPtEPleFxEx/ofNiF6orQqEnEfIkiQDDauJtaDi
-        Jywo2CWjzgZ2RzoiAYp3sYWI=
-X-Received: by 2002:a63:4410:0:b0:43c:9385:5373 with SMTP id r16-20020a634410000000b0043c93855373mr171024pga.342.1667326405462;
-        Tue, 01 Nov 2022 11:13:25 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7xCdoqUgHSMdgTLB6mB0dr3YKn10njr1NWWEPBfi45SBznlOcV6JWQVykoZp8vU4em6iPbsQ==
-X-Received: by 2002:a63:4410:0:b0:43c:9385:5373 with SMTP id r16-20020a634410000000b0043c93855373mr171015pga.342.1667326405050;
-        Tue, 01 Nov 2022 11:13:25 -0700 (PDT)
-Received: from 4VPLMR2-DT.corp.robot.car ([199.73.125.241])
-        by smtp.gmail.com with ESMTPSA id m14-20020a63fd4e000000b00460c67afbd5sm6229047pgj.7.2022.11.01.11.13.23
+        bh=d7J7upHClmi4YP0sGD2hdgbBRRT8SqEClo6yxSq4ujU=;
+        b=YM+6i3YC7VjzbU9nRMrFUvZV6nsk7/Btyk3RmNh8mlZ806FzajEiUQcBIi8QakLQnn
+         27jnm4ganFCuogqEO9Xzg2ETXjCC3MzTiVbMhGEOeyJxGfrTTgCYMqgjNcvPgAP6fecF
+         5ZADj91owkXM1r4PSdi4wTRoygoVy77tS5IJ7ah1UFHUM2UXuX+g3J12cbl/QEXwcagD
+         gDUPSinkJYVJvQHgQjvwT6hhym2XaFDxGtTOLlgDs9HpyVa21pe2PjXtD//FT0frEpol
+         Lth+X+VMgpzmBR3FfwA1101l5PVi6ZcQ+NGPTRL+jwjXlQrIHekC0XeBvuPUsoTW65qW
+         z8Rg==
+X-Gm-Message-State: ACrzQf1/bl9V/N1GBT8g0Z/5uH8dyABR6kwhX2rN+mvf1X9VPl0OejU7
+        YpS3nrHh3FQWb7Y4EyvYrZfOoEzsjA==
+X-Google-Smtp-Source: AMsMyM4xo7Qa1NyweaTPX1+p4Izhad80ebdCdEPrpfHdaT92ymsHd1Xol8KEL++k/ZhxMOr7/PyFyA==
+X-Received: by 2002:a05:6870:d29f:b0:132:bd27:825d with SMTP id d31-20020a056870d29f00b00132bd27825dmr12060430oae.99.1667326537808;
+        Tue, 01 Nov 2022 11:15:37 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id r84-20020acaa857000000b00359d1b125bdsm3648346oie.37.2022.11.01.11.15.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 11:13:24 -0700 (PDT)
-From:   Andy Ren <andy.ren@getcruise.com>
-To:     netdev@vger.kernel.org, davem@davemloft.com, kuba@kernel.org,
-        pabeni@redhat.com, corbet@lwm.net
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        roman.gushchin@linux.dev, Andy Ren <andy.ren@getcruise.com>
-Subject: [PATCH net-next] netconsole: Enable live renaming for network interfaces used by netconsole
-Date:   Tue,  1 Nov 2022 11:12:25 -0700
-Message-Id: <20221101181225.1272144-1-andy.ren@getcruise.com>
-X-Mailer: git-send-email 2.38.1
+        Tue, 01 Nov 2022 11:15:37 -0700 (PDT)
+Received: (nullmailer pid 1809981 invoked by uid 1000);
+        Tue, 01 Nov 2022 18:15:39 -0000
+From:   Rob Herring <robh@kernel.org>
+To:     Frank Rowand <frowand.list@gmail.com>
+Cc:     Lee Jones <lee@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] scripts/dtc: Update to upstream version v1.6.1-63-g55778a03df61
+Date:   Tue,  1 Nov 2022 13:14:27 -0500
+Message-Id: <20221101181427.1808703-1-robh@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: s77cnhuKxmIGjQycchWtLWnhTAzRt8FG
-X-Proofpoint-ORIG-GUID: s77cnhuKxmIGjQycchWtLWnhTAzRt8FG
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-01_09,2022-11-01_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- impostorscore=0 mlxscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0
- suspectscore=0 clxscore=1011 mlxlogscore=999 phishscore=0 adultscore=0
- spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211010132
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This patch enables support for live renaming of network interfaces
-initialized by netconsole.
+It's been a while since the last sync and Lee needs commit 73590342fc85
+("libfdt: prevent integer overflow in fdt_next_tag").
 
-This resolves an issue seen when netconsole is configured to boot as a
-built-in kernel module with a kernel boot argument. As stated in the
-kernel man page - As a built-in, netconsole initializes immediately
-after NIC cards and will bring up the specified interface as soon as
-possible. Consequently, the renaming of specified interfaces will fail
-and return EBUSY. This is because by default, the kernel disallows live
-renaming unless the device explicitly sets a priv_flags bit
-(IFF_LIVE_RENAME_OK), and renaming after a network interface is up
-returns EBUSY.
+This adds the following commits from upstream:
 
-The changes to the kernel are as of following:
+55778a03df61 libfdt: tests: add get_next_tag_invalid_prop_len
+73590342fc85 libfdt: prevent integer overflow in fdt_next_tag
+035fb90d5375 libfdt: add fdt_get_property_by_offset_w helper
+98a07006c48d Makefile: fix infinite recursion by dropping non-existent `%.output`
+a036cc7b0c10 Makefile: limit make re-execution to avoid infinite spin
+c6e92108bcd9 libdtc: remove duplicate judgments
+e37c25677dc9 Don't generate erroneous fixups from reference to path
+50454658f2b5 libfdt: Don't mask fdt_get_name() returned error
+e64a204196c9 manual.txt: Follow README.md and remove Jon
+f508c83fe6f0 Update README in MANIFEST.in and setup.py to README.md
+c2ccf8a77dd2 Add description of Signed-off-by lines
+90b9d9de42ca Split out information for contributors to CONTRIBUTING.md
+0ee1d479b23a Remove Jon Loeliger from maintainers list
+b33a73c62c1c Convert README to README.md
+7ad60734b1c1 Allow static building with meson
+fd9b8c96c780 Allow static building with make
+fda71da26e7f libfdt: Handle failed get_name() on BEGIN_NODE
+c7c7f17a83d5 Fix test script to run also on dash shell
+01f23ffe1679 Add missing relref_merge test to meson test list
+ed310803ea89 pylibfdt: add FdtRo.get_path()
+c001fc01a43e pylibfdt: fix swig build in install
+26c54f840d23 tests: add test cases for label-relative path references
+ec7986e682cf dtc: introduce label relative path references
+651410e54cb9 util: introduce xstrndup helper
+4048aed12b81 setup.py: fix out of tree build
+ff5afb96d0c0 Handle integer overflow in check_property_phandle_args()
+ca7294434309 README: Explain how to add a new API function
+c0c2e115f82e Fix a UB when fdt_get_string return null
+cd5f69cbc0d4 tests: setprop_inplace: use xstrdup instead of unchecked strdup
+a04f69025003 pylibfdt: add Property.as_*int*_array()
+83102717d7c4 pylibfdt: add Property.as_stringlist()
+d152126bb029 Fix Python crash on getprop deallocation
+17739b7ef510 Support 'r' format for printing raw bytes with fdtget
+45f3d1a095dd libfdt: overlay: make overlay_get_target() public
+c19a4bafa514 libfdt: fix an incorrect integer promotion
+1cc41b1c969f pylibfdt: Add packaging metadata
+db72398cd437 README: Update pylibfdt install instructions
+383e148b70a4 pylibfdt: fix with Python 3.10
+23b56cb7e189 pylibfdt: Move setup.py to the top level
+69a760747d8d pylibfdt: Split setup.py author name and email
+0b106a77dbdc pylibfdt: Use setuptools_scm for the version
+c691776ddb26 pylibfdt: Use setuptools instead of distutils
+5216f3f1bbb7 libfdt: Add static lib to meson build
+4eda2590f481 CI: Cirrus: bump used FreeBSD from 12.1 to 13.0
 
-- Addition of a iface_live_renaming boolean flag to the netpoll struct,
-used to enable/disable interface live renaming. False by default
-- Changes to check for the aforementioned flag in network and ethernet
-driver interface renaming code
-- Adds a new optional "*" parameter to the netconsole configuration string
-after interface device name that enables interface live renaming when
-included (e.g. "eth0*"). When this parameter is included,
-"iface_live_renaming" is set to true.
+Signed-off-by: Rob Herring <robh@kernel.org>
 ---
- Documentation/networking/netconsole.rst |  5 +++--
- include/linux/netpoll.h                 |  3 +++
- net/core/dev.c                          |  3 ++-
- net/core/netpoll.c                      | 18 +++++++++++++++++-
- net/ethernet/eth.c                      |  5 ++++-
- 5 files changed, 29 insertions(+), 5 deletions(-)
+ scripts/dtc/checks.c               | 15 +++++++-----
+ scripts/dtc/dtc-lexer.l            |  2 +-
+ scripts/dtc/dtc-parser.y           | 13 ++++++++++
+ scripts/dtc/libfdt/fdt.c           | 20 +++++++++------
+ scripts/dtc/libfdt/fdt.h           |  4 +--
+ scripts/dtc/libfdt/fdt_addresses.c |  2 +-
+ scripts/dtc/libfdt/fdt_overlay.c   | 29 ++++++----------------
+ scripts/dtc/libfdt/fdt_ro.c        |  2 +-
+ scripts/dtc/libfdt/libfdt.h        | 25 +++++++++++++++++++
+ scripts/dtc/livetree.c             | 39 +++++++++++++++++++++++++++---
+ scripts/dtc/util.c                 | 15 ++++++++++--
+ scripts/dtc/util.h                 |  4 ++-
+ scripts/dtc/version_gen.h          |  2 +-
+ 13 files changed, 124 insertions(+), 48 deletions(-)
 
-diff --git a/Documentation/networking/netconsole.rst b/Documentation/networking/netconsole.rst
-index 1f5c4a04027c..c1255a4d9c9b 100644
---- a/Documentation/networking/netconsole.rst
-+++ b/Documentation/networking/netconsole.rst
-@@ -34,20 +34,21 @@ Sender and receiver configuration:
- It takes a string configuration parameter "netconsole" in the
- following format::
- 
-- netconsole=[+][src-port]@[src-ip]/[<dev>],[tgt-port]@<tgt-ip>/[tgt-macaddr]
-+ netconsole=[+][src-port]@[src-ip]/[<dev>][*],[tgt-port]@<tgt-ip>/[tgt-macaddr]
- 
-    where
- 	+             if present, enable extended console support
- 	src-port      source for UDP packets (defaults to 6665)
- 	src-ip        source IP to use (interface address)
- 	dev           network interface (eth0)
-+	*             if present, allow runtime network interface renaming
- 	tgt-port      port for logging agent (6666)
- 	tgt-ip        IP address for logging agent
- 	tgt-macaddr   ethernet MAC address for logging agent (broadcast)
- 
- Examples::
- 
-- linux netconsole=4444@10.0.0.1/eth1,9353@10.0.0.2/12:34:56:78:9a:bc
-+ linux netconsole=4444@10.0.0.1/eth1*,9353@10.0.0.2/12:34:56:78:9a:bc
- 
- or::
- 
-diff --git a/include/linux/netpoll.h b/include/linux/netpoll.h
-index bd19c4b91e31..f2ebdabf0959 100644
---- a/include/linux/netpoll.h
-+++ b/include/linux/netpoll.h
-@@ -32,6 +32,7 @@ struct netpoll {
- 	bool ipv6;
- 	u16 local_port, remote_port;
- 	u8 remote_mac[ETH_ALEN];
-+	bool iface_live_renaming;
+diff --git a/scripts/dtc/checks.c b/scripts/dtc/checks.c
+index 781ba1129a8e..9f31d2607182 100644
+--- a/scripts/dtc/checks.c
++++ b/scripts/dtc/checks.c
+@@ -1382,10 +1382,10 @@ struct provider {
  };
  
- struct netpoll_info {
-@@ -51,9 +52,11 @@ struct netpoll_info {
- void netpoll_poll_dev(struct net_device *dev);
- void netpoll_poll_disable(struct net_device *dev);
- void netpoll_poll_enable(struct net_device *dev);
-+bool netpoll_live_renaming_enabled(struct net_device *dev);
- #else
- static inline void netpoll_poll_disable(struct net_device *dev) { return; }
- static inline void netpoll_poll_enable(struct net_device *dev) { return; }
-+static inline bool netpoll_live_renaming_enabled(struct net_device *dev) { return false; }
- #endif
- 
- void netpoll_send_udp(struct netpoll *np, const char *msg, int len);
-diff --git a/net/core/dev.c b/net/core/dev.c
-index cfb68db040a4..67430bec1f33 100644
---- a/net/core/dev.c
-+++ b/net/core/dev.c
-@@ -1176,7 +1176,8 @@ int dev_change_name(struct net_device *dev, const char *newname)
- 	 * directly.
- 	 */
- 	if (dev->flags & IFF_UP &&
--	    likely(!(dev->priv_flags & IFF_LIVE_RENAME_OK)))
-+	    likely(!(dev->priv_flags & IFF_LIVE_RENAME_OK) &&
-+		   !netpoll_live_renaming_enabled(dev)))
- 		return -EBUSY;
- 
- 	down_write(&devnet_rename_sem);
-diff --git a/net/core/netpoll.c b/net/core/netpoll.c
-index 9be762e1d042..fcea265290c3 100644
---- a/net/core/netpoll.c
-+++ b/net/core/netpoll.c
-@@ -224,6 +224,15 @@ void netpoll_poll_enable(struct net_device *dev)
- }
- EXPORT_SYMBOL(netpoll_poll_enable);
- 
-+bool netpoll_live_renaming_enabled(struct net_device *dev)
-+{
-+	if (dev->npinfo && dev->npinfo->netpoll->iface_live_renaming)
-+		return true;
-+
-+	return false;
-+}
-+EXPORT_SYMBOL(netpoll_live_renaming_enabled);
-+
- static void refill_skbs(void)
+ static void check_property_phandle_args(struct check *c,
+-					  struct dt_info *dti,
+-				          struct node *node,
+-				          struct property *prop,
+-				          const struct provider *provider)
++					struct dt_info *dti,
++					struct node *node,
++					struct property *prop,
++					const struct provider *provider)
  {
- 	struct sk_buff *skb;
-@@ -523,7 +532,7 @@ static int netpoll_parse_ip_addr(const char *str, union inet_addr *addr)
+ 	struct node *root = dti->dt;
+ 	unsigned int cell, cellsize = 0;
+@@ -1401,6 +1401,7 @@ static void check_property_phandle_args(struct check *c,
+ 		struct node *provider_node;
+ 		struct property *cellprop;
+ 		cell_t phandle;
++		unsigned int expected;
  
- int netpoll_parse_options(struct netpoll *np, char *opt)
- {
--	char *cur=opt, *delim;
-+	char *cur = opt, *delim, *asterisk;
- 	int ipv6;
- 	bool ipversion_set = false;
+ 		phandle = propval_cell_n(prop, cell);
+ 		/*
+@@ -1450,10 +1451,12 @@ static void check_property_phandle_args(struct check *c,
+ 			break;
+ 		}
  
-@@ -556,6 +565,13 @@ int netpoll_parse_options(struct netpoll *np, char *opt)
- 		if ((delim = strchr(cur, ',')) == NULL)
- 			goto parse_failed;
- 		*delim = 0;
-+
-+		asterisk = strchr(cur, '*');
-+		if (asterisk) {
-+			np->iface_live_renaming = true;
-+			*asterisk = 0;
-+		}
-+
- 		strscpy(np->dev_name, cur, sizeof(np->dev_name));
- 		cur = delim;
+-		if (prop->val.len < ((cell + cellsize + 1) * sizeof(cell_t))) {
++		expected = (cell + cellsize + 1) * sizeof(cell_t);
++		if ((expected <= cell) || prop->val.len < expected) {
+ 			FAIL_PROP(c, dti, node, prop,
+-				  "property size (%d) too small for cell size %d",
++				  "property size (%d) too small for cell size %u",
+ 				  prop->val.len, cellsize);
++			break;
+ 		}
  	}
-diff --git a/net/ethernet/eth.c b/net/ethernet/eth.c
-index e02daa74e833..bb341acfcf05 100644
---- a/net/ethernet/eth.c
-+++ b/net/ethernet/eth.c
-@@ -62,6 +62,7 @@
- #include <net/gro.h>
- #include <linux/uaccess.h>
- #include <net/pkt_sched.h>
-+#include <linux/netpoll.h>
+ }
+diff --git a/scripts/dtc/dtc-lexer.l b/scripts/dtc/dtc-lexer.l
+index 5568b4ae84cf..de60a70b6bdb 100644
+--- a/scripts/dtc/dtc-lexer.l
++++ b/scripts/dtc/dtc-lexer.l
+@@ -200,7 +200,7 @@ static void PRINTF(1, 2) lexical_error(const char *fmt, ...);
+ 			return DT_LABEL_REF;
+ 		}
+ 
+-<*>"&{/"{PATHCHAR}*\}	{	/* new-style path reference */
++<*>"&{"{PATHCHAR}*\}	{	/* new-style path reference */
+ 			yytext[yyleng-1] = '\0';
+ 			DPRINT("Ref: %s\n", yytext+2);
+ 			yylval.labelref = xstrdup(yytext+2);
+diff --git a/scripts/dtc/dtc-parser.y b/scripts/dtc/dtc-parser.y
+index a0316a3cc309..46457d4bc0aa 100644
+--- a/scripts/dtc/dtc-parser.y
++++ b/scripts/dtc/dtc-parser.y
+@@ -23,6 +23,12 @@ extern void yyerror(char const *s);
+ 
+ extern struct dt_info *parser_output;
+ extern bool treesource_error;
++
++static bool is_ref_relative(const char *ref)
++{
++	return ref[0] != '/' && strchr(&ref[1], '/');
++}
++
+ %}
+ 
+ %union {
+@@ -169,6 +175,8 @@ devicetree:
+ 			 */
+ 			if (!($<flags>-1 & DTSF_PLUGIN))
+ 				ERROR(&@2, "Label or path %s not found", $1);
++			else if (is_ref_relative($1))
++				ERROR(&@2, "Label-relative reference %s not supported in plugin", $1);
+ 			$$ = add_orphan_node(
+ 					name_node(build_node(NULL, NULL, NULL),
+ 						  ""),
+@@ -178,6 +186,9 @@ devicetree:
+ 		{
+ 			struct node *target = get_node_by_ref($1, $3);
+ 
++			if (($<flags>-1 & DTSF_PLUGIN) && is_ref_relative($3))
++				ERROR(&@2, "Label-relative reference %s not supported in plugin", $3);
++
+ 			if (target) {
+ 				add_label(&target->labels, $2);
+ 				merge_nodes(target, $4);
+@@ -193,6 +204,8 @@ devicetree:
+ 			 * so $-1 is what we want (plugindecl)
+ 			 */
+ 			if ($<flags>-1 & DTSF_PLUGIN) {
++				if (is_ref_relative($2))
++					ERROR(&@2, "Label-relative reference %s not supported in plugin", $2);
+ 				add_orphan_node($1, $3, $2);
+ 			} else {
+ 				struct node *target = get_node_by_ref($1, $2);
+diff --git a/scripts/dtc/libfdt/fdt.c b/scripts/dtc/libfdt/fdt.c
+index 9fe7cf4b747d..20c6415b9ced 100644
+--- a/scripts/dtc/libfdt/fdt.c
++++ b/scripts/dtc/libfdt/fdt.c
+@@ -106,7 +106,6 @@ int fdt_check_header(const void *fdt)
+ 	}
+ 	hdrsize = fdt_header_size(fdt);
+ 	if (!can_assume(VALID_DTB)) {
+-
+ 		if ((fdt_totalsize(fdt) < hdrsize)
+ 		    || (fdt_totalsize(fdt) > INT_MAX))
+ 			return -FDT_ERR_TRUNCATED;
+@@ -115,9 +114,7 @@ int fdt_check_header(const void *fdt)
+ 		if (!check_off_(hdrsize, fdt_totalsize(fdt),
+ 				fdt_off_mem_rsvmap(fdt)))
+ 			return -FDT_ERR_TRUNCATED;
+-	}
+ 
+-	if (!can_assume(VALID_DTB)) {
+ 		/* Bounds check structure block */
+ 		if (!can_assume(LATEST) && fdt_version(fdt) < 17) {
+ 			if (!check_off_(hdrsize, fdt_totalsize(fdt),
+@@ -165,7 +162,7 @@ const void *fdt_offset_ptr(const void *fdt, int offset, unsigned int len)
+ uint32_t fdt_next_tag(const void *fdt, int startoffset, int *nextoffset)
+ {
+ 	const fdt32_t *tagp, *lenp;
+-	uint32_t tag;
++	uint32_t tag, len, sum;
+ 	int offset = startoffset;
+ 	const char *p;
+ 
+@@ -191,12 +188,19 @@ uint32_t fdt_next_tag(const void *fdt, int startoffset, int *nextoffset)
+ 		lenp = fdt_offset_ptr(fdt, offset, sizeof(*lenp));
+ 		if (!can_assume(VALID_DTB) && !lenp)
+ 			return FDT_END; /* premature end */
++
++		len = fdt32_to_cpu(*lenp);
++		sum = len + offset;
++		if (!can_assume(VALID_DTB) &&
++		    (INT_MAX <= sum || sum < (uint32_t) offset))
++			return FDT_END; /* premature end */
++
+ 		/* skip-name offset, length and value */
+-		offset += sizeof(struct fdt_property) - FDT_TAGSIZE
+-			+ fdt32_to_cpu(*lenp);
++		offset += sizeof(struct fdt_property) - FDT_TAGSIZE + len;
++
+ 		if (!can_assume(LATEST) &&
+-		    fdt_version(fdt) < 0x10 && fdt32_to_cpu(*lenp) >= 8 &&
+-		    ((offset - fdt32_to_cpu(*lenp)) % 8) != 0)
++		    fdt_version(fdt) < 0x10 && len >= 8 &&
++		    ((offset - len) % 8) != 0)
+ 			offset += 4;
+ 		break;
+ 
+diff --git a/scripts/dtc/libfdt/fdt.h b/scripts/dtc/libfdt/fdt.h
+index 0c91aa7f67b5..f2e68807f277 100644
+--- a/scripts/dtc/libfdt/fdt.h
++++ b/scripts/dtc/libfdt/fdt.h
+@@ -35,14 +35,14 @@ struct fdt_reserve_entry {
+ 
+ struct fdt_node_header {
+ 	fdt32_t tag;
+-	char name[];
++	char name[0];
+ };
+ 
+ struct fdt_property {
+ 	fdt32_t tag;
+ 	fdt32_t len;
+ 	fdt32_t nameoff;
+-	char data[];
++	char data[0];
+ };
+ 
+ #endif /* !__ASSEMBLY */
+diff --git a/scripts/dtc/libfdt/fdt_addresses.c b/scripts/dtc/libfdt/fdt_addresses.c
+index 9a82cd0ba2f9..c40ba094f1f8 100644
+--- a/scripts/dtc/libfdt/fdt_addresses.c
++++ b/scripts/dtc/libfdt/fdt_addresses.c
+@@ -73,7 +73,7 @@ int fdt_appendprop_addrrange(void *fdt, int parent, int nodeoffset,
+ 	/* check validity of address */
+ 	prop = data;
+ 	if (addr_cells == 1) {
+-		if ((addr > UINT32_MAX) || ((UINT32_MAX + 1 - addr) < size))
++		if ((addr > UINT32_MAX) || (((uint64_t) UINT32_MAX + 1 - addr) < size))
+ 			return -FDT_ERR_BADVALUE;
+ 
+ 		fdt32_st(prop, (uint32_t)addr);
+diff --git a/scripts/dtc/libfdt/fdt_overlay.c b/scripts/dtc/libfdt/fdt_overlay.c
+index d217e79b6722..5c0c3981b89d 100644
+--- a/scripts/dtc/libfdt/fdt_overlay.c
++++ b/scripts/dtc/libfdt/fdt_overlay.c
+@@ -40,37 +40,22 @@ static uint32_t overlay_get_target_phandle(const void *fdto, int fragment)
+ 	return fdt32_to_cpu(*val);
+ }
+ 
+-/**
+- * overlay_get_target - retrieves the offset of a fragment's target
+- * @fdt: Base device tree blob
+- * @fdto: Device tree overlay blob
+- * @fragment: node offset of the fragment in the overlay
+- * @pathp: pointer which receives the path of the target (or NULL)
+- *
+- * overlay_get_target() retrieves the target offset in the base
+- * device tree of a fragment, no matter how the actual targeting is
+- * done (through a phandle or a path)
+- *
+- * returns:
+- *      the targeted node offset in the base device tree
+- *      Negative error code on error
+- */
+-static int overlay_get_target(const void *fdt, const void *fdto,
+-			      int fragment, char const **pathp)
++int fdt_overlay_target_offset(const void *fdt, const void *fdto,
++			      int fragment_offset, char const **pathp)
+ {
+ 	uint32_t phandle;
+ 	const char *path = NULL;
+ 	int path_len = 0, ret;
+ 
+ 	/* Try first to do a phandle based lookup */
+-	phandle = overlay_get_target_phandle(fdto, fragment);
++	phandle = overlay_get_target_phandle(fdto, fragment_offset);
+ 	if (phandle == (uint32_t)-1)
+ 		return -FDT_ERR_BADPHANDLE;
+ 
+ 	/* no phandle, try path */
+ 	if (!phandle) {
+ 		/* And then a path based lookup */
+-		path = fdt_getprop(fdto, fragment, "target-path", &path_len);
++		path = fdt_getprop(fdto, fragment_offset, "target-path", &path_len);
+ 		if (path)
+ 			ret = fdt_path_offset(fdt, path);
+ 		else
+@@ -636,7 +621,7 @@ static int overlay_merge(void *fdt, void *fdto)
+ 		if (overlay < 0)
+ 			return overlay;
+ 
+-		target = overlay_get_target(fdt, fdto, fragment, NULL);
++		target = fdt_overlay_target_offset(fdt, fdto, fragment, NULL);
+ 		if (target < 0)
+ 			return target;
+ 
+@@ -779,7 +764,7 @@ static int overlay_symbol_update(void *fdt, void *fdto)
+ 			return -FDT_ERR_BADOVERLAY;
+ 
+ 		/* get the target of the fragment */
+-		ret = overlay_get_target(fdt, fdto, fragment, &target_path);
++		ret = fdt_overlay_target_offset(fdt, fdto, fragment, &target_path);
+ 		if (ret < 0)
+ 			return ret;
+ 		target = ret;
+@@ -801,7 +786,7 @@ static int overlay_symbol_update(void *fdt, void *fdto)
+ 
+ 		if (!target_path) {
+ 			/* again in case setprop_placeholder changed it */
+-			ret = overlay_get_target(fdt, fdto, fragment, &target_path);
++			ret = fdt_overlay_target_offset(fdt, fdto, fragment, &target_path);
+ 			if (ret < 0)
+ 				return ret;
+ 			target = ret;
+diff --git a/scripts/dtc/libfdt/fdt_ro.c b/scripts/dtc/libfdt/fdt_ro.c
+index 17584da25760..9f6c551a22c2 100644
+--- a/scripts/dtc/libfdt/fdt_ro.c
++++ b/scripts/dtc/libfdt/fdt_ro.c
+@@ -481,12 +481,12 @@ const void *fdt_getprop_by_offset(const void *fdt, int offset,
+ 		if (!can_assume(VALID_INPUT)) {
+ 			name = fdt_get_string(fdt, fdt32_ld_(&prop->nameoff),
+ 					      &namelen);
++			*namep = name;
+ 			if (!name) {
+ 				if (lenp)
+ 					*lenp = namelen;
+ 				return NULL;
+ 			}
+-			*namep = name;
+ 		} else {
+ 			*namep = fdt_string(fdt, fdt32_ld_(&prop->nameoff));
+ 		}
+diff --git a/scripts/dtc/libfdt/libfdt.h b/scripts/dtc/libfdt/libfdt.h
+index ce31e844856a..77ccff19911e 100644
+--- a/scripts/dtc/libfdt/libfdt.h
++++ b/scripts/dtc/libfdt/libfdt.h
+@@ -660,6 +660,13 @@ int fdt_next_property_offset(const void *fdt, int offset);
+ const struct fdt_property *fdt_get_property_by_offset(const void *fdt,
+ 						      int offset,
+ 						      int *lenp);
++static inline struct fdt_property *fdt_get_property_by_offset_w(void *fdt,
++								int offset,
++								int *lenp)
++{
++	return (struct fdt_property *)(uintptr_t)
++		fdt_get_property_by_offset(fdt, offset, lenp);
++}
  
  /**
-  * eth_header - create the Ethernet header
-@@ -288,8 +289,10 @@ int eth_prepare_mac_addr_change(struct net_device *dev, void *p)
- {
- 	struct sockaddr *addr = p;
+  * fdt_get_property_namelen - find a property based on substring
+@@ -2116,6 +2123,24 @@ int fdt_del_node(void *fdt, int nodeoffset);
+  */
+ int fdt_overlay_apply(void *fdt, void *fdto);
  
--	if (!(dev->priv_flags & IFF_LIVE_ADDR_CHANGE) && netif_running(dev))
-+	if (!(dev->priv_flags & IFF_LIVE_ADDR_CHANGE) && netif_running(dev) &&
-+	    !netpoll_live_renaming_enabled(dev))
- 		return -EBUSY;
++/**
++ * fdt_overlay_target_offset - retrieves the offset of a fragment's target
++ * @fdt: Base device tree blob
++ * @fdto: Device tree overlay blob
++ * @fragment_offset: node offset of the fragment in the overlay
++ * @pathp: pointer which receives the path of the target (or NULL)
++ *
++ * fdt_overlay_target_offset() retrieves the target offset in the base
++ * device tree of a fragment, no matter how the actual targeting is
++ * done (through a phandle or a path)
++ *
++ * returns:
++ *      the targeted node offset in the base device tree
++ *      Negative error code on error
++ */
++int fdt_overlay_target_offset(const void *fdt, const void *fdto,
++			      int fragment_offset, char const **pathp);
 +
- 	if (!is_valid_ether_addr(addr->sa_data))
- 		return -EADDRNOTAVAIL;
- 	return 0;
+ /**********************************************************************/
+ /* Debugging / informational functions                                */
+ /**********************************************************************/
+diff --git a/scripts/dtc/livetree.c b/scripts/dtc/livetree.c
+index cc612370ec61..f46a098d5ada 100644
+--- a/scripts/dtc/livetree.c
++++ b/scripts/dtc/livetree.c
+@@ -581,12 +581,39 @@ struct node *get_node_by_phandle(struct node *tree, cell_t phandle)
+ 
+ struct node *get_node_by_ref(struct node *tree, const char *ref)
+ {
++	struct node *target = tree;
++	const char *label = NULL, *path = NULL;
++
+ 	if (streq(ref, "/"))
+ 		return tree;
+-	else if (ref[0] == '/')
+-		return get_node_by_path(tree, ref);
++
++	if (ref[0] == '/')
++		path = ref;
+ 	else
+-		return get_node_by_label(tree, ref);
++		label = ref;
++
++	if (label) {
++		const char *slash = strchr(label, '/');
++		char *buf = NULL;
++
++		if (slash) {
++			buf = xstrndup(label, slash - label);
++			label = buf;
++			path = slash + 1;
++		}
++
++		target = get_node_by_label(tree, label);
++
++		free(buf);
++
++		if (!target)
++			return NULL;
++	}
++
++	if (path)
++		target = get_node_by_path(target, path);
++
++	return target;
+ }
+ 
+ cell_t get_node_phandle(struct node *root, struct node *node)
+@@ -892,6 +919,12 @@ static void add_fixup_entry(struct dt_info *dti, struct node *fn,
+ 	/* m->ref can only be a REF_PHANDLE, but check anyway */
+ 	assert(m->type == REF_PHANDLE);
+ 
++	/* The format only permits fixups for references to label, not
++	 * references to path */
++	if (strchr(m->ref, '/'))
++		die("Can't generate fixup for reference to path &{%s}\n",
++		    m->ref);
++
+ 	/* there shouldn't be any ':' in the arguments */
+ 	if (strchr(node->fullpath, ':') || strchr(prop->name, ':'))
+ 		die("arguments should not contain ':'\n");
+diff --git a/scripts/dtc/util.c b/scripts/dtc/util.c
+index 40274fb79236..507f0120cd13 100644
+--- a/scripts/dtc/util.c
++++ b/scripts/dtc/util.c
+@@ -33,6 +33,17 @@ char *xstrdup(const char *s)
+ 	return d;
+ }
+ 
++char *xstrndup(const char *s, size_t n)
++{
++	size_t len = strnlen(s, n) + 1;
++	char *d = xmalloc(len);
++
++	memcpy(d, s, len - 1);
++	d[len - 1] = '\0';
++
++	return d;
++}
++
+ int xavsprintf_append(char **strp, const char *fmt, va_list ap)
+ {
+ 	int n, size = 0;	/* start with 128 bytes */
+@@ -353,11 +364,11 @@ int utilfdt_decode_type(const char *fmt, int *type, int *size)
+ 	}
+ 
+ 	/* we should now have a type */
+-	if ((*fmt == '\0') || !strchr("iuxs", *fmt))
++	if ((*fmt == '\0') || !strchr("iuxsr", *fmt))
+ 		return -1;
+ 
+ 	/* convert qualifier (bhL) to byte size */
+-	if (*fmt != 's')
++	if (*fmt != 's' && *fmt != 'r')
+ 		*size = qualifier == 'b' ? 1 :
+ 				qualifier == 'h' ? 2 :
+ 				qualifier == 'l' ? 4 : -1;
+diff --git a/scripts/dtc/util.h b/scripts/dtc/util.h
+index c45b2c295aa5..9d38edee9736 100644
+--- a/scripts/dtc/util.h
++++ b/scripts/dtc/util.h
+@@ -61,6 +61,7 @@ static inline void *xrealloc(void *p, size_t len)
+ }
+ 
+ extern char *xstrdup(const char *s);
++extern char *xstrndup(const char *s, size_t len);
+ 
+ extern int PRINTF(2, 3) xasprintf(char **strp, const char *fmt, ...);
+ extern int PRINTF(2, 3) xasprintf_append(char **strp, const char *fmt, ...);
+@@ -143,6 +144,7 @@ int utilfdt_write_err(const char *filename, const void *blob);
+  *		i	signed integer
+  *		u	unsigned integer
+  *		x	hex
++ *		r	raw
+  *
+  * TODO: Implement ll modifier (8 bytes)
+  * TODO: Implement o type (octal)
+@@ -160,7 +162,7 @@ int utilfdt_decode_type(const char *fmt, int *type, int *size);
+  */
+ 
+ #define USAGE_TYPE_MSG \
+-	"<type>\ts=string, i=int, u=unsigned, x=hex\n" \
++	"<type>\ts=string, i=int, u=unsigned, x=hex, r=raw\n" \
+ 	"\tOptional modifier prefix:\n" \
+ 	"\t\thh or b=byte, h=2 byte, l=4 byte (default)";
+ 
+diff --git a/scripts/dtc/version_gen.h b/scripts/dtc/version_gen.h
+index 785cc4c57326..0f303087b043 100644
+--- a/scripts/dtc/version_gen.h
++++ b/scripts/dtc/version_gen.h
+@@ -1 +1 @@
+-#define DTC_VERSION "DTC 1.6.1-g0a3a9d34"
++#define DTC_VERSION "DTC 1.6.1-g55778a03"
 -- 
-2.38.1
+2.35.1
 
