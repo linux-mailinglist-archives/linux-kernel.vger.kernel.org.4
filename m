@@ -2,78 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0724614B69
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:12:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81445614B6B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230078AbiKANMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 09:12:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46560 "EHLO
+        id S230133AbiKANNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 09:13:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbiKANMo (ORCPT
+        with ESMTP id S229841AbiKANNj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 09:12:44 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 30C2E1A83A;
-        Tue,  1 Nov 2022 06:12:43 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 3FA4B1FB;
-        Tue,  1 Nov 2022 06:12:49 -0700 (PDT)
-Received: from FVFF77S0Q05N (unknown [10.57.3.81])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D6A693F703;
-        Tue,  1 Nov 2022 06:12:41 -0700 (PDT)
-Date:   Tue, 1 Nov 2022 13:12:39 +0000
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     'Szabolcs Nagy' <szabolcs.nagy@arm.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: linux interprets an fcntl int arg as long
-Message-ID: <Y2EbR6YnQcgK4B8T@FVFF77S0Q05N>
-References: <Y1/DS6uoWP7OSkmd@arm.com>
- <Y2B6jcLUJ1F2y2yL@mit.edu>
- <Y2DisyknbKxeCik4@arm.com>
- <a0693686d0ae41599fe1700680ec56ec@AcuMS.aculab.com>
- <Y2EGtE05hcVn3B3a@arm.com>
- <0030a20a94cd49628c5461d044bb28ed@AcuMS.aculab.com>
+        Tue, 1 Nov 2022 09:13:39 -0400
+Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B09E635A;
+        Tue,  1 Nov 2022 06:13:34 -0700 (PDT)
+Received: by mail-wr1-x42f.google.com with SMTP id h9so20106782wrt.0;
+        Tue, 01 Nov 2022 06:13:34 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QwhanQKRbqrvvgXUmj5gq6ZtQDr1OrntJTB30vFuuTY=;
+        b=e0kRdjU5SzSF2BOua3Yow1NZ+w0vOGAZlt+p/2ZhBUXewN7KZEr2dyZkYJtXiZQsyx
+         FWpQBlWjpc/zZlLTHY9rvvzVJk+/ecYZUqwW7wrBBi8HnsCZ55DMQd+jvby3snvRfdiA
+         SpOapgjH02XgFcJ2pGRLolxiAD13mkkxmy8cS2V/PkkYmOSxcUlpp8conIALYFbNN3Hb
+         8ekg98g8AlPsdxPyFfeGQHsotzfUPVkb9EAC1RjwTHzaZDJxv3E4f4jqOekJNJvvzFNd
+         7rMpffBtf+VAFzYXdDwjfSusW2RWe+PQafx9KRiAJcGlYcB1biPH+VwJindyjoCRhvYn
+         nKww==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QwhanQKRbqrvvgXUmj5gq6ZtQDr1OrntJTB30vFuuTY=;
+        b=wG24oZFo5kuZHebk1/X9YkdJYi4a+AuU1uobgiI6HQNuKUZrMHRXUIdYnBloBAxkOi
+         V9Q0gLBWaVhGaVUasbZ5FsqY9pbR9bPrRTiwwlGhTCryM48OC7H2Vbp3z3qLQla1DW55
+         mkXWGNRsZ4JXUOgNhlDkcR6AZsPs2RUHip967jPuBcggKpgC8Rac/SnQQ7G7CgzlPcbl
+         l9GJu/xVdg9QIzO9QhC0bpJVpVA5p0n8xaIqBIOW+uJLgeDQkFhEF5LiZLkvNCR5OkZQ
+         SH8WUMTV1y+AofDtUC3hk6nyjxoCmAKVO//mAt8/lgDJTLXdXCk5BkRcdjCl8Q6I4j0B
+         UbTA==
+X-Gm-Message-State: ACrzQf1bPul2vdR4hSxBqisyJ/kE3HEvJOOLBlyVmdj3rQmI5U1enD1x
+        zoUAhK5OH9lDx3khqUCfjhGGsNMjU0f3qACYg1s=
+X-Google-Smtp-Source: AMsMyM5DlQ7Km2bCUVKYm8RKj16TKBqKXaqi9AjkrKlt0+HhahmyUiEE6I44GCC/vgYreiDs7lxMcPQrvm+BZr/JQAQ=
+X-Received: by 2002:a5d:4648:0:b0:236:c0da:a4f6 with SMTP id
+ j8-20020a5d4648000000b00236c0daa4f6mr8515976wrs.134.1667308412714; Tue, 01
+ Nov 2022 06:13:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0030a20a94cd49628c5461d044bb28ed@AcuMS.aculab.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220811161331.37055-1-peterx@redhat.com> <20220811161331.37055-5-peterx@redhat.com>
+ <20221021160603.GA23307@u164.east.ru> <Y1Wbi4yyVvDtg4zN@x1n>
+ <CADxRZqy+cMHN4FjtDr7-LOyVf0y+G8MPiBoGiTEsSj48jBfVnw@mail.gmail.com> <Y1f2IR+h4i2+/swj@x1n>
+In-Reply-To: <Y1f2IR+h4i2+/swj@x1n>
+From:   Anatoly Pugachev <matorola@gmail.com>
+Date:   Tue, 1 Nov 2022 16:13:20 +0300
+Message-ID: <CADxRZqz+Sk=yxrJQ8B7UVkrcct9w6nUeiaaVn7QTFL59isFLDA@mail.gmail.com>
+Subject: Re: dpkg fails on sparc64 (was: [PATCH v4 4/7] mm/thp: Carry over
+ dirty bit when thp splits on pmd)
+To:     Peter Xu <peterx@redhat.com>
+Cc:     David Miller <davem@davemloft.net>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Alistair Popple <apopple@nvidia.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Andi Kleen <andi.kleen@intel.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>, sparclinux@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 12:19:51PM +0000, David Laight wrote:
-> From: 'Szabolcs Nagy' <szabolcs.nagy@arm.com>
-> > Sent: 01 November 2022 11:45
-> > 
-> > The 11/01/2022 10:02, David Laight wrote:
-> > > From: Szabolcs Nagy
+On Tue, Oct 25, 2022 at 5:43 PM Peter Xu <peterx@redhat.com> wrote:
+>
+> On Tue, Oct 25, 2022 at 01:22:45PM +0300, Anatoly Pugachev wrote:
+> > On Sun, Oct 23, 2022 at 10:53 PM Peter Xu <peterx@redhat.com> wrote:
+> > > On Fri, Oct 21, 2022 at 07:06:03PM +0300, Anatoly Pugachev wrote:
+> > > >
+> > > >     Link: https://lkml.kernel.org/r/20220811161331.37055-5-peterx@redhat.com
+>
+> Maybe we need to have the minimum revert for v6.1 before we have more
+> clues.
 
-> > kernel code:
-> > ------------
-> > SYSCALL_DEFINE3(fcntl, unsigned int, fd, unsigned int, cmd, unsigned long, arg)
-> > {
-> 
-> That is just a wrapper and calls do_fcntl().
-> which needs changing to be add:
-> 	arg &= ~0U;
-> before the switch(cmd) {
+Just a quick update on 6.1.0-rc3
 
-Just to check, do you mean the switch in do_fcntl(), or the switch within memfd_fcntl() ?
-
-The former handles other APIs which do expect arg to be a long (e.g.
-F_SET_RW_HINT and F_GET_RW_HINT expect it to hold a full 64-bit pointer), so
-that'd break things.
-
-The latter would work (as would casting arg to int when calling
-memfd_add_seals()).
-
-Mark.
+Tested again with 6.1.0-rc3, segfaults dpkg... applied patch - no dpkg
+segfaults.
