@@ -2,134 +2,215 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99F7C61536A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 21:40:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC061615370
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 21:45:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbiKAUkp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 16:40:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43636 "EHLO
+        id S229877AbiKAUpi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 16:45:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229814AbiKAUkl (ORCPT
+        with ESMTP id S229591AbiKAUpg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 16:40:41 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A5747DF62
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 13:40:40 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so77576pjl.3
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 13:40:40 -0700 (PDT)
+        Tue, 1 Nov 2022 16:45:36 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD569120B2
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 13:45:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mOdWYdGW3s/P7m5FZD4/WdL1KbYLkJOJKiY+fmsgK1Y=;
-        b=de8L7i8dhThB5jPU0QJ+wNCGKLfERSiRy+Nbh6pG252kQcQxnKnQdrC/dzwc2hsMlr
-         aXSqguw0WCWoiHLlL8FFhFYXq5any+pt0sbBNK/Z6RyfW/Q96G2LiLAVl79je4VnNTZc
-         rx7+QW6x2/TMYXuBQq6Crli0IYNQMfIW0re3/mURukLaYSLsG+CEd0VMlMAyPCD7M4C9
-         9GGqwlrOuFinXjL1GQ/xEE6TwHb2EZbofdPaFWrE2pP5qCy4pczRGQwKJ17LIBJtMrYw
-         lyxeDfIa0ZOR5vN8EbK8VDmf6DZ5plNsAi7rnapRAvQL37amHSUoIZZVL9z71/lBWZ0o
-         pHwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mOdWYdGW3s/P7m5FZD4/WdL1KbYLkJOJKiY+fmsgK1Y=;
-        b=ri3hP7j6ThoPdwX6JGyBgAzYF7vF0s0mNcXAqYULyF1qP+PI3JfCu8qVSdAvA3+ss5
-         PSV+l4tfU0QIad2v6ZYXd62QFgrPhUUQh8XTRc5V0YJFR44i6xAwjurOmBSSQQ4a5MiX
-         hwBODRkWHlussf62a8UGxbsZq7cxZgm7ITz+PbOvBbyND/1iMdHks6Ne7K+TETvDDjoX
-         lKB7NvtVK1jBTZ2YHv79zqUOm50MjvraQIzINu3RAJywGga87fIa6cG1/XEosR5LzYtm
-         EMIsbeHBmTFFIuq88yp3D/MkQQAVOsDy6/B3LrhR5D4tDtTJ4/EvFGWGI5Tb98v1/gEn
-         Z2Hg==
-X-Gm-Message-State: ACrzQf1R2XHHjW8aUdsKOzm3UjBCMmr9tN9gjTPk6ySZeLCTgRpUCf4D
-        Pv34Ia6n+XsvM+TMcu16E1/lbg==
-X-Google-Smtp-Source: AMsMyM6VfVb9FYoLCNZggIxd4jHQV9YIO5CmtN8F82LNyD+04hIVSj/1BCmis1ty+4F5c9ub9uHCgA==
-X-Received: by 2002:a17:902:d2c4:b0:187:a4e:f9c1 with SMTP id n4-20020a170902d2c400b001870a4ef9c1mr18314924plc.168.1667335240174;
-        Tue, 01 Nov 2022 13:40:40 -0700 (PDT)
-Received: from p14s (S0106889e681aac74.cg.shawcable.net. [68.147.0.187])
-        by smtp.gmail.com with ESMTPSA id o10-20020a62f90a000000b005625d5ae760sm7103069pfh.11.2022.11.01.13.40.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 13:40:39 -0700 (PDT)
-Date:   Tue, 1 Nov 2022 14:40:37 -0600
-From:   Mathieu Poirier <mathieu.poirier@linaro.org>
-To:     Tinghan Shen <tinghan.shen@mediatek.com>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Tiffany Lin <tiffany.lin@mediatek.com>,
-        Andrew-CT Chen <andrew-ct.chen@mediatek.com>,
-        Yunfei Dong <yunfei.dong@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        linux-remoteproc@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-media@vger.kernel.org
-Subject: Re: [PATCH v3 00/11] Add support for MT8195 SCP 2nd core
-Message-ID: <20221101204037.GA1656603@p14s>
-References: <20220927025606.26673-1-tinghan.shen@mediatek.com>
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=+J1NDqzKFTtTNi/LQ/3Qk9QZTbg+z6wDJhxfKc3qUJk=;
+  b=Guqfk8EQbUlAwPROkSCvZwlMtZ9meuH9Llcv1WggyJhdxhgV+pwz4Qid
+   trCrArIRpCPbLvEPQAc0s5d+g4aW0Tbuin8qKahqKaJuAfSWax5BPhZIR
+   M3yROY5UbG+7eHVlar10YG8grKUrffYhGyVUSmDKWWoRGHVINl0EiZk3C
+   c=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.95,232,1661810400"; 
+   d="scan'208";a="72537135"
+Received: from 51.123.68.85.rev.sfr.net (HELO hadrien) ([85.68.123.51])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 21:45:30 +0100
+Date:   Tue, 1 Nov 2022 21:45:30 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Deepak R Varma <drv@mailo.com>
+cc:     outreachy@lists.linux.dev,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: r8188eu: remove unwanted variable
+ implementation
+In-Reply-To: <Y2GBzcnG+bT/dEcG@ubunlion>
+Message-ID: <alpine.DEB.2.22.394.2211012144290.2834@hadrien>
+References: <Y2FPOON3UcqqAQFy@ubunlion> <alpine.DEB.2.22.394.2211011811400.2834@hadrien> <Y2GBzcnG+bT/dEcG@ubunlion>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220927025606.26673-1-tinghan.shen@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Good day,
 
-A lot of comments related to the handling of SCP 0 and 1 have already been made
-on this patchset, along with my own advice from the previous patchset on how to
-move forward.  As such I will wait for a new revision.
 
-Thanks,
-Mathieu
+On Wed, 2 Nov 2022, Deepak R Varma wrote:
 
-On Tue, Sep 27, 2022 at 10:55:55AM +0800, Tinghan Shen wrote:
-> The mediatek remoteproc driver currently only allows bringing up a 
-> single core SCP, e.g. MT8183. It also only bringing up the 1st 
-> core in SoCs with a dual-core SCP, e.g. MT8195. This series support 
-> to bring-up the 2nd core of the dual-core SCP.
-> 
-> v2 -> v3:
-> 1. change the representation of dual-core SCP in dts file and update SCP yaml
-> 2. rewrite SCP driver to reflect the change of dts node
-> 3. add SCP core 1 node to mt8195.dtsi
-> 4. remove redundant call of rproc_boot for SCP
-> 5. refine IPI error message
-> 
-> v1 -> v2:
-> 1. update dt-binding property description
-> 2. remove kconfig for scp dual driver
-> 3. merge mtk_scp_dual.c and mtk_scp_subdev.c to mtk_scp.c
-> 
-> Tinghan Shen (11):
->   dt-bindings: remoteproc: mediatek: Give the subnode a persistent name
->   dt-bindings: remoteproc: mediatek: Support MT8195 dual-core SCP
->   arm64: dts: mt8195: Add SCP core 1 node
->   remoteproc: mediatek: Remove redundant rproc_boot
->   remoteproc: mediatek: Add SCP core 1 register definitions
->   remoteproc: mediatek: Add MT8195 SCP core 1 operations
->   remoteproc: mediatek: Probe MT8195 SCP core 1
->   remoteproc: mediatek: Control SCP core 1 boot by rproc subdevice
->   remoteproc: mediatek: Setup MT8195 SCP core 1 SRAM offset
->   remoteproc: mediatek: Handle MT8195 SCP core 1 watchdog timeout
->   remoteproc: mediatek: Refine ipi handler error message
-> 
->  .../bindings/remoteproc/mtk,scp.yaml          | 132 ++++++++--
->  .../arm64/boot/dts/mediatek/mt8183-kukui.dtsi |   2 +-
->  arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  14 +-
->  .../mediatek/vcodec/mtk_vcodec_fw_scp.c       |   2 +-
->  drivers/remoteproc/mtk_common.h               |  35 +++
->  drivers/remoteproc/mtk_scp.c                  | 241 +++++++++++++++++-
->  include/linux/remoteproc/mtk_scp.h            |   1 +
->  7 files changed, 397 insertions(+), 30 deletions(-)
-> 
-> -- 
-> 2.18.0
-> 
+> On Tue, Nov 01, 2022 at 06:14:01PM +0100, Julia Lawall wrote:
+> >
+> >
+> > On Tue, 1 Nov 2022, Deepak R Varma wrote:
+> >
+> > > Local variables intended as the function return value are
+> > > initialized but their value does not change during function
+> > > execution. The initial value assigned to the variable is simply
+> > > returned to the caller. This makes the variable declaration
+> > > unnecessary and the initial value can be directly returned.
+> >
+> > I think it would be better to make an argument for each case as to why the
+> > change is correct, and no more interesting return value is needed.  For
+> > example, looking at the code in
+> > drivers/staging/r8188eu/hal/rtl8188eu_xmit.c, it seems that the variable
+> > pull was used in a more interesting way previously, but some previous
+> > patches removed the relevant code.
+>
+> Thank you Julia for the hints. I learned that git blame will not show commits
+> associated with deleted/replaced lines. Used pickaxe tool to identify the old
+> commits. It was good learning. Thank you. v2 is submitted for review and feedback.
+
+OK, I just did git log -p and looked through the commits.
+
+You can also use the argument eg -G pull to find commits that change the
+number of occurrences of pull.
+
+julia
+
+
+>
+> >
+> > julia
+> >
+> > >
+> > > The patch is produced using the following coccicheck options:
+> > >    COCCI=./scripts/coccinelle/misc/returnvar.cocci
+> > >    M=driver/staging/r8188eu/
+> > >    MODE=patch
+> > >
+> > > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> > > ---
+> > >  drivers/staging/r8188eu/core/rtw_ap.c        | 5 ++---
+> > >  drivers/staging/r8188eu/core/rtw_recv.c      | 3 +--
+> > >  drivers/staging/r8188eu/hal/rtl8188eu_xmit.c | 3 +--
+> > >  drivers/staging/r8188eu/os_dep/ioctl_linux.c | 4 +---
+> > >  4 files changed, 5 insertions(+), 10 deletions(-)
+> > >
+> > > diff --git a/drivers/staging/r8188eu/core/rtw_ap.c b/drivers/staging/r8188eu/core/rtw_ap.c
+> > > index 24eb8dce9bfe..9eaf345e6a00 100644
+> > > --- a/drivers/staging/r8188eu/core/rtw_ap.c
+> > > +++ b/drivers/staging/r8188eu/core/rtw_ap.c
+> > > @@ -1020,7 +1020,6 @@ u8 ap_free_sta(struct adapter *padapter, struct sta_info *psta,
+> > >  int rtw_sta_flush(struct adapter *padapter)
+> > >  {
+> > >  	struct list_head *phead, *plist;
+> > > -	int ret = 0;
+> > >  	struct sta_info *psta = NULL;
+> > >  	struct sta_priv *pstapriv = &padapter->stapriv;
+> > >  	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
+> > > @@ -1028,7 +1027,7 @@ int rtw_sta_flush(struct adapter *padapter)
+> > >  	u8 bc_addr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+> > >
+> > >  	if ((pmlmeinfo->state & 0x03) != WIFI_FW_AP_STATE)
+> > > -		return ret;
+> > > +		return 0;
+> > >
+> > >  	spin_lock_bh(&pstapriv->asoc_list_lock);
+> > >  	phead = &pstapriv->asoc_list;
+> > > @@ -1051,7 +1050,7 @@ int rtw_sta_flush(struct adapter *padapter)
+> > >
+> > >  	associated_clients_update(padapter, true);
+> > >
+> > > -	return ret;
+> > > +	return 0;
+> > >  }
+> > >
+> > >  /* called > TSR LEVEL for USB or SDIO Interface*/
+> > > diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
+> > > index 4b68a543f68b..94f85cd7038d 100644
+> > > --- a/drivers/staging/r8188eu/core/rtw_recv.c
+> > > +++ b/drivers/staging/r8188eu/core/rtw_recv.c
+> > > @@ -1415,7 +1415,6 @@ static int amsdu_to_msdu(struct adapter *padapter, struct recv_frame *prframe)
+> > >
+> > >  	struct recv_priv *precvpriv = &padapter->recvpriv;
+> > >  	struct __queue *pfree_recv_queue = &precvpriv->free_recv_queue;
+> > > -	int	ret = _SUCCESS;
+> > >
+> > >  	nr_subframes = 0;
+> > >
+> > > @@ -1513,7 +1512,7 @@ static int amsdu_to_msdu(struct adapter *padapter, struct recv_frame *prframe)
+> > >  	prframe->len = 0;
+> > >  	rtw_free_recvframe(prframe, pfree_recv_queue);/* free this recv_frame */
+> > >
+> > > -	return ret;
+> > > +	return _SUCCESS;
+> > >  }
+> > >
+> > >  static bool check_indicate_seq(struct recv_reorder_ctrl *preorder_ctrl, u16 seq_num)
+> > > diff --git a/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c b/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c
+> > > index 8e4a5acc0b18..6d1f56d1f9d7 100644
+> > > --- a/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c
+> > > +++ b/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c
+> > > @@ -149,7 +149,6 @@ static void fill_txdesc_phy(struct pkt_attrib *pattrib, __le32 *pdw)
+> > >
+> > >  static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bagg_pkt)
+> > >  {
+> > > -	int	pull = 0;
+> > >  	uint	qsel;
+> > >  	u8 data_rate, pwr_status, offset;
+> > >  	struct adapter		*adapt = pxmitframe->padapter;
+> > > @@ -295,7 +294,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bag
+> > >  	ODM_SetTxAntByTxInfo_88E(&haldata->odmpriv, pmem, pattrib->mac_id);
+> > >
+> > >  	rtl8188eu_cal_txdesc_chksum(ptxdesc);
+> > > -	return pull;
+> > > +	return 0;
+> > >  }
+> > >
+> > >  /* for non-agg data frame or  management frame */
+> > > diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+> > > index 8516e253bb03..59a97c5fb80c 100644
+> > > --- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+> > > +++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+> > > @@ -2979,8 +2979,6 @@ static int rtw_p2p_set(struct net_device *dev,
+> > >  			       struct iw_request_info *info,
+> > >  			       union iwreq_data *wrqu, char *extra)
+> > >  {
+> > > -	int ret = 0;
+> > > -
+> > >  	if (!memcmp(extra, "enable =", 7)) {
+> > >  		rtw_wext_p2p_enable(dev, info, wrqu, &extra[7]);
+> > >  	} else if (!memcmp(extra, "setDN =", 6)) {
+> > > @@ -3027,7 +3025,7 @@ static int rtw_p2p_set(struct net_device *dev,
+> > >  		rtw_p2p_set_persistent(dev, info, wrqu, &extra[11]);
+> > >  	}
+> > >
+> > > -	return ret;
+> > > +	return 0;
+> > >  }
+> > >
+> > >  static int rtw_p2p_get2(struct net_device *dev,
+> > > --
+> > > 2.34.1
+> > >
+> > >
+> > >
+> > >
+> > >
+> >
+>
+>
+>
