@@ -2,62 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9F7561433B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 03:29:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 580CE614337
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 03:29:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229905AbiKAC3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 22:29:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34894 "EHLO
+        id S229907AbiKAC25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 22:28:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiKAC2u (ORCPT
+        with ESMTP id S229868AbiKAC2u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Mon, 31 Oct 2022 22:28:50 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4EE11789E;
-        Mon, 31 Oct 2022 19:28:46 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id r18so12248574pgr.12;
-        Mon, 31 Oct 2022 19:28:46 -0700 (PDT)
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 723F317898;
+        Mon, 31 Oct 2022 19:28:48 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so17583664pjc.3;
+        Mon, 31 Oct 2022 19:28:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=rcYDeI5SBeBnTD+t/yVKUy/qxI+mXodW4zJ5wc3sj7g=;
-        b=C4FK3XybtipAlqgoYWZe/WzlhC82YUsRxr8zgYTroJf82Xdb9uumW5TYpZ+J5tB915
-         uNxwl3bwD+VqtSzArx8MZ0pEZ7F848a7TyG+8JlcmkMiy3zYBEJ5c9Mpzr6WxIZ+kM1k
-         gw0P9iJwXghJoblIlXvyFbLF4Vw3peX9j/fmwibD/d0Qk+4mEafrRUhF696Wqpbw2a4D
-         57eopvOwHaubxmD7zUSe/rsvslezFdCSjZEncCX5yvQg6972ZXjRouxHXZmXCKbq1ygt
-         KMgzzwGwDeo4YDMro8KixnxyBnMkWb4RWRRptJPN48pw821dUVCsHlNkk0fNZyBGHT/5
-         vB2g==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S9+wd/d26nPzxPMD3za/Xjqe3tTkigkq7OyKBI7dvzc=;
+        b=CatEbRowU2ywt45dREKrkgA7CaFmvOdufAQ0prUMQblLdiEr+iKFatlv66jcBINXKt
+         BApC7Xq10xrVvUJNyzzsYb6w7UYCDm2ZU0ICuFiPFNJPBCJEhs7jSZJMZf5E8fDvxhfn
+         b/0TFgJlISYH/Kr/0JJ3sk9+ibPyMsgWoxKqBCcs/xMqGEcji1pxsNIT18YQGcJCQM9S
+         uE4bHHtz6pUYZ9M9S9Y9n/j6NOuCxwkh7gnIFO2bGXnEc5MRBGK3IE6IbtEzFAWf/2Jj
+         rVRvpfP6nbazaH5dSuFOdExlFpHQAlRezOlx6BviCcu5q9ogFYyKl2F1kGL5GZUYK2Is
+         JsXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rcYDeI5SBeBnTD+t/yVKUy/qxI+mXodW4zJ5wc3sj7g=;
-        b=i32JYzypQhIl4WfcON6liBwIoQELT5KA721Kzad02zlNP2ZiiMbwQj1nXDc4iLk7v9
-         MAnkTXLnXXwJagLeklRvZParfgAZJqyreu4W2ZLCfSSw11seDO7n9kGDwnhgpsIi4KuT
-         HYf5A5S+iey1txTqaFDRsOvzJiZCMxrgKxbxhG8onwAqSqv2r2s28OwDaseiDkQDSR0g
-         PBkuAFscpk4qDoJM1pGGd1kti3a5RcD5sdk0CNOt08kMntqK1PUPlnTlndQotmrB7R2K
-         uGrshLrnuxZEkhdznO7xy07Ze37GZwy+M4FbMA4HGjRvXVpNqI0WiQ4QgzPsePrvy7fQ
-         nz/Q==
-X-Gm-Message-State: ACrzQf0GEinBBW8bxABFHQ/g7VoibkbrnyAmZDwxmMreiNZ1q0HsHVUT
-        xJxB3yhx/sQTEmxy855Szhs=
-X-Google-Smtp-Source: AMsMyM7Ulyp+a388OV9INgKc/JfAXLQTl8oJNbn5WefBkUQGKIa1Fl//qX+7mhHO6Tt0eKInzbHH9g==
-X-Received: by 2002:a63:2158:0:b0:46f:9c0c:8673 with SMTP id s24-20020a632158000000b0046f9c0c8673mr50182pgm.154.1667269725704;
-        Mon, 31 Oct 2022 19:28:45 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=S9+wd/d26nPzxPMD3za/Xjqe3tTkigkq7OyKBI7dvzc=;
+        b=QLsPe0pCkMYmQ68yQgK+vzDLzo/8D4dsKoFypv782Cyze/yNLqZ91c+/G58Sd8l+9G
+         5ANMS0qnj0Zq3MDAYI4eZP5MwNO8eoQEM1bwLagln2BAViFRAyMa6PEYGIe/Dlifc7BL
+         0WIRQV6+lJ+4Jo5/lnJaXm2APu2jt3oXklEN5Ajl/Ht6bzDfcJiR2EDu9ypve/c3nEWE
+         tgKNWNdwpuUVFbaMGr51/HJ9uSBry3Pt9X1BcSxr3xKBadDDMNRxQjrOGGXlUioDApTB
+         1iperZOyOJo6UdWggsoj1viXUcC7DXVLHvJT6BipVa+JTiw2gWY6OpI9VwjrIDy3ygf8
+         wXhg==
+X-Gm-Message-State: ACrzQf2pnW+tWXlqBfavPjnb8XKrfru4Z9hm+33CsCdPzSdsutJYizV7
+        GHK6ZA+O7ES6HYylM4hk+zw=
+X-Google-Smtp-Source: AMsMyM6nc4eVpjuycwaedY8rS0v2bmpXj5xPgGwZChT1lD2VzXnww3zHJpoSD/oS/IVo5d0JiSTF6Q==
+X-Received: by 2002:a17:902:f686:b0:187:16a0:fd2b with SMTP id l6-20020a170902f68600b0018716a0fd2bmr11499574plg.91.1667269728041;
+        Mon, 31 Oct 2022 19:28:48 -0700 (PDT)
 Received: from localhost.localdomain ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id t5-20020a625f05000000b005385e2e86eesm5126925pfb.18.2022.10.31.19.28.43
+        by smtp.gmail.com with ESMTPSA id t5-20020a625f05000000b005385e2e86eesm5126925pfb.18.2022.10.31.19.28.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 19:28:45 -0700 (PDT)
+        Mon, 31 Oct 2022 19:28:47 -0700 (PDT)
 From:   TGSP <tgsp002@gmail.com>
 To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
         huanglei@kylinos.cn
 Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xiongxin <xiongxin@kylinos.cn>
-Subject: [PATCH -next 0/2] Fixes to the hibernate_preallocate_memory()
-Date:   Tue,  1 Nov 2022 10:28:38 +0800
-Message-Id: <20221101022840.1351163-1-tgsp002@gmail.com>
+        xiongxin <xiongxin@kylinos.cn>, stable@vger.kernel.org
+Subject: [PATCH -next 1/2] PM: hibernate: fix spelling mistake for annotation
+Date:   Tue,  1 Nov 2022 10:28:39 +0800
+Message-Id: <20221101022840.1351163-2-tgsp002@gmail.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221101022840.1351163-1-tgsp002@gmail.com>
+References: <20221101022840.1351163-1-tgsp002@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -72,22 +75,36 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: xiongxin <xiongxin@kylinos.cn>
 
-hibernate_preallocate_memory() function is still quite obscure, can
-anyone add a little more description?
+The actual calculation formula in the code below is:
 
-It seems that the max_size calculation formula is wrong in the comment
-part, correct it;
+max_size = (count - (size + PAGES_FOR_IO)) / 2
+	    - 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE);
 
-It is also found that when mem preallocate is not enough, it goes
-directly down without checking.
+But function comments are written differently, the comment is wrong?
 
-xiongxin (2):
-  PM: hibernate: fix spelling mistake for annotation
-  PM: hibernate: add check of preallocate mem for image size pages
+By the way, what exactly do the "/ 2" and "2 *" mean?
 
- kernel/power/snapshot.c | 13 ++++++++++---
- 1 file changed, 10 insertions(+), 3 deletions(-)
+Cc: stable@vger.kernel.org
+Signed-off-by: xiongxin <xiongxin@kylinos.cn>
+---
+ kernel/power/snapshot.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
+diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+index 2a406753af90..c20ca5fb9adc 100644
+--- a/kernel/power/snapshot.c
++++ b/kernel/power/snapshot.c
+@@ -1723,8 +1723,8 @@ static unsigned long minimum_image_size(unsigned long saveable)
+  * /sys/power/reserved_size, respectively).  To make this happen, we compute the
+  * total number of available page frames and allocate at least
+  *
+- * ([page frames total] + PAGES_FOR_IO + [metadata pages]) / 2
+- *  + 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE)
++ * ([page frames total] - PAGES_FOR_IO - [metadata pages]) / 2
++ *  - 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE)
+  *
+  * of them, which corresponds to the maximum size of a hibernation image.
+  *
 -- 
 2.25.1
 
