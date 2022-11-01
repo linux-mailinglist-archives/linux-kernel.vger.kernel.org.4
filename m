@@ -2,142 +2,177 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 020D4614A86
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98066614A89
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:21:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230437AbiKAMUB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 08:20:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33300 "EHLO
+        id S230258AbiKAMVR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 08:21:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiKAMT6 (ORCPT
+        with ESMTP id S229742AbiKAMVP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 08:19:58 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 947FE167CA
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 05:19:56 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-321-cgaiRFvXNJ2qCkCMR_nIOQ-1; Tue, 01 Nov 2022 12:19:53 +0000
-X-MC-Unique: cgaiRFvXNJ2qCkCMR_nIOQ-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 1 Nov
- 2022 12:19:51 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.042; Tue, 1 Nov 2022 12:19:51 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Szabolcs Nagy' <szabolcs.nagy@arm.com>
-CC:     Theodore Ts'o <tytso@mit.edu>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: RE: linux interprets an fcntl int arg as long
-Thread-Topic: linux interprets an fcntl int arg as long
-Thread-Index: AQHY7dH4b5GlkmHz9EyVI+/nub6Ts64p0qEQgAAgcACAAAds0A==
-Date:   Tue, 1 Nov 2022 12:19:51 +0000
-Message-ID: <0030a20a94cd49628c5461d044bb28ed@AcuMS.aculab.com>
-References: <Y1/DS6uoWP7OSkmd@arm.com> <Y2B6jcLUJ1F2y2yL@mit.edu>
- <Y2DisyknbKxeCik4@arm.com>
- <a0693686d0ae41599fe1700680ec56ec@AcuMS.aculab.com>
- <Y2EGtE05hcVn3B3a@arm.com>
-In-Reply-To: <Y2EGtE05hcVn3B3a@arm.com>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Tue, 1 Nov 2022 08:21:15 -0400
+Received: from out162-62-57-137.mail.qq.com (out162-62-57-137.mail.qq.com [162.62.57.137])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E90D815A28;
+        Tue,  1 Nov 2022 05:21:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1667305270;
+        bh=75pCasUsHqBk31UsD2MHbUsUh53DCMpvOo4pIhDwXDE=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=SxERwk2yicWLXruWR9UYPY62g4Sgsgofq1A/R1GPlOb98JGnKBLBLMt5vxUImCXUy
+         DSb/35c4485XgN8jjipYBNVJQb17vlcR/6FnOxDUUvtAEz56eSrZornYvmDAajBxZ1
+         E3KkeCZXmDwBe1fVk+gcVjy6R5rhCU7KqanoXung=
+Received: from localhost.localdomain ([39.156.73.13])
+        by newxmesmtplogicsvrszb1-0.qq.com (NewEsmtp) with SMTP
+        id 5458DCCE; Tue, 01 Nov 2022 20:21:05 +0800
+X-QQ-mid: xmsmtpt1667305265tr27vlhfu
+Message-ID: <tencent_ED443B037FA1D72CB4CB38958E57F2D12007@qq.com>
+X-QQ-XMAILINFO: NUmvkRAbRxZgsBl3jbK6+SAphFPsVPLkCwSPPdEguHkkovswAQWlXf+b79DpDm
+         6DnVWkC0Rrs/3iGq+CdtRWNhELQ4K/z4/1tbOy9DITMM2irKuYWSQ2Ehu8JOGeAsjAry5ojwr03A
+         xKckEd02j5C2IisSzbBDR/xudTReQWARwQl7cbHf0C29A8H5TT3/LUkM7NDtWtK+iE2CMGoSizuf
+         LVZNnUvNmIKmlimfexBxWoHEOaFrmgs0Wa56maLBc1Fi4foOdmhPF/mSLrsewRfDKoXxAVRL66+0
+         SgDPVTPdh7WzZefSLLBzkxpmIFRB4thWEgrPZIG/U9R0wNBq3l11Y630AH7JqGY0CXebf5BCtCV8
+         kzYf/Q+tv9dmIeHybF4Az0ySCvWTw6tiFSjkBy80YviD4mP5tMRUKveTijK+rNOiIugg6HHJwkDL
+         9hygDW7aXv1q/idJBFgm9EPKywl9kaEbig5bCV9hp/D25rbfo3Vb3cdfqViL3TVU3+3KAeMQqooa
+         ECOTN5HVpG22Pnx8THkfu/ZCA6bV5FrkNUnmNtrSHV4M0nfxc5YiYqc+dd0tjyIqOUwTlIG93hqw
+         JPWlCAS4H96fzVIU+KPTCAxAFcfvaAtozStmfcwA3myJZ0bPqz5w3vS3esvbKeHWNAT56CGtT4Gy
+         X6Wm/D8XDL2mDZs5zqY/GWFojbh5i3OE/TP9iSbpBIqd6ozbtNR1Xumnh5xebhasa3HZUhwg+pkF
+         7fHaeBjN+w1mbGncsbk5ZotBQlj5Eaf13xZ65bQDJm/4kEg5an7gbxrWoMMjaxv9czEJJld5rmOh
+         THSNU2xU//oDrbggjlIQJsYGUGNA4vIpBgT/hnkGCt7TKOi52x1G8ZNIxsmsAq42Oq8i+AmQ1gVu
+         KcpN8kCNEi6fyGZXvHxLQ5mrKZ6TsGLeyjxXl/402aaM74NUOM+2lNV5NoexA1vQaqz6Phwf2+/z
+         eXhFwLiRC5HAW73k5TEoJxnFYktB7u5swbWW/S7mzMtbBtupMx4QUHVzX/mak8J+5gGxjWVnzn5w
+         /fhfHtqw==
+From:   Rong Tao <rtoax@foxmail.com>
+To:     david.laight@aculab.com
+Cc:     andrii.nakryiko@gmail.com, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, haoluo@google.com,
+        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        martin.lau@linux.dev, mykolal@fb.com, rongtao@cestc.cn,
+        rtoax@foxmail.com, sdf@google.com, shuah@kernel.org,
+        song@kernel.org, yhs@fb.com
+Subject: [PATCH bpf-next] selftests/bpf: Fix strncpy() fortify warning
+Date:   Tue,  1 Nov 2022 20:21:04 +0800
+X-OQ-MSGID: <20221101122104.54265-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <70ddf02157bc418cbc38230c87a7b228@AcuMS.aculab.com>
+References: <70ddf02157bc418cbc38230c87a7b228@AcuMS.aculab.com>
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: base64
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-RnJvbTogJ1N6YWJvbGNzIE5hZ3knIDxzemFib2xjcy5uYWd5QGFybS5jb20+DQo+IFNlbnQ6IDAx
-IE5vdmVtYmVyIDIwMjIgMTE6NDUNCj4gDQo+IFRoZSAxMS8wMS8yMDIyIDEwOjAyLCBEYXZpZCBM
-YWlnaHQgd3JvdGU6DQo+ID4gRnJvbTogU3phYm9sY3MgTmFneQ0KPiA+ID4gU2VudDogMDEgTm92
-ZW1iZXIgMjAyMiAwOToxMQ0KPiA+ID4NCj4gPiA+IFRoZSAxMC8zMS8yMDIyIDIxOjQ2LCBUaGVv
-ZG9yZSBUcydvIHdyb3RlOg0KPiA+ID4gPiBPbiBNb24sIE9jdCAzMSwgMjAyMiBhdCAxMjo0NDo1
-OVBNICswMDAwLCBTemFib2xjcyBOYWd5IHdyb3RlOg0KPiA+ID4gPiA+IGFuZCBzdWNoIGZjbnRs
-IGNhbGwgY2FuIGhhcHBlbiB3aXRoIGMgY29kZSB0aGF0IGp1c3QgcGFzc2VzDQo+ID4gPiA+ID4g
-Rl9TRUFMX1dSSVRFIHNpbmNlIGl0IGlzIGFuIGludCBhbmQgZS5nLiB3aXRoIGFhcmNoNjQgcGNz
-IHJ1bGVzDQo+ID4gPiA+ID4gaXQgaXMgcGFzc2VkIGluIGEgcmVnaXN0ZXIgd2hlcmUgdG9wIGJp
-dHMgY2FuIGJlIG5vbi16ZXJvDQo+ID4gPiA+ID4gKHVubGlrZWx5IGluIHByYWN0aWNlIGJ1dCB2
-YWxpZCkuDQo+ID4gPiA+DQo+ID4gPiA+IEluIExpbnV4J3MgYWFyY2g2NCBBQkksIGFuIGludCBp
-cyBhIDQtYnl0ZSB2YWx1ZS4gIEl0IGlzICpub3QqIGFuDQo+ID4gPiA+IDgtYnl0ZSB2YWx1ZS4g
-IFNvIHBhc3NpbmcgaW4gIkZfU0VBTF9XUklURSB8IDB4RjAwMDAwMDAwIiBhcyBhbiBpbnQNCj4g
-PiA+ID4gKGFzIGluIHlvdXIgZXhhbXBsZSkgaXMgc2ltcGx5IG5vdCB2YWxpZCB0aGluZyBmb3Ig
-dGhlIHVzZXJzcGFjZQ0KPiA+ID4gPiBwcm9ncmFtIHRvIGRvLg0KPiA+ID4gPg0KPiA+ID4gPiBO
-b3csIGlmIHRoZXJlIGlzIGEgQyBwcm9ncmFtIHdoaWNoIGhhcyAiaW50IGMgPSBGX1NFQUxfV1JJ
-VEUiLCBpZiB0aGUNCj4gPiA+ID4gUENTIGFsbG93cyB0aGUgY29tcGlsZXIgdG8gcGFzcyBhIGZ1
-bmN0aW9uIHBhcmFtdGVyIGMgLS0tIGZvciBleGFtcGxlDQo+ID4gPiA+IGYoYSwgYiwgYykgLS0t
-IHdoZXJlIHRoZSA0LWJ5dGUgcGFyYW10ZXIgJ2MnIGlzIHBsYWNlZCBpbiBhIDY0LWJpdA0KPiA+
-ID4gPiByZWdpc3RlciB3aGVyZSB0aGUgaGlnaCBiaXRzIG9mIHRoZSA2NC1iaXQgcmVnaXN0ZXIg
-Y29udGFpbnMgbm9uLXplcm8NCj4gPiA+ID4gZ2FyYmFnZSB2YWx1ZXMsIEkgd291bGQgYXJndWUg
-dGhhdCB0aGlzIGlzIGEgYnVnIGluIHRoZSBQQ1MgYW5kL29yIHRoZQ0KPiA+ID4gPiBjb21waWxl
-ci4NCj4gPiA+DQo+ID4gPiB0aGUgY2FsbGVlIHVzZXMgdmFfYXJnKGFwLCB0eXBlKSB0byBnZXQg
-dGhlIGFyZ3VtZW50LA0KPiA+ID4gYW5kIGlmIHRoZSB0eXBlIGlzIHdpZGVyIHRoYW4gd2hhdCB3
-YXMgYWN0dWFsbHkgcGFzc2VkDQo+ID4gPiB0aGVuIGFueXRoaW5nIGNhbiBoYXBwZW4uIGluIHBy
-YWN0aWNlIHdoYXQgaGFwcGVucyBpcw0KPiA+ID4gdGhhdCB0aGUgdG9wIGJpdHMgY2FuIGJlIG5v
-bi16ZXJvLg0KPiA+ID4NCj4gPiA+IG1hbnkgcGNzIGFyZSBhZmZlY3RlZCAoYWFyY2g2NCBpcyB0
-aGUgb25lIGkga25vdyB3ZWxsLA0KPiA+ID4gYnV0IGF0IGxlYXN0IHg4Nl82NCwgYXJtIGFyZSBh
-ZmZlY3RlZCB0b28pLiBhbmQgZXZlbiBpZg0KPiA+ID4gaXQgd2FzIGFhcmNoNjQgcGNzIG9ubHks
-IGl0IGlzIGluY29tcGV0ZW50IHRvIHNheSB0aGF0DQo+ID4gPiB0aGUgcGNzIGlzIHdyb25nOiB0
-aGF0J3MgYSBjb25zdHJhaW50IHdlIGFyZSB3b3JraW5nIHdpdGguDQo+ID4gPg0KPiA+ID4gdGhl
-IGtlcm5lbCBtdXN0IG5vdCByZWFkIGEgd2lkZXIgdHlwZSB0aGFuIHdoYXQgaXQNCj4gPiA+IGRv
-Y3VtZW50cyBhcyBhcmd1bWVudCB0byB2YXJpYWRpYyBmdW5jdGlvbnMgaW4gdGhlIGMgYXBpLg0K
-PiA+ID4gKGl0IGRvZXMgbm90IG1ha2UgbXVjaCBzZW5zZSB0byBleHBlY3QgYW55dGhpbmcgdGhl
-cmUNCj4gPiA+IGFueXdheSwgYnV0IGl0IGNhbiBicmVhayB1c2Vyc3BhY2UpDQo+ID4NCj4gPiBU
-aGUgTGludXgga2VybmVsIGp1c3QgYXNzdW1lcyB0aGF0IHRoZSB2YXJhcmdzIGNhbGwgbG9va3Mg
-bGlrZQ0KPiA+IGEgbm9uLXZhcmFncyBjYWxsIHdpdGggdGhlIHNhbWUgcGFyYW1ldGVycy4NCj4g
-PiAoSXQgZG9lc24ndCB1c2UgdmFfYXJnKCkpDQo+ID4gQWxsIHN5c2NhbGwgYXJndW1lbnRzIGFy
-ZSBwYXNzZWQgaW4gcmVnaXN0ZXJzICh1bmxpa2UgQlNEcw0KPiA+IHdoZXJlIHRoZXkgY2FuIGFs
-c28gYmUgb24gdGhlIHVzZXIgc3RhY2spLg0KPiA+IE9uIDY0Yml0IHN5c3RlbXMgdGhlIHNhbWUg
-cmVnaXN0ZXJzIGFyZSBleHBlY3RlZCB0byBiZSB1c2VkDQo+ID4gZm9yIDY0Yml0IGFuZCAzMmJp
-dCBpbnRlZ2VycyBhbmQgZm9yIHBvaW50ZXJzLg0KPiA+IDMyYml0IHZhbHVlcyB1c3VhbGx5IGdl
-dCBtYXNrZWQgYmVjYXVzZSB0aGV5IGdldCBwYXNzZWQgdG8NCj4gPiBhIGZ1bmN0aW9uIHdpdGgg
-YW4gJ2ludCcgYXJndW1lbnQuDQo+ID4NCj4gPiBJZiBhbnkgZmNudGwoKSBjYWxscyByZXF1aXJl
-IGEgNjRiaXQgdmFsdWUgYW5kIHRoZSBDIEFCSQ0KPiA+IG1pZ2h0IGxlYXZlIG5vbi16ZXJvIGhp
-Z2ggYml0cyBpbiBhbiByZWdpc3RlciBjb250YWluaW5nDQo+ID4gYSAzMmJpdCB2YWx1ZSAoZXNw
-LiB0byBhIHZhcmFyZ3MgZnVuY3Rpb24pIHRoZW4gdGhlIGNhbGxpbmcNCj4gPiBjb2RlIHdpbGwg
-bmVlZCB0byBjYXN0IHN1Y2ggYXJndW1lbnRzIHRvIDY0IGJpdHMuDQo+IA0KPiB0aGUgZW50aXJl
-IHBvaW50IG9mIG15IG1haWwgaXMgdGhhdCBpdCBpcyBub3QgcG9zc2libGUNCj4gdG8gdGVsbCBp
-biB0aGUgbGliYyBpZiB0aGUgdmFyYXJnIGlzIHBvaW50ZXIgb3IgaW50Lg0KPiANCj4gc28gaW4g
-Y2FzZSBhIHVzZXIgcGFzc2VkIGFuIGludCwgdGhlIGxpYmMgY2Fubm90IGZpeA0KPiB0aGF0IHVw
-LCBsaWtlIGl0IHVzdWFsbHkgZG9lcyBmb3Igb3RoZXIgY2FzZXMgd2hlcmUNCj4gbGludXggc3lz
-Y2FsbCBhYmkgaXMgaW5jb21wYXRpYmxlIHdpdGggdGhlIGMgYXBpLg0KPiANCj4gbGV0IG1lIGdv
-IHRocm91Z2ggc3RlcCBieSBzdGVwIHdoYXQgaXMgZ29pbmcgb246DQouLi4NCj4gbG9uZyBpbnRl
-cm5hbF9zeXNjYWxsKGludCwgbG9uZywgbG9uZywgbG9uZywgbG9uZywgbG9uZywgbG9uZyk7DQo+
-IGludCBmY250bChpbnQgZmQsIGludCBjbWQsIC4uLikNCj4gew0KPiAJdmFfbGlzdCBhcDsNCj4g
-CXZhX3N0YXJ0KGFwLCBjbWQpOw0KPiAJLyogdGhpcyBpcyBub24tY29uZm9ybWluZyBDOiB3cm9u
-ZyB0eXBlIGluIHZhX2FyZywNCj4gCSAgIGJ1dCB0aGF0J3Mgbm90IHJlbGV2YW50IHNpbmNlIGxp
-YmMgY2FuIGltcGxlbWVudA0KPiAJICAgdGhpcyBhcyB0YXJnZXQgc3BlY2lmaWMgYXNtLCB0aGUg
-aW1wb3J0YW50IGJpdCBpcw0KPiAJICAgdGhhdCB0aGUgY29ycmVjdCB0eXBlIGlzIG5vdCBrbm93
-bjogbGliYyBjYW5ub3QNCj4gCSAgIHJlcGxpY2F0ZSB0aGUga2VybmVsIHNpZGUgZGlzcGF0Y2gg
-bG9naWMgYmVjYXVzZQ0KPiAJICAgbmV3IGNtZCBjYW4gYmUgaW50cm9kdWNlZCBpbiB0aGUgZnV0
-dXJlIHdpdGgNCj4gCSAgIGFyYml0cmFyeSB0eXBlIGFyZy4NCj4gDQo+IAkgICB0b3AgMzJiaXRz
-IG9mIGFyZyBhcmUgbm9uLXplcm8sIGxpYmMgY2Fubm90DQo+IAkgICB6ZXJvIHRoZW0gaGVyZSBh
-cyBhcmcgbWF5IGJlIGxvbmcgb3IgcG9pbnRlci4gICovDQo+IAlsb25nIGFyZyA9IHZhX2FyZyhh
-cCwgbG9uZyk7DQoNCkhlcmUgbGliYyBoYXMgdG8gYXNzdW1lIHRoYXQgaW50LCBsb25nIGFuZCBw
-b2ludGVyIGFyZSBwYXNzZWQNCnRoZSBzYW1lIHdheS4NClRoaXMgaXMgdHJ1ZSBmb3IgZXZlcnl0
-aGluZyBMaW51eCBhY3R1YWxseSBydW5zIG9uLg0KQnV0IHdvdWxkbid0IGJlIGlmLCBmb3IgZXhh
-bXBsZSwgYSA2NGJpdCBhcmNoIGp1c3QgcHVzaGVkDQozMmJpdCBhcmd1bWVudHMgb24gc3RhY2su
-DQpPciBpZiBhIDMyIGJpdCBvbmUgcGFzc2VkIGludGVnZXIgYW5kIHBvaW50ZXIgYXJncyBpbiBk
-aWZmZXJlbnQNCnR5cGVzIG9mIHJlZ2lzdGVycy4NCkJ1dCBhbGwgNjRiaXQgb25lcyB1c2UgdGhl
-IHNhbWUgR1AgcmVnaXN0ZXJzIGZvciBpbnQvbG9uZy9wb2ludGVyLg0KDQo+IGtlcm5lbCBjb2Rl
-Og0KPiAtLS0tLS0tLS0tLS0NCj4gU1lTQ0FMTF9ERUZJTkUzKGZjbnRsLCB1bnNpZ25lZCBpbnQs
-IGZkLCB1bnNpZ25lZCBpbnQsIGNtZCwgdW5zaWduZWQgbG9uZywgYXJnKQ0KPiB7DQoNClRoYXQg
-aXMganVzdCBhIHdyYXBwZXIgYW5kIGNhbGxzIGRvX2ZjbnRsKCkuDQp3aGljaCBuZWVkcyBjaGFu
-Z2luZyB0byBiZSBhZGQ6DQoJYXJnICY9IH4wVTsNCmJlZm9yZSB0aGUgc3dpdGNoKGNtZCkgew0K
-DQoJRGF2aWQNCg0KLQ0KUmVnaXN0ZXJlZCBBZGRyZXNzIExha2VzaWRlLCBCcmFtbGV5IFJvYWQs
-IE1vdW50IEZhcm0sIE1pbHRvbiBLZXluZXMsIE1LMSAxUFQsIFVLDQpSZWdpc3RyYXRpb24gTm86
-IDEzOTczODYgKFdhbGVzKQ0K
+From: Rong Tao <rongtao@cestc.cn>
+
+move libbpf_strlcpy() to bpf_util.h, and replace strncpy() with
+libbpf_strlcpy(), fix compile warning.
+
+Compile samples/bpf, warning:
+$ cd samples/bpf
+$ make
+...
+cgroup_helpers.c: In function ‘__enable_controllers’:
+cgroup_helpers.c:80:17: warning: ‘strncpy’ specified bound 4097 equals destination size [-Wstringop-truncation]
+   80 |                 strncpy(enable, controllers, sizeof(enable));
+      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+Signed-off-by: Rong Tao <rongtao@cestc.cn>
+---
+ tools/testing/selftests/bpf/bpf_util.h       | 19 +++++++++++++++++++
+ tools/testing/selftests/bpf/cgroup_helpers.c |  3 ++-
+ tools/testing/selftests/bpf/xsk.c            | 19 -------------------
+ 3 files changed, 21 insertions(+), 20 deletions(-)
+
+diff --git a/tools/testing/selftests/bpf/bpf_util.h b/tools/testing/selftests/bpf/bpf_util.h
+index a3352a64c067..bf78212ff6e9 100644
+--- a/tools/testing/selftests/bpf/bpf_util.h
++++ b/tools/testing/selftests/bpf/bpf_util.h
+@@ -20,6 +20,25 @@ static inline unsigned int bpf_num_possible_cpus(void)
+ 	return possible_cpus;
+ }
+ 
++/* Copy up to sz - 1 bytes from zero-terminated src string and ensure that dst
++ * is zero-terminated string no matter what (unless sz == 0, in which case
++ * it's a no-op). It's conceptually close to FreeBSD's strlcpy(), but differs
++ * in what is returned. Given this is internal helper, it's trivial to extend
++ * this, when necessary. Use this instead of strncpy inside libbpf source code.
++ */
++static inline void libbpf_strlcpy(char *dst, const char *src, size_t sz)
++{
++	size_t i;
++
++	if (sz == 0)
++		return;
++
++	sz--;
++	for (i = 0; i < sz && src[i]; i++)
++		dst[i] = src[i];
++	dst[i] = '\0';
++}
++
+ #define __bpf_percpu_val_align	__attribute__((__aligned__(8)))
+ 
+ #define BPF_DECLARE_PERCPU(type, name)				\
+diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
+index e914cc45b766..e33b70e509da 100644
+--- a/tools/testing/selftests/bpf/cgroup_helpers.c
++++ b/tools/testing/selftests/bpf/cgroup_helpers.c
+@@ -13,6 +13,7 @@
+ #include <ftw.h>
+ 
+ #include "cgroup_helpers.h"
++#include "bpf_util.h"
+ 
+ /*
+  * To avoid relying on the system setup, when setup_cgroup_env is called
+@@ -77,7 +78,7 @@ static int __enable_controllers(const char *cgroup_path, const char *controllers
+ 		enable[len] = 0;
+ 		close(fd);
+ 	} else {
+-		strncpy(enable, controllers, sizeof(enable));
++		libbpf_strlcpy(enable, controllers, sizeof(enable));
+ 	}
+ 
+ 	snprintf(path, sizeof(path), "%s/cgroup.subtree_control", cgroup_path);
+diff --git a/tools/testing/selftests/bpf/xsk.c b/tools/testing/selftests/bpf/xsk.c
+index 0b3ff49c740d..4b6890e2a0a9 100644
+--- a/tools/testing/selftests/bpf/xsk.c
++++ b/tools/testing/selftests/bpf/xsk.c
+@@ -521,25 +521,6 @@ static int xsk_create_bpf_link(struct xsk_socket *xsk)
+ 	return 0;
+ }
+ 
+-/* Copy up to sz - 1 bytes from zero-terminated src string and ensure that dst
+- * is zero-terminated string no matter what (unless sz == 0, in which case
+- * it's a no-op). It's conceptually close to FreeBSD's strlcpy(), but differs
+- * in what is returned. Given this is internal helper, it's trivial to extend
+- * this, when necessary. Use this instead of strncpy inside libbpf source code.
+- */
+-static inline void libbpf_strlcpy(char *dst, const char *src, size_t sz)
+-{
+-        size_t i;
+-
+-        if (sz == 0)
+-                return;
+-
+-        sz--;
+-        for (i = 0; i < sz && src[i]; i++)
+-                dst[i] = src[i];
+-        dst[i] = '\0';
+-}
+-
+ static int xsk_get_max_queues(struct xsk_socket *xsk)
+ {
+ 	struct ethtool_channels channels = { .cmd = ETHTOOL_GCHANNELS };
+-- 
+2.31.1
+
 
