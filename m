@@ -2,77 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0E19F614920
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:33:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFA9061492F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:34:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231182AbiKALdF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 07:33:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36384 "EHLO
+        id S230475AbiKALeQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 07:34:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231174AbiKALb7 (ORCPT
+        with ESMTP id S229887AbiKALdX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 07:31:59 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C4E21A827
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 04:30:00 -0700 (PDT)
-Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.57])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N1nqm6Nqzz15MCV;
-        Tue,  1 Nov 2022 19:29:56 +0800 (CST)
-Received: from [10.67.110.176] (10.67.110.176) by
- kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 1 Nov 2022 19:29:58 +0800
-Subject: Re: [PATCH] x86/cpu: replacing the open-coded shift with BIT(x)
-To:     Peter Zijlstra <peterz@infradead.org>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
-        <puwen@hygon.cn>, <TonyWWang-oc@zhaoxin.com>, <Jason@zx2c4.com>,
-        <hca@linux.ibm.com>, <mika.westerberg@linux.intel.com>,
-        <mario.limonciello@amd.com>, <tony.luck@intel.com>,
-        <andrew.cooper3@citrix.com>, <pawan.kumar.gupta@linux.intel.com>,
-        <rdunlap@infradead.org>, <jithu.joseph@intel.com>,
-        <chenyi.qiang@intel.com>, <rafael.j.wysocki@intel.com>,
-        <paulmck@kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221101060945.722565-1-cuigaosheng1@huawei.com>
- <Y2DdQwVfU2jFjMRX@hirez.programming.kicks-ass.net>
-From:   cuigaosheng <cuigaosheng1@huawei.com>
-Message-ID: <76e13f1a-6edc-b923-101c-e059005d180c@huawei.com>
-Date:   Tue, 1 Nov 2022 19:29:57 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.6.1
+        Tue, 1 Nov 2022 07:33:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FF641B1CF;
+        Tue,  1 Nov 2022 04:30:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 930DAB81CCD;
+        Tue,  1 Nov 2022 11:30:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28FEFC433C1;
+        Tue,  1 Nov 2022 11:30:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667302215;
+        bh=vLsWhaWfthnY1eDb3thOqafTKkz9DILQDMTO4Ks0ZkY=;
+        h=From:To:Cc:Subject:Date:From;
+        b=reH42v+QZegfrULq45Tg3GKowzECfbwwXAU4RxnG9r5wnSmvSQAGsCiaRmIUffXto
+         x33Y+w/HzelUdcwdzgu96CYj+kqsFVKayv5nctOgqyLH/cTHFSQ85PBS0QmwgHvu1c
+         7BHW6vDpqsSVWxf0bXXuzHpoNyIRcABW5OySIz9mZ9VsF1arYblvwhvw7NFT56oZJJ
+         7oHnUWnIpWp2YZDCtApNrGPcgaMSGiCjru+E3LJUXu1l0b3cw9VBcEwXIn5Osa2vkX
+         pRbYfR4FGyBFHdQbikYeQwngKOSE3F1W+nbyJZCcMpn6si5N1X4K1LhV528avFwC79
+         KaV8SEO6Lh7YQ==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Paul Elder <paul.elder@ideasonboard.com>,
+        Dafna Hirschfeld <dafna@fastmail.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, gregkh@linuxfoundation.org,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev
+Subject: [PATCH AUTOSEL 5.10 01/14] media: rkisp1: Initialize color space on resizer sink and source pads
+Date:   Tue,  1 Nov 2022 07:29:57 -0400
+Message-Id: <20221101113012.800271-1-sashal@kernel.org>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-In-Reply-To: <Y2DdQwVfU2jFjMRX@hirez.programming.kicks-ass.net>
-Content-Type: text/plain; charset="utf-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.176]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemi500012.china.huawei.com (7.221.188.12)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> Same as to the other case; UBSAN is broken garbage, stop quoting it.
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-I have made patch v2 and submitted it, removed the UBSAN warning calltrace,
-and merged the patch "x86/cpu: fix undefined behavior in bit shift for intel_detect_tlb"
-with it. Thanks!
+[ Upstream commit 83b9296e399367862845d3b19984444fc756bd61 ]
 
-On 2022/11/1 16:48, Peter Zijlstra wrote:
-> On Tue, Nov 01, 2022 at 02:09:45PM +0800, Gaosheng Cui wrote:
->> Replace the open-coded shift with BIT(x) for x86_power to make the
->> code a bit more self-documenting, and we will get a UBSAN issue in
->> arch/x86/kernel/cpu/proc.c, fix it.
->>
->> The UBSAN warning calltrace like below:
->>
->> UBSAN: shift-out-of-bounds in arch/x86/kernel/cpu/proc.c:138:25
->> left shift of 1 by 31 places cannot be represented in type 'int'
-> Same as to the other case; UBSAN is broken garbage, stop quoting it.
->
-> .
+Initialize the four color space fields on the sink and source video pads
+of the resizer in the .init_cfg() operation. The resizer can't perform
+any color space conversion, so set the sink and source color spaces to
+the same defaults, which match the ISP source video pad default.
+
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Paul Elder <paul.elder@ideasonboard.com>
+Reviewed-by: Dafna Hirschfeld <dafna@fastmail.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ drivers/staging/media/rkisp1/rkisp1-resizer.c | 4 ++++
+ 1 file changed, 4 insertions(+)
+
+diff --git a/drivers/staging/media/rkisp1/rkisp1-resizer.c b/drivers/staging/media/rkisp1/rkisp1-resizer.c
+index 4dcc342ac2b2..76f17dd7670f 100644
+--- a/drivers/staging/media/rkisp1/rkisp1-resizer.c
++++ b/drivers/staging/media/rkisp1/rkisp1-resizer.c
+@@ -500,6 +500,10 @@ static int rkisp1_rsz_init_config(struct v4l2_subdev *sd,
+ 	sink_fmt->height = RKISP1_DEFAULT_HEIGHT;
+ 	sink_fmt->field = V4L2_FIELD_NONE;
+ 	sink_fmt->code = RKISP1_DEF_FMT;
++	sink_fmt->colorspace = V4L2_COLORSPACE_SRGB;
++	sink_fmt->xfer_func = V4L2_XFER_FUNC_SRGB;
++	sink_fmt->ycbcr_enc = V4L2_YCBCR_ENC_601;
++	sink_fmt->quantization = V4L2_QUANTIZATION_LIM_RANGE;
+ 
+ 	sink_crop = v4l2_subdev_get_try_crop(sd, cfg, RKISP1_RSZ_PAD_SINK);
+ 	sink_crop->width = RKISP1_DEFAULT_WIDTH;
+-- 
+2.35.1
+
