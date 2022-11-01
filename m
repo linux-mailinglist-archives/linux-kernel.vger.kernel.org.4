@@ -2,84 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EA7936142CE
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 02:41:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBA436142D0
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 02:42:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229792AbiKABle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 21:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
+        id S229823AbiKABmQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 21:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33666 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiKABlc (ORCPT
+        with ESMTP id S229475AbiKABmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 21:41:32 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4582910050;
-        Mon, 31 Oct 2022 18:41:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D49B2614E1;
-        Tue,  1 Nov 2022 01:41:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99CCAC433D6;
-        Tue,  1 Nov 2022 01:41:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667266890;
-        bh=XJvNcCvYTd4PK+vO4pqCyIW2MQydHQ5BXboQR88RVrI=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=Ng5IKB72OvrAGnyyDLPsp+VJEDvkimJgEQ5XQs9rLxfH/2OVyZdacii0xI0OlpoGw
-         ROslgGRfdYZZOh9H6G/swxBr9nFGNVSxJyGWLEO4Hz6KVFI9SOnoOTW91fo1091TnF
-         mCKNYHVe9nCllh7xOnQfYedyII7LWbrx07rSr27Yz8qTSiqL/H/6hbV58ZR6jnpyXo
-         Wu+q6tcCHdEcaJ1R9KZLJc545bPCwNlVDBmUAHmZZKVO4hpIy3SoXPS1xhzpwqgfYw
-         kJSPv5NsIga5PV6bxwB2qp7BXnnoiWtu3tuviHu322iBWxuiM0b/MqSo7nteLJJ221
-         fWaP/FKhuezTg==
-Date:   Mon, 31 Oct 2022 18:41:28 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Steen Hegelund <steen.hegelund@microchip.com>
-Cc:     Casper Andersson <casper.casan@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        "Wan Jiabing" <wanjiabing@vivo.com>,
-        Nathan Huckleberry <nhuck@google.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>
-Subject: Re: [PATCH net-next v2 2/5] net: microchip: sparx5: Adding more tc
- flower keys for the IS2 VCAP
-Message-ID: <20221031184128.1143d51e@kernel.org>
-In-Reply-To: <51622bfd3fe718139cece38493946c2860ebdf77.camel@microchip.com>
-References: <20221028144540.3344995-1-steen.hegelund@microchip.com>
-        <20221028144540.3344995-3-steen.hegelund@microchip.com>
-        <20221031103747.uk76tudphqdo6uto@wse-c0155>
-        <51622bfd3fe718139cece38493946c2860ebdf77.camel@microchip.com>
+        Mon, 31 Oct 2022 21:42:14 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8849E17064
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 18:42:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667266933; x=1698802933;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=LRzPwld48hCcJHFTt/Jv7ni/9JBk/odPZ5m7hdfwjTU=;
+  b=LTa+uM9yrysFqPZSJvI+Zqe/y8B9KOMG5guBmLBWg4UQmgv1OtNS08Iy
+   V0awDmcXYh35TUWFi1uLrqTwiaBUyEQrx5V4iq7SuUbC8rbXdswrq880w
+   ZWaQDngjkFbX/fvBuTa2OiST9Bu2fo1+OOz8W0p9VDouJGi4+EhBMuPyS
+   sNiOBmFo9LI69ZfuDG52AJ3PrpUwhcUuVkiDfcDVtWuDuSicTW24+oZdz
+   xTYBJYNhk1CKlXEEsXVLIc44O8/LmKeqKJAkFeAV8CnxYe9cE+PfEoi+8
+   aaQ5uvQ0J8AM1tzh0GWLv+0/qD6ImKFc7a/JV1Ep9xRGNnauqInD53yxb
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="395356574"
+X-IronPort-AV: E=Sophos;i="5.95,229,1661842800"; 
+   d="scan'208";a="395356574"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 18:42:13 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="584859623"
+X-IronPort-AV: E=Sophos;i="5.95,229,1661842800"; 
+   d="scan'208";a="584859623"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga003.jf.intel.com with ESMTP; 31 Oct 2022 18:42:11 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1opgI7-000DAq-0M;
+        Tue, 01 Nov 2022 01:42:11 +0000
+Date:   Tue, 01 Nov 2022 09:42:05 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/cleanups] BUILD SUCCESS
+ c9053e1c5a6fca221946f95d1fe6e47f69fb303a
+Message-ID: <6360796d.d5vg/VGKic7N7N7e%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 31 Oct 2022 13:14:33 +0100 Steen Hegelund wrote:
-> > I'm not able to get this working on PCB135. I tested the VLAN tags and
-> > did not work either (did not test the rest). The example from the
-> > previous patch series doesn't work either after applying this series.  
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/cleanups
+branch HEAD: c9053e1c5a6fca221946f95d1fe6e47f69fb303a  x86/i8259: Make default_legacy_pic static
 
-Previous series in this context means previous revision or something
-that was already merged?
+elapsed time: 972m
 
-> tc filter add dev eth3 ingress chain 8000000 prio 10 handle 10 \
+configs tested: 34
+configs skipped: 81
 
-How are you using chains?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-I thought you need to offload FLOW_ACTION_GOTO to get to a chain,
-and I get no hits on this driver.
+gcc tested configs:
+x86_64                              defconfig
+i386                 randconfig-a011-20221031
+i386                 randconfig-a012-20221031
+i386                 randconfig-a013-20221031
+i386                 randconfig-a016-20221031
+i386                 randconfig-a015-20221031
+x86_64                    rhel-8.3-kselftests
+x86_64                         rhel-8.3-kunit
+i386                 randconfig-a014-20221031
+x86_64                          rhel-8.3-func
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+i386                                defconfig
+x86_64                               rhel-8.3
+x86_64               randconfig-a012-20221031
+x86_64                           allyesconfig
+x86_64               randconfig-a011-20221031
+x86_64               randconfig-a013-20221031
+x86_64               randconfig-a014-20221031
+x86_64               randconfig-a016-20221031
+i386                             allyesconfig
+x86_64               randconfig-a015-20221031
+
+clang tested configs:
+x86_64               randconfig-a004-20221031
+x86_64               randconfig-a003-20221031
+x86_64               randconfig-a002-20221031
+x86_64               randconfig-a001-20221031
+x86_64               randconfig-a006-20221031
+x86_64               randconfig-a005-20221031
+i386                 randconfig-a001-20221031
+i386                 randconfig-a003-20221031
+i386                 randconfig-a002-20221031
+i386                 randconfig-a004-20221031
+i386                 randconfig-a005-20221031
+i386                 randconfig-a006-20221031
+
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
