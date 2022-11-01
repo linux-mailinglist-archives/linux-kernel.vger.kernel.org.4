@@ -2,170 +2,211 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E9F561422E
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 01:16:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 99B7B614233
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 01:18:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229441AbiKAAP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 20:15:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
+        id S229642AbiKAASy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 20:18:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52648 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229727AbiKAAPz (ORCPT
+        with ESMTP id S229475AbiKAASv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 20:15:55 -0400
-Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A357515FC0
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 17:15:54 -0700 (PDT)
-Received: by mail-lj1-x22d.google.com with SMTP id u11so18770033ljk.6
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 17:15:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=38cDXdi0r69fdE/BUKO80R1kI/zw2O2sBzCV4ZqhUwg=;
-        b=J9E40lntmHOrjoy9Xcdik21H9sYudcve10nrz642t/oMhyvmL9VFzyufdi3szUwjBV
-         m/p5FEnviTesKG2W7OtG7jBD+iMM+10VyyFiueKZLk8IlllJ61r+A9sFe1BC38dtweGP
-         23GUL1AqAFIhJ/cVI2cCFPse2JsR0XwPIh16/MNKJFKZnrmjDBquRlbwwYzweTQj2nXw
-         C3/KLMl81IzZP3sRWy8In1aoOzLESHfQYwXhdSs4xrh9W5c5tJhKuuvtsfRqKeCNiydH
-         BpprdULh+xbph4gtavi+z08szpmE7RLQ6ICzMZc1ZXnzEZf9UCfhjzTcFroAfmbE1H1b
-         b7HA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=38cDXdi0r69fdE/BUKO80R1kI/zw2O2sBzCV4ZqhUwg=;
-        b=rVngh3iu3OcyG8PZ5zt/SsuJbiNtbkN/uzxrhQD2fE7YgGvBeXOSewbmAFfNARUBam
-         X3YQ8+RSZbjrt/Cc/0h1b1AnACTK5vl1SffoTVgvAvrxAvEZvjN+A9IKrS79sOERE33p
-         ZYIeBeQJXG+ZNG6eurqw4vYbeP4He++dh1DxicWoWr5WbJPngCSVANBVL/l5V21W+59t
-         SzNAO06Cw6bdC9w4wUnmyiFcuK5f4hRgTfw6VSivxZeOb+OnxZ03OYpeTFqHf+EBYFAz
-         sXhil1wP9iWJeMbJALrjzCXjxYr75JyCt1kHefakDqypqHRflQt25yVTqKemHYq0P+C7
-         QCGw==
-X-Gm-Message-State: ACrzQf00wQ2chaqXnqfLIXBGs2DOCozPWCN/o5FnxOyFSH7nKgU6oz/x
-        nzr6J3mE2gYEU7nZSs4YATX3pQ==
-X-Google-Smtp-Source: AMsMyM4nWjJC7qQLq2CsQhuNIRUwJ8W7P86DduyVfrSh1xY70OZRwrvx9QT6G38gI6top2m9YGZSUA==
-X-Received: by 2002:a2e:9c89:0:b0:277:138c:9fd9 with SMTP id x9-20020a2e9c89000000b00277138c9fd9mr174812lji.119.1667261753008;
-        Mon, 31 Oct 2022 17:15:53 -0700 (PDT)
-Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id u18-20020a05651220d200b004a1e7216131sm1491028lfr.116.2022.10.31.17.15.52
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Oct 2022 17:15:52 -0700 (PDT)
-Message-ID: <155e4171-187c-4ecf-5a9b-12f0c2207524@linaro.org>
-Date:   Tue, 1 Nov 2022 03:15:51 +0300
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH] drm/msm/dp: remove limitation of link rate at 5.4G to
- support HBR3
-Content-Language: en-GB
-To:     Doug Anderson <dianders@chromium.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>
-Cc:     robdclark@gmail.com, sean@poorly.run, swboyd@chromium.org,
-        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
-        agross@kernel.org, bjorn.andersson@linaro.org,
-        quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <1667237245-24988-1-git-send-email-quic_khsieh@quicinc.com>
- <94b507e8-5b94-12ae-4c81-95f5d36279d5@linaro.org>
- <deb60200-5a37-ec77-9515-0c0c89022174@quicinc.com>
- <CAD=FV=X_fs_4JYcRvAwkU9mAafOten9WdyzPfSVWdAU=ZMo8zg@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <CAD=FV=X_fs_4JYcRvAwkU9mAafOten9WdyzPfSVWdAU=ZMo8zg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 31 Oct 2022 20:18:51 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC0B66340
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 17:18:49 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.nyi.internal (Postfix) with ESMTP id 7E4A85C00DA;
+        Mon, 31 Oct 2022 20:18:46 -0400 (EDT)
+Received: from imap46 ([10.202.2.96])
+  by compute5.internal (MEProxy); Mon, 31 Oct 2022 20:18:46 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com.au;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1667261926; x=1667348326; bh=fi
+        mXTSH5ZLpHfGKWM0j4zT+1so1IP4NpiYE5OssGC/c=; b=J1pUU7BERazf1IeLBd
+        jAWNGQAB2kKYNThwgOANWSBBBAbnUxGN9q8hSYqVwMI4gYFnfyN3UQzun4eLndEd
+        IwCpynC7CK/cLg+QktJAiVQ8FimTS7jnB2iT8OKV5IylFxdHuZexPndnPJ9KFnZa
+        ekksJw1NoKXHNH7GmqVdgNRtHQkqB04ySo8BOi3agwwS0BbxFiSo/cwubK/RuQm4
+        kWW/w/WGH/yRkWTBo2WLo8vnDwxPl5N2OKH7GHTtExEI+MU8MWS4POPweskpvect
+        7IhaXIBh+G0u+ERvlnQ7inrwxxKnKWBJz8G5PhTlIZjzq9UPrCUmp7WC72r3eO6+
+        CdEQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1667261926; x=1667348326; bh=fimXTSH5ZLpHfGKWM0j4zT+1so1I
+        P4NpiYE5OssGC/c=; b=Z3P5fypnqKglxy1Mw/0alIqLLvyCi1HVyzxSDnZUIyDA
+        XDYW6nDULoHv3jXTEv8CHHdB5YHQX9qxPzDC/3F5WkGI9QvgTaHc3XhMfr3VNMWM
+        oleabt+4AMlPllGgscypqUTZigHmVPaURtZuQBf5PCqPC5sXiZhMV40oin9+eaNx
+        jAQh+fg33NfDaFtEKElq15W2vVlE/CA/1fLa32BmN2xeZeGXSpVm9L9tfLWx2Xzs
+        XUTyPV09IF7ioG5c4tqrK4XOAUNPMmDT9cPRCRQUKCghaGBT6Y1ngTGyfHF5/4rI
+        R9CzV04lyJR8CfR9FkHOiRQQx7NoUP3XujvTboTFGA==
+X-ME-Sender: <xms:5GVgY699hbxKzHuSY6C2zB1vzbhcJfrTYBFw6zJIpB0Y4UJcVYiC2g>
+    <xme:5GVgY6vZCxv6bDUxsAm6ECgsB2g9DwFjykHr9X8z2-fhtsqQewgojfFCsS2ZN0Gem
+    L2S4UyW-eSGBPz8YQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudeggddvudcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdflohhh
+    nhcuvfhhohhmshhonhdfuceolhhishhtshesjhhohhhnthhhohhmshhonhdrfhgrshhtmh
+    grihhlrdgtohhmrdgruheqnecuggftrfgrthhtvghrnhepkeefhffguddtgeegjedtvedt
+    vddvkeevvdehfeehieejhffhhfejkeejgfelveegnecuvehluhhsthgvrhfuihiivgeptd
+    enucfrrghrrghmpehmrghilhhfrhhomheplhhishhtshesjhhohhhnthhhohhmshhonhdr
+    fhgrshhtmhgrihhlrdgtohhmrdgruh
+X-ME-Proxy: <xmx:5GVgYwConxQxZaHrkMScgBLIVSfU_n2Q3-eVscNgZ7QvjD9QPpy_Kw>
+    <xmx:5GVgYyf0zV0xhlUqYS56AExooi7Go68jlav443JUV4mdOG-MOaYogw>
+    <xmx:5GVgY_PCQxx2lzkC0UmAE1Q1FianhfOY5q98ekgxZsOkucT7AlWxIA>
+    <xmx:5mVgY8eDrdN-eX_8gePN0WeOq5TVkwVKJcRXn_uu2i0yNWSbisKDWQ>
+Feedback-ID: ia7894244:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id A370A2A20080; Mon, 31 Oct 2022 20:18:44 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
+Mime-Version: 1.0
+Message-Id: <9b71ae3e-7f53-4c9e-90c4-79d3d649f94c@app.fastmail.com>
+In-Reply-To: <Y1+0sbQ3R4DB46NX@feng-clx>
+References: <20220913065423.520159-1-feng.tang@intel.com>
+ <20220913065423.520159-2-feng.tang@intel.com>
+ <becf2ac3-2a90-4f3a-96d9-a70f67c66e4a@app.fastmail.com>
+ <af2ba83d-c3f4-c6fb-794e-c2c7c0892c44@suse.cz> <Y180l6zUnNjdCoaE@feng-clx>
+ <c4285caf-277c-45fd-8fc7-8a1d61685ce8@app.fastmail.com>
+ <Y1+0sbQ3R4DB46NX@feng-clx>
+Date:   Tue, 01 Nov 2022 00:18:19 +0000
+From:   "John Thomson" <lists@johnthomson.fastmail.com.au>
+To:     "Feng Tang" <feng.tang@intel.com>
+Cc:     "Vlastimil Babka" <vbabka@suse.cz>,
+        "Andrew Morton" <akpm@linux-foundation.org>,
+        "Christoph Lameter" <cl@linux.com>,
+        "Pekka Enberg" <penberg@kernel.org>,
+        "David Rientjes" <rientjes@google.com>,
+        "Joonsoo Kim" <iamjoonsoo.kim@lge.com>,
+        "Roman Gushchin" <roman.gushchin@linux.dev>,
+        "Hyeonggon Yoo" <42.hyeyoo@gmail.com>,
+        "Dmitry Vyukov" <dvyukov@google.com>,
+        "Jonathan Corbet" <corbet@lwn.net>,
+        "Andrey Konovalov" <andreyknvl@gmail.com>,
+        "Hansen, Dave" <dave.hansen@intel.com>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
+        "Robin Murphy" <robin.murphy@arm.com>,
+        "John Garry" <john.garry@huawei.com>,
+        "Kefeng Wang" <wangkefeng.wang@huawei.com>
+Subject: Re: [PATCH v6 1/4] mm/slub: enable debugging memory wasting of kmalloc
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/11/2022 03:08, Doug Anderson wrote:
-> Hi,
-> 
-> On Mon, Oct 31, 2022 at 2:11 PM Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
->>
->> Hi Dmitry,
->>
->>
->> Link rate is advertised by sink, but adjusted (reduced the link rate)
->> by host during link training.
->>
->> Therefore should be fine if host did not support HBR3 rate.
->>
->> It will reduce to lower link rate during link training procedures.
->>
->> kuogee
->>
->> On 10/31/2022 11:46 AM, Dmitry Baryshkov wrote:
->>> On 31/10/2022 20:27, Kuogee Hsieh wrote:
->>>> An HBR3-capable device shall also support TPS4. Since TPS4 feature
->>>> had been implemented already, it is not necessary to limit link
->>>> rate at HBR2 (5.4G). This patch remove this limitation to support
->>>> HBR3 (8.1G) link rate.
->>>
->>> The DP driver supports several platforms including sdm845 and can
->>> support, if I'm not mistaken, platforms up to msm8998/sdm630/660.
->>> Could you please confirm that all these SoCs have support for HBR3?
->>>
->>> With that fact being confirmed:
->>>
->>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->>>
->>>
->>>>
->>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->>>> ---
->>>>    drivers/gpu/drm/msm/dp/dp_panel.c | 4 ----
->>>>    1 file changed, 4 deletions(-)
->>>>
->>>> diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c
->>>> b/drivers/gpu/drm/msm/dp/dp_panel.c
->>>> index 5149ceb..3344f5a 100644
->>>> --- a/drivers/gpu/drm/msm/dp/dp_panel.c
->>>> +++ b/drivers/gpu/drm/msm/dp/dp_panel.c
->>>> @@ -78,10 +78,6 @@ static int dp_panel_read_dpcd(struct dp_panel
->>>> *dp_panel)
->>>>        if (link_info->num_lanes > dp_panel->max_dp_lanes)
->>>>            link_info->num_lanes = dp_panel->max_dp_lanes;
->>>>    -    /* Limit support upto HBR2 until HBR3 support is added */
->>>> -    if (link_info->rate >=
->>>> (drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4)))
->>>> -        link_info->rate = drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4);
->>>> -
->>>>        drm_dbg_dp(panel->drm_dev, "version: %d.%d\n", major, minor);
->>>>        drm_dbg_dp(panel->drm_dev, "link_rate=%d\n", link_info->rate);
->>>>        drm_dbg_dp(panel->drm_dev, "lane_count=%d\n",
->>>> link_info->num_lanes);
-> 
-> Stephen might remember better, but I could have sworn that the problem
-> was that there might be something in the middle that couldn't support
-> the higher link rate. In other words, I think we have:
-> 
-> SoC <--> TypeC Port Controller <--> Display
-> 
-> The SoC might support HBR3 and the display might support HBR3, but the
-> TCPC (Type C Port Controller) might not. I think that the TCPC is a
-> silent/passive component so it can't really let anyone know about its
-> limitations.
-> 
-> In theory I guess you could rely on link training to just happen to
-> fail if you drive the link too fast for the TCPC to handle. Does this
-> actually work reliably?
-> 
-> I think the other option that was discussed in the past was to add
-> something in the device tree for this. Either you could somehow model
-> the TCPC in DRM and thus know that a given model of TCPC limits the
-> link rate or you could hack in a property in the DP controller to
-> limit it.
+On Mon, 31 Oct 2022, at 11:42, Feng Tang wrote:
+> On Mon, Oct 31, 2022 at 10:05:58AM +0000, John Thomson wrote:
+>> On Mon, 31 Oct 2022, at 02:36, Feng Tang wrote:
+>> >> > 
+>> >> > possibly relevant config options:
+>> >> > grep -E '(SLUB|SLAB)' .config
+>> >> > # SLAB allocator options
+>> >> > # CONFIG_SLAB is not set
+>> >> > CONFIG_SLUB=y
+>> >> > CONFIG_SLAB_MERGE_DEFAULT=y
+>> >> > # CONFIG_SLAB_FREELIST_RANDOM is not set
+>> >> > # CONFIG_SLAB_FREELIST_HARDENED is not set
+>> >> > # CONFIG_SLUB_STATS is not set
+>> >> > CONFIG_SLUB_CPU_PARTIAL=y
+>> >> > # end of SLAB allocator options
+>> >> > # CONFIG_SLUB_DEBUG is not set
+>> >> 
+>> >> Also not having CONFIG_SLUB_DEBUG enabled means most of the code the 
+>> >> patch/commit touches is not even active.
+>> >> Could this be some miscompile or code layout change exposing some 
+>> >> different bug, hmm.
+>> 
+>> Yes, it could be.
+>> 
+>> >> Is it any different if you do enable CONFIG_SLUB_DEBUG ?
+>> 
+>> No change
+>> 
+>> >> Or change to CONFIG_SLAB? (that would be really weird if not)
+>> 
+>> This boots fine
+>> 
+>> > I haven't found any clue from the code either, and I compiled
+>> > kernel with the config above and tested booting on an Alder-lake
+>> > desktop and a QEMU, which boot fine.
+>> >
+>> > Could you provide the full kernel config and demsg (in compressed
+>> > format if you think it's too big), so we can check more?
+>> 
+>> Attached
+>> 
+>> > Thanks,
+>> > Feng
+>> 
+>> vmlinux is bigger, and entry point is larger (0x8074081c vs 0x807407dc revert vs 0x8073fcbc),
+>> so that may be it? Or not?
+>> revert + SLUB_DEBUG + SLUB_DEBUG_ON is bigger still, but does successfully boot.
+>> vmlinux entry point is 0x8074705c
+>
+> Thanks for prompt info!
+>
+> As I can't reproduce it locally yet, could you help try 3 tests separately:
+> * change the O2/O3 compile option to O1
+> * try the attached 0001 patch (which cut part of commit)
+> * try attached 0001+0002 patch
 
-Latest pmic_glink proposal from Bjorn include adding the drm_bridge for 
-the TCPC. Such bridge can in theory limit supported modes and rates.
+None of these changed my outcome.
+
+I also tried compiling the same linux tree & config with the Bootlin toolchain
+(mipsel-buildroot-linux-gnu-gcc.br_real (Buildroot 2021.11-4428-g6b6741b) 12.2.0)
+with the same results.
+I will look into finding or building a mips clang toolchain.
+
+No JTAG capability to debug, sorry.
+
+I get the same outcome with either the ZBOOT vmlinuz, or vmlinux
+
+Same happening with 6.1-rc3
+
+
+After some blind poking around changing (how much of the commit affected) mm/slub.c,
+I may have got lucky. it appears as though this is all I need to boot:
+(against 6.1-rc3), and with the Bootlin toolchain. Will test my other build system as well.
+
+--- a/mm/slub.c
++++ b/mm/slub.c
+@@ -3276,7 +3276,7 @@ static void *__slab_alloc(struct kmem_cache *s, gfp_t gfpflags, int node,
+        c = slub_get_cpu_ptr(s->cpu_slab);
+ #endif
+ 
+-       p = ___slab_alloc(s, gfpflags, node, addr, c, orig_size);
++       p = ___slab_alloc(s, gfpflags, node, addr, c, 0);
+ #ifdef CONFIG_PREEMPT_COUNT
+        slub_put_cpu_ptr(s->cpu_slab);
+ #endif
+
+
+Would like to hear your thoughts, but I will keep digging.
+
+>
+> Thanks!
+>
+>
+> - Feng
+>
+>
+>
+>
+> Attachments:
+> * 0001-reduced-slub-patch.patch
+> * 0002-reorder-the-partial_context-initialization.patch
 
 -- 
-With best wishes
-Dmitry
-
+  John Thomson
