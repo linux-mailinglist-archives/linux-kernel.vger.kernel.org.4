@@ -2,119 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF874614DC8
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 16:06:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05376614DCE
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 16:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231447AbiKAPGi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 11:06:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59796 "EHLO
+        id S231249AbiKAPHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 11:07:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59218 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231414AbiKAPGW (ORCPT
+        with ESMTP id S231401AbiKAPHJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 11:06:22 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A91A31DDD6
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 08:00:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=b1Cj0chaw9JLH2gXk2AZTiOd2rXLa7xopFMjGx4myaM=; b=GO1A5SoU2ykqlSazqqbbpt53fS
-        tiPQJnRVbFOm4yp/siJ3m95ByA6Vzgd2nY6Yx1ltR03u2mMJnyvXpkMA66wFNhMItJ51CiPe/SoR4
-        iXMPvBma0/0omCz/pcySWoREN/csO0FsQhnyr7rOMI8qWxgsnt072XL8oSyYXaC+6QV2SHPpdIzIC
-        1CAzkIsUuO8fvTiv2WMV/ytqcZxLiEkNmry8XF5m1yZE42WbLKO59pG1rUNBjyKqQwSONyXdBaKQe
-        5RZZ4ez7pigqnNg7G3tkFAi65EeTSfIqAUkIebjm4AblEJ4mmflkio/LguqB6iR9rAPOo1sNXLuyb
-        89Y0gCxA==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1opsje-0089Qb-GU; Tue, 01 Nov 2022 14:59:26 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 7C6C130007E;
-        Tue,  1 Nov 2022 15:59:25 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id 3925D28576692; Tue,  1 Nov 2022 15:59:25 +0100 (CET)
-Date:   Tue, 1 Nov 2022 15:59:25 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Chen Yu <yu.c.chen@intel.com>
-Cc:     Tianchen Ding <dtcccc@linux.alibaba.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] sched: Clear ttwu_pending after enqueue_task
-Message-ID: <Y2E0TeFJorjOXikX@hirez.programming.kicks-ass.net>
-References: <20221101073630.2797-1-dtcccc@linux.alibaba.com>
- <Y2D2HIZuGP81w25+@hirez.programming.kicks-ass.net>
- <Y2EkXYqZ15/Kjl6H@chenyu5-mobl1>
+        Tue, 1 Nov 2022 11:07:09 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07A631DF0E;
+        Tue,  1 Nov 2022 08:00:59 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id k15so5634101pfg.2;
+        Tue, 01 Nov 2022 08:00:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=gun1iY/Ev7jUkuPSB5eGYnxQ+oJQPhXUeqVegBkXHI0=;
+        b=F8RZQLTL/seSsqRJF8M8PkO+NKjm4qG2RUiIZXcv8I8+svBagNBE0IRbqKT9pIM19t
+         x5lGd7F36/1OJoZK1a2x7Hv0hwTSH+kSDvKDiO4trR8Lhfj07FEuPCj/BwWj/KoUGmzF
+         wpFWg+SYdG68+qU0JrYa1sEGmW3H/Sug1K2Wd3JsqRi4jq3d+B0XLURxNssxslRDjlhr
+         PKjLD/Uqir5GKAjM/qjZEIpln4s0FWykznAJi71WV+0yFIw4hXYe+tJxJsqcl4kBEtAs
+         M7VJdFhlywnU3lg/Fke5hAo9xsF7oQ79XKj8Rk7CH0uz/G3Tu/MExhW8OgyK8eIliwXN
+         3/eA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=gun1iY/Ev7jUkuPSB5eGYnxQ+oJQPhXUeqVegBkXHI0=;
+        b=QaOBHVpWW2bgkZgGpHKSVV9x7UVr3MXYtpoPCd8HNJqLFmQT1VN0VmCVhIYXnDqcTk
+         OEkKaLc36fWJdKQGKkMInqzMeFrWvANveJTZ7pDYTboG/YhK8SG9cNwkGoFit++z4FRi
+         MeOldv8WW/mwl+C8E0OLvf5Ewu9BfgNuHp1ZTvQui1yB80bBKmfFohBOVECu9aSEmxyt
+         UHbyRZ3UwBWj3yDyOa9R2UL6e7t82Ij0iZxPrWez4ny9Pt14RXr8MvMMTxdd0s3vv/2h
+         zBzuDJpspom6Wv4Lv01kUYiSezcLd9ZHXbedKmR5jql0WrakpC9/njwP3zY1QOu5CRa/
+         Ywtg==
+X-Gm-Message-State: ACrzQf1t6p5+1YK8Ahrwbu+ZlHiVadQPi/vJbvUConim+wKGg5D+JhE6
+        Kfo2zq7DBFhM/GDmwTD896c=
+X-Google-Smtp-Source: AMsMyM5+aZe/e/LqwyaP0o9+9aMalBMSzYKbdT2Y6WqjvE1WoFfK2aSORVEqoDEjsBm0zxw4r1lUCg==
+X-Received: by 2002:a63:fb0b:0:b0:46f:a98b:5685 with SMTP id o11-20020a63fb0b000000b0046fa98b5685mr12248746pgh.393.1667314812821;
+        Tue, 01 Nov 2022 08:00:12 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:a6ae:11ff:fe11:fcc3])
+        by smtp.gmail.com with ESMTPSA id v8-20020a17090a088800b0020087d7e778sm6048005pjc.37.2022.11.01.08.00.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 08:00:12 -0700 (PDT)
+Date:   Tue, 1 Nov 2022 08:00:08 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>
+Cc:     Alistair Francis <alistair@alistair23.me>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-input@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linus.walleij@linaro.org,
+        shawnguo@kernel.org, rydberg@bitmath.org, alistair23@gmail.com,
+        s.hauer@pengutronix.de, andreas@kemnade.info
+Subject: Re: [PATCH v10 2/4] dt-bindings: input: Add Cypress TT21000
+ touchscreen controller
+Message-ID: <Y2E0eFq1xZthd3Os@google.com>
+References: <20221026114908.191472-1-alistair@alistair23.me>
+ <20221026114908.191472-3-alistair@alistair23.me>
+ <Y2BfCkVhE9GNdjWI@google.com>
+ <CAL_JsqKppGZ2Dm3GiDY-e4TvLSvcc-EHwafXNwfoSD1AHzz=GA@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y2EkXYqZ15/Kjl6H@chenyu5-mobl1>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAL_JsqKppGZ2Dm3GiDY-e4TvLSvcc-EHwafXNwfoSD1AHzz=GA@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 09:51:25PM +0800, Chen Yu wrote:
+On Tue, Nov 01, 2022 at 06:50:23AM -0500, Rob Herring wrote:
+> On Mon, Oct 31, 2022 at 6:49 PM Dmitry Torokhov
+> <dmitry.torokhov@gmail.com> wrote:
+> >
+> > On Wed, Oct 26, 2022 at 09:49:06PM +1000, Alistair Francis wrote:
+> > > Add the Cypress TrueTouch Generation 5 touchscreen device tree bindings
+> > > documentation. It can use I2C or SPI bus.
+> > > This touchscreen can handle some defined zone that are designed and
+> > > sent as button. To be able to customize the keycode sent, the
+> > > "linux,code" property in a "button" sub-node can be used.
+> > >
+> > > Signed-off-by: Alistair Francis <alistair@alistair23.me>
+> > > Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> > > Reviewed-by: Rob Herring <robh@kernel.org>
+> >
+> > Applied, thank you.
+> 
+> It looks like you applied v8, not this version. linux-next now has a warning:
+> 
+> /builds/robherring/linux-dt/Documentation/devicetree/bindings/input/touchscreen/cypress,tt21000.example.dtb:
+> touchscreen@24: Unevaluated properties are not allowed
+> ('#address-cells', '#size-cells' were unexpected)
+>         From schema:
+> /builds/robherring/linux-dt/Documentation/devicetree/bindings/input/touchscreen/cypress,tt21000.yaml
 
-> > Could you try the below instead? Also note the comment; since you did
-> > the work to figure out why -- best record that for posterity.
-> > 
-> > @@ -3737,6 +3730,13 @@ void sched_ttwu_pending(void *arg)
-> >  			set_task_cpu(p, cpu_of(rq));
-> >  
-> >  		ttwu_do_activate(rq, p, p->sched_remote_wakeup ? WF_MIGRATED : 0, &rf);
-> > +		/*
-> > +		 * Must be after enqueueing at least once task such that
-> > +		 * idle_cpu() does not observe a false-negative -- if it does,
-> > +		 * it is possible for select_idle_siblings() to stack a number
-> > +		 * of tasks on this CPU during that window.
-> > +		 */
-> > +		WRITE_ONCE(rq->ttwu_pending, 0);
-> Just curious why do we put above code inside llist_for_each_entry_safe loop?
+Oops, should be fixed now.
 
-> My understanding is that once 1 task is queued, select_idle_cpu() would not
-> treat this rq as idle anymore because nr_running is not 0. But would this bring
-> overhead to write the rq->ttwu_pending multiple times, do I miss something?
-
-So the consideration is that by clearing it late, you might also clear a
-next set; consider something like:
-
-
-	cpu0			cpu1			cpu2
-
-	ttwu_queue()
-	  ->ttwu_pending = 1;
-	  llist_add()
-
-				sched_ttwu_pending()
-				  llist_del_all()
-				  ... long ...
-							ttwu_queue()
-							  ->ttwu_pending = 1
-							  llist_add()
-
-				  ... time ...
-				  ->ttwu_pending = 0
-
-Which leaves you with a non-empty list but with ttwu_pending == 0.
-
-But I suppose that's not actually better with my variant, since it keeps
-writing 0s. We can make it more complicated again, but perhaps it
-doesn't matter and your version is good enough.
-
-But please update with a comment on why it needs to be after
-ttwu_do_activate().
-
+-- 
+Dmitry
