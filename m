@@ -2,75 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE26A615647
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 00:54:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ECEB5615651
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 00:57:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbiKAXyD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 19:54:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35688 "EHLO
+        id S229996AbiKAX5n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 19:57:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiKAXyA (ORCPT
+        with ESMTP id S229457AbiKAX5k (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 19:54:00 -0400
-Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D79A713DC6;
-        Tue,  1 Nov 2022 16:53:59 -0700 (PDT)
-Received: by mail-wr1-x42c.google.com with SMTP id a14so22267708wru.5;
-        Tue, 01 Nov 2022 16:53:59 -0700 (PDT)
+        Tue, 1 Nov 2022 19:57:40 -0400
+Received: from mail-il1-x12e.google.com (mail-il1-x12e.google.com [IPv6:2607:f8b0:4864:20::12e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 820631F625;
+        Tue,  1 Nov 2022 16:57:39 -0700 (PDT)
+Received: by mail-il1-x12e.google.com with SMTP id g13so8700298ile.0;
+        Tue, 01 Nov 2022 16:57:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=z3FRDuuLwsrtOeXY8HtkGnt8wtOUT94ofl0sNB3vcQI=;
-        b=gqKp3LZYwPxJIeLX8gVUpL8ykLCVcRNAnborbEZPNhGocFSNT1rNvacrShoBu2PdFF
-         w1yMXm9voWJM5cT3jp7kELL/BdjEUQ8ZGZrOKzueh91ZcO2hgG0iNHnytAQ0LsuUeE9U
-         3jpVUW3ul3T3ate4IjmDNEwqGakP154inpieEINWycYvpF+om15bbg4aleEd414LhMeW
-         18iN03Zm68Du8ZaQMVJpk5SL1lGRoAhSOyXrLf8k4uJR0tfyjuTcW8Kt8EcWdsLLQXDr
-         dd/hEAg5d8aMEXWyZxe8Pbw9H9bL7E74Mc0b/urnX1zuMo5m7KSJl8esZidDwcNVTgXp
-         zq2Q==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=79QVVyXFg8UxsRAv7iIJih7AMld9P3iLtMsZBswHoqE=;
+        b=q5qrb4vacT3b1cEDSOcuN/m0eNwt7oNmU3Dq2x09izIHg1QSA9i35IM69duVGQKKlQ
+         HqR9wvist2TPiMaWuuoN7XKbZ4pvE0mA8DR24LLPrXENpOTeTmxGDmT24knL/CLC31KZ
+         NBB5xVNjFrH6XfW7zhwziR+f1sEbau4NyM3L4bqL6xyZ2/y8n5FPo1wtuc0Ogu+iYWFy
+         KDuk4c8mqNlfGTmqceT/lCippBBepWn0AuCxFF/uGPB6sXHXtQtoYwzCQwWldVaciZ2e
+         zaF1u7G/DSgjEmIkZLDwo60jr1D3BMV48As6DVNvO7iTyqSderbmB5wKcu7Qpdn/apyt
+         u80w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=z3FRDuuLwsrtOeXY8HtkGnt8wtOUT94ofl0sNB3vcQI=;
-        b=reF+y5Xq1jr24kszbL9XCC3iZhoQnGMgd4bPjAXQJaI9aG3NwWdLwH/Xnb8EdYHUCg
-         mhUdcW93UwMDuXqoLhzJb+TicAZyuQydHeTfBkF19E7ueuTC7KGF+iz4fav+6nHsg5j7
-         l0oLu48aAiN/kH1vbSCqo2CfA4WgRoZ0g7D9aXMRAQSAmbZOJ9pTN7WfNbPnivHoozu/
-         +P7Y8mz++A0Lhc6+K31UUav/W3qqS+lAwMHQXHbjkow6jh434nzNJHHdmxC1n8L/TUR4
-         y1AhvI048DmERpmBYgzuWzEDn/YwSRR6D6F14am0b7mpKgyv7Nq2nDGfiZVp3nvxTTW+
-         uu7g==
-X-Gm-Message-State: ACrzQf3q71+gCCIKEifvSBOW9hEpke7BERp+bJ1ElrfS9D0JmbzyDGak
-        0nBJUcDK7aodrWhoU/7Eqeo=
-X-Google-Smtp-Source: AMsMyM6S4RYnyr9fA/9Z/Ui+zms2pmGeKvZVTBxyY2J8xgdEBuu/b4yBP1CcYZR6KTyQFGiin2B/Ng==
-X-Received: by 2002:a5d:47a6:0:b0:236:7854:246d with SMTP id 6-20020a5d47a6000000b002367854246dmr12836652wrb.300.1667346838314;
-        Tue, 01 Nov 2022 16:53:58 -0700 (PDT)
-Received: from DreamMachine2.lan (188.red-83-35-57.dynamicip.rima-tde.net. [83.35.57.188])
-        by smtp.gmail.com with ESMTPSA id f7-20020adff987000000b0022e6178bd84sm11209264wrr.8.2022.11.01.16.53.57
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=79QVVyXFg8UxsRAv7iIJih7AMld9P3iLtMsZBswHoqE=;
+        b=YYkWFl8H1uXdBOza3JEJbkDG0Dou8FnrC03TTXDfVA3e35TFERSt4rXq4S37dfjtmm
+         tXJPqBOxEtUlVDnzmCt6FsOWZwqwcmPPZ4V0Qnr+8e2yRCCvvyAX9Usow+hUfxOfQM2h
+         /bAl7IsNgzFbp9cBviG06wBT+g0MXi68lwwSTYs/Wft764/Fz3OMSTZ0TS0JDVU3KPXy
+         yZ2Cf7izuXxHERgUjFpVFYODdfE//MuIT2WE762syvZWuLOrGA6Zchjm8i45uG5y/pwI
+         hyZiT0HPamG94mOj03BCRfFFNlMQfdkXiF68M0mpRwCyUJV/+WE7GVjHZ6F3mn+AkdiZ
+         4kKQ==
+X-Gm-Message-State: ACrzQf1059IY10H3btyey+m+P9Mi1ZIiY5ILLKbtEf7J4ltrJb3g48fa
+        78IhGguXKvMLIQ9QFUV8LA4=
+X-Google-Smtp-Source: AMsMyM5qvwLWgIrPUtRiDcylkN4kx1MzFaJj64axVksnHyx7mknR1a34xP3bW7qkCNcd5Ede9ms/TA==
+X-Received: by 2002:a92:7d0a:0:b0:300:b187:cac7 with SMTP id y10-20020a927d0a000000b00300b187cac7mr7699147ilc.178.1667347058181;
+        Tue, 01 Nov 2022 16:57:38 -0700 (PDT)
+Received: from localhost ([2607:fea8:a2e2:2d00:f1f0:c4d7:e39e:e2f])
+        by smtp.gmail.com with ESMTPSA id u6-20020a02cbc6000000b00363fe31cf55sm4446477jaq.40.2022.11.01.16.57.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 16:53:57 -0700 (PDT)
-Message-ID: <d464a5319e1571613abcd7f0b3120e82a6f62e6e.camel@gmail.com>
-Subject: Re: [RFC PATCH 1/2] i2c: core: Introduce i2c_client_get_device_id
- helper function
-From:   Angel Iglesias <ang.iglesiasg@gmail.com>
-To:     Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Cc:     linux-iio@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Date:   Wed, 02 Nov 2022 00:53:56 +0100
-In-Reply-To: <20221101145421.jwytax2srno4hhrl@pengutronix.de>
-References: <cover.1667151588.git.ang.iglesiasg@gmail.com>
-         <aeac9f372ffe0013757e261229e6e23f76f2d8f9.1667151588.git.ang.iglesiasg@gmail.com>
-         <20221101145421.jwytax2srno4hhrl@pengutronix.de>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.1 (by Flathub.org) 
+        Tue, 01 Nov 2022 16:57:37 -0700 (PDT)
+From:   Richard Acayan <mailingradian@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Robert Marko <robimarko@gmail.com>,
+        Das Srinagesh <quic_gurus@quicinc.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org
+Subject: [PATCH 0/4] Initial SDM670 and Pixel 3a support
+Date:   Tue,  1 Nov 2022 19:57:18 -0400
+Message-Id: <20221101235722.53955-1-mailingradian@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -81,66 +82,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-11-01 at 15:54 +0100, Uwe Kleine-K=C3=B6nig wrote:
-> On Sun, Oct 30, 2022 at 06:52:18PM +0100, Angel Iglesias wrote:
-> > Introduces new helper function to aid in .probe_new() refactors. In ord=
-er
-> > to use existing i2c_get_device_id() on the probe callback, the device
-> > match table needs to be accessible in that function, which would requir=
-e
-> > bigger refactors in some drivers using the deprecated .probe callback.
-> >=20
-> > This issue was discussed in more detail in the IIO mailing list.
-> >=20
-> > Link:
-> > https://lore.kernel.org/all/20221023132302.911644-11-u.kleine-koenig@pe=
-ngutronix.de/
-> > Suggested-by: Nuno S=C3=A1 <noname.nuno@gmail.com>
-> > Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > Suggested-by: Jonathan Cameron <jic23@kernel.org>
-> > Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
-> > ---
-> > =C2=A0drivers/i2c/i2c-core-base.c | 15 +++++++++++++++
-> > =C2=A0include/linux/i2c.h=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0 |=C2=A0 1 +
-> > =C2=A02 files changed, 16 insertions(+)
-> >=20
-> > diff --git a/drivers/i2c/i2c-core-base.c b/drivers/i2c/i2c-core-base.c
-> > index b4edf10e8fd0..e6623226e393 100644
-> > --- a/drivers/i2c/i2c-core-base.c
-> > +++ b/drivers/i2c/i2c-core-base.c
-> > @@ -2236,6 +2236,21 @@ int i2c_get_device_id(const struct i2c_client
-> > *client,
-> > =C2=A0}
-> > =C2=A0EXPORT_SYMBOL_GPL(i2c_get_device_id);
-> > =C2=A0
-> > +/**
-> > + * i2c_client_get_device_id - get the driver match table entry of a de=
-vice
-> > + * @client: the device to query
-> > + *
-> > + * Returns a pointer to the matching entry if found, NULL otherwise.
-> > + */
-> > +const struct i2c_device_id *i2c_client_get_device_id(const struct
-> > i2c_client *client)
-> > +{
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const struct i2c_driver *drv=
- =3D to_i2c_driver(client->dev.driver);
-> > +
-> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0return i2c_match_id(drv->id_=
-table, client);
-> > +
->=20
-> I'd drop the empty line after the return. Is it worth to note in a
-> comment that it only works for bound clients? (Oopses otherwise)
+Do not apply this series yet. It is only for review comments. It can be
+applied once the "qcom,sdm670-smmu-500" compatible string gets added (or
+now if you don't care about handling an unnecessary quirk).
 
-Yup, my bad, that newline shouldn't be there.
-Sure, seems reasonable to leave warn just in case.
+This adds the device trees and bindings to support the Qualcomm
+Snapdragon 670 and Google Pixel 3a. This patch series, specifically the
+last patch, depends on:
 
-Kind regards,
-Angel
+[PATCH v4 0/3] SDM670 Global Clocks
+  https://lore.kernel.org/all/20220914013922.198778-1-mailingradian@gmail.com/T/
+[PATCH v2 0/2] RPMh Support for PM660 and PM660L
+  https://lore.kernel.org/all/20220920223331.150635-1-mailingradian@gmail.com/T/
+[PATCH v2 0/2] SDM670 RPMh Clocks
+  https://lore.kernel.org/all/20220920223734.151135-1-mailingradian@gmail.com/T/
+[PATCH v2 0/2] SDM670 USB 2.0 support
+  https://lore.kernel.org/all/20220922024656.178529-1-mailingradian@gmail.com/T/
+[PATCH 0/2] SDM670 SDHCI support
+  https://lore.kernel.org/all/20220923014322.33620-1-mailingradian@gmail.com/T/
+[PATCH v2 0/2] SDM670 Power Domains
+  https://lore.kernel.org/all/20221004221130.14076-1-mailingradian@gmail.com/T/
+[PATCH v10 0/3] SDM670 Pin Control Driver
+  https://lore.kernel.org/all/20221014001934.4995-1-mailingradian@gmail.com/T/
+[PATCH v6 0/4] SDM670 GPI DMA support
+  https://lore.kernel.org/all/20221018005740.23952-1-mailingradian@gmail.com/T/
+[RFC PATCH 0/9] iommy/arm-smmu-qcom: Rework Qualcomm SMMU bindings and implementation
+  https://lore.kernel.org/linux-iommu/73eee2ed-f8ee-f136-2853-34b27c099644@quicinc.com/T/
 
-> Best regards
-> Uwe
->=20
+Richard Acayan (4):
+  dt-bindings: arm: cpus: add qcom kryo 360 compatible
+  dt-bindings: arm: qcom: add sdm670 and pixel 3a compatible
+  dt-bindings: firmware: scm: add sdm670 compatible
+  arm64: dts: qcom: add sdm670 and pixel 3a device trees
+
+ .../devicetree/bindings/arm/cpus.yaml         |    1 +
+ .../devicetree/bindings/arm/qcom.yaml         |    6 +
+ .../bindings/firmware/qcom,scm.yaml           |    1 +
+ arch/arm64/boot/dts/qcom/Makefile             |    1 +
+ .../boot/dts/qcom/sdm670-google-sargo.dts     |  519 +++++++
+ arch/arm64/boot/dts/qcom/sdm670.dtsi          | 1216 +++++++++++++++++
+ 6 files changed, 1744 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm670-google-sargo.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm670.dtsi
+
+P.S.: Thank you to all the maintainers and reviewers who went through
+everything and made helpful comments!
+-- 
+2.38.1
 
