@@ -2,98 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A91AD614B0C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:46:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA755614B0F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:46:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230294AbiKAMqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 08:46:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60334 "EHLO
+        id S230295AbiKAMq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 08:46:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60756 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiKAMp6 (ORCPT
+        with ESMTP id S229471AbiKAMqz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 08:45:58 -0400
-Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E2A192BC;
-        Tue,  1 Nov 2022 05:45:58 -0700 (PDT)
-Received: by mail-pg1-x535.google.com with SMTP id 78so13292365pgb.13;
-        Tue, 01 Nov 2022 05:45:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lrG+YXaUGAscfFFfn+JVBJvhu3xyIhC/RE4Ontt4Bn8=;
-        b=X5FvDNq+UEDBiGr4dMhgnutQKwbuvBz1+LajQr9xTClsadOf/VNuAKXKgZ504MocjN
-         f0O1aY683/QyRDtBAyCxBgVI8SpDKwcta9V3TMnls6+vgoiBBTyL/WpXWiHAKRF5q09C
-         WgAB7WqUyen7eW0Ynq1ko+qJfBciJ0dOfG1HMw6+JZ3EZn2uRnM3YHBOAc8deYvnvPRN
-         lJMtT4RjbV98ULwIbQPeWdP1Rbh212vmbKdlM5BTufiKBiIS33DP+g3vw65zp0f+xLDA
-         P8UfZr3y7KiPPxZ8RYqz12A4mxz0/7OGoW/G6OJPcWBmIwgexnDEtDziSZNtBxJiew6R
-         0JDA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lrG+YXaUGAscfFFfn+JVBJvhu3xyIhC/RE4Ontt4Bn8=;
-        b=0UuWLUqwYGQQpivvdKopvKizI/VJ3LEXUxzO6T2G4IqIEtI4Aho8rhVluwnj7GPRER
-         tS2HvVgO/OY5LrJL75AI1/ki2bybnC5dGG8z5ZFBR3tWzPfG8WdvClJkbBFUlfYx05re
-         lRbsxOpRMnogdFEeYwr+NNzbPPZ1hkZ0fURpiyI0puCRFH8G1QbZkR4LPtgEpfNo/hqk
-         5KhSKj6ne8z9NPWeRSRoYPPv00NDWo6WKeyjIP0DvIXro4O0E6JVeMEokSW8vvqL0Gnz
-         0pzewvioVxAGeW4DX3k55yR8f39NR3XYVVmM2t1C1d4v+n42zJceoWdF6vFk26RRuJM7
-         05dA==
-X-Gm-Message-State: ACrzQf3gVBrDjQc3pjaofjIQO2faeroViJUJdNHezyv1bUgvhiPjaSu5
-        Co/maJzD/hNm8ZozgzqKWPc=
-X-Google-Smtp-Source: AMsMyM4HzgkWxuPH9DkJZ5EmFj0kWanp79esgEtSFYJJkil56qYRzaD6XGNaQ2HBrhCykiTV3g0fAw==
-X-Received: by 2002:aa7:818f:0:b0:562:dc99:8a84 with SMTP id g15-20020aa7818f000000b00562dc998a84mr19555257pfi.30.1667306757992;
-        Tue, 01 Nov 2022 05:45:57 -0700 (PDT)
-Received: from [192.168.43.80] (subs02-180-214-232-74.three.co.id. [180.214.232.74])
-        by smtp.gmail.com with ESMTPSA id 77-20020a621750000000b0056c2e497ad6sm6606351pfx.93.2022.11.01.05.45.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Nov 2022 05:45:57 -0700 (PDT)
-Message-ID: <55d9baa0-6ab2-63ff-51c1-57f379efff29@gmail.com>
-Date:   Tue, 1 Nov 2022 19:45:54 +0700
+        Tue, 1 Nov 2022 08:46:55 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF486192A0;
+        Tue,  1 Nov 2022 05:46:54 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 60D46B81CF5;
+        Tue,  1 Nov 2022 12:46:53 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7E7EBC433D6;
+        Tue,  1 Nov 2022 12:46:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667306812;
+        bh=bMmRpdw3GwHmGn2s8NCRCzcJ7zkV7g3nTjcHKI0yTuw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=cyXpYlU34y/pFwyakvDsFcssQlW5rVc6Py0GMourXTa1GDRVYR0CuTBI+Jm5II82l
+         RSggqii3O4Oqs6jqwMrSItpKAApku/2zgyrg/ptVuzzOIy4oqxNCImNVeI7FV33MO3
+         qrBYBW1NmxBhGSrwLxswDx7MxNx32VeFQBsFfER6wL0FvuFvpk/7pR788OfysYmcd2
+         fMUl1kRoxu5Wx/6d1usXRG7WNa7RNGsSatWoZc0Zu7CHYTO6cX8ln5L2Zpa/P9Fo4D
+         dNakd2QQff87ROEuFVZDHBnbetGxJ8UiSWS4Q0QsTHnF1VHt4b3RE0CLe+gHvOo80m
+         7Fsd9qXs0Isrg==
+Date:   Tue, 1 Nov 2022 13:46:48 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Nam Cao <namcaov@gmail.com>
+Cc:     jdelvare@suse.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] i2c: i801: add lis3lv02d's I2C address for Vostro 5568
+Message-ID: <Y2EVOEwR7HQaK473@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Nam Cao <namcaov@gmail.com>, jdelvare@suse.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221006145440.10281-1-namcaov@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH -next 1/2] PM: hibernate: fix spelling mistake for
- annotation
-Content-Language: en-US
-To:     TGSP <tgsp002@gmail.com>, rafael@kernel.org, len.brown@intel.com,
-        pavel@ucw.cz, huanglei@kylinos.cn
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xiongxin <xiongxin@kylinos.cn>, stable@vger.kernel.org
-References: <20221101022840.1351163-1-tgsp002@gmail.com>
- <20221101022840.1351163-2-tgsp002@gmail.com>
-From:   Bagas Sanjaya <bagasdotme@gmail.com>
-In-Reply-To: <20221101022840.1351163-2-tgsp002@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="16jWhIqg7CBGDNl9"
+Content-Disposition: inline
+In-Reply-To: <20221006145440.10281-1-namcaov@gmail.com>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/1/22 09:28, TGSP wrote:
-> From: xiongxin <xiongxin@kylinos.cn>
-> 
-> The actual calculation formula in the code below is:
-> 
-> max_size = (count - (size + PAGES_FOR_IO)) / 2
-> 	    - 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE);
-> 
-> But function comments are written differently, the comment is wrong?
-> 
-> By the way, what exactly do the "/ 2" and "2 *" mean?
-> 
 
-Shouldn't the description above better below triple-dash (just
-before diffstat)?
+--16jWhIqg7CBGDNl9
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
--- 
-An old man doll... just what I always wanted! - Clara
+On Thu, Oct 06, 2022 at 04:54:40PM +0200, Nam Cao wrote:
+> Dell Vostro 5568 laptop has lis3lv02d, but its i2c address is not known
+> to the kernel. Add this address.
+>=20
+> Output of "cat /sys/devices/platform/lis3lv02d/position" on Dell Vostro
+> 5568 laptop:
+>     - Horizontal: (-18,0,1044)
+>     - Front elevated: (522,-18,1080)
+>     - Left elevated: (-18,-360,1080)
+>     - Upside down: (36,108,-1134)
+>=20
+> Signed-off-by: Nam Cao <namcaov@gmail.com>
 
+Applied to for-current, thanks!
+
+
+--16jWhIqg7CBGDNl9
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNhFTgACgkQFA3kzBSg
+KbaKshAAmQtlA1G6uRQ1THv8yszK+qupQpYuwl6HUie61kDoFH6MOp6QyVmJvSmU
+ZKZxbc4KGOaslt07OZixbQrE/X06cyfbJdYP2NHJpDetQnVYmXE131d9d6EHb3Kn
+QW3EHPOznYOORi3fD+8PUWToBLfOTgm3m+oaOWHOQ7oAKlFqES/+mQUQ7XizNAWf
+2GRST5abqqT0YukqOLtYudZ41LlY7pbvWm7Qs9mK/ZLlVNSBXfWKR+3LtG88Y5HW
+0INVc9pfUXkqtkqrW6/a61cdWQU3jyjDU26Utvti1ztmPGIW7hYNcpKnDrZP64rG
+32Cznd8TJNn1inUpnpTKxSOA6COWJm79Vb5KqHj3cY7ocGdHCbSUskSb+bDIa1mC
+HPb6bXnUDlyjbfp87iN9yDWPJnD15LrjRzgmW6tskOuXKXOxAloYxeDed8c1iETd
+Utrwjmm8dKcWyXlDsPbbRoQH83InReSOpzURjaoXwmI5K9uH6Uj2Jo8gx1VFb56V
+qLi1+GDPkUgc3/8Yacj9DC7BAxJLjp/ZdsGiv0Bf2rjyuNNDv9C3oEZRd+b1BjB1
+Hj9hs7roIo/VjHvH/0chtVn+WhFs6QK3U2yvU2OnozLJx8Df6FcZs1eZcsI0dSSF
+T2E8kZNzEMDTITJvoaBl+MqF3beaZreD1xrW0aqeh7t/P3C8vdg=
+=VLaY
+-----END PGP SIGNATURE-----
+
+--16jWhIqg7CBGDNl9--
