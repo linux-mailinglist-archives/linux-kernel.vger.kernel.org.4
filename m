@@ -2,120 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A737D6149FF
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:55:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A43E6614A04
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:56:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229838AbiKALzT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 07:55:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46892 "EHLO
+        id S229939AbiKALz6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 07:55:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiKALzR (ORCPT
+        with ESMTP id S229457AbiKALzz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 07:55:17 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 741A832C
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 04:55:16 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 3717AB81CC1
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 11:55:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C950C433D6
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 11:55:13 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="alNktnbo"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1667303711;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=VlJEwXojWvDU34CSJ+DZumSMVmlHAaP55pYaPxI2KIM=;
-        b=alNktnbohJtQ/jtfauGD+hTjjHSxR3BFRFDm3K1D1tuwrFduTLAD3LQD+RIL6c2A3k2xXL
-        Rsj8WTtuc/zqf84RAjI0p/Z5BL2UiJzv7Tea9PxeBKkKJI6MjUIaABvx54tAwO+8jo/kPk
-        o2Zb3Ch+45UBmQE/KUE/bQyJERsHYto=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 26ed5fbb (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO)
-        for <linux-kernel@vger.kernel.org>;
-        Tue, 1 Nov 2022 11:55:11 +0000 (UTC)
-Received: by mail-vs1-f48.google.com with SMTP id p4so13635768vsa.11
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 04:55:11 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2X2wwHVQ+PhCMlthNO4psWzTviuFMwqEihcaJ7moXPiwDpYfee
-        X62QCQ98M2TsxBb2EEX2ofzBr0680H0/GbmkuBc=
-X-Google-Smtp-Source: AMsMyM7+PDQn7wdPe/fu3OuUhyysBAOAhjVIYkJEQ7LwbfvkffJXrP0BN6tlV6xUb6odyqEIm4Xh6RgVEONjjYKlTI8=
-X-Received: by 2002:a05:6102:f9a:b0:3aa:1a11:2702 with SMTP id
- e26-20020a0561020f9a00b003aa1a112702mr7064693vsv.73.1667303710029; Tue, 01
- Nov 2022 04:55:10 -0700 (PDT)
+        Tue, 1 Nov 2022 07:55:55 -0400
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52302180;
+        Tue,  1 Nov 2022 04:55:54 -0700 (PDT)
+Received: by mail-oi1-f173.google.com with SMTP id m204so3907054oib.6;
+        Tue, 01 Nov 2022 04:55:54 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=rrbh15qgzMA/o8yBcJMyagirxvUvQI4PNn4V+H8c/rg=;
+        b=Ax7GBXRv1S1hkBnBuu7+tPl3apAHTznfkDadcJKWQJZukz+g2vTm2nt93t+4Lqfa8Z
+         MJYwDI5NWK4KRm5U6ndJY74UK8HtpEKuBdEYPMnwUEPKRF4iFFOXnjfy0qthaIGBNsId
+         cwFvgoiWmCniwL5y2bOblAzsEN1xXPJnvMywLEcdpQwVdVp1KaqIiNqUDEGhZ/6aoKAZ
+         R6yLBlGoiabhSYHGLNKWdPIMdmFY3fr5Zy4fGyTOzbwEc6f1CCsjqXNrNelfZNYMKN0m
+         JDT1btjH97eNUr+PEATqjzALuTH+SpH5hw5Hh1047k1XGsYpwG+6LxTr5cipgeJEQK/p
+         05bA==
+X-Gm-Message-State: ACrzQf2NrHNWP+i/DHS9FOSFVYFyNDne/tlCh3hb9CViQTDoiy5KHQA7
+        4Huin2U4nIWWtiSNwuApCQ==
+X-Google-Smtp-Source: AMsMyM4pERgMl8sfVIJ1EjXYDJ/RrYpu6vIqrK8Rp006zt48Esh3m/jh7XQCueTC2ZfJMLybjWL0UQ==
+X-Received: by 2002:aca:1019:0:b0:359:e535:bf92 with SMTP id 25-20020aca1019000000b00359e535bf92mr9605215oiq.90.1667303753505;
+        Tue, 01 Nov 2022 04:55:53 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id t3-20020a056870f20300b0012752d3212fsm4314073oao.53.2022.11.01.04.55.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 04:55:52 -0700 (PDT)
+Received: (nullmailer pid 909532 invoked by uid 1000);
+        Tue, 01 Nov 2022 11:55:54 -0000
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 MIME-Version: 1.0
-References: <20221030212123.1022049-1-Jason@zx2c4.com> <20221031102840.85621-1-Jason@zx2c4.com>
- <Y2EFX5wGsjLwtO8j@arm.com>
-In-Reply-To: <Y2EFX5wGsjLwtO8j@arm.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Tue, 1 Nov 2022 12:54:59 +0100
-X-Gmail-Original-Message-ID: <CAHmME9rNEiwPwaCz-b110vjAqZpaZuwXW6n+6mb=n7WwLHaGUQ@mail.gmail.com>
-Message-ID: <CAHmME9rNEiwPwaCz-b110vjAqZpaZuwXW6n+6mb=n7WwLHaGUQ@mail.gmail.com>
-Subject: Re: [PATCH v3] random: remove early archrandom abstraction
-To:     Catalin Marinas <catalin.marinas@arm.com>
-Cc:     linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Leonard =?utf-8?q?G=C3=B6hrs?= <l.goehrs@pengutronix.de>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-iio@vger.kernel.org, kernel@pengutronix.de,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        devicetree@vger.kernel.org, Rob Herring <robh+dt@kernel.org>,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221101064804.720050-1-l.goehrs@pengutronix.de>
+References: <20221101064804.720050-1-l.goehrs@pengutronix.de>
+Message-Id: <166730309295.897577.4866397087832832552.robh@kernel.org>
+Subject: Re: [PATCH v2 1/2] dt-bindings: iio: adc: add TI LMP92064 controller
+Date:   Tue, 01 Nov 2022 06:55:54 -0500
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Catalin,
 
-On Tue, Nov 1, 2022 at 12:39 PM Catalin Marinas <catalin.marinas@arm.com> wrote:
-> > +static __always_inline bool __cpu_has_rng(void)
-> > +{
-> > +     if (!system_capabilities_finalized() && early_boot_irqs_disabled)
-> > +             return __early_cpu_has_rndr();
-> > +     return cpus_have_const_cap(ARM64_HAS_RNG);
-> > +}
->
-> I'm not sure about using early_boot_irqs_disabled, it is described as a
-> debug helper.
+On Tue, 01 Nov 2022 07:48:03 +0100, Leonard Göhrs wrote:
+> Add binding documentation for the TI LMP92064 dual channel SPI ADC.
+> 
+> Changes from v1 -> v2:
+> 
+>  - Rename the "shunt-resistor" devicetree property to
+>    "shunt-resistor-micro-ohms".
+>  - Add supply regulator support for the two voltage domains of the chip
+>    (vdd and vdig).
+>  - Add reference to spi-peripheral-props.yaml
+> 
+> Signed-off-by: Leonard Göhrs <l.goehrs@pengutronix.de>
+> ---
+>  .../bindings/iio/adc/ti,lmp92064.yaml         | 70 +++++++++++++++++++
+>  1 file changed, 70 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/iio/adc/ti,lmp92064.yaml
+> 
 
-Not sure that part matters much?
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-> It's also set to 'false' before
-> system_capabilities_finalized() (once the full SMP is enabled).
+yamllint warnings/errors:
 
-Right, so there's still a "hole", where we'll ball back to
-cpus_have_final_cap(), which might return false. In practice I don't
-think this matters much. But it's still not perfect.
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/iio/adc/ti,lmp92064.example.dtb: adc@0: 'spi-max-frequency' does not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/iio/adc/ti,lmp92064.yaml
 
->
-> Would something like this work:
->
->         if (system_capabilities_finalized())
->                 return cpus_have_final_cap(ARM64_HAS_RNG);
->         if (!preemptible())
->                 return __early_cpu_has_rndr();
->         return false;
+doc reference errors (make refcheckdocs):
 
-That'd be fine. Of course that introduces a different sort of "hole",
-when it's called from preemptable context. But again, that doesn't
-matter in practice. So I'll send you a v4 doing that for you to ack.
+See https://patchwork.ozlabs.org/patch/
 
-I'm going to structure it like this, though:
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
 
-static __always_inline bool __cpu_has_rng(void)
-{
-        if (!system_capabilities_finalized() && !preemptible())
-                return __early_cpu_has_rndr();
-        return cpus_have_const_cap(ARM64_HAS_RNG);
-}
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
 
-Because cpus_have_const_cap() itself has a fallback mode before
-system_capabilities_finalized() is true, where it checks a big
-bitmask. So that seems like a better fallback than `false`, in case it
-happens to be true.
+pip3 install dtschema --upgrade
 
-Jason
+Please check and re-submit.
+
