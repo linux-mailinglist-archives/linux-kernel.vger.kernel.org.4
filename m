@@ -2,58 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2E7E615159
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 19:15:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40D5761515D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 19:16:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229739AbiKASPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 14:15:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60576 "EHLO
+        id S229909AbiKASQr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 14:16:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60886 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiKASPl (ORCPT
+        with ESMTP id S229650AbiKASQp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 14:15:41 -0400
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9CA56140;
-        Tue,  1 Nov 2022 11:15:38 -0700 (PDT)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-13ba86b5ac0so17732471fac.1;
-        Tue, 01 Nov 2022 11:15:38 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=d7J7upHClmi4YP0sGD2hdgbBRRT8SqEClo6yxSq4ujU=;
-        b=YM+6i3YC7VjzbU9nRMrFUvZV6nsk7/Btyk3RmNh8mlZ806FzajEiUQcBIi8QakLQnn
-         27jnm4ganFCuogqEO9Xzg2ETXjCC3MzTiVbMhGEOeyJxGfrTTgCYMqgjNcvPgAP6fecF
-         5ZADj91owkXM1r4PSdi4wTRoygoVy77tS5IJ7ah1UFHUM2UXuX+g3J12cbl/QEXwcagD
-         gDUPSinkJYVJvQHgQjvwT6hhym2XaFDxGtTOLlgDs9HpyVa21pe2PjXtD//FT0frEpol
-         Lth+X+VMgpzmBR3FfwA1101l5PVi6ZcQ+NGPTRL+jwjXlQrIHekC0XeBvuPUsoTW65qW
-         z8Rg==
-X-Gm-Message-State: ACrzQf1/bl9V/N1GBT8g0Z/5uH8dyABR6kwhX2rN+mvf1X9VPl0OejU7
-        YpS3nrHh3FQWb7Y4EyvYrZfOoEzsjA==
-X-Google-Smtp-Source: AMsMyM4xo7Qa1NyweaTPX1+p4Izhad80ebdCdEPrpfHdaT92ymsHd1Xol8KEL++k/ZhxMOr7/PyFyA==
-X-Received: by 2002:a05:6870:d29f:b0:132:bd27:825d with SMTP id d31-20020a056870d29f00b00132bd27825dmr12060430oae.99.1667326537808;
-        Tue, 01 Nov 2022 11:15:37 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r84-20020acaa857000000b00359d1b125bdsm3648346oie.37.2022.11.01.11.15.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 11:15:37 -0700 (PDT)
-Received: (nullmailer pid 1809981 invoked by uid 1000);
-        Tue, 01 Nov 2022 18:15:39 -0000
-From:   Rob Herring <robh@kernel.org>
-To:     Frank Rowand <frowand.list@gmail.com>
-Cc:     Lee Jones <lee@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] scripts/dtc: Update to upstream version v1.6.1-63-g55778a03df61
-Date:   Tue,  1 Nov 2022 13:14:27 -0500
-Message-Id: <20221101181427.1808703-1-robh@kernel.org>
-X-Mailer: git-send-email 2.35.1
+        Tue, 1 Nov 2022 14:16:45 -0400
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2066.outbound.protection.outlook.com [40.107.94.66])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6711313E17;
+        Tue,  1 Nov 2022 11:16:40 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=RxI821PhkRC0Csh2SBtLJY1u/IfIDhnzYf9VoOPik1tVwg/ELRkNLwUiffmhSr4cMxffeaMCtw0ksLvj0wRScbVT84H749ee2GSJSDKyiTNKHPMh2cxdGnHRi+N1Ix9B0Ca8iEicrXi3E8YydMtSzUMIGiyNUCBUbu9mQ+3dcx3V6cnsWA9qz9My+mS9jO5ulOQPBiH79bPwlVypP4vh/Cw1MS1VaZwzoPXdKfTeLKayUKi6qqZoZ82yQljHGQwKzfqqf5jQKxUv+NpUQe1rTiXaV+g3SqKcirH512Saf2B6zMMJ81SB56457xrDTQrMehithmx1X/WEZri+P+EF2A==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vDA25l4+iqucQPcg53zRJjFAsXVQvaLgoC6GkrVDlXA=;
+ b=P9ZY17QFcIf9v9TPF+/EOhLpAjHd8ohVYylr1Whjq+tgwxCzFQzRqTuht3KvjLwntSn7thhsOoGhxwaNCirGZtixUQ9WUBL+10YPgL2PZkXo4eZMpTRDykGFveSL3Igq8J1ANLZa4G2gDsNkQ7ZtKr0Aqbq+zNkheIDkMkCrLA9AAGbbI//mAj0EdV9i+Ph6LxzM/2oR7UOYIEhp8+mGtCJ7ga1OqHE6okzx37wMy/7k2XfSdhM7aQwAUDIeHOtDN7tycvaC6uUMcxfdAiGUX5vidViXqZJkg7GvmX5VlOIyV5jDMmi+6s7HD73KJyYa5M1AmdnKHuHGmV6MMmm1OQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=wanadoo.fr smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vDA25l4+iqucQPcg53zRJjFAsXVQvaLgoC6GkrVDlXA=;
+ b=lNq8jBuEqfIOsrSL9PnuF4HyOqYc0xLJVtjbFbVVu0tWb+Q+HRXeLrFeHLGRaXTYUYOkUNjDqNlv9OwkV2pXFwlzoLOr+uyOqlSgLT4nHnuFgEpKK40E0h8I4bZ6CbEO/FoDWn3fpqzUlZHElQEunL6eHJ9bVFDe7p/1BROsVOs=
+Received: from BN8PR04CA0031.namprd04.prod.outlook.com (2603:10b6:408:70::44)
+ by SJ0PR12MB5456.namprd12.prod.outlook.com (2603:10b6:a03:3ae::12) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.21; Tue, 1 Nov
+ 2022 18:16:38 +0000
+Received: from BN8NAM11FT045.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:408:70:cafe::33) by BN8PR04CA0031.outlook.office365.com
+ (2603:10b6:408:70::44) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.21 via Frontend
+ Transport; Tue, 1 Nov 2022 18:16:37 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB03.amd.com; pr=C
+Received: from SATLEXMB03.amd.com (165.204.84.17) by
+ BN8NAM11FT045.mail.protection.outlook.com (10.13.177.47) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5769.14 via Frontend Transport; Tue, 1 Nov 2022 18:16:37 +0000
+Received: from SATLEXMB03.amd.com (10.181.40.144) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 1 Nov
+ 2022 13:16:37 -0500
+Received: from [172.19.74.144] (10.180.168.240) by SATLEXMB03.amd.com
+ (10.181.40.144) with Microsoft SMTP Server id 15.1.2375.31 via Frontend
+ Transport; Tue, 1 Nov 2022 13:16:36 -0500
+Message-ID: <561c74b9-4e9a-3f1f-093f-618bc468d46f@amd.com>
+Date:   Tue, 1 Nov 2022 11:16:35 -0700
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH RFC V2 1/3] of: dynamic: Add of_create_node() and
+ of_destroy_node()
+Content-Language: en-US
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        <linux-pci@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <robh@kernel.org>,
+        <frowand.list@gmail.com>, <helgaas@kernel.org>
+CC:     <clement.leger@bootlin.com>, <max.zhen@amd.com>,
+        <sonal.santan@amd.com>, <larry.liu@amd.com>, <brian.xu@amd.com>,
+        <stefano.stabellini@xilinx.com>, <trix@redhat.com>
+References: <1665598440-47410-1-git-send-email-lizhi.hou@amd.com>
+ <1665598440-47410-2-git-send-email-lizhi.hou@amd.com>
+ <67fdf851-961d-2f4b-591f-4939e1937e68@wanadoo.fr>
+From:   Lizhi Hou <lizhi.hou@amd.com>
+In-Reply-To: <67fdf851-961d-2f4b-591f-4939e1937e68@wanadoo.fr>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BN8NAM11FT045:EE_|SJ0PR12MB5456:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9c299636-4224-4418-42de-08dabc353786
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 5AQiTDMPe7GnppCjTqjcmsXEz9BkEpl+42qw4jdQTgl06evYj+vs5YGggI/SofH2SHorZPqS2mkUIzg6KnlYat+pZw+riQPq3UIOiKzPnc3jKz9bG8s6p5bk/gylihxcK7RMQ75SVkJsTf5vnN4ftt9WRzeTjE6hQsWc1wx2Xmpodm1rrJihgrIb+NlSy0kT/48Ni3VkCkj6qvHTFYxf2EzWcSatVZAViFecTGEw+wWElJkoDgQCJ/+4bdHIZCVvV3PeZYxS6+7/k+E82Muqy9lVYblfSYpLLHZeC+AGdOjTzk9uad+/+dw2FP9klxhldr64kltk7594SkjX7ommTh6FaJ9RRcAyzluCFSWm9VITauBFG7ysaVLNi6agVxYtQoB/WdwdcGpucNohl1qG8TgCJL8IrBhAr01diUq8v5hA5GTC/K+X1ZgM/Cmy6+HOPS1p04c4AQtUbQiyZ36RAq971H0spN/4xkliesoaUuA0KEy1gjT5gNJJzWwHbpG0luS8HXkbltx/VvGoLCHb8lTWq0HfWfTfUu/bwBOuB6n8Ys99nri/pvydFIQWJACIloTk1R8nTJBHrZhywJ0vZXrti0yeq1luPEiIXzqDKoLialnTcmdoobh0cgaa9vzvNK21XyMr3o441pHau15uMP41IsdIknjc3ECIHW2RzFPnD0l6uo00KOWFswzshjiJ/IlRCgElpPEWbK2msvFntegRkvjEeml7EfUqjSO8QXBluSrDAu85zoM6x+U1CIWZJUIjB8MZHe61tHsQR1AnNReRz/STLq37hfWnq7gwRgGvdZTmkLVZDfpgPrbj4xqFwq041oNX8lUVh4YCtiqGoQ==
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB03.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(376002)(346002)(39860400002)(451199015)(36840700001)(46966006)(40470700004)(31696002)(426003)(86362001)(336012)(47076005)(36860700001)(82740400003)(81166007)(356005)(5660300002)(44832011)(2906002)(8936002)(4326008)(8676002)(41300700001)(82310400005)(70206006)(53546011)(110136005)(2616005)(16576012)(316002)(186003)(26005)(40460700003)(54906003)(70586007)(478600001)(31686004)(36756003)(40480700001)(36900700001)(43740500002);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Nov 2022 18:16:37.6712
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9c299636-4224-4418-42de-08dabc353786
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB03.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT045.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB5456
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,528 +108,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It's been a while since the last sync and Lee needs commit 73590342fc85
-("libfdt: prevent integer overflow in fdt_next_tag").
 
-This adds the following commits from upstream:
+On 11/1/22 00:47, Christophe JAILLET wrote:
+> Le 12/10/2022 à 20:13, Lizhi Hou a écrit :
+>> of_create_node() creates device node and apply to base tree dynamically.
+>> The parent device node and full name are required for creating the node.
+>> And the caller can also provide a property array for the node.
+>>
+>> Inside this function, it creates a changeset. Then the new device node
+>> and properties are added to the changeset and applied to base tree. The
+>> pointer of this changeset is saved in device node private data.
+>>
+>> of_destroy_node() removes the node created by of_create_node() from the
+>> base tree and free it. It gets the changeset pointer from device node
+>> private data and call of_changeset_destroy() to free everything.
+>>
+>> Signed-off-by: Lizhi Hou <lizhi.hou@amd.com>
+>> Signed-off-by: Sonal Santan <sonal.santan@amd.com>
+>> Signed-off-by: Max Zhen <max.zhen@amd.com>
+>> Signed-off-by: Brian Xu <brian.xu@amd.com>
+>> ---
+>>   drivers/of/dynamic.c | 80 ++++++++++++++++++++++++++++++++++++++++++++
+>>   include/linux/of.h   |  4 +++
+>>   2 files changed, 84 insertions(+)
+>>
+>> diff --git a/drivers/of/dynamic.c b/drivers/of/dynamic.c
+>> index cd3821a6444f..eca28b723706 100644
+>> --- a/drivers/of/dynamic.c
+>> +++ b/drivers/of/dynamic.c
+>> @@ -934,3 +934,83 @@ int of_changeset_action(struct of_changeset 
+>> *ocs, unsigned long action,
+>>       return 0;
+>>   }
+>>   EXPORT_SYMBOL_GPL(of_changeset_action);
+>> +
+>> +/**
+>> + * of_create_node - Dynamically create a device node and apply it to 
+>> base tree
+>> + *
+>> + * @parent: Pointer to parent device node
+>> + * @full_name: Full name of device node
+>> + * @props: Pointer to property array
+>> + *
+>> + * Return: Pointer to the created device node or NULL in case of an 
+>> error.
+>> + */
+>> +struct device_node *of_create_node(struct device_node *parent,
+>> +                   const char *full_name,
+>> +                   struct property *props)
+>> +{
+>> +    struct of_changeset *cset;
+>> +    struct property *new_pp;
+>> +    struct device_node *np;
+>> +    int ret, i;
+>> +
+>> +    cset = kzalloc(sizeof(*cset), GFP_KERNEL);
+>
+> Hi,
+>
+> kmalloc() would be enough. of_changeset_init() below already calls 
+> memset().
+Ok.
+>
+>> +    if (!cset)
+>> +        return NULL;
+>> +
+>> +    of_changeset_init(cset);
+>> +
+>> +    np = __of_node_dup(NULL, full_name);
+>> +    if (!np)
+>> +        goto failed;
+>
+> 'cset' seems to be leaking if __of_node_dup() fails.
 
-55778a03df61 libfdt: tests: add get_next_tag_invalid_prop_len
-73590342fc85 libfdt: prevent integer overflow in fdt_next_tag
-035fb90d5375 libfdt: add fdt_get_property_by_offset_w helper
-98a07006c48d Makefile: fix infinite recursion by dropping non-existent `%.output`
-a036cc7b0c10 Makefile: limit make re-execution to avoid infinite spin
-c6e92108bcd9 libdtc: remove duplicate judgments
-e37c25677dc9 Don't generate erroneous fixups from reference to path
-50454658f2b5 libfdt: Don't mask fdt_get_name() returned error
-e64a204196c9 manual.txt: Follow README.md and remove Jon
-f508c83fe6f0 Update README in MANIFEST.in and setup.py to README.md
-c2ccf8a77dd2 Add description of Signed-off-by lines
-90b9d9de42ca Split out information for contributors to CONTRIBUTING.md
-0ee1d479b23a Remove Jon Loeliger from maintainers list
-b33a73c62c1c Convert README to README.md
-7ad60734b1c1 Allow static building with meson
-fd9b8c96c780 Allow static building with make
-fda71da26e7f libfdt: Handle failed get_name() on BEGIN_NODE
-c7c7f17a83d5 Fix test script to run also on dash shell
-01f23ffe1679 Add missing relref_merge test to meson test list
-ed310803ea89 pylibfdt: add FdtRo.get_path()
-c001fc01a43e pylibfdt: fix swig build in install
-26c54f840d23 tests: add test cases for label-relative path references
-ec7986e682cf dtc: introduce label relative path references
-651410e54cb9 util: introduce xstrndup helper
-4048aed12b81 setup.py: fix out of tree build
-ff5afb96d0c0 Handle integer overflow in check_property_phandle_args()
-ca7294434309 README: Explain how to add a new API function
-c0c2e115f82e Fix a UB when fdt_get_string return null
-cd5f69cbc0d4 tests: setprop_inplace: use xstrdup instead of unchecked strdup
-a04f69025003 pylibfdt: add Property.as_*int*_array()
-83102717d7c4 pylibfdt: add Property.as_stringlist()
-d152126bb029 Fix Python crash on getprop deallocation
-17739b7ef510 Support 'r' format for printing raw bytes with fdtget
-45f3d1a095dd libfdt: overlay: make overlay_get_target() public
-c19a4bafa514 libfdt: fix an incorrect integer promotion
-1cc41b1c969f pylibfdt: Add packaging metadata
-db72398cd437 README: Update pylibfdt install instructions
-383e148b70a4 pylibfdt: fix with Python 3.10
-23b56cb7e189 pylibfdt: Move setup.py to the top level
-69a760747d8d pylibfdt: Split setup.py author name and email
-0b106a77dbdc pylibfdt: Use setuptools_scm for the version
-c691776ddb26 pylibfdt: Use setuptools instead of distutils
-5216f3f1bbb7 libfdt: Add static lib to meson build
-4eda2590f481 CI: Cirrus: bump used FreeBSD from 12.1 to 13.0
+Will fix this. Thanks.
 
-Signed-off-by: Rob Herring <robh@kernel.org>
----
- scripts/dtc/checks.c               | 15 +++++++-----
- scripts/dtc/dtc-lexer.l            |  2 +-
- scripts/dtc/dtc-parser.y           | 13 ++++++++++
- scripts/dtc/libfdt/fdt.c           | 20 +++++++++------
- scripts/dtc/libfdt/fdt.h           |  4 +--
- scripts/dtc/libfdt/fdt_addresses.c |  2 +-
- scripts/dtc/libfdt/fdt_overlay.c   | 29 ++++++----------------
- scripts/dtc/libfdt/fdt_ro.c        |  2 +-
- scripts/dtc/libfdt/libfdt.h        | 25 +++++++++++++++++++
- scripts/dtc/livetree.c             | 39 +++++++++++++++++++++++++++---
- scripts/dtc/util.c                 | 15 ++++++++++--
- scripts/dtc/util.h                 |  4 ++-
- scripts/dtc/version_gen.h          |  2 +-
- 13 files changed, 124 insertions(+), 48 deletions(-)
 
-diff --git a/scripts/dtc/checks.c b/scripts/dtc/checks.c
-index 781ba1129a8e..9f31d2607182 100644
---- a/scripts/dtc/checks.c
-+++ b/scripts/dtc/checks.c
-@@ -1382,10 +1382,10 @@ struct provider {
- };
- 
- static void check_property_phandle_args(struct check *c,
--					  struct dt_info *dti,
--				          struct node *node,
--				          struct property *prop,
--				          const struct provider *provider)
-+					struct dt_info *dti,
-+					struct node *node,
-+					struct property *prop,
-+					const struct provider *provider)
- {
- 	struct node *root = dti->dt;
- 	unsigned int cell, cellsize = 0;
-@@ -1401,6 +1401,7 @@ static void check_property_phandle_args(struct check *c,
- 		struct node *provider_node;
- 		struct property *cellprop;
- 		cell_t phandle;
-+		unsigned int expected;
- 
- 		phandle = propval_cell_n(prop, cell);
- 		/*
-@@ -1450,10 +1451,12 @@ static void check_property_phandle_args(struct check *c,
- 			break;
- 		}
- 
--		if (prop->val.len < ((cell + cellsize + 1) * sizeof(cell_t))) {
-+		expected = (cell + cellsize + 1) * sizeof(cell_t);
-+		if ((expected <= cell) || prop->val.len < expected) {
- 			FAIL_PROP(c, dti, node, prop,
--				  "property size (%d) too small for cell size %d",
-+				  "property size (%d) too small for cell size %u",
- 				  prop->val.len, cellsize);
-+			break;
- 		}
- 	}
- }
-diff --git a/scripts/dtc/dtc-lexer.l b/scripts/dtc/dtc-lexer.l
-index 5568b4ae84cf..de60a70b6bdb 100644
---- a/scripts/dtc/dtc-lexer.l
-+++ b/scripts/dtc/dtc-lexer.l
-@@ -200,7 +200,7 @@ static void PRINTF(1, 2) lexical_error(const char *fmt, ...);
- 			return DT_LABEL_REF;
- 		}
- 
--<*>"&{/"{PATHCHAR}*\}	{	/* new-style path reference */
-+<*>"&{"{PATHCHAR}*\}	{	/* new-style path reference */
- 			yytext[yyleng-1] = '\0';
- 			DPRINT("Ref: %s\n", yytext+2);
- 			yylval.labelref = xstrdup(yytext+2);
-diff --git a/scripts/dtc/dtc-parser.y b/scripts/dtc/dtc-parser.y
-index a0316a3cc309..46457d4bc0aa 100644
---- a/scripts/dtc/dtc-parser.y
-+++ b/scripts/dtc/dtc-parser.y
-@@ -23,6 +23,12 @@ extern void yyerror(char const *s);
- 
- extern struct dt_info *parser_output;
- extern bool treesource_error;
-+
-+static bool is_ref_relative(const char *ref)
-+{
-+	return ref[0] != '/' && strchr(&ref[1], '/');
-+}
-+
- %}
- 
- %union {
-@@ -169,6 +175,8 @@ devicetree:
- 			 */
- 			if (!($<flags>-1 & DTSF_PLUGIN))
- 				ERROR(&@2, "Label or path %s not found", $1);
-+			else if (is_ref_relative($1))
-+				ERROR(&@2, "Label-relative reference %s not supported in plugin", $1);
- 			$$ = add_orphan_node(
- 					name_node(build_node(NULL, NULL, NULL),
- 						  ""),
-@@ -178,6 +186,9 @@ devicetree:
- 		{
- 			struct node *target = get_node_by_ref($1, $3);
- 
-+			if (($<flags>-1 & DTSF_PLUGIN) && is_ref_relative($3))
-+				ERROR(&@2, "Label-relative reference %s not supported in plugin", $3);
-+
- 			if (target) {
- 				add_label(&target->labels, $2);
- 				merge_nodes(target, $4);
-@@ -193,6 +204,8 @@ devicetree:
- 			 * so $-1 is what we want (plugindecl)
- 			 */
- 			if ($<flags>-1 & DTSF_PLUGIN) {
-+				if (is_ref_relative($2))
-+					ERROR(&@2, "Label-relative reference %s not supported in plugin", $2);
- 				add_orphan_node($1, $3, $2);
- 			} else {
- 				struct node *target = get_node_by_ref($1, $2);
-diff --git a/scripts/dtc/libfdt/fdt.c b/scripts/dtc/libfdt/fdt.c
-index 9fe7cf4b747d..20c6415b9ced 100644
---- a/scripts/dtc/libfdt/fdt.c
-+++ b/scripts/dtc/libfdt/fdt.c
-@@ -106,7 +106,6 @@ int fdt_check_header(const void *fdt)
- 	}
- 	hdrsize = fdt_header_size(fdt);
- 	if (!can_assume(VALID_DTB)) {
--
- 		if ((fdt_totalsize(fdt) < hdrsize)
- 		    || (fdt_totalsize(fdt) > INT_MAX))
- 			return -FDT_ERR_TRUNCATED;
-@@ -115,9 +114,7 @@ int fdt_check_header(const void *fdt)
- 		if (!check_off_(hdrsize, fdt_totalsize(fdt),
- 				fdt_off_mem_rsvmap(fdt)))
- 			return -FDT_ERR_TRUNCATED;
--	}
- 
--	if (!can_assume(VALID_DTB)) {
- 		/* Bounds check structure block */
- 		if (!can_assume(LATEST) && fdt_version(fdt) < 17) {
- 			if (!check_off_(hdrsize, fdt_totalsize(fdt),
-@@ -165,7 +162,7 @@ const void *fdt_offset_ptr(const void *fdt, int offset, unsigned int len)
- uint32_t fdt_next_tag(const void *fdt, int startoffset, int *nextoffset)
- {
- 	const fdt32_t *tagp, *lenp;
--	uint32_t tag;
-+	uint32_t tag, len, sum;
- 	int offset = startoffset;
- 	const char *p;
- 
-@@ -191,12 +188,19 @@ uint32_t fdt_next_tag(const void *fdt, int startoffset, int *nextoffset)
- 		lenp = fdt_offset_ptr(fdt, offset, sizeof(*lenp));
- 		if (!can_assume(VALID_DTB) && !lenp)
- 			return FDT_END; /* premature end */
-+
-+		len = fdt32_to_cpu(*lenp);
-+		sum = len + offset;
-+		if (!can_assume(VALID_DTB) &&
-+		    (INT_MAX <= sum || sum < (uint32_t) offset))
-+			return FDT_END; /* premature end */
-+
- 		/* skip-name offset, length and value */
--		offset += sizeof(struct fdt_property) - FDT_TAGSIZE
--			+ fdt32_to_cpu(*lenp);
-+		offset += sizeof(struct fdt_property) - FDT_TAGSIZE + len;
-+
- 		if (!can_assume(LATEST) &&
--		    fdt_version(fdt) < 0x10 && fdt32_to_cpu(*lenp) >= 8 &&
--		    ((offset - fdt32_to_cpu(*lenp)) % 8) != 0)
-+		    fdt_version(fdt) < 0x10 && len >= 8 &&
-+		    ((offset - len) % 8) != 0)
- 			offset += 4;
- 		break;
- 
-diff --git a/scripts/dtc/libfdt/fdt.h b/scripts/dtc/libfdt/fdt.h
-index 0c91aa7f67b5..f2e68807f277 100644
---- a/scripts/dtc/libfdt/fdt.h
-+++ b/scripts/dtc/libfdt/fdt.h
-@@ -35,14 +35,14 @@ struct fdt_reserve_entry {
- 
- struct fdt_node_header {
- 	fdt32_t tag;
--	char name[];
-+	char name[0];
- };
- 
- struct fdt_property {
- 	fdt32_t tag;
- 	fdt32_t len;
- 	fdt32_t nameoff;
--	char data[];
-+	char data[0];
- };
- 
- #endif /* !__ASSEMBLY */
-diff --git a/scripts/dtc/libfdt/fdt_addresses.c b/scripts/dtc/libfdt/fdt_addresses.c
-index 9a82cd0ba2f9..c40ba094f1f8 100644
---- a/scripts/dtc/libfdt/fdt_addresses.c
-+++ b/scripts/dtc/libfdt/fdt_addresses.c
-@@ -73,7 +73,7 @@ int fdt_appendprop_addrrange(void *fdt, int parent, int nodeoffset,
- 	/* check validity of address */
- 	prop = data;
- 	if (addr_cells == 1) {
--		if ((addr > UINT32_MAX) || ((UINT32_MAX + 1 - addr) < size))
-+		if ((addr > UINT32_MAX) || (((uint64_t) UINT32_MAX + 1 - addr) < size))
- 			return -FDT_ERR_BADVALUE;
- 
- 		fdt32_st(prop, (uint32_t)addr);
-diff --git a/scripts/dtc/libfdt/fdt_overlay.c b/scripts/dtc/libfdt/fdt_overlay.c
-index d217e79b6722..5c0c3981b89d 100644
---- a/scripts/dtc/libfdt/fdt_overlay.c
-+++ b/scripts/dtc/libfdt/fdt_overlay.c
-@@ -40,37 +40,22 @@ static uint32_t overlay_get_target_phandle(const void *fdto, int fragment)
- 	return fdt32_to_cpu(*val);
- }
- 
--/**
-- * overlay_get_target - retrieves the offset of a fragment's target
-- * @fdt: Base device tree blob
-- * @fdto: Device tree overlay blob
-- * @fragment: node offset of the fragment in the overlay
-- * @pathp: pointer which receives the path of the target (or NULL)
-- *
-- * overlay_get_target() retrieves the target offset in the base
-- * device tree of a fragment, no matter how the actual targeting is
-- * done (through a phandle or a path)
-- *
-- * returns:
-- *      the targeted node offset in the base device tree
-- *      Negative error code on error
-- */
--static int overlay_get_target(const void *fdt, const void *fdto,
--			      int fragment, char const **pathp)
-+int fdt_overlay_target_offset(const void *fdt, const void *fdto,
-+			      int fragment_offset, char const **pathp)
- {
- 	uint32_t phandle;
- 	const char *path = NULL;
- 	int path_len = 0, ret;
- 
- 	/* Try first to do a phandle based lookup */
--	phandle = overlay_get_target_phandle(fdto, fragment);
-+	phandle = overlay_get_target_phandle(fdto, fragment_offset);
- 	if (phandle == (uint32_t)-1)
- 		return -FDT_ERR_BADPHANDLE;
- 
- 	/* no phandle, try path */
- 	if (!phandle) {
- 		/* And then a path based lookup */
--		path = fdt_getprop(fdto, fragment, "target-path", &path_len);
-+		path = fdt_getprop(fdto, fragment_offset, "target-path", &path_len);
- 		if (path)
- 			ret = fdt_path_offset(fdt, path);
- 		else
-@@ -636,7 +621,7 @@ static int overlay_merge(void *fdt, void *fdto)
- 		if (overlay < 0)
- 			return overlay;
- 
--		target = overlay_get_target(fdt, fdto, fragment, NULL);
-+		target = fdt_overlay_target_offset(fdt, fdto, fragment, NULL);
- 		if (target < 0)
- 			return target;
- 
-@@ -779,7 +764,7 @@ static int overlay_symbol_update(void *fdt, void *fdto)
- 			return -FDT_ERR_BADOVERLAY;
- 
- 		/* get the target of the fragment */
--		ret = overlay_get_target(fdt, fdto, fragment, &target_path);
-+		ret = fdt_overlay_target_offset(fdt, fdto, fragment, &target_path);
- 		if (ret < 0)
- 			return ret;
- 		target = ret;
-@@ -801,7 +786,7 @@ static int overlay_symbol_update(void *fdt, void *fdto)
- 
- 		if (!target_path) {
- 			/* again in case setprop_placeholder changed it */
--			ret = overlay_get_target(fdt, fdto, fragment, &target_path);
-+			ret = fdt_overlay_target_offset(fdt, fdto, fragment, &target_path);
- 			if (ret < 0)
- 				return ret;
- 			target = ret;
-diff --git a/scripts/dtc/libfdt/fdt_ro.c b/scripts/dtc/libfdt/fdt_ro.c
-index 17584da25760..9f6c551a22c2 100644
---- a/scripts/dtc/libfdt/fdt_ro.c
-+++ b/scripts/dtc/libfdt/fdt_ro.c
-@@ -481,12 +481,12 @@ const void *fdt_getprop_by_offset(const void *fdt, int offset,
- 		if (!can_assume(VALID_INPUT)) {
- 			name = fdt_get_string(fdt, fdt32_ld_(&prop->nameoff),
- 					      &namelen);
-+			*namep = name;
- 			if (!name) {
- 				if (lenp)
- 					*lenp = namelen;
- 				return NULL;
- 			}
--			*namep = name;
- 		} else {
- 			*namep = fdt_string(fdt, fdt32_ld_(&prop->nameoff));
- 		}
-diff --git a/scripts/dtc/libfdt/libfdt.h b/scripts/dtc/libfdt/libfdt.h
-index ce31e844856a..77ccff19911e 100644
---- a/scripts/dtc/libfdt/libfdt.h
-+++ b/scripts/dtc/libfdt/libfdt.h
-@@ -660,6 +660,13 @@ int fdt_next_property_offset(const void *fdt, int offset);
- const struct fdt_property *fdt_get_property_by_offset(const void *fdt,
- 						      int offset,
- 						      int *lenp);
-+static inline struct fdt_property *fdt_get_property_by_offset_w(void *fdt,
-+								int offset,
-+								int *lenp)
-+{
-+	return (struct fdt_property *)(uintptr_t)
-+		fdt_get_property_by_offset(fdt, offset, lenp);
-+}
- 
- /**
-  * fdt_get_property_namelen - find a property based on substring
-@@ -2116,6 +2123,24 @@ int fdt_del_node(void *fdt, int nodeoffset);
-  */
- int fdt_overlay_apply(void *fdt, void *fdto);
- 
-+/**
-+ * fdt_overlay_target_offset - retrieves the offset of a fragment's target
-+ * @fdt: Base device tree blob
-+ * @fdto: Device tree overlay blob
-+ * @fragment_offset: node offset of the fragment in the overlay
-+ * @pathp: pointer which receives the path of the target (or NULL)
-+ *
-+ * fdt_overlay_target_offset() retrieves the target offset in the base
-+ * device tree of a fragment, no matter how the actual targeting is
-+ * done (through a phandle or a path)
-+ *
-+ * returns:
-+ *      the targeted node offset in the base device tree
-+ *      Negative error code on error
-+ */
-+int fdt_overlay_target_offset(const void *fdt, const void *fdto,
-+			      int fragment_offset, char const **pathp);
-+
- /**********************************************************************/
- /* Debugging / informational functions                                */
- /**********************************************************************/
-diff --git a/scripts/dtc/livetree.c b/scripts/dtc/livetree.c
-index cc612370ec61..f46a098d5ada 100644
---- a/scripts/dtc/livetree.c
-+++ b/scripts/dtc/livetree.c
-@@ -581,12 +581,39 @@ struct node *get_node_by_phandle(struct node *tree, cell_t phandle)
- 
- struct node *get_node_by_ref(struct node *tree, const char *ref)
- {
-+	struct node *target = tree;
-+	const char *label = NULL, *path = NULL;
-+
- 	if (streq(ref, "/"))
- 		return tree;
--	else if (ref[0] == '/')
--		return get_node_by_path(tree, ref);
-+
-+	if (ref[0] == '/')
-+		path = ref;
- 	else
--		return get_node_by_label(tree, ref);
-+		label = ref;
-+
-+	if (label) {
-+		const char *slash = strchr(label, '/');
-+		char *buf = NULL;
-+
-+		if (slash) {
-+			buf = xstrndup(label, slash - label);
-+			label = buf;
-+			path = slash + 1;
-+		}
-+
-+		target = get_node_by_label(tree, label);
-+
-+		free(buf);
-+
-+		if (!target)
-+			return NULL;
-+	}
-+
-+	if (path)
-+		target = get_node_by_path(target, path);
-+
-+	return target;
- }
- 
- cell_t get_node_phandle(struct node *root, struct node *node)
-@@ -892,6 +919,12 @@ static void add_fixup_entry(struct dt_info *dti, struct node *fn,
- 	/* m->ref can only be a REF_PHANDLE, but check anyway */
- 	assert(m->type == REF_PHANDLE);
- 
-+	/* The format only permits fixups for references to label, not
-+	 * references to path */
-+	if (strchr(m->ref, '/'))
-+		die("Can't generate fixup for reference to path &{%s}\n",
-+		    m->ref);
-+
- 	/* there shouldn't be any ':' in the arguments */
- 	if (strchr(node->fullpath, ':') || strchr(prop->name, ':'))
- 		die("arguments should not contain ':'\n");
-diff --git a/scripts/dtc/util.c b/scripts/dtc/util.c
-index 40274fb79236..507f0120cd13 100644
---- a/scripts/dtc/util.c
-+++ b/scripts/dtc/util.c
-@@ -33,6 +33,17 @@ char *xstrdup(const char *s)
- 	return d;
- }
- 
-+char *xstrndup(const char *s, size_t n)
-+{
-+	size_t len = strnlen(s, n) + 1;
-+	char *d = xmalloc(len);
-+
-+	memcpy(d, s, len - 1);
-+	d[len - 1] = '\0';
-+
-+	return d;
-+}
-+
- int xavsprintf_append(char **strp, const char *fmt, va_list ap)
- {
- 	int n, size = 0;	/* start with 128 bytes */
-@@ -353,11 +364,11 @@ int utilfdt_decode_type(const char *fmt, int *type, int *size)
- 	}
- 
- 	/* we should now have a type */
--	if ((*fmt == '\0') || !strchr("iuxs", *fmt))
-+	if ((*fmt == '\0') || !strchr("iuxsr", *fmt))
- 		return -1;
- 
- 	/* convert qualifier (bhL) to byte size */
--	if (*fmt != 's')
-+	if (*fmt != 's' && *fmt != 'r')
- 		*size = qualifier == 'b' ? 1 :
- 				qualifier == 'h' ? 2 :
- 				qualifier == 'l' ? 4 : -1;
-diff --git a/scripts/dtc/util.h b/scripts/dtc/util.h
-index c45b2c295aa5..9d38edee9736 100644
---- a/scripts/dtc/util.h
-+++ b/scripts/dtc/util.h
-@@ -61,6 +61,7 @@ static inline void *xrealloc(void *p, size_t len)
- }
- 
- extern char *xstrdup(const char *s);
-+extern char *xstrndup(const char *s, size_t len);
- 
- extern int PRINTF(2, 3) xasprintf(char **strp, const char *fmt, ...);
- extern int PRINTF(2, 3) xasprintf_append(char **strp, const char *fmt, ...);
-@@ -143,6 +144,7 @@ int utilfdt_write_err(const char *filename, const void *blob);
-  *		i	signed integer
-  *		u	unsigned integer
-  *		x	hex
-+ *		r	raw
-  *
-  * TODO: Implement ll modifier (8 bytes)
-  * TODO: Implement o type (octal)
-@@ -160,7 +162,7 @@ int utilfdt_decode_type(const char *fmt, int *type, int *size);
-  */
- 
- #define USAGE_TYPE_MSG \
--	"<type>\ts=string, i=int, u=unsigned, x=hex\n" \
-+	"<type>\ts=string, i=int, u=unsigned, x=hex, r=raw\n" \
- 	"\tOptional modifier prefix:\n" \
- 	"\t\thh or b=byte, h=2 byte, l=4 byte (default)";
- 
-diff --git a/scripts/dtc/version_gen.h b/scripts/dtc/version_gen.h
-index 785cc4c57326..0f303087b043 100644
---- a/scripts/dtc/version_gen.h
-+++ b/scripts/dtc/version_gen.h
-@@ -1 +1 @@
--#define DTC_VERSION "DTC 1.6.1-g0a3a9d34"
-+#define DTC_VERSION "DTC 1.6.1-g55778a03"
--- 
-2.35.1
+Lizhi
 
+>
+>> +    np->parent = parent;
+>> +
+>> +    ret = of_changeset_attach_node(cset, np);
+>> +    if (ret)
+>> +        goto failed;
+>> +
+>> +    if (props) {
+>> +        for (i = 0; props[i].name; i++) {
+>> +            new_pp = __of_prop_dup(&props[i], GFP_KERNEL);
+>> +            if (!new_pp)
+>> +                goto failed;
+>> +            ret = of_changeset_add_property(cset, np, new_pp);
+>> +            if (ret) {
+>> +                kfree(new_pp->name);
+>> +                kfree(new_pp->value);
+>> +                kfree(new_pp);
+>> +                goto failed;
+>> +            }
+>> +        }
+>> +    }
+>> +
+>> +    ret = of_changeset_apply(cset);
+>> +    if (ret)
+>> +        goto failed;
+>> +
+>> +    np->data = cset;
+>> +
+>> +    return np;
+>> +
+>> +failed:
+>> +    of_changeset_destroy(cset);
+>> +    if (np)
+>> +        of_node_put(np);
+>> +
+>> +    return NULL;
+>> +}
+>> +
+>> +/**
+>> + * of_destroy_node - Destroy a dynamically created device node
+>> + *
+>> + * @np: Pointer to dynamically created device node
+>> + *
+>> + */
+>> +void of_destroy_node(struct device_node *np)
+>> +{
+>> +    struct of_changeset *cset;
+>> +
+>> +    cset = (struct of_changeset *)np->data;
+>> +    of_changeset_destroy(cset);
+>> +    of_node_put(np);
+>> +    kfree(cset);
+>> +}
+>> diff --git a/include/linux/of.h b/include/linux/of.h
+>> index 766d002bddb9..493ef957c1a8 100644
+>> --- a/include/linux/of.h
+>> +++ b/include/linux/of.h
+>> @@ -1475,6 +1475,10 @@ extern int of_changeset_revert(struct 
+>> of_changeset *ocs);
+>>   extern int of_changeset_action(struct of_changeset *ocs,
+>>           unsigned long action, struct device_node *np,
+>>           struct property *prop);
+>> +struct device_node *of_create_node(struct device_node *parent,
+>> +                   const char *full_name,
+>> +                   struct property *props);
+>> +void of_destroy_node(struct device_node *np);
+>>     static inline int of_changeset_attach_node(struct of_changeset *ocs,
+>>           struct device_node *np)
+>
