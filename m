@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D522261520D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 20:14:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E72EE61520E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 20:15:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229980AbiKATOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 15:14:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43016 "EHLO
+        id S230244AbiKATPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 15:15:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229496AbiKATOQ (ORCPT
+        with ESMTP id S229496AbiKATPF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 15:14:16 -0400
-Received: from mail-lj1-x232.google.com (mail-lj1-x232.google.com [IPv6:2a00:1450:4864:20::232])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4558B167F6
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 12:14:15 -0700 (PDT)
-Received: by mail-lj1-x232.google.com with SMTP id j14so22303492ljh.12
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 12:14:15 -0700 (PDT)
+        Tue, 1 Nov 2022 15:15:05 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A3D0318344
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 12:15:04 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id ud5so39571966ejc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 12:15:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=8yWGGQy6nd75MxfeaMsUIV4s8QBs1RLTaTKHXtygWyI=;
-        b=lIP+xq5Kgn9HZbrOq8qu+0sEJ7RuCOgkQQdNVNDXTgZLLMd3jQR0o6oATzIwnM2lWN
-         WLEDDzpVUS1oCbA9RyDvUgBOrXQyCc6BgdQW5Ztwg7859HzkXJOnqZL0uLemhn/0Sv6d
-         aLLW+Qbswkh2B0bcIHQ87tjgpvHEwgM2c+/tESXnaTUPZ3GwNlqDmLgGahfLKZb2jZun
-         j+dPyWlL11KidIIxuksY7Pz7z/85HtLRxdT4iqknHgG7uNHln5VrmMm6O/o5q9wmLM5q
-         BEm4OgEOys31Ni2rhI282iTZLLAqPb+5ncGH5RdAS/TbAjlZjj74y2An9qXJoukd6fap
-         BxFQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bh/vb258a85waAX85aoxt5/0nDK0TrUQ5LPFD52UgPA=;
+        b=Lu9O3ACO2fkVQQg7P2DynITZmIloWlIb6e4XM3rcu3PeX/Su5aPDqY/R24Q3r4H3Fq
+         N8nUkdA1MWtb9iumVDOwCy0PTzDRp5uBhLrFt8tAG8shZ2eErCYvTDyHPf8Puq+iIpBL
+         a3dO3DbUCNc7OSu9OTLcybcCfM/tFDeQSn/9RqCAconcGd8GbN3P7zW57HkOhDT6ZVE8
+         qeeGuz7QpwsauwT8+Bm/tMXvN8CK9tHxFL0a4C1XcfVy6qM/3jDdQIyX26/5wCzv9Ejc
+         FcQJF7d5hbDut6lfeS4Ye8Wa/B0mlkKmhUAXZckDvy8m3h3lOU+MpH7tkDxarocyey4l
+         Wu5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=8yWGGQy6nd75MxfeaMsUIV4s8QBs1RLTaTKHXtygWyI=;
-        b=HH/H6Y+X6skmT9NYRUwnRRH/rL8esmL7eeCowcpIkNdtV9hHFY6KTXyY5ztSYaRRpI
-         eVvBxfl87SBDC8/PElpr/Fs/OOKbVtSDcns5w2K3KqmOjh7x4k1ulvbzK08v1fhmuIz6
-         KUMqx5emVaZA2ny5WY8F4t2kwrSptpqkaKH7i3VtwQIUhXHnbNeLZUkYbL5kEjT2Nok6
-         a1QAvwQhEs7chjZq+p9ewgTtx82dk6lJGK01x2PTk5xaxe6u1sJG+Bpbv0IDaTTA1dui
-         uZAMQo6WV7jXmGEqOSzy1tyPZaiz/e07MX7C+LRWtwYrjhPsjiVPTm4LIg6d+SViSIZe
-         C0Eg==
-X-Gm-Message-State: ACrzQf1asb7qpaIaM5whGtFJaYd/+m/Acd+D993fTYazTe7J3ckA7EPO
-        oUyfgl0BEc3WTPUQOaOHTnQ75LUrZOHK410am/7H7Q==
-X-Google-Smtp-Source: AMsMyM7bB7G05FEiSkW2V70Q/+5r8EyVM0JISba4cQ4DUd1oH4EQf/MZe37nP6WbThGnF0Tpc2J3whFn+nh/1S5GXaE=
-X-Received: by 2002:a2e:8181:0:b0:25f:e028:a67 with SMTP id
- e1-20020a2e8181000000b0025fe0280a67mr8074104ljg.89.1667330053341; Tue, 01 Nov
- 2022 12:14:13 -0700 (PDT)
+        bh=bh/vb258a85waAX85aoxt5/0nDK0TrUQ5LPFD52UgPA=;
+        b=y5BK4fD8IOBPo5MX2+U0VcVfhbU0UVC2nKS3mMlA06fR2nf8TqjRZVtBKARGMzNl3b
+         C9bIRkcNVNTMVmWfnZ8bLTh4nkUIfwCojHASExXIVHTUQZyG7qWlI63h6pM5T/WOc1yt
+         arWvl+/mWaqwy3hbIdj8ZdvvB9pZfyVdCdSpmpNTv9TW+ORbHvimoRPeZ/b9/UNZ+z9M
+         iyXpOYspb8hgh62LCDk7PmIzS7MMinmPWzV3/8whVN9tpQ1K6SbMpxtOqA5zsMLFwP/s
+         IYXpnmqmQWGzxecvAcBaq70xzVZlVH7L63QxXD8sun5Q3ke0SewbkMncad85VT0hvYyj
+         3JHQ==
+X-Gm-Message-State: ACrzQf2PzO2dj6/0gzDsm693ZxJRl2/eYbtP9Mn7jLdiHmwzepGeWsWz
+        wJ92wcz0MFvTEHjlk28MoSg=
+X-Google-Smtp-Source: AMsMyM4a2dWzxMe/fpwr9NVsBr+fP6KZUEpMJTIJORIBfVkUzF9XIw97i+WhqhbR3qJRGW+jv1svyw==
+X-Received: by 2002:a17:906:db0e:b0:77b:82cf:54a6 with SMTP id xj14-20020a170906db0e00b0077b82cf54a6mr19470626ejb.691.1667330103172;
+        Tue, 01 Nov 2022 12:15:03 -0700 (PDT)
+Received: from localhost.localdomain (ip5f5abb7a.dynamic.kabel-deutschland.de. [95.90.187.122])
+        by smtp.gmail.com with ESMTPSA id hw20-20020a170907a0d400b007ade5cc6e7asm1643853ejc.39.2022.11.01.12.15.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 12:15:02 -0700 (PDT)
+From:   Michael Straube <straube.linux@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Michael Straube <straube.linux@gmail.com>
+Subject: [PATCH 0/2] staging: r8188eu: two simple cleanups
+Date:   Tue,  1 Nov 2022 20:14:56 +0100
+Message-Id: <20221101191458.8619-1-straube.linux@gmail.com>
+X-Mailer: git-send-email 2.38.0
 MIME-Version: 1.0
-References: <20221031183122.470962-1-shy828301@gmail.com> <Y2BHcBCR2FIJgU4w@dhcp22.suse.cz>
- <CAAa6QmQt9Us8YpirQGXV0_AetuPS+EOqMSGqNn6KW24HXvwO_A@mail.gmail.com>
- <Y2DQr06mNzk0ITX1@dhcp22.suse.cz> <CAHbLzkonsnr4yxUOpMpoch1eCVNgR5hC9YaMkPR=fSV2Uszc6g@mail.gmail.com>
-In-Reply-To: <CAHbLzkonsnr4yxUOpMpoch1eCVNgR5hC9YaMkPR=fSV2Uszc6g@mail.gmail.com>
-From:   "Zach O'Keefe" <zokeefe@google.com>
-Date:   Tue, 1 Nov 2022 12:13:35 -0700
-Message-ID: <CAAa6QmRe1zMp8P-gZjR63Fg6KhOw+fP-v7SQWLNKuc2Y9ZxvyA@mail.gmail.com>
-Subject: Re: [PATCH] mm: don't warn if the node is offlined
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,129 +70,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 1, 2022 at 10:13 AM Yang Shi <shy828301@gmail.com> wrote:
->
-> On Tue, Nov 1, 2022 at 12:54 AM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Mon 31-10-22 17:05:06, Zach O'Keefe wrote:
-> > > On Mon, Oct 31, 2022 at 3:08 PM Michal Hocko <mhocko@suse.com> wrote:
-> > > >
-> > > > On Mon 31-10-22 11:31:22, Yang Shi wrote:
-> > > > > Syzbot reported the below splat:
-> > > > >
-> > > > > WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 __alloc_pages_node include/linux/gfp.h:221 [inline]
-> > > > > WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-> > > > > WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-> > > > > Modules linked in:
-> > > > > CPU: 1 PID: 3646 Comm: syz-executor210 Not tainted 6.1.0-rc1-syzkaller-00454-ga70385240892 #0
-> > > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-> > > > > RIP: 0010:__alloc_pages_node include/linux/gfp.h:221 [inline]
-> > > > > RIP: 0010:hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-> > > > > RIP: 0010:alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-> > > > > Code: e5 01 4c 89 ee e8 6e f9 ae ff 4d 85 ed 0f 84 28 fc ff ff e8 70 fc ae ff 48 8d 6b ff 4c 8d 63 07 e9 16 fc ff ff e8 5e fc ae ff <0f> 0b e9 96 fa ff ff 41 bc 1a 00 00 00 e9 86 fd ff ff e8 47 fc ae
-> > > > > RSP: 0018:ffffc90003fdf7d8 EFLAGS: 00010293
-> > > > > RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> > > > > RDX: ffff888077f457c0 RSI: ffffffff81cd8f42 RDI: 0000000000000001
-> > > > > RBP: ffff888079388c0c R08: 0000000000000001 R09: 0000000000000000
-> > > > > R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-> > > > > R13: dffffc0000000000 R14: 0000000000000000 R15: 0000000000000000
-> > > > > FS:  00007f6b48ccf700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> > > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > > > CR2: 00007f6b48a819f0 CR3: 00000000171e7000 CR4: 00000000003506e0
-> > > > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > > > Call Trace:
-> > > > >  <TASK>
-> > > > >  collapse_file+0x1ca/0x5780 mm/khugepaged.c:1715
-> > > >
-> > > > This is quite weird, isn't it? alloc_charge_hpage is selecting the most
-> > > > busy node (as per collapse_control). How come this can be an offline
-> > > > node? Is a parallel memory hotplug happening?
-> > >
-> > > TBH -- I did not look closely at the syzbot reproducer (let alone
-> > > attempt to run it) and assumed this was the case. Taking a quick look,
-> > > at least memory hot remove is enabled:
-> > >
-> > > CONFIG_ARCH_ENABLE_MEMORY_HOTPLUG=y
-> > > CONFIG_ARCH_ENABLE_MEMORY_HOTREMOVE=y
-> > > CONFIG_MEMORY_HOTPLUG=y
-> > > CONFIG_MEMORY_HOTPLUG_DEFAULT_ONLINE=y
-> > > CONFIG_MEMORY_HOTREMOVE=y
-> > >
-> > > But looking at the C reproducer, I don't immediately see anywhere
-> > > where we offline nodes. I'll try to run this tomorrow to make sure I'm
-> > > not missing something real here.
-> >
-> > Looking slightly closer at hpage_collapse_scan_file I think that it is
-> > possible that xas_for_each simply doesn't find any entries in the page
-> > cache and with khugepaged_max_ptes_none == HPAGE_PMD_NR we can fall back
-> > to collapse_file even without any real entries.
->
-> The khugepaged_max_ptes_none can't be HPAGE_PMD_NR, it must be <=
-> (HPAGE_PMD_NR - 1), but MADV_COLLAPSE does ignore it.
->
-> But a closer look at the code about how to pick up the preferred node,
-> there seems to be a corner case for MADV_COLLAPSE.
->
-> The code tried to do some balance if several nodes have the same hit
-> record. Basically it does conceptually:
->     * If the target_node <= last_target_node, then iterate from
-> last_target_node + 1 to MAX_NUMNODES (1024 on default config)
->     * If the max_value == node_load[nid], then target_node = nid
->
-> So assuming the system has 2 nodes, the target_node is 0 and the
-> last_target_node is 1, if MADV_COLLAPSE path is hit, then it may
-> return 2 for target_node, but it is actually not existing (offline),
-> so the warn is triggered.
->
+This series contains two simple cleanup patches.
+Tested on x86_64 with Inter-Tech DMG-02.
 
-You're one step ahead of me, Yang. I was just debugging the syzbot C
-reproducer, and this seems to be exactly the case that is happening.
+Michael Straube (2):
+  staging: r8188eu: remove extern from function prototypes
+  staging: r8188eu: convert rtw_free_stainfo() to void
 
-> The below patch should be able to fix it:
->
-> diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> index ea0d186bc9d4..d24405e6736b 100644
-> --- a/mm/khugepaged.c
-> +++ b/mm/khugepaged.c
-> @@ -787,7 +787,8 @@ static int hpage_collapse_find_target_node(struct
-> collapse_control *cc)
->         if (target_node <= cc->last_target_node)
->                 for (nid = cc->last_target_node + 1; nid < MAX_NUMNODES;
->                      nid++)
-> -                       if (max_value == cc->node_load[nid]) {
-> +                       if (node_online(nid) &&
-> +                           max_value == cc->node_load[nid]) {
->                                 target_node = nid;
->                                 break;
->                         }
->
+ drivers/staging/r8188eu/core/rtw_sta_mgt.c     |  8 ++------
+ .../staging/r8188eu/include/osdep_service.h    |  2 +-
+ drivers/staging/r8188eu/include/rtw_mlme_ext.h |  4 ++--
+ drivers/staging/r8188eu/include/sta_info.h     | 18 +++++++++---------
+ 4 files changed, 14 insertions(+), 18 deletions(-)
 
-Thanks for the patch. I think this is the right place to do the check.
+-- 
+2.38.0
 
-This is slightly tangential - but I don't want to send a new mail
-about it -- but I wonder if we should be doing __GFP_THISNODE +
-explicit node vs having hpage_collapse_find_target_node() set a
-nodemask. We could then provide fallback nodes for ties, or if some
-node contained > some threshold number of pages.
-
-> > But the mere possibility of the hotplug race should be a sufficient
-> > ground to remove those WARN_ONs
->
-
-Agreed.
-
-> The warn_on did help to catch this bug. But the reasons for removing
-> it still stand TBH, so we may consider to move this warn_on to the
-> callers which care about it?
-
-I didn't come across in a cursory search -- but if there are callers
-which try to synchronize with hot remove to ensure __GFP_THISNODE
-succeeds, then sure, the warn makes sense to them.
-
-> >
-> >
-> > Thanks!
-> > --
-> > Michal Hocko
-> > SUSE Labs
