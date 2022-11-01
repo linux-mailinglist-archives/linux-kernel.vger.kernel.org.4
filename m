@@ -2,199 +2,219 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 476C661479D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 11:21:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 46F556147A3
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 11:24:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiKAKVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 06:21:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52230 "EHLO
+        id S229828AbiKAKY0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 06:24:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53990 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiKAKVe (ORCPT
+        with ESMTP id S229511AbiKAKYX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 06:21:34 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A01460FA;
-        Tue,  1 Nov 2022 03:21:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667298093; x=1698834093;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=kp/VTQaNp+uoQTfUuEpAJ7NXTuuBRp55w/P2S6kyzvs=;
-  b=QGbPBazcVDWNMpdQn4mwmDsthZc+w1JU9TvPedTBD94f0CLiHXqQBO2K
-   bZuvTv4f166Tm075GQUyN5mSk/8UmYYpdQtCn4Mwpwsnr/aU8QMWkOR64
-   Gbp8ikRq/PKDrG3p/oHGBOwPza41J2T7Q+VRtpNQfgHGvuFvv/PbWRmF6
-   aFnswuBr+mqP/4JusF5DTBPJ8x9KH3nvXHIsu04sWzPB443UF16L+g7hA
-   wmSAO1Mc2cQ/iSurnt31Cl3BT5tbMwz0aIwYay6iU7MW2f+Lq8ofnv5ZZ
-   V7gP2dQ/y+ngZpdHPP6mYwnFsMTQNFZ3gHZBwdyAqvW/HXU2nleOTWbpd
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="289497177"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="289497177"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 03:21:33 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="739284277"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="739284277"
-Received: from xiaoyaol-hp-g830.ccr.corp.intel.com (HELO [10.255.30.42]) ([10.255.30.42])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 03:21:31 -0700
-Message-ID: <36cde6d6-128d-884e-1447-09b08bb5de3d@intel.com>
-Date:   Tue, 1 Nov 2022 18:21:26 +0800
+        Tue, 1 Nov 2022 06:24:23 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1263DF9E
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 03:24:22 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id p15-20020a17090a348f00b002141615576dso692750pjb.4
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 03:24:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=KeuyhC/yqWeMZ9A5XwFlrzKZ+ajBX1/kPKg5+DZQVrM=;
+        b=btzAajd+q+JpmIQm13I5HOulVkqsIH1EJRGHuaPfS6MbvPOkEM2c/b6kvooZu+25YQ
+         3qls0kUzH4K1pD6HZ1NuPel5a2CYtsOK5412oU3sdUMPdlMBp9lxrd39EtisslQIU4JR
+         Nuh2W3/i8jOb4TKFQVuCeCGFhmsQbWR5K5MzZA1WxZaQkZSHTtTjCqd1z7R5Jjc9jcZ6
+         bTKORRm9JXCKbq6CKTNMHCYGUgVyvU7JQTbUtqIjLa16n6lnjHTL/zJ8fEX996H/8OYT
+         nTnvluVsYa0T/oe7uKJWGkO3atpwqPL2hpLwkTd1cylvT5p39qAXDD8n4RInw0NR06RM
+         yH/Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=KeuyhC/yqWeMZ9A5XwFlrzKZ+ajBX1/kPKg5+DZQVrM=;
+        b=GUbCIHbwE+ydgC+m+0PVMVv4ESTzm4ze30j8gpfrDNzAm0VycB+ZAofv9sNGkK10tQ
+         d28xCiaeVFZ2A2PQ0k+Pxn5BbCN8EurP2EtVevt2wuBGmNUfUT2fntDj7mIYIryJxKNy
+         rmjpdAu1+bP0tLgzMsc1cvDj2KLc8maepYld07Y37LFq80JiiboBR06zYn21/oX50LNq
+         9gV8H4Y0GAWrvDJPYN1CjPTEUPg74P8BSr4n3W3v7M4NiaiBEj8mhnyqHWiRi6Uqy+XG
+         dSNxNnkUwkW8L3y48gdAxyXdNgncPWOiy14O8GsE5lXOHWWE4CxW1F2OMTFBQ0GNZusd
+         sLrA==
+X-Gm-Message-State: ACrzQf0101RtUelDVSH5SkRyZBOJvgFE84L9+sMi+ejaEY1Y6otf1mtA
+        LlUS5QpPmhTutknCLDoYyYnmBDPGPQiWZlmhGy34kA==
+X-Google-Smtp-Source: AMsMyM4pKvV+Qk2wQ7bCR6XhdiDx26u61Hppa6SqeDDgb8CInrWbtfF06Y9S7fpIlVG3UeuCB/ehTxZsxBr/L45xrDw=
+X-Received: by 2002:a17:90b:4d07:b0:1ef:521c:f051 with SMTP id
+ mw7-20020a17090b4d0700b001ef521cf051mr37407934pjb.164.1667298262178; Tue, 01
+ Nov 2022 03:24:22 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.0
-Subject: Re: [PATCH v10 060/108] KVM: Add functions to set GFN to private or
- shared
-To:     isaku.yamahata@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     isaku.yamahata@gmail.com, Paolo Bonzini <pbonzini@redhat.com>,
-        erdemaktas@google.com, Sean Christopherson <seanjc@google.com>,
-        Sagi Shahar <sagis@google.com>,
-        David Matlack <dmatlack@google.com>
-References: <cover.1667110240.git.isaku.yamahata@intel.com>
- <c834432220f04c39a8dfa6ac3838446e6c06c9e9.1667110240.git.isaku.yamahata@intel.com>
-Content-Language: en-US
-From:   Xiaoyao Li <xiaoyao.li@intel.com>
-In-Reply-To: <c834432220f04c39a8dfa6ac3838446e6c06c9e9.1667110240.git.isaku.yamahata@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,NICE_REPLY_A,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221101024736.1509207-1-shawn.guo@linaro.org> <20221101024736.1509207-3-shawn.guo@linaro.org>
+In-Reply-To: <20221101024736.1509207-3-shawn.guo@linaro.org>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Tue, 1 Nov 2022 11:23:45 +0100
+Message-ID: <CAPDyKFqjf3P8GDfNinEeO57peM=7qVVP_M4yu1vsQY6N2wNcqA@mail.gmail.com>
+Subject: Re: [PATCH v2 2/3] PM: domains: Consolidate genpd_restore_noirq() and genpd_resume_noirq()
+To:     Shawn Guo <shawn.guo@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Kevin Hilman <khilman@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/30/2022 2:23 PM, isaku.yamahata@intel.com wrote:
-> From: Isaku Yamahata <isaku.yamahata@intel.com>
-> 
-> TDX KVM support needs to track whether GFN is private or shared.  Introduce
-> functions to set whether GFN is private or shared and pre-allocate memory
-> for xarray.
-> 
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> Signed-off-by: Isaku Yamahata <isaku.yamahata@intel.com>
+On Tue, 1 Nov 2022 at 03:47, Shawn Guo <shawn.guo@linaro.org> wrote:
+>
+> Most of the logic between genpd_restore_noirq() and genpd_resume_noirq()
+> are same except GENPD_STATE_OFF status reset for hibernation restore.
+> The suspended_count decrement for restore should be the right thing to do
+> anyway, considering there is an increment in genpd_finish_suspend() for
+> hibernation.
+>
+> Consolidate genpd_restore_noirq() and genpd_resume_noirq() into
+> genpd_finish_resume() and handle GENPD_STATE_OFF status reset for
+> restore case specially.
+>
+> Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
+
+I have a comment, see more below.
+
+Nevertheless, please add:
+
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+
 > ---
->   include/linux/kvm_host.h | 11 ++++++
->   virt/kvm/kvm_main.c      | 74 ++++++++++++++++++++++++++++++++++++++++
->   2 files changed, 85 insertions(+)
-> 
-> diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-> index a0b64308d240..fac07886ab39 100644
-> --- a/include/linux/kvm_host.h
-> +++ b/include/linux/kvm_host.h
-> @@ -2307,9 +2307,20 @@ static inline void kvm_account_pgtable_pages(void *virt, int nr)
->   #define KVM_MEM_ATTR_PRIVATE	0x0002
->   
->   #ifdef __KVM_HAVE_ARCH_UPDATE_MEM_ATTR
-> +/* memory attr on [start, end) */
-> +int kvm_vm_reserve_mem_attr(struct kvm *kvm, gfn_t start, gfn_t end);
-> +int kvm_vm_set_mem_attr(struct kvm *kvm, int attr, gfn_t start, gfn_t end);
->   void kvm_arch_update_mem_attr(struct kvm *kvm, struct kvm_memory_slot *slot,
->   			      unsigned int attr, gfn_t start, gfn_t end);
->   #else
-> +static inline int kvm_vm_reserve_mem_attr(struct kvm *kvm, gfn_t start, gfn_t end)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +static inline int kvm_vm_set_mem_attr(struct kvm *kvm, int attr, gfn_t start, gfn_t end)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
->   static inline void kvm_arch_update_mem_attr(struct kvm *kvm,
->   					    struct kvm_memory_slot *slot,
->   					    unsigned int attr,
-> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
-> index 9f82b03a8118..f0e77b65939b 100644
-> --- a/virt/kvm/kvm_main.c
-> +++ b/virt/kvm/kvm_main.c
-> @@ -1121,6 +1121,80 @@ static inline void kvm_restrictedmem_unregister(struct kvm_memory_slot *slot)
->   					  &slot->notifier);
->   }
->   
-> +/*
-> + * Reserve memory for [start, end) so that the next set oepration won't fail
-> + * with -ENOMEM.
+>  drivers/base/power/domain.c | 70 ++++++++++++++++++-------------------
+>  1 file changed, 35 insertions(+), 35 deletions(-)
+>
+> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
+> index 54f6b0dd35fb..b81baeb38d81 100644
+> --- a/drivers/base/power/domain.c
+> +++ b/drivers/base/power/domain.c
+> @@ -1247,12 +1247,14 @@ static int genpd_suspend_noirq(struct device *dev)
+>  }
+>
+>  /**
+> - * genpd_resume_noirq - Start of resume of device in an I/O PM domain.
+> + * genpd_finish_resume - Completion of resume of device in an I/O PM domain.
+>   * @dev: Device to resume.
+> + * @resume_noirq: Generic resume_noirq callback.
+>   *
+>   * Restore power to the device's PM domain, if necessary, and start the device.
+>   */
+> -static int genpd_resume_noirq(struct device *dev)
+> +static int genpd_finish_resume(struct device *dev,
+> +                              int (*resume_noirq)(struct device *dev))
+>  {
+>         struct generic_pm_domain *genpd;
+>         int ret;
+> @@ -1264,9 +1266,25 @@ static int genpd_resume_noirq(struct device *dev)
+>                 return -EINVAL;
+>
+>         if (device_wakeup_path(dev) && genpd_is_active_wakeup(genpd))
+> -               return pm_generic_resume_noirq(dev);
+> +               return resume_noirq(dev);
+>
+>         genpd_lock(genpd);
+> +
+> +       /*
+> +        * Special handling for hibernation restore:
+> +        * At this point suspended_count == 0 means we are being run for the
+> +        * first time for the given domain in the present cycle.
+> +        */
+> +       if (resume_noirq == pm_generic_restore_noirq &&
+> +           genpd->suspended_count++ == 0) {
+> +               /*
+> +                * The boot kernel might put the domain into arbitrary state,
+> +                * so make it appear as powered off to genpd_sync_power_on(),
+> +                * so that it tries to power it on in case it was really off.
+> +                */
+> +               genpd->status = GENPD_STATE_OFF;
+
+This has really never worked as intended. Resetting the status like
+this, needs more careful actions.
+
+For example, if the genpd->status was GENPD_STATE_ON, the parent
+domain's ->sd_count have been increased - so that needs to be adjusted
+too.
+
+By looking at patch3/3, I wonder if we shouldn't try to align the
+hibernation behaviors so the above hack can be dropped. Do you think
+that could work?
+
+> +       }
+> +
+>         genpd_sync_power_on(genpd, true, 0);
+>         genpd->suspended_count--;
+>         genpd_unlock(genpd);
+> @@ -1281,6 +1299,19 @@ static int genpd_resume_noirq(struct device *dev)
+>         return pm_generic_resume_noirq(dev);
+>  }
+>
+> +/**
+> + * genpd_resume_noirq - Start of resume of device in an I/O PM domain.
+> + * @dev: Device to resume.
+> + *
+> + * Restore power to the device's PM domain, if necessary, and start the device.
 > + */
-> +int kvm_vm_reserve_mem_attr(struct kvm *kvm, gfn_t start, gfn_t end)
+> +static int genpd_resume_noirq(struct device *dev)
 > +{
-> +	int r = 0;
-> +	gfn_t gfn;
+> +       dev_dbg(dev, "%s()\n", __func__);
 > +
-> +	xa_lock(&kvm->mem_attr_array);
-> +	for (gfn = start; gfn < end; gfn++) {
-> +		r = __xa_insert(&kvm->mem_attr_array, gfn, NULL, GFP_KERNEL_ACCOUNT);
-> +		if (r == -EBUSY)
-> +			r = 0;
-> +		if (r)
-> +			break;
-> +	}
-> +	xa_unlock(&kvm->mem_attr_array);
-> +
-> +	return r;
+> +       return genpd_finish_resume(dev, pm_generic_resume_noirq);
 > +}
-> +EXPORT_SYMBOL_GPL(kvm_vm_reserve_mem_attr);
 > +
-> +/* Set memory attr for [start, end) */
-> +int kvm_vm_set_mem_attr(struct kvm *kvm, int attr, gfn_t start, gfn_t end)
-> +{
-> +	void *entry;
-> +	gfn_t gfn;
-> +	int r;
-> +	int i;
-> +
-> +	/* By default, the entry is private. */
-> +	switch (attr) {
-> +	case KVM_MEM_ATTR_PRIVATE:
-> +		entry = NULL;
-> +		break;
-> +	case KVM_MEM_ATTR_SHARED:
-> +		entry = xa_mk_value(KVM_MEM_ATTR_SHARED);
-> +		break;
-> +	default:
-> +		WARN_ON_ONCE(1);
-> +		return -EINVAL;
-> +	}
-> +
-> +	WARN_ON_ONCE(start >= end);
-> +	for (gfn = start; gfn < end; gfn++) {
-> +		r = xa_err(xa_store(&kvm->mem_attr_array, gfn, entry,
-> +				    GFP_KERNEL_ACCOUNT));
-> +		if (r)
-> +			break;
-> +	}
-> +	if (start >= gfn)
-> +		return r;
-> +
-> +	end = gfn;
-> +	for (i = 0; i < KVM_ADDRESS_SPACE_NUM; i++) {
-> +		struct kvm_memslot_iter iter;
-> +		struct kvm_memory_slot *slot;
-> +		struct kvm_memslots *slots;
-> +
-> +		slots = __kvm_memslots(kvm, i);
-> +		kvm_for_each_memslot_in_gfn_range(&iter, slots, start, end) {
+>  /**
+>   * genpd_freeze_noirq - Completion of freezing a device in an I/O PM domain.
+>   * @dev: Device to freeze.
+> @@ -1366,40 +1397,9 @@ static int genpd_poweroff_noirq(struct device *dev)
+>   */
+>  static int genpd_restore_noirq(struct device *dev)
+>  {
+> -       struct generic_pm_domain *genpd;
+> -       int ret = 0;
+> -
+>         dev_dbg(dev, "%s()\n", __func__);
+>
+> -       genpd = dev_to_genpd(dev);
+> -       if (IS_ERR(genpd))
+> -               return -EINVAL;
+> -
+> -       /*
+> -        * At this point suspended_count == 0 means we are being run for the
+> -        * first time for the given domain in the present cycle.
+> -        */
+> -       genpd_lock(genpd);
+> -       if (genpd->suspended_count++ == 0) {
+> -               /*
+> -                * The boot kernel might put the domain into arbitrary state,
+> -                * so make it appear as powered off to genpd_sync_power_on(),
+> -                * so that it tries to power it on in case it was really off.
+> -                */
+> -               genpd->status = GENPD_STATE_OFF;
+> -       }
+> -
+> -       genpd_sync_power_on(genpd, true, 0);
+> -       genpd_unlock(genpd);
+> -
+> -       if (genpd->dev_ops.stop && genpd->dev_ops.start &&
+> -           !pm_runtime_status_suspended(dev)) {
+> -               ret = genpd_start_dev(genpd, dev);
+> -               if (ret)
+> -                       return ret;
+> -       }
+> -
+> -       return pm_generic_restore_noirq(dev);
+> +       return genpd_finish_resume(dev, pm_generic_restore_noirq);
+>  }
+>
+>  /**
 
-slot needs to be set as
-
-			slot = iter.slot;
-
-> +			gfn_t s = max(start, slot->base_gfn);
-> +			gfn_t e = min(end, slot->base_gfn + slot->npages);
-> +
-> +			WARN_ON_ONCE(s >= e);
-> +			kvm_arch_update_mem_attr(kvm, slot, attr, s, e);
-> +		}
-> +	}
-> +
-> +	return r;
-> +}
-> +EXPORT_SYMBOL_GPL(kvm_vm_set_mem_attr);
-> +
->   #else /* !CONFIG_HAVE_KVM_RESTRICTED_MEM */
->   
->   static inline void kvm_restrictedmem_register(struct kvm_memory_slot *slot)
-
+Kind regards
+Uffe
