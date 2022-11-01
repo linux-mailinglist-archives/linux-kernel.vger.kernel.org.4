@@ -2,75 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DE0166142CA
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 02:38:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7936142CE
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 02:41:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbiKABi4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 21:38:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32838 "EHLO
+        id S229792AbiKABle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 21:41:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229647AbiKABiy (ORCPT
+        with ESMTP id S229475AbiKABlc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 21:38:54 -0400
-Received: from mail-il1-x12a.google.com (mail-il1-x12a.google.com [IPv6:2607:f8b0:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08B4013DD7
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 18:38:54 -0700 (PDT)
-Received: by mail-il1-x12a.google.com with SMTP id e19so7125379ili.4
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 18:38:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rFcFtrUWDD7wOJNwbyc+wIiDwYpeYSwMkMCUUwIfLCA=;
-        b=ZCT1Zygf8gLVKF4L3NOckwmpB+hK95U0elPFNVSr4t2n6eM7vlJiOilioFuHkd4SVx
-         fblsF3kARMPIfdP9ZpQFzTtmAlxt4g+xci12R57dLcRUqSWUpz+04aAki2RTvwuuSUuQ
-         Fa0pGr9YiUZlbquYjoESaq762VoyFwoiBEckk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rFcFtrUWDD7wOJNwbyc+wIiDwYpeYSwMkMCUUwIfLCA=;
-        b=xWqSVnd6qFD0uUapArwtERj13RwcBN2DZeL+LVXf9xLUOHuCjR5PxQsHSPLLOVzAMa
-         dgCEbHeCwYZG1i/BSHUVD9jqEFbrI2hCXrvsRQUiHVmvr7uuV43WybqYL4oukAomLP2v
-         NfEk6I6bT4FR3+JTIZcS0oFMOK8OKhBA2G/XpAUNZTH6i+NOi+KxFq5cnv0rOeVPWK6E
-         0444Ejt/tcfMONF56kcAiAa6CBmd48gQ0legjzqdfihu9Ek/5FljkB0Nrq9+rGeLxoCB
-         S/APXoqo8BdgxXOMwtLObMEfp2uVYVpdeE8MRq3aziAfk9S40QIb5UX+ARPxG/HDJdrI
-         o0Rw==
-X-Gm-Message-State: ACrzQf3QjTSfCYAWjf0VrH2Z/HH4UXgB2C9qUV9Fe7kaZDSfxpiQcRgZ
-        tUEOEY8TLlQWGuQClSbm07S3wXZ+I6ZWgZLYtVRYyw==
-X-Google-Smtp-Source: AMsMyM7YqoFr83RhbdshghyOzE+J9fJTEUa6ewa//JFhpxcGATT30qD2gEQrx7vIdKbLQW5VAG2HCnrYfnA7uIt2RGo=
-X-Received: by 2002:a05:6e02:c6b:b0:300:8f53:2c38 with SMTP id
- f11-20020a056e020c6b00b003008f532c38mr8338611ilj.253.1667266733422; Mon, 31
- Oct 2022 18:38:53 -0700 (PDT)
+        Mon, 31 Oct 2022 21:41:32 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4582910050;
+        Mon, 31 Oct 2022 18:41:31 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id D49B2614E1;
+        Tue,  1 Nov 2022 01:41:30 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99CCAC433D6;
+        Tue,  1 Nov 2022 01:41:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667266890;
+        bh=XJvNcCvYTd4PK+vO4pqCyIW2MQydHQ5BXboQR88RVrI=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=Ng5IKB72OvrAGnyyDLPsp+VJEDvkimJgEQ5XQs9rLxfH/2OVyZdacii0xI0OlpoGw
+         ROslgGRfdYZZOh9H6G/swxBr9nFGNVSxJyGWLEO4Hz6KVFI9SOnoOTW91fo1091TnF
+         mCKNYHVe9nCllh7xOnQfYedyII7LWbrx07rSr27Yz8qTSiqL/H/6hbV58ZR6jnpyXo
+         Wu+q6tcCHdEcaJ1R9KZLJc545bPCwNlVDBmUAHmZZKVO4hpIy3SoXPS1xhzpwqgfYw
+         kJSPv5NsIga5PV6bxwB2qp7BXnnoiWtu3tuviHu322iBWxuiM0b/MqSo7nteLJJ221
+         fWaP/FKhuezTg==
+Date:   Mon, 31 Oct 2022 18:41:28 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Steen Hegelund <steen.hegelund@microchip.com>
+Cc:     Casper Andersson <casper.casan@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        "Wan Jiabing" <wanjiabing@vivo.com>,
+        Nathan Huckleberry <nhuck@google.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Daniel Machon <daniel.machon@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>
+Subject: Re: [PATCH net-next v2 2/5] net: microchip: sparx5: Adding more tc
+ flower keys for the IS2 VCAP
+Message-ID: <20221031184128.1143d51e@kernel.org>
+In-Reply-To: <51622bfd3fe718139cece38493946c2860ebdf77.camel@microchip.com>
+References: <20221028144540.3344995-1-steen.hegelund@microchip.com>
+        <20221028144540.3344995-3-steen.hegelund@microchip.com>
+        <20221031103747.uk76tudphqdo6uto@wse-c0155>
+        <51622bfd3fe718139cece38493946c2860ebdf77.camel@microchip.com>
 MIME-Version: 1.0
-References: <20221027151908.v1.1.I295e65357f06f162b46ea6fc6c03be37e3978bdc@changeid>
- <4b7304c0-8dd5-9add-7c84-4e9f0aa9396b@redhat.com> <MN0PR12MB6101BCCA364437A76FED924AE2339@MN0PR12MB6101.namprd12.prod.outlook.com>
- <CAG-rBijvNoN3ppz6bdkEUofYPPBxCtFfo1nWBK5TdG69fcKMnA@mail.gmail.com>
- <CAE2upjS6qRGRcuVYuAB5DMf66A7VcfCKKYEkpsr1My7RnKDFtQ@mail.gmail.com>
- <CAG-rBihDRq1y61tAp56yYCoTOSZXO9OZNzn7gXb_y8XaiO_zqg@mail.gmail.com> <MN0PR12MB610109F448E3FC8CE71FBA76E2379@MN0PR12MB6101.namprd12.prod.outlook.com>
-In-Reply-To: <MN0PR12MB610109F448E3FC8CE71FBA76E2379@MN0PR12MB6101.namprd12.prod.outlook.com>
-From:   Sven van Ashbrook <svenva@chromium.org>
-Date:   Mon, 31 Oct 2022 21:38:42 -0400
-Message-ID: <CAG-rBijSASfbfWQNarjGqj2UxQDOSdwM-qj5YA5A9ur=DNJf-g@mail.gmail.com>
-Subject: Re: [PATCH v1] platform/x86: intel_pmc_core: promote S0ix failure
- warn() to WARN()
-To:     "Limonciello, Mario" <Mario.Limonciello@amd.com>
-Cc:     Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
-        Hans de Goede <hdegoede@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>,
-        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
-        "rrangel@chromium.org" <rrangel@chromium.org>,
-        "platform-driver-x86@vger.kernel.org" 
-        <platform-driver-x86@vger.kernel.org>,
-        Rajneesh Bhardwaj <rajneesh.bhardwaj@intel.com>,
-        Rafael J Wysocki <rjw@rjwysocki.net>,
-        Rajat Jain <rajatja@google.com>,
-        David E Box <david.e.box@intel.com>,
-        Mark Gross <markgross@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,38 +69,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 3:39 PM Limonciello, Mario
-<Mario.Limonciello@amd.com> wrote:
->
-> Just thinking about it a little bit more, it could be a lot nicer to have something like:
->
-> /sys/power/suspend_stats/last_hw_deepest_state
+On Mon, 31 Oct 2022 13:14:33 +0100 Steen Hegelund wrote:
+> > I'm not able to get this working on PCB135. I tested the VLAN tags and
+> > did not work either (did not test the rest). The example from the
+> > previous patch series doesn't work either after applying this series.  
 
-While I agree that reporting through a framework is generally better
-than getting infrastructure to grep for specific strings, I believe
-that a simple sysfs file is probably too simplistic.
+Previous series in this context means previous revision or something
+that was already merged?
 
-1. We need more sophisticated reporting than just last_hw_deepest_state:
+> tc filter add dev eth3 ingress chain 8000000 prio 10 handle 10 \
 
-- sometimes the system enters the deep state we want, yet after a
-while moves back up and gets "stuck" in an intermediate state (below
-S0). Or, the system enters the deep state we want, but moves back to
-S0 after a time without apparent reason. These platform-dependent
-failures are not so easily describable in a generic framework.
+How are you using chains?
 
-- ChromeOS in particular has multiple independent S0ix / S3 / s2idle
-failure report sources. We have the kernel warning above; also our
-Embedded Controller monitors suspend failure cases which the simple
-kernel warning cannot catch, reported through a separate WARN_ONCE().
-
-2. A simple sysfs file will need to be polled by the infrastructure
-after every suspend; it would be preferable to have some signal or
-callback which the infrastructure could register itself with.
-
-The generic infrastructure to support this sounds like quite a bit of
-work, and for what gain? Compared to simply matching a log string and
-sending the whole dmesg if there's a match.
-
-Is the light worth the candle?
-
-Sven
+I thought you need to offload FLOW_ACTION_GOTO to get to a chain,
+and I get no hits on this driver.
