@@ -2,122 +2,171 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9AD56144C2
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 07:41:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BFE696144C4
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 07:45:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbiKAGle (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 02:41:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60238 "EHLO
+        id S229695AbiKAGpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 02:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229714AbiKAGlc (ORCPT
+        with ESMTP id S229462AbiKAGpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 02:41:32 -0400
-Received: from rtits2.realtek.com.tw (rtits2.realtek.com [211.75.126.72])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 48EF0FD10;
-        Mon, 31 Oct 2022 23:41:30 -0700 (PDT)
-Authenticated-By: 
-X-SpamFilter-By: ArmorX SpamTrap 5.77 with qID 2A16eP5o9016308, This message is accepted by code: ctloc85258
-Received: from mail.realtek.com (rtexh36506.realtek.com.tw[172.21.6.27])
-        by rtits2.realtek.com.tw (8.15.2/2.81/5.90) with ESMTPS id 2A16eP5o9016308
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=FAIL);
-        Tue, 1 Nov 2022 14:40:25 +0800
-Received: from RTEXMBS01.realtek.com.tw (172.21.6.94) by
- RTEXH36506.realtek.com.tw (172.21.6.27) with Microsoft SMTP Server
+        Tue, 1 Nov 2022 02:45:08 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AFF38109E;
+        Mon, 31 Oct 2022 23:45:05 -0700 (PDT)
+Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N1gW13yxVzmVZp;
+        Tue,  1 Nov 2022 14:45:01 +0800 (CST)
+Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
+ dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.9; Tue, 1 Nov 2022 14:41:01 +0800
-Received: from RTEXMBS04.realtek.com.tw (172.21.6.97) by
- RTEXMBS01.realtek.com.tw (172.21.6.94) with Microsoft SMTP Server
+ 15.1.2375.31; Tue, 1 Nov 2022 14:45:03 +0800
+Received: from ubuntu1804.huawei.com (10.67.174.174) by
+ kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.7; Tue, 1 Nov 2022 14:41:00 +0800
-Received: from RTEXMBS04.realtek.com.tw ([fe80::add3:284:fd3d:8adb]) by
- RTEXMBS04.realtek.com.tw ([fe80::add3:284:fd3d:8adb%5]) with mapi id
- 15.01.2375.007; Tue, 1 Nov 2022 14:41:00 +0800
-From:   Ping-Ke Shih <pkshih@realtek.com>
-To:     Colin Ian King <colin.i.king@gmail.com>,
-        Kalle Valo <kvalo@kernel.org>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "linux-wireless@vger.kernel.org" <linux-wireless@vger.kernel.org>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
-CC:     "kernel-janitors@vger.kernel.org" <kernel-janitors@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH] rtlwifi: rtl8192ee: remove static variable stop_report_cnt
-Thread-Topic: [PATCH] rtlwifi: rtl8192ee: remove static variable
- stop_report_cnt
-Thread-Index: AQHY7UFi7CO5kegy5EyHq0HjTYwI4a4pNVXQgABpbtA=
-Date:   Tue, 1 Nov 2022 06:41:00 +0000
-Message-ID: <8c501b46825a4579a88ff16f53e9bcc4@realtek.com>
-References: <20221031155637.871164-1-colin.i.king@gmail.com> 
-Accept-Language: en-US, zh-TW
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [172.21.69.188]
-x-kse-serverinfo: RTEXMBS01.realtek.com.tw, 9
-x-kse-attachmentfiltering-interceptor-info: no applicable attachment filtering
- rules found
-x-kse-antivirus-interceptor-info: scan successful
-x-kse-antivirus-info: =?utf-8?B?Q2xlYW4sIGJhc2VzOiAyMDIyLzExLzEg5LiK5Y2IIDA0OjU5OjAw?=
-x-kse-bulkmessagesfiltering-scan-result: protection disabled
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+ 15.1.2375.31; Tue, 1 Nov 2022 14:45:02 +0800
+From:   Li Huafei <lihuafei1@huawei.com>
+To:     <rostedt@goodmis.org>
+CC:     <mhiramat@kernel.org>, <mark.rutland@arm.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>, <lihuafei1@huawei.com>
+Subject: [PATCH] ftrace: Fix use-after-free for dynamic ftrace_ops
+Date:   Tue, 1 Nov 2022 14:41:46 +0800
+Message-ID: <20221101064146.69551-1-lihuafei1@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.174]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemm600010.china.huawei.com (7.193.23.86)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQo+IC0tLS0tT3JpZ2luYWwgTWVzc2FnZS0tLS0tDQo+IEZyb206IFBpbmctS2UgU2hpaA0KPiBT
-ZW50OiBUdWVzZGF5LCBOb3ZlbWJlciAxLCAyMDIyIDg6MjIgQU0NCj4gVG86ICdDb2xpbiBJYW4g
-S2luZycgPGNvbGluLmkua2luZ0BnbWFpbC5jb20+OyBLYWxsZSBWYWxvIDxrdmFsb0BrZXJuZWwu
-b3JnPjsgRGF2aWQgUyAuIE1pbGxlcg0KPiA8ZGF2ZW1AZGF2ZW1sb2Z0Lm5ldD47IEVyaWMgRHVt
-YXpldCA8ZWR1bWF6ZXRAZ29vZ2xlLmNvbT47IEpha3ViIEtpY2luc2tpIDxrdWJhQGtlcm5lbC5v
-cmc+OyBQYW9sbyBBYmVuaQ0KPiA8cGFiZW5pQHJlZGhhdC5jb20+OyBsaW51eC13aXJlbGVzc0B2
-Z2VyLmtlcm5lbC5vcmc7IG5ldGRldkB2Z2VyLmtlcm5lbC5vcmcNCj4gQ2M6IGtlcm5lbC1qYW5p
-dG9yc0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gU3Vi
-amVjdDogUkU6IFtQQVRDSF0gcnRsd2lmaTogcnRsODE5MmVlOiByZW1vdmUgc3RhdGljIHZhcmlh
-YmxlIHN0b3BfcmVwb3J0X2NudA0KPiANCj4gDQo+ID4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0t
-LS0NCj4gPiBGcm9tOiBDb2xpbiBJYW4gS2luZyA8Y29saW4uaS5raW5nQGdtYWlsLmNvbT4NCj4g
-PiBTZW50OiBNb25kYXksIE9jdG9iZXIgMzEsIDIwMjIgMTE6NTcgUE0NCj4gPiBUbzogUGluZy1L
-ZSBTaGloIDxwa3NoaWhAcmVhbHRlay5jb20+OyBLYWxsZSBWYWxvIDxrdmFsb0BrZXJuZWwub3Jn
-PjsgRGF2aWQgUyAuIE1pbGxlcg0KPiA+IDxkYXZlbUBkYXZlbWxvZnQubmV0PjsgRXJpYyBEdW1h
-emV0IDxlZHVtYXpldEBnb29nbGUuY29tPjsgSmFrdWIgS2ljaW5za2kgPGt1YmFAa2VybmVsLm9y
-Zz47IFBhb2xvIEFiZW5pDQo+ID4gPHBhYmVuaUByZWRoYXQuY29tPjsgbGludXgtd2lyZWxlc3NA
-dmdlci5rZXJuZWwub3JnOyBuZXRkZXZAdmdlci5rZXJuZWwub3JnDQo+ID4gQ2M6IGtlcm5lbC1q
-YW5pdG9yc0B2Z2VyLmtlcm5lbC5vcmc7IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4g
-PiBTdWJqZWN0OiBbUEFUQ0hdIHJ0bHdpZmk6IHJ0bDgxOTJlZTogcmVtb3ZlIHN0YXRpYyB2YXJp
-YWJsZSBzdG9wX3JlcG9ydF9jbnQNCg0KU3ViamVjdCBwcmVmaXggc2hvdWxkIGJlICJ3aWZpOiBy
-dGx3aWZpOiAuLi4iDQoNCkknbSBub3Qgc3VyZSBpZiBLYWxsZSBjYW4gaGVscCB0aGlzLCBvciB5
-b3UgY2FuIHNlbmQgdjIgdG8gYWRkIHByZWZpeC4NCg0KPiA+DQo+ID4gVmFyaWFibGUgc3RvcF9y
-ZXBvcnRfY250IGlzIGJlaW5nIHNldCBvciBpbmNyZW1lbnRlZCBidXQgaXMgbmV2ZXINCj4gPiBi
-ZWluZyB1c2VkIGZvciBhbnl0aGluZyBtZWFuaW5nZnVsLiBUaGUgdmFyaWFibGUgYW5kIGNvZGUg
-cmVsYXRpbmcNCj4gPiB0byBpdCdzIHVzZSBpcyByZWR1bmRhbnQgYW5kIGNhbiBiZSByZW1vdmVk
-Lg0KPiA+DQo+ID4gU2lnbmVkLW9mZi1ieTogQ29saW4gSWFuIEtpbmcgPGNvbGluLmkua2luZ0Bn
-bWFpbC5jb20+DQo+IA0KPiBBY2tlZC1ieTogUGluZy1LZSBTaGloIDxwa3NoaWhAcmVhbHRlay5j
-b20+DQo+IA0KPiA+IC0tLQ0KPiA+ICBkcml2ZXJzL25ldC93aXJlbGVzcy9yZWFsdGVrL3J0bHdp
-ZmkvcnRsODE5MmVlL3RyeC5jIHwgOCAtLS0tLS0tLQ0KPiA+ICAxIGZpbGUgY2hhbmdlZCwgOCBk
-ZWxldGlvbnMoLSkNCj4gPg0KPiA+IGRpZmYgLS1naXQgYS9kcml2ZXJzL25ldC93aXJlbGVzcy9y
-ZWFsdGVrL3J0bHdpZmkvcnRsODE5MmVlL3RyeC5jDQo+ID4gYi9kcml2ZXJzL25ldC93aXJlbGVz
-cy9yZWFsdGVrL3J0bHdpZmkvcnRsODE5MmVlL3RyeC5jDQo+ID4gaW5kZXggODA0M2Q4MTlmYjg1
-Li5hMTgyY2RlYjU4ZTIgMTAwNjQ0DQo+ID4gLS0tIGEvZHJpdmVycy9uZXQvd2lyZWxlc3MvcmVh
-bHRlay9ydGx3aWZpL3J0bDgxOTJlZS90cnguYw0KPiA+ICsrKyBiL2RyaXZlcnMvbmV0L3dpcmVs
-ZXNzL3JlYWx0ZWsvcnRsd2lmaS9ydGw4MTkyZWUvdHJ4LmMNCj4gPiBAQCAtOTk3LDcgKzk5Nyw2
-IEBAIGJvb2wgcnRsOTJlZV9pc190eF9kZXNjX2Nsb3NlZChzdHJ1Y3QgaWVlZTgwMjExX2h3ICpo
-dywgdTggaHdfcXVldWUsIHUxNiBpbmRleCkNCj4gPiAgCXN0cnVjdCBydGxfcHJpdiAqcnRscHJp
-diA9IHJ0bF9wcml2KGh3KTsNCj4gPiAgCXUxNiByZWFkX3BvaW50LCB3cml0ZV9wb2ludDsNCj4g
-PiAgCWJvb2wgcmV0ID0gZmFsc2U7DQo+ID4gLQlzdGF0aWMgdTggc3RvcF9yZXBvcnRfY250Ow0K
-PiA+ICAJc3RydWN0IHJ0bDgxOTJfdHhfcmluZyAqcmluZyA9ICZydGxwY2ktPnR4X3JpbmdbaHdf
-cXVldWVdOw0KPiA+DQo+ID4gIAl7DQo+ID4gQEAgLTEwMzgsMTMgKzEwMzcsNiBAQCBib29sIHJ0
-bDkyZWVfaXNfdHhfZGVzY19jbG9zZWQoc3RydWN0IGllZWU4MDIxMV9odyAqaHcsIHU4IGh3X3F1
-ZXVlLCB1MTYgaW5kZXgpDQo+ID4gIAkgICAgcnRscHJpdi0+cHNjLnJmb2ZmX3JlYXNvbiA+IFJG
-X0NIQU5HRV9CWV9QUykNCj4gPiAgCQlyZXQgPSB0cnVlOw0KPiA+DQo+ID4gLQlpZiAoaHdfcXVl
-dWUgPCBCRUFDT05fUVVFVUUpIHsNCj4gPiAtCQlpZiAoIXJldCkNCj4gPiAtCQkJc3RvcF9yZXBv
-cnRfY250Kys7DQo+ID4gLQkJZWxzZQ0KPiA+IC0JCQlzdG9wX3JlcG9ydF9jbnQgPSAwOw0KPiA+
-IC0JfQ0KPiA+IC0NCj4gPiAgCXJldHVybiByZXQ7DQo+ID4gIH0NCj4gPg0KPiA+IC0tDQo+ID4g
-Mi4zNy4zDQo+ID4NCj4gPg0KPiA+IC0tLS0tLVBsZWFzZSBjb25zaWRlciB0aGUgZW52aXJvbm1l
-bnQgYmVmb3JlIHByaW50aW5nIHRoaXMgZS1tYWlsLg0K
+KASAN reported a use-after-free with ftrace ops [1]. It was found from
+vmcore that perf had registered two ops with the same content
+successively, both dynamic. After unregistering the second ops, a
+use-after-free occurred.
+
+In ftrace_shutdown(), when the second ops is unregistered, the
+FTRACE_UPDATE_CALLS command is not set because there is another enabled
+ops with the same content.  Also, both ops are dynamic and the ftrace
+callback function is ftrace_ops_list_func, so the
+FTRACE_UPDATE_TRACE_FUNC command will not be set. Eventually the value
+of 'command' will be 0 and ftrace_shutdown() will skip the rcu
+synchronization.
+
+However, ftrace may be activated. When the ops is released, another CPU
+may be accessing the ops.  Add the missing synchronization to fix this
+problem.
+
+[1]
+BUG: KASAN: use-after-free in __ftrace_ops_list_func kernel/trace/ftrace.c:7020 [inline]
+BUG: KASAN: use-after-free in ftrace_ops_list_func+0x2b0/0x31c kernel/trace/ftrace.c:7049
+Read of size 8 at addr ffff56551965bbc8 by task syz-executor.2/14468
+
+CPU: 1 PID: 14468 Comm: syz-executor.2 Not tainted 5.10.0 #7
+Hardware name: linux,dummy-virt (DT)
+Call trace:
+ dump_backtrace+0x0/0x40c arch/arm64/kernel/stacktrace.c:132
+ show_stack+0x30/0x40 arch/arm64/kernel/stacktrace.c:196
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x1b4/0x248 lib/dump_stack.c:118
+ print_address_description.constprop.0+0x28/0x48c mm/kasan/report.c:387
+ __kasan_report mm/kasan/report.c:547 [inline]
+ kasan_report+0x118/0x210 mm/kasan/report.c:564
+ check_memory_region_inline mm/kasan/generic.c:187 [inline]
+ __asan_load8+0x98/0xc0 mm/kasan/generic.c:253
+ __ftrace_ops_list_func kernel/trace/ftrace.c:7020 [inline]
+ ftrace_ops_list_func+0x2b0/0x31c kernel/trace/ftrace.c:7049
+ ftrace_graph_call+0x0/0x4
+ __might_sleep+0x8/0x100 include/linux/perf_event.h:1170
+ __might_fault mm/memory.c:5183 [inline]
+ __might_fault+0x58/0x70 mm/memory.c:5171
+ do_strncpy_from_user lib/strncpy_from_user.c:41 [inline]
+ strncpy_from_user+0x1f4/0x4b0 lib/strncpy_from_user.c:139
+ getname_flags+0xb0/0x31c fs/namei.c:149
+ getname+0x2c/0x40 fs/namei.c:209
+ [...]
+
+Allocated by task 14445:
+ kasan_save_stack+0x24/0x50 mm/kasan/common.c:48
+ kasan_set_track mm/kasan/common.c:56 [inline]
+ __kasan_kmalloc mm/kasan/common.c:479 [inline]
+ __kasan_kmalloc.constprop.0+0x110/0x13c mm/kasan/common.c:449
+ kasan_kmalloc+0xc/0x14 mm/kasan/common.c:493
+ kmem_cache_alloc_trace+0x440/0x924 mm/slub.c:2950
+ kmalloc include/linux/slab.h:563 [inline]
+ kzalloc include/linux/slab.h:675 [inline]
+ perf_event_alloc.part.0+0xb4/0x1350 kernel/events/core.c:11230
+ perf_event_alloc kernel/events/core.c:11733 [inline]
+ __do_sys_perf_event_open kernel/events/core.c:11831 [inline]
+ __se_sys_perf_event_open+0x550/0x15f4 kernel/events/core.c:11723
+ __arm64_sys_perf_event_open+0x6c/0x80 kernel/events/core.c:11723
+ [...]
+
+Freed by task 14445:
+ kasan_save_stack+0x24/0x50 mm/kasan/common.c:48
+ kasan_set_track+0x24/0x34 mm/kasan/common.c:56
+ kasan_set_free_info+0x20/0x40 mm/kasan/generic.c:358
+ __kasan_slab_free.part.0+0x11c/0x1b0 mm/kasan/common.c:437
+ __kasan_slab_free mm/kasan/common.c:445 [inline]
+ kasan_slab_free+0x2c/0x40 mm/kasan/common.c:446
+ slab_free_hook mm/slub.c:1569 [inline]
+ slab_free_freelist_hook mm/slub.c:1608 [inline]
+ slab_free mm/slub.c:3179 [inline]
+ kfree+0x12c/0xc10 mm/slub.c:4176
+ perf_event_alloc.part.0+0xa0c/0x1350 kernel/events/core.c:11434
+ perf_event_alloc kernel/events/core.c:11733 [inline]
+ __do_sys_perf_event_open kernel/events/core.c:11831 [inline]
+ __se_sys_perf_event_open+0x550/0x15f4 kernel/events/core.c:11723
+ [...]
+
+Signed-off-by: Li Huafei <lihuafei1@huawei.com>
+---
+ kernel/trace/ftrace.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
+
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index fbf2543111c0..4219cc2a04a6 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -3030,13 +3030,16 @@ int ftrace_shutdown(struct ftrace_ops *ops, int command)
+ 
+ 	if (!command || !ftrace_enabled) {
+ 		/*
+-		 * If these are dynamic or per_cpu ops, they still
+-		 * need their data freed. Since, function tracing is
+-		 * not currently active, we can just free them
+-		 * without synchronizing all CPUs.
++		 * If these are dynamic, they still need their data freed. If
++		 * function tracing is currently active, we neet to synchronize
++		 * all CPUs before we can release them.
+ 		 */
+-		if (ops->flags & FTRACE_OPS_FL_DYNAMIC)
++		if (ops->flags & FTRACE_OPS_FL_DYNAMIC) {
++			if (ftrace_enabled)
++				goto sync_rcu;
++
+ 			goto free_ops;
++		}
+ 
+ 		return 0;
+ 	}
+@@ -3083,6 +3086,7 @@ int ftrace_shutdown(struct ftrace_ops *ops, int command)
+ 	 * ops.
+ 	 */
+ 	if (ops->flags & FTRACE_OPS_FL_DYNAMIC) {
++ sync_rcu:
+ 		/*
+ 		 * We need to do a hard force of sched synchronization.
+ 		 * This is because we use preempt_disable() to do RCU, but
+-- 
+2.17.1
+
