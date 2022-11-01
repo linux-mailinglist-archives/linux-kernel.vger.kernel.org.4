@@ -2,63 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFDED6144E1
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 08:05:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 116E76144F2
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 08:17:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiKAHE6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 03:04:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42502 "EHLO
+        id S229549AbiKAHR3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 03:17:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiKAHE4 (ORCPT
+        with ESMTP id S229457AbiKAHR1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 03:04:56 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41C6010B66
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 00:04:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667286295; x=1698822295;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=krP+7HTZhXI4XzFI/mvOb52bDMhAGH76tAHdLqKcV/Q=;
-  b=gu3kNl/r1WrGYXDX8QSezEyahTvrTdgBFFBrlkvlA4M5dGoDxm2o8qvu
-   ZXDdEEK/2zFkJ/cJqqH86peYFP95S3z7W7IwcGXmw7oZYUIYCMkfU3Iwz
-   96Mfh0HHisobVylYEI52r2CuWgCpjsgXBuDjji/tJ2WOUlBF9YmqfZPQ1
-   qCYWE/+T+XwOImxRxeco1b7gq2tXXbnU0HlYq9Wg/fDNc3fDAty9swUqf
-   /9vytI8Gi3518q+ddetNvDS78M/rd04NM3lUa2xfTgu+QAnG1fl6tghnV
-   SeXximKIQjIXA8uCoL4elhre2f1xTAWzK1cquryX2zVgdgtreTvXsVCsq
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="309079451"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="309079451"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 00:04:54 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="702793369"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="702793369"
-Received: from sushilsu-mobl1.amr.corp.intel.com (HELO [10.209.50.146]) ([10.209.50.146])
-  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 00:04:54 -0700
-Message-ID: <6bbbb89b-1339-e5a1-b127-09270327b6c8@intel.com>
-Date:   Tue, 1 Nov 2022 00:04:53 -0700
+        Tue, 1 Nov 2022 03:17:27 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F8313EBD
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 00:17:26 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so2514860pjl.3
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 00:17:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=X151aWAx0oBEk1QziksxFzs+DkRswE3AVquu+T8L8pY=;
+        b=fpArzlG+lKoWhF2A+ZLFuBMFEmn0pPGQvVPPakbZleRlftKjDcjW0XO7wI+GymTmGD
+         WiM475Io3rRtMK+wu99V/J0vYYH8k4IWKElkMB2KkItKkpjFpD46sHNlqa/F9mxDEYSf
+         SdxPRvDQI4v0h8+ea+G6nW5QBxbRwinKBN/ltVIP+uUgPhgEKSkIBNaNf8e3oLUT2s/n
+         mWeF6fa1LsqZGBgEJZNA++monDhWxn0jwQWpJSkuAB/7wxTTithMt+Se46IlRCkuEyKf
+         kmvD9wY1CMbWKeVW8Q9gTJ+5iQ+JPvEtkdrn+LlhXfdMn3KvYBQ5rDc+Wo8EsZDjMTBH
+         Hw3Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=X151aWAx0oBEk1QziksxFzs+DkRswE3AVquu+T8L8pY=;
+        b=YGNojAC87Sf1FE0LztpnhkveulmOJxvgiDWrv4wsimYzox6gFqFmRRvZZgbDskrge9
+         Kp655KbHGIa5btr5bWeOWQxgA9GmamLKg/akwd6VNCzyz6qLuHfOJeCVw3XgboMdg3zM
+         GOW3fjAsvo1FV1QGazivAG8Zn3md2F2J/GSrZ22Vh8I8xMtMLEand7rFSlKZf03MGAkQ
+         QxGrpWwUvvxgdoZ6E4cwOavXvfRl2U+YKC2U7iRjfM8hz7rNXN3jgbMuAi5+3MT0nQa9
+         4YRYyVFWx4myIx8kUPRsYf9gfI0OGW8+SCmVptHemroPlJUV4WqOWbZcY6Db7EQfVEY8
+         vQmQ==
+X-Gm-Message-State: ACrzQf3VT1CadtkCw6OMbMuikqU9qGRCzRsPNUsyEESEuO+6BkxEVa5h
+        +nDctY0qwRk5G0kty0MQCvs8Kg==
+X-Google-Smtp-Source: AMsMyM7Ri3LgG4my6uX6230wfGoU3ezFfydJgC3ChlvBgeQhtoU71SL2HoBb6Vh2CwWhMIJXy4TNIQ==
+X-Received: by 2002:a17:902:7485:b0:17d:5176:fe6e with SMTP id h5-20020a170902748500b0017d5176fe6emr18287907pll.147.1667287045594;
+        Tue, 01 Nov 2022 00:17:25 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-106-210.pa.nsw.optusnet.com.au. [49.181.106.210])
+        by smtp.gmail.com with ESMTPSA id k1-20020a170902c40100b0016c9e5f291bsm5609807plk.111.2022.11.01.00.17.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 00:17:25 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1oplWT-008tcn-Sm; Tue, 01 Nov 2022 18:17:21 +1100
+Date:   Tue, 1 Nov 2022 18:17:21 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     Zhaoyang Huang <huangzhaoyang@gmail.com>,
+        "zhaoyang.huang" <zhaoyang.huang@unisoc.com>,
+        Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, ke.wang@unisoc.com,
+        steve.kang@unisoc.com, baocong.liu@unisoc.com,
+        linux-fsdevel@vger.kernel.org
+Subject: Re: [RFC PATCH] mm: move xa forward when run across zombie page
+Message-ID: <20221101071721.GV2703033@dread.disaster.area>
+References: <1665725448-31439-1-git-send-email-zhaoyang.huang@unisoc.com>
+ <Y0lSChlclGPkwTeA@casper.infradead.org>
+ <CAGWkznG=_A-3A8JCJEoWXVcx+LUNH=gvXjLpZZs0cRX4dhUJfQ@mail.gmail.com>
+ <Y017BeC64GDb3Kg7@casper.infradead.org>
+ <CAGWkznEdtGPPZkHrq6Y_+XLL37w12aC8XN8R_Q-vhq48rFhkSA@mail.gmail.com>
+ <Y04Y3RNq6D2T9rVw@casper.infradead.org>
+ <20221018223042.GJ2703033@dread.disaster.area>
+ <Y1AWXiJdyjdLmO1E@casper.infradead.org>
+ <20221019220424.GO2703033@dread.disaster.area>
+ <Y1HDDu3UV0L3cDwE@casper.infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v2] selftests/x86: add "ffff8" -- kernel memory scanner
-Content-Language: en-US
-To:     Alexey Dobriyan <adobriyan@gmail.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        linux-kernel@vger.kernel.org, x86@kernel.org
-References: <Y1wunXB2iv0QHr22@p183>
- <84E9CFF2-760D-4A5D-9B19-11CA804E1FE8@zytor.com> <Y11h+mbtSEEwHKRZ@p183>
- <429982ba-e06f-e76b-061c-39db67558aa5@intel.com> <Y2DAk9zKYG9hT/Ov@p183>
-From:   Dave Hansen <dave.hansen@intel.com>
-In-Reply-To: <Y2DAk9zKYG9hT/Ov@p183>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1HDDu3UV0L3cDwE@casper.infradead.org>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -66,43 +86,148 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/31/22 23:45, Alexey Dobriyan wrote:
-> On Mon, Oct 31, 2022 at 02:37:43PM -0700, Dave Hansen wrote:
->> On 10/29/22 10:25, Alexey Dobriyan wrote:
->>> 	$ ./ffff8_64 -h
->>> 	usage: ./ffff8_64 [-f] [-r] [-n N] [-s S]
->>> 	        -f: sequential scan
->>> 	        -r: random scan (default)
->>> 	        -n: use N threads (default: $(nproc))
->>> 	        -s: lowest address shift (default: 47)
->>> 	        -t: time to run (default: 256 seconds)
->> Does this mean that if someone is just running all kernel selftests,
->> they need to wait for 256 seconds for this to finish?
-> Yes. But low time will cover negligible amount of address space.
+On Thu, Oct 20, 2022 at 10:52:14PM +0100, Matthew Wilcox wrote:
+> On Thu, Oct 20, 2022 at 09:04:24AM +1100, Dave Chinner wrote:
+> > On Wed, Oct 19, 2022 at 04:23:10PM +0100, Matthew Wilcox wrote:
+> > > On Wed, Oct 19, 2022 at 09:30:42AM +1100, Dave Chinner wrote:
+> > > > This is reading and writing the same amount of file data at the
+> > > > application level, but once the data has been written and kicked out
+> > > > of the page cache it seems to require an awful lot more read IO to
+> > > > get it back to the application. i.e. this looks like mmap() is
+> > > > readahead thrashing severely, and eventually it livelocks with this
+> > > > sort of report:
+> > > > 
+> > > > [175901.982484] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+> > > > [175901.985095] rcu:    Tasks blocked on level-1 rcu_node (CPUs 0-15): P25728
+> > > > [175901.987996]         (detected by 0, t=97399871 jiffies, g=15891025, q=1972622 ncpus=32)
+> > > > [175901.991698] task:test_write      state:R  running task     stack:12784 pid:25728 ppid: 25696 flags:0x00004002
+> > > > [175901.995614] Call Trace:
+> > > > [175901.996090]  <TASK>
+> > > > [175901.996594]  ? __schedule+0x301/0xa30
+> > > > [175901.997411]  ? sysvec_apic_timer_interrupt+0xb/0x90
+> > > > [175901.998513]  ? sysvec_apic_timer_interrupt+0xb/0x90
+> > > > [175901.999578]  ? asm_sysvec_apic_timer_interrupt+0x16/0x20
+> > > > [175902.000714]  ? xas_start+0x53/0xc0
+> > > > [175902.001484]  ? xas_load+0x24/0xa0
+> > > > [175902.002208]  ? xas_load+0x5/0xa0
+> > > > [175902.002878]  ? __filemap_get_folio+0x87/0x340
+> > > > [175902.003823]  ? filemap_fault+0x139/0x8d0
+> > > > [175902.004693]  ? __do_fault+0x31/0x1d0
+> > > > [175902.005372]  ? __handle_mm_fault+0xda9/0x17d0
+> > > > [175902.006213]  ? handle_mm_fault+0xd0/0x2a0
+> > > > [175902.006998]  ? exc_page_fault+0x1d9/0x810
+> > > > [175902.007789]  ? asm_exc_page_fault+0x22/0x30
+> > > > [175902.008613]  </TASK>
+> > > > 
+> > > > Given that filemap_fault on XFS is probably trying to map large
+> > > > folios, I do wonder if this is a result of some kind of race with
+> > > > teardown of a large folio...
+> > > 
+> > > It doesn't matter whether we're trying to map a large folio; it
+> > > matters whether a large folio was previously created in the cache.
+> > > Through the magic of readahead, it may well have been.  I suspect
+> > > it's not teardown of a large folio, but splitting.  Removing a
+> > > page from the page cache stores to the pointer in the XArray
+> > > first (either NULL or a shadow entry), then decrements the refcount.
+> > > 
+> > > We must be observing a frozen folio.  There are a number of places
+> > > in the MM which freeze a folio, but the obvious one is splitting.
+> > > That looks like this:
+> > > 
+> > >         local_irq_disable();
+> > >         if (mapping) {
+> > >                 xas_lock(&xas);
+> > > (...)
+> > >         if (folio_ref_freeze(folio, 1 + extra_pins)) {
+> > 
+> > But the lookup is not doing anything to prevent the split on the
+> > frozen page from making progress, right? It's not holding any folio
+> > references, and it's not holding the mapping tree lock, either. So
+> > how does the lookup in progress prevent the page split from making
+> > progress?
 > 
-> Is there some kind of policy to not do this? LTP surely has similar
-> tests for races.
+> My thinking was that it keeps hammering the ->refcount field in
+> struct folio.  That might prevent a thread on a different socket
+> from making forward progress.  In contrast, spinlocks are designed
+> to be fair under contention, so by spinning on an actual lock, we'd
+> remove contention on the folio.
+> 
+> But I think the tests you've done refute that theory.  I'm all out of
+> ideas at the moment.  Either we have a frozen folio from somebody who
+> doesn't hold the lock, or we have someone who's left a frozen folio in
+> the page cache.  I'm leaning towards that explanation at the moment,
+> but I don't have a good suggestion for debugging.
 
-There's no written policy that I know of.  But, right now, the entirety
-of the x86 selftests will run in a second or two.  It's actually
-something I run in a loop to stress the entry/exit paths when I'm
-messing with them.  Something silly like this:
+It's something else. I got gdb attached to qemu and single stepped
+the looping lookup. The context I caught this time is truncate after
+unlink:
 
-	for i in *_32 *_64; do ./$i; done
+(gdb) bt
+#0  find_get_entry (mark=<optimized out>, max=<optimized out>, xas=<optimized out>) at mm/filemap.c:2014
+#1  find_lock_entries (mapping=mapping@entry=0xffff8882445e2118, start=start@entry=25089, end=end@entry=18446744073709551614, 
+    fbatch=fbatch@entry=0xffffc900082a7dd8, indices=indices@entry=0xffffc900082a7d60) at mm/filemap.c:2095
+#2  0xffffffff8128f024 in truncate_inode_pages_range (mapping=mapping@entry=0xffff8882445e2118, lstart=lstart@entry=0, lend=lend@entry=-1)
+    at mm/truncate.c:364
+#3  0xffffffff8128f452 in truncate_inode_pages (lstart=0, mapping=0xffff8882445e2118) at mm/truncate.c:452
+#4  0xffffffff8136335d in evict (inode=inode@entry=0xffff8882445e1f78) at fs/inode.c:666
+#5  0xffffffff813636cc in iput_final (inode=0xffff8882445e1f78) at fs/inode.c:1747
+#6  0xffffffff81355b8b in do_unlinkat (dfd=dfd@entry=10, name=0xffff88834170e000) at fs/namei.c:4326
+#7  0xffffffff81355cc3 in __do_sys_unlinkat (flag=<optimized out>, pathname=<optimized out>, dfd=<optimized out>) at fs/namei.c:4362
+#8  __se_sys_unlinkat (flag=<optimized out>, pathname=<optimized out>, dfd=<optimized out>) at fs/namei.c:4355
+#9  __x64_sys_unlinkat (regs=<optimized out>) at fs/namei.c:4355
+#10 0xffffffff81e92e35 in do_syscall_x64 (nr=<optimized out>, regs=0xffffc900082a7f58) at arch/x86/entry/common.c:50
+#11 do_syscall_64 (regs=0xffffc900082a7f58, nr=<optimized out>) at arch/x86/entry/common.c:80
+#12 0xffffffff82000087 in entry_SYSCALL_64 () at arch/x86/entry/entry_64.S:120
+#13 0x0000000000000000 in ?? ()
 
-Just picking a number out of thin air, I'd say that running for a couple
-of seconds, like 2 is fine by default for any one tests.  Longer than
-that, and it'll be out of whack with all the other x86 selftests.  If
-it's 256 seconds, it just won't get run.
+The find_lock_entries() call is being asked to start at index
+25089, and we are spinning on a folio we find because
+folio_try_get_rcu(folio) is failing - the folio ref count is zero.
 
-Yes, a single run will not have as much coverage, but a lot of people
-run those tests (think 0day) and some folks run them a *lot*, like how I
-run them in a loop.
+The xas state on lookup is:
 
-The MPX selftest that was in there was in a similar situation.  It
-*could* run for a long, long time and that helped because address
-randomization would eventually help find some of the nastier corner
-cases.  But, it was limited to a few seconds.
+(gdb) p *xas
+$6 = {xa = 0xffff8882445e2120, xa_index = 25092, xa_shift = 0 '\000', xa_sibs = 0 '\000', xa_offset = 4 '\004', xa_pad = 0 '\000', 
+  xa_node = 0xffff888144c15918, xa_alloc = 0x0 <fixed_percpu_data>, xa_update = 0x0 <fixed_percpu_data>, xa_lru = 0x0 <fixed_percpu_data>
 
-I really think we should stick to just a few seconds at most for any
-individual test.
+indicating that we are trying to look up index 25092 (3 pages
+further in than the start of the batch), and the folio that this
+keeps returning is this:
+
+(gdb) p *folio
+$7 = {{{flags = 24769796876795904, {lru = {next = 0xffffea0005690008, prev = 0xffff88823ffd5f50}, {__filler = 0xffffea0005690008, 
+          mlock_count = 1073569616}}, mapping = 0x0 <fixed_percpu_data>, index = 18688, private = 0x8 <fixed_percpu_data+8>, _mapcount = {
+        counter = -129}, _refcount = {counter = 0}, memcg_data = 0}, page = {flags = 24769796876795904, {{{lru = {next = 0xffffea0005690008, 
+              prev = 0xffff88823ffd5f50}, {__filler = 0xffffea0005690008, mlock_count = 1073569616}, buddy_list = {
+              next = 0xffffea0005690008, prev = 0xffff88823ffd5f50}, pcp_list = {next = 0xffffea0005690008, prev = 0xffff88823ffd5f50}}, 
+          mapping = 0x0 <fixed_percpu_data>, index = 18688, private = 8}, {pp_magic = 18446719884544507912, pp = 0xffff88823ffd5f50, 
+          _pp_mapping_pad = 0, dma_addr = 18688, {dma_addr_upper = 8, pp_frag_count = {counter = 8}}}, {
+          compound_head = 18446719884544507912, compound_dtor = 80 'P', compound_order = 95 '_', compound_mapcount = {counter = -30590}, 
+          compound_pincount = {counter = 0}, compound_nr = 0}, {_compound_pad_1 = 18446719884544507912, 
+          _compound_pad_2 = 18446612691733536592, deferred_list = {next = 0x0 <fixed_percpu_data>, 
+            prev = 0x4900 <irq_stack_backing_store+10496>}}, {_pt_pad_1 = 18446719884544507912, pmd_huge_pte = 0xffff88823ffd5f50, 
+          _pt_pad_2 = 0, {pt_mm = 0x4900 <irq_stack_backing_store+10496>, pt_frag_refcount = {counter = 18688}}, 
+          ptl = 0x8 <fixed_percpu_data+8>}, {pgmap = 0xffffea0005690008, zone_device_data = 0xffff88823ffd5f50}, callback_head = {
+          next = 0xffffea0005690008, func = 0xffff88823ffd5f50}}, {_mapcount = {counter = -129}, page_type = 4294967167}, _refcount = {
+        counter = 0}, memcg_data = 0}}, _flags_1 = 24769796876795904, __head = 0, _folio_dtor = 3 '\003', _folio_order = 8 '\b', 
+  _total_mapcount = {counter = -1}, _pincount = {counter = 0}, _folio_nr_pages = 0}
+(gdb)
+
+The folio has a NULL mapping, and an index of 18688, which means
+even if it was not a folio that has been invalidated or freed, the
+index is way outside the range we are looking for.
+
+If I step it round the lookup loop, xas does not change, and the
+same folio is returned every time through the loop. Perhaps
+the mapping tree itself might be corrupt???
+
+It's simple enough to stop the machine once it has become stuck to
+observe the iteration and dump structures, just tell me what you
+need to know from here...
+
+Cheers,
+
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
