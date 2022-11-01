@@ -2,148 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 930CE614CC9
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 15:39:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E52D614CFC
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 15:46:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230331AbiKAOjI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 10:39:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52506 "EHLO
+        id S230369AbiKAOqn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 10:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229717AbiKAOjE (ORCPT
+        with ESMTP id S230071AbiKAOqe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 10:39:04 -0400
-Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA57120B8;
-        Tue,  1 Nov 2022 07:39:03 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045192;MF=chentao.kernel@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VTjllex_1667313533;
-Received: from VM20210331-5.tbsite.net(mailfrom:chentao.kernel@linux.alibaba.com fp:SMTPD_---0VTjllex_1667313533)
-          by smtp.aliyun-inc.com;
-          Tue, 01 Nov 2022 22:39:00 +0800
-From:   Tao Chen <chentao.kernel@linux.alibaba.com>
-To:     Quentin Monnet <quentin@isovalent.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Tao Chen <chentao.kernel@linux.alibaba.com>
-Subject: [PATCH] bpftool: Support use full prog name in prog subcommand
-Date:   Tue,  1 Nov 2022 22:38:33 +0800
-Message-Id: <c26d1dde6d1665a9195b054e5fd209a32c94e490.1667313454.git.chentao.kernel@linux.alibaba.com>
-X-Mailer: git-send-email 2.2.1
-In-Reply-To: <c26d1dde6d1665a9195b054e5fd209a32c94e490.1667313454.git.chentao.kernel@linux.alibaba.com>
-References: <c26d1dde6d1665a9195b054e5fd209a32c94e490.1667313454.git.chentao.kernel@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
-        version=3.4.6
+        Tue, 1 Nov 2022 10:46:34 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F772175B7
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 07:46:33 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667313993; x=1698849993;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=9r7bV7THRZ3zvbuzv5WUUyGnoPxnVYn+rhpH3ErFd/c=;
+  b=mdbZfsF0LYgL7fmG+sfgijsTBHAPBGUyvUHI+uyvMJlWL3w/zHX2/JPz
+   RCdTyexnRql5EFh420nx5KmV5Nxp0s/NBSXK0/F1lYTrXTdo8ep7z6eAb
+   OaNx6p/SUnuR5YYxhEH9Fcv6sh7FsYSMAECQQWK+KYXT3Ruz1wZ2jJ/2j
+   s7hJmf5bKBsKZEFzT2b90K8+8swZmlCe4NwHoBIghXLNoH+QmdnG2nfda
+   YJR26z/hoIYqkh6k6D1w0Xpf3XNakjxXF/AoZ3OrvpOhqwHfhIzzyu2Im
+   VMG9BZ1xnDq9t8G+JYU7zzLS9yJD7lHDBs2Q2w5HXtbNYKkFr72dTKC5A
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="395460865"
+X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
+   d="scan'208";a="395460865"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 07:40:42 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="759193494"
+X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
+   d="scan'208";a="759193494"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga004.jf.intel.com with ESMTP; 01 Nov 2022 07:40:39 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1opsRS-005dFp-0o;
+        Tue, 01 Nov 2022 16:40:38 +0200
+Date:   Tue, 1 Nov 2022 16:40:37 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Petr Mladek <pmladek@suse.com>
+Cc:     linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>,
+        Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH v1 1/1] test_printf: Refactor fwnode_pointer() to make it
+ more readable
+Message-ID: <Y2Ev5RgFvw8WyM6g@smile.fi.intel.com>
+References: <20220824170542.18263-1-andriy.shevchenko@linux.intel.com>
+ <Yw9tTD1Qt6LG25bX@smile.fi.intel.com>
+ <Y2EYrIHe8sQwT4ko@alley>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2EYrIHe8sQwT4ko@alley>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that the commit: <b662000aff84> ("bpftool: Adding support for BTF
-program names") supported show the full prog name, we can also use
-the full prog name more than 16 (BPF_OBJ_NAME_LEN) chars in prog
-subcommand, such as "bpftool prog show name PROG_NAME".
+On Tue, Nov 01, 2022 at 02:01:32PM +0100, Petr Mladek wrote:
+> On Wed 2022-08-31 17:16:44, Andy Shevchenko wrote:
+> > On Wed, Aug 24, 2022 at 08:05:42PM +0300, Andy Shevchenko wrote:
+> > > Converting fwnode_pointer() to use better swnode API allows to
+> > > make code more readable.
+> > > 
+> > > While at it, rename full_name to full_name_third to show exact
+> > > relation in the hierarchy.
+> > 
+> > Any comments?
+> > 
+> > Note, I would like to reduce exported swnode APIs and this will
+> > help to do so.
+> 
+> JFYI, I have just pushed the patch into printk/linux.git, branch
+> for-6.2.
 
-Signed-off-by: Tao Chen <chentao.kernel@linux.alibaba.com>
----
- tools/bpf/bpftool/common.c | 48 ++++++++++++++++++++++++++++++++++++++--------
- 1 file changed, 40 insertions(+), 8 deletions(-)
+Thank you!
 
-diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
-index 067e9ea..5efdedc 100644
---- a/tools/bpf/bpftool/common.c
-+++ b/tools/bpf/bpftool/common.c
-@@ -720,6 +720,40 @@ print_all_levels(__maybe_unused enum libbpf_print_level level,
- 	return vfprintf(stderr, format, args);
- }
- 
-+static bool is_invalid_prog(char *nametag, struct bpf_prog_info *info,
-+				struct bpf_func_info *finfo, bool tag)
-+{
-+	const struct btf *prog_btf;
-+	const struct btf_type *func_type;
-+	const char *name;
-+
-+	if (tag)
-+		return memcmp(nametag, info->tag, BPF_TAG_SIZE);
-+
-+	if (strlen(nametag) < BPF_OBJ_NAME_LEN)
-+		return strncmp(nametag, info->name, BPF_OBJ_NAME_LEN);
-+
-+	prog_btf = btf__load_from_kernel_by_id(info->btf_id);
-+	if (!prog_btf) {
-+		p_err("get prog btf failed, btf_id:%u\n", info->btf_id);
-+		return true;
-+	}
-+
-+	func_type = btf__type_by_id(prog_btf, finfo->type_id);
-+	if (!func_type || !btf_is_func(func_type)) {
-+		p_err("func type invalid, type_id:%u\n", finfo->type_id);
-+		return true;
-+	}
-+
-+	name = btf__name_by_offset(prog_btf, func_type->name_off);
-+	if (!name) {
-+		p_err("func name invalid, name_off:%u\n", func_type->name_off);
-+		return true;
-+	}
-+
-+	return strncmp(nametag, name, strlen(name));
-+}
-+
- static int prog_fd_by_nametag(void *nametag, int **fds, bool tag)
- {
- 	unsigned int id = 0;
-@@ -729,6 +763,7 @@ static int prog_fd_by_nametag(void *nametag, int **fds, bool tag)
- 
- 	while (true) {
- 		struct bpf_prog_info info = {};
-+		struct bpf_func_info finfo = {};
- 		__u32 len = sizeof(info);
- 
- 		err = bpf_prog_get_next_id(id, &id);
-@@ -747,15 +782,17 @@ static int prog_fd_by_nametag(void *nametag, int **fds, bool tag)
- 			goto err_close_fds;
- 		}
- 
-+		info.nr_func_info = 1;
-+		info.func_info_rec_size = sizeof(finfo);
-+		info.func_info = ptr_to_u64(&finfo);
-+
- 		err = bpf_obj_get_info_by_fd(fd, &info, &len);
- 		if (err) {
- 			p_err("can't get prog info (%u): %s",
- 			      id, strerror(errno));
- 			goto err_close_fd;
- 		}
--
--		if ((tag && memcmp(nametag, info.tag, BPF_TAG_SIZE)) ||
--		    (!tag && strncmp(nametag, info.name, BPF_OBJ_NAME_LEN))) {
-+		if (is_invalid_prog(nametag, &info, &finfo, tag)) {
- 			close(fd);
- 			continue;
- 		}
-@@ -818,12 +855,7 @@ int prog_parse_fds(int *argc, char ***argv, int **fds)
- 		char *name;
- 
- 		NEXT_ARGP();
--
- 		name = **argv;
--		if (strlen(name) > BPF_OBJ_NAME_LEN - 1) {
--			p_err("can't parse name");
--			return -1;
--		}
- 		NEXT_ARGP();
- 
- 		return prog_fd_by_nametag(name, fds, false);
+> I am sorry that it took so long. I have got a long backlog of mails
+> to proceed.
+
+No problem.
+
 -- 
-2.2.1
+With Best Regards,
+Andy Shevchenko
+
 
