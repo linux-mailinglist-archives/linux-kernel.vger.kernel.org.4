@@ -2,52 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF186144D3
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 07:52:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1B956144D6
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 07:53:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbiKAGwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 02:52:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38178 "EHLO
+        id S229997AbiKAGxh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 02:53:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39020 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiKAGwk (ORCPT
+        with ESMTP id S229475AbiKAGxc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 02:52:40 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635FC60C4;
-        Mon, 31 Oct 2022 23:52:39 -0700 (PDT)
-Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N1ggR5X28zHvDt;
-        Tue,  1 Nov 2022 14:52:19 +0800 (CST)
-Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
- dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 1 Nov 2022 14:52:08 +0800
-Received: from [10.67.110.237] (10.67.110.237) by
- kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 1 Nov 2022 14:52:07 +0800
-Subject: Re: [PATCH -next] ftrace: Fix use-after-free for dynamic ftrace_ops
-To:     <rostedt@goodmis.org>
-CC:     <mhiramat@kernel.org>, <mark.rutland@arm.com>,
-        <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>
-References: <20221101063748.68490-1-lihuafei1@huawei.com>
-From:   Li Huafei <lihuafei1@huawei.com>
-Message-ID: <0f19ce07-d822-1ca1-3e28-86fb73c348a2@huawei.com>
-Date:   Tue, 1 Nov 2022 14:52:07 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.9.0
+        Tue, 1 Nov 2022 02:53:32 -0400
+Received: from m13101.mail.163.com (m13101.mail.163.com [220.181.13.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 736A59FD9;
+        Mon, 31 Oct 2022 23:53:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=Date:From:Subject:MIME-Version:Message-ID; bh=SlNnA
+        lvkTnpWtXAcanjAnOnlx54H97bCSGPvzO7gD4w=; b=dmJiOHo9WgJid7mNQlID0
+        Bd1H8EOaJwwOVRk9j91veiXbkbqiWhrHR8J1JPAzqbXZumZSIWuSVJXhp2+FUj1p
+        Pje1vfuCK4uZWAGGJhSPQIwr0PCg7pSC7Do2LZuvwviZhihJjZGg8DIDdO9Io2d/
+        IQeFZbW4xna6pENWSoOBqI=
+Received: from slark_xiao$163.com ( [223.104.68.52] ) by
+ ajax-webmail-wmsvr101 (Coremail) ; Tue, 1 Nov 2022 14:52:45 +0800 (CST)
+X-Originating-IP: [223.104.68.52]
+Date:   Tue, 1 Nov 2022 14:52:45 +0800 (CST)
+From:   "Slark Xiao" <slark_xiao@163.com>
+To:     "Greg KH" <gregkh@linuxfoundation.org>,
+        "Manivannan Sadhasivam" <mani@kernel.org>
+Cc:     quic_hemantk@quicinc.com, bhelgaas@google.com,
+        loic.poulain@linaro.org, dnlplm@gmail.com, yonglin.tan@outlook.com,
+        mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re:Re: Re: [PATCH v3] PCI: Add vendor ID for QUECTEL
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20220113(9671e152)
+ Copyright (c) 2002-2022 www.mailtech.cn 163com
+In-Reply-To: <Y2C7uhzVorUrfQA2@kroah.com>
+References: <20221101021052.7532-1-slark_xiao@163.com>
+ <Y2Ckm79PgcTcVVne@kroah.com>
+ <3af61b4.1f11.18431cf918d.Coremail.slark_xiao@163.com>
+ <Y2C7uhzVorUrfQA2@kroah.com>
+X-NTES-SC: AL_QuydBf6Tuk0t4yWeYekWkkcRjuo+UMC0vfgh249fPJs0vSvT2hIyXEBmBnbczcOLNBy0jye6fzZP1MJWdpt/Qr0R5RNYGIvi6+HwhoAdEeAe
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=GBK
 MIME-Version: 1.0
-In-Reply-To: <20221101063748.68490-1-lihuafei1@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.237]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600010.china.huawei.com (7.193.23.86)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Message-ID: <69942131.48d4.18431f6c080.Coremail.slark_xiao@163.com>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: ZcGowAAnLag9wmBjYHWRAA--.41938W
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbCdQysZGBbGAAviwACs0
+X-Coremail-Antispam: 1U5529EdanIXcx71UUUUU7vcSsGvfC2KfnxnUU==
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,129 +60,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The subject prefix was messed up, please ignore this patch. I've resent it:
+CgoKCgpBdCAyMDIyLTExLTAxIDE0OjI0OjU4LCAiR3JlZyBLSCIgPGdyZWdraEBsaW51eGZvdW5k
+YXRpb24ub3JnPiB3cm90ZToKPk9uIFR1ZSwgTm92IDAxLCAyMDIyIGF0IDAyOjA5OjU3UE0gKzA4
+MDAsIFNsYXJrIFhpYW8gd3JvdGU6Cj4+IAo+PiAKPj4gQXQgMjAyMi0xMS0wMSAxMjo0NjoxOSwg
+IkdyZWcgS0giIDxncmVna2hAbGludXhmb3VuZGF0aW9uLm9yZz4gd3JvdGU6Cj4+ID5PbiBUdWUs
+IE5vdiAwMSwgMjAyMiBhdCAxMDoxMDo1MkFNICswODAwLCBTbGFyayBYaWFvIHdyb3RlOgo+PiA+
+PiBuIE1ISSBkcml2ZXIsIHRoZXJlIGFyZSBzb21lIGNvbXBhbmllcycgcHJvZHVjdCBzdGlsbCBk
+byBub3QgaGF2ZSB0aGVpcgo+PiA+PiBvd24gUENJIHZlbmRvciBtYWNyby4gU28gd2UgYWRkIGl0
+IGhlcmUgdG8gbWFrZSB0aGUgY29kZSBuZWF0LiBSZWYgSUQKPj4gPj4gY291bGQgYmUgZm91bmQg
+aW4gbGluayBodHRwczovL3BjaXNpZy5jb20vbWVtYmVyc2hpcC9tZW1iZXItY29tcGFuaWVzLgo+
+PiA+PiAKPj4gPj4gU2lnbmVkLW9mZi1ieTogU2xhcmsgWGlhbyA8c2xhcmtfeGlhb0AxNjMuY29t
+Pgo+PiA+PiAtLS0KPj4gPj4gdjM6IFNlcGFyYXRlIGRpZmZlcmVudCB2ZW5kb3JzIGludG8gZGlm
+ZmVyZW50IHBhdGNoLgo+PiA+PiAKPj4gPj4gdjI6IFVwZGF0ZSB2ZW5kb3IgSUQgdG8gdGhlIHJp
+Z2h0IGxvY2F0aW9uIHNvcnRlZCBieSBudW1lcmljIHZhbHVlLgo+PiA+PiAtLS0KPj4gPj4gIGRy
+aXZlcnMvYnVzL21oaS9ob3N0L3BjaV9nZW5lcmljLmMgfCA2ICsrKy0tLQo+PiA+PiAgaW5jbHVk
+ZS9saW51eC9wY2lfaWRzLmggICAgICAgICAgICB8IDIgKysKPj4gPj4gIDIgZmlsZXMgY2hhbmdl
+ZCwgNSBpbnNlcnRpb25zKCspLCAzIGRlbGV0aW9ucygtKQo+PiA+PiAKPj4gPj4gZGlmZiAtLWdp
+dCBhL2RyaXZlcnMvYnVzL21oaS9ob3N0L3BjaV9nZW5lcmljLmMgYi9kcml2ZXJzL2J1cy9taGkv
+aG9zdC9wY2lfZ2VuZXJpYy5jCj4+ID4+IGluZGV4IGNhYTRjZTI4Y2Y5ZS4uODFhZTljNDljZTJh
+IDEwMDY0NAo+PiA+PiAtLS0gYS9kcml2ZXJzL2J1cy9taGkvaG9zdC9wY2lfZ2VuZXJpYy5jCj4+
+ID4+ICsrKyBiL2RyaXZlcnMvYnVzL21oaS9ob3N0L3BjaV9nZW5lcmljLmMKPj4gPj4gQEAgLTU1
+NSwxMSArNTU1LDExIEBAIHN0YXRpYyBjb25zdCBzdHJ1Y3QgcGNpX2RldmljZV9pZCBtaGlfcGNp
+X2lkX3RhYmxlW10gPSB7Cj4+ID4+ICAJCS5kcml2ZXJfZGF0YSA9IChrZXJuZWxfdWxvbmdfdCkg
+Jm1oaV90ZWxpdF9mbjk5MF9pbmZvIH0sCj4+ID4+ICAJeyBQQ0lfREVWSUNFKFBDSV9WRU5ET1Jf
+SURfUUNPTSwgMHgwMzA4KSwKPj4gPj4gIAkJLmRyaXZlcl9kYXRhID0gKGtlcm5lbF91bG9uZ190
+KSAmbWhpX3Fjb21fc2R4NjVfaW5mbyB9LAo+PiA+PiAtCXsgUENJX0RFVklDRSgweDFlYWMsIDB4
+MTAwMSksIC8qIEVNMTIwUi1HTCAoc2R4MjQpICovCj4+ID4+ICsJeyBQQ0lfREVWSUNFKFBDSV9W
+RU5ET1JfSURfUVVFQ1RFTCwgMHgxMDAxKSwgLyogRU0xMjBSLUdMIChzZHgyNCkgKi8KPj4gPj4g
+IAkJLmRyaXZlcl9kYXRhID0gKGtlcm5lbF91bG9uZ190KSAmbWhpX3F1ZWN0ZWxfZW0xeHhfaW5m
+byB9LAo+PiA+PiAtCXsgUENJX0RFVklDRSgweDFlYWMsIDB4MTAwMiksIC8qIEVNMTYwUi1HTCAo
+c2R4MjQpICovCj4+ID4+ICsJeyBQQ0lfREVWSUNFKFBDSV9WRU5ET1JfSURfUVVFQ1RFTCwgMHgx
+MDAyKSwgLyogRU0xNjBSLUdMIChzZHgyNCkgKi8KPj4gPj4gIAkJLmRyaXZlcl9kYXRhID0gKGtl
+cm5lbF91bG9uZ190KSAmbWhpX3F1ZWN0ZWxfZW0xeHhfaW5mbyB9LAo+PiA+PiAtCXsgUENJX0RF
+VklDRSgweDFlYWMsIDB4MjAwMSksIC8qIEVNMTIwUi1HTCBmb3IgRkNDTCAoc2R4MjQpICovCj4+
+ID4+ICsJeyBQQ0lfREVWSUNFKFBDSV9WRU5ET1JfSURfUVVFQ1RFTCwgMHgyMDAxKSwgLyogRU0x
+MjBSLUdMIGZvciBGQ0NMIChzZHgyNCkgKi8KPj4gPj4gIAkJLmRyaXZlcl9kYXRhID0gKGtlcm5l
+bF91bG9uZ190KSAmbWhpX3F1ZWN0ZWxfZW0xeHhfaW5mbyB9LAo+PiA+PiAgCS8qIFQ5OVcxNzUg
+KHNkeDU1KSwgQm90aCBmb3IgZVNJTSBhbmQgTm9uLWVTSU0gKi8KPj4gPj4gIAl7IFBDSV9ERVZJ
+Q0UoUENJX1ZFTkRPUl9JRF9GT1hDT05OLCAweGUwYWIpLAo+PiA+PiBkaWZmIC0tZ2l0IGEvaW5j
+bHVkZS9saW51eC9wY2lfaWRzLmggYi9pbmNsdWRlL2xpbnV4L3BjaV9pZHMuaAo+PiA+PiBpbmRl
+eCBiMzYyZDkwZWI5YjAuLjNjOTE0NjFiY2ZlNCAxMDA2NDQKPj4gPj4gLS0tIGEvaW5jbHVkZS9s
+aW51eC9wY2lfaWRzLmgKPj4gPj4gKysrIGIvaW5jbHVkZS9saW51eC9wY2lfaWRzLmgKPj4gPj4g
+QEAgLTI1ODUsNiArMjU4NSw4IEBACj4+ID4+ICAjZGVmaW5lIFBDSV9WRU5ET1JfSURfVEVLUkFN
+CQkweDFkZTEKPj4gPj4gICNkZWZpbmUgUENJX0RFVklDRV9JRF9URUtSQU1fREMyOTAJMHhkYzI5
+Cj4+ID4+ICAKPj4gPj4gKyNkZWZpbmUgUENJX1ZFTkRPUl9JRF9RVUVDVEVMCQkweDFlYWMKPj4g
+Pgo+PiA+V2h5IGRpZCB5b3UgaWdub3JlIHRoZSBjb21tZW50IGF0IHRoZSB0b3Agb2YgdGhpcyBm
+aWxlIHNheWluZyB0aGF0IG5ldwo+PiA+ZW50cmllcyBhcmUgbm90IG5lZWRlZCB0byBiZSBhZGRl
+ZCwgZXNwZWNpYWxseSBmb3IganVzdCBvbmUgdXNlcj8KPj4gPgo+PiA+dGhhbmtzLAo+PiA+Cj4+
+ID5ncmVnIGstaAo+PiBIaSBHcmVnLAo+PiAgQWN0dWFsbHkgSSBkaWRuJ3Qgc2VlIHRoaXMgbm90
+aWNlIGJlZm9yZSBjb21taXR0aW5nIHRoaXMgcGF0Y2guIEkgZXZlbiBkaXNjdXNzZWQgCj4+IGl0
+IHdpdGggdGhlIG1haW50YWluZXIgZm9yIHNldmVyYWwgdGltZXMgYW5kIG5vYm9keSBzaG93IG1l
+IHRoaXMgcnVsZS4KPj4gSSBoYXZlIGEgY29uY2Vybiwgc29tZSBJT1QgbW9kdWxlIHZlbmRvcnMs
+IGxpa2UgUVVFQ1RFTCwgQ0lOVEVSSU9OKFRIQUxFUyksCj4+IFNJRVJSQSxST0xMSU5HIGFuZCBz
+byBvbiwgdGhleSBvbmx5IHByb2R1Y2UgSU9UIG1vZHVsZXMgd2l0aG91dCBvdGhlciAKPj4gaGFy
+ZHdhcmUgd2l0aCBQQ0llICBpbnRlcmZhY2UsIGFuZCB0aGV5IGFwcGxpZWQgZm9yIHRoZWlyIG93
+biBWSUQuIEJ1dCB0aGV5Cj4+IGNhbid0IGdldCBhIHRoZWlyIG93biBWRU5ET1IgTUFSQ08/IFRo
+aXMgc2VlbXMgdW5yZWFzb25hYmxlLgo+PiBUaGlzIGNoYW5nZSBzaG91bGQgYmUgaGFybWxlc3Mg
+YW5kICBtYWtlIHRoZSBjb2RlIG5lYXQuCj4+IFRoaXMgaXMgbXkgb3Bpbmlvbi4KPgo+SXQgY2F1
+c2VzIGEgX0xPVF8gb2YgY2h1cm4gYW5kIG1lcmdlIGlzc3VlcyB3aGVuIGV2ZXJ5b25lIGlzIGFk
+ZGluZyBuZXcKPmVudHJpZXMgdG8gYSBzaW5nbGUgZmlsZS4gIFdoaWNoIGlzIHdoeSwgMTUrIHll
+YXJzIGFnbywgd2UgbWFkZSB0aGUKPmRlY2lzaW9uIHRoYXQgaWYgYSB2ZW5kb3Igb3IgZGV2aWNl
+IGlkIGlzIG9ubHkgbmVlZGVkIGluIG9uZSBmaWxlLCB0aGVuCj5pdCBzaG91bGQgbm90IGJlIGFk
+ZGVkIHRvIHRoZSBwY2lfaWRzLmggZmlsZS4KPgo+Tm8gbmVlZCB0byBjaGFuZ2UgdGhhdCBub3cs
+IHBsZWFzZSBqdXN0IHB1dCB0aGUgdmVuZG9yIGlkIGluIHRoZSBzaW5nbGUKPmRyaXZlciB0aGF0
+IGl0IGlzIG5lZWRlZCBpbi4KPgo+dGhhbmtzLAo+Cj5ncmVnIGstaApIaSBHcmVnLApUaGFua3Mg
+Zm9yIHlvdXIgZXhwbGFuYXRpb24uIAoKSGkgTWFuaSwKICBJcyB0aGVyZSBhIG5lZWQgdG8gdXBk
+YXRlIHRoZXNlIHZlbmRvciBpZHMgYXMgbWFjcm8gaW4KcGNpX2dlbmVyaWMuYz8KClRoYW5rcy4K
 
-https://lore.kernel.org/lkml/20221101064146.69551-1-lihuafei1@huawei.com/
-
-Thanks!
-
-On 2022/11/1 14:37, Li Huafei wrote:
-> KASAN reported a use-after-free with ftrace ops [1]. It was found from
-> vmcore that perf had registered two ops with the same content
-> successively, both dynamic. After unregistering the second ops, a
-> use-after-free occurred.
-> 
-> In ftrace_shutdown(), when the second ops is unregistered, the
-> FTRACE_UPDATE_CALLS command is not set because there is another enabled
-> ops with the same content.  Also, both ops are dynamic and the ftrace
-> callback function is ftrace_ops_list_func, so the
-> FTRACE_UPDATE_TRACE_FUNC command will not be set. Eventually the value
-> of 'command' will be 0 and ftrace_shutdown() will skip the rcu
-> synchronization.
-> 
-> However, ftrace may be activated. When the ops is released, another CPU
-> may be accessing the ops.  Add the missing synchronization to fix this
-> problem.
-> 
-> [1]
-> BUG: KASAN: use-after-free in __ftrace_ops_list_func kernel/trace/ftrace.c:7020 [inline]
-> BUG: KASAN: use-after-free in ftrace_ops_list_func+0x2b0/0x31c kernel/trace/ftrace.c:7049
-> Read of size 8 at addr ffff56551965bbc8 by task syz-executor.2/14468
-> 
-> CPU: 1 PID: 14468 Comm: syz-executor.2 Not tainted 5.10.0 #7
-> Hardware name: linux,dummy-virt (DT)
-> Call trace:
->  dump_backtrace+0x0/0x40c arch/arm64/kernel/stacktrace.c:132
->  show_stack+0x30/0x40 arch/arm64/kernel/stacktrace.c:196
->  __dump_stack lib/dump_stack.c:77 [inline]
->  dump_stack+0x1b4/0x248 lib/dump_stack.c:118
->  print_address_description.constprop.0+0x28/0x48c mm/kasan/report.c:387
->  __kasan_report mm/kasan/report.c:547 [inline]
->  kasan_report+0x118/0x210 mm/kasan/report.c:564
->  check_memory_region_inline mm/kasan/generic.c:187 [inline]
->  __asan_load8+0x98/0xc0 mm/kasan/generic.c:253
->  __ftrace_ops_list_func kernel/trace/ftrace.c:7020 [inline]
->  ftrace_ops_list_func+0x2b0/0x31c kernel/trace/ftrace.c:7049
->  ftrace_graph_call+0x0/0x4
->  __might_sleep+0x8/0x100 include/linux/perf_event.h:1170
->  __might_fault mm/memory.c:5183 [inline]
->  __might_fault+0x58/0x70 mm/memory.c:5171
->  do_strncpy_from_user lib/strncpy_from_user.c:41 [inline]
->  strncpy_from_user+0x1f4/0x4b0 lib/strncpy_from_user.c:139
->  getname_flags+0xb0/0x31c fs/namei.c:149
->  getname+0x2c/0x40 fs/namei.c:209
->  [...]
-> 
-> Allocated by task 14445:
->  kasan_save_stack+0x24/0x50 mm/kasan/common.c:48
->  kasan_set_track mm/kasan/common.c:56 [inline]
->  __kasan_kmalloc mm/kasan/common.c:479 [inline]
->  __kasan_kmalloc.constprop.0+0x110/0x13c mm/kasan/common.c:449
->  kasan_kmalloc+0xc/0x14 mm/kasan/common.c:493
->  kmem_cache_alloc_trace+0x440/0x924 mm/slub.c:2950
->  kmalloc include/linux/slab.h:563 [inline]
->  kzalloc include/linux/slab.h:675 [inline]
->  perf_event_alloc.part.0+0xb4/0x1350 kernel/events/core.c:11230
->  perf_event_alloc kernel/events/core.c:11733 [inline]
->  __do_sys_perf_event_open kernel/events/core.c:11831 [inline]
->  __se_sys_perf_event_open+0x550/0x15f4 kernel/events/core.c:11723
->  __arm64_sys_perf_event_open+0x6c/0x80 kernel/events/core.c:11723
->  [...]
-> 
-> Freed by task 14445:
->  kasan_save_stack+0x24/0x50 mm/kasan/common.c:48
->  kasan_set_track+0x24/0x34 mm/kasan/common.c:56
->  kasan_set_free_info+0x20/0x40 mm/kasan/generic.c:358
->  __kasan_slab_free.part.0+0x11c/0x1b0 mm/kasan/common.c:437
->  __kasan_slab_free mm/kasan/common.c:445 [inline]
->  kasan_slab_free+0x2c/0x40 mm/kasan/common.c:446
->  slab_free_hook mm/slub.c:1569 [inline]
->  slab_free_freelist_hook mm/slub.c:1608 [inline]
->  slab_free mm/slub.c:3179 [inline]
->  kfree+0x12c/0xc10 mm/slub.c:4176
->  perf_event_alloc.part.0+0xa0c/0x1350 kernel/events/core.c:11434
->  perf_event_alloc kernel/events/core.c:11733 [inline]
->  __do_sys_perf_event_open kernel/events/core.c:11831 [inline]
->  __se_sys_perf_event_open+0x550/0x15f4 kernel/events/core.c:11723
->  [...]
-> 
-> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
-> ---
->  kernel/trace/ftrace.c | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index fbf2543111c0..4219cc2a04a6 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -3030,13 +3030,16 @@ int ftrace_shutdown(struct ftrace_ops *ops, int command)
->  
->  	if (!command || !ftrace_enabled) {
->  		/*
-> -		 * If these are dynamic or per_cpu ops, they still
-> -		 * need their data freed. Since, function tracing is
-> -		 * not currently active, we can just free them
-> -		 * without synchronizing all CPUs.
-> +		 * If these are dynamic, they still need their data freed. If
-> +		 * function tracing is currently active, we neet to synchronize
-> +		 * all CPUs before we can release them.
->  		 */
-> -		if (ops->flags & FTRACE_OPS_FL_DYNAMIC)
-> +		if (ops->flags & FTRACE_OPS_FL_DYNAMIC) {
-> +			if (ftrace_enabled)
-> +				goto sync_rcu;
-> +
->  			goto free_ops;
-> +		}
->  
->  		return 0;
->  	}
-> @@ -3083,6 +3086,7 @@ int ftrace_shutdown(struct ftrace_ops *ops, int command)
->  	 * ops.
->  	 */
->  	if (ops->flags & FTRACE_OPS_FL_DYNAMIC) {
-> + sync_rcu:
->  		/*
->  		 * We need to do a hard force of sched synchronization.
->  		 * This is because we use preempt_disable() to do RCU, but
-> 
