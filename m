@@ -2,90 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41B51614D7C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 15:58:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AFC1614D91
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 15:59:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbiKAO6S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 10:58:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40450 "EHLO
+        id S230313AbiKAO7K (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 10:59:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231153AbiKAO5R (ORCPT
+        with ESMTP id S231204AbiKAO63 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 10:57:17 -0400
-Received: from mail-qv1-xf2f.google.com (mail-qv1-xf2f.google.com [IPv6:2607:f8b0:4864:20::f2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4D276436
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 07:56:06 -0700 (PDT)
-Received: by mail-qv1-xf2f.google.com with SMTP id e15so10437537qvo.4
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 07:56:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=91Pi1sgd0zTVujDHIVVyfFUD/3uaMubrRUnbeHfYyeI=;
-        b=fRDx55YIuvo3rjltGc0Bfuid1YLiG8Aj2v7JiRiqgJzNtqOigagNjxgTi21qsG60da
-         31/WYflyGGBailfSZhPkcKHnpIxsjqw2a3iGIpSm4W+/bbNxaUb2YWfRLLkdgGr809Xb
-         02CzHgVQhrhe+wgCBDBoERD+OQgg4VS+9yiPcOkDKlbDQxMP22ISAOLDWfj2frFbw0ug
-         INy4keqNqMCS8mZfnmfKOTKER42HQHw4XM78vqIScoO5ynaqm0jlTxosKb3A1tEyVQj8
-         +D5Wg9WyaCTZRPxRBhBfDjhx62EDu+OGdh+qSj6AIQ97SwpFMX/bM63fFGWsLr7xPPSe
-         NUAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=91Pi1sgd0zTVujDHIVVyfFUD/3uaMubrRUnbeHfYyeI=;
-        b=W9kVZ4vLKn6tx8yuxZUMteAhP4XfDAHOLVxxjflgtf6+L87IGLolgZCGH9Sdyhj3//
-         AKiScIyJ3l9mCFU2RGn4E1cp8rj50rfP57SaYhWb+7sZtIBx4o12S05BxvNK25IWaY9P
-         UW8cfZTZhNNPkL6Kym3G1ywOrRkG4MsMgTSpDFiejAPFkfkdtiG2dQAx1V5u5WP14y6h
-         gvBvmPJqJOvIe+p8N6GShQAB0yJPdnwr6AHAOVl+3IjQv0/yB8gz3U0JOHAXzy/LL44V
-         vKQFYRVCAejIQOwOAUdfNosbwA5FoE1u/Oz88Gy73i9RNwxPZIK6cnI7tNjFAWOyezjA
-         fGiA==
-X-Gm-Message-State: ACrzQf22UtAsWUv449663CkmzLP+eozjNqe9KMCbf2KA8JnniTZJWVNL
-        JaEch0x9eN3i20/tLu1w9pJ4W8cHjfmkjQB5C00=
-X-Google-Smtp-Source: AMsMyM5+VC0MbPsIUuv66pB203xFny42zcAiRVPVoqdEHirqq+IojKHlO94SZEMMAfcULWsc73j3D3FjHaoi+Gs/A4w=
-X-Received: by 2002:ad4:5bac:0:b0:4bb:db4d:b60f with SMTP id
- 12-20020ad45bac000000b004bbdb4db60fmr13176764qvq.105.1667314565724; Tue, 01
- Nov 2022 07:56:05 -0700 (PDT)
+        Tue, 1 Nov 2022 10:58:29 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9F9B1D312;
+        Tue,  1 Nov 2022 07:56:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667314584; x=1698850584;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ymj/jOHbE6XLvUeDMy9nMN43LrVvwx6KJLq+fmcPOf0=;
+  b=U1fH3qBfHvfoWwy68Tw8jQDYOyG1PSzPFdGWTKHQTH2/XxVWB/vgbEun
+   31sEBAnI5qZEOZksyN5BKF3Mq+8ef7f5EclN/h6T1utBSjSNoIhYUQ1C1
+   /B9TriiXWhq/l3e4BDBCzRFZe4XcelLWU7MDR/svUJ7X7pjcy5d+8d+jI
+   Mh3ZTl3mzwac/eSeBajTbfb6IomScgsEPOc5yFhrBBaUyiZJTHcm1M74Q
+   W0N1y1IfzGsvgJxuqm4L4EolvU3Yfcx+W1kjL4L18bQ/k9EJq28rLYVv8
+   8pEat5Sbl0hgkZigBoYF4GZVMkkJOAPxhyKp9STHaHECnzrHtgMcywZcy
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="310860962"
+X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
+   d="scan'208";a="310860962"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 07:56:11 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="636423228"
+X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
+   d="scan'208";a="636423228"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 01 Nov 2022 07:56:06 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1opsgO-005dZF-04;
+        Tue, 01 Nov 2022 16:56:04 +0200
+Date:   Tue, 1 Nov 2022 16:56:03 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Weilong Chen <chenweilong@huawei.com>
+Cc:     yangyicong@hisilicon.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, wsa@kernel.org,
+        f.fainelli@gmail.com, jarkko.nikula@linux.intel.com,
+        jdelvare@suse.de, william.zhang@broadcom.com, jsd@semihalf.com,
+        conor.dooley@microchip.com, phil.edworthy@renesas.com,
+        tharunkumar.pasumarthi@microchip.com, semen.protsenko@linaro.org,
+        kfting@nuvoton.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH next v10 1/2] i2c: hisi: Add initial device tree support
+Message-ID: <Y2Ezg2TYeIsxUYxW@smile.fi.intel.com>
+References: <20221101080728.143639-1-chenweilong@huawei.com>
 MIME-Version: 1.0
-References: <cover.1667305446.git.tanjubrunostar0@gmail.com>
- <ea25c687d28f5cf40c315b8191d98fa0608f8a76.1667305446.git.tanjubrunostar0@gmail.com>
- <ea1476128e2f21956ad99e52b01f0c99f46e70ba.camel@perches.com>
-In-Reply-To: <ea1476128e2f21956ad99e52b01f0c99f46e70ba.camel@perches.com>
-From:   Tanju Brunostar <tanjubrunostar0@gmail.com>
-Date:   Tue, 1 Nov 2022 15:55:54 +0100
-Message-ID: <CAHJEyKXhEGnFRfdv5xSQeEp4bTS4FsvU9oU=hfeuUdYVaovWHQ@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] change the function name s_vFillRTSHead
-To:     Joe Perches <joe@perches.com>
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221101080728.143639-1-chenweilong@huawei.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 1, 2022 at 2:32 PM Joe Perches <joe@perches.com> wrote:
->
-> On Tue, 2022-11-01 at 12:37 +0000, Tanjuate Brunostar wrote:
-> > Remove the use of Hungarian notation, which is not used in the Linux
-> > kernel. Reported by checkpatch
-> []
-> > diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
-> []
-> > @@ -23,7 +23,7 @@
-> >   *      s_uGetTxRsvTime- get frame reserved time
-> >   *      s_vFillCTSHead- fulfill CTS ctl header
-> >   *      s_vFillFragParameter- Set fragment ctl parameter.
-> > - *      s_vFillRTSHead- fulfill RTS ctl header
-> > + *      fill_rts_head- fulfill RTS ctl header
->
-> Perhaps use header as head is conventionally used in lists.
->
->         fill_rts_header
->
-OK, thanks
+On Tue, Nov 01, 2022 at 04:07:27PM +0800, Weilong Chen wrote:
+> The HiSilicon I2C controller can be used on embedded platform, which
+> boot from devicetree.
+
+Thanks, This version LGTM,
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+> Acked-by: Yicong Yang <yangyicong@hisilicon.com>
+> ---
+> Change since v9:
+> - Drop wrong use ACPI_PTR/of_match_ptr
+> Link: https://lore.kernel.org/lkml/dfc1c006-61c0-8f28-6164-060347c69d04@huawei.com/T/
+> 
+>  drivers/i2c/busses/Kconfig    | 2 +-
+>  drivers/i2c/busses/i2c-hisi.c | 7 +++++++
+>  2 files changed, 8 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/i2c/busses/Kconfig b/drivers/i2c/busses/Kconfig
+> index e50f9603d189..a7bfddf08fa7 100644
+> --- a/drivers/i2c/busses/Kconfig
+> +++ b/drivers/i2c/busses/Kconfig
+> @@ -673,7 +673,7 @@ config I2C_HIGHLANDER
+>  
+>  config I2C_HISI
+>  	tristate "HiSilicon I2C controller"
+> -	depends on (ARM64 && ACPI) || COMPILE_TEST
+> +	depends on ARM64 || COMPILE_TEST
+>  	help
+>  	  Say Y here if you want to have Hisilicon I2C controller support
+>  	  available on the Kunpeng Server.
+> diff --git a/drivers/i2c/busses/i2c-hisi.c b/drivers/i2c/busses/i2c-hisi.c
+> index 76c3d8f6fc3c..bcc97e4fcb65 100644
+> --- a/drivers/i2c/busses/i2c-hisi.c
+> +++ b/drivers/i2c/busses/i2c-hisi.c
+> @@ -489,11 +489,18 @@ static const struct acpi_device_id hisi_i2c_acpi_ids[] = {
+>  };
+>  MODULE_DEVICE_TABLE(acpi, hisi_i2c_acpi_ids);
+>  
+> +static const struct of_device_id hisi_i2c_dts_ids[] = {
+> +	{ .compatible = "hisilicon,ascend910-i2c", },
+> +	{ }
+> +};
+> +MODULE_DEVICE_TABLE(of, hisi_i2c_dts_ids);
+> +
+>  static struct platform_driver hisi_i2c_driver = {
+>  	.probe		= hisi_i2c_probe,
+>  	.driver		= {
+>  		.name	= "hisi-i2c",
+>  		.acpi_match_table = hisi_i2c_acpi_ids,
+> +		.of_match_table = hisi_i2c_dts_ids,
+>  	},
+>  };
+>  module_platform_driver(hisi_i2c_driver);
+> -- 
+> 2.31.GIT
+> 
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
