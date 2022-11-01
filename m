@@ -2,98 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DBDE4614BC5
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:30:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2600F614BCC
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:32:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbiKANaA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 09:30:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57512 "EHLO
+        id S229770AbiKANcX convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 1 Nov 2022 09:32:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229940AbiKAN3x (ORCPT
+        with ESMTP id S229452AbiKANcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 09:29:53 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51B3715823;
-        Tue,  1 Nov 2022 06:29:53 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E1C9461230;
-        Tue,  1 Nov 2022 13:29:52 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B84BC433C1;
-        Tue,  1 Nov 2022 13:29:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667309392;
-        bh=wgF15WbJ4A+wAddVowTV506/Nopb/uRZ9KyWYptTzhA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=pl5ABAXDmGEeIsqlW28nJu7jlaPPfuI+ZvKmmel1BPJawCqB/s/+XBYfrltusPp+E
-         15lGgJvKyF4FeCtf9ukMM9Qpcfcz7FvUDS8qbGu8pmL9S7eDixDq24s0JgX8Tdh43w
-         q90lAg3ujLB4bIfKIH21TCnwrVQ1KalpAu/zOBvY=
-Date:   Tue, 1 Nov 2022 14:30:45 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-Cc:     stable@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@denx.de>,
-        Biju Das <biju.das.jz@bp.renesas.com>
-Subject: Re: [PATCH] Documentation: process: Describe kernel version prefix
- for third option
-Message-ID: <Y2EfhWxk0j/oVLJx@kroah.com>
-References: <20221101131743.371340-1-bagasdotme@gmail.com>
+        Tue, 1 Nov 2022 09:32:21 -0400
+Received: from relay.hostedemail.com (smtprelay0010.hostedemail.com [216.40.44.10])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E63CD1AD8F
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 06:32:20 -0700 (PDT)
+Received: from omf13.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay08.hostedemail.com (Postfix) with ESMTP id 73062140A19;
+        Tue,  1 Nov 2022 13:32:19 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf13.hostedemail.com (Postfix) with ESMTPA id A231B20010;
+        Tue,  1 Nov 2022 13:31:27 +0000 (UTC)
+Message-ID: <ea1476128e2f21956ad99e52b01f0c99f46e70ba.camel@perches.com>
+Subject: Re: [PATCH v2 1/2] change the function name s_vFillRTSHead
+From:   Joe Perches <joe@perches.com>
+To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Date:   Tue, 01 Nov 2022 06:32:15 -0700
+In-Reply-To: <ea25c687d28f5cf40c315b8191d98fa0608f8a76.1667305446.git.tanjubrunostar0@gmail.com>
+References: <cover.1667305446.git.tanjubrunostar0@gmail.com>
+         <ea25c687d28f5cf40c315b8191d98fa0608f8a76.1667305446.git.tanjubrunostar0@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221101131743.371340-1-bagasdotme@gmail.com>
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_NONE,UNPARSEABLE_RELAY autolearn=no autolearn_force=no
+        version=3.4.6
+X-Stat-Signature: bqygm3jsbejrzbgd6drrra7iuu8fj6wi
+X-Rspamd-Server: rspamout01
+X-Rspamd-Queue-Id: A231B20010
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX19vCoHjt09qItJOcQk9xglaTnJ4aqTq5NI=
+X-HE-Tag: 1667309487-134588
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 08:17:43PM +0700, Bagas Sanjaya wrote:
-> The current wording on third option of stable kernel submission doesn't
-> mention how to specify desired kernel version. Submitters reading the
-> documentation could simply send multiple backported patches of the same
-> upstream commit without any kernel version information, leaving stable
-> maintainers and reviewers hard time to figure out the correct kernel
-> version to be applied.
-> 
-> Describe the subject prefix for specifying kernel version for the case
-> above.
-> 
-> Cc: stable@vger.kernel.org
-> Signed-off-by: Bagas Sanjaya <bagasdotme@gmail.com>
-> ---
->  This patch is sent as response to [1].
-> 
->  [1]: https://lore.kernel.org/stable/20221101074351.GA8310@amd/
-> 
->  Documentation/process/stable-kernel-rules.rst | 4 +++-
->  1 file changed, 3 insertions(+), 1 deletion(-)
-> 
-> diff --git a/Documentation/process/stable-kernel-rules.rst b/Documentation/process/stable-kernel-rules.rst
-> index 2fd8aa593a2851..409ae73c1ffcd1 100644
-> --- a/Documentation/process/stable-kernel-rules.rst
-> +++ b/Documentation/process/stable-kernel-rules.rst
-> @@ -77,7 +77,9 @@ Option 3
->  Send the patch, after verifying that it follows the above rules, to
->  stable@vger.kernel.org.  You must note the upstream commit ID in the
->  changelog of your submission, as well as the kernel version you wish
-> -it to be applied to.
-> +it to be applied to by adding desired kernel version number to the
-> +patch subject prefix. For example, patches targeting 5.15 kernel should
-> +have ``[PATCH 5.15]`` prefix.
+On Tue, 2022-11-01 at 12:37 +0000, Tanjuate Brunostar wrote:
+> Remove the use of Hungarian notation, which is not used in the Linux
+> kernel. Reported by checkpatch
+[]
+> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+[]
+> @@ -23,7 +23,7 @@
+>   *      s_uGetTxRsvTime- get frame reserved time
+>   *      s_vFillCTSHead- fulfill CTS ctl header
+>   *      s_vFillFragParameter- Set fragment ctl parameter.
+> - *      s_vFillRTSHead- fulfill RTS ctl header
+> + *      fill_rts_head- fulfill RTS ctl header
 
-No, sorry, this is not needed and does not have to be in the subject
-line at all.
+Perhaps use header as head is conventionally used in lists.
 
-The current wording is fine, it's just that people don't always read it.
+	fill_rts_header
 
-so consider this a NAK.
-
-thanks,
-
-greg k-h-
