@@ -2,127 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9C036143F9
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 05:47:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1615A6143FB
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 05:49:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229740AbiKAEro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 00:47:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33734 "EHLO
+        id S229761AbiKAEte (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 00:49:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiKAErm (ORCPT
+        with ESMTP id S229457AbiKAEtc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 00:47:42 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36AA31740C;
-        Mon, 31 Oct 2022 21:47:41 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C23F861538;
-        Tue,  1 Nov 2022 04:47:40 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5D99C433D6;
-        Tue,  1 Nov 2022 04:47:38 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667278060;
-        bh=X3FkZQ/SbRqslJBljFtz6/3HOfW8eaIKfHU4UjbAKeY=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=xnI3lLFKGbBHWPQs7eVsS3wymsCTMcEXNAEZ/HnP3ie5kIeK0P0T6yK/pCobAB4h6
-         rGZen9aG6EE/TQayi3O/lHIfibJwJ80UBW7el6AL4UZUyekyAZ6BXYZdUReVkif8DA
-         +t27FInFPvlWcJND2RCqvvqZOWhLcWv2uLqyZj1k=
-Date:   Tue, 1 Nov 2022 05:48:29 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Oleksandr Tymoshenko <ovt@google.com>, christophe.leroy@csgroup.eu,
-        davem@davemloft.net, edumazet@google.com,
-        linux-kernel@vger.kernel.org, sashal@kernel.org,
-        stable@vger.kernel.org, w@1wt.eu, llvm@lists.linux.dev
-Subject: Re: [PATCH 5.4 086/255] once: add DO_ONCE_SLOW() for sleepable
- contexts
-Message-ID: <Y2ClHT6FNL+DLfqP@kroah.com>
-References: <20221024113005.376059449@linuxfoundation.org>
- <20221029011211.4049810-1-ovt@google.com>
- <Y2ATiXtpwPxfsOUD@dev-arch.thelio-3990X>
+        Tue, 1 Nov 2022 00:49:32 -0400
+Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F971FD12;
+        Mon, 31 Oct 2022 21:49:31 -0700 (PDT)
+Received: by mail-ej1-x62e.google.com with SMTP id q9so34499892ejd.0;
+        Mon, 31 Oct 2022 21:49:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=7WqRNDbAUlJ0O3/34AOe0TVDEPlr0UlTZFj5VM45W9Q=;
+        b=iYtIw1Eq8dpSU+eEwDdnHE7hg6LUSp40eXnzR9aB7OZrL2moWt+99Mm6bMst7tEP9J
+         ZavOkhBsDRBmNzpMw8FtDfmIx9d5jgx9Hg9LILR7CGNM70EydWvXvKUl/7mi+83/kxOm
+         b1lfPhxaKC1XAzCEtC3aw8R6Yp0MWSFHq9OpLr8CpjWRI5xiekNJsKoI9h08wkWLoGih
+         e5P+9h5hyyqBGq0IxYkYVX8RPN9xLhFW7/BEg14hu8HLFoW9nqTyMGxVIFh9yA05tUPi
+         LtimMo8hHLo4uZcWcYN9XgegcC7mqG8uKGjoLpqoOe9SxVfjRWhRu9JIBEL1qW7TSdFJ
+         Kp7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=7WqRNDbAUlJ0O3/34AOe0TVDEPlr0UlTZFj5VM45W9Q=;
+        b=G2sF6rW7yv7uwX80VaEX2E4+xdoUot8a4FduHiXnXvmPrD2xeLDxUdoeRyS9zRHXFZ
+         xdg6a6JSOwmDVQqO6fabTrYsREV3BrGPc4tMzdr1qFXMCiYTYIVZZBcGcO2Fw9jUQf3Q
+         jn9OVjJco/fvHINVQi4Jt5pTWFilaE9Zio6vhyS7tDQMwrP+2WorRXeLvJp3xEb03dIo
+         H5K20eY7aKbwB7VNNADCZa9VIyGYXNxamtVRx1qfandxtc5SD2kjvmvHoNH0ALZL5yLY
+         sT+sxfHJk+QmhJRlzugWmZJUP7uK5H3o4dstOk6glg3smC66W71BJciKXQBG2Z3xX19H
+         VYkQ==
+X-Gm-Message-State: ACrzQf3PgaHWVPcXckq9oIowQeP0bTelJACBq1MyJGun224HrZ01Krm9
+        DwCzV2NDFNMJ6wVIqqg79WYm8aVRydk=
+X-Google-Smtp-Source: AMsMyM7pHRAEfENB1OAVTQn74jeAN1OqeQnMUo4lZuM/uovIxovpq9/9cvKjgs9e/LJtG+hpPFyskA==
+X-Received: by 2002:a17:907:9627:b0:78d:a7d8:9407 with SMTP id gb39-20020a170907962700b0078da7d89407mr16026062ejc.675.1667278169936;
+        Mon, 31 Oct 2022 21:49:29 -0700 (PDT)
+Received: from pc636 ([155.137.26.201])
+        by smtp.gmail.com with ESMTPSA id 17-20020a170906211100b0078d9b967962sm3780601ejt.65.2022.10.31.21.49.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 21:49:29 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Tue, 1 Nov 2022 05:49:27 +0100
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>,
+        "Paul E. McKenney" <paulmck@kernel.org>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org, kernel-team@fb.com,
+        rostedt@goodmis.org
+Subject: Re: [PATCH rcu 13/14] workqueue: Make queue_rcu_work() use
+ call_rcu_flush()
+Message-ID: <Y2ClV/i9ongBosna@pc636>
+References: <20221024031540.GU5600@paulmck-ThinkPad-P17-Gen-1>
+ <Y1ZtyjxKCcV0Hfjn@pc636>
+ <Y1aDy3maaO39ClSU@pc636>
+ <Y1ahs83258Lok9+O@google.com>
+ <20221024153958.GY5600@paulmck-ThinkPad-P17-Gen-1>
+ <Y1a8ei1h7SzyYZx9@pc636>
+ <20221024164819.GA5600@paulmck-ThinkPad-P17-Gen-1>
+ <Y1xIY77sFTyxgAsU@google.com>
+ <Y1/LwKz60iU2izOZ@pc636>
+ <CAEXW_YTmtm2yb0MVvNV9C1jPEs=5K9PaEFsWEG7pAmPAyWJ_qQ@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y2ATiXtpwPxfsOUD@dev-arch.thelio-3990X>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAEXW_YTmtm2yb0MVvNV9C1jPEs=5K9PaEFsWEG7pAmPAyWJ_qQ@mail.gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 11:27:21AM -0700, Nathan Chancellor wrote:
-> Hi Oleksandr,
+> On Mon, Oct 31, 2022 at 9:21 AM Uladzislau Rezki <urezki@gmail.com> wrote:
+> >
+> > On Fri, Oct 28, 2022 at 09:23:47PM +0000, Joel Fernandes wrote:
+> > > On Mon, Oct 24, 2022 at 09:48:19AM -0700, Paul E. McKenney wrote:
+> > > > On Mon, Oct 24, 2022 at 06:25:30PM +0200, Uladzislau Rezki wrote:
+> > > > > >
+> > > > > > You guys might need to agree on the definition of "good" here.  Or maybe
+> > > > > > understand the differences in your respective platforms' definitions of
+> > > > > > "good".  ;-)
+> > > > > >
+> > > > > Indeed. Bad is when once per-millisecond infinitely :) At least in such use
+> > > > > workload a can detect a power delta and power gain. Anyway, below is a new
+> > > > > trace where i do not use "flush" variant for the kvfree_rcu():
+> > > > >
+> > > > > <snip>
+> > > > > 1. Home screen swipe:
+> [...]
+> > > > > 2. App launches:
+> [...]
+> > > > > <snip>
+> > > > >
+> > > > > it is much more better. But. As i wrote earlier there is a patch that i have submitted
+> > > > > some time ago improving kvfree_rcu() batching:
+> > > > >
+> > > > > <snip>
+> > > > > commit 51824b780b719c53113dc39e027fbf670dc66028
+> > > > > Author: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > > > > Date:   Thu Jun 30 18:33:35 2022 +0200
+> > > > >
+> > > > >     rcu/kvfree: Update KFREE_DRAIN_JIFFIES interval
+> > > > >
+> > > > >     Currently the monitor work is scheduled with a fixed interval of HZ/20,
+> > > > >     which is roughly 50 milliseconds. The drawback of this approach is
+> > > > >     low utilization of the 512 page slots in scenarios with infrequence
+> > > > >     kvfree_rcu() calls.  For example on an Android system:
+> > > > > <snip>
+> > > > >
+> > > > > The trace that i posted was taken without it.
+> > > >
+> > > > And if I am not getting too confused, that patch is now in mainline.
+> > > > So it does make sense to rely on it, then.  ;-)
+> > >
+> > > Vlad's patch to change the KFREE_DRAIN_JIFFIES to 5 seconds seems reasonable
+> > > to me. However, can we unify KFREE_DRAIN_JIFFIES and LAZY_FLUSH_JIFFIES ?
+> > >
+> > This is very good.
+> >
+> > Below is a plot that i have taken during one use-case. It is about three
+> > apps usage in parallel. It was done by running "monkey" test:
+> >
+> > wget ftp://vps418301.ovh.net/incoming/monkey_3_apps_slab_usage_5_minutes.png
+> >
+> > i set up three apps as usage scenario: Google Chrome, YoTube and Camera.
+> > I logged the Slab metric from the /proc/meminfo. Sampling rate is 0.1 second.
+> >
+> > Please have a look at results. It reflects what i am saying. non-flush
+> > kvfree RCU variant makes a memory usage higher. What is not acceptable
+> > for our mobile devices and workloads.
 > 
-> On Sat, Oct 29, 2022 at 01:12:11AM +0000, Oleksandr Tymoshenko wrote:
-> > Hello,
-> > 
-> > This commit causes the following panic in kernel built with clang
-> > (GCC build is not affected): 
-> > 
-> > [    8.320308] BUG: unable to handle page fault for address: ffffffff97216c6a                                        [26/4066]
-> > [    8.330029] #PF: supervisor write access in kernel mode                                                                    
-> > [    8.337263] #PF: error_code(0x0003) - permissions violation 
-> > [    8.344816] PGD 12e816067 P4D 12e816067 PUD 12e817063 PMD 800000012e2001e1                                                 
-> > [    8.354337] Oops: 0003 [#1] SMP PTI                
-> > [    8.359178] CPU: 2 PID: 437 Comm: curl Not tainted 5.4.220 #15                                                             
-> > [    8.367241] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06/2015                                   
-> > [    8.378529] RIP: 0010:__do_once_slow_done+0xf/0xa0   
-> > [    8.384962] Code: 1b 84 db 74 0c 48 c7 c7 80 ce 8d 97 e8 fa e9 4a 00 84 db 0f 94 c0 5b 5d c3 66 90 55 48 89 e5 41 57 41 56 
-> > 53 49 89 d7 49 89 f6 <c6> 07 01 48 c7 c7 80 ce 8d 97 e8 d2 e9 4a 00 48 8b 3d 9b de c9 00                                      
-> > [    8.409066] RSP: 0018:ffffb764c02d3c90 EFLAGS: 00010246
-> > [    8.415697] RAX: 4f51d3d06bc94000 RBX: d474b86ddf7162eb RCX: 000000007229b1d6                                              
-> > [    8.424805] RDX: 0000000000000000 RSI: ffffffff9791b4a0 RDI: ffffffff97216c6a                                              
-> > [    8.434108] RBP: ffffb764c02d3ca8 R08: 0e81c130f1159fc1 R09: 1d19d60ce0b52c77                                              
-> > [    8.443408] R10: 8ea59218e6892b1f R11: d5260237a3c1e35c R12: ffff9c3dadd42600                                              
-> > [    8.452468] R13: ffffffff97910f80 R14: ffffffff9791b4a0 R15: 0000000000000000                                            
-> > [    8.461416] FS:  00007eff855b40c0(0000) GS:ffff9c3db7a80000(0000) knlGS:0000000000000000                                   
-> > [    8.471632] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033                                                              
-> > [    8.478763] CR2: ffffffff97216c6a CR3: 000000022ded0000 CR4: 00000000000006a0                                              
-> > [    8.487789] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000                                              
-> > [    8.496684] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400                                              
-> > [    8.505443] Call Trace:                                                                                                    
-> > [    8.508568]  __inet_hash_connect+0x523/0x530                                                                               
-> > [    8.513839]  ? inet_hash_connect+0x50/0x50                                                                                 
-> > [    8.518818]  ? secure_ipv4_port_ephemeral+0x69/0xe0
-> > [    8.525003]  tcp_v4_connect+0x2c5/0x410
-> > [    8.529858]  __inet_stream_connect+0xd7/0x360
-> > [    8.535329]  ? _raw_spin_unlock+0xe/0x10
-> > ... skipped ...
-> > 
-> > 
-> > The root cause is the difference in __section macro semantics between 5.4 and
-> > later LTS releases. On 5.4 it stringifies the argument so the ___done
-> > symbol is created in a bogus section ".data.once", with double quotes:
-> > 
-> > % readelf -S vmlinux | grep data.once
-> >   [ 5] ".data.once"      PROGBITS         ffffffff82216c6a  01416c6a
+> That does look higher, though honestly about ~5%. But that's just the
+> effect of more "laziness". The graph itself does not show a higher
+> number of shrinker invocations, in fact I think shrinker invocations
+> are not happening much that's why the slab holds more memory. The
+> system may not be under memory pressure?
 > 
-> Thanks for the report! The reason this does not happen in mainline is
-> due to commit 33def8498fdd ("treewide: Convert macro and uses of
-> __section(foo) to __section("foo")"), which came as a result of these
-> issues:
+The idea is to minimize a possibility of entering into a low memory
+condition mode. This is bad from a sluggishness point of view for users.
+I am saying it in a context of android devices.
+
+> Anyway, I agree with your point of view and I think my concern does
+> not even occur with the latest patch on avoiding RCU that I posted
+> [1], so I come in peace.
 > 
-> https://github.com/ClangBuiltLinux/linux/issues/619
-> https://llvm.org/pr42950
+> [1] https://lore.kernel.org/rcu/20221029132856.3752018-1-joel@joelfernandes.org/
 > 
-> To keep stable from diverging, it would probably be best to pick
-> 33def8498fdd and fight through whatever conflicts there are. If that is
-> not a suitable solution, the next best thing would be to remove the
-> quotes like was done in commit bfafddd8de42 ("include/linux/compiler.h:
-> fix Oops for Clang-compiled kernels") for all instances of
-> __section(...) or __attribute__((__section__(...))), which should
-> resolve the specific problem you are seeing.
+I will have a look at it.
 
-I think we should do the latter, fighting with all of the different
-section entries would be a pain.
+>
+> I am going to start merging all the lazy patches to ChromeOS 5.10 now
+> including your kfree updates, except for [1] while we discuss it.
+>
+Good for ChromeOS users :)
 
-Unless someone beats me to it, I'll go make up a patch for this...
-
-thanks,
-
-greg k-h
+--
+Uladzislau Rezki
