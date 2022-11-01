@@ -2,322 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5631961486D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:22:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 596D2614883
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:27:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229941AbiKALWI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 07:22:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60012 "EHLO
+        id S230037AbiKAL1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 07:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34608 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiKALWG (ORCPT
+        with ESMTP id S229945AbiKAL1e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 07:22:06 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9172112E
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 04:22:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1667301707; bh=SNn2ztNgHSI1Eaozxi2RD7RWfXb7kGVwqgrmpAQeoU0=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=fccCwBk3KkJgyTTVolrfHwHtGMRfuzXy/F+MIjaGUBitLFdqkNR/CadHsj8U/5TzI
-         8utwZjG7tRqpJkhPIFkMCQi1W/ONz3FWDpOWjLww7JAYA5N9h62KgJKphD/AsCAC67
-         mkzeF4kF4ur4P1nr4wCNAU7+Aj2l1M7ILdyekX9gLMUfkZjrOTZToh/FzvAh+vPmhu
-         UL4gD9qX8lsmqrl3UxBfcJASSbfzUxr02qGjlhT3stTzhcibXtVen/azhwsP1/nQTk
-         ESlbIzqniihdRWJ0WXVnwabz+iZdPUYHfaMZiWyXCcsiSDcIsesuCljLewkdoJv0PC
-         9mw1wXLlQyJzg==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([95.223.44.31]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1MCKFk-1ohc8v0RBC-009MqG; Tue, 01
- Nov 2022 12:21:47 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     openbmc@lists.ozlabs.org
-Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Russell King <linux@armlinux.org.uk>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-Subject: [PATCH v3] ARM: Add wpcm450_defconfig for Nuvoton WPCM450
-Date:   Tue,  1 Nov 2022 12:21:34 +0100
-Message-Id: <20221101112134.673869-1-j.neuschaefer@gmx.net>
+        Tue, 1 Nov 2022 07:27:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE7A717E29;
+        Tue,  1 Nov 2022 04:27:32 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6AB45B81CC1;
+        Tue,  1 Nov 2022 11:27:31 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DEF24C433C1;
+        Tue,  1 Nov 2022 11:27:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667302050;
+        bh=ACB5NCpzrjJVLKWCx5UcKZl9u+6qQLqmZKiRINI/hCE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ay3qp9lT+Oeq4QKw0e4JsX92Y+9fO0fO1vsxjSW1bKWujheGFaU+EJm6uiAdWTm9C
+         zUk4KHP9zrUB7lNL77kBjdRotanUM9OvSIl991MTwCThx7HXq+1NZgrLkha87Kn0eW
+         IUXEcpONa2AWoDgKIgNEENTTv8vPPtIBsjrIX1JAwhi/jXfAc1sfzhx01kkJ6HAnfT
+         3UNkKQuS2NeKVrFjWC0Dl/1nm4MB8rfktdScXfl7cNYtNlyCDBA2Du/HWwdmwnVqgf
+         coId7cfTHIbWK0o8uZVDhwWmSZvWZ/HqID/03FD7tafQtTSi6P1zwJz8HEkhbNUSQY
+         R229r1I+mzoDA==
+From:   Sasha Levin <sashal@kernel.org>
+To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
+Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Dafna Hirschfeld <dafna@fastmail.com>,
+        Paul Elder <paul.elder@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Sasha Levin <sashal@kernel.org>, heiko@sntech.de,
+        linux-media@vger.kernel.org, linux-rockchip@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: [PATCH AUTOSEL 6.0 01/34] media: rkisp1: Fix source pad format configuration
+Date:   Tue,  1 Nov 2022 07:26:53 -0400
+Message-Id: <20221101112726.799368-1-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:1Pt83EjlArUpPNX6+NB6SQyVSbALIn6wRdmuBjPVhV1d75PkrlC
- 9sLCgpWmjy9iQwEFk1AzIVOiyISWGRs08L0C9pjb2CzN+7M+IaZAQ9NTK1Flu47gbm9VNsu
- GnSKXv/TpiHej/AtPFS3GW49rtde7WYw8+8ukMNFTRkdztmOxBZWNKtGmsBMLG/xAqRI0ZL
- 9UEDM4ONi1BbRxKr3Yt7w==
-UI-OutboundReport: notjunk:1;M01:P0:U5pHjGQj/jI=;ZpEIBanVqsRq2mz0JZtpof9cKMq
- d3XKFK5YFUbMI5fWzAXXtu4dcskEEkIsRnsFqonsNzRpBsFvwifFZdjV21oNz8lsfMQl3h7Nb
- e0PTC1zREy+7nHhKzpxa1MI7HEhOVy7RDQqg8BINXgNJkohJIN5g6DVFEB4mQEPjWQaPUgG8b
- Wrvb/mI+wAJ0ED/1XLId/I6kylPRhZUkrwG6holuvMmIXsryvuK8YXRQBqqKGc6d2HCi/o0sJ
- EoSfURTlmk/MbmEU7TKnbZdyxf4nnlVclStWOSF6hWW8dPCRlg7t2WMdjo0M8rRH2t0q/O6lo
- LvwqxOC1mmVuZuDa2vToFwqxI72rog4acp1UHnLTbJo1jZ4JMBAkmQxErkyYhYTCBkacw/6uy
- VSGX0SPR1aMmlbba4Yq5xDIbut3bGYNAu/vI286HIL2xAIfhEm7wsaUO20iGACfXlvk4SlTK3
- gWAiaV3yBF3Y4/bRmTJKzcWbvyGJDRmt3wA+rU/HSwwX/Ij7p4sV/01gIkYeMWOVW/RWeByrU
- /ZLfCyb8JCWm8OW4VbeqMTLwbGSft5UI+s9MHG8M1ur8L5WBW3e/MVD2vanMy6rQCV2Efh7yN
- ny2mNtqYmRGlpU1xxwpniGPZuYOGnCkXqs4ZYmre52d3yMjhOD77Qy3TvaqnfnSWGguhOLwCS
- Co2JL8tFnAjigZdQKY3NepvSyNog9dNZY/jIENWk8rY08jIp+VmTljH+KfUCNe6RxsrCjA68F
- CKo76Y63WIOxrWJ5fYuFYhr4kGOBIvGwTMWdFocimF2/RLnjys7Tw5gmGPqUP6T9sjjWMWlLO
- LEdl4CKo9OPPn3sZ/vCg2fiONwftif6W+OzTWszLVJmCDGnAvizTZcmXfmKFW/rvSX6IYR6+/
- +n4M40fPj6qSr8CV8+NwN8X1o+2LR/ybLgeO0bT+VK8+E1o7eeqxVcqRA+SOWjkVd77TozpBV
- 4ghe0VqlhSD2pMsKwX258RoLkWo=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,UPPERCASE_50_75 autolearn=ham
-        autolearn_force=no version=3.4.6
+X-stable: review
+X-Patchwork-Hint: Ignore
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This defconfig aims to offer a reasonable set of defaults for all
-systems running on a Nuvoton WPCM450 chip.
+From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
-v3:
-- Regenerate for 6.1-rc1 and enable a few Nuvoton-specific options as
-  well as the PECI subsystem
+[ Upstream commit cb00f3a4421d5c7d7155bd4bded7fb2ff8eec211 ]
 
-v2:
-- Regenerate for 5.19-rc1
-=2D--
- MAINTAINERS                        |   1 +
- arch/arm/configs/wpcm450_defconfig | 213 +++++++++++++++++++++++++++++
- 2 files changed, 214 insertions(+)
- create mode 100644 arch/arm/configs/wpcm450_defconfig
+The ISP converts Bayer data to YUV when operating normally, and can also
+operate in pass-through mode where the input and output formats must
+match. Converting from YUV to Bayer isn't possible. If such an invalid
+configuration is attempted, adjust it by copying the sink pad media bus
+code to the source pad.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index cf0f185023724..cac5a4ad4eb8a 100644
-=2D-- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -2543,6 +2543,7 @@ S:	Maintained
- W:	https://github.com/neuschaefer/wpcm450/wiki
- F:	Documentation/devicetree/bindings/*/*wpcm*
- F:	arch/arm/boot/dts/nuvoton-wpcm450*
-+F:	arch/arm/configs/wpcm450_defconfig
- F:	arch/arm/mach-npcm/wpcm450.c
- F:	drivers/*/*/*wpcm*
- F:	drivers/*/*wpcm*
-diff --git a/arch/arm/configs/wpcm450_defconfig b/arch/arm/configs/wpcm450=
-_defconfig
-new file mode 100644
-index 0000000000000..702f2bf909f93
-=2D-- /dev/null
-+++ b/arch/arm/configs/wpcm450_defconfig
-@@ -0,0 +1,213 @@
-+CONFIG_SYSVIPC=3Dy
-+CONFIG_NO_HZ_IDLE=3Dy
-+CONFIG_HIGH_RES_TIMERS=3Dy
-+CONFIG_PREEMPT=3Dy
-+CONFIG_IKCONFIG=3Dy
-+CONFIG_IKCONFIG_PROC=3Dy
-+CONFIG_LOG_BUF_SHIFT=3D19
-+CONFIG_CGROUPS=3Dy
-+CONFIG_BLK_DEV_INITRD=3Dy
-+CONFIG_CC_OPTIMIZE_FOR_SIZE=3Dy
-+CONFIG_PROFILING=3Dy
-+# CONFIG_ARCH_MULTI_V7 is not set
-+CONFIG_ARCH_NPCM=3Dy
-+CONFIG_ARCH_WPCM450=3Dy
-+CONFIG_CPU_DCACHE_WRITETHROUGH=3Dy
-+CONFIG_AEABI=3Dy
-+CONFIG_UACCESS_WITH_MEMCPY=3Dy
-+# CONFIG_ATAGS is not set
-+CONFIG_ARM_APPENDED_DTB=3Dy
-+CONFIG_KEXEC=3Dy
-+CONFIG_CPU_FREQ=3Dy
-+CONFIG_CPU_FREQ_STAT=3Dy
-+CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=3Dy
-+CONFIG_CPU_IDLE=3Dy
-+CONFIG_KPROBES=3Dy
-+CONFIG_JUMP_LABEL=3Dy
-+CONFIG_STRICT_KERNEL_RWX=3Dy
-+CONFIG_MODULES=3Dy
-+CONFIG_MODULE_UNLOAD=3Dy
-+CONFIG_NET=3Dy
-+CONFIG_PACKET=3Dy
-+CONFIG_PACKET_DIAG=3Dy
-+CONFIG_UNIX=3Dy
-+CONFIG_UNIX_DIAG=3Dy
-+CONFIG_INET=3Dy
-+CONFIG_IP_MULTICAST=3Dy
-+CONFIG_IP_PNP=3Dy
-+CONFIG_IP_PNP_DHCP=3Dy
-+CONFIG_IP_PNP_BOOTP=3Dy
-+CONFIG_NET_DSA=3Dy
-+CONFIG_NET_DSA_TAG_DSA=3Dy
-+CONFIG_NET_DSA_TAG_EDSA=3Dy
-+CONFIG_NET_DSA_TAG_TRAILER=3Dy
-+CONFIG_NET_PKTGEN=3Dm
-+# CONFIG_WIRELESS is not set
-+CONFIG_DEVTMPFS=3Dy
-+CONFIG_DEVTMPFS_MOUNT=3Dy
-+CONFIG_MTD=3Dy
-+CONFIG_MTD_CMDLINE_PARTS=3Dy
-+CONFIG_MTD_BLOCK=3Dy
-+CONFIG_MTD_SPI_NOR=3Dy
-+CONFIG_MTD_UBI=3Dy
-+CONFIG_MTD_UBI_FASTMAP=3Dy
-+CONFIG_MTD_UBI_BLOCK=3Dy
-+CONFIG_BLK_DEV_LOOP=3Dy
-+CONFIG_SRAM=3Dy
-+CONFIG_EEPROM_AT24=3Dy
-+CONFIG_SCSI=3Dy
-+# CONFIG_SCSI_PROC_FS is not set
-+# CONFIG_SCSI_LOWLEVEL is not set
-+CONFIG_NETDEVICES=3Dy
-+# CONFIG_NET_VENDOR_ALACRITECH is not set
-+# CONFIG_NET_VENDOR_AMAZON is not set
-+# CONFIG_NET_VENDOR_AQUANTIA is not set
-+# CONFIG_NET_VENDOR_ARC is not set
-+# CONFIG_NET_VENDOR_BROADCOM is not set
-+# CONFIG_NET_VENDOR_CADENCE is not set
-+# CONFIG_NET_VENDOR_CAVIUM is not set
-+# CONFIG_NET_VENDOR_CIRRUS is not set
-+# CONFIG_NET_VENDOR_CORTINA is not set
-+# CONFIG_NET_VENDOR_EZCHIP is not set
-+# CONFIG_NET_VENDOR_FARADAY is not set
-+# CONFIG_NET_VENDOR_GOOGLE is not set
-+# CONFIG_NET_VENDOR_HISILICON is not set
-+# CONFIG_NET_VENDOR_HUAWEI is not set
-+# CONFIG_NET_VENDOR_INTEL is not set
-+# CONFIG_NET_VENDOR_MARVELL is not set
-+# CONFIG_NET_VENDOR_MELLANOX is not set
-+# CONFIG_NET_VENDOR_MICREL is not set
-+# CONFIG_NET_VENDOR_MICROCHIP is not set
-+# CONFIG_NET_VENDOR_MICROSEMI is not set
-+# CONFIG_NET_VENDOR_NI is not set
-+# CONFIG_NET_VENDOR_NATSEMI is not set
-+# CONFIG_NET_VENDOR_NETRONOME is not set
-+# CONFIG_NET_VENDOR_PENSANDO is not set
-+# CONFIG_NET_VENDOR_QUALCOMM is not set
-+# CONFIG_NET_VENDOR_RENESAS is not set
-+# CONFIG_NET_VENDOR_ROCKER is not set
-+# CONFIG_NET_VENDOR_SAMSUNG is not set
-+# CONFIG_NET_VENDOR_SEEQ is not set
-+# CONFIG_NET_VENDOR_SOLARFLARE is not set
-+# CONFIG_NET_VENDOR_SMSC is not set
-+# CONFIG_NET_VENDOR_SOCIONEXT is not set
-+# CONFIG_NET_VENDOR_STMICRO is not set
-+# CONFIG_NET_VENDOR_SYNOPSYS is not set
-+# CONFIG_NET_VENDOR_VIA is not set
-+# CONFIG_NET_VENDOR_WIZNET is not set
-+# CONFIG_NET_VENDOR_XILINX is not set
-+CONFIG_REALTEK_PHY=3Dy
-+# CONFIG_WLAN is not set
-+CONFIG_INPUT_FF_MEMLESS=3Dy
-+CONFIG_INPUT_EVDEV=3Dy
-+CONFIG_KEYBOARD_QT1070=3Dm
-+CONFIG_KEYBOARD_GPIO=3Dy
-+# CONFIG_INPUT_MOUSE is not set
-+CONFIG_VT_HW_CONSOLE_BINDING=3Dy
-+CONFIG_LEGACY_PTY_COUNT=3D16
-+CONFIG_SERIAL_8250=3Dy
-+CONFIG_SERIAL_8250_CONSOLE=3Dy
-+CONFIG_SERIAL_8250_NR_UARTS=3D6
-+CONFIG_SERIAL_8250_RUNTIME_UARTS=3D6
-+CONFIG_SERIAL_8250_EXTENDED=3Dy
-+CONFIG_SERIAL_8250_MANY_PORTS=3Dy
-+CONFIG_SERIAL_OF_PLATFORM=3Dy
-+CONFIG_NPCM7XX_KCS_IPMI_BMC=3Dy
-+CONFIG_IPMI_KCS_BMC_CDEV_IPMI=3Dy
-+CONFIG_IPMI_KCS_BMC_SERIO=3Dy
-+CONFIG_HW_RANDOM=3Dy
-+# CONFIG_HW_RANDOM_NPCM is not set
-+CONFIG_I2C=3Dy
-+# CONFIG_I2C_COMPAT is not set
-+CONFIG_I2C_CHARDEV=3Dy
-+CONFIG_I2C_MUX=3Dy
-+CONFIG_I2C_NPCM=3Dy
-+CONFIG_SPI=3Dy
-+CONFIG_SPI_NPCM_PSPI=3Dy
-+CONFIG_PINCTRL_SINGLE=3Dy
-+CONFIG_PINCTRL_WPCM450=3Dy
-+CONFIG_POWER_SUPPLY=3Dy
-+CONFIG_SENSORS_NPCM7XX=3Dy
-+# CONFIG_THERMAL is not set
-+CONFIG_WATCHDOG=3Dy
-+CONFIG_NPCM7XX_WATCHDOG=3Dy
-+CONFIG_MFD_SYSCON=3Dy
-+CONFIG_REGULATOR=3Dy
-+CONFIG_REGULATOR_FIXED_VOLTAGE=3Dy
-+CONFIG_FB=3Dy
-+CONFIG_FB_MODE_HELPERS=3Dy
-+# CONFIG_HID is not set
-+CONFIG_USB_CHIPIDEA=3Dy
-+CONFIG_USB_CHIPIDEA_UDC=3Dy
-+CONFIG_USB_GADGET=3Dy
-+CONFIG_USB_CONFIGFS=3Dy
-+CONFIG_USB_CONFIGFS_SERIAL=3Dy
-+CONFIG_USB_CONFIGFS_ACM=3Dy
-+CONFIG_USB_CONFIGFS_EEM=3Dy
-+CONFIG_USB_CONFIGFS_MASS_STORAGE=3Dy
-+CONFIG_USB_CONFIGFS_F_FS=3Dy
-+CONFIG_USB_CONFIGFS_F_HID=3Dy
-+CONFIG_NEW_LEDS=3Dy
-+CONFIG_LEDS_CLASS=3Dy
-+CONFIG_LEDS_GPIO=3Dy
-+CONFIG_LEDS_TRIGGERS=3Dy
-+CONFIG_LEDS_TRIGGER_TIMER=3Dy
-+CONFIG_LEDS_TRIGGER_HEARTBEAT=3Dy
-+CONFIG_LEDS_TRIGGER_DEFAULT_ON=3Dy
-+CONFIG_DMADEVICES=3Dy
-+CONFIG_SYNC_FILE=3Dy
-+# CONFIG_VIRTIO_MENU is not set
-+# CONFIG_VHOST_MENU is not set
-+CONFIG_STAGING=3Dy
-+# CONFIG_IOMMU_SUPPORT is not set
-+CONFIG_PWM=3Dy
-+CONFIG_GENERIC_PHY=3Dy
-+CONFIG_PECI=3Dy
-+CONFIG_PECI_CPU=3Dy
-+CONFIG_MSDOS_FS=3Dy
-+CONFIG_VFAT_FS=3Dy
-+CONFIG_TMPFS=3Dy
-+CONFIG_UBIFS_FS=3Dy
-+CONFIG_SQUASHFS=3Dy
-+CONFIG_SQUASHFS_XZ=3Dy
-+CONFIG_SQUASHFS_ZSTD=3Dy
-+# CONFIG_NETWORK_FILESYSTEMS is not set
-+CONFIG_NLS_CODEPAGE_437=3Dy
-+CONFIG_NLS_CODEPAGE_850=3Dy
-+CONFIG_NLS_ISO8859_1=3Dy
-+CONFIG_NLS_ISO8859_2=3Dy
-+CONFIG_NLS_UTF8=3Dy
-+CONFIG_KEYS=3Dy
-+CONFIG_HARDENED_USERCOPY=3Dy
-+CONFIG_FORTIFY_SOURCE=3Dy
-+CONFIG_CRYPTO_RSA=3Dy
-+CONFIG_CRYPTO_AES=3Dy
-+CONFIG_CRYPTO_CBC=3Dm
-+CONFIG_CRYPTO_PCBC=3Dm
-+CONFIG_CRYPTO_CCM=3Dy
-+CONFIG_CRYPTO_GCM=3Dy
-+CONFIG_CRYPTO_CMAC=3Dy
-+CONFIG_CRYPTO_SHA256=3Dy
-+CONFIG_ASYMMETRIC_KEY_TYPE=3Dy
-+CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE=3Dy
-+CONFIG_X509_CERTIFICATE_PARSER=3Dy
-+CONFIG_PKCS7_MESSAGE_PARSER=3Dy
-+CONFIG_SYSTEM_TRUSTED_KEYRING=3Dy
-+CONFIG_CRC_CCITT=3Dy
-+CONFIG_CRC_ITU_T=3Dm
-+CONFIG_LIBCRC32C=3Dy
-+CONFIG_PRINTK_TIME=3Dy
-+CONFIG_DEBUG_KERNEL=3Dy
-+CONFIG_MAGIC_SYSRQ=3Dy
-+CONFIG_DEBUG_FS=3Dy
-+# CONFIG_SCHED_DEBUG is not set
-+# CONFIG_DEBUG_PREEMPT is not set
-+# CONFIG_FTRACE is not set
-+CONFIG_IO_STRICT_DEVMEM=3Dy
-+CONFIG_DEBUG_USER=3Dy
-+CONFIG_DEBUG_LL=3Dy
-+CONFIG_DEBUG_LL_UART_8250=3Dy
-+CONFIG_DEBUG_UART_PHYS=3D0xb8000000
-+CONFIG_DEBUG_UART_VIRT=3D0x0ff000000
-+CONFIG_DEBUG_UART_8250_WORD=3Dy
-+CONFIG_EARLY_PRINTK=3Dy
-=2D-
+Signed-off-by: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+Reviewed-by: Dafna Hirschfeld <dafna@fastmail.com>
+Reviewed-by: Paul Elder <paul.elder@ideasonboard.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
+Signed-off-by: Sasha Levin <sashal@kernel.org>
+---
+ .../platform/rockchip/rkisp1/rkisp1-isp.c     | 40 +++++++++++++++----
+ 1 file changed, 32 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
+index 383a3ec83ca9..00032b849a07 100644
+--- a/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
++++ b/drivers/media/platform/rockchip/rkisp1/rkisp1-isp.c
+@@ -472,23 +472,43 @@ static void rkisp1_isp_set_src_fmt(struct rkisp1_isp *isp,
+ 				   struct v4l2_mbus_framefmt *format,
+ 				   unsigned int which)
+ {
+-	const struct rkisp1_mbus_info *mbus_info;
++	const struct rkisp1_mbus_info *sink_info;
++	const struct rkisp1_mbus_info *src_info;
++	struct v4l2_mbus_framefmt *sink_fmt;
+ 	struct v4l2_mbus_framefmt *src_fmt;
+ 	const struct v4l2_rect *src_crop;
+ 
++	sink_fmt = rkisp1_isp_get_pad_fmt(isp, sd_state,
++					  RKISP1_ISP_PAD_SINK_VIDEO, which);
+ 	src_fmt = rkisp1_isp_get_pad_fmt(isp, sd_state,
+ 					 RKISP1_ISP_PAD_SOURCE_VIDEO, which);
+ 	src_crop = rkisp1_isp_get_pad_crop(isp, sd_state,
+ 					   RKISP1_ISP_PAD_SOURCE_VIDEO, which);
+ 
++	/*
++	 * Media bus code. The ISP can operate in pass-through mode (Bayer in,
++	 * Bayer out or YUV in, YUV out) or process Bayer data to YUV, but
++	 * can't convert from YUV to Bayer.
++	 */
++	sink_info = rkisp1_mbus_info_get_by_code(sink_fmt->code);
++
+ 	src_fmt->code = format->code;
+-	mbus_info = rkisp1_mbus_info_get_by_code(src_fmt->code);
+-	if (!mbus_info || !(mbus_info->direction & RKISP1_ISP_SD_SRC)) {
++	src_info = rkisp1_mbus_info_get_by_code(src_fmt->code);
++	if (!src_info || !(src_info->direction & RKISP1_ISP_SD_SRC)) {
+ 		src_fmt->code = RKISP1_DEF_SRC_PAD_FMT;
+-		mbus_info = rkisp1_mbus_info_get_by_code(src_fmt->code);
++		src_info = rkisp1_mbus_info_get_by_code(src_fmt->code);
+ 	}
+-	if (which == V4L2_SUBDEV_FORMAT_ACTIVE)
+-		isp->src_fmt = mbus_info;
++
++	if (sink_info->pixel_enc == V4L2_PIXEL_ENC_YUV &&
++	    src_info->pixel_enc == V4L2_PIXEL_ENC_BAYER) {
++		src_fmt->code = sink_fmt->code;
++		src_info = sink_info;
++	}
++
++	/*
++	 * The source width and height must be identical to the source crop
++	 * size.
++	 */
+ 	src_fmt->width  = src_crop->width;
+ 	src_fmt->height = src_crop->height;
+ 
+@@ -498,14 +518,18 @@ static void rkisp1_isp_set_src_fmt(struct rkisp1_isp *isp,
+ 	 */
+ 	if (format->flags & V4L2_MBUS_FRAMEFMT_SET_CSC &&
+ 	    format->quantization == V4L2_QUANTIZATION_FULL_RANGE &&
+-	    mbus_info->pixel_enc == V4L2_PIXEL_ENC_YUV)
++	    src_info->pixel_enc == V4L2_PIXEL_ENC_YUV)
+ 		src_fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
+-	else if (mbus_info->pixel_enc == V4L2_PIXEL_ENC_YUV)
++	else if (src_info->pixel_enc == V4L2_PIXEL_ENC_YUV)
+ 		src_fmt->quantization = V4L2_QUANTIZATION_LIM_RANGE;
+ 	else
+ 		src_fmt->quantization = V4L2_QUANTIZATION_FULL_RANGE;
+ 
+ 	*format = *src_fmt;
++
++	/* Store the source format info when setting the active format. */
++	if (which == V4L2_SUBDEV_FORMAT_ACTIVE)
++		isp->src_fmt = src_info;
+ }
+ 
+ static void rkisp1_isp_set_src_crop(struct rkisp1_isp *isp,
+-- 
 2.35.1
 
