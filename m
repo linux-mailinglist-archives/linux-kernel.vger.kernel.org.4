@@ -2,120 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE673614CAB
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 15:35:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BAD0614CA8
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 15:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbiKAOfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 10:35:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47854 "EHLO
+        id S230036AbiKAOfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 10:35:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47936 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbiKAOfB (ORCPT
+        with ESMTP id S229487AbiKAOez (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 10:35:01 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 786211B9E3
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 07:35:00 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id d10so13623437pfh.6
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 07:35:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NR0zkcTR64wHAjX9AnDry5ZpqjNrgt1ho9rCOwWk1u4=;
-        b=PrmfwbdEoaA+/aYLn6KyPDuRPIrF4ku2zpK97abpZpsznZm3urteLLw9eV0BBgWNwM
-         Bjo54YGJEsSxkGd4Trm8DnISuPbfN4cRiqrZXElAhSWk+T6LuEebogO1ylpJrCtLrLk+
-         0HPxBa8a25+1p1YfDdYLr+uXUeXNpKLHGnoZ0+m1i7AV4BqdVpHtxlzeKv1CJukCveEJ
-         I0CQ57IhbBLeODYGchxZnqqbt6rH9n5Vi8m9aV7H3xN/mZrk0pS5BLi0G7odfFT8KJ8D
-         5HERjnKGl3waiShgzUrwLCgmZERsHYutExRuYTM6/kmqaliV9H/tva8mc3Hz8j2kJhhH
-         eI6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=NR0zkcTR64wHAjX9AnDry5ZpqjNrgt1ho9rCOwWk1u4=;
-        b=ZRz011ETLo9iG2WCiTkiQFEplM7gExEA23Yi8xQnmuQ97YzzbrKG+p02u1eIL8TMIh
-         uzw4HmvPd2b5xkrn+g+krC9XrX/zXvIY1bBpvbhipxJMiczU15aK8b4kIb/GJB2XJYaa
-         QdrZ/TnmcN/NfrC2RoeYQHTvp9M9qdn5CSlYUSrCSp4Ju03CbElFOfhpbNJ5650iTBlf
-         lzxAf2c4o4qk/ti/CQqL/xwzfIvUkF+V9e5eyFYnyKnf50LCCnQQxp+Iq73b32PVcDXo
-         LU4URRH/ZDhSKIHgMajrVCY8cPz6tf+vi5J6nivFqb0DrLCNTxugWOxU6/H6U58W223c
-         u68Q==
-X-Gm-Message-State: ACrzQf2QQvT+VqKtdXgZQt2UMvhWTV6oLl8bM0A2sYl86WJhq9ml1dFC
-        lYuvIgped8BKKfJHPcEgoj/SXhEMUJzFuQ==
-X-Google-Smtp-Source: AMsMyM5ziTFAirnAfSVMBfXauwPF5l+do40/tZsapEiJXWEdNzYhHb0bMdaYzsJPlxk7HV/celXeBQ==
-X-Received: by 2002:a63:eb03:0:b0:46f:80a3:737d with SMTP id t3-20020a63eb03000000b0046f80a3737dmr141167pgh.447.1667313299873;
-        Tue, 01 Nov 2022 07:34:59 -0700 (PDT)
-Received: from anup-ubuntu64-vm.. ([171.76.80.52])
-        by smtp.gmail.com with ESMTPSA id o20-20020a170903009400b0018685aaf41dsm6449055pld.18.2022.11.01.07.34.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 07:34:59 -0700 (PDT)
-From:   Anup Patel <apatel@ventanamicro.com>
-To:     Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Marc Zyngier <maz@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc:     Atish Patra <atishp@atishpatra.org>,
-        Alistair Francis <Alistair.Francis@wdc.com>,
-        Anup Patel <anup@brainfault.org>,
-        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Anup Patel <apatel@ventanamicro.com>
-Subject: [PATCH v10 7/7] RISC-V: Use IPIs for remote icache flush when possible
-Date:   Tue,  1 Nov 2022 20:04:00 +0530
-Message-Id: <20221101143400.690000-8-apatel@ventanamicro.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221101143400.690000-1-apatel@ventanamicro.com>
-References: <20221101143400.690000-1-apatel@ventanamicro.com>
+        Tue, 1 Nov 2022 10:34:55 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70F1F1BE8F
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 07:34:53 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 1F727336F9;
+        Tue,  1 Nov 2022 14:34:52 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1667313292; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=md7UdvagT3X4V8u77OX2NjG4n87gQfkAxPbnmYefNuc=;
+        b=ZFyHqoxeRhYtLuEfJJNaBqeFdVHfTDO5Nw6gJoMHmH7yKnkMiUXJUeYsGswDVHeja9lhMH
+        cixX1+RaowWVAo9iTCEgoLGomWiO4zrBnXZlIsAInL8LqcOmjtZeRrN2OWoBtE0ixgVwPc
+        Qs18LUCGxWBtXDgWEZYyvQkLStW2lYU=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id CF91F13AAF;
+        Tue,  1 Nov 2022 14:34:51 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id TWBUMIsuYWPeRgAAMHmgww
+        (envelope-from <mhocko@suse.com>); Tue, 01 Nov 2022 14:34:51 +0000
+Date:   Tue, 1 Nov 2022 15:34:51 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Bharata B Rao <bharata@amd.com>,
+        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Jagdish Gediya <jvgediya.oss@gmail.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Tim Chen <tim.c.chen@intel.com>, Wei Xu <weixugc@google.com>,
+        Yang Shi <shy828301@gmail.com>
+Subject: Re: [RFC] memory tiering: use small chunk size and more tiers
+Message-ID: <Y2Eui+kKvwj8ip+T@dhcp22.suse.cz>
+References: <20221027065925.476955-1-ying.huang@intel.com>
+ <578c9b89-10eb-1e23-8868-cdd6685d8d4e@linux.ibm.com>
+ <877d0kk5uf.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <59291b98-6907-0acf-df11-6d87681027cc@linux.ibm.com>
+ <8735b8jy9k.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <0d938c9f-c810-b10a-e489-c2b312475c52@amd.com>
+ <87tu3oibyr.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <07912a0d-eb91-a6ef-2b9d-74593805f29e@amd.com>
+ <87leowepz6.fsf@yhuang6-desk2.ccr.corp.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87leowepz6.fsf@yhuang6-desk2.ccr.corp.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If we have specialized interrupt controller (such as AIA IMSIC) which
-allows supervisor mode to directly inject IPIs without any assistance
-from M-mode or HS-mode then using such specialized interrupt controller,
-we can do remote icache flushe directly from supervisor mode instead of
-using the SBI RFENCE calls.
+On Mon 31-10-22 09:33:49, Huang, Ying wrote:
+[...]
+> In the upstream implementation, 4 tiers are possible below DRAM.  That's
+> enough for now.  But in the long run, it may be better to define more.
+> 100 possible tiers below DRAM may be too extreme.
 
-This patch extends remote icache flush functions to use supervisor mode
-IPIs whenever direct supervisor mode IPIs.are supported by interrupt
-controller.
+I am just curious. Is any configurations with more than couple of tiers
+even manageable? I mean applications have been struggling even with
+regular NUMA systems for years and vast majority of them is largerly
+NUMA unaware. How are they going to configure for a more complex system
+when a) there is no resource access control so whatever you aim for
+might not be available and b) in which situations there is going to be a
+demand only for subset of tears (GPU memory?) ?
 
-Signed-off-by: Anup Patel <apatel@ventanamicro.com>
----
- arch/riscv/mm/cacheflush.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Thanks!
 
-diff --git a/arch/riscv/mm/cacheflush.c b/arch/riscv/mm/cacheflush.c
-index 57b40a350420..f10cb47eac3a 100644
---- a/arch/riscv/mm/cacheflush.c
-+++ b/arch/riscv/mm/cacheflush.c
-@@ -19,7 +19,7 @@ void flush_icache_all(void)
- {
- 	local_flush_icache_all();
- 
--	if (IS_ENABLED(CONFIG_RISCV_SBI))
-+	if (IS_ENABLED(CONFIG_RISCV_SBI) && !riscv_use_ipi_for_rfence())
- 		sbi_remote_fence_i(NULL);
- 	else
- 		on_each_cpu(ipi_remote_fence_i, NULL, 1);
-@@ -67,7 +67,8 @@ void flush_icache_mm(struct mm_struct *mm, bool local)
- 		 * with flush_icache_deferred().
- 		 */
- 		smp_mb();
--	} else if (IS_ENABLED(CONFIG_RISCV_SBI)) {
-+	} else if (IS_ENABLED(CONFIG_RISCV_SBI) &&
-+		   !riscv_use_ipi_for_rfence()) {
- 		sbi_remote_fence_i(&others);
- 	} else {
- 		on_each_cpu_mask(&others, ipi_remote_fence_i, NULL, 1);
 -- 
-2.34.1
-
+Michal Hocko
+SUSE Labs
