@@ -2,125 +2,179 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C282E614546
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 08:54:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DF383614551
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 08:57:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229817AbiKAHyb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 03:54:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39346 "EHLO
+        id S229739AbiKAH5U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 03:57:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40122 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229544AbiKAHy0 (ORCPT
+        with ESMTP id S229452AbiKAH5S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 03:54:26 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B57052AF0
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 00:54:25 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 5A7B81FD95;
-        Tue,  1 Nov 2022 07:54:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1667289264; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=yXPEUXV/416Reg713Kd7mHOIawcGRYFkNyfM/5Mm2HY=;
-        b=q4KcyPrs4gJ3TZEoqDyTVPGkG5KZ5EOzGHE6kbA/G0Dm1rzurCr187JNb+jPShncO/0sBX
-        GyjI8+Wwk0xhyB3IuD6GxdtsTaPl4mWbbjHSCKmhrb6QZgpF5Fnj+kw9lnrVLJh4w5BlYg
-        jhRnuJ9SOLS6HiaFzvigDr3J65vTTZ0=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 4B24F13AAF;
-        Tue,  1 Nov 2022 07:54:24 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id /kKXEbDQYGMVFwAAMHmgww
-        (envelope-from <mhocko@suse.com>); Tue, 01 Nov 2022 07:54:24 +0000
-Date:   Tue, 1 Nov 2022 08:54:23 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Zach O'Keefe <zokeefe@google.com>
-Cc:     Yang Shi <shy828301@gmail.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: don't warn if the node is offlined
-Message-ID: <Y2DQr06mNzk0ITX1@dhcp22.suse.cz>
-References: <20221031183122.470962-1-shy828301@gmail.com>
- <Y2BHcBCR2FIJgU4w@dhcp22.suse.cz>
- <CAAa6QmQt9Us8YpirQGXV0_AetuPS+EOqMSGqNn6KW24HXvwO_A@mail.gmail.com>
+        Tue, 1 Nov 2022 03:57:18 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8BE3018362;
+        Tue,  1 Nov 2022 00:57:16 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id kt23so35082371ejc.7;
+        Tue, 01 Nov 2022 00:57:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=S7YqvcW7uJgnvwYFXgxeJbVFHcM8MqyxOmFtKk4o1e8=;
+        b=Axuh0GyB1m/5zx5ujC1ZRQ4nA4yP8lbxoJxh2ikRk1bImT3tAn0Nfc1R+2N0W4CwDI
+         0ga1iUmOM+E/a6Z6sIIvR/usEy/w2grMFecHrNCgbAySFhBCTt2o4WKwVWJvvQoa5y+A
+         /TLMYlvP0zcb5CtfVLCqlfrafVi/eXzekKxl9RCiQ6fSJ8234zLHsMA+A1JskX5PNeID
+         kGqE+xU/9xhSNBVOtIX0olQpAcgipeFLWSoq3EC5UZ40SiiveQsuDCls2BedKmaWu/A8
+         69NauQoJTskQwEuik/8OYa4xodSCjjE+bR6WWEk+NamTPh6YvxKoaIibUnkuZQu0AoXO
+         Bm+Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=S7YqvcW7uJgnvwYFXgxeJbVFHcM8MqyxOmFtKk4o1e8=;
+        b=LzM/7eruQH9D0t68AHv0C538pBOVL/wrKpfxSU8V8IXCtmwksTUcmhJMT1+Ks0qNHn
+         oc+Lup9D3/VTz4POn0Nc8FIKLPud1aXTlDPWijTFBfqprzfoTFJ1alV1/eN/6ZrQu+4C
+         lwrMHQYZkjRimptVbpsRyAfM9/gU0f5nQR+NGkq9f3RUmFjqb9vrmYn7iHkhAysmCsGH
+         /DCD5EpPVdhONNeDqj8syX1lpJJE4uFgM9qRh98V4bsATiqxLS1rArkbUy19TlqyK1B0
+         v1j6FZTFfS+jljjQMQiwx44ry+Y8lTljdnAT020v/BrG1zNzXs6KMMTkM0fjWuST8LMn
+         fi9g==
+X-Gm-Message-State: ACrzQf0rxRylmN1UUCaGB0q0leZGovvvlxCDFJoAbeyBUIgaqHQpF5Hu
+        rxrNm1YZStE7OBQYUeGCfQo=
+X-Google-Smtp-Source: AMsMyM4pjDNo0Kww61Ai4NrW4m8vcLBMwRCzHrkO1tvnytVeLlvNSWmy7Va37978oGE/Vpqawvpvhw==
+X-Received: by 2002:a17:907:80a:b0:783:2585:5d73 with SMTP id wv10-20020a170907080a00b0078325855d73mr16851516ejb.642.1667289434901;
+        Tue, 01 Nov 2022 00:57:14 -0700 (PDT)
+Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
+        by smtp.gmail.com with ESMTPSA id d25-20020aa7c1d9000000b00456c6b4b777sm4124898edp.69.2022.11.01.00.57.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 00:57:14 -0700 (PDT)
+From:   Jiri Olsa <olsajiri@gmail.com>
+X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
+Date:   Tue, 1 Nov 2022 08:57:11 +0100
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, x86@kernel.org, bpf@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        llvm@lists.linux.dev, patches@lists.linux.dev
+Subject: Re: [PATCH bpf] bpf: Mark bpf_arch_init_dispatcher_early() as
+ __init_or_module
+Message-ID: <Y2DRVwI4bNUppmXJ@krava>
+References: <20221031173819.2344270-1-nathan@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAa6QmQt9Us8YpirQGXV0_AetuPS+EOqMSGqNn6KW24HXvwO_A@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221031173819.2344270-1-nathan@kernel.org>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon 31-10-22 17:05:06, Zach O'Keefe wrote:
-> On Mon, Oct 31, 2022 at 3:08 PM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Mon 31-10-22 11:31:22, Yang Shi wrote:
-> > > Syzbot reported the below splat:
-> > >
-> > > WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 __alloc_pages_node include/linux/gfp.h:221 [inline]
-> > > WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-> > > WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-> > > Modules linked in:
-> > > CPU: 1 PID: 3646 Comm: syz-executor210 Not tainted 6.1.0-rc1-syzkaller-00454-ga70385240892 #0
-> > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-> > > RIP: 0010:__alloc_pages_node include/linux/gfp.h:221 [inline]
-> > > RIP: 0010:hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-> > > RIP: 0010:alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-> > > Code: e5 01 4c 89 ee e8 6e f9 ae ff 4d 85 ed 0f 84 28 fc ff ff e8 70 fc ae ff 48 8d 6b ff 4c 8d 63 07 e9 16 fc ff ff e8 5e fc ae ff <0f> 0b e9 96 fa ff ff 41 bc 1a 00 00 00 e9 86 fd ff ff e8 47 fc ae
-> > > RSP: 0018:ffffc90003fdf7d8 EFLAGS: 00010293
-> > > RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> > > RDX: ffff888077f457c0 RSI: ffffffff81cd8f42 RDI: 0000000000000001
-> > > RBP: ffff888079388c0c R08: 0000000000000001 R09: 0000000000000000
-> > > R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-> > > R13: dffffc0000000000 R14: 0000000000000000 R15: 0000000000000000
-> > > FS:  00007f6b48ccf700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > CR2: 00007f6b48a819f0 CR3: 00000000171e7000 CR4: 00000000003506e0
-> > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > Call Trace:
-> > >  <TASK>
-> > >  collapse_file+0x1ca/0x5780 mm/khugepaged.c:1715
-> >
-> > This is quite weird, isn't it? alloc_charge_hpage is selecting the most
-> > busy node (as per collapse_control). How come this can be an offline
-> > node? Is a parallel memory hotplug happening?
+On Mon, Oct 31, 2022 at 10:38:19AM -0700, Nathan Chancellor wrote:
+> After commit dbe69b299884 ("bpf: Fix dispatcher patchable function entry
+> to 5 bytes nop"), building kernel/bpf/dispatcher.c in certain
+> configurations with LLVM's integrated assembler results in a known
+> recordmcount bug:
 > 
-> TBH -- I did not look closely at the syzbot reproducer (let alone
-> attempt to run it) and assumed this was the case. Taking a quick look,
-> at least memory hot remove is enabled:
+>   Cannot find symbol for section 4: .init.text.
+>   kernel/bpf/dispatcher.o: failed
 > 
-> CONFIG_ARCH_ENABLE_MEMORY_HOTPLUG=y
-> CONFIG_ARCH_ENABLE_MEMORY_HOTREMOVE=y
-> CONFIG_MEMORY_HOTPLUG=y
-> CONFIG_MEMORY_HOTPLUG_DEFAULT_ONLINE=y
-> CONFIG_MEMORY_HOTREMOVE=y
+> This occurs when there are only weak symbols in a particular section in
+> the translation unit; in this case, bpf_arch_init_dispatcher_early() is
+> marked '__weak __init' and it is the only symbol in the .init.text
+> section. recordmcount expects there to be a symbol for a particular
+> section but LLVM's integrated assembler (and GNU as after 2.37) do not
+> generated section symbols. This has been worked around in the kernel
+> before in commit 55d5b7dd6451 ("initramfs: fix clang build failure")
+> and commit 6e7b64b9dd6d ("elfcore: fix building with clang").
 > 
-> But looking at the C reproducer, I don't immediately see anywhere
-> where we offline nodes. I'll try to run this tomorrow to make sure I'm
-> not missing something real here.
+> Fixing recordmcount has been brought up before but there is no clear
+> solution that does not break ftrace outright.
+> 
+> Unfortunately, working around this issue by removing the '__init' from
+> bpf_arch_init_dispatcher_early() is not an option, as the x86 version of
+> bpf_arch_init_dispatcher_early() calls text_poke_early(), which is
+> marked '__init_or_module', meaning that when CONFIG_MODULES is disabled,
+> bpf_arch_init_dispatcher_early() has to be marked '__init' as well to
+> avoid a section mismatch warning from modpost.
+> 
+> However, bpf_arch_init_dispatcher_early() can be marked
+> '__init_or_module' as well, which would resolve the recordmcount warning
+> for configurations that support modules (i.e., the vast majority of
+> them) while not introducing any new warnings for all configurations. Do
+> so to clear up the build failure for CONFIG_MODULES=y configurations.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/981
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-Looking slightly closer at hpage_collapse_scan_file I think that it is
-possible that xas_for_each simply doesn't find any entries in the page
-cache and with khugepaged_max_ptes_none == HPAGE_PMD_NR we can fall back
-to collapse_file even without any real entries.
+LGTM but the whole thing might be actually going away:
+  https://lore.kernel.org/bpf/Y2BD6xZ108lv3j7J@krava/T/#u
 
-But the mere possibility of the hotplug race should be a sufficient
-ground to remove those WARN_ONs
+because it won't compile on gcc 7
 
+jirka
 
-Thanks!
--- 
-Michal Hocko
-SUSE Labs
+> ---
+>  arch/x86/net/bpf_jit_comp.c | 2 +-
+>  include/linux/bpf.h         | 2 +-
+>  kernel/bpf/dispatcher.c     | 2 +-
+>  3 files changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/arch/x86/net/bpf_jit_comp.c b/arch/x86/net/bpf_jit_comp.c
+> index 00127abd89ee..4145939bbb6a 100644
+> --- a/arch/x86/net/bpf_jit_comp.c
+> +++ b/arch/x86/net/bpf_jit_comp.c
+> @@ -389,7 +389,7 @@ static int __bpf_arch_text_poke(void *ip, enum bpf_text_poke_type t,
+>  	return ret;
+>  }
+>  
+> -int __init bpf_arch_init_dispatcher_early(void *ip)
+> +int __init_or_module bpf_arch_init_dispatcher_early(void *ip)
+>  {
+>  	const u8 *nop_insn = x86_nops[5];
+>  
+> diff --git a/include/linux/bpf.h b/include/linux/bpf.h
+> index 0566705c1d4e..4aa7bde406f5 100644
+> --- a/include/linux/bpf.h
+> +++ b/include/linux/bpf.h
+> @@ -971,7 +971,7 @@ struct bpf_trampoline *bpf_trampoline_get(u64 key,
+>  					  struct bpf_attach_target_info *tgt_info);
+>  void bpf_trampoline_put(struct bpf_trampoline *tr);
+>  int arch_prepare_bpf_dispatcher(void *image, void *buf, s64 *funcs, int num_funcs);
+> -int __init bpf_arch_init_dispatcher_early(void *ip);
+> +int __init_or_module bpf_arch_init_dispatcher_early(void *ip);
+>  
+>  #define BPF_DISPATCHER_INIT(_name) {				\
+>  	.mutex = __MUTEX_INITIALIZER(_name.mutex),		\
+> diff --git a/kernel/bpf/dispatcher.c b/kernel/bpf/dispatcher.c
+> index 04f0a045dcaa..e14a68e9a74f 100644
+> --- a/kernel/bpf/dispatcher.c
+> +++ b/kernel/bpf/dispatcher.c
+> @@ -91,7 +91,7 @@ int __weak arch_prepare_bpf_dispatcher(void *image, void *buf, s64 *funcs, int n
+>  	return -ENOTSUPP;
+>  }
+>  
+> -int __weak __init bpf_arch_init_dispatcher_early(void *ip)
+> +int __weak __init_or_module bpf_arch_init_dispatcher_early(void *ip)
+>  {
+>  	return -ENOTSUPP;
+>  }
+> 
+> base-commit: 8bdc2acd420c6f3dd1f1c78750ec989f02a1e2b9
+> -- 
+> 2.38.1
+> 
