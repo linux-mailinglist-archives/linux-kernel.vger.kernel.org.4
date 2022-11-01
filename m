@@ -2,225 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 584FE614B01
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:43:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50377614B06
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:45:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230251AbiKAMns (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 08:43:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59052 "EHLO
+        id S230193AbiKAMpR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 08:45:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiKAMnq (ORCPT
+        with ESMTP id S229511AbiKAMpP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 08:43:46 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D94818E37;
-        Tue,  1 Nov 2022 05:43:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667306625; x=1698842625;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=447inlpxE5S1idg51FXKxsFvnXhIeN3ynoRElsi9OSg=;
-  b=gH7XfP9kx/OIMnvJKRmhLnN4yZdyiPEA/0N1GUFXuU1kIcaqLzgLwYrk
-   IGazOLlpXJnF7/ERzuTbSE1TjJ0mxkWaQgVWJvRM/1AzPyvfjOBjkB43V
-   rsK1sVPpucOA4qsQ1AJD6MDzfdF8sSU7CjhaErTRYwA+LbzJdxZJ6Nn5i
-   D/JT+VklNkkxqZ1+hPS1goOmFuoNxEyoNGY53JTrKjRVkgo1bjGh7AwwU
-   hezU5fIrwTa934kQjCD9eesuE2kQyaaFccl/K7p15gEg+jBRBn3cNrHCS
-   9s5tK3XLE/x2T6kmJUf3/gXCtUKU8rYup+W+em5EJvFlMLXSRUKMqsfdV
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="292429016"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="292429016"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 05:43:44 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="633861884"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="633861884"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga002.jf.intel.com with ESMTP; 01 Nov 2022 05:43:44 -0700
-Received: from maurocar-mobl2 (maurocar-mobl2.ger.corp.intel.com [10.252.29.141])
+        Tue, 1 Nov 2022 08:45:15 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 435CB1AF1C;
+        Tue,  1 Nov 2022 05:45:15 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 7EF95580AA7;
-        Tue,  1 Nov 2022 05:43:37 -0700 (PDT)
-Date:   Tue, 1 Nov 2022 13:43:34 +0100
-From:   Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
-To:     Daniel Latypov <dlatypov@google.com>
-Cc:     Isabella Basso <isabbasso@riseup.net>,
-        linux-kselftest@vger.kernel.org, Daniel Vetter <daniel@ffwll.ch>,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Magali Lemes <magalilemes00@gmail.com>,
-        =?UTF-8?B?TWHDrXJh?= Canal <maira.canal@usp.br>,
-        n@nfraprado.net, kernel list <linux-kernel@vger.kernel.org>,
-        leandro.ribeiro@collabora.com, igt-dev@lists.freedesktop.org,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        David Gow <davidgow@google.com>,
-        Tales Aparecida <tales.aparecida@gmail.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        =?UTF-8?B?QW5kcsOp?= Almeida <andrealmeid@riseup.net>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Trevor Woerner <twoerner@gmail.com>
-Subject: Re: [igt-dev] [PATCH i-g-t v2 3/4] lib/igt_kmod: add compatibility
- for KUnit
-Message-ID: <20221101134334.59500e01@maurocar-mobl2>
-In-Reply-To: <CAGS_qxpCPTSRNAyejL0gS0pZAoVNp9SdFwPFkHRyn5yMuPGkLw@mail.gmail.com>
-References: <20220829000920.38185-1-isabbasso@riseup.net>
-        <20220829000920.38185-4-isabbasso@riseup.net>
-        <CABVgOS=HO9XAf8C5X7ZD6aTW37r06ify==7AW9a8cpKsgLVfFw@mail.gmail.com>
-        <D53B4EB1-1A95-48F1-BF49-8EC0CC7B5418@riseup.net>
-        <CAGS_qxpCPTSRNAyejL0gS0pZAoVNp9SdFwPFkHRyn5yMuPGkLw@mail.gmail.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id F39D5B81C9C;
+        Tue,  1 Nov 2022 12:45:13 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 14D0DC433D6;
+        Tue,  1 Nov 2022 12:45:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667306712;
+        bh=44cQ93c6tk7IF1CBO+5gDPy5bTD1a+eBcb6QrsNdutM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=gpyeBIQo2ErA2v7MzdGXIVTZv2uYGXonifv4KEkySlNyGSxu9JMHz+03YNkMydgpb
+         8nVpUnPB11YnlC0I5CckHciGcEIb4GGdE/S/If5nachg7WD2vrp0a2PdZB1VIcfBKm
+         hHW4fhnyk9WVuIBTlxIwhpPnlxeJplc3B3MzdAIcvEtmPC738Y+8pCTHeP7xCKKlQC
+         toSJtTL8FPw+eRtxQR1BC+8/i4TMFeAslfx6yEJaAcusVjQvphy0yxFtIRs8hkOAsB
+         +pp2n0nGn4eFrGr4KqUGADNOVdIj1T4wA13k/V2TwJq8TFVd5nG7Po4gX8jpOErf3g
+         O5PoNHSqZ53dg==
+Date:   Tue, 1 Nov 2022 13:45:09 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+Cc:     linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] i2c: npcm7xx: Group bank 0/1 registers together for
+ readability
+Message-ID: <Y2EU1SbtBwoF24yc@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        linux-kernel@vger.kernel.org
+References: <20221008125924.1220203-1-j.neuschaefer@gmx.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Yyo+CywAAMaOGClx"
+Content-Disposition: inline
+In-Reply-To: <20221008125924.1220203-1-j.neuschaefer@gmx.net>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 19 Sep 2022 17:25:38 -0700
-Daniel Latypov <dlatypov@google.com> wrote:
 
-> On Mon, Sep 19, 2022 at 1:43 PM Isabella Basso <isabbasso@riseup.net> wro=
-te:
-> > >> +        * "(K)TAP version XX" should be the first line on all (sub)=
-tests as per
-> > >> +        * https://www.kernel.org/doc/html/latest/dev-tools/ktap.htm=
-l#version-lines
-> > >> +        * but actually isn't, as it currently depends on whoever wr=
-ites the
-> > >> +        * test to print this info =20
-> > >
-> > > FYI: we're really trying to fix cases of "missing version lines",
-> > > largely by making the kunit_test_suites() macro work in more
-> > > circumstances.
-> > >
-> > > So while it may be worth still handling the case where this is
-> > > missing, I don't think there are any tests in the latest versions of
-> > > the kernel which should have this missing. =20
-> >
-> > I=E2=80=99m not sure if I totally get how these work. Every time I run =
-a KUnit test I
-> > get something like this: https://pastebin.com/7Ff31PMC
-> >
-> > As you can see it has been loaded as a module, just like we intend to d=
-o it
-> > from IGT, and I see no version lines whatsoever. Am I doing something w=
-rong? =20
+--Yyo+CywAAMaOGClx
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+On Sat, Oct 08, 2022 at 02:59:23PM +0200, Jonathan Neusch=C3=A4fer wrote:
+> The unlabelled registers NPCM_I2CCTL4 to NPCM_I2CSCLHT overlap with the
+> bank 1 registers below, and they are accessed after selecting bank 0, so
+> they clearly belong to bank 0.
 >=20
-> You're doing everything right.
+> Move them together with the other bank 0 registers, and move the
+> unrelated definition of npcm_i2caddr down to keep the banked registers
+> in one piece.
 >=20
-> The problem is we only print the version line for the *built-in* tests.
-> It never gets printed for tests in loadable modules.
+> Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
 
-IGT tests require loadable modules, as some tests check if bind/unbind
-and load/unload works. Also, some tests require modprobing drivers
-with different parameters.
+Applied to for-next, thanks!
 
-Unfortunately, kunit.py is currently broken on such cases: its parser
-simply ignores everything if the subtest doesn't have a TAP version
-just before it. See:
 
-	$ ./tools/testing/kunit/kunit.py parse /var/log/dmesg
-	[12:37:05] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-	[12:37:05] [ERROR] Test: main: 0 tests run!
-	[12:37:05] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-	[12:37:05] Testing complete. Ran 0 tests: errors: 1
+--Yyo+CywAAMaOGClx
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Here, I loaded the test module twice. I can force it to parse it by
-doing
+-----BEGIN PGP SIGNATURE-----
 
-	$ (dmesg|grep "TAP version"; dmesg|grep -A9999 intel_i915_mock) >logs=20
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNhFNUACgkQFA3kzBSg
+KbZ7vA/+NMNAb3/LudrY1sd1RO0JeFXNUeakp4Tw8wnp2nMdolmbLvmMo4qNdaBj
+2JJwTsjlqw8zhBD+/tXbU/5F8UInX8EF7PYIBAM44DYpH/ZeX0SFvjb3/xYYK4+F
+Ooxh4NxjXb40VXeD/8a63FxVVi2EUV8c5nBLAhn40EvIOfoXI+SPL6lHZfY2AJk5
+J1ADPm3kvo11JkP1fNazOOUMD61/HzZ7pSRXSZfpLAF+WT2+btRaL1I9aIB+WQiO
+NUsif/nkrqHHm4uYLYAVDS56fzg/KfdScoEEiPWXAB0dciIL4B3fN9cGwMmRAS0w
+PjzMgYYViZajSzBxcXWzXNbB5+tqVB1NbZCDrzs91nAtaC0kYUc2NByRoAC+iRrv
+uI8fAdNcuy8EmBRG1wP+e/KQUbewNU8Hh5eNkllBakBUfrT3yNl9keUE5Gn63N4B
+hUwWou06sckVlueXk3+FMIlVE5PNlmxrEm58RNkx2+K+KvXHgqpbBiHHPnGuB0/B
+FN8Oio6vYvzepKMs2YfuSo0AvJ+IlEBPFAVhfu7JmnJ6q8QbyNKGa1ZkAhV20RUn
++bUFSUcy9l+TyYvvWMtg92g8lWDzNr27WA9dU/X0Bw+1rHWL8sNUEv468ThDqH2f
+mkF+x3WbjqZe2k/UBahpxEfZWUom5pKlvQiWaxDCg+NwRSwf7Bk=
+=F1sB
+-----END PGP SIGNATURE-----
 
-But then, it gets confused with two subtests with the same name:
-
-	$ ./tools/testing/kunit/kunit.py parse logs
-	[12:37:34] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-	[12:37:34] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D intel_i915_mock (18 =
-subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-	[12:37:34] [PASSED] sanitycheck
-	[12:37:34] [PASSED] shmem
-	[12:37:34] [PASSED] fence
-	[12:37:34] [PASSED] scatterlist
-	[12:37:34] [PASSED] syncmap
-	[12:37:34] [PASSED] uncore
-	[12:37:34] [PASSED] ring
-	[12:37:34] [PASSED] engine
-	[12:37:34] [PASSED] timelines
-	[12:37:34] [PASSED] requests
-	[12:37:34] [PASSED] objects
-	[12:37:34] [PASSED] phys
-	[12:37:34] [PASSED] dmabuf
-	[12:37:34] [PASSED] vma
-	[12:37:34] [PASSED] evict
-	[12:37:34] [PASSED] gtt
-	[12:37:34] [PASSED] hugepages
-	[12:37:34] [PASSED] memory_region
-	[12:37:34] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PASSED] in=
-tel_i915_mock =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-	[12:37:34] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D intel_i915_mock (18 =
-subtests) =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-	[12:37:34] [PASSED] sanitycheck
-	[12:37:34] [PASSED] shmem
-	[12:37:34] [PASSED] fence
-	[12:37:34] [PASSED] scatterlist
-	[12:37:34] [PASSED] syncmap
-	[12:37:34] [PASSED] uncore
-	[12:37:34] [PASSED] ring
-	[12:37:34] [PASSED] engine
-	[12:37:34] [PASSED] timelines
-	[12:37:34] [PASSED] requests
-	[12:37:34] [PASSED] objects
-	[12:37:34] [PASSED] phys
-	[12:37:34] [PASSED] dmabuf
-	[12:37:34] [PASSED] vma
-	[12:37:34] [PASSED] evict
-	[12:37:34] [PASSED] gtt
-	[12:37:34] [PASSED] hugepages
-	[12:37:34] [PASSED] memory_region
-	[12:37:34] [ERROR] Test: intel_i915_mock: Expected test number 2 but found=
- 1
-	[12:37:34] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D [PASSED] in=
-tel_i915_mock =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-	[12:37:34] =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
-	[12:37:34] Testing complete. Ran 36 tests: passed: 36, errors: 1
-
-> Some more details below, if interested.
-> Specifically, it happens in
-> https://elixir.bootlin.com/linux/latest/C/ident/kunit_print_tap_header
->=20
-> What David is referring to is we had tests that weren't in modules,
-> but didn't use the normal built-in code path. Those were also missing
-> TAP version lines.
-> But KUnit needs to do better here in the case of modules.
->=20
-> The goal was that you'd be able to parse the result of module based
-> tests by something like
-> $ cat /sys/kernel/debug/kunit/*/results | ./tools/testing/kunit/kunit.py =
-parse
-> but this doesn't work because of the lack of a version line.
-
-At least here, debug/kunit doesn't exist:
-
-	sudo ls -lctra /sys/kernel/debug/|grep kunit
-
->=20
-> If we add it to each module's test results, then we'll need to update
-> the parse to allow multiple verison lines, I think.
-
-Yeah, the parser is currently broken when used with modules.
-
-Regards,
-Mauro
+--Yyo+CywAAMaOGClx--
