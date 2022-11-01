@@ -2,21 +2,21 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 295836146BB
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 10:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D35A6146BC
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 10:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230162AbiKAJe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 05:34:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39958 "EHLO
+        id S230181AbiKAJeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 05:34:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229982AbiKAJeX (ORCPT
+        with ESMTP id S230119AbiKAJeX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 1 Nov 2022 05:34:23 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EB7918E05;
-        Tue,  1 Nov 2022 02:34:22 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N1lGM04Flz15MCf;
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B5D618E11;
+        Tue,  1 Nov 2022 02:34:23 -0700 (PDT)
+Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.54])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N1lGL65LYzmVW6;
         Tue,  1 Nov 2022 17:34:18 +0800 (CST)
 Received: from huawei.com (10.174.178.129) by kwepemi500016.china.huawei.com
  (7.221.188.220) with Microsoft SMTP Server (version=TLS1_2,
@@ -26,9 +26,9 @@ From:   Kemeng Shi <shikemeng@huawei.com>
 To:     <paolo.valente@linaro.org>, <axboe@kernel.dk>
 CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <shikemeng@huawei.com>
-Subject: [PATCH 01/20] block, bfq: fix typo in comment
-Date:   Tue, 1 Nov 2022 17:33:58 +0800
-Message-ID: <20221101093417.10540-2-shikemeng@huawei.com>
+Subject: [PATCH 02/20] block, bfq: Update bfqd->max_budget with bfqd->lock held
+Date:   Tue, 1 Nov 2022 17:33:59 +0800
+Message-ID: <20221101093417.10540-3-shikemeng@huawei.com>
 X-Mailer: git-send-email 2.14.1.windows.1
 In-Reply-To: <20221101093417.10540-1-shikemeng@huawei.com>
 References: <20221101093417.10540-1-shikemeng@huawei.com>
@@ -46,26 +46,60 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-IO/ -> I/0
+bfq_max_budget and bfq_user_max_budget maybe be in inconsisten state if
+bfq_max_budget configuration and bfq_max_budget auto-update happen
+concurrently.
+Example sequence:
+config                          auto-update
+bfqd->bfq_max_budget =
+  __data
+                                if (bfqd->bfq_user_max_budget == 0)
+                                  bfqd->bfq_max_budget =
+                                    bfq_calc_max_budget(bfqd);
+bfqd->bfq_user_max_budget =
+  __data;
+
+bfq_max_budget is only update in update_thr_responsiveness_params and
+configuration code. As update_thr_responsiveness_params is always called
+under bfqd->lock, fix this by holding lock in configuration code.
 
 Signed-off-by: Kemeng Shi <shikemeng@huawei.com>
 ---
- block/bfq-iosched.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ block/bfq-iosched.c | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 7ea427817f7f..25a88ffd997e 100644
+index 25a88ffd997e..13370c41ad36 100644
 --- a/block/bfq-iosched.c
 +++ b/block/bfq-iosched.c
-@@ -5633,7 +5633,7 @@ bfq_do_early_stable_merge(struct bfq_data *bfqd, struct bfq_queue *bfqq,
-  *
-  * Putting these two facts together, this commits merges stably the
-  * bfq_queues associated with these I/O flows, i.e., with the
-- * processes that generate these IO/ flows, regardless of how many the
-+ * processes that generate these I/O flows, regardless of how many the
-  * involved processes are.
-  *
-  * To decide whether a set of bfq_queues is actually associated with
+@@ -7328,6 +7328,7 @@ static ssize_t bfq_max_budget_store(struct elevator_queue *e,
+ 	if (ret)
+ 		return ret;
+ 
++	spin_lock_irq(&bfqd->lock);
+ 	if (__data == 0)
+ 		bfqd->bfq_max_budget = bfq_calc_max_budget(bfqd);
+ 	else {
+@@ -7337,6 +7338,7 @@ static ssize_t bfq_max_budget_store(struct elevator_queue *e,
+ 	}
+ 
+ 	bfqd->bfq_user_max_budget = __data;
++	spin_unlock_irq(&bfqd->lock);
+ 
+ 	return count;
+ }
+@@ -7362,8 +7364,11 @@ static ssize_t bfq_timeout_sync_store(struct elevator_queue *e,
+ 		__data = INT_MAX;
+ 
+ 	bfqd->bfq_timeout = msecs_to_jiffies(__data);
++
++	spin_lock_irq(&bfqd->lock);
+ 	if (bfqd->bfq_user_max_budget == 0)
+ 		bfqd->bfq_max_budget = bfq_calc_max_budget(bfqd);
++	spin_unlock_irq(&bfqd->lock);
+ 
+ 	return count;
+ }
 -- 
 2.30.0
 
