@@ -2,129 +2,146 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC969614CC5
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 15:38:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 94C38614CC7
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 15:39:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230063AbiKAOiL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 10:38:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
+        id S230083AbiKAOjD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 10:39:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52490 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229889AbiKAOiJ (ORCPT
+        with ESMTP id S229717AbiKAOjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 10:38:09 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03FC51C11E;
-        Tue,  1 Nov 2022 07:38:07 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A01B1B81DE9;
-        Tue,  1 Nov 2022 14:38:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86C9BC433D6;
-        Tue,  1 Nov 2022 14:37:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667313484;
-        bh=kXIES3fUfmzO3HJbLiS5y/Jt0Jn+5tsME6+CcibsmBQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Nd1RzC5/4V/HY9n0QcSbWzhxKVyETUTh38ZBhXbEnOWbpZhO29Rmq+sL7CocZvXRC
-         zypQa7TxV9+aLi3m6Z2GARHHVNvKl3bwYMZ9v58iXCVFJsYKvfKOpuhz3urtn7kXoE
-         7M5T2ud/lwVlkEdSG23H4F7D6PKdSfqGeZgB3zwLVeyZshHnLfzrKCkuhlbs2ipr2L
-         ryf/Utxx4mtmS2ezTwmkgvQTtqdPck1QDq5DTCr7dIAMhdAAsEC1+LoWZ4JRJyjKOy
-         rwv3BT4M/NMHcrInbaKq26Jxt3z3Ra+vBGmYK5qQ2giDt+5n2EKJiDn/ARD4XY8iUG
-         pCilnbJq8Z1lQ==
-Date:   Tue, 1 Nov 2022 20:07:49 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Johan Hovold <johan+linaro@kernel.org>
-Cc:     Stanimir Varbanov <svarbanov@mm-sol.com>,
-        Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-        quic_vbadigan@quicinc.com, Brian Masney <bmasney@redhat.com>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/2] dt-bindings: PCI: qcom: Add SC8280XP/SA8540P
- interconnects
-Message-ID: <20221101143749.GB244012@thinkpad>
-References: <20221021064616.6380-1-johan+linaro@kernel.org>
- <20221021064616.6380-2-johan+linaro@kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221021064616.6380-2-johan+linaro@kernel.org>
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 1 Nov 2022 10:39:00 -0400
+Received: from out30-131.freemail.mail.aliyun.com (out30-131.freemail.mail.aliyun.com [115.124.30.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 762B03895;
+        Tue,  1 Nov 2022 07:38:56 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R101e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018046050;MF=chentao.kernel@linux.alibaba.com;NM=1;PH=DS;RN=13;SR=0;TI=SMTPD_---0VTjllWc_1667313514;
+Received: from VM20210331-5.tbsite.net(mailfrom:chentao.kernel@linux.alibaba.com fp:SMTPD_---0VTjllWc_1667313514)
+          by smtp.aliyun-inc.com;
+          Tue, 01 Nov 2022 22:38:52 +0800
+From:   Tao Chen <chentao.kernel@linux.alibaba.com>
+To:     Quentin Monnet <quentin@isovalent.com>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>
+Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tao Chen <chentao.kernel@linux.alibaba.com>
+Subject: [PATCH] bpftool: Support use full prog name in prog subcommand
+Date:   Tue,  1 Nov 2022 22:38:32 +0800
+Message-Id: <c26d1dde6d1665a9195b054e5fd209a32c94e490.1667313454.git.chentao.kernel@linux.alibaba.com>
+X-Mailer: git-send-email 2.2.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 08:46:15AM +0200, Johan Hovold wrote:
-> Add the missing SC8280XP/SA8540P "pcie-mem" and "cpu-pcie" interconnect
-> paths to the bindings.
-> 
-> Fixes: 76d777ae045e ("dt-bindings: PCI: qcom: Add SC8280XP to binding")
-> Fixes: 76c4207f4085 ("dt-bindings: PCI: qcom: Add SA8540P to binding")
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+Now that the commit: <b662000aff84> ("bpftool: Adding support for BTF
+program names") supported show the full prog name, we can also use
+the full prog name more than 16 (BPF_OBJ_NAME_LEN) chars in prog
+subcommand, such as "bpftool prog show name PROG_NAME".
 
-Acked-by: Manivannan Sadhasivam <mani@kernel.org>
+Signed-off-by: Tao Chen <chentao.kernel@linux.alibaba.com>
+---
+ tools/bpf/bpftool/common.c | 48 ++++++++++++++++++++++++++++++++++++++--------
+ 1 file changed, 40 insertions(+), 8 deletions(-)
 
-Thanks,
-Mani 
-
-> ---
->  .../devicetree/bindings/pci/qcom,pcie.yaml    | 20 +++++++++++++++++++
->  1 file changed, 20 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> index 54f07852d279..2f851c804bb0 100644
-> --- a/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> +++ b/Documentation/devicetree/bindings/pci/qcom,pcie.yaml
-> @@ -62,6 +62,14 @@ properties:
->      minItems: 3
->      maxItems: 13
->  
-> +  interconnects:
-> +    maxItems: 2
-> +
-> +  interconnect-names:
-> +    items:
-> +      - const: pcie-mem
-> +      - const: cpu-pcie
-> +
->    resets:
->      minItems: 1
->      maxItems: 12
-> @@ -631,6 +639,18 @@ allOf:
->            items:
->              - const: pci # PCIe core reset
->  
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            enum:
-> +              - qcom,pcie-sa8540p
-> +              - qcom,pcie-sc8280xp
-> +    then:
-> +      required:
-> +        - interconnects
-> +        - interconnect-names
-> +
->    - if:
->        not:
->          properties:
-> -- 
-> 2.37.3
-> 
-
+diff --git a/tools/bpf/bpftool/common.c b/tools/bpf/bpftool/common.c
+index 067e9ea..5efdedc 100644
+--- a/tools/bpf/bpftool/common.c
++++ b/tools/bpf/bpftool/common.c
+@@ -720,6 +720,40 @@ print_all_levels(__maybe_unused enum libbpf_print_level level,
+ 	return vfprintf(stderr, format, args);
+ }
+ 
++static bool is_invalid_prog(char *nametag, struct bpf_prog_info *info,
++				struct bpf_func_info *finfo, bool tag)
++{
++	const struct btf *prog_btf;
++	const struct btf_type *func_type;
++	const char *name;
++
++	if (tag)
++		return memcmp(nametag, info->tag, BPF_TAG_SIZE);
++
++	if (strlen(nametag) < BPF_OBJ_NAME_LEN)
++		return strncmp(nametag, info->name, BPF_OBJ_NAME_LEN);
++
++	prog_btf = btf__load_from_kernel_by_id(info->btf_id);
++	if (!prog_btf) {
++		p_err("get prog btf failed, btf_id:%u\n", info->btf_id);
++		return true;
++	}
++
++	func_type = btf__type_by_id(prog_btf, finfo->type_id);
++	if (!func_type || !btf_is_func(func_type)) {
++		p_err("func type invalid, type_id:%u\n", finfo->type_id);
++		return true;
++	}
++
++	name = btf__name_by_offset(prog_btf, func_type->name_off);
++	if (!name) {
++		p_err("func name invalid, name_off:%u\n", func_type->name_off);
++		return true;
++	}
++
++	return strncmp(nametag, name, strlen(name));
++}
++
+ static int prog_fd_by_nametag(void *nametag, int **fds, bool tag)
+ {
+ 	unsigned int id = 0;
+@@ -729,6 +763,7 @@ static int prog_fd_by_nametag(void *nametag, int **fds, bool tag)
+ 
+ 	while (true) {
+ 		struct bpf_prog_info info = {};
++		struct bpf_func_info finfo = {};
+ 		__u32 len = sizeof(info);
+ 
+ 		err = bpf_prog_get_next_id(id, &id);
+@@ -747,15 +782,17 @@ static int prog_fd_by_nametag(void *nametag, int **fds, bool tag)
+ 			goto err_close_fds;
+ 		}
+ 
++		info.nr_func_info = 1;
++		info.func_info_rec_size = sizeof(finfo);
++		info.func_info = ptr_to_u64(&finfo);
++
+ 		err = bpf_obj_get_info_by_fd(fd, &info, &len);
+ 		if (err) {
+ 			p_err("can't get prog info (%u): %s",
+ 			      id, strerror(errno));
+ 			goto err_close_fd;
+ 		}
+-
+-		if ((tag && memcmp(nametag, info.tag, BPF_TAG_SIZE)) ||
+-		    (!tag && strncmp(nametag, info.name, BPF_OBJ_NAME_LEN))) {
++		if (is_invalid_prog(nametag, &info, &finfo, tag)) {
+ 			close(fd);
+ 			continue;
+ 		}
+@@ -818,12 +855,7 @@ int prog_parse_fds(int *argc, char ***argv, int **fds)
+ 		char *name;
+ 
+ 		NEXT_ARGP();
+-
+ 		name = **argv;
+-		if (strlen(name) > BPF_OBJ_NAME_LEN - 1) {
+-			p_err("can't parse name");
+-			return -1;
+-		}
+ 		NEXT_ARGP();
+ 
+ 		return prog_fd_by_nametag(name, fds, false);
 -- 
-மணிவண்ணன் சதாசிவம்
+2.2.1
+
