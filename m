@@ -2,79 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EC44961510E
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 18:47:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00BCA615111
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 18:51:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbiKARrw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 13:47:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44606 "EHLO
+        id S230043AbiKARvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 13:51:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46080 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229562AbiKARrt (ORCPT
+        with ESMTP id S229562AbiKARvr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 13:47:49 -0400
-Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 466EA1D643;
-        Tue,  1 Nov 2022 10:47:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667324869; x=1698860869;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=TYf5YYIzFj+h7ElHv3ioNLA0mS+1SXo5oCNtaYVIquA=;
-  b=N+5O+DumIbOame0OI571r3Y2i4czPcQ4fSvgdL9h58eXO5ZiBhRFdYWx
-   tbH/wgAoDhX1ofBhmqyTfYJbKHrE2CK/kMp11PsbsoU4bfnhmMXHwD3ZA
-   /JLJBTvnKFv3Ct7t5E3sXSVn3MfqpP8eqSE95Wr9Ah+cDrCKwy7fhs2op
-   EPQaLqRiiBd3HZQ/wynIbLHH5u+SfVK1sypDEJfjYtsPXTYbJuyyFPEiV
-   lSFQpfO2wqzqXNpjb5yAyXbe/eksdPO4UHVN9GGv/4RLpwVVRgqhBsuaI
-   CF+lPG652PLs+6g4zOIldwnGv5lGqtcGRRNEBU9lw3onOCgOBtU7hUCVS
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="306818990"
-X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
-   d="scan'208";a="306818990"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 10:47:49 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="963206366"
-X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
-   d="scan'208";a="963206366"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga005.fm.intel.com with ESMTP; 01 Nov 2022 10:47:47 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1opvMY-005hWx-1m;
-        Tue, 01 Nov 2022 19:47:46 +0200
-Date:   Tue, 1 Nov 2022 19:47:46 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
-        <u.kleine-koenig@pengutronix.de>, linux-pwm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Thierry Reding <thierry.reding@gmail.com>
-Subject: Re: [PATCH v1 2/3] pwm: core: Drop unneeded casting in pwm_seq_show()
-Message-ID: <Y2Fbwg99BWJ54q/w@smile.fi.intel.com>
-References: <20221101174255.54452-1-andriy.shevchenko@linux.intel.com>
- <20221101174255.54452-2-andriy.shevchenko@linux.intel.com>
+        Tue, 1 Nov 2022 13:51:47 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D1F1D1C43D;
+        Tue,  1 Nov 2022 10:51:46 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 77152336C4;
+        Tue,  1 Nov 2022 17:51:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1667325105; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8Hu2igDpV58FWOpyGjErjvDHZCw49fVJ+gWTy+xKV5E=;
+        b=y9wYpip6Of0LxO5D0ICCZcxW5C4TSGGzJYTFjb+bKg3sU2k05k4D+/01EPPXlczTaEBRmB
+        fbmiQ/N6jqun7+cAPgU8IAkRAhiPgew7XKrAjURzfU3Lu1w2crWuvxtj9JjG7w5lOm5dNy
+        t+qapKKxG0oDUt/1dtxQO3ahJmGqKG4=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1667325105;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8Hu2igDpV58FWOpyGjErjvDHZCw49fVJ+gWTy+xKV5E=;
+        b=XhaNawLrRjMwML6jyojoDCga85WxaVolsa3sEPqf0UcePwfe2kmdA2uIEP5avYx0+Eb2P0
+        Dmgclk6xu5T1aGCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 531561346F;
+        Tue,  1 Nov 2022 17:51:45 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id vH08FLFcYWMHIwAAMHmgww
+        (envelope-from <jack@suse.cz>); Tue, 01 Nov 2022 17:51:45 +0000
+Received: by quack3.suse.cz (Postfix, from userid 1000)
+        id 3EC20A0700; Tue,  1 Nov 2022 18:51:44 +0100 (CET)
+Date:   Tue, 1 Nov 2022 18:51:44 +0100
+From:   Jan Kara <jack@suse.cz>
+To:     Stephen Brennan <stephen.s.brennan@oracle.com>
+Cc:     Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Subject: Re: [PATCH v3 0/3] fsnotify: fix softlockups iterating over d_subdirs
+Message-ID: <20221101175144.yu3l5qo5gfwfpatt@quack3>
+References: <20221021010310.29521-1-stephen.s.brennan@oracle.com>
+ <20221028001016.332663-1-stephen.s.brennan@oracle.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221101174255.54452-2-andriy.shevchenko@linux.intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221028001016.332663-1-stephen.s.brennan@oracle.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 07:42:54PM +0200, Andy Shevchenko wrote:
-> The casting form void * to char * is not needed and done implicitly.
+Hi Stephen!
 
-This patch is wrong and it seems I have tried something like this in the past.
-The rest in the series is okay.
+On Thu 27-10-22 17:10:13, Stephen Brennan wrote:
+> Here is v3 of the patch series. I've taken all of the feedback,
+> thanks Amir, Christian, Hilf, et al. Differences are noted in each
+> patch.
+> 
+> I caught an obvious and silly dentry reference leak: d_find_any_alias()
+> returns a reference, which I never called dput() on. With that change, I
+> no longer see the rpc_pipefs issue, but I do think I need more testing
+> and thinking through the third patch. Al, I'd love your feedback on that
+> one especially.
+> 
+> Thanks,
+> Stephen
+> 
+> Stephen Brennan (3):
+>   fsnotify: Use d_find_any_alias to get dentry associated with inode
+>   fsnotify: Protect i_fsnotify_mask and child flags with inode rwsem
+>   fsnotify: allow sleepable child flag update
 
+Thanks for the patches Stephen and I'm sorry for replying somewhat late.
+The first patch is a nobrainer. The other two patches ... complicate things
+somewhat more complicated than I'd like. I guess I can live with them if we
+don't find a better solution but I'd like to discuss a bit more about
+alternatives.
+
+So what would happen if we just clear DCACHE_FSNOTIFY_PARENT_WATCHED in
+__fsnotify_parent() for the dentry which triggered the event and does not
+have watched parent anymore and never bother with full children walk? I
+suppose your contention problems will be gone, we'll just pay the price of
+dget_parent() + fsnotify_inode_watches_children() for each child that
+falsely triggers instead of for only one. Maybe that's not too bad? After
+all any event upto this moment triggered this overhead as well...
+
+Am I missing something? AFAIU this would allow us to avoid the games with
+the new connector flag etc... We would probably still need to avoid
+softlockups when setting the flag DCACHE_FSNOTIFY_PARENT_WATCHED but that
+should be much simpler (we could use i_rwsem trick like you do).
+
+								Honza
 -- 
-With Best Regards,
-Andy Shevchenko
-
-
+Jan Kara <jack@suse.com>
+SUSE Labs, CR
