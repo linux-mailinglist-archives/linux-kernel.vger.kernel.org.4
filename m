@@ -2,227 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BD80614C89
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 15:26:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D140614C8D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 15:28:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbiKAO0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 10:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43118 "EHLO
+        id S230078AbiKAO2W (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 10:28:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229752AbiKAO0f (ORCPT
+        with ESMTP id S229511AbiKAO2T (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 10:26:35 -0400
-Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6342CDF0D
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 07:26:34 -0700 (PDT)
-Received: by mail-ej1-x62a.google.com with SMTP id t25so37459854ejb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 07:26:34 -0700 (PDT)
+        Tue, 1 Nov 2022 10:28:19 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6074645E
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 07:28:18 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id t62so5238404oib.12
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 07:28:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=oVIuibKW7Di+NHpw7iDbFjaRzUNbZHTAtJupVrKnN1I=;
-        b=U4fWyAMhWOG3hCLCogEuTz5Hv9u9XUphFx5Vg3AFjaJhjIOkTLj50uF4LDfLtaRWNV
-         dSKACqGdqSeCgbMkJ8qZo4G9p8MREV9xRGNvxRh824kyLcQ7tvDs0O5m7C6dfqxA7NW+
-         cF2TzSFiTu4LJR4c3wrtB4SIr1YgjDhPS5JfWIm2L9Xqhqnhh1qcCCWPC3h21GExAVJB
-         0e/I7GQioRkyW+J7cvewoz2ETTxr4fMvngnAbbS/B92SgCQDjfdqNQelxpM1FlejPe1d
-         1NbkiAHccCZoRxsRBFLQSe8+wgkhcwXWicBfO8cg++wmVsBcQM1ZayDZCseaevANwze1
-         j5rA==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tCAHuauyqRDt6mVa8UX+cbOhcceVwq2lTH7wmX1Rf1A=;
+        b=XrU1syuKyYTGj8ZOLCfiFGzue+8tq752jGzFu/UEAkyMV+LxqCyKb3a54opjuXMGEJ
+         hOHALRVwfP7HchVP5CKoWo7CJRBpZ7nELeFZFM55MOPskt++SipNS0vhWnzN4/JJ6SAL
+         Hpz2k/FgoUw25enqaEMjqjxU3JDkuc5gk9kbC1KvRNxrW3SruZjFtp8qcpRLLDJnsEd6
+         Pos0rw5VJ7Rk9u+izPdjcC0gHU2UXaBJJsuXMw4MWG+Yr9iQeYFxp8yIpwid/JjfGs6v
+         Sgr+rKtwRk9mbkBLtqQbpWcupPxY/8EUbEl1tIg2dbwNwkKnB6z6ZV+LGHdW/LmJ+rdy
+         JGaw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oVIuibKW7Di+NHpw7iDbFjaRzUNbZHTAtJupVrKnN1I=;
-        b=fp+VBXWu4x7uokBZ/kPcjZx3vxRKF6x4kzrdX1xx4tHb2xDFfvbXDv1IDkOZQXb2Od
-         IPfJzth7mya49e+6EYoaksAnF/iNiN2FJ7LJ20bgkuqc/qam8msj+BnVuAgzATm0Rjrv
-         UkpHYWUwTGYJSbUeSgff9OiGCUW9kPzlvZalC1HAZe9XYPC7D4rdvuaWbU9Ca/ezOX58
-         7JOw5hNY8XKsQZt1VqvYw7XCgZu7BabhOqSn0PgatOfls8uISNMYCfJyBJt5Q5DWHNkA
-         awK/0aMj4Sddu0dSEtXEeTIQE/NVS+TP0EdsKw0XHzXNx8Lm+fIezpqUUZEigq6QxorH
-         UzNQ==
-X-Gm-Message-State: ACrzQf0RMlkLT1ZZG3o+15841AnPfl9VAMTFvRX1yVIl+QyljuZdmlMZ
-        KVsG1FpewyyPsEsNDKwo+5UZcw==
-X-Google-Smtp-Source: AMsMyM4lOOJRlCZ+7BLMeDTWBlE5tKftEVsKjQPh7j2g2sPc7AfFGdOsPLoeTfoJpR1uuJZ243VD1w==
-X-Received: by 2002:a17:906:ee89:b0:73d:70c5:1a4e with SMTP id wt9-20020a170906ee8900b0073d70c51a4emr17976079ejb.683.1667312792806;
-        Tue, 01 Nov 2022 07:26:32 -0700 (PDT)
-Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
-        by smtp.gmail.com with ESMTPSA id oq13-20020a170906cc8d00b0073022b796a7sm4286691ejb.93.2022.11.01.07.26.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 07:26:32 -0700 (PDT)
-Date:   Tue, 1 Nov 2022 15:26:31 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Guo Ren <guoren@kernel.org>, kvm-riscv@lists.infradead.org,
-        kvm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [RFC  6/9] RISC-V: KVM: Add SBI PMU extension support
-Message-ID: <20221101142631.du54p4kyhlgf54cr@kamzik>
-References: <20220718170205.2972215-1-atishp@rivosinc.com>
- <20220718170205.2972215-7-atishp@rivosinc.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tCAHuauyqRDt6mVa8UX+cbOhcceVwq2lTH7wmX1Rf1A=;
+        b=7axVrYJOBEUcrj1q6jipH1cg5NdgEMQv4f65tRQI4FyDK22a3Vf1XBXsEZfB/a1edO
+         uehXlsfPTsrxZzLliGMfDm3JhBfXuIETzcsJ8+BiNrRe8IjqrLAg018PHsCQQitBvxeC
+         IyY1KQEFkjHihsjAvan8V7zyi+MMTTLmSoZww3vet6zHB8yJLcFm6o8UlyepsEc+65NQ
+         /nt3NoSrhW3cDAd/PoQdGyee10ZfDlPYy6OmZhcic1e+ed3PfDeoscUP7vRRWWqPRqnO
+         T1U8LduIwZ+3QU13ykKLkNn9hFEXiQE1wCtl3G3KyP7U+FY6GuOeafemCQK1rVr6QBTm
+         gxdg==
+X-Gm-Message-State: ACrzQf1Ai5KSWaKluP3+8FLWti0pvWpf3evyVDSmBO80k4bSxxgEOYGl
+        4bSzyynxaNx1CJTopM/p8lUoybKCFwJdfN3r6Pc=
+X-Google-Smtp-Source: AMsMyM4GKr9xTNcrz7XVOWmlcFIN18yBdZKMUvERKx/D3jLESiQaKh9x/1yt0cosLbMODhmMDf/DnPomjMa7j8T9K1U=
+X-Received: by 2002:a05:6808:14d2:b0:354:c733:abd3 with SMTP id
+ f18-20020a05680814d200b00354c733abd3mr10191629oiw.96.1667312897992; Tue, 01
+ Nov 2022 07:28:17 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718170205.2972215-7-atishp@rivosinc.com>
+References: <20221031114247.10309-1-jirislaby@kernel.org> <cb9f90d1-344e-c329-178e-3662c76eee7d@amd.com>
+In-Reply-To: <cb9f90d1-344e-c329-178e-3662c76eee7d@amd.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Tue, 1 Nov 2022 10:28:06 -0400
+Message-ID: <CADnq5_NAK_peOnu2vwxcN8s0Ee4MiMPkV4URxKSh5nsOFDY8XA@mail.gmail.com>
+Subject: Re: [PATCH] drm/amd/display (gcc13): fix enum mismatch
+To:     Harry Wentland <harry.wentland@amd.com>
+Cc:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>,
+        Leo Li <sunpeng.li@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Martin Liska <mliska@suse.cz>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 10:02:02AM -0700, Atish Patra wrote:
-> SBI PMU extension allows KVM guests to configure/start/stop/query about
-> the PMU counters in virtualized enviornment as well.
-> 
-> In order to allow that, KVM implements the entire SBI PMU extension.
-> 
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> ---
->  arch/riscv/kvm/vcpu_sbi.c     | 11 +++++
->  arch/riscv/kvm/vcpu_sbi_pmu.c | 81 +++++++++++++++++++++++++++++++++++
->  2 files changed, 92 insertions(+)
->  create mode 100644 arch/riscv/kvm/vcpu_sbi_pmu.c
-> 
-> diff --git a/arch/riscv/kvm/vcpu_sbi.c b/arch/riscv/kvm/vcpu_sbi.c
-> index d45e7da3f0d3..da9f7959340e 100644
-> --- a/arch/riscv/kvm/vcpu_sbi.c
-> +++ b/arch/riscv/kvm/vcpu_sbi.c
-> @@ -50,6 +50,16 @@ extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_hsm;
->  extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_experimental;
->  extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_vendor;
->  
-> +#ifdef CONFIG_RISCV_PMU_SBI
-> +extern const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_pmu;
-> +#else
-> +static const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_pmu = {
-> +	.extid_start = -1UL,
-> +	.extid_end = -1UL,
-> +	.handler = NULL,
-> +};
-> +#endif
-> +
->  static const struct kvm_vcpu_sbi_extension *sbi_ext[] = {
->  	&vcpu_sbi_ext_v01,
->  	&vcpu_sbi_ext_base,
-> @@ -58,6 +68,7 @@ static const struct kvm_vcpu_sbi_extension *sbi_ext[] = {
->  	&vcpu_sbi_ext_rfence,
->  	&vcpu_sbi_ext_srst,
->  	&vcpu_sbi_ext_hsm,
-> +	&vcpu_sbi_ext_pmu,
->  	&vcpu_sbi_ext_experimental,
->  	&vcpu_sbi_ext_vendor,
->  };
-> diff --git a/arch/riscv/kvm/vcpu_sbi_pmu.c b/arch/riscv/kvm/vcpu_sbi_pmu.c
-> new file mode 100644
-> index 000000000000..90c51a95d4f4
-> --- /dev/null
-> +++ b/arch/riscv/kvm/vcpu_sbi_pmu.c
-> @@ -0,0 +1,81 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2022 Rivos Inc
-> + *
-> + * Authors:
-> + *     Atish Patra <atishp@rivosinc.com>
-> + */
-> +
-> +#include <linux/errno.h>
-> +#include <linux/err.h>
-> +#include <linux/kvm_host.h>
-> +#include <asm/csr.h>
-> +#include <asm/sbi.h>
-> +#include <asm/kvm_vcpu_sbi.h>
-> +
-> +static int kvm_sbi_ext_pmu_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
-> +				   unsigned long *out_val,
-> +				   struct kvm_cpu_trap *utrap,
-> +				   bool *exit)
-> +{
-> +	int ret = -EOPNOTSUPP;
-> +	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
-> +	unsigned long funcid = cp->a6;
-> +	uint64_t temp;
+Applied.  Thanks!
 
-I think we need something like
+Alex
 
-   if (!vcpu_to_pmu(vcpu)->enabled)
-      return -EOPNOTSUPP;
-
-here. Where 'enabled' is only true when we successfully initialize
-the pmu. And, successful initialization depends on 
-IS_ENABLED(CONFIG_RISCV_PMU_SBI) and
-riscv_isa_extension_available(NULL, SSCOFPMF) as well as not
-failing other things. And, KVM userspace should be able to
-disable the pmu, which keep enabled from being set as well.
-
-> +
-> +	switch (funcid) {
-> +	case SBI_EXT_PMU_NUM_COUNTERS:
-> +		ret = kvm_riscv_vcpu_pmu_num_ctrs(vcpu, out_val);
-> +		break;
-> +	case SBI_EXT_PMU_COUNTER_GET_INFO:
-> +		ret = kvm_riscv_vcpu_pmu_ctr_info(vcpu, cp->a0, out_val);
-> +		break;
-> +	case SBI_EXT_PMU_COUNTER_CFG_MATCH:
-> +#if defined(CONFIG_32BIT)
-> +		temp = ((uint64_t)cp->a5 << 32) | cp->a4;
-> +#else
-> +		temp = cp->a4;
-> +#endif
-> +		ret = kvm_riscv_vcpu_pmu_ctr_cfg_match(vcpu, cp->a0, cp->a1, cp->a2, cp->a3, temp);
-> +		if (ret >= 0) {
-> +			*out_val = ret;
-> +			ret = 0;
-> +		}
-> +		break;
-> +	case SBI_EXT_PMU_COUNTER_START:
-> +#if defined(CONFIG_32BIT)
-> +		temp = ((uint64_t)cp->a4 << 32) | cp->a3;
-> +#else
-> +		temp = cp->a3;
-> +#endif
-> +		ret = kvm_riscv_vcpu_pmu_ctr_start(vcpu, cp->a0, cp->a1, cp->a2, temp);
-> +		break;
-> +	case SBI_EXT_PMU_COUNTER_STOP:
-> +		ret = kvm_riscv_vcpu_pmu_ctr_stop(vcpu, cp->a0, cp->a1, cp->a2);
-> +		break;
-> +	case SBI_EXT_PMU_COUNTER_FW_READ:
-> +		ret = kvm_riscv_vcpu_pmu_ctr_read(vcpu, cp->a0, out_val);
-> +		break;
-> +	default:
-> +		ret = -EOPNOTSUPP;
-> +	}
-> +
-> +	return ret;
-> +}
-> +
-> +unsigned long kvm_sbi_ext_pmu_probe(unsigned long extid)
-> +{
-> +	/*
-> +	 * PMU Extension is only available to guests if privilege mode filtering
-> +	 * is available. Otherwise, guest will always count events while the
-> +	 * execution is in hypervisor mode.
-> +	 */
-> +	return riscv_isa_extension_available(NULL, SSCOFPMF);
-> +}
-> +
-> +const struct kvm_vcpu_sbi_extension vcpu_sbi_ext_pmu = {
-> +	.extid_start = SBI_EXT_PMU,
-> +	.extid_end = SBI_EXT_PMU,
-> +	.handler = kvm_sbi_ext_pmu_handler,
-> +	.probe = kvm_sbi_ext_pmu_probe,
-> +};
-> -- 
-> 2.25.1
+On Mon, Oct 31, 2022 at 9:59 AM Harry Wentland <harry.wentland@amd.com> wro=
+te:
 >
-
-Thanks,
-drew
+> On 2022-10-31 07:42, Jiri Slaby (SUSE) wrote:
+> > rn_vbios_smu_set_dcn_low_power_state() produces a valid warning with
+> > gcc-13:
+> >   drivers/gpu/drm/amd/display/dc/clk_mgr/dcn21/rn_clk_mgr_vbios_smu.c:2=
+37:6: error: conflicting types for 'rn_vbios_smu_set_dcn_low_power_state' d=
+ue to enum/integer mismatch; have 'void(struct clk_mgr_internal *, enum dcn=
+_pwr_state)'
+> >   drivers/gpu/drm/amd/display/dc/clk_mgr/dcn21/rn_clk_mgr_vbios_smu.h:3=
+6:6: note: previous declaration of 'rn_vbios_smu_set_dcn_low_power_state' w=
+ith type 'void(struct clk_mgr_internal *, int)'
+> >
+> > I.e. the type of the 2nd parameter of
+> > rn_vbios_smu_set_dcn_low_power_state() in the declaration is int, while
+> > the definition spells enum dcn_pwr_state. Synchronize them to the
+> > latter (and add a forward enum declaration).
+> >
+> > Cc: Martin Liska <mliska@suse.cz>
+> > Cc: Harry Wentland <harry.wentland@amd.com>
+> > Cc: Leo Li <sunpeng.li@amd.com>
+> > Cc: Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>
+> > Cc: Alex Deucher <alexander.deucher@amd.com>
+> > Cc: "Christian K=C3=B6nig" <christian.koenig@amd.com>
+> > Cc: "Pan, Xinhui" <Xinhui.Pan@amd.com>
+> > Cc: David Airlie <airlied@gmail.com>
+> > Cc: Daniel Vetter <daniel@ffwll.ch>
+> > Cc: amd-gfx@lists.freedesktop.org
+> > Cc: dri-devel@lists.freedesktop.org
+> > Signed-off-by: Jiri Slaby (SUSE) <jirislaby@kernel.org>
+>
+> Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+>
+> Harry
+>
+> > ---
+> >  .../drm/amd/display/dc/clk_mgr/dcn21/rn_clk_mgr_vbios_smu.h   | 4 +++-
+> >  1 file changed, 3 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn21/rn_clk_mgr_vb=
+ios_smu.h b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn21/rn_clk_mgr_vbios_s=
+mu.h
+> > index 3e5df27aa96f..1ce19d875358 100644
+> > --- a/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn21/rn_clk_mgr_vbios_smu=
+.h
+> > +++ b/drivers/gpu/drm/amd/display/dc/clk_mgr/dcn21/rn_clk_mgr_vbios_smu=
+.h
+> > @@ -26,6 +26,8 @@
+> >  #ifndef DAL_DC_RN_CLK_MGR_VBIOS_SMU_H_
+> >  #define DAL_DC_RN_CLK_MGR_VBIOS_SMU_H_
+> >
+> > +enum dcn_pwr_state;
+> > +
+> >  int rn_vbios_smu_get_smu_version(struct clk_mgr_internal *clk_mgr);
+> >  int rn_vbios_smu_set_dispclk(struct clk_mgr_internal *clk_mgr, int req=
+uested_dispclk_khz);
+> >  int rn_vbios_smu_set_dprefclk(struct clk_mgr_internal *clk_mgr);
+> > @@ -33,7 +35,7 @@ int rn_vbios_smu_set_hard_min_dcfclk(struct clk_mgr_i=
+nternal *clk_mgr, int reque
+> >  int rn_vbios_smu_set_min_deep_sleep_dcfclk(struct clk_mgr_internal *cl=
+k_mgr, int requested_min_ds_dcfclk_khz);
+> >  void rn_vbios_smu_set_phyclk(struct clk_mgr_internal *clk_mgr, int req=
+uested_phyclk_khz);
+> >  int rn_vbios_smu_set_dppclk(struct clk_mgr_internal *clk_mgr, int requ=
+ested_dpp_khz);
+> > -void rn_vbios_smu_set_dcn_low_power_state(struct clk_mgr_internal *clk=
+_mgr, int display_count);
+> > +void rn_vbios_smu_set_dcn_low_power_state(struct clk_mgr_internal *clk=
+_mgr, enum dcn_pwr_state);
+> >  void rn_vbios_smu_enable_48mhz_tmdp_refclk_pwrdwn(struct clk_mgr_inter=
+nal *clk_mgr, bool enable);
+> >  void rn_vbios_smu_enable_pme_wa(struct clk_mgr_internal *clk_mgr);
+> >  int rn_vbios_smu_is_periodic_retraining_disabled(struct clk_mgr_intern=
+al *clk_mgr);
+>
