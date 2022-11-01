@@ -2,53 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4E65E614E18
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 16:15:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B427614E1A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 16:16:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230005AbiKAPPm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 11:15:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38004 "EHLO
+        id S230173AbiKAPQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 11:16:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229934AbiKAPPI (ORCPT
+        with ESMTP id S231538AbiKAPPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 11:15:08 -0400
-Received: from zju.edu.cn (spam.zju.edu.cn [61.164.42.155])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 25EED15829;
-        Tue,  1 Nov 2022 08:12:08 -0700 (PDT)
-Received: from localhost.localdomain (unknown [10.14.30.251])
-        by mail-app4 (Coremail) with SMTP id cS_KCgCH_k0qN2FjsHmtBw--.39315S6;
-        Tue, 01 Nov 2022 23:12:04 +0800 (CST)
-From:   Jinlong Chen <nickyc975@zju.edu.cn>
-To:     axboe@kernel.dk
-Cc:     hch@lst.de, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, nickyc975@zju.edu.cn
-Subject: [PATCH 4/4] blk-mq: improve readability of blk_mq_alloc_request()
-Date:   Tue,  1 Nov 2022 23:11:37 +0800
-Message-Id: <81fcbc046c9ea96cdfd8e20d1edc8e64c4d08153.1667314759.git.nickyc975@zju.edu.cn>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <cover.1667314759.git.nickyc975@zju.edu.cn>
-References: <cover.1667314759.git.nickyc975@zju.edu.cn>
+        Tue, 1 Nov 2022 11:15:30 -0400
+Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399F31CFD2;
+        Tue,  1 Nov 2022 08:12:40 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
+        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
+        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=M2ExO0OCc/LPgMfVGJ0dehDqeiUDLMpSbdsjJWkQO9w=; b=iVaiWKqvDXPFcMYqk7ShHnWG9V
+        05F2ZgaJh6rZYVtjNBrIEQgutVEb7TmGlwvQpDrG7UdNus6mhoaIet4q+XBp+2nGEE/yLLd2kdksL
+        L/Q1p5uHduSw1hBmyVdeitYOqlQXm0GzL4zEO7YqEA8oDIkoIzNkGx6+sTc+5AIqeDimAu3tA4NXS
+        oGmFzLmHiA40eYcdXN10EOS4Me3x9/UEwSAAWlVVzLWmqsw6mDJZ4jmAwu+R29DebdwhMY3eRPwbP
+        02xDkFFHk7SldT0wjXICghtKwZfq2JeK+h2QifyQmsIUYBDETi10IGJ0rS+kFE077gXA5ERqmNzuR
+        s/VoTPKg==;
+Received: from [177.102.148.33] (helo=[192.168.1.60])
+        by fanzine2.igalia.com with esmtpsa 
+        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
+        id 1opsvy-00AMRE-3c; Tue, 01 Nov 2022 16:12:10 +0100
+Message-ID: <2ece1ac9-e602-9c65-e5b5-81b4a7fb6676@igalia.com>
+Date:   Tue, 1 Nov 2022 12:12:01 -0300
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: cS_KCgCH_k0qN2FjsHmtBw--.39315S6
-X-Coremail-Antispam: 1UD129KBjvJXoW7uw13GF43Zry5WF45ur17Jrb_yoW8ZryfpF
-        WfJayakF90gr1xWFWxJw43Jr1agr4I9Fy7A3W3Jw1Fvr95Kw4kCF18XFW0vrySyrWkCF47
-        GFn8tryDuF1xZa7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUUvq1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AE
-        w4v_Jr0_Jr4l8cAvFVAK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2
-        IY67AKxVWDJVCq3wA2z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8Jr0_Cr1UM28EF7xvwVC2
-        z280aVAFwI0_GcCE3s1l84ACjcxK6I8E87Iv6xkF7I0E14v26rxl6s0DM2vYz4IE04k24V
-        AvwVAKI4IrM2AIxVAIcxkEcVAq07x20xvEncxIr21l5I8CrVACY4xI64kE6c02F40Ex7xf
-        McIj6xIIjxv20xvE14v26r1j6r18McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7
-        v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lF7I21c0EjII2zVCS5cI20VAGYxC7MxAIw28IcxkI
-        7VAKI48JMxAIw28IcVCjz48v1sIEY20_GFWkJr1UJwCFx2IqxVCFs4IE7xkEbVWUJVW8Jw
-        C20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI8E67AF67kF1VAF
-        wI0_JF0_Jw1lIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUJVWUCwCI42IY6xIIjx
-        v20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r1xMIIF0xvEx4A2
-        jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIdaVFxhVjvjDU0x
-        ZFpf9x0JUQZ23UUUUU=
-X-CM-SenderInfo: qssqjiaqqzq6lmxovvfxof0/1tbiAgIAB1ZdtcLuXwALsB
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH V3] x86/split_lock: Add sysctl to control the misery mode
+To:     x86@kernel.org, tglx@linutronix.de, Tony Luck <tony.luck@intel.com>
+Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com, luto@kernel.org,
+        corbet@lwn.net, linux-doc@vger.kernel.org, bagasdotme@gmail.com,
+        kernel-dev@igalia.com, kernel@gpiccoli.net,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Joshua Ashton <joshua@froggi.es>,
+        Melissa Wen <mwen@igalia.com>,
+        Paul Gofman <pgofman@codeweavers.com>,
+        Pavel Machek <pavel@denx.de>,
+        Pierre-Loup Griffais <pgriffais@valvesoftware.com>,
+        Zebediah Figura <zfigura@codeweavers.com>,
+        Andre Almeida <andrealmeid@igalia.com>
+References: <20221024200254.635256-1-gpiccoli@igalia.com>
+Content-Language: en-US
+From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
+In-Reply-To: <20221024200254.635256-1-gpiccoli@igalia.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,84 +65,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a helper blk_mq_alloc_request_nocache() to alloc request without
-cache. This makes blk_mq_alloc_request() more readable.
+On 24/10/2022 17:02, Guilherme G. Piccoli wrote:
+> Commit b041b525dab9 ("x86/split_lock: Make life miserable for split lockers")
+> changed the way the split lock detector works when in "warn" mode;
+> basically, not only it shows the warn message, but also intentionally
+> introduces a slowdown (through sleeping plus serialization mechanism)
+> on such task. Based on discussions in [0], seems the warning alone
+> wasn't enough motivation for userspace developers to fix their
+> applications.
+> 
+> Happens that originally the proposal in [0] was to add a new mode
+> which would warns + slowdown the "split locking" task, keeping the
+> old warn mode untouched. In the end, that idea was discarded and
+> the regular/default "warn" mode now slowdowns the applications. This
+> is quite aggressive with regards proprietary/legacy programs that
+> basically are unable to properly run in kernel with this change.
+> While it is understandable that a malicious application could DoS
+> by split locking, it seems unacceptable to regress old/proprietary
+> userspace programs through a default configuration that previously
+> worked. An example of such breakage was reported in [1].
+> 
+> So let's add a sysctl to allow controlling the "misery mode" behavior,
+> as per Thomas suggestion on [2]. This way, users running legacy and/or
+> proprietary software are allowed to still execute them with a decent
+> performance while still observe the warning messages on kernel log.
+> 
+> [0] https://lore.kernel.org/lkml/20220217012721.9694-1-tony.luck@intel.com/
+> 
+> [1] https://github.com/doitsujin/dxvk/issues/2938
+> 
+> [2] https://lore.kernel.org/lkml/87pmf4bter.ffs@tglx/
+> 
+> Fixes: b041b525dab9 ("x86/split_lock: Make life miserable for split lockers")
+> Cc: Fenghua Yu <fenghua.yu@intel.com>
+> Cc: Joshua Ashton <joshua@froggi.es>
+> Cc: Melissa Wen <mwen@igalia.com>
+> Cc: Paul Gofman <pgofman@codeweavers.com>
+> Cc: Pavel Machek <pavel@denx.de>
+> Cc: Pierre-Loup Griffais <pgriffais@valvesoftware.com>
+> Cc: Tony Luck <tony.luck@intel.com>
+> Cc: Zebediah Figura <zfigura@codeweavers.com>
+> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
+> Tested-by: Andre Almeida <andrealmeid@igalia.com>
+> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
 
-Signed-off-by: Jinlong Chen <nickyc975@zju.edu.cn>
----
- block/blk-mq.c | 47 +++++++++++++++++++++++++++++------------------
- 1 file changed, 29 insertions(+), 18 deletions(-)
+Hi Thomas / Tony, is there anything else to improve here? Suggestions /
+reviews are greatly appreciated.
 
-diff --git a/block/blk-mq.c b/block/blk-mq.c
-index 87a6348a0d0a..2fae111a42c8 100644
---- a/block/blk-mq.c
-+++ b/block/blk-mq.c
-@@ -572,36 +572,47 @@ static struct request *blk_mq_alloc_cached_request(struct request_queue *q,
- 	return rq;
- }
- 
--struct request *blk_mq_alloc_request(struct request_queue *q, blk_opf_t opf,
--		blk_mq_req_flags_t flags)
-+static struct request *blk_mq_alloc_request_nocache(struct request_queue *q,
-+		blk_opf_t opf, blk_mq_req_flags_t flags)
- {
--	struct request *rq;
--
--	rq = blk_mq_alloc_cached_request(q, opf, flags);
--	if (!rq) {
--		struct blk_mq_alloc_data data = {
-+	struct blk_mq_alloc_data data = {
- 			.q		= q,
- 			.flags		= flags,
- 			.cmd_flags	= opf,
- 			.nr_tags	= 1,
- 		};
--		int ret;
-+	struct request *rq;
-+	int ret;
- 
--		ret = blk_queue_enter(q, flags);
--		if (ret)
--			return ERR_PTR(ret);
-+	ret = blk_queue_enter(q, flags);
-+	if (ret)
-+		return ERR_PTR(ret);
- 
--		rq = __blk_mq_alloc_requests(&data);
--		if (!rq)
--			goto out_queue_exit;
-+	rq = __blk_mq_alloc_requests(&data);
-+	if (!rq) {
-+		rq = ERR_PTR(-EWOULDBLOCK);
-+		blk_queue_exit(q);
- 	}
-+
-+	return rq;
-+}
-+
-+struct request *blk_mq_alloc_request(struct request_queue *q, blk_opf_t opf,
-+		blk_mq_req_flags_t flags)
-+{
-+	struct request *rq;
-+
-+	rq = blk_mq_alloc_cached_request(q, opf, flags);
-+	if (!rq) {
-+		rq = blk_mq_alloc_request_nocache(q, opf, flags);
-+		if (IS_ERR(rq))
-+			return rq;
-+	}
-+
- 	rq->__data_len = 0;
- 	rq->__sector = (sector_t) -1;
- 	rq->bio = rq->biotail = NULL;
--	return rq;
--out_queue_exit:
--	blk_queue_exit(q);
--	return ERR_PTR(-EWOULDBLOCK);
-+	return rq;
- }
- EXPORT_SYMBOL(blk_mq_alloc_request);
- 
--- 
-2.31.1
+In case this version is good enough, I'd like to ask if it's possible to
+get it merged during the rc cycle for 6.1 (I'll also backport it to
+stable 6.0), so we can have this fix available for a bigger public.
 
+Thanks,
+
+
+Guilherme
