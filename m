@@ -2,56 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E84AD615233
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 20:22:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CB1C5615237
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 20:23:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbiKATWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 15:22:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48230 "EHLO
+        id S229487AbiKATW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 15:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiKATWS (ORCPT
+        with ESMTP id S230074AbiKATWz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 15:22:18 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660CC1C93C;
-        Tue,  1 Nov 2022 12:22:17 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C65F61705;
-        Tue,  1 Nov 2022 19:22:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EE5DC433D6;
-        Tue,  1 Nov 2022 19:22:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667330536;
-        bh=rzMpc3yyGF71lY7u/blmIwz+eJhbF9m5RL7Pl44fz0M=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=KaqT8v6ze0W8xaqIdyEs3+njmgpSmGE/13pvzPzBBpWFl9CAVJnchldF1ONTPCAE0
-         izA9dXVNw/Nq7sd9jI4NJDNSjS5WfebeT6+u2VDleROJfpDNpkOxTA7L/M5+9aP0fI
-         bpGO2L1bgsSdxHpRrW1Br12lRX0dl0sww86LOcxcuVTNtDOYwrkH2K5EJBvWeqLcso
-         JLqu8mE4jy2T/3uIoRNQE7Tr6vv3bJXx7PhO2k3ou8sWeXJ2tIp7p1+2ab6/xUEG6r
-         bP+lpsbpV8jmhQI7rs2LsCUhtiMJ3NsOqH6vZceDGLu74hOj4EYQM6mjIcd6H66mxB
-         faghF4Z8C0fmA==
-Content-Type: text/plain; charset="utf-8"
+        Tue, 1 Nov 2022 15:22:55 -0400
+Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AB9B1EC6D
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 12:22:54 -0700 (PDT)
+Received: by mail-pg1-x536.google.com with SMTP id 128so14283415pga.1
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 12:22:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eEtZo/a1sd1wcSWZKkoCrX1avRUJt1UjkNS0NlZQL/4=;
+        b=QEA1iXc37I5rzSs5hKflQbAc2y8xw0vwFh2PE/vObyapp49iv5wDtqXSZ2s+okrFcV
+         gyuGIG29rF1qYFGN9vB0i4BdahCR4D2AZVB7MZ+X+lYggJKjfOHgIvLd9JTq0BZfG10i
+         17xgpZAPG3HAGMGnDSlqeQ/+LzNSazkJFQCdTxWpKfNqFH9WIgLM1OYC2zXERuVLJYlb
+         O+Om0cNyMMG6jo0GcspPvpvx7bXKxcA9lUqnqKJUKnXHMEXZatGjrTR/bbNe2dq58cpJ
+         0o8ka+lGLBr4d8Uj2uC3kp4phufIRlupcic3UfKS5rjfLf26UbkerewjEr84Y/tCa/g6
+         nRXg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eEtZo/a1sd1wcSWZKkoCrX1avRUJt1UjkNS0NlZQL/4=;
+        b=Ms97Vg7pNPEV+EY5cEaZUyCBHLrpAc9I08rpcv+33F/c1sUhvPMoOR4Y4dV3X1Bsnd
+         DL8+kio+ndJqKr/4noOE/YmTNFRpiodOFnT1NBL+61U8eCI7x8a5+JbWusx+O4dQh2b7
+         82//+NJX7dCFntbmRyPKPnkLqVW1TQOaXSiyFxMy1G/8BMA5V3LyVh8d4TJ7cinPwOqB
+         MEXvdPhO1zwiPRVmQXwB0BxQeKBCSFm/dEzAHR0ck5twI4GXdb4q5ZOUoAEsc9JhYe32
+         myZGoHMMZ1xqFXPXQKBtiaQAUTQkw3YNN9csY4ZmyzgpWIbhgwyrULxhN1UTjtDgTPKh
+         hb3A==
+X-Gm-Message-State: ACrzQf3UrP0QdP+0nDPtN69yp3SnYH1fBjwbN9lEPFeujVbuIjhQRJs/
+        yeZUn+w8aBZBcdhTiXBof/e/+g==
+X-Google-Smtp-Source: AMsMyM4uxb/DbCv9KgzTqU7n0Ij38fHEqA9N+MdGN8qw+d1O/PEts1FOLgUcQX0ndANjcIiYy+nd3w==
+X-Received: by 2002:a05:6a00:810:b0:56c:df84:1b2d with SMTP id m16-20020a056a00081000b0056cdf841b2dmr21622827pfk.66.1667330573898;
+        Tue, 01 Nov 2022 12:22:53 -0700 (PDT)
+Received: from ?IPV6:2405:201:d02f:da6a:d4a2:1253:adfc:370? ([2405:201:d02f:da6a:d4a2:1253:adfc:370])
+        by smtp.gmail.com with ESMTPSA id m14-20020a63fd4e000000b00460c67afbd5sm6279892pgj.7.2022.11.01.12.22.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Nov 2022 12:22:53 -0700 (PDT)
+Message-ID: <2cad1cb4-b16f-201e-0593-2599ec8abf8f@9elements.com>
+Date:   Wed, 2 Nov 2022 00:52:49 +0530
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <ZODGKR.IJ47UDRQGD431@crapouillou.net>
-References: <20221027192024.484320-1-lis8215@gmail.com> <20221027192024.484320-4-lis8215@gmail.com> <20221027215716.77250C433D6@smtp.kernel.org> <ZODGKR.IJ47UDRQGD431@crapouillou.net>
-Subject: Re: [PATCH v6 3/3] clk: Add Ingenic JZ4755 CGU driver
-From:   Stephen Boyd <sboyd@kernel.org>
-Cc:     Siarhei Volkau <lis8215@gmail.com>,
-        Siarhei Volkau <lis8215@gmail.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v4 1/3] dt-bindings: hwmon: fan: Add fan binding to schema
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     devicetree@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+        Jean Delvare <jdelvare@suse.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
-To:     Paul Cercueil <paul@crapouillou.net>
-Date:   Tue, 01 Nov 2022 12:22:14 -0700
-User-Agent: alot/0.10
-Message-Id: <20221101192216.5EE5DC433D6@smtp.kernel.org>
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        linux-kernel@vger.kernel.org, linux-hwmon@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+References: <20221013094838.1529153-1-Naresh.Solanki@9elements.com>
+ <20221013094838.1529153-2-Naresh.Solanki@9elements.com>
+ <20221024161806.GA1855651-robh@kernel.org>
+ <dcd22f70-e51c-290e-c11f-9a5ce32748c1@9elements.com>
+ <CAL_JsqKT52ULEZjKo9emEAt74nH2OpMO8ymLLKM_T-NzAwqGog@mail.gmail.com>
+ <3152c290-8aca-b91a-df20-335c33395835@9elements.com>
+ <20221101184402.GA1884153-robh@kernel.org>
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <20221101184402.GA1884153-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,50 +83,16 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Paul Cercueil (2022-10-28 00:48:35)
-> Hi Stephen,
->=20
-> Le jeu. 27 oct. 2022 =EF=BF=BD 14:57:14 -0700, Stephen Boyd <sboyd@kernel=
-.org>=20
-> a =EF=BF=BDcrit :
-> > Quoting Siarhei Volkau (2022-10-27 12:20:23)
-> >>  diff --git a/drivers/clk/ingenic/jz4755-cgu.c=20
-> >> b/drivers/clk/ingenic/jz4755-cgu.c
-> >>  new file mode 100644
-> >>  index 000000000..d2eb3ae0c
-> >>  --- /dev/null
-> >>  +++ b/drivers/clk/ingenic/jz4755-cgu.c
-> >>  @@ -0,0 +1,346 @@
-> > [...]
-> >>  +static void __init jz4755_cgu_init(struct device_node *np)
-> >>  +{
-> >>  +       int retval;
-> >>  +
-> >>  +       cgu =3D ingenic_cgu_new(jz4755_cgu_clocks,
-> >>  +                             ARRAY_SIZE(jz4755_cgu_clocks), np);
-> >>  +       if (!cgu) {
-> >>  +               pr_err("%s: failed to initialise CGU\n", __func__);
-> >>  +               return;
-> >>  +       }
-> >>  +
-> >>  +       retval =3D ingenic_cgu_register_clocks(cgu);
-> >>  +       if (retval)
-> >>  +               pr_err("%s: failed to register CGU Clocks\n",=20
-> >> __func__);
-> >>  +
-> >>  +       ingenic_cgu_register_syscore_ops(cgu);
-> >>  +}
-> >>  +CLK_OF_DECLARE_DRIVER(jz4755_cgu, "ingenic,jz4755-cgu",=20
-> >> jz4755_cgu_init);
-> >=20
-> > Is there another driver that probes this device?=20
-> > CLK_OF_DECLARE_DRIVER()
-> > is for the situation where we want to probe this device again with
-> > another platform driver. Please add a comment indicating what that=20
-> > other
-> > driver is.
->=20
-> See: 03d570e1a4dc ("clk: ingenic: Use CLK_OF_DECLARE_DRIVER macro")
->=20
+Hi Rob,
 
-Does that mean this is also a simple-mfd?
+On 02-11-2022 12:14 am, Rob Herring wrote:
+> Does turning off fw_devlink help (fw_devlink=off)?
+This didn't bring any difference for the error.
+Failing due to same consumer & supplier.
+Returning from here:
+https://github.com/torvalds/linux/blob/master/drivers/base/core.c#L702
+Also this can cause return:
+https://github.com/torvalds/linux/blob/master/drivers/base/core.c#L732
+
+Regards,
+Naresh
