@@ -2,93 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8BE36147E1
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 11:46:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB2E56147E6
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 11:47:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiKAKqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 06:46:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35292 "EHLO
+        id S229944AbiKAKrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 06:47:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiKAKqj (ORCPT
+        with ESMTP id S229531AbiKAKrh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 06:46:39 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DC1193C7;
-        Tue,  1 Nov 2022 03:46:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667299599; x=1698835599;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=uituX6EfEuLj0s1j7ECFATXPhjO7z9j9nwhPYjeinlY=;
-  b=czdMxmH9sVFQG2XnQE1F2wdaRawkPy56yUOkWj4VIBDw/AOtnm5Uy3Yu
-   QXaH2l/HVNrGGzTrIVB7PG3HALHQsyYlgp7AdVwkHimWRoR/OLm65WoAM
-   cKpro8FCEzF2VbF5er0bE6R0cVWhyhnoN8zh7eGvBEwIXU5TNEJgYo0Ho
-   K+e4QM4kKRhM9cPl1URLZxCCeBbyeMyFLZjg6U+fRpoRlJDhJXyCmqwuQ
-   mrPGJ+e9+0x+Xj+/ez/YAcWrsxLFPm860RPZHVQCfxfSUnClr+VkwULgB
-   ofsuryZ7LxdKbknTTWJJQK05N+ArDrdouNCfxwEsZoJJ7CoMh1PW4S4ac
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="310816950"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="310816950"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 03:46:38 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="739288553"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="739288553"
-Received: from rsimofi-mobl.ger.corp.intel.com (HELO localhost) ([10.252.30.2])
-  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 03:46:35 -0700
-From:   Jani Nikula <jani.nikula@intel.com>
-To:     Cai Huoqing <cai.huoqing@linux.dev>, kuba@kernel.org
-Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Zhengchao Shao <shaozhengchao@huawei.com>,
-        SeongJae Park <sj@kernel.org>,
-        Bin Chen <bin.chen@corigine.com>, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH net-next v2 2/2] net: hinic: Add control command support
- for VF PMD driver in DPDK
-In-Reply-To: <20221101060358.7837-2-cai.huoqing@linux.dev>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-References: <20221101060358.7837-1-cai.huoqing@linux.dev>
- <20221101060358.7837-2-cai.huoqing@linux.dev>
-Date:   Tue, 01 Nov 2022 12:46:32 +0200
-Message-ID: <87iljz7y0n.fsf@intel.com>
+        Tue, 1 Nov 2022 06:47:37 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84B3193C7;
+        Tue,  1 Nov 2022 03:47:36 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id a11-20020a05600c2d4b00b003cf6f5fd9f1so3448756wmg.2;
+        Tue, 01 Nov 2022 03:47:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/FwRGP8BwKaXmW2k8HRZR6WmbigXa5hHO418FZc4xNY=;
+        b=IYUBIIujNue24apx8G7zfTr2uVehnwGWmFGKSj8tMpOF+Ijp6Kdf9CHhtWytPZNtph
+         oUfaVr7ehmUa/xfLoMVwaMttid8d2jzeGLFBo+sWcoEyLod4ByVcdLZsCiS+99SgNUXw
+         K2M1pZvnlDDCFNfyR55CQs+Co6DK1hPAwFpbxhnxeCJsCo2a+/ChoYZJq/nWAVs4X7Cv
+         fsHnMm6cKOnkecIVJQl32CFaFdBlote6ir8KIm3rHOHwvqqfUFN7dX8VMlaI+00pA1A0
+         Kx4WC5aagh0tB6PPByiVvZeZHywxkKUGikLfoJ14Bx+vQeZ66MHwDp7Lh46KjZUbi+GF
+         +Q0w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/FwRGP8BwKaXmW2k8HRZR6WmbigXa5hHO418FZc4xNY=;
+        b=TLWer3gKsolbVbDTg4xikZX8+fOWC8xovJ5kuJ2xhSEqjGbGYYhhfcKvWwRzaDJFDm
+         iC+J2sI/ZW8Ld03+uzjWoZXD9v+vJC/tmShVILBbgjCJ+xO8iTJx9Ky1EH5A9IjDfyFm
+         /693EK3jty4nDLN9lNAlf0YezA1G/Cl1wKf/HonRh/9PLcLD9b8HyAMCmarwqyxwziy7
+         Y6lyqk+VFnb8d4pBtOqZEqv/NR8q7BeLDnu5sHAJlpL/Ut+LNxYKnotB/NLjuB2/53L9
+         bkZpH65ziYrD7JqhfPNdgoF7E1QK4O6m3LmPfntMWm0uZvN8IfgduS0LJu+oRtlNeEG7
+         /EWQ==
+X-Gm-Message-State: ACrzQf0ANDQm9mIiIAs4siwakd3XwP/pf6J1LIkhVlhfQTcYQw59o1HR
+        RywEnmGEBHloRde8vC4buwDmIL0qDfIPu1UP
+X-Google-Smtp-Source: AMsMyM5Vr5sdPnHnvs6v1i04Xc34hhFJ8JVAijUkr1z367YlFbXW/kgLoViWk7S/5mBU6BsCxGPBUQ==
+X-Received: by 2002:a1c:6a10:0:b0:3cf:699f:c03 with SMTP id f16-20020a1c6a10000000b003cf699f0c03mr9621554wmc.23.1667299655129;
+        Tue, 01 Nov 2022 03:47:35 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id i4-20020a05600c354400b003cf4c1e211fsm10738270wmq.38.2022.11.01.03.47.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 03:47:34 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Nilesh Javali <njavali@marvell.com>,
+        GR-QLogic-Storage-Upstream@marvell.com,
+        "James E . J . Bottomley" <jejb@linux.ibm.com>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        linux-scsi@vger.kernel.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] scsi: qla2xxx: Remove unused variable found_devs
+Date:   Tue,  1 Nov 2022 10:47:33 +0000
+Message-Id: <20221101104733.30363-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 01 Nov 2022, Cai Huoqing <cai.huoqing@linux.dev> wrote:
-> HINIC has a mailbox for PF-VF communication and the VF driver
-> could send port control command to PF driver via mailbox.
->
-> The control command only can be set to register in PF,
-> so add support in PF driver for VF PMD driver control
-> command when VF PMD driver work with linux PF driver.
->
-> Then there is no need to add handlers to nic_vf_cmd_msg_handler[],
-> because the host driver just forwards it to the firmware.
-> Actually the firmware works on a coprocessor MGMT_CPU(inside the NIC)
-> which will recv and deal with these commands.
->
-> Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+Variable found_devs is just being incremented and it's never used
+anywhere else. The variable and the increment are redundant so
+remove it.
 
-Out of curiosity, what exactly compelled you to Cc me on this particular
-patch? I mean there aren't a whole lot of places in the kernel that
-would be more off-topic for me. :)
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/scsi/qla2xxx/qla_init.c | 4 ----
+ 1 file changed, 4 deletions(-)
 
-BR,
-Jani.
-
-
+diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
+index e12db95de688..8f737d80bce4 100644
+--- a/drivers/scsi/qla2xxx/qla_init.c
++++ b/drivers/scsi/qla2xxx/qla_init.c
+@@ -5546,7 +5546,6 @@ static int
+ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
+ {
+ 	int		rval, rval2;
+-	int		found_devs;
+ 	int		found;
+ 	fc_port_t	*fcport, *new_fcport;
+ 	uint16_t	index;
+@@ -5561,7 +5560,6 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
+ 	if (N2N_TOPO(ha))
+ 		return qla2x00_configure_n2n_loop(vha);
+ 
+-	found_devs = 0;
+ 	new_fcport = NULL;
+ 	entries = MAX_FIBRE_DEVICES_LOOP;
+ 
+@@ -5720,8 +5718,6 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
+ 
+ 		/* Base iIDMA settings on HBA port speed. */
+ 		fcport->fp_speed = ha->link_data_rate;
+-
+-		found_devs++;
+ 	}
+ 
+ 	list_for_each_entry(fcport, &vha->vp_fcports, list) {
 -- 
-Jani Nikula, Intel Open Source Graphics Center
+2.37.3
+
