@@ -2,246 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B672161460A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 09:52:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57135614611
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 09:57:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiKAIwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 04:52:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36836 "EHLO
+        id S229935AbiKAI5h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 04:57:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiKAIwd (ORCPT
+        with ESMTP id S229875AbiKAI5e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 04:52:33 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3323A14D10
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 01:52:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667292752; x=1698828752;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=j0y/gU0N76hksTyR6uOy3Ksq4bC7H9H77jI0W5EJonU=;
-  b=CWZyakall1Y2C935FeUvkWU4FOzlvvGP2QjgG18d91enk7hfnmxCJE0h
-   ZAt0LgeIaTre/TKQ5j+InwkMITlgYHP1oKe0HOT3fineHjSxfvkvvpXsr
-   eX15Y5FcuYs8CDC2dN+Klx2AG9ly0aoEC7frOA7gjaigk+JvV3FZlpU/v
-   isCt8/1AQRtXZo6Hh5GKnwdHr3K5kOBeN2le9eeM3qfhhuiA573NJMgAQ
-   x+ZUeVuKJtNUyBNGZaE1OF9Vqio0+yS7caA6Bs4w1IiJturfSq6LllQiS
-   iXkXtDiKPR+Tyg1Y4+lwmJfWiWOm+CyM08KECTpBJSMKs4ReuzvudbgyB
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="292399071"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="292399071"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 01:52:31 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="667127094"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="667127094"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
-  by orsmga001.jf.intel.com with SMTP; 01 Nov 2022 01:52:26 -0700
-Received: by stinkbox (sSMTP sendmail emulation); Tue, 01 Nov 2022 10:52:26 +0200
-Date:   Tue, 1 Nov 2022 10:52:26 +0200
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Jason Baron <jbaron@akamai.com>
-Cc:     jim.cromie@gmail.com, Jani Nikula <jani.nikula@linux.intel.com>,
-        Greg KH <gregkh@linuxfoundation.org>, daniel.vetter@ffwll.ch,
-        intel-gfx@lists.freedesktop.org, linux@rasmusvillemoes.dk,
-        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
-        seanpaul@chromium.org, dri-devel@lists.freedesktop.org,
-        joe@perches.com, intel-gvt-dev@lists.freedesktop.org
-Subject: Re: [Intel-gfx] [PATCH v7 0/9] dyndbg: drm.debug adaptation
-Message-ID: <Y2DeSlGI38fvzvED@intel.com>
-References: <87a65pfsbq.fsf@intel.com>
- <c1807585-f6c8-c05d-bc20-c6a540e59814@akamai.com>
- <CAJfuBxxWVBxL29sXS3XoE5Es9HTbVyFUi9bQFYNupJAERffAew@mail.gmail.com>
- <Y1qqurH/lG0u+3ky@intel.com>
- <CAJfuBxzpG+C1ARLs3c_znXECEU7Ldg8RhruLMUXA67w+DwcrOQ@mail.gmail.com>
- <Y1rllFeOnT9/PQVA@intel.com>
- <CAJfuBxw_YFvCtHMwVE0K0fa5GJbrZy4hTOSS9FebeDs6fxUUCA@mail.gmail.com>
- <Y1/In+ZBzNguVNoy@intel.com>
- <CAJfuBxxHNXHEWCEPXnPTh64dq4igaddnrU27NT=OHASmnxgudA@mail.gmail.com>
- <9ff84a99-e500-625e-ba9d-20cd752d7ff4@akamai.com>
+        Tue, 1 Nov 2022 04:57:34 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DA9717E26
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 01:57:32 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out2.suse.de (Postfix) with ESMTP id 474A12019D;
+        Tue,  1 Nov 2022 08:57:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1667293050; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wtNsnDDmw/y8+B/JJiPR8TmQN8BlInC5LCvuB8Rzxio=;
+        b=ZfhEAdbVkUYECm7HqlvS+W+TMbqg33CxB1gslIx1LxMSZOON6U+ZgBn12gplDJ9WLKIbZm
+        bL2TfcGdiJBeW1+4VYJd7QmxgJuFGj9QVEVSzHMQz+6t/7TI+L88vpgm4o3juyq3HCEkUd
+        OkB78aXku/9tMra4SY2aRo5vuSHEO2U=
+Received: from suse.cz (unknown [10.100.208.146])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by relay2.suse.de (Postfix) with ESMTPS id 09DF62C141;
+        Tue,  1 Nov 2022 08:57:29 +0000 (UTC)
+Date:   Tue, 1 Nov 2022 09:57:26 +0100
+From:   Petr Mladek <pmladek@suse.com>
+To:     John Ogness <john.ogness@linutronix.de>
+Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        linux-kernel@vger.kernel.org,
+        Geert Uytterhoeven <geert@linux-m68k.org>,
+        linux-m68k@lists.linux-m68k.org
+Subject: Re: [PATCH printk v2 06/38] tty: nfcon: use console_is_enabled()
+Message-ID: <Y2Dfdje2x34VvWMb@alley>
+References: <20221019145600.1282823-1-john.ogness@linutronix.de>
+ <20221019145600.1282823-7-john.ogness@linutronix.de>
+ <Y1Jspm1n3t0bgIym@alley>
+ <87fsf49e6d.fsf@jogness.linutronix.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9ff84a99-e500-625e-ba9d-20cd752d7ff4@akamai.com>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <87fsf49e6d.fsf@jogness.linutronix.de>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 08:20:54PM -0400, Jason Baron wrote:
+On Mon 2022-10-31 17:05:54, John Ogness wrote:
+> On 2022-10-21, Petr Mladek <pmladek@suse.com> wrote:
+> >> diff --git a/arch/m68k/emu/nfcon.c b/arch/m68k/emu/nfcon.c
+> >> index 557d60867f98..c542fc2b121f 100644
+> >> --- a/arch/m68k/emu/nfcon.c
+> >> +++ b/arch/m68k/emu/nfcon.c
+> >> @@ -151,7 +151,7 @@ static int __init nfcon_init(void)
+> >>  
+> >>  	nfcon_tty_driver = driver;
+> >>  
+> >> -	if (!(nf_console.flags & CON_ENABLED))
+> >> +	if (!console_is_enabled(&nf_console))
+> >
+> > Heh, the check of CON_ENABLED does not make much sense. IMHO, the
+> > important thing is whether the console is in console_list or not.
+> >
+> > I would personally add a check at the beginning of register_console()
+> > whether the console is already registered and enabled() and do
+> > nothing when already done.
 > 
-> 
-> On 10/31/22 6:11 PM, jim.cromie@gmail.com wrote:
-> > On Mon, Oct 31, 2022 at 7:07 AM Ville Syrjälä
-> > <ville.syrjala@linux.intel.com> wrote:
-> >> On Sun, Oct 30, 2022 at 08:42:52AM -0600, jim.cromie@gmail.com wrote:
-> >>> On Thu, Oct 27, 2022 at 2:10 PM Ville Syrjälä
-> >>> <ville.syrjala@linux.intel.com> wrote:
-> >>>> On Thu, Oct 27, 2022 at 01:55:39PM -0600, jim.cromie@gmail.com wrote:
-> >>>>> On Thu, Oct 27, 2022 at 9:59 AM Ville Syrjälä
-> >>>>> <ville.syrjala@linux.intel.com> wrote:
-> >>>>>> On Thu, Oct 27, 2022 at 09:37:52AM -0600, jim.cromie@gmail.com wrote:
-> >>>>>>> On Thu, Oct 27, 2022 at 9:08 AM Jason Baron <jbaron@akamai.com> wrote:
-> >>>>>>>>
-> >>>>>>>>
-> >>>>>>>> On 10/21/22 05:18, Jani Nikula wrote:
-> >>>>>>>>> On Thu, 20 Oct 2022, Ville Syrjälä <ville.syrjala@linux.intel.com> wrote:
-> >>>>>>>>>> On Sat, Sep 24, 2022 at 03:02:34PM +0200, Greg KH wrote:
-> >>>>>>>>>>> On Sun, Sep 11, 2022 at 11:28:43PM -0600, Jim Cromie wrote:
-> >>>>>>>>>>>> hi Greg, Dan, Jason, DRM-folk,
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> heres follow-up to V6:
-> >>>>>>>>>>>>    rebased on driver-core/driver-core-next for -v6 applied bits (thanks)
-> >>>>>>>>>>>>    rework drm_debug_enabled{_raw,_instrumented,} per Dan.
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> It excludes:
-> >>>>>>>>>>>>    nouveau parts (immature)
-> >>>>>>>>>>>>    tracefs parts (I missed --to=Steve on v6)
-> >>>>>>>>>>>>    split _ddebug_site and de-duplicate experiment (way unready)
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> IOW, its the remaining commits of V6 on which Dan gave his Reviewed-by.
-> >>>>>>>>>>>>
-> >>>>>>>>>>>> If these are good to apply, I'll rebase and repost the rest separately.
-> >>>>>>>>>>> All now queued up, thanks.
-> >>>>>>>>>> This stuff broke i915 debugs. When I first load i915 no debug prints are
-> >>>>>>>>>> produced. If I then go fiddle around in /sys/module/drm/parameters/debug
-> >>>>>>>>>> the debug prints start to suddenly work.
-> >>>>>>>>> Wait what? I always assumed the default behaviour would stay the same,
-> >>>>>>>>> which is usually how we roll. It's a regression in my books. We've got a
-> >>>>>>>>> CI farm that's not very helpful in terms of dmesg logging right now
-> >>>>>>>>> because of this.
-> >>>>>>>>>
-> >>>>>>>>> BR,
-> >>>>>>>>> Jani.
-> >>>>>>>>>
-> >>>>>>>>>
-> >>>>>>>> That doesn't sound good - so you are saying that prior to this change some
-> >>>>>>>> of the drm debugs were default enabled. But now you have to manually enable
-> >>>>>>>> them?
-> >>>>>>>>
-> >>>>>>>> Thanks,
-> >>>>>>>>
-> >>>>>>>> -Jason
-> >>>>>>>
-> >>>>>>> Im just seeing this now.
-> >>>>>>> Any new details ?
-> >>>>>> No. We just disabled it as BROKEN for now. I was just today thinking
-> >>>>>> about sending that patch out if no solutin is forthcoming soon since
-> >>>>>> we need this working before 6.1 is released.
-> >>>>>>
-> >>>>>> Pretty sure you should see the problem immediately with any driver
-> >>>>>> (at least if it's built as a module, didn't try builtin). Or at least
-> >>>>>> can't think what would make i915 any more special.
-> >>>>>>
-> >>>>> So, I should note -
-> >>>>> 99% of my time & energy on this dyndbg + drm patchset
-> >>>>> has been done using virtme,
-> >>>>> so my world-view (and dev-hack-test env) has been smaller, simpler
-> >>>>> maybe its been fatally simplistic.
-> >>>>>
-> >>>>> ive just rebuilt v6.0  (before the trouble)
-> >>>>> and run it thru my virtual home box,
-> >>>>> I didnt see any unfamiliar drm-debug output
-> >>>>> that I might have inadvertently altered somehow
-> >>>>>
-> >>>>> I have some real HW I can put a reference kernel on,0
-> >>>>> to look for the missing output, but its all gonna take some time,
-> >>>>> esp to tighten up my dev-test-env
-> >>>>>
-> >>>>> in the meantime, there is:
-> >>>>>
-> >>>>> config DRM_USE_DYNAMIC_DEBUG
-> >>>>> bool "use dynamic debug to implement drm.debug"
-> >>>>> default y
-> >>>>> depends on DRM
-> >>>>> depends on DYNAMIC_DEBUG || DYNAMIC_DEBUG_CORE
-> >>>>> depends on JUMP_LABEL
-> >>>>> help
-> >>>>>    Use dynamic-debug to avoid drm_debug_enabled() runtime overheads.
-> >>>>>    Due to callsite counts in DRM drivers (~4k in amdgpu) and 56
-> >>>>>    bytes per callsite, the .data costs can be substantial, and
-> >>>>>    are therefore configurable.
-> >>>>>
-> >>>>> Does changing the default fix things for i915 dmesg ?
-> >>>> I think we want to mark it BROKEN in addition to make sure no one
-> >>> Ok, I get the distinction now.
-> >>> youre spelling that
-> >>>    depends on BROKEN
-> >>>
-> >>> I have a notional explanation, and a conflating commit:
-> >>>
-> >>> can you eliminate
-> >>> git log -p ccc2b496324c13e917ef05f563626f4e7826bef1
-> >>>
-> >>> as the cause ?
-> >> Reverting that doesn't help.
-> >>
-> > thanks for eliminating it.
-> >
-> >>> I do need to clarify, I dont know exactly what debug/logging output
-> >>> is missing such that CI is failing
-> >> CI isn't failing. But any logs it produces are 100% useless,
-> >> as are any user reported logs.
-> >>
-> >> The debugs that are missing are anything not coming directly
-> >> from drm.ko.
-> >>
-> >> The stuff that I see being printed by i915.ko are drm_info()
-> >> and the drm_printer stuff from i915_welcome_messages(). That
-> >> also implies that drm_debug_enabled(DRM_UT_DRIVER) does at
-> >> least still work correctly.
-> >>
-> >> I suspect that the problem is just that the debug calls
-> >> aren't getting patched in when a module loads. And fiddling
-> >> with the modparam after the fact does trigger that somehow.
-> >>
-> > ok, heres the 'tape' of a virtme boot,
-> > then modprobe going wrong.
-> >
-> > [    1.785873] dyndbg:   2 debug prints in module intel_rapl_msr
-> > [    2.040598] virtme-init: udev is done
-> > virtme-init: console is ttyS0
-> >
-> >> load drm driver
-> > bash-5.2# modprobe i915
-> >
-> >> drm module is loaded 1st
-> > [    6.549451] dyndbg: add-module: drm.302 sites
-> > [    6.549991] dyndbg: class[0]: module:drm base:0 len:10 ty:0
-> > [    6.550647] dyndbg:  0: 0 DRM_UT_CORE
-> > [    6.551097] dyndbg:  1: 1 DRM_UT_DRIVER
-> > [    6.551531] dyndbg:  2: 2 DRM_UT_KMS
-> > [    6.551931] dyndbg:  3: 3 DRM_UT_PRIME
-> > [    6.552402] dyndbg:  4: 4 DRM_UT_ATOMIC
-> > [    6.552799] dyndbg:  5: 5 DRM_UT_VBL
-> > [    6.553270] dyndbg:  6: 6 DRM_UT_STATE
-> > [    6.553634] dyndbg:  7: 7 DRM_UT_LEASE
-> > [    6.554043] dyndbg:  8: 8 DRM_UT_DP
-> > [    6.554392] dyndbg:  9: 9 DRM_UT_DRMRES
-> > [    6.554776] dyndbg: module:drm attached 1 classes
-> > [    6.555241] dyndbg: 302 debug prints in module drm
-> >
-> >> here modprobe reads /etc/modprobe.d/drm-test.conf:
-> > options drm dyndbg="class DRM_UT_CORE +p; class DRM_UT_DRIVER +p"
-> > and dyndbg applies it
-> 
-> Hi,
-> 
-> I'm a bit confused with this. My understanding is that there
-> is a 'regression' here from how this used to work. But the
-> 'class' keyword is new - are we sure this is the command-line
-> we are trying to fix?
+> Actually, register_console() already has this check, but it does a
+> WARN(). If the debug setup is used for nfcon, this situation is
+> normal.
 
-The thing we need fixed is just the bog standard drm.debug=0xe etc.
+I see.
 
--- 
-Ville Syrjälä
-Intel
+> So probably to avoid the WARN, the CON_ENABLED code was added.
+
+I though more about it. I would keep the warning for the case
+when the 2nd registration is not intentional.
+
+This driver has two ways how the console can be registered.
+It can happen either in nfcon_init() or in nf_debug_setup().
+It is better to have an explicit check to show that it is intentional.
+
+
+> > I would be nice to fix this. But it might be done later.
+> 
+> I could add a console_is_registered() function that checks if the
+> console is in the console list and use that instead. If we are going to
+> touch this code, we might as well touch it correctly, right?
+
+It would be great. It is actually much easier after switching
+to the hlist.
+
+Best Regards,
+Petr
