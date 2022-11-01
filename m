@@ -2,130 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F672614BFF
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:47:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B94A614C01
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbiKANrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 09:47:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46230 "EHLO
+        id S229983AbiKANrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 09:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiKANrJ (ORCPT
+        with ESMTP id S229487AbiKANrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 09:47:09 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E68DF9A;
-        Tue,  1 Nov 2022 06:47:08 -0700 (PDT)
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oprbT-000Bjd-Nz; Tue, 01 Nov 2022 14:46:55 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oprbT-000CPs-6k; Tue, 01 Nov 2022 14:46:55 +0100
-Subject: Re: [PATCH bpf-next v2 1/3] bpf/verifier: Fix potential memory leak
- in array reallocation
-To:     Bill Wendling <morbo@google.com>, Kees Cook <keescook@chromium.org>
-Cc:     Alexei Starovoitov <ast@kernel.org>,
-        John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org,
-        Zhengchao Shao <shaozhengchao@huawei.com>,
-        Lorenz Bauer <oss@lmb.io>
-References: <20221029024444.gonna.633-kees@kernel.org>
- <20221029025433.2533810-1-keescook@chromium.org>
- <CAGG=3QXYVwQ5pwARdGTenm-mDQn4Tcz6U-=EZ8BDcwBkM5bFfg@mail.gmail.com>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <2c6203ac-de2a-607e-0589-0a69f91e0479@iogearbox.net>
-Date:   Tue, 1 Nov 2022 14:46:54 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
+        Tue, 1 Nov 2022 09:47:51 -0400
+Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85165DF9A
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 06:47:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1667310454; bh=7jTJtPDuvOB4UjP4GvxdQueh87xLMlDPi/Mqzt+n5G0=;
+        h=X-EA-Auth:Date:From:To:Subject:Message-ID:MIME-Version:
+         Content-Type;
+        b=lB6xDl1sDGjv3GtGZQBgw60sAB+cuWMDNzmltKRksha1WAHF093y9HHlC3NztsyI8
+         U1Sbzo3ifHEbQFbYKKXghpysTsT4IueFFvZnenmfmzAzLNhFbiMyBkFOnmsR9rQRts
+         P/KhuZQZs46rIqZh8r1CF8Mm0T3FEhinXa8U3ryo=
+Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
+        via [213.182.55.206]
+        Tue,  1 Nov 2022 14:47:34 +0100 (CET)
+X-EA-Auth: DfQ3DHXejnins+N2KjtND5TsIgSXGYhJ7du0CuWJRoHUgib7V4P3WtP15n7USff9UsVtKlni9XmdVpw0oYMVDJ+tGLC47Zf+
+Date:   Tue, 1 Nov 2022 19:17:30 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     outreachy@lists.linux.dev,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/7] wlan-ng: Unused code clean-up patch set
+Message-ID: <cover.1667308828.git.drv@mailo.com>
 MIME-Version: 1.0
-In-Reply-To: <CAGG=3QXYVwQ5pwARdGTenm-mDQn4Tcz6U-=EZ8BDcwBkM5bFfg@mail.gmail.com>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
-Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26706/Tue Nov  1 08:52:34 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[ +Lorenz ]
+The patch set proposes to clean unused code from the wlan-ng driver. The patches
+are compile tested on my x86 machine.
 
-On 10/31/22 9:16 PM, Bill Wendling wrote:
-> On Fri, Oct 28, 2022 at 7:55 PM Kees Cook <keescook@chromium.org> wrote:
->>
->> If an error (NULL) is returned by krealloc(), callers of realloc_array()
->> were setting their allocation pointers to NULL, but on error krealloc()
->> does not touch the original allocation. This would result in a memory
->> resource leak. Instead, free the old allocation on the error handling
->> path.
->>
->> Cc: Alexei Starovoitov <ast@kernel.org>
->> Cc: Daniel Borkmann <daniel@iogearbox.net>
->> Cc: John Fastabend <john.fastabend@gmail.com>
->> Cc: Andrii Nakryiko <andrii@kernel.org>
->> Cc: Martin KaFai Lau <martin.lau@linux.dev>
->> Cc: Song Liu <song@kernel.org>
->> Cc: Yonghong Song <yhs@fb.com>
->> Cc: KP Singh <kpsingh@kernel.org>
->> Cc: Stanislav Fomichev <sdf@google.com>
->> Cc: Hao Luo <haoluo@google.com>
->> Cc: Jiri Olsa <jolsa@kernel.org>
->> Cc: bpf@vger.kernel.org
->> Signed-off-by: Kees Cook <keescook@chromium.org>
-> 
-> Reviewed-by: Bill Wendling <morbo@google.com>
-> 
->> ---
->>   kernel/bpf/verifier.c | 9 +++++++--
->>   1 file changed, 7 insertions(+), 2 deletions(-)
->>
->> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
->> index 014ee0953dbd..eb8c34db74c7 100644
->> --- a/kernel/bpf/verifier.c
->> +++ b/kernel/bpf/verifier.c
->> @@ -1027,12 +1027,17 @@ static void *copy_array(void *dst, const void *src, size_t n, size_t size, gfp_t
->>    */
->>   static void *realloc_array(void *arr, size_t old_n, size_t new_n, size_t size)
->>   {
->> +       void *new_arr;
->> +
->>          if (!new_n || old_n == new_n)
->>                  goto out;
->>
->> -       arr = krealloc_array(arr, new_n, size, GFP_KERNEL);
->> -       if (!arr)
->> +       new_arr = krealloc_array(arr, new_n, size, GFP_KERNEL);
->> +       if (!new_arr) {
->> +               kfree(arr);
->>                  return NULL;
->> +       }
->> +       arr = new_arr;
+Change in v2:
+   1. Review and include additional code clean-up opportunities as
+      suggested by dan.carpenter@oracle.com and paskripkin@gmail.com
+   2. Combine changes for different impact areas into a path sea.
+      Suggested by dan.carpenter@oracle.com
 
-Fyi, I took this fix into bpf tree and improved commit log a bit with the
-one from Zhengchao [0] given yours came in first. Fixes tag would have been
-nice, I added the c69431aab67a to the commit message while applying.
+Deepak R Varma (7):
+  staging: wlan-ng: Remove unused struct wlan_ie_ssid references
+  staging: wlan-ng: Remove unused struct wlan_ie_supp_rates references
+  staging: wlan-ng: Remove unused struct wlan_ie_tim references
+  staging: wlan-ng: Remove unused struct wlan_ie_ibss_parms references
+  staging: wlan-ng: Remove unused struct p80211macarray definition
+  staging: wlan-ng: Remove unused function declarations
+  staging: wlan-ng: Remove unused structure definitions
 
-   [0] https://patchwork.kernel.org/project/netdevbpf/patch/20221031070812.339883-1-shaozhengchao@huawei.com/
+ drivers/staging/wlan-ng/p80211mgmt.h  | 301 --------------------------
+ drivers/staging/wlan-ng/p80211types.h |   6 -
+ 2 files changed, 307 deletions(-)
 
->>          if (new_n > old_n)
->>                  memset(arr + old_n * size, 0, (new_n - old_n) * size);
->> --
->> 2.34.1
->>
+--
+2.34.1
+
+
 
