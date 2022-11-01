@@ -2,58 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FAF1614BD0
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:34:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41F11614BD5
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:35:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbiKANed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 09:34:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
+        id S229872AbiKANfh convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 1 Nov 2022 09:35:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiKANeL (ORCPT
+        with ESMTP id S229898AbiKANfa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 09:34:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD61B1156;
-        Tue,  1 Nov 2022 06:34:10 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 52DB161452;
-        Tue,  1 Nov 2022 13:34:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67B09C433D6;
-        Tue,  1 Nov 2022 13:34:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667309649;
-        bh=lCCeOtXrB+VyAf+ZkJOVzx63oP7fC/Cq3ISVXHAAfr8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=REBbclWjlsoZUgfhWVDKwCSBCo0fV0NG/i6DrDr9xGymYY9glAxaevf5/z1nKtCkd
-         6sBgfy/f6I+ouVqIyh7iG1Wm6IYrhczlEOMvtHfXYdCNVGuZ2AIltwceK5r81uRXvv
-         sAgkvhQaUH95MJELg3ATeln9QH8ZPD4J+n1Hh9Cc=
-Date:   Tue, 1 Nov 2022 14:35:03 +0100
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     Yongqin Liu <yongqin.liu@linaro.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Eric Dumazet <edumazet@google.com>, Willy Tarreau <w@1wt.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Benjamin Copeland <ben.copeland@linaro.org>,
-        Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>
-Subject: Re: [PATCH 4.19 092/229] once: add DO_ONCE_SLOW() for sleepable
- contexts
-Message-ID: <Y2Egh1LFMvOv6I7m@kroah.com>
-References: <20221024112959.085534368@linuxfoundation.org>
- <20221024113002.025977656@linuxfoundation.org>
- <CAMSo37XApZ_F5nSQYWFsSqKdMv_gBpfdKG3KN1TDB+QNXqSh0A@mail.gmail.com>
- <Y2C74nuMI3RBroTg@kroah.com>
- <CAMSo37Vt4BMkY1AJTR5yaWPDaJSQQhbj7xhqnVqDo0Q_Sy6ycg@mail.gmail.com>
+        Tue, 1 Nov 2022 09:35:30 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E323219B
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 06:35:28 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-38-tp3SBBnYM7uN9vRSuxgg_A-1; Tue, 01 Nov 2022 13:35:25 +0000
+X-MC-Unique: tp3SBBnYM7uN9vRSuxgg_A-1
+Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
+ (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 1 Nov
+ 2022 13:35:24 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.042; Tue, 1 Nov 2022 13:35:24 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Mark Rutland' <mark.rutland@arm.com>
+CC:     'Szabolcs Nagy' <szabolcs.nagy@arm.com>,
+        'Theodore Ts'o' <tytso@mit.edu>,
+        "'linux-api@vger.kernel.org'" <linux-api@vger.kernel.org>,
+        "'linux-kernel@vger.kernel.org'" <linux-kernel@vger.kernel.org>,
+        "'linux-arm-kernel@lists.infradead.org'" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: linux interprets an fcntl int arg as long
+Thread-Topic: linux interprets an fcntl int arg as long
+Thread-Index: AQHY7dH4b5GlkmHz9EyVI+/nub6Ts64p0qEQgAAgcACAAAds0IAAERqAgAADzNCAAAIMcA==
+Date:   Tue, 1 Nov 2022 13:35:23 +0000
+Message-ID: <b3d815b3ee734278a6fa34d4d129d15d@AcuMS.aculab.com>
+References: <Y1/DS6uoWP7OSkmd@arm.com> <Y2B6jcLUJ1F2y2yL@mit.edu>
+ <Y2DisyknbKxeCik4@arm.com>
+ <a0693686d0ae41599fe1700680ec56ec@AcuMS.aculab.com>
+ <Y2EGtE05hcVn3B3a@arm.com>
+ <0030a20a94cd49628c5461d044bb28ed@AcuMS.aculab.com>
+ <Y2EbR6YnQcgK4B8T@FVFF77S0Q05N>
+ <267402c9e66a4cac91a2e1df749dea6a@AcuMS.aculab.com>
+In-Reply-To: <267402c9e66a4cac91a2e1df749dea6a@AcuMS.aculab.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAMSo37Vt4BMkY1AJTR5yaWPDaJSQQhbj7xhqnVqDo0Q_Sy6ycg@mail.gmail.com>
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,44 +65,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 08:00:03PM +0800, Yongqin Liu wrote:
-> Hi, Greg
+From: David Laight
+> Sent: 01 November 2022 13:30
 > 
-> On Tue, 1 Nov 2022 at 14:26, Greg Kroah-Hartman
-> <gregkh@linuxfoundation.org> wrote:
+> From: Mark Rutland
+> > Sent: 01 November 2022 13:13
 > >
-> > On Tue, Nov 01, 2022 at 02:07:35PM +0800, Yongqin Liu wrote:
-> > > Hello,
+> > On Tue, Nov 01, 2022 at 12:19:51PM +0000, David Laight wrote:
+> > > From: 'Szabolcs Nagy' <szabolcs.nagy@arm.com>
+> > > > Sent: 01 November 2022 11:45
+> > > >
+> > > > The 11/01/2022 10:02, David Laight wrote:
+> > > > > From: Szabolcs Nagy
+> >
+> > > > kernel code:
+> > > > ------------
+> > > > SYSCALL_DEFINE3(fcntl, unsigned int, fd, unsigned int, cmd, unsigned long, arg)
+> > > > {
 > > >
-> > > As mentioned in the thread for the 5.4 version here[1], it causes a
-> > > crash for the 4.19 kernel too.
-> > > Just paste the log here for reference:
+> > > That is just a wrapper and calls do_fcntl().
+> > > which needs changing to be add:
+> > > 	arg &= ~0U;
+> > > before the switch(cmd) {
 > >
-> > Can you try this patch please:
+> > Just to check, do you mean the switch in do_fcntl(), or the switch within memfd_fcntl() ?
 > >
-> >
-> > diff --git a/include/linux/once.h b/include/linux/once.h
-> > index bb58e1c3aa03..3a6671d961b9 100644
-> > --- a/include/linux/once.h
-> > +++ b/include/linux/once.h
-> > @@ -64,7 +64,7 @@ void __do_once_slow_done(bool *done, struct static_key_true *once_key,
-> >  #define DO_ONCE_SLOW(func, ...)                                                     \
-> >         ({                                                                   \
-> >                 bool ___ret = false;                                         \
-> > -               static bool __section(".data.once") ___done = false;         \
-> > +               static bool __section(.data.once) ___done = false;           \
-> >                 static DEFINE_STATIC_KEY_TRUE(___once_key);                  \
-> >                 if (static_branch_unlikely(&___once_key)) {                  \
-> >                         ___ret = __do_once_slow_start(&___done);             \
+> > The former handles other APIs which do expect arg to be a long (e.g.
+> > F_SET_RW_HINT and F_GET_RW_HINT expect it to hold a full 64-bit pointer), so
+> > that'd break things.
 > 
-> 
-> This change works, it does not cause kernel panic again after this
-> change is applied.
+> The assignment to argv is earlier.
 
-Great, thanks!  Can I get a Tested-by: line for the changelog?
+Clearly I meant argp :-)
 
-I'll queue this up in a bit and get it fixed in the next release.
+Alternatively all the helper functions should be changed to
+have an 'unsigned int' argument instead of 'unsigned long'.
 
-thanks,
+That might show up any that try to read user buffers.
 
-greg k-h
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
