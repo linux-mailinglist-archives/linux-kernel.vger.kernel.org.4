@@ -2,97 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 80A2F614B23
+	by mail.lfdr.de (Postfix) with ESMTP id CC61A614B24
 	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:51:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiKAMv0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 08:51:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35438 "EHLO
+        id S230451AbiKAMvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 08:51:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230183AbiKAMvY (ORCPT
+        with ESMTP id S229468AbiKAMvY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 1 Nov 2022 08:51:24 -0400
-Received: from mail-oa1-x33.google.com (mail-oa1-x33.google.com [IPv6:2001:4860:4864:20::33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F8F1B1F5;
-        Tue,  1 Nov 2022 05:51:23 -0700 (PDT)
-Received: by mail-oa1-x33.google.com with SMTP id 586e51a60fabf-13bd19c3b68so16637835fac.7;
-        Tue, 01 Nov 2022 05:51:22 -0700 (PDT)
+Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDB31B1FC
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 05:51:23 -0700 (PDT)
+Received: by mail-ed1-x52b.google.com with SMTP id x2so21627752edd.2
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 05:51:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=ventanamicro.com; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Zd8ew0Fcdtt+vn+WPQkyqr+cTA4/IsSUe1qVBtpnWNs=;
-        b=JHsIdYCmoCKt/QIf+2xLn+VWR97YHma4Q6woPQpTOHVKnzSBq8fkOjBkQfmjJBtVkv
-         8PIEvdObggiLjsfcAUfHlM1wrm8G7J/LZD12b4DXGnslFEUDNndQXjPhZqPoFPZgYTUn
-         5degH08BD/HwLMMYsNlJA0uRF8sWOMI1z7eI+M2nrofZ6IYF5DU7rn4ZBPdOmXoazqGz
-         Z4U+26mwqu4bqVFKRsSixpkXNky9cFQ/fBmztzCj6KvXOWwURtB0l0CvZSkXcn3959sE
-         FlOaUhFtHFm5xjNsvWzATT9+F0wn4Xs1m3e1NPFjcN7QrwLlHMkhLf6fmyYanvUXx5G4
-         8d4w==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=I3ZWUelOBGuajwMCGSZuHahRmnca9IMPS5lnk5/9ETI=;
+        b=SH22qPUXsEn3p/Floa1ZUMCLaXYV8bLk5ULHiQsQqH465E1SVAmIu6Gj850XUtWV9A
+         D3vcOJJpkBKDfQObFbUbvPzsspuQeDi8iVxdxbPuOD5L9lqdeXzBxpoBhQrusiuhFHEW
+         X5gb+sDNXCfylI/G4HA9XvQ5zBoOQLjxCMPiCtygwfXo80GSGpNvwLPh/Z+T/8bh3Zuk
+         SwXqo9RR/EoPDC2jCc+HLc5z3HKMEmC/z195V79dBXKBEvrvXGJaudJx8wGWvzn2YMCf
+         SHKwY8wXPJECzov7T2eLVkWbEI2/y+28jeSZJQxu8o71oB3W65T8TXYTCq5r5pvnAkJ1
+         KxsQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Zd8ew0Fcdtt+vn+WPQkyqr+cTA4/IsSUe1qVBtpnWNs=;
-        b=OXmI4NfCGEDMfGtulAJ0PxTNOrQFE6qkTxuv0MykBKDLYPCN6GAUib95yu3xcOTtaG
-         gboBMHbGsvwt/sF4DCCeEi8LtbAKperY5ZMKZ9U9nN6eVJqfxVORIATPU1dEfWzzXqZn
-         Fd/r4iUcs7DqPKDyvea1MFHUMXFBeHX0exvXyKhymiep4XyzBdpHBVvNZ9WENQuIPpUg
-         uJHZ2+I+hI12Da3+DAnOppC1Mlp4kAULUxQ1UR7SrT6JaX+O547OjA6mdPNPK3LHU03y
-         AKGOXjVhaEylMCSlgd44iH3pGu2B5Xm8hASPm+cS863lM5jwpWjmz5mkNA8mmLQecbWq
-         gRog==
-X-Gm-Message-State: ACrzQf0xDTyZAIdVnH8Yw1d6mvTgj8qAytTNEC2g6Ly5ARoIA8DNAzvC
-        BZjfuP0B295gVJIfYpau0PU=
-X-Google-Smtp-Source: AMsMyM7h6iyk9rwLta5eEEXTz4x0HYN4lg7IfIg6vG8jwGcPHAov4FPbiA23wf0jno+Q4MVSs0QT3A==
-X-Received: by 2002:a05:6871:207:b0:13b:92ee:89da with SMTP id t7-20020a056871020700b0013b92ee89damr10529640oad.233.1667307082366;
-        Tue, 01 Nov 2022 05:51:22 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id r24-20020a056870179800b00132f141ef2dsm4368963oae.56.2022.11.01.05.51.20
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=I3ZWUelOBGuajwMCGSZuHahRmnca9IMPS5lnk5/9ETI=;
+        b=ZWHUf1uX7q+F38X7eJ+BdAA3vZbdseoV2t4B6cSLZHbNuia+LZ83++cHbEIvAQ39Qc
+         EFjQbWSal+Akl/D9Y8HKLHzZcwlwm6p/Rw3A9ThpghmXUSV3DGRok+ijsEzQyrFFJtx+
+         60ecIbA9D5WfRB4EFtV/ZQbguvemtQkcx0V/SbWdhUnFbScBlUEiU2ExZiqNrsxsdEkF
+         biNehMl1EdoVJ8ygbBcWZEi5G98LYYZJ3Q5FZ9czaYIAUn1eg5fyd3MGdjc9I9tSBb8b
+         EwvR1E667W6Xp53C8UlY4B/xe1PTm+GQhe4MpDZWEfaEIF2hiZDq+edAvVRqis52Xue7
+         lBIA==
+X-Gm-Message-State: ACrzQf38Vqy51/FLE2DtIZ2rZHbrkxaF75AB7W9yhOzUaJMl0YFDKPhb
+        JVXFXFPCfUL/nkq1l345awL9LomfpbXFlw==
+X-Google-Smtp-Source: AMsMyM49yeZoSu5tYqBhel3Vi41lPu+IDsM9aRBTodsPAIXmVMIiAGsNUkmhNpKrHHoSwAH+rwrGSg==
+X-Received: by 2002:a05:6402:158d:b0:463:2343:b980 with SMTP id c13-20020a056402158d00b004632343b980mr14233232edv.150.1667307081713;
+        Tue, 01 Nov 2022 05:51:21 -0700 (PDT)
+Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
+        by smtp.gmail.com with ESMTPSA id e22-20020a17090658d600b007ad0b97e6e9sm4112927ejs.162.2022.11.01.05.51.20
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
         Tue, 01 Nov 2022 05:51:21 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 1 Nov 2022 05:51:19 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Subject: Re: [PATCH 4.14 00/34] 4.14.297-rc1 review
-Message-ID: <20221101125119.GA1310060@roeck-us.net>
-References: <20221031070140.108124105@linuxfoundation.org>
+Date:   Tue, 1 Nov 2022 13:51:20 +0100
+From:   Andrew Jones <ajones@ventanamicro.com>
+To:     Atish Patra <atishp@rivosinc.com>
+Cc:     linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
+        Anup Patel <anup@brainfault.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Guo Ren <guoren@kernel.org>, kvm-riscv@lists.infradead.org,
+        kvm@vger.kernel.org, linux-riscv@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Will Deacon <will@kernel.org>
+Subject: Re: [RFC  4/9] RISC-V: KVM: Improve privilege mode filtering for perf
+Message-ID: <20221101125120.lkd3n3yybihjhzyk@kamzik>
+References: <20220718170205.2972215-1-atishp@rivosinc.com>
+ <20220718170205.2972215-5-atishp@rivosinc.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221031070140.108124105@linuxfoundation.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20220718170205.2972215-5-atishp@rivosinc.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 08:02:33AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.14.297 release.
-> There are 34 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Mon, Jul 18, 2022 at 10:02:00AM -0700, Atish Patra wrote:
+> Currently, the host driver doesn't have any method to identify if the
+> requested perf event is from kvm or bare metal. As KVM runs in HS
+> mode, there are no separate hypervisor privilege mode to distinguish
+> between the attributes for guest/host.
 > 
-> Responses should be made by Wed, 02 Nov 2022 07:01:32 +0000.
-> Anything received after that time might be too late.
+> Improve the privilege mode filtering by using the event specific
+> config1 field.
 > 
+> Signed-off-by: Atish Patra <atishp@rivosinc.com>
+> ---
+>  drivers/perf/riscv_pmu_sbi.c   | 27 ++++++++++++++++++++++-----
+>  include/linux/perf/riscv_pmu.h |  2 ++
+>  2 files changed, 24 insertions(+), 5 deletions(-)
+> 
+> diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
+> index 5d0eef3ef136..34f9fcc221a8 100644
+> --- a/drivers/perf/riscv_pmu_sbi.c
+> +++ b/drivers/perf/riscv_pmu_sbi.c
+> @@ -275,6 +275,27 @@ int riscv_pmu_sbi_hpmc_width(void)
+>  }
+>  EXPORT_SYMBOL(riscv_pmu_sbi_hpmc_width);
+>  
+> +static unsigned long pmu_sbi_get_filter_flags(struct perf_event *event)
+> +{
+> +	unsigned long cflags = 0;
+> +	bool guest_events = false;
+> +
+> +	if (event->attr.config1 & RISCV_KVM_PMU_CONFIG1_GUEST_EVENTS)
+> +		guest_events = true;
+> +	if (event->attr.exclude_kernel)
+> +		cflags |= guest_events ? SBI_PMU_CFG_FLAG_SET_VSINH : SBI_PMU_CFG_FLAG_SET_SINH;
+> +	if (event->attr.exclude_user)
+> +		cflags |= guest_events ? SBI_PMU_CFG_FLAG_SET_VUINH : SBI_PMU_CFG_FLAG_SET_UINH;
+> +	if (guest_events && event->attr.exclude_hv)
+> +		cflags |= SBI_PMU_CFG_FLAG_SET_SINH;
+> +	if (event->attr.exclude_host)
+> +		cflags |= SBI_PMU_CFG_FLAG_SET_UINH | SBI_PMU_CFG_FLAG_SET_SINH;
+> +	if (event->attr.exclude_guest)
+> +		cflags |= SBI_PMU_CFG_FLAG_SET_VSINH | SBI_PMU_CFG_FLAG_SET_VUINH;
+> +
+> +	return cflags;
+> +}
+> +
+>  static int pmu_sbi_ctr_get_idx(struct perf_event *event)
+>  {
+>  	struct hw_perf_event *hwc = &event->hw;
+> @@ -286,11 +307,7 @@ static int pmu_sbi_ctr_get_idx(struct perf_event *event)
+>  	uint64_t cmask = GENMASK_ULL(rvpmu->num_counters - 1, 0);
+>  	unsigned long cflags = 0;
+>  
+> -	if (event->attr.exclude_kernel)
+> -		cflags |= SBI_PMU_CFG_FLAG_SET_SINH;
+> -	if (event->attr.exclude_user)
+> -		cflags |= SBI_PMU_CFG_FLAG_SET_UINH;
+> -
+> +	cflags = pmu_sbi_get_filter_flags(event);
+>  	/* retrieve the available counter index */
+>  #if defined(CONFIG_32BIT)
+>  	ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_CFG_MATCH, cbase, cmask,
+> diff --git a/include/linux/perf/riscv_pmu.h b/include/linux/perf/riscv_pmu.h
+> index 6fee211c27b5..825b95253bc5 100644
+> --- a/include/linux/perf/riscv_pmu.h
+> +++ b/include/linux/perf/riscv_pmu.h
+> @@ -26,6 +26,8 @@
+>  
+>  #define RISCV_PMU_STOP_FLAG_RESET 1
+>  
+> +#define RISCV_KVM_PMU_CONFIG1_GUEST_EVENTS 0x1
+> +
+>  struct cpu_hw_events {
+>  	/* currently enabled events */
+>  	int			n_events;
+> -- 
+> 2.25.1
+>
 
-Build results:
-	total: 170 pass: 170 fail: 0
-Qemu test results:
-	total: 422 pass: 422 fail: 0
-
-Tested-by: Guenter Roeck <linux@roeck-us.net>
-
-Guenter
+Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
