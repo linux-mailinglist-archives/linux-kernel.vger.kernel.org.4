@@ -2,45 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9236614FC4
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 17:54:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72621614FC5
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 17:55:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231147AbiKAQyo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 12:54:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55120 "EHLO
+        id S230515AbiKAQzg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 12:55:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbiKAQyi (ORCPT
+        with ESMTP id S229961AbiKAQzd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 12:54:38 -0400
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E6A231D0EF
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 09:54:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1667321661; bh=8YVJzLkjok9FyytutsxVxX0mBcAacup22qHtrQ8O00Y=;
-        h=X-EA-Auth:Date:From:To:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=lsd009h845o8RntXvfoTseq4TnGtfrVtg3PeO7F3Pq+MGcKFG5fP0Ydy0LUllFoEz
-         CB1zCkQTMkyF/hbG+BlB4ZhaMbH/tZWNTSUM7250NiM/JzNY6VN1ikZfFKroGIJ8Kd
-         h5p9IYx5XKTy2BmIEPQimvap9IXkylvRoP7TnjWE=
-Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
-        via [213.182.55.206]
-        Tue,  1 Nov 2022 17:54:21 +0100 (CET)
-X-EA-Auth: rv1lLadpktQ6bGQclQZze9gI4h6PWCVMTYUQPJBBxg7btmUvoVeAv6vc2LMERn3jWltxUINSBnuu0cCzAvsMYa5mjEPAP/A0
-Date:   Tue, 1 Nov 2022 22:24:16 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     outreachy@lists.linux.dev,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: r8188eu: remove unwanted variable implementation
-Message-ID: <Y2FPOON3UcqqAQFy@ubunlion>
+        Tue, 1 Nov 2022 12:55:33 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2BEB42B2;
+        Tue,  1 Nov 2022 09:55:32 -0700 (PDT)
+Received: from W11-BEAU-MD.localdomain (unknown [76.135.50.127])
+        by linux.microsoft.com (Postfix) with ESMTPSA id C3DCF205D3B7;
+        Tue,  1 Nov 2022 09:55:31 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com C3DCF205D3B7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1667321731;
+        bh=ZxUDhag+SzXzqq0HYVtbUdQX9aVD/5bvmeFf32UifHk=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=AiN0IFR/B/56M3TVvT2kBDhXMIlq8FswTe+cBLNl/uXxo1MFU/KAGvrzO0q+ZiFdD
+         E0WwHYfKtcUgPf/zFgxdBMiD/qF19Rh4BvexW6NXhsjmdxSsWUeF5UPYuiB79TuEnh
+         y034XCVDdFhq2k0ehpteOibGtwjwvGen2p5dRXVk=
+Date:   Tue, 1 Nov 2022 09:55:28 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     rostedt@goodmis.org, mathieu.desnoyers@efficios.com,
+        dcook@linux.microsoft.com, alanau@linux.microsoft.com,
+        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/2] tracing/user_events: Remote write ABI
+Message-ID: <20221101165528.GB69@W11-BEAU-MD.localdomain>
+References: <20221027224011.2075-1-beaub@linux.microsoft.com>
+ <20221031231556.a15846fd3513641d48820d5b@kernel.org>
+ <20221031172706.GA196@W11-BEAU-MD.localdomain>
+ <20221101225220.a948157064a47678d2ed6fd7@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+In-Reply-To: <20221101225220.a948157064a47678d2ed6fd7@kernel.org>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -48,121 +52,154 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Local variables intended as the function return value are
-initialized but their value does not change during function
-execution. The initial value assigned to the variable is simply
-returned to the caller. This makes the variable declaration
-unnecessary and the initial value can be directly returned.
+On Tue, Nov 01, 2022 at 10:52:20PM +0900, Masami Hiramatsu wrote:
+> On Mon, 31 Oct 2022 10:27:06 -0700
+> Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> 
+> > On Mon, Oct 31, 2022 at 11:15:56PM +0900, Masami Hiramatsu wrote:
+> > > Hi Beau,
+> > > 
+> > > On Thu, 27 Oct 2022 15:40:09 -0700
+> > > Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> > > 
+> > > > As part of the discussions for user_events aligned with user space
+> > > > tracers, it was determined that user programs should register a 32-bit
+> > > > value to set or clear a bit when an event becomes enabled. Currently a
+> > > > shared page is being used that requires mmap().
+> > > > 
+> > > > In this new model during the event registration from user programs 2 new
+> > > > values are specified. The first is the address to update when the event
+> > > > is either enabled or disabled. The second is the bit to set/clear to
+> > > > reflect the event being enabled. This allows for a local 32-bit value in
+> > > > user programs to support both kernel and user tracers. As an example,
+> > > > setting bit 31 for kernel tracers when the event becomes enabled allows
+> > > > for user tracers to use the other bits for ref counts or other flags.
+> > > > The kernel side updates the bit atomically, user programs need to also
+> > > > update these values atomically.
+> > > 
+> > > I think you means the kernel tracer (ftrace/perf) and user tracers (e.g. 
+> > > LTTng) use the same 32bit data so that traced user-application only checks
+> > > that data for checking an event is enabled, right?
+> > > 
+> > 
+> > Yes, exactly, user code can just check a single uint32 or uint64 to tell
+> > if anything is enabled (kernel or user tracer).
+> > 
+> > > If so, who the user tracer threads updates the data bit? Is that thread
+> > > safe to update both kernel tracer and user tracers at the same time?
+> > > 
+> > 
+> > This is why atomics are used to set the bit on the kernel side. The user
+> > side should do the same. This is like the futex code. Do you see a
+> > problem with atomics being used between user and kernel space on a
+> > shared 32/64-bit address?
+> 
+> Ah, OK. set_bit()/clear_bit() are atomic ops. So the user tracer must
+> use per-arch atomic ops implementation too. Hmm, can you comment it there?
+> 
 
-The patch is produced using the following coccicheck options:
-   COCCI=./scripts/coccinelle/misc/returnvar.cocci
-   M=driver/staging/r8188eu/
-   MODE=patch
+I can add a comment here, I also plan to update our documentation. I
+really want to get good feedback on this first, so I avoid updating the
+documentation several times as we progress this conversation. Expect
+documentation updates when I flip from RFC to normal patchset.
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
- drivers/staging/r8188eu/core/rtw_ap.c        | 5 ++---
- drivers/staging/r8188eu/core/rtw_recv.c      | 3 +--
- drivers/staging/r8188eu/hal/rtl8188eu_xmit.c | 3 +--
- drivers/staging/r8188eu/os_dep/ioctl_linux.c | 4 +---
- 4 files changed, 5 insertions(+), 10 deletions(-)
+> > 
+> > > And what is the actual advantage of this change? Are there any issue
+> > > to use mmaped page? I would like to know more background of this
+> > > change.
+> > > 
+> > 
+> > Without this change user tracers like LTTng will have to check 2 values
+> > instead of 1 to tell if the kernel tracer is enabled or not. Mathieu is
+> > working on a user side tracing library in an effort to align writing
+> > tracing code in user processes that works well for both kernel and user
+> > tracers without much effort.
+> > 
+> > See here:
+> > https://github.com/compudj/side
+> 
+> Thanks for pointing!
+> 
+> > 
+> > Are you proposing we keep the bitmap approach and have side library just
+> > hook another branch? Mathieu had issues with that approach during our
+> > talks.
+> 
+> No, that makes things more complicated. We should choose one.
+> 
 
-diff --git a/drivers/staging/r8188eu/core/rtw_ap.c b/drivers/staging/r8188eu/core/rtw_ap.c
-index 24eb8dce9bfe..9eaf345e6a00 100644
---- a/drivers/staging/r8188eu/core/rtw_ap.c
-+++ b/drivers/staging/r8188eu/core/rtw_ap.c
-@@ -1020,7 +1020,6 @@ u8 ap_free_sta(struct adapter *padapter, struct sta_info *psta,
- int rtw_sta_flush(struct adapter *padapter)
- {
- 	struct list_head *phead, *plist;
--	int ret = 0;
- 	struct sta_info *psta = NULL;
- 	struct sta_priv *pstapriv = &padapter->stapriv;
- 	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
-@@ -1028,7 +1027,7 @@ int rtw_sta_flush(struct adapter *padapter)
- 	u8 bc_addr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+Agree, it seems we are settling behind the user provided address
+approach, as long as we can work through fork() and other scenarios.
+During the bi-weekly tracefs meetings we've been going back and forth
+on which approach to take.
 
- 	if ((pmlmeinfo->state & 0x03) != WIFI_FW_AP_STATE)
--		return ret;
-+		return 0;
+I promised a RFC patch to see how far I could get on this to see what
+edge cases exist that we need to work through. Currently fork() seems
+the hardest to do with private mappings, but I believe I have a path
+forward that I'll put in the next version of this patchset.
 
- 	spin_lock_bh(&pstapriv->asoc_list_lock);
- 	phead = &pstapriv->asoc_list;
-@@ -1051,7 +1050,7 @@ int rtw_sta_flush(struct adapter *padapter)
+> > 
+> > > Could you also provide any sample program which I can play it? :)
+> > > 
+> > 
+> > When I make the next patch version, I will update the user_events sample
+> > so you'll have something to try out.
+> 
+> That's helpful for me. We can have the code under tools/tracing/user_events/.
+> 
 
- 	associated_clients_update(padapter, true);
+I was planning to update the existing sample at samples/user_events/.
+Any reason that location can't be used?
 
--	return ret;
-+	return 0;
- }
+> Thank you,
+> 
+> > 
+> > > > User provided addresses must be aligned on a 32-bit boundary, this
+> > > > allows for single page checking and prevents odd behaviors such as a
+> > > > 32-bit value straddling 2 pages instead of a single page.
+> > > > 
+> > > > When page faults are encountered they are done asyncly via a workqueue.
+> > > > If the page faults back in, the write update is attempted again. If the
+> > > > page cannot fault-in, then we log and wait until the next time the event
+> > > > is enabled/disabled. This is to prevent possible infinite loops resulting
+> > > > from bad user processes unmapping or changing protection values after
+> > > > registering the address.
+> > > > 
+> > > > NOTE:
+> > > > User programs that wish to have the enable bit shared across forks
+> > > > either need to use a MAP_SHARED allocated address or register a new
+> > > > address and file descriptor. If MAP_SHARED cannot be used or new
+> > > > registrations cannot be done, then it's allowable to use MAP_PRIVATE
+> > > > as long as the forked children never update the page themselves. Once
+> > > > the page has been updated, the page from the parent will be copied over
+> > > > to the child. This new copy-on-write page will not receive updates from
+> > > > the kernel until another registration has been performed with this new
+> > > > address.
+> > > > 
+> > > > Beau Belgrave (2):
+> > > >   tracing/user_events: Use remote writes for event enablement
+> > > >   tracing/user_events: Fixup enable faults asyncly
+> > > > 
+> > > >  include/linux/user_events.h      |  10 +-
+> > > >  kernel/trace/trace_events_user.c | 396 ++++++++++++++++++++-----------
+> > > >  2 files changed, 270 insertions(+), 136 deletions(-)
+> > > > 
+> > > > 
+> > > > base-commit: 23758867219c8d84c8363316e6dd2f9fd7ae3049
+> > > > -- 
+> > > > 2.25.1
+> > > > 
+> > > 
+> > > 
+> > > -- 
+> > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Thanks,
+> > -Beau
+> 
+> 
+> -- 
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
 
- /* called > TSR LEVEL for USB or SDIO Interface*/
-diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-index 4b68a543f68b..94f85cd7038d 100644
---- a/drivers/staging/r8188eu/core/rtw_recv.c
-+++ b/drivers/staging/r8188eu/core/rtw_recv.c
-@@ -1415,7 +1415,6 @@ static int amsdu_to_msdu(struct adapter *padapter, struct recv_frame *prframe)
-
- 	struct recv_priv *precvpriv = &padapter->recvpriv;
- 	struct __queue *pfree_recv_queue = &precvpriv->free_recv_queue;
--	int	ret = _SUCCESS;
-
- 	nr_subframes = 0;
-
-@@ -1513,7 +1512,7 @@ static int amsdu_to_msdu(struct adapter *padapter, struct recv_frame *prframe)
- 	prframe->len = 0;
- 	rtw_free_recvframe(prframe, pfree_recv_queue);/* free this recv_frame */
-
--	return ret;
-+	return _SUCCESS;
- }
-
- static bool check_indicate_seq(struct recv_reorder_ctrl *preorder_ctrl, u16 seq_num)
-diff --git a/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c b/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c
-index 8e4a5acc0b18..6d1f56d1f9d7 100644
---- a/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c
-+++ b/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c
-@@ -149,7 +149,6 @@ static void fill_txdesc_phy(struct pkt_attrib *pattrib, __le32 *pdw)
-
- static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bagg_pkt)
- {
--	int	pull = 0;
- 	uint	qsel;
- 	u8 data_rate, pwr_status, offset;
- 	struct adapter		*adapt = pxmitframe->padapter;
-@@ -295,7 +294,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bag
- 	ODM_SetTxAntByTxInfo_88E(&haldata->odmpriv, pmem, pattrib->mac_id);
-
- 	rtl8188eu_cal_txdesc_chksum(ptxdesc);
--	return pull;
-+	return 0;
- }
-
- /* for non-agg data frame or  management frame */
-diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-index 8516e253bb03..59a97c5fb80c 100644
---- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-+++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-@@ -2979,8 +2979,6 @@ static int rtw_p2p_set(struct net_device *dev,
- 			       struct iw_request_info *info,
- 			       union iwreq_data *wrqu, char *extra)
- {
--	int ret = 0;
--
- 	if (!memcmp(extra, "enable =", 7)) {
- 		rtw_wext_p2p_enable(dev, info, wrqu, &extra[7]);
- 	} else if (!memcmp(extra, "setDN =", 6)) {
-@@ -3027,7 +3025,7 @@ static int rtw_p2p_set(struct net_device *dev,
- 		rtw_p2p_set_persistent(dev, info, wrqu, &extra[11]);
- 	}
-
--	return ret;
-+	return 0;
- }
-
- static int rtw_p2p_get2(struct net_device *dev,
---
-2.34.1
-
-
-
+Thanks,
+-Beau
