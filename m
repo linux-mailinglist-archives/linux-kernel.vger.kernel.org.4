@@ -2,156 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39BF4614B37
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:54:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED282614B3D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:54:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230350AbiKAMyk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 08:54:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38356 "EHLO
+        id S230464AbiKAMyp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 08:54:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230369AbiKAMyd (ORCPT
+        with ESMTP id S230019AbiKAMyg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 08:54:33 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0150CE35;
-        Tue,  1 Nov 2022 05:54:31 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A1CDkiL017408;
-        Tue, 1 Nov 2022 12:54:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=qGscPiuX0QSOpKGT3WadhbemaYY5uvKETCqeHPJM4Qw=;
- b=dqMVCj8BPWTIPeP/atJBG8vJP7ymcVBrHOG5JuDnSfwQoVCBCrzcLfcKuDx6hZ2jiP6X
- /b5mChy/YNind0/qr9AChcVWOv2YyOKuFTGaSl4oq5cSTOlih91ai98ji3DEzw+yWzPg
- pZYYyqX+YMsGSUvbbUmWfvjvX+iWKkPUtRJT00w3K2tFsHQ1xdqHcP7+Sp9FiJV4mWE1
- sYwoZbHYX0ynHM0ZFhjzUs+E6AbWCyrrfk9qPVeGbGZl5C1sZ7yjVZvVL9Y7ZclajIvp
- 8JK3DHtdPg/1tIclRkQvf00K7B1y54gFBGkJPuf/Og0imIpNTJaR4uhYWiFJUxsbBZFr Kg== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kjv4wnqrw-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Nov 2022 12:54:18 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A1CJPgZ009687;
-        Tue, 1 Nov 2022 12:54:18 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kjv4wnqre-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Nov 2022 12:54:18 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A1Coibh012584;
-        Tue, 1 Nov 2022 12:54:17 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma04dal.us.ibm.com with ESMTP id 3kguta12mn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Nov 2022 12:54:17 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com ([9.208.128.113])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A1CsFQL20054620
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 1 Nov 2022 12:54:16 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 977945804B;
-        Tue,  1 Nov 2022 12:54:15 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8A5A258059;
-        Tue,  1 Nov 2022 12:54:13 +0000 (GMT)
-Received: from [9.163.9.174] (unknown [9.163.9.174])
-        by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  1 Nov 2022 12:54:13 +0000 (GMT)
-Message-ID: <f51d6df1-4d85-8b65-2480-e626037287aa@linux.ibm.com>
-Date:   Tue, 1 Nov 2022 13:54:12 +0100
+        Tue, 1 Nov 2022 08:54:36 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A499C1B9D3;
+        Tue,  1 Nov 2022 05:54:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667307275; x=1698843275;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=/2AoikK0W8w5NML5eDaXWNLf++sjzy7BGwh04ld7jzA=;
+  b=aecTX7DcR6fR2S8L8gxBbt27F6Dk1JZtG68h0oit9nBYEr+eY1kA5CsF
+   zBJnct8/2YAfSivU3Aq5lMEhnIC2ks9Y8qz/OlbJ2xiiwxfU1NU3x26Se
+   i2KwPeVTTlrSSUgxoTwk/nVTO8AyS4Q86YLZ4O6ptiBTnCp5OtqOEOi8a
+   7+J3lnw29bbuntcm+A7VjwdkHLzDqakjm47XehypdWBpVMFfp1DXS8WLJ
+   PRMY0UuxK1EOtxP/ZnmZDblx4PTqhYjxbaPthYLBot2bzf2PMqLfiYdlb
+   46gecV2Zd6hFXr3w2hSpc6JAbhZQc0KlXScMsZNGwbfDCc5QnYTqA0u1i
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="371208207"
+X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
+   d="scan'208";a="371208207"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 05:54:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="633863354"
+X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
+   d="scan'208";a="633863354"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga002.jf.intel.com with ESMTP; 01 Nov 2022 05:54:35 -0700
+Received: from maurocar-mobl2 (maurocar-mobl2.ger.corp.intel.com [10.252.29.141])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id BE3D9580B9D;
+        Tue,  1 Nov 2022 05:54:28 -0700 (PDT)
+Date:   Tue, 1 Nov 2022 13:54:25 +0100
+From:   Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
+To:     Petri Latvala <petri.latvala@intel.com>
+Cc:     Isabella Basso <isabbasso@riseup.net>, twoerner@gmail.com,
+        linux-kselftest@vger.kernel.org, magalilemes00@gmail.com,
+        maira.canal@usp.br, dlatypov@google.com, tales.aparecida@gmail.com,
+        brendanhiggins@google.com, linux-kernel@vger.kernel.org,
+        leandro.ribeiro@collabora.com, igt-dev@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, daniel@ffwll.ch, n@nfraprado.net,
+        davidgow@google.com, skhan@linuxfoundation.org,
+        andrealmeid@riseup.net, kunit-dev@googlegroups.com
+Subject: Re: [igt-dev] [PATCH i-g-t v2 4/4] tests: DRM selftests: switch to
+ KUnit
+Message-ID: <20221101135425.3ee12c9c@maurocar-mobl2>
+In-Reply-To: <Yyl3UXvLd3Jyr9uP@platvala-desk.ger.corp.intel.com>
+References: <20220829000920.38185-1-isabbasso@riseup.net>
+        <20220829000920.38185-5-isabbasso@riseup.net>
+        <Yyl3UXvLd3Jyr9uP@platvala-desk.ger.corp.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH] net/smc: Fix possible leaked pernet namespace in
- smc_init()
-To:     Chen Zhongjin <chenzhongjin@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        netdev@vger.kernel.org
-Cc:     kgraul@linux.ibm.com, jaka@linux.ibm.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        guvenc@linux.ibm.com
-References: <20221101093722.127223-1-chenzhongjin@huawei.com>
-From:   Wenjia Zhang <wenjia@linux.ibm.com>
-In-Reply-To: <20221101093722.127223-1-chenzhongjin@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: l_8v8EMag4i2SDAfI6tWkerWUPzwWQPq
-X-Proofpoint-ORIG-GUID: AELET7V63WL7xKhvzPDVeVOZbDR85vg8
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-01_06,2022-11-01_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- spamscore=0 phishscore=0 mlxscore=0 priorityscore=1501 impostorscore=0
- malwarescore=0 suspectscore=0 mlxlogscore=999 bulkscore=0 adultscore=0
- clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211010095
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, 20 Sep 2022 11:18:25 +0300
+Petri Latvala <petri.latvala@intel.com> wrote:
 
+> On Sun, Aug 28, 2022 at 09:09:20PM -0300, Isabella Basso wrote:
+> > As the DRM selftests are now using KUnit [1], update IGT tests as well.
+> > 
+> > [1] - https://lore.kernel.org/all/20220708203052.236290-1-maira.canal@usp.br/
+> > 
+> > Signed-off-by: Isabella Basso <isabbasso@riseup.net>
+> > ---
+> >  tests/drm_buddy.c    |  7 ++++---
+> >  tests/drm_mm.c       |  7 ++++---
+> >  tests/kms_selftest.c | 12 +++++++++---
+> >  3 files changed, 17 insertions(+), 9 deletions(-)
+> > 
+> > diff --git a/tests/drm_buddy.c b/tests/drm_buddy.c
+> > index 06876e0c..74c06dce 100644
+> > --- a/tests/drm_buddy.c
+> > +++ b/tests/drm_buddy.c
+> > @@ -6,9 +6,10 @@
+> >  #include "igt.h"
+> >  #include "igt_kmod.h"
+> >  
+> > -IGT_TEST_DESCRIPTION("Basic sanity check of DRM's buddy allocator (struct drm_buddy)");
+> > +IGT_TEST_DESCRIPTION("Basic sanity check of DRM's buddy allocator (struct \
+> > +		      drm_buddy) using KUnit");
+> >  
+> > -igt_main
+> > +igt_simple_main
+> >  {
+> > -	igt_kselftests("test-drm_buddy", NULL, NULL, NULL);
+> > +	igt_kunit("drm_buddy_test", NULL);
+> >  }  
+> 
+> With kselftests we had the ability to only run a specified set of
+> tests, and with or without selection, we had sub-results for each
+> through dynamic subtests. Does kunit have that possibility? I mean I
+> know kunit itself does but what about igt_kunit()?
 
-On 01.11.22 10:37, Chen Zhongjin wrote:
-> In smc_init(), register_pernet_subsys(&smc_net_stat_ops) is called
-> without any error handling.
-> If it fails, registering of &smc_net_ops won't be reverted.
-> And if smc_nl_init() fails, &smc_net_stat_ops itself won't be reverted.
-> 
-> This leaves wild ops in subsystem linkedlist and when another module
-> tries to call register_pernet_operations() it triggers page fault:
-> 
-> BUG: unable to handle page fault for address: fffffbfff81b964c
-> RIP: 0010:register_pernet_operations+0x1b9/0x5f0
-> Call Trace:
->    <TASK>
->    register_pernet_subsys+0x29/0x40
->    ebtables_init+0x58/0x1000 [ebtables]
->    ...
-> 
-> Fixes: 194730a9beb5 ("net/smc: Make SMC statistics network namespace aware")
-> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+I don't think so. I created a KUnit with the mock selftests:
 
-It looks good, thank you for the effort!
+	$ modinfo test-i915-mock
+	filename:       /lib/modules/6.1.0-rc2-drm-b1cab854a639+/kernel/drivers/gpu/drm/i915/test-i915-mock.ko
+	import_ns:      I915_SELFTEST
+	license:        GPL v2
+	depends:        i915
+	retpoline:      Y
+	intree:         Y
+	name:           test_i915_mock
+	vermagic:       6.1.0-rc2-drm-b1cab854a639+ SMP preempt mod_unload 
 
-Reviewed-by: Wenjia Zhang <wenjia@linux.ibm.com>
-> ---
->   net/smc/af_smc.c | 6 ++++--
->   1 file changed, 4 insertions(+), 2 deletions(-)
-> 
-> diff --git a/net/smc/af_smc.c b/net/smc/af_smc.c
-> index 3ccbf3c201cd..e12d4fa5aece 100644
-> --- a/net/smc/af_smc.c
-> +++ b/net/smc/af_smc.c
-> @@ -3380,14 +3380,14 @@ static int __init smc_init(void)
->   
->   	rc = register_pernet_subsys(&smc_net_stat_ops);
->   	if (rc)
-> -		return rc;
-> +		goto out_pernet_subsys;
->   
->   	smc_ism_init();
->   	smc_clc_init();
->   
->   	rc = smc_nl_init();
->   	if (rc)
-> -		goto out_pernet_subsys;
-> +		goto out_pernet_subsys_stat;
->   
->   	rc = smc_pnet_init();
->   	if (rc)
-> @@ -3480,6 +3480,8 @@ static int __init smc_init(void)
->   	smc_pnet_exit();
->   out_nl:
->   	smc_nl_exit();
-> +out_pernet_subsys_stat:
-> +	unregister_pernet_subsys(&smc_net_stat_ops);
->   out_pernet_subsys:
->   	unregister_pernet_subsys(&smc_net_ops);
->   
+There's no module parameters. Just loading it makes all tests
+there to run.
+
+OK, with the current implementation, we could have one module per subtest, 
+but that sounds overkill. 
+
+Another possibility would be to implement it like:
+
+	test-i915-mock-fences
+	test-i915-mock-hugepages
+	...
+
+which would allow a finer control. Another possibility would be to
+change kunit_suite and kunit_test_suites() to optionally create
+a modprobe parameter to allow specifying what tests from the test
+suites would run.
+
+On the other hand, not sure if are there any gains implementing it,
+at least for the hardware-independent tests. I mean, if one of such
+tests fail after a patch, the change is broken and should be reverted,
+as this is a regression.
+
+> Orthogonal to that question, drm_mm and test-drm_modeset are _now_
+> using kunit but in LTS kernels they're not, and we'd like to be able
+> to keep testing those. That means having both launchers here and just
+> letting the "incorrect" one produce a 'skip'.
+
+Agreed. Patch 4/4 should be checking if the test module is there.
+If not, fall back to selftest.
+
+Regards,
+Mauro
+
