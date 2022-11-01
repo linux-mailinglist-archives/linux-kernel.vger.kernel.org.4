@@ -2,119 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7396F61484B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:14:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23100614847
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:14:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229763AbiKALO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 07:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50844 "EHLO
+        id S230144AbiKALO3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 07:14:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50542 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230184AbiKALOw (ORCPT
+        with ESMTP id S229882AbiKALOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 07:14:52 -0400
-Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F0F19C1D
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 04:14:49 -0700 (PDT)
-Received: by mail-lf1-x135.google.com with SMTP id t4so9997597lfp.2
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 04:14:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Et0dLu8NcqFUEiFUqF09J+RIhc7UoMo0suIjCPp+COE=;
-        b=Q2PtqRY6KrwP3n9DeLyFElWkTzB87jb7VOfbmqYF6zUGhNijk0IPeJ8TzNKBQuq1F9
-         5UlQdtvRnaa6lhyLRHphzhkTQ1K4VjmL6NJ/taHrsvKQaZayYFmiA7YjS7DcTGup/8+v
-         okq5l1ps1vTd1KP1wMYGMv43RfKXjWdelFUXgTHgg4WBQzpUVl7diPrXdtsH5zOKkK5i
-         9n9WEcLn/LOyXmQafS0bqlKM59MMrRC5tizDeboWNSUN0nRFLZrgwifeVyHOg5L4xUZr
-         GI9HWnPKEzUs0YTGLd7rR2jHQMx/vLjkg2+kDGjgzFvCqXi/JwmGgzf9kO8/Gypi9BZg
-         PQXA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Et0dLu8NcqFUEiFUqF09J+RIhc7UoMo0suIjCPp+COE=;
-        b=pKdqTwG3NoaPAX0fX2Dcw5EB1+Ob0u8GQdREh6RAjQTUtfRz5hT4IQu/SNlC+mnw4P
-         AR6u38Jb+cZIY1S0RXW8ZBHPDMhvyK4LHp/pT+hK3CSE8kBTN8kbkTx45BugvMhmeiSV
-         f5vp7owo8bZaVmyrekcTCe2Cvu1fM0HLmwi2gestg8C+rwWj3NTSGmQSn8jGnN1NSyw3
-         0UZ7tpSMFrGLqOzFv8zlE9exWZ5yED/pkS8jgcIPEJxu6WbJ2W6nzutzi9Lu0k3bc2Kz
-         JyjcF20INrQ6sCabg2VciPfq7rN971iUYW/kGl74clGNx4DryuB51ZTN9ZTjd6PKeLF3
-         83pA==
-X-Gm-Message-State: ACrzQf2uDNbyIHDS3ho0eYi34unI6e0ShftGIZxeu+KkJSnn8KMQZD2J
-        sbu4MNq9e2BKqDQwNQX/k2Q=
-X-Google-Smtp-Source: AMsMyM6aGUKbqF8nu2opQO8Hniz97PYjbfRKBgkjR7bJJweSp6d8uOuPN9u/iraFIINPAmdpG60aiA==
-X-Received: by 2002:a19:ad03:0:b0:4a0:56ab:7148 with SMTP id t3-20020a19ad03000000b004a056ab7148mr7796171lfc.430.1667301287906;
-        Tue, 01 Nov 2022 04:14:47 -0700 (PDT)
-Received: from elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net ([20.240.130.248])
-        by smtp.googlemail.com with ESMTPSA id e17-20020a05651236d100b0048af3c090f8sm1629472lfs.13.2022.11.01.04.14.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 04:14:47 -0700 (PDT)
-From:   Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev,
-        Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-Subject: [PATCH 2/2] Join some lines of code to avoid a line ending in a (
-Date:   Tue,  1 Nov 2022 11:13:29 +0000
-Message-Id: <1da74119d5a50ef97e68f26c82c9c9e429f8d0ec.1667300134.git.tanjubrunostar0@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <cover.1667300134.git.tanjubrunostar0@gmail.com>
-References: <cover.1667300134.git.tanjubrunostar0@gmail.com>
+        Tue, 1 Nov 2022 07:14:24 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C13FBF49
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 04:14:22 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.57])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N1nQR1wwGzJnMr;
+        Tue,  1 Nov 2022 19:11:27 +0800 (CST)
+Received: from cgs.huawei.com (10.244.148.83) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 1 Nov 2022 19:14:19 +0800
+From:   Gaosheng Cui <cuigaosheng1@huawei.com>
+To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+        <puwen@hygon.cn>, <TonyWWang-oc@zhaoxin.com>, <Jason@zx2c4.com>,
+        <peterz@infradead.org>, <gregkh@linuxfoundation.org>,
+        <cuigaosheng1@huawei.com>, <andrew.cooper3@citrix.com>,
+        <tony.luck@intel.com>, <mario.limonciello@amd.com>,
+        <pawan.kumar.gupta@linux.intel.com>, <chenyi.qiang@intel.com>,
+        <rdunlap@infradead.org>, <jithu.joseph@intel.com>,
+        <rafael.j.wysocki@intel.com>, <paulmck@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>
+Subject: [PATCH v2] x86/cpu: replacing the open-coded shift with BIT(x)
+Date:   Tue, 1 Nov 2022 19:14:18 +0800
+Message-ID: <20221101111418.816139-1-cuigaosheng1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.244.148.83]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The code line ends with a '(' which is not allowed in
-Linux kernel coding. Joining the lines and indenting
-correctly improves visibility
+Replace the open-coded shift with BIT(x) to make the code a bit
+more self-documenting, at the same time, fix some useless warnings.
 
-Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
 ---
- drivers/staging/vt6655/rxtx.c | 22 +++++++++-------------
- 1 file changed, 9 insertions(+), 13 deletions(-)
+v2:
+- Change the commit msg, remove the UBSAN warning calltrace, and
+  merge patch "x86/cpu: fix undefined behavior in bit shift for
+  intel_detect_tlb" with it. Thanks!
+ arch/x86/kernel/cpu/amd.c     | 2 +-
+ arch/x86/kernel/cpu/centaur.c | 2 +-
+ arch/x86/kernel/cpu/hygon.c   | 2 +-
+ arch/x86/kernel/cpu/intel.c   | 4 ++--
+ arch/x86/kernel/cpu/proc.c    | 2 +-
+ arch/x86/kernel/cpu/zhaoxin.c | 2 +-
+ 6 files changed, 7 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
-index d7e439cd8675..df7473155704 100644
---- a/drivers/staging/vt6655/rxtx.c
-+++ b/drivers/staging/vt6655/rxtx.c
-@@ -555,19 +555,15 @@ s_uFillDataHead(
- 	return buf->duration;
- }
+diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
+index 860b60273df3..75d82cad323a 100644
+--- a/arch/x86/kernel/cpu/amd.c
++++ b/arch/x86/kernel/cpu/amd.c
+@@ -613,7 +613,7 @@ static void early_init_amd(struct cpuinfo_x86 *c)
+ 	 * c->x86_power is 8000_0007 edx. Bit 8 is TSC runs at constant rate
+ 	 * with P/T states and does not stop in deep C-states
+ 	 */
+-	if (c->x86_power & (1 << 8)) {
++	if (c->x86_power & BIT(8)) {
+ 		set_cpu_cap(c, X86_FEATURE_CONSTANT_TSC);
+ 		set_cpu_cap(c, X86_FEATURE_NONSTOP_TSC);
+ 	}
+diff --git a/arch/x86/kernel/cpu/centaur.c b/arch/x86/kernel/cpu/centaur.c
+index 345f7d905db6..9910bb1d90fd 100644
+--- a/arch/x86/kernel/cpu/centaur.c
++++ b/arch/x86/kernel/cpu/centaur.c
+@@ -105,7 +105,7 @@ static void early_init_centaur(struct cpuinfo_x86 *c)
+ #ifdef CONFIG_X86_64
+ 	set_cpu_cap(c, X86_FEATURE_SYSENTER32);
+ #endif
+-	if (c->x86_power & (1 << 8)) {
++	if (c->x86_power & BIT(8)) {
+ 		set_cpu_cap(c, X86_FEATURE_CONSTANT_TSC);
+ 		set_cpu_cap(c, X86_FEATURE_NONSTOP_TSC);
+ 	}
+diff --git a/arch/x86/kernel/cpu/hygon.c b/arch/x86/kernel/cpu/hygon.c
+index 21fd425088fe..dc473bfbf1b5 100644
+--- a/arch/x86/kernel/cpu/hygon.c
+x86/cpu: fix undefined behavior in bit shift for intel_detect_tlb+++ b/arch/x86/kernel/cpu/hygon.c
+@@ -251,7 +251,7 @@ static void early_init_hygon(struct cpuinfo_x86 *c)
+ 	 * c->x86_power is 8000_0007 edx. Bit 8 is TSC runs at constant rate
+ 	 * with P/T states and does not stop in deep C-states
+ 	 */
+-	if (c->x86_power & (1 << 8)) {
++	if (c->x86_power & BIT(8)) {
+ 		set_cpu_cap(c, X86_FEATURE_CONSTANT_TSC);
+ 		set_cpu_cap(c, X86_FEATURE_NONSTOP_TSC);
+ 	}
+diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+index 2d7ea5480ec3..2bdf6d601a6f 100644
+--- a/arch/x86/kernel/cpu/intel.c
++++ b/arch/x86/kernel/cpu/intel.c
+@@ -286,7 +286,7 @@ static void early_init_intel(struct cpuinfo_x86 *c)
+ 	 * It is also reliable across cores and sockets. (but not across
+ 	 * cabinets - we turn it off in that case explicitly.)
+ 	 */
+-	if (c->x86_power & (1 << 8)) {
++	if (c->x86_power & BIT(8)) {
+ 		set_cpu_cap(c, X86_FEATURE_CONSTANT_TSC);
+ 		set_cpu_cap(c, X86_FEATURE_NONSTOP_TSC);
+ 	}
+@@ -945,7 +945,7 @@ static void intel_detect_tlb(struct cpuinfo_x86 *c)
  
--static
--void
--s_vFillRTSHead(
--	struct vnt_private *pDevice,
--	unsigned char byPktType,
--	void *pvRTS,
--	unsigned int cbFrameLength,
--	bool bNeedAck,
--	bool bDisCRC,
--	struct ieee80211_hdr *hdr,
--	unsigned short wCurrentRate,
--	unsigned char byFBOption
--)
-+static void fill_rts_head(struct vnt_private *pDevice,
-+			  unsigned char byPktType,
-+			  void *pvRTS,
-+			  unsigned int cbFrameLength,
-+			  bool bNeedAck,
-+			  bool bDisCRC,
-+			  struct ieee80211_hdr *hdr,
-+			  unsigned short wCurrentRate,
-+			  unsigned char byFBOption)
- {
- 	unsigned int uRTSFrameLen = 20;
+ 		/* If bit 31 is set, this is an unknown format */
+ 		for (j = 0 ; j < 3 ; j++)
+-			if (regs[j] & (1 << 31))
++			if (regs[j] & BIT(31))
+ 				regs[j] = 0;
  
+ 		/* Byte 0 is level count, not a descriptor */
+diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
+index 099b6f0d96bd..efa1d39c4f25 100644
+--- a/arch/x86/kernel/cpu/proc.c
++++ b/arch/x86/kernel/cpu/proc.c
+@@ -135,7 +135,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+ 
+ 	seq_puts(m, "power management:");
+ 	for (i = 0; i < 32; i++) {
+-		if (c->x86_power & (1 << i)) {
++		if (c->x86_power & BIT(i)) {
+ 			if (i < ARRAY_SIZE(x86_power_flags) &&
+ 			    x86_power_flags[i])
+ 				seq_printf(m, "%s%s",
+diff --git a/arch/x86/kernel/cpu/zhaoxin.c b/arch/x86/kernel/cpu/zhaoxin.c
+index 05fa4ef63490..34a8a460f8f4 100644
+--- a/arch/x86/kernel/cpu/zhaoxin.c
++++ b/arch/x86/kernel/cpu/zhaoxin.c
+@@ -61,7 +61,7 @@ static void early_init_zhaoxin(struct cpuinfo_x86 *c)
+ #ifdef CONFIG_X86_64
+ 	set_cpu_cap(c, X86_FEATURE_SYSENTER32);
+ #endif
+-	if (c->x86_power & (1 << 8)) {
++	if (c->x86_power & BIT(8)) {
+ 		set_cpu_cap(c, X86_FEATURE_CONSTANT_TSC);
+ 		set_cpu_cap(c, X86_FEATURE_NONSTOP_TSC);
+ 	}
 -- 
-2.34.1
+2.25.1
 
