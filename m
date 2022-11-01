@@ -2,33 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F08396153DC
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 22:15:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C11D6153DD
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 22:15:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230280AbiKAVPI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 17:15:08 -0400
+        id S230259AbiKAVPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 17:15:14 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230078AbiKAVO5 (ORCPT
+        with ESMTP id S230008AbiKAVO7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 17:14:57 -0400
-Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7823A1DF24
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 14:14:55 -0700 (PDT)
+        Tue, 1 Nov 2022 17:14:59 -0400
+Received: from smtp.smtpout.orange.fr (smtp-15.smtpout.orange.fr [80.12.242.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1E51DDFF
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 14:14:57 -0700 (PDT)
 Received: from pop-os.home ([86.243.100.34])
         by smtp.orange.fr with ESMTPA
-        id pyanoKD2rsfCIpyazoWfH6; Tue, 01 Nov 2022 22:14:54 +0100
+        id pyanoKD2rsfCIpyb1oWfHL; Tue, 01 Nov 2022 22:14:56 +0100
 X-ME-Helo: pop-os.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 01 Nov 2022 22:14:54 +0100
+X-ME-Date: Tue, 01 Nov 2022 22:14:56 +0100
 X-ME-IP: 86.243.100.34
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Thomas Gleixner <tglx@linutronix.de>, Marc Zyngier <maz@kernel.org>
+To:     "Martin K. Petersen" <martin.petersen@oracle.com>
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Subject: [PATCH 03/30] irqchip: Use kstrtobool() instead of strtobool()
-Date:   Tue,  1 Nov 2022 22:13:51 +0100
-Message-Id: <755c4083122071bb27aa8ed5d98156a07bb63a39.1667336095.git.christophe.jaillet@wanadoo.fr>
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
+Subject: [PATCH 04/30] scsi: target: Use kstrtobool() instead of strtobool()
+Date:   Tue,  1 Nov 2022 22:13:52 +0100
+Message-Id: <fcddc0a53b4fc6e3c2e93592d3f61c5c63121855.1667336095.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
 References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
@@ -61,57 +62,170 @@ The last patch of the serie removes the definition of strtobool().
 You may not be in copy of the cover letter. So, if needed, it is available
 at [1].
 
-
-This patch has NOT been compile tested.
-
-
 [1]: https://lore.kernel.org/all/cover.1667336095.git.christophe.jaillet@wanadoo.fr/
 ---
- drivers/irqchip/irq-gic-v3.c | 3 ++-
- drivers/irqchip/irq-gic.c    | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ drivers/target/target_core_configfs.c        | 29 ++++++++++----------
+ drivers/target/target_core_fabric_configfs.c |  3 +-
+ 2 files changed, 17 insertions(+), 15 deletions(-)
 
-diff --git a/drivers/irqchip/irq-gic-v3.c b/drivers/irqchip/irq-gic-v3.c
-index 34d58567b78d..997104d4338e 100644
---- a/drivers/irqchip/irq-gic-v3.c
-+++ b/drivers/irqchip/irq-gic-v3.c
+diff --git a/drivers/target/target_core_configfs.c b/drivers/target/target_core_configfs.c
+index 533524299ed6..b8a5c8d6cfde 100644
+--- a/drivers/target/target_core_configfs.c
++++ b/drivers/target/target_core_configfs.c
 @@ -12,6 +12,7 @@
- #include <linux/delay.h>
- #include <linux/interrupt.h>
- #include <linux/irqdomain.h>
-+#include <linux/kstrtox.h>
- #include <linux/of.h>
- #include <linux/of_address.h>
- #include <linux/of_irq.h>
-@@ -1171,7 +1172,7 @@ static bool gicv3_nolpi;
+  *
+  ****************************************************************************/
  
- static int __init gicv3_nolpi_cfg(char *buf)
- {
--	return strtobool(buf, &gicv3_nolpi);
-+	return kstrtobool(buf, &gicv3_nolpi);
- }
- early_param("irqchip.gicv3_nolpi", gicv3_nolpi_cfg);
- 
-diff --git a/drivers/irqchip/irq-gic.c b/drivers/irqchip/irq-gic.c
-index 4c7bae0ec8f9..799f86d84b43 100644
---- a/drivers/irqchip/irq-gic.c
-+++ b/drivers/irqchip/irq-gic.c
-@@ -19,6 +19,7 @@
-  */
- #include <linux/init.h>
- #include <linux/kernel.h>
 +#include <linux/kstrtox.h>
- #include <linux/err.h>
  #include <linux/module.h>
- #include <linux/list.h>
-@@ -1332,7 +1333,7 @@ static bool gicv2_force_probe;
+ #include <linux/moduleparam.h>
+ #include <generated/utsrelease.h>
+@@ -578,7 +579,7 @@ static ssize_t _name##_store(struct config_item *item, const char *page,	\
+ 	bool flag;							\
+ 	int ret;							\
+ 									\
+-	ret = strtobool(page, &flag);					\
++	ret = kstrtobool(page, &flag);					\
+ 	if (ret < 0)							\
+ 		return ret;						\
+ 	da->_name = flag;						\
+@@ -638,7 +639,7 @@ static ssize_t emulate_model_alias_store(struct config_item *item,
+ 		return -EINVAL;
+ 	}
  
- static int __init gicv2_force_probe_cfg(char *buf)
- {
--	return strtobool(buf, &gicv2_force_probe);
-+	return kstrtobool(buf, &gicv2_force_probe);
- }
- early_param("irqchip.gicv2_force_probe", gicv2_force_probe_cfg);
+-	ret = strtobool(page, &flag);
++	ret = kstrtobool(page, &flag);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -660,7 +661,7 @@ static ssize_t emulate_write_cache_store(struct config_item *item,
+ 	bool flag;
+ 	int ret;
+ 
+-	ret = strtobool(page, &flag);
++	ret = kstrtobool(page, &flag);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -712,7 +713,7 @@ static ssize_t emulate_tas_store(struct config_item *item,
+ 	bool flag;
+ 	int ret;
+ 
+-	ret = strtobool(page, &flag);
++	ret = kstrtobool(page, &flag);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -737,7 +738,7 @@ static ssize_t emulate_tpu_store(struct config_item *item,
+ 	bool flag;
+ 	int ret;
+ 
+-	ret = strtobool(page, &flag);
++	ret = kstrtobool(page, &flag);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -767,7 +768,7 @@ static ssize_t emulate_tpws_store(struct config_item *item,
+ 	bool flag;
+ 	int ret;
+ 
+-	ret = strtobool(page, &flag);
++	ret = kstrtobool(page, &flag);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -866,7 +867,7 @@ static ssize_t pi_prot_format_store(struct config_item *item,
+ 	bool flag;
+ 	int ret;
+ 
+-	ret = strtobool(page, &flag);
++	ret = kstrtobool(page, &flag);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -903,7 +904,7 @@ static ssize_t pi_prot_verify_store(struct config_item *item,
+ 	bool flag;
+ 	int ret;
+ 
+-	ret = strtobool(page, &flag);
++	ret = kstrtobool(page, &flag);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -932,7 +933,7 @@ static ssize_t force_pr_aptpl_store(struct config_item *item,
+ 	bool flag;
+ 	int ret;
+ 
+-	ret = strtobool(page, &flag);
++	ret = kstrtobool(page, &flag);
+ 	if (ret < 0)
+ 		return ret;
+ 	if (da->da_dev->export_count) {
+@@ -954,7 +955,7 @@ static ssize_t emulate_rest_reord_store(struct config_item *item,
+ 	bool flag;
+ 	int ret;
+ 
+-	ret = strtobool(page, &flag);
++	ret = kstrtobool(page, &flag);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -977,7 +978,7 @@ static ssize_t unmap_zeroes_data_store(struct config_item *item,
+ 	bool flag;
+ 	int ret;
+ 
+-	ret = strtobool(page, &flag);
++	ret = kstrtobool(page, &flag);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -1126,7 +1127,7 @@ static ssize_t alua_support_store(struct config_item *item,
+ 	bool flag, oldflag;
+ 	int ret;
+ 
+-	ret = strtobool(page, &flag);
++	ret = kstrtobool(page, &flag);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -1165,7 +1166,7 @@ static ssize_t pgr_support_store(struct config_item *item,
+ 	bool flag, oldflag;
+ 	int ret;
+ 
+-	ret = strtobool(page, &flag);
++	ret = kstrtobool(page, &flag);
+ 	if (ret < 0)
+ 		return ret;
+ 
+@@ -1194,7 +1195,7 @@ static ssize_t emulate_rsoc_store(struct config_item *item,
+ 	bool flag;
+ 	int ret;
+ 
+-	ret = strtobool(page, &flag);
++	ret = kstrtobool(page, &flag);
+ 	if (ret < 0)
+ 		return ret;
+ 
+diff --git a/drivers/target/target_core_fabric_configfs.c b/drivers/target/target_core_fabric_configfs.c
+index 95a88f6224cd..67b18a67317a 100644
+--- a/drivers/target/target_core_fabric_configfs.c
++++ b/drivers/target/target_core_fabric_configfs.c
+@@ -11,6 +11,7 @@
+ *
+  ****************************************************************************/
+ 
++#include <linux/kstrtox.h>
+ #include <linux/module.h>
+ #include <linux/moduleparam.h>
+ #include <linux/utsname.h>
+@@ -829,7 +830,7 @@ static ssize_t target_fabric_tpg_base_enable_store(struct config_item *item,
+ 	int ret;
+ 	bool op;
+ 
+-	ret = strtobool(page, &op);
++	ret = kstrtobool(page, &op);
+ 	if (ret)
+ 		return ret;
  
 -- 
 2.34.1
