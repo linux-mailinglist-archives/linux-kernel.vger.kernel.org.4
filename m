@@ -2,136 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 70578614FE5
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 18:00:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 972A6614FEA
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 18:02:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229636AbiKARA0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 13:00:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59832 "EHLO
+        id S230466AbiKARCF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 13:02:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231192AbiKARAY (ORCPT
+        with ESMTP id S229533AbiKARCC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 13:00:24 -0400
-Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 412A8E52
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 10:00:23 -0700 (PDT)
-Received: by mail-ot1-x330.google.com with SMTP id l42-20020a9d1b2d000000b0066c6366fbc3so2232948otl.3
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 10:00:23 -0700 (PDT)
+        Tue, 1 Nov 2022 13:02:02 -0400
+Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 528E76371
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 10:02:01 -0700 (PDT)
+Received: by mail-pf1-x42a.google.com with SMTP id y13so14009815pfp.7
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 10:02:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xk+MtDazZwHkRnY9ofj6QJmGpLSc2+y5Ct3XSUfAelc=;
-        b=QyMYws8rgBJ9b00O9E8UIu8UKBiysOXXb0NQzFXBrd8FSajn4in+zEoMxHwBdKVX2z
-         qu+4kk1Q+1O+D0MGykvBTLWshOvoSlJxhsv7sXtwWMO6aLy+oHj7mhJxtgN1rDVaabzx
-         C1RQFr7WCHncNVzoz2zhvyFfEhxNDJ7XjBX5+/c3Z7IzzBe1xR1wmflg4RJeSd8ezXQM
-         1P+LyQpe1/ihEmhBdir7v0fnebdFwN3k4TP0HqkLjrHJP4JoX4nEWB44aa+s6Rzx9DqX
-         9ddQ9RVbuMGSKI/EOOFbfvYVJZkZv3j4nOzAw/XEjNzD8nSPSzm3ixGpGnWxkFEg70c4
-         ONpw==
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jE7AvJG+Pz67X1gNkDD5t0oKXb/RV/Yt8yibr4qw2hM=;
+        b=X/gV7zp6dIxPh1lTFK7XJ1Lzpq/BU9+/KVrCvofn1ZEe/klpVutZ0tyFNEqWnHK+tY
+         djh1iYMcH01+Smh7fhNrKsh315ifrlU7gHoZ6kjKTsMX9a0o5hYJW5pF4EDXqmJ4VfVP
+         v94BSqS5Z6rlDc3T715VlRhA7zcP2usCNyuUo=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xk+MtDazZwHkRnY9ofj6QJmGpLSc2+y5Ct3XSUfAelc=;
-        b=dBv8r1Yon9xs6tbYia91dIKFONkXtMCqfbeZ30hgUuH3r0W6zsfbdFr++baJVUEcWO
-         mDoJ/dtJMJ8DeL1nrs5sCnFnf2yoTGHLRAYoCBncenE2xMm5Ukxj4GKGEPKR+Tu3p3z8
-         hYxWSEO0xR4MVWATcYnX658lkt9vGDKT3E01YmLXMEB5sX2sRqpQdL0KxMbhJSwewSLn
-         wxcgoSLG9Kif7Oa1KuiJRXDHCyYeJnMwxpT3O9arcKS2o+aCtOwNSJkjXnlXDxTg9Y4k
-         nayFrVPYAelqsLKii3tdVFg0oGJGT8+akWsOT/AEbpplTW36rq02awVaG57OOpVWCcbj
-         9ljQ==
-X-Gm-Message-State: ACrzQf0frAMIStXncCeviefQmrXW3b3OJ00SYCMKzCn1N4BgqxHwahu7
-        pKgO0v/Hb3DNZArReEqKu8XADIqs8zA=
-X-Google-Smtp-Source: AMsMyM6M4mNeyT98P4VyrDPXxkgpwL9ShPbp6gBfaxGb9sD4/3pngjoRmc2QtsnzyNqVkHiXek3JIA==
-X-Received: by 2002:a9d:4d90:0:b0:66c:47a9:da6c with SMTP id u16-20020a9d4d90000000b0066c47a9da6cmr7228423otk.250.1667322022532;
-        Tue, 01 Nov 2022 10:00:22 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id t14-20020a056808158e00b00349a06c581fsm3613672oiw.3.2022.11.01.10.00.16
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jE7AvJG+Pz67X1gNkDD5t0oKXb/RV/Yt8yibr4qw2hM=;
+        b=WXQM3JWbPfQUz+vAnwBhtuAIC3xTKQ7PsYzT2t436XAwi/LfIVJRYFcvyUxypOYcJM
+         g/gfaLTiOcIm0PE3ofwOaMFtTiVf0Aftzg6DtOyngiqmOytAYHn8mSDXA90t2OZElTJC
+         NTU0hiRt0WkoNFeQ1uQ7ueGABw7DHyUpP6WIgNf72EMRt4JxnfSkCkbFTOfQfhO05YAL
+         s7jgrB0eoxu8E6MUYQNb+/jB1ZOmrZbJ9unCWK8pJFTdrDUo6urxoAT1/fDMdBjIuatD
+         HSp7FCmzzC3zoEDeIgOmeHeJDkqfCgOEmt6G+kEK/+ERyvkbCeeU2YN6/Y7vyaiJDBb9
+         jFEA==
+X-Gm-Message-State: ACrzQf1Ht97017UUK+Xa7qNVL2B/8JxvCZ2EmKoglnrDh72ksHP4V3cm
+        Ak4vXY287tEw1q9saVS6pZxTzQ==
+X-Google-Smtp-Source: AMsMyM5i16ttcVnnTVedidHBJ9bNsg59Epj19woNCj4kXnyFV8ovuhhEUMMKJaZDZxaCdd+pCO2HVw==
+X-Received: by 2002:a63:551b:0:b0:44b:7dcf:92ee with SMTP id j27-20020a63551b000000b0044b7dcf92eemr18373150pgb.610.1667322120754;
+        Tue, 01 Nov 2022 10:02:00 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a10-20020a1709027e4a00b0016eef326febsm1597080pln.1.2022.11.01.10.02.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 10:00:19 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Tue, 1 Nov 2022 10:00:15 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Miguel Ojeda <ojeda@kernel.org>
-Subject: Re: Linux 6.1-rc3
-Message-ID: <20221101170015.GA1314742@roeck-us.net>
-References: <CAHk-=wgJVNe4mUxGJE5B-_GMg0oOgxkZz3UxehVRiCT3QvoZ0w@mail.gmail.com>
+        Tue, 01 Nov 2022 10:02:00 -0700 (PDT)
+Date:   Tue, 1 Nov 2022 10:01:59 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Daniel Borkmann <daniel@iogearbox.net>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH bpf-next v2 2/3] bpf/verifier: Use kmalloc_size_roundup()
+ to match ksize() usage
+Message-ID: <202211010937.4631CB1B0E@keescook>
+References: <20221029024444.gonna.633-kees@kernel.org>
+ <20221029025433.2533810-2-keescook@chromium.org>
+ <da0959e7-a91c-ab4c-56be-3c3cd280e592@iogearbox.net>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAHk-=wgJVNe4mUxGJE5B-_GMg0oOgxkZz3UxehVRiCT3QvoZ0w@mail.gmail.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <da0959e7-a91c-ab4c-56be-3c3cd280e592@iogearbox.net>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 30, 2022 at 03:35:51PM -0700, Linus Torvalds wrote:
-> It's Sunday afternoon, so it must be time for an rc release.
+On Tue, Nov 01, 2022 at 02:52:16PM +0100, Daniel Borkmann wrote:
+> On 10/29/22 4:54 AM, Kees Cook wrote:
+> > Round up allocations with kmalloc_size_roundup() so that the verifier's
+> > use of ksize() is always accurate and no special handling of the memory
+> > is needed by KASAN, UBSAN_BOUNDS, nor FORTIFY_SOURCE. Pass the new size
+> > information back up to callers so they can use the space immediately,
+> > so array resizing to happen less frequently as well.
+> > 
+> [...]
 > 
-> I know I said last week that rc2 was unusually large. It turns out
-> that rc3 is almost exactly the same size. But at least for an rc3
-> release, that bigger size is a bit more normal: this is when people
-> are starting to find problems and send in fixes for them.
-> 
-> So while rc2 was just _way_ bigger than usual, rc3 is only a bit
-> larger than an average rc3 release is. But it's still on the largish
-> side. I hope that things start calming down, and we'll start seeing
-> the size of these rc's shrink. Please?
-> 
-> Unlike rc2, there's no one single reason for the bulk of the rc3
-> changes. They're pretty much all over, with the usual distribution -
-> drivers dominating (networking, gpu and sound are most noticeable, but
-> there's a little bit of everything).
-> 
-> Outside of drivers, tool updates stand out, with selftests, perf, and
-> the pm-graph tool all seeing a fair amount of changes.
-> 
-> And then we have the usual things: architecture updates, some
-> filesystem work, and core kernel fixes (mainly networking and mm).
-> 
-> Anyway, while it isn't small, nothing looks particularly worrisome or
-> strange, and I thin kyou can just scan the appended shortlog to get a
-> feel for the kinds of fixes we have here. Please do give it more
-> testing, and here's to hoping we'll start seeing the rc's shrink from
-> now on.
-> 
+> The commit message is a bit cryptic here without further context. Is this
+> a bug fix or improvement? I read the latter, but it would be good to have
 
-Build results:
-	total: 152 pass: 152 fail: 0
-Qemu test results:
-	total: 500 pass: 500 fail: 0
+It's an improvement -- e.g. it depends on the recently added
+kmalloc_size_roundup() helper.
 
-No runtime warnings.
+> more context here for reviewers (maybe Link tag pointing to some discussion
+> or the like). Also, why is the kmalloc_size_roundup() not hidden for kmalloc
+> callers, isn't this a tree-wide issue?
 
-There is one spurious build error. It does not happen all the time,
-and even on the same SHA it is not easy to reproduce. If I see it,
-I may see it on one server reliably but not at all on another with
-almost the same hardware configuration.
+The main issue is that _most_ allocation callers want an explicitly sized
+allocation (and not "more"), and that dynamic runtime analysis tools
+(e.g. KASAN, UBSAN_BOUNDS, FORTIFY_SOURCE, etc) are looking for precise
+bounds checking (i.e. not something that is rounded up). A tiny handful
+of allocations were doing an implicit alloc/realloc loop that actually
+depended on ksize(), and didn't actually always call realloc. This has
+created a long series of bugs and problems over many years related to the
+runtime bounds checking, so these callers are finally being adjusted to
+_not_ depend on the ksize() side-effect, by doing one of several things:
 
-Building powerpc:allnoconfig ... failed
---------------
-Error log:
-Inconsistent kallsyms data
-Try make KALLSYMS_EXTRA_PASS=1 as a workaround
+- tracking the allocation size precisely and just never calling ksize()
+  at all[1].
 
-I first noticed the error after commit 73bbb94466fd ("kallsyms: support
-"big" kernel symbols"). Reverting this commit fixes the problem if and
-when it is reproducible. I can not reproduce it with v6.1-rc3.
-KALLSYMS_EXTRA_PASS=1 does _not_ fix the problem. Adding more kallsyms
-passes (I tried up to 20) does not help either; it never stabilizes.
-Instead, the data oscillates between runs (i.e., if it happens, even
-runs produce the same kallsyms data, and odd runs produce the same data).
+- always calling realloc and not using ksize() at all. (This solution
+  ends up actually be a subset of the next solution.)
 
-Maybe something changed between commit 73bbb94466fd and v6.1-rc3 and
-the problem is gone for good. If not I'll report if I see it again.
+- using kmalloc_size_roundup() to explicitly round up the desired
+  allocation size immediately[2].
 
-Guenter
+The bpf/verifier case is this another of this latter case.
+
+Because some of the dynamic bounds checking depends on the size being an
+_argument_ to an allocator function (i.e. see the __alloc_size attribute),
+the ksize() users are rare, and it could waste local variables, it
+was been deemed better to explicitly separate the rounding up from the
+allocation itself[3].
+
+Hopefully that helps clarify! :)
+
+-Kees
+
+[1] e.g.:
+    https://git.kernel.org/linus/712f210a457d
+    https://git.kernel.org/linus/72c08d9f4c72
+
+[2] e.g.:
+    https://git.kernel.org/netdev/net-next/c/12d6c1d3a2ad
+    https://git.kernel.org/netdev/net-next/c/ab3f7828c979
+    https://git.kernel.org/netdev/net-next/c/d6dd508080a3
+
+[3] https://lore.kernel.org/lkml/0ea1fc165a6c6117f982f4f135093e69cb884930.camel@redhat.com/
+
+-- 
+Kees Cook
