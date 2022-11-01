@@ -2,298 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2FF261435C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 03:43:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49E8161435F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 03:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbiKACnD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 22:43:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40952 "EHLO
+        id S229889AbiKACrx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 22:47:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42224 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiKACnA (ORCPT
+        with ESMTP id S229487AbiKACrv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 22:43:00 -0400
-Received: from out2-smtp.messagingengine.com (out2-smtp.messagingengine.com [66.111.4.26])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B6816178A4
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 19:42:58 -0700 (PDT)
-Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
-        by mailout.nyi.internal (Postfix) with ESMTP id 5ACD65C00CD;
-        Mon, 31 Oct 2022 22:42:56 -0400 (EDT)
-Received: from imap46 ([10.202.2.96])
-  by compute5.internal (MEProxy); Mon, 31 Oct 2022 22:42:56 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com.au;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm3; t=1667270576; x=1667356976; bh=/d
-        wKm9SsHVF+uc6H4cCJSM/BggzQOsC1bv5VwAzfx5w=; b=TLdlHt4nbWshMvpEf2
-        7iBFabk9yfw8BZgGq50uBhfiTZlE0T1nPLQAUiMPxm+WXsIblFnkYlb3km7DXyAf
-        ZnrC6g428BYZdFgqg/iW2gfXxAhwsRmvqBw0zPg9Bu17AbaFtodxH0INzrNwWpDx
-        V4wmIxLbyHPEVli9Djq0Y89mWLUohvn2qxlvp9pmigkfmHJO8L4Yga7c5+P6LiJ7
-        Fn3NC612D+ixTYHDolFFGm4Z/MHpWC437KDqloKM9a19E3PuVfCHHZryqs0yoY4i
-        1KGpVru8bap+NOtLC84E3TdcUV/w6vj7vcLQpMnXF4zM+5CTqpnRJIoFHOVxYdt9
-        xh5g==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1667270576; x=1667356976; bh=/dwKm9SsHVF+uc6H4cCJSM/BggzQ
-        OsC1bv5VwAzfx5w=; b=Htik0XU818a/xurg5F2b6JdlJNsswQDdp3gQZB/Pqu31
-        TwCfkc7oX584Qfzh17vFJgc232eYf2+DcWGD8MGcYufuUIYT/ys6YtGf+qtOGYt4
-        5BAsYMY0wvKXZOMYs9vvqNsVyNQy2oKsRa+3uK4FZ4NENzVBmxYs/mYX7Cag9XEw
-        dUxazRbZ+fY2pTNhjiNONWxsWQgUE2K093271na7i0JfytdfxgcN4ZpEDzMTaOEc
-        3vp0dndcZ6dJ55qj+ENOEItOVp9AAoio4ttSkKX4NdZHC2TyCgd1W9KeilMXmwu5
-        XFEwR9UafYkQhWucbaA7o9jUCbjVwzxji1KHwxVfgw==
-X-ME-Sender: <xms:r4dgY_bJ1KJuRJjGxL5d2A1xbcMAQY-ZyYw6m5gSovZFnxeEQfbncQ>
-    <xme:r4dgY-Ydy0wW6Fcg7Isc_xSmKcXaAQXICu6vFo4n5WpfHenG1TTai1ptkS30f14CW
-    goqIAG_HPY6J2QQ7A>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudeggdehudcutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdflohhh
-    nhcuvfhhohhmshhonhdfuceolhhishhtshesjhhohhhnthhhohhmshhonhdrfhgrshhtmh
-    grihhlrdgtohhmrdgruheqnecuggftrfgrthhtvghrnhepkeefhffguddtgeegjedtvedt
-    vddvkeevvdehfeehieejhffhhfejkeejgfelveegnecuvehluhhsthgvrhfuihiivgeptd
-    enucfrrghrrghmpehmrghilhhfrhhomheplhhishhtshesjhhohhhnthhhohhmshhonhdr
-    fhgrshhtmhgrihhlrdgtohhmrdgruh
-X-ME-Proxy: <xmx:r4dgYx-3wCqeEnC193H4AU_rM8kJGYOZK-LASIRiBJCWRlfU2AAXQQ>
-    <xmx:r4dgY1o-C1CZzeI_jHgsDJJXr--Hep3Qq0ngZQO_BTKnmXNF5jzPyQ>
-    <xmx:r4dgY6osCvI8vH-fIgn5PS-JyBEd4uziuvu1b7USSv2CXZENXTeUxA>
-    <xmx:sIdgY9-75UVaJPCJLVIZXwEcZ6OcwmYiHX-VDM2UfA9_xQEEjybcCg>
-Feedback-ID: if0294502:Fastmail
-Received: by mailuser.nyi.internal (Postfix, from userid 501)
-        id 0E03D2A20080; Mon, 31 Oct 2022 22:42:54 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
-User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
-Mime-Version: 1.0
-Message-Id: <00ce752c-17e0-4813-afa3-fe1510545b23@app.fastmail.com>
-In-Reply-To: <9b71ae3e-7f53-4c9e-90c4-79d3d649f94c@app.fastmail.com>
-References: <20220913065423.520159-1-feng.tang@intel.com>
- <20220913065423.520159-2-feng.tang@intel.com>
- <becf2ac3-2a90-4f3a-96d9-a70f67c66e4a@app.fastmail.com>
- <af2ba83d-c3f4-c6fb-794e-c2c7c0892c44@suse.cz> <Y180l6zUnNjdCoaE@feng-clx>
- <c4285caf-277c-45fd-8fc7-8a1d61685ce8@app.fastmail.com>
- <Y1+0sbQ3R4DB46NX@feng-clx>
- <9b71ae3e-7f53-4c9e-90c4-79d3d649f94c@app.fastmail.com>
-Date:   Tue, 01 Nov 2022 02:41:45 +0000
-From:   "John Thomson" <lists@johnthomson.fastmail.com.au>
-To:     "John Thomson" <lists@johnthomson.fastmail.com.au>,
-        "Feng Tang" <feng.tang@intel.com>
-Cc:     "Vlastimil Babka" <vbabka@suse.cz>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        "Christoph Lameter" <cl@linux.com>,
-        "Pekka Enberg" <penberg@kernel.org>,
-        "David Rientjes" <rientjes@google.com>,
-        "Joonsoo Kim" <iamjoonsoo.kim@lge.com>,
-        "Roman Gushchin" <roman.gushchin@linux.dev>,
-        "Hyeonggon Yoo" <42.hyeyoo@gmail.com>,
-        "Dmitry Vyukov" <dvyukov@google.com>,
-        "Jonathan Corbet" <corbet@lwn.net>,
-        "Andrey Konovalov" <andreyknvl@gmail.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
-        "Robin Murphy" <robin.murphy@arm.com>,
-        "John Garry" <john.garry@huawei.com>,
-        "Kefeng Wang" <wangkefeng.wang@huawei.com>
-Subject: Re: [PATCH v6 1/4] mm/slub: enable debugging memory wasting of kmalloc
-Content-Type: text/plain
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 31 Oct 2022 22:47:51 -0400
+Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4076C17894
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 19:47:48 -0700 (PDT)
+Received: by mail-pf1-x42e.google.com with SMTP id m6so12356304pfb.0
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 19:47:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=bqRIQ062uuK/o+/WpcLxqow2YV5qT2kYhS0BBT+EteU=;
+        b=DRCdy0I8Sl8TkVAgdeg/jvSKu+czCngr3cXev+Kwv7pfbBInABYASHoU8SEYDVqLXh
+         9t5P0IzT1wYf8J6IHBJXbHTYPgwz8+YDH98zX0qa2JYt9gTxFPXJirGjAf1RQYL5+Bcj
+         vEj9fzKQ5VULUFBRc5IoHXV6VlV3FxoAZHh61slEi18ElUUzetqNQv9QpitfRJv0UKqS
+         ZtEBoOxaIFutjPJtWXsf5O1NTVGqyOjPR1jiHxiD4UBXXVsnft8hOTqEqz1OHBbv1KuO
+         ByzGFheRm9rT3/yThkU5ExEyiBowAwR4X3CPCmfqZqfkwlPkeDi1edZilt2lwqRaw9WG
+         +doQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bqRIQ062uuK/o+/WpcLxqow2YV5qT2kYhS0BBT+EteU=;
+        b=pT2XBrnHW4BqwSWjEGUF6UAVPgzMnLL3Yp9QqcfQNhLl5Yoz8syj12DeD92rcUsB8j
+         CdMrRJzpZfHHShsIyWvHhRSK5W2NxzyuN0xEdJVQEs+WEKKbwXG531f/ny86mkaM+vnm
+         HeyU0mazaTaI4mBafw9HjxIu1veGYVH+9PQhBjcg9O/RP8E5y9MyVHnfO2kvB/qe9/a0
+         buIGwcO08RLjhYVqBlCVmAbzG9nKeqdwxOQJKdxAU1b4HrMCWB/eoFgku1C21MKdnhrU
+         8sVUC6x+F0UiGL7EcR1vW5VYxcbMcTJc8lrz0eJ4rdumh0Xcl4HX3/OQJGPkTOb2GRyq
+         v4EA==
+X-Gm-Message-State: ACrzQf1+R82GEoykvmqjVe7RFk3U0T02g8vPB3ZRj7vEMkSFiT4Irq+h
+        mwPv1ZtIoOH9kTwE4ZUNvpdcjw==
+X-Google-Smtp-Source: AMsMyM71feJVISISgariwLNWQfEM4he/JyNbNIKmkyIWnvZ2Qgt8Ponl4uP06pOBBoik59p0tmVFjA==
+X-Received: by 2002:a05:6a00:114c:b0:528:2c7a:6302 with SMTP id b12-20020a056a00114c00b005282c7a6302mr17656095pfm.37.1667270867814;
+        Mon, 31 Oct 2022 19:47:47 -0700 (PDT)
+Received: from localhost.localdomain (80.251.214.228.16clouds.com. [80.251.214.228])
+        by smtp.gmail.com with ESMTPSA id y4-20020a170902ed4400b001714c36a6e7sm5079570plb.284.2022.10.31.19.47.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 31 Oct 2022 19:47:47 -0700 (PDT)
+From:   Shawn Guo <shawn.guo@linaro.org>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>
+Cc:     Kevin Hilman <khilman@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Shawn Guo <shawn.guo@linaro.org>
+Subject: [PATCH v2 0/3] Manage domain power state for hibernate freeze
+Date:   Tue,  1 Nov 2022 10:47:33 +0800
+Message-Id: <20221101024736.1509207-1-shawn.guo@linaro.org>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The series tries to fix a hardware lockup issue caused by missing domain
+power state management from hibernate .freeze[thaw]_noirq hooks.  The
+detailed description of the issue can be found in commit log of patch
+#3.
 
-On Tue, 1 Nov 2022, at 00:18, John Thomson wrote:
-> I may have got lucky. it appears as though this is all I need to boot:
-> (against 6.1-rc3), and with the Bootlin toolchain. Will test my other 
-> build system as well.
->
-> --- a/mm/slub.c
-> +++ b/mm/slub.c
-> @@ -3276,7 +3276,7 @@ static void *__slab_alloc(struct kmem_cache *s, 
-> gfp_t gfpflags, int node,
->         c = slub_get_cpu_ptr(s->cpu_slab);
->  #endif
-> 
-> -       p = ___slab_alloc(s, gfpflags, node, addr, c, orig_size);
-> +       p = ___slab_alloc(s, gfpflags, node, addr, c, 0);
->  #ifdef CONFIG_PREEMPT_COUNT
->         slub_put_cpu_ptr(s->cpu_slab);
->  #endif
+Changes for v2:
+- Fix kernel doc of genpd_finish_resume() to use the new function name
 
-Tested that with and without SLUB_DEBUG
+Shawn Guo (3):
+  PM: domains: Pass generic PM noirq hooks to genpd_finish_suspend()
+  PM: domains: Consolidate genpd_restore_noirq() and
+    genpd_resume_noirq()
+  PM: domains: Power off[on] domain in hibernate .freeze[thaw]_noirq
+    hook
 
-
-Testing without SLUB_DEBUG below:
-With this change on 6.1-rc3:
-diff --git a/mm/slub.c b/mm/slub.c
-index 157527d7101b..5fdb7609bb9e 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -3410,6 +3410,8 @@ static __always_inline
- void *__kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
-                             gfp_t gfpflags)
- {
-+
-+       pr_warn("SLUB: __slab_alloc from slab_alloc s->object_size=%d\n", s->object_size);
-        void *ret = slab_alloc(s, lru, gfpflags, _RET_IP_, s->object_size);
- 
-        trace_kmem_cache_alloc(_RET_IP_, ret, s, gfpflags, NUMA_NO_NODE);
-
-
-UART & boot stops here:
-transfer started ......................................... transfer ok, time=2.00s
-setting up elf image... OK
-jumping to kernel code
-zimage at:     80B842A0 810B4BE4
-
-Uncompressing Linux at load address 80001000
-
-Copy device tree to address  80B80EE0
-
-Now, booting the kernel...
-
-[    0.000000] Linux version 6.1.0-rc3+ (john@john) (mipsel-buildroot-linux-gnu-gcc.br_real (Buildroot 2021.11-4428-g6b6741b) 12.2.0, GNU ld (GNU Binutils) 2.39) #34 SMP Tue Nov  1 12:33:10 AEST 2022
-[    0.000000] Overriding previously set SMP ops
-[    0.000000] SoC Type: MediaTek MT7621 ver:1 eco:3
-[    0.000000] printk: bootconsole [early0] enabled
-[    0.000000] CPU0 revision is: 0001992f (MIPS 1004Kc)
-[    0.000000] MIPS: machine is MikroTik RouterBOARD 760iGS
-[    0.000000] Initrd not found or empty - disabling initrd
-[    0.000000] VPE topology {2,2} total 4
-[    0.000000] Primary instruction cache 32kB, VIPT, 4-way, linesize 32 bytes.
-[    0.000000] Primary data cache 32kB, 4-way, PIPT, no aliases, linesize 32 bytes
-[    0.000000] MIPS secondary cache 256kB, 8-way, linesize 32 bytes.
-[    0.000000] Zone ranges:
-[    0.000000]   Normal   [mem 0x0000000000000000-0x000000000fffffff]
-[    0.000000]   HighMem  empty
-[    0.000000] Movable zone start for each node
-[    0.000000] Early memory node ranges
-[    0.000000]   node   0: [mem 0x0000000000000000-0x000000000fffffff]
-[    0.000000] Initmem setup node 0 [mem 0x0000000000000000-0x000000000fffffff]
-[    0.000000] percpu: Embedded 11 pages/cpu s16064 r8192 d20800 u45056
-[    0.000000] Built 1 zonelists, mobility grouping on.  Total pages: 64960
-[    0.000000] Kernel command line: earlyprintk=ttyS0,115200 console=ttyS0,115200 rootfstype=squashfs,jffs2
-[    0.000000] Unknown kernel command line parameters "earlyprintk=ttyS0,115200", will be passed to user space.
-[    0.000000] Dentry cache hash table entries: 32768 (order: 5, 131072 bytes, linear)
-[    0.000000] Inode-cache hash table entries: 16384 (order: 4, 65536 bytes, linear)
-[    0.000000] Writing ErrCtl register=00011146
-[    0.000000] Readback ErrCtl register=00011146
-[    0.000000] mem auto-init: stack:off, heap alloc:off, heap free:off
-[    0.000000] Memory: 246284K/262144K available (7417K kernel code, 630K rwdata, 1304K rodata, 3500K init, 245K bss, 15860K reserved, 0K cma-reserved, 0K highmem)
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: HWalign=32, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=32
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=132
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=300
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] rcu: Hierarchical RCU implementation.
-[    0.000000] 	Tracing variant of Tasks RCU enabled.
-[    0.000000] rcu: RCU calculated value of scheduler-enlistment delay is 10 jiffies.
-[    0.000000] NR_IRQS: 256
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] rcu: srcu_init: Setting srcu_struct sizes based on contention.
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=512
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=512
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=256
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=256
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=256
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=128
-[    0.000000] clocksource: GIC: mask: 0xffffffffffffffff max_cycles: 0xcaf478abb4, max_idle_ns: 440795247997 ns
-[    0.000000] SLUB: __slab_alloc from slab_alloc s->object_size=256
-[    0.000004] sched_clock: 64 bits at 880MHz, resolution 1ns, wraps every 4398046511103ns
-
-
-This change, and kernel boots fine:
-
-diff --git a/mm/slub.c b/mm/slub.c
-index 157527d7101b..e9677c04d19c 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -3410,7 +3410,11 @@ static __always_inline
- void *__kmem_cache_alloc_lru(struct kmem_cache *s, struct list_lru *lru,
-                             gfp_t gfpflags)
- {
--       void *ret = slab_alloc(s, lru, gfpflags, _RET_IP_, s->object_size);
-+
-+       /*
-+       pr_warn("SLUB: __slab_alloc from slab_alloc s->object_size=%d\n", s->object_size);
-+       void *ret = slab_alloc(s, lru, gfpflags, _RET_IP_, s->object_size);*/
-+       void *ret = slab_alloc(s, lru, gfpflags, _RET_IP_, 0);
- 
-        trace_kmem_cache_alloc(_RET_IP_, ret, s, gfpflags, NUMA_NO_NODE);
- 
-
-
-Cheers,
+ drivers/base/power/domain.c | 130 +++++++++++++++---------------------
+ 1 file changed, 52 insertions(+), 78 deletions(-)
 
 -- 
-  John Thomson
+2.25.1
+
