@@ -2,156 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8EB56154ED
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:26:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B6066154F7
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiKAW0R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 18:26:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32944 "EHLO
+        id S230093AbiKAW3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 18:29:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbiKAW0L (ORCPT
+        with ESMTP id S230326AbiKAW3d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 18:26:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BE7DF93
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 15:26:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6C93FB81DA0
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 22:26:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B274DC433C1;
-        Tue,  1 Nov 2022 22:26:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667341567;
-        bh=bH391DK6mDhlfk/m9c9qaAOR1+HEqjYW4XKMtEK5zKQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=mXfVmQc8UrEuZM0HilitmRJturD7H7r9yQzekwIkMDc6cUWPlu5EV9ozQDqEP6lkd
-         /4eefv4pttplO2R6vVTBoTcE2rqf0KY3sm4oOa6DyDDS3FKV7O6YySYI/JkWXw90uk
-         MqE1CnzjyZDSU8fKkaQGCzRzJYgZnL2m8zSCN873FDu2en+0tibCmxo2KU//vb/F0X
-         WS7fBwtJ3wDrPXYfmQUcxmfGb4fA3EeeRVAYhBhmpSgS1OHGTfAePN8X1rV5id3TiY
-         171/iY4Ezrf/HtSqck4qz6ZL1d1phbJK8Sm3Z4SDYsK+d+t2uyxjR9WD+zE9di68j6
-         y5fgZWBrBzJFg==
-Received: by pali.im (Postfix)
-        id C50EA7F8; Tue,  1 Nov 2022 23:26:03 +0100 (CET)
-Date:   Tue, 1 Nov 2022 23:26:03 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Michael Ellerman <mpe@ellerman.id.au>,
-        Benjamin Herrenschmidt <benh@kernel.crashing.org>,
-        Paul Mackerras <paulus@samba.org>
-Cc:     linuxppc-dev@lists.ozlabs.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] powerpc/pci: Allow to disable filling deprecated
- pci-OF-bus-map
-Message-ID: <20221101222603.h3nlrp6xuhrnkmht@pali>
-References: <20220817163927.24453-1-pali@kernel.org>
- <20221009112555.spnwid27r4rwi67q@pali>
+        Tue, 1 Nov 2022 18:29:33 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 355421D319
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 15:29:32 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id t25so40758623ejb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 15:29:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=G74Wuy6JUbEZeguR9z8D5PigaA7SQEA2iQsub/0ykr4=;
+        b=Wh/schGSPH2trCP5hnARhLA/9Na4tDKwK5YAadg5v8IoqogJ7WV1qKrcaEVjDOhax6
+         mZ3rNlzr8APzJ28E6BJLyK3LglC94wCYp62W2KuWi6EhiJJE4ywYUex5rEGfP4LiKlyk
+         Kn/esG2/3Pv7EVyy2+mnvTBF+F2V4nKAKklHu0GLrHAl6e9PqyVm6M/Jhp4vJZmXvaX6
+         EsG6P8+V8W4HCgUgPeFa8+VMBIR+Ba48SzZrsGTRLhB295bEo+vLk7EkdWUaN+QnSafs
+         zbTmtzklEQ2RrsI2lNEqQD74g1w9N8h0IBdU2Jsw726yz/T4S3plQmNOEVbmD/JRttHz
+         n1Lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G74Wuy6JUbEZeguR9z8D5PigaA7SQEA2iQsub/0ykr4=;
+        b=SkaSUnthnh9RXn54BRmDjNfDAo8r2otjzKmSZtGf/JdMWb/Uok0tUQNJNshNe2dACy
+         sIqs1r4wF3fx7mB6M9yZzhf04BxXrnOexHeGTQdDCuBDXtNgaKOJu306l5YIGC/Ie7N6
+         +r5NiJxTjFWu4OFs8i4CLjrzYq1u0M/aV6PNRrPliI71t65cnbfFEJVw1Mb9jkMfuepK
+         +DPG32Ni0REOu768jcjlVmtwYcB37fcrpXBXcEXVU9uvOTYxam8WpqpetJXe0AvqJdU1
+         woSXA1spBclCumOWubzSDqsIA6B+tIFPIbhB5NmCJrLBjOQ5qMRnINXVpjCbPpbukWD/
+         pfRA==
+X-Gm-Message-State: ACrzQf1gshglr6nmORCEe35G6va69/P4FM05dkZDE00rRSkUP8IWocWp
+        XTwsS05aDhyfqkemS4wFasA=
+X-Google-Smtp-Source: AMsMyM4f8eMxJOLzvij00f87n2slJuioPe1icpzbqIX3dgqUzFUi38de5v2xR40Tzb4RnYudA6Ek7g==
+X-Received: by 2002:a17:906:8477:b0:7ad:9ada:a6a4 with SMTP id hx23-20020a170906847700b007ad9adaa6a4mr20744760ejc.674.1667341770785;
+        Tue, 01 Nov 2022 15:29:30 -0700 (PDT)
+Received: from ZBook.localdomain (86-90-194-80.fixed.kpn.net. [86.90.194.80])
+        by smtp.gmail.com with ESMTPSA id f15-20020a17090631cf00b007a03313a78esm4650773ejf.20.2022.11.01.15.29.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 15:29:30 -0700 (PDT)
+From:   Jerom van der Sar <jerom.vandersar@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     philipp.g.hortmann@gmail.com, error27@gmail.com,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Jerom van der Sar <jerom.vandersar@gmail.com>
+Subject: [PATCH v3] staging: rtl8192e: space formatting fixes in rtl_cam.c
+Date:   Tue,  1 Nov 2022 23:29:00 +0100
+Message-Id: <20221101222900.4681-1-jerom.vandersar@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <f391a7cd-e57a-0643-1ba1-c859bf2f83a6@gmail.com>
+References: <f391a7cd-e57a-0643-1ba1-c859bf2f83a6@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221009112555.spnwid27r4rwi67q@pali>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello! Gentle reminder...
+Fixed a few coding style issues in rtl_cam.c such as double blank lines
+and lack of spaces around binary operators.Some other warnings still
+remain. These issues were found by scripts/checkpatch.pl.
 
-On Sunday 09 October 2022 13:25:55 Pali Rohár wrote:
-> Hello! Any comments on this? It would be nice to take these two patches
-> (or at least patch 2) to finally enable PPC_PCI_BUS_NUM_DOMAIN_DEPENDENT
-> by default where possible.
-> 
-> Per following comment there can be an issue with early powermac so seems
-> that PPC_PCI_OF_BUS_MAP_FILL still has to be by default enabled (which
-> implies that PPC_PCI_BUS_NUM_DOMAIN_DEPENDENT is disabled) on powermac:
-> https://lore.kernel.org/linuxppc-dev/575f239205e8635add81c9f902b7d9db7beb83ea.camel@kernel.crashing.org/
-> 
-> On Wednesday 17 August 2022 18:39:26 Pali Rohár wrote:
-> > Creating or filling pci-OF-bus-map property in the device-tree is
-> > deprecated since May 2006 [1]. Allow to disable filling this property by
-> > unsetting config option CONFIG_PPC_PCI_OF_BUS_MAP_FILL for remaining chrp
-> > and powermac code.
-> > 
-> > Disabling of pci-OF-bus-map property allows to enable new option
-> > CONFIG_PPC_PCI_BUS_NUM_DOMAIN_DEPENDENT also for chrp and powermac.
-> > 
-> > [1] - https://lore.kernel.org/linuxppc-dev/1148016268.13249.14.camel@localhost.localdomain/
-> > 
-> > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > ---
-> >  arch/powerpc/Kconfig         | 12 +++++++++++-
-> >  arch/powerpc/kernel/pci_32.c |  6 ++++++
-> >  2 files changed, 17 insertions(+), 1 deletion(-)
-> > 
-> > diff --git a/arch/powerpc/Kconfig b/arch/powerpc/Kconfig
-> > index 5881441f7672..df2696c406ad 100644
-> > --- a/arch/powerpc/Kconfig
-> > +++ b/arch/powerpc/Kconfig
-> > @@ -373,9 +373,19 @@ config PPC_DCR
-> >  	depends on PPC_DCR_NATIVE || PPC_DCR_MMIO
-> >  	default y
-> >  
-> > +config PPC_PCI_OF_BUS_MAP_FILL
-> > +	bool "Fill pci-OF-bus-map property in the device-tree"
-> > +	depends on PPC32
-> > +	depends on PPC_PMAC || PPC_CHRP
-> > +	default y
-> > +	help
-> > +	  This option creates and fills pci-OF-bus-map property in the
-> > +	  device-tree which is deprecated and is needed only for old
-> > +	  platforms.
-> > +
-> >  config PPC_PCI_BUS_NUM_DOMAIN_DEPENDENT
-> >  	depends on PPC32
-> > -	depends on !PPC_PMAC && !PPC_CHRP
-> > +	depends on !PPC_PCI_OF_BUS_MAP_FILL
-> >  	bool "Assign PCI bus numbers from zero individually for each PCI domain"
-> >  	help
-> >  	  By default on PPC32 were PCI bus numbers unique across all PCI domains.
-> > diff --git a/arch/powerpc/kernel/pci_32.c b/arch/powerpc/kernel/pci_32.c
-> > index 433965bf37b4..ffc4e1928c80 100644
-> > --- a/arch/powerpc/kernel/pci_32.c
-> > +++ b/arch/powerpc/kernel/pci_32.c
-> > @@ -64,6 +64,8 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_IBM,	PCI_DEVICE_ID_IBM_CPC710_PCI64,	fixu
-> >  
-> >  #if defined(CONFIG_PPC_PMAC) || defined(CONFIG_PPC_CHRP)
-> >  
-> > +#ifdef CONFIG_PPC_PCI_OF_BUS_MAP_FILL
-> > +
-> >  static u8* pci_to_OF_bus_map;
-> >  static int pci_bus_count;
-> >  
-> > @@ -223,6 +225,8 @@ pci_create_OF_bus_map(void)
-> >  }
-> >  #endif
-> >  
-> > +#endif /* CONFIG_PPC_PCI_OF_BUS_MAP_FILL */
-> > +
-> >  #endif /* defined(CONFIG_PPC_PMAC) || defined(CONFIG_PPC_CHRP) */
-> >  
-> >  void pcibios_setup_phb_io_space(struct pci_controller *hose)
-> > @@ -264,6 +268,7 @@ static int __init pcibios_init(void)
-> >  	}
-> >  
-> >  #if defined(CONFIG_PPC_PMAC) || defined(CONFIG_PPC_CHRP)
-> > +#ifdef CONFIG_PPC_PCI_OF_BUS_MAP_FILL
-> >  	pci_bus_count = next_busno;
-> >  
-> >  	/* OpenFirmware based machines need a map of OF bus
-> > @@ -272,6 +277,7 @@ static int __init pcibios_init(void)
-> >  	 */
-> >  	if (pci_assign_all_buses)
-> >  		pcibios_make_OF_bus_map();
-> > +#endif
-> >  #endif
-> >  
-> >  	/* Call common code to handle resource allocation */
-> > -- 
-> > 2.20.1
-> > 
+This patch helps clean up the rtl8192e driver in staging, making it
+easier to read and maintain.
+
+Signed-off-by: Jerom van der Sar <jerom.vandersar@gmail.com>
+---
+Changes in v3:
+  - Fixed faulty dot at the end of the patch sign-off.
+
+Changes in v2:
+  - Reverted some formatting fixes to make the diff easier to review.
+
+ drivers/staging/rtl8192e/rtl8192e/rtl_cam.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c b/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c
+index 41faeb4b9b9b..d5aaf24a0ddb 100644
+--- a/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c
++++ b/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c
+@@ -17,7 +17,7 @@ void rtl92e_cam_reset(struct net_device *dev)
+ {
+ 	u32 ulcommand = 0;
+ 
+-	ulcommand |= BIT31|BIT30;
++	ulcommand |= BIT31 | BIT30;
+ 	rtl92e_writel(dev, RWCAM, ulcommand);
+ }
+ 
+@@ -40,7 +40,6 @@ void rtl92e_enable_hw_security_config(struct net_device *dev)
+ 		SECR_value |= SCR_TxUseDK;
+ 	}
+ 
+-
+ 	ieee->hwsec_active = 1;
+ 	if ((ieee->pHTInfo->iot_action & HT_IOT_ACT_PURE_N_MODE) || !hwwep) {
+ 		ieee->hwsec_active = 0;
+@@ -104,10 +103,9 @@ void rtl92e_set_key(struct net_device *dev, u8 EntryNo, u8 KeyIndex,
+ 	else
+ 		usConfig |= BIT15 | (KeyType<<2) | KeyIndex;
+ 
+-
+ 	for (i = 0; i < CAM_CONTENT_COUNT; i++) {
+ 		TargetCommand  = i + CAM_CONTENT_COUNT * EntryNo;
+-		TargetCommand |= BIT31|BIT16;
++		TargetCommand |= BIT31 | BIT16;
+ 
+ 		if (i == 0) {
+ 			TargetContent = (u32)(*(MacAddr+0)) << 16 |
+@@ -152,7 +150,6 @@ void rtl92e_cam_restore(struct net_device *dev)
+ 
+ 	if ((priv->rtllib->pairwise_key_type == KEY_TYPE_WEP40) ||
+ 	    (priv->rtllib->pairwise_key_type == KEY_TYPE_WEP104)) {
+-
+ 		for (EntryId = 0; EntryId < 4; EntryId++) {
+ 			MacAddr = CAM_CONST_ADDR[EntryId];
+ 			if (priv->rtllib->swcamtable[EntryId].bused) {
+-- 
+2.34.1
+
