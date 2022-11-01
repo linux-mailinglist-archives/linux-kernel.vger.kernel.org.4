@@ -2,99 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FC2F614BC1
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:29:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8E57614BC7
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229981AbiKAN3u convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 1 Nov 2022 09:29:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57456 "EHLO
+        id S229511AbiKANaZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 09:30:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiKAN3r (ORCPT
+        with ESMTP id S230149AbiKANaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 09:29:47 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3CB6F120B9
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 06:29:46 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-20-AfaSK5zRMHuT_5a8roxyow-1; Tue, 01 Nov 2022 13:29:43 +0000
-X-MC-Unique: AfaSK5zRMHuT_5a8roxyow-1
-Received: from AcuMS.Aculab.com (10.202.163.6) by AcuMS.aculab.com
- (10.202.163.6) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 1 Nov
- 2022 13:29:41 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.042; Tue, 1 Nov 2022 13:29:41 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Mark Rutland' <mark.rutland@arm.com>
-CC:     'Szabolcs Nagy' <szabolcs.nagy@arm.com>,
-        Theodore Ts'o <tytso@mit.edu>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: RE: linux interprets an fcntl int arg as long
-Thread-Topic: linux interprets an fcntl int arg as long
-Thread-Index: AQHY7dH4b5GlkmHz9EyVI+/nub6Ts64p0qEQgAAgcACAAAds0IAAERqAgAADzNA=
-Date:   Tue, 1 Nov 2022 13:29:41 +0000
-Message-ID: <267402c9e66a4cac91a2e1df749dea6a@AcuMS.aculab.com>
-References: <Y1/DS6uoWP7OSkmd@arm.com> <Y2B6jcLUJ1F2y2yL@mit.edu>
- <Y2DisyknbKxeCik4@arm.com>
- <a0693686d0ae41599fe1700680ec56ec@AcuMS.aculab.com>
- <Y2EGtE05hcVn3B3a@arm.com>
- <0030a20a94cd49628c5461d044bb28ed@AcuMS.aculab.com>
- <Y2EbR6YnQcgK4B8T@FVFF77S0Q05N>
-In-Reply-To: <Y2EbR6YnQcgK4B8T@FVFF77S0Q05N>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
-MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 1 Nov 2022 09:30:04 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2AA513E20;
+        Tue,  1 Nov 2022 06:30:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 783C361326;
+        Tue,  1 Nov 2022 13:30:03 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B30FC433C1;
+        Tue,  1 Nov 2022 13:30:01 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667309402;
+        bh=dOBkh2Voj6UgfzAK9AwIha7a75ZaMGSpzsdKHn+BTOM=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=KEP7pSmtclln9h4NGUy/PbL5ZX3RG/w3N2KGYv22vLb7y/T40LC3SKX0yxIDcjjwx
+         XJyNuaEvsvkfYOzbq/32yf58O8/b8j29D09D8HyJd43pgeqD4YEeuguD3aCotbl19o
+         ftMS3gPJoF+fOvaruD6CcIxtS7iVsPIMqfO3nNloazTOWZWgwYudz9hb4+oQtbIgMg
+         N/blHjI1Ohddox0cIeGlNmq/hG1ACP5n/E8unZISHknkfHk2+3uc3E5PWxfdsjNaKa
+         UHc5VIGEufpomBchRrP7BFOBFuwt4qHhye7Pz+jKoGkK208Zc1IzcLF18Hu1Uh5vRV
+         QsCAfUL0AmRyQ==
+Date:   Tue, 1 Nov 2022 22:29:59 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: Re: [PATCH 0/3] tools/perf: Fix perf probe crash by broken DWARF
+ file
+Message-Id: <20221101222959.0815521a31e45c1ddabad756@kernel.org>
+In-Reply-To: <166730844138.2095228.4225918836201778608.stgit@devnote3>
+References: <166730844138.2095228.4225918836201778608.stgit@devnote3>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mark Rutland
-> Sent: 01 November 2022 13:13
-> 
-> On Tue, Nov 01, 2022 at 12:19:51PM +0000, David Laight wrote:
-> > From: 'Szabolcs Nagy' <szabolcs.nagy@arm.com>
-> > > Sent: 01 November 2022 11:45
-> > >
-> > > The 11/01/2022 10:02, David Laight wrote:
-> > > > From: Szabolcs Nagy
-> 
-> > > kernel code:
-> > > ------------
-> > > SYSCALL_DEFINE3(fcntl, unsigned int, fd, unsigned int, cmd, unsigned long, arg)
-> > > {
-> >
-> > That is just a wrapper and calls do_fcntl().
-> > which needs changing to be add:
-> > 	arg &= ~0U;
-> > before the switch(cmd) {
-> 
-> Just to check, do you mean the switch in do_fcntl(), or the switch within memfd_fcntl() ?
-> 
-> The former handles other APIs which do expect arg to be a long (e.g.
-> F_SET_RW_HINT and F_GET_RW_HINT expect it to hold a full 64-bit pointer), so
-> that'd break things.
+On Tue,  1 Nov 2022 22:14:01 +0900
+"Masami Hiramatsu (Google)" <mhiramat@kernel.org> wrote:
 
-The assignment to argv is earlier.
+> Hi,
+> 
+> Here is a series of patches for perf probe which improves the robustness
+> against broken DWARF file.
+> 
+> Since the Clang generates the out of standard DWARF5 file, the perf probe
+> crashes or failed to analyze it. There are actually fragile code against
+> it, so I fixed it ([1/3]) to avoid crash by SEGV. And make it accepts
+> Clang's DWARF5 file ([2/3],[3/3]).
+> 
+> Without this series, the perf probe crashes with the DWARF5 file
+> which generated by clang as below;
+>  
+>   $ ./perf probe -k $BIN_PATH/vmlinux -s $SRC_PATH -L vfs_read:10
+>   Segmentation fault
+> 
+> This series fixes it to handle such file correctly;
+> 
+>   $ ./perf probe -k $BIN_PATH/vmlinux -s $SRC_PATH -L vfs_read:10
+>   <vfs_read@$SRC_PATH/fs/read_write.c:10>
+>  
+>        11         ret = rw_verify_area(READ, file, pos, count);
+>        12         if (ret)
+>                            return ret;
+> 
+> This issue is reported on LLVM ML;
+> https://www.mail-archive.com/dwarf-discuss@lists.dwarfstd.org/msg00884.html
 
-	David
+Hmm, according to the discussion in this thread, this spec is under discussion
+(still?). As far as I can see the "DWARF Debugging Information Format Version 5"
+2.14, it says "The value 0 indicates that no source line has been specified."
+But the description will be updated(?)
+http://wiki.dwarfstd.org/index.php?title=DWARF5_Line_Table_File_Numbers
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
+Let me update the series so that carefully remove the "broken". Maybe "clang"
+DWARF5?
 
+Thank you,
+
+> 
+> Thank you,
+> 
+> ---
+> 
+> Masami Hiramatsu (Google) (3):
+>       tools/perf: Fix to avoid crashing with a broken DWARF file
+>       tools/perf: Fix to use dwarf_attr_integrate for generic attr accessor
+>       tools/perf: Fix to get declared file name from broken DWARF5
+> 
+> 
+>  tools/perf/util/dwarf-aux.c    |   58 ++++++++++++++++++++++++++++------------
+>  tools/perf/util/dwarf-aux.h    |    3 ++
+>  tools/perf/util/probe-finder.c |   37 +++++++++++++++++---------
+>  3 files changed, 68 insertions(+), 30 deletions(-)
+> 
+> --
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
