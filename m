@@ -2,242 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 034A76151A4
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 19:37:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F1546151AC
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 19:40:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbiKAShp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 14:37:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52182 "EHLO
+        id S230271AbiKASk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 14:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229919AbiKAShm (ORCPT
+        with ESMTP id S230037AbiKASkX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 14:37:42 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7667E1AF00;
-        Tue,  1 Nov 2022 11:37:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667327861; x=1698863861;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=Vixn+OAUCYICXDkjZhJuixt1K2HTgAZoHIXd+dYB/oo=;
-  b=d18afC6Cf1KHeD7afWlxQA6cCBjuBx4zFbXlcKNdSmFr1Ae1TqJ2eTs3
-   nbgXAz4j/LSyi6814rgg6vN9rR8LnRlq2yCJaDm2p7xo5T+AH/2dVk1BG
-   Sp9HcsxIA0gBtzinAqf2XkZD0rUdeu5xQae+OJ/TdOTV/bZntb4M1Qlpq
-   WPflaWzObyNLvlQ5Xv9KcyOp0vBTl5bVz3p0d3bcsHMHi2ojArjPAx7KS
-   DZuFj0mk1KQ7CtZT1qHLHkrSE3qyZt5HEM2pv4M0xRUkAgDAQpqCAz1at
-   S5k3Hn9ek5PpS+xyDAVuUdHQ0uNrhl/lZlrHR9CZlSkBUlPAGNuRWdbeO
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="373431187"
-X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
-   d="scan'208";a="373431187"
-Received: from fmsmga005.fm.intel.com ([10.253.24.32])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 11:37:41 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="963221802"
-X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
-   d="scan'208";a="963221802"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga005.fm.intel.com with ESMTP; 01 Nov 2022 11:37:40 -0700
-Received: from orsmsx612.amr.corp.intel.com (10.22.229.25) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 1 Nov 2022 11:37:39 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX612.amr.corp.intel.com (10.22.229.25) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 1 Nov 2022 11:37:38 -0700
-Received: from ORSEDG601.ED.cps.intel.com (10.7.248.6) by
- orsmsx611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Tue, 1 Nov 2022 11:37:38 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.102)
- by edgegateway.intel.com (134.134.137.102) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Tue, 1 Nov 2022 11:37:38 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ZCm07o+NLAwfJF8wgW0AajAUaBMr1g9GRClPDz3mHRrd4cQSCzEDNWacR+WdnKT91bbXYiTdujNre+yHQTvlZuhbFLgihIev+FlpJAvvuJeQ1iGnytyEEz9VRlXLqjIpGeLHpAKaipXQ4NQz0oZKqaGpq8EtQNlzfCn3kklHYVjJs70T94pCwpICQhJWrWDl5px2d3fbsXFRCVGEbYAivlkaR5P+Hba4E/7D3aBVeq0mSiA+985KzlgqpvLThLZz4qHFVOuQG2VJ5dTLfuDSZvq6SghGra6g8wiOAMZtlE0jH4Hxlq6WnSry7MXKzJmpLpmc5MpPvR8lYWOupr8iyg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=fwp0NDwuJsJRUmKfJ+8MnpkVReMpFoZnXGSNu6GiseQ=;
- b=MbK3M/aoPahWM4S2uF10uHxyD2GsJh7vLk17TMVUF5umnWDhwL+ywVDR3ni2/+jTSym3/Qc/qRE9uFsW8Uyi13PHGs14bXbttz1WmELTZBqyvKCvtB7IHdlRr5KwyoBbRiDT2zoB7r5ZpmzX1uUWLzvVPb9/ZLyIqk4uRTZbwV7kShdFQd4s7uxPLKS1VKVSmaJWi/qn9X/7A4G9OJFmbcSVmKwn4OmpEiTZPlN67swJc3IV1SvP6mnQUcJpPyu+LkH3zL1114UCGxa/jOemfuWM6t05JGbJlmIMzR3m5I0PrEDVL1i/HM9xcWgehF8TGdzr+s8ZN8rufkhjWOyXDQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com (2603:10b6:a03:18::25)
- by SA2PR11MB5050.namprd11.prod.outlook.com (2603:10b6:806:fb::19) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.19; Tue, 1 Nov
- 2022 18:37:33 +0000
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::e475:190a:6680:232]) by BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::e475:190a:6680:232%7]) with mapi id 15.20.5769.021; Tue, 1 Nov 2022
- 18:37:33 +0000
-Message-ID: <8cb7050c-d8e4-08ff-fb34-1df207a738db@intel.com>
-Date:   Tue, 1 Nov 2022 11:37:31 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH 09/14] platform/x86/intel/ifs: Use generic microcode
- headers and functions
-Content-Language: en-US
-To:     Jithu Joseph <jithu.joseph@intel.com>, <hdegoede@redhat.com>,
-        <markgross@kernel.org>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
-        <gregkh@linuxfoundation.org>, <ashok.raj@intel.com>,
-        <tony.luck@intel.com>, <linux-kernel@vger.kernel.org>,
-        <platform-driver-x86@vger.kernel.org>, <patches@lists.linux.dev>,
-        <ravi.v.shankar@intel.com>, <thiago.macieira@intel.com>,
-        <athenas.jimenez.gonzalez@intel.com>
-References: <20221021203413.1220137-1-jithu.joseph@intel.com>
- <20221021203413.1220137-10-jithu.joseph@intel.com>
-From:   Sohil Mehta <sohil.mehta@intel.com>
-In-Reply-To: <20221021203413.1220137-10-jithu.joseph@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BY3PR05CA0055.namprd05.prod.outlook.com
- (2603:10b6:a03:39b::30) To BYAPR11MB3320.namprd11.prod.outlook.com
- (2603:10b6:a03:18::25)
+        Tue, 1 Nov 2022 14:40:23 -0400
+Received: from mx0a-003ede02.pphosted.com (mx0a-003ede02.pphosted.com [205.220.169.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ACE41BEAC
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 11:40:22 -0700 (PDT)
+Received: from pps.filterd (m0286615.ppops.net [127.0.0.1])
+        by mx0b-003ede02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A1IeMYt003494
+        for <linux-kernel@vger.kernel.org>; Tue, 1 Nov 2022 11:40:22 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=getcruise.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=ppemail; bh=TZN+nxD29A/mXjM1cTiRY1RyYzHigm/eAkBELU0CF14=;
+ b=cA1YNKo/ElUALFXNlrUwD6xNYLkdcvPsSFHRoO2j+Sxr4kjnhmsTxvg+SQdWZRChz23a
+ jLbdnQqTw2liZyaBf/sY0l4BgNCIh0GalmwcMfcpdE1soBTtdsXjVvq/+SkVXr5nm0Vi
+ 8994I0gZvevUECKneatLKdq0U187exSiKd00VTNfnczLKg3+zeOpXF/wUPQ6d11pjL+F
+ CMjdw564Zf/6zTm3Nsu2p3CvlFLfOtTxlR9YrT5sVW71jgijsycHfGDG3OrrXrnBVbKN
+ uvAbH9wukxpb/rOoIUT1xzR4pkJUs7ZCUUhaldXbX1KsvL/pJuLd07DNm8c7uhauoGBF 9g== 
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+        by mx0b-003ede02.pphosted.com (PPS) with ESMTPS id 3kh0ckrun0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 11:40:22 -0700
+Received: by mail-pl1-f198.google.com with SMTP id s15-20020a170902ea0f00b00187050232fcso6903213plg.3
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 11:40:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=getcruise.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TZN+nxD29A/mXjM1cTiRY1RyYzHigm/eAkBELU0CF14=;
+        b=kaNealaoGmf/RrPO8DwyZR6T+/tcWXGyYzK0SKjEnxcfOEiA8sRNfFOhnHZrSh7vND
+         nbhi/gbGEhsSa2dR2Y11RXiYJlIpioQm1Vr7rWlxlmr+J857hqo32unyVe70tTeY86gY
+         TJuhJDjpLlxMC+SZYzLr8o3qb2edlQvoGSKCX0DCCWxplz4NSdXmwBTSbHjiYiVqGnxL
+         lq+ggrQ8+MSmiF6Ri/gNLJmNRFU60IPDxIhhVFL3Z9GdL5bjMtT9nenL5BXEfALwqfn6
+         9uPoNkRhhkLyGOdI1/xqvohu3un7pjjoDE1mOPBSLWHf3wQwh6aErszAED4AQ7/7YjTc
+         F71Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TZN+nxD29A/mXjM1cTiRY1RyYzHigm/eAkBELU0CF14=;
+        b=rZdZPFePbLsKGizpFtVXmNd/1pJCbtgEENNiR9v6kCLjgjs2Cmi0AjzPsrbdsgZfw+
+         tXyA8dUOBXc5MTrYpj8KUm4ALxkNVNGZq45OFXCzURBPBriZMMxm1XuVuO7LMCrWeY3e
+         9Ybi+aauqt/PNHt6zvqgT7de3MQuFOycK9H1JZGmgoXYKMtkirgsRL8CeMDOrlcOxutg
+         h/RXjadPhz9ULwlvtUr0v2r5NNdHCmqxKqgL5+nNqTS83Hm5LIhkyROQwk4tMow+xaqf
+         1i9AKoG8dwv/bkS6xDDGN3sUUPlkf0svCbl0EXEciqrtiu2mtem9VLHimktl0BpfKq2X
+         5+NQ==
+X-Gm-Message-State: ACrzQf2nSiXJhLhFAVCpo/wyWIY5QcYT2spb9YcI0FSklKHrdApGP3P/
+        huCkNmpqXlQA5HEiUiLLzJ/ZcUztqOiyCvlwlsEf+ZDrxYth72lsj+veyMEjCBZCfoEoIkz0eQ3
+        X8vik7Ubk3RVo112xtm5tQHo=
+X-Received: by 2002:a62:a503:0:b0:56b:cb10:2d87 with SMTP id v3-20020a62a503000000b0056bcb102d87mr21167769pfm.79.1667328021194;
+        Tue, 01 Nov 2022 11:40:21 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4h7sjO7Pjd4/m+pe8D/lAg5yb26iD2UghyFQ1kUHbRrOa+BOyWQ+jEHR/N6AJpCu1UVjrmoA==
+X-Received: by 2002:a62:a503:0:b0:56b:cb10:2d87 with SMTP id v3-20020a62a503000000b0056bcb102d87mr21167747pfm.79.1667328020908;
+        Tue, 01 Nov 2022 11:40:20 -0700 (PDT)
+Received: from 4VPLMR2-DT.corp.robot.car ([199.73.125.241])
+        by smtp.gmail.com with ESMTPSA id l6-20020a622506000000b0056c08c87196sm6851935pfl.48.2022.11.01.11.40.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 11:40:20 -0700 (PDT)
+From:   Andy Ren <andy.ren@getcruise.com>
+To:     netdev@vger.kernel.org
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        roman.gushchin@linux.dev, Andy Ren <andy.ren@getcruise.com>
+Subject: [PATCH net-next] netconsole: Enable live renaming for network interfaces used by netconsole
+Date:   Tue,  1 Nov 2022 11:40:05 -0700
+Message-Id: <20221101184005.1278860-1-andy.ren@getcruise.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR11MB3320:EE_|SA2PR11MB5050:EE_
-X-MS-Office365-Filtering-Correlation-Id: f9410250-68bd-441b-a898-08dabc3823fc
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: SwsI9NJadIfTofooiA/NdE+WYfUYk7zfQwgzUX2B5SToKoXXEN6Kw8D0E8ZyJcT6y9cSKPdVvDbc3FUCZNtMlY7K00TLsCIm5Y44Y5oWsT2Kt/k9ouCt3iTZUUmhc1+mreVL8UtqEdhUeERLbzk9+d4O11bXGCk2xuSZAQ/ZMF7ncXcEZoWcOP78hPMxS85zT7du9P42Ga10QqSaFW4tI5SgcwG+R4HtINWSGN5bFOHKFszbUugKkrNuc83D2iNs9aesOCNDxwUKeghNgas3esFTOUtxRAseFQ9HR+Zx3+0maM/SbH6nL5O0SEaxGC7fkVSNz3zx9Mw4D/oma8YsaNclwAS1p1YCiVAJ/1nKcrlYCRS3aU77kRRXTKhaLyrD1/T+DNjvCiGy5BCCgzGqvl9m/iOTdQkrGOYL6puIKJApJvE0Ky+a1ZyxklLxa6dbI294JDLRftNuYQNqR62SOzarQOYIU1OMHm9y0XfGaQUi3Wjx6lXj8JQ9lDG32s0hhDgN7nm5u8NtFs4jTORtdxuhzTanbIRpThxhnbw10MFixCaH0JMmW2EZkwt/PG8ZgJllc5uG41oMjSJcnouCtjcRrML7xLSSWIPOeGdJZ9zw8EcYRMQyfh6uD+gYCcAM2FPUR7sMd2yCb1c9xmbGAgmRJwcesCYDirhriUbzwF4TZ89/vurXr2joDvTkQ8faMELZPO3iWOBtcCVtQGcTKBIjVfHcJiaWWUWL3NdwGKuszUg8/TYreDwQDuH8wVpYz9OcrLGxRM3/K/hKRj79P/gpJQ+z+R9Qw+OHb9Wsw53kbJVFAdGLx+Lcw+hKcXeT
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(136003)(346002)(366004)(396003)(376002)(451199015)(36756003)(86362001)(31696002)(31686004)(82960400001)(38100700002)(2906002)(83380400001)(44832011)(26005)(6512007)(53546011)(2616005)(186003)(6506007)(478600001)(66946007)(41300700001)(8676002)(316002)(66476007)(8936002)(4326008)(66556008)(7416002)(5660300002)(6486002)(41533002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dGlSam9BeUJUT1ZnUkRJSXl2VVFmVTNRbTM1REhGREEwc2FNakRCQkZudUpL?=
- =?utf-8?B?QTN4L0VncHRabFVNS3BTTVRQTUpZLzRpQlBKdU8zQ3JyYmZZRXRMTk9zelNK?=
- =?utf-8?B?UDlqY0Q1K0F2ZFJnUEJ1bGMxTk8wQVBBdTEwVXlUWHlZQ2RPTG5mU3N3c083?=
- =?utf-8?B?MGoySmE2Y1dJZ1pZcGJaTldKT3hGTlN2bGZRb0pLMk1OeWlNU2hFUEpDQ21p?=
- =?utf-8?B?ejJ1cnBVMnZkSmxDWENCSmRQMkpMR1c4N0RkbmJ4SVNPaWJ6NzdEY2hTdS9M?=
- =?utf-8?B?MFNDZVcxOVFxa0doYytqVnhOQmM0cDBxd09UYnFPR2piN0ZuL2RyOFdDQVZV?=
- =?utf-8?B?T2VtYmsyQ2hqaktiNU9ibWRhRXp3ZWo4WFd3MzdrQW9SMTZaTVVHeDN0SmVM?=
- =?utf-8?B?bkJYa3FuNWR2Rk8xWTdqRGNCRHpRb2o2MzJ4bVlFeStTa1dKb0VPY0JBcHFJ?=
- =?utf-8?B?RTRNNGxnMFpjM1E3RjVOQ1Y0VlBXTFVjSGxlNVJkRG5ZZU1FZFl4SFYyb3kv?=
- =?utf-8?B?V3VIMmpGUDdUUlA1N20vL3ZYVFFzZnBKUXZ5Rk1uVjNwd2JRWllkRGlZTkVZ?=
- =?utf-8?B?OEFLdVBvQXhVZVluYnVtaXd4ekNYdlphT25VeHJQS095eHB2eCs4QURGRWxK?=
- =?utf-8?B?b3JwaTBLR3hKNXVNZ1E1ZGM0Q3I5KzRzVHhWR3VaRUl4V0duMDYwcEdMMmYw?=
- =?utf-8?B?Mm8vYktiMnoxV0hDUFVzb0orUDFpbkZrNmVzWWFraFR6RUtmMVlGdDJSTEZ6?=
- =?utf-8?B?QlZkSTFIM0pNR1FCdGN4Q01yNlF3M2hOOGhoZmJ6enpVNnd2V1BCSUpiZG9P?=
- =?utf-8?B?SjM5ZGgvY3JLeG9mSDQwWUp5SjYrdkZxTmYyRmhJbURrUDJ5UnNhQytvTVVz?=
- =?utf-8?B?N1VaZEVpeG9LMEIzTTNzS0Z4empla2JvdHRmc0pQd2dPL3orRjhCWVo4b2NR?=
- =?utf-8?B?bXVXb1VkbGNXK2RUV0RYQjREUFdFay8ya3dvZGZzY1RRR2EwZ3pyanBxYzhG?=
- =?utf-8?B?bkYzdmhBeW12VE4wVGJxVlRYa3c4YW5zRTRxVWZkWnhTVHFxS25RM3JkU2Vx?=
- =?utf-8?B?VXJlNTgxWHZaVk9aVXlXTGI5NUU0NE9MVjVDMUZtZDZ1WmVOZDZVTmxIa3p0?=
- =?utf-8?B?bHlJWUtIcVlUVzlUV2kvQjBBa2UxNWFEcU5pbjBQdTRzWERsa2ZCYmNkQUs5?=
- =?utf-8?B?UFd2WnFESUY3YXExQVl1N0tVUjgxR2Mra2hXNGc1STdvaXk1dVB0Szl2TVYx?=
- =?utf-8?B?d0gzaXRmVnk0Zi9OMnBTN3BlZ2NBWnhSWmJMMkp0M25wbjVwQVltdmo1WnR0?=
- =?utf-8?B?SVZVU29RTWVHUURTc2pFTjZHNTBLcXFCRis4SGdDeDYxSmh2YWx2bHJSRmsz?=
- =?utf-8?B?RjhHdzVtM1FleE1rQVNrdUdidHM4RU5JNlA3SEdUeTBVbDhXclpHTWo0ejhQ?=
- =?utf-8?B?YnVqTUpLOHBzdXBvaUJpNW5sY1JqQVB0WTJFbjZtelVZU3pJVWQ4NjFvYXVC?=
- =?utf-8?B?RUpMSHFJOTN1bU1adnc1YVhYTWMyeE8raGRuMWdQYkljWFZaN0svVzVnVnRZ?=
- =?utf-8?B?eUNyN0RXZHFSSnFHREpzb1ZvQ1RkZ011TmhudVB3eThXNEdyZDhnRFdsMnNE?=
- =?utf-8?B?SWFZN0kyWDRFWDVvNXl0cHoxdGFRc0szOWxXeG9oUWIwUmk5N29Xc0Zqay9N?=
- =?utf-8?B?em8yRkw2bTdocHdhQTJQUlVRdWdMTjRUZWp5R01wVzZ6TkJaRVE0QVduN1VU?=
- =?utf-8?B?bDd2Mk5OMEdOWTROaDFYZGZYaGgzTG9YLzUySGZvODRvd05hS0ZKR2xCWGgr?=
- =?utf-8?B?U24xY2JIZVNjZ3dZdVRMWVBtZElPdnc4L1NHZ2lzWEdsNy9YRWJuVloxdnRY?=
- =?utf-8?B?eW9xM1QxdnFvWkpNbGZ6emd4UTd4aDJNZWhZQkdjcWtpNjFzUXdjTUhtMjA1?=
- =?utf-8?B?NFhDVjVhSkZRWGMyRmtmVkh1L1BzSEFneXptNGh6bS92U0UrQ29kQ09BN0xl?=
- =?utf-8?B?YzI2QUh6Mzl3bUtFS1pxQTU2ejRPeU5xdlU0NnJtM29vME9tdkxPTDN6VGtn?=
- =?utf-8?B?S3VBRlZEeVM3MDhJRTlCKzRnSjVwRjBNV2VNdHp6MDBDaG9OUmYyS2x3K3Ba?=
- =?utf-8?Q?FIp7DLVZ/20nmrLVC4+V+Cg+a?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: f9410250-68bd-441b-a898-08dabc3823fc
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3320.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Nov 2022 18:37:33.6485
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 6CAfkFRGmk6bDHfoOhMlRrfuQ8d5Fam3i6Cz0o/Q6PkT8cehQ4PrRsTRCpePK5pZrS+LJEuiTpZL1KK7aCFHuw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5050
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: Ky9_gmbPfiRF9Jbvv4k_YV2h1Q0n07Ct
+X-Proofpoint-ORIG-GUID: Ky9_gmbPfiRF9Jbvv4k_YV2h1Q0n07Ct
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-01_09,2022-11-01_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0
+ suspectscore=0 clxscore=1015 mlxlogscore=999 phishscore=0 adultscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211010135
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/21/2022 1:34 PM, Jithu Joseph wrote:
-> Newer IFS test image headers will use  microcode_header_intel->hdrver = 2,
-> so as to distinguish it from microcode images and older IFS test images.
-> 
+This patch enables support for live renaming of network interfaces
+initialized by netconsole.
 
-IIUC, older IFS test images would no longer be supported. Have they been 
-released publicly?
+This resolves an issue seen when netconsole is configured to boot as a
+built-in kernel module with a kernel boot argument. As stated in the
+kernel man page - As a built-in, netconsole initializes immediately
+after NIC cards and will bring up the specified interface as soon as
+possible. Consequently, the renaming of specified interfaces will fail
+and return EBUSY. This is because by default, the kernel disallows live
+renaming unless the device explicitly sets a priv_flags bit
+(IFF_LIVE_RENAME_OK), and renaming after a network interface is up
+returns EBUSY.
 
-What would happen if someone tries to load one? I am guessing one of the 
-error checks would catch it. It might be useful to describe this error 
-signature in the commit message.
+The changes to the kernel are as of following:
 
->   
-> -	if ((data_size + MC_HEADER_SIZE > total_size) || (total_size % sizeof(u32))) {
-> -		dev_err(dev, "bad ifs data file size.\n");
-> +	if (data->hdrver != IFS_HEADER_VER) {
-> +		dev_err(dev, "Header version %d not supported\n", data->hdrver);
->   		return -EINVAL;
->   	}
->   
-> -	if (mc_header->ldrver != 1 || mc_header->hdrver != 1) {
-> -		dev_err(dev, "invalid/unknown ifs update format.\n");
-> +	if (microcode_intel_sanity_check((void *)data, true, IFS_HEADER_VER)) {
+- Addition of a iface_live_renaming boolean flag to the netpoll struct,
+used to enable/disable interface live renaming. False by default
+- Changes to check for the aforementioned flag in network and ethernet
+driver interface renaming code
+- Adds a new optional "*" parameter to the netconsole configuration string
+after interface device name that enables interface live renaming when
+included (e.g. "eth0*"). When this parameter is included,
+"iface_live_renaming" is set to true.
+---
+ Documentation/networking/netconsole.rst |  5 +++--
+ include/linux/netpoll.h                 |  3 +++
+ net/core/dev.c                          |  3 ++-
+ net/core/netpoll.c                      | 18 +++++++++++++++++-
+ net/ethernet/eth.c                      |  5 ++++-
+ 5 files changed, 29 insertions(+), 5 deletions(-)
 
-I referred to this in a another patch. The data->hdrver is already 
-verified above, why is there a need to pass it as a parameter as well.
+diff --git a/Documentation/networking/netconsole.rst b/Documentation/networking/netconsole.rst
+index 1f5c4a04027c..c1255a4d9c9b 100644
+--- a/Documentation/networking/netconsole.rst
++++ b/Documentation/networking/netconsole.rst
+@@ -34,20 +34,21 @@ Sender and receiver configuration:
+ It takes a string configuration parameter "netconsole" in the
+ following format::
+ 
+- netconsole=[+][src-port]@[src-ip]/[<dev>],[tgt-port]@<tgt-ip>/[tgt-macaddr]
++ netconsole=[+][src-port]@[src-ip]/[<dev>][*],[tgt-port]@<tgt-ip>/[tgt-macaddr]
+ 
+    where
+ 	+             if present, enable extended console support
+ 	src-port      source for UDP packets (defaults to 6665)
+ 	src-ip        source IP to use (interface address)
+ 	dev           network interface (eth0)
++	*             if present, allow runtime network interface renaming
+ 	tgt-port      port for logging agent (6666)
+ 	tgt-ip        IP address for logging agent
+ 	tgt-macaddr   ethernet MAC address for logging agent (broadcast)
+ 
+ Examples::
+ 
+- linux netconsole=4444@10.0.0.1/eth1,9353@10.0.0.2/12:34:56:78:9a:bc
++ linux netconsole=4444@10.0.0.1/eth1*,9353@10.0.0.2/12:34:56:78:9a:bc
+ 
+ or::
+ 
+diff --git a/include/linux/netpoll.h b/include/linux/netpoll.h
+index bd19c4b91e31..f2ebdabf0959 100644
+--- a/include/linux/netpoll.h
++++ b/include/linux/netpoll.h
+@@ -32,6 +32,7 @@ struct netpoll {
+ 	bool ipv6;
+ 	u16 local_port, remote_port;
+ 	u8 remote_mac[ETH_ALEN];
++	bool iface_live_renaming;
+ };
+ 
+ struct netpoll_info {
+@@ -51,9 +52,11 @@ struct netpoll_info {
+ void netpoll_poll_dev(struct net_device *dev);
+ void netpoll_poll_disable(struct net_device *dev);
+ void netpoll_poll_enable(struct net_device *dev);
++bool netpoll_live_renaming_enabled(struct net_device *dev);
+ #else
+ static inline void netpoll_poll_disable(struct net_device *dev) { return; }
+ static inline void netpoll_poll_enable(struct net_device *dev) { return; }
++static inline bool netpoll_live_renaming_enabled(struct net_device *dev) { return false; }
+ #endif
+ 
+ void netpoll_send_udp(struct netpoll *np, const char *msg, int len);
+diff --git a/net/core/dev.c b/net/core/dev.c
+index cfb68db040a4..67430bec1f33 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -1176,7 +1176,8 @@ int dev_change_name(struct net_device *dev, const char *newname)
+ 	 * directly.
+ 	 */
+ 	if (dev->flags & IFF_UP &&
+-	    likely(!(dev->priv_flags & IFF_LIVE_RENAME_OK)))
++	    likely(!(dev->priv_flags & IFF_LIVE_RENAME_OK) &&
++		   !netpoll_live_renaming_enabled(dev)))
+ 		return -EBUSY;
+ 
+ 	down_write(&devnet_rename_sem);
+diff --git a/net/core/netpoll.c b/net/core/netpoll.c
+index 9be762e1d042..fcea265290c3 100644
+--- a/net/core/netpoll.c
++++ b/net/core/netpoll.c
+@@ -224,6 +224,15 @@ void netpoll_poll_enable(struct net_device *dev)
+ }
+ EXPORT_SYMBOL(netpoll_poll_enable);
+ 
++bool netpoll_live_renaming_enabled(struct net_device *dev)
++{
++	if (dev->npinfo && dev->npinfo->netpoll->iface_live_renaming)
++		return true;
++
++	return false;
++}
++EXPORT_SYMBOL(netpoll_live_renaming_enabled);
++
+ static void refill_skbs(void)
+ {
+ 	struct sk_buff *skb;
+@@ -523,7 +532,7 @@ static int netpoll_parse_ip_addr(const char *str, union inet_addr *addr)
+ 
+ int netpoll_parse_options(struct netpoll *np, char *opt)
+ {
+-	char *cur=opt, *delim;
++	char *cur = opt, *delim, *asterisk;
+ 	int ipv6;
+ 	bool ipversion_set = false;
+ 
+@@ -556,6 +565,13 @@ int netpoll_parse_options(struct netpoll *np, char *opt)
+ 		if ((delim = strchr(cur, ',')) == NULL)
+ 			goto parse_failed;
+ 		*delim = 0;
++
++		asterisk = strchr(cur, '*');
++		if (asterisk) {
++			np->iface_live_renaming = true;
++			*asterisk = 0;
++		}
++
+ 		strscpy(np->dev_name, cur, sizeof(np->dev_name));
+ 		cur = delim;
+ 	}
+diff --git a/net/ethernet/eth.c b/net/ethernet/eth.c
+index e02daa74e833..bb341acfcf05 100644
+--- a/net/ethernet/eth.c
++++ b/net/ethernet/eth.c
+@@ -62,6 +62,7 @@
+ #include <net/gro.h>
+ #include <linux/uaccess.h>
+ #include <net/pkt_sched.h>
++#include <linux/netpoll.h>
+ 
+ /**
+  * eth_header - create the Ethernet header
+@@ -288,8 +289,10 @@ int eth_prepare_mac_addr_change(struct net_device *dev, void *p)
+ {
+ 	struct sockaddr *addr = p;
+ 
+-	if (!(dev->priv_flags & IFF_LIVE_ADDR_CHANGE) && netif_running(dev))
++	if (!(dev->priv_flags & IFF_LIVE_ADDR_CHANGE) && netif_running(dev) &&
++	    !netpoll_live_renaming_enabled(dev))
+ 		return -EBUSY;
++
+ 	if (!is_valid_ether_addr(addr->sa_data))
+ 		return -EADDRNOTAVAIL;
+ 	return 0;
+-- 
+2.38.1
 
-> +		dev_err(dev, "sanity check failed\n");
->   		return -EINVAL;
->   	}
->   
-> -	mc = (u32 *)mc_header;
-> -	sum = 0;
-> -	for (int i = 0; i < total_size / sizeof(u32); i++)
-> -		sum += mc[i];
-> +	intel_cpu_collect_info(&uci);
->   
-> -	if (sum) {
-> -		dev_err(dev, "bad ifs data checksum, aborting.\n");
-> +	if (!microcode_intel_find_matching_signature((void *)data,
-> +						     uci.cpu_sig.sig,
-> +						     uci.cpu_sig.pf)) {
-> +		dev_err(dev, "cpu signature, pf not matching\n");
-
-What does pf stand for? It would be good to avoid abbreviations for 
-error logging.
-
-
->   /*
->    * Load ifs image. Before loading ifs module, the ifs image must be located
->    * in /lib/firmware/intel/ifs and named as {family/model/stepping}.{testname}.
-> @@ -252,12 +189,11 @@ int ifs_load_firmware(struct device *dev)
->   		goto done;
->   	}
->   
-> -	if (!ifs_image_sanity_check(dev, (struct microcode_header_intel *)fw->data)) {
-> -		dev_err(dev, "ifs header sanity check failed\n");
-> +	ret = ifs_image_sanity_check(dev, (struct microcode_header_intel *)fw->data);
-> +	if (ret)
->   		goto release;
-> -	}
->   
-> -	ifs_header_ptr = (struct ifs_header *)fw->data;
-> +	ifs_header_ptr = (struct microcode_header_intel *)fw->data;
-
-The use of a global ifs_header_ptr seems problematic. The semaphore 
-operation before calling ifs_load_firmware() makes it seem concurrency 
-is expected. Can ifs_load_firmware() really be called concurrently?
-
-If that is not true can we use a mutex for synchronization?
-
-Sohil
