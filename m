@@ -2,172 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 56EC2614561
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 09:00:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1FEF9614572
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 09:08:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229918AbiKAIAU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 04:00:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41922 "EHLO
+        id S229949AbiKAIID (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 04:08:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229871AbiKAIAR (ORCPT
+        with ESMTP id S229511AbiKAIIA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 04:00:17 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73DD89FE8;
-        Tue,  1 Nov 2022 01:00:14 -0700 (PDT)
-Received: from canpemm500004.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N1j9k02MNzmVZq;
-        Tue,  1 Nov 2022 16:00:09 +0800 (CST)
-Received: from localhost (10.175.101.6) by canpemm500004.china.huawei.com
- (7.192.104.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 1 Nov
- 2022 16:00:04 +0800
-From:   Weilong Chen <chenweilong@huawei.com>
-To:     <chenweilong@huawei.com>, <yangyicong@hisilicon.com>,
-        <robh+dt@kernel.org>, <krzysztof.kozlowski+dt@linaro.org>,
-        <wsa@kernel.org>, <andriy.shevchenko@linux.intel.com>,
-        <f.fainelli@gmail.com>, <jarkko.nikula@linux.intel.com>,
-        <jdelvare@suse.de>, <william.zhang@broadcom.com>,
-        <jsd@semihalf.com>, <conor.dooley@microchip.com>,
-        <phil.edworthy@renesas.com>,
-        <tharunkumar.pasumarthi@microchip.com>,
-        <semen.protsenko@linaro.org>, <kfting@nuvoton.com>
-CC:     <linux-i2c@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: [PATCH next v10 2/2] dt-bindings: i2c: add entry for hisilicon,ascend910-i2c
-Date:   Tue, 1 Nov 2022 16:07:28 +0800
-Message-ID: <20221101080728.143639-2-chenweilong@huawei.com>
-X-Mailer: git-send-email 2.31.GIT
-In-Reply-To: <20221101080728.143639-1-chenweilong@huawei.com>
-References: <20221101080728.143639-1-chenweilong@huawei.com>
+        Tue, 1 Nov 2022 04:08:00 -0400
+Received: from mail-il1-x129.google.com (mail-il1-x129.google.com [IPv6:2607:f8b0:4864:20::129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF63A1834E;
+        Tue,  1 Nov 2022 01:07:59 -0700 (PDT)
+Received: by mail-il1-x129.google.com with SMTP id o2so7409469ilo.8;
+        Tue, 01 Nov 2022 01:07:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NziJY6/fyP+utH+wONN+4YTM+lMaIKC/fH0mKgAarmA=;
+        b=YXlrNLxqzKzYUVnb3wco5w3HzIK2/t3QuwRIhttCmLZzPf0ZpKreSxnnGh4YJm2gqS
+         OlIjdQp8GB3y0CcAtQ+JP0nq60wD66CmiopFiTg5Hm9TtFdI+mB6nmhVBzMyLU0TfPvt
+         I3l0Q6nfGYhz8ejdib3Mv6OnReRJGcxDfOITODinYLNJ0isX0J2t+QlNvgQkZzbbMoe1
+         5RYKqCpJJPa8uZpFN5CwKOrujMQ95rhRsf2duJusno8klWUCI2BZDsfI699mVCwf2G8y
+         Ap07BMeCrMktsAJBSUte7W/GgokSBi3W0yG0iv4VoS6UqcpBusKiZSRHzd/yt3LEyyv6
+         erBw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NziJY6/fyP+utH+wONN+4YTM+lMaIKC/fH0mKgAarmA=;
+        b=WVBC1Y/ce1MkEdhvnJB/t6LMcdsY+A5Udr/TsqVZjC5ziDOukttCbk7rrwh3US85PZ
+         H1k5WaCmJcMcRGlRhVXulA5I8RZwJXAZtxCeNX7Jv8tSIPk+zLkcKz1z/EoC2FQR/td/
+         ge5i4PVi/aBsO8a/nHVjte/YeBlHsJ+va4ZL9eGy9eA5ux86n7NTH5JPvs7EuMFE9BIW
+         TrVZThc1hguqNxzUCfyX4nsPp/k7PfFG7muKnXI/H3OaLgn1XRe2yUZspQCCrMgchllk
+         DOre3UvMU64NwKOn+fItcLaToZIBTOz3yskj7drNpgftc6NHSypN2a+8j8paRb5uXhPG
+         +zug==
+X-Gm-Message-State: ACrzQf3vzu+1rxgqeUJEOblMoIMOtw1QrarwARLfBVe9DEBDTWuxH80o
+        PgITfXiAmbty6mjnZmqT6/DccBOD0YsVUMjGe7IMwXnLPMS1zCkw
+X-Google-Smtp-Source: AMsMyM5FqKTLQ4YFREilyxrr3PyG2tVv4MFHjVwm0WhqmZEE07K4C3m/MZDXaZPfV2iizknDneQmjcZTrQicHwG9yWY=
+X-Received: by 2002:a05:6e02:b22:b0:2f9:b864:f1ad with SMTP id
+ e2-20020a056e020b2200b002f9b864f1admr10472437ilu.298.1667290079191; Tue, 01
+ Nov 2022 01:07:59 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- canpemm500004.china.huawei.com (7.192.104.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221031190159.1341027-1-lis8215@gmail.com> <20221031190159.1341027-2-lis8215@gmail.com>
+ <166725358721.3638147.11464755727689545438.robh@kernel.org> <20221101010834.GA4034975-robh@kernel.org>
+In-Reply-To: <20221101010834.GA4034975-robh@kernel.org>
+From:   Siarhei Volkau <lis8215@gmail.com>
+Date:   Tue, 1 Nov 2022 11:07:48 +0300
+Message-ID: <CAKNVLfagXrTmwAPX3019SgMSOJ+BMQ1KfQV2LjOSrUA6+ZiFSA@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/2] dt-bindings: adc-joystick: add valid-range
+To:     Rob Herring <robh@kernel.org>
+Cc:     linux-input@vger.kernel.org,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        linux-kernel@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, Paul Cercueil <paul@crapouillou.net>,
+        Artur Rojek <contact@artur-rojek.eu>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the new compatible for HiSilicon i2c.
+=D0=B2=D1=82, 1 =D0=BD=D0=BE=D1=8F=D0=B1. 2022 =D0=B3. =D0=B2 04:08, Rob He=
+rring <robh@kernel.org>:
+>
+> On Mon, Oct 31, 2022 at 05:05:54PM -0500, Rob Herring wrote:
+> >
+> > On Mon, 31 Oct 2022 22:01:58 +0300, Siarhei Volkau wrote:
+> > > The valid-range property aims to cover detachable/lock-able
+> > > joysticks where measured value goes outside valid-range.
+> > >
+> > > Signed-off-by: Siarhei Volkau <lis8215@gmail.com>
+> > > ---
+> > >  .../bindings/input/adc-joystick.yaml          | 62 +++++++++++++++++=
+++
+> > >  1 file changed, 62 insertions(+)
+> > >
+> >
+> > My bot found errors running 'make DT_CHECKER_FLAGS=3D-m dt_binding_chec=
+k'
+> > on your patch (DT_CHECKER_FLAGS is new in v5.13):
+> >
+> > yamllint warnings/errors:
+> >
+> > dtschema/dtc warnings/errors:
+> > Documentation/devicetree/bindings/input/adc-joystick.example.dts:82.28-=
+104.11: ERROR (duplicate_label): /example-1/joystick: Duplicate label 'joys=
+tick' on /example-1/joystick and /example-0/adc-joystick
+> > ERROR: Input tree has errors, aborting (use -f to force output)
+> > make[1]: *** [scripts/Makefile.lib:406: Documentation/devicetree/bindin=
+gs/input/adc-joystick.example.dtb] Error 2
+> > make[1]: *** Waiting for unfinished jobs....
+> > make: *** [Makefile:1492: dt_binding_check] Error 2
+>
+> The examples aren't completely independent, so you can't use the same
+> labels.
 
-Signed-off-by: Weilong Chen <chenweilong@huawei.com>
-Reviewed-by: Rob Herring <robh@kernel.org>
----
-Change since v9:
-- No change
-Link: https://lore.kernel.org/lkml/20221029115937.179788-2-chenweilong@huawei.com/
-
-Change since v8:
-- Use vendor,soc-ipblock format.
-- Drop quotes.
-- Drop "Device Tree bindings".
-- Description goes to top level description.
-- Use defines for constants.
-Link: https://lore.kernel.org/lkml/20221024015151.342651-2-chenweilong@huawei.com/
-
- .../bindings/i2c/hisilicon,ascend910-i2c.yaml | 73 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 74 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/i2c/hisilicon,ascend910-i2c.yaml
-
-diff --git a/Documentation/devicetree/bindings/i2c/hisilicon,ascend910-i2c.yaml b/Documentation/devicetree/bindings/i2c/hisilicon,ascend910-i2c.yaml
-new file mode 100644
-index 000000000000..7d7a8de7bcd8
---- /dev/null
-+++ b/Documentation/devicetree/bindings/i2c/hisilicon,ascend910-i2c.yaml
-@@ -0,0 +1,73 @@
-+# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/i2c/hisilicon,ascend910-i2c.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: HiSilicon common I2C controller
-+
-+maintainers:
-+  - Yicong Yang <yangyicong@hisilicon.com>
-+
-+description:
-+  The HiSilicon common I2C controller can be used for many different
-+  types of SoC such as Huawei Ascend AI series chips.
-+
-+allOf:
-+  - $ref: /schemas/i2c/i2c-controller.yaml#
-+
-+properties:
-+  compatible:
-+    const: hisilicon,ascend910-i2c
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  clocks:
-+    maxItems: 1
-+
-+  clock-frequency:
-+    default: 400000
-+
-+  i2c-sda-falling-time-ns:
-+    default: 343
-+
-+  i2c-scl-falling-time-ns:
-+    default: 203
-+
-+  i2c-sda-hold-time-ns:
-+    default: 830
-+
-+  i2c-scl-rising-time-ns:
-+    default: 365
-+
-+  i2c-digital-filter-width-ns:
-+    default: 0
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+
-+unevaluatedProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/arm-gic.h>
-+
-+    i2c@38b0000 {
-+      compatible = "hisilicon,ascend910-i2c";
-+      reg = <0x38b0000 0x10000>;
-+      interrupts = <GIC_SPI 120 IRQ_TYPE_LEVEL_HIGH>;
-+      i2c-sda-falling-time-ns = <56>;
-+      i2c-scl-falling-time-ns = <56>;
-+      i2c-sda-hold-time-ns = <56>;
-+      i2c-scl-rising-time-ns = <56>;
-+      i2c-digital-filter;
-+      i2c-digital-filter-width-ns = <0x0>;
-+      clocks = <&alg_clk>;
-+      clock-frequency = <400000>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index d1214d83c2df..d42e34d1e8e2 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -9228,6 +9228,7 @@ M:	Yicong Yang <yangyicong@hisilicon.com>
- L:	linux-i2c@vger.kernel.org
- S:	Maintained
- W:	https://www.hisilicon.com
-+F:	Documentation/devicetree/bindings/i2c/hisilicon,ascend910-i2c.yaml
- F:	drivers/i2c/busses/i2c-hisi.c
- 
- HISILICON LPC BUS DRIVER
--- 
-2.31.GIT
-
+Good explanation, thank you.
