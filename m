@@ -2,102 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 454B46153C5
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 22:07:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C2756153CF
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 22:13:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbiKAVHy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 17:07:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57398 "EHLO
+        id S229935AbiKAVNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 17:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59620 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiKAVHp (ORCPT
+        with ESMTP id S229517AbiKAVNH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 17:07:45 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2C711DA78;
-        Tue,  1 Nov 2022 14:07:44 -0700 (PDT)
-Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A1K0bgv011530;
-        Tue, 1 Nov 2022 21:07:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
- from : to : cc : date : in-reply-to : references : content-type :
- content-transfer-encoding : mime-version; s=pp1;
- bh=tFHhevBTuVeibnGjbNPPIb8CHtAFDNMRfUu71KO8UeY=;
- b=Qm+NsJ51+Im8XWzN3Akue+SjanAA0ED81sCyGTTNa17E8tKerbqyzj/blekFvm/xyr14
- HUG/shLEno4Ov8xDIhXqeSkxN1FrgWnX3cetsHnKxVBS3FcqRpJiXdbz69MuI0zMwoh9
- um5Fo+OEE1ocAMj98KpR0afWkuRNSvfX3cKVw/p70Sr0M6GvKASevTXsOPkVBrE9Gu2m
- 7OVvcJlum+sUVIEhsKFD/zkEZ5IFXsn0l7KI469k0aBx8sleygPhFBY0AWip0+v5jAZ0
- RnyZBriXM/A72qr/zWaWTqa0a0GtIYE4Nv1znDi+zdnQ4NGyEkSWNuBuYP4Vds+FIvuB Cw== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kjvbhem89-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Nov 2022 21:07:20 +0000
-Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A1Iag3I019035;
-        Tue, 1 Nov 2022 21:07:19 GMT
-Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kjvbhem7r-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Nov 2022 21:07:19 +0000
-Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
-        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A1L6p7J028551;
-        Tue, 1 Nov 2022 21:07:18 GMT
-Received: from b03cxnp08026.gho.boulder.ibm.com (b03cxnp08026.gho.boulder.ibm.com [9.17.130.18])
-        by ppma04dal.us.ibm.com with ESMTP id 3kguta3yk0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Nov 2022 21:07:18 +0000
-Received: from smtpav01.dal12v.mail.ibm.com ([9.208.128.133])
-        by b03cxnp08026.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A1L7K9L10289820
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 1 Nov 2022 21:07:21 GMT
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id DF28558058;
-        Tue,  1 Nov 2022 21:07:16 +0000 (GMT)
-Received: from smtpav01.dal12v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 17A0E58059;
-        Tue,  1 Nov 2022 21:07:16 +0000 (GMT)
-Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.106.109])
-        by smtpav01.dal12v.mail.ibm.com (Postfix) with ESMTP;
-        Tue,  1 Nov 2022 21:07:15 +0000 (GMT)
-Message-ID: <6d1f5204ad68fa34d55019790ce376167a0110a9.camel@linux.ibm.com>
-Subject: Re: [PATCH] efi: Add iMac Pro 2017 to uefi skip cert quirk
-From:   Mimi Zohar <zohar@linux.ibm.com>
-To:     Aditya Garg <gargaditya08@live.com>
-Cc:     "chyishian.jiang@gmail.com" <chyishian.jiang@gmail.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "jarkko@kernel.org" <jarkko@kernel.org>,
-        "dmitry.kasatkin@gmail.com" <dmitry.kasatkin@gmail.com>,
-        "paul@paul-moore.com" <paul@paul-moore.com>,
-        "jmorris@namei.org" <jmorris@namei.org>,
-        "serge@hallyn.com" <serge@hallyn.com>,
-        "linux-integrity@vger.kernel.org" <linux-integrity@vger.kernel.org>,
-        "keyrings@vger.kernel.org" <keyrings@vger.kernel.org>,
-        "linux-security-module@vger.kernel.org" 
-        <linux-security-module@vger.kernel.org>,
-        "stable@vger.kernel.org" <stable@vger.kernel.org>,
-        Orlando Chamberlain <redecorating@protonmail.com>
-Date:   Tue, 01 Nov 2022 17:07:15 -0400
-In-Reply-To: <9D46D92F-1381-4F10-989C-1A12CD2FFDD8@live.com>
-References: <8CB9E43B-AB65-4735-BB8D-A8A7A10F9E30@live.com>
-         <cee0b0176edc942ecc0ce6f4d585c239f9b7c425.camel@linux.ibm.com>
-         <9D46D92F-1381-4F10-989C-1A12CD2FFDD8@live.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: otuF8GVL0erMKE98_o_DPisopIAymoU4
-X-Proofpoint-ORIG-GUID: YSB9X97RL2Qh1CzDBwDtkO-er7_dB7zc
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Tue, 1 Nov 2022 17:13:07 -0400
+Received: from sonic309-27.consmr.mail.ne1.yahoo.com (sonic309-27.consmr.mail.ne1.yahoo.com [66.163.184.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A07693A6
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 14:13:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1667337182; bh=y7evtBZqilyLoR6Rin60Y0gr4OxBOwwInD/K7bd7ScQ=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=lccOpcJ49zCDjnl/56ZW2giq6XTj3ZJrgF7XwM5gJmlHQBXjZF2y8sNxY3L3V3nFW9fmGQqkmZDsAMeqdyfaEo0vBMsusK94bC4gW0ll8cAaEMaPV1skNayhFMUY/QUTs5Qe/aNAwEMF6fVAz1hvwfGcL+PM+yzuvrPXjpkIq+nGyuebynFIviNKXux7JXlV4+RF5lDbkkJQzGVC64/QmmLZQR4jp6b/Bo73eC9cBaE/sANa8CV/+zHsrJ/3mUoBLqU0jZ1u+ILmXTjr9P0NIMtToZC05w1zsNk23RFZkY6RYzs0u5WMka274qWXAQ43rCo2sjyyQw6B9UVZrv1/7A==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1667337182; bh=YrcFPzAa2fW+ipk41vAUMpy3Tg8Sza8yCxD3i7oIQOH=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=iU3uYlYAsnE3zRPtW4S+RHVKg2RraZZVm7B0/pwuY8sIRj2NH1CIUpVs8UJHtWWjCn8CGBl+3bmW1lcY2f7QdxWyi1L9vJKfW2bASZgQ+yx4c4G6yIAxL38UX+n1ms408LtgSfJPGwx2umOxTn+31WGFZt3XkhmtO72Pgu2lZjdu6Mm7R1kbUpxkPo0WJr2rTSztsx+ATs4O67FR2AA1nGc/kNJAGOwo1VLgpSI1mrXSYgT4L1V7gDrTVOS59ooQfBWDDd3R2x0q7kiHzb3BgC289V0c6pyulKZJKIepnFbJUbZSpVWSgJfNmvjRfaGyXci7bnfXRMBapMAC4Tt26g==
+X-YMail-OSG: 6zZTxlcVM1mSuS.TYWtqXVMKdep.LJcuqs12kpwGzSRReOEFtOwacjeqx9d4PXE
+ YqMv6cxulz2mxDQKwXVlDxF4w0tFdDpCWCsigNXXGsN6Ku.doP0LL0RAMiW9bKIV3PBXMxMF51xF
+ CguQIdDsyNTiVuFb.g9IFqiduke8k26lj0JOt2GVHvQS5EF9.Sl3EOQ2ghAbNMObUJRbcI2LaX2z
+ GdwMwcMUcJdnmgjUG5weqdEciPQFPPyMxaW5ysztkKJH4Zo2PCZIq8JNkuiIIeSKz_TkNYueo0Z0
+ 9GnCwsXH6jNsuQIEh1PcOTQ_vc5vgp_ZPsazqcKE6YERsVulkhdMOlYrh6vsq5iBohn21u4xvZk6
+ j0rk6zVwYUyV66YJBicn_wwoWPdEvXFoPkJLPuZu7ndQ_gnIQFbxU6UrzTVU1nuhgNJhe.Vg_X8k
+ dUdTBmsk_XZgYOgmagM27oWrZU33dNbuyrZ1abAaW_wM9qNVmeHeZhuszuRrhZEAT1i8cv6OmogV
+ 1enf_iIcSeP3AYywFUJcuvYVSV9sZB3aG0CJ.gDWsFBdp4S8rD55EMLrxQPL3F.Jyb7G4rU7d0__
+ vJDtSotLU1whKFn0H_65d7uaIdYSodJNY6Uuk.2D4B5kLcBE0unecaGdjQ2S_yGNAiDRHsjAtc03
+ D3qGHUObNEQ3OSScgxwVwx5Fx6MZO2zINvnJC9_qq2HFWvS_OcQK8WI.kQ8WxZi5FoV2ZxF1uGEc
+ pGU9F9PGzGHzMepfLo42TwjWiqeWL09udUc2xFOheoIgXVKSkl3nTARkZBOWrWGgitC4bNqKROP1
+ j7cLIXm4NpAb9I3ZdPtF9OitY8VL8P9K2mFF8dhNWnwFkijloJcdI3QH.pq04PEzR3123GBH.4.i
+ 7fYY6R.EGVhngG6GUv8lrEyRwPbkflQbIJSFc9N2AvL0ReiOQCZJGoTpY9LTgoaes7ND2633m_Vu
+ GRagfswqBd69UD85MGdeAO6RMtsxiirtXvvg30jWiqStfkCV5LJoE8GWptp6pF3Mu0dpq394veHr
+ ewjKqzkrtDQ.KgWUbwRjLG2hX0G.1.xX4LHiYML.i6DVHjnfL6pe4RnrrBFiPn.Zq3BM_Airzy_i
+ pa7Wmo65z52piKt6RyjIOEMMFc_NMSnvUrLMV4kJjybJ0JdaKf7pTUxYo2GiuHPDw6jzRpPC5fr9
+ h0BcjPP8zLzA.7yej2zTjxec1VCgc06_BH.IDaVbnY1zWy3huWIvLgSTpJcjvFHcackoMG4EMSUe
+ JpgyWqoMM0rOF7f7Rlcj2zlyYV3R9olLiemMjMIXCbHdf8nnreGuWryy8l.uYfcuAfw_oCXiEbYH
+ F_ojJXSx0yc2beCsnaEoi.mx.5UP_fefgB1hCsKtEJvwvdjHGZXBlDpFujSAi.8XmuxVs1Z2TrIx
+ zIyo1QGfM.w9zSfWi1n09bAaSnEG507j9guVuSYqFyPSPPOJV.6pD0qtN7eX347eU52Ba6Rbjcz8
+ FLPCXGjFr7GWMTnPgLcH6D36OH4pEx8WUi7Tyk.rATVibPj_IrDAxCJ7ZhADM5aXa3E0Sjq1q35I
+ qTJNNTv1CoyfRQUQCVGHfHc0kGNsiTc2qFvPxavTZujRGStSOgI4_Y6LZlB4bi9cjzVDcoGzXELv
+ 8MOn5HfZGMr1Ss8Maqf.qe9jreSr5errM5tF6lZQuW4hIuNxKqvsLSkWZ.cKlQsfmWoGCHYNYIPf
+ MjPAlgTiVUffPhK5.qDbmuAmV61gydatQvs8WlUU8B8NyLwXI0w7XkvCX3gRZJM.c4o0Cv5oUvtp
+ T7vKzCr2pZ5OmFzO4qGFHBN2KMOVfHJLL4nijPoKsPxq3gFaGOyaR7P7eTxPTsIUSjXFz9quloYz
+ KsetymQg89eg5rw6NEr64Te.8paoGrZdeNZTtGxXD4iy3Nh72Ei2n7IFz6k9D6.Vp6MjhodD5rOS
+ jvsW_5FQG.RH0IeC7GHIw7toz159.uGe.1mqAyk7vMPftamMdA8jUYrE68KqddGOeyiTFRcPVmxS
+ Wa4Bcr0PlXPFLXArTkyCtSbFcAx5EFAMrEtlkHd_Ljk1jSIn46fuBQPPDWMUlsCsF4d_haYTwv83
+ xCUYjOd4SgGyvrFIHt6fLnhpMr_b9kQF_FlmvYXWoueII_Z8_AmXiLQJNtC2agG.OW0RfgB1qf5y
+ CGJ2C4Cg681fT7TVgPuwqSSCkarinDBNKN3dUqgwTSSxAIeI44nuO60_K4xW_OIMuXWerTBmpAw5
+ kxDiDD7GxBDjPstb8qcTICgkllZzFIqGXLss-
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic309.consmr.mail.ne1.yahoo.com with HTTP; Tue, 1 Nov 2022 21:13:02 +0000
+Received: by hermes--production-bf1-5878955b5f-d26fx (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID 02dbd698678bd0a8986b376377bc8d93;
+          Tue, 01 Nov 2022 21:12:58 +0000 (UTC)
+Message-ID: <4929fc7f-eb31-6ee4-0365-1b0f61ad5946@schaufler-ca.com>
+Date:   Tue, 1 Nov 2022 14:12:56 -0700
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-01_10,2022-11-01_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- phishscore=0 adultscore=0 bulkscore=0 mlxscore=0 spamscore=0
- malwarescore=0 mlxlogscore=718 suspectscore=0 classifier=spam adjust=0
- reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211010147
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 1/1] smack_lsm: remove unnecessary type casting
+Content-Language: en-US
+To:     XU pengfei <xupengfei@nfschina.com>, paul@paul-moore.com,
+        jmorris@namei.org, serge@hallyn.com
+Cc:     linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, casey@schaufler-ca.com
+References: <20221026082923.3400-1-xupengfei@nfschina.com>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20221026082923.3400-1-xupengfei@nfschina.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20783 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,47 +78,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Aditya,
+On 10/26/2022 1:29 AM, XU pengfei wrote:
+> Remove unnecessary type casting.
+> The type of inode variable is struct inode *, so no type casting required.
+>
+> Signed-off-by: XU pengfei <xupengfei@nfschina.com>
 
-On Tue, 2022-11-01 at 14:06 +0000, Aditya Garg wrote:
-> Hi Mimi
-> 
-> > I found this list of computers with the Apple T2 Security Chip - 
-> > https://support.apple.com/en-us/HT208862, but not a list that
-> > correlates them to the system ID.  With this update, is this the entire
-> > list?
-> 
-> As per the link you sent me, the following are the system IDs of the T2 Macs mentioned in the list
-> 
-> 1. iMac (Retina 5K, 27-inch, 2020) - iMac20,1, iMac20,2
-> 2. iMac Pro - iMacPro1,1
-> 3. Mac Pro (2019) - MacPro7,1
-> 4. Mac Pro (Rack, 2019) - MacPro7,1
-> 5. Mac mini (2018) - Macmini8,1
-> 6. MacBook Air (Retina, 13-inch, 2020) - MacBookAir9,1
-> 7. MacBook Air (Retina, 13-inch, 2019) - MacBookAir8,2
-> 8. MacBook Air (Retina, 13-inch, 2018) - MacBookAir8,1
-> 9. MacBook Pro (13-inch, 2020, Two Thunderbolt 3 ports) - MacBookPro16,3
-> 10. MacBook Pro (13-inch, 2020, Four Thunderbolt 3 ports) - MacBookPro16,2
-> 11. MacBook Pro (16-inch, 2019) - MacBookPro16,1, MacBookPro16,4
-> 12. MacBook Pro (13-inch, 2019, Two Thunderbolt 3 ports) - MacBookPro15,4
-> 13. MacBook Pro (15-inch, 2019) - MacBookPro15,1, MacBookPro15,3
-> 14. MacBook Pro (13-inch, 2019, Four Thunderbolt 3 ports) - MacBookPro15,2
-> 15. MacBook Pro (15-inch, 2018) - MacBookPro15,1
-> 16. MacBook Pro (13-inch, 2018, Four Thunderbolt 3 ports) - MacBookPro15,2
-> 
-> The system IDs of the Macs can be seen from official Apple’s documentation form the links below :-
-> 
-> https://support.apple.com/en-in/HT201634 - For iMac
-> https://support.apple.com/en-in/HT202888 - For Mac Pro
-> https://support.apple.com/en-in/HT201894 - For Mac mini
-> https://support.apple.com/en-in/HT201862 - For MacBook Air
-> https://support.apple.com/en-in/HT201300 - For MacBook Pro
-> 
-> After cross-checking only iMacPro1,1 seems to be missing.
+Thank you. Added to smack-next:
+	https://github.com/cschaufler/smack-next.git#next
 
-Thank you for double checking.  The patch is now queued in next-
-integrity.
-
-Mimi
-
+> ---
+>  security/smack/smack_lsm.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/security/smack/smack_lsm.c b/security/smack/smack_lsm.c
+> index b6306d71c908..853c6878edc0 100644
+> --- a/security/smack/smack_lsm.c
+> +++ b/security/smack/smack_lsm.c
+> @@ -1409,7 +1409,7 @@ static int smack_inode_getsecurity(struct user_namespace *mnt_userns,
+>  	struct socket_smack *ssp;
+>  	struct socket *sock;
+>  	struct super_block *sbp;
+> -	struct inode *ip = (struct inode *)inode;
+> +	struct inode *ip = inode;
+>  	struct smack_known *isp;
+>  
+>  	if (strcmp(name, XATTR_SMACK_SUFFIX) == 0)
