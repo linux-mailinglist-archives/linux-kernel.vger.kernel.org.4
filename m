@@ -2,89 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC5FD61524D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 20:31:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2D35615252
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 20:32:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230288AbiKATbq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 15:31:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57772 "EHLO
+        id S230133AbiKATcR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 15:32:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbiKATbl (ORCPT
+        with ESMTP id S229962AbiKATcL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 15:31:41 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C2231DF07
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 12:31:38 -0700 (PDT)
+        Tue, 1 Nov 2022 15:32:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904A112AEA;
+        Tue,  1 Nov 2022 12:32:10 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E6BA46171A
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 19:31:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 291B9C433C1;
-        Tue,  1 Nov 2022 19:31:37 +0000 (UTC)
-Date:   Tue, 1 Nov 2022 15:31:35 -0400
-From:   Steven Rostedt <rostedt@goodmis.org>
-To:     Roland Ruckerbauer <roland.rucky@gmail.com>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-kernel@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        regressions@lists.linux.dev,
-        Steven Noonan <steven.noonan@gmail.com>
-Subject: Re: [BUG] NULL pointer dereference probably caused by
- kernel/trace/ring_buffer.c
-Message-ID: <20221101153135.5345c748@rorschach.local.home>
-In-Reply-To: <CAM6WdxeZbGmRopXqLtDNTwPOahnyC6GrCfv4H1m=mF41-J=VbA@mail.gmail.com>
-References: <CAM6Wdxc0KRJMXVAA0Y=u6Jh2V=uWB-_Fn6M4xRuNppfXzL1mUg@mail.gmail.com>
-        <20221031145046.2a7f9d32@rorschach.local.home>
-        <CAM6WdxeZbGmRopXqLtDNTwPOahnyC6GrCfv4H1m=mF41-J=VbA@mail.gmail.com>
-X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        by ams.source.kernel.org (Postfix) with ESMTPS id 470CEB81F5E;
+        Tue,  1 Nov 2022 19:32:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EDC3BC433D6;
+        Tue,  1 Nov 2022 19:32:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667331128;
+        bh=SqTpkEJDimDLK8JCkPSO5Of7KHU3i9/ujWgBTDi8Ym0=;
+        h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+        b=cOVV+0xTjfOJSF5q3foDxrY03mtFOiavKSFeXqSyNPljxLYY4wRPn1KRK0erbXzcH
+         zaXOKikkeP3Tc7zaTxuaoCds4A8c1jmpbRqE8XP+EdSk0kd+/8OXlHElgc0DnpkduH
+         rexFCAWWFgcuwmMiX212hZFfYGjX36cDnUWQUNFdExvUjk2V71bQxXHsvOV+QJg+Vb
+         Bqx0cdzQkZRLG5lgXhwAG1gwQ+xFdeU26E2ikxd9xBK56lg907pkmIWneTAdg1OtTP
+         r4pWy5YEz83fBYS4YyfTPuPFpXgiYBdBp5amcfsyt79qTaH/TMmL+mtKjwPJtCEuVu
+         7hBfHzQgFIbzQ==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id DBF26E270D3;
+        Tue,  1 Nov 2022 19:32:07 +0000 (UTC)
+Subject: Re: [GIT PULL REQUEST] watchdog - v6.1 release cycle.
+From:   pr-tracker-bot@kernel.org
+In-Reply-To: <20221101081902.GA5794@www.linux-watchdog.org>
+References: <20221101081902.GA5794@www.linux-watchdog.org>
+X-PR-Tracked-List-Id: <linux-watchdog.vger.kernel.org>
+X-PR-Tracked-Message-Id: <20221101081902.GA5794@www.linux-watchdog.org>
+X-PR-Tracked-Remote: git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.1-rc4
+X-PR-Tracked-Commit-Id: 82ebbe65d781064cfb0a6a8af221a9cebcaaac9e
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: d79dcde0bc413efd35dd7eabe2d5eed34ec6deb0
+Message-Id: <166733112789.6375.9114607752098301144.pr-tracker-bot@kernel.org>
+Date:   Tue, 01 Nov 2022 19:32:07 +0000
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Linux Watchdog Mailing List <linux-watchdog@vger.kernel.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Jiangshan Yi <yijiangshan@kylinos.cn>,
+        Manank Patel <pmanank200502@gmail.com>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 31 Oct 2022 21:20:33 +0100
-Roland Ruckerbauer <roland.rucky@gmail.com> wrote:
+The pull request you sent on Tue, 1 Nov 2022 09:19:02 +0100:
 
-> Unfortunately the same thing is still happening.
+> git://www.linux-watchdog.org/linux-watchdog.git tags/linux-watchdog-6.1-rc4
 
-Can you try this?
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/d79dcde0bc413efd35dd7eabe2d5eed34ec6deb0
 
-If it stops the crash, it should trigger the warning, which hopefully
-will shed more light onto the issue.
+Thank you!
 
-Thanks!
-
--- Steve
-
-diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
-index 199759c73519..8dd793833b51 100644
---- a/kernel/trace/ring_buffer.c
-+++ b/kernel/trace/ring_buffer.c
-@@ -937,6 +937,9 @@ void ring_buffer_wake_waiters(struct trace_buffer *buffer, int cpu)
- 	struct ring_buffer_per_cpu *cpu_buffer;
- 	struct rb_irq_work *rbwork;
- 
-+	if (!buffer)
-+		return;
-+
- 	if (cpu == RING_BUFFER_ALL_CPUS) {
- 
- 		/* Wake up individual ones too. One level recursion */
-@@ -945,6 +948,10 @@ void ring_buffer_wake_waiters(struct trace_buffer *buffer, int cpu)
- 
- 		rbwork = &buffer->irq_work;
- 	} else {
-+		if (WARN_ON_ONCE(!buffer->buffers))
-+			return;
-+		if (WARN_ON_ONCE(cpu >= nr_cpu_ids))
-+			return;
- 		cpu_buffer = buffer->buffers[cpu];
- 		rbwork = &cpu_buffer->irq_work;
- 	}
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
