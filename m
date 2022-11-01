@@ -2,131 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E9FFB614BFD
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:44:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F672614BFF
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:47:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229923AbiKANop (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 09:44:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45636 "EHLO
+        id S229944AbiKANrL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 09:47:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229870AbiKANom (ORCPT
+        with ESMTP id S229487AbiKANrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 09:44:42 -0400
-Received: from mail-vs1-xe34.google.com (mail-vs1-xe34.google.com [IPv6:2607:f8b0:4864:20::e34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91CDA62D2
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 06:44:41 -0700 (PDT)
-Received: by mail-vs1-xe34.google.com with SMTP id z189so13328340vsb.4
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 06:44:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wmlDbxR43p/AVKjp9OWEiUiPO2sb+nmDFWo89vNMtlg=;
-        b=xtRaXtRJufi5E55u5VPH6L1vPkaVY/Jjx2qHNusVQQxg4p3/fIJSs4FCm1Elk3Ebwe
-         X3m+I2TMPqgEaBf8SHtwhHDhM4/F6H7SoDJ5SQyAp8J1YJm72JF34sTCclU83H8TQlBL
-         W6RqZ6Z6IYSgld0lt7BrTTR+BssWEJptn5pkoTmMHGXOOaNTtsMNrKPSswLxIhp7GNKS
-         /+TyRssm0BbWHqn9pg8qFets9zKXOVDADiWK7SlU9jYAMJX7sBaaloKZ4s8FEJYDSTNI
-         tCdb1Q22k4qBc72CTZ1A7D4kMUEKNjZWOk1PFX6QaJnZ8HqZtBUzL9HxHmosAqosnjaO
-         fhmQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wmlDbxR43p/AVKjp9OWEiUiPO2sb+nmDFWo89vNMtlg=;
-        b=w+oYClPugdInGpk6Hno4NssBs6qP969W6NhWnUOHWjhSUofCK5RyXT+kx0DR4V9+vY
-         p8cNeytDPsZRPPaWvqFMtSvsuNtJbnWy3/s4oAaQp2evkpyxMvFDqq4RJ50dQlG4Ku90
-         JF4M6OPpHP110q3DlUEdwVJ/AOvhYN52R7ZrhEd5cAs/DFi5tcah/8rRC37XV6Fedoj7
-         nAKc7nyGNf995srL8BkYb2ueZbU3u2sl6MpIWWQ0C11dZ7V0zqWvV32RRbkUmc4EzIlF
-         eW+7rntMt00kXs9mJPu3/dAbziVK3pcKkLr6dJvQx7hffEZkvg56mkFeHzNLQMR1aN/X
-         OWEw==
-X-Gm-Message-State: ACrzQf2/O2oUtGdPqukO/tWeLzU7iSvtvxuzB277LwiIDdZ5ly6waeJT
-        knygkcjTXiBaUdth43J9iedX65mR0ZqdCVI5KW3NBQ==
-X-Google-Smtp-Source: AMsMyM6dWSMgu33OOYMi6pqhJtdD0hvHbgxTBidAxbGSJKrSQUJ+/zQvT4C+WxuQjurTuoXPI7dmuwFGM+oJm9yuWgo=
-X-Received: by 2002:a05:6102:534c:b0:3a7:c31a:a661 with SMTP id
- bq12-20020a056102534c00b003a7c31aa661mr7280950vsb.7.1667310280708; Tue, 01
- Nov 2022 06:44:40 -0700 (PDT)
+        Tue, 1 Nov 2022 09:47:09 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41E68DF9A;
+        Tue,  1 Nov 2022 06:47:08 -0700 (PDT)
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oprbT-000Bjd-Nz; Tue, 01 Nov 2022 14:46:55 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oprbT-000CPs-6k; Tue, 01 Nov 2022 14:46:55 +0100
+Subject: Re: [PATCH bpf-next v2 1/3] bpf/verifier: Fix potential memory leak
+ in array reallocation
+To:     Bill Wendling <morbo@google.com>, Kees Cook <keescook@chromium.org>
+Cc:     Alexei Starovoitov <ast@kernel.org>,
+        John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org,
+        Zhengchao Shao <shaozhengchao@huawei.com>,
+        Lorenz Bauer <oss@lmb.io>
+References: <20221029024444.gonna.633-kees@kernel.org>
+ <20221029025433.2533810-1-keescook@chromium.org>
+ <CAGG=3QXYVwQ5pwARdGTenm-mDQn4Tcz6U-=EZ8BDcwBkM5bFfg@mail.gmail.com>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <2c6203ac-de2a-607e-0589-0a69f91e0479@iogearbox.net>
+Date:   Tue, 1 Nov 2022 14:46:54 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-References: <20221024112959.085534368@linuxfoundation.org> <20221024113002.025977656@linuxfoundation.org>
- <CAMSo37XApZ_F5nSQYWFsSqKdMv_gBpfdKG3KN1TDB+QNXqSh0A@mail.gmail.com>
- <Y2C74nuMI3RBroTg@kroah.com> <CAMSo37Vt4BMkY1AJTR5yaWPDaJSQQhbj7xhqnVqDo0Q_Sy6ycg@mail.gmail.com>
- <Y2Egh1LFMvOv6I7m@kroah.com>
-In-Reply-To: <Y2Egh1LFMvOv6I7m@kroah.com>
-From:   Yongqin Liu <yongqin.liu@linaro.org>
-Date:   Tue, 1 Nov 2022 21:44:29 +0800
-Message-ID: <CAMSo37XDNfptuK3=MepUUMht4+hqrg8OJMwRTYmu1utW1eJdJA@mail.gmail.com>
-Subject: Re: [PATCH 4.19 092/229] once: add DO_ONCE_SLOW() for sleepable contexts
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Eric Dumazet <edumazet@google.com>, Willy Tarreau <w@1wt.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Benjamin Copeland <ben.copeland@linaro.org>,
-        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CAGG=3QXYVwQ5pwARdGTenm-mDQn4Tcz6U-=EZ8BDcwBkM5bFfg@mail.gmail.com>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26706/Tue Nov  1 08:52:34 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 1 Nov 2022 at 21:34, Greg Kroah-Hartman
-<gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Nov 01, 2022 at 08:00:03PM +0800, Yongqin Liu wrote:
-> > Hi, Greg
-> >
-> > On Tue, 1 Nov 2022 at 14:26, Greg Kroah-Hartman
-> > <gregkh@linuxfoundation.org> wrote:
-> > >
-> > > On Tue, Nov 01, 2022 at 02:07:35PM +0800, Yongqin Liu wrote:
-> > > > Hello,
-> > > >
-> > > > As mentioned in the thread for the 5.4 version here[1], it causes a
-> > > > crash for the 4.19 kernel too.
-> > > > Just paste the log here for reference:
-> > >
-> > > Can you try this patch please:
-> > >
-> > >
-> > > diff --git a/include/linux/once.h b/include/linux/once.h
-> > > index bb58e1c3aa03..3a6671d961b9 100644
-> > > --- a/include/linux/once.h
-> > > +++ b/include/linux/once.h
-> > > @@ -64,7 +64,7 @@ void __do_once_slow_done(bool *done, struct static_key_true *once_key,
-> > >  #define DO_ONCE_SLOW(func, ...)                                                     \
-> > >         ({                                                                   \
-> > >                 bool ___ret = false;                                         \
-> > > -               static bool __section(".data.once") ___done = false;         \
-> > > +               static bool __section(.data.once) ___done = false;           \
-> > >                 static DEFINE_STATIC_KEY_TRUE(___once_key);                  \
-> > >                 if (static_branch_unlikely(&___once_key)) {                  \
-> > >                         ___ret = __do_once_slow_start(&___done);             \
-> >
-> >
-> > This change works, it does not cause kernel panic again after this
-> > change is applied.
->
-> Great, thanks!  Can I get a Tested-by: line for the changelog?
+[ +Lorenz ]
 
-Sure, Yongqin Liu <yongqin.liu@linaro.org>
+On 10/31/22 9:16 PM, Bill Wendling wrote:
+> On Fri, Oct 28, 2022 at 7:55 PM Kees Cook <keescook@chromium.org> wrote:
+>>
+>> If an error (NULL) is returned by krealloc(), callers of realloc_array()
+>> were setting their allocation pointers to NULL, but on error krealloc()
+>> does not touch the original allocation. This would result in a memory
+>> resource leak. Instead, free the old allocation on the error handling
+>> path.
+>>
+>> Cc: Alexei Starovoitov <ast@kernel.org>
+>> Cc: Daniel Borkmann <daniel@iogearbox.net>
+>> Cc: John Fastabend <john.fastabend@gmail.com>
+>> Cc: Andrii Nakryiko <andrii@kernel.org>
+>> Cc: Martin KaFai Lau <martin.lau@linux.dev>
+>> Cc: Song Liu <song@kernel.org>
+>> Cc: Yonghong Song <yhs@fb.com>
+>> Cc: KP Singh <kpsingh@kernel.org>
+>> Cc: Stanislav Fomichev <sdf@google.com>
+>> Cc: Hao Luo <haoluo@google.com>
+>> Cc: Jiri Olsa <jolsa@kernel.org>
+>> Cc: bpf@vger.kernel.org
+>> Signed-off-by: Kees Cook <keescook@chromium.org>
+> 
+> Reviewed-by: Bill Wendling <morbo@google.com>
+> 
+>> ---
+>>   kernel/bpf/verifier.c | 9 +++++++--
+>>   1 file changed, 7 insertions(+), 2 deletions(-)
+>>
+>> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+>> index 014ee0953dbd..eb8c34db74c7 100644
+>> --- a/kernel/bpf/verifier.c
+>> +++ b/kernel/bpf/verifier.c
+>> @@ -1027,12 +1027,17 @@ static void *copy_array(void *dst, const void *src, size_t n, size_t size, gfp_t
+>>    */
+>>   static void *realloc_array(void *arr, size_t old_n, size_t new_n, size_t size)
+>>   {
+>> +       void *new_arr;
+>> +
+>>          if (!new_n || old_n == new_n)
+>>                  goto out;
+>>
+>> -       arr = krealloc_array(arr, new_n, size, GFP_KERNEL);
+>> -       if (!arr)
+>> +       new_arr = krealloc_array(arr, new_n, size, GFP_KERNEL);
+>> +       if (!new_arr) {
+>> +               kfree(arr);
+>>                  return NULL;
+>> +       }
+>> +       arr = new_arr;
 
-> I'll queue this up in a bit and get it fixed in the next release.
+Fyi, I took this fix into bpf tree and improved commit log a bit with the
+one from Zhengchao [0] given yours came in first. Fixes tag would have been
+nice, I added the c69431aab67a to the commit message while applying.
 
-BTW, to be clear, I tested it with one 4.19-q tree based on the latest
-ACK android-4.19-q branch[1],
-If there is something else I could help test, please let me know.
+   [0] https://patchwork.kernel.org/project/netdevbpf/patch/20221031070812.339883-1-shaozhengchao@huawei.com/
 
-[1]: https://android.googlesource.com/kernel/common/+/refs/heads/android-4.19-q
--- 
-Best Regards,
-Yongqin Liu
----------------------------------------------------------------
-#mailing list
-linaro-android@lists.linaro.org
-http://lists.linaro.org/mailman/listinfo/linaro-android
+>>          if (new_n > old_n)
+>>                  memset(arr + old_n * size, 0, (new_n - old_n) * size);
+>> --
+>> 2.34.1
+>>
+
