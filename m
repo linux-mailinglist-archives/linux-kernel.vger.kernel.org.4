@@ -2,198 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99191614667
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 10:11:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F0D3C614670
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 10:14:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiKAJLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 05:11:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56510 "EHLO
+        id S229988AbiKAJNz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 05:13:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiKAJLq (ORCPT
+        with ESMTP id S229516AbiKAJNx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 05:11:46 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86D59625F;
-        Tue,  1 Nov 2022 02:11:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667293905; x=1698829905;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=K59X3Mt14TudHyl+9MwWkzMQnymoXZZFMnysWa8sZh4=;
-  b=n9SFeANg/Ew9xuHdROh5VqdmZciKZDIJWSJ9yALq5pAC8NUxO2oztIMl
-   enHVjxKPm2Yju7xc+ytsuXNefnsmxL09lko6uj9f0RzxKO12IcLcgznyp
-   xizcx7yVwS5qy0hDzG9HDuU+rWLy3GcOQtiUg1GnOqgZBlINPh3pqC0f0
-   HrSPEH9jfHiUMM3P1fAaCU2RdxPq9+etM0W+L58ftaVXAGfGUwdHdtuGa
-   4zQVCS+CbfsLTBLfHvaw4TMuOHq62YbcwaaE+7A+wAab5Kq+9kMYVZ0/n
-   mtr/AukIVkCww/d5VjINwkqDBp6h6iun+vbtYOIwgejdsuuioJOXYUuB7
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="310193994"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="310193994"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 02:11:45 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="879034719"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="879034719"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga006.fm.intel.com with ESMTP; 01 Nov 2022 02:11:43 -0700
-Received: from orsmsx611.amr.corp.intel.com (10.22.229.24) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 1 Nov 2022 02:11:43 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX611.amr.corp.intel.com (10.22.229.24) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 1 Nov 2022 02:11:42 -0700
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Tue, 1 Nov 2022 02:11:42 -0700
-Received: from NAM04-MW2-obe.outbound.protection.outlook.com (104.47.73.169)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Tue, 1 Nov 2022 02:11:42 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=J1l+wSBTK3uXEu83/YbosIAAgSUdQ1T+IneFucJS50Q3d+z2plZSvxz6mEVGox9sppZTsRHp6Q30XQX8zgfPEVHpSIUlJeWrm/YIILvayclmZNNa27AUvvj5S72+f8WEMxDza3kWR+XWxRy4SX9OTdrcb61p7HfE7RAUHE6DRt9FXTnqt+5rcQ60Igr3g0PkQwC045Qz1fqXfgY1bTloy/Cpwhd3liiMvvi2zB+SdlEPcxePJnyavyoH0vBw8eVvDg/g+k2H+53PQ9QcSxBd4qJ8f0OBALbLdE/YHh52oxUtmtv0BERAt2cEw9e8kfCL4lMAgnwyVQ0slWEYI9C1ow==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=K59X3Mt14TudHyl+9MwWkzMQnymoXZZFMnysWa8sZh4=;
- b=DKhRRsF5f03kFW+nBpdeNB4WYmjUmeY2V6+H36lNH5efolSplZuKFm2KjNQXALyQae5WsMOmnMEKhtl0Ah2/AVuog0md7pRt8p+2tslMjMjjnlweoSMmAaHa0X2id24htE3arH6A2kyiD23EaGVvr23MUlc1mnQWHsto1gvW3vs/JUDED4KgcB2TkYWrDrDCOY8G42ioeJ2bWqKSfo7hsZ+dvHiAfnBNeai1AKpWy7aeKKS9Oh9Z2eIRUAsgQ7OrnLqmJ6i5ntyF643ocC8p+g4WSmC3D1bbPfVYRBnZdtti2Puy0TeGfCfVaa9oV6rrBmsAdvAd74N+KMUM2hKpaw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
- by SJ1PR11MB6252.namprd11.prod.outlook.com (2603:10b6:a03:457::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.16; Tue, 1 Nov
- 2022 09:11:41 +0000
-Received: from BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::737e:211a:bb53:4cd7]) by BN9PR11MB5276.namprd11.prod.outlook.com
- ([fe80::737e:211a:bb53:4cd7%5]) with mapi id 15.20.5769.021; Tue, 1 Nov 2022
- 09:11:40 +0000
-From:   "Tian, Kevin" <kevin.tian@intel.com>
-To:     Eric Farman <farman@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        "Liu, Yi L" <yi.l.liu@intel.com>
-CC:     Zhenyu Wang <zhenyuw@linux.intel.com>,
-        "Wang, Zhi A" <zhi.a.wang@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        "Joonas Lahtinen" <joonas.lahtinen@linux.intel.com>,
-        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "Halil Pasic" <pasic@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        "Peter Oberparleiter" <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Tony Krowiak <akrowiak@linux.ibm.com>,
-        Jason Herne <jjherne@linux.ibm.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Kirti Wankhede <kwankhede@nvidia.com>,
-        Abhishek Sahu <abhsahu@nvidia.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        "intel-gvt-dev@lists.freedesktop.org" 
-        <intel-gvt-dev@lists.freedesktop.org>,
-        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
-        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
-Subject: RE: [PATCH v1 7/7] vfio: Remove vfio_free_device
-Thread-Topic: [PATCH v1 7/7] vfio: Remove vfio_free_device
-Thread-Index: AQHY49cc6IlfQ6/8HUyTbs6M71+22a4p3CKQ
-Date:   Tue, 1 Nov 2022 09:11:40 +0000
-Message-ID: <BN9PR11MB5276DC6065E67B0AF6C4127E8C369@BN9PR11MB5276.namprd11.prod.outlook.com>
-References: <20221019162135.798901-1-farman@linux.ibm.com>
- <20221019162135.798901-8-farman@linux.ibm.com>
-In-Reply-To: <20221019162135.798901-8-farman@linux.ibm.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|SJ1PR11MB6252:EE_
-x-ms-office365-filtering-correlation-id: f6d7830e-af78-4757-890a-08dabbe916a9
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: JI2x9prWE1ET2TokHhp2Yz2tRDgoX9UhZY0zCtjYHt5lOnUpDPHKEli4D8etEIJ6g/oQzfLmlr9xo4cDe1DEJsVUHj0TODfwVs2dSNi9gud1K/U3Gb+YIyHIyP9G6pD3+SE0zjEfBHmBhFhkP/LfA2FRY5jX8R/MFwQpskNGW4FGDNnaM5W2pnhBAnJVH8LhShFSf1vG5QS/qqQ6W9qIffJ8qjopbYO10VNBTDMVb9vNL3urpD4BJHGOV5aCrVkDgDt4fi68OYe6ocqP/0qVujSH4XMsrY8I6o8uU3T68XKXarpXjaR1w1+XBl1sedYrriHjfpOBb3knM/gisvZvG0eyEx17pKZT1Tjtc9fq7rhtus0JkHHd1B3M880MYWzHFdFr0dHJqTob+CKpNaD2llSkc5/Huptx/xEML397WfRVepmX5SJ7QOfpEzL3DgsMjIdfpXDlT74muP1QTI832d3nLSMI1pk2KBb60/HQG71dcsgN6KNfMH76OxRxPVRiVsY4bo3eMmfo/tZnYzThZ9EIUV1subPyZn5dO8++sjfRdjN8IM1ikBg/Gu6Dk7ZwyMtFXmQ00Svj7ljAt8bRohBm3X9D9JLW/or8B+mtlIjyI1JqoW68/Qk9DcC+fZYyXjaSC6jxx1JBLs9yB2Mci5CB+B2zhlvOLBAK2KSku9xlDw2/Gu+x4bMt14DW0AGdi9wPT16GxP/7Vw6LSmQNpeNXAuo8BqsajRT8uVSxh24eoJ1D6szWS6F7E8vVwvpVNnfJ13+JjPq7XrSkaWzfcQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(136003)(396003)(376002)(346002)(39860400002)(451199015)(5660300002)(186003)(66446008)(7416002)(4744005)(7696005)(4326008)(9686003)(76116006)(66556008)(66946007)(8936002)(64756008)(8676002)(2906002)(66476007)(6506007)(38100700002)(82960400001)(41300700001)(86362001)(38070700005)(33656002)(122000001)(26005)(55016003)(52536014)(7406005)(110136005)(316002)(54906003)(71200400001)(478600001)(6636002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?SkyRIPOYxnZgMTm0248637MnkDRjWa6bn2/uL0MvqNOwweeRbMqMIKFLmZVa?=
- =?us-ascii?Q?1ir/YL261iQSVhVi/dJwKlUKQCaccFMctwIP48G78Ff1cLJzRRS5fVCTqpaZ?=
- =?us-ascii?Q?GSXT+3kqEH9ApIO8EQRDoWh0Bi7Zs9ZO+w0mumKIiewffhia42Q05nOtLvuQ?=
- =?us-ascii?Q?RopMGJtHcGYR1qjLWT8Ezzfrxp0ItlePco1b2MGKXluiTKWNBuVj4q5swNnV?=
- =?us-ascii?Q?INAlrB9TG9hT7MvP3zFw47BAbmNRL+2AYbP1y3h5dj2EzyoZJngYT74DRta7?=
- =?us-ascii?Q?1pJhs+SsDSflD9JrCWFYTkTHDAI4ez3tdtr3mKO2OEgbfx0d/3Dka77BoxLY?=
- =?us-ascii?Q?uy6fc/zt6raP9t/26i7DbA3gkPTd08dijgfWtydG9fDSmQZ1yOayGl/DSjpx?=
- =?us-ascii?Q?SpD5p08PQ+cjTCGN7S0b+0kXBQlIZ4rKqae3uwrUhlggZ/bGg/Pdn8uWOtAu?=
- =?us-ascii?Q?CzkoXG5/CDxJLx2WeoSzzvKrSXiZn8VRmZscbWPBgxZYURe1KPPNVJ2aK1Ea?=
- =?us-ascii?Q?mFqraTWSnQNSZsPn8jdDqp0iljmfN/gyYoWy6QVexLst2rjDIKyNmpcCh389?=
- =?us-ascii?Q?dOfm7d3wJMVGFvppJKpcQe+hwItg3po/4gLL3xlI9pLxb67D1zt4dqiXbTAl?=
- =?us-ascii?Q?H7FWMzLgwHc+wT6j/ardx8+D2HDRM9qjMedGi1sxj8S7fLS1O6hPDuXc1umI?=
- =?us-ascii?Q?dsQhTvXEfnzuZvvPTKGpga9zMKQbdqqhEsCAytlOpXLp0QFE/WgOMaP1k15+?=
- =?us-ascii?Q?TJ7VZOFs7FAJ75pLN8GMqrgqn1M0pB8gbS6U8mozwMHTlK4XlkyEofil7899?=
- =?us-ascii?Q?LtmbYegYnxCIQXItlvpJOYnZJ0YpTVuDr8/d62E2vX1uIiPGvHoiwcH8WduL?=
- =?us-ascii?Q?mVhty6DQMuEWvdsnr+1lYz3GtQxppnLWUUoIsW4uvsJD+KI0WGbmI8cE7zNU?=
- =?us-ascii?Q?SVsSnIlZEVI9c1AjqtsE0Eltn+22nz1GtrbaZk3xfDl/HhfIMu1U9TNJMkik?=
- =?us-ascii?Q?kqqFYLb3Z3SLLy4ZC4RkIU83CX6l9JfU9X9sb0wtGY3P9zCTy+wK9b7wt++e?=
- =?us-ascii?Q?5qQMS0bUhYa9UANgh0u2CwzZFm43VR41/V7cNXw3MQV7PyMFEQauR2ilirGO?=
- =?us-ascii?Q?Ky3ersqPnt8RvaOS/soGSgPYHPr3F5fteEoEGGI/0JMXEVKcZxocBeBVLM5q?=
- =?us-ascii?Q?mENKIvJ7qjxWYP49zM6sAn3ks8FBLS5OzlOUsm1GiE3X2mHo+goQq6gvb1Wa?=
- =?us-ascii?Q?MJjU7WncqObAEJoiXR7ITsBhAjO+aetIS/B0+h2VeEwxCkaFqEmTplOZzRi6?=
- =?us-ascii?Q?1kCNfEhoI231CIQbWiu+z/1KLrWQrD4D7i8t2bctodlOveddfvQkhjI3HXY9?=
- =?us-ascii?Q?OlLLln3bJ0P8nAidpyxosPo5JxbtMEBC/lyZuvSzFoUmgLWx+KsAi4sTdWRF?=
- =?us-ascii?Q?O5k3z6vH8OHD3nbCStteliWWE8/s1ajw16/1GvV8nv6Az6yZq/HNPsLPv4Jw?=
- =?us-ascii?Q?ptn9H/Dt63DPH6yelwg0ow5327dO+OSon4tPnkHOtKFI/zXqbKnCs922N/Lj?=
- =?us-ascii?Q?qYypRJDTKu64BlzOY2aYMkODP3dVnIhD6GDEijz4?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+        Tue, 1 Nov 2022 05:13:53 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA702DF5E;
+        Tue,  1 Nov 2022 02:13:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 66A396156F;
+        Tue,  1 Nov 2022 09:13:52 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7B07C433C1;
+        Tue,  1 Nov 2022 09:13:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667294031;
+        bh=QHsGnq7GKNlqhME9hG1k+53dFj98wy8UH/SBmiMhgFs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=L8uMcfrNm1G0d5ZNL0Bc+vQdmCcZeeUEBv2oKR89hOSce7rBSYJQKnhkx4yG5q/5e
+         GKkfF34jgtC3QuTK5a4VHBy3fFwB4gq5LtJkwl1CzPI01wOCawwvprLiJZRkXmcRS4
+         ji2Yh3ZyugjLxe3OthaKlS/y/ueQXWYzxfpH3yc+5YsAcgUmNtvzDTsCGodYoVuZup
+         dkOXi/LeEnNwxLp15LZTqE4B7/u6CAWMpUw2thWBbrTb19H2eVCu/oLCJTyK7dYPTS
+         3d+4XUUICSBM75kiOkBDyq8ynFG3PTihLJnPwjsWOAjU945YZsa5to68mgepYLTm6f
+         jAOSv2z1KV+IA==
+Date:   Tue, 1 Nov 2022 14:43:39 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     Greg KH <gregkh@linuxfoundation.org>, quic_hemantk@quicinc.com,
+        bhelgaas@google.com, loic.poulain@linaro.org, dnlplm@gmail.com,
+        yonglin.tan@outlook.com, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org
+Subject: Re: Re: Re: [PATCH v3] PCI: Add vendor ID for QUECTEL
+Message-ID: <20221101091339.GA54667@thinkpad>
+References: <20221101021052.7532-1-slark_xiao@163.com>
+ <Y2Ckm79PgcTcVVne@kroah.com>
+ <3af61b4.1f11.18431cf918d.Coremail.slark_xiao@163.com>
+ <Y2C7uhzVorUrfQA2@kroah.com>
+ <69942131.48d4.18431f6c080.Coremail.slark_xiao@163.com>
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: f6d7830e-af78-4757-890a-08dabbe916a9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Nov 2022 09:11:40.8173
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: UqGy64TBx1bi/4oAKWjo8RHwCKyqjnTOiDp8JVhO6xyoid7AzKgbZ8m8JKBxsupqiC9irUsHa0/C4QS0gZR9kg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR11MB6252
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <69942131.48d4.18431f6c080.Coremail.slark_xiao@163.com>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> From: Eric Farman <farman@linux.ibm.com>
-> Sent: Thursday, October 20, 2022 12:22 AM
->=20
-> With the "mess" sorted out, we should be able to inline the
-> vfio_free_device call introduced by commit cb9ff3f3b84c
-> ("vfio: Add helpers for unifying vfio_device life cycle")
-> and remove them from driver release callbacks.
->=20
-> Signed-off-by: Eric Farman <farman@linux.ibm.com>
+On Tue, Nov 01, 2022 at 02:52:45PM +0800, Slark Xiao wrote:
+> 
+> 
+> 
+> 
+> 
+> At 2022-11-01 14:24:58, "Greg KH" <gregkh@linuxfoundation.org> wrote:
+> >On Tue, Nov 01, 2022 at 02:09:57PM +0800, Slark Xiao wrote:
+> >> 
+> >> 
+> >> At 2022-11-01 12:46:19, "Greg KH" <gregkh@linuxfoundation.org> wrote:
+> >> >On Tue, Nov 01, 2022 at 10:10:52AM +0800, Slark Xiao wrote:
+> >> >> n MHI driver, there are some companies' product still do not have their
+> >> >> own PCI vendor macro. So we add it here to make the code neat. Ref ID
+> >> >> could be found in link https://pcisig.com/membership/member-companies.
+> >> >> 
+> >> >> Signed-off-by: Slark Xiao <slark_xiao@163.com>
+> >> >> ---
+> >> >> v3: Separate different vendors into different patch.
+> >> >> 
+> >> >> v2: Update vendor ID to the right location sorted by numeric value.
+> >> >> ---
+> >> >>  drivers/bus/mhi/host/pci_generic.c | 6 +++---
+> >> >>  include/linux/pci_ids.h            | 2 ++
+> >> >>  2 files changed, 5 insertions(+), 3 deletions(-)
+> >> >> 
+> >> >> diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
+> >> >> index caa4ce28cf9e..81ae9c49ce2a 100644
+> >> >> --- a/drivers/bus/mhi/host/pci_generic.c
+> >> >> +++ b/drivers/bus/mhi/host/pci_generic.c
+> >> >> @@ -555,11 +555,11 @@ static const struct pci_device_id mhi_pci_id_table[] = {
+> >> >>  		.driver_data = (kernel_ulong_t) &mhi_telit_fn990_info },
+> >> >>  	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0308),
+> >> >>  		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx65_info },
+> >> >> -	{ PCI_DEVICE(0x1eac, 0x1001), /* EM120R-GL (sdx24) */
+> >> >> +	{ PCI_DEVICE(PCI_VENDOR_ID_QUECTEL, 0x1001), /* EM120R-GL (sdx24) */
+> >> >>  		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
+> >> >> -	{ PCI_DEVICE(0x1eac, 0x1002), /* EM160R-GL (sdx24) */
+> >> >> +	{ PCI_DEVICE(PCI_VENDOR_ID_QUECTEL, 0x1002), /* EM160R-GL (sdx24) */
+> >> >>  		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
+> >> >> -	{ PCI_DEVICE(0x1eac, 0x2001), /* EM120R-GL for FCCL (sdx24) */
+> >> >> +	{ PCI_DEVICE(PCI_VENDOR_ID_QUECTEL, 0x2001), /* EM120R-GL for FCCL (sdx24) */
+> >> >>  		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
+> >> >>  	/* T99W175 (sdx55), Both for eSIM and Non-eSIM */
+> >> >>  	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0ab),
+> >> >> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> >> >> index b362d90eb9b0..3c91461bcfe4 100644
+> >> >> --- a/include/linux/pci_ids.h
+> >> >> +++ b/include/linux/pci_ids.h
+> >> >> @@ -2585,6 +2585,8 @@
+> >> >>  #define PCI_VENDOR_ID_TEKRAM		0x1de1
+> >> >>  #define PCI_DEVICE_ID_TEKRAM_DC290	0xdc29
+> >> >>  
+> >> >> +#define PCI_VENDOR_ID_QUECTEL		0x1eac
+> >> >
+> >> >Why did you ignore the comment at the top of this file saying that new
+> >> >entries are not needed to be added, especially for just one user?
+> >> >
+> >> >thanks,
+> >> >
+> >> >greg k-h
+> >> Hi Greg,
+> >>  Actually I didn't see this notice before committing this patch. I even discussed 
+> >> it with the maintainer for several times and nobody show me this rule.
+> >> I have a concern, some IOT module vendors, like QUECTEL, CINTERION(THALES),
+> >> SIERRA,ROLLING and so on, they only produce IOT modules without other 
+> >> hardware with PCIe  interface, and they applied for their own VID. But they
+> >> can't get a their own VENDOR MARCO? This seems unreasonable.
+> >> This change should be harmless and  make the code neat.
+> >> This is my opinion.
+> >
+> >It causes a _LOT_ of churn and merge issues when everyone is adding new
+> >entries to a single file.  Which is why, 15+ years ago, we made the
+> >decision that if a vendor or device id is only needed in one file, then
+> >it should not be added to the pci_ids.h file.
+> >
+> >No need to change that now, please just put the vendor id in the single
+> >driver that it is needed in.
+> >
+> >thanks,
+> >
+> >greg k-h
+> Hi Greg,
+> Thanks for your explanation. 
+> 
+> Hi Mani,
+>   Is there a need to update these vendor ids as macro in
+> pci_generic.c?
+> 
 
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+It is not really needed but for convenience you could add a macro in
+pci_generic.c itself.
+
+Thanks,
+Mani
+
+> Thanks.
+
+-- 
+மணிவண்ணன் சதாசிவம்
