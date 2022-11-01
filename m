@@ -2,57 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6A0661553F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:44:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49BF8615543
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:45:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230442AbiKAWoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 18:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49482 "EHLO
+        id S231225AbiKAWpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 18:45:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229945AbiKAWob (ORCPT
+        with ESMTP id S229511AbiKAWpE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 18:44:31 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 746811EC5A;
-        Tue,  1 Nov 2022 15:44:30 -0700 (PDT)
+        Tue, 1 Nov 2022 18:45:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA7B51DF2F;
+        Tue,  1 Nov 2022 15:45:02 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 310E9B81D5E;
-        Tue,  1 Nov 2022 22:44:29 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8FEEC433C1;
-        Tue,  1 Nov 2022 22:44:27 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9BE36B81C59;
+        Tue,  1 Nov 2022 22:45:01 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 08570C433C1;
+        Tue,  1 Nov 2022 22:45:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667342667;
-        bh=T6X814n6uuTYX8qCVDxnR9LEQXhgOnylT/BCSSOXgcE=;
+        s=k20201202; t=1667342700;
+        bh=f9ZYK7pCcA5RSq1PMVqWMAgInCrImyCQwFADKirBX4M=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=QpO9D/fe8DhXU6Kc3sJNxz19TIDYCDSNG3L5Zor7VeH2SbBmpcTSoH5rsixqORotF
-         oFYD/gKUWl45Ob+eFZnFKHesrKq/JSyBVEoPzhhm1dGIeWQwC0fpn4i3ymqDeee1nt
-         e4VryfWSu+dGqHpRIEr6eFRmhe6reQaTaJAJhCY5im3Lg4RrNfnf/6z/Ej5Or65PQ0
-         9dicT9v5wZDHAUzVG1zv4qPKHuXyIs+WYerszSl3HT6BomMdR9Z0Q0BpjVyBY7Ky3u
-         1Efv9/K403cvC47lhxj6nGsI3nHXA8CagkhtKBcW0DphA1Yqcz0FEdB6vY3pie7IXp
-         R2BhKYgrMLjQg==
+        b=PVUmy0wC9zcpqd2rCRbHnuXbEATplsdJRCRBoqnCyvSdamQHCV9kdNK4FcCGP/kK4
+         fz6B+AYiBHRXo2dbjo2ukxuH2eS9Xs1GgCIUNVIjGziBZ+v3Z9/NjtYp9mGNAkVZ3b
+         s9cHdimvm68zvndnbvw78LR4dnoeuAyxHSNXJt8c4q1E7vjO5Xy2kDl3nIgvinBFIw
+         Me2hcY911zBhlRXVWyQ5OYx2uaJPSXCRsN3PZtVqA7WhQ4N5oAk0E8asrXvPPfe3f8
+         45lRqSFLkRoykoz5MrrGsE6VSGrKoYuP+F1gxQF1f6uTNALedBjrlKKOLMR+3xhVlI
+         ujAr7FVxblCIA==
 Received: by pali.im (Postfix)
-        id 94BFB7F8; Tue,  1 Nov 2022 23:44:25 +0100 (CET)
-Date:   Tue, 1 Nov 2022 23:44:25 +0100
+        id E46CB7F8; Tue,  1 Nov 2022 23:44:57 +0100 (CET)
+Date:   Tue, 1 Nov 2022 23:44:57 +0100
 From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
 To:     Gregory Clement <gregory.clement@bootlin.com>
-Cc:     linux-pwm@vger.kernel.org, linux-gpio@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2 3/4] ARM: dts: armada-38x: Fix compatible string for
- gpios
-Message-ID: <20221101224425.huygrjriyhjwov5x@pali>
-References: <20220714115515.5748-1-pali@kernel.org>
- <20220714183328.4137-1-pali@kernel.org>
- <20220714183328.4137-3-pali@kernel.org>
- <20220930233453.ixfj7ps2fo2jukjp@pali>
- <20221009120558.nb6mxipaijrhszt6@pali>
+Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] arm64: dts: marvell: Fix compatible strings for Armada
+ 3720 boards
+Message-ID: <20221101224457.vyraefpfyphvnv4p@pali>
+References: <20220713125644.3117-1-pali@kernel.org>
+ <20220930233802.wjfzk3xkphm565uz@pali>
+ <20221009120639.hds2nhdynwdzjizr@pali>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221009120558.nb6mxipaijrhszt6@pali>
+In-Reply-To: <20221009120639.hds2nhdynwdzjizr@pali>
 User-Agent: NeoMutt/20180716
 X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -65,51 +62,136 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 PING?
 
-On Sunday 09 October 2022 14:05:58 Pali Rohár wrote:
+On Sunday 09 October 2022 14:06:39 Pali Rohár wrote:
 > PING
 > 
-> On Saturday 01 October 2022 01:34:53 Pali Rohár wrote:
+> On Saturday 01 October 2022 01:38:02 Pali Rohár wrote:
 > > Gregory: ping
 > > 
-> > On Thursday 14 July 2022 20:33:27 Pali Rohár wrote:
-> > > Armada 38x supports per CPU interrupts for gpios, like Armada XP. Pre-XP
-> > > variants like Armada 370 do not support per CPU interrupts for gpios.
+> > On Wednesday 13 July 2022 14:56:44 Pali Rohár wrote:
+> > > All Armada 3720 boards have Armada 3720 processor which is of Armada 3700
+> > > family and do not have Armada 3710 processor. So none of them should have
+> > > compatible string for Armada 3710 processor.
 > > > 
-> > > So change compatible string for Armada 38x from "marvell,armada-370-gpio"
-> > > which indicates pre-XP variant to "marvell,armadaxp-gpio" which indicates
-> > > XP variant or new.
-> > > 
-> > > Driver gpio-mvebu.c which handles both pre-XP and XP variants already
-> > > provides support for per CPU interrupts on XP and newer variants.
+> > > Fix compatible string for all these boards by removing wrong processor
+> > > string "marvell,armada3710" and adding family string "marvell,armada3700"
+> > > as the last one. (Note that this is same way how are defined Armada 3710
+> > > DTS files).
 > > > 
 > > > Signed-off-by: Pali Rohár <pali@kernel.org>
-> > > Fixes: 7cb2acb3fbae ("ARM: dts: mvebu: Add PWM properties for armada-38x")
 > > > ---
-> > >  arch/arm/boot/dts/armada-38x.dtsi | 4 ++--
-> > >  1 file changed, 2 insertions(+), 2 deletions(-)
+> > >  arch/arm64/boot/dts/marvell/armada-3720-db.dts                  | 2 +-
+> > >  arch/arm64/boot/dts/marvell/armada-3720-espressobin-emmc.dts    | 2 +-
+> > >  arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts   | 2 +-
+> > >  arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7-emmc.dts | 2 +-
+> > >  arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7.dts      | 2 +-
+> > >  arch/arm64/boot/dts/marvell/armada-3720-espressobin.dts         | 2 +-
+> > >  arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts          | 2 +-
+> > >  arch/arm64/boot/dts/marvell/armada-372x.dtsi                    | 2 +-
+> > >  8 files changed, 8 insertions(+), 8 deletions(-)
 > > > 
-> > > diff --git a/arch/arm/boot/dts/armada-38x.dtsi b/arch/arm/boot/dts/armada-38x.dtsi
-> > > index df3c8d1d8f64..9343de6947b3 100644
-> > > --- a/arch/arm/boot/dts/armada-38x.dtsi
-> > > +++ b/arch/arm/boot/dts/armada-38x.dtsi
-> > > @@ -292,7 +292,7 @@
-> > >  			};
+> > > diff --git a/arch/arm64/boot/dts/marvell/armada-3720-db.dts b/arch/arm64/boot/dts/marvell/armada-3720-db.dts
+> > > index bd4e61d5448e..0cfb38492021 100644
+> > > --- a/arch/arm64/boot/dts/marvell/armada-3720-db.dts
+> > > +++ b/arch/arm64/boot/dts/marvell/armada-3720-db.dts
+> > > @@ -18,7 +18,7 @@
 > > >  
-> > >  			gpio0: gpio@18100 {
-> > > -				compatible = "marvell,armada-370-gpio",
-> > > +				compatible = "marvell,armadaxp-gpio",
-> > >  					     "marvell,orion-gpio";
-> > >  				reg = <0x18100 0x40>, <0x181c0 0x08>;
-> > >  				reg-names = "gpio", "pwm";
-> > > @@ -310,7 +310,7 @@
-> > >  			};
+> > >  / {
+> > >  	model = "Marvell Armada 3720 Development Board DB-88F3720-DDR3";
+> > > -	compatible = "marvell,armada-3720-db", "marvell,armada3720", "marvell,armada3710";
+> > > +	compatible = "marvell,armada-3720-db", "marvell,armada3720", "marvell,armada3700";
 > > >  
-> > >  			gpio1: gpio@18140 {
-> > > -				compatible = "marvell,armada-370-gpio",
-> > > +				compatible = "marvell,armadaxp-gpio",
-> > >  					     "marvell,orion-gpio";
-> > >  				reg = <0x18140 0x40>, <0x181c8 0x08>;
-> > >  				reg-names = "gpio", "pwm";
+> > >  	chosen {
+> > >  		stdout-path = "serial0:115200n8";
+> > > diff --git a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-emmc.dts b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-emmc.dts
+> > > index 5c4d8f379704..6715a19c1483 100644
+> > > --- a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-emmc.dts
+> > > +++ b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-emmc.dts
+> > > @@ -18,7 +18,7 @@
+> > >  / {
+> > >  	model = "Globalscale Marvell ESPRESSOBin Board (eMMC)";
+> > >  	compatible = "globalscale,espressobin-emmc", "globalscale,espressobin",
+> > > -		     "marvell,armada3720", "marvell,armada3710";
+> > > +		     "marvell,armada3720", "marvell,armada3700";
+> > >  };
+> > >  
+> > >  &sdhci0 {
+> > > diff --git a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts
+> > > index 070725b81be5..447760b69850 100644
+> > > --- a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts
+> > > +++ b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-ultra.dts
+> > > @@ -13,7 +13,7 @@
+> > >  / {
+> > >  	model = "Globalscale Marvell ESPRESSOBin Ultra Board";
+> > >  	compatible = "globalscale,espressobin-ultra", "marvell,armada3720",
+> > > -		     "marvell,armada3710";
+> > > +		     "marvell,armada3700";
+> > >  
+> > >  	aliases {
+> > >  		/* ethernet1 is WAN port */
+> > > diff --git a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7-emmc.dts b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7-emmc.dts
+> > > index 75401eab4d42..2a8aa3901a9f 100644
+> > > --- a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7-emmc.dts
+> > > +++ b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7-emmc.dts
+> > > @@ -19,7 +19,7 @@
+> > >  	model = "Globalscale Marvell ESPRESSOBin Board V7 (eMMC)";
+> > >  	compatible = "globalscale,espressobin-v7-emmc", "globalscale,espressobin-v7",
+> > >  		     "globalscale,espressobin", "marvell,armada3720",
+> > > -		     "marvell,armada3710";
+> > > +		     "marvell,armada3700";
+> > >  
+> > >  	aliases {
+> > >  		/* ethernet1 is wan port */
+> > > diff --git a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7.dts b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7.dts
+> > > index 48a7f50fb427..b03af87611a9 100644
+> > > --- a/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7.dts
+> > > +++ b/arch/arm64/boot/dts/marvell/armada-3720-espressobin-v7.dts
+> > > @@ -18,7 +18,7 @@
+> > >  / {
+> > >  	model = "Globalscale Marvell ESPRESSOBin Board V7";
+> > >  	compatible = "globalscale,espressobin-v7", "globalscale,espressobin",
+> > > -		     "marvell,armada3720", "marvell,armada3710";
+> > > +		     "marvell,armada3720", "marvell,armada3700";
+> > >  
+> > >  	aliases {
+> > >  		/* ethernet1 is wan port */
+> > > diff --git a/arch/arm64/boot/dts/marvell/armada-3720-espressobin.dts b/arch/arm64/boot/dts/marvell/armada-3720-espressobin.dts
+> > > index 1542d836c090..c5a834b33b77 100644
+> > > --- a/arch/arm64/boot/dts/marvell/armada-3720-espressobin.dts
+> > > +++ b/arch/arm64/boot/dts/marvell/armada-3720-espressobin.dts
+> > > @@ -16,5 +16,5 @@
+> > >  
+> > >  / {
+> > >  	model = "Globalscale Marvell ESPRESSOBin Board";
+> > > -	compatible = "globalscale,espressobin", "marvell,armada3720", "marvell,armada3710";
+> > > +	compatible = "globalscale,espressobin", "marvell,armada3720", "marvell,armada3700";
+> > >  };
+> > > diff --git a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
+> > > index caf9c8529fca..5840ed129309 100644
+> > > --- a/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
+> > > +++ b/arch/arm64/boot/dts/marvell/armada-3720-turris-mox.dts
+> > > @@ -14,7 +14,7 @@
+> > >  / {
+> > >  	model = "CZ.NIC Turris Mox Board";
+> > >  	compatible = "cznic,turris-mox", "marvell,armada3720",
+> > > -		     "marvell,armada3710";
+> > > +		     "marvell,armada3700";
+> > >  
+> > >  	aliases {
+> > >  		spi0 = &spi0;
+> > > diff --git a/arch/arm64/boot/dts/marvell/armada-372x.dtsi b/arch/arm64/boot/dts/marvell/armada-372x.dtsi
+> > > index 5ce55bdbb995..02ae1e153288 100644
+> > > --- a/arch/arm64/boot/dts/marvell/armada-372x.dtsi
+> > > +++ b/arch/arm64/boot/dts/marvell/armada-372x.dtsi
+> > > @@ -13,7 +13,7 @@
+> > >  
+> > >  / {
+> > >  	model = "Marvell Armada 3720 SoC";
+> > > -	compatible = "marvell,armada3720", "marvell,armada3710";
+> > > +	compatible = "marvell,armada3720", "marvell,armada3700";
+> > >  
+> > >  	cpus {
+> > >  		cpu1: cpu@1 {
 > > > -- 
 > > > 2.20.1
 > > > 
