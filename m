@@ -2,109 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8F42B614BD3
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:35:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FAF1614BD0
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:34:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229867AbiKANfK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 09:35:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33458 "EHLO
+        id S229826AbiKANed (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 09:34:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229601AbiKANfG (ORCPT
+        with ESMTP id S229601AbiKANeL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 09:35:06 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5378B2192
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 06:34:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667309651;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=PKW8Pf1E15nZeyxIsBODYnAk76ngwldQbrSOxueGd64=;
-        b=ZX9XDB86TWIacEWeuNTFMQQtTR/pD94MmPBEry2AhfW2XMApeqTgd3y4esNy+SxD3cF52x
-        /wtdWUT9Wpww6qmfVA/IODg/49/2qICwRjLNZIM/YQ8mFEKOJ8GJxnSxUg5Q7amarOLsVH
-        ZMCqbbxPcDV1oVXCIf//IJooWldHlU8=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-649-fCgu297eO-KoonOoEZ4tQw-1; Tue, 01 Nov 2022 09:34:06 -0400
-X-MC-Unique: fCgu297eO-KoonOoEZ4tQw-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Tue, 1 Nov 2022 09:34:11 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD61B1156;
+        Tue,  1 Nov 2022 06:34:10 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2716D1C0896B;
-        Tue,  1 Nov 2022 13:34:05 +0000 (UTC)
-Received: from fedora (unknown [10.22.32.201])
-        by smtp.corp.redhat.com (Postfix) with SMTP id 62B504B4011;
-        Tue,  1 Nov 2022 13:34:00 +0000 (UTC)
-Date:   Tue, 1 Nov 2022 10:33:59 -0300
-From:   Wander Lairson Costa <wander@redhat.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v16 2/3] virt: Add TDX guest driver
-Message-ID: <20221101133359.r572wy7pku6e65dr@fedora>
-References: <20221028002820.3303030-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20221028002820.3303030-3-sathyanarayanan.kuppuswamy@linux.intel.com>
- <Y1t18Aw2RbP+oj9D@kroah.com>
- <01f437c1-9330-6fb5-d692-6cd500d8adf8@linux.intel.com>
- <Y14fX1Ni1taUxtFk@kroah.com>
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 52DB161452;
+        Tue,  1 Nov 2022 13:34:10 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 67B09C433D6;
+        Tue,  1 Nov 2022 13:34:08 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667309649;
+        bh=lCCeOtXrB+VyAf+ZkJOVzx63oP7fC/Cq3ISVXHAAfr8=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=REBbclWjlsoZUgfhWVDKwCSBCo0fV0NG/i6DrDr9xGymYY9glAxaevf5/z1nKtCkd
+         6sBgfy/f6I+ouVqIyh7iG1Wm6IYrhczlEOMvtHfXYdCNVGuZ2AIltwceK5r81uRXvv
+         sAgkvhQaUH95MJELg3ATeln9QH8ZPD4J+n1Hh9Cc=
+Date:   Tue, 1 Nov 2022 14:35:03 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Yongqin Liu <yongqin.liu@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Eric Dumazet <edumazet@google.com>, Willy Tarreau <w@1wt.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Sasha Levin <sashal@kernel.org>,
+        Sumit Semwal <sumit.semwal@linaro.org>,
+        Benjamin Copeland <ben.copeland@linaro.org>,
+        Daniel =?iso-8859-1?Q?D=EDaz?= <daniel.diaz@linaro.org>
+Subject: Re: [PATCH 4.19 092/229] once: add DO_ONCE_SLOW() for sleepable
+ contexts
+Message-ID: <Y2Egh1LFMvOv6I7m@kroah.com>
+References: <20221024112959.085534368@linuxfoundation.org>
+ <20221024113002.025977656@linuxfoundation.org>
+ <CAMSo37XApZ_F5nSQYWFsSqKdMv_gBpfdKG3KN1TDB+QNXqSh0A@mail.gmail.com>
+ <Y2C74nuMI3RBroTg@kroah.com>
+ <CAMSo37Vt4BMkY1AJTR5yaWPDaJSQQhbj7xhqnVqDo0Q_Sy6ycg@mail.gmail.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y14fX1Ni1taUxtFk@kroah.com>
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <CAMSo37Vt4BMkY1AJTR5yaWPDaJSQQhbj7xhqnVqDo0Q_Sy6ycg@mail.gmail.com>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 30, 2022 at 07:53:19AM +0100, Greg Kroah-Hartman wrote:
-> On Sat, Oct 29, 2022 at 04:17:39PM -0700, Sathyanarayanan Kuppuswamy wrote:
-> > Hi Greg
-> > 
-> > On 10/27/22 11:25 PM, Greg Kroah-Hartman wrote:
-> > > On Thu, Oct 27, 2022 at 05:28:19PM -0700, Kuppuswamy Sathyanarayanan wrote:
-> > 
-> > >> +
-> > >> +static long tdx_guest_ioctl(struct file *file, unsigned int cmd,
-> > >> +			    unsigned long arg)
-> > >> +{
-> > >> +	switch (cmd) {
-> > >> +	case TDX_CMD_GET_REPORT:
-> > >> +		return tdx_get_report((void __user *)arg);
-> > > 
-> > > You know the type of this pointer here, why not cast it instead of
-> > > having to cast it from void * again?
-> > 
-> > The only place we use arg pointer is in copy_from_user() function,
-> > which expects void __user * pointer. So why cast it as struct
-> > tdx_report_req * here?
+On Tue, Nov 01, 2022 at 08:00:03PM +0800, Yongqin Liu wrote:
+> Hi, Greg
 > 
-> Because then your function will show the true type and you don't have to
-> cast it again.
+> On Tue, 1 Nov 2022 at 14:26, Greg Kroah-Hartman
+> <gregkh@linuxfoundation.org> wrote:
+> >
+> > On Tue, Nov 01, 2022 at 02:07:35PM +0800, Yongqin Liu wrote:
+> > > Hello,
+> > >
+> > > As mentioned in the thread for the 5.4 version here[1], it causes a
+> > > crash for the 4.19 kernel too.
+> > > Just paste the log here for reference:
+> >
+> > Can you try this patch please:
+> >
+> >
+> > diff --git a/include/linux/once.h b/include/linux/once.h
+> > index bb58e1c3aa03..3a6671d961b9 100644
+> > --- a/include/linux/once.h
+> > +++ b/include/linux/once.h
+> > @@ -64,7 +64,7 @@ void __do_once_slow_done(bool *done, struct static_key_true *once_key,
+> >  #define DO_ONCE_SLOW(func, ...)                                                     \
+> >         ({                                                                   \
+> >                 bool ___ret = false;                                         \
+> > -               static bool __section(".data.once") ___done = false;         \
+> > +               static bool __section(.data.once) ___done = false;           \
+> >                 static DEFINE_STATIC_KEY_TRUE(___once_key);                  \
+> >                 if (static_branch_unlikely(&___once_key)) {                  \
+> >                         ___ret = __do_once_slow_start(&___done);             \
 > 
+> 
+> This change works, it does not cause kernel panic again after this
+> change is applied.
 
-If we are taking this route, isn't better to move the copy_from_user
-call to tdx_guest_ioctl and pass the resulting struct tdx_report_req
-pointer to tdx_get_report?
+Great, thanks!  Can I get a Tested-by: line for the changelog?
 
+I'll queue this up in a bit and get it fixed in the next release.
+
+thanks,
+
+greg k-h
