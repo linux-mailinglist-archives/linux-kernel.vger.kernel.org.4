@@ -2,173 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42CB5615041
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 18:13:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8814B61504C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 18:14:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229717AbiKARNR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 13:13:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44162 "EHLO
+        id S231312AbiKAROu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 13:14:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230375AbiKARNF (ORCPT
+        with ESMTP id S231136AbiKAROO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 13:13:05 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6DD1DDC9
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 10:13:02 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id b185so14037616pfb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 10:13:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=7ZeCWm44Qsu4BEsJWoI0iqlW+Uat+vdy0Jy/tod3ruo=;
-        b=QRqIgXZawY6u72XktvfN+JoAbxNi5KjSOOf4sM0DYoX287Nx9Xk75rEMp3pPyVHg2c
-         xWQVA+4M+Sf42MOuxrsx6gX7adJKqzLGyyQsyghWZ8H67emYzJ+Yk2NJ84E8wTAgx9Q/
-         WBGUCdHGCaTvvfS57Xy7720noYSqMYNx/LkLLrdXgLBV5UvPBr/RVRfV21Ws2flJ/+IH
-         9kqdNBsQvihumo9DBZzZ8YeFSQ3JabMORwKqM6U8E2PX92XSjrTxXKAh+KlCMtZ5HzkE
-         sXU5v/X3F7mNKepsApp98KyOaHBPS9aSSjcvwS8EsbfixHeoS7dkhi1cqtNnLDJDxCVL
-         qdow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7ZeCWm44Qsu4BEsJWoI0iqlW+Uat+vdy0Jy/tod3ruo=;
-        b=cMYJTrzj0dpchGwzsT2q41lI0HppUU9Heq7b6ncOZSgSsjp5GcSAtroZYC3LZQkxYi
-         yNTYPT6bUH5h2Wpw6WnEOZGcFqtJpYrfJpcfmGyaFBHZ8E9peGO3pF1OqNiy627POe6K
-         s9exPxHRFhAFRqjvWOxJGhs8brItsHbWXG2A+kngFw2445aj15J1zs5JwsLK9c/JF3Mi
-         Kcz3YNiuO4KDml4NuAmMdyACJu92mDQZwDm77PP3uFaoaCdjtxRYBHvTD6RFXaKv/73i
-         warFP7dDfQrUaVbi4UOdSimIa4ulip4hut1uUQEQJYf0MkTC9Mv1p1vgkd5PA2pUlriM
-         sNJQ==
-X-Gm-Message-State: ACrzQf2wwdomLZJe/0aXHcKdoRM9q3TM1d8RYtwPGTz0isNPR6fEw8De
-        em+2kty/GT1zPA9DNV3INkA1leiEhiSb7EgEsORXuo9rUYs=
-X-Google-Smtp-Source: AMsMyM62eEOHZiuJhrGGicQxTZts+7ifbl/6GPaLzGg8Qkdah0MPbXeGNAnZ9b9Ibk5hokpavTuiUtHLdwjN4ZdUcBI=
-X-Received: by 2002:a05:6a00:24c2:b0:52e:7181:a8a0 with SMTP id
- d2-20020a056a0024c200b0052e7181a8a0mr20803558pfv.57.1667322781843; Tue, 01
- Nov 2022 10:13:01 -0700 (PDT)
+        Tue, 1 Nov 2022 13:14:14 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD7D16329;
+        Tue,  1 Nov 2022 10:13:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667322831; x=1698858831;
+  h=message-id:date:mime-version:from:subject:to:cc:
+   references:in-reply-to:content-transfer-encoding;
+  bh=KTvWMa0hQMXT7OsBaw/UoYuLMTgDttKWDdCMw+Ct78c=;
+  b=mX/7zsYQBbjEfyUNJAH/LKUVXdv0C8gsN0SCxnP5RppBKIMSelx9RPiC
+   pZE9pwdpw3YaJxk5xxyi0riFjmcRbXwJJJZngQhZ8TD3HD4y50ihVbVY9
+   W/DLHG81Pd4zVcGNcuXkj+/lHAz+67HlGH3sTbOgFirFDmGtng57R91GS
+   aMCJhmiXJOT721klAnVYjAWBG1dEjYUX4gXyQOhV6KM554WxMu+97ERNr
+   qrEDmTqt6gS31X+4BUiKfhOFeDqM5cwzzEfsYk09Am+eGcv4UgdggwPtI
+   V6UhQ/Kj3HEgzc9aqXQQ4YDY4n8rdsAilqralkIRKwDYA8fs1NDsrGjo9
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="310288060"
+X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
+   d="scan'208";a="310288060"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 10:13:08 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="723228787"
+X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
+   d="scan'208";a="723228787"
+Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.55.64])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 10:13:04 -0700
+Message-ID: <3b36c596-3353-bb2c-b92f-fb475934503a@intel.com>
+Date:   Tue, 1 Nov 2022 19:13:01 +0200
 MIME-Version: 1.0
-References: <20221031183122.470962-1-shy828301@gmail.com> <Y2BHcBCR2FIJgU4w@dhcp22.suse.cz>
- <CAAa6QmQt9Us8YpirQGXV0_AetuPS+EOqMSGqNn6KW24HXvwO_A@mail.gmail.com> <Y2DQr06mNzk0ITX1@dhcp22.suse.cz>
-In-Reply-To: <Y2DQr06mNzk0ITX1@dhcp22.suse.cz>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Tue, 1 Nov 2022 10:12:49 -0700
-Message-ID: <CAHbLzkonsnr4yxUOpMpoch1eCVNgR5hC9YaMkPR=fSV2Uszc6g@mail.gmail.com>
-Subject: Re: [PATCH] mm: don't warn if the node is offlined
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     "Zach O'Keefe" <zokeefe@google.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.4.1
+From:   Adrian Hunter <adrian.hunter@intel.com>
+Subject: Re: [PATCH V5 10/26] mmc: sdhci-uhs2: dump UHS-II registers
+To:     Victor Shih <victorshihgli@gmail.com>, ulf.hansson@linaro.org
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        benchuanggli@gmail.com, HL.Liu@genesyslogic.com.tw,
+        Greg.tu@genesyslogic.com.tw, takahiro.akashi@linaro.org,
+        dlunev@chromium.org, Victor Shih <victor.shih@genesyslogic.com.tw>,
+        Ben Chuang <ben.chuang@genesyslogic.com.tw>
+References: <20221019110647.11076-1-victor.shih@genesyslogic.com.tw>
+ <20221019110647.11076-11-victor.shih@genesyslogic.com.tw>
+Content-Language: en-US
+Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
+ Business Identity Code: 0357606 - 4, Domiciled in Helsinki
+In-Reply-To: <20221019110647.11076-11-victor.shih@genesyslogic.com.tw>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 1, 2022 at 12:54 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Mon 31-10-22 17:05:06, Zach O'Keefe wrote:
-> > On Mon, Oct 31, 2022 at 3:08 PM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Mon 31-10-22 11:31:22, Yang Shi wrote:
-> > > > Syzbot reported the below splat:
-> > > >
-> > > > WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 __alloc_pages_node include/linux/gfp.h:221 [inline]
-> > > > WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-> > > > WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-> > > > Modules linked in:
-> > > > CPU: 1 PID: 3646 Comm: syz-executor210 Not tainted 6.1.0-rc1-syzkaller-00454-ga70385240892 #0
-> > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-> > > > RIP: 0010:__alloc_pages_node include/linux/gfp.h:221 [inline]
-> > > > RIP: 0010:hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-> > > > RIP: 0010:alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-> > > > Code: e5 01 4c 89 ee e8 6e f9 ae ff 4d 85 ed 0f 84 28 fc ff ff e8 70 fc ae ff 48 8d 6b ff 4c 8d 63 07 e9 16 fc ff ff e8 5e fc ae ff <0f> 0b e9 96 fa ff ff 41 bc 1a 00 00 00 e9 86 fd ff ff e8 47 fc ae
-> > > > RSP: 0018:ffffc90003fdf7d8 EFLAGS: 00010293
-> > > > RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> > > > RDX: ffff888077f457c0 RSI: ffffffff81cd8f42 RDI: 0000000000000001
-> > > > RBP: ffff888079388c0c R08: 0000000000000001 R09: 0000000000000000
-> > > > R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-> > > > R13: dffffc0000000000 R14: 0000000000000000 R15: 0000000000000000
-> > > > FS:  00007f6b48ccf700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > > CR2: 00007f6b48a819f0 CR3: 00000000171e7000 CR4: 00000000003506e0
-> > > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > > Call Trace:
-> > > >  <TASK>
-> > > >  collapse_file+0x1ca/0x5780 mm/khugepaged.c:1715
-> > >
-> > > This is quite weird, isn't it? alloc_charge_hpage is selecting the most
-> > > busy node (as per collapse_control). How come this can be an offline
-> > > node? Is a parallel memory hotplug happening?
-> >
-> > TBH -- I did not look closely at the syzbot reproducer (let alone
-> > attempt to run it) and assumed this was the case. Taking a quick look,
-> > at least memory hot remove is enabled:
-> >
-> > CONFIG_ARCH_ENABLE_MEMORY_HOTPLUG=y
-> > CONFIG_ARCH_ENABLE_MEMORY_HOTREMOVE=y
-> > CONFIG_MEMORY_HOTPLUG=y
-> > CONFIG_MEMORY_HOTPLUG_DEFAULT_ONLINE=y
-> > CONFIG_MEMORY_HOTREMOVE=y
-> >
-> > But looking at the C reproducer, I don't immediately see anywhere
-> > where we offline nodes. I'll try to run this tomorrow to make sure I'm
-> > not missing something real here.
->
-> Looking slightly closer at hpage_collapse_scan_file I think that it is
-> possible that xas_for_each simply doesn't find any entries in the page
-> cache and with khugepaged_max_ptes_none == HPAGE_PMD_NR we can fall back
-> to collapse_file even without any real entries.
+On 19/10/22 14:06, Victor Shih wrote:
+> From: AKASHI Takahiro <takahiro.akashi@linaro.org>
+> 
+> Dump UHS-II specific registers, if available, in sdhci_dumpregs()
+> for informative/debugging use.
+> 
+> Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
+> Signed-off-by: AKASHI Takahiro <takahiro.akashi@linaro.org>
+> ---
+>  drivers/mmc/host/sdhci-uhs2.c | 30 ++++++++++++++++++++++++++++++
+>  drivers/mmc/host/sdhci-uhs2.h |  4 ++++
+>  drivers/mmc/host/sdhci.c      |  3 +++
+>  3 files changed, 37 insertions(+)
+> 
+> diff --git a/drivers/mmc/host/sdhci-uhs2.c b/drivers/mmc/host/sdhci-uhs2.c
+> index f29d3a4ed43c..08905ed081fb 100644
+> --- a/drivers/mmc/host/sdhci-uhs2.c
+> +++ b/drivers/mmc/host/sdhci-uhs2.c
+> @@ -18,6 +18,36 @@
+>  #define DRIVER_NAME "sdhci_uhs2"
+>  #define DBG(f, x...) \
+>  	pr_debug(DRIVER_NAME " [%s()]: " f, __func__, ## x)
+> +#define SDHCI_UHS2_DUMP(f, x...) \
+> +	pr_err("%s: " DRIVER_NAME ": " f, mmc_hostname(host->mmc), ## x)
+> +
+> +void sdhci_uhs2_dump_regs(struct sdhci_host *host)
+> +{
+> +	if (!host->mmc || !(host->mmc->flags & MMC_UHS2_SUPPORT))
 
-The khugepaged_max_ptes_none can't be HPAGE_PMD_NR, it must be <=
-(HPAGE_PMD_NR - 1), but MADV_COLLAPSE does ignore it.
+!host->mmc is not possible
 
-But a closer look at the code about how to pick up the preferred node,
-there seems to be a corner case for MADV_COLLAPSE.
+> +		return;
+> +
+> +	SDHCI_UHS2_DUMP("==================== UHS2 ==================\n");
+> +	SDHCI_UHS2_DUMP("Blk Size:  0x%08x | Blk Cnt:  0x%08x\n",
+> +			sdhci_readw(host, SDHCI_UHS2_BLOCK_SIZE),
+> +			sdhci_readl(host, SDHCI_UHS2_BLOCK_COUNT));
+> +	SDHCI_UHS2_DUMP("Cmd:       0x%08x | Trn mode: 0x%08x\n",
+> +			sdhci_readw(host, SDHCI_UHS2_COMMAND),
+> +			sdhci_readw(host, SDHCI_UHS2_TRANS_MODE));
+> +	SDHCI_UHS2_DUMP("Int Stat:  0x%08x | Dev Sel : 0x%08x\n",
+> +			sdhci_readw(host, SDHCI_UHS2_DEV_INT_STATUS),
+> +			sdhci_readb(host, SDHCI_UHS2_DEV_SELECT));
+> +	SDHCI_UHS2_DUMP("Dev Int Code:  0x%08x\n",
+> +			sdhci_readb(host, SDHCI_UHS2_DEV_INT_CODE));
+> +	SDHCI_UHS2_DUMP("Reset:     0x%08x | Timer:    0x%08x\n",
+> +			sdhci_readw(host, SDHCI_UHS2_SW_RESET),
+> +			sdhci_readw(host, SDHCI_UHS2_TIMER_CTRL));
+> +	SDHCI_UHS2_DUMP("ErrInt:    0x%08x | ErrIntEn: 0x%08x\n",
+> +			sdhci_readl(host, SDHCI_UHS2_ERR_INT_STATUS),
+> +			sdhci_readl(host, SDHCI_UHS2_ERR_INT_STATUS_EN));
+> +	SDHCI_UHS2_DUMP("ErrSigEn:  0x%08x\n",
+> +			sdhci_readl(host, SDHCI_UHS2_ERR_INT_SIG_EN));
+> +}
+> +EXPORT_SYMBOL_GPL(sdhci_uhs2_dump_regs);
+>  
+>  /*****************************************************************************\
+>   *                                                                           *
+> diff --git a/drivers/mmc/host/sdhci-uhs2.h b/drivers/mmc/host/sdhci-uhs2.h
+> index 5610affebdf3..afdb05d6056b 100644
+> --- a/drivers/mmc/host/sdhci-uhs2.h
+> +++ b/drivers/mmc/host/sdhci-uhs2.h
+> @@ -207,4 +207,8 @@
+>  #define SDHCI_UHS2_EMBED_CTRL	0xE6
+>  #define SDHCI_UHS2_VENDOR	0xE8
+>  
+> +struct sdhci_host;
+> +
+> +void sdhci_uhs2_dump_regs(struct sdhci_host *host);
+> +
+>  #endif /* __SDHCI_UHS2_H */
+> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
+> index fef03de85b99..2cdd183c8ada 100644
+> --- a/drivers/mmc/host/sdhci.c
+> +++ b/drivers/mmc/host/sdhci.c
+> @@ -110,6 +110,9 @@ void sdhci_dumpregs(struct sdhci_host *host)
+>  		}
+>  	}
+>  
+> +	if (host->ops->dump_uhs2_regs)
+> +		host->ops->dump_uhs2_regs(host);
+> +
+>  	if (host->ops->dump_vendor_regs)
+>  		host->ops->dump_vendor_regs(host);
+>  
 
-The code tried to do some balance if several nodes have the same hit
-record. Basically it does conceptually:
-    * If the target_node <= last_target_node, then iterate from
-last_target_node + 1 to MAX_NUMNODES (1024 on default config)
-    * If the max_value == node_load[nid], then target_node = nid
-
-So assuming the system has 2 nodes, the target_node is 0 and the
-last_target_node is 1, if MADV_COLLAPSE path is hit, then it may
-return 2 for target_node, but it is actually not existing (offline),
-so the warn is triggered.
-
-The below patch should be able to fix it:
-
-diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-index ea0d186bc9d4..d24405e6736b 100644
---- a/mm/khugepaged.c
-+++ b/mm/khugepaged.c
-@@ -787,7 +787,8 @@ static int hpage_collapse_find_target_node(struct
-collapse_control *cc)
-        if (target_node <= cc->last_target_node)
-                for (nid = cc->last_target_node + 1; nid < MAX_NUMNODES;
-                     nid++)
--                       if (max_value == cc->node_load[nid]) {
-+                       if (node_online(nid) &&
-+                           max_value == cc->node_load[nid]) {
-                                target_node = nid;
-                                break;
-                        }
-
-> But the mere possibility of the hotplug race should be a sufficient
-> ground to remove those WARN_ONs
-
-The warn_on did help to catch this bug. But the reasons for removing
-it still stand TBH, so we may consider to move this warn_on to the
-callers which care about it?
-
->
->
-> Thanks!
-> --
-> Michal Hocko
-> SUSE Labs
