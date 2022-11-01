@@ -2,66 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BC165614310
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 03:11:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8207E614315
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 03:12:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229549AbiKACLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 22:11:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53622 "EHLO
+        id S229846AbiKACMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 22:12:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbiKACLJ (ORCPT
+        with ESMTP id S229527AbiKACMI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 22:11:09 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 6BE8AE0CE;
-        Mon, 31 Oct 2022 19:10:54 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8AxTbctgGBj0rQDAA--.1645S3;
-        Tue, 01 Nov 2022 10:10:53 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8DxbuAegGBjQk0JAA--.28365S3;
-        Tue, 01 Nov 2022 10:10:49 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
-        Liu Peibao <liupeibao@loongson.cn>,
-        Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v9 2/2] dt-bindings: thermal: add loongson-2 thermal
-Date:   Tue,  1 Nov 2022 10:10:36 +0800
-Message-Id: <20221101021036.8982-2-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221101021036.8982-1-zhuyinbo@loongson.cn>
-References: <20221101021036.8982-1-zhuyinbo@loongson.cn>
+        Mon, 31 Oct 2022 22:12:08 -0400
+Received: from m12-17.163.com (m12-17.163.com [220.181.12.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D12B31741A;
+        Mon, 31 Oct 2022 19:12:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=7JpQD
+        TRO14UjkY6Gjl6llkqWx+hpMjtf/mA9QfbxVYo=; b=NEYZvPs+lnWZj6E/h2SOM
+        jjrc0sT35QhVLoYtD4SzoekZsYv+QWsV/1SIHFxMHp5du2U8iE+OXO75LMhr3EE+
+        ON8H3bkahsaNIwo8heXSR+BTRB/oM0lzwFCVLLXutG8taR+0cFX5X5wEgmKokDDr
+        QAnkS8hOaXom5q05pkah9k=
+Received: from jbd-ThinkPad-X1-Nano-Gen-1.. (unknown [223.104.68.52])
+        by smtp13 (Coremail) with SMTP id EcCowABHzI85gGBjaxd2mw--.40980S2;
+        Tue, 01 Nov 2022 10:11:07 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     mani@kernel.org, quic_hemantk@quicinc.com, bhelgaas@google.com,
+        gregkh@linuxfoundation.org, loic.poulain@linaro.org
+Cc:     dnlplm@gmail.com, yonglin.tan@outlook.com, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH v3] PCI: Add vendor ID for QUECTEL
+Date:   Tue,  1 Nov 2022 10:10:52 +0800
+Message-Id: <20221101021052.7532-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8DxbuAegGBjQk0JAA--.28365S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoW7uF15Xw1fXFyktF45urWrAFb_yoW8trWUpF
-        47CF1DCr4vkF17Aws5KFy0kws0qwnYyF9rZrs2kw15Kr98Ja4fXw43Kr1DZ3yfWF1jgFW7
-        uFyIkr4UC3WDJ3DanT9S1TB71UUUUUJqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bfxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr0_Gr1UM2
-        8EF7xvwVC2z280aVCY1x0267AKxVW8Jr0_Cr1UM2kKe7AKxVWUXVWUAwAS0I0E0xvYzxvE
-        52x082IY62kv0487Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I
-        80ewAv7VC0I7IYx2IY67AKxVWUAVWUtwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCj
-        c4AY6r1j6r4UM4x0Y48IcxkI7VAKI48JMxkF7I0En4kS14v26r126r1DMxAIw28IcxkI7V
-        AKI48JMxAIw28IcVCjz48v1sIEY20_WwCFx2IqxVCFs4IE7xkEbVWUJVW8JwCFI7km07C2
-        67AKxVWUXVWUAwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE14v26r106r1rMI
-        8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2IY67AKxVWUCVW8
-        JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Gr0_Cr1lIxAIcVCF04k26cxKx2IYs7xG6r1j6r
-        1xMIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBI
-        daVFxhVjvjDU0xZFpf9x07jn73kUUUUU=
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+X-CM-TRANSID: EcCowABHzI85gGBjaxd2mw--.40980S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7KrWDWr1xCw1kZw47WF1rZwb_yoW8trWrpF
+        s09ryvvF4qqrWUtw1kK3ykXF98ZanxCF9FkFyagw4FgFsFya1Fqr9FvrWYyryagFWvqF4a
+        qF1DurZ8G3WqyF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEZXOZUUUUU=
+X-Originating-IP: [223.104.68.52]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiRxusZFc7ZI139AAAsS
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,78 +52,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the Loongson-2 thermal binding with DT schema format using
-json-schema.
+n MHI driver, there are some companies' product still do not have their
+own PCI vendor macro. So we add it here to make the code neat. Ref ID
+could be found in link https://pcisig.com/membership/member-companies.
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
 ---
- .../thermal/loongson,ls2k-thermal.yaml        | 43 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 44 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
+v3: Separate different vendors into different patch.
 
-diff --git a/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-new file mode 100644
-index 000000000000..c0637e2d6d57
---- /dev/null
-+++ b/Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
-@@ -0,0 +1,43 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/thermal/loongson,ls2k-thermal.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Thermal sensors on Loongson-2 SoCs
-+
-+maintainers:
-+  - zhanghongchen <zhanghongchen@loongson.cn>
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+properties:
-+  compatible:
-+    const: loongson,ls2k-thermal
-+
-+  reg:
-+    maxItems: 1
-+
-+  interrupts:
-+    maxItems: 1
-+
-+  '#thermal-sensor-cells':
-+    const: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - interrupts
-+  - '#thermal-sensor-cells'
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    thermal: thermal-sensor@1fe01500 {
-+        compatible = "loongson,ls2k-thermal";
-+        reg = <0x1fe01500 0x30>;
-+        interrupt-parent = <&liointc0>;
-+        interrupts = <7 IRQ_TYPE_LEVEL_LOW>;
-+        #thermal-sensor-cells = <1>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 37ab451d9258..3aff8b8723b1 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12015,6 +12015,7 @@ M:	zhanghongchen <zhanghongchen@loongson.cn>
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-pm@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/thermal/loongson,ls2k-thermal.yaml
- F:	drivers/thermal/loongson2_thermal.c
+v2: Update vendor ID to the right location sorted by numeric value.
+---
+ drivers/bus/mhi/host/pci_generic.c | 6 +++---
+ include/linux/pci_ids.h            | 2 ++
+ 2 files changed, 5 insertions(+), 3 deletions(-)
+
+diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
+index caa4ce28cf9e..81ae9c49ce2a 100644
+--- a/drivers/bus/mhi/host/pci_generic.c
++++ b/drivers/bus/mhi/host/pci_generic.c
+@@ -555,11 +555,11 @@ static const struct pci_device_id mhi_pci_id_table[] = {
+ 		.driver_data = (kernel_ulong_t) &mhi_telit_fn990_info },
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0308),
+ 		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx65_info },
+-	{ PCI_DEVICE(0x1eac, 0x1001), /* EM120R-GL (sdx24) */
++	{ PCI_DEVICE(PCI_VENDOR_ID_QUECTEL, 0x1001), /* EM120R-GL (sdx24) */
+ 		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
+-	{ PCI_DEVICE(0x1eac, 0x1002), /* EM160R-GL (sdx24) */
++	{ PCI_DEVICE(PCI_VENDOR_ID_QUECTEL, 0x1002), /* EM160R-GL (sdx24) */
+ 		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
+-	{ PCI_DEVICE(0x1eac, 0x2001), /* EM120R-GL for FCCL (sdx24) */
++	{ PCI_DEVICE(PCI_VENDOR_ID_QUECTEL, 0x2001), /* EM120R-GL for FCCL (sdx24) */
+ 		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
+ 	/* T99W175 (sdx55), Both for eSIM and Non-eSIM */
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0ab),
+diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+index b362d90eb9b0..3c91461bcfe4 100644
+--- a/include/linux/pci_ids.h
++++ b/include/linux/pci_ids.h
+@@ -2585,6 +2585,8 @@
+ #define PCI_VENDOR_ID_TEKRAM		0x1de1
+ #define PCI_DEVICE_ID_TEKRAM_DC290	0xdc29
  
- LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
++#define PCI_VENDOR_ID_QUECTEL		0x1eac
++
+ #define PCI_VENDOR_ID_TEHUTI		0x1fc9
+ #define PCI_DEVICE_ID_TEHUTI_3009	0x3009
+ #define PCI_DEVICE_ID_TEHUTI_3010	0x3010
 -- 
-2.33.0
+2.34.1
 
