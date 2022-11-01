@@ -2,140 +2,148 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D327361426C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 01:50:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFFFA61426D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 01:52:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229632AbiKAAuz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 20:50:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41422 "EHLO
+        id S229639AbiKAAwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 20:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiKAAux (ORCPT
+        with ESMTP id S229469AbiKAAwW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 20:50:53 -0400
-Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 807CD14D3E
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 17:50:50 -0700 (PDT)
-From:   =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
-        s=mail; t=1667263848;
-        bh=Ih90hSMCFhO4YPLOJxjstP2DevM5oYaVVK0RDWXWhYg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=O/4Tj3Ph8aPMokTeCF6TyJh/9doYb5U8tHjzpNMIHVlpYQExOYj+O/4hF24zl4Xwi
-         j+FLb5XWcQzj3Tot8qjkhc8xXFMzEoSkKoEsuIQWUm+Lf5J50GP9ml7N+QSf5GgQdg
-         VLIFxOVDWEU4AE19Y5zvszGqq9TGgZca5S/vp6FA=
-To:     linux-fsdevel@vger.kernel.org
-Cc:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
-        linux-kernel@vger.kernel.org, Karel Zak <kzak@redhat.com>,
-        Masatake YAMATO <yamato@redhat.com>, linux-api@vger.kernel.org
-Subject: [PATCH] proc: add byteorder file
-Date:   Tue,  1 Nov 2022 01:50:43 +0100
-Message-Id: <20221101005043.1791-1-linux@weissschuh.net>
-X-Mailer: git-send-email 2.38.1
+        Mon, 31 Oct 2022 20:52:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92FD14D3E;
+        Mon, 31 Oct 2022 17:52:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 78F9461411;
+        Tue,  1 Nov 2022 00:52:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B039C433D6;
+        Tue,  1 Nov 2022 00:52:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667263940;
+        bh=HWEyYhTRPVpxScw+Umz7p1bNJQ9QmOz14vkT8EGXetc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Zs88KE0XmeUvH7SNcf3URWb5ISZx9zmIJ1IEYkN24oL2k3DWU7WEWQtbsdeH5Wo3e
+         EzoouQ0U8xQstv4a4PARXwRDHiasUiTO89U7ZhXVD5cgNezbnMp457stM2vLNpoDL9
+         B3QHsDxK4hNHY7OQ7Wflh+JCKNVjxOI5krJMJAwzEkqBdOWkLeL/9gY8okgneLMq5Y
+         PnC8CyVlPOCQ4hBN93Tt2zqI/1O4nGlTA+hCS0E2YEnA1lJj3yRqRm39TFzxHLL8de
+         gF4JoKt4cwJyuObEbitJ44ogEABH4h+b6UaU7JrmaL3rJIBoyvOoOKAMKGyRgqlEnM
+         Q+tX/nnuPRs9w==
+Date:   Tue, 1 Nov 2022 02:52:16 +0200
+From:   Jarkko Sakkinen <jarkko@kernel.org>
+To:     Reinette Chatre <reinette.chatre@intel.com>
+Cc:     dave.hansen@linux.intel.com, md.iqbal.hossain@intel.com,
+        haitao.huang@intel.com, linux-sgx@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] x86/sgx: Reduce delay and interference of enclave release
+Message-ID: <Y2BtwGIfnW4fqkUg@kernel.org>
+References: <06a5f478d3bfaa57954954c82dd5d4040450171d.1666130846.git.reinette.chatre@intel.com>
+ <Y1WemizNZgFOVxja@kernel.org>
+ <77943714-b988-bf14-8795-c72ff0424418@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1667263841; l=2700; s=20211113; h=from:subject; bh=Ih90hSMCFhO4YPLOJxjstP2DevM5oYaVVK0RDWXWhYg=; b=Ta7OQLIgmKOBb7EZY2QPbltIZD7sna9NOI3okgEls+PXyJZ0SW4d/Fqo9VrpHPnvcVZo01r0UfIT C3PCBmz9BZbSEDfzLd6HWYdcD+gaAijlsR47TNuB2GCTo27UDfTb
-X-Developer-Key: i=linux@weissschuh.net; a=ed25519; pk=9LP6KM4vD/8CwHW7nouRBhWLyQLcK1MkP6aTZbzUlj4=
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <77943714-b988-bf14-8795-c72ff0424418@intel.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Certain files in procfs are formatted in byteorder dependent ways. For
-example the IP addresses in /proc/net/udp.
+On Mon, Oct 24, 2022 at 11:56:39AM -0700, Reinette Chatre wrote:
+> Hi Jarkko,
+> 
+> On 10/23/2022 1:06 PM, Jarkko Sakkinen wrote:
+> > On Tue, Oct 18, 2022 at 03:42:47PM -0700, Reinette Chatre wrote:
+> 
+> ...
+> 
+> >> diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
+> >> index 1ec20807de1e..f7365c278525 100644
+> >> --- a/arch/x86/kernel/cpu/sgx/encl.c
+> >> +++ b/arch/x86/kernel/cpu/sgx/encl.c
+> >> @@ -682,9 +682,12 @@ void sgx_encl_release(struct kref *ref)
+> >>  	struct sgx_encl *encl = container_of(ref, struct sgx_encl, refcount);
+> >>  	struct sgx_va_page *va_page;
+> >>  	struct sgx_encl_page *entry;
+> >> -	unsigned long index;
+> >> +	unsigned long count = 0;
+> >> +
+> >> +	XA_STATE(xas, &encl->page_array, PFN_DOWN(encl->base));
+> >>  
+> >> -	xa_for_each(&encl->page_array, index, entry) {
+> >> +	xas_lock(&xas);
+> >> +	xas_for_each(&xas, entry, PFN_DOWN(encl->base + encl->size  - 1)) {
+> > 
+> > I would add to declarations:
+> > 
+> > unsigned long nr_pages = PFN_DOWN(encl->base + encl->size  - 1);
+> > 
+> > Makes this more readable.
+> 
+> Will do, but I prefer to name it "max_page_index" or something related instead.
+> "nr_pages" implies "number of pages" to me, which is not what
+> PFN_DOWN(encl->base + encl->size - 1) represents. What is represented is the
+> highest possible index of a page in page_array, where an index is the
+> pfn of a page.
 
-Assuming the byteorder of the userspace program is not guaranteed to be
-correct in the face of emulation as for example with qemu-user.
+Yeah, makes sense.
 
-Also this makes it easier for non-compiled applications like
-shellscripts to discover the byteorder.
+> 
+> > 
+> >>  		if (entry->epc_page) {
+> >>  			/*
+> >>  			 * The page and its radix tree entry cannot be freed
+> >> @@ -699,9 +702,20 @@ void sgx_encl_release(struct kref *ref)
+> >>  		}
+> >>  
+> >>  		kfree(entry);
+> >> -		/* Invoke scheduler to prevent soft lockups. */
+> >> -		cond_resched();
+> >> +		/*
+> >> +		 * Invoke scheduler on every XA_CHECK_SCHED iteration
+> >> +		 * to prevent soft lockups.
+> >> +		 */
+> >> +		if (!(++count % XA_CHECK_SCHED)) {
+> >> +			xas_pause(&xas);
+> >> +			xas_unlock(&xas);
+> >> +
+> >> +			cond_resched();
+> >> +
+> >> +			xas_lock(&xas);
+> >> +		}
+> >>  	}
+> > 
+> >         WARN_ON(count != nr_pages);
+> > 
+> 
+> nr_pages as assigned in your example does not represent a count of the
+> enclave pages but instead a pfn index into the page_array. Comparing it
+> to count, the number of removed enclave pages that are not being held
+> by reclaimer, is not appropriate.
+> 
+> This check would be problematic even if we create a "nr_pages" from
+> the range of possible indices. This is because of how enclave sizes are
+> required to be power-of-two that makes it likely for there to be indices
+> without pages associated with it.
 
-Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
+Ok.
 
----
+> 
+> >> +	xas_unlock(&xas);
+> >>  
+> >>  	xa_destroy(&encl->page_array);
+> >>  
+> >> -- 
+> >> 2.34.1
+> >>
+> 
+> Reinette
 
-Development of userspace part: https://github.com/util-linux/util-linux/pull/1872
----
- Documentation/ABI/testing/procfs-byteorder | 12 +++++++++
- fs/proc/Makefile                           |  1 +
- fs/proc/byteorder.c                        | 31 ++++++++++++++++++++++
- 3 files changed, 44 insertions(+)
- create mode 100644 Documentation/ABI/testing/procfs-byteorder
- create mode 100644 fs/proc/byteorder.c
-
-diff --git a/Documentation/ABI/testing/procfs-byteorder b/Documentation/ABI/testing/procfs-byteorder
-new file mode 100644
-index 000000000000..bb80aae889be
---- /dev/null
-+++ b/Documentation/ABI/testing/procfs-byteorder
-@@ -0,0 +1,12 @@
-+What:		/proc/byteorder
-+Date:		February 2023
-+KernelVersion:	6.2
-+Contact:	linux-fsdevel@vger.kernel.org
-+Description:
-+		The current endianness of the running kernel.
-+
-+		Access: Read
-+
-+		Valid values:
-+			"little", "big"
-+Users:		util-linux
-diff --git a/fs/proc/Makefile b/fs/proc/Makefile
-index bd08616ed8ba..c790d3665358 100644
---- a/fs/proc/Makefile
-+++ b/fs/proc/Makefile
-@@ -12,6 +12,7 @@ proc-$(CONFIG_MMU)	:= task_mmu.o
- proc-y       += inode.o root.o base.o generic.o array.o \
- 		fd.o
- proc-$(CONFIG_TTY)      += proc_tty.o
-+proc-y	+= byteorder.o
- proc-y	+= cmdline.o
- proc-y	+= consoles.o
- proc-y	+= cpuinfo.o
-diff --git a/fs/proc/byteorder.c b/fs/proc/byteorder.c
-new file mode 100644
-index 000000000000..39644b281da9
---- /dev/null
-+++ b/fs/proc/byteorder.c
-@@ -0,0 +1,31 @@
-+// SPDX-License-Identifier: GPL-2.0
-+
-+#include <asm/byteorder.h>
-+#include <linux/fs.h>
-+#include <linux/proc_fs.h>
-+#include <linux/seq_file.h>
-+#include "internal.h"
-+
-+#if defined(__LITTLE_ENDIAN)
-+#define BYTEORDER_STRING	"little"
-+#elif defined(__BIG_ENDIAN)
-+#define BYTEORDER_STRING	"big"
-+#else
-+#error Unknown byteorder
-+#endif
-+
-+static int byteorder_seq_show(struct seq_file *seq, void *)
-+{
-+	seq_puts(seq, BYTEORDER_STRING "\n");
-+	return 0;
-+}
-+
-+static int __init proc_byteorder_init(void)
-+{
-+	struct proc_dir_entry *pde;
-+
-+	pde = proc_create_single("byteorder", 0444, NULL, byteorder_seq_show);
-+	pde_make_permanent(pde);
-+	return 0;
-+}
-+fs_initcall(proc_byteorder_init);
-
-base-commit: 5aaef24b5c6d4246b2cac1be949869fa36577737
--- 
-2.38.1
-
+BR, Jarkko
