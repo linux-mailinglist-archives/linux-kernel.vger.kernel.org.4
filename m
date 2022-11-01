@@ -2,41 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41E426146DC
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 10:35:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0740D6146E6
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 10:39:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230371AbiKAJfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 05:35:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40092 "EHLO
+        id S230402AbiKAJjo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 05:39:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40088 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbiKAJew (ORCPT
+        with ESMTP id S230283AbiKAJj2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 05:34:52 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8434419283;
-        Tue,  1 Nov 2022 02:34:33 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.54])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N1lBX0NsGzpW59;
-        Tue,  1 Nov 2022 17:31:00 +0800 (CST)
-Received: from huawei.com (10.174.178.129) by kwepemi500016.china.huawei.com
- (7.221.188.220) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 1 Nov
- 2022 17:34:31 +0800
-From:   Kemeng Shi <shikemeng@huawei.com>
-To:     <paolo.valente@linaro.org>, <axboe@kernel.dk>
-CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <shikemeng@huawei.com>
-Subject: [PATCH 20/20] block, bfq: remove unncessary process_ref check for merged queue in bfq_setup_merge
-Date:   Tue, 1 Nov 2022 17:34:17 +0800
-Message-ID: <20221101093417.10540-21-shikemeng@huawei.com>
-X-Mailer: git-send-email 2.14.1.windows.1
-In-Reply-To: <20221101093417.10540-1-shikemeng@huawei.com>
-References: <20221101093417.10540-1-shikemeng@huawei.com>
+        Tue, 1 Nov 2022 05:39:28 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B761903C;
+        Tue,  1 Nov 2022 02:37:52 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.54])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N1lLN4GBWz15MD6;
+        Tue,  1 Nov 2022 17:37:48 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 1 Nov 2022 17:37:48 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 1 Nov 2022 17:37:47 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <netfilter-devel@vger.kernel.org>,
+        <coreteam@netfilter.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+CC:     <pablo@netfilter.org>, <kadlec@netfilter.org>, <fw@strlen.de>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <john.fastabend@gmail.com>,
+        <lorenzo@kernel.org>, <ast@kernel.org>, <chenzhongjin@huawei.com>
+Subject: [PATCH] netfilter: nf_nat: Fix possible memory leak in nf_nat_init()
+Date:   Tue, 1 Nov 2022 17:34:30 +0800
+Message-ID: <20221101093430.126571-1-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
 Content-Type: text/plain
-X-Originating-IP: [10.174.178.129]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemi500016.china.huawei.com (7.221.188.220)
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
 X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -46,45 +52,45 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As we already check process_refs of original new_bfqq is not zero. The
-later new_bfqq maybe the merged queue of original new_bfqq which inherit
-the process_refs of original new_bfqq which is not zero, so process_refs
-of merged queue will not be zero.
-Remove unncessary check for merged queue and remove new_process_refs
-which will not be used.
+In nf_nat_init(), register_nf_nat_bpf() can fail and return directly
+without any error handling.
+Then nf_nat_bysource will leak and registering of &nat_net_ops won't
+be reverted. This leaves wild ops in subsystem linkedlist and when
+another module tries to call register_pernet_operations() it triggers
+page fault:
 
-Signed-off-by: Kemeng Shi <shikemeng@huawei.com>
+ BUG: unable to handle page fault for address: fffffbfff81b964c
+ RIP: 0010:register_pernet_operations+0x1b9/0x5f0
+ Call Trace:
+ <TASK>
+  register_pernet_subsys+0x29/0x40
+  ebtables_init+0x58/0x1000 [ebtables]
+  ...
+
+Fixes: 820dc0523e05 ("net: netfilter: move bpf_ct_set_nat_info kfunc in nf_nat_bpf.c")
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
 ---
- block/bfq-iosched.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+ net/netfilter/nf_nat_core.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 589ab59abcf5..0736577bfbfe 100644
---- a/block/bfq-iosched.c
-+++ b/block/bfq-iosched.c
-@@ -2740,7 +2740,7 @@ static struct bfq_queue *bfq_find_close_cooperator(struct bfq_data *bfqd,
- static struct bfq_queue *
- bfq_setup_merge(struct bfq_queue *bfqq, struct bfq_queue *new_bfqq)
- {
--	int process_refs, new_process_refs;
-+	int process_refs;
+diff --git a/net/netfilter/nf_nat_core.c b/net/netfilter/nf_nat_core.c
+index 18319a6e6806..b24b4dfc1ca4 100644
+--- a/net/netfilter/nf_nat_core.c
++++ b/net/netfilter/nf_nat_core.c
+@@ -1152,7 +1152,12 @@ static int __init nf_nat_init(void)
+ 	WARN_ON(nf_nat_hook != NULL);
+ 	RCU_INIT_POINTER(nf_nat_hook, &nat_hook);
  
- 	/*
- 	 * If there are no process references on the new_bfqq, then it is
-@@ -2758,12 +2758,11 @@ bfq_setup_merge(struct bfq_queue *bfqq, struct bfq_queue *new_bfqq)
- 	}
+-	return register_nf_nat_bpf();
++	ret = register_nf_nat_bpf();
++	if (ret < 0) {
++		kvfree(nf_nat_bysource);
++		unregister_pernet_subsys(&nat_net_ops);
++	}
++	return ret;
+ }
  
- 	process_refs = bfqq_process_refs(bfqq);
--	new_process_refs = bfqq_process_refs(new_bfqq);
- 	/*
- 	 * If the process for the bfqq has gone away, there is no
- 	 * sense in merging the queues.
- 	 */
--	if (process_refs == 0 || new_process_refs == 0)
-+	if (process_refs == 0)
- 		return NULL;
- 
- 	/*
+ static void __exit nf_nat_cleanup(void)
 -- 
-2.30.0
+2.17.1
 
