@@ -2,107 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A5A4614A41
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:01:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21585614828
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:03:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230456AbiKAMBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 08:01:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
+        id S230094AbiKALDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 07:03:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229782AbiKAMBk (ORCPT
+        with ESMTP id S230080AbiKALDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 08:01:40 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5630A63F0;
-        Tue,  1 Nov 2022 05:01:39 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id h9so19857368wrt.0;
-        Tue, 01 Nov 2022 05:01:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:content-disposition:mime-version:message-id:subject:to
-         :from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=dDiFLbcCPs9I3+qSQ2/UHfejkBwzWQ533NU4ZUsGCPY=;
-        b=AECDTUUM7wPd78XMLMkzvlsVEc+oowtP7u+lfBMn+oxn2MelQNpZ5WiTFK+33zC9oQ
-         AoIHVqndwGCRvMZwS0ecfzu2a1jw0yI15Y+BULVfPJQNRQIcq13MojBOtutuZIj5W+V/
-         GaZH5hxLK5yG9DZKgcgNu6/WqrUd7+meIfaLdVf96San3sh8Nxy9Mej8yr+lcIKGiqX7
-         80MxdWmkR0YhVa/FrIi3kIZvXHLjsusAGUrPXZDRdJ4Rzo0RLyoLOZyIQgm1N9F8I1HI
-         zVRSO+lZurvyBZ8qJrme6uzzK7Ewv+LR4m97k8uKsXnLeKURdMMTU/qMEXRDrpJUTytB
-         PrxA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:content-disposition:mime-version:message-id:subject:to
-         :from:date:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=dDiFLbcCPs9I3+qSQ2/UHfejkBwzWQ533NU4ZUsGCPY=;
-        b=GGvcz1uauXsZIaX7KvpyKauRp5Pgrhe4CXWR7HrcgoL1dgxopmUsU1DA6p8fyEBfdx
-         n7bC4foXOQudM26Ms72mIyc0hRbmeDMtlTPnwGxRhOyrFdJtwR6QDxqfuWx+1d85n9UK
-         p16sEOZuOJncVSa+iobcmLa+rxr1QNGNZjsd9zvFD3jyFFYy4p8VcvOat4Wu5cn8Mdiz
-         jEXN0F82btvYFsm60ZiumA/02IM94Zu8uRUJZsWKg43cD1W3g/vYvcHcD7pEm142JEy7
-         WaB6kN8gD2CLFrF6Nt47ahEfT4zoJm74MX2ZFEpDsQw0rKgTdKOPbUK4PqjfsIdj19ax
-         2lqg==
-X-Gm-Message-State: ACrzQf2leJwQBrEoNNXy6eAZwVXfv5kaR8EwtTzIjekhhAaJHgzl00DB
-        rPSKsuz/DuotnXFQRCxqyxk=
-X-Google-Smtp-Source: AMsMyM4IPeCSlhIxX9MDs5ZpryesBGdS/XtcwW29lM+9nZKxAkZNflGe+Tq7Ive1xQtRrsJ597EcfA==
-X-Received: by 2002:adf:dbc5:0:b0:22c:c605:3b81 with SMTP id e5-20020adfdbc5000000b0022cc6053b81mr11287837wrj.218.1667304097843;
-        Tue, 01 Nov 2022 05:01:37 -0700 (PDT)
-Received: from debian ([89.238.191.199])
-        by smtp.gmail.com with ESMTPSA id m13-20020adffe4d000000b0022afcc11f65sm9911489wrs.47.2022.11.01.05.01.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 05:01:37 -0700 (PDT)
-Date:   Mon, 24 Oct 2022 07:17:49 +0200
-From:   Richard Gobert <richardbgobert@gmail.com>
-To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, lixiaoyan@google.com, alexanderduyck@fb.com,
-        richardbgobert@gmail.com, steffen.klassert@secunet.com,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next] gro: avoid checking for a failed search
-Message-ID: <20221024051744.GA48642@debian>
+        Tue, 1 Nov 2022 07:03:47 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FC711A053;
+        Tue,  1 Nov 2022 04:03:34 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.55])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N1nDy5qmvzHvXt;
+        Tue,  1 Nov 2022 19:03:14 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 1 Nov 2022 19:03:06 +0800
+Received: from [10.67.108.67] (10.67.108.67) by dggpemm500013.china.huawei.com
+ (7.185.36.172) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 1 Nov
+ 2022 19:03:06 +0800
+Message-ID: <be794dca-f3ad-8fe4-98f2-2b17ea8ad72b@huawei.com>
+Date:   Tue, 1 Nov 2022 19:03:06 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=1.3 required=5.0 tests=BAYES_00,DATE_IN_PAST_96_XX,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.0
+Subject: Re: [PATCH] netfilter: nf_nat: Fix possible memory leak in
+ nf_nat_init()
+Content-Language: en-US
+To:     <linux-kernel@vger.kernel.org>, <netfilter-devel@vger.kernel.org>,
+        <coreteam@netfilter.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+CC:     <pablo@netfilter.org>, <kadlec@netfilter.org>, <fw@strlen.de>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <john.fastabend@gmail.com>,
+        <lorenzo@kernel.org>, <ast@kernel.org>
+References: <20221101093430.126571-1-chenzhongjin@huawei.com>
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+In-Reply-To: <20221101093430.126571-1-chenzhongjin@huawei.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.67.108.67]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
-X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After searching for a protocol handler in dev_gro_receive, checking for
-failure is redundant. Skip the failure code after finding the 
-corresponding handler.
+On 2022/11/1 17:34, Chen Zhongjin wrote:
+> In nf_nat_init(), register_nf_nat_bpf() can fail and return directly
+> without any error handling.
+> Then nf_nat_bysource will leak and registering of &nat_net_ops won't
+> be reverted. This leaves wild ops in subsystem linkedlist and when
+> another module tries to call register_pernet_operations() it triggers
+> page fault:
+>
+>   BUG: unable to handle page fault for address: fffffbfff81b964c
+>   RIP: 0010:register_pernet_operations+0x1b9/0x5f0
+>   Call Trace:
+>   <TASK>
+>    register_pernet_subsys+0x29/0x40
+>    ebtables_init+0x58/0x1000 [ebtables]
+>    ...
+>
+> Fixes: 820dc0523e05 ("net: netfilter: move bpf_ct_set_nat_info kfunc in nf_nat_bpf.c")
+> Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+> ---
+>   net/netfilter/nf_nat_core.c | 7 ++++++-
+>   1 file changed, 6 insertions(+), 1 deletion(-)
+>
+> diff --git a/net/netfilter/nf_nat_core.c b/net/netfilter/nf_nat_core.c
+> index 18319a6e6806..b24b4dfc1ca4 100644
+> --- a/net/netfilter/nf_nat_core.c
+> +++ b/net/netfilter/nf_nat_core.c
+> @@ -1152,7 +1152,12 @@ static int __init nf_nat_init(void)
+>   	WARN_ON(nf_nat_hook != NULL);
+>   	RCU_INIT_POINTER(nf_nat_hook, &nat_hook);
+>   
+> -	return register_nf_nat_bpf();
+> +	ret = register_nf_nat_bpf();
+> +	if (ret < 0) {
+> +		kvfree(nf_nat_bysource);
+> +		unregister_pernet_subsys(&nat_net_ops);
+> +	}
+> +	return ret;
+>   }
 
-Signed-off-by: Richard Gobert <richardbgobert@gmail.com>
----
- net/core/gro.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+I noticed that follow_master_nat should also be unregistered.
 
-diff --git a/net/core/gro.c b/net/core/gro.c
-index bc9451743307..a4e1b5a5be64 100644
---- a/net/core/gro.c
-+++ b/net/core/gro.c
-@@ -522,13 +522,13 @@ static enum gro_result dev_gro_receive(struct napi_struct *napi, struct sk_buff
- 		pp = INDIRECT_CALL_INET(ptype->callbacks.gro_receive,
- 					ipv6_gro_receive, inet_gro_receive,
- 					&gro_list->list, skb);
--		break;
-+		rcu_read_unlock();
-+		goto found;
- 	}
- 	rcu_read_unlock();
-+	goto normal;
- 
--	if (&ptype->list == head)
--		goto normal;
--
-+found:
- 	if (PTR_ERR(pp) == -EINPROGRESS) {
- 		ret = GRO_CONSUMED;
- 		goto ok;
--- 
-2.20.1
+Going to send v2, discard this one.
 
+
+Best,
+
+Chen
+
+>   
+>   static void __exit nf_nat_cleanup(void)
