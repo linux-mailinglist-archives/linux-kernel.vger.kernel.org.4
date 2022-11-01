@@ -2,69 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36DE061447E
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 07:08:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 080E1614481
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 07:09:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbiKAGI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 02:08:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40480 "EHLO
+        id S229890AbiKAGJx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 02:09:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41234 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiKAGIY (ORCPT
+        with ESMTP id S229613AbiKAGJv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 02:08:24 -0400
-Received: from mail-vk1-xa32.google.com (mail-vk1-xa32.google.com [IPv6:2607:f8b0:4864:20::a32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEA0B1274C
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 23:08:23 -0700 (PDT)
-Received: by mail-vk1-xa32.google.com with SMTP id g4so3088164vkk.6
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 23:08:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ua5FVDFuWA4ML+Z6FKPFIkiRw5Q+9HqcyoXzwLEIt/M=;
-        b=NegiWdsaynG96JcQSCQWjoqfqptXQ6RnsLRZ1Q2JmZXTKyJmBHCoSDH4rBzd2YgB6v
-         4BMg2ZkiHQzBSFPsK3gRnWUbByE9UNFnKMjBD8BwLhiy4ohuyAas2x2lfkfmSnlTebWy
-         iIbnaeF72gWQFQUI+I+qBLvxrNN4r2FqXzv1TjAosJ1MnIH9peEpEVsndU9UWQwPEe4n
-         gUJefDPAoFU6pQTG7CsZG76C5uWKm5VhAHr8onoPEHB//2sfKfzWTbRwMiWzxN4Sihbn
-         F5SwJybP3Xz2ai+GSvRtWHk09IgF9ssjNiAgPTd8X5GyLbLMvXpZRcLvey41u2RXxlFy
-         h3CQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ua5FVDFuWA4ML+Z6FKPFIkiRw5Q+9HqcyoXzwLEIt/M=;
-        b=2iHMB1Vcfik9mC6eqUf/UGixqwd9oyCEZ2zuIycS0ml2pEzPhye0hMXHwUKK5Mt6mp
-         chBKEFRDv24YSo7493pcxCabq2OR0rqkk3aR4wvW5NGC63ExF2tfON8aTl0+4sr7gN/A
-         OG6UqXRF88TrX7pnCEVgtuFiDt99eCpaNuv4USYVtXSI4L8lKtqp/03uctsEv1MbMbmr
-         CjNNfcxcjuXgaGE3X0rhrnf6N4ZQZYqGrAILjE453Q9ZoEaWJA7eT9AtsZPXEfqU9ntA
-         APBuVPZOdu82CPtppTC2N3VAvUfMDDYFS/LP70mYXhXRe8avuLHLPaUs/m5teOD+Vahl
-         AF2w==
-X-Gm-Message-State: ACrzQf0qNVyNpeUO47enSwSPww8FW1p/k1856noN+y03RPBP1PXiuQ/S
-        x95xURY7bUA4IguWeHjYYyA7isqnZEqxycQ7cHO0QQ==
-X-Google-Smtp-Source: AMsMyM4EFV3ZLhsnVZMdqtDuxzf3/qJzItgirzInUNsCEQpERRym5uvAWBuY2oPaIphZWLBUR0rSt56nQMuyME4GMEE=
-X-Received: by 2002:ac5:c213:0:b0:3b2:52ab:123f with SMTP id
- m19-20020ac5c213000000b003b252ab123fmr6715032vkk.13.1667282902832; Mon, 31
- Oct 2022 23:08:22 -0700 (PDT)
+        Tue, 1 Nov 2022 02:09:51 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 500FCFD12
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 23:09:49 -0700 (PDT)
+Received: from kwepemi500012.china.huawei.com (unknown [172.30.72.56])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N1fk11zF6zHvS1;
+        Tue,  1 Nov 2022 14:09:29 +0800 (CST)
+Received: from cgs.huawei.com (10.244.148.83) by
+ kwepemi500012.china.huawei.com (7.221.188.12) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 1 Nov 2022 14:09:46 +0800
+From:   Gaosheng Cui <cuigaosheng1@huawei.com>
+To:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+        <puwen@hygon.cn>, <TonyWWang-oc@zhaoxin.com>, <Jason@zx2c4.com>,
+        <peterz@infradead.org>, <hca@linux.ibm.com>,
+        <mika.westerberg@linux.intel.com>, <mario.limonciello@amd.com>,
+        <cuigaosheng1@huawei.com>, <tony.luck@intel.com>,
+        <andrew.cooper3@citrix.com>, <pawan.kumar.gupta@linux.intel.com>,
+        <rdunlap@infradead.org>, <jithu.joseph@intel.com>,
+        <chenyi.qiang@intel.com>, <rafael.j.wysocki@intel.com>,
+        <paulmck@kernel.org>
+CC:     <linux-kernel@vger.kernel.org>
+Subject: [PATCH] x86/cpu: replacing the open-coded shift with BIT(x)
+Date:   Tue, 1 Nov 2022 14:09:45 +0800
+Message-ID: <20221101060945.722565-1-cuigaosheng1@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221024112959.085534368@linuxfoundation.org> <20221024113002.025977656@linuxfoundation.org>
-In-Reply-To: <20221024113002.025977656@linuxfoundation.org>
-From:   Yongqin Liu <yongqin.liu@linaro.org>
-Date:   Tue, 1 Nov 2022 14:07:35 +0800
-Message-ID: <CAMSo37XApZ_F5nSQYWFsSqKdMv_gBpfdKG3KN1TDB+QNXqSh0A@mail.gmail.com>
-Subject: Re: [PATCH 4.19 092/229] once: add DO_ONCE_SLOW() for sleepable contexts
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, stable@vger.kernel.org,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        Eric Dumazet <edumazet@google.com>, Willy Tarreau <w@1wt.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Sasha Levin <sashal@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Benjamin Copeland <ben.copeland@linaro.org>,
-        =?UTF-8?B?RGFuaWVsIETDrWF6?= <daniel.diaz@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.244.148.83]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500012.china.huawei.com (7.221.188.12)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,81 +53,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Replace the open-coded shift with BIT(x) for x86_power to make the
+code a bit more self-documenting, and we will get a UBSAN issue in
+arch/x86/kernel/cpu/proc.c, fix it.
 
-As mentioned in the thread for the 5.4 version here[1], it causes a
-crash for the 4.19 kernel too.
-Just paste the log here for reference:
+The UBSAN warning calltrace like below:
 
-[ 1375.219830] wlan0: authenticate with 98:da:c4:4f:77:11
-[ 1375.230257] wlan0: send auth to 98:da:c4:4f:77:11 (try 1/3)
-[ 1375.262598] wlan0: authenticated
-[ 1375.267766] wlan0: associate with 98:da:c4:4f:77:11 (try 1/3)
-[ 1375.285716] wlan0: RX AssocResp from 98:da:c4:4f:77:11
-(capab=0x1411 status=0 aid=1)
-[ 1375.310066] wlan0: associated
-[ 1375.332056] wlcore: Association completed.
-[ 1376.105149] Unable to handle kernel write to read-only memory at
-virtual address ffffff80092a6f18
-[ 1376.114129] Mem abort info:
-[ 1376.117072]   ESR = 0x9600004f
-[ 1376.120138]   Exception class = DABT (current EL), IL = 32 bits
-[ 1376.126091]   SET = 0, FnV = 0
-[ 1376.129147]   EA = 0, S1PTW = 0
-[ 1376.132301] Data abort info:
-[ 1376.135176]   ISV = 0, ISS = 0x0000004f
-[ 1376.139012]   CM = 0, WnR = 1
-[ 1376.141997] swapper pgtable: 4k pages, 39-bit VAs, pgdp = 00000000a9880db2
-[ 1376.148923] [ffffff80092a6f18] pgd=000000021fffe003,
-pud=000000021fffe003, pmd=000000021fffb003, pte=00600000012a6793
-[ 1376.159550] Internal error: Oops: 9600004f [#1] PREEMPT SMP
-[ 1376.165119] Modules linked in:
-[ 1376.168168] Process TlsVerify_100 (pid: 5454, stack limit =
-0x0000000025f9c863)
-[ 1376.175472] CPU: 5 PID: 5454 Comm: TlsVerify_100 Not tainted
-4.19.262-g8479d939a3b0 #1
-[ 1376.183381] Hardware name: HiKey960 (DT)
-[ 1376.187295] pstate: 60400005 (nZCv daif +PAN -UAO)
-[ 1376.192085] pc : __do_once_slow_done+0x14/0x98
-[ 1376.196535] lr : __inet_hash_connect+0x480/0x484
-[ 1376.201146] sp : ffffff800e203b80
-[ 1376.204460] x29: ffffff800e203b80 x28: 0000000000000000
-[ 1376.209768] x27: 0000000000006e48 x26: 0000000000000000
-[ 1376.215071] x25: ffffff80098e6000 x24: 9b29771fbf0b881c
-[ 1376.220375] x23: ffffff8009766600 x22: ffffff8009766bc0
-[ 1376.225678] x21: ffffff8008c34198 x20: ffffff80098e65c0
-[ 1376.230982] x19: ffffffc04cabd1c0 x18: 0000000005c65eec
-[ 1376.236285] x17: 00000000175fece9 x16: 0000000071679066
-[ 1376.241588] x15: 00000000467bf177 x14: 000000005f331e5c
-[ 1376.246891] x13: 0000000000000014 x12: 00000000b82286ab
-[ 1376.252194] x11: 0000000084c874ea x10: 00000000fdb36642
-[ 1376.257497] x9 : 68962c3381a87000 x8 : 0000000000000001
-[ 1376.262800] x7 : 0000000000000000 x6 : ffffffc2197c0000
-[ 1376.268103] x5 : 000000008113af5d x4 : 0000000000000008
-[ 1376.273406] x3 : 0000000000000030 x2 : 0000000000000000
-[ 1376.278709] x1 : ffffff800976e568 x0 : ffffff80092a6f18
-[ 1376.284012] Call trace:
-[ 1376.286456]  __do_once_slow_done+0x14/0x98
-[ 1376.290544]  __inet_hash_connect+0x480/0x484
-[ 1376.294805]  inet_hash_connect+0x48/0x54
-[ 1376.298720]  tcp_v4_connect+0x26c/0x3e4
-[ 1376.302549]  __inet_stream_connect+0x2ac/0x308
-[ 1376.306984]  inet_stream_connect+0x44/0x68
-[ 1376.311072]  __sys_connect+0xb4/0x100
-[ 1376.314725]  __arm64_sys_connect+0x1c/0x28
-[ 1376.318816]  el0_svc_common+0xa4/0x188
-[ 1376.322556]  el0_svc_handler+0x60/0x68
-[ 1376.326298]  el0_svc+0x8/0x300
-[ 1376.329345] Code: f9000bf5 a9024ff4 910003fd 52800028 (39000008)
-[ 1376.335431] ---[ end trace 28410d3ffccfb491 ]---
-[ 1376.351416] Kernel panic - not syncing: Fatal exception
-[ 1376.356640] SMP: stopping secondary CPUs
-[ 1376.360775] Kernel Offset: disabled
-[ 1376.364257] CPU features: 0x10,20082004
-[ 1376.368083] Memory Limit: none
-[ 1376.382434] Rebooting in 5 seconds..
+UBSAN: shift-out-of-bounds in arch/x86/kernel/cpu/proc.c:138:25
+left shift of 1 by 31 places cannot be represented in type 'int'
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x7d/0xa5
+ dump_stack+0x15/0x1b
+ ubsan_epilogue+0xe/0x4e
+ __ubsan_handle_shift_out_of_bounds+0x1e7/0x20c
+ show_cpuinfo+0x5ff/0x6d0
+ seq_read_iter+0x116/0x5b0
+ proc_reg_read_iter+0x45/0xc0
+ vfs_read+0x2ee/0x3c0
+ ksys_read+0xe1/0x130
+ __x64_sys_read+0x23/0x30
+ do_syscall_64+0x58/0x80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+ </TASK>
 
-[1]: https://lore.kernel.org/lkml/20221029011211.4049810-1-ovt@google.com/
+Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+---
+ arch/x86/kernel/cpu/amd.c     | 2 +-
+ arch/x86/kernel/cpu/centaur.c | 2 +-
+ arch/x86/kernel/cpu/hygon.c   | 2 +-
+ arch/x86/kernel/cpu/intel.c   | 2 +-
+ arch/x86/kernel/cpu/proc.c    | 2 +-
+ arch/x86/kernel/cpu/zhaoxin.c | 2 +-
+ 6 files changed, 6 insertions(+), 6 deletions(-)
 
-Thanks,
-Yongqin Liu
+diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
+index 860b60273df3..75d82cad323a 100644
+--- a/arch/x86/kernel/cpu/amd.c
++++ b/arch/x86/kernel/cpu/amd.c
+@@ -613,7 +613,7 @@ static void early_init_amd(struct cpuinfo_x86 *c)
+ 	 * c->x86_power is 8000_0007 edx. Bit 8 is TSC runs at constant rate
+ 	 * with P/T states and does not stop in deep C-states
+ 	 */
+-	if (c->x86_power & (1 << 8)) {
++	if (c->x86_power & BIT(8)) {
+ 		set_cpu_cap(c, X86_FEATURE_CONSTANT_TSC);
+ 		set_cpu_cap(c, X86_FEATURE_NONSTOP_TSC);
+ 	}
+diff --git a/arch/x86/kernel/cpu/centaur.c b/arch/x86/kernel/cpu/centaur.c
+index 345f7d905db6..9910bb1d90fd 100644
+--- a/arch/x86/kernel/cpu/centaur.c
++++ b/arch/x86/kernel/cpu/centaur.c
+@@ -105,7 +105,7 @@ static void early_init_centaur(struct cpuinfo_x86 *c)
+ #ifdef CONFIG_X86_64
+ 	set_cpu_cap(c, X86_FEATURE_SYSENTER32);
+ #endif
+-	if (c->x86_power & (1 << 8)) {
++	if (c->x86_power & BIT(8)) {
+ 		set_cpu_cap(c, X86_FEATURE_CONSTANT_TSC);
+ 		set_cpu_cap(c, X86_FEATURE_NONSTOP_TSC);
+ 	}
+diff --git a/arch/x86/kernel/cpu/hygon.c b/arch/x86/kernel/cpu/hygon.c
+index 21fd425088fe..dc473bfbf1b5 100644
+--- a/arch/x86/kernel/cpu/hygon.c
++++ b/arch/x86/kernel/cpu/hygon.c
+@@ -251,7 +251,7 @@ static void early_init_hygon(struct cpuinfo_x86 *c)
+ 	 * c->x86_power is 8000_0007 edx. Bit 8 is TSC runs at constant rate
+ 	 * with P/T states and does not stop in deep C-states
+ 	 */
+-	if (c->x86_power & (1 << 8)) {
++	if (c->x86_power & BIT(8)) {
+ 		set_cpu_cap(c, X86_FEATURE_CONSTANT_TSC);
+ 		set_cpu_cap(c, X86_FEATURE_NONSTOP_TSC);
+ 	}
+diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+index 121c1c38162a..bbe86a2f3a43 100644
+--- a/arch/x86/kernel/cpu/intel.c
++++ b/arch/x86/kernel/cpu/intel.c
+@@ -286,7 +286,7 @@ static void early_init_intel(struct cpuinfo_x86 *c)
+ 	 * It is also reliable across cores and sockets. (but not across
+ 	 * cabinets - we turn it off in that case explicitly.)
+ 	 */
+-	if (c->x86_power & (1 << 8)) {
++	if (c->x86_power & BIT(8)) {
+ 		set_cpu_cap(c, X86_FEATURE_CONSTANT_TSC);
+ 		set_cpu_cap(c, X86_FEATURE_NONSTOP_TSC);
+ 	}
+diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
+index 099b6f0d96bd..efa1d39c4f25 100644
+--- a/arch/x86/kernel/cpu/proc.c
++++ b/arch/x86/kernel/cpu/proc.c
+@@ -135,7 +135,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+ 
+ 	seq_puts(m, "power management:");
+ 	for (i = 0; i < 32; i++) {
+-		if (c->x86_power & (1 << i)) {
++		if (c->x86_power & BIT(i)) {
+ 			if (i < ARRAY_SIZE(x86_power_flags) &&
+ 			    x86_power_flags[i])
+ 				seq_printf(m, "%s%s",
+diff --git a/arch/x86/kernel/cpu/zhaoxin.c b/arch/x86/kernel/cpu/zhaoxin.c
+index 05fa4ef63490..34a8a460f8f4 100644
+--- a/arch/x86/kernel/cpu/zhaoxin.c
++++ b/arch/x86/kernel/cpu/zhaoxin.c
+@@ -61,7 +61,7 @@ static void early_init_zhaoxin(struct cpuinfo_x86 *c)
+ #ifdef CONFIG_X86_64
+ 	set_cpu_cap(c, X86_FEATURE_SYSENTER32);
+ #endif
+-	if (c->x86_power & (1 << 8)) {
++	if (c->x86_power & BIT(8)) {
+ 		set_cpu_cap(c, X86_FEATURE_CONSTANT_TSC);
+ 		set_cpu_cap(c, X86_FEATURE_NONSTOP_TSC);
+ 	}
+-- 
+2.25.1
+
