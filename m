@@ -2,110 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EBA396154E6
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 460A46154EC
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:25:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230494AbiKAWXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 18:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58178 "EHLO
+        id S229739AbiKAWZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 18:25:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbiKAWXC (ORCPT
+        with ESMTP id S229920AbiKAWZM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 18:23:02 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3415A1A811
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 15:22:57 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id p21so11003932plr.7
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 15:22:57 -0700 (PDT)
+        Tue, 1 Nov 2022 18:25:12 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04A5C1035
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 15:25:12 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id z18so18820776edb.9
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 15:25:11 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=H/atQqeE7yew2f3NLAU7m28aDdmCRbd7A5xTuP3olaM=;
-        b=Z/SVfi/W/l0ZbgH7VD2JPBlUzJN4/MyupL9V4lXL/QK1qKQT1oJDwbnPQRJF1Flhw3
-         RQgQVZ3rB3x2DDjEg+v2Fs7tYMStDaw4ahLmgdpZ1FuqcFmDO9Rn3/uADJGqGfEjlNC0
-         uhzcpvSIuDLiZCO+KiAGnCUuLzMTSInGH8NcM=
+        bh=1Y0TtHVNR0Zt2jBbXANXyzyZbG58TNvz96BB5dak+Do=;
+        b=XTD1f7Yp1DKCBTkuRWo2+SvHQxYrb6N1nL03Lr76IqyAxIsPcJtgrsAxq8dokZGxpf
+         Pf9aHTVUu2ry1awbP1Nk2Tqva0NMyq+Ml5AYGTbrIpKoHESdjVoPmwey/OJylxbSRT49
+         Y316EdFrieSqTgP2uWz+rihiXkVtjpne1MrcZCmVCSrOQ85Fn4rDAJvyIj73YylwcqmI
+         NKj6zuvvBoK0w9rr09a1yjFrTnQLW3eYtj2kxVIUYKA0Led89We1MY1E+wVhMUoKF6vo
+         GQjS9Q7k+1TMAOx4/tKUwkMPH9gJcNhX4vvr8wmKPiMpqIhFTBqHbEjDdB862qAjf/YS
+         pcfg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=H/atQqeE7yew2f3NLAU7m28aDdmCRbd7A5xTuP3olaM=;
-        b=38rlth+7NAx3RIAO2fM/n3os5umAZPEWJzMk/n/nkpaaGT1Qvb0sRPVj8EbvFFpZO8
-         P0hsl+96mFDGUMCQ3QhWERoiaVcvobBDZl6rOuUKM8PbKrnEgnFK6j1pDsLeSDN0W96E
-         ATxrztTFVZ8jqlkm33JsxY0m9NEKVqb8eQ9+r2lV0LA2VCKULTapjSyGEI02eD6ahvus
-         FvYKKO64TgQG9iNk/38aX/wfmFTziVUbdDpDXhBOSXn1ZQI+HMyP+OL8ysbDuCZHOtK3
-         AVyhvThUAs5Idx9y2KDv9MXDC0TYjYMLHntI1Q8DqP8m01OVs5BcXaKVx0EEVwGaUcIU
-         8Fbw==
-X-Gm-Message-State: ACrzQf20zGglE+PRRU4LgURsMvz3keqyek+mSasCzuzSm3yx4+I4Krb9
-        mPt4vb6oD7pbh+O9L0RDAkHeyQ==
-X-Google-Smtp-Source: AMsMyM6tT1E2ZOGyLhi6joXexZS2tF424ZuU80HT1E8PlX5VEfgewkfgxiOERbPawxoJGiTPW3hzAQ==
-X-Received: by 2002:a17:90b:4c48:b0:214:25cd:96e3 with SMTP id np8-20020a17090b4c4800b0021425cd96e3mr1808035pjb.188.1667341376942;
-        Tue, 01 Nov 2022 15:22:56 -0700 (PDT)
-Received: from localhost ([2620:15c:9d:2:9c5f:7c8e:b8a2:3495])
-        by smtp.gmail.com with UTF8SMTPSA id m10-20020a170902f64a00b001769cfa5cd4sm6865385plg.49.2022.11.01.15.22.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Nov 2022 15:22:56 -0700 (PDT)
-From:   Brian Norris <briannorris@chromium.org>
-To:     Benson Leung <bleung@chromium.org>,
-        Guenter Roeck <groeck@chromium.org>
-Cc:     chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Brian Norris <briannorris@chromium.org>
-Subject: [PATCH v2 5/5] platform/chrome: cros_ec_spi: Set PROBE_PREFER_ASYNCHRONOUS
-Date:   Tue,  1 Nov 2022 15:22:10 -0700
-Message-Id: <20221101152132.v2.5.Ia458a69e1d592bfa4f04cde7018bbc7486f91a23@changeid>
-X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
-In-Reply-To: <20221101152132.v2.1.I0728421299079b104710c202d5d7095b2674fd8c@changeid>
-References: <20221101152132.v2.1.I0728421299079b104710c202d5d7095b2674fd8c@changeid>
+        bh=1Y0TtHVNR0Zt2jBbXANXyzyZbG58TNvz96BB5dak+Do=;
+        b=M01X6MtO/rGw9VZpcDzrtLlMBeVwT43QuJy1V1QWk5xMh4BM3kbOHYuX6M7rTREdCR
+         vAzWGizsgWiziKYbcSbYZ0Yisxv23CnVgDdr5ubaVx7Pcd1NFESqoNOhXIhnzFJlA3Zb
+         SZ3i8rd9nUy+bLEaEg6qfq9234IDM9uIGJUm/QPkPvRNxzgRXtQFln8oWNFpU3tCe8xn
+         GaLywyn1Svb3xebc02EE6WlqbGaWeVt7JQ8u7MB2OHRemkrK9C5HHtVWNQfXa1ee+iy7
+         LYpZxT8JCQNGLgK64Um4O/AZIbSRe+Go02wjnv9WSDkz8hRgTbh37dCWTwe9Wf7rKwvG
+         PXIg==
+X-Gm-Message-State: ACrzQf1k/W1ZnBc4ou0A7jZbTtfBORibQ675431DRRj1rqrtH+lf0VvI
+        5BZRlKX0iVCaL6K35lKIOzM=
+X-Google-Smtp-Source: AMsMyM6LzPa2RCiNmCR+IRBXvZBNmChmGLbhjGBuWPneabK4epdnsZKYenQf3jxpNORYfuMBLkXSeQ==
+X-Received: by 2002:a05:6402:51c8:b0:462:3e90:aef with SMTP id r8-20020a05640251c800b004623e900aefmr21986115edd.225.1667341510532;
+        Tue, 01 Nov 2022 15:25:10 -0700 (PDT)
+Received: from ZBook.localdomain (86-90-194-80.fixed.kpn.net. [86.90.194.80])
+        by smtp.gmail.com with ESMTPSA id z20-20020aa7c654000000b0045b3853c4b7sm4964843edr.51.2022.11.01.15.25.09
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 15:25:09 -0700 (PDT)
+From:   Jerom van der Sar <jerom.vandersar@gmail.com>
+To:     gregkh@linuxfoundation.org
+Cc:     philipp.g.hortmann@gmail.com, error27@gmail.com,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] staging: rtl8192e: space formatting fixes in rtl_cam.c
+Date:   Tue,  1 Nov 2022 23:25:09 +0100
+Message-Id: <20221101222509.4596-1-jerom.vandersar@gmail.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <f391a7cd-e57a-0643-1ba1-c859bf2f83a6@gmail.com>
+References: <f391a7cd-e57a-0643-1ba1-c859bf2f83a6@gmail.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This driver often takes on the order of 10ms to start, but in some cases
-as much as 600ms [1]. It shouldn't have many cross-device dependencies
-to race with, nor racy access to shared state with other drivers, so
-this should be a relatively low risk change.
+On 11/1/22 23:11, Philipp Hortman wrote:
+> WARNING: Unexpected content after email: 'Jerom van der Sar 
+> <jerom.vandersar@gmail.com>.', should be: 'Jerom van der Sar 
+> <jerom.vandersar@gmail.com>'
+> #14:
+> Signed-off-by: Jerom van der Sar <jerom.vandersar@gmail.com>.
+>
+>
+> I cannot apply your patch.
+>
+> Bye Philipp
 
-This driver was pinpointed as part of a survey of top slowest initcalls
-(i.e., are built in, and probing synchronously) on a lab of ChromeOS
-systems.
-
-[1] 600ms was especially surprising to me, so I checked a little deeper.
-This driver is used to interface with Embedded Controllers besides just
-the traditional laptop power-state controller -- it also interfaces with
-some fingerprint readers, which may start up in parallel with the
-kernel, or which may not even be present on some SKUs, despite having a
-node for it. Thus, our time is wasted just timing out talking to it. At
-least we can do that without blocking everyone else.
-
-Signed-off-by: Brian Norris <briannorris@chromium.org>
----
-
-(no changes since v1)
-
- drivers/platform/chrome/cros_ec_spi.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/drivers/platform/chrome/cros_ec_spi.c b/drivers/platform/chrome/cros_ec_spi.c
-index 7360b3ff6e4f..21143dba8970 100644
---- a/drivers/platform/chrome/cros_ec_spi.c
-+++ b/drivers/platform/chrome/cros_ec_spi.c
-@@ -834,6 +834,7 @@ static struct spi_driver cros_ec_driver_spi = {
- 		.name	= "cros-ec-spi",
- 		.of_match_table = cros_ec_spi_of_match,
- 		.pm	= &cros_ec_spi_pm_ops,
-+		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
- 	},
- 	.probe		= cros_ec_spi_probe,
- 	.remove		= cros_ec_spi_remove,
--- 
-2.38.1.273.g43a17bfeac-goog
-
+Thanks for the catch. Will fix.
