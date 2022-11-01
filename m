@@ -2,122 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 14E5B61450F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 08:31:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA3066144E6
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 08:12:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229891AbiKAHb0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 03:31:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51196 "EHLO
+        id S229744AbiKAHML (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 03:12:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiKAHbX (ORCPT
+        with ESMTP id S229457AbiKAHMJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 03:31:23 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 666EA14009;
-        Tue,  1 Nov 2022 00:31:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1667287881; x=1698823881;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=eMtIlU9F4D5ldNUDMy/uDawq9fDt32Jeq5I/BgKOwX0=;
-  b=M867ufJtod1EdI2bCdp2YVXMxYHfBGEORk1kPm4SpvSPaxOrTjuj6Xaq
-   P4TbOcFTuXzWCreJylYGKNMTbmOVudKe31qHoHuksk3g9W2m5meV7FCcZ
-   t+58BnNytSzCcSMIXb+T2nV75nWx+tIEli1ao7uIOudtIPu5oAEPTGX0n
-   byOhLfI2F5FrUoOfLikwTC6rKt8+7PsNbVexQ0E+sEvbYNCIjO3cx7kUX
-   YrVSpQjuucFgCJJWeVvpRL4+nD3mYwt4Jx+UpKNOxuIMOfrT5Y7Cn09Tp
-   yR+9DiYWulUMW2oI8LphBIDyJ2QChRh9K6H7pfq7vsWJKFvYHPgwfXLoB
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="184781964"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Nov 2022 00:31:20 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 1 Nov 2022 00:31:20 -0700
-Received: from den-her-m31857h.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Tue, 1 Nov 2022 00:31:16 -0700
-Message-ID: <741b628857168a6844b6c2e0482beb7df9b56520.camel@microchip.com>
-Subject: Re: [PATCH net-next v2 2/5] net: microchip: sparx5: Adding more tc
- flower keys for the IS2 VCAP
-From:   Steen Hegelund <steen.hegelund@microchip.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     Casper Andersson <casper.casan@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        "Wan Jiabing" <wanjiabing@vivo.com>,
-        Nathan Huckleberry <nhuck@google.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>
-Date:   Tue, 1 Nov 2022 08:31:16 +0100
-In-Reply-To: <20221031184128.1143d51e@kernel.org>
-References: <20221028144540.3344995-1-steen.hegelund@microchip.com>
-         <20221028144540.3344995-3-steen.hegelund@microchip.com>
-         <20221031103747.uk76tudphqdo6uto@wse-c0155>
-         <51622bfd3fe718139cece38493946c2860ebdf77.camel@microchip.com>
-         <20221031184128.1143d51e@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-User-Agent: Evolution 3.36.5-0ubuntu1 
+        Tue, 1 Nov 2022 03:12:09 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 523423A2;
+        Tue,  1 Nov 2022 00:12:07 -0700 (PDT)
+Received: from dggpeml500021.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N1h5v3qVLzHvTL;
+        Tue,  1 Nov 2022 15:11:47 +0800 (CST)
+Received: from huawei.com (10.175.127.227) by dggpeml500021.china.huawei.com
+ (7.185.36.21) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 1 Nov
+ 2022 15:12:00 +0800
+From:   Baokun Li <libaokun1@huawei.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <phillip@squashfs.org.uk>, <akpm@linux-foundation.org>,
+        <nixiaoming@huawei.com>, <linux-fsdevel@vger.kernel.org>,
+        <yi.zhang@huawei.com>, <yukuai3@huawei.com>, <libaokun1@huawei.com>
+Subject: [PATCH] squashfs: fix null-ptr-deref in squashfs_fill_super
+Date:   Tue, 1 Nov 2022 15:33:43 +0800
+Message-ID: <20221101073343.3961562-1-libaokun1@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.127.227]
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ dggpeml500021.china.huawei.com (7.185.36.21)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jacub,
+When squashfs_read_table() returns an error or `sb->s_magic
+!= SQUASHFS_MAGIC`, enters the error branch and calls
+msblk->thread_ops->destroy(msblk) to destroy msblk.
+However, msblk->thread_ops has not been initialized.
+Therefore, the following problem is triggered:
 
+==================================================================
+BUG: KASAN: null-ptr-deref in squashfs_fill_super+0xe7a/0x13b0
+Read of size 8 at addr 0000000000000008 by task swapper/0/1
 
-On Mon, 2022-10-31 at 18:41 -0700, Jakub Kicinski wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> 
-> On Mon, 31 Oct 2022 13:14:33 +0100 Steen Hegelund wrote:
-> > > I'm not able to get this working on PCB135. I tested the VLAN tags and
-> > > did not work either (did not test the rest). The example from the
-> > > previous patch series doesn't work either after applying this series.
-> 
-> Previous series in this context means previous revision or something
-> that was already merged?
+CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc3-next-20221031 #367
+Call Trace:
+ <TASK>
+ dump_stack_lvl+0x73/0x9f
+ print_report+0x743/0x759
+ kasan_report+0xc0/0x120
+ __asan_load8+0xd3/0x140
+ squashfs_fill_super+0xe7a/0x13b0
+ get_tree_bdev+0x27b/0x450
+ squashfs_get_tree+0x19/0x30
+ vfs_get_tree+0x49/0x150
+ path_mount+0xaae/0x1350
+ init_mount+0xad/0x100
+ do_mount_root+0xbc/0x1d0
+ mount_block_root+0x173/0x316
+ mount_root+0x223/0x236
+ prepare_namespace+0x1eb/0x237
+ kernel_init_freeable+0x528/0x576
+ kernel_init+0x29/0x250
+ ret_from_fork+0x1f/0x30
+ </TASK>
+==================================================================
 
-Casper refers to this series (the first of the VCAP related series) that was merged on Oct 24th:
+To solve this issue, msblk->thread_ops is initialized immediately after
+msblk is assigned a value.
 
-https://lore.kernel.org/all/20221020130904.1215072-1-steen.hegelund@microchip.com/
+Fixes: b0645770d3c7 ("squashfs: add the mount parameter theads=<single|multi|percpu>")
+Signed-off-by: Baokun Li <libaokun1@huawei.com>
+---
+ fs/squashfs/super.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-> 
-> > tc filter add dev eth3 ingress chain 8000000 prio 10 handle 10 \
-> 
-> How are you using chains?
-
-The chain ids are referring to the VCAP instances and their lookups.  There are some more details
-about this in the series I referred to above.
-
-The short version is that this allows you to select where in the frame processing flow your rule
-will be inserted (using ingress or egress and the chain id).
-
-> 
-> I thought you need to offload FLOW_ACTION_GOTO to get to a chain,
-> and I get no hits on this driver.
-
-I have not yet added the goto action, but one use of that is to chain a filter from one VCAP
-instance/lookup to another.
-
-The goto action will be added in a soon-to-come series.  I just wanted to avoid a series getting too
-large, but on the other hand each of them should provide functionality that you can use in practice.
-
-BR
-Steen
-
+diff --git a/fs/squashfs/super.c b/fs/squashfs/super.c
+index 1e428ca9414e..7d5265a39d20 100644
+--- a/fs/squashfs/super.c
++++ b/fs/squashfs/super.c
+@@ -197,6 +197,7 @@ static int squashfs_fill_super(struct super_block *sb, struct fs_context *fc)
+ 		return -ENOMEM;
+ 	}
+ 	msblk = sb->s_fs_info;
++	msblk->thread_ops = opts->thread_ops;
+ 
+ 	msblk->panic_on_errors = (opts->errors == Opt_errors_panic);
+ 
+@@ -231,7 +232,7 @@ static int squashfs_fill_super(struct super_block *sb, struct fs_context *fc)
+ 			       sb->s_bdev);
+ 		goto failed_mount;
+ 	}
+-	msblk->thread_ops = opts->thread_ops;
++
+ 	if (opts->thread_num == 0) {
+ 		msblk->max_thread_num = msblk->thread_ops->max_decompressors();
+ 	} else {
+-- 
+2.31.1
 
