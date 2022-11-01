@@ -2,256 +2,508 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 930CE614797
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 11:18:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62484614798
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 11:19:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229920AbiKAKSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 06:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50182 "EHLO
+        id S229828AbiKAKTR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 06:19:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51402 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229593AbiKAKSK (ORCPT
+        with ESMTP id S229995AbiKAKTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 06:18:10 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E0CF18345;
-        Tue,  1 Nov 2022 03:18:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667297888; x=1698833888;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SHihEAg3nhNRPiYlYllEkTIhkYtcgJYGQVnysp8hIe4=;
-  b=ARPD6N/e/muIhZtoFG0C3mTWUfQ0yEGgazdEZFyNRvRUo0V4EVwdH+ss
-   /hDzLjtTHnenbk4q+Ll+BlkwP++2aUjnKf2PsM8+HgiF9bhf9nlPjIiZg
-   Xkup0+r+hm1omO6uOEgSkxuPiQl1rVv8nSkthn31/ZpoUm+9DbVWCxjVF
-   BI8M6e9IXTMVlqf7kFZpQH0ECVH0eiSQ+E5PPJcJAhMPoiyJvVfYofBef
-   eTwPSgWftmQHf5g5zKYJ9yJnoULCpzSSr/g07OcLc3qV/p/2z7+SJ7IiM
-   QhxBSIOXzROvFLtiVHWnfDhpZU5/d1thCcCwM5csIJCZ/fy3Y1Bb49OF9
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="371188133"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="371188133"
-Received: from orsmga006.jf.intel.com ([10.7.209.51])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 03:18:07 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="611807849"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="611807849"
-Received: from linkunji-mobl1.ccr.corp.intel.com (HELO localhost) ([10.249.169.98])
-  by orsmga006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 03:18:04 -0700
-Date:   Tue, 1 Nov 2022 18:18:01 +0800
-From:   Yu Zhang <yu.c.zhang@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Eric Li <ercli@ucdavis.edu>,
-        David Matlack <dmatlack@google.com>,
-        Oliver Upton <oupton@google.com>
-Subject: Re: [PATCH v5 05/15] KVM: nVMX: Let userspace set nVMX MSR to any
- _host_ supported value
-Message-ID: <20221101101801.zxcjswoesg2gltri@linux.intel.com>
-References: <20220607213604.3346000-1-seanjc@google.com>
- <20220607213604.3346000-6-seanjc@google.com>
- <20221031163907.w64vyg5twzvv2nho@linux.intel.com>
- <Y2ABrnRzg729ZZNI@google.com>
+        Tue, 1 Nov 2022 06:19:13 -0400
+Received: from mail-oi1-x229.google.com (mail-oi1-x229.google.com [IPv6:2607:f8b0:4864:20::229])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D957D6369
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 03:19:11 -0700 (PDT)
+Received: by mail-oi1-x229.google.com with SMTP id p127so15391389oih.9
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 03:19:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xBm5F24RanvxSwBGYePAcpZ2sd9hyRnqMzxPviRfwC0=;
+        b=KdM+0ZpTBllZvcBKpeHz5uI0F5PtnkntWuYOayb1O7ZIkEcItJu2aLzpMSqBMNOwLQ
+         F5IzW/htXrKGaDws/I2cDrMN98AN8oi7SYJQytsDrYEVgCvDZmGabfQdBoyPkc6voNxs
+         lZJp8Hp6+ry5c/0zEFVVNTxA4p7O+94H+KOGgtC7isBal8/bPBerswYOiQNrN685O3UR
+         6AzTXgnoObkNeEOkiYR2LrlcR02ihXCIr+6uJfpfOhWgJm0oJttT/0jSs0CEXv99d5k2
+         o5RkPiaxYwv2D3ThCvmQAT4vvDwahnsBwJW8xp9vc0GD9TR2oqFfGw4n+UBwLHNXlWK9
+         AtAw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xBm5F24RanvxSwBGYePAcpZ2sd9hyRnqMzxPviRfwC0=;
+        b=wle2IFa9B2JWeDxDImTjmKZ4hI7+CoI8F+/8zovbmTHK3YdNLzM0aTr9M/L41Uxk+2
+         gmh8BKni9xc028GGX/Mdv8kxpQkwI/U3+qW2KYKL8zOsoFIf9kDO1BDF12lV82VkPVYO
+         zEm9goUzkaRSpxz4rFBFZUCtB9a1oVRaHiBkRgrN5z1sIlfQuWF5SV4r7KNF26ctGsEu
+         8KIVVlKnjwJ3qJILkpvV4rm9KzUUUuM4WZ4/LZd+D7gMRSntx+O3VOqoN2+Orca0sBDt
+         j4Ci8vWxK9LgSNQTXkfrYuz2AFun2I/JquKFP5qVOo4iGkdLhjRKH9b2jxqHKuTigzHy
+         MbIQ==
+X-Gm-Message-State: ACrzQf0vKVx/7YLSZOCWkijM5kGsw9DXiywEwaxP+Bh7geRTa1fVZne0
+        qiMT0mj27mAdiQn41ktKSE1nhTOJ7k+GEYyQNAsF3w==
+X-Google-Smtp-Source: AMsMyM4tX1GuDmDr8376Vz9x8x8qPBJmmXPabdqW8TQ0T8Ch7Qu6L+PX9PvrQhOp8lZLnMI/HW58YZNNhdFYGQ55zrE=
+X-Received: by 2002:a05:6808:e88:b0:351:2725:ed84 with SMTP id
+ k8-20020a0568080e8800b003512725ed84mr17105924oil.17.1667297950909; Tue, 01
+ Nov 2022 03:19:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2ABrnRzg729ZZNI@google.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20220903161309.32848-1-apatel@ventanamicro.com>
+ <20220903161309.32848-4-apatel@ventanamicro.com> <87k05wk2da.wl-maz@kernel.org>
+In-Reply-To: <87k05wk2da.wl-maz@kernel.org>
+From:   Anup Patel <apatel@ventanamicro.com>
+Date:   Tue, 1 Nov 2022 15:48:26 +0530
+Message-ID: <CAK9=C2V+81u6L78to8CCLZtU30oHCjrCZY8juODXc1hSP9H5BA@mail.gmail.com>
+Subject: Re: [PATCH v9 3/7] genirq: Add mechanism to multiplex a single HW IPI
+To:     Marc Zyngier <maz@kernel.org>
+Cc:     Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Atish Patra <atishp@atishpatra.org>,
+        Alistair Francis <Alistair.Francis@wdc.com>,
+        Anup Patel <anup@brainfault.org>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 05:11:10PM +0000, Sean Christopherson wrote:
-> On Tue, Nov 01, 2022, Yu Zhang wrote:
-> > Hi Sean & Paolo,
-> > 
-> > On Tue, Jun 07, 2022 at 09:35:54PM +0000, Sean Christopherson wrote:
-> > > Restrict the nVMX MSRs based on KVM's config, not based on the guest's
-> > > current config.  Using the guest's config to audit the new config
-> > > prevents userspace from restoring the original config (KVM's config) if
-> > > at any point in the past the guest's config was restricted in any way.
-> > 
-> > May I ask for an example here, to explain why we use the KVM config
-> > here, instead of the guest's? I mean, the guest's config can be
-> > adjusted after cpuid updates by vmx_vcpu_after_set_cpuid(). Yet the
-> > msr settings in vmcs_config.nested might be outdated by then.
+Hi Marc,
 
-Thanks a lot for your explanation, Sean. Questions are embedded below:
+Apologies for being slow, I got preempted by other tasks.
 
-> 
-> vmcs_config.nested never becomes out-of-date, it's read-only after __init (not
-> currently marked as such, that will be remedied soon).
-> 
-> The auditing performed by KVM is purely to guard against userspace enabling
-> features that KVM doesn't support.  KVM is not responsible for ensuring that the
-> vCPU's CPUID model match the VMX MSR model.
+On Wed, Sep 21, 2022 at 11:59 PM Marc Zyngier <maz@kernel.org> wrote:
+>
+> On Sat, 03 Sep 2022 17:13:05 +0100,
+> Anup Patel <apatel@ventanamicro.com> wrote:
+> >
+> > All RISC-V platforms have a single HW IPI provided by the INTC local
+> > interrupt controller. The HW method to trigger INTC IPI can be through
+> > external irqchip (e.g. RISC-V AIA), through platform specific device
+> > (e.g. SiFive CLINT timer), or through firmware (e.g. SBI IPI call).
+> >
+> > To support multiple IPIs on RISC-V, we add a generic IPI multiplexing
+> > mechanism which help us create multiple virtual IPIs using a single
+> > HW IPI. This generic IPI multiplexing is shared among various RISC-V
+> > irqchip drivers.
+> >
+> > Signed-off-by: Anup Patel <apatel@ventanamicro.com>
+> > ---
+> >  include/linux/irq.h  |  18 ++++
+> >  kernel/irq/Kconfig   |   5 +
+> >  kernel/irq/Makefile  |   1 +
+> >  kernel/irq/ipi-mux.c | 244 +++++++++++++++++++++++++++++++++++++++++++
+> >  4 files changed, 268 insertions(+)
+> >  create mode 100644 kernel/irq/ipi-mux.c
+> >
+> > diff --git a/include/linux/irq.h b/include/linux/irq.h
+> > index c3eb89606c2b..5ab702cb0a5b 100644
+> > --- a/include/linux/irq.h
+> > +++ b/include/linux/irq.h
+> > @@ -1266,6 +1266,24 @@ int __ipi_send_mask(struct irq_desc *desc, const struct cpumask *dest);
+> >  int ipi_send_single(unsigned int virq, unsigned int cpu);
+> >  int ipi_send_mask(unsigned int virq, const struct cpumask *dest);
+> >
+> > +/**
+> > + * struct ipi_mux_ops - IPI multiplex operations
+> > + *
+> > + * @ipi_mux_pre_handle:      Optional function called before handling parent IPI
+> > + * @ipi_mux_post_handle:Optional function called after handling parent IPI
+> > + * @ipi_mux_send:    Trigger parent IPI on target CPUs
+> > + */
+> > +struct ipi_mux_ops {
+> > +     void (*ipi_mux_pre_handle)(unsigned int parent_virq, void *data);
+> > +     void (*ipi_mux_post_handle)(unsigned int parent_virq, void *data);
+> > +     void (*ipi_mux_send)(unsigned int parent_virq, void *data,
+> > +                          const struct cpumask *mask);
+> > +};
+>
+> What is the rational for these pre/post handling functions? We don't
+> have them for normal interrupts, why are they required for IPIs?
 
-Do you mean the VMX MSR model shall not be changed after the cpuid updates?
-And for VMX MSR model, do you mean the vmx->nested.msrs or the ones in 
-vmcs_config->nested? 
+Yes, normal interrupts don't require these functions but there is
+diversity among irqchip drivers for IPI muxing.
 
-What I observed is that vmx->nested.msrs.secondary_ctls_high will be changed
-in vmx_adjust_secondary_exec_control(), which can be triggered after cpuid is
-set. 
+For example:  the Apple AIC driver has device specific MMIO access
+before and after handling IPIs whereas the RISC-V SBI IPI driver needs
+to clear the sip.SSIP bit before handling the IPIs.
 
-Since KVM's config(vmcs_config->nested.secondary_ctls_high) is done during init
-by nested_vmx_setup_ctls_msrs(), which only kept a subset of the flags from the
-vmcs_confg->cpu_based_2nd_exec_ctrl, the vmx_restore_control_msr() could fail
-later, when userspace VMM tries to enable a feature(the only one I witnessed is
-SECONDARY_EXEC_ENABLE_USR_WAIT_PAUSE) by setting MSR_IA32_VMX_PROCBASED_CTLS2.
-Because the vmx->nested.msrs.secondary_ctls_high is updated by cpuid, but this
-bit is not taken from vmcs_conf->cpu_based_2nd_exec_ctrl by nested_vmx_setup_ctls_msrs()
-for vmcs_config->nested.secondary_ctls_high.
+>
+> > +
+> > +void ipi_mux_process(void);
+> > +int ipi_mux_create(unsigned int parent_virq, unsigned int nr_ipi,
+> > +                const struct ipi_mux_ops *ops, void *data);
+> > +
+> >  #ifdef CONFIG_GENERIC_IRQ_MULTI_HANDLER
+> >  /*
+> >   * Registers a generic IRQ handling function as the top-level IRQ handler in
+> > diff --git a/kernel/irq/Kconfig b/kernel/irq/Kconfig
+> > index db3d174c53d4..df17dbc54b02 100644
+> > --- a/kernel/irq/Kconfig
+> > +++ b/kernel/irq/Kconfig
+> > @@ -86,6 +86,11 @@ config GENERIC_IRQ_IPI
+> >       depends on SMP
+> >       select IRQ_DOMAIN_HIERARCHY
+> >
+> > +# Generic IRQ IPI Mux support
+> > +config GENERIC_IRQ_IPI_MUX
+> > +     bool
+> > +     depends on SMP
+> > +
+> >  # Generic MSI interrupt support
+> >  config GENERIC_MSI_IRQ
+> >       bool
+> > diff --git a/kernel/irq/Makefile b/kernel/irq/Makefile
+> > index b4f53717d143..f19d3080bf11 100644
+> > --- a/kernel/irq/Makefile
+> > +++ b/kernel/irq/Makefile
+> > @@ -15,6 +15,7 @@ obj-$(CONFIG_GENERIC_IRQ_MIGRATION) += cpuhotplug.o
+> >  obj-$(CONFIG_PM_SLEEP) += pm.o
+> >  obj-$(CONFIG_GENERIC_MSI_IRQ) += msi.o
+> >  obj-$(CONFIG_GENERIC_IRQ_IPI) += ipi.o
+> > +obj-$(CONFIG_GENERIC_IRQ_IPI_MUX) += ipi-mux.o
+> >  obj-$(CONFIG_SMP) += affinity.o
+> >  obj-$(CONFIG_GENERIC_IRQ_DEBUGFS) += debugfs.o
+> >  obj-$(CONFIG_GENERIC_IRQ_MATRIX_ALLOCATOR) += matrix.o
+> > diff --git a/kernel/irq/ipi-mux.c b/kernel/irq/ipi-mux.c
+> > new file mode 100644
+> > index 000000000000..8939fa2be73c
+> > --- /dev/null
+> > +++ b/kernel/irq/ipi-mux.c
+> > @@ -0,0 +1,244 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Multiplex several virtual IPIs over a single HW IPI.
+> > + *
+> > + * Copyright (c) 2022 Ventana Micro Systems Inc.
+>
+> Basic courtesy would be to at least mention where this was lifted
+> from, as well as the original copyrights. Also, the original code
+> states "GPL-2.0-or-later". Since this is a derivative work, the same
+> licence should apply, shouldn't it?
 
-The failure can be fixed, simply by adding SECONDARY_EXEC_ENABLE_USR_WAIT_PAUSE in
-nested_vmx_setup_ctls_msrs(), e.g.
+Sure, I will update it.
 
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 0c62352dda6a..fa255391718c 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -6791,13 +6791,7 @@ void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps)
-        msrs->procbased_ctls_low &=
-                ~(CPU_BASED_CR3_LOAD_EXITING | CPU_BASED_CR3_STORE_EXITING);
+>
+> > + */
+> > +
+> > +#define pr_fmt(fmt) "ipi-mux: " fmt
+> > +#include <linux/cpu.h>
+> > +#include <linux/init.h>
+> > +#include <linux/irq.h>
+> > +#include <linux/irqchip.h>
+> > +#include <linux/irqchip/chained_irq.h>
+> > +#include <linux/irqdomain.h>
+> > +#include <linux/smp.h>
+> > +
+> > +static void *ipi_mux_data;
+> > +static unsigned int ipi_mux_nr;
+> > +static unsigned int ipi_mux_parent_virq;
+> > +static struct irq_domain *ipi_mux_domain;
+> > +static const struct ipi_mux_ops *ipi_mux_ops;
+> > +static DEFINE_PER_CPU(atomic_t, ipi_mux_enable);
+> > +static DEFINE_PER_CPU(atomic_t, ipi_mux_bits);
+>
+> How about making these fields part of a structure, and only allocate
+> them on creation of an IPI irqdomain? Most platforms do not require
+> this at all.
 
--       /*
--        * secondary cpu-based controls.  Do not include those that
--        * depend on CPUID bits, they are added later by
--        * vmx_vcpu_after_set_cpuid.
--        */
-        msrs->secondary_ctls_low = 0;
--
-        msrs->secondary_ctls_high = vmcs_conf->cpu_based_2nd_exec_ctrl;
-        msrs->secondary_ctls_high &=
-                SECONDARY_EXEC_DESC |
-@@ -6810,7 +6804,8 @@ void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps)
-                SECONDARY_EXEC_ENABLE_INVPCID |
-                SECONDARY_EXEC_RDSEED_EXITING |
-                SECONDARY_EXEC_XSAVES |
--               SECONDARY_EXEC_TSC_SCALING;
-+               SECONDARY_EXEC_TSC_SCALING |
-+               SECONDARY_EXEC_ENABLE_USR_WAIT_PAUSE;
+Okay, I will update like you suggested.
 
-        /*
-         * We can emulate "VMCS shadowing," even if the hardware
+>
+> > +
+> > +static void ipi_mux_mask(struct irq_data *d)
+> > +{
+> > +     atomic_andnot(BIT(irqd_to_hwirq(d)), this_cpu_ptr(&ipi_mux_enable));
+> > +}
+> > +
+> > +static void ipi_mux_unmask(struct irq_data *d)
+> > +{
+> > +     u32 ipi_bit = BIT(irqd_to_hwirq(d));
+> > +
+> > +     atomic_or(ipi_bit, this_cpu_ptr(&ipi_mux_enable));
+> > +
+> > +     /*
+> > +      * The atomic_or() above must complete before the atomic_read()
+> > +      * below to avoid racing ipi_mux_send_mask().
+> > +      */
+> > +     smp_mb__after_atomic();
+> > +
+> > +     /* If a pending IPI was unmasked, raise a parent IPI immediately. */
+> > +     if (atomic_read(this_cpu_ptr(&ipi_mux_bits)) & ipi_bit)
+> > +             ipi_mux_ops->ipi_mux_send(ipi_mux_parent_virq, ipi_mux_data,
+> > +                                       cpumask_of(smp_processor_id()));
+> > +}
+> > +
+> > +static void ipi_mux_send_mask(struct irq_data *d, const struct cpumask *mask)
+> > +{
+> > +     u32 ipi_bit = BIT(irqd_to_hwirq(d));
+> > +     struct cpumask pmask = { 0 };
+>
+> Urgh, no (see the comment in cpumask.h). struct cpumask can be really
+> huge (it uses NR_CPUS), and we only want to depend on nr_cpus. Use a
+> per-CPU temp if you must, but don't allocate something like this on
+> the stack.
 
-But then I wonder, why do we need the bitwise and operation here first:
-        msrs->secondary_ctls_high = vmcs_conf->cpu_based_2nd_exec_ctrl;
-        msrs->secondary_ctls_high &=
-                SECONDARY_EXEC_DESC |
-                SECONDARY_EXEC_ENABLE_RDTSCP |
-                SECONDARY_EXEC_VIRTUALIZE_X2APIC_MODE |
-                SECONDARY_EXEC_WBINVD_EXITING |
-                SECONDARY_EXEC_APIC_REGISTER_VIRT |
-                SECONDARY_EXEC_VIRTUAL_INTR_DELIVERY |
-                SECONDARY_EXEC_RDRAND_EXITING |
-                SECONDARY_EXEC_ENABLE_INVPCID |
-                SECONDARY_EXEC_RDSEED_EXITING |
-                SECONDARY_EXEC_XSAVES |
-                SECONDARY_EXEC_TSC_SCALING |
-                SECONDARY_EXEC_ENABLE_USR_WAIT_PAUSE;
+Okay, I will create per-CPU temp like you suggested.
 
-And then reset many of the remaining flags based on configurations such as
-enable_ept, enable_vpid, enable_unrestricted_guest etc... But maybe we need
-go through this case by case.
+>
+> > +     unsigned long pending;
+> > +     int cpu;
+> > +
+> > +     for_each_cpu(cpu, mask) {
+> > +             pending = atomic_fetch_or_release(ipi_bit,
+> > +                                     per_cpu_ptr(&ipi_mux_bits, cpu));
+> > +
+> > +             /*
+> > +              * The atomic_fetch_or_release() above must complete before
+> > +              * the atomic_read() below to avoid racing ipi_mux_unmask().
+> > +              */
+> > +             smp_mb__after_atomic();
+> > +
+> > +             if (!(pending & ipi_bit) &&
+> > +                 (atomic_read(per_cpu_ptr(&ipi_mux_enable, cpu)) & ipi_bit))
+> > +                     cpumask_set_cpu(cpu, &pmask);
+> > +     }
+> > +
+> > +     /* Trigger the parent IPI */
+> > +     ipi_mux_ops->ipi_mux_send(ipi_mux_parent_virq, ipi_mux_data, &pmask);
+> > +}
+> > +
+> > +static const struct irq_chip ipi_mux_chip = {
+> > +     .name           = "IPI Mux",
+> > +     .irq_mask       = ipi_mux_mask,
+> > +     .irq_unmask     = ipi_mux_unmask,
+> > +     .ipi_send_mask  = ipi_mux_send_mask,
+> > +};
+> > +
+> > +static int ipi_mux_domain_alloc(struct irq_domain *d, unsigned int virq,
+> > +                             unsigned int nr_irqs, void *arg)
+> > +{
+> > +     struct irq_fwspec *fwspec = arg;
+> > +     irq_hw_number_t hwirq;
+> > +     unsigned int type;
+> > +     int i, ret;
+> > +
+> > +     ret = irq_domain_translate_onecell(d, fwspec, &hwirq, &type);
+>
+> Where is the format of this fwspec documented?
 
-> 
-> An example would be if userspace loaded the VMX MSRs with a default model, and
-> then enabled features one-by-one.  In practice this doesn't happen because it's
-> more performant to gather all features and do a single KVM_SET_MSRS, but it's a
-> legitimate approach that KVM should allow.
-> 
-> > Another question is about the setting of secondary_ctls_high in
-> > nested_vmx_setup_ctls_msrs().  I saw there's a comment saying:
-> > 	"Do not include those that depend on CPUID bits, they are
-> > 	added later by vmx_vcpu_after_set_cpuid.".
-> 
-> That's a stale comment, see the very next commit, 8805875aa473 ("Revert "KVM: nVMX:
-> Do not expose MPX VMX controls when guest MPX disabled""), as well as the slightly
-> later commit 9389d5774aca ("Revert "KVM: nVMX: Expose load IA32_PERF_GLOBAL_CTRL
-> VM-{Entry,Exit} control"").
-> 
+We don't need this fwspec. I will remove it in next patch revision.
 
-So the comment can be and shall be removed, right? 
+>
+> > +     if (ret)
+> > +             return ret;
+> > +
+> > +     for (i = 0; i < nr_irqs; i++) {
+> > +             irq_set_percpu_devid(virq + i);
+> > +             irq_domain_set_info(d, virq + i, hwirq + i,
+> > +                                 &ipi_mux_chip, d->host_data,
+> > +                                 handle_percpu_devid_irq, NULL, NULL);
+> > +     }
+> > +
+> > +     return 0;
+> > +}
+> > +
+> > +static const struct irq_domain_ops ipi_mux_domain_ops = {
+> > +     .alloc          = ipi_mux_domain_alloc,
+> > +     .free           = irq_domain_free_irqs_top,
+> > +};
+> > +
+> > +/**
+> > + * ipi_mux_process - Process multiplexed virtual IPIs
+> > + */
+> > +void ipi_mux_process(void)
+> > +{
+> > +     irq_hw_number_t hwirq;
+> > +     unsigned long ipis;
+> > +     int en, err;
+> > +
+> > +     if (ipi_mux_ops->ipi_mux_pre_handle)
+>
+> Given that this shouldn't change in the lifetime of the system, this
+> needs to be turned into a static key in order to avoid the overhead of
+> accessing this on each and every IPI.
 
-> > But since cpuid updates can adjust the vmx->nested.msrs.secondary_ctls_high,
-> > do we really need to clear those flags for secondary_ctls_high in this
-> > global config?
-> 
-> As above, the comment is stale, KVM should not manipulate the VMX MSRs in response
-> to guest CPUID changes.  The one exception to this is reserved CR0/CR4 bits.  We
-> discussed quirking that behavior, but ultimately decided not to because (a) no
-> userspace actually cares and and (b) KVM would effectively need to make up behavior
-> if userspace allowed the guest to load CR4 bits via VM-Enter or VM-Exit that are
-> disallowed by CPUID, e.g. L1 could end up running with a CR4 that is supposed to
-> be impossible according to CPUID.
-> 
-> > Could we just set 
-> > 	msrs->secondary_ctls_high = vmcs_conf->cpu_based_2nd_exec_ctrl?
-> 
-> KVM already does that in upstream (with further sanitization).  See commit
-> bcdf201f8a4d ("KVM: nVMX: Use sanitized allowed-1 bits for VMX control MSRs").
-> 
-> > If yes, code(in nested_vmx_setup_ctls_msrs()) such as
-> > 	if (enable_ept) {
-> > 		/* nested EPT: emulate EPT also to L1 */
-> > 		msrs->secondary_ctls_high |=
-> > 			SECONDARY_EXEC_ENABLE_EPT;
-> 
-> This can't be completely removed, though unless I'm missing something, it can and
-> should be shifted to the sanitization code, e.g.
-> 
-> diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-> index 8f67a9c4a287..0c41d5808413 100644
-> --- a/arch/x86/kvm/vmx/nested.c
-> +++ b/arch/x86/kvm/vmx/nested.c
-> @@ -6800,6 +6800,7 @@ void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps)
->  
->         msrs->secondary_ctls_high = vmcs_conf->cpu_based_2nd_exec_ctrl;
->         msrs->secondary_ctls_high &=
-> +               SECONDARY_EXEC_ENABLE_EPT |
->                 SECONDARY_EXEC_DESC |
->                 SECONDARY_EXEC_ENABLE_RDTSCP |
->                 SECONDARY_EXEC_VIRTUALIZE_X2APIC_MODE |
-> @@ -6820,9 +6821,6 @@ void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps)
->                 SECONDARY_EXEC_SHADOW_VMCS;
->  
->         if (enable_ept) {
-> -               /* nested EPT: emulate EPT also to L1 */
-> -               msrs->secondary_ctls_high |=
-> -                       SECONDARY_EXEC_ENABLE_EPT;
->                 msrs->ept_caps =
->                         VMX_EPT_PAGE_WALK_4_BIT |
->                         VMX_EPT_PAGE_WALK_5_BIT |
-> 
-> 
-> > or 
-> > 	if (cpu_has_vmx_vmfunc()) {
-> > 		msrs->secondary_ctls_high |=
-> > 			SECONDARY_EXEC_ENABLE_VMFUNC;
-> 
-> This one is still required.  KVM never enables VMFUNC for itself, i.e. it won't
-> be set in KVM's VMCS configuration.
-> 
+Sure, I will use static keys here.
 
-My understanding is that, for VMFUNC, altough KVM does not support it,
-SECONDARY_EXEC_ENABLE_VMFUNC is still set in the secondary proc-based
-vm execution ctrol. KVM just uses different handlers for VMFUNC exits
-from L1(to inject the #UD) and L2(to emulate the eptp switching). So
-it doesn't matter if we do not clear this bit for vmcs_config->nested.
-procbased_ctls_high. 
+>
+> > +             ipi_mux_ops->ipi_mux_pre_handle(ipi_mux_parent_virq,
+> > +                                             ipi_mux_data);
+> > +
+> > +     /*
+> > +      * Reading enable mask does not need to be ordered as long as
+> > +      * this function called from interrupt handler because only
+> > +      * the CPU itself can change it's own enable mask.
+> > +      */
+> > +     en = atomic_read(this_cpu_ptr(&ipi_mux_enable));
+> > +
+> > +     /*
+> > +      * Clear the IPIs we are about to handle. This pairs with the
+> > +      * atomic_fetch_or_release() in ipi_mux_send_mask().
+> > +      */
+> > +     ipis = atomic_fetch_andnot(en, this_cpu_ptr(&ipi_mux_bits)) & en;
+> > +
+> > +     for_each_set_bit(hwirq, &ipis, ipi_mux_nr) {
+> > +             err = generic_handle_domain_irq(ipi_mux_domain,
+> > +                                             hwirq);
+> > +             if (unlikely(err))
+> > +                     pr_warn_ratelimited(
+> > +                             "can't find mapping for hwirq %lu\n",
+> > +                             hwirq);
+>
+> How can this happen?
 
-I may probably missed something. But I hope my questions are clear 
-enough (though I also doubt it...) :)
+This is a paranoid check on my side. I will remove it.
 
-B.R.
-Yu
+>
+> > +     }
+> > +
+> > +     if (ipi_mux_ops->ipi_mux_post_handle)
+>
+> Same thing as above.
+
+Okay, I will update.
+
+>
+> > +             ipi_mux_ops->ipi_mux_post_handle(ipi_mux_parent_virq,
+> > +                                              ipi_mux_data);
+> > +}
+> > +
+> > +static void ipi_mux_handler(struct irq_desc *desc)
+> > +{
+> > +     struct irq_chip *chip = irq_desc_get_chip(desc);
+> > +
+> > +     chained_irq_enter(chip, desc);
+> > +     ipi_mux_process();
+> > +     chained_irq_exit(chip, desc);
+> > +}
+> > +
+> > +static int ipi_mux_dying_cpu(unsigned int cpu)
+> > +{
+> > +     disable_percpu_irq(ipi_mux_parent_virq);
+> > +     return 0;
+> > +}
+> > +
+> > +static int ipi_mux_starting_cpu(unsigned int cpu)
+> > +{
+> > +     enable_percpu_irq(ipi_mux_parent_virq,
+> > +                       irq_get_trigger_type(ipi_mux_parent_virq));
+> > +     return 0;
+> > +}
+> > +
+> > +/**
+> > + * ipi_mux_create - Create virtual IPIs multiplexed on top of a single
+> > + * parent IPI.
+> > + * @parent_virq:     virq of the parent per-CPU IRQ
+> > + * @nr_ipi:          number of virtual IPIs to create. This should
+> > + *                   be <= BITS_PER_TYPE(int)
+>
+> In general, please use 'long' rather than 'int', like for most other
+> things in the kernel.
+
+This is BITS_PER_TYPE(int) because we are using 32bit atomic
+operations.
+
+>
+> > + * @ops:             multiplexing operations for the parent IPI
+> > + * @data:            opaque data used by the multiplexing operations
+> > + *
+> > + * If the parent IPI > 0 then ipi_mux_process() will be automatically
+> > + * called via chained handler.
+> > + *
+> > + * If the parent IPI <= 0 then it is responsibility of irqchip drivers
+> > + * to explicitly call ipi_mux_process() for processing muxed IPIs.
+> > + *
+> > + * Returns first virq of the newly created virtual IPIs upon success
+> > + * or <=0 upon failure
+> > + */
+> > +int ipi_mux_create(unsigned int parent_virq, unsigned int nr_ipi,
+> > +                const struct ipi_mux_ops *ops, void *data)
+> > +{
+> > +     struct fwnode_handle *fwnode;
+> > +     struct irq_domain *domain;
+> > +     struct irq_fwspec ipi;
+> > +     int virq;
+> > +
+> > +     if (ipi_mux_domain || BITS_PER_TYPE(int) < nr_ipi ||
+> > +         !ops || !ops->ipi_mux_send)
+> > +             return -EINVAL;
+> > +
+> > +     if (parent_virq &&
+> > +         !irqd_is_per_cpu(irq_desc_get_irq_data(irq_to_desc(parent_virq))))
+> > +             return -EINVAL;
+> > +
+> > +     fwnode = irq_domain_alloc_named_fwnode("IPI-Mux");
+> > +     if (!fwnode) {
+> > +             pr_err("unable to create IPI Mux fwnode\n");
+> > +             return -ENOMEM;
+> > +     }
+> > +
+> > +     domain = irq_domain_create_simple(fwnode, nr_ipi, 0,
+> > +                                       &ipi_mux_domain_ops, NULL);
+> > +     if (!domain) {
+> > +             pr_err("unable to add IPI Mux domain\n");
+> > +             irq_domain_free_fwnode(fwnode);
+> > +             return -ENOMEM;
+> > +     }
+> > +
+> > +     ipi.fwnode = domain->fwnode;
+> > +     ipi.param_count = 1;
+> > +     ipi.param[0] = 0;
+>
+> This really deserves some documentation if this is to be used at scale
+> (and not be a riscv-special).
+
+This fwspec is not needed. I will be removing it in the next patch revision.
+
+>
+> > +     virq = __irq_domain_alloc_irqs(domain, -1, nr_ipi,
+> > +                                    NUMA_NO_NODE, &ipi, false, NULL);
+> > +     if (virq <= 0) {
+> > +             pr_err("unable to alloc IRQs from IPI Mux domain\n");
+> > +             irq_domain_remove(domain);
+> > +             irq_domain_free_fwnode(fwnode);
+> > +             return virq;
+> > +     }
+> > +
+> > +     ipi_mux_domain = domain;
+> > +     ipi_mux_data = data;
+> > +     ipi_mux_nr = nr_ipi;
+> > +     ipi_mux_parent_virq = parent_virq;
+> > +     ipi_mux_ops = ops;
+> > +
+> > +     if (parent_virq > 0) {
+> > +             irq_set_chained_handler(parent_virq, ipi_mux_handler);
+> > +             cpuhp_setup_state(CPUHP_AP_ONLINE_DYN,
+> > +                               "irqchip/ipi-mux:starting",
+> > +                               ipi_mux_starting_cpu, ipi_mux_dying_cpu);
+> > +     }
+>
+> This whole CPUHP thing feels like something that should stay outside
+> of the generic code. I'm pretty sure some architectures would have
+> specific requirements and wouldn't be able to just use any odd dynamic
+> value...
+
+I agree. I will update irqchip drivers to do the parent_virq enable/disable
+and remove it from here.
+
+>
+> > +
+> > +     return virq;
+> > +}
+>
+> Thanks,
+>
+>         M.
+>
+> --
+> Without deviation from the norm, progress is not possible.
+
+Thanks,
+Anup
