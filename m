@@ -2,145 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6337261550C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:33:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D9883615500
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:32:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230493AbiKAWdf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 18:33:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36652 "EHLO
+        id S229933AbiKAWcE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 18:32:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231185AbiKAWdJ (ORCPT
+        with ESMTP id S230174AbiKAWbx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 18:33:09 -0400
-Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C88C21DA56
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 15:33:05 -0700 (PDT)
-Received: from pps.filterd (m0246632.ppops.net [127.0.0.1])
-        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A1M3xWC016221;
-        Tue, 1 Nov 2022 22:32:56 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references :
- content-transfer-encoding : content-type : mime-version; s=corp-2022-7-12;
- bh=S17dg2dyeQUIoXTB9U1R9CMRu2YgHFA8Z60QOzRAZ7o=;
- b=Jr+UOFti3vagBqAktcoRadVUKEkNGiD906OrBY7jjb89KrwK4D4EnPb+i8x7LaIgyiPt
- VnNvjfl4JqMcU2BJ23q0U+1O+qPn8kX79He9nd2tnCutl+XqYjOfVJ4CVLxySTKq8hV6
- gUIGPQmnKKPli65kNkqWHJONituGAs3O7MDUbMcc8M8fcK22b/SD5XbbyAAsp2IbVpYM
- x+3LKtYWtYhKPRs+N+ekbujhBfK4oFqOE67yFizIEAppOLlwsRvdQpsRS9soqpZjqPe/
- CNUVGW/YWWx7bONw9psx/nScHuraOk0iw+HXtkzwVco+Km2VyFjGFD9ySIAs3IejjJVX ow== 
-Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
-        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kgussr1xm-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 01 Nov 2022 22:32:55 +0000
-Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2A1KbWqC014088;
-        Tue, 1 Nov 2022 22:32:54 GMT
-Received: from nam11-bn8-obe.outbound.protection.outlook.com (mail-bn8nam11lp2169.outbound.protection.outlook.com [104.47.58.169])
-        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kgtm4w34x-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Tue, 01 Nov 2022 22:32:54 +0000
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=euUPyiBWkBgxH6KIlWovRKYJS+NoQyGhXxRtg77RlhhGPc0ZPOGPy8A9hlg32bMmGxXGtrZLMV9+B90T0vtH1psbFj+1+Jia6H3iPdBQqZTUd5lnr6LFHOS9sLf/Bvc+tzge1Ncc7OHH0OKerVr4LmNVIEp8FgvByPMHdmuudOCxAZBmmKTkdUzexZRzCZsyuPnR/9O7Vnf4R1HKXLbTKIhObu37np7ykTbgQ7q0j+6167dfEjQO3Xuf/lwg7FNs4LocLURuV4rx0NUaWkhx9BhQglEirSt5Mx+Jl4CESTvFcrS2Tbg6PTcmgYJRE1iMx9LjB7Ctl9gTBWpOh78xUA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=S17dg2dyeQUIoXTB9U1R9CMRu2YgHFA8Z60QOzRAZ7o=;
- b=XZ0J0GQIUxm8g7OGBBj6pcLBVkJygpWznYp24DjbKBmxB3Narp/L6At2eZrRaDqKQyc06RdDqweOA98rRFEGje/y24HUt83zHx0AOguZtRyTb7Z/yQoMTYJNvCfo1Okq0hD61MUbx3jEHCeVxJlBQ9PGMINZvfeVAOPWIvfqEmR8YFgJHRmnr5eXU8XL5UXV4fivv5i/ujpm+2EjwooMLyxs32poPb5yWsBrcSjKl8GHEMcYK1XPW5B8za4RZbTMgkIG/4vBWZDIeS7uWDfnUYfGms+CCn7W7a+AEEVJORBEeFWF0U7vU1bdtq+oVcl15dmrBcPyBwofKa06wexTGQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
- dkim=pass header.d=oracle.com; arc=none
+        Tue, 1 Nov 2022 18:31:53 -0400
+Received: from mail-oa1-x41.google.com (mail-oa1-x41.google.com [IPv6:2001:4860:4864:20::41])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 311F61D661;
+        Tue,  1 Nov 2022 15:31:50 -0700 (PDT)
+Received: by mail-oa1-x41.google.com with SMTP id 586e51a60fabf-13c569e5ff5so18053156fac.6;
+        Tue, 01 Nov 2022 15:31:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=S17dg2dyeQUIoXTB9U1R9CMRu2YgHFA8Z60QOzRAZ7o=;
- b=rUuZMVtKi85I5TDzsR/tq8dH73VrKUHfSiK5qcDhV5oBcCNtJV1b69K56MA9/Fza38WGthSpDyVXG7azZt9z3SVbB7j9dfNTB9D+qq4pEN+KQZPqv+mUWLbrNyuIOzuxx4auw43x3aLqJ00Au49ICfc7QAaBNg9UxNJWJCsASrU=
-Received: from CH0PR10MB5113.namprd10.prod.outlook.com (2603:10b6:610:c9::8)
- by DM4PR10MB6184.namprd10.prod.outlook.com (2603:10b6:8:8c::16) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.15; Tue, 1 Nov
- 2022 22:32:52 +0000
-Received: from CH0PR10MB5113.namprd10.prod.outlook.com
- ([fe80::3702:7db0:8917:9954]) by CH0PR10MB5113.namprd10.prod.outlook.com
- ([fe80::3702:7db0:8917:9954%4]) with mapi id 15.20.5769.019; Tue, 1 Nov 2022
- 22:32:52 +0000
-From:   Sidhartha Kumar <sidhartha.kumar@oracle.com>
-To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
-Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
-        mike.kravetz@oracle.com, willy@infradead.org,
-        almasrymina@google.com, linmiaohe@huawei.com,
-        minhquangbui99@gmail.com, aneesh.kumar@linux.ibm.com,
-        Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Subject: [PATCH v2 9/9] mm/hugetlb: convert move_hugetlb_state() to folios
-Date:   Tue,  1 Nov 2022 15:30:59 -0700
-Message-Id: <20221101223059.460937-10-sidhartha.kumar@oracle.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221101223059.460937-1-sidhartha.kumar@oracle.com>
-References: <20221101223059.460937-1-sidhartha.kumar@oracle.com>
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: BYAPR07CA0001.namprd07.prod.outlook.com
- (2603:10b6:a02:bc::14) To CH0PR10MB5113.namprd10.prod.outlook.com
- (2603:10b6:610:c9::8)
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ENLdlMGrxYOQQ6+/iiPdY/yb1WVFSPiKyQyKcHEemIA=;
+        b=qt6Qdhy9m2XP52Q5OCaNwefkUSHW71CWMeIAZM7D/5OKOrpbJxAP+q5FS4purW/BLn
+         ufzOgd4b4Z4EIk6w11GFi/7fgT1CiFPTRDDi9cLLTSi+6HayCOPPeSAvGnMTp5Mf2n1j
+         KSOSSOtnhUwokBwIMWk+kK1d59Ast4HsH8O/3CW3nNs4YNaVwELG5ikZKkNI/wVoibiZ
+         YO+9IC2fKKfCpqcpNcqgbaFgg7lufrYdM8dwZupR5xkwlGjGgrP8KDC6it/CVUqZJ0PW
+         fEonsRT/LLCrkHbzXTsrNyey4KhhhSODehvbdiq116SlH5gtdBrGMna2EdPw+jwe5ffs
+         KLIA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ENLdlMGrxYOQQ6+/iiPdY/yb1WVFSPiKyQyKcHEemIA=;
+        b=BpMEjbwM/w1a47lDX0xUt5iQFDgRjarVn96r3Rfyv4uJRRmiUCGSx5qfM/8k2NHc7O
+         iKhBUeJ9JUZ5s8dKLbS5Exn8jr8YmN4ZH0PZ7uNiSMXFZDgEOSwb7vKwqzOM50WDs0aN
+         9OcB/7QmvTQWjNQI5DFUzJ5RSL2ZhHi4HzOQsZqECX+30fKfrQDIHiGSZvJYNEW5St+b
+         qWsKGn1tFQui1eDe9cbCSrwzW72yYRMgJyI3gAV/ajJnYntEcb5DfmZTIsQcVB/pcrFD
+         bLXdJucecF0yH4gGlE8zKXq0LeK4vqJUwa14HxdF1KbGcOc2uZKkhcbzD5a+lLLmTVKk
+         cMLw==
+X-Gm-Message-State: ACrzQf13bVJxAJQdMC8wqZ4jd4i6ECdAldM4pignWwFVZaBSaR2SIKbN
+        MQfkwBskO8QITojcbvWRFC6obyCs77QvXT8MoVc=
+X-Google-Smtp-Source: AMsMyM7x9Zc6JHNlinkLfS0MGi5KbVE0pM6sDB0okwOH+cFSUHXpCg4Oj39hdTVcGqcVbntvgEa0V2CB9X0mgIzamek=
+X-Received: by 2002:a05:6870:3516:b0:13b:8bc3:1140 with SMTP id
+ k22-20020a056870351600b0013b8bc31140mr21957069oah.293.1667341909476; Tue, 01
+ Nov 2022 15:31:49 -0700 (PDT)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH0PR10MB5113:EE_|DM4PR10MB6184:EE_
-X-MS-Office365-Filtering-Correlation-Id: 09bbf4e9-4ef0-413a-bde8-08dabc59039e
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Z9PtVLjkl8kkh9zOZ8k4H1g/XorjWHAdWsijrxL+QfLV92HomvVqCShUUVBE8KW7faGIo4V7iw/esYmxRbLWG9SBx3q5RVJXESWZavoJsYZEhZagiW7w96qbvcft6lbkFc2SlxV80d8KCVz7xRrQXsYOMKcmqKKGDChXKE02EMcJ/syCYxHD8+OAMF1SxUERY+7ELlQEHvt3U8mKbMSV5R1QMlCEBx2U3Pri8HBMECQ33t3yZrOKfTs5mlSAedKpktlkwdG+2LMzCbi5iEagl4iAS0qoaHJeBnWCMN1IOH9EnYQAZCko2Aa+zShvDAAfSW8otQ/Q7ddqgkvITb6HfKlcWTxMT0KAqzr1PBsI/Ha652owlc+Pa6LpxCt/7cbRwT3/EbYfPNuXujNSUbnhoFl6NDcKe90Wtgeg9TRgEtozF+ZJYtVu4/eWDfJFRND5xuXOz0ZgKXpD+B+PEpvpftZ0pNbYo4iS/VQxwkX64/TP2hTVM6J7P4T0dmLG1COBZ0dvQ7CIPl93cQ63j2AXYdp7k6YpRrFeZ9ygXUiO/DvPnbYPPWNuvjLoNb1FvNaLYanELfwB3nVLP80rmevsoEtLA9/4Ir7pQxC2o9Ww8XvkkMFyfElnhz31G3JXSzE1ppNj1MzJwJVFFwLsh3R1xwulMukb+6mRXALpplOBCHlP2kjsGP8O+MC6Mi3rWm2fbHj2v+6GuSmQVl2bT4wNhnUo76T1467mDks2zFd7GfHgqSmSGlSUXVFnr/UwV7Za
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR10MB5113.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(39860400002)(376002)(366004)(346002)(136003)(451199015)(38100700002)(36756003)(44832011)(6506007)(66476007)(107886003)(2906002)(4326008)(316002)(66556008)(8676002)(6486002)(41300700001)(8936002)(66946007)(5660300002)(86362001)(83380400001)(186003)(1076003)(26005)(478600001)(6512007)(2616005);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?IUrYBReM8eErcC1KuLAXTTbGtLqAj37GNPGK2OkUWm37RU6yje5P9L00XpYF?=
- =?us-ascii?Q?Fkk0S8vTBXhYCbvMVhag4iuJtckSN59+qYQZLl3aJ5240JYmXzpM/FlDEVeE?=
- =?us-ascii?Q?cTt0XWRQRXwPZwm3o4ixagkgHrn7h/5rz5/3WPsBn7OJmApDx6NnMhDgSKeC?=
- =?us-ascii?Q?xDcgi/QFTby6TsXzx4yFxUSJi+17UztEKSdCkdTwmPrsW7FbIlvN+Bwuh7ap?=
- =?us-ascii?Q?g7SzDG+He/l213wCFXbMHruoYwxaQIh1NIZRnJqhjtoa8XxmaMV9/DfjPm+f?=
- =?us-ascii?Q?ewNeFIfzxJLYxD6Ncu+D4bkewxzmQM04drUfeP4r7rTDRoh6zUioXiIe1tzb?=
- =?us-ascii?Q?H9ofnQQiLYAXlqvlByjggWO7w43biaGh4R2q07KiWqLlUHymRKTV66cZ6HiV?=
- =?us-ascii?Q?YxLk5AfkT5jaiOmtu8+sKguD6vCUr/R68pG78bVo8MKzJlbxspgqzVWyzznm?=
- =?us-ascii?Q?Y4hqoxYL5/DU1J8y4TG6Vf9vm2WPpmTdW7zs20SQstre5dg/rEks3vfrkamj?=
- =?us-ascii?Q?eH9ZfLciCQj2PQkjRPX5Uf5UpNwuQUivjjfUTU4in2rJ+/tDZKngTyghoONQ?=
- =?us-ascii?Q?aVF3lEFqkIjYyfXm3MPB3Q8NE/7KghNY5tuLfspwiECMkAs651wTGiziQv96?=
- =?us-ascii?Q?yDpEeeBhTqIa+lIfY3ccQjBepZRlglrFipxeKZ0zaQpmhcxY3qfVdgm1SydH?=
- =?us-ascii?Q?YuAHQHtaOjxKI2+VouEY8j5eERl5a2JiwGSiruwb6/QQDBz3crMCrR7HCWjL?=
- =?us-ascii?Q?A3BImxvpMEl3YQE0qM5b4Y/rYluDb9yJHviL+QIg5Jifqq11KxMkt6i3Fq+l?=
- =?us-ascii?Q?HlfwNTJI0BUsY8rfavxTYzX2zO4JciJOYAUQ+vLHRDz8/V05SqkPrmgRh3Jl?=
- =?us-ascii?Q?W2tYo1+jklFDFk7JdL9dpY54u92WDguJysBMMErqzo2guJrFLXgGtDINtpe3?=
- =?us-ascii?Q?BWP+RP8Mj0CZeqROpr3qkqwVMe0MUAGz8xzTJpzQ18Q0B5tQsGeMzswSIfo1?=
- =?us-ascii?Q?eaAvqycw+Kmy5uwRD+OKjV+uMcKunKaE611posdc103pkzEPvYIPfTyEb/1d?=
- =?us-ascii?Q?3VSEksMhBkn8sbF3oDJzIngnDJmbUdVOh4UTYT8cDUM6jad5UafipXQt1atT?=
- =?us-ascii?Q?NSAlzRHBmdn0wuBWvT8r1gE/XZ1Nj0BLBu4ZFHui8KYnT/c3zzlojCySEJ58?=
- =?us-ascii?Q?rUtZgd+tHHCqZSx8++at10fn36tmqlTXLDgGk697B3SIUM0APqTHIZVgPGfH?=
- =?us-ascii?Q?dy144cwcoEMRkgfOFD+xcK+JO+6sVhQYGfGhLcGX4MGWeYOjkREeiNzW8k1b?=
- =?us-ascii?Q?7+WS9zkOtq3K+x0rzvLuJe/mmeyk719UMZ2idT/Ns/QxkAalyFEGarWvi5dw?=
- =?us-ascii?Q?wwTSXjA2QNQC+bGn9v9Mqi7ykFpSLMWI7A+7+Lib4PQGQsYZdvq7DovGLssf?=
- =?us-ascii?Q?pITTSVhaBRZQ2bSbHy2FMZqn0Vv2Yp4XKkhwkGXmJCBVKCLUXaBd3o2xq4of?=
- =?us-ascii?Q?wNFGF1Gyo2Z4CkSPYLfZHY597Epnh7utFc0r2xAjCzdR8Tic4KbStEIprG2U?=
- =?us-ascii?Q?pJPecGRIIudLRZB46aBlALcEiyFllbDBQbASDEQbS/maabR42cMtvkjDro3Q?=
- =?us-ascii?Q?uA=3D=3D?=
-X-OriginatorOrg: oracle.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 09bbf4e9-4ef0-413a-bde8-08dabc59039e
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR10MB5113.namprd10.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Nov 2022 22:32:52.7084
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: /n377HLAIYQcJ8lgYrKqw05wCtirD3my68dfjeBZEq5f5xl/a5LZ9JxiqUttQi/6p4X0KX9Ua9KbPVCnKg8kNFULkBz+Rd+Yr940KxQn4/o=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM4PR10MB6184
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-01_10,2022-11-01_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0 bulkscore=0
- suspectscore=0 phishscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211010153
-X-Proofpoint-ORIG-GUID: j1spNW1vW_Cn6TdX8aw24239zZYUOnu8
-X-Proofpoint-GUID: j1spNW1vW_Cn6TdX8aw24239zZYUOnu8
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+References: <20221020222416.3415511-1-void@manifault.com> <20221020222416.3415511-2-void@manifault.com>
+ <20221101000239.pbbmym4mbdbmnzjd@macbook-pro-4.dhcp.thefacebook.com>
+ <Y2FhXC/s5GUkbr9P@maniforge.dhcp.thefacebook.com> <CAADnVQ+KZcFZdC=W_qZ3kam9yAjORtpN-9+Ptg_Whj-gRxCZNQ@mail.gmail.com>
+ <Y2GRQhsyQMNCOZMT@maniforge.dhcp.thefacebook.com>
+In-Reply-To: <Y2GRQhsyQMNCOZMT@maniforge.dhcp.thefacebook.com>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Wed, 2 Nov 2022 04:01:11 +0530
+Message-ID: <CAP01T75R+8WF7jAi5=9cvXfpKtKi9Dq6VxpuYyu7NbWjCtozNg@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 1/3] bpf: Allow trusted pointers to be passed
+ to KF_TRUSTED_ARGS kfuncs
+To:     David Vernet <void@manifault.com>
+Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
+        bpf <bpf@vger.kernel.org>, Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>, Tejun Heo <tj@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -148,108 +81,105 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Clean up unmap_and_move_huge_page() by converting move_hugetlb_state() to
-take in folios.
+On Wed, 2 Nov 2022 at 03:06, David Vernet <void@manifault.com> wrote:
+>
+> On Tue, Nov 01, 2022 at 01:22:39PM -0700, Alexei Starovoitov wrote:
+> > On Tue, Nov 1, 2022 at 11:11 AM David Vernet <void@manifault.com> wrote:
+> > >
+> > > > What kind of bpf prog will be able to pass 'struct nf_conn___init *' into these bpf_ct_* ?
+> > > > We've introduced / vs nf_conf specifically to express the relationship
+> > > > between allocated nf_conn and other nf_conn-s via different types.
+> > > > Why is this not enough?
+> > >
+> > > Kumar should have more context here (he originally suggested this in
+> > > [0]),
+> >
+> > Quoting:
+> > "
+> > Unfortunately a side effect of this change is that now since
+> > PTR_TO_BTF_ID without ref_obj_id is considered trusted, the bpf_ct_*
+> > functions would begin working with tp_btf args.
+> > "
+> > I couldn't find any tracepoint that has nf_conn___init as an argument.
+> > The whole point of that new type was to return it to bpf prog,
+> > so the verifier type matches it when it's passed into bpf_ct_*
+> > in turn.
+> > So I don't see a need for a new OWNED flag still.
+> > If nf_conn___init is passed into tracepoint it's a bug and
+> > we gotta fix it.
+>
+> Yep, this is what I'm seeing as well. I think you're right that
+> KF_OWNED_ARGS is just strictly unnecessary and that creating wrapper
+> types is the way to enable an ownership model like this.
+>
 
-Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
-Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
----
- include/linux/hugetlb.h |  6 +++---
- mm/hugetlb.c            | 22 ++++++++++++----------
- mm/migrate.c            |  4 ++--
- 3 files changed, 17 insertions(+), 15 deletions(-)
+It's not just nf_conn___init. Some CT helpers also take nf_conn.
+e.g. bpf_ct_change_timeout, bpf_ct_change_status.
+Right now they are only allowed in XDP and TC programs, so the tracing
+args part is not a problem _right now_.
 
-diff --git a/include/linux/hugetlb.h b/include/linux/hugetlb.h
-index d81f139193aa..375cd57721d6 100644
---- a/include/linux/hugetlb.h
-+++ b/include/linux/hugetlb.h
-@@ -184,7 +184,7 @@ int get_hwpoison_huge_page(struct page *page, bool *hugetlb, bool unpoison);
- int get_huge_page_for_hwpoison(unsigned long pfn, int flags,
- 				bool *migratable_cleared);
- void putback_active_hugepage(struct page *page);
--void move_hugetlb_state(struct page *oldpage, struct page *newpage, int reason);
-+void move_hugetlb_state(struct folio *old_folio, struct folio *new_folio, int reason);
- void free_huge_page(struct page *page);
- void hugetlb_fix_reserve_counts(struct inode *inode);
- extern struct mutex *hugetlb_fault_mutex_table;
-@@ -440,8 +440,8 @@ static inline void putback_active_hugepage(struct page *page)
- {
- }
- 
--static inline void move_hugetlb_state(struct page *oldpage,
--					struct page *newpage, int reason)
-+static inline void move_hugetlb_state(struct folio *old_folio,
-+					struct folio *new_folio, int reason)
- {
- }
- 
-diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-index 2ecc0a6cf883..2ab8f3b7132a 100644
---- a/mm/hugetlb.c
-+++ b/mm/hugetlb.c
-@@ -7289,15 +7289,15 @@ void putback_active_hugepage(struct page *page)
- 	put_page(page);
- }
- 
--void move_hugetlb_state(struct page *oldpage, struct page *newpage, int reason)
-+void move_hugetlb_state(struct folio *old_folio, struct folio *new_folio, int reason)
- {
--	struct hstate *h = page_hstate(oldpage);
-+	struct hstate *h = folio_hstate(old_folio);
- 
--	hugetlb_cgroup_migrate(page_folio(oldpage), page_folio(newpage));
--	set_page_owner_migrate_reason(newpage, reason);
-+	hugetlb_cgroup_migrate(old_folio, new_folio);
-+	set_page_owner_migrate_reason(&new_folio->page, reason);
- 
- 	/*
--	 * transfer temporary state of the new huge page. This is
-+	 * transfer temporary state of the new hugetlb folio. This is
- 	 * reverse to other transitions because the newpage is going to
- 	 * be final while the old one will be freed so it takes over
- 	 * the temporary status.
-@@ -7306,12 +7306,14 @@ void move_hugetlb_state(struct page *oldpage, struct page *newpage, int reason)
- 	 * here as well otherwise the global surplus count will not match
- 	 * the per-node's.
- 	 */
--	if (HPageTemporary(newpage)) {
--		int old_nid = page_to_nid(oldpage);
--		int new_nid = page_to_nid(newpage);
-+	if (folio_test_hugetlb_temporary(new_folio)) {
-+		int old_nid = folio_nid(old_folio);
-+		int new_nid = folio_nid(new_folio);
-+
-+
-+		folio_set_hugetlb_temporary(old_folio);
-+		folio_clear_hugetlb_temporary(new_folio);
- 
--		SetHPageTemporary(oldpage);
--		ClearHPageTemporary(newpage);
- 
- 		/*
- 		 * There is no need to transfer the per-node surplus state
-diff --git a/mm/migrate.c b/mm/migrate.c
-index d7db4fd97d8e..81f9a36c754d 100644
---- a/mm/migrate.c
-+++ b/mm/migrate.c
-@@ -1278,7 +1278,7 @@ static int unmap_and_move_huge_page(new_page_t get_new_page,
- 	 * folio_mapping() set, hugetlbfs specific move page routine will not
- 	 * be called and we could leak usage counts for subpools.
- 	 */
--	if (hugetlb_page_subpool(hpage) && !folio_mapping(src)) {
-+	if (hugetlb_folio_subpool(src) && !folio_mapping(src)) {
- 		rc = -EBUSY;
- 		goto out_unlock;
- 	}
-@@ -1328,7 +1328,7 @@ static int unmap_and_move_huge_page(new_page_t get_new_page,
- 		put_anon_vma(anon_vma);
- 
- 	if (rc == MIGRATEPAGE_SUCCESS) {
--		move_hugetlb_state(hpage, new_hpage, reason);
-+		move_hugetlb_state(src, dst, reason);
- 		put_new_page = NULL;
- 	}
- 
--- 
-2.31.1
+So currently it may not be possible to pass such a trusted but
+ref_obj_id == 0 nf_conn to those helpers.
+But based on changes unrelated to this, it may become possible in the
+future to obtain such a trusted nf_conn pointer.
+It is hard to then go and audit all possible cases where this can be
+passed into helpers/kfuncs.
 
+It is a requirement of those kfuncs that the nf_conn has its refcount
+held while they are called.
+KF_TRUSTED_ARGS was encoding this requirement before, but it wouldn't anymore.
+It seems better to me to keep that restriction instead of relaxing it,
+if it is part of the contract.
+
+It is fine to not require people to dive into these details and just
+use KF_TRUSTED_ARGS in general, but we need something to cover special
+cases like these where the object is only stable while we hold an
+active refcount, RCU protection is not enough against reuse.
+
+It could be 'expert only' __ref suffix on the nf_conn arg, or
+KF_OWNED_ARGS, or something else.
+
+> > > [...]
+> > >
+> > > > This PTR_WALKED looks like new thing.
+> > > > If we really need it PTR_TO_BTF_ID should be allowlisted instead of denylisted
+> > > > as PTR_WALKED is doing.
+> > > > I mean we can introduce PTR_TRUSTED and add this flag to return value
+> > > > of bpf_get_current_task_btf() and arguments of tracepoints.
+> > > > As soon as any ptr walking is done we can clear PTR_TRUSTED to keep
+> > > > backward compat behavior of PTR_TO_BTF_ID.
+> > > > PTR_WALKED is sort-of doing the same, but not conservative enough.
+> > > > Too many things produce PTR_TO_BTF_ID. Auditing it all is challenging.
+> > >
+> > > I very much prefer the idea of allowlisting instead of denylisting,
+> > > though I wish we'd taken that approach from the start rather than going
+> > > with PTR_UNTRUSTED. It feels wrong to have both PTR_UNTRUSTED and
+> > > PTR_TRUSTED as type modifiers, as the absence of PTR_UNTRUSTED should
+> > > (and currently does) imply PTR_TRUSTED.
+> >
+> > I kind agree, but we gotta have both because of backward compat.
+> > We cannot change PTR_TO_BTF_ID as a whole right now.
+> >
+> > Note PTR_TO_BTF_ID appears in kfuncs too.
+> > I'm proposing to use PTR_TO_BTF_ID | PTR_TRUSTED
+> > only in tracepoint args and as return value from
+> > certain helpers like bpf_get_current_task_btf().
+> > afaik it's all safe. There is no uaf here.
+> > uaf is for kfunc. Especially fexit.
+> > Those will stay PTR_TO_BTF_ID. Without PTR_TRUSTED.
+>
+> Ok, this feels like the right approach to me. Unless I'm missing
+> something, modulo doing our due diligence and checking if there are any
+> existing kfuncs that are relying on different behavior, once this lands
+> I think we could maybe even make KF_TRUSTED_ARGS the default for all
+> kfuncs? That should probably be done in a separate patch set though.
+>
+
+I do like the allowlist vs denylist point from Alexei. It was also
+what I originally suggested in [0], but when I went looking, pointer
+walking is really the only case that was problematic, which was being
+marked by PTR_WALKED. The other case of handling fexit is unrelated to
+both.
+But it's always better to be safe than sorry.
+
+[0]: https://lore.kernel.org/bpf/CAP01T76zg0kABh36ekC4FTxDsdiYBaP7agErO=YadfFmaJ1LKQ@mail.gmail.com
