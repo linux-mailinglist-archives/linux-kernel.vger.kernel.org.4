@@ -2,100 +2,86 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39CBD614D0D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 15:47:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0FC12614CFA
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 15:46:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230318AbiKAOrr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 10:47:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57568 "EHLO
+        id S230347AbiKAOqb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 10:46:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbiKAOrp (ORCPT
+        with ESMTP id S229496AbiKAOq3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 10:47:45 -0400
-Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A45B175B7;
-        Tue,  1 Nov 2022 07:47:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667314064; x=1698850064;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=C/RryqlYG2pq3NMvhGm+Rlflkdb79G489C0aHrLOG64=;
-  b=AZ/LBlaDasK/hC4/TtBfU6gXw3q858ghWBmUmzN+ydZf4wMGoatMPWNg
-   o9E2nYYsbEkzKdsiqAUnks7KsuCGoUuwsgS/fMU4IimYgH/ovvcAHfRoa
-   X67LXpe1FopcBefq4qV/ZBsf0sXvIeefJofZb2eX/sFnjpLM5jYQ97zEt
-   JAiKpb8Bwa3hSgj4ZjkYNUhP6+vwIWEe1En0VBEWz2/JO+YJaDkLMFUGU
-   FtMHcuuGBfh+1nPm5uJISn94lJWQTTKY6EIzTuA8y68pb8MhQQC0GHQ4k
-   lhhebHZqxadgtIPZwZ4izMsmGNJ8vNAODlziDx6gr3DV0i+LPcDUWrZI/
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="296579359"
-X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
-   d="scan'208";a="296579359"
-Received: from fmsmga007.fm.intel.com ([10.253.24.52])
-  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 07:43:39 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="636418547"
-X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
-   d="scan'208";a="636418547"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga007.fm.intel.com with ESMTP; 01 Nov 2022 07:43:34 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1opsUG-005dKC-0a;
-        Tue, 01 Nov 2022 16:43:32 +0200
-Date:   Tue, 1 Nov 2022 16:43:31 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     chenweilong <chenweilong@huawei.com>
-Cc:     yangyicong@hisilicon.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, wsa@kernel.org,
-        f.fainelli@gmail.com, jarkko.nikula@linux.intel.com,
-        jdelvare@suse.de, william.zhang@broadcom.com, jsd@semihalf.com,
-        conor.dooley@microchip.com, phil.edworthy@renesas.com,
-        tharunkumar.pasumarthi@microchip.com, semen.protsenko@linaro.org,
-        kfting@nuvoton.com, linux-i2c@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH next v9 1/4] i2c: hisi: Add initial device tree support
-Message-ID: <Y2Ewk5i/PAS87fa8@smile.fi.intel.com>
-References: <20221029115937.179788-1-chenweilong@huawei.com>
- <Y170TZoIp1WBIwU4@smile.fi.intel.com>
- <dfc1c006-61c0-8f28-6164-060347c69d04@huawei.com>
- <Y1/s2iZFod/7qzU+@smile.fi.intel.com>
- <d96beadb-5693-6c73-8fee-3ac3b4cb9a44@huawei.com>
+        Tue, 1 Nov 2022 10:46:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C31BE13CEC;
+        Tue,  1 Nov 2022 07:46:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5F854615E8;
+        Tue,  1 Nov 2022 14:46:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29A6BC433D6;
+        Tue,  1 Nov 2022 14:46:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667313987;
+        bh=mRINjiRnOBOfJq5iqp3pBxJc+AyDgUafRTpJ4I4NiSs=;
+        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
+        b=RSXbWW3paXaR2HPrTjmIaRk/tUgJLKZDePR4ioQKd4K6iiIO6BK8hax1OwbNUQzHR
+         WEzqQPCSTrbwm7kh2aPkI0/e2SjTpS0nKQfOkchKjCScUg6TM+nIaKC5l6yQqF/5pJ
+         A3LXEjeeKWJr8K6yKd8DJLqsSllRWGtc6KJAt9g3TVgslR+3gp7XC7nDJgGTMVE8Jr
+         fgtwTNltOt6C81CdwrJbl7ew5wekQ2AkcF8uZIjCu2uHa3+l4/TZg9MWpPvjHo39CH
+         cztGWNbVRT184KoZ2dcnMgOZ4+KGwR4kXLf5nIB67KFzcTij3GDeqS8N0chnmEwYVV
+         jebF+Q2ERWRuA==
+From:   Kalle Valo <kvalo@kernel.org>
+To:     "Tyler J. Stachecki" <stachecki.tyler@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        ath11k@lists.infradead.org (open list:QUALCOMM ATHEROS ATH11K WIRELESS
+        DRIVER),
+        linux-wireless@vger.kernel.org (open list:NETWORKING DRIVERS (WIRELESS)),
+        netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
+        linux-kernel@vger.kernel.org (open list)
+Subject: Re: [PATCH] ath11k: Fix QCN9074 firmware boot on x86
+References: <20221022042728.43015-1-stachecki.tyler@gmail.com>
+Date:   Tue, 01 Nov 2022 16:46:22 +0200
+In-Reply-To: <20221022042728.43015-1-stachecki.tyler@gmail.com> (Tyler J.
+        Stachecki's message of "Sat, 22 Oct 2022 00:27:28 -0400")
+Message-ID: <87y1sug2bl.fsf@kernel.org>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <d96beadb-5693-6c73-8fee-3ac3b4cb9a44@huawei.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 03:23:29PM +0800, chenweilong wrote:
-> On 2022/10/31 23:42, Andy Shevchenko wrote:
+"Tyler J. Stachecki" <stachecki.tyler@gmail.com> writes:
 
-...
+> The 2.7.0 series of QCN9074's firmware requests 5 segments
+> of memory instead of 3 (as in the 2.5.0 series).
+>
+> The first segment (11M) is too large to be kalloc'd in one
+> go on x86 and requires piecemeal 1MB allocations, as was
+> the case with the prior public firmware (2.5.0, 15M).
+>
+> Since f6f92968e1e5, ath11k will break the memory requests,
+> but only if there were fewer than 3 segments requested by
+> the firmware. It seems that 5 segments works fine and
+> allows QCN9074 to boot on x86 with firmware 2.7.0, so
+> change things accordingly.
+>
+> Signed-off-by: Tyler J. Stachecki <stachecki.tyler@gmail.com>
 
-> Thanks very much for your detailed explanation.
+Ouch, that's pretty bad. Thanks for fixing this!
 
-You're welcome!
-
-> By the way,  is it valuable to make a cleanup for the legacy not-up-to-dated drivers?
-> 
-> There's lots of of_match_ptr or ACPI_PTR...
-
-Not on per se basis, only if there is a series which does something more useful
-than that. E.g. enabling PRP0001 trick for discrete component drivers that may
-be used on more than a single architecture.
+Does the 2.5.0.1 firmware branch still work with this patch? It's
+important that we don't break the old firmware.
 
 -- 
-With Best Regards,
-Andy Shevchenko
+https://patchwork.kernel.org/project/linux-wireless/list/
 
-
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
