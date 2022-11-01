@@ -2,338 +2,238 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E24C615626
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 00:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71A1461562A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 00:38:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbiKAXe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 19:34:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57192 "EHLO
+        id S229819AbiKAXiR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 19:38:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiKAXe0 (ORCPT
+        with ESMTP id S229628AbiKAXiO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 19:34:26 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDAAC1A805
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 16:34:24 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id l6so14680421pjj.0
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 16:34:24 -0700 (PDT)
+        Tue, 1 Nov 2022 19:38:14 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F4041C427
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 16:38:12 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id 4so15035732pli.0
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 16:38:12 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fiCS58ae4A8sQ9uGla/myzHbwEt2fBq1HAnefdPpGXw=;
-        b=Q86fSDNTbms1Mb8JrOYHI1p7oaSFY/zMzgVag9dI/GNGn2oQYG2KaWanrqqryNhN9j
-         /o1IYA5nOqK9KoBrUAMx8Ecwoy4hREDsIUikXri20AkUxhiLBGnGM66xHMPV+I+0xFG4
-         LFONQS24R+U28wLX94W1q79A5ZLyNEmJmQJZ0=
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5D52avhPxbcbZms62P7jg88MPx8Vu63yNQl/KWl+6Cg=;
+        b=eSAPOBiDCmg+ikv7vxQ4ChNLJT7PWqccIWCQFdJmO5nvJcQGpKZZBE5njFOcaYA0F7
+         Qdn3vN1IC1lXz6NZNUBlYc7D7Ezd+khiEyIjIq7X5Ul9lDX5Mgx+yLOUSS9/WcCqOy2P
+         ffHfPTRhjQWAVRguk7Bt8sUmFVG5Je3Q61uKQ=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fiCS58ae4A8sQ9uGla/myzHbwEt2fBq1HAnefdPpGXw=;
-        b=xFDaslTnWLCX04PPMCZJkH2jsFKnvMRdZ/eHOjjE+i81Sh3cHx1IJMnYZeiSXtXh70
-         NmRJiouersrh+8ihSiKyN6+lwpl3GIO2he+2dK90Yfj3otL3OXlX/NnT1NTjKm6NKbiJ
-         wSLmV472Nz5Cm/OJIBvaT3YtRgmaOBwkf11F//13cP14iRGnkAWK9QCmgz9sjfI+pYch
-         Cz9ZMcUgzTFAkFNi/BCxHkhYvOMHEzhJ7sZGmxI5bR/aWC1cubqEuXajSprhY26Dldg5
-         /D3LuGTjI4dgIcAiw5/Qx6K9lcBLF08rA2SeuqYBYFo0Pf0jKwd8NTG/M89CozrK4dTe
-         4nfA==
-X-Gm-Message-State: ACrzQf3CmENifhfRuqtSmATBUEKQqSbvVJzlWszP8DTHdEaNOWTeIWka
-        ixpCAmYu3V7SEC82fIKvpHzUMg==
-X-Google-Smtp-Source: AMsMyM72nKPR2ufazXxcn0DYr+8HSKemjmCYJg0pO1CLdZHKdz9XflAKz9Qzy1PCInazElLUrg97Qg==
-X-Received: by 2002:a17:902:b70b:b0:186:b014:9609 with SMTP id d11-20020a170902b70b00b00186b0149609mr22177828pls.108.1667345664412;
-        Tue, 01 Nov 2022 16:34:24 -0700 (PDT)
-Received: from smtp.gmail.com ([2620:15c:11a:201:4437:8d79:dd1:7eb8])
-        by smtp.gmail.com with ESMTPSA id a19-20020aa79713000000b0056bc1a41209sm7051224pfg.33.2022.11.01.16.34.22
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5D52avhPxbcbZms62P7jg88MPx8Vu63yNQl/KWl+6Cg=;
+        b=aE/+5BAJMMkLdYN/k88SdlnGaqEukgCOf8qMVqlTpBuEw/LrQXHdBaynQ95mgbosaK
+         ZoH5Jw889S+AGyJqp0n2qr8dkPGiuOyNt0xqgmACYUnxM/HWXdRluqNeeP/IFXqBRDvq
+         fylWr0R4Rp7DmvJ6fI6WdZHLODKm8vwd5fDf9NB1DJ9/d9O0DIJrrD9KqMyUpSLrIkiV
+         6zfA+TAFJ8ts5tsvyYEuqo7MyA5rTazDEnegbbBrUiXzIvwQwQWxp2dWtRSYDmScYNu3
+         E9Q4m9IrMo6P/oaZIDP+7K9xrFjPnrlh/8LR65D8/YkPQxk9jLRXvXWY2fg7RyFrRcv/
+         noZA==
+X-Gm-Message-State: ACrzQf32XpaOSV1XWsbdPaX3JOgpaO4lrIMicBSHjAg0ziHfW7eZUlVv
+        l00fIwzyKnqavvb0Fqm646IntQ==
+X-Google-Smtp-Source: AMsMyM4E2vAxuWKs3+GwBW0in2lTsFDbozPO3T1dsw/EaJMjkjF+4sT6dmlCesvIEX6Ym/CjUSmMpA==
+X-Received: by 2002:a17:902:7c11:b0:178:a6ca:4850 with SMTP id x17-20020a1709027c1100b00178a6ca4850mr22463473pll.111.1667345891597;
+        Tue, 01 Nov 2022 16:38:11 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id 65-20020a621644000000b0056bbcf88b93sm7081158pfw.42.2022.11.01.16.38.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 16:34:23 -0700 (PDT)
-From:   Stephen Boyd <swboyd@chromium.org>
-To:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
-        patches@lists.linux.dev, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Satya Priya <quic_c_skakit@quicinc.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Subject: [PATCH] clk: qcom: gdsc: Remove direct runtime PM calls
-Date:   Tue,  1 Nov 2022 16:34:21 -0700
-Message-Id: <20221101233421.997149-1-swboyd@chromium.org>
-X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
+        Tue, 01 Nov 2022 16:38:11 -0700 (PDT)
+Date:   Tue, 1 Nov 2022 16:38:10 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Paul Moore <paul@paul-moore.com>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH] LSM: Better reporting of actual LSMs at boot
+Message-ID: <202211011636.8C10CB9@keescook>
+References: <20221018064825.never.323-kees@kernel.org>
+ <CAHC9VhTScG513+-_GDN+nzBQjASW31LrE8juU3c03=0fJ_csGw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHC9VhTScG513+-_GDN+nzBQjASW31LrE8juU3c03=0fJ_csGw@mail.gmail.com>
 X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We shouldn't be calling runtime PM APIs from within the genpd
-enable/disable path for a couple reasons.
+On Tue, Oct 18, 2022 at 05:50:09PM -0400, Paul Moore wrote:
+> On Tue, Oct 18, 2022 at 2:48 AM Kees Cook <keescook@chromium.org> wrote:
+> >
+> > Enhance the details reported by "lsm.debug" in several ways:
+> >
+> > - report contents of "security="
+> > - report contents of "CONFIG_LSM"
+> > - report contents of "lsm="
+> > - report any early LSM details
+> > - whitespace-align the output of similar phases for easier visual parsing
+> > - change "disabled" to more accurate "skipped"
+> > - explain what "skipped" and "ignored" mean in a parenthetical
+> >
+> > Upgrade the "security= is ignored" warning from pr_info to pr_warn,
+> > and include full arguments list to make the cause even more clear.
+> >
+> > Replace static "Security Framework initializing" pr_info with specific
+> > list of the resulting order of enabled LSMs.
+> >
+> > Cc: Paul Moore <paul@paul-moore.com>
+> > Cc: James Morris <jmorris@namei.org>
+> > Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> > Cc: linux-security-module@vger.kernel.org
+> > Signed-off-by: Kees Cook <keescook@chromium.org>
+> > ---
+> >  security/security.c | 61 +++++++++++++++++++++++++++++++++++++++------
+> >  1 file changed, 54 insertions(+), 7 deletions(-)
+> 
+> I don't know about you, but when I'm reading commit descriptions about
+> how a patch changes the user visible output of something, e.g. console
+> messages, I always enjoy seeing an example of the new output, both in
+> normal and debug mode (hint, hint) ;)
 
-First, this causes an AA lockdep splat because genpd can call into genpd
-code again while holding the genpd lock.
+Fair point. Commit log will be looong. :)
 
-WARNING: possible recursive locking detected
-5.19.0-rc2-lockdep+ #7 Not tainted
---------------------------------------------
-kworker/2:1/49 is trying to acquire lock:
-ffffffeea0370788 (&genpd->mlock){+.+.}-{3:3}, at: genpd_lock_mtx+0x24/0x30
+> 
+> More comments below ...
+> 
+> > diff --git a/security/security.c b/security/security.c
+> > index 9696dd64095e..6f6079dec270 100644
+> > --- a/security/security.c
+> > +++ b/security/security.c
+> > @@ -159,7 +159,7 @@ static void __init append_ordered_lsm(struct lsm_info *lsm, const char *from)
+> >                 lsm->enabled = &lsm_enabled_true;
+> >         ordered_lsms[last_lsm++] = lsm;
+> >
+> > -       init_debug("%s ordering: %s (%sabled)\n", from, lsm->name,
+> > +       init_debug("%s ordered: %s (%sabled)\n", from, lsm->name,
+> >                    is_enabled(lsm) ? "en" : "dis");
+> 
+> This isn't your fault, but since you're changing this line let's get
+> rid of the "en"/"dis" and do a proper "enabled"/"disabled" string to
+> make it slightly easier to find string while grep'ing through the
+> sources.  Example:
+> 
+>   init_debug("... %s\n", (is_enabled(lsm) ? "enabled" : "disabled"));
 
-but task is already holding lock:
-ffffffeea03710a8 (&genpd->mlock){+.+.}-{3:3}, at: genpd_lock_mtx+0x24/0x30
+Sure, will do.
 
-other info that might help us debug this:
- Possible unsafe locking scenario:
+> 
+> > @@ -307,7 +308,8 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+> >                 if (exists_ordered_lsm(lsm))
+> >                         continue;
+> >                 set_enabled(lsm, false);
+> > -               init_debug("%s disabled: %s\n", origin, lsm->name);
+> > +               init_debug("%s skipped: %s (not in requested order)\n",
+> > +                          origin, lsm->name);
+> 
+> I'm not sure the distinction between "disabled" and "skipped" above is
+> that significant, and in fact I tend to think "disabled" is more
+> appropriate.  There is also some (minor) advantage to keeping the user
+> visible log messages consistent.
+> 
+> However, I do think the parenthetical explanations are a nice addition.
+> 
+> (If we did go the "skipped" route, I think we should also change the
+> "security=%s disabled: %s\n" further up the function for the sake of
+> consistent language.)
 
-       CPU0
-       ----
-  lock(&genpd->mlock);
-  lock(&genpd->mlock);
+I prefer "skipped", so I'll update the security= report...
 
- *** DEADLOCK ***
+> 
+> > @@ -318,6 +320,44 @@ static void __init lsm_early_task(struct task_struct *task);
+> >
+> >  static int lsm_append(const char *new, char **result);
+> >
+> > +static void __init report_lsm_order(void)
+> > +{
+> > +       struct lsm_info **lsm, *early;
+> > +       size_t size = 0;
+> > +       char *effective, *step, *end;
+> > +
+> > +       /* Count the length of each enabled LSM name. */
+> > +       for (early = __start_early_lsm_info; early < __end_early_lsm_info; early++)
+> > +               if (is_enabled(early))
+> > +                       size += strlen(early->name) + 1;
+> > +       for (lsm = ordered_lsms; *lsm; lsm++)
+> > +               if (is_enabled(*lsm))
+> > +                       size += strlen((*lsm)->name) + 1;
+> > +
+> > +       /* Allocate space with trailing %NUL or give up. */
+> > +       size += 1;
+> > +       effective = kzalloc(size, GFP_KERNEL);
+> > +       if (!effective)
+> > +               return;
+> > +       end = effective + size;
+> > +       step = effective;
+> > +
+> > +       /* Append each enabled LSM name. */
+> > +       for (early = __start_early_lsm_info; early < __end_early_lsm_info; early++)
+> > +               if (is_enabled(early))
+> > +                       step += scnprintf(step, end - step, "%s%s",
+> > +                                         step == effective ? "" : ",",
+> > +                                         early->name);
+> > +       for (lsm = ordered_lsms; *lsm; lsm++)
+> > +               if (is_enabled(*lsm))
+> > +                       step += scnprintf(step, end - step, "%s%s",
+> > +                                         step == effective ? "" : ",",
+> > +                                         (*lsm)->name);
+> > +
+> > +       pr_info("initializing lsm=%s\n", effective);
+> 
+> Instead of going through all the trouble of determining the string
+> size and formatting the string via a series of scnprintf() calls, why
+> not cut out the intermediate string buffer and use
+> pr_info()/pr_cont()?  What am I missing?
 
- May be due to missing lock nesting notation
+I just kinda dislike pr_cont(), but yeah, it's a lot shorter. :P
 
-3 locks held by kworker/2:1/49:
- #0: 74ffff80811a5748 ((wq_completion)pm){+.+.}-{0:0}, at: process_one_work+0x320/0x5fc
- #1: ffffffc008537cf8 ((work_completion)(&genpd->power_off_work)){+.+.}-{0:0}, at: process_one_work+0x354/0x5fc
- #2: ffffffeea03710a8 (&genpd->mlock){+.+.}-{3:3}, at: genpd_lock_mtx+0x24/0x30
+ security/security.c |   32 ++++++--------------------------
+ 1 file changed, 6 insertions(+), 26 deletions(-)
 
-stack backtrace:
-CPU: 2 PID: 49 Comm: kworker/2:1 Not tainted 5.19.0-rc2-lockdep+ #7
-Hardware name: Google Lazor (rev3 - 8) with KB Backlight (DT)
-Workqueue: pm genpd_power_off_work_fn
-Call trace:
- dump_backtrace+0x1a0/0x200
- show_stack+0x24/0x30
- dump_stack_lvl+0x7c/0xa0
- dump_stack+0x18/0x44
- __lock_acquire+0xb38/0x3634
- lock_acquire+0x180/0x2d4
- __mutex_lock_common+0x118/0xe30
- mutex_lock_nested+0x70/0x7c
- genpd_lock_mtx+0x24/0x30
- genpd_runtime_suspend+0x2f0/0x414
- __rpm_callback+0xdc/0x1b8
- rpm_callback+0x4c/0xcc
- rpm_suspend+0x21c/0x5f0
- rpm_idle+0x17c/0x1e0
- __pm_runtime_idle+0x78/0xcc
- gdsc_disable+0x24c/0x26c
- _genpd_power_off+0xd4/0x1c4
- genpd_power_off+0x2d8/0x41c
- genpd_power_off_work_fn+0x60/0x94
- process_one_work+0x398/0x5fc
- worker_thread+0x42c/0x6c4
- kthread+0x194/0x1b4
- ret_from_fork+0x10/0x20
+> 
+> > @@ -393,13 +436,17 @@ int __init security_init(void)
+> >  {
+> >         struct lsm_info *lsm;
+> >
+> > -       pr_info("Security Framework initializing\n");
+> > +       init_debug("legacy security=%s\n", chosen_major_lsm ?: " *unspecified*");
+> > +       init_debug("  CONFIG_LSM=%s\n", builtin_lsm_order);
+> > +       init_debug("boot arg lsm=%s\n", chosen_lsm_order ?: " *unspecified*");
+> >
+> >         /*
+> >          * Append the names of the early LSM modules now that kmalloc() is
+> >          * available
+> >          */
+> >         for (lsm = __start_early_lsm_info; lsm < __end_early_lsm_info; lsm++) {
+> > +               init_debug("  early started: %s (%sabled)\n", lsm->name,
+> > +                          is_enabled(lsm) ? "en" : "dis");
+> 
+> See the earlier comment about "en"/"dis" versus "enabled"/"disabled".
+> 
+> However, I wonder how useful the above debug message is when you
+> consider report_lsm_order().  Since report_lsm_order() dumps both the
+> early and normal LSMs, perhaps it makes more sense to annotate the
+> output there to indicate early vs normal LSM loading?
 
-Second, this confuses runtime PM on CoachZ for the camera devices by
-causing the camera clock controller's runtime PM usage_count to go
-negative after resuming from suspend. This is because runtime PM is
-being used on the clock controller while runtime PM is disabled for the
-device.
+I think of it as "debug" being a "show your work" mode, and the final
+list should always be visible.
 
-The reason for the negative count is because a GDSC is represented as a
-genpd and each genpd that is attached to a device is resumed during the
-noirq phase of system wide suspend/resume (see the noirq suspend ops
-assignment in pm_genpd_init() for more details). The camera GDSCs are
-attached to camera devices with the 'power-domains' property in DT.
-Every device has runtime PM disabled in the late system suspend phase
-via __device_suspend_late(). Runtime PM is not usable until runtime PM
-is enabled in device_resume_early(). The noirq phases run after the
-'late' and before the 'early' phase of suspend/resume. When the genpds
-are resumed in genpd_resume_noirq(), we call down into gdsc_enable()
-that calls pm_runtime_resume_and_get() and that returns -EACCES to
-indicate failure to resume because runtime PM is disabled for all
-devices.
+I will send a v2.
 
-Upon closer inspection, calling runtime PM APIs like this in the GDSC
-driver doesn't make sense. It was intended to make sure the GDSC for the
-clock controller providing other GDSCs was enabled, specifically the
-MMCX GDSC for the display clk controller on SM8250 (sm8250-dispcc), so
-that GDSC register accesses succeeded. That will already happen because
-we make the 'dev->pm_domain' a parent domain of each GDSC we register in
-gdsc_register() via pm_genpd_add_subdomain(). When any of these GDSCs
-are accessed, we'll enable the parent domain (in this specific case
-MMCX).
+-Kees
 
-We also remove any getting of runtime PM during registration, because
-when a genpd is registered it increments the count on the parent if the
-genpd itself is already enabled. And finally, the runtime PM state of
-the clk controller registering the GDSC shouldn't matter to the
-subdomain setup. Therefore we always assign 'dev' unconditionally so
-when GDSCs are removed we properly unlink the GDSC from the clk
-controller's pm_domain.
-
-Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: Johan Hovold <johan+linaro@kernel.org>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Taniya Das <quic_tdas@quicinc.com>
-Cc: Satya Priya <quic_c_skakit@quicinc.com>
-Cc: Douglas Anderson <dianders@chromium.org>
-Cc: Matthias Kaehlcke <mka@chromium.org>
-Reported-by: Stephen Boyd <swboyd@chromium.org>
-Fixes: 1b771839de05 ("clk: qcom: gdsc: enable optional power domain support")
-Signed-off-by: Stephen Boyd <swboyd@chromium.org>
----
- drivers/clk/qcom/gdsc.c | 64 ++++++-----------------------------------
- 1 file changed, 8 insertions(+), 56 deletions(-)
-
-diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
-index 7cf5e130e92f..a775ce1b7d8a 100644
---- a/drivers/clk/qcom/gdsc.c
-+++ b/drivers/clk/qcom/gdsc.c
-@@ -11,7 +11,6 @@
- #include <linux/kernel.h>
- #include <linux/ktime.h>
- #include <linux/pm_domain.h>
--#include <linux/pm_runtime.h>
- #include <linux/regmap.h>
- #include <linux/regulator/consumer.h>
- #include <linux/reset-controller.h>
-@@ -56,22 +55,6 @@ enum gdsc_status {
- 	GDSC_ON
- };
- 
--static int gdsc_pm_runtime_get(struct gdsc *sc)
--{
--	if (!sc->dev)
--		return 0;
--
--	return pm_runtime_resume_and_get(sc->dev);
--}
--
--static int gdsc_pm_runtime_put(struct gdsc *sc)
--{
--	if (!sc->dev)
--		return 0;
--
--	return pm_runtime_put_sync(sc->dev);
--}
--
- /* Returns 1 if GDSC status is status, 0 if not, and < 0 on error */
- static int gdsc_check_status(struct gdsc *sc, enum gdsc_status status)
- {
-@@ -271,8 +254,9 @@ static void gdsc_retain_ff_on(struct gdsc *sc)
- 	regmap_update_bits(sc->regmap, sc->gdscr, mask, mask);
- }
- 
--static int _gdsc_enable(struct gdsc *sc)
-+static int gdsc_enable(struct generic_pm_domain *domain)
- {
-+	struct gdsc *sc = domain_to_gdsc(domain);
- 	int ret;
- 
- 	if (sc->pwrsts == PWRSTS_ON)
-@@ -328,22 +312,11 @@ static int _gdsc_enable(struct gdsc *sc)
- 	return 0;
- }
- 
--static int gdsc_enable(struct generic_pm_domain *domain)
-+static int gdsc_disable(struct generic_pm_domain *domain)
- {
- 	struct gdsc *sc = domain_to_gdsc(domain);
- 	int ret;
- 
--	ret = gdsc_pm_runtime_get(sc);
--	if (ret)
--		return ret;
--
--	return _gdsc_enable(sc);
--}
--
--static int _gdsc_disable(struct gdsc *sc)
--{
--	int ret;
--
- 	if (sc->pwrsts == PWRSTS_ON)
- 		return gdsc_assert_reset(sc);
- 
-@@ -388,18 +361,6 @@ static int _gdsc_disable(struct gdsc *sc)
- 	return 0;
- }
- 
--static int gdsc_disable(struct generic_pm_domain *domain)
--{
--	struct gdsc *sc = domain_to_gdsc(domain);
--	int ret;
--
--	ret = _gdsc_disable(sc);
--
--	gdsc_pm_runtime_put(sc);
--
--	return ret;
--}
--
- static int gdsc_init(struct gdsc *sc)
- {
- 	u32 mask, val;
-@@ -447,11 +408,6 @@ static int gdsc_init(struct gdsc *sc)
- 				return ret;
- 		}
- 
--		/* ...and the power-domain */
--		ret = gdsc_pm_runtime_get(sc);
--		if (ret)
--			goto err_disable_supply;
--
- 		/*
- 		 * Votable GDSCs can be ON due to Vote from other masters.
- 		 * If a Votable GDSC is ON, make sure we have a Vote.
-@@ -459,14 +415,14 @@ static int gdsc_init(struct gdsc *sc)
- 		if (sc->flags & VOTABLE) {
- 			ret = gdsc_update_collapse_bit(sc, false);
- 			if (ret)
--				goto err_put_rpm;
-+				goto err_disable_supply;
- 		}
- 
- 		/* Turn on HW trigger mode if supported */
- 		if (sc->flags & HW_CTRL) {
- 			ret = gdsc_hwctrl(sc, true);
- 			if (ret < 0)
--				goto err_put_rpm;
-+				goto err_disable_supply;
- 		}
- 
- 		/*
-@@ -495,14 +451,11 @@ static int gdsc_init(struct gdsc *sc)
- 		sc->pd.power_on = gdsc_enable;
- 
- 	ret = pm_genpd_init(&sc->pd, NULL, !on);
--	if (ret)
--		goto err_put_rpm;
-+	if (!ret)
-+		goto err_disable_supply;
- 
- 	return 0;
- 
--err_put_rpm:
--	if (on)
--		gdsc_pm_runtime_put(sc);
- err_disable_supply:
- 	if (on && sc->rsupply)
- 		regulator_disable(sc->rsupply);
-@@ -541,8 +494,7 @@ int gdsc_register(struct gdsc_desc *desc,
- 	for (i = 0; i < num; i++) {
- 		if (!scs[i])
- 			continue;
--		if (pm_runtime_enabled(dev))
--			scs[i]->dev = dev;
-+		scs[i]->dev = dev;
- 		scs[i]->regmap = regmap;
- 		scs[i]->rcdev = rcdev;
- 		ret = gdsc_init(scs[i]);
 -- 
-https://chromeos.dev
-
+Kees Cook
