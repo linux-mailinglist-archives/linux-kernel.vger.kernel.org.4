@@ -2,69 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54E7961475B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 11:01:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7233B61475F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 11:03:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbiKAKBL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 06:01:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34386 "EHLO
+        id S230421AbiKAKC6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 06:02:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34852 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiKAKBH (ORCPT
+        with ESMTP id S229928AbiKAKCy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 06:01:07 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A13AC18E03
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 03:01:01 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id f5-20020a17090a4a8500b002131bb59d61so939800pjh.1
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 03:01:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=C5MT9pFJPIFyMQMUqsCPf2dIxLdEeAaS7OZYyjwAin4=;
-        b=vLrovUn7NN6GLFWxM1wONYTxkGW3zbxw/+nu7rVxO7HcBM/vAG2IwkiAHvFnOrItf3
-         APw52AtM3dtCiRg4x64sL9KpCRKzqfdKY9IrNBoO7ycNCzApUmKH/4qDPeUifjFvogh5
-         ntHtGiLd16NHpuIzGrIKPzy8ys9kB/FQdX+50+szel1d5F+QM0fOsCBoCD93+7ZTwqag
-         ktsWM9r2nMNuJ8DcECmRCl5gSgg/V5lyyCb1loueGEuNh0AxDUJzIUnlujA2M56DxD0p
-         ok4U9A3YXV882ayb/Vi0PdowV1SObTNd6DqUgcznflh8q3Vu2E4MTvClKy9jjzk+Vtiv
-         xMwA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=C5MT9pFJPIFyMQMUqsCPf2dIxLdEeAaS7OZYyjwAin4=;
-        b=2Ak8+9h4JKBYVHKbrArjWTqayJe5g0orC+YChqrZFBreF+DPu4BScV3rP6aMM8M1hh
-         yLYMqYIATyeAoUsVx3TjQmiJ17IfZGswFBzMNDWOP403mlMV06s1bA/F+Ant3YF9mmZP
-         IcDWBFR52JT1Zh2deZhTzNXWKzibEQBAiqH2URQ1EVUraz+zEnf8quB29tyRVljK3sCx
-         ItDVjonhJMuqchpx8IbZVtQWBdPQG3RFAQgd7r/2QAY8Z+hdgTWkJdxdssiMI2U/H32O
-         6/OQt65eot2YWDQTEe3DWXgZTocpXsnrHedNrwWCWBXPxBFtCGNnpasoG6jjUXM9/w7e
-         3ozw==
-X-Gm-Message-State: ACrzQf1NZb+A7UsmKhRrLpJzVT1ApapF/uY2QeFvmRmZr9AbMav0XVBg
-        B7cFskENKiX6XuLAzMlJ8ODhgVKLCibrNqIQmbiTWw==
-X-Google-Smtp-Source: AMsMyM4bHEnfRhWl+iQhLC/OofGxaCzQnfDqCYyhMSIu6O+SCD51XE5TGkp7lLwyJtkmRS3ZUhUKFRlCYfkx1guE0Cw=
-X-Received: by 2002:a17:903:100c:b0:186:63a1:3b5d with SMTP id
- a12-20020a170903100c00b0018663a13b5dmr19241016plb.148.1667296860898; Tue, 01
- Nov 2022 03:01:00 -0700 (PDT)
+        Tue, 1 Nov 2022 06:02:54 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.85.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 315E714087
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 03:02:53 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-2-IO7oJJsdPEWfrci-nPnQRA-1; Tue, 01 Nov 2022 10:02:38 +0000
+X-MC-Unique: IO7oJJsdPEWfrci-nPnQRA-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 1 Nov
+ 2022 10:02:26 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.042; Tue, 1 Nov 2022 10:02:26 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     'Szabolcs Nagy' <szabolcs.nagy@arm.com>,
+        Theodore Ts'o <tytso@mit.edu>
+CC:     "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>
+Subject: RE: linux interprets an fcntl int arg as long
+Thread-Topic: linux interprets an fcntl int arg as long
+Thread-Index: AQHY7dH4b5GlkmHz9EyVI+/nub6Ts64p0qEQ
+Date:   Tue, 1 Nov 2022 10:02:26 +0000
+Message-ID: <a0693686d0ae41599fe1700680ec56ec@AcuMS.aculab.com>
+References: <Y1/DS6uoWP7OSkmd@arm.com> <Y2B6jcLUJ1F2y2yL@mit.edu>
+ <Y2DisyknbKxeCik4@arm.com>
+In-Reply-To: <Y2DisyknbKxeCik4@arm.com>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-References: <20221024144304.198689-1-abel.vesa@linaro.org>
-In-Reply-To: <20221024144304.198689-1-abel.vesa@linaro.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Tue, 1 Nov 2022 11:00:23 +0100
-Message-ID: <CAPDyKFq1fvKBtPhmd3YbYcg-hWPRkqGoB=-f8SwTG2OSiKjzdw@mail.gmail.com>
-Subject: Re: [PATCH] PM: domains: Reverse the order of performance and
- enabling ops
-To:     Abel Vesa <abel.vesa@linaro.org>
-Cc:     "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Kevin Hilman <khilman@kernel.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        linux-pm@vger.kernel.org,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: base64
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,136 +59,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Oct 2022 at 16:44, Abel Vesa <abel.vesa@linaro.org> wrote:
->
-> The ->set_performance_state() needs to be called before ->power_on()
-> when a genpd is powered on, and after ->power_off() when a genpd is
-> powered off. Do this in order to let the provider know to which
-> performance state to power on the genpd, on the power on sequence, and
-> also to maintain the performance for that genpd until after powering off,
-> on power off sequence.
->
-> There is no scenario where a consumer would need its genpd enabled and
-> then its performance state increased. Instead, in every scenario, the
-> consumer needs the genpd to be enabled from the start at a specific
-> performance state.
->
-> And same logic applies to the powering down. No consumer would need its
-> genpd performance state dropped right before powering down.
->
-> Now, there are currently two vendors which use ->set_performance_state()
-> in their genpd providers. One of them is Tegra, but the only genpd provider
-> (PMC) that makes use of ->set_performance_state() doesn't implement the
-> ->power_on() or ->power_off(), and so it will not be affected by the ops
-> reversal.
->
-> The other vendor that uses it is Qualcomm, in multiple genpd providers
-> actually (RPM, RPMh and CPR). But all Qualcomm genpd providers that make
-> use of ->set_performance_state() need the order between enabling ops and
-> the performance setting op to be reversed. And the reason for that is that
-> it currently translates into two different voltages in order to power on
-> a genpd to a specific performance state. Basically, ->power_on() switches
-> to the minimum (enabling) voltage for that genpd, and then
-> ->set_performance_state() sets it to the voltage level required by the
-> consumer.
->
-> By reversing the call order, we rely on the provider to know what to do
-> on each call, but most popular usecase is to cache the performance state
-> and postpone the voltage setting until the ->power_on() gets called.
->
-> As for the reason of still needing the ->power_on() and ->power_off() for a
-> provider which could get away with just having ->set_performance_state()
-> implemented, there are consumers that do not (nor should) provide an
-> opp-table. For those consumers, ->set_performance_state() will not be
-> called, and so they will enable the genpd to its minimum performance state
-> by a ->power_on() call. Same logic goes for the disabling.
->
-> Signed-off-by: Abel Vesa <abel.vesa@linaro.org>
-> ---
->  drivers/base/power/domain.c | 30 +++++++++++++++---------------
->  1 file changed, 15 insertions(+), 15 deletions(-)
->
-> diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-> index ead135c7044c..e66a711fec88 100644
-> --- a/drivers/base/power/domain.c
-> +++ b/drivers/base/power/domain.c
-> @@ -939,8 +939,8 @@ static int genpd_runtime_suspend(struct device *dev)
->                 return 0;
->
->         genpd_lock(genpd);
-> -       gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
->         genpd_power_off(genpd, true, 0);
-> +       gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
->         genpd_unlock(genpd);
->
->         return 0;
-> @@ -978,9 +978,8 @@ static int genpd_runtime_resume(struct device *dev)
->                 goto out;
->
->         genpd_lock(genpd);
-> +       genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
->         ret = genpd_power_on(genpd, 0);
-> -       if (!ret)
-> -               genpd_restore_performance_state(dev, gpd_data->rpm_pstate);
->         genpd_unlock(genpd);
->
->         if (ret)
-> @@ -1018,8 +1017,8 @@ static int genpd_runtime_resume(struct device *dev)
->  err_poweroff:
->         if (!pm_runtime_is_irq_safe(dev) || genpd_is_irq_safe(genpd)) {
->                 genpd_lock(genpd);
-> -               gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
->                 genpd_power_off(genpd, true, 0);
-> +               gpd_data->rpm_pstate = genpd_drop_performance_state(dev);
->                 genpd_unlock(genpd);
->         }
->
-> @@ -2749,17 +2748,6 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
->         dev->pm_domain->detach = genpd_dev_pm_detach;
->         dev->pm_domain->sync = genpd_dev_pm_sync;
->
-> -       if (power_on) {
-> -               genpd_lock(pd);
-> -               ret = genpd_power_on(pd, 0);
-> -               genpd_unlock(pd);
-> -       }
-> -
-> -       if (ret) {
-> -               genpd_remove_device(pd, dev);
-> -               return -EPROBE_DEFER;
-> -       }
-> -
->         /* Set the default performance state */
->         pstate = of_get_required_opp_performance_state(dev->of_node, index);
->         if (pstate < 0 && pstate != -ENODEV && pstate != -EOPNOTSUPP) {
-> @@ -2771,6 +2759,18 @@ static int __genpd_dev_pm_attach(struct device *dev, struct device *base_dev,
->                         goto err;
->                 dev_gpd_data(dev)->default_pstate = pstate;
->         }
-> +
-> +       if (power_on) {
-> +               genpd_lock(pd);
-> +               ret = genpd_power_on(pd, 0);
-> +               genpd_unlock(pd);
-> +       }
-> +
-> +       if (ret) {
-> +               genpd_remove_device(pd, dev);
-> +               return -EPROBE_DEFER;
+RnJvbTogU3phYm9sY3MgTmFneQ0KPiBTZW50OiAwMSBOb3ZlbWJlciAyMDIyIDA5OjExDQo+IA0K
+PiBUaGUgMTAvMzEvMjAyMiAyMTo0NiwgVGhlb2RvcmUgVHMnbyB3cm90ZToNCj4gPiBPbiBNb24s
+IE9jdCAzMSwgMjAyMiBhdCAxMjo0NDo1OVBNICswMDAwLCBTemFib2xjcyBOYWd5IHdyb3RlOg0K
+PiA+ID4gYW5kIHN1Y2ggZmNudGwgY2FsbCBjYW4gaGFwcGVuIHdpdGggYyBjb2RlIHRoYXQganVz
+dCBwYXNzZXMNCj4gPiA+IEZfU0VBTF9XUklURSBzaW5jZSBpdCBpcyBhbiBpbnQgYW5kIGUuZy4g
+d2l0aCBhYXJjaDY0IHBjcyBydWxlcw0KPiA+ID4gaXQgaXMgcGFzc2VkIGluIGEgcmVnaXN0ZXIg
+d2hlcmUgdG9wIGJpdHMgY2FuIGJlIG5vbi16ZXJvDQo+ID4gPiAodW5saWtlbHkgaW4gcHJhY3Rp
+Y2UgYnV0IHZhbGlkKS4NCj4gPg0KPiA+IEluIExpbnV4J3MgYWFyY2g2NCBBQkksIGFuIGludCBp
+cyBhIDQtYnl0ZSB2YWx1ZS4gIEl0IGlzICpub3QqIGFuDQo+ID4gOC1ieXRlIHZhbHVlLiAgU28g
+cGFzc2luZyBpbiAiRl9TRUFMX1dSSVRFIHwgMHhGMDAwMDAwMDAiIGFzIGFuIGludA0KPiA+IChh
+cyBpbiB5b3VyIGV4YW1wbGUpIGlzIHNpbXBseSBub3QgdmFsaWQgdGhpbmcgZm9yIHRoZSB1c2Vy
+c3BhY2UNCj4gPiBwcm9ncmFtIHRvIGRvLg0KPiA+DQo+ID4gTm93LCBpZiB0aGVyZSBpcyBhIEMg
+cHJvZ3JhbSB3aGljaCBoYXMgImludCBjID0gRl9TRUFMX1dSSVRFIiwgaWYgdGhlDQo+ID4gUENT
+IGFsbG93cyB0aGUgY29tcGlsZXIgdG8gcGFzcyBhIGZ1bmN0aW9uIHBhcmFtdGVyIGMgLS0tIGZv
+ciBleGFtcGxlDQo+ID4gZihhLCBiLCBjKSAtLS0gd2hlcmUgdGhlIDQtYnl0ZSBwYXJhbXRlciAn
+YycgaXMgcGxhY2VkIGluIGEgNjQtYml0DQo+ID4gcmVnaXN0ZXIgd2hlcmUgdGhlIGhpZ2ggYml0
+cyBvZiB0aGUgNjQtYml0IHJlZ2lzdGVyIGNvbnRhaW5zIG5vbi16ZXJvDQo+ID4gZ2FyYmFnZSB2
+YWx1ZXMsIEkgd291bGQgYXJndWUgdGhhdCB0aGlzIGlzIGEgYnVnIGluIHRoZSBQQ1MgYW5kL29y
+IHRoZQ0KPiA+IGNvbXBpbGVyLg0KPiANCj4gdGhlIGNhbGxlZSB1c2VzIHZhX2FyZyhhcCwgdHlw
+ZSkgdG8gZ2V0IHRoZSBhcmd1bWVudCwNCj4gYW5kIGlmIHRoZSB0eXBlIGlzIHdpZGVyIHRoYW4g
+d2hhdCB3YXMgYWN0dWFsbHkgcGFzc2VkDQo+IHRoZW4gYW55dGhpbmcgY2FuIGhhcHBlbi4gaW4g
+cHJhY3RpY2Ugd2hhdCBoYXBwZW5zIGlzDQo+IHRoYXQgdGhlIHRvcCBiaXRzIGNhbiBiZSBub24t
+emVyby4NCj4gDQo+IG1hbnkgcGNzIGFyZSBhZmZlY3RlZCAoYWFyY2g2NCBpcyB0aGUgb25lIGkg
+a25vdyB3ZWxsLA0KPiBidXQgYXQgbGVhc3QgeDg2XzY0LCBhcm0gYXJlIGFmZmVjdGVkIHRvbyku
+IGFuZCBldmVuIGlmDQo+IGl0IHdhcyBhYXJjaDY0IHBjcyBvbmx5LCBpdCBpcyBpbmNvbXBldGVu
+dCB0byBzYXkgdGhhdA0KPiB0aGUgcGNzIGlzIHdyb25nOiB0aGF0J3MgYSBjb25zdHJhaW50IHdl
+IGFyZSB3b3JraW5nIHdpdGguDQo+IA0KPiB0aGUga2VybmVsIG11c3Qgbm90IHJlYWQgYSB3aWRl
+ciB0eXBlIHRoYW4gd2hhdCBpdA0KPiBkb2N1bWVudHMgYXMgYXJndW1lbnQgdG8gdmFyaWFkaWMg
+ZnVuY3Rpb25zIGluIHRoZSBjIGFwaS4NCj4gKGl0IGRvZXMgbm90IG1ha2UgbXVjaCBzZW5zZSB0
+byBleHBlY3QgYW55dGhpbmcgdGhlcmUNCj4gYW55d2F5LCBidXQgaXQgY2FuIGJyZWFrIHVzZXJz
+cGFjZSkNCg0KVGhlIExpbnV4IGtlcm5lbCBqdXN0IGFzc3VtZXMgdGhhdCB0aGUgdmFyYXJncyBj
+YWxsIGxvb2tzIGxpa2UNCmEgbm9uLXZhcmFncyBjYWxsIHdpdGggdGhlIHNhbWUgcGFyYW1ldGVy
+cy4NCihJdCBkb2Vzbid0IHVzZSB2YV9hcmcoKSkNCkFsbCBzeXNjYWxsIGFyZ3VtZW50cyBhcmUg
+cGFzc2VkIGluIHJlZ2lzdGVycyAodW5saWtlIEJTRHMNCndoZXJlIHRoZXkgY2FuIGFsc28gYmUg
+b24gdGhlIHVzZXIgc3RhY2spLg0KT24gNjRiaXQgc3lzdGVtcyB0aGUgc2FtZSByZWdpc3RlcnMg
+YXJlIGV4cGVjdGVkIHRvIGJlIHVzZWQNCmZvciA2NGJpdCBhbmQgMzJiaXQgaW50ZWdlcnMgYW5k
+IGZvciBwb2ludGVycy4NCjMyYml0IHZhbHVlcyB1c3VhbGx5IGdldCBtYXNrZWQgYmVjYXVzZSB0
+aGV5IGdldCBwYXNzZWQgdG8NCmEgZnVuY3Rpb24gd2l0aCBhbiAnaW50JyBhcmd1bWVudC4NCg0K
+SWYgYW55IGZjbnRsKCkgY2FsbHMgcmVxdWlyZSBhIDY0Yml0IHZhbHVlIGFuZCB0aGUgQyBBQkkN
+Cm1pZ2h0IGxlYXZlIG5vbi16ZXJvIGhpZ2ggYml0cyBpbiBhbiByZWdpc3RlciBjb250YWluaW5n
+DQphIDMyYml0IHZhbHVlIChlc3AuIHRvIGEgdmFyYXJncyBmdW5jdGlvbikgdGhlbiB0aGUgY2Fs
+bGluZw0KY29kZSB3aWxsIG5lZWQgdG8gY2FzdCBzdWNoIGFyZ3VtZW50cyB0byA2NCBiaXRzLg0K
+DQpPVE9IIEkgc3VzcGVjdCB0aGUgYXJndW1lbnQgaXMgZWl0aGVyIGFic2VudCwgaW50IG9yIHBv
+aW50ZXIuDQpTbyBpdCBzaG91bGQgbWFzayB0aGUgdmFsdWUgdG8gMzIgYml0cy4NCg0KTm90ZSB0
+aGF0IHRoZXJlIGFyZSBBQkkgd2hlcmUgJ2ludCcgYW5kICdwb2ludGVyJyBnZXQgcGFzc2VkDQpp
+biBkaWZmZXJlbnQgcmVnaXN0ZXJzLg0KRm9ydHVuYXRlbHkgbm9uZSB3aWxsIHN1cHBvcnQgTGlu
+dXghDQoNCglEYXZpZA0KDQotDQpSZWdpc3RlcmVkIEFkZHJlc3MgTGFrZXNpZGUsIEJyYW1sZXkg
+Um9hZCwgTW91bnQgRmFybSwgTWlsdG9uIEtleW5lcywgTUsxIDFQVCwgVUsNClJlZ2lzdHJhdGlv
+biBObzogMTM5NzM4NiAoV2FsZXMpDQo=
 
-If we manage to request a default performance state
-(dev_gpd_data(dev)->default_pstate != 0) a few lines above, we should
-probably drop that request before returning here.
-
-Similar to what we do in genpd_dev_pm_detach().
-
-> +       }
-> +
->         return 1;
->
->  err:
-
-Other than the rather small thing above, this looks good to me!
-
-Kind regards
-Uffe
