@@ -2,131 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7525614579
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 09:09:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C713614583
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 09:15:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbiKAIJk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 04:09:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48158 "EHLO
+        id S229902AbiKAIPN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 04:15:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229920AbiKAIJf (ORCPT
+        with ESMTP id S229556AbiKAIPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 04:09:35 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DAF0BC3E;
-        Tue,  1 Nov 2022 01:09:35 -0700 (PDT)
-Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
-        by mailout.nyi.internal (Postfix) with ESMTP id A671E5C0183;
-        Tue,  1 Nov 2022 04:09:34 -0400 (EDT)
-Received: from mailfrontend2 ([10.202.2.163])
-  by compute3.internal (MEProxy); Tue, 01 Nov 2022 04:09:34 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=themaw.net; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1667290174; x=
-        1667376574; bh=fZsEJ7wi+HahAReChxV3837nUT/qrncYmj4vJFyeKis=; b=K
-        FjRkr3OgjHGn+kMfurwKA4uzcb9nYif4iQjCfCcmUuut4Lwp78yZwlTgt67Y2Koh
-        9BTTBap0QdO+ejVgYHYUV5nJbfRvtWo9uTCI1jXt18c3Y9VqHA89SvI/oQs29mjj
-        sDDQyAIUrYhQ5Pe8jZylkIeLXjwbCTi/6irBv1EqvBVjSQfbjYJIpm2UZW1mKcor
-        HrQELPzNFvxKmqD613/gMVTBDBJUk3JqAl0kNeD6bd5unq3kda/FUUVlpxDoo9j3
-        vBJ6Z7f3au60GMHyK4D7kNKhl3yAXd5HaLeMMTlgYSAa7r2c8yxOOOysKOxp9gzp
-        3NRAkyjKRyUqwKaKySNtw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1667290174; x=
-        1667376574; bh=fZsEJ7wi+HahAReChxV3837nUT/qrncYmj4vJFyeKis=; b=t
-        ss5KYZZHvakKZKa1yr5Qo5ZQfAd23aHXcdzzJc4HbBmDvb/frle9rjvDwExNQ/Fz
-        W7bz9z/HgahBlqN6Obzo+6fvMtuBLgoCgTd3QHyTI8BuFRFuPb1UrOuKk/AMwh+q
-        QIlKePG75K5bPqC9nYx0TGaIFkWQB+eGJCeI1R/P6n2QxwPPUDXB2msnhOo7qzLm
-        SvDLEnCRXNwcpJaiVU54FseDVaqt4Lc6tHqIB0pG75j1tsAlY/9VOY+5Uzh+U8+2
-        IQ7KuD3YklEqJpB911bYhVQjoys/SRNs5KtnaylGx1gQSDjo4efFjXoz56uhRaPK
-        5CXomR462GZ3g1aJxqMog==
-X-ME-Sender: <xms:PdRgY6juQeEb7KizJHU_nBYb2GYa70ifiFPxe-aHPTleu80J_6KMXQ>
-    <xme:PdRgY7CpUyBYrsX6-GYWFFJWa6_aaSKxZRwHnnjSJ22Rmc2TqhEkaKCjrSbeglfoj
-    hUBwDfFjQe5>
-X-ME-Received: <xmr:PdRgYyG4s_Pthm7LIW50GJXeyolSp5rqsx9pHCMIwjdR2YQTd6YLAG2SEDEncmR7RHBFbChhrFH5SAys7i8sBVeCPx82Bavm6SqphXZ1w2H_H7OcXvk>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudeggdduudelucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpefkrghn
-    ucfmvghnthcuoehrrghvvghnsehthhgvmhgrfidrnhgvtheqnecuggftrfgrthhtvghrnh
-    epuefhueeiieejueevkefgiedtteehgfdutdelfffhleeflefhudeuvdefhfeghfehnecu
-    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomheprhgrvhgvnh
-    esthhhvghmrgifrdhnvght
-X-ME-Proxy: <xmx:PdRgYzR4QtzV5XXdJormcSgi5QF3EFeN6Td1oy0i4qfYzC4PrFLt0A>
-    <xmx:PdRgY3yqf6SGsCjiovyyK9NZdTyXxlmsk1peCX7KBmh0ZmrzoguLQQ>
-    <xmx:PdRgYx6bvfARGEDqUveKCD02xtn3Y7EhDhD-OmSfSq9pzotGMECnOg>
-    <xmx:PtRgY_cNdob1-8Wuxq9cxYhZZvGtXS1fPivhgcUjwob-5GcDtO7Phg>
-Feedback-ID: i31e841b0:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Tue,
- 1 Nov 2022 04:09:29 -0400 (EDT)
-Message-ID: <5fd7f78e-4b8f-1dd4-5b3c-e2c3583b9e9d@themaw.net>
-Date:   Tue, 1 Nov 2022 16:09:25 +0800
+        Tue, 1 Nov 2022 04:15:12 -0400
+Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A7011260E;
+        Tue,  1 Nov 2022 01:15:07 -0700 (PDT)
+Received: from ([60.208.111.195])
+        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id WLR00100;
+        Tue, 01 Nov 2022 16:15:00 +0800
+Received: from localhost.localdomain (10.200.104.97) by
+ jtjnmail201603.home.langchao.com (10.100.2.3) with Microsoft SMTP Server id
+ 15.1.2507.12; Tue, 1 Nov 2022 16:15:01 +0800
+From:   Bo Liu <liubo03@inspur.com>
+To:     <dmitry.torokhov@gmail.com>
+CC:     <michael@amarulasolutions.com>,
+        <dario.binacchi@amarulasolutions.com>,
+        <wsa+renesas@sang-engineering.com>,
+        <oliver.graute@kococonnector.com>, <linux-input@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Bo Liu <liubo03@inspur.com>
+Subject: [PATCH] Input: edt-ft5x06 - replace DEFINE_SIMPLE_ATTRIBUTE with DEFINE_DEBUGFS_ATTRIBUTE
+Date:   Tue, 1 Nov 2022 04:14:58 -0400
+Message-ID: <20221101081458.8119-1-liubo03@inspur.com>
+X-Mailer: git-send-email 2.18.2
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH 2/2] kernfs: dont take i_lock on revalidate
-To:     Amir Goldstein <amir73il@gmail.com>
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Tejun Heo <tj@kernel.org>, Minchan Kim <minchan@kernel.org>,
-        Eric Sandeen <sandeen@sandeen.net>,
-        Al Viro <viro@zeniv.linux.org.uk>,
-        Rick Lindsley <ricklind@linux.vnet.ibm.com>,
-        David Howells <dhowells@redhat.com>,
-        Miklos Szeredi <miklos@szeredi.hu>,
-        Carlos Maiolino <cmaiolino@redhat.com>,
-        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
-        Kernel Mailing List <linux-kernel@vger.kernel.org>
-References: <166606025456.13363.3829702374064563472.stgit@donald.themaw.net>
- <166606036967.13363.9336408133975631967.stgit@donald.themaw.net>
- <CAOQ4uxjiEbHwT7M1GhPb_GFn-oiuvqwS1aOw7N9N8cu5jam5Yw@mail.gmail.com>
-Content-Language: en-US
-From:   Ian Kent <raven@themaw.net>
-In-Reply-To: <CAOQ4uxjiEbHwT7M1GhPb_GFn-oiuvqwS1aOw7N9N8cu5jam5Yw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.200.104.97]
+tUid:   20221101161500c5e451d4bbc87ab63752f659c0e9ec61
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Fix the following coccicheck warning:
+  drivers/input/touchscreen/edt-ft5x06.c:756:0-23: WARNING:
+    debugfs_mode_fops should be defined with DEFINE_DEBUGFS_ATTRIBUTE
 
-On 1/11/22 15:46, Amir Goldstein wrote:
-> On Tue, Oct 18, 2022 at 5:58 AM Ian Kent <raven@themaw.net> wrote:
->> In kernfs_dop_revalidate() when the passed in dentry is negative the
->> dentry directory is checked to see if it has changed and if so the
->> negative dentry is discarded so it can refreshed. During this check
->> the dentry inode i_lock is taken to mitigate against a possible
->> concurrent rename.
->>
->> But if it's racing with a rename, becuase the dentry is negative, it
->> can't be the source it must be the target and it must be going to do
->> a d_move() otherwise the rename will return an error.
->>
->> In this case the parent dentry of the target will not change, it will
->> be the same over the d_move(), only the source dentry parent may change
->> so the inode i_lock isn't needed.
-> You meant d_lock.
-> Same for the commit title.
+Signed-off-by: Bo Liu <liubo03@inspur.com>
+---
+ drivers/input/touchscreen/edt-ft5x06.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Ha, well how do you like that, such an obvious mistake, how
-
-did I not see it?
-
-
-Not sure what to do about it now though ...
-
-Any suggestions anyone?
-
-
-Ian
-
+diff --git a/drivers/input/touchscreen/edt-ft5x06.c b/drivers/input/touchscreen/edt-ft5x06.c
+index 9ac1378610bc..a184425b6985 100644
+--- a/drivers/input/touchscreen/edt-ft5x06.c
++++ b/drivers/input/touchscreen/edt-ft5x06.c
+@@ -753,7 +753,7 @@ static int edt_ft5x06_debugfs_mode_set(void *data, u64 mode)
+ 	return retval;
+ };
+ 
+-DEFINE_SIMPLE_ATTRIBUTE(debugfs_mode_fops, edt_ft5x06_debugfs_mode_get,
++DEFINE_DEBUGFS_ATTRIBUTE(debugfs_mode_fops, edt_ft5x06_debugfs_mode_get,
+ 			edt_ft5x06_debugfs_mode_set, "%llu\n");
+ 
+ static ssize_t edt_ft5x06_debugfs_raw_data_read(struct file *file,
+-- 
+2.27.0
 
