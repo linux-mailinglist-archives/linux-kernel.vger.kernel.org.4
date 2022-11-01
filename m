@@ -2,114 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DAA5614B5D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:09:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E916D614B65
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:10:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbiKANJl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 09:09:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45120 "EHLO
+        id S229939AbiKANKQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 09:10:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiKANJj (ORCPT
+        with ESMTP id S230075AbiKANKM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 09:09:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9665F19C02;
-        Tue,  1 Nov 2022 06:09:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 46FF4B81BD2;
-        Tue,  1 Nov 2022 13:09:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C83FC433D6;
-        Tue,  1 Nov 2022 13:09:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667308176;
-        bh=WSufmy9yVEDlZ5qbeQU4D1okCj9Nr92AV/WW56C6udc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PASCSiEJHM++/+xAG66nSY5pokQStirVMO2ZuO6x2LH0sLyVpuLorIfb0wx29mPFy
-         w2hbTiPoWnqaMB5AHdMO4WSXa/d8x0sy7hhcmwZxjlkCcABr/kSw+4Y+r20HvtMBOL
-         grEAWqq2V7GpgaGSO0IAo1VFQxI6qICRJj6dGq48VpQX+Kr+kIVZ9xbkome0SSN5bx
-         tHTJzG5k2hn00w//Wpmn18nd1E0OOaFx+L0fkptbEEghQ9Ruc3BhoUWjheVpCy9c0E
-         jIMfdzZf8PNu7kUqzES1fPQFDqhQYmOGyQZi1u1r/BdfdBNQqroQA7t/YzTuS/VHX/
-         BGxlWGmSOW2BQ==
-Date:   Tue, 1 Nov 2022 14:09:32 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Angel Iglesias <ang.iglesiasg@gmail.com>
-Cc:     linux-iio@vger.kernel.org,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Nuno =?utf-8?B?U8Oh?= <noname.nuno@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/2] i2c: core: Introduce i2c_client_get_device_id
- helper function
-Message-ID: <Y2EajA8DU4WXLSfE@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Angel Iglesias <ang.iglesiasg@gmail.com>, linux-iio@vger.kernel.org,
-        Uwe =?utf-8?Q?Kleine-K=C3=B6nig?= <u.kleine-koenig@pengutronix.de>,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Nuno =?utf-8?B?U8Oh?= <noname.nuno@gmail.com>,
-        Jonathan Cameron <jic23@kernel.org>, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <cover.1667151588.git.ang.iglesiasg@gmail.com>
- <aeac9f372ffe0013757e261229e6e23f76f2d8f9.1667151588.git.ang.iglesiasg@gmail.com>
+        Tue, 1 Nov 2022 09:10:12 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEA2A1A83A
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 06:10:09 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id u6so13492983plq.12
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 06:10:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HodXEuYzqCTG15c9CAh+5cByd+S8fmEjuYPaH6ghzhM=;
+        b=knk5c/ux/y+eglyyWWu4j84v8Ixq48CJt4i6w1OYiGXLO7ZbsDuN1LZ9K8gjNEXT5/
+         hbIWLRqA0lkXtkUwHfcsuW6QYxCGdKl4w/kXLoRohhz0aTjbuaZBnVK7wqeCOUWdxd+9
+         6tKG/0IlXKVbwFh5KlXOe+TNLH/3M75z2O8Pzk/QRl1hHGe3YIdoGxMdNr8cW7DzKs7n
+         1zthSjGfeet4uE2cKkMEoucbJKxS23TnfcQu62MBMB0DcvbqhYkIIdcTHSKzZGxWMNok
+         +kXWDnlzy7os746o9KBcVFg0NpEbqyOLCxLYpInlga+0m8H2YbadRiCDV1SWVAGjiwvs
+         JI7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HodXEuYzqCTG15c9CAh+5cByd+S8fmEjuYPaH6ghzhM=;
+        b=aEXOtsVXT6esqeuL7zATGDc0JKONZaIpXA5hVM3ew0yCut25C2hpFXXZ45f/jPEMGV
+         k+MDp3SetGExcUPyq+fVAyntLUFNpzy5iZ9PDYztxHh2fKzV8wgWVzpCuxqeSH7F+iyx
+         iICA/3YR1RAm/ei01LQUl70oOdfHZx9cgMyXfQ2U9VrHduRfLAJ5UYoGDOvwRF3+R3QD
+         Jxkpq16I8rnqXolYKWiufeGB1uENqCqEcgpsp0xA37vHxVUgg8yahAoMuDDbjokq6Lgb
+         PBrZKN0KLYla18TgDXCR/ah/1EMHwGwTpF7g0b8OwiloCRo7GWkd0PmeBv2GV0lYzp2f
+         ibFA==
+X-Gm-Message-State: ACrzQf3C4IGmbkorXA0GaERmR2PuNd1Mx/xnt6UFEw8lbfIIUVk2M94/
+        tkGLOjbVGTSdRombkA1/2jzbJg==
+X-Google-Smtp-Source: AMsMyM7AsUERJZGxdlKUJXlDnooCAE7Bx7toADGqJAI1DxXNkDerEMNtwcPUtTk3YLcZ4bhI9ecSXg==
+X-Received: by 2002:a17:903:183:b0:184:8c1a:7a95 with SMTP id z3-20020a170903018300b001848c1a7a95mr19464851plg.137.1667308208882;
+        Tue, 01 Nov 2022 06:10:08 -0700 (PDT)
+Received: from [127.0.0.1] ([198.8.77.157])
+        by smtp.gmail.com with ESMTPSA id h7-20020a170902f70700b0016c50179b1esm6335596plo.152.2022.11.01.06.10.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 06:10:08 -0700 (PDT)
+From:   Jens Axboe <axboe@kernel.dk>
+To:     Yu Kuai <yukuai1@huaweicloud.com>, paolo.valente@linaro.org,
+        tj@kernel.org, jack@suse.cz
+Cc:     yukuai3@huawei.com, yi.zhang@huawei.com,
+        linux-kernel@vger.kernel.org, linux-block@vger.kernel.org,
+        cgroups@vger.kernel.org
+In-Reply-To: <20220916071942.214222-1-yukuai1@huaweicloud.com>
+References: <20220916071942.214222-1-yukuai1@huaweicloud.com>
+Subject: Re: [patch v11 0/6] support concurrent sync io for bfq on a specail occasion
+Message-Id: <166730820758.252147.11493585744578710855.b4-ty@kernel.dk>
+Date:   Tue, 01 Nov 2022 07:10:07 -0600
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="M69caHwk2wYuVsmJ"
-Content-Disposition: inline
-In-Reply-To: <aeac9f372ffe0013757e261229e6e23f76f2d8f9.1667151588.git.ang.iglesiasg@gmail.com>
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.11.0-dev-d9ed3
+X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Level: *
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, 16 Sep 2022 15:19:36 +0800, Yu Kuai wrote:
+> From: Yu Kuai <yukuai3@huawei.com>
+> 
+> Changes in v11:
+>  - keep the comments in bfq_weights_tree_remove() and move it to the
+>  caller where bfqq can be freed.
+>  - add two followed up cleanup patches.
+> 
+> [...]
 
---M69caHwk2wYuVsmJ
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Applied, thanks!
 
-On Sun, Oct 30, 2022 at 06:52:18PM +0100, Angel Iglesias wrote:
-> Introduces new helper function to aid in .probe_new() refactors. In order
-> to use existing i2c_get_device_id() on the probe callback, the device
-> match table needs to be accessible in that function, which would require
-> bigger refactors in some drivers using the deprecated .probe callback.
->=20
-> This issue was discussed in more detail in the IIO mailing list.
->=20
-> Link: https://lore.kernel.org/all/20221023132302.911644-11-u.kleine-koeni=
-g@pengutronix.de/
-> Suggested-by: Nuno S=C3=A1 <noname.nuno@gmail.com>
-> Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> Suggested-by: Jonathan Cameron <jic23@kernel.org>
-> Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
+[1/6] block, bfq: support to track if bfqq has pending requests
+      commit: 3d89bd12d352e20f4f7c8f11a0f1a712b95a5295
+[2/6] block, bfq: record how many queues have pending requests
+      commit: 60a6e10c537a7459dd53882186bd16fff257fb03
+[3/6] block, bfq: refactor the counting of 'num_groups_with_pending_reqs'
+      commit: 71f8ca77cb8764d46f656b725999e8b8b1aec215
+[4/6] block, bfq: do not idle if only one group is activated
+      commit: eed3ecc991c90a4a0ce32ea2b35378dc351f012b
+[5/6] block, bfq: cleanup bfq_weights_tree add/remove apis
+      commit: afdba14612622ec75896e5646950b3562a9aadd3
+[6/6] block, bfq: cleanup __bfq_weights_tree_remove()
+      commit: eb5bca73655cb6aa3bb608253e1e47283240c933
 
-Looks good to me!
+Best regards,
+-- 
+Jens Axboe
 
 
---M69caHwk2wYuVsmJ
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNhGogACgkQFA3kzBSg
-KbY3tg//fGMtP+NadBILucb+yhhywXppgoDc6rkziK8K0CL9gvUom+sHDNa0x7eQ
-E7Ep7evCaFpr7oxtcG3nZEbCIS5OKff5x01SjNUANOOU/hoeSG1b9nXvsMhR/OEc
-6xEDCUedXd5DOlqt+OLa1s1q/yaE49KNKkPLq65n3iD8v3JQECnwc90m5D40Gbss
-O/8ZKoaWzSgP/WGcb8Xuf+0rp3lhXJgFPUXvzv/iWhXTuMsjeuyD+u3oIx1k6nkV
-tYqt40Y/s/0ooswMZqz0fcb6DeTyWMfcPXZ6aE55Mn31wit32+0H9E899vT+Kdkx
-BVJ1n30palDw1uKPX66p2NhBua56GGrqR67RaRpA4S+uxXZkZl5G7rF1uobWIcgs
-khvcpiLpL1bGBLI4BA33CtdWtU2/sRtP6vjebwOi0YTeX9E09YLaY8xtEX9PERZJ
-8qKil7+nwSe2lQ6bOfRfOwcOf0PAH4fIY7I0mhQwuJxn/z7emH9RaqzAFL4TRh5j
-VfT/m5WQl5cjLi62cvKqK8jnEoEPsuJ3JoKtRi/im8AWsLif8Jo8XmrhwnT7v9uR
-iH343EKEeeOG1OP6Vk6kNAPz09HAz2UMQ6Dd9I5cme6/sEV9Ls/gyhKlJ5a9g4og
-vVljeG2+ifhlHQl7o5sLNz9nr/IvhBphBFrn9xY1sfxIbuzncvw=
-=DRDF
------END PGP SIGNATURE-----
-
---M69caHwk2wYuVsmJ--
