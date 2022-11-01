@@ -2,187 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FAED6151C7
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 19:48:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 350FC6151CE
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 19:53:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbiKASsh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 14:48:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58436 "EHLO
+        id S230241AbiKASxN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 14:53:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59724 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230136AbiKASsb (ORCPT
+        with ESMTP id S229566AbiKASxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 14:48:31 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4FD8517E23;
-        Tue,  1 Nov 2022 11:48:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
-        List-Post:List-Owner:List-Archive;
-        bh=KiM8NF3I5HDTZGKG8OKbQBwCPXdwKmsbyN9xYuphi7Y=; b=N1pyzw2l7vEf5w1x4PLENi7pre
-        PsKQZp4roXBXYz4FPYwca1L4/BmSSk7IqfT/hs5lT5iPYtSwsUnxmviA4k0RjMD6BVtNelG+xO+Zv
-        S0hX4hs4+hS+QtuV/dJBi3is1rCy2lkvrdUOleWZOtDWly3t3IYyNlJ3ksmuck9SVMJH8IchEXhfQ
-        B4PXqzl30zZ26srn1JSjxrAJfWzukknBJPXEn0Oh19FKLDWeWlejxf4DDLg1s7pFdbAGUwvWOYLt1
-        JcVTak1XjXp4Z/PV9wlKhxfOOMCga0xHqKzyXFLZn8rtRTd6wFMKNxou579SA0TfaDgKwUd+OAmwH
-        bq+cDykg==;
-Received: from [177.102.148.33] (helo=localhost)
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_SECP256R1__RSA_PSS_RSAE_SHA256__AES_256_GCM:256) (Exim)
-        id 1opwJE-00ASTb-ES; Tue, 01 Nov 2022 19:48:25 +0100
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-To:     linux-hardening@vger.kernel.org
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-efi@vger.kernel.org, kernel-dev@igalia.com,
-        kernel@gpiccoli.net, keescook@chromium.org, anton@enomsg.org,
-        ccross@android.com, tony.luck@intel.com,
-        "Guilherme G. Piccoli" <gpiccoli@igalia.com>,
-        Ard Biesheuvel <ardb@kernel.org>
-Subject: [PATCH V3] efi: pstore: Add module parameter for setting the record size
-Date:   Tue,  1 Nov 2022 15:48:07 -0300
-Message-Id: <20221101184808.80747-1-gpiccoli@igalia.com>
-X-Mailer: git-send-email 2.38.0
+        Tue, 1 Nov 2022 14:53:11 -0400
+Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DED411D660;
+        Tue,  1 Nov 2022 11:53:09 -0700 (PDT)
+Received: by mail-ed1-x534.google.com with SMTP id 21so23110582edv.3;
+        Tue, 01 Nov 2022 11:53:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=yQ7/MwAQn4LrD4Cf9RqJ2+ZX45LUaYFp5K5tPUEtopc=;
+        b=CZygNYllInTMzzqdHiFTJOLrkjxTQgO1oQpuU+yG/Fw3VBPhuP0ceXjWxu8kChGduR
+         fqoTqd6VAL1EQRLZQ4MK0QChp5USOBCwR+P4aWf0CUDCpDsIMtioht+Ys1bHkOr3XZTq
+         rYq32ODtMzjhUAAYGglasgB85wad2W4smQhN0wyxM1XS7lw7JJLEK1Js0jamImBd/OJ/
+         5xo2VyQ/B/5OwC7g7z/RJrJZlTvaUD7eM8CcC/zl8UDhfXVy7MOZe0z7PWwzO0ZqR/Xw
+         3hmX0MDaRR3l5Yyzqcl3+EWMrYp5qSoirBxw4sjHT0/QFv+kvvIuIJiKvnxW9vsVfZ+R
+         PhzA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yQ7/MwAQn4LrD4Cf9RqJ2+ZX45LUaYFp5K5tPUEtopc=;
+        b=NimcRsmeVUvNFumwSNkspAJLr4UNcAWW9FvmICvOQ0nn0O1WhWkU+Jx9v0vgeVHrms
+         6dm8/0dIzPWgW7/cnMYH0M+KWctRbgEsUhPwP+Uk7vRmGWycsaN9vBJui6pE2YFFYO9Q
+         WBedBjKoRYWh532M1mfnYk/RsUk/CjYADr/PJg4B1vRK/X+lBhoB3lHjg9MkEi7Gpwax
+         AK8ntU3FhUuadCSzOe/DS3d58EpWEdjLfKrMhmJuAlTUh50N8sLi7/RK4tFIOA59ThCw
+         ePqoxwW9GGXjod2pwps8BoLfI5sZCP1ypB70ADrIEKf5b7JB7+/GiI18k6qk65HT0WL7
+         7Hjw==
+X-Gm-Message-State: ACrzQf3F39CP2ZPxg5eTWyMmgM7f6jjvM7lu2GJ3DD7n+o3egvrm0Fyn
+        vlaPhxMAAO8NOjyn9CwBEGc2UI9V28ivGH46sDA=
+X-Google-Smtp-Source: AMsMyM4NWTcwa6GoOT/IG73obE/jQ6ZPCtMq7hwJI8TVjbfrYopO5y4KbfIIOZ2nPTKTMxHQ+eZTTqse6EjRNmXOdp8=
+X-Received: by 2002:a05:6402:5406:b0:452:1560:f9d4 with SMTP id
+ ev6-20020a056402540600b004521560f9d4mr20659134edb.333.1667328788216; Tue, 01
+ Nov 2022 11:53:08 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20221101052340.1210239-1-namhyung@kernel.org> <20221101052340.1210239-3-namhyung@kernel.org>
+ <Y2DuzmnUm6NIh25a@krava> <CAADnVQJ6+N6vQ=ZUgUjoB_M2RoTGGPXpLwz81mNDmLWrGYKetw@mail.gmail.com>
+ <CAPhsuW6iuEZCCYJk-cra8DkEWNtdin8GyJDZ6Y8zd4ecfd1gQA@mail.gmail.com>
+In-Reply-To: <CAPhsuW6iuEZCCYJk-cra8DkEWNtdin8GyJDZ6Y8zd4ecfd1gQA@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 1 Nov 2022 11:52:56 -0700
+Message-ID: <CAADnVQ+SYv5O+UxnGaBAvxptopWyANdbQRg=e2GXiRBPyJMGgA@mail.gmail.com>
+Subject: Re: [PATCH bpf-next 2/3] bpf: Add bpf_perf_event_read_sample() helper
+To:     Song Liu <song@kernel.org>
+Cc:     Jiri Olsa <olsajiri@gmail.com>, Namhyung Kim <namhyung@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Song Liu <songliubraving@fb.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
+        Stanislav Fomichev <sdf@google.com>,
+        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-By default, the efi-pstore backend hardcode the UEFI variable size
-as 1024 bytes. The historical reasons for that were discussed by
-Ard in threads [0][1]:
+On Tue, Nov 1, 2022 at 11:47 AM Song Liu <song@kernel.org> wrote:
+>
+> On Tue, Nov 1, 2022 at 11:26 AM Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Tue, Nov 1, 2022 at 3:03 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+> > >
+> > > On Mon, Oct 31, 2022 at 10:23:39PM -0700, Namhyung Kim wrote:
+> > > > The bpf_perf_event_read_sample() helper is to get the specified sample
+> > > > data (by using PERF_SAMPLE_* flag in the argument) from BPF to make a
+> > > > decision for filtering on samples.  Currently PERF_SAMPLE_IP and
+> > > > PERF_SAMPLE_DATA flags are supported only.
+> > > >
+> > > > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
+> > > > ---
+> > > >  include/uapi/linux/bpf.h       | 23 ++++++++++++++++
+> > > >  kernel/trace/bpf_trace.c       | 49 ++++++++++++++++++++++++++++++++++
+> > > >  tools/include/uapi/linux/bpf.h | 23 ++++++++++++++++
+> > > >  3 files changed, 95 insertions(+)
+> > > >
+> > > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
+> > > > index 94659f6b3395..cba501de9373 100644
+> > > > --- a/include/uapi/linux/bpf.h
+> > > > +++ b/include/uapi/linux/bpf.h
+> > > > @@ -5481,6 +5481,28 @@ union bpf_attr {
+> > > >   *           0 on success.
+> > > >   *
+> > > >   *           **-ENOENT** if the bpf_local_storage cannot be found.
+> > > > + *
+> > > > + * long bpf_perf_event_read_sample(struct bpf_perf_event_data *ctx, void *buf, u32 size, u64 sample_flags)
+> > > > + *   Description
+> > > > + *           For an eBPF program attached to a perf event, retrieve the
+> > > > + *           sample data associated to *ctx* and store it in the buffer
+> > > > + *           pointed by *buf* up to size *size* bytes.
+> > > > + *
+> > > > + *           The *sample_flags* should contain a single value in the
+> > > > + *           **enum perf_event_sample_format**.
+> > > > + *   Return
+> > > > + *           On success, number of bytes written to *buf*. On error, a
+> > > > + *           negative value.
+> > > > + *
+> > > > + *           The *buf* can be set to **NULL** to return the number of bytes
+> > > > + *           required to store the requested sample data.
+> > > > + *
+> > > > + *           **-EINVAL** if *sample_flags* is not a PERF_SAMPLE_* flag.
+> > > > + *
+> > > > + *           **-ENOENT** if the associated perf event doesn't have the data.
+> > > > + *
+> > > > + *           **-ENOSYS** if system doesn't support the sample data to be
+> > > > + *           retrieved.
+> > > >   */
+> > > >  #define ___BPF_FUNC_MAPPER(FN, ctx...)                       \
+> > > >       FN(unspec, 0, ##ctx)                            \
+> > > > @@ -5695,6 +5717,7 @@ union bpf_attr {
+> > > >       FN(user_ringbuf_drain, 209, ##ctx)              \
+> > > >       FN(cgrp_storage_get, 210, ##ctx)                \
+> > > >       FN(cgrp_storage_delete, 211, ##ctx)             \
+> > > > +     FN(perf_event_read_sample, 212, ##ctx)          \
+> > > >       /* */
+> > > >
+> > > >  /* backwards-compatibility macros for users of __BPF_FUNC_MAPPER that don't
+> > > > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
+> > > > index ce0228c72a93..befd937afa3c 100644
+> > > > --- a/kernel/trace/bpf_trace.c
+> > > > +++ b/kernel/trace/bpf_trace.c
+> > > > @@ -28,6 +28,7 @@
+> > > >
+> > > >  #include <uapi/linux/bpf.h>
+> > > >  #include <uapi/linux/btf.h>
+> > > > +#include <uapi/linux/perf_event.h>
+> > > >
+> > > >  #include <asm/tlb.h>
+> > > >
+> > > > @@ -1743,6 +1744,52 @@ static const struct bpf_func_proto bpf_read_branch_records_proto = {
+> > > >       .arg4_type      = ARG_ANYTHING,
+> > > >  };
+> > > >
+> > > > +BPF_CALL_4(bpf_perf_event_read_sample, struct bpf_perf_event_data_kern *, ctx,
+> > > > +        void *, buf, u32, size, u64, flags)
+> > > > +{
+> > >
+> > > I wonder we could add perf_btf (like we have tp_btf) program type that
+> > > could access ctx->data directly without helpers
+> > >
+> > > > +     struct perf_sample_data *sd = ctx->data;
+> > > > +     void *data;
+> > > > +     u32 to_copy = sizeof(u64);
+> > > > +
+> > > > +     /* only allow a single sample flag */
+> > > > +     if (!is_power_of_2(flags))
+> > > > +             return -EINVAL;
+> > > > +
+> > > > +     /* support reading only already populated info */
+> > > > +     if (flags & ~sd->sample_flags)
+> > > > +             return -ENOENT;
+> > > > +
+> > > > +     switch (flags) {
+> > > > +     case PERF_SAMPLE_IP:
+> > > > +             data = &sd->ip;
+> > > > +             break;
+> > > > +     case PERF_SAMPLE_ADDR:
+> > > > +             data = &sd->addr;
+> > > > +             break;
+> > >
+> > > AFAICS from pe_prog_convert_ctx_access you should be able to read addr
+> > > directly from context right? same as sample_period.. so I think if this
+> > > will be generic way to read sample data, should we add sample_period
+> > > as well?
+> >
+> > +1
+> > Let's avoid new stable helpers for this.
+> > Pls use CORE and read perf_sample_data directly.
+>
+> We have legacy ways to access sample_period and addr with
+> struct bpf_perf_event_data and struct bpf_perf_event_data_kern. I
+> think mixing that
+> with CORE makes it confusing for the user. And a helper or a kfunc would make it
+> easier to follow. perf_btf might also be a good approach for this.
 
-"there is some cargo cult from prehistoric EFI times going
-on here, it seems. Or maybe just misinterpretation of the maximum
-size for the variable *name* vs the variable itself.".
-
-"OVMF has
-OvmfPkg/OvmfPkgX64.dsc:
-gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x2000
-OvmfPkg/OvmfPkgX64.dsc:
-gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x8400
-
-where the first one is without secure boot and the second with secure
-boot. Interestingly, the default is
-
-gEfiMdeModulePkgTokenSpaceGuid.PcdMaxVariableSize|0x400
-
-so this is probably where this 1k number comes from."
-
-With that, and since there is not such a limit in the UEFI spec, we
-have the confidence to hereby add a module parameter to enable advanced
-users to change the UEFI record size for efi-pstore data collection,
-this way allowing a much easier reading of the collected log, which
-wouldn't be scattered anymore among many small files.
-
-Through empirical analysis we observed that extreme low values (like 8
-bytes) could eventually cause writing issues, so given that and the OVMF
-default discussed, we limited the minimum value to 1024 bytes, which also
-is still the default.
-
-[0] https://lore.kernel.org/lkml/CAMj1kXF4UyRMh2Y_KakeNBHvkHhTtavASTAxXinDO1rhPe_wYg@mail.gmail.com/
-[1] https://lore.kernel.org/lkml/CAMj1kXFy-2KddGu+dgebAdU9v2sindxVoiHLWuVhqYw+R=kqng@mail.gmail.com/
-
-Cc: Ard Biesheuvel <ardb@kernel.org>
-Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
----
-
-V3:
-- Stick with 1024 to the varname size (thanks Ard!).
-- Rebased to v6.1-rc3.
-
-
-Hey folks, I've tested multiple record_size values, using lz4, zstd, deflate
-and no compression. For smaller ones ( up to 4k), all cases worked (for
-deflate, there was some failures even with 1024, and even with this patch
-reverted). For bigger sizes, no compression/deflate fails for 8k+, lz4 for
-values bigger than 16k and zstd only for values more then 20k.
-
-I've instrumented the function efivar_set_variable_locked() to get the return
-value during panic, and when it fails, usually it gives 0x8000000000000002
-(EFI_INVALID_PARAMETER it seems?). It's not related to this patch specifically,
-but worth mentioning in case you have ideas.
-
-Thanks,
-
-
-Guilherme
-
-
- drivers/firmware/efi/efi-pstore.c | 23 +++++++++++++++++------
- 1 file changed, 17 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/firmware/efi/efi-pstore.c b/drivers/firmware/efi/efi-pstore.c
-index 3bddc152fcd4..81ed4fc6d76d 100644
---- a/drivers/firmware/efi/efi-pstore.c
-+++ b/drivers/firmware/efi/efi-pstore.c
-@@ -10,7 +10,9 @@ MODULE_IMPORT_NS(EFIVAR);
- 
- #define DUMP_NAME_LEN 66
- 
--#define EFIVARS_DATA_SIZE_MAX 1024
-+static unsigned int record_size = 1024;
-+module_param(record_size, uint, 0444);
-+MODULE_PARM_DESC(record_size, "size of each pstore UEFI var (in bytes, min/default=1024)");
- 
- static bool efivars_pstore_disable =
- 	IS_ENABLED(CONFIG_EFI_VARS_PSTORE_DEFAULT_DISABLE);
-@@ -30,7 +32,7 @@ static int efi_pstore_open(struct pstore_info *psi)
- 	if (err)
- 		return err;
- 
--	psi->data = kzalloc(EFIVARS_DATA_SIZE_MAX, GFP_KERNEL);
-+	psi->data = kzalloc(record_size, GFP_KERNEL);
- 	if (!psi->data)
- 		return -ENOMEM;
- 
-@@ -52,7 +54,7 @@ static inline u64 generic_id(u64 timestamp, unsigned int part, int count)
- static int efi_pstore_read_func(struct pstore_record *record,
- 				efi_char16_t *varname)
- {
--	unsigned long wlen, size = EFIVARS_DATA_SIZE_MAX;
-+	unsigned long wlen, size = record_size;
- 	char name[DUMP_NAME_LEN], data_type;
- 	efi_status_t status;
- 	int cnt;
-@@ -133,7 +135,7 @@ static ssize_t efi_pstore_read(struct pstore_record *record)
- 	efi_status_t status;
- 
- 	for (;;) {
--		varname_size = EFIVARS_DATA_SIZE_MAX;
-+		varname_size = 1024;
- 
- 		/*
- 		 * If this is the first read() call in the pstore enumeration,
-@@ -224,11 +226,20 @@ static __init int efivars_pstore_init(void)
- 	if (efivars_pstore_disable)
- 		return 0;
- 
--	efi_pstore_info.buf = kmalloc(4096, GFP_KERNEL);
-+	/*
-+	 * Notice that 1024 is the minimum here to prevent issues with
-+	 * decompression algorithms that were spotted during tests;
-+	 * even in the case of not using compression, smaller values would
-+	 * just pollute more the pstore FS with many small collected files.
-+	 */
-+	if (record_size < 1024)
-+		record_size = 1024;
-+
-+	efi_pstore_info.buf = kmalloc(record_size, GFP_KERNEL);
- 	if (!efi_pstore_info.buf)
- 		return -ENOMEM;
- 
--	efi_pstore_info.bufsize = 1024;
-+	efi_pstore_info.bufsize = record_size;
- 
- 	if (pstore_register(&efi_pstore_info)) {
- 		kfree(efi_pstore_info.buf);
--- 
-2.38.0
-
+imo that's a counter argument to non-CORE style.
+struct bpf_perf_event_data has sample_period and addr,
+and as soon as we pushed the boundaries it turned out it's not enough.
+Now we're proposing to extend uapi a bit with sample_ip.
+That will repeat the same mistake.
+Just use CORE and read everything that is there today
+and will be there in the future.
