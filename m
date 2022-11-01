@@ -2,52 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65F7F614491
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 07:16:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F274614497
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 07:20:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229667AbiKAGQL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 02:16:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44040 "EHLO
+        id S229875AbiKAGUs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 02:20:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45486 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiKAGQJ (ORCPT
+        with ESMTP id S229819AbiKAGUl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 02:16:09 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5541181C;
-        Mon, 31 Oct 2022 23:16:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 087936152C;
-        Tue,  1 Nov 2022 06:16:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21F7FC433D6;
-        Tue,  1 Nov 2022 06:16:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667283365;
-        bh=lufWgB5um/sNxdP6lEFeAgabE+Ij9VKyh7YPrmjuB8M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=MtcAPHXiZE9DrpUM8sWJXgElbCJyOW7RBR/YzbJH7BGRjqgMovwlXf7J4vUaj17Nx
-         ZLmjVXm/Q56VbOHelTHfQEPaNdJoevkZvWX/1qbL+tMBgAziCbgC64XperIBtdK1GW
-         6UTTXJHmOuB4jjgwi05F3Z4azz3RLSkOco63bzXA=
-Date:   Tue, 1 Nov 2022 07:16:54 +0100
-From:   Greg KH <gregkh@linuxfoundation.org>
-To:     "Starke, Daniel" <daniel.starke@siemens.com>
-Cc:     "linux-serial@vger.kernel.org" <linux-serial@vger.kernel.org>,
-        "jirislaby@kernel.org" <jirislaby@kernel.org>,
-        "ilpo.jarvinen@linux.intel.com" <ilpo.jarvinen@linux.intel.com>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v2 3/3] tty: n_gsm: add parameter negotiation support
-Message-ID: <Y2C51txUYBGv53j+@kroah.com>
-References: <20221024130114.2070-1-daniel.starke@siemens.com>
- <20221024130114.2070-3-daniel.starke@siemens.com>
- <Y1fQ3G1W8PUIrod9@kroah.com>
- <DB9PR10MB5881479C5BE3D2A97A7D354CE0379@DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM>
+        Tue, 1 Nov 2022 02:20:41 -0400
+Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14F7815FC8
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 23:20:41 -0700 (PDT)
+Received: by mail-pf1-x42b.google.com with SMTP id g62so12623819pfb.10
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 23:20:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=MkD/xxnuw0GgTenGbcmw3AVr/END4d5U7VG4R1TARoU=;
+        b=bFeRwG8hlbuLO/bCUD4jEyAyFP2SVgNhVNdT/5NkRd5H92OOXB6nERYL8ZHq8uFDWR
+         C3XN8gJlFZuRZCnwkc7DxZBHenFGIkByik88nEqVfoZLFjziZpgo/Ky3HYcH0UkVCpvE
+         AQ1XB90kBfSVZn5IYbhLCD4wqliT3+ZxBccmmZ7vS26RB5/keVaggpIFK7IX3GKntFJC
+         4BZeHERCuGraWfmIwAF0PVNj+Qwddpu9+ioDMHnxynhah2pi+9I2xPbCUXbY8yVOGcCE
+         xRblYxfZWzxaTzovm2+ID3Fcdqbq45Zfbnw3JNYR2hUWdoSjVzn3iFkCKOnlQpGEpG1B
+         KDlg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=MkD/xxnuw0GgTenGbcmw3AVr/END4d5U7VG4R1TARoU=;
+        b=hxTeLH3GKr5kis+NkQbTtEnxr/vnED0oGjE4PCSJMKRplZwQctDRmRukpOt1I1cGQu
+         /P9FfKaP0NQBTjOkQi9DHDshqV1I8QRJXoJKII91PeFr5lcdwZ1/uYEbnLfwffpE6ED7
+         Ciyu25byaLSwlXfWLvdwx1tQS+NX5zxTUBagaW+A5R8qWprSC/odBP0XYgg+je67y6cO
+         +/qrS5CHPOkk2GLSsmnP0k0BODMJ/i6KhD3CVRRX2McOR/0DuCybxIgemgqD9e7AaPH9
+         N68GgenGHi8dBZGLaD7ZshNGDN/2v19sdT7ugDDqGnNRm+QYOxo942f95Ep8sJWyC470
+         1E0Q==
+X-Gm-Message-State: ACrzQf1hpplsMW+O8mE57t/KHL6jT/2U3OTyWzhqi/261rY3aqCKDgHg
+        0EP0mJji7uSLYWDueioVpRzew8ruJQWaEsTVxywzug==
+X-Google-Smtp-Source: AMsMyM6AR4ITiLmDUPQU1HoAap1WR+dknQ4LQoDLtHS1f24GPxGn2qvLasi1in527JX914XXmHpd8KMyi9Zuhx4Cf+E=
+X-Received: by 2002:aa7:8502:0:b0:56c:349e:c18b with SMTP id
+ v2-20020aa78502000000b0056c349ec18bmr18171715pfn.1.1667283640583; Mon, 31 Oct
+ 2022 23:20:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DB9PR10MB5881479C5BE3D2A97A7D354CE0379@DB9PR10MB5881.EURPRD10.PROD.OUTLOOK.COM>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+References: <20221016121406.co3qixzcbfke4ye7@proprietary-killer.gsrm.network>
+In-Reply-To: <20221016121406.co3qixzcbfke4ye7@proprietary-killer.gsrm.network>
+From:   Haojian Zhuang <haojian.zhuang@linaro.org>
+Date:   Tue, 1 Nov 2022 14:20:27 +0800
+Message-ID: <CAD6h2NSahYuqg1T2oW7tHmAeAfqircfeokYhvJYNRVi5TXEDAA@mail.gmail.com>
+Subject: Re: pinconf-single: pinctrl-single,bias-pull{up,down} bits help/explanation
+To:     "Marty E. Plummer" <hanetzer@startmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, tony@atomide.com,
+        linus.walleij@linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,58 +67,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 01:26:50PM +0000, Starke, Daniel wrote:
-> Thank you for your review.
-> 
-> > > +		pr_err("%s: unsupported frame type %d\n", __func__,
-> > > +		       dlci->ftype);
-> >
-> > This needs to be dev_err(), right?
-> 
-> There is no place within this driver that uses dev_*() at the moment except
-> for the timeout function of the network stack (gsm_mux_net_tx_timeout()).
-> I do not mind either way, but I would prefer a consistent variant within
-> this driver. Therefore, I suggest switching from pr_*() to dev_*() in a
-> separate patch.
+On Sun, 16 Oct 2022 at 20:14, Marty E. Plummer <hanetzer@startmail.com> wrote:
+>
+> Greetings.
+>
+> What I'm having issue with is the pinctrl-single,bias-pull values. From
+> commit abe4e4675dfc62b7f2328e2c4bce8b5bdcdff7c0 I get a bit of it, and I
+> think I have it mostly figured out:
+>
+> // <[input] [enabled] [disabled] [mask]>;
+> pinctrl-single,bias-pullup = <? 1 0 0x100>;
+> pinctrl-single,bias-pulldown = <? 1 0 0x200>;
+>
+> using mask 0x100 to single out bit 8 and mask 0x200 to single out bit 9,
+> enable values being simple binary on/off. What I don't get is how the
+> input value is determined/calculated.
+>
+> Aside from the above mentioned commit for the am335x-pocketbeagle.dts,
+> which uses a differing pullup control scheme, the only users I can find
+> in the tree are a handful of hisi socs which I don't have a datasheet
+> for to map their usage to register definitions and puzzle this out.
+>
+Excuse me for just noticing the email.
 
-Yes, that's a good idea.
+#define  PULL_DIS     0
+#define  PULL_UP        0x100
+#define  PULL_DOWN  0x200
 
-> > And why is it not just dev_dbg()/
-> 
-> I used pr_err() instead of pr_dbg() due to the fact that this mismatch will
-> most likely make it impossible to use the n_gsm driver with the connected
-> device as it stands. I am okay to replace it with pr_info() though.
-> 
-> > > +		pr_err("%s: unsupported adaption %d\n", __func__,
-> > > +		       dlci->adaption);
-> >
-> > Again, dev_dbg()?
-> >
-> > Do not yet userspace, or external devices, spam kernel logs with
-> > messages.
-> 
-> These are related to the user API. Therefore, I do not mind changing these
-> to debug level.
+// <[input] [enabled] [disabled] [mask]>
 
-Please do, userspace should not be able to spam kernel logs, bad things
-can happen if that is possible.
+// If you want to pull-up, configure the pin as below.
+pinctrl-single,bias-pullup = <PULL_UP  PULL_UP  0  PULL_UP>
+// If you want to disable pull-up, configure the pin as below.
+pinctrl-single,bias-pullup = <0  PULL_UP  0  PULL_UP>
 
-> > And never use __func__ in a dev_dbg() call, it's there automatically.
-> 
-> I could not find a hint that __func__ is included in dev_dbg(). What is
-> included is the subsystem name and the device name but not the function
-> name within the driver according to include/linux/dev_printk.h. Other
-> device drivers like usb/dwc2/core.c also include __func__ here. But it
-> appears to be possible to automate this by re-defining dev_fmt().
+It seems that the pin configuration in am335x-pocketbeagle.dts is wrong.
+But I don't have the board to verify it.
 
-You can dynamically add the function location at runtime when using
-pr_dbg() or dev_dbg(), see the documentation.  So any addition of
-__func__ in a string for those calls is just wrong and should be
-removed.
+And you can check the logic in pcs_pinconf_set().
 
-Can you fix this up to not spam the log for errors (move to debug
-level), and resend the updated series?
-
-thanks,
-
-greg k-h
+Best Regards
+Haojian
