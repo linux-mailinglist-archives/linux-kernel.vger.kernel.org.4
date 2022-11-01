@@ -2,58 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E98E4614C1B
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:52:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E9D2614C1C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:52:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229824AbiKANwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 09:52:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
+        id S230017AbiKANwh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 09:52:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230115AbiKANw2 (ORCPT
+        with ESMTP id S230129AbiKANw3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 09:52:28 -0400
-Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A681409C;
-        Tue,  1 Nov 2022 06:52:24 -0700 (PDT)
-Received: from sslproxy02.your-server.de ([78.47.166.47])
-        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92.3)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oprgf-000DGm-DE; Tue, 01 Nov 2022 14:52:17 +0100
-Received: from [85.1.206.226] (helo=linux.home)
-        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-        (Exim 4.92)
-        (envelope-from <daniel@iogearbox.net>)
-        id 1oprge-000Jkk-Tx; Tue, 01 Nov 2022 14:52:17 +0100
-Subject: Re: [PATCH bpf-next v2 2/3] bpf/verifier: Use kmalloc_size_roundup()
- to match ksize() usage
-To:     Kees Cook <keescook@chromium.org>,
-        Alexei Starovoitov <ast@kernel.org>
-Cc:     John Fastabend <john.fastabend@gmail.com>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>,
-        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <20221029024444.gonna.633-kees@kernel.org>
- <20221029025433.2533810-2-keescook@chromium.org>
-From:   Daniel Borkmann <daniel@iogearbox.net>
-Message-ID: <da0959e7-a91c-ab4c-56be-3c3cd280e592@iogearbox.net>
-Date:   Tue, 1 Nov 2022 14:52:16 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
- Thunderbird/60.7.2
-MIME-Version: 1.0
-In-Reply-To: <20221029025433.2533810-2-keescook@chromium.org>
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Language: en-US
+        Tue, 1 Nov 2022 09:52:29 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C0813F9B;
+        Tue,  1 Nov 2022 06:52:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 43DB9B81D9F;
+        Tue,  1 Nov 2022 13:52:25 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A3BA8C433D7;
+        Tue,  1 Nov 2022 13:52:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667310743;
+        bh=dfziG2vuEiP9trk6wO8lQZ/+UBCzl6JP73fjp+e+yCw=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=GVht0bStMl0LY5OQ1gJdvPuL3+rAc+I7KDFXQzMgjnu0Qi0U9KrL/vrxMAA5t4HDd
+         6vcaIT4bnS6QenlaYLeovS7sKrjpxXfIjhTNx0bBykvnFITsSt4cAh/aweEQl3CLy9
+         /kWyPFgSF9wqJhmoXi38nARGy5MlhBK3ijPs3+RDoXFpZG01cuM7LJcCfI1DaavEco
+         m1wTkCX7cPC6WNnNIXDVN0msJoSOrqjwXU0pb+sochQAnpGKpA6ehZn+UuSkUkGJlY
+         PflBMLEedmG2camror4I3rf4wbQFJ/cd37ynZk5K7SU8vQ353foe+VCxeN616JCelT
+         2NkIw2ftaqqdA==
+Date:   Tue, 1 Nov 2022 22:52:20 +0900
+From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
+To:     Beau Belgrave <beaub@linux.microsoft.com>
+Cc:     rostedt@goodmis.org, mathieu.desnoyers@efficios.com,
+        dcook@linux.microsoft.com, alanau@linux.microsoft.com,
+        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/2] tracing/user_events: Remote write ABI
+Message-Id: <20221101225220.a948157064a47678d2ed6fd7@kernel.org>
+In-Reply-To: <20221031172706.GA196@W11-BEAU-MD.localdomain>
+References: <20221027224011.2075-1-beaub@linux.microsoft.com>
+        <20221031231556.a15846fd3513641d48820d5b@kernel.org>
+        <20221031172706.GA196@W11-BEAU-MD.localdomain>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 Content-Transfer-Encoding: 7bit
-X-Authenticated-Sender: daniel@iogearbox.net
-X-Virus-Scanned: Clear (ClamAV 0.103.6/26706/Tue Nov  1 08:52:34 2022)
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -61,71 +58,129 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/29/22 4:54 AM, Kees Cook wrote:
-> Round up allocations with kmalloc_size_roundup() so that the verifier's
-> use of ksize() is always accurate and no special handling of the memory
-> is needed by KASAN, UBSAN_BOUNDS, nor FORTIFY_SOURCE. Pass the new size
-> information back up to callers so they can use the space immediately,
-> so array resizing to happen less frequently as well.
+On Mon, 31 Oct 2022 10:27:06 -0700
+Beau Belgrave <beaub@linux.microsoft.com> wrote:
+
+> On Mon, Oct 31, 2022 at 11:15:56PM +0900, Masami Hiramatsu wrote:
+> > Hi Beau,
+> > 
+> > On Thu, 27 Oct 2022 15:40:09 -0700
+> > Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> > 
+> > > As part of the discussions for user_events aligned with user space
+> > > tracers, it was determined that user programs should register a 32-bit
+> > > value to set or clear a bit when an event becomes enabled. Currently a
+> > > shared page is being used that requires mmap().
+> > > 
+> > > In this new model during the event registration from user programs 2 new
+> > > values are specified. The first is the address to update when the event
+> > > is either enabled or disabled. The second is the bit to set/clear to
+> > > reflect the event being enabled. This allows for a local 32-bit value in
+> > > user programs to support both kernel and user tracers. As an example,
+> > > setting bit 31 for kernel tracers when the event becomes enabled allows
+> > > for user tracers to use the other bits for ref counts or other flags.
+> > > The kernel side updates the bit atomically, user programs need to also
+> > > update these values atomically.
+> > 
+> > I think you means the kernel tracer (ftrace/perf) and user tracers (e.g. 
+> > LTTng) use the same 32bit data so that traced user-application only checks
+> > that data for checking an event is enabled, right?
+> > 
 > 
-[...]
-
-The commit message is a bit cryptic here without further context. Is this
-a bug fix or improvement? I read the latter, but it would be good to have
-more context here for reviewers (maybe Link tag pointing to some discussion
-or the like). Also, why is the kmalloc_size_roundup() not hidden for kmalloc
-callers, isn't this a tree-wide issue?
-
-Thanks,
-Daniel
-
->   kernel/bpf/verifier.c | 12 ++++++++----
->   1 file changed, 8 insertions(+), 4 deletions(-)
+> Yes, exactly, user code can just check a single uint32 or uint64 to tell
+> if anything is enabled (kernel or user tracer).
 > 
-> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
-> index eb8c34db74c7..1c040d27b8f6 100644
-> --- a/kernel/bpf/verifier.c
-> +++ b/kernel/bpf/verifier.c
-> @@ -1008,9 +1008,9 @@ static void *copy_array(void *dst, const void *src, size_t n, size_t size, gfp_t
->   	if (unlikely(check_mul_overflow(n, size, &bytes)))
->   		return NULL;
->   
-> -	if (ksize(dst) < bytes) {
-> +	if (ksize(dst) < ksize(src)) {
->   		kfree(dst);
-> -		dst = kmalloc_track_caller(bytes, flags);
-> +		dst = kmalloc_track_caller(kmalloc_size_roundup(bytes), flags);
->   		if (!dst)
->   			return NULL;
->   	}
-> @@ -1027,12 +1027,14 @@ static void *copy_array(void *dst, const void *src, size_t n, size_t size, gfp_t
->    */
->   static void *realloc_array(void *arr, size_t old_n, size_t new_n, size_t size)
->   {
-> +	size_t alloc_size;
->   	void *new_arr;
->   
->   	if (!new_n || old_n == new_n)
->   		goto out;
->   
-> -	new_arr = krealloc_array(arr, new_n, size, GFP_KERNEL);
-> +	alloc_size = kmalloc_size_roundup(size_mul(new_n, size));
-> +	new_arr = krealloc(arr, alloc_size, GFP_KERNEL);
->   	if (!new_arr) {
->   		kfree(arr);
->   		return NULL;
-> @@ -2504,9 +2506,11 @@ static int push_jmp_history(struct bpf_verifier_env *env,
->   {
->   	u32 cnt = cur->jmp_history_cnt;
->   	struct bpf_idx_pair *p;
-> +	size_t alloc_size;
->   
->   	cnt++;
-> -	p = krealloc(cur->jmp_history, cnt * sizeof(*p), GFP_USER);
-> +	alloc_size = kmalloc_size_roundup(size_mul(cnt, sizeof(*p)));
-> +	p = krealloc(cur->jmp_history, alloc_size, GFP_USER);
->   	if (!p)
->   		return -ENOMEM;
->   	p[cnt - 1].idx = env->insn_idx;
+> > If so, who the user tracer threads updates the data bit? Is that thread
+> > safe to update both kernel tracer and user tracers at the same time?
+> > 
 > 
+> This is why atomics are used to set the bit on the kernel side. The user
+> side should do the same. This is like the futex code. Do you see a
+> problem with atomics being used between user and kernel space on a
+> shared 32/64-bit address?
 
+Ah, OK. set_bit()/clear_bit() are atomic ops. So the user tracer must
+use per-arch atomic ops implementation too. Hmm, can you comment it there?
+
+> 
+> > And what is the actual advantage of this change? Are there any issue
+> > to use mmaped page? I would like to know more background of this
+> > change.
+> > 
+> 
+> Without this change user tracers like LTTng will have to check 2 values
+> instead of 1 to tell if the kernel tracer is enabled or not. Mathieu is
+> working on a user side tracing library in an effort to align writing
+> tracing code in user processes that works well for both kernel and user
+> tracers without much effort.
+> 
+> See here:
+> https://github.com/compudj/side
+
+Thanks for pointing!
+
+> 
+> Are you proposing we keep the bitmap approach and have side library just
+> hook another branch? Mathieu had issues with that approach during our
+> talks.
+
+No, that makes things more complicated. We should choose one.
+
+> 
+> > Could you also provide any sample program which I can play it? :)
+> > 
+> 
+> When I make the next patch version, I will update the user_events sample
+> so you'll have something to try out.
+
+That's helpful for me. We can have the code under tools/tracing/user_events/.
+
+Thank you,
+
+> 
+> > > User provided addresses must be aligned on a 32-bit boundary, this
+> > > allows for single page checking and prevents odd behaviors such as a
+> > > 32-bit value straddling 2 pages instead of a single page.
+> > > 
+> > > When page faults are encountered they are done asyncly via a workqueue.
+> > > If the page faults back in, the write update is attempted again. If the
+> > > page cannot fault-in, then we log and wait until the next time the event
+> > > is enabled/disabled. This is to prevent possible infinite loops resulting
+> > > from bad user processes unmapping or changing protection values after
+> > > registering the address.
+> > > 
+> > > NOTE:
+> > > User programs that wish to have the enable bit shared across forks
+> > > either need to use a MAP_SHARED allocated address or register a new
+> > > address and file descriptor. If MAP_SHARED cannot be used or new
+> > > registrations cannot be done, then it's allowable to use MAP_PRIVATE
+> > > as long as the forked children never update the page themselves. Once
+> > > the page has been updated, the page from the parent will be copied over
+> > > to the child. This new copy-on-write page will not receive updates from
+> > > the kernel until another registration has been performed with this new
+> > > address.
+> > > 
+> > > Beau Belgrave (2):
+> > >   tracing/user_events: Use remote writes for event enablement
+> > >   tracing/user_events: Fixup enable faults asyncly
+> > > 
+> > >  include/linux/user_events.h      |  10 +-
+> > >  kernel/trace/trace_events_user.c | 396 ++++++++++++++++++++-----------
+> > >  2 files changed, 270 insertions(+), 136 deletions(-)
+> > > 
+> > > 
+> > > base-commit: 23758867219c8d84c8363316e6dd2f9fd7ae3049
+> > > -- 
+> > > 2.25.1
+> > > 
+> > 
+> > 
+> > -- 
+> > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 
+> Thanks,
+> -Beau
+
+
+-- 
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
