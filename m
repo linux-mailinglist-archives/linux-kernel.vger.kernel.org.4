@@ -2,128 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9413B61546C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 22:49:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57F5D61546F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 22:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229695AbiKAVt1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 17:49:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58668 "EHLO
+        id S230085AbiKAVuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 17:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiKAVtY (ORCPT
+        with ESMTP id S229528AbiKAVuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 17:49:24 -0400
-Received: from mail-io1-xd2f.google.com (mail-io1-xd2f.google.com [IPv6:2607:f8b0:4864:20::d2f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F260A26D6
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 14:49:22 -0700 (PDT)
-Received: by mail-io1-xd2f.google.com with SMTP id p184so13521581iof.11
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 14:49:22 -0700 (PDT)
+        Tue, 1 Nov 2022 17:50:00 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABC8D2ADC
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 14:49:58 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id b29so14645901pfp.13
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 14:49:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ieee.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HejXL+J+QIXG9aHFC0KatU8gI5T0S5HF7LycLEhYP4k=;
-        b=XLf9q+YrCpSEojPiWImV+o706LQsz4Os76EOGQVTew1FOVpxlUxe35X0D2L7oB1Q/9
-         jK/dn/Fu2f7d5Y+UcN2IJg579s78sTn/J8gLb+Zu/5T+GFkonpTle7ch8HvdxsLgn6IG
-         AJGAJKmnFena6VCJCjNReK7oyjMu/bZF5gXC4=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=G47ufFWCEHkEOl+rpDEPV/WtoyVq/lMFXIhhpklwHVM=;
+        b=qeTjhXRSrqE2D98uNzCkHhl5QCRXDZvgR9wiRp0VE7ps8gZHaT8lQ4rfvhrqNlNvsS
+         d+VuzED3S1NKdYumslPTE0VwQIDuhgS/TZ92J18nazEJcWP0n5k0dR9Uin8184Y5Xa3p
+         oaX5sq2fldrXJZ55ZVMuDLaR+sYXGzaAXGz8thIR+PsRFrYglgwt/yDcSmN1+V0HYdx3
+         8NcHdPR+i3n1Mc//DvnnYHPjkWsGUxTGa6B4nMRn+MvzUbXTBSNhZhlZZ7kLHR30ramq
+         NspyZme4+QnlvyfrgQDdXLLeU4yanTDZGk9x6s7JQQVam9icibuwXAXIvC07JCLqU3lW
+         cXBA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=HejXL+J+QIXG9aHFC0KatU8gI5T0S5HF7LycLEhYP4k=;
-        b=RDQaB+kH4UP9yMQ8umE/+97QBInALcpnXfYD8nd1cdwUwlwaHqpHQEt7OHJcfowicW
-         Fhiyh8oLmgZ/5jelcZHBIw3IiuqBOKtutHzZH7b+CJTx811MKxNhxzs/rcBAdyz7qWTy
-         fmPjVwF9PJ8BcXH0GMVsUtJ3+uMNjxF7PbAg+sy7Nbss8vzZSlwidUsEObZRWWe1jDbz
-         +rXoGsPCy7XX0M3VYjxVD6yXJp4ytAGjPnv+6XL1GD0RaPxtNv1awxHxRC5QD10yFj/D
-         NdD5RmANyiqHTUANYV/1HqXDgpHLKSsRtaW4fOLFu5Un6EmqjUnXrLN+IM1zkl7GJMoS
-         lk/A==
-X-Gm-Message-State: ACrzQf3Z5qM31YZ+9fkv6emIQ6m4p5bIrB6JqZjdC+1KhrWzBdGf/cgi
-        vED5c4gIFme79EjD7wzWyB93jg==
-X-Google-Smtp-Source: AMsMyM6/m1cWkL+Pw6gKRxAuWst0ALy4aPYsPZTBDrZ3EqaBRU9Qibe+PqUodJI1JL0JjikvxtZvrQ==
-X-Received: by 2002:a02:94cf:0:b0:363:4a26:8cff with SMTP id x73-20020a0294cf000000b003634a268cffmr13638400jah.286.1667339362369;
-        Tue, 01 Nov 2022 14:49:22 -0700 (PDT)
-Received: from [172.22.22.4] ([98.61.227.136])
-        by smtp.googlemail.com with ESMTPSA id t11-20020a6bc30b000000b006bc53dd917fsm4327045iof.51.2022.11.01.14.49.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Nov 2022 14:49:21 -0700 (PDT)
-Message-ID: <a20c1378-926e-2f69-1473-fb654fd035f7@ieee.org>
-Date:   Tue, 1 Nov 2022 16:49:20 -0500
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=G47ufFWCEHkEOl+rpDEPV/WtoyVq/lMFXIhhpklwHVM=;
+        b=cnYwl/uV8rss+L1j7qkW9vWfSldBnvSzsEtEOFLWDk9SRMzCY/WhvJxN1ok6nbkU7Q
+         JbB3HmcCafb3YjzT2/Aj+izJxmZN6rOMYpBwkYGAPQ3UU6rKhBp91BKSo+n2zKXysAqv
+         OjeMxcPb9HxQOnCgXg8dTKcdjNCSTFgCymCJN893yjXexkSCM4x071+22AIN/T4N4Dnf
+         u0J7ddc7+IDbK4bc7t67SLqyffN2lyJ+dT3gaD130FKD/SMdUCgj71vrjPy+4x1mLyjg
+         SqhDu1WFEom/udCiujqeo0MxFrblmltVLcr2uZSW+OVQoeldJNqnr8Ssx+xgp6edGVfB
+         SW+g==
+X-Gm-Message-State: ACrzQf1COLct9qMkenGU6f2QYPbEQday7YaMLqDgv3ODcbAFoyrzvlkq
+        X37tkqeREZIDfNhu2Bx3vOM0QWonIT0=
+X-Google-Smtp-Source: AMsMyM7+Xl1r7RD8I5XmNiS+L9JKX9qRSXNqMPGD/GV8eS5fmiN/nl+I3hBAz7TFGBXHKpt3fRpHtg==
+X-Received: by 2002:a05:6a00:2409:b0:54e:a3ad:d32d with SMTP id z9-20020a056a00240900b0054ea3add32dmr21622632pfh.70.1667339397956;
+        Tue, 01 Nov 2022 14:49:57 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:f37f])
+        by smtp.gmail.com with ESMTPSA id v18-20020a170902ca9200b00186e8526790sm6783423pld.127.2022.11.01.14.49.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 14:49:57 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 1 Nov 2022 11:49:55 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Josh Don <joshdon@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [PATCH v2] sched: async unthrottling for cfs bandwidth
+Message-ID: <Y2GUg8CiI68ZBznr@slm.duckdns.org>
+References: <Y1/HzzA1FIawYM11@hirez.programming.kicks-ass.net>
+ <CABk29Nu=XcjwRxnGBtKHfknxnDPpspghou06+W0fufnkGF6NkA@mail.gmail.com>
+ <Y2BDFNpkSawKnE9S@slm.duckdns.org>
+ <CABk29Nta-RJpTcybgOk9u4DH=1mwQFZsOxFuQ-UpCcTwzjzAuA@mail.gmail.com>
+ <Y2Bf+CeQ8x2jKQ3S@slm.duckdns.org>
+ <CABk29Nvqv-T1JuAq2cf9=AwRu=y1+YOR4xS2qnVo6+XpWd2UNQ@mail.gmail.com>
+ <Y2B6V1PPuCcTXGp6@slm.duckdns.org>
+ <CABk29Ns1VWEVRYENud4CW3JQPrcr79i_F2PBTANqt3t-LaYCfQ@mail.gmail.com>
+ <Y2FwVX42LIKXSTz3@slm.duckdns.org>
+ <CABk29Nua8ZsDfhY+x+VfYDkbkjfXLXTZ5JMVR9uiBygraxDM+g@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 11/30] greybus: svc: Use kstrtobool() instead of
- strtobool()
-Content-Language: en-US
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Johan Hovold <johan@kernel.org>, Alex Elder <elder@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        greybus-dev@lists.linaro.org
-References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
- <ebf1e6988a53a455990230a37cf759ee542ea7ec.1667336095.git.christophe.jaillet@wanadoo.fr>
-From:   Alex Elder <elder@ieee.org>
-In-Reply-To: <ebf1e6988a53a455990230a37cf759ee542ea7ec.1667336095.git.christophe.jaillet@wanadoo.fr>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABk29Nua8ZsDfhY+x+VfYDkbkjfXLXTZ5JMVR9uiBygraxDM+g@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/1/22 4:13 PM, Christophe JAILLET wrote:
-> strtobool() is the same as kstrtobool().
-> However, the latter is more used within the kernel.
-> 
-> In order to remove strtobool() and slightly simplify kstrtox.h, switch to
-> the other function name.
-> 
-> While at it, include the corresponding header file (<linux/kstrtox.h>)
-> 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Hello,
 
-Looks OK to me.
+On Tue, Nov 01, 2022 at 01:56:29PM -0700, Josh Don wrote:
+> Maybe walking through an example would be helpful? I don't know if
+> there's anything super specific. For cgroup_mutex for example, the
+> same global mutex is being taken for things like cgroup mkdir and
+> cgroup proc attach, regardless of which part of the hierarchy is being
+> modified. So, we end up sharing that mutex between random job threads
+> (ie. that may be manipulating their own cgroup sub-hierarchy), and
+> control plane threads, which are attempting to manage root-level
+> cgroups. Bad things happen when the cgroup_mutex (or similar) is held
+> by a random thread which blocks and is of low scheduling priority,
+> since when it wakes back up it may take quite a while for it to run
+> again (whether that low priority be due to CFS bandwidth, sched_idle,
+> or even just O(hundreds) of threads on a cpu). Starving out the
+> control plane causes us significant issues, since that affects machine
+> health. cgroup manipulation is not a hot path operation, but the
+> control plane tends to hit it fairly often, and so those things
+> combine at our scale to produce this rare problem.
 
-Reviewed-by: Alex Elder <elder@linaro.org>
+I keep asking because I'm curious about the specific details of the
+contentions. Control plane locking up is obviously bad but they can usually
+tolerate some latencies - stalling out multiple seconds (or longer) can be
+catastrophic but tens or hundreds or millisecs occasionally usually isn't.
 
-> ---
-> This patch is part of a serie that axes all usages of strtobool().
-> Each patch can be applied independently from the other ones.
-> 
-> The last patch of the serie removes the definition of strtobool().
-> 
-> You may not be in copy of the cover letter. So, if needed, it is available
-> at [1].
-> 
-> [1]: https://lore.kernel.org/all/cover.1667336095.git.christophe.jaillet@wanadoo.fr/
-> ---
->   drivers/greybus/svc.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/greybus/svc.c b/drivers/greybus/svc.c
-> index 56d2b44d6fef..16cced80867a 100644
-> --- a/drivers/greybus/svc.c
-> +++ b/drivers/greybus/svc.c
-> @@ -7,6 +7,7 @@
->    */
->   
->   #include <linux/debugfs.h>
-> +#include <linux/kstrtox.h>
->   #include <linux/workqueue.h>
->   #include <linux/greybus.h>
->   
-> @@ -83,7 +84,7 @@ static ssize_t watchdog_store(struct device *dev,
->   	int retval;
->   	bool user_request;
->   
-> -	retval = strtobool(buf, &user_request);
-> +	retval = kstrtobool(buf, &user_request);
->   	if (retval)
->   		return retval;
->   
+The only times we've seen latency spikes from CPU side which is enough to
+cause system-level failures were when there were severe restrictions through
+bw control. Other cases sure are possible but unless you grab these mutexes
+while IDLE inside a heavily contended cgroup (which is a bit silly) you
+gotta push *really* hard.
 
+If most of the problems were with cpu bw control, fixing that should do for
+the time being. Otherwise, we'll have to think about finishing kernfs
+locking granularity improvements and doing something similar to cgroup
+locking too.
+
+Thanks.
+
+-- 
+tejun
