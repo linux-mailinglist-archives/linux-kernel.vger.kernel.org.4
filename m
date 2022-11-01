@@ -2,488 +2,745 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1445614756
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 10:59:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 81DC161463C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 10:03:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230311AbiKAJ7k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 05:59:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34004 "EHLO
+        id S230158AbiKAJDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 05:03:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229763AbiKAJ7h (ORCPT
+        with ESMTP id S230115AbiKAJCw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 05:59:37 -0400
-Received: from spamfilter04.delta.nl (spamfilter04.delta.nl [217.102.255.204])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C808A14087
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 02:59:35 -0700 (PDT)
-Received: from host-ubmmyvj.static.zeelandnet.nl ([217.102.255.198] helo=mail.zeelandnet.nl)
-        by spamfilter04.delta.nl with esmtp (Exim 4.92)
-        (envelope-from <glazveze@delta.nl>)
-        id 1opmgT-0006Dr-4K; Tue, 01 Nov 2022 09:31:56 +0100
-X-Sender-IP: 204.168.188.16
-Received: from phenom.domain_not_set.invalid (016-188-168-204.dynamic.caiway.nl [204.168.188.16])
-        (Authenticated sender: glasveze@delta.nl)
-        by mail.zeelandnet.nl (Postfix) with ESMTPA;
-        Tue,  1 Nov 2022 09:31:39 +0100 (CET)
-From:   glazveze@delta.nl
-To:     linux-rtc@vger.kernel.org
-Cc:     Mike Looijmans <mike.looijmans@topic.nl>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH v2 2/2] rtc: ds1307: Add support for Epson RX8111
-Date:   Tue,  1 Nov 2022 09:31:22 +0100
-Message-Id: <20221101083123.11695-2-glazveze@delta.nl>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221101083123.11695-1-glazveze@delta.nl>
-References: <20221101083123.11695-1-glazveze@delta.nl>
-X-Originating-IP: 217.102.255.198
-X-DELTA-Domain: zeelandnet.nl
-X-DELTA-Username: 217.102.255.198
-Authentication-Results: delta.nl; auth=pass smtp.auth=217.102.255.198@zeelandnet.nl
-X-DELTA-Outgoing-Class: ham
-X-DELTA-Outgoing-Evidence: SB/global_tokens (2.89810905447e-05)
-X-Recommended-Action: accept
-X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT+ZRGfk0At9Ike/xfAhHowcPUtbdvnXkggZ
- 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5wqSBOxlRVmV45FJ8CYZCUIt8C9mOBdONdnsxgsk1D2pwpi
- 79/9lCWegUcH0YAeiESZu3hhVxUr+XbzYNuhZTyMN2jRpXv406oGDMCZBpfLj6tXYKbjfBt0vNkw
- cgcqpVi2EeDr8t3Z6zKdUQQxqR+SarWVngVq5vG8OaFuy65RvR2mlP2W9u+agdcanH6cUDPhtIdB
- kUNQyNMiiqabnglhcXCN1jpoyjx2M7Im+CZAXFY+5adZvWXoGLcQcb78Eui+mtbuPAbQ+aWD8hhQ
- CZMTEEe1sLzznCY3CGPOzCfYYPbQTl/SJIDeIbJV6Zcf430jRGDmKiHQCBmbL4/kVA5ilfR3t3lk
- efZwj1OjoVRNk0OBtfs8eND145V556pRoeWoiZFW8yMEtAB+QqbWN455cayBalMzNiQi+IaP6Ip3
- l1/Gfk/thginq2iQcOP+mMhCFzRIiEpzynty7G1sAhwpazrLOzVL2cm1v+nUTthXE4PZdr6INmo5
- IO5sXBWBIKP+Xt1YVt34tXjgAnyScrZDbgZGFmIP8t6jENaJPnk2Q0EqJ2YhaHYKPX4HHcW4fmLf
- d77XZbPqWAY81T0FayDkAbOrs4FPMK+W+hB4jPTBjMy+REZzZZBkbyPIV/jp5XA84mAL2fYZt/ag
- 6cJYhE+JR1THjBWZFF00ALVWc/sntqhVr03UHlrscRrHorFm3BMamUdylUIKhf3z2GAHxH7Inwey
- uebMOAyd9KE1KnR6Q/uNUZtOoISscGZbnZWaYNZOLDTtebGvOVlNWIOgzjpYs6oM5c5v6nO6dxgr
- nLgL2IFyOv5cAKYGRAn40Vzq1+FjVbTBFy0HmZ7j54j5nbTw0F2VAitLyFstLTVGwdoo+nbOFKKz
- xACo90vCZrfvMYKWPHYo9X+hHrxPABGbYgYFQMAJdpT8SBGMx9Hio+WRxFDvx3zE1+CEGnCvOf5u
- H+WNO/AEWyHOtr9hiOqu6Gu3yB2oVjwpD0SDGnhQZ7XpT5syUIQR9jMhtWFgK0+Er7PJLlMHANA1
- bs2R4iRcH3xv9Puiud/hROIkQBFx9BA5yh8iLgxxK8ttJOgE22ySLDlnuktNvxRB2uyScQ1h73J0
- jHT9cO2eqPW6UlupkxNosx4GZ3jlszDBLqeHTFooTZCcSBYZDWQs5qlkvd6bQTUH3gkwE9mTsS/2
- b1BN8Jw1rw==
-X-Report-Abuse-To: spam@spamfilter03.delta.nl
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        T_SPF_PERMERROR autolearn=unavailable autolearn_force=no version=3.4.6
+        Tue, 1 Nov 2022 05:02:52 -0400
+Received: from mx.socionext.com (mx.socionext.com [202.248.49.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 78D7818B3C;
+        Tue,  1 Nov 2022 02:02:39 -0700 (PDT)
+Received: from unknown (HELO iyokan2-ex.css.socionext.com) ([172.31.9.54])
+  by mx.socionext.com with ESMTP; 01 Nov 2022 18:02:35 +0900
+Received: from mail.mfilter.local (m-filter-2 [10.213.24.62])
+        by iyokan2-ex.css.socionext.com (Postfix) with ESMTP id 19C4220584CE;
+        Tue,  1 Nov 2022 18:02:35 +0900 (JST)
+Received: from 172.31.9.51 (172.31.9.51) by m-FILTER with ESMTP; Tue, 1 Nov 2022 18:02:35 +0900
+Received: from [10.212.156.238] (unknown [10.212.156.238])
+        by kinkan2.css.socionext.com (Postfix) with ESMTP id 6F677B62A4;
+        Tue,  1 Nov 2022 18:02:34 +0900 (JST)
+Subject: Re: [PATCH 4/4] arm64: dts: uniphier: Add NX1 SoC and boards support
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     soc@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221027045157.23325-1-hayashi.kunihiko@socionext.com>
+ <20221027045157.23325-5-hayashi.kunihiko@socionext.com>
+ <a05535bc-ba18-0296-b387-d2c9c759d6f2@linaro.org>
+From:   Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
+Message-ID: <54206dca-0583-88c0-9924-a80dfaf0ba94@socionext.com>
+Date:   Tue, 1 Nov 2022 18:02:34 +0900
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.11.0
+MIME-Version: 1.0
+In-Reply-To: <a05535bc-ba18-0296-b387-d2c9c759d6f2@linaro.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Mike Looijmans <mike.looijmans@topic.nl>
+Hi Krzysztof,
 
-The rx_8111 is quite similar to the rx_8030. This adds support for this
-chip to the ds1307 driver. Date/time and alarm registers are in the
-usual places. The nvmem is located at 0x40. Time stamping is not
-supported.
+Sorry for late and thank you for reviewing.
 
-Signed-off-by: Mike Looijmans <mike.looijmans@topic.nl>
+On 2022/10/27 22:36, Krzysztof Kozlowski wrote:
+> On 27/10/2022 00:51, Kunihiko Hayashi wrote:
+>> Initial version of devicetree sources for NX1 SoC and boards.
+>>
+> 
+> Thank you for your patch. There is something to discuss/improve.
+> 
+>> diff --git a/arch/arm64/boot/dts/socionext/uniphier-nx1.dtsi
+>> b/arch/arm64/boot/dts/socionext/uniphier-nx1.dtsi
+>> new file mode 100644
+>> index 000000000000..e401763de86e
+>> --- /dev/null
+>> +++ b/arch/arm64/boot/dts/socionext/uniphier-nx1.dtsi
+
+(snip)
+
+>> +	clocks {
+>> +		refclk: ref {
+> 
+> Generic node name, so at least "clock" prefix or suffix.
+
+I see. I'll change the node name with "clock".
+
+>> +			compatible = "fixed-clock";
+>> +			#clock-cells = <0>;
+>> +			clock-frequency = <25000000>;
+> 
+> Are you sure the clock is a property of a SoC? IOW, it is physically on
+> the SoC? If not, define entire clock or its frequency by boards.
+
+Indeed. This shows an external oscillator outside of a SoC.
+I'll consider to define the node or the property by board devicetree.
+
+>> +		};
+>> +	};
+>> +
+>> +	emmc_pwrseq: emmc-pwrseq {
+>> +		compatible = "mmc-pwrseq-emmc";
+>> +		reset-gpios = <&gpio UNIPHIER_GPIO_PORT(3, 0) GPIO_ACTIVE_LOW>;
+>> +	};
+>> +
+>> +	timer {
+>> +		compatible = "arm,armv8-timer";
+>> +		interrupts = <GIC_PPI 13 IRQ_TYPE_LEVEL_HIGH>,
+>> +			     <GIC_PPI 14 IRQ_TYPE_LEVEL_HIGH>,
+>> +			     <GIC_PPI 11 IRQ_TYPE_LEVEL_HIGH>,
+>> +			     <GIC_PPI 10 IRQ_TYPE_LEVEL_HIGH>;
+>> +	};
+>> +
+>> +	thermal-zones {
+>> +		cpu-thermal {
+>> +			polling-delay-passive = <250>;	/* 250ms */
+>> +			polling-delay = <1000>;		/* 1000ms */
+>> +			thermal-sensors = <&pvtctl>;
+>> +
+>> +			trips {
+>> +				cpu_crit: cpu-crit {
+>> +					temperature = <120000>;	/* 120C */
+>> +					hysteresis = <2000>;
+>> +					type = "critical";
+>> +				};
+>> +				cpu_alert: cpu-alert {
+>> +					temperature = <110000>;	/* 110C */
+>> +					hysteresis = <2000>;
+>> +					type = "passive";
+>> +				};
+>> +			};
+>> +
+>> +			cooling-maps {
+>> +				map0 {
+>> +					trip = <&cpu_alert>;
+>> +					cooling-device = <&cpu0 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+>> +							 <&cpu1 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+>> +							 <&cpu2 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+>> +							 <&cpu3 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+>> +				};
+>> +			};
+>> +		};
+>> +	};
+>> +
+>> +	reserved-memory {
+>> +		#address-cells = <2>;
+>> +		#size-cells = <2>;
+>> +		ranges;
+>> +
+>> +		secure-memory@21000000 {
+>> +			reg = <0x0 0x21000000 0x0 0x01000000>;
+>> +			no-map;
+>> +		};
+>> +	};
+>> +
+>> +	soc@0 {
+>> +		compatible = "simple-bus";
+>> +		#address-cells = <1>;
+>> +		#size-cells = <1>;
+>> +		ranges = <0 0 0 0xffffffff>;
+>> +
+>> +		sysctrl: sysctrl@11840000 {
+> 
+> Node name: system-controller or syscon
+
+I see. I'll rename it to a generic name.
+And also other system controller nodes in the same way.
+
+> 
+>> +			compatible = "socionext,uniphier-nx1-sysctrl",
+> 
+> This looks undocumented.
+> 
+> Did you run `make dtbs_check`?
+
+I've done it, however, I missed the dt-binding document for the system
+controller. I'll need to add a system controller's document before
+this patch.
+
+>> +				     "simple-mfd", "syscon";
+>> +			reg = <0x11840000 0x10000>;
+>> +
+>> +			sys_clk: clock {
+> 
+> Node name: clock-controller
+
+Need to rename to a generic name in the same way. After this as well.
+
+>> +				compatible = "socionext,uniphier-nx1-clock";
+>> +				#clock-cells = <1>;
+>> +			};
+>> +
+>> +			sys_rst: reset {
+> 
+> reset-controller
+> 
+>> +				compatible = "socionext,uniphier-nx1-reset";
+>> +				#reset-cells = <1>;
+>> +			};
+>> +
+>> +			watchdog {
+>> +				compatible = "socionext,uniphier-wdt";
+>> +			};
+>> +
+>> +			pvtctl: thermal-sensor {
+>> +				compatible = "socionext,uniphier-nx1-thermal";
+>> +				interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
+>> +				#thermal-sensor-cells = <0>;
+>> +				socionext,tmod-calibration = <0x0f22 0x68ee>;
+>> +			};
+>> +		};
+>> +
+>> +		spi0: spi@14006000 {
+>> +			compatible = "socionext,uniphier-scssi";
+>> +			status = "disabled";
+>> +			reg = <0x14006000 0x100>;
+> 
+> Reg is second property. Status goes last. The same in other nodes.
+
+Hmm, I've put "status" here according to the existing (uniphier's) DT policy
+and this should rewrite the policy. Is there documentation somewhere that
+recommends the order? Or, should I refer to previous comments?
+
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +			interrupts = <GIC_SPI 36 IRQ_TYPE_LEVEL_HIGH>;
+>> +			pinctrl-names = "default";
+>> +			pinctrl-0 = <&pinctrl_spi0>;
+>> +			clocks = <&peri_clk 11>;
+>> +			resets = <&peri_rst 11>;
+>> +		};
+>> +
+>> +		spi1: spi@14006100 {
+>> +			compatible = "socionext,uniphier-scssi";
+>> +			status = "disabled";
+>> +			reg = <0x14006100 0x100>;
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +			interrupts = <GIC_SPI 37 IRQ_TYPE_LEVEL_HIGH>;
+>> +			pinctrl-names = "default";
+>> +			pinctrl-0 = <&pinctrl_spi1>;
+>> +			clocks = <&peri_clk 12>;
+>> +			resets = <&peri_rst 12>;
+>> +		};
+>> +
+>> +		serial0: serial@14006800 {
+>> +			compatible = "socionext,uniphier-uart";
+>> +			status = "disabled";
+>> +			reg = <0x14006800 0x40>;
+>> +			interrupts = <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
+>> +			pinctrl-names = "default";
+>> +			pinctrl-0 = <&pinctrl_uart0>;
+>> +			clocks = <&peri_clk 0>;
+>> +			resets = <&peri_rst 0>;
+>> +		};
+>> +
+>> +		serial1: serial@14006900 {
+>> +			compatible = "socionext,uniphier-uart";
+>> +			status = "disabled";
+>> +			reg = <0x14006900 0x40>;
+>> +			interrupts = <GIC_SPI 33 IRQ_TYPE_LEVEL_HIGH>;
+>> +			pinctrl-names = "default";
+>> +			pinctrl-0 = <&pinctrl_uart1>;
+>> +			clocks = <&peri_clk 1>;
+>> +			resets = <&peri_rst 1>;
+>> +		};
+>> +
+>> +		serial2: serial@14006a00 {
+>> +			compatible = "socionext,uniphier-uart";
+>> +			status = "disabled";
+>> +			reg = <0x14006a00 0x40>;
+>> +			interrupts = <GIC_SPI 34 IRQ_TYPE_LEVEL_HIGH>;
+>> +			pinctrl-names = "default";
+>> +			pinctrl-0 = <&pinctrl_uart2>;
+>> +			clocks = <&peri_clk 2>;
+>> +			resets = <&peri_rst 2>;
+>> +		};
+>> +
+>> +		serial3: serial@14006b00 {
+>> +			compatible = "socionext,uniphier-uart";
+>> +			status = "disabled";
+>> +			reg = <0x14006b00 0x40>;
+>> +			interrupts = <GIC_SPI 35 IRQ_TYPE_LEVEL_HIGH>;
+>> +			pinctrl-names = "default";
+>> +			pinctrl-0 = <&pinctrl_uart3>;
+>> +			clocks = <&peri_clk 3>;
+>> +			resets = <&peri_rst 3>;
+>> +		};
+>> +
+>> +		gpio: gpio@14007000 {
+>> +			compatible = "socionext,uniphier-gpio";
+>> +			reg = <0x14007000 0x200>;
+>> +			interrupt-parent = <&aidet>;
+>> +			interrupt-controller;
+>> +			#interrupt-cells = <2>;
+>> +			gpio-controller;
+>> +			#gpio-cells = <2>;
+>> +			gpio-ranges = <&pinctrl 0 0 0>,
+>> +				      <&pinctrl 49 0 0>,
+>> +				      <&pinctrl 53 0 0>,
+>> +				      <&pinctrl 96 0 0>,
+>> +				      <&pinctrl 120 0 0>;
+>> +			gpio-ranges-group-names = "gpio_range0",
+>> +						  "gpio_range1",
+>> +						  "gpio_range2",
+>> +						  "gpio_range3",
+>> +						  "gpio_range4";
+>> +			ngpios = <126>;
+>> +			socionext,interrupt-ranges = <0 48 6>;
+>> +		};
+>> +
+>> +		eth: ethernet@15000000 {
+>> +			compatible = "socionext,uniphier-nx1-ave4";
+>> +			status = "disabled";
+>> +			reg = <0x15000000 0x8500>;
+>> +			interrupts = <GIC_SPI 66 IRQ_TYPE_LEVEL_HIGH>;
+>> +			pinctrl-names = "default";
+>> +			pinctrl-0 = <&pinctrl_ether_rgmii>;
+>> +			clock-names = "ether";
+>> +			clocks = <&sys_clk 6>;
+>> +			reset-names = "ether";
+>> +			resets = <&sys_rst 6>;
+>> +			phy-mode = "rgmii-id";
+>> +			local-mac-address = [00 00 00 00 00 00];
+>> +			socionext,syscon-phy-mode = <&soc_glue 0>;
+>> +
+>> +			mdio: mdio {
+>> +				#address-cells = <1>;
+>> +				#size-cells = <0>;
+>> +			};
+>> +		};
+>> +
+>> +		usb: usb@15a00000 {
+>> +			compatible = "socionext,uniphier-dwc3", "snps,dwc3";
+>> +			status = "disabled";
+>> +			reg = <0x15a00000 0xcd00>;
+>> +			interrupt-names = "host";
+>> +			interrupts = <GIC_SPI 68 IRQ_TYPE_LEVEL_HIGH>;
+>> +			pinctrl-names = "default";
+>> +			pinctrl-0 = <&pinctrl_usb0>, <&pinctrl_usb1>;
+>> +			clock-names = "ref", "bus_early", "suspend";
+>> +			clocks = <&sys_clk 12>, <&sys_clk 12>, <&sys_clk 12>;
+>> +			resets = <&usb_rst 15>;
+>> +			phys = <&usb_hsphy0>, <&usb_hsphy1>,
+>> +			       <&usb_ssphy0>, <&usb_ssphy1>;
+>> +			dr_mode = "host";
+>> +		};
+>> +
+>> +		usb-controller@15b00000 {
+>> +			compatible = "socionext,uniphier-nx1-dwc3-glue",
+> 
+> Undocumented compatible.
+> 
+>> +				     "simple-mfd";
+> 
+> 
+> Missing reg. Did you run `make dtbs_check`? Did you actually check it
+> with dtc?
+
+I missed it and will add it.
+
+>> +			#address-cells = <1>;
+>> +			#size-cells = <1>;
+>> +			ranges = <0 0x15b00000 0x400>;
+>> +
+>> +			usb_rst: reset@0 {
+> 
+> reset-controller
+> 
+>> +				compatible = "socionext,uniphier-nx1-usb3-reset";
+>> +				reg = <0x0 0x4>;
+>> +				#reset-cells = <1>;
+>> +				clock-names = "link";
+>> +				clocks = <&sys_clk 12>;
+>> +				reset-names = "link";
+>> +				resets = <&sys_rst 12>;
+>> +			};
+>> +
+>> +			usb_vbus0: regulator@100 {
+>> +				compatible = "socionext,uniphier-nx1-usb3-regulator";
+>> +				reg = <0x100 0x10>;
+>> +				clock-names = "link";
+>> +				clocks = <&sys_clk 12>;
+>> +				reset-names = "link";
+>> +				resets = <&sys_rst 12>;
+>> +			};
+>> +
+>> +			usb_vbus1: regulator@110 {
+>> +				compatible = "socionext,uniphier-nx1-usb3-regulator";
+>> +				reg = <0x110 0x10>;
+>> +				clock-names = "link";
+>> +				clocks = <&sys_clk 12>;
+>> +				reset-names = "link";
+>> +				resets = <&sys_rst 12>;
+>> +			};
+>> +
+>> +			usb_hsphy0: hs-phy@200 {
+> 
+> Node name: phy
+> 
+> The same in all other places. It can be also usb-phy and few others
+> mentioned iin DT spec:
+> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+I see. I'll replace the node name with "phy".
+
+>> +				compatible = "socionext,uniphier-nx1-usb3-hsphy";
+>> +				reg = <0x200 0x10>;
+>> +				#phy-cells = <0>;
+>> +				clock-names = "link", "phy", "phy-ext";
+>> +				clocks = <&sys_clk 12>, <&sys_clk 16>,
+>> +					 <&sys_clk 13>;
+>> +				reset-names = "link", "phy";
+>> +				resets = <&sys_rst 12>, <&sys_rst 16>;
+>> +				vbus-supply = <&usb_vbus0>;
+>> +			};
+>> +
+>> +			usb_hsphy1: hs-phy@210 {
+>> +				compatible = "socionext,uniphier-nx1-usb3-hsphy";
+>> +				reg = <0x210 0x10>;
+>> +				#phy-cells = <0>;
+>> +				clock-names = "link", "phy", "phy-ext";
+>> +				clocks = <&sys_clk 12>, <&sys_clk 16>,
+>> +					 <&sys_clk 13>;
+>> +				reset-names = "link", "phy";
+>> +				resets = <&sys_rst 12>, <&sys_rst 16>;
+>> +				vbus-supply = <&usb_vbus1>;
+>> +			};
+>> +
+>> +			usb_ssphy0: ss-phy@300 {
+>> +				compatible = "socionext,uniphier-nx1-usb3-ssphy";
+>> +				reg = <0x300 0x10>;
+>> +				#phy-cells = <0>;
+>> +				clock-names = "link", "phy", "phy-ext";
+>> +				clocks = <&sys_clk 12>, <&sys_clk 17>,
+>> +					 <&sys_clk 13>;
+>> +				reset-names = "link", "phy";
+>> +				resets = <&sys_rst 12>, <&sys_rst 17>;
+>> +				vbus-supply = <&usb_vbus0>;
+>> +			};
+>> +
+>> +			usb_ssphy1: ss-phy@310 {
+>> +				compatible = "socionext,uniphier-nx1-usb3-ssphy";
+>> +				reg = <0x310 0x10>;
+>> +				#phy-cells = <0>;
+>> +				clock-names = "link", "phy", "phy-ext";
+>> +				clocks = <&sys_clk 12>, <&sys_clk 18>,
+>> +					 <&sys_clk 13>;
+>> +				reset-names = "link", "phy";
+>> +				resets = <&sys_rst 12>, <&sys_rst 18>;
+>> +				vbus-supply = <&usb_vbus1>;
+>> +			};
+>> +		};
+>> +
+>> +		pcie: pcie@16000000 {
+>> +			compatible = "socionext,uniphier-pcie";
+>> +			status = "disabled";
+>> +			reg-names = "dbi", "link", "config", "atu";
+>> +			reg = <0x16000000 0x1000>, <0x179a0000 0x10000>,
+>> +			      <0x0fff0000 0x10000>, <0x16300000 0x1000>;
+>> +			#address-cells = <3>;
+>> +			#size-cells = <2>;
+>> +			clocks = <&sys_clk 24>;
+>> +			resets = <&sys_rst 24>;
+>> +			num-lanes = <2>;
+>> +			num-viewport = <1>;
+>> +			bus-range = <0x0 0xff>;
+>> +			device_type = "pci";
+>> +			ranges =
+>> +			/* downstream I/O */
+>> +				<0x81000000 0 0x00000000 0x0ffe0000 0 0x00010000>,
+>> +			/* non-prefetchable memory */
+>> +				<0x82000000 0 0x20000000 0x04200000 0 0x0bde0000>;
+>> +			#interrupt-cells = <1>;
+>> +			interrupt-names = "dma", "msi";
+>> +			interrupts = <GIC_SPI 84 IRQ_TYPE_LEVEL_HIGH>,
+>> +				     <GIC_SPI 85 IRQ_TYPE_LEVEL_HIGH>;
+>> +			interrupt-map-mask = <0 0 0 7>;
+>> +			interrupt-map = <0 0 0 1 &pcie_intc 0>,	/* INTA */
+>> +					<0 0 0 2 &pcie_intc 1>,	/* INTB */
+>> +					<0 0 0 3 &pcie_intc 2>,	/* INTC */
+>> +					<0 0 0 4 &pcie_intc 3>;	/* INTD */
+>> +			phy-names = "pcie-phy";
+>> +			phys = <&pcie_phy>;
+>> +
+>> +			pcie_intc: legacy-interrupt-controller {
+>> +				interrupt-controller;
+>> +				#interrupt-cells = <1>;
+>> +				interrupt-parent = <&gic>;
+>> +				interrupts = <GIC_SPI 86 IRQ_TYPE_LEVEL_HIGH>;
+>> +			};
+>> +		};
+>> +
+>> +		pcie_ep: pcie-ep@16000000 {
+>> +			compatible = "socionext,uniphier-nx1-pcie-ep";
+>> +			status = "disabled";
+>> +			reg-names = "dbi", "dbi2", "link", "addr_space", "atu";
+>> +			reg = <0x16000000 0x1000>, <0x16100000 0x1000>,
+>> +			      <0x179a0000 0x10000>, <0x04200000 0xbe00000>,
+>> +			      <0x16300000 0x1000>;
+>> +			clock-names = "link";
+>> +			clocks = <&sys_clk 24>;
+>> +			reset-names = "link";
+>> +			resets = <&sys_rst 24>;
+>> +			num-ib-windows = <16>;
+>> +			num-ob-windows = <16>;
+>> +			num-lanes = <2>;
+>> +			phy-names = "pcie-phy";
+>> +			phys = <&pcie_phy>;
+>> +		};
+>> +
+>> +		pcie_phy: phy@179b8000 {
+>> +			compatible = "socionext,uniphier-nx1-pcie-phy";
+>> +			reg = <0x179b8000 0x4000>;
+>> +			#phy-cells = <0>;
+>> +			clock-names = "link";
+>> +			clocks = <&sys_clk 24>;
+>> +			reset-names = "link";
+>> +			resets = <&sys_rst 24>;
+>> +			socionext,syscon = <&sysctrl>;
+>> +		};
+>> +
+>> +		i2c0: i2c@18780000 {
+>> +			compatible = "socionext,uniphier-fi2c";
+>> +			status = "disabled";
+>> +			reg = <0x18780000 0x80>;
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +			interrupts = <GIC_SPI 41 IRQ_TYPE_LEVEL_HIGH>;
+>> +			pinctrl-names = "default";
+>> +			pinctrl-0 = <&pinctrl_i2c0>;
+>> +			clocks = <&peri_clk 4>;
+>> +			resets = <&peri_rst 4>;
+>> +			clock-frequency = <400000>;
+>> +		};
+>> +
+>> +		i2c1: i2c@18781000 {
+>> +			compatible = "socionext,uniphier-fi2c";
+>> +			status = "disabled";
+>> +			reg = <0x18781000 0x80>;
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +			interrupts = <GIC_SPI 42 IRQ_TYPE_LEVEL_HIGH>;
+>> +			pinctrl-names = "default";
+>> +			pinctrl-0 = <&pinctrl_i2c1>;
+>> +			clocks = <&peri_clk 5>;
+>> +			resets = <&peri_rst 5>;
+>> +			clock-frequency = <400000>;
+>> +		};
+>> +
+>> +		i2c2: i2c@18782000 {
+>> +			compatible = "socionext,uniphier-fi2c";
+>> +			status = "disabled";
+>> +			reg = <0x18782000 0x80>;
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +			interrupts = <GIC_SPI 43 IRQ_TYPE_LEVEL_HIGH>;
+>> +			pinctrl-names = "default";
+>> +			pinctrl-0 = <&pinctrl_i2c2>;
+>> +			clocks = <&peri_clk 6>;
+>> +			resets = <&peri_rst 6>;
+>> +			clock-frequency = <400000>;
+>> +		};
+>> +
+>> +		i2c3: i2c@18783000 {
+>> +			compatible = "socionext,uniphier-fi2c";
+>> +			status = "disabled";
+>> +			reg = <0x18783000 0x80>;
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +			interrupts = <GIC_SPI 44 IRQ_TYPE_LEVEL_HIGH>;
+>> +			pinctrl-names = "default";
+>> +			pinctrl-0 = <&pinctrl_i2c3>;
+>> +			clocks = <&peri_clk 7>;
+>> +			resets = <&peri_rst 7>;
+>> +			clock-frequency = <400000>;
+>> +		};
+>> +
+>> +		i2c4: i2c@18784000 {
+>> +			compatible = "socionext,uniphier-fi2c";
+>> +			status = "disabled";
+>> +			reg = <0x18784000 0x80>;
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +			interrupts = <GIC_SPI 45 IRQ_TYPE_LEVEL_HIGH>;
+>> +			pinctrl-names = "default";
+>> +			pinctrl-0 = <&pinctrl_i2c4>;
+>> +			clocks = <&peri_clk 8>;
+>> +			resets = <&peri_rst 8>;
+>> +			clock-frequency = <100000>;
+>> +		};
+>> +
+>> +		i2c5: i2c@18785000 {
+>> +			compatible = "socionext,uniphier-fi2c";
+>> +			status = "disabled";
+>> +			reg = <0x18785000 0x80>;
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +			interrupts = <GIC_SPI 46 IRQ_TYPE_LEVEL_HIGH>;
+>> +			pinctrl-names = "default";
+>> +			pinctrl-0 = <&pinctrl_i2c5>;
+>> +			clocks = <&peri_clk 9>;
+>> +			resets = <&peri_rst 9>;
+>> +			clock-frequency = <100000>;
+>> +		};
+>> +
+>> +		i2c6: i2c@18786000 {
+>> +			compatible = "socionext,uniphier-fi2c";
+>> +			status = "disabled";
+>> +			reg = <0x18786000 0x80>;
+>> +			#address-cells = <1>;
+>> +			#size-cells = <0>;
+>> +			interrupts = <GIC_SPI 47 IRQ_TYPE_LEVEL_HIGH>;
+>> +			pinctrl-names = "default";
+>> +			pinctrl-0 = <&pinctrl_i2c6>;
+>> +			clocks = <&peri_clk 10>;
+>> +			resets = <&peri_rst 10>;
+>> +			clock-frequency = <100000>;
+>> +		};
+>> +
+>> +		sdctrl@19810000 {
+> 
+> Same comment as before...
+> 
+>> +			compatible = "socionext,uniphier-nx1-sdctrl",
+> 
+> Same problem as before...
+> 
+>> +				     "simple-mfd", "syscon";
+>> +			reg = <0x19810000 0x400>;
+>> +
+>> +			sd_clk: clock {
+>> +				compatible = "socionext,uniphier-nx1-sd-clock";
+>> +				#clock-cells = <1>;
+>> +			};
+>> +
+>> +			sd_rst: reset {
+>> +				compatible = "socionext,uniphier-nx1-sd-reset";
+>> +				#reset-cells = <1>;
+>> +			};
+>> +		};
+>> +
+>> +		perictrl@19820000 {
+>> +			compatible = "socionext,uniphier-nx1-perictrl",
+> 
+> Also undocumented.
+> 
+>> +				     "simple-mfd", "syscon";
+>> +			reg = <0x19820000 0x200>;
+>> +
+>> +			peri_clk: clock {
+> 
+> clock-controller
+> 
+>> +				compatible = "socionext,uniphier-nx1-peri-clock";
+>> +				#clock-cells = <1>;
+>> +			};
+>> +
+>> +			peri_rst: reset {
+> 
+> reset-controller
+> 
+>> +				compatible = "socionext,uniphier-nx1-peri-reset";
+>> +				#reset-cells = <1>;
+>> +			};
+>> +		};
+>> +
+>> +		emmc: mmc@1a000000 {
+>> +			compatible = "socionext,uniphier-sd4hc", "cdns,sd4hc";
+>> +			reg = <0x1a000000 0x400>;
+>> +			interrupts = <GIC_SPI 78 IRQ_TYPE_LEVEL_HIGH>;
+>> +			pinctrl-names = "default";
+>> +			pinctrl-0 = <&pinctrl_emmc>;
+>> +			clocks = <&sys_clk 4>;
+>> +			resets = <&sys_rst 4>;
+>> +			bus-width = <8>;
+>> +			mmc-ddr-1_8v;
+>> +			mmc-hs200-1_8v;
+>> +			mmc-pwrseq = <&emmc_pwrseq>;
+>> +			cdns,phy-input-delay-legacy = <9>;
+>> +			cdns,phy-input-delay-mmc-highspeed = <2>;
+>> +			cdns,phy-input-delay-mmc-ddr = <3>;
+>> +			cdns,phy-dll-delay-sdclk = <21>;
+>> +			cdns,phy-dll-delay-sdclk-hsmmc = <21>;
+>> +		};
+>> +
+>> +		sd: mmc@1a400000 {
+>> +			compatible = "socionext,uniphier-sd-v3.1.1";
+>> +			status = "disabled";
+>> +			reg = <0x1a400000 0x800>;
+>> +			interrupts = <GIC_SPI 76 IRQ_TYPE_LEVEL_HIGH>;
+>> +			pinctrl-names = "default";
+>> +			pinctrl-0 = <&pinctrl_sd>;
+>> +			clocks = <&sd_clk 0>;
+>> +			reset-names = "host";
+>> +			resets = <&sd_rst 0>;
+>> +			bus-width = <4>;
+>> +			cap-sd-highspeed;
+>> +		};
+>> +
+>> +		soc_glue: soc-glue@1f800000 {
+>> +			compatible = "socionext,uniphier-nx1-soc-glue",
+> 
+> I am not going to check...
+> 
+>> +				     "simple-mfd", "syscon";
+>> +			reg = <0x1f800000 0x2000>;
+>> +
+>> +			pinctrl: pinctrl {
+>> +				compatible = "socionext,uniphier-nx1-pinctrl";
+>> +			};
+>> +		};
+>> +
+>> +		soc-glue@1f900000 {
+>> +			compatible = "socionext,uniphier-nx1-soc-glue-debug",
+> 
+> Hm...
+> 
+>> +				     "simple-mfd";
+>> +			#address-cells = <1>;
+>> +			#size-cells = <1>;
+>> +			ranges = <0 0x1f900000 0x2000>;
+>> +		};
+>> +
+>> +		xdmac: dma-controller@1fa10000 {
+>> +			compatible = "socionext,uniphier-xdmac";
+>> +			reg = <0x1fa10000 0x5300>;
+>> +			interrupts = <GIC_SPI 39 IRQ_TYPE_LEVEL_HIGH>;
+>> +			dma-channels = <16>;
+>> +			#dma-cells = <2>;
+>> +		};
+>> +
+>> +		aidet: aidet@1fb20000 {
+> 
+> Node names should be generic.
+> https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
+
+I forgot to rename it and will rename to "interrupt-controller".
+
+> 
+>> +			compatible = "socionext,uniphier-nx1-aidet";
+>> +			reg = <0x1fb20000 0x200>;
+>> +			interrupt-controller;
+>> +			#interrupt-cells = <2>;
+>> +		};
+
+Thank you,
 
 ---
-
-Changes in v2:
-Add "_REG" in register names
-Add interrupt/alarm handling (different from rx8030)
-
- drivers/rtc/rtc-ds1307.c | 308 ++++++++++++++++++++++++++++++++++++---
- 1 file changed, 285 insertions(+), 23 deletions(-)
-
-diff --git a/drivers/rtc/rtc-ds1307.c b/drivers/rtc/rtc-ds1307.c
-index d51565bcc189..2c5dff45a246 100644
---- a/drivers/rtc/rtc-ds1307.c
-+++ b/drivers/rtc/rtc-ds1307.c
-@@ -46,6 +46,7 @@ enum ds_type {
- 	m41t11,
- 	mcp794xx,
- 	rx_8025,
-+	rx_8111,
- 	rx_8130,
- 	last_ds_type /* always last */
- 	/* rs5c372 too?  different address... */
-@@ -113,6 +114,24 @@ enum ds_type {
- #	define RX8025_BIT_VDET		0x40
- #	define RX8025_BIT_XST		0x20
- 
-+#define RX8111_REG_EXTENSION	0x1d
-+#	define RX8111_REG_EXTENSION_WADA	BIT(3)
-+#define RX8111_REG_FLAG		0x1e
-+#	define RX8111_REG_FLAG_VLF	BIT(1)
-+#	define RX8111_REG_FLAG_EVF	BIT(2)
-+#	define RX8111_REG_FLAG_AF	BIT(3)
-+#	define RX8111_REG_FLAG_TF	BIT(4)
-+#	define RX8111_REG_FLAG_UF	BIT(5)
-+#define RX8111_REG_CONTROL	0x1e
-+#	define RX8111_REG_CONTROL_EIE	BIT(2)
-+#	define RX8111_REG_CONTROL_AIE	BIT(3)
-+#	define RX8111_REG_CONTROL_TIE	BIT(4)
-+#	define RX8111_REG_CONTROL_UIE	BIT(5)
-+#define RX8111_REG_PWR_SWITCH_CTRL	0x32
-+#	define RX8111_PSC_SMP_INIEN	BIT(6)
-+#	define RX8111_PSC_SMP_CHGEN	BIT(7)
-+#define RX8111_REG_TIME_STAMP_BUF_CTRL	0x34
-+
- #define RX8130_REG_ALARM_MIN		0x17
- #define RX8130_REG_ALARM_HOUR		0x18
- #define RX8130_REG_ALARM_WEEK_OR_DAY	0x19
-@@ -205,6 +224,68 @@ struct chip_desc {
- 
- static const struct chip_desc chips[last_ds_type];
- 
-+static int ds1307_check_voltage_lost(struct ds1307 *ds1307)
-+{
-+	int ret;
-+	unsigned int reg;
-+	unsigned int mask;
-+	unsigned int regflag;
-+
-+	switch (ds1307->type) {
-+	case rx_8111:
-+		reg = RX8111_REG_FLAG;
-+		mask = RX8111_REG_FLAG_VLF;
-+		break;
-+	case rx_8130:
-+		reg = RX8130_REG_FLAG;
-+		mask = RX8130_REG_FLAG_VLF;
-+		break;
-+	default:
-+		return 0;
-+	}
-+
-+	ret = regmap_read(ds1307->regmap, reg, &regflag);
-+	if (ret) {
-+		dev_err(ds1307->dev, "%s error %d\n", "read", ret);
-+		return ret;
-+	}
-+
-+	if (regflag & mask) {
-+		dev_warn_once(ds1307->dev, "oscillator failed, set time!\n");
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+static int ds1307_clear_voltage_lost(struct ds1307 *ds1307)
-+{
-+	int ret;
-+	unsigned int reg;
-+	unsigned int mask;
-+
-+	switch (ds1307->type) {
-+	case rx_8111:
-+		reg = RX8111_REG_FLAG;
-+		mask = (unsigned int)~RX8111_REG_FLAG_VLF;
-+		break;
-+	case rx_8130:
-+		reg = RX8130_REG_FLAG;
-+		mask = (unsigned int)~RX8130_REG_FLAG_VLF;
-+		break;
-+	default:
-+		return 0;
-+	}
-+
-+	ret = regmap_write(ds1307->regmap, reg, mask);
-+	if (ret) {
-+		dev_err(ds1307->dev, "%s error %d\n", "write", ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
- static int ds1307_get_time(struct device *dev, struct rtc_time *t)
- {
- 	struct ds1307	*ds1307 = dev_get_drvdata(dev);
-@@ -212,19 +293,9 @@ static int ds1307_get_time(struct device *dev, struct rtc_time *t)
- 	const struct chip_desc *chip = &chips[ds1307->type];
- 	u8 regs[7];
- 
--	if (ds1307->type == rx_8130) {
--		unsigned int regflag;
--		ret = regmap_read(ds1307->regmap, RX8130_REG_FLAG, &regflag);
--		if (ret) {
--			dev_err(dev, "%s error %d\n", "read", ret);
--			return ret;
--		}
--
--		if (regflag & RX8130_REG_FLAG_VLF) {
--			dev_warn_once(dev, "oscillator failed, set time!\n");
--			return -EINVAL;
--		}
--	}
-+	ret = ds1307_check_voltage_lost(ds1307);
-+	if (ret)
-+		return ret;
- 
- 	/* read the RTC date and time registers all at once */
- 	ret = regmap_bulk_read(ds1307->regmap, chip->offset, regs,
-@@ -397,15 +468,9 @@ static int ds1307_set_time(struct device *dev, struct rtc_time *t)
- 		return result;
- 	}
- 
--	if (ds1307->type == rx_8130) {
--		/* clear Voltage Loss Flag as data is available now */
--		result = regmap_write(ds1307->regmap, RX8130_REG_FLAG,
--				      ~(u8)RX8130_REG_FLAG_VLF);
--		if (result) {
--			dev_err(dev, "%s error %d\n", "write", result);
--			return result;
--		}
--	}
-+	result =  ds1307_clear_voltage_lost(ds1307);
-+	if (result)
-+		return result;
- 
- 	return 0;
- }
-@@ -541,6 +606,174 @@ static u8 do_trickle_setup_ds1339(struct ds1307 *ds1307, u32 ohms, bool diode)
- 	return setup;
- }
- 
-+static u8 do_trickle_setup_rx8111(struct ds1307 *ds1307, u32 ohms, bool diode)
-+{
-+	/* make sure that the backup battery is enabled */
-+	u8 setup = RX8111_PSC_SMP_INIEN;
-+
-+	if (diode)
-+		setup |= RX8111_PSC_SMP_CHGEN;
-+
-+	return setup;
-+}
-+
-+static irqreturn_t rx8111_irq(int irq, void *dev_id)
-+{
-+	struct ds1307 *ds1307 = dev_id;
-+	irqreturn_t result = IRQ_NONE;
-+	int ret;
-+	u8 ctl[2];
-+	u8 flags = 0;
-+
-+	rtc_lock(ds1307->rtc);
-+
-+	/* Read flag and control registers. */
-+	ret = regmap_bulk_read(ds1307->regmap, RX8111_REG_FLAG, ctl,
-+			       sizeof(ctl));
-+	if (ret < 0)
-+		goto out;
-+
-+	if (ctl[0] & RX8111_REG_FLAG_AF) {
-+		result = IRQ_HANDLED;
-+		flags |= RTC_AF; /* Alarm */
-+		ctl[1] &= ~RX8111_REG_CONTROL_AIE;
-+	}
-+	/*
-+	 * If an interrupt occurred that we cannot process, we'll have to turn
-+	 * it off, otherwise we'd be called again and again.
-+	 */
-+	if (ctl[0] & RX8111_REG_FLAG_UF) {
-+		result = IRQ_HANDLED;
-+		ctl[1] &= ~RX8111_REG_CONTROL_UIE;
-+	}
-+	if (ctl[0] & RX8111_REG_FLAG_TF) {
-+		result = IRQ_HANDLED;
-+		ctl[1] &= ~RX8111_REG_CONTROL_TIE;
-+	}
-+	if (ctl[0] & RX8111_REG_FLAG_EVF) {
-+		result = IRQ_HANDLED;
-+		ctl[1] &= ~RX8111_REG_CONTROL_EIE;
-+	}
-+	/* Clear all flags */
-+	ctl[0] &= ~(RX8111_REG_FLAG_UF | RX8111_REG_FLAG_TF |
-+		    RX8111_REG_FLAG_AF | RX8111_REG_FLAG_EVF);
-+
-+	ret = regmap_bulk_write(ds1307->regmap, RX8111_REG_FLAG, ctl,
-+				sizeof(ctl));
-+	if (ret < 0)
-+		goto out;
-+
-+	rtc_update_irq(ds1307->rtc, 1, flags | RTC_IRQF);
-+
-+out:
-+	rtc_unlock(ds1307->rtc);
-+
-+	return result;
-+}
-+
-+static int rx8111_read_alarm(struct device *dev, struct rtc_wkalrm *t)
-+{
-+	struct ds1307 *ds1307 = dev_get_drvdata(dev);
-+	u8 ald[3], ctl[2];
-+	int ret;
-+
-+	/* Read alarm registers. */
-+	ret = regmap_bulk_read(ds1307->regmap, RX8130_REG_ALARM_MIN, ald,
-+			       sizeof(ald));
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Read flag and control registers. */
-+	ret = regmap_bulk_read(ds1307->regmap, RX8111_REG_FLAG, ctl,
-+			       sizeof(ctl));
-+	if (ret < 0)
-+		return ret;
-+
-+	t->enabled = !!(ctl[1] & RX8111_REG_CONTROL_AIE);
-+	t->pending = !!(ctl[0] & RX8111_REG_FLAG_AF);
-+
-+	/* Report alarm 0 time assuming 24-hour and day-of-month modes. */
-+	t->time.tm_sec = -1;
-+	t->time.tm_min = bcd2bin(ald[0] & 0x7f);
-+	t->time.tm_hour = bcd2bin(ald[1] & 0x7f);
-+	t->time.tm_wday = -1;
-+	t->time.tm_mday = bcd2bin(ald[2] & 0x7f);
-+	t->time.tm_mon = -1;
-+	t->time.tm_year = -1;
-+	t->time.tm_yday = -1;
-+	t->time.tm_isdst = -1;
-+
-+	dev_dbg(dev, "%s, sec=%d min=%d hour=%d wday=%d mday=%d mon=%d enabled=%d\n",
-+		__func__, t->time.tm_sec, t->time.tm_min, t->time.tm_hour,
-+		t->time.tm_wday, t->time.tm_mday, t->time.tm_mon, t->enabled);
-+
-+	return 0;
-+}
-+
-+static int rx8111_set_alarm(struct device *dev, struct rtc_wkalrm *t)
-+{
-+	struct ds1307 *ds1307 = dev_get_drvdata(dev);
-+	u8 ald[3], ctl[3];
-+	int ret;
-+
-+	dev_dbg(dev, "%s, sec=%d min=%d hour=%d wday=%d mday=%d mon=%d "
-+		"enabled=%d pending=%d\n", __func__,
-+		t->time.tm_sec, t->time.tm_min, t->time.tm_hour,
-+		t->time.tm_wday, t->time.tm_mday, t->time.tm_mon,
-+		t->enabled, t->pending);
-+
-+	/* Read control registers. */
-+	ret = regmap_bulk_read(ds1307->regmap, RX8111_REG_EXTENSION, ctl,
-+			       sizeof(ctl));
-+	if (ret < 0)
-+		return ret;
-+
-+	ctl[0] &= RX8111_REG_EXTENSION_WADA;
-+	ctl[1] &= ~RX8111_REG_FLAG_AF;
-+	ctl[2] &= ~RX8111_REG_CONTROL_AIE;
-+
-+	ret = regmap_bulk_write(ds1307->regmap, RX8111_REG_EXTENSION, ctl,
-+				sizeof(ctl));
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Hardware alarm precision is 1 minute! */
-+	ald[0] = bin2bcd(t->time.tm_min);
-+	ald[1] = bin2bcd(t->time.tm_hour);
-+	ald[2] = bin2bcd(t->time.tm_mday);
-+
-+	ret = regmap_bulk_write(ds1307->regmap, RX8130_REG_ALARM_MIN, ald,
-+				sizeof(ald));
-+	if (ret < 0)
-+		return ret;
-+
-+	if (!t->enabled)
-+		return 0;
-+
-+	ctl[2] |= RX8111_REG_CONTROL_AIE;
-+
-+	return regmap_write(ds1307->regmap, RX8111_REG_CONTROL, ctl[2]);
-+}
-+
-+static int rx8111_alarm_irq_enable(struct device *dev, unsigned int enabled)
-+{
-+	struct ds1307 *ds1307 = dev_get_drvdata(dev);
-+	int ret, reg;
-+
-+	ret = regmap_read(ds1307->regmap, RX8111_REG_CONTROL, &reg);
-+	if (ret < 0)
-+		return ret;
-+
-+	if (enabled)
-+		reg |= RX8111_REG_CONTROL_AIE;
-+	else
-+		reg &= ~RX8111_REG_CONTROL_AIE;
-+
-+	dev_dbg(dev, "%s, enable=%u, reg=0x%x\n", __func__, enabled, reg);
-+
-+	return regmap_write(ds1307->regmap, RX8111_REG_CONTROL, reg);
-+}
-+
- static u8 do_trickle_setup_rx8130(struct ds1307 *ds1307, u32 ohms, bool diode)
- {
- 	/* make sure that the backup battery is enabled */
-@@ -943,6 +1176,14 @@ static const struct rtc_class_ops rx8130_rtc_ops = {
- 	.alarm_irq_enable = rx8130_alarm_irq_enable,
- };
- 
-+static const struct rtc_class_ops rx8111_rtc_ops = {
-+	.read_time      = ds1307_get_time,
-+	.set_time       = ds1307_set_time,
-+	.read_alarm     = rx8111_read_alarm,
-+	.set_alarm      = rx8111_set_alarm,
-+	.alarm_irq_enable = rx8111_alarm_irq_enable,
-+};
-+
- static const struct rtc_class_ops mcp794xx_rtc_ops = {
- 	.read_time      = ds1307_get_time,
- 	.set_time       = ds1307_set_time,
-@@ -1012,6 +1253,16 @@ static const struct chip_desc chips[last_ds_type] = {
- 		.century_bit	= DS1337_BIT_CENTURY,
- 		.bbsqi_bit	= DS3231_BIT_BBSQW,
- 	},
-+	[rx_8111] = {
-+		.alarm		= 1,
-+		.nvram_offset	= 0x40,
-+		.nvram_size	= 0x40,	/* 0x40 .. 0x7F is user RAM */
-+		.offset		= 0x10,
-+		.irq_handler = rx8111_irq,
-+		.rtc_ops = &rx8111_rtc_ops,
-+		.trickle_charger_reg = RX8111_REG_PWR_SWITCH_CTRL,
-+		.do_trickle_setup = &do_trickle_setup_rx8111,
-+	},
- 	[rx_8130] = {
- 		.alarm		= 1,
- 		/* this is battery backed SRAM */
-@@ -1063,6 +1314,7 @@ static const struct i2c_device_id ds1307_id[] = {
- 	{ "pt7c4338", ds_1307 },
- 	{ "rx8025", rx_8025 },
- 	{ "isl12057", ds_1337 },
-+	{ "rx8111", rx_8111 },
- 	{ "rx8130", rx_8130 },
- 	{ }
- };
-@@ -1137,6 +1389,10 @@ static const struct of_device_id ds1307_of_match[] = {
- 		.compatible = "isil,isl12057",
- 		.data = (void *)ds_1337
- 	},
-+	{
-+		.compatible = "epson,rx8111",
-+		.data = (void *)rx_8111
-+	},
- 	{
- 		.compatible = "epson,rx8130",
- 		.data = (void *)rx_8130
-@@ -1880,6 +2136,12 @@ static int ds1307_probe(struct i2c_client *client,
- 				     DS1307_REG_HOUR << 4 | 0x08, hour);
- 		}
- 		break;
-+	case rx_8111:
-+		/* Use memory as user RAM */
-+		regmap_write(ds1307->regmap, RX8111_REG_TIME_STAMP_BUF_CTRL, 0);
-+		/* Disable timer, events, frequency output */
-+		regmap_write(ds1307->regmap, RX8111_REG_EXTENSION, 0xc8);
-+		break;
- 	case ds_1388:
- 		err = regmap_read(ds1307->regmap, DS1388_REG_CONTROL, &tmp);
- 		if (err) {
-@@ -1955,7 +2217,7 @@ static int ds1307_probe(struct i2c_client *client,
- 		dev_info(ds1307->dev,
- 			 "'wakeup-source' is set, request for an IRQ is disabled!\n");
- 		/* We cannot support UIE mode if we do not have an IRQ line */
--		clear_bit(RTC_FEATURE_UPDATE_INTERRUPT, ds1307->rtc->features);
-+		ds1307->rtc->uie_unsupported = 1;
- 	}
- 
- 	if (want_irq) {
--- 
-2.17.1
-
+Best Regards
+Kunihiko Hayashi
