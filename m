@@ -2,54 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 46B2E615531
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:41:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6B85B615532
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:42:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbiKAWlr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 18:41:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46760 "EHLO
+        id S230433AbiKAWmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 18:42:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46972 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiKAWln (ORCPT
+        with ESMTP id S230515AbiKAWl6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 18:41:43 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2609765CA;
-        Tue,  1 Nov 2022 15:41:42 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id B58A461646;
-        Tue,  1 Nov 2022 22:41:41 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 077BBC433D6;
-        Tue,  1 Nov 2022 22:41:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667342501;
-        bh=6LjcZLlfXDajYf+UxU5rviBR8j+wzEQGyunyc6QKoJ8=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NZOE4r2QOoMe/gw6ilbIheWaB6WW2CopdX6sszLKtSf51i55E0x3CdPKTjETEh05p
-         fqCqJbcStGs5o0GjS6DAA3Mt2FUelOJ0c4b783TWqtCG/J5uzUGgfNDuDuCrNTed/c
-         x9p8qf1C4qwUFoH5ddS7FJb/rtemnlUmq7X9is1ttDCF0msp3ig2A3GEAuQ5uNaG5/
-         vmv2jaKXwwBXui/z1s0nGzJZoxm/Brk2o9VTwJJB8QWlPAC5g7geAXTFidNy+178nV
-         Q7eT1lW1l0v0gZv6BFxXkfw2QTyEVwtMQb6ZY1YUugwGNohIRy3fL9yzqfFlDDg7VO
-         lqkneEc9Kbsjg==
-Received: by pali.im (Postfix)
-        id E0C277F8; Tue,  1 Nov 2022 23:41:38 +0100 (CET)
-Date:   Tue, 1 Nov 2022 23:41:38 +0100
-From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
-To:     Gregory Clement <gregory.clement@bootlin.com>
-Cc:     linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] ARM: dts: turris-omnia: Add switch port 6 node
-Message-ID: <20221101224138.66utw2el3kc2opgx@pali>
-References: <20220825122102.18634-1-pali@kernel.org>
+        Tue, 1 Nov 2022 18:41:58 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11C31DA5A
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 15:41:56 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id z5-20020a17090a8b8500b00210a3a2364fso2360519pjn.0
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 15:41:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=549rWF/Cs3zs/38lC9NGwtRSOQOXjmIrrlVQub1z2o8=;
+        b=X8yNsPnmPfT3SN6GNaL+qXXP6PlWP+tNfOepu9Waku/e8TbMh5Teg/RoEAaxBvZAyp
+         86MoLHZvivJ51VxIIlJcdpz/F5d7/wyZli/YZPlxZeL30msR5HHRyHoxNWtQDgse6TbY
+         lBpkMDv9gA8YENbSvr5jeWlK6hF7bphcC4SUQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=549rWF/Cs3zs/38lC9NGwtRSOQOXjmIrrlVQub1z2o8=;
+        b=JxavuFGhIMQZAQ86teSpDqW9nig9Wj2axY9us8gUmT39SslAFRmkqtz4NB2ANE14dX
+         QxhCVnVc9cqSdKHZyQE3sW5d8U+xvHgJx7YqDDL05v+T+2NA3JMiGwKJQK06ixj0oS9P
+         X25epJF/sP7LtTMwF5ZatTx/26RzttFWDwhUSt7XRGx57meCeKd4Y7AZytnx/su+0h4R
+         66mO6mFKfKiaP7FA/M7XmMTQr8kEpGLz/l1ye0BNN2LTyu7wk4Q4gnCJd6VEePdlvG+s
+         o+86ng9pIb0t9Jdn+z1IpLIyLS2yKHaLaSVEaHxInL56WC26GfiFaJd2h/uXG4VGxJyd
+         uWTA==
+X-Gm-Message-State: ACrzQf2SyBHWM9+tT4d5Z/PKMeHFspJ8TwacKt+K98OpKE36woIn3cVi
+        9kdol2+abqW2bxfLuF0Kr5YBDw==
+X-Google-Smtp-Source: AMsMyM5ebbfmmxQLSRv1+X29/5hLVS8lb8HR1kl72PW5ICE/mOVinx4Zw3IXtyUk1+PYEjtzhsFvlg==
+X-Received: by 2002:a17:90b:4d0e:b0:1f7:ae99:4d7f with SMTP id mw14-20020a17090b4d0e00b001f7ae994d7fmr38881630pjb.200.1667342516227;
+        Tue, 01 Nov 2022 15:41:56 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id b138-20020a621b90000000b0056bc742d21esm7194023pfb.176.2022.11.01.15.41.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 15:41:55 -0700 (PDT)
+Date:   Tue, 1 Nov 2022 15:41:54 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] [next] drm/radeon: Replace one-element array with
+ flexible-array member
+Message-ID: <202211011538.B7548FDDE@keescook>
+References: <Y1trhRE3nK5iAY6q@mail.google.com>
+ <Y1yetX1CHsr+fibp@mail.google.com>
+ <CADnq5_Mod90O=tN26+Yi74WPYxpVtss+LG_+_HZyFv2EtzR+MA@mail.gmail.com>
+ <202211011443.7BDB243D8D@keescook>
+ <CADnq5_Ou9HnZjQx5WaAZW+iu24g_eS2hh25xhExeQjdMOXYfCQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220825122102.18634-1-pali@kernel.org>
-User-Agent: NeoMutt/20180716
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <CADnq5_Ou9HnZjQx5WaAZW+iu24g_eS2hh25xhExeQjdMOXYfCQ@mail.gmail.com>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -57,40 +78,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PING?
+On Tue, Nov 01, 2022 at 06:09:16PM -0400, Alex Deucher wrote:
+> On Tue, Nov 1, 2022 at 5:54 PM Kees Cook <keescook@chromium.org> wrote:
+> > Does the ROM always only have a single byte there? This seems unlikely
+> > given the member "ucFakeEDIDLength" (and the code below).
+> 
+> I'm not sure.  I'm mostly concerned about this:
+>
+>             record += fake_edid_record->ucFakeEDIDLength ?
+>                       fake_edid_record->ucFakeEDIDLength + 2 :
+>                       sizeof(ATOM_FAKE_EDID_PATCH_RECORD);
 
-On Thursday 25 August 2022 14:21:02 Pali Rohár wrote:
-> Switch port 6 is connected to eth0, so add appropriate device tree node for it.
-> 
-> Fixes: 26ca8b52d6e1 ("ARM: dts: add support for Turris Omnia")
-> Signed-off-by: Pali Rohár <pali@kernel.org>
-> ---
->  arch/arm/boot/dts/armada-385-turris-omnia.dts | 12 +++++++++++-
->  1 file changed, 11 insertions(+), 1 deletion(-)
-> 
-> diff --git a/arch/arm/boot/dts/armada-385-turris-omnia.dts b/arch/arm/boot/dts/armada-385-turris-omnia.dts
-> index f655e9229d68..8215ffb6a795 100644
-> --- a/arch/arm/boot/dts/armada-385-turris-omnia.dts
-> +++ b/arch/arm/boot/dts/armada-385-turris-omnia.dts
-> @@ -463,7 +463,17 @@
->  				};
->  			};
->  
-> -			/* port 6 is connected to eth0 */
-> +			ports@6 {
-> +				reg = <6>;
-> +				label = "cpu";
-> +				ethernet = <&eth0>;
-> +				phy-mode = "rgmii-id";
-> +
-> +				fixed-link {
-> +					speed = <1000>;
-> +					full-duplex;
-> +				};
-> +			};
->  		};
->  	};
->  };
-> -- 
-> 2.20.1
-> 
+But this is exactly what the code currently does, as noted in the commit
+log: "It's worth mentioning that doing a build before/after this patch
+results in no binary output differences.
+
+> Presumably the record should only exist if ucFakeEDIDLength is non 0,
+> but I don't know if there are some OEMs out there that just included
+> an empty record for some reason.  Maybe the code is wrong today and
+> there are some OEMs that include it and the array is already size 0.
+> In that case, Paulo's original patches are probably more correct.
+
+Right, but if true, that seems to be a distinctly separate bug fix?
+
+-- 
+Kees Cook
