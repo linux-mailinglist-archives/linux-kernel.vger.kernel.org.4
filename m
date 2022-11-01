@@ -2,71 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2EAE614ED1
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 17:07:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 523A2614ED8
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 17:08:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbiKAQHP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 12:07:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47684 "EHLO
+        id S230345AbiKAQIK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 12:08:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230148AbiKAQHK (ORCPT
+        with ESMTP id S230139AbiKAQII (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 12:07:10 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BEF3718B35
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 09:07:08 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id s206so16394955oie.3
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 09:07:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=EIvCsNcYvM6/Hsp4ajqEM/CHCcHllUHTLyim4Fdl4PQ=;
-        b=Ci/4R5cjQS65fqeKJcqsOF3dXNAO9yGdtsYGsGuG6ITYtLKDGXMZ+E54KSHs0x7TFv
-         AAt7wWNEhTv6+eFgud0NrPs20ruzTbW0a65k7xxqrQ2iazFb3wG/04dj4shaKnfB+X3c
-         0W7nqGmDY+1Of3QtcY0DIcn72+gfYv5iuT0FN/65X4wLMhn1DM6ekTf53yVhcrqlbbiM
-         lUoUVdaxThUqrBLHofdXdYett/2k9bUeau5FO/gxqqU2OSXusZrFV5cYl64o8YUSCFZE
-         HWZZvC0OqfyAs2cOVBTyB19AMA0p3pFhXBNzxo+1DbQfF441S0eUWU+LocCKAIEEt8HN
-         wMnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EIvCsNcYvM6/Hsp4ajqEM/CHCcHllUHTLyim4Fdl4PQ=;
-        b=faGQGVcnhpSW82lLvCM6eyBA1YppMNdj40dLQOk0wcTlY2HV8Yx4IiQXJ1NgaLCu85
-         CS/xz+dzxE791PGWyLVlw7LbBwFbKpKzsHWx2yDxjH2pWMb8XDEBc6o/Js8qObTlcCkA
-         SkuKMd0MJIP1qFwBNhthJDA7YahiN/NI/sbQy7xu6ZY377fe3eyqKT0X3eiZYUuiF4PH
-         IOwG25yxK2OPbT4gCDX9LJAhECtcFnCKRi0/04AwE9ytOcrCAZnyk8Vt0r10Mpp6N7F6
-         p3SMjv8qZkaErOX/zOGwPT1lSdAlG1wqivD7QIs5/zdma2l0HO6yhOHZie9Cw9c9RY5Z
-         Q2+g==
-X-Gm-Message-State: ACrzQf2Cs1wlHA2w+LrlZzrGBjMgvzBwMhf5fhxlVGJOxEuCJgwtP4C8
-        dojWkPEaIPvjEwAeEvPuMqTp6NuO16YJFgL96WY=
-X-Google-Smtp-Source: AMsMyM7IKs5sFOzl9MgowQZ6B6fZPiPbgU9kAYR7sXxyETzysb5DoDPacdLtQlROr5xf93oUsQpLNIX+OX7pDz2Y1zU=
-X-Received: by 2002:a05:6808:14d2:b0:354:c733:abd3 with SMTP id
- f18-20020a05680814d200b00354c733abd3mr10488249oiw.96.1667318828044; Tue, 01
- Nov 2022 09:07:08 -0700 (PDT)
+        Tue, 1 Nov 2022 12:08:08 -0400
+Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70072.outbound.protection.outlook.com [40.107.7.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC05B1571D;
+        Tue,  1 Nov 2022 09:08:06 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=cX6vfEd7zXp8ECsITdxm+novoqn5AiM5s/DwmuwPMqDUYR1O0SzQpAa61iNkLpaPnIg56WaAUAGV5deugaUaBbIplES1AVOA/ri2BcNwokXinbb5RyXF/8RZrLqG7NoZB3Z3QCPgXlRTRI+p+hueryOmdbC5RRfwjDmkxUQ2RYBVb3UqPQ8eOpmKchUGgx8EdvLKnGyYqVSDH0vEL6UOxAqMFTThoarCturGne3otg5ZJKAgS47eE5Y+aowGFQlXjOyCgxHf6JPQNyUJ20gcqu8c3sDQF5Ca35RTu9Z42XL1pLPL+SY7+VsVF8PeEnQLYsyv4tXlkjDfKoy+6Dm1PQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=1mewYtNWddQHeeYLduGwrgF3Vf1VEKULqxz+E5bUjxg=;
+ b=GYd1wDs85A8kpI0u+sxKHp7/CVKiGircsDcvW3aecyf7JZ0U616nVfbj5RFkRaTwnT1NnVQo2p2Q1V59MiL6gMhFpXHC5dsFh+PBXiyNgmzW8j2I9qbDb7vjgRRoRdc7AsE2HhOrVZDaj6i4JOHv4hnsgRGYUY+Af9rFNYoTE0MzHX8sVofHlTgYZVMdJ+NamjpJT7/lzhd/saJbfTFW26U9xQvslT8exgjMTjVYH82RVkE2BhHYK41ZSXJw2HrasSQTamNFoL6/aOEX1OLLikdqn0TFxFn9coa9Q+alrNr2Mo4o7VbsHrprApSqy/AgcMLtTlAe3kjmSlcKkVYwcA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=1mewYtNWddQHeeYLduGwrgF3Vf1VEKULqxz+E5bUjxg=;
+ b=KgjnZsk6/OP+TZy8KdoA+eytgqYTlLyR3xM3u0ZIY6exa84p2XyKE5tDIeAyKqH9aZS7pC9fJrddhaeCNOu/5QhkCV3N+lWSNBg/DtmvA7ZTxV4GN8ogE8NknoMMspGbyC5C/pGDdzNEbBZE9qZl47E2ZMzPckRu7XAcq8jiraA=
+Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com (2603:10a6:3:24::22)
+ by AS8PR04MB7846.eurprd04.prod.outlook.com (2603:10a6:20b:2a0::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.15; Tue, 1 Nov
+ 2022 16:08:01 +0000
+Received: from HE1PR0401MB2331.eurprd04.prod.outlook.com
+ ([fe80::44bb:8387:8f4b:6a28]) by HE1PR0401MB2331.eurprd04.prod.outlook.com
+ ([fe80::44bb:8387:8f4b:6a28%11]) with mapi id 15.20.5769.021; Tue, 1 Nov 2022
+ 16:08:01 +0000
+From:   Frank Li <frank.li@nxp.com>
+To:     Manivannan Sadhasivam <mani@kernel.org>
+CC:     "allenbh@gmail.com" <allenbh@gmail.com>,
+        "bhelgaas@google.com" <bhelgaas@google.com>,
+        "dave.jiang@intel.com" <dave.jiang@intel.com>,
+        "helgaas@kernel.org" <helgaas@kernel.org>,
+        "imx@lists.linux.dev" <imx@lists.linux.dev>,
+        "jdmason@kudzu.us" <jdmason@kudzu.us>,
+        "kw@linux.com" <kw@linux.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-pci@vger.kernel.org" <linux-pci@vger.kernel.org>,
+        "lpieralisi@kernel.org" <lpieralisi@kernel.org>,
+        "ntb@lists.linux.dev" <ntb@lists.linux.dev>
+Subject: RE: [EXT] Re: [PATCH v14 2/7] PCI: endpoint: pci-epf-vntb: Fix
+ indentation of the struct epf_ntb_ctrl
+Thread-Topic: [EXT] Re: [PATCH v14 2/7] PCI: endpoint: pci-epf-vntb: Fix
+ indentation of the struct epf_ntb_ctrl
+Thread-Index: AQHY6uX+NR8TaW/PxU6w0p24A40Cma4p/B6AgABGHzA=
+Date:   Tue, 1 Nov 2022 16:08:00 +0000
+Message-ID: <HE1PR0401MB2331A8A3546988B5BBBE85B888369@HE1PR0401MB2331.eurprd04.prod.outlook.com>
+References: <20221028155703.318928-1-Frank.Li@nxp.com>
+ <20221028155703.318928-3-Frank.Li@nxp.com> <20221101115621.GF54667@thinkpad>
+In-Reply-To: <20221101115621.GF54667@thinkpad>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: HE1PR0401MB2331:EE_|AS8PR04MB7846:EE_
+x-ms-office365-filtering-correlation-id: ba668c55-e61a-4207-9668-08dabc234006
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: NGq1VNMqsj6jQf1UGeSgrzMijjfDy6gsZ1UXqFxRtC/p4KiWGK8SpLrroHoWbldQM0xQcd+1Fl/XxSJZ8ILt2x4F2Xruc5Rs6DgmC2UO8G9R4FJTIDLjrCDoQCn4kGR1wVEzU4Lhd0HsmLscYL8YfUTRPpeGQM29kM8EN5/fsBNkqx+/iRWAKuIh5B82uU+rQshiNaZORv9/yegmJMzl/jUGIDv5ubp4vWIryw/vBIX4GXdZu6GLBdzvCTNxG6k85NiUHyZeKuixWH/U3QE0/1jii6mRk36Dh1Jl+fGRqPuh6RDtPrt7b9Pc00XuFOqptoG/DslLiLIv3UvYwpbMlTmFY/dfcaErja2bBgMn2yF4Y34clZypn4or5BRsMCPvNGY4qkLwo29oun3hD2CUPTnkig9vmlAYPhjh2BM5hCbqAZcuCMPG/+VueZ++9z55JlxmEN5pL7tqbVgRYMP/LGnQSs0Jx0S8EsLO6W8hItRohs354LSxquz3aajk0qrCPcGYSz7ToW0nZpmUg1v82Ec6WH1IoNY/MF+aEhpr+KRlc1RAaUNQ3ZFjTUeYf2UwrS3QOKZAKcJSocxVmKv0ehaWV74/c6ZGpzHrR532T+oR0qxN9HfVFOH1LmSfV6WwVX51IPHWdJoGDhkFP/yBRQCmtwtxZq8AmYYW8JKQpuM8ilObMA+pbfw6F0edSCwSQrkARH8jl4ZPlujoeCvGseX/aR8cqof0ne+ks1uMSgBuBg4IxlX7otRpvcDeEtkJDglhy6HbM4jFyGeAunczKw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:HE1PR0401MB2331.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(39860400002)(366004)(376002)(136003)(451199015)(53546011)(6506007)(71200400001)(38100700002)(478600001)(7696005)(55236004)(55016003)(122000001)(33656002)(8676002)(4326008)(26005)(54906003)(76116006)(66946007)(66556008)(66446008)(66476007)(83380400001)(41300700001)(86362001)(2906002)(38070700005)(9686003)(8936002)(64756008)(52536014)(186003)(6916009)(316002)(5660300002)(7416002)(44832011);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?d21paUlQcjNtOVM4U0F3QU8rcHo1SDlBQWxuNy9URUsrbjJxdFNKQ2V2Q1RR?=
+ =?utf-8?B?dnNnQm40MUt6a0E3NXFyWkNhejhKMTlHcFZYY3RrMzViOEluVWRQWE4zYVlZ?=
+ =?utf-8?B?NjRPcXl1aVZLVVh6RXpJMFYyaG9yU3VrUjZXK3AzdnI4bDUzeTN5dlBDVGtQ?=
+ =?utf-8?B?RUpGT0MzbGRxSlpsZjcvUVhKUXU4U3ZwaVdnaW1XRWtVZDR1R3ZEUUdHYXQx?=
+ =?utf-8?B?MmRIdTI2c2lqdEVLSTNjRmkrRHdBTFRSQ3BCSUltcW9iMnpmeitqZ2VtZGky?=
+ =?utf-8?B?WXJZSXhHbm54R2M1aHltenRqT0hVOFFUZTBLa2VwOVFNN29lc2FLY093UW9u?=
+ =?utf-8?B?bDhTelM2QndZcG5vYWoxbzRHdENUNlZEdUM5MkthQ005VXBScklHRndQakla?=
+ =?utf-8?B?cXdMUSswZnVPVmluNjE2YmRPUGlWWEJER29URUcwZFBOSld5S3U4MFlmRVBU?=
+ =?utf-8?B?KzZiY2Jhb3pJMmdIN2w3L3Z0SWs4UFcvUExpSkwxeXdxUmdlT1IwODNUMmgr?=
+ =?utf-8?B?aXhyODF4RjFoM2JDQUR6QnhWM1hWMEFWaWV1VDNwS1Z2dDIwb2l0M21CbTRy?=
+ =?utf-8?B?RFhjREc0ZG4yeDRFUlBoUFdRWFFqRlFsOVdFSmFDdEhJWkoxU2JUb3FKem8v?=
+ =?utf-8?B?eEJXckZkM3ZRK2NHZFpYRit4SkJqcjczVTBpeEt4Nk5nYmVUODhvaVdNS3Zl?=
+ =?utf-8?B?dXBieDZiZUx0Q0d4M25Lb1pUUXkxSjljVUN2aEdMRlJiekZZbGdXZThWMHdx?=
+ =?utf-8?B?Mk5HQVVOc3V2alBPandaamRTZHQxN0FtR1ZnMUVLaG44VER6QzM1TFBlbXMz?=
+ =?utf-8?B?ZnRtMEJmdkNyU1E4Z29MZ0tOMFlKMXkyV2pQY1h3S3dSZU9vbTU3VkJVVGVO?=
+ =?utf-8?B?UFYrWTMybzdXQjYrY3oyYnF0VGg4dmkxOG1IbWlIYVhycDZoT3hGV0xJQmpO?=
+ =?utf-8?B?UHVLN2NhOC9LTmRCdlZaU25LRE1jOUVCWjE2K2d1eFdvMWlyNWxDbXN5bWxz?=
+ =?utf-8?B?ZnpUeXB6MURjVTQrQXR0VWI1aHFyVEprQTRGR1VYaWVNcjk5dFNIamJSdzdw?=
+ =?utf-8?B?ajFCckxkUk5ic040REhVMjhUek1JWHNhenF2TXFyUktTWkFmcng0UFZMRktY?=
+ =?utf-8?B?TFdCOU5nOWV0K0FSTURGbE01YlNJaG5PK2NrYU9wdkhmTTc3ZGk2ZnVZWG1C?=
+ =?utf-8?B?N0VPd2g1Ykp4MnpPY1hVUENsLzRWWVhJSEJzOERlcW5sVnJ1QnhUd2pVYXNM?=
+ =?utf-8?B?akZxZVBmbTZoN1VlUnFCR0p2eTZSeXNVampiT1ZKcUJtalZmaUpyUkNnbWNP?=
+ =?utf-8?B?RHNJWXN0RytML2kwcEdZMUVjUkNmU0ltNzdUTXBaUWgzakxiNU50TzRrTHRE?=
+ =?utf-8?B?L1ZMRkxuRytndFBob0FNbE0yanVlcUZRbW1iN1o1ejJYQ2FiemhIVldxQ0pW?=
+ =?utf-8?B?NkdidFZzWnNSd3dWYVd4SFR0V3h2clFCTkhoMG1FK2pCc1kyRVVSU3ZBRmRV?=
+ =?utf-8?B?bTUzcUxMdTMzZ0k3aUQ5eUN4cy92SzFOZ3lKS0pvSlBjeFB4Y3pEa2NFZXVy?=
+ =?utf-8?B?eHgrTHl6TGp5RDB2dlZ4cklKamM4dXdKb2o5cUFsQ1pKbGdmdi94ZnJxbFQ0?=
+ =?utf-8?B?VFVWeU5HcTlPdG4zajNTb0M3allDNkhjV2lNaXU5TDZSOGIyait5VnU0UE9x?=
+ =?utf-8?B?VXRrRnBKbHY5b3E2bnlxbndCOElYSWREZ1VSMWhCN2FNYmVhR1h5Mno1OENj?=
+ =?utf-8?B?aEE1bit6ekkwYVA2aS9hMXBYeURkWVU5WmIvditUeWEzTmRtdC9mU2dqZGFI?=
+ =?utf-8?B?dHZlb2RYT2dvbzBrb1drRkdTdWlOYTFKTFozOGhtMHE5bTdHVm9JemNzMzRO?=
+ =?utf-8?B?cUNpV1hVMHV3OUo1QzV2ZE0xakp0aVFoS2k3a0tSc3ZWbHFvamFHSlh2akg2?=
+ =?utf-8?B?cWNrNnJhRS81MXlUdXhBNUtxOHFzcGJCN1k3VWc1RysxQnVUazJ4SWd0ODdu?=
+ =?utf-8?B?Z21jRUkxVmtLRndDV3JjaWFnVTZMamZMSDVWUkhDZmV6SnczSGhDQkR4WDRI?=
+ =?utf-8?B?eUxxWi9qY3grZW5sZVdYcU13eXBPc2Rmd0ljcWJoS2M5T3I2NVFjYm5vcy9n?=
+ =?utf-8?Q?bfjc=3D?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
 MIME-Version: 1.0
-References: <Y117XNaSP6/8bH+3@moc6.cz> <CADnq5_Muegi+dvmrg5U=Cau_oeXQFjv_h2Pdn_j9AG0mRgE4=g@mail.gmail.com>
- <Y2E+XUEPbQn2tMt+@moc6.cz>
-In-Reply-To: <Y2E+XUEPbQn2tMt+@moc6.cz>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Tue, 1 Nov 2022 12:06:55 -0400
-Message-ID: <CADnq5_PmwiOecVqfpy17V4viYA5wt8WbEDOFPo70VSdmGTjOew@mail.gmail.com>
-Subject: Re: [PATCH] drm/amd/display: add parameter backlight_min
-To:     Filip Moc <dev@moc6.cz>
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Content-Type: text/plain; charset="UTF-8"
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: HE1PR0401MB2331.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ba668c55-e61a-4207-9668-08dabc234006
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Nov 2022 16:08:01.0084
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: JPRs5Dwsv6g8PX83ydIP5+0mJa3CkdKbVNgl3EXbRsiHJjYW3hvnQqdqjW4R7zuCd0V09fLcr/D0k5xgPRC5jQ==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AS8PR04MB7846
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,147 +136,49 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 1, 2022 at 11:42 AM Filip Moc <dev@moc6.cz> wrote:
->
-> Hello Alex,
->
-> thank you for your response.
->
-> Yes, I have HP ENVY x360 Convertible 13-ay1xxx, and backlight_min=2
-> seems to work the best in my case.
->
-> I added a dmi based quirk table. So far with support only for display 0
-> to make it simple. Support for more displays in quirk table can be added
-> later if ever needed.
->
-> According to [1] HP ENVY x360 Convertible 13-ag0xxx also needs a quirk
-> so I'm going to use this to cover both:
-> DMI_EXACT_MATCH(DMI_SYS_VENDOR, "HP")
-> DMI_MATCH(DMI_PRODUCT_NAME, "HP ENVY x360 Convertible 13-")
-
-You might want to add an additional check for the panel name/vendor
-from the EDID as well in case HP uses multiple panels from different
-vendors on that system.
-
-Alex
-
->
-> So far it seems to be working fine.
-> I'll send this in v2 once I do some final tweaks and do more tests.
->
-> [1] https://bugzilla.kernel.org/show_bug.cgi?id=203439#c5
->
-> Filip
->
->
-> V Mon, Oct 31, 2022 at 11:36:09AM -0400, Alex Deucher napsal(a):
-> > On Sun, Oct 30, 2022 at 5:26 AM Filip Moc <dev@moc6.cz> wrote:
-> > >
-> > > There are some devices on which amdgpu won't allow user to set brightness
-> > > to sufficiently low values even though the hardware would support it just
-> > > fine.
-> > >
-> > > This usually happens in two cases when either configuration of brightness
-> > > levels via ACPI/ATIF is not available and amdgpu falls back to defaults
-> > > (currently 12 for minimum level) which may be too high for some devices or
-> > > even the configuration via ATIF is available but the minimum brightness
-> > > level provided by the manufacturer is set to unreasonably high value.
-> > >
-> > > In either case user can use this new module parameter to adjust the
-> > > minimum allowed backlight brightness level.
-> > >
-> > > Link: https://bugzilla.kernel.org/show_bug.cgi?id=203439
-> > > Signed-off-by: Filip Moc <dev@moc6.cz>
-> >
-> > Does your system require an override and if so, what is it?  It would
-> > be good to add a quirk for your system as well so that other users of
-> > the same system wouldn't need to manually figure out an apply the
-> > settings.
-> >
-> > Alex
-> >
-> >
-> > > ---
-> > >  drivers/gpu/drm/amd/amdgpu/amdgpu.h               |  3 +++
-> > >  drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c           | 15 +++++++++++++++
-> > >  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 15 +++++++++++++++
-> > >  3 files changed, 33 insertions(+)
-> > >
-> > > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu.h b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-> > > index 0e6ddf05c23c..c5445402c49d 100644
-> > > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-> > > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-> > > @@ -200,6 +200,9 @@ extern uint amdgpu_dc_debug_mask;
-> > >  extern uint amdgpu_dc_visual_confirm;
-> > >  extern uint amdgpu_dm_abm_level;
-> > >  extern int amdgpu_backlight;
-> > > +#ifdef CONFIG_DRM_AMD_DC
-> > > +extern int amdgpu_backlight_override_min[];
-> > > +#endif
-> > >  extern struct amdgpu_mgpu_info mgpu_info;
-> > >  extern int amdgpu_ras_enable;
-> > >  extern uint amdgpu_ras_mask;
-> > > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> > > index 16f6a313335e..f2fb549ac52f 100644
-> > > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> > > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> > > @@ -43,6 +43,7 @@
-> > >  #include "amdgpu_irq.h"
-> > >  #include "amdgpu_dma_buf.h"
-> > >  #include "amdgpu_sched.h"
-> > > +#include "amdgpu_dm.h"
-> > >  #include "amdgpu_fdinfo.h"
-> > >  #include "amdgpu_amdkfd.h"
-> > >
-> > > @@ -853,6 +854,20 @@ int amdgpu_backlight = -1;
-> > >  MODULE_PARM_DESC(backlight, "Backlight control (0 = pwm, 1 = aux, -1 auto (default))");
-> > >  module_param_named(backlight, amdgpu_backlight, bint, 0444);
-> > >
-> > > +/**
-> > > + * DOC: backlight_min (array of int)
-> > > + * Override minimum allowed backlight brightness signal (per display).
-> > > + * Must be less than the maximum brightness signal.
-> > > + * Negative value means no override.
-> > > + *
-> > > + * Defaults to all -1 (no override on any display).
-> > > + */
-> > > +#ifdef CONFIG_DRM_AMD_DC
-> > > +int amdgpu_backlight_override_min[AMDGPU_DM_MAX_NUM_EDP] = {[0 ... (AMDGPU_DM_MAX_NUM_EDP-1)] = -1};
-> > > +MODULE_PARM_DESC(backlight_min, "Override minimum backlight brightness signal (0..max-1, -1 = no override (default))");
-> > > +module_param_array_named(backlight_min, amdgpu_backlight_override_min, int, NULL, 0444);
-> > > +#endif
-> > > +
-> > >  /**
-> > >   * DOC: tmz (int)
-> > >   * Trusted Memory Zone (TMZ) is a method to protect data being written
-> > > diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> > > index eb4ce7216104..e2c36ba93d05 100644
-> > > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> > > +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> > > @@ -3911,6 +3911,21 @@ static void amdgpu_dm_update_backlight_caps(struct amdgpu_display_manager *dm,
-> > >         dm->backlight_caps[bl_idx].min_input_signal = AMDGPU_DM_DEFAULT_MIN_BACKLIGHT;
-> > >         dm->backlight_caps[bl_idx].max_input_signal = AMDGPU_DM_DEFAULT_MAX_BACKLIGHT;
-> > >  #endif
-> > > +
-> > > +       if (amdgpu_backlight_override_min[bl_idx] >= 0) {
-> > > +               if (amdgpu_backlight_override_min[bl_idx] < dm->backlight_caps[bl_idx].max_input_signal) {
-> > > +                       DRM_INFO("amdgpu: backlight[%i]: overriding minimum brightness from %i to %i\n",
-> > > +                                 bl_idx,
-> > > +                                 dm->backlight_caps[bl_idx].min_input_signal,
-> > > +                                 amdgpu_backlight_override_min[bl_idx]);
-> > > +                       dm->backlight_caps[bl_idx].min_input_signal = amdgpu_backlight_override_min[bl_idx];
-> > > +               } else {
-> > > +                       DRM_ERROR("amdgpu: backlight[%i]: minimum brightness override (%i) is not below maximum (%i)\n",
-> > > +                                 bl_idx,
-> > > +                                 amdgpu_backlight_override_min[bl_idx],
-> > > +                                 dm->backlight_caps[bl_idx].max_input_signal);
-> > > +               }
-> > > +       }
-> > >  }
-> > >
-> > >  static int get_brightness_range(const struct amdgpu_dm_backlight_caps *caps,
-> > >
-> > > base-commit: d8c03bfe146fd5e081a252cd34f3f12ca0255357
-> > > --
-> > > 2.30.2
-> > >
+DQoNCj4gLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCj4gRnJvbTogTWFuaXZhbm5hbiBTYWRo
+YXNpdmFtIDxtYW5pQGtlcm5lbC5vcmc+DQo+IFNlbnQ6IFR1ZXNkYXksIE5vdmVtYmVyIDEsIDIw
+MjIgNjo1NiBBTQ0KPiBUbzogRnJhbmsgTGkgPGZyYW5rLmxpQG54cC5jb20+DQo+IENjOiBhbGxl
+bmJoQGdtYWlsLmNvbTsgYmhlbGdhYXNAZ29vZ2xlLmNvbTsgZGF2ZS5qaWFuZ0BpbnRlbC5jb207
+DQo+IGhlbGdhYXNAa2VybmVsLm9yZzsgaW14QGxpc3RzLmxpbnV4LmRldjsgamRtYXNvbkBrdWR6
+dS51czsNCj4ga3dAbGludXguY29tOyBsaW51eC1rZXJuZWxAdmdlci5rZXJuZWwub3JnOyBsaW51
+eC1wY2lAdmdlci5rZXJuZWwub3JnOw0KPiBscGllcmFsaXNpQGtlcm5lbC5vcmc7IG50YkBsaXN0
+cy5saW51eC5kZXYNCj4gU3ViamVjdDogW0VYVF0gUmU6IFtQQVRDSCB2MTQgMi83XSBQQ0k6IGVu
+ZHBvaW50OiBwY2ktZXBmLXZudGI6IEZpeA0KPiBpbmRlbnRhdGlvbiBvZiB0aGUgc3RydWN0IGVw
+Zl9udGJfY3RybA0KPiANCj4gQ2F1dGlvbjogRVhUIEVtYWlsDQo+IA0KPiBPbiBGcmksIE9jdCAy
+OCwgMjAyMiBhdCAxMTo1Njo1OEFNIC0wNDAwLCBGcmFuayBMaSB3cm90ZToNCj4gPiBGcm9tOiBG
+cmFuayBMaSA8ZnJhbmsubGlAbnhwLmNvbT4NCj4gPg0KPiA+IEluZGVudGF0aW9uIG9mIHRoZSBz
+dHJ1Y3QgZXBmX250Yl9jdHJsIGFsaWduIHdpdGggb3RoZXIgc3RydWN0DQo+ID4NCj4gDQo+ICJB
+bGlnbiB0aGUgaW5kZW50YXRpb24gb2Ygc3RydWN0IGVwZl9udGJfY3RybCB3aXRoIG90aGVyIHN0
+cnVjdHMgaW4gdGhlIGRyaXZlciINCj4gDQo+ID4gU2lnbmVkLW9mZi1ieTogRnJhbmsgTGkgPGZy
+YW5rLmxpQG54cC5jb20+DQo+ID4gLS0tDQo+ID4gIGRyaXZlcnMvcGNpL2VuZHBvaW50L2Z1bmN0
+aW9ucy9wY2ktZXBmLXZudGIuYyB8IDI4ICsrKysrKysrKy0tLS0tLS0tLS0NCj4gPiAgMSBmaWxl
+IGNoYW5nZWQsIDE0IGluc2VydGlvbnMoKyksIDE0IGRlbGV0aW9ucygtKQ0KPiA+DQo+ID4gZGlm
+ZiAtLWdpdCBhL2RyaXZlcnMvcGNpL2VuZHBvaW50L2Z1bmN0aW9ucy9wY2ktZXBmLXZudGIuYw0K
+PiBiL2RyaXZlcnMvcGNpL2VuZHBvaW50L2Z1bmN0aW9ucy9wY2ktZXBmLXZudGIuYw0KPiA+IGlu
+ZGV4IGMwMTE1YmNiM2I1ZS4uMTg2MzAwNmNjMzZjIDEwMDY0NA0KPiA+IC0tLSBhL2RyaXZlcnMv
+cGNpL2VuZHBvaW50L2Z1bmN0aW9ucy9wY2ktZXBmLXZudGIuYw0KPiA+ICsrKyBiL2RyaXZlcnMv
+cGNpL2VuZHBvaW50L2Z1bmN0aW9ucy9wY2ktZXBmLXZudGIuYw0KPiA+IEBAIC05OSwyMCArOTks
+MjAgQEAgZW51bSBlcGZfbnRiX2JhciB7DQo+ID4gICAqICAgICAgIE5UQiBEcml2ZXIgICAgICAg
+ICAgICAgICBOVEIgRHJpdmVyDQo+ID4gICAqLw0KPiA+ICBzdHJ1Y3QgZXBmX250Yl9jdHJsIHsN
+Cj4gPiAtICAgICB1MzIgICAgIGNvbW1hbmQ7DQo+ID4gLSAgICAgdTMyICAgICBhcmd1bWVudDsN
+Cj4gPiAtICAgICB1MTYgICAgIGNvbW1hbmRfc3RhdHVzOw0KPiA+IC0gICAgIHUxNiAgICAgbGlu
+a19zdGF0dXM7DQo+ID4gLSAgICAgdTMyICAgICB0b3BvbG9neTsNCj4gPiAtICAgICB1NjQgICAg
+IGFkZHI7DQo+ID4gLSAgICAgdTY0ICAgICBzaXplOw0KPiA+IC0gICAgIHUzMiAgICAgbnVtX213
+czsNCj4gPiAtICAgICB1MzIgICAgIHJlc2VydmVkOw0KPiA+IC0gICAgIHUzMiAgICAgc3BhZF9v
+ZmZzZXQ7DQo+ID4gLSAgICAgdTMyICAgICBzcGFkX2NvdW50Ow0KPiA+IC0gICAgIHUzMiAgICAg
+ZGJfZW50cnlfc2l6ZTsNCj4gPiAtICAgICB1MzIgICAgIGRiX2RhdGFbTUFYX0RCX0NPVU5UXTsN
+Cj4gPiAtICAgICB1MzIgICAgIGRiX29mZnNldFtNQVhfREJfQ09VTlRdOw0KPiA+ICsgICAgIHUz
+MiBjb21tYW5kOw0KPiA+ICsgICAgIHUzMiBhcmd1bWVudDsNCj4gPiArICAgICB1MTYgY29tbWFu
+ZF9zdGF0dXM7DQo+ID4gKyAgICAgdTE2IGxpbmtfc3RhdHVzOw0KPiA+ICsgICAgIHUzMiB0b3Bv
+bG9neTsNCj4gPiArICAgICB1NjQgYWRkcjsNCj4gPiArICAgICB1NjQgc2l6ZTsNCj4gPiArICAg
+ICB1MzIgbnVtX213czsNCj4gPiArICAgICB1MzIgcmVzZXJ2ZWQ7DQo+ID4gKyAgICAgdTMyIHNw
+YWRfb2Zmc2V0Ow0KPiA+ICsgICAgIHUzMiBzcGFkX2NvdW50Ow0KPiA+ICsgICAgIHUzMiBkYl9l
+bnRyeV9zaXplOw0KPiA+ICsgICAgIHUzMiBkYl9kYXRhW01BWF9EQl9DT1VOVF07DQo+ID4gKyAg
+ICAgdTMyIGRiX29mZnNldFtNQVhfREJfQ09VTlRdOw0KPiANCj4gR2VuZXJhbCBxdWVzdGlvbjog
+RG9uJ3Qgd2UgbmVlZCB0byB0YWtlIGNhcmUgb2YgZW5kaWFuZXNzIGhlcmU/DQoNCltGcmFuayBM
+aV0geW91IGFyZSByaWdodC4gQnV0IGl0IGlzIG91dCBvZiBzY29wZSBvZiB0aGlzIHBhdGNoLiAN
+CldlIGNhbiBhZGQgaXQgbGF0ZXIuDQoNCj4gDQo+IFRoYW5rcywNCj4gTWFuaQ0KPiANCj4gPiAg
+fSBfX3BhY2tlZDsNCj4gPg0KPiA+ICBzdHJ1Y3QgZXBmX250YiB7DQo+ID4gLS0NCj4gPiAyLjM0
+LjENCj4gPg0KPiANCj4gLS0NCj4g4K6u4K6j4K6/4K614K6j4K+N4K6j4K6p4K+NIOCumuCupOCu
+vuCumuCuv+CuteCuruCvjQ0K
