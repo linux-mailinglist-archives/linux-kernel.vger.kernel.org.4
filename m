@@ -2,148 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8D12F613740
-	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 14:00:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 26A6C6134EE
+	for <lists+linux-kernel@lfdr.de>; Mon, 31 Oct 2022 12:50:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231269AbiJaNAN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 09:00:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40950 "EHLO
+        id S230266AbiJaLux (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 07:50:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231421AbiJaM77 (ORCPT
+        with ESMTP id S231128AbiJaLut (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 08:59:59 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F9CDE0BE
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 05:59:57 -0700 (PDT)
-Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N1CmH4crQz15MH9;
-        Mon, 31 Oct 2022 20:54:55 +0800 (CST)
-Received: from dggpemm100009.china.huawei.com (7.185.36.113) by
- dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 31 Oct 2022 20:59:37 +0800
-Received: from huawei.com (10.175.113.32) by dggpemm100009.china.huawei.com
- (7.185.36.113) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 31 Oct
- 2022 20:59:36 +0800
-From:   Liu Shixin <liushixin2@huawei.com>
-To:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        "David Rientjes" <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        "Andrew Morton" <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        "Roman Gushchin" <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>
-CC:     <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
-        Liu Shixin <liushixin2@huawei.com>
-Subject: [PATCH v2 3/3] mm/slub: Fix memory leak of kobj->name in sysfs_slab_add()
-Date:   Mon, 31 Oct 2022 21:47:47 +0800
-Message-ID: <20221031134747.3049593-4-liushixin2@huawei.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221031134747.3049593-1-liushixin2@huawei.com>
-References: <20221031134747.3049593-1-liushixin2@huawei.com>
+        Mon, 31 Oct 2022 07:50:49 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D77FAF01A;
+        Mon, 31 Oct 2022 04:50:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667217048; x=1698753048;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=07fgYSi+0DSE3i6JcgPfVEFUgaXPKTFDzgW38hGG66E=;
+  b=JbafUmRgSyqVx19VvUQuRpBNIJPcYLPz0+BY5ZH9Oh23YqAdZcWGFaIc
+   zkxHTJpWf4aiA0BSDM+tRIHdeLpltV5Ge5oSXot40521y7ZE1t7ezuqCQ
+   CEQOQ07zC4kj/kVD7t8ArVUSZ13Wvc9S8gTdenqU110jRSlhJARsSrkDV
+   EYYrBZAcDtWUZWyPIC7nAWFGzgfdMnG4kWyn4i7DspBwbFWjOCOQpNUL1
+   i2YhNgVwjG762a/sGv5ad1nClUv4iLlOXOhm5P+KWzgmzDIaGpC+jxJ76
+   4bRBoL4qESjMcCx/Hh09ycV5G0bbDJoXwq+h/br79CjldvTGSrw557w9T
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="395192557"
+X-IronPort-AV: E=Sophos;i="5.95,227,1661842800"; 
+   d="scan'208";a="395192557"
+Received: from orsmga004.jf.intel.com ([10.7.209.38])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 04:50:48 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10516"; a="758810961"
+X-IronPort-AV: E=Sophos;i="5.95,227,1661842800"; 
+   d="scan'208";a="758810961"
+Received: from unknown (HELO rajath-NUC10i7FNH..) ([10.223.165.88])
+  by orsmga004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 04:50:45 -0700
+From:   Rajat Khandelwal <rajat.khandelwal@intel.com>
+To:     mika.westerberg@linux.intel.com, michael.jamet@intel.com,
+        YehezkelShB@gmail.com, andreas.noever@gmail.com
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Rajat Khandelwal <rajat.khandelwal@intel.com>
+Subject: [PATCH v2] thunderbolt: Add wake on connect/disconnect on USB4 ports
+Date:   Tue,  1 Nov 2022 17:20:42 +0530
+Message-Id: <20221101115042.248187-1-rajat.khandelwal@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.113.32]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- dggpemm100009.china.huawei.com (7.185.36.113)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.2 required=5.0 tests=BAYES_00,DATE_IN_FUTURE_12_24,
+        DKIMWL_WL_HIGH,DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There is a memory leak of kobj->name in sysfs_slab_add():
+Wake on connect/disconnect is only supported while runtime suspend
+for now, which is obviously necessary. It is also not inherently
+desired for the system to wakeup on thunderbolt/USB4 hot plug events.
+However, we can still make user in control of waking up the system
+in the events of hot plug/unplug.
+This patch adds 'wakeup' attribute under 'usb4_portX/power' sysfs
+attribute and only enables wakes on connect/disconnect to the
+respective port when 'wakeup' is set to 'enabled'. The attribute
+is set to 'disabled' by default.
 
- unreferenced object 0xffff88817e446440 (size 32):
-   comm "insmod", pid 4085, jiffies 4296564501 (age 126.272s)
-   hex dump (first 32 bytes):
-     75 62 69 66 73 5f 69 6e 6f 64 65 5f 73 6c 61 62  ubifs_inode_slab
-     00 65 44 7e 81 88 ff ff 00 00 00 00 00 00 00 00  .eD~............
-   backtrace:
-     [<000000005b30fbbd>] __kmalloc_node_track_caller+0x4e/0x150
-     [<000000002f70da0c>] kstrdup_const+0x4b/0x80
-     [<00000000c6712c61>] kobject_set_name_vargs+0x2f/0xb0
-     [<00000000b151218e>] kobject_init_and_add+0xb0/0x120
-     [<00000000e56a4cf5>] sysfs_slab_add+0x17d/0x220
-     [<000000009326fd57>] __kmem_cache_create+0x406/0x590
-     [<00000000dde33cff>] kmem_cache_create_usercopy+0x1fc/0x300
-     [<00000000fe90cedb>] kmem_cache_create+0x12/0x20
-     [<000000007a6531c8>] 0xffffffffa02d802d
-     [<000000000e3b13c7>] do_one_initcall+0x87/0x2a0
-     [<00000000995ecdcf>] do_init_module+0xdf/0x320
-     [<000000008821941f>] load_module+0x2f98/0x3330
-     [<00000000ef51efa4>] __do_sys_finit_module+0x113/0x1b0
-     [<000000009339fbce>] do_syscall_64+0x35/0x80
-     [<000000006b7f2033>] entry_SYSCALL_64_after_hwframe+0x46/0xb0
-
-Following the rules stated in the comment for kobject_init_and_add():
- If this function returns an error, kobject_put() must be called to
- properly clean up the memory associated with the object.
-
-kobject_put() is more appropriate for error handling after kobject_init().
-And we can use this function to solve this problem.
-
-Fixes: 80da026a8e5d ("mm/slub: fix slab double-free in case of duplicate sysfs filename")
-Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+Signed-off-by: Rajat Khandelwal <rajat.khandelwal@intel.com>
+Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
 ---
- mm/slab_common.c | 4 +---
- mm/slub.c        | 8 ++++++--
- 2 files changed, 7 insertions(+), 5 deletions(-)
 
-diff --git a/mm/slab_common.c b/mm/slab_common.c
-index 55e2cf064dfe..9337724b5c76 100644
---- a/mm/slab_common.c
-+++ b/mm/slab_common.c
-@@ -238,10 +238,8 @@ static struct kmem_cache *create_cache(const char *name,
- 	/* Mutex is not taken during early boot */
- 	if (slab_state >= FULL) {
- 		err = sysfs_slab_add(s);
--		if (err) {
--			slab_kmem_cache_release(s);
-+		if (err)
- 			return ERR_PTR(err);
--		}
- 		debugfs_slab_add(s);
+Significant changes and reasons:
+1. 'if (!port->cap_usb4)' is added under the loop in
+'usb4_switch_check_wakes' function since the checks later are
+explicitly targeted to the USB4 port configuration capability.
+'if (!tb_port_has_remote(port))' is removed because events now can
+be connection/disconnection along with USB4 events. Thus, a wake
+on connection can be triggered by user on the USB4 port (initially
+no remote).
+2. Verified runtime wakeup. It works absolutely fine.
+3. Wakeup count has to be increased in the 'wakeup_count' attribute
+under usb4_port/power, thus requiring another pm_wakeup_event.
+
+v2: Fixed version naming along with some minor grammatical fixes.
+
+ drivers/thunderbolt/tb_regs.h   |  2 ++
+ drivers/thunderbolt/usb4.c      | 33 +++++++++++++++++++++++++--------
+ drivers/thunderbolt/usb4_port.c |  3 +++
+ 3 files changed, 30 insertions(+), 8 deletions(-)
+
+diff --git a/drivers/thunderbolt/tb_regs.h b/drivers/thunderbolt/tb_regs.h
+index 166054110388..04733fc1130c 100644
+--- a/drivers/thunderbolt/tb_regs.h
++++ b/drivers/thunderbolt/tb_regs.h
+@@ -358,6 +358,8 @@ struct tb_regs_port_header {
+ #define PORT_CS_18_BE				BIT(8)
+ #define PORT_CS_18_TCM				BIT(9)
+ #define PORT_CS_18_CPS				BIT(10)
++#define PORT_CS_18_WOCS				BIT(16)
++#define PORT_CS_18_WODS				BIT(17)
+ #define PORT_CS_18_WOU4S			BIT(18)
+ #define PORT_CS_19				0x13
+ #define PORT_CS_19_PC				BIT(3)
+diff --git a/drivers/thunderbolt/usb4.c b/drivers/thunderbolt/usb4.c
+index 3a2e7126db9d..0d5ff086814b 100644
+--- a/drivers/thunderbolt/usb4.c
++++ b/drivers/thunderbolt/usb4.c
+@@ -155,6 +155,8 @@ static inline int usb4_switch_op_data(struct tb_switch *sw, u16 opcode,
+ 
+ static void usb4_switch_check_wakes(struct tb_switch *sw)
+ {
++	bool wakeup_usb4 = false;
++	struct usb4_port *usb4;
+ 	struct tb_port *port;
+ 	bool wakeup = false;
+ 	u32 val;
+@@ -173,20 +175,31 @@ static void usb4_switch_check_wakes(struct tb_switch *sw)
+ 		wakeup = val & (ROUTER_CS_6_WOPS | ROUTER_CS_6_WOUS);
  	}
- #endif
-diff --git a/mm/slub.c b/mm/slub.c
-index a1ad759753ce..f8883bc642b8 100644
---- a/mm/slub.c
-+++ b/mm/slub.c
-@@ -5911,14 +5911,16 @@ int sysfs_slab_add(struct kmem_cache *s)
- 		 * for the symlinks.
- 		 */
- 		name = create_unique_id(s);
--		if (IS_ERR(name))
-+		if (IS_ERR(name)) {
-+			slab_kmem_cache_release(s);
- 			return PTR_ERR(name);
-+		}
+ 
+-	/* Check for any connected downstream ports for USB4 wake */
++	/*
++	 * Check for any downstream ports for USB4 wake,
++	 * connection wake and disconnection wake.
++	 */
+ 	tb_switch_for_each_port(sw, port) {
+-		if (!tb_port_has_remote(port))
++		if (!port->cap_usb4)
+ 			continue;
+ 
+ 		if (tb_port_read(port, &val, TB_CFG_PORT,
+ 				 port->cap_usb4 + PORT_CS_18, 1))
+ 			break;
+ 
+-		tb_port_dbg(port, "USB4 wake: %s\n",
+-			    (val & PORT_CS_18_WOU4S) ? "yes" : "no");
++		tb_port_dbg(port, "USB4 wake: %s, connection wake: %s, disconnection wake: %s\n",
++			    (val & PORT_CS_18_WOU4S) ? "yes" : "no",
++			    (val & PORT_CS_18_WOCS) ? "yes" : "no",
++			    (val & PORT_CS_18_WODS) ? "yes" : "no");
++
++		wakeup_usb4 = val & (PORT_CS_18_WOU4S | PORT_CS_18_WOCS |
++				     PORT_CS_18_WODS);
++
++		usb4 = port->usb4;
++		if (device_may_wakeup(&usb4->dev) && wakeup_usb4)
++			pm_wakeup_event(&usb4->dev, 0);
+ 
+-		if (val & PORT_CS_18_WOU4S)
+-			wakeup = true;
++		wakeup |= wakeup_usb4;
  	}
  
- 	s->kobj.kset = kset;
- 	err = kobject_init_and_add(&s->kobj, &slab_ktype, NULL, "%s", name);
- 	if (err)
--		goto out;
-+		goto out_put_kobj;
+ 	if (wakeup)
+@@ -366,6 +379,7 @@ bool usb4_switch_lane_bonding_possible(struct tb_switch *sw)
+  */
+ int usb4_switch_set_wake(struct tb_switch *sw, unsigned int flags)
+ {
++	struct usb4_port *usb4;
+ 	struct tb_port *port;
+ 	u64 route = tb_route(sw);
+ 	u32 val;
+@@ -395,10 +409,13 @@ int usb4_switch_set_wake(struct tb_switch *sw, unsigned int flags)
+ 			val |= PORT_CS_19_WOU4;
+ 		} else {
+ 			bool configured = val & PORT_CS_19_PC;
++			usb4 = port->usb4;
  
- 	err = sysfs_create_group(&s->kobj, &slab_attr_group);
- 	if (err)
-@@ -5934,6 +5936,8 @@ int sysfs_slab_add(struct kmem_cache *s)
- 	return err;
- out_del_kobj:
- 	kobject_del(&s->kobj);
-+out_put_kobj:
-+	kobject_put(&s->kobj);
- 	goto out;
- }
+-			if ((flags & TB_WAKE_ON_CONNECT) && !configured)
++			if (((flags & TB_WAKE_ON_CONNECT) |
++			      device_may_wakeup(&usb4->dev)) && !configured)
+ 				val |= PORT_CS_19_WOC;
+-			if ((flags & TB_WAKE_ON_DISCONNECT) && configured)
++			if (((flags & TB_WAKE_ON_DISCONNECT) |
++			      device_may_wakeup(&usb4->dev)) && configured)
+ 				val |= PORT_CS_19_WOD;
+ 			if ((flags & TB_WAKE_ON_USB4) && configured)
+ 				val |= PORT_CS_19_WOU4;
+diff --git a/drivers/thunderbolt/usb4_port.c b/drivers/thunderbolt/usb4_port.c
+index 6b02945624ee..442ed1152e59 100644
+--- a/drivers/thunderbolt/usb4_port.c
++++ b/drivers/thunderbolt/usb4_port.c
+@@ -282,6 +282,9 @@ struct usb4_port *usb4_port_device_add(struct tb_port *port)
+ 		}
+ 	}
  
++	if (!tb_is_upstream_port(port))
++		device_set_wakeup_capable(&usb4->dev, true);
++
+ 	pm_runtime_no_callbacks(&usb4->dev);
+ 	pm_runtime_set_active(&usb4->dev);
+ 	pm_runtime_enable(&usb4->dev);
 -- 
-2.25.1
+2.34.1
 
