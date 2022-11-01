@@ -2,84 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1A2496144D1
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 07:50:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9EF186144D3
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 07:52:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229872AbiKAGuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 02:50:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37512 "EHLO
+        id S229918AbiKAGwm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 02:52:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38178 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229795AbiKAGuI (ORCPT
+        with ESMTP id S229475AbiKAGwk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 02:50:08 -0400
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 61C13BC9E
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 23:50:07 -0700 (PDT)
-Received: by mail-wm1-f47.google.com with SMTP id l16-20020a05600c4f1000b003c6c0d2a445so9344756wmq.4
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 23:50:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:references:cc:to:from
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=L/TlanoNX7lE0YMUkSvsZLUQrX4flVMuJ3MNTRvQeH0=;
-        b=dg6LGn4DraeFQqqXR8NdGIEDp6L4e2SlJJDpi9pGxcKVsUNep+zU5sBMVBxB7Yn06P
-         BdWRlnTt9SfK+HG85gkkjm997rVgmhf3vj8ZuJc/li+zD000owPZgc7/mrWRKKitTQR7
-         omUXq5en65CAqKsq0QqWuMIWvclx1hTGwaawnX1RuT9SXGn0MBzfYESfMIvFAEtV9G6i
-         h3l6km2CFXncGTxIC00dmDzM2nT07Ilv7hD1B7xaJ+Yp27VzlvcEmCz7nxn6bqtFJ0zm
-         Zx/QvhUK9f/BaXPWy1zSGlfxAVt05MPKt9XaK7vHgjvNTyzICrC01aUclN/JcpFtdEF/
-         V82Q==
-X-Gm-Message-State: ACrzQf0ynrNDSsVNyA4psqLnznKtuyO4kKfHyNhmeFxXPKoUSSGbGZ7L
-        tiiiWUvBd9H8SDqO0GcihNfUAHZ0LRbfXw==
-X-Google-Smtp-Source: AMsMyM78j5JqLY0LLKjLKluZkHoi/rxNmRHVA/qWgCbqzxA90fHrmEwlJEXmmSVqzU5Eiu67ZaBF0w==
-X-Received: by 2002:a05:600c:1e8b:b0:3c6:f6e5:c41d with SMTP id be11-20020a05600c1e8b00b003c6f6e5c41dmr21080972wmb.12.1667285405811;
-        Mon, 31 Oct 2022 23:50:05 -0700 (PDT)
-Received: from [192.168.1.49] (185-219-167-24-static.vivo.cz. [185.219.167.24])
-        by smtp.gmail.com with ESMTPSA id q9-20020adfdfc9000000b002366d1cc198sm9371772wrn.41.2022.10.31.23.50.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 31 Oct 2022 23:50:05 -0700 (PDT)
-Message-ID: <39ac78ea-1ee5-8911-1208-c56e57df7338@kernel.org>
-Date:   Tue, 1 Nov 2022 07:50:04 +0100
+        Tue, 1 Nov 2022 02:52:40 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635FC60C4;
+        Mon, 31 Oct 2022 23:52:39 -0700 (PDT)
+Received: from dggemv704-chm.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N1ggR5X28zHvDt;
+        Tue,  1 Nov 2022 14:52:19 +0800 (CST)
+Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
+ dggemv704-chm.china.huawei.com (10.3.19.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 1 Nov 2022 14:52:08 +0800
+Received: from [10.67.110.237] (10.67.110.237) by
+ kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 1 Nov 2022 14:52:07 +0800
+Subject: Re: [PATCH -next] ftrace: Fix use-after-free for dynamic ftrace_ops
+To:     <rostedt@goodmis.org>
+CC:     <mhiramat@kernel.org>, <mark.rutland@arm.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>
+References: <20221101063748.68490-1-lihuafei1@huawei.com>
+From:   Li Huafei <lihuafei1@huawei.com>
+Message-ID: <0f19ce07-d822-1ca1-3e28-86fb73c348a2@huawei.com>
+Date:   Tue, 1 Nov 2022 14:52:07 +0800
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
+ Thunderbird/78.9.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 1/2] x86/boot: robustify calling startup_{32,64}() from
- the decompressor code
+In-Reply-To: <20221101063748.68490-1-lihuafei1@huawei.com>
+Content-Type: text/plain; charset="utf-8"
 Content-Language: en-US
-From:   Jiri Slaby <jirislaby@kernel.org>
-To:     Alexander Lobakin <alexandr.lobakin@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Cc:     "H. Peter Anvin" <hpa@zytor.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Tony Luck <tony.luck@intel.com>,
-        Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <masahiroy@kernel.org>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221031151047.167288-1-alexandr.lobakin@intel.com>
- <20221031151047.167288-2-alexandr.lobakin@intel.com>
- <0fcbedf6-3eb5-75cd-cdd9-24582f70cc64@kernel.org>
-In-Reply-To: <0fcbedf6-3eb5-75cd-cdd9-24582f70cc64@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Originating-IP: [10.67.110.237]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600010.china.huawei.com (7.193.23.86)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01. 11. 22, 7:47, Jiri Slaby wrote:
-> Tested-by: Jiri Slaby <jirislaby@kernel.org>
+The subject prefix was messed up, please ignore this patch. I've resent it:
 
-FWIW that means: tested with gcc-lto which deliberately stores 
-startup_64() randomly, not to the beginning of vmlinux.
+https://lore.kernel.org/lkml/20221101064146.69551-1-lihuafei1@huawei.com/
 
--- 
-js
-suse labs
+Thanks!
 
+On 2022/11/1 14:37, Li Huafei wrote:
+> KASAN reported a use-after-free with ftrace ops [1]. It was found from
+> vmcore that perf had registered two ops with the same content
+> successively, both dynamic. After unregistering the second ops, a
+> use-after-free occurred.
+> 
+> In ftrace_shutdown(), when the second ops is unregistered, the
+> FTRACE_UPDATE_CALLS command is not set because there is another enabled
+> ops with the same content.  Also, both ops are dynamic and the ftrace
+> callback function is ftrace_ops_list_func, so the
+> FTRACE_UPDATE_TRACE_FUNC command will not be set. Eventually the value
+> of 'command' will be 0 and ftrace_shutdown() will skip the rcu
+> synchronization.
+> 
+> However, ftrace may be activated. When the ops is released, another CPU
+> may be accessing the ops.  Add the missing synchronization to fix this
+> problem.
+> 
+> [1]
+> BUG: KASAN: use-after-free in __ftrace_ops_list_func kernel/trace/ftrace.c:7020 [inline]
+> BUG: KASAN: use-after-free in ftrace_ops_list_func+0x2b0/0x31c kernel/trace/ftrace.c:7049
+> Read of size 8 at addr ffff56551965bbc8 by task syz-executor.2/14468
+> 
+> CPU: 1 PID: 14468 Comm: syz-executor.2 Not tainted 5.10.0 #7
+> Hardware name: linux,dummy-virt (DT)
+> Call trace:
+>  dump_backtrace+0x0/0x40c arch/arm64/kernel/stacktrace.c:132
+>  show_stack+0x30/0x40 arch/arm64/kernel/stacktrace.c:196
+>  __dump_stack lib/dump_stack.c:77 [inline]
+>  dump_stack+0x1b4/0x248 lib/dump_stack.c:118
+>  print_address_description.constprop.0+0x28/0x48c mm/kasan/report.c:387
+>  __kasan_report mm/kasan/report.c:547 [inline]
+>  kasan_report+0x118/0x210 mm/kasan/report.c:564
+>  check_memory_region_inline mm/kasan/generic.c:187 [inline]
+>  __asan_load8+0x98/0xc0 mm/kasan/generic.c:253
+>  __ftrace_ops_list_func kernel/trace/ftrace.c:7020 [inline]
+>  ftrace_ops_list_func+0x2b0/0x31c kernel/trace/ftrace.c:7049
+>  ftrace_graph_call+0x0/0x4
+>  __might_sleep+0x8/0x100 include/linux/perf_event.h:1170
+>  __might_fault mm/memory.c:5183 [inline]
+>  __might_fault+0x58/0x70 mm/memory.c:5171
+>  do_strncpy_from_user lib/strncpy_from_user.c:41 [inline]
+>  strncpy_from_user+0x1f4/0x4b0 lib/strncpy_from_user.c:139
+>  getname_flags+0xb0/0x31c fs/namei.c:149
+>  getname+0x2c/0x40 fs/namei.c:209
+>  [...]
+> 
+> Allocated by task 14445:
+>  kasan_save_stack+0x24/0x50 mm/kasan/common.c:48
+>  kasan_set_track mm/kasan/common.c:56 [inline]
+>  __kasan_kmalloc mm/kasan/common.c:479 [inline]
+>  __kasan_kmalloc.constprop.0+0x110/0x13c mm/kasan/common.c:449
+>  kasan_kmalloc+0xc/0x14 mm/kasan/common.c:493
+>  kmem_cache_alloc_trace+0x440/0x924 mm/slub.c:2950
+>  kmalloc include/linux/slab.h:563 [inline]
+>  kzalloc include/linux/slab.h:675 [inline]
+>  perf_event_alloc.part.0+0xb4/0x1350 kernel/events/core.c:11230
+>  perf_event_alloc kernel/events/core.c:11733 [inline]
+>  __do_sys_perf_event_open kernel/events/core.c:11831 [inline]
+>  __se_sys_perf_event_open+0x550/0x15f4 kernel/events/core.c:11723
+>  __arm64_sys_perf_event_open+0x6c/0x80 kernel/events/core.c:11723
+>  [...]
+> 
+> Freed by task 14445:
+>  kasan_save_stack+0x24/0x50 mm/kasan/common.c:48
+>  kasan_set_track+0x24/0x34 mm/kasan/common.c:56
+>  kasan_set_free_info+0x20/0x40 mm/kasan/generic.c:358
+>  __kasan_slab_free.part.0+0x11c/0x1b0 mm/kasan/common.c:437
+>  __kasan_slab_free mm/kasan/common.c:445 [inline]
+>  kasan_slab_free+0x2c/0x40 mm/kasan/common.c:446
+>  slab_free_hook mm/slub.c:1569 [inline]
+>  slab_free_freelist_hook mm/slub.c:1608 [inline]
+>  slab_free mm/slub.c:3179 [inline]
+>  kfree+0x12c/0xc10 mm/slub.c:4176
+>  perf_event_alloc.part.0+0xa0c/0x1350 kernel/events/core.c:11434
+>  perf_event_alloc kernel/events/core.c:11733 [inline]
+>  __do_sys_perf_event_open kernel/events/core.c:11831 [inline]
+>  __se_sys_perf_event_open+0x550/0x15f4 kernel/events/core.c:11723
+>  [...]
+> 
+> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
+> ---
+>  kernel/trace/ftrace.c | 14 +++++++++-----
+>  1 file changed, 9 insertions(+), 5 deletions(-)
+> 
+> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+> index fbf2543111c0..4219cc2a04a6 100644
+> --- a/kernel/trace/ftrace.c
+> +++ b/kernel/trace/ftrace.c
+> @@ -3030,13 +3030,16 @@ int ftrace_shutdown(struct ftrace_ops *ops, int command)
+>  
+>  	if (!command || !ftrace_enabled) {
+>  		/*
+> -		 * If these are dynamic or per_cpu ops, they still
+> -		 * need their data freed. Since, function tracing is
+> -		 * not currently active, we can just free them
+> -		 * without synchronizing all CPUs.
+> +		 * If these are dynamic, they still need their data freed. If
+> +		 * function tracing is currently active, we neet to synchronize
+> +		 * all CPUs before we can release them.
+>  		 */
+> -		if (ops->flags & FTRACE_OPS_FL_DYNAMIC)
+> +		if (ops->flags & FTRACE_OPS_FL_DYNAMIC) {
+> +			if (ftrace_enabled)
+> +				goto sync_rcu;
+> +
+>  			goto free_ops;
+> +		}
+>  
+>  		return 0;
+>  	}
+> @@ -3083,6 +3086,7 @@ int ftrace_shutdown(struct ftrace_ops *ops, int command)
+>  	 * ops.
+>  	 */
+>  	if (ops->flags & FTRACE_OPS_FL_DYNAMIC) {
+> + sync_rcu:
+>  		/*
+>  		 * We need to do a hard force of sched synchronization.
+>  		 * This is because we use preempt_disable() to do RCU, but
+> 
