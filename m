@@ -2,43 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 05DB4614586
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 09:16:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6678D614599
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 09:21:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229940AbiKAIQV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 04:16:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50116 "EHLO
+        id S229912AbiKAIVs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 04:21:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiKAIQS (ORCPT
+        with ESMTP id S229462AbiKAIVr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 04:16:18 -0400
-Received: from ssh248.corpemail.net (ssh248.corpemail.net [210.51.61.248])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1527EE0D;
-        Tue,  1 Nov 2022 01:16:15 -0700 (PDT)
-Received: from ([60.208.111.195])
-        by ssh248.corpemail.net ((D)) with ASMTP (SSL) id WLS00012;
-        Tue, 01 Nov 2022 16:16:12 +0800
-Received: from localhost.localdomain (10.200.104.97) by
- jtjnmail201603.home.langchao.com (10.100.2.3) with Microsoft SMTP Server id
- 15.1.2507.12; Tue, 1 Nov 2022 16:16:13 +0800
-From:   Bo Liu <liubo03@inspur.com>
-To:     <krzysztof.kozlowski@linaro.org>, <thierry.reding@gmail.com>,
-        <jonathanh@nvidia.com>
-CC:     <linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-        Bo Liu <liubo03@inspur.com>
-Subject: [PATCH] memory: tegra20-emc: replace DEFINE_SIMPLE_ATTRIBUTE with DEFINE_DEBUGFS_ATTRIBUTE
-Date:   Tue, 1 Nov 2022 04:16:11 -0400
-Message-ID: <20221101081611.8179-1-liubo03@inspur.com>
-X-Mailer: git-send-email 2.18.2
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.200.104.97]
-tUid:   20221101161612805c7c5ea3d01c1012e969ff4e38ba2d
-X-Abuse-Reports-To: service@corp-email.com
-Abuse-Reports-To: service@corp-email.com
-X-Complaints-To: service@corp-email.com
-X-Report-Abuse-To: service@corp-email.com
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        Tue, 1 Nov 2022 04:21:47 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0041218394
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 01:21:42 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AF0DF1FE4D;
+        Tue,  1 Nov 2022 08:21:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1667290901; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CwmF+GF8TFJ1DJcjepgRHGxKQmBCUwUcD5eX9NLO3jQ=;
+        b=qvWgpbe/emohvXjwWNSBIyY5uNizh9A+X2Y/scGu9wtK6upAfM+ySEtC2zqYtbswgxG+hm
+        tqHn2snnoRvpFtOi+InpK6dZvkE+HMtKRWLypjWWXJLYmHHKpUu+VXHey01825DdUzmOou
+        29v0DuUskqHeaXByLr7f7bnHPQW6vx0=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1667290901;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=CwmF+GF8TFJ1DJcjepgRHGxKQmBCUwUcD5eX9NLO3jQ=;
+        b=8yBk+eGkgjLrqU3GH/7ug0JKi1BAZP3oLqWWN5VQESCK6/HveEoDb9p/WzezT1OA4Gsde+
+        gAsQHSjLIkiAGeCw==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 794911346F;
+        Tue,  1 Nov 2022 08:21:41 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id xp6pHBXXYGMaIQAAMHmgww
+        (envelope-from <tiwai@suse.de>); Tue, 01 Nov 2022 08:21:41 +0000
+Date:   Tue, 01 Nov 2022 09:21:41 +0100
+Message-ID: <871qqn84q2.wl-tiwai@suse.de>
+From:   Takashi Iwai <tiwai@suse.de>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Takashi Iwai <tiwai@suse.de>, regressions@lists.linux.dev,
+        linux-kernel@vger.kernel.org, postix@posteo.eu
+Subject: Re: [REGRESSION 6.0.x / 6.1.x] NULL dereferencing at tracing
+In-Reply-To: <20221031144850.5522b036@rorschach.local.home>
+References: <87h6zklb6n.wl-tiwai@suse.de>
+        <20221031144850.5522b036@rorschach.local.home>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
         SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,39 +69,62 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fix the following coccicheck warning:
- drivers/memory/tegra/tegra20-emc.c:902:0-23: WARNING:
-  tegra_emc_debug_max_rate_fops should be defined with DEFINE_DEBUGFS_ATTRIBUTE
- drivers/memory/tegra/tegra20-emc.c:872:0-23: WARNING:
-  tegra_emc_debug_min_rate_fops should be defined with DEFINE_DEBUGFS_ATTRIBUTE
+On Mon, 31 Oct 2022 19:48:50 +0100,
+Steven Rostedt wrote:
+> 
+> On Mon, 31 Oct 2022 08:11:28 +0100
+> Takashi Iwai <tiwai@suse.de> wrote:
+> 
+> > Hi Steven,
+> > 
+> > we've got a bug report indicating the NULL dereference at the recent
+> > tracing changes, showing at the start of KDE.  The details including
+> > the dmesg are found at:
+> >   https://bugzilla.opensuse.org/show_bug.cgi?id=1204705
+> > 
+> > It was reported at first for 6.0.3, and confirmed that the problem
+> > persists with 6.1-rc, too.
+> > 
+> > The culprit seems to be the commit
+> > f3ddb74ad0790030c9592229fb14d8c451f4e9a8
+> >     tracing: Wake up ring buffer waiters on closing of the file
+> > and reverting it seems fixing the problem.
+> > 
+> > Could you take a look?
+> > 
+> >
+> 
+> Can you apply this to see if it fixes it?
+> 
+> I'm guessing there's a path to the release of the file descriptor where
+> the ring buffer isn't allocated (and this expected it to be).
+> 
+> I'll investigate further to see if I can find that path.
 
-Signed-off-by: Bo Liu <liubo03@inspur.com>
----
- drivers/memory/tegra/tegra20-emc.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+For avoiding confusion: the follow up post in this thread
+  https://lore.kernel.org/71829e56-a13f-0462-37a7-a4d64c16f561@posteo.de
+is from Alex, who is the original bug reporter on openSUSE Bugzilla.
 
-diff --git a/drivers/memory/tegra/tegra20-emc.c b/drivers/memory/tegra/tegra20-emc.c
-index bd4e37b6552d..c2b4caccfae9 100644
---- a/drivers/memory/tegra/tegra20-emc.c
-+++ b/drivers/memory/tegra/tegra20-emc.c
-@@ -869,7 +869,7 @@ static int tegra_emc_debug_min_rate_set(void *data, u64 rate)
- 	return 0;
- }
- 
--DEFINE_SIMPLE_ATTRIBUTE(tegra_emc_debug_min_rate_fops,
-+DEFINE_DEBUGFS_ATTRIBUTE(tegra_emc_debug_min_rate_fops,
- 			tegra_emc_debug_min_rate_get,
- 			tegra_emc_debug_min_rate_set, "%llu\n");
- 
-@@ -899,7 +899,7 @@ static int tegra_emc_debug_max_rate_set(void *data, u64 rate)
- 	return 0;
- }
- 
--DEFINE_SIMPLE_ATTRIBUTE(tegra_emc_debug_max_rate_fops,
-+DEFINE_DEBUGFS_ATTRIBUTE(tegra_emc_debug_max_rate_fops,
- 			tegra_emc_debug_max_rate_get,
- 			tegra_emc_debug_max_rate_set, "%llu\n");
- 
--- 
-2.27.0
+The test result looks negative, unfortunately.
 
+
+Takashi
+
+> 
+> -- Steve
+> 
+> diff --git a/kernel/trace/ring_buffer.c b/kernel/trace/ring_buffer.c
+> index 199759c73519..c1c7ce4c6ddb 100644
+> --- a/kernel/trace/ring_buffer.c
+> +++ b/kernel/trace/ring_buffer.c
+> @@ -937,6 +937,9 @@ void ring_buffer_wake_waiters(struct trace_buffer *buffer, int cpu)
+>  	struct ring_buffer_per_cpu *cpu_buffer;
+>  	struct rb_irq_work *rbwork;
+>  
+> +	if (!buffer)
+> +		return;
+> +
+>  	if (cpu == RING_BUFFER_ALL_CPUS) {
+>  
+>  		/* Wake up individual ones too. One level recursion */
+> 
