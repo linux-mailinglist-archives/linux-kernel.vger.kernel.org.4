@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A23436146C6
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 10:34:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C87576146C8
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 10:34:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbiKAJev (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 05:34:51 -0400
+        id S230253AbiKAJex (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 05:34:53 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbiKAJe0 (ORCPT
+        with ESMTP id S230150AbiKAJe0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Tue, 1 Nov 2022 05:34:26 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 66CA018E05;
-        Tue,  1 Nov 2022 02:34:25 -0700 (PDT)
-Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N1lBM5CnNzpW50;
-        Tue,  1 Nov 2022 17:30:51 +0800 (CST)
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02DA018B13;
+        Tue,  1 Nov 2022 02:34:26 -0700 (PDT)
+Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N1l8m1Xl4zRnsP;
+        Tue,  1 Nov 2022 17:29:28 +0800 (CST)
 Received: from huawei.com (10.174.178.129) by kwepemi500016.china.huawei.com
  (7.221.188.220) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 1 Nov
@@ -26,9 +26,9 @@ From:   Kemeng Shi <shikemeng@huawei.com>
 To:     <paolo.valente@linaro.org>, <axboe@kernel.dk>
 CC:     <linux-block@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
         <shikemeng@huawei.com>
-Subject: [PATCH 06/20] block, bfq: correct interactive weight-raise check in bfq_set_budget_timeout
-Date:   Tue, 1 Nov 2022 17:34:03 +0800
-Message-ID: <20221101093417.10540-7-shikemeng@huawei.com>
+Subject: [PATCH 07/20] block, bfq: simpfy check for interactive bfqq in bfq_update_wr_data
+Date:   Tue, 1 Nov 2022 17:34:04 +0800
+Message-ID: <20221101093417.10540-8-shikemeng@huawei.com>
 X-Mailer: git-send-email 2.14.1.windows.1
 In-Reply-To: <20221101093417.10540-1-shikemeng@huawei.com>
 References: <20221101093417.10540-1-shikemeng@huawei.com>
@@ -46,32 +46,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-After weight-raise finished, bfqq->wr_coeff is reset to 1 while
-bfqq->wr_cur_max_time may not be reset. For example,
-Function bfq_update_bfqq_wr_on_rq_arrival will only reset wr_coeff to 1 if
-bfqq is created in burst creation. Function bfq_set_budget_timeout will be
-called when bfqq is selected while it's wr_cur_max_time is set and wr_coeff
-is 1. Fix this by check wr_coeff > 1 before check wr_cur_max_time.
+The bfqq->wr_coeff will be set to bfqd->bfq_wr_coeff if bfqq is in
+interactive weight raising. So we can simpfy interactive weight raising
+check in function bfq_update_wr_data.
 
 Signed-off-by: Kemeng Shi <shikemeng@huawei.com>
 ---
- block/bfq-iosched.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+ block/bfq-iosched.c | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
 diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index f4b4ba05f804..20ae52882235 100644
+index 20ae52882235..15e7d6c6fa83 100644
 --- a/block/bfq-iosched.c
 +++ b/block/bfq-iosched.c
-@@ -3271,7 +3271,8 @@ static void bfq_set_budget_timeout(struct bfq_data *bfqd,
- {
- 	unsigned int timeout_coeff;
- 
--	if (bfqq->wr_cur_max_time == bfqd->bfq_wr_rt_max_time)
-+	if (bfqq->wr_coeff > 1 &&
-+	    bfqq->wr_cur_max_time == bfqd->bfq_wr_rt_max_time)
- 		timeout_coeff = 1;
- 	else
- 		timeout_coeff = bfqq->entity.weight / bfqq->entity.orig_weight;
+@@ -4997,8 +4997,7 @@ static void bfq_update_wr_data(struct bfq_data *bfqd, struct bfq_queue *bfqq)
+ 				bfqq->entity.prio_changed = 1;
+ 			}
+ 		}
+-		if (bfqq->wr_coeff > 1 &&
+-		    bfqq->wr_cur_max_time != bfqd->bfq_wr_rt_max_time &&
++		if (bfqq->wr_coeff == bfqd->bfq_wr_coeff &&
+ 		    bfqq->service_from_wr > max_service_from_wr) {
+ 			/* see comments on max_service_from_wr */
+ 			bfq_bfqq_end_wr(bfqq);
 -- 
 2.30.0
 
