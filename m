@@ -2,141 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C4509615525
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82003615527
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:38:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231440AbiKAWh1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 18:37:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38468 "EHLO
+        id S230505AbiKAWic (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 18:38:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231190AbiKAWgr (ORCPT
+        with ESMTP id S231433AbiKAWiK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 18:36:47 -0400
-Received: from mail-pg1-x531.google.com (mail-pg1-x531.google.com [IPv6:2607:f8b0:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D1C31EC5A
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 15:36:25 -0700 (PDT)
-Received: by mail-pg1-x531.google.com with SMTP id f9so14683959pgj.2
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 15:36:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2cwGjp62AuRZ4ErOGQPCTEHZe72CYawrStjsHhz7giw=;
-        b=hAAEPFf4J5fodOBH0LmSyrz38aQxWjUdrG6jYhbXewAGk3aOLj1pNDqpa956tKah8m
-         RKQOlzYTMEtKDUsYmHP6R3U/zkJs+JfgIkwgb2tkgc9NEKr1pPioAnd/uCmzRSWV970l
-         Zzym2tS+iKfutBSNeGiFbIojVYjBySIgyFVQk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2cwGjp62AuRZ4ErOGQPCTEHZe72CYawrStjsHhz7giw=;
-        b=Wq8W08TttkURfcWInXH6qmIEtVZ084YJYclju8rzb1m/4rQ8x5zP/DEmRWt4bkOkkX
-         vN4a7rA69NbTH2uDFr+JaNA2H1EZKQVhut1YUenS3/SmiiPd9S7XQKb53QYmfl1+FvJN
-         zv6iKYr+gsfYAvgnatUtlla/VQz787v5Eh6kWv/Azf+kcU5xijfI4aJMbAJw+K5v8WNO
-         EqIO7L0lIXUU1TQyZJdqv3ZaDRZX7WOgzHBUuHRGAk9ftl6YPUOu9xJ0tk0WMjswmbRj
-         JoGqoattHvJnMDBIk9s90zpGunTTXRmv1OfOHsqkApEgWvx7jXHOas7LYwWKg7rqe77M
-         po5w==
-X-Gm-Message-State: ACrzQf3Kgr9/AqQ8m5JpKz3NLfw1HMKooSXLFJiSkeM8rgVEe+K99OJv
-        BDobxTnDX5yPNSTKjH5SPcIXfA==
-X-Google-Smtp-Source: AMsMyM4kT+kkRBSFjTOn045KLLXKB9sbYcsB3D9L4w9+wzGQHQ3EJJ+9ptAxFYvDPVxf1wNTjc9Jcg==
-X-Received: by 2002:a63:595:0:b0:470:8b7:255a with SMTP id 143-20020a630595000000b0047008b7255amr317560pgf.329.1667342184656;
-        Tue, 01 Nov 2022 15:36:24 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id n6-20020a654cc6000000b004608b721dfesm6344856pgt.38.2022.11.01.15.36.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 15:36:24 -0700 (PDT)
-Date:   Tue, 1 Nov 2022 15:36:23 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     bp@alien8.de, tglx@linutronix.de, mingo@kernel.org,
-        peterz@infradead.org
-Cc:     Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        dave.hansen@linux.intel.com, David.Laight@aculab.com,
-        hpa@zytor.com, linux-kernel@vger.kernel.org,
-        linux@rasmusvillemoes.dk, llvm@lists.linux.dev, luto@kernel.org,
-        mingo@redhat.com, torvalds@linux-foundation.org, x86@kernel.org
-Subject: Re: [RESEND PATCH v5] x86, mem: move memmove to out of line assembler
-Message-ID: <202211011534.C31FC5ED6@keescook>
-References: <20221018172155.287409-1-ndesaulniers@google.com>
- <Y08NJohEeoYX2aIf@thelio-3990X>
+        Tue, 1 Nov 2022 18:38:10 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57FE81EC5A;
+        Tue,  1 Nov 2022 15:37:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667342250; x=1698878250;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=TSOGjnjupfOrdH3obGXGgrrinoXppjy4+FuK31YZweg=;
+  b=G8pMiDlSYIRGCEJRmldyxYiv3IK3CuffNiKpBT0LCbD68fQ0FBU6teTQ
+   fJ/SBV3+Z6n1QLI2qvnx4pa4ZZ3iP51939QGJ11tGFwc1R/xhxI2qGuCp
+   moSaQDVhUoIRPgivxi0Jv3n2Ot2fbLDV6cPqCUZbRBY+JWEgc1KgcsU1v
+   6SOKGcd4sJ9Z7EaT7/xwULIVHG1Hzbm+OFCtus0Yb3Y0H1mYzqhljbW5p
+   p6nikBvfd9nprCpibvVtSScsj1HFOuKUg11tcUW8tnerzJmlIuhvbNZID
+   zitarmXJgP7vBNhNqGef9EXCcrmTvS4mQEkn4JO3JOftOvL+IVfqLFgmn
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="310360135"
+X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
+   d="scan'208";a="310360135"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 15:37:28 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="723320146"
+X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
+   d="scan'208";a="723320146"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
+  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 15:37:27 -0700
+Date:   Tue, 1 Nov 2022 15:37:19 -0700 (PDT)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     Xu Yilun <yilun.xu@intel.com>
+cc:     hao.wu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net, jirislaby@kernel.org,
+        geert+renesas@glider.be, andriy.shevchenko@linux.intel.com,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
+        marpagan@redhat.com
+Subject: Re: [PATCH v4 3/4] fpga: dfl: add basic support DFHv1
+In-Reply-To: <alpine.DEB.2.22.394.2210290739540.2504975@rhweight-WRK1>
+Message-ID: <alpine.DEB.2.22.394.2211011520290.2767909@rhweight-WRK1>
+References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com> <20221020212610.697729-4-matthew.gerlach@linux.intel.com> <Y10l3NkIn0gsdVZq@yilunxu-OptiPlex-7050> <alpine.DEB.2.22.394.2210290739540.2504975@rhweight-WRK1>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y08NJohEeoYX2aIf@thelio-3990X>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 18, 2022 at 01:31:34PM -0700, Nathan Chancellor wrote:
-> On Tue, Oct 18, 2022 at 10:21:55AM -0700, Nick Desaulniers wrote:
-> > When building ARCH=i386 with CONFIG_LTO_CLANG_FULL=y, it's possible
-> > (depending on additional configs which I have not been able to isolate)
-> > to observe a failure during register allocation:
-> > 
-> >   error: inline assembly requires more registers than available
-> > 
-> > when memmove is inlined into tcp_v4_fill_cb() or tcp_v6_fill_cb().
-> > 
-> > memmove is quite large and probably shouldn't be inlined due to size
-> > alone. A noinline function attribute would be the simplest fix, but
-> > there's a few things that stand out with the current definition:
-> > 
-> > In addition to having complex constraints that can't always be resolved,
-> > the clobber list seems to be missing %bx. By using numbered operands
-> > rather than symbolic operands, the constraints are quite obnoxious to
-> > refactor.
-> > 
-> > Having a large function be 99% inline asm is a code smell that this
-> > function should simply be written in stand-alone out-of-line assembler.
-> > 
-> > Moving this to out of line assembler guarantees that the
-> > compiler cannot inline calls to memmove.
-> > 
-> > This has been done previously for 64b:
-> > commit 9599ec0471de ("x86-64, mem: Convert memmove() to assembly file
-> > and fix return value bug")
-> > 
-> > That gives the opportunity for other cleanups like fixing the
-> > inconsistent use of tabs vs spaces and instruction suffixes, and the
-> > label 3 appearing twice.  Symbolic operands, local labels, and
-> > additional comments would provide this code with a fresh coat of paint.
-> > 
-> > Finally, add a test that tickles the `rep movsl` implementation to test
-> > it for correctness, since it has implicit operands.
-> > 
-> > Suggested-by: Ingo Molnar <mingo@kernel.org>
-> > Suggested-by: David Laight <David.Laight@aculab.com>
-> > Reviewed-by: Kees Cook <keescook@chromium.org>
-> > Tested-by: Kees Cook <keescook@chromium.org>
-> > Signed-off-by: Nick Desaulniers <ndesaulniers@google.com>
-> 
-> I ran
-> 
-> $ tools/testing/kunit/kunit.py run --arch i386 --cross_compile x86_64-linux- memcpy
-> 
-> with GCC 6 through 12 from
-> https://mirrors.edge.kernel.org/pub/tools/crosstool/ (my GCC 5 container
-> is based on Ubuntu Xenial, which does not have a new enough Python for
-> kunit.py) and
-> 
-> $ tools/testing/kunit/kunit.py run --arch i386 --make_options LLVM=1 memcpy
-> 
-> with LLVM 11 through 16 from Debian with this change on top of Kees's
-> expanding of the memcpy() KUnit tests [1] and everything passed.
-> 
-> Tested-by: Nathan Chancellor <nathan@kernel.org>
 
-Can an x86 maintainer please pick this up for -tip?
 
-Thanks!
+On Sat, 29 Oct 2022, matthew.gerlach@linux.intel.com wrote:
 
--Kees
+>
+>>
+>>>  	if (!finfo)
+>>>  		return -ENOMEM;
+>>> 
+>>> +	if (dfh_psize > 0) {
+>>> +		memcpy_fromio(finfo->params,
+>>> +			      binfo->ioaddr + ofst + DFHv1_PARAM_HDR, 
+>>> dfh_psize);
+>>> +		finfo->param_size = dfh_psize;
+>>> +	}
+>>> +
+>>>  	finfo->fid = fid;
+>>>  	finfo->revision = revision;
+>>> -	finfo->mmio_res.start = binfo->start + ofst;
+>>> -	finfo->mmio_res.end = finfo->mmio_res.start + size - 1;
+>>> +	finfo->dfh_version = dfh_ver;
+>>>  	finfo->mmio_res.flags = IORESOURCE_MEM;
+>>> -	finfo->irq_base = irq_base;
+>>> -	finfo->nr_irqs = nr_irqs;
+>>> +	if (dfh_ver == 1) {
+>>> +		v = readq(binfo->ioaddr + ofst + DFHv1_CSR_ADDR);
+>>> +		if (v & DFHv1_CSR_ADDR_REL)
+>>> +			finfo->mmio_res.start = v & ~DFHv1_CSR_ADDR_REL;
+>>> +		else
+>>> +			finfo->mmio_res.start = binfo->start + ofst +
+>>> +					       FIELD_GET(DFHv1_CSR_ADDR_MASK, 
+>>> v);
+>>> +
+>>> +		v = readq(binfo->ioaddr + ofst + DFHv1_CSR_SIZE_GRP);
+>>> +		finfo->mmio_res.end = finfo->mmio_res.start +
+>>> +				      FIELD_GET(DFHv1_CSR_SIZE_GRP_SIZE, v) - 
+>>> 1;
+>> 
+>> So for dflv1, no feature header resource for dfl_device, is it a problem
+>> for dfl_uio? Does userspace driver need the raw feature header?
+> These are two very good questions.  The dfl_uio driver question is 
+> particularly relevent because user space is looking at the GUIDs.
+>
 
--- 
-Kees Cook
+In the case of dfl_uio driver, user space will definitely want to look at 
+the feature header for the GUID and the parameters.  Since DFHv1 can have 
+the DFH header and the feature registers in non-contiguous memory 
+locations, a resource for the dfl_device will be required.  In earlier
+revisions of this patch set, a second resource was added called csr_res 
+pointing to the feature's register while mmio_res pointed at the header.
+Do we just need better names or do we need an array of named resources?
+
+>> 
+>>> +	} else {
+>>> +		finfo->mmio_res.start = binfo->start + ofst;
+>>> +		finfo->mmio_res.end = finfo->mmio_res.start + size - 1;
+>>> +	}
+>>> +
+>>> +	ret = parse_feature_irqs(binfo, ofst, finfo);
+>>> +	if (ret) {
+>>> +		kfree(finfo);
+>>> +		return ret;
+>>> +	}
+>>>
