@@ -2,167 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 71BFE614BBD
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:29:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 51190614BBA
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230008AbiKAN3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 09:29:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56312 "EHLO
+        id S229946AbiKAN22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 09:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbiKAN2y (ORCPT
+        with ESMTP id S229487AbiKAN2Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 09:28:54 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BB9A12AB8
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 06:28:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667309279;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=TuQrcuKYSmxbYTgmez/0o7iIQmKrnxkqsQehv9iqJF8=;
-        b=Q7uEqFoLsYkIORzpW4ZncCGFgDlbRGQQr3gQ0DEENErrFXSIIFJmIvAlUb+mgwVHXrOMAI
-        b8fRGxYbxADF6JwkPJRwMjzWFpW8GndY+pxBJNvfECSSct71tb5c2RkdbEEdziMTkk5lrI
-        cQ/+NImFqq5ksmRCZ4LKHVFAJrZH5Bw=
-Received: from mail-ej1-f71.google.com (mail-ej1-f71.google.com
- [209.85.218.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-191-rAoqkXJoOe6RizEPpoNDVw-1; Tue, 01 Nov 2022 09:27:56 -0400
-X-MC-Unique: rAoqkXJoOe6RizEPpoNDVw-1
-Received: by mail-ej1-f71.google.com with SMTP id hq18-20020a1709073f1200b007ade8dd3494so1620511ejc.2
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 06:27:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TuQrcuKYSmxbYTgmez/0o7iIQmKrnxkqsQehv9iqJF8=;
-        b=mwXoal3OkBxiO983wNHJt6Xi7aU+iGg00GXA1yJLOPIRjd4xv4KPoE08TUjL5faW3z
-         2fEeIGujs+DD1W+Rb4J3jx1ZilPErDxQrFiOR/CVmszHphQVkwObYu2uxAw1rsBrLi7W
-         XLTBQVDS66bGxwKLxmODrerzzmzW94XUCitm5zYAI2mmyT8/rzskmzF0YzrZvrJQB7kq
-         //uxMfzutK9ljupUlGBpjaCUjT8JuW0ZXTX44+w5C2oQqb259k+ImcOdDL8HorOzou7e
-         cBADLLmViYan6m33JnRUx1ZR3VXyhi445gc8h7OJWLmpgWUlWEsKhW0nsTLUFlZPvczn
-         f1CQ==
-X-Gm-Message-State: ACrzQf0SUXg71FWu6y11EicRkFKBEAGlOZXoWldRlScAhRPiC9yWSHVL
-        fFjqALzbMZxXwohX7a890Jq8+IEceBIGo5GrL7yT/D56QlsYMbVOkk46pVmoMA8G8Mu8pQvq/c3
-        ueieU67vyvqtRuL+A3h8FJu6E
-X-Received: by 2002:a17:907:da5:b0:7ad:7e95:6513 with SMTP id go37-20020a1709070da500b007ad7e956513mr18872136ejc.442.1667309275372;
-        Tue, 01 Nov 2022 06:27:55 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7G9zSldywDkzM/+VU8twoULILd9bDVUvHBmvJahcdwrQ9vJk2UsXR4+PeLwv2QQ+0RgvbxhQ==
-X-Received: by 2002:a17:907:da5:b0:7ad:7e95:6513 with SMTP id go37-20020a1709070da500b007ad7e956513mr18872125ejc.442.1667309275190;
-        Tue, 01 Nov 2022 06:27:55 -0700 (PDT)
-Received: from ?IPV6:2001:1c00:c1e:bf00:d69d:5353:dba5:ee81? (2001-1c00-0c1e-bf00-d69d-5353-dba5-ee81.cable.dynamic.v6.ziggo.nl. [2001:1c00:c1e:bf00:d69d:5353:dba5:ee81])
-        by smtp.gmail.com with ESMTPSA id v27-20020aa7cd5b000000b00458898fe90asm4554226edw.5.2022.11.01.06.27.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Nov 2022 06:27:54 -0700 (PDT)
-Message-ID: <48a28601-a3eb-8735-6a15-34436dcbd73e@redhat.com>
-Date:   Tue, 1 Nov 2022 14:27:53 +0100
+        Tue, 1 Nov 2022 09:28:25 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13C60DF3F;
+        Tue,  1 Nov 2022 06:28:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AACD612D1;
+        Tue,  1 Nov 2022 13:28:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1FACC433C1;
+        Tue,  1 Nov 2022 13:28:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667309302;
+        bh=qn/BBkYwXhsC9S6z3zDROC8oNtgG+BFKYdU879D3sT4=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Farymb1qpUoPea5c83twStB/Qb4TFgn4n5e0b+pSQqKjwQ0S0rTR9nroLgBLUaI5F
+         5TP73Sw04QBAtKlpfH8h/y1I7GEhNjpC4de6ADh6DOFF+62nifB4OJUDiMrtwRUuEU
+         W0b/qAJ2UC5DAcLG7m/TDlWLmXP4a7upy5EtjRiw=
+Date:   Tue, 1 Nov 2022 14:29:15 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Karel Zak <kzak@redhat.com>,
+        Masatake YAMATO <yamato@redhat.com>, linux-api@vger.kernel.org
+Subject: Re: [PATCH v2] proc: add byteorder file
+Message-ID: <Y2EfK2CnHLq5HF9B@kroah.com>
+References: <20221101130401.1841-1-linux@weissschuh.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH AUTOSEL 6.0 15/34] media: atomisp-ov2680: Fix
- ov2680_set_fmt()
-Content-Language: en-US, nl
-To:     Sasha Levin <sashal@kernel.org>, linux-kernel@vger.kernel.org,
-        stable@vger.kernel.org
-Cc:     Andy Shevchenko <andy.shevchenko@gmail.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        gregkh@linuxfoundation.org, linux-media@vger.kernel.org,
-        linux-staging@lists.linux.dev
-References: <20221101112726.799368-1-sashal@kernel.org>
- <20221101112726.799368-15-sashal@kernel.org>
-From:   Hans de Goede <hdegoede@redhat.com>
-In-Reply-To: <20221101112726.799368-15-sashal@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221101130401.1841-1-linux@weissschuh.net>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Sasha,
-
-I have no specific objections against the backporting of this
-and other atomisp related patches.
-
-But in general the atomisp driver is not yet in a state where
-it is ready to be used by normal users. Progress is being made
-but atm I don't really expect normal users to have it enabled /
-in active use.
-
-As such I'm also not sure if there is much value in backporting
-atomisp changes to the stable series.
-
-I don't know if you have a way to opt out certain drivers /
-file-paths from stable series backporting, but if you do
-you may want to consider opting out everything under:
-
-drivers/staging/media/atomisp/
-
-As said above I don't think doing the backports offers
-much (if any) value to end users and I assume it does take
-you some time, so opting this path out might be better.
-
-Also given the fragile state of atomisp support atm
-it is hard to say for me if partially backporting some of
-the changes won't break the driver.
-
-Regards,
-
-Hans
-
-
-
-
-On 11/1/22 12:27, Sasha Levin wrote:
-> From: Hans de Goede <hdegoede@redhat.com>
+On Tue, Nov 01, 2022 at 02:04:01PM +0100, Thomas Weiﬂschuh wrote:
+> Certain files in procfs are formatted in byteorder dependent ways. For
+> example the IP addresses in /proc/net/udp.
 > 
-> [ Upstream commit adea153b4f6537f367fe77abada263fde8a1f7b6 ]
+> Assuming the byteorder of the userspace program is not guaranteed to be
+> correct in the face of emulation as for example with qemu-user.
 > 
-> On sets actually store the set (closest) format inside ov2680_device.dev,
-> so that it also properly gets returned by get_fmt.
+> Also this makes it easier for non-compiled applications like
+> shellscripts to discover the byteorder.
+
+Your subject says "proc" :(
+
+Also you do not list the new file name here in the changelog text, why
+not?
+
 > 
-> This fixes the following problem:
+> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
 > 
-> 1. App does an VIDIOC_SET_FMT 640x480, calling ov2680_set_fmt()
-> 2. Internal buffers (atomisp_create_pipes_stream()) get allocated
->    at 640x480 size by atomisp_set_fmt()
-> 3. ov2680_get_fmt() gets called later on and returns 1600x1200
->    since ov2680_device.dev was not updated. So things get configured
->    to stream at 1600x1200, but the internal buffers created during
->    atomisp_create_pipes_stream() do not get updated in size
-> 4. streaming starts, internal buffers overflow and the entire
->    machine freezes eventually due to memory being corrupted
-> 
-> Reviewed-by: Andy Shevchenko <andy.shevchenko@gmail.com>
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> Signed-off-by: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Signed-off-by: Sasha Levin <sashal@kernel.org>
 > ---
->  drivers/staging/media/atomisp/i2c/atomisp-ov2680.c | 6 +-----
->  1 file changed, 1 insertion(+), 5 deletions(-)
 > 
-> diff --git a/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c b/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
-> index 4ba99c660681..ab52e35266bb 100644
-> --- a/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
-> +++ b/drivers/staging/media/atomisp/i2c/atomisp-ov2680.c
-> @@ -894,11 +894,7 @@ static int ov2680_set_fmt(struct v4l2_subdev *sd,
->  	if (v_flag)
->  		ov2680_v_flip(sd, v_flag);
->  
-> -	/*
-> -	 * ret = startup(sd);
-> -	 * if (ret)
-> -	 * dev_err(&client->dev, "ov2680 startup err\n");
-> -	 */
-> +	dev->res = res;
->  err:
->  	mutex_unlock(&dev->input_lock);
->  	return ret;
+> Development of userspace part: https://github.com/util-linux/util-linux/pull/1872
+> 
+> v1: https://lore.kernel.org/lkml/20221101005043.1791-1-linux@weissschuh.net/
+> v1->v2:
+>   * Move file to /sys/kernel/byteorder
+> ---
+>  .../ABI/testing/sysfs-kernel-byteorder         | 12 ++++++++++++
+>  kernel/ksysfs.c                                | 18 ++++++++++++++++++
+>  2 files changed, 30 insertions(+)
+>  create mode 100644 Documentation/ABI/testing/sysfs-kernel-byteorder
+> 
+> diff --git a/Documentation/ABI/testing/sysfs-kernel-byteorder b/Documentation/ABI/testing/sysfs-kernel-byteorder
+> new file mode 100644
+> index 000000000000..4c45016d78ae
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-kernel-byteorder
+> @@ -0,0 +1,12 @@
+> +What:		/sys/kernel/byteorder
+> +Date:		February 2023
+> +KernelVersion:	6.2
+> +Contact:	linux-fsdevel@vger.kernel.org
 
+Why is this a filesystem thing?  I don't see how that is true.
+
+> +Description:
+> +		The current endianness of the running kernel.
+> +
+> +		Access: Read
+> +
+> +		Valid values:
+> +			"little", "big"
+> +Users:		util-linux
+> diff --git a/kernel/ksysfs.c b/kernel/ksysfs.c
+> index 65dba9076f31..7c7cb2c96ac0 100644
+> --- a/kernel/ksysfs.c
+> +++ b/kernel/ksysfs.c
+> @@ -6,6 +6,7 @@
+>   * Copyright (C) 2004 Kay Sievers <kay.sievers@vrfy.org>
+>   */
+>  
+> +#include <asm/byteorder.h>
+>  #include <linux/kobject.h>
+>  #include <linux/string.h>
+>  #include <linux/sysfs.h>
+> @@ -20,6 +21,14 @@
+>  
+>  #include <linux/rcupdate.h>	/* rcu_expedited and rcu_normal */
+>  
+> +#if defined(__LITTLE_ENDIAN)
+> +#define BYTEORDER_STRING	"little"
+> +#elif defined(__BIG_ENDIAN)
+> +#define BYTEORDER_STRING	"big"
+> +#else
+> +#error Unknown byteorder
+> +#endif
+> +
+>  #define KERNEL_ATTR_RO(_name) \
+>  static struct kobj_attribute _name##_attr = __ATTR_RO(_name)
+>  
+> @@ -34,6 +43,14 @@ static ssize_t uevent_seqnum_show(struct kobject *kobj,
+>  }
+>  KERNEL_ATTR_RO(uevent_seqnum);
+>  
+> +/* kernel byteorder */
+> +static ssize_t byteorder_show(struct kobject *kobj,
+> +			      struct kobj_attribute *attr, char *buf)
+> +{
+> +	return sprintf(buf, "%s\n", BYTEORDER_STRING);
+
+sysfs_emit() please.
+
+And this really is CPU byteorder, right?  We have processors that have
+devices running in different byteorder than the CPU.  userspace usually
+doesn't need to know about that, but it might be good to be specific.
+
+thanks,
+
+greg k-h
