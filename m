@@ -2,87 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 42DFA6146FA
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 10:41:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1EAAA6146EE
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 10:40:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230347AbiKAJlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 05:41:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47614 "EHLO
+        id S230382AbiKAJk0 convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 1 Nov 2022 05:40:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42332 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230142AbiKAJkN (ORCPT
+        with ESMTP id S230232AbiKAJkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 05:40:13 -0400
-Received: from mx0b-001ae601.pphosted.com (mx0b-001ae601.pphosted.com [67.231.152.168])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5178B19039
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 02:39:57 -0700 (PDT)
-Received: from pps.filterd (m0077474.ppops.net [127.0.0.1])
-        by mx0b-001ae601.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A14vYJZ031601;
-        Tue, 1 Nov 2022 04:39:03 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cirrus.com; h=date : from : to : cc
- : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=PODMain02222019;
- bh=kr6z9lQxoGcTz2dnir8DYxHyHWTDYYd2mshXwPWC9qY=;
- b=AhDSKoU+eCTbc65qY3gE6zuf1pmJVkNnrWtRCKScimXiWUZd5ZCmURJu1meJ/xnAtox/
- QiHiwz7+9cBWgibaKYg9sH00pq1UmrcP5FMe6isbos7vlQDBReW7d5FMpysiKc4ks382
- RvBaK8oFu6WLN3cTopi5ioJPCQbv+oQ6sYEgHpTlQlPYMXBIT67mmcwN9WaZjeTaZfcJ
- wvxCLEJ0d7HLVdBZcMY6AjXeBHsyOqwmw2rn2mMpKuolMnRIBvCUDpZ83zORdzeSeuyT
- 8mvHHXPaXDIBvnJWbm40xZSnA/uQQt8jjNGOT6PVRWTiGFXTCKdawFIq5XdfZqoSQpZt kQ== 
-Received: from ediex01.ad.cirrus.com ([84.19.233.68])
-        by mx0b-001ae601.pphosted.com (PPS) with ESMTPS id 3kh0kpk5uh-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Nov 2022 04:39:03 -0500
-Received: from ediex02.ad.cirrus.com (198.61.84.81) by ediex01.ad.cirrus.com
- (198.61.84.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1118.15; Tue, 1 Nov
- 2022 04:39:02 -0500
-Received: from ediswmail.ad.cirrus.com (198.61.86.93) by
- anon-ediex02.ad.cirrus.com (198.61.84.81) with Microsoft SMTP Server id
- 15.2.1118.15 via Frontend Transport; Tue, 1 Nov 2022 04:39:02 -0500
-Received: from ediswmail.ad.cirrus.com (ediswmail.ad.cirrus.com [198.61.86.93])
-        by ediswmail.ad.cirrus.com (Postfix) with ESMTP id 1168DB06;
-        Tue,  1 Nov 2022 09:39:02 +0000 (UTC)
-Date:   Tue, 1 Nov 2022 09:39:02 +0000
-From:   Charles Keepax <ckeepax@opensource.cirrus.com>
-To:     Peter Bergin <peter@berginkonsult.se>
-CC:     <james.schulman@cirrus.com>, <david.rhodes@cirrus.com>,
-        <tanureal@opensource.cirrus.com>, <rf@opensource.cirrus.com>,
-        <broonie@kernel.org>, Liam Girdwood <lgirdwood@gmail.com>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>, <alsa-devel@alsa-project.org>,
-        <patches@opensource.cirrus.com>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3] ASoC: cs42xx8-i2c.c: add module device table for of
-Message-ID: <20221101093902.GH92394@ediswmail.ad.cirrus.com>
-References: <20221031203723.168177-1-peter@berginkonsult.se>
+        Tue, 1 Nov 2022 05:40:04 -0400
+Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FAE3193F2
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 02:39:27 -0700 (PDT)
+Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
+ uk-mta-187-iRoj6YtCMo2VjsB38UYWMQ-1; Tue, 01 Nov 2022 09:39:24 +0000
+X-MC-Unique: iRoj6YtCMo2VjsB38UYWMQ-1
+Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
+ (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Tue, 1 Nov
+ 2022 09:39:22 +0000
+Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
+ id 15.00.1497.042; Tue, 1 Nov 2022 09:39:22 +0000
+From:   David Laight <David.Laight@ACULAB.COM>
+To:     "'Jiri Slaby (SUSE)'" <jirislaby@kernel.org>,
+        "Jason@zx2c4.com" <Jason@zx2c4.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Martin Liska" <mliska@suse.cz>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        "wireguard@lists.zx2c4.com" <wireguard@lists.zx2c4.com>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>
+Subject: RE: [PATCH] wireguard (gcc13): cast enum limits members to int in
+ prints
+Thread-Topic: [PATCH] wireguard (gcc13): cast enum limits members to int in
+ prints
+Thread-Index: AQHY7R5F39fDc134tkipsCBRXoDaea4p0HMQ
+Date:   Tue, 1 Nov 2022 09:39:22 +0000
+Message-ID: <dde406ed000b41d4985599aff0916e2b@AcuMS.aculab.com>
+References: <20221031114424.10438-1-jirislaby@kernel.org>
+In-Reply-To: <20221031114424.10438-1-jirislaby@kernel.org>
+Accept-Language: en-GB, en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-exchange-transport-fromentityheader: Hosted
+x-originating-ip: [10.202.205.107]
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221031203723.168177-1-peter@berginkonsult.se>
-User-Agent: Mutt/1.5.21 (2010-09-15)
-X-Proofpoint-ORIG-GUID: d0wAoJWUuyBJYk_gULEmugXMUaF8Kiyq
-X-Proofpoint-GUID: d0wAoJWUuyBJYk_gULEmugXMUaF8Kiyq
-X-Proofpoint-Spam-Reason: safe
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mimecast-Spam-Score: 0
+X-Mimecast-Originator: aculab.com
+Content-Language: en-US
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8BIT
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 09:37:23PM +0100, Peter Bergin wrote:
-> When trying to connect the device with the driver through
-> device-tree it is not working. The of_device_id is defined in
-> cs42xx8.c but is not correctly included in cs42xx8-i2c.c.
+From: Jiri Slaby (SUSE)
+> Sent: 31 October 2022 11:44
 > 
-> Move of_device_id table to cs42xx8-i2c.c. Get cs42xx8_driver_data
-> in cs42xx8_i2c_probe() and pass as argument to cs42xx8_probe(). Move
-> error check if no driver data found to cs42xx8_i2c_probe().
+> Since gcc13, each member of an enum has the same type as the enum [1]. And
+> that is inherited from its members. Provided "REKEY_AFTER_MESSAGES = 1ULL
+> << 60", the named type is unsigned long.
 > 
-> Signed-off-by: Peter Bergin <peter@berginkonsult.se>
-> ---
+> This generates warnings with gcc-13:
+>   error: format '%d' expects argument of type 'int', but argument 6 has type 'long unsigned int'
+> 
+> Cast the enum members to int when printing them.
+> 
+> Alternatively, we can cast it to ulong (to silence gcc < 12) and use %lu.
+> Alternatively, we can move REKEY_AFTER_MESSAGES away from the enum.
 
-Acked-by: Charles Keepax <ckeepax@opensource.cirrus.com>
+I'd suggest moving the 'out of range' value out of the enum.
+Otherwise integer promotion to 'long' might happen elsewhere
+and the effects might not be desirable.
 
-Thanks,
-Charles
+It is a shame that gcc doesn't force you to add the type
+to 'big enums' (or emit a warning) so that the behavioural
+change is properly detected.
+
+From reading the gcc bug it seems that C++ has a syntax for that.
+
+	David
+
+-
+Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
+Registration No: 1397386 (Wales)
+
