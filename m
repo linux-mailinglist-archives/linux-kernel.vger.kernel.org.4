@@ -2,155 +2,206 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EEF09614E66
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 16:32:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC432614E68
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 16:33:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231247AbiKAPcu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 11:32:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51826 "EHLO
+        id S230261AbiKAPdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 11:33:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiKAPcp (ORCPT
+        with ESMTP id S229783AbiKAPdo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 11:32:45 -0400
-Received: from mail-ed1-x534.google.com (mail-ed1-x534.google.com [IPv6:2a00:1450:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC53117A86
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 08:32:43 -0700 (PDT)
-Received: by mail-ed1-x534.google.com with SMTP id z18so17282905edb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 08:32:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=EkOTr9SItjKJoDycMahI5/oHi6EPM1ssOxtlPzqceFY=;
-        b=HNNzcgpfiO+zdeymquvREye/XQQhuyJO32ZM+OqtMJdNWMBVTHM3M/1qdMB4gg7K/F
-         WVZnvEtB/S24D8t/nt2qn/KwsTtdkBlzYY35jVsuJr5buka4uZNjj4rOz6y8K8I7b2L1
-         RxxOeXbwMEZpDEiwA7P5weMWERGXjsDvSIzG3jwozI0WCAFC5317ty/YtJaZshbWmTGt
-         UaopkjfHNJNLLCUha2AzfFiGcigpO4+QlTYJI73s4zN49Nbz8bPsoeo+zIYUZoRtW0tj
-         UDFNZKVPdpZLYMi2SohA7ETdxoJAd1uLR8i6IEkyKNASBJAkdG3moY6Kk234I9ViCaSL
-         ucbA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=EkOTr9SItjKJoDycMahI5/oHi6EPM1ssOxtlPzqceFY=;
-        b=hBQqSETcRigPj3fZiXR+vxaooU5jxUX7F2QvvORg9nB9tmmUwbon/mTkXGgUhl3DGb
-         MdhDg3t6f1SpdstjpN1rFrMMD7QKQNNFYVkDtJt2Z0cKekMou3+KXVYYIas7QFZ5qvts
-         leaVWR/Z6X+PaevcaKRXbTuvJFC0+zR8I/ZYjPPrTMEr853cvBeFeUyRz9gOOv+2vjT/
-         sRZFNYjFxPNfINnV2MRMtMzyhqobBbXsgWDP2BQItWUwrzy4OKaNmsOuGkurHyKyhc+d
-         zkqp/XrKcQSHTTSAE5L2Lvi2B3QOjeKZrEkH0OV4VLNJbUz0iFKh3uFHHPFNSPNcxbuW
-         jq+g==
-X-Gm-Message-State: ACrzQf0lUK/QV6aDbC4XB3JrcDlmzwOxrAEMSq7jqbKUUHJB8u6imNAy
-        Lp7Le4pPkbfJmcsxpPLVEk9PDsM/pvJOvg==
-X-Google-Smtp-Source: AMsMyM7rzsOnx9cmR8tUrWyQkYnuHkdHVOzYOHLWUDVt+oT0IjgcykUJSaf1PBY/vEUjSl+YMEs2Jg==
-X-Received: by 2002:a05:6402:2802:b0:43a:9098:55a0 with SMTP id h2-20020a056402280200b0043a909855a0mr19417901ede.179.1667316762391;
-        Tue, 01 Nov 2022 08:32:42 -0700 (PDT)
-Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
-        by smtp.gmail.com with ESMTPSA id kx1-20020a170907774100b007add62dafb7sm2277851ejc.5.2022.11.01.08.32.41
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 08:32:42 -0700 (PDT)
-Date:   Tue, 1 Nov 2022 16:32:41 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Guo Ren <guoren@kernel.org>, kvm-riscv@lists.infradead.org,
-        kvm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [RFC  3/9] RISC-V: KVM: Define a probe function for SBI
- extension data structures
-Message-ID: <20221101153241.wnox5zp7ymyg4gnx@kamzik>
-References: <20220718170205.2972215-1-atishp@rivosinc.com>
- <20220718170205.2972215-4-atishp@rivosinc.com>
+        Tue, 1 Nov 2022 11:33:44 -0400
+Received: from moc6.cz (hosting.moc6.cz [IPv6:2a02:c60:c70:8900::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5C1F9FF0
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 08:33:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=moc6.cz;
+        s=mail20201116; h=In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Reply-To;
+        bh=AhuhHf4zrmixzZAsBr9hEqobQ8VFY76RJTWzb1GkiwM=; b=a8y3ZxAJ34Cjdz4lY470TFaRM/
+        5pGFbNZYNIt2/11DbUly3NPCXhb5IaujoU3Ssw2L8l9zsD+iWX99ABryWslyhfcGT3T7E5SbWE9Z3
+        wuFuuw366n13JWTRrZNMcM8TC8ShLYnAX/LldxdfImd54g8W8MeC/+Oy1JN7Qi+XxZlC/QiWtJKC6
+        o4WM2vCEsyXoxeanS77p3+avECxhDItMV18HXd/uqlCfXB16b6MYPtzOEXarMO/CjpuLluojPjZaJ
+        Ms+uXYMTuIuoAjcY8G+bSUz/xQ60P4wzZZMSPAh8W7ZBcARrdDWwNSSwgrFFeAHSvBP5uH6QRYIjC
+        LjnuUKXoaDdp+WCn4wqRvU93O8lz2EUTu++CIorfe/4geyuEiBs1tc66Zq+sA9JJ0+XqqxEsxyr6C
+        eWoC4g/m9zIRNBwI8JaIKvnT+lYyZz0sUX//karmRyGvJG70g/hxxY5r1tSGigItr8IooEUJ9UtnC
+        +xzGE1+sM4PwME18HXl6M/Yz0cJBcrbjq6bnunvCGsmbT/SBwM0XzFrbhT2hFLK+QrsQLbHvBpVDT
+        hJSCGjPXFwDtBTRg+i458yEw3pQ3a9cbS62SczbYznE/6woBO/+VHHQx7giPmT84ZvO7bSGvvYiRo
+        vY91Z4rMvmGtaiMew/Ggf2qeiDhr9f4999EepaRNQ=;
+Received: from Debian-exim by moc6.cz with local (Exim 4.94.2)
+        (envelope-from <Debian-exim@moc6.cz>)
+         authenticated: Debian-exim
+        id 1optGc-00117m-QO; Tue, 01 Nov 2022 16:33:30 +0100
+Date:   Tue, 1 Nov 2022 16:33:30 +0100
+From:   Filip Moc <dev@moc6.cz>
+To:     Harry Wentland <harry.wentland@amd.com>
+Cc:     Leo Li <sunpeng.li@amd.com>,
+        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/amd/display: add parameter backlight_min
+Message-ID: <Y2E8SsisrDn/f6+c@moc6.cz>
+References: <Y117XNaSP6/8bH+3@moc6.cz>
+ <23cd28ea-59ed-7687-0912-506356b4b24d@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20220718170205.2972215-4-atishp@rivosinc.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <23cd28ea-59ed-7687-0912-506356b4b24d@amd.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 10:01:59AM -0700, Atish Patra wrote:
-> c,urrently the probe function just check if an SBI extension is
-Currently                            checks
+Hello Harry,
 
-> registered or not. However, the extension may not want to advertise
-> itself depending on some other condition.
-> An additional extension specific probe function will allow
-> extensions to decide if they want to be advertised to the caller or
-> not. Any extension that do not require additional dependency check
-                          does                                 checks
+thank you for your response.
 
-> does not required to implement this function.
+> amdgpu.backlight_min=2:-1
 
-s/does/is/
+almost :-)
 
+Array elements in module parameters are separated by commas not colons.
+So for cmdline it should look like this:
+amdgpu.backlight_min=2,-1
+
+Though you can just drop the ,-1 relying on kernel leaving the rest of array
+untouched. Which I would recommend as there is no point for user to
+follow AMDGPU_DM_MAX_NUM_EDP.
+Only when you need to override some other display than display 0 then you may
+need to use -1. E.g. backlight_min=-1,2 overrides display 1 to min backlight=2
+while keeping display 0 with no override.
+
+When amdgpu is loaded as a kernel module, backlight_min can also be passed as a
+parameter to modprobe, e.g.:
+modprobe backlight_min=2
+So in that case you probably want to add something like
+options amdgpu backlight_min=2 to /etc/modprobe.d/amdgpu.conf
+(and also run update-initramfs if amdgpu is loaded by initramfs).
+
+I'll add some examples to commit message in v2.
+
+Filip
+
+
+V Mon, Oct 31, 2022 at 10:24:25AM -0400, Harry Wentland napsal(a):
+> On 2022-10-29 15:13, Filip Moc wrote:
+> > There are some devices on which amdgpu won't allow user to set brightness
+> > to sufficiently low values even though the hardware would support it just
+> > fine.
+> > 
+> > This usually happens in two cases when either configuration of brightness
+> > levels via ACPI/ATIF is not available and amdgpu falls back to defaults
+> > (currently 12 for minimum level) which may be too high for some devices or
+> > even the configuration via ATIF is available but the minimum brightness
+> > level provided by the manufacturer is set to unreasonably high value.
+> > 
+> > In either case user can use this new module parameter to adjust the
+> > minimum allowed backlight brightness level.
+> > 
 > 
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> ---
->  arch/riscv/include/asm/kvm_vcpu_sbi.h |  3 +++
->  arch/riscv/kvm/vcpu_sbi_base.c        | 13 +++++++++++--
->  2 files changed, 14 insertions(+), 2 deletions(-)
+> Thanks for this patch and covering all the bases.
 > 
-> diff --git a/arch/riscv/include/asm/kvm_vcpu_sbi.h b/arch/riscv/include/asm/kvm_vcpu_sbi.h
-> index 83d6d4d2b1df..5853a1ef71ea 100644
-> --- a/arch/riscv/include/asm/kvm_vcpu_sbi.h
-> +++ b/arch/riscv/include/asm/kvm_vcpu_sbi.h
-> @@ -25,6 +25,9 @@ struct kvm_vcpu_sbi_extension {
->  	int (*handler)(struct kvm_vcpu *vcpu, struct kvm_run *run,
->  		       unsigned long *out_val, struct kvm_cpu_trap *utrap,
->  		       bool *exit);
-> +
-> +	/* Extension specific probe function */
-> +	unsigned long (*probe)(unsigned long extid);
->  };
->  
->  void kvm_riscv_vcpu_sbi_forward(struct kvm_vcpu *vcpu, struct kvm_run *run);
-> diff --git a/arch/riscv/kvm/vcpu_sbi_base.c b/arch/riscv/kvm/vcpu_sbi_base.c
-> index 48f431091cdb..14be1a819588 100644
-> --- a/arch/riscv/kvm/vcpu_sbi_base.c
-> +++ b/arch/riscv/kvm/vcpu_sbi_base.c
-> @@ -22,6 +22,7 @@ static int kvm_sbi_ext_base_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
->  	int ret = 0;
->  	struct kvm_cpu_context *cp = &vcpu->arch.guest_context;
->  	struct sbiret ecall_ret;
-> +	const struct kvm_vcpu_sbi_extension *sbi_ext;
->  
->  	switch (cp->a6) {
->  	case SBI_EXT_BASE_GET_SPEC_VERSION:
-> @@ -46,8 +47,16 @@ static int kvm_sbi_ext_base_handler(struct kvm_vcpu *vcpu, struct kvm_run *run,
->  			 */
->  			kvm_riscv_vcpu_sbi_forward(vcpu, run);
->  			*exit = true;
-> -		} else
-> -			*out_val = kvm_vcpu_sbi_find_ext(cp->a0) ? 1 : 0;
-> +		} else {
-> +			sbi_ext = kvm_vcpu_sbi_find_ext(cp->a0);
-> +			if (sbi_ext) {
-> +				if (sbi_ext->probe)
-> +					*out_val = sbi_ext->probe(cp->a0);
-> +				else
-> +					*out_val = 1;
-> +			} else
-> +				*out_val = 0;
-> +		}
->  		break;
->  	case SBI_EXT_BASE_GET_MVENDORID:
->  	case SBI_EXT_BASE_GET_MARCHID:
-> -- 
-> 2.25.1
->
-
-Other than the commit message fixes
-
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+> It might be useful to have an example in the commit description on
+> how to set the array property. I assume it looks like this if I
+> wanted to set the first device to a minimum of 2 and leave the default
+> for the 2nd one:
+> 
+> amdgpu.backlight_min=2:-1
+> 
+> Either way, this patch is
+> Reviewed-by: Harry Wentland <harry.wentland@amd.com>
+> 
+> Harry
+> 
+> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=203439>> 
+> > Signed-off-by: Filip Moc <dev@moc6.cz>
+> > ---
+> >  drivers/gpu/drm/amd/amdgpu/amdgpu.h               |  3 +++
+> >  drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c           | 15 +++++++++++++++
+> >  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 15 +++++++++++++++
+> >  3 files changed, 33 insertions(+)
+> > 
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu.h b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+> > index 0e6ddf05c23c..c5445402c49d 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
+> > @@ -200,6 +200,9 @@ extern uint amdgpu_dc_debug_mask;
+> >  extern uint amdgpu_dc_visual_confirm;
+> >  extern uint amdgpu_dm_abm_level;
+> >  extern int amdgpu_backlight;
+> > +#ifdef CONFIG_DRM_AMD_DC
+> > +extern int amdgpu_backlight_override_min[];
+> > +#endif
+> >  extern struct amdgpu_mgpu_info mgpu_info;
+> >  extern int amdgpu_ras_enable;
+> >  extern uint amdgpu_ras_mask;
+> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> > index 16f6a313335e..f2fb549ac52f 100644
+> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
+> > @@ -43,6 +43,7 @@
+> >  #include "amdgpu_irq.h"
+> >  #include "amdgpu_dma_buf.h"
+> >  #include "amdgpu_sched.h"
+> > +#include "amdgpu_dm.h"
+> >  #include "amdgpu_fdinfo.h"
+> >  #include "amdgpu_amdkfd.h"
+> >  
+> > @@ -853,6 +854,20 @@ int amdgpu_backlight = -1;
+> >  MODULE_PARM_DESC(backlight, "Backlight control (0 = pwm, 1 = aux, -1 auto (default))");
+> >  module_param_named(backlight, amdgpu_backlight, bint, 0444);
+> >  
+> > +/**
+> > + * DOC: backlight_min (array of int)
+> > + * Override minimum allowed backlight brightness signal (per display).
+> > + * Must be less than the maximum brightness signal.
+> > + * Negative value means no override.
+> > + *
+> > + * Defaults to all -1 (no override on any display).
+> > + */
+> > +#ifdef CONFIG_DRM_AMD_DC
+> > +int amdgpu_backlight_override_min[AMDGPU_DM_MAX_NUM_EDP] = {[0 ... (AMDGPU_DM_MAX_NUM_EDP-1)] = -1};
+> > +MODULE_PARM_DESC(backlight_min, "Override minimum backlight brightness signal (0..max-1, -1 = no override (default))");
+> > +module_param_array_named(backlight_min, amdgpu_backlight_override_min, int, NULL, 0444);
+> > +#endif
+> > +
+> >  /**
+> >   * DOC: tmz (int)
+> >   * Trusted Memory Zone (TMZ) is a method to protect data being written
+> > diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > index eb4ce7216104..e2c36ba93d05 100644
+> > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
+> > @@ -3911,6 +3911,21 @@ static void amdgpu_dm_update_backlight_caps(struct amdgpu_display_manager *dm,
+> >  	dm->backlight_caps[bl_idx].min_input_signal = AMDGPU_DM_DEFAULT_MIN_BACKLIGHT;
+> >  	dm->backlight_caps[bl_idx].max_input_signal = AMDGPU_DM_DEFAULT_MAX_BACKLIGHT;
+> >  #endif
+> > +
+> > +	if (amdgpu_backlight_override_min[bl_idx] >= 0) {
+> > +		if (amdgpu_backlight_override_min[bl_idx] < dm->backlight_caps[bl_idx].max_input_signal) {
+> > +			DRM_INFO("amdgpu: backlight[%i]: overriding minimum brightness from %i to %i\n",
+> > +				  bl_idx,
+> > +				  dm->backlight_caps[bl_idx].min_input_signal,
+> > +				  amdgpu_backlight_override_min[bl_idx]);
+> > +			dm->backlight_caps[bl_idx].min_input_signal = amdgpu_backlight_override_min[bl_idx];
+> > +		} else {
+> > +			DRM_ERROR("amdgpu: backlight[%i]: minimum brightness override (%i) is not below maximum (%i)\n",
+> > +				  bl_idx,
+> > +				  amdgpu_backlight_override_min[bl_idx],
+> > +				  dm->backlight_caps[bl_idx].max_input_signal);
+> > +		}
+> > +	}
+> >  }
+> >  
+> >  static int get_brightness_range(const struct amdgpu_dm_backlight_caps *caps,
+> > 
+> > base-commit: d8c03bfe146fd5e081a252cd34f3f12ca0255357
+> 
