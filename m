@@ -2,134 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CBFB8614223
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 01:09:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4E9F561422E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 01:16:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiKAAJE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 20:09:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48690 "EHLO
+        id S229441AbiKAAP6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 20:15:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229913AbiKAAIs (ORCPT
+        with ESMTP id S229727AbiKAAPz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 20:08:48 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39E7915FFB;
-        Mon, 31 Oct 2022 17:08:36 -0700 (PDT)
-Received: from mercury (unknown [185.209.196.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: sre)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7BCC366015AC;
-        Tue,  1 Nov 2022 00:08:35 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667261315;
-        bh=sIMxUPfqJGh8LEp6SOaWCrB1Uu3hHBT4c08tadHon8Q=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=PgubL0ZbBjXBUBmDW7nbZiJcoNQguhntNvQOylREzDEToHAym6DQDyYFP7eW5zqd/
-         zCV9heCfvBq828qqT8p3+/YHiP8XJXDT1JfVAURlXOJiWl48nGqWe/3sfrqzlLw65y
-         rrwKL10BT6NqyuTmD74eGO8owv22XrsvDQDCQwk9ysGkmkiNCybz/0kHarcVja879j
-         GYsdfsYWfWNNfwd89MYJjyf2YOV5N0Nldqk+G8IyvXuHCq2P9QoLTnFfTFBA6p1S5i
-         PEfzVrwlSBF2z/UYSryR94XX4Vu0U+4RckkoDvzegM+o2sLoUM95t4M/PxYWeVs0v4
-         ya8lRSkgVjwXQ==
-Received: by mercury (Postfix, from userid 1000)
-        id 5083B1061C6F; Tue,  1 Nov 2022 01:08:33 +0100 (CET)
-Date:   Tue, 1 Nov 2022 01:08:33 +0100
-From:   Sebastian Reichel <sebastian.reichel@collabora.com>
-To:     Samuel Holland <samuel@sholland.org>
-Cc:     Ondrej Jirman <megi@xff.cz>,
-        "open list:POWER SUPPLY CLASS/SUBSYSTEM and DRIVERS" 
-        <linux-pm@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>,
-        linux-rockchip@lists.infradead.org
-Subject: Re: [PATCH] power: supply: ip5xxx: Fix integer overflow in
- current_now calculation
-Message-ID: <20221101000833.hwuhc7ki6b33fnhf@mercury.elektranox.org>
-References: <20221028224052.293693-1-megi@xff.cz>
- <6b23af14-340d-b7b5-7d20-14fae03f724c@sholland.org>
+        Mon, 31 Oct 2022 20:15:55 -0400
+Received: from mail-lj1-x22d.google.com (mail-lj1-x22d.google.com [IPv6:2a00:1450:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A357515FC0
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 17:15:54 -0700 (PDT)
+Received: by mail-lj1-x22d.google.com with SMTP id u11so18770033ljk.6
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 17:15:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=38cDXdi0r69fdE/BUKO80R1kI/zw2O2sBzCV4ZqhUwg=;
+        b=J9E40lntmHOrjoy9Xcdik21H9sYudcve10nrz642t/oMhyvmL9VFzyufdi3szUwjBV
+         m/p5FEnviTesKG2W7OtG7jBD+iMM+10VyyFiueKZLk8IlllJ61r+A9sFe1BC38dtweGP
+         23GUL1AqAFIhJ/cVI2cCFPse2JsR0XwPIh16/MNKJFKZnrmjDBquRlbwwYzweTQj2nXw
+         C3/KLMl81IzZP3sRWy8In1aoOzLESHfQYwXhdSs4xrh9W5c5tJhKuuvtsfRqKeCNiydH
+         BpprdULh+xbph4gtavi+z08szpmE7RLQ6ICzMZc1ZXnzEZf9UCfhjzTcFroAfmbE1H1b
+         b7HA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=38cDXdi0r69fdE/BUKO80R1kI/zw2O2sBzCV4ZqhUwg=;
+        b=rVngh3iu3OcyG8PZ5zt/SsuJbiNtbkN/uzxrhQD2fE7YgGvBeXOSewbmAFfNARUBam
+         X3YQ8+RSZbjrt/Cc/0h1b1AnACTK5vl1SffoTVgvAvrxAvEZvjN+A9IKrS79sOERE33p
+         ZYIeBeQJXG+ZNG6eurqw4vYbeP4He++dh1DxicWoWr5WbJPngCSVANBVL/l5V21W+59t
+         SzNAO06Cw6bdC9w4wUnmyiFcuK5f4hRgTfw6VSivxZeOb+OnxZ03OYpeTFqHf+EBYFAz
+         sXhil1wP9iWJeMbJALrjzCXjxYr75JyCt1kHefakDqypqHRflQt25yVTqKemHYq0P+C7
+         QCGw==
+X-Gm-Message-State: ACrzQf00wQ2chaqXnqfLIXBGs2DOCozPWCN/o5FnxOyFSH7nKgU6oz/x
+        nzr6J3mE2gYEU7nZSs4YATX3pQ==
+X-Google-Smtp-Source: AMsMyM4nWjJC7qQLq2CsQhuNIRUwJ8W7P86DduyVfrSh1xY70OZRwrvx9QT6G38gI6top2m9YGZSUA==
+X-Received: by 2002:a2e:9c89:0:b0:277:138c:9fd9 with SMTP id x9-20020a2e9c89000000b00277138c9fd9mr174812lji.119.1667261753008;
+        Mon, 31 Oct 2022 17:15:53 -0700 (PDT)
+Received: from [10.10.15.130] ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id u18-20020a05651220d200b004a1e7216131sm1491028lfr.116.2022.10.31.17.15.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Oct 2022 17:15:52 -0700 (PDT)
+Message-ID: <155e4171-187c-4ecf-5a9b-12f0c2207524@linaro.org>
+Date:   Tue, 1 Nov 2022 03:15:51 +0300
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="7sslbaiyftedhb4w"
-Content-Disposition: inline
-In-Reply-To: <6b23af14-340d-b7b5-7d20-14fae03f724c@sholland.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH] drm/msm/dp: remove limitation of link rate at 5.4G to
+ support HBR3
+Content-Language: en-GB
+To:     Doug Anderson <dianders@chromium.org>,
+        Kuogee Hsieh <quic_khsieh@quicinc.com>
+Cc:     robdclark@gmail.com, sean@poorly.run, swboyd@chromium.org,
+        vkoul@kernel.org, daniel@ffwll.ch, airlied@linux.ie,
+        agross@kernel.org, bjorn.andersson@linaro.org,
+        quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1667237245-24988-1-git-send-email-quic_khsieh@quicinc.com>
+ <94b507e8-5b94-12ae-4c81-95f5d36279d5@linaro.org>
+ <deb60200-5a37-ec77-9515-0c0c89022174@quicinc.com>
+ <CAD=FV=X_fs_4JYcRvAwkU9mAafOten9WdyzPfSVWdAU=ZMo8zg@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <CAD=FV=X_fs_4JYcRvAwkU9mAafOten9WdyzPfSVWdAU=ZMo8zg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 01/11/2022 03:08, Doug Anderson wrote:
+> Hi,
+> 
+> On Mon, Oct 31, 2022 at 2:11 PM Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
+>>
+>> Hi Dmitry,
+>>
+>>
+>> Link rate is advertised by sink, but adjusted (reduced the link rate)
+>> by host during link training.
+>>
+>> Therefore should be fine if host did not support HBR3 rate.
+>>
+>> It will reduce to lower link rate during link training procedures.
+>>
+>> kuogee
+>>
+>> On 10/31/2022 11:46 AM, Dmitry Baryshkov wrote:
+>>> On 31/10/2022 20:27, Kuogee Hsieh wrote:
+>>>> An HBR3-capable device shall also support TPS4. Since TPS4 feature
+>>>> had been implemented already, it is not necessary to limit link
+>>>> rate at HBR2 (5.4G). This patch remove this limitation to support
+>>>> HBR3 (8.1G) link rate.
+>>>
+>>> The DP driver supports several platforms including sdm845 and can
+>>> support, if I'm not mistaken, platforms up to msm8998/sdm630/660.
+>>> Could you please confirm that all these SoCs have support for HBR3?
+>>>
+>>> With that fact being confirmed:
+>>>
+>>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+>>>
+>>>
+>>>>
+>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
+>>>> ---
+>>>>    drivers/gpu/drm/msm/dp/dp_panel.c | 4 ----
+>>>>    1 file changed, 4 deletions(-)
+>>>>
+>>>> diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c
+>>>> b/drivers/gpu/drm/msm/dp/dp_panel.c
+>>>> index 5149ceb..3344f5a 100644
+>>>> --- a/drivers/gpu/drm/msm/dp/dp_panel.c
+>>>> +++ b/drivers/gpu/drm/msm/dp/dp_panel.c
+>>>> @@ -78,10 +78,6 @@ static int dp_panel_read_dpcd(struct dp_panel
+>>>> *dp_panel)
+>>>>        if (link_info->num_lanes > dp_panel->max_dp_lanes)
+>>>>            link_info->num_lanes = dp_panel->max_dp_lanes;
+>>>>    -    /* Limit support upto HBR2 until HBR3 support is added */
+>>>> -    if (link_info->rate >=
+>>>> (drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4)))
+>>>> -        link_info->rate = drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4);
+>>>> -
+>>>>        drm_dbg_dp(panel->drm_dev, "version: %d.%d\n", major, minor);
+>>>>        drm_dbg_dp(panel->drm_dev, "link_rate=%d\n", link_info->rate);
+>>>>        drm_dbg_dp(panel->drm_dev, "lane_count=%d\n",
+>>>> link_info->num_lanes);
+> 
+> Stephen might remember better, but I could have sworn that the problem
+> was that there might be something in the middle that couldn't support
+> the higher link rate. In other words, I think we have:
+> 
+> SoC <--> TypeC Port Controller <--> Display
+> 
+> The SoC might support HBR3 and the display might support HBR3, but the
+> TCPC (Type C Port Controller) might not. I think that the TCPC is a
+> silent/passive component so it can't really let anyone know about its
+> limitations.
+> 
+> In theory I guess you could rely on link training to just happen to
+> fail if you drive the link too fast for the TCPC to handle. Does this
+> actually work reliably?
+> 
+> I think the other option that was discussed in the past was to add
+> something in the device tree for this. Either you could somehow model
+> the TCPC in DRM and thus know that a given model of TCPC limits the
+> link rate or you could hack in a property in the DP controller to
+> limit it.
 
---7sslbaiyftedhb4w
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Latest pmic_glink proposal from Bjorn include adding the drm_bridge for 
+the TCPC. Such bridge can in theory limit supported modes and rates.
 
-Hi,
+-- 
+With best wishes
+Dmitry
 
-On Fri, Oct 28, 2022 at 06:06:07PM -0500, Samuel Holland wrote:
-> On 10/28/22 17:40, Ondrej Jirman wrote:
-> > When current is larger than ~2A, the multiplication in current_now
-> > property overflows and the kernel reports invalid negative current
-> > value. Change the numerator and denominator while preserving their
-> > ratio to allow up to +-6A before the overflow.
-> >=20
-> > Fixes: 75853406fa27 ("power: supply: Add a driver for Injoinic power ba=
-nk ICs")
-> > Signed-off-by: Ondrej Jirman <megi@xff.cz>
->=20
-> Reviewed-by: Samuel Holland <samuel@sholland.org>
->=20
-> > ---
-> >  drivers/power/supply/ip5xxx_power.c | 2 +-
-> >  1 file changed, 1 insertion(+), 1 deletion(-)
-> >=20
-> > diff --git a/drivers/power/supply/ip5xxx_power.c b/drivers/power/supply=
-/ip5xxx_power.c
-> > index 02ee4d252a3e..f39cb2f7aa11 100644
-> > --- a/drivers/power/supply/ip5xxx_power.c
-> > +++ b/drivers/power/supply/ip5xxx_power.c
-> > @@ -398,7 +398,7 @@ static int ip5xxx_battery_get_property(struct power=
-_supply *psy,
-> >  		ret =3D ip5xxx_battery_read_adc(ip5xxx, IP5XXX_BATIADC_DAT0,
-> >  					      IP5XXX_BATIADC_DAT1, &raw);
-> > =20
-> > -		val->intval =3D DIV_ROUND_CLOSEST(raw * 745985, 1000);
-> > +		val->intval =3D DIV_ROUND_CLOSEST(raw * 261095, 350);
->=20
-> DIV_ROUND_CLOSEST(raw * 149197, 200) would be marginally more accurate,
-> but it doesn't matter in practice.
-
-Thanks, I queued it with that change included.
-
--- Sebastian
-
->=20
-> >  		return 0;
-> > =20
-> >  	case POWER_SUPPLY_PROP_CONSTANT_CHARGE_CURRENT:
->=20
-
---7sslbaiyftedhb4w
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmNgY4AACgkQ2O7X88g7
-+prRfA//dU4GytovELqDppXXyxa26eg1cfkrNdYZcsa/z1LZkgKuHF6cdG620W8M
-Tmnna2OU9L5JIdsgx0Ub6qsemzWUBlCuUUNzJxVjir0TkxliAttV5W5tBIC23YKp
-X0h2Nw63lf4kFpq6RG8KPMKbdgtVvN8JNiuffner4xE0dg0Xc8Tew2XjvPzXpItL
-pwvkeT9wef3m5k3ZX1U8hWfMot3PJiUiMftRHuAtgPBiWi1QECxNRWUXOWSEFhIW
-b9ghREIpay4RqMXVJssRw4b/eyvSqTvpImswCF8jelyyQEgdDrwsiUyd/3MGwRql
-ABawQyUc8J2A1opOWmCQyXfqXqhA1pEXfhwgJWc9Ooz0lI2YSVWxZlMR4XNoOkzM
-hWSrSWOiKfEHJ3dL56F6Dv1a6unmmMpj8kCjyWXHbgYU/eFTOJmGv23L0Yq+MrCG
-ZDnIDHP4Q6D2HeSOywLDwrqexSFj8lg8JsZZMPI2ZBoFl+bbCE97hmnoTSoDhEAA
-zuayfSbnAPsIubAS/c6gi+cp9/iGXVOCqHDuNkivKG+543wZSJKrX2jsSXy/iFLl
-8RSZQr3c0u537Ae+MWy1MBkPGYbja/kYxkxesCJ0GrmSNM3BKfOF4KWBAaiJAHyL
-p7plxduZcTGsglePNcMfBvDvliyOddUH0TvundPoUlgvZIN9FxU=
-=s9pm
------END PGP SIGNATURE-----
-
---7sslbaiyftedhb4w--
