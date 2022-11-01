@@ -2,292 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCD5C61529E
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 20:55:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A9E6152A2
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 20:58:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229997AbiKATzA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 15:55:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44898 "EHLO
+        id S229636AbiKAT6u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 15:58:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiKATyv (ORCPT
+        with ESMTP id S229457AbiKAT6q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 15:54:51 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 040EA1BEA5;
-        Tue,  1 Nov 2022 12:54:49 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A1JsfFZ025427;
-        Tue, 1 Nov 2022 19:54:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=6zxzczJROcEEGeZcE8UuaeXsk7nWV0majcan5zRwn0E=;
- b=DUKuKruHRhJNq/45ObDtqGsJi60nX7PnGiidoQjyzuRNPIDDb3boSaykFLGzgp2HPSWs
- hMhHqUnkFk59PEJ7znYJAVANTZoLTqVOxCgfggRAWeEDXx0ziDQ9AXPPxK/hLJvgWbaT
- ZeahVf4Z2uAibNOMs8EwJdB0trAT9REulJvJ0v0PKRCRWTzU8QAQj1iko03pLHBco0MX
- 8iN/dkoHsUWoy0vcXotaGmbOKO90Cmvi1nkcWuYQkXXSRo6ee0+6rf3xSb1iVkmIZioX
- LTJN1S9R5Ym2Z9Ms9/omZJOuVuBqJl0alka25oDzVeqO3qMyKfXocp5hW7SXOfSAgevt ZA== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kk7qng8kk-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Nov 2022 19:54:40 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A1JsdhX005617
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 1 Nov 2022 19:54:39 GMT
-Received: from [10.216.52.223] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 1 Nov 2022
- 12:54:12 -0700
-Message-ID: <fa56debb-41cb-6b91-3f22-f41ffca98fdc@quicinc.com>
-Date:   Wed, 2 Nov 2022 01:24:08 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.3.2
-Subject: Re: [PATCH 2/2] drm/msm: Hangcheck progress detection
+        Tue, 1 Nov 2022 15:58:46 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2075.outbound.protection.outlook.com [40.107.243.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A017A1BEA0;
+        Tue,  1 Nov 2022 12:58:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=OBAuH/mOUMCSsTmJIYu9Dct3keP2DzPI3rHQAFKceuXHf+JLwogx3mdQzNE5N+Zl8ps0nDLMV1pAECaF1a+BLhCYNfwJX/D4+V0Pkr0sngJV26t41nOpA8iNN8MHaRHRhgJSWTMev9NhE40ynUme1nXa4TZ8FJ1sGgWbEkFIFqsVy5ASW3gU8gkGYNYnPbhrpgmFzW9IKw1D7/ZKS52mcb/mv/M/K3hDkRRWtmhrirurLRRmYTcTB9nBKMdwPN+Zk1PjTw0VU/9zXt+oaU31fhPtsIh1Ny1tFA3Ra2s5Pto2ZbMkxtjI7r90nl+LX02UgXdi+NS48ttLnIe3ZDWwQQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=DdmuB/CkmpbbaoUlOmQqUsc0Nyfs2Y2QnhEqVEAVP+4=;
+ b=aXwReL8kvZVKQXaDzv7OLlADPwEAkZQZfVg+MUlhILXL9Sbl9kPWTty/UZLQO35XgwmfXweDiFROEAc5sD3UpYqN7JLq5kNvXpNrOJFUTfsK5CnUVj+p+6psJVkoj1nuwJAMkCBP+9eXF4wvEcDjeVhTK5KKKeX7No1B/VaR3uRofuSLcsGS11rwrasyolMp1GGwtEDfiLJBT64GwVq+j3nZW91bt6v83JZAltSBAA30INLx31UDqqeaqKTCaaObQlR2yZjPEoyHD+5VbhXvafMphZ55VMYEWUDkbJd8kM6n6TnBbVW9lCcMyLMresBpKQzw9fWzc3eGnmdowdbQ1g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=DdmuB/CkmpbbaoUlOmQqUsc0Nyfs2Y2QnhEqVEAVP+4=;
+ b=vrro04S1fAbe01Q0DlaMQbKVU4/dLMR4CQmQJX8Sic0wbj/3Airwzl7Laynorg6hwb8fnl3zbci/fwiVzndOui5yFbBKLiBGkVUN2MBFoPKpXfFDkssW0rddzQM5b98CbPbzrORBJNcrS2hwtFf7148OHDA2PJvbPxvPnLZ89o8=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by DS7PR12MB5911.namprd12.prod.outlook.com (2603:10b6:8:7c::16) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.16; Tue, 1 Nov
+ 2022 19:58:43 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::f8c0:db03:2d30:792c]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::f8c0:db03:2d30:792c%3]) with mapi id 15.20.5769.016; Tue, 1 Nov 2022
+ 19:58:43 +0000
+Message-ID: <23c353e0-078f-91e4-26fe-bf552319eaad@amd.com>
+Date:   Tue, 1 Nov 2022 14:58:41 -0500
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [RFC 1/3] PM: Add a sysfs file to represent whether hardware
+ reached the deepest state
 Content-Language: en-US
-To:     Rob Clark <robdclark@gmail.com>, <dri-devel@lists.freedesktop.org>
-CC:     <linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
-        "Rob Clark" <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Chia-I Wu <olvaffe@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        "Douglas Anderson" <dianders@chromium.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20221031225414.1280169-1-robdclark@gmail.com>
- <20221031225414.1280169-3-robdclark@gmail.com>
-From:   Akhil P Oommen <quic_akhilpo@quicinc.com>
-In-Reply-To: <20221031225414.1280169-3-robdclark@gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Sven van Ashbrook <svenva@chromium.org>
+Cc:     Rafael J Wysocki <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>,
+        Len Brown <len.brown@intel.com>,
+        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+        S-k Shyam-sundar <Shyam-sundar.S-k@amd.com>,
+        rrangel@chromium.org, platform-driver-x86@vger.kernel.org,
+        Rajat Jain <rajatja@google.com>,
+        David E Box <david.e.box@intel.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20221031204320.22464-1-mario.limonciello@amd.com>
+ <20221031204320.22464-2-mario.limonciello@amd.com>
+ <CAM7w-FXAGki+k9aP0wV1Qs8dKqpPXgY9ZJR_a83ETrUF6ZRZOw@mail.gmail.com>
+From:   "Limonciello, Mario" <mario.limonciello@amd.com>
+In-Reply-To: <CAM7w-FXAGki+k9aP0wV1Qs8dKqpPXgY9ZJR_a83ETrUF6ZRZOw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: BdB8hmq7x0ki3f4p7LzCxtiayf25gJFa
-X-Proofpoint-GUID: BdB8hmq7x0ki3f4p7LzCxtiayf25gJFa
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-01_09,2022-11-01_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
- mlxlogscore=999 malwarescore=0 lowpriorityscore=0 spamscore=0
- priorityscore=1501 impostorscore=0 clxscore=1011 adultscore=0 bulkscore=0
- mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211010141
+X-ClientProxiedBy: DM6PR13CA0025.namprd13.prod.outlook.com
+ (2603:10b6:5:bc::38) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DS7PR12MB5911:EE_
+X-MS-Office365-Filtering-Correlation-Id: ecd0377b-83f7-4047-4ed8-08dabc437aa9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jra/+7tezDP12KzMb3RmrXGbNf+Adeku1nwYI3MHH+4cNKJCDal5RWm9gJtwFEfU7neDZ67vQWnauDW9d+xKyyxFFEuoqID1xyvZA9tSQ6JybjiWWtq8mCHcz8EaUwRsKPCn1kmURyPCyunI1RrCJG/rlU7luLHfry6MH4SHmJkoMM1AOh811ebyYOqcKO+/ns12rus39/xbb4oi9NKfr5ImmrpVp7sZYcbM5JyCPEJwnEpZFXKtrXOIjOdIbHO5H+Ubm4bFPsHg5Dnr51DSYgpIs/4329eJEhR7m4VMPOXqHBVaRmvx8sKS44XDGtvJ72zw/te15g/jY5BUpUgtVKwne67KycFnp8QGliy5QzImsgBs+upqmENjGZhuAvpxDTpTg5GjkOCFjXym3mIxaQY/lqEs7RKu13sE9+7nHDwJ20lq3MmF7ccPnWXHO0TluMGt2K+apdkyGgwp2pZOxg4O9C441Rb4mrV+mbl7wNhqeO8UslWX9OB551C6wtjcyv2iS61M78iHwdSM5K80j1KXcMfVwaWEr8bsy2IrC1OVvY/oZfNPSbAHBcdQCgpMKwKqcS0jINgG7pusgb4G7KMSJ5KQwLzx9K0RwLrTzk5VR2rAftlGhpTg7Zb2sgfWxNfR3npFrf6BLaoxdPjISP+UdfHut8PuOQMIbdALAL9WMTB95zY2onu8PHXqaO3Gben1GqPyKTm/PPRUVYOIpx1nBOxEOpJV9XAr48raT203Rz2IzRC8oP2LqXCJSAQwl9xW5RLHNMWWZ4JFbOdPR03pjWoySHfpvmAijIZUQwE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(346002)(39860400002)(366004)(136003)(376002)(451199015)(6486002)(54906003)(478600001)(31686004)(38100700002)(6916009)(86362001)(5660300002)(36756003)(316002)(53546011)(31696002)(8936002)(2616005)(26005)(41300700001)(66556008)(6512007)(83380400001)(2906002)(186003)(66946007)(8676002)(6506007)(4326008)(66476007)(7416002)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?QTdGVDhzUXpVUlI1aldDOWtsYTJCVSt5bGtheDE0Y0pZWlh1S3pVNE4rQ3Jy?=
+ =?utf-8?B?bmNRanhUVFVCeE9URFNlVjFsa0dLMXZkcklqbitNbDR1WFlvZUFHYTJsNDJ0?=
+ =?utf-8?B?NVEycGdpM0E2a1lNclMwV2gvaDZwY3hyWEhxUnZBS2YvdlZLS3hIK3VJMFQ5?=
+ =?utf-8?B?bTUzZytNSmMzTytSaEFyNTBjUXdGZUlubjRxSFdmL3NaRm9BcDBVNHN5c2RG?=
+ =?utf-8?B?SkhYWFV0ckhiT0cyeTc4b2cyV0dJNlpmVTdaYk5IMXRVRnBDbFBTS3lpMFRi?=
+ =?utf-8?B?dDBySHJ1c1FmYzIvUmVlbHlvdjZkeDdUbUtBeUIzTnhXR1Q0bzNBWE5jN2FN?=
+ =?utf-8?B?Y2p5Mzg1RmxVcFc3d3ZhZ2NlWEkydDBPZmdKM1B3UWx5R3VKbVVZU2xleFFX?=
+ =?utf-8?B?Z2lybmVZSC9JbVROeTNSbmZGclFCcVZQaWpsS1BwZ3pLQWFvdHhuVnFDSTZJ?=
+ =?utf-8?B?a2lNaUJ0UFJiTGI0aUVvZ0lBWEtsSSsrajNMNWt5ankvLzZlZTNlcEcya3hu?=
+ =?utf-8?B?K045dFpadFVnU2VqQTdXak5CbUVLSEUwcllhYnVyWThjcEROcFYrZGpNQjE2?=
+ =?utf-8?B?N0dONHg4K2Zaa3FqdnBhUzlvOU1RckVtaGkzOVpxdkNJUWtlOEdwR1Q5c0tN?=
+ =?utf-8?B?N2dQNTN2STc0Skd5VFM5N2o2bUtQN3NlM3NKajJJSUR0VVhJdUVzU3NzSjdV?=
+ =?utf-8?B?MVFMVHk4TVNBVXV1VGZ3aEdvck5SUzg2aEFkclYzZk9ERWM4MW9sNVZJYjZo?=
+ =?utf-8?B?U3F1MkdPVzQ3ay9Mbkh1dCtuZUFoK09tckMyK1RmQXJnNVRlTGFmWE1JVGxz?=
+ =?utf-8?B?SVJha2JqUG92VkRjeWJKcTE0OGlMVzZIN0tOMEpGdmtIZ1RsNUpvTUV1TWVp?=
+ =?utf-8?B?enhaWVIyOHlMV0xxNlg3RUtnRElXbHZVb1kybTBqRlNRRVZNN1J1OCtab0VD?=
+ =?utf-8?B?L1phRTgrS0l4dUhXcU5SSzNGYU1rS1Y1NFRKRHpDNDU0bUJNSTd4ZkpwMVBj?=
+ =?utf-8?B?U3NjdnVWaWJvZElwdHQrNG1uRzJ0cnRqRTRyOUhNU0JGZmFIZW9vcmJ5em1l?=
+ =?utf-8?B?QXg5MWtQZFNPWGJaQXBKaFF6MSs3UUQ1QXkxdmJUUG01WlFGenI2T2RkTXJK?=
+ =?utf-8?B?a2RtMDBnT0h3SGRaemJQL2FXQWk4b3FNNU9PMlNyeEU1emhqYjVxbkFxcEJT?=
+ =?utf-8?B?cjJhYWt5WlVHY1Fvck9LaTIzR1dxRi94b1JRZzhZQVk5QzNibGZWeU9WSHBw?=
+ =?utf-8?B?YlowSzZ3L0pqNk9JSnExM2JTaWpMUWFMSjJTTlA4S2psSmIvUC93Q3VpWVpV?=
+ =?utf-8?B?OGZqcllaa3BwMC91eEo1cDRGSER1ZDFzRFZxMW5HRFdmQWZoTGxzcmFPVUhP?=
+ =?utf-8?B?amNuTnJpbHhJcVl6V3dja3ZjQmtERzhIcnNKaXNNWkVvVUhMYkl5T2x1REg2?=
+ =?utf-8?B?N0ViZ1BBVUxkVFpuQmVpUXVKTXJpZ0N4VVBxZXJHc0FZTVZJeENLRUdrNTNB?=
+ =?utf-8?B?TDdzNVdPeWZpV2dYaXhVMkNMblhUc1pBMkV2RDN0M2pmRUdEK1FNK3A5SHlJ?=
+ =?utf-8?B?T0xYNUhqSjJDbURZT3VFRTh1VTFTZlI1azloWlh2c3NNUXkwenA2b010UkRy?=
+ =?utf-8?B?MzhJNDdGMFZ0MlhFb1BCNjZrVnlDWExNYkJkRnZGNXBHUFFrOHZkcDBWTWtK?=
+ =?utf-8?B?N2l6dWFaKzFiRzIxZmFEZDJNVWxwSXFXNGZEMkQ2TTIwNlZMSTdqdDIxaG5L?=
+ =?utf-8?B?MG1DZHkxbmtZMUVTb3RkZzlwampBcDBPelZ3amRYUkQ4N2dEMzJVWDR3TG5K?=
+ =?utf-8?B?MSsvUjdWRjFheEJqOFdHejJqbVJPa1lGckdXT2NoeU40b3d6T3BVbjhrUDdp?=
+ =?utf-8?B?K0RpSzJ2NG1WMmZNN3IxN0hmTy9qbkdTeGlSNDdhRUhWc3F2MWhrSWdQaTRZ?=
+ =?utf-8?B?dFlLdlNvVy9PY3hCdXBTKzFaVTR2SVBvM3Q5SnRmT2dpNEp6SzdBd0NzTGpz?=
+ =?utf-8?B?cXhaU3dONGY0LzZ2SGg1QVp5SFN3YytMeWlLMWgwK0Ruc0FBK0FjUWZnTWxY?=
+ =?utf-8?B?akdIWFFQSFU4aEY1TU0ranFHdUp4MkZJQ0I4RkczclNPYzFUNnk0aW12Qm4r?=
+ =?utf-8?Q?tUix9FgQ2tZAPc+/NWxoKvrM6?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: ecd0377b-83f7-4047-4ed8-08dabc437aa9
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Nov 2022 19:58:43.4967
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: qcBHKL9Km6zG6OwCRZkhYqAC7j6H8yd7IeML3ciaHXLxcmXjhb+d9yFIviTuCKHfkUDXNzkpiI3ah8hX4tpD1Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB5911
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/1/2022 4:24 AM, Rob Clark wrote:
-> From: Rob Clark <robdclark@chromium.org>
->
-> If the hangcheck timer expires, check if the fw's position in the
-> cmdstream has advanced (changed) since last timer expiration, and
-> allow it up to three additional "extensions" to it's alotted time.
-> The intention is to continue to catch "shader stuck in a loop" type
-> hangs quickly, but allow more time for things that are actually
-> making forward progress.
->
-> Because we need to sample the CP state twice to detect if there has
-> not been progress, this also cuts the the timer's duration in half.
->
-> Signed-off-by: Rob Clark <robdclark@chromium.org>
-> ---
->   drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 34 +++++++++++++++++++++++++++
->   drivers/gpu/drm/msm/msm_drv.h         |  8 ++++++-
->   drivers/gpu/drm/msm/msm_gpu.c         | 20 +++++++++++++++-
->   drivers/gpu/drm/msm/msm_gpu.h         |  5 +++-
->   drivers/gpu/drm/msm/msm_ringbuffer.h  | 24 +++++++++++++++++++
->   5 files changed, 88 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> index 1ff605c18ee6..3b8fb7a11dff 100644
-> --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> @@ -1843,6 +1843,39 @@ static uint32_t a6xx_get_rptr(struct msm_gpu *gpu, struct msm_ringbuffer *ring)
->   	return ring->memptrs->rptr = gpu_read(gpu, REG_A6XX_CP_RB_RPTR);
->   }
->   
-> +static bool a6xx_progress(struct msm_gpu *gpu, struct msm_ringbuffer *ring)
-> +{
-> +	struct msm_cp_state cp_state = {
-> +		.ib1_base = gpu_read64(gpu, REG_A6XX_CP_IB1_BASE),
-> +		.ib2_base = gpu_read64(gpu, REG_A6XX_CP_IB2_BASE),
-> +		.ib1_rem  = gpu_read(gpu, REG_A6XX_CP_IB1_REM_SIZE),
-> +		.ib2_rem  = gpu_read(gpu, REG_A6XX_CP_IB2_REM_SIZE),
-> +	};
-> +	bool progress;
-> +
-> +	/*
-> +	 * Adjust the remaining data to account for what has already been
-> +	 * fetched from memory, but not yet consumed by the SQE.
-> +	 *
-> +	 * This is not *technically* correct, the amount buffered could
-> +	 * exceed the IB size due to hw prefetching ahead, but:
-> +	 *
-> +	 * (1) We aren't trying to find the exact position, just whether
-> +	 *     progress has been made
-> +	 * (2) The CP_REG_TO_MEM at the end of a submit should be enough
-> +	 *     to prevent prefetching into an unrelated submit.  (And
-> +	 *     either way, at some point the ROQ will be full.)
-> +	 */
-> +	cp_state.ib1_rem += gpu_read(gpu, REG_A6XX_CP_CSQ_IB1_STAT) >> 16;
-> +	cp_state.ib2_rem += gpu_read(gpu, REG_A6XX_CP_CSQ_IB1_STAT) >> 16;
-REG_A6XX_CP_CSQ_IB1_STAT -> REG_A6XX_CP_CSQ_IB2_STAT
+On 11/1/2022 12:37, Sven van Ashbrook wrote:
+> On Mon, Oct 31, 2022 at 4:43 PM Mario Limonciello
+> <mario.limonciello@amd.com> wrote:
+>>
+>> +void pm_set_hw_deepest_state(u64 duration)
+>> +{
+>> +       suspend_stats.last_hw_deepest_state = duration;
+> 
+> I'm wondering if we could add a userspace notification here. Then
+> userspace wouldn't have to synchronize with the suspend/resume state
+> of the system when reading this entry.
+> 
+> What about sysfs_notify() ? Or via udev?
 
-With that, Reviewed-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+The question I would have is what kobj would you notify?  power_kobj? 
+Lots of other things write to suspend stats, but nothing else sends 
+notifications.  So why is this one going to be special?
 
--Akhil.
-> +
-> +	progress = !!memcmp(&cp_state, &ring->last_cp_state, sizeof(cp_state));
-> +
-> +	ring->last_cp_state = cp_state;
-> +
-> +	return progress;
-> +}
-> +
->   static u32 a618_get_speed_bin(u32 fuse)
->   {
->   	if (fuse == 0)
-> @@ -1961,6 +1994,7 @@ static const struct adreno_gpu_funcs funcs = {
->   		.create_address_space = a6xx_create_address_space,
->   		.create_private_address_space = a6xx_create_private_address_space,
->   		.get_rptr = a6xx_get_rptr,
-> +		.progress = a6xx_progress,
->   	},
->   	.get_timestamp = a6xx_get_timestamp,
->   };
-> diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
-> index efcd7260f428..970a1a0ab34f 100644
-> --- a/drivers/gpu/drm/msm/msm_drv.h
-> +++ b/drivers/gpu/drm/msm/msm_drv.h
-> @@ -226,7 +226,13 @@ struct msm_drm_private {
->   
->   	struct drm_atomic_state *pm_state;
->   
-> -	/* For hang detection, in ms */
-> +	/**
-> +	 * hangcheck_period: For hang detection, in ms
-> +	 *
-> +	 * Note that in practice, a submit/job will get at least two hangcheck
-> +	 * periods, due to checking for progress being implemented as simply
-> +	 * "have the CP position registers changed since last time?"
-> +	 */
->   	unsigned int hangcheck_period;
->   
->   	/**
-> diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
-> index 3dffee54a951..136f5977b0bf 100644
-> --- a/drivers/gpu/drm/msm/msm_gpu.c
-> +++ b/drivers/gpu/drm/msm/msm_gpu.c
-> @@ -500,6 +500,21 @@ static void hangcheck_timer_reset(struct msm_gpu *gpu)
->   			round_jiffies_up(jiffies + msecs_to_jiffies(priv->hangcheck_period)));
->   }
->   
-> +static bool made_progress(struct msm_gpu *gpu, struct msm_ringbuffer *ring)
-> +{
-> +	if (ring->hangcheck_progress_retries >= DRM_MSM_HANGCHECK_PROGRESS_RETRIES)
-> +		return false;
-> +
-> +	if (!gpu->funcs->progress)
-> +		return false;
-> +
-> +	if (!gpu->funcs->progress(gpu, ring))
-> +		return false;
-> +
-> +	ring->hangcheck_progress_retries++;
-> +	return true;
-> +}
-> +
->   static void hangcheck_handler(struct timer_list *t)
->   {
->   	struct msm_gpu *gpu = from_timer(gpu, t, hangcheck_timer);
-> @@ -511,9 +526,12 @@ static void hangcheck_handler(struct timer_list *t)
->   	if (fence != ring->hangcheck_fence) {
->   		/* some progress has been made.. ya! */
->   		ring->hangcheck_fence = fence;
-> -	} else if (fence_before(fence, ring->fctx->last_fence)) {
-> +		ring->hangcheck_progress_retries = 0;
-> +	} else if (fence_before(fence, ring->fctx->last_fence) &&
-> +			!made_progress(gpu, ring)) {
->   		/* no progress and not done.. hung! */
->   		ring->hangcheck_fence = fence;
-> +		ring->hangcheck_progress_retries = 0;
->   		DRM_DEV_ERROR(dev->dev, "%s: hangcheck detected gpu lockup rb %d!\n",
->   				gpu->name, ring->id);
->   		DRM_DEV_ERROR(dev->dev, "%s:     completed fence: %u\n",
-> diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
-> index 585fd9c8d45a..d8f355e9f0b2 100644
-> --- a/drivers/gpu/drm/msm/msm_gpu.h
-> +++ b/drivers/gpu/drm/msm/msm_gpu.h
-> @@ -78,6 +78,8 @@ struct msm_gpu_funcs {
->   	struct msm_gem_address_space *(*create_private_address_space)
->   		(struct msm_gpu *gpu);
->   	uint32_t (*get_rptr)(struct msm_gpu *gpu, struct msm_ringbuffer *ring);
-> +
-> +	bool (*progress)(struct msm_gpu *gpu, struct msm_ringbuffer *ring);
->   };
->   
->   /* Additional state for iommu faults: */
-> @@ -236,7 +238,8 @@ struct msm_gpu {
->   	 */
->   #define DRM_MSM_INACTIVE_PERIOD   66 /* in ms (roughly four frames) */
->   
-> -#define DRM_MSM_HANGCHECK_DEFAULT_PERIOD 500 /* in ms */
-> +#define DRM_MSM_HANGCHECK_DEFAULT_PERIOD 250 /* in ms */
-> +#define DRM_MSM_HANGCHECK_PROGRESS_RETRIES 3
->   	struct timer_list hangcheck_timer;
->   
->   	/* Fault info for most recent iova fault: */
-> diff --git a/drivers/gpu/drm/msm/msm_ringbuffer.h b/drivers/gpu/drm/msm/msm_ringbuffer.h
-> index 2a5045abe46e..e3d33bae3380 100644
-> --- a/drivers/gpu/drm/msm/msm_ringbuffer.h
-> +++ b/drivers/gpu/drm/msm/msm_ringbuffer.h
-> @@ -35,6 +35,11 @@ struct msm_rbmemptrs {
->   	volatile u64 ttbr0;
->   };
->   
-> +struct msm_cp_state {
-> +	uint64_t ib1_base, ib2_base;
-> +	uint32_t ib1_rem, ib2_rem;
-> +};
-> +
-I think we can add CP_RB_RPTR too here.
->   struct msm_ringbuffer {
->   	struct msm_gpu *gpu;
->   	int id;
-> @@ -64,6 +69,25 @@ struct msm_ringbuffer {
->   	uint64_t memptrs_iova;
->   	struct msm_fence_context *fctx;
->   
-> +	/**
-> +	 * hangcheck_progress_retries:
-> +	 *
-> +	 * The number of extra hangcheck duration cycles that we have given
-> +	 * due to it appearing that the GPU is making forward progress.
-> +	 *
-> +	 * If the GPU appears to be making progress (ie. the CP has advanced
-> +	 * in the command stream, we'll allow up to DRM_MSM_HANGCHECK_PROGRESS_RETRIES
-> +	 * expirations of the hangcheck timer before killing the job.  In other
-> +	 * words we'll let the submit run for up to
-> +	 * DRM_MSM_HANGCHECK_DEFAULT_PERIOD *  DRM_MSM_HANGCHECK_PROGRESS_RETRIES
-> +	 */
-> +	int hangcheck_progress_retries;
-> +
-> +	/**
-> +	 * last_cp_state: The state of the CP at the last call to gpu->progress()
-> +	 */
-> +	struct msm_cp_state last_cp_state;
-> +
->   	/*
->   	 * preempt_lock protects preemption and serializes wptr updates against
->   	 * preemption.  Can be aquired from irq context.
+To me I don't think it's much different for userspace to "always" read 
+the file after resume vs wait for the notification and then read it.
+
+To make userspace flexible to multiple kernel versions it seems to me 
+that userspace could check if that file exists before suspend and if it 
+does then check the value after suspend.
+
+> 
+>> +}
+>> +EXPORT_SYMBOL_GPL(pm_set_hw_deepest_state);
 
