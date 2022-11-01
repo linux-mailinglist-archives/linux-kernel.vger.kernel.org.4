@@ -2,87 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CF64C6146A6
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 10:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 252C66146AA
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 10:30:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230113AbiKAJ3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 05:29:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37642 "EHLO
+        id S230035AbiKAJaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 05:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiKAJ3O (ORCPT
+        with ESMTP id S229556AbiKAJaJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 05:29:14 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D8D5B2648;
-        Tue,  1 Nov 2022 02:29:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7788061552;
-        Tue,  1 Nov 2022 09:29:13 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BA662C433C1;
-        Tue,  1 Nov 2022 09:29:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667294952;
-        bh=SHCUtKcvJiP4x/pfLfKcS8SGR09keelP++DTClcWsqc=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=cRvh8ggN/RxQBCdsU51vlzlPibZ2lM/sx/5X9NrqF6NFfBJ+E/swRKcWlgI7iu0vK
-         ZhBcOL4zN08RK0na63PPvV+TAtDp8j9ebRUVLG01B7d+fquzBTVI2fhBj27DXg9bBF
-         1Tnf7LUy3hRUZr2xxzvltB+BnRGzDUvCjcF1xmM47T0cOI/gHrYElWwH8ZGj/lQoIg
-         ShnUJa781rfoUwSmktyxaeeSA0Zg5J/lKEFynW3kcZV7shKBlxEcdG3aYDxpd0fENx
-         aX5bXTqM0VCOQYZtC8+pdJ9DlIVT5SJ04pPosXr2fJhxYpbOUxSm+icKZC7GivlYNG
-         vHPVartbWfqcQ==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     "Youghandhar Chintala \(Temp\)" <quic_youghand@quicinc.com>
-Cc:     Jeff Johnson <quic_jjohnson@quicinc.com>,
-        <ath10k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] wifi: ath10k: Add WLAN firmware image version info into smem
-References: <20221026102257.19919-1-quic_youghand@quicinc.com>
-        <b55ef95f-f400-9ef6-a427-525ae529d673@quicinc.com>
-        <fd45187c-739c-cd5d-4d4b-ae6abad03a94@quicinc.com>
-        <877d0fgiaa.fsf@kernel.org>
-        <722d3571-b399-dbf0-26da-04b73331df49@quicinc.com>
-Date:   Tue, 01 Nov 2022 11:29:09 +0200
-In-Reply-To: <722d3571-b399-dbf0-26da-04b73331df49@quicinc.com> (Youghandhar
-        Chintala's message of "Tue, 1 Nov 2022 14:38:22 +0530")
-Message-ID: <8735b3gh0a.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Tue, 1 Nov 2022 05:30:09 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7C32264F
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 02:30:06 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1667295005;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=TJnkLWBDb/g+EIJR+QCS7+bzQuK8KqDlxpwgbdmako0=;
+        b=I3+tX0DGdXq93FnPXwK/TAd0YbWOlhvU00/OVLZZHIOaE1O/DlWDA+eZ0n1pfVOuWL6bmy
+        Ru0lZ59Afj6AC8Rdr/lRYbAISG+aawR6lwiuIwF9HDyUTz9BPBYCbN/FK3m5HHrqohW/9h
+        /NIPShIw5Owt6Zzx5xIAIOt8KZ2bdWc=
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Subject: Re: [PATCH -next 1/1] mm: hugetlb_vmemmap: Fix WARN_ON in
+ vmemmap_remap_pte
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <Y1v64lILNN2woIcu@arm.com>
+Date:   Tue, 1 Nov 2022 17:29:49 +0800
+Cc:     Anshuman Khandual <anshuman.khandual@arm.com>,
+        Wupeng Ma <mawupeng1@huawei.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Michal Hocko <mhocko@suse.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        linux-kernel@vger.kernel.org
 Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-Id: <1FD8D6EF-B7E9-4200-931C-3CCD81605741@linux.dev>
+References: <20221025014215.3466904-1-mawupeng1@huawei.com>
+ <614E3E83-1EAB-4C39-AF9C-83C0CCF26218@linux.dev>
+ <35dd51eb-c266-f221-298a-21309c17971a@arm.com>
+ <3D6FDA43-A812-4907-B9C8-C2B25567DBBC@linux.dev>
+ <3c545133-71aa-9a8d-8a13-09186c4fa767@arm.com> <Y1piguJXagcxiTpn@arm.com>
+ <ED740104-0A97-44C1-839F-407F221070BB@linux.dev> <Y1v64lILNN2woIcu@arm.com>
+To:     Catalin Marinas <catalin.marinas@arm.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"Youghandhar Chintala (Temp)" <quic_youghand@quicinc.com> writes:
 
-> On 11/1/2022 2:31 PM, Kalle Valo wrote:
->
->> BTW Youghandhar, your quotes were broken in this mail so your reply was
->> difficult to find. See here:
->>
->> https://patchwork.kernel.org/project/linux-wireless/patch/20221026102257=
-.19919-1-quic_youghand@quicinc.com/
->>
->> If you are using Outlook, I recommend switching to an application which
->> respects standards more :) For example, some people seem to be happy
->> with Thunderbird.
->
->
-> Thank you so much for your suggestion. I will address it.
->
-> Currently I am using=C2=A0 Thunderbird.
 
-Good, and now your quotes were correct.
+> On Oct 28, 2022, at 23:53, Catalin Marinas <catalin.marinas@arm.com> =
+wrote:
+>=20
+> On Fri, Oct 28, 2022 at 10:45:09AM +0800, Muchun Song wrote:
+>> On Oct 27, 2022, at 18:50, Catalin Marinas <catalin.marinas@arm.com> =
+wrote:
+>>> On Wed, Oct 26, 2022 at 02:06:00PM +0530, Anshuman Khandual wrote:
+>>>> On 10/26/22 12:31, Muchun Song wrote:
+>>>>>> On 10/25/22 12:06, Muchun Song wrote:
+>>>>>>>> On Oct 25, 2022, at 09:42, Wupeng Ma <mawupeng1@huawei.com> =
+wrote:
+>>>>>>>> From: Ma Wupeng <mawupeng1@huawei.com>
+>>>>>>>>=20
+>>>>>>>> Commit f41f2ed43ca5 ("mm: hugetlb: free the vmemmap pages =
+associated with
+>>>>>>>> each HugeTLB page") add vmemmap_remap_pte to remap the tail =
+pages as
+>>>>>>>> read-only to catch illegal write operation to the tail page.
+>>>>>>>>=20
+>>>>>>>> However this will lead to WARN_ON in arm64 in =
+__check_racy_pte_update()
+>>>>>>>=20
+>>>>>>> Thanks for your finding this issue.
+>>>>>>>=20
+>>>>>>>> since this may lead to dirty state cleaned. This check is =
+introduced by
+>>>>>>>> commit 2f4b829c625e ("arm64: Add support for hardware updates =
+of the
+>>>>>>>> access and dirty pte bits") and the initial check is as follow:
+>>>>>>>>=20
+>>>>>>>> BUG_ON(pte_write(*ptep) && !pte_dirty(pte));
+>>>>>>>>=20
+>>>>>>>> Since we do need to mark this pte as read-only to catch illegal =
+write
+>>>>>>>> operation to the tail pages, use set_pte  to replace set_pte_at =
+to bypass
+>>>>>>>> this check.
+>>>>>>>=20
+>>>>>>> In theory, the waring does not affect anything since the tail =
+vmemmap
+>>>>>>> pages are supposed to be read-only. So, skipping this check for =
+vmemmap
+>>>>>>=20
+>>>>>> Tails vmemmap pages are supposed to be read-only, in practice but =
+their
+>>>>>> backing pages do have pte_write() enabled. Otherwise the =
+VM_WARN_ONCE()
+>>>>>> warning would not have triggered.
+>>>>>=20
+>>>>> Right.
+>>>>>=20
+>>>>>>=20
+>>>>>>      VM_WARN_ONCE(pte_write(old_pte) && !pte_dirty(pte),
+>>>>>>                   "%s: racy dirty state clearing: 0x%016llx -> =
+0x%016llx",
+>>>>>>                   __func__, pte_val(old_pte), pte_val(pte));
+>>>>>>=20
+>>>>>> Also, is not it true that the pte being remapped into a different =
+page
+>>>>>> as read only, than what it had originally (which will be freed =
+up) i.e=20
+>>>>>> the PFN in 'old_pte' and 'pte' will be different. Hence is there =
+still
+>>>>>=20
+>>>>> Right.
+>>>>>=20
+>>>>>> a possibility for a race condition even when the PFN changes ?
+>>>>>=20
+>>>>> Sorry, I didn't get this question. Did you mean the PTE is changed =
+from
+>>>>> new (pte) to the old one (old_pte) by the hardware because of the =
+update
+>>>>> of dirty bit when a concurrent write operation to the tail vmemmap =
+page?
+>>>>=20
+>>>> No, but is not vmemmap_remap_pte() reuses walk->reuse_page for all =
+remaining
+>>>> tails pages ? Is not there a PFN change, along with access =
+permission change
+>>>> involved in this remapping process ?
+>>>=20
+>>> For the record, as we discussed offline, changing the output address
+>>> (pfn) of a pte is not safe without break-before-make if at least one =
+of
+>>> the mappings was writeable. The caller (vmemmap_remap_pte()) would =
+need
+>>> to be fixed to first invalidate the pte and then write the new pte. =
+I
+>>=20
+>> Could you expose more details about what issue it will be caused? I =
+am
+>> not familiar with arm64.
+>=20
+> Well, it's not allowed by the architecture, so some CPU =
+implementations
+> may do weird things like accessing incorrect memory or triggering TLB
+> conflict aborts if, for some reason, they end up with two entries in
+> the TLB for the same VA but pointing to different pfns. The hardware
+> expects an invalid PTE and TLB invalidation between such changes. In
+> practice most likely nothing happens and this works fine but we need =
+to
+> stick to the architecture requirements in case some CPUs take =
+advantage
+> of this requirement.
 
---=20
-https://patchwork.kernel.org/project/linux-wireless/list/
+Got it. Thanks for your nice explanation.
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatc=
-hes
+>=20
+>>> assume no other CPU accesses this part of the vmemmap while the pte =
+is
+>>> being remapped.
+>>=20
+>> However, there is no guarantee that no other CPU accesses this pte.
+>> E.g. memory failure or memory compaction, both can obtain head page
+>> from any tail struct pages (only read) anytime.
+>=20
+> Oh, so we cannot safely go through a break-before-make sequence here
+> (zero the PTE, flush the TLB, write the new PTE) as some CPU may =
+access
+> this pte.
+
+Right.
+
+Muchun
+
+>=20
+> --=20
+> Catalin
+
+
