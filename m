@@ -2,264 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E48FC615202
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 20:11:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C5C0615205
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 20:12:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbiKATLR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 15:11:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38666 "EHLO
+        id S230416AbiKATMp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 15:12:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39862 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230338AbiKATK7 (ORCPT
+        with ESMTP id S230414AbiKATMV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 15:10:59 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 96E211C416;
-        Tue,  1 Nov 2022 12:10:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667329858; x=1698865858;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=VmV32OVHi9fb2P0Ej7w8R1hN8TMIjIqdcfI5b5Yocxo=;
-  b=EoxOxxFaImcqZbbqPs4Xzk5aLUMLiSZqFqTFsMMJsfsGELJfYOydusTj
-   eyAUMq+W1+sf+Ltj4lKMRuuQ9gPz5qn81IH1iIvAii1fYp/CSwUTo79yt
-   np0+KlbBA0U+h9juYBjF1fL18RKV7Ibyn87+BJraG2ozn7MWqtLMsBwv1
-   Coip9y5ZYktYvlru2ijBTmZMIXeadV7rnj7n7lwgYC1CVfSSGDNG7bK6y
-   OT+yRV2Mv8N2rqrA1FiazyD3l092HzX0fyQ0hSMq0gC3aRq2XbOBWC4Mx
-   1uwbCcufEUEDV0hIt25SzRM7HF9QKMQFKtjLu7mFj5rPOIuQAoUbuRJYo
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="373440772"
-X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
-   d="scan'208";a="373440772"
-Received: from fmsmga001.fm.intel.com ([10.253.24.23])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 12:10:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="776605740"
-X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
-   d="scan'208";a="776605740"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga001.fm.intel.com with ESMTP; 01 Nov 2022 12:10:28 -0700
-Received: from debox1-desk4.intel.com (unknown [10.212.195.64])
-        by linux.intel.com (Postfix) with ESMTP id 95675580C99;
-        Tue,  1 Nov 2022 12:10:27 -0700 (PDT)
-From:   "David E. Box" <david.e.box@linux.intel.com>
-To:     hdegoede@redhat.com, markgross@kernel.org,
-        andriy.shevchenko@linux.intel.com, srinivas.pandruvada@intel.com
-Cc:     "David E. Box" <david.e.box@linux.intel.com>,
-        platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 9/9] tools/arch/x86: intel_sdsi: Add support for reading meter certificates
-Date:   Tue,  1 Nov 2022 12:10:23 -0700
-Message-Id: <20221101191023.4150315-10-david.e.box@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221101191023.4150315-1-david.e.box@linux.intel.com>
-References: <20221101191023.4150315-1-david.e.box@linux.intel.com>
+        Tue, 1 Nov 2022 15:12:21 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD1321EAF2
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 12:11:44 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id a15so22322881ljb.7
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 12:11:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=FccYZAniuq6nRVGyYDJ7zjVHwOXNS5lQO6I/rpbHjOQ=;
+        b=sB1mwoFI/m+l/Ew4opzYjj6BfHId2DtqAeAlqBUw7jewUAngWTexFhyfPmqYQIN36f
+         TTFtH1PfyAI6XGSvz5cmJPTL688ft6ihT363mb9LXZQuPI5vaCnsCa+RFdF/YXvg2j0N
+         9fhcrERxVqminZvzuyBuU3GJ7KNexwFJG8AGLUM9pLQcGBCdPVgMZk/fY4R88lmQEd4w
+         nLeWOxAawTJUp2X/Bl7qn6g7gzKECgLcz0Y8QY8Imz2mzKLRis4W7fzHNDCJEjmZ2PIl
+         dkJr+SVoGO745dueGhSksR4xsRCeIkyxiFEKwOPbjX840mFnb/ngZkAtyn7iEneTHcsV
+         uGjw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FccYZAniuq6nRVGyYDJ7zjVHwOXNS5lQO6I/rpbHjOQ=;
+        b=ZmFYZNeFxFEdRJiVzVdsmm22e7XPdX+2gkuIZ1TgjpwCHTUFbtQAFF/uIOrDAg3tHm
+         eEnIqNvfz09KvIO4roTCf+NS03h9zOm08uv2Ud1Ic3fi0b52aJsndQhqaUbSvOEcI06J
+         w+DHhqROnu3M+F/2UsPsjO5kRoBxCaqwkKz6OwO4nL3go7wUNFSag4mfCu6HFNPWBxVA
+         sIaOnvYZ4nVA2IR19xW2T3U4fyQhXdDFLz0m1cArIO4e3GpxpQ+w+Qxu0yf0sDPsYWzT
+         +d8/dMbZF605tH2kjzpBmhGqAFSEL+5K5Vme5kEFYGTdiS38BnYUbOSGzCE4/oZ8ZcaZ
+         8pPw==
+X-Gm-Message-State: ACrzQf0H2S9yePTKydc/afrLrv4/snGRj+tHfMFNxgqsw/I/SGYLJ8tD
+        5mIBPItipBWEbaBb41i9QjNgtV6qoqD9LpeJE0RgAw==
+X-Google-Smtp-Source: AMsMyM4dY91u6R1+w8bG8BJ4eTkOXK1cyuQY9caMdmbW6eXkMcY61d4N5vIOtuY5HdmkZ5V1eD2oFFL+LarVq53/AlA=
+X-Received: by 2002:a2e:9a8f:0:b0:277:2427:53cd with SMTP id
+ p15-20020a2e9a8f000000b00277242753cdmr7785406lji.52.1667329902870; Tue, 01
+ Nov 2022 12:11:42 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221026224449.214839-1-joshdon@google.com> <Y1/HzzA1FIawYM11@hirez.programming.kicks-ass.net>
+ <CABk29Nu=XcjwRxnGBtKHfknxnDPpspghou06+W0fufnkGF6NkA@mail.gmail.com>
+ <Y2BDFNpkSawKnE9S@slm.duckdns.org> <CABk29Nta-RJpTcybgOk9u4DH=1mwQFZsOxFuQ-UpCcTwzjzAuA@mail.gmail.com>
+ <Y2Bf+CeQ8x2jKQ3S@slm.duckdns.org> <CABk29Nvqv-T1JuAq2cf9=AwRu=y1+YOR4xS2qnVo6+XpWd2UNQ@mail.gmail.com>
+ <Y2B6V1PPuCcTXGp6@slm.duckdns.org>
+In-Reply-To: <Y2B6V1PPuCcTXGp6@slm.duckdns.org>
+From:   Josh Don <joshdon@google.com>
+Date:   Tue, 1 Nov 2022 12:11:30 -0700
+Message-ID: <CABk29Ns1VWEVRYENud4CW3JQPrcr79i_F2PBTANqt3t-LaYCfQ@mail.gmail.com>
+Subject: Re: [PATCH v2] sched: async unthrottling for cfs bandwidth
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Joel Fernandes <joel@joelfernandes.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add option to read and decode On Demand meter certificates.
+On Mon, Oct 31, 2022 at 6:46 PM Tejun Heo <tj@kernel.org> wrote:
+>
+> On Mon, Oct 31, 2022 at 06:01:19PM -0700, Josh Don wrote:
+> > > Yeah, especially with narrow cpuset (or task cpu affinity) configurations,
+> > > it can get pretty bad. Outside that tho, at least I haven't seen a lot of
+> > > problematic cases as long as the low priority one isn't tightly entangled
+> > > with high priority tasks, mostly because 1. if the resource the low pri one
+> > > is holding affects large part of the system, the problem is self-solving as
+> > > the system quickly runs out of other things to do 2. if the resource isn't
+> > > affecting large part of the system, their blast radius is usually reasonably
+> > > confined to things tightly coupled with it. I'm sure there are exceptions
+> > > and we definitely wanna improve the situation where it makes sense.
+> >
+> > cgroup_mutex and kernfs rwsem beg to differ :) These are shared with
+> > control plane threads, so it is pretty easy to starve those out even
+> > while the system has plenty of work to do.
+>
+> Hahaha yeah, good point. We definitely wanna improve them. There were some
+> efforts to improve kernfs locking granularity earlier this year. It was
+> promising but didn't get to the finish line. cgroup_mutex, w/ cgroup2 and
+> especially with the optimizations around CLONE_INTO_CGROUP, we avoid that in
+> most hot paths and hopefully that should help quite a bit. If it continues
+> to be a problem, we definitely wanna further improve it.
+>
+> Just to better understand the situation, can you give some more details on
+> the scenarios where cgroup_mutex was in the middle of a shitshow?
 
-Link: https://github.com/intel/intel-sdsi/blob/master/meter-certificate.rst
+There have been a couple, I think one of the main ones has been writes
+to cgroup.procs. cpuset modifications also show up since there's a
+mutex there.
 
-Signed-off-by: David E. Box <david.e.box@linux.intel.com>
----
- tools/arch/x86/intel_sdsi/intel_sdsi.c | 110 ++++++++++++++++++++++++-
- 1 file changed, 107 insertions(+), 3 deletions(-)
-
-diff --git a/tools/arch/x86/intel_sdsi/intel_sdsi.c b/tools/arch/x86/intel_sdsi/intel_sdsi.c
-index 0680eda78b1a..ebf076ee6ef8 100644
---- a/tools/arch/x86/intel_sdsi/intel_sdsi.c
-+++ b/tools/arch/x86/intel_sdsi/intel_sdsi.c
-@@ -39,8 +39,10 @@
- #define GUID_V2			0xF210D9EF
- #define REGISTERS_MIN_SIZE	72
- #define STATE_CERT_MAX_SIZE	4096
-+#define METER_CERT_MAX_SIZE	4096
- #define STATE_MAX_NUM_LICENSES	16
- #define STATE_MAX_NUM_IN_BUNDLE	(uint32_t)8
-+#define METER_MAX_NUM_BUNDLES	8
- 
- #define __round_mask(x, y) ((__typeof__(x))((y) - 1))
- #define round_up(x, y) ((((x) - 1) | __round_mask(x, y)) + 1)
-@@ -150,6 +152,21 @@ struct bundle_encoding {
- 	uint32_t encoding_rsvd[7];
- };
- 
-+struct meter_certificate {
-+	uint32_t block_signature;
-+	uint32_t counter_unit;
-+	uint64_t ppin;
-+	uint32_t bundle_length;
-+	uint32_t reserved;
-+	uint32_t mmrc_encoding;
-+	uint32_t mmrc_counter;
-+};
-+
-+struct bundle_encoding_counter {
-+	uint32_t encoding;
-+	uint32_t counter;
-+};
-+
- struct sdsi_dev {
- 	struct sdsi_regs regs;
- 	struct state_certificate sc;
-@@ -160,6 +177,7 @@ struct sdsi_dev {
- 
- enum command {
- 	CMD_SOCKET_INFO,
-+	CMD_METER_CERT,
- 	CMD_STATE_CERT,
- 	CMD_PROV_AKC,
- 	CMD_PROV_CAP,
-@@ -306,6 +324,86 @@ static void get_feature(uint32_t encoding, char *feature)
- 	feature[0] = name[3];
- }
- 
-+static int sdsi_meter_cert_show(struct sdsi_dev *s)
-+{
-+	char buf[METER_CERT_MAX_SIZE] = {0};
-+	struct bundle_encoding_counter *bec;
-+	struct meter_certificate *mc;
-+	uint32_t count = 0;
-+	FILE *cert_ptr;
-+	int ret, size;
-+
-+	ret = sdsi_update_registers(s);
-+	if (ret)
-+		return ret;
-+
-+	if (!s->regs.en_features.sdsi) {
-+		fprintf(stderr, "SDSi feature is present but not enabled.\n");
-+		fprintf(stderr, " Unable to read meter certificate\n");
-+		return -1;
-+	}
-+
-+	if (!s->regs.en_features.metering) {
-+		fprintf(stderr, "Metering not supporting on this socket.\n");
-+		return -1;
-+	}
-+
-+	ret = chdir(s->dev_path);
-+	if (ret == -1) {
-+		perror("chdir");
-+		return ret;
-+	}
-+
-+	cert_ptr = fopen("meter_certificate", "r");
-+	if (!cert_ptr) {
-+		perror("Could not open 'meter_certificate' file");
-+		return -1;
-+	}
-+
-+	size = fread(buf, 1, sizeof(buf), cert_ptr);
-+	if (!size) {
-+		fprintf(stderr, "Could not read 'meter_certificate' file\n");
-+		fclose(cert_ptr);
-+		return -1;
-+	}
-+	fclose(cert_ptr);
-+
-+	mc = (struct meter_certificate *)buf;
-+
-+	printf("\n");
-+	printf("Meter certificate for device %s\n", s->dev_name);
-+	printf("\n");
-+	printf("Block Signature:       0x%x\n", mc->block_signature);
-+	printf("Count Unit:            %dms\n", mc->counter_unit);
-+	printf("PPIN:                  0x%lx\n", mc->ppin);
-+	printf("Feature Bundle Length: %d\n", mc->bundle_length);
-+	printf("MMRC encoding:         %d\n", mc->mmrc_encoding);
-+	printf("MMRC counter:          %d\n", mc->mmrc_counter);
-+	if (mc->bundle_length % 8) {
-+		fprintf(stderr, "Invalid bundle length\n");
-+		return -1;
-+	}
-+
-+	if (mc->bundle_length > METER_MAX_NUM_BUNDLES * 8)  {
-+		fprintf(stderr, "More the %d bundles: %d\n",
-+			METER_MAX_NUM_BUNDLES, mc->bundle_length / 8);
-+		return -1;
-+	}
-+
-+	bec = (void *)(mc) + sizeof(mc);
-+
-+	printf("Number of Feature Counters:          %d\n", mc->bundle_length / 8);
-+	while (count++ < mc->bundle_length / 8) {
-+		char feature[5];
-+
-+		feature[4] = '\0';
-+		get_feature(bec[count].encoding, feature);
-+		printf("    %s:          %d\n", feature, bec[count].counter);
-+	}
-+
-+	return 0;
-+}
-+
- static int sdsi_state_cert_show(struct sdsi_dev *s)
- {
- 	char buf[STATE_CERT_MAX_SIZE] = {0};
-@@ -625,7 +723,7 @@ static void sdsi_free_dev(struct sdsi_dev *s)
- 
- static void usage(char *prog)
- {
--	printf("Usage: %s [-l] [-d DEVNO [-i] [-s] [-a FILE] [-c FILE]]\n", prog);
-+	printf("Usage: %s [-l] [-d DEVNO [-i] [-s] [-m] [-a FILE] [-c FILE]]\n", prog);
- }
- 
- static void show_help(void)
-@@ -635,6 +733,7 @@ static void show_help(void)
- 	printf("  %-18s\t%s\n", "-d, --devno DEVNO",    "On Demand device number");
- 	printf("  %-18s\t%s\n", "-i, --info",           "show socket information");
- 	printf("  %-18s\t%s\n", "-s, --state",          "show state certificate");
-+	printf("  %-18s\t%s\n", "-m, --meter",          "show meter certificate");
- 	printf("  %-18s\t%s\n", "-a, --akc FILE",       "provision socket with AKC FILE");
- 	printf("  %-18s\t%s\n", "-c, --cap FILE>",      "provision socket with CAP FILE");
- }
-@@ -656,6 +755,7 @@ int main(int argc, char *argv[])
- 		{"help",	no_argument,		0, 'h'},
- 		{"info",	no_argument,		0, 'i'},
- 		{"list",	no_argument,		0, 'l'},
-+		{"meter",	no_argument,		0, 'm'},
- 		{"state",	no_argument,		0, 's'},
- 		{0,		0,			0, 0 }
- 	};
-@@ -663,7 +763,7 @@ int main(int argc, char *argv[])
- 
- 	progname = argv[0];
- 
--	while ((opt = getopt_long_only(argc, argv, "+a:c:d:hils", long_options,
-+	while ((opt = getopt_long_only(argc, argv, "+a:c:d:hilms", long_options,
- 			&option_index)) != -1) {
- 		switch (opt) {
- 		case 'd':
-@@ -676,8 +776,9 @@ int main(int argc, char *argv[])
- 		case 'i':
- 			command = CMD_SOCKET_INFO;
- 			break;
-+		case 'm':
- 		case 's':
--			command = CMD_STATE_CERT;
-+			command = (opt == 'm') ? CMD_METER_CERT : CMD_STATE_CERT;
- 			break;
- 		case 'a':
- 		case 'c':
-@@ -713,6 +814,9 @@ int main(int argc, char *argv[])
- 		case CMD_SOCKET_INFO:
- 			ret = sdsi_read_reg(s);
- 			break;
-+		case CMD_METER_CERT:
-+			ret = sdsi_meter_cert_show(s);
-+			break;
- 		case CMD_STATE_CERT:
- 			ret = sdsi_state_cert_show(s);
- 			break;
--- 
-2.25.1
-
+>
+> Thanks.
+>
+> --
+> tejun
