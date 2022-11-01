@@ -2,103 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2BFA614B4F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:03:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D54AB614B53
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:04:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbiKANDK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 09:03:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42068 "EHLO
+        id S229826AbiKANEg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 09:04:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230351AbiKANDH (ORCPT
+        with ESMTP id S229471AbiKANEd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 09:03:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BD3D1B798
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 06:03:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 128F4B81BD2
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 13:03:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BAB39C433D6;
-        Tue,  1 Nov 2022 13:03:02 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="myvlQccd"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1667307780;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aGf3HRCgre3btUoaDn4OQ44V8myJz/3Xau3fRCIpvUk=;
-        b=myvlQccdLLbbOrtow+kUbH/oXOYEc8Oy9LENIq4/ncat6FPoYRAVx9139m1B9/8SVuOXJ1
-        CIkMB7K2W8O7BGFtcBthO1d7Z+zw2tKWQkTc2ucHEyTq76TFDkgcaYSwkHDXHW/NN0rtmP
-        RBf5hazhmW6EgCY1N4D/nZJ8eKI2Jr0=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 52812150 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Tue, 1 Nov 2022 13:03:00 +0000 (UTC)
-Date:   Tue, 1 Nov 2022 14:02:58 +0100
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-To:     Mark Rutland <mark.rutland@arm.com>
-Cc:     Catalin Marinas <catalin.marinas@arm.com>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        Will Deacon <will@kernel.org>,
-        Ard Biesheuvel <ardb@kernel.org>,
-        Jean-Philippe Brucker <jean-philippe@linaro.org>
-Subject: Re: [PATCH v5] random: remove early archrandom abstraction
-Message-ID: <Y2EZAsRA8uS+ppnn@zx2c4.com>
-References: <20221101115616.232884-1-Jason@zx2c4.com>
- <20221101122527.323843-1-Jason@zx2c4.com>
- <Y2ESilMCF9eeffW6@FVFF77S0Q05N>
+        Tue, 1 Nov 2022 09:04:33 -0400
+Received: from todd.t-8ch.de (todd.t-8ch.de [IPv6:2a01:4f8:c010:41de::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC82712D16;
+        Tue,  1 Nov 2022 06:04:32 -0700 (PDT)
+From:   =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=weissschuh.net;
+        s=mail; t=1667307870;
+        bh=WKsfKfXzkJWoJQvD09hXFWT3kjqAmgF8ogC0a2yCnWQ=;
+        h=From:To:Cc:Subject:Date:From;
+        b=eFp+gYnvUzd555IsQfvG45RQND3MuvtWYUdXrThDC7n0XGhkngGCdL3imHyi+so6p
+         EEUk9n8nYaH+kaGjALVrj02IJzSbz+pqN3jGnqpn+QmZAZImHdsgNrUcmppmfWi8/g
+         uMSVFkN+F1YIQ3kmsisp3d9PqkaFsJgLgyXCI2wg=
+To:     linux-fsdevel@vger.kernel.org
+Cc:     =?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+        linux-kernel@vger.kernel.org, Karel Zak <kzak@redhat.com>,
+        Masatake YAMATO <yamato@redhat.com>, linux-api@vger.kernel.org,
+        Greg KH <gregkh@linuxfoundation.org>
+Subject: [PATCH v2] proc: add byteorder file
+Date:   Tue,  1 Nov 2022 14:04:01 +0100
+Message-Id: <20221101130401.1841-1-linux@weissschuh.net>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y2ESilMCF9eeffW6@FVFF77S0Q05N>
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1667307838; l=2910; s=20211113; h=from:subject; bh=WKsfKfXzkJWoJQvD09hXFWT3kjqAmgF8ogC0a2yCnWQ=; b=uDOy06fc7qHj8VYikcsRGtc3ggGiSSQhV5XQOrXFXXlgF8OEaJAZgZmGxu3CNyT2U5oPwJvfhNRX FG8dV0gcCgTQyakBKLbyUCJkDZVHqB+XmBPb+OPLhNp7s+GakK1N
+X-Developer-Key: i=linux@weissschuh.net; a=ed25519; pk=9LP6KM4vD/8CwHW7nouRBhWLyQLcK1MkP6aTZbzUlj4=
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mark,
+Certain files in procfs are formatted in byteorder dependent ways. For
+example the IP addresses in /proc/net/udp.
 
-On Tue, Nov 01, 2022 at 12:36:07PM +0000, Mark Rutland wrote:
-> Hi Jason,
-> 
-> Sorry for joining this late...
-> 
-> On Tue, Nov 01, 2022 at 01:25:28PM +0100, Jason A. Donenfeld wrote:
-> > The arch_get_random*_early() abstraction is not completely useful and
-> > adds complexity, because it's not a given that there will be no calls to
-> > arch_get_random*() between random_init_early(), which uses
-> > arch_get_random*_early(), and init_cpu_features(). During that gap,
-> > crng_reseed() might be called, which uses arch_get_random*(), since it's
-> > mostly not init code.
-> 
-> The original rationale for arch_get_random*_early() was just to seed the RNG
-> more robustly rather than to feed every possible arch_get_random() call made
-> early in the boot flow, and the rationale for having a separate functions was
-> that it was trivial to see by inspection that it was (only) called in the
-> expected places.
-> 
-> I'm not wedded to arch_get_random*_early() specifically, but I do think that
-> having arch_get_random() behave differently depending on which phase of boot
-> we're in has more scope for error than having a separate call of some sort.
-> 
-> Other than removing the lines below, what chages is this going to permit?
+Assuming the byteorder of the userspace program is not guaranteed to be
+correct in the face of emulation as for example with qemu-user.
 
-Firstly, the issue with the API is having to remember to use it! There's
-already been a bug from forgetting to use the _early() call during some
-refactoring, and I doubt it'll be the last.
+Also this makes it easier for non-compiled applications like
+shellscripts to discover the byteorder.
 
-But also, functions such as crng_reseed()->extract_entropy() wind up
-being called in both early contexts and normal contexts. It's not
-feasible to have different paths there, so by having two functions,
-we miss out on having access during early boot.
+Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
 
-So I don't want a separate call, both for the API complexity reasons,
-and because it doesn't really work as intended in the end.
+---
 
-Jason
+Development of userspace part: https://github.com/util-linux/util-linux/pull/1872
+
+v1: https://lore.kernel.org/lkml/20221101005043.1791-1-linux@weissschuh.net/
+v1->v2:
+  * Move file to /sys/kernel/byteorder
+---
+ .../ABI/testing/sysfs-kernel-byteorder         | 12 ++++++++++++
+ kernel/ksysfs.c                                | 18 ++++++++++++++++++
+ 2 files changed, 30 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-kernel-byteorder
+
+diff --git a/Documentation/ABI/testing/sysfs-kernel-byteorder b/Documentation/ABI/testing/sysfs-kernel-byteorder
+new file mode 100644
+index 000000000000..4c45016d78ae
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-kernel-byteorder
+@@ -0,0 +1,12 @@
++What:		/sys/kernel/byteorder
++Date:		February 2023
++KernelVersion:	6.2
++Contact:	linux-fsdevel@vger.kernel.org
++Description:
++		The current endianness of the running kernel.
++
++		Access: Read
++
++		Valid values:
++			"little", "big"
++Users:		util-linux
+diff --git a/kernel/ksysfs.c b/kernel/ksysfs.c
+index 65dba9076f31..7c7cb2c96ac0 100644
+--- a/kernel/ksysfs.c
++++ b/kernel/ksysfs.c
+@@ -6,6 +6,7 @@
+  * Copyright (C) 2004 Kay Sievers <kay.sievers@vrfy.org>
+  */
+ 
++#include <asm/byteorder.h>
+ #include <linux/kobject.h>
+ #include <linux/string.h>
+ #include <linux/sysfs.h>
+@@ -20,6 +21,14 @@
+ 
+ #include <linux/rcupdate.h>	/* rcu_expedited and rcu_normal */
+ 
++#if defined(__LITTLE_ENDIAN)
++#define BYTEORDER_STRING	"little"
++#elif defined(__BIG_ENDIAN)
++#define BYTEORDER_STRING	"big"
++#else
++#error Unknown byteorder
++#endif
++
+ #define KERNEL_ATTR_RO(_name) \
+ static struct kobj_attribute _name##_attr = __ATTR_RO(_name)
+ 
+@@ -34,6 +43,14 @@ static ssize_t uevent_seqnum_show(struct kobject *kobj,
+ }
+ KERNEL_ATTR_RO(uevent_seqnum);
+ 
++/* kernel byteorder */
++static ssize_t byteorder_show(struct kobject *kobj,
++			      struct kobj_attribute *attr, char *buf)
++{
++	return sprintf(buf, "%s\n", BYTEORDER_STRING);
++}
++KERNEL_ATTR_RO(byteorder);
++
+ #ifdef CONFIG_UEVENT_HELPER
+ /* uevent helper program, used during early boot */
+ static ssize_t uevent_helper_show(struct kobject *kobj,
+@@ -215,6 +232,7 @@ EXPORT_SYMBOL_GPL(kernel_kobj);
+ static struct attribute * kernel_attrs[] = {
+ 	&fscaps_attr.attr,
+ 	&uevent_seqnum_attr.attr,
++	&byteorder_attr.attr,
+ #ifdef CONFIG_UEVENT_HELPER
+ 	&uevent_helper_attr.attr,
+ #endif
+
+base-commit: 5aaef24b5c6d4246b2cac1be949869fa36577737
+-- 
+2.38.1
+
