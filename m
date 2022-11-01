@@ -2,73 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A2A526154F3
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCBAB6154FD
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:31:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbiKAW3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 18:29:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34538 "EHLO
+        id S230173AbiKAWbp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 18:31:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35274 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiKAW3O (ORCPT
+        with ESMTP id S229591AbiKAWbm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 18:29:14 -0400
-Received: from mail-oo1-xc2e.google.com (mail-oo1-xc2e.google.com [IPv6:2607:f8b0:4864:20::c2e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97BA5DFB7;
-        Tue,  1 Nov 2022 15:29:12 -0700 (PDT)
-Received: by mail-oo1-xc2e.google.com with SMTP id r15-20020a4abf0f000000b004761c7e6be1so2258744oop.9;
-        Tue, 01 Nov 2022 15:29:12 -0700 (PDT)
+        Tue, 1 Nov 2022 18:31:42 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C141DFB7
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 15:31:42 -0700 (PDT)
+Received: from pps.filterd (m0246617.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A1M47HM028746;
+        Tue, 1 Nov 2022 22:31:25 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=from : to : cc :
+ subject : date : message-id : content-transfer-encoding : content-type :
+ mime-version; s=corp-2022-7-12;
+ bh=J8Y2Ey1M18G7oaDVu2SAR48OoMG4Yc24leIq2Z/FI0g=;
+ b=sdp85oOF6PlXA/gStkdt6TxNfZz4SXAe0kQ/HZ1ya6I3PeAC1iBUEN5pEYOvb+q6hTpH
+ klzwNFtVULXAW4Uu2SvCHdyaeQH16A2iK8ikSbfwq+TJAz1VTjH71GDXbW/rXsVzvg9u
+ QoMi4GpAcZms9htjhZYfc+L9jRN/b1HWY69A9FUturky0XMa1d8nBH8Z3MQlYxlhvzBZ
+ BYrjVKinwiz2ZnRwBPxgo9tfTHBKZhXRdhNlyxptbFXGFKabmgu6JUsAIreywUfjdM9+
+ +eND+ayq3ySF6s91gE5CZP+BTj5f1ZoSvpzGA1/vtIvmGhHYPj2lAGad3OIz99tcnSko KQ== 
+Received: from iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta01.appoci.oracle.com [130.35.100.223])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kgvqtg3ra-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 01 Nov 2022 22:31:24 +0000
+Received: from pps.filterd (iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2A1KUc3J003094;
+        Tue, 1 Nov 2022 22:31:23 GMT
+Received: from nam02-sn1-obe.outbound.protection.outlook.com (mail-sn1anam02lp2043.outbound.protection.outlook.com [104.47.57.43])
+        by iadpaimrmta01.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 3kgtmayarw-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Tue, 01 Nov 2022 22:31:23 +0000
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=Yn3nkqfSQGvoFPtDvBDXFa0fYiL5TECcmCmYNNmOxZ2MIj6mi1k9Q77hVBiaRai2v55TEv5xRWDPmjCRRi933cjs9CblUAHaVpaqzZsX3/2G/NHUicovOSrTllZVGeBV4itL6nwTkixqod8GkO0Ype5sZGtFUlxtqrJnFHckdxsGOqZ7HhNFZCvb3ZuY8lgN56GHvgNFhw7DHZLqQJdOc90yUgs3B6GqLjWsA8Pd46nCNCIYgFLx+LGjLibeV6I5/T2yEIBtTaE8fd7r+ZwpCSJL4NNyWZnhBkdcy2GbUplcGLzVqnq+bOxhNw8cW65Ko1EhJ4pIIlbVoSyqJvLs2Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=J8Y2Ey1M18G7oaDVu2SAR48OoMG4Yc24leIq2Z/FI0g=;
+ b=Mj/Vee226HfoIkoj8l1E4bkqjvgKWKRkEg+v6jvskZqbZpJIvue6e59d+JmGf2hZ8n3G3ZKcHft9yx/hFhQEoN02MhZaLAosp5dGU9LX1tx00TIHCTuTImtTd5NlEkkoOj7fnHZ7Y7mVwMBv32keEsuR+DEZkg/NrUtALUZEAgJ0uhLknFcjWi1LVWHAX6EBZ05PDdRJhJhddA3bBcRuOYmCe8zAKOuIRuWDdWurhL9d2fiPMzJsmdrrsHGWvlaqYiQjWe2bA9+1eZxaQqSFganr0RcZi3gDnVlLWjqVGmZRydOplKwRDuRPLLCRJ0FuTxizofDfGsOShbBqsnQhyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=jkzEUyl2aPrJCEJ2Lx0JtWG1kofrnzJEL+LzA1fV9kY=;
-        b=hJPWI/W8Az+4Bg3JBiOZWgsQ+Xy47ABvBcSkEeA82TNgCKvtkOuYKGlBpsvruRFpXC
-         cu4UrriQYP4Kf0G2+9MSBbduChVcRtzOe5mkEaiD+I6TNU27OfDAEEfk4bj5LOZKP52z
-         PALf61PnQ5nWA+fCyi2esvLMVs/Rvo9i5X3d/YPReX/C3FVV3SqOufuDpN85gYu2L2uu
-         zabo+KZWbikMk62XNFVezW3T+iyajM3zj+4ItlRg6fWiJZZIxeGM2x8tOTvaOhgx/9eb
-         WRW/ciOULrABT9vozx6g2g1juieEHAef2CzNgWUqbu+b+h5LXrGOG5rlj8QLaJw+ecOi
-         cfdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jkzEUyl2aPrJCEJ2Lx0JtWG1kofrnzJEL+LzA1fV9kY=;
-        b=WOlX8iiATUeB6vj7l3dLpXdnzPiEUGER8wqRsMPvKU9MyR4e/+mf3QUNT6vs7L7omB
-         hFqxDgsIx9LDloNiqjXeNbJSSTx6chuv07aQZbsKskcY1mgySpm70bJ4Fw1gvmYNRWM4
-         YocquZDCSJpFFY2XOPkfXa6HPJJYl8d9f2XnljMyDB9tEcE2ZKtl+ny2KV/UP1JrxBLr
-         u4AD2xNrKoUwrIDlnDKqWeMhqRpSmsK3VMKNbtKRwt3ajRonjQYmQYHnaKlkhHe83PF/
-         2tTDEgj7a6f4f+yl5TaKxlPsuzbmMKiENWQ9Bz7D0/xCWbkBXNu0CWHLYO7WHsriFGoM
-         Y7sQ==
-X-Gm-Message-State: ACrzQf1PwtvyczwiaMOO6nJg7SL2jeASIRf0ugTXTiGXgGsKxAB2MzTB
-        NbwnNXELG9whf5sIdF1PT2H/uGC+c1WKyN2yjzw=
-X-Google-Smtp-Source: AMsMyM5ymTtkXNGeFfcHFDpfAeD/6wct1Bkjuwddmtg784RsHfgUiImexNdheVrN9Cf/lqfEr2i17R6o+ICXNRu+x1o=
-X-Received: by 2002:a4a:e2d3:0:b0:497:e693:10d6 with SMTP id
- l19-20020a4ae2d3000000b00497e69310d6mr8939311oot.92.1667341751801; Tue, 01
- Nov 2022 15:29:11 -0700 (PDT)
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=J8Y2Ey1M18G7oaDVu2SAR48OoMG4Yc24leIq2Z/FI0g=;
+ b=AsQKAlhB9HY8hJqv3RLr9/BzlI+hWwEV3aBJYHoCUqJU109C3VeLwZzPQho25CttBUVAhJqiwYveMc3wxdLfNQvY7hCnSQrR4FJs9EP0Yk80cSjrI/2HZ/xzLPMzbjQd64ixI4UmELYJ/GKmxjT/mOd7nZUFo9y3Tv60Sko2Ilc=
+Received: from CH0PR10MB5113.namprd10.prod.outlook.com (2603:10b6:610:c9::8)
+ by IA1PR10MB6075.namprd10.prod.outlook.com (2603:10b6:208:3ad::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.21; Tue, 1 Nov
+ 2022 22:31:21 +0000
+Received: from CH0PR10MB5113.namprd10.prod.outlook.com
+ ([fe80::3702:7db0:8917:9954]) by CH0PR10MB5113.namprd10.prod.outlook.com
+ ([fe80::3702:7db0:8917:9954%4]) with mapi id 15.20.5769.019; Tue, 1 Nov 2022
+ 22:31:21 +0000
+From:   Sidhartha Kumar <sidhartha.kumar@oracle.com>
+To:     linux-kernel@vger.kernel.org, linux-mm@kvack.org
+Cc:     akpm@linux-foundation.org, songmuchun@bytedance.com,
+        mike.kravetz@oracle.com, willy@infradead.org,
+        almasrymina@google.com, linmiaohe@huawei.com,
+        minhquangbui99@gmail.com, aneesh.kumar@linux.ibm.com,
+        Sidhartha Kumar <sidhartha.kumar@oracle.com>
+Subject: [PATCH v2 0/9] convert hugetlb_cgroup helper functions to folios
+Date:   Tue,  1 Nov 2022 15:30:50 -0700
+Message-Id: <20221101223059.460937-1-sidhartha.kumar@oracle.com>
+X-Mailer: git-send-email 2.31.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SJ0PR03CA0051.namprd03.prod.outlook.com
+ (2603:10b6:a03:33e::26) To CH0PR10MB5113.namprd10.prod.outlook.com
+ (2603:10b6:610:c9::8)
 MIME-Version: 1.0
-References: <20221031225414.1280169-1-robdclark@gmail.com> <20221031225414.1280169-3-robdclark@gmail.com>
- <fa56debb-41cb-6b91-3f22-f41ffca98fdc@quicinc.com>
-In-Reply-To: <fa56debb-41cb-6b91-3f22-f41ffca98fdc@quicinc.com>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Tue, 1 Nov 2022 15:29:28 -0700
-Message-ID: <CAF6AEGvvbEhAEuWP3Go9otFF5fBtvp-QMmx4xxjAnr=AwvuxnQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] drm/msm: Hangcheck progress detection
-To:     Akhil P Oommen <quic_akhilpo@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org,
-        Rob Clark <robdclark@chromium.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>, Chia-I Wu <olvaffe@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Douglas Anderson <dianders@chromium.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH0PR10MB5113:EE_|IA1PR10MB6075:EE_
+X-MS-Office365-Filtering-Correlation-Id: 158337b9-596f-4218-f314-08dabc58cd29
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mHfZVqYnHOkgAeCNEJTTNyuckhQKWDeMjUIIYWhTXRKPGm82Nie3rY1b+sp3ZEvvvpxUL5CZ5+1tRMUTJR6DNNUElZHqgTtZ9+mfF9B7v9dJkoyxBVV4n0AjMDUJsUGb1T3qTBkl3liTGCwF6yHC7cWX5M1ejgcROfB3kw6WoQUvLpaLD6mJwlQoWJF99MfNvvz75RWKh2veSN0Gokdwt+muO2vEXbBrJa1ERYMvnKGSu7k5Jqx4D8rh63qj05v0w0YeodNMUCfwlin8kKJ4FHPOYNqKO1VJbn8/b24Kdu/JaJq9yZbcKEO1kGGHmugGy1qElbM5XaFre+mcWb55oQ6CbmkDgj+IKWuOOAUKNFoSbWSQa7Nb81//Danq8BdhlDDdyiO64aB/kxxFTXBKFFbJZ0/cD3f9wWXy1R96YqwHuVaSncHbtU+RfkklS3CM/0/BdtQMkGW3Qta2eWhthqKOg2LQ6Fd0JlsrS9mwY6Cq+TAn440o/z2G/n8/sKxk4UmQshhvzc9NQI0o4CSDh+lhycyGEX8xlAZnpIDnm5rPMpzMe6NLvMkmXXlUD2pHpb98QtfVY+mBYrIWt8gslz4jJGY2NRNn5jI/HpwWmdUDJ+xkaswnymsBisVNHz/Bw4Y3KWFebvlSLZoET7N9Gfn8Vhosx9+8PKZq4U8V/lkwKMhKdvFQOlR3ZDyoajPv2vAouUh40P2MUQQW55D9cI+FMQcCli+YFlsKvldS/Xg=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR10MB5113.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(136003)(376002)(396003)(346002)(39860400002)(451199015)(36756003)(86362001)(38100700002)(83380400001)(2906002)(5660300002)(44832011)(107886003)(2616005)(186003)(1076003)(6666004)(6506007)(26005)(6512007)(316002)(478600001)(4326008)(66556008)(66946007)(8676002)(66476007)(41300700001)(8936002)(6486002)(966005);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?k6R0suY2QqefF0Rc+xh3l2I9ROKkoEOFIrkQz/eLo0YF+K4ubZ/wsPHqQHrx?=
+ =?us-ascii?Q?yf7bPlgumhunwzxkBvI1IgtksVGvQ9HcfxOZgWOxeyH9p52ZNmcyxPJEh5Zp?=
+ =?us-ascii?Q?jpdqEMBs9xf0K25v7MsBbC4Zo2b1+nZkPMCLFL38EE8gsUnH+2S5ghkDgfWA?=
+ =?us-ascii?Q?pXL68Q9Jz4x+/V7eehZpCtKvwDbnpepNc6aU0UxMrysKB45JCHGx19BshTpB?=
+ =?us-ascii?Q?FiRmp60+hcTzuOu5JrkiJXF7UYrXbPoTHYEGx0ntBe9WxrvJE7R+n7fbQqyV?=
+ =?us-ascii?Q?Bse6MdSUdefusvCBYmZTvMQuS5PzSFpG+tojNSj0lFVcAxFlnEO590cj1dsB?=
+ =?us-ascii?Q?3f3Fqwwh/0rFa2uHORia3PCGHzRk4/N3OvQ5xozP/HsZqfKfGdrycN64gMnN?=
+ =?us-ascii?Q?4lr7TnogOemfmz6hD/b43kPG+3z4VL6Tt1+6JvqNzDYLKdve1KTfQIiS4NLV?=
+ =?us-ascii?Q?CpQvzy3yp9t/amdzS0oRvmSqnaQdtoBarTjxfaa+CAFstNHrXmdrcWvzuK5Q?=
+ =?us-ascii?Q?RLblX7sv/ctq+hpSRM9GOJ1WZ528uxochdUrwb0p++KcX4cxxR+6iAJ+wo15?=
+ =?us-ascii?Q?0o1Nnc80/kdOFGk7rlkxMLaOFmUyVQ2qC9UapYVSePQ1WdNZGC/XRG9jRGDr?=
+ =?us-ascii?Q?z6H1+XVGIYEGfBxbe9wo2rPqBcbIuoBuFt2hqKDLiUb1sX2FGHal6TLgs8mx?=
+ =?us-ascii?Q?P5b+L72ormrotsqiu8qVrO0aO3g5vCk+9L4x6gNcmS2eeJFhXJjPnWQqvlKy?=
+ =?us-ascii?Q?bXbhDHaEhBeN4H+7b/mQ1flX8gfp5S3GeCtBkWHs2xuhWAUd99ezLfnnM8NO?=
+ =?us-ascii?Q?pLCog6twfxD8m7hM2Xmbky2GIb9aQDLaB8hkz4lqtq0wIgLcPR4kiMQlcfuJ?=
+ =?us-ascii?Q?7/8rL91VFHvcI8U9d+h/6LBmQvUxtd4mKmXIK1Wyx843btQz8fxYa5sVQgvA?=
+ =?us-ascii?Q?6+/l2u3k3NeBrVMrbp/RyRDPjD2eXJxrNBvRQLNfbM9tfhWsy/SA4TFRsOK/?=
+ =?us-ascii?Q?16zwbXSfya2DThS5wmZlk6FszauGGzDV/IyMJY1yRcFi7lFikPVcYEwNkbLa?=
+ =?us-ascii?Q?embHO/KGVHUvc1rcuWaYITFyNejaLF4K1ff65IYDXWeqS++3rm5QDtvnbd9J?=
+ =?us-ascii?Q?xp/woY+w3t7kGlg7QLVw0Tr3pHKRyB2eeFEHKZnnUFiN6UQAKvSQL8ss602u?=
+ =?us-ascii?Q?IIsehH9hvRGu4HKOrkMmXuQfG2JZD9gdbyg0HQ9m9R+CILOSSvGK4dwLcliO?=
+ =?us-ascii?Q?kxm7A//sGWPUxqYKvYErs6fr+21WxksaWX3LkGijxNLNfeIhBuBr/fWEE4ZL?=
+ =?us-ascii?Q?tJXZzyqRIFjgijO9g+vm6pyaUKELhS9Se143XLEq0lsCKgQjTCJAAAtVmIr1?=
+ =?us-ascii?Q?r7Qji3YXs1od6UmMWwB+LLuxYIhMysghuuZwDIxYKEb5G81aA2xY8ELL7Q7i?=
+ =?us-ascii?Q?eWZBdW6RDkoMwLiWDeQgNyAM3zQNMgTBxk8X1Nn1RLzcezvAS4i41GO75POK?=
+ =?us-ascii?Q?hPk0HLfNxUZt77Goke3f+m1O63kSwS6QijuzfJ8wB9asLBpf0jwAyp+2vzO+?=
+ =?us-ascii?Q?Cl2vphyfU552FXDH+KfdfzMDhd1fisQQtdk6+jktPPHnkYzFdbopYZNLTcB0?=
+ =?us-ascii?Q?CQ=3D=3D?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 158337b9-596f-4218-f314-08dabc58cd29
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR10MB5113.namprd10.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Nov 2022 22:31:21.3755
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: st0ilgeFk3rinN19zLnGSdSKUDUH8dgLWYW1BSzBFUtDIm/i87VYLs8wnlcNheRf6pKmNu7xDcULNmo1K9yGw+gvbbMVMh61OsqhWUhFMC0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR10MB6075
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-01_10,2022-11-01_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0 mlxscore=0
+ suspectscore=0 malwarescore=0 bulkscore=0 phishscore=0 mlxlogscore=898
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211010153
+X-Proofpoint-GUID: mDRKZEkWXBDT2cgNbjz9puvERlBYIjbU
+X-Proofpoint-ORIG-GUID: mDRKZEkWXBDT2cgNbjz9puvERlBYIjbU
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,224 +146,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 1, 2022 at 12:54 PM Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
->
-> On 11/1/2022 4:24 AM, Rob Clark wrote:
-> > From: Rob Clark <robdclark@chromium.org>
-> >
-> > If the hangcheck timer expires, check if the fw's position in the
-> > cmdstream has advanced (changed) since last timer expiration, and
-> > allow it up to three additional "extensions" to it's alotted time.
-> > The intention is to continue to catch "shader stuck in a loop" type
-> > hangs quickly, but allow more time for things that are actually
-> > making forward progress.
-> >
-> > Because we need to sample the CP state twice to detect if there has
-> > not been progress, this also cuts the the timer's duration in half.
-> >
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > ---
-> >   drivers/gpu/drm/msm/adreno/a6xx_gpu.c | 34 +++++++++++++++++++++++++++
-> >   drivers/gpu/drm/msm/msm_drv.h         |  8 ++++++-
-> >   drivers/gpu/drm/msm/msm_gpu.c         | 20 +++++++++++++++-
-> >   drivers/gpu/drm/msm/msm_gpu.h         |  5 +++-
-> >   drivers/gpu/drm/msm/msm_ringbuffer.h  | 24 +++++++++++++++++++
-> >   5 files changed, 88 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> > index 1ff605c18ee6..3b8fb7a11dff 100644
-> > --- a/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> > +++ b/drivers/gpu/drm/msm/adreno/a6xx_gpu.c
-> > @@ -1843,6 +1843,39 @@ static uint32_t a6xx_get_rptr(struct msm_gpu *gpu, struct msm_ringbuffer *ring)
-> >       return ring->memptrs->rptr = gpu_read(gpu, REG_A6XX_CP_RB_RPTR);
-> >   }
-> >
-> > +static bool a6xx_progress(struct msm_gpu *gpu, struct msm_ringbuffer *ring)
-> > +{
-> > +     struct msm_cp_state cp_state = {
-> > +             .ib1_base = gpu_read64(gpu, REG_A6XX_CP_IB1_BASE),
-> > +             .ib2_base = gpu_read64(gpu, REG_A6XX_CP_IB2_BASE),
-> > +             .ib1_rem  = gpu_read(gpu, REG_A6XX_CP_IB1_REM_SIZE),
-> > +             .ib2_rem  = gpu_read(gpu, REG_A6XX_CP_IB2_REM_SIZE),
-> > +     };
-> > +     bool progress;
-> > +
-> > +     /*
-> > +      * Adjust the remaining data to account for what has already been
-> > +      * fetched from memory, but not yet consumed by the SQE.
-> > +      *
-> > +      * This is not *technically* correct, the amount buffered could
-> > +      * exceed the IB size due to hw prefetching ahead, but:
-> > +      *
-> > +      * (1) We aren't trying to find the exact position, just whether
-> > +      *     progress has been made
-> > +      * (2) The CP_REG_TO_MEM at the end of a submit should be enough
-> > +      *     to prevent prefetching into an unrelated submit.  (And
-> > +      *     either way, at some point the ROQ will be full.)
-> > +      */
-> > +     cp_state.ib1_rem += gpu_read(gpu, REG_A6XX_CP_CSQ_IB1_STAT) >> 16;
-> > +     cp_state.ib2_rem += gpu_read(gpu, REG_A6XX_CP_CSQ_IB1_STAT) >> 16;
-> REG_A6XX_CP_CSQ_IB1_STAT -> REG_A6XX_CP_CSQ_IB2_STAT
+This patch series continues the conversion of hugetlb code from being
+managed in pages to folios by converting many of the hugetlb_cgroup helper
+functions to use folios. This allows the core hugetlb functions to pass in
+a folio to these helper functions.
 
-oops, will fix in v2
+This series depends on my previous patch series which begins the hugetlb
+folio conversion[1], both series pass the LTP hugetlb test cases.
 
-> With that, Reviewed-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
->
-> -Akhil.
-> > +
-> > +     progress = !!memcmp(&cp_state, &ring->last_cp_state, sizeof(cp_state));
-> > +
-> > +     ring->last_cp_state = cp_state;
-> > +
-> > +     return progress;
-> > +}
-> > +
-> >   static u32 a618_get_speed_bin(u32 fuse)
-> >   {
-> >       if (fuse == 0)
-> > @@ -1961,6 +1994,7 @@ static const struct adreno_gpu_funcs funcs = {
-> >               .create_address_space = a6xx_create_address_space,
-> >               .create_private_address_space = a6xx_create_private_address_space,
-> >               .get_rptr = a6xx_get_rptr,
-> > +             .progress = a6xx_progress,
-> >       },
-> >       .get_timestamp = a6xx_get_timestamp,
-> >   };
-> > diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
-> > index efcd7260f428..970a1a0ab34f 100644
-> > --- a/drivers/gpu/drm/msm/msm_drv.h
-> > +++ b/drivers/gpu/drm/msm/msm_drv.h
-> > @@ -226,7 +226,13 @@ struct msm_drm_private {
-> >
-> >       struct drm_atomic_state *pm_state;
-> >
-> > -     /* For hang detection, in ms */
-> > +     /**
-> > +      * hangcheck_period: For hang detection, in ms
-> > +      *
-> > +      * Note that in practice, a submit/job will get at least two hangcheck
-> > +      * periods, due to checking for progress being implemented as simply
-> > +      * "have the CP position registers changed since last time?"
-> > +      */
-> >       unsigned int hangcheck_period;
-> >
-> >       /**
-> > diff --git a/drivers/gpu/drm/msm/msm_gpu.c b/drivers/gpu/drm/msm/msm_gpu.c
-> > index 3dffee54a951..136f5977b0bf 100644
-> > --- a/drivers/gpu/drm/msm/msm_gpu.c
-> > +++ b/drivers/gpu/drm/msm/msm_gpu.c
-> > @@ -500,6 +500,21 @@ static void hangcheck_timer_reset(struct msm_gpu *gpu)
-> >                       round_jiffies_up(jiffies + msecs_to_jiffies(priv->hangcheck_period)));
-> >   }
-> >
-> > +static bool made_progress(struct msm_gpu *gpu, struct msm_ringbuffer *ring)
-> > +{
-> > +     if (ring->hangcheck_progress_retries >= DRM_MSM_HANGCHECK_PROGRESS_RETRIES)
-> > +             return false;
-> > +
-> > +     if (!gpu->funcs->progress)
-> > +             return false;
-> > +
-> > +     if (!gpu->funcs->progress(gpu, ring))
-> > +             return false;
-> > +
-> > +     ring->hangcheck_progress_retries++;
-> > +     return true;
-> > +}
-> > +
-> >   static void hangcheck_handler(struct timer_list *t)
-> >   {
-> >       struct msm_gpu *gpu = from_timer(gpu, t, hangcheck_timer);
-> > @@ -511,9 +526,12 @@ static void hangcheck_handler(struct timer_list *t)
-> >       if (fence != ring->hangcheck_fence) {
-> >               /* some progress has been made.. ya! */
-> >               ring->hangcheck_fence = fence;
-> > -     } else if (fence_before(fence, ring->fctx->last_fence)) {
-> > +             ring->hangcheck_progress_retries = 0;
-> > +     } else if (fence_before(fence, ring->fctx->last_fence) &&
-> > +                     !made_progress(gpu, ring)) {
-> >               /* no progress and not done.. hung! */
-> >               ring->hangcheck_fence = fence;
-> > +             ring->hangcheck_progress_retries = 0;
-> >               DRM_DEV_ERROR(dev->dev, "%s: hangcheck detected gpu lockup rb %d!\n",
-> >                               gpu->name, ring->id);
-> >               DRM_DEV_ERROR(dev->dev, "%s:     completed fence: %u\n",
-> > diff --git a/drivers/gpu/drm/msm/msm_gpu.h b/drivers/gpu/drm/msm/msm_gpu.h
-> > index 585fd9c8d45a..d8f355e9f0b2 100644
-> > --- a/drivers/gpu/drm/msm/msm_gpu.h
-> > +++ b/drivers/gpu/drm/msm/msm_gpu.h
-> > @@ -78,6 +78,8 @@ struct msm_gpu_funcs {
-> >       struct msm_gem_address_space *(*create_private_address_space)
-> >               (struct msm_gpu *gpu);
-> >       uint32_t (*get_rptr)(struct msm_gpu *gpu, struct msm_ringbuffer *ring);
-> > +
-> > +     bool (*progress)(struct msm_gpu *gpu, struct msm_ringbuffer *ring);
-> >   };
-> >
-> >   /* Additional state for iommu faults: */
-> > @@ -236,7 +238,8 @@ struct msm_gpu {
-> >        */
-> >   #define DRM_MSM_INACTIVE_PERIOD   66 /* in ms (roughly four frames) */
-> >
-> > -#define DRM_MSM_HANGCHECK_DEFAULT_PERIOD 500 /* in ms */
-> > +#define DRM_MSM_HANGCHECK_DEFAULT_PERIOD 250 /* in ms */
-> > +#define DRM_MSM_HANGCHECK_PROGRESS_RETRIES 3
-> >       struct timer_list hangcheck_timer;
-> >
-> >       /* Fault info for most recent iova fault: */
-> > diff --git a/drivers/gpu/drm/msm/msm_ringbuffer.h b/drivers/gpu/drm/msm/msm_ringbuffer.h
-> > index 2a5045abe46e..e3d33bae3380 100644
-> > --- a/drivers/gpu/drm/msm/msm_ringbuffer.h
-> > +++ b/drivers/gpu/drm/msm/msm_ringbuffer.h
-> > @@ -35,6 +35,11 @@ struct msm_rbmemptrs {
-> >       volatile u64 ttbr0;
-> >   };
-> >
-> > +struct msm_cp_state {
-> > +     uint64_t ib1_base, ib2_base;
-> > +     uint32_t ib1_rem, ib2_rem;
-> > +};
-> > +
-> I think we can add CP_RB_RPTR too here.
 
-I originally was going to, but I figured if it is making progress in
-the RB, probably fences will be getting updated.  And if not at least
-IB1 state should be changing, since we don't write all that much into
-RB other than CP_INDIRECT_BRANCH (ie. nothing that would take long
-enough to run for hangcheck timer to expire)
+[1] https://lore.kernel.org/lkml/20220922154207.1575343-1-sidhartha.kumar@oracle.com/
 
-I guess I could at least add a comment.
+v1 -> v2
+-fix folio_test_hugetlb_freed() check in alloc_and_dissolve_huge_page
+-add more folio conversions to unmap_and_move_huge_page in patch 9
+-collect review-bys from Mike Kravetz
+-rebased on next-20221101 and mm-unstable
 
-BR,
--R
+Sidhartha Kumar (9):
+  mm/hugetlb_cgroup: convert __set_hugetlb_cgroup() to folios
+  mm/hugetlb_cgroup: convert hugetlb_cgroup_from_page() to folios
+  mm/hugetlb_cgroup: convert set_hugetlb_cgroup*() to folios
+  mm/hugetlb_cgroup: convert hugetlb_cgroup_migrate to folios
+  mm/hugetlb: convert isolate_or_dissolve_huge_page to folios
+  mm/hugetlb: convert free_huge_page to folios
+  mm/hugetlb_cgroup: convert hugetlb_cgroup_uncharge_page() to folios
+  mm/hugeltb_cgroup: convert hugetlb_cgroup_commit_charge*() to folios
+  mm/hugetlb: convert move_hugetlb_state() to folios
 
-> >   struct msm_ringbuffer {
-> >       struct msm_gpu *gpu;
-> >       int id;
-> > @@ -64,6 +69,25 @@ struct msm_ringbuffer {
-> >       uint64_t memptrs_iova;
-> >       struct msm_fence_context *fctx;
-> >
-> > +     /**
-> > +      * hangcheck_progress_retries:
-> > +      *
-> > +      * The number of extra hangcheck duration cycles that we have given
-> > +      * due to it appearing that the GPU is making forward progress.
-> > +      *
-> > +      * If the GPU appears to be making progress (ie. the CP has advanced
-> > +      * in the command stream, we'll allow up to DRM_MSM_HANGCHECK_PROGRESS_RETRIES
-> > +      * expirations of the hangcheck timer before killing the job.  In other
-> > +      * words we'll let the submit run for up to
-> > +      * DRM_MSM_HANGCHECK_DEFAULT_PERIOD *  DRM_MSM_HANGCHECK_PROGRESS_RETRIES
-> > +      */
-> > +     int hangcheck_progress_retries;
-> > +
-> > +     /**
-> > +      * last_cp_state: The state of the CP at the last call to gpu->progress()
-> > +      */
-> > +     struct msm_cp_state last_cp_state;
-> > +
-> >       /*
-> >        * preempt_lock protects preemption and serializes wptr updates against
-> >        * preemption.  Can be aquired from irq context.
->
+ include/linux/hugetlb.h        |   6 +-
+ include/linux/hugetlb_cgroup.h |  85 ++++++++++++------------
+ mm/hugetlb.c                   | 115 ++++++++++++++++++---------------
+ mm/hugetlb_cgroup.c            |  63 +++++++++---------
+ mm/migrate.c                   |  12 ++--
+ 5 files changed, 149 insertions(+), 132 deletions(-)
+
+-- 
+2.31.1
+
