@@ -2,43 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6D5B614BEB
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:41:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08DB7614BEE
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:42:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiKANlv convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 1 Nov 2022 09:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42214 "EHLO
+        id S229850AbiKANmQ convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 1 Nov 2022 09:42:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229556AbiKANlt (ORCPT
+        with ESMTP id S229452AbiKANmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 09:41:49 -0400
+        Tue, 1 Nov 2022 09:42:14 -0400
 Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27FA1D8B
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 06:41:48 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94B3F12AB8
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 06:42:13 -0700 (PDT)
 Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
         by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
         (Exim 4.92)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1oprWS-0007ZC-EL; Tue, 01 Nov 2022 14:41:44 +0100
+        id 1oprWd-0007cK-Ar; Tue, 01 Nov 2022 14:41:55 +0100
 Received: from [2a0a:edc0:0:900:1d::4e] (helo=lupine)
         by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1oprWS-001geW-5m; Tue, 01 Nov 2022 14:41:43 +0100
+        id 1oprWc-001ged-SZ; Tue, 01 Nov 2022 14:41:53 +0100
 Received: from pza by lupine with local (Exim 4.94.2)
         (envelope-from <p.zabel@pengutronix.de>)
-        id 1oprWQ-0009cc-BU; Tue, 01 Nov 2022 14:41:42 +0100
-Message-ID: <f8f5479739acd3bded9f06f8678ca42b77a0a0ef.camel@pengutronix.de>
-Subject: Re: [PATCH] drm/imx: Kconfig: Remove duplicated 'select
- DRM_KMS_HELPER' line
+        id 1oprWb-0009dA-48; Tue, 01 Nov 2022 14:41:53 +0100
+Message-ID: <0ddbe44d4247cf888bf2d8585b7b20d21a89b9b8.camel@pengutronix.de>
+Subject: Re: [PATCH] drm/imx: imx-tve: Fix return type of
+ imx_tve_connector_mode_valid
 From:   Philipp Zabel <p.zabel@pengutronix.de>
-To:     Liu Ying <victor.liu@nxp.com>, dri-devel@lists.freedesktop.org,
+To:     Nathan Huckleberry <nhuck@google.com>
+Cc:     Dan Carpenter <error27@gmail.com>, llvm@lists.linux.dev,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, dri-devel@lists.freedesktop.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Cc:     airlied@gmail.com, daniel@ffwll.ch, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
-        linux-imx@nxp.com, tzimmermann@suse.de
-Date:   Tue, 01 Nov 2022 14:41:42 +0100
-In-Reply-To: <20221009023527.3669647-1-victor.liu@nxp.com>
-References: <20221009023527.3669647-1-victor.liu@nxp.com>
+Date:   Tue, 01 Nov 2022 14:41:53 +0100
+In-Reply-To: <20220913205544.155106-1-nhuck@google.com>
+References: <20220913205544.155106-1-nhuck@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8BIT
 User-Agent: Evolution 3.38.3-1 
@@ -55,29 +63,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On So, 2022-10-09 at 10:35 +0800, Liu Ying wrote:
-> A duplicated line 'select DRM_KMS_HELPER' was introduced in Kconfig file
-> by commit 09717af7d13d ("drm: Remove CONFIG_DRM_KMS_CMA_HELPER option"),
-> so remove it.
+On Di, 2022-09-13 at 13:55 -0700, Nathan Huckleberry wrote:
+> The mode_valid field in drm_connector_helper_funcs is expected to be of
+> type:
+> enum drm_mode_status (* mode_valid) (struct drm_connector *connector,
+>                                      struct drm_display_mode *mode);
 > 
-> Fixes: 09717af7d13d ("drm: Remove CONFIG_DRM_KMS_CMA_HELPER option")
-> Signed-off-by: Liu Ying <victor.liu@nxp.com>
+> The mismatched return type breaks forward edge kCFI since the underlying
+> function definition does not match the function hook definition.
+> 
+> The return type of imx_tve_connector_mode_valid should be changed from
+> int to enum drm_mode_status.
+> 
+> Reported-by: Dan Carpenter <error27@gmail.com>
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1703
+> Cc: llvm@lists.linux.dev
+> Signed-off-by: Nathan Huckleberry <nhuck@google.com>
 > ---
->  drivers/gpu/drm/imx/Kconfig | 1 -
->  1 file changed, 1 deletion(-)
+>  drivers/gpu/drm/imx/imx-tve.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/gpu/drm/imx/Kconfig b/drivers/gpu/drm/imx/Kconfig
-> index 975de4ff7313..fd5b2471fdf0 100644
-> --- a/drivers/gpu/drm/imx/Kconfig
-> +++ b/drivers/gpu/drm/imx/Kconfig
-> @@ -4,7 +4,6 @@ config DRM_IMX
->  	select DRM_KMS_HELPER
->  	select VIDEOMODE_HELPERS
->  	select DRM_GEM_DMA_HELPER
-> -	select DRM_KMS_HELPER
->  	depends on DRM && (ARCH_MXC || ARCH_MULTIPLATFORM || COMPILE_TEST)
->  	depends on IMX_IPUV3_CORE
->  	help
+> diff --git a/drivers/gpu/drm/imx/imx-tve.c b/drivers/gpu/drm/imx/imx-tve.c
+> index 6b34fac3f73a..ab4d1c878fda 100644
+> --- a/drivers/gpu/drm/imx/imx-tve.c
+> +++ b/drivers/gpu/drm/imx/imx-tve.c
+> @@ -218,8 +218,9 @@ static int imx_tve_connector_get_modes(struct drm_connector *connector)
+>  	return ret;
+>  }
+>  
+> 
+> -static int imx_tve_connector_mode_valid(struct drm_connector *connector,
+> -					struct drm_display_mode *mode)
+> +static enum drm_mode_status
+> +imx_tve_connector_mode_valid(struct drm_connector *connector,
+> +			     struct drm_display_mode *mode)
+>  {
+>  	struct imx_tve *tve = con_to_tve(connector);
+>  	unsigned long rate;
 
 Reviewed-by: Philipp Zabel <p.zabel@pengutronix.de>
 
