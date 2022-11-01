@@ -2,97 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82AA7614999
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:40:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 515016149A0
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231238AbiKALkG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 07:40:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58398 "EHLO
+        id S231400AbiKALlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 07:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58484 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230428AbiKALjt (ORCPT
+        with ESMTP id S231393AbiKALky (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 07:39:49 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 675E71B7A9;
-        Tue,  1 Nov 2022 04:33:24 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N1nrW597nzl18M;
-        Tue,  1 Nov 2022 19:30:35 +0800 (CST)
-Received: from [10.174.176.73] (unknown [10.174.176.73])
-        by APP2 (Coremail) with SMTP id Syh0CgD33NHdA2Fj2YS+BA--.36014S3;
-        Tue, 01 Nov 2022 19:32:46 +0800 (CST)
-Subject: Re: [patch v11 0/6] support concurrent sync io for bfq on a specail
- occasion
-To:     Yu Kuai <yukuai1@huaweicloud.com>, tj@kernel.org, axboe@kernel.dk,
-        paolo.valente@linaro.org, jack@suse.cz
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20220916071942.214222-1-yukuai1@huaweicloud.com>
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-Message-ID: <b2099166-5386-d60b-0b31-e5cd40ef97da@huaweicloud.com>
-Date:   Tue, 1 Nov 2022 19:32:45 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; WOW64; rv:60.0) Gecko/20100101
- Thunderbird/60.8.0
+        Tue, 1 Nov 2022 07:40:54 -0400
+Received: from mail3-relais-sop.national.inria.fr (mail3-relais-sop.national.inria.fr [192.134.164.104])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1773C1FCC0
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 04:34:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=V6n2MWOOY0pZymd4oI7C3sh0yOHwVS9t/O1/Ve2U86c=;
+  b=iJhovUMRxnlYU7s9ovRxCni5GeoF71yAaxNNqL1NVoxvHC/+Fwgioc7d
+   Upt8+wJ4uLADBi+txphErOkCuGqpKjJtSGwOXrv9PhJmUuOA55aQ8+Zar
+   77uUwzxk/5IbfNtiDdPeM7cPGYYAa3Vml3Cy14tiFnzA5ANi9lsCUn+bD
+   A=;
+Authentication-Results: mail3-relais-sop.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.95,230,1661810400"; 
+   d="scan'208";a="36170295"
+Received: from 51.123.68.85.rev.sfr.net (HELO hadrien) ([85.68.123.51])
+  by mail3-relais-sop.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 12:32:49 +0100
+Date:   Tue, 1 Nov 2022 12:32:48 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+X-X-Sender: jll@hadrien
+To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Subject: Re: [PATCH 1/2] change the function name s_vFillRTSHead
+In-Reply-To: <16e1033e32dd5a82e058c7c69ea2ec93800a30b7.1667300134.git.tanjubrunostar0@gmail.com>
+Message-ID: <alpine.DEB.2.22.394.2211011232260.2834@hadrien>
+References: <cover.1667300134.git.tanjubrunostar0@gmail.com> <16e1033e32dd5a82e058c7c69ea2ec93800a30b7.1667300134.git.tanjubrunostar0@gmail.com>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-In-Reply-To: <20220916071942.214222-1-yukuai1@huaweicloud.com>
-Content-Type: text/plain; charset=gbk; format=flowed
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgD33NHdA2Fj2YS+BA--.36014S3
-X-Coremail-Antispam: 1UD129KBjvdXoWrZr1fuw1fXr45Ar4xZryrZwb_yoWfJrbE9F
-        WkKF1fGrZ8Jas0qa4vgw1Fk3yjqF4fXFs7t34vqF17KFyUC3y2kFWqkryayF13C3ySy3Z3
-        W3say34fKr13ZjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-        9fnUUIcSsGvfJTRUUUb3kFF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
-        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
-        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
-        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
-        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
-        I7IYx2IY67AKxVWUGVWUXwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
-        4UM4x0Y48IcVAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwACI402YVCY1x02628vn2kI
-        c2xKxwCYjI0SjxkI62AI1cAE67vIY487MxAIw28IcxkI7VAKI48JMxC20s026xCaFVCjc4
-        AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_JrWlx4CE
-        17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1j6r1xMI
-        IF0xvE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwCI42IY6xAIw20EY4v20xvaj40_Zr0_Wr1U
-        MIIF0xvEx4A2jsIE14v26r1j6r4UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr0_Gr1UYxBIda
-        VFxhVjvjDU0xZFpf9x0JUZa9-UUUUU=
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi, Jens
 
-ÔÚ 2022/09/16 15:19, Yu Kuai Ð´µÀ:
-> From: Yu Kuai <yukuai3@huawei.com>
+
+On Tue, 1 Nov 2022, Tanjuate Brunostar wrote:
+
+> Remove the use of Hungarian notation, which is not used in the Linux
+> kernel
+
+Period at the end of the sentence.  It woudl still be good to acknowledge
+checkpatch.
+
+julia
+
 >
-> 
-> Currently, bfq can't handle sync io concurrently as long as they
-> are not issued from root group. This is because
-> 'bfqd->num_groups_with_pending_reqs > 0' is always true in
-> bfq_asymmetric_scenario().
-> 
-> The way that bfqg is counted into 'num_groups_with_pending_reqs':
-> 
-> Before this patchset:
->   1) root group will never be counted.
->   2) Count if bfqg or it's child bfqgs have pending requests.
->   3) Don't count if bfqg and it's child bfqgs complete all the requests.
-> 
-> After this patchset:
->   1) root group is counted.
->   2) Count if bfqg has pending requests.
->   3) Don't count if bfqg complete all the requests.
-> 
-> With the above changes, concurrent sync io can be supported if only
-> one group is activated.
-
-Can you apply this patchset?
-
-Thanks,
-Kuai
-
+> Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+> ---
+>  drivers/staging/vt6655/rxtx.c | 26 +++++++++++++-------------
+>  1 file changed, 13 insertions(+), 13 deletions(-)
+>
+> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+> index 31ae99b3cb35..d7e439cd8675 100644
+> --- a/drivers/staging/vt6655/rxtx.c
+> +++ b/drivers/staging/vt6655/rxtx.c
+> @@ -23,7 +23,7 @@
+>   *      s_uGetTxRsvTime- get frame reserved time
+>   *      s_vFillCTSHead- fulfill CTS ctl header
+>   *      s_vFillFragParameter- Set fragment ctl parameter.
+> - *      s_vFillRTSHead- fulfill RTS ctl header
+> + *      fill_rts_head- fulfill RTS ctl header
+>   *      s_vFillTxKey- fulfill tx encrypt key
+>   *      s_vSWencryption- Software encrypt header
+>   *      vDMA0_tx_80211- tx 802.11 frame via dma0
+> @@ -85,15 +85,15 @@ static const unsigned short fb_opt1[2][5] = {
+>  #define DATADUR_A_F1    13
+>
+>  /*---------------------  Static Functions  --------------------------*/
+> -static void s_vFillRTSHead(struct vnt_private *pDevice,
+> -			   unsigned char byPktType,
+> -			   void *pvRTS,
+> -			   unsigned int	cbFrameLength,
+> -			   bool bNeedAck,
+> -			   bool bDisCRC,
+> -			   struct ieee80211_hdr *hdr,
+> -			   unsigned short wCurrentRate,
+> -			   unsigned char byFBOption);
+> +static void fill_rts_head(struct vnt_private *pDevice,
+> +			  unsigned char byPktType,
+> +			  void *pvRTS,
+> +			  unsigned int	cbFrameLength,
+> +			  bool bNeedAck,
+> +			  bool bDisCRC,
+> +			  struct ieee80211_hdr *hdr,
+> +			  unsigned short wCurrentRate,
+> +			  unsigned char byFBOption);
+>
+>  static void s_vGenerateTxParameter(struct vnt_private *pDevice,
+>  				   unsigned char byPktType,
+> @@ -912,7 +912,7 @@ s_vGenerateTxParameter(
+>  			buf->rrv_time_a = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+>  			buf->rrv_time_b = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, pDevice->byTopCCKBasicRate, bNeedACK);
+>
+> -			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> +			fill_rts_head(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+>  		} else {/* RTS_needless, PCF mode */
+>  			struct vnt_rrv_time_cts *buf = pvRrvTime;
+>
+> @@ -931,7 +931,7 @@ s_vGenerateTxParameter(
+>  			buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+>
+>  			/* Fill RTS */
+> -			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> +			fill_rts_head(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+>  		} else if (!pvRTS) {/* RTS_needless, non PCF mode */
+>  			struct vnt_rrv_time_ab *buf = pvRrvTime;
+>
+> @@ -945,7 +945,7 @@ s_vGenerateTxParameter(
+>  			buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, wCurrentRate, bNeedACK);
+>
+>  			/* Fill RTS */
+> -			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> +			fill_rts_head(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+>  		} else { /* RTS_needless, non PCF mode */
+>  			struct vnt_rrv_time_ab *buf = pvRrvTime;
+>
+> --
+> 2.34.1
+>
+>
+>
