@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB2E56147E6
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 11:47:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D52F6147E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 11:48:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229944AbiKAKrj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 06:47:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35834 "EHLO
+        id S229967AbiKAKsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 06:48:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiKAKrh (ORCPT
+        with ESMTP id S229587AbiKAKsJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 06:47:37 -0400
-Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A84B3193C7;
-        Tue,  1 Nov 2022 03:47:36 -0700 (PDT)
-Received: by mail-wm1-x32e.google.com with SMTP id a11-20020a05600c2d4b00b003cf6f5fd9f1so3448756wmg.2;
-        Tue, 01 Nov 2022 03:47:36 -0700 (PDT)
+        Tue, 1 Nov 2022 06:48:09 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521E2193EB
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 03:48:08 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id z5-20020a17090a8b8500b00210a3a2364fso1257817pjn.0
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 03:48:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/FwRGP8BwKaXmW2k8HRZR6WmbigXa5hHO418FZc4xNY=;
-        b=IYUBIIujNue24apx8G7zfTr2uVehnwGWmFGKSj8tMpOF+Ijp6Kdf9CHhtWytPZNtph
-         oUfaVr7ehmUa/xfLoMVwaMttid8d2jzeGLFBo+sWcoEyLod4ByVcdLZsCiS+99SgNUXw
-         K2M1pZvnlDDCFNfyR55CQs+Co6DK1hPAwFpbxhnxeCJsCo2a+/ChoYZJq/nWAVs4X7Cv
-         fsHnMm6cKOnkecIVJQl32CFaFdBlote6ir8KIm3rHOHwvqqfUFN7dX8VMlaI+00pA1A0
-         Kx4WC5aagh0tB6PPByiVvZeZHywxkKUGikLfoJ14Bx+vQeZ66MHwDp7Lh46KjZUbi+GF
-         +Q0w==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=TMxfFnQEzQ8AbsMFHJGkF0WYebtIumwrSeVhJx0ftUI=;
+        b=UqNCRBe9TgKtGt2+WEXUrx+W0tS0e/IfA/QOOT+HS2ZcyjUxt7tItX0VNLUJeuwS82
+         F0U7/pL0aUC2rZLIHu9Faf+fE9VVZWxFy8YZYspyY3TserZI2PzhqkSzcxIqLdyGmsFV
+         cFjj+yxAwFl87zQ56vsUahVXHUZUkaPABqLDZOjr4HuJknaso3FzFqiWZQ4uHvT9XPg7
+         g5dSbdxneGubPCenpXtPXmGr7JChDQHBYSKt1IpXCaQf+HsYP/Otn9NP961qMPTzwuoH
+         LebOSHfm8irgvL6j3Vp+iuSWriYqFtolOTTt2lXTXa7xk2Os+nLrXHecam+mxsrI7CB+
+         KUXg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/FwRGP8BwKaXmW2k8HRZR6WmbigXa5hHO418FZc4xNY=;
-        b=TLWer3gKsolbVbDTg4xikZX8+fOWC8xovJ5kuJ2xhSEqjGbGYYhhfcKvWwRzaDJFDm
-         iC+J2sI/ZW8Ld03+uzjWoZXD9v+vJC/tmShVILBbgjCJ+xO8iTJx9Ky1EH5A9IjDfyFm
-         /693EK3jty4nDLN9lNAlf0YezA1G/Cl1wKf/HonRh/9PLcLD9b8HyAMCmarwqyxwziy7
-         Y6lyqk+VFnb8d4pBtOqZEqv/NR8q7BeLDnu5sHAJlpL/Ut+LNxYKnotB/NLjuB2/53L9
-         bkZpH65ziYrD7JqhfPNdgoF7E1QK4O6m3LmPfntMWm0uZvN8IfgduS0LJu+oRtlNeEG7
-         /EWQ==
-X-Gm-Message-State: ACrzQf0ANDQm9mIiIAs4siwakd3XwP/pf6J1LIkhVlhfQTcYQw59o1HR
-        RywEnmGEBHloRde8vC4buwDmIL0qDfIPu1UP
-X-Google-Smtp-Source: AMsMyM5Vr5sdPnHnvs6v1i04Xc34hhFJ8JVAijUkr1z367YlFbXW/kgLoViWk7S/5mBU6BsCxGPBUQ==
-X-Received: by 2002:a1c:6a10:0:b0:3cf:699f:c03 with SMTP id f16-20020a1c6a10000000b003cf699f0c03mr9621554wmc.23.1667299655129;
-        Tue, 01 Nov 2022 03:47:35 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id i4-20020a05600c354400b003cf4c1e211fsm10738270wmq.38.2022.11.01.03.47.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 03:47:34 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Nilesh Javali <njavali@marvell.com>,
-        GR-QLogic-Storage-Upstream@marvell.com,
-        "James E . J . Bottomley" <jejb@linux.ibm.com>,
-        "Martin K . Petersen" <martin.petersen@oracle.com>,
-        linux-scsi@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] scsi: qla2xxx: Remove unused variable found_devs
-Date:   Tue,  1 Nov 2022 10:47:33 +0000
-Message-Id: <20221101104733.30363-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        bh=TMxfFnQEzQ8AbsMFHJGkF0WYebtIumwrSeVhJx0ftUI=;
+        b=I3WoIhr/iacoGLOGluUBLmpYXgooYODTKdukcNT1L90yR/NrwDuY6U0wiLvm+84Bb7
+         Kh1Rl/qvqdsthY72+h2VwoLl0tPTYqQ+//kloMrtyFvHfVBAi9Xv5/1mS3K2djFKK/ZC
+         bKzNC+AmYuUWToqzwWMl1oEStExK+bk70nP65yVgasSoN+eVZnGpHEuEy6IpqsbDQf9q
+         zyMh1CKNcwnpG3YwTSQXZ0IwCkcasBBNVZFGuCEgArIi5ldwXq2JWHPdjybgRlAzFFpq
+         e0TgncEEy0XsVZFAjzkk15cxdO9HDXyVHVH5MiRklrXgzHSJOnH9ygkcdB6qeYkupg6u
+         DmEw==
+X-Gm-Message-State: ACrzQf0eOnj+70omAH3G3G9aCwc6Vo/bqwQJRbJ73OrvkmM6v/X/R1WE
+        QGptwInpldmVJx2MIxE/vxXm7xv9CnqtoFOIWP8Ia9UHJr8=
+X-Google-Smtp-Source: AMsMyM4QXwuQisJZcrtUtmStzzQ1dKTn2YwaMqyArI5euBjHzZ2nKC1dCA5XdgPaN/E2MUHBVQCg8vVsOA0krMCqZME=
+X-Received: by 2002:a17:903:264b:b0:186:af7a:391d with SMTP id
+ je11-20020a170903264b00b00186af7a391dmr18965064plb.19.1667299687554; Tue, 01
+ Nov 2022 03:48:07 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221013121319.994170-1-vannapurve@google.com>
+ <20221013121319.994170-5-vannapurve@google.com> <Y1Hhw40H58EmZ6lK@google.com>
+In-Reply-To: <Y1Hhw40H58EmZ6lK@google.com>
+From:   Vishal Annapurve <vannapurve@google.com>
+Date:   Tue, 1 Nov 2022 16:17:55 +0530
+Message-ID: <CAGtprH90U_gNGOxnOey3k=F8+HdC0zW+xk0ZxD4VNzaDey0sLw@mail.gmail.com>
+Subject: Re: [V3 PATCH 4/4] KVM: selftests: x86: Precompute the cpu type
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
+        shuah@kernel.org, bgardon@google.com, oupton@google.com,
+        peterx@redhat.com, vkuznets@redhat.com, dmatlack@google.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,44 +71,101 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Variable found_devs is just being incremented and it's never used
-anywhere else. The variable and the increment are redundant so
-remove it.
+On Fri, Oct 21, 2022 at 5:33 AM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Thu, Oct 13, 2022, Vishal Annapurve wrote:
+> > Cache the vendor CPU type in a global variable so that multiple calls
+> > to is_amd/intel_cpu() do not need to re-execute CPUID.
+> >
+> > Sync the global variable is_cpu_amd into the guest so the guest can also
+> > avoid executing CPUID instruction.
+> >
+> > Suggested-by: Sean Christopherson <seanjc@google.com>
+> > Signed-off-by: Vishal Annapurve <vannapurve@google.com>
+> > ---
+> >  tools/testing/selftests/kvm/lib/x86_64/processor.c | 10 ++++++++--
+> >  1 file changed, 8 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> > index fa65e8142c16..f508e58346e9 100644
+> > --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> > +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
+> > @@ -19,6 +19,7 @@
+> >  #define MAX_NR_CPUID_ENTRIES 100
+> >
+> >  vm_vaddr_t exception_handlers;
+> > +static bool is_cpu_amd;
+>
+> This should probably have a "host" qualifier, e.g. is_host_cpu_amd.  More below.
+>
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/scsi/qla2xxx/qla_init.c | 4 ----
- 1 file changed, 4 deletions(-)
+Ack.
 
-diff --git a/drivers/scsi/qla2xxx/qla_init.c b/drivers/scsi/qla2xxx/qla_init.c
-index e12db95de688..8f737d80bce4 100644
---- a/drivers/scsi/qla2xxx/qla_init.c
-+++ b/drivers/scsi/qla2xxx/qla_init.c
-@@ -5546,7 +5546,6 @@ static int
- qla2x00_configure_local_loop(scsi_qla_host_t *vha)
- {
- 	int		rval, rval2;
--	int		found_devs;
- 	int		found;
- 	fc_port_t	*fcport, *new_fcport;
- 	uint16_t	index;
-@@ -5561,7 +5560,6 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
- 	if (N2N_TOPO(ha))
- 		return qla2x00_configure_n2n_loop(vha);
- 
--	found_devs = 0;
- 	new_fcport = NULL;
- 	entries = MAX_FIBRE_DEVICES_LOOP;
- 
-@@ -5720,8 +5718,6 @@ qla2x00_configure_local_loop(scsi_qla_host_t *vha)
- 
- 		/* Base iIDMA settings on HBA port speed. */
- 		fcport->fp_speed = ha->link_data_rate;
--
--		found_devs++;
- 	}
- 
- 	list_for_each_entry(fcport, &vha->vp_fcports, list) {
--- 
-2.37.3
+> >
+> >  static void regs_dump(FILE *stream, struct kvm_regs *regs, uint8_t indent)
+> >  {
+> > @@ -1046,7 +1047,7 @@ static bool cpu_vendor_string_is(const char *vendor)
+> >
+> >  bool is_intel_cpu(void)
+>
+> It'll be more churn, but I think we should drop the wrappers in this patch so
+> that we can visually audit all users.  There is technically a subtle functional
+> change here, as previously executing is_intel_cpu() and is_amd_cpu() in the guest
+> will consume the _guest_ CPUID, whereas with this change, the guest will now
+> consume the _host_ CPUID.
+>
+> It just so happens that the existing user and the new user both want to query
+> Intel vs. AMD for VMCALL vs. VMMCALL, i.e. care about the host even when checking
+> from the guest.  It's extreme paranoia since I don't think there are any parallel
+> series that are adding is_intel_cpu()/is_amd_cpu() users, not to mention that I
+> don't think any selftests does cross-vendor virtualization, but on the other hand
+> the paranoia doesn't cost much.
+>
 
+Ack. I think this patch should also be the part of a different series
+which deals with executing hypercall according to the cpu type, there
+is no immediate need for this change in this series.
+
+Will incorporate your feedback in the next version of this patch.
+
+> >  {
+> > -     return cpu_vendor_string_is("GenuineIntel");
+> > +     return !is_cpu_amd;
+>
+> Please keep the explicit "GenuineIntel" check, i.e. add is_host_cpu_intel.  KVM
+> technically supports other vendors, e.g. Centaur and Zhaoxin for VMX, and Hygon
+> for AMD, so it's not impossible that someone could run on Centuar or Zhaoxin and
+> get a false positive.  Again, extreme paranoia, but doesn't cost much.
+>
+
+Ack, makes sense.
+
+> >  }
+> >
+> >  /*
+> > @@ -1054,7 +1055,7 @@ bool is_intel_cpu(void)
+> >   */
+> >  bool is_amd_cpu(void)
+> >  {
+> > -     return cpu_vendor_string_is("AuthenticAMD");
+> > +     return is_cpu_amd;
+> >  }
+> >
+> >  void kvm_get_cpu_address_width(unsigned int *pa_bits, unsigned int *va_bits)
+> > @@ -1328,8 +1329,13 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
+> >       return get_kvm_intel_param_bool("unrestricted_guest");
+> >  }
+> >
+> > +void kvm_selftest_arch_init(void)
+> > +{
+> > +     is_cpu_amd = cpu_vendor_string_is("AuthenticAMD");
+> > +}
+> >
+> >  void kvm_arch_vm_post_create(struct kvm_vm *vm)
+> >  {
+> >       vm_create_irqchip(vm);
+> > +     sync_global_to_guest(vm, is_cpu_amd);
+> >  }
+> > --
+> > 2.38.0.rc1.362.ged0d419d3c-goog
+> >
