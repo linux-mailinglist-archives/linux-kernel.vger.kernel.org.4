@@ -2,43 +2,43 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9802C6154A2
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:03:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 268A361549E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:03:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231221AbiKAWDv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 18:03:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43480 "EHLO
+        id S231171AbiKAWDk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 18:03:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbiKAWDi (ORCPT
+        with ESMTP id S230515AbiKAWDh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 18:03:38 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC10563C7
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 15:03:36 -0700 (PDT)
+        Tue, 1 Nov 2022 18:03:37 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BE2F617A
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 15:03:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1D2A5B81F90
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0215A61744
         for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 22:03:35 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50CFBC43470;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBCDEC433D7;
         Tue,  1 Nov 2022 22:03:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667340213;
-        bh=RJxfjUA7jNYJ7rWPy3bqy3nlzFdR9jtjrg0QcbRrD0Y=;
+        s=k20201202; t=1667340214;
+        bh=/1k1bBlsjxjo9k4yKNnny083mrtwv5FWU+9lM1PdzeQ=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=RLI4dX1ktExmpS86A8YCkyHR1D8R29/qqVpOFjBUDqtvYEmJugGewa7sIYD5WLI9R
-         pBLkM+jK4FtBoIt2BcpKlGqFFuw6XU3fVbXHrSubLQ5kV8nE+QBaTqpKuwaLxclSeg
-         ktyuyFdw5fDZvOgpmgUi5NsOXzvUosBUH+h1EaupHKSxWOLPZ7ZFjZGccgji22fdsq
-         hMKSS3z8J/fXd3CGtSG7hdLUuc3VXOgFZrqQo/QTg9eGN2pFF13QbeLIuFSsqO95L4
-         0w7ORnyKfxlVwQN0L0jckgI/e93A8xNYx2UNFvn5BUjBy/pHCh7lS4mzsqex25YBBT
-         4W4WBOLWK5pNw==
+        b=VRXQmr3mV2mTLz+4+nYdZKAv6AO3TB8XVGLyNXGM0nSSgG5AbZTa1in/nOl8zUDsK
+         BM92vEa7Ze75qXBbB4lvkORJhA+DhNlHnCwC2KBcRkSKqJNwEkmf5SJYpS+6QTK9Pf
+         ypIr8YDbRCzZ77CmCjkUo8YvVKObinMT6rMhnU3ouu9wyFV6+3ALHP7cJpJZ6lXzaC
+         pNkzIbhS9x51U7S/LPtmIwYfozv51FCau3jFvePiUbjPwIfofxT4tj3ggUwqD8qUNM
+         5w4BL/hXvdy5wFxZXHz/0Ile5zLQtAzu6woU5LPH2UNUyhdf2iEP35Ae/2Qm1EgU77
+         HhfKu3/Ino90w==
 From:   SeongJae Park <sj@kernel.org>
 To:     Andrew Morton <akpm@linux-foundation.org>
 Cc:     damon@lists.linux.dev, linux-mm@kvack.org,
         linux-kernel@vger.kernel.org, SeongJae Park <sj@kernel.org>
-Subject: [PATCH 1/8] mm/damon/core: add a callback for scheme target regions check
-Date:   Tue,  1 Nov 2022 22:03:21 +0000
-Message-Id: <20221101220328.95765-2-sj@kernel.org>
+Subject: [PATCH 2/8] mm/damon/sysfs-schemes: implement schemes/tried_regions directory
+Date:   Tue,  1 Nov 2022 22:03:22 +0000
+Message-Id: <20221101220328.95765-3-sj@kernel.org>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221101220328.95765-1-sj@kernel.org>
 References: <20221101220328.95765-1-sj@kernel.org>
@@ -53,79 +53,123 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Getting DAMON monitoring results of only specific access pattern (e.g.,
-getting address ranges of memory that not accessed at all for two
-minutes) can be useful for efficient monitoring of the system.  The
-information can also be helpful for deep level investigation of
-DAMON-based operation schemes.
+For efficient and simple query-like DAMON monitoring results readings
+and deep level investigations of DAMOS, DAMON kernel API
+(include/linux/damon.h) users can use 'before_damos_apply' DAMON
+callback.  However, DAMON sysfs interface users don't have such option.
 
-For that, users need to record (in case of the user space users) or
-iterate (in case of the kernel space users) full monitoring results and
-filter it out for the specific access pattern.  In case of the DAMOS
-investigation, users will even need to simulate DAMOS' quota and
-prioritization mechanisms.  It's inefficient and complex.
+Add a directory, namely 'tried_regions', under each scheme directory to
+use it as the interface for the purpose.  Note that this commit is
+implementing only the directory but the data filling.
 
-Add a new DAMON callback that will be called before each scheme is
-applied to each region.  DAMON kernel API users will be able to do the
-query-like monitoring results collection, or DAMOS investigation in an
-efficient and simple way using it.
-
-Commits for providing the capability to the user space users will
-follow.
+After the data filling change is made, users will be able to signal
+DAMON to fill the directory with the regions that corresponding scheme
+has tried to be applied.  By setting the access pattern of the scheme,
+users could do the efficient query-like monitoring.
 
 Signed-off-by: SeongJae Park <sj@kernel.org>
 ---
- include/linux/damon.h | 5 +++++
- mm/damon/core.c       | 6 +++++-
- 2 files changed, 10 insertions(+), 1 deletion(-)
+ mm/damon/sysfs-schemes.c | 57 ++++++++++++++++++++++++++++++++++++++++
+ 1 file changed, 57 insertions(+)
 
-diff --git a/include/linux/damon.h b/include/linux/damon.h
-index 620ada094c3b..35630634d790 100644
---- a/include/linux/damon.h
-+++ b/include/linux/damon.h
-@@ -357,6 +357,7 @@ struct damon_operations {
-  * @after_wmarks_check:	Called after each schemes' watermarks check.
-  * @after_sampling:	Called after each sampling.
-  * @after_aggregation:	Called after each aggregation.
-+ * @before_damos_apply:	Called before applying DAMOS action.
-  * @before_terminate:	Called before terminating the monitoring.
-  * @private:		User private data.
-  *
-@@ -385,6 +386,10 @@ struct damon_callback {
- 	int (*after_wmarks_check)(struct damon_ctx *context);
- 	int (*after_sampling)(struct damon_ctx *context);
- 	int (*after_aggregation)(struct damon_ctx *context);
-+	int (*before_damos_apply)(struct damon_ctx *context,
-+			struct damon_target *target,
-+			struct damon_region *region,
-+			struct damos *scheme);
- 	void (*before_terminate)(struct damon_ctx *context);
+diff --git a/mm/damon/sysfs-schemes.c b/mm/damon/sysfs-schemes.c
+index 7ea4bcce90cb..f9714ac62565 100644
+--- a/mm/damon/sysfs-schemes.c
++++ b/mm/damon/sysfs-schemes.c
+@@ -9,6 +9,36 @@
+ 
+ #include "sysfs-common.h"
+ 
++/*
++ * scheme regions directory
++ */
++
++struct damon_sysfs_scheme_regions {
++	struct kobject kobj;
++};
++
++static struct damon_sysfs_scheme_regions *
++damon_sysfs_scheme_regions_alloc(void)
++{
++	return kzalloc(sizeof(struct damon_sysfs_scheme_regions), GFP_KERNEL);
++}
++
++static void damon_sysfs_scheme_regions_release(struct kobject *kobj)
++{
++	kfree(container_of(kobj, struct damon_sysfs_scheme_regions, kobj));
++}
++
++static struct attribute *damon_sysfs_scheme_regions_attrs[] = {
++	NULL,
++};
++ATTRIBUTE_GROUPS(damon_sysfs_scheme_regions);
++
++static struct kobj_type damon_sysfs_scheme_regions_ktype = {
++	.release = damon_sysfs_scheme_regions_release,
++	.sysfs_ops = &kobj_sysfs_ops,
++	.default_groups = damon_sysfs_scheme_regions_groups,
++};
++
+ /*
+  * schemes/stats directory
+  */
+@@ -635,6 +665,7 @@ struct damon_sysfs_scheme {
+ 	struct damon_sysfs_quotas *quotas;
+ 	struct damon_sysfs_watermarks *watermarks;
+ 	struct damon_sysfs_stats *stats;
++	struct damon_sysfs_scheme_regions *tried_regions;
  };
  
-diff --git a/mm/damon/core.c b/mm/damon/core.c
-index 80d5937fe337..ceec75b88ef9 100644
---- a/mm/damon/core.c
-+++ b/mm/damon/core.c
-@@ -772,6 +772,7 @@ static void damos_apply_scheme(struct damon_ctx *c, struct damon_target *t,
- 	unsigned long sz = damon_sz_region(r);
- 	struct timespec64 begin, end;
- 	unsigned long sz_applied = 0;
-+	int err = 0;
+ /* This should match with enum damos_action */
+@@ -743,6 +774,25 @@ static int damon_sysfs_scheme_set_stats(struct damon_sysfs_scheme *scheme)
+ 	return err;
+ }
  
- 	if (c->ops.apply_scheme) {
- 		if (quota->esz && quota->charged_sz + sz > quota->esz) {
-@@ -782,7 +783,10 @@ static void damos_apply_scheme(struct damon_ctx *c, struct damon_target *t,
- 			damon_split_region_at(t, r, sz);
- 		}
- 		ktime_get_coarse_ts64(&begin);
--		sz_applied = c->ops.apply_scheme(c, t, r, s);
-+		if (c->callback.before_damos_apply)
-+			err = c->callback.before_damos_apply(c, t, r, s);
-+		if (!err)
-+			sz_applied = c->ops.apply_scheme(c, t, r, s);
- 		ktime_get_coarse_ts64(&end);
- 		quota->total_charged_ns += timespec64_to_ns(&end) -
- 			timespec64_to_ns(&begin);
++static int damon_sysfs_scheme_set_tried_regions(
++		struct damon_sysfs_scheme *scheme)
++{
++	struct damon_sysfs_scheme_regions *tried_regions =
++		damon_sysfs_scheme_regions_alloc();
++	int err;
++
++	if (!tried_regions)
++		return -ENOMEM;
++	err = kobject_init_and_add(&tried_regions->kobj,
++			&damon_sysfs_scheme_regions_ktype, &scheme->kobj,
++			"tried_regions");
++	if (err)
++		kobject_put(&tried_regions->kobj);
++	else
++		scheme->tried_regions = tried_regions;
++	return err;
++}
++
+ static int damon_sysfs_scheme_add_dirs(struct damon_sysfs_scheme *scheme)
+ {
+ 	int err;
+@@ -759,8 +809,14 @@ static int damon_sysfs_scheme_add_dirs(struct damon_sysfs_scheme *scheme)
+ 	err = damon_sysfs_scheme_set_stats(scheme);
+ 	if (err)
+ 		goto put_watermarks_quotas_access_pattern_out;
++	err = damon_sysfs_scheme_set_tried_regions(scheme);
++	if (err)
++		goto put_tried_regions_out;
+ 	return 0;
+ 
++put_tried_regions_out:
++	kobject_put(&scheme->tried_regions->kobj);
++	scheme->tried_regions = NULL;
+ put_watermarks_quotas_access_pattern_out:
+ 	kobject_put(&scheme->watermarks->kobj);
+ 	scheme->watermarks = NULL;
+@@ -781,6 +837,7 @@ static void damon_sysfs_scheme_rm_dirs(struct damon_sysfs_scheme *scheme)
+ 	kobject_put(&scheme->quotas->kobj);
+ 	kobject_put(&scheme->watermarks->kobj);
+ 	kobject_put(&scheme->stats->kobj);
++	kobject_put(&scheme->tried_regions->kobj);
+ }
+ 
+ static ssize_t action_show(struct kobject *kobj, struct kobj_attribute *attr,
 -- 
 2.25.1
 
