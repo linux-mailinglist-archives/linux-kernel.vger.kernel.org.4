@@ -2,65 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52D8E614216
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 01:05:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98470614219
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 01:08:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229682AbiKAAF4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 20:05:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46880 "EHLO
+        id S229668AbiKAAIZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 20:08:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229480AbiKAAFq (ORCPT
+        with ESMTP id S229476AbiKAAIW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 20:05:46 -0400
-Received: from mail-lj1-x22a.google.com (mail-lj1-x22a.google.com [IPv6:2a00:1450:4864:20::22a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE3A615801
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 17:05:44 -0700 (PDT)
-Received: by mail-lj1-x22a.google.com with SMTP id l8so7818897ljh.13
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 17:05:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=txnZSp/Uxinz0uPSRhzfeynMSK2VfD19NZd64peYgz0=;
-        b=tI7lDymutDjdtRCI5Rn9I/xFciMbyhtaLAFtkTb3VycWNMjxpOumJWdgtXuSj/pR7E
-         /Nuo5dHW2C3ADQ0ZPjtGXnWLeFut5M91na+RD08T+euxdTiB/ssg9ORpdbix7eRXbDZ+
-         Bh26lOBnaODYwXY2hPyClFps95GocCM1urBaEBusq3F2XP3Y+/O4YoM+bBFjL//4ZJVv
-         UYevgeHG/D2QC+04e+vHLiEWo6jdZa8FL2ZXulPjtdoLhKx+yKPlb1M06mh5z3w6Ein2
-         j36g/wzsvZqI3a5Ic0wX5aA5dVsJxBCiXV6z2CYlTOawhos3InQ0GrHPRWw6L8HtCKYT
-         br+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=txnZSp/Uxinz0uPSRhzfeynMSK2VfD19NZd64peYgz0=;
-        b=zkPnKpdsVIDuqOAN+lq5yNnNWSOSySTx/h8kFiFh+wMnllCef/ZGOxn2U+ucU9FjkO
-         jbsFilAPeXvwEPtH+5iKMs8FPLKSToAsN9azY7tzgwBFVz1Cg6fRPVqbvmmCZqsFKC+P
-         aaYwPel9nghQzSeKm71yp95jvhuuX1u1XScMAF8jDo+oWSxIw2MjJRemOb6PP8fg2p6k
-         I8wDRwl3Ma7jFLguMJkIHqz8hZfF4qA4hcfAwylCywB4Aukmd8lUWx7qToGL52gyWgwD
-         5TvU3siGraUju6xevBtjk17Zd18bPPPRGsgDUtkatYzY/Vsi0XZ/PUr2B41puUTPd+O5
-         q1Sg==
-X-Gm-Message-State: ACrzQf3WWPgw/HlRHViQCOWuUWWJYalJc6jEpaSDuW6W/LvNQGhAmNWz
-        mmn6socXCuNdHYsjEz2mwuuKgpyprLiKhnR/ia5BxQ==
-X-Google-Smtp-Source: AMsMyM6B8h37i9zOCQcpvyiVXU6FtpmReXFQC3bzx+UzgCwxtwe0VqgkMDRUm0dDBOYuCiBtfoNwjxZVLAv6x00Ah78=
-X-Received: by 2002:a2e:99d0:0:b0:277:7c4:6c49 with SMTP id
- l16-20020a2e99d0000000b0027707c46c49mr168145ljj.276.1667261142954; Mon, 31
- Oct 2022 17:05:42 -0700 (PDT)
+        Mon, 31 Oct 2022 20:08:22 -0400
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2074.outbound.protection.outlook.com [40.107.223.74])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE157255;
+        Mon, 31 Oct 2022 17:08:20 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=hBF5ZVO3Nb/h/tQH2RBkD+7wqMYnH5NRobWsTUrIC1QGlJCa77fIjkrD9OiLnrdX1LRKygInrfP1f0QR4e7txsCyGjefmO6TJspAF/szzE6x6jp9DaJ5wcQ0ZgpcX+Ufz/GlJMj1s6ZIgajLFFrRwrbpcOb/U6Y4b6PnFwtmVn9nsjK/yYej6I4EpBmhaUe5dN1mq2kno6WBP4q9t/B1Tw5AWqUfqFh4t33/0vygbpeeBlvE5Q3nr5K6bi5uADLySJiZuiAMKqwY9XameLAVEd0md1N+g5THChr1Cr5W9g5LUx2fqjStw4HtXYq3360XD5+LxEou/BGpABVxFxWXig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=8WA37ek520vaTk5XeBv6U8S8EVbELFmFxvIiKeXUV1c=;
+ b=Z9/AOS5huwNqfWy+U13YrwhYnCdKWWWk/jq+gl4P4zYCTDKQ1bGRT92+9hxbK7+e9vsxvZ3iDz/Evi3fU+cjg5eB1Q0vIjnOHKhDzInqccroj6cGFYKb5onkIfRfu50PYiPF557/aVGJOKDPGNzyhNCR5lfeWQzdkAkbbX5RyikOrop5B57EWGhspvk1CbpeAyvmx/dmYGMV0XX4T3lQmBd2oX4rBRG+aJoZf3D0P2XKUxIDjmlpuVpwgSZqCZ2dM74xkg8Oq2ZCdhwwItBplB6UehkHqkTrOzkS/Piho/Uwfw50WZlqwMnGENDslkHucMDW5v5IUC22Wxecf2RsCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=amd.com;
+ dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
+ header.from=amd.com; dkim=none (message not signed); arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=8WA37ek520vaTk5XeBv6U8S8EVbELFmFxvIiKeXUV1c=;
+ b=1hW5fPDUq7A69ch2LoQUIiPAWdpjRaT5zS7ye24ILJHhXZYSJCb86GCAqxyTsxaLaxoYLBz9Ej3GCQW4FaT4BHQlvMkK9kYCJijYfsDMcPHBnCQHIwk2QlzCpAObFyeMFBAetvpYCvo4OLyhcDeqI50Tvkoam8jIpFMPOanCaeU=
+Received: from MW4PR03CA0095.namprd03.prod.outlook.com (2603:10b6:303:b7::10)
+ by SA0PR12MB4510.namprd12.prod.outlook.com (2603:10b6:806:94::8) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.19; Tue, 1 Nov
+ 2022 00:08:19 +0000
+Received: from CO1NAM11FT081.eop-nam11.prod.protection.outlook.com
+ (2603:10b6:303:b7:cafe::20) by MW4PR03CA0095.outlook.office365.com
+ (2603:10b6:303:b7::10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.19 via Frontend
+ Transport; Tue, 1 Nov 2022 00:08:19 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CO1NAM11FT081.mail.protection.outlook.com (10.13.174.80) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.5769.21 via Frontend Transport; Tue, 1 Nov 2022 00:08:18 +0000
+Received: from ethanolx50f7host.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Mon, 31 Oct
+ 2022 19:08:14 -0500
+From:   Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+To:     <linux-pci@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     Bjorn Helgaas <bhelgaas@google.com>, <oohall@gmail.com>,
+        "Mahesh J Salgaonkar" <mahesh@linux.ibm.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        "Kuppuswamy Sathyanarayanan" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Fontenot Nathan <Nathan.Fontenot@amd.com>,
+        "Smita Koralahalli" <Smita.KoralahalliChannabasappa@amd.com>
+Subject: [PATCH 0/2] PCI: pciehp: Add support for OS-First Hotplug
+Date:   Tue, 1 Nov 2022 00:07:17 +0000
+Message-ID: <20221101000719.36828-1-Smita.KoralahalliChannabasappa@amd.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-References: <20221031183122.470962-1-shy828301@gmail.com> <Y2BHcBCR2FIJgU4w@dhcp22.suse.cz>
-In-Reply-To: <Y2BHcBCR2FIJgU4w@dhcp22.suse.cz>
-From:   "Zach O'Keefe" <zokeefe@google.com>
-Date:   Mon, 31 Oct 2022 17:05:06 -0700
-Message-ID: <CAAa6QmQt9Us8YpirQGXV0_AetuPS+EOqMSGqNn6KW24HXvwO_A@mail.gmail.com>
-Subject: Re: [PATCH] mm: don't warn if the node is offlined
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Yang Shi <shy828301@gmail.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+Content-Type: text/plain
+X-Originating-IP: [10.180.168.240]
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CO1NAM11FT081:EE_|SA0PR12MB4510:EE_
+X-MS-Office365-Filtering-Correlation-Id: 9e30e502-1bef-4c06-ec5e-08dabb9d2e7e
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: NzNDpOSjUtitvWlPgaZThBRYDZds0ttbI/vSZ2RGpiKvOccMANKk7HCzsZoEe7P/minJLPSHKNlwoGWkcBL1ccdeIKaefOnPxK/tDdZu8rQ/5Oq8z+IaXWxEpCCeSo877gswX8kfB6RBbZfi/NgXUYqBbAVxoLiR5Tzgsh6wHHg9ZivecyozeQEI2qPvdJ6EEAG9D1r0qGkeXCg4ZqlaWg/S5RRrwJoshZnl1ufHIorWEnHaAnISA4UR9aKZomgHo3X3bSXkv9fumH5GDRfNfm9yrd/7bdwqaLUR5lpPj+QVDavkPPc75bHrshGgXcSnNJvEU4GSyJqbz+ojCb5jJPRghDfERBmHDZETyis7gQFnBDfejJCNKWFrY1Ls/pTlxbIsLAMCIp6FVMoZ53EfTJpWBvtVnmVUaQZEl+wK+tVcPc6y7w0Ug5gLigqjDZcubJ8/nmeXkTL6bw5T52teCmPF6BWd8LVYi+pXxr7RpkIPAGiPn4SJjSmuS+ymLqG8UlJqKlNYwGEGh2NZQFHJNpg2AYDzE+6kbIv5IckIhuBHCU34w3thHCf5gxMvtf//LJJwpLpMu0Da4LETt68kNcFEiVCBPCbpexUTuqmc07GXU57RQzJudJa5x15HosFeiBDOAnC7ub/ToBV35I2zP1vJatqs71tYt203JtdG76Y4SNXALWZ28gYCkvyuoLCljpAxRB205aCaC1bGQaxB2JW52f8SBImpU72+zZLICVmWE0r8JPZQua+eg5I3rcQk2e6BYZ+sFakUBkIOK49GJa7jz748KlQZTamWOtcftRg=
+X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(396003)(39860400002)(451199015)(46966006)(36840700001)(40470700004)(47076005)(426003)(40460700003)(2906002)(70586007)(4744005)(336012)(81166007)(356005)(36756003)(86362001)(40480700001)(82740400003)(82310400005)(186003)(2616005)(26005)(36860700001)(16526019)(1076003)(316002)(4326008)(5660300002)(8936002)(70206006)(41300700001)(8676002)(110136005)(7696005)(478600001)(54906003)(36900700001);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Nov 2022 00:08:18.8801
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 9e30e502-1bef-4c06-ec5e-08dabb9d2e7e
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT081.eop-nam11.prod.protection.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA0PR12MB4510
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,121 +102,17 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 3:08 PM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Mon 31-10-22 11:31:22, Yang Shi wrote:
-> > Syzbot reported the below splat:
-> >
-> > WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 __alloc_pages_node include/linux/gfp.h:221 [inline]
-> > WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-> > WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-> > Modules linked in:
-> > CPU: 1 PID: 3646 Comm: syz-executor210 Not tainted 6.1.0-rc1-syzkaller-00454-ga70385240892 #0
-> > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-> > RIP: 0010:__alloc_pages_node include/linux/gfp.h:221 [inline]
-> > RIP: 0010:hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-> > RIP: 0010:alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-> > Code: e5 01 4c 89 ee e8 6e f9 ae ff 4d 85 ed 0f 84 28 fc ff ff e8 70 fc ae ff 48 8d 6b ff 4c 8d 63 07 e9 16 fc ff ff e8 5e fc ae ff <0f> 0b e9 96 fa ff ff 41 bc 1a 00 00 00 e9 86 fd ff ff e8 47 fc ae
-> > RSP: 0018:ffffc90003fdf7d8 EFLAGS: 00010293
-> > RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> > RDX: ffff888077f457c0 RSI: ffffffff81cd8f42 RDI: 0000000000000001
-> > RBP: ffff888079388c0c R08: 0000000000000001 R09: 0000000000000000
-> > R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-> > R13: dffffc0000000000 R14: 0000000000000000 R15: 0000000000000000
-> > FS:  00007f6b48ccf700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > CR2: 00007f6b48a819f0 CR3: 00000000171e7000 CR4: 00000000003506e0
-> > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > Call Trace:
-> >  <TASK>
-> >  collapse_file+0x1ca/0x5780 mm/khugepaged.c:1715
->
-> This is quite weird, isn't it? alloc_charge_hpage is selecting the most
-> busy node (as per collapse_control). How come this can be an offline
-> node? Is a parallel memory hotplug happening?
+This series of patches adds OS-First support to handle AER/DPC events
+occurred as a side-effect on a hotplug event.
 
-TBH -- I did not look closely at the syzbot reproducer (let alone
-attempt to run it) and assumed this was the case. Taking a quick look,
-at least memory hot remove is enabled:
+Smita Koralahalli (2):
+  PCI: pciehp: Add support for OS-First Hotplug and AER/DPC
+  PCI:pciehp: Clear 10-bit tags unconditionally on a hot-plug event
 
-CONFIG_ARCH_ENABLE_MEMORY_HOTPLUG=y
-CONFIG_ARCH_ENABLE_MEMORY_HOTREMOVE=y
-CONFIG_MEMORY_HOTPLUG=y
-CONFIG_MEMORY_HOTPLUG_DEFAULT_ONLINE=y
-CONFIG_MEMORY_HOTREMOVE=y
+ drivers/pci/pcie/dpc.c        | 62 +++++++++++++++++++++++++++++++++++
+ include/uapi/linux/pci_regs.h |  1 +
+ 2 files changed, 63 insertions(+)
 
-But looking at the C reproducer, I don't immediately see anywhere
-where we offline nodes. I'll try to run this tomorrow to make sure I'm
-not missing something real here.
+-- 
+2.17.1
 
-Thanks,
-Zach
-
-
-> [...]
->
-> > It is because khugepaged allocates pages with __GFP_THISNODE, but the
-> > preferred node is offlined.  The warning was even stronger before commit
-> > 8addc2d00fe17 ("mm: do not warn on offline nodes unless the specific node
-> > is explicitly requested").  The commit softened the warning for
-> > __GFP_THISNODE.
-> >
-> > But this warning seems not quite useful because:
-> >   * There is no guarantee the node is online for __GFP_THISNODE context
-> >     for all the callsites.
->
-> The original idea IIRC was to catch a buggy code which mishandled node
-> assignment. But this looks like a perfectly valid code. There is no
-> synchronization with the memory hotplug so it is possible that memory
-> gets offline during a longer taking scanning.
->
-> I do agree that the warning is not really helpful in this case. It is
-> actually even harmful for those running in panic-on-warn mode.
->
-> >   * Kernel just fails the allocation regardless the warning, and it looks
-> >     all callsites handle the allocation failure gracefully.
-> >
-> > So, removing the warning seems like the good move.
-> >
-> > Reported-by: syzbot+0044b22d177870ee974f@syzkaller.appspotmail.com
-> > Signed-off-by: Yang Shi <shy828301@gmail.com>
-> > Cc: Zach O'Keefe <zokeefe@google.com>
-> > Cc: Michal Hocko <mhocko@suse.com>
->
-> Unless I am wrong in my above statement I would appreciate extending the
-> changelog to describe the actual code is correct so the warning is
-> harmful.
->
-> Acked-by: Michal Hocko <mhocko@suse.com>
->
-> > ---
-> >  include/linux/gfp.h | 2 --
-> >  1 file changed, 2 deletions(-)
-> >
-> > diff --git a/include/linux/gfp.h b/include/linux/gfp.h
-> > index ef4aea3b356e..594d6dee5646 100644
-> > --- a/include/linux/gfp.h
-> > +++ b/include/linux/gfp.h
-> > @@ -218,7 +218,6 @@ static inline struct page *
-> >  __alloc_pages_node(int nid, gfp_t gfp_mask, unsigned int order)
-> >  {
-> >       VM_BUG_ON(nid < 0 || nid >= MAX_NUMNODES);
-> > -     VM_WARN_ON((gfp_mask & __GFP_THISNODE) && !node_online(nid));
-> >
-> >       return __alloc_pages(gfp_mask, order, nid, NULL);
-> >  }
-> > @@ -227,7 +226,6 @@ static inline
-> >  struct folio *__folio_alloc_node(gfp_t gfp, unsigned int order, int nid)
-> >  {
-> >       VM_BUG_ON(nid < 0 || nid >= MAX_NUMNODES);
-> > -     VM_WARN_ON((gfp & __GFP_THISNODE) && !node_online(nid));
-> >
-> >       return __folio_alloc(gfp, order, nid, NULL);
-> >  }
-> > --
-> > 2.26.3
->
-> --
-> Michal Hocko
-> SUSE Labs
