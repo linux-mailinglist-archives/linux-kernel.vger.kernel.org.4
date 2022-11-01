@@ -2,118 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16923614646
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 10:07:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CD4D7614647
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 10:07:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbiKAJHm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 05:07:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53086 "EHLO
+        id S229889AbiKAJHv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 05:07:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229462AbiKAJHk (ORCPT
+        with ESMTP id S229890AbiKAJHp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 05:07:40 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C464F18B09;
-        Tue,  1 Nov 2022 02:07:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667293659; x=1698829659;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=U5H8Zelx5ugEIaSXGsCTFGIW0cdkr61olry0Ir0BReA=;
-  b=fbS4CF7ERZmX1OAwFmE38emj9+MEX3XynkaohQvtk0ot75VvsM8lXm9b
-   B0ROdVqp0tUrOEpjHy3vcxEU1dohyE9S9GWCCkqYYOFR+xTGZevaCPDHC
-   f+uKDuHX5JtVkgrAAL/KLd3oBan0qyQUIgF87BmQtfFwEyFRX71rD32bI
-   ww5mQIcmBCXRjveBT08d8CJSzn+Q/SVOnSiz2N8H0sgYC6xfFxGpneip7
-   o9lmD+XTwcR+Ap+mdXdLLJnxWH6V5f+W25RPpi2OuM4eFZgHZYhJNigbj
-   1fsr7OOMax5bE8UIUKS7Nz32jo96lz8abJuV3ZQc+Gei6aREII9Eh6onS
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="371179750"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="371179750"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 02:07:39 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="584951562"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="584951562"
-Received: from jiaxiche-mobl.ccr.corp.intel.com (HELO [10.238.2.23]) ([10.238.2.23])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 02:07:34 -0700
-Message-ID: <ad24c33d-8f07-4d73-136f-ad16bb2b1981@linux.intel.com>
-Date:   Tue, 1 Nov 2022 17:07:22 +0800
+        Tue, 1 Nov 2022 05:07:45 -0400
+Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8176118E00
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 02:07:44 -0700 (PDT)
+Received: by mail-qt1-x82e.google.com with SMTP id cg5so146351qtb.12
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 02:07:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=th4xE1kbxGXhvqp58bQuwMXJRdHQ2h80CsaIeNEDNYA=;
+        b=OYz9l1Y5jipEZRqi3+Ap+YOfsah2VQ9iMf7WNs3maEj3q6h/Dfs9GFi+QIO/psu+Ly
+         DXAj6alXARPIVeyTfkRlpPghdYn9KjMcm3ZMakzXUYkbjmZ+TJK/PWU2fMrTxurvUL/a
+         k5Z1RkaTdV618nCftw9T1JwbvCjipnbpcD8DKhv2tJ3oQWNqHhq/A09jHd6IMtkmsd1a
+         yT/ZmFkNL90owGNyD0V2xpVNSiAA8cg0kFUSoxa+L/SQo0xc9+lxGFReNtdLKJgsYH1f
+         8dLyNpX2GwhtFqMesZ74vzm/hZV+mc1E6BytoZE1AJP9l7humU+TKmx6sXgEk4kQOQYW
+         Zr7A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=th4xE1kbxGXhvqp58bQuwMXJRdHQ2h80CsaIeNEDNYA=;
+        b=M5D4xKkstf6rrB0Bz/joOo+97pPdQVMjJdBehNR4Z80nUzRGcLLzq8EioUusi10Ili
+         dKT1bvtQQsrdcLg+Bqudf6fwsiEsAMNXf8xxvxloTQwnN1a5glRR1vd1lK+X+n6Dxizn
+         mkXwZK9gZbOgz0eJzVKiytG5fK+IQtCj4w9stwY9hzNHynMp/MtDnKVsvi7+8C0DPWtU
+         pFosRt59l5Gp2vvA+KFxLQjHXcwLKHdbBk8ggLFDMPOTOFq+/pNtEbXSUVRf/SAwvB+I
+         mKE4KFglpcQkEkDILPfSwSsuKOR+Ve/sg8p/Q/5xq7Gbu8zGH6r1JG7ADI9j2ls9Zkcb
+         Oe2A==
+X-Gm-Message-State: ACrzQf3cNzmCUpevOnlFlm1yODuqncA7RYKSuzBoODyytkwM0Ceiiohh
+        OSkguKidWi2g59nnQmda28O/euNNyIByZSdT4WU=
+X-Google-Smtp-Source: AMsMyM7pD9BJESp5l+Gr6L3YVVtbGVqkbv2G+8523qeiuaN11uPGoMbnxqvZhSktFvZAwlbFmDbo+Ck0BfrJ1N/rVB8=
+X-Received: by 2002:a05:622a:147:b0:39c:dc0d:7d0f with SMTP id
+ v7-20020a05622a014700b0039cdc0d7d0fmr13847372qtw.281.1667293663598; Tue, 01
+ Nov 2022 02:07:43 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH 1/6] x86: KVM: Enable CMPccXADD CPUID and expose it to
- guest
-To:     Borislav Petkov <bp@alien8.de>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     kvm@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        pbonzini@redhat.com, ndesaulniers@google.com,
-        alexandre.belloni@bootlin.com, peterz@infradead.org,
-        jpoimboe@kernel.org, chang.seok.bae@intel.com,
-        pawan.kumar.gupta@linux.intel.com, babu.moger@amd.com,
-        jmattson@google.com, sandipan.das@amd.com, tony.luck@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, fenghua.yu@intel.com,
-        keescook@chromium.org, jane.malalane@citrix.com, nathan@kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221019084734.3590760-1-jiaxi.chen@linux.intel.com>
- <20221019084734.3590760-2-jiaxi.chen@linux.intel.com>
- <Y1AUhlwWjIkKfZHA@google.com>
- <cce514da-32b4-3b84-cfad-67a05705bc9f@linux.intel.com>
- <Y1lrGgyIcgweVGup@zn.tnic>
-From:   Jiaxi Chen <jiaxi.chen@linux.intel.com>
-In-Reply-To: <Y1lrGgyIcgweVGup@zn.tnic>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <Y2DXsnrQjQeP2PfO@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+ <alpine.DEB.2.22.394.2211010942210.2834@hadrien>
+In-Reply-To: <alpine.DEB.2.22.394.2211010942210.2834@hadrien>
+From:   Tanju Brunostar <tanjubrunostar0@gmail.com>
+Date:   Tue, 1 Nov 2022 10:07:31 +0100
+Message-ID: <CAHJEyKW0wcY8sSZWG6CpF8p8e+i12vN9mtOYngQQBRh8zxRr7Q@mail.gmail.com>
+Subject: Re: [PATCH v2] staging: vt6655: change variable name wTimeStampOff
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 10/27/2022 1:15 AM, Borislav Petkov wrote:
-> On Wed, Oct 26, 2022 at 11:40:31AM +0800, Jiaxi Chen wrote:
->>> What do you think about moving CPUID_7_1_EAX to be a KVM-only leaf too?  AFAICT,
->>> KVM passthrough is the only reason the existing features are defined.
-> 
-> Yap, looking at the patches which added those 2 feature flags upstream,
-> they don't look like some particular use was the goal but rather to
-> expose it to guests. Besides, AVX512 apps do their own CPUID detection.
-> 
->> Since CPUID_7_1_EAX has only 5 features now, it is a big waste,       
->> should we move it to KVM-only leaf as Sean suggested. What's your     
->> opinion about this?                                                   
-> 
-> Yes, pls do.
-> 
-> And when you do, make sure to undo what
-> 
->   b302e4b176d0 ("x86/cpufeatures: Enumerate the new AVX512 BFLOAT16 instructions")
-> 
-> added.
-> 
-> Thx.
-> 
-Hi Sean and Boris,
-
-Just realized moving CPUID_7_1_EAX to kvm-only leaf will not save space
-in enum cpuid_leafs[]. CPUID_7_1_EAX is indeed removed, but someone
-else, ie. CPUID_DUMMY needs to take the place, otherwise the cpuid_leafs
-array would be deranged. Therefore, the length of x86 cpuid leaves is
-not decreased.
-
-Wonder if the intention of moving this leaf to kvm-only is for saving
-space in x86_capability[], or just because there's no other use case in
-the host kernel side and the cpuflags of this features can be removed.
-
-Hope for your suggestions.
-
--- 
-Regards,
-Jiaxi
+On Tue, Nov 1, 2022 at 9:43 AM Julia Lawall <julia.lawall@inria.fr> wrote:
+>
+>
+>
+> On Tue, 1 Nov 2022, Tanjuate Brunostar wrote:
+>
+> > Change the variable name wTimeStampOff to adhear to Linux kernel coding
+> > style, which does not allow naming variables in CamelCase. error is
+> > reported by checkpatch
+>
+> adhear -> adhere
+>
+> error -> Error
+>
+> Actually, the variable is written in Hungarian notation, given the little
+> w at the beginning of its name.
+>
+> Maybe
+>
+> "Remove the use of Hungarian notation, which is not used in the Linux
+> kernel."
+>
+> julia
+>
+Thanks
+> >
+> > Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+> > ---
+> >  drivers/staging/vt6655/rxtx.c | 4 ++--
+> >  1 file changed, 2 insertions(+), 2 deletions(-)
+> >
+> > diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+> > index 1e5036121665..9bdcf2337235 100644
+> > --- a/drivers/staging/vt6655/rxtx.c
+> > +++ b/drivers/staging/vt6655/rxtx.c
+> > @@ -54,7 +54,7 @@
+> >   */
+> >  #define CRITICAL_PACKET_LEN      256
+> >
+> > -static const unsigned short wTimeStampOff[2][MAX_RATE] = {
+> > +static const unsigned short time_stamp_off[2][MAX_RATE] = {
+> >       {384, 288, 226, 209, 54, 43, 37, 31, 28, 25, 24, 23}, /* Long Preamble */
+> >       {384, 192, 130, 113, 54, 43, 37, 31, 28, 25, 24, 23}, /* Short Preamble */
+> >  };
+> > @@ -130,7 +130,7 @@ static __le16 s_uFillDataHead(struct vnt_private *pDevice,
+> >
+> >  static __le16 vnt_time_stamp_off(struct vnt_private *priv, u16 rate)
+> >  {
+> > -     return cpu_to_le16(wTimeStampOff[priv->preamble_type % 2]
+> > +     return cpu_to_le16(time_stamp_off[priv->preamble_type % 2]
+> >                                                       [rate % MAX_RATE]);
+> >  }
+> >
+> > --
+> > 2.34.1
+> >
+> >
+> >
