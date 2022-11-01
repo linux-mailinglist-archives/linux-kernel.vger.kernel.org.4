@@ -2,47 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9BD4615442
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 22:28:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0FC2615444
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 22:30:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230384AbiKAV2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 17:28:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47320 "EHLO
+        id S230402AbiKAVaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 17:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbiKAV2t (ORCPT
+        with ESMTP id S230056AbiKAVaD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 17:28:49 -0400
-Received: from gandalf.ozlabs.org (mail.ozlabs.org [IPv6:2404:9400:2221:ea00::3])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDDAD1DF2F;
-        Tue,  1 Nov 2022 14:28:45 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        Tue, 1 Nov 2022 17:30:03 -0400
+Received: from ms.lwn.net (ms.lwn.net [IPv6:2600:3c01:e000:3a1::42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58D3C1DF3E;
+        Tue,  1 Nov 2022 14:30:02 -0700 (PDT)
+Received: from localhost (unknown [IPv6:2601:281:8300:73:8b7:7001:c8aa:b65f])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N236c07kkz4xFr;
-        Wed,  2 Nov 2022 08:28:39 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1667338120;
-        bh=begiQeirg8nUPiZn4wI0A7c46RT1wVmZbLG90APn0Yg=;
-        h=Date:From:To:Cc:Subject:From;
-        b=cGW4why/+Ah15TLjY/7yV7X1577SEcvOeTtdmPTCgORrMMLjr3OROj+5YS3Bhp0Hi
-         4cB5Qgu2LGV4Y7/J94zGbJBOgvMgim52WgaJ0m8mPjcXJDEL+S8hm2RG1qYnJTeKOq
-         8r05f//g39h8QelcaPwu8Yrkel/WLIgmHB3wmMN7gt0o2Xiz2p6lr6w+WN5WnXTsW2
-         1NPTLAiUA39oMRbDQTcmTMfi7RfNfw+6c1SzHZ1A/FJyRRikbH1zc/s3PQ/2GLrhEE
-         Js9zJUGV165pNcNTo/7XnK7aiNvSG2oZwq0qbuws8Hd+nz/mUUTPbGCmdSvko+CCRZ
-         5ioodo/1OVUvg==
-Date:   Wed, 2 Nov 2022 08:28:26 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     John Johansen <john.johansen@canonical.com>
-Cc:     Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>
-Subject: linux-next: Signed-off-by missing for commit in the apparmor tree
-Message-ID: <20221102082826.0541eec6@canb.auug.org.au>
+        by ms.lwn.net (Postfix) with ESMTPSA id E8EDE365;
+        Tue,  1 Nov 2022 21:30:01 +0000 (UTC)
+DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net E8EDE365
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
+        t=1667338202; bh=Whjgo1/LcTcPlcW4445jRDYE5vq2NPEo3QUgeSSwdlQ=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=g46ySEfodXVUkzI/4hXZe33PCUn92FRck2p4svSpul/MRPGSsnBI1q5qN3OneXrNA
+         u5NT8Wca9TSPorTr5GVcE+urRIWgC1V3sRNMtqS9XdqDUuswp1EVt+0QFS43zzWfFV
+         FrbMoQOyBfNkhP5Nto7qIkWA2NQxyj712UROGMghEfa4+nM40CXjM6IoFUsUDCT790
+         RpXd1Qw3NMTYHyNoIo/eFZ6YyC1Azm35nRyKkkdBDLiB3c6jIEa2JKnVtgdm993IRv
+         9K1v3A7vYMr3/T0xo5Jjn+H83hvrLkqb+2RyXJ5ckqWAvMejR6/7UGb/2vXYmpvt0u
+         xFL4xO5XzyrCg==
+From:   Jonathan Corbet <corbet@lwn.net>
+To:     Carlos Bilbao <carlos.bilbao@amd.com>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bilbao@vt.edu, bagasdotme@gmail.com, willy@infradead.org,
+        akiyks@gmail.com, miguel.ojeda.sandonis@gmail.com,
+        Carlos Bilbao <carlos.bilbao@amd.com>
+Subject: Re: [PATCH v3 0/2] Documentation: Start Spanish translation and
+ include HOWTO
+In-Reply-To: <20221024145521.69465-1-carlos.bilbao@amd.com>
+References: <20221024145521.69465-1-carlos.bilbao@amd.com>
+Date:   Tue, 01 Nov 2022 15:30:01 -0600
+Message-ID: <87wn8ext0m.fsf@meer.lwn.net>
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/0nVuu_HNwXIh2WZWD2glVLR";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-4.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,37 +54,53 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/0nVuu_HNwXIh2WZWD2glVLR
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+Carlos Bilbao <carlos.bilbao@amd.com> writes:
 
-Hi all,
+> Spanish is the second most spoken language in the world. This patch set
+> starts the process of translating critical kernel documentation into the
+> Spanish language.
+>
+> Link to v2: https://lkml.org/lkml/2022/10/13/866
+> Changes since v2:
+>   - Apply improvements proposed by Miguel Ojeda
+>   - Added Reviewed-By of Miguel Ojeda for first commit
+>   - Added Reviwed-By of Bagas Sanjaya for second commit
+>
+> Changes since v1:
+>   - Added me as MAINTAINER
+>   - Fixed warnings of kernel test robot
+>   - Use imperative form in second commit
+>   - Improved minor translation details
+>
+> Carlos Bilbao (2):
+>   Documentation: Start translations to Spanish
+>   Documentation: Add HOWTO Spanish translation into rst based build system
+>
+>   Documentation/translations/index.rst          |   1 +
+>   .../translations/sp_SP/disclaimer-sp.rst      |   6 +
+>   Documentation/translations/sp_SP/howto.rst    | 617 ++++++++++++++++++
+>   Documentation/translations/sp_SP/index.rst    |  80 +++
+>   MAINTAINERS                                   |   5 +
+>   5 files changed, 709 insertions(+)
+>   create mode 100644 Documentation/translations/sp_SP/disclaimer-sp.rst
+>   create mode 100644 Documentation/translations/sp_SP/howto.rst
+>   create mode 100644 Documentation/translations/sp_SP/index.rst
 
-Commit
+I went to apply this series just now, and got the following from "git
+am":
 
-  0fc0401eb24c ("apparmor: Add __init annotation to aa_{setup/teardown}_dfa=
-_engine()")
+WARNING: Message contains suspicious unicode control characters!
+         Subject: [PATCH v3 2/2] Documentation: Add HOWTO Spanish translati=
+on into rst based build system
+            Line: +estable m=C3=A1s reciente del kernel, y no est=C3=A1n in=
+teresados =E2=80=8B=E2=80=8Ben ayudar a probar
+            ---------------------------------------------------------------^
+            Char: ZERO WIDTH SPACE (0x200b)
+         If you are sure about this, rerun with the right flag to allow.
 
-is missing a Signed-off-by from its committer.
+Any idea what the story is there?  Could I get a resend without that
+problem?
 
---=20
-Cheers,
-Stephen Rothwell
+Thanks,
 
---Sig_/0nVuu_HNwXIh2WZWD2glVLR
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNhj3sACgkQAVBC80lX
-0GxhCgf/QtjtIv3sC7uqNfE7p08DPtzs3JHsj/cPe0dYaYU81ziOOofA6DT5J/Ah
-PHMkwDGK6TlolaQJFzhLWvvMGwePZl5k0QSpIwZY8LkGZBlN/QCCL1CDoSzoVuBA
-CzWltahgh2KWah51PQmemRX5/43H4KmtLG+P8QaSkMIT1wM6gyRaWCDoWXyx5U+c
-HTHCbQycpoZ2yDGQpiGYftiEUnWZsxoR+T2KF69H6H67Oh9ZkCsI78XBIItWcqol
-kLOv6WNC0H/ZtCeiFQ+0+Zb4sJcDiZDPer0wdSWZcFtrqy2yg/GBD3CgGZLkIuBP
-a3VQVjQW3ACBRDn4OTiMBwaQg2Oi+g==
-=iXA8
------END PGP SIGNATURE-----
-
---Sig_/0nVuu_HNwXIh2WZWD2glVLR--
+jon
