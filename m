@@ -2,54 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3D40E614AF6
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:42:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BA95614AF9
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:42:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230458AbiKAMmT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 08:42:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56402 "EHLO
+        id S230489AbiKAMmd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 08:42:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230177AbiKAMmP (ORCPT
+        with ESMTP id S230526AbiKAMm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 08:42:15 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FA05193D4;
-        Tue,  1 Nov 2022 05:42:14 -0700 (PDT)
+        Tue, 1 Nov 2022 08:42:29 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 150DC1A398;
+        Tue,  1 Nov 2022 05:42:23 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id C9A0EB81C89;
-        Tue,  1 Nov 2022 12:42:12 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3B20C433D7;
-        Tue,  1 Nov 2022 12:42:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9A61E61092;
+        Tue,  1 Nov 2022 12:42:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EDA0C43149;
+        Tue,  1 Nov 2022 12:42:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667306531;
-        bh=2T8WNwxqXqc4RLKndjcY8hK2X8Sm42uT6q5iYuYCI0I=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=oowB+qf809zDTaZa0PPPDXyXF8gVHv3RUCeKkugeClUsyVcP0fGXJarruWLLHoTC8
-         qaEK9kBgy81uuL2eA523sDFI23RmldTXqawWSakleZU7HQtVebd57dWtbeUWyoUX9u
-         mgQAG1SDTUg59Mn2uPMZ2DXdj91zerl3s7yYQOAfoYJUFIFTmRQ67TiFvVA+TmYLNG
-         Iv6eEn0y2ARROfoFiHU3lQtu+wmREdyx+rXzCr3IDrK0xjaeKBBho/H15xX2Ctb93n
-         YyuEoBbvIZKVMJ4f9D+FmHZugN/aqNuKnQ2rMuLI8CB8BRJ2+mJklgboMcL7gX+uLG
-         qwejXkxAJ9Lzg==
-Date:   Tue, 1 Nov 2022 18:12:00 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Vidya Sagar <vidyas@nvidia.com>
-Cc:     jingoohan1@gmail.com, gustavo.pimentel@synopsys.com,
-        lpieralisi@kernel.org, robh@kernel.org, kw@linux.com,
-        bhelgaas@google.com, kishon@ti.com, thierry.reding@gmail.com,
-        jonathanh@nvidia.com, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, kthota@nvidia.com,
-        mmaddireddy@nvidia.com, sagar.tv@gmail.com
-Subject: Re: [PATCH V2 1/4] PCI: endpoint: Add core_deinit() callback support
-Message-ID: <20221101124200.GL54667@thinkpad>
-References: <20221013181815.2133-1-vidyas@nvidia.com>
- <20221013181815.2133-2-vidyas@nvidia.com>
+        s=k20201202; t=1667306542;
+        bh=KzGRg5qkuvMpcyZBQVa6HjEtBiE9z54YDbSgDbPAeHg=;
+        h=Date:From:To:Subject:References:In-Reply-To:From;
+        b=NwPt1aZTBxMYnAZEcLL75Z7eEiL5AOs4Nplj0/gxG+tY641khPpoJ/VSS1BQ8qIP5
+         VvjulI8ipJsBLrUfQLWaPyKnBzXKc0exstJMEj81Smbtl3UqqOcjCX9Dg9jj3Zm0J0
+         Goj3XKLbbnEHK54ia3dMVNobwT4gw/fcvldap2U+r5twYWL1/tQZTUpELqhJwc27IE
+         KnZLbA+A8rbCRI5CESeJT4/wzWnznpR4gEfgomuTQ0+PilMmMl+/TYxixIzTg3qD62
+         XWpLPNcLa4qgTIuYufZ+ZuFa+fr9mORC9y434H0DmUaXCmbnRKGRpoJ7t+mWhsJSDy
+         Ln4QBT5rMkXrQ==
+Date:   Tue, 1 Nov 2022 13:42:18 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Raju Rangoju <Raju.Rangoju@amd.com>, syniurge@gmail.com,
+        shyam-sundar.s-k@amd.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rajesh1.kumar@amd.com,
+        Basavaraj Natikar <basavaraj.natikar@amd.com>
+Subject: Re: [PATCH] i2c: amd-mp2: use msix/msi if the hardware supports
+Message-ID: <Y2EUKpto2ZRZorLd@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Raju Rangoju <Raju.Rangoju@amd.com>, syniurge@gmail.com,
+        shyam-sundar.s-k@amd.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rajesh1.kumar@amd.com,
+        Basavaraj Natikar <basavaraj.natikar@amd.com>
+References: <20221025181124.421628-1-Raju.Rangoju@amd.com>
+ <Y2ESGbkgfEXsx9es@shikoro>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="vVNqkArORQcowHZ6"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221013181815.2133-2-vidyas@nvidia.com>
+In-Reply-To: <Y2ESGbkgfEXsx9es@shikoro>
 X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -59,99 +61,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 13, 2022 at 11:48:12PM +0530, Vidya Sagar wrote:
-> The endpoint function driver should undo the things done in core_init()
-> and stop hardware access before deinitializing the controller. Add
-> core_deinit() callback support for function driver to do this cleanup.
-> This core_deinit() callback should be invoked by the controller driver
-> before deinitializing the controller.
-> 
-> Signed-off-by: Vidya Sagar <vidyas@nvidia.com>
-> ---
-> V2:
-> * Reworded the commit message
-> 
->  drivers/pci/endpoint/pci-epc-core.c | 26 ++++++++++++++++++++++++++
->  include/linux/pci-epc.h             |  1 +
->  include/linux/pci-epf.h             |  2 ++
->  3 files changed, 29 insertions(+)
-> 
-> diff --git a/drivers/pci/endpoint/pci-epc-core.c b/drivers/pci/endpoint/pci-epc-core.c
-> index 5dac1496cf16..689450f01f75 100644
-> --- a/drivers/pci/endpoint/pci-epc-core.c
-> +++ b/drivers/pci/endpoint/pci-epc-core.c
-> @@ -732,6 +732,32 @@ void pci_epc_init_notify(struct pci_epc *epc)
->  }
->  EXPORT_SYMBOL_GPL(pci_epc_init_notify);
->  
-> +/**
-> + * pci_epc_deinit_notify() - Notify the EPF device that EPC device's core
-> + *			     deinitialization is scheduled.
-> + * @epc: the EPC device whose core deinitialization is scheduled
-> + *
-> + * Invoke to Notify the EPF device that the EPC device's deinitialization
-> + * is scheduled.
-> + */
-> +void pci_epc_deinit_notify(struct pci_epc *epc)
-> +{
-> +	struct pci_epf *epf;
-> +
-> +	if (!epc || IS_ERR(epc))
-> +		return;
-> +
-> +	mutex_lock(&epc->list_lock);
-> +	list_for_each_entry(epf, &epc->pci_epf, list) {
-> +		mutex_lock(&epf->lock);
-> +		if (epf->event_ops->core_deinit)
 
-I've added a check for the existence of the "event_ops" in latest series.
-Please rebase on top of that and add the check here too.
+--vVNqkArORQcowHZ6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Thanks,
-Mani
 
-> +			epf->event_ops->core_deinit(epf);
-> +		mutex_unlock(&epf->lock);
-> +	}
-> +	mutex_unlock(&epc->list_lock);
-> +}
-> +EXPORT_SYMBOL_GPL(pci_epc_deinit_notify);
-> +
->  /**
->   * pci_epc_destroy() - destroy the EPC device
->   * @epc: the EPC device that has to be destroyed
-> diff --git a/include/linux/pci-epc.h b/include/linux/pci-epc.h
-> index 301bb0e53707..b95dc4b3e302 100644
-> --- a/include/linux/pci-epc.h
-> +++ b/include/linux/pci-epc.h
-> @@ -204,6 +204,7 @@ int pci_epc_add_epf(struct pci_epc *epc, struct pci_epf *epf,
->  		    enum pci_epc_interface_type type);
->  void pci_epc_linkup(struct pci_epc *epc);
->  void pci_epc_init_notify(struct pci_epc *epc);
-> +void pci_epc_deinit_notify(struct pci_epc *epc);
->  void pci_epc_remove_epf(struct pci_epc *epc, struct pci_epf *epf,
->  			enum pci_epc_interface_type type);
->  int pci_epc_write_header(struct pci_epc *epc, u8 func_no, u8 vfunc_no,
-> diff --git a/include/linux/pci-epf.h b/include/linux/pci-epf.h
-> index a215dc8ce693..fa51579951db 100644
-> --- a/include/linux/pci-epf.h
-> +++ b/include/linux/pci-epf.h
-> @@ -70,10 +70,12 @@ struct pci_epf_ops {
->  /**
->   * struct pci_epf_event_ops - Callbacks for capturing the EPC events
->   * @core_init: Callback for the EPC initialization complete event
-> + * @core_deinit: Callback for the EPC deinitialization schedule event
->   * @link_up: Callback for the EPC link up event
->   */
->  struct pci_epc_event_ops {
->  	int (*core_init)(struct pci_epf *epf);
-> +	int (*core_deinit)(struct pci_epf *epf);
->  	int (*link_up)(struct pci_epf *epf);
->  };
->  
-> -- 
-> 2.17.1
-> 
+> > Fixes: 529766e0a011 ("i2c: Add drivers for the AMD PCIe MP2 I2C controller")
 
--- 
-மணிவண்ணன் சதாசிவம்
+I dropped this Fixes tag, though. Looks like a new feature to me.
+
+
+--vVNqkArORQcowHZ6
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNhFCoACgkQFA3kzBSg
+KbZ/+Q/9HKi/y2D/PRTfhcqwVMgcFygahYoZfMV7bHg5eo0OaByo1J1z8uX5ue6a
+sEl9GL9xuUoN13DZPP11C1TWmAQHs2Xgk3lCxcNW5aP67+9B5VeyEgLzH5K5EEav
+PsKcQPSK96JV2awZzHkarTr/upHVu6TrIKUBGzPkEPn5PGXc2DrUU5LdRqEm8CLw
+QDHYOrMch1THjoPNtuk70mWuhnVZfAhlW/YGotU6GzUrmeE8kx7JdloVwaFtGmUC
+TGTpbXFYvUkCkpCygCMkRjV2KmheP7q/UPXU9nsyVzVv+2s6sraeWM3jZqKx7m/g
+xoWYNfAltDN59O7BAsUEi6njFQ85t4fHUzn5gbvddHjnnwgnGf9f9Wl11+zDNVh/
+cL7TodXRjU0/EKJNkaLNMKuwWvaDoc4Oid/5fy8syGgkhoeVjnG6oVxeKIxC4poh
+u0u/sLo0DqKVyWNcpEX1eDqGzWAiCOuN22C5QPc8qUsucQLgudvoXZsHyXUB90ju
+kBHCAisjdU6m04Iitz48X3LaGZebJvkvrjp88PcSyH/k5ixN2eriJJWO83yDrnsj
+b8B6QkphpL438yTb25JidHeoTScYhvY8gyEIhTmMjOPg54uBeDJsfAyDWB7Kz4kP
+bj5WjYSfi9l3gd/bi0pewqEilXfpVHmGl5dXNib0tqIWFVq2n4w=
+=lbyW
+-----END PGP SIGNATURE-----
+
+--vVNqkArORQcowHZ6--
