@@ -2,146 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E40E614EBB
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 17:00:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1F9FB614ECB
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 17:06:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230147AbiKAQAR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 12:00:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43836 "EHLO
+        id S229994AbiKAQG0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 12:06:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47292 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbiKAQAO (ORCPT
+        with ESMTP id S229553AbiKAQGX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 12:00:14 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DE1DF13E9A;
-        Tue,  1 Nov 2022 09:00:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1667318412; x=1698854412;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=rFi+QccnOwdpqMzOzh+5VH7hp3B+12AeLQr8Z5QZS88=;
-  b=MdrO1XOtuOz7YNmjPZYTI5f+z3sggO4bBW6XAT6Ss58Va4CRcxbDmceb
-   Q9n8aQJv9XAKgxBYYO7Sbh/s7e0nXjN9a3rZJOepmoSnFeXn41DaptfLP
-   HsHm2klrKJIlE08QL9zpCVgWJFt5B4j8k7wFpPmNYm2H/RtgrJ6UAeoWg
-   QNV3ZffTcaRemzFWFmCJ8nTR/+DsdX6wPijRMtWO681frK/UM7kXn+Wu9
-   ZXg2DzEtMy5kMUyfJY0qf5VOE1ysxNTkxsIgX6ZntngkLcgDzEu4M4h6/
-   zvz+GuoNE3K9XbNlQSTg5DsM8LlyiKC+mbNlBPpq2ppmt/5moJy2Hy50i
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
-   d="scan'208";a="184854886"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Nov 2022 09:00:11 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 1 Nov 2022 09:00:09 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Tue, 1 Nov 2022 09:00:09 -0700
-Date:   Tue, 1 Nov 2022 17:04:52 +0100
-From:   'Horatiu Vultur' <horatiu.vultur@microchip.com>
-To:     David Laight <David.Laight@aculab.com>
-CC:     "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "kuba@kernel.org" <kuba@kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "UNGLinuxDriver@microchip.com" <UNGLinuxDriver@microchip.com>
-Subject: Re: [PATCH net v2 0/3] net: lan966x: Fixes for when MTU is changed
-Message-ID: <20221101160452.mhk6ze7hzjaz4hzo@soft-dev3-1>
-References: <20221030213636.1031408-1-horatiu.vultur@microchip.com>
- <b75a7136030846f587e555763ef2750e@AcuMS.aculab.com>
- <20221031150133.2be5xr7cmuhr4gng@soft-dev3-1>
- <219ebe83a5ad4467937545ee5a0e77e4@AcuMS.aculab.com>
- <20221101075906.ets6zsti3c54idae@soft-dev3-1>
- <de73370512334c76b1500e12cfd33005@AcuMS.aculab.com>
+        Tue, 1 Nov 2022 12:06:23 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E93713E14;
+        Tue,  1 Nov 2022 09:06:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1667318776; bh=GDM5w/VeqzXan3VWgpM/qUk5TbfOxJCHDnXddN5FY2E=;
+        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
+        b=QnqfJL1ucll31p6hRPGdK0rNqX3J1n6DaEO9OEl4Ei8qe4eqRQ6PVZxbwXBeawo3+
+         pgzbW8GTTRVUWa8Bfe6pT1+b4oKaW9mG5Q9w3Z/bct/tQ8sv163x5eZ4lrX70ZEFvj
+         qA2KeBbBEXWV/2vU+XjDHtAOQBCS3NG8XqFtKexvT0bdZ2qRviPrnE/Vhe+alQ4VkD
+         dOEwz3phUr8eIQMKW3GVDw7OZ/PrkxSpPRZjV/H4DMmNDbmPeoDDQY5K6disCjUf2x
+         gazzijXRzFr+fMj9SihgU4XSxNeQMLWT/++6XxmU1dYMEBWJKJ38bHr4tDJ+wSWAF4
+         hrMGPmT0Vbfwg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([78.34.126.36]) by mail.gmx.net (mrgmx104
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1M89L1-1ouaTL2iA7-005HB4; Tue, 01
+ Nov 2022 17:06:16 +0100
+From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     linux-doc@vger.kernel.org
+Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Jonathan Corbet <corbet@lwn.net>, linux-ia64@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH] docs: ia64: Fix a typo ("identify mappings")
+Date:   Tue,  1 Nov 2022 17:06:09 +0100
+Message-Id: <20221101160609.961950-1-j.neuschaefer@gmx.net>
+X-Mailer: git-send-email 2.35.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <de73370512334c76b1500e12cfd33005@AcuMS.aculab.com>
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:/VRiGKjvC/suvQdqYSsF82L0JMSiSVg4aF1DQVvMmkX1CJI9art
+ HtrqolxTTDg+JqHeNQybqSf9BGPIHmg241N+PMI16yAEMiaNSttZKKMSxWBt+ZyEBRejXfj
+ QUYRxrpZKWIvseBOpAxyQhcj4M5oOaHFullar9+IHPYgVciBsZbfqQAR9vJqMdFS6ozpiBf
+ IvEpaztOQPLYm9Z0VY1fA==
+UI-OutboundReport: notjunk:1;M01:P0:CinfW92A6PE=;XnaiRvyVEhl15pc8HtejAYg6GNs
+ PJYMwfoxBsQuVW/9ils3T/lJnuKWM3MoiNqWikPCndzaYLTbwGme4MBBWUpI8jmjDfB6iiVTw
+ Sn8frRqd+IsJL4RykXeTTlaLKBFUu9ri21ZA1FAYsJoJbmKulLpK/imXr07hYrU6lxnSxXjWy
+ 9f7aY8yu0QR9AJ9/3LImfbOulilBhJUoEUAKBUZIuirkJwOR1DEbTVDa7nNoK0Jk32Rgpl/wW
+ WLtAsihjSbIFhepwjLmYxtBQE09OIBp2Fyy0G7oOkBUC9Z2/ZZnzci6UIvTUfxBpFZ0xXVrY6
+ tOkGs/4vdPnUq6F48zZ4avY/2ucldbOhd1NYFeys8nAQMxhsjLNFAa4qKb5AiYccS4R6wcVK4
+ nFIq6i6c5cQ0kfbvfvGCjIGj8db3CauGsRpet1S/BYgXjQiQNTVBgAbpoz4NMCHfIuvd6Il1r
+ wkSQ/1iEygyfDaBMXx0f1czt9EdOSOY1Q+UR4k2YLc0zgiUR+QQuNgClS1mDBnh+bhBPap3hd
+ NkrbYqXGvRWSy7oTFpSLRkC1ji6STv/Uuaigu+ASnBAHoDGeVSTG8cWUHs/mteC6txevHiJs3
+ zvBVWgVyUMocf0LYCclZ1hALERH/QwAGfb2YD0L76wXetF4s5+mTxYbms4jVm4uVJhlQCISvy
+ XtXWnbj/ytLy7KjWTfNvBeK8hKcQpj7aonGbgFKQf0jv2EZnnjjVfnmtgJt2hy8WdpyP/8egb
+ E1LEXqtnC8X7oahrLYemXiPV/j0yjt1+hTj2HdOOBVPAkgBe074TQFtwuqmOprPmq207nq54w
+ hclZ7fhuhVm7dJ3xZt6nFX23GdIGfH7wE6HsfobpBnhMbLflzkeo6v2cXnG+9SNxMxF7q786s
+ E7Amgrbc3Pi64MPHWLF3z1JoZG+dkEo5Gxs5yaDng7RemE+gEMJg6slyS0YvPn43knEOXZsQz
+ tIix66iVg2C37IAf/r9ubPxER8o=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 11/01/2022 09:03, David Laight wrote:
-> > HW requires to have the start of frame alligned to 128 bytes.
-> 
-> Not a real problem.
-> Even dma_alloc_coherent() guarantees alignment.
-> 
-> I'm not 100% sure of all the options of the Linux stack.
-> But for ~1500 byte mtu I'd have thought that receiving
-> directly into an skb would be best (1 page allocated for an skb).
-> For large mtu (and hardware receive coalescing) receiving
-> into pages is probably better - but not high order allocations.
+The correct term here, also used in the next line, is "identity
+mappings". "itentify mappings" was probably just a typo.
 
-But am I not doing this already? I allocate the page here [1] and then create
-the skb here[2].
+Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+=2D--
+ Documentation/ia64/aliasing.rst | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> 
-> ...
-> > > If the buffer is embedded in an skb you really want the skb
-> > > to be under 4k (I don't think a 1500 byte mtu can fit in 2k).
-> > >
-> > > But you might as well tell the hardware the actual buffer length
-> > > (remember to allow for the crc and any alignment header).
-> >
-> > I am already doing that here [2]
-> > And I need to do it for each frame it can received.
-> 
-> That is the length of the buffer.
-> Not the maximum frame length - which seems to be elsewhere.
-> I suspect that having the maximum frame length less than the
-> buffer size stops the driver having to handle long frames
-> that span multiple buffers.
-> (and very long frames that are longer than all the buffers!)
-> 
-> ...
-> > > I'd set the buffer large enough for the mtu but let the hardware fill
-> > > the entire buffer.
-> >
-> > I am not 100% sure I follow it. Can you expend on this a little bit?
-> 
-> At the moment I think the receive buffer descriptors have a length
-> of 4k. But you are setting another 'maximum frame length' register
-> to (eg) 1518 so that the hardware rejects long frames.
+diff --git a/Documentation/ia64/aliasing.rst b/Documentation/ia64/aliasing=
+.rst
+index a08b36aba0159..36a1e1d4842b8 100644
+=2D-- a/Documentation/ia64/aliasing.rst
++++ b/Documentation/ia64/aliasing.rst
+@@ -61,7 +61,7 @@ Memory Map
+     The efi_memmap table is preserved unmodified because the original
+     boot-time information is required for kexec.
 
-That is correct.
+-Kernel Identify Mappings
++Kernel Identity Mappings
+ =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D
 
-> But you can set the 'maximum frame length' register to (just under)
-> 4k so that longer frames are received ok but without the driver
-> having to worry about frames spanning multiple buffer fragments.
+     Linux/ia64 identity mappings are done with large pages, currently
+=2D-
+2.35.1
 
-But this will not just put more load on CPU? In the way that I accept
-long frames but then they will be discard by the CPU.
-And I can do this in HW, because I know what is the maximum frame length
-accepted on that interface.
-
-> 
-> The network stack might choose to discard frames with an overlong mtu.
-> But that can be done after all the headers have been removed.
-> 
-> ...
-> > But all these possible changes will need to go through net-next.
-> 
-> Indeed.
-> 
->         David
-
-[1] https://elixir.bootlin.com/linux/v6.1-rc3/source/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c#L17
-[2] https://elixir.bootlin.com/linux/v6.1-rc3/source/drivers/net/ethernet/microchip/lan966x/lan966x_fdma.c#L417
-
-> 
-> -
-> Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-> Registration No: 1397386 (Wales)
-
--- 
-/Horatiu
