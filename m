@@ -2,75 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CC61A614B24
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:51:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4BE0614B27
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:53:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230451AbiKAMvb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 08:51:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35440 "EHLO
+        id S230064AbiKAMx2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 08:53:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiKAMvY (ORCPT
+        with ESMTP id S229468AbiKAMx0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 08:51:24 -0400
-Received: from mail-ed1-x52b.google.com (mail-ed1-x52b.google.com [IPv6:2a00:1450:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CDB31B1FC
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 05:51:23 -0700 (PDT)
-Received: by mail-ed1-x52b.google.com with SMTP id x2so21627752edd.2
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 05:51:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=I3ZWUelOBGuajwMCGSZuHahRmnca9IMPS5lnk5/9ETI=;
-        b=SH22qPUXsEn3p/Floa1ZUMCLaXYV8bLk5ULHiQsQqH465E1SVAmIu6Gj850XUtWV9A
-         D3vcOJJpkBKDfQObFbUbvPzsspuQeDi8iVxdxbPuOD5L9lqdeXzBxpoBhQrusiuhFHEW
-         X5gb+sDNXCfylI/G4HA9XvQ5zBoOQLjxCMPiCtygwfXo80GSGpNvwLPh/Z+T/8bh3Zuk
-         SwXqo9RR/EoPDC2jCc+HLc5z3HKMEmC/z195V79dBXKBEvrvXGJaudJx8wGWvzn2YMCf
-         SHKwY8wXPJECzov7T2eLVkWbEI2/y+28jeSZJQxu8o71oB3W65T8TXYTCq5r5pvnAkJ1
-         KxsQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=I3ZWUelOBGuajwMCGSZuHahRmnca9IMPS5lnk5/9ETI=;
-        b=ZWHUf1uX7q+F38X7eJ+BdAA3vZbdseoV2t4B6cSLZHbNuia+LZ83++cHbEIvAQ39Qc
-         EFjQbWSal+Akl/D9Y8HKLHzZcwlwm6p/Rw3A9ThpghmXUSV3DGRok+ijsEzQyrFFJtx+
-         60ecIbA9D5WfRB4EFtV/ZQbguvemtQkcx0V/SbWdhUnFbScBlUEiU2ExZiqNrsxsdEkF
-         biNehMl1EdoVJ8ygbBcWZEi5G98LYYZJ3Q5FZ9czaYIAUn1eg5fyd3MGdjc9I9tSBb8b
-         EwvR1E667W6Xp53C8UlY4B/xe1PTm+GQhe4MpDZWEfaEIF2hiZDq+edAvVRqis52Xue7
-         lBIA==
-X-Gm-Message-State: ACrzQf38Vqy51/FLE2DtIZ2rZHbrkxaF75AB7W9yhOzUaJMl0YFDKPhb
-        JVXFXFPCfUL/nkq1l345awL9LomfpbXFlw==
-X-Google-Smtp-Source: AMsMyM49yeZoSu5tYqBhel3Vi41lPu+IDsM9aRBTodsPAIXmVMIiAGsNUkmhNpKrHHoSwAH+rwrGSg==
-X-Received: by 2002:a05:6402:158d:b0:463:2343:b980 with SMTP id c13-20020a056402158d00b004632343b980mr14233232edv.150.1667307081713;
-        Tue, 01 Nov 2022 05:51:21 -0700 (PDT)
-Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
-        by smtp.gmail.com with ESMTPSA id e22-20020a17090658d600b007ad0b97e6e9sm4112927ejs.162.2022.11.01.05.51.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 05:51:21 -0700 (PDT)
-Date:   Tue, 1 Nov 2022 13:51:20 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Guo Ren <guoren@kernel.org>, kvm-riscv@lists.infradead.org,
-        kvm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [RFC  4/9] RISC-V: KVM: Improve privilege mode filtering for perf
-Message-ID: <20221101125120.lkd3n3yybihjhzyk@kamzik>
-References: <20220718170205.2972215-1-atishp@rivosinc.com>
- <20220718170205.2972215-5-atishp@rivosinc.com>
+        Tue, 1 Nov 2022 08:53:26 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC9B22BDE;
+        Tue,  1 Nov 2022 05:53:24 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AF9DBB81D1C;
+        Tue,  1 Nov 2022 12:53:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6BCEC433D6;
+        Tue,  1 Nov 2022 12:53:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667307202;
+        bh=//Hxv4m5/4QFRxQRfAon0gk4J4k+/YkMxoNhB+9hSjw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=pwFUNTanDEt0f8mjmDDpk4NWrcYo9Qn4x5XD5ockyCaqypHBIdKaVZ+14azUWPgpn
+         hMjvkwEzWCtqs46Aet/E0rWrEjF7iZIc8xCakHca3Qvn+VV0OOmFYGgRWwhaw+69Dg
+         LwmcaI03269wCwnQfr5NQv1sen/dHOnzrSTt7vvccQ57Ewg9/w2GZYTCGADBk4vunj
+         +iIE/iEpKcrcxV7ZklHDvKeVRfM2Eu6EMuCsh3ngxn1hD22d2GM+eXGWuvLumv9/ho
+         V1NAE6YQ8UPSWU9gvgqd4THWN4omXnkkVegA/TzD/3WTw4ppprmal9bSnZEmXbegZw
+         FAJIKc0TpYNFw==
+Date:   Tue, 1 Nov 2022 13:53:18 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     Arminder Singh <arminders208@outlook.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, asahi@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Hector Martin <marcan@marcan.st>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+Subject: Re: [PATCH v3] i2c/pasemi: PASemi I2C controller IRQ enablement
+Message-ID: <Y2EWvokvkixLucg+@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Sven Peter <sven@svenpeter.dev>,
+        Arminder Singh <arminders208@outlook.com>,
+        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, asahi@lists.linux.dev,
+        linuxppc-dev@lists.ozlabs.org,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Hector Martin <marcan@marcan.st>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+References: <MN2PR01MB5358ED8FC32C0CFAEBD4A0E19F5F9@MN2PR01MB5358.prod.exchangelabs.com>
+ <A0B81E7F-BF26-424D-B9E5-5647323B24EC@svenpeter.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="NW2sLPhekt1Tv84F"
 Content-Disposition: inline
-In-Reply-To: <20220718170205.2972215-5-atishp@rivosinc.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <A0B81E7F-BF26-424D-B9E5-5647323B24EC@svenpeter.dev>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,81 +73,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 10:02:00AM -0700, Atish Patra wrote:
-> Currently, the host driver doesn't have any method to identify if the
-> requested perf event is from kvm or bare metal. As KVM runs in HS
-> mode, there are no separate hypervisor privilege mode to distinguish
-> between the attributes for guest/host.
-> 
-> Improve the privilege mode filtering by using the event specific
-> config1 field.
-> 
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> ---
->  drivers/perf/riscv_pmu_sbi.c   | 27 ++++++++++++++++++++++-----
->  include/linux/perf/riscv_pmu.h |  2 ++
->  2 files changed, 24 insertions(+), 5 deletions(-)
-> 
-> diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
-> index 5d0eef3ef136..34f9fcc221a8 100644
-> --- a/drivers/perf/riscv_pmu_sbi.c
-> +++ b/drivers/perf/riscv_pmu_sbi.c
-> @@ -275,6 +275,27 @@ int riscv_pmu_sbi_hpmc_width(void)
->  }
->  EXPORT_SYMBOL(riscv_pmu_sbi_hpmc_width);
->  
-> +static unsigned long pmu_sbi_get_filter_flags(struct perf_event *event)
-> +{
-> +	unsigned long cflags = 0;
-> +	bool guest_events = false;
-> +
-> +	if (event->attr.config1 & RISCV_KVM_PMU_CONFIG1_GUEST_EVENTS)
-> +		guest_events = true;
-> +	if (event->attr.exclude_kernel)
-> +		cflags |= guest_events ? SBI_PMU_CFG_FLAG_SET_VSINH : SBI_PMU_CFG_FLAG_SET_SINH;
-> +	if (event->attr.exclude_user)
-> +		cflags |= guest_events ? SBI_PMU_CFG_FLAG_SET_VUINH : SBI_PMU_CFG_FLAG_SET_UINH;
-> +	if (guest_events && event->attr.exclude_hv)
-> +		cflags |= SBI_PMU_CFG_FLAG_SET_SINH;
-> +	if (event->attr.exclude_host)
-> +		cflags |= SBI_PMU_CFG_FLAG_SET_UINH | SBI_PMU_CFG_FLAG_SET_SINH;
-> +	if (event->attr.exclude_guest)
-> +		cflags |= SBI_PMU_CFG_FLAG_SET_VSINH | SBI_PMU_CFG_FLAG_SET_VUINH;
-> +
-> +	return cflags;
-> +}
-> +
->  static int pmu_sbi_ctr_get_idx(struct perf_event *event)
->  {
->  	struct hw_perf_event *hwc = &event->hw;
-> @@ -286,11 +307,7 @@ static int pmu_sbi_ctr_get_idx(struct perf_event *event)
->  	uint64_t cmask = GENMASK_ULL(rvpmu->num_counters - 1, 0);
->  	unsigned long cflags = 0;
->  
-> -	if (event->attr.exclude_kernel)
-> -		cflags |= SBI_PMU_CFG_FLAG_SET_SINH;
-> -	if (event->attr.exclude_user)
-> -		cflags |= SBI_PMU_CFG_FLAG_SET_UINH;
-> -
-> +	cflags = pmu_sbi_get_filter_flags(event);
->  	/* retrieve the available counter index */
->  #if defined(CONFIG_32BIT)
->  	ret = sbi_ecall(SBI_EXT_PMU, SBI_EXT_PMU_COUNTER_CFG_MATCH, cbase, cmask,
-> diff --git a/include/linux/perf/riscv_pmu.h b/include/linux/perf/riscv_pmu.h
-> index 6fee211c27b5..825b95253bc5 100644
-> --- a/include/linux/perf/riscv_pmu.h
-> +++ b/include/linux/perf/riscv_pmu.h
-> @@ -26,6 +26,8 @@
->  
->  #define RISCV_PMU_STOP_FLAG_RESET 1
->  
-> +#define RISCV_KVM_PMU_CONFIG1_GUEST_EVENTS 0x1
-> +
->  struct cpu_hw_events {
->  	/* currently enabled events */
->  	int			n_events;
-> -- 
-> 2.25.1
->
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+--NW2sLPhekt1Tv84F
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+
+> > +    complete(&smbus->irq_completion);
+>=20
+> I only realized just now that you also want to disable the interrupt
+> right here by writing to IMASK. This is a level sensitive interrupt at
+> AIC level so the moment this handler returns it will fire again until
+> you reach the write above after the completion wait a bit later.
+
+This seems like a valid request. Any chance for a v4? We are so close to
+being good here...
+
+
+--NW2sLPhekt1Tv84F
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNhFr4ACgkQFA3kzBSg
+KbZTiw/8Dlg4oKc1MA8MC7mHzNw8On6Tqi9U92KfEJWvk2wK99rdh41lCyBayYdB
+4NCFrJeY+Nqu90Buf4Ui2rVom01pPSd9guyDZ+YAyxd+uLSlfrD8R6vCjLbWbXPo
+V0SSN0+POvYYZ5XLE5ASIU3MlIMCAYV/+ZgOesqjD7LyraOIcSvt+nEVe7y0BDFX
+qDR2LxOZMo512FVzjoloyGicjbhGbbMBm0Xmo4QKWv5RBmxbZIebuEbqnoibtzEe
+VXFGULpQt9wJ+q+Tw1S12uKnrV1ds8qX614A1uILui6he0WaX92mIxiN9FGROGaB
+t/0vqarPj6zTgmD7JhQLDtxqZcxjzJSE2mMX4ied6NC1zi1H6NFatxyIg7gCLS5b
+hlYlhVk2x8IjeCnaeGfrtczmQSSK71xMi34RhS+Ohyic3PG/xWfOUMqDuI2Glfx1
+IwkrTaR+WQwb9TJEnH7peybHATPjmeZHG8mC+VlH9c4vtSRXNq8JYXtH+hLCN8kb
+vJuHvbsXFpe0NZGCm4gT12g4UhJTM/nVwBxO89j7wmETdf9AMxAMStUepUQpxd4w
+M4q0zgnAwT+iSz1qCRO2LT+84J0LH+tV6zfH+NfysoSnjPG+Gi3Ke9RWqJeEME3T
+MzPj6d88/qFAMcwN9L9eewvRncGBSqpqBQcSYEBTnEmrVNSZEto=
+=tAGC
+-----END PGP SIGNATURE-----
+
+--NW2sLPhekt1Tv84F--
