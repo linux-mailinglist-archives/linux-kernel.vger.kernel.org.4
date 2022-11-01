@@ -2,96 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29493614247
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 01:32:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 625DD614259
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 01:34:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229862AbiKAAcq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 20:32:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56284 "EHLO
+        id S229881AbiKAAea (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 20:34:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229692AbiKAAck (ORCPT
+        with ESMTP id S229776AbiKAAeZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 20:32:40 -0400
-Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8657613F20;
-        Mon, 31 Oct 2022 17:32:39 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.nyi.internal (Postfix) with ESMTP id EDE315C00E7;
-        Mon, 31 Oct 2022 20:32:38 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Mon, 31 Oct 2022 20:32:38 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=themaw.net; h=cc
-        :cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm2; t=1667262758; x=
-        1667349158; bh=8ame5+g1vFTZe19N8YY2ZI8AVM29rYwFCCLbDt28C5A=; b=s
-        Nt7Raaa2nvEuJiaHpK5EDg2caNAw2rCwhiwY8pSwiZ6/JqGwefUnHVJrHxBpXtnr
-        ha24sCLiblvl8c6Fp0UMvvYKCEugHPAfaUHB9tbJ5JIK7YRzwQwhdXNWR0IJwkWE
-        so0sHApClPmf18LMDPIkZ1p1l3BEjN9oi76HGloV4csNXd1ron50JtzndRbJ35sf
-        B2V31pkFNSDFCLsroIO2gRlONJZMcPIugAcIxwANgZN3IK219SfloPE8SD3ztCCM
-        933bdOFZKo20Iw4tuZbCOgB4yi7/h0pZ7e/XIUoK0ZAalBBRiO/DpV9Ae5UOK+Cd
-        eikAKcy8KM/3L/dvVmjoA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1667262758; x=
-        1667349158; bh=8ame5+g1vFTZe19N8YY2ZI8AVM29rYwFCCLbDt28C5A=; b=b
-        lNoUguwSMu5+Ns9poN2qAapNeBHdubOjHA+B5nbnQW9IxKHwCagyMHE3Z1PnAe28
-        nnpq6hinuwhCKtIpO7EhM3rBSnjAhSzc9CkTT+L79zqssqx5yhzq1gZ6RVqENMEE
-        lUABdeYTZBk0xg4BetLi5j/rNbWB/UQjOM4Alj1alATOdmcA1fRE15gW1ok0bKL1
-        UDDxEfWUhOc3b2Yi40a7AGoxbNbQRRiDlXDemnHtqZm/qgRW73c+2gKJOHhZBx8D
-        7Dznykfx1mRyDxwOMd30yBk5fIDO5R6PB7AVkGVtb3uHrqxLrXcnUtai2nYasg9E
-        AFxWkeKp1Pdkntp/AU/Og==
-X-ME-Sender: <xms:JWlgYwCIwAcNWw3YXRUv511jrdNCgQGikN72CPunO13MknpYCDzxKw>
-    <xme:JWlgYygEIO_muzHxuiQk3TPsXUdyzZJFU1dszvCaPvEPHgvt8v83gIYxHLdBLuSpq
-    otA_jM_z6Wx>
-X-ME-Received: <xmr:JWlgYzkNnhB60ZDbCsY9TewXobQLdIwUP5jv34RCJzG68T0cRnb7hgyiwyXnnRcD8zZ2x4uWPcT9xjErLSII0sWOpKJEvNueXcc4NEkMzRG3lSceXN0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudeggddvgecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecunecujfgurhepkfffgggfuffvvehfhfgjtgfgsehtke
-    ertddtfeejnecuhfhrohhmpefkrghnucfmvghnthcuoehrrghvvghnsehthhgvmhgrfidr
-    nhgvtheqnecuggftrfgrthhtvghrnhepgedvteevvdefiedvueeujeegtedvheelhfehte
-    fhkefgjeeuffeguefgkeduhfejnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghm
-    pehmrghilhhfrhhomheprhgrvhgvnhesthhhvghmrgifrdhnvght
-X-ME-Proxy: <xmx:JWlgY2xDnPanSANpvR2s91j_WwlOsO1iDK1dm5Z5i-Ne0oRnbtEybw>
-    <xmx:JWlgY1SB73B6jyXojI1R1Z3N2KUhI9RJjsE1C-o79Eo8-15X2CEWBw>
-    <xmx:JWlgYxYlgtaq9gtYtihtJt2TJ5mjm51MwYoWRwngoQM0UOedDrXCoQ>
-    <xmx:JmlgY2K07sbDbBMCWZrQQtUU0Py3MOgsVXkUhVoNVyTn59VBCX_mlQ>
-Feedback-ID: i31e841b0:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Mon,
- 31 Oct 2022 20:32:30 -0400 (EDT)
-Message-ID: <f81f0ddc-cff3-b327-f4b2-57102bdf0ecf@themaw.net>
-Date:   Tue, 1 Nov 2022 08:32:26 +0800
+        Mon, 31 Oct 2022 20:34:25 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFE0F15A27;
+        Mon, 31 Oct 2022 17:34:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667262864; x=1698798864;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=acc+2gBvRft+JiQI6WLRivHkyIwnDQIoyJyGzxx54G8=;
+  b=fOqynw/FxWsnL7zmy8pcfsD7bEI51JImUeX7hT6i80Sy4wCfPnL48PUh
+   XdGQ/32UJpIqqol8kHCvKjn1PWzQQoz9jAAG3O8PLe8W+cgIjWAceXOVe
+   IDxmU51CFfdef0niBHDZDNSNpN7xdK+C1gL2RF82htkEEbSI6FpTADRc8
+   Jmy5mIqHFNCHKO7P/9QEY88qflJznY+6ViMcIE0FBt42TGkeVu3qH1LuW
+   RcLqGDS7oMbdXhLANS4iNV+oObheE49McSCjZDd6jEj1VHQtMaaiDPsC1
+   IvpE6+CSd2H/Vl+kGKyOcA8qvUYDAh7WYGtXiV1LJJgNvBfQEavzcI1n/
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="371112434"
+X-IronPort-AV: E=Sophos;i="5.95,229,1661842800"; 
+   d="scan'208";a="371112434"
+Received: from fmsmga002.fm.intel.com ([10.253.24.26])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 17:34:23 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="739152697"
+X-IronPort-AV: E=Sophos;i="5.95,229,1661842800"; 
+   d="scan'208";a="739152697"
+Received: from rhweight-wrk1.ra.intel.com ([137.102.106.139])
+  by fmsmga002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 17:34:22 -0700
+Date:   Mon, 31 Oct 2022 17:34:39 -0700 (PDT)
+From:   matthew.gerlach@linux.intel.com
+X-X-Sender: mgerlach@rhweight-WRK1
+To:     Xu Yilun <yilun.xu@intel.com>
+cc:     hao.wu@intel.com, russell.h.weight@intel.com,
+        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
+        mdf@kernel.org, linux-fpga@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        tianfei.zhang@intel.com, corbet@lwn.net,
+        linux-serial@vger.kernel.org, jirislaby@kernel.org,
+        geert+renesas@glider.be, andriy.shevchenko@linux.intel.com,
+        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
+        johan@kernel.org, lukas@wunner.de, ilpo.jarvinen@linux.intel.com,
+        marpagan@redhat.com
+Subject: Re: [PATCH v4 4/4] tty: serial: 8250: add DFL bus driver for Altera
+ 16550.
+In-Reply-To: <Y11FmiDeVhGir+7z@yilunxu-OptiPlex-7050>
+Message-ID: <alpine.DEB.2.22.394.2210311719460.2680729@rhweight-WRK1>
+References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com> <20221020212610.697729-5-matthew.gerlach@linux.intel.com> <Y11FmiDeVhGir+7z@yilunxu-OptiPlex-7050>
+User-Agent: Alpine 2.22 (DEB 394 2020-01-19)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH -next 0/5] fs: fix possible null-ptr-deref when parsing
- param
-Content-Language: en-US
-To:     Tetsuo Handa <penguin-kernel@I-love.SAKURA.ne.jp>,
-        Hawkins Jiawei <yin31149@gmail.com>, viro@zeniv.linux.org.uk
-Cc:     18801353760@163.com, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
-        cmaiolino@redhat.com, dhowells@redhat.com, hughd@google.com,
-        miklos@szeredi.hu, oliver.sang@intel.com, siddhesh@gotplt.org,
-        syzbot+db1d2ea936378be0e4ea@syzkaller.appspotmail.com,
-        syzkaller-bugs@googlegroups.com, tytso@mit.edu, smfrench@gmail.com,
-        pc@cjr.nz, lsahlber@redhat.com, sprasad@microsoft.com,
-        tom@talpey.com
-References: <Y1VwdUYGvDE4yUoI@ZenIV>
- <20221024004257.18689-1-yin31149@gmail.com>
- <7ba9257e-0285-117c-eada-04716230d5af@themaw.net>
- <af24da42-02cb-e60e-d1df-365801aa686b@I-love.SAKURA.ne.jp>
-From:   Ian Kent <raven@themaw.net>
-In-Reply-To: <af24da42-02cb-e60e-d1df-365801aa686b@I-love.SAKURA.ne.jp>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII; format=flowed
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -99,50 +70,150 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On 31/10/22 19:28, Tetsuo Handa wrote:
-> On 2022/10/24 12:34, Ian Kent wrote:
->> On 24/10/22 08:42, Hawkins Jiawei wrote:
->>> On Mon, 24 Oct 2022 at 00:48, Al Viro <viro@zeniv.linux.org.uk> wrote:
->>>> On Mon, Oct 24, 2022 at 12:39:41AM +0800, Hawkins Jiawei wrote:
->>>>> According to commit "vfs: parse: deal with zero length string value",
->>>>> kernel will set the param->string to null pointer in vfs_parse_fs_string()
->>>>> if fs string has zero length.
->>>>>
->>>>> Yet the problem is that, when fs parses its mount parameters, it will
->>>>> dereferences the param->string, without checking whether it is a
->>>>> null pointer, which may trigger a null-ptr-deref bug.
->>>>>
->>>>> So this patchset reviews all functions for fs to parse parameters,
->>>>> by using `git grep -n "\.parse_param" fs/*`, and adds sanity check
->>>>> on param->string if its function will dereference param->string
->>>>> without check.
->>>> How about reverting the commit in question instead?  Or dropping it
->>>> from patch series, depending upon the way akpm handles the pile
->>>> these days...
->>> I think both are OK.
->>>
->>> On one hand, commit "vfs: parse: deal with zero length string value"
->>> seems just want to make output more informattive, which probably is not
->>> the one which must be applied immediately to fix the
->>> panic.
->>>
->>> On the other hand, commit "vfs: parse: deal with zero length string value"
->>> affects so many file systems, so there are probably some deeper
->>> null-ptr-deref bugs I ignore, which may take time to review.
->> Yeah, it would be good to make the file system handling consistent
->> but I think there's been a bit too much breakage and it appears not
->> everyone thinks the approach is the right way to do it.
+
+On Sat, 29 Oct 2022, Xu Yilun wrote:
+
+> On 2022-10-20 at 14:26:10 -0700, matthew.gerlach@linux.intel.com wrote:
+>> From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
 >>
->> I'm thinking of abandoning this and restricting it to the "source"
->> parameter only to solve the user space mount table parser problem but
->> still doing it in the mount context code to keep it general (at least
->> for this case).
-> No progress on this problem, and syzbot is reporting one after the other...
+>> Add a Device Feature List (DFL) bus driver for the Altera
+>> 16550 implementation of UART.
+>>
+>> Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>> ---
+>> v4: use dev_err_probe() everywhere that is appropriate
+>>     clean up noise
+>>     change error messages to use the word, unsupported
+>>     tried again to sort Makefile and KConfig better
+>>     reorder probe function for easier error handling
+>>     use new dfh_find_param API
+>>
+>> v3: use passed in location of registers
+>>     use cleaned up functions for parsing parameters
+>>
+>> v2: clean up error messages
+>>     alphabetize header files
+>>     fix 'missing prototype' error by making function static
+>>     tried to sort Makefile and Kconfig better
+>> ---
+>>  drivers/tty/serial/8250/8250_dfl.c | 149 +++++++++++++++++++++++++++++
+>>  drivers/tty/serial/8250/Kconfig    |  12 +++
+>>  drivers/tty/serial/8250/Makefile   |   1 +
+>>  3 files changed, 162 insertions(+)
+>>  create mode 100644 drivers/tty/serial/8250/8250_dfl.c
+>>
+>> diff --git a/drivers/tty/serial/8250/8250_dfl.c b/drivers/tty/serial/8250/8250_dfl.c
+>> new file mode 100644
+>> index 000000000000..f02f0ba2a565
+>> --- /dev/null
+>> +++ b/drivers/tty/serial/8250/8250_dfl.c
+>> @@ -0,0 +1,149 @@
+>> +// SPDX-License-Identifier: GPL-2.0
+>> +/*
+>> + * Driver for FPGA UART
+>> + *
+>> + * Copyright (C) 2022 Intel Corporation, Inc.
+>> + *
+>> + * Authors:
+>> + *   Ananda Ravuri <ananda.ravuri@intel.com>
+>> + *   Matthew Gerlach <matthew.gerlach@linux.intel.com>
+>> + */
+>> +
+>> +#include <linux/bitfield.h>
+>> +#include <linux/dfl.h>
+>> +#include <linux/io-64-nonatomic-lo-hi.h>
+>> +#include <linux/kernel.h>
+>> +#include <linux/module.h>
+>> +#include <linux/serial.h>
+>> +#include <linux/serial_8250.h>
+>> +
+>> +struct dfl_uart {
+>> +	int line;
+>> +};
+>> +
+>> +static int dfl_uart_get_params(struct dfl_device *dfl_dev, struct uart_8250_port *uart)
+>> +{
+>> +	struct device *dev = &dfl_dev->dev;
+>> +	u64 v, fifo_len, reg_width;
+>> +	u64 *p;
+>> +
+>> +	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_CLK_FRQ);
+>> +	if (!p)
+>> +		return dev_err_probe(dev, -EINVAL, "missing CLK_FRQ param\n");
+>> +
+>> +	uart->port.uartclk = *p;
+>> +	dev_dbg(dev, "UART_CLK_ID %u Hz\n", uart->port.uartclk);
+>> +
+>> +	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_FIFO_LEN);
+>> +	if (!p)
+>> +		return dev_err_probe(dev, -EINVAL, "missing FIFO_LEN param\n");
+>> +
+>> +	fifo_len = *p;
+>> +	dev_dbg(dev, "UART_FIFO_ID fifo_len %llu\n", fifo_len);
+>> +
+>> +	switch (fifo_len) {
+>> +	case 32:
+>> +		uart->port.type = PORT_ALTR_16550_F32;
+>> +		break;
+>> +
+>> +	case 64:
+>> +		uart->port.type = PORT_ALTR_16550_F64;
+>> +		break;
+>> +
+>> +	case 128:
+>> +		uart->port.type = PORT_ALTR_16550_F128;
+>> +		break;
+>> +
+>> +	default:
+>> +		return dev_err_probe(dev, -EINVAL, "unsupported fifo_len %llu\n", fifo_len);
+>> +	}
+>> +
+>> +	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_REG_LAYOUT);
+>> +	if (!p)
+>> +		return dev_err_probe(dev, -EINVAL, "missing REG_LAYOUT param\n");
+>> +
+>> +	v = *p;
+>> +	uart->port.regshift = FIELD_GET(DFHv1_PARAM_ID_REG_SHIFT, v);
+>> +	reg_width = FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v);
 >
-> I think that reverting is the better choice.
+> I have concern that the raw layout inside the parameter block is
+> still exposed to drivers and need to be parsed by each driver.
 
-Yes, I agree/
+Raw parameter block will always have to be passed to the driver because HW 
+specific properties can be defined that will need to be parsed by the 
+specific driver.
 
+>
+> How about we define HW agnostic IDs for parameter specific fields like:
+>
+> PARAM_ID		FIELD_ID
+> ================================
+> MSIX			STARTV
+> 			NUMV
+> --------------------------------
+> CLK			FREQ
+> --------------------------------
+> FIFO			LEN
+> --------------------------------
+> REG_LAYOUT		WIDTH
+> 			SHIFT
+>
+> And define like u64 dfl_find_param(struct dfl_device *, int param_id, int field_id)
 
-Ian
+I don't think dfl_find_param as defined above adds much value.
 
+>
+> Think further, if we have to define HW agnostic property - value pairs,
+> why don't we just use "Software nodes for the firmware node", see
+> drivers/base/swnode.c. I think this may be a better choice.
+
+I am looking into "Software nodes for the firmware node", and it can be 
+used for HW agnostic properties.  Each dfl driver will still have to 
+make a function call to fetch each HW agnostice property value as well as 
+a function call to find the HW specific parameters and then parse those 
+parameters.
+
+>
+> Thanks,
+> Yilun
+>
