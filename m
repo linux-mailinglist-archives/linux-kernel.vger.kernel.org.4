@@ -2,276 +2,698 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92C7B614B6F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:14:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 894B8614B74
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:15:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230175AbiKANOm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 09:14:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48110 "EHLO
+        id S230351AbiKANPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 09:15:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48676 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230302AbiKANOg (ORCPT
+        with ESMTP id S230324AbiKANPD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 09:14:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09E0F10B61;
-        Tue,  1 Nov 2022 06:14:35 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id B55F7B81D14;
-        Tue,  1 Nov 2022 13:14:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A75E9C433D6;
-        Tue,  1 Nov 2022 13:14:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667308472;
-        bh=9E06RtiJ9dtL9/s+aaGy4XoeL9sxQERb4JUdC/8RtSg=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=oMSog7nbVsPVxYTsto0K8oI2cdVDOOSNnZK5grPh78JH5DOK1F89W4LHr5V4ZqiiD
-         36D4vGJM9Q4/kbjDuQ+z96uxfuc4YGixjUBG1sC2wRCgLsxTHKrcgjb00/s1D5+cCP
-         Ib+FFM4jqmCbAMFRDe4dXdHUu3sOxFWBzImeU3X+IVsLffm08TOKoaSDt9MoILMZbn
-         OfoVlfpoY/o75BbyBJj6DU5VuaRByuN5iW9ocLoM+D2FdCbdyzYMOoxOmtJbso6bhm
-         q4n0Bc6tWdGGzjkQO2LndNwmi7fmoIaq9XDabfJbWqfVqhEwVNS9YUDoE25Ls5ie+/
-         ZIJaR7YsX6U/g==
-From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-To:     Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>,
-        Namhyung Kim <namhyung@kernel.org>,
-        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Masami Hiramatsu <mhiramat@kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: [PATCH 3/3] tools/perf: Fix to get declared file name from broken DWARF5
-Date:   Tue,  1 Nov 2022 22:14:28 +0900
-Message-Id: <166730846871.2095228.62126794905076996.stgit@devnote3>
-X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
-In-Reply-To: <166730844138.2095228.4225918836201778608.stgit@devnote3>
-References: <166730844138.2095228.4225918836201778608.stgit@devnote3>
-User-Agent: StGit/0.19
+        Tue, 1 Nov 2022 09:15:03 -0400
+Received: from mail-oi1-x22a.google.com (mail-oi1-x22a.google.com [IPv6:2607:f8b0:4864:20::22a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6641B9E3;
+        Tue,  1 Nov 2022 06:14:59 -0700 (PDT)
+Received: by mail-oi1-x22a.google.com with SMTP id v81so7155097oie.5;
+        Tue, 01 Nov 2022 06:14:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e3VlahgZPry3IdZ8jTKpuTbzhBSV2xsDB4KjSBrCf7Y=;
+        b=kKjGRndl4BncN+iRS0ABF6hPO2Bg+bAV7hMC4lkfXFs3dQa2w1BKLgoDHEghex4aYa
+         24Nv5eH8rEw8kD8bQ4uMtpDgb6uO/erWGxBxLxq/TV1xQn4sWmzwi4zaqKn2SKV3o7b2
+         h5CHVvaueEfow3PqX2qUfE6GFquWoH9b7kZvokWqSOK9IK3ao7JkcL4s3eIexOwrBWVB
+         CrOD5DKttlspPQg//xxxEc8Gn39EzfG9GMFfaN2rILWkQPdJXBPmMmpBzvhch2n1HBDL
+         4iEVlqL3hW+fnaiPwSbvMiteG6a6U1vaX5s0cpmfLfc29V75Sn+78bBjAM0PEDnv1HI4
+         9X7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=e3VlahgZPry3IdZ8jTKpuTbzhBSV2xsDB4KjSBrCf7Y=;
+        b=e5X9tToJyU4yw6/jyTa1DI+tDwx0Y12smJEb8dz6giDP7WObZEWZIS0KG6jLtVWznp
+         SNqzuvyYUm7eOeB5bwj9v9Zyqr8iqQHML5+oB0UcvmlwbZxSzjG2WVbCRd9ngh/QvIf0
+         Q29E2uhH9dUI9DGssK7Oz+K8QMfyAYjFqMqGN9pDdkiy+xzHTkgYtUexCiADvrHlravu
+         RKkEczFtpmUcr8NgY16kv/R4bBapylnU/+mqU3UbJGksVNGYsu8oByZ5gHyzUhLEE/C/
+         Xf6++6OLAtiqW6d/BcI4Xke1OqHFROdXsJKAwEGunAJvvCEimZz9RhnRXOWO3JCnKw8L
+         Jz7g==
+X-Gm-Message-State: ACrzQf23eZv+2xYJapr0CHpS0Q5/JKL78ruVJ+Fj1X5aG4TgT/PQeHyA
+        pkDX8aYTp5pecke9Ey+oIUE=
+X-Google-Smtp-Source: AMsMyM5sw3f1NU66hIpRoH7a6Cf5DXCn0GANHce6RVGMjl8fmwqB7jkqFx0uQy+HXIWBStJXrVrUZw==
+X-Received: by 2002:a05:6808:114a:b0:357:7649:d26f with SMTP id u10-20020a056808114a00b003577649d26fmr9643748oiu.111.1667308499080;
+        Tue, 01 Nov 2022 06:14:59 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id a4-20020a4ab784000000b0044afc1ba91asm3391921oop.44.2022.11.01.06.14.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 06:14:58 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Tue, 1 Nov 2022 06:14:56 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Billy Tsai <billy_tsai@aspeedtech.com>
+Cc:     jdelvare@suse.com, robh+dt@kernel.org, joel@jms.id.au,
+        andrew@aj.id.au, lee.jones@linaro.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, p.zabel@pengutronix.de,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, BMC-SW@aspeedtech.com,
+        garnermic@meta.com
+Subject: Re: [v2 3/3] hwmon: Add Aspeed ast2600 TACH support
+Message-ID: <20221101131456.GA1310110@roeck-us.net>
+References: <20221101095156.30591-1-billy_tsai@aspeedtech.com>
+ <20221101095156.30591-4-billy_tsai@aspeedtech.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221101095156.30591-4-billy_tsai@aspeedtech.com>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+On Tue, Nov 01, 2022 at 05:51:56PM +0800, Billy Tsai wrote:
+> This patch add the support of Tachometer which can use to monitor the
+> frequency of the input. The tach supports up to 16 channels and it's part
+> function of multi-function device "pwm-tach controller".
+> 
+> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
+> ---
+>  Documentation/hwmon/tach-aspeed-ast2600.rst |  28 ++
 
-Fix to get the declared file name even if it uses index 0 in DWARF5
-using custom die_get_decl_file() function.
+Also needs to be added to Documentation/hwmon/index.rst.
 
-Actually, this is out of standard(*), but clang generates such
-DWARF5 file for the linux kernel. Thus it must be handled.
+>  drivers/hwmon/Kconfig                       |   9 +
+>  drivers/hwmon/Makefile                      |   1 +
+>  drivers/hwmon/tach-aspeed-ast2600.c         | 484 ++++++++++++++++++++
+>  4 files changed, 522 insertions(+)
+>  create mode 100644 Documentation/hwmon/tach-aspeed-ast2600.rst
+>  create mode 100644 drivers/hwmon/tach-aspeed-ast2600.c
+> 
+> diff --git a/Documentation/hwmon/tach-aspeed-ast2600.rst b/Documentation/hwmon/tach-aspeed-ast2600.rst
+> new file mode 100644
+> index 000000000000..8967f60672dc
+> --- /dev/null
+> +++ b/Documentation/hwmon/tach-aspeed-ast2600.rst
+> @@ -0,0 +1,28 @@
+> +Kernel driver tach-aspeed-ast2600
+> +==============================
+> +
+> +Supported chips:
+> +	ASPEED AST2600
+> +
+> +Authors:
+> +	<billy_tsai@aspeedtech.com>
+> +
+> +Description:
+> +------------
+> +This driver implements support for ASPEED AST2600 Fan Tacho controller.
+> +The controller supports up to 16 tachometer inputs.
+> +
+> +The driver provides the following sensor accesses in sysfs:
+> +=============== ======= =====================================================
+> +fanX_input	ro	provide current fan rotation value in RPM as reported
+> +			by the fan to the device.
+> +fanX_div	rw	Fan divisor: Supported value are power of 4 (1, 4, 16
+> +                        64, ... 4194304)
+> +                        The larger divisor, the less rpm accuracy and the less
+> +                        affected by fan signal glitch.
+> +fanX_min	rw      Fan minimum RPM which can used to change the timeout
+> +                        value for controller polling the result.
+> +fanX_max	rw      Fan maximum RPM which can used to change the polling
+> +                        period of the driver.
+> +fanX_pulses	rw      Fan pulses per resolution.
+> +=============== ======= ======================================================
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index fa2356398744..a84c15b73aa6 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -397,6 +397,15 @@ config SENSORS_ASPEED
+>  	  This driver can also be built as a module. If so, the module
+>  	  will be called aspeed_pwm_tacho.
+>  
+> +config SENSORS_TACH_ASPEED_AST2600
+> +	tristate "ASPEED ast2600 Tachometer support"
+> +	select REGMAP
+> +	help
+> +	  This driver provides support for Aspeed ast2600 Tachometer.
+> +
+> +	  To compile this driver as a module, choose M here: the module
+> +	  will be called tach-aspeed-ast2600.
+> +
+>  config SENSORS_ATXP1
+>  	tristate "Attansic ATXP1 VID controller"
+>  	depends on I2C
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index d2497b2644e6..7e2d708e93b8 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -51,6 +51,7 @@ obj-$(CONFIG_SENSORS_ARM_SCMI)	+= scmi-hwmon.o
+>  obj-$(CONFIG_SENSORS_ARM_SCPI)	+= scpi-hwmon.o
+>  obj-$(CONFIG_SENSORS_AS370)	+= as370-hwmon.o
+>  obj-$(CONFIG_SENSORS_ASC7621)	+= asc7621.o
+> +obj-$(CONFIG_SENSORS_TACH_ASPEED_AST2600) += tach-aspeed-ast2600.o
+>  obj-$(CONFIG_SENSORS_ASPEED)	+= aspeed-pwm-tacho.o
+>  obj-$(CONFIG_SENSORS_ATXP1)	+= atxp1.o
+>  obj-$(CONFIG_SENSORS_AXI_FAN_CONTROL) += axi-fan-control.o
+> diff --git a/drivers/hwmon/tach-aspeed-ast2600.c b/drivers/hwmon/tach-aspeed-ast2600.c
+> new file mode 100644
+> index 000000000000..599ed5db17a8
+> --- /dev/null
+> +++ b/drivers/hwmon/tach-aspeed-ast2600.c
+> @@ -0,0 +1,484 @@
+> +// SPDX-License-Identifier: GPL-2.0-or-later
+> +/*
+> + * Copyright (C) ASPEED Technology Inc.
+> + */
+> +
+> +#include <linux/clk.h>
+> +#include <linux/errno.h>
+> +#include <linux/delay.h>
+> +#include <linux/hwmon.h>
+> +#include <linux/hwmon-sysfs.h>
 
-Without this, the perf probe returns an error;
- $ ./perf probe -k $BIN_PATH/vmlinux -s $SRC_PATH -L vfs_read:10
- Debuginfo analysis failed.
-   Error: Failed to show lines.
+Not needed. Please check if there are other unnecessary includes.
 
-With this, it can handle the case correctly;
- $ ./perf probe -k $BIN_PATH/vmlinux -s $SRC_PATH -L vfs_read:10
- <vfs_read@$SRC_PATH/fs/read_write.c:10>
+> +#include <linux/io.h>
+> +#include <linux/kernel.h>
+> +#include <linux/module.h>
+> +#include <linux/of_platform.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/mfd/syscon.h>
+> +#include <linux/sysfs.h>
+> +#include <linux/reset.h>
+> +#include <linux/regmap.h>
+> +#include <linux/bitfield.h>
 
-      11         ret = rw_verify_area(READ, file, pos, count);
-      12         if (ret)
-                          return ret;
+Please order include files in alphabetic order.
 
-(* DWARF5 specification 2.14 says "The value 0 indicates that no
-source file has been specified.")
+> +
+> +/* The channel number of Aspeed tach controller */
+> +#define TACH_ASPEED_NR_TACHS 16
 
-Signed-off-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
----
- tools/perf/util/dwarf-aux.c    |   47 +++++++++++++++++++++++++++-------------
- tools/perf/util/dwarf-aux.h    |    3 +++
- tools/perf/util/probe-finder.c |   14 ++++++------
- 3 files changed, 42 insertions(+), 22 deletions(-)
+#define<space>NAME<tab>value, please, and align the value.
 
-diff --git a/tools/perf/util/dwarf-aux.c b/tools/perf/util/dwarf-aux.c
-index 216fc3d959e8..30b36b525681 100644
---- a/tools/perf/util/dwarf-aux.c
-+++ b/tools/perf/util/dwarf-aux.c
-@@ -123,7 +123,7 @@ int cu_find_lineinfo(Dwarf_Die *cu_die, Dwarf_Addr addr,
- 	if (die_find_realfunc(cu_die, addr, &die_mem)
- 	    && die_entrypc(&die_mem, &faddr) == 0 &&
- 	    faddr == addr) {
--		*fname = dwarf_decl_file(&die_mem);
-+		*fname = die_get_decl_file(&die_mem);
- 		dwarf_decl_line(&die_mem, lineno);
- 		goto out;
- 	}
-@@ -486,6 +486,19 @@ static int die_get_decl_fileno(Dwarf_Die *pdie)
- 		return -ENOENT;
- }
- 
-+/* Return the file name by index */
-+static const char *die_get_file_name(Dwarf_Die *dw_die, int idx)
-+{
-+	Dwarf_Die cu_die;
-+	Dwarf_Files *files;
-+
-+	if (idx < 0 || !dwarf_diecu(dw_die, &cu_die, NULL, NULL) ||
-+	    dwarf_getsrcfiles(&cu_die, &files, NULL) != 0)
-+		return NULL;
-+
-+	return dwarf_filesrc(files, idx, NULL, NULL);
-+}
-+
- /**
-  * die_get_call_file - Get callsite file name of inlined function instance
-  * @in_die: a DIE of an inlined function instance
-@@ -495,18 +508,22 @@ static int die_get_decl_fileno(Dwarf_Die *pdie)
-  */
- const char *die_get_call_file(Dwarf_Die *in_die)
- {
--	Dwarf_Die cu_die;
--	Dwarf_Files *files;
--	int idx;
--
--	idx = die_get_call_fileno(in_die);
--	if (idx < 0 || !dwarf_diecu(in_die, &cu_die, NULL, NULL) ||
--	    dwarf_getsrcfiles(&cu_die, &files, NULL) != 0)
--		return NULL;
--
--	return dwarf_filesrc(files, idx, NULL, NULL);
-+	return die_get_file_name(in_die, die_get_call_fileno(in_die));
- }
- 
-+/**
-+ * die_get_decl_file - Find the declared file name of this DIE
-+ * @dw_die: a DIE for something declared.
-+ *
-+ * Get declared file name of @dw_die.
-+ * NOTE: Since some version of clang DWARF5 implementation incorrectly uses
-+ * file index 0 for DW_AT_decl_file, die_get_decl_file() will return NULL for
-+ * such cases. Use this function instead.
-+ */
-+const char *die_get_decl_file(Dwarf_Die *dw_die)
-+{
-+	return die_get_file_name(dw_die, die_get_decl_fileno(dw_die));
-+}
- 
- /**
-  * die_find_child - Generic DIE search function in DIE tree
-@@ -790,7 +807,7 @@ static int __die_walk_funclines_cb(Dwarf_Die *in_die, void *data)
- 	}
- 
- 	if (addr) {
--		fname = dwarf_decl_file(in_die);
-+		fname = die_get_decl_file(in_die);
- 		if (fname && dwarf_decl_line(in_die, &lineno) == 0) {
- 			lw->retval = lw->callback(fname, lineno, addr, lw->data);
- 			if (lw->retval != 0)
-@@ -818,7 +835,7 @@ static int __die_walk_funclines(Dwarf_Die *sp_die, bool recursive,
- 	int lineno;
- 
- 	/* Handle function declaration line */
--	fname = dwarf_decl_file(sp_die);
-+	fname = die_get_decl_file(sp_die);
- 	if (fname && dwarf_decl_line(sp_die, &lineno) == 0 &&
- 	    die_entrypc(sp_die, &addr) == 0) {
- 		lw.retval = callback(fname, lineno, addr, data);
-@@ -873,7 +890,7 @@ int die_walk_lines(Dwarf_Die *rt_die, line_walk_callback_t callback, void *data)
- 	if (dwarf_tag(rt_die) != DW_TAG_compile_unit) {
- 		cu_die = dwarf_diecu(rt_die, &die_mem, NULL, NULL);
- 		dwarf_decl_line(rt_die, &decl);
--		decf = dwarf_decl_file(rt_die);
-+		decf = die_get_decl_file(rt_die);
- 		if (!decf) {
- 			pr_debug2("Failed to get the declared file name of %s\n",
- 				  dwarf_diename(rt_die));
-@@ -928,7 +945,7 @@ int die_walk_lines(Dwarf_Die *rt_die, line_walk_callback_t callback, void *data)
- 
- 				dwarf_decl_line(&die_mem, &inl);
- 				if (inl != decl ||
--				    decf != dwarf_decl_file(&die_mem))
-+				    decf != die_get_decl_file(&die_mem))
- 					continue;
- 			}
- 		}
-diff --git a/tools/perf/util/dwarf-aux.h b/tools/perf/util/dwarf-aux.h
-index 7ee0fa19b5c4..7ec8bc1083bb 100644
---- a/tools/perf/util/dwarf-aux.h
-+++ b/tools/perf/util/dwarf-aux.h
-@@ -50,6 +50,9 @@ int die_get_call_lineno(Dwarf_Die *in_die);
- /* Get callsite file name of inlined function instance */
- const char *die_get_call_file(Dwarf_Die *in_die);
- 
-+/* Get declared file name of a DIE */
-+const char *die_get_decl_file(Dwarf_Die *dw_die);
-+
- /* Get type die */
- Dwarf_Die *die_get_type(Dwarf_Die *vr_die, Dwarf_Die *die_mem);
- 
-diff --git a/tools/perf/util/probe-finder.c b/tools/perf/util/probe-finder.c
-index 1aa8fcc41c76..54b49ce85c9f 100644
---- a/tools/perf/util/probe-finder.c
-+++ b/tools/perf/util/probe-finder.c
-@@ -763,7 +763,7 @@ static int find_best_scope_cb(Dwarf_Die *fn_die, void *data)
- 
- 	/* Skip if declared file name does not match */
- 	if (fsp->file) {
--		file = dwarf_decl_file(fn_die);
-+		file = die_get_decl_file(fn_die);
- 		if (!file || strcmp(fsp->file, file) != 0)
- 			return 0;
- 	}
-@@ -1071,7 +1071,7 @@ static int probe_point_search_cb(Dwarf_Die *sp_die, void *data)
- 		return DWARF_CB_OK;
- 
- 	/* Check declared file */
--	fname = dwarf_decl_file(sp_die);
-+	fname = die_get_decl_file(sp_die);
- 	if (!fname) {
- 		pr_warning("A function DIE doesn't have decl_line. Maybe broken DWARF?\n");
- 		return DWARF_CB_OK;
-@@ -1151,7 +1151,7 @@ static int pubname_search_cb(Dwarf *dbg, Dwarf_Global *gl, void *data)
- 				return DWARF_CB_OK;
- 
- 			if (param->file) {
--				fname = dwarf_decl_file(param->sp_die);
-+				fname = die_get_decl_file(param->sp_die);
- 				if (!fname || strtailcmp(param->file, fname))
- 					return DWARF_CB_OK;
- 			}
-@@ -1750,7 +1750,7 @@ int debuginfo__find_probe_point(struct debuginfo *dbg, u64 addr,
- 			goto post;
- 		}
- 
--		fname = dwarf_decl_file(&spdie);
-+		fname = die_get_decl_file(&spdie);
- 		if (addr == baseaddr) {
- 			/* Function entry - Relative line number is 0 */
- 			lineno = baseline;
-@@ -1787,7 +1787,7 @@ int debuginfo__find_probe_point(struct debuginfo *dbg, u64 addr,
- 			}
- 		}
- 		/* Verify the lineno and baseline are in a same file */
--		tmp = dwarf_decl_file(&spdie);
-+		tmp = die_get_decl_file(&spdie);
- 		if (!tmp || (fname && strcmp(tmp, fname) != 0))
- 			lineno = 0;
- 	}
-@@ -1902,13 +1902,13 @@ static int line_range_search_cb(Dwarf_Die *sp_die, void *data)
- 
- 	/* Check declared file */
- 	if (lr->file) {
--		fname = dwarf_decl_file(sp_die);
-+		fname = die_get_decl_file(sp_die);
- 		if (!fname || strtailcmp(lr->file, fname))
- 			return DWARF_CB_OK;
- 	}
- 
- 	if (die_match_name(sp_die, lr->function) && die_is_func_def(sp_die)) {
--		lf->fname = dwarf_decl_file(sp_die);
-+		lf->fname = die_get_decl_file(sp_die);
- 		dwarf_decl_line(sp_die, &lr->offset);
- 		pr_debug("fname: %s, lineno:%d\n", lf->fname, lr->offset);
- 		lf->lno_s = lr->offset + lr->start;
+> +/* TACH Control Register */
+> +#define TACH_ASPEED_CTRL(ch) (((ch) * 0x10) + 0x08)
+> +#define TACH_ASPEED_IER BIT(31)
+> +#define TACH_ASPEED_INVERS_LIMIT BIT(30)
+> +#define TACH_ASPEED_LOOPBACK BIT(29)
+> +#define TACH_ASPEED_ENABLE BIT(28)
+> +#define TACH_ASPEED_DEBOUNCE_MASK GENMASK(27, 26)
+> +#define TACH_ASPEED_DEBOUNCE_BIT (26)
 
+() around plain integers is not needed.
+
+> +#define TACH_ASPEED_IO_EDGE_MASK GENMASK(25, 24)
+> +#define TACH_ASPEED_IO_EDGE_BIT (24)
+> +#define TACH_ASPEED_CLK_DIV_T_MASK GENMASK(23, 20)
+> +#define TACH_ASPEED_CLK_DIV_BIT (20)
+> +#define TACH_ASPEED_THRESHOLD_MASK GENMASK(19, 0)
+> +/* [27:26] */
+> +#define DEBOUNCE_3_CLK 0x00
+> +#define DEBOUNCE_2_CLK 0x01
+> +#define DEBOUNCE_1_CLK 0x02
+> +#define DEBOUNCE_0_CLK 0x03
+> +/* [25:24] */
+> +#define F2F_EDGES 0x00
+> +#define R2R_EDGES 0x01
+> +#define BOTH_EDGES 0x02
+> +/* [23:20] */
+> +/* divisor = 4 to the nth power, n = register value */
+> +#define DEFAULT_TACH_DIV 1024
+> +#define DIV_TO_REG(divisor) (ilog2(divisor) >> 1)
+> +
+> +/* TACH Status Register */
+> +#define TACH_ASPEED_STS(ch) (((ch) * 0x10) + 0x0C)
+> +
+> +/*PWM_TACH_STS */
+> +#define TACH_ASPEED_ISR BIT(31)
+> +#define TACH_ASPEED_PWM_OUT BIT(25)
+> +#define TACH_ASPEED_PWM_OEN BIT(24)
+> +#define TACH_ASPEED_DEB_INPUT BIT(23)
+> +#define TACH_ASPEED_RAW_INPUT BIT(22)
+> +#define TACH_ASPEED_VALUE_UPDATE BIT(21)
+> +#define TACH_ASPEED_FULL_MEASUREMENT BIT(20)
+> +#define TACH_ASPEED_VALUE_MASK GENMASK(19, 0)
+> +/**********************************************************
+> + * Software setting
+> + *********************************************************/
+> +#define DEFAULT_FAN_MIN_RPM 1000
+> +#define DEFAULT_FAN_PULSE_PR 2
+> +/*
+> + * Add this value to avoid CPU consuming a lot of resources in waiting rpm
+> + * updating. Assume the max rpm of fan is 60000, the fastest period of updating
+> + * tach value will be equal to (1000000 * 2 * 60) / (2 * max_rpm) = 1000us.
+> + */
+> +#define DEFAULT_FAN_MAX_RPM 60000
+> +
+> +struct aspeed_tach_channel_params {
+> +	int limited_inverse;
+> +	u16 threshold;
+> +	u8 tach_edge;
+> +	u8 tach_debounce;
+> +	u8 pulse_pr;
+> +	u32 min_rpm;
+> +	u32 max_rpm;
+> +	u32 divisor;
+> +	u32 sample_period; /* unit is us */
+> +	u32 polling_period; /* unit is us */
+> +};
+> +
+> +struct aspeed_tach_data {
+> +	struct device *dev;
+> +	struct regmap *regmap;
+> +	struct clk *clk;
+> +	struct reset_control *reset;
+> +	bool tach_present[TACH_ASPEED_NR_TACHS];
+> +	struct aspeed_tach_channel_params *tach_channel;
+> +};
+> +
+> +static void aspeed_update_tach_sample_period(struct aspeed_tach_data *priv,
+> +					     u8 fan_tach_ch)
+> +{
+> +	u32 tach_period_us;
+> +	u8 pulse_pr = priv->tach_channel[fan_tach_ch].pulse_pr;
+> +	u32 min_rpm = priv->tach_channel[fan_tach_ch].min_rpm;
+> +
+> +	/*
+> +	 * min(Tach input clock) = (PulsePR * minRPM) / 60
+> +	 * max(Tach input period) = 60 / (PulsePR * minRPM)
+> +	 * Tach sample period > 2 * max(Tach input period) = (2*60) / (PulsePR * minRPM)
+> +	 */
+> +	tach_period_us = (USEC_PER_SEC * 2 * 60) / (pulse_pr * min_rpm);
+> +	/* Add the margin (about 1.5) of tach sample period to avoid sample miss */
+> +	tach_period_us = (tach_period_us * 1500) >> 10;
+> +	dev_dbg(priv->dev, "tach%d sample period = %dus", fan_tach_ch, tach_period_us);
+> +	priv->tach_channel[fan_tach_ch].sample_period = tach_period_us;
+> +}
+> +
+> +static void aspeed_update_tach_polling_period(struct aspeed_tach_data *priv,
+> +					     u8 fan_tach_ch)
+> +{
+> +	u32 tach_period_us;
+> +	u8 pulse_pr = priv->tach_channel[fan_tach_ch].pulse_pr;
+> +	u32 max_rpm = priv->tach_channel[fan_tach_ch].max_rpm;
+> +
+> +	tach_period_us = (USEC_PER_SEC * 2 * 60) / (pulse_pr * max_rpm);
+> +	dev_dbg(priv->dev, "tach%d polling period = %dus", fan_tach_ch, tach_period_us);
+> +	priv->tach_channel[fan_tach_ch].polling_period = tach_period_us;
+> +}
+> +
+> +static void aspeed_tach_ch_enable(struct aspeed_tach_data *priv, u8 tach_ch,
+> +				  bool enable)
+> +{
+> +	if (enable)
+> +		regmap_set_bits(priv->regmap, TACH_ASPEED_CTRL(tach_ch),
+> +				TACH_ASPEED_ENABLE);
+> +	else
+> +		regmap_clear_bits(priv->regmap, TACH_ASPEED_CTRL(tach_ch),
+> +				   TACH_ASPEED_ENABLE);
+> +}
+> +
+> +static int aspeed_get_fan_tach_ch_rpm(struct aspeed_tach_data *priv,
+> +				      u8 fan_tach_ch)
+> +{
+> +	u32 raw_data, tach_div, val;
+> +	unsigned long clk_source;
+> +	u64 rpm;
+> +	int ret;
+> +
+> +	/* Restart the Tach channel to guarantee the value is fresh */
+> +	aspeed_tach_ch_enable(priv, fan_tach_ch, false);
+> +	aspeed_tach_ch_enable(priv, fan_tach_ch, true);
+
+Is that really needed ? Doesn't the controller measure values continuously ?
+
+> +	ret = regmap_read_poll_timeout(
+> +		priv->regmap, TACH_ASPEED_STS(fan_tach_ch), val,
+> +		(val & TACH_ASPEED_FULL_MEASUREMENT) &&
+> +			(val & TACH_ASPEED_VALUE_UPDATE),
+> +		priv->tach_channel[fan_tach_ch].polling_period,
+> +		priv->tach_channel[fan_tach_ch].sample_period);
+
+Please fix multi-line alignment everywhere. Go up to 100 columns if needed.
+
+> +
+> +	if (ret) {
+> +		/* return 0 if we didn't get an answer because of timeout*/
+> +		if (ret == -ETIMEDOUT)
+> +			return 0;
+> +		else
+> +			return ret;
+
+else after return is unnecessary, and why would a timeout be be ignored ?
+
+> +	}
+> +
+> +	raw_data = val & TACH_ASPEED_VALUE_MASK;
+> +	/*
+> +	 * We need the mode to determine if the raw_data is double (from
+> +	 * counting both edges).
+> +	 */
+> +	if (priv->tach_channel[fan_tach_ch].tach_edge == BOTH_EDGES)
+> +		raw_data <<= 1;
+> +
+> +	tach_div = raw_data * (priv->tach_channel[fan_tach_ch].divisor) *
+> +		   (priv->tach_channel[fan_tach_ch].pulse_pr);
+> +
+> +	clk_source = clk_get_rate(priv->clk);
+> +	dev_dbg(priv->dev, "clk %ld, raw_data %d , tach_div %d\n", clk_source,
+> +		raw_data, tach_div);
+> +
+> +	if (tach_div == 0)
+> +		return -EDOM;
+
+If the fan is off or not connected, would that return an error ?
+If so, that would be inappropriate; it should return a speed
+of 0 in that case.
+
+> +
+> +	rpm = (u64)clk_source * 60;
+> +	do_div(rpm, tach_div);
+> +
+> +	return rpm;
+> +}
+> +
+> +static int aspeed_tach_hwmon_read(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+> +			int channel, long *val)
+> +{
+> +	struct aspeed_tach_data *priv = dev_get_drvdata(dev);
+> +	u32 reg_val;
+> +	int ret;
+> +
+> +	switch (attr) {
+> +	case hwmon_fan_input:
+> +		ret = aspeed_get_fan_tach_ch_rpm(priv, channel);
+> +		if (ret < 0)
+> +			return ret;
+> +		*val = ret;
+> +		break;
+> +	case hwmon_fan_min:
+> +		*val = priv->tach_channel[channel].min_rpm;
+> +		break;
+> +	case hwmon_fan_max:
+> +		*val = priv->tach_channel[channel].max_rpm;
+> +		break;
+> +	case hwmon_fan_div:
+> +		regmap_read(priv->regmap, TACH_ASPEED_CTRL(channel), &reg_val);
+> +		reg_val = FIELD_GET(TACH_ASPEED_CLK_DIV_T_MASK, reg_val);
+> +		*val = 1 << (reg_val << 1);
+
+BIT() ?
+
+> +		break;
+> +	case hwmon_fan_pulses:
+> +		*val = priv->tach_channel[channel].pulse_pr;
+> +		break;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static int aspeed_tach_hwmon_write(struct device *dev, enum hwmon_sensor_types type, u32 attr,
+> +			 int channel, long val)
+> +{
+> +	struct aspeed_tach_data *priv = dev_get_drvdata(dev);
+> +
+> +	switch (attr) {
+> +	case hwmon_fan_min:
+> +		priv->tach_channel[channel].min_rpm = val;
+> +		aspeed_update_tach_sample_period(priv, channel);
+> +		break;
+> +	case hwmon_fan_max:
+> +		priv->tach_channel[channel].max_rpm = val;
+> +		aspeed_update_tach_polling_period(priv, channel);
+> +		break;
+> +	case hwmon_fan_div:
+> +		if ((is_power_of_2(val) && !(ilog2(val) % 2))) {
+> +			priv->tach_channel[channel].divisor = val;
+> +			regmap_write_bits(
+> +				priv->regmap, TACH_ASPEED_CTRL(channel),
+> +				TACH_ASPEED_CLK_DIV_T_MASK,
+> +				DIV_TO_REG(priv->tach_channel[channel].divisor)
+> +					<< TACH_ASPEED_CLK_DIV_BIT);
+> +		} else {
+> +			dev_err(dev,
+> +				"fan_div value %ld not supported. Only support power of 4\n",
+> +				val);
+> +			return -EINVAL;
+> +		}
+
+Error case should be handled first, making else unnecessary.
+
+> +		break;
+> +	case hwmon_fan_pulses:
+> +		priv->tach_channel[channel].pulse_pr = val;
+> +		aspeed_update_tach_sample_period(priv, channel);
+> +		break;
+> +	default:
+> +		return -EOPNOTSUPP;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+> +static umode_t aspeed_tach_dev_is_visible(const void *drvdata, enum hwmon_sensor_types type,
+> +				  u32 attr, int channel)
+> +{
+> +	const struct aspeed_tach_data *priv = drvdata;
+> +
+> +	if (!priv->tach_present[channel])
+> +		return 0;
+> +	switch (attr) {
+> +	case hwmon_fan_input:
+> +		return 0444;
+> +	case hwmon_fan_min:
+> +	case hwmon_fan_max:
+> +	case hwmon_fan_div:
+> +	case hwmon_fan_pulses:
+> +		return 0644;
+> +	}
+> +	return 0;
+> +}
+> +
+> +static const struct hwmon_ops aspeed_tach_ops = {
+> +	.is_visible = aspeed_tach_dev_is_visible,
+> +	.read = aspeed_tach_hwmon_read,
+> +	.write = aspeed_tach_hwmon_write,
+> +};
+> +
+> +static const struct hwmon_channel_info *aspeed_tach_info[] = {
+> +	HWMON_CHANNEL_INFO(fan,
+> +			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX |
+> +				   HWMON_F_DIV | HWMON_F_PULSES,
+> +			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX |
+> +				   HWMON_F_DIV | HWMON_F_PULSES,
+> +			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX |
+> +				   HWMON_F_DIV | HWMON_F_PULSES,
+> +			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX |
+> +				   HWMON_F_DIV | HWMON_F_PULSES,
+> +			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX |
+> +				   HWMON_F_DIV | HWMON_F_PULSES,
+> +			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX |
+> +				   HWMON_F_DIV | HWMON_F_PULSES,
+> +			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX |
+> +				   HWMON_F_DIV | HWMON_F_PULSES,
+> +			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX |
+> +				   HWMON_F_DIV | HWMON_F_PULSES,
+> +			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX |
+> +				   HWMON_F_DIV | HWMON_F_PULSES,
+> +			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX |
+> +				   HWMON_F_DIV | HWMON_F_PULSES,
+> +			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX |
+> +				   HWMON_F_DIV | HWMON_F_PULSES,
+> +			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX |
+> +				   HWMON_F_DIV | HWMON_F_PULSES,
+> +			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX |
+> +				   HWMON_F_DIV | HWMON_F_PULSES,
+> +			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX |
+> +				   HWMON_F_DIV | HWMON_F_PULSES,
+> +			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX |
+> +				   HWMON_F_DIV | HWMON_F_PULSES,
+> +			   HWMON_F_INPUT | HWMON_F_MIN | HWMON_F_MAX |
+> +				   HWMON_F_DIV | HWMON_F_PULSES),
+> +	NULL
+> +};
+> +
+> +static const struct hwmon_chip_info aspeed_tach_chip_info = {
+> +	.ops = &aspeed_tach_ops,
+> +	.info = aspeed_tach_info,
+> +};
+> +
+> +static void aspeed_create_fan_tach_channel(struct aspeed_tach_data *priv,
+> +					   u32 tach_ch)
+> +{
+> +	priv->tach_present[tach_ch] = true;
+> +	priv->tach_channel[tach_ch].limited_inverse = 0;
+> +	regmap_write_bits(priv->regmap, TACH_ASPEED_CTRL(tach_ch),
+> +			  TACH_ASPEED_INVERS_LIMIT,
+> +			  priv->tach_channel[tach_ch].limited_inverse ?
+> +				  TACH_ASPEED_INVERS_LIMIT :
+> +				  0);
+> +
+> +	priv->tach_channel[tach_ch].tach_debounce = DEBOUNCE_3_CLK;
+> +	regmap_write_bits(priv->regmap, TACH_ASPEED_CTRL(tach_ch),
+> +			  TACH_ASPEED_DEBOUNCE_MASK,
+> +			  priv->tach_channel[tach_ch].tach_debounce
+> +				  << TACH_ASPEED_DEBOUNCE_BIT);
+> +
+> +	priv->tach_channel[tach_ch].tach_edge = F2F_EDGES;
+> +	regmap_write_bits(priv->regmap, TACH_ASPEED_CTRL(tach_ch),
+> +			  TACH_ASPEED_IO_EDGE_MASK,
+> +			  priv->tach_channel[tach_ch].tach_edge
+> +				  << TACH_ASPEED_IO_EDGE_BIT);
+> +
+> +	priv->tach_channel[tach_ch].divisor = DEFAULT_TACH_DIV;
+> +	regmap_write_bits(priv->regmap, TACH_ASPEED_CTRL(tach_ch),
+> +			  TACH_ASPEED_CLK_DIV_T_MASK,
+> +			  DIV_TO_REG(priv->tach_channel[tach_ch].divisor)
+> +				  << TACH_ASPEED_CLK_DIV_BIT);
+> +
+> +	priv->tach_channel[tach_ch].threshold = 0;
+> +	regmap_write_bits(priv->regmap, TACH_ASPEED_CTRL(tach_ch),
+> +			  TACH_ASPEED_THRESHOLD_MASK,
+> +			  priv->tach_channel[tach_ch].threshold);
+> +
+> +	priv->tach_channel[tach_ch].pulse_pr = DEFAULT_FAN_PULSE_PR;
+> +	priv->tach_channel[tach_ch].min_rpm = DEFAULT_FAN_MIN_RPM;
+> +	aspeed_update_tach_sample_period(priv, tach_ch);
+> +
+> +	priv->tach_channel[tach_ch].max_rpm = DEFAULT_FAN_MAX_RPM;
+> +	aspeed_update_tach_polling_period(priv, tach_ch);
+> +
+> +	aspeed_tach_ch_enable(priv, tach_ch, true);
+> +}
+> +
+> +static int aspeed_tach_create_fan(struct device *dev, struct device_node *child,
+> +				  struct aspeed_tach_data *priv)
+> +{
+> +	u32 tach_channel;
+> +	int ret;
+> +
+> +	ret = of_property_read_u32(child, "reg", &tach_channel);
+> +	if (ret)
+> +		return ret;
+> +
+> +	aspeed_create_fan_tach_channel(priv, tach_channel);
+> +
+> +	return 0;
+> +}
+> +
+> +static void aspeed_tach_reset_assert(void *data)
+> +{
+> +	struct reset_control *rst = data;
+> +
+> +	reset_control_assert(rst);
+> +}
+> +
+> +static int aspeed_tach_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct device_node *np, *child;
+> +	struct aspeed_tach_data *priv;
+> +	struct device *hwmon;
+> +	struct platform_device *parent_dev;
+> +	int ret;
+> +
+> +	np = dev->parent->of_node;
+> +	if (!of_device_is_compatible(np, "aspeed,ast2600-pwm-tach"))
+> +		return dev_err_probe(dev, -ENODEV,
+> +				     "Unsupported tach device binding\n");
+> +
+> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
+> +	if (!priv)
+> +		return -ENOMEM;
+> +	priv->dev = &pdev->dev;
+> +	priv->tach_channel =
+> +		devm_kzalloc(dev,
+> +			     TACH_ASPEED_NR_TACHS * sizeof(*priv->tach_channel),
+> +			     GFP_KERNEL);
+> +
+> +	priv->regmap = syscon_node_to_regmap(np);
+> +	if (IS_ERR(priv->regmap)) {
+> +		dev_err(priv->dev, "Couldn't get regmap\n");
+> +		return -ENODEV;
+
+Why replace the reported error ?
+
+> +	}
+> +	parent_dev = of_find_device_by_node(np);
+> +	priv->clk = devm_clk_get_enabled(&parent_dev->dev, 0);
+> +	if (IS_ERR(priv->clk))
+> +		return dev_err_probe(dev, PTR_ERR(priv->clk),
+> +				     "Couldn't get clock\n");
+> +
+> +	priv->reset = devm_reset_control_get_shared(&parent_dev->dev, NULL);
+> +	if (IS_ERR(priv->reset))
+> +		return dev_err_probe(dev, PTR_ERR(priv->reset),
+> +				     "Couldn't get reset control\n");
+> +
+> +	ret = reset_control_deassert(priv->reset);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret,
+> +				     "Couldn't deassert reset control\n");
+> +
+> +	ret = devm_add_action_or_reset(dev, aspeed_tach_reset_assert,
+> +				       priv->reset);
+> +	if (ret)
+> +		return ret;
+> +
+> +	for_each_child_of_node(dev->of_node, child) {
+> +		ret = aspeed_tach_create_fan(dev, child, priv);
+> +		if (ret) {
+> +			of_node_put(child);
+> +			return ret;
+> +		}
+> +	}
+> +
+> +	hwmon = devm_hwmon_device_register_with_info(
+> +		dev, "aspeed_tach", priv, &aspeed_tach_chip_info, NULL);
+
+Please watch out for multi-line alignment (checkpatch --strict); go up to 100
+columns if needed.
+
+> +	ret = PTR_ERR_OR_ZERO(hwmon);
+> +	if (ret)
+> +		return dev_err_probe(dev, ret,
+> +				     "Failed to register hwmon device\n");
+> +	return 0;
+> +}
+> +
+> +static const struct of_device_id of_stach_match_table[] = {
+> +	{
+> +		.compatible = "aspeed,ast2600-tach",
+> +	},
+> +	{},
+> +};
+> +MODULE_DEVICE_TABLE(of, of_stach_match_table);
+> +
+> +static struct platform_driver aspeed_tach_driver = {
+> +	.probe		= aspeed_tach_probe,
+> +	.driver		= {
+> +		.name	= "aspeed_tach",
+> +		.of_match_table = of_stach_match_table,
+> +	},
+> +};
+> +
+> +module_platform_driver(aspeed_tach_driver);
+> +
+> +MODULE_AUTHOR("Billy Tsai <billy_tsai@aspeedtech.com>");
+> +MODULE_DESCRIPTION("Aspeed ast2600 TACH device driver");
+> +MODULE_LICENSE("GPL v2");
+> +
+> -- 
+> 2.25.1
+> 
