@@ -2,133 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB009615210
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 20:15:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B329615211
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 20:15:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230391AbiKATPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 15:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43536 "EHLO
+        id S230358AbiKATPt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 15:15:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230262AbiKATPI (ORCPT
+        with ESMTP id S230460AbiKATPj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 15:15:08 -0400
-Received: from mail-ej1-x631.google.com (mail-ej1-x631.google.com [IPv6:2a00:1450:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C11F31D0D5
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 12:15:06 -0700 (PDT)
-Received: by mail-ej1-x631.google.com with SMTP id t25so39554736ejb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 12:15:06 -0700 (PDT)
+        Tue, 1 Nov 2022 15:15:39 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 484801EC59
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 12:15:36 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id z5-20020a17090a8b8500b00210a3a2364fso2057871pjn.0
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 12:15:36 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=URSBztTq5HXujid4PUnbsPAmYdL6Ka0hNq1mm6n6cno=;
-        b=fqX5yYexYI0j5kK909nrQwP2vwkyAGRQl0POVblf3X8XEadNzCO8lJzlbIQ3rqONRl
-         KEpwUe1BPjJETcDhiB0DF+sECLDvw43PywmMPEyv21fxleB6TXKwUFW/A+0wSWaACvwU
-         frmADMZngwXzQQhG8jArGThluWuUIcuTGNazV6cOW87OK5P5ORYmRo5q2AA+GuJ0OqSI
-         gYepMIRrCxZ+nRDm1zDqyQC/g+mQPVcw7We4M2HoIfEsIFXcgPn7/FMmERxUjeOY9cgr
-         l5oSEkrQGpjkhDAevijaOEjkYbvLvbDmwiyt0U0G9Lnz2v6Me+1zTR15rOA8nybhvFwI
-         bv4g==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=x7uizm+oURVHURBJUhhwvkQc5dtB/zBCulyqvyF6/Y8=;
+        b=VbWea86l26+5oMoKhy7n5YDJY6whrAOE5UKO7ynw6dFqyspALqzppx/ZjyygQ473MV
+         u4rDukBU9R0eL2HNuBdGV7acEYY2PeYg0WnxkWaahrOIs8lGtFG9PSwpdkrylbwg8hnQ
+         ze0+5XUbJZjzKYxaASQ6mDkM7wcyuS54FByaI40KXHomwMLiiOs8bk6VSfwBpxjfKT6i
+         uQVhdWPe9ZFPsj79oh1tMBnc4fgcOv+D1Tz3BhNy+YHpeUbKoV67S8JXPCB5NSTUWShb
+         QAY3ZZvTksmBuagf0LbG1kgse3Lt8OMW2NF1jaF8oSg6gO7PaV7jKQ+ALv/2vv68E0PA
+         R10g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=URSBztTq5HXujid4PUnbsPAmYdL6Ka0hNq1mm6n6cno=;
-        b=3wXf+iKbmuigcpq3LjU8zfDC/OSL+bBTKSTHviPWNNdiHY8JYe1FGUDa1y8CSrqPYK
-         epotC1seX7LXEuf9f7OZG826MY9bRPO8zhKrDX6rFwf59NQprmgDJN/QwGJAIAKCRulT
-         Wq6SdmLuqKXclFHOsNuOgXkww8SlnX+g8JiU4j7OiV5ffImZ13waErAXG8CgZ5rMtooQ
-         sH3dlWZ1OMPP5aBxCC/hXdR+ZHi/o9Em5b/WNb/q5YvjIRdgcsaXXBlh1MUlous8OK+5
-         9x2oHLidUmswatyaYrwYudbOyXwcRtIUrcQlt0LD1yPRZ5bTWjJWN+hWwDMM6tPwNTH9
-         LSnw==
-X-Gm-Message-State: ACrzQf0IYa6MXrE/YYPJieTIWfITkK/X3i3uuqi18HWqwQ2QBeTA54OU
-        a8K9wlpCGtN4KuvGfU9KIoQ=
-X-Google-Smtp-Source: AMsMyM5CXH16D7IbYQTiafXplecV8l3pNJWjj7aQ8TMiJc9+p785pNwbUydD/vDmaOjJy7oyr4/a5A==
-X-Received: by 2002:a17:906:974f:b0:7aa:f705:e580 with SMTP id o15-20020a170906974f00b007aaf705e580mr18916152ejy.530.1667330105418;
-        Tue, 01 Nov 2022 12:15:05 -0700 (PDT)
-Received: from localhost.localdomain (ip5f5abb7a.dynamic.kabel-deutschland.de. [95.90.187.122])
-        by smtp.gmail.com with ESMTPSA id hw20-20020a170907a0d400b007ade5cc6e7asm1643853ejc.39.2022.11.01.12.15.04
+        bh=x7uizm+oURVHURBJUhhwvkQc5dtB/zBCulyqvyF6/Y8=;
+        b=HfZP4TvnuNhlKXxqi5a4MRDJGOfm7ZOSLkPTWJW9MauHbxR2RoaoJs+zsjTqsJPX/u
+         iT4utCQ2Zus6uoAEzYiWG+cCNDoSBOmN+CyNkE+CRFBfqaXesnmC7fIHz/qHgFFR6kmv
+         eAXKHs375sbNSE444WisTXvsUeibhlkR+mfIamM5UClsJ0Fnd8so/LB+4yfpbcwUJcLl
+         LDv8YEcu3QbJ5oBQcTHOpDUIhwQZ0ttGrNTqatllfuYlhS09af7oT/3NvyVmR/pzdkbx
+         tmQ1EwLrV4rPGJK8La+XKCUdXFfkdMmEoRBFcxqUHj5DkuIufrtl5UUXeKNf1Ura4OQ+
+         IS1A==
+X-Gm-Message-State: ACrzQf2TGWPxR+dAuPxClIJuIXuGj5/1PlqwovtPlw/7LbeORsqd6SAY
+        +AvFtT76/8CNKL8X4rCSgFM=
+X-Google-Smtp-Source: AMsMyM54DpQd/Ccn7cTQvmWnSzabznSFXFhnJHQLMHewIFHnqg2ZEYeiSYy3yrm1hil1Nf+MrtgGqA==
+X-Received: by 2002:a17:902:ea02:b0:187:2164:89b with SMTP id s2-20020a170902ea0200b001872164089bmr11990656plg.99.1667330135535;
+        Tue, 01 Nov 2022 12:15:35 -0700 (PDT)
+Received: from localhost ([2620:10d:c090:400::5:f37f])
+        by smtp.gmail.com with ESMTPSA id t13-20020a170902e1cd00b001754e086eb3sm6699540pla.302.2022.11.01.12.15.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 12:15:05 -0700 (PDT)
-From:   Michael Straube <straube.linux@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Michael Straube <straube.linux@gmail.com>
-Subject: [PATCH 2/2] staging: r8188eu: convert rtw_free_stainfo() to void
-Date:   Tue,  1 Nov 2022 20:14:58 +0100
-Message-Id: <20221101191458.8619-3-straube.linux@gmail.com>
-X-Mailer: git-send-email 2.38.0
-In-Reply-To: <20221101191458.8619-1-straube.linux@gmail.com>
-References: <20221101191458.8619-1-straube.linux@gmail.com>
+        Tue, 01 Nov 2022 12:15:35 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 1 Nov 2022 09:15:33 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Josh Don <joshdon@google.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Joel Fernandes <joel@joelfernandes.org>
+Subject: Re: [PATCH v2] sched: async unthrottling for cfs bandwidth
+Message-ID: <Y2FwVX42LIKXSTz3@slm.duckdns.org>
+References: <20221026224449.214839-1-joshdon@google.com>
+ <Y1/HzzA1FIawYM11@hirez.programming.kicks-ass.net>
+ <CABk29Nu=XcjwRxnGBtKHfknxnDPpspghou06+W0fufnkGF6NkA@mail.gmail.com>
+ <Y2BDFNpkSawKnE9S@slm.duckdns.org>
+ <CABk29Nta-RJpTcybgOk9u4DH=1mwQFZsOxFuQ-UpCcTwzjzAuA@mail.gmail.com>
+ <Y2Bf+CeQ8x2jKQ3S@slm.duckdns.org>
+ <CABk29Nvqv-T1JuAq2cf9=AwRu=y1+YOR4xS2qnVo6+XpWd2UNQ@mail.gmail.com>
+ <Y2B6V1PPuCcTXGp6@slm.duckdns.org>
+ <CABk29Ns1VWEVRYENud4CW3JQPrcr79i_F2PBTANqt3t-LaYCfQ@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CABk29Ns1VWEVRYENud4CW3JQPrcr79i_F2PBTANqt3t-LaYCfQ@mail.gmail.com>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The function rtw_free_stainfo() returns always _SUCCESS and none of
-its callers uses the return value. We can safely make the function
-void. Yet another tiny step towards getting rid of _FAIL / _SUCCESS.
+Hello,
 
-Signed-off-by: Michael Straube <straube.linux@gmail.com>
----
- drivers/staging/r8188eu/core/rtw_sta_mgt.c | 8 ++------
- drivers/staging/r8188eu/include/sta_info.h | 2 +-
- 2 files changed, 3 insertions(+), 7 deletions(-)
+On Tue, Nov 01, 2022 at 12:11:30PM -0700, Josh Don wrote:
+> > Just to better understand the situation, can you give some more details on
+> > the scenarios where cgroup_mutex was in the middle of a shitshow?
+> 
+> There have been a couple, I think one of the main ones has been writes
+> to cgroup.procs. cpuset modifications also show up since there's a
+> mutex there.
 
-diff --git a/drivers/staging/r8188eu/core/rtw_sta_mgt.c b/drivers/staging/r8188eu/core/rtw_sta_mgt.c
-index 51324e708697..b4aee8623099 100644
---- a/drivers/staging/r8188eu/core/rtw_sta_mgt.c
-+++ b/drivers/staging/r8188eu/core/rtw_sta_mgt.c
-@@ -242,7 +242,7 @@ struct	sta_info *rtw_alloc_stainfo(struct sta_priv *pstapriv, u8 *hwaddr)
- }
- 
- /*  using pstapriv->sta_hash_lock to protect */
--u32	rtw_free_stainfo(struct adapter *padapter, struct sta_info *psta)
-+void rtw_free_stainfo(struct adapter *padapter, struct sta_info *psta)
- {
- 	int i;
- 	struct __queue *pfree_sta_queue;
-@@ -252,7 +252,7 @@ u32	rtw_free_stainfo(struct adapter *padapter, struct sta_info *psta)
- 	struct	sta_priv *pstapriv = &padapter->stapriv;
- 
- 	if (!psta)
--		goto exit;
-+		return;
- 
- 	pfree_sta_queue = &pstapriv->free_sta_queue;
- 
-@@ -356,10 +356,6 @@ u32	rtw_free_stainfo(struct adapter *padapter, struct sta_info *psta)
- 	spin_lock_bh(&pfree_sta_queue->lock);
- 	list_add_tail(&psta->list, get_list_head(pfree_sta_queue));
- 	spin_unlock_bh(&pfree_sta_queue->lock);
--
--exit:
--
--	return _SUCCESS;
- }
- 
- /*  free all stainfo which in sta_hash[all] */
-diff --git a/drivers/staging/r8188eu/include/sta_info.h b/drivers/staging/r8188eu/include/sta_info.h
-index 55ea5edc2914..e42f4b4c6e24 100644
---- a/drivers/staging/r8188eu/include/sta_info.h
-+++ b/drivers/staging/r8188eu/include/sta_info.h
-@@ -303,7 +303,7 @@ int rtw_stainfo_offset(struct sta_priv *stapriv, struct sta_info *sta);
- struct sta_info *rtw_get_stainfo_by_offset(struct sta_priv *stapriv, int off);
- 
- struct sta_info *rtw_alloc_stainfo(struct sta_priv *stapriv, u8 *hwaddr);
--u32	rtw_free_stainfo(struct adapter *adapt, struct sta_info *psta);
-+void rtw_free_stainfo(struct adapter *adapt, struct sta_info *psta);
- void rtw_free_all_stainfo(struct adapter *adapt);
- struct sta_info *rtw_get_stainfo(struct sta_priv *stapriv, u8 *hwaddr);
- u32 rtw_init_bcmc_stainfo(struct adapter *adapt);
+If you can, I'd really like to learn more about the details. We've had some
+issues with the threadgroup_rwsem because it's such a big hammer but not
+necessarily with cgroup_mutex because they are only used in maintenance
+operations and never from any hot paths.
+
+Regarding threadgroup_rwsem, w/ CLONE_INTO_CGROUP (userspace support is
+still missing unfortunately), the usual worfklow of creating a cgroup,
+seeding it with a process and then later shutting it down doesn't involve
+threadgroup_rwsem at all, so most of the problems should go away in the
+hopefully near future.
+
+Thanks.
+
 -- 
-2.38.0
-
+tejun
