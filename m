@@ -2,155 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 20EE2614D12
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 15:49:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 76B94614D13
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 15:50:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiKAOtZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 10:49:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32926 "EHLO
+        id S229992AbiKAOuV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 10:50:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229867AbiKAOtW (ORCPT
+        with ESMTP id S229553AbiKAOuS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 10:49:22 -0400
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F32C22ADC
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 07:49:20 -0700 (PDT)
-Received: from frapeml500005.china.huawei.com (unknown [172.18.147.200])
-        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4N1tCR2Rgzz67bjw;
-        Tue,  1 Nov 2022 22:47:15 +0800 (CST)
-Received: from lhrpeml500004.china.huawei.com (7.191.163.9) by
- frapeml500005.china.huawei.com (7.182.85.13) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 1 Nov 2022 15:49:18 +0100
-Received: from [10.202.227.118] (10.202.227.118) by
- lhrpeml500004.china.huawei.com (7.191.163.9) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 1 Nov 2022 14:49:17 +0000
-Message-ID: <520d44e0-b7a9-b841-047a-d2707f3df3fe@huawei.com>
-Date:   Tue, 1 Nov 2022 14:49:17 +0000
+        Tue, 1 Nov 2022 10:50:18 -0400
+Received: from mail-vk1-xa2a.google.com (mail-vk1-xa2a.google.com [IPv6:2607:f8b0:4864:20::a2a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EDFA5559F
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 07:50:17 -0700 (PDT)
+Received: by mail-vk1-xa2a.google.com with SMTP id m18so7216375vka.10
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 07:50:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H70IfJkWF7BS/OYUjdUGSfJRgXLtJjyIpPUzLgw52xU=;
+        b=kkdx4il7KMHhpUa2fQi41MoysbRavWDGXi2WfgGB9dBknYHzM5TVI/ifkypaqW4AcT
+         sYKBik4Ws7L8bpJUXSM+LC/CKnFiMaRNGbYx91NKfOLEO5QenXFvgbvIIJCow0yfCZQO
+         hrJNa+tZN2kLMrqk76qKiRqBLIMRMf3FDIMyNZ3nj6aBQSoKT5NI0t+Gkl7pabFyx3Dt
+         RtAWSWui5v4/uCRaI+GJqs1W0Xd6bHhlqwqT6QMWWyTfAvkx9AuHMM6ezX17Sevuiya7
+         iFs+al2M8LNbOd6nSstLXApsBIu/wI/q/Lxh1pnKW4unFHv/Gej2EkDQn/CmCD7l9BsD
+         FtHw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=H70IfJkWF7BS/OYUjdUGSfJRgXLtJjyIpPUzLgw52xU=;
+        b=YXaNMRE7xoY9JQ0UKB4K449eEbKNGcpzm388UXPZG1sIkmPafd3HHDEOrAS7uaB/e7
+         n+LsS+7EMmH7SXLiI/B68fqHp2qw+NzIn31ZYbxN4f3jHCEK+yBxktuX2fJjFqHDg8B1
+         2IE4pOnrawktoNKWA30iugsR3JP5Z5ERq3D3syCsOF2dsaiaDN240uMHxc0xsZf0MD70
+         6S9SWMmHwg7OWA0fjuBU521TM7+vxtNxYhMSqo/BLadP/D5NfXlO1paSvrEJkhqiUE8E
+         wimM6kGuQTBVuWnJnqWVW54LbIdiwAjGdRVGOS1YIpmZkgxA1XXiovtFFRebxBaxyC3J
+         cH0g==
+X-Gm-Message-State: ACrzQf075eaNgOptbBmeOm1lDO2mi3bVtA40cMTdciy5doYAJeBCc6TU
+        kXeIWgTCb3oM8hYAoLSz/WWiGnM90cHrYCJ1TQ==
+X-Google-Smtp-Source: AMsMyM7h04phimz1JSyZtPVl0QYJ3eR5mQcIXO8dAJfH5/+dIbgINyyqDjRMLtTwhV2h++i0HM52huvY11ySnAZIVe8=
+X-Received: by 2002:a1f:a34c:0:b0:3af:18:ac1 with SMTP id m73-20020a1fa34c000000b003af00180ac1mr1586028vke.19.1667314216716;
+ Tue, 01 Nov 2022 07:50:16 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.0
-Subject: Re: [RFC 0/6] migrate_pages(): batch TLB flushing
-To:     haoxin <xhao@linux.alibaba.com>, Huang Ying <ying.huang@intel.com>
-CC:     <linux-kernel@vger.kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>,
-        Baolin Wang <baolin.wang@linux.alibaba.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        "Matthew Wilcox" <willy@infradead.org>, <yangyicong@hisilicon.com>,
-        <v-songbaohua@oppo.com>, <21cnbao@gmail.com>, <linux-mm@kvack.org>
-References: <20220921060616.73086-1-ying.huang@intel.com>
- <393d6318-aa38-01ed-6ad8-f9eac89bf0fc@linux.alibaba.com>
-From:   Hesham Almatary <hesham.almatary@huawei.com>
-In-Reply-To: <393d6318-aa38-01ed-6ad8-f9eac89bf0fc@linux.alibaba.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.202.227.118]
-X-ClientProxiedBy: lhrpeml500003.china.huawei.com (7.191.162.67) To
- lhrpeml500004.china.huawei.com (7.191.163.9)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.1 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS,URIBL_SBL_A
-        autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:ab0:6d84:0:0:0:0:0 with HTTP; Tue, 1 Nov 2022 07:50:15 -0700 (PDT)
+Reply-To: lilywilliam989@gmail.com
+From:   Lily William <lisawilliams0044@gmail.com>
+Date:   Tue, 1 Nov 2022 06:50:15 -0800
+Message-ID: <CAAGOrtO1i8bupTrerbPToNOc6yf02KgaDG4dxLS-kh26_+DxrQ@mail.gmail.com>
+Subject: Hi Dear,
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=6.2 required=5.0 tests=BAYES_80,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:a2a listed in]
+        [list.dnswl.org]
+        *  2.0 BAYES_80 BODY: Bayes spam probability is 80 to 95%
+        *      [score: 0.8359]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [lisawilliams0044[at]gmail.com]
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [lisawilliams0044[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [lilywilliam989[at]gmail.com]
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        *  2.9 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: ******
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi Dear,
 
-On 9/27/2022 12:21 PM, haoxin wrote:
-> Hi, Huang
->
-> 在 2022/9/21 下午2:06, Huang Ying 写道:
->> From: "Huang, Ying" <ying.huang@intel.com>
->>
->> Now, migrate_pages() migrate pages one by one, like the fake code as
->> follows,
->>
->>    for each page
->>      unmap
->>      flush TLB
->>      copy
->>      restore map
->>
->> If multiple pages are passed to migrate_pages(), there are
->> opportunities to batch the TLB flushing and copying.  That is, we can
->> change the code to something as follows,
->>
->>    for each page
->>      unmap
->>    for each page
->>      flush TLB
->>    for each page
->>      copy
->>    for each page
->>      restore map
->>
->> The total number of TLB flushing IPI can be reduced considerably.  And
->> we may use some hardware accelerator such as DSA to accelerate the
->> page copying.
->>
->> So in this patch, we refactor the migrate_pages() implementation and
->> implement the TLB flushing batching.  Base on this, hardware
->> accelerated page copying can be implemented.
->>
->> If too many pages are passed to migrate_pages(), in the naive batched
->> implementation, we may unmap too many pages at the same time. The
->> possibility for a task to wait for the migrated pages to be mapped
->> again increases.  So the latency may be hurt.  To deal with this
->> issue, the max number of pages be unmapped in batch is restricted to
->> no more than HPAGE_PMD_NR.  That is, the influence is at the same
->> level of THP migration.
->>
->> We use the following test to measure the performance impact of the
->> patchset,
->>
->> On a 2-socket Intel server,
->>
->>   - Run pmbench memory accessing benchmark
->>
->>   - Run `migratepages` to migrate pages of pmbench between node 0 and
->>     node 1 back and forth.
->>
-> As the pmbench can not run on arm64 machine, so i use lmbench instead.
-> I test case like this:  (i am not sure whether it is reasonable, but it seems 
-> worked)
-> ./bw_mem -N10000 10000m rd &
-> time migratepages pid node0 node1
->
-FYI, I have ported pmbench to AArch64 [1]. The project seems to be abandoned on 
-bitbucket,
+My name is Dr Lily William from the United States.I am a French
+and?American nationality (dual) living in the U.S and sometimes in
+France for Work Purpose.
 
-I wonder if it makes sense to fork it elsewhere and push the pending PRs there.
+I hope you consider my friend request. I will share some of my pics
+and more details about myself when I get your response.
 
+Thanks
 
-[1] https://bitbucket.org/jisooy/pmbench/pull-requests/5
-
-> o/patch w/patch
-> real    0m0.035s      real    0m0.024s
-> user    0m0.000s      user    0m0.000s
-> sys    0m0.035s        sys    0m0.024s
->
-> the migratepages time is reduced above 32%.
->
-> But there has a problem, i see the batch flush is called by
-> migrate_pages_batch
->     try_to_unmap_flush
->         arch_tlbbatch_flush(&tlb_ubc->arch); // there batch flush really work.
->
-> But in arm64, the arch_tlbbatch_flush are not supported, becasue it not 
-> support CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH yet.
->
-> So, the tlb batch flush means no any flush is did, it is a empty func.
->
-> Maybe this patch can help solve this problem.
-> https://lore.kernel.org/linux-arm-kernel/20220921084302.43631-1-yangyicong@huawei.com/T/ 
->
->
->
->
->
->
->
+With love
+Lily
