@@ -2,125 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54F72614DC2
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 16:03:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48285614DBD
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 16:03:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231270AbiKAPDl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 11:03:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54316 "EHLO
+        id S231476AbiKAPDI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 11:03:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53370 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231508AbiKAPDU (ORCPT
+        with ESMTP id S231508AbiKAPCo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 11:03:20 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 260721F2D8
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 07:58:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667314630;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=O4JQt2TyP8rv/jwuj8EGHOlJT6u9NgMM6O63X5jVr9Y=;
-        b=gMgBc28DhoaMZwXUM4Ty8iex9VeuqT69Si4TAqU+Flxn5SruaxLsCVn/3M/ZW54ANn9jN2
-        kcFpFqEbKfbry3sU63MgQB58K++32kjhE6brrRhZ/eSygxd3CQYzueqs91j0+eHN1iRYFV
-        sQ9UrYmtFUX772/ZVI1wtItGLdHS2R0=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-615-SB0Dvz_iN4GXUtxmUGOdCQ-1; Tue, 01 Nov 2022 10:57:09 -0400
-X-MC-Unique: SB0Dvz_iN4GXUtxmUGOdCQ-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id A4E281C0BC61;
-        Tue,  1 Nov 2022 14:57:08 +0000 (UTC)
-Received: from ovpn-194-149.brq.redhat.com (ovpn-194-149.brq.redhat.com [10.40.194.149])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 40292C15BB9;
-        Tue,  1 Nov 2022 14:57:06 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v13 48/48] KVM: selftests: Rename 'evmcs_test' to 'hyperv_evmcs'
-Date:   Tue,  1 Nov 2022 15:54:26 +0100
-Message-Id: <20221101145426.251680-49-vkuznets@redhat.com>
-In-Reply-To: <20221101145426.251680-1-vkuznets@redhat.com>
-References: <20221101145426.251680-1-vkuznets@redhat.com>
+        Tue, 1 Nov 2022 11:02:44 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE36D1D0D0;
+        Tue,  1 Nov 2022 07:58:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667314698; x=1698850698;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=KU7qwcjHRqpB+MNcE9GH1nnu3087nnxDD92xVTY/h1M=;
+  b=RXvW+CTpoeB/xoXzQIS6cguFCoDNFnSgbdMhaek2CtyJ9qsCn6Nhx+yn
+   AsxRA7hMpqJ+P+hPhjPAI8kKpqSQx3o2IJ15iLGg0Mgb5FRQpb2PWY0He
+   JJslmbUHRW9YjCq6cD1ZOnRwr5FP9m9Mb1HkV7kpuAwjPxKOFF99APc82
+   azMLll+QMHjmOyaP1HriG9foFjpDWE6UV55Fq62VxOC55U8zo3IHlSWUD
+   QnFoBPbzx2CIHsQ2102bPhs4qIE64odCKrFBi1xqXoEB2jlgoB/ucxhyu
+   iFGRZEK1t1d/yUdK93aOaKf4Hrr5fFLIGQDWOkzFsG8WOvt5cG6v5kIJ0
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="292458210"
+X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
+   d="scan'208";a="292458210"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 07:58:17 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="636423741"
+X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
+   d="scan'208";a="636423741"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga007.fm.intel.com with ESMTP; 01 Nov 2022 07:58:15 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1opsiT-005dbt-2a;
+        Tue, 01 Nov 2022 16:58:13 +0200
+Date:   Tue, 1 Nov 2022 16:58:13 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Angel Iglesias <ang.iglesiasg@gmail.com>
+Cc:     linux-iio@vger.kernel.org,
+        Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>,
+        Nuno =?iso-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Wolfram Sang <wsa@kernel.org>, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 0/2] i2c: core: Introduce i2c_client_get_device_id
+ helper
+Message-ID: <Y2E0BWyvHjPko2TB@smile.fi.intel.com>
+References: <cover.1667151588.git.ang.iglesiasg@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <cover.1667151588.git.ang.iglesiasg@gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Conform to the rest of Hyper-V emulation selftests which have 'hyperv'
-prefix. Get rid of '_test' suffix as well as the purpose of this code
-is fairly obvious.
+On Sun, Oct 30, 2022 at 06:51:06PM +0100, Angel Iglesias wrote:
+> Hello,
+> 
+> I don't want to step anyone's work here, so I'm sending this RFC to the
+> devs involved in the original discussion. I read on Uwe Kleine-König's
+> patchset submission thread the necessity for an i2c helper to aid with the
+> migration to the new i2c_driver .probe_new callback. Following the
+> suggestions made there, I wrote this small patchset implementing the
+> suggested helper function and ported the bmp280 IIO i2c probe to the new
+> probe using that helper.
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
- tools/testing/selftests/kvm/.gitignore                          | 2 +-
- tools/testing/selftests/kvm/Makefile                            | 2 +-
- .../selftests/kvm/x86_64/{evmcs_test.c => hyperv_evmcs.c}       | 0
- 3 files changed, 2 insertions(+), 2 deletions(-)
- rename tools/testing/selftests/kvm/x86_64/{evmcs_test.c => hyperv_evmcs.c} (100%)
+For the entire series (please drop RFC in the next version)
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 
-diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
-index 68d3d2080b59..edca2d3823d1 100644
---- a/tools/testing/selftests/kvm/.gitignore
-+++ b/tools/testing/selftests/kvm/.gitignore
-@@ -16,7 +16,6 @@
- /x86_64/cpuid_test
- /x86_64/cr4_cpuid_sync_test
- /x86_64/debug_regs
--/x86_64/evmcs_test
- /x86_64/emulator_error_test
- /x86_64/fix_hypercall_test
- /x86_64/get_msr_index_features
-@@ -24,6 +23,7 @@
- /x86_64/kvm_pv_test
- /x86_64/hyperv_clock
- /x86_64/hyperv_cpuid
-+/x86_64/hyperv_evmcs
- /x86_64/hyperv_features
- /x86_64/hyperv_ipi
- /x86_64/hyperv_svm_test
-diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
-index eee6421cf4a8..379a83ba4912 100644
---- a/tools/testing/selftests/kvm/Makefile
-+++ b/tools/testing/selftests/kvm/Makefile
-@@ -81,11 +81,11 @@ TEST_PROGS_x86_64 += x86_64/nx_huge_pages_test.sh
- TEST_GEN_PROGS_x86_64 = x86_64/cpuid_test
- TEST_GEN_PROGS_x86_64 += x86_64/cr4_cpuid_sync_test
- TEST_GEN_PROGS_x86_64 += x86_64/get_msr_index_features
--TEST_GEN_PROGS_x86_64 += x86_64/evmcs_test
- TEST_GEN_PROGS_x86_64 += x86_64/emulator_error_test
- TEST_GEN_PROGS_x86_64 += x86_64/fix_hypercall_test
- TEST_GEN_PROGS_x86_64 += x86_64/hyperv_clock
- TEST_GEN_PROGS_x86_64 += x86_64/hyperv_cpuid
-+TEST_GEN_PROGS_x86_64 += x86_64/hyperv_evmcs
- TEST_GEN_PROGS_x86_64 += x86_64/hyperv_features
- TEST_GEN_PROGS_x86_64 += x86_64/hyperv_ipi
- TEST_GEN_PROGS_x86_64 += x86_64/hyperv_svm_test
-diff --git a/tools/testing/selftests/kvm/x86_64/evmcs_test.c b/tools/testing/selftests/kvm/x86_64/hyperv_evmcs.c
-similarity index 100%
-rename from tools/testing/selftests/kvm/x86_64/evmcs_test.c
-rename to tools/testing/selftests/kvm/x86_64/hyperv_evmcs.c
+> Thanks for your time!
+> Angel
+> 
+> Original discussion thread for additional context:
+> https://lore.kernel.org/all/20221023132302.911644-11-u.kleine-koenig@pengutronix.de/
+> 
+> Angel Iglesias (2):
+>   i2c: core: Introduce i2c_client_get_device_id helper function
+>   iio: pressure: bmp280: convert to i2c's .probe_new()
+> 
+>  drivers/i2c/i2c-core-base.c       | 15 +++++++++++++++
+>  drivers/iio/pressure/bmp280-i2c.c |  8 ++++----
+>  include/linux/i2c.h               |  1 +
+>  3 files changed, 20 insertions(+), 4 deletions(-)
+> 
+> 
+> base-commit: c32793afc6976e170f6ab11ca3750fe94fb3454d
+> -- 
+> 2.38.1
+> 
+
 -- 
-2.37.3
+With Best Regards,
+Andy Shevchenko
+
 
