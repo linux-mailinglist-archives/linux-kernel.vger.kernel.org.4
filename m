@@ -2,124 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34AC7615613
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 00:25:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E38E9615615
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 00:26:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbiKAXZu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 19:25:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52932 "EHLO
+        id S229648AbiKAX0p (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 19:26:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53460 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229875AbiKAXZk (ORCPT
+        with ESMTP id S229739AbiKAX0m (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 19:25:40 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2EE11759A;
-        Tue,  1 Nov 2022 16:25:39 -0700 (PDT)
-Date:   Tue, 01 Nov 2022 23:25:36 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667345137;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=I0y+lhuQmGVn5FfJdmSsSqet8+hYCRLEMYJ6mzf+imk=;
-        b=ocwjHhsqkDMORDxhZRk7e2/M12hs2heP6mVSKrctyjQxsZ1zxm21zL+afOe24/4cLKb7BL
-        JwRT764ss3GCaMTCYFE1YU0sSrDbI9Ff4QfWQIrOX23D8NTvQB58JLnuW8NhvShqvT0BTK
-        934cLxLRlV/Fe5mDA7gnbcDwYHDWq0N5tHWFy2x+3Srn2Z+2JagyQl6BGNo1LzbaTvxIgb
-        CRbqmUpMZlhYmGu7N0yNFX6yRiaI22X7pJHD7QYQFPnFKiWoxZHM0lKHnjkd7rE4G9K3Rs
-        RfVOb5Q2rmU+ePhgONojqaDkOnHjn9ehtWe8I1VV/KBfSTspyaenlbfnhX0S1A==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667345137;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=I0y+lhuQmGVn5FfJdmSsSqet8+hYCRLEMYJ6mzf+imk=;
-        b=sAlyXw8KeGH4/B1syi7NnNrh0XgPqkOKhhSBREeBagzDNSK1e7AcOAyPnHVzMAihNz6AYU
-        ylP+qPO9LTUvUtCQ==
-From:   "tip-bot2 for Dave Hansen" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/urgent] x86/tdx: Prepare for using "INFO" call for a second purpose
-Cc:     Dave Hansen <dave.hansen@linux.intel.com>,
-        "Kirill A. Shutemov" <kirill.shutemov@linux.intel.com>,
-        stable@vger.kernel.org, x86@kernel.org,
-        linux-kernel@vger.kernel.org
+        Tue, 1 Nov 2022 19:26:42 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39F5D17E11
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 16:26:41 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id t25so41038476ejb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 16:26:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=VjaxTnD+RIihVp0m1FGP/cxt8pNup1dJPxpfJslNDq0=;
+        b=l905ClINmGBf1QRIARIGmkV+n9JhSylgXMU1TcpUnMgXVDuPCiyL8k1qc/rQ6iXo9U
+         weF7KiBTqP7NLIhVUvMKTichGHCAnRyEaXP9tOD5gvcyqE6qVs1Rs3FbJoXb0B8fJEsO
+         eV8giN2nVTaP8VgW8kNXGB3h3rs8QlTjcl9dzq1MeuBxIM1HlI9+RK0JZiJUjjadjwuy
+         8wHKDcfDgC4tZp/aT0yUoGqkMMdyM1Adid6vWG/Lqa6TV5wUZr2n6Bxid8V5DZYRN4qD
+         wL31Mq913v2mKdqqhzJ3cf9+JjUx3mRbdN9+7gesd9goH2gBfH6N2xQZ7Q+53KIgyxi+
+         pueg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VjaxTnD+RIihVp0m1FGP/cxt8pNup1dJPxpfJslNDq0=;
+        b=DDx2htyIJkao6qYwXh07FuS6bsjNjAs/YT3I1HBiOsxiEQhjsTLw8OT6a0W2qgwnJf
+         AAFjsvuikINV0B72znCcsd6q7xKObOi93/39HCuIBreNO+rS49UODfRqx8zJzXqXtje9
+         ZajACLxUvMgIwaBhgFn7JUhpUgJM4e92B3l4YELaZo6PFuoYG56rJmYeU/nZKjsAUZ3W
+         yBKepLj9TXbhePJamTmMQIrmrvh33uTzGH+mRDrX1UL+8GJuNVavfCbuntzno5YqGOnl
+         qV502gC1HgeiZPF5svdvKZEDqpG6dU0Orblnb4JWgSO6O0LDAi9ZkuOoiNtHD5TagtKS
+         SnSg==
+X-Gm-Message-State: ACrzQf1olLM04EB5LLdX4G7Hw3RmGXK0H+YQno7UdVLmQy2z3C5qW/dU
+        M9vrG0svAxHhxLdPHT6vSxo=
+X-Google-Smtp-Source: AMsMyM51/dwqW/J04wkNqDaDuY77JtN/Er/BG5P4RbcUcTNG9pWX27ABWK4tfQCvB7j4nrPML4r+bQ==
+X-Received: by 2002:a17:906:6a17:b0:794:f0e8:1918 with SMTP id qw23-20020a1709066a1700b00794f0e81918mr20990385ejc.474.1667345199742;
+        Tue, 01 Nov 2022 16:26:39 -0700 (PDT)
+Received: from [192.168.1.102] (p57935738.dip0.t-ipconnect.de. [87.147.87.56])
+        by smtp.gmail.com with ESMTPSA id mj21-20020a170906af9500b00773f3ccd989sm4717136ejb.68.2022.11.01.16.26.38
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Nov 2022 16:26:39 -0700 (PDT)
+Message-ID: <32a31a3d-99df-c402-9889-51ca4f8c041a@gmail.com>
+Date:   Wed, 2 Nov 2022 00:26:38 +0100
 MIME-Version: 1.0
-Message-ID: <166734513630.7716.12952231613533508782.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.11.0
+Subject: Re: [PATCH 0/2] staging: r8188eu: two simple cleanups
+Content-Language: en-US
+To:     Michael Straube <straube.linux@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, phil@philpotter.co.uk,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+References: <20221101191458.8619-1-straube.linux@gmail.com>
+From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
+In-Reply-To: <20221101191458.8619-1-straube.linux@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the x86/urgent branch of tip:
+On 11/1/22 20:14, Michael Straube wrote:
+> This series contains two simple cleanup patches.
+> Tested on x86_64 with Inter-Tech DMG-02.
+> 
+> Michael Straube (2):
+>    staging: r8188eu: remove extern from function prototypes
+>    staging: r8188eu: convert rtw_free_stainfo() to void
+> 
+>   drivers/staging/r8188eu/core/rtw_sta_mgt.c     |  8 ++------
+>   .../staging/r8188eu/include/osdep_service.h    |  2 +-
+>   drivers/staging/r8188eu/include/rtw_mlme_ext.h |  4 ++--
+>   drivers/staging/r8188eu/include/sta_info.h     | 18 +++++++++---------
+>   4 files changed, 14 insertions(+), 18 deletions(-)
+> 
 
-Commit-ID:     a6dd6f39008bb3ef7c73ef0a2acc2a4209555bd8
-Gitweb:        https://git.kernel.org/tip/a6dd6f39008bb3ef7c73ef0a2acc2a4209555bd8
-Author:        Dave Hansen <dave.hansen@linux.intel.com>
-AuthorDate:    Fri, 28 Oct 2022 17:12:19 +03:00
-Committer:     Dave Hansen <dave.hansen@linux.intel.com>
-CommitterDate: Tue, 01 Nov 2022 10:07:15 -07:00
-
-x86/tdx: Prepare for using "INFO" call for a second purpose
-
-The TDG.VP.INFO TDCALL provides the guest with various details about
-the TDX system that the guest needs to run.  Only one field is currently
-used: 'gpa_width' which tells the guest which PTE bits mark pages shared
-or private.
-
-A second field is now needed: the guest "TD attributes" to tell if
-virtualization exceptions are configured in a way that can harm the guest.
-
-Make the naming and calling convention more generic and discrete from the
-mask-centric one.
-
-Thanks to Sathya for the inspiration here, but there's no code, comments
-or changelogs left from where he started.
-
-Signed-off-by: Dave Hansen <dave.hansen@linux.intel.com>
-Acked-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Tested-by: Kirill A. Shutemov <kirill.shutemov@linux.intel.com>
-Cc: stable@vger.kernel.org
----
- arch/x86/coco/tdx/tdx.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/arch/x86/coco/tdx/tdx.c b/arch/x86/coco/tdx/tdx.c
-index 928dcf7..3fee969 100644
---- a/arch/x86/coco/tdx/tdx.c
-+++ b/arch/x86/coco/tdx/tdx.c
-@@ -98,7 +98,7 @@ static inline void tdx_module_call(u64 fn, u64 rcx, u64 rdx, u64 r8, u64 r9,
- 		panic("TDCALL %lld failed (Buggy TDX module!)\n", fn);
- }
- 
--static u64 get_cc_mask(void)
-+static void tdx_parse_tdinfo(u64 *cc_mask)
- {
- 	struct tdx_module_output out;
- 	unsigned int gpa_width;
-@@ -121,7 +121,7 @@ static u64 get_cc_mask(void)
- 	 * The highest bit of a guest physical address is the "sharing" bit.
- 	 * Set it for shared pages and clear it for private pages.
- 	 */
--	return BIT_ULL(gpa_width - 1);
-+	*cc_mask = BIT_ULL(gpa_width - 1);
- }
- 
- /*
-@@ -758,7 +758,7 @@ void __init tdx_early_init(void)
- 	setup_force_cpu_cap(X86_FEATURE_TDX_GUEST);
- 
- 	cc_set_vendor(CC_VENDOR_INTEL);
--	cc_mask = get_cc_mask();
-+	tdx_parse_tdinfo(&cc_mask);
- 	cc_set_mask(cc_mask);
- 
- 	/*
+Tested-by: Philipp Hortmann <philipp.g.hortmann@gmail.com> # Edimax N150
