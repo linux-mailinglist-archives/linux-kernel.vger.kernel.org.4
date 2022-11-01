@@ -2,49 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EE8CB614F11
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 17:18:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BA13614F1D
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 17:23:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229894AbiKAQSv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 12:18:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55872 "EHLO
+        id S229926AbiKAQXy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 12:23:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229517AbiKAQSr (ORCPT
+        with ESMTP id S229457AbiKAQXt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 12:18:47 -0400
-Received: from mail.z3ntu.xyz (mail.z3ntu.xyz [128.199.32.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6E991C914;
-        Tue,  1 Nov 2022 09:18:44 -0700 (PDT)
-Received: from g550jk.arnhem.chello.nl (unknown [62.108.10.64])
-        by mail.z3ntu.xyz (Postfix) with ESMTPSA id 418EDD0407;
-        Tue,  1 Nov 2022 16:18:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=z3ntu.xyz; s=z3ntu;
-        t=1667319493; bh=zvhQPufC5PJD5XQqj1MudupKvZYKF2uHkrkysvJe8u0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=Kx3L2s3t8otKxH6N+dczDfJnDgo+6Y/yE2+rFBiKk6SI17cJMGE4MuMuoaRARUvM1
-         Lhj7FoVt9ZYdo6+dP501rjkDBFUy0rF11Sz7G7HzFGQ11SWozD1dxuUkGYd8E6+wIj
-         pPlxvdJLWIhk05io5I43Eyw4DKBcFQCqXfLufCT8=
-From:   Luca Weiss <luca@z3ntu.xyz>
-To:     linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        AngeloGioacchino Del Regno <kholk11@gmail.com>,
-        Luca Weiss <luca@z3ntu.xyz>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Tue, 1 Nov 2022 12:23:49 -0400
+Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E6A91A213;
+        Tue,  1 Nov 2022 09:23:48 -0700 (PDT)
+Received: by mail-ej1-x630.google.com with SMTP id n12so38231554eja.11;
+        Tue, 01 Nov 2022 09:23:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QjE9lTE++fclwFa7yMAIrErfvE6I/XCjhnbSuMJSadI=;
+        b=HuednwKGDdGrvaUJCdekwxP+OyuF405/uycgqP4ZZkDWTkegfIrL6QXKivPLKzxEVy
+         ytOGI0Id3iUMsMWl/bkBr5NDfTZPbO2QNldy621TP7TABjsoofQX0EG58gr2heBwejNO
+         624qNm4sfn17mtTtVVml/7uON5U97fFeCmQ5gbPyG1Kd9Qv1oV3rt5Aw4cudGr6DDIj+
+         lLKKcSztI0bOhFnZbkJrm1iiUQePy0hU6QRdNco59DVmD/GycjvQZc2FM5FA2eBNSfn6
+         mHg9+fF09heSEwonV9UmXI5v7P6t7nNq9mIvhbAQpAOJkFOr2unyC15xgCIiaKDoXBWP
+         V5bA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=QjE9lTE++fclwFa7yMAIrErfvE6I/XCjhnbSuMJSadI=;
+        b=V+eYBzCFSgFJ96Wi+O+iNOBpvHjgoeVLsY0Jxe9ndp0F20tISRYd8SkVvDmcE8fjTx
+         wi2NT6lpZApMGpbQXPj6M5B5MnGDs7/UsPXN25PHm4kLMXG2CIi0e+99EiqFX/KRMb6K
+         wQs0hZBmt8g+I2v+L6ZSfXApfrngRT2bJ80xKQ92tk3DXrDh7qLAg5JD2aItFUWtKwOA
+         cfHkdcnBy5ujhj8y2/odrvsbjRGynhsy4EfycTmCDeiRwvUSPIJW5xSw0CBqIrGhVxAc
+         hQsTdtjOVsIgYapC2bslY5ASpKf0ibB3mRe18UeXNG74TqCWlqzfpT63nry6oI9cS6hG
+         9eLw==
+X-Gm-Message-State: ACrzQf1XSHYl/jWWastj31elQSOnQWJ2n1qjJ1M1pq8lGO+1LAOofxDT
+        3l+toPgC7XeMofCvN1p+Bjy+BOQZRWCpx9PJxGI=
+X-Google-Smtp-Source: AMsMyM6yCCYE1jRfdc2k7pNZy6hR1Yn704uJKgDoSiQVMAtUpptyljIOsw2MSx8YH4+AHoDsO+yCTAU/SxHwxZmdR2w=
+X-Received: by 2002:a17:906:2ad3:b0:78d:b88c:5e35 with SMTP id
+ m19-20020a1709062ad300b0078db88c5e35mr149386eje.157.1667319826948; Tue, 01
+ Nov 2022 09:23:46 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221026185846.3983888-1-quic_eberman@quicinc.com>
+ <20221026185846.3983888-3-quic_eberman@quicinc.com> <CABb+yY3JVNPG3dcyHNFxEeGEu3MN_pAOh3+cwexPPe2YG6SNUg@mail.gmail.com>
+ <fb7e101f-8de0-d77e-30e1-74b882b19583@quicinc.com>
+In-Reply-To: <fb7e101f-8de0-d77e-30e1-74b882b19583@quicinc.com>
+From:   Jassi Brar <jassisinghbrar@gmail.com>
+Date:   Tue, 1 Nov 2022 11:23:35 -0500
+Message-ID: <CABb+yY08jP+Q5xvzLf=7F1tULP6-eZz5EDiK9mBj2fAv=iZa_A@mail.gmail.com>
+Subject: Re: [PATCH v6 02/21] dt-bindings: Add binding for gunyah hypervisor
+To:     Elliot Berman <quic_eberman@quicinc.com>
+Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
         Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] arm64: dts: qcom: Add configuration for PMI8950 peripheral
-Date:   Tue,  1 Nov 2022 17:18:00 +0100
-Message-Id: <20221101161801.1058969-2-luca@z3ntu.xyz>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221101161801.1058969-1-luca@z3ntu.xyz>
-References: <20221101161801.1058969-1-luca@z3ntu.xyz>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FROM_SUSPICIOUS_NTLD,
-        PDS_OTHER_BAD_TLD,SPF_HELO_NONE,SPF_PASS autolearn=no
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Kalle Valo <kvalo@kernel.org>, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,125 +92,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: AngeloGioacchino Del Regno <kholk11@gmail.com>
+On Mon, Oct 31, 2022 at 10:20 PM Elliot Berman <quic_eberman@quicinc.com> wrote:
+>
+> Hi Jassi,
+>
+> On 10/27/2022 7:33 PM, Jassi Brar wrote:
+>  > On Wed, Oct 26, 2022 at 1:59 PM Elliot Berman
+> <quic_eberman@quicinc.com> wrote:
+>  > .....
+>  >> +
+>  >> +        gunyah-resource-mgr@0 {
+>  >> +            compatible = "gunyah-resource-manager-1-0",
+> "gunyah-resource-manager";
+>  >> +            interrupts = <GIC_SPI 3 IRQ_TYPE_EDGE_RISING>, /* TX
+> full IRQ */
+>  >> +                         <GIC_SPI 4 IRQ_TYPE_EDGE_RISING>; /* RX
+> empty IRQ */
+>  >> +            reg = <0x00000000 0x00000000>, <0x00000000 0x00000001>;
+>  >> +                  /* TX, RX cap ids */
+>  >> +        };
+>  >>
+>  > All these resources are used only by the mailbox controller driver.
+>  > So, this should be the mailbox controller node, rather than the
+>  > mailbox user.> One option is to load gunyah-resource-manager as a
+> module that relies
+>  > on the gunyah-mailbox provider. That would also avoid the "Allow
+>  > direct registration to a channel" hack patch.
+>
+> A message queue to another guest VM wouldn't be known at boot time and
+> thus couldn't be described on the devicetree.
+>
+I think you need to implement of_xlate() ... or please tell me what
+exactly you need to specify in the dt.
 
-The PMI8950 features integrated peripherals like ADC, GPIO controller,
-MPPs and others.
-
-[luca@z3ntu.xyz: remove pm8950, style changes for 2022 standards, add wled]
-Signed-off-by: AngeloGioacchino Del Regno <kholk11@gmail.com>
-Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
----
-Changes since v2:
-* Pick up patch, and adjust as mentioned above sign-offs
-
- arch/arm64/boot/dts/qcom/pmi8950.dtsi | 97 +++++++++++++++++++++++++++
- 1 file changed, 97 insertions(+)
- create mode 100644 arch/arm64/boot/dts/qcom/pmi8950.dtsi
-
-diff --git a/arch/arm64/boot/dts/qcom/pmi8950.dtsi b/arch/arm64/boot/dts/qcom/pmi8950.dtsi
-new file mode 100644
-index 000000000000..32d27e2187e3
---- /dev/null
-+++ b/arch/arm64/boot/dts/qcom/pmi8950.dtsi
-@@ -0,0 +1,97 @@
-+// SPDX-License-Identifier: GPL-2.0
-+// Copyright (c) 2019, AngeloGioacchino Del Regno <kholk11@gmail.com>
-+
-+#include <dt-bindings/iio/qcom,spmi-vadc.h>
-+#include <dt-bindings/interrupt-controller/irq.h>
-+#include <dt-bindings/spmi/spmi.h>
-+
-+&spmi_bus {
-+	pmic@2 {
-+		compatible = "qcom,pmi8950", "qcom,spmi-pmic";
-+		reg = <0x2 SPMI_USID>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		pmi8950_vadc: adc@3100 {
-+			compatible = "qcom,spmi-vadc";
-+			reg = <0x3100>;
-+			interrupts = <0x2 0x31 0x0 IRQ_TYPE_EDGE_RISING>;
-+			#address-cells = <1>;
-+			#size-cells = <0>;
-+			#io-channel-cells = <1>;
-+
-+			adc-chan@0 {
-+				reg = <VADC_USBIN>;
-+				qcom,pre-scaling = <1 4>;
-+				label = "usbin";
-+			};
-+
-+			adc-chan@1 {
-+				reg = <VADC_DCIN>;
-+				qcom,pre-scaling = <1 4>;
-+				label = "dcin";
-+			};
-+
-+			adc-chan@2 {
-+				reg = <VADC_VCHG_SNS>;
-+				qcom,pre-scaling = <1 1>;
-+				label = "vchg_sns";
-+			};
-+
-+			adc-chan@9 {
-+				reg = <VADC_REF_625MV>;
-+				qcom,pre-scaling = <1 1>;
-+				label = "ref_625mv";
-+			};
-+
-+			adc-chan@a {
-+				reg = <VADC_REF_1250MV>;
-+				qcom,pre-scaling = <1 1>;
-+				label = "ref_1250v";
-+			};
-+
-+			adc-chan@d {
-+				reg = <VADC_SPARE2>;
-+				qcom,pre-scaling = <1 1>;
-+				label = "chg_temp";
-+			};
-+		};
-+
-+		pmi8950_mpps: mpps@a000 {
-+			compatible = "qcom,pmi8950-mpp", "qcom,spmi-mpp";
-+			reg = <0xa000>;
-+			gpio-controller;
-+			gpio-ranges = <&pmi8950_mpps 0 0 4>;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+
-+		pmi8950_gpio: gpio@c000 {
-+			compatible = "qcom,pmi8950-gpio", "qcom,spmi-gpio";
-+			reg = <0xc000>;
-+			gpio-controller;
-+			gpio-ranges = <&pmi8950_gpio 0 0 2>;
-+			#gpio-cells = <2>;
-+			interrupt-controller;
-+			#interrupt-cells = <2>;
-+		};
-+	};
-+
-+	pmic@3 {
-+		compatible = "qcom,pmi8950", "qcom,spmi-pmic";
-+		reg = <0x3 SPMI_USID>;
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		pmi8950_wled: leds@d800 {
-+			compatible = "qcom,pmi8950-wled";
-+			reg = <0xd800>, <0xd900>;
-+			interrupts = <0x3 0xd8 0x02 IRQ_TYPE_EDGE_RISING>;
-+			interrupt-names = "short";
-+			label = "backlight";
-+
-+			status = "disabled";
-+		};
-+	};
-+};
--- 
-2.38.1
-
+thnx.
