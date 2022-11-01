@@ -2,79 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72E3261446D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 06:54:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08B62614472
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 06:58:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229885AbiKAFys (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 01:54:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35820 "EHLO
+        id S229846AbiKAF6Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 01:58:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36518 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiKAFym (ORCPT
+        with ESMTP id S229462AbiKAF6J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 01:54:42 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09B1B14029
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 22:54:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=Content-Transfer-Encoding:MIME-Version:
-        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
-        Content-Description:In-Reply-To:References;
-        bh=PfJarf9OujD0jxdJbIQ9WPjhLg0Bdxql4iSHEXIdul8=; b=EqX3bkwyVL0ndltH/Wyg8qYYKK
-        2a47eCMm9XtO4KQHogXuUWyZ1wXZgWyZN0iiJ01tKvtgnJIAdimAHCTWF6HM4PF9Mz+TEcbtO5LuS
-        1qJ+9/KBUyab55o8AR85yeWMQhkF1DcsdeKUbJdXJCewUJnB8uLnrsS7NU53b3RVdNotS3/0sCRPn
-        TDjMbzQgbOpdno6A6/YjuM8xM1Sj/Aey+ZVB/Cfp1I8xv5fSFMmLV4Z4hU+xc7uBGGnhXeLe7GiP6
-        NUUDwvC0TGprFJqUkyV+Fo8efzRqi1QW82DC8UaoMbtNkFabd0FlcezczMsl5bw4eDW9tSOYhmKFe
-        TMXdNxvg==;
-Received: from [2601:1c2:d80:3110::a2e7] (helo=casper.infradead.org)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1opkEU-004M6c-S4; Tue, 01 Nov 2022 05:54:43 +0000
-From:   Randy Dunlap <rdunlap@infradead.org>
-To:     linux-kernel@vger.kernel.org
-Cc:     Andy Shevchenko <andy@kernel.org>,
-        Hans de Goede <hdegoede@redhat.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Lee Jones <lee@kernel.org>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Linus Torvalds <torvalds@linux-foundation.org>
-Subject: [PATCH] mfd: intel_soc_pmic: allow COMPILE_TEST or I2C_DESIGNWARE_PLATFORM
-Date:   Mon, 31 Oct 2022 22:54:33 -0700
-Message-Id: <20221101055433.16891-1-rdunlap@infradead.org>
-X-Mailer: git-send-email 2.38.0
+        Tue, 1 Nov 2022 01:58:09 -0400
+Received: from conssluserg-06.nifty.com (conssluserg-06.nifty.com [210.131.2.91])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C8F714087;
+        Mon, 31 Oct 2022 22:58:08 -0700 (PDT)
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174]) (authenticated)
+        by conssluserg-06.nifty.com with ESMTP id 2A15viIc025803;
+        Tue, 1 Nov 2022 14:57:45 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-06.nifty.com 2A15viIc025803
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1667282265;
+        bh=gCNWBb2Eok8RLy3ONe6jfzn3xPMLs34Yqwb+SBG6Glw=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=D+mq7Rhu/EH63zPTFNBDJZL5CdYxdPyLmxD/bi3q+5UT3u5QtlFu3E01kKBxaXeij
+         MlK9kO8VB0s/Z//f9nboSrEvTkB8NVgsVcaxka57DPRbHyeVpjctVWychs0F7/2BvV
+         Ab5cjUn2t7IMwy1I6TsCxSobnB0qcDZRsP/hxAaWaDOto4mtGTd0GlNh2NsJWZKbmf
+         m4c3LuA6q/1LI6v/j9aMMmjCjxgm86QddRn8inU7ekmuNqZ1IjiOEGHlv+6Kp2odQ7
+         gW3o5fPM5CQjtS/9Y4pOSVAPUvyrGEKeumgQcmGSJAK0Qwg8SsOkdsBSGqeLdpHONC
+         xtrSr/Ux1PhJw==
+X-Nifty-SrcIP: [209.85.167.174]
+Received: by mail-oi1-f174.google.com with SMTP id y67so15006349oiy.1;
+        Mon, 31 Oct 2022 22:57:44 -0700 (PDT)
+X-Gm-Message-State: ACrzQf0hL/d+37jgxLmAlYKyH3sGtKJXaOzmFBjURr2wvoODPGl7T9Yo
+        fu40PQI1aP7sNOcKkr+8J6uOYo7CAbab6A/RizU=
+X-Google-Smtp-Source: AMsMyM7n8houcv2BWsa7QWJkxKzh5DKRqrh/PWmVCfZXKXtJA6KJU0/z+oQhzFQ2OKyMwHbCqc0ovVYaYJ3FTsTm2hI=
+X-Received: by 2002:a05:6808:1893:b0:359:f7c7:1caf with SMTP id
+ bi19-20020a056808189300b00359f7c71cafmr6481270oib.194.1667282263919; Mon, 31
+ Oct 2022 22:57:43 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <20221020175655.1660864-1-ndesaulniers@google.com>
+ <Y1GV9sHyODVmBbFW@dev-arch.thelio-3990X> <CA+icZUW2tFR=xjJEXJDNARW1yd_vjOOA1etF6aMN3Cx5ReFgmg@mail.gmail.com>
+ <CAKwvOdn_mP8kVn5Bhe7bbC8R+VZxr8h02yWwKhvaTHW40ZJ_Uw@mail.gmail.com> <CAKwvOdkNBM2-pMm+fqzXpMxL5745p0Gzmw_+--P8RSqTk=v+VQ@mail.gmail.com>
+In-Reply-To: <CAKwvOdkNBM2-pMm+fqzXpMxL5745p0Gzmw_+--P8RSqTk=v+VQ@mail.gmail.com>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Tue, 1 Nov 2022 14:57:07 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATrBDSLqBZFmWr5RA542pUVR=mieUSNVYXy8thkHS6w_A@mail.gmail.com>
+Message-ID: <CAK7LNATrBDSLqBZFmWr5RA542pUVR=mieUSNVYXy8thkHS6w_A@mail.gmail.com>
+Subject: Re: [PATCH] Makefile.debug: support for -gz=zstd
+To:     Nick Desaulniers <ndesaulniers@google.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Fangrui Song <maskray@google.com>,
+        Sedat Dilek <sedat.dilek@dhl.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Terrell <terrelln@fb.com>, Tom Rix <trix@redhat.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        David Gow <davidgow@google.com>,
+        Kees Cook <keescook@chromium.org>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Miguel Ojeda <ojeda@kernel.org>,
+        Isabella Basso <isabbasso@riseup.net>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+        linux-kernel@vger.kernel.org, linux-kbuild@vger.kernel.org,
+        llvm@lists.linux.dev, sedat.dilek@gmail.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Linus expressed a desire to have intel_soc_pmic_crc.o (INTEL_SOC_PMIC,
-for Crystal Cove) be built on an "allmodconfig" build, when
-I2C_DESIGNWARE_PLATFORM=m, to enhance build test coverage.
+On Tue, Nov 1, 2022 at 3:49 AM Nick Desaulniers <ndesaulniers@google.com> wrote:
+>
+> On Mon, Oct 24, 2022 at 10:44 AM Nick Desaulniers
+> <ndesaulniers@google.com> wrote:
+> >
+> > On Sun, Oct 23, 2022 at 8:46 AM Sedat Dilek <sedat.dilek@gmail.com> wrote:
+> > >
+> > > On Thu, Oct 20, 2022 at 8:43 PM Nathan Chancellor <nathan@kernel.org> wrote:
+> > > >
+> > > > On Thu, Oct 20, 2022 at 10:56:49AM -0700, Nick Desaulniers wrote:
+> > > > > +config DEBUG_INFO_UNCOMPRESSED
+> > > > > +     bool "Don't compress debug information"
+> > > > > +     help
+> > > > > +       Don't compress debug info sections.
+> > > > > +
+> > > > >  config DEBUG_INFO_COMPRESSED
+> > >
+> > > Also, I prefer...
+> > >
+> > > DEBUG_INFO_COMPRESSED_NONE
+> > > DEBUG_INFO_COMPRESSED_ZLIB
+> > > DEBUG_INFO_COMPRESSED_ZSTD
+> > >
+> > > Following...
+> > >
+> > > $ ld.lld-16 -v
+> > > Debian LLD 16.0.0 (compatible with GNU linkers)
+> > >
+> > > $ ld.lld-16 --help | grep compress-debug-sections
+> > >  --compress-debug-sections=[none,zlib,zstd]
+> >
+> > It's a good suggestion, though I deliberately did not modify the
+> > identifier used for the existing DEBUG_INFO_COMPRESSED.  No defconfigs
+> > set DEBUG_INFO_COMPRESSED explicitly, but I think one issue with
+> > changing the identifier of existing kconfigs is that upon upgrading to
+> > newer kernel sources, if you run `make oldmodconfig` if you previously
+> > had DEBUG_INFO_COMPRESSED=y, kconfig doesn't know that that option has
+> > been renamed to DEBUG_INFO_COMPRESSED_ZLIB so it would be silently
+> > disabled, and image sizes would increase due to uncompressed debug
+> > info. That seems developer hostile.
+> >
+> > Masahiro, what are your thoughts on how to proceed? Should I change
+> > the pre-existing Kconfig identifier, or "let sleeping dogs lie?"
+>
+> Hi Masahiro,
+> What are your thoughts on the above?
 
-The PMIC driver won't work in this case since it requires
-I2C_DESIGNWARE_PLATFORM=y to operate properly, but adding
-"|| COMPILE_TEST" does improve the build test coverage.
 
-Link: https://lore.kernel.org/all/CAHk-=wg=hh8xkPjiySnjAyR66AG64eyZ1Y9gHw+MCs8uuSZReA@mail.gmail.com/
-Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
----
- drivers/mfd/Kconfig |    2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+We renamed CONFIG options from time to time.
+We should strive to update in-tree defconfigs,
+but we did not care about external users very much.
+(we rely on "make oldconfig" showing new options
+and asking users for their choice.)
 
-diff -- a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -603,7 +603,7 @@ config INTEL_SOC_PMIC
- 	bool "Support for Crystal Cove PMIC"
- 	depends on HAS_IOMEM && I2C=y && GPIOLIB && COMMON_CLK
- 	depends on (X86 && ACPI) || COMPILE_TEST
--	depends on I2C_DESIGNWARE_PLATFORM=y
-+	depends on I2C_DESIGNWARE_PLATFORM=y || COMPILE_TEST
- 	select MFD_CORE
- 	select REGMAP_I2C
- 	select REGMAP_IRQ
+So, I like Sedat's DEBUG_INFO_COMPRESSED_{ZLIB,ZSTD,NONE}.
+(and it is consist with CONFIG_INITRAMFS_COMPRESSION_*)
+
+-- 
+Best Regards
+Masahiro Yamada
