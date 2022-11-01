@@ -2,205 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C7FC614F57
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 17:32:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB9C614F44
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 17:31:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231193AbiKAQcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 12:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
+        id S230188AbiKAQbe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 12:31:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34398 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbiKAQbu (ORCPT
+        with ESMTP id S230002AbiKAQbX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 12:31:50 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBC21CFE7
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 09:30:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667320251;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=11t7t2M5S9FVtreaeqc7IEi/JpUAAyL70GwctMIr/Uo=;
-        b=R8k7omYgk3xdRuFw5pjKvYe0fJY+3tqjZKi/EQgSRdwxDomtuDhxwYHHVNAQWoP7oY92/D
-        hYPZ4kb17Y8PFhN9dvXtaQf8faxeo7rOi9k+vuIq2Dq+38HaMDo+RXStL4rm73gevvsbeI
-        KbFEwqQ857K17odktLivTC/gHEpKOH0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-156-UXHRu4KIP5SSs1TCerXLMw-1; Tue, 01 Nov 2022 12:30:46 -0400
-X-MC-Unique: UXHRu4KIP5SSs1TCerXLMw-1
-Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E801E811E81;
-        Tue,  1 Nov 2022 16:30:44 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.36.73])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id AD9AC4EA49;
-        Tue,  1 Nov 2022 16:30:42 +0000 (UTC)
-Subject: [RFC PATCH 00/12] smb3: Add iter helpers and use iov_iters down to
- the network transport
-From:   David Howells <dhowells@redhat.com>
-To:     Steve French <smfrench@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Cc:     linux-cachefs@redhat.com, John Hubbard <jhubbard@nvidia.com>,
-        linux-cifs@vger.kernel.org, linux-rdma@vger.kernel.org,
-        Jeff Layton <jlayton@kernel.org>, linux-mm@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        Matthew Wilcox <willy@infradead.org>,
-        Steve French <sfrench@samba.org>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        linux-crypto@vger.kernel.org,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Christoph Hellwig <hch@lst.de>, dhowells@redhat.com,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Tom Talpey <tom@talpey.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Tue, 01 Nov 2022 16:30:41 +0000
-Message-ID: <166732024173.3186319.18204305072070871546.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.5
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        Tue, 1 Nov 2022 12:31:23 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4AF1A1CFD4
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 09:31:22 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id o4so20903555wrq.6
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 09:31:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IzO3d+PnqVX4eqOOm0vFp5Ik8ZhQdVIOcsgj2Vbb6Tw=;
+        b=mNDgzceo8zQsGTRZoPjjNL4wKPdLICJmBeFBzYpp/cpoVOX8EnBtqG4Bt7L6dyT4Z6
+         BLqEgELUYPkcP6b/RUrscw3jLLIHmdM9Zgx7WccySrCPFPa7ThDtgRQLgBgu8FoisxbR
+         zWqlMBH2baTfXoAI5x+we0u+gdbvEKW78/wkEfnSzCsUTdG+c3/RfsvhOPBV3YTsJ3GJ
+         rPEKNvRA851cFxIMZUwF0Dd+0vuwvZtF/zM9fAxpbpVWN+5BD/h80k9o6zkzXEjNADEs
+         JitFYf3LOnQEpK2Yn99tnifajIYNwkaXApZIB2/7tUQz8798F6FGc9/PxjksBohtscGX
+         D2jQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=IzO3d+PnqVX4eqOOm0vFp5Ik8ZhQdVIOcsgj2Vbb6Tw=;
+        b=XsYUS8OA6vxyXXi2k/eyTrN332aDJKRAZfOJiVdrPKoN5h41UM7Buy1E7hSV1hiIZK
+         lFOQuCdLMrIzDBgpHumVdOtIuGsitdCeAU6wayWFijk6XO+mtbQrp1pDG9zoqQGl08xW
+         PPhpJG9gqim7LbLHqyZQ+6xqRoqSdNl2cipBgVC6+HEuc/W7B9t11cRLHNri1nj/qxtg
+         f24CaAv0WBqXxQ5LSrhM+wnHmKgTpKxPczXeqi+rJCiIqL5jKknIgnYfFBBR2Mb/NaJ6
+         EYjxTbNWuhWGUhAkma9gt8Rxeqx2DqyfogHSdTwyFdWUVf8pnPDmsBszqKGfkL8n7BC4
+         gsFw==
+X-Gm-Message-State: ACrzQf2ZNSpjYybAKQQUYQIWs60LaudlAMAPOpDhP55BcTYz3g3Fh+jc
+        o18JPT4mrJ/tbazWoLsdSfe7BQ==
+X-Google-Smtp-Source: AMsMyM5wXfc9H9fvY5c0jpbqRy0kwubQO5OYYdhMVEMxrxKX5tVk8qsr+tm4Ie0fvYRa+FkY5LbNAg==
+X-Received: by 2002:a5d:5551:0:b0:236:c715:59bf with SMTP id g17-20020a5d5551000000b00236c71559bfmr8245183wrw.124.1667320280715;
+        Tue, 01 Nov 2022 09:31:20 -0700 (PDT)
+Received: from linaro.org ([2a00:23c5:6809:2201:e844:18b6:fc5:bbc9])
+        by smtp.gmail.com with ESMTPSA id bu15-20020a056000078f00b0022ac1be009esm8339844wrb.16.2022.11.01.09.31.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 09:31:19 -0700 (PDT)
+From:   Mike Leach <mike.leach@linaro.org>
+To:     coresight@lists.linaro.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org
+Cc:     mathieu.poirier@linaro.org, suzuki.poulose@arm.com,
+        peterz@infradead.org, mingo@redhat.com, acme@kernel.org,
+        linux-perf-users@vger.kernel.org, leo.yan@linaro.org,
+        quic_jinlmao@quicinc.com, Mike Leach <mike.leach@linaro.org>
+Subject: [PATCH v5 00/14]  coresight: Add new API to allocate trace source ID values
+Date:   Tue,  1 Nov 2022 16:30:49 +0000
+Message-Id: <20221101163103.17921-1-mike.leach@linaro.org>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The current method for allocating trace source ID values to sources is
+to use a fixed algorithm for CPU based sources of (cpu_num * 2 + 0x10).
+The STM is allocated ID 0x1.
 
-Hi Steve, Al, Christoph,
+This fixed algorithm is used in both the CoreSight driver code, and by
+perf when writing the trace metadata in the AUXTRACE_INFO record.
 
-Here's an updated version of a subset of my branch to make the cifs/smb3
-driver pass iov_iters down to the lowest layers where they can be passed to
-the network transport.
+The method needs replacing as currently:-
+1. It is inefficient in using available IDs.
+2. Does not scale to larger systems with many cores and the algorithm
+has no limits so will generate invalid trace IDs for cpu number > 44.
 
-The first couple of patches provide iov_iter general stuff:
+Additionally requirements to allocate additional system IDs on some
+systems have been seen.
 
- (1) Move the FOLL_* flags to linux/mm_types.h so that linux/uio.h can make
-     use of them.
+This patch set  introduces an API that allows the allocation of trace IDs
+in a dynamic manner.
 
- (2) Add a function to extract/get/pin pages from an iterator as a future
-     replacement for iov_iter_get_pages*().  It also adds a function by
-     which the caller can determine which of "extract/get/pin" the
-     extraction function will actually do to aid in cleaning up.
+Architecturally reserved IDs are never allocated, and the system is
+limited to allocating only valid IDs.
 
-Then there are a couple of patches that add stuff to netfslib that I want
-to use there as well as in cifs:
+Each of the current trace sources ETM3.x, ETM4.x and STM is updated to use
+the new API.
 
- (3) Add a netfslib function to use (2) to extract pages from an ITER_IOBUF
-     or ITER_UBUF iterator into an ITER_BVEC iterator.
+For the ETMx.x devices IDs are allocated on certain events
+a) When using sysfs, an ID will be allocated on hardware enable, or a read of
+sysfs TRCTRACEID register and freed when the sysfs reset is written.
 
- (4) Add a netfslib function to use (2) to extract pages from an iterator
-     that's of type ITER_UBUF/IOVEC/BVEC/KVEC/XARRAY and add them to a
-     scatterlist.  The function in (2) is used for a UBUF and IOVEC
-     iterators, so those need cleaning up afterwards; BVEC and XARRAY
-     iterators can be rendered into elements that span multiple pages.
-
-Then there are some cifs helpers that work with iterators:
-
- (5) Implement cifs_splice_read() to use an ITER_BVEC rather than an
-     ITER_PIPE, bulk-allocating the pages, attaching them to the bvec,
-     doing the I/O and then pushing the pages into the pipe.  This avoids
-     the problem with cifs wanting to split the pipe iterator in a later
-     patch.
-
- (6) Add a function to walk through an ITER_BVEC/KVEC/XARRAY iterator and
-     add elements to an RDMA SGE list.  Only the DMA addresses are stored,
-     and an element may span multiple pages (say if an xarray contains a
-     multipage folio).
-
- (7) Add a function to walk through an ITER_BVEC/KVEC/XARRAY iterator and
-     pass the contents into a shash function.
-
- (8) Add functions to walk through an ITER_XARRAY iterator and perform
-     various sorts of cleanup on the folios held therein, to be used on I/o
-     completion.
-
- (9) Add a function to read from the transport TCP socket directly into an
-     iterator.
-
-Then come the patches that actually do the work of iteratorising cifs:
-
-(10) The main patch.  Replace page lists with iterators.  It extracts the
-     pages from ITER_UBUF and ITER_IOVEC iterators to an ITER_BVEC
-     iterator, pinning or getting refs on them, before passing them down as
-     the I/O may be done from a worker thread.
-
-     The iterator is extracted into a scatterlist in order to talk to the
-     crypto interface or to do RDMA.
-
-(11) In the cifs RDMA code, extract the iterator into an RDMA SGE[] list,
-     removing the scatterlist intermediate - at least for smbd_send().
-     There appear to be other ways for cifs to talk to the RDMA layer that
-     don't go through that that I haven't managed to work out.
-
-(12) Remove a chunk of now-unused code.
-
-Note also that I haven't managed to test all the combinations of transport.
-Samba doesn't support RDMA and ksmbd doesn't support encryption.  I can
-test them separately, but not together.  That said, rdma, sign, seal and
-sign+seal seem to work.
-
-I've pushed the patches here also:
-
-	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=cifs-for-viro
-
-Note that this is based on a merge of Al's work.iov_iter branch with
-v6.1-rc2.
-
-David
-
-Link: https://lore.kernel.org/r/166697254399.61150.1256557652599252121.stgit@warthog.procyon.org.uk/
----
-David Howells (12):
-      mm: Move FOLL_* defs to mm_types.h
-      iov_iter: Add a function to extract a page list from an iterator
-      netfs: Add a function to extract a UBUF or IOVEC into a BVEC iterator
-      netfs: Add a function to extract an iterator into a scatterlist
-      cifs: Implement splice_read to pass down ITER_BVEC not ITER_PIPE
-      cifs: Add a function to build an RDMA SGE list from an iterator
-      cifs: Add a function to Hash the contents of an iterator
-      cifs: Add some helper functions
-      cifs: Add a function to read into an iter from a socket
-      cifs: Change the I/O paths to use an iterator rather than a page list
-      cifs: Build the RDMA SGE list directly from an iterator
-      cifs: Remove unused code
+b) When using perf, ID is allocated on during setup AUX event, and freed on
+event free. IDs are communicated using the AUX_OUTPUT_HW_ID packet.
+The ID allocator is notified when perf sessions start and stop
+so CPU based IDs are kept constant throughout any perf session.
 
 
- fs/cifs/Kconfig          |    1 +
- fs/cifs/cifsencrypt.c    |  172 +++-
- fs/cifs/cifsfs.c         |   12 +-
- fs/cifs/cifsfs.h         |    6 +
- fs/cifs/cifsglob.h       |   31 +-
- fs/cifs/cifsproto.h      |   11 +-
- fs/cifs/cifssmb.c        |   13 +-
- fs/cifs/connect.c        |   16 +
- fs/cifs/file.c           | 1793 ++++++++++++++++++--------------------
- fs/cifs/fscache.c        |   22 +-
- fs/cifs/fscache.h        |   10 +-
- fs/cifs/misc.c           |  127 +--
- fs/cifs/smb2ops.c        |  378 ++++----
- fs/cifs/smb2pdu.c        |   45 +-
- fs/cifs/smbdirect.c      |  503 +++++++----
- fs/cifs/smbdirect.h      |    4 +-
- fs/cifs/transport.c      |   57 +-
- fs/netfs/Makefile        |    1 +
- fs/netfs/iterator.c      |  346 ++++++++
- include/linux/mm.h       |   74 --
- include/linux/mm_types.h |   73 ++
- include/linux/netfs.h    |    5 +
- include/linux/uio.h      |   29 +
- lib/iov_iter.c           |  333 +++++++
- 24 files changed, 2390 insertions(+), 1672 deletions(-)
- create mode 100644 fs/netfs/iterator.c
+Note: This patchset breaks some backward compatibility for perf record and
+perf report.
 
+The version of the AUXTRACE_INFO has been updated to reflect the fact that
+the trace source IDs are generated differently. This will
+mean older versions of perf report cannot decode the newer file.
+
+Appies to coresight/next [30a0b95b1335]
+
+Changes since v4:
+1) update to ensure that compiling after each individual patch added still
+works - ie. git bisect not broken through the patchset..
+
+2) Revision to some of the now redundant code in cs-etm (James)
+
+3) Comments and other minor fixes requested by Suzuki.
+
+Changes since v3:
+1) Fixed aarch32 build error in ETM3.x driver.
+Reported-by: kernel test robot <lkp@intel.com>
+
+Changes since v2:
+1) Improved backward compatibility: (requested by James)
+
+Using the new version of perf on an old kernel will generate a usable file
+legacy metadata values are set by the new perf and will be used if mew
+ID packets are not present in the file.
+
+Using an older version of perf / simpleperf on an updated kernel may still
+work. The trace ID allocator has been updated to use the legacy ID values
+where possible, so generated file and used trace IDs will match up to the
+point where the legacy algorithm is broken anyway.
+
+2) Various changes to the ID allocator and ID packet format.
+(suggested by Suzuki)
+
+3) per CPU ID info in allocator now stored as atomic type to allow a passive read
+without taking the allocator spinlock. perf flow now allocates and releases ID
+values in setup_aux / free_event. Device enable and event enable use the passive
+read to set the allocated values. This simplifies the locking mechanisms on the
+perf run and fixes issues that arose with locking dependencies.
+
+Changes since v1:
+(after feedback & discussion with Mathieu & Suzuki).
+
+1) API has changed. The global trace ID map is managed internally, so it
+is no longer passed in to the API functions.
+
+2) perf record does not use sysfs to find the trace IDs. These are now
+output as AUX_OUTPUT_HW_ID events. The drivers, perf record, and perf report
+have been updated accordingly to generate and handle these events.
+
+Mike Leach (14):
+  coresight: trace-id: Add API to dynamically assign Trace ID values
+  coresight: Remove obsolete Trace ID unniqueness checks
+  coresight: perf: traceid: Add perf ID allocation and notifiers
+  coresight: stm: Update STM driver to use Trace ID API
+  coresight: etm4x: Update ETM4 driver to use Trace ID API
+  coresight: etm3x: Update ETM3 driver to use Trace ID API
+  coresight: etmX.X: stm: Remove trace_id() callback
+  coresight: trace id: Remove legacy get trace ID function.
+  perf: cs-etm: Move mapping of Trace ID and cpu into helper function
+  perf: cs-etm: Update record event to use new Trace ID protocol
+  kernel: events: Export perf_report_aux_output_id()
+  perf: cs-etm: Handle PERF_RECORD_AUX_OUTPUT_HW_ID packet
+  coresight: events: PERF_RECORD_AUX_OUTPUT_HW_ID used for Trace ID
+  coresight: trace-id: Add debug & test macros to Trace ID allocation
+
+ drivers/hwtracing/coresight/Makefile          |   2 +-
+ drivers/hwtracing/coresight/coresight-core.c  |  49 +--
+ .../hwtracing/coresight/coresight-etm-perf.c  |  23 ++
+ drivers/hwtracing/coresight/coresight-etm.h   |   3 +-
+ .../coresight/coresight-etm3x-core.c          |  90 +++--
+ .../coresight/coresight-etm3x-sysfs.c         |  27 +-
+ .../coresight/coresight-etm4x-core.c          |  70 +++-
+ .../coresight/coresight-etm4x-sysfs.c         |  27 +-
+ drivers/hwtracing/coresight/coresight-etm4x.h |   3 +
+ drivers/hwtracing/coresight/coresight-stm.c   |  49 +--
+ .../hwtracing/coresight/coresight-trace-id.c  | 258 ++++++++++++++
+ .../hwtracing/coresight/coresight-trace-id.h  | 154 ++++++++
+ include/linux/coresight-pmu.h                 |  34 +-
+ include/linux/coresight.h                     |   3 -
+ kernel/events/core.c                          |   1 +
+ tools/include/linux/coresight-pmu.h           |  48 ++-
+ tools/perf/arch/arm/util/cs-etm.c             |  21 +-
+ .../perf/util/cs-etm-decoder/cs-etm-decoder.c |   7 +
+ tools/perf/util/cs-etm.c                      | 328 +++++++++++++++---
+ tools/perf/util/cs-etm.h                      |  14 +-
+ 20 files changed, 980 insertions(+), 231 deletions(-)
+ create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.c
+ create mode 100644 drivers/hwtracing/coresight/coresight-trace-id.h
+
+-- 
+2.17.1
 
