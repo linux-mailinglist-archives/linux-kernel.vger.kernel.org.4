@@ -2,78 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1596614807
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 11:57:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CA97614808
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 11:57:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229950AbiKAK5X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 06:57:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39708 "EHLO
+        id S230019AbiKAK5m (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 06:57:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39802 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229907AbiKAK5T (ORCPT
+        with ESMTP id S229999AbiKAK5g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 06:57:19 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B01A193EB;
-        Tue,  1 Nov 2022 03:57:18 -0700 (PDT)
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A1AMo5h000519;
-        Tue, 1 Nov 2022 10:57:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=ZdwizPVPfe4p+N7OYBrHEa0WUaclhEatP+qhUy19UuM=;
- b=E/5FGYh0rrcPIBMNV3PJDR6gRyRLGTBCk/J/5PbZsHWkhsnNt5NcGFBEppjo+0f70I3c
- a55tCGXeAnCD9xPsxs8pXw1gIEAb7yMdqvSHI04hdqlMazNs2iEPueWMnSoOx6fTkEVu
- KiudgXYSIriTXfbZbwCFgmbX6Izz9LSTIYkLExYmbNI9IAoA8O5LlwKc0oOB9pSW8Kc0
- 7GZGZAURNDZ2GVktCEqCge+xzEPcm/6AXaZ8VngL8ljKqFmzx2K+kjW8Nx7mEp6fD3/j
- fg07hzG2AaoaLsGjaA5J4yRXFDd0n53RVLuKZ9g684eSbcZllwfI32Xznzw4e36rBLkz 9w== 
-Received: from apblrppmta02.qualcomm.com (blr-bdr-fw-01_GlobalNAT_AllZones-Outside.qualcomm.com [103.229.18.19])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kjxqgrr5m-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Nov 2022 10:57:14 +0000
-Received: from pps.filterd (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2A1AvBK7011728;
-        Tue, 1 Nov 2022 10:57:11 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTPS id 3khdp1w0nt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Tue, 01 Nov 2022 10:57:11 +0000
-Received: from APBLRPPMTA02.qualcomm.com (APBLRPPMTA02.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A1AvAv7011718;
-        Tue, 1 Nov 2022 10:57:10 GMT
-Received: from kalyant-linux.qualcomm.com (kalyant-linux.qualcomm.com [10.204.66.210])
-        by APBLRPPMTA02.qualcomm.com (PPS) with ESMTP id 2A1AvA0M011703;
-        Tue, 01 Nov 2022 10:57:10 +0000
-Received: by kalyant-linux.qualcomm.com (Postfix, from userid 94428)
-        id 9E57B2E82; Tue,  1 Nov 2022 03:57:09 -0700 (PDT)
-From:   Kalyan Thota <quic_kalyant@quicinc.com>
-To:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org
-Cc:     Kalyan Thota <quic_kalyant@quicinc.com>,
-        linux-kernel@vger.kernel.org, robdclark@gmail.com,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_vpolimer@quicinc.com, dmitry.baryshkov@linaro.org,
-        quic_abhinavk@quicinc.com
-Subject: [v7] drm/msm/disp/dpu1: add support for dspp sub block flush in sc7280
-Date:   Tue,  1 Nov 2022 03:57:05 -0700
-Message-Id: <1667300225-14367-1-git-send-email-quic_kalyant@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: maAWYAbJmaCPMRYUH7AF_8mWCv42PfVg
-X-Proofpoint-GUID: maAWYAbJmaCPMRYUH7AF_8mWCv42PfVg
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-01_05,2022-11-01_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
- clxscore=1011 adultscore=0 priorityscore=1501 lowpriorityscore=0
- mlxscore=0 mlxlogscore=999 impostorscore=0 spamscore=0 suspectscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211010083
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        Tue, 1 Nov 2022 06:57:36 -0400
+Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A69819281
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 03:57:35 -0700 (PDT)
+Received: by mail-ej1-x62d.google.com with SMTP id y14so36048503ejd.9
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 03:57:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=MzqF9B0T/NfF3Y4vRqndF5M9IfCaL8dvD7GSKzyTcP8=;
+        b=lQGDwX/mWuxEUr0j4yMjkVoxpOFzdmm9g1Sds8p+12S6LSzemeZIlDx96T/pzJgZws
+         otH531H7MNRSIYOaMAJQGEn4AaAn0OAg3BLD/bdvAILXP79FRy3qpeCXqULMs0lyZUtt
+         cVP+8vQOwsLGNLoQgF5g5245kxFB0uAAeIHw4bb1KDxbB3ALNJwBrCs+DZqRgaOtxhKm
+         LryB8E4YQfIOhD2IJCwsZEYrXGLpoGenJvhpxch/+NPwTbBQwInV8xxIoAOwKmWwPKSY
+         5QtB9kZA5Ghzgx6X9KUcUzYqnde4yEpKX4TaPWJsMmIk2146abylK5y80KLEdTeX351K
+         AVVQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MzqF9B0T/NfF3Y4vRqndF5M9IfCaL8dvD7GSKzyTcP8=;
+        b=FzseXR7Vg2hYZt4XIUXyW/vg9S/g5iXmOux2wduNglaKnvbIQnnX5P7Vub+QoQzn49
+         6Q5qa0h0YwgI/z5MOUsvdYrmspCukXwDrn3oq65quw425E8xjpk1rH1QBvhtxZJBfLJA
+         gMEsnoEcztot0Keh4scDhdA3m/wIrztF7auWADFiFYZV0OW/eQCoqHvM/xc3kgaozYqp
+         aes//kDoCO4rPOEPlC8A8BfSAddnwpmQdYse3Flayo625CB5DBWZ+BAwktWEx1Xn3zcK
+         67rwsCZRa9PBI1YztAHnxFPF5GSomuHDJCvAsMlmGoylb5ws3bLYekJwXnLCfykqBV+q
+         +Q7Q==
+X-Gm-Message-State: ACrzQf34W22TwxlP8fnxDqLEDTjYqi2Fn7g5TevgnB7bIiFcn0PNgkq8
+        Fd2iJjVdoKwA7+6aLdApp0wPqUC2d+DTPbbt
+X-Google-Smtp-Source: AMsMyM5TlyWQMlfm4DDf8XjillnEJmZCm2eqgKjjRdzFp6MIN+0BwxHVhyeClBW4dYDu1dWcQ7SUyQ==
+X-Received: by 2002:a17:907:7f02:b0:73d:dffa:57b3 with SMTP id qf2-20020a1709077f0200b0073ddffa57b3mr18307043ejc.19.1667300253693;
+        Tue, 01 Nov 2022 03:57:33 -0700 (PDT)
+Received: from rdm ([137.63.146.164])
+        by smtp.gmail.com with ESMTPSA id p3-20020a17090653c300b007adf2e4c6f7sm368781ejo.195.2022.11.01.03.57.31
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 03:57:33 -0700 (PDT)
+Date:   Tue, 1 Nov 2022 13:57:27 +0300
+From:   UMWARI JOVIAL <umwarijovial@gmail.com>
+To:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Subject: [RESEND PATCH v3] staging: most: dim2: hal: aligning function
+ parameters
+Message-ID: <20221101105727.GA162791@rdm>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,242 +68,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Flush mechanism for DSPP blocks has changed in sc7280 family, it
-allows individual sub blocks to be flushed in coordination with
-master flush control.
+To improve readability, start the list of
+function parameters on the same line as the function name.
+Issue reported by checkpatch.
 
-Representation: master_flush && (PCC_flush | IGC_flush .. etc )
-
-This change adds necessary support for the above design.
-
-Changes in v1:
-- Few nits (Doug, Dmitry)
-- Restrict sub-block flush programming to dpu_hw_ctl file (Dmitry)
-
-Changes in v2:
-- Move the address offset to flush macro (Dmitry)
-- Seperate ops for the sub block flush (Dmitry)
+Signed-off-by: UMWARI JOVIAL <umwarijovial@gmail.com>
+---
 
 Changes in v3:
-- Reuse the DPU_DSPP_xx enum instead of a new one (Dmitry)
+    1.Updated the commit message to well explain the  changes made 
 
-Changes in v4:
-- Use shorter version for unsigned int (Stephen)
+ drivers/staging/most/dim2/hal.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-Changes in v5:
-- Spurious patch please ignore.
-
-Changes in v6:
-- Add SOB tag (Doug, Dmitry)
-
-Changes in v7:
-- Cache flush mask per dspp (Dmitry)
-- Few nits (Marijn)
-
-Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
----
- drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c       |  2 +-
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c |  5 ++-
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h |  4 +++
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c     | 46 ++++++++++++++++++++++++--
- drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h     |  7 ++--
- 5 files changed, 58 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-index 601d687..4170fbe 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
-@@ -766,7 +766,7 @@ static void _dpu_crtc_setup_cp_blocks(struct drm_crtc *crtc)
- 
- 		/* stage config flush mask */
- 		ctl->ops.update_pending_flush_dspp(ctl,
--			mixer[i].hw_dspp->idx);
-+			mixer[i].hw_dspp->idx, DPU_DSPP_PCC);
- 	}
+diff --git a/drivers/staging/most/dim2/hal.c b/drivers/staging/most/dim2/hal.c
+index a5d40b5b138a..6abe3ab2b2cf 100644
+--- a/drivers/staging/most/dim2/hal.c
++++ b/drivers/staging/most/dim2/hal.c
+@@ -346,9 +346,8 @@ static void dim2_clear_ctram(void)
+ 		dim2_clear_ctr(ctr_addr);
  }
  
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-index 27f029f..0eecb2f 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-@@ -65,7 +65,10 @@
- 	(PINGPONG_SDM845_MASK | BIT(DPU_PINGPONG_TE2))
- 
- #define CTL_SC7280_MASK \
--	(BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE) | BIT(DPU_CTL_VM_CFG))
-+	(BIT(DPU_CTL_ACTIVE_CFG) | \
-+	 BIT(DPU_CTL_FETCH_ACTIVE) | \
-+	 BIT(DPU_CTL_VM_CFG) | \
-+	 BIT(DPU_CTL_DSPP_SUB_BLOCK_FLUSH))
- 
- #define MERGE_3D_SM8150_MASK (0)
- 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-index 38aa38a..8148e91 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-@@ -161,10 +161,12 @@ enum {
-  * DSPP sub-blocks
-  * @DPU_DSPP_PCC             Panel color correction block
-  * @DPU_DSPP_GC              Gamma correction block
-+ * @DPU_DSPP_IGC             Inverse Gamma correction block
-  */
- enum {
- 	DPU_DSPP_PCC = 0x1,
- 	DPU_DSPP_GC,
-+	DPU_DSPP_IGC,
- 	DPU_DSPP_MAX
- };
- 
-@@ -191,6 +193,7 @@ enum {
-  * @DPU_CTL_SPLIT_DISPLAY:	CTL supports video mode split display
-  * @DPU_CTL_FETCH_ACTIVE:	Active CTL for fetch HW (SSPPs)
-  * @DPU_CTL_VM_CFG:		CTL config to support multiple VMs
-+ * @DPU_CTL_DSPP_BLOCK_FLUSH: CTL config to support dspp sub-block flush
-  * @DPU_CTL_MAX
-  */
- enum {
-@@ -198,6 +201,7 @@ enum {
- 	DPU_CTL_ACTIVE_CFG,
- 	DPU_CTL_FETCH_ACTIVE,
- 	DPU_CTL_VM_CFG,
-+	DPU_CTL_DSPP_SUB_BLOCK_FLUSH,
- 	DPU_CTL_MAX
- };
- 
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-index a35ecb6..fbcb7da 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
-@@ -33,6 +33,7 @@
- #define   CTL_INTF_FLUSH                0x110
- #define   CTL_INTF_MASTER               0x134
- #define   CTL_FETCH_PIPE_ACTIVE         0x0FC
-+#define   CTL_DSPP_n_FLUSH(n)		((0x13C) + ((n) * 4))
- 
- #define CTL_MIXER_BORDER_OUT            BIT(24)
- #define CTL_FLUSH_MASK_CTL              BIT(17)
-@@ -110,9 +111,14 @@ static inline void dpu_hw_ctl_trigger_pending(struct dpu_hw_ctl *ctx)
- 
- static inline void dpu_hw_ctl_clear_pending_flush(struct dpu_hw_ctl *ctx)
+-static void dim2_configure_channel(
+-	u8 ch_addr, u8 type, u8 is_tx, u16 dbr_address, u16 hw_buffer_size,
+-	u16 packet_length)
++static void dim2_configure_channel(u8 ch_addr, u8 type, u8 is_tx, u16 dbr_address,
++				   u16 hw_buffer_size, u16 packet_length)
  {
-+	int i;
-+
- 	trace_dpu_hw_ctl_clear_pending_flush(ctx->pending_flush_mask,
- 				     dpu_hw_ctl_get_flush_register(ctx));
- 	ctx->pending_flush_mask = 0x0;
-+
-+	for(i = 0; i < ARRAY_SIZE(ctx->pending_dspp_flush_mask); i++)
-+		ctx->pending_dspp_flush_mask[i] = 0x0;
- }
- 
- static inline void dpu_hw_ctl_update_pending_flush(struct dpu_hw_ctl *ctx,
-@@ -130,6 +136,8 @@ static u32 dpu_hw_ctl_get_pending_flush(struct dpu_hw_ctl *ctx)
- 
- static inline void dpu_hw_ctl_trigger_flush_v1(struct dpu_hw_ctl *ctx)
- {
-+	int i;
-+
- 	if (ctx->pending_flush_mask & BIT(MERGE_3D_IDX))
- 		DPU_REG_WRITE(&ctx->hw, CTL_MERGE_3D_FLUSH,
- 				ctx->pending_merge_3d_flush_mask);
-@@ -140,6 +148,11 @@ static inline void dpu_hw_ctl_trigger_flush_v1(struct dpu_hw_ctl *ctx)
- 		DPU_REG_WRITE(&ctx->hw, CTL_WB_FLUSH,
- 				ctx->pending_wb_flush_mask);
- 
-+	for(i = 0; i < ARRAY_SIZE(ctx->pending_dspp_flush_mask); i++)
-+		if (ctx->pending_dspp_flush_mask[i])
-+			DPU_REG_WRITE(&ctx->hw, CTL_DSPP_n_FLUSH(i),
-+				ctx->pending_dspp_flush_mask[i]);
-+
- 	DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, ctx->pending_flush_mask);
- }
- 
-@@ -287,8 +300,9 @@ static void dpu_hw_ctl_update_pending_flush_merge_3d_v1(struct dpu_hw_ctl *ctx,
- }
- 
- static void dpu_hw_ctl_update_pending_flush_dspp(struct dpu_hw_ctl *ctx,
--	enum dpu_dspp dspp)
-+	enum dpu_dspp dspp, u32 dspp_sub_blk)
- {
-+
- 	switch (dspp) {
- 	case DSPP_0:
- 		ctx->pending_flush_mask |= BIT(13);
-@@ -307,6 +321,30 @@ static void dpu_hw_ctl_update_pending_flush_dspp(struct dpu_hw_ctl *ctx,
- 	}
- }
- 
-+static void dpu_hw_ctl_update_pending_flush_dspp_subblocks(
-+	struct dpu_hw_ctl *ctx,	enum dpu_dspp dspp, u32 dspp_sub_blk)
-+{
-+
-+	if (dspp >= DSPP_MAX)
-+		return;
-+
-+	switch (dspp_sub_blk) {
-+	case DPU_DSPP_IGC:
-+		ctx->pending_dspp_flush_mask[dspp-DSPP_0] |= BIT(2);
-+		break;
-+	case DPU_DSPP_PCC:
-+		ctx->pending_dspp_flush_mask[dspp-DSPP_0] |= BIT(4);
-+		break;
-+	case DPU_DSPP_GC:
-+		ctx->pending_dspp_flush_mask[dspp-DSPP_0] |= BIT(5);
-+		break;
-+	default:
-+		return;
-+	}
-+
-+	ctx->pending_flush_mask |= BIT(29);
-+}
-+
- static u32 dpu_hw_ctl_poll_reset_status(struct dpu_hw_ctl *ctx, u32 timeout_us)
- {
- 	struct dpu_hw_blk_reg_map *c = &ctx->hw;
-@@ -675,7 +713,11 @@ static void _setup_ctl_ops(struct dpu_hw_ctl_ops *ops,
- 	ops->setup_blendstage = dpu_hw_ctl_setup_blendstage;
- 	ops->update_pending_flush_sspp = dpu_hw_ctl_update_pending_flush_sspp;
- 	ops->update_pending_flush_mixer = dpu_hw_ctl_update_pending_flush_mixer;
--	ops->update_pending_flush_dspp = dpu_hw_ctl_update_pending_flush_dspp;
-+	if (cap & BIT(DPU_CTL_DSPP_SUB_BLOCK_FLUSH))
-+		ops->update_pending_flush_dspp = dpu_hw_ctl_update_pending_flush_dspp_subblocks;
-+	else
-+		ops->update_pending_flush_dspp = dpu_hw_ctl_update_pending_flush_dspp;
-+
- 	if (cap & BIT(DPU_CTL_FETCH_ACTIVE))
- 		ops->set_active_pipes = dpu_hw_ctl_set_fetch_pipe_active;
- };
-diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-index 96c012e..ff4e92c 100644
---- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-+++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
-@@ -148,13 +148,15 @@ struct dpu_hw_ctl_ops {
- 		enum dpu_lm blk);
- 
- 	/**
--	 * OR in the given flushbits to the cached pending_flush_mask
-+	 * OR in the given flushbits to the cached pending_dspp_flush_mask
- 	 * No effect on hardware
- 	 * @ctx       : ctl path ctx pointer
- 	 * @blk       : DSPP block index
-+	 * @dspp_sub_blk : DSPP sub-block index
- 	 */
- 	void (*update_pending_flush_dspp)(struct dpu_hw_ctl *ctx,
--		enum dpu_dspp blk);
-+		enum dpu_dspp blk, u32 dspp_sub_blk);
-+
- 	/**
- 	 * Write the value of the pending_flush_mask to hardware
- 	 * @ctx       : ctl path ctx pointer
-@@ -242,6 +244,7 @@ struct dpu_hw_ctl {
- 	u32 pending_intf_flush_mask;
- 	u32 pending_wb_flush_mask;
- 	u32 pending_merge_3d_flush_mask;
-+	u32 pending_dspp_flush_mask[DSPP_MAX - DSPP_0];
- 
- 	/* ops */
- 	struct dpu_hw_ctl_ops ops;
+ 	dim2_configure_cdt(ch_addr, dbr_address, hw_buffer_size, packet_length);
+ 	dim2_configure_cat(MLB_CAT, ch_addr, type, is_tx ? 1 : 0);
 -- 
-2.7.4
+2.25.1
 
