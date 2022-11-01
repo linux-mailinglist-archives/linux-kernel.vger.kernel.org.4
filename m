@@ -2,155 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4B3BD6149FA
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:54:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2A34C614A09
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:56:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230316AbiKALyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 07:54:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46098 "EHLO
+        id S230018AbiKAL4T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 07:56:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbiKALxm (ORCPT
+        with ESMTP id S230197AbiKAL4N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 07:53:42 -0400
-Received: from mail-ed1-x52f.google.com (mail-ed1-x52f.google.com [IPv6:2a00:1450:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F2C5B6393;
-        Tue,  1 Nov 2022 04:52:18 -0700 (PDT)
-Received: by mail-ed1-x52f.google.com with SMTP id i21so21389693edj.10;
-        Tue, 01 Nov 2022 04:52:18 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h5buWvgvvFxJX2MlWuLLvx/toLUlPXCUQviGf4Ex78s=;
-        b=qvEbhm0NIc8XP7rsvYjbz6Y55WOdQspths8YZQX57YWI6J0CF/jJZ1S7XC/Pn9n7tl
-         5Bp0LAmeOwlTfK/3mWak8hcD7YvSPUss2hEh3wv7juBeTdj9vx6Pbzc6D9QnutN/lbCC
-         aRHmnUqKPEGxAmXK/UUhksyELYSazsKxMuIsc6/tDDyOT2kpd5V7X7J6t8uRoazoGtOm
-         Yj41q1oqEKVit+ssiY7xKUL/oUL9UsVpMt8/MoFDnuwiIOZUZLW0DWMoaAt09NyGCSh4
-         hpesdZmRpCOZueRkJfNtz+75XUZvHWRyAg6CVfhYnk7gQ1t3zkpftkYLAjKXLo1E7KV4
-         eI5Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h5buWvgvvFxJX2MlWuLLvx/toLUlPXCUQviGf4Ex78s=;
-        b=ZtN+AcsxE7Bpg414BEw3axsJx4vfmxfeCvExcEGzUAAfD18+QhMQnPTVIRxPselaJd
-         jpvpRyBx2wtfWi6Rf2Jv9x5XaVaVP02+4op3fXFtGJZAMmwxHMppuosrUZZxwmlMznl3
-         U0GZvKc6Y2rJvh+RO2OCs7U9Hp15FVd9YfN3tWLCFgekGS7eM63IexNm3ATTo7h0yvCX
-         GTm1vPRALJ3kH8Gsx2NZIPu3bewHlkOiVFwrHixIvfCryNS6nOOuUGJBMdLQeMXgpSqI
-         Ut3lSjejScFVpf6pFC9N8McREQJJYUXKXgQxOIu0TTjiIfOMiDJss6cxIEdn3kJ9uGTQ
-         0zbA==
-X-Gm-Message-State: ACrzQf2gVPbLFCmGWB7FsApY5KzyJlqCcdeAkgvVyvxyu4FkGkRsUutP
-        IVNOVulZMuSzY45K5vF9Ioo=
-X-Google-Smtp-Source: AMsMyM46HgziX/cjbMhzxCCi6oNbVZBN7kqirAdwm1u9P9yeQPQq3AcrYmEHtTG2i5P+09xeCfkTRg==
-X-Received: by 2002:a05:6402:3896:b0:45c:93c3:3569 with SMTP id fd22-20020a056402389600b0045c93c33569mr19037293edb.37.1667303537360;
-        Tue, 01 Nov 2022 04:52:17 -0700 (PDT)
-Received: from orome (p200300e41f201d00f22f74fffe1f3a53.dip0.t-ipconnect.de. [2003:e4:1f20:1d00:f22f:74ff:fe1f:3a53])
-        by smtp.gmail.com with ESMTPSA id h8-20020a17090634c800b00731582babcasm4195136ejb.71.2022.11.01.04.52.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 04:52:16 -0700 (PDT)
-Date:   Tue, 1 Nov 2022 12:52:14 +0100
-From:   Thierry Reding <thierry.reding@gmail.com>
-To:     Bo Liu <liubo03@inspur.com>
-Cc:     krzysztof.kozlowski@linaro.org, jonathanh@nvidia.com,
-        linux-kernel@vger.kernel.org, linux-tegra@vger.kernel.org
-Subject: Re: [PATCH] memory: tegra20-emc: replace DEFINE_SIMPLE_ATTRIBUTE
- with DEFINE_DEBUGFS_ATTRIBUTE
-Message-ID: <Y2EIblbX0eDgpJ35@orome>
-References: <20221101081611.8179-1-liubo03@inspur.com>
+        Tue, 1 Nov 2022 07:56:13 -0400
+Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3173D6242;
+        Tue,  1 Nov 2022 04:56:12 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.54])
+        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N1pLj3y16zJnLQ;
+        Tue,  1 Nov 2022 19:53:17 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 1 Nov 2022 19:56:10 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 1 Nov 2022 19:56:10 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <netfilter-devel@vger.kernel.org>,
+        <coreteam@netfilter.org>, <netdev@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+CC:     <pablo@netfilter.org>, <kadlec@netfilter.org>, <fw@strlen.de>,
+        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <ast@kernel.org>, <lorenzo@kernel.org>,
+        <john.fastabend@gmail.com>, <chenzhongjin@huawei.com>
+Subject: [PATCH net v2] netfilter: nf_nat: Fix possible memory leak in nf_nat_init()
+Date:   Tue, 1 Nov 2022 19:52:52 +0800
+Message-ID: <20221101115252.17340-1-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-        protocol="application/pgp-signature"; boundary="/qX+lKIUA3ZU/Gtn"
-Content-Disposition: inline
-In-Reply-To: <20221101081611.8179-1-liubo03@inspur.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+In nf_nat_init(), register_nf_nat_bpf() can fail and return directly
+without any error handling.
+Then nf_nat_bysource will leak and registering of &nat_net_ops,
+&follow_master_nat and nf_nat_hook won't be reverted.
 
---/qX+lKIUA3ZU/Gtn
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+This leaves wild ops in linkedlists and when another module tries to
+call register_pernet_operations() or nf_ct_helper_expectfn_register()
+it triggers page fault:
 
-On Tue, Nov 01, 2022 at 04:16:11AM -0400, Bo Liu wrote:
-> Fix the following coccicheck warning:
->  drivers/memory/tegra/tegra20-emc.c:902:0-23: WARNING:
->   tegra_emc_debug_max_rate_fops should be defined with DEFINE_DEBUGFS_ATT=
-RIBUTE
->  drivers/memory/tegra/tegra20-emc.c:872:0-23: WARNING:
->   tegra_emc_debug_min_rate_fops should be defined with DEFINE_DEBUGFS_ATT=
-RIBUTE
->=20
-> Signed-off-by: Bo Liu <liubo03@inspur.com>
-> ---
->  drivers/memory/tegra/tegra20-emc.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
+ BUG: unable to handle page fault for address: fffffbfff81b964c
+ RIP: 0010:register_pernet_operations+0x1b9/0x5f0
+ Call Trace:
+ <TASK>
+  register_pernet_subsys+0x29/0x40
+  ebtables_init+0x58/0x1000 [ebtables]
+  ...
 
-This seems incomplete: the rationale in that debugfs cocci script says
-that DEFINE_DEBUGFS_ATTRIBUTE + debugfs_create_file_unsafe() is the
-pattern to use vs. the less efficient DEFINE_SIMPLE_ATTRIBUTE +
-debugfs_create_file(). So this patch should probably use the unsafe
-function variant at the same time to take full advantage.
+Fixes: 820dc0523e05 ("net: netfilter: move bpf_ct_set_nat_info kfunc in nf_nat_bpf.c")
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+---
+Also revert the operation for &follow_master_nat and nf_nat_hook,
+then slightly fix commit msg for it.
+---
+ net/netfilter/nf_nat_core.c | 10 +++++++++-
+ 1 file changed, 9 insertions(+), 1 deletion(-)
 
-Thierry
+diff --git a/net/netfilter/nf_nat_core.c b/net/netfilter/nf_nat_core.c
+index 18319a6e6806..47aa67abd531 100644
+--- a/net/netfilter/nf_nat_core.c
++++ b/net/netfilter/nf_nat_core.c
+@@ -1152,7 +1152,15 @@ static int __init nf_nat_init(void)
+ 	WARN_ON(nf_nat_hook != NULL);
+ 	RCU_INIT_POINTER(nf_nat_hook, &nat_hook);
+ 
+-	return register_nf_nat_bpf();
++	ret = register_nf_nat_bpf();
++	if (ret < 0) {
++		RCU_INIT_POINTER(nf_nat_hook, NULL);
++		nf_ct_helper_expectfn_unregister(&follow_master_nat);
++		synchronize_net();
++		unregister_pernet_subsys(&nat_net_ops);
++		kvfree(nf_nat_bysource);
++	}
++	return ret;
+ }
+ 
+ static void __exit nf_nat_cleanup(void)
+-- 
+2.17.1
 
->=20
-> diff --git a/drivers/memory/tegra/tegra20-emc.c b/drivers/memory/tegra/te=
-gra20-emc.c
-> index bd4e37b6552d..c2b4caccfae9 100644
-> --- a/drivers/memory/tegra/tegra20-emc.c
-> +++ b/drivers/memory/tegra/tegra20-emc.c
-> @@ -869,7 +869,7 @@ static int tegra_emc_debug_min_rate_set(void *data, u=
-64 rate)
->  	return 0;
->  }
-> =20
-> -DEFINE_SIMPLE_ATTRIBUTE(tegra_emc_debug_min_rate_fops,
-> +DEFINE_DEBUGFS_ATTRIBUTE(tegra_emc_debug_min_rate_fops,
->  			tegra_emc_debug_min_rate_get,
->  			tegra_emc_debug_min_rate_set, "%llu\n");
-> =20
-> @@ -899,7 +899,7 @@ static int tegra_emc_debug_max_rate_set(void *data, u=
-64 rate)
->  	return 0;
->  }
-> =20
-> -DEFINE_SIMPLE_ATTRIBUTE(tegra_emc_debug_max_rate_fops,
-> +DEFINE_DEBUGFS_ATTRIBUTE(tegra_emc_debug_max_rate_fops,
->  			tegra_emc_debug_max_rate_get,
->  			tegra_emc_debug_max_rate_set, "%llu\n");
-> =20
-> --=20
-> 2.27.0
->=20
-
---/qX+lKIUA3ZU/Gtn
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCAAdFiEEiOrDCAFJzPfAjcif3SOs138+s6EFAmNhCGwACgkQ3SOs138+
-s6EUSxAAlVXhq5ZD2hDdAO5/Hp6yGsNzcysyl6Jk1WAJnNdEdyfAGgLA0UeNKwDc
-WnLcPprwrRMstAAydSMqN/Ula2lmWMB0GUJOazoK1mzHezU56ERmrechuax6ttcG
-yoqdQWSGEQvSo/ufUPhX93EM9S3B8N6UO5eGlwZaXBMAA60ow1YiyJZhZGYf3yRO
-+2Xi3yVxrmctfkWyh4z/C7mJX2k2tT13AWK2hucggbL9SjxZNlkjMP88bhZd99TI
-eeGhzYGn752RS54/Km73Pzi7dKRuLfp83rQ6fWr9tDzifaHPUZL8s51Ud9h3xNhU
-p+JEizKubblvp31MnukXp5xlCGg8WDCOj1tZ5Apt6x8zhjyppWJfpeAr6GgpJyTo
-GsqkuTXBwEZ912VHlB6S2AfEDUsBAtCEzuF9pqPN0Vub+gsH17o8df/hngQco8Ik
-fXYdVoo0loIwsv0Uhcp1pP7NanhxaWCc5xw8qGiurR3fLkiNn2XreFlpozY1eeRg
-kBV+CmQLU/cSpe7z2q1DeuisTs8tj2Yg7issW0wC7DEnbGAp3h4oJ08BNe2BrPKb
-QeBFc1fqCE9uO72oJNvWOHdjNc57IUgSxci9teEVFrlPgUVKfRKgyOhMKrsabYUW
-WUywKwOcaDXMSzVpNJL1YnjMKij8/qfGnlVi2AQAHplN4aFD66I=
-=IsQ0
------END PGP SIGNATURE-----
-
---/qX+lKIUA3ZU/Gtn--
