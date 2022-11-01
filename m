@@ -2,37 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 456D16153ED
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 22:15:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BB796153E9
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 22:15:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230423AbiKAVPx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 17:15:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33774 "EHLO
+        id S230397AbiKAVPq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 17:15:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230301AbiKAVP1 (ORCPT
+        with ESMTP id S230303AbiKAVP2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 17:15:27 -0400
+        Tue, 1 Nov 2022 17:15:28 -0400
 Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 428A21DDF7
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 14:15:11 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A51341DDF2
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 14:15:12 -0700 (PDT)
 Received: from pop-os.home ([86.243.100.34])
         by smtp.orange.fr with ESMTPA
-        id pyanoKD2rsfCIpybFoWfIh; Tue, 01 Nov 2022 22:15:10 +0100
+        id pyanoKD2rsfCIpybHoWfIs; Tue, 01 Nov 2022 22:15:11 +0100
 X-ME-Helo: pop-os.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 01 Nov 2022 22:15:10 +0100
+X-ME-Date: Tue, 01 Nov 2022 22:15:11 +0100
 X-ME-IP: 86.243.100.34
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Christoph Hellwig <hch@lst.de>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-nvme@lists.infradead.org
-Subject: [PATCH 06/30] nvme: Use kstrtobool() instead of strtobool()
-Date:   Tue,  1 Nov 2022 22:13:54 +0100
-Message-Id: <2e8d7f2f3cb754982f5fe99f2e13cf72db9d6dba.1667336095.git.christophe.jaillet@wanadoo.fr>
+        linux-usb@vger.kernel.org
+Subject: [PATCH 07/30] usb: core: Use kstrtobool() instead of strtobool()
+Date:   Tue,  1 Nov 2022 22:13:55 +0100
+Message-Id: <f01ef2ddaf12a6412127611617786adc1234e0b4.1667336095.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
 References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
@@ -67,115 +64,70 @@ at [1].
 
 [1]: https://lore.kernel.org/all/cover.1667336095.git.christophe.jaillet@wanadoo.fr/
 ---
- drivers/nvme/host/pci.c        |  3 ++-
- drivers/nvme/target/configfs.c | 17 +++++++++--------
- 2 files changed, 11 insertions(+), 9 deletions(-)
+ drivers/usb/core/port.c  | 3 ++-
+ drivers/usb/core/sysfs.c | 7 ++++---
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/nvme/host/pci.c b/drivers/nvme/host/pci.c
-index 5f1d71ac0086..7c83dfd1bca6 100644
---- a/drivers/nvme/host/pci.c
-+++ b/drivers/nvme/host/pci.c
-@@ -15,6 +15,7 @@
- #include <linux/init.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
-+#include <linux/kstrtox.h>
- #include <linux/memremap.h>
- #include <linux/mm.h>
- #include <linux/module.h>
-@@ -2186,7 +2187,7 @@ static ssize_t hmb_store(struct device *dev, struct device_attribute *attr,
- 	bool new;
- 	int ret;
- 
--	if (strtobool(buf, &new) < 0)
-+	if (kstrtobool(buf, &new) < 0)
- 		return -EINVAL;
- 
- 	if (new == ndev->hmb)
-diff --git a/drivers/nvme/target/configfs.c b/drivers/nvme/target/configfs.c
-index 9443ee1d4ae3..3eb8bdd4d464 100644
---- a/drivers/nvme/target/configfs.c
-+++ b/drivers/nvme/target/configfs.c
-@@ -4,6 +4,7 @@
-  * Copyright (c) 2015-2016 HGST, a Western Digital Company.
+diff --git a/drivers/usb/core/port.c b/drivers/usb/core/port.c
+index 38c1a4f4fdea..015204fc67a1 100644
+--- a/drivers/usb/core/port.c
++++ b/drivers/usb/core/port.c
+@@ -7,6 +7,7 @@
+  * Author: Lan Tianyu <tianyu.lan@intel.com>
   */
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
+ 
 +#include <linux/kstrtox.h>
- #include <linux/kernel.h>
- #include <linux/module.h>
  #include <linux/slab.h>
-@@ -267,7 +268,7 @@ static ssize_t nvmet_param_pi_enable_store(struct config_item *item,
- 	struct nvmet_port *port = to_nvmet_port(item);
+ #include <linux/pm_qos.h>
+ #include <linux/component.h>
+@@ -63,7 +64,7 @@ static ssize_t disable_store(struct device *dev, struct device_attribute *attr,
+ 	bool disabled;
+ 	int rc;
+ 
+-	rc = strtobool(buf, &disabled);
++	rc = kstrtobool(buf, &disabled);
+ 	if (rc)
+ 		return rc;
+ 
+diff --git a/drivers/usb/core/sysfs.c b/drivers/usb/core/sysfs.c
+index 631574718d8a..8217032dfb85 100644
+--- a/drivers/usb/core/sysfs.c
++++ b/drivers/usb/core/sysfs.c
+@@ -13,6 +13,7 @@
+ 
+ 
+ #include <linux/kernel.h>
++#include <linux/kstrtox.h>
+ #include <linux/string.h>
+ #include <linux/usb.h>
+ #include <linux/usb/hcd.h>
+@@ -505,7 +506,7 @@ static ssize_t usb2_hardware_lpm_store(struct device *dev,
+ 	if (ret < 0)
+ 		return -EINTR;
+ 
+-	ret = strtobool(buf, &value);
++	ret = kstrtobool(buf, &value);
+ 
+ 	if (!ret) {
+ 		udev->usb2_hw_lpm_allowed = value;
+@@ -975,7 +976,7 @@ static ssize_t interface_authorized_default_store(struct device *dev,
+ 	int rc = count;
  	bool val;
  
--	if (strtobool(page, &val))
-+	if (kstrtobool(page, &val))
+-	if (strtobool(buf, &val) != 0)
++	if (kstrtobool(buf, &val) != 0)
  		return -EINVAL;
  
- 	if (nvmet_is_port_enabled(port, __func__))
-@@ -532,7 +533,7 @@ static ssize_t nvmet_ns_enable_store(struct config_item *item,
- 	bool enable;
- 	int ret = 0;
- 
--	if (strtobool(page, &enable))
-+	if (kstrtobool(page, &enable))
- 		return -EINVAL;
- 
- 	if (enable)
-@@ -556,7 +557,7 @@ static ssize_t nvmet_ns_buffered_io_store(struct config_item *item,
- 	struct nvmet_ns *ns = to_nvmet_ns(item);
+ 	if (val)
+@@ -1176,7 +1177,7 @@ static ssize_t interface_authorized_store(struct device *dev,
+ 	struct usb_interface *intf = to_usb_interface(dev);
  	bool val;
  
--	if (strtobool(page, &val))
-+	if (kstrtobool(page, &val))
+-	if (strtobool(buf, &val) != 0)
++	if (kstrtobool(buf, &val) != 0)
  		return -EINVAL;
  
- 	mutex_lock(&ns->subsys->lock);
-@@ -579,7 +580,7 @@ static ssize_t nvmet_ns_revalidate_size_store(struct config_item *item,
- 	struct nvmet_ns *ns = to_nvmet_ns(item);
- 	bool val;
- 
--	if (strtobool(page, &val))
-+	if (kstrtobool(page, &val))
- 		return -EINVAL;
- 
- 	if (!val)
-@@ -728,7 +729,7 @@ static ssize_t nvmet_passthru_enable_store(struct config_item *item,
- 	bool enable;
- 	int ret = 0;
- 
--	if (strtobool(page, &enable))
-+	if (kstrtobool(page, &enable))
- 		return -EINVAL;
- 
- 	if (enable)
-@@ -995,7 +996,7 @@ static ssize_t nvmet_subsys_attr_allow_any_host_store(struct config_item *item,
- 	bool allow_any_host;
- 	int ret = 0;
- 
--	if (strtobool(page, &allow_any_host))
-+	if (kstrtobool(page, &allow_any_host))
- 		return -EINVAL;
- 
- 	down_write(&nvmet_config_sem);
-@@ -1272,7 +1273,7 @@ static ssize_t nvmet_subsys_attr_pi_enable_store(struct config_item *item,
- 	struct nvmet_subsys *subsys = to_subsys(item);
- 	bool pi_enable;
- 
--	if (strtobool(page, &pi_enable))
-+	if (kstrtobool(page, &pi_enable))
- 		return -EINVAL;
- 
- 	subsys->pi_support = pi_enable;
-@@ -1392,7 +1393,7 @@ static ssize_t nvmet_referral_enable_store(struct config_item *item,
- 	struct nvmet_port *port = to_nvmet_port(item);
- 	bool enable;
- 
--	if (strtobool(page, &enable))
-+	if (kstrtobool(page, &enable))
- 		goto inval;
- 
- 	if (enable)
+ 	if (val)
 -- 
 2.34.1
 
