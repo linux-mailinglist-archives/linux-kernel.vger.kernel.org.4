@@ -2,102 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8207E614315
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 03:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 50D5A614312
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 03:12:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiKACMM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 22:12:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54182 "EHLO
+        id S229542AbiKACME (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 22:12:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229527AbiKACMI (ORCPT
+        with ESMTP id S229574AbiKACMC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 22:12:08 -0400
-Received: from m12-17.163.com (m12-17.163.com [220.181.12.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D12B31741A;
-        Mon, 31 Oct 2022 19:12:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
-        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=7JpQD
-        TRO14UjkY6Gjl6llkqWx+hpMjtf/mA9QfbxVYo=; b=NEYZvPs+lnWZj6E/h2SOM
-        jjrc0sT35QhVLoYtD4SzoekZsYv+QWsV/1SIHFxMHp5du2U8iE+OXO75LMhr3EE+
-        ON8H3bkahsaNIwo8heXSR+BTRB/oM0lzwFCVLLXutG8taR+0cFX5X5wEgmKokDDr
-        QAnkS8hOaXom5q05pkah9k=
-Received: from jbd-ThinkPad-X1-Nano-Gen-1.. (unknown [223.104.68.52])
-        by smtp13 (Coremail) with SMTP id EcCowABHzI85gGBjaxd2mw--.40980S2;
-        Tue, 01 Nov 2022 10:11:07 +0800 (CST)
-From:   Slark Xiao <slark_xiao@163.com>
-To:     mani@kernel.org, quic_hemantk@quicinc.com, bhelgaas@google.com,
-        gregkh@linuxfoundation.org, loic.poulain@linaro.org
-Cc:     dnlplm@gmail.com, yonglin.tan@outlook.com, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, Slark Xiao <slark_xiao@163.com>
-Subject: [PATCH v3] PCI: Add vendor ID for QUECTEL
-Date:   Tue,  1 Nov 2022 10:10:52 +0800
-Message-Id: <20221101021052.7532-1-slark_xiao@163.com>
-X-Mailer: git-send-email 2.34.1
+        Mon, 31 Oct 2022 22:12:02 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3570D2D5
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 19:12:01 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id k22so12279484pfd.3
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 19:12:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eLIgCkgfgn5iTxPM1gVk+h8esf5par019LyioMO/CLQ=;
+        b=gU2fp1alF/CfGOz27zUV1tjPYcplNa+O+KfQ2mlTKNBOYkbaz2YHEWSbyw9BTJ1iB9
+         CXJmh50YXtArdV/k5JEmRpQT7DHUB13lbMbIEtMBtOo+wtF6Y1gfdeeoGWJBl62TkAzQ
+         BEfh7yEbZSKS008pEA1eFifU/N7E7UzTdJM7X4nRvegykLKHnXQ+jVyGFPsgg0Ulhl9Q
+         ox24q4Ks2nKRUU2/XPksxf2/D9e6nIWtubBmOjYa3dURJXgXRmFaIpH8cglg/K2hIxIl
+         xX9QGIkiqZjks4prwAhu1OqO7bIYQ0E0+sIiXC75Mn9QhPJTVFgtkV1g77gONuYDTja9
+         vpUQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eLIgCkgfgn5iTxPM1gVk+h8esf5par019LyioMO/CLQ=;
+        b=n345LyFnwrTm7DMfFrDm1Bqe4eP9m/9zeJUD6XDczis73d0GoFICWqhzpKqGR7ZDPN
+         0sX7sdh3kVInlW3/4gZ/8toHR+u5jrPNgJJEfdumO7hY/sUc41Bj7efneHSTZcTp6ohh
+         E8aNGIJW+mdOVeep2BJSo3z4Uts4Sg7iqO/ywRZYA4CQ50S6Nl4ATngqSvM43xurrg00
+         1tmo5dtlLh/rBVqneUjfmbleJjLDdle1TYYAygxX02l1Cs3FozPibJ4YBq9yHkhdbVxA
+         Vvozxu/iYM0y779XeiJ1CS+vmlAXW1UyID2d8jDxatZSOVtJCTGZzH9/uCBWuVtHqsZf
+         ELlQ==
+X-Gm-Message-State: ACrzQf07BbFM1qet4+0srdRe1IpBEUQTznbY4/L6vQykFMAUGCP/FtFU
+        VvHNOOfWDRVuIFAQF6ci484=
+X-Google-Smtp-Source: AMsMyM4mI22oj7nqThjTGVGTfQDqYJrZXRbzCHmvjp5TFLMaXojFrrR1id5r7IJQp6VGKrbltoxdnw==
+X-Received: by 2002:a05:6a02:186:b0:431:25fb:f1fe with SMTP id bj6-20020a056a02018600b0043125fbf1femr15584524pgb.130.1667268721265;
+        Mon, 31 Oct 2022 19:12:01 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-90.three.co.id. [180.214.232.90])
+        by smtp.gmail.com with ESMTPSA id 11-20020a63134b000000b0043ae1797e2bsm4744655pgt.63.2022.10.31.19.11.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Oct 2022 19:12:00 -0700 (PDT)
+Message-ID: <5a61ae6a-8a16-8abb-e718-895c41e2e7a8@gmail.com>
+Date:   Tue, 1 Nov 2022 09:11:54 +0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: EcCowABHzI85gGBjaxd2mw--.40980S2
-X-Coremail-Antispam: 1Uf129KBjvJXoW7KrWDWr1xCw1kZw47WF1rZwb_yoW8trWrpF
-        s09ryvvF4qqrWUtw1kK3ykXF98ZanxCF9FkFyagw4FgFsFya1Fqr9FvrWYyryagFWvqF4a
-        qF1DurZ8G3WqyF7anT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEZXOZUUUUU=
-X-Originating-IP: [223.104.68.52]
-X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/1tbiRxusZFc7ZI139AAAsS
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] drm/nouveau: Add support to control backlight using
+ bl_power for nva3.
+To:     antoniospg <antoniospg100@gmail.com>, linux-kernel@vger.kernel.org
+Cc:     sam@ravnborg.org, Ben Skeggs <bskeggs@redhat.com>,
+        Karol Herbst <kherbst@redhat.com>,
+        Lyude Paul <lyude@redhat.com>, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org, nouveau@lists.freedesktop.org
+References: <20221029184851.25340-1-antoniospg100@gmail.com>
+ <20221031163211.13228-1-antoniospg100@gmail.com>
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20221031163211.13228-1-antoniospg100@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-n MHI driver, there are some companies' product still do not have their
-own PCI vendor macro. So we add it here to make the code neat. Ref ID
-could be found in link https://pcisig.com/membership/member-companies.
+On 10/31/22 23:32, antoniospg wrote:
+> Summary:
+> 
+> * Add support to turn on/off backlight when changing values in bl_power
+>   file. This is achieved by using function backlight_get_brightness()
+>   in nva3_set_intensity to get current brightness.
+> 
 
-Signed-off-by: Slark Xiao <slark_xiao@163.com>
----
-v3: Separate different vendors into different patch.
+This is [PATCH v2], right? If so, next time please pass -v <version
+number> to git-format-patch(1).
 
-v2: Update vendor ID to the right location sorted by numeric value.
----
- drivers/bus/mhi/host/pci_generic.c | 6 +++---
- include/linux/pci_ids.h            | 2 ++
- 2 files changed, 5 insertions(+), 3 deletions(-)
+Also, just say the prose without using bullet list. "Summary:" line
+is also redundant. And again, please describe why this change be made.
 
-diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
-index caa4ce28cf9e..81ae9c49ce2a 100644
---- a/drivers/bus/mhi/host/pci_generic.c
-+++ b/drivers/bus/mhi/host/pci_generic.c
-@@ -555,11 +555,11 @@ static const struct pci_device_id mhi_pci_id_table[] = {
- 		.driver_data = (kernel_ulong_t) &mhi_telit_fn990_info },
- 	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0308),
- 		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx65_info },
--	{ PCI_DEVICE(0x1eac, 0x1001), /* EM120R-GL (sdx24) */
-+	{ PCI_DEVICE(PCI_VENDOR_ID_QUECTEL, 0x1001), /* EM120R-GL (sdx24) */
- 		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
--	{ PCI_DEVICE(0x1eac, 0x1002), /* EM160R-GL (sdx24) */
-+	{ PCI_DEVICE(PCI_VENDOR_ID_QUECTEL, 0x1002), /* EM160R-GL (sdx24) */
- 		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
--	{ PCI_DEVICE(0x1eac, 0x2001), /* EM120R-GL for FCCL (sdx24) */
-+	{ PCI_DEVICE(PCI_VENDOR_ID_QUECTEL, 0x2001), /* EM120R-GL for FCCL (sdx24) */
- 		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
- 	/* T99W175 (sdx55), Both for eSIM and Non-eSIM */
- 	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0ab),
-diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-index b362d90eb9b0..3c91461bcfe4 100644
---- a/include/linux/pci_ids.h
-+++ b/include/linux/pci_ids.h
-@@ -2585,6 +2585,8 @@
- #define PCI_VENDOR_ID_TEKRAM		0x1de1
- #define PCI_DEVICE_ID_TEKRAM_DC290	0xdc29
- 
-+#define PCI_VENDOR_ID_QUECTEL		0x1eac
-+
- #define PCI_VENDOR_ID_TEHUTI		0x1fc9
- #define PCI_DEVICE_ID_TEHUTI_3009	0x3009
- #define PCI_DEVICE_ID_TEHUTI_3010	0x3010
+> Test plan:
+> 
+> * Turn off:
+> echo 1 > /sys/class/backlight/nv_backlight/bl_power
+> 
+> * Turn on:
+> echo 0 > /sys/class/backlight/nv_backlight/bl_power
+> 
+
+Shouldn't "test plan" above be documented in Documentation/ instead?
+
+Last but not least, is "antoniospg" your real, legal name?
+
+Thanks.
+
 -- 
-2.34.1
+An old man doll... just what I always wanted! - Clara
 
