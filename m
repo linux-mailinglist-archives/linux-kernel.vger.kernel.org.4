@@ -2,110 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2976F614B08
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:45:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A91AD614B0C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:46:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbiKAMp1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 08:45:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59958 "EHLO
+        id S230294AbiKAMqB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 08:46:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230295AbiKAMpY (ORCPT
+        with ESMTP id S229471AbiKAMp6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 08:45:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7109A1AF1A;
-        Tue,  1 Nov 2022 05:45:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 1398AB81C9C;
-        Tue,  1 Nov 2022 12:45:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B217C43470;
-        Tue,  1 Nov 2022 12:45:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667306720;
-        bh=pB6J1z4n/eqy93yhnvL7eDVaMSLRXXGitapDfJcOOyQ=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=gw0aZkRWhB1C2HhDgK3atKN/2j31j7NpjyvhbxElBXIA+anT9eTN+Dj3E6T0qOGKW
-         V0Jbcb/UdRdxoudrb0i4bVNGg1aQV1827h55DrMhVQz9CVHOfF5YKQgjuM75ZhTJmu
-         dHiz9wvXQ/+Udci6NFxrVzEWVfJmhDpJE/fu7055soKnDEtZdLqW/thVHik3dhMiUU
-         ppMbF8SS4/PgP9h+E48yqi89E4anPBnSTPe0u8B9pamD6kWnm/YHli443BDcOBRCSf
-         wXInrINxondGetTLxCbVFJ/TrjU/aJK69D+co9Qoj9/OmTY0GfOrMPmjP3lJV6vire
-         aFRvfWs/5WBpA==
-Date:   Tue, 1 Nov 2022 13:45:17 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc:     linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>,
-        Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 2/2] i2c: npcm7xx: Annotate register field definitions
- with longer names
-Message-ID: <Y2EU3aLbwfq8wXUv@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        linux-i2c@vger.kernel.org, openbmc@lists.ozlabs.org,
-        Avi Fishman <avifishman70@gmail.com>,
-        Tomer Maimon <tmaimon77@gmail.com>,
-        Tali Perry <tali.perry1@gmail.com>,
-        Patrick Venture <venture@google.com>, Nancy Yuen <yuenn@google.com>,
-        Benjamin Fair <benjaminfair@google.com>,
-        linux-kernel@vger.kernel.org
-References: <20221008125924.1220203-1-j.neuschaefer@gmx.net>
- <20221008125924.1220203-2-j.neuschaefer@gmx.net>
+        Tue, 1 Nov 2022 08:45:58 -0400
+Received: from mail-pg1-x535.google.com (mail-pg1-x535.google.com [IPv6:2607:f8b0:4864:20::535])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76E2A192BC;
+        Tue,  1 Nov 2022 05:45:58 -0700 (PDT)
+Received: by mail-pg1-x535.google.com with SMTP id 78so13292365pgb.13;
+        Tue, 01 Nov 2022 05:45:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lrG+YXaUGAscfFFfn+JVBJvhu3xyIhC/RE4Ontt4Bn8=;
+        b=X5FvDNq+UEDBiGr4dMhgnutQKwbuvBz1+LajQr9xTClsadOf/VNuAKXKgZ504MocjN
+         f0O1aY683/QyRDtBAyCxBgVI8SpDKwcta9V3TMnls6+vgoiBBTyL/WpXWiHAKRF5q09C
+         WgAB7WqUyen7eW0Ynq1ko+qJfBciJ0dOfG1HMw6+JZ3EZn2uRnM3YHBOAc8deYvnvPRN
+         lJMtT4RjbV98ULwIbQPeWdP1Rbh212vmbKdlM5BTufiKBiIS33DP+g3vw65zp0f+xLDA
+         P8UfZr3y7KiPPxZ8RYqz12A4mxz0/7OGoW/G6OJPcWBmIwgexnDEtDziSZNtBxJiew6R
+         0JDA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lrG+YXaUGAscfFFfn+JVBJvhu3xyIhC/RE4Ontt4Bn8=;
+        b=0UuWLUqwYGQQpivvdKopvKizI/VJ3LEXUxzO6T2G4IqIEtI4Aho8rhVluwnj7GPRER
+         tS2HvVgO/OY5LrJL75AI1/ki2bybnC5dGG8z5ZFBR3tWzPfG8WdvClJkbBFUlfYx05re
+         lRbsxOpRMnogdFEeYwr+NNzbPPZ1hkZ0fURpiyI0puCRFH8G1QbZkR4LPtgEpfNo/hqk
+         5KhSKj6ne8z9NPWeRSRoYPPv00NDWo6WKeyjIP0DvIXro4O0E6JVeMEokSW8vvqL0Gnz
+         0pzewvioVxAGeW4DX3k55yR8f39NR3XYVVmM2t1C1d4v+n42zJceoWdF6vFk26RRuJM7
+         05dA==
+X-Gm-Message-State: ACrzQf3gVBrDjQc3pjaofjIQO2faeroViJUJdNHezyv1bUgvhiPjaSu5
+        Co/maJzD/hNm8ZozgzqKWPc=
+X-Google-Smtp-Source: AMsMyM4HzgkWxuPH9DkJZ5EmFj0kWanp79esgEtSFYJJkil56qYRzaD6XGNaQ2HBrhCykiTV3g0fAw==
+X-Received: by 2002:aa7:818f:0:b0:562:dc99:8a84 with SMTP id g15-20020aa7818f000000b00562dc998a84mr19555257pfi.30.1667306757992;
+        Tue, 01 Nov 2022 05:45:57 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-74.three.co.id. [180.214.232.74])
+        by smtp.gmail.com with ESMTPSA id 77-20020a621750000000b0056c2e497ad6sm6606351pfx.93.2022.11.01.05.45.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Nov 2022 05:45:57 -0700 (PDT)
+Message-ID: <55d9baa0-6ab2-63ff-51c1-57f379efff29@gmail.com>
+Date:   Tue, 1 Nov 2022 19:45:54 +0700
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="aC1YO4lQe2I8bgSA"
-Content-Disposition: inline
-In-Reply-To: <20221008125924.1220203-2-j.neuschaefer@gmx.net>
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH -next 1/2] PM: hibernate: fix spelling mistake for
+ annotation
+Content-Language: en-US
+To:     TGSP <tgsp002@gmail.com>, rafael@kernel.org, len.brown@intel.com,
+        pavel@ucw.cz, huanglei@kylinos.cn
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        xiongxin <xiongxin@kylinos.cn>, stable@vger.kernel.org
+References: <20221101022840.1351163-1-tgsp002@gmail.com>
+ <20221101022840.1351163-2-tgsp002@gmail.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <20221101022840.1351163-2-tgsp002@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 11/1/22 09:28, TGSP wrote:
+> From: xiongxin <xiongxin@kylinos.cn>
+> 
+> The actual calculation formula in the code below is:
+> 
+> max_size = (count - (size + PAGES_FOR_IO)) / 2
+> 	    - 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE);
+> 
+> But function comments are written differently, the comment is wrong?
+> 
+> By the way, what exactly do the "/ 2" and "2 *" mean?
+> 
 
---aC1YO4lQe2I8bgSA
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Shouldn't the description above better below triple-dash (just
+before diffstat)?
 
-On Sat, Oct 08, 2022 at 02:59:24PM +0200, Jonathan Neusch=C3=A4fer wrote:
-> To make the code easier to understand, add longer names to the
-> definitions of register fields. These longer names are based on source
-> code published by DELL/AESS for WPCM450, but should apply just as well
-> to NPCM7xx and NPCM8xx.
->=20
-> Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+-- 
+An old man doll... just what I always wanted! - Clara
 
-Applied to for-next, thanks!
-
-
---aC1YO4lQe2I8bgSA
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNhFN0ACgkQFA3kzBSg
-KbYdwxAAhzCz7aYqdzx9y2ld3o6Y/J4cYOFdv5+vTSsCtXyA6iin7uYH6il9PbPW
-YXLk3Mk+QBs+VJ9LUTKgpkz04j0FNC13f1kzUJqN4Tgw3Ao8NPFFTKynE2dmZOoh
-5yJv8FQtJcXno2tU7CM38Wc9Ns9jA/UtyLXTN3rAvIUBF4enLGDncy0dfkQUc8WR
-YdPbMsKzQbmAv6XT+ZBrs+xkIUgVoxM28xY9idRfpcBBVNERF1jTM07ThhAzWmgg
-30gFHQ5i3NHYxcmx+YFiifV9d6CHLVnQh4TcqPiboshRlmpLApIt9Kz2dCLENu5+
-zMhLkTTeGk9qP7/XIgVk5XhReNLqguEa/oiRtA8PctpHsOXAyR5wl/XqTzCiTC8C
-pPq6PAgu9xahbSe0Cp3sBZnbfoL5PU5nKreS9S/ztFpvdTfgTztp/UYF1CEhnqlb
-JEDs6CXIE6SvW8ZLo7fu0MJFGfzfaviOnpWilIYdfc95nmqrzhJ0EzoUOB99hHfb
-sA8BbVysxo0vKLUnaMOMCSLPnUGOahthsw2oXLBVRW2iIkfpREqPEb1HX0nqRdGG
-ynMt0cR04o7ykGuEpuolaZabUm1SHX+IvJG6Ekgzsx17mZvkAJcNRJoflKBHqygV
-nG3JSakxMEJNO6FuZ+ZFOA7WG1bzdlx3JZzOyJGWMuQcotYtGnU=
-=BQ8Z
------END PGP SIGNATURE-----
-
---aC1YO4lQe2I8bgSA--
