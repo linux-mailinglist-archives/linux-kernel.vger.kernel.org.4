@@ -2,49 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9CF461452E
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 08:42:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EFE09614536
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 08:47:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229906AbiKAHl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 03:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54708 "EHLO
+        id S229909AbiKAHrD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 03:47:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58048 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiKAHl4 (ORCPT
+        with ESMTP id S229475AbiKAHrB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 03:41:56 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64FE917073;
-        Tue,  1 Nov 2022 00:41:55 -0700 (PDT)
-Received: from canpemm500009.china.huawei.com (unknown [172.30.72.54])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N1hmB3dVfzHvVh;
-        Tue,  1 Nov 2022 15:41:30 +0800 (CST)
-Received: from [10.67.102.169] (10.67.102.169) by
- canpemm500009.china.huawei.com (7.192.105.203) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 1 Nov 2022 15:41:48 +0800
-CC:     <linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <f.fangjian@huawei.com>,
-        <linus.walleij@linaro.org>, <yangyicong@hisilicon.com>,
-        <robh+dt@kernel.org>, <xuwei5@huawei.com>,
-        <krzysztof.kozlowski+dt@linaro.org>, <robh@kernel.org>
-Subject: Re: [PATCH next v2 1/2] gpio: hisi: Add initial device tree support
-To:     Weilong Chen <chenweilong@huawei.com>
-References: <20221028022453.163186-1-chenweilong@huawei.com>
-From:   Yicong Yang <yangyicong@huawei.com>
-Message-ID: <791619d1-a227-477a-99c6-7ba15b4a28df@huawei.com>
-Date:   Tue, 1 Nov 2022 15:41:48 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.5.1
+        Tue, 1 Nov 2022 03:47:01 -0400
+Received: from mail-vs1-xe30.google.com (mail-vs1-xe30.google.com [IPv6:2607:f8b0:4864:20::e30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC82517E2A;
+        Tue,  1 Nov 2022 00:47:00 -0700 (PDT)
+Received: by mail-vs1-xe30.google.com with SMTP id v129so13228161vsb.3;
+        Tue, 01 Nov 2022 00:47:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=n38GxNNMIxzvhVEdb99MrZWD4bfYUoPuf3+bxVa1LJ8=;
+        b=Or7pBgyk13JDypqslv8KBdimdKih0Ekw5TVaCkYKu0g96J7yOnnUwXOvyw4H0MSaC5
+         cysIl/nktGvmFnt8RYNzs2zM+bqFzGNaZ5paob6DF/d1laX3R6iYcMM4SlMN4onX7EJq
+         KDeZ6noMIiidaqx5b9ZRDpbEbJFrY3+THjK9dLGcu1jxwGwlczM+HNjG0JSsDuKxStkG
+         h+IwtbU2RVejaGZLUtwtIoCgBPFQqWGNMMC2UKwTcO4AssJoZn/4SDYY/QyjUQh+bS7P
+         w0ijuIOuJW3hDODITE06lkekXVxpJyDovA6Zrnghy3KEBC3W85UP6EvKNIOg3bgvBhgx
+         Nbaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=n38GxNNMIxzvhVEdb99MrZWD4bfYUoPuf3+bxVa1LJ8=;
+        b=gw6mvBDFaoFWEETHMPiwcQfEbN1eaksHXdX8XCdUxGIXkrr4q61ngdEwRxejHcJRH+
+         pGWhiub7lUud7QCNvltfGfNojOlfnz7TV7sk+eK2ko1qZ4V8PS56mLELyIVJJtseZFhV
+         gdfRbXsdeL2mUW2YFX4naA92zJRde61i1K0h3TtYdy5PtpPyCV5w83ka/NKFnLYLgunr
+         /qTa7Ot8gAkcObx07P54DnkKA0BmE+1e0HIVnU39ZWFg6aX88P8lGwSm+DZCvbyt1dxl
+         F242JnBE8SqWQcYSZJgkxFmIcPpF7FkH8ydHnCRP/DrNvx+jhRhnt6lgn2ghkEqH/2O/
+         pHcw==
+X-Gm-Message-State: ACrzQf35kvRY0L1RjpoRexzVWKRW9EAJQmqfXzQrws6lVG3BExwibvvz
+        7K8LvsW8JAFALJDTXGPKmziglFuvH4UmIYamIjsOe71Y
+X-Google-Smtp-Source: AMsMyM5RxE2ldSWMOdIh3VJErsRcdBjORX2L6WDF+mHHJW45H/FsEkS5CPNxvrYxNNj36AWnJTQ0gmVMa7/f4nj55fE=
+X-Received: by 2002:a67:c08d:0:b0:3ac:d0e5:719a with SMTP id
+ x13-20020a67c08d000000b003acd0e5719amr3716454vsi.3.1667288819932; Tue, 01 Nov
+ 2022 00:46:59 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <20221028022453.163186-1-chenweilong@huawei.com>
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.102.169]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- canpemm500009.china.huawei.com (7.192.105.203)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <166606025456.13363.3829702374064563472.stgit@donald.themaw.net> <166606036967.13363.9336408133975631967.stgit@donald.themaw.net>
+In-Reply-To: <166606036967.13363.9336408133975631967.stgit@donald.themaw.net>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Tue, 1 Nov 2022 09:46:48 +0200
+Message-ID: <CAOQ4uxjiEbHwT7M1GhPb_GFn-oiuvqwS1aOw7N9N8cu5jam5Yw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] kernfs: dont take i_lock on revalidate
+To:     Ian Kent <raven@themaw.net>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Tejun Heo <tj@kernel.org>, Minchan Kim <minchan@kernel.org>,
+        Eric Sandeen <sandeen@sandeen.net>,
+        Al Viro <viro@zeniv.linux.org.uk>,
+        Rick Lindsley <ricklind@linux.vnet.ibm.com>,
+        David Howells <dhowells@redhat.com>,
+        Miklos Szeredi <miklos@szeredi.hu>,
+        Carlos Maiolino <cmaiolino@redhat.com>,
+        linux-fsdevel <linux-fsdevel@vger.kernel.org>,
+        Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -52,88 +75,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Weilong,
+On Tue, Oct 18, 2022 at 5:58 AM Ian Kent <raven@themaw.net> wrote:
+>
+> In kernfs_dop_revalidate() when the passed in dentry is negative the
+> dentry directory is checked to see if it has changed and if so the
+> negative dentry is discarded so it can refreshed. During this check
+> the dentry inode i_lock is taken to mitigate against a possible
+> concurrent rename.
+>
+> But if it's racing with a rename, becuase the dentry is negative, it
+> can't be the source it must be the target and it must be going to do
+> a d_move() otherwise the rename will return an error.
+>
+> In this case the parent dentry of the target will not change, it will
+> be the same over the d_move(), only the source dentry parent may change
+> so the inode i_lock isn't needed.
 
-On 2022/10/28 10:24, Weilong Chen wrote:
-> Add support for HiSilicon GPIO controller in embedded platform, which
-> boot from devicetree.
-> 
-> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
-> ---
-> Change since v1:
-> - Rename gpio-ascend910 to ascend910-gpio
-> Link: https://lore.kernel.org/lkml/30b95e7b-b902-babc-ea78-a2112c80ec7e@linaro.org/t/#m39e195979c1f42a6327aba009428316607d033e2
-> 
->  drivers/gpio/Kconfig     |  2 +-
->  drivers/gpio/gpio-hisi.c | 15 ++++++++++++++-
->  2 files changed, 15 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/gpio/Kconfig b/drivers/gpio/Kconfig
-> index e034f752e7ce..71a7880af59d 100644
-> --- a/drivers/gpio/Kconfig
-> +++ b/drivers/gpio/Kconfig
-> @@ -310,7 +310,7 @@ config GPIO_GRGPIO
->  
->  config GPIO_HISI
->  	tristate "HiSilicon GPIO controller driver"
-> -	depends on (ARM64 && ACPI) || COMPILE_TEST
-> +	depends on ARM64 || COMPILE_TEST
->  	select GPIO_GENERIC
->  	select GPIOLIB_IRQCHIP
->  	help
-> diff --git a/drivers/gpio/gpio-hisi.c b/drivers/gpio/gpio-hisi.c
-> index 3caabef5c7a2..92cf575f2eab 100644
-> --- a/drivers/gpio/gpio-hisi.c
-> +++ b/drivers/gpio/gpio-hisi.c
-> @@ -1,8 +1,10 @@
->  // SPDX-License-Identifier: GPL-2.0-only
->  /* Copyright (c) 2020 HiSilicon Limited. */
-> +#include <linux/acpi.h>
->  #include <linux/gpio/driver.h>
->  #include <linux/module.h>
->  #include <linux/mod_devicetable.h>
-> +#include <linux/of.h>
->  #include <linux/platform_device.h>
->  #include <linux/property.h>
->  
-> @@ -215,11 +217,21 @@ static void hisi_gpio_init_irq(struct hisi_gpio *hisi_gpio)
->  	hisi_gpio_write_reg(chip, HISI_GPIO_INTCOMB_MASK_WX, 1);
->  }
->  
-> +#ifdef CONFIG_ACPI
->  static const struct acpi_device_id hisi_gpio_acpi_match[] = {
->  	{"HISI0184", 0},
->  	{}
->  };
->  MODULE_DEVICE_TABLE(acpi, hisi_gpio_acpi_match);
-> +#endif
-> +
-> +#ifdef CONFIG_OF
-> +static const struct of_device_id hisi_gpio_dts_match[] = {
-> +	{ .compatible = "hisilicon,ascend910-gpio", },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, hisi_gpio_dts_match);
-> +#endif
->  
->  static void hisi_gpio_get_pdata(struct device *dev,
->  				struct hisi_gpio *hisi_gpio)
-> @@ -310,7 +322,8 @@ static int hisi_gpio_probe(struct platform_device *pdev)
->  static struct platform_driver hisi_gpio_driver = {
->  	.driver		= {
->  		.name	= HISI_GPIO_DRIVER_NAME,
-> -		.acpi_match_table = hisi_gpio_acpi_match,
-> +		.acpi_match_table = ACPI_PTR(hisi_gpio_acpi_match),
-> +		.of_match_table = of_match_ptr(hisi_gpio_dts_match),
+You meant d_lock.
+Same for the commit title.
 
-Andy has some comments about using of ACPI_PTR/of_match_ptr(), I think they also
-apply here. [*]
-
-The patch itself looks good to me.
-
-[*] https://lore.kernel.org/linux-i2c/d96beadb-5693-6c73-8fee-3ac3b4cb9a44@huawei.com/T/#m51adf2c1480a14ca0882784826f3168ddb83bf62
-
->  	},
->  	.probe		= hisi_gpio_probe,
->  };
-> 
+Thanks,
+Amir.
