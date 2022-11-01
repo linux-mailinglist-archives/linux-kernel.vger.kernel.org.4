@@ -2,140 +2,345 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E88E615135
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 19:01:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D1397615134
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 19:01:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbiKASB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 14:01:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52040 "EHLO
+        id S230216AbiKASB2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 14:01:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbiKASBu (ORCPT
+        with ESMTP id S229648AbiKASB0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 14:01:50 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC0813CFD
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 11:01:46 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id d19-20020a056e020c1300b00300b5a12c44so5738269ile.15
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 11:01:46 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Se9qSNnHuLVh7I+jU6VGt/2+DvcgL2MeEAmjO73fbhc=;
-        b=X6wCgkMd6pOhpr5KKRdgn1omfsXcJq+Lf8rHBOA+Tk14m2TNEpMZj4/CiyHO8yrdKr
-         l3dH01avBt1ytTNVykgsaS6XB/LYlT2QNONj2wMeokqEceXNUHfoGAeew/Zd9I4JNNrd
-         21kf5pBknl22R7a+Xu+BghkqW82Aab2aUtvLD4LSHzuxldODOFkDxLseLdH9ttcgETXj
-         AEtwL4SFalKUJgIczXhOZqliOeZTDq93O9O4p0jSFNzrdbU6qxdB2oNU1ffyAppaHnm8
-         cP0E8LGr4qFUyjJJPC1k668G2B9mRpDcm+PpVLzuk/jKAS50jCra1ZanR0tz+Lt0O4jD
-         KYZg==
-X-Gm-Message-State: ACrzQf2cjMM02Ldho/xqLyxxu27zR7suWsBPMD/+0pZBhdRhobnLLuE3
-        +o5Shz6LtUUX/dYXkuacOQMNayV1q4MBsSH8xSBXB4haOo3A
-X-Google-Smtp-Source: AMsMyM74oltutcYOaT45sp5+43cX+untWCqTyBlIpfIvsx0684iGqWWhnSN3zA2IN5YlwVivD5FodzVp3rzKGOE84Oi0ifahNBhN
+        Tue, 1 Nov 2022 14:01:26 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2553611C38;
+        Tue,  1 Nov 2022 11:01:25 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 9E5EA616D7;
+        Tue,  1 Nov 2022 18:01:24 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5DCFC433D7;
+        Tue,  1 Nov 2022 18:01:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667325684;
+        bh=SlHQrX7xe+dDaoxjsjFu3JAbvEWWHPmd5SLSSMrZQ/g=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=uWJGKZy6RSi+Bj59hMk/+I5MXsIDPPYQPfdiVD9YYjeivF930LrG6ypBerIUdMb7X
+         b0i4uMOm1aoHLxeLs25HoTAqPvaJHYeDOp1uv/JZYoVokxKxZSuOEHDL1wcztMTpNK
+         Od8DJiyInPw+Mb0+glti5Asv0LRGkUTSmD2lkVpE=
+Date:   Tue, 1 Nov 2022 19:02:16 +0100
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Elliot Berman <quic_eberman@quicinc.com>
+Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Kalle Valo <kvalo@kernel.org>, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 10/21] gunyah: rsc_mgr: Add resource manager RPC core
+Message-ID: <Y2FfKCKZ3N8rOqcT@kroah.com>
+References: <20221026185846.3983888-1-quic_eberman@quicinc.com>
+ <20221026185846.3983888-11-quic_eberman@quicinc.com>
 MIME-Version: 1.0
-X-Received: by 2002:a02:7a19:0:b0:375:41a7:4fb with SMTP id
- a25-20020a027a19000000b0037541a704fbmr11933892jac.235.1667325705866; Tue, 01
- Nov 2022 11:01:45 -0700 (PDT)
-Date:   Tue, 01 Nov 2022 11:01:45 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000006c563205ec6c8442@google.com>
-Subject: [syzbot] WARNING in attr_data_get_block
-From:   syzbot <syzbot+02b932550da4a4ee1dae@syzkaller.appspotmail.com>
-To:     almaz.alexandrovich@paragon-software.com,
-        linux-kernel@vger.kernel.org, ntfs3@lists.linux.dev,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221026185846.3983888-11-quic_eberman@quicinc.com>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Wed, Oct 26, 2022 at 11:58:35AM -0700, Elliot Berman wrote:
+> The resource manager is a special virtual machine which is always
+> running on a Gunyah system. It provides APIs for creating and destroying
+> VMs, secure memory management, sharing/lending of memory between VMs,
+> and setup of inter-VM communication. Calls to the resource manager are
+> made via message queues.
+> 
+> This patch implements the basic probing and RPC mechanism to make those
+> API calls. Request/response calls can be made with gh_rm_call.
+> Drivers can also register to notifications pushed by RM via
+> gh_rm_register_notifier
+> 
+> Specific API calls that resource manager supports will be implemented in
+> subsequent patches.
+> 
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> ---
+>  MAINTAINERS                    |   2 +-
+>  drivers/virt/gunyah/Kconfig    |  15 +
+>  drivers/virt/gunyah/Makefile   |   3 +
+>  drivers/virt/gunyah/rsc_mgr.c  | 602 +++++++++++++++++++++++++++++++++
+>  drivers/virt/gunyah/rsc_mgr.h  |  34 ++
+>  include/linux/gunyah_rsc_mgr.h |  26 ++
+>  6 files changed, 681 insertions(+), 1 deletion(-)
+>  create mode 100644 drivers/virt/gunyah/rsc_mgr.c
+>  create mode 100644 drivers/virt/gunyah/rsc_mgr.h
+>  create mode 100644 include/linux/gunyah_rsc_mgr.h
+> 
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 586539eadd3b..e072a0d2e553 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -8945,7 +8945,7 @@ F:	Documentation/virt/gunyah/
+>  F:	arch/arm64/gunyah/
+>  F:	drivers/mailbox/gunyah-msgq.c
+>  F:	drivers/virt/gunyah/
+> -F:	include/linux/gunyah.h
+> +F:	include/linux/gunyah*.h
+>  
+>  HABANALABS PCI DRIVER
+>  M:	Oded Gabbay <ogabbay@kernel.org>
+> diff --git a/drivers/virt/gunyah/Kconfig b/drivers/virt/gunyah/Kconfig
+> index 127156a678a6..4de88d80aa7b 100644
+> --- a/drivers/virt/gunyah/Kconfig
+> +++ b/drivers/virt/gunyah/Kconfig
+> @@ -10,3 +10,18 @@ config GUNYAH
+>  
+>  	  Say Y/M here to enable the drivers needed to interact in a Gunyah
+>  	  virtual environment.
+> +
+> +config GUNYAH_RESORUCE_MANAGER
+> +	tristate "Gunyah Resource Manager"
+> +	select MAILBOX
+> +	select GUNYAH_MESSAGE_QUEUES
+> +	depends on GUNYAH
+> +	default y
 
-syzbot found the following issue on:
+You only have "default y" if your machine can not boot without it.
+Please do not add that here.
 
-HEAD commit:    b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=109f875a880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
-dashboard link: https://syzkaller.appspot.com/bug?extid=02b932550da4a4ee1dae
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> +	help
+> +	  The resource manager (RM) is a privileged application VM supporting
+> +	  the Gunyah Hypervisor. Enable this driver to support communicating
+> +	  with Gunyah RM. This is typically required for a VM running under
+> +	  Gunyah wanting to have Gunyah-awareness.
+> +
+> +	  Say Y/M here if unsure.
+> +
+> diff --git a/drivers/virt/gunyah/Makefile b/drivers/virt/gunyah/Makefile
+> index 2ac4ee64b89d..2c18b0a56413 100644
+> --- a/drivers/virt/gunyah/Makefile
+> +++ b/drivers/virt/gunyah/Makefile
+> @@ -1 +1,4 @@
+>  obj-$(CONFIG_GUNYAH) += gunyah.o
+> +
+> +gunyah_rsc_mgr-y += rsc_mgr.o
+> +obj-$(CONFIG_GUNYAH_RESORUCE_MANAGER) += gunyah_rsc_mgr.o
+> diff --git a/drivers/virt/gunyah/rsc_mgr.c b/drivers/virt/gunyah/rsc_mgr.c
+> new file mode 100644
+> index 000000000000..a9fde703cbbe
+> --- /dev/null
+> +++ b/drivers/virt/gunyah/rsc_mgr.c
+> @@ -0,0 +1,602 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/*
+> + * Copyright (c) 2022 Qualcomm Innovation Center, Inc. All rights reserved.
+> + */
+> +
+> +#define pr_fmt(fmt) "gh_rsc_mgr: " fmt
 
-Unfortunately, I don't have any reproducer for this issue yet.
+This is a driver, you should never need this as you should be using the
+dev_*() calls, not pr_*() calls as you always have access to a struct
+device, right?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/24728b72a896/disk-b229b6ca.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/10a3c40c60e1/vmlinux-b229b6ca.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/69f963b02b7e/bzImage-b229b6ca.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+02b932550da4a4ee1dae@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-DEBUG_RWSEMS_WARN_ON(sem->magic != sem): count = 0x100, magic = 0x0, owner = 0xffff88802168d7c1, curr 0xffff88802168d7c0, list not empty
-WARNING: CPU: 0 PID: 32351 at kernel/locking/rwsem.c:1335 __up_read+0x4f5/0x690 kernel/locking/rwsem.c:1335
-Modules linked in:
-CPU: 0 PID: 32351 Comm: syz-executor.1 Not tainted 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-RIP: 0010:__up_read+0x4f5/0x690 kernel/locking/rwsem.c:1335
-Code: c7 e0 78 8d 8a 48 c7 c6 e0 7a 8d 8a 48 8b 54 24 20 48 8b 4c 24 28 4d 89 f8 4c 8b 4c 24 30 31 c0 53 e8 0f 89 e8 ff 48 83 c4 08 <0f> 0b 48 bb 00 00 00 00 00 fc ff df 4c 8b 6c 24 18 e9 ba fb ff ff
-RSP: 0018:ffffc90015c15e80 EFLAGS: 00010292
-RAX: 3a348d4940a5a400 RBX: ffffffff8a8d79e0 RCX: 0000000000040000
-RDX: ffffc90005131000 RSI: 0000000000006bc0 RDI: 0000000000006bc1
-RBP: ffffc90015c15f50 R08: ffffffff816b8dfd R09: fffff52002b82b89
-R10: fffff52002b82b89 R11: 1ffff92002b82b88 R12: ffff8880840cd2c8
-R13: ffff8880840cd2b8 R14: 1ffff11010819a59 R15: ffff88802168d7c1
-FS:  00007f4c6bb8b700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000110f338967 CR3: 00000000345bc000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- attr_data_get_block+0x198/0x2370 fs/ntfs3/attrib.c:901
- ntfs_get_block_vbo+0x310/0xe40 fs/ntfs3/inode.c:564
- do_mpage_readpage+0x970/0x1c50 fs/mpage.c:208
- mpage_readahead+0x210/0x380 fs/mpage.c:361
- read_pages+0x169/0x9c0 mm/readahead.c:161
- page_cache_ra_unbounded+0x703/0x820 mm/readahead.c:270
- page_cache_sync_readahead include/linux/pagemap.h:1213 [inline]
- filemap_get_pages+0x465/0x10d0 mm/filemap.c:2581
- filemap_read+0x3cf/0xea0 mm/filemap.c:2675
- __kernel_read+0x3fc/0x830 fs/read_write.c:428
- integrity_kernel_read+0xac/0xf0 security/integrity/iint.c:199
- ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:485 [inline]
- ima_calc_file_shash security/integrity/ima/ima_crypto.c:516 [inline]
- ima_calc_file_hash+0x178f/0x1ca0 security/integrity/ima/ima_crypto.c:573
- ima_collect_measurement+0x444/0x8c0 security/integrity/ima/ima_api.c:292
- process_measurement+0xf4b/0x1bd0 security/integrity/ima/ima_main.c:337
- ima_file_check+0xd8/0x130 security/integrity/ima/ima_main.c:517
- do_open fs/namei.c:3559 [inline]
- path_openat+0x2642/0x2df0 fs/namei.c:3713
- do_file_open_root+0x339/0x790 fs/namei.c:3765
- file_open_root+0x234/0x290 fs/open.c:1290
- do_handle_open+0x565/0x950 fs/fhandle.c:232
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f4c6ae8b5a9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f4c6bb8b168 EFLAGS: 00000246 ORIG_RAX: 0000000000000130
-RAX: ffffffffffffffda RBX: 00007f4c6afabf80 RCX: 00007f4c6ae8b5a9
-RDX: 0000000000020000 RSI: 0000000020000000 RDI: 0000000000000003
-RBP: 00007f4c6aee67b0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffddae2ed6f R14: 00007f4c6bb8b300 R15: 0000000000022000
- </TASK>
+So you can drop this.
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+> +
+> +#include <linux/of.h>
+> +#include <linux/slab.h>
+> +#include <linux/mutex.h>
+> +#include <linux/sched.h>
+> +#include <linux/gunyah.h>
+> +#include <linux/module.h>
+> +#include <linux/of_irq.h>
+> +#include <linux/kthread.h>
+> +#include <linux/notifier.h>
+> +#include <linux/workqueue.h>
+> +#include <linux/completion.h>
+> +#include <linux/gunyah_rsc_mgr.h>
+> +#include <linux/platform_device.h>
+> +
+> +#include "rsc_mgr.h"
+> +
+> +/* Resource Manager Header */
+> +struct gh_rm_rpc_hdr {
+> +	u8 version : 4, hdr_words : 4;
+> +	u8 type : 2, fragments : 6;
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Ick, that's hard to read.  One variable per line please?
+
+And why the bit packed stuff?  Are you sure this is the way to do this?
+Why not use a bitmask instead?
+
+> +	u16 seq;
+> +	u32 msg_id;
+> +} __packed;
+> +
+> +/* Standard reply header */
+> +struct gh_rm_rpc_reply_hdr {
+> +	struct gh_rm_rpc_hdr rpc_hdr;
+> +	u32 err_code;
+> +} __packed;
+> +
+> +/* RPC Header versions */
+> +#define GH_RM_RPC_HDR_VERSION_ONE	0x1
+> +
+> +/* RPC Header words */
+> +#define GH_RM_RPC_HDR_WORDS		0x2
+> +
+> +/* RPC Message types */
+> +#define GH_RM_RPC_TYPE_CONT		0x0
+> +#define GH_RM_RPC_TYPE_REQ		0x1
+> +#define GH_RM_RPC_TYPE_RPLY		0x2
+> +#define GH_RM_RPC_TYPE_NOTIF		0x3
+> +
+> +#define GH_RM_MAX_NUM_FRAGMENTS		62
+> +
+> +#define GH_RM_MAX_MSG_SIZE	(GH_MSGQ_MAX_MSG_SIZE - sizeof(struct gh_rm_rpc_hdr))
+> +
+> +/**
+> + * struct gh_rm_connection - Represents a complete message from resource manager
+> + * @payload: Combined payload of all the fragments (msg headers stripped off).
+> + * @size: Size of the payload.
+> + * @ret: Linux return code, set in case there was an error processing connection
+> + * @msg_id: Message ID from the header.
+> + * @type: GH_RM_RPC_TYPE_RPLY or GH_RM_RPC_TYPE_NOTIF.
+> + * @num_fragments: total number of fragments expected to be received.
+> + * @fragments_received: fragments received so far.
+> + * @rm_error: For request/reply sequences with standard replies.
+> + * @seq: Sequence ID for the main message.
+> + * @seq_done: Signals caller that the RM reply has been received
+> + */
+> +struct gh_rm_connection {
+> +	void *payload;
+> +	size_t size;
+> +	int ret;
+> +	u32 msg_id;
+> +	u8 type;
+> +
+> +	u8 num_fragments;
+> +	u8 fragments_received;
+> +
+> +	/* only for req/reply sequence */
+> +	u32 rm_error;
+> +	u16 seq;
+> +	struct completion seq_done;
+> +};
+> +
+> +struct gh_rm_notif_complete {
+> +	struct gh_rm_connection *conn;
+> +	struct work_struct work;
+> +};
+> +
+> +struct gh_rsc_mgr {
+> +	struct gunyah_resource tx_ghrsc, rx_ghrsc;
+> +	struct gh_msgq msgq;
+> +	struct mbox_client msgq_client;
+> +	struct gh_rm_connection *active_rx_connection;
+> +	int last_tx_ret;
+> +
+> +	struct idr call_idr;
+> +	struct mutex call_idr_lock;
+> +
+> +	struct mutex send_lock;
+> +
+> +	struct work_struct recv_work;
+> +};
+> +
+> +static struct gh_rsc_mgr *__rsc_mgr;
+
+Sorry, no, you don't get to just limit yourself to one of these.  Please
+make this properly handle any number of "resource managers", static
+variables like this is not ok.
+
+> +SRCU_NOTIFIER_HEAD_STATIC(gh_rm_notifier);
+
+Why do you need a notifier list?
+
+Who will register for this?  For what?  Why?
+
+> +static int gh_rm_drv_probe(struct platform_device *pdev)
+> +{
+> +	struct gh_rsc_mgr *rsc_mgr;
+> +	int ret;
+> +
+> +	rsc_mgr = devm_kzalloc(&pdev->dev, sizeof(*rsc_mgr), GFP_KERNEL);
+> +	if (!rsc_mgr)
+> +		return -ENOMEM;
+> +	platform_set_drvdata(pdev, rsc_mgr);
+> +
+> +	mutex_init(&rsc_mgr->call_idr_lock);
+> +	idr_init(&rsc_mgr->call_idr);
+> +	mutex_init(&rsc_mgr->send_lock);
+> +
+> +	ret = gh_msgq_platform_probe_direction(pdev, GUNYAH_RESOURCE_TYPE_MSGQ_TX, 0,
+> +						&rsc_mgr->tx_ghrsc);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = gh_msgq_platform_probe_direction(pdev, GUNYAH_RESOURCE_TYPE_MSGQ_RX, 1,
+> +						&rsc_mgr->rx_ghrsc);
+> +	if (ret)
+> +		return ret;
+> +
+> +	rsc_mgr->msgq_client.dev = &pdev->dev;
+
+So your client device is the platform device, and not a new bridge
+device that you create instead?  Why?
+
+
+> +	rsc_mgr->msgq_client.tx_block = true;
+> +	rsc_mgr->msgq_client.rx_callback = gh_rm_msgq_rx_data;
+> +	rsc_mgr->msgq_client.tx_done = gh_rm_msgq_tx_done;
+> +
+> +	ret = gh_msgq_init(&pdev->dev, &rsc_mgr->msgq, &rsc_mgr->msgq_client,
+> +				&rsc_mgr->tx_ghrsc, &rsc_mgr->rx_ghrsc);
+> +	if (ret)
+> +		return ret;
+> +
+> +	__rsc_mgr = rsc_mgr;
+> +
+> +	return 0;
+> +}
+> +static struct platform_driver gh_rm_driver = {
+> +	.probe = gh_rm_drv_probe,
+> +	.remove = gh_rm_drv_remove,
+> +	.driver = {
+> +		.name = "gh_rsc_mgr",
+> +		.of_match_table = gh_rm_of_match,
+> +	},
+
+Wait, why is this a platform driver?  This is binding to a real device
+on a real bus, not a random platform description in DT, right?
+
+Or is it controlled by your DT?  I can't figure that out here, sorry.
+
+thanks,
+
+greg k-h
