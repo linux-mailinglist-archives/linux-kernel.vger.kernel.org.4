@@ -2,51 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 715896149C1
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:48:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACAE26149D4
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:49:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbiKALsV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 07:48:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37762 "EHLO
+        id S231202AbiKALtm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 07:49:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231383AbiKALsA (ORCPT
+        with ESMTP id S231560AbiKALtB (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 07:48:00 -0400
-Received: from smtp88.iad3b.emailsrvr.com (smtp88.iad3b.emailsrvr.com [146.20.161.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CCE91BEBD
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 04:40:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mev.co.uk;
-        s=20190130-41we5z8j; t=1667302850;
-        bh=EjPjwQYDzOIO7iyPmE8N1XzAvCG6Jb7pfvn0YGW+PQk=;
-        h=Date:Subject:To:From:From;
-        b=nJDNwFdyOaevjn7/q7qoqtUr1jqGCTw35mz+IsM+JonPTi53aHXiU5Vbs9TEn/O3x
-         gntlA976lZshO3tj6Ram6qvBZNC5VoYZyLpaLUomrcGpC+Y+FF3EPvfOWZ338DNPYm
-         tQc0LXuzqNdkjSHW/kMwj+2u698KE+9ZQbDKdD8Y=
-X-Auth-ID: abbotti@mev.co.uk
-Received: by smtp4.relay.iad3b.emailsrvr.com (Authenticated sender: abbotti-AT-mev.co.uk) with ESMTPSA id B9C24200EC;
-        Tue,  1 Nov 2022 07:40:49 -0400 (EDT)
-Message-ID: <5b8ee99d-2358-39c5-b663-2d1c80353639@mev.co.uk>
-Date:   Tue, 1 Nov 2022 11:40:48 +0000
+        Tue, 1 Nov 2022 07:49:01 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06B64639C;
+        Tue,  1 Nov 2022 04:43:13 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AE956B81CE8;
+        Tue,  1 Nov 2022 11:43:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EABCC433D6;
+        Tue,  1 Nov 2022 11:43:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667302990;
+        bh=JcTrk/RF3JsSWeq8eah3J59uSDdXRqqd/gbzuT/lHpY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=a3mID94cJ3Uf66O/Er1AuJ2n2fP8Juk9Mke++TzbpWqT+GlPVBWScoFqGkUhnOGTE
+         RUxC/6WBn0mEPtil+qH7v9Rq8Q7ajYjGlkio6GdRzM+TSfad1OZ4tnZD8+j1c833Wx
+         OQIXkmKCT8LEAnF7KdpiyL2pC+jNKjukCYvXCJBa2beuQSviG0gi9/6C6WWaL72nKO
+         IkXc5zfDwBG7FVDrmG2OdAPzVXubjFbdSXiTNK28Svlwial8hUHqzojEXRgVRdHEaX
+         r3spBnNvNyoYwAMAcwgRcmD9lwbHttvagFsV5pkgU9DhwdaqqDh7473lCmpeBGPuNd
+         SHKGLDCaLHRYg==
+Date:   Tue, 1 Nov 2022 17:12:58 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Johan Hovold <johan+linaro@kernel.org>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        Hemant Kumar <quic_hemantk@quicinc.com>, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mhi: pci_generic: add support for sc8280xp-crd SDX55
+ variant
+Message-ID: <20221101114258.GB54667@thinkpad>
+References: <20221031083429.18971-1-johan+linaro@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH] comedi: Fix potential memory leak in comedi_init()
-Content-Language: en-GB
-To:     shangxiaojing <shangxiaojing@huawei.com>,
-        Greg KH <gregkh@linuxfoundation.org>
-Cc:     hsweeten@visionengravers.com, zhangxuezhi1@coolpad.com,
-        fmhess@users.sourceforge.net, linux-kernel@vger.kernel.org
-References: <20221101032125.27337-1-shangxiaojing@huawei.com>
- <Y2CkW5EVLiLUoNWh@kroah.com>
- <32c291d7-0e87-ec1f-e2af-28d7f8ca0981@huawei.com>
-From:   Ian Abbott <abbotti@mev.co.uk>
-Organization: MEV Ltd.
-In-Reply-To: <32c291d7-0e87-ec1f-e2af-28d7f8ca0981@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Classification-ID: 24ad161b-985f-4046-9c88-0214b2466521-1-1
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+In-Reply-To: <20221031083429.18971-1-johan+linaro@kernel.org>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -54,83 +56,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/11/2022 06:16, shangxiaojing wrote:
+On Mon, Oct 31, 2022 at 09:34:29AM +0100, Johan Hovold wrote:
+> The SC8280XP Compute Reference Design (CRD) has an on-PCB SDX55 modem
+> which uses MBIM.
 > 
+> The exact channel configuration is not known but the Foxconn SDX55
+> configuration allows the modem to be used so reuse that one for now.
 > 
-> On 2022/11/1 12:45, Greg KH wrote:
->> On Tue, Nov 01, 2022 at 11:21:25AM +0800, Shang XiaoJing wrote:
->>> comedi_init() will goto out_unregister_chrdev_region if cdev_add()
->>> failed, which won't free the resource alloced in kobject_set_name().
->>> Call kfree_const() to free the leaked name before goto
->>> out_unregister_chrdev_region.
->>>
->>> unreferenced object 0xffff8881000fa8c0 (size 8):
->>>    comm "modprobe", pid 239, jiffies 4294905173 (age 51.308s)
->>>    hex dump (first 8 bytes):
->>>      63 6f 6d 65 64 69 00 ff                          comedi..
->>>    backtrace:
->>>      [<000000005f9878f7>] __kmalloc_node_track_caller+0x4c/0x1c0
->>>      [<000000000fd70302>] kstrdup+0x3f/0x70
->>>      [<000000009428bc33>] kstrdup_const+0x46/0x60
->>>      [<00000000ed50d9de>] kvasprintf_const+0xdb/0xf0
->>>      [<00000000b2766964>] kobject_set_name_vargs+0x3c/0xe0
->>>      [<00000000f2424ef7>] kobject_set_name+0x62/0x90
->>>      [<000000005d5a125b>] 0xffffffffa0013098
->>>      [<00000000f331e663>] do_one_initcall+0x7a/0x380
->>>      [<00000000aa7bac96>] do_init_module+0x5c/0x230
->>>      [<000000005fd72335>] load_module+0x227d/0x2420
->>>      [<00000000ad550cf1>] __do_sys_finit_module+0xd5/0x140
->>>      [<00000000069a60c5>] do_syscall_64+0x3f/0x90
->>>      [<00000000c5e0d521>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
->>>
->>> Fixes: ed9eccbe8970 ("Staging: add comedi core")
->>> Signed-off-by: Shang XiaoJing <shangxiaojing@huawei.com>
->>> ---
->>>   drivers/comedi/comedi_fops.c | 5 ++++-
->>>   1 file changed, 4 insertions(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/comedi/comedi_fops.c b/drivers/comedi/comedi_fops.c
->>> index e2114bcf815a..2c508c2cf6f6 100644
->>> --- a/drivers/comedi/comedi_fops.c
->>> +++ b/drivers/comedi/comedi_fops.c
->>> @@ -3379,8 +3379,11 @@ static int __init comedi_init(void)
->>>       retval = cdev_add(&comedi_cdev, MKDEV(COMEDI_MAJOR, 0),
->>>                 COMEDI_NUM_MINORS);
->>> -    if (retval)
->>> +    if (retval) {
->>> +        kfree_const(comedi_cdev.kobj.name);
->>> +        comedi_cdev.kobj.name = NULL;
->>>           goto out_unregister_chrdev_region;
->>> +    }
->>
->> A driver should never have to poke around in the internals of a cdev
->> object like this.  Please fix the cdev core to not need this if
->> cdev_add() fails.
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+>  drivers/bus/mhi/host/pci_generic.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
+> index caa4ce28cf9e..f9f4345d472d 100644
+> --- a/drivers/bus/mhi/host/pci_generic.c
+> +++ b/drivers/bus/mhi/host/pci_generic.c
+> @@ -542,6 +542,9 @@ static const struct mhi_pci_dev_info mhi_telit_fn990_info = {
+>  static const struct pci_device_id mhi_pci_id_table[] = {
+>  	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0304),
+>  		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx24_info },
+> +	/* SC8280XP-CRD (sdx55) */
 
-Or at least there should be a function that can be called to undo the 
-allocations of kobject_set_name().
+Platform device name is not needed.
 
->>
-> Hi,
-> 
-> I had checked all 67 places that used cdev_add(), and only the following 
-> 5 functions set the name before the cdev_add():
-> 
-> 1. comedi_init(), will memleak and will be fixed by this patch.
-> 2. hfi1_cdev_init(), won't memleak.
-> 3. qib_cdev_init(), won't memleak.
-> 4. uio_major_init(), won't memleak.
-> 5. __register_chrdev(), won't memleak.
-> 
-> As the result, I just fix the code in comedi_init(). Should I still fix 
-> the cdev core code, which is free the name in cdev_add() fail path?
+> +	{ PCI_DEVICE_SUB(PCI_VENDOR_ID_QCOM, 0x0306, PCI_VENDOR_ID_QCOM, 0x010c),
 
-I'm stuck trying to work out why hfi1_cdev_init() doesn't have the same 
-problem when cdev_add() returns an error.
+Sub ID looks wierd. Did you test with mhi_qcom_sdx55_info? If it didn't
+work, what was the issue?
+
+Thanks,
+Mani
+
+> +		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx55_info },
+>  	/* EM919x (sdx55), use the same vid:pid as qcom-sdx55m */
+>  	{ PCI_DEVICE_SUB(PCI_VENDOR_ID_QCOM, 0x0306, 0x18d7, 0x0200),
+>  		.driver_data = (kernel_ulong_t) &mhi_sierra_em919x_info },
+> -- 
+> 2.37.3
+> 
+> 
 
 -- 
--=( Ian Abbott <abbotti@mev.co.uk> || MEV Ltd. is a company  )=-
--=( registered in England & Wales.  Regd. number: 02862268.  )=-
--=( Regd. addr.: S11 & 12 Building 67, Europa Business Park, )=-
--=( Bird Hall Lane, STOCKPORT, SK3 0XA, UK. || www.mev.co.uk )=-
-
+மணிவண்ணன் சதாசிவம்
