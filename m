@@ -2,196 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 36938614E84
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 16:42:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0B12614E94
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 16:47:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231367AbiKAPm3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 11:42:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57572 "EHLO
+        id S231432AbiKAPq5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 11:46:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229628AbiKAPm1 (ORCPT
+        with ESMTP id S229576AbiKAPq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 11:42:27 -0400
-Received: from moc6.cz (hosting.moc6.cz [IPv6:2a02:c60:c70:8900::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94AF2BCB1
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 08:42:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=moc6.cz;
-        s=mail20201116; h=In-Reply-To:Message-ID:Subject:Cc:To:From:Date:Reply-To;
-        bh=1fsBVDnm8hy+DctJMMCqY6Ap6gJHi5gvPoChw6Lc/vI=; b=O4uU7lg6MaJiTlT8a9jo1a6TCG
-        xGAheeinRU4BL+6LdBLQWwjxkFxnKn5/MeSGKxrdkWI7SGG0cvs7f7YPFrNgYC5goCdHGqPL8r9B3
-        P8J2ko3FXt9Yo06FWd/buMAv9Qw//BuXYW86bmr38KBcwgMfkt+uYWX9YOwiR1W6cg/envmY2JdOB
-        ihBgAeJG4wjRCFq267AEwyABt3hEgimqPXvnJpK5WOJlCK6jZJusO5YUdcFGFGy5/fwbBW/mkYVYW
-        /ySPAC7GakqNjP44kUDr1sCXKxW5nMdi8JIfpecatl3bOtoauzrHHvvvnQlOiPr0FUhvRwFYGi+lJ
-        oYkVjkMD2QXgwn4IQWhDfpEP8uqUggnQWuIeQ8XTSZfjrmlIqP/kvvJ/7TK+xBQGh1BlZbwZTBvEw
-        NPfT6ywnOQlkKIR+4Hs5PEdPDCsdm8oG2iClqSHqIqQsQCQl31nW2LvFk1O0CJo5UVuo2PjmNAKZL
-        3DyepqrGd0l5iiujlpL/96GzCIRmP8+TozRKZH2VyBL5HfHyc1ymzviCELzZS/aILY8xRcbamWk0I
-        h+DBStifvFIe7WukF+ok0aaYkFKAbpyitnkxcC0h8MhzS0grJ5reVmJDW+AOrgv1W/ViPk7/F8046
-        J2WtmNcYdz7YTvkDett6EW527lCbl/DWWPuGX1x/c=;
-Received: from Debian-exim by moc6.cz with local (Exim 4.94.2)
-        (envelope-from <Debian-exim@moc6.cz>)
-         authenticated: Debian-exim
-        id 1optPB-00119c-O5; Tue, 01 Nov 2022 16:42:21 +0100
-Date:   Tue, 1 Nov 2022 16:42:21 +0100
-From:   Filip Moc <dev@moc6.cz>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Harry Wentland <harry.wentland@amd.com>,
-        Leo Li <sunpeng.li@amd.com>,
-        Rodrigo Siqueira <Rodrigo.Siqueira@amd.com>,
-        David Airlie <airlied@linux.ie>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>, linux-kernel@vger.kernel.org,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>
-Subject: Re: [PATCH] drm/amd/display: add parameter backlight_min
-Message-ID: <Y2E+XUEPbQn2tMt+@moc6.cz>
-References: <Y117XNaSP6/8bH+3@moc6.cz>
- <CADnq5_Muegi+dvmrg5U=Cau_oeXQFjv_h2Pdn_j9AG0mRgE4=g@mail.gmail.com>
+        Tue, 1 Nov 2022 11:46:56 -0400
+Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3092EF5BA
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 08:46:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667317615; x=1698853615;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=JH/9IndlqC0kFmEQVXJIchi6cPTgR0x9pFcVbHHM06c=;
+  b=kguMFbUftObj+bj2iyGztHbaY441sqvSAY0dfdqYwYGZTROcdSp3tyFT
+   CNU9SwlbrnZB3oPMcS/fGlGIp0OtZc67KaSmsb8YhDdbxjJW6OgPLqVgN
+   5C3km9+bRFh8l6YZON0dJJ6rkgjCMq9Yr4TV7TEF4iNSUr/ErosdebFg7
+   9eZuY3O7cVrQbizgFSXmYseM5G8uH8H0w0VNHBDwRlBQvmxROCZTjB3hK
+   tOmwuAX68pi5CO1NNP/h9BGxI0sVHsAodPp657GRKlh4qck4wUOIT7etI
+   2DTmFFKiqHghwjOGSMyYZslyDuaToJvju4X8hrt5sQakJrDicM/r7RLy/
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="373382637"
+X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
+   d="scan'208";a="373382637"
+Received: from fmsmga007.fm.intel.com ([10.253.24.52])
+  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 08:46:54 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="636438929"
+X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
+   d="scan'208";a="636438929"
+Received: from irvmail001.ir.intel.com ([10.43.11.63])
+  by fmsmga007.fm.intel.com with ESMTP; 01 Nov 2022 08:46:51 -0700
+Received: from newjersey.igk.intel.com (newjersey.igk.intel.com [10.102.20.203])
+        by irvmail001.ir.intel.com (8.14.3/8.13.6/MailSET/Hub) with ESMTP id 2A1FknW4015165;
+        Tue, 1 Nov 2022 15:46:50 GMT
+From:   Alexander Lobakin <alexandr.lobakin@intel.com>
+To:     "H. Peter Anvin" <hpa@zytor.com>
+Cc:     Alexander Lobakin <alexandr.lobakin@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Kees Cook <keescook@chromium.org>,
+        Masahiro Yamada <masahiroy@kernel.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] x86/boot: robustify calling startup_{32,64}() from the decompressor code
+Date:   Tue,  1 Nov 2022 16:44:41 +0100
+Message-Id: <20221101154441.976294-1-alexandr.lobakin@intel.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <454A126A-1E27-4A5C-9073-4E72D3D23B5A@zytor.com>
+References: <20221031151047.167288-1-alexandr.lobakin@intel.com> <20221031151047.167288-2-alexandr.lobakin@intel.com> <454A126A-1E27-4A5C-9073-4E72D3D23B5A@zytor.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset=utf-8
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CADnq5_Muegi+dvmrg5U=Cau_oeXQFjv_h2Pdn_j9AG0mRgE4=g@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Alex,
+From: "H. Peter Anvin" <hpa@zytor.com>
+Date: Mon, 31 Oct 2022 13:31:05 -0700
 
-thank you for your response.
+> On October 31, 2022 8:10:46 AM PDT, Alexander Lobakin <alexandr.lobakin@intel.com> wrote:
+> >After commit ce697ccee1a8 ("kbuild: remove head-y syntax"), I
+> >started digging whether x86 is ready from removing this old cruft.
+> >Removing its objects from the list makes the kernel unbootable.
+> >This applies only to bzImage, vmlinux still works correctly.
+> >The reason is that with no strict object order determined by the
+> >linker arguments, not the linker script, startup_64 can be placed
+> >not right at the beginning of the kernel.
+> >Here's vmlinux.map's beginning before removing:
 
-Yes, I have HP ENVY x360 Convertible 13-ay1xxx, and backlight_min=2
-seems to work the best in my case.
+[...]
 
-I added a dmi based quirk table. So far with support only for display 0
-to make it simple. Support for more displays in quirk table can be added
-later if ever needed.
-
-According to [1] HP ENVY x360 Convertible 13-ag0xxx also needs a quirk
-so I'm going to use this to cover both:
-DMI_EXACT_MATCH(DMI_SYS_VENDOR, "HP")
-DMI_MATCH(DMI_PRODUCT_NAME, "HP ENVY x360 Convertible 13-")
-
-So far it seems to be working fine.
-I'll send this in v2 once I do some final tweaks and do more tests.
-
-[1] https://bugzilla.kernel.org/show_bug.cgi?id=203439#c5
-
-Filip
-
-
-V Mon, Oct 31, 2022 at 11:36:09AM -0400, Alex Deucher napsal(a):
-> On Sun, Oct 30, 2022 at 5:26 AM Filip Moc <dev@moc6.cz> wrote:
-> >
-> > There are some devices on which amdgpu won't allow user to set brightness
-> > to sufficiently low values even though the hardware would support it just
-> > fine.
-> >
-> > This usually happens in two cases when either configuration of brightness
-> > levels via ACPI/ATIF is not available and amdgpu falls back to defaults
-> > (currently 12 for minimum level) which may be too high for some devices or
-> > even the configuration via ATIF is available but the minimum brightness
-> > level provided by the manufacturer is set to unreasonably high value.
-> >
-> > In either case user can use this new module parameter to adjust the
-> > minimum allowed backlight brightness level.
-> >
-> > Link: https://bugzilla.kernel.org/show_bug.cgi?id=203439
-> > Signed-off-by: Filip Moc <dev@moc6.cz>
+> >-	return output;
+> >+	return output + off;
+> > }
+> > 
+> > void fortify_panic(const char *name)
 > 
-> Does your system require an override and if so, what is it?  It would
-> be good to add a quirk for your system as well so that other users of
-> the same system wouldn't need to manually figure out an apply the
-> settings.
-> 
-> Alex
-> 
-> 
-> > ---
-> >  drivers/gpu/drm/amd/amdgpu/amdgpu.h               |  3 +++
-> >  drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c           | 15 +++++++++++++++
-> >  drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c | 15 +++++++++++++++
-> >  3 files changed, 33 insertions(+)
-> >
-> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu.h b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-> > index 0e6ddf05c23c..c5445402c49d 100644
-> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu.h
-> > @@ -200,6 +200,9 @@ extern uint amdgpu_dc_debug_mask;
-> >  extern uint amdgpu_dc_visual_confirm;
-> >  extern uint amdgpu_dm_abm_level;
-> >  extern int amdgpu_backlight;
-> > +#ifdef CONFIG_DRM_AMD_DC
-> > +extern int amdgpu_backlight_override_min[];
-> > +#endif
-> >  extern struct amdgpu_mgpu_info mgpu_info;
-> >  extern int amdgpu_ras_enable;
-> >  extern uint amdgpu_ras_mask;
-> > diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> > index 16f6a313335e..f2fb549ac52f 100644
-> > --- a/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> > +++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_drv.c
-> > @@ -43,6 +43,7 @@
-> >  #include "amdgpu_irq.h"
-> >  #include "amdgpu_dma_buf.h"
-> >  #include "amdgpu_sched.h"
-> > +#include "amdgpu_dm.h"
-> >  #include "amdgpu_fdinfo.h"
-> >  #include "amdgpu_amdkfd.h"
-> >
-> > @@ -853,6 +854,20 @@ int amdgpu_backlight = -1;
-> >  MODULE_PARM_DESC(backlight, "Backlight control (0 = pwm, 1 = aux, -1 auto (default))");
-> >  module_param_named(backlight, amdgpu_backlight, bint, 0444);
-> >
-> > +/**
-> > + * DOC: backlight_min (array of int)
-> > + * Override minimum allowed backlight brightness signal (per display).
-> > + * Must be less than the maximum brightness signal.
-> > + * Negative value means no override.
-> > + *
-> > + * Defaults to all -1 (no override on any display).
-> > + */
-> > +#ifdef CONFIG_DRM_AMD_DC
-> > +int amdgpu_backlight_override_min[AMDGPU_DM_MAX_NUM_EDP] = {[0 ... (AMDGPU_DM_MAX_NUM_EDP-1)] = -1};
-> > +MODULE_PARM_DESC(backlight_min, "Override minimum backlight brightness signal (0..max-1, -1 = no override (default))");
-> > +module_param_array_named(backlight_min, amdgpu_backlight_override_min, int, NULL, 0444);
-> > +#endif
-> > +
-> >  /**
-> >   * DOC: tmz (int)
-> >   * Trusted Memory Zone (TMZ) is a method to protect data being written
-> > diff --git a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> > index eb4ce7216104..e2c36ba93d05 100644
-> > --- a/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> > +++ b/drivers/gpu/drm/amd/display/amdgpu_dm/amdgpu_dm.c
-> > @@ -3911,6 +3911,21 @@ static void amdgpu_dm_update_backlight_caps(struct amdgpu_display_manager *dm,
-> >         dm->backlight_caps[bl_idx].min_input_signal = AMDGPU_DM_DEFAULT_MIN_BACKLIGHT;
-> >         dm->backlight_caps[bl_idx].max_input_signal = AMDGPU_DM_DEFAULT_MAX_BACKLIGHT;
-> >  #endif
-> > +
-> > +       if (amdgpu_backlight_override_min[bl_idx] >= 0) {
-> > +               if (amdgpu_backlight_override_min[bl_idx] < dm->backlight_caps[bl_idx].max_input_signal) {
-> > +                       DRM_INFO("amdgpu: backlight[%i]: overriding minimum brightness from %i to %i\n",
-> > +                                 bl_idx,
-> > +                                 dm->backlight_caps[bl_idx].min_input_signal,
-> > +                                 amdgpu_backlight_override_min[bl_idx]);
-> > +                       dm->backlight_caps[bl_idx].min_input_signal = amdgpu_backlight_override_min[bl_idx];
-> > +               } else {
-> > +                       DRM_ERROR("amdgpu: backlight[%i]: minimum brightness override (%i) is not below maximum (%i)\n",
-> > +                                 bl_idx,
-> > +                                 amdgpu_backlight_override_min[bl_idx],
-> > +                                 dm->backlight_caps[bl_idx].max_input_signal);
-> > +               }
-> > +       }
-> >  }
-> >
-> >  static int get_brightness_range(const struct amdgpu_dm_backlight_caps *caps,
-> >
-> > base-commit: d8c03bfe146fd5e081a252cd34f3f12ca0255357
-> > --
-> > 2.30.2
-> >
+> Put the entry points in dedicated sections and declare them explicitly in the linker script (the standard name for this section would be .init, but we presumably want .init.32 and .init.64 to keep 32- and 64-bit code in separate sections.)
+
+Uhm, I'm not sure I follow. We're trying to eliminate as much
+hardcode as possible, and now you propose to introduce new :P
+Some architectures don't have a separate .head.text at all: startup
+functions are placed in .init.text, preboot code finds the entry
+point and it just works. It's not possible currently on x86_64, but
+we'll be there one day.
+
+Thanks,
+Olek
