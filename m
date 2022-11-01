@@ -2,225 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B4C061512C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 18:58:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E88E615135
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 19:01:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbiKAR6a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 13:58:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50790 "EHLO
+        id S230267AbiKASB4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 14:01:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229819AbiKAR60 (ORCPT
+        with ESMTP id S230451AbiKASBu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 13:58:26 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFEC2644A
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 10:58:25 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id p3so14270993pld.10
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 10:58:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PSlM7tm98GJ6KQQBPng7urzfjnyPwOttoZ6TFnd/jVE=;
-        b=tbiyQ/qH+nehgRPrhsXEOyMFfl0Nh6L1qRXhgwe2uAhYwwLIh+4vrx7SjEGwzAlgv+
-         6bt1NpnPFq4ar1dxkygRW5xUck+xMUYcMqnOgiKbYR4L2jhUV1PqFMYC3Z0vzUXAjrTb
-         DjrBH0VbMai3H9rAG0nv75s9+1te1RnvuTn3Ez37hKJwsW6htEBUfu7pMuHlCiaof7+X
-         0Lq3kzKd+Q3fpRxvVBn6JmQSHF8BhDOWcg1AuDQlDJc+cCjnGVSe8z0FrRhcwLK97D/v
-         MhoQekh5MJAMQk7n65oo7JlM2mShK+IsRa1Ij562KAUi5WPU3pfVdWYFshMx+1gGT7Q2
-         7uew==
+        Tue, 1 Nov 2022 14:01:50 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9BC0813CFD
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 11:01:46 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id d19-20020a056e020c1300b00300b5a12c44so5738269ile.15
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 11:01:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PSlM7tm98GJ6KQQBPng7urzfjnyPwOttoZ6TFnd/jVE=;
-        b=CmHcsduhfWloyI4sjPV1yNHU5BcIjduSJGjH4UdL7gGOW7IrhDH7+qVns5zXtBC7PL
-         WflP7pKJU0WlxOceljFIEQJl6vHkfqHPtrJfy/yd5uKZrpAXgMlRZsYDMD9eoKwMMKbP
-         5fx9hCtk3eDhszDCvlHmaYJvc/6z6IFWTsy92reSW919fbkkmi3/LZKj/zxDZiCufPh/
-         GDEU98McWM0LrT2ym5eElG6tejtLUQYBp3O4ROonFpIQRqfvkOZneedjYIC5YjnD37Z5
-         2PLgj6+cpCGNJlGEIWgdfV55jdOVSci2Sw1A7mnYKzJtR9cGTyPWAZdjDFjZXSZ+1xOm
-         xXmA==
-X-Gm-Message-State: ACrzQf1fsgYeDnrOucJkM1yoLTNXQu3m1dlmunjs58N1KbQmTwJdqj00
-        s0vfa1W8kxcOK3/MCAQsyUv8Fg==
-X-Google-Smtp-Source: AMsMyM6ugcdQo4QoQpkqVPfIJKUqjKh5ecv1hn0GBLwlY/XMhuOE+o5JXOZAXwbLsTOMcDqatPuP4Q==
-X-Received: by 2002:a17:902:dac5:b0:186:a687:e082 with SMTP id q5-20020a170902dac500b00186a687e082mr20966918plx.84.1667325505243;
-        Tue, 01 Nov 2022 10:58:25 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id bb8-20020a170902bc8800b00179f370dbe7sm6614237plb.287.2022.11.01.10.58.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 10:58:24 -0700 (PDT)
-Date:   Tue, 1 Nov 2022 17:58:21 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Yu Zhang <yu.c.zhang@linux.intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Eric Li <ercli@ucdavis.edu>,
-        David Matlack <dmatlack@google.com>,
-        Oliver Upton <oupton@google.com>
-Subject: Re: [PATCH v5 05/15] KVM: nVMX: Let userspace set nVMX MSR to any
- _host_ supported value
-Message-ID: <Y2FePYteNrEfZ7D5@google.com>
-References: <20220607213604.3346000-1-seanjc@google.com>
- <20220607213604.3346000-6-seanjc@google.com>
- <20221031163907.w64vyg5twzvv2nho@linux.intel.com>
- <Y2ABrnRzg729ZZNI@google.com>
- <20221101101801.zxcjswoesg2gltri@linux.intel.com>
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Se9qSNnHuLVh7I+jU6VGt/2+DvcgL2MeEAmjO73fbhc=;
+        b=X6wCgkMd6pOhpr5KKRdgn1omfsXcJq+Lf8rHBOA+Tk14m2TNEpMZj4/CiyHO8yrdKr
+         l3dH01avBt1ytTNVykgsaS6XB/LYlT2QNONj2wMeokqEceXNUHfoGAeew/Zd9I4JNNrd
+         21kf5pBknl22R7a+Xu+BghkqW82Aab2aUtvLD4LSHzuxldODOFkDxLseLdH9ttcgETXj
+         AEtwL4SFalKUJgIczXhOZqliOeZTDq93O9O4p0jSFNzrdbU6qxdB2oNU1ffyAppaHnm8
+         cP0E8LGr4qFUyjJJPC1k668G2B9mRpDcm+PpVLzuk/jKAS50jCra1ZanR0tz+Lt0O4jD
+         KYZg==
+X-Gm-Message-State: ACrzQf2cjMM02Ldho/xqLyxxu27zR7suWsBPMD/+0pZBhdRhobnLLuE3
+        +o5Shz6LtUUX/dYXkuacOQMNayV1q4MBsSH8xSBXB4haOo3A
+X-Google-Smtp-Source: AMsMyM74oltutcYOaT45sp5+43cX+untWCqTyBlIpfIvsx0684iGqWWhnSN3zA2IN5YlwVivD5FodzVp3rzKGOE84Oi0ifahNBhN
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221101101801.zxcjswoesg2gltri@linux.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a02:7a19:0:b0:375:41a7:4fb with SMTP id
+ a25-20020a027a19000000b0037541a704fbmr11933892jac.235.1667325705866; Tue, 01
+ Nov 2022 11:01:45 -0700 (PDT)
+Date:   Tue, 01 Nov 2022 11:01:45 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000006c563205ec6c8442@google.com>
+Subject: [syzbot] WARNING in attr_data_get_block
+From:   syzbot <syzbot+02b932550da4a4ee1dae@syzkaller.appspotmail.com>
+To:     almaz.alexandrovich@paragon-software.com,
+        linux-kernel@vger.kernel.org, ntfs3@lists.linux.dev,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022, Yu Zhang wrote:
-> On Mon, Oct 31, 2022 at 05:11:10PM +0000, Sean Christopherson wrote:
-> > vmcs_config.nested never becomes out-of-date, it's read-only after __init (not
-> > currently marked as such, that will be remedied soon).
-> > 
-> > The auditing performed by KVM is purely to guard against userspace enabling
-> > features that KVM doesn't support.  KVM is not responsible for ensuring that the
-> > vCPU's CPUID model match the VMX MSR model.
-> 
-> Do you mean the VMX MSR model shall not be changed after the cpuid updates?
+Hello,
 
-No, I mean that the virtual CPU model (CPUID + VMX MSRs) that is presented to the
-guest is the responsibility of host userspace.  KVM only cares about not enabling
-bits/features that KVM doesn't supported.
+syzbot found the following issue on:
 
-> And for VMX MSR model, do you mean the vmx->nested.msrs or the ones in 
-> vmcs_config->nested? 
+HEAD commit:    b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=109f875a880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
+dashboard link: https://syzkaller.appspot.com/bug?extid=02b932550da4a4ee1dae
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
 
-vmx->nested.msrs.  vmcs_config->nested is effectively the VMX equivalent of
-KVM_GET_SUPPORTED_CPUID.
+Unfortunately, I don't have any reproducer for this issue yet.
 
-> What I observed is that vmx->nested.msrs.secondary_ctls_high will be changed
-> in vmx_adjust_secondary_exec_control(), which can be triggered after cpuid is
-> set. 
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/24728b72a896/disk-b229b6ca.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/10a3c40c60e1/vmlinux-b229b6ca.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/69f963b02b7e/bzImage-b229b6ca.xz
 
-Ugh, that path got overlooked when we yanked out KVM's manipulaton of VMX MSRs
-in response to guest CPUID changes.  I wonder if we can get away with changing
-KVM's behavior to only ensure a feature isn't exposed to L2 when it's not exposed
-to L1.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+02b932550da4a4ee1dae@syzkaller.appspotmail.com
 
-diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-index 6b4266e949a3..cfc35d559d91 100644
---- a/arch/x86/kvm/vmx/vmx.c
-+++ b/arch/x86/kvm/vmx/vmx.c
-@@ -4523,8 +4523,8 @@ vmx_adjust_secondary_exec_control(struct vcpu_vmx *vmx, u32 *exec_control,
-         * Update the nested MSR settings so that a nested VMM can/can't set
-         * controls for features that are/aren't exposed to the guest.
-         */
--       if (nested) {
--               if (enabled)
-+       if (nested && !enabled)
-+               if (exiting)
-                        vmx->nested.msrs.secondary_ctls_high |= control;
-                else
-                        vmx->nested.msrs.secondary_ctls_high &= ~control;
+------------[ cut here ]------------
+DEBUG_RWSEMS_WARN_ON(sem->magic != sem): count = 0x100, magic = 0x0, owner = 0xffff88802168d7c1, curr 0xffff88802168d7c0, list not empty
+WARNING: CPU: 0 PID: 32351 at kernel/locking/rwsem.c:1335 __up_read+0x4f5/0x690 kernel/locking/rwsem.c:1335
+Modules linked in:
+CPU: 0 PID: 32351 Comm: syz-executor.1 Not tainted 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+RIP: 0010:__up_read+0x4f5/0x690 kernel/locking/rwsem.c:1335
+Code: c7 e0 78 8d 8a 48 c7 c6 e0 7a 8d 8a 48 8b 54 24 20 48 8b 4c 24 28 4d 89 f8 4c 8b 4c 24 30 31 c0 53 e8 0f 89 e8 ff 48 83 c4 08 <0f> 0b 48 bb 00 00 00 00 00 fc ff df 4c 8b 6c 24 18 e9 ba fb ff ff
+RSP: 0018:ffffc90015c15e80 EFLAGS: 00010292
+RAX: 3a348d4940a5a400 RBX: ffffffff8a8d79e0 RCX: 0000000000040000
+RDX: ffffc90005131000 RSI: 0000000000006bc0 RDI: 0000000000006bc1
+RBP: ffffc90015c15f50 R08: ffffffff816b8dfd R09: fffff52002b82b89
+R10: fffff52002b82b89 R11: 1ffff92002b82b88 R12: ffff8880840cd2c8
+R13: ffff8880840cd2b8 R14: 1ffff11010819a59 R15: ffff88802168d7c1
+FS:  00007f4c6bb8b700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 000000110f338967 CR3: 00000000345bc000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ attr_data_get_block+0x198/0x2370 fs/ntfs3/attrib.c:901
+ ntfs_get_block_vbo+0x310/0xe40 fs/ntfs3/inode.c:564
+ do_mpage_readpage+0x970/0x1c50 fs/mpage.c:208
+ mpage_readahead+0x210/0x380 fs/mpage.c:361
+ read_pages+0x169/0x9c0 mm/readahead.c:161
+ page_cache_ra_unbounded+0x703/0x820 mm/readahead.c:270
+ page_cache_sync_readahead include/linux/pagemap.h:1213 [inline]
+ filemap_get_pages+0x465/0x10d0 mm/filemap.c:2581
+ filemap_read+0x3cf/0xea0 mm/filemap.c:2675
+ __kernel_read+0x3fc/0x830 fs/read_write.c:428
+ integrity_kernel_read+0xac/0xf0 security/integrity/iint.c:199
+ ima_calc_file_hash_tfm security/integrity/ima/ima_crypto.c:485 [inline]
+ ima_calc_file_shash security/integrity/ima/ima_crypto.c:516 [inline]
+ ima_calc_file_hash+0x178f/0x1ca0 security/integrity/ima/ima_crypto.c:573
+ ima_collect_measurement+0x444/0x8c0 security/integrity/ima/ima_api.c:292
+ process_measurement+0xf4b/0x1bd0 security/integrity/ima/ima_main.c:337
+ ima_file_check+0xd8/0x130 security/integrity/ima/ima_main.c:517
+ do_open fs/namei.c:3559 [inline]
+ path_openat+0x2642/0x2df0 fs/namei.c:3713
+ do_file_open_root+0x339/0x790 fs/namei.c:3765
+ file_open_root+0x234/0x290 fs/open.c:1290
+ do_handle_open+0x565/0x950 fs/fhandle.c:232
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f4c6ae8b5a9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f4c6bb8b168 EFLAGS: 00000246 ORIG_RAX: 0000000000000130
+RAX: ffffffffffffffda RBX: 00007f4c6afabf80 RCX: 00007f4c6ae8b5a9
+RDX: 0000000000020000 RSI: 0000000020000000 RDI: 0000000000000003
+RBP: 00007f4c6aee67b0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffddae2ed6f R14: 00007f4c6bb8b300 R15: 0000000000022000
+ </TASK>
 
 
-> Since KVM's config(vmcs_config->nested.secondary_ctls_high) is done during init
-> by nested_vmx_setup_ctls_msrs(), which only kept a subset of the flags from the
-> vmcs_confg->cpu_based_2nd_exec_ctrl, the vmx_restore_control_msr() could fail
-> later, when userspace VMM tries to enable a feature(the only one I witnessed is
-> SECONDARY_EXEC_ENABLE_USR_WAIT_PAUSE) by setting MSR_IA32_VMX_PROCBASED_CTLS2.
-> Because the vmx->nested.msrs.secondary_ctls_high is updated by cpuid, but this
-> bit is not taken from vmcs_conf->cpu_based_2nd_exec_ctrl by nested_vmx_setup_ctls_msrs()
-> for vmcs_config->nested.secondary_ctls_high.
-> 
-> The failure can be fixed, simply by adding SECONDARY_EXEC_ENABLE_USR_WAIT_PAUSE in
-> nested_vmx_setup_ctls_msrs(), e.g.
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-Assuming KVM actually supports user wait/pause in L2, this is an orthogonal bug
-to the CPUID-based manipulation above.  KVM simply neglects to advertise to userspace
-that ENABLE_USR_WAIT_PAUSE is supported for nested virtualization.
-
-If KVM doesn't correctly support virtualizing user wait/pause for L2, then the
-correct location to fix this is in vmx_secondary_exec_control().
-
-> > > Another question is about the setting of secondary_ctls_high in
-> > > nested_vmx_setup_ctls_msrs().  I saw there's a comment saying:
-> > > 	"Do not include those that depend on CPUID bits, they are
-> > > 	added later by vmx_vcpu_after_set_cpuid.".
-> > 
-> > That's a stale comment, see the very next commit, 8805875aa473 ("Revert "KVM: nVMX:
-> > Do not expose MPX VMX controls when guest MPX disabled""), as well as the slightly
-> > later commit 9389d5774aca ("Revert "KVM: nVMX: Expose load IA32_PERF_GLOBAL_CTRL
-> > VM-{Entry,Exit} control"").
-> > 
-> 
-> So the comment can be and shall be removed, right? 
-
-Yep.
-
-> > > 	if (cpu_has_vmx_vmfunc()) {
-> > > 		msrs->secondary_ctls_high |=
-> > > 			SECONDARY_EXEC_ENABLE_VMFUNC;
-> > 
-> > This one is still required.  KVM never enables VMFUNC for itself, i.e. it won't
-> > be set in KVM's VMCS configuration.
-> > 
-> 
-> My understanding is that, for VMFUNC, altough KVM does not support it,
-> SECONDARY_EXEC_ENABLE_VMFUNC is still set in the secondary proc-based
-> vm execution ctrol. KVM just uses different handlers for VMFUNC exits
-> from L1(to inject the #UD) and L2(to emulate the eptp switching). So
-> it doesn't matter if we do not clear this bit for vmcs_config->nested.
-> procbased_ctls_high. 
-
-Ah, you're right, I didn't realize KVM enables VMFUNC in L1.  Enabling VMFUNC for
-L1 is silly though, it's trivial to clear the feature in vmx_secondary_exec_control().
-
-That said, enabling VMFUNC in vmcs01 is an orthogonal topic, and it _is_ indeed
-easier to keep the feature in the reference config.  Now that the nested config
-is derived from the non-nested config, nested_vmx_setup_ctls_msrs() can do:
-
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 61a2e551640a..751cc67aa1a9 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -6811,7 +6811,8 @@ void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps)
-                SECONDARY_EXEC_ENABLE_INVPCID |
-                SECONDARY_EXEC_RDSEED_EXITING |
-                SECONDARY_EXEC_XSAVES |
--               SECONDARY_EXEC_TSC_SCALING;
-+               SECONDARY_EXEC_TSC_SCALING |
-+               SECONDARY_EXEC_ENABLE_VMFUNC;
- 
-        /*
-         * We can emulate "VMCS shadowing," even if the hardware
-@@ -6842,17 +6843,12 @@ void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps)
-                }
-        }
- 
--       if (cpu_has_vmx_vmfunc()) {
--               msrs->secondary_ctls_high |=
--                       SECONDARY_EXEC_ENABLE_VMFUNC;
--               /*
--                * Advertise EPTP switching unconditionally
--                * since we emulate it
--                */
--               if (enable_ept)
--                       msrs->vmfunc_controls =
--                               VMX_VMFUNC_EPTP_SWITCHING;
--       }
-+       /*
-+        * Advertise EPTP switching if VMFUNC and EPT are supported, KVM
-+        * emulates the actual EPTP switch in software.
-+        */
-+       if (cpu_has_vmx_vmfunc() && enable_ept)
-+               msrs->vmfunc_controls = VMX_VMFUNC_EPTP_SWITCHING;
- 
-        /*
-         * Old versions of KVM use the single-context version without
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
