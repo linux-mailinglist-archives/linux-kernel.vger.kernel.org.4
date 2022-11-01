@@ -2,210 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC1A8614271
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 01:54:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B18E614274
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 01:59:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229553AbiKAAyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 20:54:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44346 "EHLO
+        id S229648AbiKAA7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 20:59:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45964 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiKAAyG (ORCPT
+        with ESMTP id S229565AbiKAA7w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 20:54:06 -0400
-Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF1E388;
-        Mon, 31 Oct 2022 17:54:04 -0700 (PDT)
-Received: by mail-pf1-x431.google.com with SMTP id d10so12138250pfh.6;
-        Mon, 31 Oct 2022 17:54:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fq59yWSLafAiwk54zqJ+kxPVtmYjp0IhMh7ZZqtSKsc=;
-        b=Jn71qW/dsPMLnTWj9wU/Ls18emsiyQ1X+GccfVRr/xSW0gRq46YTl3ULVWDjIMdCP1
-         CIk5RxhNNCOpSGzyan2Y/nxQIz5XtRVYqIc0AuiNxZaXrcqZ+V8Sp/cI9vLwqwjv2uvu
-         yUX3ipqNmjK8EMCNDGENmJXEseW4mu3TpD5ZoYysP0blrkJnFXEdyS0x+OicQhHu61cA
-         RDllDlQf4qZBf2hRFtAXLWngwf4Xwn+qmDofXgsWdRWBf7zrWTlabDroQ3wRDD7AXzJm
-         7DOFxQ3t32omDbfMvmjtjBAfYcpkBM/oiRGeK/f+a5E2DyVhW6aCdP0IZ1kNNGT6gi1b
-         q/DA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Fq59yWSLafAiwk54zqJ+kxPVtmYjp0IhMh7ZZqtSKsc=;
-        b=beyp5LFqGOBPrxMOG055SNafOGq/ISl6lsSh219m9rNbgXmksb54dF1T4HQewUc9w6
-         DrtC3IWQ7bYhzcuUscsHmrptiJff+KM00WjDAUUxsq4n7ek6buHkt0XlMCFqp/F0uJrK
-         +57He51LrzSPqhE07nyBxi+KpLaPUbZdTZEyBf7N4OtxZqt9yhuit3KOXsg3i2qSOvcD
-         e9rcmnrn8iGDeNavCD2vlMTMJ2/KTTbMIEyIC0YwaQe3Izc4D8GDPsXm3RD5pcZnx2h7
-         +S1qu7/ng+dX9N+XRPgm+SN45yTcBbm+nMwxsWGpNaKLwQRPAvibshgwV9xhJLVj+9Ie
-         Os3A==
-X-Gm-Message-State: ACrzQf0GycPY4us5fLZU7Cbh0pHXxBNpkHoNi5x8rvkuBZOxWTzfuAkv
-        pFunvV/ryP2o+p3fiGGp5zc=
-X-Google-Smtp-Source: AMsMyM68v+SPLmdGRHXnn8XITjdXmScdbfcMceoqHO21dZYPGTJifMObb5NEhCgwPfvq90nPbsftgQ==
-X-Received: by 2002:a63:5d12:0:b0:46e:cd38:3f76 with SMTP id r18-20020a635d12000000b0046ecd383f76mr14639852pgb.64.1667264043742;
-        Mon, 31 Oct 2022 17:54:03 -0700 (PDT)
-Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
-        by smtp.gmail.com with ESMTPSA id 17-20020a17090a19d100b002036006d65bsm4795469pjj.39.2022.10.31.17.54.02
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 31 Oct 2022 17:54:03 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH v6] hugetlb: don't delete vma_lock in hugetlb
- MADV_DONTNEED processing
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <20221031223440.285187-1-mike.kravetz@oracle.com>
-Date:   Mon, 31 Oct 2022 17:54:01 -0700
-Cc:     Linux-MM <linux-mm@kvack.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
-        David Hildenbrand <david@redhat.com>,
-        Axel Rasmussen <axelrasmussen@google.com>,
-        Mina Almasry <almasrymina@google.com>,
-        Peter Xu <peterx@redhat.com>, Rik van Riel <riel@surriel.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Wei Chen <harperchen1110@gmail.com>,
-        "# 5 . 10+" <stable@vger.kernel.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <8D2D2F0F-9A53-42B5-8A9D-936E06E4A4E9@gmail.com>
-References: <20221031223440.285187-1-mike.kravetz@oracle.com>
-To:     Mike Kravetz <mike.kravetz@oracle.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Mon, 31 Oct 2022 20:59:52 -0400
+Received: from out1-smtp.messagingengine.com (out1-smtp.messagingengine.com [66.111.4.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B2EA1570A;
+        Mon, 31 Oct 2022 17:59:51 -0700 (PDT)
+Received: from compute3.internal (compute3.nyi.internal [10.202.2.43])
+        by mailout.nyi.internal (Postfix) with ESMTP id B19965C0134;
+        Mon, 31 Oct 2022 20:59:50 -0400 (EDT)
+Received: from imap43 ([10.202.2.93])
+  by compute3.internal (MEProxy); Mon, 31 Oct 2022 20:59:50 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=maxfierke.com;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1667264390; x=1667350790; bh=/T
+        yw2zeLdHb2+Dw5oK5UkZVpNiwdVxrfWV3SYy8GWLU=; b=oW61/4/ucjPrJA26Ib
+        wMk7qNewaQZ33kSOGel0yWPIUBFMi/hOxK/A1aKopMpn4a6D5YKKm8gFjCJD98Qw
+        0rSmRVVjaanH1Pl3rs5fP/BRBcxtewSYKx4oMpWXM1iliBtwttIlj0hH0bTaslsa
+        I9EPkC+iWJGHBwou8M9AF/SKkYripqnXCP3ts4ceXma9RviyE+8xZEG8lLoZeYYM
+        y63eZ2KVjKp6w/QI7NwIzy00ckGN/FtXE9XKq/fU0Kkryu9t7uf1pY8DHunil7yK
+        dv3vUyZD7hMkzohgqhGRIsqcA596eUv8dN/FjcAxxvmIiodYFmp7E7YnwHvRyFuw
+        J+MQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1667264390; x=1667350790; bh=/Tyw2zeLdHb2+Dw5oK5UkZVpNiwd
+        VxrfWV3SYy8GWLU=; b=Zuz4i4i897MG6ZZjrh9u56tpaxyaVDiDvS6cVSzs0qkN
+        KQ9OIEN/m9hpCkqPxCk2A4qPIQQAdBMKCP/2QBGp9m+Vr1QI4ohJMrmLOFykneuz
+        5ElOxOW8U6llgsQMIw9JTe8rbY1wYd+MmzJ4nothufYCAEi/3zidP5nw6B100STl
+        C7zqxOEWfST6bgl2inIoReJWGgSBMd5oeWPv2MBAC50zQvDdFn3mzjBv3eT+9UC8
+        3zEbtw/8UYqm1FP/maV+7VlrscPf2w06tkEItdsb41Yie1KMflWHibGso0iQQUom
+        Lz2YLTWbunWTySEFjNbEn9k0kg0CHxUYnSRel/0hNQ==
+X-ME-Sender: <xms:hm9gY3N76yfdUFK31PMFEc4_fFWbYptVosa4NpjgCiGl_uHHU0q1ug>
+    <xme:hm9gYx_-JmD4xI-VnJEE-5M3QGagFHEE1j1cDzyuUphsMMmvTGkNqnM3x2F1h5Hh8
+    NUamx6JhTN3hdGdU60>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudeggddvlecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdforgig
+    ucfhihgvrhhkvgdfuceomhgrgiesmhgrgihfihgvrhhkvgdrtghomheqnecuggftrfgrth
+    htvghrnhepfffgieefueefjeeutdevgfeijeetvdfgfeekjefgfedtvdekleduueetgedt
+    tefgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepmh
+    grgiesmhgrgihfihgvrhhkvgdrtghomh
+X-ME-Proxy: <xmx:hm9gY2Rl3hZqVcodjeHqK7kAptvWfjptBiWCsYEycmXx-LpdkBnwyg>
+    <xmx:hm9gY7tv3ADGKOpPSFSXCIKLCBstjl0rHM_aYX1b6fv66uOmx8dQcA>
+    <xmx:hm9gY_dY5dBohUb8gPMHXr-s4auy_gU5krqgRJ0Skh7K6eZgmBBSkg>
+    <xmx:hm9gY91d1phpyjrFtoyUs_ZLb0F89jrTu1aLDk8DJ5f1CplsBjGN6g>
+Feedback-ID: idee9475d:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 322BE2D40071; Mon, 31 Oct 2022 20:59:50 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
+Mime-Version: 1.0
+Message-Id: <5efcce2b-4534-4777-8daa-d1ff2b6bb1c7@app.fastmail.com>
+In-Reply-To: <f09812a7-5d7e-f8f8-aba4-7645810a8c52@sholland.org>
+References: <20220918034415.74641-1-max@maxfierke.com>
+ <20220918034415.74641-2-max@maxfierke.com>
+ <f09812a7-5d7e-f8f8-aba4-7645810a8c52@sholland.org>
+Date:   Mon, 31 Oct 2022 19:59:07 -0500
+From:   "Max Fierke" <max@maxfierke.com>
+To:     "Samuel Holland" <samuel@sholland.org>
+Cc:     dri-devel@lists.freedesktop.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski@linaro.org>,
+        thierry.reding@gmail.com, "Sam Ravnborg" <sam@ravnborg.org>,
+        airlied@linux.ie, daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Subject: Re: [PATCH v3 1/4] dt-bindings: vendor-prefixes: Add prefix for ClockworkPi
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Oct 31, 2022, at 3:34 PM, Mike Kravetz <mike.kravetz@oracle.com> =
-wrote:
+On Sat, Oct 29, 2022, at 1:17 PM, Samuel Holland wrote:
+> Hi Max,
+>
+> The vendor uses "clockwork" as the prefix in their downstream
+> devicetrees[1][2][3], so I would suggest using the same here. I think
+> there is a distinction between "Clockwork" the company and "ClockworkPi"
+> the product. This is what I did for the board devicetree I sent[4].
+>
+> Regards,
+> Samuel
+>
 
-> madvise(MADV_DONTNEED) ends up calling zap_page_range() to clear the =
-page
-> tables associated with the address range.  For hugetlb vmas,
-> zap_page_range will call __unmap_hugepage_range_final.  However,
-> __unmap_hugepage_range_final assumes the passed vma is about to be =
-removed
-> and deletes the vma_lock to prevent pmd sharing as the vma is on the =
-way
-> out.  In the case of madvise(MADV_DONTNEED) the vma remains, but the
-> missing vma_lock prevents pmd sharing and could potentially lead to =
-issues
-> with truncation/fault races.
->=20
+Hi Samuel,
 
-[snip]
+Ah yes, I struggled a bit with the distinction because the company itself
+seems to be a bit inconsistent here.
 
-> index 978c17df053e..517c8cc8ccb9 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -3464,4 +3464,7 @@ madvise_set_anon_name(struct mm_struct *mm, =
-unsigned long start,
->  */
-> #define  ZAP_FLAG_DROP_MARKER        ((__force zap_flags_t) BIT(0))
->=20
-> +/* Set in unmap_vmas() to indicate an unmap call.  Only used by =
-hugetlb */
-> +#define  ZAP_FLAG_UNMAP              ((__force zap_flags_t) BIT(1))
+I will follow your lead and post a v4 follow-up with that vendor prefix
+changed.
 
-PeterZ wants to add ZAP_FLAG_FORCE_FLUSH that would be set on
-zap_pte_range(). Not sure you would want to combine them both together, =
-but
-at least be aware of potential conflict.
+Glad to see someone else working on support for this hardware!
 
-=
-https://lore.kernel.org/all/Y1f7YvKuwOl1XEwU@hirez.programming.kicks-ass.n=
-et/
-
-[snip]
-
-> +#ifdef CONFIG_ADVISE_SYSCALLS
-> +/*
-> + * Similar setup as in zap_page_range().  madvise(MADV_DONTNEED) can =
-not call
-> + * zap_page_range for hugetlb vmas as __unmap_hugepage_range_final =
-will delete
-> + * the associated vma_lock.
-> + */
-> +void clear_hugetlb_page_range(struct vm_area_struct *vma, unsigned =
-long start,
-> +				unsigned long end)
-> +{
-> +	struct mmu_notifier_range range;
-> +	struct mmu_gather tlb;
-> +
-> +	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, =
-vma->vm_mm,
-> +				start, end);
-> +	adjust_range_if_pmd_sharing_possible(vma, &range.start, =
-&range.end);
-> +	tlb_gather_mmu(&tlb, vma->vm_mm);
-> +	update_hiwater_rss(vma->vm_mm);
-> +	mmu_notifier_invalidate_range_start(&range);
-> +
-> +	__unmap_hugepage_range_locking(&tlb, vma, start, end, NULL, 0);
-> +
-> +	mmu_notifier_invalidate_range_end(&range);
-> +	tlb_finish_mmu(&tlb);
-> }
-> +#endif
-
-I hate ifdef=E2=80=99s. And the second definition of =
-clear_hugetlb_page_range() is
-confusing since it does not have an ifdef at all. . How about moving the
-ifdef=E2=80=99s into the function like being done in io_madvise_prep()? =
-I think it
-is less confusing.
-
-[ snip ]
-
->=20
-> --- a/mm/memory.c
-> +++ b/mm/memory.c
-> @@ -1671,7 +1671,7 @@ void unmap_vmas(struct mmu_gather *tlb, struct =
-maple_tree *mt,
-> {
-> 	struct mmu_notifier_range range;
-> 	struct zap_details details =3D {
-> -		.zap_flags =3D ZAP_FLAG_DROP_MARKER,
-> +		.zap_flags =3D ZAP_FLAG_DROP_MARKER | ZAP_FLAG_UNMAP,
-> 		/* Careful - we need to zap private pages too! */
-> 		.even_cows =3D true,
-> 	};
-> @@ -1704,15 +1704,21 @@ void zap_page_range(struct vm_area_struct =
-*vma, unsigned long start,
-> 	MA_STATE(mas, mt, vma->vm_end, vma->vm_end);
->=20
-> 	lru_add_drain();
-> -	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, =
-vma->vm_mm,
-> -				start, start + size);
-> 	tlb_gather_mmu(&tlb, vma->vm_mm);
-> 	update_hiwater_rss(vma->vm_mm);
-> -	mmu_notifier_invalidate_range_start(&range);
-> 	do {
-> -		unmap_single_vma(&tlb, vma, start, range.end, NULL);
-> +		mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, =
-vma,
-> +				vma->vm_mm,
-> +				max(start, vma->vm_start),
-> +				min(start + size, vma->vm_end));
-> +		if (is_vm_hugetlb_page(vma))
-> +			adjust_range_if_pmd_sharing_possible(vma,
-> +				&range.start,
-> +				&range.end);
-> +		mmu_notifier_invalidate_range_start(&range);
-> +		unmap_single_vma(&tlb, vma, start, start + size, NULL);
-
-Is there a reason that you wouldn=E2=80=99t use range.start and =
-range.end here?
-At least for consistency.
-
+Thanks,
+Max
