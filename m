@@ -2,116 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4D82A614465
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 06:46:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A29C4614468
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 06:47:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229648AbiKAFq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 01:46:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32870 "EHLO
+        id S229785AbiKAFrE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 01:47:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiKAFqz (ORCPT
+        with ESMTP id S229674AbiKAFrA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 01:46:55 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC67213DFE
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 22:46:54 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id m6so12621924pfb.0
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 22:46:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M6ipy07kqjTgYjFgwvJ6maNLkyoLrvEhOe6gVx9YFPQ=;
-        b=NaskUVlqdkI/mjlrPOq+/AOceuxy3otEoNFTIgkCyvMnbCCwfYfR7YOPYB6P10gPlZ
-         KSIB2UMpNier4niv7pIOt7JiXL1wnNRJkSK58rQhh/dqAqYAFs0cz9jqiCfNm+lTx6CT
-         qz8eZ0GNtXnqV+q1PV5uehTyA86lMRCCfqDwmTCZaClLjqVDLG1Upc5PECu83fELnh96
-         +RFYbhQ878pjwt/J57UNPJgRtwyfesSN4HatbKMZeRB257kkcKDZCkHxD2ZAoqt9MP0V
-         hxQorL/wvBV2dsrQNjgU2pCDLCDQ/RYtG8Km4Fi0KP8gQ+EiVA54L5bdZMZ1S26nh02D
-         FiCQ==
+        Tue, 1 Nov 2022 01:47:00 -0400
+Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2BB513DFE;
+        Mon, 31 Oct 2022 22:46:59 -0700 (PDT)
+Received: by mail-wm1-f54.google.com with SMTP id l32so8305464wms.2;
+        Mon, 31 Oct 2022 22:46:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:references:message-id:content-transfer-encoding:cc:date
-         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M6ipy07kqjTgYjFgwvJ6maNLkyoLrvEhOe6gVx9YFPQ=;
-        b=ED4O823LqUtekkyuE7R8TKFj7CsiP6IKMNnf++BoJRWoOXII5cly8lRUUr75a6kf4q
-         3uCB2v9KY0csTLp7BvFlTlzCNNSXMA/CMCmz0RU1SVNOgQb2M0tnbaRDD8D+9kgls0p5
-         enm/ffDJxw+AME8Y8gcWYWxn5gPbldjSrs8Fc1NURkFz5Lx9aTEc9ynxtkjb4o59ux7B
-         jiD5Kqq6bt9EGJVA7dppLWEnyHq0yR4km6XdNqec8XWETmgz0Za7hpcBpLxKhxLtdgpu
-         7BR2X5J6mLFPqWSCGAedfCjrm+ZLu/LqQO5+3D74CuWNdjNqICKcpFNsLjIxNedbPzWI
-         cxVg==
-X-Gm-Message-State: ACrzQf3LEmrPWlkR2TC1NMaJvL8kRm3v1jR9gvyfh0rGWXACDZqBt7cF
-        F9jy7qtUVdjOOh6lYojHMng=
-X-Google-Smtp-Source: AMsMyM5oWCnczOC9pd+APPKnVoSdgzLJSw85swLOw+L1vcq5vjQKyzFOZ+5rzoddgMqLj99lTobQzA==
-X-Received: by 2002:a63:8643:0:b0:46b:2bef:338b with SMTP id x64-20020a638643000000b0046b2bef338bmr15796617pgd.357.1667281614026;
-        Mon, 31 Oct 2022 22:46:54 -0700 (PDT)
-Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
-        by smtp.gmail.com with ESMTPSA id d12-20020a17090ab30c00b00212daa6f41dsm5181490pjr.28.2022.10.31.22.46.52
-        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Mon, 31 Oct 2022 22:46:53 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
-Subject: Re: [PATCH RFC 02/10] mm/hugetlb: Comment huge_pte_offset() for its
- locking requirements
-From:   Nadav Amit <nadav.amit@gmail.com>
-In-Reply-To: <20221030212929.335473-3-peterx@redhat.com>
-Date:   Mon, 31 Oct 2022 22:46:52 -0700
-Cc:     kernel list <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        James Houghton <jthoughton@google.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Rik van Riel <riel@surriel.com>
+        h=content-transfer-encoding:in-reply-to:subject:from:references:cc:to
+         :content-language:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=w1nOOZythsV2g8dI/k40n8Y3Bwl44ga7mCUJ7dmyDVA=;
+        b=hExMakRCE2evZY01bxMW0G8VFkY4KVPXH+pgAsKPiF2d434pReI653/UBc0lL1AtuJ
+         K/cAI7ZJ9ToLD+U8f8gdi/4uQZDYnZ2Qy/GkYaYreH9tHCcylo8MoJgsy2W2OYdp4dcs
+         XOs25KA1nS4nWIkPwnSk+AfhHifWFWV5qujfTKIvIwnAnote+9GceeY/1adWIjxunfTH
+         LV8ipX9uIHIDUzWfe7+uHxYTlASMjiC7SGkm/Ys4Qg/Ufakgnt0FGLsANLhJSUhUTb7s
+         CcGuuhM9DtMA5ANbO3YVGs3IMx5elo7FvMXx48wi/To/+vepQbpRqaq0vUEmMyErgVPd
+         bzww==
+X-Gm-Message-State: ACrzQf3MU8UHMzIIBPFdTApCoxkkcQR2EZ4E6Fs77ELy4Tl0NYpUrYzr
+        kzgFMX4WF1OSitZTNn6WjqM=
+X-Google-Smtp-Source: AMsMyM5pTbJRsY//OK1Fm0CiekBIolyy8s4KyEyQuT/BY5M8i3/7oSGGuYVOjgemAmEWvS/jiAA93A==
+X-Received: by 2002:a05:600c:1819:b0:3cf:63fe:944a with SMTP id n25-20020a05600c181900b003cf63fe944amr10108150wmp.17.1667281618063;
+        Mon, 31 Oct 2022 22:46:58 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id u7-20020adfed47000000b002366f9bd717sm10941188wro.45.2022.10.31.22.46.57
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 31 Oct 2022 22:46:57 -0700 (PDT)
+Message-ID: <d833ad15-f458-d43d-cab7-de62ff54a939@kernel.org>
+Date:   Tue, 1 Nov 2022 06:46:56 +0100
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Content-Language: en-US
+To:     Tejun Heo <tj@kernel.org>, Christoph Hellwig <hch@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Martin Liska <mliska@suse.cz>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org
+References: <20221031114520.10518-1-jirislaby@kernel.org>
+ <Y1++fLJXkeZgtXR2@infradead.org> <Y2AMcSPAJpj6obSA@slm.duckdns.org>
+From:   Jiri Slaby <jirislaby@kernel.org>
+Subject: Re: [PATCH] block/blk-iocost (gcc13): cast enum members to int in
+ prints
+In-Reply-To: <Y2AMcSPAJpj6obSA@slm.duckdns.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <F09923E5-605F-476E-976F-C7EABDF64938@gmail.com>
-References: <20221030212929.335473-1-peterx@redhat.com>
- <20221030212929.335473-3-peterx@redhat.com>
-To:     Peter Xu <peterx@redhat.com>
-X-Mailer: Apple Mail (2.3696.120.41.1.1)
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Oct 30, 2022, at 2:29 PM, Peter Xu <peterx@redhat.com> wrote:
+On 31. 10. 22, 18:57, Tejun Heo wrote:
+> On Mon, Oct 31, 2022 at 05:24:28AM -0700, Christoph Hellwig wrote:
+>> On Mon, Oct 31, 2022 at 12:45:20PM +0100, Jiri Slaby (SUSE) wrote:
+>>> Cast the enum members to int when printing them.
+>>>
+>>> Alternatively, we can cast them to ulong (to silence gcc < 12) and use %lu.
+>>> Alternatively, we can move VTIME_PER_SEC away from the enum.
+>>
+>> Yes, either split the enum or just use a define.  But casts are a big
+>> code smell and should be avoided if there is a reasonable alternative.
+> 
+> enums are so much better for debugging and other instrumentation stuff. The
+> only requirement for the enum types is that they're big enough to express
+> all the members and we can use whatever printf format letter which matches
+> the type in use. The problem here is that the compiler behavior is different
+> depending on the compiler version, which kinda sucks.
 
-> huge_pte_offset() is potentially a pgtable walker, looking up pte_t* for a
-> hugetlb address.
-> 
-> Normally, it's always safe to walk the pgtable as long as we're with the
-> mmap lock held for either read or write, because that guarantees the
-> pgtable pages will always be valid during the process.
-> 
-> But it's not true for hugetlbfs: hugetlbfs has the pmd sharing feature, it
-> means that even with mmap lock held, the PUD pgtable page can still go away
-> from under us if pmd unsharing is possible during the walk.
-> 
-> It's not always the case, e.g.:
-> 
->  (1) If the mapping is private we're not prone to pmd sharing or
->      unsharing, so it's okay.
-> 
->  (2) If we're with the hugetlb vma lock held for either read/write, it's
->      okay too because pmd unshare cannot happen at all.
-> 
-> Document all these explicitly for huge_pte_offset(), because it's really
-> not that obvious.  This also tells all the callers on what it needs to
-> guarantee huge_pte_offset() thread-safety.
-> 
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
-> arch/arm64/mm/hugetlbpage.c | 32 ++++++++++++++++++++++++++++++++
+Yes. The real problem is that using anything else then an INT_MIN <= x 
+<= INT_MAX _constant_ in an enum is undefined in ANSI C < 2x (in 
+particular, 1 << x is undefined too). gcc manual defines unsigned int on 
+the top of that as defined too (so this holds for our -std=g*).
 
-Please excuse my ignorant question - is there something specific for arm64
-code here? Other archs seem to have similar code, no?
+> I suppose the most reasonable thing to do here is just splitting them into
+> separate enum definitions. Does anyone know how this behavior change came to
+> be?
+
+C2x which introduces un/signed long enums. See the bug I linked in the 
+commit log:
+https://gcc.gnu.org/bugzilla/show_bug.cgi?id=36113
+
+The change is also turned on in < C2x on purpose. AIUI, unless there is 
+too much breakage. So we'd need to sort it out in (rather distant) 
+future anyway (when we come up to -std=g2x).
+
+> Do we know whether clang is gonna be changed the same way?
+
+In C2x, Likely. In < C2x, dunno what'd be the default.
+
+thanks,
+-- 
+js
+suse labs
 
