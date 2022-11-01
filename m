@@ -2,68 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D52F6147E9
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 11:48:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92C056147F4
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 11:53:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229967AbiKAKsM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 06:48:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36100 "EHLO
+        id S229894AbiKAKx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 06:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37846 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiKAKsJ (ORCPT
+        with ESMTP id S229587AbiKAKxW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 06:48:09 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 521E2193EB
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 03:48:08 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id z5-20020a17090a8b8500b00210a3a2364fso1257817pjn.0
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 03:48:08 -0700 (PDT)
+        Tue, 1 Nov 2022 06:53:22 -0400
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8348833B;
+        Tue,  1 Nov 2022 03:53:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=TMxfFnQEzQ8AbsMFHJGkF0WYebtIumwrSeVhJx0ftUI=;
-        b=UqNCRBe9TgKtGt2+WEXUrx+W0tS0e/IfA/QOOT+HS2ZcyjUxt7tItX0VNLUJeuwS82
-         F0U7/pL0aUC2rZLIHu9Faf+fE9VVZWxFy8YZYspyY3TserZI2PzhqkSzcxIqLdyGmsFV
-         cFjj+yxAwFl87zQ56vsUahVXHUZUkaPABqLDZOjr4HuJknaso3FzFqiWZQ4uHvT9XPg7
-         g5dSbdxneGubPCenpXtPXmGr7JChDQHBYSKt1IpXCaQf+HsYP/Otn9NP961qMPTzwuoH
-         LebOSHfm8irgvL6j3Vp+iuSWriYqFtolOTTt2lXTXa7xk2Os+nLrXHecam+mxsrI7CB+
-         KUXg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=TMxfFnQEzQ8AbsMFHJGkF0WYebtIumwrSeVhJx0ftUI=;
-        b=I3WoIhr/iacoGLOGluUBLmpYXgooYODTKdukcNT1L90yR/NrwDuY6U0wiLvm+84Bb7
-         Kh1Rl/qvqdsthY72+h2VwoLl0tPTYqQ+//kloMrtyFvHfVBAi9Xv5/1mS3K2djFKK/ZC
-         bKzNC+AmYuUWToqzwWMl1oEStExK+bk70nP65yVgasSoN+eVZnGpHEuEy6IpqsbDQf9q
-         zyMh1CKNcwnpG3YwTSQXZ0IwCkcasBBNVZFGuCEgArIi5ldwXq2JWHPdjybgRlAzFFpq
-         e0TgncEEy0XsVZFAjzkk15cxdO9HDXyVHVH5MiRklrXgzHSJOnH9ygkcdB6qeYkupg6u
-         DmEw==
-X-Gm-Message-State: ACrzQf0eOnj+70omAH3G3G9aCwc6Vo/bqwQJRbJ73OrvkmM6v/X/R1WE
-        QGptwInpldmVJx2MIxE/vxXm7xv9CnqtoFOIWP8Ia9UHJr8=
-X-Google-Smtp-Source: AMsMyM4QXwuQisJZcrtUtmStzzQ1dKTn2YwaMqyArI5euBjHzZ2nKC1dCA5XdgPaN/E2MUHBVQCg8vVsOA0krMCqZME=
-X-Received: by 2002:a17:903:264b:b0:186:af7a:391d with SMTP id
- je11-20020a170903264b00b00186af7a391dmr18965064plb.19.1667299687554; Tue, 01
- Nov 2022 03:48:07 -0700 (PDT)
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1667300000; x=1698836000;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=iR5nbEeb8llq1Y8iZDzFZH97eYqMxkF8ru+fo1WsjQk=;
+  b=kY6mgNDZ4o7GysJNxiBJWCSdhJeLMSCsXgzjuu2UlKJ8aZ0N1/qrXORF
+   weqbaQym9ts9Y916NSYx0nrCRKKjpvY8QjQtwVkiuQerQl2C09mlb61Hb
+   Ud3i8obBmYXADHKW8KGF3Lw8dvgkFEv4Q6XACBGmKpwN3YKBK/nH2tZua
+   3DyqIHor3iCTbhfl8Nh1ymkqAjQPyz4ZMXxK5e4NPkA2aYZHf7H+nCRsW
+   FpFDLqTx0OgdarmtkmjOuuDgrrNDZpfaXjaL81sVQpavSKpO/fldzWRwO
+   nuV8n2ssjn/rYk6Qhp0s8GS8/Qa4WHanhDBxtWMDGgwoznGtbLHC8O9c1
+   A==;
+X-IronPort-AV: E=Sophos;i="5.95,230,1661810400"; 
+   d="scan'208";a="27084645"
+Received: from unknown (HELO tq-pgp-pr1.tq-net.de) ([192.168.6.15])
+  by mx1-pgp.tq-group.com with ESMTP; 01 Nov 2022 11:53:18 +0100
+Received: from mx1.tq-group.com ([192.168.6.7])
+  by tq-pgp-pr1.tq-net.de (PGP Universal service);
+  Tue, 01 Nov 2022 11:53:18 +0100
+X-PGP-Universal: processed;
+        by tq-pgp-pr1.tq-net.de on Tue, 01 Nov 2022 11:53:18 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1667299998; x=1698835998;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=iR5nbEeb8llq1Y8iZDzFZH97eYqMxkF8ru+fo1WsjQk=;
+  b=DsAO7v5asU45fn25A/NOWFVRclqqAMh4qvgqKmiQCaYnV6OULs8ciJwD
+   cGOIIEjJUuMbLAK2gzmzJGTtVQlc4OrBPXaGDmHqYLJZJ74z9YdjHAsjA
+   JLe9ePi41EKKs/Ah3MZjSyrMWx7DV6WuEoRJ2G1Y91+LkoOjQYTeK8wEC
+   gQf6T/9Fa4PVLiGMPc1/2XDSjVmIPhzCRa6wwWBXkv31rgXnu0PZY15q2
+   TnH1NF56LOOLaHQwhEYqbssSC60SaS4deg51Dy7/66UruiaLgz9Wd2BIJ
+   6ffaJ5/g1nttCZsZzpbBWPBwoba82E5E4dr9ZmDVXpYxpocntePeK3wwe
+   Q==;
+X-IronPort-AV: E=Sophos;i="5.95,230,1661810400"; 
+   d="scan'208";a="27084644"
+Received: from vtuxmail01.tq-net.de ([10.115.0.20])
+  by mx1.tq-group.com with ESMTP; 01 Nov 2022 11:53:18 +0100
+Received: from localhost.localdomain (SCHIFFERM-M2.tq-net.de [10.121.49.14])
+        by vtuxmail01.tq-net.de (Postfix) with ESMTPA id 17CD0280056;
+        Tue,  1 Nov 2022 11:53:18 +0100 (CET)
+From:   Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+Subject: [PATCH] mmc: sdhci_am654: Use dev_err_probe() for mmc_of_parse() return code
+Date:   Tue,  1 Nov 2022 11:52:42 +0100
+Message-Id: <20221101105242.2019036-1-matthias.schiffer@ew.tq-group.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-References: <20221013121319.994170-1-vannapurve@google.com>
- <20221013121319.994170-5-vannapurve@google.com> <Y1Hhw40H58EmZ6lK@google.com>
-In-Reply-To: <Y1Hhw40H58EmZ6lK@google.com>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Tue, 1 Nov 2022 16:17:55 +0530
-Message-ID: <CAGtprH90U_gNGOxnOey3k=F8+HdC0zW+xk0ZxD4VNzaDey0sLw@mail.gmail.com>
-Subject: Re: [V3 PATCH 4/4] KVM: selftests: x86: Precompute the cpu type
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     x86@kernel.org, kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-kselftest@vger.kernel.org, pbonzini@redhat.com,
-        shuah@kernel.org, bgardon@google.com, oupton@google.com,
-        peterx@redhat.com, vkuznets@redhat.com, dmatlack@google.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,101 +77,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 5:33 AM Sean Christopherson <seanjc@google.com> wrote:
->
-> On Thu, Oct 13, 2022, Vishal Annapurve wrote:
-> > Cache the vendor CPU type in a global variable so that multiple calls
-> > to is_amd/intel_cpu() do not need to re-execute CPUID.
-> >
-> > Sync the global variable is_cpu_amd into the guest so the guest can also
-> > avoid executing CPUID instruction.
-> >
-> > Suggested-by: Sean Christopherson <seanjc@google.com>
-> > Signed-off-by: Vishal Annapurve <vannapurve@google.com>
-> > ---
-> >  tools/testing/selftests/kvm/lib/x86_64/processor.c | 10 ++++++++--
-> >  1 file changed, 8 insertions(+), 2 deletions(-)
-> >
-> > diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> > index fa65e8142c16..f508e58346e9 100644
-> > --- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> > +++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-> > @@ -19,6 +19,7 @@
-> >  #define MAX_NR_CPUID_ENTRIES 100
-> >
-> >  vm_vaddr_t exception_handlers;
-> > +static bool is_cpu_amd;
->
-> This should probably have a "host" qualifier, e.g. is_host_cpu_amd.  More below.
->
+Checking phandle references like mmc-pwrseq can result in -EPROBE_DEFER.
 
-Ack.
+Signed-off-by: Matthias Schiffer <matthias.schiffer@ew.tq-group.com>
+---
+ drivers/mmc/host/sdhci_am654.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-> >
-> >  static void regs_dump(FILE *stream, struct kvm_regs *regs, uint8_t indent)
-> >  {
-> > @@ -1046,7 +1047,7 @@ static bool cpu_vendor_string_is(const char *vendor)
-> >
-> >  bool is_intel_cpu(void)
->
-> It'll be more churn, but I think we should drop the wrappers in this patch so
-> that we can visually audit all users.  There is technically a subtle functional
-> change here, as previously executing is_intel_cpu() and is_amd_cpu() in the guest
-> will consume the _guest_ CPUID, whereas with this change, the guest will now
-> consume the _host_ CPUID.
->
-> It just so happens that the existing user and the new user both want to query
-> Intel vs. AMD for VMCALL vs. VMMCALL, i.e. care about the host even when checking
-> from the guest.  It's extreme paranoia since I don't think there are any parallel
-> series that are adding is_intel_cpu()/is_amd_cpu() users, not to mention that I
-> don't think any selftests does cross-vendor virtualization, but on the other hand
-> the paranoia doesn't cost much.
->
+diff --git a/drivers/mmc/host/sdhci_am654.c b/drivers/mmc/host/sdhci_am654.c
+index 8f1023480e12..4e17efa8ab97 100644
+--- a/drivers/mmc/host/sdhci_am654.c
++++ b/drivers/mmc/host/sdhci_am654.c
+@@ -835,7 +835,7 @@ static int sdhci_am654_probe(struct platform_device *pdev)
+ 
+ 	ret = mmc_of_parse(host->mmc);
+ 	if (ret) {
+-		dev_err(dev, "parsing dt failed (%d)\n", ret);
++		dev_err_probe(dev, ret, "parsing dt failed\n");
+ 		goto pm_runtime_put;
+ 	}
+ 
+-- 
+2.25.1
 
-Ack. I think this patch should also be the part of a different series
-which deals with executing hypercall according to the cpu type, there
-is no immediate need for this change in this series.
-
-Will incorporate your feedback in the next version of this patch.
-
-> >  {
-> > -     return cpu_vendor_string_is("GenuineIntel");
-> > +     return !is_cpu_amd;
->
-> Please keep the explicit "GenuineIntel" check, i.e. add is_host_cpu_intel.  KVM
-> technically supports other vendors, e.g. Centaur and Zhaoxin for VMX, and Hygon
-> for AMD, so it's not impossible that someone could run on Centuar or Zhaoxin and
-> get a false positive.  Again, extreme paranoia, but doesn't cost much.
->
-
-Ack, makes sense.
-
-> >  }
-> >
-> >  /*
-> > @@ -1054,7 +1055,7 @@ bool is_intel_cpu(void)
-> >   */
-> >  bool is_amd_cpu(void)
-> >  {
-> > -     return cpu_vendor_string_is("AuthenticAMD");
-> > +     return is_cpu_amd;
-> >  }
-> >
-> >  void kvm_get_cpu_address_width(unsigned int *pa_bits, unsigned int *va_bits)
-> > @@ -1328,8 +1329,13 @@ bool vm_is_unrestricted_guest(struct kvm_vm *vm)
-> >       return get_kvm_intel_param_bool("unrestricted_guest");
-> >  }
-> >
-> > +void kvm_selftest_arch_init(void)
-> > +{
-> > +     is_cpu_amd = cpu_vendor_string_is("AuthenticAMD");
-> > +}
-> >
-> >  void kvm_arch_vm_post_create(struct kvm_vm *vm)
-> >  {
-> >       vm_create_irqchip(vm);
-> > +     sync_global_to_guest(vm, is_cpu_amd);
-> >  }
-> > --
-> > 2.38.0.rc1.362.ged0d419d3c-goog
-> >
