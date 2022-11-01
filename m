@@ -2,144 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5F2E161511F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 18:54:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82B24615124
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 18:55:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230372AbiKARyQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 13:54:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47614 "EHLO
+        id S231328AbiKARzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 13:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230451AbiKARx7 (ORCPT
+        with ESMTP id S231250AbiKARyd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 13:53:59 -0400
-Received: from mail-pf1-x42e.google.com (mail-pf1-x42e.google.com [IPv6:2607:f8b0:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D51711CB04;
-        Tue,  1 Nov 2022 10:53:58 -0700 (PDT)
-Received: by mail-pf1-x42e.google.com with SMTP id y203so3133pfb.4;
-        Tue, 01 Nov 2022 10:53:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=M2J1+cr5yCkfhmlJuiea40UIW73C1SmYJz1XZ9F//oM=;
-        b=a5nRUpRVccWsflu1tgAUVeXJZySVFCbti/up2zo4roQ9JkbZo/hfTJHelHBSHo5tLe
-         tC1jaZjXp19/j7nU6I5PBFMdByE64i0asxNb/6rZb7HZt/BnmzkoLFNQr8xE+O4yNXaf
-         cqrVi+oPQcK7NGLdteVHwS5XkTUUjXZ1UQiZE7t+qpHQdWqOSRb0WHS44woZVsj2Geoa
-         Wa5ftzIuMBmVy8Dkdq3XIyYWOE/DlLtDUjaGU5oe7O8ZVy0BnuY36U/yEmFBBv2+hVFL
-         dY5LBROUWb2htulwX6mqLJBYBf75f2WrHHjFLuu5Yb3twbmP/UR84r4LGdZDdoqGKA5f
-         T83Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=M2J1+cr5yCkfhmlJuiea40UIW73C1SmYJz1XZ9F//oM=;
-        b=tQ/e9qAor0W5EYYEvn+3FGy9IrTyhEUQB/Tv2lB+Z74xBJsDagGQ6FMWzdMl6Kkpig
-         IRvb6QBIHfFIpELeIgiaCMEmvW6jCrK05GCN/ICda+IYVWmSJQ3lb+kNYm5ut/usSIqr
-         hqRD+iCCFKA4yDrXLPYuRUUJE2BcZAyiGCEd2KVy4EeuVMzKcIU7FC5AOeIVUpQazUyx
-         q0ey/kbV4nPosu98trUTvZI+b7W8rzi+XPG6vDhs5AYQ1VCbq4AIq8K6wHSuSPxr4Ntr
-         JdkikeWn2m+zN0N4QFi+JZpOckup6qCiO1ajG3XRESbfx7VH32ocaAQ5R9S+f01fOXiN
-         lUmg==
-X-Gm-Message-State: ACrzQf31u7/VtrPLgy66ZOJ7FaOckRAqdPo6Kbdn6J3F12gvviqBUTwf
-        K05imVopJmYYeFf78ypMy0MloIkFxebB3g==
-X-Google-Smtp-Source: AMsMyM51zCtXYMyAw9bd3/mTakXsP6meG/nQMZjuLadCOHRAo9SG1oiCI9WwArgVlu9PEj5R5eiZHg==
-X-Received: by 2002:a05:6a00:891:b0:565:85a7:a6e with SMTP id q17-20020a056a00089100b0056585a70a6emr3854588pfj.21.1667325238285;
-        Tue, 01 Nov 2022 10:53:58 -0700 (PDT)
-Received: from fedora.hsd1.ca.comcast.net ([2601:644:8002:1c20::8080])
-        by smtp.googlemail.com with ESMTPSA id e26-20020a056a0000da00b0056b9124d441sm6797987pfj.218.2022.11.01.10.53.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 10:53:57 -0700 (PDT)
-From:   "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-To:     linux-mm@kvack.org
-Cc:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        akpm@linux-foundation.org, willy@infradead.org, miklos@szeredi.hu,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
-Subject: [PATCH 5/5] folio-compat: Remove lru_cache_add()
-Date:   Tue,  1 Nov 2022 10:53:26 -0700
-Message-Id: <20221101175326.13265-6-vishal.moola@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221101175326.13265-1-vishal.moola@gmail.com>
-References: <20221101175326.13265-1-vishal.moola@gmail.com>
+        Tue, 1 Nov 2022 13:54:33 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B94E11D0D3;
+        Tue,  1 Nov 2022 10:54:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=Rb+GxuYYkyrIKK+IY8jZcZsGk5i+4PamZxFzJOuIpvM=; b=bqYtpmjKYGACgO8BFCDLwL3w9m
+        yymr5KNFNii98N1Ca1Ulj/o23ZKmBL/lyFA3js4wFZCma3VjxYDQrgCBoy5J48kxtXZ/wkT8THrys
+        mjlSjLXQeFgMYnPDVYKeolIET4Y9nd/xN80QNqQQtVoLtLc7XtpmKCJLajiXUDzsve0PEii2i0yw8
+        UmuiegLQ0PeBfB+uUNG5+aPTDh0x9GIQJWDhRmYkg/1VsON6/QrxLCOVJ1ChssuWxt3axhRvdrOky
+        R6uRWZdM9LPWdD811IbBTk5PKzWInAr9mnHKovnnQmZGJvFIZ5VtIoKyV+lCOIHX5jrO/t/yUsDee
+        lHnu4P7Q==;
+Received: from c-67-160-137-253.hsd1.or.comcast.net ([67.160.137.253] helo=[10.0.0.152])
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1opvSn-006NYc-My; Tue, 01 Nov 2022 17:54:13 +0000
+Message-ID: <1041acdb-2978-7413-5567-ae9c14471605@infradead.org>
+Date:   Tue, 1 Nov 2022 10:54:11 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] ath11k (gcc13): synchronize
+ ath11k_mac_he_gi_to_nl80211_he_gi()'s return type
+Content-Language: en-US
+To:     Kalle Valo <kvalo@kernel.org>
+Cc:     Jiri Slaby <jirislaby@kernel.org>,
+        Jeff Johnson <quic_jjohnson@quicinc.com>,
+        linux-kernel@vger.kernel.org, Martin Liska <mliska@suse.cz>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+References: <20221031114341.10377-1-jirislaby@kernel.org>
+ <55c4d139-0f22-e7ba-398a-e3e0d8919220@quicinc.com>
+ <833c7f2f-c140-5a0b-1efc-b858348206ec@kernel.org> <87bkprgj0b.fsf@kernel.org>
+ <503a3b36-2256-a9ce-cffe-5c0ed51f6f62@infradead.org>
+ <87tu3ifv8z.fsf@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <87tu3ifv8z.fsf@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are no longer any callers of lru_cache_add(), so remove it. This
-saves 107 bytes of kernel text. Also cleanup some comments such that
-they reference the new folio_add_lru() instead.
+Hi--
 
-Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
----
- include/linux/swap.h | 1 -
- mm/folio-compat.c    | 6 ------
- mm/truncate.c        | 2 +-
- mm/workingset.c      | 2 +-
- 4 files changed, 2 insertions(+), 9 deletions(-)
+On 11/1/22 10:19, Kalle Valo wrote:
+> Randy Dunlap <rdunlap@infradead.org> writes:
+> 
+>> On 11/1/22 01:45, Kalle Valo wrote:
+>>> Jiri Slaby <jirislaby@kernel.org> writes:
+>>>
+>>>> On 31. 10. 22, 22:16, Jeff Johnson wrote:
+>>>>
+>>>>> On 10/31/2022 4:43 AM, Jiri Slaby (SUSE) wrote:
+>>
+>>>>> Suggest the subject should be
+>>>>> wifi: ath11k: synchronize ath11k_mac_he_gi_to_nl80211_he_gi()'s return type
+>>>>
+>>>> FWIW I copied from:
+>>>> $ git log --format=%s  drivers/net/wireless/ath/ath11k/mac.h
+>>>> ath11k: Handle keepalive during WoWLAN suspend and resume
+>>>> ath11k: reduce the wait time of 11d scan and hw scan while add interface
+>>>> ath11k: Add basic WoW functionalities
+>>>> ath11k: add support for hardware rfkill for QCA6390
+>>>> ath11k: report tx bitrate for iw wlan station dump
+>>>> ath11k: add 11d scan offload support
+>>>> ath11k: fix read fail for htt_stats and htt_peer_stats for single pdev
+>>>> ath11k: add support for BSS color change
+>>>> ath11k: add support for 80P80 and 160 MHz bandwidth
+>>>> ath11k: Add support for STA to handle beacon miss
+>>>> ath11k: add support to configure spatial reuse parameter set
+>>>> ath11k: remove "ath11k_mac_get_ar_vdev_stop_status" references
+>>>> ath11k: Perform per-msdu rx processing
+>>>> ath11k: fix incorrect peer stats counters update
+>>>> ath11k: Move mac80211 hw allocation before wmi_init command
+>>>> ath11k: fix missed bw conversion in tx completion
+>>>> ath11k: driver for Qualcomm IEEE 802.11ax devices
+>>>
+>>> Yeah, using "wifi:" is a new prefix we started using with wireless
+>>> patches this year.
+>>>
+>>
+>> It would be nice if that was documented somewhere...
+> 
+> It is mentioned on our wiki but I doubt anyone reads it :)
 
-diff --git a/include/linux/swap.h b/include/linux/swap.h
-index a18cf4b7c724..c92ccff9b962 100644
---- a/include/linux/swap.h
-+++ b/include/linux/swap.h
-@@ -388,7 +388,6 @@ void lru_note_cost(struct lruvec *lruvec, bool file, unsigned int nr_pages);
- void lru_note_cost_folio(struct folio *);
- void folio_add_lru(struct folio *);
- void folio_add_lru_vma(struct folio *, struct vm_area_struct *);
--void lru_cache_add(struct page *);
- void mark_page_accessed(struct page *);
- void folio_mark_accessed(struct folio *);
- 
-diff --git a/mm/folio-compat.c b/mm/folio-compat.c
-index e1e23b4947d7..efd65b7f48bb 100644
---- a/mm/folio-compat.c
-+++ b/mm/folio-compat.c
-@@ -82,12 +82,6 @@ bool redirty_page_for_writepage(struct writeback_control *wbc,
- }
- EXPORT_SYMBOL(redirty_page_for_writepage);
- 
--void lru_cache_add(struct page *page)
--{
--	folio_add_lru(page_folio(page));
--}
--EXPORT_SYMBOL(lru_cache_add);
--
- void lru_cache_add_inactive_or_unevictable(struct page *page,
- 		struct vm_area_struct *vma)
- {
-diff --git a/mm/truncate.c b/mm/truncate.c
-index c0be77e5c008..184fa17fce60 100644
---- a/mm/truncate.c
-+++ b/mm/truncate.c
-@@ -573,7 +573,7 @@ EXPORT_SYMBOL(invalidate_mapping_pages);
-  * refcount.  We do this because invalidate_inode_pages2() needs stronger
-  * invalidation guarantees, and cannot afford to leave pages behind because
-  * shrink_page_list() has a temp ref on them, or because they're transiently
-- * sitting in the lru_cache_add() pagevecs.
-+ * sitting in the folio_add_lru() pagevecs.
-  */
- static int invalidate_complete_folio2(struct address_space *mapping,
- 					struct folio *folio)
-diff --git a/mm/workingset.c b/mm/workingset.c
-index ae7e984b23c6..25844171b72d 100644
---- a/mm/workingset.c
-+++ b/mm/workingset.c
-@@ -492,7 +492,7 @@ void workingset_refault(struct folio *folio, void *shadow)
- 	/* Folio was active prior to eviction */
- 	if (workingset) {
- 		folio_set_workingset(folio);
--		/* XXX: Move to lru_cache_add() when it supports new vs putback */
-+		/* XXX: Move to folio_add_lru() when it supports new vs putback */
- 		lru_note_cost_folio(folio);
- 		mod_lruvec_state(lruvec, WORKINGSET_RESTORE_BASE + file, nr);
- 	}
+I think that you are correct. ;)
+
+> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches#subject
+> 
+> Do let me know if there are other places which should have this info.
+
+Ideally it would be in the subsystem's profile document as described in the
+MAINTAINERS file:
+
+	P: Subsystem Profile document for more details submitting
+	   patches to the given subsystem. This is either an in-tree file,
+	   or a URI. See Documentation/maintainer/maintainer-entry-profile.rst
+	   for details.
+
+although that seems to be overkill IMHO just to add a prefix: setting.
+
+You could just clone some other maintainer's Profile document and then modify it
+to anything that you would like to have in it as far as Maintaining and patching
+are concerned.
+
+> I did assume it will take at least a year or two before people get used
+> to the new prefix, but my patchwork script has a check for this and it's
+> trivial to fix the subject before I commit the patch. So hopefully the
+> switch goes smoothly.
+
+OK.
+
+Thanks.
+
 -- 
-2.38.1
-
+~Randy
