@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94C00614849
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:14:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7396F61484B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:14:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229875AbiKALOj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 07:14:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50628 "EHLO
+        id S229763AbiKALO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 07:14:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50844 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiKALOf (ORCPT
+        with ESMTP id S230184AbiKALOw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 07:14:35 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F9B617E20
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 04:14:34 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id h12so13652698ljg.9
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 04:14:34 -0700 (PDT)
+        Tue, 1 Nov 2022 07:14:52 -0400
+Received: from mail-lf1-x135.google.com (mail-lf1-x135.google.com [IPv6:2a00:1450:4864:20::135])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0F0F19C1D
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 04:14:49 -0700 (PDT)
+Received: by mail-lf1-x135.google.com with SMTP id t4so9997597lfp.2
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 04:14:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ODOqilNSijD4py9EAus4CVCtQnvb754955fyu3E9a6Y=;
-        b=XnmIx4hOAXsqj1PC3SDcc7sRM7ZiSp5OeQjyiGSBCcVNp/OyVPT9fwwMivbvhrLBJW
-         MAoWgSr4uEtUnauiw1GZrdeCVwkRRGfS+8hU7dRuq7yfcox/y2kdX9qEiaCPK1mpzxJW
-         v2B41bfsXERiI5zE7d1fU1cjI98j/RqsdeBui8r3meK59vV8+GNcazINrBpRhiZ6e0bB
-         oDG/RPSWD2pE6ZeP+TToq/8C1f2Tk1COJykyCpLOsNgvu+W99SgW0mBtQ4YyXoninrO/
-         AT9TUk0MzJjfkFuD7nZQKkUo/9GYrW4/h7LtGJFu0cdDzOk1apUQQcvASiqpN8Ugfq6c
-         qp/w==
+        bh=Et0dLu8NcqFUEiFUqF09J+RIhc7UoMo0suIjCPp+COE=;
+        b=Q2PtqRY6KrwP3n9DeLyFElWkTzB87jb7VOfbmqYF6zUGhNijk0IPeJ8TzNKBQuq1F9
+         5UlQdtvRnaa6lhyLRHphzhkTQ1K4VjmL6NJ/taHrsvKQaZayYFmiA7YjS7DcTGup/8+v
+         okq5l1ps1vTd1KP1wMYGMv43RfKXjWdelFUXgTHgg4WBQzpUVl7diPrXdtsH5zOKkK5i
+         9n9WEcLn/LOyXmQafS0bqlKM59MMrRC5tizDeboWNSUN0nRFLZrgwifeVyHOg5L4xUZr
+         GI9HWnPKEzUs0YTGLd7rR2jHQMx/vLjkg2+kDGjgzFvCqXi/JwmGgzf9kO8/Gypi9BZg
+         PQXA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ODOqilNSijD4py9EAus4CVCtQnvb754955fyu3E9a6Y=;
-        b=CviBPMB+I+k7NPwjpTt8qJ2ti7q9kkxwbkImHa49Kk534JfqPbrXx8BGGFb9lbt35V
-         OIvvyq/7iXt23LjRezpFGvc/ch3F0MG6bl18nkiP3THcsxprMJg3EOvAH5rucfX9GpRf
-         X+0W+Y5Fdz7O+YYmdVxxsxLvNbQ3Tr/4N7iclgZtMCdKlFTbz05uAz/96ssLkdRAZhBr
-         miWGcNoRRnX6CjsjsS0VidaBvZUQO91s3HGaXNqc1/GHvs2G2mc0TsBIKMCmobOcQXeO
-         zgJ10FtKZ2aRbBt15vt1WCJoSBnC3Z219JBhd4UGOy/j+m+cjBc93VHeFBP3jEW2t8gs
-         ZPAw==
-X-Gm-Message-State: ACrzQf1GZvEzN7QygcfT5/eUcg6y0ELtvQoSbGMCdkf+zBy5n5wSY0la
-        i23pdmx0VfKXQhqxlYGnRas=
-X-Google-Smtp-Source: AMsMyM6xt6uwOkEGQU4Qwe0/HFDzf9PTR1VXNz8cNbSKEVyTggHbKFXNqNdWrF9Q8vDqV7yjigVF5A==
-X-Received: by 2002:a2e:1505:0:b0:277:5648:24cf with SMTP id s5-20020a2e1505000000b00277564824cfmr4196737ljd.430.1667301272727;
-        Tue, 01 Nov 2022 04:14:32 -0700 (PDT)
+        bh=Et0dLu8NcqFUEiFUqF09J+RIhc7UoMo0suIjCPp+COE=;
+        b=pKdqTwG3NoaPAX0fX2Dcw5EB1+Ob0u8GQdREh6RAjQTUtfRz5hT4IQu/SNlC+mnw4P
+         AR6u38Jb+cZIY1S0RXW8ZBHPDMhvyK4LHp/pT+hK3CSE8kBTN8kbkTx45BugvMhmeiSV
+         f5vp7owo8bZaVmyrekcTCe2Cvu1fM0HLmwi2gestg8C+rwWj3NTSGmQSn8jGnN1NSyw3
+         0UZ7tpSMFrGLqOzFv8zlE9exWZ5yED/pkS8jgcIPEJxu6WbJ2W6nzutzi9Lu0k3bc2Kz
+         JyjcF20INrQ6sCabg2VciPfq7rN971iUYW/kGl74clGNx4DryuB51ZTN9ZTjd6PKeLF3
+         83pA==
+X-Gm-Message-State: ACrzQf2uDNbyIHDS3ho0eYi34unI6e0ShftGIZxeu+KkJSnn8KMQZD2J
+        sbu4MNq9e2BKqDQwNQX/k2Q=
+X-Google-Smtp-Source: AMsMyM6aGUKbqF8nu2opQO8Hniz97PYjbfRKBgkjR7bJJweSp6d8uOuPN9u/iraFIINPAmdpG60aiA==
+X-Received: by 2002:a19:ad03:0:b0:4a0:56ab:7148 with SMTP id t3-20020a19ad03000000b004a056ab7148mr7796171lfc.430.1667301287906;
+        Tue, 01 Nov 2022 04:14:47 -0700 (PDT)
 Received: from elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net ([20.240.130.248])
-        by smtp.googlemail.com with ESMTPSA id e17-20020a05651236d100b0048af3c090f8sm1629472lfs.13.2022.11.01.04.14.32
+        by smtp.googlemail.com with ESMTPSA id e17-20020a05651236d100b0048af3c090f8sm1629472lfs.13.2022.11.01.04.14.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 04:14:32 -0700 (PDT)
+        Tue, 01 Nov 2022 04:14:47 -0700 (PDT)
 From:   Tanjuate Brunostar <tanjubrunostar0@gmail.com>
 To:     gregkh@linuxfoundation.org
 Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
         outreachy@lists.linux.dev,
         Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-Subject: [PATCH 1/2] change the function name s_vFillRTSHead
-Date:   Tue,  1 Nov 2022 11:13:27 +0000
-Message-Id: <16e1033e32dd5a82e058c7c69ea2ec93800a30b7.1667300134.git.tanjubrunostar0@gmail.com>
+Subject: [PATCH 2/2] Join some lines of code to avoid a line ending in a (
+Date:   Tue,  1 Nov 2022 11:13:29 +0000
+Message-Id: <1da74119d5a50ef97e68f26c82c9c9e429f8d0ec.1667300134.git.tanjubrunostar0@gmail.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1667300134.git.tanjubrunostar0@gmail.com>
 References: <cover.1667300134.git.tanjubrunostar0@gmail.com>
@@ -73,78 +73,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the use of Hungarian notation, which is not used in the Linux
-kernel
+The code line ends with a '(' which is not allowed in
+Linux kernel coding. Joining the lines and indenting
+correctly improves visibility
 
 Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
 ---
- drivers/staging/vt6655/rxtx.c | 26 +++++++++++++-------------
- 1 file changed, 13 insertions(+), 13 deletions(-)
+ drivers/staging/vt6655/rxtx.c | 22 +++++++++-------------
+ 1 file changed, 9 insertions(+), 13 deletions(-)
 
 diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
-index 31ae99b3cb35..d7e439cd8675 100644
+index d7e439cd8675..df7473155704 100644
 --- a/drivers/staging/vt6655/rxtx.c
 +++ b/drivers/staging/vt6655/rxtx.c
-@@ -23,7 +23,7 @@
-  *      s_uGetTxRsvTime- get frame reserved time
-  *      s_vFillCTSHead- fulfill CTS ctl header
-  *      s_vFillFragParameter- Set fragment ctl parameter.
-- *      s_vFillRTSHead- fulfill RTS ctl header
-+ *      fill_rts_head- fulfill RTS ctl header
-  *      s_vFillTxKey- fulfill tx encrypt key
-  *      s_vSWencryption- Software encrypt header
-  *      vDMA0_tx_80211- tx 802.11 frame via dma0
-@@ -85,15 +85,15 @@ static const unsigned short fb_opt1[2][5] = {
- #define DATADUR_A_F1    13
+@@ -555,19 +555,15 @@ s_uFillDataHead(
+ 	return buf->duration;
+ }
  
- /*---------------------  Static Functions  --------------------------*/
--static void s_vFillRTSHead(struct vnt_private *pDevice,
--			   unsigned char byPktType,
--			   void *pvRTS,
--			   unsigned int	cbFrameLength,
--			   bool bNeedAck,
--			   bool bDisCRC,
--			   struct ieee80211_hdr *hdr,
--			   unsigned short wCurrentRate,
--			   unsigned char byFBOption);
+-static
+-void
+-s_vFillRTSHead(
+-	struct vnt_private *pDevice,
+-	unsigned char byPktType,
+-	void *pvRTS,
+-	unsigned int cbFrameLength,
+-	bool bNeedAck,
+-	bool bDisCRC,
+-	struct ieee80211_hdr *hdr,
+-	unsigned short wCurrentRate,
+-	unsigned char byFBOption
+-)
 +static void fill_rts_head(struct vnt_private *pDevice,
 +			  unsigned char byPktType,
 +			  void *pvRTS,
-+			  unsigned int	cbFrameLength,
++			  unsigned int cbFrameLength,
 +			  bool bNeedAck,
 +			  bool bDisCRC,
 +			  struct ieee80211_hdr *hdr,
 +			  unsigned short wCurrentRate,
-+			  unsigned char byFBOption);
- 
- static void s_vGenerateTxParameter(struct vnt_private *pDevice,
- 				   unsigned char byPktType,
-@@ -912,7 +912,7 @@ s_vGenerateTxParameter(
- 			buf->rrv_time_a = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
- 			buf->rrv_time_b = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, pDevice->byTopCCKBasicRate, bNeedACK);
- 
--			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-+			fill_rts_head(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
- 		} else {/* RTS_needless, PCF mode */
- 			struct vnt_rrv_time_cts *buf = pvRrvTime;
- 
-@@ -931,7 +931,7 @@ s_vGenerateTxParameter(
- 			buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
- 
- 			/* Fill RTS */
--			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-+			fill_rts_head(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
- 		} else if (!pvRTS) {/* RTS_needless, non PCF mode */
- 			struct vnt_rrv_time_ab *buf = pvRrvTime;
- 
-@@ -945,7 +945,7 @@ s_vGenerateTxParameter(
- 			buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, wCurrentRate, bNeedACK);
- 
- 			/* Fill RTS */
--			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-+			fill_rts_head(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
- 		} else { /* RTS_needless, non PCF mode */
- 			struct vnt_rrv_time_ab *buf = pvRrvTime;
++			  unsigned char byFBOption)
+ {
+ 	unsigned int uRTSFrameLen = 20;
  
 -- 
 2.34.1
