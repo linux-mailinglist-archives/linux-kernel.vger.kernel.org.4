@@ -2,146 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDA15614C19
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:52:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E98E4614C1B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:52:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbiKANwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 09:52:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51408 "EHLO
+        id S229824AbiKANwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 09:52:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230003AbiKANwP (ORCPT
+        with ESMTP id S230115AbiKANw2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 09:52:15 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 768815F6D;
-        Tue,  1 Nov 2022 06:52:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=In-Reply-To:Content-Type:MIME-Version
-        :References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=G33VyQ6sOfQGS04g9QhDbkRC3o9MZ8PM6yea6yNSRRA=; b=2lokBh1C81D9XohJYqekPo1vRQ
-        o6rFXfME/tQ3E2gTFRR+qhJtT/u6v/mm3nkxODcbwloUwJ+WUaPWtp980HGvaLU89tZwINoDl9qU6
-        XnEGfKDrjpNg0Pb5Jv1FJ5WR3cRq4Yd/SVwqSflh/wf42c5E1n1ernTx8JYuv389a0tDXBBjMSzqC
-        Bzfb4ksbvC+9Tm5Uex2YOOX7f4p/w2DCSe/YMdVHTq9Os38VCv949ELI+Az07K4OsPd8aVlUbas6w
-        HyLylsmnk4TgNZCpDY3wMm0E68T959p3fSLPhLXKrFXKPaCHaMrHLegMqrUCNONSsMzHEHLDG+7Ye
-        3uyoPv5A==;
-Received: from hch by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oprgH-005Lk8-Mt; Tue, 01 Nov 2022 13:51:53 +0000
-Date:   Tue, 1 Nov 2022 06:51:53 -0700
-From:   Christoph Hellwig <hch@infradead.org>
-To:     Al Viro <viro@zeniv.linux.org.uk>
-Cc:     Christoph Hellwig <hch@infradead.org>,
-        David Howells <dhowells@redhat.com>, willy@infradead.org,
-        dchinner@redhat.com, Steve French <smfrench@gmail.com>,
-        Shyam Prasad N <nspmangalore@gmail.com>,
-        Rohith Surabattula <rohiths.msft@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        Ira Weiny <ira.weiny@intel.com>, torvalds@linux-foundation.org,
-        linux-cifs@vger.kernel.org, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, jlayton@redhat.com
-Subject: Re: How to convert I/O iterators to iterators, sglists and RDMA lists
-Message-ID: <Y2EkeULBA3zsiarf@infradead.org>
-References: <Y01VjOE2RrLVA2T6@infradead.org>
- <1762414.1665761217@warthog.procyon.org.uk>
- <1415915.1666274636@warthog.procyon.org.uk>
- <Y1an1NFcowiSS9ms@infradead.org>
- <Y1btOP0tyPtcYajo@ZenIV>
+        Tue, 1 Nov 2022 09:52:28 -0400
+Received: from www62.your-server.de (www62.your-server.de [213.133.104.62])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20A681409C;
+        Tue,  1 Nov 2022 06:52:24 -0700 (PDT)
+Received: from sslproxy02.your-server.de ([78.47.166.47])
+        by www62.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92.3)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oprgf-000DGm-DE; Tue, 01 Nov 2022 14:52:17 +0100
+Received: from [85.1.206.226] (helo=linux.home)
+        by sslproxy02.your-server.de with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <daniel@iogearbox.net>)
+        id 1oprge-000Jkk-Tx; Tue, 01 Nov 2022 14:52:17 +0100
+Subject: Re: [PATCH bpf-next v2 2/3] bpf/verifier: Use kmalloc_size_roundup()
+ to match ksize() usage
+To:     Kees Cook <keescook@chromium.org>,
+        Alexei Starovoitov <ast@kernel.org>
+Cc:     John Fastabend <john.fastabend@gmail.com>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        bpf@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+References: <20221029024444.gonna.633-kees@kernel.org>
+ <20221029025433.2533810-2-keescook@chromium.org>
+From:   Daniel Borkmann <daniel@iogearbox.net>
+Message-ID: <da0959e7-a91c-ab4c-56be-3c3cd280e592@iogearbox.net>
+Date:   Tue, 1 Nov 2022 14:52:16 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:60.0) Gecko/20100101
+ Thunderbird/60.7.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1btOP0tyPtcYajo@ZenIV>
-X-SRS-Rewrite: SMTP reverse-path rewritten from <hch@infradead.org> by bombadil.infradead.org. See http://www.infradead.org/rpr.html
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221029025433.2533810-2-keescook@chromium.org>
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Language: en-US
+Content-Transfer-Encoding: 7bit
+X-Authenticated-Sender: daniel@iogearbox.net
+X-Virus-Scanned: Clear (ClamAV 0.103.6/26706/Tue Nov  1 08:52:34 2022)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 08:53:28PM +0100, Al Viro wrote:
-> 1) iter-to-scatterlist use is much wider than RDMA.  Other places like that
-> include e.g. vhost_scsi_map_to_sgl(), p9_get_mapped_pages(),
-> rds_message_zcopy_from_user(), tls_setup_from_iter()...
-
-RDS is RDMA.  vhost_scsi_map_to_sgl and p9_get_mapped_pages do some
-odd virtio thing.  But point taken, it is spread further than it should
-be at the moment.  It is however a rather bad data structure that really
-should not spead much further.
-
-> 2) there's a limit to how far we can propagate an arbitrary iov_iter -
-> ITER_IOVEC/ITER_UBUF ones are absolutely tied to mm_struct of the
-> originating process.  We can't use them for anything async - not
-> without the horrors a-la use_mm().
-
-But why would you pass them on?  It is much better to just convert
-them to a bio_vec and pass that on.  We could still feed that to n
-iter later, and in fact there are a bunch of good reasons to do so.
-But in pretty much all those cases you really do not want to keep
-the whole iov_iter state.
-
-> 	We can do separate sendmsg() for kvec and bvec parts,
-> but that doesn't come for free either.  *AND* bvec part is very
-> likely not the original iterator we got those pages from.
-
-sendmsg model seems to be very much built around that model with
-MSG_MORE.  But even with a 'converter' how do you plan to build
-such a mixed iter anyay?
-
-> My problem with all that stuff is that we ought to sort out the
-> lifetime and pin_user issues around the iov_iter.  What I really
-> want to avoid is "no worries, we'd extracted stuff into ITER_BVEC, it's
-> stable and can be passed around in arbitrary way" kind of primitive.
-> Because *that* has no chance to work.
-
-Yes.  I think the first thing we need in this whole area is to sort
-the pinning out.  After that we can talk about all kinds of convenience
-helpers.
-
-> As far as I can see, we have the following constraints:
+On 10/29/22 4:54 AM, Kees Cook wrote:
+> Round up allocations with kmalloc_size_roundup() so that the verifier's
+> use of ksize() is always accurate and no special handling of the memory
+> is needed by KASAN, UBSAN_BOUNDS, nor FORTIFY_SOURCE. Pass the new size
+> information back up to callers so they can use the space immediately,
+> so array resizing to happen less frequently as well.
 > 
-> 	* page references put into ITER_BVEC (and ITER_XARRAY) must not
-> go away while the iov_iter is being used.  That's on the creator of
-> iov_iter.
+[...]
 
-*nod*
+The commit message is a bit cryptic here without further context. Is this
+a bug fix or improvement? I read the latter, but it would be good to have
+more context here for reviewers (maybe Link tag pointing to some discussion
+or the like). Also, why is the kmalloc_size_roundup() not hidden for kmalloc
+callers, isn't this a tree-wide issue?
 
-> 	* pages found in iterator might be used past the lifetime of
-> iterator.  We need the underlying pages to survive until the last
-> use.  "Grab a page reference" is *NOT* a solution in general case.
-> 	* pages found in data-destination iterator may have their
-> contents modified, both during the iterator lifetime and asynchronously.
+Thanks,
+Daniel
 
-This is where the trouble start.  If you want to be able to feed
-kmalloced data into throgh ITER_KVEC (or ITER_BVEC for the matter),
-you can't just grab any kind of hold to it.  The only way to do that
-is by telling the caller you're done with it.  I.e. how aio/io_ring/etc
-use ki_complete - the callee owns the data until it declares it is done
-by calling ->ki_complete.  But no 'borrowing' of refeferences as the
-only sane way to do that would be page refcounts, but those do not
-work for everything.
+>   kernel/bpf/verifier.c | 12 ++++++++----
+>   1 file changed, 8 insertions(+), 4 deletions(-)
+> 
+> diff --git a/kernel/bpf/verifier.c b/kernel/bpf/verifier.c
+> index eb8c34db74c7..1c040d27b8f6 100644
+> --- a/kernel/bpf/verifier.c
+> +++ b/kernel/bpf/verifier.c
+> @@ -1008,9 +1008,9 @@ static void *copy_array(void *dst, const void *src, size_t n, size_t size, gfp_t
+>   	if (unlikely(check_mul_overflow(n, size, &bytes)))
+>   		return NULL;
+>   
+> -	if (ksize(dst) < bytes) {
+> +	if (ksize(dst) < ksize(src)) {
+>   		kfree(dst);
+> -		dst = kmalloc_track_caller(bytes, flags);
+> +		dst = kmalloc_track_caller(kmalloc_size_roundup(bytes), flags);
+>   		if (!dst)
+>   			return NULL;
+>   	}
+> @@ -1027,12 +1027,14 @@ static void *copy_array(void *dst, const void *src, size_t n, size_t size, gfp_t
+>    */
+>   static void *realloc_array(void *arr, size_t old_n, size_t new_n, size_t size)
+>   {
+> +	size_t alloc_size;
+>   	void *new_arr;
+>   
+>   	if (!new_n || old_n == new_n)
+>   		goto out;
+>   
+> -	new_arr = krealloc_array(arr, new_n, size, GFP_KERNEL);
+> +	alloc_size = kmalloc_size_roundup(size_mul(new_n, size));
+> +	new_arr = krealloc(arr, alloc_size, GFP_KERNEL);
+>   	if (!new_arr) {
+>   		kfree(arr);
+>   		return NULL;
+> @@ -2504,9 +2506,11 @@ static int push_jmp_history(struct bpf_verifier_env *env,
+>   {
+>   	u32 cnt = cur->jmp_history_cnt;
+>   	struct bpf_idx_pair *p;
+> +	size_t alloc_size;
+>   
+>   	cnt++;
+> -	p = krealloc(cur->jmp_history, cnt * sizeof(*p), GFP_USER);
+> +	alloc_size = kmalloc_size_roundup(size_mul(cnt, sizeof(*p)));
+> +	p = krealloc(cur->jmp_history, alloc_size, GFP_USER);
+>   	if (!p)
+>   		return -ENOMEM;
+>   	p[cnt - 1].idx = env->insn_idx;
+> 
 
-> If it has a chance to be a user-mapped page, we must either
-> 	a) have it locked by caller and have no modifications after
-> it gets unlocked or
-> 	b) have it pinned (sensu pin_user_pages()) by the caller and
-> have no modifications until the unpin_user_page().
-
-Yes.  And I think we need a good counter part to iov_iter_pin_pages
-that undoes any required pinning, so that users of iov_iter_pin_pages
-and iov_iter_unpin_pages can use these helpers without even thinking
-about the rules.  That requires passing some amount of state to the
-unpin side.  It could just be an unsigned long with flags probably,
-or we keep the iov_iter alive and look at that.
-
-> Another issue with iov_iter_get_pages...() is that compound page turns
-> into a bunch of references to individual subpages; io-uring folks have
-> noticed the problem, but their solution is... inelegant.  I wonder if
-> we would be better off with a variant of the primitive that would give
-> out compound pages; it would need different calling conventions,
-> obviously (current ones assume that all pages except the first and
-> the last one have PAGE_SIZE worth of data in them).
-
-The new name for compound pages is folios, and yes the whole get/pin
-user pages machinery needs to switch to that.
