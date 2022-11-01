@@ -2,115 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8EB606142A0
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 02:07:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB4586142A3
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 02:07:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229588AbiKABHF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 21:07:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
+        id S229781AbiKABHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 21:07:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49716 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229639AbiKABHD (ORCPT
+        with ESMTP id S229561AbiKABHj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 21:07:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05A7015816;
-        Mon, 31 Oct 2022 18:07:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 9609C61502;
-        Tue,  1 Nov 2022 01:07:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 887B9C433D7;
-        Tue,  1 Nov 2022 01:07:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667264822;
-        bh=miL2Sw4WCgEQl7HTxKCpsgKgGrQ8eRDYEO4TfVAtTSI=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BjqU8zBw7XRoIYyb5ZXHFXGlVANuqE3SMlH292X9xWOBpvhDBnjt4y0K0iVZr4y2N
-         YO376lZTH5COwBa8vAXpsebNU8eTP7A3E0lyVzPPYJ3iky413EvAIx39e4a0CwKfqV
-         h/8JIe1S4EFM1TX7ZEJMRHqKEQDxssPS/7Q1rxHkMbDgDdSaQXlNlasbtcykS09Ose
-         kaHAd9E7CiQQebXDL76g/iQyFTZoLns9xr8zrhmFQrTi/P5bFNh6vUcBjgT3AOctJB
-         XvVwU5Awy8KgYVO5yny5ciuy4IrxUuKuRBGZ8ytmRQMQ1+HTDXc2mWWoQSNqvWrSwp
-         fFDv8B+c29gFQ==
-Date:   Tue, 1 Nov 2022 03:06:57 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Lino Sanfilippo <LinoSanfilippo@gmx.de>
-Cc:     Lukas Wunner <lukas@wunner.de>, peterhuewe@gmx.de, jgg@ziepe.ca,
-        stefanb@linux.vnet.ibm.com, linux@mniewoehner.de,
-        linux-integrity@vger.kernel.org, linux-kernel@vger.kernel.org,
-        jandryuk@gmail.com, pmenzel@molgen.mpg.de, l.sanfilippo@kunbus.com,
-        p.rosenberger@kunbus.com
-Subject: Re: [PATCH v8 08/11] tpm, tpm: Implement usage counter for locality
-Message-ID: <Y2BxMUrXbds3MQ2X@kernel.org>
-References: <20221017235732.10145-1-LinoSanfilippo@gmx.de>
- <20221017235732.10145-9-LinoSanfilippo@gmx.de>
- <20221018062508.GB25237@wunner.de>
- <Y1TQiIw0m+8BSzMs@kernel.org>
- <0094438d-cf8e-da81-c969-119f90baf3db@gmx.de>
+        Mon, 31 Oct 2022 21:07:39 -0400
+Received: from mail-yb1-xb32.google.com (mail-yb1-xb32.google.com [IPv6:2607:f8b0:4864:20::b32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 529721658A
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 18:07:38 -0700 (PDT)
+Received: by mail-yb1-xb32.google.com with SMTP id e62so28589ybh.12
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 18:07:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=XmMaXP90CaIMiPtYW47n6m2G5ZMtSO1W1wgU+NyJUlI=;
+        b=KV7kD2/vrb7m62VzqzYzSnWH+Ru13le5MwXLe2PxHkpYIB7UYu262mGqcarWS6abdD
+         0dn/55y/MOGSm2sQV75SA1wSv0YWmvzxR9tHvFNO0eYd/p+XMjfj9QQLaHTV+LDuwnBa
+         BPYazU9flaQYyJM5cVJFmzqaMfMTDnKJRRKLPjdfFZvWpny7+W8rXzheWnWWNUTD9bOK
+         TSxsmi1kbswby1PBNFOEN080yKyITA6s4Pfiss8/g/nvbAUkmgenBIo/2AcTEEsTwfKc
+         1i/wVL7p7lpD6Z99zf+2MtG/NrYASJpB8AdHCoT/HeVY3lxITW0aXRkgbCax4e7Pmvw6
+         CjFQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XmMaXP90CaIMiPtYW47n6m2G5ZMtSO1W1wgU+NyJUlI=;
+        b=BDb/Y4nx9ycrQTpYSUCHuP8pF7D5oKruVsk5LG7JdxywCXogZ5gbr/BHY1h2dH92Kb
+         eXAAOvh6abiaIDMBfoUgktB7ha5BU4sgbqZbH0V6tDawil/I8VEVF2WGXY6roRcdlme1
+         JobH4eX7FT0bSzicSoyGHiM+gsN6WPvJNhem+Iyx1/uL/sI8VigmjBCA5QfiFaoHbvpG
+         3uUAuD4fT0rniYDgr8YDtmIYwGzRs3a5DgKrot69UBXKP5Gj8vhkTZ4t+i6Zps1cBcD9
+         GCPWEwdKoTGL7niUKmehYY8YfazppaIcD7A3rUn+IHK5FEAkHoyVC//ce1e5ngTgTlIn
+         2ybw==
+X-Gm-Message-State: ACrzQf0JGPslLs4p6RYDaEW8bDmKo2r6tH/DCS7aVRT+xIm5IPi23cDy
+        +7FC1swXTqMORdiMA4bNpM6h5tae5xdw5v+HIv2ZCg==
+X-Google-Smtp-Source: AMsMyM6rZlIQZ1PYaWj2k4quC4D/+5G6Kbx8Z29PHK8evYzmyRI+sEH2P3krYmjXNk4yI5MLVy44GaA90GQxOjbPmBU=
+X-Received: by 2002:a25:7055:0:b0:6cb:7973:a3a2 with SMTP id
+ l82-20020a257055000000b006cb7973a3a2mr15384128ybc.595.1667264857444; Mon, 31
+ Oct 2022 18:07:37 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0094438d-cf8e-da81-c969-119f90baf3db@gmx.de>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221028102450.1161382-1-ajye_huang@compal.corp-partner.google.com>
+ <20221028102450.1161382-2-ajye_huang@compal.corp-partner.google.com>
+ <Y1vDYNOwZNOco1hq@sirena.org.uk> <20221031184343.GA3235956-robh@kernel.org>
+ <Y2A0fdwnHTqw/NDw@sirena.org.uk> <CALprXBYEsB5z-iioBeyeBAwPFkOnkQn8CBbj9Di9CpdqvFFnOg@mail.gmail.com>
+In-Reply-To: <CALprXBYEsB5z-iioBeyeBAwPFkOnkQn8CBbj9Di9CpdqvFFnOg@mail.gmail.com>
+From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+Date:   Tue, 1 Nov 2022 09:07:27 +0800
+Message-ID: <CALprXBYrKMSx=JRft7eB+YGQc2eDY6VXSrNfuoB3aH8DApi=NQ@mail.gmail.com>
+Subject: Re: [PATCH v1 1/2] ASoC: dt-bindings: Document dmic_sel-gpios
+ optional prop for two DMICs case
+To:     Mark Brown <broonie@kernel.org>
+Cc:     Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Shengjiu Wang <shengjiu.wang@nxp.com>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Arnaud Pouliquen <arnaud.pouliquen@foss.st.com>,
+        angelogioacchino.delregno@collabora.corp-partner.google.com,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022 at 02:25:39AM +0200, Lino Sanfilippo wrote:
-> 
-> 
-> On 23.10.22 07:26, Jarkko Sakkinen wrote:
-> > On Tue, Oct 18, 2022 at 08:25:08AM +0200, Lukas Wunner wrote:
-> >> On Tue, Oct 18, 2022 at 01:57:29AM +0200, Lino Sanfilippo wrote:
-> >>> Implement a usage counter for the (default) locality used by the TPM TIS
-> >>> driver:
-> >>> Request the locality from the TPM if it has not been claimed yet, otherwise
-> >>> only increment the counter. Also release the locality if the counter is 0
-> >>> otherwise only decrement the counter. Ensure thread-safety by protecting
-> >>> the counter with a mutex.
-> >>>
-> >>> This allows to request and release the locality from a thread and the
-> >>> interrupt handler at the same time without the danger to interfere with
-> >>> each other.
-> >> [...]
-> >>> +static int tpm_tis_release_locality(struct tpm_chip *chip, int l)
-> >>>  {
-> >>>  	struct tpm_tis_data *priv = dev_get_drvdata(&chip->dev);
-> >>>
-> >>> -	tpm_tis_write8(priv, TPM_ACCESS(l), TPM_ACCESS_ACTIVE_LOCALITY);
-> >>> +	mutex_lock(&priv->locality_count_mutex);
-> >>> +	priv->locality_count--;
-> >>> +	if (priv->locality_count == 0)
-> >>> +		tpm_tis_release_locality_locked(priv, l);
-> >>> +	mutex_unlock(&priv->locality_count_mutex);
-> >>>
-> >>>  	return 0;
-> >>>  }
-> >>
-> >> Hm, any reason not to use struct kref for the locality counter?
-> >> Provides correct memory ordering (no mutex needed) and allows for
-> >> calling a release function too upon reaching 0.
-> >
-> > I proposed for last version kref. I have no idea why this is still
-> > using mutex. And now I apparently have proposed rcu for the whole
-> > struct (forgot what I had put my feedback for earlier version).
-> >
-> > This keeps being confusing patch as the commit message does not
-> > really go to the bottom line why mutex is really the best possible
-> > choice here.
-> >
-> 
-> 
-> I actually tried to implement this via kref but then came to the
-> conclusion it is rather not a good choice for our case. Please
-> see my response to your former request to implement this via kref:
-> 
-> https://lore.kernel.org/all/09eefdab-f677-864a-99f7-869d7a8744c2@gmx.de/
+Hi Mark, Rob
 
-OK, my bad I missed this, sorry.
+I submitted another one to process the kcontrol in the audio machine
+driver instead,  sorry about that previous non-completed mail.
+ https://patchwork.kernel.org/project/alsa-devel/patch/20221031122224.1846221-2-ajye_huang@compal.corp-partner.google.com/
+thanks
 
-BR, Jarkko
+On Tue, Nov 1, 2022 at 9:04 AM Ajye Huang
+<ajye_huang@compal.corp-partner.google.com> wrote:
+>
+> Hi Mark, Rob
+>
+> To avoid confusion, I had submitted another one for process
