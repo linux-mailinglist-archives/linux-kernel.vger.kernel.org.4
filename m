@@ -2,163 +2,187 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CCB3C614F9C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 17:43:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D4BC4614F9F
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 17:45:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230477AbiKAQnq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 12:43:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48400 "EHLO
+        id S230071AbiKAQpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 12:45:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230498AbiKAQni (ORCPT
+        with ESMTP id S229767AbiKAQpi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 12:43:38 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B720112A95;
-        Tue,  1 Nov 2022 09:43:36 -0700 (PDT)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A1Eh4Tr024459;
-        Tue, 1 Nov 2022 09:43:30 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=acnJ5DhgTdQI/k05irS7tQ/Wq5y0TnoDE4qYe/yhqV0=;
- b=AseElIqPsaxp1BYO81ebtJRtXIC7fyMuIgYDEUAkEJ5h80bvogML4VNYA5gLKSDmZn1T
- Idf7cYCwYJHSUZCg+FQ1k5aWih8MM6k7zNscLSNPK59UxYF0CDOmEIKCu92Ixo1lHyct
- F0xQcnLt57wIZpgjKO/lGMPMfcC7eila+p1r6efjATM5xgn0a6uaCSZqCnOqWi9NEnbd
- GXtQKfsYaVKtBWd6uL+NMrFymuymfOqVFdUInYuLe73nsclv4zI9yG9zWIxEZW/p/75R
- dqZqSR8aS9ovYdBqya/YiblORsxKYys38QYJCZqj3ZteIpOjnFc3PsQIYlkx7S07Wg+w fw== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3kk5f8rmgd-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Tue, 01 Nov 2022 09:43:30 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 1 Nov
- 2022 09:43:28 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Tue, 1 Nov 2022 09:43:28 -0700
-Received: from sburla-PowerEdge-T630.caveonetworks.com (unknown [10.106.27.217])
-        by maili.marvell.com (Postfix) with ESMTP id 4E82F3F7053;
-        Tue,  1 Nov 2022 09:43:28 -0700 (PDT)
-From:   Veerasenareddy Burru <vburru@marvell.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lironh@marvell.com>, <aayarekar@marvell.com>,
-        <sedara@marvell.com>, <sburla@marvell.com>
-CC:     Veerasenareddy Burru <vburru@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>
-Subject: [PATCH net-next v3] octeon_ep: support Octeon device CNF95N
-Date:   Tue, 1 Nov 2022 09:43:20 -0700
-Message-ID: <20221101164324.16343-1-vburru@marvell.com>
-X-Mailer: git-send-email 2.36.0
+        Tue, 1 Nov 2022 12:45:38 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D301112A95;
+        Tue,  1 Nov 2022 09:45:37 -0700 (PDT)
+Received: from W11-BEAU-MD.localdomain (unknown [76.135.50.127])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 68D12205D3B7;
+        Tue,  1 Nov 2022 09:45:37 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 68D12205D3B7
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1667321137;
+        bh=kZWPYfnjDKLxLTWrdqr9Ds1M/AA0Z2lq4cu8QG2GB3o=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=RU24pTU2zsUN6TCS6VUIxTURDOQkq00rL9zClZNHLplDmNxxirt0yEtZrMevsGfsg
+         YbO1IUWOtmnHOptL1Edurn34xNYI6DV4K5l6vKNobd4y+ptGcdTPtqw93+3Yw1iyI9
+         RggyvSY1IkAfVjOBCjWZ6PoBgkj951WthMs+0y64=
+Date:   Tue, 1 Nov 2022 09:45:30 -0700
+From:   Beau Belgrave <beaub@linux.microsoft.com>
+To:     Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     rostedt@goodmis.org, mathieu.desnoyers@efficios.com,
+        dcook@linux.microsoft.com, alanau@linux.microsoft.com,
+        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 1/2] tracing/user_events: Use remote writes for event
+ enablement
+Message-ID: <20221101164530.GA69@W11-BEAU-MD.localdomain>
+References: <20221027224011.2075-1-beaub@linux.microsoft.com>
+ <20221027224011.2075-2-beaub@linux.microsoft.com>
+ <20221031234703.e275650899728e64cd3fb6c3@kernel.org>
+ <20221031164603.GB69@W11-BEAU-MD.localdomain>
+ <20221101085501.443f2ac77bfb0803b91517c2@kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: 2ig1qZODVmaEqXLL1QobZG40cBGJf6lD
-X-Proofpoint-ORIG-GUID: 2ig1qZODVmaEqXLL1QobZG40cBGJf6lD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-01_07,2022-11-01_02,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221101085501.443f2ac77bfb0803b91517c2@kernel.org>
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for Octeon device CNF95N.
-CNF95N is a Octeon Fusion family product with same PCI NIC
-characteristics as CN93 which is currently supported by the driver.
+On Tue, Nov 01, 2022 at 08:55:01AM +0900, Masami Hiramatsu wrote:
+> On Mon, 31 Oct 2022 09:46:03 -0700
+> Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> 
+> > On Mon, Oct 31, 2022 at 11:47:03PM +0900, Masami Hiramatsu wrote:
+> > > Hi,
+> > > 
+> > > I have some comments.
+> > > 
+> > > On Thu, 27 Oct 2022 15:40:10 -0700
+> > > Beau Belgrave <beaub@linux.microsoft.com> wrote:
+> > > 
+> > > [...]
+> > > > @@ -1570,11 +1610,12 @@ static long user_reg_get(struct user_reg __user *ureg, struct user_reg *kreg)
+> > > >   * Registers a user_event on behalf of a user process.
+> > > >   */
+> > > >  static long user_events_ioctl_reg(struct user_event_file_info *info,
+> > > > -				  unsigned long uarg)
+> > > > +				  struct file *file, unsigned long uarg)
+> > > >  {
+> > > >  	struct user_reg __user *ureg = (struct user_reg __user *)uarg;
+> > > >  	struct user_reg reg;
+> > > >  	struct user_event *user;
+> > > > +	struct user_event_enabler *enabler;
+> > > >  	char *name;
+> > > >  	long ret;
+> > > >  
+> > > > @@ -1607,8 +1648,12 @@ static long user_events_ioctl_reg(struct user_event_file_info *info,
+> > > >  	if (ret < 0)
+> > > >  		return ret;
+> > > >  
+> > > > +	enabler = user_event_enabler_create(file, &reg, user);
+> > > > +
+> > > > +	if (!enabler)
+> > > 
+> > > Shouldn't we free the user_event if needed here?
+> > > (I found the similar memory leak pattern in the above failure case
+> > >  of the user_events_ref_add().)
+> > > 
+> > 
+> > user_events are shared across the entire group. They cannot be cleaned
+> > up until all references are gone. This is true both in this case and the
+> > in the user_events_ref_add() case.
+> > 
+> > The pattern is to register events in the group's hashtable, then add
+> > them to the local file ref array that is RCU protected. If the file ref
+> > cannot be allocated, etc. the refcount on user is decremented. If we
+> > cannot create an enabler, the refcount is still held until file release.
+> 
+> OK, when the ioctl returns, there should be 3 cases;
+> 
+> - Return success, a new(existing) user_event added.
+> - Return error, no new user_event added.
+> - Return error, a new user_event added but enabler is not initialized.
+> 
+> And in the last case, the new user_event will be released when user
+> closes the file. Could you comment it here?
+> 
 
-update supported device list in Documentation.
+Sure thing, I'll add it.
 
-Signed-off-by: Veerasenareddy Burru <vburru@marvell.com>
----
-V2 -> V3:
-  - fixed the prefix in subject: "net-next PATCH" to "PATCH net-next".
-V1 -> V2:
-  - update supported device list in Documentation.
+> > 
+> > If the event has already been added to the local file ref array, it is
+> > returned to prevent another reference.
+> 
+> I'm not sure this point. Did you mean returning an error to prevent
+> registering the same event again?
+> 
 
- .../ethernet/marvell/octeon_ep.rst            |  1 +
- .../ethernet/marvell/octeon_ep/octep_main.c   | 19 ++++++++++++++++---
- .../ethernet/marvell/octeon_ep/octep_main.h   |  2 ++
- 3 files changed, 19 insertions(+), 3 deletions(-)
+If a process uses the same fd and registers the same event multiple
+times, then only 1 index is returned to the caller. If someone either
+purposely or accidentally does this, the appropriate index will be
+returned and we won't just keep allocating user_event objects.
 
-diff --git a/Documentation/networking/device_drivers/ethernet/marvell/octeon_ep.rst b/Documentation/networking/device_drivers/ethernet/marvell/octeon_ep.rst
-index bc562c49011b..cad96c8d1f97 100644
---- a/Documentation/networking/device_drivers/ethernet/marvell/octeon_ep.rst
-+++ b/Documentation/networking/device_drivers/ethernet/marvell/octeon_ep.rst
-@@ -23,6 +23,7 @@ Supported Devices
- =================
- Currently, this driver support following devices:
-  * Network controller: Cavium, Inc. Device b200
-+ * Network controller: Cavium, Inc. Device b400
- 
- Interface Control
- =================
-diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-index 9089adcb75f9..e956c1059fc8 100644
---- a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-+++ b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-@@ -23,6 +23,7 @@ struct workqueue_struct *octep_wq;
- /* Supported Devices */
- static const struct pci_device_id octep_pci_id_tbl[] = {
- 	{PCI_DEVICE(PCI_VENDOR_ID_CAVIUM, OCTEP_PCI_DEVICE_ID_CN93_PF)},
-+	{PCI_DEVICE(PCI_VENDOR_ID_CAVIUM, OCTEP_PCI_DEVICE_ID_CNF95N_PF)},
- 	{0, },
- };
- MODULE_DEVICE_TABLE(pci, octep_pci_id_tbl);
-@@ -907,6 +908,18 @@ static void octep_ctrl_mbox_task(struct work_struct *work)
- 	}
- }
- 
-+static const char *octep_devid_to_str(struct octep_device *oct)
-+{
-+	switch (oct->chip_id) {
-+	case OCTEP_PCI_DEVICE_ID_CN93_PF:
-+		return "CN93XX";
-+	case OCTEP_PCI_DEVICE_ID_CNF95N_PF:
-+		return "CNF95N";
-+	default:
-+		return "Unsupported";
-+	}
-+}
-+
- /**
-  * octep_device_setup() - Setup Octeon Device.
-  *
-@@ -939,9 +952,9 @@ int octep_device_setup(struct octep_device *oct)
- 
- 	switch (oct->chip_id) {
- 	case OCTEP_PCI_DEVICE_ID_CN93_PF:
--		dev_info(&pdev->dev,
--			 "Setting up OCTEON CN93XX PF PASS%d.%d\n",
--			 OCTEP_MAJOR_REV(oct), OCTEP_MINOR_REV(oct));
-+	case OCTEP_PCI_DEVICE_ID_CNF95N_PF:
-+		dev_info(&pdev->dev, "Setting up OCTEON %s PF PASS%d.%d\n",
-+			 octep_devid_to_str(oct), OCTEP_MAJOR_REV(oct), OCTEP_MINOR_REV(oct));
- 		octep_device_setup_cn93_pf(oct);
- 		break;
- 	default:
-diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_main.h b/drivers/net/ethernet/marvell/octeon_ep/octep_main.h
-index 025626a61383..123ffc13754d 100644
---- a/drivers/net/ethernet/marvell/octeon_ep/octep_main.h
-+++ b/drivers/net/ethernet/marvell/octeon_ep/octep_main.h
-@@ -21,6 +21,8 @@
- #define  OCTEP_PCI_DEVICE_ID_CN93_PF 0xB200
- #define  OCTEP_PCI_DEVICE_ID_CN93_VF 0xB203
- 
-+#define  OCTEP_PCI_DEVICE_ID_CNF95N_PF 0xB400    //95N PF
-+
- #define  OCTEP_MAX_QUEUES   63
- #define  OCTEP_MAX_IQ       OCTEP_MAX_QUEUES
- #define  OCTEP_MAX_OQ       OCTEP_MAX_QUEUES
+However, in a threaded application, there may be situations where thread
+A registers event E, and thread B registers event E as well. However,
+they may pass different enable address locations. In this case you will
+get 2 enablers for the single event. Right now the code does this all
+the time, it does not do it only if the enable address differs.
 
-base-commit: 6f1a298b2e24c703bfcc643e41bc7c0604fe4830
--- 
-2.36.0
+I'm not sure how common this scenario is, but I think I should likely
+check if the address is different or not before creating another enabler
+in this case.
 
+Thoughts?
+
+> 
+> > 
+> > > > +		return -ENOMEM;
+> > > > +
+> > > >  	put_user((u32)ret, &ureg->write_index);
+> > > > -	put_user(user->index, &ureg->status_bit);
+> > > >  
+> > > >  	return 0;
+> > > >  }
+> > > [...]
+> > > > @@ -1849,7 +1863,6 @@ static int user_status_open(struct inode *node, struct file *file)
+> > > >  
+> > > >  static const struct file_operations user_status_fops = {
+> > > >  	.open = user_status_open,
+> > > > -	.mmap = user_status_mmap,
+> > > 
+> > > So, if this drops the mmap operation, can we drop the writable flag from
+> > > the status tracefs file?
+> > > 
+> > 
+> > Good catch, yes I'll remove this.
+> 
+> Thanks!
+> 
+> > 
+> > > static int create_user_tracefs(void)
+> > > {
+> > > [...]
+> > >         /* mmap with MAP_SHARED requires writable fd */
+> > >         emmap = tracefs_create_file("user_events_status", TRACE_MODE_WRITE,
+> > >                                     NULL, NULL, &user_status_fops);
+> > > 
+> > > Thank you,
+> > > 
+> > > -- 
+> > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > 
+> > Thanks,
+> > -Beau
+> 
+> 
+> -- 
+> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+
+Thanks,
+-Beau
