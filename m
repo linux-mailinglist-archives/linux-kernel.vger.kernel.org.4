@@ -2,257 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 19F90615347
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 21:29:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABCB8615349
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 21:30:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229902AbiKAU3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 16:29:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33886 "EHLO
+        id S229958AbiKAUa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 16:30:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34288 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbiKAU2s (ORCPT
+        with ESMTP id S229813AbiKAUaY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 16:28:48 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4CF6167F6;
-        Tue,  1 Nov 2022 13:28:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667334527; x=1698870527;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=9VMz/FH2R+qpDxAyuwGGvjDvvt1U4ax3yjK1oWN1CTY=;
-  b=doXS8nQDTb/54OawG8INPhvuTiHxlKf7hss0gO/j/oHe0f2Il90R0qan
-   BCjQVdlGLW38nrgFS7HtAeCGmqx0fJGJ++Xrcochx3XCdB/wRCrBzp/h3
-   Yqq9N8n3GdOXPEAMp1SrnQccQ5tt+mTCojQOPC9zvIgkJX3KA27lJBHcl
-   nrcoV/pmdaZsWfIcaPQPWj0j+AyoML09eLAFOc0A61z+Gm06QLP+4+3X7
-   lpZzGz7cWCYKBjtHGRSnZdMmu5IgyuzIe2tu1H1gVEgw3rip26O1hQpnR
-   jlcktSI0INV5yc/IiMPNRm33MUROy6rLedlfWjxFLYI2qC83BdoZNas6v
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="373456015"
-X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
-   d="scan'208";a="373456015"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 13:28:47 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="697536243"
-X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
-   d="scan'208";a="697536243"
-Received: from fmsmsx601.amr.corp.intel.com ([10.18.126.81])
-  by fmsmga008.fm.intel.com with ESMTP; 01 Nov 2022 13:28:47 -0700
-Received: from fmsmsx611.amr.corp.intel.com (10.18.126.91) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 1 Nov 2022 13:28:46 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx611.amr.corp.intel.com (10.18.126.91) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 1 Nov 2022 13:28:46 -0700
-Received: from fmsedg601.ED.cps.intel.com (10.1.192.135) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Tue, 1 Nov 2022 13:28:46 -0700
-Received: from NAM04-BN8-obe.outbound.protection.outlook.com (104.47.74.40) by
- edgegateway.intel.com (192.55.55.70) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Tue, 1 Nov 2022 13:28:41 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=cxQbOScsvVzIkCjccAQ7c1SrGMeAuK4neO6PZgl9YWLk8KUxzkF8RnnI3MZO1k5AOvAX9j5kacv4V3Wmdj1dKxNAnarHTxWFYXtbw8N1w6Ckc88DZ8EXLEfRlAKB0bjAokTJ57fb5Nz2LmVEghyj1YrCSQ4fFttsPKlN8ZXNDQR8/6v94FqfqgBIO8kOznx7S4ptqrfdQtBewa8fAtHUQki+MZ2i1gtC0doBT9JN4ZORfb5K0MtFQ5sykVhHM3uzzfCcT3oi/rvin6+EJDXaKejQlRERY/RFW4rbjeKWJ+b+KC1HYpcP4SKTBM0CuxzDeDn2jj9Y+9RTrR4EPOvXzA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MRTg4rlU0uZWfPGPnVUkQ+lZ9MIsF0qC62Jk0BRu7ss=;
- b=FCdm2Sw0UuTbNcFGEXQp+oqO9g0vhnkkRK/ThX8j1uRLnhOs3E0M6pYCXekTnByHtwWgkSo+1fae+h18I3yQag+AHvxrzG8Bsx7YoR73XcrzfZbfTN6rIse9c37vq8Wod2E/+H8W4s6qqNKTIGgIoT3QqY+hxVOzec3lv96nVEuRNfB7FNLbqVajOUdlxpy52gfvswCLEIbhzaKZEw6MQuXoEZZa4DVGMTOuJDWeFK6tQdYmt31Zf2uNHpRS+hZCNnMZReoB/NnH82T/8t5THvJhttgvahaoe3QJ78Y6HbwfRD/ZEnxo5Ev7885mSHfX5ktUW8BW9VYBxiSJfV+xRA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com (2603:10b6:a03:18::25)
- by BL1PR11MB5335.namprd11.prod.outlook.com (2603:10b6:208:31b::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.21; Tue, 1 Nov
- 2022 20:28:31 +0000
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::e475:190a:6680:232]) by BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::e475:190a:6680:232%7]) with mapi id 15.20.5769.021; Tue, 1 Nov 2022
- 20:28:31 +0000
-Message-ID: <5aa498ab-1ad6-900b-75eb-003ea2d4d8b1@intel.com>
-Date:   Tue, 1 Nov 2022 13:28:28 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH 10/14] platform/x86/intel/ifs: Add metadata validation
-Content-Language: en-US
-To:     Jithu Joseph <jithu.joseph@intel.com>, <hdegoede@redhat.com>,
-        <markgross@kernel.org>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
-        <gregkh@linuxfoundation.org>, <ashok.raj@intel.com>,
-        <tony.luck@intel.com>, <linux-kernel@vger.kernel.org>,
-        <platform-driver-x86@vger.kernel.org>, <patches@lists.linux.dev>,
-        <ravi.v.shankar@intel.com>, <thiago.macieira@intel.com>,
-        <athenas.jimenez.gonzalez@intel.com>
-References: <20221021203413.1220137-1-jithu.joseph@intel.com>
- <20221021203413.1220137-11-jithu.joseph@intel.com>
-From:   Sohil Mehta <sohil.mehta@intel.com>
-In-Reply-To: <20221021203413.1220137-11-jithu.joseph@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR02CA0045.namprd02.prod.outlook.com
- (2603:10b6:a03:54::22) To BYAPR11MB3320.namprd11.prod.outlook.com
- (2603:10b6:a03:18::25)
+        Tue, 1 Nov 2022 16:30:24 -0400
+Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCAA81C139
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 13:30:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
+        t=1667334610; bh=0xTjCkfnnHOzBJnGaTrLX2LUmGNMU22I5WIcMTwmEGY=;
+        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
+         MIME-Version:Content-Type:In-Reply-To;
+        b=Lki4df+Thgwj/gpwVq7TAa/DGgGDHvt7dg7LyayTOpZJDdjK8AjhVYsxomKGvMCw2
+         iq51AovB3WmZL4hY9IJSY5Oo/aF8K393BIuzQ1XCjku/CHllySiwSHXyB9FZUT2s5Q
+         12V4Um8ys5h483QmYXIwe5qESDOZ5iq9H8lxfbM0=
+Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
+        via [213.182.55.206]
+        Tue,  1 Nov 2022 21:30:10 +0100 (CET)
+X-EA-Auth: flZTjBEuuUNw2ArB64248TgEFfjjTv43URZghuC6TkG93sr2/fxESAS87wT+ahJNSjWWhOsbDOFlVtp7dVN1fc2LQeBs7ehx
+Date:   Wed, 2 Nov 2022 02:00:05 +0530
+From:   Deepak R Varma <drv@mailo.com>
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     outreachy@lists.linux.dev,
+        Larry Finger <Larry.Finger@lwfinger.net>,
+        Phillip Potter <phil@philpotter.co.uk>,
+        Pavel Skripkin <paskripkin@gmail.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] staging: r8188eu: remove unwanted variable implementation
+Message-ID: <Y2GBzcnG+bT/dEcG@ubunlion>
+References: <Y2FPOON3UcqqAQFy@ubunlion>
+ <alpine.DEB.2.22.394.2211011811400.2834@hadrien>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR11MB3320:EE_|BL1PR11MB5335:EE_
-X-MS-Office365-Filtering-Correlation-Id: f01f9e06-c05a-49a7-aec7-08dabc47a3fd
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: tBBlYHX/y21IrC6YPM2aqkJDr27d8iUOoUooQavZRSsSVj/znLlqeoZd84qQKD4FUj02RPNWt0+aVGmm7XeuwCj5GpEk+aMk+olC2i3EcjFDm0HjOH0KhbUBtb0s9JZPdGEzEMJHWeRmbbWRU4yfKjCjsQRHgdUuVka1pWv5/myPMVYVwtfFMEXPR79n+j7O74jXgP+JZokGczqzuSM4cEWgqZTFrQZQjyyMJf57rZJ1qIGH6of6oThHcoGELoJCXjaFm+b7IfOSxOdtxZbzLU85NkKeiQJ6OyIxhTx6XRQvXUzUSdpymxPCp1+Z5vBpLIsKsZAqWA1FfGy7MMFCj0Kvw9gED3WU8XkQTmnBEoSATKK3hHjNv2/I2YdAUZryzzpLwhHO4XMSnLWq/K6xZrBrG+M8Qb/a06horQ/F3pO7LWUDEpQxYUBbsSmvxrO8ExfbaT1Ed73tFsjiA0HvIqzBKmXyBNFPPE3J0tDcWV1vYCMJe5vhKMYgUq3sIbA9iMMhRJ8+o3hgMzyVE7YDTf78vgQVZ2IeLFpxhTGb7EbOK59c27eFEYuT6fd2mH8j22z2M8Mbd042gcuLmdkvSDN9kNb4Mi9g8r7sq04ALJ7YneUzi4Cd2OFdBgg420lcTN6ar4k+JIElbNaemB99s9yhwGMDVLYNS60t9K8JjvYpqOjV6LK3Qu97cmZR7v0Cz6jcLXXFoqEsya9VGfyHOrF0FoCEH5PYgxJDmWXJ0XHzK1OOeEac6AF5cGBuWKwtVTVOxKJxnwcoPMaIOH31lSTqipeA2hSqr3knF3s8ph8=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(346002)(376002)(39860400002)(136003)(396003)(366004)(451199015)(31686004)(36756003)(82960400001)(5660300002)(44832011)(7416002)(83380400001)(2906002)(86362001)(31696002)(38100700002)(6512007)(4326008)(26005)(186003)(316002)(2616005)(6486002)(478600001)(6666004)(66556008)(66476007)(8936002)(8676002)(66946007)(41300700001)(6506007)(53546011)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NEFEd3BuS3hjZTRWR1l1NmxYQXE3T3JYR0NTaG9Ca0xMdmIraHZKSFFoUkhk?=
- =?utf-8?B?dkwrYzZaVGlkQWNnYU9qZWxUbmpSUjNkNi9VUGhtTEtqeTRkdGZibGl0RzZ3?=
- =?utf-8?B?U0FxaFVWbkVXc2lYSWtibUh6TGE2Y1ZzRm9hTVdEMjdZbVRTQm00VzF0aWZC?=
- =?utf-8?B?a3pZVmdHRHZ0TnpwbE52alBBN3lnMm9aNklDdngvTUVWT05HWUV2RGpuZG0y?=
- =?utf-8?B?NU9Ed1paenl1T2cxWlR2VE1KTXpTV0xORkxjUVJ1VFFsS2ZnTjZ5NENPL3Yz?=
- =?utf-8?B?dFhwU1ZLTlgreml2Q05IdkI0UEhXMUNjUkx3bnc3SWZJQ0xMTHNwZStseklG?=
- =?utf-8?B?TlEzQ3pDczNKTCtyQS93ZmplVy9zVkY4QjRwOW40T2VPaUJvME9JeEprUnFC?=
- =?utf-8?B?eGd4bWlmdituSHZWalh6ZmpaZGlITnJDcUdVbG45a3prRWVzcEo4Q0pYeWVH?=
- =?utf-8?B?TnNsR21oanIrb1RkN1cvTkxxS0ZmcjRiekIxWEJqS2k5WW1EQS92dE53QVc0?=
- =?utf-8?B?dlorREtDd3I0aURNZk0vOEtrcVhHZEdBVmhFZ3laOWdlK2h1Sm5PZlJHVDVM?=
- =?utf-8?B?am8xL2t2WkhOZ1UzaytyR2s4eUlMS2c1aFRhQXdaV0wrR2JUNXdVSXBCRzRV?=
- =?utf-8?B?QlhjZXpvaVhVZG5uVFdTSEtIRWw1K2VLOG15RkRrWWZDSzB2L3N1VjBUWW5w?=
- =?utf-8?B?WXBGSTg1MTE4MUpVa3FtaWI2TldiRXNYMEw0SW9mTmxuY2dVU0RxNUx1Qzhx?=
- =?utf-8?B?ZmJvQUk0ZnA4cGVXNGsyeGxheTdIelhuNVhBbmdUVzExSFczaGFMKytLMnV3?=
- =?utf-8?B?YmJnL1g4RWZKWG9OZjZUZnBydW1KQ29MQXhkdmJJRGw1REwrTEVRbDRvNStV?=
- =?utf-8?B?dkYra1I1cUJ3bmVPUG9uUzdlaStBNWx0T3ZRVkFBR1pFWGd5S1ZtVXNKWC80?=
- =?utf-8?B?ZWhUbnIxenF0SWY4WkhoRHlscFEybTh2Qmtrdkc1MDdZb3ZoNlZtTUN3U3NO?=
- =?utf-8?B?djV2ZC96UENwYjNGMmdwWUxSK1VjL25VM0UzZlNQZVlkeS9mVnQ2YWJQQUgv?=
- =?utf-8?B?dE94TEd1Vmxya0lUZWJlZ2tlcHk4WjNaaUczenRDZEtyQVhmc2M0WEF5V2RM?=
- =?utf-8?B?SU9PSXE5SUpRd2VhRzF2OWxZRzVEeUZKMHFZTk9NWithZ1JIeWpxZEpxeStB?=
- =?utf-8?B?N292Q3llY3hmaEpyU2VWZkc4R1hqM2FHUDkweUV0ak5GR0FFQ01YVDhJTHhO?=
- =?utf-8?B?Qlg5UE54ZldvcTVpdDBVQXRsNThQQnRKQk9XTkplN0N1TW12ZmU0ZGNLZWNN?=
- =?utf-8?B?cDUyQ215eEUxZXRjSFhxN0phcUxVNDdvN3lkYThRWDNJKzR5STJIQWVZd1Yv?=
- =?utf-8?B?Yk05b1NISmJuUXlIY1hpbmV2LzcwWXBnWFM1YUMrSks1c0NWY3ptUGFWb2VG?=
- =?utf-8?B?QjY5UnRKYTF5a0N1ejU3K2QwVklzL0dDVklLYjZNTXd4VWtlYWJhWER3MUpL?=
- =?utf-8?B?SUlNV1hrQkFHV1Z2UFliUEZvN3kwb096R21BSThKYU5MNDl6d0RWcW5aSDZZ?=
- =?utf-8?B?SEFkcXA2YzBLbmFEalFvYTJnbzYxclI3ZHdzQVMvMCs2VHBCYmQxc05lc1dq?=
- =?utf-8?B?R25adExyTXo1Um5vU2p0Nk8yNGxhTjl2MXp4OUVDSlBpKzFIaWV4VHhOMUF6?=
- =?utf-8?B?b2FIQlFvTVNpZlBkN1h2V1ZwNVlrM2dnNXRPZURKU2huUDg5cTd1bXlBcXZ4?=
- =?utf-8?B?c0V3T1JMU1VkcXcxckEzclVtbzZuTDFVWlJwSHk0akRuZE9tWkN0T2JXcmFs?=
- =?utf-8?B?YXBsUkFlNUVld0ZWSnBNdmpndXk0OUpSL0xJRnRyNG1tSWFTMndoWFQwRklV?=
- =?utf-8?B?dGgxNmZSak9iTUZqSThZY0hZc09LeEtkYU1PMkpOVU1qNmdYNjlmVWVmUkd2?=
- =?utf-8?B?QURYM2RYOGttMDNlbFlkNVRwd3NOelJZNERzZlJaUDNpdG0zK0ZBeUlldGNt?=
- =?utf-8?B?Um1pTmM4R3lydkhQVFN0TGNvWmh4bFE3SjJGaW5YcjV3T2hsV0R6bzZScFpK?=
- =?utf-8?B?TDcwRHA5OFFzZTFVM3FFKzdXaGxOb2E3dGdPc3ZnM0NkMlAyOXBhUlJVbzZm?=
- =?utf-8?B?L3NxTytoSGF0YkhXYXUxMDBWUHJjSjk5dytGOWVkQ3R2TWliTXZ1czY5L1pQ?=
- =?utf-8?B?UGc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: f01f9e06-c05a-49a7-aec7-08dabc47a3fd
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3320.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Nov 2022 20:28:30.8701
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 75sr5RhCuRtAEocWY1xAm98187Cb0IqIWA6Pb7IhwRcsugqgMhSwt0qoP9YJIocQOqLKAubRg2NxqlWU8b+N2w==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BL1PR11MB5335
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <alpine.DEB.2.22.394.2211011811400.2834@hadrien>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/21/2022 1:34 PM, Jithu Joseph wrote:
-> The data portion of IFS test image file contains a meta-data
+On Tue, Nov 01, 2022 at 06:14:01PM +0100, Julia Lawall wrote:
+>
+>
+> On Tue, 1 Nov 2022, Deepak R Varma wrote:
+>
+> > Local variables intended as the function return value are
+> > initialized but their value does not change during function
+> > execution. The initial value assigned to the variable is simply
+> > returned to the caller. This makes the variable declaration
+> > unnecessary and the initial value can be directly returned.
+>
+> I think it would be better to make an argument for each case as to why the
+> change is correct, and no more interesting return value is needed.  For
+> example, looking at the code in
+> drivers/staging/r8188eu/hal/rtl8188eu_xmit.c, it seems that the variable
+> pull was used in a more interesting way previously, but some previous
+> patches removed the relevant code.
 
-Can we be consistent with meta-data/metadata usage? Multiple patches 
-have this dual usage.
+Thank you Julia for the hints. I learned that git blame will not show commits
+associated with deleted/replaced lines. Used pickaxe tool to identify the old
+commits. It was good learning. Thank you. v2 is submitted for review and feedback.
 
-The popular usage in the kernel seems to be "metadata". I would suggest:
+>
+> julia
+>
+> >
+> > The patch is produced using the following coccicheck options:
+> >    COCCI=./scripts/coccinelle/misc/returnvar.cocci
+> >    M=driver/staging/r8188eu/
+> >    MODE=patch
+> >
+> > Signed-off-by: Deepak R Varma <drv@mailo.com>
+> > ---
+> >  drivers/staging/r8188eu/core/rtw_ap.c        | 5 ++---
+> >  drivers/staging/r8188eu/core/rtw_recv.c      | 3 +--
+> >  drivers/staging/r8188eu/hal/rtl8188eu_xmit.c | 3 +--
+> >  drivers/staging/r8188eu/os_dep/ioctl_linux.c | 4 +---
+> >  4 files changed, 5 insertions(+), 10 deletions(-)
+> >
+> > diff --git a/drivers/staging/r8188eu/core/rtw_ap.c b/drivers/staging/r8188eu/core/rtw_ap.c
+> > index 24eb8dce9bfe..9eaf345e6a00 100644
+> > --- a/drivers/staging/r8188eu/core/rtw_ap.c
+> > +++ b/drivers/staging/r8188eu/core/rtw_ap.c
+> > @@ -1020,7 +1020,6 @@ u8 ap_free_sta(struct adapter *padapter, struct sta_info *psta,
+> >  int rtw_sta_flush(struct adapter *padapter)
+> >  {
+> >  	struct list_head *phead, *plist;
+> > -	int ret = 0;
+> >  	struct sta_info *psta = NULL;
+> >  	struct sta_priv *pstapriv = &padapter->stapriv;
+> >  	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
+> > @@ -1028,7 +1027,7 @@ int rtw_sta_flush(struct adapter *padapter)
+> >  	u8 bc_addr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
+> >
+> >  	if ((pmlmeinfo->state & 0x03) != WIFI_FW_AP_STATE)
+> > -		return ret;
+> > +		return 0;
+> >
+> >  	spin_lock_bh(&pstapriv->asoc_list_lock);
+> >  	phead = &pstapriv->asoc_list;
+> > @@ -1051,7 +1050,7 @@ int rtw_sta_flush(struct adapter *padapter)
+> >
+> >  	associated_clients_update(padapter, true);
+> >
+> > -	return ret;
+> > +	return 0;
+> >  }
+> >
+> >  /* called > TSR LEVEL for USB or SDIO Interface*/
+> > diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
+> > index 4b68a543f68b..94f85cd7038d 100644
+> > --- a/drivers/staging/r8188eu/core/rtw_recv.c
+> > +++ b/drivers/staging/r8188eu/core/rtw_recv.c
+> > @@ -1415,7 +1415,6 @@ static int amsdu_to_msdu(struct adapter *padapter, struct recv_frame *prframe)
+> >
+> >  	struct recv_priv *precvpriv = &padapter->recvpriv;
+> >  	struct __queue *pfree_recv_queue = &precvpriv->free_recv_queue;
+> > -	int	ret = _SUCCESS;
+> >
+> >  	nr_subframes = 0;
+> >
+> > @@ -1513,7 +1512,7 @@ static int amsdu_to_msdu(struct adapter *padapter, struct recv_frame *prframe)
+> >  	prframe->len = 0;
+> >  	rtw_free_recvframe(prframe, pfree_recv_queue);/* free this recv_frame */
+> >
+> > -	return ret;
+> > +	return _SUCCESS;
+> >  }
+> >
+> >  static bool check_indicate_seq(struct recv_reorder_ctrl *preorder_ctrl, u16 seq_num)
+> > diff --git a/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c b/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c
+> > index 8e4a5acc0b18..6d1f56d1f9d7 100644
+> > --- a/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c
+> > +++ b/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c
+> > @@ -149,7 +149,6 @@ static void fill_txdesc_phy(struct pkt_attrib *pattrib, __le32 *pdw)
+> >
+> >  static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bagg_pkt)
+> >  {
+> > -	int	pull = 0;
+> >  	uint	qsel;
+> >  	u8 data_rate, pwr_status, offset;
+> >  	struct adapter		*adapt = pxmitframe->padapter;
+> > @@ -295,7 +294,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bag
+> >  	ODM_SetTxAntByTxInfo_88E(&haldata->odmpriv, pmem, pattrib->mac_id);
+> >
+> >  	rtl8188eu_cal_txdesc_chksum(ptxdesc);
+> > -	return pull;
+> > +	return 0;
+> >  }
+> >
+> >  /* for non-agg data frame or  management frame */
+> > diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+> > index 8516e253bb03..59a97c5fb80c 100644
+> > --- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+> > +++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+> > @@ -2979,8 +2979,6 @@ static int rtw_p2p_set(struct net_device *dev,
+> >  			       struct iw_request_info *info,
+> >  			       union iwreq_data *wrqu, char *extra)
+> >  {
+> > -	int ret = 0;
+> > -
+> >  	if (!memcmp(extra, "enable =", 7)) {
+> >  		rtw_wext_p2p_enable(dev, info, wrqu, &extra[7]);
+> >  	} else if (!memcmp(extra, "setDN =", 6)) {
+> > @@ -3027,7 +3025,7 @@ static int rtw_p2p_set(struct net_device *dev,
+> >  		rtw_p2p_set_persistent(dev, info, wrqu, &extra[11]);
+> >  	}
+> >
+> > -	return ret;
+> > +	return 0;
+> >  }
+> >
+> >  static int rtw_p2p_get2(struct net_device *dev,
+> > --
+> > 2.34.1
+> >
+> >
+> >
+> >
+> >
+>
 
-s/meta-data/metadata
-
-> structure in addition to test data and hashes.
-> 
-> Introduce the layout of this meta_data structure and validate
-> the sanity of certain fields of the new-image before loading.
-> 
-
-s/new-image/new image
-
-> diff --git a/drivers/platform/x86/intel/ifs/ifs.h b/drivers/platform/x86/intel/ifs/ifs.h
-> index be37512535f2..bb43fd65d2d2 100644
-> --- a/drivers/platform/x86/intel/ifs/ifs.h
-> +++ b/drivers/platform/x86/intel/ifs/ifs.h
-> @@ -196,6 +196,7 @@ union ifs_status {
->    * @valid_chunks: number of chunks which could be validated.
->    * @status: it holds simple status pass/fail/untested
->    * @scan_details: opaque scan status code from h/w
-> + * @cur_batch: suffix indicating the currently loaded test file
-
-What does "suffix" refer to here? I feel how you derive the current 
-batch information shouldn't really matter.
-
->    */
->   struct ifs_data {
->   	int	integrity_cap_bit;
-> @@ -205,6 +206,7 @@ struct ifs_data {
->   	int	valid_chunks;
->   	int	status;
->   	u64	scan_details;
-> +	int	cur_batch;
->   };
->   
-
-...
-
->   #define IFS_HEADER_SIZE	(sizeof(struct microcode_header_intel))
->   #define IFS_HEADER_VER	2
-> +#define META_TYPE_IFS	1
-
-What namespace does this meta type belong to? Is the expectation here 
-that IFS will have different meta types? Or in the generic microcode 
-header IFS meta can be found using this type?
-
-I am asking since microcode_intel_find_meta_data() would be eventually 
-called from other non-ifs places as well.
-
-Can you please point me to the architecture documentation that describes 
-this?
-
-
-> +static int validate_ifs_metadata(struct device *dev)
-> +{
-> +	struct ifs_data *ifsd = ifs_get_data(dev);
-> +	struct meta_data *ifs_meta;
-> +	char test_file[64];
-> +	int ret = -EINVAL;
-> +
-> +	snprintf(test_file, sizeof(test_file), "%02x-%02x-%02x-%02x.scan",
-> +		 boot_cpu_data.x86, boot_cpu_data.x86_model,
-> +		 boot_cpu_data.x86_stepping, ifsd->cur_batch);
-> +
-
-There are multiple usages of ifsd->cur_batch in this patch. AFAIU, the 
-variable is still uninitialized. Would this validation patch make more 
-sense after patch 12? The "cur_batch" terminology is introduced there 
-and the initialization happens there as well.
-
-> +
-> +	if (ifs_meta->current_image != ifsd->cur_batch) {
-> +		dev_warn(dev, "Suffix metadata is not matching with filename %s(0x%02x)\n",
-
-What does "suffix metadata" mean? How about:
-
-Currently loaded filename %s(0x%02x) doesn't match with the information 
-in the metadata.
-
-Sohil
 
