@@ -2,172 +2,460 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C9C2614B1A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:49:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 01E88614B20
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:50:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbiKAMtr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 08:49:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34748 "EHLO
+        id S230389AbiKAMur (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 08:50:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229471AbiKAMtn (ORCPT
+        with ESMTP id S229468AbiKAMup (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 08:49:43 -0400
-Received: from EUR05-AM6-obe.outbound.protection.outlook.com (mail-am6eur05on2044.outbound.protection.outlook.com [40.107.22.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 005101ADBB;
-        Tue,  1 Nov 2022 05:49:41 -0700 (PDT)
-ARC-Seal: i=2; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=pass;
- b=m6bVUkhNL97EVgSo9fTiivfJO2l6d08nkjLZJuckIbQN9hXAQVMf6OzCTGFwasCVfJmlTfZab7Nd7+sf+CZuyHj9DqCLUiDwQ1Kvt3ZC+m6dQVOsysZVNbztHr5QeEKYk0GvMvT8vFjSzhtu0W75VCzbUQb4qLkTQRyu+5i7uqlPGze5UfH0VKHlu56Lcdn10RRZ5fF6gnHFtW7s3tVKnTkTQmdOL7P4qvUHnNepiZVZ8bE17Ov2cqn1m+V7pDiDQfGRWyl8FM8Hpjp7HLB+AHcZ+EjBkCDT7ZLubtiAOqfZ3f7JKXxVdsVucelfPkeKLaS9h4R3aG7WL8ArvsCM/g==
-ARC-Message-Signature: i=2; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+8E0M0WsfhgI6bkdY2wtJKDrCK9yM3qpwnmLMIdRwrU=;
- b=ZJuxShnrGgqBAIHDZHUrTehJwk5U8Aph4mcVCbuNC6z3UpOJGGdOpEvPQ0rHFt+jdCUs7z6KSdd62uphWDreo2bAMGJGt2e9vXcv1pHqt0xutgwaqwTyLhwjJ285mGyCg1xTMZdsAwalXAuM6vO8qXaLjb+3MggBtEC4KL3OIOVEq4mhEZLrNCatJ2tV2XmPg7u7CFA2InSeBCXa67TkT1WX4F6UUOthAFlu31LxpCfQ/j8D+BqqSn+3l4MevyPlTcR3Qhh0+Kyg9hJpxDc90XApOMCgG0lKZntdpkH2Z5zW8BSHyzZFynkm83vImqVAANfzKU+BQuDrAoJbkpdjSA==
-ARC-Authentication-Results: i=2; mx.microsoft.com 1; spf=pass (sender ip is
- 63.35.35.123) smtp.rcpttodomain=vger.kernel.org smtp.mailfrom=arm.com;
- dmarc=pass (p=none sp=none pct=100) action=none header.from=arm.com;
- dkim=pass (signature was verified) header.d=armh.onmicrosoft.com; arc=pass (0
- oda=1 ltdi=1 spf=[1,1,smtp.mailfrom=arm.com] dkim=[1,1,header.d=arm.com]
- dmarc=[1,1,header.from=arm.com])
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+8E0M0WsfhgI6bkdY2wtJKDrCK9yM3qpwnmLMIdRwrU=;
- b=tPNG+tceNMoKoO17M+qmsge3Tftt6dQ+KzfBmFiSwLBGg2UUyzqUw6ptivTwc4RkEGzQgI7bJCzyIicuG6DI3UQdj4PhaKzhXQTumUhK4dWfkAsDInnhiNF6VoKD2SpbCevziov3GVVI0mRvJFcTbu1Tg98fkGX1GU/kCewc4Rk=
-Received: from AS4P192CA0026.EURP192.PROD.OUTLOOK.COM (2603:10a6:20b:5e1::10)
- by DB4PR08MB8152.eurprd08.prod.outlook.com (2603:10a6:10:380::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.16; Tue, 1 Nov
- 2022 12:49:38 +0000
-Received: from AM7EUR03FT010.eop-EUR03.prod.protection.outlook.com
- (2603:10a6:20b:5e1:cafe::34) by AS4P192CA0026.outlook.office365.com
- (2603:10a6:20b:5e1::10) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.21 via Frontend
- Transport; Tue, 1 Nov 2022 12:49:38 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 63.35.35.123)
- smtp.mailfrom=arm.com; dkim=pass (signature was verified)
- header.d=armh.onmicrosoft.com;dmarc=pass action=none header.from=arm.com;
-Received-SPF: Pass (protection.outlook.com: domain of arm.com designates
- 63.35.35.123 as permitted sender) receiver=protection.outlook.com;
- client-ip=63.35.35.123; helo=64aa7808-outbound-1.mta.getcheckrecipient.com;
- pr=C
-Received: from 64aa7808-outbound-1.mta.getcheckrecipient.com (63.35.35.123) by
- AM7EUR03FT010.mail.protection.outlook.com (100.127.141.22) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5769.14 via Frontend Transport; Tue, 1 Nov 2022 12:49:36 +0000
-Received: ("Tessian outbound 2ff13c8f2c05:v130"); Tue, 01 Nov 2022 12:49:36 +0000
-X-CheckRecipientChecked: true
-X-CR-MTA-CID: 0dfa640a10e3d825
-X-CR-MTA-TID: 64aa7808
-Received: from 82fdc8b2df50.1
-        by 64aa7808-outbound-1.mta.getcheckrecipient.com id C4ADC9AC-99EA-4956-94FD-2E48A10F0CC3.1;
-        Tue, 01 Nov 2022 12:49:28 +0000
-Received: from EUR05-VI1-obe.outbound.protection.outlook.com
-    by 64aa7808-outbound-1.mta.getcheckrecipient.com with ESMTPS id 82fdc8b2df50.1
-    (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384);
-    Tue, 01 Nov 2022 12:49:28 +0000
+        Tue, 1 Nov 2022 08:50:45 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 595411B1F5;
+        Tue,  1 Nov 2022 05:50:44 -0700 (PDT)
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A1BO8Up005614;
+        Tue, 1 Nov 2022 12:50:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=from : to : cc :
+ subject : date : message-id : references : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=qcppdkim1;
+ bh=fazkPLkCZMIoAuAFYMkCHEm5CnX/XVVCJB84r6MGwMw=;
+ b=IxwgzcWF5aEIBGTcF4iqWmG4KL7RCjG+rTjjdQwFlbnFHzr13O7ygfNppll3DgJR2wLx
+ 2PFvMFvA8Vhefe2sbeOK3vZSj85Ijs9dJdpWpG59bIdFZHSnLm+mHa1dnTMjGVLv57kp
+ N5pkCTogqpvdqrQ5HUEQdVQ/Pgqh4lyiw8OUZPX6CfoXF4f95q+SMX8C4HQEzM6yVTT0
+ jy7N5EzClh/7U26cQWniBwf7rhHClaGWX8PHTncrf7gxeYeDSUtmZOFuzbObucOS7Ggm
+ Y2Ok5oQkUpdTbh5Npvd38O5nqTx4ECT2aajuLwesEFvLPYd+NPrSSPbewOee5LLXWsPA dA== 
+Received: from nam11-co1-obe.outbound.protection.outlook.com (mail-co1nam11lp2171.outbound.protection.outlook.com [104.47.56.171])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kk13xgmj6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Nov 2022 12:50:36 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=k48G9LZoOSErLnGAZPQtgNAXo7A1vaDB2YT60wtDeyjQOoFwDpJZqyAeSFq6qQaj1FGCWwiQprK43t7Yj3NR0KbBub4QLBGOMyJMckrHKOsP910bsT3ZxCQnM++LoXDxYU72r0OZ7HzQGX83dzh/fY7Psx1VHbl0STpMyY+87m9tepTNJbujbanP55WfYgE28evBcln7gRFAcWAKKMurMiFDyXCzE2AZKQS5LVKYPTaQSA8rTRhqercgUCx7/gxZKeTyBqX3mXdvCeCTOgqAn0CKKaV1o7J5UVFN3SID3IFk/g0A0az1JBkELBKEq9tB3jU4G0KGpiNMj5gEuEvHWw==
+ b=d0LwZM7fs3XSKfkd/YppHD/rdVNzkFbV9IB4y5ddLFsaBuR/dk9E2L9QNDXPpqK46CEKYWPtmfT6dDYIQfaVbsW9x0zYDjJLfyXBbAnd4sdg0Lr6cP3yyiRauO3f2OwcZc96KrzrcQuZPRMsOQ4olJ2t/I2M37/pGPwwb9iUOdqcBJZzCkUsg3zSeH9MTwj0KFX+LjAvykXJz4GXKSmmy6IN92zakhHNepvn1Zor1nPOjWQbXtWRBomY1nzhRv9jYIsdb3l0dexdqIhHv8dEIPtkWMZqNEelHwKvKCN0FS2cDouMfR+0noJKYHanC+t0QVoI5z7prO4SxoApc/TrZQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+8E0M0WsfhgI6bkdY2wtJKDrCK9yM3qpwnmLMIdRwrU=;
- b=R6AJw5d62CVI1KTjE5RmOs7i+OoY3PZ5UlxJcQ9jQqZ/AKW0dqd1o+6TEcJcK0JVadzgjARTXnTMdyTcjuMvEc/mwl17wYsWM115RnIlCoPs4OYEXfDEW+kmiT+m3EguGhmBIMSum6ezE/uKyi1Eb1pT+Za+a5JJW+ODynUi/123mDKNJFV3mg0SV1O3KgqQlSxIoBBHr8Vk7x3KUH8gdFYF4PMzCSNAiuhhlHUzgb7YSDmCff12QkVucCCUYowMD8Uns3pxmvlYktpNg84TebxaRDDLYUR4H74DZNGt7SVfn6oe1B5+qcJ+W7bS8tR5v9Nfz38pIrdKN2FUzHAgBA==
+ bh=fazkPLkCZMIoAuAFYMkCHEm5CnX/XVVCJB84r6MGwMw=;
+ b=JItoSAWzFxvuXMsRdT744k/9/AONvZ4ZoSR+kYvpuhu8C9uUqa0YvfZCRFSIbXoNzhxiHEHC6bRCyqaTbg0hUMw/hPYOvCvgEXunhkXbZm1+k5sF5F9uu8MC1kncq3ROE+Ji6J9D2STYDrP8okkPAbmdNoww73vD/K/56qfdTc1nZW54znvEo7DFsggGgpTDjOEvbEytXB4/egBBcYqEfRvhJ2ESXXgWopnl7YHHbmr5GZbUd8dXdCmXu7pT4T/UIhJiTDqDkTrcd97VDI4dNookDWZw3cYDNdFNLAxW2ovkl4bxXgTbWfC8RhBBfYSRl7ijLPxihYsNWcdi56Hbag==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=arm.com; dmarc=pass action=none header.from=arm.com; dkim=pass
- header.d=arm.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=armh.onmicrosoft.com;
- s=selector2-armh-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+8E0M0WsfhgI6bkdY2wtJKDrCK9yM3qpwnmLMIdRwrU=;
- b=tPNG+tceNMoKoO17M+qmsge3Tftt6dQ+KzfBmFiSwLBGg2UUyzqUw6ptivTwc4RkEGzQgI7bJCzyIicuG6DI3UQdj4PhaKzhXQTumUhK4dWfkAsDInnhiNF6VoKD2SpbCevziov3GVVI0mRvJFcTbu1Tg98fkGX1GU/kCewc4Rk=
-Authentication-Results-Original: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com (2603:10a6:10:2cc::19)
- by DBBPR08MB5961.eurprd08.prod.outlook.com (2603:10a6:10:203::10) with
+ smtp.mailfrom=qti.qualcomm.com; dmarc=pass action=none
+ header.from=qti.qualcomm.com; dkim=pass header.d=qti.qualcomm.com; arc=none
+Received: from BN0PR02MB8142.namprd02.prod.outlook.com (2603:10b6:408:16a::19)
+ by MW4PR02MB7316.namprd02.prod.outlook.com (2603:10b6:303:76::20) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.21; Tue, 1 Nov
- 2022 12:49:27 +0000
-Received: from DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::8999:7c8d:d088:d198]) by DB9PR08MB7179.eurprd08.prod.outlook.com
- ([fe80::8999:7c8d:d088:d198%5]) with mapi id 15.20.5769.021; Tue, 1 Nov 2022
- 12:49:26 +0000
-Date:   Tue, 1 Nov 2022 12:49:11 +0000
-From:   'Szabolcs Nagy' <szabolcs.nagy@arm.com>
-To:     David Laight <David.Laight@ACULAB.COM>
-Cc:     Theodore Ts'o <tytso@mit.edu>,
-        "linux-api@vger.kernel.org" <linux-api@vger.kernel.org>,
+ 2022 12:50:33 +0000
+Received: from BN0PR02MB8142.namprd02.prod.outlook.com
+ ([fe80::60f2:dd20:67dc:8baf]) by BN0PR02MB8142.namprd02.prod.outlook.com
+ ([fe80::60f2:dd20:67dc:8baf%8]) with mapi id 15.20.5769.021; Tue, 1 Nov 2022
+ 12:50:33 +0000
+From:   Kalyan Thota <kalyant@qti.qualcomm.com>
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        "Kalyan Thota (QUIC)" <quic_kalyant@quicinc.com>
+CC:     "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-arm-msm@vger.kernel.org" <linux-arm-msm@vger.kernel.org>,
+        "freedreno@lists.freedesktop.org" <freedreno@lists.freedesktop.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
         "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>
-Subject: Re: linux interprets an fcntl int arg as long
-Message-ID: <Y2EVx95XUEVOn7p3@arm.com>
-References: <Y1/DS6uoWP7OSkmd@arm.com>
- <Y2B6jcLUJ1F2y2yL@mit.edu>
- <Y2DisyknbKxeCik4@arm.com>
- <a0693686d0ae41599fe1700680ec56ec@AcuMS.aculab.com>
- <Y2EGtE05hcVn3B3a@arm.com>
- <0030a20a94cd49628c5461d044bb28ed@AcuMS.aculab.com>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <0030a20a94cd49628c5461d044bb28ed@AcuMS.aculab.com>
-X-ClientProxiedBy: LO2P265CA0168.GBRP265.PROD.OUTLOOK.COM
- (2603:10a6:600:9::36) To DB9PR08MB7179.eurprd08.prod.outlook.com
- (2603:10a6:10:2cc::19)
+        "robdclark@chromium.org" <robdclark@chromium.org>,
+        "dianders@chromium.org" <dianders@chromium.org>,
+        "swboyd@chromium.org" <swboyd@chromium.org>,
+        "Vinod Polimera (QUIC)" <quic_vpolimer@quicinc.com>,
+        "dmitry.baryshkov@linaro.org" <dmitry.baryshkov@linaro.org>,
+        "Abhinav Kumar (QUIC)" <quic_abhinavk@quicinc.com>
+Subject: RE: [v7] drm/msm/disp/dpu1: add support for dspp sub block flush in
+ sc7280
+Thread-Topic: [v7] drm/msm/disp/dpu1: add support for dspp sub block flush in
+ sc7280
+Thread-Index: AQHY7eC4mWSOUH55gUG42qiSkeB+FK4p8nIAgAARrsA=
+Date:   Tue, 1 Nov 2022 12:50:32 +0000
+Message-ID: <BN0PR02MB814202C4286C360484813AAB96369@BN0PR02MB8142.namprd02.prod.outlook.com>
+References: <1667300225-14367-1-git-send-email-quic_kalyant@quicinc.com>
+ <20221101114304.3vsurukthhh34wmf@SoMainline.org>
+In-Reply-To: <20221101114304.3vsurukthhh34wmf@SoMainline.org>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN0PR02MB8142:EE_|MW4PR02MB7316:EE_
+x-ms-office365-filtering-correlation-id: c424277a-cde1-46c6-d65a-08dabc07aa09
+x-ld-processed: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d,ExtAddr
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: JoK+ot8BJtLnzO6pY2cldgeYBL0BZ4xXzpTvv7GIF2Ysy9MpKjRdWDLBPo2T7DeZh9Cpm+dHxNk75hAI5z55gos7PcPQH4nULPXQsK22ZLp5VjpMmo4W97yluJ7XV7OgPb/260bh5HPbIFTkPTCDVSqAugIT7AI8OOyIxpPtC+D9hVPCJcSlIQGZWTWNKIjQVCfq9DFNjm0Dw8CJ/Q1KdpOu07J6NFS40cqDpdRJ9kXGILOA0CJ3wTisey+U0M+QQVhDobIJSb8O7sELHAS1EqDLj6rTkbnCxAKP5tFDdmKx35lPAYpRAZE0JQ7UP+C26AcuJ7NhLWIr4Zsu2+k6GgkhuY/54+4IIR34Sbrl93qZbzqpGeVoWT1kHQGQhmd3IbMlPd9U0+Ck9/17iH4MZfSkvHv6N6Jv53p+thVFacWNRu3nHKn5xllXbXA3icbilYhWVEEysuQwsudg+aNNY7Uqkr/qsHH8Ezk7bunezNPa1zIqS7JKTrG2oOWkZcrWgnz4i3oPXnuqGwyC5TIPO73RNAHO1D3JLvG+dfifMdAuI9C9pvH4ARawGoSfhQ9QQebpiWBP1X+g14Qq0MF0lsai/fvga9ScCA6zlFV4X1F5dx/mfjXd12zytPNilZZRreD9DIRcK2/yx+ELs/pwGzQxKL+iqblEBoJ/PHwmMIdA6JEfnxXlSsq0CJxwuCigdwZs4F4dm2cpgzAuxNNvRNTjGJd1Xnc/DqaNY6MrE4UDTnekZY0JuL47q5w4YvyTyWwbX8Tve7NUX7cxUaSdSWoB4dUMVOqw71ZI/YmCVB4=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN0PR02MB8142.namprd02.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(346002)(396003)(376002)(39860400002)(136003)(451199015)(186003)(7416002)(5660300002)(52536014)(8936002)(2906002)(9686003)(55016003)(41300700001)(26005)(33656002)(122000001)(38070700005)(38100700002)(83380400001)(86362001)(54906003)(316002)(110136005)(107886003)(478600001)(71200400001)(4326008)(6506007)(7696005)(8676002)(66556008)(64756008)(66476007)(66446008)(76116006)(66946007)(21314003);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?rSiMoa6wM+NXDKDcfhi7i9qoNM8OXcVI5toaCSAtwEDtxo7XIgCxhhwCTR7j?=
+ =?us-ascii?Q?SAoEr/darhRhvc/iMFwX+fW39xvH1RN5RJEFcF1vS6aJJqR4DCX5Ab83jcL3?=
+ =?us-ascii?Q?8PlvqkJ1JUdZ/fg62ibegQgLvCNDrN3slui04m5pvFSPdmvxjcvCKwO40mAE?=
+ =?us-ascii?Q?DJN1j5+CRY/cCF1Z073VbgVdCxXNWVGWlSEtGNLbUhZ/6GNXK8J4P/sqenrM?=
+ =?us-ascii?Q?9DCHXIlz4GrpiXjfO/R1SLAYJKnzhY9fa39kjoakROeKIYC1R+2IQX6aCDbg?=
+ =?us-ascii?Q?wUJnKWuxxSonYOhgKJEeMinVajdFUKnHUVGYwro9Dh37fAG6GD/C65Zz3EE2?=
+ =?us-ascii?Q?51sppV1mJrBUDd/qoANpga2sWrJgz/4Jv6Z9T8XNXGezGMsUVWisk2ABHeAW?=
+ =?us-ascii?Q?JhreUT0+ZhvdRGHyo9tOxu8/38TIGByS4N1veVl1X/QgfE14vp3jbk/2yQFD?=
+ =?us-ascii?Q?ig60s90H6cRxz3UrxkEdqz/kA2BIqNfdZkcD4K8/8lRxi6EN9k8YolCmqJTw?=
+ =?us-ascii?Q?eGLHxsRbQQeTm4Z0N9FEvep/1P62xNSnstWz0zHMUu0p7tan21sxrfUaupuu?=
+ =?us-ascii?Q?4UFomusV1udolV88Wr9JiPOW19ViiLMuEMhJaJnghMI5OiA7wXe9LIpV8HZU?=
+ =?us-ascii?Q?espsZQP0YJP5a+z0SrPI0zsLDRsini7FjfOgvz1tdxKWgJPrr6uDHA0QOy8L?=
+ =?us-ascii?Q?DnnK9eo5M/QTQV1vsyr8LjwzyGaSmKZH7w8uEaadghbmnIbovRJ2Rzb5VF7O?=
+ =?us-ascii?Q?cakzS7N6TtF+klsd2JSo1PIRO6/zCxF+kVZ2Gk64Ydbj8psx7kUUdCz65mLd?=
+ =?us-ascii?Q?0/Z72+mERpBqezjqxw93qrArE1Yh3Gwbn6a068DwmTEXTtVDGlgxcasSvpr6?=
+ =?us-ascii?Q?Km4nGUDuPDnoyeQlmC+BV8BqeN4BT1b26eD8mksm2SFMamJw0T5LiLPuKEur?=
+ =?us-ascii?Q?P9+cDWuv3Szlydo6NXzHLxC5HFh1DV5878xiyVZm/n+cx4YariDDCEEWkaw2?=
+ =?us-ascii?Q?O0zSTS3CgNgIgjKV3MQ35Ii9xX0S7Tw9jWBaebGnon9zH2m8/mNnAJwpSMEN?=
+ =?us-ascii?Q?q7GrNVOLCL9s0BjWSJtuN3CNHosVBodmwMKXC1VpEz4NLLF6aJmIDRlRT4xD?=
+ =?us-ascii?Q?EgC084RVijzng+M+R1LmhX1C+NLhYnszIhWtYjphnlCkMA7/CL/8AAwnSO0t?=
+ =?us-ascii?Q?Nv1ZaJzDNUlUF3ze/RsRkEjkYQA0Y6EoUStiJMgGlSEdw59dvWEuHcWVO3Z9?=
+ =?us-ascii?Q?oxApcVnpeAHW89HwFZhi/oqqsTifeUa/vxT+tD33EsC2utLepx5Bbhhv0mn2?=
+ =?us-ascii?Q?QW85wkaiCJFuPGs8+w5QJkjJN8dlI1vGTONxUlQ8UM7wUPpgSwMRlcWXYzPH?=
+ =?us-ascii?Q?ZH4WR9GNXRvjSQ85O/alvgvCXsvlfI0VBXnfWfZ0UsTjoeXkzHPI4aTV63cd?=
+ =?us-ascii?Q?yaWjmTiysyRnQ4py4rWShZDzOCyZGK8fInOCjDOqBt+8ivSCQ9z5QYavtRH+?=
+ =?us-ascii?Q?dbeY1EVKz1bN10zL5rOb9zZjqBxzezXi1zQ4OHf99t+pq3Xiqy2rNrduMJv/?=
+ =?us-ascii?Q?wbaVIckei8t9+wAAikQBlvAwzlVNKZCI9kTxTw7WAYugQICg2FNow0ApUnwq?=
+ =?us-ascii?Q?uQ=3D=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-X-MS-TrafficTypeDiagnostic: DB9PR08MB7179:EE_|DBBPR08MB5961:EE_|AM7EUR03FT010:EE_|DB4PR08MB8152:EE_
-X-MS-Office365-Filtering-Correlation-Id: e7a537cb-44ce-465b-2543-08dabc0788b1
-x-checkrecipientrouted: true
-NoDisclaimer: true
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam-Untrusted: BCL:0;
-X-Microsoft-Antispam-Message-Info-Original: dD7+jZD6hhJAAiLfuEMoAZ1JI3JiRYnhrNIxkmMDLRKqgaI0fnYQZSi4HTj7N38Z4+nHWuOFzMMyQb8/bwSN7gnZYPlHdcXNXfRk6mki3Er2yLdsh273QS7DyKBximhHVfZRWb/47wGFAnGgBVPnuqRzQaVjZEm9ddHgXKtsN3XnkmWAcIArLbHwxu8VTECFJbRUPWVyJ2OvGwU7K+bvseDFXgVWdJy6AEHRv1CkNq3Ifw2anX6vGpgli4BW1iVBA627YCdwKo/btHAkd5fiiD4o6Pk3Q8/SJXF+naugcp4S8FNvLomXldOZVEz6gammfVVCAdTHh+yLZeFWCg8QW+ni/A8d4tJiWcEIioa/rsvG6MeOEhOJtKEB9Nj2XE0lSfDH0+AWI7yzh9QtSgn1kF4rHfHLMMDto76r/Q5mqChr5z/7WXMI2JSx2Bv22sPjGhw5sD16/tB2KxfYDI+C8QZOurMvUXHkEmCpLkt5Y3G9naH90xEzTz+NZaEG5kQ5U8NEUsV/YsmDElKgr5NoR8y3pRr1DdqB0vH15JluC2EJp20km7XCuv/95fG/qzV8vEjkLBH04jyXmA00b9nblSjE2Zy4NftOMyaZ7ziOOC5zLc/k644OvfMgJqU49Pec7DIyVSqdRToMmkY3v3Bx9OnaavdCVfGAXAmdocH8tCdvNdTieYkVMl+29NUq6LU55lQK3ecbBqXDVpbdIqAAyw==
-X-Forefront-Antispam-Report-Untrusted: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB9PR08MB7179.eurprd08.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(396003)(39860400002)(346002)(366004)(451199015)(41300700001)(54906003)(36756003)(6916009)(6666004)(4326008)(6506007)(66476007)(8676002)(66946007)(66556008)(316002)(38100700002)(8936002)(5660300002)(26005)(6512007)(86362001)(2616005)(186003)(2906002)(4744005)(6486002)(478600001);DIR:OUT;SFP:1101;
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DBBPR08MB5961
-Original-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arm.com;
-X-EOPAttributedMessage: 0
-X-MS-Exchange-Transport-CrossTenantHeadersStripped: AM7EUR03FT010.eop-EUR03.prod.protection.outlook.com
-X-MS-PublicTrafficType: Email
-X-MS-Office365-Filtering-Correlation-Id-Prvs: f52d5c75-54f3-4c5a-01fc-08dabc07828f
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: q6GnUSIB6yFOU048qcXgvW8sFPJa1lDPw9Lbj9bHhSOrNApzMTw2qHtwwRUVtcZ7lpXNhrhPs6kCseS9aKOiM04/fcOWiK1I0aLBtDQDGbbgXOb1BZZUStcwwp7KSlIXTc+0k3SMr6Efrm339QL6vPAUvpmOQ4LNiYDd/sTI3pK9PR2mY6oked1nVqv7IXv94Ec98irxZmiYNz7xtp8vjvWAKEtMHRJuJOrNcaq9sILDrqtoGpp4oJAWxejDnMFWSs1EnL76cHSfWW5Uq9gQgLPhJd5Z6qJukh9GJMPfaa3TUWk++FlWI1LpiLXUtJVI9Z5U4wfV2pWSwqC3AUu6n9KaV1A4Hd/X8W4fI8zihe1up7YpSXNMjmgVta8Pzkl2NkjHic/LBT54b+AbP0fQ4+ZlBl8XFbA+xKMJ/P49uLOAoQ1zaGETEx8jq6FU4hJqPRKd8JZ0xm0pd4c6pjS3OpzeLMlm1lgAZdWUlGqimOkr6sayWU9p4iyLlqiOwRF8MEYun+5GfSu2j22XTAMrZvkAb4kgd93jdObjrgy1fKhbYYLk510JsYqg7CGSgW+6a3JdHDTnCO6WLHPElKEhwWIZjNJr2Q+9wMfTicZ164Gs8vbgajpcRtt7jAvwmvuQzH5ZGK0n8AYRizJWmKDhd49nKU6uicW7xHjIuj0LPUL53aa41n9ma3ZM/PGwehM/AT/582lqBHTo7GSBgmeD3wacc8z5Acdx1v9MvKaCvymF+2sZ8Y1Z0KOa/WutChJV9AnAe/aGO+19KuGIWGHM2Q==
-X-Forefront-Antispam-Report: CIP:63.35.35.123;CTRY:IE;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:64aa7808-outbound-1.mta.getcheckrecipient.com;PTR:ec2-63-35-35-123.eu-west-1.compute.amazonaws.com;CAT:NONE;SFS:(13230022)(4636009)(136003)(376002)(346002)(396003)(39850400004)(451199015)(46966006)(36840700001)(40470700004)(26005)(2616005)(316002)(36860700001)(6512007)(336012)(478600001)(47076005)(36756003)(6486002)(40460700003)(6506007)(54906003)(186003)(6666004)(107886003)(81166007)(356005)(82310400005)(86362001)(40480700001)(2906002)(82740400003)(70586007)(70206006)(8676002)(6862004)(450100002)(4326008)(5660300002)(4744005)(8936002)(41300700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: arm.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Nov 2022 12:49:36.9669
+X-OriginatorOrg: qti.qualcomm.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN0PR02MB8142.namprd02.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c424277a-cde1-46c6-d65a-08dabc07aa09
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Nov 2022 12:50:32.9442
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: e7a537cb-44ce-465b-2543-08dabc0788b1
-X-MS-Exchange-CrossTenant-Id: f34e5979-57d9-4aaa-ad4d-b122a662184d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=f34e5979-57d9-4aaa-ad4d-b122a662184d;Ip=[63.35.35.123];Helo=[64aa7808-outbound-1.mta.getcheckrecipient.com]
-X-MS-Exchange-CrossTenant-AuthSource: AM7EUR03FT010.eop-EUR03.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DB4PR08MB8152
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,FORGED_SPF_HELO,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 98e9ba89-e1a1-4e38-9007-8bdabc25de1d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: HnuECS9krFMhQ39p9ifSnAueDGrQBQvJoOYGJ4HZF+6FBdTCFmiB3xd9xfp1AK3UA0FN/PGlt2iHcjosbDG0JJSUoLQSuCXp7STgEQwlO/4=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR02MB7316
+X-Proofpoint-ORIG-GUID: jq0hWzGXJOzkqf_7ScZzxFxvadD9yptQ
+X-Proofpoint-GUID: jq0hWzGXJOzkqf_7ScZzxFxvadD9yptQ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-01_06,2022-11-01_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ malwarescore=0 mlxscore=0 adultscore=0 mlxlogscore=999 spamscore=0
+ priorityscore=1501 clxscore=1011 lowpriorityscore=0 bulkscore=0
+ phishscore=0 suspectscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2210170000 definitions=main-2211010098
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 11/01/2022 12:19, David Laight wrote:
-> From: 'Szabolcs Nagy' <szabolcs.nagy@arm.com>
-> > SYSCALL_DEFINE3(fcntl, unsigned int, fd, unsigned int, cmd, unsigned long, arg)
-> > {
-> 
-> That is just a wrapper and calls do_fcntl().
-> which needs changing to be add:
-> 	arg &= ~0U;
-> before the switch(cmd) {
 
-this makes sense.
-i thought previously you meant masking in userspace.
 
-although if you mask there then many linux internal
-apis could use int instead of long arg.
+>-----Original Message-----
+>From: Marijn Suijten <marijn.suijten@somainline.org>
+>Sent: Tuesday, November 1, 2022 5:13 PM
+>To: Kalyan Thota (QUIC) <quic_kalyant@quicinc.com>
+>Cc: dri-devel@lists.freedesktop.org; linux-arm-msm@vger.kernel.org;
+>freedreno@lists.freedesktop.org; devicetree@vger.kernel.org; linux-
+>kernel@vger.kernel.org; robdclark@gmail.com; dianders@chromium.org;
+>swboyd@chromium.org; Vinod Polimera (QUIC) <quic_vpolimer@quicinc.com>;
+>dmitry.baryshkov@linaro.org; Abhinav Kumar (QUIC)
+><quic_abhinavk@quicinc.com>
+>Subject: Re: [v7] drm/msm/disp/dpu1: add support for dspp sub block flush =
+in
+>sc7280
+>
+>WARNING: This email originated from outside of Qualcomm. Please be wary of
+>any links or attachments, and do not enable macros.
+>
+>On 2022-11-01 03:57:05, Kalyan Thota wrote:
+>> Flush mechanism for DSPP blocks has changed in sc7280 family, it
+>> allows individual sub blocks to be flushed in coordination with master
+>> flush control.
+>>
+>> Representation: master_flush && (PCC_flush | IGC_flush .. etc )
+>>
+>> This change adds necessary support for the above design.
+>>
+>> Changes in v1:
+>> - Few nits (Doug, Dmitry)
+>> - Restrict sub-block flush programming to dpu_hw_ctl file (Dmitry)
+>>
+>> Changes in v2:
+>> - Move the address offset to flush macro (Dmitry)
+>> - Seperate ops for the sub block flush (Dmitry)
+>>
+>> Changes in v3:
+>> - Reuse the DPU_DSPP_xx enum instead of a new one (Dmitry)
+>>
+>> Changes in v4:
+>> - Use shorter version for unsigned int (Stephen)
+>>
+>> Changes in v5:
+>> - Spurious patch please ignore.
+>>
+>> Changes in v6:
+>> - Add SOB tag (Doug, Dmitry)
+>>
+>> Changes in v7:
+>> - Cache flush mask per dspp (Dmitry)
+>> - Few nits (Marijn)
+>
+>Thanks, but it seems like you skipped some of them.  I'll point them out a=
+gain this
+>time, including some new formatting issues.
+>
+>>
+>> Signed-off-by: Kalyan Thota <quic_kalyant@quicinc.com>
+>> ---
+>>  drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c       |  2 +-
+>>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c |  5 ++-
+>> drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h |  4 +++
+>>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c     | 46
+>++++++++++++++++++++++++--
+>>  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h     |  7 ++--
+>>  5 files changed, 58 insertions(+), 6 deletions(-)
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+>> index 601d687..4170fbe 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_crtc.c
+>> @@ -766,7 +766,7 @@ static void _dpu_crtc_setup_cp_blocks(struct
+>> drm_crtc *crtc)
+>>
+>>               /* stage config flush mask */
+>>               ctl->ops.update_pending_flush_dspp(ctl,
+>> -                     mixer[i].hw_dspp->idx);
+>> +                     mixer[i].hw_dspp->idx, DPU_DSPP_PCC);
+>>       }
+>>  }
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> index 27f029f..0eecb2f 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
+>> @@ -65,7 +65,10 @@
+>>       (PINGPONG_SDM845_MASK | BIT(DPU_PINGPONG_TE2))
+>>
+>>  #define CTL_SC7280_MASK \
+>> -     (BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE) |
+>BIT(DPU_CTL_VM_CFG))
+>> +     (BIT(DPU_CTL_ACTIVE_CFG) | \
+>> +      BIT(DPU_CTL_FETCH_ACTIVE) | \
+>> +      BIT(DPU_CTL_VM_CFG) | \
+>> +      BIT(DPU_CTL_DSPP_SUB_BLOCK_FLUSH))
+>>
+>>  #define MERGE_3D_SM8150_MASK (0)
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>> index 38aa38a..8148e91 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
+>> @@ -161,10 +161,12 @@ enum {
+>>   * DSPP sub-blocks
+>>   * @DPU_DSPP_PCC             Panel color correction block
+>>   * @DPU_DSPP_GC              Gamma correction block
+>> + * @DPU_DSPP_IGC             Inverse Gamma correction block
+>
+>Here.
+>
+>>   */
+>>  enum {
+>>       DPU_DSPP_PCC =3D 0x1,
+>>       DPU_DSPP_GC,
+>> +     DPU_DSPP_IGC,
+>>       DPU_DSPP_MAX
+>>  };
+>>
+>> @@ -191,6 +193,7 @@ enum {
+>>   * @DPU_CTL_SPLIT_DISPLAY:   CTL supports video mode split display
+>>   * @DPU_CTL_FETCH_ACTIVE:    Active CTL for fetch HW (SSPPs)
+>>   * @DPU_CTL_VM_CFG:          CTL config to support multiple VMs
+>> + * @DPU_CTL_DSPP_BLOCK_FLUSH: CTL config to support dspp sub-block
+>> + flush
+>
+>I even overlooked this in my review: all docs use spaces except these use =
+tabs...
+>Yet you use spaces here and didn't even align the text.
+>
+>Either use tabs in the line you add here, or replace the rest with spaces =
+and align
+>them again.
+>
+>>   * @DPU_CTL_MAX
+>>   */
+>>  enum {
+>> @@ -198,6 +201,7 @@ enum {
+>>       DPU_CTL_ACTIVE_CFG,
+>>       DPU_CTL_FETCH_ACTIVE,
+>>       DPU_CTL_VM_CFG,
+>> +     DPU_CTL_DSPP_SUB_BLOCK_FLUSH,
+>>       DPU_CTL_MAX
+>>  };
+>>
+>> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+>> index a35ecb6..fbcb7da 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.c
+>> @@ -33,6 +33,7 @@
+>>  #define   CTL_INTF_FLUSH                0x110
+>>  #define   CTL_INTF_MASTER               0x134
+>>  #define   CTL_FETCH_PIPE_ACTIVE         0x0FC
+>> +#define   CTL_DSPP_n_FLUSH(n)                ((0x13C) + ((n) * 4))
+>
+>Here.
+>
+>>
+>>  #define CTL_MIXER_BORDER_OUT            BIT(24)
+>>  #define CTL_FLUSH_MASK_CTL              BIT(17)
+>> @@ -110,9 +111,14 @@ static inline void
+>> dpu_hw_ctl_trigger_pending(struct dpu_hw_ctl *ctx)
+>>
+>>  static inline void dpu_hw_ctl_clear_pending_flush(struct dpu_hw_ctl
+>> *ctx)  {
+>> +     int i;
+>> +
+>>       trace_dpu_hw_ctl_clear_pending_flush(ctx->pending_flush_mask,
+>>                                    dpu_hw_ctl_get_flush_register(ctx));
+>>       ctx->pending_flush_mask =3D 0x0;
+>> +
+>> +     for(i =3D 0; i < ARRAY_SIZE(ctx->pending_dspp_flush_mask); i++)
+>> +             ctx->pending_dspp_flush_mask[i] =3D 0x0;
+>
+>Any idea why the other `pending_xxx_flush_mask`s aren't cleared here?
+>
+Thank you for your comments Marijn. Other pending flushes are also need to =
+be cleared; however I didn't want to include them in this patch, will post =
+another change clearing the cached flush bits for other HW blocks.
+Will wait for more comments on V7 and then will post V8 addressing your com=
+ments.
 
-do you want me to post a patch? (i'm not a kernel
-developer)
+>>  }
+>>
+>>  static inline void dpu_hw_ctl_update_pending_flush(struct dpu_hw_ctl
+>> *ctx, @@ -130,6 +136,8 @@ static u32
+>> dpu_hw_ctl_get_pending_flush(struct dpu_hw_ctl *ctx)
+>>
+>>  static inline void dpu_hw_ctl_trigger_flush_v1(struct dpu_hw_ctl
+>> *ctx)  {
+>> +     int i;
+>> +
+>>       if (ctx->pending_flush_mask & BIT(MERGE_3D_IDX))
+>>               DPU_REG_WRITE(&ctx->hw, CTL_MERGE_3D_FLUSH,
+>>                               ctx->pending_merge_3d_flush_mask);
+>> @@ -140,6 +148,11 @@ static inline void dpu_hw_ctl_trigger_flush_v1(stru=
+ct
+>dpu_hw_ctl *ctx)
+>>               DPU_REG_WRITE(&ctx->hw, CTL_WB_FLUSH,
+>>                               ctx->pending_wb_flush_mask);
+>>
+>> +     for(i =3D 0; i < ARRAY_SIZE(ctx->pending_dspp_flush_mask); i++)
+>> +             if (ctx->pending_dspp_flush_mask[i])
+>> +                     DPU_REG_WRITE(&ctx->hw, CTL_DSPP_n_FLUSH(i),
+>> +                             ctx->pending_dspp_flush_mask[i]);
+>> +
+>>       DPU_REG_WRITE(&ctx->hw, CTL_FLUSH, ctx->pending_flush_mask);  }
+>>
+>> @@ -287,8 +300,9 @@ static void
+>> dpu_hw_ctl_update_pending_flush_merge_3d_v1(struct dpu_hw_ctl *ctx,  }
+>>
+>>  static void dpu_hw_ctl_update_pending_flush_dspp(struct dpu_hw_ctl *ctx=
+,
+>> -     enum dpu_dspp dspp)
+>> +     enum dpu_dspp dspp, u32 dspp_sub_blk)
+>>  {
+>> +
+>>       switch (dspp) {
+>>       case DSPP_0:
+>>               ctx->pending_flush_mask |=3D BIT(13); @@ -307,6 +321,30 @@
+>> static void dpu_hw_ctl_update_pending_flush_dspp(struct dpu_hw_ctl *ctx,
+>>       }
+>>  }
+>>
+>> +static void dpu_hw_ctl_update_pending_flush_dspp_subblocks(
+>> +     struct dpu_hw_ctl *ctx, enum dpu_dspp dspp, u32 dspp_sub_blk) {
+>> +
+>> +     if (dspp >=3D DSPP_MAX)
+>> +             return;
+>> +
+>> +     switch (dspp_sub_blk) {
+>> +     case DPU_DSPP_IGC:
+>> +             ctx->pending_dspp_flush_mask[dspp-DSPP_0] |=3D BIT(2);
+>
+>Spaces around -, here and below.
+>
+>- Marijn
+>
+>> +             break;
+>> +     case DPU_DSPP_PCC:
+>> +             ctx->pending_dspp_flush_mask[dspp-DSPP_0] |=3D BIT(4);
+>> +             break;
+>> +     case DPU_DSPP_GC:
+>> +             ctx->pending_dspp_flush_mask[dspp-DSPP_0] |=3D BIT(5);
+>> +             break;
+>> +     default:
+>> +             return;
+>> +     }
+>> +
+>> +     ctx->pending_flush_mask |=3D BIT(29); }
+>> +
+>>  static u32 dpu_hw_ctl_poll_reset_status(struct dpu_hw_ctl *ctx, u32
+>> timeout_us)  {
+>>       struct dpu_hw_blk_reg_map *c =3D &ctx->hw; @@ -675,7 +713,11 @@
+>> static void _setup_ctl_ops(struct dpu_hw_ctl_ops *ops,
+>>       ops->setup_blendstage =3D dpu_hw_ctl_setup_blendstage;
+>>       ops->update_pending_flush_sspp =3D
+>dpu_hw_ctl_update_pending_flush_sspp;
+>>       ops->update_pending_flush_mixer =3D
+>dpu_hw_ctl_update_pending_flush_mixer;
+>> -     ops->update_pending_flush_dspp =3D
+>dpu_hw_ctl_update_pending_flush_dspp;
+>> +     if (cap & BIT(DPU_CTL_DSPP_SUB_BLOCK_FLUSH))
+>> +             ops->update_pending_flush_dspp =3D
+>dpu_hw_ctl_update_pending_flush_dspp_subblocks;
+>> +     else
+>> +             ops->update_pending_flush_dspp =3D
+>> + dpu_hw_ctl_update_pending_flush_dspp;
+>> +
+>>       if (cap & BIT(DPU_CTL_FETCH_ACTIVE))
+>>               ops->set_active_pipes =3D
+>> dpu_hw_ctl_set_fetch_pipe_active;  }; diff --git
+>> a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
+>> b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
+>> index 96c012e..ff4e92c 100644
+>> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
+>> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_ctl.h
+>> @@ -148,13 +148,15 @@ struct dpu_hw_ctl_ops {
+>>               enum dpu_lm blk);
+>>
+>>       /**
+>> -      * OR in the given flushbits to the cached pending_flush_mask
+>> +      * OR in the given flushbits to the cached
+>> + pending_dspp_flush_mask
+>>        * No effect on hardware
+>>        * @ctx       : ctl path ctx pointer
+>>        * @blk       : DSPP block index
+>> +      * @dspp_sub_blk : DSPP sub-block index
+>>        */
+>>       void (*update_pending_flush_dspp)(struct dpu_hw_ctl *ctx,
+>> -             enum dpu_dspp blk);
+>> +             enum dpu_dspp blk, u32 dspp_sub_blk);
+>> +
+>>       /**
+>>        * Write the value of the pending_flush_mask to hardware
+>>        * @ctx       : ctl path ctx pointer
+>> @@ -242,6 +244,7 @@ struct dpu_hw_ctl {
+>>       u32 pending_intf_flush_mask;
+>>       u32 pending_wb_flush_mask;
+>>       u32 pending_merge_3d_flush_mask;
+>> +     u32 pending_dspp_flush_mask[DSPP_MAX - DSPP_0];
+>>
+>>       /* ops */
+>>       struct dpu_hw_ctl_ops ops;
+>> --
+>> 2.7.4
+>>
