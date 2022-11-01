@@ -2,148 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFFFA61426D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 01:52:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC1A8614271
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 01:54:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229639AbiKAAwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 20:52:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41746 "EHLO
+        id S229553AbiKAAyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 20:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229469AbiKAAwW (ORCPT
+        with ESMTP id S229475AbiKAAyG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 20:52:22 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D92FD14D3E;
-        Mon, 31 Oct 2022 17:52:21 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 78F9461411;
-        Tue,  1 Nov 2022 00:52:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B039C433D6;
-        Tue,  1 Nov 2022 00:52:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667263940;
-        bh=HWEyYhTRPVpxScw+Umz7p1bNJQ9QmOz14vkT8EGXetc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Zs88KE0XmeUvH7SNcf3URWb5ISZx9zmIJ1IEYkN24oL2k3DWU7WEWQtbsdeH5Wo3e
-         EzoouQ0U8xQstv4a4PARXwRDHiasUiTO89U7ZhXVD5cgNezbnMp457stM2vLNpoDL9
-         B3QHsDxK4hNHY7OQ7Wflh+JCKNVjxOI5krJMJAwzEkqBdOWkLeL/9gY8okgneLMq5Y
-         PnC8CyVlPOCQ4hBN93Tt2zqI/1O4nGlTA+hCS0E2YEnA1lJj3yRqRm39TFzxHLL8de
-         gF4JoKt4cwJyuObEbitJ44ogEABH4h+b6UaU7JrmaL3rJIBoyvOoOKAMKGyRgqlEnM
-         Q+tX/nnuPRs9w==
-Date:   Tue, 1 Nov 2022 02:52:16 +0200
-From:   Jarkko Sakkinen <jarkko@kernel.org>
-To:     Reinette Chatre <reinette.chatre@intel.com>
-Cc:     dave.hansen@linux.intel.com, md.iqbal.hossain@intel.com,
-        haitao.huang@intel.com, linux-sgx@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] x86/sgx: Reduce delay and interference of enclave release
-Message-ID: <Y2BtwGIfnW4fqkUg@kernel.org>
-References: <06a5f478d3bfaa57954954c82dd5d4040450171d.1666130846.git.reinette.chatre@intel.com>
- <Y1WemizNZgFOVxja@kernel.org>
- <77943714-b988-bf14-8795-c72ff0424418@intel.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <77943714-b988-bf14-8795-c72ff0424418@intel.com>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Mon, 31 Oct 2022 20:54:06 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF1E388;
+        Mon, 31 Oct 2022 17:54:04 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id d10so12138250pfh.6;
+        Mon, 31 Oct 2022 17:54:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Fq59yWSLafAiwk54zqJ+kxPVtmYjp0IhMh7ZZqtSKsc=;
+        b=Jn71qW/dsPMLnTWj9wU/Ls18emsiyQ1X+GccfVRr/xSW0gRq46YTl3ULVWDjIMdCP1
+         CIk5RxhNNCOpSGzyan2Y/nxQIz5XtRVYqIc0AuiNxZaXrcqZ+V8Sp/cI9vLwqwjv2uvu
+         yUX3ipqNmjK8EMCNDGENmJXEseW4mu3TpD5ZoYysP0blrkJnFXEdyS0x+OicQhHu61cA
+         RDllDlQf4qZBf2hRFtAXLWngwf4Xwn+qmDofXgsWdRWBf7zrWTlabDroQ3wRDD7AXzJm
+         7DOFxQ3t32omDbfMvmjtjBAfYcpkBM/oiRGeK/f+a5E2DyVhW6aCdP0IZ1kNNGT6gi1b
+         q/DA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Fq59yWSLafAiwk54zqJ+kxPVtmYjp0IhMh7ZZqtSKsc=;
+        b=beyp5LFqGOBPrxMOG055SNafOGq/ISl6lsSh219m9rNbgXmksb54dF1T4HQewUc9w6
+         DrtC3IWQ7bYhzcuUscsHmrptiJff+KM00WjDAUUxsq4n7ek6buHkt0XlMCFqp/F0uJrK
+         +57He51LrzSPqhE07nyBxi+KpLaPUbZdTZEyBf7N4OtxZqt9yhuit3KOXsg3i2qSOvcD
+         e9rcmnrn8iGDeNavCD2vlMTMJ2/KTTbMIEyIC0YwaQe3Izc4D8GDPsXm3RD5pcZnx2h7
+         +S1qu7/ng+dX9N+XRPgm+SN45yTcBbm+nMwxsWGpNaKLwQRPAvibshgwV9xhJLVj+9Ie
+         Os3A==
+X-Gm-Message-State: ACrzQf0GycPY4us5fLZU7Cbh0pHXxBNpkHoNi5x8rvkuBZOxWTzfuAkv
+        pFunvV/ryP2o+p3fiGGp5zc=
+X-Google-Smtp-Source: AMsMyM68v+SPLmdGRHXnn8XITjdXmScdbfcMceoqHO21dZYPGTJifMObb5NEhCgwPfvq90nPbsftgQ==
+X-Received: by 2002:a63:5d12:0:b0:46e:cd38:3f76 with SMTP id r18-20020a635d12000000b0046ecd383f76mr14639852pgb.64.1667264043742;
+        Mon, 31 Oct 2022 17:54:03 -0700 (PDT)
+Received: from smtpclient.apple (c-24-6-216-183.hsd1.ca.comcast.net. [24.6.216.183])
+        by smtp.gmail.com with ESMTPSA id 17-20020a17090a19d100b002036006d65bsm4795469pjj.39.2022.10.31.17.54.02
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Mon, 31 Oct 2022 17:54:03 -0700 (PDT)
+Content-Type: text/plain;
+        charset=utf-8
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3696.120.41.1.1\))
+Subject: Re: [PATCH v6] hugetlb: don't delete vma_lock in hugetlb
+ MADV_DONTNEED processing
+From:   Nadav Amit <nadav.amit@gmail.com>
+In-Reply-To: <20221031223440.285187-1-mike.kravetz@oracle.com>
+Date:   Mon, 31 Oct 2022 17:54:01 -0700
+Cc:     Linux-MM <linux-mm@kvack.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Naoya Horiguchi <naoya.horiguchi@linux.dev>,
+        David Hildenbrand <david@redhat.com>,
+        Axel Rasmussen <axelrasmussen@google.com>,
+        Mina Almasry <almasrymina@google.com>,
+        Peter Xu <peterx@redhat.com>, Rik van Riel <riel@surriel.com>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Wei Chen <harperchen1110@gmail.com>,
+        "# 5 . 10+" <stable@vger.kernel.org>
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <8D2D2F0F-9A53-42B5-8A9D-936E06E4A4E9@gmail.com>
+References: <20221031223440.285187-1-mike.kravetz@oracle.com>
+To:     Mike Kravetz <mike.kravetz@oracle.com>
+X-Mailer: Apple Mail (2.3696.120.41.1.1)
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 11:56:39AM -0700, Reinette Chatre wrote:
-> Hi Jarkko,
-> 
-> On 10/23/2022 1:06 PM, Jarkko Sakkinen wrote:
-> > On Tue, Oct 18, 2022 at 03:42:47PM -0700, Reinette Chatre wrote:
-> 
-> ...
-> 
-> >> diff --git a/arch/x86/kernel/cpu/sgx/encl.c b/arch/x86/kernel/cpu/sgx/encl.c
-> >> index 1ec20807de1e..f7365c278525 100644
-> >> --- a/arch/x86/kernel/cpu/sgx/encl.c
-> >> +++ b/arch/x86/kernel/cpu/sgx/encl.c
-> >> @@ -682,9 +682,12 @@ void sgx_encl_release(struct kref *ref)
-> >>  	struct sgx_encl *encl = container_of(ref, struct sgx_encl, refcount);
-> >>  	struct sgx_va_page *va_page;
-> >>  	struct sgx_encl_page *entry;
-> >> -	unsigned long index;
-> >> +	unsigned long count = 0;
-> >> +
-> >> +	XA_STATE(xas, &encl->page_array, PFN_DOWN(encl->base));
-> >>  
-> >> -	xa_for_each(&encl->page_array, index, entry) {
-> >> +	xas_lock(&xas);
-> >> +	xas_for_each(&xas, entry, PFN_DOWN(encl->base + encl->size  - 1)) {
-> > 
-> > I would add to declarations:
-> > 
-> > unsigned long nr_pages = PFN_DOWN(encl->base + encl->size  - 1);
-> > 
-> > Makes this more readable.
-> 
-> Will do, but I prefer to name it "max_page_index" or something related instead.
-> "nr_pages" implies "number of pages" to me, which is not what
-> PFN_DOWN(encl->base + encl->size - 1) represents. What is represented is the
-> highest possible index of a page in page_array, where an index is the
-> pfn of a page.
+On Oct 31, 2022, at 3:34 PM, Mike Kravetz <mike.kravetz@oracle.com> =
+wrote:
 
-Yeah, makes sense.
+> madvise(MADV_DONTNEED) ends up calling zap_page_range() to clear the =
+page
+> tables associated with the address range.  For hugetlb vmas,
+> zap_page_range will call __unmap_hugepage_range_final.  However,
+> __unmap_hugepage_range_final assumes the passed vma is about to be =
+removed
+> and deletes the vma_lock to prevent pmd sharing as the vma is on the =
+way
+> out.  In the case of madvise(MADV_DONTNEED) the vma remains, but the
+> missing vma_lock prevents pmd sharing and could potentially lead to =
+issues
+> with truncation/fault races.
+>=20
 
-> 
-> > 
-> >>  		if (entry->epc_page) {
-> >>  			/*
-> >>  			 * The page and its radix tree entry cannot be freed
-> >> @@ -699,9 +702,20 @@ void sgx_encl_release(struct kref *ref)
-> >>  		}
-> >>  
-> >>  		kfree(entry);
-> >> -		/* Invoke scheduler to prevent soft lockups. */
-> >> -		cond_resched();
-> >> +		/*
-> >> +		 * Invoke scheduler on every XA_CHECK_SCHED iteration
-> >> +		 * to prevent soft lockups.
-> >> +		 */
-> >> +		if (!(++count % XA_CHECK_SCHED)) {
-> >> +			xas_pause(&xas);
-> >> +			xas_unlock(&xas);
-> >> +
-> >> +			cond_resched();
-> >> +
-> >> +			xas_lock(&xas);
-> >> +		}
-> >>  	}
-> > 
-> >         WARN_ON(count != nr_pages);
-> > 
-> 
-> nr_pages as assigned in your example does not represent a count of the
-> enclave pages but instead a pfn index into the page_array. Comparing it
-> to count, the number of removed enclave pages that are not being held
-> by reclaimer, is not appropriate.
-> 
-> This check would be problematic even if we create a "nr_pages" from
-> the range of possible indices. This is because of how enclave sizes are
-> required to be power-of-two that makes it likely for there to be indices
-> without pages associated with it.
+[snip]
 
-Ok.
+> index 978c17df053e..517c8cc8ccb9 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -3464,4 +3464,7 @@ madvise_set_anon_name(struct mm_struct *mm, =
+unsigned long start,
+>  */
+> #define  ZAP_FLAG_DROP_MARKER        ((__force zap_flags_t) BIT(0))
+>=20
+> +/* Set in unmap_vmas() to indicate an unmap call.  Only used by =
+hugetlb */
+> +#define  ZAP_FLAG_UNMAP              ((__force zap_flags_t) BIT(1))
 
-> 
-> >> +	xas_unlock(&xas);
-> >>  
-> >>  	xa_destroy(&encl->page_array);
-> >>  
-> >> -- 
-> >> 2.34.1
-> >>
-> 
-> Reinette
+PeterZ wants to add ZAP_FLAG_FORCE_FLUSH that would be set on
+zap_pte_range(). Not sure you would want to combine them both together, =
+but
+at least be aware of potential conflict.
 
-BR, Jarkko
+=
+https://lore.kernel.org/all/Y1f7YvKuwOl1XEwU@hirez.programming.kicks-ass.n=
+et/
+
+[snip]
+
+> +#ifdef CONFIG_ADVISE_SYSCALLS
+> +/*
+> + * Similar setup as in zap_page_range().  madvise(MADV_DONTNEED) can =
+not call
+> + * zap_page_range for hugetlb vmas as __unmap_hugepage_range_final =
+will delete
+> + * the associated vma_lock.
+> + */
+> +void clear_hugetlb_page_range(struct vm_area_struct *vma, unsigned =
+long start,
+> +				unsigned long end)
+> +{
+> +	struct mmu_notifier_range range;
+> +	struct mmu_gather tlb;
+> +
+> +	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, =
+vma->vm_mm,
+> +				start, end);
+> +	adjust_range_if_pmd_sharing_possible(vma, &range.start, =
+&range.end);
+> +	tlb_gather_mmu(&tlb, vma->vm_mm);
+> +	update_hiwater_rss(vma->vm_mm);
+> +	mmu_notifier_invalidate_range_start(&range);
+> +
+> +	__unmap_hugepage_range_locking(&tlb, vma, start, end, NULL, 0);
+> +
+> +	mmu_notifier_invalidate_range_end(&range);
+> +	tlb_finish_mmu(&tlb);
+> }
+> +#endif
+
+I hate ifdef=E2=80=99s. And the second definition of =
+clear_hugetlb_page_range() is
+confusing since it does not have an ifdef at all. . How about moving the
+ifdef=E2=80=99s into the function like being done in io_madvise_prep()? =
+I think it
+is less confusing.
+
+[ snip ]
+
+>=20
+> --- a/mm/memory.c
+> +++ b/mm/memory.c
+> @@ -1671,7 +1671,7 @@ void unmap_vmas(struct mmu_gather *tlb, struct =
+maple_tree *mt,
+> {
+> 	struct mmu_notifier_range range;
+> 	struct zap_details details =3D {
+> -		.zap_flags =3D ZAP_FLAG_DROP_MARKER,
+> +		.zap_flags =3D ZAP_FLAG_DROP_MARKER | ZAP_FLAG_UNMAP,
+> 		/* Careful - we need to zap private pages too! */
+> 		.even_cows =3D true,
+> 	};
+> @@ -1704,15 +1704,21 @@ void zap_page_range(struct vm_area_struct =
+*vma, unsigned long start,
+> 	MA_STATE(mas, mt, vma->vm_end, vma->vm_end);
+>=20
+> 	lru_add_drain();
+> -	mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, vma, =
+vma->vm_mm,
+> -				start, start + size);
+> 	tlb_gather_mmu(&tlb, vma->vm_mm);
+> 	update_hiwater_rss(vma->vm_mm);
+> -	mmu_notifier_invalidate_range_start(&range);
+> 	do {
+> -		unmap_single_vma(&tlb, vma, start, range.end, NULL);
+> +		mmu_notifier_range_init(&range, MMU_NOTIFY_CLEAR, 0, =
+vma,
+> +				vma->vm_mm,
+> +				max(start, vma->vm_start),
+> +				min(start + size, vma->vm_end));
+> +		if (is_vm_hugetlb_page(vma))
+> +			adjust_range_if_pmd_sharing_possible(vma,
+> +				&range.start,
+> +				&range.end);
+> +		mmu_notifier_invalidate_range_start(&range);
+> +		unmap_single_vma(&tlb, vma, start, start + size, NULL);
+
+Is there a reason that you wouldn=E2=80=99t use range.start and =
+range.end here?
+At least for consistency.
+
