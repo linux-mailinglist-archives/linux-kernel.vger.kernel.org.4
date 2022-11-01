@@ -2,193 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B8860614390
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 04:18:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9833614399
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 04:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229742AbiKADSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 23:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59644 "EHLO
+        id S229696AbiKADUQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 23:20:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiKADSl (ORCPT
+        with ESMTP id S229561AbiKADUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 23:18:41 -0400
-Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 42F405F89;
-        Mon, 31 Oct 2022 20:18:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667272719; x=1698808719;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=LLGUqaqhbBSGpDbst31TdXt2wnYWwjRvX4qrN9P9vd8=;
-  b=j2Nq/pxRh7SH5e7Gjxc4btHKRq2IZrf10cTCry3FkiRELz6ILgEi0PUH
-   Kr55/TpGSx1SnjyBWDb9zYcjFePEjoq6pm6sBttqq3tr0rvkEfLkWsMjF
-   k6cZkqowOvNRaVfyfnHgwVO7n+WmIKp6Piu9k4LJLZwo3Ppza3vWY1bPK
-   RVExyRgXYr0Y7dD+4BKAHC3XNgFUzw2TojGybNQFKnuNOB8ezULVFRMXr
-   f1/nzl4AlymNi7GLcim8s25BuxFDJXDmMHgha921Oms+sEj3+6Z+scxVF
-   otU62LENQ3l+1scpln7+6ZOO7StEA+PHqAzSXaZyu9Q188EXN1TwHHF1u
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="395368869"
-X-IronPort-AV: E=Sophos;i="5.95,229,1661842800"; 
-   d="scan'208";a="395368869"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 31 Oct 2022 20:18:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="808777330"
-X-IronPort-AV: E=Sophos;i="5.95,229,1661842800"; 
-   d="scan'208";a="808777330"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga005.jf.intel.com with ESMTP; 31 Oct 2022 20:18:38 -0700
-Received: from fmsmsx601.amr.corp.intel.com (10.18.126.81) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Mon, 31 Oct 2022 20:18:37 -0700
-Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
- fmsmsx601.amr.corp.intel.com (10.18.126.81) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Mon, 31 Oct 2022 20:18:37 -0700
-Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.176)
- by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Mon, 31 Oct 2022 20:18:37 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=ioPDt7ps1lGpQtyXXI5w4WYECgY6sXZk8n3H3uJjC5tBfCRInb9fsJ2wC1J4aEDRi1rhXDRWpaBrFNsBfrde0iqz/MD5gi/LdAi/X+JmWlChrRDmPm+pEda5PQ2VbCPt/Dfd+XoguZXoCmx7b7utxnK4bXvoZU1xDw9WBvUDhxL61FX+LpG1aatJ3ITz6F5OWwofCq3jVAdOj+5MdCNZuje9pW6PSXFUB+5jkHTCqgPpX32lhAO46rjiSB7Ofapl1jygc7oxl4i2RBEvgfGB7oC6lxe92v9sGEkNe/ldVX8Qiu43cmHkXqGgqo0Cq+esPCzjqS4X3pe8V/nB+FXSYQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=LLGUqaqhbBSGpDbst31TdXt2wnYWwjRvX4qrN9P9vd8=;
- b=bwIl0B/sYfdlrN99swOsTvcsCt2eKWysChCfkHX4m2R6cVWs8eCoThGXoDcY7ylsLwjJtvfqgzmh1SFBIVa5FymnG2c/ifQC4yyWbdj5YjKBax3LRELXWe3gH7JJXHtnUOghtBqnHkSNBOGY51BHR4rZXV9kGQx24AMQTssNGv/lwCBMwdvxeyCpeNiWf2rt8wLVOK7zXdjumoLBDwtyAxTKm8xPwuGBbhBU8zFAYxYhNY2PpH/dyyI1iAalgUUyCZakN2Y2Zv+EBjw6SQHMzjWuUdN4vWKu3W5506LZDNDYar3f2uUtw0D/r8uYaGzuzuvfN3YzKsu5N9BvEaFEjg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Received: from DM4PR11MB5454.namprd11.prod.outlook.com (2603:10b6:5:399::22)
- by PH7PR11MB6380.namprd11.prod.outlook.com (2603:10b6:510:1f8::7) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.16; Tue, 1 Nov
- 2022 03:18:35 +0000
-Received: from DM4PR11MB5454.namprd11.prod.outlook.com
- ([fe80::d955:98eb:ec88:8154]) by DM4PR11MB5454.namprd11.prod.outlook.com
- ([fe80::d955:98eb:ec88:8154%4]) with mapi id 15.20.5769.019; Tue, 1 Nov 2022
- 03:18:34 +0000
-From:   "Looi, Hong Aun" <hong.aun.looi@intel.com>
-To:     Jakub Kicinski <kuba@kernel.org>,
-        "Sit, Michael Wei Hong" <michael.wei.hong.sit@intel.com>
-CC:     Vee Khee Wong <veekhee@apple.com>,
-        "alexandre.torgue@foss.st.com" <alexandre.torgue@foss.st.com>,
-        "davem@davemloft.net" <davem@davemloft.net>,
-        "edumazet@google.com" <edumazet@google.com>,
-        "joabreu@synopsys.com" <joabreu@synopsys.com>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-stm32@st-md-mailman.stormreply.com" 
-        <linux-stm32@st-md-mailman.stormreply.com>,
-        "mcoquelin.stm32@gmail.com" <mcoquelin.stm32@gmail.com>,
-        "Zulkifli, Muhammad Husaini" <muhammad.husaini.zulkifli@intel.com>,
-        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
-        "pabeni@redhat.com" <pabeni@redhat.com>,
-        "peppe.cavallaro@st.com" <peppe.cavallaro@st.com>,
-        "Tan, Tee Min" <tee.min.tan@intel.com>,
-        "Voon, Weifeng" <weifeng.voon@intel.com>,
-        "Gan, Yi Fang" <yi.fang.gan@intel.com>,
-        "Song, Yoong Siang" <yoong.siang.song@intel.com>
-Subject: RE: [PATCH net-next 1/1] stmmac: intel: Separate ADL-N and RPL-P
- device ID from TGL
-Thread-Topic: [PATCH net-next 1/1] stmmac: intel: Separate ADL-N and RPL-P
- device ID from TGL
-Thread-Index: AQHY6rPgEgDfUEMJ0UWR9lW6DQc0va4jnxUAgACMfoCABT3f8A==
-Date:   Tue, 1 Nov 2022 03:18:34 +0000
-Message-ID: <DM4PR11MB5454EA991FA941D68C7BDEF0BE369@DM4PR11MB5454.namprd11.prod.outlook.com>
-References: <A23A7058-5598-46EB-8007-C401ADC33149@apple.com>
-        <DM5PR11MB15935E3AF06794F523DB48C69D329@DM5PR11MB1593.namprd11.prod.outlook.com>
- <20221028120715.1dc12fc1@kernel.org>
-In-Reply-To: <20221028120715.1dc12fc1@kernel.org>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-dlp-product: dlpe-windows
-dlp-version: 11.6.500.17
-dlp-reaction: no-action
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM4PR11MB5454:EE_|PH7PR11MB6380:EE_
-x-ms-office365-filtering-correlation-id: 31b2aa40-0002-4a2b-0e87-08dabbb7c2a9
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 7cafnhLQfTSQl9oOgwhWs5xVWgy8ccvnIUiqSUEXG/g30XySgVrztORsSE+fwWYJaI5ByD9Fj//Fm0P12Qzlr3BqwV6voObSBDhPL+OhozVmeY+mSppnd0ar1aU4hdnjs8y6ubWB1hk0mkmQ39Yp9jkEAWzlKWHN6j4DOmNoz1F2d0eeB7lQ4Z9FLmlZOfZrfv5QIalWpXSqzi/ZfqOTq6UeBQoSg+T2XmNkh+GRNEBB9sCa6WGAJQ5xu3cJPhgd5DJfVk16XhbrPoMOiXiGY78GTW/A+vKPZm9Xk9IJyJODNa7KZyv+ru1IcleIEsdc2PhLEKYunZz1Scz+9ktAfh+khE/qR05cc+yxIZ4+q9wvzocyTRaz76Epdbeed7EHCd1I0eXc47snzCdUAY0GsJT/vfQtKTUvDde7mXIh7bBE557j0jHZMBOVKodUHJp4GeNJBKDYkKtEIN3n5KnIt591+5YKc0UzHD5d2cAxYdwHh3zRdrdBcL5U1tfDYkfAsbgIms0UJUuxvnywDU15uKbq+SfgX8ol8fh9IyTbGvNVOZlCKtT/euMHAGRajJXAOObMNqTJNlLbyoix8ZPDPLNtvI8bu3r2bMpdefyqWIyQGiIbJ3jhWWBb1K/Nlae2rPKq0CjPTfP1QXeki16+56R4TQ1s7eRMe7hoYsTa6Qc8K/0iLCyhk2EFPfTOM3oca/ZmLen6FxFVkm4klnBU3LuJJm2lcgxT01lxUXQnvECmwV7oiP9EQawuANUK59yLNpfqas7zSSrtKAPIxBQb9Q==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM4PR11MB5454.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(396003)(376002)(366004)(39860400002)(346002)(451199015)(71200400001)(107886003)(6506007)(7696005)(83380400001)(110136005)(66556008)(38070700005)(66946007)(66476007)(76116006)(66446008)(8676002)(82960400001)(55016003)(38100700002)(64756008)(4326008)(122000001)(33656002)(186003)(26005)(86362001)(9686003)(478600001)(316002)(54906003)(4744005)(8936002)(2906002)(52536014)(6636002)(7416002)(41300700001)(5660300002);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Y0p0dVR5a2lPNWFJSlBGV2tXMHo4YTFPdVVrNDFPZzM2UnN2cUNjQTJpMGdt?=
- =?utf-8?B?cnZlcjQ3d0VneXdUTTNreVBnREswWURXeElsNmN4aWNmT2t2OFNnTDRDaFFm?=
- =?utf-8?B?QzEwSHFsMWhvMVh0MDl6ZjlXMnM0U2VoL05VTW5XT3MvQnorWGIzY21qRUd1?=
- =?utf-8?B?V1BUVmFSTFIxQjVXb3orOHBzTjdPb0ZIeWRjbm5aOGtiV2pTOCtCNXdGa3Nv?=
- =?utf-8?B?czV5dEc3OXF4a25NbEhxRDNJWFdmZnlQSUp3UWJzSGZzR01ickFSU3N4Q0tU?=
- =?utf-8?B?SVJQL0R4bFNGMTg2a3VpZ1hKaHFWUzBDTlpZNGwvQWswaXZoR0FtQnhRU0NU?=
- =?utf-8?B?V21uYlVXdnBJQjEyRFFVQ1R6cjgxbml2bnhlN1lLcnduOGFsVnhaQTd6Q1lr?=
- =?utf-8?B?UGpKb0xVZHlLbjRwQk9FMU81dUpIY1VldlpmVG53RUZ1Y0tpZU91a1ZKcWNM?=
- =?utf-8?B?TVVCMTM2SHNMMG42eU9jQ1ZKRGRlcG83UGxDT0h0aG9INjhhdXdOb0MyS1RZ?=
- =?utf-8?B?Wkc5cXdOcTVNV1JHTlQ1c2Nma1F5QlVFeDBNNFVsQ3hXcS9PeldoU2laMGFZ?=
- =?utf-8?B?blYwRnZkY0dwa3FIMThIQ3FPaXUyL0xYcm1hSkpScUFHRE92YXYrR2VOdXBR?=
- =?utf-8?B?SFRhcGJJY2JvS2pZeWVIME5OWGpEazVxaWNTdkx2aTVFRmUwbXZiNTdJSW1V?=
- =?utf-8?B?YkZCS3lKUDdxdElOekd2bFZJUUpyQWZFbEgxSEloZlpoNU5YTTJVdG5mVnV0?=
- =?utf-8?B?LytmdTJ0emhneGNrNjZ6Q01naGhudkhsejd6U0NpOE40bkt2bllDUThrVkUv?=
- =?utf-8?B?dFg0NHRqR2NCaFg3Y1RjajlESi93SGI1ZDhMcTlhVDZES0c4QkhQQ2c5bFlv?=
- =?utf-8?B?REtWMHl3d0MxVnE2MzN2dUF2aHhvaUJNdUx1SHJ2ZmRqVUxwVnRUdk9jcm1x?=
- =?utf-8?B?OEQ2c2tuMFNqbWNtSE9PazJIM0NmWVJ2Q01VZVNsSTYvaDlDSVBHem81NEsr?=
- =?utf-8?B?ZkFUdVpNcEtFRklwdVFtVkxyNThKa0tmUHVjcUhoRGFBaEVRY1pHVk1sMWtY?=
- =?utf-8?B?MGVEc3k3MFFoL0E1cUp6RmNzZFZmbGZZazZjUmhGaXFWZUhKVWM1dzNwcUJN?=
- =?utf-8?B?dGhiSFNKRVFMRWxla0NaZ1dXSWVMWmZDaFlJcThyZ0hzVmR4cEpsVmcxV3ZU?=
- =?utf-8?B?b0UvOTR4a3V5S2lpUURGS1lxKytMWWJKa0hYWVZKUE8xU2xXK1NnOVY1UERw?=
- =?utf-8?B?SGVIMGhKVkg1RmpGSU9HLzE0RnlUd0Nna3dNcUpNSHVtd0hTcktGYlcvYWtD?=
- =?utf-8?B?TmRseXEwWWtMRlhsY2Fqd3VuL0pURmd4UHZFL09hSjVpQVloOGhGL2pMaFVD?=
- =?utf-8?B?MjZUSUN3YmlGczJINklhTzdtN2lZdWdmajlkaDRyWHJmWTZEUGJDVjg4ZnVI?=
- =?utf-8?B?Z0pBSFBESDN0N3ZhZWVQZFd6b0hIem1HbUxQN0hmVWxhUWJUTERyZ0pJMXhT?=
- =?utf-8?B?MGNpbEZzeHIyUXR5Tm9iVTdyQ1RiK1N0dnV5d215SDFDYndWeExsTkdaWnNy?=
- =?utf-8?B?OWZvM05SeFhNeHBsTEhXeWxRM2xvVVdkU0ZQT091U2d3d09FV2xyYzNTNTBL?=
- =?utf-8?B?TXUwOWJnaUNWRXIrdmgra1dTVy9iZTdwb2tqN0JCL3VJWDNNWWlIZDVTdXNl?=
- =?utf-8?B?TnJGVjByU3JXejBXWGxkaURSalUxWlhMWG0wRGcxS0VUa0VzTDVaZzMyVDBO?=
- =?utf-8?B?SkxqbjJ3VlBJL2ZWT3diYUdpd3BMREtIZU5BK3pXdC9xbCtYVTZJaWVLUlY5?=
- =?utf-8?B?c2wwTFFBMEk5VjFiN2ZYbEltZUNGZlJlT3BkMnZER3pqMkFCTm52d002UE5j?=
- =?utf-8?B?cDZSRHhFRXF5RFBSbW5kNXpIc0duV1h6MzJaNmMxblR2LzdJam5pVUJiUjhV?=
- =?utf-8?B?dDR5dXQxVkluVEFRUEFkc2FYRGVVR3pBSUkzZGRxQnBJTzN3OC9uVFoveUhP?=
- =?utf-8?B?S2JpcHJIS1ZrLzQ4bXVWTmEvVlFVTmdBTUhmTXQ0MzNBUHMzRi9VdGwyTmth?=
- =?utf-8?B?SXVrVy9JUitzU2tEKzE5eWlxVFJSR1BDMnR0S2I1ZE1Fc1UxZVBzek4vUHJF?=
- =?utf-8?Q?Yk8mVPfGeDEb8F3u+IMzUlG/7?=
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
+        Mon, 31 Oct 2022 23:20:12 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DBC6647F;
+        Mon, 31 Oct 2022 20:20:09 -0700 (PDT)
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A139dCP031554;
+        Tue, 1 Nov 2022 03:19:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=9WjdJBUVH8MeLvA9zh4Sza3xE353qf9XmPnIJRTg3o0=;
+ b=FkxISVjvKZXQbL+0dSpAJTk4egSQgWpxAXWeB6toT6waoXI5r9ErXEymo0PuOb+vdDP3
+ VxV1GUK58L0HPrFFEUrJdlkh+m62H83mSM+CRvoH18qQlNwBmtGHVNqDdKtjFFkx/uLm
+ ngwNjZvFXHMsDJXSkMvN3MIaJ8oTwLRfgDKbqQ4wDe7yI1AZZ949YXErB/3Beg04n3f1
+ kf9frK4Wy7YEpAIUaLeJdOocOsh78m46CC/Nt63whE4wFEUFKzI/kqi3tMIkzJ4pDKnx
+ bnncDilBbM/kebhj4fSZGGlQbtvSjGtDO+Yit3vGVfoKP5v1LwUechbUajZ+AsbLkNxN Zw== 
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kjsqh05vc-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 01 Nov 2022 03:19:49 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A13Jm3k029644
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Tue, 1 Nov 2022 03:19:48 GMT
+Received: from [10.110.109.83] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Mon, 31 Oct
+ 2022 20:19:46 -0700
+Message-ID: <df09560d-803b-33f6-69ed-6d377d05d336@quicinc.com>
+Date:   Mon, 31 Oct 2022 20:19:45 -0700
 MIME-Version: 1.0
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM4PR11MB5454.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 31b2aa40-0002-4a2b-0e87-08dabbb7c2a9
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Nov 2022 03:18:34.5458
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: dylivc5vArQknBPjccs+QldtA2qTLKNV584d+z+/ze6uuu34OGIANScKoqxVcByXjsucz/8UsEiKFX4z+F3UQg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6380
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v5 02/13] dt-bindings: Add binding for gunyah hypervisor
+Content-Language: en-US
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh@kernel.org>
+CC:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        "Srivatsa Vaddagiri" <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <devicetree@vger.kernel.org>, <linux-doc@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221011000840.289033-1-quic_eberman@quicinc.com>
+ <20221011000840.289033-3-quic_eberman@quicinc.com>
+ <20221012155645.GA2173829-robh@kernel.org>
+ <ca13eb92-9b5b-19fd-27a5-f91f5048b142@quicinc.com>
+ <CAL_Jsq+cR5AEa5i1u-_L6sP6nYXS6qgaVWZ=KwxpUbxV3ZW-BA@mail.gmail.com>
+ <75ef3cc5-3b19-9eab-b3eb-56fa254d92bd@quicinc.com>
+ <79673829-a079-201f-91e1-790eb7cc3a4b@linaro.org>
+From:   Elliot Berman <quic_eberman@quicinc.com>
+In-Reply-To: <79673829-a079-201f-91e1-790eb7cc3a4b@linaro.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: fs7KBXATslAtjcGiQirE6T_AviZphkjK
+X-Proofpoint-ORIG-GUID: fs7KBXATslAtjcGiQirE6T_AviZphkjK
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-10-31_22,2022-10-31_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxscore=0
+ priorityscore=1501 malwarescore=0 impostorscore=0 lowpriorityscore=0
+ suspectscore=0 bulkscore=0 mlxlogscore=999 clxscore=1011 spamscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211010023
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PiBPbiBGcmksIDI4IE9jdCAyMDIyIDEwOjQ0OjI0ICswMDAwIFNpdCwgTWljaGFlbCBXZWkgSG9u
-ZyB3cm90ZToNCj4gPiBUaGlzIGlzIHRvIGFsbG93IGZpbmVyIGNvbnRyb2wgb24gcGxhdGZvcm0g
-c3BlY2lmaWMgZmVhdHVyZXMgZm9yIEFETCBhbmQgUlBMLg0KPiA+IFRoZXJlIGFyZSBzb21lIGZl
-YXR1cmVzIHRoYXQgQURMIGFuZCBSUEwgZG9lc27igJl0IHN1cHBvcnQgYW5kIFRHTA0KPiBzdXBw
-b3J0cyB2aWNlIHZlcnNhLg0KPiANCj4gQnV0IGlmIHRoZXkgYXJlIHRoZSBzYW1lIF9yaWdodF8g
-X25vd18gd2hhdCdzIHRoZSBwb2ludD8NCj4gUGxlYXNlIHJlcG9zdCBhcyBwYXJ0IG9mIGEgc2Vy
-aWVzIHdoaWNoIGFjdHVhbGx5IG1vZGlmaWVzIHRoZSBjb250ZW50cy4NCj4gDQo+IFBsZWFzZSBy
-ZW1lbWJlciBub3QgdG8gdG9wIHBvc3Qgb24gdGhlIE1MLg0KDQpOb3RlZC4gVGhhbmtzIFZlZSBL
-aGVlIGFuZCBKYWt1YiBmb3IgdGhlIGNvbW1lbnRzLiBUaGVyZSBpcyBzb21lIHdvcmsgaW4gcHJv
-Z3Jlc3MgYXMgcGFydCBvZiBBREwtTiBkZXZlbG9wbWVudC4gV2UnbGwgc3VibWl0IGEgY29tcGxl
-dGUgcGF0Y2hzZXQgd2hlbiBpdCBpcyBjb21wbGV0ZWQgaW4gdGhlIGZ1dHVyZS4gTGV0J3MgY2xv
-c2UgdGhlIHJldmlldyBmb3IgdGhpcyBwYXRjaCBmb3Igbm93Lg0K
+
+
+On 10/27/2022 12:55 PM, Krzysztof Kozlowski wrote:
+> On 27/10/2022 12:17, Elliot Berman wrote:
+>> Hi Rob,
+>>
+>> On 10/26/2022 2:16 PM, Rob Herring wrote:
+>>> On Thu, Oct 13, 2022 at 6:59 PM Elliot Berman <quic_eberman@quicinc.com> wrote:
+>>>>
+>>>>
+>>>> On 10/12/2022 8:56 AM, Rob Herring wrote:
+>>>>> On Mon, Oct 10, 2022 at 05:08:29PM -0700, Elliot Berman wrote:
+>>>>>> When Linux is booted as a guest under the Gunyah hypervisor, the Gunyah
+>>>>>> Resource Manager applies a devicetree overlay describing the virtual
+>>>>>> platform configuration of the guest VM, such as the message queue
+>>>>>> capability IDs for communicating with the Resource Manager. This
+>>>>>> information is not otherwise discoverable by a VM: the Gunyah hypervisor
+>>>>>> core does not provide a direct interface to discover capability IDs nor
+>>>>>> a way to communicate with RM without having already known the
+>>>>>> corresponding message queue capability ID. Add the DT bindings that
+>>>>>> Gunyah adheres for the hypervisor node and message queues.
+>>>>>>
+>>>>>> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+>>>>>> ---
+>>>>>>     .../bindings/firmware/gunyah-hypervisor.yaml  | 87 +++++++++++++++++++
+>>>>>>     MAINTAINERS                                   |  1 +
+>>>>>>     2 files changed, 88 insertions(+)
+>>>>>>     create mode 100644 Documentation/devicetree/bindings/firmware/gunyah-hypervisor.yaml
+>>>>>>
+>>>>>> diff --git a/Documentation/devicetree/bindings/firmware/gunyah-hypervisor.yaml b/Documentation/devicetree/bindings/firmware/gunyah-hypervisor.yaml
+>>>>>> new file mode 100644
+>>>>>> index 000000000000..f0a14101e2fd
+>>>>>> --- /dev/null
+>>>>>> +++ b/Documentation/devicetree/bindings/firmware/gunyah-hypervisor.yaml
+>>>>>> @@ -0,0 +1,87 @@
+>>>>>> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+>>>>>> +%YAML 1.2
+>>>>>> +---
+>>>>>> +$id: http://devicetree.org/schemas/firmware/gunyah-hypervisor.yaml#
+>>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>>>>>> +
+>>>>>> +title: Gunyah Hypervisor
+>>>>>> +
+>>>>>> +maintainers:
+>>>>>> +  - Murali Nalajala <quic_mnalajal@quicinc.com>
+>>>>>> +  - Elliot Berman <quic_eberman@quicinc.com>
+>>>>>> +
+>>>>>> +description: |+
+>>>>>> +  On systems which support devicetree, Gunyah generates and overlays a deviceetree overlay which
+>>>>>
+>>>>> How you end up with the node (applying an overlay) is not relavent to
+>>>>> the binding.
+>>>>>
+>>>>>> +  describes the basic configuration of the hypervisor. Virtual machines use this information to determine
+>>>>>> +  the capability IDs of the message queues used to communicate with the Gunyah Resource Manager.
+>>>>>
+>>>>> Wrap at 80. That is the coding standard still though 100 is deemed
+>>>>> allowed. And yamllint only complains at 110 because I didn't care to fix
+>>>>> everyones lines over 100.
+>>>>>
+>>>>>> +  See also: https://github.com/quic/gunyah-resource-manager/blob/develop/src/vm_creation/dto_construct.c
+>>>>>> +
+>>>>>> +properties:
+>>>>>> +  compatible:
+>>>>>> +    items:
+>>>>>> +      - const: gunyah-hypervisor-1.0
+>>>>>> +      - const: gunyah-hypervisor
+>>>>>
+>>>>> 2 compatibles implies a difference between the 2. What's the difference?
+>>>>> Where does '1.0' come from?
+>>>>>
+>>>>
+>>>> There's no difference. I thought the convention was to have
+>>>> device-specific compatible and the generic compatible. "device-specific"
+>>>> here would be specific to version of Gunyah since it's software.
+>>>
+>>> No, that's just what people do because "vendor,new-soc",
+>>> "vendor,old-soc" seems to bother them for some reason. At the end of
+>>> the day, it's just a string identifier that means something. If
+>>> there's no difference in that 'something', then there is no point in
+>>> having more than one string.
+>>>
+>>> You only need something specific enough to discover the rest from the
+>>> firmware. When that changes, then you add a new compatible. Of course,
+>>> if you want existing OSs to work, then better not change the
+>>> compatible.
+>>>
+>>
+>> Thanks for the info, I'll drop the "-1.0" suffix.
+> 
+> You still did not answer from where does 1.0 come from... Compatibles
+> are usually expected to be specific.
+> 
+
+The 1.0 comes from the Gunyah version. This is the same version returned 
+by "hyp_identify" hypercall.
+
