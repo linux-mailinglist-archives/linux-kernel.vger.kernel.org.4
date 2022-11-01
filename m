@@ -2,47 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D38D76143F7
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 05:45:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9C036143F9
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 05:47:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229730AbiKAEpd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 00:45:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33270 "EHLO
+        id S229740AbiKAEro (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 00:47:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiKAEpb (ORCPT
+        with ESMTP id S229457AbiKAErm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 00:45:31 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D2C1740C;
-        Mon, 31 Oct 2022 21:45:30 -0700 (PDT)
+        Tue, 1 Nov 2022 00:47:42 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36AA31740C;
+        Mon, 31 Oct 2022 21:47:41 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3DBA360F72;
-        Tue,  1 Nov 2022 04:45:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0281BC433C1;
-        Tue,  1 Nov 2022 04:45:28 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C23F861538;
+        Tue,  1 Nov 2022 04:47:40 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C5D99C433D6;
+        Tue,  1 Nov 2022 04:47:38 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667277929;
-        bh=7Tgw9cmj0X/gJHgDspc1Fx8Gx0C3tPIo/87cHLCWo0I=;
+        s=korg; t=1667278060;
+        bh=X3FkZQ/SbRqslJBljFtz6/3HOfW8eaIKfHU4UjbAKeY=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=UVoFYYNvXUbe5hm+tNZ6oB3cxE/1fBZskqLiojb4VhHAcb6JOYCsxxlwlx9Rl1X2d
-         Ha+BUh1uEyf9loYaV6j9UOfzWs8uwrQOaJ+NFl+azuDcyijbhyhPRZATg17rCNe0kQ
-         IiVKsAM/J8hp8dCmMOcDobeizx2TF3erI+zGhHDE=
-Date:   Tue, 1 Nov 2022 05:46:19 +0100
+        b=xnI3lLFKGbBHWPQs7eVsS3wymsCTMcEXNAEZ/HnP3ie5kIeK0P0T6yK/pCobAB4h6
+         rGZen9aG6EE/TQayi3O/lHIfibJwJ80UBW7el6AL4UZUyekyAZ6BXYZdUReVkif8DA
+         +t27FInFPvlWcJND2RCqvvqZOWhLcWv2uLqyZj1k=
+Date:   Tue, 1 Nov 2022 05:48:29 +0100
 From:   Greg KH <gregkh@linuxfoundation.org>
-To:     Slark Xiao <slark_xiao@163.com>
-Cc:     mani@kernel.org, quic_hemantk@quicinc.com, bhelgaas@google.com,
-        loic.poulain@linaro.org, dnlplm@gmail.com, yonglin.tan@outlook.com,
-        mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
-Subject: Re: [PATCH v3] PCI: Add vendor ID for QUECTEL
-Message-ID: <Y2Ckm79PgcTcVVne@kroah.com>
-References: <20221101021052.7532-1-slark_xiao@163.com>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Oleksandr Tymoshenko <ovt@google.com>, christophe.leroy@csgroup.eu,
+        davem@davemloft.net, edumazet@google.com,
+        linux-kernel@vger.kernel.org, sashal@kernel.org,
+        stable@vger.kernel.org, w@1wt.eu, llvm@lists.linux.dev
+Subject: Re: [PATCH 5.4 086/255] once: add DO_ONCE_SLOW() for sleepable
+ contexts
+Message-ID: <Y2ClHT6FNL+DLfqP@kroah.com>
+References: <20221024113005.376059449@linuxfoundation.org>
+ <20221029011211.4049810-1-ovt@google.com>
+ <Y2ATiXtpwPxfsOUD@dev-arch.thelio-3990X>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221101021052.7532-1-slark_xiao@163.com>
+In-Reply-To: <Y2ATiXtpwPxfsOUD@dev-arch.thelio-3990X>
 X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -52,52 +55,73 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 10:10:52AM +0800, Slark Xiao wrote:
-> n MHI driver, there are some companies' product still do not have their
-> own PCI vendor macro. So we add it here to make the code neat. Ref ID
-> could be found in link https://pcisig.com/membership/member-companies.
+On Mon, Oct 31, 2022 at 11:27:21AM -0700, Nathan Chancellor wrote:
+> Hi Oleksandr,
 > 
-> Signed-off-by: Slark Xiao <slark_xiao@163.com>
-> ---
-> v3: Separate different vendors into different patch.
+> On Sat, Oct 29, 2022 at 01:12:11AM +0000, Oleksandr Tymoshenko wrote:
+> > Hello,
+> > 
+> > This commit causes the following panic in kernel built with clang
+> > (GCC build is not affected): 
+> > 
+> > [    8.320308] BUG: unable to handle page fault for address: ffffffff97216c6a                                        [26/4066]
+> > [    8.330029] #PF: supervisor write access in kernel mode                                                                    
+> > [    8.337263] #PF: error_code(0x0003) - permissions violation 
+> > [    8.344816] PGD 12e816067 P4D 12e816067 PUD 12e817063 PMD 800000012e2001e1                                                 
+> > [    8.354337] Oops: 0003 [#1] SMP PTI                
+> > [    8.359178] CPU: 2 PID: 437 Comm: curl Not tainted 5.4.220 #15                                                             
+> > [    8.367241] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06/2015                                   
+> > [    8.378529] RIP: 0010:__do_once_slow_done+0xf/0xa0   
+> > [    8.384962] Code: 1b 84 db 74 0c 48 c7 c7 80 ce 8d 97 e8 fa e9 4a 00 84 db 0f 94 c0 5b 5d c3 66 90 55 48 89 e5 41 57 41 56 
+> > 53 49 89 d7 49 89 f6 <c6> 07 01 48 c7 c7 80 ce 8d 97 e8 d2 e9 4a 00 48 8b 3d 9b de c9 00                                      
+> > [    8.409066] RSP: 0018:ffffb764c02d3c90 EFLAGS: 00010246
+> > [    8.415697] RAX: 4f51d3d06bc94000 RBX: d474b86ddf7162eb RCX: 000000007229b1d6                                              
+> > [    8.424805] RDX: 0000000000000000 RSI: ffffffff9791b4a0 RDI: ffffffff97216c6a                                              
+> > [    8.434108] RBP: ffffb764c02d3ca8 R08: 0e81c130f1159fc1 R09: 1d19d60ce0b52c77                                              
+> > [    8.443408] R10: 8ea59218e6892b1f R11: d5260237a3c1e35c R12: ffff9c3dadd42600                                              
+> > [    8.452468] R13: ffffffff97910f80 R14: ffffffff9791b4a0 R15: 0000000000000000                                            
+> > [    8.461416] FS:  00007eff855b40c0(0000) GS:ffff9c3db7a80000(0000) knlGS:0000000000000000                                   
+> > [    8.471632] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033                                                              
+> > [    8.478763] CR2: ffffffff97216c6a CR3: 000000022ded0000 CR4: 00000000000006a0                                              
+> > [    8.487789] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000                                              
+> > [    8.496684] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400                                              
+> > [    8.505443] Call Trace:                                                                                                    
+> > [    8.508568]  __inet_hash_connect+0x523/0x530                                                                               
+> > [    8.513839]  ? inet_hash_connect+0x50/0x50                                                                                 
+> > [    8.518818]  ? secure_ipv4_port_ephemeral+0x69/0xe0
+> > [    8.525003]  tcp_v4_connect+0x2c5/0x410
+> > [    8.529858]  __inet_stream_connect+0xd7/0x360
+> > [    8.535329]  ? _raw_spin_unlock+0xe/0x10
+> > ... skipped ...
+> > 
+> > 
+> > The root cause is the difference in __section macro semantics between 5.4 and
+> > later LTS releases. On 5.4 it stringifies the argument so the ___done
+> > symbol is created in a bogus section ".data.once", with double quotes:
+> > 
+> > % readelf -S vmlinux | grep data.once
+> >   [ 5] ".data.once"      PROGBITS         ffffffff82216c6a  01416c6a
 > 
-> v2: Update vendor ID to the right location sorted by numeric value.
-> ---
->  drivers/bus/mhi/host/pci_generic.c | 6 +++---
->  include/linux/pci_ids.h            | 2 ++
->  2 files changed, 5 insertions(+), 3 deletions(-)
+> Thanks for the report! The reason this does not happen in mainline is
+> due to commit 33def8498fdd ("treewide: Convert macro and uses of
+> __section(foo) to __section("foo")"), which came as a result of these
+> issues:
 > 
-> diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
-> index caa4ce28cf9e..81ae9c49ce2a 100644
-> --- a/drivers/bus/mhi/host/pci_generic.c
-> +++ b/drivers/bus/mhi/host/pci_generic.c
-> @@ -555,11 +555,11 @@ static const struct pci_device_id mhi_pci_id_table[] = {
->  		.driver_data = (kernel_ulong_t) &mhi_telit_fn990_info },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0308),
->  		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx65_info },
-> -	{ PCI_DEVICE(0x1eac, 0x1001), /* EM120R-GL (sdx24) */
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_QUECTEL, 0x1001), /* EM120R-GL (sdx24) */
->  		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
-> -	{ PCI_DEVICE(0x1eac, 0x1002), /* EM160R-GL (sdx24) */
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_QUECTEL, 0x1002), /* EM160R-GL (sdx24) */
->  		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
-> -	{ PCI_DEVICE(0x1eac, 0x2001), /* EM120R-GL for FCCL (sdx24) */
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_QUECTEL, 0x2001), /* EM120R-GL for FCCL (sdx24) */
->  		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
->  	/* T99W175 (sdx55), Both for eSIM and Non-eSIM */
->  	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0ab),
-> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
-> index b362d90eb9b0..3c91461bcfe4 100644
-> --- a/include/linux/pci_ids.h
-> +++ b/include/linux/pci_ids.h
-> @@ -2585,6 +2585,8 @@
->  #define PCI_VENDOR_ID_TEKRAM		0x1de1
->  #define PCI_DEVICE_ID_TEKRAM_DC290	0xdc29
->  
-> +#define PCI_VENDOR_ID_QUECTEL		0x1eac
+> https://github.com/ClangBuiltLinux/linux/issues/619
+> https://llvm.org/pr42950
+> 
+> To keep stable from diverging, it would probably be best to pick
+> 33def8498fdd and fight through whatever conflicts there are. If that is
+> not a suitable solution, the next best thing would be to remove the
+> quotes like was done in commit bfafddd8de42 ("include/linux/compiler.h:
+> fix Oops for Clang-compiled kernels") for all instances of
+> __section(...) or __attribute__((__section__(...))), which should
+> resolve the specific problem you are seeing.
 
-Why did you ignore the comment at the top of this file saying that new
-entries are not needed to be added, especially for just one user?
+I think we should do the latter, fighting with all of the different
+section entries would be a pain.
+
+Unless someone beats me to it, I'll go make up a patch for this...
 
 thanks,
 
