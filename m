@@ -2,111 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 784AD614E74
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 16:36:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C520614E72
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 16:36:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231273AbiKAPgQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 11:36:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54490 "EHLO
+        id S230460AbiKAPgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 11:36:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231129AbiKAPgM (ORCPT
+        with ESMTP id S230264AbiKAPf5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 11:36:12 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 05F9D19285;
-        Tue,  1 Nov 2022 08:36:12 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id i9so7016279qki.10;
-        Tue, 01 Nov 2022 08:36:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6tyOFs8HMbPI+3QLAryCFA6h9mffJbuGR7qcAQvPo6U=;
-        b=HD2F7usIAd7F8S8uMjiTVJ5X7S19RhIjJDEF6bhBE6PKB4r4Qv5416aWWBwTnpyp0b
-         6u3lTQAqEgYqIiEC4Ur3tnmviCrLWklJuwUY2i6p/VgnJ4GF49XFg0idXlmUPLwLztgD
-         XBHW1trEsP7xQqFr8JkdwqbVTK7g0kQHP1bKnxGUlb5ayEnD+Dn4X8y6jldU5ZfnzEyr
-         vuZyeYNBkODaYu4zQ3mPkwqgQ5VJBZeBBqOL6JgPO8+kYEDn42M2VHr1Pb1aziP4eSFJ
-         s6Pid7JP12kZ56M5RLnzEEuXsLbDgv7J/XfwYVVyVoQ6z4Q8QEydkTPLHcbgZaHGuUD0
-         0oDQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6tyOFs8HMbPI+3QLAryCFA6h9mffJbuGR7qcAQvPo6U=;
-        b=MMiQuA4qaZ+X+4Ycg7uRDAr/2TJgzIvwUejWulBp/EZ/sK+0EI/C0C21QcBGiCe8R6
-         ND3xVaN1T8PrkguA5EITLtJ4FNtOVQJgkiopXlzoNxfgYTnDKIyse69AMrY0IhKR8jHi
-         UPz3TL2nmDzzAOyBvdTvEPvZl7PoyVeyGTYz3G7bquggXsjHuw0uxYShdwYVMGXKtvF4
-         waVXLyudJunHECdYLwHX0xtQRpna0MlglA3e6K5TQGIiE9ZhTZQVo4Yxklt2W91gx3ft
-         gYc0i+tRJB7ChFf8RH4m+WyBWxq4oFDemRymoNq/OPAecs/F1MicO0CtKUcj2xytXyI4
-         qKuA==
-X-Gm-Message-State: ACrzQf3XgKcmcw3ZUHZDxvT7YlQ8ojBBWUe6eDmFNdZ2eeL3U9sMC5qw
-        xAK6PgbC7Qzb0qLmKPyy4T+xCPgsRpIbKiv+gYs=
-X-Google-Smtp-Source: AMsMyM5qBbpvlvNhLoJPjX7ijO/W8S3R6x9hlC6iBDXs41tmeasn1CZpPTQ+vfmcyONP+08aPBBwyKhVuKClZEnNx6Q=
-X-Received: by 2002:a37:8786:0:b0:6f9:6d0c:27b4 with SMTP id
- j128-20020a378786000000b006f96d0c27b4mr130158qkd.383.1667316971008; Tue, 01
- Nov 2022 08:36:11 -0700 (PDT)
+        Tue, 1 Nov 2022 11:35:57 -0400
+Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EB618B35;
+        Tue,  1 Nov 2022 08:35:56 -0700 (PDT)
+Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
+        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A1Eh09W023397;
+        Tue, 1 Nov 2022 08:35:44 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding :
+ content-type; s=pfpt0220; bh=75Fikn0ell3K3XFW9rWytIYn3Zx5mPG/Nu172ngiwog=;
+ b=FJHvoI5jX9r3xCsFxlZJtR4ctdUwTHZl2IlOkFErGspz+7fqkrwiDyWj3dGMQ1PINoFE
+ MBGTjPdGdTKquqZ9QZEWdYcgKs5opm6aFxXyWkPI8Fb9sdefjlzxW6dijF2IkrhiImLy
+ xj4ip3Gw4H3ltoLw1ogRHtgIiF+gdhDTtwr+6t5UCoeERgbeZ2+HA6S1fkVwT9p945Ih
+ 8x2JgvXacG2r/4umAfTMFW4dd+D1WQqBoVPY4dcuTlFSUFsHsGY55qJ0XUqCaJsc9kq8
+ Wd5ee8D8it4L7e6ord5X3iKSHCJs1zp3PCDybNPFtbdV9f67NnfXq9jeq9AfRescGNXB Wg== 
+Received: from dc5-exch02.marvell.com ([199.233.59.182])
+        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3kk5f8r8j6-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
+        Tue, 01 Nov 2022 08:35:44 -0700
+Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 1 Nov
+ 2022 08:35:42 -0700
+Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
+ (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
+ Transport; Tue, 1 Nov 2022 08:35:42 -0700
+Received: from sburla-PowerEdge-T630.caveonetworks.com (unknown [10.106.27.217])
+        by maili.marvell.com (Postfix) with ESMTP id 72DD93F7053;
+        Tue,  1 Nov 2022 08:35:42 -0700 (PDT)
+From:   Veerasenareddy Burru <vburru@marvell.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <lironh@marvell.com>, <aayarekar@marvell.com>,
+        <sedara@marvell.com>, <sburla@marvell.com>
+CC:     Veerasenareddy Burru <vburru@marvell.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Subject: [PATCH] octeon_ep: support Octeon device CNF95N
+Date:   Tue, 1 Nov 2022 08:35:39 -0700
+Message-ID: <20221101153539.22630-1-vburru@marvell.com>
+X-Mailer: git-send-email 2.36.0
 MIME-Version: 1.0
-References: <20221001061507.3508603-1-kumaravel.thiagarajan@microchip.com>
- <20221001061507.3508603-3-kumaravel.thiagarajan@microchip.com>
- <e433da81-46d5-5aad-4ce9-6d48b2e674e@linux.intel.com> <PH0PR11MB509668B72B3B85C2966D36909B369@PH0PR11MB5096.namprd11.prod.outlook.com>
- <adb2d184-a247-ec16-10f-dfc13831ffc9@linux.intel.com>
-In-Reply-To: <adb2d184-a247-ec16-10f-dfc13831ffc9@linux.intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Tue, 1 Nov 2022 17:35:35 +0200
-Message-ID: <CAHp75VeuYDbjvShTTW5797opunO4DvGSLQG3Aiv0pTpx-6ZZXg@mail.gmail.com>
-Subject: Re: [PATCH v2 tty-next 2/3] 8250: microchip: pci1xxxx: Add rs485
- support to quad-uart driver.
-To:     =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc:     Tharunkumar.Pasumarthi@microchip.com,
-        Kumaravel.Thiagarajan@microchip.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jiri Slaby <jirislaby@kernel.org>,
-        u.kleine-koenig@pengutronix.de, johan@kernel.org,
-        wander@redhat.com, etremblay@distech-controls.com,
-        macro@orcam.me.uk, geert+renesas@glider.be, jk@ozlabs.org,
-        phil.edworthy@renesas.com, Lukas Wunner <lukas@wunner.de>,
-        LKML <linux-kernel@vger.kernel.org>,
-        linux-serial <linux-serial@vger.kernel.org>,
-        UNGLinuxDriver@microchip.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Proofpoint-GUID: XJM2dSwErgz-aoz6nJGjYg14RfyixfIT
+X-Proofpoint-ORIG-GUID: XJM2dSwErgz-aoz6nJGjYg14RfyixfIT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-01_07,2022-11-01_02,2022-06-22_01
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 1, 2022 at 5:25 PM Ilpo J=C3=A4rvinen
-<ilpo.jarvinen@linux.intel.com> wrote:
-> On Tue, 1 Nov 2022, Tharunkumar.Pasumarthi@microchip.com wrote:
+Add support for Octeon device CNF95N.
+CNF95N is a Octeon Fusion family product with same PCI NIC
+characteristics as CN93 which is currently supported by the driver.
 
-...
+Signed-off-by: Veerasenareddy Burru <vburru@marvell.com>
+---
+ .../ethernet/marvell/octeon_ep/octep_main.c   | 19 ++++++++++++++++---
+ .../ethernet/marvell/octeon_ep/octep_main.h   |  2 ++
+ 2 files changed, 18 insertions(+), 3 deletions(-)
 
-> > I went through the code and it seems like this is not taken care by the=
- core.
-> > Do you suggest calling 'serial8250_em485_config' inside 'pci1xxxx_rs485=
-_config' callback?
-> > This has not been done since we do not need all the configurations done=
- inside 'serial8250_em485_config'.
->
-> It has nothing to do with serial8250_em485_config.
->
-> It is very hard to believe you couldn't find
-> uart_sanitize_serial_rs485() and uart_set_rs485_config() yourself, the
-> latter calls your driver specific rs485 handler.
+diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
+index 9089adcb75f9..e956c1059fc8 100644
+--- a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
++++ b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
+@@ -23,6 +23,7 @@ struct workqueue_struct *octep_wq;
+ /* Supported Devices */
+ static const struct pci_device_id octep_pci_id_tbl[] = {
+ 	{PCI_DEVICE(PCI_VENDOR_ID_CAVIUM, OCTEP_PCI_DEVICE_ID_CN93_PF)},
++	{PCI_DEVICE(PCI_VENDOR_ID_CAVIUM, OCTEP_PCI_DEVICE_ID_CNF95N_PF)},
+ 	{0, },
+ };
+ MODULE_DEVICE_TABLE(pci, octep_pci_id_tbl);
+@@ -907,6 +908,18 @@ static void octep_ctrl_mbox_task(struct work_struct *work)
+ 	}
+ }
+ 
++static const char *octep_devid_to_str(struct octep_device *oct)
++{
++	switch (oct->chip_id) {
++	case OCTEP_PCI_DEVICE_ID_CN93_PF:
++		return "CN93XX";
++	case OCTEP_PCI_DEVICE_ID_CNF95N_PF:
++		return "CNF95N";
++	default:
++		return "Unsupported";
++	}
++}
++
+ /**
+  * octep_device_setup() - Setup Octeon Device.
+  *
+@@ -939,9 +952,9 @@ int octep_device_setup(struct octep_device *oct)
+ 
+ 	switch (oct->chip_id) {
+ 	case OCTEP_PCI_DEVICE_ID_CN93_PF:
+-		dev_info(&pdev->dev,
+-			 "Setting up OCTEON CN93XX PF PASS%d.%d\n",
+-			 OCTEP_MAJOR_REV(oct), OCTEP_MINOR_REV(oct));
++	case OCTEP_PCI_DEVICE_ID_CNF95N_PF:
++		dev_info(&pdev->dev, "Setting up OCTEON %s PF PASS%d.%d\n",
++			 octep_devid_to_str(oct), OCTEP_MAJOR_REV(oct), OCTEP_MINOR_REV(oct));
+ 		octep_device_setup_cn93_pf(oct);
+ 		break;
+ 	default:
+diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_main.h b/drivers/net/ethernet/marvell/octeon_ep/octep_main.h
+index 025626a61383..123ffc13754d 100644
+--- a/drivers/net/ethernet/marvell/octeon_ep/octep_main.h
++++ b/drivers/net/ethernet/marvell/octeon_ep/octep_main.h
+@@ -21,6 +21,8 @@
+ #define  OCTEP_PCI_DEVICE_ID_CN93_PF 0xB200
+ #define  OCTEP_PCI_DEVICE_ID_CN93_VF 0xB203
+ 
++#define  OCTEP_PCI_DEVICE_ID_CNF95N_PF 0xB400    //95N PF
++
+ #define  OCTEP_MAX_QUEUES   63
+ #define  OCTEP_MAX_IQ       OCTEP_MAX_QUEUES
+ #define  OCTEP_MAX_OQ       OCTEP_MAX_QUEUES
+-- 
+2.36.0
 
-Which version has this API? If it's v6.1-rc1 and patches are made
-against v6.0, it's possible to miss something.
-
-In any case, the patches to the serial subsystem should always be done
-against the tty/tty-next branch.
-
---=20
-With Best Regards,
-Andy Shevchenko
