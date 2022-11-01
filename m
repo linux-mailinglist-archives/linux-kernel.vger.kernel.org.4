@@ -2,135 +2,274 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E0020614AAA
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:29:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02EB7614AAC
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:29:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230080AbiKAM3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 08:29:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42120 "EHLO
+        id S229475AbiKAM3x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 08:29:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43180 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiKAM3d (ORCPT
+        with ESMTP id S229996AbiKAM3v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 08:29:33 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B4FB22DE1;
-        Tue,  1 Nov 2022 05:29:31 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Tue, 1 Nov 2022 08:29:51 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DAD115F5B;
+        Tue,  1 Nov 2022 05:29:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667305789; x=1698841789;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=vVyJ7eKhdwkHC5O2oGG3qWa0Uq/lk+yFizhB5oFvMS4=;
+  b=ib3ETWT/iSE/DsQRuwU8bXxHKdEMfAtyjQxkSIr9uVGUPenQBwM5Y3ju
+   0UszJvoHZqksP+TwPsuXKLlrniM3vaN0EssI/831fjtRpFzyLQHZIc5bk
+   V9CMHhbfT9O/p0n4w9v82ODdSWt/4ov+AwhWmbdHnN+85CecOGg0Sy60s
+   T+4N6sb9JOGtjn3/3gALAs/7SIhmw7osOkFh9uZxPgDWzH3Mz7Fai7Bnu
+   dv+DbvFti/XujU4XxjjGeVTZLqXYDWOOT2lYaAxNnKju2tbj1AAznzoUx
+   fvD4m7H03rsDO+qmbWdw27BF7zqwiSevdqFNpWeYE3OLUcWV8bkrDca/7
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="371205687"
+X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
+   d="scan'208";a="371205687"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 05:29:49 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="665134700"
+X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
+   d="scan'208";a="665134700"
+Received: from linux.intel.com ([10.54.29.200])
+  by orsmga008.jf.intel.com with ESMTP; 01 Nov 2022 05:29:45 -0700
+Received: from maurocar-mobl2 (maurocar-mobl2.ger.corp.intel.com [10.252.29.141])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 5C303B81C89;
-        Tue,  1 Nov 2022 12:29:30 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F73DC433C1;
-        Tue,  1 Nov 2022 12:29:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667305769;
-        bh=fE/QK2tz0bp4uZzAiCUSbLtHhUCqal1+EorRLas3dn0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=Og93aCaKP6Y3Sw1w3Y47CNFasLfm8mO5lerezUgYEZ4QFG1HzEa8bJcMLlV07A3mc
-         rP1PnA5Gh17L+ILoGMk/azbm8TsT28ztYa+dneSVHjJGvMhSjYx9pFIuMUzsbgYML8
-         uW1J63ev4WfMFkY4Ygxt0gopO0RV80cMDL9cK9lxtoCzUGcWXvPxKcsg/kkzj1eZ7t
-         wG/DmMJmVjuxnsr5waFeQb/PgQFyTOyIZYyw3wRh2/ctk0Q9WKYlFYemCziubUR/zh
-         BBMk24nHh6++CsRKO69pMhihvGCav5Eu+5lpx4SpoX1m6BoA1qS8LicRiY7QLlb5Dh
-         OQ4Ds+clrvCmQ==
-Date:   Tue, 1 Nov 2022 13:29:22 +0100
-From:   Wolfram Sang <wsa@kernel.org>
-To:     Chen Zhongjin <chenzhongjin@huawei.com>
-Cc:     linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        jdelvare@suse.com
-Subject: Re: [PATCH v2] i2c: piix4: Fix adapter not be removed in
- piix4_remove()
-Message-ID: <Y2ERIsY9/IKLuXoG@shikoro>
-Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
-        Chen Zhongjin <chenzhongjin@huawei.com>,
-        linux-kernel@vger.kernel.org, linux-i2c@vger.kernel.org,
-        jdelvare@suse.com
-References: <20221027121353.181695-1-chenzhongjin@huawei.com>
+        by linux.intel.com (Postfix) with ESMTPS id 947AE580AA7;
+        Tue,  1 Nov 2022 05:29:39 -0700 (PDT)
+Date:   Tue, 1 Nov 2022 13:29:36 +0100
+From:   Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
+To:     David Gow <davidgow@google.com>
+Cc:     Isabella Basso <isabbasso@riseup.net>,
+        linux-kselftest@vger.kernel.org,
+        KUnit Development <kunit-dev@googlegroups.com>,
+        magalilemes00@gmail.com,
+        =?UTF-8?B?TWHDrXJh?= Canal <maira.canal@usp.br>,
+        Daniel Latypov <dlatypov@google.com>, n@nfraprado.net,
+        linux-kernel@vger.kernel.org, leandro.ribeiro@collabora.com,
+        igt-dev@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Tales Aparecida <tales.aparecida@gmail.com>,
+        Shuah Khan <skhan@linuxfoundation.org>, andrealmeid@riseup.net,
+        Brendan Higgins <brendanhiggins@google.com>,
+        Trevor Woerner <twoerner@gmail.com>
+Subject: Re: [igt-dev] [PATCH i-g-t v2 3/4] lib/igt_kmod: add compatibility
+ for KUnit
+Message-ID: <20221101132936.4c936414@maurocar-mobl2>
+In-Reply-To: <CABVgOS=HO9XAf8C5X7ZD6aTW37r06ify==7AW9a8cpKsgLVfFw@mail.gmail.com>
+References: <20220829000920.38185-1-isabbasso@riseup.net>
+        <20220829000920.38185-4-isabbasso@riseup.net>
+        <CABVgOS=HO9XAf8C5X7ZD6aTW37r06ify==7AW9a8cpKsgLVfFw@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="otMN8fDUrbC6X6ca"
-Content-Disposition: inline
-In-Reply-To: <20221027121353.181695-1-chenzhongjin@huawei.com>
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, 1 Sep 2022 14:37:06 +0800
+David Gow <davidgow@google.com> wrote:
 
---otMN8fDUrbC6X6ca
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+> On Mon, Aug 29, 2022 at 8:10 AM Isabella Basso <isabbasso@riseup.net> wrote:
+> >
+> > This adds functions for both executing the tests as well as parsing (K)TAP
+> > kmsg output, as per the KTAP spec [1].
+> >
+> > [1] https://www.kernel.org/doc/html/latest/dev-tools/ktap.html
+> >
+> > Signed-off-by: Isabella Basso <isabbasso@riseup.net>
+> > ---  
+> 
+> Thanks very much for sending these patches out again.
+> 
+> Alas, I don't have a particularly useful igt setup to test this
+> properly, but I've left a couple of notes from trying it on my laptop
+> here.
+> 
+> 
+> >  lib/igt_kmod.c | 290 +++++++++++++++++++++++++++++++++++++++++++++++++
+> >  lib/igt_kmod.h |   2 +
+> >  2 files changed, 292 insertions(+)
+> >
+> > diff --git a/lib/igt_kmod.c b/lib/igt_kmod.c
+> > index 97cac7f5..93cdfcc5 100644
+> > --- a/lib/igt_kmod.c
+> > +++ b/lib/igt_kmod.c
+> > @@ -25,6 +25,7 @@
+> >  #include <signal.h>
+> >  #include <errno.h>
+> >  #include <sys/utsname.h>
+> > +#include <limits.h>
+> >
+> >  #include "igt_aux.h"
+> >  #include "igt_core.h"
+> > @@ -32,6 +33,8 @@
+> >  #include "igt_sysfs.h"
+> >  #include "igt_taints.h"
+> >
+> > +#define BUF_LEN 4096
+> > +
+> >  /**
+> >   * SECTION:igt_kmod
+> >   * @short_description: Wrappers around libkmod for module loading/unloading
+> > @@ -713,6 +716,293 @@ void igt_kselftest_get_tests(struct kmod_module *kmod,
+> >         kmod_module_info_free_list(pre);
+> >  }
+> >
+> > +/**
+> > + * lookup_value:
+> > + * @haystack: the string to search in
+> > + * @needle: the string to search for
+> > + *
+> > + * Returns: the value of the needle in the haystack, or -1 if not found.
+> > + */
+> > +static long lookup_value(const char *haystack, const char *needle)
+> > +{
+> > +       const char *needle_rptr;
+> > +       char *needle_end;
+> > +       long num;
+> > +
+> > +       needle_rptr = strcasestr(haystack, needle);
+> > +
+> > +       if (needle_rptr == NULL)
+> > +               return -1;
+> > +
+> > +       /* skip search string and whitespaces after it */
+> > +       needle_rptr += strlen(needle);
+> > +
+> > +       num = strtol(needle_rptr, &needle_end, 10);
+> > +
+> > +       if (needle_rptr == needle_end)
+> > +               return -1;
+> > +
+> > +       if (num == LONG_MIN || num == LONG_MAX)
+> > +               return 0;
+> > +
+> > +       return num > 0 ? num : 0;
+> > +}
+> > +
+> > +static int find_next_tap_subtest(char *record, char *test_name,
+> > +                                bool is_subtest)
+> > +{
+> > +       const char *name_lookup_str,
+> > +             *lend, *version_rptr, *name_rptr;
+> > +       long test_count;
+> > +
+> > +       name_lookup_str = "test: ";
+> > +
+> > +       version_rptr = strcasestr(record, "TAP version ");
+> > +       name_rptr = strcasestr(record, name_lookup_str);
+> > +
+> > +       /*
+> > +        * total test count will almost always appear as 0..N at the beginning
+> > +        * of a run, so we use it as indication of a run
+> > +        */
+> > +       test_count = lookup_value(record, "..");
+> > +
+> > +       /* no count found, so this is probably not starting a (sub)test */
+> > +       if (test_count < 0) {
+> > +               if (name_rptr != NULL) {
+> > +                       if (test_name[0] == '\0')
+> > +                               strncpy(test_name,
+> > +                                       name_rptr + strlen(name_lookup_str),
+> > +                                       BUF_LEN);
+> > +                       else if (strcmp(test_name, name_rptr + strlen(name_lookup_str)) == 0)
+> > +                               return 0;
+> > +                       else
+> > +                               test_name[0] = '\0';
+> > +
+> > +               }
+> > +               return -1;
+> > +       }
+> > +
+> > +       /*
+> > +        * "(K)TAP version XX" should be the first line on all (sub)tests as per
+> > +        * https://www.kernel.org/doc/html/latest/dev-tools/ktap.html#version-lines
+> > +        * but actually isn't, as it currently depends on whoever writes the
+> > +        * test to print this info  
+> 
+> FYI: we're really trying to fix cases of "missing version lines",
+> largely by making the kunit_test_suites() macro work in more
+> circumstances.
+> 
+> So while it may be worth still handling the case where this is
+> missing, I don't think there are any tests in the latest versions of
+> the kernel which should have this missing.
 
-On Thu, Oct 27, 2022 at 08:13:53PM +0800, Chen Zhongjin wrote:
-> In piix4_probe(), the piix4 adapter will be registered in:
->=20
->    piix4_probe()
->      piix4_add_adapters_sb800() / piix4_add_adapter()
->        i2c_add_adapter()
->=20
-> Based on the probed device type, piix4_add_adapters_sb800() or single
-> piix4_add_adapter() will be called.
-> For the former case, piix4_adapter_count is set as the number of adapters,
-> while for antoher case it is not set and kept default *zero*.
->=20
-> When piix4 is removed, piix4_remove() removes the adapters added in
-> piix4_probe(), basing on the piix4_adapter_count value.
-> Because the count is zero for the single adapter case, the adapter won't
-> be removed and makes the sources allocated for adapter leaked, such as
-> the i2c client and device.
->=20
-> These sources can still be accessed by i2c or bus and cause problems.
-> An easily reproduced case is that if a new adapter is registered, i2c
-> will get the leaked adapter and try to call smbus_algorithm, which was
-> already freed:
->=20
-> Triggered by: rmmod i2c_piix4 && modprobe max31730
->=20
->  BUG: unable to handle page fault for address: ffffffffc053d860
->  #PF: supervisor read access in kernel mode
->  #PF: error_code(0x0000) - not-present page
->  Oops: 0000 [#1] PREEMPT SMP KASAN
->  CPU: 0 PID: 3752 Comm: modprobe Tainted: G
->  Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
->  RIP: 0010:i2c_default_probe (drivers/i2c/i2c-core-base.c:2259) i2c_core
->  RSP: 0018:ffff888107477710 EFLAGS: 00000246
->  ...
->  <TASK>
->   i2c_detect (drivers/i2c/i2c-core-base.c:2302) i2c_core
->   __process_new_driver (drivers/i2c/i2c-core-base.c:1336) i2c_core
->   bus_for_each_dev (drivers/base/bus.c:301)
->   i2c_for_each_dev (drivers/i2c/i2c-core-base.c:1823) i2c_core
->   i2c_register_driver (drivers/i2c/i2c-core-base.c:1861) i2c_core
->   do_one_initcall (init/main.c:1296)
->   do_init_module (kernel/module/main.c:2455)
->   ...
->  </TASK>
+That doesn't seem to be the case, at least when the tests are loaded
+as module.
 
-Applied to for-current, thanks!
+I'm working on adding more KUnit tests. At least here, TAP version
+doesn't appear before the tests (I'm using drm-tip + my KUnit tests):
 
+	$ dmesg|grep TAP
+	[    7.597592] TAP version 14
+	$ sudo lcov -z && sudo modprobe test-i915-mock && sudo IGT_KERNEL_TREE=~/linux ~/igt/scripts/code_cov_capture mock_selftest && sudo rmmod test-i915-mock
+	Auto-detecting gcov kernel support.
+	Found upstream gcov kernel support at /sys/kernel/debug/gcov
+	Resetting kernel execution counters
+	Done.
+	[3734.23]     Code coverage wrote to mock_selftest.info
+	$ sudo ./tools/testing/kunit/kunit.py parse /var/log/dmesg
+	[12:15:50] ============================================================
+	[12:15:50] [ERROR] Test: main: 0 tests run!
+	[12:15:50] ============================================================
+	[12:15:50] Testing complete. Ran 0 tests: errors: 1
 
---otMN8fDUrbC6X6ca
-Content-Type: application/pgp-signature; name="signature.asc"
+In order for kunit.py KTAP parser to work, I have to cheat by doing:
 
------BEGIN PGP SIGNATURE-----
+	$ (dmesg|grep "TAP version"; dmesg|grep -A9999 intel_i915_mock) >logs 
+	$ ./tools/testing/kunit/kunit.py parse logs
 
-iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNhEQ4ACgkQFA3kzBSg
-KbauaA/+MW0pMRkolqVq0BcOSMcyMQAPeYd+gJk/+dpqv+/19KY+mtiZWyqlF2D7
-faJTYGU+wvuPzScNrkw5IbWZ48sNA02mvCtnxXZqQJqDP11c70F/qWa3azqMLB0d
-dzdjKs+JagGTY5gDB0il0uuxxjUL0xXQcDJ5ZrOwGaYaZKUZ/ply9C2EK/3XUCvg
-9SzROVLGlpXhcVk16X7yh9YbdtfBQyGuh27HC/WgaCgb3bRmvLwAkOCz+GRGABB+
-QFse8hdYw5qnDaKI5dSumbeOTe+d4TkRKOu+s8d3qr2Cct/f2Hb4avG8FVjOiNms
-lCnUr78siu2CRg95MrCsbPToC9MQrUaXjl9MZmGTAj4oE5kW30x8zgQgu8ZfQ4DU
-KiSYVkA7vKSUgTj8CKQQsrbE2lHLLrfFOWw9VaM4AjEFhGb5YSCTTPnb9hX778lh
-zW5YuCiYJT6j214MrxI1Vd9o0GRSsKCOsIHPPZ7v4ACWLupv4sIz/9G36lzKSHR+
-PhVTonPPDqxvkq4cMXAOEfY7+oCI03Kk0ilx5ndT/mWCNDnSTkRcYmSoZhkJtoRp
-klbjC2YKwlgv4iCKBOHhmjnkDmgeAn8Pa4BJA+Kcio/rxx5L6PIStvJ2BPm+LUn4
-JcIDn7MIW18HK2hPhwYv8xM3KDF9VqYJ/0NqPIXIP8eOuubV2Os=
-=m4QC
------END PGP SIGNATURE-----
+> > +       /* The kunit module is required for running any kunit tests */
+> > +       if (igt_kmod_load("kunit", NULL) != 0) {
+> > +               igt_warn("Unable to load kunit module\n");
+> > +               goto unload;
+> > +       }  
+> 
+> Do you want to _require_ KUnit be built as a module, rather than built-in here?
 
---otMN8fDUrbC6X6ca--
+I guess it doesn't matter much, for kunit module.
+
+On KUnit test modules themselves, we need to be able to do module
+unload/reload, as some IGT tests check or need to do module unload/reload. 
+
+> Equally, does this need to mark a failure (or at least "SKIPPED")
+> rather than success, in the case it fails.
+
+Agreed.
+
+> > +
+> > +       if (igt_kmod_load(module_name, opts) != 0) {
+> > +               igt_warn("Unable to load %s module\n", module_name);
+> > +               goto unload;
+> > +       }  
+> 
+> As above, should this record a failure, or skip?
+
+Yes, it should be a failure.
+
+> > +
+> > +       igt_kunit_subtests(tst.kmsg, record, &sublevel, &failed_tests);
+> > +unload:
+> > +       igt_kmod_unload("kunit", 0);  
+> 
+> Do you want to unconditionally unload the KUnit module here? It's safe
+> (maybe even safer) to leave it loaded between runs of KUnit tests.
+
+Agreed.
+
+Regards,
+Mauro
