@@ -2,101 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C1DB614D24
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 15:54:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E509614DAA
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 16:02:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230214AbiKAOyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 10:54:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39776 "EHLO
+        id S231474AbiKAPCY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 11:02:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52960 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230158AbiKAOy0 (ORCPT
+        with ESMTP id S231282AbiKAPBt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 10:54:26 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC848E5E;
-        Tue,  1 Nov 2022 07:54:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
-        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
-        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=45UfOVePY+OHDZoHoj/7WNu01YKoYtNkYfuiJy1E/Sc=; b=qhYVkaTztKrRSFlfSM9lEqpvC+
-        0k8pvYDUhyhLKu9xPESEcK3dqVNPW/6f4mwSTxq8AWaUrOA5+deBcwG/aXVnebSmPYFCAzKuOkb8H
-        y4qQ6qlTx6Kl7a89zeGwV1u10aa0rsKbcKjyG3Sb6Cm6ObhtuxupTopImOckHrAaivaS89JuS3b+M
-        hej4wFWNBfdpwIOP7boSFjyR2boeWb3qI0jeOaBM2rQNYhg1RgW6wjj8HB1V/EIMqyIeAyHnmbAhA
-        ggSposh/E6ksw/6BHxC4Ie1F+rP12MpNzP+pQ61IEjaWvOzDfVEhdvchgT5LrW84nrNpLbxbtsKar
-        DVnhjWBw==;
-Received: from c-67-160-137-253.hsd1.or.comcast.net ([67.160.137.253] helo=[10.0.0.152])
-        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1opseg-005eKf-UY; Tue, 01 Nov 2022 14:54:19 +0000
-Message-ID: <503a3b36-2256-a9ce-cffe-5c0ed51f6f62@infradead.org>
-Date:   Tue, 1 Nov 2022 07:54:16 -0700
+        Tue, 1 Nov 2022 11:01:49 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B0561CFD4
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 07:57:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667314606;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=X90HdBpZHRlpEK78X14jzV2xZFPi7hDj+jPQpLmDwa4=;
+        b=DTt9jmhHUFlstmiz5Gd64ndWc7iS875xOcU+guvEWa6BKLftqcI4TGTRF6ZEvERDPQzTQb
+        etSLJVslEjFIL/SNfrriPiqfw2OBJI//3AzUj37in95vHVJx3+mlj7W6miSAM+iZ9g0pCx
+        MD2jqhmC9pcWdeLYesPTbFMJCTBmRSA=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-630-1UUHtVpaN869W--wioRrpg-1; Tue, 01 Nov 2022 10:56:40 -0400
+X-MC-Unique: 1UUHtVpaN869W--wioRrpg-1
+Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 5A7B587B2AF;
+        Tue,  1 Nov 2022 14:56:40 +0000 (UTC)
+Received: from ovpn-194-149.brq.redhat.com (ovpn-194-149.brq.redhat.com [10.40.194.149])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 16443C2C8D8;
+        Tue,  1 Nov 2022 14:56:37 +0000 (UTC)
+From:   Vitaly Kuznetsov <vkuznets@redhat.com>
+To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Sean Christopherson <seanjc@google.com>
+Cc:     Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Michael Kelley <mikelley@microsoft.com>,
+        Siddharth Chandrasekaran <sidcha@amazon.de>,
+        Yuan Yao <yuan.yao@linux.intel.com>,
+        Maxim Levitsky <mlevitsk@redhat.com>,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v13 39/48] KVM: selftests: Sync 'struct hv_vp_assist_page' definition with hyperv-tlfs.h
+Date:   Tue,  1 Nov 2022 15:54:17 +0100
+Message-Id: <20221101145426.251680-40-vkuznets@redhat.com>
+In-Reply-To: <20221101145426.251680-1-vkuznets@redhat.com>
+References: <20221101145426.251680-1-vkuznets@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] ath11k (gcc13): synchronize
- ath11k_mac_he_gi_to_nl80211_he_gi()'s return type
-Content-Language: en-US
-To:     Kalle Valo <kvalo@kernel.org>, Jiri Slaby <jirislaby@kernel.org>
-Cc:     Jeff Johnson <quic_jjohnson@quicinc.com>,
-        linux-kernel@vger.kernel.org, Martin Liska <mliska@suse.cz>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-References: <20221031114341.10377-1-jirislaby@kernel.org>
- <55c4d139-0f22-e7ba-398a-e3e0d8919220@quicinc.com>
- <833c7f2f-c140-5a0b-1efc-b858348206ec@kernel.org> <87bkprgj0b.fsf@kernel.org>
-From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <87bkprgj0b.fsf@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+'struct hv_vp_assist_page' definition doesn't match TLFS. Also, define
+'struct hv_nested_enlightenments_control' and use it instead of opaque
+'__u64'.
 
+Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
+Reviewed-by: Sean Christopherson <seanjc@google.com>
+Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
+---
+ .../selftests/kvm/include/x86_64/evmcs.h      | 22 ++++++++++++++-----
+ 1 file changed, 17 insertions(+), 5 deletions(-)
 
-On 11/1/22 01:45, Kalle Valo wrote:
-> Jiri Slaby <jirislaby@kernel.org> writes:
-> 
->> On 31. 10. 22, 22:16, Jeff Johnson wrote:
->>
->>> On 10/31/2022 4:43 AM, Jiri Slaby (SUSE) wrote:
-
->>> Suggest the subject should be
->>> wifi: ath11k: synchronize ath11k_mac_he_gi_to_nl80211_he_gi()'s return type
->>
->> FWIW I copied from:
->> $ git log --format=%s  drivers/net/wireless/ath/ath11k/mac.h
->> ath11k: Handle keepalive during WoWLAN suspend and resume
->> ath11k: reduce the wait time of 11d scan and hw scan while add interface
->> ath11k: Add basic WoW functionalities
->> ath11k: add support for hardware rfkill for QCA6390
->> ath11k: report tx bitrate for iw wlan station dump
->> ath11k: add 11d scan offload support
->> ath11k: fix read fail for htt_stats and htt_peer_stats for single pdev
->> ath11k: add support for BSS color change
->> ath11k: add support for 80P80 and 160 MHz bandwidth
->> ath11k: Add support for STA to handle beacon miss
->> ath11k: add support to configure spatial reuse parameter set
->> ath11k: remove "ath11k_mac_get_ar_vdev_stop_status" references
->> ath11k: Perform per-msdu rx processing
->> ath11k: fix incorrect peer stats counters update
->> ath11k: Move mac80211 hw allocation before wmi_init command
->> ath11k: fix missed bw conversion in tx completion
->> ath11k: driver for Qualcomm IEEE 802.11ax devices
-> 
-> Yeah, using "wifi:" is a new prefix we started using with wireless
-> patches this year.
-> 
-
-It would be nice if that was documented somewhere...
-
+diff --git a/tools/testing/selftests/kvm/include/x86_64/evmcs.h b/tools/testing/selftests/kvm/include/x86_64/evmcs.h
+index 4b6840df2979..efdc62704f27 100644
+--- a/tools/testing/selftests/kvm/include/x86_64/evmcs.h
++++ b/tools/testing/selftests/kvm/include/x86_64/evmcs.h
+@@ -20,14 +20,26 @@
+ 
+ extern bool enable_evmcs;
+ 
++struct hv_nested_enlightenments_control {
++	struct {
++		__u32 directhypercall:1;
++		__u32 reserved:31;
++	} features;
++	struct {
++		__u32 reserved;
++	} hypercallControls;
++} __packed;
++
++/* Define virtual processor assist page structure. */
+ struct hv_vp_assist_page {
+ 	__u32 apic_assist;
+-	__u32 reserved;
+-	__u64 vtl_control[2];
+-	__u64 nested_enlightenments_control[2];
+-	__u32 enlighten_vmentry;
++	__u32 reserved1;
++	__u64 vtl_control[3];
++	struct hv_nested_enlightenments_control nested_control;
++	__u8 enlighten_vmentry;
++	__u8 reserved2[7];
+ 	__u64 current_nested_vmcs;
+-};
++} __packed;
+ 
+ struct hv_enlightened_vmcs {
+ 	u32 revision_id;
 -- 
-~Randy
+2.37.3
+
