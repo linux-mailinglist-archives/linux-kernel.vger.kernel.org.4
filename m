@@ -2,39 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3DF0615417
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 22:17:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F350161541A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 22:17:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231196AbiKAVRN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 17:17:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33790 "EHLO
+        id S231206AbiKAVRZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 17:17:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230477AbiKAVQM (ORCPT
+        with ESMTP id S230353AbiKAVQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 17:16:12 -0400
+        Tue, 1 Nov 2022 17:16:14 -0400
 Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33A101EEC8
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 14:15:34 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD6E41DF02
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 14:15:35 -0700 (PDT)
 Received: from pop-os.home ([86.243.100.34])
         by smtp.orange.fr with ESMTPA
-        id pyanoKD2rsfCIpybcoWfMO; Tue, 01 Nov 2022 22:15:33 +0100
+        id pyanoKD2rsfCIpybdoWfMe; Tue, 01 Nov 2022 22:15:34 +0100
 X-ME-Helo: pop-os.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 01 Nov 2022 22:15:33 +0100
+X-ME-Date: Tue, 01 Nov 2022 22:15:34 +0100
 X-ME-IP: 86.243.100.34
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     Juergen Gross <jgross@suse.com>,
-        Boris Ostrovsky <boris.ostrovsky@oracle.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        xen-devel@lists.xenproject.org
-Subject: [PATCH 28/30] x86/xen: Use kstrtobool() instead of strtobool()
-Date:   Tue,  1 Nov 2022 22:14:16 +0100
-Message-Id: <e91af3c8708af38b1c57e0a2d7eb9765dda0e963.1667336095.git.christophe.jaillet@wanadoo.fr>
+        Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Subject: [PATCH 29/30] driver core: Use kstrtobool() instead of strtobool()
+Date:   Tue,  1 Nov 2022 22:14:17 +0100
+Message-Id: <02ba683a5c0716638ad8ca11e8b0fdca97c4f294.1667336095.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
 References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
@@ -69,52 +64,48 @@ at [1].
 
 [1]: https://lore.kernel.org/all/cover.1667336095.git.christophe.jaillet@wanadoo.fr/
 ---
- arch/x86/xen/enlighten_pv.c | 3 ++-
- arch/x86/xen/setup.c        | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ drivers/base/core.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/xen/enlighten_pv.c b/arch/x86/xen/enlighten_pv.c
-index 05170fc19083..9e1ac6a281e4 100644
---- a/arch/x86/xen/enlighten_pv.c
-+++ b/arch/x86/xen/enlighten_pv.c
-@@ -23,6 +23,7 @@
- #include <linux/start_kernel.h>
- #include <linux/sched.h>
- #include <linux/kprobes.h>
-+#include <linux/kstrtox.h>
- #include <linux/memblock.h>
- #include <linux/export.h>
- #include <linux/mm.h>
-@@ -113,7 +114,7 @@ static __read_mostly bool xen_msr_safe = IS_ENABLED(CONFIG_XEN_PV_MSR_SAFE);
- static int __init parse_xen_msr_safe(char *str)
- {
- 	if (str)
--		return strtobool(str, &xen_msr_safe);
-+		return kstrtobool(str, &xen_msr_safe);
- 	return -EINVAL;
- }
- early_param("xen_msr_safe", parse_xen_msr_safe);
-diff --git a/arch/x86/xen/setup.c b/arch/x86/xen/setup.c
-index cfa99e8f054b..0abccdab5bc6 100644
---- a/arch/x86/xen/setup.c
-+++ b/arch/x86/xen/setup.c
-@@ -7,6 +7,7 @@
- 
+diff --git a/drivers/base/core.c b/drivers/base/core.c
+index d02501933467..5f6b80329cf1 100644
+--- a/drivers/base/core.c
++++ b/drivers/base/core.c
+@@ -14,6 +14,7 @@
+ #include <linux/err.h>
+ #include <linux/fwnode.h>
  #include <linux/init.h>
- #include <linux/sched.h>
 +#include <linux/kstrtox.h>
- #include <linux/mm.h>
- #include <linux/pm.h>
- #include <linux/memblock.h>
-@@ -85,7 +86,7 @@ static void __init xen_parse_512gb(void)
- 	arg = strstr(xen_start_info->cmd_line, "xen_512gb_limit=");
- 	if (!arg)
- 		val = true;
--	else if (strtobool(arg + strlen("xen_512gb_limit="), &val))
-+	else if (kstrtobool(arg + strlen("xen_512gb_limit="), &val))
- 		return;
+ #include <linux/module.h>
+ #include <linux/slab.h>
+ #include <linux/string.h>
+@@ -1628,7 +1629,7 @@ early_param("fw_devlink", fw_devlink_setup);
+ static bool fw_devlink_strict;
+ static int __init fw_devlink_strict_setup(char *arg)
+ {
+-	return strtobool(arg, &fw_devlink_strict);
++	return kstrtobool(arg, &fw_devlink_strict);
+ }
+ early_param("fw_devlink.strict", fw_devlink_strict_setup);
  
- 	xen_512gb_limit = val;
+@@ -2280,7 +2281,7 @@ ssize_t device_store_bool(struct device *dev, struct device_attribute *attr,
+ {
+ 	struct dev_ext_attribute *ea = to_ext_attr(attr);
+ 
+-	if (strtobool(buf, ea->var) < 0)
++	if (kstrtobool(buf, ea->var) < 0)
+ 		return -EINVAL;
+ 
+ 	return size;
+@@ -2534,7 +2535,7 @@ static ssize_t online_store(struct device *dev, struct device_attribute *attr,
+ 	bool val;
+ 	int ret;
+ 
+-	ret = strtobool(buf, &val);
++	ret = kstrtobool(buf, &val);
+ 	if (ret < 0)
+ 		return ret;
+ 
 -- 
 2.34.1
 
