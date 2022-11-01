@@ -2,188 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9177A615189
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 19:26:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E820961518C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 19:28:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230092AbiKAS0i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 14:26:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46286 "EHLO
+        id S230057AbiKAS2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 14:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47828 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229887AbiKAS0e (ORCPT
+        with ESMTP id S229533AbiKAS2v (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 14:26:34 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 047CC1DF27;
-        Tue,  1 Nov 2022 11:26:33 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id 13so39244142ejn.3;
-        Tue, 01 Nov 2022 11:26:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/n2xvHfg8OGeHHzcBTtnpiFjtgymhEU/fTqPxcH6ZpQ=;
-        b=nemwCOVSD2RqW1rSIh3CowKPBXI2ldcAzoAaOlo/NxnQGm9mUrZMk5ikZUGY+6kPSo
-         MHQBgEz3cDx+0HF62a09G/Kjb13xGK8ZduT84UV867Os7WOSAcYZEDMeuawn/BdVGRN8
-         K2+K8HIg6asBSXw/sj6i0/9CNHEx677gv8JASCo7aEbT6EO6ilXgbCVfCvU7H1xJiKaY
-         e28koQf15pOkUPQ9Q77gZgfpplmxoSsF1cdpkddC5AepmRd0zYJ9UZ+Uca8x6TQBWofv
-         GZdfI0inXtmqEfI2h9PmopKap1FLISIt2u95/DngGVVqnKISqbsg6Ms1GygVrX/Pdazh
-         ZYQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/n2xvHfg8OGeHHzcBTtnpiFjtgymhEU/fTqPxcH6ZpQ=;
-        b=VuIIQ0cM2fgHcPFrpJ8wzjSTtvxITysSGOfAjyIrgzVO+V2zXZl2xE1Kc4HTo5Z0/Z
-         gyVSltsj9hgiKDLIfut1r+NabbRs+3oyqFmqMm2iZlZBgFZdKqCmi/geHfVwkdDuDiWH
-         +JysAHCYsPssKd9/m5DjgKvGN92Wsga0fdJlssA8RbMstlaFQVifWlMMUeYE1OGPL/kM
-         mlEU+H3EZJteRr6nE90/N0sdpZraJDixRKLl/oWJ4cEAkNclKOT0hPYJjpIxLniTYkjQ
-         9AXyelEtMrYPFZ9qhVUf8whphAp+XYsKxhfmaAdrz44onj7KI3qSSaCcLKE00F0V5M5A
-         adhQ==
-X-Gm-Message-State: ACrzQf0LaQBzCixaFXdf5/7oMU7UfIdoaKfGwIHCpw+GjpMV3UbVAr+J
-        wfB3bNVxTxunwBJg/N61pH++5jPWGY6yzQITS3k=
-X-Google-Smtp-Source: AMsMyM49VJkek4EvcoMOFD9eNMkmVB7szmSQhewZ53aQy094SGg4UwkZVxflrUdUg7TzBsagSVaGnhf3xE14x0VE1IA=
-X-Received: by 2002:a17:906:3b88:b0:78d:513d:f447 with SMTP id
- u8-20020a1709063b8800b0078d513df447mr170794ejf.708.1667327191384; Tue, 01 Nov
- 2022 11:26:31 -0700 (PDT)
+        Tue, 1 Nov 2022 14:28:51 -0400
+Received: from mail.marcansoft.com (marcansoft.com [212.63.210.85])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA2BB6376;
+        Tue,  1 Nov 2022 11:28:49 -0700 (PDT)
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: marcan@marcan.st)
+        by mail.marcansoft.com (Postfix) with ESMTPSA id 855924267B;
+        Tue,  1 Nov 2022 18:28:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=marcan.st; s=default;
+        t=1667327328; bh=FNzvVcw0wbF+4/Rh6ZkrNFOkM2Dg97dYxtkFzoT3wCU=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To;
+        b=y4nKaGfkdXYMVrEShBWZHRKdzFtCCDoBLOOkwL3REl6NbF+6M053rcomejdo0EIC8
+         8okltHpHzXzQXvk/Ali5MJcV8o+VzCM9QwQsr+ke7KllD7CjQjh4756qenmpXBD/b+
+         rjd+lOKfJNR+YNdlL8HbecQ5GnzPf239Q0vpOg734niZiN08FHz7KVIlSUtOPEzbNv
+         Gk8N6WTMhOxXK7U+9Jd0ARlrsqfIJFP04pHD9Ga2PiRPQp5eQo0onr11YQ3J545Hmx
+         8zvs8KSKogigqkHYFxWlTXhnFG4Ew4wCWDuJ/EIvg+24dimHGJ+5BED8x8aBUpFj9P
+         uSyl1yIVKueRw==
+Message-ID: <a40dbff1-6aa1-dedf-7eb2-c75d75d808b2@marcan.st>
+Date:   Wed, 2 Nov 2022 03:28:43 +0900
 MIME-Version: 1.0
-References: <20221101052340.1210239-1-namhyung@kernel.org> <20221101052340.1210239-3-namhyung@kernel.org>
- <Y2DuzmnUm6NIh25a@krava>
-In-Reply-To: <Y2DuzmnUm6NIh25a@krava>
-From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Date:   Tue, 1 Nov 2022 11:26:19 -0700
-Message-ID: <CAADnVQJ6+N6vQ=ZUgUjoB_M2RoTGGPXpLwz81mNDmLWrGYKetw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/3] bpf: Add bpf_perf_event_read_sample() helper
-To:     Jiri Olsa <olsajiri@gmail.com>
-Cc:     Namhyung Kim <namhyung@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.9.1
+Subject: Re: [PATCH v3] i2c/pasemi: PASemi I2C controller IRQ enablement
+Content-Language: en-US
+To:     Arminder Singh <arminders208@outlook.com>,
+        linux-kernel@vger.kernel.org
+Cc:     linux-i2c@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        asahi@lists.linux.dev, linuxppc-dev@lists.ozlabs.org,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Sven Peter <sven@svenpeter.dev>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Michael Ellerman <mpe@ellerman.id.au>
+References: <MN2PR01MB5358ED8FC32C0CFAEBD4A0E19F5F9@MN2PR01MB5358.prod.exchangelabs.com>
+From:   Hector Martin <marcan@marcan.st>
+In-Reply-To: <MN2PR01MB5358ED8FC32C0CFAEBD4A0E19F5F9@MN2PR01MB5358.prod.exchangelabs.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 1, 2022 at 3:03 AM Jiri Olsa <olsajiri@gmail.com> wrote:
+On 07/10/2022 09.42, Arminder Singh wrote:
+> This patch adds IRQ support to the PASemi I2C controller driver to 
+> increase the performace of I2C transactions on platforms with PASemi I2C 
+> controllers. While primarily intended for Apple silicon platforms, this 
+> patch should also help in enabling IRQ support for older PASemi hardware 
+> as well should the need arise.
+> 
+> Signed-off-by: Arminder Singh <arminders208@outlook.com>
+> ---
+> This version of the patch has been tested on an M1 Ultra Mac Studio,
+> as well as an M1 MacBook Pro, and userspace launches successfully
+> while using the IRQ path for I2C transactions.
 >
-> On Mon, Oct 31, 2022 at 10:23:39PM -0700, Namhyung Kim wrote:
-> > The bpf_perf_event_read_sample() helper is to get the specified sample
-> > data (by using PERF_SAMPLE_* flag in the argument) from BPF to make a
-> > decision for filtering on samples.  Currently PERF_SAMPLE_IP and
-> > PERF_SAMPLE_DATA flags are supported only.
-> >
-> > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > ---
-> >  include/uapi/linux/bpf.h       | 23 ++++++++++++++++
-> >  kernel/trace/bpf_trace.c       | 49 ++++++++++++++++++++++++++++++++++
-> >  tools/include/uapi/linux/bpf.h | 23 ++++++++++++++++
-> >  3 files changed, 95 insertions(+)
-> >
-> > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > index 94659f6b3395..cba501de9373 100644
-> > --- a/include/uapi/linux/bpf.h
-> > +++ b/include/uapi/linux/bpf.h
-> > @@ -5481,6 +5481,28 @@ union bpf_attr {
-> >   *           0 on success.
-> >   *
-> >   *           **-ENOENT** if the bpf_local_storage cannot be found.
-> > + *
-> > + * long bpf_perf_event_read_sample(struct bpf_perf_event_data *ctx, void *buf, u32 size, u64 sample_flags)
-> > + *   Description
-> > + *           For an eBPF program attached to a perf event, retrieve the
-> > + *           sample data associated to *ctx* and store it in the buffer
-> > + *           pointed by *buf* up to size *size* bytes.
-> > + *
-> > + *           The *sample_flags* should contain a single value in the
-> > + *           **enum perf_event_sample_format**.
-> > + *   Return
-> > + *           On success, number of bytes written to *buf*. On error, a
-> > + *           negative value.
-> > + *
-> > + *           The *buf* can be set to **NULL** to return the number of bytes
-> > + *           required to store the requested sample data.
-> > + *
-> > + *           **-EINVAL** if *sample_flags* is not a PERF_SAMPLE_* flag.
-> > + *
-> > + *           **-ENOENT** if the associated perf event doesn't have the data.
-> > + *
-> > + *           **-ENOSYS** if system doesn't support the sample data to be
-> > + *           retrieved.
-> >   */
-> >  #define ___BPF_FUNC_MAPPER(FN, ctx...)                       \
-> >       FN(unspec, 0, ##ctx)                            \
-> > @@ -5695,6 +5717,7 @@ union bpf_attr {
-> >       FN(user_ringbuf_drain, 209, ##ctx)              \
-> >       FN(cgrp_storage_get, 210, ##ctx)                \
-> >       FN(cgrp_storage_delete, 211, ##ctx)             \
-> > +     FN(perf_event_read_sample, 212, ##ctx)          \
-> >       /* */
-> >
-> >  /* backwards-compatibility macros for users of __BPF_FUNC_MAPPER that don't
-> > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > index ce0228c72a93..befd937afa3c 100644
-> > --- a/kernel/trace/bpf_trace.c
-> > +++ b/kernel/trace/bpf_trace.c
-> > @@ -28,6 +28,7 @@
-> >
-> >  #include <uapi/linux/bpf.h>
-> >  #include <uapi/linux/btf.h>
-> > +#include <uapi/linux/perf_event.h>
-> >
-> >  #include <asm/tlb.h>
-> >
-> > @@ -1743,6 +1744,52 @@ static const struct bpf_func_proto bpf_read_branch_records_proto = {
-> >       .arg4_type      = ARG_ANYTHING,
-> >  };
-> >
-> > +BPF_CALL_4(bpf_perf_event_read_sample, struct bpf_perf_event_data_kern *, ctx,
-> > +        void *, buf, u32, size, u64, flags)
-> > +{
->
-> I wonder we could add perf_btf (like we have tp_btf) program type that
-> could access ctx->data directly without helpers
->
-> > +     struct perf_sample_data *sd = ctx->data;
-> > +     void *data;
-> > +     u32 to_copy = sizeof(u64);
-> > +
-> > +     /* only allow a single sample flag */
-> > +     if (!is_power_of_2(flags))
-> > +             return -EINVAL;
-> > +
-> > +     /* support reading only already populated info */
-> > +     if (flags & ~sd->sample_flags)
-> > +             return -ENOENT;
-> > +
-> > +     switch (flags) {
-> > +     case PERF_SAMPLE_IP:
-> > +             data = &sd->ip;
-> > +             break;
-> > +     case PERF_SAMPLE_ADDR:
-> > +             data = &sd->addr;
-> > +             break;
->
-> AFAICS from pe_prog_convert_ctx_access you should be able to read addr
-> directly from context right? same as sample_period.. so I think if this
-> will be generic way to read sample data, should we add sample_period
-> as well?
+[...]
 
-+1
-Let's avoid new stable helpers for this.
-Pls use CORE and read perf_sample_data directly.
+Please increase the timeout to 100ms for v4. 10ms was always wrong (the
+datasheet says the hardware clock stretching timeout is 25ms, and most
+i2c drivers have much larger timeouts), and with the tighter timing
+achievable with the IRQ patchset we are seeing timeouts in tipd
+controller requests which can clock-stretch for ~10ms themselves,
+followed by a spiral of errors as the driver has pretty poor error
+recovery. Increasing the timeout fixes the immediate problem/regression.
+
+Other than that, I now have a patch that makes the whole timeout/error
+detection/recovery much more robust, but I can submit it after this goes
+in :)
+
+- Hector
