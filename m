@@ -2,121 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B427614E1A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 16:16:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE1B1614E21
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 16:17:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbiKAPQI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 11:16:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37824 "EHLO
+        id S231566AbiKAPRB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 11:17:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231538AbiKAPPa (ORCPT
+        with ESMTP id S231543AbiKAPQa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 11:15:30 -0400
-Received: from fanzine2.igalia.com (fanzine.igalia.com [178.60.130.6])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 399F31CFD2;
-        Tue,  1 Nov 2022 08:12:40 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=igalia.com;
-        s=20170329; h=Content-Transfer-Encoding:Content-Type:In-Reply-To:From:
-        References:Cc:To:Subject:MIME-Version:Date:Message-ID:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=M2ExO0OCc/LPgMfVGJ0dehDqeiUDLMpSbdsjJWkQO9w=; b=iVaiWKqvDXPFcMYqk7ShHnWG9V
-        05F2ZgaJh6rZYVtjNBrIEQgutVEb7TmGlwvQpDrG7UdNus6mhoaIet4q+XBp+2nGEE/yLLd2kdksL
-        L/Q1p5uHduSw1hBmyVdeitYOqlQXm0GzL4zEO7YqEA8oDIkoIzNkGx6+sTc+5AIqeDimAu3tA4NXS
-        oGmFzLmHiA40eYcdXN10EOS4Me3x9/UEwSAAWlVVzLWmqsw6mDJZ4jmAwu+R29DebdwhMY3eRPwbP
-        02xDkFFHk7SldT0wjXICghtKwZfq2JeK+h2QifyQmsIUYBDETi10IGJ0rS+kFE077gXA5ERqmNzuR
-        s/VoTPKg==;
-Received: from [177.102.148.33] (helo=[192.168.1.60])
-        by fanzine2.igalia.com with esmtpsa 
-        (Cipher TLS1.3:ECDHE_X25519__RSA_PSS_RSAE_SHA256__AES_128_GCM:128) (Exim)
-        id 1opsvy-00AMRE-3c; Tue, 01 Nov 2022 16:12:10 +0100
-Message-ID: <2ece1ac9-e602-9c65-e5b5-81b4a7fb6676@igalia.com>
-Date:   Tue, 1 Nov 2022 12:12:01 -0300
+        Tue, 1 Nov 2022 11:16:30 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0949A1CFC5
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 08:12:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667315558;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=WhCfbrC+tKlaqwlNl94RimQiIKrtWvzi9RGBXnP5PaA=;
+        b=i2Sqz2pyCUKmYYZV76++4Gj0YRSoInD+4WSDzF4LGw9iPfTvWaONweB6Hj14UIPcGS7rhh
+        dNUrMK4Lnp7bRptbnE6Imf1APNdtFI4GHt5YX6YjxlNKW/fAj568r5fKap+q2xvWci647L
+        EqQ2DsBwKaSFFNvz9Zu+6mqHcwM/IJc=
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
+ [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-669-WbLyiibeOmmSN80dYVuk_g-1; Tue, 01 Nov 2022 11:12:37 -0400
+X-MC-Unique: WbLyiibeOmmSN80dYVuk_g-1
+Received: by mail-oi1-f200.google.com with SMTP id o12-20020a056808124c00b00353f308fb4bso6291627oiv.22
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 08:12:36 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=WhCfbrC+tKlaqwlNl94RimQiIKrtWvzi9RGBXnP5PaA=;
+        b=YQQGStiwgfTiDB+PwB1jJgwPPCzU7IfkJ+lTYrmB9zLeZzqNYEnt8+8fwE5gFZDmg4
+         /UDH9SmHp8fzf2eEIhCfG1jr7otvGs0p+0N1ceKvLkzL13dlSzan/aqp+L1J/kss8SEP
+         rJEP8ueG7IswHSu3x5YD8UbVFyW/ruG6TVIenxPklBBtnOir5AUuP0SGEEDk+E1ZyKYc
+         gthDKlC7uj/+c9y4QyScB3QvelzU7jyewclytqhpA1VrkzxJewMQ7otSH84S9G/F+LLS
+         E/lJ1zKJJ4XXJcin2Mnef0f8XTupOaRm/BXRlmLb5UR/FfwJoxJcluYilY8GRN9jlGz1
+         lJtg==
+X-Gm-Message-State: ACrzQf0JoqlU2RtYVdil3ldN9vx3XqBiCHg1KaCa+z/v/5eWj4Mie9np
+        xWoF9eGES9ZBjR32tcZ+KsmppGRmKXujpqejMpoZNZewLLI2BpkCDAZQcRO/KaoTACsVjO0HuDI
+        6Sr9tVEggVg7OX5OvXZMJrLLn
+X-Received: by 2002:a05:6830:2693:b0:661:e5be:54d with SMTP id l19-20020a056830269300b00661e5be054dmr10137063otu.365.1667315556272;
+        Tue, 01 Nov 2022 08:12:36 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM793XlwTZxCVNxIGpeJvkdANMVrjJrL3o5j79HVnLEDlz/VJyPLPzK5QdqyGPayhDWk8QyQxQ==
+X-Received: by 2002:a05:6830:2693:b0:661:e5be:54d with SMTP id l19-20020a056830269300b00661e5be054dmr10137047otu.365.1667315556035;
+        Tue, 01 Nov 2022 08:12:36 -0700 (PDT)
+Received: from halaney-x13s ([2600:1700:1ff0:d0e0::41])
+        by smtp.gmail.com with ESMTPSA id w67-20020acadf46000000b0035770fc6ca9sm3437879oig.16.2022.11.01.08.12.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 08:12:35 -0700 (PDT)
+Date:   Tue, 1 Nov 2022 10:12:33 -0500
+From:   Andrew Halaney <ahalaney@redhat.com>
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     martin.petersen@oracle.com, jejb@linux.ibm.com,
+        andersson@kernel.org, vkoul@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, konrad.dybcio@somainline.org,
+        robh+dt@kernel.org, quic_cang@quicinc.com,
+        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
+        linux-scsi@vger.kernel.org, dmitry.baryshkov@linaro.org
+Subject: Re: [PATCH v2 12/15] scsi: ufs: ufs-qcom: Fix the Qcom register name
+ for offset 0xD0
+Message-ID: <20221101151233.gsmmdbz7htkzpbps@halaney-x13s>
+References: <20221031180217.32512-1-manivannan.sadhasivam@linaro.org>
+ <20221031180217.32512-13-manivannan.sadhasivam@linaro.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.2
-Subject: Re: [PATCH V3] x86/split_lock: Add sysctl to control the misery mode
-To:     x86@kernel.org, tglx@linutronix.de, Tony Luck <tony.luck@intel.com>
-Cc:     linux-kernel@vger.kernel.org, mingo@redhat.com, bp@alien8.de,
-        dave.hansen@linux.intel.com, hpa@zytor.com, luto@kernel.org,
-        corbet@lwn.net, linux-doc@vger.kernel.org, bagasdotme@gmail.com,
-        kernel-dev@igalia.com, kernel@gpiccoli.net,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Joshua Ashton <joshua@froggi.es>,
-        Melissa Wen <mwen@igalia.com>,
-        Paul Gofman <pgofman@codeweavers.com>,
-        Pavel Machek <pavel@denx.de>,
-        Pierre-Loup Griffais <pgriffais@valvesoftware.com>,
-        Zebediah Figura <zfigura@codeweavers.com>,
-        Andre Almeida <andrealmeid@igalia.com>
-References: <20221024200254.635256-1-gpiccoli@igalia.com>
-Content-Language: en-US
-From:   "Guilherme G. Piccoli" <gpiccoli@igalia.com>
-In-Reply-To: <20221024200254.635256-1-gpiccoli@igalia.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221031180217.32512-13-manivannan.sadhasivam@linaro.org>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24/10/2022 17:02, Guilherme G. Piccoli wrote:
-> Commit b041b525dab9 ("x86/split_lock: Make life miserable for split lockers")
-> changed the way the split lock detector works when in "warn" mode;
-> basically, not only it shows the warn message, but also intentionally
-> introduces a slowdown (through sleeping plus serialization mechanism)
-> on such task. Based on discussions in [0], seems the warning alone
-> wasn't enough motivation for userspace developers to fix their
-> applications.
+On Mon, Oct 31, 2022 at 11:32:14PM +0530, Manivannan Sadhasivam wrote:
+> On newer UFS revisions, the register at offset 0xD0 is called,
+> REG_UFS_PARAM0. Since the existing register, RETRY_TIMER_REG is not used
+> anywhere, it is safe to use the new name.
 > 
-> Happens that originally the proposal in [0] was to add a new mode
-> which would warns + slowdown the "split locking" task, keeping the
-> old warn mode untouched. In the end, that idea was discarded and
-> the regular/default "warn" mode now slowdowns the applications. This
-> is quite aggressive with regards proprietary/legacy programs that
-> basically are unable to properly run in kernel with this change.
-> While it is understandable that a malicious application could DoS
-> by split locking, it seems unacceptable to regress old/proprietary
-> userspace programs through a default configuration that previously
-> worked. An example of such breakage was reported in [1].
-> 
-> So let's add a sysctl to allow controlling the "misery mode" behavior,
-> as per Thomas suggestion on [2]. This way, users running legacy and/or
-> proprietary software are allowed to still execute them with a decent
-> performance while still observe the warning messages on kernel log.
-> 
-> [0] https://lore.kernel.org/lkml/20220217012721.9694-1-tony.luck@intel.com/
-> 
-> [1] https://github.com/doitsujin/dxvk/issues/2938
-> 
-> [2] https://lore.kernel.org/lkml/87pmf4bter.ffs@tglx/
-> 
-> Fixes: b041b525dab9 ("x86/split_lock: Make life miserable for split lockers")
-> Cc: Fenghua Yu <fenghua.yu@intel.com>
-> Cc: Joshua Ashton <joshua@froggi.es>
-> Cc: Melissa Wen <mwen@igalia.com>
-> Cc: Paul Gofman <pgofman@codeweavers.com>
-> Cc: Pavel Machek <pavel@denx.de>
-> Cc: Pierre-Loup Griffais <pgriffais@valvesoftware.com>
-> Cc: Tony Luck <tony.luck@intel.com>
-> Cc: Zebediah Figura <zfigura@codeweavers.com>
-> Suggested-by: Thomas Gleixner <tglx@linutronix.de>
-> Tested-by: Andre Almeida <andrealmeid@igalia.com>
-> Signed-off-by: Guilherme G. Piccoli <gpiccoli@igalia.com>
+> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
 
-Hi Thomas / Tony, is there anything else to improve here? Suggestions /
-reviews are greatly appreciated.
+Reviewed-by: Andrew Halaney <ahalaney@redhat.com>
 
-In case this version is good enough, I'd like to ask if it's possible to
-get it merged during the rc cycle for 6.1 (I'll also backport it to
-stable 6.0), so we can have this fix available for a bigger public.
+> ---
+>  drivers/ufs/host/ufs-qcom.h | 3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/ufs/host/ufs-qcom.h b/drivers/ufs/host/ufs-qcom.h
+> index 9d96ac71b27f..7fe928b82753 100644
+> --- a/drivers/ufs/host/ufs-qcom.h
+> +++ b/drivers/ufs/host/ufs-qcom.h
+> @@ -33,7 +33,8 @@ enum {
+>  	REG_UFS_TX_SYMBOL_CLK_NS_US         = 0xC4,
+>  	REG_UFS_LOCAL_PORT_ID_REG           = 0xC8,
+>  	REG_UFS_PA_ERR_CODE                 = 0xCC,
+> -	REG_UFS_RETRY_TIMER_REG             = 0xD0,
+> +	/* On older UFS revisions, this register is called "RETRY_TIMER_REG" */
+> +	REG_UFS_PARAM0                      = 0xD0,
+>  	REG_UFS_PA_LINK_STARTUP_TIMER       = 0xD8,
+>  	REG_UFS_CFG1                        = 0xDC,
+>  	REG_UFS_CFG2                        = 0xE0,
+> -- 
+> 2.25.1
+> 
 
-Thanks,
-
-
-Guilherme
