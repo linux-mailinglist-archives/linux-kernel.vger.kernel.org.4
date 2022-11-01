@@ -2,182 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D5D56151FE
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 20:11:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CA95D6151F5
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 20:10:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230354AbiKATLJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 15:11:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38608 "EHLO
+        id S230328AbiKATK4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 15:10:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38580 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230219AbiKATKz (ORCPT
+        with ESMTP id S229556AbiKATKx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 15:10:55 -0400
-Received: from mga17.intel.com (mga17.intel.com [192.55.52.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0E2821CB10;
-        Tue,  1 Nov 2022 12:10:54 -0700 (PDT)
+        Tue, 1 Nov 2022 15:10:53 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 88A571C416;
+        Tue,  1 Nov 2022 12:10:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667329855; x=1698865855;
+  t=1667329852; x=1698865852;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=NA5/t41ZCbqszgHs3lJC1knncUR7kRh2Cap2isglxDI=;
-  b=eyf6Axlr/KQZNbcUoeOkGWBnmTn+LgD3LWsLDM7jtUTShVnntEvKVwLt
-   lVipl6iYQoBbexu4lPkNTs54ur18/xeLamU0HDmVOLh9vpKGJV67HLDNK
-   vfPi4T5naMi8QB9G/iiLCHI0W5eezlkyE/YnwUbvtHcXcNWyn+VyiFM70
-   sISiVG8QdPFZjz5BvRzwqpTo/ub6qx1NNHlrY0Er1ix9EgVaPE6yI9lD4
-   LIvd7KDRX11Y9SulHCMLu+5LkYgATInwmk+axWStvV3tyIi1PZkDWq3JR
-   gSRrwr5MHQsMMXhfxBHXjYwYllmwkHTbVza9Ld5CPv2dSQpBxiHJFJX2H
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="289607881"
+  bh=K6E1RFYeJekr3s2TcMWi6yPlXHIkdOkuHKVN7RzSc9s=;
+  b=bHjC+l6GtMZEPiI0xuJAY5NvEDTasNPaosynun9/od1KA32TZKUAPyXh
+   2VJ9y/+NJNRz1v4EHeHz9CJA6AUwEu0f6XGQTM5X6myo3mXjUf6gINwoV
+   z/E3xJxjPcrF27tJXc6OY8u9ve8imeSyOaaARNwiZqkEjP66N+lgyGHBj
+   02F4fLN85Znhc1FVvG8S5MA/ChE2i/7whKYVShg/Fv6VNfvs4tOclLelp
+   szlkFGTV8VO80W16SB7zDfcBvQlbKmyEtEzgjLgvhteM6kkVhry7lJKtn
+   SIIT603fmL06RYZ/2sCDEooQoe7lgqd/SBevaYgfKALT6yP8alU5CitGN
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="296656329"
 X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
-   d="scan'208";a="289607881"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by fmsmga107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 12:10:27 -0700
+   d="scan'208";a="296656329"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 12:10:27 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="667299027"
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="702985441"
 X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
-   d="scan'208";a="667299027"
+   d="scan'208";a="702985441"
 Received: from linux.intel.com ([10.54.29.200])
-  by orsmga001.jf.intel.com with ESMTP; 01 Nov 2022 12:10:26 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 01 Nov 2022 12:10:26 -0700
 Received: from debox1-desk4.intel.com (unknown [10.212.195.64])
-        by linux.intel.com (Postfix) with ESMTP id 70A9A580AA7;
+        by linux.intel.com (Postfix) with ESMTP id 9DBBF580B9D;
         Tue,  1 Nov 2022 12:10:26 -0700 (PDT)
 From:   "David E. Box" <david.e.box@linux.intel.com>
 To:     hdegoede@redhat.com, markgross@kernel.org,
         andriy.shevchenko@linux.intel.com, srinivas.pandruvada@intel.com
 Cc:     "David E. Box" <david.e.box@linux.intel.com>,
         platform-driver-x86@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/9] platform/x86/intel/sdsi: Support different GUIDs
-Date:   Tue,  1 Nov 2022 12:10:17 -0700
-Message-Id: <20221101191023.4150315-4-david.e.box@linux.intel.com>
+Subject: [PATCH 4/9] platform/x86/intel/sdsi: Add meter certificate support
+Date:   Tue,  1 Nov 2022 12:10:18 -0700
+Message-Id: <20221101191023.4150315-5-david.e.box@linux.intel.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221101191023.4150315-1-david.e.box@linux.intel.com>
 References: <20221101191023.4150315-1-david.e.box@linux.intel.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Newer versions of Intel On Demand hardware may have an expanded list of
-registers to support new features. The register layout is identified by a
-unique GUID that's read during driver probe. Add support for handling
-different GUIDs and add support for current GUIDs [1].
+Add support for reading the meter certificate from Intel On Demand
+hardware.  The meter certificate [1] is used to access the utilization
+metrics of enabled features in support of the Intel On Demand consumption
+model. Similar to the state certificate, the meter certificate is read by
+mailbox command.
 
-[1] https://github.com/intel/intel-sdsi/blob/master/os-interface.rst
+[1] https://github.com/intel-sandbox/debox1.intel_sdsi/blob/gnr-review/meter-certificate.rst
 
 Signed-off-by: David E. Box <david.e.box@linux.intel.com>
 ---
- drivers/platform/x86/intel/sdsi.c | 47 +++++++++++++++++++++++++++++--
- 1 file changed, 44 insertions(+), 3 deletions(-)
+ .../ABI/testing/sysfs-driver-intel_sdsi       | 10 ++++
+ drivers/platform/x86/intel/sdsi.c             | 52 +++++++++++++++----
+ 2 files changed, 52 insertions(+), 10 deletions(-)
 
+diff --git a/Documentation/ABI/testing/sysfs-driver-intel_sdsi b/Documentation/ABI/testing/sysfs-driver-intel_sdsi
+index 9d77f30d9b9a..f8afed127107 100644
+--- a/Documentation/ABI/testing/sysfs-driver-intel_sdsi
++++ b/Documentation/ABI/testing/sysfs-driver-intel_sdsi
+@@ -69,6 +69,16 @@ Description:
+ 		the CPU configuration is updated. A cold reboot is required to
+ 		fully activate the feature. Mailbox command.
+ 
++What:		/sys/bus/auxiliary/devices/intel_vsec.sdsi.X/meter_certificate
++Date:		Nov 2022
++KernelVersion:	6.2
++Contact:	"David E. Box" <david.e.box@linux.intel.com>
++Description:
++		(RO) Used to read back the current meter certificate for the CPU
++		from Intel On Demand hardware. The meter certificate contains
++		utilization metrics of On Demand enabled features. Mailbox
++		command.
++
+ What:		/sys/bus/auxiliary/devices/intel_vsec.sdsi.X/state_certificate
+ Date:		Feb 2022
+ KernelVersion:	5.18
 diff --git a/drivers/platform/x86/intel/sdsi.c b/drivers/platform/x86/intel/sdsi.c
-index bca05b4dd983..ab1f65919fc5 100644
+index ab1f65919fc5..1dee10822df7 100644
 --- a/drivers/platform/x86/intel/sdsi.c
 +++ b/drivers/platform/x86/intel/sdsi.c
-@@ -27,10 +27,10 @@
- #define ACCESS_TYPE_LOCAL		3
+@@ -42,6 +42,7 @@
  
- #define SDSI_MIN_SIZE_DWORDS		276
--#define SDSI_SIZE_CONTROL		8
- #define SDSI_SIZE_MAILBOX		1024
--#define SDSI_SIZE_REGS			72
-+#define SDSI_SIZE_REGS			80
- #define SDSI_SIZE_CMD			sizeof(u64)
-+#define SDSI_SIZE_MAILBOX		1024
+ #define SDSI_ENABLED_FEATURES_OFFSET	16
+ #define SDSI_FEATURE_SDSI		BIT(3)
++#define SDSI_FEATURE_METERING		BIT(26)
  
- /*
-  * Write messages are currently up to the size of the mailbox
-@@ -76,6 +76,9 @@
- #define DT_TBIR				GENMASK(2, 0)
- #define DT_OFFSET(v)			((v) & GENMASK(31, 3))
+ #define SDSI_SOCKET_ID_OFFSET		64
+ #define SDSI_SOCKET_ID			GENMASK(3, 0)
+@@ -80,9 +81,10 @@
+ #define SDSI_GUID_V2			0xF210D9EF
  
-+#define SDSI_GUID_V1			0x006DD191
-+#define SDSI_GUID_V2			0xF210D9EF
-+
  enum sdsi_command {
- 	SDSI_CMD_PROVISION_AKC		= 0x04,
- 	SDSI_CMD_PROVISION_CAP		= 0x08,
-@@ -100,6 +103,9 @@ struct sdsi_priv {
- 	void __iomem		*control_addr;
- 	void __iomem		*mbox_addr;
- 	void __iomem		*regs_addr;
-+	int			control_size;
-+	int			maibox_size;
-+	int			registers_size;
- 	u32			guid;
- 	u32			features;
+-	SDSI_CMD_PROVISION_AKC		= 0x04,
+-	SDSI_CMD_PROVISION_CAP		= 0x08,
+-	SDSI_CMD_READ_STATE		= 0x10,
++	SDSI_CMD_PROVISION_AKC		= 0x0004,
++	SDSI_CMD_PROVISION_CAP		= 0x0008,
++	SDSI_CMD_READ_STATE		= 0x0010,
++	SDSI_CMD_READ_METER		= 0x0014,
  };
-@@ -444,6 +450,18 @@ static ssize_t registers_read(struct file *filp, struct kobject *kobj,
- 	struct device *dev = kobj_to_dev(kobj);
- 	struct sdsi_priv *priv = dev_get_drvdata(dev);
- 	void __iomem *addr = priv->regs_addr;
-+	int size =  priv->registers_size;
-+
-+	/*
-+	 * The check below is performed by the sysfs caller based on the static
-+	 * file size. But this may be greater than the actual size which is based
-+	 * on the GUID. So check here again based on actual size before reading.
-+	 */
-+	if (off >= size)
-+		return 0;
-+
-+	if (off + count > size)
-+		count = size - off;
  
- 	memcpy_fromio(buf, addr + off, count);
+ struct sdsi_mbox_info {
+@@ -398,13 +400,10 @@ static ssize_t provision_cap_write(struct file *filp, struct kobject *kobj,
+ }
+ static BIN_ATTR_WO(provision_cap, SDSI_SIZE_WRITE_MSG);
  
-@@ -496,6 +514,24 @@ static const struct attribute_group sdsi_group = {
- };
- __ATTRIBUTE_GROUPS(sdsi);
- 
-+static int sdsi_get_layout(struct sdsi_priv *priv, struct disc_table *table)
-+{
-+	switch (table->guid) {
-+	case SDSI_GUID_V1:
-+		priv->control_size = 8;
-+		priv->registers_size = 72;
-+		break;
-+	case SDSI_GUID_V2:
-+		priv->control_size = 16;
-+		priv->registers_size = 80;
-+		break;
-+	default:
-+		dev_err(priv->dev, "Unrecognized GUID 0x%x\n", table->guid);
-+		return -EINVAL;
-+	}
-+	return 0;
-+}
-+
- static int sdsi_map_mbox_registers(struct sdsi_priv *priv, struct pci_dev *parent,
- 				   struct disc_table *disc_table, struct resource *disc_res)
+-static long state_certificate_read(struct file *filp, struct kobject *kobj,
+-				   struct bin_attribute *attr, char *buf, loff_t off,
+-				   size_t count)
++static ssize_t
++certificate_read(u64 command, struct sdsi_priv *priv, char *buf, loff_t off,
++		 size_t count)
  {
-@@ -537,7 +573,7 @@ static int sdsi_map_mbox_registers(struct sdsi_priv *priv, struct pci_dev *paren
- 	if (IS_ERR(priv->control_addr))
- 		return PTR_ERR(priv->control_addr);
+-	struct device *dev = kobj_to_dev(kobj);
+-	struct sdsi_priv *priv = dev_get_drvdata(dev);
+-	u64 command = SDSI_CMD_READ_STATE;
+ 	struct sdsi_mbox_info info;
+ 	size_t size;
+ 	int ret;
+@@ -441,8 +440,31 @@ static long state_certificate_read(struct file *filp, struct kobject *kobj,
  
--	priv->mbox_addr = priv->control_addr + SDSI_SIZE_CONTROL;
-+	priv->mbox_addr = priv->control_addr + priv->control_size;
- 	priv->regs_addr = priv->mbox_addr + SDSI_SIZE_MAILBOX;
- 
- 	priv->features = readq(priv->regs_addr + SDSI_ENABLED_FEATURES_OFFSET);
-@@ -572,6 +608,11 @@ static int sdsi_probe(struct auxiliary_device *auxdev, const struct auxiliary_de
- 
- 	priv->guid = disc_table.guid;
- 
-+	/* Get guid based layout info */
-+	ret = sdsi_get_layout(priv, &disc_table);
-+	if (ret)
-+		return ret;
+ 	return size;
+ }
 +
- 	/* Map the SDSi mailbox registers */
- 	ret = sdsi_map_mbox_registers(priv, intel_cap_dev->pcidev, &disc_table, disc_res);
- 	if (ret)
++static ssize_t
++state_certificate_read(struct file *filp, struct kobject *kobj,
++		       struct bin_attribute *attr, char *buf, loff_t off,
++		       size_t count)
++{
++	struct device *dev = kobj_to_dev(kobj);
++	struct sdsi_priv *priv = dev_get_drvdata(dev);
++
++	return certificate_read(SDSI_CMD_READ_STATE, priv, buf, off, count);
++}
+ static BIN_ATTR(state_certificate, 0400, state_certificate_read, NULL, SDSI_SIZE_READ_MSG);
+ 
++static ssize_t
++meter_certificate_read(struct file *filp, struct kobject *kobj,
++		       struct bin_attribute *attr, char *buf, loff_t off,
++		       size_t count)
++{
++	struct device *dev = kobj_to_dev(kobj);
++	struct sdsi_priv *priv = dev_get_drvdata(dev);
++
++	return certificate_read(SDSI_CMD_READ_METER, priv, buf, off, count);
++}
++static BIN_ATTR(meter_certificate, 0400, meter_certificate_read, NULL, SDSI_SIZE_READ_MSG);
++
+ static ssize_t registers_read(struct file *filp, struct kobject *kobj,
+ 			      struct bin_attribute *attr, char *buf, loff_t off,
+ 			      size_t count)
+@@ -472,6 +494,7 @@ static BIN_ATTR(registers, 0400, registers_read, NULL, SDSI_SIZE_REGS);
+ static struct bin_attribute *sdsi_bin_attrs[] = {
+ 	&bin_attr_registers,
+ 	&bin_attr_state_certificate,
++	&bin_attr_meter_certificate,
+ 	&bin_attr_provision_akc,
+ 	&bin_attr_provision_cap,
+ 	NULL
+@@ -491,7 +514,16 @@ sdsi_battr_is_visible(struct kobject *kobj, struct bin_attribute *attr, int n)
+ 	if (!(priv->features & SDSI_FEATURE_SDSI))
+ 		return 0;
+ 
+-	return attr->attr.mode;
++	if (attr == &bin_attr_state_certificate ||
++	    attr == &bin_attr_provision_akc ||
++	    attr == &bin_attr_provision_cap)
++		return attr->attr.mode;
++
++	if (attr == &bin_attr_meter_certificate &&
++	    !!(priv->features & SDSI_FEATURE_METERING))
++		return attr->attr.mode;
++
++	return 0;
+ }
+ 
+ static ssize_t guid_show(struct device *dev, struct device_attribute *attr, char *buf)
 -- 
 2.25.1
 
