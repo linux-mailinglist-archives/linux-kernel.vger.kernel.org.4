@@ -2,96 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 414B2614AC4
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:33:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AD92B614AC7
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:33:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229887AbiKAMdh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 08:33:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48224 "EHLO
+        id S230296AbiKAMdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 08:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiKAMde (ORCPT
+        with ESMTP id S229930AbiKAMdh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 08:33:34 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C285FE3A;
-        Tue,  1 Nov 2022 05:33:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667306013; x=1698842013;
-  h=date:from:to:cc:subject:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=TPNf+FzQp/e3Et/6Wapw/U8UpkpopWkGTZenhVM/bIM=;
-  b=mOUJOSV7Vhj4kZVJDWbgHqDILN8pBJQX7W+qMiZkLkmmMEXJBOjetZzw
-   kl3TAj8QK8NYJKg5X/DCt70zMg+yuB5VlDPpCVkHN4PNCQa7cR6OVchO+
-   dR3L6mZvDviCfAgXtXLvVEnzZYrmmEoQx2EBTm3PIlfTNjXbBvdeqLCt1
-   SiVXPPElDPnU+BCEAMX5bVHUF+EBFz2rlS0Uq9uDo12jjQpP8Q6bB6hYi
-   lTR1/LvIt9FHS09FPKJnf23XL1xFyfI+gIBN3xRGmH25BDwwxiECSgU5b
-   jl4Z58L4v2f42lek/EZ/Oin69fhC77PboCBRkoG6IOdubu0T0BIqXaCIG
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="310832171"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="310832171"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 05:33:33 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="697384294"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="697384294"
-Received: from linux.intel.com ([10.54.29.200])
-  by fmsmga008.fm.intel.com with ESMTP; 01 Nov 2022 05:33:32 -0700
-Received: from maurocar-mobl2 (maurocar-mobl2.ger.corp.intel.com [10.252.29.141])
+        Tue, 1 Nov 2022 08:33:37 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1176E3F;
+        Tue,  1 Nov 2022 05:33:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by linux.intel.com (Postfix) with ESMTPS id 1A5CF580B9D;
-        Tue,  1 Nov 2022 05:33:26 -0700 (PDT)
-Date:   Tue, 1 Nov 2022 13:33:23 +0100
-From:   Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
-To:     Isabella Basso <isabbasso@riseup.net>
-Cc:     David Gow <davidgow@google.com>, linux-kselftest@vger.kernel.org,
-        KUnit Development <kunit-dev@googlegroups.com>,
-        Magali Lemes <magalilemes00@gmail.com>,
-        =?UTF-8?B?TWHDrXJh?= Canal <maira.canal@usp.br>,
-        Daniel Latypov <dlatypov@google.com>, n@nfraprado.net,
-        kernel list <linux-kernel@vger.kernel.org>,
-        leandro.ribeiro@collabora.com, igt-dev@lists.freedesktop.org,
-        ML dri-devel <dri-devel@lists.freedesktop.org>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Tales Aparecida <tales.aparecida@gmail.com>,
-        Shuah Khan <skhan@linuxfoundation.org>,
-        =?UTF-8?B?QW5kcsOp?= Almeida <andrealmeid@riseup.net>,
-        Brendan Higgins <brendanhiggins@google.com>,
-        Trevor Woerner <twoerner@gmail.com>
-Subject: Re: [igt-dev] [PATCH i-g-t v2 3/4] lib/igt_kmod: add compatibility
- for KUnit
-Message-ID: <20221101133323.72101670@maurocar-mobl2>
-In-Reply-To: <D53B4EB1-1A95-48F1-BF49-8EC0CC7B5418@riseup.net>
-References: <20220829000920.38185-1-isabbasso@riseup.net>
-        <20220829000920.38185-4-isabbasso@riseup.net>
-        <CABVgOS=HO9XAf8C5X7ZD6aTW37r06ify==7AW9a8cpKsgLVfFw@mail.gmail.com>
-        <D53B4EB1-1A95-48F1-BF49-8EC0CC7B5418@riseup.net>
+        by ams.source.kernel.org (Postfix) with ESMTPS id A52E0B81C89;
+        Tue,  1 Nov 2022 12:33:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB8BFC433D6;
+        Tue,  1 Nov 2022 12:33:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667306013;
+        bh=J9nZjVxzwAo9aLCOJoInbpWSUu/a9O4+CyYLzNrtHlI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=d3zbb5jq50opDrLP8HUM/vf+fW8EcahO4Wmm8Q0qQBdES060ly0FFFBrMbqZKVNTN
+         YL8cGTDxw642fL4S0896UXwOtEC8EP71HW2SY5dGF7dy7rYJ5C3rmYTKwPU1qgL06O
+         p0xm1DAqg+o1RcLnxloeGA4EQL4VLkOoLBHm8HJn2H54NIShgxO2TDI1+GBdwsL+u1
+         ZSHlBLLIgw8K0Gr8BfpJwSW/FShOkWKZCguwhNEzAvEF1GO6LuuWV/uRIWOXbEUy/L
+         9FHE92ofZb1ucx03J0BVld2nNX4NBHepUkD1qInMQbN3Ol+V2EmRWeTDBjRecVt4BE
+         KJwobaN8CiGdw==
+Date:   Tue, 1 Nov 2022 13:33:29 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Raju Rangoju <Raju.Rangoju@amd.com>
+Cc:     syniurge@gmail.com, shyam-sundar.s-k@amd.com,
+        linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+        rajesh1.kumar@amd.com,
+        Basavaraj Natikar <basavaraj.natikar@amd.com>
+Subject: Re: [PATCH] i2c: amd-mp2: use msix/msi if the hardware supports
+Message-ID: <Y2ESGbkgfEXsx9es@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Raju Rangoju <Raju.Rangoju@amd.com>, syniurge@gmail.com,
+        shyam-sundar.s-k@amd.com, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, rajesh1.kumar@amd.com,
+        Basavaraj Natikar <basavaraj.natikar@amd.com>
+References: <20221025181124.421628-1-Raju.Rangoju@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="5fEbzoCs5nDslbUQ"
+Content-Disposition: inline
+In-Reply-To: <20221025181124.421628-1-Raju.Rangoju@amd.com>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Isabella,
 
-On Mon, 19 Sep 2022 17:43:19 -0300
-Isabella Basso <isabbasso@riseup.net> wrote:
+--5fEbzoCs5nDslbUQ
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-> > Do you want to _require_ KUnit be built as a module, rather than built-=
-in here? =20
+On Tue, Oct 25, 2022 at 11:41:24PM +0530, Raju Rangoju wrote:
+> Use msix or msi interrupts if the hardware supports it. Else, fallback to
+> legacy interrupts.
 >=20
-> I=E2=80=99ll change the comment and the warning in v3 to clarify this.
+> Fixes: 529766e0a011 ("i2c: Add drivers for the AMD PCIe MP2 I2C controlle=
+r")
+> Co-developed-by: Basavaraj Natikar <basavaraj.natikar@amd.com>
+> Signed-off-by: Basavaraj Natikar <basavaraj.natikar@amd.com>
+> Signed-off-by: Raju Rangoju <Raju.Rangoju@amd.com>
 
-When do you intend to submit v3?
+Applied to for-next, thanks!
 
-Regards,
-Mauro
+
+--5fEbzoCs5nDslbUQ
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNhEhkACgkQFA3kzBSg
+KbYjEA/+KmaERvUdpZQrXLFENwuXt+r4F8GkoLqlcY3YJnkhEyGt2XBK6kCMF/Gj
+SHvfsTVnWBRXNKjdRv60wr4PL/rk9iWeVbnYVORWitQkcJ9qek/yiGkVUe6/gp5t
+F9QDz5C0YyAcZLx8TMYpggB4tkWF30P/g7zQ5sW8wRYC8RFe08rMsb3ktcHi24Ng
+OaTTkXg8/zL2Sjh0AZr7oaYZqlWjdzPfEG0k2gnHXx0GRHGGAsYHowwi7yo1km9/
+uDWTsP+Fd5JKmNP7ic3PdPspyLnMhj/J7YIt/6k/4/nn56tb4cnhT1g4LQMW1Ikf
+wYKETdBXoXlMt70urzzghk4McvnAmVHft1ClAg3dJ/LREW9qupgO/6ZLZ1qxRrnw
+9wy2HnFMhUEIKjpOmmzxcfIVYabNs1oabhN7JSnCw32Y84miXE7fhobiCk4W/37n
+T4ybzvXOARR3eDqkbCge5I2Ol3k9HWNt8rXZfj0vjijpfDJuYU8z+U/k43ZQXqLb
+sFaM0j3b5BRhhyGPkzTz0nXsnE7/FBTDQu3ZYb1eE7qc2LyKCulMaBUviM/5lGaY
+YmB+ObglX1YnxH27cNcuAQK0VSXgurGaSFOsmPPgoL4mEtYnQ2YfY/9g0geCuvyR
+foq5PV+UGiGfGVmk4gh8Ua8yZbO75IO2+Xj/nZHFR3Uh/+mUbxQ=
+=5IWg
+-----END PGP SIGNATURE-----
+
+--5fEbzoCs5nDslbUQ--
