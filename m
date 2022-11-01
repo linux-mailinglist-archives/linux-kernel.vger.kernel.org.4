@@ -2,173 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F066614615
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 09:57:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5F8A061462C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 10:02:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229877AbiKAI5s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 04:57:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40082 "EHLO
+        id S229667AbiKAJBz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 05:01:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46940 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229936AbiKAI5m (ORCPT
+        with ESMTP id S229492AbiKAJBq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 04:57:42 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D54A186F3;
-        Tue,  1 Nov 2022 01:57:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667293061; x=1698829061;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=msnEZkv3YQ45VUNdt3VQyEvi87+GNc4MrWptBr/Uq0I=;
-  b=mz7L7Ruf5CToUEAY8QuwOSVAYGKh7zSKoqvXwHU++JKoSipgEzog7scb
-   dzLQ2HiNLN81gCWmTi7Kh682HHioxZ9uZmohIrMWiYOuILl1FmjvzxW3Q
-   J7CpkQnSPvVkcmEUIW8WWrT13SXDdpwwNjOpbh2W8d4dKSAHuRN3hKrpr
-   U4tWaEMSQVj5rOxB/obheVexWOepe3mu+oRtZRBHtxcxTW3VmWhzwVdz1
-   f796HbFX9PoSIvu6g0155m9sPa9qKeE2vg5b31KQYqrwqoNPCOacBpoID
-   UqvNLJUOoMS+zOaDuC7SdBrteZfdJAinEhQS+q3qQ+K6EyF+B7tr5MOo8
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="309095587"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="309095587"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 01:57:41 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="697337066"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="697337066"
-Received: from punajuuri.fi.intel.com (HELO paasikivi.fi.intel.com) ([10.237.72.43])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 01:57:37 -0700
-Received: from paasikivi.fi.intel.com (localhost [127.0.0.1])
-        by paasikivi.fi.intel.com (Postfix) with SMTP id B8EF220207;
-        Tue,  1 Nov 2022 10:57:34 +0200 (EET)
-Date:   Tue, 1 Nov 2022 08:57:34 +0000
-From:   Sakari Ailus <sakari.ailus@linux.intel.com>
-To:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Cc:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Niklas =?iso-8859-1?Q?S=F6derlund?= 
-        <niklas.soderlund@ragnatech.se>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        linux-media@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [PATCH v4 4/4] media: platform: Add Renesas RZ/G2L CRU driver
-Message-ID: <Y2Dffvzr24FCG1Lw@paasikivi.fi.intel.com>
-References: <20221027103104.74576-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221027103104.74576-5-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <Y1qCbUoLrR6qlQwa@paasikivi.fi.intel.com>
- <CA+V-a8seroka4YkyCnSYa2KMPDWMG1Zk8tyiqRntdPUQnc+nrA@mail.gmail.com>
- <Y1vJbJfFjV9jRNzz@paasikivi.fi.intel.com>
- <CA+V-a8tONhJ1_x3T7+6n7tu=xyFBZfsqT2v3iUGd2Jy5_NuZCg@mail.gmail.com>
- <Y1+FFD4/XCY8HyYa@paasikivi.fi.intel.com>
- <CA+V-a8sKb4em07S5bYfe9RsgBnp3WDhf6bHu38LfuB2g+iJYZg@mail.gmail.com>
+        Tue, 1 Nov 2022 05:01:46 -0400
+Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC8FE60D8;
+        Tue,  1 Nov 2022 02:01:39 -0700 (PDT)
+X-UUID: 405e77d4e6e740c59bfc61c99a703aa1-20221101
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
+        h=Content-Transfer-Encoding:Content-Type:MIME-Version:Message-ID:Date:Subject:CC:To:From; bh=KajTHLzpEN0YFJj2S7xlPAotHDiov+2vzD/u1x7W78M=;
+        b=J3x0PTp4PKtHBH56KxRfm+uCvHckB4dUzzDGPA9DLHX73cZUTEWaEi2X7TjXjw0eI6cXsztwOTj0ZB2hThsl7nNQuwy8Dtip/ZuRtEYYXAkDn+6WuF6Q1FlZYDBYXuZp3tEKibTEi3avhZVP92a2+GlWy3CVWNQIhN5qYlzUmOE=;
+X-CID-P-RULE: Release_Ham
+X-CID-O-INFO: VERSION:1.1.12,REQID:f3304fb1-0cfe-45f0-94de-7efa6d1bc89b,IP:0,U
+        RL:0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTI
+        ON:release,TS:70
+X-CID-INFO: VERSION:1.1.12,REQID:f3304fb1-0cfe-45f0-94de-7efa6d1bc89b,IP:0,URL
+        :0,TC:0,Content:-25,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTI
+        ON:quarantine,TS:70
+X-CID-META: VersionHash:62cd327,CLOUDID:82544481-3116-4fbc-b86b-83475c3df513,B
+        ulkID:221101170129AUL700IQ,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
+        il,Content:0,EDM:-3,IP:nil,URL:1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
+X-UUID: 405e77d4e6e740c59bfc61c99a703aa1-20221101
+Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
+        (envelope-from <allen-kh.cheng@mediatek.com>)
+        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
+        with ESMTP id 1626355597; Tue, 01 Nov 2022 17:01:26 +0800
+Received: from mtkmbs13n2.mediatek.inc (172.21.101.108) by
+ mtkmbs13n2.mediatek.inc (172.21.101.108) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.792.15; Tue, 1 Nov 2022 17:01:25 +0800
+Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
+ mtkmbs13n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
+ 15.2.792.15 via Frontend Transport; Tue, 1 Nov 2022 17:01:24 +0800
+From:   Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+To:     Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>
+CC:     <nfraprado@collabora.com>,
+        <angelogioacchino.delregno@collabora.com>,
+        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
+        <devicetree@vger.kernel.org>, <linux-watchdog@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-mediatek@lists.infradead.org>,
+        Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+Subject: [PATCH v3 0/7] MediaTek watchdog: Convert mtk-wdt.txt to dt-schema
+Date:   Tue, 1 Nov 2022 17:01:09 +0800
+Message-ID: <20221101090116.27130-1-allen-kh.cheng@mediatek.com>
+X-Mailer: git-send-email 2.18.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CA+V-a8sKb4em07S5bYfe9RsgBnp3WDhf6bHu38LfuB2g+iJYZg@mail.gmail.com>
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="y"
+Content-Transfer-Encoding: 8bit
+X-MTK:  N
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Prabhakar,
+Based on git/groeck/linux-staging.git, watchdog-next. 
+We use [1] and [2] as references to send a new series.
 
-On Mon, Oct 31, 2022 at 12:40:28PM +0000, Lad, Prabhakar wrote:
-> Hi Sakari,
-> 
-> On Mon, Oct 31, 2022 at 8:19 AM Sakari Ailus
-> <sakari.ailus@linux.intel.com> wrote:
-> >
-> > Hi Prabhakar,
-> >
-> > On Sun, Oct 30, 2022 at 10:32:43PM +0000, Lad, Prabhakar wrote:
-> > > Hi Sakari,
-> > >
-> > > On Fri, Oct 28, 2022 at 1:22 PM Sakari Ailus
-> > > <sakari.ailus@linux.intel.com> wrote:
-> > > >
-> > > > Hi Prabhakar,
-> > > >
-> > > > On Thu, Oct 27, 2022 at 08:04:40PM +0100, Lad, Prabhakar wrote:
-> > > > ...
-> > > > > > > +static int rzg2l_cru_ip_s_stream(struct v4l2_subdev *sd, int enable)
-> > > > > > > +{
-> > > > > > > +     struct rzg2l_cru_dev *cru;
-> > > > > > > +     int ret;
-> > > > > > > +
-> > > > > > > +     cru = v4l2_get_subdevdata(sd);
-> > > > > > > +
-> > > > > > > +     if (!cru->is_csi)
-> > > > > > > +             return -EINVAL;
-> > > > > > > +
-> > > > > > > +     ret = v4l2_subdev_call(cru->ip.remote, video, s_stream, enable);
-> > > > > >
-> > > > > > It's up to the driver how call pre_streamon() and post_streamoff(), as long
-> > > > > > as it takes place on both sides of s_stream().
-> > > > > >
-> > > > > > In other words, as it seems your device doesn't need anything special, you
-> > > > > > could waive implemeting the callbacks yourself and call pre_streamon() and
-> > > > > > post_streamoff() here.
-> > > > > >
-> > > > > Here the cru->ip.remote = CSI, in the rzg2l_cru_set_stream(1) where we
-> > > > > are calling pre_streamon()/post_streamoff() callbacks the subdev is
-> > > > > CRU-IP. So the calls from rzg2l_cru_set_stream() land into
-> > > > > rzg2l_cru_ip_pre_streamon() and rzg2l_cru_ip_post_streamoff() which
-> > > > > are calling pre_streamon/post_streamoff for the CSI subdev.
-> > > >
-> > > > Again, you should call the source sub-device's pre_streamon and
-> > > > post_streamoff from the s_stream handler (not from
-> > > > rzg2l_cru_ip_pre_streamon or rzg2l_cru_ip_post_streamoff).
-> > > >
-> > > > Starting streaming takes place link by link. This allows a driver to omit
-> > > > implementing pre_streamon and post_streamon callbacks if it doesn't need
-> > > > them.
-> > > >
-> > > Thank you for the explanation that makes sense now to me.
-> > >
-> > > Now with this approach the initialization sequence of CSI + CRU won't
-> > > align as per the HW manual. Unfortunately I'll have to switch back on
-> > > exporting the functions. I hope that's okay?
-> >
-> > It is not.
-> >
-> > What exactly would you like to do that you can't with the
-> > pre_streamon/post_streamoff callbacks called from s_stream?
-> >
-> The initialization sequence for MIPI CSI [0]. As per [0] we need to
-> initialize the CSI2 dphy first then setup the AXI (part of CRU driver)
-> and then later MIPI CSI2 link (part of csi driver) and lastly turn on
-> clock and link (in the cru driver).
-> 
-> So as per the current implementation we have the below:
-> 1] CRU IP subdev is calling pre_stream for the CSI2 subdev in its
-> pre_stream on callback - This is where the CSI2 DPHY is initialized
-> 2] Later in the flow we initialize the AXI part - ie part of
-> rzg2l_cru_set_stream
-> 3] We call s_stream in rzg2l_cru_set_stream - This lands into CSI2
-> subdev to initialize the MIPI CSI2 Link
-> 4] In the rzg2l_cru_set_stream we setup up the vclk and enable link reception
-> 
-> [0] https://ibb.co/QpHNkLh
+This series converts mtk-wdt.txt to dt-schema and contains
+- Fix watchdog compatibles for MT7986, MT8186, MT8188 and MT8195,
+- Fix the watchdog name of mt8516
+- Add mt6795 and MT8173 watchdog compatible
 
-How is this changed by calling the pre_streamon/post_streamoff callbacks
-from s_stream? I understand the pipeline device-wise is:
+Changes since v2:
+ - Drop Add-support-for-MT6795-Helio-X10-watchdog from series (merged)
+ - Rebase to watchdog-next (for mt8188)
 
-	... -> CSI-2 -> CRU
+Changes since v1:
+ - Drop "items" for a single enum·
 
-I wonder if it would be faster to discuss this on #linux-media.
+Changes since [1]:
+  - Update the commit message with some details
+ - Drop "timeout-sec: true" and use unevaluatedProperties
+[1] https://lore.kernel.org/all/20221005113517.70628-1-angelogioacchino.delregno@collabora.com/
+[2] https://lore.kernel.org/all/20220422121017.23920-3-allen-kh.cheng@mediatek.com/
+
+Allen-KH Cheng (3):
+  arm64: dts: mediatek: mt7986: Fix watchdog compatible
+  arm64: dts: mediatek: mt8516: Fix the watchdog node name
+  dt-bindings: watchdog: mediatek,mtk-wdt: Add compatible for MT8173
+
+AngeloGioacchino Del Regno (4):
+  arm64: dts: mediatek: mt8186: Fix watchdog compatible
+  arm64: dts: mediatek: mt8195: Fix watchdog compatible
+  dt-bindings: watchdog: mediatek: Convert mtk-wdt to json-schema
+  dt-bindings: watchdog: mediatek,mtk-wdt: Add compatible for MT6795
+
+ .../bindings/watchdog/mediatek,mtk-wdt.yaml   | 80 +++++++++++++++++++
+ .../devicetree/bindings/watchdog/mtk-wdt.txt  | 43 ----------
+ arch/arm64/boot/dts/mediatek/mt7986a.dtsi     |  3 +-
+ arch/arm64/boot/dts/mediatek/mt8186.dtsi      |  3 +-
+ arch/arm64/boot/dts/mediatek/mt8195.dtsi      |  3 +-
+ arch/arm64/boot/dts/mediatek/mt8516.dtsi      |  2 +-
+ 6 files changed, 84 insertions(+), 50 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/watchdog/mediatek,mtk-wdt.yaml
+ delete mode 100644 Documentation/devicetree/bindings/watchdog/mtk-wdt.txt
 
 -- 
-Kind regards,
+2.18.0
 
-Sakari Ailus
