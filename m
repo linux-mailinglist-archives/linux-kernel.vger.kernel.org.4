@@ -2,196 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ABCB8615349
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 21:30:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 553C961534A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 21:30:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229958AbiKAUa2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 16:30:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34288 "EHLO
+        id S229772AbiKAUac (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 16:30:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34286 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229813AbiKAUaY (ORCPT
+        with ESMTP id S229636AbiKAUaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 16:30:24 -0400
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCAA81C139
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 13:30:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1667334610; bh=0xTjCkfnnHOzBJnGaTrLX2LUmGNMU22I5WIcMTwmEGY=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=Lki4df+Thgwj/gpwVq7TAa/DGgGDHvt7dg7LyayTOpZJDdjK8AjhVYsxomKGvMCw2
-         iq51AovB3WmZL4hY9IJSY5Oo/aF8K393BIuzQ1XCjku/CHllySiwSHXyB9FZUT2s5Q
-         12V4Um8ys5h483QmYXIwe5qESDOZ5iq9H8lxfbM0=
-Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
-        via [213.182.55.206]
-        Tue,  1 Nov 2022 21:30:10 +0100 (CET)
-X-EA-Auth: flZTjBEuuUNw2ArB64248TgEFfjjTv43URZghuC6TkG93sr2/fxESAS87wT+ahJNSjWWhOsbDOFlVtp7dVN1fc2LQeBs7ehx
-Date:   Wed, 2 Nov 2022 02:00:05 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     outreachy@lists.linux.dev,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: r8188eu: remove unwanted variable implementation
-Message-ID: <Y2GBzcnG+bT/dEcG@ubunlion>
-References: <Y2FPOON3UcqqAQFy@ubunlion>
- <alpine.DEB.2.22.394.2211011811400.2834@hadrien>
+        Tue, 1 Nov 2022 16:30:23 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1AE1C92C;
+        Tue,  1 Nov 2022 13:30:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667334622; x=1698870622;
+  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=APQeYjrRT3hLyy+c2ncnyeZeok1od6+0PtsZwGx62ts=;
+  b=jWvXBsMxWvBmNNnAt2/Yd9S4+cKj+OKFdz/6nkba4mwqs2thplT6X48P
+   NbgncmACQsgv45hcwlm3rSvIQ68j8wLnZ8gHgc+YAQ6re6e/soBSPbu7/
+   O3Hh0wV/s03vI8ooQodfz/WrwalzgXppeStzZyFgXYZyN2uCb2IULq3MV
+   NxHFn2z8Cahkn61iBFEjh2HbVw75/E6//Rk27vZQsWbLV5MJlhCUNxteY
+   ojYOt8G+eq/LYedGjZ9zpNqs2L0u4vnWWFdiEsBmcxFO4M9KWayr2lCyr
+   Oifg/dk929R9v9cdvNuZIxNrxviNZgDGwbLFda2wNqbIeY2pHHNI/j9bq
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="309233501"
+X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
+   d="scan'208";a="309233501"
+Received: from fmsmga005.fm.intel.com ([10.253.24.32])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 13:30:22 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="963255856"
+X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
+   d="scan'208";a="963255856"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga005.fm.intel.com with ESMTP; 01 Nov 2022 13:30:22 -0700
+Received: from ritvikti-mobl.amr.corp.intel.com (unknown [10.212.195.64])
+        by linux.intel.com (Postfix) with ESMTP id B33A8580AA7;
+        Tue,  1 Nov 2022 13:30:21 -0700 (PDT)
+Message-ID: <c5be860724b0e74623bcc2f09bde8abd62b2dcdd.camel@linux.intel.com>
+Subject: Re: [PATCH v1] platform/x86: intel_pmc_core: promote S0ix failure
+ warn() to WARN()
+From:   "David E. Box" <david.e.box@linux.intel.com>
+Reply-To: david.e.box@linux.intel.com
+To:     Sven van Ashbrook <svenva@chromium.org>,
+        "Limonciello, Mario" <mario.limonciello@amd.com>
+Cc:     Rajat Jain <rajatja@google.com>,
+        Rajneesh Bhardwaj <irenic.rajneesh@gmail.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        "S-k, Shyam-sundar" <Shyam-sundar.S-k@amd.com>,
+        "rrangel@chromium.org" <rrangel@chromium.org>,
+        "platform-driver-x86@vger.kernel.org" 
+        <platform-driver-x86@vger.kernel.org>,
+        Rafael J Wysocki <rjw@rjwysocki.net>,
+        David E Box <david.e.box@intel.com>,
+        Mark Gross <markgross@kernel.org>,
+        "swboyd@chromium.org" <swboyd@chromium.org>
+Date:   Tue, 01 Nov 2022 13:30:21 -0700
+In-Reply-To: <CAM7w-FUTHEAis-F3bDWSsxzQdT-koD-UO54ee9NzbBpKiQhPzQ@mail.gmail.com>
+References: <20221027151908.v1.1.I295e65357f06f162b46ea6fc6c03be37e3978bdc@changeid>
+         <4b7304c0-8dd5-9add-7c84-4e9f0aa9396b@redhat.com>
+         <MN0PR12MB6101BCCA364437A76FED924AE2339@MN0PR12MB6101.namprd12.prod.outlook.com>
+         <CAG-rBijvNoN3ppz6bdkEUofYPPBxCtFfo1nWBK5TdG69fcKMnA@mail.gmail.com>
+         <CAE2upjS6qRGRcuVYuAB5DMf66A7VcfCKKYEkpsr1My7RnKDFtQ@mail.gmail.com>
+         <CAG-rBihDRq1y61tAp56yYCoTOSZXO9OZNzn7gXb_y8XaiO_zqg@mail.gmail.com>
+         <MN0PR12MB610109F448E3FC8CE71FBA76E2379@MN0PR12MB6101.namprd12.prod.outlook.com>
+         <CACK8Z6E7=xt118d47FTpmgKHgUBgH48FQzTi5iL90C3MjHb-3Q@mail.gmail.com>
+         <29e7c8f5-0784-6501-e3fb-f2ab33d3f438@amd.com>
+         <CAM7w-FUTHEAis-F3bDWSsxzQdT-koD-UO54ee9NzbBpKiQhPzQ@mail.gmail.com>
+Organization: David E. Box
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.36.5-0ubuntu1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2211011811400.2834@hadrien>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 06:14:01PM +0100, Julia Lawall wrote:
->
->
-> On Tue, 1 Nov 2022, Deepak R Varma wrote:
->
-> > Local variables intended as the function return value are
-> > initialized but their value does not change during function
-> > execution. The initial value assigned to the variable is simply
-> > returned to the caller. This makes the variable declaration
-> > unnecessary and the initial value can be directly returned.
->
-> I think it would be better to make an argument for each case as to why the
-> change is correct, and no more interesting return value is needed.  For
-> example, looking at the code in
-> drivers/staging/r8188eu/hal/rtl8188eu_xmit.c, it seems that the variable
-> pull was used in a more interesting way previously, but some previous
-> patches removed the relevant code.
+On Tue, 2022-11-01 at 13:24 -0400, Sven van Ashbrook wrote:
+> On Mon, Oct 31, 2022 at 4:55 PM Limonciello, Mario
+> <mario.limonciello@amd.com> wrote:
+> > I just spun together an RFC series for this idea and while doing it I
+> > had the same realization.  So I left the warning messages in place for
+> > both drivers.
+> > 
+> > You can take a look at the series here:
+> > 
+> > https://lore.kernel.org/platform-driver-x86/20221031204320.22464-1-mario.limonciello@amd.com/T/#m6c7db55c98b8a3ce8c48d451fc01c1d9b0df37fb
+> > 
+> 
+> We've had some internal discussions within ChromeOS intel big core,
+> and we believe this is a worthwhile effort, and we are supportive, as
+> long as our current S0ix fail detection will not break for the
+> foreseeable future, i.e. as long as the warning message and register
+> dump stays in place. Which is the case for your RFC.
 
-Thank you Julia for the hints. I learned that git blame will not show commits
-associated with deleted/replaced lines. Used pickaxe tool to identify the old
-commits. It was good learning. Thank you. v2 is submitted for review and feedback.
+Yeah, I did not see this as a replacement for anything in the pmc drivers. Given
+the prevalence of S0ix, and that hardware based low power idle support is
+indicated in the FADT (so part of the standard) it makes sense to have it
+tracked by the suspend core, particularly when it's being used as a replacement
+for S3. We don't need to collect any implementation or debug details there. Only
+detect when it's available, being used for suspend, and being achieved. Maybe
+residency information as well if available but that's it. Other information is
+separate and should be contained to the individual drivers which have the
+detailed platform knowledge.
 
->
-> julia
->
-> >
-> > The patch is produced using the following coccicheck options:
-> >    COCCI=./scripts/coccinelle/misc/returnvar.cocci
-> >    M=driver/staging/r8188eu/
-> >    MODE=patch
-> >
-> > Signed-off-by: Deepak R Varma <drv@mailo.com>
-> > ---
-> >  drivers/staging/r8188eu/core/rtw_ap.c        | 5 ++---
-> >  drivers/staging/r8188eu/core/rtw_recv.c      | 3 +--
-> >  drivers/staging/r8188eu/hal/rtl8188eu_xmit.c | 3 +--
-> >  drivers/staging/r8188eu/os_dep/ioctl_linux.c | 4 +---
-> >  4 files changed, 5 insertions(+), 10 deletions(-)
-> >
-> > diff --git a/drivers/staging/r8188eu/core/rtw_ap.c b/drivers/staging/r8188eu/core/rtw_ap.c
-> > index 24eb8dce9bfe..9eaf345e6a00 100644
-> > --- a/drivers/staging/r8188eu/core/rtw_ap.c
-> > +++ b/drivers/staging/r8188eu/core/rtw_ap.c
-> > @@ -1020,7 +1020,6 @@ u8 ap_free_sta(struct adapter *padapter, struct sta_info *psta,
-> >  int rtw_sta_flush(struct adapter *padapter)
-> >  {
-> >  	struct list_head *phead, *plist;
-> > -	int ret = 0;
-> >  	struct sta_info *psta = NULL;
-> >  	struct sta_priv *pstapriv = &padapter->stapriv;
-> >  	struct mlme_ext_priv *pmlmeext = &padapter->mlmeextpriv;
-> > @@ -1028,7 +1027,7 @@ int rtw_sta_flush(struct adapter *padapter)
-> >  	u8 bc_addr[ETH_ALEN] = {0xff, 0xff, 0xff, 0xff, 0xff, 0xff};
-> >
-> >  	if ((pmlmeinfo->state & 0x03) != WIFI_FW_AP_STATE)
-> > -		return ret;
-> > +		return 0;
-> >
-> >  	spin_lock_bh(&pstapriv->asoc_list_lock);
-> >  	phead = &pstapriv->asoc_list;
-> > @@ -1051,7 +1050,7 @@ int rtw_sta_flush(struct adapter *padapter)
-> >
-> >  	associated_clients_update(padapter, true);
-> >
-> > -	return ret;
-> > +	return 0;
-> >  }
-> >
-> >  /* called > TSR LEVEL for USB or SDIO Interface*/
-> > diff --git a/drivers/staging/r8188eu/core/rtw_recv.c b/drivers/staging/r8188eu/core/rtw_recv.c
-> > index 4b68a543f68b..94f85cd7038d 100644
-> > --- a/drivers/staging/r8188eu/core/rtw_recv.c
-> > +++ b/drivers/staging/r8188eu/core/rtw_recv.c
-> > @@ -1415,7 +1415,6 @@ static int amsdu_to_msdu(struct adapter *padapter, struct recv_frame *prframe)
-> >
-> >  	struct recv_priv *precvpriv = &padapter->recvpriv;
-> >  	struct __queue *pfree_recv_queue = &precvpriv->free_recv_queue;
-> > -	int	ret = _SUCCESS;
-> >
-> >  	nr_subframes = 0;
-> >
-> > @@ -1513,7 +1512,7 @@ static int amsdu_to_msdu(struct adapter *padapter, struct recv_frame *prframe)
-> >  	prframe->len = 0;
-> >  	rtw_free_recvframe(prframe, pfree_recv_queue);/* free this recv_frame */
-> >
-> > -	return ret;
-> > +	return _SUCCESS;
-> >  }
-> >
-> >  static bool check_indicate_seq(struct recv_reorder_ctrl *preorder_ctrl, u16 seq_num)
-> > diff --git a/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c b/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c
-> > index 8e4a5acc0b18..6d1f56d1f9d7 100644
-> > --- a/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c
-> > +++ b/drivers/staging/r8188eu/hal/rtl8188eu_xmit.c
-> > @@ -149,7 +149,6 @@ static void fill_txdesc_phy(struct pkt_attrib *pattrib, __le32 *pdw)
-> >
-> >  static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bagg_pkt)
-> >  {
-> > -	int	pull = 0;
-> >  	uint	qsel;
-> >  	u8 data_rate, pwr_status, offset;
-> >  	struct adapter		*adapt = pxmitframe->padapter;
-> > @@ -295,7 +294,7 @@ static s32 update_txdesc(struct xmit_frame *pxmitframe, u8 *pmem, s32 sz, u8 bag
-> >  	ODM_SetTxAntByTxInfo_88E(&haldata->odmpriv, pmem, pattrib->mac_id);
-> >
-> >  	rtl8188eu_cal_txdesc_chksum(ptxdesc);
-> > -	return pull;
-> > +	return 0;
-> >  }
-> >
-> >  /* for non-agg data frame or  management frame */
-> > diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-> > index 8516e253bb03..59a97c5fb80c 100644
-> > --- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-> > +++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-> > @@ -2979,8 +2979,6 @@ static int rtw_p2p_set(struct net_device *dev,
-> >  			       struct iw_request_info *info,
-> >  			       union iwreq_data *wrqu, char *extra)
-> >  {
-> > -	int ret = 0;
-> > -
-> >  	if (!memcmp(extra, "enable =", 7)) {
-> >  		rtw_wext_p2p_enable(dev, info, wrqu, &extra[7]);
-> >  	} else if (!memcmp(extra, "setDN =", 6)) {
-> > @@ -3027,7 +3025,7 @@ static int rtw_p2p_set(struct net_device *dev,
-> >  		rtw_p2p_set_persistent(dev, info, wrqu, &extra[11]);
-> >  	}
-> >
-> > -	return ret;
-> > +	return 0;
-> >  }
-> >
-> >  static int rtw_p2p_get2(struct net_device *dev,
-> > --
-> > 2.34.1
-> >
-> >
-> >
-> >
-> >
->
+David
 
+> 
+> +swboyd@chromium.org who expressed interest in doing something similar for
+> ARM.
 
