@@ -2,167 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 674466142FB
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 02:58:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C1B86142FE
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 02:59:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbiKAB6y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 21:58:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43024 "EHLO
+        id S229476AbiKAB7h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 21:59:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229783AbiKAB6p (ORCPT
+        with ESMTP id S229475AbiKAB7e (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 21:58:45 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 946C8F3E
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 18:58:39 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id j7-20020a056e02154700b003007885e7beso11565075ilu.20
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 18:58:39 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=k5aumleoC+6dOgtsmeyQ80AN/JAO4J+h0lsbF+cmcaA=;
-        b=V2vrRwLniRdw7isAtFSRCa1mm2aHoWnbhONmetAPBleRjBJk39qnUzO1HxE2MB3icp
-         Ojd0h0BrcErlF/L8V90yUAN3b863Xna+UMhfZVTYMoDKO6TYDDcg1vFfP7uGEJS4spuU
-         gUD8qU19a3jqTpvSoCsn5Q12C0qouEExe/KqSw6wjW+HVCv9pxDDKW4FCpnHEQAsAY1a
-         jSIyehGW3DXDuOb85qdS8DVvxR1jz6q9ibPqX61jGSgc8QgSypcudaZ/mtBGlWB3zc0G
-         dxMDUs6lOoYoUf/3+zeACE3JAUH7Q/tA5qbHA47zhrkf5gLQS6B1RiNnoRYErir/QqXc
-         wMKQ==
-X-Gm-Message-State: ACrzQf2rHRrYBDQMFdjLBbB7UffmOi/49q7EQOxlDUoJMohdA3suDiNr
-        xeX/05YloXTOv26oqcZX7iWwJCImy2AdX/C9qTG5rTolzj28
-X-Google-Smtp-Source: AMsMyM55cnr9xu3djM1WAb9zBUV5XeIA5h/VRdj7FJ+TwNqlvQrhVHxDSqdaCTTjWgYMembu6mdFh7k5eC5/V3PVhK7EkkQwdjJN
+        Mon, 31 Oct 2022 21:59:34 -0400
+Received: from m12-11.163.com (m12-11.163.com [220.181.12.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DA417C0D;
+        Mon, 31 Oct 2022 18:59:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=N0hM1
+        nAyAcqMRYO7veUovn/zmY6ZVwxa+Voc4ePVpJI=; b=IYAMurcCVuXtOuUl63xR5
+        kHW1ymWFPAyu2WW1rHRe4sznEJAGjEV18jCrgVqI4Fz4nWpePH3QsrqvuycjlHRc
+        P1azNnpe3w7hYH+yXSxDLvX22eBaSULt+De6bDjccVFWGoJPyYlTRacFSK9HwqYo
+        Vc5qJwGN99zEyrT+NkHNwo=
+Received: from jbd-ThinkPad-X1-Nano-Gen-1.. (unknown [223.104.68.52])
+        by smtp7 (Coremail) with SMTP id C8CowABnLfJlfWBjwnq9PA--.32038S2;
+        Tue, 01 Nov 2022 09:59:02 +0800 (CST)
+From:   Slark Xiao <slark_xiao@163.com>
+To:     mani@kernel.org, quic_hemantk@quicinc.com, bhelgaas@google.com,
+        loic.poulain@linaro.org
+Cc:     dnlplm@gmail.com, yonglin.tan@outlook.com, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pci@vger.kernel.org, Slark Xiao <slark_xiao@163.com>
+Subject: [PATCH v3] PCI: Add vendor ID for THALES
+Date:   Tue,  1 Nov 2022 09:58:58 +0800
+Message-Id: <20221101015858.6777-1-slark_xiao@163.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-X-Received: by 2002:a02:a518:0:b0:375:59f0:a0f3 with SMTP id
- e24-20020a02a518000000b0037559f0a0f3mr5418197jam.24.1667267918925; Mon, 31
- Oct 2022 18:58:38 -0700 (PDT)
-Date:   Mon, 31 Oct 2022 18:58:38 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <0000000000000d98ad05ec5f106a@google.com>
-Subject: [syzbot] net-next boot error: WARNING in genl_register_family
-From:   syzbot <syzbot+1bd9726d2031ebadac74@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, jiri@nvidia.com,
-        johannes@sipsolutions.net, kuba@kernel.org,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        nicolas.dichtel@6wind.com, pabeni@redhat.com, razor@blackwall.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: C8CowABnLfJlfWBjwnq9PA--.32038S2
+X-Coremail-Antispam: 1Uf129KBjvJXoW7KrWDWr45uFyDWF1rAw4DXFb_yoW5Jr4xpF
+        s0krW0yF4kJF4Ut3yvyF9ruF95Aa1DCFy5Kwn3Kw1F9F4Dta1Fgrn7ur4YvFyakayvqrWa
+        qF1Du3yqgayqyaUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
+        9KBjDUYxBIdaVFxhVjvjDU0xZFpf9x0pEuc_UUUUUU=
+X-Originating-IP: [223.104.68.52]
+X-CM-SenderInfo: xvod2y5b0lt0i6rwjhhfrp/xtbCdQ+sZGBbF-yaewAAsD
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+In MHI driver, there are some companies' product still do not have their
+own PCI vendor macro. So we add it here to make the code neat. Ref ID
+could be found in link https://pcisig.com/membership/member-companies.
+We must clear that CINTERION belongs to THALES in case confusing user.
+There are some descriptions about that in below link:
+https://www.thalesgroup.com/en/markets/digital-identity-and-security/iot/iot-connectivity/products
 
-syzbot found the following issue on:
-
-HEAD commit:    0cf9deb3005f net: mvneta: Remove unused variable i
-git tree:       net-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1515e00a880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=53cedb500b7b74c6
-dashboard link: https://syzkaller.appspot.com/bug?extid=1bd9726d2031ebadac74
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/f1565497b0ab/disk-0cf9deb3.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/0b1b7b29a5f5/vmlinux-0cf9deb3.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/a9200f03d86a/bzImage-0cf9deb3.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+1bd9726d2031ebadac74@syzkaller.appspotmail.com
-
-can: controller area network core
-NET: Registered PF_CAN protocol family
-can: raw protocol
-can: broadcast manager protocol
-can: netlink gateway - max_hops=1
-can: SAE J1939
-can: isotp protocol
-Bluetooth: RFCOMM TTY layer initialized
-Bluetooth: RFCOMM socket layer initialized
-Bluetooth: RFCOMM ver 1.11
-Bluetooth: BNEP (Ethernet Emulation) ver 1.3
-Bluetooth: BNEP filters: protocol multicast
-Bluetooth: BNEP socket layer initialized
-Bluetooth: CMTP (CAPI Emulation) ver 1.0
-Bluetooth: CMTP socket layer initialized
-Bluetooth: HIDP (Human Interface Emulation) ver 1.2
-Bluetooth: HIDP socket layer initialized
-NET: Registered PF_RXRPC protocol family
-Key type rxrpc registered
-Key type rxrpc_s registered
-NET: Registered PF_KCM protocol family
-lec:lane_module_init: lec.c: initialized
-mpoa:atm_mpoa_init: mpc.c: initialized
-l2tp_core: L2TP core driver, V2.0
-l2tp_ppp: PPPoL2TP kernel driver, V2.0
-l2tp_ip: L2TP IP encapsulation support (L2TPv3)
-l2tp_netlink: L2TP netlink interface
-l2tp_eth: L2TP ethernet pseudowire support (L2TPv3)
-l2tp_ip6: L2TP IP encapsulation support for IPv6 (L2TPv3)
-NET: Registered PF_PHONET protocol family
-8021q: 802.1Q VLAN Support v1.8
-DCCP: Activated CCID 2 (TCP-like)
-DCCP: Activated CCID 3 (TCP-Friendly Rate Control)
-sctp: Hash tables configured (bind 32/56)
-NET: Registered PF_RDS protocol family
-Registered RDS/infiniband transport
-Registered RDS/tcp transport
-tipc: Activated (version 2.0.0)
-NET: Registered PF_TIPC protocol family
-tipc: Started in single node mode
-NET: Registered PF_SMC protocol family
-9pnet: Installing 9P2000 support
-NET: Registered PF_CAIF protocol family
-NET: Registered PF_IEEE802154 protocol family
-Key type dns_resolver registered
-Key type ceph registered
-libceph: loaded (mon/osd proto 15/24)
-batman_adv: B.A.T.M.A.N. advanced 2022.3 (compatibility version 15) loaded
-openvswitch: Open vSwitch switching datapath
-------------[ cut here ]------------
-WARNING: CPU: 0 PID: 1 at net/netlink/genetlink.c:383 genl_validate_ops net/netlink/genetlink.c:383 [inline]
-WARNING: CPU: 0 PID: 1 at net/netlink/genetlink.c:383 genl_register_family+0x298/0x1450 net/netlink/genetlink.c:414
-Modules linked in:
-CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc2-syzkaller-00625-g0cf9deb3005f #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-RIP: 0010:genl_validate_ops net/netlink/genetlink.c:383 [inline]
-RIP: 0010:genl_register_family+0x298/0x1450 net/netlink/genetlink.c:414
-Code: dd 0f 82 b1 06 00 00 e8 06 11 e5 f9 0f b6 9c 24 b7 00 00 00 31 ff 89 de e8 85 0d e5 f9 84 db 0f 84 93 06 00 00 e8 e8 10 e5 f9 <0f> 0b e8 e1 10 e5 f9 41 bc ea ff ff ff e8 d6 10 e5 f9 48 b8 00 00
-RSP: 0000:ffffc90000067c50 EFLAGS: 00010293
-RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
-RDX: ffff8881401c8000 RSI: ffffffff87978b98 RDI: 0000000000000001
-RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000000
-R10: 0000000000000003 R11: 0000000000000000 R12: 0000000000000000
-R13: ffffffff8b9a6a26 R14: ffffffff8b9a6a00 R15: 0000000000000000
-FS:  0000000000000000(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: ffff88823ffff000 CR3: 000000000bc8e000 CR4: 00000000003506f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- dp_register_genl net/openvswitch/datapath.c:2578 [inline]
- dp_init+0x148/0x25d net/openvswitch/datapath.c:2707
- do_one_initcall+0x13d/0x780 init/main.c:1303
- do_initcall_level init/main.c:1376 [inline]
- do_initcalls init/main.c:1392 [inline]
- do_basic_setup init/main.c:1411 [inline]
- kernel_init_freeable+0x6ff/0x788 init/main.c:1631
- kernel_init+0x1a/0x1d0 init/main.c:1519
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-
-
+Signed-off-by: Slark Xiao <slark_xiao@163.com>
 ---
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+v3: Separate different vendors into different patch, and change macro
+from CINTERION to THALES.
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+v2: Update vendor ID to the right location sorted by numeric value.
+---
+ drivers/bus/mhi/host/pci_generic.c | 8 ++++----
+ include/linux/pci_ids.h            | 2 ++
+ 2 files changed, 6 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
+index caa4ce28cf9e..3ad39f5ac63b 100644
+--- a/drivers/bus/mhi/host/pci_generic.c
++++ b/drivers/bus/mhi/host/pci_generic.c
+@@ -583,16 +583,16 @@ static const struct pci_device_id mhi_pci_id_table[] = {
+ 	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0d9),
+ 		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx65_info },
+ 	/* MV31-W (Cinterion) */
+-	{ PCI_DEVICE(0x1269, 0x00b3),
++	{ PCI_DEVICE(PCI_VENDOR_ID_THALES, 0x00b3),
+ 		.driver_data = (kernel_ulong_t) &mhi_mv31_info },
+ 	/* MV31-W (Cinterion), based on new baseline */
+-	{ PCI_DEVICE(0x1269, 0x00b4),
++	{ PCI_DEVICE(PCI_VENDOR_ID_THALES, 0x00b4),
+ 		.driver_data = (kernel_ulong_t) &mhi_mv31_info },
+ 	/* MV32-WA (Cinterion) */
+-	{ PCI_DEVICE(0x1269, 0x00ba),
++	{ PCI_DEVICE(PCI_VENDOR_ID_THALES, 0x00ba),
+ 		.driver_data = (kernel_ulong_t) &mhi_mv32_info },
+ 	/* MV32-WB (Cinterion) */
+-	{ PCI_DEVICE(0x1269, 0x00bb),
++	{ PCI_DEVICE(PCI_VENDOR_ID_THALES, 0x00bb),
+ 		.driver_data = (kernel_ulong_t) &mhi_mv32_info },
+ 	{  }
+ };
+diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+index b362d90eb9b0..298c8cae66ff 100644
+--- a/include/linux/pci_ids.h
++++ b/include/linux/pci_ids.h
+@@ -1765,6 +1765,8 @@
+ #define PCI_VENDOR_ID_SATSAGEM		0x1267
+ #define PCI_DEVICE_ID_SATSAGEM_NICCY	0x1016
+ 
++#define PCI_VENDOR_ID_THALES		0x1269
++
+ #define PCI_VENDOR_ID_ENSONIQ		0x1274
+ #define PCI_DEVICE_ID_ENSONIQ_CT5880	0x5880
+ #define PCI_DEVICE_ID_ENSONIQ_ES1370	0x5000
+-- 
+2.34.1
+
