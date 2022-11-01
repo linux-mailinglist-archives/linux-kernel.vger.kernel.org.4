@@ -2,125 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 843B161433C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 03:29:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2753614348
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 03:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229917AbiKAC3G (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 22:29:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34906 "EHLO
+        id S229670AbiKACc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 22:32:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229576AbiKAC2w (ORCPT
+        with ESMTP id S229441AbiKACc4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 22:28:52 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2321D13E;
-        Mon, 31 Oct 2022 19:28:50 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id p21so8493768plr.7;
-        Mon, 31 Oct 2022 19:28:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GitM46EFRM9nH6tIDAppCJX9q32SAFXaMRLIqIakjjU=;
-        b=jH3NvDCyBGXMBaUTMBOvkNef8p9Z0VL8qnWhCvi1CTp9CmZfiFm2mNXMFVRACIbxqw
-         cwWoyLGSHOe3qVRquSR8VN5C4hCEK1au5oRDOi+Bd5HG9wi9gMNcgbk4g8rd/ceqFBbk
-         IN4dQ3PK03TQyCZk8aguSBzrkCq7hwpNcDik2LXJdWnwMq0hJ89pqAMzo7y6eqwdJ2KF
-         PsUG1EoGlPHx4F46ITYdA4ePouSbjaley6tLhKljI6o/a1/snxg6BTiU/RkitsV1fAuX
-         7w43sG0PPrzHFGX44CI9BqAeC7CTCa/D18yPOiRKN3Nm4v6kvyzK+I7Fn00X+ZZh2m5v
-         XHHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GitM46EFRM9nH6tIDAppCJX9q32SAFXaMRLIqIakjjU=;
-        b=E+mZb8vtiZUf/NL5IbK6iVkMGnl38hfPZGb4X/ryfJSIribWgQWrsS3bNwgNgy7M8m
-         uPK2xJAiEfZ4D3WiVe/nCA8HwYt1AmCDFqjrHQR3OSuH7tcTGThWcPZJ8zBKNbkVz/w6
-         bH6kX9TVMm2iyCtNKUyUyT4P/1F5GLZMT6Z90tAXXq9vdwwH0/Ryw44K5imq/fFEx2xr
-         ETSqPB1IKD+61G7FyF+0PQJzqPH8JSEqleJx5p4Pd4wV2TNLx3EQmhdvNDVRnz7WzNwG
-         djVtITh3msVwZxS/ApAZnopvkiW2Dc53z0BfMtbAwZ90GncabZJQNsPyZ16804Iu+KAV
-         3N+A==
-X-Gm-Message-State: ACrzQf0t0KfSWjn1REnM4BUf3Dvte1keu7fBFAeSpVP2l7BJoLv/lUIh
-        f9MqPhBITplEzE8GuzfnsTo=
-X-Google-Smtp-Source: AMsMyM7uD7HN829N+C1C4t09vo0KK4aDVkMaEbkwQUkvJuBMdbb616LQFG4C5eXBXRIIdRUgC0Q4dQ==
-X-Received: by 2002:a17:90a:13:b0:212:d139:748a with SMTP id 19-20020a17090a001300b00212d139748amr17340844pja.182.1667269730416;
-        Mon, 31 Oct 2022 19:28:50 -0700 (PDT)
-Received: from localhost.localdomain ([116.128.244.169])
-        by smtp.gmail.com with ESMTPSA id t5-20020a625f05000000b005385e2e86eesm5126925pfb.18.2022.10.31.19.28.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 31 Oct 2022 19:28:50 -0700 (PDT)
-From:   TGSP <tgsp002@gmail.com>
-To:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        huanglei@kylinos.cn
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        xiongxin <xiongxin@kylinos.cn>, stable@vger.kernel.org
-Subject: [PATCH -next 2/2] PM: hibernate: add check of preallocate mem for image size pages
-Date:   Tue,  1 Nov 2022 10:28:40 +0800
-Message-Id: <20221101022840.1351163-3-tgsp002@gmail.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221101022840.1351163-1-tgsp002@gmail.com>
-References: <20221101022840.1351163-1-tgsp002@gmail.com>
+        Mon, 31 Oct 2022 22:32:56 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E94DCD5
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 19:32:55 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1667269973;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=6TefmdO43ILS61YweujCpCvfdLxa126KkuiZEMMTg3c=;
+        b=XDksCaR5tYi0qjMnF2RCdEumv8O4KTNHiCx2EzDr+cook6Vf/kFA5lFqVhAEJ0Yt+S7OhS
+        GZTAuWKLRQ6a+mV8tVwuh4waKnVvf7yfnl5h54TkjbpA5LK2cJ64bDyXMIrQFfE/JW0il3
+        MtnXj0qcp5h3/PeC5Bw2UDAiy+6b+bk=
+From:   Yajun Deng <yajun.deng@linux.dev>
+To:     akpm@linux-foundation.org
+Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Yajun Deng <yajun.deng@linux.dev>
+Subject: [PATCH] mm: simplify page_zone() and get_deferred_split_queue() with page_pgdat()
+Date:   Tue,  1 Nov 2022 10:32:19 +0800
+Message-Id: <20221101023219.752365-1-yajun.deng@linux.dev>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: xiongxin <xiongxin@kylinos.cn>
+page_zone() is too long, we can shorten it by page_pgdat().
 
-Added a check on the return value of preallocate_image_highmem(). If
-memory preallocate is insufficient, S4 cannot be done;
+There is no need define pgdat variable if memcg isn't NULL, so use
+page_pgdat() to simplify get_deferred_split_queue().
 
-I am playing 4K video on a machine with AMD or other graphics card and
-only 8GiB memory, and the kernel is not configured with CONFIG_HIGHMEM.
-When doing the S4 test, the analysis found that when the pages get from
-minimum_image_size() is large enough, The preallocate_image_memory() and
-preallocate_image_highmem() calls failed to obtain enough memory. Add
-the judgment that memory preallocate is insufficient;
-
-"pages -= free_unnecessary_pages()" below will let pages to drop a lot,
-so I wonder if it makes sense to add a judgment here.
-
-Cc: stable@vger.kernel.org
-Signed-off-by: xiongxin <xiongxin@kylinos.cn>
-Signed-off-by: huanglei <huanglei@kylinos.cn>
+Signed-off-by: Yajun Deng <yajun.deng@linux.dev>
 ---
- kernel/power/snapshot.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+ include/linux/mm.h | 8 ++++----
+ mm/huge_memory.c   | 7 ++-----
+ 2 files changed, 6 insertions(+), 9 deletions(-)
 
-diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-index c20ca5fb9adc..670abf89cf31 100644
---- a/kernel/power/snapshot.c
-+++ b/kernel/power/snapshot.c
-@@ -1738,6 +1738,7 @@ int hibernate_preallocate_memory(void)
- 	struct zone *zone;
- 	unsigned long saveable, size, max_size, count, highmem, pages = 0;
- 	unsigned long alloc, save_highmem, pages_highmem, avail_normal;
-+	unsigned long size_highmem;
- 	ktime_t start, stop;
- 	int error;
+diff --git a/include/linux/mm.h b/include/linux/mm.h
+index 978c17df053e..25ff9a14a777 100644
+--- a/include/linux/mm.h
++++ b/include/linux/mm.h
+@@ -1448,14 +1448,14 @@ static inline void page_kasan_tag_reset(struct page *page) { }
  
-@@ -1863,7 +1864,13 @@ int hibernate_preallocate_memory(void)
- 		pages_highmem += size;
- 		alloc -= size;
- 		size = preallocate_image_memory(alloc, avail_normal);
--		pages_highmem += preallocate_image_highmem(alloc - size);
-+		size_highmem += preallocate_image_highmem(alloc - size);
-+		if (size_highmem < (alloc - size)) {
-+			pr_err("Image allocation is %lu pages short, exit\n",
-+				alloc - size - pages_highmem);
-+			goto err_out;
-+		}
-+		pages_highmem += size_highmem;
- 		pages += pages_highmem + size;
- 	}
+ #endif /* CONFIG_KASAN_SW_TAGS || CONFIG_KASAN_HW_TAGS */
+ 
+-static inline struct zone *page_zone(const struct page *page)
++static inline pg_data_t *page_pgdat(const struct page *page)
+ {
+-	return &NODE_DATA(page_to_nid(page))->node_zones[page_zonenum(page)];
++	return NODE_DATA(page_to_nid(page));
+ }
+ 
+-static inline pg_data_t *page_pgdat(const struct page *page)
++static inline struct zone *page_zone(const struct page *page)
+ {
+-	return NODE_DATA(page_to_nid(page));
++	return &page_pgdat(page)->node_zones[page_zonenum(page)];
+ }
+ 
+ static inline struct zone *folio_zone(const struct folio *folio)
+diff --git a/mm/huge_memory.c b/mm/huge_memory.c
+index 1ed245f6d1a7..a524db74e9e6 100644
+--- a/mm/huge_memory.c
++++ b/mm/huge_memory.c
+@@ -562,19 +562,16 @@ pmd_t maybe_pmd_mkwrite(pmd_t pmd, struct vm_area_struct *vma)
+ static inline struct deferred_split *get_deferred_split_queue(struct page *page)
+ {
+ 	struct mem_cgroup *memcg = page_memcg(compound_head(page));
+-	struct pglist_data *pgdat = NODE_DATA(page_to_nid(page));
+ 
+ 	if (memcg)
+ 		return &memcg->deferred_split_queue;
+ 	else
+-		return &pgdat->deferred_split_queue;
++		return &page_pgdat(page)->deferred_split_queue;
+ }
+ #else
+ static inline struct deferred_split *get_deferred_split_queue(struct page *page)
+ {
+-	struct pglist_data *pgdat = NODE_DATA(page_to_nid(page));
+-
+-	return &pgdat->deferred_split_queue;
++	return &page_pgdat(page)->deferred_split_queue;
+ }
+ #endif
  
 -- 
 2.25.1
