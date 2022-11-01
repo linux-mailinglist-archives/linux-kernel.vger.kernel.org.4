@@ -2,105 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 000516143A6
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 04:31:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE5E16143B9
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 04:42:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229628AbiKADbY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Mon, 31 Oct 2022 23:31:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36462 "EHLO
+        id S229740AbiKADmb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Mon, 31 Oct 2022 23:42:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229495AbiKADbV (ORCPT
+        with ESMTP id S229469AbiKADm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Mon, 31 Oct 2022 23:31:21 -0400
-Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 76D3EBCAC;
-        Mon, 31 Oct 2022 20:31:20 -0700 (PDT)
-Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N1bCV42jMz4xG6;
-        Tue,  1 Nov 2022 14:31:18 +1100 (AEDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
-        s=201702; t=1667273478;
-        bh=5sOu7Pp5MIfQEoQ+iRj34Ry88sZkoQpOF7QKNfomrto=;
-        h=Date:From:To:Cc:Subject:From;
-        b=MgQ5oM3EYnYeWLkXpdSMO8OhRIvW7puDUGpBx+vL1/mHWq0P35a7aimjE8RCn2RXc
-         pnx/SB9i6IJ5hBMssDrXpADSOQbbXp9Hcin6NsTuQQgtzUbv/EvGqNYkZ4MR5GhMNK
-         sJU/shA7GyfqXiMGVRtU48Cb98uibQG/4rpzTLta2TMSl3laSGrbZG5K2S1nTaqsiX
-         2x221oNfkPi15RzLK9483QJS9ScGmsXjxz9SACVlrbf6VJnWiM8ePlei/ATbAaDS6D
-         uioGiR/TJsOKKOdmL9rygwNogmftRzAWZLeTLYngkYWaEYPVj1usidKSmR/U1oU8f2
-         4UeHfGVby14hw==
-Date:   Tue, 1 Nov 2022 14:31:17 +1100
-From:   Stephen Rothwell <sfr@canb.auug.org.au>
-To:     Shuah Khan <skhan@linuxfoundation.org>,
-        Brendan Higgins <brendanhiggins@google.com>
-Cc:     Dan Carpenter <dan.carpenter@oracle.com>,
-        Dan Carpenter <error27@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Linux Next Mailing List <linux-next@vger.kernel.org>,
-        "YoungJun.park" <her0gyugyu@gmail.com>
-Subject: linux-next: manual merge of the kunit-next tree with the
- kunit-fixes tree
-Message-ID: <20221101143117.07829d4d@canb.auug.org.au>
+        Mon, 31 Oct 2022 23:42:29 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B898717885
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 20:42:26 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N1bSH4z9Nz15MD6;
+        Tue,  1 Nov 2022 11:42:23 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 1 Nov 2022 11:42:25 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 1 Nov
+ 2022 11:42:24 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>
+CC:     <sre@kernel.org>, <sebastian.reichel@collabora.com>,
+        <carlos.chinea@nokia.com>, <ivo.g.dimitrov.75@gmail.com>
+Subject: [PATCH] HSI: omap_ssi_core: fix unbalanced pm_runtime_disable()
+Date:   Tue, 1 Nov 2022 11:41:18 +0800
+Message-ID: <20221101034118.1331731-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: multipart/signed; boundary="Sig_/tQCdwl_qW=k2iiGGtGF40E+";
- protocol="application/pgp-signature"; micalg=pgp-sha256
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
---Sig_/tQCdwl_qW=k2iiGGtGF40E+
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: quoted-printable
+In error label 'out1' path in ssi_probe(), the pm_runtime_enable()
+has not been called yet, so pm_runtime_disable() is not needed.
 
-Hi all,
+Fixes: b209e047bc74 ("HSI: Introduce OMAP SSI driver")
+Signed-off-by: Yang Yingliang <yangyingliang@huawei.com>
+---
+ drivers/hsi/controllers/omap_ssi_core.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Today's linux-next merge of the kunit-next tree got a conflict in:
+diff --git a/drivers/hsi/controllers/omap_ssi_core.c b/drivers/hsi/controllers/omap_ssi_core.c
+index 80bf09bc5d15..052cf3e92dd6 100644
+--- a/drivers/hsi/controllers/omap_ssi_core.c
++++ b/drivers/hsi/controllers/omap_ssi_core.c
+@@ -538,9 +538,9 @@ static int ssi_probe(struct platform_device *pd)
+ 	device_for_each_child(&pd->dev, NULL, ssi_remove_ports);
+ out2:
+ 	ssi_remove_controller(ssi);
++	pm_runtime_disable(&pd->dev);
+ out1:
+ 	platform_set_drvdata(pd, NULL);
+-	pm_runtime_disable(&pd->dev);
+ 
+ 	return err;
+ }
+-- 
+2.25.1
 
-  lib/kunit/string-stream.c
-
-between commit:
-
-  618887768bb7 ("kunit: update NULL vs IS_ERR() tests")
-
-from the kunit-fixes tree and commit:
-
-  29ad37f740d3 ("kunit: alloc_string_stream_fragment error handling bug fix=
-")
-
-from the kunit-next tree.
-
-I fixed it up (I used the former part of the conflict) and can carry the
-fix as necessary. This is now fixed as far as linux-next is concerned,
-but any non trivial conflicts should be mentioned to your upstream
-maintainer when your tree is submitted for merging.  You may also want
-to consider cooperating with the maintainer of the conflicting tree to
-minimise any particularly complex conflicts.
-
---=20
-Cheers,
-Stephen Rothwell
-
---Sig_/tQCdwl_qW=k2iiGGtGF40E+
-Content-Type: application/pgp-signature
-Content-Description: OpenPGP digital signature
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNgkwUACgkQAVBC80lX
-0GxREAgAhEGpr1iIBpGLjPa8sLRhB1vYqU+QexlMqoe+dEHhcyxLyWccB3E4HYyF
-trOUNIyrVrJrYZ+0Cpy0un3NyR680wrK+QcuACPwh45bcK2hoiWi0s+Pb3OzpFP5
-U5no8DGBnuK3s0g4xVt9tQjaud6EBinLxayy8gifDQtxYFXi23xlhOLQwsnkZrMI
-SDTYqcQyh+SrxUDoYbmoQBWD4kZfPoZt735vVaKXEBOiqo/pjVwHpyTKc4Pqiwva
-NjnvSpArF977Q8c6rlnLnK3Qry6gTsMPP62UQ9jcLUg9Lb/hhjYZjdcMOa2aZ0Yn
-+ezTr5bcIWSD7BF5GJi0ZyEB857GwA==
-=3fkm
------END PGP SIGNATURE-----
-
---Sig_/tQCdwl_qW=k2iiGGtGF40E+--
