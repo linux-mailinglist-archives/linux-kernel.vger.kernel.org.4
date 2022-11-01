@@ -2,129 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0201C61449C
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 07:24:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BAB016144A0
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 07:25:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229930AbiKAGYV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 02:24:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47148 "EHLO
+        id S229941AbiKAGZr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 02:25:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229641AbiKAGYS (ORCPT
+        with ESMTP id S229641AbiKAGZp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 02:24:18 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 86DB913DD7
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 23:24:16 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id kt23so34699886ejc.7
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 23:24:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=telus.net; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=0LLx4Ifa4+PSEGpr0FQ+28GXR7ZIhAE1v1s6IMskmnU=;
-        b=DWZFRdtYK/P/3ZIO7X+Nq0goFrrxDVcePCn514GOND4IeIilSDrw/7c5szBUPveT3N
-         88T20ZQj9zXctkSmrbeszLsyoLbY9Hh1l5/ZtXR4m5Mf/KPH3RmOB8SYwG9e5UW9Jh9V
-         qxf0Y7ztD1AnMwwKo1Ib0wc9J1c5I/mdkJervmGJ/X/7EoMScSiQNtICDgd2D8pkQx30
-         kiIKRjBhk9/SZsqowbaON6E622YYTVgP5yUgWCDJ9qREmo/1CGkPoB9VhP29OwALsxLV
-         Fd4TF7QYqvtwgvojOhZy5RaWgZ5Ndx0keYLBQ30z38R548R4ToM04QiBmz1X/AV33udI
-         vNOA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=0LLx4Ifa4+PSEGpr0FQ+28GXR7ZIhAE1v1s6IMskmnU=;
-        b=TSHapDjOcY72KlzuY3K1nYVYhecuBZC8I6GFMXOuzFI4UM2H4ouV3OM/KilHqzEsmS
-         TnEpYGBlP34jlHZQfKv8iyg5GEwhJZZyIAxNFbgvhIwUrwSc9DvQE10xl52GQ70KCqLf
-         7/RYBP0EhkWBBB1rIUczG4OnsHXyFRcKEScH+F7kq4ZRhgUdGIfRTrrAszmoNoleKk1z
-         kz0MmrKGWB1W83ACmARsQ267CPKZKCtEPhwMU43WvDcRncJYgUqH6dPdWPIJlMFdpuve
-         WKe/ZIE/3edu7Z3GGeQU1ri3R7O/hN7C/IoC5oIq+tFWGcVkb4E1ivDr4sUTLfKkuYdu
-         yvgw==
-X-Gm-Message-State: ACrzQf0VJ1XNqipBiXpGG7Gzvi1RpDgqRaX4uDdOSXY0AOja3FNEPBAz
-        PRMNHUgHHAaeqFgLtV7Rsj0H6RdnEJL/fj11BSPu3w==
-X-Google-Smtp-Source: AMsMyM7Du0UIuYV+hwXaSlpQiq4ksOMny9Dob0AHjZWcMHGqbFi2FmFZLmBYdUbIlmkBFjT/Kus5krOvDsKTnAJBQm0=
-X-Received: by 2002:a17:907:6d9c:b0:7ad:b45c:dc18 with SMTP id
- sb28-20020a1709076d9c00b007adb45cdc18mr15338182ejc.406.1667283855131; Mon, 31
- Oct 2022 23:24:15 -0700 (PDT)
+        Tue, 1 Nov 2022 02:25:45 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB6C120BE;
+        Mon, 31 Oct 2022 23:25:44 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id AA81961558;
+        Tue,  1 Nov 2022 06:25:43 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 82934C433C1;
+        Tue,  1 Nov 2022 06:25:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667283943;
+        bh=mlJmimxkA6At2KeXNHIHwlyw51azzVCcQYXn0odmMnM=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ZaYTGUAua51jIDMkF7n+sKxB/kviTU585ZQifuJ5LFoxdQUaZIiidKpIwcKwHgV03
+         PI+oq9Xpfhg0a7ObF4fVOLy11Nn146l2YrAMEoQSF9Umig0ZSwJYonqGZnQpoYxbVw
+         qs6MfwNNSEH8Y40eKytU4G9i5Kr1+48pEjLtqpeg=
+Date:   Tue, 1 Nov 2022 07:24:58 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Slark Xiao <slark_xiao@163.com>
+Cc:     mani@kernel.org, quic_hemantk@quicinc.com, bhelgaas@google.com,
+        loic.poulain@linaro.org, dnlplm@gmail.com, yonglin.tan@outlook.com,
+        mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org
+Subject: Re: Re: [PATCH v3] PCI: Add vendor ID for QUECTEL
+Message-ID: <Y2C7uhzVorUrfQA2@kroah.com>
+References: <20221101021052.7532-1-slark_xiao@163.com>
+ <Y2Ckm79PgcTcVVne@kroah.com>
+ <3af61b4.1f11.18431cf918d.Coremail.slark_xiao@163.com>
 MIME-Version: 1.0
-References: <20221031121314.1381472-1-kajetan.puchalski@arm.com> <20221031121314.1381472-3-kajetan.puchalski@arm.com>
-In-Reply-To: <20221031121314.1381472-3-kajetan.puchalski@arm.com>
-From:   Doug Smythies <dsmythies@telus.net>
-Date:   Mon, 31 Oct 2022 23:24:06 -0700
-Message-ID: <CAAYoRsUDxsbexq5KmNTk60Ki7V4q-LxHeCzJmm9DEB6O49ks2w@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 2/2] cpuidle: teo: Introduce util-awareness
-To:     Kajetan Puchalski <kajetan.puchalski@arm.com>
-Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com,
-        Dietmar.Eggemann@arm.com, yu.chen.surf@gmail.com,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Doug Smythies <dsmythies@telus.net>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3af61b4.1f11.18431cf918d.Coremail.slark_xiao@163.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Kajetan,
+On Tue, Nov 01, 2022 at 02:09:57PM +0800, Slark Xiao wrote:
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> 
+> At 2022-11-01 12:46:19, "Greg KH" <gregkh@linuxfoundation.org> wrote:
+> >On Tue, Nov 01, 2022 at 10:10:52AM +0800, Slark Xiao wrote:
+> >> n MHI driver, there are some companies' product still do not have their
+> >> own PCI vendor macro. So we add it here to make the code neat. Ref ID
+> >> could be found in link https://pcisig.com/membership/member-companies.
+> >> 
+> >> Signed-off-by: Slark Xiao <slark_xiao@163.com>
+> >> ---
+> >> v3: Separate different vendors into different patch.
+> >> 
+> >> v2: Update vendor ID to the right location sorted by numeric value.
+> >> ---
+> >>  drivers/bus/mhi/host/pci_generic.c | 6 +++---
+> >>  include/linux/pci_ids.h            | 2 ++
+> >>  2 files changed, 5 insertions(+), 3 deletions(-)
+> >> 
+> >> diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
+> >> index caa4ce28cf9e..81ae9c49ce2a 100644
+> >> --- a/drivers/bus/mhi/host/pci_generic.c
+> >> +++ b/drivers/bus/mhi/host/pci_generic.c
+> >> @@ -555,11 +555,11 @@ static const struct pci_device_id mhi_pci_id_table[] = {
+> >>  		.driver_data = (kernel_ulong_t) &mhi_telit_fn990_info },
+> >>  	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0308),
+> >>  		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx65_info },
+> >> -	{ PCI_DEVICE(0x1eac, 0x1001), /* EM120R-GL (sdx24) */
+> >> +	{ PCI_DEVICE(PCI_VENDOR_ID_QUECTEL, 0x1001), /* EM120R-GL (sdx24) */
+> >>  		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
+> >> -	{ PCI_DEVICE(0x1eac, 0x1002), /* EM160R-GL (sdx24) */
+> >> +	{ PCI_DEVICE(PCI_VENDOR_ID_QUECTEL, 0x1002), /* EM160R-GL (sdx24) */
+> >>  		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
+> >> -	{ PCI_DEVICE(0x1eac, 0x2001), /* EM120R-GL for FCCL (sdx24) */
+> >> +	{ PCI_DEVICE(PCI_VENDOR_ID_QUECTEL, 0x2001), /* EM120R-GL for FCCL (sdx24) */
+> >>  		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
+> >>  	/* T99W175 (sdx55), Both for eSIM and Non-eSIM */
+> >>  	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0ab),
+> >> diff --git a/include/linux/pci_ids.h b/include/linux/pci_ids.h
+> >> index b362d90eb9b0..3c91461bcfe4 100644
+> >> --- a/include/linux/pci_ids.h
+> >> +++ b/include/linux/pci_ids.h
+> >> @@ -2585,6 +2585,8 @@
+> >>  #define PCI_VENDOR_ID_TEKRAM		0x1de1
+> >>  #define PCI_DEVICE_ID_TEKRAM_DC290	0xdc29
+> >>  
+> >> +#define PCI_VENDOR_ID_QUECTEL		0x1eac
+> >
+> >Why did you ignore the comment at the top of this file saying that new
+> >entries are not needed to be added, especially for just one user?
+> >
+> >thanks,
+> >
+> >greg k-h
+> Hi Greg,
+>  Actually I didn't see this notice before committing this patch. I even discussed 
+> it with the maintainer for several times and nobody show me this rule.
+> I have a concern, some IOT module vendors, like QUECTEL, CINTERION(THALES),
+> SIERRA,ROLLING and so on, they only produce IOT modules without other 
+> hardware with PCIe  interface, and they applied for their own VID. But they
+> can't get a their own VENDOR MARCO? This seems unreasonable.
+> This change should be harmless and  make the code neat.
+> This is my opinion.
 
-On Mon, Oct 31, 2022 at 5:14 AM Kajetan Puchalski
-<kajetan.puchalski@arm.com> wrote:
+It causes a _LOT_ of churn and merge issues when everyone is adding new
+entries to a single file.  Which is why, 15+ years ago, we made the
+decision that if a vendor or device id is only needed in one file, then
+it should not be added to the pci_ids.h file.
 
-... [delete some]...
+No need to change that now, please just put the vendor id in the single
+driver that it is needed in.
 
->  /**
->   * teo_update - Update CPU metrics after wakeup.
->   * @drv: cpuidle driver containing state data.
-> @@ -303,7 +359,9 @@ static int teo_select(struct cpuidle_driver *drv, struct cpuidle_device *dev,
->         int i;
->
->         if (dev->last_state_idx >= 0) {
-> -               teo_update(drv, dev);
-> +               /* don't update metrics if the cpu was utilized during the last sleep */
-> +               if (!cpu_data->utilized)
-> +                       teo_update(drv, dev);
->                 dev->last_state_idx = -1;
->         }
+thanks,
 
-Ignoring the metrics is not the correct thing to do.
-Depending on the workflow, it can severely bias the idle states deeper
-than they should be because most of the needed information to select
-the appropriate shallow state is tossed out.
-
-Example 1:
-2 pairs of ping pongs = 4 threads
-Parameters chosen such that idle state 2 would be a most used state.
-CPU frequency governor: Schedutil.
-CPU frequency scaling driver: intel_cpufreq.
-HWP: Disabled
-Processor: i5-10600K (6 cores 12 cpus).
-Kernel: 6.1-rc3
-Run length: 1e8 cycles
-Idle governor:
-teo: 11.73 uSecs/loop ; idle state 1 ~3.5e6 exits/sec
-menu: 12.1 uSecs/loop ; idle state 1 ~3.3e6 exits/sec
-util-v3: 15.2 uSecs/loop ; idle state 1 ~200 exits/sec
-util-v4: 11.63 uSecs/loop ; idle state 1 ~3.5e6 exits/sec
-
-Where util-v4 is the same as this patch (util-v3) with the above code reverted.
-
-Note: less time per loop is better.
-
-Example 2: Same but parameters selected such that idle state 0 would
-be a most used idle state.
-Run Length: 4e8 cycles
-Idle governor:
-teo: 3.1 uSecs/loop ; idle state 0 ~1.2e6 exits/sec
-menu:  3.1 uSecs/loop ; idle state 0 ~1.3e6 exits/sec
-util-v3: 5.1 uSecs/loop ; idle state 0 ~4 exits/sec
-util-v4: ? uSecs/loop ; idle state 0 ~1.2e6 exits/sec (partial result)
-
-Note: the util-v4 test is still in progress, but it is late in my time
-zone. But I can tell from the idle state usage, which I can observe
-once per minute, that the issue is, at least mostly, fixed.
-
-... Doug
+greg k-h
