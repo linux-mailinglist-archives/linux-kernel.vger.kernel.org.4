@@ -2,140 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C520614E72
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 16:36:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 288BF614E7B
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 16:37:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbiKAPgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 11:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54270 "EHLO
+        id S231322AbiKAPhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 11:37:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55140 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230264AbiKAPf5 (ORCPT
+        with ESMTP id S230251AbiKAPhs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 11:35:57 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91EB618B35;
-        Tue,  1 Nov 2022 08:35:56 -0700 (PDT)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A1Eh09W023397;
-        Tue, 1 Nov 2022 08:35:44 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=75Fikn0ell3K3XFW9rWytIYn3Zx5mPG/Nu172ngiwog=;
- b=FJHvoI5jX9r3xCsFxlZJtR4ctdUwTHZl2IlOkFErGspz+7fqkrwiDyWj3dGMQ1PINoFE
- MBGTjPdGdTKquqZ9QZEWdYcgKs5opm6aFxXyWkPI8Fb9sdefjlzxW6dijF2IkrhiImLy
- xj4ip3Gw4H3ltoLw1ogRHtgIiF+gdhDTtwr+6t5UCoeERgbeZ2+HA6S1fkVwT9p945Ih
- 8x2JgvXacG2r/4umAfTMFW4dd+D1WQqBoVPY4dcuTlFSUFsHsGY55qJ0XUqCaJsc9kq8
- Wd5ee8D8it4L7e6ord5X3iKSHCJs1zp3PCDybNPFtbdV9f67NnfXq9jeq9AfRescGNXB Wg== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3kk5f8r8j6-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Tue, 01 Nov 2022 08:35:44 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Tue, 1 Nov
- 2022 08:35:42 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Tue, 1 Nov 2022 08:35:42 -0700
-Received: from sburla-PowerEdge-T630.caveonetworks.com (unknown [10.106.27.217])
-        by maili.marvell.com (Postfix) with ESMTP id 72DD93F7053;
-        Tue,  1 Nov 2022 08:35:42 -0700 (PDT)
-From:   Veerasenareddy Burru <vburru@marvell.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lironh@marvell.com>, <aayarekar@marvell.com>,
-        <sedara@marvell.com>, <sburla@marvell.com>
-CC:     Veerasenareddy Burru <vburru@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
+        Tue, 1 Nov 2022 11:37:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5A8019C0B;
+        Tue,  1 Nov 2022 08:37:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 66C8961645;
+        Tue,  1 Nov 2022 15:37:46 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D2A0C433D7;
+        Tue,  1 Nov 2022 15:37:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667317065;
+        bh=Cui/4MgtQLHs/m1tpB4yK9M7ZhzRBb+NXaKygznnO20=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=qgIPVcK8jni91Yfk7NEpm7FMBzi8jCLykbsBDaETFl2UCThpMrKAQBzXN/67dlRO8
+         WK8qWBXqmiPbT68X/uaKi3aegiqyAWqDAEozeoNjVkXem/Qj0X5IfUlzN3qI2vSd9L
+         OjJqRCjhJGQTEFZo/z085XzAswfpQEtPbNlG5gdV4Zv/rWvTRhTPNzUpPjlAJiIhYj
+         pY6uB67q7ixV1ND55DG58P2KNikArDUKleJ3g/3v99v3tO+PrQsi9AfXFgHID1nM4e
+         IMDexVYKzXZPuFYU6Nzy2D3G0Bc1taz6U5Fb8O5wi7//59dY+IYGNP5vzA0DxSahlr
+         b9T4pi0EGvAdQ==
+Date:   Tue, 1 Nov 2022 08:37:44 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     Jani Nikula <jani.nikula@intel.com>,
+        Cai Huoqing <cai.huoqing@linux.dev>
+Cc:     "David S. Miller" <davem@davemloft.net>,
         Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Subject: [PATCH] octeon_ep: support Octeon device CNF95N
-Date:   Tue, 1 Nov 2022 08:35:39 -0700
-Message-ID: <20221101153539.22630-1-vburru@marvell.com>
-X-Mailer: git-send-email 2.36.0
+        Paolo Abeni <pabeni@redhat.com>,
+        Zhengchao Shao <shaozhengchao@huawei.com>,
+        SeongJae Park <sj@kernel.org>,
+        Bin Chen <bin.chen@corigine.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2 2/2] net: hinic: Add control command support
+ for VF PMD driver in DPDK
+Message-ID: <20221101083744.7b0e9e5a@kernel.org>
+In-Reply-To: <87a65a97fw.fsf@intel.com>
+References: <20221101060358.7837-1-cai.huoqing@linux.dev>
+        <20221101060358.7837-2-cai.huoqing@linux.dev>
+        <87iljz7y0n.fsf@intel.com>
+        <20221101121734.GA6389@chq-T47>
+        <87a65a97fw.fsf@intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: XJM2dSwErgz-aoz6nJGjYg14RfyixfIT
-X-Proofpoint-ORIG-GUID: XJM2dSwErgz-aoz6nJGjYg14RfyixfIT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-01_07,2022-11-01_02,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for Octeon device CNF95N.
-CNF95N is a Octeon Fusion family product with same PCI NIC
-characteristics as CN93 which is currently supported by the driver.
+On Tue, 01 Nov 2022 14:37:39 +0200 Jani Nikula wrote:
+> On Tue, 01 Nov 2022, Cai Huoqing <cai.huoqing@linux.dev> wrote:
+> > On 01 11=E6=9C=88 22 12:46:32, Jani Nikula wrote: =20
+> >> Out of curiosity, what exactly compelled you to Cc me on this particul=
+ar
+> >> patch? I mean there aren't a whole lot of places in the kernel that
+> >> would be more off-topic for me. :) =20
+> > run ./scripts/get_maintainer.pl this patch in net-next
+> > then get your email
+> > Jani Nikula <jani.nikula@intel.com> (commit_signer:1/8=3D12%)
+> > Maybe you have some commits in net subsystem ? =20
+>=20
+> A grand total of 3 commits in drivers/net/wireless/ath/ two years ago,
+> adding 3 const keywords, nowhere near of what you're changing.
+>=20
+> get_maintainer.pl is utterly broken to suggest I should be Cc'd.
 
-Signed-off-by: Veerasenareddy Burru <vburru@marvell.com>
----
- .../ethernet/marvell/octeon_ep/octep_main.c   | 19 ++++++++++++++++---
- .../ethernet/marvell/octeon_ep/octep_main.h   |  2 ++
- 2 files changed, 18 insertions(+), 3 deletions(-)
+Apparently is because you acked commit 8581fd402a0c ("treewide: Add
+missing includes masked by cgroup -> bpf dependency").
+This random driver is obviously was not the part you were acking but
+heuristics :/
 
-diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-index 9089adcb75f9..e956c1059fc8 100644
---- a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-+++ b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-@@ -23,6 +23,7 @@ struct workqueue_struct *octep_wq;
- /* Supported Devices */
- static const struct pci_device_id octep_pci_id_tbl[] = {
- 	{PCI_DEVICE(PCI_VENDOR_ID_CAVIUM, OCTEP_PCI_DEVICE_ID_CN93_PF)},
-+	{PCI_DEVICE(PCI_VENDOR_ID_CAVIUM, OCTEP_PCI_DEVICE_ID_CNF95N_PF)},
- 	{0, },
- };
- MODULE_DEVICE_TABLE(pci, octep_pci_id_tbl);
-@@ -907,6 +908,18 @@ static void octep_ctrl_mbox_task(struct work_struct *work)
- 	}
- }
- 
-+static const char *octep_devid_to_str(struct octep_device *oct)
-+{
-+	switch (oct->chip_id) {
-+	case OCTEP_PCI_DEVICE_ID_CN93_PF:
-+		return "CN93XX";
-+	case OCTEP_PCI_DEVICE_ID_CNF95N_PF:
-+		return "CNF95N";
-+	default:
-+		return "Unsupported";
-+	}
-+}
-+
- /**
-  * octep_device_setup() - Setup Octeon Device.
-  *
-@@ -939,9 +952,9 @@ int octep_device_setup(struct octep_device *oct)
- 
- 	switch (oct->chip_id) {
- 	case OCTEP_PCI_DEVICE_ID_CN93_PF:
--		dev_info(&pdev->dev,
--			 "Setting up OCTEON CN93XX PF PASS%d.%d\n",
--			 OCTEP_MAJOR_REV(oct), OCTEP_MINOR_REV(oct));
-+	case OCTEP_PCI_DEVICE_ID_CNF95N_PF:
-+		dev_info(&pdev->dev, "Setting up OCTEON %s PF PASS%d.%d\n",
-+			 octep_devid_to_str(oct), OCTEP_MAJOR_REV(oct), OCTEP_MINOR_REV(oct));
- 		octep_device_setup_cn93_pf(oct);
- 		break;
- 	default:
-diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_main.h b/drivers/net/ethernet/marvell/octeon_ep/octep_main.h
-index 025626a61383..123ffc13754d 100644
---- a/drivers/net/ethernet/marvell/octeon_ep/octep_main.h
-+++ b/drivers/net/ethernet/marvell/octeon_ep/octep_main.h
-@@ -21,6 +21,8 @@
- #define  OCTEP_PCI_DEVICE_ID_CN93_PF 0xB200
- #define  OCTEP_PCI_DEVICE_ID_CN93_VF 0xB203
- 
-+#define  OCTEP_PCI_DEVICE_ID_CNF95N_PF 0xB400    //95N PF
-+
- #define  OCTEP_MAX_QUEUES   63
- #define  OCTEP_MAX_IQ       OCTEP_MAX_QUEUES
- #define  OCTEP_MAX_OQ       OCTEP_MAX_QUEUES
--- 
-2.36.0
-
+Cai Huoqing FWIW we recommend adding --git-min-percent 25 when running
+get_maintainers, otherwise there's all sorts of noise that gets in.
