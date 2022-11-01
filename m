@@ -2,133 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EF737615478
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 22:54:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E040615479
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 22:54:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbiKAVyU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 17:54:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36336 "EHLO
+        id S230390AbiKAVyX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 17:54:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiKAVyR (ORCPT
+        with ESMTP id S229954AbiKAVyT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 17:54:17 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 48DCB26F4
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 14:54:16 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id t25so40558238ejb.8
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 14:54:16 -0700 (PDT)
+        Tue, 1 Nov 2022 17:54:19 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97CA52DF9
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 14:54:17 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id c2so14796336plz.11
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 14:54:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Ifr2udJQaykytNB8WSuWQEM/D/tWuwVDxhVVtYTxuG8=;
-        b=WHSj1s3RA0vwjR99/GJ4uAjcFD8u1uXQuvv7saw5RYWmUgG46nLc7CyDa08YDbqYgq
-         AiAI0cpKPA+D/InnucH5k3hJ3Azx/IzCVIc4zLpY7WUcV9AATllpBSps+JDcacQCBcTa
-         eiCVG6GXxj2G73byshAFtbVg9+oxs37rjEZlfPOH44ejSE8xBR5+wvCFsFGRYDQK8H2Y
-         8c0MyFV63Zn9EZ0acrNn6hGS9nMsth6PtAJzXrdPfh6GItbkc/12+2dtLVreenpPt0Mp
-         NnQGcRgD4zvf0RRaIgYMzU2mrftJqewg/pTf9+0Sh2eCXTLreM0iZWO0HTb9o0BWvxuk
-         sA2g==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=GA8q7YVJ2PrEh80a5RzqM/oJzGj5JG0NgG09XRsMdqg=;
+        b=JkZ+NC3LNfYR65ttedUVvXPCnV5s6itLxeP+NXZl9F+Hf2bi7IyxEl7/jUySG1Xjhe
+         JqrcWbR3x+hL6Zr6k+XJrs31lcGRbWs9g5gNYujB0mhay/HUyNl68ZnjyhG6g1xE/v67
+         ReYOIHvuBeyDa/kXn0GjMwwiX+LBbz10PDs/Q=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Ifr2udJQaykytNB8WSuWQEM/D/tWuwVDxhVVtYTxuG8=;
-        b=OJaZAY0Lk7dzpXiVlexGXKQQCLYUlXk/duQS4rvVJ4bSLiij4r2x/NRjKT8MaOkK8L
-         4fmB49caea5APHWixzj82HmhNelbkhHVP3QJ9SpsR0YMLX81YN3Oe0BmnDGeeRbGwj/q
-         J3bIDPE+8Ix0lupqMRQn4jilxWFPHePSERJEGD/h888Dh0srNVwg6J8B2o/cO0Jbg3kQ
-         H9K1jfMc6Uuvxrmd1UmK3XaI4IobzYi9EJVcwX5tJ/656BHaOln31C3mTtVUA0sPA/xW
-         9M7ukdtyQL//UMrOxbnD1tVqoqi30rEK99J8M3SazrE2N6NInhdOpVTbIsz4ObClIX92
-         /M0g==
-X-Gm-Message-State: ACrzQf2W5E9S7lPU490O4PbYJ48ESZQ4wsBb817Y3EgphcuktQLvj1do
-        7hFxOZShOiyn9io3InYCmQE=
-X-Google-Smtp-Source: AMsMyM50IGdCSOamunZKGC5uD89LokM+MpbjYBTKKc038M5wHgwEvNmfkzJyGeY/kDyRtuqZEaO/vA==
-X-Received: by 2002:a17:906:4917:b0:7ad:f9d6:9435 with SMTP id b23-20020a170906491700b007adf9d69435mr2270312ejq.238.1667339654824;
-        Tue, 01 Nov 2022 14:54:14 -0700 (PDT)
-Received: from ZBook.localdomain (86-90-194-80.fixed.kpn.net. [86.90.194.80])
-        by smtp.gmail.com with ESMTPSA id cq11-20020a056402220b00b00458478a4295sm692684edb.9.2022.11.01.14.54.14
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GA8q7YVJ2PrEh80a5RzqM/oJzGj5JG0NgG09XRsMdqg=;
+        b=oBRCLLEbDH7nPPZfwChYyqxkV37XqxljWDglC/tRfkR7lpgOQmfivUSPfdy4KyXrqj
+         sYzz9Ut/5Ee5t0OfPKdsvFJLmH54+M4YjFQ2rUXXMEICFaFYzPlecNegD0P7kYpDNEaT
+         A1uiqL1pjtMiqTGU/JjlR7a5VnPiS9GCwNuBG2hXwYcxQbXmnIQwDHe8tio0WqKORuSF
+         C6gs5NddJhX6O9BU2vgpMyVK5XsgmFes7tOgug5ACBw9gNa+XXiINpmxtqo1fJRKL/EI
+         ptFamLdqoZ5kPO08qzPyF1jZsmcyzTrAr5t3MUj1SzigDE7YGkHvTox0k9M2ltS7nnFz
+         epOA==
+X-Gm-Message-State: ACrzQf2wagd/TvDhY413YeCAew1/99QgplmvjusAh6nfzYVUZ5yfI56b
+        5tVYRo0Mrs3tQ1l3ONVNCfQkwA==
+X-Google-Smtp-Source: AMsMyM5OvRjW3oHM3Bghe5cW2+FRx8fyhjBnToJnwrbr0Jg8a5Y/wWRZYIgidp7GwXYqel1nldMV0g==
+X-Received: by 2002:a17:903:200b:b0:186:892f:9f0b with SMTP id s11-20020a170903200b00b00186892f9f0bmr21292591pla.56.1667339657068;
+        Tue, 01 Nov 2022 14:54:17 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id w18-20020a170902e89200b0017f92246e4dsm6817494plg.181.2022.11.01.14.54.16
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 14:54:14 -0700 (PDT)
-From:   Jerom van der Sar <jerom.vandersar@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     philipp.g.hortmann@gmail.com, error27@gmail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Jerom van der Sar <jerom.vandersar@gmail.com>
-Subject: [PATCH v2] staging: rtl8192e: space formatting fixes in rtl_cam.c
-Date:   Tue,  1 Nov 2022 22:52:47 +0100
-Message-Id: <20221101215246.4442-1-jerom.vandersar@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <7d001a49-4e45-fda2-15fe-b05f2c340eaa@gmail.com>
-References: <7d001a49-4e45-fda2-15fe-b05f2c340eaa@gmail.com>
+        Tue, 01 Nov 2022 14:54:16 -0700 (PDT)
+Date:   Tue, 1 Nov 2022 14:54:15 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Alex Deucher <alexdeucher@gmail.com>
+Cc:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
+        Alex Deucher <alexander.deucher@amd.com>,
+        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        linux-hardening@vger.kernel.org
+Subject: Re: [PATCH v2] [next] drm/radeon: Replace one-element array with
+ flexible-array member
+Message-ID: <202211011443.7BDB243D8D@keescook>
+References: <Y1trhRE3nK5iAY6q@mail.google.com>
+ <Y1yetX1CHsr+fibp@mail.google.com>
+ <CADnq5_Mod90O=tN26+Yi74WPYxpVtss+LG_+_HZyFv2EtzR+MA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CADnq5_Mod90O=tN26+Yi74WPYxpVtss+LG_+_HZyFv2EtzR+MA@mail.gmail.com>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixed a few coding style issues in rtl_cam.c such as double blank lines
-and lack of spaces around binary operators. Some other warnings still
-remain. These issues were found by scripts/checkpatch.pl.
+On Tue, Nov 01, 2022 at 10:42:14AM -0400, Alex Deucher wrote:
+> On Fri, Oct 28, 2022 at 11:32 PM Paulo Miguel Almeida
+> <paulo.miguel.almeida.rodenas@gmail.com> wrote:
+> >
+> > One-element arrays are deprecated, and we are replacing them with
+> > flexible array members instead. So, replace one-element array with
+> > flexible-array member in struct _ATOM_FAKE_EDID_PATCH_RECORD and
+> > refactor the rest of the code accordingly.
+> >
+> > It's worth mentioning that doing a build before/after this patch results
+> > in no binary output differences.
+> >
+> > This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> > routines on memcpy() and help us make progress towards globally
+> > enabling -fstrict-flex-arrays=3 [1].
+> 
+> This seems like a worthy goal, and I'm not opposed to the patch per
+> se, but it seems a bit at odds with what this header represents.
+> atombios.h represents the memory layout of the data stored in the ROM
+> on the GPU.  This changes the memory layout of that ROM.  We can work
 
-This patch helps clean up the rtl8192e driver in staging, making it
-easier to read and maintain.
+It doesn't though. Or maybe I'm misunderstanding what you mean.
 
-Signed-off-by: Jerom van der Sar <jerom.vandersar@gmail.com>.
----
-Changes in v2:
-  - Reverted some formatting fixes to make the diff easier to review.
+> around that in the driver code, but if someone were to take this
+> header to try and write some standalone tool or use it for something
+> else in the kernel, it would not reflect reality.
 
- drivers/staging/rtl8192e/rtl8192e/rtl_cam.c | 7 ++-----
- 1 file changed, 2 insertions(+), 5 deletions(-)
+Does the ROM always only have a single byte there? This seems unlikely
+given the member "ucFakeEDIDLength" (and the code below).
 
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c b/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c
-index 41faeb4b9b9b..d5aaf24a0ddb 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c
-@@ -17,7 +17,7 @@ void rtl92e_cam_reset(struct net_device *dev)
- {
- 	u32 ulcommand = 0;
- 
--	ulcommand |= BIT31|BIT30;
-+	ulcommand |= BIT31 | BIT30;
- 	rtl92e_writel(dev, RWCAM, ulcommand);
- }
- 
-@@ -40,7 +40,6 @@ void rtl92e_enable_hw_security_config(struct net_device *dev)
- 		SECR_value |= SCR_TxUseDK;
- 	}
- 
--
- 	ieee->hwsec_active = 1;
- 	if ((ieee->pHTInfo->iot_action & HT_IOT_ACT_PURE_N_MODE) || !hwwep) {
- 		ieee->hwsec_active = 0;
-@@ -104,10 +103,9 @@ void rtl92e_set_key(struct net_device *dev, u8 EntryNo, u8 KeyIndex,
- 	else
- 		usConfig |= BIT15 | (KeyType<<2) | KeyIndex;
- 
--
- 	for (i = 0; i < CAM_CONTENT_COUNT; i++) {
- 		TargetCommand  = i + CAM_CONTENT_COUNT * EntryNo;
--		TargetCommand |= BIT31|BIT16;
-+		TargetCommand |= BIT31 | BIT16;
- 
- 		if (i == 0) {
- 			TargetContent = (u32)(*(MacAddr+0)) << 16 |
-@@ -152,7 +150,6 @@ void rtl92e_cam_restore(struct net_device *dev)
- 
- 	if ((priv->rtllib->pairwise_key_type == KEY_TYPE_WEP40) ||
- 	    (priv->rtllib->pairwise_key_type == KEY_TYPE_WEP104)) {
--
- 		for (EntryId = 0; EntryId < 4; EntryId++) {
- 			MacAddr = CAM_CONST_ADDR[EntryId];
- 			if (priv->rtllib->swcamtable[EntryId].bused) {
+The problem on the kernel side is that the code just before the patch
+context in drivers/gpu/drm/amd/amdgpu/atombios_encoders.c will become
+a problem soon:
+
+        if (fake_edid_record->ucFakeEDIDLength) {
+                struct edid *edid;
+                int edid_size =
+                        max((int)EDID_LENGTH, (int)fake_edid_record->ucFakeEDIDLength);
+                edid = kmalloc(edid_size, GFP_KERNEL);
+                if (edid) {
+                        memcpy((u8 *)edid, (u8 *)&fake_edid_record->ucFakeEDIDString[0],
+                               fake_edid_record->ucFakeEDIDLength);
+
+                        if (drm_edid_is_valid(edid)) {
+	...
+
+the memcpy() from "fake_edid_record->ucFakeEDIDString" will eventually
+start to WARN, since the size of that field will be seen as a single byte
+under -fstrict-flex-arrays. At this moment, no, there's neither source
+bounds checking nor -fstrict-flex-arrays, but we're trying to clean up
+everything we can find now so that we don't have to do this all again
+later. :)
+
+-Kees
+
+P.S. Also this could be shorter with fewer casts:
+
+                struct edid *edid;
+                u8 edid_size =
+                        max_t(u8, EDID_LENGTH, fake_edid_record->ucFakeEDIDLength);
+                edid = kmemdup(fake_edid_record->ucFakeEDIDString, edid_size, GFP_KERNEL);
+                if (edid) {
+                        if (drm_edid_is_valid(edid)) {
+                                adev->mode_info.bios_hardcoded_edid = edid;
+	...
+
 -- 
-2.34.1
-
+Kees Cook
