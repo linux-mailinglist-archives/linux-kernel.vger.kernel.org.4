@@ -2,125 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 686D5614A0D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:56:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2E294614A0E
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:56:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230216AbiKAL4o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 07:56:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48000 "EHLO
+        id S229553AbiKAL4y convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Tue, 1 Nov 2022 07:56:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48182 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230073AbiKAL4k (ORCPT
+        with ESMTP id S230303AbiKAL4u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 07:56:40 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 266B3C43;
-        Tue,  1 Nov 2022 04:56:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id CA2D7B81C9C;
-        Tue,  1 Nov 2022 11:56:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C81EBC433C1;
-        Tue,  1 Nov 2022 11:56:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667303797;
-        bh=3Gbw2UZZJhp39VIc/j5rzxNESBVTn6BHioH52Hr/85s=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=b0X8TrGomHpyhbg89JghPX9JWhpRs2+olb67gQK12Z9tmwl3FzmWIUaOio3TNtQKx
-         /2mJwBcfPwfzrUOVc2LruqdvMTkWax95l4sx/NycJo2uwl03tGOzoXgnJs1h0pwLvI
-         mC8iA3tJmpC3ph+OYzHwvJEQG/f+Jh6tXPfq0TG86PkwujL6j6aqHHEo4Ne1vKx5Vl
-         gOVKUJQ5HOShc6sPW3e0V7zQ9ZPKT44rGgRxngWB8GRj76jh0cdUOZk8w58JwuDB/V
-         4vT13cuJiDSnhrehI1FPHLFFaANgIsGKHmltnIIpfz/x3x9glwQlfUB8Iuleb/p6cp
-         F0zx+eMQkiJlg==
-Date:   Tue, 1 Nov 2022 17:26:21 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Frank Li <Frank.Li@nxp.com>
-Cc:     allenbh@gmail.com, bhelgaas@google.com, dave.jiang@intel.com,
-        helgaas@kernel.org, imx@lists.linux.dev, jdmason@kudzu.us,
-        kw@linux.com, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, lpieralisi@kernel.org,
-        ntb@lists.linux.dev
-Subject: Re: [PATCH v14 2/7] PCI: endpoint: pci-epf-vntb: Fix indentation of
- the struct epf_ntb_ctrl
-Message-ID: <20221101115621.GF54667@thinkpad>
-References: <20221028155703.318928-1-Frank.Li@nxp.com>
- <20221028155703.318928-3-Frank.Li@nxp.com>
+        Tue, 1 Nov 2022 07:56:50 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F24CF637A
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 04:56:47 -0700 (PDT)
+Received: from canpemm100008.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N1pQM5HP5zHtf8;
+        Tue,  1 Nov 2022 19:56:27 +0800 (CST)
+Received: from canpemm500005.china.huawei.com (7.192.104.229) by
+ canpemm100008.china.huawei.com (7.192.104.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 1 Nov 2022 19:56:40 +0800
+Received: from canpemm500005.china.huawei.com ([7.192.104.229]) by
+ canpemm500005.china.huawei.com ([7.192.104.229]) with mapi id 15.01.2375.031;
+ Tue, 1 Nov 2022 19:56:40 +0800
+From:   zhaogongyi <zhaogongyi@huawei.com>
+To:     kernel test robot <yujie.liu@intel.com>
+CC:     "oe-lkp@lists.linux.dev" <oe-lkp@lists.linux.dev>,
+        "lkp@intel.com" <lkp@intel.com>,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>
+Subject: Re: [linus:master] [selftests/memory] 13023c33c9:
+ kernel-selftests.memory-hotplug.mem-on-off-test.sh.fail
+Thread-Topic: [linus:master] [selftests/memory] 13023c33c9:
+ kernel-selftests.memory-hotplug.mem-on-off-test.sh.fail
+Thread-Index: Adjt4wESSc/+YfD2QFSTt9INW1YibAABRaug
+Date:   Tue, 1 Nov 2022 11:56:40 +0000
+Message-ID: <983aef2332ee47e3abb3efae1290a4b5@huawei.com>
+Accept-Language: zh-CN, en-US
+Content-Language: zh-CN
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+x-originating-ip: [10.67.110.209]
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 8BIT
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221028155703.318928-3-Frank.Li@nxp.com>
-X-Spam-Status: No, score=-5.7 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no
-        version=3.4.6
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 11:56:58AM -0400, Frank Li wrote:
-> From: Frank Li <frank.li@nxp.com>
+Hi!
+
+
 > 
-> Indentation of the struct epf_ntb_ctrl align with other struct
+> Hi!
 > 
-
-"Align the indentation of struct epf_ntb_ctrl with other structs in the driver"
-
-> Signed-off-by: Frank Li <frank.li@nxp.com>
-> ---
->  drivers/pci/endpoint/functions/pci-epf-vntb.c | 28 +++++++++----------
->  1 file changed, 14 insertions(+), 14 deletions(-)
+> >
+> > Hi Gongyi,
+> >
+> > We noticed that below commit may change the exit status of
+> > memory-hotplug selftest, please check if the test result is expected.
+> >
+> > We got same test log before this commit but with a good exit, though
+> > there were also some "Invalid argument" and "unexpected success" log.
+> > Please help give some guidance if there are any problems in our test
+> flow.
+> > Thanks.
+> >
+> >
+> > Greeting,
+> >
+> > FYI, we noticed
+> > kernel-selftests.memory-hotplug.mem-on-off-test.sh.fail
+> > due to commit (built with gcc-11):
+> >
+> > commit: 13023c33c962730a38d6b43995910c8805637a9a
+> > ("selftests/memory-hotplug: Add checking after online or offline")
+> > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+> >
+> > in testcase: kernel-selftests
+> > version: kernel-selftests-x86_64-9313ba54-1_20221017
+> > with following parameters:
+> >
+> > 	group: memory-hotplug
+> >
+> > test-description: The kernel contains a set of "self tests" under the
+> > tools/testing/selftests/ directory. These are intended to be small
+> > unit tests to exercise individual code paths in the kernel.
+> > test-url: https://www.kernel.org/doc/Documentation/kselftest.txt
+> >
+> >
+> > on test machine: 8 threads Intel(R) Core(TM) i7-6700 CPU @ 3.40GHz
+> > (Skylake) with 28G memory
+> >
+> > caused below changes (please refer to attached dmesg/kmsg for entire
+> > log/backtrace):
+> >
+> >
+> > 2022-10-28 01:04:44 make quicktest=1 run_tests -C memory-hotplug
+> > make: Entering directory
+> >
+> '/usr/src/perf_selftests-x86_64-rhel-8.3-kselftests-13023c33c962730a38
+> > d6b43995910c8805637a9a/tools/testing/selftests/memory-hotplug'
+> > TAP version 13
+> > 1..1
+> > # selftests: memory-hotplug: mem-on-off-test.sh # Test scope: 2%
+> > hotplug memory
+> > # 	 online all hot-pluggable memory in offline state:
+> > # 		 SKIPPED - no hot-pluggable memory in offline state
+> > # 	 offline 2% hot-pluggable memory in online state
+> > # 	 trying to offline 5 out of 224 memory block(s):
+> > # online->offline memory0
+> > # ./mem-on-off-test.sh: line 78: echo: write error: Invalid argument #
+> > offline_memory_expect_success 0: unexpected fail # online->offline
+> > memory1 # online->offline memory10 # online->offline memory100 #
+> > online->offline memory101 # online->offline memory102
+> > # 	 online all hot-pluggable memory in offline state:
+> > # offline->online memory1
+> > # offline->online memory10
+> > # offline->online memory100
+> > # offline->online memory101
+> > # offline->online memory102
+> > # 	 Test with memory notifier error injection
+> > # ./mem-on-off-test.sh: line 267: echo: write error: Invalid argument
+> > #
 > 
-> diff --git a/drivers/pci/endpoint/functions/pci-epf-vntb.c b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> index c0115bcb3b5e..1863006cc36c 100644
-> --- a/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> +++ b/drivers/pci/endpoint/functions/pci-epf-vntb.c
-> @@ -99,20 +99,20 @@ enum epf_ntb_bar {
->   *       NTB Driver               NTB Driver
->   */
->  struct epf_ntb_ctrl {
-> -	u32     command;
-> -	u32     argument;
-> -	u16     command_status;
-> -	u16     link_status;
-> -	u32     topology;
-> -	u64     addr;
-> -	u64     size;
-> -	u32     num_mws;
-> -	u32	reserved;
-> -	u32     spad_offset;
-> -	u32     spad_count;
-> -	u32	db_entry_size;
-> -	u32     db_data[MAX_DB_COUNT];
-> -	u32     db_offset[MAX_DB_COUNT];
-> +	u32 command;
-> +	u32 argument;
-> +	u16 command_status;
-> +	u16 link_status;
-> +	u32 topology;
-> +	u64 addr;
-> +	u64 size;
-> +	u32 num_mws;
-> +	u32 reserved;
-> +	u32 spad_offset;
-> +	u32 spad_count;
-> +	u32 db_entry_size;
-> +	u32 db_data[MAX_DB_COUNT];
-> +	u32 db_offset[MAX_DB_COUNT];
-
-General question: Don't we need to take care of endianess here?
-
-Thanks,
-Mani
-
->  } __packed;
->  
->  struct epf_ntb {
-> -- 
-> 2.34.1
+> I can not reproduce the error according to the file 'reproduce'.
 > 
+> Line 267 is not runnable on my system. Is there something wrong here?
+> 
+> The code on my system like:
+> 
+> 266 #
+> 267 # Offline $ratio percent of hot-pluggable memory
+> 268 #
+> 269 echo 0 >
+> $NOTIFIER_ERR_INJECT_DIR/actions/MEM_GOING_OFFLINE/error
+> 270 for memory in `hotpluggable_online_memory`; do
+> 271         if [ $((RANDOM % 100)) -lt $ratio ]; then
+> 272                 offline_memory_expect_success $memory
+> &>/dev/null
+> 273         fi
+> 274 done
+> 
+> 
+> > online_memory_expect_fail 142: unexpected success #
+> > online_memory_expect_fail 190: unexpected success #
+> > ./mem-on-off-test.sh: line 287: echo: write error: Invalid argument #
+> 
+> The problem is similar with line 267.
+> 
+> > offline_memory_expect_fail 107: unexpected success #
+> 
+> It seems the error-inject not work.
 
--- 
-மணிவண்ணன் சதாசிவம்
+
+Oh, I see that the version you run the test is based on commit 13023c33c962730a38d6b43995910c8805637a9a, and there is a bug on lib/notifier-error-inject.c.
+
+The commit of the fix patch is c597d9054b13. 
+
+Your test version has no the fix patch, So the test failed as expected
+
+
+Regards,
+Gongyi
