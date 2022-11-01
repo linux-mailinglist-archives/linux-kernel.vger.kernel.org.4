@@ -2,70 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1CF8F6151D7
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 19:59:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7107F6151E0
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 20:02:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230201AbiKAS7C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 14:59:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33948 "EHLO
+        id S230210AbiKATCK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 15:02:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiKAS67 (ORCPT
+        with ESMTP id S229591AbiKATCH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 14:58:59 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 054571C933;
-        Tue,  1 Nov 2022 11:58:59 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id u6so14409602plq.12;
-        Tue, 01 Nov 2022 11:58:59 -0700 (PDT)
+        Tue, 1 Nov 2022 15:02:07 -0400
+Received: from mail-wm1-x329.google.com (mail-wm1-x329.google.com [IPv6:2a00:1450:4864:20::329])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0D521CFF1
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 12:02:04 -0700 (PDT)
+Received: by mail-wm1-x329.google.com with SMTP id bg9-20020a05600c3c8900b003bf249616b0so10460413wmb.3
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 12:02:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=jqgGYNiRUBQpbFO9gD8v/2mrLdOYGMPFEirI6ZSs87g=;
-        b=HJJXTszBeabJCT3UH77BoqQsPO9yKZ1VJmkW5UxQGQDIbzFAPq0Z7mYtaJkpcPNCpr
-         Q/syUcoenNxN5RbLOpFWzxxc7wXIzIH3uWXLu9ZOKt1O7BpFM81DI7hIPqFFPoAMoCU7
-         2/USqJ8AxBuD46j6PWs6Fbogm4c9xAl78D73E1nwjjULZY4VbLGsw4a1YQrdaNjeaxHP
-         uEVswBUUrmaek9nE4Dywa+YkXKrfZRxA9DEWX3CWG1vqPKprnHC2Rza5A0YYirAxAilt
-         Y26W5KU/ufXb5iN6qYG142w0asxCEcyQc7U6iCtUXebA78S75tYAYQtcie+47oe2mXRL
-         /jvg==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Mn4YfEQWKIJQD//Kju02cktaiRIU2F9W8PwX5XQiQMA=;
+        b=Ev57ZBkdyzQC3QaXmi4kVM9gOVMhmYqzkuihkS1E4rktQybXKfIBIuTVv3PENOdYrm
+         khvSeOtpsPLYeg3NlQzfJeuBNGzWAHUl69wjAwrmFS6RZ5wbbt+g/Ktufd31etI6zJq7
+         ihUBF14WJnJpTBTj8zd/0hXHjhvbKcFfmRAtOT73SAHpxt1Kz4mbPXZJ24of481ndoIn
+         2Ef6ZId1rWhq85jMlIVCMXYCPTEurt/fgGtUBfQgEOW1TF+Yb8zamJvT59TYYIoIY0U3
+         CCx94Q6ow4WgSl5gY8n6PG4xZlR4Mm9J2mS6qDCV1aSbJVn04BeHX7AstCpa8fRcsXDP
+         gYnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=jqgGYNiRUBQpbFO9gD8v/2mrLdOYGMPFEirI6ZSs87g=;
-        b=p3M7TsUBvL6J3XZC0/qYVoTpO6cyym6u4N80Dc77k5BX2Kcv6s3FQ124WNUt5GuZyE
-         jFX3kjBrBZ49/+Wq7j6s8e2HRWcoe6h04bo5tdizYJNmhuym/ELOlwPM4xaSussqS7SM
-         Y/Hb/tZYpwMhaxCk5s88oHarguSToOK2XwRCFA4JGYq08pUT2nNuv2re+0mH9Er8V8F0
-         SPX7Gbo6DEceLEronivTmVHXamie3jai8Ie4n+CxbShL9T9N8L0JaiGyEBMnwhOxMfHE
-         Do+BxRQjN+yCluvGYBGPF0Js2840eAAYuESeyUX/Mc8G4s93TywroWpV2/sl1EBVCeku
-         eQUA==
-X-Gm-Message-State: ACrzQf1EPy/iyelbTTaQt3BEIG0aiglIomqfsJF0huXSwscN9ZAJxWJm
-        OYqtkDaAq1vsazkhdBHp5fUeqDLhHx0=
-X-Google-Smtp-Source: AMsMyM7y3K02KULzlK5H2zB9uy/LMzaZg2eJA2R7koJzmxuDSpipihzu2kXlq9rdG8mH5nzyFemLDQ==
-X-Received: by 2002:a17:90a:f2cb:b0:213:9afa:d13a with SMTP id gt11-20020a17090af2cb00b002139afad13amr21267818pjb.180.1667329138323;
-        Tue, 01 Nov 2022 11:58:58 -0700 (PDT)
-Received: from google.com ([2620:15c:9d:2:a6ae:11ff:fe11:fcc3])
-        by smtp.gmail.com with ESMTPSA id c137-20020a624e8f000000b0056cee8af3a5sm6810127pfb.29.2022.11.01.11.58.57
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 11:58:57 -0700 (PDT)
-Date:   Tue, 1 Nov 2022 11:58:54 -0700
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Bo Liu <liubo03@inspur.com>
-Cc:     michael@amarulasolutions.com, dario.binacchi@amarulasolutions.com,
-        wsa+renesas@sang-engineering.com, oliver.graute@kococonnector.com,
-        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] Input: edt-ft5x06 - replace DEFINE_SIMPLE_ATTRIBUTE with
- DEFINE_DEBUGFS_ATTRIBUTE
-Message-ID: <Y2FsbufV00jbyF0B@google.com>
-References: <20221101081458.8119-1-liubo03@inspur.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Mn4YfEQWKIJQD//Kju02cktaiRIU2F9W8PwX5XQiQMA=;
+        b=m8mcyIlyDIRzisfP0Nt5sFnGktSvxV9u81YKaelX3tb6+3euLVanaaI9VBUfRwtzvA
+         pKU3Csls5IE2KdSx+qtbZd8dDAJr1PsFKfFShJ4A4/V9Wbwi9edCtkm8h7IWfcRfl0g1
+         YKAhoM9sKqzyWDAaSsF/mpB+J5YCcjXw1Fxe6VEyXbswpG+vmF58KHVK0pYgsUiZrNBe
+         GBNEU/RD2E1ZCoUia5Nx5uzuqfyYWbduycJy5SWs+K8ohDVaY75LfMYpfUCu6hN3MzC+
+         4lghj5epMiVmAIHGot6NZhs7ohz+thHvczey68ca7OsF9cNF1L2yoRr5gUPl6mbK/26L
+         h/uQ==
+X-Gm-Message-State: ACrzQf2OaolEvYgNKAsrDUp5xRHZGyQWBDmdYab7mk092g69EBtA13CY
+        kB0LC/NHgywb6ciOYAkWeVthdj2ZOl1aJVnW8YHb9A==
+X-Google-Smtp-Source: AMsMyM7+GVnmCAKMhr+dkuNYvoI/t1UfX+4nYpV1XlZp0R47EfT29ksTiyis4vC+n+46TcYTFLStz1bZh1jEAkCzE9s=
+X-Received: by 2002:a7b:cb17:0:b0:3cf:7801:c76f with SMTP id
+ u23-20020a7bcb17000000b003cf7801c76fmr6011483wmj.1.1667329323165; Tue, 01 Nov
+ 2022 12:02:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221101081458.8119-1-liubo03@inspur.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221031173819.1035684-1-vipinsh@google.com> <20221031173819.1035684-5-vipinsh@google.com>
+ <Y2AmgObslx57+uYt@google.com>
+In-Reply-To: <Y2AmgObslx57+uYt@google.com>
+From:   Vipin Sharma <vipinsh@google.com>
+Date:   Tue, 1 Nov 2022 12:01:26 -0700
+Message-ID: <CAHVum0fhangxMp5ysYdyoKVY+CKWeBAadMFX1V8MgqryRGHQrw@mail.gmail.com>
+Subject: Re: [PATCH v7 4/5] KVM: selftests: Add atoi_positive() and
+ atoi_non_negative() for input validation
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     pbonzini@redhat.com, dmatlack@google.com, andrew.jones@linux.dev,
+        wei.w.wang@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -73,41 +71,183 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Bo,
+On Mon, Oct 31, 2022 at 12:48 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Mon, Oct 31, 2022, Vipin Sharma wrote:
+> > diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
+> > index ec0f070a6f21..210e98a49a83 100644
+> > --- a/tools/testing/selftests/kvm/lib/test_util.c
+> > +++ b/tools/testing/selftests/kvm/lib/test_util.c
+> > @@ -353,3 +353,19 @@ int atoi_paranoid(const char *num_str)
+> >
+> >       return num;
+> >  }
+> > +
+> > +uint32_t atoi_positive(const char *num_str)
+>
+> I think it makes sense to inline atoi_positive() and atoi_non_negative() in
+> test_util.h.  Depending on developer's setups, it might be one less layer to jump
+> through to look at the implementation.
+>
 
-On Tue, Nov 01, 2022 at 04:14:58AM -0400, Bo Liu wrote:
-> Fix the following coccicheck warning:
->   drivers/input/touchscreen/edt-ft5x06.c:756:0-23: WARNING:
->     debugfs_mode_fops should be defined with DEFINE_DEBUGFS_ATTRIBUTE
+I am not sure if this makes life much easier for developers, as
+"inline" can totally be ignored by the compiler. Also, not sure how
+much qualitative improvement it will add in the developer's code
+browsing journey. Anyways, I will add "inline" in the next version.
 
-This is not a great justification for a change. Could you please update
-the patch description to document why DEFINE_DEBUGFS_ATTRIBUTE is
-preferred over DEFINE_SIMPLE_ATTRIBUTE?
+> > +{
+> > +     int num = atoi_paranoid(num_str);
+> > +
+> > +     TEST_ASSERT(num > 0, "%s is not a positive integer.\n", num_str);
+>
+> Newlines aren't needed in asserts.  This applies to atoi_paranoid() in the previous
+> patch as well (I initially missed them).
+>
 
-> 
-> Signed-off-by: Bo Liu <liubo03@inspur.com>
-> ---
->  drivers/input/touchscreen/edt-ft5x06.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/input/touchscreen/edt-ft5x06.c b/drivers/input/touchscreen/edt-ft5x06.c
-> index 9ac1378610bc..a184425b6985 100644
-> --- a/drivers/input/touchscreen/edt-ft5x06.c
-> +++ b/drivers/input/touchscreen/edt-ft5x06.c
-> @@ -753,7 +753,7 @@ static int edt_ft5x06_debugfs_mode_set(void *data, u64 mode)
->  	return retval;
->  };
->  
-> -DEFINE_SIMPLE_ATTRIBUTE(debugfs_mode_fops, edt_ft5x06_debugfs_mode_get,
-> +DEFINE_DEBUGFS_ATTRIBUTE(debugfs_mode_fops, edt_ft5x06_debugfs_mode_get,
->  			edt_ft5x06_debugfs_mode_set, "%llu\n");
->  
->  static ssize_t edt_ft5x06_debugfs_raw_data_read(struct file *file,
-> -- 
-> 2.27.0
-> 
+Okay, I will remove it from the previous patch also.
 
-Thanks.
+> > +     return num;
+> > +}
+> > +
+> > +uint32_t atoi_non_negative(const char *num_str)
+> > +{
+> > +     int num = atoi_paranoid(num_str);
+> > +
+> > +     TEST_ASSERT(num >= 0, "%s is not a non-negative integer.\n", num_str);
+> > +     return num;
+> > +}
+> > diff --git a/tools/testing/selftests/kvm/max_guest_memory_test.c b/tools/testing/selftests/kvm/max_guest_memory_test.c
+> > index 1595b73dc09a..20015de3b91c 100644
+> > --- a/tools/testing/selftests/kvm/max_guest_memory_test.c
+> > +++ b/tools/testing/selftests/kvm/max_guest_memory_test.c
+> > @@ -193,15 +193,14 @@ int main(int argc, char *argv[])
+> >       while ((opt = getopt(argc, argv, "c:h:m:s:H")) != -1) {
+> >               switch (opt) {
+> >               case 'c':
+> > -                     nr_vcpus = atoi_paranoid(optarg);
+> > -                     TEST_ASSERT(nr_vcpus > 0, "number of vcpus must be >0");
+> > +                     nr_vcpus = atoi_positive(optarg);
+>
+> I know I originally made the claim that the assert would provide enough context
+> to offest lack of a specific message, but after actually playing around with this,
+> past me was wrong.  E.g. this
+>
+>   Memory size must be greater than 0, got '-1'
+>
+> is much more helpful than
+>
+>   -1 is not a positive integer.
+>
+> E.g. something like this?
+>
+>   static inline uint32_t atoi_positive(const char *name, const char *num_str)
+>   {
+>         int num = atoi_paranoid(num_str);
+>
+>         TEST_ASSERT(num > 0, "%s must be greater than 0, got '%s'", name, num_str);
+>         return num;
+>   }
+>
+>   static inline uint32_t atoi_non_negative(const char *name, const char *num_str)
+>   {
+>         int num = atoi_paranoid(num_str);
+>
+>         TEST_ASSERT(num >= 0, "%s must be non-negative, got '%s'", name, num_str);
+>         return num;
+>   }
+>
+> IMO, that also makes the code slightly easier to follow as it's super obvious
+> what is being parsed.
+>
+>   p.wr_fract = atoi_positive("Write fraction", optarg);
+>
+>   p.iterations = atoi_positive("Number of iterations", optarg);
+>
+>   nr_vcpus = atoi_positive("Number of vCPUs", optarg);
+>
 
--- 
-Dmitry
+I will make this change. It is indeed better.
+
+> Last thought: my vote would be to ignore the 80 char soft limit when adding the
+> "name" to these calls, in every case except nr_memslot_modifications the overrun
+> is relatively minor and not worth wrapping.  See below for my thougts on that one.
+>
+> >                       break;
+> >               case 'm':
+> > -                     max_mem = atoi_paranoid(optarg) * size_1gb;
+> > +                     max_mem = atoi_positive(optarg) * size_1gb;
+> >                       TEST_ASSERT(max_mem > 0, "memory size must be >0");
+>
+> This assert can be dropped, max_mem is a uint64_t so wrapping to '0' is impossible.
+>
+
+I intentionally kept it, as it is also protecting against having
+accidently making size_1gb to 0.
+
+> >                       break;
+> >               case 's':
+> > -                     slot_size = atoi_paranoid(optarg) * size_1gb;
+> > +                     slot_size = atoi_positive(optarg) * size_1gb;
+>
+> Same thing here.
+>
+> >                       TEST_ASSERT(slot_size > 0, "slot size must be >0");
+> >                       break;
+> >               case 'H':
+> > diff --git a/tools/testing/selftests/kvm/memslot_modification_stress_test.c b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
+> > index 865276993ffb..7539ee7b6e95 100644
+> > --- a/tools/testing/selftests/kvm/memslot_modification_stress_test.c
+> > +++ b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
+> > @@ -175,7 +175,7 @@ int main(int argc, char *argv[])
+> >                       p.partition_vcpu_memory_access = false;
+> >                       break;
+>
+> memslot_modification_delay can be converted to atoi_non_negative(), it open codes
+> strtoul(), but the "long" part is unnecessary because memslot_modification_delay
+> is an "unsigned int", not an "unsigned long".
+>
+> >               case 'i':
+> > -                     p.nr_memslot_modifications = atoi_paranoid(optarg);
+> > +                     p.nr_memslot_modifications = atoi_positive(optarg);
+>
+> To avoid a ridiculously long line, my vote is to rename the test args.  The names
+> are rather odd irrespective of line length.  E.g. in a prep patch do
+>
+>   s/memslot_modification_delay/delay
+>   s/nr_memslot_modifications/nr_iterations
+>
+
+Okay, I will change this and any other places I find which can be shortened.
+
+> which yields parsing of:
+>
+>         while ((opt = getopt(argc, argv, "hm:d:b:v:oi:")) != -1) {
+>                 switch (opt) {
+>                 case 'm':
+>                         guest_modes_cmdline(optarg);
+>                         break;
+>                 case 'd':
+>                         p.delay = atoi_non_negative("Delay", optarg);
+>                         break;
+>                 case 'b':
+>                         guest_percpu_mem_size = parse_size(optarg);
+>                         break;
+>                 case 'v':
+>                         nr_vcpus = atoi_positive("Number of vCPUs", optarg);
+>                         TEST_ASSERT(nr_vcpus <= max_vcpus,
+>                                     "Invalid number of vcpus, must be between 1 and %d",
+>                                     max_vcpus);
+>                         break;
+>                 case 'o':
+>                         p.partition_vcpu_memory_access = false;
+>                         break;
+>                 case 'i':
+>                         p.nr_iterations = atoi_positive("Number of iterations", optarg);
+>                         break;
+>                 case 'h':
+>                 default:
+>                         help(argv[0]);
+>                         break;
+>                 }
+>         }
+>
