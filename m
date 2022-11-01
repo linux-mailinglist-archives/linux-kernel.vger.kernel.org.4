@@ -2,49 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5707E61504A
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 18:14:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 12A84615050
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 18:15:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231259AbiKAROX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 13:14:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45412 "EHLO
+        id S230463AbiKARPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 13:15:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46566 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230146AbiKAROC (ORCPT
+        with ESMTP id S229946AbiKAROZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 13:14:02 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78685E33;
-        Tue,  1 Nov 2022 10:13:36 -0700 (PDT)
+        Tue, 1 Nov 2022 13:14:25 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 278BE5F58;
+        Tue,  1 Nov 2022 10:14:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667322816; x=1698858816;
+  t=1667322848; x=1698858848;
   h=message-id:date:mime-version:from:subject:to:cc:
    references:in-reply-to:content-transfer-encoding;
-  bh=Gk4ykGOQrrFGOZkX3n7veE6yahJppzXBMsWuGaLT/Yc=;
-  b=Ui434w4tm2KvJeWIvF+rtKtZKcO5hMdG0OIpUP9wYl4wPT9Usnag0oXa
-   5s8s4kaCMnQhtpnGmXQ3bLuuZEUEFWnaneU1tEMSxT1GptHlhFtx/73+U
-   p7YM9+aBIzmKeX5niPlO9m2zU06jAEorzV7W5P9oLbu7L8o74bbJ542F+
-   AYphqKRZ4tdfqkIYpWcHBivDQi+kNwSpB4WoeBLRbffU+EyUPmF4ewLdT
-   foMNuwL+Z1pf90TlwJz5JlSVsXRxYoBOEhAljjwRC2txP+Dq4TW/JgqlM
-   tdxTD9Yt7CqVLaxdhaLWGAbBuOnTKyUqAmt1ZaC7IHHsgwm4vO7fMvKiA
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="310900038"
+  bh=XhFzZrI/fHUEnsZF8FOLeVipwFUNRO0s3JA4KitNpIA=;
+  b=StLSSo1oH2ER9L/6oErusDfRea6uX/6Lsz08sd49l/M3QxM+33H5lJNN
+   CJjZl8g2T1okDhVsptm7iqbtMQxsvGXH3GAtaLbYMgPOh4viz72MGaYmK
+   hR+C5RRglAjkdZESVhhVIXeWja8kGTCx/vjt5Y0YHX2jyMUgGpg4UBc+h
+   Pnx9Udvk9EF/dlN7OxdKGhfbcXeAA+Idz7Q+lliYw4ewlGi9s4+Cdrd0e
+   CS0wxKICh7ZByGiCVe4dlQbLu1o6dYZZH/U2AvZrqoNHEATpAnkFZ1NYH
+   25/x3zpUqXJ6sKUuxLPm9bEfl3NaFb/XNeInnSabGEdid+OcjjXB3Duhl
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="309190348"
 X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
-   d="scan'208";a="310900038"
+   d="scan'208";a="309190348"
 Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 10:13:35 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="665219773"
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 10:14:07 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="665220020"
 X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
-   d="scan'208";a="665219773"
+   d="scan'208";a="665220020"
 Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.55.64])
-  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 10:13:32 -0700
-Message-ID: <96826b51-a980-0c25-f448-78bf726458fd@intel.com>
-Date:   Tue, 1 Nov 2022 19:13:28 +0200
+  by orsmga008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 10:14:03 -0700
+Message-ID: <f8b3feee-8372-a469-1853-45fb2738740d@intel.com>
+Date:   Tue, 1 Nov 2022 19:14:00 +0200
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Firefox/102.0 Thunderbird/102.4.1
 From:   Adrian Hunter <adrian.hunter@intel.com>
-Subject: Re: [PATCH V5 12/26] mmc: sdhci-uhs2: add set_power() to support vdd2
+Subject: Re: [PATCH V5 14/26] mmc: sdhci-uhs2: add set_timeout()
 To:     Victor Shih <victorshihgli@gmail.com>, ulf.hansson@linaro.org
 Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
         benchuanggli@gmail.com, HL.Liu@genesyslogic.com.tw,
@@ -52,16 +52,16 @@ Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
         dlunev@chromium.org, Victor Shih <victor.shih@genesyslogic.com.tw>,
         Ben Chuang <ben.chuang@genesyslogic.com.tw>
 References: <20221019110647.11076-1-victor.shih@genesyslogic.com.tw>
- <20221019110647.11076-13-victor.shih@genesyslogic.com.tw>
+ <20221019110647.11076-15-victor.shih@genesyslogic.com.tw>
 Content-Language: en-US
 Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
  Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20221019110647.11076-13-victor.shih@genesyslogic.com.tw>
+In-Reply-To: <20221019110647.11076-15-victor.shih@genesyslogic.com.tw>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,288 +70,131 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On 19/10/22 14:06, Victor Shih wrote:
-> This is a UHS-II version of sdhci's set_power operation.
-> VDD2, as well as VDD, is handled here.
+> From: AKASHI Takahiro <takahiro.akashi@linaro.org>
+> 
+> This is a UHS-II version of sdhci's set_timeout() operation.
 > 
 > Signed-off-by: Ben Chuang <ben.chuang@genesyslogic.com.tw>
 > Signed-off-by: AKASHI Takahiro <takahiro.akashi@linaro.org>
-> Signed-off-by: Victor Shih <victor.shih@genesyslogic.com.tw>
 > ---
->  drivers/mmc/host/sdhci-uhs2.c | 79 +++++++++++++++++++++++++++++++++++
->  drivers/mmc/host/sdhci-uhs2.h |  2 +
->  drivers/mmc/host/sdhci.c      | 66 ++++++++++++++++-------------
->  drivers/mmc/host/sdhci.h      |  2 +
->  4 files changed, 120 insertions(+), 29 deletions(-)
+>  drivers/mmc/host/sdhci-uhs2.c | 85 +++++++++++++++++++++++++++++++++++
+>  drivers/mmc/host/sdhci-uhs2.h |  1 +
+>  2 files changed, 86 insertions(+)
 > 
 > diff --git a/drivers/mmc/host/sdhci-uhs2.c b/drivers/mmc/host/sdhci-uhs2.c
-> index 0e82f98d1967..896a1c8e55cf 100644
+> index 4dc3e904d7d2..2b90e5308764 100644
 > --- a/drivers/mmc/host/sdhci-uhs2.c
 > +++ b/drivers/mmc/host/sdhci-uhs2.c
-> @@ -117,6 +117,85 @@ void sdhci_uhs2_reset(struct sdhci_host *host, u16 mask)
+> @@ -196,6 +196,91 @@ void sdhci_uhs2_set_power(struct sdhci_host *host, unsigned char mode,
 >  }
->  EXPORT_SYMBOL_GPL(sdhci_uhs2_reset);
+>  EXPORT_SYMBOL_GPL(sdhci_uhs2_set_power);
 >  
-> +void sdhci_uhs2_set_power(struct sdhci_host *host, unsigned char mode,
-> +			  unsigned short vdd)
+> +static u8 sdhci_calc_timeout_uhs2(struct sdhci_host *host, u8 *cmd_res,
+> +				  u8 *dead_lock)
 > +{
-> +	struct mmc_host *mmc = host->mmc;
-> +	u8 pwr;
+> +	u8 count;
+> +	unsigned int cmd_res_timeout, dead_lock_timeout, current_timeout;
 > +
-> +	/* FIXME: check if flags & MMC_UHS2_SUPPORT? */
-> +	if (!(sdhci_uhs2_mode(host))) {
-> +		sdhci_set_power(host, mode, vdd);
-> +		return;
+> +	/*
+> +	 * If the host controller provides us with an incorrect timeout
+> +	 * value, just skip the check and use 0xE.  The hardware may take
+> +	 * longer to time out, but that's much better than having a too-short
+> +	 * timeout value.
+> +	 */
+> +	if (host->quirks & SDHCI_QUIRK_BROKEN_TIMEOUT_VAL) {
+> +		*cmd_res = 0xE;
+> +		*dead_lock = 0xE;
+> +		return 0xE;
 > +	}
 
-sdhci_uhs2_set_power() is called via ->uhs2_set_ios().  That should
-not be called if not in UHS2 mode, so no check should be needed here.
-
+Let's skip quirks you don't need for now.
 
 > +
-> +	if (mode != MMC_POWER_OFF) {
-> +		pwr = sdhci_get_vdd_value(vdd);
-> +		if (!pwr)
-> +			WARN(1, "%s: Invalid vdd %#x\n",
-> +			     mmc_hostname(host->mmc), vdd);
-> +		pwr |= SDHCI_VDD2_POWER_180;
+> +	/* timeout in us */
+> +	cmd_res_timeout = 5 * 1000;
+> +	dead_lock_timeout = 1 * 1000 * 1000;
+> +
+> +	/*
+> +	 * Figure out needed cycles.
+> +	 * We do this in steps in order to fit inside a 32 bit int.
+> +	 * The first step is the minimum timeout, which will have a
+> +	 * minimum resolution of 6 bits:
+> +	 * (1) 2^13*1000 > 2^22,
+> +	 * (2) host->timeout_clk < 2^16
+> +	 *     =>
+> +	 *     (1) / (2) > 2^6
+> +	 */
+> +	count = 0;
+> +	current_timeout = (1 << 13) * 1000 / host->timeout_clk;
+> +	while (current_timeout < cmd_res_timeout) {
+> +		count++;
+> +		current_timeout <<= 1;
+> +		if (count >= 0xF)
+> +			break;
 > +	}
 > +
-> +	if (host->pwr == pwr)
-> +		return;
-> +	host->pwr = pwr;
-> +
-> +	if (pwr == 0) {
-> +		sdhci_writeb(host, 0, SDHCI_POWER_CONTROL);
-> +
-> +		if (!IS_ERR(host->mmc->supply.vmmc))
-> +			mmc_regulator_set_ocr(mmc, mmc->supply.vmmc, 0);
-
-Seems to be a common if-clause.  Looks like we could use a
-helper like:
-
-static inline int mmc_opt_regulator_set_ocr(struct mmc_host *mmc,
-					    struct regulator *supply,
-					    unsigned short vdd_bit)
-{
-	return IS_ERR_OR_NULL(supply) ? 0 : mmc_regulator_set_ocr(mmc, supply, vdd_bit);
-}
-
-
-> +		if (!IS_ERR_OR_NULL(host->mmc->supply.vmmc2))
-> +			mmc_regulator_set_ocr(mmc, mmc->supply.vmmc2, 0);
-> +
-> +		if (host->quirks2 & SDHCI_QUIRK2_CARD_ON_NEEDS_BUS_ON)
-> +			sdhci_runtime_pm_bus_off(host);
-
-Let's not support quirks that you don't need like
-SDHCI_QUIRK2_CARD_ON_NEEDS_BUS_ON
-
-> +	} else {
-> +		if (!IS_ERR(host->mmc->supply.vmmc))
-> +			mmc_regulator_set_ocr(mmc, mmc->supply.vmmc, vdd);
-> +		if (!IS_ERR_OR_NULL(host->mmc->supply.vmmc2))
-> +			/* support 1.8v only for now */
-> +			mmc_regulator_set_ocr(mmc, mmc->supply.vmmc2,
-> +					      fls(MMC_VDD2_165_195) - 1);
-> +
-> +		/*
-> +		 * Spec says that we should clear the power reg before setting
-> +		 * a new value. Some controllers don't seem to like this though.
-> +		 */
-> +		if (!(host->quirks & SDHCI_QUIRK_SINGLE_POWER_WRITE))
-
-Let's not support quirks that you don't need like
-SDHCI_QUIRK_SINGLE_POWER_WRITE
-note this one is !
-
-> +			sdhci_writeb(host, 0, SDHCI_POWER_CONTROL);
-> +
-> +		/*
-> +		 * At least the Marvell CaFe chip gets confused if we set the
-> +		 * voltage and set turn on power at the same time, so set the
-> +		 * voltage first.
-> +		 */
-> +		if (host->quirks & SDHCI_QUIRK_NO_SIMULT_VDD_AND_POWER)
-> +			sdhci_writeb(host, pwr, SDHCI_POWER_CONTROL);
-
-Let's not support quirks that you don't need like
-SDHCI_QUIRK_NO_SIMULT_VDD_AND_POWER
-
-> +
-> +		/* vdd first */
-> +		pwr |= SDHCI_POWER_ON;
-> +		sdhci_writeb(host, pwr & 0xf, SDHCI_POWER_CONTROL);
-> +		mdelay(5);
-> +
-> +		pwr |= SDHCI_VDD2_POWER_ON;
-> +		sdhci_writeb(host, pwr, SDHCI_POWER_CONTROL);
-> +		mdelay(5);
-> +
-> +		if (host->quirks2 & SDHCI_QUIRK2_CARD_ON_NEEDS_BUS_ON)
-> +			sdhci_runtime_pm_bus_on(host);
-
-Let's not support quirks that you don't need like
-SDHCI_QUIRK2_CARD_ON_NEEDS_BUS_ON
-
-> +
-> +		/*
-> +		 * Some controllers need an extra 10ms delay of 10ms before
-> +		 * they can apply clock after applying power
-> +		 */
-> +		if (host->quirks & SDHCI_QUIRK_DELAY_AFTER_POWER)
-> +			mdelay(10);
-
-Let's not support quirks that you don't need like
-SDHCI_QUIRK_DELAY_AFTER_POWER
-
+> +	if (count >= 0xF) {
+> +		DBG("%s: Too large timeout 0x%x requested for CMD_RES!\n",
+> +		    mmc_hostname(host->mmc), count);
+> +		count = 0xE;
 > +	}
+> +	*cmd_res = count;
+> +
+> +	count = 0;
+> +	current_timeout = (1 << 13) * 1000 / host->timeout_clk;
+> +	while (current_timeout < dead_lock_timeout) {
+> +		count++;
+> +		current_timeout <<= 1;
+> +		if (count >= 0xF)
+> +			break;
+> +	}
+> +
+> +	if (count >= 0xF) {
+> +		DBG("%s: Too large timeout 0x%x requested for DEADLOCK!\n",
+> +		    mmc_hostname(host->mmc), count);
+> +		count = 0xE;
+> +	}
+> +	*dead_lock = count;
+> +
+> +	return count;
 > +}
-> +EXPORT_SYMBOL_GPL(sdhci_uhs2_set_power);
+> +
+> +static void __sdhci_uhs2_set_timeout(struct sdhci_host *host)
+> +{
+> +	u8 cmd_res, dead_lock;
+> +
+> +	sdhci_calc_timeout_uhs2(host, &cmd_res, &dead_lock);
+> +	cmd_res |= dead_lock << SDHCI_UHS2_TIMER_CTRL_DEADLOCK_SHIFT;
 
-It is only used in this file, so let's not export it.
+GENMASK() and FIELD_PREP() please
 
+> +	sdhci_writeb(host, cmd_res, SDHCI_UHS2_TIMER_CTRL);
+> +}
+> +
+> +void sdhci_uhs2_set_timeout(struct sdhci_host *host, struct mmc_command *cmd)
+> +{
+> +	__sdhci_set_timeout(host, cmd);
+> +
+> +	if (host->mmc->flags & MMC_UHS2_SUPPORT)
+
+	if (sdhci_uhs2_mode(host))
+
+> +		__sdhci_uhs2_set_timeout(host);
+> +}
+> +EXPORT_SYMBOL_GPL(sdhci_uhs2_set_timeout);
 > +
 >  /*****************************************************************************\
 >   *                                                                           *
->   * Driver init/exit                                                          *
+>   * MMC callbacks                                                             *
 > diff --git a/drivers/mmc/host/sdhci-uhs2.h b/drivers/mmc/host/sdhci-uhs2.h
-> index 31776dcca5cf..3179915f7f79 100644
+> index 3179915f7f79..5ea235b14108 100644
 > --- a/drivers/mmc/host/sdhci-uhs2.h
 > +++ b/drivers/mmc/host/sdhci-uhs2.h
-> @@ -213,5 +213,7 @@ struct sdhci_host;
->  void sdhci_uhs2_dump_regs(struct sdhci_host *host);
->  bool sdhci_uhs2_mode(struct sdhci_host *host);
+> @@ -215,5 +215,6 @@ bool sdhci_uhs2_mode(struct sdhci_host *host);
 >  void sdhci_uhs2_reset(struct sdhci_host *host, u16 mask);
-> +void sdhci_uhs2_set_power(struct sdhci_host *host, unsigned char mode,
-> +			  unsigned short vdd);
-
-Let's not export it for now.
-
+>  void sdhci_uhs2_set_power(struct sdhci_host *host, unsigned char mode,
+>  			  unsigned short vdd);
+> +void sdhci_uhs2_set_timeout(struct sdhci_host *host, struct mmc_command *cmd);
 >  
 >  #endif /* __SDHCI_UHS2_H */
-> diff --git a/drivers/mmc/host/sdhci.c b/drivers/mmc/host/sdhci.c
-> index bd017c59a020..dfa0939a9058 100644
-> --- a/drivers/mmc/host/sdhci.c
-> +++ b/drivers/mmc/host/sdhci.c
-> @@ -23,7 +23,7 @@
->  #include <linux/regulator/consumer.h>
->  #include <linux/pm_runtime.h>
->  #include <linux/of.h>
-> -
-> +#include <linux/bug.h>
->  #include <linux/leds.h>
->  
->  #include <linux/mmc/mmc.h>
-> @@ -186,13 +186,14 @@ static void sdhci_disable_card_detection(struct sdhci_host *host)
->  	sdhci_set_card_detection(host, false);
->  }
->  
-> -static void sdhci_runtime_pm_bus_on(struct sdhci_host *host)
-> +void sdhci_runtime_pm_bus_on(struct sdhci_host *host)
->  {
->  	if (host->bus_on)
->  		return;
->  	host->bus_on = true;
->  	pm_runtime_get_noresume(mmc_dev(host->mmc));
->  }
-> +EXPORT_SYMBOL_GPL(sdhci_runtime_pm_bus_on);
->  
->  void sdhci_runtime_pm_bus_off(struct sdhci_host *host)
->  {
-> @@ -2071,41 +2072,48 @@ static void sdhci_set_power_reg(struct sdhci_host *host, unsigned char mode,
->  		sdhci_writeb(host, 0, SDHCI_POWER_CONTROL);
->  }
->  
-> +unsigned short sdhci_get_vdd_value(unsigned short vdd)
-> +{
-> +	u8 pwr;
-> +
-> +	switch (1 << vdd) {
-> +	case MMC_VDD_165_195:
-> +	/*
-> +	 * Without a regulator, SDHCI does not support 2.0v
-> +	 * so we only get here if the driver deliberately
-> +	 * added the 2.0v range to ocr_avail. Map it to 1.8v
-> +	 * for the purpose of turning on the power.
-> +	 */
-> +	case MMC_VDD_20_21:
-> +		pwr = SDHCI_POWER_180;
-> +		break;
-> +	case MMC_VDD_29_30:
-> +	case MMC_VDD_30_31:
-> +		pwr = SDHCI_POWER_300;
-> +		break;
-> +	case MMC_VDD_32_33:
-> +	case MMC_VDD_33_34:
-> +		pwr = SDHCI_POWER_330;
-> +		break;
-> +	default:
-> +		pwr = 0;
-> +		break;
-> +	}
-> +
-> +	return pwr;
-> +}
-> +EXPORT_SYMBOL_GPL(sdhci_get_vdd_value);
-> +
->  void sdhci_set_power_noreg(struct sdhci_host *host, unsigned char mode,
->  			   unsigned short vdd)
->  {
->  	u8 pwr = 0;
->  
->  	if (mode != MMC_POWER_OFF) {
-> -		switch (1 << vdd) {
-> -		case MMC_VDD_165_195:
-> -		/*
-> -		 * Without a regulator, SDHCI does not support 2.0v
-> -		 * so we only get here if the driver deliberately
-> -		 * added the 2.0v range to ocr_avail. Map it to 1.8v
-> -		 * for the purpose of turning on the power.
-> -		 */
-> -		case MMC_VDD_20_21:
-> -			pwr = SDHCI_POWER_180;
-> -			break;
-> -		case MMC_VDD_29_30:
-> -		case MMC_VDD_30_31:
-> -			pwr = SDHCI_POWER_300;
-> -			break;
-> -		case MMC_VDD_32_33:
-> -		case MMC_VDD_33_34:
-> -		/*
-> -		 * 3.4 ~ 3.6V are valid only for those platforms where it's
-> -		 * known that the voltage range is supported by hardware.
-> -		 */
-> -		case MMC_VDD_34_35:
-> -		case MMC_VDD_35_36:
-> -			pwr = SDHCI_POWER_330;
-> -			break;
-> -		default:
-> +		pwr = sdhci_get_vdd_value(vdd);
-> +		if (!pwr) {
->  			WARN(1, "%s: Invalid vdd %#x\n",
->  			     mmc_hostname(host->mmc), vdd);
-> -			break;
->  		}
->  	}
->  
-> diff --git a/drivers/mmc/host/sdhci.h b/drivers/mmc/host/sdhci.h
-> index 28716105da61..c34ca6ffbff6 100644
-> --- a/drivers/mmc/host/sdhci.h
-> +++ b/drivers/mmc/host/sdhci.h
-> @@ -850,6 +850,7 @@ static inline void sdhci_read_caps(struct sdhci_host *host)
->  	__sdhci_read_caps(host, NULL, NULL, NULL);
->  }
->  
-> +void sdhci_runtime_pm_bus_on(struct sdhci_host *host);
->  void sdhci_runtime_pm_bus_off(struct sdhci_host *host);
->  u16 sdhci_calc_clk(struct sdhci_host *host, unsigned int clock,
->  		   unsigned int *actual_clock);
-> @@ -860,6 +861,7 @@ void sdhci_set_power(struct sdhci_host *host, unsigned char mode,
->  void sdhci_set_power_and_bus_voltage(struct sdhci_host *host,
->  				     unsigned char mode,
->  				     unsigned short vdd);
-> +unsigned short sdhci_get_vdd_value(unsigned short vdd);
->  void sdhci_set_power_noreg(struct sdhci_host *host, unsigned char mode,
->  			   unsigned short vdd);
->  int sdhci_get_cd_nogpio(struct mmc_host *mmc);
 
