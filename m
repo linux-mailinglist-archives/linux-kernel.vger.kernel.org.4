@@ -2,201 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2599614C42
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 15:07:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 75DAC614C48
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 15:10:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229934AbiKAOHZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 10:07:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60872 "EHLO
+        id S230183AbiKAOKI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 10:10:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34290 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229880AbiKAOHX (ORCPT
+        with ESMTP id S229867AbiKAOKE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 10:07:23 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C2B31A80E;
-        Tue,  1 Nov 2022 07:07:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 256EAB81DBF;
-        Tue,  1 Nov 2022 14:07:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C56E7C433C1;
-        Tue,  1 Nov 2022 14:07:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667311639;
-        bh=qa2NiLkvwqh21P7yD2YxH/oo+2IG9kAry/2hB7aqHHE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=BPr7RLqm09Zk2SCcceYlzd588wpwZzzCjLQ+HqeVic/FprOXymQgYV57sFd3tLTte
-         /+lVpFZRYrK5kfNM0YKZGYLQLK542ydckeL1393kJ7dyo1e4C87MibTVCA+SSx4no6
-         rdMCpVUiTxrEjzqAqbcJGhiYaB/LmtGPQOnoW+D+EkFR5okjUYLQiGFoEzdkr7sqHJ
-         Kf4EdTMpdz40LRP3a1P7g7Q20r+LYycytGZwg8VdBxTQL9v4juZLq9KlVVn+Ybo7FM
-         FUM8wIpjqSBHFtBQ7HGmxJjBsIqJpW5qeWYIL3b3k6ZBat88SruosPXGxVb8iJu0Cb
-         YIZ+slw6AcEsw==
-Date:   Tue, 1 Nov 2022 23:07:16 +0900
-From:   Masami Hiramatsu (Google) <mhiramat@kernel.org>
-To:     Li Huafei <lihuafei1@huawei.com>
-Cc:     <rostedt@goodmis.org>, <mhiramat@kernel.org>,
-        <mark.rutland@arm.com>, <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ftrace: Fix use-after-free for dynamic ftrace_ops
-Message-Id: <20221101230716.22c7b52728990f6b192795c0@kernel.org>
-In-Reply-To: <20221101064146.69551-1-lihuafei1@huawei.com>
-References: <20221101064146.69551-1-lihuafei1@huawei.com>
-X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
-Mime-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+        Tue, 1 Nov 2022 10:10:04 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0350F1AF3E
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 07:10:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667311803; x=1698847803;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=ZEZSk39pvbuiY84GZl6/xaxUFyuII6JlR36TbxBDDNU=;
+  b=f7vTCXy9e9Ki0OgxKJuYqNUI4G3jHEoI9/gLfb9gQMolF6CooUQes7kr
+   vmw01opREZ1Y19L7jj1s65VDGiEvKEfH102Ru9CSpcejD5x/0KNfknTOG
+   J5uMGJjeIm3BV4rQ4I6QFp1Inr6HNBbVk4VmkugL7MtKp7mcKJHyKOzkZ
+   +QKqVmNZeOkFioyTEfqkpWKXV6sFB89P3zBDY+5LfkglQILyP0KOzk6mz
+   ODKa96Cu8pb+R9YGQXSlnOWWCqRLyzWHtdkmac0Pw4yF5wm64HTOLT1Qn
+   4aeEP+wWYul8Ty/v3o36Irq0/nNNqWuEKtq5Ge1/PQccP5jCvhUNYQFhz
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="310237349"
+X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
+   d="scan'208";a="310237349"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 07:09:57 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="667198204"
+X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
+   d="scan'208";a="667198204"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga001.jf.intel.com with ESMTP; 01 Nov 2022 07:09:56 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oprxj-000DgB-16;
+        Tue, 01 Nov 2022 14:09:55 +0000
+Date:   Tue, 01 Nov 2022 22:09:44 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:ras/core] BUILD SUCCESS
+ 50865c14f34edbd03f8113147fac069b39f4e390
+Message-ID: <636128a8.H3R9YIyXi26CPwjR%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 1 Nov 2022 14:41:46 +0800
-Li Huafei <lihuafei1@huawei.com> wrote:
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git ras/core
+branch HEAD: 50865c14f34edbd03f8113147fac069b39f4e390  RAS: Fix return value from show_trace()
 
-> KASAN reported a use-after-free with ftrace ops [1]. It was found from
-> vmcore that perf had registered two ops with the same content
-> successively, both dynamic. After unregistering the second ops, a
-> use-after-free occurred.
-> 
-> In ftrace_shutdown(), when the second ops is unregistered, the
-> FTRACE_UPDATE_CALLS command is not set because there is another enabled
-> ops with the same content.  Also, both ops are dynamic and the ftrace
-> callback function is ftrace_ops_list_func, so the
-> FTRACE_UPDATE_TRACE_FUNC command will not be set. Eventually the value
-> of 'command' will be 0 and ftrace_shutdown() will skip the rcu
-> synchronization.
-> 
-> However, ftrace may be activated. When the ops is released, another CPU
-> may be accessing the ops.  Add the missing synchronization to fix this
-> problem.
-> 
-> [1]
-> BUG: KASAN: use-after-free in __ftrace_ops_list_func kernel/trace/ftrace.c:7020 [inline]
-> BUG: KASAN: use-after-free in ftrace_ops_list_func+0x2b0/0x31c kernel/trace/ftrace.c:7049
-> Read of size 8 at addr ffff56551965bbc8 by task syz-executor.2/14468
-> 
-> CPU: 1 PID: 14468 Comm: syz-executor.2 Not tainted 5.10.0 #7
-> Hardware name: linux,dummy-virt (DT)
-> Call trace:
->  dump_backtrace+0x0/0x40c arch/arm64/kernel/stacktrace.c:132
->  show_stack+0x30/0x40 arch/arm64/kernel/stacktrace.c:196
->  __dump_stack lib/dump_stack.c:77 [inline]
->  dump_stack+0x1b4/0x248 lib/dump_stack.c:118
->  print_address_description.constprop.0+0x28/0x48c mm/kasan/report.c:387
->  __kasan_report mm/kasan/report.c:547 [inline]
->  kasan_report+0x118/0x210 mm/kasan/report.c:564
->  check_memory_region_inline mm/kasan/generic.c:187 [inline]
->  __asan_load8+0x98/0xc0 mm/kasan/generic.c:253
->  __ftrace_ops_list_func kernel/trace/ftrace.c:7020 [inline]
->  ftrace_ops_list_func+0x2b0/0x31c kernel/trace/ftrace.c:7049
->  ftrace_graph_call+0x0/0x4
->  __might_sleep+0x8/0x100 include/linux/perf_event.h:1170
->  __might_fault mm/memory.c:5183 [inline]
->  __might_fault+0x58/0x70 mm/memory.c:5171
->  do_strncpy_from_user lib/strncpy_from_user.c:41 [inline]
->  strncpy_from_user+0x1f4/0x4b0 lib/strncpy_from_user.c:139
->  getname_flags+0xb0/0x31c fs/namei.c:149
->  getname+0x2c/0x40 fs/namei.c:209
->  [...]
-> 
-> Allocated by task 14445:
->  kasan_save_stack+0x24/0x50 mm/kasan/common.c:48
->  kasan_set_track mm/kasan/common.c:56 [inline]
->  __kasan_kmalloc mm/kasan/common.c:479 [inline]
->  __kasan_kmalloc.constprop.0+0x110/0x13c mm/kasan/common.c:449
->  kasan_kmalloc+0xc/0x14 mm/kasan/common.c:493
->  kmem_cache_alloc_trace+0x440/0x924 mm/slub.c:2950
->  kmalloc include/linux/slab.h:563 [inline]
->  kzalloc include/linux/slab.h:675 [inline]
->  perf_event_alloc.part.0+0xb4/0x1350 kernel/events/core.c:11230
->  perf_event_alloc kernel/events/core.c:11733 [inline]
->  __do_sys_perf_event_open kernel/events/core.c:11831 [inline]
->  __se_sys_perf_event_open+0x550/0x15f4 kernel/events/core.c:11723
->  __arm64_sys_perf_event_open+0x6c/0x80 kernel/events/core.c:11723
->  [...]
-> 
-> Freed by task 14445:
->  kasan_save_stack+0x24/0x50 mm/kasan/common.c:48
->  kasan_set_track+0x24/0x34 mm/kasan/common.c:56
->  kasan_set_free_info+0x20/0x40 mm/kasan/generic.c:358
->  __kasan_slab_free.part.0+0x11c/0x1b0 mm/kasan/common.c:437
->  __kasan_slab_free mm/kasan/common.c:445 [inline]
->  kasan_slab_free+0x2c/0x40 mm/kasan/common.c:446
->  slab_free_hook mm/slub.c:1569 [inline]
->  slab_free_freelist_hook mm/slub.c:1608 [inline]
->  slab_free mm/slub.c:3179 [inline]
->  kfree+0x12c/0xc10 mm/slub.c:4176
->  perf_event_alloc.part.0+0xa0c/0x1350 kernel/events/core.c:11434
->  perf_event_alloc kernel/events/core.c:11733 [inline]
->  __do_sys_perf_event_open kernel/events/core.c:11831 [inline]
->  __se_sys_perf_event_open+0x550/0x15f4 kernel/events/core.c:11723
->  [...]
-> 
+elapsed time: 727m
 
-Good catch! This should go stable tree too.
+configs tested: 118
+configs skipped: 3
 
-Cc: stable@vger.kernel.org
-Reviewed-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-But I'm not sure what commit this is fixed. Maybe commit a4c35ed24112
-("ftrace: Fix synchronization location disabling and freeing ftrace_ops").
-Steve, can you add Fixed: ?
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+alpha                               defconfig
+x86_64               randconfig-k001-20221031
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+powerpc                           allnoconfig
+powerpc                          allmodconfig
+arc                              allyesconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+mips                             allyesconfig
+i386                             allyesconfig
+i386                                defconfig
+alpha                            allyesconfig
+ia64                             allmodconfig
+sh                              ul2_defconfig
+powerpc                 mpc8540_ads_defconfig
+openrisc                       virt_defconfig
+powerpc                 canyonlands_defconfig
+sh                               allmodconfig
+powerpc                         wii_defconfig
+sh                           sh2007_defconfig
+arm                         lubbock_defconfig
+powerpc                      chrp32_defconfig
+m68k                                defconfig
+arm                            mps2_defconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+s390                                defconfig
+s390                             allmodconfig
+s390                             allyesconfig
+i386                 randconfig-a016-20221031
+i386                 randconfig-a012-20221031
+i386                 randconfig-a015-20221031
+i386                 randconfig-a013-20221031
+i386                 randconfig-a014-20221031
+i386                 randconfig-a011-20221031
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+um                               alldefconfig
+mips                            ar7_defconfig
+x86_64               randconfig-a016-20221031
+x86_64               randconfig-a011-20221031
+x86_64               randconfig-a013-20221031
+x86_64               randconfig-a012-20221031
+x86_64               randconfig-a014-20221031
+x86_64               randconfig-a015-20221031
+m68k                            q40_defconfig
+xtensa                           alldefconfig
+loongarch                 loongson3_defconfig
+mips                           jazz_defconfig
+arm                           tegra_defconfig
+mips                 decstation_r4k_defconfig
+arm                          lpd270_defconfig
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+x86_64                        randconfig-a002
+i386                 randconfig-c001-20221031
+mips                 randconfig-c004-20221031
+arm                        mini2440_defconfig
+powerpc                      mgcoge_defconfig
+powerpc                 mpc834x_itx_defconfig
+mips                       bmips_be_defconfig
+i386                          randconfig-c001
+sh                          rsk7203_defconfig
+m68k                       bvme6000_defconfig
+arm                           viper_defconfig
+sparc                             allnoconfig
+xtensa                    smp_lx200_defconfig
+arm                          gemini_defconfig
+sh                 kfr2r09-romimage_defconfig
+xtensa                       common_defconfig
+riscv                    nommu_virt_defconfig
+riscv                          rv32_defconfig
+riscv                    nommu_k210_defconfig
+riscv                             allnoconfig
+i386                   debian-10.3-kselftests
+i386                              debian-10.3
 
-Also, I found a typo below.
-
-> Signed-off-by: Li Huafei <lihuafei1@huawei.com>
-> ---
->  kernel/trace/ftrace.c | 14 +++++++++-----
->  1 file changed, 9 insertions(+), 5 deletions(-)
-> 
-> diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
-> index fbf2543111c0..4219cc2a04a6 100644
-> --- a/kernel/trace/ftrace.c
-> +++ b/kernel/trace/ftrace.c
-> @@ -3030,13 +3030,16 @@ int ftrace_shutdown(struct ftrace_ops *ops, int command)
->  
->  	if (!command || !ftrace_enabled) {
->  		/*
-> -		 * If these are dynamic or per_cpu ops, they still
-> -		 * need their data freed. Since, function tracing is
-> -		 * not currently active, we can just free them
-> -		 * without synchronizing all CPUs.
-> +		 * If these are dynamic, they still need their data freed. If
-> +		 * function tracing is currently active, we neet to synchronize
-                                                          ^need
-
-Thank you!
-
-> +		 * all CPUs before we can release them.
->  		 */
-> -		if (ops->flags & FTRACE_OPS_FL_DYNAMIC)
-> +		if (ops->flags & FTRACE_OPS_FL_DYNAMIC) {
-> +			if (ftrace_enabled)
-> +				goto sync_rcu;
-> +
->  			goto free_ops;
-> +		}
->  
->  		return 0;
->  	}
-> @@ -3083,6 +3086,7 @@ int ftrace_shutdown(struct ftrace_ops *ops, int command)
->  	 * ops.
->  	 */
->  	if (ops->flags & FTRACE_OPS_FL_DYNAMIC) {
-> + sync_rcu:
->  		/*
->  		 * We need to do a hard force of sched synchronization.
->  		 * This is because we use preempt_disable() to do RCU, but
-> -- 
-> 2.17.1
-> 
-
+clang tested configs:
+riscv                randconfig-r042-20221101
+hexagon              randconfig-r041-20221101
+hexagon              randconfig-r045-20221101
+s390                 randconfig-r044-20221101
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+arm                     am200epdkit_defconfig
+arm                       spear13xx_defconfig
+x86_64               randconfig-a005-20221031
+x86_64               randconfig-a006-20221031
+x86_64               randconfig-a004-20221031
+x86_64               randconfig-a001-20221031
+x86_64               randconfig-a003-20221031
+x86_64               randconfig-a002-20221031
+i386                 randconfig-a002-20221031
+i386                 randconfig-a005-20221031
+i386                 randconfig-a004-20221031
+i386                 randconfig-a006-20221031
+i386                 randconfig-a003-20221031
+i386                 randconfig-a001-20221031
+mips                        bcm63xx_defconfig
+powerpc                          allyesconfig
+arm                    vt8500_v6_v7_defconfig
 
 -- 
-Masami Hiramatsu (Google) <mhiramat@kernel.org>
+0-DAY CI Kernel Test Service
+https://01.org/lkp
