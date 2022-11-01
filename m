@@ -2,46 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 773B6614A6E
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:15:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1767C614A84
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:19:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230268AbiKAMPP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 08:15:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59154 "EHLO
+        id S230521AbiKAMTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 08:19:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230018AbiKAMPK (ORCPT
+        with ESMTP id S229906AbiKAMTN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 08:15:10 -0400
-Received: from relay05.th.seeweb.it (relay05.th.seeweb.it [5.144.164.166])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D597F165B1
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 05:15:09 -0700 (PDT)
-Received: from SoMainline.org (94-209-172-39.cable.dynamic.v4.ziggo.nl [94.209.172.39])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r2.th.seeweb.it (Postfix) with ESMTPSA id 947E13EEFE;
-        Tue,  1 Nov 2022 13:15:07 +0100 (CET)
-Date:   Tue, 1 Nov 2022 13:15:06 +0100
-From:   Marijn Suijten <marijn.suijten@somainline.org>
-To:     Vinod Polimera <quic_vpolimer@quicinc.com>
-Cc:     dri-devel@lists.freedesktop.org, linux-arm-msm@vger.kernel.org,
-        freedreno@lists.freedesktop.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, robdclark@gmail.com,
-        dianders@chromium.org, swboyd@chromium.org,
-        quic_kalyant@quicinc.com, dmitry.baryshkov@linaro.org,
-        quic_khsieh@quicinc.com, quic_vproddut@quicinc.com,
-        quic_bjorande@quicinc.com, quic_aravindh@quicinc.com,
-        quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com
-Subject: Re: [PATCH v8 12/15] drm/msm/disp/dpu: get timing engine status from
- intf status register
-Message-ID: <20221101121506.eyzsepukm6smwvxh@SoMainline.org>
-References: <1665576159-3749-1-git-send-email-quic_vpolimer@quicinc.com>
- <1665576159-3749-13-git-send-email-quic_vpolimer@quicinc.com>
+        Tue, 1 Nov 2022 08:19:13 -0400
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 449D2167CA;
+        Tue,  1 Nov 2022 05:19:12 -0700 (PDT)
+Received: from dggpemm500023.china.huawei.com (unknown [172.30.72.55])
+        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N1pwX3z1Qz15M0R;
+        Tue,  1 Nov 2022 20:19:08 +0800 (CST)
+Received: from dggpemm500013.china.huawei.com (7.185.36.172) by
+ dggpemm500023.china.huawei.com (7.185.36.83) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 1 Nov 2022 20:19:10 +0800
+Received: from ubuntu1804.huawei.com (10.67.175.36) by
+ dggpemm500013.china.huawei.com (7.185.36.172) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 1 Nov 2022 20:19:10 +0800
+From:   Chen Zhongjin <chenzhongjin@huawei.com>
+To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <dsahern@kernel.org>, <daniel@iogearbox.net>,
+        <yangyingliang@huawei.com>, <chenzhongjin@huawei.com>,
+        <stephen@networkplumber.org>, <wangyuweihx@gmail.com>,
+        <alexander.mikhalitsyn@virtuozzo.com>, <den@openvz.org>,
+        <xu.xin16@zte.com.cn>
+Subject: [PATCH net] net, neigh: Fix null-ptr-deref in neigh_table_clear()
+Date:   Tue, 1 Nov 2022 20:15:52 +0800
+Message-ID: <20221101121552.21890-1-chenzhongjin@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1665576159-3749-13-git-send-email-quic_vpolimer@quicinc.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain
+X-Originating-IP: [10.67.175.36]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500013.china.huawei.com (7.185.36.172)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -49,110 +52,54 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022-10-12 17:32:36, Vinod Polimera wrote:
-> Timing gen status can be read reliablly from intf status
+When IPv6 module gets initialized but hits an error in the middle,
+kenel panic with:
 
-Typo. "reliably read from the intf status register..."
+KASAN: null-ptr-deref in range [0x0000000000000598-0x000000000000059f]
+CPU: 1 PID: 361 Comm: insmod
+Hardware name: QEMU Standard PC (i440FX + PIIX, 1996)
+RIP: 0010:__neigh_ifdown.isra.0+0x24b/0x370
+RSP: 0018:ffff888012677908 EFLAGS: 00000202
+...
+Call Trace:
+ <TASK>
+ neigh_table_clear+0x94/0x2d0
+ ndisc_cleanup+0x27/0x40 [ipv6]
+ inet6_init+0x21c/0x2cb [ipv6]
+ do_one_initcall+0xd3/0x4d0
+ do_init_module+0x1ae/0x670
+...
+Kernel panic - not syncing: Fatal exception
 
-> register rather than from the timing gen control register,
-> which will readback as "0" after disable though the timing
-> gen is still under going disable path. This support was
+When ipv6 initialization fails, it will try to cleanup and calls:
 
-undergoing*, and it's still rather unclear what behaviour you're trying
-to describe.
+neigh_table_clear()
+  neigh_ifdown(tbl, NULL)
+    pneigh_queue_purge(&tbl->proxy_queue, dev_net(dev == NULL))
+    # dev_net(NULL) triggers null-ptr-deref.
 
-It seems like you're stating that INTF_STATUS (in the first bit...) will
-read zero when the timing engine (in hardware) has finished disabling
-rather than reading zero as soon as dpu_hw_intf_enable_timing_engine()
-writes a zero.
+Fix it by passing NULL to pneigh_queue_purge() in neigh_ifdown() if dev
+is NULL, to make kernel not panic immediately.
 
-> added from DPU version 5.0.0.
-> 
-> Signed-off-by: Vinod Polimera <quic_vpolimer@quicinc.com>
-> ---
->  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c |  3 ++-
->  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h | 12 +++++++-----
->  drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c    |  8 +++++++-
->  3 files changed, 16 insertions(+), 7 deletions(-)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> index 27f029f..0332cea 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> @@ -77,7 +77,8 @@
->  
->  #define INTF_SC7180_MASK BIT(DPU_INTF_INPUT_CTRL) | BIT(DPU_INTF_TE)
->  
-> -#define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN)
-> +#define INTF_SC7280_MASK \
-> +	(INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN) | BIT(DPU_INTF_STATUS_SUPPORTED))
->  
->  #define IRQ_SDM845_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
->  			 BIT(MDP_SSPP_TOP0_INTR2) | \
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> index 38aa38a..21ae3cf 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> @@ -203,17 +203,19 @@ enum {
->  
->  /**
->   * INTF sub-blocks
-> - * @DPU_INTF_INPUT_CTRL         Supports the setting of pp block from which
-> - *                              pixel data arrives to this INTF
-> - * @DPU_INTF_TE                 INTF block has TE configuration support
-> - * @DPU_DATA_HCTL_EN            Allows data to be transferred at different rate
-> -                                than video timing
-> + * @DPU_INTF_INPUT_CTRL             Supports the setting of pp block from which
-> + *                                  pixel data arrives to this INTF
-> + * @DPU_INTF_TE                     INTF block has TE configuration support
-> + * @DPU_DATA_HCTL_EN                Allows data to be transferred at different rate
-> +				    than video timing
+Fixes: 66ba215cb513 ("neigh: fix possible DoS due to net iface start/stop loop")
+Signed-off-by: Chen Zhongjin <chenzhongjin@huawei.com>
+---
+ net/core/neighbour.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Use spaces instead of tabs.
+diff --git a/net/core/neighbour.c b/net/core/neighbour.c
+index 3c4786b99907..a77a85e357e0 100644
+--- a/net/core/neighbour.c
++++ b/net/core/neighbour.c
+@@ -409,7 +409,7 @@ static int __neigh_ifdown(struct neigh_table *tbl, struct net_device *dev,
+ 	write_lock_bh(&tbl->lock);
+ 	neigh_flush_dev(tbl, dev, skip_perm);
+ 	pneigh_ifdown_and_unlock(tbl, dev);
+-	pneigh_queue_purge(&tbl->proxy_queue, dev_net(dev));
++	pneigh_queue_purge(&tbl->proxy_queue, dev ? dev_net(dev) : NULL);
+ 	if (skb_queue_empty_lockless(&tbl->proxy_queue))
+ 		del_timer_sync(&tbl->proxy_timer);
+ 	return 0;
+-- 
+2.17.1
 
-> + * @DPU_INTF_STATUS_SUPPORTED       INTF block has INTF_STATUS register
->   * @DPU_INTF_MAX
->   */
->  enum {
->  	DPU_INTF_INPUT_CTRL = 0x1,
->  	DPU_INTF_TE,
->  	DPU_DATA_HCTL_EN,
-> +	DPU_INTF_STATUS_SUPPORTED,
->  	DPU_INTF_MAX
->  };
->  
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-> index 7ce66bf..2394473 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_intf.c
-> @@ -62,6 +62,7 @@
->  #define   INTF_LINE_COUNT               0x0B0
->  
->  #define   INTF_MUX                      0x25C
-> +#define   INTF_STATUS                   0x26C
->  
->  #define INTF_CFG_ACTIVE_H_EN	BIT(29)
->  #define INTF_CFG_ACTIVE_V_EN	BIT(30)
-> @@ -297,8 +298,13 @@ static void dpu_hw_intf_get_status(
->  		struct intf_status *s)
->  {
->  	struct dpu_hw_blk_reg_map *c = &intf->hw;
-> +	unsigned long cap = intf->cap->features;
-> +
-> +	if (cap & BIT(DPU_INTF_STATUS_SUPPORTED))
-> +		s->is_en = BIT(0) & DPU_REG_READ(c, INTF_STATUS);
-
-It is more clear to write `& BIT(0)` at the end.
-
-- Marijn
-
-> +	else
-> +		s->is_en = DPU_REG_READ(c, INTF_TIMING_ENGINE_EN);
->  
-> -	s->is_en = DPU_REG_READ(c, INTF_TIMING_ENGINE_EN);
->  	s->is_prog_fetch_en = !!(DPU_REG_READ(c, INTF_CONFIG) & BIT(31));
->  	if (s->is_en) {
->  		s->frame_count = DPU_REG_READ(c, INTF_FRAME_COUNT);
-> -- 
-> 2.7.4
-> 
