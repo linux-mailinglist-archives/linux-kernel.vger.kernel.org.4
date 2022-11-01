@@ -2,59 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58EEB6154E3
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:23:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 472766154E4
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:23:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbiKAWW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 18:22:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57988 "EHLO
+        id S229553AbiKAWXA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 18:23:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230165AbiKAWWw (ORCPT
+        with ESMTP id S230210AbiKAWWy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 18:22:52 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D499319C13
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 15:22:51 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso256418pjc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 15:22:51 -0700 (PDT)
+        Tue, 1 Nov 2022 18:22:54 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD41D1A21B
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 15:22:53 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id g62so14734980pfb.10
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 15:22:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=uhDBAUhO5scPlfZQJJkosTaLVirDeVVGs54DNXhKQpg=;
-        b=U4JBkHwZ9YjBgtJFqGJIhTwVRG1U3DJ4XqLA9TnHH1CZp6GdyHKLYgQ+o5Y1u2QBPj
-         fTJmP6U1Z+wznRqQT5hkSlw+EphKFYnQYZIvuC0uUkiVK5TUEWxPnwpd4m/RpbXlL0HC
-         4qwqxdROBnxcvdQzFKuAwLc0tcgH8e4nkt54U=
+        bh=ekHYZpDEhYvmgLl9ibVW1UrC0RjLNjOHWSwbS/YHNwk=;
+        b=We4cGsIeIdDqNRSLbBZwM8NCXtOgrImcozpOe19X4k4kUy2sMr99BV6XbE2pW0sAnN
+         XDqAKM5zWARWYRjot6ekw2J13Css968k2n72VBsT23O+oQGiaBdFn+yG/C1JJkM0dtF4
+         2RpMAYHLAqXHBI4BoJj+r4j9S9uCRZPfADNkU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=uhDBAUhO5scPlfZQJJkosTaLVirDeVVGs54DNXhKQpg=;
-        b=IiAAYv9OsMzlSfgZZDILC9PVqp5vlvq0sW70OPiREE3T8L1/oigf9lt3of95d2zswy
-         3wMDCiLs0Bx/OxXWzFvKgg3/93XIUFKx+KVoJ0QsSgI5tviTPLCbNQsI+uuz0suBwEoA
-         lkoWThmMYH/OyBq6cmuwyuUitnv0bZ5dbezrTVlSErXCyfwmLntFCdW4IFt4mt3UCAQe
-         kh+iO5IsVGQ0dDY2rA024VVRPq8omDE9Hyv6ixppto3lWMzaFweTq7tGhZSyfsx8gGbe
-         4TKchYXYwONe0O+X5jf8Jrpf+Blq/6a/kxYzU1HoOw/5WHV3Yo4aEI0FjYQbwyDid4gv
-         xoIA==
-X-Gm-Message-State: ACrzQf3CeZhtauquCZpN0TCyuWImgaZT2twNtEL3bE7SRB+HOO5s7IIs
-        poVOVfbXGz2CHODp0LmXMseqLg==
-X-Google-Smtp-Source: AMsMyM4WLgDDjTjLX67kShDt6zODkWQSyOwZps+yLROfGu6JclUPAsRo+ohLF+F9J+909Trqzs+Ybw==
-X-Received: by 2002:a17:90b:1950:b0:212:de19:b3ce with SMTP id nk16-20020a17090b195000b00212de19b3cemr21874558pjb.16.1667341371422;
-        Tue, 01 Nov 2022 15:22:51 -0700 (PDT)
+        bh=ekHYZpDEhYvmgLl9ibVW1UrC0RjLNjOHWSwbS/YHNwk=;
+        b=WIHY+V5mxX5xj3IYmHuiTo7kfj+1s63YUbswlzMoCuQKzrt6gpIQ5v7PIsEfRAuwtf
+         FM0a82TP3IV/ZXuTOg+bPtpk+hGvjVstRDCJ9BjltJKGw+7Fn99s/5fHNqz+Ri+bjLCi
+         /u1yGIvBMBkj931DnSV7xYKJay8FhLgG+JojtXzpKXMilGhT6diKRdjAKF7QfZyTXbfa
+         zxzmDCMQzR3DBzb4kdmzpgIaq6h1TfqGaHizpR3P191RFO96bjANI9wIyptRMS2EqJJj
+         RmU5R/fVsZx2tgrbRfwDg6AhJqdEMr2Mo5i4SCakWAPE6qDMsTa+CV4lAAegckBgufne
+         xdBg==
+X-Gm-Message-State: ACrzQf32nvxZWcxPx3IysTRnhi2CkbdgJN2NY3w79K9//8mU7ZE2tnML
+        URcMOsdS/kwIeuNyiFWaqgngyUIMBhG4Wg==
+X-Google-Smtp-Source: AMsMyM6Z/kapNZXYi+y4YDi0ULoqmJ35hoYlfVuPSko31JNn1avbNlegyM4Sun4haQP8GrG47MPTeg==
+X-Received: by 2002:a63:2b10:0:b0:451:5df1:4b17 with SMTP id r16-20020a632b10000000b004515df14b17mr18480543pgr.61.1667341373216;
+        Tue, 01 Nov 2022 15:22:53 -0700 (PDT)
 Received: from localhost ([2620:15c:9d:2:9c5f:7c8e:b8a2:3495])
-        by smtp.gmail.com with UTF8SMTPSA id cp15-20020a170902e78f00b0017f5ba1fffasm6797659plb.297.2022.11.01.15.22.50
+        by smtp.gmail.com with UTF8SMTPSA id 9-20020a631749000000b0046f1e8cb30dsm6300322pgx.26.2022.11.01.15.22.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Nov 2022 15:22:51 -0700 (PDT)
+        Tue, 01 Nov 2022 15:22:52 -0700 (PDT)
 From:   Brian Norris <briannorris@chromium.org>
 To:     Benson Leung <bleung@chromium.org>,
         Guenter Roeck <groeck@chromium.org>
 Cc:     chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org,
         Brian Norris <briannorris@chromium.org>
-Subject: [PATCH v2 2/5] platform/chrome: cros_ec_lpc: Mark PROBE_PREFER_ASYNCHRONOUS
-Date:   Tue,  1 Nov 2022 15:22:07 -0700
-Message-Id: <20221101152132.v2.2.Ib1036816e77aba71ebc16b71f7615c55d054689c@changeid>
+Subject: [PATCH v2 3/5] platform/chrome: cros_ec_debugfs: Set PROBE_PREFER_ASYNCHRONOUS
+Date:   Tue,  1 Nov 2022 15:22:08 -0700
+Message-Id: <20221101152132.v2.3.Ic9a4f378f73319da323cd55940012fa6b1de24f4@changeid>
 X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
 In-Reply-To: <20221101152132.v2.1.I0728421299079b104710c202d5d7095b2674fd8c@changeid>
 References: <20221101152132.v2.1.I0728421299079b104710c202d5d7095b2674fd8c@changeid>
@@ -69,30 +69,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This takes on the order of 60ms to probe on some systems, so let it
-probe asynchronously. It shouldn't have any dependencies that aren't
-handled cleanly.
+This driver takes on the order of 40ms to start on some systems. It
+shouldn't have many cross-device dependencies to race with, nor racy
+access to shared state with other drivers, so this should be a
+relatively low risk change.
+
+This driver was pinpointed as part of a survey of top slowest initcalls
+(i.e., are built in, and probing synchronously) on a lab of ChromeOS
+systems.
 
 Signed-off-by: Brian Norris <briannorris@chromium.org>
 ---
 
 (no changes since v1)
 
- drivers/platform/chrome/cros_ec_lpc.c | 1 +
+ drivers/platform/chrome/cros_ec_debugfs.c | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/drivers/platform/chrome/cros_ec_lpc.c b/drivers/platform/chrome/cros_ec_lpc.c
-index 48302183d62e..2e4dba724ada 100644
---- a/drivers/platform/chrome/cros_ec_lpc.c
-+++ b/drivers/platform/chrome/cros_ec_lpc.c
-@@ -557,6 +557,7 @@ static struct platform_driver cros_ec_lpc_driver = {
+diff --git a/drivers/platform/chrome/cros_ec_debugfs.c b/drivers/platform/chrome/cros_ec_debugfs.c
+index 4e63adf083ea..21d973fc6be2 100644
+--- a/drivers/platform/chrome/cros_ec_debugfs.c
++++ b/drivers/platform/chrome/cros_ec_debugfs.c
+@@ -521,6 +521,7 @@ static struct platform_driver cros_ec_debugfs_driver = {
+ 	.driver = {
  		.name = DRV_NAME,
- 		.acpi_match_table = cros_ec_lpc_acpi_device_ids,
- 		.pm = &cros_ec_lpc_pm_ops,
+ 		.pm = &cros_ec_debugfs_pm_ops,
 +		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
  	},
- 	.probe = cros_ec_lpc_probe,
- 	.remove = cros_ec_lpc_remove,
+ 	.probe = cros_ec_debugfs_probe,
+ 	.remove = cros_ec_debugfs_remove,
 -- 
 2.38.1.273.g43a17bfeac-goog
 
