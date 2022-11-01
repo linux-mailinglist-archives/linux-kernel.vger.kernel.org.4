@@ -2,268 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2B5C614F40
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 17:31:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C7FC614F57
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 17:32:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230164AbiKAQa7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 12:30:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33930 "EHLO
+        id S231193AbiKAQcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 12:32:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34394 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbiKAQat (ORCPT
+        with ESMTP id S230300AbiKAQbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 12:30:49 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 771991CFF9;
-        Tue,  1 Nov 2022 09:30:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667320230; x=1698856230;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=oyJcxv9XLLszFYcBarMqE4cI9/+st/gjsR3pNOh/nb0=;
-  b=Yo+iXTllZxM9qlIbxx6mSvVYFt3c78J0wI/d0EvPempIs0R4khJw3Ccs
-   4Cym2gg7tbQ+XO4dmsvucpW1Ml93fY+1lz8Az+jKKFFdNIZhZ+iRgMvfd
-   CWugf7yBG8ZRwIpykjUEXDNo5pXMIjlUjDruVwgPE99VpmsuGco54aPrk
-   COD0uPk4RpIoeKUc9Zk7Yrr8zC+7iLd7nCDUAchz91BKMsBgi1HCJjnvQ
-   4MiW2voYnhgczUHgqN6ZAFIZX9Daeg+83LO7JD5AcuKjsyiLKSGSYNjE2
-   CC4gpTeXp7sFBcvJrRiv9a5mx9pNYZdf19E5OkXkee7qKt6Yw2vz9me/m
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="310887148"
-X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
-   d="scan'208";a="310887148"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 09:30:29 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="697458814"
-X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
-   d="scan'208";a="697458814"
-Received: from mweigler-mobl.ger.corp.intel.com ([10.249.40.213])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 09:30:24 -0700
-Date:   Tue, 1 Nov 2022 18:30:22 +0200 (EET)
-From:   =?ISO-8859-15?Q?Ilpo_J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To:     matthew.gerlach@linux.intel.com
-cc:     Xu Yilun <yilun.xu@intel.com>, hao.wu@intel.com,
-        Russ Weight <russell.h.weight@intel.com>,
-        basheer.ahmed.muddebihal@intel.com, trix@redhat.com,
-        mdf@kernel.org, linux-fpga@vger.kernel.org,
-        linux-doc@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
-        tianfei.zhang@intel.com, corbet@lwn.net,
-        linux-serial <linux-serial@vger.kernel.org>,
-        Jiri Slaby <jirislaby@kernel.org>, geert+renesas@glider.be,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        niklas.soderlund+renesas@ragnatech.se, macro@orcam.me.uk,
-        johan@kernel.org, Lukas Wunner <lukas@wunner.de>,
-        marpagan@redhat.com
-Subject: Re: [PATCH v4 4/4] tty: serial: 8250: add DFL bus driver for Altera
- 16550.
-In-Reply-To: <alpine.DEB.2.22.394.2211010843110.2746019@rhweight-WRK1>
-Message-ID: <1a812bba-6832-36cc-dfed-7d7ddd8f421c@linux.intel.com>
-References: <20221020212610.697729-1-matthew.gerlach@linux.intel.com> <20221020212610.697729-5-matthew.gerlach@linux.intel.com> <Y11FmiDeVhGir+7z@yilunxu-OptiPlex-7050> <alpine.DEB.2.22.394.2210311719460.2680729@rhweight-WRK1> <Y2B6kAnd+m3ftWRf@yilunxu-OptiPlex-7050>
- <alpine.DEB.2.22.394.2211010843110.2746019@rhweight-WRK1>
+        Tue, 1 Nov 2022 12:31:50 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6FBC21CFE7
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 09:30:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667320251;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=11t7t2M5S9FVtreaeqc7IEi/JpUAAyL70GwctMIr/Uo=;
+        b=R8k7omYgk3xdRuFw5pjKvYe0fJY+3tqjZKi/EQgSRdwxDomtuDhxwYHHVNAQWoP7oY92/D
+        hYPZ4kb17Y8PFhN9dvXtaQf8faxeo7rOi9k+vuIq2Dq+38HaMDo+RXStL4rm73gevvsbeI
+        KbFEwqQ857K17odktLivTC/gHEpKOH0=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-156-UXHRu4KIP5SSs1TCerXLMw-1; Tue, 01 Nov 2022 12:30:46 -0400
+X-MC-Unique: UXHRu4KIP5SSs1TCerXLMw-1
+Received: from smtp.corp.redhat.com (int-mx05.intmail.prod.int.rdu2.redhat.com [10.11.54.5])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id E801E811E81;
+        Tue,  1 Nov 2022 16:30:44 +0000 (UTC)
+Received: from warthog.procyon.org.uk (unknown [10.33.36.73])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id AD9AC4EA49;
+        Tue,  1 Nov 2022 16:30:42 +0000 (UTC)
+Subject: [RFC PATCH 00/12] smb3: Add iter helpers and use iov_iters down to
+ the network transport
+From:   David Howells <dhowells@redhat.com>
+To:     Steve French <smfrench@gmail.com>,
+        Al Viro <viro@zeniv.linux.org.uk>
+Cc:     linux-cachefs@redhat.com, John Hubbard <jhubbard@nvidia.com>,
+        linux-cifs@vger.kernel.org, linux-rdma@vger.kernel.org,
+        Jeff Layton <jlayton@kernel.org>, linux-mm@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org,
+        Matthew Wilcox <willy@infradead.org>,
+        Steve French <sfrench@samba.org>,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        linux-crypto@vger.kernel.org,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Christoph Hellwig <hch@lst.de>, dhowells@redhat.com,
+        Shyam Prasad N <nspmangalore@gmail.com>,
+        Rohith Surabattula <rohiths.msft@gmail.com>,
+        Tom Talpey <tom@talpey.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Jeff Layton <jlayton@kernel.org>, linux-cifs@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org
+Date:   Tue, 01 Nov 2022 16:30:41 +0000
+Message-ID: <166732024173.3186319.18204305072070871546.stgit@warthog.procyon.org.uk>
+User-Agent: StGit/1.5
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.5
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 1 Nov 2022, matthew.gerlach@linux.intel.com wrote:
 
-> 
-> 
-> On Tue, 1 Nov 2022, Xu Yilun wrote:
-> 
-> > On 2022-10-31 at 17:34:39 -0700, matthew.gerlach@linux.intel.com wrote:
-> > > 
-> > > 
-> > > On Sat, 29 Oct 2022, Xu Yilun wrote:
-> > > 
-> > > > On 2022-10-20 at 14:26:10 -0700, matthew.gerlach@linux.intel.com wrote:
-> > > > > From: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > > > > 
-> > > > > Add a Device Feature List (DFL) bus driver for the Altera
-> > > > > 16550 implementation of UART.
-> > > > > 
-> > > > > Signed-off-by: Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > > > > ---
-> > > > > v4: use dev_err_probe() everywhere that is appropriate
-> > > > >     clean up noise
-> > > > >     change error messages to use the word, unsupported
-> > > > >     tried again to sort Makefile and KConfig better
-> > > > >     reorder probe function for easier error handling
-> > > > >     use new dfh_find_param API
-> > > > > 
-> > > > > v3: use passed in location of registers
-> > > > >     use cleaned up functions for parsing parameters
-> > > > > 
-> > > > > v2: clean up error messages
-> > > > >     alphabetize header files
-> > > > >     fix 'missing prototype' error by making function static
-> > > > >     tried to sort Makefile and Kconfig better
-> > > > > ---
-> > > > >  drivers/tty/serial/8250/8250_dfl.c | 149
-> > > > > +++++++++++++++++++++++++++++
-> > > > >  drivers/tty/serial/8250/Kconfig    |  12 +++
-> > > > >  drivers/tty/serial/8250/Makefile   |   1 +
-> > > > >  3 files changed, 162 insertions(+)
-> > > > >  create mode 100644 drivers/tty/serial/8250/8250_dfl.c
-> > > > > 
-> > > > > diff --git a/drivers/tty/serial/8250/8250_dfl.c
-> > > > > b/drivers/tty/serial/8250/8250_dfl.c
-> > > > > new file mode 100644
-> > > > > index 000000000000..f02f0ba2a565
-> > > > > --- /dev/null
-> > > > > +++ b/drivers/tty/serial/8250/8250_dfl.c
-> > > > > @@ -0,0 +1,149 @@
-> > > > > +// SPDX-License-Identifier: GPL-2.0
-> > > > > +/*
-> > > > > + * Driver for FPGA UART
-> > > > > + *
-> > > > > + * Copyright (C) 2022 Intel Corporation, Inc.
-> > > > > + *
-> > > > > + * Authors:
-> > > > > + *   Ananda Ravuri <ananda.ravuri@intel.com>
-> > > > > + *   Matthew Gerlach <matthew.gerlach@linux.intel.com>
-> > > > > + */
-> > > > > +
-> > > > > +#include <linux/bitfield.h>
-> > > > > +#include <linux/dfl.h>
-> > > > > +#include <linux/io-64-nonatomic-lo-hi.h>
-> > > > > +#include <linux/kernel.h>
-> > > > > +#include <linux/module.h>
-> > > > > +#include <linux/serial.h>
-> > > > > +#include <linux/serial_8250.h>
-> > > > > +
-> > > > > +struct dfl_uart {
-> > > > > +	int line;
-> > > > > +};
-> > > > > +
-> > > > > +static int dfl_uart_get_params(struct dfl_device *dfl_dev, struct
-> > > > > uart_8250_port *uart)
-> > > > > +{
-> > > > > +	struct device *dev = &dfl_dev->dev;
-> > > > > +	u64 v, fifo_len, reg_width;
-> > > > > +	u64 *p;
-> > > > > +
-> > > > > +	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_CLK_FRQ);
-> > > > > +	if (!p)
-> > > > > +		return dev_err_probe(dev, -EINVAL, "missing CLK_FRQ
-> > > > > param\n");
-> > > > > +
-> > > > > +	uart->port.uartclk = *p;
-> > > > > +	dev_dbg(dev, "UART_CLK_ID %u Hz\n", uart->port.uartclk);
-> > > > > +
-> > > > > +	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_FIFO_LEN);
-> > > > > +	if (!p)
-> > > > > +		return dev_err_probe(dev, -EINVAL, "missing FIFO_LEN
-> > > > > param\n");
-> > > > > +
-> > > > > +	fifo_len = *p;
-> > > > > +	dev_dbg(dev, "UART_FIFO_ID fifo_len %llu\n", fifo_len);
-> > > > > +
-> > > > > +	switch (fifo_len) {
-> > > > > +	case 32:
-> > > > > +		uart->port.type = PORT_ALTR_16550_F32;
-> > > > > +		break;
-> > > > > +
-> > > > > +	case 64:
-> > > > > +		uart->port.type = PORT_ALTR_16550_F64;
-> > > > > +		break;
-> > > > > +
-> > > > > +	case 128:
-> > > > > +		uart->port.type = PORT_ALTR_16550_F128;
-> > > > > +		break;
-> > > > > +
-> > > > > +	default:
-> > > > > +		return dev_err_probe(dev, -EINVAL, "unsupported
-> > > > > fifo_len %llu\n", fifo_len);
-> > > > > +	}
-> > > > > +
-> > > > > +	p = dfh_find_param(dfl_dev, DFHv1_PARAM_ID_REG_LAYOUT);
-> > > > > +	if (!p)
-> > > > > +		return dev_err_probe(dev, -EINVAL, "missing REG_LAYOUT
-> > > > > param\n");
-> > > > > +
-> > > > > +	v = *p;
-> > > > > +	uart->port.regshift = FIELD_GET(DFHv1_PARAM_ID_REG_SHIFT, v);
-> > > > > +	reg_width = FIELD_GET(DFHv1_PARAM_ID_REG_WIDTH, v);
-> > > > 
-> > > > I have concern that the raw layout inside the parameter block is
-> > > > still exposed to drivers and need to be parsed by each driver.
-> > > 
-> > > Raw parameter block will always have to be passed to the driver because HW
-> > > specific properties can be defined that will need to be parsed by the
-> > > specific driver.
-> > 
-> > So there is a question about the scope of the definitions of these parameter
-> > blocks. MSIX seems globally used across all dfl devices. REG_LAYOUT
-> > seems specific to uart?
-> 
-> There are definitely two classes of parameter blocks.  One class is HW
-> agnostic parameters where the parameters are relevant to many different kinds
-> of HW components.  MSI-X, and input clock-frequency are certainly HW agnostic,
-> and it turns out that REG_LAYOUT is not specific to uart.  You can see
-> reg_bits and reg_stride in struct regmap_config.  There are also device tree
-> bindings for reg-shift and reg-io-width.  The second class of parameters would
-> be specific to HW component.  In the case of this uart driver, all parameters
-> would be considered HW agnostic parameters.
-> 
-> > 
-> > If a parameter block is widely used in dfl drivers, duplicate the parsing
-> > from HW layout in each driver may not be a good idea. While for device
-> > specific parameter block, it's OK.
-> 
-> It sounds like we are in agreement.
-> 
-> > 
-> > Another concern is the indexing of the parameter IDs. If some parameter
-> > blocks should be device specific, then no need to have globally indexed
-> > parameter IDs. Index them locally in device is OK. So put the definitions
-> > of ID values, HW layout and their parsing operation in each driver.
-> 
-> It may be confusing for two drivers to use the same parameter id that have
-> different meanings and data layout.  Since all the parameters for this driver
-> would be considered HW agnostic, we'd don't need to address this issue with
-> this patchset.
->
-> > > > How about we define HW agnostic IDs for parameter specific fields like:
-> > > > 
-> > > > PARAM_ID		FIELD_ID
-> > > > ================================
-> > > > MSIX			STARTV
-> > > > 			NUMV
-> > > > --------------------------------
-> > > > CLK			FREQ
-> > > > --------------------------------
-> > > > FIFO			LEN
-> > > > --------------------------------
-> > > > REG_LAYOUT		WIDTH
-> > > > 			SHIFT
-> > > > 
-> > > > And define like u64 dfl_find_param(struct dfl_device *, int param_id,
-> > > > int field_id)
-> > > 
-> > > I don't think dfl_find_param as defined above adds much value.
-> > > 
-> > > > 
-> > > > Think further, if we have to define HW agnostic property - value pairs,
-> > > > why don't we just use "Software nodes for the firmware node", see
-> > > > drivers/base/swnode.c. I think this may be a better choice.
-> > > 
-> > > I am looking into "Software nodes for the firmware node", and it can be
-> > > used
-> > > for HW agnostic properties.  Each dfl driver will still have to make a
-> > > function call to fetch each HW agnostice property value as well as a
-> > > function call to find the HW specific parameters and then parse those
-> > > parameters.
+Hi Steve, Al, Christoph,
 
-Btw, another aspect this discussion has completely overlooked is the 
-presence of parameter version and how it impacts data layout. Is v1 
-always going be a subset of v2 or can a later version remove something
-v1 had?
+Here's an updated version of a subset of my branch to make the cifs/smb3
+driver pass iov_iters down to the lowest layers where they can be passed to
+the network transport.
 
--- 
- i.
+The first couple of patches provide iov_iter general stuff:
+
+ (1) Move the FOLL_* flags to linux/mm_types.h so that linux/uio.h can make
+     use of them.
+
+ (2) Add a function to extract/get/pin pages from an iterator as a future
+     replacement for iov_iter_get_pages*().  It also adds a function by
+     which the caller can determine which of "extract/get/pin" the
+     extraction function will actually do to aid in cleaning up.
+
+Then there are a couple of patches that add stuff to netfslib that I want
+to use there as well as in cifs:
+
+ (3) Add a netfslib function to use (2) to extract pages from an ITER_IOBUF
+     or ITER_UBUF iterator into an ITER_BVEC iterator.
+
+ (4) Add a netfslib function to use (2) to extract pages from an iterator
+     that's of type ITER_UBUF/IOVEC/BVEC/KVEC/XARRAY and add them to a
+     scatterlist.  The function in (2) is used for a UBUF and IOVEC
+     iterators, so those need cleaning up afterwards; BVEC and XARRAY
+     iterators can be rendered into elements that span multiple pages.
+
+Then there are some cifs helpers that work with iterators:
+
+ (5) Implement cifs_splice_read() to use an ITER_BVEC rather than an
+     ITER_PIPE, bulk-allocating the pages, attaching them to the bvec,
+     doing the I/O and then pushing the pages into the pipe.  This avoids
+     the problem with cifs wanting to split the pipe iterator in a later
+     patch.
+
+ (6) Add a function to walk through an ITER_BVEC/KVEC/XARRAY iterator and
+     add elements to an RDMA SGE list.  Only the DMA addresses are stored,
+     and an element may span multiple pages (say if an xarray contains a
+     multipage folio).
+
+ (7) Add a function to walk through an ITER_BVEC/KVEC/XARRAY iterator and
+     pass the contents into a shash function.
+
+ (8) Add functions to walk through an ITER_XARRAY iterator and perform
+     various sorts of cleanup on the folios held therein, to be used on I/o
+     completion.
+
+ (9) Add a function to read from the transport TCP socket directly into an
+     iterator.
+
+Then come the patches that actually do the work of iteratorising cifs:
+
+(10) The main patch.  Replace page lists with iterators.  It extracts the
+     pages from ITER_UBUF and ITER_IOVEC iterators to an ITER_BVEC
+     iterator, pinning or getting refs on them, before passing them down as
+     the I/O may be done from a worker thread.
+
+     The iterator is extracted into a scatterlist in order to talk to the
+     crypto interface or to do RDMA.
+
+(11) In the cifs RDMA code, extract the iterator into an RDMA SGE[] list,
+     removing the scatterlist intermediate - at least for smbd_send().
+     There appear to be other ways for cifs to talk to the RDMA layer that
+     don't go through that that I haven't managed to work out.
+
+(12) Remove a chunk of now-unused code.
+
+Note also that I haven't managed to test all the combinations of transport.
+Samba doesn't support RDMA and ksmbd doesn't support encryption.  I can
+test them separately, but not together.  That said, rdma, sign, seal and
+sign+seal seem to work.
+
+I've pushed the patches here also:
+
+	https://git.kernel.org/pub/scm/linux/kernel/git/dhowells/linux-fs.git/log/?h=cifs-for-viro
+
+Note that this is based on a merge of Al's work.iov_iter branch with
+v6.1-rc2.
+
+David
+
+Link: https://lore.kernel.org/r/166697254399.61150.1256557652599252121.stgit@warthog.procyon.org.uk/
+---
+David Howells (12):
+      mm: Move FOLL_* defs to mm_types.h
+      iov_iter: Add a function to extract a page list from an iterator
+      netfs: Add a function to extract a UBUF or IOVEC into a BVEC iterator
+      netfs: Add a function to extract an iterator into a scatterlist
+      cifs: Implement splice_read to pass down ITER_BVEC not ITER_PIPE
+      cifs: Add a function to build an RDMA SGE list from an iterator
+      cifs: Add a function to Hash the contents of an iterator
+      cifs: Add some helper functions
+      cifs: Add a function to read into an iter from a socket
+      cifs: Change the I/O paths to use an iterator rather than a page list
+      cifs: Build the RDMA SGE list directly from an iterator
+      cifs: Remove unused code
+
+
+ fs/cifs/Kconfig          |    1 +
+ fs/cifs/cifsencrypt.c    |  172 +++-
+ fs/cifs/cifsfs.c         |   12 +-
+ fs/cifs/cifsfs.h         |    6 +
+ fs/cifs/cifsglob.h       |   31 +-
+ fs/cifs/cifsproto.h      |   11 +-
+ fs/cifs/cifssmb.c        |   13 +-
+ fs/cifs/connect.c        |   16 +
+ fs/cifs/file.c           | 1793 ++++++++++++++++++--------------------
+ fs/cifs/fscache.c        |   22 +-
+ fs/cifs/fscache.h        |   10 +-
+ fs/cifs/misc.c           |  127 +--
+ fs/cifs/smb2ops.c        |  378 ++++----
+ fs/cifs/smb2pdu.c        |   45 +-
+ fs/cifs/smbdirect.c      |  503 +++++++----
+ fs/cifs/smbdirect.h      |    4 +-
+ fs/cifs/transport.c      |   57 +-
+ fs/netfs/Makefile        |    1 +
+ fs/netfs/iterator.c      |  346 ++++++++
+ include/linux/mm.h       |   74 --
+ include/linux/mm_types.h |   73 ++
+ include/linux/netfs.h    |    5 +
+ include/linux/uio.h      |   29 +
+ lib/iov_iter.c           |  333 +++++++
+ 24 files changed, 2390 insertions(+), 1672 deletions(-)
+ create mode 100644 fs/netfs/iterator.c
+
+
