@@ -2,121 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2EBFF61464D
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 10:08:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4D84A614656
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 10:09:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbiKAJIq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 05:08:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54410 "EHLO
+        id S229767AbiKAJJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 05:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54672 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229626AbiKAJIm (ORCPT
+        with ESMTP id S229988AbiKAJJ1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 05:08:42 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D36345FA9;
-        Tue,  1 Nov 2022 02:08:39 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A18mEYp013330;
-        Tue, 1 Nov 2022 09:08:28 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ilX9N7XuGwQznLnjFjp8fK0eTBudblM02vlzIqJN95A=;
- b=hMj+1R7cAjVKhn0NMhP1yCBZ5iOcRFDEauigzkzBKh86eSsyZcqCfxW1ENX68zX9ZVfw
- XGEqJqpIdUywy90B5jExcPlevZr6UgriedzswHtjDquEhoLURO1KQpJ1JI/ASVogByNg
- 64+DgWD0Vu4xC1t2CTCplfEKfzl8OH9SDtP+BWQJnKl3vMET2bMlo3Kw8hA3l+hNOjSt
- D+wKzP76Kulj6Y82NM22IEYChbZHtGOlR299gystlzkHslq9lebcCjH3fCVly44JLbqy
- pLD8Yb/RLZ6IxBb6mK/La/+ZJrNqw1SqIRaN53P9iF9AjOwhJCNuEp97fpWStOlWk0qm 3g== 
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kk093820p-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Nov 2022 09:08:28 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A198RVZ029968
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 1 Nov 2022 09:08:27 GMT
-Received: from [10.216.27.235] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Tue, 1 Nov 2022
- 02:08:25 -0700
-Message-ID: <722d3571-b399-dbf0-26da-04b73331df49@quicinc.com>
-Date:   Tue, 1 Nov 2022 14:38:22 +0530
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.0.2
-Subject: Re: [PATCH] wifi: ath10k: Add WLAN firmware image version info into
- smem
+        Tue, 1 Nov 2022 05:09:27 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF0DE62D7;
+        Tue,  1 Nov 2022 02:09:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667293766; x=1698829766;
+  h=from:to:cc:subject:date:message-id:references:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=d3cL9Cibzyvv43VzarDema9esnf82VylamgRc8ofx5k=;
+  b=Wn5Bo5p2+cCfPsx62a6IC3qZ3ZaK6wfDdWt6Kox6TVuF2hN8Ip1ttpfX
+   v5N+K+km+n5CEmXFzuLuBwL1GXSadrtI6bG49nyZDGt+3lhIx3V4BjkG+
+   X4jvRDIATnHesrtcMgR9/jJR+PehYkhuspgwMDmwHa+xKZcwdhju+FcrM
+   FWK1d/gfa7vtfWc2XPC1M43kY7UYxyr/mE+ze2n8/9Pnl8/hA+hDo3vvs
+   SvvErzF3IJxOt4f/yRsJVTaGp/0mC+RzaSqyy69L++GXgSbHyaZTGM3QX
+   25T6K/R+X5AKyQ9dmBmyMf3byNm017m30lqNvQrBF5FHgGqSeUzo9ea/H
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="309097285"
+X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
+   d="scan'208";a="309097285"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 02:09:26 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="808846000"
+X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
+   d="scan'208";a="808846000"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga005.jf.intel.com with ESMTP; 01 Nov 2022 02:09:25 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 1 Nov 2022 02:09:24 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Tue, 1 Nov 2022 02:09:24 -0700
+Received: from fmsedg602.ED.cps.intel.com (10.1.192.136) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Tue, 1 Nov 2022 02:09:24 -0700
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.108)
+ by edgegateway.intel.com (192.55.55.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Tue, 1 Nov 2022 02:09:24 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=DpEJAVDkr+goZikCeCJrHQ3JAvdMhZy8XIITq+sYiNiWew5BVDUr+nGkWTfdEMDbs0KN0JhcD1VsGAOINZGnu2wnpQqSV6htPer7sxVI+IYgDmX1dKZYmczDQWMuartrSBf7pGoP28cf+4nmBuU4tW29xPHutcvBrIB+GCH/Tws3Zy6/7WAR7OjGY9Vsy50mEWDfMqgOStRYckSeWniUmGFYKWeCifncYlnkdHMgdU+ZAWE2bz23ZieKzmoXspx75ccZkuWED9QyXXlTRSLT3Ydkmvi4gUQ+c9jFLJe5FlmS5lfXIIo3Ww38teZW0zLFOaiFXPZMbzLv4qyMtHpehQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=d3cL9Cibzyvv43VzarDema9esnf82VylamgRc8ofx5k=;
+ b=dGVBV93XWidGLVcwdpR/awrlpm7NihmlF3OF1PReSbsMbNOifOFEYulAkOrjmvk56wlnLYKZyQ+JvqTVYgM5TJwVOSL17yE2XmnloGt8xD8jE1ijfK/Yk0lILs1OcCb+A8II5rEks+5+QXalPFhRlEf6WUyQlo/lQGYdgGWOC6K76tSbET6WXmQJEe+8MPGXj++rfdODxHkl+ohkmfHxb+/je1J9KgFetkgo3dBmecUCqmpD+umz6IWMgHThKvKcBTD2HZDRZMhpzT8S3E6Og74crzREfCTm7myugSOJPZjTL+jFObZNxLu9vAbVRXK8NOwEGUdPC7zlZH7m3MA+2g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com (2603:10b6:408:135::18)
+ by SJ1PR11MB6252.namprd11.prod.outlook.com (2603:10b6:a03:457::21) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.16; Tue, 1 Nov
+ 2022 09:09:16 +0000
+Received: from BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::737e:211a:bb53:4cd7]) by BN9PR11MB5276.namprd11.prod.outlook.com
+ ([fe80::737e:211a:bb53:4cd7%5]) with mapi id 15.20.5769.021; Tue, 1 Nov 2022
+ 09:09:16 +0000
+From:   "Tian, Kevin" <kevin.tian@intel.com>
+To:     Eric Farman <farman@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        "Liu, Yi L" <yi.l.liu@intel.com>
+CC:     Zhenyu Wang <zhenyuw@linux.intel.com>,
+        "Wang, Zhi A" <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        "Joonas Lahtinen" <joonas.lahtinen@linux.intel.com>,
+        "Vivi, Rodrigo" <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        "Halil Pasic" <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        "Peter Oberparleiter" <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        "intel-gvt-dev@lists.freedesktop.org" 
+        <intel-gvt-dev@lists.freedesktop.org>,
+        "intel-gfx@lists.freedesktop.org" <intel-gfx@lists.freedesktop.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-s390@vger.kernel.org" <linux-s390@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>
+Subject: RE: [PATCH v1 5/7] vfio/ccw: remove release completion
+Thread-Topic: [PATCH v1 5/7] vfio/ccw: remove release completion
+Thread-Index: AQHY49ch09fbxb5+bk6wNsLTkwW1Q64p23EQ
+Date:   Tue, 1 Nov 2022 09:09:15 +0000
+Message-ID: <BN9PR11MB527609A5BD1A652D2108B1CD8C369@BN9PR11MB5276.namprd11.prod.outlook.com>
+References: <20221019162135.798901-1-farman@linux.ibm.com>
+ <20221019162135.798901-6-farman@linux.ibm.com>
+In-Reply-To: <20221019162135.798901-6-farman@linux.ibm.com>
+Accept-Language: en-US
 Content-Language: en-US
-To:     Kalle Valo <kvalo@kernel.org>
-CC:     Jeff Johnson <quic_jjohnson@quicinc.com>,
-        <ath10k@lists.infradead.org>, <linux-wireless@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221026102257.19919-1-quic_youghand@quicinc.com>
- <b55ef95f-f400-9ef6-a427-525ae529d673@quicinc.com>
- <fd45187c-739c-cd5d-4d4b-ae6abad03a94@quicinc.com>
- <877d0fgiaa.fsf@kernel.org>
-From:   "Youghandhar Chintala (Temp)" <quic_youghand@quicinc.com>
-In-Reply-To: <877d0fgiaa.fsf@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: zYRwwMhjNqmSmIewrws5MHNOaUx2h2wY
-X-Proofpoint-ORIG-GUID: zYRwwMhjNqmSmIewrws5MHNOaUx2h2wY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-01_05,2022-10-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxlogscore=999
- lowpriorityscore=0 spamscore=0 phishscore=0 priorityscore=1501
- impostorscore=0 adultscore=0 malwarescore=0 mlxscore=0 bulkscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211010070
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BN9PR11MB5276:EE_|SJ1PR11MB6252:EE_
+x-ms-office365-filtering-correlation-id: 01723365-9455-4351-bcde-08dabbe8c060
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: kjZHyUm6BiNqqNP3zLj+EVUQOoSCljNdYF7osPrT8MPRj2qp6Bj930ZqbCsdR7AppSz/Js+kgmfRhUbAUofpP0SM9CR1T7FY3+x+nWj2Dug+6e5bd+/CVYryfcUf3cmvajYTzCMEYCrJod5kWFAHMl2g1a0hdrAv4jA+KnY/FugeIOsqEb6m7kCT3lyZjIhwwragDR0+2nQlE3ErZAp0//jjw5OCLtRu7Vm/D9TcpIp4lXccXpXN9oUYzIHXF1drkcNRIbAPliMGlinRrJB/JS3Qy6YMFQaHoqFS7qsZWjFL/cKT55HCxh4JPRonKccunXKu7cZIuqrCXA0I4XG4BUUnMcOOTPjJ3HpyEX2pzELxJ1W8IGaOYd9Niix4s+sG4ArdurE87U5eDBiZ16btGZxG/mpOaqNT3976yt9JKrfBISy9oNtdAaHZrvVYPFmcPQIXWI6lRr+xbIeuOCrt9UmMJ/mYlcfswzURWSWggWt6Aq5vEV0eygVsp1hbXdegiIZCZE5LzXsaiRNVSlqRAzYLTmBnvOIILevySa8VMR8MakMVx0oQmlZMXqO+vT8M2bdb+P3qa9ecDVhDt/2pbT9O4Rp4gy5rMvgFjAkVIQoVlzgmbxUgNuFMw2oZ+MkkLt3E43fMN3DzNpdMMa7cJzHtbJ5iL0+2MQzumOgscmA1rWJeWYzF13vYhRAJPLep008tm1X4OUow2c+aN7H4a9V7OG2gy4/GgzBGlGtqXjBpe8x0Juph1AoH1SH27h+cc9gQDNgHTkMlmDqZozH+Gw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BN9PR11MB5276.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(366004)(136003)(396003)(376002)(346002)(39860400002)(451199015)(5660300002)(186003)(66446008)(7416002)(7696005)(4326008)(9686003)(76116006)(66556008)(66946007)(8936002)(64756008)(8676002)(2906002)(66476007)(6506007)(38100700002)(82960400001)(41300700001)(86362001)(38070700005)(33656002)(122000001)(26005)(558084003)(55016003)(52536014)(7406005)(110136005)(316002)(54906003)(71200400001)(478600001)(6636002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?vP9TMnQ6iL8VCLiUDG6ZMVvpd2cqgC/3ku7eg+e5OIU1RKj6VEZQ2gV2As2Q?=
+ =?us-ascii?Q?00R+WL9osqD6v8yExM3rA2Ly+aginxHXGcsgfnZg6ZjzBPw83EjS2/dk54sr?=
+ =?us-ascii?Q?o3VlFD+ZlXsiWWENmJa6wpIWOyr5zqCxzylvBY4OVMZjb6DLQ0Pt3RYHqM22?=
+ =?us-ascii?Q?WLoZ+h/ngokTY9Qhg9oG5O0uH8jghQQGkssJtw6/YLCQu9ukIAJfgQTowD9e?=
+ =?us-ascii?Q?9fe+TKu8+nHw/S7kLtB3cAGkz3qxPNzu4Za8QfHStPJay7viUyyAoFHrRnQw?=
+ =?us-ascii?Q?TTHT96HOes910Xw/iM0Tl6K4B+t4sSyGh/4crkb/WLrYZcISI5xzdHdqu4q/?=
+ =?us-ascii?Q?wbhALTUmXxV2k8SY11CWnu1gs5WIt2WneDWIDt+/9Qv0n+8JndbKPK4++Vb/?=
+ =?us-ascii?Q?Um3SnHY5Z2KNjRjDuzvun0e1T+ZsKIv+83PuLN7QiPAtQ06LLC0G8qHbJdxh?=
+ =?us-ascii?Q?tr2WO/PbyWYe+VN2sibisQpsQ8FgkikQgwOTv0f4Dp+9CUYfW20qw4iKqFcX?=
+ =?us-ascii?Q?lXydQoAjWzUQvoVz8p9ObLG9T2WQNhNVKJtM0DUOxUuzjaX+rnFRnfMkh6w7?=
+ =?us-ascii?Q?xgb4BWaSEqiOcqTXRGt9wDkO+W9jX49oi7v9hnjrgJz4lPpxUakcVyWFX3rP?=
+ =?us-ascii?Q?G8j8uZiwj6l0kCSyK05s/VI5zKjmre9qzZJBIsBlKdr7DVmfnL9/ApZdaDgQ?=
+ =?us-ascii?Q?tSAI1xje2RGsFysVMRJawcb7HkpIlzoHFUdaww/uMi14dTVBB/O7rkS6TE2j?=
+ =?us-ascii?Q?W6b9ynh4DJPsMf70mDzH39sTnmy75Jqq32O0i1W6LbC4vkNQMUDHaeyyEQUS?=
+ =?us-ascii?Q?Ot5nqDyDpMHqqicPWorgFtXIqmQOWA5Y94h+oCmaTKaQ8Y9EAA0n8Lqxvbz2?=
+ =?us-ascii?Q?9EMZtMMAC5nqMqvWn1R92/cxZOfB7x+q75eWXp4RJv7yp0jJKYqyqozm9olP?=
+ =?us-ascii?Q?fsKOUCdXSJZ8ZM6tV4PDuL3T4HwMQV+aA8Zemhyd1m59M12DHBunDzuXiy3E?=
+ =?us-ascii?Q?wbg04kpO1TbyizgFjbSKwUy8ZSdCXNj4q9wIbwUgA6Ofi84TTsMeKXjpCPuU?=
+ =?us-ascii?Q?RrUJi4u21gl7NEhquQcpoHDRrvbBx9eQ7FlPrQ5Exz+IM2YOw8W9kazdwdJ/?=
+ =?us-ascii?Q?11EU7o2DpXNjD+GPi7mrOX2DuTI9MKCJhYeq5RnHGC/1MQZ/blNNAfjFo12e?=
+ =?us-ascii?Q?RSH8WmNjHbcj2T4kJDvIT640MHW8w/CdK9RXz47uegtQN/rRTzHK83Ylpmk4?=
+ =?us-ascii?Q?IM1l2wYjPVTxwNiCcOJIH5DbxMUOlRTYqgjyt6gNffAmrtUbnltot/Sh1pJ0?=
+ =?us-ascii?Q?j24vvSltTy2ZOSNOm6qcub6yPrBZHsdj3YRvS1D30678ErHhkVh5Sjjgawbv?=
+ =?us-ascii?Q?jqFoyVz6M4Mt3+q1q3D4uG0m1CN/NKnM7vAfOqBaRf66i7nKfPA5nBJqcYrw?=
+ =?us-ascii?Q?KAQhrzfZ4TL61nGKldpjrX+1CqrobgPpYwks+HfNQ5TxVKsYNf6mWKsrllu3?=
+ =?us-ascii?Q?na1SkCF2rdpBT9LKXQ0Dl1NZXwiaXz3KygYupgXu4a2Vq88U6hA5GDcc2tSG?=
+ =?us-ascii?Q?Vu8WGMh/tzwzKprBAYYPQl3Yq/V4RP1iv2v90z8H?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
+MIME-Version: 1.0
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BN9PR11MB5276.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 01723365-9455-4351-bcde-08dabbe8c060
+X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Nov 2022 09:09:15.9936
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: QaS0TH4zY78Xdz4VqigkhiO+4fHNB+sXlBieS+jWVoUlFtywBKrUrnZcVDy1gMTC2Cmh4K14pwbLsfub7UqtZw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ1PR11MB6252
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+> From: Eric Farman <farman@linux.ibm.com>
+> Sent: Thursday, October 20, 2022 12:22 AM
+>=20
+> There's enough separation between the parent and private structs now,
+> that it is fine to remove the release completion hack.
+>=20
+> Signed-off-by: Eric Farman <farman@linux.ibm.com>
 
-On 11/1/2022 2:31 PM, Kalle Valo wrote:
-> (fixing quotation)
->
-> "Youghandhar Chintala (Temp)" <quic_youghand@quicinc.com> writes:
->
->> On 10/28/2022 12:19 AM, Jeff Johnson wrote:
->>
->>> On 10/26/2022 3:22 AM, Youghandhar Chintala wrote:
->>>>    +static void ath10k_qmi_add_wlan_ver_smem(struct ath10k *ar, char
->>>> *fw_build_id)
->>> const char *fw_build_id?
->>>
->>>> +{
->>>> +    u8 *smem_table_ptr;
->>>> +    size_t smem_block_size;
->>>> +    const u32 version_string_size = 128;
->>> should you s/128/MAX_BUILD_ID_LEN/ since that is what is used to
->>> size qmi->fw_build_id?
->>>
->>> or alternately have the caller pass fw_build_id length as a separate
->>> param?
->> Sure Jeff. Will address it in next version of patch.
-> BTW Youghandhar, your quotes were broken in this mail so your reply was
-> difficult to find. See here:
->
-> https://patchwork.kernel.org/project/linux-wireless/patch/20221026102257.19919-1-quic_youghand@quicinc.com/
->
-> If you are using Outlook, I recommend switching to an application which
-> respects standards more :) For example, some people seem to be happy
-> with Thunderbird.
-
-
-Thank you so much for your suggestion. I will address it.
-
-Currently I am using  Thunderbird.
-
+Reviewed-by: Kevin Tian <kevin.tian@intel.com>
