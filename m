@@ -2,430 +2,184 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C8C6E615519
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:34:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8347F615517
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:34:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231168AbiKAWeZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 18:34:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36420 "EHLO
+        id S231264AbiKAWeP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 18:34:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36754 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230410AbiKAWd2 (ORCPT
+        with ESMTP id S231311AbiKAWdf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 18:33:28 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8B1B2DDF
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 15:33:25 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id 78so14646108pgb.13
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 15:33:25 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZgD6VkoidY1K6fgTV3eaPZ8+VeXqzeB8ij/KEzvrtPE=;
-        b=Zw+jdonF3srm2oOPHvE/wciZkC1yJTpG3TlH5S3YyHIINs0uHGKyoAYf5vGGcyPEjk
-         Yhw+0mU8iighIYZhu/NhquSMkNwGmNcRshoLuOHe0mxCTR+CYWlIgtW9rrBMmmmXlpk+
-         C8NLcj1NWzw+ZnaBV55BWXOspaUdrT2J2AQG8=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZgD6VkoidY1K6fgTV3eaPZ8+VeXqzeB8ij/KEzvrtPE=;
-        b=i/4Lxwj4LxLeP3WUK0bpcz+WWVNtecIpTFUAkmJuKtUVAbcFaNTIiPkPqgUqNoTXo7
-         hputs6jeTwcYuh3V2MjvqaqPkJ1MSX5irltFeSJWRbOQB3Quen1cVqBaOvXq0GmU42xp
-         UfkGJBy4V4vqzC8zuMxZM8I+grrafjyUbHD23IWBTM8h3AbEzhJiUSRvgAWwky2sGmZM
-         lDyWUZSsYxQCQqI4LHbuo/N24/R2gUZZ/PrqdSsCZQD7gVJktaBNY90JK2cNU+3uf8tB
-         Dg5mamth2x3/XF1zi9BD5EthNuAlb9txiMLzel6jxFDmdqZyJ5oyL5fqB1ZtLNdOqv+d
-         0DGw==
-X-Gm-Message-State: ACrzQf2ZGl9wrzr6wbZ2Iw35+d8pmJHi1mqAa6fM88pqscp8IrW8NTcZ
-        a/fkiTQBApn5DvXV+LhHW4jmIw==
-X-Google-Smtp-Source: AMsMyM7pxv2Lvo5vKR9F8rfeCTRMS0FxQ0HTHdi2PJZNgWTfKuMPs74vyBlEnyTTOhIdTXzsE6uwaA==
-X-Received: by 2002:a63:dc4a:0:b0:470:5e7:6bba with SMTP id f10-20020a63dc4a000000b0047005e76bbamr1285044pgj.143.1667342004961;
-        Tue, 01 Nov 2022 15:33:24 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w22-20020a1709026f1600b001708c4ebbaesm6735258plk.309.2022.11.01.15.33.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 15:33:24 -0700 (PDT)
-From:   Kees Cook <keescook@chromium.org>
-To:     Vlastimil Babka <vbabka@suse.cz>
-Cc:     Kees Cook <keescook@chromium.org>, David Gow <davidgow@google.com>,
-        linux-hardening@vger.kernel.org, Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Rasmus Villemoes <rasmus.villemoes@prevas.dk>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Andy Shevchenko <andriy.shevchenko@intel.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Geert Uytterhoeven <geert@linux-m68k.org>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, llvm@lists.linux.dev
-Subject: [PATCH 6/6] kunit/fortify: Validate __alloc_size attribute results
-Date:   Tue,  1 Nov 2022 15:33:14 -0700
-Message-Id: <20221101223321.1326815-6-keescook@chromium.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221101222520.never.109-kees@kernel.org>
-References: <20221101222520.never.109-kees@kernel.org>
-MIME-Version: 1.0
-X-Developer-Signature: v=1; a=openpgp-sha256; l=13607; h=from:subject; bh=wSAVvLhC49WrEsey+rzI3Mf2kVppLeoS2Xvz7/CIGX8=; b=owEBbQKS/ZANAwAKAYly9N/cbcAmAcsmYgBjYZ6qOpdEK8ymLzEQRofKPXlon+ENY5S/tTJEZj6i spotAHaJAjMEAAEKAB0WIQSlw/aPIp3WD3I+bhOJcvTf3G3AJgUCY2GeqgAKCRCJcvTf3G3AJmAFD/ 90tYxqc7iT6OunNqTOrQkbn9mc7bapmfR+YkkyhSnAZKeDuHwRfN4p2kwOVaCGcHxgJwS9QQc9wsyJ MyEFyMTdlVu81h3ztDGPI/9oI7qLp0lVbh6hg573DsWPmYrVu0HvzMQA0mp3xtUtrWR5BdcCWkAgsr 8HhVuNTwFSTjLM8DGRnQtIq0FZ6EZ7/6gmcrfVAQ5HsSsYHxVZMp5t+6A5Op4Vf4EqOqSe0TGIAgSw s50gIlJL4hzs0PgV++sohnEJZuskR9o+Y7Rs7qjBsdY4l8BG2N4WB8CSwEtLSWSouiyXbt6aXW/49r 1gAVCV0/uf/LsQ3sMtXkYVEQb+zhut27bgLVDyppx/NJBPUBZLUMbi5vQFTedUG6cVAu/n5RIurbCz 9tVvHM1Q2SEqILXvxOTHjR4bjOIihBxNIV/hfitfkOn5+zMLAid9WcWqkZve2lxVeN+7zL5Wa5HICx J5U9cOj/rwWX1SabXm4vjCRGNjwL+qmd4TIDEDFunxhJU9lmqyA6eDMLFs7u+zz2Pw6T60dy9a3S90 7xUr0yQeXkNdEu2OKNWWbCK74B+jGqtFR9HIRbIFxPI4j8mFBiPUtM6hxahuJNWL/m4XOno+Y4/KKf +N4+iSiPB57uHYauGeWNsoToUSZlEtHpOVent5FYkbsQMY166Avk8ph3mWAA==
-X-Developer-Key: i=keescook@chromium.org; a=openpgp; fpr=A5C3F68F229DD60F723E6E138972F4DFDC6DC026
+        Tue, 1 Nov 2022 18:33:35 -0400
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2055.outbound.protection.outlook.com [40.107.220.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5D618647A;
+        Tue,  1 Nov 2022 15:33:32 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=kiafn1OPb6B2ELeFTu2LvuLIwYxOi1BWjaSDpoe7HQY2IrlOGQrFrUVzgvBJQ9fT8fL4hYxpsRP8Ye5Vz4DQC8yC1LpwMjK0PeHV+D6ULSIFJNBgthw+RbsUgghVpTXbpaPePaY57JSu/tta1ESOXZ259S1LOtnyU83IRBQ/Z7lCt8u9Q/kBKNd4XVAcTW5OZ+oJnvqwyKMgUCe1YzuWGSzsJrnUqBYQMRpMpsFSpNslWd3/0+PwwRtJe5ta5GGfymq5OPe56PoXx+m1ns5NOAbS/vUORbMHvGo99s/ic8LpdkZnBUT+FC5veOYzNrwtjFu97JgeSMf7LxelLUHcmA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=qtDMwu0olHQ569sSTmJ3pQr8uNyt69wZnix2qyAwrCA=;
+ b=EiJ+obwOtUUhM6ZO3Kv2gYWVtihlk4YqG+YTb6CdBLPLktOJbByAvkYKCmCk72PHHSu0yn6CoKN6nkz3PDYoiaNREMd+7bltNhhY3y7Y7BLVBQx1RPjrI40ZMpEGu5UwxP/DHgD8wYV7Yvzuw6a7YwWfHDJZnGrvPbDzUpazPMAzKBfG/w90MMqZ7mKNvix7y7uRh2IZ54aNEcudACYb2CWUAasGA3keYkEG8FfWTXl7Ww39s6QRXHtmbrdgMI3G52+uliTRSegN75vy83jAflBHbOAfmxgCgk0kAg3Q4lE1i0tb1MpX3/OrnuCSO8R4q2Tvm1FxBj9XPqjtojh1pg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=qtDMwu0olHQ569sSTmJ3pQr8uNyt69wZnix2qyAwrCA=;
+ b=aJGVAzbL5TapIMv7qRtFL2FhsPWPDTzJq9/WFynW4CavjKAyo83NdWeIi0OMxKE0EDPhSI/UWaG96CmWWa+4h9PWvH3zahPT7tu09bE/UT+t31iUvd0IvlNoLO/jhy53YQdS2CVIDOi9WkScHKMzg98ZWDJt9mLER4r1awzHMnc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from BL1PR12MB5874.namprd12.prod.outlook.com (2603:10b6:208:396::17)
+ by LV2PR12MB6014.namprd12.prod.outlook.com (2603:10b6:408:170::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.21; Tue, 1 Nov
+ 2022 22:33:30 +0000
+Received: from BL1PR12MB5874.namprd12.prod.outlook.com
+ ([fe80::9eca:d454:d407:7ba2]) by BL1PR12MB5874.namprd12.prod.outlook.com
+ ([fe80::9eca:d454:d407:7ba2%3]) with mapi id 15.20.5769.021; Tue, 1 Nov 2022
+ 22:33:30 +0000
+Message-ID: <5fd2092e-2f3e-27c0-66a9-94e02efa1e8d@amd.com>
+Date:   Tue, 1 Nov 2022 17:33:28 -0500
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v3 0/2] Documentation: Start Spanish translation and
+ include HOWTO
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        bilbao@vt.edu, bagasdotme@gmail.com, willy@infradead.org,
+        akiyks@gmail.com, miguel.ojeda.sandonis@gmail.com
+References: <20221024145521.69465-1-carlos.bilbao@amd.com>
+ <87wn8ext0m.fsf@meer.lwn.net>
+Content-Language: en-US
+From:   Carlos Bilbao <carlos.bilbao@amd.com>
+In-Reply-To: <87wn8ext0m.fsf@meer.lwn.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-ClientProxiedBy: CH2PR15CA0021.namprd15.prod.outlook.com
+ (2603:10b6:610:51::31) To BL1PR12MB5874.namprd12.prod.outlook.com
+ (2603:10b6:208:396::17)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: BL1PR12MB5874:EE_|LV2PR12MB6014:EE_
+X-MS-Office365-Filtering-Correlation-Id: 28815ac6-bfa4-44d2-b30d-08dabc591a29
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: PySmyn4IaV6lbNuGTXu2zWKCMThiLqgKJzhVeYocsCNO9mj3HV+w8ywFbWQyw+3hOW9ISoxvRHAK7yZxnf3vkFL/JHo1+Ie8eF6/nfz1yGPe5J6SlsGJ86OlVswA6quiB7h0EVPdLyOBM0kgJL2Ph2qb6sEFXeV2rnsnaBc+h6SGCRL70b7BHVoF+9wl2B2AWBsIf0ySdyty4ZsdkfANmiT6Prk87hHys4LdlnCEEtUZArcXb4slLHUzHIMDYygeEZgp0Q3FsdsAh15F0k5WtalnNa40lyb2RivPVGkOQC0aE8FMHE0cId1wLVfpsLYVsAsZy7ZZk866OHHkCJX6fRgjH7YPAOOsEvdkVTrAq9QYs4hYAVUdr8ViqrqZH2Ct3kFqX62OMLsjHDBaXfyoIPUmpD75Q6qZN8SgKXL4kXzqFPQ1f9EBSSKIHNvOihJBC1JKqqs4pMFIGPP7PiKxkEH2CQvmUXhoJP5f0jNp06kBKAuda8IdH5eDc1gmwhk7rS6rSM+a0AcS5EflHwj7BAWXrW6YDc+AHmmx47D9NJDZg3/bKH/Rre3w9FQATsLkm8TWjJSqgVWDVXoZV1OdL3Ht0p+Oc0ZCyMJ4gcbbJXcoGuCaye4u33rCgcAkmi6toZmARYopDNp6J6D8CWD5GI5ycF3TIqU8yg5I1MIzU45A7mpVY0spPxR49u+omIycWg68yY7tYevi4Ne44SjAx4w1YUISTRi0qKMs4V6qu4mrkscZXEU3HfexwL3WrBmx3Hr7V7/vAb3I1vCOikzSiUEXqSEuQkAPeEzu3UC2o/ZuNv3RVrGch1kpMjjITga/
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BL1PR12MB5874.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(366004)(39860400002)(376002)(396003)(451199015)(66574015)(83380400001)(186003)(86362001)(31696002)(38100700002)(2906002)(5660300002)(66556008)(8676002)(66946007)(66476007)(8936002)(4326008)(6506007)(2616005)(26005)(6512007)(316002)(6916009)(41300700001)(966005)(6486002)(478600001)(45080400002)(44832011)(53546011)(31686004)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RGNBd3JXNjJJUVByTGVNTFhTNFhvTW1sMXhmVWhmOHFxQ29SYjRCNHNDQjZQ?=
+ =?utf-8?B?eUhLZlF1bE5SNURwUGFxOHU2a0lJZmw1V3hIdFhUT2VYZkNYdUtteHZsNVBP?=
+ =?utf-8?B?MTJVQkVIZUZqKytRZzJKYk5zSVVuM2ZsTG00Q252UDJwZFV6NmhDb0hrRGk5?=
+ =?utf-8?B?UlNvaGxVY09McVdwT1ZXVXh0Vyt3NDFxODdlUnRqdy9OcXFlQmx5cEl4dmdl?=
+ =?utf-8?B?cXlGZ3llQUN5dmI3cTN5OXpQdW85UnVENEYwNXMvbWRjWkVqWmp0VkpINkU5?=
+ =?utf-8?B?R3ZmMXhtNTFGRnkyaWZVWFhhdC90TjU5amxiSlZwQkNXQ3pqQ0JHeTh2eGs4?=
+ =?utf-8?B?K2tDOEsySkxVeGZUSkJ4ZzJEdWFJV2lWblhYQld1aURzbVkvWFc2NHVURkRm?=
+ =?utf-8?B?ZExCQUN4K0RZdVdsOW84aWJUeVZTUy9ROGNZeFFVWEJyWlZRc2tOZFl3Z2JZ?=
+ =?utf-8?B?aVBGZFNTbUNHalNEaTlWRnFHY2xGTDR2cS9UVGFJc0F3MitITTB4VERZTFNu?=
+ =?utf-8?B?VHJ0TjB4enlPRXFzR2JHZ00yNE9OcmY4MmFqR0d4OCtqSE1iZVo0aTJhM3Uz?=
+ =?utf-8?B?d2xWMnU5SllJT0dqSXcwOGJ3MkNBL1NFcmpDOWFUejM1TzdUdEx3aTY3OVly?=
+ =?utf-8?B?L3RXdEtpaCtqTlBydDZLT25uNlRVZEE5WGdPYkhwY0hOUk05MDcwa25YMUtF?=
+ =?utf-8?B?dzVpVW5hQlZkemdRUWUvcm1pZ2JQUnVoSUp1d2JYMU5DMUNpNnVqcTgxR0dl?=
+ =?utf-8?B?RThRRllCMFNoMGJrTnV5ekZVZUhIVVZvMzBidXBWWEd4TkZ1Y3o0NjZQeEFF?=
+ =?utf-8?B?VmlSYXpMZW5uMVVKcENBd2J6RmxNc1FHZ0NuNXBZOXpPd1poeGU0djhKUkpx?=
+ =?utf-8?B?aU5XNmxsamxFMmIwdUQ2dk5VWHN6ZWltUUdDUC9RNWdtWFdCVEVyMGx5bHY2?=
+ =?utf-8?B?dVVSOGNnQVZ1NUl1dm9Ud3ZNY3VVWjFQNWhqYldTNUxVS201eDc1TnhWbUJX?=
+ =?utf-8?B?aWY0eTdwclNhaERwTmMvRG9tV2xFa0twaXlwSmlaM0lST1dEekhrZm5HVzZX?=
+ =?utf-8?B?N05yQk9iZnEwNmJTTjRrQ3ZoK3FlK0JDc05DWmpPQUNLd2wzK0FSTFdFN0d5?=
+ =?utf-8?B?OFdwaytpejhKbW44N2dKcDdSSmJZRE5jeCtsTDdyd0lHbUs5RGZXRW5XOGsz?=
+ =?utf-8?B?dFZiS21wWHU2ZTdXNlEzR0xXbHFCa3ZIbmRNOGh6SXZIdDJVUi8zMGRDUDFX?=
+ =?utf-8?B?eEovRGR0eUJaZEplVGVERGtZYXV6WDBCc2J3Zm9nT0p2OUgzR0pQWi9kVEV4?=
+ =?utf-8?B?RjArTzEwc1h4d2NSaUdwUjdWbnpPWU5xZ1ZJZWdyTTRpaSsvN0k2dFQ2aFdM?=
+ =?utf-8?B?S1cwSU14cU40c3J5YlBuNDVxdkRZV0V3aWFXYkV5a1ZnZzQzdk5SbDZCN1dU?=
+ =?utf-8?B?SDA0UWtHVi85a0hwU1k1L2l2cjFtMnZHVThXWDFLZ3F4dDRGVXJpVHlDV1cr?=
+ =?utf-8?B?aEJ6TmpkR2pYZkV5UExCUVkwVVlURnY0bVVxMnZPWDBHRys1MjdtRXlSemly?=
+ =?utf-8?B?ZlFZb3Bjenp6MndCU1ZaelcxaGM4OWhVK0djY1ZlMEVEaEl3dnpLK3JRT2FD?=
+ =?utf-8?B?eGFTcDcvTVJ5ejZqRjhYbTBuanFFRjBZZm1WZUI0MXZrQnowNVNMYkVEbmpJ?=
+ =?utf-8?B?alg3ZThLTVJKd3RIUkxHWHJKRGl4THhtTU5zOU1xUEYza0FCd1pQT25KQ2Vl?=
+ =?utf-8?B?WmRqWk02eldST3JBQUdUQWRPOVBvWnM4ODJJQ0VIaElselZ2aURWMmJ2M1hP?=
+ =?utf-8?B?OWZKcUE1TnQyOW05R3c3QzlMT21qMTBLcEU4aDJZeUFzekdZMWVweGlCbFlE?=
+ =?utf-8?B?SExCNGZuVE1rb3ZQN2RwR3lYZktZVzZ2Qkk5ZnFaYnJLZFhKRG4rUVVIQ0d4?=
+ =?utf-8?B?b3V3NkR6Zk9sd1p1ZEo4NThpbkNHLzVqeU9vTlp3RGs4MHd6ZTBWL2pMOC9t?=
+ =?utf-8?B?dXp3NDFpaTBFK1libEsxTXJ5M253NHFvZzYxSmxMdVprc0x6OVNVZlhONkpp?=
+ =?utf-8?B?L3ZGdTBjUldYM0pOUzhCcGJkejE3S3ZITmk5eWxoYWNqTzc4bDVZMkZEMWlq?=
+ =?utf-8?Q?rUUUFl6u5TD2FvRi/W9CtjNDT?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 28815ac6-bfa4-44d2-b30d-08dabc591a29
+X-MS-Exchange-CrossTenant-AuthSource: BL1PR12MB5874.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Nov 2022 22:33:30.4960
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /Yp9KTRJPIyY8KQZ68QUMidDZDkol7nHezMnGaUnNYylMFqDIJAdIh3F9fRzZsz2CXDFxWQXEctpgYmCVwzqwg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB6014
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Validate the effect of the __alloc_size attribute on allocators. If the
-compiler doesn't support __builtin_dynamic_object_size(), skip the
-associated tests.
+On 11/1/22 16:30, Jonathan Corbet wrote:
 
-(For GCC, just remove the "--make_options" line below...)
+> Carlos Bilbao <carlos.bilbao@amd.com> writes:
+>
+>> Spanish is the second most spoken language in the world. This patch set
+>> starts the process of translating critical kernel documentation into the
+>> Spanish language.
+>>
+>> Link to v2: https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flkml.org%2Flkml%2F2022%2F10%2F13%2F866&amp;data=05%7C01%7Ccarlos.bilbao%40amd.com%7Cc3cb093ef27e484b78fa08dabc503ce0%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638029350093417289%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=dKxHmWM4ljRyAZUw%2BpZ%2BxVM1KxIM5pR098RqnV7w2gs%3D&amp;reserved=0
+>> Changes since v2:
+>>    - Apply improvements proposed by Miguel Ojeda
+>>    - Added Reviewed-By of Miguel Ojeda for first commit
+>>    - Added Reviwed-By of Bagas Sanjaya for second commit
+>>
+>> Changes since v1:
+>>    - Added me as MAINTAINER
+>>    - Fixed warnings of kernel test robot
+>>    - Use imperative form in second commit
+>>    - Improved minor translation details
+>>
+>> Carlos Bilbao (2):
+>>    Documentation: Start translations to Spanish
+>>    Documentation: Add HOWTO Spanish translation into rst based build system
+>>
+>>    Documentation/translations/index.rst          |   1 +
+>>    .../translations/sp_SP/disclaimer-sp.rst      |   6 +
+>>    Documentation/translations/sp_SP/howto.rst    | 617 ++++++++++++++++++
+>>    Documentation/translations/sp_SP/index.rst    |  80 +++
+>>    MAINTAINERS                                   |   5 +
+>>    5 files changed, 709 insertions(+)
+>>    create mode 100644 Documentation/translations/sp_SP/disclaimer-sp.rst
+>>    create mode 100644 Documentation/translations/sp_SP/howto.rst
+>>    create mode 100644 Documentation/translations/sp_SP/index.rst
+> I went to apply this series just now, and got the following from "git
+> am":
+>
+> WARNING: Message contains suspicious unicode control characters!
+>           Subject: [PATCH v3 2/2] Documentation: Add HOWTO Spanish translation into rst based build system
+>              Line: +estable más reciente del kernel, y no están interesados ​​en ayudar a probar
+>              ---------------------------------------------------------------^
+>              Char: ZERO WIDTH SPACE (0x200b)
+>           If you are sure about this, rerun with the right flag to allow.
+>
+> Any idea what the story is there?  Could I get a resend without that
+> problem?
+Just tried to apply git am and didn't get any warning. Maybe you are using
+an extra flag? I'm running with git version 2.34.1. Could you try replacing
+the offending char with a space? Hopefully that solves it.
 
-$ ./tools/testing/kunit/kunit.py run --arch x86_64 \
-        --kconfig_add CONFIG_FORTIFY_SOURCE=y \
-	--make_options LLVM=1
-        fortify
-...
-[15:16:30] ================== fortify (10 subtests) ===================
-[15:16:30] [PASSED] known_sizes_test
-[15:16:30] [PASSED] control_flow_split_test
-[15:16:30] [PASSED] alloc_size_kmalloc_const_test
-[15:16:30] [PASSED] alloc_size_kmalloc_dynamic_test
-[15:16:30] [PASSED] alloc_size_vmalloc_const_test
-[15:16:30] [PASSED] alloc_size_vmalloc_dynamic_test
-[15:16:30] [PASSED] alloc_size_kvmalloc_const_test
-[15:16:30] [PASSED] alloc_size_kvmalloc_dynamic_test
-[15:16:30] [PASSED] alloc_size_devm_kmalloc_const_test
-[15:16:30] [PASSED] alloc_size_devm_kmalloc_dynamic_test
-[15:16:30] ===================== [PASSED] fortify =====================
-[15:16:30] ============================================================
-[15:16:30] Testing complete. Ran 10 tests: passed: 10
-[15:16:31] Elapsed time: 8.348s total, 0.002s configuring, 6.923s building, 1.075s running
+I apologize for the inconvenience.
 
-For earlier GCC prior to version 12, the dynamic tests will be skipped:
-
-[15:18:59] ================== fortify (10 subtests) ===================
-[15:18:59] [PASSED] known_sizes_test
-[15:18:59] [PASSED] control_flow_split_test
-[15:18:59] [PASSED] alloc_size_kmalloc_const_test
-[15:18:59] [SKIPPED] alloc_size_kmalloc_dynamic_test
-[15:18:59] [PASSED] alloc_size_vmalloc_const_test
-[15:18:59] [SKIPPED] alloc_size_vmalloc_dynamic_test
-[15:18:59] [PASSED] alloc_size_kvmalloc_const_test
-[15:18:59] [SKIPPED] alloc_size_kvmalloc_dynamic_test
-[15:18:59] [PASSED] alloc_size_devm_kmalloc_const_test
-[15:18:59] [SKIPPED] alloc_size_devm_kmalloc_dynamic_test
-[15:18:59] ===================== [PASSED] fortify =====================
-[15:18:59] ============================================================
-[15:18:59] Testing complete. Ran 10 tests: passed: 6, skipped: 4
-[15:18:59] Elapsed time: 11.965s total, 0.002s configuring, 10.540s building, 1.068s running
-
-Cc: David Gow <davidgow@google.com>
-Cc: linux-hardening@vger.kernel.org
-Signed-off-by: Kees Cook <keescook@chromium.org>
----
- lib/Makefile        |   1 +
- lib/fortify_kunit.c | 255 ++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 256 insertions(+)
-
-diff --git a/lib/Makefile b/lib/Makefile
-index 77c7951c8cf0..d197079ef22a 100644
---- a/lib/Makefile
-+++ b/lib/Makefile
-@@ -377,6 +377,7 @@ obj-$(CONFIG_IS_SIGNED_TYPE_KUNIT_TEST) += is_signed_type_kunit.o
- obj-$(CONFIG_OVERFLOW_KUNIT_TEST) += overflow_kunit.o
- CFLAGS_stackinit_kunit.o += $(call cc-disable-warning, switch-unreachable)
- obj-$(CONFIG_STACKINIT_KUNIT_TEST) += stackinit_kunit.o
-+CFLAGS_fortify_kunit.o += $(call cc-disable-warning, unsequenced)
- obj-$(CONFIG_FORTIFY_KUNIT_TEST) += fortify_kunit.o
- obj-$(CONFIG_STRSCPY_KUNIT_TEST) += strscpy_kunit.o
- obj-$(CONFIG_SIPHASH_KUNIT_TEST) += siphash_kunit.o
-diff --git a/lib/fortify_kunit.c b/lib/fortify_kunit.c
-index 409af07f340a..78acfdbda835 100644
---- a/lib/fortify_kunit.c
-+++ b/lib/fortify_kunit.c
-@@ -16,7 +16,10 @@
- #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
- 
- #include <kunit/test.h>
-+#include <linux/device.h>
-+#include <linux/slab.h>
- #include <linux/string.h>
-+#include <linux/vmalloc.h>
- 
- static const char array_of_10[] = "this is 10";
- static const char *ptr_of_11 = "this is 11!";
-@@ -60,9 +63,261 @@ static void control_flow_split_test(struct kunit *test)
- 	KUNIT_EXPECT_EQ(test, want_minus_one(pick), SIZE_MAX);
- }
- 
-+#define KUNIT_EXPECT_BOS(test, p, expected, name)			\
-+	KUNIT_EXPECT_EQ_MSG(test, __builtin_object_size(p, 1),		\
-+		expected,						\
-+		"__alloc_size() not working with __bos on " name "\n")
-+
-+#if !__has_builtin(__builtin_dynamic_object_size)
-+#define KUNIT_EXPECT_BDOS(test, p, expected, name)			\
-+	/* Silence "unused variable 'expected'" warning. */		\
-+	KUNIT_EXPECT_EQ(test, expected, expected)
-+#else
-+#define KUNIT_EXPECT_BDOS(test, p, expected, name)			\
-+	KUNIT_EXPECT_EQ_MSG(test, __builtin_dynamic_object_size(p, 1),	\
-+		expected,						\
-+		"__alloc_size() not working with __bdos on " name "\n")
-+#endif
-+
-+/* If the execpted size is a constant value, __bos can see it. */
-+#define check_const(_expected, alloc, free)		do {		\
-+	size_t expected = (_expected);					\
-+	void *p = alloc;						\
-+	KUNIT_EXPECT_TRUE_MSG(test, p != NULL, #alloc " failed?!\n");	\
-+	KUNIT_EXPECT_BOS(test, p, expected, #alloc);			\
-+	KUNIT_EXPECT_BDOS(test, p, expected, #alloc);			\
-+	free;								\
-+} while (0)
-+
-+/* If the execpted size is NOT a constant value, __bos CANNOT see it. */
-+#define check_dynamic(_expected, alloc, free)		do {		\
-+	size_t expected = (_expected);					\
-+	void *p = alloc;						\
-+	KUNIT_EXPECT_TRUE_MSG(test, p != NULL, #alloc " failed?!\n");	\
-+	KUNIT_EXPECT_BOS(test, p, SIZE_MAX, #alloc);			\
-+	KUNIT_EXPECT_BDOS(test, p, expected, #alloc);			\
-+	free;								\
-+} while (0)
-+
-+/* Assortment of constant-value kinda-edge cases. */
-+#define CONST_TEST_BODY(TEST_alloc)	do {				\
-+	/* Special-case vmalloc()-family to skip 0-sized allocs. */	\
-+	if (strcmp(#TEST_alloc, "TEST_vmalloc") != 0)			\
-+		TEST_alloc(check_const, 0, 0);				\
-+	TEST_alloc(check_const, 1, 1);					\
-+	TEST_alloc(check_const, 128, 128);				\
-+	TEST_alloc(check_const, 1023, 1023);				\
-+	TEST_alloc(check_const, 1025, 1025);				\
-+	TEST_alloc(check_const, 4096, 4096);				\
-+	TEST_alloc(check_const, 4097, 4097);				\
-+} while (0)
-+
-+static volatile size_t zero_size;
-+static volatile size_t unknown_size = 50;
-+
-+#if !__has_builtin(__builtin_dynamic_object_size)
-+#define DYNAMIC_TEST_BODY(TEST_alloc)					\
-+	kunit_skip(test, "Compiler is missing __builtin_dynamic_object_size() support\n")
-+#else
-+#define DYNAMIC_TEST_BODY(TEST_alloc)	do {				\
-+	size_t size = unknown_size;					\
-+									\
-+	/*								\
-+	 * Expected size is "size" in each test, before it is then	\
-+	 * internally incremented in each test.	Requires we disable	\
-+	 * -Wunsequenced.						\
-+	 */								\
-+	TEST_alloc(check_dynamic, size, size++);			\
-+	/* Make sure incrementing actually happened. */			\
-+	KUNIT_EXPECT_NE(test, size, unknown_size);			\
-+} while (0)
-+#endif
-+
-+#define DEFINE_ALLOC_SIZE_TEST_PAIR(allocator)				\
-+static void alloc_size_##allocator##_const_test(struct kunit *test)	\
-+{									\
-+	CONST_TEST_BODY(TEST_##allocator);				\
-+}									\
-+static void alloc_size_##allocator##_dynamic_test(struct kunit *test)	\
-+{									\
-+	DYNAMIC_TEST_BODY(TEST_##allocator);				\
-+}
-+
-+#define TEST_kmalloc(checker, expected_size, alloc_size)	do {	\
-+	gfp_t gfp = GFP_KERNEL | __GFP_NOWARN;				\
-+	void *orig;							\
-+	size_t len;							\
-+									\
-+	checker(expected_size, kmalloc(alloc_size, gfp),		\
-+		kfree(p));						\
-+	checker(expected_size,						\
-+		kmalloc_node(alloc_size, gfp, NUMA_NO_NODE),		\
-+		kfree(p));						\
-+	checker(expected_size, kzalloc(alloc_size, gfp),		\
-+		kfree(p));						\
-+	checker(expected_size,						\
-+		kzalloc_node(alloc_size, gfp, NUMA_NO_NODE),		\
-+		kfree(p));						\
-+	checker(expected_size, kcalloc(1, alloc_size, gfp),		\
-+		kfree(p));						\
-+	checker(expected_size, kcalloc(alloc_size, 1, gfp),		\
-+		kfree(p));						\
-+	checker(expected_size,						\
-+		kcalloc_node(1, alloc_size, gfp, NUMA_NO_NODE),		\
-+		kfree(p));						\
-+	checker(expected_size,						\
-+		kcalloc_node(alloc_size, 1, gfp, NUMA_NO_NODE),		\
-+		kfree(p));						\
-+	checker(expected_size, kmalloc_array(1, alloc_size, gfp),	\
-+		kfree(p));						\
-+	checker(expected_size, kmalloc_array(alloc_size, 1, gfp),	\
-+		kfree(p));						\
-+	checker(expected_size,						\
-+		kmalloc_array_node(1, alloc_size, gfp, NUMA_NO_NODE),	\
-+		kfree(p));						\
-+	checker(expected_size,						\
-+		kmalloc_array_node(alloc_size, 1, gfp, NUMA_NO_NODE),	\
-+		kfree(p));						\
-+	checker(expected_size, __kmalloc(alloc_size, gfp),		\
-+		kfree(p));						\
-+	checker(expected_size,						\
-+		__kmalloc_node(alloc_size, gfp, NUMA_NO_NODE),		\
-+		kfree(p));						\
-+									\
-+	orig = kmalloc(alloc_size, gfp);				\
-+	KUNIT_EXPECT_TRUE(test, orig != NULL);				\
-+	checker((expected_size) * 2,					\
-+		krealloc(orig, (alloc_size) * 2, gfp),			\
-+		kfree(p));						\
-+	orig = kmalloc(alloc_size, gfp);				\
-+	KUNIT_EXPECT_TRUE(test, orig != NULL);				\
-+	checker((expected_size) * 2,					\
-+		krealloc_array(orig, 1, (alloc_size) * 2, gfp),		\
-+		kfree(p));						\
-+	orig = kmalloc(alloc_size, gfp);				\
-+	KUNIT_EXPECT_TRUE(test, orig != NULL);				\
-+	checker((expected_size) * 2,					\
-+		krealloc_array(orig, (alloc_size) * 2, 1, gfp),		\
-+		kfree(p));						\
-+									\
-+	len = 11;							\
-+	/* Using memdup() with fixed size, so force unknown length. */	\
-+	if (!__builtin_constant_p(expected_size))			\
-+		len += zero_size;					\
-+	checker(len, kmemdup("hello there", len, gfp), kfree(p));	\
-+} while (0)
-+DEFINE_ALLOC_SIZE_TEST_PAIR(kmalloc)
-+
-+/* Sizes are in pages, not bytes. */
-+#define TEST_vmalloc(checker, expected_pages, alloc_pages)	do {	\
-+	gfp_t gfp = GFP_KERNEL | __GFP_NOWARN;				\
-+	checker((expected_pages) * PAGE_SIZE,				\
-+		vmalloc((alloc_pages) * PAGE_SIZE),	   vfree(p));	\
-+	checker((expected_pages) * PAGE_SIZE,				\
-+		vzalloc((alloc_pages) * PAGE_SIZE),	   vfree(p));	\
-+	checker((expected_pages) * PAGE_SIZE,				\
-+		__vmalloc((alloc_pages) * PAGE_SIZE, gfp), vfree(p));	\
-+} while (0)
-+DEFINE_ALLOC_SIZE_TEST_PAIR(vmalloc)
-+
-+/* Sizes are in pages (and open-coded for side-effects), not bytes. */
-+#define TEST_kvmalloc(checker, expected_pages, alloc_pages)	do {	\
-+	gfp_t gfp = GFP_KERNEL | __GFP_NOWARN;				\
-+	size_t prev_size;						\
-+	void *orig;							\
-+									\
-+	checker((expected_pages) * PAGE_SIZE,				\
-+		kvmalloc((alloc_pages) * PAGE_SIZE, gfp),		\
-+		vfree(p));						\
-+	checker((expected_pages) * PAGE_SIZE,				\
-+		kvmalloc_node((alloc_pages) * PAGE_SIZE, gfp, NUMA_NO_NODE), \
-+		vfree(p));						\
-+	checker((expected_pages) * PAGE_SIZE,				\
-+		kvzalloc((alloc_pages) * PAGE_SIZE, gfp),		\
-+		vfree(p));						\
-+	checker((expected_pages) * PAGE_SIZE,				\
-+		kvzalloc_node((alloc_pages) * PAGE_SIZE, gfp, NUMA_NO_NODE), \
-+		vfree(p));						\
-+	checker((expected_pages) * PAGE_SIZE,				\
-+		kvcalloc(1, (alloc_pages) * PAGE_SIZE, gfp),		\
-+		vfree(p));						\
-+	checker((expected_pages) * PAGE_SIZE,				\
-+		kvcalloc((alloc_pages) * PAGE_SIZE, 1, gfp),		\
-+		vfree(p));						\
-+	checker((expected_pages) * PAGE_SIZE,				\
-+		kvmalloc_array(1, (alloc_pages) * PAGE_SIZE, gfp),	\
-+		vfree(p));						\
-+	checker((expected_pages) * PAGE_SIZE,				\
-+		kvmalloc_array((alloc_pages) * PAGE_SIZE, 1, gfp),	\
-+		vfree(p));						\
-+									\
-+	prev_size = (expected_pages) * PAGE_SIZE;			\
-+	orig = kvmalloc(prev_size, gfp);				\
-+	KUNIT_EXPECT_TRUE(test, orig != NULL);				\
-+	checker(((expected_pages) * PAGE_SIZE) * 2,			\
-+		kvrealloc(orig, prev_size,				\
-+			  ((alloc_pages) * PAGE_SIZE) * 2, gfp),	\
-+		kvfree(p));						\
-+} while (0)
-+DEFINE_ALLOC_SIZE_TEST_PAIR(kvmalloc)
-+
-+#define TEST_devm_kmalloc(checker, expected_size, alloc_size)	do {	\
-+	gfp_t gfp = GFP_KERNEL | __GFP_NOWARN;				\
-+	const char const dev_name[] = "fortify-test";			\
-+	struct device *dev;						\
-+	void *orig;							\
-+	size_t len;							\
-+									\
-+	/* Create dummy device for devm_kmalloc()-family tests. */	\
-+	dev = root_device_register(dev_name);				\
-+	KUNIT_ASSERT_FALSE_MSG(test, IS_ERR(dev),			\
-+			       "Cannot register test device\n");	\
-+									\
-+	checker(expected_size, devm_kmalloc(dev, alloc_size, gfp),	\
-+		devm_kfree(dev, p));					\
-+	checker(expected_size, devm_kzalloc(dev, alloc_size, gfp),	\
-+		devm_kfree(dev, p));					\
-+	checker(expected_size,						\
-+		devm_kmalloc_array(dev, 1, alloc_size, gfp),		\
-+		devm_kfree(dev, p));					\
-+	checker(expected_size,						\
-+		devm_kmalloc_array(dev, alloc_size, 1, gfp),		\
-+		devm_kfree(dev, p));					\
-+	checker(expected_size,						\
-+		devm_kcalloc(dev, 1, alloc_size, gfp),			\
-+		devm_kfree(dev, p));					\
-+	checker(expected_size,						\
-+		devm_kcalloc(dev, alloc_size, 1, gfp),			\
-+		devm_kfree(dev, p));					\
-+									\
-+	orig = devm_kmalloc(dev, alloc_size, gfp);			\
-+	KUNIT_EXPECT_TRUE(test, orig != NULL);				\
-+	checker((expected_size) * 2,					\
-+		devm_krealloc(dev, orig, (alloc_size) * 2, gfp),	\
-+		devm_kfree(dev, p));					\
-+									\
-+	len = 4;							\
-+	/* Using memdup() with fixed size, so force unknown length. */	\
-+	if (!__builtin_constant_p(expected_size))			\
-+		len += zero_size;					\
-+	checker(len, devm_kmemdup(dev, "Ohai", len, gfp),		\
-+		devm_kfree(dev, p));					\
-+									\
-+	device_unregister(dev);						\
-+} while (0)
-+DEFINE_ALLOC_SIZE_TEST_PAIR(devm_kmalloc)
-+
- static struct kunit_case fortify_test_cases[] = {
- 	KUNIT_CASE(known_sizes_test),
- 	KUNIT_CASE(control_flow_split_test),
-+	KUNIT_CASE(alloc_size_kmalloc_const_test),
-+	KUNIT_CASE(alloc_size_kmalloc_dynamic_test),
-+	KUNIT_CASE(alloc_size_vmalloc_const_test),
-+	KUNIT_CASE(alloc_size_vmalloc_dynamic_test),
-+	KUNIT_CASE(alloc_size_kvmalloc_const_test),
-+	KUNIT_CASE(alloc_size_kvmalloc_dynamic_test),
-+	KUNIT_CASE(alloc_size_devm_kmalloc_const_test),
-+	KUNIT_CASE(alloc_size_devm_kmalloc_dynamic_test),
- 	{}
- };
- 
--- 
-2.34.1
-
+Carlos.
+>
+> Thanks,
+>
+> jon
