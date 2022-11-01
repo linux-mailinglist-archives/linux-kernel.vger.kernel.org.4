@@ -2,104 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0431A615139
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 19:03:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5EBEF61513C
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 19:04:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbiKASDy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 14:03:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53618 "EHLO
+        id S230437AbiKASEO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 14:04:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230269AbiKASDw (ORCPT
+        with ESMTP id S231182AbiKASEC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 14:03:52 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE21818E29
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 11:03:51 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id b185so14161058pfb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 11:03:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=B6yv38rBcXg8ajx2YDuTgCNAFEG5qCJwSqMKG6SLY/Q=;
-        b=oirac5wGLIY4i7en0pMoj97TKnKq5f/AWRFqN4VjYjwFJLSoZ5tysow4ZthFobpB+C
-         OT2R7Lw6Tj2fGOjQC+xOG98LCLhmIwEezmGHnhlQS9/wSEox5HqG3Qm0XqGl2Sh51yvd
-         B3MmVErdZm05tk1aomEDBL8K7UR++WC4l1Q4JyGEu0Tryq9rEHAhcRL3zECb5eZercVE
-         oKh2MTW00uc7UUaQe6BVZyRldAUz5rnjgecL7jLu2eCTtOGzlNwQj93/PGOQsz1DnKLH
-         JJ5ZoYcKx6Naccvr6z1KH1wCt3w7It0+gROA6MwGCmRk51ZOX+kTQviVFpc8c03w5MmN
-         T/gA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=B6yv38rBcXg8ajx2YDuTgCNAFEG5qCJwSqMKG6SLY/Q=;
-        b=GEmpuyfe+YN01uJ7WfKa2omgUyuBbukQh5dudu6iApuq2T/E5sHI3Ga5OLb2HRy07G
-         svXprp6Z3WAfXd/b03u39ei6ko+zq2m37BgOPRfAsfYf23wQ68D/qbgmrOoBo2AqGYV3
-         3V+VqJX7ojF+jZ4upd2USHOdR+L1GULeSrDtY95jyxLAaF+wJ2DVJqC4NvYw0Mn+lpxG
-         3UiQ7+IdKsWxApEfqka/h6ZcqkXdWvFYpnemT+LhxtegQpdkQ3WeiQ3cazhJcVHDwlNI
-         VoRG2lJ0eZzsQfP+qNfssmVhHo7QG+oiVnf1VVe4BsHeQAZztOEOERrPPOGEb7mQgIM4
-         6B1w==
-X-Gm-Message-State: ACrzQf3ayauzSXrqEiWv8pUQ8ZXtIY3aNBHQ1pUX9QPqIC+EIUJ26zlP
-        v1VNU2Ro8xNZzCO/XSGonL43zQ==
-X-Google-Smtp-Source: AMsMyM6UQ/rdIID1qVa9AOBJLP7GWRwIhvkiK6LmGe8T+mVuZ6XCaLcp8TDY9IHaNRNUNYRuiec+hQ==
-X-Received: by 2002:a65:56ca:0:b0:439:169f:f027 with SMTP id w10-20020a6556ca000000b00439169ff027mr17974497pgs.580.1667325831175;
-        Tue, 01 Nov 2022 11:03:51 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id g6-20020a625206000000b005633a06ad67sm6808026pfb.64.2022.11.01.11.03.50
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 11:03:50 -0700 (PDT)
-Date:   Tue, 1 Nov 2022 18:03:47 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Josh Poimboeuf <jpoimboe@kernel.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, linux-kernel@vger.kernel.org,
-        kvm@vger.kernel.org, jmattson@google.com
-Subject: Re: [PATCH 1/7] KVM: VMX: remove regs argument of __vmx_vcpu_run
-Message-ID: <Y2Ffg5ed5zoijqOB@google.com>
-References: <20221028230723.3254250-1-pbonzini@redhat.com>
- <20221028230723.3254250-2-pbonzini@redhat.com>
- <Y2AH6sevOvD/GnKV@google.com>
- <20221101173204.w7yuoerkafxonyzx@treble>
+        Tue, 1 Nov 2022 14:04:02 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CED8DB865;
+        Tue,  1 Nov 2022 11:04:00 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667325840; x=1698861840;
+  h=date:from:to:cc:subject:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=dIEmCpVfRRWPffZCKLWu7PxI+hb2qI36bvVulVYkRfE=;
+  b=eHsvOA1tWPiruDLqRwiLbLzw3d2MIMfBMx4+gz0KrX+HWJ4M+6BSIVSV
+   dDssiUITMASySwfD5SfUmHWLUzw3wphoLDvB6DGv8QiYrO3uk2DMBPA2K
+   oiStP4Dcir6pKGginFsAzQSOxEigI7ygcHFYzELrdMKbrOo/bsVYY6/8f
+   Q4ouWEFabQmk0lZkvxH1x9WMYSXTfF4pAaxuqkgEIPdi+YOAS9joOjoeU
+   c4WqDslZtAmS/RlCnOBrsNePSsDeJFHZf++fL1WIFPmW1HwNBswQ/sifj
+   uOG9y1W8VaTDnlbMzuoFOPFqyoJ4yM0SMLVsYxdEAYo9jzmDxQhaOWPU+
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="292512050"
+X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
+   d="scan'208";a="292512050"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 11:03:59 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="697492011"
+X-IronPort-AV: E=Sophos;i="5.95,231,1661842800"; 
+   d="scan'208";a="697492011"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmsmga008.fm.intel.com with ESMTP; 01 Nov 2022 11:03:59 -0700
+Received: from maurocar-mobl2 (maurocar-mobl2.ger.corp.intel.com [10.252.29.141])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by linux.intel.com (Postfix) with ESMTPS id 59319580AA7;
+        Tue,  1 Nov 2022 11:03:53 -0700 (PDT)
+Date:   Tue, 1 Nov 2022 19:03:49 +0100
+From:   Mauro Carvalho Chehab <mauro.chehab@linux.intel.com>
+To:     Isabella Basso <isabbasso@riseup.net>
+Cc:     David Gow <davidgow@google.com>,
+        Magali Lemes <magalilemes00@gmail.com>,
+        =?UTF-8?B?TWHDrXJh?= Canal <maira.canal@usp.br>,
+        Daniel Latypov <dlatypov@google.com>,
+        Tales Aparecida <tales.aparecida@gmail.com>,
+        Brendan Higgins <brendanhiggins@google.com>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        leandro.ribeiro@collabora.com, igt-dev@lists.freedesktop.org,
+        ML dri-devel <dri-devel@lists.freedesktop.org>,
+        linux-kselftest@vger.kernel.org, n@nfraprado.net,
+        Shuah Khan <skhan@linuxfoundation.org>,
+        =?UTF-8?B?QW5k?= =?UTF-8?B?csOp?= Almeida 
+        <andrealmeid@riseup.net>,
+        KUnit Development <kunit-dev@googlegroups.com>
+Subject: Re: [igt-dev] [PATCH i-g-t v2 3/4] lib/igt_kmod: add compatibility
+ for KUnit
+Message-ID: <20221101190349.4043db12@maurocar-mobl2>
+In-Reply-To: <F263C946-123C-407F-984D-7AC284CC1B29@riseup.net>
+References: <20220829000920.38185-1-isabbasso@riseup.net>
+        <20220829000920.38185-4-isabbasso@riseup.net>
+        <CABVgOS=HO9XAf8C5X7ZD6aTW37r06ify==7AW9a8cpKsgLVfFw@mail.gmail.com>
+        <D53B4EB1-1A95-48F1-BF49-8EC0CC7B5418@riseup.net>
+        <20221101133323.72101670@maurocar-mobl2>
+        <F263C946-123C-407F-984D-7AC284CC1B29@riseup.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221101173204.w7yuoerkafxonyzx@treble>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022, Josh Poimboeuf wrote:
-> On Mon, Oct 31, 2022 at 05:37:46PM +0000, Sean Christopherson wrote:
-> > > diff --git a/arch/x86/kernel/asm-offsets.c b/arch/x86/kernel/asm-offsets.c
-> > > index cb50589a7102..90da275ad223 100644
-> > > --- a/arch/x86/kernel/asm-offsets.c
-> > > +++ b/arch/x86/kernel/asm-offsets.c
-> > > @@ -111,6 +111,7 @@ static void __used common(void)
-> > >  
-> > >  	if (IS_ENABLED(CONFIG_KVM_INTEL)) {
-> > >  		BLANK();
-> > > +		OFFSET(VMX_vcpu_arch_regs, vcpu_vmx, vcpu.arch.regs);
-> > 
-> > Is there an asm-offsets-like solution that doesn't require exposing vcpu_vmx
-> > outside of KVM?  We (Google) want to explore loading multiple instances of KVM,
-> > i.e. loading multiple versions of kvm.ko at the same time, to allow intra-host
-> > migration between versions of KVM to upgrade/rollback KVM without changing the
-> > kernel (RFC coming soon-ish).  IIRC, asm-offsets is the only place where I haven't
-> > been able to figure out a simple way to avoid exposing KVM's internal structures
-> > outside of KVM (so that the structures can change across KVM instances without
-> > breaking kernel code).
-> 
-> Is that really a problem?  Would it even make sense for non-KVM kernel
-> code to use 'vcpu_vmx' anyway?
+On Tue, 1 Nov 2022 14:17:26 -0300
+Isabella Basso <isabbasso@riseup.net> wrote:
 
-vcpu_vmx itself isn't a problem as non-KVM kernel code _shouldn't_ be using
-vcpu_vmx, but I want to go beyond "shouldn't" and make it all-but-impossible for
-non-KVM code to reference internal KVM structures/state, e.g. I want to bury all
-kvm_host.h headers in kvm/ code instead of exposing them in include/asm/.
+> Hi, Mauro,
+>=20
+> > Am 01/11/2022 um 9:33 AM schrieb Mauro Carvalho Chehab <mauro.chehab@li=
+nux.intel.com>:
+> >=20
+> > Hi Isabella,
+> >=20
+> > On Mon, 19 Sep 2022 17:43:19 -0300
+> > Isabella Basso <isabbasso@riseup.net> wrote:
+> >  =20
+> >>> Do you want to _require_ KUnit be built as a module, rather than buil=
+t-in here?   =20
+> >>=20
+> >> I=E2=80=99ll change the comment and the warning in v3 to clarify this.=
+ =20
+> >=20
+> > When do you intend to submit v3? =20
+>=20
+> I=E2=80=99m currently waiting for my peers to review some refactorings an=
+d test
+> things thoroughly. I hope to submit it in a week or two. Sorry it=E2=80=
+=99s taking so
+> long.
+
+No problem. In the mean time, I'll try to do some tests with the current
+version.
+
+Btw, if you want, you can also check the RFC patch I submitted today, adding
+KUnit support for i915:
+
+	https://patchwork.freedesktop.org/patch/509448/?series=3D110384&rev=3D1
+
+The tests there are hardware-independent, but they need to be built
+using x86_64 arch, due to i915 dependencies.
+
+Regards,
+Mauro
