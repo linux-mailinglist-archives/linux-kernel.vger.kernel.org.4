@@ -2,129 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F4D3614D9E
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 16:01:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C1DB614D24
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 15:54:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231386AbiKAPB1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 11:01:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40486 "EHLO
+        id S230214AbiKAOyj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 10:54:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231191AbiKAPBJ (ORCPT
+        with ESMTP id S230158AbiKAOy0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 11:01:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 257831DDD9
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 07:56:49 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667314601;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EODbDTkqTZBBymFnsXzTDVagmoVBHbitQaX3f99+ld8=;
-        b=dq7j0wvDx3E5/LjhvOjf5qwdc8RKgt1Yu6U6cVg+ZPtKXAjv1v/K3hjuHoBb5O2WgX4aIp
-        au7glpagEa851gQdn3+8lrf8/eEsHQJhh4rZkNPtSPFHMgqFGTrVpTRexisHzxC8FHMSYY
-        /+USNkVkdVKwNndsg/uWO7aZTnuga8E=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-487-f2DQYAPmN0eOuVbcNTz9Tw-1; Tue, 01 Nov 2022 10:56:38 -0400
-X-MC-Unique: f2DQYAPmN0eOuVbcNTz9Tw-1
-Received: from smtp.corp.redhat.com (int-mx08.intmail.prod.int.rdu2.redhat.com [10.11.54.8])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CAA5F1C0A58A;
-        Tue,  1 Nov 2022 14:56:37 +0000 (UTC)
-Received: from ovpn-194-149.brq.redhat.com (ovpn-194-149.brq.redhat.com [10.40.194.149])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 500B4C2C8DB;
-        Tue,  1 Nov 2022 14:56:32 +0000 (UTC)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     kvm@vger.kernel.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>
-Cc:     Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        Siddharth Chandrasekaran <sidcha@amazon.de>,
-        Yuan Yao <yuan.yao@linux.intel.com>,
-        Maxim Levitsky <mlevitsk@redhat.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v13 38/48] KVM: selftests: Sync 'struct hv_enlightened_vmcs' definition with hyperv-tlfs.h
-Date:   Tue,  1 Nov 2022 15:54:16 +0100
-Message-Id: <20221101145426.251680-39-vkuznets@redhat.com>
-In-Reply-To: <20221101145426.251680-1-vkuznets@redhat.com>
-References: <20221101145426.251680-1-vkuznets@redhat.com>
+        Tue, 1 Nov 2022 10:54:26 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BC848E5E;
+        Tue,  1 Nov 2022 07:54:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=45UfOVePY+OHDZoHoj/7WNu01YKoYtNkYfuiJy1E/Sc=; b=qhYVkaTztKrRSFlfSM9lEqpvC+
+        0k8pvYDUhyhLKu9xPESEcK3dqVNPW/6f4mwSTxq8AWaUrOA5+deBcwG/aXVnebSmPYFCAzKuOkb8H
+        y4qQ6qlTx6Kl7a89zeGwV1u10aa0rsKbcKjyG3Sb6Cm6ObhtuxupTopImOckHrAaivaS89JuS3b+M
+        hej4wFWNBfdpwIOP7boSFjyR2boeWb3qI0jeOaBM2rQNYhg1RgW6wjj8HB1V/EIMqyIeAyHnmbAhA
+        ggSposh/E6ksw/6BHxC4Ie1F+rP12MpNzP+pQ61IEjaWvOzDfVEhdvchgT5LrW84nrNpLbxbtsKar
+        DVnhjWBw==;
+Received: from c-67-160-137-253.hsd1.or.comcast.net ([67.160.137.253] helo=[10.0.0.152])
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1opseg-005eKf-UY; Tue, 01 Nov 2022 14:54:19 +0000
+Message-ID: <503a3b36-2256-a9ce-cffe-5c0ed51f6f62@infradead.org>
+Date:   Tue, 1 Nov 2022 07:54:16 -0700
 MIME-Version: 1.0
-Content-Type: text/plain
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.8
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] ath11k (gcc13): synchronize
+ ath11k_mac_he_gi_to_nl80211_he_gi()'s return type
+Content-Language: en-US
+To:     Kalle Valo <kvalo@kernel.org>, Jiri Slaby <jirislaby@kernel.org>
+Cc:     Jeff Johnson <quic_jjohnson@quicinc.com>,
+        linux-kernel@vger.kernel.org, Martin Liska <mliska@suse.cz>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+References: <20221031114341.10377-1-jirislaby@kernel.org>
+ <55c4d139-0f22-e7ba-398a-e3e0d8919220@quicinc.com>
+ <833c7f2f-c140-5a0b-1efc-b858348206ec@kernel.org> <87bkprgj0b.fsf@kernel.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <87bkprgj0b.fsf@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'struct hv_enlightened_vmcs' definition in selftests is not '__packed'
-and so we rely on the compiler doing the right padding. This is not
-obvious so it seems beneficial to use the same definition as in kernel.
 
-Reviewed-by: Maxim Levitsky <mlevitsk@redhat.com>
-Reviewed-by: Sean Christopherson <seanjc@google.com>
-Signed-off-by: Vitaly Kuznetsov <vkuznets@redhat.com>
----
- tools/testing/selftests/kvm/include/x86_64/evmcs.h | 10 ++++++----
- 1 file changed, 6 insertions(+), 4 deletions(-)
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/evmcs.h b/tools/testing/selftests/kvm/include/x86_64/evmcs.h
-index 58db74f68af2..4b6840df2979 100644
---- a/tools/testing/selftests/kvm/include/x86_64/evmcs.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/evmcs.h
-@@ -41,6 +41,8 @@ struct hv_enlightened_vmcs {
- 	u16 host_gs_selector;
- 	u16 host_tr_selector;
- 
-+	u16 padding16_1;
-+
- 	u64 host_ia32_pat;
- 	u64 host_ia32_efer;
- 
-@@ -159,7 +161,7 @@ struct hv_enlightened_vmcs {
- 	u64 ept_pointer;
- 
- 	u16 virtual_processor_id;
--	u16 padding16[3];
-+	u16 padding16_2[3];
- 
- 	u64 padding64_2[5];
- 	u64 guest_physical_address;
-@@ -195,13 +197,13 @@ struct hv_enlightened_vmcs {
- 	u64 guest_rip;
- 
- 	u32 hv_clean_fields;
--	u32 hv_padding_32;
-+	u32 padding32_1;
- 	u32 hv_synthetic_controls;
- 	struct {
- 		u32 nested_flush_hypercall:1;
- 		u32 msr_bitmap:1;
- 		u32 reserved:30;
--	} hv_enlightenments_control;
-+	}  __packed hv_enlightenments_control;
- 	u32 hv_vp_id;
- 	u32 padding32_2;
- 	u64 hv_vm_id;
-@@ -222,7 +224,7 @@ struct hv_enlightened_vmcs {
- 	u64 host_ssp;
- 	u64 host_ia32_int_ssp_table_addr;
- 	u64 padding64_6;
--};
-+} __packed;
- 
- #define HV_VMX_ENLIGHTENED_CLEAN_FIELD_NONE                     0
- #define HV_VMX_ENLIGHTENED_CLEAN_FIELD_IO_BITMAP                BIT(0)
+On 11/1/22 01:45, Kalle Valo wrote:
+> Jiri Slaby <jirislaby@kernel.org> writes:
+> 
+>> On 31. 10. 22, 22:16, Jeff Johnson wrote:
+>>
+>>> On 10/31/2022 4:43 AM, Jiri Slaby (SUSE) wrote:
+
+>>> Suggest the subject should be
+>>> wifi: ath11k: synchronize ath11k_mac_he_gi_to_nl80211_he_gi()'s return type
+>>
+>> FWIW I copied from:
+>> $ git log --format=%s  drivers/net/wireless/ath/ath11k/mac.h
+>> ath11k: Handle keepalive during WoWLAN suspend and resume
+>> ath11k: reduce the wait time of 11d scan and hw scan while add interface
+>> ath11k: Add basic WoW functionalities
+>> ath11k: add support for hardware rfkill for QCA6390
+>> ath11k: report tx bitrate for iw wlan station dump
+>> ath11k: add 11d scan offload support
+>> ath11k: fix read fail for htt_stats and htt_peer_stats for single pdev
+>> ath11k: add support for BSS color change
+>> ath11k: add support for 80P80 and 160 MHz bandwidth
+>> ath11k: Add support for STA to handle beacon miss
+>> ath11k: add support to configure spatial reuse parameter set
+>> ath11k: remove "ath11k_mac_get_ar_vdev_stop_status" references
+>> ath11k: Perform per-msdu rx processing
+>> ath11k: fix incorrect peer stats counters update
+>> ath11k: Move mac80211 hw allocation before wmi_init command
+>> ath11k: fix missed bw conversion in tx completion
+>> ath11k: driver for Qualcomm IEEE 802.11ax devices
+> 
+> Yeah, using "wifi:" is a new prefix we started using with wireless
+> patches this year.
+> 
+
+It would be nice if that was documented somewhere...
+
 -- 
-2.37.3
-
+~Randy
