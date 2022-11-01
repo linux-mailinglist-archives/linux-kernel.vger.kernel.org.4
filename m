@@ -2,135 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7D06D615226
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 20:20:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E84AD615233
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 20:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229939AbiKATUn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 15:20:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47792 "EHLO
+        id S230060AbiKATWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 15:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiKATUj (ORCPT
+        with ESMTP id S229457AbiKATWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 15:20:39 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52D141C93C
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 12:20:37 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id b5so14261314pgb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 12:20:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=+7m3bZypo6dhghlyAzOpNSDD/kv+tTj2Q4d+rYCS/og=;
-        b=ZCVcPpLxiGzCICqw3qsqWg33Y++dpXuN77GfX3vWkEhCDU5vqhpIXjliRfiuue5vro
-         BqKZR+64KSFiGrbOVGZPcAWQ1BHkna3Uu8lQju0w+tlHYTKgHh6rbxWnYoJhlPBNmX51
-         /bXn+35ZP5AN3IcqSJBWJZLGqbnPjOS1aVchCpAkWL2CA4xeoDsXHzZBfsJGfwnKL/+M
-         4ENbuBih5FOKtEUD06x+MprssH+AKyRGFdAMzbaNhSf4u4sPfwh0qvNcFHujwh5gDR4Q
-         gi2CmCCdh13jB3OWtW2P76KrtaNrAlabjFLq02y9B6yW/wu8x4LuEdxwGfyV+ysnL1Si
-         sfMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=+7m3bZypo6dhghlyAzOpNSDD/kv+tTj2Q4d+rYCS/og=;
-        b=wdwJJufTfZhCDrqZQX1Xr9M/ShMz3qLaZy8kERrC08zoekqksJLMnlc4fDNFHPBwl4
-         U2UoBzFs0sIztKRgLI0oqjA5UB/DyhkA0kbOquVpw7KYKRqNBAbVLM6StHiB/cxCUZU8
-         M7igqIr1xBlY17RCrUnBXQVrKlqrdWZbFv/+bu9UuPL3KSihjVlgQ40sckWA8XU7NWqM
-         bUV6TtiID3zgTZtEKjRH8Jyyia2aRhjS1nWFm4JDeOviteZrgDTkl2gDARkz9ZSpZbC3
-         1iHBZP6cccAfVWWu6yDWZB1CerGpXyCni1+8ExuDe4Jh51HcFx66hB2iHNjds1uY0R9I
-         IkJg==
-X-Gm-Message-State: ACrzQf3jDE/PXHTU7/KaQcgxa7OT9EXXLzXe28WH3rVY79HI80DiBY2X
-        f6BG6r/VTWeJusj8TrsQtDI20A==
-X-Google-Smtp-Source: AMsMyM4DSX5aQaSlSc9t3DRUmShOOGsQgE+GL4tPDpKnyhhuvMhiLZtjmwIZkOGD07wRIh2EnrXG2A==
-X-Received: by 2002:a63:a555:0:b0:46f:f363:635d with SMTP id r21-20020a63a555000000b0046ff363635dmr3293752pgu.212.1667330436694;
-        Tue, 01 Nov 2022 12:20:36 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id u1-20020a17090a3fc100b0020dc318a43esm6337288pjm.25.2022.11.01.12.20.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 12:20:36 -0700 (PDT)
-Date:   Tue, 1 Nov 2022 19:20:32 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     pbonzini@redhat.com, dmatlack@google.com, andrew.jones@linux.dev,
-        wei.w.wang@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v7 4/5] KVM: selftests: Add atoi_positive() and
- atoi_non_negative() for input validation
-Message-ID: <Y2FxgNCw11tA7yDz@google.com>
-References: <20221031173819.1035684-1-vipinsh@google.com>
- <20221031173819.1035684-5-vipinsh@google.com>
- <Y2AmgObslx57+uYt@google.com>
- <CAHVum0fhangxMp5ysYdyoKVY+CKWeBAadMFX1V8MgqryRGHQrw@mail.gmail.com>
+        Tue, 1 Nov 2022 15:22:18 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 660CC1C93C;
+        Tue,  1 Nov 2022 12:22:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 0C65F61705;
+        Tue,  1 Nov 2022 19:22:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5EE5DC433D6;
+        Tue,  1 Nov 2022 19:22:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667330536;
+        bh=rzMpc3yyGF71lY7u/blmIwz+eJhbF9m5RL7Pl44fz0M=;
+        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+        b=KaqT8v6ze0W8xaqIdyEs3+njmgpSmGE/13pvzPzBBpWFl9CAVJnchldF1ONTPCAE0
+         izA9dXVNw/Nq7sd9jI4NJDNSjS5WfebeT6+u2VDleROJfpDNpkOxTA7L/M5+9aP0fI
+         bpGO2L1bgsSdxHpRrW1Br12lRX0dl0sww86LOcxcuVTNtDOYwrkH2K5EJBvWeqLcso
+         JLqu8mE4jy2T/3uIoRNQE7Tr6vv3bJXx7PhO2k3ou8sWeXJ2tIp7p1+2ab6/xUEG6r
+         bP+lpsbpV8jmhQI7rs2LsCUhtiMJ3NsOqH6vZceDGLu74hOj4EYQM6mjIcd6H66mxB
+         faghF4Z8C0fmA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHVum0fhangxMp5ysYdyoKVY+CKWeBAadMFX1V8MgqryRGHQrw@mail.gmail.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <ZODGKR.IJ47UDRQGD431@crapouillou.net>
+References: <20221027192024.484320-1-lis8215@gmail.com> <20221027192024.484320-4-lis8215@gmail.com> <20221027215716.77250C433D6@smtp.kernel.org> <ZODGKR.IJ47UDRQGD431@crapouillou.net>
+Subject: Re: [PATCH v6 3/3] clk: Add Ingenic JZ4755 CGU driver
+From:   Stephen Boyd <sboyd@kernel.org>
+Cc:     Siarhei Volkau <lis8215@gmail.com>,
+        Siarhei Volkau <lis8215@gmail.com>,
+        Michael Turquette <mturquette@baylibre.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mips@vger.kernel.org
+To:     Paul Cercueil <paul@crapouillou.net>
+Date:   Tue, 01 Nov 2022 12:22:14 -0700
+User-Agent: alot/0.10
+Message-Id: <20221101192216.5EE5DC433D6@smtp.kernel.org>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022, Vipin Sharma wrote:
-> On Mon, Oct 31, 2022 at 12:48 PM Sean Christopherson <seanjc@google.com> wrote:
-> >
-> > On Mon, Oct 31, 2022, Vipin Sharma wrote:
-> > > diff --git a/tools/testing/selftests/kvm/lib/test_util.c b/tools/testing/selftests/kvm/lib/test_util.c
-> > > index ec0f070a6f21..210e98a49a83 100644
-> > > --- a/tools/testing/selftests/kvm/lib/test_util.c
-> > > +++ b/tools/testing/selftests/kvm/lib/test_util.c
-> > > @@ -353,3 +353,19 @@ int atoi_paranoid(const char *num_str)
-> > >
-> > >       return num;
-> > >  }
-> > > +
-> > > +uint32_t atoi_positive(const char *num_str)
-> >
-> > I think it makes sense to inline atoi_positive() and atoi_non_negative() in
-> > test_util.h.  Depending on developer's setups, it might be one less layer to jump
-> > through to look at the implementation.
-> >
-> 
-> I am not sure if this makes life much easier for developers, as
-> "inline" can totally be ignored by the compiler. Also, not sure how
-> much qualitative improvement it will add in the developer's code
-> browsing journey. Anyways, I will add "inline" in the next version.
+Quoting Paul Cercueil (2022-10-28 00:48:35)
+> Hi Stephen,
+>=20
+> Le jeu. 27 oct. 2022 =EF=BF=BD 14:57:14 -0700, Stephen Boyd <sboyd@kernel=
+.org>=20
+> a =EF=BF=BDcrit :
+> > Quoting Siarhei Volkau (2022-10-27 12:20:23)
+> >>  diff --git a/drivers/clk/ingenic/jz4755-cgu.c=20
+> >> b/drivers/clk/ingenic/jz4755-cgu.c
+> >>  new file mode 100644
+> >>  index 000000000..d2eb3ae0c
+> >>  --- /dev/null
+> >>  +++ b/drivers/clk/ingenic/jz4755-cgu.c
+> >>  @@ -0,0 +1,346 @@
+> > [...]
+> >>  +static void __init jz4755_cgu_init(struct device_node *np)
+> >>  +{
+> >>  +       int retval;
+> >>  +
+> >>  +       cgu =3D ingenic_cgu_new(jz4755_cgu_clocks,
+> >>  +                             ARRAY_SIZE(jz4755_cgu_clocks), np);
+> >>  +       if (!cgu) {
+> >>  +               pr_err("%s: failed to initialise CGU\n", __func__);
+> >>  +               return;
+> >>  +       }
+> >>  +
+> >>  +       retval =3D ingenic_cgu_register_clocks(cgu);
+> >>  +       if (retval)
+> >>  +               pr_err("%s: failed to register CGU Clocks\n",=20
+> >> __func__);
+> >>  +
+> >>  +       ingenic_cgu_register_syscore_ops(cgu);
+> >>  +}
+> >>  +CLK_OF_DECLARE_DRIVER(jz4755_cgu, "ingenic,jz4755-cgu",=20
+> >> jz4755_cgu_init);
+> >=20
+> > Is there another driver that probes this device?=20
+> > CLK_OF_DECLARE_DRIVER()
+> > is for the situation where we want to probe this device again with
+> > another platform driver. Please add a comment indicating what that=20
+> > other
+> > driver is.
+>=20
+> See: 03d570e1a4dc ("clk: ingenic: Use CLK_OF_DECLARE_DRIVER macro")
+>=20
 
-To be clear, it's not about adding "inline", it's about not having separate
-declarations and definitions.  E.g. I've yet to achieve a setup that has 100%
-accuracy when it comes to navigating to a definition versus a declaration.  And
-when poking around code, seeing a "static inline" function provides a hint that
-a function is likely a simple wrapper without even having to look at the
-implementation.
-
-These are all small things, but I can't think of a reason _not_ to inline these
-trivial wrappers.
-
-> > Last thought: my vote would be to ignore the 80 char soft limit when adding the
-> > "name" to these calls, in every case except nr_memslot_modifications the overrun
-> > is relatively minor and not worth wrapping.  See below for my thougts on that one.
-> >
-> > >                       break;
-> > >               case 'm':
-> > > -                     max_mem = atoi_paranoid(optarg) * size_1gb;
-> > > +                     max_mem = atoi_positive(optarg) * size_1gb;
-> > >                       TEST_ASSERT(max_mem > 0, "memory size must be >0");
-> >
-> > This assert can be dropped, max_mem is a uint64_t so wrapping to '0' is impossible.
-> >
-> 
-> I intentionally kept it, as it is also protecting against having
-> accidently making size_1gb to 0.
-
-Heh, the test has far, far bigger problems if it screws up size_1gb.  And that's
-an orthogonal concern as the test would be horrifically broken regardless of
-whether or not the user specified '-m' and/or '-s'.
-
-A better approach is to replace the homebrewed size_1gb with SZ_1G from
-tools/include/linux/sizes.h.  I, and many others, completely overlooked size.h.
+Does that mean this is also a simple-mfd?
