@@ -2,215 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 924586152AD
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 21:04:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6416152B2
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 21:05:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229926AbiKAUE0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 16:04:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48560 "EHLO
+        id S229939AbiKAUFF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 16:05:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiKAUEY (ORCPT
+        with ESMTP id S229457AbiKAUFD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 16:04:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 750201C437;
-        Tue,  1 Nov 2022 13:04:23 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E93A96171A;
-        Tue,  1 Nov 2022 20:04:22 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A1A2C4347C;
-        Tue,  1 Nov 2022 20:04:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667333062;
-        bh=7XHcT9f5J4g8DUVSlnwzPNm8LhYkpUS0/AMNBo9GJUw=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=FBRvkOYHviuunbD60ryqT2SJpVXzILmLsbk4oCCN1PPUfZRoRMXfcftBWHsnhzQvP
-         X2rSulY8YSkIZTb1mdOW9/BA3EwawUJp3PVXrugJeQMkBARSHfXu4/9KvsFeAqQm8b
-         l2sWys+IS01a7pFM36ouHY/NolCKq1SFzVWSL8Z0Z7BoX7awZgJE6hXdVDD0qcy5SK
-         fsHusHEjEAJgmJey+F5Rhiy6pdb3Ss9ZJF4fbgHu8BGyIjt8DubYtOaJOd4c0yYpIl
-         yBzPGVjBPguUyB9EhYyaE92t3RNK8lJrwAdUVkFgozFeI+NgOlGqzcdN+gQtN1SCh7
-         bV9Y0/tHfzlhw==
-Received: by mail-ej1-f44.google.com with SMTP id y14so39864568ejd.9;
-        Tue, 01 Nov 2022 13:04:22 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0F5hkJS42QDJN3kX7JcBbpT9JvcrrLh0QVtpOL76gV/6jaVgdw
-        V6ZJSf5IUCKvDAopbQqIYNliDQcRV2HVSmvgT6s=
-X-Google-Smtp-Source: AMsMyM4BvokXG3mZAS3b6jtYCaK0TRjw2+YB+yV5CbP3BvAOvmHfYrXMyuLHe6QIfsRHg3bjK47x7pBeER/rI4lAZaE=
-X-Received: by 2002:a17:906:eec1:b0:782:6384:76be with SMTP id
- wu1-20020a170906eec100b00782638476bemr19830640ejb.756.1667333060421; Tue, 01
- Nov 2022 13:04:20 -0700 (PDT)
+        Tue, 1 Nov 2022 16:05:03 -0400
+Received: from vps0.lunn.ch (vps0.lunn.ch [156.67.10.101])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ED6F61C437;
+        Tue,  1 Nov 2022 13:04:58 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=lunn.ch;
+        s=20171124; h=In-Reply-To:Content-Disposition:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:From:Sender:Reply-To:Subject:
+        Date:Message-ID:To:Cc:MIME-Version:Content-Type:Content-Transfer-Encoding:
+        Content-ID:Content-Description:Content-Disposition:In-Reply-To:References;
+        bh=LEq/aBrq9Dkaeu3yr9tLk3Wh8ERxZDVGhiSFuxa4GZ8=; b=JMOqRF/atib0J2b7g2l8/DPRun
+        0ipGenUKgVCKc7IgAOhHWWO5Qvg68zBNhrZd9C1UfaYb/NtybqbqTmVkKhAPr5/BHwGDlLn5r/gnu
+        qM2h3ycUdTyl/i6UmHdqgmEOHI2FNaEUE00WZXfr9BfhDPfCc3Yz0dTg4SEnB7cUaqbU=;
+Received: from andrew by vps0.lunn.ch with local (Exim 4.94.2)
+        (envelope-from <andrew@lunn.ch>)
+        id 1opxUl-0018b1-Az; Tue, 01 Nov 2022 21:04:23 +0100
+Date:   Tue, 1 Nov 2022 21:04:23 +0100
+From:   Andrew Lunn <andrew@lunn.ch>
+To:     Andy Ren <andy.ren@getcruise.com>
+Cc:     netdev@vger.kernel.org, davem@davemloft.com, kuba@kernel.org,
+        pabeni@redhat.com, corbet@lwm.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, roman.gushchin@linux.dev
+Subject: Re: [PATCH net-next] netconsole: Enable live renaming for network
+ interfaces used by netconsole
+Message-ID: <Y2F7x319oanq/+i1@lunn.ch>
+References: <20221101181225.1272144-1-andy.ren@getcruise.com>
 MIME-Version: 1.0
-References: <20221101052340.1210239-1-namhyung@kernel.org> <20221101052340.1210239-3-namhyung@kernel.org>
- <Y2DuzmnUm6NIh25a@krava> <CAADnVQJ6+N6vQ=ZUgUjoB_M2RoTGGPXpLwz81mNDmLWrGYKetw@mail.gmail.com>
- <CAPhsuW6iuEZCCYJk-cra8DkEWNtdin8GyJDZ6Y8zd4ecfd1gQA@mail.gmail.com> <CAADnVQ+SYv5O+UxnGaBAvxptopWyANdbQRg=e2GXiRBPyJMGgA@mail.gmail.com>
-In-Reply-To: <CAADnVQ+SYv5O+UxnGaBAvxptopWyANdbQRg=e2GXiRBPyJMGgA@mail.gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 1 Nov 2022 13:04:08 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW55zAYCipf1P4dM8Cu9QFewnyZE+SOquKhSbdqUWG_EKg@mail.gmail.com>
-Message-ID: <CAPhsuW55zAYCipf1P4dM8Cu9QFewnyZE+SOquKhSbdqUWG_EKg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/3] bpf: Add bpf_perf_event_read_sample() helper
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>, Namhyung Kim <namhyung@kernel.org>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221101181225.1272144-1-andy.ren@getcruise.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 1, 2022 at 11:53 AM Alexei Starovoitov
-<alexei.starovoitov@gmail.com> wrote:
->
-> On Tue, Nov 1, 2022 at 11:47 AM Song Liu <song@kernel.org> wrote:
-> >
-> > On Tue, Nov 1, 2022 at 11:26 AM Alexei Starovoitov
-> > <alexei.starovoitov@gmail.com> wrote:
-> > >
-> > > On Tue, Nov 1, 2022 at 3:03 AM Jiri Olsa <olsajiri@gmail.com> wrote:
-> > > >
-> > > > On Mon, Oct 31, 2022 at 10:23:39PM -0700, Namhyung Kim wrote:
-> > > > > The bpf_perf_event_read_sample() helper is to get the specified sample
-> > > > > data (by using PERF_SAMPLE_* flag in the argument) from BPF to make a
-> > > > > decision for filtering on samples.  Currently PERF_SAMPLE_IP and
-> > > > > PERF_SAMPLE_DATA flags are supported only.
-> > > > >
-> > > > > Signed-off-by: Namhyung Kim <namhyung@kernel.org>
-> > > > > ---
-> > > > >  include/uapi/linux/bpf.h       | 23 ++++++++++++++++
-> > > > >  kernel/trace/bpf_trace.c       | 49 ++++++++++++++++++++++++++++++++++
-> > > > >  tools/include/uapi/linux/bpf.h | 23 ++++++++++++++++
-> > > > >  3 files changed, 95 insertions(+)
-> > > > >
-> > > > > diff --git a/include/uapi/linux/bpf.h b/include/uapi/linux/bpf.h
-> > > > > index 94659f6b3395..cba501de9373 100644
-> > > > > --- a/include/uapi/linux/bpf.h
-> > > > > +++ b/include/uapi/linux/bpf.h
-> > > > > @@ -5481,6 +5481,28 @@ union bpf_attr {
-> > > > >   *           0 on success.
-> > > > >   *
-> > > > >   *           **-ENOENT** if the bpf_local_storage cannot be found.
-> > > > > + *
-> > > > > + * long bpf_perf_event_read_sample(struct bpf_perf_event_data *ctx, void *buf, u32 size, u64 sample_flags)
-> > > > > + *   Description
-> > > > > + *           For an eBPF program attached to a perf event, retrieve the
-> > > > > + *           sample data associated to *ctx* and store it in the buffer
-> > > > > + *           pointed by *buf* up to size *size* bytes.
-> > > > > + *
-> > > > > + *           The *sample_flags* should contain a single value in the
-> > > > > + *           **enum perf_event_sample_format**.
-> > > > > + *   Return
-> > > > > + *           On success, number of bytes written to *buf*. On error, a
-> > > > > + *           negative value.
-> > > > > + *
-> > > > > + *           The *buf* can be set to **NULL** to return the number of bytes
-> > > > > + *           required to store the requested sample data.
-> > > > > + *
-> > > > > + *           **-EINVAL** if *sample_flags* is not a PERF_SAMPLE_* flag.
-> > > > > + *
-> > > > > + *           **-ENOENT** if the associated perf event doesn't have the data.
-> > > > > + *
-> > > > > + *           **-ENOSYS** if system doesn't support the sample data to be
-> > > > > + *           retrieved.
-> > > > >   */
-> > > > >  #define ___BPF_FUNC_MAPPER(FN, ctx...)                       \
-> > > > >       FN(unspec, 0, ##ctx)                            \
-> > > > > @@ -5695,6 +5717,7 @@ union bpf_attr {
-> > > > >       FN(user_ringbuf_drain, 209, ##ctx)              \
-> > > > >       FN(cgrp_storage_get, 210, ##ctx)                \
-> > > > >       FN(cgrp_storage_delete, 211, ##ctx)             \
-> > > > > +     FN(perf_event_read_sample, 212, ##ctx)          \
-> > > > >       /* */
-> > > > >
-> > > > >  /* backwards-compatibility macros for users of __BPF_FUNC_MAPPER that don't
-> > > > > diff --git a/kernel/trace/bpf_trace.c b/kernel/trace/bpf_trace.c
-> > > > > index ce0228c72a93..befd937afa3c 100644
-> > > > > --- a/kernel/trace/bpf_trace.c
-> > > > > +++ b/kernel/trace/bpf_trace.c
-> > > > > @@ -28,6 +28,7 @@
-> > > > >
-> > > > >  #include <uapi/linux/bpf.h>
-> > > > >  #include <uapi/linux/btf.h>
-> > > > > +#include <uapi/linux/perf_event.h>
-> > > > >
-> > > > >  #include <asm/tlb.h>
-> > > > >
-> > > > > @@ -1743,6 +1744,52 @@ static const struct bpf_func_proto bpf_read_branch_records_proto = {
-> > > > >       .arg4_type      = ARG_ANYTHING,
-> > > > >  };
-> > > > >
-> > > > > +BPF_CALL_4(bpf_perf_event_read_sample, struct bpf_perf_event_data_kern *, ctx,
-> > > > > +        void *, buf, u32, size, u64, flags)
-> > > > > +{
-> > > >
-> > > > I wonder we could add perf_btf (like we have tp_btf) program type that
-> > > > could access ctx->data directly without helpers
-> > > >
-> > > > > +     struct perf_sample_data *sd = ctx->data;
-> > > > > +     void *data;
-> > > > > +     u32 to_copy = sizeof(u64);
-> > > > > +
-> > > > > +     /* only allow a single sample flag */
-> > > > > +     if (!is_power_of_2(flags))
-> > > > > +             return -EINVAL;
-> > > > > +
-> > > > > +     /* support reading only already populated info */
-> > > > > +     if (flags & ~sd->sample_flags)
-> > > > > +             return -ENOENT;
-> > > > > +
-> > > > > +     switch (flags) {
-> > > > > +     case PERF_SAMPLE_IP:
-> > > > > +             data = &sd->ip;
-> > > > > +             break;
-> > > > > +     case PERF_SAMPLE_ADDR:
-> > > > > +             data = &sd->addr;
-> > > > > +             break;
-> > > >
-> > > > AFAICS from pe_prog_convert_ctx_access you should be able to read addr
-> > > > directly from context right? same as sample_period.. so I think if this
-> > > > will be generic way to read sample data, should we add sample_period
-> > > > as well?
-> > >
-> > > +1
-> > > Let's avoid new stable helpers for this.
-> > > Pls use CORE and read perf_sample_data directly.
-> >
-> > We have legacy ways to access sample_period and addr with
-> > struct bpf_perf_event_data and struct bpf_perf_event_data_kern. I
-> > think mixing that
-> > with CORE makes it confusing for the user. And a helper or a kfunc would make it
-> > easier to follow. perf_btf might also be a good approach for this.
->
-> imo that's a counter argument to non-CORE style.
-> struct bpf_perf_event_data has sample_period and addr,
-> and as soon as we pushed the boundaries it turned out it's not enough.
-> Now we're proposing to extend uapi a bit with sample_ip.
-> That will repeat the same mistake.
-> Just use CORE and read everything that is there today
-> and will be there in the future.
+>     where
+>  	+             if present, enable extended console support
+>  	src-port      source for UDP packets (defaults to 6665)
+>  	src-ip        source IP to use (interface address)
+>  	dev           network interface (eth0)
+> +	*             if present, allow runtime network interface renaming
+>  	tgt-port      port for logging agent (6666)
+>  	tgt-ip        IP address for logging agent
+>  	tgt-macaddr   ethernet MAC address for logging agent (broadcast)
+>  
+>  Examples::
+>  
+> - linux netconsole=4444@10.0.0.1/eth1,9353@10.0.0.2/12:34:56:78:9a:bc
+> + linux netconsole=4444@10.0.0.1/eth1*,9353@10.0.0.2/12:34:56:78:9a:bc
 
-Another work of this effort is that we need the perf_event to prepare
-required fields before calling the BPF program. I think we will need
-some logic in addition to CORE to get that right. How about we add
-perf_btf where the perf_event prepare all fields before calling the
-BPF program? perf_btf + CORE will be able to read all fields in the
-sample.
+To me, this looks like a wildcard of the interface name.
 
-Thanks,
-Song
+Maybe move the position of the *. Put it after the + ?
+
+      Andrew
