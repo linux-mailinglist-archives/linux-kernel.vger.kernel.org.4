@@ -2,44 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4F2A6148D2
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:30:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3C05C6148D4
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:30:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbiKALaM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 07:30:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35570 "EHLO
+        id S230316AbiKALaW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 07:30:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230365AbiKAL3P (ORCPT
+        with ESMTP id S230311AbiKAL3R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 07:29:15 -0400
+        Tue, 1 Nov 2022 07:29:17 -0400
 Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4060B15;
-        Tue,  1 Nov 2022 04:28:33 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B3BC6247;
+        Tue,  1 Nov 2022 04:28:35 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 62A2E615D4;
+        by dfw.source.kernel.org (Postfix) with ESMTPS id CBDED6152E;
+        Tue,  1 Nov 2022 11:28:34 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 47EC0C433C1;
         Tue,  1 Nov 2022 11:28:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 28361C433D6;
-        Tue,  1 Nov 2022 11:28:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667302112;
-        bh=zR2VOIOlFiLeKD8mLniZemC5q0Y54iEGRXSvder+ekc=;
+        s=k20201202; t=1667302114;
+        bh=/d4XatDkBeJiW0pJ2RZNoRT5620x04FZ8zQKk8rwHLw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=cZPcWEZiWHrt1EpgEzjnXqZxauOR9MN0341VlmZV/tyjDZxOlrOhzEgdEraS2+uv+
-         H2K24ujmc0HIsyxCDvabWpcAIW9z28yYnd5qLGCZ3Rb9Rq+80UanoJxfSI+izZD7wd
-         zMTmgHRaaS+ydsILigcgqTj64mJLE08JbVyJLvMAndtQ4QQio1KNXsWiuNKmkfY+GU
-         TMSGHwkqw0Pxw7tU8/hkpfA6WUym7QAytPo84h8QTKQzcXd9IZSjn2RzpNFh8r3Ulr
-         /erx/fIf7p944fl4kW17Fj9fWot8fZTqG5cJvFc6rs6doQyrLBf8k2Y+KQChtp7QtY
-         G0PBlT3ocH31w==
+        b=QwGnQIGjaEWhVBYrsvHeTI21Bq3tcUVmGvrBsKB2tPmDAu+KbRzQ7DeBWBHXEv9d5
+         u8gEBcciJR7Nm+Uli4YEbHaJvmLouGz69B6ZeWjs0Hvnc9KzywUbk8f2aMTTzk4iOT
+         7UGBvmEBaCwAM6o368zE4cT78JOb1jnkxkWyrVgDfyqfQjmHvjrUsgzVucMW3+GtCU
+         yo17VuzX87Bv7qeV10fUe/f5mK7QZenNcFeAuEEMix1CrSP/jVr7I2+89qMn818X0q
+         RfzvjpemyQnCZDN/zI0LUXVQ/8vz5UiIT4CJNKPsdi4xGy9Sz/OPedLInv2kXFpfJM
+         2i03YVqRpX8mg==
 From:   Sasha Levin <sashal@kernel.org>
 To:     linux-kernel@vger.kernel.org, stable@vger.kernel.org
-Cc:     Pavel Begunkov <asml.silence@gmail.com>,
-        Jens Axboe <axboe@kernel.dk>, Sasha Levin <sashal@kernel.org>,
-        io-uring@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.0 23/34] io_uring: don't iopoll from io_ring_ctx_wait_and_kill()
-Date:   Tue,  1 Nov 2022 07:27:15 -0400
-Message-Id: <20221101112726.799368-23-sashal@kernel.org>
+Cc:     Uday Shankar <ushankar@purestorage.com>,
+        Mike Christie <michael.christie@oracle.com>,
+        Hannes Reinecke <hare@suse.de>,
+        "Martin K . Petersen" <martin.petersen@oracle.com>,
+        Sasha Levin <sashal@kernel.org>, jejb@linux.ibm.com,
+        linux-scsi@vger.kernel.org
+Subject: [PATCH AUTOSEL 6.0 24/34] scsi: core: Restrict legal sdev_state transitions via sysfs
+Date:   Tue,  1 Nov 2022 07:27:16 -0400
+Message-Id: <20221101112726.799368-24-sashal@kernel.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221101112726.799368-1-sashal@kernel.org>
 References: <20221101112726.799368-1-sashal@kernel.org>
@@ -56,49 +59,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Pavel Begunkov <asml.silence@gmail.com>
+From: Uday Shankar <ushankar@purestorage.com>
 
-[ Upstream commit 02bac94bd8efd75f615ac7515dd2def75b43e5b9 ]
+[ Upstream commit 2331ce6126be8864b39490e705286b66e2344aac ]
 
-We should not be completing requests from a task context that has already
-undergone io_uring cancellations, i.e. __io_uring_cancel(), as there are
-some assumptions, e.g. around cached task refs draining. Remove
-iopolling from io_ring_ctx_wait_and_kill() as it can be called later
-after PF_EXITING is set with the last task_work run.
+Userspace can currently write to sysfs to transition sdev_state to RUNNING
+or OFFLINE from any source state. This causes issues because proper
+transitioning out of some states involves steps besides just changing
+sdev_state, so allowing userspace to change sdev_state regardless of the
+source state can result in inconsistencies; e.g. with ISCSI we can end up
+with sdev_state == SDEV_RUNNING while the device queue is quiesced. Any
+task attempting I/O on the device will then hang, and in more recent
+kernels, iscsid will hang as well.
 
-Signed-off-by: Pavel Begunkov <asml.silence@gmail.com>
-Link: https://lore.kernel.org/r/7c03cc91455c4a1af49c6b9cbda4e57ea467aa11.1665891182.git.asml.silence@gmail.com
-Signed-off-by: Jens Axboe <axboe@kernel.dk>
+More detail about this bug is provided in my first attempt:
+
+https://groups.google.com/g/open-iscsi/c/PNKca4HgPDs/m/CXaDkntOAQAJ
+
+Link: https://lore.kernel.org/r/20220924000241.2967323-1-ushankar@purestorage.com
+Signed-off-by: Uday Shankar <ushankar@purestorage.com>
+Suggested-by: Mike Christie <michael.christie@oracle.com>
+Reviewed-by: Hannes Reinecke <hare@suse.de>
+Signed-off-by: Martin K. Petersen <martin.petersen@oracle.com>
 Signed-off-by: Sasha Levin <sashal@kernel.org>
 ---
- io_uring/io_uring.c | 13 +++++--------
- 1 file changed, 5 insertions(+), 8 deletions(-)
+ drivers/scsi/scsi_sysfs.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
 
-diff --git a/io_uring/io_uring.c b/io_uring/io_uring.c
-index c5dd483a7de2..d29f397f095e 100644
---- a/io_uring/io_uring.c
-+++ b/io_uring/io_uring.c
-@@ -2653,15 +2653,12 @@ static __cold void io_ring_ctx_wait_and_kill(struct io_ring_ctx *ctx)
- 		io_poll_remove_all(ctx, NULL, true);
- 	mutex_unlock(&ctx->uring_lock);
+diff --git a/drivers/scsi/scsi_sysfs.c b/drivers/scsi/scsi_sysfs.c
+index 5d61f58399dc..dc41d7c6b9b1 100644
+--- a/drivers/scsi/scsi_sysfs.c
++++ b/drivers/scsi/scsi_sysfs.c
+@@ -828,6 +828,14 @@ store_state_field(struct device *dev, struct device_attribute *attr,
+ 	}
  
--	/* failed during ring init, it couldn't have issued any requests */
--	if (ctx->rings) {
-+	/*
-+	 * If we failed setting up the ctx, we might not have any rings
-+	 * and therefore did not submit any requests
-+	 */
-+	if (ctx->rings)
- 		io_kill_timeouts(ctx, NULL, true);
--		/* if we failed setting up the ctx, we might not have any rings */
--		io_iopoll_try_reap_events(ctx);
--		/* drop cached put refs after potentially doing completions */
--		if (current->io_uring)
--			io_uring_drop_tctx_refs(current);
--	}
- 
- 	INIT_WORK(&ctx->exit_work, io_ring_exit_work);
- 	/*
+ 	mutex_lock(&sdev->state_mutex);
++	switch (sdev->sdev_state) {
++	case SDEV_RUNNING:
++	case SDEV_OFFLINE:
++		break;
++	default:
++		mutex_unlock(&sdev->state_mutex);
++		return -EINVAL;
++	}
+ 	if (sdev->sdev_state == SDEV_RUNNING && state == SDEV_RUNNING) {
+ 		ret = 0;
+ 	} else {
 -- 
 2.35.1
 
