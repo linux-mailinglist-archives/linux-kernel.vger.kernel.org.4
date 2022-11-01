@@ -2,139 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4622F6149DF
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:50:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBD7F6149E4
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:50:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230093AbiKALuU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 07:50:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40276 "EHLO
+        id S231506AbiKALuo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 07:50:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231493AbiKALtj (ORCPT
+        with ESMTP id S231516AbiKALuT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 07:49:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFDFF625D;
-        Tue,  1 Nov 2022 04:46:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8CCC260B2C;
-        Tue,  1 Nov 2022 11:46:06 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E161DC433D6;
-        Tue,  1 Nov 2022 11:46:02 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667303165;
-        bh=a8xt1T5Uay9NpOBwXLmpdOHdQGFiCZzWC7ujs3LyI4E=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=qURshmvKeB8E2t/oIPTGsnh0Udh6UOT3w52nnQGF6gaemKL14K8svBmxsqAcHsCqb
-         wel1ZZUlgIAJWu65ghln+yTwCahK0ucC77KLV2T5LNIhh8ZWgCRirrEqXGMvGj3XZq
-         Q/ftj0KKcY3hWSfikw2xk51LQAMSrvZpExcoIMDq5dX9EpJMSEKxh+Rnda9mImDiOS
-         jv6h6umxXe9JepBzvutst+9/Yqtwx8qUWLtirN/DDEx/HBEVJvvoRKMCCD9I1bpVvc
-         9s9G17/W+SEtPmEIH32kl9fonlJfUSVxsCwwsawWx0b0vZzu0MDk95RIR/SIVwoDKC
-         dbkcWj+GqBtyQ==
-Date:   Tue, 1 Nov 2022 17:15:54 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Qiang Yu <quic_qianyu@quicinc.com>
-Cc:     quic_hemantk@quicinc.com, loic.poulain@linaro.org,
-        mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_cang@quicinc.com,
-        mrana@quicinc.com
-Subject: Re: [PATCH] bus: mhi: host: Add session ID to MHI controller
-Message-ID: <20221101114554.GD54667@thinkpad>
-References: <1665376870-60668-1-git-send-email-quic_qianyu@quicinc.com>
- <20221028172022.GC13880@thinkpad>
- <7dc5b87a-1413-f7cb-4fdc-93828252c4f1@quicinc.com>
+        Tue, 1 Nov 2022 07:50:19 -0400
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B34DC18356;
+        Tue,  1 Nov 2022 04:47:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
+        t=1667303193; bh=JJv66pqUZLGSuwjn2/9tXQQ7SlOBgLn8HpmJOkx7aPg=;
+        h=X-UI-Sender-Class:Date:From:To:Cc:Subject:References:In-Reply-To;
+        b=rrF+YsPAa3IV99mB0UyIPdZwWMj2a1Sd0W7yTqGVoVzjeF8p5DGkY21ppeA/EkzVP
+         z29N0cxCAoRyzprHerp0+BAqwljinzvwpce1Lg7MiZ1vJP9Rk37TF1FM37YSicCAfS
+         GvgTL6gQ03dZbcvlZ7yBfu9G2Pqa+3c3dBIDpjQnOoAxXaDG3pyBZpDwjCpnqOsON/
+         tttbO5e9jyjL7PdPPwFl16q8Z0rlbEb/Ege3qZYNr1RKU8QPTEFjv1UccAXSXyyPJm
+         QUNd8yjya2RYv6Se09sOur3sGcgB1xfB9HItkpVppf5L0QmhhhOtmFsSx9tzaAxVuM
+         R6kxCeq4gnCAQ==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from probook ([95.223.44.31]) by mail.gmx.net (mrgmx004
+ [212.227.17.190]) with ESMTPSA (Nemesis) id 1MRmfo-1oSIKp2Fsg-00T9OQ; Tue, 01
+ Nov 2022 12:46:33 +0100
+Date:   Tue, 1 Nov 2022 12:46:24 +0100
+From:   Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc:     Jonathan =?utf-8?Q?Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        linux-clk@vger.kernel.org, openbmc@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, linux-watchdog@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Avi Fishman <avifishman70@gmail.com>,
+        Tomer Maimon <tmaimon77@gmail.com>,
+        Tali Perry <tali.perry1@gmail.com>,
+        Patrick Venture <venture@google.com>,
+        Nancy Yuen <yuenn@google.com>,
+        Benjamin Fair <benjaminfair@google.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Philipp Zabel <p.zabel@pengutronix.de>,
+        Wim Van Sebroeck <wim@linux-watchdog.org>,
+        Guenter Roeck <linux@roeck-us.net>
+Subject: Re: [PATCH v3 2/7] clocksource: timer-npcm7xx: Enable timer 1 clock
+ before use
+Message-ID: <Y2EHEMja1KuhUJda@probook>
+References: <20220508194333.2170161-1-j.neuschaefer@gmx.net>
+ <20220508194333.2170161-3-j.neuschaefer@gmx.net>
+ <0972c833-432d-a850-958f-0d4f482e25a4@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="Cg4Yx/SYZOk1zL3s"
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7dc5b87a-1413-f7cb-4fdc-93828252c4f1@quicinc.com>
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <0972c833-432d-a850-958f-0d4f482e25a4@linaro.org>
+X-Provags-ID: V03:K1:nQWEA620M0xDRJA3lx//ZeEp2fNJGNFvQyYu7/vR8QZvRV2AKUU
+ cSEYUB1J0pIUVc5JeZ2F/CgCHKgi6EA8TJF0TaTBz1hrzvsJrSw+LR/YoClr6L0s9FNay4e
+ jrrN+GvUJYPXquSebUUbVnWqeUkfq+nlBn3j/nkhv9R+WufeU26d+h7jEsD8Jp8IBc7qepy
+ xhmnYem6U8/Xzz52cQr1A==
+UI-OutboundReport: notjunk:1;M01:P0:K8gGFXdxteQ=;f+EuOcF2T+Nx30Flx0u0xHWGvPw
+ zziIdeP5O68bmUXfyk/H2heXB3PcrROiY5DzSCTaX5UPhQs9h5DRdnFWsQwOE7x1K3urzYsTW
+ eORz1MN0uvXw2vEBv5nPWyM8NPwQMuBddVXqQQljlpEqE3nnZb1EdY5c7i0lrN3A5aJanrzQU
+ L/eBIFF/XdT5gx9TT5Vcmo/VgNbNn2kDYhWYMVzKfp+BrRsq150Ah6hHc0VeeVu+t66TFi5Kh
+ q2zMJVvUhjSaom/4uvlJesJTzhkzHCmE9XP+wK0UK1JNXfI8k37bi86NMoptJAuDsHXHUUiP4
+ XzgwSuDJObE6H/Uk9ID96wuqTZBAmQzGusKFiATq3ZA1OvCvUvJhpTICJ0BBEidqTmvirMxHE
+ PZegy8D9J7Ioajz8NV91MYVk7/cvv7S1q/a1uSxsqtzUBTAjxA9tnm7VQXsDgiuiDeSNfPRXg
+ 68hV3VYt8emm19JfVjW+z9HRJljWYFGQMgjPucsBj7HDnDgUQTMb3lXOl2pwNhTvYP0VgWsU7
+ +w8dzpIddaG+7Cet54hmjAHXscoSb8oyCaI898FGxmAVE6VN5KtQVqa02QlrnwKSbTEh0vm+w
+ 5/VGC4guFNGSHaBZ9/YUcKA3fPBvzTif8rb10dS11sOMF/wV8ukzx6wDeN1ZJ/4yponjo+1BH
+ Qb5/Zzi4B7P+u4oanm1+0zKrRd4lXnTGRDR3TVC/BdtiJyBJIX9TqQch3POA/i6HPB2glmGiK
+ y83xB46YjNmmv4Igi1LZQdrpY31k9osWi7f7+a3qsHQ0MLdR8TEgg7q+I2Ek9mhVxaMDc4ykZ
+ H+neKgeBt0upoGbGora8TQBDbr8K5YuNoLLEW+s/6cF9Uy2Gv64M/ZGUKWZzE/UaOInC1xLBO
+ rcV3DsTsM1EctieH6rybO4oH71kbpNIcoxVuXZ6JraJQIfmRgfhTkY7Bk2Aw+VTd/yALlYiJT
+ VAi5nms9oxarNm0kKWwiKfpr8fQ=
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 04:54:55PM +0800, Qiang Yu wrote:
-> 
-> On 10/29/2022 1:20 AM, Manivannan Sadhasivam wrote:
-> > On Mon, Oct 10, 2022 at 12:41:10PM +0800, Qiang Yu wrote:
-> > > Session ID to be used during BHI transfers to recognize a
-> > > particular session are currently not being stored in the MHI
-> > > controller structure. Store them to allow for tracking and other
-> > > future usage.
-> > > 
-> > > Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
-> > Who/what is going to use this session id?
-> Sometimes, we may find some error logs and want to see what happens on
-> device when host is printing these error logs.
-> Session id can help us find the logs we want.
 
-Okay. Please add this info to the commit message.
+--Cg4Yx/SYZOk1zL3s
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Thanks,
-Mani
+On Mon, May 09, 2022 at 01:37:40PM +0200, Daniel Lezcano wrote:
+> On 08/05/2022 21:43, Jonathan Neusch=C3=A4fer wrote:
+> > In the WPCM450 SoC, the clocks for each timer can be gated individually.
+> > To prevent the timer 1 clock from being gated, enable it explicitly.
+> >=20
+> > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+> > ---
+>=20
+>=20
+> Applied, thanks
 
-> > 
-> > Thanks,
-> > Mani
-> > 
-> > > ---
-> > >   drivers/bus/mhi/host/boot.c | 8 ++++----
-> > >   include/linux/mhi.h         | 1 +
-> > >   2 files changed, 5 insertions(+), 4 deletions(-)
-> > > 
-> > > diff --git a/drivers/bus/mhi/host/boot.c b/drivers/bus/mhi/host/boot.c
-> > > index 26d0edd..5bed8b51 100644
-> > > --- a/drivers/bus/mhi/host/boot.c
-> > > +++ b/drivers/bus/mhi/host/boot.c
-> > > @@ -231,7 +231,7 @@ static int mhi_fw_load_bhi(struct mhi_controller *mhi_cntrl,
-> > >   			   dma_addr_t dma_addr,
-> > >   			   size_t size)
-> > >   {
-> > > -	u32 tx_status, val, session_id;
-> > > +	u32 tx_status, val;
-> > >   	int i, ret;
-> > >   	void __iomem *base = mhi_cntrl->bhi;
-> > >   	rwlock_t *pm_lock = &mhi_cntrl->pm_lock;
-> > > @@ -253,16 +253,16 @@ static int mhi_fw_load_bhi(struct mhi_controller *mhi_cntrl,
-> > >   		goto invalid_pm_state;
-> > >   	}
-> > > -	session_id = MHI_RANDOM_U32_NONZERO(BHI_TXDB_SEQNUM_BMSK);
-> > > +	mhi_cntrl->session_id = MHI_RANDOM_U32_NONZERO(BHI_TXDB_SEQNUM_BMSK);
-> > >   	dev_dbg(dev, "Starting image download via BHI. Session ID: %u\n",
-> > > -		session_id);
-> > > +		mhi_cntrl->session_id);
-> > >   	mhi_write_reg(mhi_cntrl, base, BHI_STATUS, 0);
-> > >   	mhi_write_reg(mhi_cntrl, base, BHI_IMGADDR_HIGH,
-> > >   		      upper_32_bits(dma_addr));
-> > >   	mhi_write_reg(mhi_cntrl, base, BHI_IMGADDR_LOW,
-> > >   		      lower_32_bits(dma_addr));
-> > >   	mhi_write_reg(mhi_cntrl, base, BHI_IMGSIZE, size);
-> > > -	mhi_write_reg(mhi_cntrl, base, BHI_IMGTXDB, session_id);
-> > > +	mhi_write_reg(mhi_cntrl, base, BHI_IMGTXDB, mhi_cntrl->session_id);
-> > >   	read_unlock_bh(pm_lock);
-> > >   	/* Wait for the image download to complete */
-> > > diff --git a/include/linux/mhi.h b/include/linux/mhi.h
-> > > index a5441ad..8b3c934 100644
-> > > --- a/include/linux/mhi.h
-> > > +++ b/include/linux/mhi.h
-> > > @@ -405,6 +405,7 @@ struct mhi_controller {
-> > >   	u32 minor_version;
-> > >   	u32 serial_number;
-> > >   	u32 oem_pk_hash[MHI_MAX_OEM_PK_HASH_SEGMENTS];
-> > > +	u32 session_id;
-> > >   	struct mhi_event *mhi_event;
-> > >   	struct mhi_cmd *mhi_cmd;
-> > > -- 
-> > > The Qualcomm Innovation Center, Inc. is a member of the Code Aurora Forum,
-> > > a Linux Foundation Collaborative Project
-> > > 
-> > > 
-> 
+Hi, I didn't see this patch in linux-next. May I know where you applied it?
 
--- 
-மணிவண்ணன் சதாசிவம்
+If it got lost somehow, I can also resend it later.
+
+
+Best regards,
+Jonathan
+
+--Cg4Yx/SYZOk1zL3s
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEvHAHGBBjQPVy+qvDCDBEmo7zX9sFAmNhBu4ACgkQCDBEmo7z
+X9veJBAAzD5hLwhrXHZk7IC3NjXxmXkEvjxqi+k1w8isyz9tr6/ldQGEmQ9m2YJc
+Lqw+QYmq2MvpPeEDYzsX+wGq8kjbQmdn5rztX/k5wx2I4MaZEtKmHEl8WlAJ973M
+ryvuLYqzsdparwWYam7WdjdhIPBsrtDvlQYtThoCYSSQlDgUgwv1/pfZE2Rh3nXT
+KhTmM/eZ0xVh0DT9VzaiVQForAg6mokDB0OdTBf0ZcXTctCTAkHo8Mjr5Yb7iIlZ
+lWnM5NG7Nhykn8AbVFOE6dQMIaiPJzwhpYY35APp+5qvPLJcYMc1H8hsDowVXK2c
+rwEEhKFOreq8ovc9zjFiQ37QH71Qvv4o1xJ3/1Q0HmF06KiF9zidWopokC8o5pe6
+RT1HY+7+D14CHL2+HnF9vjCqhyfZsVUraGBxscolgxoK/q3sfX0tWunle6qM17vc
+MjeYmkjnjV5SyQg7TL8/8BKttzYt/wC9mqEtkFzCnHtCtBpGgJJ9QbP8OfCJxZTs
+Fw4iww/01aZQSvC1HvBISotocCFDmXejtBjkQCdkbQOQbHI7u78Z/2RTG3DNtq6r
+lgi0ZvzjeA47j7XAX+jLm2K4XhnGJnhv+X30z2llNFfPa+fFt3UovL7het7hIXfR
+NONeccaOnV9J5M0Y/hPw2cGEi4RwJCjjxIv2/YK3sfnXX2QUPIM=
+=g5U2
+-----END PGP SIGNATURE-----
+
+--Cg4Yx/SYZOk1zL3s--
