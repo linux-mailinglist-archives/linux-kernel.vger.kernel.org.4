@@ -2,268 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 292C2614606
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 09:51:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B672161460A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 09:52:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229738AbiKAIvX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 04:51:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36544 "EHLO
+        id S229875AbiKAIwf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 04:52:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36836 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229511AbiKAIvU (ORCPT
+        with ESMTP id S229457AbiKAIwd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 04:51:20 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44D4514D10;
-        Tue,  1 Nov 2022 01:51:19 -0700 (PDT)
+        Tue, 1 Nov 2022 04:52:33 -0400
+Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3323A14D10
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 01:52:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667292679; x=1698828679;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=yw95zDdmYW/BW6jCfraYg4JBJL9vEXdtr4r3Z5zhG7I=;
-  b=Hgbu+QQ3f6roCqBilMguaGnWGuuyLAwOE/QrWP/OW2D2UXwjv6xRyvvT
-   foRWRGAcPbXaVvjo2oi6nZLLP/7XM6XZAQChoN3TlaXd+MpoUqSb6TIPa
-   h9RPvu4kCGW4KEGQVqVL+omMEXpWh15CoIFgcp352aXje4XO+GkP4Oy+p
-   lwvOEeIsFjnMhA8qzmNAGfiNLj6ASSI97BlZEU3NPyyHNBIHIoPHL72rH
-   CoYUrWKw1Qxl4N651huHFuNZlsziTSV5DFEojz6V7yAc44d5MEL9dM3y5
-   rH3YwjsbbYeKonDclcbrJ+4WkNPi6qm7dABnN+O+7zsm6Nhsvx4mIGh8+
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="373310784"
+  t=1667292752; x=1698828752;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=j0y/gU0N76hksTyR6uOy3Ksq4bC7H9H77jI0W5EJonU=;
+  b=CWZyakall1Y2C935FeUvkWU4FOzlvvGP2QjgG18d91enk7hfnmxCJE0h
+   ZAt0LgeIaTre/TKQ5j+InwkMITlgYHP1oKe0HOT3fineHjSxfvkvvpXsr
+   eX15Y5FcuYs8CDC2dN+Klx2AG9ly0aoEC7frOA7gjaigk+JvV3FZlpU/v
+   isCt8/1AQRtXZo6Hh5GKnwdHr3K5kOBeN2le9eeM3qfhhuiA573NJMgAQ
+   x+ZUeVuKJtNUyBNGZaE1OF9Vqio0+yS7caA6Bs4w1IiJturfSq6LllQiS
+   iXkXtDiKPR+Tyg1Y4+lwmJfWiWOm+CyM08KECTpBJSMKs4ReuzvudbgyB
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="292399071"
 X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="373310784"
-Received: from fmsmga002.fm.intel.com ([10.253.24.26])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 01:51:18 -0700
+   d="scan'208";a="292399071"
+Received: from orsmga001.jf.intel.com ([10.7.209.18])
+  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 01:52:31 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="739262361"
+X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="667127094"
 X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="739262361"
-Received: from orsmsx602.amr.corp.intel.com ([10.22.229.15])
-  by fmsmga002.fm.intel.com with ESMTP; 01 Nov 2022 01:51:18 -0700
-Received: from orsmsx610.amr.corp.intel.com (10.22.229.23) by
- ORSMSX602.amr.corp.intel.com (10.22.229.15) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Tue, 1 Nov 2022 01:51:17 -0700
-Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
- orsmsx610.amr.corp.intel.com (10.22.229.23) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Tue, 1 Nov 2022 01:51:17 -0700
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (104.47.70.103)
- by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Tue, 1 Nov 2022 01:51:17 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=JD8H7o9ev+qzCsTq4Dx2Tsvjuc8wE4Q2qRZIrS/6UsrZpuhLOz8q4pX00QqD5wU8j1EkjIr6mFlGwMdGKZPhMDmpBW+AH9BR06Tr9LjX6mBXmleU/WGxVaD0XmeXYhWGmpB2eqEDiL02uj2eNh2n6zDpcdC6Rmr0ZEVL3xoy7CwZ/CRebBQ9q7uO3RkXT8c8L/gCwso/uaaqLZFGan4u2YJUI4k+l+yvTpU8tMya07HuMlk2O8pn0GVdZRCM49QchrupHQujcGYiVqb4zOL2/YZ79WhgzT1yk3Bm0WNYPl2xcVrkmhsqLMA5PjmBg5ZQnYy+9d0cvc1by3wgJExr6Q==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=m3XQK65hAqW3R8NCSqz0qSxos8gA/6Wr5gz75qgpCpg=;
- b=RvaZx4grdeJAPKoaHIVpR9qm7EJxWfuuMYkiJ2sM0mUPwR7tsL7qb3jxSqqOhM+pNLSQt3tpd81sP9NDwLgWS38ByQ3iTj3vuirK8qaBD3DdqKzIzrJPkTscVjjic0ND/H6USHOEnuxu97v1DTkx/Iti3EkS4WRXNXqHKZ09QAgUjbL9gPTAL+0cOy5fn6Gcs37F3+Cum7DsknVlRU2Im06/4hPuAfP1K/LLAgkM/QjICfA3K9crX6G+FNs55Q/q/wuQvHM051o/1awEW/DxL6d2ckDNqgjIens7GZAg25WRtwxsljKIFT/HgMnY6vp9ABLJUhd0YR94I/TlxvjRDw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com (2603:10b6:a03:18::25)
- by BN0PR11MB5694.namprd11.prod.outlook.com (2603:10b6:408:167::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.21; Tue, 1 Nov
- 2022 08:51:12 +0000
-Received: from BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::e475:190a:6680:232]) by BYAPR11MB3320.namprd11.prod.outlook.com
- ([fe80::e475:190a:6680:232%7]) with mapi id 15.20.5769.019; Tue, 1 Nov 2022
- 08:51:12 +0000
-Message-ID: <7ceeaf97-fbc8-54ac-2041-75f2ca8bc7e2@intel.com>
-Date:   Tue, 1 Nov 2022 01:51:10 -0700
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.13.1
-Subject: Re: [PATCH 08/14] x86/microcode/intel: Meta-data support in microcode
- file
-Content-Language: en-US
-To:     Jithu Joseph <jithu.joseph@intel.com>, <hdegoede@redhat.com>,
-        <markgross@kernel.org>
-CC:     <tglx@linutronix.de>, <mingo@redhat.com>, <bp@alien8.de>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
-        <gregkh@linuxfoundation.org>, <ashok.raj@intel.com>,
-        <tony.luck@intel.com>, <linux-kernel@vger.kernel.org>,
-        <platform-driver-x86@vger.kernel.org>, <patches@lists.linux.dev>,
-        <ravi.v.shankar@intel.com>, <thiago.macieira@intel.com>,
-        <athenas.jimenez.gonzalez@intel.com>
-References: <20221021203413.1220137-1-jithu.joseph@intel.com>
- <20221021203413.1220137-9-jithu.joseph@intel.com>
-From:   Sohil Mehta <sohil.mehta@intel.com>
-In-Reply-To: <20221021203413.1220137-9-jithu.joseph@intel.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BYAPR11CA0064.namprd11.prod.outlook.com
- (2603:10b6:a03:80::41) To BYAPR11MB3320.namprd11.prod.outlook.com
- (2603:10b6:a03:18::25)
+   d="scan'208";a="667127094"
+Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
+  by orsmga001.jf.intel.com with SMTP; 01 Nov 2022 01:52:26 -0700
+Received: by stinkbox (sSMTP sendmail emulation); Tue, 01 Nov 2022 10:52:26 +0200
+Date:   Tue, 1 Nov 2022 10:52:26 +0200
+From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
+To:     Jason Baron <jbaron@akamai.com>
+Cc:     jim.cromie@gmail.com, Jani Nikula <jani.nikula@linux.intel.com>,
+        Greg KH <gregkh@linuxfoundation.org>, daniel.vetter@ffwll.ch,
+        intel-gfx@lists.freedesktop.org, linux@rasmusvillemoes.dk,
+        linux-kernel@vger.kernel.org, amd-gfx@lists.freedesktop.org,
+        seanpaul@chromium.org, dri-devel@lists.freedesktop.org,
+        joe@perches.com, intel-gvt-dev@lists.freedesktop.org
+Subject: Re: [Intel-gfx] [PATCH v7 0/9] dyndbg: drm.debug adaptation
+Message-ID: <Y2DeSlGI38fvzvED@intel.com>
+References: <87a65pfsbq.fsf@intel.com>
+ <c1807585-f6c8-c05d-bc20-c6a540e59814@akamai.com>
+ <CAJfuBxxWVBxL29sXS3XoE5Es9HTbVyFUi9bQFYNupJAERffAew@mail.gmail.com>
+ <Y1qqurH/lG0u+3ky@intel.com>
+ <CAJfuBxzpG+C1ARLs3c_znXECEU7Ldg8RhruLMUXA67w+DwcrOQ@mail.gmail.com>
+ <Y1rllFeOnT9/PQVA@intel.com>
+ <CAJfuBxw_YFvCtHMwVE0K0fa5GJbrZy4hTOSS9FebeDs6fxUUCA@mail.gmail.com>
+ <Y1/In+ZBzNguVNoy@intel.com>
+ <CAJfuBxxHNXHEWCEPXnPTh64dq4igaddnrU27NT=OHASmnxgudA@mail.gmail.com>
+ <9ff84a99-e500-625e-ba9d-20cd752d7ff4@akamai.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BYAPR11MB3320:EE_|BN0PR11MB5694:EE_
-X-MS-Office365-Filtering-Correlation-Id: ff44eafd-73e3-434b-9fdb-08dabbe63a6e
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: ui+nSl/oEEMQESuh4LHSYS7Rm2ZTiGAt28vFQ8KmGgBmAsGfCuE9HcRwMEi+yUJY6bj8NWxKuh+vRcJmVY2ktnUee35T1DiyU2LByGt7Gpda1rwgqdthAx/xFG5NbPyql5hbZLAlnBr5mckTRSZ3IBrDV0f1z1fnv81mNyCYbQi684CBpo1+VSWfFWWg9wDiVkixKAPvFTOkDiHzcWa+NGKuD8aCPZi/sZK3REQMMxYo+0Q7jEdSHWPTVwV7x2qshHL5vs/boQkJ2ESNYSMtNwYg2PpCqB+4ngEJ+h9djgBv1CHFNYwGSKWWZIZHTC5x1VwP0wdpUYPzACrnzVH7eSyqBctercJCffRjhQi4cv+psS+8vgYK0pL5T9Zp//ID5Sbns4S/7rS2J9OllmEu35ZgNa7JJuv6ial91d7dpHuhc8ipvew+FXvml3Yro3S+1a6AmKHGpYOqMxfkopsDsDSk86XlAd0Eo9PwXlE6I9MDtyqpx8fg+N90URiG8n2tMHK0YyYhLzGtl2rBJtFGOVghJN2muCAWi6uU+CClk7YkVcEiJmPoMBtgRgL/pvUE69aJl8YztabiLMUyad7Ia/wCpNK3lHAK8++TjB56W1EAj2cvbOOYoHgxVl09eW7aDcrilJ58rIAwjdLINh5BUydqkFDbOQtz5PymCDMjdpBqbQ08GJBgaqfN21u8e27H/O3UOO1TOnTX5iwDpIJXDYO7aboBdvH8mzsY6HpjAzfXR/7X86Nan5JFPSRz61quOQlC6YmySw4izqjNSspmsluIS6ciYVrxIpoT6UjBvrM=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR11MB3320.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(39860400002)(376002)(346002)(136003)(396003)(366004)(451199015)(82960400001)(31696002)(86362001)(2906002)(5660300002)(66476007)(66556008)(31686004)(44832011)(7416002)(38100700002)(66946007)(186003)(6512007)(2616005)(6506007)(26005)(478600001)(316002)(8676002)(4326008)(36756003)(41300700001)(8936002)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?dEN6RFBMeDF6cW1PeFlGc0pLVlZUdVBSejRpRU1ydkJvMHN4MEM5bG8yVGFy?=
- =?utf-8?B?L2FYcjVjSUowRU9CMVF5cnFDNEoraHVkdHRUQW81T1oyWVNvbFVjYzRrQlkr?=
- =?utf-8?B?Q0lsb1Ura0JIVllldEZqdk16M1Rha3VhZDJPWkI0OEN3OTE5YkFJYk8rRCtV?=
- =?utf-8?B?UjZvbDNNWk5kZ1FweXA4Qzd0TEhCODJXaThVMDdEd1BGaGVYWGtHTkd0SFZW?=
- =?utf-8?B?cEl2VVNMSEtzZ0JjR3JBTGg0WVRlN0MrVTUrVFBkbStWUysraW12U2FYYzlr?=
- =?utf-8?B?K0tIT2JTOHFKRFpZa2pxS0llWWRGUmpvaUJRQit0NThQTUNSRFpzUmFCcTVt?=
- =?utf-8?B?Vm05cE44MWZPYkxKT1BQN0NNWnM3T0xJVjRJSzdhOFd0MU1BWC8vTlBZOVUy?=
- =?utf-8?B?cHpKVkFGcDlPQkVhTk1oUko5a05VK0pSU0sxdUpwelFSN3czQVFsdU5vSlgr?=
- =?utf-8?B?dDNNVGhibHpYUUpxdHRHWlc1ZVQ0S091S2lWZDZlTUpYMFJNYi82aVFKeURo?=
- =?utf-8?B?S2w5SWdRN3c4Wmw3WUMzM3E0dy9qRzMxdmJMd0tSUUtGTnlvcDJwN3J0RU80?=
- =?utf-8?B?eDZWSnBlZExzNzdVVkRhQi9Vb0pWSzNXSkdJT1pFRThtdk0veERyNHJxaHlq?=
- =?utf-8?B?cElSZ3ZYdTA4QmJoSHE4OFgwTUxFMU9Ba2c2dHYxVEUrOWRhelZXbWdNZ01H?=
- =?utf-8?B?dDk4NmtTZDBkczZJT2g0aUZlbGRzSS95bzdadnc0c3lYYWo0TFhLZCs3RG11?=
- =?utf-8?B?ZWxLbG9VSm0yYnZ4Mzc2d2I2TnVjaGMzdG5OQ0xiK1IwajhRcmVtK1hOTjho?=
- =?utf-8?B?OFNiYlpTZm8zRzhNMG9EWGFuTVpTcXgvU003RmhXRDVTam9pTk9ZcmZtVThy?=
- =?utf-8?B?TERreW1WL3JXODdId1cvNHM4bVIvVmVaSXJlVWhzSWlhVzZ0YU12L0p6RitU?=
- =?utf-8?B?NkdJeEJka0h2UzdYTWVKRy9TNG5GOFo1Vk5zSzFQOEM1QkFzQmFJRm5BZnZm?=
- =?utf-8?B?SzF3MDJGNkdmQWpWYVRLQ2lhUGhIQW50T0ZYM3lxZTJFdVgydXQrcmQyV3BR?=
- =?utf-8?B?RjBPdnQ0blNCbnJUZGFqdFdsZUxjYXJsUGhRWFZ4dHpKR2ZOVis2WHp4TUtY?=
- =?utf-8?B?MU5pS0pudEgvM1BYeDdQNlQ0OWJHWC9Ccm1EOXd2RDJ1Vk9UVmo3K0M2Sm8v?=
- =?utf-8?B?d3graThoOGJlYW80V2RRWFZCU1dIaUNUcWdrKy8xdUJieWs1L25XUDNCT3pK?=
- =?utf-8?B?L0FudFFveG1WSmEzak5wa0F6dldkU2ZPak1PVDRHbzRqcStIVG1nMlpVU2xw?=
- =?utf-8?B?NFBNeDlGZzAxTTdEeXJFb2lyR0llZVU3L0dURmE2N3VKdFhmL0g4SG5MUGMv?=
- =?utf-8?B?aStZdTUrMlZTODRONUlaKzlYc3F1dWtoZmNySHk1blBVc0hobHkrZFlzV3lO?=
- =?utf-8?B?cHZERWpVYlF1MFpqYytwQjFodWh6dzhYYkMwcmVmNHMrY2hXd1dMMU14SkxJ?=
- =?utf-8?B?VVdnalYrYnlIbmE0cmhqODJibFJ2dHk0S1VjdFc2TDVGQVNiWk5sMTcrM0JX?=
- =?utf-8?B?YkdrT1hsZ1ZLdVlid05GYzkxMUkwMG00TDRMQUcvZEVFU3NMQjhYTVhWdEdV?=
- =?utf-8?B?Vnk2Nnh2YjMzWlAydm04NVlscXpZTGsvbHR4cTl3M0JtRWIyeWJsU2VpZ0Z0?=
- =?utf-8?B?V214ak5GdlFpM1l5U1NKMHRiRElWK0RzeGVKTExoUExaYVNpYks0STJETmlB?=
- =?utf-8?B?RjRUaUtNZVoyMXorQ2s2cGsxb0JvbEhsNytPS2ZJUWIvUDVrK2FpZVIreVVl?=
- =?utf-8?B?TWJUVE1GNkJKU0MvMk9hc2ZCejZGSkZrUnR1MDNJSGFaWk90OCtrdktVd2w4?=
- =?utf-8?B?a2tIbjhka2pCNGl5QVhpM3NCNExvVTZiUDhLWXVLVk5jZW4wUkNjN0FZM29n?=
- =?utf-8?B?K0doYlp5cWJXTlo2ZjV6NDU1aDhGcnBhRDJibW80eUgzVHJQQStqL2E1WTNi?=
- =?utf-8?B?RW9sQlFCUFhwOWxhNk0zRnBUU052eVp4NnFNRThMUXZpYWlaWXNPbFhnYnBo?=
- =?utf-8?B?MFFTc0xZZXJOTmV3NGJPdzloZWZiMVdtcHMxUUtXYmlFZklXeUZjMVBYK0NN?=
- =?utf-8?B?Z1Z0VTJRanRtaThrc3FJTXJzakFXNzVPbkVKQTZzODFBRFVoelA1VXN3b3V5?=
- =?utf-8?B?T2c9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: ff44eafd-73e3-434b-9fdb-08dabbe63a6e
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR11MB3320.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Nov 2022 08:51:12.4640
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: ewWT7AnxB0LDW7LPzBWEmp0nMGcsFUn2O6ovAxjKyirKPSzdq9LtDtmDCPFlDtaY7oE9irMlinyEXZN6lHwkWg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: BN0PR11MB5694
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <9ff84a99-e500-625e-ba9d-20cd752d7ff4@akamai.com>
+X-Patchwork-Hint: comment
+X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-How about?
+On Mon, Oct 31, 2022 at 08:20:54PM -0400, Jason Baron wrote:
+> 
+> 
+> On 10/31/22 6:11 PM, jim.cromie@gmail.com wrote:
+> > On Mon, Oct 31, 2022 at 7:07 AM Ville Syrjälä
+> > <ville.syrjala@linux.intel.com> wrote:
+> >> On Sun, Oct 30, 2022 at 08:42:52AM -0600, jim.cromie@gmail.com wrote:
+> >>> On Thu, Oct 27, 2022 at 2:10 PM Ville Syrjälä
+> >>> <ville.syrjala@linux.intel.com> wrote:
+> >>>> On Thu, Oct 27, 2022 at 01:55:39PM -0600, jim.cromie@gmail.com wrote:
+> >>>>> On Thu, Oct 27, 2022 at 9:59 AM Ville Syrjälä
+> >>>>> <ville.syrjala@linux.intel.com> wrote:
+> >>>>>> On Thu, Oct 27, 2022 at 09:37:52AM -0600, jim.cromie@gmail.com wrote:
+> >>>>>>> On Thu, Oct 27, 2022 at 9:08 AM Jason Baron <jbaron@akamai.com> wrote:
+> >>>>>>>>
+> >>>>>>>>
+> >>>>>>>> On 10/21/22 05:18, Jani Nikula wrote:
+> >>>>>>>>> On Thu, 20 Oct 2022, Ville Syrjälä <ville.syrjala@linux.intel.com> wrote:
+> >>>>>>>>>> On Sat, Sep 24, 2022 at 03:02:34PM +0200, Greg KH wrote:
+> >>>>>>>>>>> On Sun, Sep 11, 2022 at 11:28:43PM -0600, Jim Cromie wrote:
+> >>>>>>>>>>>> hi Greg, Dan, Jason, DRM-folk,
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> heres follow-up to V6:
+> >>>>>>>>>>>>    rebased on driver-core/driver-core-next for -v6 applied bits (thanks)
+> >>>>>>>>>>>>    rework drm_debug_enabled{_raw,_instrumented,} per Dan.
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> It excludes:
+> >>>>>>>>>>>>    nouveau parts (immature)
+> >>>>>>>>>>>>    tracefs parts (I missed --to=Steve on v6)
+> >>>>>>>>>>>>    split _ddebug_site and de-duplicate experiment (way unready)
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> IOW, its the remaining commits of V6 on which Dan gave his Reviewed-by.
+> >>>>>>>>>>>>
+> >>>>>>>>>>>> If these are good to apply, I'll rebase and repost the rest separately.
+> >>>>>>>>>>> All now queued up, thanks.
+> >>>>>>>>>> This stuff broke i915 debugs. When I first load i915 no debug prints are
+> >>>>>>>>>> produced. If I then go fiddle around in /sys/module/drm/parameters/debug
+> >>>>>>>>>> the debug prints start to suddenly work.
+> >>>>>>>>> Wait what? I always assumed the default behaviour would stay the same,
+> >>>>>>>>> which is usually how we roll. It's a regression in my books. We've got a
+> >>>>>>>>> CI farm that's not very helpful in terms of dmesg logging right now
+> >>>>>>>>> because of this.
+> >>>>>>>>>
+> >>>>>>>>> BR,
+> >>>>>>>>> Jani.
+> >>>>>>>>>
+> >>>>>>>>>
+> >>>>>>>> That doesn't sound good - so you are saying that prior to this change some
+> >>>>>>>> of the drm debugs were default enabled. But now you have to manually enable
+> >>>>>>>> them?
+> >>>>>>>>
+> >>>>>>>> Thanks,
+> >>>>>>>>
+> >>>>>>>> -Jason
+> >>>>>>>
+> >>>>>>> Im just seeing this now.
+> >>>>>>> Any new details ?
+> >>>>>> No. We just disabled it as BROKEN for now. I was just today thinking
+> >>>>>> about sending that patch out if no solutin is forthcoming soon since
+> >>>>>> we need this working before 6.1 is released.
+> >>>>>>
+> >>>>>> Pretty sure you should see the problem immediately with any driver
+> >>>>>> (at least if it's built as a module, didn't try builtin). Or at least
+> >>>>>> can't think what would make i915 any more special.
+> >>>>>>
+> >>>>> So, I should note -
+> >>>>> 99% of my time & energy on this dyndbg + drm patchset
+> >>>>> has been done using virtme,
+> >>>>> so my world-view (and dev-hack-test env) has been smaller, simpler
+> >>>>> maybe its been fatally simplistic.
+> >>>>>
+> >>>>> ive just rebuilt v6.0  (before the trouble)
+> >>>>> and run it thru my virtual home box,
+> >>>>> I didnt see any unfamiliar drm-debug output
+> >>>>> that I might have inadvertently altered somehow
+> >>>>>
+> >>>>> I have some real HW I can put a reference kernel on,0
+> >>>>> to look for the missing output, but its all gonna take some time,
+> >>>>> esp to tighten up my dev-test-env
+> >>>>>
+> >>>>> in the meantime, there is:
+> >>>>>
+> >>>>> config DRM_USE_DYNAMIC_DEBUG
+> >>>>> bool "use dynamic debug to implement drm.debug"
+> >>>>> default y
+> >>>>> depends on DRM
+> >>>>> depends on DYNAMIC_DEBUG || DYNAMIC_DEBUG_CORE
+> >>>>> depends on JUMP_LABEL
+> >>>>> help
+> >>>>>    Use dynamic-debug to avoid drm_debug_enabled() runtime overheads.
+> >>>>>    Due to callsite counts in DRM drivers (~4k in amdgpu) and 56
+> >>>>>    bytes per callsite, the .data costs can be substantial, and
+> >>>>>    are therefore configurable.
+> >>>>>
+> >>>>> Does changing the default fix things for i915 dmesg ?
+> >>>> I think we want to mark it BROKEN in addition to make sure no one
+> >>> Ok, I get the distinction now.
+> >>> youre spelling that
+> >>>    depends on BROKEN
+> >>>
+> >>> I have a notional explanation, and a conflating commit:
+> >>>
+> >>> can you eliminate
+> >>> git log -p ccc2b496324c13e917ef05f563626f4e7826bef1
+> >>>
+> >>> as the cause ?
+> >> Reverting that doesn't help.
+> >>
+> > thanks for eliminating it.
+> >
+> >>> I do need to clarify, I dont know exactly what debug/logging output
+> >>> is missing such that CI is failing
+> >> CI isn't failing. But any logs it produces are 100% useless,
+> >> as are any user reported logs.
+> >>
+> >> The debugs that are missing are anything not coming directly
+> >> from drm.ko.
+> >>
+> >> The stuff that I see being printed by i915.ko are drm_info()
+> >> and the drm_printer stuff from i915_welcome_messages(). That
+> >> also implies that drm_debug_enabled(DRM_UT_DRIVER) does at
+> >> least still work correctly.
+> >>
+> >> I suspect that the problem is just that the debug calls
+> >> aren't getting patched in when a module loads. And fiddling
+> >> with the modparam after the fact does trigger that somehow.
+> >>
+> > ok, heres the 'tape' of a virtme boot,
+> > then modprobe going wrong.
+> >
+> > [    1.785873] dyndbg:   2 debug prints in module intel_rapl_msr
+> > [    2.040598] virtme-init: udev is done
+> > virtme-init: console is ttyS0
+> >
+> >> load drm driver
+> > bash-5.2# modprobe i915
+> >
+> >> drm module is loaded 1st
+> > [    6.549451] dyndbg: add-module: drm.302 sites
+> > [    6.549991] dyndbg: class[0]: module:drm base:0 len:10 ty:0
+> > [    6.550647] dyndbg:  0: 0 DRM_UT_CORE
+> > [    6.551097] dyndbg:  1: 1 DRM_UT_DRIVER
+> > [    6.551531] dyndbg:  2: 2 DRM_UT_KMS
+> > [    6.551931] dyndbg:  3: 3 DRM_UT_PRIME
+> > [    6.552402] dyndbg:  4: 4 DRM_UT_ATOMIC
+> > [    6.552799] dyndbg:  5: 5 DRM_UT_VBL
+> > [    6.553270] dyndbg:  6: 6 DRM_UT_STATE
+> > [    6.553634] dyndbg:  7: 7 DRM_UT_LEASE
+> > [    6.554043] dyndbg:  8: 8 DRM_UT_DP
+> > [    6.554392] dyndbg:  9: 9 DRM_UT_DRMRES
+> > [    6.554776] dyndbg: module:drm attached 1 classes
+> > [    6.555241] dyndbg: 302 debug prints in module drm
+> >
+> >> here modprobe reads /etc/modprobe.d/drm-test.conf:
+> > options drm dyndbg="class DRM_UT_CORE +p; class DRM_UT_DRIVER +p"
+> > and dyndbg applies it
+> 
+> Hi,
+> 
+> I'm a bit confused with this. My understanding is that there
+> is a 'regression' here from how this used to work. But the
+> 'class' keyword is new - are we sure this is the command-line
+> we are trying to fix?
 
-x86/microcode/intel: Add metadata support
+The thing we need fixed is just the bog standard drm.debug=0xe etc.
 
-> +struct metadata_header {
-> +	unsigned int		meta_type;
-> +	unsigned int		meta_blk_size;
-> +};
-> +
-> +struct metadata_intel {
-> +	struct metadata_header	meta_hdr;
-> +	unsigned int		meta_bits[];
-> +};
-> +
-
-Can we avoid the meta_ prefixes in the struct variables since the struct 
-name already includes meta?
-
->   #define DEFAULT_UCODE_DATASIZE	(2000)
->   #define MC_HEADER_SIZE		(sizeof(struct microcode_header_intel))
->   #define DEFAULT_UCODE_TOTALSIZE (DEFAULT_UCODE_DATASIZE + MC_HEADER_SIZE)
-> @@ -76,6 +89,7 @@ extern int __init save_microcode_in_initrd_intel(void);
->   void reload_ucode_intel(void);
->   int microcode_intel_find_matching_signature(void *mc, unsigned int csig, int cpf);
->   int microcode_intel_sanity_check(void *mc, bool print_err, int hdr_ver);
-> +struct metadata_header *microcode_intel_find_meta_data(void *ucode, unsigned int meta_type);
-
-Is there a difference between "ucode" and "mc"? They seem to be used 
-interchangeably all over.
-
-At least to keep it consistent across the exported functions, should the 
-  parameter be named "mc"?
-
->   int microcode_intel_sanity_check(void *mc, bool print_err, int hdr_ver)
->   {
-> -	unsigned long total_size, data_size, ext_table_size;
-> +	unsigned long total_size, data_size, ext_table_size, total_meta;
->   	struct microcode_header_intel *mc_header = mc;
->   	struct extended_sigtable *ext_header = NULL;
->   	u32 sum, orig_sum, ext_sigcount = 0, i;
->   	struct extended_signature *ext_sig;
-> +	struct metadata_header *meta_header;
-> +	unsigned long meta_size = 0;
->   
->   	total_size = get_totalsize(mc_header);
->   	data_size = get_datasize(mc_header);
-> +	total_meta = mc_header->metasize;
->   
->   	if (data_size + MC_HEADER_SIZE > total_size) {
->   		if (print_err)
-> @@ -245,7 +248,7 @@ int microcode_intel_sanity_check(void *mc, bool print_err, int hdr_ver)
->   	}
->   
->   	if (!ext_table_size)
-> -		return 0;
-> +		goto check_meta;
->   
-
-The code flow in this function seems a bit confusing. Can we avoid the 
-goto and make this a bit cleaner?
-
-There is already a check for ext_table_size above. Can the extended 
-signature checking be merged with that?
-
-
->   	/*
->   	 * Check extended signature checksum: 0 => valid.
-> @@ -262,6 +265,22 @@ int microcode_intel_sanity_check(void *mc, bool print_err, int hdr_ver)
->   			return -EINVAL;
->   		}
->   	}
-> +
-> +check_meta:
-> +	if (!total_meta)
-> +		return 0;
-> +
-> +	meta_header =  (mc + MC_HEADER_SIZE + data_size) - total_meta;
-> +	while (meta_header->meta_type != META_TYPE_END) {
-> +		meta_size += meta_header->meta_blk_size;
-> +		if (!meta_header->meta_blk_size || meta_size > total_meta) {
-> +			if (print_err) {
-> +				pr_err("Bad value for metadata size, aborting.\n");
-> +				return -EINVAL;
-> +			}
-
-This seems to be returning an error only when print_err is enabled. 
-Otherwise, it treats as a success.
-
-> +		}
-> +		meta_header = (void *)meta_header + meta_header->meta_blk_size;
-> +	}
->   	return 0;
->   }
->   EXPORT_SYMBOL_GPL(microcode_intel_sanity_check);
-> @@ -967,3 +986,28 @@ struct microcode_ops * __init init_intel_microcode(void)
->   
->   	return &microcode_intel_ops;
->   }
-> +
-
-Sohil
+-- 
+Ville Syrjälä
+Intel
