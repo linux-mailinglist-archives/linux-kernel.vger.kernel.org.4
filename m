@@ -2,242 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 850476149A5
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:42:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 752AE6149A6
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 12:42:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231295AbiKALmK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 07:42:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59602 "EHLO
+        id S231329AbiKALmv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 07:42:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59126 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231289AbiKALlt (ORCPT
+        with ESMTP id S231278AbiKALmi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 07:41:49 -0400
-X-Greylist: delayed 10319 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 01 Nov 2022 04:34:41 PDT
-Received: from chronos.abteam.si (chronos.abteam.si [IPv6:2a01:4f8:140:90ea::2])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 448EB6364;
-        Tue,  1 Nov 2022 04:34:40 -0700 (PDT)
-Received: from localhost (localhost.localdomain [127.0.0.1])
-        by chronos.abteam.si (Postfix) with ESMTP id 8C5945D000A6;
-        Tue,  1 Nov 2022 12:34:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=bstnet.org; h=
-        content-transfer-encoding:content-type:content-type:in-reply-to
-        :from:from:references:content-language:subject:subject
-        :user-agent:mime-version:date:date:message-id; s=default; t=
-        1667302477; x=1669116878; bh=w0S4kzOF/nYIfpjQVL70Imy+ZJK8fWizqlL
-        +ed92z3w=; b=Z/wDlvyR8x/YWvMI6VQ+mG1RT+iypQuVAHmWIEsVAuNggVjFAF9
-        1x8Z7YFHSZ/gOnA4Q1Dr3F7rBo8IO3p2d+9ChnZVJJ4URYNPfRD1p/cXwmZDwXJn
-        +RqV/wo+ZDJ284kIT7xwbQsyCrawJZvvcdo9A15QxKs08WbCsmiJgjYs=
-X-Virus-Scanned: Debian amavisd-new at chronos.abteam.si
-Received: from chronos.abteam.si ([127.0.0.1])
-        by localhost (chronos.abteam.si [127.0.0.1]) (amavisd-new, port 10026)
-        with LMTP id fFLLcw9RpGAy; Tue,  1 Nov 2022 12:34:37 +0100 (CET)
-Received: from [IPV6:2a00:ee2:4d00:602:9f2b:eb04:ae5e:7a5f] (unknown [IPv6:2a00:ee2:4d00:602:9f2b:eb04:ae5e:7a5f])
-        (Authenticated sender: boris@abteam.si)
-        by chronos.abteam.si (Postfix) with ESMTPSA id B6F375D000A3;
-        Tue,  1 Nov 2022 12:34:36 +0100 (CET)
-Message-ID: <13425444-c4bc-5107-4d86-4a19c619e575@bstnet.org>
-Date:   Tue, 1 Nov 2022 12:34:36 +0100
+        Tue, 1 Nov 2022 07:42:38 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9EF82098F
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 04:35:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 4F63A603F2
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 11:35:09 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87375C433C1;
+        Tue,  1 Nov 2022 11:35:06 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=fail reason="signature verification failed" (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="CO6JjFtJ"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1667302503;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=7NfYm6sby+EMAs/+0GL8Wzp/D88zVvqWOVCo8SMDNGI=;
+        b=CO6JjFtJIcgmQOz35udB3SQKPKwlMaNeMh7teykEqIQC5++h8m6wyTj2NIZDjlZ+OcEAyY
+        dAL6ZvxabnSAD1tFzfm8T1ixgfbb975lwQcf8V7RzqJQY35hpKYcWTwjtxHwl3cGt1zqA/
+        abh4WglwNJrcZkUpkwxjaO7Dc96uTxY=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 7b4d3266 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Tue, 1 Nov 2022 11:35:02 +0000 (UTC)
+Date:   Tue, 1 Nov 2022 12:34:59 +0100
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     Gaosheng Cui <cuigaosheng1@huawei.com>
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        puwen@hygon.cn, TonyWWang-oc@zhaoxin.com, peterz@infradead.org,
+        gregkh@linuxfoundation.org, andrew.cooper3@citrix.com,
+        tony.luck@intel.com, mario.limonciello@amd.com,
+        pawan.kumar.gupta@linux.intel.com, chenyi.qiang@intel.com,
+        rdunlap@infradead.org, jithu.joseph@intel.com,
+        rafael.j.wysocki@intel.com, paulmck@kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] x86/cpu: replacing the open-coded shift with BIT(x)
+Message-ID: <Y2EEY63DnDodJFoz@zx2c4.com>
+References: <20221101111418.816139-1-cuigaosheng1@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 6.0 20/20] fbdev/core: Remove
- remove_conflicting_pci_framebuffers()
-Content-Language: en-US
-To:     Thomas Zimmermann <tzimmermann@suse.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-kernel@vger.kernel.org,
-        Alex Williamson <alex.williamson@redhat.com>
-Cc:     stable@vger.kernel.org,
-        Javier Martinez Canillas <javierm@redhat.com>
-References: <20221024112934.415391158@linuxfoundation.org>
- <20221024112935.205547130@linuxfoundation.org>
- <ba4caf7a-9e1f-d5fb-f20c-dba81dc00c06@bstnet.org>
- <88e835b3-4075-e1a3-9201-8ab5c8eaaaff@suse.de>
-From:   "Boris V." <borisvk@bstnet.org>
-In-Reply-To: <88e835b3-4075-e1a3-9201-8ab5c8eaaaff@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,NO_DNS_FOR_FROM,
-        SPF_HELO_PASS,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221101111418.816139-1-cuigaosheng1@huawei.com>
+X-Spam-Status: No, score=-6.5 required=5.0 tests=BAYES_00,DKIM_INVALID,
+        DKIM_SIGNED,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/11/2022 11:34, Thomas Zimmermann wrote:
-> (cc: Alex Williamson)
->
-> Hi
->
-> Am 01.11.22 um 09:42 schrieb Boris V.:
->> On 24/10/2022 13:31, Greg Kroah-Hartman wrote:
->>> From: Thomas Zimmermann <tzimmermann@suse.de>
->>>
->>> commit 9d69ef1838150c7d87afc1a87aa658c637217585 upstream.
->>>
->>> Remove remove_conflicting_pci_framebuffers() and implement similar
->>> functionality in aperture_remove_conflicting_pci_device(), which was
->>> the only caller. Removes an otherwise unused interface and streamlines
->>> the aperture helper. No functional changes.
->>>
->>> Signed-off-by: Thomas Zimmermann <tzimmermann@suse.de>
->>> Reviewed-by: Javier Martinez Canillas <javierm@redhat.com>
->>> Link: 
->>> https://patchwork.freedesktop.org/patch/msgid/20220718072322.8927-5-tzimmermann@suse.de
->>> Signed-off-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
->>> ---
->>>   drivers/video/aperture.c         |   30 ++++++++++++++----------
->>>   drivers/video/fbdev/core/fbmem.c |   48 
->>> ---------------------------------------
->>>   include/linux/fb.h               |    2 -
->>>   3 files changed, 18 insertions(+), 62 deletions(-)
->>>
->>> --- a/drivers/video/aperture.c
->>> +++ b/drivers/video/aperture.c
->>> @@ -335,30 +335,36 @@ EXPORT_SYMBOL(aperture_remove_conflictin
->>>    */
->>>   int aperture_remove_conflicting_pci_devices(struct pci_dev *pdev, 
->>> const char *name)
->>>   {
->>> +    bool primary = false;
->>>       resource_size_t base, size;
->>>       int bar, ret;
->>> -    /*
->>> -     * WARNING: Apparently we must kick fbdev drivers before vgacon,
->>> -     * otherwise the vga fbdev driver falls over.
->>> -     */
->>> -#if IS_REACHABLE(CONFIG_FB)
->>> -    ret = remove_conflicting_pci_framebuffers(pdev, name);
->>> -    if (ret)
->>> -        return ret;
->>> +#ifdef CONFIG_X86
->>> +    primary = pdev->resource[PCI_ROM_RESOURCE].flags & 
->>> IORESOURCE_ROM_SHADOW;
->>>   #endif
->>> -    ret = vga_remove_vgacon(pdev);
->>> -    if (ret)
->>> -        return ret;
->>>       for (bar = 0; bar < PCI_STD_NUM_BARS; ++bar) {
->>>           if (!(pci_resource_flags(pdev, bar) & IORESOURCE_MEM))
->>>               continue;
->>> +
->>>           base = pci_resource_start(pdev, bar);
->>>           size = pci_resource_len(pdev, bar);
->>> -        aperture_detach_devices(base, size);
->>> +        ret = aperture_remove_conflicting_devices(base, size, 
->>> primary, name);
->>> +        if (ret)
->>> +            break;
->>>       }
->>> +    if (ret)
->>> +        return ret;
->>> +
->>> +    /*
->>> +     * WARNING: Apparently we must kick fbdev drivers before vgacon,
->>> +     * otherwise the vga fbdev driver falls over.
->>> +     */
->>> +    ret = vga_remove_vgacon(pdev);
->>> +    if (ret)
->>> +        return ret;
->>> +
->>>       return 0;
->>>   }
->>> --- a/drivers/video/fbdev/core/fbmem.c
->>> +++ b/drivers/video/fbdev/core/fbmem.c
->>> @@ -1788,54 +1788,6 @@ int remove_conflicting_framebuffers(stru
->>>   EXPORT_SYMBOL(remove_conflicting_framebuffers);
->>>   /**
->>> - * remove_conflicting_pci_framebuffers - remove firmware-configured 
->>> framebuffers for PCI devices
->>> - * @pdev: PCI device
->>> - * @name: requesting driver name
->>> - *
->>> - * This function removes framebuffer devices (eg. initialized by 
->>> firmware)
->>> - * using memory range configured for any of @pdev's memory bars.
->>> - *
->>> - * The function assumes that PCI device with shadowed ROM drives a 
->>> primary
->>> - * display and so kicks out vga16fb.
->>> - */
->>> -int remove_conflicting_pci_framebuffers(struct pci_dev *pdev, const 
->>> char *name)
->>> -{
->>> -    struct apertures_struct *ap;
->>> -    bool primary = false;
->>> -    int err, idx, bar;
->>> -
->>> -    for (idx = 0, bar = 0; bar < PCI_STD_NUM_BARS; bar++) {
->>> -        if (!(pci_resource_flags(pdev, bar) & IORESOURCE_MEM))
->>> -            continue;
->>> -        idx++;
->>> -    }
->>> -
->>> -    ap = alloc_apertures(idx);
->>> -    if (!ap)
->>> -        return -ENOMEM;
->>> -
->>> -    for (idx = 0, bar = 0; bar < PCI_STD_NUM_BARS; bar++) {
->>> -        if (!(pci_resource_flags(pdev, bar) & IORESOURCE_MEM))
->>> -            continue;
->>> -        ap->ranges[idx].base = pci_resource_start(pdev, bar);
->>> -        ap->ranges[idx].size = pci_resource_len(pdev, bar);
->>> -        pci_dbg(pdev, "%s: bar %d: 0x%lx -> 0x%lx\n", __func__, bar,
->>> -            (unsigned long)pci_resource_start(pdev, bar),
->>> -            (unsigned long)pci_resource_end(pdev, bar));
->>> -        idx++;
->>> -    }
->>> -
->>> -#ifdef CONFIG_X86
->>> -    primary = pdev->resource[PCI_ROM_RESOURCE].flags &
->>> -                    IORESOURCE_ROM_SHADOW;
->>> -#endif
->>> -    err = remove_conflicting_framebuffers(ap, name, primary);
->>> -    kfree(ap);
->>> -    return err;
->>> -}
->>> -EXPORT_SYMBOL(remove_conflicting_pci_framebuffers);
->>> -
->>> -/**
->>>    *    register_framebuffer - registers a frame buffer device
->>>    *    @fb_info: frame buffer info structure
->>>    *
->>> --- a/include/linux/fb.h
->>> +++ b/include/linux/fb.h
->>> @@ -615,8 +615,6 @@ extern ssize_t fb_sys_write(struct fb_in
->>>   /* drivers/video/fbmem.c */
->>>   extern int register_framebuffer(struct fb_info *fb_info);
->>>   extern void unregister_framebuffer(struct fb_info *fb_info);
->>> -extern int remove_conflicting_pci_framebuffers(struct pci_dev *pdev,
->>> -                           const char *name);
->>>   extern int remove_conflicting_framebuffers(struct apertures_struct 
->>> *a,
->>>                          const char *name, bool primary);
->>>   extern int fb_prepare_logo(struct fb_info *fb_info, int rotate);
->>>
->>>
->>>
->>>
->>
->> Hello,
->>
->> this patch seems to disable console/framebuffer when vfio-pci is used.
->> I hava 2 nvidia GPUs one is used for host and other is passed through 
->> to VM.
->
-> Vfio uses this helper to unload the driver before passing it to a VM 
-> AFAIU. But unless you're using nouveau, you're on your own.
->
-> Best regards
-> Thomas
->
+On Tue, Nov 01, 2022 at 07:14:18PM +0800, Gaosheng Cui wrote:
+> Replace the open-coded shift with BIT(x) to make the code a bit
+> more self-documenting, at the same time, fix some useless warnings.
 
-But this happens at boot, when vfio-pci module is loaded. Not when VM is 
-started.
-And console/framebuffer is unloaded for primary/boot GPU, not the one 
-passed to VM.
-Also no GPU driver is loaded at this point. And there was no problem 
-before, it stopped working with 6.0.4 kernel.
+Others might feel differently and that's fine, but I always found the
+BIT() thing so much less clear than doing 1<<n, which is not only a
+pattern that I recognize as builtin to my brain, but also provides a
+direct description of what's happening, "shift a 1 over n times",
+leaving no off-by-one ambiguity about it. If anything I'd like to see
+the BIT() macro expanded throughout and then removed entirely.
 
+Probably just me though. You can safely ignore my opinion :).
+
+Jason
+
+
+> 
+> Signed-off-by: Gaosheng Cui <cuigaosheng1@huawei.com>
+> ---
+> v2:
+> - Change the commit msg, remove the UBSAN warning calltrace, and
+>   merge patch "x86/cpu: fix undefined behavior in bit shift for
+>   intel_detect_tlb" with it. Thanks!
+>  arch/x86/kernel/cpu/amd.c     | 2 +-
+>  arch/x86/kernel/cpu/centaur.c | 2 +-
+>  arch/x86/kernel/cpu/hygon.c   | 2 +-
+>  arch/x86/kernel/cpu/intel.c   | 4 ++--
+>  arch/x86/kernel/cpu/proc.c    | 2 +-
+>  arch/x86/kernel/cpu/zhaoxin.c | 2 +-
+>  6 files changed, 7 insertions(+), 7 deletions(-)
+> 
+> diff --git a/arch/x86/kernel/cpu/amd.c b/arch/x86/kernel/cpu/amd.c
+> index 860b60273df3..75d82cad323a 100644
+> --- a/arch/x86/kernel/cpu/amd.c
+> +++ b/arch/x86/kernel/cpu/amd.c
+> @@ -613,7 +613,7 @@ static void early_init_amd(struct cpuinfo_x86 *c)
+>  	 * c->x86_power is 8000_0007 edx. Bit 8 is TSC runs at constant rate
+>  	 * with P/T states and does not stop in deep C-states
+>  	 */
+> -	if (c->x86_power & (1 << 8)) {
+> +	if (c->x86_power & BIT(8)) {
+>  		set_cpu_cap(c, X86_FEATURE_CONSTANT_TSC);
+>  		set_cpu_cap(c, X86_FEATURE_NONSTOP_TSC);
+>  	}
+> diff --git a/arch/x86/kernel/cpu/centaur.c b/arch/x86/kernel/cpu/centaur.c
+> index 345f7d905db6..9910bb1d90fd 100644
+> --- a/arch/x86/kernel/cpu/centaur.c
+> +++ b/arch/x86/kernel/cpu/centaur.c
+> @@ -105,7 +105,7 @@ static void early_init_centaur(struct cpuinfo_x86 *c)
+>  #ifdef CONFIG_X86_64
+>  	set_cpu_cap(c, X86_FEATURE_SYSENTER32);
+>  #endif
+> -	if (c->x86_power & (1 << 8)) {
+> +	if (c->x86_power & BIT(8)) {
+>  		set_cpu_cap(c, X86_FEATURE_CONSTANT_TSC);
+>  		set_cpu_cap(c, X86_FEATURE_NONSTOP_TSC);
+>  	}
+> diff --git a/arch/x86/kernel/cpu/hygon.c b/arch/x86/kernel/cpu/hygon.c
+> index 21fd425088fe..dc473bfbf1b5 100644
+> --- a/arch/x86/kernel/cpu/hygon.c
+> x86/cpu: fix undefined behavior in bit shift for intel_detect_tlb+++ b/arch/x86/kernel/cpu/hygon.c
+> @@ -251,7 +251,7 @@ static void early_init_hygon(struct cpuinfo_x86 *c)
+>  	 * c->x86_power is 8000_0007 edx. Bit 8 is TSC runs at constant rate
+>  	 * with P/T states and does not stop in deep C-states
+>  	 */
+> -	if (c->x86_power & (1 << 8)) {
+> +	if (c->x86_power & BIT(8)) {
+>  		set_cpu_cap(c, X86_FEATURE_CONSTANT_TSC);
+>  		set_cpu_cap(c, X86_FEATURE_NONSTOP_TSC);
+>  	}
+> diff --git a/arch/x86/kernel/cpu/intel.c b/arch/x86/kernel/cpu/intel.c
+> index 2d7ea5480ec3..2bdf6d601a6f 100644
+> --- a/arch/x86/kernel/cpu/intel.c
+> +++ b/arch/x86/kernel/cpu/intel.c
+> @@ -286,7 +286,7 @@ static void early_init_intel(struct cpuinfo_x86 *c)
+>  	 * It is also reliable across cores and sockets. (but not across
+>  	 * cabinets - we turn it off in that case explicitly.)
+>  	 */
+> -	if (c->x86_power & (1 << 8)) {
+> +	if (c->x86_power & BIT(8)) {
+>  		set_cpu_cap(c, X86_FEATURE_CONSTANT_TSC);
+>  		set_cpu_cap(c, X86_FEATURE_NONSTOP_TSC);
+>  	}
+> @@ -945,7 +945,7 @@ static void intel_detect_tlb(struct cpuinfo_x86 *c)
+>  
+>  		/* If bit 31 is set, this is an unknown format */
+>  		for (j = 0 ; j < 3 ; j++)
+> -			if (regs[j] & (1 << 31))
+> +			if (regs[j] & BIT(31))
+>  				regs[j] = 0;
+>  
+>  		/* Byte 0 is level count, not a descriptor */
+> diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
+> index 099b6f0d96bd..efa1d39c4f25 100644
+> --- a/arch/x86/kernel/cpu/proc.c
+> +++ b/arch/x86/kernel/cpu/proc.c
+> @@ -135,7 +135,7 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+>  
+>  	seq_puts(m, "power management:");
+>  	for (i = 0; i < 32; i++) {
+> -		if (c->x86_power & (1 << i)) {
+> +		if (c->x86_power & BIT(i)) {
+>  			if (i < ARRAY_SIZE(x86_power_flags) &&
+>  			    x86_power_flags[i])
+>  				seq_printf(m, "%s%s",
+> diff --git a/arch/x86/kernel/cpu/zhaoxin.c b/arch/x86/kernel/cpu/zhaoxin.c
+> index 05fa4ef63490..34a8a460f8f4 100644
+> --- a/arch/x86/kernel/cpu/zhaoxin.c
+> +++ b/arch/x86/kernel/cpu/zhaoxin.c
+> @@ -61,7 +61,7 @@ static void early_init_zhaoxin(struct cpuinfo_x86 *c)
+>  #ifdef CONFIG_X86_64
+>  	set_cpu_cap(c, X86_FEATURE_SYSENTER32);
+>  #endif
+> -	if (c->x86_power & (1 << 8)) {
+> +	if (c->x86_power & BIT(8)) {
+>  		set_cpu_cap(c, X86_FEATURE_CONSTANT_TSC);
+>  		set_cpu_cap(c, X86_FEATURE_NONSTOP_TSC);
+>  	}
+> -- 
+> 2.25.1
+> 
