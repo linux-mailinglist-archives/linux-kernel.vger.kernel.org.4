@@ -2,75 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B85B615532
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:42:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64545615536
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:42:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbiKAWmC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 18:42:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46972 "EHLO
+        id S230467AbiKAWmh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 18:42:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230515AbiKAWl6 (ORCPT
+        with ESMTP id S229717AbiKAWmf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 18:41:58 -0400
-Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B11C31DA5A
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 15:41:56 -0700 (PDT)
-Received: by mail-pj1-x1034.google.com with SMTP id z5-20020a17090a8b8500b00210a3a2364fso2360519pjn.0
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 15:41:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=549rWF/Cs3zs/38lC9NGwtRSOQOXjmIrrlVQub1z2o8=;
-        b=X8yNsPnmPfT3SN6GNaL+qXXP6PlWP+tNfOepu9Waku/e8TbMh5Teg/RoEAaxBvZAyp
-         86MoLHZvivJ51VxIIlJcdpz/F5d7/wyZli/YZPlxZeL30msR5HHRyHoxNWtQDgse6TbY
-         lBpkMDv9gA8YENbSvr5jeWlK6hF7bphcC4SUQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=549rWF/Cs3zs/38lC9NGwtRSOQOXjmIrrlVQub1z2o8=;
-        b=JxavuFGhIMQZAQ86teSpDqW9nig9Wj2axY9us8gUmT39SslAFRmkqtz4NB2ANE14dX
-         QxhCVnVc9cqSdKHZyQE3sW5d8U+xvHgJx7YqDDL05v+T+2NA3JMiGwKJQK06ixj0oS9P
-         X25epJF/sP7LtTMwF5ZatTx/26RzttFWDwhUSt7XRGx57meCeKd4Y7AZytnx/su+0h4R
-         66mO6mFKfKiaP7FA/M7XmMTQr8kEpGLz/l1ye0BNN2LTyu7wk4Q4gnCJd6VEePdlvG+s
-         o+86ng9pIb0t9Jdn+z1IpLIyLS2yKHaLaSVEaHxInL56WC26GfiFaJd2h/uXG4VGxJyd
-         uWTA==
-X-Gm-Message-State: ACrzQf2SyBHWM9+tT4d5Z/PKMeHFspJ8TwacKt+K98OpKE36woIn3cVi
-        9kdol2+abqW2bxfLuF0Kr5YBDw==
-X-Google-Smtp-Source: AMsMyM5ebbfmmxQLSRv1+X29/5hLVS8lb8HR1kl72PW5ICE/mOVinx4Zw3IXtyUk1+PYEjtzhsFvlg==
-X-Received: by 2002:a17:90b:4d0e:b0:1f7:ae99:4d7f with SMTP id mw14-20020a17090b4d0e00b001f7ae994d7fmr38881630pjb.200.1667342516227;
-        Tue, 01 Nov 2022 15:41:56 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id b138-20020a621b90000000b0056bc742d21esm7194023pfb.176.2022.11.01.15.41.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 15:41:55 -0700 (PDT)
-Date:   Tue, 1 Nov 2022 15:41:54 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Alex Deucher <alexdeucher@gmail.com>
-Cc:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        Christian =?iso-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, amd-gfx@lists.freedesktop.org,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-Subject: Re: [PATCH v2] [next] drm/radeon: Replace one-element array with
- flexible-array member
-Message-ID: <202211011538.B7548FDDE@keescook>
-References: <Y1trhRE3nK5iAY6q@mail.google.com>
- <Y1yetX1CHsr+fibp@mail.google.com>
- <CADnq5_Mod90O=tN26+Yi74WPYxpVtss+LG_+_HZyFv2EtzR+MA@mail.gmail.com>
- <202211011443.7BDB243D8D@keescook>
- <CADnq5_Ou9HnZjQx5WaAZW+iu24g_eS2hh25xhExeQjdMOXYfCQ@mail.gmail.com>
+        Tue, 1 Nov 2022 18:42:35 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6C471CB3F;
+        Tue,  1 Nov 2022 15:42:33 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 424A76175D;
+        Tue,  1 Nov 2022 22:42:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81BCFC433D6;
+        Tue,  1 Nov 2022 22:42:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667342552;
+        bh=caDhOOkdw7z53f05vO/AU3UZzOHNogK6zUKVe9TIHWo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=b9+ZoH3rLB8ompGkwnmJ258fNTx3GkBSrxm4TRaZiVujXyHZYKJTG3IkOxWWgupWl
+         WyWRgjMppktx+/G534Zl1GAkatKvTYUG873rFYn6tYI4tUcCbP8gfZVwR8Bdv4LocT
+         dYnWGX9lvznYciDJ1Lq2pCe9rx/5UbFByJ263pDGMvYJWeV28nqm09c1ilavf8aYFT
+         lFD1wzhYZ573nP+/1354yh0+hHrhQpcgZSTASXK8TLmtmAthYJsE3czeepGj2kVAnf
+         zT3YQ5fnMNKH00QFoNhHi4InCjmWyqv1nlL5e64Z0SlFdRIhO6uXV6ULtOSGjbVQX8
+         0uLtNFA5ph1RQ==
+Received: by pali.im (Postfix)
+        id 175207F8; Tue,  1 Nov 2022 23:42:30 +0100 (CET)
+Date:   Tue, 1 Nov 2022 23:42:30 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] Documentation: arm: marvell: Add Orion codenames and
+ archive homepage
+Message-ID: <20221101224230.wbd37f7zbaueevkn@pali>
+References: <20220719080807.16729-1-pali@kernel.org>
+ <20220817231208.42emdluzead2hweg@pali>
+ <20220923224346.tgws4gxd5daoz2rm@pali>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <CADnq5_Ou9HnZjQx5WaAZW+iu24g_eS2hh25xhExeQjdMOXYfCQ@mail.gmail.com>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20220923224346.tgws4gxd5daoz2rm@pali>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,28 +59,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 06:09:16PM -0400, Alex Deucher wrote:
-> On Tue, Nov 1, 2022 at 5:54 PM Kees Cook <keescook@chromium.org> wrote:
-> > Does the ROM always only have a single byte there? This seems unlikely
-> > given the member "ucFakeEDIDLength" (and the code below).
+On Saturday 24 September 2022 00:43:46 Pali Rohár wrote:
+> On Thursday 18 August 2022 01:12:08 Pali Rohár wrote:
+> > On Tuesday 19 July 2022 10:08:07 Pali Rohár wrote:
+> > > Orion codenames are extracted from menuconfig ARCH_ORION5X and
+> > > old Orion homepage with 88F5182/88F5281 was found in web archive.
+> > > 
+> > > Signed-off-by: Pali Rohár <pali@kernel.org>
+> > 
+> > PING?
 > 
-> I'm not sure.  I'm mostly concerned about this:
->
->             record += fake_edid_record->ucFakeEDIDLength ?
->                       fake_edid_record->ucFakeEDIDLength + 2 :
->                       sizeof(ATOM_FAKE_EDID_PATCH_RECORD);
+> PING?
 
-But this is exactly what the code currently does, as noted in the commit
-log: "It's worth mentioning that doing a build before/after this patch
-results in no binary output differences.
+PING?
 
-> Presumably the record should only exist if ucFakeEDIDLength is non 0,
-> but I don't know if there are some OEMs out there that just included
-> an empty record for some reason.  Maybe the code is wrong today and
-> there are some OEMs that include it and the array is already size 0.
-> In that case, Paulo's original patches are probably more correct.
-
-Right, but if true, that seems to be a distinctly separate bug fix?
-
--- 
-Kees Cook
+> > > ---
+> > > In archived homepage are also links to erratas and other Orion documents
+> > > but apparently webarchive does not have backup copy of it :-( and Marvell
+> > > already removed all documentation from their web sites :-(
+> > > ---
+> > >  Documentation/arm/marvell.rst | 12 +++++++-----
+> > >  1 file changed, 7 insertions(+), 5 deletions(-)
+> > > 
+> > > diff --git a/Documentation/arm/marvell.rst b/Documentation/arm/marvell.rst
+> > > index 2f41caa0096c..8540437f6a79 100644
+> > > --- a/Documentation/arm/marvell.rst
+> > > +++ b/Documentation/arm/marvell.rst
+> > > @@ -14,18 +14,20 @@ Orion family
+> > >  
+> > >    Flavors:
+> > >          - 88F5082
+> > > -        - 88F5181
+> > > -        - 88F5181L
+> > > -        - 88F5182
+> > > +        - 88F5181  a.k.a Orion-1
+> > > +        - 88F5181L a.k.a Orion-VoIP
+> > > +        - 88F5182  a.k.a Orion-NAS
+> > >  
+> > >                 - Datasheet: https://web.archive.org/web/20210124231420/http://csclub.uwaterloo.ca/~board/ts7800/MV88F5182-datasheet.pdf
+> > >                 - Programmer's User Guide: https://web.archive.org/web/20210124231536/http://csclub.uwaterloo.ca/~board/ts7800/MV88F5182-opensource-manual.pdf
+> > >                 - User Manual: https://web.archive.org/web/20210124231631/http://csclub.uwaterloo.ca/~board/ts7800/MV88F5182-usermanual.pdf
+> > >                 - Functional Errata: https://web.archive.org/web/20210704165540/https://www.digriz.org.uk/ts78xx/88F5182_Functional_Errata.pdf
+> > > -        - 88F5281
+> > > +        - 88F5281  a.k.a Orion-2
+> > >  
+> > >                 - Datasheet: https://web.archive.org/web/20131028144728/http://www.ocmodshop.com/images/reviews/networking/qnap_ts409u/marvel_88f5281_data_sheet.pdf
+> > > -        - 88F6183
+> > > +        - 88F6183  a.k.a Orion-1-90
+> > > +  Homepage:
+> > > +        https://web.archive.org/web/20080607215437/http://www.marvell.com/products/media/index.jsp
+> > >    Core:
+> > >  	Feroceon 88fr331 (88f51xx) or 88fr531-vd (88f52xx) ARMv5 compatible
+> > >    Linux kernel mach directory:
+> > > -- 
+> > > 2.20.1
+> > > 
