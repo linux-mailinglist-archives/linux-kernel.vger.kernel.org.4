@@ -2,34 +2,37 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C11D6153DD
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 22:15:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B3976153E0
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 22:15:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbiKAVPO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 17:15:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32852 "EHLO
+        id S230310AbiKAVPi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 17:15:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33010 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230008AbiKAVO7 (ORCPT
+        with ESMTP id S230106AbiKAVPM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 17:14:59 -0400
-Received: from smtp.smtpout.orange.fr (smtp-15.smtpout.orange.fr [80.12.242.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1E51DDFF
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 14:14:57 -0700 (PDT)
+        Tue, 1 Nov 2022 17:15:12 -0400
+Received: from smtp.smtpout.orange.fr (smtp-16.smtpout.orange.fr [80.12.242.16])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EAB6E1EC77
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 14:15:09 -0700 (PDT)
 Received: from pop-os.home ([86.243.100.34])
         by smtp.orange.fr with ESMTPA
-        id pyanoKD2rsfCIpyb1oWfHL; Tue, 01 Nov 2022 22:14:56 +0100
+        id pyanoKD2rsfCIpyb8oWfHr; Tue, 01 Nov 2022 22:15:03 +0100
 X-ME-Helo: pop-os.home
 X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Tue, 01 Nov 2022 22:14:56 +0100
+X-ME-Date: Tue, 01 Nov 2022 22:15:03 +0100
 X-ME-IP: 86.243.100.34
 From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-To:     "Martin K. Petersen" <martin.petersen@oracle.com>
+To:     Dan Williams <dan.j.williams@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Dave Jiang <dave.jiang@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>
 Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
         Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        linux-scsi@vger.kernel.org, target-devel@vger.kernel.org
-Subject: [PATCH 04/30] scsi: target: Use kstrtobool() instead of strtobool()
-Date:   Tue,  1 Nov 2022 22:13:52 +0100
-Message-Id: <fcddc0a53b4fc6e3c2e93592d3f61c5c63121855.1667336095.git.christophe.jaillet@wanadoo.fr>
+        nvdimm@lists.linux.dev
+Subject: [PATCH 05/30] nvdimm: Use kstrtobool() instead of strtobool()
+Date:   Tue,  1 Nov 2022 22:13:53 +0100
+Message-Id: <5990e1eadd81a25026e6f04fdda96bd43ff23a07.1667336095.git.christophe.jaillet@wanadoo.fr>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
 References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
@@ -64,169 +67,83 @@ at [1].
 
 [1]: https://lore.kernel.org/all/cover.1667336095.git.christophe.jaillet@wanadoo.fr/
 ---
- drivers/target/target_core_configfs.c        | 29 ++++++++++----------
- drivers/target/target_core_fabric_configfs.c |  3 +-
- 2 files changed, 17 insertions(+), 15 deletions(-)
+ drivers/nvdimm/namespace_devs.c | 3 ++-
+ drivers/nvdimm/pmem.c           | 3 ++-
+ drivers/nvdimm/region_devs.c    | 5 +++--
+ 3 files changed, 7 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/target/target_core_configfs.c b/drivers/target/target_core_configfs.c
-index 533524299ed6..b8a5c8d6cfde 100644
---- a/drivers/target/target_core_configfs.c
-+++ b/drivers/target/target_core_configfs.c
-@@ -12,6 +12,7 @@
-  *
-  ****************************************************************************/
- 
+diff --git a/drivers/nvdimm/namespace_devs.c b/drivers/nvdimm/namespace_devs.c
+index c60ec0b373c5..07177eadc56e 100644
+--- a/drivers/nvdimm/namespace_devs.c
++++ b/drivers/nvdimm/namespace_devs.c
+@@ -2,6 +2,7 @@
+ /*
+  * Copyright(c) 2013-2015 Intel Corporation. All rights reserved.
+  */
 +#include <linux/kstrtox.h>
  #include <linux/module.h>
+ #include <linux/device.h>
+ #include <linux/sort.h>
+@@ -1338,7 +1339,7 @@ static ssize_t force_raw_store(struct device *dev,
+ 		struct device_attribute *attr, const char *buf, size_t len)
+ {
+ 	bool force_raw;
+-	int rc = strtobool(buf, &force_raw);
++	int rc = kstrtobool(buf, &force_raw);
+ 
+ 	if (rc)
+ 		return rc;
+diff --git a/drivers/nvdimm/pmem.c b/drivers/nvdimm/pmem.c
+index 3c63dc2cdc81..46475d146f64 100644
+--- a/drivers/nvdimm/pmem.c
++++ b/drivers/nvdimm/pmem.c
+@@ -17,6 +17,7 @@
  #include <linux/moduleparam.h>
- #include <generated/utsrelease.h>
-@@ -578,7 +579,7 @@ static ssize_t _name##_store(struct config_item *item, const char *page,	\
- 	bool flag;							\
- 	int ret;							\
- 									\
--	ret = strtobool(page, &flag);					\
-+	ret = kstrtobool(page, &flag);					\
- 	if (ret < 0)							\
- 		return ret;						\
- 	da->_name = flag;						\
-@@ -638,7 +639,7 @@ static ssize_t emulate_model_alias_store(struct config_item *item,
- 		return -EINVAL;
- 	}
- 
--	ret = strtobool(page, &flag);
-+	ret = kstrtobool(page, &flag);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -660,7 +661,7 @@ static ssize_t emulate_write_cache_store(struct config_item *item,
- 	bool flag;
- 	int ret;
- 
--	ret = strtobool(page, &flag);
-+	ret = kstrtobool(page, &flag);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -712,7 +713,7 @@ static ssize_t emulate_tas_store(struct config_item *item,
- 	bool flag;
- 	int ret;
- 
--	ret = strtobool(page, &flag);
-+	ret = kstrtobool(page, &flag);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -737,7 +738,7 @@ static ssize_t emulate_tpu_store(struct config_item *item,
- 	bool flag;
- 	int ret;
- 
--	ret = strtobool(page, &flag);
-+	ret = kstrtobool(page, &flag);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -767,7 +768,7 @@ static ssize_t emulate_tpws_store(struct config_item *item,
- 	bool flag;
- 	int ret;
- 
--	ret = strtobool(page, &flag);
-+	ret = kstrtobool(page, &flag);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -866,7 +867,7 @@ static ssize_t pi_prot_format_store(struct config_item *item,
- 	bool flag;
- 	int ret;
- 
--	ret = strtobool(page, &flag);
-+	ret = kstrtobool(page, &flag);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -903,7 +904,7 @@ static ssize_t pi_prot_verify_store(struct config_item *item,
- 	bool flag;
- 	int ret;
- 
--	ret = strtobool(page, &flag);
-+	ret = kstrtobool(page, &flag);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -932,7 +933,7 @@ static ssize_t force_pr_aptpl_store(struct config_item *item,
- 	bool flag;
- 	int ret;
- 
--	ret = strtobool(page, &flag);
-+	ret = kstrtobool(page, &flag);
- 	if (ret < 0)
- 		return ret;
- 	if (da->da_dev->export_count) {
-@@ -954,7 +955,7 @@ static ssize_t emulate_rest_reord_store(struct config_item *item,
- 	bool flag;
- 	int ret;
- 
--	ret = strtobool(page, &flag);
-+	ret = kstrtobool(page, &flag);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -977,7 +978,7 @@ static ssize_t unmap_zeroes_data_store(struct config_item *item,
- 	bool flag;
- 	int ret;
- 
--	ret = strtobool(page, &flag);
-+	ret = kstrtobool(page, &flag);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -1126,7 +1127,7 @@ static ssize_t alua_support_store(struct config_item *item,
- 	bool flag, oldflag;
- 	int ret;
- 
--	ret = strtobool(page, &flag);
-+	ret = kstrtobool(page, &flag);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -1165,7 +1166,7 @@ static ssize_t pgr_support_store(struct config_item *item,
- 	bool flag, oldflag;
- 	int ret;
- 
--	ret = strtobool(page, &flag);
-+	ret = kstrtobool(page, &flag);
- 	if (ret < 0)
- 		return ret;
- 
-@@ -1194,7 +1195,7 @@ static ssize_t emulate_rsoc_store(struct config_item *item,
- 	bool flag;
- 	int ret;
- 
--	ret = strtobool(page, &flag);
-+	ret = kstrtobool(page, &flag);
- 	if (ret < 0)
- 		return ret;
- 
-diff --git a/drivers/target/target_core_fabric_configfs.c b/drivers/target/target_core_fabric_configfs.c
-index 95a88f6224cd..67b18a67317a 100644
---- a/drivers/target/target_core_fabric_configfs.c
-+++ b/drivers/target/target_core_fabric_configfs.c
-@@ -11,6 +11,7 @@
- *
-  ****************************************************************************/
- 
+ #include <linux/badblocks.h>
+ #include <linux/memremap.h>
 +#include <linux/kstrtox.h>
- #include <linux/module.h>
- #include <linux/moduleparam.h>
- #include <linux/utsname.h>
-@@ -829,7 +830,7 @@ static ssize_t target_fabric_tpg_base_enable_store(struct config_item *item,
- 	int ret;
- 	bool op;
+ #include <linux/vmalloc.h>
+ #include <linux/blk-mq.h>
+ #include <linux/pfn_t.h>
+@@ -408,7 +409,7 @@ static ssize_t write_cache_store(struct device *dev,
+ 	bool write_cache;
+ 	int rc;
  
--	ret = strtobool(page, &op);
-+	ret = kstrtobool(page, &op);
- 	if (ret)
- 		return ret;
+-	rc = strtobool(buf, &write_cache);
++	rc = kstrtobool(buf, &write_cache);
+ 	if (rc)
+ 		return rc;
+ 	dax_write_cache(pmem->dax_dev, write_cache);
+diff --git a/drivers/nvdimm/region_devs.c b/drivers/nvdimm/region_devs.c
+index e0875d369762..76e1ae6f830a 100644
+--- a/drivers/nvdimm/region_devs.c
++++ b/drivers/nvdimm/region_devs.c
+@@ -5,6 +5,7 @@
+ #include <linux/scatterlist.h>
+ #include <linux/memregion.h>
+ #include <linux/highmem.h>
++#include <linux/kstrtox.h>
+ #include <linux/sched.h>
+ #include <linux/slab.h>
+ #include <linux/hash.h>
+@@ -229,7 +230,7 @@ static ssize_t deep_flush_store(struct device *dev, struct device_attribute *att
+ 		const char *buf, size_t len)
+ {
+ 	bool flush;
+-	int rc = strtobool(buf, &flush);
++	int rc = kstrtobool(buf, &flush);
+ 	struct nd_region *nd_region = to_nd_region(dev);
  
+ 	if (rc)
+@@ -484,7 +485,7 @@ static ssize_t read_only_store(struct device *dev,
+ 		struct device_attribute *attr, const char *buf, size_t len)
+ {
+ 	bool ro;
+-	int rc = strtobool(buf, &ro);
++	int rc = kstrtobool(buf, &ro);
+ 	struct nd_region *nd_region = to_nd_region(dev);
+ 
+ 	if (rc)
 -- 
 2.34.1
 
