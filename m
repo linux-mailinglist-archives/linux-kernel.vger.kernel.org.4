@@ -2,153 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 273186144B8
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 07:38:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF0D36144BB
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 07:39:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229795AbiKAGij (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 02:38:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53490 "EHLO
+        id S229909AbiKAGjv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 02:39:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56800 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiKAGif (ORCPT
+        with ESMTP id S229468AbiKAGjt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 02:38:35 -0400
-Received: from esa6.hgst.iphmx.com (esa6.hgst.iphmx.com [216.71.154.45])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0355D7D
-        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 23:38:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1667284714; x=1698820714;
-  h=from:to:cc:subject:date:message-id:references:
-   in-reply-to:content-id:content-transfer-encoding:
-   mime-version;
-  bh=dTVSX0+gBmQz4UlWzj5FxLOmPZci7GK9NFOfG8bxiSY=;
-  b=jV/06lWfAY6Q7Gwjw6cOaeZuux0z1QGTnNuUcRvYKF9OkN64NtVO8P1X
-   G72FWuej6qvLsKdbAOwBLkmy/zSjC/HkoPuqd330m2ntgXuqJUfuH0mUh
-   gZemZd+KCnCX8a0X22Lau84CFYDK1WjybnETxuViBN39oIHTiymKeZKIW
-   Z5gkcjaZiKdeIroZqRyGnPUpaNFnIJ76SyEuHTep+vFFE4NyuZ9eMBgN2
-   K2ZNI84j8h+r/D4lm7OxzD+JHv+RKvwZIHPm+5Qo7isfGyE0+ciF9Ofvw
-   UM8UkkV3pOuXwuT6k7UkQbknER7cXmBIp4GA+j+I9fvXcpz9dPJgd5XQf
-   w==;
-X-IronPort-AV: E=Sophos;i="5.95,230,1661788800"; 
-   d="scan'208";a="215545680"
-Received: from mail-bn8nam11lp2168.outbound.protection.outlook.com (HELO NAM11-BN8-obe.outbound.protection.outlook.com) ([104.47.58.168])
-  by ob1.hgst.iphmx.com with ESMTP; 01 Nov 2022 14:38:31 +0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Q+9gUlMP70n+5ExV61AVkmwwmo+1BaNVrwLlqAgKoPPb7CIsKs8KczwjTOx/W/ZhVoTVUBeyeo/pOvgEJSwxuc6S/XBt0eTKxU7ErEp3ohFxaPCyfxIg5YVt3BQW2vR+2C4JsAv2hK6QBZz2uqIMZvOqQdpKWaEoxkJOAwZJDmVdiBjpC2BV6PKk7CPfpGUqS87+IsgNfy953zj3R2nkulnjfH+1LoznudoBWlvqVcGRMc8Qz84wY3swO+3pEBebIdLDemJ68zOubeng3Xuvbs93HDScsryIpejpP77DoLUT/yfADvhgiW4J0NMs2z5RW2P19DbZ0NO36cU/CB/+Zg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=obaIdZb8xiHToFjOlko97Z4g3Jit3M/3bpVioghlibU=;
- b=PacFnPxhU3m+S3CiKPhg+mAl4/5iDmznPthWyKFO9cCIza4fbkMPFFtxb/bs4TDGbkuBCnAYovVqjCCYDOIKTPSlwV1us+ZodMrODHhcka4o5K891QFpK8te8aL9UHgSi+FzO5qUYmGM5epvQRzdkp0sRQL6I9dJ5dNoY2EG+6lmgFEHsdYErteyWL1ggJFxJRjOU6MFQL0oDuOcrxB0KkMLACpcPhbQnTfTLAWE52DiAz+0tiV7jDxl1iX9kwVbKOoToywBq4S3q/VnTduadCx4jlu7gNHeS6BMzY9wzr2jEzoFuWS8ILjATuAEora4RZ08uQkJFEju1AGfGQdV8g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=wdc.com; dmarc=pass action=none header.from=wdc.com; dkim=pass
- header.d=wdc.com; arc=none
+        Tue, 1 Nov 2022 02:39:49 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 967FD2BF1
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 23:39:48 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso17948067pjg.5
+        for <linux-kernel@vger.kernel.org>; Mon, 31 Oct 2022 23:39:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=sharedspace.onmicrosoft.com; s=selector2-sharedspace-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=obaIdZb8xiHToFjOlko97Z4g3Jit3M/3bpVioghlibU=;
- b=ouLeYupmWT6sfSBJEbHRz9hgxEmFE1nGBACEEooI87Ug6+z6Yf4exrqnCni75Y/qXhDmk18Lu3L/r8f3SM64KgPah1M27fpx1XtTMuwyWXDWxEsAMjCcn3n0du6sc8xVNs3heajtDyjgUeE1mfguznwzkt2lypDrRXYwSC1+oCk=
-Received: from DM8PR04MB8037.namprd04.prod.outlook.com (2603:10b6:8:f::6) by
- CH2PR04MB6631.namprd04.prod.outlook.com (2603:10b6:610:9f::20) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5769.21; Tue, 1 Nov 2022 06:38:30 +0000
-Received: from DM8PR04MB8037.namprd04.prod.outlook.com
- ([fe80::d4b9:86e9:4fc8:d6e0]) by DM8PR04MB8037.namprd04.prod.outlook.com
- ([fe80::d4b9:86e9:4fc8:d6e0%7]) with mapi id 15.20.5769.019; Tue, 1 Nov 2022
- 06:38:30 +0000
-From:   Shinichiro Kawasaki <shinichiro.kawasaki@wdc.com>
-To:     Sijie Lan <sijielan@gmail.com>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-f2fs-devel@lists.sourceforge.net" 
-        <linux-f2fs-devel@lists.sourceforge.net>,
-        "kernel-team@android.com" <kernel-team@android.com>
-Subject: Re: [f2fs-dev] Mkfs.f2fs on null_blk device
-Thread-Topic: [f2fs-dev] Mkfs.f2fs on null_blk device
-Thread-Index: AQHY7byNaPuxWRRfpEKFMBQ9nvyuiA==
-Date:   Tue, 1 Nov 2022 06:38:30 +0000
-Message-ID: <20221101063829.phzt6g35k55tygv4@shindev>
-References: <CAGAHmYA=QPJZy-NCRFF_17y-3HLb4UxcXVRiw=6c-1N7Fa7kQQ@mail.gmail.com>
-In-Reply-To: <CAGAHmYA=QPJZy-NCRFF_17y-3HLb4UxcXVRiw=6c-1N7Fa7kQQ@mail.gmail.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=wdc.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: DM8PR04MB8037:EE_|CH2PR04MB6631:EE_
-x-ms-office365-filtering-correlation-id: 97f891e7-7069-4965-d3d9-08dabbd3b0a4
-wdcipoutbound: EOP-TRUE
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: CcTcY6WA819aMbv71UC1prl5D9PvvQANkVJil+ZvT+arwruKH+3+UEdoXs8w4DAp3b2tvSEERtnJXU0qgGn+WTFhA6fZtN4UqQDKeEmMu5eR8lx0+YahnAlKZMQeJHRKM1cJkFodMQhFLJyYaLkZhOXO3e6oDImFmeB3bRd9xlktogow+0sbC82AaIMH4Liz9hcpN1TxYvTqFxncOuZ3dsxMEcUnvJRtxFGz3x8sG2UC0753zbRR8x4Zuj83Dd+ViGedHembffrCVqa4564MTjsuEzm8uaOWNXoeois0uKfTka7D3ppXAmfXSA8QAZk2M+tJl01EoIw1INxET9H7oQosAC7TnB/pRsFNRXs9yZG22iX1fzIpFIxuv7aJYX87DNzk27WJVv7bnFCEPKngK/PSEjaeHY5hE9hFN4UX4wTMnqNB8Bqxpq+cYVAjYsRNCsJXhYz42fqQ6EuVrqmJRHOj2Ar2vYXXLLrBXfUESlFJE4ysiO13wR63pfEmKlXlugq8/vS/a3stc02RLJTJ5AYnsINIChwqEzwCLGpzoBQ8XrvOPZut3fZ7fIS9oLd8m9RHIPwsH3RdlNPJ9L9i5qQOj8CUg+BE/zMQPVVwkcdjwG7WqwbL8N9fcEyV3brcUH7TEnfJ7ckZ+bDZWcoC1h9uV9uvphaybv531IoGksxNLETnPUQ1zLdyvQhObQ0nrabfoaJBfsl4Ve12xHi272BAqMlBYJ4YEXMQbvWbelJjwCQLzrJqQFsUYj0sWfKE88UP5brNaQ/lBteUAVL5PA==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM8PR04MB8037.namprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(7916004)(4636009)(136003)(39860400002)(396003)(376002)(366004)(346002)(451199015)(6916009)(38070700005)(54906003)(316002)(71200400001)(66476007)(66446008)(478600001)(6486002)(76116006)(66556008)(66946007)(91956017)(64756008)(8676002)(4326008)(6506007)(41300700001)(9686003)(6512007)(26005)(5660300002)(8936002)(44832011)(4744005)(186003)(1076003)(2906002)(83380400001)(86362001)(122000001)(82960400001)(38100700002)(33716001);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?V/NQXW7EsrW0h+rQ+ak3ZEUVCwwg9iK2QR82zfU9RHobWBoL3xXp28hLjfT+?=
- =?us-ascii?Q?1zncgbNcbDvCMgmHzawD1qvCiTmKwbd32uCoKIqt3qxl6LAwwaDRvCUPbhuj?=
- =?us-ascii?Q?qyQCmU9cjImRhGApeapK0qJ6MDtMmv248wxf0o16ufVbK5+eEhB4CSgkvWD7?=
- =?us-ascii?Q?SKLCZpskg0Nz3ukSDtq3/vwoesiNsOCEngjE2KukGhO9RTIG6agYR8XUPOt3?=
- =?us-ascii?Q?wqBGHQV1G77+3+Sl/SB/Y5JzuY8UXonnq6IzOnkA4RAt5XMmmPbq31j5dyxJ?=
- =?us-ascii?Q?YdyrOnC/eaH1479aId7RkgFcw1qS0eZrIjsBgW9Rw0MgmYWaVGIGQMwPoAej?=
- =?us-ascii?Q?F7sWHoIXNRxxTxIiuu6JZeWqx7TmRTMLIfep7CetJKwLAC2IwDfQxFnfkQQU?=
- =?us-ascii?Q?j8Wdep41Yndx/MqL+ocmkBWZmg0Det5ZEjGVMWOh/dYWBdenBh5siH7TaL+p?=
- =?us-ascii?Q?gAVjt88R/015AuJnP4iGwR/PjxzZt+ik3xFahIQ33Prv3YG0pmwPFu6kgwc6?=
- =?us-ascii?Q?bMTcihDKQ75CoJwMmEYECeD5K38rtwBp6Z3nm+Dpbuaml4uDpz/A7Lawoxv7?=
- =?us-ascii?Q?u5QRf5+9c1LEVekSsCWzbznUZ+Lh+XCx/jLgJ6PerzBQOEO6B477c6Aimh9Z?=
- =?us-ascii?Q?YF8y9LxmuvazwQfbs6fBSW7JRVlgnnnouaZURul4INDupH6nsBlUTWty+HbQ?=
- =?us-ascii?Q?V2cEmAUOiZ+RZXzCWz1QJ4YBpp6PUOSBJQ+kHZA4/M8KQfK49MKFoxkXeJAc?=
- =?us-ascii?Q?XA8nkHR/1ptYKH6Vf0m/RE5DCoROM9THkr1NyVII7L0Fui00YfP8ST5u+Qdq?=
- =?us-ascii?Q?3dzpCKJh0dKoPD+Abr9KZm33OZqGuG9xyKv5f+gtn02KYUX4j+fixJGknGQg?=
- =?us-ascii?Q?Qxr7plqDTUN/DMfngSWg5NbZsFscktIgduVTopfOw9kdMSRn9Ns1l5jhPejZ?=
- =?us-ascii?Q?9O/pNuuRDljdgj+RAvv7aR4Vid/IyfMH7qosy991LiMEF6fkwqFI7ud3/gJd?=
- =?us-ascii?Q?WitaD4vF22TxNlzW17085ue91+rZhICzNDzd/hOahVsl7Zpvt20BWAde5MHZ?=
- =?us-ascii?Q?/tQQeGHAfs1KhdzXN98WfzI4be1Y26Cz/jbw4D1Bfg/PEAueHU1m4i4SWHGM?=
- =?us-ascii?Q?3SNMsG1lt5QuXI4vltTxy151/E4/naBtIXnA2AwhGlaD00oQm6YY48LFuwex?=
- =?us-ascii?Q?ddPQ9UEZe5njs42pCTF3URPNZvcWSxqmQtcJUVmeOwx0L0wNSOMwLvkAs0+n?=
- =?us-ascii?Q?e1qOQ/dvyGGY+hktWxondjUNHOvZls+6tchxR8yQ1F44lNokPhyewS1uzuY7?=
- =?us-ascii?Q?Em5H7bAZn2yLqPbMGBkwvI+MjHsqx42Fhoob1hORcAoF2TRVw7wyrzxYtH+w?=
- =?us-ascii?Q?YMHuRzzRnNzwRl8py4xON/uJ3PLtsTrbtNWVAi2mmbOQn1HkFbkmHuHZRqUN?=
- =?us-ascii?Q?EdUBjOiRqZDcFLfrhZ4afHT4+nxkwzElmBWpv/Bj0Gx1JrsUQ6bHYKkDYX49?=
- =?us-ascii?Q?4LOYbpU2LapPqm7FhW6XF9eI8/XHJe6KEi42ICxgeKc5EISIzqLBEqjlvYC0?=
- =?us-ascii?Q?E0iYA7hmIjfugH8r8Ec1EItiCffhSSoo/DjW9tEDgIT4JBIADsxCsbQ6jpvn?=
- =?us-ascii?Q?ld9wZNuQDGjIGcFPZv/Zm+s=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <5F4E43451B291042A19BD254759EFEED@namprd04.prod.outlook.com>
-Content-Transfer-Encoding: quoted-printable
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zjm6vkcUHHt/WlCFKXrmJ5qjIVeFNMZWxZFTowcFZnw=;
+        b=Egvel5cPdV6oz5Ybxr6963sDu5ZkoxKeSJm0ReR2X/XVaTY8jceFi04dAllG4kv7m4
+         CVoYpqNQTe8oXfblGC3c+scOhoA2YV2dz6LxfTLBShIBueoHF6yruO9Co3g7VeyYWbp6
+         Vdb6iTyU67ewnSWAuEwRo5HzvraT9lajPyc1z3u+7lWTAz7KbrEkK8jfThkVV66UWWLo
+         hBPxc0yPJozwfPzbLYbZtj4cB957sQ9BpLKfKBlg3mIB26gB6oc9XIISoCpe8Qwy0JZs
+         eUWhBUINZzeRUj//JjBA0PSSP+jeznHUQU02W6y7+sxIs5GmJbsY29p8Y+5rm8qQy7T5
+         v48w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zjm6vkcUHHt/WlCFKXrmJ5qjIVeFNMZWxZFTowcFZnw=;
+        b=o5JzM3/O+R9NDtP/pNRogSx74R91sqAEAKWOXAaZbdcu+GphvYczAbHPRJwnJ8H1iY
+         ijsc5dP/vVwln5JTnl6VG4uL8GEynk/6Qxgfq9rBoUCor6VyauvsGkEF22BBnazmPHpt
+         HVtBQ+LUMc4obi+qmm8giHeGHzFTHIZV9gLDTkD1/eSYeVPugDwjKU9iVYDk9K/kbcZK
+         h6/MAdDxjJk6V1hNgKnwFUhVvTmlSjsbOUqy4VD0sMxAnlyVxWSxJA6o/tCp9N5G8b3M
+         UZlSUpRIve4axZ4T7ipYf7OvLDfMmTovWmNjBnaSq/7eqBvep1OqO282qYSZ7VL0t4s2
+         /sdA==
+X-Gm-Message-State: ACrzQf3xRdgDNkZ+YH+ZhaJefKI/WBVU7up4OX+YGMX2b2kYmi0knrsJ
+        tuEiDmFj24ieAOLimgYbsKX3/TwqUmg+dVyD8RFRQQ==
+X-Google-Smtp-Source: AMsMyM6Pb3FdPIBUFMBKkraNZxzDYfIcCtv3ngoLrPVf1pM9fGiKb9V9JmB8px+XaD3qqN/P+WmIeH/HrKP8l+lsyKo=
+X-Received: by 2002:a17:902:f686:b0:187:16a0:fd2b with SMTP id
+ l6-20020a170902f68600b0018716a0fd2bmr12326009plg.91.1667284788108; Mon, 31
+ Oct 2022 23:39:48 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: wdc.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: DM8PR04MB8037.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 97f891e7-7069-4965-d3d9-08dabbd3b0a4
-X-MS-Exchange-CrossTenant-originalarrivaltime: 01 Nov 2022 06:38:30.1964
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: b61c8803-16f3-4c35-9b17-6f65f441df86
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: xkZUWo1RLB+nAvSK2dDbN1hZrU9I0NDFRNHDuOB0UgDH70XZMrBJ8sZsBMLhhDmJph4iQnkE9VGg3p18NteWTFIdyBGk/XtrEDfTY59qhjw=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH2PR04MB6631
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221016121406.co3qixzcbfke4ye7@proprietary-killer.gsrm.network> <CAD6h2NSahYuqg1T2oW7tHmAeAfqircfeokYhvJYNRVi5TXEDAA@mail.gmail.com>
+In-Reply-To: <CAD6h2NSahYuqg1T2oW7tHmAeAfqircfeokYhvJYNRVi5TXEDAA@mail.gmail.com>
+From:   Haojian Zhuang <haojian.zhuang@linaro.org>
+Date:   Tue, 1 Nov 2022 14:39:35 +0800
+Message-ID: <CAD6h2NT84eLERrx8T_=4qK7d9jum7Lc9QEMnNvd65cptZRTuoA@mail.gmail.com>
+Subject: Re: pinconf-single: pinctrl-single,bias-pull{up,down} bits help/explanation
+To:     "Marty E. Plummer" <hanetzer@startmail.com>
+Cc:     linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, tony@atomide.com,
+        linus.walleij@linaro.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Nov 01, 2022 / 00:09, Sijie Lan wrote:
+On Tue, 1 Nov 2022 at 14:20, Haojian Zhuang <haojian.zhuang@linaro.org> wrote:
+>
+> On Sun, 16 Oct 2022 at 20:14, Marty E. Plummer <hanetzer@startmail.com> wrote:
+> >
+> > Greetings.
+> >
+> > What I'm having issue with is the pinctrl-single,bias-pull values. From
+> > commit abe4e4675dfc62b7f2328e2c4bce8b5bdcdff7c0 I get a bit of it, and I
+> > think I have it mostly figured out:
+> >
+> > // <[input] [enabled] [disabled] [mask]>;
+> > pinctrl-single,bias-pullup = <? 1 0 0x100>;
+> > pinctrl-single,bias-pulldown = <? 1 0 0x200>;
+> >
+> > using mask 0x100 to single out bit 8 and mask 0x200 to single out bit 9,
+> > enable values being simple binary on/off. What I don't get is how the
+> > input value is determined/calculated.
+> >
+> > Aside from the above mentioned commit for the am335x-pocketbeagle.dts,
+> > which uses a differing pullup control scheme, the only users I can find
+> > in the tree are a handful of hisi socs which I don't have a datasheet
+> > for to map their usage to register definitions and puzzle this out.
+> >
+> Excuse me for just noticing the email.
+>
+> #define  PULL_DIS     0
+> #define  PULL_UP        0x100
+> #define  PULL_DOWN  0x200
+>
+> // <[input] [enabled] [disabled] [mask]>
+>
+> // If you want to pull-up, configure the pin as below.
+> pinctrl-single,bias-pullup = <PULL_UP  PULL_UP  0  PULL_UP>
+> // If you want to disable pull-up, configure the pin as below.
+> pinctrl-single,bias-pullup = <0  PULL_UP  0  PULL_UP>
+>
+> It seems that the pin configuration in am335x-pocketbeagle.dts is wrong.
+> But I don't have the board to verify it.
+>
 
-...
+Sorry. I didn't check the comments in the commit carefully.
 
-> Info: Host-managed zoned block device:
->       20 zones, 2147483648 zone size(bytes), 10 randomly writeable zones
+Obviously, the pinctrl definition is totally different in am335x chip.
 
-When zone size is large comparing to device size, reserved area size tend t=
-o be
-large and results in the failure. Can you try with smaller zone size, such =
-as
-128MB or 64MB?
+bit4 is used to select pull-up or pull-down.
+bit3 is used to enable the pull-up/pull-down.
 
---=20
-Shin'ichiro Kawasaki=
+In Hisilicon chip, bit9 is used to enable pull-down and bit8 is used
+to enable pull-up.
+
+They're totally different. I suggest you to enable the value in DTS
+file and dump the register
+value  to check for your own silicon.
+
+Best Regards
+Haojian
