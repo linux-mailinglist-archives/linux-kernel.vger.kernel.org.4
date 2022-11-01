@@ -2,113 +2,202 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6D2ED615606
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 00:21:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 986FF6155F7
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 00:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231328AbiKAXVJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 19:21:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50460 "EHLO
+        id S230335AbiKAXOh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 19:14:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46470 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbiKAXVG (ORCPT
+        with ESMTP id S231286AbiKAXOd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 19:21:06 -0400
-Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97A9817E39;
-        Tue,  1 Nov 2022 16:21:01 -0700 (PDT)
-Received: by mail-wm1-x335.google.com with SMTP id bg9-20020a05600c3c8900b003bf249616b0so247535wmb.3;
-        Tue, 01 Nov 2022 16:21:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wxyxXUAbWcBHc9d21EGasKXnhPYfVJvAuFGJWn1enDs=;
-        b=W4VJj2OxkzduLyb1JVdbRtO0v8jmkBqRu5rWTymTBs2xiND8ig1Kf6Dk6XCJ/2f9ep
-         cQJzoRGlY6/DWX+5JYKcdKIHfr0JS0MdaBQyIDUhRd+FOJaZxF3pHcf2xbHChhlW4rty
-         ILkUYe3cws4PsfmVl+bjjyCH5pdUl/TjK0Gb9vr9EHjpFN12YTCZePl8gviTuDyZCDK8
-         0bez6hGXn81BQtpLrWRp/HB6XLFdulYs7Cg5evyxfNLJKpKuGR4tQyfTfrvvLO+6Uevh
-         tYBaubwq+L0LF2LYlxCace4VZ7EeIJQm7yZYpxUbOkPwwXmHvp+E7J4lRV4blnxjtOVV
-         JqCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wxyxXUAbWcBHc9d21EGasKXnhPYfVJvAuFGJWn1enDs=;
-        b=WyJKLVRoyV9N9cf7pUk6rDRJ1x2mWnJMb9a+cln3bMvmVdMrfxOq3IkfSBFDDCWbAR
-         axVbGykYJmtzsb7cHSgmNT3jnKPry6nxT/nFB50aPos9bJdMSILm/LsLLBzk4hN7DMV2
-         tORYcxN/gqdVZ8yzCYsuFop2NJs5113NTROENdRAJlcdmZ+sL5o6XtfhOslY479sp5wf
-         SkqKhEO9/ktTmnAeimyxajtI2++PdZLOCZ23Cx0666tWtCSPtFqWbhyiEgU6zZ9eeJK8
-         FRwgEYm9ptx2W935NGbMK/hF5N8hM96b/9sRpuOwmILxacQAySz0oys23F27nhWt6m/L
-         TSuA==
-X-Gm-Message-State: ACrzQf0nHjgE+9gcfDo3T75wjXQZAirLE3WTFKeMdRL0LM0guHlVsve/
-        MwdtuqWUHdE+XToGOU/Pkic=
-X-Google-Smtp-Source: AMsMyM50e+QYw8SxGLXTQQSN/H4evMDT0wK2OPuH/ZtE+ylXd4szu1ziml/ktY5vD0j1TqS9pHNVkw==
-X-Received: by 2002:a05:600c:1c0d:b0:3cf:5fd2:1fd1 with SMTP id j13-20020a05600c1c0d00b003cf5fd21fd1mr15921329wms.8.1667344860058;
-        Tue, 01 Nov 2022 16:21:00 -0700 (PDT)
-Received: from suse.localnet (host-79-43-11-206.retail.telecomitalia.it. [79.43.11.206])
-        by smtp.gmail.com with ESMTPSA id dn12-20020a05600c654c00b003cf537ec2efsm123480wmb.36.2022.11.01.16.20.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 16:20:58 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        Alex Deucher <alexdeucher@gmail.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Christian Brauner <brauner@kernel.org>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Jean Delvare <jdelvare@suse.com>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Kees Cook <keescook@chromium.org>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-media@vger.kernel.org, linaro-mm-sig@lists.linaro.org,
-        linux-hwmon@vger.kernel.org, linux-hardening@vger.kernel.org,
-        "Venkataramanan, Anirudh" <anirudh.venkataramanan@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>
-Subject: Re: [PATCH] drm/radeon: Replace kmap() with kmap_local_page()
-Date:   Wed, 02 Nov 2022 00:11:53 +0100
-Message-ID: <1942083.usQuhbGJ8B@suse>
-In-Reply-To: <CADnq5_PP3VCXQ5rbC0-8Qsi5W7Ew87U_bRknz4=qxbrPxVQ+qA@mail.gmail.com>
-References: <20221013210714.16320-1-fmdefrancesco@gmail.com> <fb0b7389-7121-04f8-176d-1ababe0ad8f2@amd.com> <CADnq5_PP3VCXQ5rbC0-8Qsi5W7Ew87U_bRknz4=qxbrPxVQ+qA@mail.gmail.com>
+        Tue, 1 Nov 2022 19:14:33 -0400
+Received: from mga11.intel.com (mga11.intel.com [192.55.52.93])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 458576565
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 16:14:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667344471; x=1698880471;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=nPh3+60EmNTELzIo99w5dA7f/vwWEAXuyy6DSr53nfA=;
+  b=G1W/9TEc+F6JrnuupKJjQDe6L1J2U12LAmuciqpysEB9X3wbN4WjqEGN
+   ACVzDOFPL9JryW3qraMksRJOCuX6+ofCeK5zEHCMTkD5Lcx6L6VjuBZJS
+   oIeKSUOLQvA4vaNYHOm7N8lQ4xTNAdCyFoR7IrGBzdcjT5rutIE9W/X00
+   kgj96n3hL4W0OcAfAfeicWYNN4yxx/uwasMX+cpc+JP6VeidNhbdNW9cH
+   3qrlu5mPig63vlFaaCQR5xGgemARGzSZuGExFEcCdwcbPZ0XaVHgOG0ir
+   EET0lv95VwPzrIueST+tX43vBbo9EPmakFAhXqXoxutErvv6hyV3Tf1Bn
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="306879998"
+X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
+   d="scan'208";a="306879998"
+Received: from orsmga006.jf.intel.com ([10.7.209.51])
+  by fmsmga102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 16:14:31 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="612019860"
+X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
+   d="scan'208";a="612019860"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by orsmga006.jf.intel.com with ESMTP; 01 Nov 2022 16:14:29 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oq0Sj-000E9g-06;
+        Tue, 01 Nov 2022 23:14:29 +0000
+Date:   Wed, 02 Nov 2022 07:13:48 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:master] BUILD SUCCESS
+ 74f2af2d5393451ff1a104f0187826e44f45fc84
+Message-ID: <6361a82c.eR/b4ON4NJP4XDTa%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On luned=EC 17 ottobre 2022 18:52:10 CET Alex Deucher wrote:
-> Applied.  Thanks!
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git master
+branch HEAD: 74f2af2d5393451ff1a104f0187826e44f45fc84  Merge branch into tip/master: 'x86/sgx'
 
-Many thanks to you!
+elapsed time: 727m
 
-However, about a week ago, I received a report saying that this patch is "N=
-ot=20
-Applicable".=20
+configs tested: 120
+configs skipped: 2
 
-That email was also referring to another patch, for which I'll reply in its=
-=20
-own thread.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-That report has a link to https://patchwork.linuxtv.org/project/linux-media/
-patch/20221013210714.16320-1-fmdefrancesco@gmail.com/
+gcc tested configs:
+powerpc                           allnoconfig
+um                             i386_defconfig
+um                           x86_64_defconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+x86_64                        randconfig-a015
+i386                                defconfig
+arc                                 defconfig
+arm                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+x86_64                              defconfig
+x86_64                        randconfig-a004
+arm                              allyesconfig
+arc                  randconfig-r043-20221101
+s390                                defconfig
+arm64                            allyesconfig
+i386                          randconfig-a014
+m68k                             allmodconfig
+sh                               allmodconfig
+s390                             allyesconfig
+mips                             allyesconfig
+x86_64                        randconfig-a002
+arc                              allyesconfig
+i386                          randconfig-a012
+powerpc                          allmodconfig
+x86_64                               rhel-8.3
+i386                          randconfig-a016
+x86_64                           allyesconfig
+i386                             allyesconfig
+x86_64               randconfig-a016-20221031
+x86_64               randconfig-a011-20221031
+x86_64               randconfig-a013-20221031
+x86_64               randconfig-a012-20221031
+x86_64               randconfig-a014-20221031
+x86_64               randconfig-a015-20221031
+x86_64               randconfig-k001-20221031
+alpha                            allyesconfig
+x86_64                           rhel-8.3-syz
+x86_64                        randconfig-a006
+m68k                             allyesconfig
+x86_64                         rhel-8.3-kunit
+x86_64                           rhel-8.3-kvm
+ia64                             allmodconfig
+arm                         lubbock_defconfig
+powerpc                      chrp32_defconfig
+m68k                                defconfig
+arm                            mps2_defconfig
+i386                 randconfig-a016-20221031
+i386                 randconfig-a012-20221031
+i386                 randconfig-a015-20221031
+i386                 randconfig-a013-20221031
+i386                 randconfig-a014-20221031
+i386                 randconfig-a011-20221031
+sparc                             allnoconfig
+xtensa                    smp_lx200_defconfig
+arm                          gemini_defconfig
+sh                 kfr2r09-romimage_defconfig
+xtensa                       common_defconfig
+mips                           jazz_defconfig
+arm                           tegra_defconfig
+mips                 decstation_r4k_defconfig
+arm                          lpd270_defconfig
+sh                              ul2_defconfig
+powerpc                 mpc8540_ads_defconfig
+openrisc                       virt_defconfig
+powerpc                 canyonlands_defconfig
+i386                          randconfig-c001
+i386                 randconfig-c001-20221031
+loongarch                           defconfig
+loongarch                         allnoconfig
+loongarch                        allmodconfig
+arm64                            alldefconfig
+powerpc                 linkstation_defconfig
+m68k                        stmark2_defconfig
+um                                  defconfig
+arm                         s3c6400_defconfig
+m68k                       m5249evb_defconfig
+arm                            qcom_defconfig
+arm                      footbridge_defconfig
+powerpc                     taishan_defconfig
+sh                  sh7785lcr_32bit_defconfig
+alpha                             allnoconfig
+powerpc                      arches_defconfig
+powerpc                    klondike_defconfig
+nios2                            allyesconfig
+nios2                               defconfig
+parisc64                            defconfig
+parisc                           allyesconfig
 
-Can you please let me understand why, despite it was applied, this patch la=
-ter=20
-shifted "State" to "Not Applicable"?
+clang tested configs:
+i386                 randconfig-a001-20221031
+i386                 randconfig-a003-20221031
+i386                 randconfig-a002-20221031
+i386                 randconfig-a004-20221031
+i386                 randconfig-a006-20221031
+i386                 randconfig-a005-20221031
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+hexagon              randconfig-r041-20221101
+i386                          randconfig-a013
+i386                          randconfig-a011
+hexagon              randconfig-r045-20221101
+s390                 randconfig-r044-20221101
+riscv                randconfig-r042-20221101
+x86_64                        randconfig-a005
+i386                          randconfig-a015
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+powerpc                   bluestone_defconfig
+arm                        magician_defconfig
+arm                        vexpress_defconfig
+powerpc                       ebony_defconfig
+powerpc                      obs600_defconfig
+arm                      pxa255-idp_defconfig
+mips                      bmips_stb_defconfig
 
-Thanks,
-
-=46abio
-
-
-
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
