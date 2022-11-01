@@ -2,361 +2,267 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7F979615155
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 19:11:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E3B66151A9
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 19:40:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229670AbiKASLr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 14:11:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56914 "EHLO
+        id S230169AbiKASkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 14:40:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54208 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229452AbiKASLp (ORCPT
+        with ESMTP id S230222AbiKASkE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 14:11:45 -0400
-Received: from mail-qv1-f43.google.com (mail-qv1-f43.google.com [209.85.219.43])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFF8A1CFD1;
-        Tue,  1 Nov 2022 11:11:43 -0700 (PDT)
-Received: by mail-qv1-f43.google.com with SMTP id x13so10844668qvn.6;
-        Tue, 01 Nov 2022 11:11:43 -0700 (PDT)
+        Tue, 1 Nov 2022 14:40:04 -0400
+X-Greylist: delayed 1595 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Tue, 01 Nov 2022 11:40:02 PDT
+Received: from mx0a-003ede02.pphosted.com (mx0a-003ede02.pphosted.com [205.220.169.153])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA26E1C10B
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 11:40:02 -0700 (PDT)
+Received: from pps.filterd (m0286615.ppops.net [127.0.0.1])
+        by mx0b-003ede02.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A1IDQIn028254
+        for <linux-kernel@vger.kernel.org>; Tue, 1 Nov 2022 11:13:26 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=getcruise.com; h=from : to : cc :
+ subject : date : message-id : mime-version : content-transfer-encoding;
+ s=ppemail; bh=TZN+nxD29A/mXjM1cTiRY1RyYzHigm/eAkBELU0CF14=;
+ b=PBHgMfUWCAyWU+BS9eg7YzTm9ZpaAWRdUFPUe3AbTXdG9277ibb7aYz6LP2C+JW38sNt
+ +RShb638WNFPMBblaBb0ov0DM7lRc9HUi1ihzHVyW6bIN6uzuHLuSYwbePPDnnjShLH/
+ XO3ui/uthf28h7KkwyyZWPucah2FYIWYRzMSD2dTgMicQcRhC2VFFXj6biwxY+gmgOPr
+ Y9WMTK/kiqOi/oUt7tjmUIofofxArczYB981kZNKts+jNyPh7JWrHHWgUd7HGz32Ly/o
+ 8nnvQRCg1YDQvLwTIF13w9Ryvbcyu5Tliw+MF5UCaQdnCHpv4XaaRCYZ7y2foj8MwpDa cg== 
+Received: from mail-pg1-f197.google.com (mail-pg1-f197.google.com [209.85.215.197])
+        by mx0b-003ede02.pphosted.com (PPS) with ESMTPS id 3kh0ckrufj-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 11:13:26 -0700
+Received: by mail-pg1-f197.google.com with SMTP id e125-20020a636983000000b0046ed15a8212so8169711pgc.19
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 11:13:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=getcruise.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TZN+nxD29A/mXjM1cTiRY1RyYzHigm/eAkBELU0CF14=;
+        b=B9YUrfo7zTLPpIvcViTkY5ihrai3NrkPOR9Me2X6e/5VjqOEorTYmYKytewk8j5Whh
+         VOrVciNBdVse5KYJzaGbd4iSdC/KfI9Hrzpx/o2rNOY7hdOTkLyjWc6W3axBFzbnFa5T
+         NZuNVao5FcNNiAQP+woknoddrhEZkRiV7C2XonIybKVRC5p+SYICfCtsmBKWpJALQ90c
+         UDSc4gX9deqGyEV/IrPWO/96WsipmOy5U71WwlNg8GaDii+IFcyPvCwcHgkDlPc8Mg44
+         lZcmvzDKj1lKYv2VvSxrCH7m9r/ZwU0VT3p8Nup5+8yGfUQasJenSyIrY4scjlm4jNSf
+         iPlw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=user-agent:in-reply-to:content-disposition:mime-version:references
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6B63Wsta4Owu5UDDP6cwu6XxQKzS3sTXQXrzjyNvFDs=;
-        b=qUf+oTa2TsqOVmweNYrp+4eenzCeIPYEw/9S4K5OiYFeaPuriIrZLOOtxfO/FtzNhS
-         8zqR8JKCY2YlUavaJDHMqeMUD8Ls7mDSqEVqHGhfzHdJcaj1kxIbaznmPD29fs5F+27D
-         4wcUVKlwTpFedE1Qq+HtprRZSwR38znKKjd5RJ/qZMU3gxH816uLI66fJaPvi5yzxy47
-         8ORCPvohgGz5c9LWrFmW8Sn8aikPXKMeksaEhE3MxNyaVWeHTnHIs9Wuqbi+pQWSY777
-         2s66daQN7uJyYwLF+DI+EPm5+hdHqVqBTcjxKh64YGRrOkN9xztWuufhUdUyN3k4BAg8
-         urYg==
-X-Gm-Message-State: ACrzQf3AS8fvmWqqjuCGYgFA7lmPXsxqIGAt5nZbf5I756QKEQfC2S0j
-        lHmvO1BDeqZY2ix5zuwFrkI=
-X-Google-Smtp-Source: AMsMyM6s/W7l7fy60lDOvfSKRRMRw00+edufI7AqdQsKEpLYMwGvAb0XB+4Kap9L3Do4wcw4sPdLCA==
-X-Received: by 2002:a05:6214:d08:b0:4bc:b92:8171 with SMTP id 8-20020a0562140d0800b004bc0b928171mr7160257qvh.78.1667326302621;
-        Tue, 01 Nov 2022 11:11:42 -0700 (PDT)
-Received: from maniforge.dhcp.thefacebook.com ([2620:10d:c091:480::987b])
-        by smtp.gmail.com with ESMTPSA id t12-20020a37ea0c000000b006cfaee39ccesm6898126qkj.114.2022.11.01.11.11.41
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TZN+nxD29A/mXjM1cTiRY1RyYzHigm/eAkBELU0CF14=;
+        b=opEKzGBbShfM2bn71/kVpx1mU5/2QJ8MRSohzrZqrMr/n58a5OALp9Tr2jo8H73xsm
+         CY6INGwPWG/5LGjHgX9V2z1Sx2vIncM25DE9m2BG/u5ievrTSwCKsHpXT+bXlzl7YBNn
+         7hn34DeYLMTLSus8QIk7P1yXWJiEKiMqLjOs6u0aUuvnqxmGxPIAuNw6qqWabFbcX+rJ
+         NT8XDTKrtqq4kasGrRFOqQT01HqEcXql82Mi0w6r8RpG0/jC54jrifN1tqKtuR8sFeQE
+         jfNBwfQj9sw0y+DQRzcZvaw0XhDB6hVNakpXeBonWsNCVRaZZIWt5nYvtW+2bRwCbB2Z
+         7OPg==
+X-Gm-Message-State: ACrzQf2vq5hWyZevftxZG2i6xKaOcH09zsEuJbZZSJa/br0BAJISsuAH
+        bYqOXKwEnqT0KC6xaG43VGpS4C3OEFB8mpplfPtEPleFxEx/ofNiF6orQqEnEfIkiQDDauJtaDi
+        Jywo2CWjzgZ2RzoiAYp3sYWI=
+X-Received: by 2002:a63:4410:0:b0:43c:9385:5373 with SMTP id r16-20020a634410000000b0043c93855373mr171024pga.342.1667326405462;
+        Tue, 01 Nov 2022 11:13:25 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7xCdoqUgHSMdgTLB6mB0dr3YKn10njr1NWWEPBfi45SBznlOcV6JWQVykoZp8vU4em6iPbsQ==
+X-Received: by 2002:a63:4410:0:b0:43c:9385:5373 with SMTP id r16-20020a634410000000b0043c93855373mr171015pga.342.1667326405050;
+        Tue, 01 Nov 2022 11:13:25 -0700 (PDT)
+Received: from 4VPLMR2-DT.corp.robot.car ([199.73.125.241])
+        by smtp.gmail.com with ESMTPSA id m14-20020a63fd4e000000b00460c67afbd5sm6229047pgj.7.2022.11.01.11.13.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 11:11:42 -0700 (PDT)
-Date:   Tue, 1 Nov 2022 13:11:40 -0500
-From:   David Vernet <void@manifault.com>
-To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
-Cc:     bpf@vger.kernel.org, ast@kernel.org, daniel@iogearbox.net,
-        andrii@kernel.org, martin.lau@linux.dev, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        sdf@google.com, haoluo@google.com, jolsa@kernel.org,
-        linux-kernel@vger.kernel.org, kernel-team@fb.com, tj@kernel.org,
-        memxor@gmail.com
-Subject: Re: [PATCH bpf-next v6 1/3] bpf: Allow trusted pointers to be passed
- to KF_TRUSTED_ARGS kfuncs
-Message-ID: <Y2FhXC/s5GUkbr9P@maniforge.dhcp.thefacebook.com>
-References: <20221020222416.3415511-1-void@manifault.com>
- <20221020222416.3415511-2-void@manifault.com>
- <20221101000239.pbbmym4mbdbmnzjd@macbook-pro-4.dhcp.thefacebook.com>
+        Tue, 01 Nov 2022 11:13:24 -0700 (PDT)
+From:   Andy Ren <andy.ren@getcruise.com>
+To:     netdev@vger.kernel.org, davem@davemloft.com, kuba@kernel.org,
+        pabeni@redhat.com, corbet@lwm.net
+Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        roman.gushchin@linux.dev, Andy Ren <andy.ren@getcruise.com>
+Subject: [PATCH net-next] netconsole: Enable live renaming for network interfaces used by netconsole
+Date:   Tue,  1 Nov 2022 11:12:25 -0700
+Message-Id: <20221101181225.1272144-1-andy.ren@getcruise.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221101000239.pbbmym4mbdbmnzjd@macbook-pro-4.dhcp.thefacebook.com>
-User-Agent: Mutt/2.2.7 (2022-08-07)
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: s77cnhuKxmIGjQycchWtLWnhTAzRt8FG
+X-Proofpoint-ORIG-GUID: s77cnhuKxmIGjQycchWtLWnhTAzRt8FG
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-01_09,2022-11-01_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ impostorscore=0 mlxscore=0 lowpriorityscore=0 malwarescore=0 bulkscore=0
+ suspectscore=0 clxscore=1011 mlxlogscore=999 phishscore=0 adultscore=0
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211010132
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 05:02:39PM -0700, Alexei Starovoitov wrote:
-> On Thu, Oct 20, 2022 at 05:24:14PM -0500, David Vernet wrote:
-> > Kfuncs currently support specifying the KF_TRUSTED_ARGS flag to signal
-> > to the verifier that it should enforce that a BPF program passes it a
-> > "safe", trusted pointer. Currently, "safe" means that the pointer is
-> > either PTR_TO_CTX, or is refcounted. There may be cases, however, where
-> > the kernel passes a BPF program a safe / trusted pointer to an object
-> > that the BPF program wishes to use as a kptr, but because the object
-> > does not yet have a ref_obj_id from the perspective of the verifier, the
-> > program would be unable to pass it to a KF_ACQUIRE | KF_TRUSTED_ARGS
-> > kfunc.
-> > 
-> > The solution is to expand the set of pointers that are considered
-> > trusted according to KF_TRUSTED_ARGS, so that programs can invoke kfuncs
-> > with these pointers without getting rejected by the verifier.
-> > 
-> > There is already a PTR_UNTRUSTED flag that is set in some scenarios,
-> > such as when a BPF program reads a kptr directly from a map
-> > without performing a bpf_kptr_xchg() call. These pointers of course can
-> > and should be rejected by the verifier. Unfortunately, however,
-> > PTR_UNTRUSTED does not cover all the cases for safety that need to
-> > be addressed to adequately protect kfuncs. Specifically, pointers
-> > obtained by a BPF program "walking" a struct are _not_ considered
-> > PTR_UNTRUSTED according to BPF. For example, say that we were to add a
-> > kfunc called bpf_task_acquire(), with KF_ACQUIRE | KF_TRUSTED_ARGS, to
-> > acquire a struct task_struct *. If we only used PTR_UNTRUSTED to signal
-> > that a task was unsafe to pass to a kfunc, the verifier would mistakenly
-> > allow the following unsafe BPF program to be loaded:
-> > 
-> > SEC("tp_btf/task_newtask")
-> > int BPF_PROG(unsafe_acquire_task,
-> >              struct task_struct *task,
-> >              u64 clone_flags)
-> > {
-> >         struct task_struct *acquired, *nested;
-> > 
-> >         nested = task->last_wakee;
-> > 
-> >         /* Would not be rejected by the verifier. */
-> >         acquired = bpf_task_acquire(nested);
-> >         if (!acquired)
-> >                 return 0;
-> > 
-> >         bpf_task_release(acquired);
-> >         return 0;
-> > }
-> > 
-> > To address this, this patch defines a new type flag called PTR_WALKED
-> > which tracks whether a PTR_TO_BTF_ID pointer was retrieved from walking
-> > a struct. A pointer passed directly from the kernel begins with
-> > (PTR_WALKED & type) == 0, meaning of course that it is not obtained from
-> > walking another struct. Any pointer received from walking that object,
-> > however, would inherit that flag and become a walked pointer.
-> > 
-> > Additionally, because some kfuncs still only want BPF programs to be
-> > able to send them an arg that they "own" (i.e. which they own a refcount
-> > on) another kfunc arg flag called KF_OWNED_ARGS is added which is
-> > identical to KF_TRUSTED_ARGS, but imposes the stricter requirement that
-> > the arg must also have a refcount.
-> > 
-> > A subsequent patch will add kfuncs for storing a task kfunc as a kptr,
-> > and then another patch will validate this feature by ensuring that the
-> > verifier rejects a kfunc invocation with a nested pointer.
-> > 
-> > Signed-off-by: David Vernet <void@manifault.com>
-> > ---
-> >  Documentation/bpf/kfuncs.rst                  | 50 ++++++++++----
-> >  include/linux/bpf.h                           |  6 ++
-> >  include/linux/btf.h                           | 57 ++++++++++++++--
-> >  kernel/bpf/btf.c                              | 18 ++++-
-> >  kernel/bpf/verifier.c                         | 66 ++++++++++++++-----
-> >  net/bpf/test_run.c                            |  2 +-
-> >  net/netfilter/nf_conntrack_bpf.c              |  8 +--
-> >  net/netfilter/nf_nat_bpf.c                    |  2 +-
-> >  .../selftests/bpf/prog_tests/map_kptr.c       |  2 +-
-> >  tools/testing/selftests/bpf/verifier/calls.c  |  4 +-
-> >  .../testing/selftests/bpf/verifier/map_kptr.c |  2 +-
-> >  11 files changed, 169 insertions(+), 48 deletions(-)
-> > 
-> > diff --git a/Documentation/bpf/kfuncs.rst b/Documentation/bpf/kfuncs.rst
-> > index 0f858156371d..8e2825150a8d 100644
-> > --- a/Documentation/bpf/kfuncs.rst
-> > +++ b/Documentation/bpf/kfuncs.rst
-> > @@ -137,30 +137,54 @@ KF_ACQUIRE and KF_RET_NULL flags.
-> >  --------------------------
-> >  
-> >  The KF_TRUSTED_ARGS flag is used for kfuncs taking pointer arguments. It
-> > -indicates that the all pointer arguments will always have a guaranteed lifetime,
-> > -and pointers to kernel objects are always passed to helpers in their unmodified
-> > -form (as obtained from acquire kfuncs).
-> > +indicates that the all pointer arguments will always have a guaranteed
-> > +lifetime, and pointers to kernel objects are always passed to helpers in their
-> > +unmodified form (either as passed by the main kernel, or as obtained from
-> > +acquire kfuncs).
-> >  
-> > -It can be used to enforce that a pointer to a refcounted object acquired from a
-> > -kfunc or BPF helper is passed as an argument to this kfunc without any
-> > -modifications (e.g. pointer arithmetic) such that it is trusted and points to
-> > -the original object.
-> > +It can be used to enforce that a safe pointer passed to the program by the
-> > +kernel, or a refcounted object acquired from a kfunc or BPF helper, is passed
-> > +as an argument to this kfunc without any modifications (e.g. pointer
-> > +arithmetic) such that it is trusted and points to the original object.
-> >  
-> >  Meanwhile, it is also allowed pass pointers to normal memory to such kfuncs,
-> >  but those can have a non-zero offset.
-> >  
-> > -This flag is often used for kfuncs that operate (change some property, perform
-> > -some operation) on an object that was obtained using an acquire kfunc. Such
-> > -kfuncs need an unchanged pointer to ensure the integrity of the operation being
-> > -performed on the expected object.
-> > +This flag is often used for kfuncs that receive a trusted pointer from the
-> > +kernel, and which do not require a reference to be held by the program. For
-> > +example, if there's a kernel object that was allocated by the main kernel, and
-> > +which the BPF program wishes to store in a map as a kptr, KF_TRUSTED_ARGS can
-> > +be used to ensure that the pointer is actually a trusted kernel pointer before
-> > +a reference is acquired on it in a KF_ACQUIRE kfunc.
-> > +
-> > +2.4.6 KF_OWNED_ARGS flag
-> > +------------------------
-> > +
-> > +The KF_OWNED_ARGS flag is identical to the KF_TRUSTED_ARGS flag, though it is
-> > +more restrictive in that it also requires the BPF program to hold a reference
-> > +on the object.
-> >  
-> > -2.4.6 KF_SLEEPABLE flag
-> > +In other words, it can be used to enforce that a pointer to a refcounted object
-> > +acquired from a kfunc or BPF helper is passed as an argument to this kfunc
-> > +without any modifications (e.g. pointer arithmetic) such that it is trusted and
-> > +points to the original object that was allocated or owned by the BPF program.
-> > +
-> > +This flag is often used for kfuncs that operate (change some property, perform
-> > +some operation) on an object that was obtained using an acquire kfunc. For
-> > +example, if an acquire kfunc allocates an object on behalf of a program,
-> > +KF_OWNED_ARGS would be an appropriate flag to specify for other kfuncs which
-> > +allow the program to mutate that object. KF_TRUSTED_ARGS, on the other hand,
-> > +would likely not be sufficiently restrictive as the kfunc does not want to
-> > +allow the BPF program to mutate another instance of the same object type which
-> > +was allocated by the main kernel.
-> > +
-> > +2.4.7 KF_SLEEPABLE flag
-> >  -----------------------
-> >  
-> >  The KF_SLEEPABLE flag is used for kfuncs that may sleep. Such kfuncs can only
-> >  be called by sleepable BPF programs (BPF_F_SLEEPABLE).
-> >  
-> > -2.4.7 KF_DESTRUCTIVE flag
-> > +2.4.8 KF_DESTRUCTIVE flag
-> >  --------------------------
-> >  
-> >  The KF_DESTRUCTIVE flag is used to indicate functions calling which is
-> > diff --git a/include/linux/bpf.h b/include/linux/bpf.h
-> > index 9e7d46d16032..ccdbefd72a95 100644
-> > --- a/include/linux/bpf.h
-> > +++ b/include/linux/bpf.h
-> > @@ -457,6 +457,12 @@ enum bpf_type_flag {
-> >  	/* Size is known at compile time. */
-> >  	MEM_FIXED_SIZE		= BIT(10 + BPF_BASE_TYPE_BITS),
-> >  
-> > +	/* PTR was obtained from walking a struct. This is used with
-> > +	 * PTR_TO_BTF_ID to determine whether the pointer is safe to pass to a
-> > +	 * kfunc with KF_TRUSTED_ARGS.
-> > +	 */
-> > +	PTR_WALKED		= BIT(11 + BPF_BASE_TYPE_BITS),
-> > +
-> >  	__BPF_TYPE_FLAG_MAX,
-> >  	__BPF_TYPE_LAST_FLAG	= __BPF_TYPE_FLAG_MAX - 1,
-> >  };
-> > diff --git a/include/linux/btf.h b/include/linux/btf.h
-> > index f9aababc5d78..7f5a438196a2 100644
-> > --- a/include/linux/btf.h
-> > +++ b/include/linux/btf.h
-> > @@ -17,9 +17,48 @@
-> >  #define KF_RELEASE	(1 << 1) /* kfunc is a release function */
-> >  #define KF_RET_NULL	(1 << 2) /* kfunc returns a pointer that may be NULL */
-> >  #define KF_KPTR_GET	(1 << 3) /* kfunc returns reference to a kptr */
-> > -/* Trusted arguments are those which are meant to be referenced arguments with
-> > - * unchanged offset. It is used to enforce that pointers obtained from acquire
-> > - * kfuncs remain unmodified when being passed to helpers taking trusted args.
-> > +/* Trusted arguments are those which are meant to be guaranteed valid
-> > + * arguments, with an unchanged offset. It is used to enforce that pointers
-> > + * obtained from either acquire kfuncs or the main kernel remain unmodified
-> > + * when being passed to helpers taking trusted args.
-> > + *
-> > + * Consider, for example, the following task tracepoint:
-> > + *
-> > + *	SEC("tp_btf/task_newtask")
-> > + *	int BPF_PROG(new_task_tp, struct task_struct *task, u64 clone_flags)
-> > + *	{
-> > + *		...
-> > + *	}
-> > + *
-> > + * And the following kfunc:
-> > + *
-> > + *	BTF_ID_FLAGS(func, bpf_task_acquire, KF_ACQUIRE | KF_RET_NULL | KF_TRUSTED_ARGS)
-> > + *
-> > + * All invocations to the kfunc must pass the unmodified, unwalked task:
-> > + *
-> > + *	bpf_task_acquire(task);		    // Allowed
-> > + *	bpf_task_acquire(task->last_wakee); // Rejected, walked task
-> > + *
-> > + * Users may also pass referenced tasks directly to the kfunc:
-> > + *
-> > + *	struct task_struct *acquired;
-> > + *
-> > + *	acquired = bpf_task_acquire(task);	// Allowed, same as above
-> > + *	bpf_task_acquire(acquired);		// Allowed
-> > + *	bpf_task_acquire(task);			// Allowed
-> > + *	bpf_task_acquire(acquired->last_wakee); // Rejected, walked task
-> > + *
-> > + * If users wish to only allow referenced objects to be passed to a kfunc, they
-> > + * may instead specify the KF_OWNED_ARGS flag.
-> > + */
-> > +#define KF_TRUSTED_ARGS (1 << 4) /* kfunc only takes trusted pointer arguments */
-> > +#define KF_SLEEPABLE    (1 << 5) /* kfunc may sleep */
-> > +#define KF_DESTRUCTIVE  (1 << 6) /* kfunc performs destructive actions */
-> > +/* Owned arguments are similar to trusted arguments, but are even more
-> > + * restrictive.  Owned arguments are arguments which are "owned" by the BPF
-> > + * program, meaning it has acquired a reference to the object via an acquire
-> > + * kfunc. Just as with trusted arguments, the verifier enforces that owned
-> > + * arguments have an unchanged offset when they're passed to kfuncs.
-> 
-> I don't think the kfunc writers will be able to use KF_OWNED_ARGS vs KF_TRUSTED_ARGS properly.
-> refcnt-ed or not is not a property that they should worry about.
+This patch enables support for live renaming of network interfaces
+initialized by netconsole.
 
-Ok, I think I agree with you that making a separate type as we did with
-struct nf_conn___init is a better solution. I'll drop this in v7. First
-though, we'll have to get aligned on PTR_WALKED vs. PTR_TRUSTED.
+This resolves an issue seen when netconsole is configured to boot as a
+built-in kernel module with a kernel boot argument. As stated in the
+kernel man page - As a built-in, netconsole initializes immediately
+after NIC cards and will bring up the specified interface as soon as
+possible. Consequently, the renaming of specified interfaces will fail
+and return EBUSY. This is because by default, the kernel disallows live
+renaming unless the device explicitly sets a priv_flags bit
+(IFF_LIVE_RENAME_OK), and renaming after a network interface is up
+returns EBUSY.
 
-> Let's evaluate this patch set without KF_OWNED_ARGS and bpf_ct_* are still KF_TRUSTED_ARGS
-> and the other side of the verifier is relaxed to accept non-refcnted PTR_TO_BTF_ID
-> into kfunc.
+The changes to the kernel are as of following:
 
-Sounds good, assuming Kumar agrees.
+- Addition of a iface_live_renaming boolean flag to the netpoll struct,
+used to enable/disable interface live renaming. False by default
+- Changes to check for the aforementioned flag in network and ethernet
+driver interface renaming code
+- Adds a new optional "*" parameter to the netconsole configuration string
+after interface device name that enables interface live renaming when
+included (e.g. "eth0*"). When this parameter is included,
+"iface_live_renaming" is set to true.
+---
+ Documentation/networking/netconsole.rst |  5 +++--
+ include/linux/netpoll.h                 |  3 +++
+ net/core/dev.c                          |  3 ++-
+ net/core/netpoll.c                      | 18 +++++++++++++++++-
+ net/ethernet/eth.c                      |  5 ++++-
+ 5 files changed, 29 insertions(+), 5 deletions(-)
 
-> What kind of bpf prog will be able to pass 'struct nf_conn___init *' into these bpf_ct_* ?
-> We've introduced nf_conn___init vs nf_conf specifically to express the relationship
-> between allocated nf_conn and other nf_conn-s via different types.
-> Why is this not enough?
+diff --git a/Documentation/networking/netconsole.rst b/Documentation/networking/netconsole.rst
+index 1f5c4a04027c..c1255a4d9c9b 100644
+--- a/Documentation/networking/netconsole.rst
++++ b/Documentation/networking/netconsole.rst
+@@ -34,20 +34,21 @@ Sender and receiver configuration:
+ It takes a string configuration parameter "netconsole" in the
+ following format::
+ 
+- netconsole=[+][src-port]@[src-ip]/[<dev>],[tgt-port]@<tgt-ip>/[tgt-macaddr]
++ netconsole=[+][src-port]@[src-ip]/[<dev>][*],[tgt-port]@<tgt-ip>/[tgt-macaddr]
+ 
+    where
+ 	+             if present, enable extended console support
+ 	src-port      source for UDP packets (defaults to 6665)
+ 	src-ip        source IP to use (interface address)
+ 	dev           network interface (eth0)
++	*             if present, allow runtime network interface renaming
+ 	tgt-port      port for logging agent (6666)
+ 	tgt-ip        IP address for logging agent
+ 	tgt-macaddr   ethernet MAC address for logging agent (broadcast)
+ 
+ Examples::
+ 
+- linux netconsole=4444@10.0.0.1/eth1,9353@10.0.0.2/12:34:56:78:9a:bc
++ linux netconsole=4444@10.0.0.1/eth1*,9353@10.0.0.2/12:34:56:78:9a:bc
+ 
+ or::
+ 
+diff --git a/include/linux/netpoll.h b/include/linux/netpoll.h
+index bd19c4b91e31..f2ebdabf0959 100644
+--- a/include/linux/netpoll.h
++++ b/include/linux/netpoll.h
+@@ -32,6 +32,7 @@ struct netpoll {
+ 	bool ipv6;
+ 	u16 local_port, remote_port;
+ 	u8 remote_mac[ETH_ALEN];
++	bool iface_live_renaming;
+ };
+ 
+ struct netpoll_info {
+@@ -51,9 +52,11 @@ struct netpoll_info {
+ void netpoll_poll_dev(struct net_device *dev);
+ void netpoll_poll_disable(struct net_device *dev);
+ void netpoll_poll_enable(struct net_device *dev);
++bool netpoll_live_renaming_enabled(struct net_device *dev);
+ #else
+ static inline void netpoll_poll_disable(struct net_device *dev) { return; }
+ static inline void netpoll_poll_enable(struct net_device *dev) { return; }
++static inline bool netpoll_live_renaming_enabled(struct net_device *dev) { return false; }
+ #endif
+ 
+ void netpoll_send_udp(struct netpoll *np, const char *msg, int len);
+diff --git a/net/core/dev.c b/net/core/dev.c
+index cfb68db040a4..67430bec1f33 100644
+--- a/net/core/dev.c
++++ b/net/core/dev.c
+@@ -1176,7 +1176,8 @@ int dev_change_name(struct net_device *dev, const char *newname)
+ 	 * directly.
+ 	 */
+ 	if (dev->flags & IFF_UP &&
+-	    likely(!(dev->priv_flags & IFF_LIVE_RENAME_OK)))
++	    likely(!(dev->priv_flags & IFF_LIVE_RENAME_OK) &&
++		   !netpoll_live_renaming_enabled(dev)))
+ 		return -EBUSY;
+ 
+ 	down_write(&devnet_rename_sem);
+diff --git a/net/core/netpoll.c b/net/core/netpoll.c
+index 9be762e1d042..fcea265290c3 100644
+--- a/net/core/netpoll.c
++++ b/net/core/netpoll.c
+@@ -224,6 +224,15 @@ void netpoll_poll_enable(struct net_device *dev)
+ }
+ EXPORT_SYMBOL(netpoll_poll_enable);
+ 
++bool netpoll_live_renaming_enabled(struct net_device *dev)
++{
++	if (dev->npinfo && dev->npinfo->netpoll->iface_live_renaming)
++		return true;
++
++	return false;
++}
++EXPORT_SYMBOL(netpoll_live_renaming_enabled);
++
+ static void refill_skbs(void)
+ {
+ 	struct sk_buff *skb;
+@@ -523,7 +532,7 @@ static int netpoll_parse_ip_addr(const char *str, union inet_addr *addr)
+ 
+ int netpoll_parse_options(struct netpoll *np, char *opt)
+ {
+-	char *cur=opt, *delim;
++	char *cur = opt, *delim, *asterisk;
+ 	int ipv6;
+ 	bool ipversion_set = false;
+ 
+@@ -556,6 +565,13 @@ int netpoll_parse_options(struct netpoll *np, char *opt)
+ 		if ((delim = strchr(cur, ',')) == NULL)
+ 			goto parse_failed;
+ 		*delim = 0;
++
++		asterisk = strchr(cur, '*');
++		if (asterisk) {
++			np->iface_live_renaming = true;
++			*asterisk = 0;
++		}
++
+ 		strscpy(np->dev_name, cur, sizeof(np->dev_name));
+ 		cur = delim;
+ 	}
+diff --git a/net/ethernet/eth.c b/net/ethernet/eth.c
+index e02daa74e833..bb341acfcf05 100644
+--- a/net/ethernet/eth.c
++++ b/net/ethernet/eth.c
+@@ -62,6 +62,7 @@
+ #include <net/gro.h>
+ #include <linux/uaccess.h>
+ #include <net/pkt_sched.h>
++#include <linux/netpoll.h>
+ 
+ /**
+  * eth_header - create the Ethernet header
+@@ -288,8 +289,10 @@ int eth_prepare_mac_addr_change(struct net_device *dev, void *p)
+ {
+ 	struct sockaddr *addr = p;
+ 
+-	if (!(dev->priv_flags & IFF_LIVE_ADDR_CHANGE) && netif_running(dev))
++	if (!(dev->priv_flags & IFF_LIVE_ADDR_CHANGE) && netif_running(dev) &&
++	    !netpoll_live_renaming_enabled(dev))
+ 		return -EBUSY;
++
+ 	if (!is_valid_ether_addr(addr->sa_data))
+ 		return -EADDRNOTAVAIL;
+ 	return 0;
+-- 
+2.38.1
 
-Kumar should have more context here (he originally suggested this in
-[0]), but AFAICT you're correct that this should be sufficient. I added
-a negative test case that correctly fails if a BPF program tries to call
-these helpers with a struct nf_conn* rather than a struct
-nf_conn__init*.
-
-[0]: https://lore.kernel.org/all/CAP01T77PTK+bD2mBrxJShKNPhEypT2+nSHcr3=uuJbrghv_wFg@mail.gmail.com/
-
-> I prefer to keep only one flag KF_TRUSTED_ARGS that kfunc-s need to use
-> and eventually make all kfuncs KF_TRUSTED_ARGS by default and remove that flag.
-
-Yes, KF_TRUSTED_ARGS really should be the default. As Kumar describes in
-[1], we'll have to figure out how to avoid trace progs with unsafe args
-from calling these kfuncs. Maybe the right thing to do is allow-listing
-rather than deny-listing, as you pointed out.
-
-[1]: https://lore.kernel.org/bpf/CAP01T77goGbF3GVithEuJ7yMQR9PxHNA9GXFODq_nfA66G=F9g@mail.gmail.com/
-
-> Separately...
-> I think there was a plan to strengthen PTR_TO_BTF_ID and apply PTR_UNTRUSTED.
-
-That would be nice if we could do it. I assume that the issue is we're
-breaking backwards compat if we do, so I'd be curious to hear what the
-plan was if you're aware. The only plan that I've seen so far is what
-Kumar spelled out above in [1] above.
-
-> This PTR_WALKED looks like new thing.
-> If we really need it PTR_TO_BTF_ID should be allowlisted instead of denylisted
-> as PTR_WALKED is doing.
-> I mean we can introduce PTR_TRUSTED and add this flag to return value
-> of bpf_get_current_task_btf() and arguments of tracepoints.
-> As soon as any ptr walking is done we can clear PTR_TRUSTED to keep
-> backward compat behavior of PTR_TO_BTF_ID.
-> PTR_WALKED is sort-of doing the same, but not conservative enough.
-> Too many things produce PTR_TO_BTF_ID. Auditing it all is challenging.
-
-I very much prefer the idea of allowlisting instead of denylisting,
-though I wish we'd taken that approach from the start rather than going
-with PTR_UNTRUSTED. It feels wrong to have both PTR_UNTRUSTED and
-PTR_TRUSTED as type modifiers, as the absence of PTR_UNTRUSTED should
-(and currently does) imply PTR_TRUSTED.
-
-If we're going to go with an allowlist approach, then I think we should
-just get rid of PTR_UNTRUSTED altogether. Is that what you're
-suggesting? Otherwise, if we don't get rid of PTR_UNTRUSTED, then
-PTR_WALKED seems like a more natural type modifier addition.
-
-> I might have missed earlier discussions on this patch set. Apologies if so.
-
-Just FYI, the main initial thread where this was all discussed was [2].
-
-[2]: https://lore.kernel.org/all/CAP01T76OR3J_P8YMq4ZgKHBpuZyA0zgsPy+tq9htbX=j6AVyOg@mail.gmail.com/
