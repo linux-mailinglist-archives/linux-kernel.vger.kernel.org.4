@@ -2,112 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E96A1614AB2
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:30:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCE73614AB8
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 13:32:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbiKAMaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 08:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44376 "EHLO
+        id S229988AbiKAMcY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 08:32:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230260AbiKAMaM (ORCPT
+        with ESMTP id S229516AbiKAMcV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 08:30:12 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C2E6364
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 05:30:11 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id 13so36639808ejn.3
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 05:30:11 -0700 (PDT)
+        Tue, 1 Nov 2022 08:32:21 -0400
+Received: from mail-wr1-x42b.google.com (mail-wr1-x42b.google.com [IPv6:2a00:1450:4864:20::42b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9B5F17E10;
+        Tue,  1 Nov 2022 05:32:20 -0700 (PDT)
+Received: by mail-wr1-x42b.google.com with SMTP id a14so19904235wru.5;
+        Tue, 01 Nov 2022 05:32:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=MMdJJP7qwJgB+YOZJZoHob5+MxmSHtL0fZ6b/8D51/A=;
-        b=HRxnWtZ78Fle+GMZ/BglbxUAgUR/pOZoMyuTHxjejOFyG7ByqwcarnPhV0NQaqXYSl
-         khrNMjh7fNsKZEwPrAjlzO8uNrMDO6NCJBJs9v/AgjRyb2rqst7VjvZtYzs57oN1upEl
-         bH9HpfFj14uxOXfaah/iYuqn0p9h7C7/IfCCxWckV4oDaDXO/1URXqis5D+lWNn7+4TO
-         pGHNOp7nJ48TWywRMqGUIb/UiMz60UzdR8+BkI+tDbtu8TmhJGK2AT/RK6lANdPYWU6V
-         c5s8RtO/mLCsaW2Z0HcA7lDVYefF8rv6kvzBbCPq9JJdoyW1R2PMgIW1GDeoNxFehqo7
-         GSKw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=asoWekP0S6I4rKhiYwy8FgHvcv/s8ZlTBqdD48kgwrs=;
+        b=SV/rrSTjwUPVGv5ixCHdcN+wfHbDMCSfpgFpNcYO6UyADssLZD1Ro4bQWQwaE6iSFF
+         6pxN5PxMmGGuUDbQV1lkcT+bsDnQX8LI+YSbbrAuehqYvlzy4dfCxQJj8L3ZRsqBeqrn
+         eMNUNoaB16qd+hLTF/yRzieHKp6Zfe2MkfJJoLk91V1vnCzsj+DtdGsGGfBEXOMYkycH
+         BPK8J+X4ZgFkkS+MM8PP1UKzBKJcvGGdcT7sYdM1mRjTFE4zuSswJQXqiKCxV6I1uYhS
+         EpxltdmTLZtbO6Je/PIR9/TLFUPH6fFkvW8LIUgoz625eJdgdUeD2APgdv+3HPhPrs1G
+         nm1Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MMdJJP7qwJgB+YOZJZoHob5+MxmSHtL0fZ6b/8D51/A=;
-        b=hTyZjlcGvqMMDA3KkPpaQL6wOdcPpCzGiHSrysGy9KPen2UJftOlVsNjQGozEhnO2x
-         dBVcH2jm7OUD6ebxnaOc/cGUjeYAokiUO1/h6bGtM7B/guHw9VG17qAE/Ae260oxWP/I
-         9HOmjXBH7wIv42o/h1zuQUcGFvFZzYe1uT9FQkTJj76PMTTRSV0rz/jjgSGTl9w3in7r
-         FWu6oOakCNhIDbz95LAkHoMPG/i9P6FMsaIYWBxcKkUweh0RCotmzNVGnkfNWysVIuO4
-         g6k7cyDfhpHIqOJlrJDKGPMfSwWK6UPFy3eW/UBMEsWKSrXPKGQKo8Wu4bUwF+Z5Q9q7
-         zA9w==
-X-Gm-Message-State: ACrzQf1u7x49aJRkBrGB3vwtQ4WsXb3eLsaGAD46z77exee4nu7cB1NN
-        H3Agf4COb254Ml21bTvKiRzIlA==
-X-Google-Smtp-Source: AMsMyM43Au0M4n/HFiW/cXmrltu4nx6ymG910hAE86Cu/h8Mh2B6UpOdnv1cioo6CGtmr8+mmacM1Q==
-X-Received: by 2002:a17:907:9d03:b0:7ad:e310:ea8 with SMTP id kt3-20020a1709079d0300b007ade3100ea8mr6546291ejc.400.1667305810129;
-        Tue, 01 Nov 2022 05:30:10 -0700 (PDT)
-Received: from localhost (cst2-173-61.cust.vodafone.cz. [31.30.173.61])
-        by smtp.gmail.com with ESMTPSA id bm6-20020a0564020b0600b00461a6997c5dsm4456757edb.83.2022.11.01.05.30.09
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=asoWekP0S6I4rKhiYwy8FgHvcv/s8ZlTBqdD48kgwrs=;
+        b=yEBLcNrimGbUO9j8EDKMQ3ZAVIq06BnYxGmgo7fjuKLTNmbwfq3ubVZCtrDJ9kBHi9
+         DQwi7WDVMu+vbShpPlvx/uYjAdDM3bur719WySOrbJVsM1JT8u20tcB2oduu0FE8ybcB
+         Pi0CC5JdfW9NNwIkS8H/z424z5Vo1b7clywVj3YFp85I8TjS6kO9sf1mEL+4w2G476EG
+         Iaenmzkc6DkI1uJ5trE9psPJ8ZdBdIy30OXDn+tZqBwrtdrloZupjVIZgSsCg3Ikj54i
+         nqtEDtweCQaAleVVt9HczOR8RmOifHCjTCFF9i4a8ghvErP4PkkptQC3qU8ffKMDwb9W
+         0FQw==
+X-Gm-Message-State: ACrzQf2TEZWQWa47ZSS1g34P7szug4CzQPjB3fM+TeXeS/ujRSfXvdrD
+        XOvWUNBiQMPMzc/tsp6s10Q=
+X-Google-Smtp-Source: AMsMyM7yIX+qGuPW1i/7qFvjN9goSNuVqX60VD/ARdYElANN5QYXIPnACp6wyWxRCeRKJIQuEwpSug==
+X-Received: by 2002:a05:6000:1887:b0:236:7b1a:b14c with SMTP id a7-20020a056000188700b002367b1ab14cmr11561165wri.173.1667305939174;
+        Tue, 01 Nov 2022 05:32:19 -0700 (PDT)
+Received: from kista.localdomain (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id f18-20020a1cc912000000b003cf5ec79bf9sm10404176wmb.40.2022.11.01.05.32.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 05:30:09 -0700 (PDT)
-Date:   Tue, 1 Nov 2022 13:30:08 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Atish Patra <atishp@rivosinc.com>
-Cc:     linux-kernel@vger.kernel.org, Albert Ou <aou@eecs.berkeley.edu>,
-        Anup Patel <anup@brainfault.org>,
-        Atish Patra <atishp@atishpatra.org>,
-        Guo Ren <guoren@kernel.org>, kvm-riscv@lists.infradead.org,
-        kvm@vger.kernel.org, linux-riscv@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Will Deacon <will@kernel.org>
-Subject: Re: [RFC  1/9] RISC-V: Define a helper function to probe number of
- hardware counters
-Message-ID: <20221101123008.e3bwen6f2yxi3whi@kamzik>
-References: <20220718170205.2972215-1-atishp@rivosinc.com>
- <20220718170205.2972215-2-atishp@rivosinc.com>
+        Tue, 01 Nov 2022 05:32:18 -0700 (PDT)
+From:   Jernej Skrabec <jernej.skrabec@gmail.com>
+To:     mchehab@kernel.org, hverkuil-cisco@xs4all.nl
+Cc:     robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        wens@csie.org, samuel@sholland.org, linux-media@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Subject: [PATCH 0/3] media: sunxi: Add H6 deinterlace driver
+Date:   Tue,  1 Nov 2022 13:31:58 +0100
+Message-Id: <20221101123201.3021129-1-jernej.skrabec@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20220718170205.2972215-2-atishp@rivosinc.com>
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Jul 18, 2022 at 10:01:57AM -0700, Atish Patra wrote:
-> KVM module needs to know how many hardware counters the platform supports.
-> Otherwise, it will not be able to show optimal value of virtual
-                                        ^ the
-> counters to the guest.
-> 
-> Signed-off-by: Atish Patra <atishp@rivosinc.com>
-> ---
->  drivers/perf/riscv_pmu_sbi.c   | 23 +++++++++++++++++------
->  include/linux/perf/riscv_pmu.h |  4 ++++
->  2 files changed, 21 insertions(+), 6 deletions(-)
-> 
-> diff --git a/drivers/perf/riscv_pmu_sbi.c b/drivers/perf/riscv_pmu_sbi.c
-> index 24124546844c..1723af68ffa1 100644
-> --- a/drivers/perf/riscv_pmu_sbi.c
-> +++ b/drivers/perf/riscv_pmu_sbi.c
-> @@ -27,6 +27,7 @@
->   */
->  static union sbi_pmu_ctr_info *pmu_ctr_list;
->  static unsigned int riscv_pmu_irq;
-> +static struct riscv_pmu *rvpmu;
+This series implements driver for H6 deinterlace core, which is
+newer version of core, covered by sun8i-di (v2.3). Contrary to
+older one, it doesn't support scaling, but it supports iommu,
+has additional motion compensated deinterlacing algorithm and
+supports different pixel formats.
 
-Do we really need rvpmu? From a quick scan of the series it's only used
-for num_hw_counters, which has to be added to struct riscv_pmu, and
-num_counters. How about instead creating a static global for num_counters
-and then getting num_hw_counters by iterating pmu_ctr_list. If we want
-riscv_pmu_sbi_get_num_hw_ctrs() to be faster, then we can cache the value
-in a static variable in the function.
+v4l2-compliance 1.23.0-4961, 64 bits, 64-bit time_t
+v4l2-compliance SHA: f86484524f32 2022-10-21 10:08:58
 
-Thanks,
-drew
+Compliance test for sun50i-di device /dev/video0:
+
+Driver Info:
+        Driver name      : sun50i-di
+        Card type        : sun50i-di
+        Bus info         : platform:sun50i-di
+        Driver version   : 6.1.0
+        Capabilities     : 0x84208000
+                Video Memory-to-Memory
+                Streaming
+                Extended Pix Format
+                Device Capabilities
+        Device Caps      : 0x04208000
+                Video Memory-to-Memory
+                Streaming
+                Extended Pix Format
+
+Required ioctls:
+        test VIDIOC_QUERYCAP: OK
+        test invalid ioctls: OK
+
+Allow for multiple opens:
+        test second /dev/video0 open: OK
+        test VIDIOC_QUERYCAP: OK
+        test VIDIOC_G/S_PRIORITY: OK
+        test for unlimited opens: OK
+
+Debug ioctls:
+        test VIDIOC_DBG_G/S_REGISTER: OK (Not Supported)
+        test VIDIOC_LOG_STATUS: OK (Not Supported)
+
+Input ioctls:
+        test VIDIOC_G/S_TUNER/ENUM_FREQ_BANDS: OK (Not Supported)
+        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+        test VIDIOC_S_HW_FREQ_SEEK: OK (Not Supported)
+        test VIDIOC_ENUMAUDIO: OK (Not Supported)
+        test VIDIOC_G/S/ENUMINPUT: OK (Not Supported)
+        test VIDIOC_G/S_AUDIO: OK (Not Supported)
+        Inputs: 0 Audio Inputs: 0 Tuners: 0
+
+Output ioctls:
+        test VIDIOC_G/S_MODULATOR: OK (Not Supported)
+        test VIDIOC_G/S_FREQUENCY: OK (Not Supported)
+        test VIDIOC_ENUMAUDOUT: OK (Not Supported)
+        test VIDIOC_G/S/ENUMOUTPUT: OK (Not Supported)
+        test VIDIOC_G/S_AUDOUT: OK (Not Supported)
+        Outputs: 0 Audio Outputs: 0 Modulators: 0
+
+Input/Output configuration ioctls:
+        test VIDIOC_ENUM/G/S/QUERY_STD: OK (Not Supported)
+        test VIDIOC_ENUM/G/S/QUERY_DV_TIMINGS: OK (Not Supported)
+        test VIDIOC_DV_TIMINGS_CAP: OK (Not Supported)
+        test VIDIOC_G/S_EDID: OK (Not Supported)
+
+Control ioctls:
+        test VIDIOC_QUERY_EXT_CTRL/QUERYMENU: OK (Not Supported)
+        test VIDIOC_QUERYCTRL: OK (Not Supported)
+        test VIDIOC_G/S_CTRL: OK (Not Supported)
+        test VIDIOC_G/S/TRY_EXT_CTRLS: OK (Not Supported)
+        test VIDIOC_(UN)SUBSCRIBE_EVENT/DQEVENT: OK (Not Supported)
+        test VIDIOC_G/S_JPEGCOMP: OK (Not Supported)
+        Standard Controls: 0 Private Controls: 0
+
+Format ioctls:
+        test VIDIOC_ENUM_FMT/FRAMESIZES/FRAMEINTERVALS: OK
+        test VIDIOC_G/S_PARM: OK (Not Supported)
+        test VIDIOC_G_FBUF: OK (Not Supported)
+        test VIDIOC_G_FMT: OK
+        test VIDIOC_TRY_FMT: OK
+        test VIDIOC_S_FMT: OK
+        test VIDIOC_G_SLICED_VBI_CAP: OK (Not Supported)
+        test Cropping: OK (Not Supported)
+        test Composing: OK (Not Supported)
+        test Scaling: OK (Not Supported)
+
+Codec ioctls:
+        test VIDIOC_(TRY_)ENCODER_CMD: OK (Not Supported)
+        test VIDIOC_G_ENC_INDEX: OK (Not Supported)
+        test VIDIOC_(TRY_)DECODER_CMD: OK (Not Supported)
+
+Buffer ioctls:
+        test VIDIOC_REQBUFS/CREATE_BUFS/QUERYBUF: OK
+        test VIDIOC_EXPBUF: OK
+        test Requests: OK (Not Supported)
+
+Total for sun50i-di device /dev/video0: 45, Succeeded: 45, Failed: 0, Warnings: 0
+
+Best regards,
+Jernej
+
+Jernej Skrabec (3):
+  media: dt-bindings: media: Add Allwinner H6 Deinterlace binding
+  media: sunxi: Add H6 deinterlace driver
+  arm64: dts: allwinner: h6: Add deinterlace node
+
+ .../allwinner,sun50i-h6-deinterlace.yaml      |   74 ++
+ MAINTAINERS                                   |    4 +-
+ arch/arm64/boot/dts/allwinner/sun50i-h6.dtsi  |   12 +
+ drivers/media/platform/sunxi/Kconfig          |    1 +
+ drivers/media/platform/sunxi/Makefile         |    1 +
+ .../media/platform/sunxi/sun50i-di/Kconfig    |   15 +
+ .../media/platform/sunxi/sun50i-di/Makefile   |    2 +
+ .../platform/sunxi/sun50i-di/sun50i-di.c      | 1142 +++++++++++++++++
+ .../platform/sunxi/sun50i-di/sun50i-di.h      |  175 +++
+ 9 files changed, 1425 insertions(+), 1 deletion(-)
+ create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun50i-h6-deinterlace.yaml
+ create mode 100644 drivers/media/platform/sunxi/sun50i-di/Kconfig
+ create mode 100644 drivers/media/platform/sunxi/sun50i-di/Makefile
+ create mode 100644 drivers/media/platform/sunxi/sun50i-di/sun50i-di.c
+ create mode 100644 drivers/media/platform/sunxi/sun50i-di/sun50i-di.h
+
+--
+2.38.1
+
