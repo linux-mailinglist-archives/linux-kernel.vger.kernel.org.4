@@ -2,187 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D4BC4614F9F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 17:45:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6165614FA3
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 17:46:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230071AbiKAQpm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 12:45:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49426 "EHLO
+        id S229889AbiKAQqm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 12:46:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49786 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229767AbiKAQpi (ORCPT
+        with ESMTP id S229767AbiKAQqj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 12:45:38 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D301112A95;
-        Tue,  1 Nov 2022 09:45:37 -0700 (PDT)
-Received: from W11-BEAU-MD.localdomain (unknown [76.135.50.127])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 68D12205D3B7;
-        Tue,  1 Nov 2022 09:45:37 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 68D12205D3B7
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1667321137;
-        bh=kZWPYfnjDKLxLTWrdqr9Ds1M/AA0Z2lq4cu8QG2GB3o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RU24pTU2zsUN6TCS6VUIxTURDOQkq00rL9zClZNHLplDmNxxirt0yEtZrMevsGfsg
-         YbO1IUWOtmnHOptL1Edurn34xNYI6DV4K5l6vKNobd4y+ptGcdTPtqw93+3Yw1iyI9
-         RggyvSY1IkAfVjOBCjWZ6PoBgkj951WthMs+0y64=
-Date:   Tue, 1 Nov 2022 09:45:30 -0700
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     Masami Hiramatsu <mhiramat@kernel.org>
-Cc:     rostedt@goodmis.org, mathieu.desnoyers@efficios.com,
-        dcook@linux.microsoft.com, alanau@linux.microsoft.com,
-        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 1/2] tracing/user_events: Use remote writes for event
- enablement
-Message-ID: <20221101164530.GA69@W11-BEAU-MD.localdomain>
-References: <20221027224011.2075-1-beaub@linux.microsoft.com>
- <20221027224011.2075-2-beaub@linux.microsoft.com>
- <20221031234703.e275650899728e64cd3fb6c3@kernel.org>
- <20221031164603.GB69@W11-BEAU-MD.localdomain>
- <20221101085501.443f2ac77bfb0803b91517c2@kernel.org>
+        Tue, 1 Nov 2022 12:46:39 -0400
+Received: from mail-pj1-x1036.google.com (mail-pj1-x1036.google.com [IPv6:2607:f8b0:4864:20::1036])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DD49712A95;
+        Tue,  1 Nov 2022 09:46:37 -0700 (PDT)
+Received: by mail-pj1-x1036.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso13375477pjc.5;
+        Tue, 01 Nov 2022 09:46:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8NNV/E5PvWzmIXNGvDSWT/6GgvR8jci+9gjd8ctauYo=;
+        b=LEL4GYFUmS8dUOAT/5nK1/KYd+ZwtOmK9IedlMya1qlOZRx+FuuuuA/CtLRS+eCLRz
+         Nsz6Dr/k/g6GAPFyavmARI1wuovp24HHeB6HGw0lS3IQv+qRkvB0JZ1gKMbi/FLWoeYh
+         H2hrCDdMs7KYEipsyf2LL7i2N5mYxjOCRDArSv1s0QSKfzMKIORCDRuOqdmBpwsohacW
+         6QuUicBqOf+POhLdqmHX7PXtL0vRcyB4s4VBHQpx3CLs1uS4Aad6MGQMTANTDZpWbGKo
+         YyQDpVTaEkJBqnArwECrk8uywmNczFnR0FTUAaZWfA8KK93xKlpBmR2J0DO1TKHyVw0i
+         qwug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8NNV/E5PvWzmIXNGvDSWT/6GgvR8jci+9gjd8ctauYo=;
+        b=XbGmplaJ1I/m10NJJcKSkxbtUGeBcdIwhBOKutqwaMyMsQFi5CBBBcvZscFsW+ffGK
+         Q+tM79u8utZ8kTZdDSZbfBfSdrvAhiuU6uWtC5fVAPP9744hrmbWj+0bImT+rYGd8+T+
+         /SriZiKZ7su6NzVby42YH9GFZyeY8m/1QXP7Xs4p3buxl2tCyhgr7pJpqT2jMnn/7PdF
+         ftDdt40eqbQ11w8C6BzVjVGJ9Ga6KkdnEESvyVgJY+9ZyYFu7k2H0SyhMCK8kSDsDhOK
+         7PcLnXM40INTFl+YLjsZ8TvzPVCepgxJ9wzeHe34OJrk0YFPRsUH2jPyC9CNs/2mucXY
+         GxcA==
+X-Gm-Message-State: ACrzQf2QTJ36zMvC8dkXEsULgwHt5wvP+Aeh+zuodziSRvuKJDmnqyCW
+        zZ6Z7vZW19t+l78hQ8dmUmaEE7RPKLC71A==
+X-Google-Smtp-Source: AMsMyM7gRgdNVhhxA9mKmp7nYeepdqg6rs0kbUI0glNDKNRPfKqztAuA7caGIiSRhU54fNwxObiiuQ==
+X-Received: by 2002:a17:902:d4ce:b0:187:17bd:44d7 with SMTP id o14-20020a170902d4ce00b0018717bd44d7mr14164487plg.84.1667321197086;
+        Tue, 01 Nov 2022 09:46:37 -0700 (PDT)
+Received: from localhost (2603-800c-1a02-1bae-e24f-43ff-fee6-449f.res6.spectrum.com. [2603:800c:1a02:1bae:e24f:43ff:fee6:449f])
+        by smtp.gmail.com with ESMTPSA id n15-20020aa7984f000000b0055f209690c0sm6748817pfq.50.2022.11.01.09.46.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 09:46:36 -0700 (PDT)
+Sender: Tejun Heo <htejun@gmail.com>
+Date:   Tue, 1 Nov 2022 06:46:35 -1000
+From:   Tejun Heo <tj@kernel.org>
+To:     Jiri Slaby <jirislaby@kernel.org>
+Cc:     Christoph Hellwig <hch@infradead.org>,
+        linux-kernel@vger.kernel.org, Martin Liska <mliska@suse.cz>,
+        Josef Bacik <josef@toxicpanda.com>,
+        Jens Axboe <axboe@kernel.dk>, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org
+Subject: Re: [PATCH] block/blk-iocost (gcc13): cast enum members to int in
+ prints
+Message-ID: <Y2FNa4bGhJoevRKT@slm.duckdns.org>
+References: <20221031114520.10518-1-jirislaby@kernel.org>
+ <Y1++fLJXkeZgtXR2@infradead.org>
+ <Y2AMcSPAJpj6obSA@slm.duckdns.org>
+ <d833ad15-f458-d43d-cab7-de62ff54a939@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221101085501.443f2ac77bfb0803b91517c2@kernel.org>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <d833ad15-f458-d43d-cab7-de62ff54a939@kernel.org>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 08:55:01AM +0900, Masami Hiramatsu wrote:
-> On Mon, 31 Oct 2022 09:46:03 -0700
-> Beau Belgrave <beaub@linux.microsoft.com> wrote:
-> 
-> > On Mon, Oct 31, 2022 at 11:47:03PM +0900, Masami Hiramatsu wrote:
-> > > Hi,
-> > > 
-> > > I have some comments.
-> > > 
-> > > On Thu, 27 Oct 2022 15:40:10 -0700
-> > > Beau Belgrave <beaub@linux.microsoft.com> wrote:
-> > > 
-> > > [...]
-> > > > @@ -1570,11 +1610,12 @@ static long user_reg_get(struct user_reg __user *ureg, struct user_reg *kreg)
-> > > >   * Registers a user_event on behalf of a user process.
-> > > >   */
-> > > >  static long user_events_ioctl_reg(struct user_event_file_info *info,
-> > > > -				  unsigned long uarg)
-> > > > +				  struct file *file, unsigned long uarg)
-> > > >  {
-> > > >  	struct user_reg __user *ureg = (struct user_reg __user *)uarg;
-> > > >  	struct user_reg reg;
-> > > >  	struct user_event *user;
-> > > > +	struct user_event_enabler *enabler;
-> > > >  	char *name;
-> > > >  	long ret;
-> > > >  
-> > > > @@ -1607,8 +1648,12 @@ static long user_events_ioctl_reg(struct user_event_file_info *info,
-> > > >  	if (ret < 0)
-> > > >  		return ret;
-> > > >  
-> > > > +	enabler = user_event_enabler_create(file, &reg, user);
-> > > > +
-> > > > +	if (!enabler)
-> > > 
-> > > Shouldn't we free the user_event if needed here?
-> > > (I found the similar memory leak pattern in the above failure case
-> > >  of the user_events_ref_add().)
-> > > 
-> > 
-> > user_events are shared across the entire group. They cannot be cleaned
-> > up until all references are gone. This is true both in this case and the
-> > in the user_events_ref_add() case.
-> > 
-> > The pattern is to register events in the group's hashtable, then add
-> > them to the local file ref array that is RCU protected. If the file ref
-> > cannot be allocated, etc. the refcount on user is decremented. If we
-> > cannot create an enabler, the refcount is still held until file release.
-> 
-> OK, when the ioctl returns, there should be 3 cases;
-> 
-> - Return success, a new(existing) user_event added.
-> - Return error, no new user_event added.
-> - Return error, a new user_event added but enabler is not initialized.
-> 
-> And in the last case, the new user_event will be released when user
-> closes the file. Could you comment it here?
-> 
+Hello,
 
-Sure thing, I'll add it.
-
-> > 
-> > If the event has already been added to the local file ref array, it is
-> > returned to prevent another reference.
+On Tue, Nov 01, 2022 at 06:46:56AM +0100, Jiri Slaby wrote:
+> Yes. The real problem is that using anything else then an INT_MIN <= x <=
+> INT_MAX _constant_ in an enum is undefined in ANSI C < 2x (in particular, 1
+> << x is undefined too). gcc manual defines unsigned int on the top of that
+> as defined too (so this holds for our -std=g*).
 > 
-> I'm not sure this point. Did you mean returning an error to prevent
-> registering the same event again?
+> > I suppose the most reasonable thing to do here is just splitting them into
+> > separate enum definitions. Does anyone know how this behavior change came to
+> > be?
 > 
+> C2x which introduces un/signed long enums. See the bug I linked in the
+> commit log:
+> https://gcc.gnu.org/bugzilla/show_bug.cgi?id=36113
 
-If a process uses the same fd and registers the same event multiple
-times, then only 1 index is returned to the caller. If someone either
-purposely or accidentally does this, the appropriate index will be
-returned and we won't just keep allocating user_event objects.
+I see. So, it was an extension but the new standard is defined differently
+and we're gonna end up with that behavior.
 
-However, in a threaded application, there may be situations where thread
-A registers event E, and thread B registers event E as well. However,
-they may pass different enable address locations. In this case you will
-get 2 enablers for the single event. Right now the code does this all
-the time, it does not do it only if the enable address differs.
+> The change is also turned on in < C2x on purpose. AIUI, unless there is too
+> much breakage. So we'd need to sort it out in (rather distant) future anyway
+> (when we come up to -std=g2x).
 
-I'm not sure how common this scenario is, but I think I should likely
-check if the address is different or not before creating another enabler
-in this case.
+The part that the new behavior applying to <C2x feels like an odd decision.
+I'm having a hard time seeing the upsides in doing so but maybe that's just
+me not knowing the area well enough.
 
-Thoughts?
-
+> > Do we know whether clang is gonna be changed the same way?
 > 
-> > 
-> > > > +		return -ENOMEM;
-> > > > +
-> > > >  	put_user((u32)ret, &ureg->write_index);
-> > > > -	put_user(user->index, &ureg->status_bit);
-> > > >  
-> > > >  	return 0;
-> > > >  }
-> > > [...]
-> > > > @@ -1849,7 +1863,6 @@ static int user_status_open(struct inode *node, struct file *file)
-> > > >  
-> > > >  static const struct file_operations user_status_fops = {
-> > > >  	.open = user_status_open,
-> > > > -	.mmap = user_status_mmap,
-> > > 
-> > > So, if this drops the mmap operation, can we drop the writable flag from
-> > > the status tracefs file?
-> > > 
-> > 
-> > Good catch, yes I'll remove this.
-> 
-> Thanks!
-> 
-> > 
-> > > static int create_user_tracefs(void)
-> > > {
-> > > [...]
-> > >         /* mmap with MAP_SHARED requires writable fd */
-> > >         emmap = tracefs_create_file("user_events_status", TRACE_MODE_WRITE,
-> > >                                     NULL, NULL, &user_status_fops);
-> > > 
-> > > Thank you,
-> > > 
-> > > -- 
-> > > Masami Hiramatsu (Google) <mhiramat@kernel.org>
-> > 
-> > Thanks,
-> > -Beau
-> 
-> 
-> -- 
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> In C2x, Likely. In < C2x, dunno what'd be the default.
 
-Thanks,
--Beau
+It looks like we can do one of the following two:
+
+* If gcc actually changes the behavior for <c2x, split the enums according
+  to their sizes. This feels rather silly but I can't think of a better way
+  to cater to divergent compiler behaviors.
+
+* If gcc doesn't change the behavior for <c2x, there's nothing to do for the
+  time being. Later when we switch to -std=g2x, we can just change the
+  format strings to use the now larger types.
+
+Does the above make sense?
+
+Thanks.
+
+-- 
+tejun
