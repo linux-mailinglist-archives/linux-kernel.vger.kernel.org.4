@@ -2,123 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 91F7361468F
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 10:25:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5336614693
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 10:25:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230060AbiKAJZA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 05:25:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34964 "EHLO
+        id S230048AbiKAJZc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 05:25:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35248 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229475AbiKAJY5 (ORCPT
+        with ESMTP id S229589AbiKAJZ3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 05:24:57 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B0DB1209B;
-        Tue,  1 Nov 2022 02:24:55 -0700 (PDT)
-Received: from canpemm500006.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N1l370vNRzHvWF;
-        Tue,  1 Nov 2022 17:24:35 +0800 (CST)
-Received: from [10.67.110.83] (10.67.110.83) by canpemm500006.china.huawei.com
- (7.192.105.130) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Tue, 1 Nov
- 2022 17:24:52 +0800
-Subject: Re: [PATCH] squashfs: fix null-ptr-deref in squashfs_fill_super
-To:     Baokun Li <libaokun1@huawei.com>, <linux-kernel@vger.kernel.org>
-CC:     <phillip@squashfs.org.uk>, <akpm@linux-foundation.org>,
-        <linux-fsdevel@vger.kernel.org>, <yi.zhang@huawei.com>,
-        <yukuai3@huawei.com>
-References: <20221101073343.3961562-1-libaokun1@huawei.com>
-From:   Xiaoming Ni <nixiaoming@huawei.com>
-Message-ID: <97e67924-3394-5135-64a1-b205824d0dc3@huawei.com>
-Date:   Tue, 1 Nov 2022 17:24:52 +0800
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:78.0) Gecko/20100101
- Thunderbird/78.0.1
+        Tue, 1 Nov 2022 05:25:29 -0400
+Received: from out162-62-57-87.mail.qq.com (out162-62-57-87.mail.qq.com [162.62.57.87])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C043E1209B
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 02:25:27 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
+        s=s201512; t=1667294719;
+        bh=Cekqkql9v7On2C1zdmpgOoDkbQP/R/pNGmTtgQ5uif0=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References;
+        b=ujI4rT6d0PNFJ+XrghJfglqsrvJfhI31XfJKbrdRm3jPtkMCwPNAHXZEu3B3Y1mPq
+         0R0pLqaei45kfHieyKrqV6tw9oeqO6AShYS9d5kUcvuAx4Y2ITz14ZBvvqd+l5OLB0
+         ImI36YyKfP/uhLXfBIOur2J/V/Y9qlBMn0iSaM4I=
+Received: from localhost.localdomain ([39.156.73.13])
+        by newxmesmtplogicsvrszb9-0.qq.com (NewEsmtp) with SMTP
+        id 64D19628; Tue, 01 Nov 2022 17:25:13 +0800
+X-QQ-mid: xmsmtpt1667294713txcwf9uwb
+Message-ID: <tencent_5523542A5E3F46AD119B0C0A8588B27E2E09@qq.com>
+X-QQ-XMAILINFO: MR/iVh5QLeiek3W8slCJTZFHrgnJETeGs8BX0f9qVDeX7DqIu+xrAEOO5FK82P
+         7ujuFcOpLFVn/h844lF1OpEV6TRAFPWm56qRHWGZvccHYRKgN4bIN6UNkJmPt3sxZRmCAV7p2r05
+         5wa9g9yPzEEVl0M3/W9cBCN1kHM1e6YeHcvPlW0p+qvLCYiSMPnfhBh2YNL+JIFsnoEDTzVUCRp4
+         s5NkeX0kINWQG85UtaaEWuKN9BWtvr2h+EY70pVqb1fmMJVcBfTH19VqwrJLrasr8QuJgVqCUooj
+         jXDsD1pCAR7FWtmnDJbCuVjAOHFiQSExFovBCVWz/bH4DazIhBc8j6m2TyuyLbjzHN8Fgof2JE2m
+         Y7QCGZdkdrxdm9jxtfn0k7dSd19PEmBFFah/bSzl8kLZiB2jnO4yuovj42IDOk82lNJJx7v/noNQ
+         i/XPcJ/FjbHEryveNrdSQb26T07BqDO9jrLPzxN1gxHjN6h+Xm6DEK4XrhRAZm7vyyexFg3NEMBl
+         E/Asf5Y3X+FBabSu1w+fCn4ujJbxxy22LJ8n6LCyVI1soid5MHOwxTgSqW1mi+B3+vMJXkhNpa+v
+         7quhN2a8jA9Mclhic6gJ2hF6+mgMYSFARW6K1g/5GQ/1jWXjsWvtRONOMa8ZxOW5XKMv3aom1ZH0
+         MuYCCnbdbRzoV50TjjSs2TjmRxL4NQ76TJ4YKOk3RIjAr0Xu+y3frSRha943pBN00StDZL6wWpf4
+         sNLvJ7O9WjlFoScAJzwjtHJRozOTlq+SjlXPDAmt6REg4uM6osf8uS5e3j3xhKGbHnOoMQQpXF5n
+         vNEbWd4XHLGhZDub4atl3NNfmurAP7yOpgMdL6sU0KFf+G8bltk2uL3Z5geyPSghilzIFIM9yjHC
+         nV9+r7dYXuBPOWUHrSfqa7hQpvLZ9YoLDiYgpnHM64BnKxzlL9+wARZaU/ElC0wbdI3tTJ0qE6Mc
+         k/akOASXEBXDEGk3D2iBiviI8dQXq2txCGa1bgQj0TQi3BDCPqYeUVfn6yS0Ts
+From:   Rong Tao <rtoax@foxmail.com>
+To:     david.laight@aculab.com
+Cc:     andrii.nakryiko@gmail.com, andrii@kernel.org, ast@kernel.org,
+        bpf@vger.kernel.org, daniel@iogearbox.net, haoluo@google.com,
+        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        martin.lau@linux.dev, mykolal@fb.com, rongtao@cestc.cn,
+        rtoax@foxmail.com, sdf@google.com, shuah@kernel.org,
+        song@kernel.org, yhs@fb.com
+Subject: Re: RE: [PATCH bpf-next] selftests/bpf: Fix strncpy() fortify warning
+Date:   Tue,  1 Nov 2022 17:25:12 +0800
+X-OQ-MSGID: <20221101092512.33174-1-rtoax@foxmail.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <1611fe67d311461aa5f820836318bacc@AcuMS.aculab.com>
+References: <1611fe67d311461aa5f820836318bacc@AcuMS.aculab.com>
 MIME-Version: 1.0
-In-Reply-To: <20221101073343.3961562-1-libaokun1@huawei.com>
-Content-Type: text/plain; charset="gbk"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.67.110.83]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500006.china.huawei.com (7.192.105.130)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,RDNS_DYNAMIC,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 2022/11/1 15:33, Baokun Li wrote:
-> When squashfs_read_table() returns an error or `sb->s_magic
-> != SQUASHFS_MAGIC`, enters the error branch and calls
-> msblk->thread_ops->destroy(msblk) to destroy msblk.
-> However, msblk->thread_ops has not been initialized.
-> Therefore, the following problem is triggered:
-> 
-> ==================================================================
-> BUG: KASAN: null-ptr-deref in squashfs_fill_super+0xe7a/0x13b0
-> Read of size 8 at addr 0000000000000008 by task swapper/0/1
-> 
-> CPU: 0 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc3-next-20221031 #367
-> Call Trace:
->   <TASK>
->   dump_stack_lvl+0x73/0x9f
->   print_report+0x743/0x759
->   kasan_report+0xc0/0x120
->   __asan_load8+0xd3/0x140
->   squashfs_fill_super+0xe7a/0x13b0
->   get_tree_bdev+0x27b/0x450
->   squashfs_get_tree+0x19/0x30
->   vfs_get_tree+0x49/0x150
->   path_mount+0xaae/0x1350
->   init_mount+0xad/0x100
->   do_mount_root+0xbc/0x1d0
->   mount_block_root+0x173/0x316
->   mount_root+0x223/0x236
->   prepare_namespace+0x1eb/0x237
->   kernel_init_freeable+0x528/0x576
->   kernel_init+0x29/0x250
->   ret_from_fork+0x1f/0x30
->   </TASK>
-> ==================================================================
-> 
-> To solve this issue, msblk->thread_ops is initialized immediately after
-> msblk is assigned a value.
-> 
-> Fixes: b0645770d3c7 ("squashfs: add the mount parameter theads=<single|multi|percpu>")
-> Signed-off-by: Baokun Li <libaokun1@huawei.com>
-> ---
-Thank you for helping to identify and fix this bug.
-
-Reviewed-by: Xiaoming Ni <nixiaoming@huawei.com>
-
-
-
->   fs/squashfs/super.c | 3 ++-
->   1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/fs/squashfs/super.c b/fs/squashfs/super.c
-> index 1e428ca9414e..7d5265a39d20 100644
-> --- a/fs/squashfs/super.c
-> +++ b/fs/squashfs/super.c
-> @@ -197,6 +197,7 @@ static int squashfs_fill_super(struct super_block *sb, struct fs_context *fc)
->   		return -ENOMEM;
->   	}
->   	msblk = sb->s_fs_info;
-> +	msblk->thread_ops = opts->thread_ops;
->   
->   	msblk->panic_on_errors = (opts->errors == Opt_errors_panic);
->   
-> @@ -231,7 +232,7 @@ static int squashfs_fill_super(struct super_block *sb, struct fs_context *fc)
->   			       sb->s_bdev);
->   		goto failed_mount;
->   	}
-> -	msblk->thread_ops = opts->thread_ops;
-> +
->   	if (opts->thread_num == 0) {
->   		msblk->max_thread_num = msblk->thread_ops->max_decompressors();
->   	} else {
-> 
+Can we just use the first patch?
+https://lore.kernel.org/lkml/tencent_EE3E19F80ACD66955D26A878BC768CFA210A@qq.com/
 
