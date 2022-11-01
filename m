@@ -2,78 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A42B3615498
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:02:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F77361549A
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 23:03:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230274AbiKAWCA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 18:02:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41810 "EHLO
+        id S230505AbiKAWDN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 18:03:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42414 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230463AbiKAWBx (ORCPT
+        with ESMTP id S230357AbiKAWDK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 18:01:53 -0400
-Received: from mail-lj1-x229.google.com (mail-lj1-x229.google.com [IPv6:2a00:1450:4864:20::229])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1DBBE6338
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 15:01:52 -0700 (PDT)
-Received: by mail-lj1-x229.google.com with SMTP id k19so22532500lji.2
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 15:01:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cb+tt9Vtj615rOrk5Qe1IbJBDO4sgCO757XJJ/DJ6iw=;
-        b=lAxW1D8vqNJPKLYEA3wmWpu8nXmAvhM56I+75pXI5bch9ayzOM1BIgSgbZQnqy5g95
-         ytdzXSRmiRlrGW5TkN0eHoDLCSfxXApbBzhaNKsKFMDDUxmisMVizgv4t0h+lMzG0DEs
-         xXZpbCrCzoq+ItfLqH+r2gs4I5NVGQ3J0I9GGczNQWgZZzB3J9H/6sxe2Ip+sr+ypMsJ
-         sfSA4F8vImPylcbBGpX369T/swtKAfV4DDV7fo2I+fpxysMnxXFragJG6OBfmNNNchVY
-         iwDZ87Pay5wPd3DHMEFbA2PTID1UiQGf8w0v4mJzm96Fdgzj93BD+9d3655s/qqH5dL0
-         4SpA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cb+tt9Vtj615rOrk5Qe1IbJBDO4sgCO757XJJ/DJ6iw=;
-        b=2oLZ6Lw99fGg01Ji3nl9zz0N/L60xEgKHOuc3R1COkLp46eB582e6HlqjfDiS66Efw
-         Kv5pHx/YBg3MvJ6amemDPCK4rhmW2cHoU3q3Jyv3Q49nMNwjFumhOM7rWeWPf9rRLfff
-         ETfJ4cJh3nV1U6cZEggtFOGLj7JXYqmhVzRy/2/vPyIKPIpwA7kK+9DKB61gN1rLniYh
-         TjW1g86mdocicHH24eEePTv5Fq2VZroVC2hG+hwDxPaltE64s6xIONogWlFXW8JFCpOv
-         kCzESetBhFseCi1+BzSRJeHvsq5Gdn8E81yyioM3noYXOG1lHXoEgBgrBE5nH029MJZp
-         KaXA==
-X-Gm-Message-State: ACrzQf3JwI1RCytHQjSTH2piP9QqcDG+S+PCo0KqAIkbwmF/2c6okKPn
-        Bk0u95mZlrURam6I4IIiRi0VfU2rZsTHxnkSeO0=
-X-Google-Smtp-Source: AMsMyM61WyYzDD6Xmh5TB9DP6GzRoiHWWRokJZEctycLLrpprMbnj3c/WbietIKDX3lmK23IcRHhJUD/PIHFaR+JKhA=
-X-Received: by 2002:a2e:3012:0:b0:277:32d:34b4 with SMTP id
- w18-20020a2e3012000000b00277032d34b4mr8044871ljw.112.1667340110382; Tue, 01
- Nov 2022 15:01:50 -0700 (PDT)
+        Tue, 1 Nov 2022 18:03:10 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B0163894;
+        Tue,  1 Nov 2022 15:03:10 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 33F8F660284F;
+        Tue,  1 Nov 2022 22:03:07 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667340188;
+        bh=yMp4w9RoWXCGng4R5gRPNg63j86qA6FnSxUKrRZ65bs=;
+        h=From:To:Cc:Subject:Date:From;
+        b=j+ei/IQG//damy7N0vcrtAagkDLsrP4ZOsk52t5QV64cHuYQQBW58N91q6uAmEQzo
+         5Zh7RRckssF/ZPC1kHvZymv8aB4O9ocAzfWN6QULCBkX3NTPJikOLE2A4giFsFLtJz
+         HPEbSPCP1UVpf4vcqCYag3kgn3oZ8HN9MZKdR0L5J1Vg/eoAk9aFnh6VZgb+ahnC7D
+         p+VO7ciIXExKioAmxgyth17Z8pOiozefhqs7gQPMpoi8SdUXSLKK/Syn4IFXLo0JNL
+         majVSvEOYMtQHT7H2k6Fzo1ng8cfLGPQETsuk85neh3FM3vVXlHt5VTg3Sq56rQuaz
+         nOQoa4+tBaUDA==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Rob Herring <robh@kernel.org>
+Cc:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, Masahiro Yamada <masahiroy@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Michal Marek <michal.lkml@markovi.net>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        linux-arm-kernel@lists.infradead.org, linux-kbuild@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
+Subject: [PATCH] kbuild: Add DTB_FILES variable for dtbs_check
+Date:   Tue,  1 Nov 2022 18:03:03 -0400
+Message-Id: <20221101220304.65715-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <CAM6Wdxc0KRJMXVAA0Y=u6Jh2V=uWB-_Fn6M4xRuNppfXzL1mUg@mail.gmail.com>
- <20221031145046.2a7f9d32@rorschach.local.home> <CAM6WdxeZbGmRopXqLtDNTwPOahnyC6GrCfv4H1m=mF41-J=VbA@mail.gmail.com>
- <20221101153135.5345c748@rorschach.local.home> <CAM6WdxfYU1Dc6dkMQMSGjgiggrziLvfwVPJV5OC02_AQO8YkVw@mail.gmail.com>
- <20221101173802.7a476a04@rorschach.local.home> <CAM6WdxdAF5X8v_tbL1LvNDXgEPY5veL_OtQv5CrADV9qH4um-g@mail.gmail.com>
-In-Reply-To: <CAM6WdxdAF5X8v_tbL1LvNDXgEPY5veL_OtQv5CrADV9qH4um-g@mail.gmail.com>
-From:   Roland Ruckerbauer <roland.rucky@gmail.com>
-Date:   Tue, 1 Nov 2022 23:01:38 +0100
-Message-ID: <CAM6WdxfsP13aS62=xWNTFEEzAekAuDwFTpnONP9qF3br-65KWQ@mail.gmail.com>
-Subject: Re: [BUG] NULL pointer dereference probably caused by kernel/trace/ring_buffer.c
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Masami Hiramatsu <mhiramat@kernel.org>,
-        linux-kernel@vger.kernel.org, Takashi Iwai <tiwai@suse.de>,
-        regressions@lists.linux.dev,
-        Steven Noonan <steven.noonan@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Just figured out something, the poll() errors starting at fd 29 (which
-is CPU 24).
-But I only have 24 cores. Looked at
-/sys/kernel/debug/tracing/instances/rasdaemon/per_cpu/, and voila, it
-lists 32 cpus not 24.
+Currently running dtbs_check compiles and runs the DT checker on all
+enabled devicetrees against all dt-bindings. This can take a long time,
+and is an unnecessary burden when just validating a new devicetree or
+changes in an existing one, with the dt-bindings unchanged.
+
+Similarly to DT_SCHEMA_FILES for dt_binding_check, add a DTB_FILES
+variable that can be passed to the dtbs_check make command to restrict
+which devicetrees are validated.
+
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+
+---
+Usage example:
+make dtbs_check DTB_FILES='arch/arm64/boot/dts/mediatek/mt8192-asurada-spherion-r0.dtb arch/arm64/boot/dts/mediatek/mt8192-asurada-hayato-r1.dtb'
+
+ scripts/Makefile.lib | 7 +++++++
+ 1 file changed, 7 insertions(+)
+
+diff --git a/scripts/Makefile.lib b/scripts/Makefile.lib
+index ec391c6a2641..f3ac6d3632a2 100644
+--- a/scripts/Makefile.lib
++++ b/scripts/Makefile.lib
+@@ -418,9 +418,16 @@ DT_CHECKER_FLAGS ?= $(if $(DT_SCHEMA_FILES),-l $(DT_SCHEMA_FILES),-m)
+ DT_BINDING_DIR := Documentation/devicetree/bindings
+ DT_TMP_SCHEMA := $(objtree)/$(DT_BINDING_DIR)/processed-schema.json
+ 
++ifeq ($(DTB_FILES),)
+ quiet_cmd_dtb =	DTC_CHK $@
+       cmd_dtb =	$(cmd_dtc) ; $(DT_CHECKER) $(DT_CHECKER_FLAGS) -u $(srctree)/$(DT_BINDING_DIR) -p $(DT_TMP_SCHEMA) $@ || true
+ else
++SHOULD_CHECK_DTB = $(filter $@,$(DTB_FILES))
++
++quiet_cmd_dtb =	$(if $(SHOULD_CHECK_DTB),DTC_CHK,DTC) $@
++      cmd_dtb =	$(if $(SHOULD_CHECK_DTB), $(cmd_dtc) ; $(DT_CHECKER) $(DT_CHECKER_FLAGS) -u $(srctree)/$(DT_BINDING_DIR) -p $(DT_TMP_SCHEMA) $@ || true , $(cmd_dtc))
++endif
++else
+ quiet_cmd_dtb = $(quiet_cmd_dtc)
+       cmd_dtb = $(cmd_dtc)
+ endif
+-- 
+2.38.1
+
