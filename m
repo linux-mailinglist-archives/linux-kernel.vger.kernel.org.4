@@ -2,199 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C09AB6145BE
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 09:32:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A74CD6145C2
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 09:35:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230019AbiKAIcm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 04:32:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57236 "EHLO
+        id S230039AbiKAIe4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 04:34:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58310 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229912AbiKAIck (ORCPT
+        with ESMTP id S229835AbiKAIey (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 04:32:40 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 968F73B5;
-        Tue,  1 Nov 2022 01:32:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667291559; x=1698827559;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=knn1oLAwfIIL7icxHS5nRNahPFf2tYSjAdO5agJ5DQI=;
-  b=eYkGisWxpq8rcOc7PO5rVTZQotzF8wBclcuxUYGbRR6yhi/yw7SgoUby
-   L0pJCZD3q1mlRJi5rcKswNCst1v2hLecWX2UaKUJbk/wyvJzPxaZbQ3+N
-   Z6ZDLZemuNmnU7ZfT6HVln0+Rn8KIHSmoJSBcX9AF+Gu2GR5ZICxugaNB
-   Z1r5BwpEqfj2rNLR9H4QZu6/fT37Y3wxD4ROFCM2wF4hvhONELpYWlRBM
-   YVge9TByTb2To3DLFlbG+PlJeVS7BTI5ZoTVi3jNHzP66VPrb2RbriVvQ
-   TIFBpXX066uOH8qb8qj7GW9CtDe7cuoEKhDIKuwmIfLMsqQZ0ou0ZiiA/
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="310800251"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="310800251"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 01:32:38 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10517"; a="723095713"
-X-IronPort-AV: E=Sophos;i="5.95,230,1661842800"; 
-   d="scan'208";a="723095713"
-Received: from sqa-gate.sh.intel.com (HELO robert-ivt.tsp.org) ([10.239.48.212])
-  by FMSMGA003.fm.intel.com with ESMTP; 01 Nov 2022 01:32:35 -0700
-Message-ID: <955799c72b6b825fcce104771ee7570d826faac5.camel@linux.intel.com>
-Subject: Re: [KVM] e923b0537d: kernel-selftests.kvm.rseq_test.fail
-From:   Robert Hoo <robert.hu@linux.intel.com>
-To:     Gavin Shan <gshan@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        kernel test robot <oliver.sang@intel.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Andrew Jones <andrew.jones@linux.dev>,
-        LKML <linux-kernel@vger.kernel.org>, kvm@vger.kernel.org,
-        lkp@lists.01.org, lkp@intel.com, xudong.hao@intel.com,
-        regressions@lists.linux.dev
-Date:   Tue, 01 Nov 2022 16:32:35 +0800
-In-Reply-To: <9bfeae26-b4b1-eedb-6cbd-b4f9f1e1cc55@redhat.com>
-References: <Yvn60W/JpPO8URLY@xsang-OptiPlex-9020>
-         <Yvq9wzXNF4ZnlCdk@google.com>
-         <5034abb9-e176-d480-c577-1ec5dd47182b@redhat.com>
-         <9bfeae26-b4b1-eedb-6cbd-b4f9f1e1cc55@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-10.el7) 
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Tue, 1 Nov 2022 04:34:54 -0400
+Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 32F5111A1E
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 01:34:52 -0700 (PDT)
+Received: by mail-ej1-x636.google.com with SMTP id d26so35247534eje.10
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 01:34:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:from:to:cc:subject:date:message-id:reply-to;
+        bh=IrnxhycyH4ZLQVbvKxGksFSJ83XprCvJaMVzjl9CDyM=;
+        b=gwpKHV9VnpITXBtR887Q+/HcekEwCx46vkcYe7LNUVpRQcCDZ4CpdYUt3HRc52WbOr
+         +6jN/MT5Nr2D9IJsdMICTBf3KjN2UV0E6OjZEX39G9+6UzpAa8u3rNxTyTfPBzmDcmvk
+         oCcqGS6dfI/JM1lj6/JuYUsTnDJ82elU4c9/0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:message-id:date:from:content-transfer-encoding:mime-version
+         :subject:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=IrnxhycyH4ZLQVbvKxGksFSJ83XprCvJaMVzjl9CDyM=;
+        b=zLdZarFbN4HRzVenpVygjFKGPvtDpRFCnNRsmMCq7Tqge6Cifh7j7/+IkFY3y/72hS
+         swjf/7A4j6XtUkmZ3R3n+CjOk4V/W3+jQhS3jw2MeVNq778ClUYlrZuW7hZA/Bv7DDme
+         qc8jTyJpRQo458zawsHhC403/mw8lkUlZWm8IwGYTKRtCHdHZjni9smezVrqeqAo+/B+
+         gewoqUor6/mf0S0LaYQFIU8n9Ka/gQ3yISRRgbms1Ehn6hnp1ZkMB8dQlDQriZX57gm4
+         k5VdpWD1uMci5M8m6geZsPBYvVcx2FL6YmlWWuAEdzDUgKJUa6Z01dmsGzL8J9uDqSDL
+         Eo/Q==
+X-Gm-Message-State: ACrzQf3PLCsIfTIloNE0Qq1t7iMJfTz53XJNyt6oY/Jj1jEOCvbcIw8/
+        1hXL0hLPay1DWLMf1z1TNRB01kxYMmaPrATS
+X-Google-Smtp-Source: AMsMyM71r23gFNOKw3UTVxGfL9Xr6F33RCyyjyksKQzdJ3pXvc7ALI50nSkAAiP7Z67ZojrF1dOZyg==
+X-Received: by 2002:a17:906:fd82:b0:770:7e61:3707 with SMTP id xa2-20020a170906fd8200b007707e613707mr16899114ejb.143.1667291690845;
+        Tue, 01 Nov 2022 01:34:50 -0700 (PDT)
+Received: from alco.roam.corp.google.com ([2620:0:1059:10:7782:437f:aea6:1ec7])
+        by smtp.gmail.com with ESMTPSA id u18-20020a1709061db200b007030c97ae62sm3904075ejh.191.2022.11.01.01.34.49
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 01:34:50 -0700 (PDT)
+Subject: [PATCH v1 0/1] media: uvcvideo: Disable autosuspend for Insta360
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-b4-tracking: H4sIABraYGMC/w3KMQqAMAwAwK9IZgOmFKr+Jq1BAyVCoy7i3+14cC+4NBWHdXihyaOup3XQOEA52H
+ ZB3bohTCEQTYRqfnHFhVPKTKXEOEPPmV0wN7Zy9G53rd/3A5vhUbRdAAAA
+From:   Ricardo Ribalda <ribalda@chromium.org>
+Date:   Tue, 01 Nov 2022 09:34:34 +0100
+Message-Id: <20221101-instal-v1-0-321f3d96ad92@chromium.org>
+To:     Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Ricardo Ribalda <ribalda@chromium.org>
+X-Mailer: b4 0.11.0-dev-d93f8
+X-Developer-Signature: v=1; a=openpgp-sha256; l=718; i=ribalda@chromium.org;
+ h=from:subject:message-id; bh=CXl9Hu/uecq6/DdQYEr3K4jx8KyroE3PMMxTWKI1Qpo=;
+ b=owEBbQKS/ZANAwAKAdE30T7POsSIAcsmYgBjYNod23hIBblqI+A1iTmGFdD0+QUfolMB9cbtagDd
+ evqhI+6JAjMEAAEKAB0WIQREDzjr+/4oCDLSsx7RN9E+zzrEiAUCY2DaHQAKCRDRN9E+zzrEiA/aD/
+ 0ZGxRPwokG8paJZzJQezjDEGVZ84ZzuWpKJ3z+w+obwMpjWgqI+vsHQ0cjNUuMMCKXmu3Pt3D/Z4bb
+ LB886zsrj4Moe/YnKSSQcCrp3BLQ0Xw3HtESH6K42Li5QMLiPbnbx0xTCOSXdVSRdRc0470sHi4/XZ
+ 8G5vpiKnTsrIu6DglYIOvnDbSEGjOuCh26RJ85OS4Hl+pDAMZlTXJsOSooKxQK+rfz2fVbsphzVkxN
+ ukN5/HXDX7ePgPNBsXbepRH9cc7hnvv4iMkde9XhPOW72L1C+Nji4/fVANOKt00mybCo2ZR/sGyTs0
+ aYOvbemxkuk0SS1mQ7tWTReFXKvfNyVapnfG0ojVt62X+XFxGAgqn5aGxkJDEJh+DRS/d2T+wrBY5B
+ 64uo6DvkOcBaxu/UdgCaA+dtxH2NvXjyhCyxJXKBIl9+mJMr/WEh6d6RHzTwL7ox3txLsDgkhfuIOD
+ xHXYNN/JSc1FVSpVpOLqT2aihAr2EE+OzbTAzcJPjv3TtCalGflTL5MH4Gf8ApKQYVBQdMP6H5Mgtz
+ oYIq9W48WJM5Cmu5MiMA35SIfO+wf+5k8gMzy2AxkAIG1tZfaX+as16DaPg1TTNsUZrkx2NfH3n0Br
+ 31ArJxfqD6N0Bdv2AJ6bKnqbXGJ7EYFwK7nVwYMvhaEW/lFM2XzskIVMl8cQ==
+X-Developer-Key: i=ribalda@chromium.org; a=openpgp;
+ fpr=9EC3BB66E2FC129A6F90B39556A0D81F9F782DA9
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 2022-08-16 at 20:02 +1000, Gavin Shan wrote:
-> Hi Sean,
-> 
-> On 8/16/22 3:02 PM, Gavin Shan wrote:
-> > On 8/16/22 7:42 AM, Sean Christopherson wrote:
-> > > On Mon, Aug 15, 2022, kernel test robot wrote:
-> > > > commit: e923b0537d28e15c9d31ce8b38f810b325816903 ("KVM:
-> > > > selftests: Fix target thread to be migrated in rseq_test")
-> > > > https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git
-> > > >  master
-> > > 
-> > > ...
-> > > 
-> > > > # selftests: kvm: rseq_test
-> > > > # ==== Test Assertion Failure ====
-> > > > #   rseq_test.c:278: i > (NR_TASK_MIGRATIONS / 2)
-> > > > #   pid=49599 tid=49599 errno=4 - Interrupted system call
-> > > > #      1    0x000000000040265d: main at rseq_test.c:278
-> > > > #      2    0x00007fe44eed07fc: ?? ??:0
-> > > > #      3    0x00000000004026d9: _start at ??:?
-> > > > #   Only performed 23174 KVM_RUNs, task stalled too much?
-> > > > #
-> > > > not ok 56 selftests: kvm: rseq_test # exit=254
-> > > 
-> > > ...
-> > > 
-> > > > # Automatically generated file; DO NOT EDIT.
-> > > > # Linux/x86_64 5.19.0-rc6 Kernel Configuration
-> > > > #
-> > > > CONFIG_CC_VERSION_TEXT="gcc-11 (Debian 11.3.0-3) 11.3.0"
-> > > > CONFIG_CC_IS_GCC=y
-> > > > CONFIG_GCC_VERSION=110300
-> > > > CONFIG_CLANG_VERSION=0
-> > > > CONFIG_AS_IS_GNU=y
-> > > > CONFIG_AS_VERSION=23800
-> > > > CONFIG_LD_IS_BFD=y
-> > > > CONFIG_LD_VERSION=23800
-> > > > CONFIG_LLD_VERSION=0
-> > > 
-> > > Assuming 23800 == 2.38, this is a known issue.
-> > > 
-> > > https://lore.kernel.org/all/20220810104114.6838-1-gshan@redhat.com
-> > > 
-> > 
-> > It's probably different story this time. The assert is triggered
-> > because
-> > of the following instructions. I would guess the reason is vcpu
-> > thread
-> > has been running on CPU where we has high CPU load. In this case,
-> > the
-> > vcpu thread can't be run in time. More specific, the vcpu thread
-> > can't
-> > be run in the 1 - 10us time window, which is specified by the
-> > migration
-> > worker (thread).
-> > 
-> >      TEST_ASSERT(i > (NR_TASK_MIGRATIONS / 2),
-> >                  "Only performed %d KVM_RUNs, task stalled too
-> > much?\n", i);
-> > 
-> > I think we need to improve the handshake mechanism between the vcpu
-> > thread
-> > and migration worker. In current implementation, the handshake is
-> > done through
-> > the atomic counter. The mechanism is simple enough, but vcpu thread
-> > can miss
-> > the aforementioned time window. Another issue is the test case much
-> > more time
-> > than expected to finish.
-> > 
-> > Sean, if you think it's reasonable, I can figure out something to
-> > do:
-> > 
-> > - Reuse the atomic counter for a full synchronization between these
-> > two
-> >    threads. Something like below:
-> > 
-> >    #define RSEQ_TEST_STATE_RUN_VCPU       0     // vcpu_run()
-> >    #define RSEQ_TEST_STATE_MIGRATE        1     //
-> > sched_setaffinity()
-> >    #define RSEQ_TEST_STATE_CHECK          2     // Check
-> > rseq.cpu_id and get_cpu()
-> > 
-> >    The atomic counter is reset to RSEQ_TEST_STATE_RUN_VCPU after
-> > RSEQ_TEST_STATE_RUN_VCPU
-> > 
-> > - Reduce NR_TASK_MIGRATIONS from 100000 to num_of_online_cpus().
-> > With this,
-> >    less time is needed to finish the test case.
-> > 
-> 
-> I'm able to recreate the issue on my local arm64 system.
-> 
-> - From the source code, the iteration count is changed from 100000 to
-> 1000
-> - Only CPU#0 and CPU#1 are exposed in calc_min_max_cpu, meaning other
-> CPUs
->    are cleared from @possible_mask
-> - Run some CPU bound task on CPU#0 and CPU#1
->    # while true; do taskset -c 0 ./a; done
->    # while true; do taskset -c 1 ./a; done
-> - Run 'rseq_test' and hit the issue
->    # ./rseq_test
->    calc_min_max_cpu: nproc=224
->    calc_min_max_cpu: min_cpu=0, max_cpu=1
->    main: Required tests: 1000   Succeeds: 1
->    ==== Test Assertion Failure ====
->      rseq_test.c:280: i > (NR_TASK_MIGRATIONS / 2)
->      pid=9624 tid=9624 errno=4 - Interrupted system call
->         1	0x0000000000401cf3: main at rseq_test.c:280
->         2	0x0000ffffbc64679b: ?? ??:0
->         3	0x0000ffffbc64686b: ?? ??:0
->         4	0x0000000000401def: _start at ??:?
->      Only performed 1 KVM_RUNs, task stalled too much?
-> 
-I met this as well, and can reproduce this easily on my Cascade-Lake
-machine, without heavy workload; before I find this mail.
-I'm wondering if it's because vcpu_run() has become much more time
-consuming than this test case was defined?
+The device does not handle properly the USB suspend and makes it barely usable.
 
-BTW, if we substitute sys_getcpu(&cpu) with vdso_getcpu(), can reduce
-the reproduction odds.
+To: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
+To: Mauro Carvalho Chehab <mchehab@kernel.org>
+Cc: linux-media@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Signed-off-by: Ricardo Ribalda <ribalda@chromium.org>
 
-> Thanks,
-> Gavin
-> 
-> 
+---
+Ricardo Ribalda (1):
+      media: uvcvideo: Disable autosuspend for Insta360 Link
 
+ drivers/media/usb/uvc/uvc_driver.c | 13 ++++++++++++-
+ drivers/media/usb/uvc/uvcvideo.h   |  1 +
+ 2 files changed, 13 insertions(+), 1 deletion(-)
+---
+base-commit: 23758867219c8d84c8363316e6dd2f9fd7ae3049
+change-id: 20221101-instal-9a77ba1cc448
+
+Best regards,
+-- 
+Ricardo Ribalda <ribalda@chromium.org>
