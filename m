@@ -2,132 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5660E614C02
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:48:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6BE37614C03
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 14:48:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229576AbiKANsY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 09:48:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46848 "EHLO
+        id S230003AbiKANsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 09:48:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiKANsV (ORCPT
+        with ESMTP id S229487AbiKANs1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 09:48:21 -0400
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29107A7
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 06:48:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1667310493; bh=FNdZHPIXSMqReTu7V7OLhEbcfqLKVeX8EB+0vnG4PBo=;
-        h=X-EA-Auth:Date:From:To:Subject:Message-ID:References:MIME-Version:
-         Content-Type:In-Reply-To;
-        b=h0ytcWHLTY4pkEjjk22m33rTbMiwNeT/jOaOedq7rv0tk7di1ZMX9TjE2sfoO1aMw
-         5AE1DenTbi+E8LDHHMvaXR5qyTGXOKJ8HLGNUpIXK5rWDRuB+WwInyNdjWpf0bSLyU
-         /8pP+mY+4p08j08SMNi5COMGMDrhLsBZ2xA1P5o4=
-Received: by b-3.in.mailobj.net [192.168.90.13] with ESMTP
-        via [213.182.55.206]
-        Tue,  1 Nov 2022 14:48:13 +0100 (CET)
-X-EA-Auth: PONAtjAXCOVWqqpb0fs+8wLWjA/64MWw6vvfq5B0q/Z5Rz/CGiHLJLNDNxnbOIx3Zx1nilKCZZAeewY7zlSTvcQIWt5TMSEA
-Date:   Tue, 1 Nov 2022 19:18:10 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     outreachy@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2 1/7] staging: wlan-ng: Remove unused struct wlan_ie_ssid
- references
-Message-ID: <6e39ef59d01d65a1e179f6aecfbb0d68b81fa257.1667308828.git.drv@mailo.com>
-References: <cover.1667308828.git.drv@mailo.com>
+        Tue, 1 Nov 2022 09:48:27 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B667C1162;
+        Tue,  1 Nov 2022 06:48:26 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 16730611E7;
+        Tue,  1 Nov 2022 13:48:26 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0F14C433D6;
+        Tue,  1 Nov 2022 13:48:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667310505;
+        bh=2r6RMNudw65t+LrmOPtjGBPzbGcSI8my0xvyNFh7v7c=;
+        h=From:To:Cc:Subject:Date:From;
+        b=u5+TP2f9XGevZNTdAqt4Z6sTDENHb1y8A2EB/sZeIJBNN5gNKhdu7VRPYYjTRbjoR
+         rN+rfjLGrVZv6sOSAAMzo/gVxb9HhjrMCeJYQzhO0fRuZXQzGvHEWmPzfeQ4D68lur
+         UmGTrEWmKkGaTh4fclViL4/nVhGi7GqeSzFPbkKC60Yo5gJXxt8E33slKoN+ePtv1E
+         EsbpwrIlXzxari5SEvfTDmcVq1fKlCRCG8/DNDp9YfhLVSGQ8+AeeIl4fGw1xBZVsr
+         v1cNvJDF9KowiwjFdIOFnb6lF3MLCL/n8DYnURo64OmDJsz9Qd7hHbeOPlrnq9DEJy
+         KEpr1Lh8PEnCg==
+From:   "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Masami Hiramatsu <mhiramat@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>
+Subject: [PATCH v2 0/3] tools/perf: Fix perf probe crash by clang DWARF5 file
+Date:   Tue,  1 Nov 2022 22:48:21 +0900
+Message-Id: <166731050151.2100653.8202870942871353491.stgit@devnote3>
+X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
+User-Agent: StGit/0.19
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <cover.1667308828.git.drv@mailo.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Pointer reference to struct wlan_ie_ssid is added as a member variable
-to 5 different structures. However, these references are never used.
-Remove such unused struct references. The cleanup also renders the
-struct useless; so remove it as well.
-Issue identified as part of coccicheck based code analysis.
+Hi,
 
-Suggested-by: Dan Carpenter <dan.carpenter@oracle.com>
-Suggested-by: Pavel Skripkin <paskripkin@gmail.com>
-Signed-off-by: Deepak R Varma <drv@mailo.com>
+Here is the 2nd version of the patches for perf probe which improves the
+robustness against clang DWARF5 file.
+
+Since the Clang generates a bit different DWARF5 file, the perf probe
+crashes or failes to analyze it. There are actually fragile code against
+it, so I fixed it ([1/3]) to avoid crash by SEGV. And make it accepts
+Clang's DWARF5 file ([2/3],[3/3]).
+
+Without this series, the perf probe crashes with the DWARF5 file
+which generated by clang as below;
+ 
+  $ ./perf probe -k $BIN_PATH/vmlinux -s $SRC_PATH -L vfs_read:10
+  Segmentation fault
+
+This series fixes it to handle such file correctly;
+
+  $ ./perf probe -k $BIN_PATH/vmlinux -s $SRC_PATH -L vfs_read:10
+  <vfs_read@$SRC_PATH/fs/read_write.c:10>
+ 
+       11         ret = rw_verify_area(READ, file, pos, count);
+       12         if (ret)
+                           return ret;
+
+
+On the DWARF5 specification, Sec 2.14, there is
+"The value 0 indicates that no source file has been specified."
+for DW_AT_decl_file, but clang generated DWARF5 will use the value 0.
+
+This issue is discussed on DWARF std ML;
+https://www.mail-archive.com/dwarf-discuss@lists.dwarfstd.org/msg00884.html
+
+And suggested that removing this part from the specification.
+http://wiki.dwarfstd.org/index.php?title=DWARF5_Line_Table_File_Numbers
+
+So as far as I understand, this is out of standard at this moment,
+but the standard itself has a discussion on this part. And maybe updated
+as currently clang does in the next release/revision.
+
+Thank you,
+
 ---
 
-Changes in v2:
-   1. Include additional code clean-up opportunities and combine changes in a
-      patch set based on impact areas.
-   2. The patch changes are compile tested only on X86 arch.
+Masami Hiramatsu (Google) (3):
+      tools/perf: Fix to avoid crashing if DW_AT_decl_file is NULL
+      tools/perf: Fix to use dwarf_attr_integrate for generic attr accessor
+      tools/perf: Fix to get declared file name from clang DWARF5
 
 
- drivers/staging/wlan-ng/p80211mgmt.h | 12 ------------
- 1 file changed, 12 deletions(-)
+ tools/perf/util/dwarf-aux.c    |   58 ++++++++++++++++++++++++++++------------
+ tools/perf/util/dwarf-aux.h    |    3 ++
+ tools/perf/util/probe-finder.c |   37 +++++++++++++++++---------
+ 3 files changed, 68 insertions(+), 30 deletions(-)
 
-diff --git a/drivers/staging/wlan-ng/p80211mgmt.h b/drivers/staging/wlan-ng/p80211mgmt.h
-index 1ef30d3f3159..dcff56d18498 100644
---- a/drivers/staging/wlan-ng/p80211mgmt.h
-+++ b/drivers/staging/wlan-ng/p80211mgmt.h
-@@ -225,13 +225,6 @@ struct wlan_ie {
- 	u8 len;
- } __packed;
-
--/*-- Service Set Identity (SSID)  -----------------*/
--struct wlan_ie_ssid {
--	u8 eid;
--	u8 len;
--	u8 ssid[1];		/* may be zero, ptrs may overlap */
--} __packed;
--
- /*-- Supported Rates  -----------------------------*/
- struct wlan_ie_supp_rates {
- 	u8 eid;
-@@ -319,7 +312,6 @@ struct wlan_fr_beacon {
- 	u16 *bcn_int;
- 	u16 *cap_info;
- 	/*-- info elements ----------*/
--	struct wlan_ie_ssid *ssid;
- 	struct wlan_ie_supp_rates *supp_rates;
- 	struct wlan_ie_fh_parms *fh_parms;
- 	struct wlan_ie_ds_parms *ds_parms;
-@@ -372,7 +364,6 @@ struct wlan_fr_assocreq {
- 	u16 *cap_info;
- 	u16 *listen_int;
- 	/*-- info elements ----------*/
--	struct wlan_ie_ssid *ssid;
- 	struct wlan_ie_supp_rates *supp_rates;
-
- };
-@@ -407,7 +398,6 @@ struct wlan_fr_reassocreq {
- 	u16 *listen_int;
- 	u8 *curr_ap;
- 	/*-- info elements ----------*/
--	struct wlan_ie_ssid *ssid;
- 	struct wlan_ie_supp_rates *supp_rates;
-
- };
-@@ -439,7 +429,6 @@ struct wlan_fr_probereq {
- 	void *priv;
- 	/*-- fixed fields -----------*/
- 	/*-- info elements ----------*/
--	struct wlan_ie_ssid *ssid;
- 	struct wlan_ie_supp_rates *supp_rates;
-
- };
-@@ -457,7 +446,6 @@ struct wlan_fr_proberesp {
- 	u16 *bcn_int;
- 	u16 *cap_info;
- 	/*-- info elements ----------*/
--	struct wlan_ie_ssid *ssid;
- 	struct wlan_ie_supp_rates *supp_rates;
- 	struct wlan_ie_fh_parms *fh_parms;
- 	struct wlan_ie_ds_parms *ds_parms;
 --
-2.34.1
-
-
-
+Masami Hiramatsu (Google) <mhiramat@kernel.org>
