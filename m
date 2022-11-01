@@ -2,73 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17A346143E8
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 05:31:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BC5546143EB
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 05:33:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229601AbiKAEa6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 00:30:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56962 "EHLO
+        id S229647AbiKAEdY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 00:33:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiKAEa4 (ORCPT
+        with ESMTP id S229487AbiKAEdW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 00:30:56 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60ECA65AE;
-        Mon, 31 Oct 2022 21:30:55 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A10lfwl028121;
-        Tue, 1 Nov 2022 04:30:54 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=date : from : to :
- cc : subject : message-id : references : mime-version : content-type :
- in-reply-to; s=qcppdkim1; bh=hoLgRDiYK5RzZsmXZv+AE8Nv4CBVihWdG2Zj2F4b9qE=;
- b=X9YeOo5rFX26axeoWrB3gIc5q/gOcTai2rotHSCXQuakHfnBUvapvbRf4nSO+LWYc8st
- /PIXrooHhdNwPoCcHDMxcaBCzfy05320N0/t8wNFgxN5jGjdH/8c51k8wxEEj6O+Jpur
- jiKDMchopsxacdNBj77uSrF+cjLOFv040F8XrqpJRLwaRQmWquFepZxL/Rnpx4MokjIu
- OTjKzekdtGMVrqWaEzoSTUPiKt9ZnRiKEY3kR++dodvK+hI5rpt+6VayjgnbvrwoxByN
- ZZhlqf+R8ZfKpHW9nWPtxbZkEiKz/zDnz0asSF7Jh4mbJ2JJvr0BFmumRM5CXeG44w9Y Yw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kjs7u0ga8-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 01 Nov 2022 04:30:54 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A14UrHF002603
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Tue, 1 Nov 2022 04:30:53 GMT
-Received: from hu-pkondeti-hyd.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Mon, 31 Oct 2022 21:30:51 -0700
-Date:   Tue, 1 Nov 2022 10:00:47 +0530
-From:   Pavan Kondeti <quic_pkondeti@quicinc.com>
-To:     Maria Yu <quic_aiquny@quicinc.com>
-CC:     <linus.walleij@linaro.org>, <linux-gpio@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] pinctrl: core: Make p->state in order in
- pinctrl_commit_state
-Message-ID: <20221101043047.GA11893@hu-pkondeti-hyd.qualcomm.com>
-References: <20221027065408.36977-1-quic_aiquny@quicinc.com>
+        Tue, 1 Nov 2022 00:33:22 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7294384;
+        Mon, 31 Oct 2022 21:33:21 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 2E0E860F72;
+        Tue,  1 Nov 2022 04:33:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0DE2CC433D6;
+        Tue,  1 Nov 2022 04:33:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667277200;
+        bh=S6J6gnx37ncA0g8KRYAs0JwCn4toE/be+QwSrIPnqQU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=SO9YmAEDID2KF10xGyqYOVrKWDXo4LusNHXlBf6l7nTk6KwAKJzlCxn8Fvx+J6ccp
+         lXDKy/i1UXaGErldQn0eY0zmYow4MA/+JH2xlMS5Gq0d/XqbPym5WEiLc1R0TdOwb0
+         9J6KT1K2aD/sc3O0IZ/gNa2qQa3dABcOzaK2WWIM=
+Date:   Tue, 1 Nov 2022 05:34:07 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Thomas =?iso-8859-1?Q?Wei=DFschuh?= <linux@weissschuh.net>
+Cc:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Karel Zak <kzak@redhat.com>,
+        Masatake YAMATO <yamato@redhat.com>, linux-api@vger.kernel.org
+Subject: Re: [PATCH] proc: add byteorder file
+Message-ID: <Y2Chv8uO04ahV9W8@kroah.com>
+References: <20221101005043.1791-1-linux@weissschuh.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20221027065408.36977-1-quic_aiquny@quicinc.com>
-User-Agent: Mutt/1.5.24 (2015-08-30)
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 3lYQlVNmjcghFKlJCLwUc3qRM7wHJgYr
-X-Proofpoint-ORIG-GUID: 3lYQlVNmjcghFKlJCLwUc3qRM7wHJgYr
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-01_01,2022-10-31_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 bulkscore=0
- mlxlogscore=999 priorityscore=1501 adultscore=0 lowpriorityscore=0
- suspectscore=0 mlxscore=0 malwarescore=0 impostorscore=0 spamscore=0
- phishscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211010033
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221101005043.1791-1-linux@weissschuh.net>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,50 +52,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Maria,
-
-On Thu, Oct 27, 2022 at 02:54:08PM +0800, Maria Yu wrote:
-> We've got a dump that current cpu is in pinctrl_commit_state, the
-> old_state != p->state while the stack is still in the process of
-> pinmux_disable_setting. So it means even if the current p->state is
-> changed in new state, the settings are not yet up-to-date enabled
-> complete yet.
+On Tue, Nov 01, 2022 at 01:50:43AM +0100, Thomas Weiﬂschuh wrote:
+> Certain files in procfs are formatted in byteorder dependent ways. For
+> example the IP addresses in /proc/net/udp.
 > 
-> Currently p->state in different value to synchronize the
-> pinctrl_commit_state behaviors. The p->state will have transaction like
-> old_state -> NULL -> new_state. When in old_state, it will try to
-> disable all the all state settings. And when after new state settings
-> enabled, p->state will changed to the new state after that. So use
-> smp_mb to synchronize the p->state variable and the settings in order.
-> ---
->  drivers/pinctrl/core.c | 2 ++
->  1 file changed, 2 insertions(+)
+> Assuming the byteorder of the userspace program is not guaranteed to be
+> correct in the face of emulation as for example with qemu-user.
 > 
-> diff --git a/drivers/pinctrl/core.c b/drivers/pinctrl/core.c
-> index 9e57f4c62e60..cd917a5b1a0a 100644
-> --- a/drivers/pinctrl/core.c
-> +++ b/drivers/pinctrl/core.c
-> @@ -1256,6 +1256,7 @@ static int pinctrl_commit_state(struct pinctrl *p, struct pinctrl_state *state)
->  		}
->  	}
->  
-> +	smp_mb();
->  	p->state = NULL;
->  
->  	/* Apply all the settings for the new state - pinmux first */
-> @@ -1305,6 +1306,7 @@ static int pinctrl_commit_state(struct pinctrl *p, struct pinctrl_state *state)
->  			pinctrl_link_add(setting->pctldev, p->dev);
->  	}
->  
-> +	smp_mb();
->  	p->state = state;
->  
+> Also this makes it easier for non-compiled applications like
+> shellscripts to discover the byteorder.
+> 
+> Signed-off-by: Thomas Weiﬂschuh <linux@weissschuh.net>
 
-From your commit description, are you inferring that this p->state assignment
-re-ordered wrt pinmux_disable_setting()? btw, I don't see any locking that
-protects concurrent access to p->state modifications. For whatever reasons, if
-a client makes concurrent calls to pinctrl_select_state(), we can land up in
-the situation, you are seeing. correct?
+Why not put this in /sys/kernel/ instead?  What does this have to do
+with /proc/ other than it's traditionally been the dumping ground for
+stuff like this?  :)
 
-Thanks,
-Pavan
+thanks,
+
+greg k-h
