@@ -2,162 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1EC9614FF0
-	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 18:03:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E9EB6615005
+	for <lists+linux-kernel@lfdr.de>; Tue,  1 Nov 2022 18:08:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbiKARD0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 13:03:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60952 "EHLO
+        id S230127AbiKARIL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 13:08:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiKARDY (ORCPT
+        with ESMTP id S229761AbiKARIH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 13:03:24 -0400
-Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 67329A4
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 10:03:21 -0700 (PDT)
-Received: by mail-ej1-x632.google.com with SMTP id f5so17088620ejc.5
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 10:03:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=BmOzTOknKLYK8DbDZpYjaVcrV5Rf9u7VBwmv6gC9EQg=;
-        b=IC2ritDxFfviQyivZT1zEPdBHtRvQheBhy87DVoM2Dnn4hrKtKUj+Q5jVpTwAJ6AUt
-         1PflSYX85K1ScAwgTcalIluR3ShrwF3HvH2hATRukFHMvxYKv+Z3EIk4Tg7/EO8B7UlQ
-         b2lO9fdC3SEL/NZ1IMFoJwDEHI7G0LHIhj4yP2QJgMrnSicur8XEz/3SWho/Ca2qcdCp
-         AhYGV1YmG0mA8G0JdxFbMoghbhOE4m1JI3Xudk/cfuyYzTVEUZd2SlgPpzxE3M3dLuE4
-         w4YiNTTY4I7Sa44+0yFlAT/VShoywczeaJw5PTSKIh/tha0bJ31algwl+oMDM8QCYPm+
-         VfIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BmOzTOknKLYK8DbDZpYjaVcrV5Rf9u7VBwmv6gC9EQg=;
-        b=cjPJ6vl20Ikg0scbAxkEzxfuUeGpPY8gviZmKXURF0D0JxMG2iZcmKddUcqVVyi6ha
-         3/L2fHgyfv9pgpiqZyvCdLXCvSyvy7PDvPVANTIKn0nz+9w86przohoJVlLEA/9UxlmH
-         yhMeJ8la9AvDpzjpt57JW4LfNbBCoal6TaaMKxpRxT5vEpggD4hDP74T23iMQJLNuB6x
-         7D/X06dSudlpZfNLknXLeR7t0Es8gRSqHHjsuOI3hLcbF9HAd1o67lgoAhZybWLaP8Sa
-         E0SeS36H0a3DFscCfNIoaPIHjUiE4tluyJcsEMMK0VXJmCZEuwWO1lyGsszjVgRReX5p
-         7xYA==
-X-Gm-Message-State: ACrzQf3XgqUt8SeqD8L/KWgMf1v0CRJQ31FuIsJClOn/VYXzSvOLfG2f
-        /z2CfKdidY2LYgSJfhYVc3XexcTKnlP8aoigD79CmLaBU0M=
-X-Google-Smtp-Source: AMsMyM5iD9QIGkzpSWJvRSHJcLR0py6LxhfUPirqCdA/nZTRd5GGthw+pZdfhJvjr/BvZMJQaiXrkWuJVBekRM6v1jg=
-X-Received: by 2002:a17:906:fc1e:b0:780:93d2:8510 with SMTP id
- ov30-20020a170906fc1e00b0078093d28510mr149190ejb.457.1667322199705; Tue, 01
- Nov 2022 10:03:19 -0700 (PDT)
+        Tue, 1 Nov 2022 13:08:07 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9F399D8B
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 10:08:02 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 25EC261656
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 17:08:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54410C433D6;
+        Tue,  1 Nov 2022 17:07:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667322481;
+        bh=2Y4FXSKTEjF1qcYmzzsY+q+7a2NVRoQEVXrR1FcCVUw=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=tA0ddphq6ZwqaV0xWZCkp4pEcY+OkbDE5oOQ20B1NJIg0FozRlhFhoyURR1kcsuxF
+         UEDIX59usJVYSRW10N+LTLu7FEP2dnpLIdBBv6r/wUpIxp3eThbdqrsCGZk5e0JxTV
+         KDhO5w3b2LhVhBaVCyPfwc+N1LpT6Z8T4Xui5tvJAllXrfXW0YdW9lpVfHZ0xCnh14
+         u2JKSYVFyoMnXyPGWJxU9VqYUaUkqfBsnedrUtAYXZAr5LwqM5VsS/yOUNw0h7pM5g
+         5Ce//sdIikux7UK1eMgr1xDJhxg0I0iG5isX4uFKJMFNBX63Gp5erpr+Gc9umYqxo2
+         pq1za7wo5ObLA==
+Date:   Tue, 1 Nov 2022 17:07:56 +0000
+From:   Conor Dooley <conor@kernel.org>
+To:     binglei wang <l3b2w1@gmail.com>
+Cc:     aou@eecs.berkeley.edu, linux-riscv@lists.infradead.org,
+        palmer@dabbelt.com, paul.walmsley@sifive.com,
+        anil.s.keshavamurthy@intel.com, davem@davemloft.net,
+        linux-kernel@vger.kernel.org, mhiramat@kernel.org,
+        naveen.n.rao@linux.ibm.com,
+        Conor Dooley <conor.dooley@microchip.com>
+Subject: Re: [PATCH RESEND v9] riscv: add riscv rethook implementation
+Message-ID: <Y2FSbEaOhkYeqkEb@spud>
+References: <20221025151831.1097417-1-conor@kernel.org>
+ <CAJ3C4KygPPaxK55oZFcaXLpr0PaUvvY1qj_5i47TkV1Tm7G-uQ@mail.gmail.com>
 MIME-Version: 1.0
-References: <20221024113005.376059449@linuxfoundation.org> <20221029011211.4049810-1-ovt@google.com>
- <Y2ATiXtpwPxfsOUD@dev-arch.thelio-3990X> <Y2ClHT6FNL+DLfqP@kroah.com> <Y2C70Gc5vcrRIsRr@kroah.com>
-In-Reply-To: <Y2C70Gc5vcrRIsRr@kroah.com>
-From:   Oleksandr Tymoshenko <ovt@google.com>
-Date:   Tue, 1 Nov 2022 10:03:07 -0700
-Message-ID: <CACGj0Ci3qXX6E_U27Jg9UFp4b8-UyuNCq_hHUP9akA+6ipp7xA@mail.gmail.com>
-Subject: Re: [PATCH 5.4 086/255] once: add DO_ONCE_SLOW() for sleepable contexts
-To:     Greg KH <gregkh@linuxfoundation.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>, christophe.leroy@csgroup.eu,
-        davem@davemloft.net, edumazet@google.com,
-        linux-kernel@vger.kernel.org, sashal@kernel.org,
-        stable@vger.kernel.org, w@1wt.eu, llvm@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJ3C4KygPPaxK55oZFcaXLpr0PaUvvY1qj_5i47TkV1Tm7G-uQ@mail.gmail.com>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 11:25 PM Greg KH <gregkh@linuxfoundation.org> wrote:
->
-> On Tue, Nov 01, 2022 at 05:48:29AM +0100, Greg KH wrote:
-> > On Mon, Oct 31, 2022 at 11:27:21AM -0700, Nathan Chancellor wrote:
-> > > Hi Oleksandr,
-> > >
-> > > On Sat, Oct 29, 2022 at 01:12:11AM +0000, Oleksandr Tymoshenko wrote:
-> > > > Hello,
-> > > >
-> > > > This commit causes the following panic in kernel built with clang
-> > > > (GCC build is not affected):
-> > > >
-> > > > [    8.320308] BUG: unable to handle page fault for address: ffffffff97216c6a                                        [26/4066]
-> > > > [    8.330029] #PF: supervisor write access in kernel mode
-> > > > [    8.337263] #PF: error_code(0x0003) - permissions violation
-> > > > [    8.344816] PGD 12e816067 P4D 12e816067 PUD 12e817063 PMD 800000012e2001e1
-> > > > [    8.354337] Oops: 0003 [#1] SMP PTI
-> > > > [    8.359178] CPU: 2 PID: 437 Comm: curl Not tainted 5.4.220 #15
-> > > > [    8.367241] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 0.0.0 02/06/2015
-> > > > [    8.378529] RIP: 0010:__do_once_slow_done+0xf/0xa0
-> > > > [    8.384962] Code: 1b 84 db 74 0c 48 c7 c7 80 ce 8d 97 e8 fa e9 4a 00 84 db 0f 94 c0 5b 5d c3 66 90 55 48 89 e5 41 57 41 56
-> > > > 53 49 89 d7 49 89 f6 <c6> 07 01 48 c7 c7 80 ce 8d 97 e8 d2 e9 4a 00 48 8b 3d 9b de c9 00
-> > > > [    8.409066] RSP: 0018:ffffb764c02d3c90 EFLAGS: 00010246
-> > > > [    8.415697] RAX: 4f51d3d06bc94000 RBX: d474b86ddf7162eb RCX: 000000007229b1d6
-> > > > [    8.424805] RDX: 0000000000000000 RSI: ffffffff9791b4a0 RDI: ffffffff97216c6a
-> > > > [    8.434108] RBP: ffffb764c02d3ca8 R08: 0e81c130f1159fc1 R09: 1d19d60ce0b52c77
-> > > > [    8.443408] R10: 8ea59218e6892b1f R11: d5260237a3c1e35c R12: ffff9c3dadd42600
-> > > > [    8.452468] R13: ffffffff97910f80 R14: ffffffff9791b4a0 R15: 0000000000000000
-> > > > [    8.461416] FS:  00007eff855b40c0(0000) GS:ffff9c3db7a80000(0000) knlGS:0000000000000000
-> > > > [    8.471632] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > > [    8.478763] CR2: ffffffff97216c6a CR3: 000000022ded0000 CR4: 00000000000006a0
-> > > > [    8.487789] DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > > [    8.496684] DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > > [    8.505443] Call Trace:
-> > > > [    8.508568]  __inet_hash_connect+0x523/0x530
-> > > > [    8.513839]  ? inet_hash_connect+0x50/0x50
-> > > > [    8.518818]  ? secure_ipv4_port_ephemeral+0x69/0xe0
-> > > > [    8.525003]  tcp_v4_connect+0x2c5/0x410
-> > > > [    8.529858]  __inet_stream_connect+0xd7/0x360
-> > > > [    8.535329]  ? _raw_spin_unlock+0xe/0x10
-> > > > ... skipped ...
-> > > >
-> > > >
-> > > > The root cause is the difference in __section macro semantics between 5.4 and
-> > > > later LTS releases. On 5.4 it stringifies the argument so the ___done
-> > > > symbol is created in a bogus section ".data.once", with double quotes:
-> > > >
-> > > > % readelf -S vmlinux | grep data.once
-> > > >   [ 5] ".data.once"      PROGBITS         ffffffff82216c6a  01416c6a
-> > >
-> > > Thanks for the report! The reason this does not happen in mainline is
-> > > due to commit 33def8498fdd ("treewide: Convert macro and uses of
-> > > __section(foo) to __section("foo")"), which came as a result of these
-> > > issues:
-> > >
-> > > https://github.com/ClangBuiltLinux/linux/issues/619
-> > > https://llvm.org/pr42950
-> > >
-> > > To keep stable from diverging, it would probably be best to pick
-> > > 33def8498fdd and fight through whatever conflicts there are. If that is
-> > > not a suitable solution, the next best thing would be to remove the
-> > > quotes like was done in commit bfafddd8de42 ("include/linux/compiler.h:
-> > > fix Oops for Clang-compiled kernels") for all instances of
-> > > __section(...) or __attribute__((__section__(...))), which should
-> > > resolve the specific problem you are seeing.
-> >
-> > I think we should do the latter, fighting with all of the different
-> > section entries would be a pain.
-> >
-> > Unless someone beats me to it, I'll go make up a patch for this...
->
-> Can someone test the following patch:
+On Tue, Nov 01, 2022 at 09:40:23PM +0800, binglei wang wrote:
+> Hi Conor,
+> 
+> Thanks for your resending.
+> What to do next is just to wait patently, right ?
 
-The patch fixes the issue for me, the system boots fine.
+Yup.. You'll get at least one email when it gets applied.
+It's in patchwork [0] so it should not get forgotten about.
 
->
->
-> diff --git a/include/linux/once.h b/include/linux/once.h
-> index bb58e1c3aa03..3a6671d961b9 100644
-> --- a/include/linux/once.h
-> +++ b/include/linux/once.h
-> @@ -64,7 +64,7 @@ void __do_once_slow_done(bool *done, struct static_key_true *once_key,
->  #define DO_ONCE_SLOW(func, ...)                                                     \
->         ({                                                                   \
->                 bool ___ret = false;                                         \
-> -               static bool __section(".data.once") ___done = false;         \
-> +               static bool __section(.data.once) ___done = false;           \
->                 static DEFINE_STATIC_KEY_TRUE(___once_key);                  \
->                 if (static_branch_unlikely(&___once_key)) {                  \
->                         ___ret = __do_once_slow_start(&___done);             \
+0 - https://patchwork.kernel.org/project/linux-riscv/patch/20221025151831.1097417-1-conor@kernel.org/
+
+> 
+> Binglei Wang
+> Best wishes.
+> 
+> 
+> Conor Dooley <conor@kernel.org> 于2022年10月25日周二 23:19写道：
+> >
+> > From: Binglei Wang <l3b2w1@gmail.com>
+> >
+> > Implement the kretprobes on riscv arch by using rethook machenism
+> > which abstracts general kretprobe info into a struct rethook_node
+> > to be embedded in the struct kretprobe_instance.
+> >
+> > Acked-by: Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> > Signed-off-by: Binglei Wang <l3b2w1@gmail.com>
+> > Signed-off-by: Conor Dooley <conor.dooley@microchip.com>
+> > ---
+> > Binglei's patches do not seem to make it to the linux-riscv list, so
+> > blindly resending on their behalf, with Masami's ack from v8 added.
+> >
+> >  arch/riscv/Kconfig                            |  1 +
+> >  arch/riscv/include/asm/kprobes.h              |  2 --
+> >  arch/riscv/kernel/probes/Makefile             |  2 +-
+> >  arch/riscv/kernel/probes/kprobes.c            | 13 ---------
+> >  arch/riscv/kernel/probes/rethook.c            | 27 +++++++++++++++++++
+> >  arch/riscv/kernel/probes/rethook.h            |  8 ++++++
+> >  ...obes_trampoline.S => rethook_trampoline.S} |  6 ++---
+> >  7 files changed, 40 insertions(+), 19 deletions(-)
+> >  create mode 100644 arch/riscv/kernel/probes/rethook.c
+> >  create mode 100644 arch/riscv/kernel/probes/rethook.h
+> >  rename arch/riscv/kernel/probes/{kprobes_trampoline.S => rethook_trampoline.S} (94%)
+> >
+> > diff --git a/arch/riscv/Kconfig b/arch/riscv/Kconfig
+> > index 6b48a3ae9843..413aeca71ca0 100644
+> > --- a/arch/riscv/Kconfig
+> > +++ b/arch/riscv/Kconfig
+> > @@ -99,6 +99,7 @@ config RISCV
+> >         select HAVE_KPROBES if !XIP_KERNEL
+> >         select HAVE_KPROBES_ON_FTRACE if !XIP_KERNEL
+> >         select HAVE_KRETPROBES if !XIP_KERNEL
+> > +       select HAVE_RETHOOK if !XIP_KERNEL
+> >         select HAVE_MOVE_PMD
+> >         select HAVE_MOVE_PUD
+> >         select HAVE_PCI
+> > diff --git a/arch/riscv/include/asm/kprobes.h b/arch/riscv/include/asm/kprobes.h
+> > index 217ef89f22b9..e7882ccb0fd4 100644
+> > --- a/arch/riscv/include/asm/kprobes.h
+> > +++ b/arch/riscv/include/asm/kprobes.h
+> > @@ -40,8 +40,6 @@ void arch_remove_kprobe(struct kprobe *p);
+> >  int kprobe_fault_handler(struct pt_regs *regs, unsigned int trapnr);
+> >  bool kprobe_breakpoint_handler(struct pt_regs *regs);
+> >  bool kprobe_single_step_handler(struct pt_regs *regs);
+> > -void __kretprobe_trampoline(void);
+> > -void __kprobes *trampoline_probe_handler(struct pt_regs *regs);
+> >
+> >  #endif /* CONFIG_KPROBES */
+> >  #endif /* _ASM_RISCV_KPROBES_H */
+> > diff --git a/arch/riscv/kernel/probes/Makefile b/arch/riscv/kernel/probes/Makefile
+> > index 7f0840dcc31b..c40139e9ca47 100644
+> > --- a/arch/riscv/kernel/probes/Makefile
+> > +++ b/arch/riscv/kernel/probes/Makefile
+> > @@ -1,6 +1,6 @@
+> >  # SPDX-License-Identifier: GPL-2.0
+> >  obj-$(CONFIG_KPROBES)          += kprobes.o decode-insn.o simulate-insn.o
+> > -obj-$(CONFIG_KPROBES)          += kprobes_trampoline.o
+> > +obj-$(CONFIG_RETHOOK)          += rethook.o rethook_trampoline.o
+> >  obj-$(CONFIG_KPROBES_ON_FTRACE)        += ftrace.o
+> >  obj-$(CONFIG_UPROBES)          += uprobes.o decode-insn.o simulate-insn.o
+> >  CFLAGS_REMOVE_simulate-insn.o = $(CC_FLAGS_FTRACE)
+> > diff --git a/arch/riscv/kernel/probes/kprobes.c b/arch/riscv/kernel/probes/kprobes.c
+> > index e6e950b7cf32..f21592d20306 100644
+> > --- a/arch/riscv/kernel/probes/kprobes.c
+> > +++ b/arch/riscv/kernel/probes/kprobes.c
+> > @@ -345,19 +345,6 @@ int __init arch_populate_kprobe_blacklist(void)
+> >         return ret;
+> >  }
+> >
+> > -void __kprobes __used *trampoline_probe_handler(struct pt_regs *regs)
+> > -{
+> > -       return (void *)kretprobe_trampoline_handler(regs, NULL);
+> > -}
+> > -
+> > -void __kprobes arch_prepare_kretprobe(struct kretprobe_instance *ri,
+> > -                                     struct pt_regs *regs)
+> > -{
+> > -       ri->ret_addr = (kprobe_opcode_t *)regs->ra;
+> > -       ri->fp = NULL;
+> > -       regs->ra = (unsigned long) &__kretprobe_trampoline;
+> > -}
+> > -
+> >  int __kprobes arch_trampoline_kprobe(struct kprobe *p)
+> >  {
+> >         return 0;
+> > diff --git a/arch/riscv/kernel/probes/rethook.c b/arch/riscv/kernel/probes/rethook.c
+> > new file mode 100644
+> > index 000000000000..5c27c1f50989
+> > --- /dev/null
+> > +++ b/arch/riscv/kernel/probes/rethook.c
+> > @@ -0,0 +1,27 @@
+> > +// SPDX-License-Identifier: GPL-2.0-only
+> > +/*
+> > + * Generic return hook for riscv.
+> > + */
+> > +
+> > +#include <linux/kprobes.h>
+> > +#include <linux/rethook.h>
+> > +#include "rethook.h"
+> > +
+> > +/* This is called from arch_rethook_trampoline() */
+> > +unsigned long __used arch_rethook_trampoline_callback(struct pt_regs *regs)
+> > +{
+> > +       return rethook_trampoline_handler(regs, regs->s0);
+> > +}
+> > +
+> > +NOKPROBE_SYMBOL(arch_rethook_trampoline_callback);
+> > +
+> > +void arch_rethook_prepare(struct rethook_node *rhn, struct pt_regs *regs, bool mcount)
+> > +{
+> > +       rhn->ret_addr = regs->ra;
+> > +       rhn->frame = regs->s0;
+> > +
+> > +       /* replace return addr with trampoline */
+> > +       regs->ra = (unsigned long)arch_rethook_trampoline;
+> > +}
+> > +
+> > +NOKPROBE_SYMBOL(arch_rethook_prepare);
+> > diff --git a/arch/riscv/kernel/probes/rethook.h b/arch/riscv/kernel/probes/rethook.h
+> > new file mode 100644
+> > index 000000000000..4758f7e3ce88
+> > --- /dev/null
+> > +++ b/arch/riscv/kernel/probes/rethook.h
+> > @@ -0,0 +1,8 @@
+> > +/* SPDX-License-Identifier: GPL-2.0-only */
+> > +#ifndef __RISCV_RETHOOK_H
+> > +#define __RISCV_RETHOOK_H
+> > +
+> > +unsigned long arch_rethook_trampoline_callback(struct pt_regs *regs);
+> > +void arch_rethook_prepare(struct rethook_node *rhn, struct pt_regs *regs, bool mcount);
+> > +
+> > +#endif
+> > diff --git a/arch/riscv/kernel/probes/kprobes_trampoline.S b/arch/riscv/kernel/probes/rethook_trampoline.S
+> > similarity index 94%
+> > rename from arch/riscv/kernel/probes/kprobes_trampoline.S
+> > rename to arch/riscv/kernel/probes/rethook_trampoline.S
+> > index 7bdb09ded39b..21bac92a170a 100644
+> > --- a/arch/riscv/kernel/probes/kprobes_trampoline.S
+> > +++ b/arch/riscv/kernel/probes/rethook_trampoline.S
+> > @@ -75,13 +75,13 @@
+> >         REG_L x31, PT_T6(sp)
+> >         .endm
+> >
+> > -ENTRY(__kretprobe_trampoline)
+> > +ENTRY(arch_rethook_trampoline)
+> >         addi sp, sp, -(PT_SIZE_ON_STACK)
+> >         save_all_base_regs
+> >
+> >         move a0, sp /* pt_regs */
+> >
+> > -       call trampoline_probe_handler
+> > +       call arch_rethook_trampoline_callback
+> >
+> >         /* use the result as the return-address */
+> >         move ra, a0
+> > @@ -90,4 +90,4 @@ ENTRY(__kretprobe_trampoline)
+> >         addi sp, sp, PT_SIZE_ON_STACK
+> >
+> >         ret
+> > -ENDPROC(__kretprobe_trampoline)
+> > +ENDPROC(arch_rethook_trampoline)
+> > --
+> > 2.38.0
+> >
