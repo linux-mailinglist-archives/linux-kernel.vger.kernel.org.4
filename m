@@ -2,643 +2,246 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 86FE66158D8
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 03:59:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C104F61579C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 03:35:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231223AbiKBC7i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 22:59:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48880 "EHLO
+        id S230085AbiKBCfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 22:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54154 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231224AbiKBC7g (ORCPT
+        with ESMTP id S229553AbiKBCfM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 22:59:36 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2D4D222A8;
-        Tue,  1 Nov 2022 19:59:34 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 555DEB8206C;
-        Wed,  2 Nov 2022 02:59:33 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 500DBC433D6;
-        Wed,  2 Nov 2022 02:59:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667357972;
-        bh=UzmSYY4f7wxMhEIRhs2yu/vBBdKVDh/gCyw8/g3euQU=;
-        h=From:To:Cc:Subject:Date:From;
-        b=TSJEdwD/+0e09lNqxByIGsiO3NJxXAWN+74bmj11rcjSqO7TyPWfNSCfrQLb27eyH
-         vv7S33zZm0jUE2xBvEhEm+qIYc96p9G9eGbCWf5gyAl8Ji0pCnGinjCzNKv/OG9VYo
-         HA1Yh/uEfTUnsOfvgE1jjIj69v0F+C7R38t1Gqjk=
-From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Subject: [PATCH 5.15 000/132] 5.15.77-rc1 review
-Date:   Wed,  2 Nov 2022 03:31:46 +0100
-Message-Id: <20221102022059.593236470@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.1
+        Tue, 1 Nov 2022 22:35:12 -0400
+Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 086F5958E;
+        Tue,  1 Nov 2022 19:35:11 -0700 (PDT)
+Received: by mail-ej1-x635.google.com with SMTP id f27so41802692eje.1;
+        Tue, 01 Nov 2022 19:35:10 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=aznj2ZKmJdp+fSkwqbXJeWZ95eAYsYDg0L+lHXLDzis=;
+        b=Pk2JOg3a7s7nAaP5dugWfjeBtrJ2fHvCRqXSnL2IUCWBgHyY2jnYO1x4eIjrx8dSZ0
+         i6zUFARQNW0xY+Fo/o92mCLhdBSiW98n6MJGZZGw2g3OzcH9vJ+uPw0FGwG4LAshTmY1
+         DDbbixclT3FNagANjyI9kssTuSMrfvxQf9eJGgXlFagcBhKb0JytTO9EGx1zGAh1ahyZ
+         YEHnovwmB2GYOmJ7i02zJFy6SRwSwAh43lBYdAQ+PgKDGi7BCLCqIz2ij2feaiF08jPW
+         sSmnLipyf6hOUCjnITehhHsj9Ti6ANoJak2IAyrZxP64+ctWRJ2sBp8JtImnKdTxUE74
+         R4dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aznj2ZKmJdp+fSkwqbXJeWZ95eAYsYDg0L+lHXLDzis=;
+        b=MgTHVJIjFUHbgrzV/NTGAJc3QsfElHUCQjhLqmwjjhJxwPMrqAXo9Va+BNllBIgwVS
+         RhQL0FeZkJuQnxXmwvSA+Z8uCP697D5sGkFd7Zb6+LzmYMNm2OG2hf9XeL0r5qA6D/Sv
+         FX505uvm2fRDtFzXtBSslEClNTPZ3O1hdw3luJE2Dl3L2QtB/FlUdGQV/J6BLiByobYn
+         qqU80ApL1UTn3ViTpdJtVZrwOrwkF4wYRTYkRbA9B9X2w5uIsADz4c6aOBCvPzziPGIe
+         eHXbdpt5cBBlz7NhyD5N7z3hum93p46oi3e2kfNEgzWlHq0tIHEE09rg2i7BYutCpSaQ
+         SnJg==
+X-Gm-Message-State: ACrzQf0SGJ5INglNzeSA/Takmd8TRXHISagB2x7yzS4UIxIzKGv/ty3e
+        SXpmKXEjc/e3ZV/m01DQKaoBSKpJELRAH5jEfBqLgxMYxSk=
+X-Google-Smtp-Source: AMsMyM4RHGKYWPsPGTpxUn7s10t/Pa9r6dHhTAgqxqW8kAg6KrttIHCRcrnadfZazRxl+ROr2tr0Dvx/6b+YBFv9dEM=
+X-Received: by 2002:a17:907:7b94:b0:731:1b11:c241 with SMTP id
+ ne20-20020a1709077b9400b007311b11c241mr22169870ejc.676.1667356509367; Tue, 01
+ Nov 2022 19:35:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.77-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-5.15.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 5.15.77-rc1
-X-KernelTest-Deadline: 2022-11-04T02:21+00:00
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221020222416.3415511-1-void@manifault.com> <20221020222416.3415511-2-void@manifault.com>
+ <20221101000239.pbbmym4mbdbmnzjd@macbook-pro-4.dhcp.thefacebook.com>
+ <Y2FhXC/s5GUkbr9P@maniforge.dhcp.thefacebook.com> <CAADnVQ+KZcFZdC=W_qZ3kam9yAjORtpN-9+Ptg_Whj-gRxCZNQ@mail.gmail.com>
+ <Y2GRQhsyQMNCOZMT@maniforge.dhcp.thefacebook.com> <CAP01T75R+8WF7jAi5=9cvXfpKtKi9Dq6VxpuYyu7NbWjCtozNg@mail.gmail.com>
+ <20221102003222.2isv2ewxxamoe6lw@macbook-pro-4.dhcp.thefacebook.com> <CAP01T75cXDoKxj4c7YYrv2YLCLpRdsuWc9fVbV0Qzxii9wneGQ@mail.gmail.com>
+In-Reply-To: <CAP01T75cXDoKxj4c7YYrv2YLCLpRdsuWc9fVbV0Qzxii9wneGQ@mail.gmail.com>
+From:   Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Date:   Tue, 1 Nov 2022 19:34:57 -0700
+Message-ID: <CAADnVQJfj9mrFZ+mBfwh8Xba333B6EyHRMdb6DE4s6te_5_V_A@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 1/3] bpf: Allow trusted pointers to be passed
+ to KF_TRUSTED_ARGS kfuncs
+To:     Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Cc:     David Vernet <void@manifault.com>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>, Tejun Heo <tj@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 5.15.77 release.
-There are 132 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
-
-Responses should be made by Fri, 04 Nov 2022 02:20:38 +0000.
-Anything received after that time might be too late.
-
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.77-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-and the diffstat can be found below.
-
-thanks,
-
-greg k-h
-
--------------
-Pseudo-Shortlog of commits:
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 5.15.77-rc1
-
-Kuniyuki Iwashima <kuniyu@amazon.com>
-    tcp/udp: Fix memory leak in ipv6_renew_options().
-
-Lukas Wunner <lukas@wunner.de>
-    serial: Deassert Transmit Enable on probe in driver-specific way
-
-Lino Sanfilippo <LinoSanfilippo@gmx.de>
-    serial: core: move RS485 configuration tasks from drivers into core
-
-Biju Das <biju.das.jz@bp.renesas.com>
-    can: rcar_canfd: rcar_canfd_handle_global_receive(): fix IRQ storm on global FIFO receive
-
-Biju Das <biju.das.jz@bp.renesas.com>
-    can: rcar_canfd: fix channel specific IRQ handling for RZ/G2L
-
-Yu Kuai <yukuai3@huawei.com>
-    scsi: sd: Revert "scsi: sd: Remove a local variable"
-
-D Scott Phillips <scott@os.amperecomputing.com>
-    arm64: Add AMPERE1 to the Spectre-BHB affected list
-
-Vladimir Oltean <vladimir.oltean@nxp.com>
-    net: enetc: survive memory pressure without crashing
-
-Eric Dumazet <edumazet@google.com>
-    kcm: do not sense pfmemalloc status in kcm_sendpage()
-
-Eric Dumazet <edumazet@google.com>
-    net: do not sense pfmemalloc status in skb_append_pagefrags()
-
-Suresh Devarakonda <ramad@nvidia.com>
-    net/mlx5: Fix crash during sync firmware reset
-
-Roy Novich <royno@nvidia.com>
-    net/mlx5: Update fw fatal reporter state on PCI handlers successful recover
-
-Saeed Mahameed <saeedm@nvidia.com>
-    net/mlx5: Print more info on pci error handlers
-
-Tariq Toukan <tariqt@nvidia.com>
-    net/mlx5: Fix possible use-after-free in async command interface
-
-Aya Levin <ayal@nvidia.com>
-    net/mlx5e: Extend SKB room check to include PTP-SQ
-
-Hyong Youb Kim <hyonkim@cisco.com>
-    net/mlx5e: Do not increment ESN when updating IPsec ESN state
-
-Zhengchao Shao <shaozhengchao@huawei.com>
-    netdevsim: remove dir in nsim_dev_debugfs_init() when creating ports dir failed
-
-Rafał Miłecki <rafal@milecki.pl>
-    net: broadcom: bcm4908_enet: update TX stats after actual transmission
-
-Colin Ian King <colin.i.king@gmail.com>
-    net: broadcom: bcm4908enet: remove redundant variable bytes
-
-Nicolas Dichtel <nicolas.dichtel@6wind.com>
-    nh: fix scope used to find saddr when adding non gw nh
-
-Florian Fainelli <f.fainelli@gmail.com>
-    net: bcmsysport: Indicate MAC is in charge of PHY PM
-
-Yang Yingliang <yangyingliang@huawei.com>
-    net: ehea: fix possible memory leak in ehea_register_port()
-
-Aaron Conole <aconole@redhat.com>
-    openvswitch: switch from WARN to pr_warn
-
-Takashi Iwai <tiwai@suse.de>
-    ALSA: aoa: Fix I2S device accounting
-
-Yang Yingliang <yangyingliang@huawei.com>
-    ALSA: aoa: i2sbus: fix possible memory leak in i2sbus_add_dev()
-
-Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-    net: ethernet: ave: Fix MAC to be in charge of PHY PM
-
-Juergen Borleis <jbe@pengutronix.de>
-    net: fec: limit register access on i.MX6UL
-
-Shang XiaoJing <shangxiaojing@huawei.com>
-    perf vendor events arm64: Fix incorrect Hisi hip08 L3 metrics
-
-Sudeep Holla <sudeep.holla@arm.com>
-    PM: domains: Fix handling of unavailable/disabled idle states
-
-Yang Yingliang <yangyingliang@huawei.com>
-    net: ksz884x: fix missing pci_disable_device() on error in pcidev_init()
-
-Slawomir Laba <slawomirx.laba@intel.com>
-    i40e: Fix flow-type by setting GL_HASH_INSET registers
-
-Sylwester Dziedziuch <sylwesterx.dziedziuch@intel.com>
-    i40e: Fix VF hang when reset is triggered on another VF
-
-Slawomir Laba <slawomirx.laba@intel.com>
-    i40e: Fix ethtool rx-flow-hash setting for X722
-
-Eric Dumazet <edumazet@google.com>
-    ipv6: ensure sane device mtu in tunnels
-
-Kajol Jain <kjain@linux.ibm.com>
-    perf vendor events power10: Fix hv-24x7 metric events
-
-Hans Verkuil <hverkuil-cisco@xs4all.nl>
-    media: vivid: set num_in/outputs to 0 if not supported
-
-Hans Verkuil <hverkuil-cisco@xs4all.nl>
-    media: videodev2.h: V4L2_DV_BT_BLANKING_HEIGHT should check 'interlaced'
-
-Hans Verkuil <hverkuil-cisco@xs4all.nl>
-    media: v4l2-dv-timings: add sanity checks for blanking values
-
-Hans Verkuil <hverkuil-cisco@xs4all.nl>
-    media: vivid: dev->bitmap_cap wasn't freed in all cases
-
-Hans Verkuil <hverkuil-cisco@xs4all.nl>
-    media: vivid: s_fbuf: add more sanity checks
-
-Mario Limonciello <mario.limonciello@amd.com>
-    PM: hibernate: Allow hybrid sleep to work with s2idle
-
-Dongliang Mu <dzm91@hust.edu.cn>
-    can: mcp251x: mcp251x_can_probe(): add missing unregister_candev() in error path
-
-Dongliang Mu <dzm91@hust.edu.cn>
-    can: mscan: mpc5xxx: mpc5xxx_can_probe(): add missing put_clock() in error path
-
-Rafael Mendonca <rafaelmendsr@gmail.com>
-    drm/amdkfd: Fix memory leak in kfd_mem_dmamap_userptr()
-
-Jakub Kicinski <kuba@kernel.org>
-    net-memcg: avoid stalls when under memory pressure
-
-Neal Cardwell <ncardwell@google.com>
-    tcp: fix indefinite deferral of RTO with SACK reneging
-
-Lu Wei <luwei32@huawei.com>
-    tcp: fix a signed-integer-overflow bug in tcp_add_backlog()
-
-Eric Dumazet <edumazet@google.com>
-    tcp: minor optimization in tcp_add_backlog()
-
-Zhang Changzhong <zhangchangzhong@huawei.com>
-    net: lantiq_etop: don't free skb when returning NETDEV_TX_BUSY
-
-Zhengchao Shao <shaozhengchao@huawei.com>
-    net: fix UAF issue in nfqnl_nf_hook_drop() when ops_init() failed
-
-Eric Dumazet <edumazet@google.com>
-    kcm: annotate data-races around kcm->rx_wait
-
-Eric Dumazet <edumazet@google.com>
-    kcm: annotate data-races around kcm->rx_psock
-
-Íñigo Huguet <ihuguet@redhat.com>
-    atlantic: fix deadlock at aq_nic_stop
-
-Ankit Nautiyal <ankit.k.nautiyal@intel.com>
-    drm/i915/dp: Reset frl trained flag before restarting FRL training
-
-Raju Rangoju <Raju.Rangoju@amd.com>
-    amd-xgbe: add the bit rate quirk for Molex cables
-
-Raju Rangoju <Raju.Rangoju@amd.com>
-    amd-xgbe: fix the SFP compliance codes check for DAC cables
-
-Chen Zhongjin <chenzhongjin@huawei.com>
-    x86/unwind/orc: Fix unreliable stack dump with gcov
-
-Shang XiaoJing <shangxiaojing@huawei.com>
-    nfc: virtual_ncidev: Fix memory leak in virtual_nci_send()
-
-Sergiu Moga <sergiu.moga@microchip.com>
-    net: macb: Specify PHY PM management done by MAC
-
-Zhengchao Shao <shaozhengchao@huawei.com>
-    net: hinic: fix the issue of double release MBOX callback of VF
-
-Zhengchao Shao <shaozhengchao@huawei.com>
-    net: hinic: fix the issue of CMDQ memory leaks
-
-Zhengchao Shao <shaozhengchao@huawei.com>
-    net: hinic: fix memory leak when reading function table
-
-Zhengchao Shao <shaozhengchao@huawei.com>
-    net: hinic: fix incorrect assignment issue in hinic_set_interrupt_cfg()
-
-Yang Yingliang <yangyingliang@huawei.com>
-    net: netsec: fix error handling in netsec_register_mdio()
-
-Xin Long <lucien.xin@gmail.com>
-    tipc: fix a null-ptr-deref in tipc_topsrv_accept
-
-Maxim Levitsky <mlevitsk@redhat.com>
-    perf/x86/intel/lbr: Use setup_clear_cpu_cap() instead of clear_cpu_cap()
-
-Yang Yingliang <yangyingliang@huawei.com>
-    ALSA: ac97: fix possible memory leak in snd_ac97_dev_register()
-
-Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-    ASoC: qcom: lpass-cpu: Mark HDMI TX parity register as volatile
-
-Yang Yingliang <yangyingliang@huawei.com>
-    mtd: rawnand: intel: Add missing of_node_put() in ebu_nand_probe()
-
-Randy Dunlap <rdunlap@infradead.org>
-    arc: iounmap() arg is volatile
-
-Lin Shengwang <linshengwang1@huawei.com>
-    sched/core: Fix comparison in sched_group_cookie_match()
-
-Peter Zijlstra <peterz@infradead.org>
-    perf: Fix missing SIGTRAPs
-
-Srinivasa Rao Mandadapu <quic_srivasam@quicinc.com>
-    ASoC: qcom: lpass-cpu: mark HDMI TX registers as volatile
-
-Gavin Shan <gshan@redhat.com>
-    KVM: selftests: Fix number of pages for memory slot in memslot_modification_stress_test
-
-Nathan Huckleberry <nhuck@google.com>
-    drm/msm: Fix return type of mdp4_lvds_connector_mode_valid
-
-Dan Carpenter <dan.carpenter@oracle.com>
-    media: atomisp: prevent integer overflow in sh_css_set_black_frame()
-
-Alexander Stein <alexander.stein@ew.tq-group.com>
-    media: v4l2: Fix v4l2_i2c_subdev_set_name function documentation
-
-Wei Yongjun <weiyongjun1@huawei.com>
-    net: ieee802154: fix error return code in dgram_bind()
-
-Xin Long <lucien.xin@gmail.com>
-    ethtool: eeprom: fix null-deref on genl_info in dump
-
-Christian Löhle <CLoehle@hyperstone.com>
-    mmc: block: Remove error check of hw_reset on reset
-
-James Smart <jsmart2021@gmail.com>
-    Revert "scsi: lpfc: SLI path split: Refactor lpfc_iocbq"
-
-James Smart <jsmart2021@gmail.com>
-    Revert "scsi: lpfc: SLI path split: Refactor fast and slow paths to native SLI4"
-
-James Smart <jsmart2021@gmail.com>
-    Revert "scsi: lpfc: SLI path split: Refactor SCSI paths"
-
-James Smart <jsmart2021@gmail.com>
-    Revert "scsi: lpfc: Fix locking for lpfc_sli_iocbq_lookup()"
-
-James Smart <jsmart2021@gmail.com>
-    Revert "scsi: lpfc: Fix element offset in __lpfc_sli_release_iocbq_s4()"
-
-James Smart <jsmart2021@gmail.com>
-    Revert "scsi: lpfc: Resolve some cleanup issues following SLI path refactoring"
-
-Heiko Carstens <hca@linux.ibm.com>
-    s390/pci: add missing EX_TABLE entries to __pcistg_mio_inuser()/__pcilg_mio_inuser()
-
-Heiko Carstens <hca@linux.ibm.com>
-    s390/futex: add missing EX_TABLE entry to __futex_atomic_op()
-
-Adrian Hunter <adrian.hunter@intel.com>
-    perf auxtrace: Fix address filter symbol name match for modules
-
-Pavel Kozlov <pavel.kozlov@synopsys.com>
-    ARC: mm: fix leakage of memory allocated for PTE
-
-Siarhei Volkau <lis8215@gmail.com>
-    pinctrl: Ingenic: JZ4755 bug fixes
-
-Christian A. Ehrhardt <lk@c--e.de>
-    kernfs: fix use-after-free in __kernfs_remove
-
-William Breathitt Gray <william.gray@linaro.org>
-    counter: microchip-tcb-capture: Handle Signal1 read and Synapse
-
-Sascha Hauer <s.hauer@pengutronix.de>
-    mmc: sdhci-esdhc-imx: Propagate ESDHC_FLAG_HS400* only on 8bit bus
-
-Patrick Thompson <ptf@google.com>
-    mmc: sdhci-pci-core: Disable ES for ASUS BIOS on Jasper Lake
-
-Matthew Ma <mahongwei@zeku.com>
-    mmc: core: Fix kernel panic when remove non-standard SDIO card
-
-Brian Norris <briannorris@chromium.org>
-    mmc: sdhci_am654: 'select', not 'depends' REGMAP_MMIO
-
-James Clark <james.clark@arm.com>
-    coresight: cti: Fix hang in cti_disable_hw()
-
-Johan Hovold <johan+linaro@kernel.org>
-    drm/msm/dp: fix IRQ lifetime
-
-Johan Hovold <johan+linaro@kernel.org>
-    drm/msm/hdmi: fix memory corruption with too many bridges
-
-Johan Hovold <johan+linaro@kernel.org>
-    drm/msm/dsi: fix memory corruption with too many bridges
-
-Prike Liang <Prike.Liang@amd.com>
-    drm/amdgpu: disallow gfxoff until GC IP blocks complete s2idle resume
-
-Manish Rangankar <mrangankar@marvell.com>
-    scsi: qla2xxx: Use transport-defined speed mask for supported_speeds
-
-Miquel Raynal <miquel.raynal@bootlin.com>
-    mac802154: Fix LQI recording
-
-Bernd Edlinger <bernd.edlinger@hotmail.de>
-    exec: Copy oldsighand->action under spin-lock
-
-Li Zetao <lizetao1@huawei.com>
-    fs/binfmt_elf: Fix memory leak in load_elf_binary()
-
-Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-    cpufreq: intel_pstate: hybrid: Use known scaling factor for P-cores
-
-Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-    cpufreq: intel_pstate: Read all MSRs on the target CPU
-
-Hyunwoo Kim <imv4bel@gmail.com>
-    fbdev: smscufx: Fix several use-after-free bugs
-
-Matti Vaittinen <mazziesaccount@gmail.com>
-    iio: adxl372: Fix unsafe buffer attributes
-
-Cosmin Tanislav <cosmin.tanislav@analog.com>
-    iio: temperature: ltc2983: allocate iio channels once
-
-Shreeya Patel <shreeya.patel@collabora.com>
-    iio: light: tsl2583: Fix module unloading
-
-Matti Vaittinen <mazziesaccount@gmail.com>
-    tools: iio: iio_utils: fix digit calculation
-
-Mathias Nyman <mathias.nyman@linux.intel.com>
-    xhci: Remove device endpoints from bandwidth list when freeing the device
-
-Mario Limonciello <mario.limonciello@amd.com>
-    xhci-pci: Set runtime PM as default policy on all xHC 1.2 or later devices
-
-Mathias Nyman <mathias.nyman@linux.intel.com>
-    xhci: Add quirk to reset host back to default state at shutdown
-
-Tony O'Brien <tony.obrien@alliedtelesis.co.nz>
-    mtd: rawnand: marvell: Use correct logic for nand-keep-config
-
-Jens Glathe <jens.glathe@oldschoolsolutions.biz>
-    usb: xhci: add XHCI_SPURIOUS_SUCCESS to ASM1042 despite being a V0.96 controller
-
-Justin Chen <justinpopo6@gmail.com>
-    usb: bdc: change state when port disconnected
-
-Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-    usb: dwc3: gadget: Don't set IMI for no_interrupt
-
-Thinh Nguyen <Thinh.Nguyen@synopsys.com>
-    usb: dwc3: gadget: Stop processing more requests on IMI
-
-Jeff Vanhoof <qjv001@motorola.com>
-    usb: gadget: uvc: fix sg handling during video encode
-
-Dan Vacura <w36195@motorola.com>
-    usb: gadget: uvc: fix sg handling in error case
-
-Hannu Hartikainen <hannu@hrtk.in>
-    USB: add RESET_RESUME quirk for NVIDIA Jetson devices in RCM
-
-Jason A. Donenfeld <Jason@zx2c4.com>
-    ALSA: rme9652: use explicitly signed char
-
-Jason A. Donenfeld <Jason@zx2c4.com>
-    ALSA: au88x0: use explicitly signed char
-
-Takashi Iwai <tiwai@suse.de>
-    ALSA: usb-audio: Add quirks for M-Audio Fast Track C400/600
-
-Steven Rostedt (Google) <rostedt@goodmis.org>
-    ALSA: Use del_timer_sync() before freeing timer
-
-Anssi Hannula <anssi.hannula@bitwise.fi>
-    can: kvaser_usb: Fix possible completions during init_completion
-
-Yang Yingliang <yangyingliang@huawei.com>
-    can: j1939: transport: j1939_session_skb_drop_old(): spin_unlock_irqrestore() before kfree_skb()
-
-Scott Mayhew <smayhew@redhat.com>
-    NFSv4: Add an fattr allocation to _nfs4_discover_trunking()
-
-Benjamin Coddington <bcodding@redhat.com>
-    NFSv4: Fix free of uninitialized nfs4_label on referral lookup.
-
-
--------------
-
-Diffstat:
-
- Makefile                                           |   4 +-
- arch/arc/include/asm/io.h                          |   2 +-
- arch/arc/include/asm/pgtable-levels.h              |   2 +-
- arch/arc/mm/ioremap.c                              |   2 +-
- arch/arm64/include/asm/cputype.h                   |   4 +
- arch/arm64/kernel/proton-pack.c                    |   6 +
- arch/s390/include/asm/futex.h                      |   3 +-
- arch/s390/pci/pci_mmio.c                           |   8 +-
- arch/x86/events/intel/lbr.c                        |   2 +-
- arch/x86/kernel/unwind_orc.c                       |   2 +-
- drivers/base/power/domain.c                        |   4 +
- drivers/counter/microchip-tcb-capture.c            |  18 +-
- drivers/cpufreq/intel_pstate.c                     | 133 ++--
- drivers/gpu/drm/amd/amdgpu/amdgpu_amdkfd_gpuvm.c   |   6 +-
- drivers/gpu/drm/amd/amdgpu/amdgpu_device.c         |  16 +
- drivers/gpu/drm/i915/display/intel_dp.c            |   2 +
- .../gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c    |   5 +-
- drivers/gpu/drm/msm/dp/dp_display.c                |   2 +-
- drivers/gpu/drm/msm/dsi/dsi.c                      |   6 +
- drivers/gpu/drm/msm/hdmi/hdmi.c                    |   5 +
- drivers/hwtracing/coresight/coresight-cti-core.c   |   5 -
- drivers/iio/accel/adxl372.c                        |  23 +-
- drivers/iio/light/tsl2583.c                        |   2 +-
- drivers/iio/temperature/ltc2983.c                  |  13 +-
- drivers/media/test-drivers/vivid/vivid-core.c      |  38 +-
- drivers/media/test-drivers/vivid/vivid-core.h      |   2 +
- drivers/media/test-drivers/vivid/vivid-vid-cap.c   |  27 +-
- drivers/media/v4l2-core/v4l2-dv-timings.c          |  14 +
- drivers/mmc/core/block.c                           |  44 +-
- drivers/mmc/core/sdio_bus.c                        |   3 +-
- drivers/mmc/host/Kconfig                           |   3 +-
- drivers/mmc/host/sdhci-esdhc-imx.c                 |  14 +-
- drivers/mmc/host/sdhci-pci-core.c                  |  14 +-
- drivers/mtd/nand/raw/intel-nand-controller.c       |  19 +-
- drivers/mtd/nand/raw/marvell_nand.c                |   2 +-
- drivers/net/can/mscan/mpc5xxx_can.c                |   8 +-
- drivers/net/can/rcar/rcar_canfd.c                  |  24 +-
- drivers/net/can/spi/mcp251x.c                      |   5 +-
- drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c  |   4 +-
- drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c   |   4 +-
- drivers/net/ethernet/amd/xgbe/xgbe-phy-v2.c        |  17 +-
- drivers/net/ethernet/aquantia/atlantic/aq_macsec.c |  96 ++-
- drivers/net/ethernet/aquantia/atlantic/aq_nic.h    |   2 +
- drivers/net/ethernet/broadcom/bcm4908_enet.c       |  10 +-
- drivers/net/ethernet/broadcom/bcmsysport.c         |   3 +
- drivers/net/ethernet/cadence/macb_main.c           |   1 +
- drivers/net/ethernet/freescale/enetc/enetc.c       |   5 +
- drivers/net/ethernet/freescale/fec_main.c          |  46 +-
- drivers/net/ethernet/huawei/hinic/hinic_debugfs.c  |  18 +-
- drivers/net/ethernet/huawei/hinic/hinic_hw_cmdq.c  |   2 +-
- drivers/net/ethernet/huawei/hinic/hinic_hw_dev.c   |   2 +-
- drivers/net/ethernet/huawei/hinic/hinic_sriov.c    |   1 -
- drivers/net/ethernet/ibm/ehea/ehea_main.c          |   1 +
- drivers/net/ethernet/intel/i40e/i40e_ethtool.c     | 100 ++-
- drivers/net/ethernet/intel/i40e/i40e_type.h        |   4 +
- drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c |  43 +-
- drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.h |   1 +
- drivers/net/ethernet/lantiq_etop.c                 |   1 -
- drivers/net/ethernet/mellanox/mlx5/core/cmd.c      |  10 +-
- drivers/net/ethernet/mellanox/mlx5/core/en/ptp.h   |   9 +
- drivers/net/ethernet/mellanox/mlx5/core/en/txrx.h  |   6 +
- .../ethernet/mellanox/mlx5/core/en_accel/ipsec.c   |   3 -
- drivers/net/ethernet/mellanox/mlx5/core/en_tx.c    |   6 +
- drivers/net/ethernet/mellanox/mlx5/core/lib/mpfs.c |   6 +-
- drivers/net/ethernet/mellanox/mlx5/core/main.c     |  55 +-
- drivers/net/ethernet/micrel/ksz884x.c              |   2 +-
- drivers/net/ethernet/socionext/netsec.c            |   2 +
- drivers/net/ethernet/socionext/sni_ave.c           |   6 +
- drivers/net/netdevsim/dev.c                        |  11 +-
- drivers/nfc/virtual_ncidev.c                       |   3 +
- drivers/pinctrl/pinctrl-ingenic.c                  |   4 +-
- drivers/scsi/lpfc/lpfc.h                           |  40 -
- drivers/scsi/lpfc/lpfc_bsg.c                       |  50 +-
- drivers/scsi/lpfc/lpfc_crtn.h                      |   3 +-
- drivers/scsi/lpfc/lpfc_ct.c                        |   8 +-
- drivers/scsi/lpfc/lpfc_els.c                       | 139 ++--
- drivers/scsi/lpfc/lpfc_hw4.h                       |   7 -
- drivers/scsi/lpfc/lpfc_init.c                      |  13 +-
- drivers/scsi/lpfc/lpfc_nportdisc.c                 |   4 +-
- drivers/scsi/lpfc/lpfc_nvme.c                      |  34 +-
- drivers/scsi/lpfc/lpfc_nvme.h                      |   6 +-
- drivers/scsi/lpfc/lpfc_nvmet.c                     |  83 +-
- drivers/scsi/lpfc/lpfc_scsi.c                      | 441 ++++++-----
- drivers/scsi/lpfc/lpfc_sli.c                       | 876 ++++++++++++---------
- drivers/scsi/lpfc/lpfc_sli.h                       |  26 +-
- drivers/scsi/qla2xxx/qla_attr.c                    |  28 +-
- drivers/scsi/sd.c                                  |   3 +-
- drivers/staging/media/atomisp/pci/sh_css_params.c  |   4 +-
- drivers/tty/serial/8250/8250_omap.c                |   3 +
- drivers/tty/serial/8250/8250_pci.c                 |   9 +-
- drivers/tty/serial/8250/8250_port.c                |  12 +-
- drivers/tty/serial/fsl_lpuart.c                    |   8 +-
- drivers/tty/serial/imx.c                           |   8 +-
- drivers/tty/serial/serial_core.c                   |  61 +-
- drivers/usb/core/quirks.c                          |   9 +
- drivers/usb/dwc3/gadget.c                          |   8 +-
- drivers/usb/gadget/function/uvc_queue.c            |   8 +-
- drivers/usb/gadget/function/uvc_video.c            |  22 +-
- drivers/usb/gadget/udc/bdc/bdc_udc.c               |   1 +
- drivers/usb/host/xhci-mem.c                        |  20 +-
- drivers/usb/host/xhci-pci.c                        |  44 +-
- drivers/usb/host/xhci.c                            |  10 +-
- drivers/usb/host/xhci.h                            |   1 +
- drivers/video/fbdev/smscufx.c                      |  55 +-
- fs/binfmt_elf.c                                    |   3 +-
- fs/exec.c                                          |   4 +-
- fs/kernfs/dir.c                                    |   5 +-
- fs/nfs/nfs4namespace.c                             |   9 +-
- fs/nfs/nfs4proc.c                                  |  34 +-
- fs/nfs/nfs4state.c                                 |   9 +-
- fs/nfs/nfs4xdr.c                                   |   4 +-
- include/linux/mlx5/driver.h                        |   2 +-
- include/linux/nfs_xdr.h                            |   2 +-
- include/linux/perf_event.h                         |  19 +-
- include/media/v4l2-common.h                        |   3 +-
- include/net/sock.h                                 |   2 +-
- include/uapi/linux/videodev2.h                     |   3 +-
- kernel/events/core.c                               | 153 +++-
- kernel/events/ring_buffer.c                        |   2 +-
- kernel/power/hibernate.c                           |   2 +-
- kernel/sched/sched.h                               |  18 +-
- net/can/j1939/transport.c                          |   4 +-
- net/core/net_namespace.c                           |   7 +
- net/core/skbuff.c                                  |   2 +-
- net/ethtool/eeprom.c                               |   2 +-
- net/ieee802154/socket.c                            |   4 +-
- net/ipv4/nexthop.c                                 |   2 +-
- net/ipv4/tcp_input.c                               |   3 +-
- net/ipv4/tcp_ipv4.c                                |   7 +-
- net/ipv6/ip6_gre.c                                 |  12 +-
- net/ipv6/ip6_tunnel.c                              |  11 +-
- net/ipv6/ipv6_sockglue.c                           |   7 +
- net/ipv6/sit.c                                     |   8 +-
- net/kcm/kcmsock.c                                  |  25 +-
- net/mac802154/rx.c                                 |   5 +-
- net/openvswitch/datapath.c                         |   3 +-
- net/tipc/topsrv.c                                  |  16 +-
- sound/aoa/soundbus/i2sbus/core.c                   |   7 +-
- sound/pci/ac97/ac97_codec.c                        |   1 +
- sound/pci/au88x0/au88x0.h                          |   6 +-
- sound/pci/au88x0/au88x0_core.c                     |   2 +-
- sound/pci/rme9652/hdsp.c                           |  26 +-
- sound/pci/rme9652/rme9652.c                        |  22 +-
- sound/soc/qcom/lpass-cpu.c                         |  10 +
- sound/synth/emux/emux.c                            |   7 +-
- sound/usb/implicit.c                               |   2 +
- tools/iio/iio_utils.c                              |   4 +
- .../arch/arm64/hisilicon/hip08/metrics.json        |   6 +-
- .../arch/powerpc/power10/nest_metrics.json         |  72 +-
- tools/perf/util/auxtrace.c                         |  10 +-
- .../kvm/memslot_modification_stress_test.c         |   2 +-
- 151 files changed, 2130 insertions(+), 1459 deletions(-)
-
-
+On Tue, Nov 1, 2022 at 6:01 PM Kumar Kartikeya Dwivedi <memxor@gmail.com> wrote:
+>
+> On Wed, 2 Nov 2022 at 06:02, Alexei Starovoitov
+> <alexei.starovoitov@gmail.com> wrote:
+> >
+> > On Wed, Nov 02, 2022 at 04:01:11AM +0530, Kumar Kartikeya Dwivedi wrote:
+> > > On Wed, 2 Nov 2022 at 03:06, David Vernet <void@manifault.com> wrote:
+> > > >
+> > > > On Tue, Nov 01, 2022 at 01:22:39PM -0700, Alexei Starovoitov wrote:
+> > > > > On Tue, Nov 1, 2022 at 11:11 AM David Vernet <void@manifault.com> wrote:
+> > > > > >
+> > > > > > > What kind of bpf prog will be able to pass 'struct nf_conn___init *' into these bpf_ct_* ?
+> > > > > > > We've introduced / vs nf_conf specifically to express the relationship
+> > > > > > > between allocated nf_conn and other nf_conn-s via different types.
+> > > > > > > Why is this not enough?
+> > > > > >
+> > > > > > Kumar should have more context here (he originally suggested this in
+> > > > > > [0]),
+> > > > >
+> > > > > Quoting:
+> > > > > "
+> > > > > Unfortunately a side effect of this change is that now since
+> > > > > PTR_TO_BTF_ID without ref_obj_id is considered trusted, the bpf_ct_*
+> > > > > functions would begin working with tp_btf args.
+> > > > > "
+> > > > > I couldn't find any tracepoint that has nf_conn___init as an argument.
+> > > > > The whole point of that new type was to return it to bpf prog,
+> > > > > so the verifier type matches it when it's passed into bpf_ct_*
+> > > > > in turn.
+> > > > > So I don't see a need for a new OWNED flag still.
+> > > > > If nf_conn___init is passed into tracepoint it's a bug and
+> > > > > we gotta fix it.
+> > > >
+> > > > Yep, this is what I'm seeing as well. I think you're right that
+> > > > KF_OWNED_ARGS is just strictly unnecessary and that creating wrapper
+> > > > types is the way to enable an ownership model like this.
+> > > >
+> > >
+> > > It's not just nf_conn___init. Some CT helpers also take nf_conn.
+> > > e.g. bpf_ct_change_timeout, bpf_ct_change_status.
+> > > Right now they are only allowed in XDP and TC programs, so the tracing
+> > > args part is not a problem _right now_.
+> >
+> > ... and it will be fine to use bpf_ct_change_timeout from tp_btf as well.
+> >
+> > > So currently it may not be possible to pass such a trusted but
+> > > ref_obj_id == 0 nf_conn to those helpers.
+> > > But based on changes unrelated to this, it may become possible in the
+> > > future to obtain such a trusted nf_conn pointer.
+> >
+> > From kfunc's pov trusted pointer means valid pointer.
+> > It doesn't need to be ref_obj_id refcounted from the verifier pov.
+> > It can be refcounted on the kernel side and it will be trusted.
+> > The code that calls trace_*() passes only trusted pointers into tp-s.
+> > If there is a tracepoint somewhere in the kernel that uses a volatile
+> > pointer to potentially uaf kernel object it's a bug that should be fixed.
+> >
+>
+> This is all fine. I'm asking you to distinguish between
+> trusted-not-refcounted and trusted-and-refcounted.
+
+That's not what you're asking :)
+
+> It is necessary for nf_conn, since the object can be reused if the
+> refcount is not held.
+
+of course. No one argues the opposite.
+
+> Some other CPU could be reusing the same memory and allocating a new
+> nf_conn on it while we change its status.
+> So it's not ok to call bpf_ct_change_timeout/status on trusted
+> nf_conn, but only on trusted+refcounted nf_conn.
+
+and here we start to disagree.
+
+> Trusted doesn't capture the difference between 'valid' vs 'valid and
+> owned by prog' anymore with the new definition
+> for PTR_TO_BTF_ID.
+
+and here we disagree completely.
+You're asking to distinguish refcnt++ done by the program
+and recognized by the verifier as ref_obj_id > 0 vs
+refcnt++ done by the kernel code before it calls into tracepoint.
+That's odd, right?
+I don't think people adding kfuncs should care what piece
+of code before kfunc did refcnt++.
+
+> Yes, in most cases the tracepoints/tracing functions whitelisted will
+> have the caller ensure that,
+> but we should then allow trusted nf_conn in those hooks explicitly,
+> not implicitly by default everywhere.
+> Until then it should be restricted to ref_obj_id > 0 IMO as it is right now.
+>
+> > > It is a requirement of those kfuncs that the nf_conn has its refcount
+> > > held while they are called.
+> >
+> > and it will be. Just not by the verifier.
+> >
+> > > KF_TRUSTED_ARGS was encoding this requirement before, but it wouldn't anymore.
+> > > It seems better to me to keep that restriction instead of relaxing it,
+> > > if it is part of the contract.
+> >
+> > Disagree as explained above.
+> >
+> > > It is fine to not require people to dive into these details and just
+> > > use KF_TRUSTED_ARGS in general, but we need something to cover special
+> > > cases like these where the object is only stable while we hold an
+> > > active refcount, RCU protection is not enough against reuse.
+> >
+> > This is not related to RCU. Let's not mix RCU concerns in here.
+> > It's a different topic.
+> >
+>
+> What I meant is that in the normal case, usually objects aren't reused
+> while the RCU read lock is held.
+> In case of nf_conn, the refcount needs to be held to ensure that,
+> since it uses SLAB_TYPESAFE_BY_RCU.
+> This is why bpf_ct_lookup needs to bump the refcount and match the key
+> after that again, and cannot just return the looked up ct directly.
+
+bpf_ct_lookup needs to bump a refcnt?!
+bpf_skb_ct_lookup calls __bpf_nf_ct_lookup
+that calls nf_conntrack_find_get() that does
+the search and incs the refcnt in a generic kernel code.
+There is nothing bpf specific stuff here. bpf kfunc didn't
+add any special refcnt incs.
+
+There are no tracepoints in netfilter, so this discussion
+is all theoretical, but if there was then the code
+should have made sure that refcnt is held before
+passing nf_conn into tracepoint.
+
+> > > It could be 'expert only' __ref suffix on the nf_conn arg, or
+> > > KF_OWNED_ARGS, or something else.
+> >
+> > I'm still against that.
+> >
+>
+> I understand (and agree) that you don't want to complicate things further.
+> It's fine if you want to deal with this later when the above concern
+> materializes. But it will be yet another thing to keep in mind for the
+> future.
+
+I don't share the concern.
+With nf_conn there is none, right?
+But imagine there is only RCU protected pointer that
+is passed into tracepoint somewhere.
+The verifier doesn't recognize refcnt++ on it and ref_obj_id == 0
+the kernel code doesn't do refcnt++ either.
+But it's still safe and this arg should still be
+PTR_TO_BTF_ID | PTR_TRUSTED.
+The bpf prog can pass it further into kfunc that has KF_TRUSTED_ARGS.
+Since RCU is held before calling into tracepoint the bpf prog
+has to be non sleepable. Additional rcu_read_lock done by
+the prog is redundant, but doesn't hurt.
+When prog is calling kfunc the pointer is still valid and
+kfunc can safely operate on it assuming that object is not going away.
+That is the definition of KF_TRUSTED_ARGS from pov of kfunc.
+You documented it yourself :)
+"
+The KF_TRUSTED_ARGS flag is used for kfuncs taking pointer arguments. It
+indicates that the all pointer arguments will always have a guaranteed lifetime,
+"
