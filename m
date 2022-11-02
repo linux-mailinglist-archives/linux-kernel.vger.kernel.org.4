@@ -2,136 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AB61615FB4
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:29:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71901615FB8
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:30:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbiKBJ3R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 05:29:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42034 "EHLO
+        id S230002AbiKBJaH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 05:30:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42550 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiKBJ3O (ORCPT
+        with ESMTP id S229523AbiKBJaE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 05:29:14 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C3734235
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 02:29:13 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id 130so15895958pfu.8
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 02:29:13 -0700 (PDT)
+        Wed, 2 Nov 2022 05:30:04 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D681C9;
+        Wed,  2 Nov 2022 02:30:03 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id gw22so2754662pjb.3;
+        Wed, 02 Nov 2022 02:30:03 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e/LpNA2XkrZd/P1C5jUW2C9ri+5Ug2DmDuhYFjerMn4=;
-        b=QCD1TPOZZn+fBI7T153LS5r9TxHVKJnuBcW5Q686Cpn2TQbGzJ55JXxu9yxstl5WR0
-         0e0RIx+9d0T5X/VNFuTPsW4zpaIrIEUMuTHelfwuzsmXGkmioSV7w5/3e6QZlrApB3H3
-         D4LDShuwnAtn6Ap3Rx9OPZGilS01eB78pX96g=
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=5nsIzuIYmRPwf1ZuO4FYaaeeY7t1Mz4FhjUozOEED1E=;
+        b=liDPQwXxbtN8tnlF928S6zo7C5ZUgOLaTZSYzJ9uugzNzBBd9S3RIcwNRPrZje2WEK
+         F+WZ6zrQ74pDDX7CKEp61Eqt0a8kBY+Enfm+/QJZqjgynN3ZR5TN8QbCptzp2ff2v5gb
+         Eh+//Yqp1ogIeXLLTrPKfqkUiz02f3S4rRb2fjJotHxm5XybNVWdWUMp2jXiu+aM95yl
+         0XACOE8khe1AqTP8YPEPLUJCPiAoeputnKTdByMuWINvdjIFES7OWcXhrJkcpIjwa7xJ
+         TTBLxy9t+7m3zaLZKTaHOw65+/pjfGqen5ktXrA/jzqDWyutdCALBVEGt4/SEOWFuMW8
+         x5iA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=e/LpNA2XkrZd/P1C5jUW2C9ri+5Ug2DmDuhYFjerMn4=;
-        b=RFC33tokQ+30QtgI6k9MByUnm2tIutSPOKc0caQ6wnPDbVkZHzy4GivprjcBuCyV/9
-         r2WJRgv5UqCzAmdRk0u3JGT5Xd80qCsU5KVPFqABsMD2MhfJQXVuv4IKCCAHC+mAqAZO
-         NbhiR0Alo9bYdnP5LhjzQFbtOvdYnw5wJuIO2J2KmvxBSH3aq6IjZT3/S6GAlB44wxUo
-         mUh8dg2gvLK9wfn5wNp1YwPW6aGeHsc+wZz6Hq2UVmF58ydal5EBTkVCHUvjTjKcLCiF
-         jbk+Sx6KWjZNMTJRfZPBlUwwvybF+Kv199w/wYtNGyeJG5YivebCvV3MaE9DLAtFQ/VK
-         GddA==
-X-Gm-Message-State: ACrzQf3yhrrXKLkvzFdDPHm/ozD3NBCDwRJ/I48Kf/XyJh5SON85jSVf
-        y3gWze2dZyg4eY1imZXF01zxgA==
-X-Google-Smtp-Source: AMsMyM7CaXqBaokXJ069u2tiyq/rKMTNn1whUU0PaDONfoAQYSWcpOe/l+HeMNhyhNtV7z47NOPPtQ==
-X-Received: by 2002:a05:6a00:24c3:b0:56c:dd9c:dab4 with SMTP id d3-20020a056a0024c300b0056cdd9cdab4mr24274738pfv.36.1667381353253;
-        Wed, 02 Nov 2022 02:29:13 -0700 (PDT)
-Received: from [192.168.0.168] ([103.99.10.63])
-        by smtp.gmail.com with ESMTPSA id c12-20020a056a00008c00b00565b259a52asm8042791pfj.1.2022.11.02.02.29.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 02:29:12 -0700 (PDT)
-Message-ID: <52154117-ee1c-9ea9-bce6-04e02124ea1b@linuxfoundation.org>
-Date:   Wed, 2 Nov 2022 03:29:09 -0600
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5nsIzuIYmRPwf1ZuO4FYaaeeY7t1Mz4FhjUozOEED1E=;
+        b=XK6PIRzCpNAO7MlnqEebQ10u8clr/peTuNjMUM9Dt3Qr6vdrvzNOkThYBb05KI3soV
+         sjBsRKDpkFyszVK4dx3JIgMzbUZde5PL0AyuhCN5bObeYuQuzx582Usd4NLzzvppyN05
+         97XxHzH+sqfcM+TfdGiLh4RmQ1zOVAMmgeSkd5P6qLCLwhFWh+hD4VpLIKceWrjDzOt8
+         V1xQq/dFeNuSA5b6J1Bvx8rk3ZKV6fisTog4OiDwRNY2fz11LNlQ9zYxyTnCucBc1x+h
+         otJa8yOTlPmW+2H2DAZCoB6wqp3d2mdV8tuiVnFAoMYwHxJlGNKHapmCIi9+lnR6xVgN
+         DCGQ==
+X-Gm-Message-State: ACrzQf36F78MmBWajZFGSlluy0mHa6EodNymavn1E1RKMAVj/IqcWJFk
+        S1MCSKPNNuWnAqLQM2iCx5g=
+X-Google-Smtp-Source: AMsMyM5dVQhGtDNhyEZljMRIGBm1i3pVK/RxrQ5m6KQv13h3Z6dE975UeuFZluCHGrZ66+AO8Dtn6Q==
+X-Received: by 2002:a17:902:ecd0:b0:187:791:ae9f with SMTP id a16-20020a170902ecd000b001870791ae9fmr21909964plh.32.1667381402490;
+        Wed, 02 Nov 2022 02:30:02 -0700 (PDT)
+Received: from debian.me (subs03-180-214-233-74.three.co.id. [180.214.233.74])
+        by smtp.gmail.com with ESMTPSA id k76-20020a62844f000000b0056bbba4302dsm7994036pfd.119.2022.11.02.02.30.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 02:30:01 -0700 (PDT)
+Received: by debian.me (Postfix, from userid 1000)
+        id 577F910415C; Wed,  2 Nov 2022 16:29:58 +0700 (WIB)
+Date:   Wed, 2 Nov 2022 16:29:57 +0700
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
+Subject: Re: [PATCH 5.15 000/132] 5.15.77-rc1 review
+Message-ID: <Y2I4lc3+R7duLVM6@debian.me>
+References: <20221102022059.593236470@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 3/5] selftests/resctrl: Flush stdout file buffer before
- executing fork()
-Content-Language: en-US
-To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20221101094341.3383073-1-tan.shaopeng@jp.fujitsu.com>
- <20221101094341.3383073-4-tan.shaopeng@jp.fujitsu.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221101094341.3383073-4-tan.shaopeng@jp.fujitsu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="JTBO09mxtFwK9BL0"
+Content-Disposition: inline
+In-Reply-To: <20221102022059.593236470@linuxfoundation.org>
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/1/22 03:43, Shaopeng Tan wrote:
-> When a process has buffered output, a child process created by fork()
-> will also copy buffered output. When using kselftest framework,
-> the output (resctrl test result message) will be printed multiple times.
-> 
-> Add fflush() to flush out the buffered output before executing fork().
-> 
-> Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-> ---
->   tools/testing/selftests/resctrl/cat_test.c    | 1 +
->   tools/testing/selftests/resctrl/resctrl_val.c | 1 +
->   tools/testing/selftests/resctrl/resctrlfs.c   | 1 +
->   3 files changed, 3 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-> index 1c5e90c63254..6a8306b0a109 100644
-> --- a/tools/testing/selftests/resctrl/cat_test.c
-> +++ b/tools/testing/selftests/resctrl/cat_test.c
-> @@ -167,6 +167,7 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
->   		return errno;
->   	}
->   
-> +	fflush(stdout);
->   	bm_pid = fork();
->   
->   	/* Set param values for child thread which will be allocated bitmask
-> diff --git a/tools/testing/selftests/resctrl/resctrl_val.c b/tools/testing/selftests/resctrl/resctrl_val.c
-> index b32b96356ec7..6948843bf995 100644
-> --- a/tools/testing/selftests/resctrl/resctrl_val.c
-> +++ b/tools/testing/selftests/resctrl/resctrl_val.c
-> @@ -629,6 +629,7 @@ int resctrl_val(char **benchmark_cmd, struct resctrl_val_param *param)
->   	 * Fork to start benchmark, save child's pid so that it can be killed
->   	 * when needed
->   	 */
-> +	fflush(stdout);
->   	bm_pid = fork();
->   	if (bm_pid == -1) {
->   		perror("# Unable to fork");
-> diff --git a/tools/testing/selftests/resctrl/resctrlfs.c b/tools/testing/selftests/resctrl/resctrlfs.c
-> index 8546bc9f1786..d95688298469 100644
-> --- a/tools/testing/selftests/resctrl/resctrlfs.c
-> +++ b/tools/testing/selftests/resctrl/resctrlfs.c
-> @@ -678,6 +678,7 @@ int filter_dmesg(void)
->   		perror("pipe");
->   		return ret;
->   	}
-> +	fflush(stdout);
->   	pid = fork();
->   	if (pid == 0) {
->   		close(pipefds[0]);
 
-Good find. Looks good to me.
+--JTBO09mxtFwK9BL0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+On Wed, Nov 02, 2022 at 03:31:46AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.77 release.
+> There are 132 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>=20
 
-thanks,
--- Shuah
+Successfully cross-compiled for arm64 (bcm2711_defconfig, GCC 10.2.0) and
+powerpc (ps3_defconfig, GCC 12.2.0).
+
+Tested-by: Bagas Sanjaya <bagasdotme@gmail.com>
+=20
+
+--=20
+An old man doll... just what I always wanted! - Clara
+
+--JTBO09mxtFwK9BL0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQSSYQ6Cy7oyFNCHrUH2uYlJVVFOowUCY2I4jwAKCRD2uYlJVVFO
+o8hKAQCG6KVJzVo38x3ygZsO5CnlD+SIg5aqrvVmUylKTXrltgEAt6cI3ZLhA/jN
+XZKXmifVD79C2XscJWyMl0pSfbIPkwI=
+=0Uva
+-----END PGP SIGNATURE-----
+
+--JTBO09mxtFwK9BL0--
