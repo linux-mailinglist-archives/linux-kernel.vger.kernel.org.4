@@ -2,168 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0A436162C7
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:35:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CEB226162CB
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:39:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbiKBMfX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 08:35:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46384 "EHLO
+        id S230254AbiKBMjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 08:39:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230254AbiKBMfQ (ORCPT
+        with ESMTP id S229459AbiKBMjK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 08:35:16 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120040.outbound.protection.outlook.com [40.107.12.40])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F8D829809
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 05:35:09 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=mI6AXpP5tkpNmh7bLYv05W/epxAAXno5bDGb3sBZFJFSriIXj9BA8nm5jcgShDHN/VZSc7LizvfbO9KyMteEuFWhB27cUhMxipjzM0JqMUym2xkyGtZ/2sIPMgxb94/cAWeR8dLVEq/Go3ty6faW7DjgKDlb4umKbORsGRZ3LUIf2KUGhbvjUV/vpDGLhwlc+doZ3C6wa1C3VyFzfYwdj7TaD9xqSSvyFYstWC/J5cRhy/LTGSL6+L2/22wDCb+EI+0IDhQyN5HAuYYZ5g141PrdHrLTL1EqV5Mc26kWO/gLrKQLrVI8JhA/FRvOYUSlUwjJlD+Ym/oUZRmYLaXWBQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=8Bxvp/h7SEq67eA++lriTziDGVzsKNwi3KcJX1zGO74=;
- b=VCuwMaRLxKW+XO4Fr2UsGmVi7fEsZ00EmtPov2u0JVXbm7T6eNV0wO3tEHybYTW1zLH1y+3peIwbMvXg9DHnsXoWR/VVHzPGqKdJeDGju11wlq5stJWUy5qg2UeLBQApyYE5TFeAmASIvJKbzOVWO3wLUaJfSsvwqoojS8EkM9NIrAVZpqBWthIgHH412ULD6WNabU27BmZ+MZKnMQ9GYEO3gxRuQeJqYfrRmqUKdq1FzrajCqsiriTspYFMiSerldgmOEC8hAny/68NAzIyUQPeioqD+15/+KF6A9ddTRxZkuA7ZGyqAGeBfd20IWMF5uHwmHhrhS9KxxiRAaRByw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=8Bxvp/h7SEq67eA++lriTziDGVzsKNwi3KcJX1zGO74=;
- b=rhHGY96ZfSYa5CyDoGstSwwFAQ0aoW6Bop54WGw2/fQpalrb6u2HyONAzxb8lwO+IBUkTlHc9rKuprqs8TknKPAeg5rHrcNmsYREZChAM6voqScnC8g+Z1R2At9k36CNkt03oCDSRJElhNZk4Tuwu1osQzk9KiM3BvGlZ2u7q7zOkEhY9kAPzl5zlaobfhVB2VJA9abRttEnBYbrthyMKDGmxyISbp5+V0MbdBYgq29RNFsGFl0kK9WzH3DcoKpys+02pM1OnjygpnxhMIfd/Pq9Una4SydDhT5Erh4rXf3f8LO7zJLsE4GCVZi3WvhHmrdSp3N3CgQsatj+9dKl2w==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PR1P264MB1597.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:193::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.20; Wed, 2 Nov
- 2022 12:35:07 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::8bbc:32cb:956d:88e8]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::8bbc:32cb:956d:88e8%2]) with mapi id 15.20.5769.021; Wed, 2 Nov 2022
- 12:35:07 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Sathvika Vasireddy <sv@linux.ibm.com>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-CC:     "jpoimboe@redhat.com" <jpoimboe@redhat.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "aik@ozlabs.ru" <aik@ozlabs.ru>,
-        "mpe@ellerman.id.au" <mpe@ellerman.id.au>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "rostedt@goodmis.org" <rostedt@goodmis.org>,
-        "mbenes@suse.cz" <mbenes@suse.cz>,
-        "npiggin@gmail.com" <npiggin@gmail.com>,
-        "chenzhongjin@huawei.com" <chenzhongjin@huawei.com>,
-        "naveen.n.rao@linux.vnet.ibm.com" <naveen.n.rao@linux.vnet.ibm.com>
-Subject: Re: [PATCH v5 02/16] powerpc: Override __ALIGN and __ALIGN_STR macros
-Thread-Topic: [PATCH v5 02/16] powerpc: Override __ALIGN and __ALIGN_STR
- macros
-Thread-Index: AQHY6tphEWIcPxSR20K5NwF8coXsna4rmV4A
-Date:   Wed, 2 Nov 2022 12:35:07 +0000
-Message-ID: <327c371a-a8f4-1676-3da8-f454612b5c58@csgroup.eu>
-References: <20221028143346.183569-1-sv@linux.ibm.com>
- <20221028143346.183569-3-sv@linux.ibm.com>
-In-Reply-To: <20221028143346.183569-3-sv@linux.ibm.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PR1P264MB1597:EE_
-x-ms-office365-filtering-correlation-id: 21fa2336-eb04-4c01-916e-08dabcceaca6
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 0SnCkYJgQKUXIrB7mXxvAkSUVgMQPUfJj0y6EzZtA3FWAL6mnoGKSNsyIMYZJ6A7rOfoUVOa6T3atPkmzYPqilAl4Secs9K3vsm7JTwmYs5g5cfMOqL8ss50KVjTxeY+67SPCcb/R1YhC2xtzw8s340tE4xxnBJTcGaKhFgo6hfChFBDuZ0UAChYL3CwFOVBkw9XjqubBo5xGhVWhj+1haoDtlh2PRE+g4TH9DGgSaJUXJAX7vvUndCuDa8mXRDAAcSKHOwxJGFSgigeTUCbNpdgGfn20KAp9e2Lk+Q9jV7pRpWDyxm89ziyMvC6THUPPJF6wi6ggi9hPthLGKxiNxtmfN+1vwHpbSeqihSbRE3Rj6wAkCkXA9CeAa6r6snN2CwVl0RNv5qSwWzZL39BRXa1A1tcI6Eyr8pkFt6CSnHrErBJbayL1/ZwrzLCEzShtehcsnFUu8pRGhVbu0eZwgjJ+GJfHnsfvpGt1YKj47LAzzQFfOqaFd2BELXW+rd9je5MPAD8bMS3n3DPFPNeS3SNV08Ud9gl2EEvuHfayinL9xfw3hCTbgzwd33v5l19jlt3KfxRxREOWF046HYV6Yon/8KGWBxVMzAaDLZbbLT6hBBH+NOFaYbCo2U4BhPMFZWY8cnERQeXPu78FNHia+T5x+TknZu+SFStss31k7/r0/sOXKo6gCNd9osKreR6bjcEXAsAbXKppG92fFtv1PcMilrudvSbtzSAh4oa1UbM79+voNlayn0hcjynkReHtI6gHfavo8BC091SHMZffIyCOs6Z5vIVExdQAuMcpecgrj2S1n5WPne8iAp6zbWDTHruMwXjjcqkcMEVRtw0Cw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(396003)(376002)(39850400004)(346002)(366004)(451199015)(38100700002)(38070700005)(4326008)(36756003)(31696002)(86362001)(2906002)(71200400001)(44832011)(6486002)(6506007)(64756008)(316002)(91956017)(66946007)(8676002)(66556008)(66476007)(66446008)(5660300002)(8936002)(7416002)(110136005)(122000001)(41300700001)(54906003)(76116006)(186003)(2616005)(478600001)(6512007)(26005)(31686004)(43740500002)(45980500001);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?ZTJYbk1acXA2N25vUHZnUXhKUjVRK2owa3ZZRTdPN2RNc1FxdTd6TXNsVk1i?=
- =?utf-8?B?NWk1NGxleUZIZGo3aWlualRYMDBLVmxiQkhadWUvdTNUV2dqbitUNm9RVGNP?=
- =?utf-8?B?MjR2a3EyU2Y3RHJNYndDejdKZkxMWWJYbURLVmxiU3BrcEhSTkRwc1F4VERi?=
- =?utf-8?B?RHZQVllvZ0xiUlpWbnorcDFOK3Y0VDVyUGI5cWk5bFNhbEUxaVRrZXhjQkRR?=
- =?utf-8?B?eHBxa3NvdVF0RGFpZVZETG1SUDR2ODRZWk1JUlVRTTdaY2c2d2VEY05ZNWJW?=
- =?utf-8?B?UkxXQWQxR2Q0ZnQ1WmhUZ1lqMjN3VnBETmpGTXJwU21hNDRYZHZ1a1ZJWkcr?=
- =?utf-8?B?NXRPYlRVWnF5dzJXeGVXd2YwdnkzeUhGcTlFVEZJL28zYVphcDY4NHNybE0v?=
- =?utf-8?B?bGpBZUQ3WmVOd1lweHlqdDBVTzY0TXVUa3dxV2NQR2t4d2lNWExYRE5WcU5u?=
- =?utf-8?B?b29zaHhHTkU1OHZvUGZaWUswUnBFdkttRWRabUxpMVVUNWhNblBXODExWXhM?=
- =?utf-8?B?VzRjYXBqc1Rac3hsM2dYN21OaThybTZsUUFCM1lBRnI2MmVCSGI3T2M1S1ZU?=
- =?utf-8?B?OHl1THZvb1ppeUtRNlFzWXg4NnFMQXlhcmpEZmRQZjlydlBFT256V01LUkZ1?=
- =?utf-8?B?MTQxZktWVDlvZURpajE3M0RQQW5NUWtPWTBSU1BDVGhKMWpsOHF3QWJFTW43?=
- =?utf-8?B?MWtERmgrQ2JDUmJGdzREZ2lxekprUDlwa1ozaUp4QUVQeEhyY1RkaDJkaVAz?=
- =?utf-8?B?ZXppNmx1aURSdTRDN1VHaGt4clFuaDliOWEwZnZrVWI4WkR0K0JKYjhvRnBV?=
- =?utf-8?B?Y3ZGZmVKUzNjTkRoeUhiWTZCS09NdHo4dkRBMkt5Mmd0TVlGSU1vQUVKTzBa?=
- =?utf-8?B?bzlWbmJZbWcwZTRERkl6dW5OT2t4RkV6WXJ3WHhCYy9BRE9Sdmt5M01oQjNH?=
- =?utf-8?B?WWV5UG84R0t2dXR5L0cxbmF3WVdtUWxmQVZQY0FZRU9SRnZyMVJiazZnWm44?=
- =?utf-8?B?TG5DdmowVVJ6WnVIRVFGcjNnS0hELzRPUnZINzNDd2xSTWNyczNuNzRxdkxC?=
- =?utf-8?B?a1RqWnBwaVorWStCcVowVkhmWEM1UUFzRGVRRzNCMWZZc3J5VkZnZ3Q3R1BJ?=
- =?utf-8?B?Rm1ubUw3MjRrSU56VzJ4THpGWnhSck5UOUxRVmJGa0dFOW9VYVNSUk9GUDg4?=
- =?utf-8?B?bzNpR0dqZHFsc0JVcEZHdVkvQnB2YVJLSGFyWGVXays1WkNiVTQ3NTQxSVp6?=
- =?utf-8?B?ci8rc2NObGJGRXZGdTZkdkJubUhkK2ZOdnl4SEs0U2kvMHZmeWZ4Y0NVczNX?=
- =?utf-8?B?d2pBT01tTHl0MnBxc2xhUXJzbTJ4TTlHOVdHTVQ5UEZWcUQvRTR1emZXV0pR?=
- =?utf-8?B?RzlxUWc5QVU4MUwySnQ2VGtUTmxEMnZEeWR3QjBQcU94b2RmOStsMWQvYlJJ?=
- =?utf-8?B?VU5hQ05obHpDRUNIZVA4ZFVNVC9MbTVKemdWMEVGdzhkbXRkVVZEK0tJVWhD?=
- =?utf-8?B?S09tc0o3K1hzdXIwVGQ1V09lYnB6ZW1NUDVrUDdKUmMrV0c0dlRtSVUvZzBt?=
- =?utf-8?B?bjQ1MndNZlJmYmZnZVdEbWEzN09WYnJ5OHRXNVVzTmRNN0VhejZPNUoySUkr?=
- =?utf-8?B?MmU4Y3lNdEdtcHBGQUk3U1gwVTIxcEdtNDl3aU10Y0N2M0gzR0grNFA1TEN6?=
- =?utf-8?B?Sk9nMkN4MG9DTW1tWHdHQm9XY280YWxtTGlFKzdDY3BvL1NoRy9ZcUJRYVM1?=
- =?utf-8?B?VHl5SkVaeU9rZVhhNzVKSHJLZU1EUTNCNlBkMlhjNEQyUlVGYzBRTTBsdURk?=
- =?utf-8?B?eFdFVnZpbyswcHY1eW1sK1h0VGVteXo3eEFMZ2VPTEV4U2U1WVk5RVY3T2FB?=
- =?utf-8?B?R1RRQlJNeGRsS3AzNXltaUM4dk93SklHRlc1VU9veEowdWE0SmtxdHY1TkJu?=
- =?utf-8?B?SDhMeVRUaVRRUS9sVkxMTFdDQzNiMFZzSURjSFRvditjbTBBN0F5UEx2a0hL?=
- =?utf-8?B?RW0yQlFJMHV5QzVvVnY1UU1YNGNyMWQyZDhLc216Ymo3L2E0eS9adXZCelAy?=
- =?utf-8?B?U292NXRZdXRVMzdteWlTcjJ2aUtrSHZOMDVHNk91aG1VTUE0OWdSQkdiWnZH?=
- =?utf-8?B?Ti9WY1lUczJUL1RkNFVNTloremtTbVlIa2JUT0llOE9lSTNhWVVjaE01ajhP?=
- =?utf-8?Q?CDcv3lH0FbPZgQmPpw+L998=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <75AD33305E25094984D6BD7B6482DF9D@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Wed, 2 Nov 2022 08:39:10 -0400
+Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D30C24952;
+        Wed,  2 Nov 2022 05:39:09 -0700 (PDT)
+Received: by mail-lf1-x134.google.com with SMTP id bp15so27943613lfb.13;
+        Wed, 02 Nov 2022 05:39:08 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=fXZZm1OWNoD+MlyMwXmBwTMSYbGBMYKx08W+mXfVVsk=;
+        b=DjotE9Jfn1pVJuY6tm+mmxAabBRwlZKt4B6/k4D0lLtIf0Pm5q6PhhEmew02EDFyyj
+         o6EpBdM6y/aapaIzADtdXu2/EWHaUUkmxMVxDKHNXEph5AbAKxYFMuF/UszrtxSw4e+U
+         WKbjZ9QxEsbydtGsGlxftFtTf6nPcjtEfuL3T7MlscIe3NoFkvCNTKLq6sIsMzfOXM+U
+         yZMaGKSGBWL9IrVxaEhXZSdgMyMvUCBiTDMPiqqRrVz/lXcQHSASiWgxBF4ITlByVBB9
+         qpNh1+OgWSb6YqEYSOLX8BZ7+j2gRfF5Ckg1M45VCk+q9qUUh+Za8qeLKyg79YW4+WfG
+         KxkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fXZZm1OWNoD+MlyMwXmBwTMSYbGBMYKx08W+mXfVVsk=;
+        b=j3OHRoDjhCRLSrQ4K1stsPj92QlXY31PjEdj/8NMNWexRJZHkqlDx+LTHM0qOjzkhz
+         MKeRPYcp8x+Uvw1eNMUTaFmIrwx/TgJN3GU8y4A950A8pnWlDSaYI7sXkSE1AcL3L0iW
+         akSpFhFybAAFoCPXydfTP6UcGlmRJmM7XENs7x78hP2f8JC0JJZQADYN4yMSjsgSZj2T
+         BoJIv6pjDnronT0JnTdXZiFfP0EHTZYIJMsooaK6kZCCxg9lnykLVcTS/Wjr3hmgHd4o
+         8ghHimDkflyc9xjY6+r+6zLeNR6mfPRsPIScPK+946yzXaNPvDkLqlXGPrsv8qMvVnvd
+         ujKw==
+X-Gm-Message-State: ACrzQf1QQ8caEbil8kW5BrHJn4SWrkkQUGgUfE2yo7209Foe9B6x3JlP
+        knnMXPPdCwTpnGn3RvHDiFo=
+X-Google-Smtp-Source: AMsMyM5SR4F08Pw/CdCEjT0l/mCMXmKZ/G7l5yiQYFqSeCe2UGmvrXswP+kRbx8zOX/qT6hlIKfvEg==
+X-Received: by 2002:a05:6512:1596:b0:4a2:5de8:410a with SMTP id bp22-20020a056512159600b004a25de8410amr8433101lfb.627.1667392676312;
+        Wed, 02 Nov 2022 05:37:56 -0700 (PDT)
+Received: from pc636 (host-90-235-23-76.mobileonline.telia.com. [90.235.23.76])
+        by smtp.gmail.com with ESMTPSA id v18-20020a2ea452000000b002771888fda1sm2159288ljn.84.2022.11.02.05.37.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 05:37:55 -0700 (PDT)
+From:   Uladzislau Rezki <urezki@gmail.com>
+X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
+Date:   Wed, 2 Nov 2022 13:37:53 +0100
+To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
+Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
+        paulmck@kernel.org, urezki@gmail.com
+Subject: Re: [PATCH RFC] rcu/kfree: Do not request RCU when not needed
+Message-ID: <Y2JkoVV3jaVS4y0Q@pc636>
+References: <20221029132856.3752018-1-joel@joelfernandes.org>
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 21fa2336-eb04-4c01-916e-08dabcceaca6
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Nov 2022 12:35:07.1601
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 03bekNJYVelcJByfroabMF0kgjrrtarF6R55d3bBBqV7COJv/jumirLftHZX84oRTsNaGU5mfiyuS3TYpGjD5BGEEBQHkcQ6ByJjohQBXGQ=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR1P264MB1597
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221029132856.3752018-1-joel@joelfernandes.org>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDI4LzEwLzIwMjIgw6AgMTY6MzMsIFNhdGh2aWthIFZhc2lyZWRkeSBhIMOpY3JpdMKg
-Og0KPiBJbiBhIHN1YnNlcXVlbnQgcGF0Y2gsIHdlIHdvdWxkIHdhbnQgdG8gYW5ub3RhdGUgcG93
-ZXJwYyBhc3NlbWJseSBmdW5jdGlvbnMNCj4gd2l0aCBTWU1fRlVOQ19TVEFSVF9MT0NBTCBtYWNy
-by4gVGhpcyBtYWNybyBkZXBlbmRzIG9uIF9fQUxJR04gbWFjcm8uDQo+IA0KPiBUaGUgZGVmYXVs
-dCBleHBhbnNpb24gb2YgX19BTElHTiBtYWNybyBpczoNCj4gICAgICAgICAgI2RlZmluZSBfX0FM
-SUdOICAgICAgLmFsaWduIDQsMHg5MA0KPiANCj4gU28sIG92ZXJyaWRlIF9fQUxJR04gYW5kIF9f
-QUxJR05fU1RSIG1hY3JvcyB0byB1c2UgdGhlIHNhbWUgYWxpZ25tZW50IGFzDQo+IHRoYXQgb2Yg
-dGhlIGV4aXN0aW5nIF9HTE9CQUwgbWFjcm8uIEFsc28sIGRvIG5vdCBwYWQgd2l0aCAweDkwLCBi
-ZWNhdXNlDQo+IHJlcGVhdGVkIDB4OTBzIGFyZSBub3QgYSBub3Agb3IgdHJhcCBvbiBwb3dlcnBj
-Lg0KDQpCeSB0aGUgd2F5LCBkbyB3ZSBrbm93IHdoYXQgdGhlIGluc3RydWN0aW9uIDB4OTA5MDkw
-OTAgaXMgb24gcG93ZXJwYyA/IA0KSXMgdGhhdCBzb21ldGhpbmcgdmFsaWQgb3Igbm90ID8NCg0K
-PiANCj4gVGVzdGVkLWJ5OiBOYXZlZW4gTi4gUmFvIDxuYXZlZW4ubi5yYW9AbGludXgudm5ldC5p
-Ym0uY29tPg0KPiBSZXZpZXdlZC1ieTogTmF2ZWVuIE4uIFJhbyA8bmF2ZWVuLm4ucmFvQGxpbnV4
-LnZuZXQuaWJtLmNvbT4NCj4gUmV2aWV3ZWQtYnk6IENocmlzdG9waGUgTGVyb3kgPGNocmlzdG9w
-aGUubGVyb3lAY3Nncm91cC5ldT4NCj4gQWNrZWQtYnk6IEpvc2ggUG9pbWJvZXVmIDxqcG9pbWJv
-ZUBrZXJuZWwub3JnPg0KPiBTaWduZWQtb2ZmLWJ5OiBTYXRodmlrYSBWYXNpcmVkZHkgPHN2QGxp
-bnV4LmlibS5jb20+DQo+IC0tLQ0KPiAgIGFyY2gvcG93ZXJwYy9pbmNsdWRlL2FzbS9saW5rYWdl
-LmggfCAzICsrKw0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAzIGluc2VydGlvbnMoKykNCj4gDQo+IGRp
-ZmYgLS1naXQgYS9hcmNoL3Bvd2VycGMvaW5jbHVkZS9hc20vbGlua2FnZS5oIGIvYXJjaC9wb3dl
-cnBjL2luY2x1ZGUvYXNtL2xpbmthZ2UuaA0KPiBpbmRleCBiNzFiOTU4MmU3NTQuLmI4OGQxZDJj
-ZjMwNCAxMDA2NDQNCj4gLS0tIGEvYXJjaC9wb3dlcnBjL2luY2x1ZGUvYXNtL2xpbmthZ2UuaA0K
-PiArKysgYi9hcmNoL3Bvd2VycGMvaW5jbHVkZS9hc20vbGlua2FnZS5oDQo+IEBAIC00LDYgKzQs
-OSBAQA0KPiAgIA0KPiAgICNpbmNsdWRlIDxhc20vdHlwZXMuaD4NCj4gICANCj4gKyNkZWZpbmUg
-X19BTElHTgkJLmFsaWduIDINCj4gKyNkZWZpbmUgX19BTElHTl9TVFIJIi5hbGlnbiAyIg0KPiAr
-DQo+ICAgI2lmZGVmIENPTkZJR19QUEM2NF9FTEZfQUJJX1YxDQo+ICAgI2RlZmluZSBjb25kX3N5
-c2NhbGwoeCkgXA0KPiAgIAlhc20gKCJcdC53ZWFrICIgI3ggIlxuXHQuc2V0ICIgI3ggIiwgc3lz
-X25pX3N5c2NhbGxcbiIJCVw=
+On Sat, Oct 29, 2022 at 01:28:56PM +0000, Joel Fernandes (Google) wrote:
+> On ChromeOS, I am (almost) always seeing the optimization trigger.
+> Tested boot up and trace_printk'ing how often it triggers.
+> 
+> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> ---
+>  kernel/rcu/tree.c | 18 +++++++++++++++++-
+>  1 file changed, 17 insertions(+), 1 deletion(-)
+> 
+> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> index 591187b6352e..3e4c50b9fd33 100644
+> --- a/kernel/rcu/tree.c
+> +++ b/kernel/rcu/tree.c
+> @@ -2935,6 +2935,7 @@ struct kfree_rcu_cpu_work {
+>  
+>  /**
+>   * struct kfree_rcu_cpu - batch up kfree_rcu() requests for RCU grace period
+> + * @rdp: The rdp of the CPU that this kfree_rcu corresponds to.
+>   * @head: List of kfree_rcu() objects not yet waiting for a grace period
+>   * @bkvhead: Bulk-List of kvfree_rcu() objects not yet waiting for a grace period
+>   * @krw_arr: Array of batches of kfree_rcu() objects waiting for a grace period
+> @@ -2964,6 +2965,8 @@ struct kfree_rcu_cpu {
+>  	struct kfree_rcu_cpu_work krw_arr[KFREE_N_BATCHES];
+>  	raw_spinlock_t lock;
+>  	struct delayed_work monitor_work;
+> +	struct rcu_data *rdp;
+> +	unsigned long last_gp_seq;
+>  	bool initialized;
+>  	int count;
+>  
+> @@ -3167,6 +3170,7 @@ schedule_delayed_monitor_work(struct kfree_rcu_cpu *krcp)
+>  			mod_delayed_work(system_wq, &krcp->monitor_work, delay);
+>  		return;
+>  	}
+> +	krcp->last_gp_seq = krcp->rdp->gp_seq;
+>  	queue_delayed_work(system_wq, &krcp->monitor_work, delay);
+>  }
+>  
+> @@ -3217,7 +3221,17 @@ static void kfree_rcu_monitor(struct work_struct *work)
+>  			// be that the work is in the pending state when
+>  			// channels have been detached following by each
+>  			// other.
+> -			queue_rcu_work(system_wq, &krwp->rcu_work);
+> +			//
+> +			// NOTE about gp_seq wrap: In case of gp_seq overflow,
+> +			// it is possible for rdp->gp_seq to be less than
+> +			// krcp->last_gp_seq even though a GP might be over. In
+> +			// this rare case, we would just have one extra GP.
+> +			if (krcp->last_gp_seq &&
+>
+This check can be eliminated i think. A kfree_rcu_cpu is defined as
+static so by default the last_gp_set is set to zero.
+
+>  
+> @@ -4802,6 +4816,8 @@ static void __init kfree_rcu_batch_init(void)
+>  	for_each_possible_cpu(cpu) {
+>  		struct kfree_rcu_cpu *krcp = per_cpu_ptr(&krc, cpu);
+>  
+> +		krcp->rdp = per_cpu_ptr(&rcu_data, cpu);
+> +		krcp->last_gp_seq = 0;
+>
+Yep. This one can be just dropped.
+
+But all the rest looks good :) I will give it a try from test point of
+view. It is interested from the memory footprint point of view.
+
+--
+Uladzislau Rezki
