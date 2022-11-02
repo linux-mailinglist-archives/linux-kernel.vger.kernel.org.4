@@ -2,136 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1C7B615B5C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 05:16:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 771FD615B4E
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 05:14:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiKBEQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 00:16:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53318 "EHLO
+        id S229684AbiKBEOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 00:14:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51618 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbiKBEPZ (ORCPT
+        with ESMTP id S229523AbiKBEOH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 00:15:25 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D03248FB;
-        Tue,  1 Nov 2022 21:14:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1667362493; x=1698898493;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=9GnNyz13QneI0oPfy3KJmDwliNeb7C9tr9KliRE0l1Y=;
-  b=gZLsJTEVElUpMI4cqB3RQdhzTkDr4jZo3kJw52arjpoNkcIMZ8fbgeg0
-   o7cWUDU+ELrQcQI5YIVIIkfTTrPetrbrprjJyFLpslVHKE358aVcuTEpd
-   8WN6xPqh3nOmxB+NS9a5HbupyYj3yV0xNLtgwIBHqUoSiNjVxQbSHYaNw
-   lDE2kYy4wPKCEiSXNuQX0zOPQTeJUVNs+PhaQHBWYNo1rnhBbGL2Q4JX9
-   N0C4/e2Vt0MNBF+fmcV0+xPKyll3T4Cgab6BWVCFpcDWzcYWHlI41WpiN
-   gKRQmuxX+lh3wJYnEMvM2JRhWEThjWebt1TCIxgLB51441qD4/mEUqMN4
-   w==;
-X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
-   d="scan'208";a="181530261"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 01 Nov 2022 21:14:53 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Tue, 1 Nov 2022 21:14:52 -0700
-Received: from che-lt-i67786lx.microchip.com (10.10.115.15) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Tue, 1 Nov 2022 21:14:48 -0700
-From:   Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <woojung.huh@microchip.com>, <UNGLinuxDriver@microchip.com>,
-        <andrew@lunn.ch>, <vivien.didelot@gmail.com>,
-        <f.fainelli@gmail.com>, <olteanv@gmail.com>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>
-Subject: [PATCH net-next 6/6] net: dsa: microchip: add dev_err_probe in probe functions
-Date:   Wed, 2 Nov 2022 09:40:58 +0530
-Message-ID: <20221102041058.128779-7-rakesh.sankaranarayanan@microchip.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221102041058.128779-1-rakesh.sankaranarayanan@microchip.com>
-References: <20221102041058.128779-1-rakesh.sankaranarayanan@microchip.com>
+        Wed, 2 Nov 2022 00:14:07 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE0223146
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 21:14:03 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id h193so6504214pgc.10
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 21:14:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=c30GhC3CoSosVopfRUjx7dVhkmM5E32hTKQ81gMJsz8=;
+        b=CMdN+AncmaG8HzjUzD9ywczQaU/TKgxywNgXU/V1Ac3MzLcrIYrGtAEky0EN0t9Z+R
+         kziHTMp/GxnodGxxW8GiqtstZ2gv4PQpowivv1e7YIieaYETHVrvPK18tNiO122bulaI
+         EXqiS6Flg0fa12XxofyPl6OT+HjtsLwAn0iLo=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c30GhC3CoSosVopfRUjx7dVhkmM5E32hTKQ81gMJsz8=;
+        b=NNsMZ8Y4y4n8rFKBlcaLE4NnG2DeBbrEzihO5qSwGfR4+ABDb62DozYl+AHlFx1l77
+         6vKuhxI9ziTMdiSPHaC0IE24+FtLff3fjxXpwRHKHap/4dwJjOq338VWwUDu6tNpGOsP
+         bKnf9V0vk24f4UlMBwWkEVptA/BTd3A2NOw2S0E+NNVrO36TcCVu9DVa4d2soa8pzcWN
+         f29+hHLA3LZK7MoVU6XmE3MyC8sx0+M/bxj5gagzsqvtmMzeklCs0PTlUca4zlw7QG8Q
+         ZuWyMCcEnfGNFwBZUeNlegc5ne/Xx8rZ2PHXwbkcSRh5pYBy+092sKsHCQiOQAODVY26
+         EC+Q==
+X-Gm-Message-State: ACrzQf3vyHmTJW0k3d3oDKoa1kTh8sry9DOIm4voeEBomHYkH/2WxerZ
+        z9G725F9/hnHQHKUP+E7tc0dmg==
+X-Google-Smtp-Source: AMsMyM6oSQXsw+x4LT1N+XG0H91Ng+MhsL+HQJ99odIHJfJ9qXaMBWV8NxtN5U8+WL9yAk+X7o0AMQ==
+X-Received: by 2002:a63:d211:0:b0:46f:6229:c380 with SMTP id a17-20020a63d211000000b0046f6229c380mr19785356pgg.621.1667362443346;
+        Tue, 01 Nov 2022 21:14:03 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:f558:dfb0:7cb7:44d9])
+        by smtp.gmail.com with ESMTPSA id l6-20020a170903244600b00187197c499asm5386872pls.164.2022.11.01.21.14.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 21:14:02 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 13:13:58 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, minchan@kernel.org,
+        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com
+Subject: Re: [PATCH v2 5/5] zsmalloc: Implement writeback mechanism for
+ zsmalloc
+Message-ID: <Y2HuhiyorAHFO+Ss@google.com>
+References: <202210272158.7swYwd23-lkp@intel.com>
+ <20221027182736.513530-1-nphamcs@gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221027182736.513530-1-nphamcs@gmail.com>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Probe functions uses normal dev_err() to check error conditions
-and print messages. Replace dev_err() with dev_err_probe() to
-have more standardized format and error logging.
+On (22/10/27 11:27), Nhat Pham wrote:
+> +
+> +static int zs_zpool_shrink(void *pool, unsigned int pages,
+> +			unsigned int *reclaimed)
+> +{
+> +	unsigned int total = 0;
+> +	int ret = -EINVAL;
+> +
+> +	while (total < pages) {
+> +		ret = zs_reclaim_page(pool, 8);
+> +		if (ret < 0)
+> +			break;
+> +		total++;
+> +	}
+> +
+> +	if (reclaimed)
+> +		*reclaimed = total;
+> +
+> +	return ret;
+> +}
 
-Signed-off-by: Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
----
- drivers/net/dsa/microchip/ksz8863_smi.c | 9 ++++-----
- drivers/net/dsa/microchip/ksz9477_i2c.c | 8 +++-----
- drivers/net/dsa/microchip/ksz_spi.c     | 8 +++-----
- 3 files changed, 10 insertions(+), 15 deletions(-)
+The name collides with shrinker callbacks (compaction). That's a bit
+confusing, took me some time.
 
-diff --git a/drivers/net/dsa/microchip/ksz8863_smi.c b/drivers/net/dsa/microchip/ksz8863_smi.c
-index ddb40838181e..9e49c2cc0550 100644
---- a/drivers/net/dsa/microchip/ksz8863_smi.c
-+++ b/drivers/net/dsa/microchip/ksz8863_smi.c
-@@ -152,11 +152,10 @@ static int ksz8863_smi_probe(struct mdio_device *mdiodev)
- 						  &regmap_smi[i], dev,
- 						  &rc);
- 		if (IS_ERR(dev->regmap[i])) {
--			ret = PTR_ERR(dev->regmap[i]);
--			dev_err(&mdiodev->dev,
--				"Failed to initialize regmap%i: %d\n",
--				ksz8863_regmap_config[i].val_bits, ret);
--			return ret;
-+			return dev_err_probe(&mdiodev->dev,
-+					     PTR_ERR(dev->regmap[i])
-+					     "Failed to initialize regmap%i\n",
-+					     ksz8863_regmap_config[i].val_bits);
- 		}
- 	}
- 
-diff --git a/drivers/net/dsa/microchip/ksz9477_i2c.c b/drivers/net/dsa/microchip/ksz9477_i2c.c
-index caa9acf1495c..db4aec0a51dc 100644
---- a/drivers/net/dsa/microchip/ksz9477_i2c.c
-+++ b/drivers/net/dsa/microchip/ksz9477_i2c.c
-@@ -30,11 +30,9 @@ static int ksz9477_i2c_probe(struct i2c_client *i2c,
- 		rc.lock_arg = &dev->regmap_mutex;
- 		dev->regmap[i] = devm_regmap_init_i2c(i2c, &rc);
- 		if (IS_ERR(dev->regmap[i])) {
--			ret = PTR_ERR(dev->regmap[i]);
--			dev_err(&i2c->dev,
--				"Failed to initialize regmap%i: %d\n",
--				ksz9477_regmap_config[i].val_bits, ret);
--			return ret;
-+			return dev_err_probe(&i2c->dev, PTR_ERR(dev->regmap[i]),
-+					     "Failed to initialize regmap%i\n",
-+					     ksz9477_regmap_config[i].val_bits);
- 		}
- 	}
- 
-diff --git a/drivers/net/dsa/microchip/ksz_spi.c b/drivers/net/dsa/microchip/ksz_spi.c
-index 4f2186779082..96c52e8fb51b 100644
---- a/drivers/net/dsa/microchip/ksz_spi.c
-+++ b/drivers/net/dsa/microchip/ksz_spi.c
-@@ -71,11 +71,9 @@ static int ksz_spi_probe(struct spi_device *spi)
- 		dev->regmap[i] = devm_regmap_init_spi(spi, &rc);
- 
- 		if (IS_ERR(dev->regmap[i])) {
--			ret = PTR_ERR(dev->regmap[i]);
--			dev_err(&spi->dev,
--				"Failed to initialize regmap%i: %d\n",
--				regmap_config[i].val_bits, ret);
--			return ret;
-+			return dev_err_probe(&spi->dev, PTR_ERR(dev->regmap[i]),
-+					     "Failed to initialize regmap%i\n",
-+					     regmap_config[i].val_bits);
- 		}
- 	}
- 
--- 
-2.34.1
+> @@ -482,6 +504,7 @@ static struct zpool_driver zs_zpool_driver = {
+>  	.malloc_support_movable = true,
+>  	.malloc =		  zs_zpool_malloc,
+>  	.free =			  zs_zpool_free,
+> +	.shrink =     zs_zpool_shrink,
+>  	.map =			  zs_zpool_map,
+>  	.unmap =		  zs_zpool_unmap,
+>  	.total_size =		  zs_zpool_total_size,
+> @@ -955,6 +978,21 @@ static int trylock_zspage(struct zspage *zspage)
+>  	return 0;
+>  }
 
+[..]
+
+> +#ifdef CONFIG_ZPOOL
+> +static int zs_reclaim_page(struct zs_pool *pool, unsigned int retries)
+> +{
+> +	int i, obj_idx, ret = 0;
+> +	unsigned long handle;
+> +	struct zspage *zspage;
+> +	struct page *page;
+> +	enum fullness_group fullness;
+> +
+> +	/* Lock LRU and fullness list */
+> +	spin_lock(&pool->lock);
+> +	if (!pool->ops || !pool->ops->evict || list_empty(&pool->lru) ||
+
+You don't need pool->lock for pool->ops/pool->ops->evict checks.
+
+But, more importantly, I don't understand why is it even checked here?
+Why do we use ops->evict? Why cannot we call into zsmalloc evict
+directly? All of these are statically defined in zsmalloc, just don't
+provide .shrink if !define CONFIG_ZPOOL? Under what circumstances
+zsmalloc can provide .shrink but no ->evict?
