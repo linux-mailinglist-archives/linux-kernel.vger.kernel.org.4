@@ -2,57 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9E45B61709F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 23:23:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 91B0C6170A0
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 23:23:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231493AbiKBWXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 18:23:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37604 "EHLO
+        id S231531AbiKBWXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 18:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231220AbiKBWXK (ORCPT
+        with ESMTP id S231318AbiKBWXK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 2 Nov 2022 18:23:10 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ECABA474;
-        Wed,  2 Nov 2022 15:23:09 -0700 (PDT)
-Date:   Wed, 02 Nov 2022 22:23:06 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BA94AE42;
+        Wed,  2 Nov 2022 15:23:10 -0700 (PDT)
+Date:   Wed, 02 Nov 2022 22:23:07 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667427787;
+        s=2020; t=1667427788;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YUW1QVhkjRWaatCaIAT8He2QfaycB0btMRJuB7W3Bnk=;
-        b=RD+nxuQeX31+tzaN+UXlupWoQ22DX3nQKFXU5DeR2FYqfEp5jePpKo8iHZL8wyf4yKs1Qg
-        k2SdwrlZC1HJ7wHo+64FYIqVt0z59KfTlHIOyEi9ua4gFUGoAS40sZAbxrQaoYjk9LNrri
-        YK8DXRNwWsDzOk9G66TPN+JgCGOtZ3PREod7qb33Ez6xb96bJt/M0aRVLM4xkxZ2+0q5ES
-        6xynFVf2ASVprqei1U789qqpZw2yrDDuCMfPsXOI4w69xw/3uy2M2axD32PYA6lbZvyIYz
-        eKJ9TxNp2sjjXkQU/mObpkAZrTigqMEG5sOjB2uYBdu8HoNKYYyF5apvvo6Vbw==
+        bh=DJFFxTBTuJKMnzFJ4AteZowL/17syVKOLV0VVt689mc=;
+        b=dZl8gbyg6m9LZaZLUioxV64iS2pg0AhIwj+Cq9H6GB5/GOEAHRAFtFYTd7aOOFNuC0ZUB8
+        8Jm+R/J18fVa/SLj83otEFSmZvCzZkQmnVquSTK7CUFJSm5hjSR6J4dAD3xYVVAcnaax7E
+        uncagbatC4nf+OjYXUG3xgRuX5Gl7p+H2w/FmAfZzkXD+AcgZ7n2MrmALnHZXT9Za3I1um
+        fPc6h5pt7Q3Lpv+ANCySEW/SFPPP32+K25N1J83a4PMHzVZDaV/XDOpVOIQkvumlLPuUPl
+        sk340MwFK0hxAGkdlI7+C0XLCUSn6WPrWooxJXU6GzB6XiwxWSmxTPN/4in9tQ==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667427787;
+        s=2020e; t=1667427788;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=YUW1QVhkjRWaatCaIAT8He2QfaycB0btMRJuB7W3Bnk=;
-        b=dpXIZ3UBbaE8fJRRP5S/jOTDGjVvplVZsWGXV9/rtb85ejlVmh4cR5jPJTrkr/6emj70rG
-        zY1+k1vIRHOvJSBA==
-From:   "tip-bot2 for Kan Liang" <tip-bot2@linutronix.de>
+        bh=DJFFxTBTuJKMnzFJ4AteZowL/17syVKOLV0VVt689mc=;
+        b=a39BTn9i/EuhgdRVmnmbI9omnklO9E86n9ON8iJPk+Ges1lbdSOEspT3JGzfNTUlFXLZYu
+        ssLlbkxJYkoLcABA==
+From:   "tip-bot2 for Zhang Rui" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/urgent] perf/x86/intel: Fix pebs event constraints for ICL
-Cc:     Jannis Klinkenberg <jannis.klinkenberg@rwth-aachen.de>,
-        Kan Liang <kan.liang@linux.intel.com>,
+Subject: [tip: perf/urgent] perf/x86/rapl: Use standard Energy Unit for SPR
+ Dram RAPL domain
+Cc:     Zhang Rui <rui.zhang@intel.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        stable@vger.kernel.org, x86@kernel.org,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Wang Wendy <wendy.wang@intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20221031154119.571386-1-kan.liang@linux.intel.com>
-References: <20221031154119.571386-1-kan.liang@linux.intel.com>
+In-Reply-To: <20220924054738.12076-3-rui.zhang@intel.com>
+References: <20220924054738.12076-3-rui.zhang@intel.com>
 MIME-Version: 1.0
-Message-ID: <166742778655.6127.8719495668978265751.tip-bot2@tip-bot2>
+Message-ID: <166742778760.6127.12132934184185495445.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -68,45 +69,46 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the perf/urgent branch of tip:
 
-Commit-ID:     acc5568b90c19ac6375508a93b9676cd18a92a35
-Gitweb:        https://git.kernel.org/tip/acc5568b90c19ac6375508a93b9676cd18a92a35
-Author:        Kan Liang <kan.liang@linux.intel.com>
-AuthorDate:    Mon, 31 Oct 2022 08:41:18 -07:00
+Commit-ID:     80275ca9e525c198c7efe045c4a6cdb68a2ea763
+Gitweb:        https://git.kernel.org/tip/80275ca9e525c198c7efe045c4a6cdb68a2ea763
+Author:        Zhang Rui <rui.zhang@intel.com>
+AuthorDate:    Sat, 24 Sep 2022 13:47:37 +08:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Wed, 02 Nov 2022 12:22:06 +01:00
+CommitterDate: Wed, 02 Nov 2022 12:22:05 +01:00
 
-perf/x86/intel: Fix pebs event constraints for ICL
+perf/x86/rapl: Use standard Energy Unit for SPR Dram RAPL domain
 
-According to the latest event list, update the MEM_INST_RETIRED events
-which support the DataLA facility.
+Intel Xeon servers used to use a fixed energy resolution (15.3uj) for
+Dram RAPL domain. But on SPR, Dram RAPL domain follows the standard
+energy resolution as described in MSR_RAPL_POWER_UNIT.
 
-Fixes: 6017608936c1 ("perf/x86/intel: Add Icelake support")
-Reported-by: Jannis Klinkenberg <jannis.klinkenberg@rwth-aachen.de>
-Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Remove the SPR Dram energy unit quirk.
+
+Fixes: bcfd218b6679 ("perf/x86/rapl: Add support for Intel SPR platform")
+Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Cc: stable@vger.kernel.org
-Link: https://lkml.kernel.org/r/20221031154119.571386-1-kan.liang@linux.intel.com
+Reviewed-by: Kan Liang <kan.liang@linux.intel.com>
+Tested-by: Wang Wendy <wendy.wang@intel.com>
+Link: https://lkml.kernel.org/r/20220924054738.12076-3-rui.zhang@intel.com
 ---
- arch/x86/events/intel/ds.c |  9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
+ arch/x86/events/rapl.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
 
-diff --git a/arch/x86/events/intel/ds.c b/arch/x86/events/intel/ds.c
-index 7839507..41e8d65 100644
---- a/arch/x86/events/intel/ds.c
-+++ b/arch/x86/events/intel/ds.c
-@@ -982,8 +982,13 @@ struct event_constraint intel_icl_pebs_event_constraints[] = {
- 	INTEL_FLAGS_UEVENT_CONSTRAINT(0x0400, 0x800000000ULL),	/* SLOTS */
- 
- 	INTEL_PLD_CONSTRAINT(0x1cd, 0xff),			/* MEM_TRANS_RETIRED.LOAD_LATENCY */
--	INTEL_FLAGS_UEVENT_CONSTRAINT_DATALA_LD(0x1d0, 0xf),	/* MEM_INST_RETIRED.LOAD */
--	INTEL_FLAGS_UEVENT_CONSTRAINT_DATALA_ST(0x2d0, 0xf),	/* MEM_INST_RETIRED.STORE */
-+	INTEL_FLAGS_UEVENT_CONSTRAINT_DATALA_LD(0x11d0, 0xf),	/* MEM_INST_RETIRED.STLB_MISS_LOADS */
-+	INTEL_FLAGS_UEVENT_CONSTRAINT_DATALA_ST(0x12d0, 0xf),	/* MEM_INST_RETIRED.STLB_MISS_STORES */
-+	INTEL_FLAGS_UEVENT_CONSTRAINT_DATALA_LD(0x21d0, 0xf),	/* MEM_INST_RETIRED.LOCK_LOADS */
-+	INTEL_FLAGS_UEVENT_CONSTRAINT_DATALA_LD(0x41d0, 0xf),	/* MEM_INST_RETIRED.SPLIT_LOADS */
-+	INTEL_FLAGS_UEVENT_CONSTRAINT_DATALA_ST(0x42d0, 0xf),	/* MEM_INST_RETIRED.SPLIT_STORES */
-+	INTEL_FLAGS_UEVENT_CONSTRAINT_DATALA_LD(0x81d0, 0xf),	/* MEM_INST_RETIRED.ALL_LOADS */
-+	INTEL_FLAGS_UEVENT_CONSTRAINT_DATALA_ST(0x82d0, 0xf),	/* MEM_INST_RETIRED.ALL_STORES */
- 
- 	INTEL_FLAGS_EVENT_CONSTRAINT_DATALA_LD_RANGE(0xd1, 0xd4, 0xf), /* MEM_LOAD_*_RETIRED.* */
- 
+diff --git a/arch/x86/events/rapl.c b/arch/x86/events/rapl.c
+index fea544e..a829492 100644
+--- a/arch/x86/events/rapl.c
++++ b/arch/x86/events/rapl.c
+@@ -619,12 +619,8 @@ static int rapl_check_hw_unit(struct rapl_model *rm)
+ 	case RAPL_UNIT_QUIRK_INTEL_HSW:
+ 		rapl_hw_unit[PERF_RAPL_RAM] = 16;
+ 		break;
+-	/*
+-	 * SPR shares the same DRAM domain energy unit as HSW, plus it
+-	 * also has a fixed energy unit for Psys domain.
+-	 */
++	/* SPR uses a fixed energy unit for Psys domain. */
+ 	case RAPL_UNIT_QUIRK_INTEL_SPR:
+-		rapl_hw_unit[PERF_RAPL_RAM] = 16;
+ 		rapl_hw_unit[PERF_RAPL_PSYS] = 0;
+ 		break;
+ 	default:
