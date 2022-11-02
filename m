@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9BDC4617078
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 23:12:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D0A5617072
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 23:12:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231467AbiKBWLv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 18:11:51 -0400
+        id S231559AbiKBWMA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 18:12:00 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58560 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231391AbiKBWLq (ORCPT
+        with ESMTP id S231321AbiKBWLs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 18:11:46 -0400
-Received: from mail-io1-xd34.google.com (mail-io1-xd34.google.com [IPv6:2607:f8b0:4864:20::d34])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 485AA6179
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 15:11:45 -0700 (PDT)
-Received: by mail-io1-xd34.google.com with SMTP id o65so16238841iof.4
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 15:11:45 -0700 (PDT)
+        Wed, 2 Nov 2022 18:11:48 -0400
+Received: from mail-io1-xd33.google.com (mail-io1-xd33.google.com [IPv6:2607:f8b0:4864:20::d33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B9586460
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 15:11:46 -0700 (PDT)
+Received: by mail-io1-xd33.google.com with SMTP id y6so13257409iof.9
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 15:11:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=P4nuwgGkQOaib3BwT5hOD0oPhyITqBv+siRpxH4LVLA=;
-        b=QWAql5sruNOYapQ8D3iedsH3hR0D8NvgG5miWD7mQ2egdNW9qeymNJSEPbNeqX8rtt
-         PnEoUfiE2PNslqNekLVwrC7U3xCPwCeTTcCA4dlwffSIPNJSlWLtDj1Y84nf6kauIZ7c
-         HzYyXPIiJ7ZTGRMmVnGVBwc/X/mIGvBlCy39CU0WVYa7PndE/GrfDU3ln3aSO/N6lpNR
-         y2rzM8Pkpk0EbIO6LcEkqCcZWBWaO2lhhw6b9FVTMnQ/EphPsPTKhcOrH68qOQHwAmjG
-         7OkSn79SVka13cLXQrBGRXoHJCrnoLJjoTW2hwLna/uqV0gAS45MOFG9VjcQtcMzW3xx
-         CNxg==
+        bh=lCQLB8py1X/NJwP3+BLi4r+G0VNoFsbUa3BWr+xCFoQ=;
+        b=SNCDbmVKKb+oXB9d2PZfmQ6sGlOAEy3WH57N0KnFlaRTGlopsX4RUr79DscWszmB8b
+         PvOTMZ/Zje2FeFenOosF179eV+2gHKT+RhYyJJxeqalnyvaFj/Ko9I0uRe1njB26FVIu
+         if4zwr6/CLuEGz7bb0ftItu0VKeJFDYb3ldhClkNqMbeI75zlVEdeD2DrvgaLePddd8C
+         xZtLIB83w2j6hsppp8THKQDIx0y26rOZuf4miBG9qpshQKHxl9uAt3StG5ztrUC8RoYp
+         S58COHsH9YR141+iYlNzVv3Z8O57oS3p220BASIl8IMnBbddAy2l4VCsEiuLe+OF0x2b
+         tG/Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=P4nuwgGkQOaib3BwT5hOD0oPhyITqBv+siRpxH4LVLA=;
-        b=gCjNlvdDBx7eBcZs6hySBE1bstZ1hulu7nUVZfMSqTR3r7rlmAaKeP+IbG3U27UNQJ
-         OWCEf+bkwicacJX2UenPPTVbDUY5L3z2avvz2zH7BCUTrNitpdBicgj9uGciaU3eP4dx
-         jEtaTbIKYEbdL54Z5BoKXt2BKOD/O+uisOrvebMpa33ZmuNw/xl8fEFAW87G2UHPTAmG
-         dHwyzTvekD3shK6+DjYqrfEBNZ9wzuxp3mzB4/6NQhqDYBwWmdl53CEZRQYFer24cRjf
-         D2UutROPquliqBathGA0lvqubtI59EX/WSzFRJh0GhBAzBF4pLxQUbezRVnQfGJruP6W
-         E6OQ==
-X-Gm-Message-State: ACrzQf1e+rja2N0Q7hZxalLApAHpDmNwe9bbiumcRH57A0+Wp5Sz1tbX
-        X8KSV/SNm+YF6HGQpowiki97yQ==
-X-Google-Smtp-Source: AMsMyM7FJU56e1gpPyVNrFfjvVxKPEZim8DHPH4XiYspfzma0k5BkqJ313w6+XHhnHkPzukAzOJduA==
-X-Received: by 2002:a05:6602:3420:b0:6ce:3066:181a with SMTP id n32-20020a056602342000b006ce3066181amr13433619ioz.98.1667427104655;
-        Wed, 02 Nov 2022 15:11:44 -0700 (PDT)
+        bh=lCQLB8py1X/NJwP3+BLi4r+G0VNoFsbUa3BWr+xCFoQ=;
+        b=eJrHQQjhKt9gIC6jCMaowxpySZX08t9tO93W4QN7vmp2EjZhfROSwvAD4FewvdLs3R
+         7Hfvkkjv8B99k07J+wqTh3KKCtJ42IekVs5aveLStKrpVevKpm+RVGvbB3IPTBv/Kapv
+         UNcr3tuugHX2biD4JNpccrjMyFaJmTCBiQPKrKQY76FnVaLN+cdIhF5CZHEtbWjXbeVJ
+         ciUttyRitbefkYPChp8VESBtXshRP6lY+oQFCb8LwJMvjTfn/WuCrfnfY/CXgg3RTa+6
+         74cDLDHHkhuBRQIlwLw1BnhVgYb8IwPmN8cSIR/W3O9lGvplX1k5AmWeAwSZzyJuChCk
+         zRJA==
+X-Gm-Message-State: ACrzQf1FT1UHxNVsNK4k9UFPJHv9XRqW1VjoAkcNt+6eAlvvFMYqm1gB
+        ciG+KcL5FB92OOmWX/fYlOE5oL0ja+CDKg==
+X-Google-Smtp-Source: AMsMyM4CeoNL38zmvm/YKt29nzHl92WZ/9UIh/QsBpe4nGijPLUyY0M8Rmv2eNDf7KQmZ0ebDa4FiA==
+X-Received: by 2002:a05:6602:2dc7:b0:6a5:14e5:d709 with SMTP id l7-20020a0566022dc700b006a514e5d709mr16658698iow.54.1667427105992;
+        Wed, 02 Nov 2022 15:11:45 -0700 (PDT)
 Received: from presto.localdomain ([98.61.227.136])
-        by smtp.gmail.com with ESMTPSA id f8-20020a02a108000000b0037465a1dd3fsm5073974jag.156.2022.11.02.15.11.43
+        by smtp.gmail.com with ESMTPSA id f8-20020a02a108000000b0037465a1dd3fsm5073974jag.156.2022.11.02.15.11.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 15:11:44 -0700 (PDT)
+        Wed, 02 Nov 2022 15:11:45 -0700 (PDT)
 From:   Alex Elder <elder@linaro.org>
 To:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
         pabeni@redhat.com
@@ -58,9 +58,9 @@ Cc:     mka@chromium.org, evgreen@chromium.org, andersson@kernel.org,
         quic_jponduru@quicinc.com, quic_subashab@quicinc.com,
         elder@kernel.org, netdev@vger.kernel.org,
         linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH net-next v2 1/9] net: ipa: reduce arguments to ipa_table_init_add()
-Date:   Wed,  2 Nov 2022 17:11:31 -0500
-Message-Id: <20221102221139.1091510-2-elder@linaro.org>
+Subject: [PATCH net-next v2 2/9] net: ipa: use ipa_table_mem() in ipa_table_reset_add()
+Date:   Wed,  2 Nov 2022 17:11:32 -0500
+Message-Id: <20221102221139.1091510-3-elder@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221102221139.1091510-1-elder@linaro.org>
 References: <20221102221139.1091510-1-elder@linaro.org>
@@ -68,106 +68,109 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Recently ipa_table_mem() was added as a way to look up one of 8
-possible memory regions by indicating whether it was a filter or
-route table, hashed or not, and IPv6 or not.
+Similar to the previous commit, pass flags rather than a memory
+region ID to ipa_table_reset_add(), and there use ipa_table_mem() to
+look up the memory region affected based on those flags.
 
-We can simplify the interface to ipa_table_init_add() by passing two
-flags to it instead of the opcode and both hashed and non-hashed
-memory region IDs.  The "filter" and "ipv6" flags are sufficient to
-determine the opcode to use, and with ipa_table_mem() can look up
-the correct memory region as well.
-
-It's possible to not have hashed tables, but we already verify the
-number of entries in a filter or routing table is nonzero.  Stop
-assuming a hashed table entry exists in ipa_table_init_add().
+Currently all eight of these table memory regions are assumed to
+exist, because they all have canaries within them.  Stop assuming
+that will always be the case, and in ipa_table_reset_add() allow
+these memory regions to be non-existent.
 
 Signed-off-by: Alex Elder <elder@linaro.org>
 ---
- drivers/net/ipa/ipa_table.c | 37 ++++++++++++++++++-------------------
- 1 file changed, 18 insertions(+), 19 deletions(-)
+ drivers/net/ipa/ipa_table.c | 31 +++++++++++++++----------------
+ 1 file changed, 15 insertions(+), 16 deletions(-)
 
 diff --git a/drivers/net/ipa/ipa_table.c b/drivers/net/ipa/ipa_table.c
-index cf3a3de239dc3..94bb7611e574b 100644
+index 94bb7611e574b..3a14465bf8a64 100644
 --- a/drivers/net/ipa/ipa_table.c
 +++ b/drivers/net/ipa/ipa_table.c
-@@ -376,14 +376,12 @@ int ipa_table_hash_flush(struct ipa *ipa)
- 	return 0;
+@@ -200,16 +200,17 @@ static dma_addr_t ipa_table_addr(struct ipa *ipa, bool filter_mask, u16 count)
  }
  
--static void ipa_table_init_add(struct gsi_trans *trans, bool filter,
--			       enum ipa_cmd_opcode opcode,
--			       enum ipa_mem_id mem_id,
--			       enum ipa_mem_id hash_mem_id)
-+static void ipa_table_init_add(struct gsi_trans *trans, bool filter, bool ipv6)
+ static void ipa_table_reset_add(struct gsi_trans *trans, bool filter,
+-				u16 first, u16 count, enum ipa_mem_id mem_id)
++				bool hashed, bool ipv6, u16 first, u16 count)
  {
  	struct ipa *ipa = container_of(trans->gsi, struct ipa, gsi);
--	const struct ipa_mem *hash_mem = ipa_mem_find(ipa, hash_mem_id);
 -	const struct ipa_mem *mem = ipa_mem_find(ipa, mem_id);
-+	const struct ipa_mem *hash_mem;
-+	enum ipa_cmd_opcode opcode;
 +	const struct ipa_mem *mem;
- 	dma_addr_t hash_addr;
  	dma_addr_t addr;
- 	u32 zero_offset;
-@@ -393,6 +391,14 @@ static void ipa_table_init_add(struct gsi_trans *trans, bool filter,
- 	u16 count;
+ 	u32 offset;
  	u16 size;
  
-+	opcode = filter ? ipv6 ? IPA_CMD_IP_V6_FILTER_INIT
-+			       : IPA_CMD_IP_V4_FILTER_INIT
-+			: ipv6 ? IPA_CMD_IP_V6_ROUTING_INIT
-+			       : IPA_CMD_IP_V4_ROUTING_INIT;
-+
-+	mem = ipa_table_mem(ipa, filter, false, ipv6);
-+	hash_mem = ipa_table_mem(ipa, filter, true, ipv6);
-+
- 	/* Compute the number of table entries to initialize */
- 	if (filter) {
- 		/* The number of filtering endpoints determines number of
-@@ -401,13 +407,13 @@ static void ipa_table_init_add(struct gsi_trans *trans, bool filter,
- 		 * table is either the same as the non-hashed one, or zero.
- 		 */
- 		count = 1 + hweight32(ipa->filter_map);
--		hash_count = hash_mem->size ? count : 0;
-+		hash_count = hash_mem && hash_mem->size ? count : 0;
- 	} else {
- 		/* The size of a route table region determines the number
- 		 * of entries it has.
- 		 */
- 		count = mem->size / sizeof(__le64);
--		hash_count = hash_mem->size / sizeof(__le64);
-+		hash_count = hash_mem && hash_mem->size / sizeof(__le64);
- 	}
- 	size = count * sizeof(__le64);
- 	hash_size = hash_count * sizeof(__le64);
-@@ -458,17 +464,10 @@ int ipa_table_setup(struct ipa *ipa)
- 		return -EBUSY;
+-	/* Nothing to do if the table memory region is empty */
+-	if (!mem->size)
++	/* Nothing to do if the memory region is doesn't exist or is empty */
++	mem = ipa_table_mem(ipa, filter, hashed, ipv6);
++	if (!mem || !mem->size)
+ 		return;
+ 
+ 	if (filter)
+@@ -227,7 +228,7 @@ static void ipa_table_reset_add(struct gsi_trans *trans, bool filter,
+  * for the IPv4 and IPv6 non-hashed and hashed filter tables.
+  */
+ static int
+-ipa_filter_reset_table(struct ipa *ipa, enum ipa_mem_id mem_id, bool modem)
++ipa_filter_reset_table(struct ipa *ipa, bool hashed, bool ipv6, bool modem)
+ {
+ 	u32 ep_mask = ipa->filter_map;
+ 	u32 count = hweight32(ep_mask);
+@@ -253,7 +254,7 @@ ipa_filter_reset_table(struct ipa *ipa, enum ipa_mem_id mem_id, bool modem)
+ 		if (endpoint->ee_id != ee_id)
+ 			continue;
+ 
+-		ipa_table_reset_add(trans, true, endpoint_id, 1, mem_id);
++		ipa_table_reset_add(trans, true, hashed, ipv6, endpoint_id, 1);
  	}
  
--	ipa_table_init_add(trans, false, IPA_CMD_IP_V4_ROUTING_INIT,
--			   IPA_MEM_V4_ROUTE, IPA_MEM_V4_ROUTE_HASHED);
--
--	ipa_table_init_add(trans, false, IPA_CMD_IP_V6_ROUTING_INIT,
--			   IPA_MEM_V6_ROUTE, IPA_MEM_V6_ROUTE_HASHED);
--
--	ipa_table_init_add(trans, true, IPA_CMD_IP_V4_FILTER_INIT,
--			   IPA_MEM_V4_FILTER, IPA_MEM_V4_FILTER_HASHED);
--
--	ipa_table_init_add(trans, true, IPA_CMD_IP_V6_FILTER_INIT,
--			   IPA_MEM_V6_FILTER, IPA_MEM_V6_FILTER_HASHED);
-+	ipa_table_init_add(trans, false, false);
-+	ipa_table_init_add(trans, false, true);
-+	ipa_table_init_add(trans, true, false);
-+	ipa_table_init_add(trans, true, true);
+ 	gsi_trans_commit_wait(trans);
+@@ -269,18 +270,18 @@ static int ipa_filter_reset(struct ipa *ipa, bool modem)
+ {
+ 	int ret;
+ 
+-	ret = ipa_filter_reset_table(ipa, IPA_MEM_V4_FILTER, modem);
++	ret = ipa_filter_reset_table(ipa, false, false, modem);
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = ipa_filter_reset_table(ipa, IPA_MEM_V4_FILTER_HASHED, modem);
++	ret = ipa_filter_reset_table(ipa, true, false, modem);
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = ipa_filter_reset_table(ipa, IPA_MEM_V6_FILTER, modem);
++	ret = ipa_filter_reset_table(ipa, false, true, modem);
+ 	if (ret)
+ 		return ret;
+-	ret = ipa_filter_reset_table(ipa, IPA_MEM_V6_FILTER_HASHED, modem);
++	ret = ipa_filter_reset_table(ipa, true, true, modem);
+ 
+ 	return ret;
+ }
+@@ -312,13 +313,11 @@ static int ipa_route_reset(struct ipa *ipa, bool modem)
+ 		count = ipa->route_count - modem_route_count;
+ 	}
+ 
+-	ipa_table_reset_add(trans, false, first, count, IPA_MEM_V4_ROUTE);
+-	ipa_table_reset_add(trans, false, first, count,
+-			    IPA_MEM_V4_ROUTE_HASHED);
++	ipa_table_reset_add(trans, false, false, false, first, count);
++	ipa_table_reset_add(trans, false, true, false, first, count);
+ 
+-	ipa_table_reset_add(trans, false, first, count, IPA_MEM_V6_ROUTE);
+-	ipa_table_reset_add(trans, false, first, count,
+-			    IPA_MEM_V6_ROUTE_HASHED);
++	ipa_table_reset_add(trans, false, false, true, first, count);
++	ipa_table_reset_add(trans, false, true, true, first, count);
  
  	gsi_trans_commit_wait(trans);
  
