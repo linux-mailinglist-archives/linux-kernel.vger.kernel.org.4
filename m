@@ -2,173 +2,178 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6DED617006
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 22:45:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AA4161700C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 22:47:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbiKBVpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 17:45:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
+        id S231311AbiKBVrJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 17:47:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45510 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiKBVo7 (ORCPT
+        with ESMTP id S230315AbiKBVrG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 17:44:59 -0400
-Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CC69FD2;
-        Wed,  2 Nov 2022 14:44:55 -0700 (PDT)
-Received: by mail-ot1-f51.google.com with SMTP id w26-20020a056830061a00b0066c320f5b49so5341oti.5;
-        Wed, 02 Nov 2022 14:44:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=syOzYtOOOUOYVS4+OlEvCGBduiGZmBKkbZQSbbMUPpA=;
-        b=Ai59QzDF3njfiJ8WmpJm/jR//u4TcX2m7C7weX6z5D8COwCvd81toeiR3L4MgO2b95
-         BW/3Wrrr0T7bTxq9Gv4vrszQX7WPxRSIc9px7skY/DtjbKRRWGDlc9LYP84rJxT7ReKR
-         VCVxUbkpJckIePw/k4jVuPRZokzDBMPa6ppIsOYSeHzScmkH+T2+0CwDQqghzMm9HiE5
-         1yQhXD0FhdinbYQZv8xIBjVnxxeJCJT0DcMaYtSKsuhct0qpj1hTuoI47E0qn+Y7N0Yo
-         SXV1X3Tv9nOeOU3jMSFsS+G9Fkdotc12IzlGQwrNFa/Xot65f9YwA49ppm0Xoz44Ro+A
-         H92A==
-X-Gm-Message-State: ACrzQf1N6Roz79uQN29+1JOxCfLFse9ZycaJN04s1cZWVi1NMwvtO5B6
-        eAvIptbxSd9GboQWnSms6w==
-X-Google-Smtp-Source: AMsMyM5jgp6/w71wsIeSDu5Cp2add+eO31Ja16PdaL5iDF1jEe8kETQjfyntiTk6ehIozKaHEcN28A==
-X-Received: by 2002:a05:6830:108:b0:66a:8d0d:6a73 with SMTP id i8-20020a056830010800b0066a8d0d6a73mr13260759otp.193.1667425495145;
-        Wed, 02 Nov 2022 14:44:55 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id q21-20020a056830233500b00661c0747545sm5655710otg.44.2022.11.02.14.44.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 14:44:54 -0700 (PDT)
-Received: (nullmailer pid 522290 invoked by uid 1000);
-        Wed, 02 Nov 2022 21:44:56 -0000
-Date:   Wed, 2 Nov 2022 16:44:56 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>
-Cc:     Chester Lin <clin@suse.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jan Petrous <jan.petrous@nxp.com>, netdev@vger.kernel.org,
-        s32@nxp.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Matthias Brugger <mbrugger@suse.com>
-Subject: Re: [PATCH 2/5] dt-bindings: net: add schema for NXP S32CC dwmac
- glue driver
-Message-ID: <20221102214456.GB459441-robh@kernel.org>
-References: <20221031101052.14956-1-clin@suse.com>
- <20221031101052.14956-3-clin@suse.com>
- <20221102155515.GA3959603-robh@kernel.org>
- <2a7ebef4-77cc-1c26-ec6d-86db5ee5a94b@suse.de>
+        Wed, 2 Nov 2022 17:47:06 -0400
+Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8478AE0C0
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 14:47:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=PAqLk4vbz/jMyf0acd8AaUtbY70n/pCagLl/I8+aAy4=; b=Mlqf86ujjgIDW8LACKKsN0DHlm
+        UE/XS328m2Mynx6qIbbIMNH7OMcdrWxt1NG/yi2z8JTyqZAmBPPs6AOxF/FD/MwVvj35nvy4gdk9n
+        vat5p8hyus8Q3AGatMGa6evGstcpSAOYACyj2J4oVg5iUD+gqQD0HYdN85JfhudFs3E64QY7cmn3Q
+        C3GIL3A5aBislzBCL5ULSUHc7IjQqiJw1CsUCoRfGathVddINOSktcpEFfJ4IpzuUxxvkeWBMZPSE
+        T85+0KXqR9+sNisVISO+i+m/lTBBOABPaGL0HvU83unLPNmTcjekGgMN1J0CJbe8CO9FrIJDDFDlk
+        MN3S3f3A==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oqLZO-008W7N-Cu; Wed, 02 Nov 2022 21:46:47 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id D1282300130;
+        Wed,  2 Nov 2022 22:46:44 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id ADC7C20B23194; Wed,  2 Nov 2022 22:46:44 +0100 (CET)
+Date:   Wed, 2 Nov 2022 22:46:44 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     x86@kernel.org
+Cc:     linux-kernel@vger.kernel.org, djwong@kernel.org,
+        yujie.liu@intel.com, tglx@linutronix.de, jpoimboe@kernel.org,
+        joao.moreira@intel.com, samitolvanen@google.com
+Subject: [PATCH 6/5] objtool: Optimize elf_dirty_reloc_sym()
+Message-ID: <Y2LlRA7x+8UsE1xf@hirez.programming.kicks-ass.net>
+References: <20221028194022.388521751@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <2a7ebef4-77cc-1c26-ec6d-86db5ee5a94b@suse.de>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221028194022.388521751@infradead.org>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 06:13:35PM +0100, Andreas Färber wrote:
-> Hi Rob,
-> 
-> On 02.11.22 16:55, Rob Herring wrote:
-> > On Mon, Oct 31, 2022 at 06:10:49PM +0800, Chester Lin wrote:
-> > > Add the DT schema for the DWMAC Ethernet controller on NXP S32 Common
-> > > Chassis.
-> > > 
-> > > Signed-off-by: Jan Petrous <jan.petrous@nxp.com>
-> > > Signed-off-by: Chester Lin <clin@suse.com>
-> > > ---
-> > >   .../bindings/net/nxp,s32cc-dwmac.yaml         | 145 ++++++++++++++++++
-> > >   1 file changed, 145 insertions(+)
-> > >   create mode 100644 Documentation/devicetree/bindings/net/nxp,s32cc-dwmac.yaml
-> > > 
-> > > diff --git a/Documentation/devicetree/bindings/net/nxp,s32cc-dwmac.yaml b/Documentation/devicetree/bindings/net/nxp,s32cc-dwmac.yaml
-> > > new file mode 100644
-> > > index 000000000000..f6b8486f9d42
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/net/nxp,s32cc-dwmac.yaml
-> > > @@ -0,0 +1,145 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +# Copyright 2021-2022 NXP
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: "http://devicetree.org/schemas/net/nxp,s32cc-dwmac.yaml#"
-> > > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
-> > > +
-> > > +title: NXP S32CC DWMAC Ethernet controller
-> > > +
-> > > +maintainers:
-> > > +  - Jan Petrous <jan.petrous@nxp.com>
-> > > +  - Chester Lin <clin@suse.com>
-> [...]
-> > > +properties:
-> > > +  compatible:
-> > > +    contains:
-> > 
-> > Drop 'contains'.
-> > 
-> > > +      enum:
-> > > +        - nxp,s32cc-dwmac
-> 
-> In the past you were adamant that we use concrete SoC-specific strings. Here
-> that would mean s32g2 or s32g274 instead of s32cc (which aims to share with
-> S32G3 IIUC).
+Subject: objtool: Optimize elf_dirty_reloc_sym()
+From: Peter Zijlstra <peterz@infradead.org>
+Date: Wed Nov  2 22:31:19 CET 2022
 
-Yes they should be SoC specific. Really, 1 per maskset or die is fine if 
-that level of detail is known. No need for different compatibles for 
-different part numbers created by fused off features or package pinout 
-differences.
+When moving a symbol in the symtab its index changes and any reloc
+referring that symtol-table-index will need to be rewritten too.
 
+In order to facilitate this, objtool simply marks the whole reloc
+section 'changed' which will cause the whole section to be
+re-generated.
 
-> [...]
-> > > +  clocks:
-> > > +    items:
-> > > +      - description: Main GMAC clock
-> > > +      - description: Peripheral registers clock
-> > > +      - description: Transmit SGMII clock
-> > > +      - description: Transmit RGMII clock
-> > > +      - description: Transmit RMII clock
-> > > +      - description: Transmit MII clock
-> > > +      - description: Receive SGMII clock
-> > > +      - description: Receive RGMII clock
-> > > +      - description: Receive RMII clock
-> > > +      - description: Receive MII clock
-> > > +      - description:
-> > > +          PTP reference clock. This clock is used for programming the
-> > > +          Timestamp Addend Register. If not passed then the system
-> > > +          clock will be used.
-> > 
-> > If optional, then you need 'minItems'.
-> [snip]
-> 
-> Do we have any precedence of bindings with *MII clocks like these?
+However, finding the relocs that use any given symbol is implemented
+rather crudely -- a fully iteration of all sections and their relocs.
+Given that some builds have over 20k sections (kallsyms etc..)
+iterating all that for *each* symbol moved takes a bit of time.
 
-Don't know...
+Instead have each symbol keep a list of relocs that reference it.
 
-> AFAIU the reason there are so many here is that there are in fact physically
-> just five, but different parent clock configurations that SCMI does not
-> currently expose to Linux. Thus I was raising that we may want to extend the
-> SCMI protocol with some SET_PARENT operation that could allow us to use less
-> input clocks here, but obviously such a standardization process will take
-> time...
-> 
-> What are your thoughts on how to best handle this here?
+This *vastly* improves build times for certain configs.
 
-Perhaps use assigned-clocks if it is static for a board.
+Reported-by: Borislav Petkov <bp@alien8.de>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+---
+ tools/objtool/elf.c                 |   27 ++++++++++-----------------
+ tools/objtool/include/objtool/elf.h |    2 ++
+ 2 files changed, 12 insertions(+), 17 deletions(-)
 
-> Not clear to me has been whether the PHY mode can be switched at runtime
-> (like DPAA2 on Layerscape allows for SFPs) or whether this is fixed by board
-> design. If the latter, the two out of six SCMI IDs could get selected in
-> TF-A, to have only physical clocks here in the binding.
-> 
-> Regards,
-> Andreas
+--- a/tools/objtool/elf.c
++++ b/tools/objtool/elf.c
+@@ -356,6 +356,7 @@ static void elf_add_symbol(struct elf *e
+ 	struct rb_node *pnode;
+ 	struct symbol *iter;
+ 
++	INIT_LIST_HEAD(&sym->reloc_list);
+ 	INIT_LIST_HEAD(&sym->pv_target);
+ 	sym->alias = sym;
+ 
+@@ -557,6 +558,7 @@ int elf_add_reloc(struct elf *elf, struc
+ 	reloc->sym = sym;
+ 	reloc->addend = addend;
+ 
++	list_add_tail(&reloc->sym_reloc_entry, &sym->reloc_list);
+ 	list_add_tail(&reloc->list, &sec->reloc->reloc_list);
+ 	elf_hash_add(reloc, &reloc->hash, reloc_hash(reloc));
+ 
+@@ -573,21 +575,10 @@ int elf_add_reloc(struct elf *elf, struc
+  */
+ static void elf_dirty_reloc_sym(struct elf *elf, struct symbol *sym)
+ {
+-	struct section *sec;
+-
+-	list_for_each_entry(sec, &elf->sections, list) {
+-		struct reloc *reloc;
+-
+-		if (sec->changed)
+-			continue;
++	struct reloc *reloc;
+ 
+-		list_for_each_entry(reloc, &sec->reloc_list, list) {
+-			if (reloc->sym == sym) {
+-				sec->changed = true;
+-				break;
+-			}
+-		}
+-	}
++	list_for_each_entry(reloc, &sym->reloc_list, sym_reloc_entry)
++		reloc->sec->changed = true;
+ }
+ 
+ /*
+@@ -902,11 +893,12 @@ static int read_rela_reloc(struct sectio
+ 
+ static int read_relocs(struct elf *elf)
+ {
++	unsigned long nr_reloc, max_reloc = 0, tot_reloc = 0;
+ 	struct section *sec;
+ 	struct reloc *reloc;
+-	int i;
+ 	unsigned int symndx;
+-	unsigned long nr_reloc, max_reloc = 0, tot_reloc = 0;
++	struct symbol *sym;
++	int i;
+ 
+ 	if (!elf_alloc_hash(reloc, elf->text_size / 16))
+ 		return -1;
+@@ -947,13 +939,14 @@ static int read_relocs(struct elf *elf)
+ 
+ 			reloc->sec = sec;
+ 			reloc->idx = i;
+-			reloc->sym = find_symbol_by_index(elf, symndx);
++			reloc->sym = sym = find_symbol_by_index(elf, symndx);
+ 			if (!reloc->sym) {
+ 				WARN("can't find reloc entry symbol %d for %s",
+ 				     symndx, sec->name);
+ 				return -1;
+ 			}
+ 
++			list_add_tail(&reloc->sym_reloc_entry, &sym->reloc_list);
+ 			list_add_tail(&reloc->list, &sec->reloc_list);
+ 			elf_hash_add(reloc, &reloc->hash, reloc_hash(reloc));
+ 
+--- a/tools/objtool/include/objtool/elf.h
++++ b/tools/objtool/include/objtool/elf.h
+@@ -62,6 +62,7 @@ struct symbol {
+ 	u8 fentry            : 1;
+ 	u8 profiling_func    : 1;
+ 	struct list_head pv_target;
++	struct list_head reloc_list;
+ };
+ 
+ struct reloc {
+@@ -73,6 +74,7 @@ struct reloc {
+ 	};
+ 	struct section *sec;
+ 	struct symbol *sym;
++	struct list_head sym_reloc_entry;
+ 	unsigned long offset;
+ 	unsigned int type;
+ 	s64 addend;
