@@ -2,53 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A21DE6169A2
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:48:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C146169B5
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:50:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232088AbiKBQss (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 12:48:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48398 "EHLO
+        id S232149AbiKBQuE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 12:50:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232120AbiKBQsW (ORCPT
+        with ESMTP id S231807AbiKBQtq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 12:48:22 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E01A163A4
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 09:45:40 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id a15-20020a056e0208af00b00300806a52b6so15886783ilt.22
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 09:45:40 -0700 (PDT)
+        Wed, 2 Nov 2022 12:49:46 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 570226373
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 09:48:57 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id f8so12126617qkg.3
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 09:48:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uD30lAoArCayIjKDZVlL5ocMenNCJJq05otGcDZLCH8=;
+        b=zV8hhjYdbwHNiuh7M2h2tIRAFiosB9FrHDQ8qgjUuOpSzPQbfe4YhTNLXOps33072i
+         vPr6OGhsDK6pjD2bmauzBU3N1bf3DKQ4krKgAghhcQChr/j/TEBm+cNcYPQplEZmtsgS
+         MjtLD+wuijOdHRRalmyiqf3BBOV/cmxj6YXGyDUUrPAAZ2acn+eP4E2RwlhpVhoZzL0f
+         DI9E5YnUtPK3ddkozWRaj8YerG0Edb7IQD6EJVGmUHRBo/gzfQOHVt8saSUaFSuuD8rk
+         D/O3cFI4il8BU+lVZsMf+Dp5Ne3CzR3FcV7GYP2qv5NaRrJuX9t0dPTDQLxw38Dt84yl
+         hmZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=LcOb2ZJWLl1897Yh0WqPwUDkZj+56LNf0c8jQbloFkM=;
-        b=4bIQmldsRKoQeuvLBEQRKQ33FfdiIoHIfIeFYnkk+ZIY4meer06BSgdZxqYuXA9oER
-         Y3o+viWar/y2uW8qJqJmCt456uhnCkbMCY6QZIWdR5AVTvh29B0O/DCt8JQ4nl0g1vls
-         RV33f7VWk/241IBAd25kKDH/krwZbsH6fi/FoByIhJW28XW+OY/XedY65O4PQCJpdCXU
-         eNNv8vqwODcts7d/uO0zbcXfnmLPCvb+C4BpgYLI4FA4q3871UwKTjpU77bADIAffY0+
-         yAqTPwzJfR7JlkmKbrs3ZFf5x+dy6QHphkyDLeD6tbV9wOKejgQkUXmUWJmvMLllI1Iy
-         ZJ6Q==
-X-Gm-Message-State: ACrzQf3Cf5OvF/4s/KDuA9oK4nh1ak99sXAScUe+ix7alT/irJeLosBj
-        RJU0dgNuRRHvV6PXbBLmdz+2A+KisDKIlhfHZe/DFbVnOgJl
-X-Google-Smtp-Source: AMsMyM5cwRZvSGeiwOh3DYs8byZEbFJNtIJcaBnl4INf0n0WL4T3DSfzyFZ3GxRomR2NotrQFUQ8i8sRkH4AcWjVneuG8TFTiKJc
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uD30lAoArCayIjKDZVlL5ocMenNCJJq05otGcDZLCH8=;
+        b=GpqwzBeIRMTWNcGZ9q7+eiSibu2tsxNxtQr/JXsU6lqA0ZZlLKm8FiE9OPhDbHoIwe
+         kVCZoveEYApaxeuBgP2/6ICTuPOLHTwdyy+ZO6zFYhwfd3EmcwCTOw0MY3OQFWg9Ml+E
+         a0rGlcDPJksg03RB9Q9YiM95pMRLKfLFgc7gyUIJQOOxWwaDU13l8DrDKurRAhe6sqL6
+         qXilWFIDMLw1KYjwyno8dN2cpY/AP5YejIXEIjmhOYnvmpq4ae84CCsT2orqCgp3n/fv
+         YOCclJCQTuI25ztotVMfJdxHzj8lWdi//fymeXdzFg56E+qiF9s/UbHgP7uhSd2CwOsl
+         8How==
+X-Gm-Message-State: ACrzQf31xgp69KAvDo/7rP0HoaBqAzc0soe+mgy7vgSLyp7vzF+4vdah
+        9vFcwCWkdIvMtRzp48NXA/EORg==
+X-Google-Smtp-Source: AMsMyM7PzDCe2M/7OY5FK0VrVkM/8arnKOiYqHWjZB9+WRh5VmLBtqEycnm+UfJPynJ7cCkD4hsFOw==
+X-Received: by 2002:a05:620a:986:b0:6fa:3c74:e97f with SMTP id x6-20020a05620a098600b006fa3c74e97fmr9687890qkx.246.1667407736476;
+        Wed, 02 Nov 2022 09:48:56 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
+        by smtp.gmail.com with ESMTPSA id x18-20020a05620a259200b006bc192d277csm8942567qko.10.2022.11.02.09.48.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 09:48:55 -0700 (PDT)
+Message-ID: <f1b5e138-e708-8aeb-9b59-96403f996fbd@linaro.org>
+Date:   Wed, 2 Nov 2022 12:48:54 -0400
 MIME-Version: 1.0
-X-Received: by 2002:a05:6638:258b:b0:375:1760:601a with SMTP id
- s11-20020a056638258b00b003751760601amr16745179jat.306.1667407540297; Wed, 02
- Nov 2022 09:45:40 -0700 (PDT)
-Date:   Wed, 02 Nov 2022 09:45:40 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000022a65705ec7f923c@google.com>
-Subject: [syzbot] kernel BUG in do_journal_begin_r
-From:   syzbot <syzbot+2da5e132dd0268a9c0e4@syzkaller.appspotmail.com>
-To:     akpm@linux-foundation.org, bvanassche@acm.org, jack@suse.cz,
-        jlayton@kernel.org, linux-kernel@vger.kernel.org, neilb@suse.de,
-        reiserfs-devel@vger.kernel.org, syzkaller-bugs@googlegroups.com,
-        willy@infradead.org, yi.zhang@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 4/4] arm64: dts: uniphier: Add NX1 SoC and boards support
+Content-Language: en-US
+To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+        Masami Hiramatsu <mhiramat@kernel.org>
+Cc:     soc@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <20221027045157.23325-1-hayashi.kunihiko@socionext.com>
+ <20221027045157.23325-5-hayashi.kunihiko@socionext.com>
+ <a05535bc-ba18-0296-b387-d2c9c759d6f2@linaro.org>
+ <54206dca-0583-88c0-9924-a80dfaf0ba94@socionext.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <54206dca-0583-88c0-9924-a80dfaf0ba94@socionext.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -56,91 +82,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
-
-syzbot found the following issue on:
-
-HEAD commit:    b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
-git tree:       upstream
-console output: https://syzkaller.appspot.com/x/log.txt?x=11168446880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
-dashboard link: https://syzkaller.appspot.com/bug?extid=2da5e132dd0268a9c0e4
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-
-Unfortunately, I don't have any reproducer for this issue yet.
-
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/24728b72a896/disk-b229b6ca.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/10a3c40c60e1/vmlinux-b229b6ca.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/69f963b02b7e/bzImage-b229b6ca.xz
-
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+2da5e132dd0268a9c0e4@syzkaller.appspotmail.com
-
-------------[ cut here ]------------
-kernel BUG at fs/reiserfs/journal.c:3039!
-invalid opcode: 0000 [#1] PREEMPT SMP KASAN
-CPU: 1 PID: 17357 Comm: syz-executor.5 Not tainted 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-RIP: 0010:do_journal_begin_r+0x105b/0x1070 fs/reiserfs/journal.c:3039
-Code: ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c 22 ff ff ff 48 89 df e8 b6 ec b2 ff e9 15 ff ff ff e8 1c f4 5e ff 0f 0b e8 15 f4 5e ff <0f> 0b e8 3e d6 0a 08 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 55
-RSP: 0018:ffffc9000cf375c0 EFLAGS: 00010287
-RAX: ffffffff8228dbcb RBX: 0000000011008083 RCX: 0000000000040000
-RDX: ffffc9000be91000 RSI: 00000000000012c4 RDI: 00000000000012c5
-RBP: ffffc9000cf37768 R08: ffffffff8228cca2 R09: fffffbfff1c1b5f6
-R10: fffffbfff1c1b5f6 R11: 1ffffffff1c1b5f5 R12: ffff8880411d4678
-R13: ffffc9000cedf214 R14: dffffc0000000000 R15: 0000000000000100
-FS:  00007f76be5ff700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 000000c02de75000 CR3: 0000000027e78000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- journal_begin+0x14b/0x350 fs/reiserfs/journal.c:3255
- reiserfs_create+0x2c3/0x660 fs/reiserfs/namei.c:661
- lookup_open fs/namei.c:3413 [inline]
- open_last_lookups fs/namei.c:3481 [inline]
- path_openat+0x12d0/0x2df0 fs/namei.c:3710
- do_filp_open+0x264/0x4f0 fs/namei.c:3740
- do_sys_openat2+0x124/0x4e0 fs/open.c:1310
- do_sys_open fs/open.c:1326 [inline]
- __do_sys_open fs/open.c:1334 [inline]
- __se_sys_open fs/open.c:1330 [inline]
- __x64_sys_open+0x221/0x270 fs/open.c:1330
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f76bf28b5a9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f76be5ff168 EFLAGS: 00000246 ORIG_RAX: 0000000000000002
-RAX: ffffffffffffffda RBX: 00007f76bf3ac120 RCX: 00007f76bf28b5a9
-RDX: 0000000000000000 RSI: 0000000000042142 RDI: 00000000200000c0
-RBP: 00007f76bf2e67b0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc4062385f R14: 00007f76be5ff300 R15: 0000000000022000
- </TASK>
-Modules linked in:
----[ end trace 0000000000000000 ]---
-RIP: 0010:do_journal_begin_r+0x105b/0x1070 fs/reiserfs/journal.c:3039
-Code: ff 89 d9 80 e1 07 80 c1 03 38 c1 0f 8c 22 ff ff ff 48 89 df e8 b6 ec b2 ff e9 15 ff ff ff e8 1c f4 5e ff 0f 0b e8 15 f4 5e ff <0f> 0b e8 3e d6 0a 08 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 55
-RSP: 0018:ffffc9000cf375c0 EFLAGS: 00010287
-RAX: ffffffff8228dbcb RBX: 0000000011008083 RCX: 0000000000040000
-RDX: ffffc9000be91000 RSI: 00000000000012c4 RDI: 00000000000012c5
-RBP: ffffc9000cf37768 R08: ffffffff8228cca2 R09: fffffbfff1c1b5f6
-R10: fffffbfff1c1b5f6 R11: 1ffffffff1c1b5f5 R12: ffff8880411d4678
-R13: ffffc9000cedf214 R14: dffffc0000000000 R15: 0000000000000100
-FS:  00007f76be5ff700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f76bf3a8000 CR3: 0000000027e78000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+On 01/11/2022 05:02, Kunihiko Hayashi wrote:
+> Hi Krzysztof,
+> 
 
 
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
+>>> +				compatible = "socionext,uniphier-nx1-clock";
+>>> +				#clock-cells = <1>;
+>>> +			};
+>>> +
+>>> +			sys_rst: reset {
+>>
+>> reset-controller
+>>
+>>> +				compatible = "socionext,uniphier-nx1-reset";
+>>> +				#reset-cells = <1>;
+>>> +			};
+>>> +
+>>> +			watchdog {
+>>> +				compatible = "socionext,uniphier-wdt";
+>>> +			};
+>>> +
+>>> +			pvtctl: thermal-sensor {
+>>> +				compatible = "socionext,uniphier-nx1-thermal";
+>>> +				interrupts = <GIC_SPI 3 IRQ_TYPE_LEVEL_HIGH>;
+>>> +				#thermal-sensor-cells = <0>;
+>>> +				socionext,tmod-calibration = <0x0f22 0x68ee>;
+>>> +			};
+>>> +		};
+>>> +
+>>> +		spi0: spi@14006000 {
+>>> +			compatible = "socionext,uniphier-scssi";
+>>> +			status = "disabled";
+>>> +			reg = <0x14006000 0x100>;
+>>
+>> Reg is second property. Status goes last. The same in other nodes.
+> 
+> Hmm, I've put "status" here according to the existing (uniphier's) DT policy
+> and this should rewrite the policy. Is there documentation somewhere that
+> recommends the order? Or, should I refer to previous comments?
 
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+Hm, your decision (as arch maintainer) is then preferred, not mine.
+Although it is quite unusual to find status, not reg, as the second
+property.
+
+compatible followed by reg is not documented anywhere, it's just the
+most used style. And actually most sensible as it answers to questions
+from highest importance to lowest:
+1. What is this device? compatible
+2. Where is it? Does it match unit address? reg
+3. all other properties
+4. Is it off or on? status as optional property
+
+Best regards,
+Krzysztof
+
