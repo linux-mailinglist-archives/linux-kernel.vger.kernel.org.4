@@ -2,237 +2,271 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F3CF615E69
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 09:54:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6E83615E6F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 09:55:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230333AbiKBIy1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 04:54:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57328 "EHLO
+        id S230155AbiKBIzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 04:55:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57870 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiKBIyW (ORCPT
+        with ESMTP id S229459AbiKBIzD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 04:54:22 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0F951A04C;
-        Wed,  2 Nov 2022 01:54:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667379261; x=1698915261;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=/XRD4QRaEl90JV9MjJKQm91dlEzeeoviOfTasdxuFxs=;
-  b=nxOqUFakAnZ0nmdTCGh82wX2t44IqD3dapOMNmU2tmOEAG9FX2xbPKdj
-   ZZKALxEQhb/4+fdvxgm0c2ZdaXnK6oNa4TUiQCdzbItgRHVaK+jNcAro/
-   435wUIJvdvYo9ln6FUCUKGY8bPuBX/DuBIxqku+hM9cLzsnAT1bmxQfO/
-   cn1Qjc6w+rXbEH+jFG4aTcSdhE0F3sbECVsBiRHQM8y3KXPIs+1OQBm0A
-   E0N51hZEbZoChEq8ZvgO0AQzJNsyeg/PDrplM11g06YaN3bHr/OM8Gafn
-   rh/ICbAX6xnlqFeGSa3YJz8DpjPtmDuiRqR0+W4ahrZBLyTw4+zEdgNfw
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="336027672"
-X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
-   d="scan'208";a="336027672"
-Received: from orsmga007.jf.intel.com ([10.7.209.58])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 01:54:21 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="628879854"
-X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
-   d="scan'208";a="628879854"
-Received: from zhuoche1-mobl1.ccr.corp.intel.com (HELO localhost) ([10.255.30.84])
-  by orsmga007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 01:54:16 -0700
-Date:   Wed, 2 Nov 2022 16:54:14 +0800
-From:   Yu Zhang <yu.c.zhang@linux.intel.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Eric Li <ercli@ucdavis.edu>,
-        David Matlack <dmatlack@google.com>,
-        Oliver Upton <oupton@google.com>
-Subject: Re: [PATCH v5 05/15] KVM: nVMX: Let userspace set nVMX MSR to any
- _host_ supported value
-Message-ID: <20221102085414.fk2xss74jvtzs6mr@linux.intel.com>
-References: <20220607213604.3346000-1-seanjc@google.com>
- <20220607213604.3346000-6-seanjc@google.com>
- <20221031163907.w64vyg5twzvv2nho@linux.intel.com>
- <Y2ABrnRzg729ZZNI@google.com>
- <20221101101801.zxcjswoesg2gltri@linux.intel.com>
- <Y2FePYteNrEfZ7D5@google.com>
+        Wed, 2 Nov 2022 04:55:03 -0400
+Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B2A24969
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 01:55:02 -0700 (PDT)
+Received: by mail-io1-xd36.google.com with SMTP id p141so14465924iod.6
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 01:55:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZcE47X74p4ZLI+MbkADionKujrI2BX7HQN2GnbMJo5M=;
+        b=p+Ol3h8/vz/XfFARtEJbA6eZnO6+Y5xsaobJk0lFGDbdAGtMWkliUSfmubQIUHD6DQ
+         eG9EDgYg4HrqgaKcSlicxDaZ9uLE0YIRBS2NSPrf1dPWWYKHSMmaloSyT9/d8hee9VHG
+         1bYHvHdWWGxjoWVFfB+26yOV0eckW0fI/J5gqq+XzEWMNgaXcJ2SxRDgXYZMjet1WEC/
+         /K8WqUyF0siVy6R2mMr/tOF27vks4Ow2sO38PxItQzdGbkDM9U7AMT/BTjf8s+kzl3Bl
+         ulTpM4ReJ+HUrXwAuzXdpfDdHR1jmOHurslDK0L278MHhUy1Atf6nJ6Qk0M+ZtadJaP0
+         stdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ZcE47X74p4ZLI+MbkADionKujrI2BX7HQN2GnbMJo5M=;
+        b=wJpXN8gnw3evoTlvRPYWYftvFY6ht8PT2Ra1qQ4e/B/lE/phyRD8EwtB29TUo+Tcyb
+         lqy6kq7Yb44f8WQvus77l5jBE/b0qk5g0/CSC1yK0Kp7sUsXmpxlmF+txtRafLoPYlCu
+         BQ4YdzIrPom05dVsQnlrzIUT92yaCCNoox9ttBo2WYPzQudpOAXofxNBDN41VnIkllBb
+         mjQsndPp7IPWIhda5arEkRbPI+2u53QNB4QCP4cjDv+gcCXoZbHvro3sojWoePP2pTZ7
+         42SS1GUPnbNOQYRzKQ02sUVWUY9pdcoLL8Jc23ZhIplVuLa6Kj+8624fL+DL8/JAYJSO
+         F96A==
+X-Gm-Message-State: ACrzQf1/i8Rrt/yS6lAemAQJl1MDcwwg7rJShPJ3sZ6c4Ze19ERgATBv
+        0Ad07k41ND6U9r7z++fyovMNHgmOt684b+AbtGqIUA==
+X-Google-Smtp-Source: AMsMyM7ej56+xne29skg2szA+CTcxkTmPIeEtUAGt3HFdcFDHgGJ9SFe5tdP7dtH/s687K83x1fl7Gioc4yEVqB7fis=
+X-Received: by 2002:a05:6602:2f02:b0:6a4:5b5d:9dbb with SMTP id
+ q2-20020a0566022f0200b006a45b5d9dbbmr15221603iow.32.1667379301818; Wed, 02
+ Nov 2022 01:55:01 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2FePYteNrEfZ7D5@google.com>
-User-Agent: NeoMutt/20171215
-X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221019204626.3813043-1-cristian.marussi@arm.com>
+ <CAKfTPtBJy4SdbYUNHFn2ZXEO_pnaMPYibfjXWNBnXy49P2h78Q@mail.gmail.com>
+ <Y1vvPBw4xB7m23wY@e120937-lin> <CAKfTPtAfuqtCee7f4bREsLqb5KJcLWw1Y=-0Y+2t+3XfX_YctQ@mail.gmail.com>
+ <Y1wKHoxcWTz6VXyh@e120937-lin>
+In-Reply-To: <Y1wKHoxcWTz6VXyh@e120937-lin>
+From:   Vincent Guittot <vincent.guittot@linaro.org>
+Date:   Wed, 2 Nov 2022 09:54:50 +0100
+Message-ID: <CAKfTPtAcEiqBDr5BXBS8Q9HzBWg544YR0eZkkaF3u_9EowZJcQ@mail.gmail.com>
+Subject: Re: [PATCH v4 0/11] Introduce a unified API for SCMI Server testing
+To:     Cristian Marussi <cristian.marussi@arm.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        sudeep.holla@arm.com, james.quinlan@broadcom.com,
+        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
+        etienne.carriere@linaro.org, souvik.chakravarty@arm.com,
+        wleavitt@marvell.com, peter.hilber@opensynergy.com,
+        nicola.mazzucato@arm.com, tarek.el-sherbiny@arm.com,
+        quic_kshivnan@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 05:58:21PM +0000, Sean Christopherson wrote:
-> On Tue, Nov 01, 2022, Yu Zhang wrote:
-> > On Mon, Oct 31, 2022 at 05:11:10PM +0000, Sean Christopherson wrote:
-> > > vmcs_config.nested never becomes out-of-date, it's read-only after __init (not
-> > > currently marked as such, that will be remedied soon).
-> > > 
-> > > The auditing performed by KVM is purely to guard against userspace enabling
-> > > features that KVM doesn't support.  KVM is not responsible for ensuring that the
-> > > vCPU's CPUID model match the VMX MSR model.
-> > 
-> > Do you mean the VMX MSR model shall not be changed after the cpuid updates?
-> 
-> No, I mean that the virtual CPU model (CPUID + VMX MSRs) that is presented to the
-> guest is the responsibility of host userspace.  KVM only cares about not enabling
-> bits/features that KVM doesn't supported.
-> 
+On Fri, 28 Oct 2022 at 18:58, Cristian Marussi <cristian.marussi@arm.com> wrote:
+>
+> On Fri, Oct 28, 2022 at 06:18:52PM +0200, Vincent Guittot wrote:
+> > On Fri, 28 Oct 2022 at 17:04, Cristian Marussi <cristian.marussi@arm.com> wrote:
+> > >
+> > > On Fri, Oct 28, 2022 at 04:40:02PM +0200, Vincent Guittot wrote:
+> > > > On Wed, 19 Oct 2022 at 22:46, Cristian Marussi <cristian.marussi@arm.com> wrote:
+> > > > >
+> > > > > Hi all,
+> > > > >
+> > >
+> > > Hi Vincent,
+> > >
+> > > > > This series aims to introduce a new SCMI unified userspace interface meant
+> > > > > to ease testing an SCMI Server implementation for compliance, fuzzing etc.,
+> > > > > from the perspective of the OSPM agent (non-secure world only ...)
+> > > > >
+> >
+> > [ snip]
+> >
+> > > > Hi Cristian,
+> > > >
+> > > > I have tested your series with an optee message transport layer and
+> > > > been able to send raw messages to the scmi server PTA
+> > > >
+> > > > FWIW
+> > > >
+> > > > Tested-by: Vincent Guittot <vincent.guittot@linaro.org>
+> > > >
+> > >
+> > > Thanks a lot for your test and feedback !
+> > >
+> > > ... but I was going to reply to this saying that I spotted another issue
+> > > with the current SCMI Raw implementation (NOT related to optee/smc) so
+> > > that I'll post a V5 next week :P
+> > >
+> > > Anyway, the issue is much related to the debugfs root used by SCMI Raw,
+> > > i.e.:
+> > >
+> > >         /sys/kernel/debug/scmi_raw/
+> > >
+> > > ..this works fine unless you run it on a system sporting multiple DT-defined
+> > > server instances ...that is not officially supported but....ehm...a little
+> > > bird told these system with multiple servers do exists :D
+> >
+> > ;-)
+> >
+> > >
+> > > In such a case the SCMI core stack is probed multiuple times and so it
+> > > will try to register multiple debugfs Raw roots: there is no chanche to
+> > > root the SCMI Raw entries at the same point clearly ... and then anyway
+> > > there is the issue of recognizing which server is rooted where ... with
+> > > the additional pain that a server CANNOT be recognized by querying...cause
+> > > there is only one by teh spec with agentID ZERO ... in theory :D...
+> > >
+> > > So my tentaive solution for V5 would be:
+> > >
+> > > - change the Raw root debugfs as:
+> > >
+> > >         /sys/kernel/debug/scmi_raw/0/... (first server defined)
+> > >
+> > >         /sys/kernel/debug/scmi_raw/1/... (possible additional server(s)..)
+> > >
+> > > - expose the DT scmi-server root-node name of the server somewhere under
+> > >   that debugfs root like:
+> > >
+> > >         ..../scmi_raw/0/transport_name -> 'scmi-mbx'
+> > >
+> > >         ..../scmi_raw/1/transport_name -> 'scmi-virtio'
+> >
+> > I was about to say that you would display the server name but that
+> > means that you have send a request to the server which probably
+> > defeats the purpose of the raw mode
+> >
+> > >
+> > >   so that if you know HOW you have configured your own system in the DT
+> > >   (maybe multiple servers with different kind of transports ?), you can
+> > >   easily select programmatically which one is which, and so decide
+> > >   which Raw debugfs fs to use...
+> > >
+> > > ... I plan to leave the SCMI ACS suite use by default the first system
+> > > rooted at /sys/kernel/debug/scmi_raw/0/...maybe adding a commandline
+> > > option to choose an alternative path for SCMI Raw.
+> > >
+> > > Does all of this sound reasonable ?
+> >
+> > Yes, adding an index looks good to me.
+>
+> Ok, I'll rework accordingly.
+>
+> >
+> > As we are there, should we consider adding a per channel entry in the
+> > tree when there are several channels shared with the same server ?
+> >
+>
+> So, I was thinking about this and, even though, it seems not strictly
+> needed for Compliance testing (as discussed offline) I do think that
+> could be a sensible option to have as an additional mean to stress the
+> server transport implementation (as you wish).
 
-Oh, I see. We need to guarantee the userspace VMM can not successfully
-set a feature in vmx msr, if KVM does not support it.
+Thanks
 
-> > And for VMX MSR model, do you mean the vmx->nested.msrs or the ones in 
-> > vmcs_config->nested? 
-> 
-> vmx->nested.msrs.  vmcs_config->nested is effectively the VMX equivalent of
-> KVM_GET_SUPPORTED_CPUID.
-> 
-> > What I observed is that vmx->nested.msrs.secondary_ctls_high will be changed
-> > in vmx_adjust_secondary_exec_control(), which can be triggered after cpuid is
-> > set. 
-> 
-> Ugh, that path got overlooked when we yanked out KVM's manipulaton of VMX MSRs
-> in response to guest CPUID changes.  I wonder if we can get away with changing
-> KVM's behavior to only ensure a feature isn't exposed to L2 when it's not exposed
-> to L1.
-> 
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 6b4266e949a3..cfc35d559d91 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -4523,8 +4523,8 @@ vmx_adjust_secondary_exec_control(struct vcpu_vmx *vmx, u32 *exec_control,
->          * Update the nested MSR settings so that a nested VMM can/can't set
->          * controls for features that are/aren't exposed to the guest.
->          */
-> -       if (nested) {
-> -               if (enabled)
-> +       if (nested && !enabled)
-> +               if (exiting)
->                         vmx->nested.msrs.secondary_ctls_high |= control;
->                 else
->                         vmx->nested.msrs.secondary_ctls_high &= ~control;
-> 
+>
+> Having said that, this week, I was reasoning about an alternative
+> interface to do this, i.e. to avoid to add even more debugfs entries
+> for this chosen-channel config or possibly in the future to ask for
+> transport polling mode (if supported by the underlying transport)
+>
+> My idea (not thought fully through as of now eh..) would be as follows:
+>
+> since the current Raw implementation enforces a minimum size of 4 bytes
+> for the injected message (more on this later down below in NOTE), I was
+> thinking about using less-than-4-bytes-sized messages to sort of
+> pre-configure the Raw stack.
+>
+> IOW, instead of having a number of new additional entries like
+>
+>         ../message_ch10
+>         ../message_ch13
+>         ../message_poll
+>
+> we could design a sort of API (in the API :D) that defines how
+> 3-bytes message payload are to be interpreted, so that in normal usage
+> everything will go on as it is now, while if a 3-bytes message is
+> injected by a specially crafted testcase, it would be used to configure
+> the behaviour stack for the subsequent set of Raw transactions
+> (i.e. for the currently opened fd...) like:
+>
+> - open message fd
+>
+> - send a configure message:
+>
+>         | proto_chan_#  |     flags (polling..)  |
+>         ------------------------------------------
+>         0               7                       21
+>
+> - send/receive your test messages
+>
+> - repeat or close (then the config will vanish...)
+>
+> This would mean adding some sort entry under scmi_raw to expose the
+> configured available channels on the system though.
+>
+> [maybe the flags above could also include an async flag and avoid
+>  also to add the message_async entries...]
+>
+> I discarded the idea to run the above config process via IOCTLs since
+> it seemed to me even more frowned upon to use IOCTLs on a debugfs entry
+> :P...but I maybe wrong ah...
+>
+> All of this is still to be explored anyway, any thoughts ? or evident
+> drawbacks ? (beside having to clearly define an API for these message
+> config machinery)
 
-Indeed, this change can make sure a feature won't be exposed to L2, if L1
-does not have it. But for the feature bits that L1 has, yet cleared from
-the vmcs_conf->nested.msrs.secondary_ctls_high in nested_vmx_setup_ctls_msrs(),
-there's no chance for userspace vmm to reset it again.
+TBH, I'm not a fan of adding a protocol on top of the SCMI one. This
+interface aims to test the SCMI servers and their channels so we
+should focus on this and make it simple to use. IMHO, adding some
+special bytes before the real scmi message is prone to create
+complexity and error in the use of this debug interface.
 
-Well, I am not suggesting to give userspace vmm such permission(which I believe
-is incorrect). And IIUC, vmcs_conf->nested.msrs.secondary_ctls_high shall serve
-as a template to initialize vmx->nested.msrs.secondary_ctls_high. So maybe we
-shall not mask off some features in nested_vmx_setup_ctls_msrs() at the beginning.
- 
-> > Since KVM's config(vmcs_config->nested.secondary_ctls_high) is done during init
-> > by nested_vmx_setup_ctls_msrs(), which only kept a subset of the flags from the
-> > vmcs_confg->cpu_based_2nd_exec_ctrl, the vmx_restore_control_msr() could fail
-> > later, when userspace VMM tries to enable a feature(the only one I witnessed is
-> > SECONDARY_EXEC_ENABLE_USR_WAIT_PAUSE) by setting MSR_IA32_VMX_PROCBASED_CTLS2.
-> > Because the vmx->nested.msrs.secondary_ctls_high is updated by cpuid, but this
-> > bit is not taken from vmcs_conf->cpu_based_2nd_exec_ctrl by nested_vmx_setup_ctls_msrs()
-> > for vmcs_config->nested.secondary_ctls_high.
-> > 
-> > The failure can be fixed, simply by adding SECONDARY_EXEC_ENABLE_USR_WAIT_PAUSE in
-> > nested_vmx_setup_ctls_msrs(), e.g.
-> 
-> Assuming KVM actually supports user wait/pause in L2, this is an orthogonal bug
-> to the CPUID-based manipulation above.  KVM simply neglects to advertise to userspace
-> that ENABLE_USR_WAIT_PAUSE is supported for nested virtualization.
-> 
-> If KVM doesn't correctly support virtualizing user wait/pause for L2, then the
-> correct location to fix this is in vmx_secondary_exec_control().
-> 
+>
+> Anyway, whatever direction we'll choose (additional entries vs 3-bytes
+> config msg), I would prefer to add this per-channel (or polling)
+> capabilities with separate series to post on top of this in teh next
+> cycle.
 
-Sorry, why vmx_secondary_exec_control()? Could we just change
-nested_vmx_setup_ctls_msrs() like below:
+Ok
 
-diff --git a/arch/x86/kvm/vmx/nested.c b/arch/x86/kvm/vmx/nested.c
-index 0c62352dda6a..fa255391718c 100644
---- a/arch/x86/kvm/vmx/nested.c
-+++ b/arch/x86/kvm/vmx/nested.c
-@@ -6791,13 +6791,7 @@ void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps)
-        msrs->procbased_ctls_low &=
-                ~(CPU_BASED_CR3_LOAD_EXITING | CPU_BASED_CR3_STORE_EXITING);
+>
+> ..too many words even this time :P
 
--       /*
--        * secondary cpu-based controls.  Do not include those that
--        * depend on CPUID bits, they are added later by
--        * vmx_vcpu_after_set_cpuid.
--        */
-        msrs->secondary_ctls_low = 0;
--
-        msrs->secondary_ctls_high = vmcs_conf->cpu_based_2nd_exec_ctrl;
-        msrs->secondary_ctls_high &=
-                SECONDARY_EXEC_DESC |
-@@ -6810,7 +6804,8 @@ void nested_vmx_setup_ctls_msrs(struct vmcs_config *vmcs_conf, u32 ept_caps)
-                SECONDARY_EXEC_ENABLE_INVPCID |
-                SECONDARY_EXEC_RDSEED_EXITING |
-                SECONDARY_EXEC_XSAVES |
--               SECONDARY_EXEC_TSC_SCALING;
-+               SECONDARY_EXEC_TSC_SCALING |
-+               SECONDARY_EXEC_ENABLE_USR_WAIT_PAUSE;
+Thanks
+Vincent
 
-        /*
-         * We can emulate "VMCS shadowing," even if the hardware
-
-Note: I did not use "if (cpu_has_vmx_waitpkg())" here, it looks like to
-take off one's pants to fart(no offense, just a Chinese old saying meaning
-unnecessary acts.:)).
-
-> > > > Another question is about the setting of secondary_ctls_high in
-> > > > nested_vmx_setup_ctls_msrs().  I saw there's a comment saying:
-> > > > 	"Do not include those that depend on CPUID bits, they are
-> > > > 	added later by vmx_vcpu_after_set_cpuid.".
-> > > 
-> > > That's a stale comment, see the very next commit, 8805875aa473 ("Revert "KVM: nVMX:
-> > > Do not expose MPX VMX controls when guest MPX disabled""), as well as the slightly
-> > > later commit 9389d5774aca ("Revert "KVM: nVMX: Expose load IA32_PERF_GLOBAL_CTRL
-> > > VM-{Entry,Exit} control"").
-> > > 
-> > 
-> > So the comment can be and shall be removed, right? 
-> 
-> Yep.
-> 
-> > > > 	if (cpu_has_vmx_vmfunc()) {
-> > > > 		msrs->secondary_ctls_high |=
-> > > > 			SECONDARY_EXEC_ENABLE_VMFUNC;
-> > > 
-> > > This one is still required.  KVM never enables VMFUNC for itself, i.e. it won't
-> > > be set in KVM's VMCS configuration.
-> > > 
-> > 
-> > My understanding is that, for VMFUNC, altough KVM does not support it,
-> > SECONDARY_EXEC_ENABLE_VMFUNC is still set in the secondary proc-based
-> > vm execution ctrol. KVM just uses different handlers for VMFUNC exits
-> > from L1(to inject the #UD) and L2(to emulate the eptp switching). So
-> > it doesn't matter if we do not clear this bit for vmcs_config->nested.
-> > procbased_ctls_high. 
-> 
-> Ah, you're right, I didn't realize KVM enables VMFUNC in L1.  Enabling VMFUNC for
-> L1 is silly though, it's trivial to clear the feature in vmx_secondary_exec_control().
-> 
-> That said, enabling VMFUNC in vmcs01 is an orthogonal topic, and it _is_ indeed
-> easier to keep the feature in the reference config.  Now that the nested config
-> is derived from the non-nested config, nested_vmx_setup_ctls_msrs() can do:
-
-Agreed. BTW, do you know why KVM took pains to do so? I mean, emulation for
-L2's vmfunc does not rely on the existance of vmfunc, right? So, for L2,
-we can just set vmcs02's SECONDARY_EXEC_ENABLE_VMFUNC based on vmcs12. And
-for L1, we can just disable it by clearing it in vmx_secondary_exec_control(),
-and remove the #UD injection logic from KVM?
-
-B.R.
-Yu
+>
+> Thanks,
+> Cristian
+>
+>
+> P.S: NOTE min_injected_msg_size:
+> --------------------------------
+> Thinking about all of the above, at first, I was a bit dubious if
+> instead I should not allow, in Raw mode, the injection of shorter than
+> 4 bytes messages (i.e. shorter than a SCMI header) for the purpose of
+> fuzzing: then I realized that even though I should allow the injection
+> of smaller messages, the underlying transports, as they are defined, both
+> sides (platform and agent) will anyway carry out a 4bytes transaction,
+> it's just that all the other non-provided bytes will be zeroed in the
+> memory layout; this is just how the transports itself (shmem or msg
+> based) are designed to work both sides. (and again would be transport
+> layer testing more than SCMI spec verification..)
+>
+> So at the end I thought this kind of less-than-4-bytes transmissions
+> gave no benefit and I came up with the above trick to use such tiny
+> message for configuration.
+>
