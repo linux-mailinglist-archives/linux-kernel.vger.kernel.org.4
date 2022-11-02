@@ -2,93 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DD9A617001
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 22:43:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C6DED617006
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 22:45:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230102AbiKBVnK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 17:43:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44010 "EHLO
+        id S231284AbiKBVpB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 17:45:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiKBVnH (ORCPT
+        with ESMTP id S229708AbiKBVo7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 17:43:07 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16E8F6591;
-        Wed,  2 Nov 2022 14:43:07 -0700 (PDT)
-Received: from notapiano.myfiosgateway.com (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id BF48C660037C;
-        Wed,  2 Nov 2022 21:43:03 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667425385;
-        bh=I6k0VYTBtgXqylue8+whQkMj2wwlEM89xgbgwhw/Gmg=;
-        h=From:To:Cc:Subject:Date:From;
-        b=dFDgAJLbSFI9EOSca34tAKkHzdhLLdsf9vnQaR0Cj4ijTC5sqJoLsaeZn+rGY1jb6
-         U6X1C7odwcSRrtrUaMkS4wwAoXiiWuwbYXxswZBS/MoSVB7LY9AlgGvbNvMbSFTuU2
-         jjAuXo3zpDnwoHnrkdtpRg/0Q89AiQr17/T2VxqhPDyt2EmbR1c0wDcggEYth7R1Of
-         kyvmIb2DOC2+/uDdqom/3gfaKCs1wWZCun5vXp7ysr76L0n+OZaQ368qfxswpO6MDG
-         YqQkW5COIllOaScVlOUvE45dtf/EUl2TiKmOpPx/lY4/4OmmOb5jyIiVJ0y+z1V3qv
-         n0XRk4mlOJWjA==
-From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>
-To:     Rob Herring <robh+dt@kernel.org>
-Cc:     AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, kernel@collabora.com,
-        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
-        <nfraprado@collabora.com>,
+        Wed, 2 Nov 2022 17:44:59 -0400
+Received: from mail-ot1-f51.google.com (mail-ot1-f51.google.com [209.85.210.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0CC69FD2;
+        Wed,  2 Nov 2022 14:44:55 -0700 (PDT)
+Received: by mail-ot1-f51.google.com with SMTP id w26-20020a056830061a00b0066c320f5b49so5341oti.5;
+        Wed, 02 Nov 2022 14:44:55 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=syOzYtOOOUOYVS4+OlEvCGBduiGZmBKkbZQSbbMUPpA=;
+        b=Ai59QzDF3njfiJ8WmpJm/jR//u4TcX2m7C7weX6z5D8COwCvd81toeiR3L4MgO2b95
+         BW/3Wrrr0T7bTxq9Gv4vrszQX7WPxRSIc9px7skY/DtjbKRRWGDlc9LYP84rJxT7ReKR
+         VCVxUbkpJckIePw/k4jVuPRZokzDBMPa6ppIsOYSeHzScmkH+T2+0CwDQqghzMm9HiE5
+         1yQhXD0FhdinbYQZv8xIBjVnxxeJCJT0DcMaYtSKsuhct0qpj1hTuoI47E0qn+Y7N0Yo
+         SXV1X3Tv9nOeOU3jMSFsS+G9Fkdotc12IzlGQwrNFa/Xot65f9YwA49ppm0Xoz44Ro+A
+         H92A==
+X-Gm-Message-State: ACrzQf1N6Roz79uQN29+1JOxCfLFse9ZycaJN04s1cZWVi1NMwvtO5B6
+        eAvIptbxSd9GboQWnSms6w==
+X-Google-Smtp-Source: AMsMyM5jgp6/w71wsIeSDu5Cp2add+eO31Ja16PdaL5iDF1jEe8kETQjfyntiTk6ehIozKaHEcN28A==
+X-Received: by 2002:a05:6830:108:b0:66a:8d0d:6a73 with SMTP id i8-20020a056830010800b0066a8d0d6a73mr13260759otp.193.1667425495145;
+        Wed, 02 Nov 2022 14:44:55 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id q21-20020a056830233500b00661c0747545sm5655710otg.44.2022.11.02.14.44.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 14:44:54 -0700 (PDT)
+Received: (nullmailer pid 522290 invoked by uid 1000);
+        Wed, 02 Nov 2022 21:44:56 -0000
+Date:   Wed, 2 Nov 2022 16:44:56 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>
+Cc:     Chester Lin <clin@suse.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-mediatek@lists.infradead.org
-Subject: [PATCH] docs: dt: writing-schema: Document usage of CHECK_DTBS make flag
-Date:   Wed,  2 Nov 2022 17:43:00 -0400
-Message-Id: <20221102214300.309347-1-nfraprado@collabora.com>
-X-Mailer: git-send-email 2.38.1
+        Jan Petrous <jan.petrous@nxp.com>, netdev@vger.kernel.org,
+        s32@nxp.com, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        Matthias Brugger <mbrugger@suse.com>
+Subject: Re: [PATCH 2/5] dt-bindings: net: add schema for NXP S32CC dwmac
+ glue driver
+Message-ID: <20221102214456.GB459441-robh@kernel.org>
+References: <20221031101052.14956-1-clin@suse.com>
+ <20221031101052.14956-3-clin@suse.com>
+ <20221102155515.GA3959603-robh@kernel.org>
+ <2a7ebef4-77cc-1c26-ec6d-86db5ee5a94b@suse.de>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <2a7ebef4-77cc-1c26-ec6d-86db5ee5a94b@suse.de>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is possible to run checks on a Devicetree by passing the CHECK_DTBS
-flag when building. This is a useful shortcut to the dtbs_check make
-target since it avoids checking unrelated Devicetrees, which can take
-some time and is unnecessary if no bindings were modified. Document it.
+On Wed, Nov 02, 2022 at 06:13:35PM +0100, Andreas Färber wrote:
+> Hi Rob,
+> 
+> On 02.11.22 16:55, Rob Herring wrote:
+> > On Mon, Oct 31, 2022 at 06:10:49PM +0800, Chester Lin wrote:
+> > > Add the DT schema for the DWMAC Ethernet controller on NXP S32 Common
+> > > Chassis.
+> > > 
+> > > Signed-off-by: Jan Petrous <jan.petrous@nxp.com>
+> > > Signed-off-by: Chester Lin <clin@suse.com>
+> > > ---
+> > >   .../bindings/net/nxp,s32cc-dwmac.yaml         | 145 ++++++++++++++++++
+> > >   1 file changed, 145 insertions(+)
+> > >   create mode 100644 Documentation/devicetree/bindings/net/nxp,s32cc-dwmac.yaml
+> > > 
+> > > diff --git a/Documentation/devicetree/bindings/net/nxp,s32cc-dwmac.yaml b/Documentation/devicetree/bindings/net/nxp,s32cc-dwmac.yaml
+> > > new file mode 100644
+> > > index 000000000000..f6b8486f9d42
+> > > --- /dev/null
+> > > +++ b/Documentation/devicetree/bindings/net/nxp,s32cc-dwmac.yaml
+> > > @@ -0,0 +1,145 @@
+> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > > +# Copyright 2021-2022 NXP
+> > > +%YAML 1.2
+> > > +---
+> > > +$id: "http://devicetree.org/schemas/net/nxp,s32cc-dwmac.yaml#"
+> > > +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
+> > > +
+> > > +title: NXP S32CC DWMAC Ethernet controller
+> > > +
+> > > +maintainers:
+> > > +  - Jan Petrous <jan.petrous@nxp.com>
+> > > +  - Chester Lin <clin@suse.com>
+> [...]
+> > > +properties:
+> > > +  compatible:
+> > > +    contains:
+> > 
+> > Drop 'contains'.
+> > 
+> > > +      enum:
+> > > +        - nxp,s32cc-dwmac
+> 
+> In the past you were adamant that we use concrete SoC-specific strings. Here
+> that would mean s32g2 or s32g274 instead of s32cc (which aims to share with
+> S32G3 IIUC).
 
-Signed-off-by: NÃ­colas F. R. A. Prado <nfraprado@collabora.com>
+Yes they should be SoC specific. Really, 1 per maskset or die is fine if 
+that level of detail is known. No need for different compatibles for 
+different part numbers created by fused off features or package pinout 
+differences.
 
----
 
- Documentation/devicetree/bindings/writing-schema.rst | 7 +++++++
- 1 file changed, 7 insertions(+)
+> [...]
+> > > +  clocks:
+> > > +    items:
+> > > +      - description: Main GMAC clock
+> > > +      - description: Peripheral registers clock
+> > > +      - description: Transmit SGMII clock
+> > > +      - description: Transmit RGMII clock
+> > > +      - description: Transmit RMII clock
+> > > +      - description: Transmit MII clock
+> > > +      - description: Receive SGMII clock
+> > > +      - description: Receive RGMII clock
+> > > +      - description: Receive RMII clock
+> > > +      - description: Receive MII clock
+> > > +      - description:
+> > > +          PTP reference clock. This clock is used for programming the
+> > > +          Timestamp Addend Register. If not passed then the system
+> > > +          clock will be used.
+> > 
+> > If optional, then you need 'minItems'.
+> [snip]
+> 
+> Do we have any precedence of bindings with *MII clocks like these?
 
-diff --git a/Documentation/devicetree/bindings/writing-schema.rst b/Documentation/devicetree/bindings/writing-schema.rst
-index 4a381d20f2b4..55ad556472b4 100644
---- a/Documentation/devicetree/bindings/writing-schema.rst
-+++ b/Documentation/devicetree/bindings/writing-schema.rst
-@@ -167,6 +167,13 @@ setting the ``DT_SCHEMA_FILES`` variable to a specific schema file or pattern.
-     make dt_binding_check DT_SCHEMA_FILES=/gpio/
-     make dtbs_check DT_SCHEMA_FILES=trivial-devices.yaml
- 
-+Note that ``make dtbs_check`` will validate every DT source file that is
-+enabled. When making changes to a DT but not to the bindings, a possible
-+shortcut to validate only the DT in question is to explicitly build it with
-+the ``CHECK_DTBS`` flag enabled. For example::
-+
-+    make CHECK_DTBS=y mediatek/mt8192-evb.dtb
-+
- 
- json-schema Resources
- ---------------------
--- 
-2.38.1
+Don't know...
 
+> AFAIU the reason there are so many here is that there are in fact physically
+> just five, but different parent clock configurations that SCMI does not
+> currently expose to Linux. Thus I was raising that we may want to extend the
+> SCMI protocol with some SET_PARENT operation that could allow us to use less
+> input clocks here, but obviously such a standardization process will take
+> time...
+> 
+> What are your thoughts on how to best handle this here?
+
+Perhaps use assigned-clocks if it is static for a board.
+
+> Not clear to me has been whether the PHY mode can be switched at runtime
+> (like DPAA2 on Layerscape allows for SFPs) or whether this is fixed by board
+> design. If the latter, the two out of six SCMI IDs could get selected in
+> TF-A, to have only physical clocks here in the binding.
+> 
+> Regards,
+> Andreas
