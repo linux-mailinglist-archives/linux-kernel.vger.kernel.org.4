@@ -2,23 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8C5396163BB
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:18:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DA1646163BF
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:18:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231440AbiKBNS1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 09:18:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56942 "EHLO
+        id S231555AbiKBNSj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 09:18:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56944 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231361AbiKBNSA (ORCPT
+        with ESMTP id S231390AbiKBNSC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 09:18:00 -0400
-X-Greylist: delayed 317 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 02 Nov 2022 06:17:58 PDT
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 704AF2A97D;
-        Wed,  2 Nov 2022 06:17:57 -0700 (PDT)
+        Wed, 2 Nov 2022 09:18:02 -0400
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D50E52AC56;
+        Wed,  2 Nov 2022 06:18:01 -0700 (PDT)
 Received: from toolbox.toradex.int ([31.10.206.125]) by mrelay.perfora.net
- (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0MGTgc-1olngA1i6K-00DIrP;
- Wed, 02 Nov 2022 14:12:18 +0100
+ (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0M71P9-1pDfns39uv-00wiDa;
+ Wed, 02 Nov 2022 14:12:22 +0100
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Peter Chen <peter.chen@kernel.org>,
@@ -34,35 +33,34 @@ Cc:     Peter Chen <peter.chen@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/6] arm64: dts: verdin-imx8mp: remove usb_2 over-current detection disabling
-Date:   Wed,  2 Nov 2022 14:11:59 +0100
-Message-Id: <20221102131203.35648-3-marcel@ziswiler.com>
+Subject: [PATCH v1 3/6] arm64: dts: verdin-imx8mp: add usb_1 over-current detection
+Date:   Wed,  2 Nov 2022 14:12:00 +0100
+Message-Id: <20221102131203.35648-4-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20221102131203.35648-1-marcel@ziswiler.com>
 References: <20221102131203.35648-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:czHBTzCluX/JCivsrSik2Qxz22JKvt9utshS16ntwY02MJhVPsM
- mIuvhaKwK/IIK6tj4t7bbqKI7M79MGBSCZ19d81khW3RGh8TbiSRkpSrLyFRsSZ3Z8goo6P
- Ush1T9cL4GgR5yfxMtVtLIZg6EkxcYE8p8ejb0de8cyHLJngmuUgVf7hC12aUHOa4r1K5CK
- d0Bf7Zq5sX6wmAQcCiXnw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:OggyC/DFIKc=:fw57hSIdNBh1SkDcCC9YeU
- H0sABP9TtOdCoNz7qTbOnjM3GE3ZQdc6vtYwa0Ylp8LnJc2q5RQ2O+BTQ5DlqvcqvX67mWckp
- XIQHiEjiOnIaS+GkxC9lBvNwKAs2off2jH5xekNVITbMWe9w7KeloeBnPDlbgESe44Pp1qLyf
- wk9mN6mrsAF3u5p9vivR0wMAi5bjOLAxdbB8+I+mugJT6/4w9GEIaEKHAZVaQif7IyYqNlb3M
- tdBaCcGOIH081rJWgTAU5eElr3/O6DDdXo0yuWjU3/z0ku02899pQlcUDYP0HD/EU+OBRDn7r
- vp0KWWvSOvelKyYe7OnlSYDghClliC8JhcLgi0Ll8uzqfiMoqPkEWFVtRtPKickaIZbPTEb3b
- zu+bEnjrp+xxLRqPvB6BT2FbcYf16FW0gO+d4pG1DH+8oViCQ2iBtQiqwSa2G9Uhotj8KQsmp
- PssQPGbZfdt2c1rooftigWENz1BhqZXQVFso7jqXVLFYRZwcAtUjoyXad+XELlgZ2S7XD5bj9
- 4N4vgwyo6pqDQ9qf2VDk8nOHrkrdIk5Vvl3Y4h+mxDkldm5Xmv/UU4irXiG4csUvGJii+TauU
- anrp5TgcPL2o7EwcBgK6Xq7QqjP1EfEze9RLJH0NqPX7VbAT6g5UFU8rKETC/rU+ji7OTsId9
- 2I1cfKwFQ/JbzGltDBCu7UCQL6AtnnwJt/ZgE+E7G7yjZPgbqAWadWThhA2lNnxQcWA1WdtyR
- T/idc2mxg5H4aPaCGpG/rZovzdaHafHWruAN4Jci6cl1w1HtiTiJdREPMU/mv73A4FmF5PkpR
- a5hFNterHFwQmtaM+FxM+QGfDLKI4JMrzq9kOmss3vP4Ar3rfByy8ZGXOxruYdzzEfQJuOCR7
- thcrOV3FZwo5uIvffcvQ==
+X-Provags-ID: V03:K1:VQbP8JLwp2ycgZAlAZ0to6PKhljnPQABl1FTvBfHv1rJtfSopi7
+ vPe+rWbhjlwwe1A93h2mL39nKQDtaP8K5RTOdxNqkFPTrRz+u4+soxZr/RZiOK86fVpCzSC
+ /3W06Yb3s1TtauANsKRV3ryZCS+bn5q3/fcNH33a+0EH93suLgrYn1MJlQdiEJOFkDAAXBM
+ /mW9xtTKe3eOYAkqEw9oQ==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:pGSKfUY51eU=:QJqQ2uMMenQDLUt5ihljxK
+ t4kyeYOJxu+bqAL2A6R3ACETH43xCzcI9SXAZEtv8gKaELzPpZyuO0nc0nDdOBzeBJIf2vOv/
+ kEXYNK9ajn4eEjO68FOdrc8LEc6bOUiKp4mqWQHpk+oxzIzyVryOIblOJsB4zZTXfaEv4UoDn
+ l/ogNVXj7cBTlkb63nfM88zvNkW6racyx65g2lUw+0/PTHkX6jI4lDd/5rfHsNsrG9ukW11mP
+ 5IS/X3wV8th/3PYp4W+V2hF8qW7ytjggrUkESiqBDUQ5HWd9v6RYxtrYT0ItoNH8iIkuhIEyy
+ rT16Pg7nWnMVZANer4sEH3VDEkjlOW0bWWuJABVFHD4zYbkH+NKVguSLXa4UgQ1F6CsNAYDKk
+ CrR1zm2RuDeCl3HHyjt4HKJEHi1Vq64+zVPIgo/M0s++Ha3M0aq0eW535kPvO3n5uRN5474t5
+ gbkSMDwTs7Wq4hc72tqBnC/LaSrlhHiUVuDrdSVk6ikO1Zgp4jlofc63/NqIObQG1mAs6kaAI
+ rydeIuCm7DoGF+caQXUxLsWqRlhVYNjDCyz3CN487vJlDh351Ydbi+vTq0pXj2YkgvEIojQMq
+ OBsfP77LHSBZeOOIJeq8Wo5FBcHVRw17sETSJJ0XSiUKYY2BvLbCK/8cMTTI19SIshX8PkhDr
+ mbinh5U4Nqy9YKvuFpQ5YXqJGhkiekoJwuLKgmhELzoT52NOnj33OMYSbC/EaZTXVY8lc4Dvb
+ pcHWSVukfWLa8Q9o7kuXB9/WntzSPWvxWFgF44yosYyVvKzFwOKn38vpPD3q3X+j09sHrjTEi
+ iD4rNIT
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -71,29 +69,62 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-The disable-over-current property is only applicable for the
-ci-hdrc-usb2 and dwc2 drivers while the i.MX 8M Plus integrates dwc3
-IP. Therefore remove this property which does not really serve any
-purpose here.
+Add Verdin USB_1 over-current detection functionality via Verdin
+USB_1_OC# (SODIMM 157) being active-low and removing its previous
+gpio_hog3 mapping.
 
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 ---
 
- arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi | 1 -
- 1 file changed, 1 deletion(-)
+ arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi | 14 ++++++++++++--
+ 1 file changed, 12 insertions(+), 2 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-index 97e88440a251..57cddf1bf6b3 100644
+index 57cddf1bf6b3..85af2875fb70 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-@@ -828,7 +828,6 @@ &usb3_phy1 {
+@@ -807,6 +807,12 @@ &uart4 {
  };
  
- &usb_dwc3_1 {
--	disable-over-current;
- 	dr_mode = "host";
+ /* Verdin USB_1 */
++&usb3_0 {
++	fsl,over-current-active-low;
++	pinctrl-names = "default";
++	pinctrl-0 = <&pinctrl_usb_1_oc_n>;
++};
++
+ &usb3_phy0 {
+ 	vbus-supply = <&reg_usb1_vbus>;
  };
+@@ -816,7 +822,6 @@ &usb_dwc3_0 {
+ 	dr_mode = "otg";
+ 	hnp-disable;
+ 	maximum-speed = "high-speed";
+-	over-current-active-low;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&pinctrl_usb_1_id>;
+ 	srp-disable;
+@@ -1045,7 +1050,6 @@ pinctrl_gpio_hog2: gpiohog2grp {
  
+ 	pinctrl_gpio_hog3: gpiohog3grp {
+ 		fsl,pins =
+-			<MX8MP_IOMUXC_GPIO1_IO13__GPIO1_IO13		0x1c4>,	/* SODIMM 157 */
+ 			/* CSI_1_MCLK */
+ 			<MX8MP_IOMUXC_GPIO1_IO15__GPIO1_IO15		0x1c4>;	/* SODIMM 91 */
+ 	};
+@@ -1229,6 +1233,12 @@ pinctrl_usb_1_id: usb1idgrp {
+ 			<MX8MP_IOMUXC_SD1_RESET_B__GPIO2_IO10		0x1c4>;	/* SODIMM 161 */
+ 	};
+ 
++	/* USB_1_OC# */
++	pinctrl_usb_1_oc_n: usb1ocngrp {
++		fsl,pins =
++			<MX8MP_IOMUXC_GPIO1_IO13__USB1_OTG_OC		0x1c4>;	/* SODIMM 157 */
++	};
++
+ 	pinctrl_usb2_vbus: usb2vbusgrp {
+ 		fsl,pins =
+ 			<MX8MP_IOMUXC_GPIO1_IO14__GPIO1_IO14		0x106>;	/* SODIMM 185 */
 -- 
 2.36.1
 
