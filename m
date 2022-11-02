@@ -2,121 +2,214 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39D986162AB
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:26:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E55E86162AD
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:26:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbiKBM0Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 08:26:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43024 "EHLO
+        id S230190AbiKBM04 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 08:26:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229557AbiKBM0U (ORCPT
+        with ESMTP id S230371AbiKBM0w (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 08:26:20 -0400
-Received: from qproxy1-pub.mail.unifiedlayer.com (qproxy1-pub.mail.unifiedlayer.com [173.254.64.10])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7349724945
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 05:26:19 -0700 (PDT)
-Received: from gproxy1-pub.mail.unifiedlayer.com (unknown [69.89.25.95])
-        by qproxy1.mail.unifiedlayer.com (Postfix) with ESMTP id 1AAAB80380F7
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 12:26:19 +0000 (UTC)
-Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
-        by progateway3.mail.pro1.eigbox.com (Postfix) with ESMTP id 59F4510047A90
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 12:25:55 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id qCoco9i1DPi3DqCodoT3mb; Wed, 02 Nov 2022 12:25:55 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=KK2fsHJo c=1 sm=1 tr=0 ts=636261d3
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=9xFQ1JgjjksA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=CSFKPktmnMtZzj74Sde0RaSXpz44odT6IJGcn0daLl0=; b=EKvvegnihbuqmRnfe5LeduRd17
-        +n3bn6d4FVMlZUF1U4wuey+jO4FA9IrXqLh2X7IUF58FHQXPkfe26dcYTzKyqt+Vtf/sn7LrghWwZ
-        kjR7VkngroKsM1DZLpFb9ziu5d7BaBCL49TqjbgN+RYmdsLHX6xRMkVZcK8uHdF0rAXtuTeyemX7M
-        I0TrDnj6xzHps7lrYF7SwHOnxNic3LuRxiS4yekRGQ0xVyI3QHOaNo+kFGCR/L/JF13IFbqKinojo
-        jso/Ig8A/LEOsy5Ysk6OuUj0D/uELA1N+SV1QyAOkX6K1WuyIsvJYXwb8/zljptyIhQvw8GzrE4jV
-        RQIRlsIQ==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:56258 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1oqCoa-003ByE-Bd;
-        Wed, 02 Nov 2022 06:25:52 -0600
-Subject: Re: [PATCH 6.0 000/240] 6.0.7-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-References: <20221102022111.398283374@linuxfoundation.org>
-In-Reply-To: <20221102022111.398283374@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <2ebfdb20-b1f4-b982-c480-bf667b601b2b@w6rz.net>
-Date:   Wed, 2 Nov 2022 05:25:47 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 2 Nov 2022 08:26:52 -0400
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2040.outbound.protection.outlook.com [40.107.236.40])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0F9FC27DC4;
+        Wed,  2 Nov 2022 05:26:51 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mf3zYr9cN6OcrKkJHsWNG94Z/oypBWwlHrJ+s8zdleWQVzoGjwTZIifzt8c3RrZZPRihSCtAc138OY0j/HOM/oR2cxmMiQ9gkv8DtJY1xCeg2rjVTjHGf0KuHTMJhfS80LQx1Z0rnRdAcgsZoHVFBiT/un3/hvlNxbXE8xyNOqzxgxSbNfu4bTx8xMAfWm7Nd8eSQhfZOgy11KrOP6wvFSO9S7S4kJrDJ36NGgqH9tbrxGFrwgxyDWIJzsY+0ZjJzeeZVR7zuCGzq+YU41K2whm0Mwa9l+vUubRq5yRBie4blNYiok1ZUR27I3UGKPIo4577zozc06SgtWchNM4PxQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ReQk3zRPgVzEU3KyCHpema5cQUAvFLcnTzuDMFRsKTA=;
+ b=lnwXLX4A6HnW5LCwy6r0lw8JT7Rxb4wVr/wcePnMGaPQ/SSi+UV69PEBXrYSfOxLTA1eLlbLqWg2gEhH9noRhrimcl3Q9gVP8eR5gN59do1Cnhg5MKP0JEhWKLJ7X+vKeUPFaIemR0O3BwzFRwGj68NVne19jNGoSwosSQjYtcJCSFUjrtALftZEkkkPvpBV4srUR9+58ujBqTAsTf2OCswSk9utIEFFNIZ8ubq3yNMKtDqkqXuzSVNBm5wI/+MgsqWNSyWScf5m5OdDok4JnEeusDK2tHs0A5QwgLWqvRH/QHJ2x7V73N0UhVA9Da2GPYCcZndAAKjzgVdL2wlu7g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nvidia.com; dmarc=pass action=none header.from=nvidia.com;
+ dkim=pass header.d=nvidia.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ReQk3zRPgVzEU3KyCHpema5cQUAvFLcnTzuDMFRsKTA=;
+ b=QR4ncM3spbKcqTziNOdjTJIS9kr4fsHVRyqxKHmc3nxEFptrmVqDkBECsDWpPGnIs/sDLQvoJ9vBbQ8KATiHRx1py5PA9021jcqykc50Xw9iMSeZ815TN9xulJNehDucUpnDxerYTLT8iQAnMFCXVqkg/WE0GqfTlsPKjTco5iO2Su1kRQM+JpwKj95LXtaSMVFlvUxKmxnGus1mEkxJiq0OfXfKIGX6Gpb+b73QApXZ7jdqraRoA6g42Dj+D8h3FLk/jj2bM2alYBDMOaSw3NOGFXjFxwLhbyJfHTuSQRyFcGO0FHN+gdVr37mLLxLQ8WggCUfQNcpFe5SAPBrrCQ==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nvidia.com;
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com (2603:10b6:408:176::16)
+ by SN7PR12MB7156.namprd12.prod.outlook.com (2603:10b6:806:2a7::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.21; Wed, 2 Nov
+ 2022 12:26:49 +0000
+Received: from LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de]) by LV2PR12MB5869.namprd12.prod.outlook.com
+ ([fe80::7a81:a4e4:bb9c:d1de%6]) with mapi id 15.20.5769.015; Wed, 2 Nov 2022
+ 12:26:49 +0000
+Date:   Wed, 2 Nov 2022 09:26:47 -0300
+From:   Jason Gunthorpe <jgg@nvidia.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-rdma@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Leon Romanovsky <leonro@nvidia.com>
+Subject: [GIT PULL] Please pull RDMA subsystem changes
+Message-ID: <Y2JiBz6YMTTFfxI/@nvidia.com>
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="pi2VHx54BGkc/iZ+"
+Content-Disposition: inline
+X-ClientProxiedBy: MN2PR10CA0006.namprd10.prod.outlook.com
+ (2603:10b6:208:120::19) To LV2PR12MB5869.namprd12.prod.outlook.com
+ (2603:10b6:408:176::16)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
-Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1oqCoa-003ByE-Bd
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:56258
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV2PR12MB5869:EE_|SN7PR12MB7156:EE_
+X-MS-Office365-Filtering-Correlation-Id: 25f90c28-1e57-4313-80e2-08dabccd83a4
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: eR46IJegqYAwOQP0FJ0B+HX9a1EioK2SHMQ5xOw2cvhTsnW+jRIqj6bWUGIrjfI1Hi2APC1zQDNiX+pT3YQ/uoDaL5vpQSUwI4nmW/RX+cOCeuFlPR7a6A6SD5aO9jb3VJmG8NsfINkxpMNxiS7n2EFaMdp4Zhm1XMeM2LtoKs1MQiMwZtzk5crxqpciymLNBQJq8Ws1RMLpGRYDtEexGPELb1rnPE5zkMWL9ALfF3XDGHseK077FII6D5TEJHeEnut+sfnbuJ2kVvDZIT8Tyc9LhZbvyLL9jvFldVPS/hvClRADN927zdrx4/H6Px1xPgRIOLCqMUTYpnChjZgftK7QvL0im7V3OTRQ5BaZpBmYvTC5RxyDDcBxy+4fJoW+f95oJQaqhwv9aPnZpt5eneOSYblx5DaWAhBwH0DZDPlZtDJcVmEPeacfNbxXL8ov7cKPvIZt2OlrK/wFZwPbelY5q9tvh4/x4KH1mlxyQOLXVh1X5QzbdEphF8YVxHT1neeiVsTVfMutReotxDwBqWvt5ZJX5IdELDT+e2AS2k623nKYaeT90PjzvBCnW8Hm4mcW9Hm+bE3XCK1IkTaclb5TbLqyGegGgDvznC3kl9Fc9ThLGzopSu9FyyXQT9P+AOnsDEpw42pP5JGSMaCnPItZzCJNGk+P34dWnJSfdIdQKYpdLGX+VK99Rf0RxQMZJ4GS6E/C1LVLf8L5xcLLxcxhhI5/oK8h5NzMHdV3DkkC2Mv2vhucTuBnWdX4Osh4kWj84VGoCvvIlwL7N437uw==
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV2PR12MB5869.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(136003)(39860400002)(396003)(346002)(376002)(366004)(451199015)(66574015)(21480400003)(86362001)(36756003)(38100700002)(5660300002)(107886003)(316002)(6916009)(83380400001)(8936002)(33964004)(186003)(478600001)(2616005)(2906002)(4001150100001)(6486002)(8676002)(6506007)(44144004)(41300700001)(4326008)(6512007)(66476007)(26005)(66946007)(66556008)(2700100001);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?bFRhMkwyNHE1bEsweUdTQkhUSGNKeFI2SjFNUDlLMnJEU21Nc2p2ZVVWOWFp?=
+ =?utf-8?B?TWVtV3BDRDhXYmhmWklrTVBkOFVESlZwQjJTQTBPQmhkQ0M0ZTJDYmV3c3Uy?=
+ =?utf-8?B?WTJZTUdGVUZEQVN1VVV1MnpvNk81UGVmV2wrVGQrTEFrRE5Ma25Ud05ISG0z?=
+ =?utf-8?B?UjRKNnpkN2RROEFQVG5iWXc0UXhKL3N0Q1cyRENKVkJ0K09jZWtLLy9oNjA1?=
+ =?utf-8?B?ZWlMSHhvZjdKMGZwVGU3RFEyMkczbGlaM1FwQjR3SUVkNFc3TGxObDZvTEtJ?=
+ =?utf-8?B?WkdvaUpHQ3hnb0x3NklCNGhyckQwL1lmSWR2Nm50ckdUNit4ZERMVHc0QXQz?=
+ =?utf-8?B?aUltZVovQmU1K0Q2RCtnWXhlaGxDalFxMGR1bmhmaElYTW43OHRnN3pNQXlD?=
+ =?utf-8?B?ZUpoWndtRjVQbExtckxVSnE0a3JJTjZVaGJNdDhCZyt3eGhlNkxSY1hQd29N?=
+ =?utf-8?B?bmpBV1dCdHBVcXlzS2FBS1IwS05yRlJEZ0dldVNkcGxxa3doWVFNRFRMYkp1?=
+ =?utf-8?B?Q1NLMGdIV05RbWU1YjZaSmlBekp6RUNzNEk5TDJJaXhIdDJqb2FxUWVxZEpq?=
+ =?utf-8?B?KzZ2aVlFZUNjemtLUzRsUEpPSW0weFB2cnVESHlpN0YyTkhhOEFCaUNJZ0Nx?=
+ =?utf-8?B?M3l0VlF6VWcvR3VyM3I0NmZERURnNUUrenlLSUFnempvUDRIM0tQRkpKVVgw?=
+ =?utf-8?B?elFwdDJvemxIOFNvcFV4eElVY3BpaWI0K2ZsY3hXZzBYU1hobmYzaFRHMllU?=
+ =?utf-8?B?NzM3ZHcvSFNkZ2JLcmtoVGdXa0dVeVgwRm5FdUVTYWs3U3hrd24vM0JpUzhk?=
+ =?utf-8?B?M1dlbzRTemNZQytMUnBmcnFhdm5DcTVIUDRGUHFMLzBSNmphbCtiMk9SSjdk?=
+ =?utf-8?B?S1JVa3BqVWRSUU1PQjhvbGxhZkk4cUpFbWlVNEgydVN3NHN1NHpHckcxbURW?=
+ =?utf-8?B?N0V1akdNQ2NLSjVObVROeFFnQlA5N2hpTnFtaGRyU2RJUTJ0VVBNdG85QTJr?=
+ =?utf-8?B?dFlXcUh5OFRSZ3Fra0w3a0xXdkxpMXc3dGZ1SVdFOFIvaUcweFcvS3gyVDYr?=
+ =?utf-8?B?Y3JlNWFhYmxWRWNkTWgwOTN6VGxJYmUzSTRvNTZDUWFQenFFZDBDQTlwaU9K?=
+ =?utf-8?B?RytOZnJzZE4wUVlNWXpUTFAyektLYXdXWlYwbHlJczc1N3l4T0tVV0RBRlRz?=
+ =?utf-8?B?OHVIQWpNdHpXS0w2MTFTamVxamhQM2ZvTG1SZTRqdTd2Z1VsaGxhUERTbHF6?=
+ =?utf-8?B?NGZCbXl5Qzlyd3FQRWg5RlpHNHkxU2pUcEJtWXFkYTBWaGUzUzNBQzEwR0t1?=
+ =?utf-8?B?aXp1SDR5THh5TUpETnJ3OHJta2ZPWHd0dTVCUGJLR3hiR29hMkNyN2tiRnJO?=
+ =?utf-8?B?ZXZLbyswcllrTytOZ0cwREJMc01GNWJvRm1Mcjg2ZjFLUm1XRVdqemR6b0lh?=
+ =?utf-8?B?TDZkb2pCLzJ1aUpCM2hGN2dHK3B4TGh1VFRXRWxUVlJQT2o4TUxnM1RmV09u?=
+ =?utf-8?B?WFNQWFJ4dGh1eFJNczk0Y05zTmUveFg3bGZBZ3B3bWZ6VmxKRjcvRjJHazJn?=
+ =?utf-8?B?R0UwWlZOSGowNUoxYmNjNjczQ25ML01ob1l4ekx1TndYUXYxTHRUR29ROXcv?=
+ =?utf-8?B?UXdCWG1wbVFwQTZ5dVZGbDNKdEVZeWZEa2pmLy9wOUkvbGtPUFBSY2d1VzlK?=
+ =?utf-8?B?amtoS2Z3cVVob3JVaGFNK3BxU0ZqZlBWTTRxTXRzam85Qk95U2xSbWU2ZE9v?=
+ =?utf-8?B?c1VSa1dnZDM1d09tQUJGQ3cySU5iYnJ4VVdpYVFFdFZMZnJnTXVTVlJZQlMw?=
+ =?utf-8?B?Qy8ydkROYmlDRUt0dVJ2V3FQYjl4TDJZMzdnSmFxOEZSNnd6MFhBcFBuUmQ2?=
+ =?utf-8?B?NU1NbXVTMk1BY0gzZ1NMKzc1cEl2WkNNOUlDR1dWaFZHdFJrMUszQ2NWdkFa?=
+ =?utf-8?B?Nll5TEF0YWk1eDhCc2JqWEF2bklkRkJBak12S2tGT3EvRkY3MXBTZWwzdDl0?=
+ =?utf-8?B?V09jUjFXUHZjTGNNdkpsQTRNeTd6Nzh0ZW5yenAxcDlLR1NhTEFMcFNINUR1?=
+ =?utf-8?B?b3ZwUzVyeEZVNzJzeHVRT3FPQkMxL1dRdVlKL1RNR3NrcnEyeUdpalkvaVZp?=
+ =?utf-8?Q?xJgQ=3D?=
+X-OriginatorOrg: Nvidia.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 25f90c28-1e57-4313-80e2-08dabccd83a4
+X-MS-Exchange-CrossTenant-AuthSource: LV2PR12MB5869.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2022 12:26:49.0041
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: C+Fz6+FcGdVnMuyxnpLA07OyZj1iqgcevF4WdpxQVGLY3n74mpGt2aq7okuO8/Y/
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7156
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/1/22 7:29 PM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.7 release.
-> There are 240 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 04 Nov 2022 02:20:38 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.7-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+--pi2VHx54BGkc/iZ+
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Hi Linus,
 
-Tested-by: Ron Economos <re@w6rz.net>
+Small set of rc fixes
 
+The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
+
+  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/rdma/rdma.git tags/for-linus
+
+for you to fetch changes up to 7a47e077e503feb73d56e491ce89aa73b67a3972:
+
+  RDMA/qedr: clean up work queue on failure in qedr_alloc_resources() (2022=
+-10-28 12:59:40 -0300)
+
+----------------------------------------------------------------
+v6.1 first rc pull request
+
+Fix a few more of the usual sorts of bugs:
+
+- Another regression with source route validation in CMA, introduced this
+  merge window
+
+- Crash in hfi1 due to faulty list operations
+
+- PCI ID updates for EFA
+
+- Disable LOCAL_INV in hns because it causes a HW hang
+
+- Crash in hns due to missing initialization
+
+- Memory leak in rxe
+
+- Missing error unwind during ib_core module loading
+
+- Missing error handling in qedr around work queue creation during startup
+
+----------------------------------------------------------------
+Chen Zhongjin (1):
+      RDMA/core: Fix null-ptr-deref in ib_core_cleanup()
+
+Dan Carpenter (1):
+      RDMA/qedr: clean up work queue on failure in qedr_alloc_resources()
+
+Dean Luick (1):
+      IB/hfi1: Correctly move list in sc_disable()
+
+H=C3=A5kon Bugge (1):
+      RDMA/cma: Use output interface for net_dev check
+
+Li Zhijian (1):
+      RDMA/rxe: Fix mr leak in RESPST_ERR_RNR
+
+Michael Margolin (1):
+      RDMA/efa: Add EFA 0xefa2 PCI ID
+
+Yangyang Li (1):
+      RDMA/hns: Disable local invalidate operation
+
+Yixing Liu (1):
+      RDMA/hns: Fix NULL pointer problem in free_mr_init()
+
+ drivers/infiniband/core/cma.c              |  2 +-
+ drivers/infiniband/core/device.c           | 10 +++++++++-
+ drivers/infiniband/core/nldev.c            |  2 +-
+ drivers/infiniband/hw/efa/efa_main.c       |  4 +++-
+ drivers/infiniband/hw/hfi1/pio.c           |  3 +--
+ drivers/infiniband/hw/hns/hns_roce_hw_v2.c | 15 ++++-----------
+ drivers/infiniband/hw/hns/hns_roce_hw_v2.h |  2 --
+ drivers/infiniband/hw/qedr/main.c          |  9 ++++++++-
+ drivers/infiniband/sw/rxe/rxe_resp.c       |  4 +++-
+ 9 files changed, 30 insertions(+), 21 deletions(-)
+
+--pi2VHx54BGkc/iZ+
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEABYIAB0WIQRRRCHOFoQz/8F5bUaFwuHvBreFYQUCY2JiBQAKCRCFwuHvBreF
+YUPRAQDDNwABsVR5P1OpHDjZBqGzeId99J8CBB2a5SCj3G5sHQEA479dt53ElTiV
+NoCQD7o2BeWAJtTMAkrN9O9MQQOulwU=
+=Y6bH
+-----END PGP SIGNATURE-----
+
+--pi2VHx54BGkc/iZ+--
