@@ -2,58 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 857FD615B05
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 04:46:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 78E1E615B21
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 04:48:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230290AbiKBDqQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 23:46:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34020 "EHLO
+        id S230387AbiKBDsP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 23:48:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbiKBDqL (ORCPT
+        with ESMTP id S230341AbiKBDsK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 23:46:11 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 987392716D;
-        Tue,  1 Nov 2022 20:46:09 -0700 (PDT)
+        Tue, 1 Nov 2022 23:48:10 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A6777275E0;
+        Tue,  1 Nov 2022 20:48:08 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 3757661729;
-        Wed,  2 Nov 2022 03:46:09 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E442C433D6;
-        Wed,  2 Nov 2022 03:46:07 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5862CB81AF4;
+        Wed,  2 Nov 2022 03:48:07 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB259C433D6;
+        Wed,  2 Nov 2022 03:48:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667360768;
-        bh=mpamV9P1jlb5lGuzPTuQRClLiMOWv5ro+nvKg3GDl98=;
-        h=From:To:Cc:Subject:Date:From;
-        b=zNlkWgCSAUebHF/V7TupxuTmeg31Ol5nNklzdUvV8AjC8gs1KxHkDhQUgmQ0z3Ygd
-         d9t6v57aL6GR2yindZX6ouLl4MCXrpPuXMMUXo8/nlN01Z22gt3r8w63yP+DtAJh/1
-         C4BrkUqE93LkZQJFlAQ0f21A0+R1xlbQCBvZ0s+g=
+        s=korg; t=1667360886;
+        bh=sbMaQT6+NPvwwLF+F7fQwVF4XJp4iIgtZmUGq1r649Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=WwPcwEQsKA6aItzTDqzoBLFUKEDCoQbVfXBRVXzf7xAOUOs1/4xiNgjiCmx4bjNA+
+         mY4JAPUkj9sgLbdPV6vQ46D5d+aeZgskxt95iTD17FThVDKbQnqu6i7Ua4U6mdID7R
+         Spi95Tu/jt1O9xDHdK826C83ubpsjeOC8Cp/HuuQ=
+Date:   Wed, 2 Nov 2022 03:53:11 +0100
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To:     stable@vger.kernel.org
-Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Subject: [PATCH 4.9 00/44] 4.9.332-rc1 review
-Date:   Wed,  2 Nov 2022 03:34:46 +0100
-Message-Id: <20221102022049.017479464@linuxfoundation.org>
-X-Mailer: git-send-email 2.38.1
+To:     Elliot Berman <quic_eberman@quicinc.com>
+Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Kalle Valo <kvalo@kernel.org>, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v6 10/21] gunyah: rsc_mgr: Add resource manager RPC core
+Message-ID: <Y2Hbl4y9Hioybxmq@kroah.com>
+References: <20221026185846.3983888-1-quic_eberman@quicinc.com>
+ <20221026185846.3983888-11-quic_eberman@quicinc.com>
+ <Y2FfKCKZ3N8rOqcT@kroah.com>
+ <3d2858fe-ea3e-159c-faff-5052cba1e08c@quicinc.com>
 MIME-Version: 1.0
-User-Agent: quilt/0.67
-X-stable: review
-X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.332-rc1.gz
-X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-4.9.y
-X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 4.9.332-rc1
-X-KernelTest-Deadline: 2022-11-04T02:20+00:00
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <3d2858fe-ea3e-159c-faff-5052cba1e08c@quicinc.com>
 X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -63,216 +76,160 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 4.9.332 release.
-There are 44 patches in this series, all will be posted as a response
-to this one.  If anyone has any issues with these being applied, please
-let me know.
+On Tue, Nov 01, 2022 at 05:12:58PM -0700, Elliot Berman wrote:
+> 
+> 
+> On 11/1/2022 11:02 AM, Greg Kroah-Hartman wrote:
+> > On Wed, Oct 26, 2022 at 11:58:35AM -0700, Elliot Berman wrote:
+> > > The resource manager is a special virtual machine which is always
+> > > running on a Gunyah system. It provides APIs for creating and destroying
+> > > VMs, secure memory management, sharing/lending of memory between VMs,
+> > > and setup of inter-VM communication. Calls to the resource manager are
+> > > made via message queues.
+> > > 
+> > > This patch implements the basic probing and RPC mechanism to make those
+> > > API calls. Request/response calls can be made with gh_rm_call.
+> > > Drivers can also register to notifications pushed by RM via
+> > > gh_rm_register_notifier
+> > > 
+> > > Specific API calls that resource manager supports will be implemented in
+> > > subsequent patches.
+> > > 
+> > > Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> > > ---
+> > >   MAINTAINERS                    |   2 +-
+> > >   drivers/virt/gunyah/Kconfig    |  15 +
+> > >   drivers/virt/gunyah/Makefile   |   3 +
+> > >   drivers/virt/gunyah/rsc_mgr.c  | 602 +++++++++++++++++++++++++++++++++
+> > >   drivers/virt/gunyah/rsc_mgr.h  |  34 ++
+> > >   include/linux/gunyah_rsc_mgr.h |  26 ++
+> > >   6 files changed, 681 insertions(+), 1 deletion(-)
+> > >   create mode 100644 drivers/virt/gunyah/rsc_mgr.c
+> > >   create mode 100644 drivers/virt/gunyah/rsc_mgr.h
+> > >   create mode 100644 include/linux/gunyah_rsc_mgr.h
+> > > 
+> > > diff --git a/MAINTAINERS b/MAINTAINERS
+> > > index 586539eadd3b..e072a0d2e553 100644
+> > > --- a/MAINTAINERS
+> > > +++ b/MAINTAINERS
+> > > @@ -8945,7 +8945,7 @@ F:	Documentation/virt/gunyah/
+> > >   F:	arch/arm64/gunyah/
+> > >   F:	drivers/mailbox/gunyah-msgq.c
+> > >   F:	drivers/virt/gunyah/
+> > > -F:	include/linux/gunyah.h
+> > > +F:	include/linux/gunyah*.h
+> > >   HABANALABS PCI DRIVER
+> > >   M:	Oded Gabbay <ogabbay@kernel.org>
+> > > diff --git a/drivers/virt/gunyah/Kconfig b/drivers/virt/gunyah/Kconfig
+> > > index 127156a678a6..4de88d80aa7b 100644
+> > > --- a/drivers/virt/gunyah/Kconfig
+> > > +++ b/drivers/virt/gunyah/Kconfig
+> > > @@ -10,3 +10,18 @@ config GUNYAH
+> > >   	  Say Y/M here to enable the drivers needed to interact in a Gunyah
+> > >   	  virtual environment.
+> > > +
+> > > +config GUNYAH_RESORUCE_MANAGER
+> > > +	tristate "Gunyah Resource Manager"
+> > > +	select MAILBOX
+> > > +	select GUNYAH_MESSAGE_QUEUES
+> > > +	depends on GUNYAH
+> > > +	default y
+> > 
+> > You only have "default y" if your machine can not boot without it.
+> > Please do not add that here.
+> > 
+> 
+> There's a guideline in Documentation/kbuild/kconfig-language.rst to provide
+> some sane defaults for subdriver behavior. Here, CONFIG_GUNYAH is default n.
+> It's unlikely for someone to want to have Linux with base Gunyah support
+> (hypercalls and hypervisor detection) without also having the Resource
+> Manager driver. If it's better, I could change to default m?
 
-Responses should be made by Fri, 04 Nov 2022 02:20:38 +0000.
-Anything received after that time might be too late.
+Why is this a separate build option at all anyway?  If you want
+CONFIG_GUNYAH why would you ever turn this off?  So why even allow it to
+be an option?  Just always built it depending on the main option.
 
-The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.9.332-rc1.gz
-or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.9.y
-and the diffstat can be found below.
+> > > +/* Resource Manager Header */
+> > > +struct gh_rm_rpc_hdr {
+> > > +	u8 version : 4, hdr_words : 4;
+> > > +	u8 type : 2, fragments : 6;
+> > 
+> > Ick, that's hard to read.  One variable per line please?
+> 
+> Ack.
+> 
+> > And why the bit packed stuff?  Are you sure this is the way to do this?
+> > Why not use a bitmask instead?
+> > 
+> 
+> I felt bit packed implementation is cleaner and easier to map to
+> understanding what the fields are used for.
+
+Ah, so this isn't what is on the "wire", then don't use a bitfield like
+this, use a real variable and that will be faster and simpler to
+understand.
+
+> > > +static struct gh_rsc_mgr *__rsc_mgr;
+> > 
+> > Sorry, no, you don't get to just limit yourself to one of these.  Please
+> > make this properly handle any number of "resource managers", static
+> > variables like this is not ok.
+> > 
+> 
+> There will only ever be one resource manager. optee, psci, and qcom_scm use
+> a similar approach.
+
+And all of those are also wrong.
+
+There is no need for this variable at all, you are doing extra work to
+make this a "single" device.  Just always work off of the device that
+the driver core gave you and all is good and you will have no limits on
+how many different ones you eventually get.  It will be less code
+overall, so it's the right thing to do.
+
+> > > +SRCU_NOTIFIER_HEAD_STATIC(gh_rm_notifier);
+> > 
+> > Why do you need a notifier list?
+> > 
+> > Who will register for this?  For what?  Why?
+> > 
+> 
+> The majority of notifications that RM sends to Linux will be related to VM
+> state, e.g. "VM crashed." I've not added the handling in VM manager yet to
+> reduce the number of patches in this series. It was used in the previous
+> series for the console driver. I can remove for now and re-introduce it once
+> VM manager makes use?
+
+Please remove if you are not using it.  Notifier lists are almost always
+wrong when it comes to the driver model, so please don't add them now,
+we can discuss it later if you feel it really needs to be introduced
+then.
+
+> > > +static struct platform_driver gh_rm_driver = {
+> > > +	.probe = gh_rm_drv_probe,
+> > > +	.remove = gh_rm_drv_remove,
+> > > +	.driver = {
+> > > +		.name = "gh_rsc_mgr",
+> > > +		.of_match_table = gh_rm_of_match,
+> > > +	},
+> > 
+> > Wait, why is this a platform driver?  This is binding to a real device
+> > on a real bus, not a random platform description in DT, right?
+> 
+> This a binding for a real device and not a "random platform description" in
+> DT to get the driver probed.
+> 
+> > Or is it controlled by your DT?  I can't figure that out here, sorry.
+> 
+> There is some info in Patch 2 about why the DT node exists and how it looks.
+> Essentially, The DT node is provided by Gunyah during boot and describes how
+> Linux can communicate with resource manager.
+
+Ick, ok, for now let's leave this alone but for dynamic devices, you
+should never use a platform device.  All devices that hang off of this
+controller better not be platform devices, but belong to the bus type of
+your new bus, right?
 
 thanks,
 
 greg k-h
-
--------------
-Pseudo-Shortlog of commits:
-
-Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 4.9.332-rc1
-
-Biju Das <biju.das.jz@bp.renesas.com>
-    can: rcar_canfd: rcar_canfd_handle_global_receive(): fix IRQ storm on global FIFO receive
-
-Yang Yingliang <yangyingliang@huawei.com>
-    net: ehea: fix possible memory leak in ehea_register_port()
-
-Aaron Conole <aconole@redhat.com>
-    openvswitch: switch from WARN to pr_warn
-
-Takashi Iwai <tiwai@suse.de>
-    ALSA: aoa: Fix I2S device accounting
-
-Yang Yingliang <yangyingliang@huawei.com>
-    ALSA: aoa: i2sbus: fix possible memory leak in i2sbus_add_dev()
-
-Yang Yingliang <yangyingliang@huawei.com>
-    net: ksz884x: fix missing pci_disable_device() on error in pcidev_init()
-
-Slawomir Laba <slawomirx.laba@intel.com>
-    i40e: Fix ethtool rx-flow-hash setting for X722
-
-Hans Verkuil <hverkuil-cisco@xs4all.nl>
-    media: videodev2.h: V4L2_DV_BT_BLANKING_HEIGHT should check 'interlaced'
-
-Hans Verkuil <hverkuil-cisco@xs4all.nl>
-    media: v4l2-dv-timings: add sanity checks for blanking values
-
-Hans Verkuil <hverkuil-cisco@xs4all.nl>
-    media: vivid: dev->bitmap_cap wasn't freed in all cases
-
-Hans Verkuil <hverkuil-cisco@xs4all.nl>
-    media: vivid: s_fbuf: add more sanity checks
-
-Dongliang Mu <dzm91@hust.edu.cn>
-    can: mscan: mpc5xxx: mpc5xxx_can_probe(): add missing put_clock() in error path
-
-Neal Cardwell <ncardwell@google.com>
-    tcp: fix indefinite deferral of RTO with SACK reneging
-
-Zhang Changzhong <zhangchangzhong@huawei.com>
-    net: lantiq_etop: don't free skb when returning NETDEV_TX_BUSY
-
-Eric Dumazet <edumazet@google.com>
-    kcm: annotate data-races around kcm->rx_wait
-
-Eric Dumazet <edumazet@google.com>
-    kcm: annotate data-races around kcm->rx_psock
-
-Yang Yingliang <yangyingliang@huawei.com>
-    ALSA: ac97: fix possible memory leak in snd_ac97_dev_register()
-
-Randy Dunlap <rdunlap@infradead.org>
-    arc: iounmap() arg is volatile
-
-Nathan Huckleberry <nhuck@google.com>
-    drm/msm: Fix return type of mdp4_lvds_connector_mode_valid
-
-Wei Yongjun <weiyongjun1@huawei.com>
-    net: ieee802154: fix error return code in dgram_bind()
-
-Rik van Riel <riel@surriel.com>
-    mm,hugetlb: take hugetlb_lock before decrementing h->resv_huge_pages
-
-M. Vefa Bicakci <m.v.b@runbox.com>
-    xen/gntdev: Prevent leaking grants
-
-Jan Beulich <jbeulich@suse.com>
-    Xen/gntdev: don't ignore kernel unmapping error
-
-Heiko Carstens <hca@linux.ibm.com>
-    s390/futex: add missing EX_TABLE entry to __futex_atomic_op()
-
-Christian A. Ehrhardt <lk@c--e.de>
-    kernfs: fix use-after-free in __kernfs_remove
-
-Matthew Ma <mahongwei@zeku.com>
-    mmc: core: Fix kernel panic when remove non-standard SDIO card
-
-Johan Hovold <johan+linaro@kernel.org>
-    drm/msm/hdmi: fix memory corruption with too many bridges
-
-Miquel Raynal <miquel.raynal@bootlin.com>
-    mac802154: Fix LQI recording
-
-Hyunwoo Kim <imv4bel@gmail.com>
-    fbdev: smscufx: Fix several use-after-free bugs
-
-Matti Vaittinen <mazziesaccount@gmail.com>
-    tools: iio: iio_utils: fix digit calculation
-
-Mathias Nyman <mathias.nyman@linux.intel.com>
-    xhci: Remove device endpoints from bandwidth list when freeing the device
-
-Justin Chen <justinpopo6@gmail.com>
-    usb: bdc: change state when port disconnected
-
-Hannu Hartikainen <hannu@hrtk.in>
-    USB: add RESET_RESUME quirk for NVIDIA Jetson devices in RCM
-
-Jason A. Donenfeld <Jason@zx2c4.com>
-    ALSA: au88x0: use explicitly signed char
-
-Steven Rostedt (Google) <rostedt@goodmis.org>
-    ALSA: Use del_timer_sync() before freeing timer
-
-Werner Sembach <wse@tuxedocomputers.com>
-    ACPI: video: Force backlight native for more TongFang devices
-
-Yang Yingliang <yangyingliang@huawei.com>
-    net: hns: fix possible memory leak in hnae_ae_register()
-
-Xiaobo Liu <cppcoffee@gmail.com>
-    net/atm: fix proc_mpc_write incorrect return value
-
-José Expósito <jose.exposito89@gmail.com>
-    HID: magicmouse: Do not set BTN_MOUSE on double report
-
-James Morse <james.morse@arm.com>
-    arm64: errata: Remove AES hwcap for COMPAT tasks
-
-Kai-Heng Feng <kai.heng.feng@canonical.com>
-    ata: ahci: Match EM_MAX_SLOTS with SATA_PMP_MAX_PORTS
-
-Alexander Stein <alexander.stein@ew.tq-group.com>
-    ata: ahci-imx: Fix MODULE_ALIAS
-
-Joseph Qi <joseph.qi@linux.alibaba.com>
-    ocfs2: fix BUG when iput after ocfs2_mknod fails
-
-Joseph Qi <joseph.qi@linux.alibaba.com>
-    ocfs2: clear dinode links count in case of error
-
-
--------------
-
-Diffstat:
-
- Documentation/arm64/silicon-errata.txt             |  2 +
- Makefile                                           |  4 +-
- arch/arc/include/asm/io.h                          |  2 +-
- arch/arc/mm/ioremap.c                              |  2 +-
- arch/arm64/Kconfig                                 | 16 ++++++
- arch/arm64/include/asm/cpucaps.h                   |  3 +-
- arch/arm64/kernel/cpu_errata.c                     | 16 ++++++
- arch/arm64/kernel/cpufeature.c                     | 13 ++++-
- arch/s390/include/asm/futex.h                      |  3 +-
- drivers/acpi/video_detect.c                        | 64 ++++++++++++++++++++++
- drivers/ata/ahci.h                                 |  2 +-
- drivers/ata/ahci_imx.c                             |  2 +-
- drivers/gpu/drm/msm/hdmi/hdmi.c                    |  5 ++
- drivers/gpu/drm/msm/mdp/mdp4/mdp4_lvds_connector.c |  5 +-
- drivers/hid/hid-magicmouse.c                       |  2 +-
- drivers/media/platform/vivid/vivid-core.c          | 22 ++++++++
- drivers/media/platform/vivid/vivid-core.h          |  2 +
- drivers/media/platform/vivid/vivid-vid-cap.c       | 27 +++++++--
- drivers/media/v4l2-core/v4l2-dv-timings.c          | 14 +++++
- drivers/mmc/core/sdio_bus.c                        |  3 +-
- drivers/net/can/mscan/mpc5xxx_can.c                |  8 ++-
- drivers/net/can/rcar/rcar_canfd.c                  |  6 +-
- drivers/net/ethernet/hisilicon/hns/hnae.c          |  4 +-
- drivers/net/ethernet/ibm/ehea/ehea_main.c          |  1 +
- drivers/net/ethernet/intel/i40e/i40e_ethtool.c     | 31 ++++++++---
- drivers/net/ethernet/intel/i40e/i40e_type.h        |  4 ++
- drivers/net/ethernet/lantiq_etop.c                 |  1 -
- drivers/net/ethernet/micrel/ksz884x.c              |  2 +-
- drivers/usb/core/quirks.c                          |  9 +++
- drivers/usb/gadget/udc/bdc/bdc_udc.c               |  1 +
- drivers/usb/host/xhci-mem.c                        | 20 ++++---
- drivers/video/fbdev/smscufx.c                      | 55 ++++++++++---------
- drivers/xen/gntdev.c                               | 30 ++++++++--
- fs/kernfs/dir.c                                    |  5 +-
- fs/ocfs2/namei.c                                   | 23 ++++----
- include/uapi/linux/videodev2.h                     |  3 +-
- mm/hugetlb.c                                       |  2 +-
- net/atm/mpoa_proc.c                                |  3 +-
- net/ieee802154/socket.c                            |  4 +-
- net/ipv4/tcp_input.c                               |  3 +-
- net/kcm/kcmsock.c                                  | 23 +++++---
- net/mac802154/rx.c                                 |  5 +-
- net/openvswitch/datapath.c                         |  3 +-
- sound/aoa/soundbus/i2sbus/core.c                   |  7 ++-
- sound/pci/ac97/ac97_codec.c                        |  1 +
- sound/pci/au88x0/au88x0.h                          |  6 +-
- sound/pci/au88x0/au88x0_core.c                     |  2 +-
- sound/synth/emux/emux.c                            |  7 +--
- tools/iio/iio_utils.c                              |  4 ++
- 49 files changed, 369 insertions(+), 113 deletions(-)
-
-
