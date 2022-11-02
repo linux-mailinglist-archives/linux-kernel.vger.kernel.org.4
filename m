@@ -2,141 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CEB226162CB
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:39:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E32966162E9
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:45:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbiKBMjN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 08:39:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47784 "EHLO
+        id S230501AbiKBMpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 08:45:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiKBMjK (ORCPT
+        with ESMTP id S229598AbiKBMpV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 08:39:10 -0400
-Received: from mail-lf1-x134.google.com (mail-lf1-x134.google.com [IPv6:2a00:1450:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0D30C24952;
-        Wed,  2 Nov 2022 05:39:09 -0700 (PDT)
-Received: by mail-lf1-x134.google.com with SMTP id bp15so27943613lfb.13;
-        Wed, 02 Nov 2022 05:39:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fXZZm1OWNoD+MlyMwXmBwTMSYbGBMYKx08W+mXfVVsk=;
-        b=DjotE9Jfn1pVJuY6tm+mmxAabBRwlZKt4B6/k4D0lLtIf0Pm5q6PhhEmew02EDFyyj
-         o6EpBdM6y/aapaIzADtdXu2/EWHaUUkmxMVxDKHNXEph5AbAKxYFMuF/UszrtxSw4e+U
-         WKbjZ9QxEsbydtGsGlxftFtTf6nPcjtEfuL3T7MlscIe3NoFkvCNTKLq6sIsMzfOXM+U
-         yZMaGKSGBWL9IrVxaEhXZSdgMyMvUCBiTDMPiqqRrVz/lXcQHSASiWgxBF4ITlByVBB9
-         qpNh1+OgWSb6YqEYSOLX8BZ7+j2gRfF5Ckg1M45VCk+q9qUUh+Za8qeLKyg79YW4+WfG
-         KxkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fXZZm1OWNoD+MlyMwXmBwTMSYbGBMYKx08W+mXfVVsk=;
-        b=j3OHRoDjhCRLSrQ4K1stsPj92QlXY31PjEdj/8NMNWexRJZHkqlDx+LTHM0qOjzkhz
-         MKeRPYcp8x+Uvw1eNMUTaFmIrwx/TgJN3GU8y4A950A8pnWlDSaYI7sXkSE1AcL3L0iW
-         akSpFhFybAAFoCPXydfTP6UcGlmRJmM7XENs7x78hP2f8JC0JJZQADYN4yMSjsgSZj2T
-         BoJIv6pjDnronT0JnTdXZiFfP0EHTZYIJMsooaK6kZCCxg9lnykLVcTS/Wjr3hmgHd4o
-         8ghHimDkflyc9xjY6+r+6zLeNR6mfPRsPIScPK+946yzXaNPvDkLqlXGPrsv8qMvVnvd
-         ujKw==
-X-Gm-Message-State: ACrzQf1QQ8caEbil8kW5BrHJn4SWrkkQUGgUfE2yo7209Foe9B6x3JlP
-        knnMXPPdCwTpnGn3RvHDiFo=
-X-Google-Smtp-Source: AMsMyM5SR4F08Pw/CdCEjT0l/mCMXmKZ/G7l5yiQYFqSeCe2UGmvrXswP+kRbx8zOX/qT6hlIKfvEg==
-X-Received: by 2002:a05:6512:1596:b0:4a2:5de8:410a with SMTP id bp22-20020a056512159600b004a25de8410amr8433101lfb.627.1667392676312;
-        Wed, 02 Nov 2022 05:37:56 -0700 (PDT)
-Received: from pc636 (host-90-235-23-76.mobileonline.telia.com. [90.235.23.76])
-        by smtp.gmail.com with ESMTPSA id v18-20020a2ea452000000b002771888fda1sm2159288ljn.84.2022.11.02.05.37.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 05:37:55 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc636>
-Date:   Wed, 2 Nov 2022 13:37:53 +0100
-To:     "Joel Fernandes (Google)" <joel@joelfernandes.org>
-Cc:     rcu@vger.kernel.org, linux-kernel@vger.kernel.org,
-        paulmck@kernel.org, urezki@gmail.com
-Subject: Re: [PATCH RFC] rcu/kfree: Do not request RCU when not needed
-Message-ID: <Y2JkoVV3jaVS4y0Q@pc636>
-References: <20221029132856.3752018-1-joel@joelfernandes.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221029132856.3752018-1-joel@joelfernandes.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 2 Nov 2022 08:45:21 -0400
+X-Greylist: delayed 367 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 02 Nov 2022 05:45:20 PDT
+Received: from mxus.zte.com.cn (mxus.zte.com.cn [20.112.44.237])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE09238B8;
+        Wed,  2 Nov 2022 05:45:20 -0700 (PDT)
+Received: from mxhk.zte.com.cn (unknown [192.168.250.138])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mxus.zte.com.cn (FangMail) with ESMTPS id 4N2RJP5pstz9tyD7;
+        Wed,  2 Nov 2022 20:38:29 +0800 (CST)
+Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4N2RHq6VKpz5BNRf;
+        Wed,  2 Nov 2022 20:37:59 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl2.zte.com.cn with SMTP id 2A2CbsFU049223;
+        Wed, 2 Nov 2022 20:37:54 +0800 (+08)
+        (envelope-from zhang.songyi@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Wed, 2 Nov 2022 20:37:57 +0800 (CST)
+Date:   Wed, 2 Nov 2022 20:37:57 +0800 (CST)
+X-Zmail-TransId: 2af9636264a57d5a1a4f
+X-Mailer: Zmail v1.0
+Message-ID: <202211022037573160098@zte.com.cn>
+Mime-Version: 1.0
+From:   <zhang.songyi@zte.com.cn>
+To:     <tony.luck@intel.com>
+Cc:     <bp@alien8.de>, <tglx@linutronix.de>, <mingo@redhat.com>,
+        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
+        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <jiang.xuexin@zte.com.cn>, <xue.zhihong@zte.com.cn>,
+        <zhang.songyi@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIHg4Ni9NQ0UvQU1EOiByZW1vdmUgcmVkdW5kYW50IHJldCB2YXJpYWJsZQ==?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl2.zte.com.cn 2A2CbsFU049223
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at 10-207-168-7 with ID 636264C4.000 by FangMail milter!
+X-FangMail-Envelope: 1667392710/4N2RJP5pstz9tyD7/636264C4.000/192.168.250.138/[192.168.250.138]/mxhk.zte.com.cn/<zhang.songyi@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 636264C4.000/4N2RJP5pstz9tyD7
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 29, 2022 at 01:28:56PM +0000, Joel Fernandes (Google) wrote:
-> On ChromeOS, I am (almost) always seeing the optimization trigger.
-> Tested boot up and trace_printk'ing how often it triggers.
-> 
-> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
-> ---
->  kernel/rcu/tree.c | 18 +++++++++++++++++-
->  1 file changed, 17 insertions(+), 1 deletion(-)
-> 
-> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
-> index 591187b6352e..3e4c50b9fd33 100644
-> --- a/kernel/rcu/tree.c
-> +++ b/kernel/rcu/tree.c
-> @@ -2935,6 +2935,7 @@ struct kfree_rcu_cpu_work {
->  
->  /**
->   * struct kfree_rcu_cpu - batch up kfree_rcu() requests for RCU grace period
-> + * @rdp: The rdp of the CPU that this kfree_rcu corresponds to.
->   * @head: List of kfree_rcu() objects not yet waiting for a grace period
->   * @bkvhead: Bulk-List of kvfree_rcu() objects not yet waiting for a grace period
->   * @krw_arr: Array of batches of kfree_rcu() objects waiting for a grace period
-> @@ -2964,6 +2965,8 @@ struct kfree_rcu_cpu {
->  	struct kfree_rcu_cpu_work krw_arr[KFREE_N_BATCHES];
->  	raw_spinlock_t lock;
->  	struct delayed_work monitor_work;
-> +	struct rcu_data *rdp;
-> +	unsigned long last_gp_seq;
->  	bool initialized;
->  	int count;
->  
-> @@ -3167,6 +3170,7 @@ schedule_delayed_monitor_work(struct kfree_rcu_cpu *krcp)
->  			mod_delayed_work(system_wq, &krcp->monitor_work, delay);
->  		return;
->  	}
-> +	krcp->last_gp_seq = krcp->rdp->gp_seq;
->  	queue_delayed_work(system_wq, &krcp->monitor_work, delay);
->  }
->  
-> @@ -3217,7 +3221,17 @@ static void kfree_rcu_monitor(struct work_struct *work)
->  			// be that the work is in the pending state when
->  			// channels have been detached following by each
->  			// other.
-> -			queue_rcu_work(system_wq, &krwp->rcu_work);
-> +			//
-> +			// NOTE about gp_seq wrap: In case of gp_seq overflow,
-> +			// it is possible for rdp->gp_seq to be less than
-> +			// krcp->last_gp_seq even though a GP might be over. In
-> +			// this rare case, we would just have one extra GP.
-> +			if (krcp->last_gp_seq &&
->
-This check can be eliminated i think. A kfree_rcu_cpu is defined as
-static so by default the last_gp_set is set to zero.
+From 7fd536f480bfd526f40870c1567caf3263a584e7 Mon Sep 17 00:00:00 2001
+From: zhang songyi <zhang.songyi@zte.com.cn>
+Date: Wed, 2 Nov 2022 16:48:44 +0800
+Subject: [PATCH linux-next] x86/MCE/AMD: remove redundant ret variable
 
->  
-> @@ -4802,6 +4816,8 @@ static void __init kfree_rcu_batch_init(void)
->  	for_each_possible_cpu(cpu) {
->  		struct kfree_rcu_cpu *krcp = per_cpu_ptr(&krc, cpu);
->  
-> +		krcp->rdp = per_cpu_ptr(&rcu_data, cpu);
-> +		krcp->last_gp_seq = 0;
->
-Yep. This one can be just dropped.
+Return value from show() and store() directly instead of taking this in
+another redundant variable.
 
-But all the rest looks good :) I will give it a try from test point of
-view. It is interested from the memory footprint point of view.
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
+---
+ arch/x86/kernel/cpu/mce/amd.c | 10 ++--------
+ 1 file changed, 2 insertions(+), 8 deletions(-)
 
+diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
+index 10fb5b5c9efa..425d0803eeb6 100644
+--- a/arch/x86/kernel/cpu/mce/amd.c
++++ b/arch/x86/kernel/cpu/mce/amd.c
+@@ -1009,11 +1009,8 @@ static ssize_t show(struct kobject *kobj, struct attribute *attr, char *buf)
+ {
+    struct threshold_block *b = to_block(kobj);
+    struct threshold_attr *a = to_attr(attr);
+-   ssize_t ret;
+
+-   ret = a->show ? a->show(b, buf) : -EIO;
+-
+-   return ret;
++   return a->show ? a->show(b, buf) : -EIO;
+ }
+
+ static ssize_t store(struct kobject *kobj, struct attribute *attr,
+@@ -1021,11 +1018,8 @@ static ssize_t store(struct kobject *kobj, struct attribute *attr,
+ {
+    struct threshold_block *b = to_block(kobj);
+    struct threshold_attr *a = to_attr(attr);
+-   ssize_t ret;
+-
+-   ret = a->store ? a->store(b, buf, count) : -EIO;
+
+-   return ret;
++   return a->store ? a->store(b, buf, count) : -EIO;
+ }
+
+ static const struct sysfs_ops threshold_ops = {
 --
-Uladzislau Rezki
+2.15.2
