@@ -2,114 +2,174 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CAF07615E3E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 09:48:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7640615E44
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 09:50:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229590AbiKBIsO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 04:48:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52364 "EHLO
+        id S230380AbiKBIua (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 04:50:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53606 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbiKBIsH (ORCPT
+        with ESMTP id S229457AbiKBIu2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 04:48:07 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36DA727DC3
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 01:48:04 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id h9so23495328wrt.0
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 01:48:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=7Fsdl5KhjqGKQP2QnpOdJy/pvqM2iIVhcnFcFTUrO8A=;
-        b=DtUC+ogPgNq55gImpxgwl/g1PNaHgnSJcUcH3ey02Bg+UHOPn61NGgUQUYKxBUOm0o
-         6j55cZK0uUFkIxNtb+53CsWK1Qemz2HFYEVNxcPQv0r7mtLb2RXImhJTAH9IsAo+1z9q
-         7G1N1lvRgIsbn5JRW5ZN520ZMYXPAl0pU7SP4BuUHUJXQ8pLqmOtdGSongttbwoxl4gD
-         UCRERlPPo6ROhX89ISBcJigfQ/WWviTE5pg5Sy9EA81RzurzZR4FBrz+FkJ7VlMQlk/r
-         Kf0hzD4noFjzvmELW/qh3UcYV9e2WT9ndb5muF24MVZXZC5g3GERl9eZ0sUFk5IVZOFg
-         gSlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
-         :content-language:subject:reply-to:from:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7Fsdl5KhjqGKQP2QnpOdJy/pvqM2iIVhcnFcFTUrO8A=;
-        b=pnUZLyqyR/CGR2jiU/lS1lQPsk/mosmC2HDZvTjeLjq6fXBXMivgQHOKmda22LxyX/
-         M2F/1Le7WyKPQMue2pwGncBh606dpH+JThYENVPuxiZxQIFHYbRUNT2mr9a4/7j2IR/v
-         DQ+XNmTyj+DKtBXmNvJ6Slljvw4F4E9eJRoMa1Ux/1NVldwtbIfWW3BnYRqQxaSkMnoW
-         PH98w56UNEGi9ocZ9TPTKfEz4uBOv7Jb1QlTlY4kNKNH1sgVaXvGtMXDK7vDrIYDu+gU
-         4e6EgnkLYjAXDXHFf+Fau64C+p1USMfMz4HfV6L/zYTuHg2FafX7nfWNP7DTwj6fz6Cp
-         cubw==
-X-Gm-Message-State: ACrzQf1KPKzm9sFQJv9SFs5z0iqeYJsD7hb2cD/OHYGix+hhKIK2abCx
-        jln6I5HUoIn3qEWMIzbUejV8Ig==
-X-Google-Smtp-Source: AMsMyM5eXnSYYlsc2nkRMQQBb/aW4z9lnVUJTRZ031AFqmay+F47F4Osg205pLQkXyK71S4ukrEHUA==
-X-Received: by 2002:a5d:4c52:0:b0:236:60e8:72e with SMTP id n18-20020a5d4c52000000b0023660e8072emr14434036wrt.573.1667378883428;
-        Wed, 02 Nov 2022 01:48:03 -0700 (PDT)
-Received: from ?IPV6:2a01:e0a:982:cbb0:6bae:ac40:a798:cbb4? ([2a01:e0a:982:cbb0:6bae:ac40:a798:cbb4])
-        by smtp.gmail.com with ESMTPSA id ck1-20020a5d5e81000000b002366553eca7sm12328632wrb.83.2022.11.02.01.48.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 01:48:03 -0700 (PDT)
-Message-ID: <9499a56d-fb74-16cd-46c1-27b3fcfdcd7e@linaro.org>
-Date:   Wed, 2 Nov 2022 09:48:03 +0100
+        Wed, 2 Nov 2022 04:50:28 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E083C25289;
+        Wed,  2 Nov 2022 01:50:26 -0700 (PDT)
+Received: from dggpemm500020.china.huawei.com (unknown [172.30.72.54])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N2L7W21KpzRntq;
+        Wed,  2 Nov 2022 16:45:27 +0800 (CST)
+Received: from dggpemm500006.china.huawei.com (7.185.36.236) by
+ dggpemm500020.china.huawei.com (7.185.36.49) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 2 Nov 2022 16:50:24 +0800
+Received: from thunder-town.china.huawei.com (10.174.178.55) by
+ dggpemm500006.china.huawei.com (7.185.36.236) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 2 Nov 2022 16:50:23 +0800
+From:   Zhen Lei <thunder.leizhen@huawei.com>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Miroslav Benes <mbenes@suse.cz>,
+        Petr Mladek <pmladek@suse.com>,
+        Joe Lawrence <joe.lawrence@redhat.com>,
+        <live-patching@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Masahiro Yamada <masahiroy@kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Kees Cook <keescook@chromium.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        "Luis Chamberlain" <mcgrof@kernel.org>,
+        <linux-modules@vger.kernel.org>,
+        "Steven Rostedt" <rostedt@goodmis.org>,
+        Ingo Molnar <mingo@redhat.com>
+CC:     Zhen Lei <thunder.leizhen@huawei.com>,
+        David Laight <David.Laight@ACULAB.COM>
+Subject: [PATCH v8 0/9] kallsyms: Optimizes the performance of lookup symbols
+Date:   Wed, 2 Nov 2022 16:49:12 +0800
+Message-ID: <20221102084921.1615-1-thunder.leizhen@huawei.com>
+X-Mailer: git-send-email 2.37.3.windows.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-From:   Neil Armstrong <neil.armstrong@linaro.org>
-Reply-To: neil.armstrong@linaro.org
-Subject: Re: [PATCH 2/4] power: reset: add Odroid Go Ultra poweroff driver
-Content-Language: en-US
-To:     Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jerome Brunet <jbrunet@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        devicetree@vger.kernel.org
-References: <20221031-b4-odroid-go-ultra-initial-v1-0-42e3dbea86d5@linaro.org>
- <20221031-b4-odroid-go-ultra-initial-v1-2-42e3dbea86d5@linaro.org>
- <20221031222918.knzv3lotfn3sp7bl@mercury.elektranox.org>
-Organization: Linaro Developer Services
-In-Reply-To: <20221031222918.knzv3lotfn3sp7bl@mercury.elektranox.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.174.178.55]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500006.china.huawei.com (7.185.36.236)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,HEXHASH_WORD,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+v7 --> v8:
+Sort the symbols by name and implement kallsyms_lookup_name() using a binary
+search. The performance is more than 20 times higher than that of v7. Of course,
+the memory overhead is also extended to (3 * kallsyms_num_syms) bytes. Discard
+all implementations of compression and then comparison in v7.
 
-On 31/10/2022 23:29, Sebastian Reichel wrote:
-> Hi,
-> 
-> On Mon, Oct 31, 2022 at 05:47:26PM +0100, Neil Armstrong wrote:
->> The Hardkernel Odroid Go Ultra poweroff scheme requires requesting a poweroff
->> to its two PMICs in order, this represents the poweroff scheme needed to complete
->> a clean poweroff of the system.
->>
->> This implement this scheme, and overrides the PSCI pm_power_off.
-> 
-> Please use devm_register_power_off_handler() or
-> devm_register_sys_off_handler() for new drivers.
+In addition, all sparse warnings about kallsyms_selftest.c are cleared.
 
-Thx, will update.
 
-Neil
+v6 --> v7:
+1. Improve the performance of kallsyms_lookup_name() when CONFIG_LTO_CLANG=y
+   To achieve this, restrict '.' to be at the beginning of a substring, not in
+   the middle or end.
+2. kallsyms_selftest.c adds support for CONFIG_LTO_CLANG=y.
+3. Patches 4-6 are rearranged, centralize implementations of the same
+   functionality in one patch, rather than split it based on whether it
+   belongs to the tool or kernel.
+4. Due to the impact of the following patches, some adaptations are made.
+   aa221f2ea58655f kallsyms: take the input file instead of reading stdin
+   73bbb94466fd3f8 kallsyms: support "big" kernel symbols
+   dfb352ab1162f73 kallsyms: Drop CONFIG_CFI_CLANG workarounds
 
-> 
-> Thanks,
-> 
-> -- Sebastian
-> 
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
->> [...]
+
+v5 --> v6:
+1. Add patch 6/11, kallsyms: Add helper kallsyms_lookup_clang_name()
+2. Update commit message of patch 9/11.
+
+v4 --> v5:
+1. In scripts/kallsyms.c, we use an extra field to hold type and eventually
+   put it together with name in write_src().
+2. Generate a new table kallsyms_best_token_table[], so that we compress a
+   symbol in the kernel using a process similar to compress_symbol().
+3. Remove helper sym_name(), and rename field 'sym[]' to 'name[]' in
+   scripts/kallsyms.c
+4. Add helper __kallsyms_lookup_compressed_name() to avoid duplicate code in
+   functions kallsyms_lookup_name() and kallsyms_on_each_match_symbol().
+5. Add a new parameter "const char *modname" to module_kallsyms_on_each_symbol(),
+   this makes the code logic clearer.
+6. Delete the parameter 'struct module *' in the hook function associated with
+   kallsyms_on_each_symbol(), it's unused now.
+
+v3 --> v4:
+1. Move the declaration of function kallsyms_sym_address() to linux/kallsyms.h,
+   fix a build warning.
+
+v2 --> v3:
+1. Improve test cases, perform complete functional tests on functions
+   kallsyms_lookup_name(), kallsyms_on_each_symbol() and
+   kallsyms_on_each_match_symbol().
+2. Add patch [PATCH v3 2/8] scripts/kallsyms: ensure that all possible
+   combinations are compressed.
+3. The symbol type is not compressed regardless of whether
+   CONFIG_KALLSYMS_ALL is set or not. The memory overhead is increased
+   by less than 20KiB if CONFIG_KALLSYMS_ALL=n.
+4. Discard [PATCH v2 3/8] kallsyms: Adjust the types of some local variables
+
+v1 --> v2:
+Add self-test facility
+
+v1:
+Currently, to search for a symbol, we need to expand the symbols in
+'kallsyms_names' one by one, and then use the expanded string for
+comparison. This is very slow.
+
+In fact, we can first compress the name being looked up and then use
+it for comparison when traversing 'kallsyms_names'.
+
+This patch series optimizes the performance of function kallsyms_lookup_name(),
+and function klp_find_object_symbol() in the livepatch module. Based on the
+test results, the performance overhead is reduced to 5%. That is, the
+performance of these functions is improved by 20 times.
+
+To avoid increasing the kernel size in non-debug mode, the optimization is only
+for the case CONFIG_KALLSYMS_ALL=y.
+
+
+Zhen Lei (9):
+  scripts/kallsyms: rename build_initial_tok_table()
+  kallsyms: Improve the performance of kallsyms_lookup_name()
+  kallsyms: Correctly sequence symbols when CONFIG_LTO_CLANG=y
+  kallsyms: Reduce the memory occupied by kallsyms_seqs_of_names[]
+  kallsyms: Add helper kallsyms_on_each_match_symbol()
+  livepatch: Use kallsyms_on_each_match_symbol() to improve performance
+  livepatch: Improve the search performance of
+    module_kallsyms_on_each_symbol()
+  kallsyms: Delete an unused parameter related to
+    kallsyms_on_each_symbol()
+  kallsyms: Add self-test facility
+
+ include/linux/kallsyms.h   |  12 +-
+ include/linux/module.h     |   4 +-
+ init/Kconfig               |  13 +
+ kernel/Makefile            |   1 +
+ kernel/kallsyms.c          | 121 +++++++--
+ kernel/kallsyms_internal.h |   1 +
+ kernel/kallsyms_selftest.c | 485 +++++++++++++++++++++++++++++++++++++
+ kernel/kallsyms_selftest.h |  13 +
+ kernel/livepatch/core.c    |  31 ++-
+ kernel/module/kallsyms.c   |  15 +-
+ kernel/trace/ftrace.c      |   3 +-
+ scripts/kallsyms.c         |  78 +++++-
+ scripts/link-vmlinux.sh    |   4 +
+ 13 files changed, 743 insertions(+), 38 deletions(-)
+ create mode 100644 kernel/kallsyms_selftest.c
+ create mode 100644 kernel/kallsyms_selftest.h
+
+-- 
+2.25.1
 
