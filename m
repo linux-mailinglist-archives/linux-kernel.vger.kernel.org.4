@@ -2,105 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4FF7F616835
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:16:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0437161683C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:17:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231588AbiKBQQ2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 12:16:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52146 "EHLO
+        id S231398AbiKBQRd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 12:17:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50814 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231779AbiKBQOZ (ORCPT
+        with ESMTP id S231614AbiKBQPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 12:14:25 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 957302C67E
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 09:12:15 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id u7so12742954qvn.13
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 09:12:15 -0700 (PDT)
+        Wed, 2 Nov 2022 12:15:08 -0400
+Received: from mail-ot1-x330.google.com (mail-ot1-x330.google.com [IPv6:2607:f8b0:4864:20::330])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A4BA2D1CC;
+        Wed,  2 Nov 2022 09:12:28 -0700 (PDT)
+Received: by mail-ot1-x330.google.com with SMTP id w26-20020a056830061a00b0066c320f5b49so8216226oti.5;
+        Wed, 02 Nov 2022 09:12:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=+k46DBLcoCo3dRtPWgKGi27HQ6890qJkjOHhJG/OTD4=;
-        b=lpZHL444MjaOGE7ePEMjfaD14yNrbOlNu054yVz8GPhDIzb+2HJAG8MOD68DWWCWp+
-         8W04hunQV6twCx2v1SY+9oBptITK1UBYixs3+5dMZf7ucBlekZGDkIxvwD5sJDtOUNf4
-         lDVSQIB3TgRshOBNYE/6f7pONQQVQ7VfyzQU3Ezu68cNplD4sg1bgI3n5iZtnJdAFq1a
-         e5ROv6coqDBGKeAferYVuXMGdAExxgqWTxxC7bG5DwbeeRhEgevFKZO1klsVa8hzAxPY
-         j9f+B7AMEL9CbNqMlZWQIhmOTJHmt7P6fycs3aDIbhAj1WkoKifDM1XZ4uuefDpLMszu
-         LKcQ==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=z7vIW2ZPdKtmwvSjnPCnyJNltgx5dmGmaEed71/1EzY=;
+        b=LR6ZQXMJSJ0L4WINnpm9F0OvdWhXsPNOqWYN8PlsGouCRf7BqfwwWwk07fPirnSAD0
+         jWjcIyLLDyq40aOTJCaEx9Wo+AaQpVsAPbIsk6U3UsVV2/KqpuYc9kJKdyH6BZgDTFVw
+         XPJijFDbCfxAIU+B4TbcBE08wlsroXr5KHJ/eu4oHYI8hKw45ONqDX7bGNEOebfJUB61
+         XmzOPDwjWMN9dgz3/Y4RNgJX87bClWeXL+symO7uPezJ6OjK/x51yn0GnhlTyXS1UKdm
+         /ABvYrGYTgJbmx6KLjvAp9IYRn4WnXD7/bHuoOGPeT5d+Z4uVZhlTNH4HPAC5xF28J7X
+         dF7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+k46DBLcoCo3dRtPWgKGi27HQ6890qJkjOHhJG/OTD4=;
-        b=kYHsuOYM4LpiXtqmG5nMUzfLVNrFmMscUI3iilwnOgwXMghcPdHFkUzDNy9norKpCB
-         YQgJ4vywuvAlP8YptSKDLACAdyKTrMkWe/5ecmhFzjv7xaDP870zrLLQxi7JqlHpR08x
-         H68JpdLzAAb1czZqrSQs8PMrB8Y+tzYDA4DSrwe0DIcvjxtVCmcJzyC/PpcaZ29vAR2V
-         o0YisNIGwr8UA5yRapU6aX6wnKsMw+/KwEpSy5y/E0fPaola0HxT8m7ZfkQktFnx6Tnb
-         2PyhuKI3wcX9XjXVrIPa6hBiwwC03wpQieSNWt3feLlQ/ZnmH7caAOsMWN6zFthJyU7/
-         DL6A==
-X-Gm-Message-State: ACrzQf2T2P+lmdVYv2WcuW0rKpoeJ8AUERUaiijLfsz/2MxXamZNCpQs
-        3Y1QPUHwPZr1lC8uUHwAL2mOkA==
-X-Google-Smtp-Source: AMsMyM6YejYkb7b1cyNSYaRPfUs2k1VtqaMOpYa6/fCXbQyE837qgZ9RjnbvgAnAyXvdQlL9agXLJQ==
-X-Received: by 2002:a05:6214:300e:b0:4bb:717e:72a with SMTP id ke14-20020a056214300e00b004bb717e072amr21460970qvb.15.1667405534760;
-        Wed, 02 Nov 2022 09:12:14 -0700 (PDT)
-Received: from krzk-bin.. ([2601:586:5000:570:28d9:4790:bc16:cc93])
-        by smtp.gmail.com with ESMTPSA id s2-20020ac85282000000b0038d9555b580sm6778985qtn.44.2022.11.02.09.12.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 09:12:14 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] dt-bindings: net: nxp,sja1105: document spi-cpol
-Date:   Wed,  2 Nov 2022 12:12:11 -0400
-Message-Id: <20221102161211.51139-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
+        bh=z7vIW2ZPdKtmwvSjnPCnyJNltgx5dmGmaEed71/1EzY=;
+        b=qQiTv9fi8rmCeirTqIzhhIMRG9QP6HVGBoJzS3lI0s3X8gnSRlWJdBc10C6XsxBkzu
+         zbOE9QPlo5KKCTP7nzhmcJTCCR+PPEo3J6xsJQ479Tc/8bwn7fpA9uMHS4r8xEDUkTJM
+         YR2Zd7wnjtS1YVgGxO3grZNWr8hv2zxtiGJVnw/XKGZDckwq5DgqXk25VHSWpY5sBt6H
+         NTWDeT2kk08DktTTzmEPVoY3RQuGmNDLa0TmAzbMV9ctACnNRWoKT+hOrHY8TZMw/ei3
+         EtiO2IJbHYGfshZbsRjCzWDVk1eW1Qi2bxNKIdR6w/73nrhg1n+uf8EamLsC6DlT5gnH
+         QmvA==
+X-Gm-Message-State: ACrzQf3HNMfM/smhUVPaL15Elpr2XTYFOYhqIsR8B3LtsgeuH7v2mTXD
+        gVk5TGLB+3+PvZT51o5pFndYgnMzsZoxfMLiXII=
+X-Google-Smtp-Source: AMsMyM7Zuvi4mA7zyRQSf/ChuxdDKCxCX2EM1sE6SPy5eaAZxlItbrLR6mIvGbAnghWSCEFJp6Lq5z4DPcWB049mY24=
+X-Received: by 2002:a9d:4592:0:b0:66c:6922:8629 with SMTP id
+ x18-20020a9d4592000000b0066c69228629mr5232697ote.233.1667405547576; Wed, 02
+ Nov 2022 09:12:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <Y1x3MtRJ8ckXxlJn@mail.google.com> <Y1yCRHgx15ZOiCL4@mail.google.com>
+In-Reply-To: <Y1yCRHgx15ZOiCL4@mail.google.com>
+From:   Alex Deucher <alexdeucher@gmail.com>
+Date:   Wed, 2 Nov 2022 12:12:16 -0400
+Message-ID: <CADnq5_NVpsFJdHfizqRxidXqN5CZJ-nQpqfEA3Ngd3viojjBXA@mail.gmail.com>
+Subject: Re: [PATCH v2] [next] drm/amdgpu: Replace one-element array with
+ flexible-array member
+To:     Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+Cc:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Claudio Suarez <cssk@net-c.es>,
+        Harry Wentland <harry.wentland@amd.com>,
+        Grigory Vasilyev <h0tc0d3@gmail.com>,
+        Slark Xiao <slark_xiao@163.com>,
+        Rongguang Wei <weirongguang@kylinos.cn>,
+        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Some boards use SJA1105 Ethernet Switch with SPI CPOL, so document this
-to fix dtbs_check warnings:
+Applied.  Thanks!
 
-  arch/arm64/boot/dts/freescale/fsl-lx2160a-bluebox3.dtb: ethernet-switch@0: Unevaluated properties are not allowed ('spi-cpol' was unexpected)
+Alex
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml | 2 ++
- 1 file changed, 2 insertions(+)
-
-diff --git a/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml b/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
-index 1e26d876d146..a73905a50ee5 100644
---- a/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
-+++ b/Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml
-@@ -36,6 +36,8 @@ properties:
-   reg:
-     maxItems: 1
- 
-+  spi-cpol: true
-+
-   # Optional container node for the 2 internal MDIO buses of the SJA1110
-   # (one for the internal 100base-T1 PHYs and the other for the single
-   # 100base-TX PHY). The "reg" property does not have physical significance.
--- 
-2.34.1
-
+On Fri, Oct 28, 2022 at 9:31 PM Paulo Miguel Almeida
+<paulo.miguel.almeida.rodenas@gmail.com> wrote:
+>
+> One-element arrays are deprecated, and we are replacing them with
+> flexible array members instead. So, replace one-element array with
+> flexible-array member in struct _ATOM_FAKE_EDID_PATCH_RECORD and
+> refactor the rest of the code accordingly.
+>
+> Important to mention is that doing a build before/after this patch
+> results in no binary output differences.
+>
+> This helps with the ongoing efforts to tighten the FORTIFY_SOURCE
+> routines on memcpy() and help us make progress towards globally
+> enabling -fstrict-flex-arrays=3 [1].
+>
+> Link: https://github.com/KSPP/linux/issues/79
+> Link: https://github.com/KSPP/linux/issues/238
+> Link: https://gcc.gnu.org/bugzilla/show_bug.cgi?id=101836 [1]
+>
+> Signed-off-by: Paulo Miguel Almeida <paulo.miguel.almeida.rodenas@gmail.com>
+> ---
+> Changelog:
+>
+> v2: no binary output differences patch; report binary changes findings
+>     on commit log. Res: Kees Cook
+> v1: https://lore.kernel.org/lkml/Y1tkWdwPUp+UdpM0@mail.google.com/
+> ---
+>  drivers/gpu/drm/amd/amdgpu/atombios_encoders.c | 7 +++++--
+>  drivers/gpu/drm/amd/include/atombios.h         | 2 +-
+>  2 files changed, 6 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c b/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c
+> index 6be9ac2b9c5b..18ae9433e463 100644
+> --- a/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c
+> +++ b/drivers/gpu/drm/amd/amdgpu/atombios_encoders.c
+> @@ -2081,8 +2081,11 @@ amdgpu_atombios_encoder_get_lcd_info(struct amdgpu_encoder *encoder)
+>                                                 }
+>                                         }
+>                                         record += fake_edid_record->ucFakeEDIDLength ?
+> -                                               fake_edid_record->ucFakeEDIDLength + 2 :
+> -                                               sizeof(ATOM_FAKE_EDID_PATCH_RECORD);
+> +                                                 struct_size(fake_edid_record,
+> +                                                             ucFakeEDIDString,
+> +                                                             fake_edid_record->ucFakeEDIDLength) :
+> +                                                 /* empty fake edid record must be 3 bytes long */
+> +                                                 sizeof(ATOM_FAKE_EDID_PATCH_RECORD) + 1;
+>                                         break;
+>                                 case LCD_PANEL_RESOLUTION_RECORD_TYPE:
+>                                         panel_res_record = (ATOM_PANEL_RESOLUTION_PATCH_RECORD *)record;
+> diff --git a/drivers/gpu/drm/amd/include/atombios.h b/drivers/gpu/drm/amd/include/atombios.h
+> index 15943bc21bc5..b5b1d073f8e2 100644
+> --- a/drivers/gpu/drm/amd/include/atombios.h
+> +++ b/drivers/gpu/drm/amd/include/atombios.h
+> @@ -4107,7 +4107,7 @@ typedef struct _ATOM_FAKE_EDID_PATCH_RECORD
+>  {
+>    UCHAR ucRecordType;
+>    UCHAR ucFakeEDIDLength;       // = 128 means EDID length is 128 bytes, otherwise the EDID length = ucFakeEDIDLength*128
+> -  UCHAR ucFakeEDIDString[1];    // This actually has ucFakeEdidLength elements.
+> +  UCHAR ucFakeEDIDString[];     // This actually has ucFakeEdidLength elements.
+>  } ATOM_FAKE_EDID_PATCH_RECORD;
+>
+>  typedef struct  _ATOM_PANEL_RESOLUTION_PATCH_RECORD
+> --
+> 2.37.3
+>
