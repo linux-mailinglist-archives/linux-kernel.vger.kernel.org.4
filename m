@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9FAFA615EAB
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:02:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A3F2615EAC
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:02:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231335AbiKBJCp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 05:02:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34914 "EHLO
+        id S230397AbiKBJCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 05:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231364AbiKBJCE (ORCPT
+        with ESMTP id S229553AbiKBJCG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 05:02:04 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C84827FD7
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 02:01:48 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id j15so23498173wrq.3
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 02:01:48 -0700 (PDT)
+        Wed, 2 Nov 2022 05:02:06 -0400
+Received: from mail-wm1-x32f.google.com (mail-wm1-x32f.google.com [IPv6:2a00:1450:4864:20::32f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D55EA286E2
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 02:01:49 -0700 (PDT)
+Received: by mail-wm1-x32f.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso820112wme.5
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 02:01:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=sJwgXX3StBPw4KOENIV6+/ZT/9r64J3QECerjdiBj8E=;
-        b=Nh+SlWGOhrAOk0lcCXZSQa0YEfcrlvree0Gav6U+2pP8gd56TYkqNw41fXA38eEpjK
-         YF1vtvIT5gQkez+kPI2sEWZjspVXxle1b7ResvKq/Q/t5NLktRVQ5hFUlZ7joP2kg//g
-         PFDLfwWLDxPutFXyQP7N3UOqN0w/WqrJJP90+rG7u9d/Js4h35DGVGG61dzSnEDKyPTr
-         vIWGRyCz3wmfZl0QTiOo5CSr2wGm3uCDqHC+tOQo5jBApMST0EusZ3yHffl2jMOC+uzW
-         hWB8nujMspCxOQw4/jAw4Mw1T2jYPv/HSuvSwNnuR1xAw3HPZ2mQaOtBrFNXPawWjCX8
-         B88w==
+        bh=mzmAJH9YQHiTesc1z9ldOLJSqv+prtu196GqUJFfcRE=;
+        b=ILs12tG7hkbdb+cHXkxKXea+I+frdKuFfWAEQBS/FUNC8M4BZz+TZIN6TdQWbIXBqB
+         uWr1EoCMvueKuJXvqRVxJswPfnoUY5awGN/EBZGM27GsfzeCra3ziYie7SmsFzl5TcPG
+         TNfy2wsop4uUUTkqXh0xvxIXs29baDgvE2Zk6csI6nq82z3Wydw9OPr2iIIRcSVQkgAG
+         mG03T5lD2N+/SyrxE+/6lz1JjcaUvwEKgQA9BJRzd/84o27lzeNU40PCmrEfycndoEVk
+         eb2Ev0kBptHDyknyxypIq2wShneh6WbC4nC5kF9LRzDyfmUFzEFE07MkwG2Ot5Sqh3Lu
+         SlxQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=sJwgXX3StBPw4KOENIV6+/ZT/9r64J3QECerjdiBj8E=;
-        b=ho+jbIqDlxHjPCCNbwcd8+FEnDV8wO4LzAuCj1PkNNQw0wbjcoIEMGnGma0El5bgSS
-         rC1cGQrpiZ5ufnww5QgCIAKwVWc++Vb9jG0TOZ/cplp+nR3/d/6aZ0yyBC+K8K/spVtb
-         j+9+NfezA+Td39g8oOVU+VVE2OtsHk7X7aR32kPxc7vhXMhc0C6qV8JioW8TWWNsL13c
-         4fotazbSMZ7SoOYVecB2gxC74WfUvv06G82EMR+HeOrnsEpMd72JektthbMOcA0Nh0JN
-         zaG2YNIOqg8XCBRQfj9nBKghM5qYcFJpP7d+gEcGrTqyVueUy8p9PRyLcAlVM0fu/27V
-         N+9A==
-X-Gm-Message-State: ACrzQf1VVJtF1czO8GQLedAU/vE6ZRkUG64rdQYZE42iOf9amUXv2Jwk
-        BrZI+a8wX0sR065XMh8ddfpEgg==
-X-Google-Smtp-Source: AMsMyM5oE9tRKYcIQVRx/Gbrtq5SbtR7Y78r/us6639SISCxrHNUtW+DU78PL7XVA5bXP+n85aRxTw==
-X-Received: by 2002:adf:e104:0:b0:236:dce2:35dc with SMTP id t4-20020adfe104000000b00236dce235dcmr7129994wrz.675.1667379706813;
-        Wed, 02 Nov 2022 02:01:46 -0700 (PDT)
+        bh=mzmAJH9YQHiTesc1z9ldOLJSqv+prtu196GqUJFfcRE=;
+        b=mbfWGBzvvbL/Vh88Ey8sgel4/FXsoLNjwEj7GUf/cnRF4+MvFp2MC8tqAMbhk5CWfV
+         66pJY8EyRCvXtbE5ISzqygP3oXQujC4GPBsgX/EYka8NQUbNqrEnJXJTBDeuAZ4g1qLM
+         x34ELFl3YIDk5jlGOL97rBIrBTeXmIIsYjXhF754Ca+k2aL8lwX+wEK50OgFaq2MeE8J
+         6ULHm/xA2eoz5QPZYVYt1sq114MKlh3EXWhTaBXE2oRfMNKazlOMrRIs3kVzUVoQ+qqA
+         KGdR/LPkuOI8yhhR8TuoDJfKDpAgpx7epiMGzfQrgrROpab8oRo+JYCy9RWyIG7yGGEm
+         0rNw==
+X-Gm-Message-State: ACrzQf3newikgewYC6lgpx5w7mIk49HmNVsQojMt7euqzKazTTYjj5cM
+        BDXNqok3DERK3Cypa3QXvcBQxA==
+X-Google-Smtp-Source: AMsMyM7symkQrgKHjzoO57cPYLKB0VTs4nHaHnnnm9WbAAevST+d6XYEcpMQHfQ6g66VWM5OyjIxNA==
+X-Received: by 2002:a05:600c:1609:b0:3cf:4dc4:5a99 with SMTP id m9-20020a05600c160900b003cf4dc45a99mr14842484wmn.67.1667379708335;
+        Wed, 02 Nov 2022 02:01:48 -0700 (PDT)
 Received: from prec5560.. (freifunk-gw.bsa1-cpe1.syseleven.net. [176.74.57.43])
-        by smtp.gmail.com with ESMTPSA id bd26-20020a05600c1f1a00b003cf6c2f9513sm1425322wmb.2.2022.11.02.02.01.45
+        by smtp.gmail.com with ESMTPSA id bd26-20020a05600c1f1a00b003cf6c2f9513sm1425322wmb.2.2022.11.02.02.01.47
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 02:01:46 -0700 (PDT)
+        Wed, 02 Nov 2022 02:01:47 -0700 (PDT)
 From:   Robert Foss <robert.foss@linaro.org>
 To:     agross@kernel.org, bjorn.andersson@linaro.org,
         konrad.dybcio@somainline.org, mturquette@baylibre.com,
@@ -60,9 +60,9 @@ To:     agross@kernel.org, bjorn.andersson@linaro.org,
         Bjorn Andersson <quic_bjorande@quicinc.com>,
         dmitry.baryshkov@linaro.org, Jonathan Marek <jonathan@marek.ca>
 Cc:     Robert Foss <robert.foss@linaro.org>
-Subject: [PATCH v2 1/5] clk: qcom: dispcc-sm8250: Disable EDP_GTC for sm8350
-Date:   Wed,  2 Nov 2022 10:01:36 +0100
-Message-Id: <20221102090140.965450-2-robert.foss@linaro.org>
+Subject: [PATCH v2 2/5] clk: qcom: dispcc-sm8250: Add RETAIN_FF_ENABLE flag for mdss_gdsc
+Date:   Wed,  2 Nov 2022 10:01:37 +0100
+Message-Id: <20221102090140.965450-3-robert.foss@linaro.org>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221102090140.965450-1-robert.foss@linaro.org>
 References: <20221102090140.965450-1-robert.foss@linaro.org>
@@ -79,29 +79,32 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-SM8350 does not have the EDP_GTC clock, so let's disable it
-for this SoC.
+All SoC supported by this driver supports the RETAIN_FF_ENABLE flag,
+so it should be enabled here.
+
+This feature enables registers to maintain their state after
+dis/re-enabling the GDSC.
 
 Signed-off-by: Robert Foss <robert.foss@linaro.org>
 Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
 ---
- drivers/clk/qcom/dispcc-sm8250.c | 3 +++
- 1 file changed, 3 insertions(+)
+ drivers/clk/qcom/dispcc-sm8250.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/clk/qcom/dispcc-sm8250.c b/drivers/clk/qcom/dispcc-sm8250.c
-index 709076f0f9d7..180ac2726f7e 100644
+index 180ac2726f7e..a7606580cf22 100644
 --- a/drivers/clk/qcom/dispcc-sm8250.c
 +++ b/drivers/clk/qcom/dispcc-sm8250.c
-@@ -1330,6 +1330,9 @@ static int disp_cc_sm8250_probe(struct platform_device *pdev)
- 		disp_cc_pll1_config.test_ctl_hi1_val = 0x01800000;
- 		disp_cc_pll1_init.ops = &clk_alpha_pll_lucid_5lpe_ops;
- 		disp_cc_pll1.vco_table = lucid_5lpe_vco;
-+
-+		disp_cc_sm8250_clocks[DISP_CC_MDSS_EDP_GTC_CLK] = NULL;
-+		disp_cc_sm8250_clocks[DISP_CC_MDSS_EDP_GTC_CLK_SRC] = NULL;
- 	}
+@@ -1137,7 +1137,7 @@ static struct gdsc mdss_gdsc = {
+ 		.name = "mdss_gdsc",
+ 	},
+ 	.pwrsts = PWRSTS_OFF_ON,
+-	.flags = HW_CTRL,
++	.flags = HW_CTRL | RETAIN_FF_ENABLE,
+ };
  
- 	clk_lucid_pll_configure(&disp_cc_pll0, regmap, &disp_cc_pll0_config);
+ static struct clk_regmap *disp_cc_sm8250_clocks[] = {
 -- 
 2.34.1
 
