@@ -2,113 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6B336616486
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:10:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3E10A6164A0
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:12:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231372AbiKBOKh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 10:10:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34594 "EHLO
+        id S230518AbiKBOMT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 10:12:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35110 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230341AbiKBOKd (ORCPT
+        with ESMTP id S230509AbiKBOMM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 10:10:33 -0400
-Received: from mail-qt1-x82e.google.com (mail-qt1-x82e.google.com [IPv6:2607:f8b0:4864:20::82e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 747F91CFE5
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 07:10:31 -0700 (PDT)
-Received: by mail-qt1-x82e.google.com with SMTP id e15so7439584qts.1
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 07:10:31 -0700 (PDT)
+        Wed, 2 Nov 2022 10:12:12 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB46627FD1
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 07:11:55 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id u7so12481756qvn.13
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 07:11:55 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=r3baLHNRjybhUwz1VU0EpNO+mXmWZFbwxaMY2qdvCTY=;
-        b=DjhE16/tTUTVdFjgcA3BT/LtmSUuv28pvQFIpl8ORPofZEozhGnObHSwmFZBGObNSi
-         hzZnR9IRHQEJYRfxDXJhI/YyjT04AnAq879/iczPm3+pr8+yKiNmP5yDXpFp32k5+ZAs
-         O8M70dWjOzVfoF3c2vfzHE3lg39oneXBo3w0jrE5NFlvyPx4mxkZ89jQiWQX9a9qmyKc
-         hA7tGLgXHI8MU1645wPN0iHjeTtd3N4wfLjierTYe49bPwE+EyBV4qw/tnkIKYPH3soO
-         ZZGjcRoTzwLAyfVaNwKZ0Gg3P/weB5NYm9DWga6U7cSAOQGdYmAhdkyDuwvpma9kycDz
-         cvHg==
+        d=toxicpanda-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Km8d07l+If3latZbcnno8TWKH4LLZv0VkyhOoXFA9PI=;
+        b=3K17y2wDCpq6CGFi/JqscdFCZwJGvNNaM/UrrmYofJw1wR3fGyOhi0rlaMmUvngM6N
+         1krgS08m59z2fr/guD+Fxxlexzk1wWL4DDBfFKhfYnmJzVrUGe1X4SPy/ewT8BQC0GfG
+         cyN/fTXQ6bcPNPSW3tnZyUIjkUqa1IflSfWNU57n1QgVF2Pfb/1krse6RRVC5tWKohru
+         eaMOhLitbn3Pvl2VfFWMFZMYpBalV/17Mrynnzxe6BuDm4NHgpy96rb9Ta41d8fsSuYQ
+         4HSWJFbdNieK8n5myVnk2FIvFji3UCt22731b4pIAwKKstvvQJ57GK52yWp62ipKzz8Y
+         WCxw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=r3baLHNRjybhUwz1VU0EpNO+mXmWZFbwxaMY2qdvCTY=;
-        b=wLuMLdl3HfJXnEECbueYEZiR51wGVFGWJJ3utqgYyFgKtBSDAtVmhv21RcQSavjPQx
-         H5lPgIjtbn4e1wWoxSUna7JsKv336D4s+M3UZU+NoP7QU+UyFOUnpPNczLLHFYim10S+
-         zPV+DFFfvJ1+BvNFvV5z5zMFHzEp8iaiZsee4LYGFNrg9u6UNiyZeu6keMksN+azbHRV
-         GepeN3ivr49zUWLr2FGgZp9YQyF0tap+xOYOngUE+VlAVXtl8dox34ki8uLoqEnHmeVl
-         lNauUp5xlycfa547G5IaOZGj6rNzdzWEkP5tZGmEJCmHoo/IBrAUvgxjrPx3vk8ERZY8
-         UAvQ==
-X-Gm-Message-State: ACrzQf3ChREzToufjoaUKQfzT1WRtJIP6ef3K+ml9KZYPs29dwixkF6D
-        YHUvjeB63Z8DPdD3mR30sMOUUg==
-X-Google-Smtp-Source: AMsMyM7AK3jlPObOnz/rPlu+Up2ji8ZFVw+pIdHlReQDzjpBxb2W96SkuyWtnj/IOe72KUZ9Bx+5tQ==
-X-Received: by 2002:ac8:5d89:0:b0:3a4:f465:9434 with SMTP id d9-20020ac85d89000000b003a4f4659434mr19797213qtx.459.1667398230631;
-        Wed, 02 Nov 2022 07:10:30 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
-        by smtp.gmail.com with ESMTPSA id bs6-20020a05620a470600b006b61b2cb1d2sm8623326qkb.46.2022.11.02.07.10.29
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 07:10:30 -0700 (PDT)
-Message-ID: <69d57d4e-8a43-f8f5-f491-916197f6f4a8@linaro.org>
-Date:   Wed, 2 Nov 2022 10:10:23 -0400
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Km8d07l+If3latZbcnno8TWKH4LLZv0VkyhOoXFA9PI=;
+        b=0WDaHQfRLervyD5w9/u5keT42KydqbRrWqhW33qMBqxVKFXNQO7eqnYWIJDL3K7goO
+         7cZyF2271QGXe8kuvX2UrS3iVxbZhQbUJf5R1yGjkDrhh5hHhXXevmU63wQUDM3BkNAx
+         b0UhGAKxi0KNkmK86U/5Eq1gnwTEc+5JbG3SxKPsJaBIHstJ1S2eVXDRJWndBaGFaYpa
+         uPFVGeelE0Cfmnbomq8P4b6XURGIYHyabYsh/AhB9OVqmts3lcMRlEJkbQiVqxmYXfqt
+         3v2jHwGo9GLULQuYCPNxHwyTDT6vf5rkjojoTz8rrSXB2QY6fyLR+7XmF7IEV3DDhU4Z
+         6qnQ==
+X-Gm-Message-State: ACrzQf0dRFbjcpvBTd9eJqBk9oghaMGW+s6wAjoUMWnnH+eKc6GLFLlf
+        vXANyusODz3+DffYrPzaZErYDmqrU/pLMg==
+X-Google-Smtp-Source: AMsMyM4K1A4U/HfQlteUYmVSAP0jWa6eNflO23gy6GLcso3nCMkqhvxGSpQm+BcuP6EyzmHHwmrnYA==
+X-Received: by 2002:ad4:5c47:0:b0:4bc:f84:da8f with SMTP id a7-20020ad45c47000000b004bc0f84da8fmr8748534qva.73.1667398314614;
+        Wed, 02 Nov 2022 07:11:54 -0700 (PDT)
+Received: from localhost (cpe-174-109-170-245.nc.res.rr.com. [174.109.170.245])
+        by smtp.gmail.com with ESMTPSA id v26-20020ac8729a000000b00359961365f1sm6524563qto.68.2022.11.02.07.11.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 07:11:54 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 10:11:48 -0400
+From:   Josef Bacik <josef@toxicpanda.com>
+To:     Kemeng Shi <shikemeng@huawei.com>
+Cc:     tj@kernel.org, axboe@kernel.dk, cgroups@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/3] block: Correct comment for scale_cookie_change
+Message-ID: <Y2J6pPj4/aVdoGPp@localhost.localdomain>
+References: <20221018111240.22612-1-shikemeng@huawei.com>
+ <20221018111240.22612-3-shikemeng@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v4 08/11] mfd: qcom-pm8xxx: drop unused PM8018 compatible
-Content-Language: en-US
-To:     Lee Jones <lee@kernel.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Satya Priya <quic_c_skakit@quicinc.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        Andy Gross <agross@kernel.org>,
-        Alessandro Zummo <a.zummo@towertech.it>,
-        linux-input@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, Rob Herring <robh@kernel.org>,
-        linux-rtc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20220928-mdm9615-dt-schema-fixes-v4-0-dac2dfaac703@linaro.org>
- <20220928-mdm9615-dt-schema-fixes-v4-8-dac2dfaac703@linaro.org>
- <Y1/qnCyav/S35mRo@google.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <Y1/qnCyav/S35mRo@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221018111240.22612-3-shikemeng@huawei.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/10/2022 11:32, Lee Jones wrote:
-> On Fri, 21 Oct 2022, Neil Armstrong wrote:
+On Tue, Oct 18, 2022 at 07:12:39PM +0800, Kemeng Shi wrote:
+> Default queue depth of iolatency_grp is unlimited, so we scale down
+> quickly(once by half) in scale_cookie_change. Remove the "subtract
+> 1/16th" part which is not the truth and add the actual way we
+> scale down.
 > 
->> The PM8018 compatible is always used with PM8921 fallback, so PM8018
->> compatible can be safely removed from device ID table
->>
->> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
-> 
-> Tags should appear chronologically.
-> 
+> Signed-off-by: Kemeng Shi <shikemeng@huawei.com>
 
-I would assume that as well, but `b4 trailers` disagrees. It documents
-even this behavior (the chain of custody) here:
-https://b4.docs.kernel.org/en/latest/config.html
+This is perfect, thanks Kemeng
 
-So while I agree with you, I also prefer the tools to make the decision
-instead of humans (to follow the process, assuming the tool implements
-the process). Either the tool should be fixed or the tool's decision is
-correct.
+Reviewed-by: Josef Bacik <josef@toxicpanda.com>
 
-Best regards,
-Krzysztof
+Thanks,
 
+Josef
