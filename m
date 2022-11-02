@@ -2,316 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5717F616B83
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:05:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 45CD9616B78
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:04:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231262AbiKBSFO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 14:05:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34070 "EHLO
+        id S231209AbiKBSE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 14:04:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231134AbiKBSFI (ORCPT
+        with ESMTP id S230514AbiKBSES (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:05:08 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E646C2E6B4;
-        Wed,  2 Nov 2022 11:05:06 -0700 (PDT)
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A2I2QNd004942;
-        Wed, 2 Nov 2022 18:04:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=9QCqRyX7/rpCsjusa/miM3akYsJyOGsIlbhQcQ2O78A=;
- b=ouPRegq/ErIfIodhVe5NoKl/MlZl7bA0uAIKPQ694rqcmsHPry+XtFjd9EbHmTawTUKp
- ASJqBapoX31lCJ5lNuUCTfh7hePsWetY/oi+b0AL4kwpZItFOAzQ2lYO93mfUPc8DVNV
- timt1Xv1fyZ3YpJ7TGzw4enNMiXFLpvVg+OeiAwTu5vn7gGjHhLErwGWx0Vhy4LJ8iUC
- 8UORUFwgOxnnlaBlEBJfcHfqo81WC/oypx01cvfzk51zGGaM38qHkk501TCXljo7z/Y+
- kIAXUZ16TyiNevFwe3sf6xYX4NT/R0LzmoVkIlxZulj4BeUnyE24bFr61lufTVM833EK 9g== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kkwfu806n-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Nov 2022 18:04:14 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A2I4DBO006128
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 2 Nov 2022 18:04:13 GMT
-Received: from [10.134.65.5] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 2 Nov 2022
- 11:04:12 -0700
-Message-ID: <6b035c6e-087a-8fe9-d1ba-3e0c8a0c2130@quicinc.com>
-Date:   Wed, 2 Nov 2022 11:04:12 -0700
+        Wed, 2 Nov 2022 14:04:18 -0400
+Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB04E636A
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:04:16 -0700 (PDT)
+Received: by mail-lj1-x22b.google.com with SMTP id j14so26052366ljh.12
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 11:04:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Kfl6EFy+1s5bebZ58ocWUAzBJujFa0//d6FDWMOKEcw=;
+        b=SaXwCsrB+vSTWBTUlZwxUMaiJCMhuj7VIZED5OXyJOCUlXiQaiDQwJ/MSJayjkKHM/
+         vTjQzMXvCMRvo3y0S2fJZzloAi5OLabbagctrDPJSlGpQ1yUX8rKEwL6O4RSOhQZGCKS
+         8mMQO2vH7e9lQU0QdsNphPijYAsfVEmIKFAp6lw+TxgJgmiScNXu7Q0IPCSBMDoGWlCt
+         1ePymdyFvKf/WqNl188pmuSJbc1PZqiOOtoIg9BjUZs1MF60pVNXpB1/5cYepWmoIySK
+         AuRQaBiP1exX4Rt3ILS8sAHY+MEnfzeeCW07mSiaVvOE8Lkaf1aZEB3Ksov72hejpsZB
+         tszQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Kfl6EFy+1s5bebZ58ocWUAzBJujFa0//d6FDWMOKEcw=;
+        b=qhXSP8P1Ds5h7qh/GdOHmWCWMLdIg+G0TiJDT7VTjlHBblBxWGrQ3xa90rKU5630Yp
+         XPaijg7d3OPLuQW14F45n6V6KnJQd9DsnKDzf6NFGAAcZpSq27qLVxAdcW27Evo0G7R2
+         dYTkiDrfeqO9eppMNsqZ26+8xDXjmYpS+Ok+d4GotWw3xTmWADJM17/REaEwc7mckLea
+         zM1DxgYqRfPiH4YsEoEfR7seWz96aRXo1CkMWqmNGeFPgLc2FxdkGNiiAwvl4BW70IO9
+         i4tIp70Qw4O6Fsr7VQjMr1Tntw+y7JiVNL1ewVvzN9/wwDsK8YR2WGX6pQ/5aDsO8XKW
+         hsfw==
+X-Gm-Message-State: ACrzQf3VZzXRbttV7lfA3fkSNt8glgzu2vJHmMC6UMZWZ4lWM8sIC6J8
+        I3sFYQ36X0YVBU4XHDIi/ofbBA==
+X-Google-Smtp-Source: AMsMyM58C3ychgVlZPLXgqKxRoKbGoginKLDpoFrcYy25cZZt/ccz2yj7LHG+bD2o/zHBO0g9oxgjQ==
+X-Received: by 2002:a2e:870f:0:b0:277:2600:9d05 with SMTP id m15-20020a2e870f000000b0027726009d05mr9463378lji.144.1667412255202;
+        Wed, 02 Nov 2022 11:04:15 -0700 (PDT)
+Received: from [10.10.15.130] ([192.130.178.91])
+        by smtp.gmail.com with ESMTPSA id bf26-20020a2eaa1a000000b00261ccf566e3sm2200139ljb.65.2022.11.02.11.04.14
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 11:04:14 -0700 (PDT)
+Message-ID: <60643572-4148-cea5-e64d-ec6534b0c407@linaro.org>
+Date:   Wed, 2 Nov 2022 21:04:13 +0300
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v6 21/21] docs: gunyah: Document Gunyah VM Manager
-Content-Language: en-US
-To:     Bagas Sanjaya <bagasdotme@gmail.com>
-CC:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Will Deacon <will@kernel.org>,
-        "Catalin Marinas" <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Kalle Valo <kvalo@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221026185846.3983888-1-quic_eberman@quicinc.com>
- <20221026185846.3983888-22-quic_eberman@quicinc.com>
- <Y2JrA2rXJuRrFALF@debian.me>
-From:   Elliot Berman <quic_eberman@quicinc.com>
-In-Reply-To: <Y2JrA2rXJuRrFALF@debian.me>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] drm/msm/dp: remove limitation of link rate at 5.4G to
+ support HBR3
+Content-Language: en-GB
+To:     Doug Anderson <dianders@chromium.org>
+Cc:     Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
+        sean@poorly.run, swboyd@chromium.org, vkoul@kernel.org,
+        daniel@ffwll.ch, airlied@linux.ie, agross@kernel.org,
+        quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
+        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Andersson <andersson@kernel.org>
+References: <1667237245-24988-1-git-send-email-quic_khsieh@quicinc.com>
+ <94b507e8-5b94-12ae-4c81-95f5d36279d5@linaro.org>
+ <deb60200-5a37-ec77-9515-0c0c89022174@quicinc.com>
+ <CAD=FV=X_fs_4JYcRvAwkU9mAafOten9WdyzPfSVWdAU=ZMo8zg@mail.gmail.com>
+ <155e4171-187c-4ecf-5a9b-12f0c2207524@linaro.org>
+ <CAD=FV=Wk5rBSq9Mx1GCO0QFYckKV9KUFKL36Ld7dQX1ypHVcYw@mail.gmail.com>
+ <CAD=FV=XTOUjVAGFWZ6xTkcNOrCT1p73aU-=KJNYUOxsS-BQsyA@mail.gmail.com>
+ <c5aedb31-3881-50e7-f747-e75b18c3f4b8@linaro.org>
+ <CAD=FV=WPde5wVOGCKQYGuGwgCwRebox4FF0MgV_2pPCTsfo_UA@mail.gmail.com>
+From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+In-Reply-To: <CAD=FV=WPde5wVOGCKQYGuGwgCwRebox4FF0MgV_2pPCTsfo_UA@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: e-dSAsNRMptKzn7chKnN5jnv4T69jBlk
-X-Proofpoint-ORIG-GUID: e-dSAsNRMptKzn7chKnN5jnv4T69jBlk
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-02_14,2022-11-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
- priorityscore=1501 impostorscore=0 clxscore=1011 suspectscore=0
- phishscore=0 spamscore=0 mlxlogscore=999 mlxscore=0 adultscore=0
- bulkscore=0 lowpriorityscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2211020117
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 11/2/2022 6:05 AM, Bagas Sanjaya wrote:
-> On Wed, Oct 26, 2022 at 11:58:46AM -0700, Elliot Berman wrote:
->> diff --git a/Documentation/virt/gunyah/vm-manager.rst b/Documentation/virt/gunyah/vm-manager.rst
->> new file mode 100644
->> index 000000000000..c232ba05de7e
->> --- /dev/null
->> +++ b/Documentation/virt/gunyah/vm-manager.rst
->> @@ -0,0 +1,94 @@
->> +.. SPDX-License-Identifier: GPL-2.0
->> +
->> +=======================
->> +Virtual Machine Manager
->> +=======================
->> +
->> +The Gunyah Virtual Machine Manager is a Linux driver to support launching virtual machines.
->> +
->> +Summary
->> +=======
->> +
->> +Gunyah VMM presently supports launching non-proxy scheduled Linux-like virtual machines.
->> +
->> +Sample Userspace VMM
->> +====================
->> +
->> +A sample userspace VMM is included in samples/gunyah/ along with a sample minimal devicetree
->> +that can be used to launch a Linux-like virtual machine under Gunyah. To build this sample, enable
->> +CONFIG_SAMPLE_GUNYAH.
->> +
->> +IOCTLs and userspace VMM flows
->> +==============================
->> +
->> +The kernel exposes a char device interface at /dev/gunyah.
->> +
->> +To create a VM, use the GH_CREATE_VM ioctl. A successful call will return a "Gunyah VM" file descriptor.
->> +
->> +/dev/gunyah API Descriptions
->> +----------------------------
->> +
->> +GH_CREATE_VM
->> +~~~~~~~~~~~~
->> +
->> +Creates a Gunyah VM. The argument is reserved for future use and must be 0.
->> +
->> +Gunyah VM API Descriptions
->> +--------------------------
->> +
->> +GH_VM_SET_USER_MEM_REGION
->> +~~~~~~~~~~~~~~~~~~~~~~~~~
->> +
->> +::
->> +
->> +  struct gh_userspace_memory_region {
->> +	__u32 label;
->> +	__u32 flags;
->> +	__u64 guest_phys_addr;
->> +	__u64 memory_size;
->> +	__u64 userspace_addr;
->> +  };
->> +
->> +This ioctl allows the user to create or delete a memory parcel for a guest
->> +virtual machine. Each memory region is uniquely identified by a label;
->> +attempting to create two memory regions with the same label is not allowed.
->> +
->> +While VMM is guest-agnostic and allows runtime addition of memory regions,
->> +Linux guest virtual machines do not support accepting memory regions at runtime.
->> +Thus, memory regions should be provided before starting the VM and the VM
->> +configured to accept those memory regions at boot-up.
->> +
->> +The guest physical address is used by Linux to check the requested user regions
->> +do not overlap and to help find a corresponding memory region for calls like
->> +GH_VM_SET_DTB_CONFIG.
->> +
->> +To delete a memory region, call GH_VM_SET_USER_MEM_REGION with label set to the
->> +memory region of interest and memory_size set to 0.
->> +
->> +The flags field of gh_userspace_memory_region can set the following bits. All
->> +other bits must be 0 and are reserved for future use. The ioctl will return
->> +-EINVAL if an unsupported bit is detected.
->> +
->> +  - GH_MEM_ALLOW_READ/GH_MEM_ALLOW_WRITE/GH_MEM_ALLOW_EXEC sets read/write/exec permissions
->> +    for the guest, respectively.
->> +
->> +  - GH_MEM_LENT means that the memory will be unmapped from the host and be unaccessible by
->> +    the host while the guest has the region.
->> +
->> +GH_VM_SET_DTB_CONFIG
->> +~~~~~~~~~~~~~~~~~~~~
->> +
->> +::
->> +
->> +  struct gh_vm_dtb_config {
->> +	__u64 gpa;
->> +	__u64 size;
->> +  };
->> +
->> +This ioctl sets the location of the VM's devicetree blob and is used by Gunyah
->> +Resource Manager to allocate resources.
->> +
->> +GH_VM_START
->> +~~~~~~~~~~~
->> +
->> +This ioctl starts the virtual machine.
+On 02/11/2022 20:28, Doug Anderson wrote:
+> Hi,
 > 
-> I think the wording can be better:
+> On Wed, Nov 2, 2022 at 10:23 AM Dmitry Baryshkov
+> <dmitry.baryshkov@linaro.org> wrote:
+>>
+>>> 1. Someone figures out how to model this with the bridge chain and
+>>> then we only allow HBR3 if we detect we've got a TCPC that supports
+>>> it. This seems like the cleanest / best but feels like a long pole.
+>>> Not only have we been trying to get the TCPC-modeled-as-a-bridge stuff
+>>> landed for a long time but even when we do it we still don't have a
+>>> solution for how to communicate the number of lanes and other stuff
+>>> between the TCPC and the DP controller so we have to enrich the bridge
+>>> interface.
+>>
+>> I think we'd need some OOB interface. For example for DSI interfaces we
+>> have mipi_dsi_device struct to communicate such OOB data.
+>>
+>> Also take a note regarding data-lanes from my previous email.
 > 
-> ---- >8 ----
+> Right, we can somehow communicate the max link rate through the bridge
+> chain to the DP controller in an OOB manner that would work.
+
+I'd note that our dp_panel has some notion of such OOB data. So do AUX 
+drivers including the panel-edp. My suggestion would be to consider both 
+of them while modelling the OOB data.
+
 > 
-> diff --git a/Documentation/virt/gunyah/vm-manager.rst b/Documentation/virt/gunyah/vm-manager.rst
-> index c232ba05de7e96..772fd970b91d7e 100644
-> --- a/Documentation/virt/gunyah/vm-manager.rst
-> +++ b/Documentation/virt/gunyah/vm-manager.rst
-> @@ -4,18 +4,15 @@
->   Virtual Machine Manager
->   =======================
->   
-> -The Gunyah Virtual Machine Manager is a Linux driver to support launching virtual machines.
-> -
-> -Summary
-> -=======
-> -
-> -Gunyah VMM presently supports launching non-proxy scheduled Linux-like virtual machines.
-> +The Gunyah Virtual Machine Manager is a Linux driver for launching virtual
-> +machines using Gunyah. It presently supports launching non-proxy scheduled
-> +Linux-like virtual machines.
->   
->   Sample Userspace VMM
->   ====================
->   
-> -A sample userspace VMM is included in samples/gunyah/ along with a sample minimal devicetree
-> -that can be used to launch a Linux-like virtual machine under Gunyah. To build this sample, enable
-> +A sample userspace VMM is included in samples/gunyah/ along with a minimal
-> +devicetree that can be used to launch a VM. To build this sample, enable
->   CONFIG_SAMPLE_GUNYAH.
->   
->   IOCTLs and userspace VMM flows
-> @@ -23,7 +20,8 @@ IOCTLs and userspace VMM flows
->   
->   The kernel exposes a char device interface at /dev/gunyah.
->   
-> -To create a VM, use the GH_CREATE_VM ioctl. A successful call will return a "Gunyah VM" file descriptor.
-> +To create a VM, use the GH_CREATE_VM ioctl. A successful call will return a
-> +"Gunyah VM" file descriptor.
->   
->   /dev/gunyah API Descriptions
->   ----------------------------
-> @@ -51,29 +49,28 @@ GH_VM_SET_USER_MEM_REGION
->   
->   This ioctl allows the user to create or delete a memory parcel for a guest
->   virtual machine. Each memory region is uniquely identified by a label;
-> -attempting to create two memory regions with the same label is not allowed.
-> +attempting to create two regions with the same label is not allowed.
->   
->   While VMM is guest-agnostic and allows runtime addition of memory regions,
->   Linux guest virtual machines do not support accepting memory regions at runtime.
-> -Thus, memory regions should be provided before starting the VM and the VM
-> -configured to accept those memory regions at boot-up.
-> +Thus, memory regions should be provided before starting the VM and the VM must
-> +be configured to accept these at boot-up.
->   
-> -The guest physical address is used by Linux to check the requested user regions
-> -do not overlap and to help find a corresponding memory region for calls like
-> -GH_VM_SET_DTB_CONFIG.
-> +The guest physical address is used by Linux kernel to check that the requested
-> +user regions do not overlap and to help find the corresponding memory region
-> +for calls like GH_VM_SET_DTB_CONFIG.
->   
->   To delete a memory region, call GH_VM_SET_USER_MEM_REGION with label set to the
-> -memory region of interest and memory_size set to 0.
-> +desired region and memory_size set to 0.
->   
-> -The flags field of gh_userspace_memory_region can set the following bits. All
-> +The flags field of gh_userspace_memory_region accepts the following bits. All
->   other bits must be 0 and are reserved for future use. The ioctl will return
->   -EINVAL if an unsupported bit is detected.
->   
-> -  - GH_MEM_ALLOW_READ/GH_MEM_ALLOW_WRITE/GH_MEM_ALLOW_EXEC sets read/write/exec permissions
-> -    for the guest, respectively.
-> -
-> -  - GH_MEM_LENT means that the memory will be unmapped from the host and be unaccessible by
-> -    the host while the guest has the region.
-> +  - GH_MEM_ALLOW_READ/GH_MEM_ALLOW_WRITE/GH_MEM_ALLOW_EXEC sets read/write/exec
-> +    permissions for the guest, respectively.
-> +  - GH_MEM_LENT means that the memory will be unmapped from the host and be
-> +    unaccessible by the host while the guest has the region.
-
-One side question -- before, you asked that I add newline between the 
-list entries. Here, you've removed them. When do I need the extra 
-newline vs not?
-
-https://lore.kernel.org/all/YzUUaIx+azyzFDNX@debian.me/
-
->   
->   GH_VM_SET_DTB_CONFIG
->   ~~~~~~~~~~~~~~~~~~~~
-> @@ -91,4 +88,4 @@ Resource Manager to allocate resources.
->   GH_VM_START
->   ~~~~~~~~~~~
->   
-> -This ioctl starts the virtual machine.
-> +This ioctl starts the VM.
 > 
-> Thanks.
+>>> 2. We add in a DT property to the display controller node that says
+>>> the max link rate for use on this board. This feels like a hack, but
+>>> maybe it's not too bad. Certainly it would be incredibly simple to
+>>> implement. Actually... ...one could argue that even if we later model
+>>> the TCPC as a bridge that this property would still be valid / useful!
+>>> You could certainly imagine that the SoC supports HBR3 and the TCPC
+>>> supports HBR3 but that the board routing between the SoC and the TCPC
+>>> is bad and only supports HBR2. In this case the only way out is
+>>> essentially a "board constraint" AKA a DT property in the DP
+>>> controller.
+>>
+>> We have been discussing similar topics with Abhinav. Krzysztof suggested
+>> using link-frequencies property to provide max and min values.
 > 
+> This sounds good to me and seems worth doing even if we eventually do #1.
 
-Thanks for reviewing and providing all the suggestions. I've applied all 
-of them.
+And the bonus point is that it can be done easily.
 
-
+-- 
+With best wishes
+Dmitry
 
