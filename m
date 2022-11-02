@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0106A6162D0
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:40:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B94656162D3
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:40:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230434AbiKBMkQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 08:40:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48338 "EHLO
+        id S230466AbiKBMkV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 08:40:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48352 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230395AbiKBMkN (ORCPT
+        with ESMTP id S230427AbiKBMkQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 08:40:13 -0400
-Received: from mail-pg1-x52a.google.com (mail-pg1-x52a.google.com [IPv6:2607:f8b0:4864:20::52a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D2B5B29C91;
-        Wed,  2 Nov 2022 05:40:12 -0700 (PDT)
-Received: by mail-pg1-x52a.google.com with SMTP id v3so1183430pgh.4;
-        Wed, 02 Nov 2022 05:40:12 -0700 (PDT)
+        Wed, 2 Nov 2022 08:40:16 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EEC6A29C96;
+        Wed,  2 Nov 2022 05:40:15 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id e129so16123308pgc.9;
+        Wed, 02 Nov 2022 05:40:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=iW88jGgcd8miZh9len9gFIPIDgHa/+wXKZJwZCVeRuM=;
-        b=ExliLNWM8833uTSn3Iu6fujG7/iOfccABTOCt2AEe247j443amawJXh+Xx7pyL3KsY
-         VPWaxX8NxWIdI2MSJwVYuv9b70dZnIA3lZYtYTYH0QaDWpTx8SIHa/ghkH3+gbNc1twN
-         Mpq5JxeOnhAUEKXgu+UXbvcgQ7rrJylURkGoWxlE9wZs/Jpi+h8Qmyw7CXu//Fl5u44p
-         GCxt7oHqL2N81IL7p8QOF+0icEBrthabDI0rfyOAGObQZKgGyff+2WH9k8QyPtFdItOc
-         1ovf7Y6cpqRjvAVSv87LAP9MdYyoKusKbh3sz8L2Dnbq49meRhLFZISNcO4Q0ZeTKj8V
-         e4Ow==
+        bh=ed7Wml//j7Y9RMu6dwoeo3Qg5iNedwfaG5B6AyQm750=;
+        b=gAanQ/I5GZWf/GD2GgUisok3GodxFb+eps6OU6Z/4JyUQaaYCuWdK6WEsDbnBOLtkD
+         vDGapcAhYw+6EoKuyzJYmbtSpHdV8MCPUKPATDWF3ilMXEwPDMfl5KiO+wy05QMrxkpl
+         4L+HVD5kYAJXYcRVhkrowzyvjIwNT5PtJqrMwCHgWy6WBniWMum5yF7pBtleVo7ZdGcg
+         9+p0p5HB1zc2ZD3Babl5Zpz1001sAAJMTEuwHSNQhHZpygOHGb2LmmDoWPnGYTVzVGtI
+         icU5SKNrrQNAWxUQJLpHwMAkO0TVef1lrm72o8++DYCWataDe11wi/z70n9ajbdPReq8
+         6fRA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=iW88jGgcd8miZh9len9gFIPIDgHa/+wXKZJwZCVeRuM=;
-        b=MoP2468dQBNnLVjSy6liWC0Sfao+ZC7u+eY3ZXjMT3CWrkxdsmMKtmo3LLRHXE7aQp
-         VduJl3JTraVb+uRj1Q+p8l2TTvlSTY6Ubv3uinYpr+HDzTaYALvYE7rEKxF+CoZiVc0d
-         7EjvmvoGYW7/Hpk6QBzjA38gkNxmJSD0sss2QexPS/r0i7t+Maag7ygQPtELU9Oa4QeT
-         Xtg78deZpfz9KyzQWFjZwpL/rb79qY00U6kn6XVA5xE2JfcGga+vfMO7InqcNxlX3Q35
-         vQqXFaHUEUumojwo47knf+YHuUrtc1eGDbCnf1O1SLJyMhArc1qHAaqiTeLxQE9YkFsF
-         jVWw==
-X-Gm-Message-State: ACrzQf1KeoNDQu94aDyjqrRDDkOzX8EAd37i1ZRDHMz6r0klRysVDYTV
-        pmiDPwEBy3M2Ro+xpAqR+iE=
-X-Google-Smtp-Source: AMsMyM6fD3HjuK76WyqWIIdJLo6fTR9y9MLBvXLcsnGTiuYT3SzPQ1MVPJ3giy4fUdRVPmUbac0/Hw==
-X-Received: by 2002:a05:6a00:2409:b0:54e:a3ad:d32d with SMTP id z9-20020a056a00240900b0054ea3add32dmr24822988pfh.70.1667392812356;
-        Wed, 02 Nov 2022 05:40:12 -0700 (PDT)
+        bh=ed7Wml//j7Y9RMu6dwoeo3Qg5iNedwfaG5B6AyQm750=;
+        b=Td5NTDVhZ5OvjBv67oz0df95ZRsHqks9Lvb+NmIBQ7f8rKAGEM05DQWuRorCVgYAaJ
+         lqlAfF+WAC9UR7AnUXiOqfeeXpg3u3xmaHAMfIEGqcOBCQwMslM51Vyu4wcl/cT+aHd+
+         PLdW0hEB/pJCyF1oY1793EIJCbkFjgVzZevxNShBg58LlX3UXkDSkOJPzTaxveeNSuPz
+         JK1eJ9PTNBWK57IUDOnQr0s61LnxPvWkcrOGHR79QI1b6ZBhP4S/hj9k4NqNyHXCAvoI
+         xbJMUZKYGH8baVwg7ZUX/vNUDw+AsTmvXxkpzGQT8+nFMPvKDpeRWUZ8LwgdYM6jSGNq
+         Sl0g==
+X-Gm-Message-State: ACrzQf1+Cw1pNfhf9iClOa2+Zv+UvBuxM8j6TyLlDAzSG0QdYiCdJnRL
+        TrZAazHFbBg+krmqn9K0HKM=
+X-Google-Smtp-Source: AMsMyM5iOWdV2pPfyqmRrmntgtuRBc+0iKBhJE/t8V/GOwvmmrjb57B92hIyvaFthfSLBoCHCs48iQ==
+X-Received: by 2002:a63:da4f:0:b0:43f:6af:74ed with SMTP id l15-20020a63da4f000000b0043f06af74edmr22039169pgj.290.1667392815462;
+        Wed, 02 Nov 2022 05:40:15 -0700 (PDT)
 Received: from Zbook.localdomain ([129.227.152.6])
-        by smtp.gmail.com with ESMTPSA id f19-20020aa79693000000b0056c003f9169sm8339360pfk.196.2022.11.02.05.40.10
+        by smtp.gmail.com with ESMTPSA id f19-20020aa79693000000b0056c003f9169sm8339360pfk.196.2022.11.02.05.40.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 05:40:11 -0700 (PDT)
+        Wed, 02 Nov 2022 05:40:15 -0700 (PDT)
 From:   Yuwei Guan <ssawgyw@gmail.com>
 X-Google-Original-From: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
 To:     paolo.valente@linaro.org, axboe@kernel.dk
 Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         Yuwei.Guan@zeekrlife.com
-Subject: [PATCH 1/5] block, bfq: remove unnecessary value print
-Date:   Wed,  2 Nov 2022 20:39:52 +0800
-Message-Id: <20221102123956.230-2-Yuwei.Guan@zeekrlife.com>
+Subject: [PATCH 2/5] block, bfq: do bfq_set_next_ioprio_data() after setting sync mode and pid
+Date:   Wed,  2 Nov 2022 20:39:53 +0800
+Message-Id: <20221102123956.230-3-Yuwei.Guan@zeekrlife.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221102123956.230-1-Yuwei.Guan@zeekrlife.com>
 References: <20221102123956.230-1-Yuwei.Guan@zeekrlife.com>
@@ -73,28 +73,43 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"peak_rate_samples" is 0 alway when do first dispatch from last reset,
-so no need to print it's value.
+Do bfq_set_next_ioprio_data() after setting sync mode and pid for bfqq
+in bfq_init_bfqq(), which can print real pid and sync info for
+bfq_log_bfqq log in bfq_set_next_ioprio_data().
+
+such as,
+before: "bfq0A new_ioprio 4 new_weight 40"
+after: "bfq203S new_ioprio 4 new_weight 40"
 
 Signed-off-by: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
 ---
- block/bfq-iosched.c | 3 +--
- 1 file changed, 1 insertion(+), 2 deletions(-)
+ block/bfq-iosched.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
 diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
-index 7ea427817f7f..7a15b2689cb8 100644
+index 7a15b2689cb8..e00c67a01b09 100644
 --- a/block/bfq-iosched.c
 +++ b/block/bfq-iosched.c
-@@ -3573,8 +3573,7 @@ static void bfq_update_peak_rate(struct bfq_data *bfqd, struct request *rq)
- 	u64 now_ns = ktime_get_ns();
+@@ -5509,9 +5509,6 @@ static void bfq_init_bfqq(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+ 	bfqq->ref = 0;
+ 	bfqq->bfqd = bfqd;
  
- 	if (bfqd->peak_rate_samples == 0) { /* first dispatch */
--		bfq_log(bfqd, "update_peak_rate: goto reset, samples %d",
--			bfqd->peak_rate_samples);
-+		bfq_log(bfqd, "update_peak_rate: goto reset");
- 		bfq_reset_rate_computation(bfqd, rq);
- 		goto update_last_values; /* will add one sample */
- 	}
+-	if (bic)
+-		bfq_set_next_ioprio_data(bfqq, bic);
+-
+ 	if (is_sync) {
+ 		/*
+ 		 * No need to mark as has_short_ttime if in
+@@ -5537,6 +5534,9 @@ static void bfq_init_bfqq(struct bfq_data *bfqd, struct bfq_queue *bfqq,
+ 
+ 	bfqq->pid = pid;
+ 
++	if (bic)
++		bfq_set_next_ioprio_data(bfqq, bic);
++
+ 	/* Tentative initial value to trade off between thr and lat */
+ 	bfqq->max_budget = (2 * bfq_max_budget(bfqd)) / 3;
+ 	bfqq->budget_timeout = bfq_smallest_from_now();
 -- 
 2.34.1
 
