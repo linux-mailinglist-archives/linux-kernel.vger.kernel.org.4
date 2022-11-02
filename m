@@ -2,131 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E1D04615676
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 01:13:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3656B61567A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 01:16:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229772AbiKBANu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 20:13:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44746 "EHLO
+        id S229756AbiKBAQv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 20:16:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46186 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229846AbiKBANp (ORCPT
+        with ESMTP id S229462AbiKBAQt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 20:13:45 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D998510E0;
-        Tue,  1 Nov 2022 17:13:44 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 30F656176B;
-        Wed,  2 Nov 2022 00:13:44 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91186C43470;
-        Wed,  2 Nov 2022 00:13:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667348023;
-        bh=W5/aHpfTqxwv/nvrlYsLGEOlpYa6t8S/FHMPfvIzJRE=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=fEBWQV/wl4DU9DFj2+ZEZUI4vaK9IP/j4G7WaF+BE7GxJkRZ6+yeT/Wf1rlvRTE7g
-         mJOM0L8AfgapMJTu93I+EtxXmPNuqHJQv5Fb3L4Koh+nsFucg0kZB7rRkf6TFWHpyV
-         p636ijFY1A9DUkg+5EMdDhEIJtwXM5naKTD+TP4QKccTJry6ft57Nwa3i2l1fj+bNd
-         /fxrFg/XPOAtxidb4SPJAZZ4WEMKJNbAquEiyAhnL9oMO9zoMxASkB7/g3Do6Z74I/
-         ka0graJ7VYk0JeYxJ9OERlR/jqB4W/UtBLegTsZh4JgfPR+7NPQwnnoyLnqA6PJ92b
-         OYxnkmD9P81Qw==
-Received: by mail-ed1-f51.google.com with SMTP id 21so24120980edv.3;
-        Tue, 01 Nov 2022 17:13:43 -0700 (PDT)
-X-Gm-Message-State: ACrzQf1jaBaVaX0Teo1z2jnSVc9Fh4hpg2bjOwUaQnjRj9YHlfjgb9rC
-        YXdQHvJol0G8lHPobBDvxKx3dJAgexDRM/fUrUQ=
-X-Google-Smtp-Source: AMsMyM7fpo1hygNW+WdKPt/ClXuTcf4KPITZbkTdR2Sawerz1XlnjPSfwaJrORCbCZuB4o0IUEG4PJbWKDwncFhKS8I=
-X-Received: by 2002:aa7:d710:0:b0:463:bd7b:2b44 with SMTP id
- t16-20020aa7d710000000b00463bd7b2b44mr4877227edq.385.1667348021818; Tue, 01
- Nov 2022 17:13:41 -0700 (PDT)
-MIME-Version: 1.0
-References: <20221101052340.1210239-1-namhyung@kernel.org> <20221101052340.1210239-3-namhyung@kernel.org>
- <Y2DuzmnUm6NIh25a@krava> <CAADnVQJ6+N6vQ=ZUgUjoB_M2RoTGGPXpLwz81mNDmLWrGYKetw@mail.gmail.com>
- <CAPhsuW6iuEZCCYJk-cra8DkEWNtdin8GyJDZ6Y8zd4ecfd1gQA@mail.gmail.com>
- <CAADnVQ+SYv5O+UxnGaBAvxptopWyANdbQRg=e2GXiRBPyJMGgA@mail.gmail.com>
- <CAPhsuW55zAYCipf1P4dM8Cu9QFewnyZE+SOquKhSbdqUWG_EKg@mail.gmail.com> <CAM9d7chKunyZX=-9gANZ2BKZTzQXuWYCgPQU46jCHkqsjsoGUg@mail.gmail.com>
-In-Reply-To: <CAM9d7chKunyZX=-9gANZ2BKZTzQXuWYCgPQU46jCHkqsjsoGUg@mail.gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Tue, 1 Nov 2022 17:13:29 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW70GMFfzvgp__GOhebPu9bXnG7PzEby6xEExFgg+JmeTQ@mail.gmail.com>
-Message-ID: <CAPhsuW70GMFfzvgp__GOhebPu9bXnG7PzEby6xEExFgg+JmeTQ@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/3] bpf: Add bpf_perf_event_read_sample() helper
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Jiri Olsa <olsajiri@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
+        Tue, 1 Nov 2022 20:16:49 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B50FF10B9;
+        Tue,  1 Nov 2022 17:16:47 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id m29-20020a05600c3b1d00b003c6bf423c71so339376wms.0;
+        Tue, 01 Nov 2022 17:16:47 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=6EgJHcNc9I4Hg68B4v54gsqbN5dL6gMdd+mtOwKKfWQ=;
+        b=eXIDVLm2x52AdgKdH1WyIVfjTCZX4+dnaPvNdX8OkfPZnW0AquTc3oqES44BmI7f3o
+         83RHeP9/PUEJbtHkpgCmAPAfD3s9ncp3Jos6q+nQmoAYuuVXxtLF0wEZwEdI+5blRciT
+         sYx3Mc1P1Cu/scsLYGwrx33fCwfLjYDeosPm2NRES57lKCVvQPT2vGyqsQvGthQDA9qY
+         OwzsU88NpdaeYkoOkZ7FRdMbDBHuSheVb5Fcf3aZy6bnTvmZrz6eJYQXMvm1J+ZFuXsR
+         UK0ifiZJWiBfyrxkWHHmwLPUGSPfJVguNq22BxuTQkLpWAlbyzWWde5RGtOtx1dHvZDI
+         YGfQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=6EgJHcNc9I4Hg68B4v54gsqbN5dL6gMdd+mtOwKKfWQ=;
+        b=xjqGqlJRYr8g2yAPQ8LVuIGWrjBrWcH5+7K1+ydhpGQcj6ded0UxDX3hWV29Qvzuwm
+         VTqnE36HTBbPPsgUodNyd2KD1HVWwFWdzvou/P56GRLbyF+lzTeTILWXHwxYzV5MlEF5
+         tE9gAdO9opGL1dgnFNsO0GX2ocHnI+kDf+IrNF5YMQXKHnNbI8Dgds3A1pC+3SUf2p1k
+         Z522lCoC431UUcMGyWLx8HVfCc7RhqLA92CCIC0Ttt6hP7Ed9LsI5be4CbydeFRFwhBl
+         ARrclZyCGJjey1ejvgWymI2D6dK/eYE/xiFOwP1c6DaH9G62Ov6frK91FkpXDL3Lg78W
+         FizA==
+X-Gm-Message-State: ACrzQf0e4MPuFE1tRg5Dux08jbuLVBhVInXxhL55D/TIo1zV4uZtBQmR
+        T2TQe85hjDd3gMD76SJj/2Gj7dah+iM=
+X-Google-Smtp-Source: AMsMyM4bqf2Q2DAJavIvv67fkz1F+mis5E51X6JVvDcGHELGOnt56JeXjFBEQ0/iqEwRHWznhtTZ2A==
+X-Received: by 2002:a05:600c:6885:b0:3c2:9da1:5034 with SMTP id fn5-20020a05600c688500b003c29da15034mr13720974wmb.38.1667348206213;
+        Tue, 01 Nov 2022 17:16:46 -0700 (PDT)
+Received: from DreamMachine2.lan (188.red-83-35-57.dynamicip.rima-tde.net. [83.35.57.188])
+        by smtp.gmail.com with ESMTPSA id j10-20020a5d464a000000b002365cd93d05sm10965055wrs.102.2022.11.01.17.16.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 17:16:45 -0700 (PDT)
+Message-ID: <ae43aa9c3a9f29d0ecef69756a539ebf00a84ab1.camel@gmail.com>
+Subject: Re: [RFC PATCH 2/2] iio: pressure: bmp280: convert to i2c's
+ .probe_new()
+From:   Angel Iglesias <ang.iglesiasg@gmail.com>
+To:     Uwe =?ISO-8859-1?Q?Kleine-K=F6nig?= 
+        <u.kleine-koenig@pengutronix.de>
+Cc:     linux-iio@vger.kernel.org,
+        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Paul Cercueil <paul@crapouillou.net>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        linux-kernel@vger.kernel.org
+Date:   Wed, 02 Nov 2022 01:16:44 +0100
+In-Reply-To: <20221101215236.ihoqkx2xckilom67@pengutronix.de>
+References: <cover.1667151588.git.ang.iglesiasg@gmail.com>
+         <af8ed10a85d48531c50823163e6c55b2a72371ef.1667151588.git.ang.iglesiasg@gmail.com>
+         <20221101215236.ihoqkx2xckilom67@pengutronix.de>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.1 (by Flathub.org) 
+MIME-Version: 1.0
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 1, 2022 at 3:17 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> > > > >
-> > > > > +1
-> > > > > Let's avoid new stable helpers for this.
-> > > > > Pls use CORE and read perf_sample_data directly.
-> > > >
-> > > > We have legacy ways to access sample_period and addr with
-> > > > struct bpf_perf_event_data and struct bpf_perf_event_data_kern. I
-> > > > think mixing that
-> > > > with CORE makes it confusing for the user. And a helper or a kfunc would make it
-> > > > easier to follow. perf_btf might also be a good approach for this.
-> > >
-> > > imo that's a counter argument to non-CORE style.
-> > > struct bpf_perf_event_data has sample_period and addr,
-> > > and as soon as we pushed the boundaries it turned out it's not enough.
-> > > Now we're proposing to extend uapi a bit with sample_ip.
-> > > That will repeat the same mistake.
-> > > Just use CORE and read everything that is there today
-> > > and will be there in the future.
-> >
-> > Another work of this effort is that we need the perf_event to prepare
-> > required fields before calling the BPF program. I think we will need
-> > some logic in addition to CORE to get that right. How about we add
-> > perf_btf where the perf_event prepare all fields before calling the
-> > BPF program? perf_btf + CORE will be able to read all fields in the
-> > sample.
->
-> IIUC we want something like below to access sample data directly,
-> right?
->
->   BPF_CORE_READ(ctx, data, ip);
->
+On Tue, 2022-11-01 at 22:52 +0100, Uwe Kleine-K=C3=B6nig wrote:
+> Hello,
+>=20
+> On Sun, Oct 30, 2022 at 06:53:11PM +0100, Angel Iglesias wrote:
+> > Use i2c_client_get_device_id() to get the i2c_device_id* parameter in t=
+he
+> > .new_probe() callback.
+> >=20
+> > Signed-off-by: Angel Iglesias <ang.iglesiasg@gmail.com>
+> > ---
+> > =C2=A0drivers/iio/pressure/bmp280-i2c.c | 8 ++++----
+> > =C2=A01 file changed, 4 insertions(+), 4 deletions(-)
+> >=20
+> > diff --git a/drivers/iio/pressure/bmp280-i2c.c
+> > b/drivers/iio/pressure/bmp280-i2c.c
+> > index 0c27211f3ea0..20073b09b3e3 100644
+> > --- a/drivers/iio/pressure/bmp280-i2c.c
+> > +++ b/drivers/iio/pressure/bmp280-i2c.c
+> > @@ -5,11 +5,11 @@
+> > =C2=A0
+> > =C2=A0#include "bmp280.h"
+> > =C2=A0
+> > -static int bmp280_i2c_probe(struct i2c_client *client,
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 const struct i2c_device_id *id)
+> > +static int bmp280_i2c_probe(struct i2c_client *client)
+> > =C2=A0{
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct regmap *regmap;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const struct i2c_device_id *=
+id =3D i2c_client_get_device_id(client);
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0const struct regmap_con=
+fig *regmap_config;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0struct regmap *regmap;
+> > =C2=A0
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0switch (id->driver_data=
+) {
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0case BMP180_CHIP_ID:
+>=20
+> What is the motivation for moving regmap? I thought reverse christmas
+> tree is only a thing in network code? I would have left the regmap
+> declaration where it is.
 
-I haven't tried this, but I guess we may need something like
+Long story short, I worked previously on a small refactor of this driver to=
+ add
+support for a new family of sensors. During the different iterations of the
+patchset, one thing that was agreed was unifying the driver coding style to
+reverse xmas tree. For some extra context, here's the thread:
+https://lore.kernel.org/all/20220814145249.701f1261@jic23-huawei/
 
-data = ctx->data;
-BPF_CORE_READ(data, ip);
-
-> Some fields like raw and callchains will have variable length data
-> so it'd be hard to check the boundary at load time.
-
-I think we are fine as long as we can check boundaries at run time.
-
-> Also it's possible
-> that some fields are not set (according to sample type), and it'd be
-> the user's (or programmer's) responsibility to check if the data is
-> valid.  If these are not the concerns, I think I'm good.
-
-So we still need 1/3 of the set to make sure the data is valid?
-
-Thanks,
-Song
+> > @@ -65,7 +65,7 @@ static struct i2c_driver bmp280_i2c_driver =3D {
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0.of_match_table =3D bmp280_of_i2c_match,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0.pm =3D pm_ptr(&bmp280_dev_pm_ops),
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0},
+> > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.probe=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D bmp280_i2c_probe,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.probe_new=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=3D bmp280_i2c_probe,
+> > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0.id_table=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=3D bmp280_i2c_id,
+> > =C2=A0};
+> > =C2=A0module_i2c_driver(bmp280_i2c_driver);
+>=20
+> Best regards
+> Uwe
+>=20
+Kind regards
+Angel
