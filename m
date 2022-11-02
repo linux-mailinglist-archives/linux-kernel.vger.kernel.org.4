@@ -2,160 +2,349 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 101D96156B6
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 01:45:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 707556156BD
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 01:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbiKBApY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 20:45:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58108 "EHLO
+        id S229846AbiKBArU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 20:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60240 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230178AbiKBApK (ORCPT
+        with ESMTP id S229533AbiKBArR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 20:45:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7D791AD81;
-        Tue,  1 Nov 2022 17:45:08 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 7308761789;
-        Wed,  2 Nov 2022 00:45:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C3F6DC433C1;
-        Wed,  2 Nov 2022 00:45:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667349907;
-        bh=4e3rycQUwb33zwwCwGW0m1UPZ5kIn2EC65KtL6U4wZ0=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=kmjO3y2sm11ONmRank57zkDzKxO01q8BE9hXRvTd4jmFX2RW4+S9ZqmnzxKVm4cUN
-         YJDYCav7pb8K+u8cxR+wOpnii7Skg5QwZh4NjV7qj1tR0QAuFXnSOHNeEf6XMzKfO6
-         4jlQcoWESNFvzonFw2Vi1pQpjXOhVsP0NQYuHQ1R5MikRCAPcfUTiK1+HaKz2gwHpk
-         9KA7rLIcasZ0aFUIucXvwXTJou+nCwHBPU+pIfYebvu8bqz/0d8xQ9b/bHyfEHjPcZ
-         KZk10R2cwjEb/8GveeF3ZIEfTLygDy5jKs4DnHrPiel4CHrbe6avRseEv5YJqzXNFJ
-         aCoR+q353l9TQ==
-Date:   Tue, 1 Nov 2022 17:45:07 -0700
-From:   "Darrick J. Wong" <djwong@kernel.org>
-To:     Shiyang Ruan <ruansy.fnst@fujitsu.com>
-Cc:     Dan Williams <dan.j.williams@intel.com>,
-        Dave Chinner <david@fromorbit.com>,
-        "yangx.jy@fujitsu.com" <yangx.jy@fujitsu.com>,
-        "Yasunori Gotou (Fujitsu)" <y-goto@fujitsu.com>,
-        Brian Foster <bfoster@redhat.com>,
-        "hch@infradead.org" <hch@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-xfs@vger.kernel.org" <linux-xfs@vger.kernel.org>,
-        "nvdimm@lists.linux.dev" <nvdimm@lists.linux.dev>,
-        "linux-fsdevel@vger.kernel.org" <linux-fsdevel@vger.kernel.org>,
-        "zwisler@kernel.org" <zwisler@kernel.org>,
-        Jeff Moyer <jmoyer@redhat.com>,
-        "dm-devel@redhat.com" <dm-devel@redhat.com>,
-        "toshi.kani@hpe.com" <toshi.kani@hpe.com>,
-        Theodore Ts'o <tytso@mit.edu>
-Subject: Re: [PATCH] xfs: fail dax mount if reflink is enabled on a partition
-Message-ID: <Y2G9k9/XJVQ7yiWN@magnolia>
-References: <6a83a56e-addc-f3c4-2357-9589a49bf582@fujitsu.com>
- <Y1NRNtToQTjs0Dbd@magnolia>
- <20221023220018.GX3600936@dread.disaster.area>
- <OSBPR01MB2920CA997DDE891C06776279F42E9@OSBPR01MB2920.jpnprd01.prod.outlook.com>
- <20221024053109.GY3600936@dread.disaster.area>
- <dd00529c-d3ef-40e3-9dea-834c5203e3df@fujitsu.com>
- <Y1gjQ4wNZr3ve2+K@magnolia>
- <Y1rzZN0wgLcie47z@magnolia>
- <635b325d25889_6be129446@dwillia2-xfh.jf.intel.com.notmuch>
- <7a3aac47-1492-a3cc-c53a-53c908f4f857@fujitsu.com>
+        Tue, 1 Nov 2022 20:47:17 -0400
+Received: from sonic307-16.consmr.mail.ne1.yahoo.com (sonic307-16.consmr.mail.ne1.yahoo.com [66.163.190.39])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677321A813
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 17:47:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1667350024; bh=rFMsRSvK76yXWYxv1sYQvrpSF0kCt3i9sjs7q7QMJBk=; h=Date:Subject:To:Cc:References:From:In-Reply-To:From:Subject:Reply-To; b=PyICtDzcNHhyONE0u+DgJoBX+wNWrshKGOEU5zsETeYQtuGz/Ot64VUzBagosUkWwloU0bBCYDiMjhRn3atvxBt6fonmniFTHfADBUAXQVzx7jxTR3AXYdgZIOjcLjaYmXYdbNXCeHcU0clDstvJCmnnwbnjFZESFRwW7vsIJl1rnhAkS3IZulz1IH/+xzla9lJwO/TD4WJjI41Y6gKjkaVXPgYHZHxKPOWvyrj7CObCLtaR1rRzKNABXUcchVUshH1zCIaA+44V5ka1DUbfYvkQMUXDhMaLbiu1yhWdvtckaWdlKLzluC9EEOmqfGYZQNmxEa7Q+wAZBWQgrOqqeA==
+X-SONIC-DKIM-SIGN: v=1; a=rsa-sha256; c=relaxed/relaxed; d=yahoo.com; s=s2048; t=1667350024; bh=YIMTkVKaLiufm1esWFi6si3SB4Xri8sxkq1E3guAK43=; h=X-Sonic-MF:Date:Subject:To:From:From:Subject; b=hj0mKBhtsfLCrb6LhsZAuh/Ir1ecRz43O7GDe/y3RPMMix2oPLKQSV/FSxLt/cLrE6CrjMAfhrCH4SXxvMZg7crKl5G7bpY9Eq6aBMq0LMPFi9Vrr9i75/fZJh5XiJq7nGuDhINcmSLioHCkFEHF8o2BSkSR4nwCV3Se2uuPSGIiovTigueurnRqa/iAdOximEvZ2vHU4ghHya5OQZiWagp72cxGYZUYhyLJygJTYjWv9/1JvceViA+rqKIWUgiiOKFDoBF4sUIW17SryS4DsG6zXcbPHZmr44XK09wb3EH1zaw5ru/7bmyHyJqsW7pjs5VB/0vWMpcXg6zDArZq0w==
+X-YMail-OSG: ttK7sikVM1ms0f9E0Ho2gpWk8WUa.nrgYh2QqOEmF0qhCbqeiKeZstTjNIGo9qC
+ 4_09c8pzpgG5x.6zC0MwCmnGfuxWSP6irrrfg8dOcHWrC5jSBxA3YMwKr0Dzsql5KRVrp6SbcyQi
+ D.koCUN.fT__kMFm5fQX.qK4qZiah8fu3YMZJHttv3Mn.71pdsYCCxR9pPmAyLs08ZpCItIrA9eD
+ uEa2vVTjOEAjQn.I.EinTFzZfb3RlODIHUEsY1JVuRZPSazE1yp2SmcjLaOM4JCRA41uD8qLuDbn
+ y5Ffp1xBUsA9YF2MMKvZBb6JM5rWQu7.oHtn.iHKjqOkpOR7m_stkhuSHv9pKKmo3w4XnTygvyec
+ _d42hLSky7HOv7HMHJ8O7QBRiZ_FCUGmgy9EK3O4tcx4shh5iK5xB_SiqstV7CZXe5Ei0MI3cBKK
+ nxGgCotwmoB1XVYDBPIems0BEmhKYgnhdL2DbORzCrke.LQhdO0H5CiFDB0nisqVK10eOMoRvRRJ
+ mJp8krH64wW8Z.KsT0AvHemnG2vq3tqVm6BeKiLl16uRhwhoKbsnlUbWbICgR5nfTqGAd6epvF4u
+ DZTCIqwg28S4lkr4AYux9mhcC_BVBrOCYljhB8_MuB2q52FEely81GDWBFEKBLT5DgJQiLH7OIvg
+ 12bP6Z6TCVyJC2dpc3MKaY2CkgWV8sSgBtkNSqkLwJJxgurlfiQwYCK1UcWqElOSwkpIV90pK8Zo
+ 2XVjRUzdXJTbC1hahKDzByuL01zBdRyiEkpBtWBhsEBdGr6vt7DOz8S0nomaTVNyETYRSabH0vPA
+ dDPNOlENI5AeFWyCtnDZQFXTnAOEhF7S9Yd_W4HfTJZ9wDrbja_1geKFvoUNHJH.p5iMbhF_B9.p
+ Re9ctJjCL1F0K4DoIduJHkblx33eB7kX__lp5VPtShgxYaI7VC4i4ZBaL137gqKguT35dare55vc
+ 3jkRI.v.Z__irwkhhpCHQM2Iw59CWVtm2dCJw9i80LE95_goYLI3AgZXhaGOimiMLdXBcHU89uQr
+ oosyV9Cek0KfGuy8.W0ClNEZl5n5dytSoIg_6nB7bL_MoZ10W5oSyWtG6yHaHryUegqAS9h8Wbnp
+ 5.hQxmdi4riJuhmg3Ck79CZPbTVsCnjncyd_uKvbwimCz7FXhCnYRai9zqtF0oPkOki2d56jjKBi
+ Nr95hPYr4gs2q6qxkQbpsy5U3kmX_cWCRKrsi2aAstYpDB0ADcfGrdpQeguujP3hXmoQCOdIqlKs
+ dXS7hyP5wbf9GI94b6z7jNMz7FHOmHTDWOufU9sKd.o.wS09CoFugN7TYx1LuzFegSxOU0gm8Dz2
+ VqrzCfvNU72z9v.GLMX27DAGmjXQYaePd4G9lrJpfhKDwBs9gmxN2VuBSuv1N_m_t_7gxo295pov
+ fYcOsXo_HWcJ4rnyAxpuu4bqKkMOY_I8bzIAI8ba9RPaooJuWwWoo7B6uHB4GoZaTdoNVQ9Fy8bU
+ BNWuSowxqWlA.S7kB5ST9vRyixiZKLP1CcNNju8DQHFN9R4hfIpLDnQ9luwY2u9saSjNIN.HMrc7
+ 90gghQF21mqbkTla6R1IJoNjFMj0YlyB7gKXP2Hxi7HFsRI9aifocM.lpQIYTp8cgggTivGwxBRS
+ I9R459H4AMUhcS.7H89OJvndnwkhuuZd3GEYdL8wbxhYDQGU2Pf9NXZ.4IahRSMU7MutDy7m0pWu
+ T7irLBiGKtTLGQubJZe8sRcvLDO2Nf1sWVBaa9reDyWjSOBTHgC2g6WMb4qJqqXrUVyDiiQboEBh
+ Hu2VTvqJpvK.9WkrdtjaKjZr_pCeA_YfOqnSspptE8v9rihqBbNN5NKmowUCkTQpnJUHxsnRQjKH
+ Twe2.x.fKqLTXXsdZzrpmRRz0RWuBvQY2kaUUWac.rKY9WR9og_3EOi6QKrS7QSlvBj3Im2yyXwv
+ 7vMGBVTlRTvmhJ6pcpdh208lOv9dIiyOJua2cfJYSSTyfe5OySnm_zvX2Qr.fBDuzFPdv5g1B64D
+ rWmOmfPy.t1wnNfEwJYctLzR_4rmIAqR0fp._gDgLfl5X3vVO6AhbrDdzV2U0nZWyxTGs62L_ghn
+ AvYXcRukc3BTvyt8P.O9_2tpFeH3SxnpnpH.osBpsfccUjK5_bYsKkwe.ULzUHbHGVzrg_XXGxD7
+ j0HDLNeQr7jQxQKmySvUvKdtKbpKq_k4jzi6F5VR1x6Ns_3GMKqEk3pbrcOaPxMsVbQXURaznuwp
+ wFD_H993IHm6hH_Lf2nVlH5A6sp7LE4CMrOWU4A--
+X-Sonic-MF: <casey@schaufler-ca.com>
+Received: from sonic.gate.mail.ne1.yahoo.com by sonic307.consmr.mail.ne1.yahoo.com with HTTP; Wed, 2 Nov 2022 00:47:04 +0000
+Received: by hermes--production-bf1-5878955b5f-h4zdf (Yahoo Inc. Hermes SMTP Server) with ESMTPA ID d0691bd8e6a40c3bfdb33866ea043b85;
+          Wed, 02 Nov 2022 00:46:58 +0000 (UTC)
+Message-ID: <a737ec91-0eba-94dc-46dc-683abdc96366@schaufler-ca.com>
+Date:   Tue, 1 Nov 2022 17:46:55 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <7a3aac47-1492-a3cc-c53a-53c908f4f857@fujitsu.com>
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v2] LSM: Better reporting of actual LSMs at boot
+Content-Language: en-US
+To:     Kees Cook <keescook@chromium.org>, Paul Moore <paul@paul-moore.com>
+Cc:     James Morris <jmorris@namei.org>,
+        "Serge E. Hallyn" <serge@hallyn.com>,
+        linux-security-module@vger.kernel.org,
+        =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>,
+        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
+        linux-hardening@vger.kernel.org, casey@schaufler-ca.com
+References: <20221102000525.gonna.409-kees@kernel.org>
+From:   Casey Schaufler <casey@schaufler-ca.com>
+In-Reply-To: <20221102000525.gonna.409-kees@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Mailer: WebService/1.1.20783 mail.backend.jedi.jws.acl:role.jedi.acl.token.atz.jws.hermes.yahoo
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 30, 2022 at 05:31:43PM +0800, Shiyang Ruan wrote:
-> 
-> 
-> 在 2022/10/28 9:37, Dan Williams 写道:
-> > Darrick J. Wong wrote:
-> > > [add tytso to cc since he asked about "How do you actually /get/ fsdax
-> > > mode these days?" this morning]
-> > > 
-> > > On Tue, Oct 25, 2022 at 10:56:19AM -0700, Darrick J. Wong wrote:
-> > > > On Tue, Oct 25, 2022 at 02:26:50PM +0000, ruansy.fnst@fujitsu.com wrote:
-> 
-> ...skip...
-> 
-> > > > 
-> > > > Nope.  Since the announcement of pmem as a product, I have had 15
-> > > > minutes of acces to one preproduction prototype server with actual
-> > > > optane DIMMs in them.
-> > > > 
-> > > > I have /never/ had access to real hardware to test any of this, so it's
-> > > > all configured via libvirt to simulate pmem in qemu:
-> > > > https://lore.kernel.org/linux-xfs/YzXsavOWMSuwTBEC@magnolia/
-> > > > 
-> > > > /run/mtrdisk/[gh].mem are both regular files on a tmpfs filesystem:
-> > > > 
-> > > > $ grep mtrdisk /proc/mounts
-> > > > none /run/mtrdisk tmpfs rw,relatime,size=82894848k,inode64 0 0
-> > > > 
-> > > > $ ls -la /run/mtrdisk/[gh].mem
-> > > > -rw-r--r-- 1 libvirt-qemu kvm 10739515392 Oct 24 18:09 /run/mtrdisk/g.mem
-> > > > -rw-r--r-- 1 libvirt-qemu kvm 10739515392 Oct 24 19:28 /run/mtrdisk/h.mem
-> > > 
-> > > Also forgot to mention that the VM with the fake pmem attached has a
-> > > script to do:
-> > > 
-> > > ndctl create-namespace --mode fsdax --map dev -e namespace0.0 -f
-> > > ndctl create-namespace --mode fsdax --map dev -e namespace1.0 -f
-> > > 
-> > > Every time the pmem device gets recreated, because apparently that's the
-> > > only way to get S_DAX mode nowadays?
-> > 
-> > If you have noticed a change here it is due to VM configuration not
-> > anything in the driver.
-> > 
-> > If you are interested there are two ways to get pmem declared the legacy
-> > way that predates any of the DAX work, the kernel calls it E820_PRAM,
-> > and the modern way by platform firmware tables like ACPI NFIT. The
-> > assumption with E820_PRAM is that it is dealing with battery backed
-> > NVDIMMs of small capacity. In that case the /dev/pmem device can support
-> > DAX operation by default because the necessary memory for the 'struct
-> > page' array for that memory is likely small.
-> > 
-> > Platform firmware defined PMEM can be terabytes. So the driver does not
-> > enable DAX by default because the user needs to make policy choice about
-> > burning gigabytes of DRAM for that metadata, or placing it in PMEM which
-> > is abundant, but slower. So what I suspect might be happening is your
-> > configuration changed from something that auto-allocated the 'struct
-> > page' array, to something that needed those commands you list above to
-> > explicitly opt-in to reserving some PMEM capacity for the page metadata.
-> 
-> I am using the same simulation environment as Darrick's and Dave's and have
-> tested many times, but still cannot reproduce the failed cases they
-> mentioned (dax+non_reflink mode, currently focuing) until now. Only a few
-> cases randomly failed because of "target is busy". But IIRC, those failed
-> cases you mentioned were failed with dmesg warning around the function
-> "dax_associate_entry()" or "dax_disassociate_entry()". Since I cannot
-> reproduce the failure, it hard for me to continue sovling the problem.
+On 11/1/2022 5:05 PM, Kees Cook wrote:
+> Enhance the details reported by "lsm.debug" in several ways:
+>
+> - report contents of "security="
+> - report contents of "CONFIG_LSM"
+> - report contents of "lsm="
+> - report any early LSM details
+> - whitespace-align the output of similar phases for easier visual parsing
+> - change "disabled" to more accurate "skipped"
+> - explain what "skipped" and "ignored" mean in a parenthetical
+>
+> Upgrade the "security= is ignored" warning from pr_info to pr_warn,
+> and include full arguments list to make the cause even more clear.
+>
+> Replace static "Security Framework initializing" pr_info with specific
+> list of the resulting order of enabled LSMs.
+>
+> For example, if the kernel is built with:
+>
+> CONFIG_SECURITY_SELINUX=y
+> CONFIG_SECURITY_APPARMOR=y
+> CONFIG_SECURITY_LOADPIN=y
+> CONFIG_SECURITY_YAMA=y
+> CONFIG_SECURITY_SAFESETID=y
+> CONFIG_SECURITY_LOCKDOWN_LSM=y
+> CONFIG_SECURITY_LANDLOCK=y
+> CONFIG_INTEGRITY=y
+> CONFIG_BPF_LSM=y
+> CONFIG_DEFAULT_SECURITY_APPARMOR=y
+> CONFIG_LSM="landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf"
+>
+> Booting without options will show:
+>
+> LSM: initializing lsm=lockdown,capability,landlock,yama,loadpin,safesetid,integrity,selinux,bpf
+> landlock: Up and running.
+> Yama: becoming mindful.
+> LoadPin: ready to pin (currently not enforcing)
+> SELinux:  Initializing.
+> LSM support for eBPF active
+>
+> Boot with "lsm.debug" will show:
+>
+> LSM: legacy security= *unspecified*
+> LSM: CONFIG_LSM=landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf
+> LSM: boot arg lsm= *unspecified*
+> LSM:   early started: lockdown (enabled)
+> LSM:   first ordered: capability (enabled)
+> LSM: builtin ordered: landlock (enabled)
+> LSM: builtin ignored: lockdown (not built into kernel)
+> LSM: builtin ordered: yama (enabled)
+> LSM: builtin ordered: loadpin (enabled)
+> LSM: builtin ordered: safesetid (enabled)
+> LSM: builtin ordered: integrity (enabled)
+> LSM: builtin ordered: selinux (enabled)
+> LSM: builtin ignored: smack (not built into kernel)
+> LSM: builtin ignored: tomoyo (not built into kernel)
+> LSM: builtin ordered: apparmor (enabled)
+> LSM: builtin ordered: bpf (enabled)
+> LSM: exclusive chosen:   selinux
+> LSM: exclusive disabled: apparmor
+> LSM: initializing lsm=lockdown,capability,landlock,yama,loadpin,safesetid,integrity,selinux,bpf
+> LSM: cred blob size       = 32
+> LSM: file blob size       = 16
+> LSM: inode blob size      = 72
+> LSM: ipc blob size        = 8
+> LSM: msg_msg blob size    = 4
+> LSM: superblock blob size = 80
+> LSM: task blob size       = 8
+> LSM: initializing capability
+> LSM: initializing landlock
+> landlock: Up and running.
+> LSM: initializing yama
+> Yama: becoming mindful.
+> LSM: initializing loadpin
+> LoadPin: ready to pin (currently not enforcing)
+> LSM: initializing safesetid
+> LSM: initializing integrity
+> LSM: initializing selinux
+> SELinux:  Initializing.
+> LSM: initializing bpf
+> LSM support for eBPF active
+>
+> And some examples of how the lsm.debug ordering report changes...
+>
+> With "lsm.debug security=selinux":
+>
+> LSM: legacy security=selinux
+> LSM: CONFIG_LSM=landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf
+> LSM: boot arg lsm= *unspecified*
+> LSM:   early started: lockdown (enabled)
+> LSM:   first ordered: capability (enabled)
+> LSM: security=selinux disabled: apparmor (only one legacy major LSM)
+> LSM: builtin ordered: landlock (enabled)
+> LSM: builtin ignored: lockdown (not built into kernel)
+> LSM: builtin ordered: yama (enabled)
+> LSM: builtin ordered: loadpin (enabled)
+> LSM: builtin ordered: safesetid (enabled)
+> LSM: builtin ordered: integrity (enabled)
+> LSM: builtin ordered: selinux (enabled)
+> LSM: builtin ignored: smack (not built into kernel)
+> LSM: builtin ignored: tomoyo (not built into kernel)
+> LSM: builtin ordered: apparmor (disabled)
+> LSM: builtin ordered: bpf (enabled)
+> LSM: exclusive chosen:   selinux
+> LSM: initializing lsm=lockdown,capability,landlock,yama,loadpin,safesetid,integrity,selinux,bpf
+>
+> With "lsm.debug lsm=integrity,selinux,loadpin,crabability,bpf,loadpin,loadpin":
+>
+> LSM: legacy security= *unspecified*
+> LSM: CONFIG_LSM=landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf
+> LSM: boot arg lsm=integrity,selinux,loadpin,capability,bpf,loadpin,loadpin
+> LSM:   early started: lockdown (enabled)
+> LSM:   first ordered: capability (enabled)
+> LSM: cmdline ordered: integrity (enabled)
+> LSM: cmdline ordered: selinux (enabled)
+> LSM: cmdline ordered: loadpin (enabled)
+> LSM: cmdline ignored: crabability (not built into kernel)
+> LSM: cmdline ordered: bpf (enabled)
+> LSM: cmdline skipped: apparmor (not in requested order)
+> LSM: cmdline skipped: yama (not in requested order)
+> LSM: cmdline skipped: safesetid (not in requested order)
+> LSM: cmdline skipped: landlock (not in requested order)
+> LSM: exclusive chosen:   selinux
+> LSM: initializing lsm=lockdown,capability,integrity,selinux,loadpin,bpf
+>
+> Cc: Paul Moore <paul@paul-moore.com>
+> Cc: James Morris <jmorris@namei.org>
+> Cc: "Serge E. Hallyn" <serge@hallyn.com>
+> Cc: linux-security-module@vger.kernel.org
+> Signed-off-by: Kees Cook <keescook@chromium.org>
 
-FWIW things have calmed down as of 6.1-rc3 -- if I disable reflink,
-fstests runs without complaint.  Now it only seems to be affecting
-reflink=1 filesystems.
+Acked-by: Casey Schaufler <casey@schaufler-ca.com>
 
-> And how is your recent test?  Still failed with those dmesg warnings? If so,
-> could you zip the test result and send it to me?
+I'm curious about what is driving this change.
 
-https://djwong.org/docs/kernel/daxbad.zip
-
---D
-
-> 
-> 
-> --
-> Thanks,
-> Ruan
+> ---
+> v2: en/dis-enabled expanded, example output in commit log, use pr_cont.
+> v1: https://lore.kernel.org/lkml/20221018064825.never.323-kees@kernel.org/
+> ---
+>  security/security.c | 45 ++++++++++++++++++++++++++++++++++++---------
+>  1 file changed, 36 insertions(+), 9 deletions(-)
+>
+> diff --git a/security/security.c b/security/security.c
+> index 79d82cb6e469..abceabda103d 100644
+> --- a/security/security.c
+> +++ b/security/security.c
+> @@ -161,8 +161,8 @@ static void __init append_ordered_lsm(struct lsm_info *lsm, const char *from)
+>  		lsm->enabled = &lsm_enabled_true;
+>  	ordered_lsms[last_lsm++] = lsm;
+>  
+> -	init_debug("%s ordering: %s (%sabled)\n", from, lsm->name,
+> -		   is_enabled(lsm) ? "en" : "dis");
+> +	init_debug("%s ordered: %s (%s)\n", from, lsm->name,
+> +		   is_enabled(lsm) ? "enabled" : "disabled");
+>  }
+>  
+>  /* Is an LSM allowed to be initialized? */
+> @@ -224,7 +224,7 @@ static void __init prepare_lsm(struct lsm_info *lsm)
+>  	if (enabled) {
+>  		if ((lsm->flags & LSM_FLAG_EXCLUSIVE) && !exclusive) {
+>  			exclusive = lsm;
+> -			init_debug("exclusive chosen: %s\n", lsm->name);
+> +			init_debug("exclusive chosen:   %s\n", lsm->name);
+>  		}
+>  
+>  		lsm_set_blob_sizes(lsm->blobs);
+> @@ -252,7 +252,7 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+>  	/* LSM_ORDER_FIRST is always first. */
+>  	for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
+>  		if (lsm->order == LSM_ORDER_FIRST)
+> -			append_ordered_lsm(lsm, "first");
+> +			append_ordered_lsm(lsm, "  first");
+>  	}
+>  
+>  	/* Process "security=", if given. */
+> @@ -270,7 +270,7 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+>  			if ((major->flags & LSM_FLAG_LEGACY_MAJOR) &&
+>  			    strcmp(major->name, chosen_major_lsm) != 0) {
+>  				set_enabled(major, false);
+> -				init_debug("security=%s disabled: %s\n",
+> +				init_debug("security=%s disabled: %s (only one legacy major LSM)\n",
+>  					   chosen_major_lsm, major->name);
+>  			}
+>  		}
+> @@ -291,7 +291,8 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+>  		}
+>  
+>  		if (!found)
+> -			init_debug("%s ignored: %s\n", origin, name);
+> +			init_debug("%s ignored: %s (not built into kernel)\n",
+> +				   origin, name);
+>  	}
+>  
+>  	/* Process "security=", if given. */
+> @@ -309,7 +310,8 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
+>  		if (exists_ordered_lsm(lsm))
+>  			continue;
+>  		set_enabled(lsm, false);
+> -		init_debug("%s disabled: %s\n", origin, lsm->name);
+> +		init_debug("%s skipped: %s (not in requested order)\n",
+> +			   origin, lsm->name);
+>  	}
+>  
+>  	kfree(sep);
+> @@ -320,6 +322,24 @@ static void __init lsm_early_task(struct task_struct *task);
+>  
+>  static int lsm_append(const char *new, char **result);
+>  
+> +static void __init report_lsm_order(void)
+> +{
+> +	struct lsm_info **lsm, *early;
+> +	int first = 0;
+> +
+> +	pr_info("initializing lsm=");
+> +
+> +	/* Report each enabled LSM name, comma separated. */
+> +	for (early = __start_early_lsm_info; early < __end_early_lsm_info; early++)
+> +		if (is_enabled(early))
+> +			pr_cont("%s%s", first++ == 0 ? "" : ",", early->name);
+> +	for (lsm = ordered_lsms; *lsm; lsm++)
+> +		if (is_enabled(*lsm))
+> +			pr_cont("%s%s", first++ == 0 ? "" : ",", (*lsm)->name);
+> +
+> +	pr_cont("\n");
+> +}
+> +
+>  static void __init ordered_lsm_init(void)
+>  {
+>  	struct lsm_info **lsm;
+> @@ -329,7 +349,8 @@ static void __init ordered_lsm_init(void)
+>  
+>  	if (chosen_lsm_order) {
+>  		if (chosen_major_lsm) {
+> -			pr_info("security= is ignored because it is superseded by lsm=\n");
+> +			pr_warn("security=%s is ignored because it is superseded by lsm=%s\n",
+> +				chosen_major_lsm, chosen_lsm_order);
+>  			chosen_major_lsm = NULL;
+>  		}
+>  		ordered_lsm_parse(chosen_lsm_order, "cmdline");
+> @@ -339,6 +360,8 @@ static void __init ordered_lsm_init(void)
+>  	for (lsm = ordered_lsms; *lsm; lsm++)
+>  		prepare_lsm(*lsm);
+>  
+> +	report_lsm_order();
+> +
+>  	init_debug("cred blob size       = %d\n", blob_sizes.lbs_cred);
+>  	init_debug("file blob size       = %d\n", blob_sizes.lbs_file);
+>  	init_debug("inode blob size      = %d\n", blob_sizes.lbs_inode);
+> @@ -395,13 +418,17 @@ int __init security_init(void)
+>  {
+>  	struct lsm_info *lsm;
+>  
+> -	pr_info("Security Framework initializing\n");
+> +	init_debug("legacy security=%s\n", chosen_major_lsm ?: " *unspecified*");
+> +	init_debug("  CONFIG_LSM=%s\n", builtin_lsm_order);
+> +	init_debug("boot arg lsm=%s\n", chosen_lsm_order ?: " *unspecified*");
+>  
+>  	/*
+>  	 * Append the names of the early LSM modules now that kmalloc() is
+>  	 * available
+>  	 */
+>  	for (lsm = __start_early_lsm_info; lsm < __end_early_lsm_info; lsm++) {
+> +		init_debug("  early started: %s (%s)\n", lsm->name,
+> +			   is_enabled(lsm) ? "enabled" : "disabled");
+>  		if (lsm->enabled)
+>  			lsm_append(lsm->name, &lsm_names);
+>  	}
