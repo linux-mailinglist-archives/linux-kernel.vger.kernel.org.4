@@ -2,228 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3420F616D58
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 20:03:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D015616D55
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 20:03:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231724AbiKBTDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 15:03:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59476 "EHLO
+        id S231737AbiKBTD2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 15:03:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59732 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231742AbiKBTDr (ORCPT
+        with ESMTP id S231703AbiKBTDZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 15:03:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20072C0
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 12:02:54 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667415773;
+        Wed, 2 Nov 2022 15:03:25 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D19A63BE;
+        Wed,  2 Nov 2022 12:03:24 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e741329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e741:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E9BF01EC0426;
+        Wed,  2 Nov 2022 20:03:21 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1667415802;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=UqcZSn2dIGg+txRUz0yg2pNp7hn+WnfiER5ZgqstaLw=;
-        b=SQPVj7ssE2pl2mwGhEHrqCLZGeUWfwwTvJv53d4uQOxww0vM6Oscj/2pDWWgzqgkiqRWyz
-        7aNrV2yeoiLioOpXFUyBTJrq9lC9XcBG7y8mYc/BVRQS77b06sN+LyG8uBpW+J5XWZaVDB
-        r8TXdvc6KtibiwZn+SXCav7rmZTZ8Hs=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-35-NDWALGgFMo-Mv8dH-Zh2jA-1; Wed, 02 Nov 2022 15:02:52 -0400
-X-MC-Unique: NDWALGgFMo-Mv8dH-Zh2jA-1
-Received: by mail-qt1-f197.google.com with SMTP id i4-20020ac813c4000000b003a5044a818cso11134929qtj.11
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 12:02:52 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UqcZSn2dIGg+txRUz0yg2pNp7hn+WnfiER5ZgqstaLw=;
-        b=Ex8iKmbVQbHvfvx9HZ8OpsHqAVHt/QZhvnemreZ36uvlUaTPVcrYNOvDyWNFqDddqH
-         oolgjQqEj7eSMSQuVNBhhYJL0GfknKvdS33Haf09jPfnufWXNwZoQWM0EGyMKLWhQUY1
-         qv/HGCgUyK88gkxPCkaWyrQ2+8qOARcXN8wPQcENbL01uCDXHLqM5t8aReKxFLk0HBin
-         6M8Ub/eDtBw9EoMbanT8paDN8UYUY0Z65/vh7eAYYVnIHOBzBkazzip/uWTI92k6eL9C
-         t/X8Ilqa/kpPPxRtGOUSQAqRs/93JUu27LPp7sG9tTHegEQoEzApaO9Nhccp+Ai2kkHF
-         utVg==
-X-Gm-Message-State: ACrzQf2KPbde6XVp0JJBcmyK9apZ/nR8xpz0EfCt2VA83OvPovO2U1xi
-        Hj4mzcSAJjp+vwgPyBcdr06Sg4C6rOvZWhMDZmeBKyHbblojHpi5mdP22hd+CLN/zSRSPesGX9x
-        +imOBOwveg4MOj6cc5m/ZRzzw
-X-Received: by 2002:a0c:e28a:0:b0:4b9:e578:1581 with SMTP id r10-20020a0ce28a000000b004b9e5781581mr22708703qvl.102.1667415767051;
-        Wed, 02 Nov 2022 12:02:47 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM6MCTCf/l3AxomdMLN6xadr+DHXOXgwS23JyXphBskH+IPvIsI6jm68HNZtMx+QppTeytMxpA==
-X-Received: by 2002:a0c:e28a:0:b0:4b9:e578:1581 with SMTP id r10-20020a0ce28a000000b004b9e5781581mr22708077qvl.102.1667415757850;
-        Wed, 02 Nov 2022 12:02:37 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id fx7-20020a05622a4ac700b003a4f6a566e9sm6990905qtb.83.2022.11.02.12.02.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 12:02:36 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 15:02:35 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Matthew Wilcox <willy@infradead.org>
-Cc:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org,
-        Hugh Dickins <hughd@google.com>,
-        Axel Rasmussen <axelrasmussen@google.com>
-Subject: Re: [PATCH 3/5] userfualtfd: Replace lru_cache functions with
- folio_add functions
-Message-ID: <Y2K+y7wnhC4vbnP2@x1n>
-References: <20221101175326.13265-1-vishal.moola@gmail.com>
- <20221101175326.13265-4-vishal.moola@gmail.com>
- <Y2Fl/pZyLSw/ddZY@casper.infradead.org>
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=RVyN7kuq7UHk5zEp061nN94sGhj7lHSPMVlNMnUJTf4=;
+        b=dAjjIwJTXnj0LfdeDLwrrAsn/C8xEntX/jQpngLatvWStx4/nqIcV5ph5m6R4++l+gM8Uu
+        tMP42jEztjPGyP1il2jMRc/MXv3KLvKcTVeHgZHwJCecMz+U2CdcXu+QBkMKF/dfhmZMoX
+        C5ycdIbDZg2rCE6TBuOmoWrjBDyhht4=
+Date:   Wed, 2 Nov 2022 20:03:18 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Jithu Joseph <jithu.joseph@intel.com>
+Cc:     hdegoede@redhat.com, markgross@kernel.org, tglx@linutronix.de,
+        mingo@redhat.com, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, gregkh@linuxfoundation.org, ashok.raj@intel.com,
+        tony.luck@intel.com, linux-kernel@vger.kernel.org,
+        platform-driver-x86@vger.kernel.org, patches@lists.linux.dev,
+        ravi.v.shankar@intel.com, thiago.macieira@intel.com,
+        athenas.jimenez.gonzalez@intel.com
+Subject: Re: [PATCH 05/14] x86/microcode/intel: Expose
+ find_matching_signature() for IFS
+Message-ID: <Y2K+9jfb5xiYE3eU@zn.tnic>
+References: <20221021203413.1220137-1-jithu.joseph@intel.com>
+ <20221021203413.1220137-6-jithu.joseph@intel.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="XtXX9UT9oQ4Z3Adt"
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y2Fl/pZyLSw/ddZY@casper.infradead.org>
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221021203413.1220137-6-jithu.joseph@intel.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Fri, Oct 21, 2022 at 01:34:04PM -0700, Jithu Joseph wrote:
+> IFS uses 'scan test images' provided by Intel that can be regarded as
+> firmware. IFS test image carries microcode header with extended signature
+> table.
+> 
+> Expose find_matching_signature() for verifying if the test image
+> header or the extended signature table indicate whether an IFS test image
+> is fit to run on a system. Add microcode_intel_ prefix to the
+> function name.
 
---XtXX9UT9oQ4Z3Adt
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+This doesn't look like the right design to me:
 
-On Tue, Nov 01, 2022 at 06:31:26PM +0000, Matthew Wilcox wrote:
-> On Tue, Nov 01, 2022 at 10:53:24AM -0700, Vishal Moola (Oracle) wrote:
-> > Replaces lru_cache_add() and lru_cache_add_inactive_or_unevictable()
-> > with folio_add_lru() and folio_add_lru_vma(). This is in preparation for
-> > the removal of lru_cache_add().
-> 
-> Ummmmm.  Reviewing this patch reveals a bug (not introduced by your
-> patch).  Look:
-> 
-> mfill_atomic_install_pte:
->         bool page_in_cache = page->mapping;
-> 
-> mcontinue_atomic_pte:
->         ret = shmem_get_folio(inode, pgoff, &folio, SGP_NOALLOC);
-> ...
->         page = folio_file_page(folio, pgoff);
->         ret = mfill_atomic_install_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
->                                        page, false, wp_copy);
-> 
-> That says pretty plainly that mfill_atomic_install_pte() can be passed
-> a tail page from shmem, and if it is ...
-> 
->         if (page_in_cache) {
-> ...
->         } else {
->                 page_add_new_anon_rmap(page, dst_vma, dst_addr);
->                 lru_cache_add_inactive_or_unevictable(page, dst_vma);
->         }
-> 
-> it'll get put on the rmap as an anon page!
+If this is going to be generic CPU-vendor related code which other
+facilities like the microcode loader can use, then the prefix should be
+intel_<bla>. Just like intel_cpu_signatures_match().
 
-Hmm yeah.. thanks Matthew!
+Then that code should either be in a lib-like compilation unit or simply
+in arch/x86/kernel/cpu/intel.c. Just like intel_cpu_signatures_match().
 
-Does the patch attached look reasonable to you?
-
-Copying Axel too.
-
-> 
-> > Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
-> > ---
-> >  mm/userfaultfd.c | 6 ++++--
-> >  1 file changed, 4 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-> > index e24e8a47ce8a..2560973b00d8 100644
-> > --- a/mm/userfaultfd.c
-> > +++ b/mm/userfaultfd.c
-> > @@ -66,6 +66,7 @@ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
-> >  	bool vm_shared = dst_vma->vm_flags & VM_SHARED;
-> >  	bool page_in_cache = page->mapping;
-> >  	spinlock_t *ptl;
-> > +	struct folio *folio;
-> >  	struct inode *inode;
-> >  	pgoff_t offset, max_off;
-> >  
-> > @@ -113,14 +114,15 @@ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
-> >  	if (!pte_none_mostly(*dst_pte))
-> >  		goto out_unlock;
-> >  
-> > +	folio = page_folio(page);
-> >  	if (page_in_cache) {
-> >  		/* Usually, cache pages are already added to LRU */
-> >  		if (newly_allocated)
-> > -			lru_cache_add(page);
-> > +			folio_add_lru(folio);
-> >  		page_add_file_rmap(page, dst_vma, false);
-> >  	} else {
-> >  		page_add_new_anon_rmap(page, dst_vma, dst_addr);
-> > -		lru_cache_add_inactive_or_unevictable(page, dst_vma);
-> > +		folio_add_lru_vma(folio, dst_vma);
-> >  	}
-> >  
-> >  	/*
-> > -- 
-> > 2.38.1
-> > 
-> > 
-> 
+Ok?
 
 -- 
-Peter Xu
+Regards/Gruss,
+    Boris.
 
---XtXX9UT9oQ4Z3Adt
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: attachment;
-	filename="0001-mm-shmem-Use-page_mapping-to-detect-page-cache-for-u.patch"
-
-From 4eea0908b4890745bedd931283c1af91f509d039 Mon Sep 17 00:00:00 2001
-From: Peter Xu <peterx@redhat.com>
-Date: Wed, 2 Nov 2022 14:41:52 -0400
-Subject: [PATCH] mm/shmem: Use page_mapping() to detect page cache for uffd
- continue
-Content-type: text/plain
-
-mfill_atomic_install_pte() checks page->mapping to detect whether one page
-is used in the page cache.  However as pointed out by Matthew, the page can
-logically be a tail page rather than always the head in the case of uffd
-minor mode with UFFDIO_CONTINUE.  It means we could wrongly install one pte
-with shmem thp tail page assuming it's an anonymous page.
-
-It's not that clear even for anonymous page, since normally anonymous pages
-also have page->mapping being setup with the anon vma. It's safe here only
-because the only such caller to mfill_atomic_install_pte() is always
-passing in a newly allocated page (mcopy_atomic_pte()), whose page->mapping
-is not yet setup.  However that's not extremely obvious either.
-
-For either of above, use page_mapping() instead.
-
-And this should be stable material.
-
-Cc: Andrea Arcangeli <aarcange@redhat.com>
-Cc: Hugh Dickins <hughd@google.com>
-Cc: Axel Rasmussen <axelrasmussen@google.com>
-Cc: stable@vger.kernel.org
-Reported-by: Matthew Wilcox <willy@infradead.org>
-Signed-off-by: Peter Xu <peterx@redhat.com>
----
- mm/userfaultfd.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-index 3d0fef3980b3..650ab6cfd5f4 100644
---- a/mm/userfaultfd.c
-+++ b/mm/userfaultfd.c
-@@ -64,7 +64,7 @@ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
- 	pte_t _dst_pte, *dst_pte;
- 	bool writable = dst_vma->vm_flags & VM_WRITE;
- 	bool vm_shared = dst_vma->vm_flags & VM_SHARED;
--	bool page_in_cache = page->mapping;
-+	bool page_in_cache = page_mapping(page);
- 	spinlock_t *ptl;
- 	struct inode *inode;
- 	pgoff_t offset, max_off;
--- 
-2.37.3
-
-
---XtXX9UT9oQ4Z3Adt--
-
+https://people.kernel.org/tglx/notes-about-netiquette
