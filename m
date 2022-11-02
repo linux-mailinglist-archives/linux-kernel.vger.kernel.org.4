@@ -2,105 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 589DC616DD6
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 20:30:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82EE0616DE0
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 20:33:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230304AbiKBTaa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 15:30:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50782 "EHLO
+        id S231197AbiKBTdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 15:33:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51798 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229640AbiKBTaZ (ORCPT
+        with ESMTP id S230179AbiKBTdg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 15:30:25 -0400
-Received: from mail-pg1-x549.google.com (mail-pg1-x549.google.com [IPv6:2607:f8b0:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B42565CA
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 12:30:25 -0700 (PDT)
-Received: by mail-pg1-x549.google.com with SMTP id v18-20020a637a12000000b0046ed84b94efso9853178pgc.6
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 12:30:25 -0700 (PDT)
+        Wed, 2 Nov 2022 15:33:36 -0400
+Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09F338AC
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 12:33:35 -0700 (PDT)
+Received: by mail-pl1-x633.google.com with SMTP id p21so13679876plr.7
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 12:33:35 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=4mfNKilwFmWrqa2spYtO5Tj25NqUdCGG8fx/ELXfW3g=;
-        b=hhK6C71gMmgCuhyKE25DVYTKUHSUUpT5xEYkm1oWFozn/GMGCDvp3A4t4RmXNVxaaV
-         YWZdMzV2pCTe90Zn/na6/OD8hPoDn73YxV4ek+H8NFrId8pLGs9gB15H/I13eQBbfx03
-         Zq6aRH94hVD2SytAxjwfY+Ri/baAKSJ3od+LHlYlOX9tmS6OfREqelFSknh3W5pxgFBQ
-         qh6aafaql1y7CMtxFYjFwYw+YXOq7TNxfstUffyK70SfuaA5n68E6m6wAQ3ojftVQnMk
-         EbYETIW/CyYkeJyEUoUKENpYhHAVRBVMKCmzAJZQIkUpXXbjG7IGT+BspHKzZoRUyKbw
-         QGWw==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Is8uxYlhyk8bBxYXj/AJ+5Ed7risnbmV/bZZuRONlGw=;
+        b=YgTo3g4CWnxassQXwnQGCJRK8UV2dkG1gd5qUAMt9TS//89B3+EgDk8JBHMqQRWbqE
+         SasIIt6rr9pasf/tRkH/JpmtucjEENqYnz4Ij31JPs/tyYvKfhh0Xab/ZL8Kv52Brl9z
+         k+6eHolz1b5J42Hw8E/CNYhE3n7UgliU9iEI8=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:mime-version:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=4mfNKilwFmWrqa2spYtO5Tj25NqUdCGG8fx/ELXfW3g=;
-        b=FHCTqy5Y423x4/Bs1TpYn4Qvm5VH1day5Ann8VFKVCFIppWXGJIvlGZ+14jynWmhJM
-         wTtIHFo9GjQD372v/J73iL9Sgz+0IqmFz7kfDTOZAf6z1EOTtFyKXSSTukMZhNiTMhEm
-         zXIBjrPHysMrbe+0a5YFH4l0h7Q3Pa/mQw1Czpa0i4zWhn8+r/ElV7mg9mblbXvjvfDk
-         P60rRe1m0xTRLFTFpLWAv7DjzWXVAQ/lVcaum7QOPSmaV7nGtk+lISmsls8eaJRJYj26
-         fTWSQKE7ui/krXsUGww2A3TtfZJs+3stQQ4igeeaJujxeSHFnC+fwKnTDdrgaq6zsSKt
-         AlJg==
-X-Gm-Message-State: ACrzQf0cJFwwaBfEegudgG7mhai1DEs+5CXXnZjsATEvfoRdaQJ0J0Jx
-        u0AFMCIEXug14mniuaxpeml1kfEvRB4WhcGjamV2M2U58IQFZ931QshxgzVggq6+vPBS1rI3on+
-        53IcimlOE+TmKuumCNFje25egulWR+ypOR4MybkY86r7jMbJfcHwFoEdzI2952aE9xEA6dEqW
-X-Google-Smtp-Source: AMsMyM6Jl6QZZ8lvOVzndcSJfSzMoMifS9JXraVtV/8BvsFPPKWh2/05r04l+hviMGWLAssl3ix1QT/J950k
-X-Received: from sweer.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:e45])
- (user=bgardon job=sendgmr) by 2002:aa7:9099:0:b0:56a:d3f0:a013 with SMTP id
- i25-20020aa79099000000b0056ad3f0a013mr26991991pfa.26.1667417424554; Wed, 02
- Nov 2022 12:30:24 -0700 (PDT)
-Date:   Wed,  2 Nov 2022 19:30:20 +0000
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221102193020.1091939-1-bgardon@google.com>
-Subject: [PATCH] KVM: x86: Use SRCU to protect zap in __kvm_set_or_clear_apicv_inhibit
-From:   Ben Gardon <bgardon@google.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Cc:     Paolo Bonzini <pbonzini@redhat.com>,
-        Sean Christopherson <seanjc@google.com>,
-        David Matlack <dmatlack@google.com>,
-        Anish Ghulati <aghulati@google.com>,
-        Ben Gardon <bgardon@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Is8uxYlhyk8bBxYXj/AJ+5Ed7risnbmV/bZZuRONlGw=;
+        b=MjUXPMLeh+Dx4sdk5eI1MwKmInFGLJ+Ao89Jd5fnAR4D5xjeHzMEueKWf9ItNod3f2
+         jsCGtn1a80D7Er2UM/dvkXFvkCPbrzKdl8GV7Xs0PLw/ZiriiJnb8BUrNWG1jkt5cCjW
+         hBRj8JimGAf87nEx+qKeJUfbv8ztJPGvIOdd5tWwTkWAHIrwq4Ie1kU4GsFgQqHqdT8X
+         6RbNIDkly5TDFSBNjlnWmXrjeZykvH8vsFo5m1pi8oSmBX/aWuJ3HN1vXFyLrxnKIMb9
+         8w1+aYKi5O6QHumD0hcLIFyi6b30VtiVfPBNpqUGTmJ7AImG3JuHUtWYLr9w26N/YyoZ
+         WKng==
+X-Gm-Message-State: ACrzQf1oIWG0+HTOWW89cKz8dxMi3upES4eA8aOwed3q55jE6tUoLDWU
+        aAcoF3XisYH5TqXXPHEW/XMRLw==
+X-Google-Smtp-Source: AMsMyM53U0WVK/IltYw2wXUwLPZJui+ftOfV8T9ZqcZx2iahytioyLerdzpOUR84Yg1+mPoG2ixzFA==
+X-Received: by 2002:a17:902:7446:b0:186:a3a1:782d with SMTP id e6-20020a170902744600b00186a3a1782dmr26452013plt.76.1667417615186;
+        Wed, 02 Nov 2022 12:33:35 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id s7-20020a170902988700b001811a197797sm8605891plp.194.2022.11.02.12.33.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 12:33:34 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 12:33:33 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+Cc:     Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
+        luc.vanoostenryck@gmail.com, nathan@kernel.org,
+        ndesaulniers@google.com, trix@redhat.com, dlatypov@google.com,
+        vitor@massaru.org, gustavoars@kernel.org,
+        linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
+        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+        airlied@linux.ie, daniel@ffwll.ch, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-sparse@vger.kernel.org, arnd@kernel.org, mchehab@kernel.org,
+        mauro.chehab@linux.intel.com
+Subject: Re: [PATCH v5] overflow: Introduce overflows_type() and
+ castable_to_type()
+Message-ID: <202211021233.02BF0D38@keescook>
+References: <20220926191109.1803094-1-keescook@chromium.org>
+ <20221024201125.1416422-1-gwan-gyeong.mun@intel.com>
+ <307b90cb-b80d-6ce3-14ae-4a0b2ee5e447@prevas.dk>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <307b90cb-b80d-6ce3-14ae-4a0b2ee5e447@prevas.dk>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-kvm_zap_gfn_range must be called in an SRCU read-critical section, but
-there is no SRCU annotation in __kvm_set_or_clear_apicv_inhibit.
-Add the needed SRCU annotation.
+On Wed, Nov 02, 2022 at 12:52:32PM +0100, Rasmus Villemoes wrote:
+> On 24/10/2022 22.11, Gwan-gyeong Mun wrote:
+> > From: Kees Cook <keescook@chromium.org>
+> > 
+> > Implement a robust overflows_type() macro to test if a variable or
+> > constant value would overflow another variable or type. This can be
+> > used as a constant expression for static_assert() (which requires a
+> > constant expression[1][2]) when used on constant values. This must be
+> > constructed manually, since __builtin_add_overflow() does not produce
+> > a constant expression[3].
+> > 
+> > Additionally adds castable_to_type(), similar to __same_type(), but for
+> > checking if a constant value would overflow if cast to a given type.
+> > 
+> 
+> > +#define __overflows_type_constexpr(x, T) (			\
+> > +	is_unsigned_type(typeof(x)) ?				\
+> > +		(x) > type_max(typeof(T)) ? 1 : 0		\
+> > +	: is_unsigned_type(typeof(T)) ?				\
+> > +		(x) < 0 || (x) > type_max(typeof(T)) ? 1 : 0	\
+> > +		: (x) < type_min(typeof(T)) ||			\
+> > +		  (x) > type_max(typeof(T)) ? 1 : 0)
+> > +
+> 
+> Can't all these instances of "foo ? 1 : 0" be simplified to "foo"? That
+> would improve the readability of this thing somewhat IMO.
 
-Tested: ran tools/testing/selftests/kvm/x86_64/debug_regs on a DBG
-	build. This patch causes the suspicious RCU warning to disappear.
-	Note that the warning is hit in __kvm_zap_rmaps, so
-	kvm_memslots_have_rmaps must return true in order for this to
-	repro (i.e. the TDP MMU must be off or nesting in use.)
+Oh, good point. :P I'll fix these.
 
-Fixes: 36222b117e36 ("KVM: x86: don't disable APICv memslot when inhibited")
-Signed-off-by: Ben Gardon <bgardon@google.com>
----
- arch/x86/kvm/x86.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/arch/x86/kvm/x86.c b/arch/x86/kvm/x86.c
-index cd9eb13e2ed7..6d853e5f683d 100644
---- a/arch/x86/kvm/x86.c
-+++ b/arch/x86/kvm/x86.c
-@@ -10091,7 +10091,10 @@ void __kvm_set_or_clear_apicv_inhibit(struct kvm *kvm,
- 		kvm->arch.apicv_inhibit_reasons = new;
- 		if (new) {
- 			unsigned long gfn = gpa_to_gfn(APIC_DEFAULT_PHYS_BASE);
-+			int idx = srcu_read_lock(&kvm->srcu);
-+
- 			kvm_zap_gfn_range(kvm, gfn, gfn+1);
-+			srcu_read_unlock(&kvm->srcu, idx);
- 		}
- 	} else {
- 		kvm->arch.apicv_inhibit_reasons = new;
 -- 
-2.38.1.431.g37b22c650d-goog
-
+Kees Cook
