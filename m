@@ -2,77 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BCF8616A65
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:16:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2DFE0616A6B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:17:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229551AbiKBRQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:16:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43050 "EHLO
+        id S230006AbiKBRRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:17:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231354AbiKBRQO (ORCPT
+        with ESMTP id S230241AbiKBRRI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:16:14 -0400
-Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A494B240B2;
-        Wed,  2 Nov 2022 10:16:06 -0700 (PDT)
-Received: by mail-qt1-x829.google.com with SMTP id l2so7049413qtq.11;
-        Wed, 02 Nov 2022 10:16:06 -0700 (PDT)
+        Wed, 2 Nov 2022 13:17:08 -0400
+Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BBE21E0A;
+        Wed,  2 Nov 2022 10:17:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qOws5RrrraQdImG7NAEUZloT5JDKMF2E4x52BNGTp6o=;
-        b=M4Nnssqn0CLZ6bbqRAXUeda+p4sEo2IVnHL5NiHzr+9OjC/1dvnz1f0eX+eMN0YM54
-         5wsDIp1jbQAhrAXR1VLjaGmA8ao2/w1zPdv/vpVWZIJRfNigbJta3XU5EFsIHUvy2lfn
-         mmkGPcKBSl1a2Fyp771XfMUZ0sPCdX8ICQc6cmKQePvDGJAD221Q9nVglpVhD4G5f6xp
-         ctmZrUGxrvfveHphhy4/uzKPWSx7v+Ot9DIJ29wfUP8kgwbLI/9peoHpcpvf3Fox7Oh2
-         z6PRaJV7UGJMliATe7e9D+6ggzmJpBUvZHFx0RMeOfBDK4oKIvBSLGvDlD3NqecFozSJ
-         0jkA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qOws5RrrraQdImG7NAEUZloT5JDKMF2E4x52BNGTp6o=;
-        b=RPISGnk242uMkfL27Um9IU/Ll9d66bJMKaUiSwSKCaQM+THogPgbXxxchFaG9xrwRa
-         FkpTUcVjwnRpj0WTBouL+Vg0ELyCPifaNGJxAALU0D+AGToFAOFkn3GauGLS7msYn0SM
-         pOE3cdOwnsW0rchbvE4kuOje8muGvSZZTZzu+5fc/apHmUsNrxYrfHKbFd7+XoKHGFf1
-         nHiGAoI9cQnInTEUS4sO5KjODpCObc/khDRTQA3gs5d8UrS3qkqJLmy1/+MN5cW+XTzl
-         C5AGkORjYytWMdOBXp2ANesqP0kM8VuewIG9tLIf3F+GBlaw97yoqOv3b3SN0SGbr7Cw
-         hylA==
-X-Gm-Message-State: ACrzQf2KOcTlG/GnvDX8BicsBBJ6eRbFvjKdN0RbvQbJBjS9lzyUCNXL
-        sKbpi6PmApCIKgH+4GBsne0=
-X-Google-Smtp-Source: AMsMyM4d5BBr3cpnwag87E2VXkpTPiRwe4/d3whuL1AvHhdmwd8wNJwXCpAKO2uwCl8bxsLc/gMZ9g==
-X-Received: by 2002:a05:622a:1cc8:b0:3a5:30df:5e0f with SMTP id bc8-20020a05622a1cc800b003a530df5e0fmr10831574qtb.634.1667409365696;
-        Wed, 02 Nov 2022 10:16:05 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id hg24-20020a05622a611800b00398a7c860c2sm6807322qtb.4.2022.11.02.10.16.01
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 10:16:05 -0700 (PDT)
-Message-ID: <cc5dd02f-7285-dfcf-76b1-bb258c8029fb@gmail.com>
-Date:   Wed, 2 Nov 2022 10:15:54 -0700
+  d=inria.fr; s=dc;
+  h=date:from:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Hwlkw4yAnCdRiQ+TM46iAZW7QPfAAgCdGvGqNHRyplo=;
+  b=H5UvIVYTfCSfCsJKvK0mipZhvhRzj9y8kKLh86gNspOg4Ze7Dcy8Ys3O
+   gldI0+jMNErr2iMaqtJsOvJMVxpQuEpIvlRQr3v01N3cdqZLlz+mS7Gjt
+   C7nPoQRkj62ttpQ5YKEv4lrhBw4Sk+sBcGeOL2bLmUuZwcB8fjjU6FoCK
+   M=;
+Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
+X-IronPort-AV: E=Sophos;i="5.95,234,1661810400"; 
+   d="scan'208";a="72701514"
+Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
+  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 18:17:04 +0100
+Date:   Wed, 2 Nov 2022 18:17:04 +0100 (CET)
+From:   Julia Lawall <julia.lawall@inria.fr>
+To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
+cc:     Kees Cook <keescook@chromium.org>, cocci@inria.fr,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Alexey Dobriyan <adobriyan@gmail.com>,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        mm-commits@vger.kernel.org, masahiroy@kernel.org,
+        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
+        Stephen Rothwell <sfr@canb.auug.org.au>
+Subject: Re: [cocci] [PATCH -mm] -funsigned-char, x86: make struct
+ p4_event_bind::cntr signed array
+In-Reply-To: <Y1ku+jfRAyezq6Nz@zx2c4.com>
+Message-ID: <b72d866d-1dce-7260-7f1e-54be9fd25e97@inria.fr>
+References: <20221020000356.177CDC433C1@smtp.kernel.org> <Y1EZuQcO8UoN91cX@localhost.localdomain> <CAHmME9prEhkHqQmtDGCSFunNnxiKdE_8FHKiksyqebUN63U81Q@mail.gmail.com> <CAHk-=whFow9Wd6C8htoRUt5wXbwf1i_qbuArBbhXOPqYsTFvtw@mail.gmail.com>
+ <CAHmME9qBZqTd0D_gr8nE+DUzCrC0fxZNZK=7u+21jbgtFgAJBg@mail.gmail.com> <CAHk-=wjZDC9o8iwF+bU91Hx40HjGOpMui+VoFCDJkaGCu=rG4A@mail.gmail.com> <202210201151.ECC19BC97A@keescook> <Y1iSYddi3BpP8gvf@zx2c4.com> <Y1ku+jfRAyezq6Nz@zx2c4.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH net-next 1/6] net: dsa: microchip: lan937x: add regmap
- range validation
-Content-Language: en-US
-To:     Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
-Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
-        andrew@lunn.ch, vivien.didelot@gmail.com, olteanv@gmail.com,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com
-References: <20221102041058.128779-1-rakesh.sankaranarayanan@microchip.com>
- <20221102041058.128779-2-rakesh.sankaranarayanan@microchip.com>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221102041058.128779-2-rakesh.sankaranarayanan@microchip.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=US-ASCII
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,42 +57,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/1/22 21:10, Rakesh Sankaranarayanan wrote:
-> Add regmap_range and regmap_access_table to define valid
-> register range for LAN937x switch family. LAN937x family
-> have sku id's LAN9370, LAN9371, LAN9372, LAN9373 and
-> LAN9374. regmap_range structure is arranged as Global
-> Registers followed by Port Registers but they are distributed
-> as Global Registers, T1 PHY Port Registers, Tx PHY Port Registers,
-> RGMII Port Registers, SGMII Port Registers. On 16 bit addressing,
-> most significant 4 bits are used for representing port number.
-> So valid range of two different T1 PHY ports within a sku
-> will differ on upper nibble only.
-> 
-> Signed-off-by: Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
-> ---
->   drivers/net/dsa/microchip/ksz_common.c | 1760 ++++++++++++++++++++++++
->   1 file changed, 1760 insertions(+)
-> 
-> diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
-> index d612181b3226..b0905c5b701d 100644
-> --- a/drivers/net/dsa/microchip/ksz_common.c
-> +++ b/drivers/net/dsa/microchip/ksz_common.c
-> @@ -1030,6 +1030,1756 @@ static const struct regmap_access_table ksz9896_register_set = {
->   	.n_yes_ranges = ARRAY_SIZE(ksz9896_valid_regs),
->   };
->   
-> +static const struct regmap_range lan9370_valid_regs[] = {
 
-Suggest you employ some macros for generating the valid register ranges 
-for ports since there is a lot of repetition, and chances are that new 
-registers may have to be added in the future, or corrected.
 
-Between the fact that regmap makes you pull an entire subsystem into the 
-kernel image thus adding to code sections, plus these big tables of 
-register ranges adding to read-only data sections, this really makes me 
-wonder what benefit there is just to expose a debugfs interface for 
-dumping registers... value proposition does not seem so great to me.
--- 
-Florian
+On Wed, 26 Oct 2022, Jason A. Donenfeld wrote:
 
+> On Wed, Oct 26, 2022 at 03:50:25AM +0200, Jason A. Donenfeld wrote:
+> > The traditional objdump comparison does work, though. It produces a good
+>
+> Another thing that appears to work well is just using Coccinelle
+> scripts. I've had some success just scrolling through the results of:
+>
+>     @@
+>     char c;
+>     expression E;
+>     @@
+>     (
+>     * E > c
+>     |
+>     * E >= c
+>     |
+>     * E < c
+>     |
+>     * E <= c
+>     )
+>
+> That also triggers on explicitly signed chars, and examining those
+> reveals that quite a bit of code in the tree already does do the right
+> thing, which is good.
+>
+> From looking at this and objdump output, it looks like most naked-char
+> usage that isn't for strings is actually already assuming it's unsigned,
+> using it as a byte. I'll continue to churn, and I'm sure I'll miss a few
+> things here and there, but all and all, I don't think this is looking as
+> terrible as I initially feared.
+>
+> I'm CC'ing the Coccinelle people to see if they have any nice ideas on
+> improvements. Specifically, the thing we're trying to identify is:
+>
+>   - Usage of vanilla `char`, without a `signed` or `unsigned` qualifier,
+>     where:
+
+Try putting
+
+disable optional_qualifier
+
+between the initial @@, to avoid the implicit matching of signed and
+unsigned.
+
+>   - It's not being used for characters; and
+>   - It's doing something that assumes it is signed, such as various
+>     types of comparisons or decrements.
+
+I took a quick look at the article, but I'm not completely sure what you
+are getting at here.  Could you give some examples of what you do and
+don't want to find?
+
+You don't want the case where c is 'x', for some x?
+
+julia
+
+> LWN wrote a summary of the general problem, in case that helps describe
+> what would be useful: https://lwn.net/SubscriberLink/911914/f90c2ed1af23cbc4/
+>
+> Any nice Cocci tricks for this?
+>
+> Jason
+>
