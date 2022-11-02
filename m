@@ -2,137 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 028C9616B41
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:54:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AAAC616B4D
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:55:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiKBRyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:54:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55824 "EHLO
+        id S231414AbiKBRzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:55:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230211AbiKBRyu (ORCPT
+        with ESMTP id S231383AbiKBRz2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:54:50 -0400
-Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD682EF08
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 10:54:49 -0700 (PDT)
-Received: by mail-io1-xd2d.google.com with SMTP id n191so15637907iod.13
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 10:54:49 -0700 (PDT)
+        Wed, 2 Nov 2022 13:55:28 -0400
+Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 993C02EF1F
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 10:55:27 -0700 (PDT)
+Received: by mail-qv1-xf35.google.com with SMTP id j6so12955756qvn.12
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 10:55:27 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=lXvclno+jyQQctV09xCPun3dWMxNCv1weH6yrqWHinI=;
-        b=zqZlL+Fvk1hgljzOk+cKOdGfyG5s6UgWQ0R2uYP7f1zx7xWSL9LqPAEdPfc/MoNEQZ
-         t054ZJmE3YLCIwo+8p0hAnYOL0hwOK9fsdwzzC6AARht0XYURR4MXZvDqEttNbMyzmtb
-         gyrUrw6TsdndnWktcASaBz66fG8BEzm5U1SfxulWpjOpclRyOtQmgKXjtH5ZGvU3/w5A
-         Mr+ceiXmV6543B+HaGTxVYYxXFGJZ0TfE0BCtd5n5/xz7vai4DohQCtD0gZtPbSzJDna
-         2CcaXgOE05XJ5sOwJdLdg+S3f4RAx8vMnCvTEiPpR+g0pGJ3fWdnmCs/+8ztBZ2i3H9e
-         +c2w==
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+tfgl/2wz1H/8UpZUR1BGxO9QY8fMwSWN8ozNgnnwNo=;
+        b=NeK0NeRjuTAZUtHhMjgNyr6bYudXXk6DWAHX3bTjmN4JSWdzL6JeZGWMcTF+HKB1jh
+         MxgfTRp94CqtCSRHcGW+QimC0eY6cr+M+yV1ssIcn+3APuGyZYLufIf07JWzaUc4957/
+         eUOIf2N32qzKN+9Hwta9aX6xiuqzbYaFCmZks=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=lXvclno+jyQQctV09xCPun3dWMxNCv1weH6yrqWHinI=;
-        b=N3+CyyjN7aE9UAeNYh+bGdzBxOLJ7nCrp0XEnmCOMhWPqmzWX8oNAU5B8IaO3sU7zS
-         V4ORnlu/JV/VBNBafT1sIUxJ4M7p8KzlnGqVmM9NG0IuZNECGMrtIk5GZ+EDXoQ4s4Gh
-         /Fr1GFPvpQbsIWZF0Pq7+6rElM85dBg/C1BvNWCQeCEnTOwhPetogDbjITbnGS69Mkqm
-         livNiw+YFJcavdPHRRRV7cg0u+lTmo8B4d7HzPSXoH4UU29pxuLXiIdY5Eig1NSen0gI
-         /ToKzGU3b6s7oob6t2PBVuBY65oG5QAvdPPniwdTOmN+og/XgO3CxkTt+I5qhCUfiQnL
-         UNBA==
-X-Gm-Message-State: ACrzQf0Q+R/fWuvtUTJzRF+Gku3OaTCq2Xc6s0xY5Zd+UwpdFuG55ExD
-        RTtePi8sQGpKhu4ohCSY/g1rfw==
-X-Google-Smtp-Source: AMsMyM7Uz7kyuV0u+yZfyJ0xx7p9CVYMaoTXa62eyRLqMmmQztWTvwWsKufxMYOeg7ol0y68bD+2iA==
-X-Received: by 2002:a6b:5d11:0:b0:6c7:46be:4719 with SMTP id r17-20020a6b5d11000000b006c746be4719mr17248097iob.190.1667411688572;
-        Wed, 02 Nov 2022 10:54:48 -0700 (PDT)
-Received: from [192.168.1.94] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id b6-20020a05660214c600b006a129b10229sm3496263iow.31.2022.11.02.10.54.47
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+tfgl/2wz1H/8UpZUR1BGxO9QY8fMwSWN8ozNgnnwNo=;
+        b=iZ6K/bEH88+6VjWaw/i153vuVG1CM3M+2xShy5kTGZaCeGWgqGJssVpB6TKKIl2rP2
+         AS4UwAXJKlAbeoZ9eEfB45XFtW725QnpinmBmnD7lGKi7mrixQLonphJDV4/rGNP95BO
+         Qa/KQTKcgP+1xJXmFeDW6fTnBwHtn3vpbMo6mHqdVa6rX2gnCxV65QQyu/SKByiA+aLL
+         /+pB6VKoVWF6Sr1K5kuRcvjyCm7SsUMAayoFh1xeHy4ZEGDZxDw+6benGqtlqWpD0LwH
+         z4wsEjaZTa/n9++DwpbDwcBNh/rIuXaL4EC/9VaT9D3jwofHVoisqovUYPAWsId0eAlI
+         q/lw==
+X-Gm-Message-State: ACrzQf3+AQYwLcayUwznrugrXirqBZdD4MI7Gw10ROuRY4JZdSiw+eYK
+        IbPGMqwBQ/O3S1/65QMcY8gLtyBy1LJP/w==
+X-Google-Smtp-Source: AMsMyM7NjgekpBMl3QVBN5F1YXh/SdrfP+q+VHI3Bc64HQiTUw/I4OdZw64aQ0oacPlpJGt8IuiSLw==
+X-Received: by 2002:a05:6214:623:b0:4bb:91d1:53cb with SMTP id a3-20020a056214062300b004bb91d153cbmr22345277qvx.64.1667411726835;
+        Wed, 02 Nov 2022 10:55:26 -0700 (PDT)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id q68-20020a378e47000000b006b929a56a2bsm8802313qkd.3.2022.11.02.10.55.26
+        for <linux-kernel@vger.kernel.org>
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 10:54:48 -0700 (PDT)
-Message-ID: <02e5bf45-f877-719b-6bf8-c4ac577187a8@kernel.dk>
-Date:   Wed, 2 Nov 2022 11:54:47 -0600
+        Wed, 02 Nov 2022 10:55:26 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-37063f855e5so87245687b3.3
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 10:55:26 -0700 (PDT)
+X-Received: by 2002:a81:114e:0:b0:36a:fc80:fa62 with SMTP id
+ 75-20020a81114e000000b0036afc80fa62mr25201108ywr.58.1667411726040; Wed, 02
+ Nov 2022 10:55:26 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCHSET v3 0/5] Add support for epoll min_wait
-Content-Language: en-US
-To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
-References: <20221030220203.31210-1-axboe@kernel.dk>
- <CA+FuTSfj5jn8Wui+az2BrcpDFYF5m5ehwLiswwHMPJ2MK+S_Jw@mail.gmail.com>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <CA+FuTSfj5jn8Wui+az2BrcpDFYF5m5ehwLiswwHMPJ2MK+S_Jw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com>
+ <CAHk-=wgzT1QsSCF-zN+eS06WGVTBg4sf=6oTMg95+AEq7QrSCQ@mail.gmail.com>
+ <47678198-C502-47E1-B7C8-8A12352CDA95@gmail.com> <CAHk-=wjzngbbwHw4nAsqo_RpyOtUDk5G+Wus=O0w0A6goHvBWA@mail.gmail.com>
+ <CAHk-=wijU_YHSZq5N7vYK+qHPX0aPkaePaGOyWk4aqMvvSXxJA@mail.gmail.com>
+ <140B437E-B994-45B7-8DAC-E9B66885BEEF@gmail.com> <CAHk-=wjX_P78xoNcGDTjhkgffs-Bhzcwp-mdsE1maeF57Sh0MA@mail.gmail.com>
+ <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
+ <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
+ <CAHk-=wiwt4LC-VmqvYrphraF0=yQV=CQimDCb0XhtXwk8oKCCA@mail.gmail.com>
+ <Y1+XCALog8bW7Hgl@hirez.programming.kicks-ass.net> <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
+ <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com> <50458458-9b57-aa5a-0d67-692cc4dbf2ad@linux.ibm.com>
+In-Reply-To: <50458458-9b57-aa5a-0d67-692cc4dbf2ad@linux.ibm.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 2 Nov 2022 10:55:10 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wja5+tuvbV6vzJSbLBWSR8--WUq-ss0j0K-JQXe_EsqhQ@mail.gmail.com>
+Message-ID: <CAHk-=wja5+tuvbV6vzJSbLBWSR8--WUq-ss0j0K-JQXe_EsqhQ@mail.gmail.com>
+Subject: Re: mm: delay rmap removal until after TLB flush
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Jann Horn <jannh@google.com>,
+        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/2/22 11:46 AM, Willem de Bruijn wrote:
-> On Sun, Oct 30, 2022 at 6:02 PM Jens Axboe <axboe@kernel.dk> wrote:
->>
->> Hi,
->>
->> tldr - we saw a 6-7% CPU reduction with this patch. See patch 6 for
->> full numbers.
->>
->> This adds support for EPOLL_CTL_MIN_WAIT, which allows setting a minimum
->> time that epoll_wait() should wait for events on a given epoll context.
->> Some justification and numbers are in patch 6, patches 1-5 are really
->> just prep patches or cleanups.
->>
->> Sending this out to get some input on the API, basically. This is
->> obviously a per-context type of operation in this patchset, which isn't
->> necessarily ideal for any use case. Questions to be debated:
->>
->> 1) Would we want this to be available through epoll_wait() directly?
->>    That would allow this to be done on a per-epoll_wait() basis, rather
->>    than be tied to the specific context.
->>
->> 2) If the answer to #1 is yes, would we still want EPOLL_CTL_MIN_WAIT?
->>
->> I think there are pros and cons to both, and perhaps the answer to both is
->> "yes". There are some benefits to doing this at epoll setup time, for
->> example - it nicely isolates it to that part rather than needing to be
->> done dynamically everytime epoll_wait() is called. This also helps the
->> application code, as it can turn off any busy'ness tracking based on if
->> the setup accepted EPOLL_CTL_MIN_WAIT or not.
->>
->> Anyway, tossing this out there as it yielded quite good results in some
->> initial testing, we're running more of it. Sending out a v3 now since
->> someone reported that nonblock issue which is annoying. Hoping to get some
->> more discussion this time around, or at least some...
-> 
-> My main question is whether the cycle gains justify the code
-> complexity and runtime cost in all other epoll paths.
-> 
-> Syscall overhead is quite dependent on architecture and things like KPTI.
+On Wed, Nov 2, 2022 at 2:15 AM Christian Borntraeger
+<borntraeger@linux.ibm.com> wrote:
+>
+> It certainly needs a build fix for s390:
+>
+> In file included from kernel/sched/core.c:78:
+> ./arch/s390/include/asm/tlb.h: In function '__tlb_remove_page_size':
+> ./arch/s390/include/asm/tlb.h:50:17: error: implicit declaration of function 'page_zap_pte_rmap' [-Werror=implicit-function-declaration]
+>     50 |                 page_zap_pte_rmap(page);
+>        |                 ^~~~~~~~~~~~~~~~~
 
-Definitely interested in experiences from other folks, but what other
-runtime costs do you see compared to the baseline?
+Hmm. I'm not sure if I can add a
 
-> Indeed, I was also wondering whether an extra timeout arg to
-> epoll_wait would give the same feature with less side effects. Then no
-> need for that new ctrl API.
+   #include <linux/rmap.h>
 
-That was my main question in this posting - what's the best api? The
-current one, epoll_wait() addition, or both? The nice thing about the
-current one is that it's easy to integrate into existing use cases, as
-the decision to do batching on the userspace side or by utilizing this
-feature can be kept in the setup path. If you do epoll_wait() and get
--1/EINVAL or false success on older kernels, then that's either a loss
-because of thinking it worked, or a fast path need to check for this
-specifically every time you call epoll_wait() rather than just at
-init/setup time.
+to that s390 asm header file without causing more issues.
 
-But this is very much the question I already posed and wanted to
-discuss...
+The minimal damage would probably be to duplicate the declaration of
+page_zap_pte_rmap() in the s390 asm/tlb.h header where it is used.
 
--- 
-Jens Axboe
+Not pretty to have two different declarations of that thing, but
+anything that then includes both <asm/tlb.h> and <linux/rmap.h> (which
+is much of mm) would then verify the consistency of  them.
+
+So I'll do that minimal fix and update that branch, but if s390 people
+end up having a better fix, please holler.
+
+                Linus
