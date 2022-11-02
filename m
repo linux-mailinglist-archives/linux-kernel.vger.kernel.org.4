@@ -2,114 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A02A9615D79
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 09:16:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 00B7B615D7C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 09:17:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbiKBIQe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 04:16:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50816 "EHLO
+        id S230176AbiKBIRp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 04:17:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51934 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230171AbiKBIQ0 (ORCPT
+        with ESMTP id S229493AbiKBIRm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 04:16:26 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 996852529C;
-        Wed,  2 Nov 2022 01:16:23 -0700 (PDT)
-Received: from canpemm500005.china.huawei.com (unknown [172.30.72.53])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N2KQb6XN0zJnS6;
-        Wed,  2 Nov 2022 16:13:27 +0800 (CST)
-Received: from huawei.com (10.175.104.82) by canpemm500005.china.huawei.com
- (7.192.104.229) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 2 Nov
- 2022 16:16:21 +0800
-From:   Baisong Zhong <zhongbaisong@huawei.com>
-To:     <edumazet@google.com>, <keescook@chromium.org>, <kuba@kernel.org>,
-        <ast@kernel.org>, <daniel@iogearbox.net>, <davem@davemloft.net>,
-        <pabeni@redhat.com>
-CC:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <glider@google.com>, <elver@google.com>, <netdev@vger.kernel.org>,
-        <zhongbaisong@huawei.com>
-Subject: [PATCH -next,v2] bpf, test_run: fix alignment problem in bpf_prog_test_run_skb()
-Date:   Wed, 2 Nov 2022 16:16:20 +0800
-Message-ID: <20221102081620.1465154-1-zhongbaisong@huawei.com>
-X-Mailer: git-send-email 2.25.1
+        Wed, 2 Nov 2022 04:17:42 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0DBE21F9D4
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 01:17:41 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id BB9051F898;
+        Wed,  2 Nov 2022 08:17:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1667377059; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=wko95XSy2SHsBUnksXP59GvfWwdvJCJ/BihoSvq6r4o=;
+        b=jz9zThdt3aB+bCicBEdSh+DWj1aKlA36kBhpABPGm16AcMiajgtJm2u3FC84h8hV4GVbTS
+        +S/l9EmfWmukXQv1HTGq684orhUxYXsy+1B6T1OAbQ2tzcwYJcYDttvPmNxKUD64m0lJwK
+        JCfERZbiqDVdZjiMcIxcnS6bM7/9gW0=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 9B2F01376E;
+        Wed,  2 Nov 2022 08:17:39 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id bgH+IqMnYmOBBQAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 02 Nov 2022 08:17:39 +0000
+Date:   Wed, 2 Nov 2022 09:17:38 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     "Huang, Ying" <ying.huang@intel.com>
+Cc:     Bharata B Rao <bharata@amd.com>,
+        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Jagdish Gediya <jvgediya.oss@gmail.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Tim Chen <tim.c.chen@intel.com>, Wei Xu <weixugc@google.com>,
+        Yang Shi <shy828301@gmail.com>
+Subject: Re: [RFC] memory tiering: use small chunk size and more tiers
+Message-ID: <Y2Inot4i4xUGH60O@dhcp22.suse.cz>
+References: <59291b98-6907-0acf-df11-6d87681027cc@linux.ibm.com>
+ <8735b8jy9k.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <0d938c9f-c810-b10a-e489-c2b312475c52@amd.com>
+ <87tu3oibyr.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <07912a0d-eb91-a6ef-2b9d-74593805f29e@amd.com>
+ <87leowepz6.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <Y2Eui+kKvwj8ip+T@dhcp22.suse.cz>
+ <878rkuchpm.fsf@yhuang6-desk2.ccr.corp.intel.com>
+ <Y2IhiSnpQsmY7khx@dhcp22.suse.cz>
+ <87bkppbx75.fsf@yhuang6-desk2.ccr.corp.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.104.82]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- canpemm500005.china.huawei.com (7.192.104.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <87bkppbx75.fsf@yhuang6-desk2.ccr.corp.intel.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-we got a syzkaller problem because of aarch64 alignment fault
-if KFENCE enabled.
+On Wed 02-11-22 16:02:54, Huang, Ying wrote:
+> Michal Hocko <mhocko@suse.com> writes:
+> 
+> > On Wed 02-11-22 08:39:49, Huang, Ying wrote:
+> >> Michal Hocko <mhocko@suse.com> writes:
+> >> 
+> >> > On Mon 31-10-22 09:33:49, Huang, Ying wrote:
+> >> > [...]
+> >> >> In the upstream implementation, 4 tiers are possible below DRAM.  That's
+> >> >> enough for now.  But in the long run, it may be better to define more.
+> >> >> 100 possible tiers below DRAM may be too extreme.
+> >> >
+> >> > I am just curious. Is any configurations with more than couple of tiers
+> >> > even manageable? I mean applications have been struggling even with
+> >> > regular NUMA systems for years and vast majority of them is largerly
+> >> > NUMA unaware. How are they going to configure for a more complex system
+> >> > when a) there is no resource access control so whatever you aim for
+> >> > might not be available and b) in which situations there is going to be a
+> >> > demand only for subset of tears (GPU memory?) ?
+> >> 
+> >> Sorry for confusing.  I think that there are only several (less than 10)
+> >> tiers in a system in practice.  Yes, here, I suggested to define 100 (10
+> >> in the later text) POSSIBLE tiers below DRAM.  My intention isn't to
+> >> manage a system with tens memory tiers.  Instead, my intention is to
+> >> avoid to put 2 memory types into one memory tier by accident via make
+> >> the abstract distance range of each memory tier as small as possible.
+> >> More possible memory tiers, smaller abstract distance range of each
+> >> memory tier.
+> >
+> > TBH I do not really understand how tweaking ranges helps anything.
+> > IIUC drivers are free to assign any abstract distance so they will clash
+> > without any higher level coordination.
+> 
+> Yes.  That's possible.  Each memory tier corresponds to one abstract
+> distance range.  The larger the range is, the higher the possibility of
+> clashing is.  So I suggest to make the abstract distance range smaller
+> to reduce the possibility of clashing.
 
-When the size from user bpf program is an odd number, like
-399, 407, etc, it will cause the struct skb_shared_info's
-unaligned access. As seen below:
+I am sorry but I really do not understand how the size of the range
+actually addresses a fundamental issue that each driver simply picks
+what it wants. Is there any enumeration defining basic characteristic of
+each tier? How does a driver developer knows which tear to assign its
+driver to?
 
-BUG: KFENCE: use-after-free read in __skb_clone+0x23c/0x2a0 net/core/skbuff.c:1032
-
-Use-after-free read at 0xffff6254fffac077 (in kfence-#213):
- __lse_atomic_add arch/arm64/include/asm/atomic_lse.h:26 [inline]
- arch_atomic_add arch/arm64/include/asm/atomic.h:28 [inline]
- arch_atomic_inc include/linux/atomic-arch-fallback.h:270 [inline]
- atomic_inc include/asm-generic/atomic-instrumented.h:241 [inline]
- __skb_clone+0x23c/0x2a0 net/core/skbuff.c:1032
- skb_clone+0xf4/0x214 net/core/skbuff.c:1481
- ____bpf_clone_redirect net/core/filter.c:2433 [inline]
- bpf_clone_redirect+0x78/0x1c0 net/core/filter.c:2420
- bpf_prog_d3839dd9068ceb51+0x80/0x330
- bpf_dispatcher_nop_func include/linux/bpf.h:728 [inline]
- bpf_test_run+0x3c0/0x6c0 net/bpf/test_run.c:53
- bpf_prog_test_run_skb+0x638/0xa7c net/bpf/test_run.c:594
- bpf_prog_test_run kernel/bpf/syscall.c:3148 [inline]
- __do_sys_bpf kernel/bpf/syscall.c:4441 [inline]
- __se_sys_bpf+0xad0/0x1634 kernel/bpf/syscall.c:4381
-
-kfence-#213: 0xffff6254fffac000-0xffff6254fffac196, size=407, cache=kmalloc-512
-
-allocated by task 15074 on cpu 0 at 1342.585390s:
- kmalloc include/linux/slab.h:568 [inline]
- kzalloc include/linux/slab.h:675 [inline]
- bpf_test_init.isra.0+0xac/0x290 net/bpf/test_run.c:191
- bpf_prog_test_run_skb+0x11c/0xa7c net/bpf/test_run.c:512
- bpf_prog_test_run kernel/bpf/syscall.c:3148 [inline]
- __do_sys_bpf kernel/bpf/syscall.c:4441 [inline]
- __se_sys_bpf+0xad0/0x1634 kernel/bpf/syscall.c:4381
- __arm64_sys_bpf+0x50/0x60 kernel/bpf/syscall.c:4381
-
-To fix the problem, we adjust @size so that (@size + @hearoom) is a
-multiple of SMP_CACHE_BYTES. So we make sure the struct skb_shared_info
-is aligned to a cache line.
-
-Fixes: 1cf1cae963c2 ("bpf: introduce BPF_PROG_TEST_RUN command")
-Signed-off-by: Baisong Zhong <zhongbaisong@huawei.com>
----
-v2: use SKB_DATA_ALIGN instead kmalloc_size_roundup
----
- net/bpf/test_run.c | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-index 4b855af267b1..bfdd7484b93f 100644
---- a/net/bpf/test_run.c
-+++ b/net/bpf/test_run.c
-@@ -259,6 +259,7 @@ static void *bpf_test_init(const union bpf_attr *kattr, u32 size,
- 	if (user_size > size)
- 		return ERR_PTR(-EMSGSIZE);
- 
-+	size = SKB_DATA_ALIGN(size);
- 	data = kzalloc(size + headroom + tailroom, GFP_USER);
- 	if (!data)
- 		return ERR_PTR(-ENOMEM);
 -- 
-2.25.1
-
+Michal Hocko
+SUSE Labs
