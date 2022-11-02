@@ -2,65 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 890DD616168
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:06:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DBDF0616169
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:06:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230374AbiKBLGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 07:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48282 "EHLO
+        id S230336AbiKBLGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 07:06:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbiKBLGX (ORCPT
+        with ESMTP id S230370AbiKBLGd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 07:06:23 -0400
-Received: from mail-ed1-x549.google.com (mail-ed1-x549.google.com [IPv6:2a00:1450:4864:20::549])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FE7829372
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 04:06:22 -0700 (PDT)
-Received: by mail-ed1-x549.google.com with SMTP id b13-20020a056402350d00b00464175c3f1eso160397edd.11
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 04:06:22 -0700 (PDT)
+        Wed, 2 Nov 2022 07:06:33 -0400
+Received: from mail-wr1-x44a.google.com (mail-wr1-x44a.google.com [IPv6:2a00:1450:4864:20::44a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2826529C83
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 04:06:25 -0700 (PDT)
+Received: by mail-wr1-x44a.google.com with SMTP id d23-20020adfa417000000b002364a31b7c9so4682909wra.15
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 04:06:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fUQfvgq1r8lF9rRRm4NumpIHqFvDpVd5cUWloyxUIys=;
-        b=ZOFvSA0cmseSVYIuYaM2BdEV+9xbe5Xbf2t7D0GgypSpP1gnX3wIZjxGtpGcZlix5E
-         FCdURGEXcoZhbn0atFQBOKA8PWu5GZmM0PepNS7WW/UOv8wS8UBvhYQA/S017ZeMaU6B
-         pduViuSKslfAwUv/JkReNhliQybOgcLy8uFrc0LLbfBUiBcHAE6KfsJe1A8kD7TZje6B
-         IGivUc1aeRKlICNXfm5j+lzmy+rGqkvLo+gUkMJchlsBDJTqDJ/HltB0c5Jh1EmtZrYy
-         udfceaJkn1m4l67dY8Nrhn/+bADs62+zBKdKM2OPoBBpBSlwpT6u6Adqi1g1JykfTIHV
-         nquA==
+        bh=WrClR7h0c/XU2pAfJHOZckEycFJJtsgVk0eEUZJfByQ=;
+        b=p8C9AfvzfTHb4amAZyR7Huo6iTM2OmZ596wuVutv4RMIjPVHhzGcRhijW0Wdzbgz/4
+         mg8h+O0U7SL3esE9xQvb/5kztONm+5qgbpw+tJlE//0bLZKuFkjRAzzQj+0wx1PDrFL6
+         Gauls6F4ST7RPiHkY++x7dd+3pFWOzDJv/RKpYF7ClI+YHFIqhcGVGIZOl7rqs/xFadg
+         JoL4S1a87PsVKKh6JjnOfr+h9u34ulSYmsJAwMO91rHcN2Iy4iWb7e3lSQdY6fNFQ1ky
+         oJ0NvFIbyshMi4t2Q/NN65+FNBXzM8tc6cSwn+oFCnYObruLNwf8GKhvRyngWCXgMNCu
+         nieA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fUQfvgq1r8lF9rRRm4NumpIHqFvDpVd5cUWloyxUIys=;
-        b=5Wku6TgvF03ZuSfXqeKpwDXKmkI4IZQRVl7Jelp/SDs3xVubXm2ptEE2eOPyFOJBYv
-         GwcPwkGvVknbKP0MLZKhdGxL1KxkwB4J5PiWy6hNvPckG76eAgeRQHXATFFKmaIeqzKb
-         G2o0d9yUm/CKRN+MdrZd0cBMNFLWMjiYaTIz/j14ay+3KL6oS2XZIstMyTIaMxsY0IU/
-         +XIXaXz2prYJDNCorYgN4T0Xjh++FMohVcgA0yseYbKnLUiOkIZWmX4H1pfZiWLflzkj
-         qxkHgljz17qg33cqfcU2tj/KqBji2/RV8fYDFIJMCBJcigxneZjg1R3C/76bUaY5Tq5J
-         7RSQ==
-X-Gm-Message-State: ACrzQf1OBpEGVLFemuY0Hv/Yf8B+HcVE7yTYBolQwmDrVGt+5pi+d7Da
-        krES3y3RC6R9ok72PA8iDqCe69IQSEU=
-X-Google-Smtp-Source: AMsMyM6PXK1AcgbPYvS415aXFf4iDD8g9auqwdAGE8GYIznokzqnaxqJcwlrYZDt7ihqGTup8MwZef43Ezw=
+        bh=WrClR7h0c/XU2pAfJHOZckEycFJJtsgVk0eEUZJfByQ=;
+        b=Fkj0wGbRuEOzGfSMKkuwKKydff6CpzFQgzN+ABOsco+lsN+/OBObvfeE/pQVFWvRm4
+         5y4Lhw0/ItsNDIHDyQNaW8MHSV6tEjgWhrhKjtjRfDGhFZjGyTFnvB5VeaUEfVrv+D4p
+         5QmPyO8NucyM61/YSccjz/RNvxCn8pWywjUAgBzygJycqxHysH5ukGgGG9W/EWrA5Kzy
+         8iUIARPwoKBLu1YmPhkhl4pM6+eXOVmAcgd6AWoVcxvzMTPxEcApc4vp0SghGeWMBY94
+         FzP1GxPtJaxXuxCU2HArjkqkq7vif0hrQDg9X9WcHl3SpWBLjASbdj935PeAHs69AAqh
+         9ufg==
+X-Gm-Message-State: ACrzQf1L0yr2EGljHpuQwcsMlyfb7UEpVyBGqZJ2EaG08L6Z/TK4HRQJ
+        +cpdUGfYE/AdNKOpAtIv3lvFYwZtG7A=
+X-Google-Smtp-Source: AMsMyM74mWMhrgnaynccgvDcG2odp7kJoqQH6hJmlTrNDoPthPuQMBlGWcgbtLnfVHNrarTgP4wSHzfbzMc=
 X-Received: from glider.muc.corp.google.com ([2a00:79e0:9c:201:7f41:af20:8:a96d])
- (user=glider job=sendgmr) by 2002:a05:6402:450c:b0:443:6279:774f with SMTP id
- ez12-20020a056402450c00b004436279774fmr24423763edb.11.1667387181029; Wed, 02
- Nov 2022 04:06:21 -0700 (PDT)
-Date:   Wed,  2 Nov 2022 12:06:09 +0100
+ (user=glider job=sendgmr) by 2002:adf:dd91:0:b0:236:a261:6930 with SMTP id
+ x17-20020adfdd91000000b00236a2616930mr14444934wrl.551.1667387183641; Wed, 02
+ Nov 2022 04:06:23 -0700 (PDT)
+Date:   Wed,  2 Nov 2022 12:06:10 +0100
 In-Reply-To: <20221102110611.1085175-1-glider@google.com>
 Mime-Version: 1.0
 References: <20221102110611.1085175-1-glider@google.com>
 X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
-Message-ID: <20221102110611.1085175-3-glider@google.com>
-Subject: [PATCH 3/5] Kconfig.debug: ensure early check for KMSAN in CONFIG_KMSAN_WARN
+Message-ID: <20221102110611.1085175-4-glider@google.com>
+Subject: [PATCH 4/5] kmsan: make sure PREEMPT_RT is off
 From:   Alexander Potapenko <glider@google.com>
 To:     glider@google.com
 Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Andrew Morton <akpm@linux-foundation.org>,
-        Kees Cook <keescook@chromium.org>,
-        Masahiro Yamada <masahiroy@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kbuild@vger.kernel.org
+        Dmitry Vyukov <dvyukov@google.com>,
+        Marco Elver <elver@google.com>,
+        Peter Zijlstra <peterz@infradead.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
@@ -72,44 +71,38 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-As pointed out by Masahiro Yamada, Kconfig picks up the first default
-entry which has true 'if' condition. Hence, the previously added check
-for KMSAN was never used, because it followed the checks for 64BIT and
-!64BIT.
+As pointed out by Peter Zijlstra, __msan_poison_alloca() does not play
+well with IRQ code when PREEMPT_RT is on, because in that mode even
+GFP_ATOMIC allocations cannot be performed.
 
-Put KMSAN check before others to ensure it is always applied.
+Fixing this would require making stackdepot completely lockless, which
+is quite challenging and may be excessive for the time being.
+
+Instead, make sure KMSAN is incompatible with PREEMPT_RT, like other
+debug configs are.
 
 Cc: Andrew Morton <akpm@linux-foundation.org>
-Cc: Kees Cook <keescook@chromium.org>
-Cc: Masahiro Yamada <masahiroy@kernel.org>
-Cc: Nick Desaulniers <ndesaulniers@google.com>
-Cc: linux-kbuild@vger.kernel.org
-Link: https://github.com/google/kmsan/issues/89
-Link: https://lore.kernel.org/linux-mm/20221024212144.2852069-3-glider@google.com/
-Fixes: 921757bc9b61 ("Kconfig.debug: disable CONFIG_FRAME_WARN for KMSAN by default")
+Cc: Dmitry Vyukov <dvyukov@google.com>
+Cc: Marco Elver <elver@google.com>
+Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lore.kernel.org/lkml/20221025221755.3810809-1-glider@google.com/
 Signed-off-by: Alexander Potapenko <glider@google.com>
 ---
- lib/Kconfig.debug | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ lib/Kconfig.kmsan | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/lib/Kconfig.debug b/lib/Kconfig.debug
-index 29280072dc0e4..b4a0988a7ffd2 100644
---- a/lib/Kconfig.debug
-+++ b/lib/Kconfig.debug
-@@ -395,12 +395,12 @@ endif # DEBUG_INFO
- config FRAME_WARN
- 	int "Warn for stack frames larger than"
- 	range 0 8192
-+	default 0 if KMSAN
- 	default 2048 if GCC_PLUGIN_LATENT_ENTROPY
- 	default 2048 if PARISC
- 	default 1536 if (!64BIT && XTENSA)
- 	default 1024 if !64BIT
- 	default 2048 if 64BIT
--	default 0 if KMSAN
+diff --git a/lib/Kconfig.kmsan b/lib/Kconfig.kmsan
+index b2489dd6503fa..ef2c8f256c57d 100644
+--- a/lib/Kconfig.kmsan
++++ b/lib/Kconfig.kmsan
+@@ -12,6 +12,7 @@ config KMSAN
+ 	bool "KMSAN: detector of uninitialized values use"
+ 	depends on HAVE_ARCH_KMSAN && HAVE_KMSAN_COMPILER
+ 	depends on SLUB && DEBUG_KERNEL && !KASAN && !KCSAN
++	depends on !PREEMPT_RT
+ 	select STACKDEPOT
+ 	select STACKDEPOT_ALWAYS_INIT
  	help
- 	  Tell the compiler to warn at build time for stack frames larger than this.
- 	  Setting this too low will cause a lot of warnings.
 -- 
 2.38.1.273.g43a17bfeac-goog
 
