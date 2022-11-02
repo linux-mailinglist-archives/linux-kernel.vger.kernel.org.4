@@ -2,50 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C321616688
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:52:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 04F1261668C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:53:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230461AbiKBPwj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 11:52:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60748 "EHLO
+        id S230460AbiKBPxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 11:53:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32926 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbiKBPwi (ORCPT
+        with ESMTP id S230366AbiKBPxL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 11:52:38 -0400
-Received: from smtp-bc09.mail.infomaniak.ch (smtp-bc09.mail.infomaniak.ch [IPv6:2001:1600:3:17::bc09])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 64A2C2AE35
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 08:52:35 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-2-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4N2WcK0L8xzMqNZt;
-        Wed,  2 Nov 2022 16:52:33 +0100 (CET)
-Received: from philippe-pc.toradex.int (unknown [31.10.206.125])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4N2WcJ40DVzMpqBV;
-        Wed,  2 Nov 2022 16:52:32 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=pschenker.ch;
-        s=20220412; t=1667404352;
-        bh=hsmqP6LW9Hc8mmhziJ3amvKnlktfxLKv2Sastr0h7Mc=;
+        Wed, 2 Nov 2022 11:53:11 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F36412BB34
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 08:53:09 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 9BA88B8236B
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 15:53:08 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A406CC433D7;
+        Wed,  2 Nov 2022 15:53:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667404387;
+        bh=1uIdbgrfwhx0R+OMdlVdLSgX+ISrJXXxfTiu3acQa9U=;
         h=From:To:Cc:Subject:Date:From;
-        b=TQm8+MuVUwOG0FZujEOnW7Guwm64m8a1xGcEzqlHvLxisaRwxJuzqvTua50ZFeZ+X
-         WaTLDPNoYxMGvittPp5RHg9Qxp6YowAa+4AbXgQ0O7bT+VF+dU5UR0okp58kB1PKra
-         k1IgbmLnWIgyikD4GOCunTDajWVD1JyWv9QxjEUk=
-From:   Philippe Schenker <dev@pschenker.ch>
-To:     Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org
-Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] ARM: dts: colibri-imx6ull: Enable dual-role switching
-Date:   Wed,  2 Nov 2022 16:52:26 +0100
-Message-Id: <20221102155226.51587-1-dev@pschenker.ch>
+        b=sn5mQZD634YpH/ylGcaZeJgoWJjEt/rRHp//FwBRskERP9XMhH8hFrm67lq//pOEM
+         wcFApNGwnNvxV+hegJzONrBrVjQscveyo5FeBV6T+0EaXzETciaFd1ISU4x7vYiOR2
+         8WObpBaaOm/2XwUXwyK6oDPkhC0u2cfl6oJ+ws0JNrylnoMqbgldOX7l2WRGJEswdJ
+         hq7YFTylOCYF2UCSE2XkHaPBhh4LZZpy4MpuAo70C7cXqG772kPuCObxo3WTgOz8+u
+         74iZGfnj1dvgokxCwaLInnvheb2arkrj6caOhNXgPYAPqmuRffHz+9qi52hmIMzxl0
+         XXOqBKxcCj5dw==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Neil Armstrong <neil.armstrong@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] drm/meson: Fix return type of meson_encoder_cvbs_mode_valid()
+Date:   Wed,  2 Nov 2022 08:52:42 -0700
+Message-Id: <20221102155242.1927166-1-nathan@kernel.org>
 X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -53,50 +55,51 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Philippe Schenker <philippe.schenker@toradex.com>
+With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+indirect call targets are validated against the expected function
+pointer prototype to make sure the call target is valid to help mitigate
+ROP attacks. If they are not identical, there is a failure at run time,
+which manifests as either a kernel panic or thread getting killed. A
+proposed warning in clang aims to catch these at compile time, which
+reveals:
 
-The Colibri standard provides a GPIO called USBC_DET to switch from
-USB Host to USB Device and back. The Colibri iMX6ULL does have the SoC
-ball USB_OTG1_VBUS connected in series with a capacitor to ground.
+  drivers/gpu/drm/meson/meson_encoder_cvbs.c:211:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_bridge *, const struct drm_display_info *, const struct drm_display_mode *)' with an expression of type 'int (struct drm_bridge *, const struct drm_display_info *, const struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+          .mode_valid = meson_encoder_cvbs_mode_valid,
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  1 error generated.
 
-This means that we need to provide to the extcon framework VBUS and ID
-events using the single GPIO we have. The Extcon USB GPIO driver does
-use id-gpio also for VBUS event, as in our case where vbus-gpio is
-absent.
+->mode_valid() in 'struct drm_bridge_funcs' expects a return type of
+'enum drm_mode_status', not 'int'. Adjust the return type of
+meson_encoder_cvbs_mode_valid() to match the prototype's to resolve the
+warning and CFI failure.
 
-Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
-
+Link: https://github.com/ClangBuiltLinux/linux/issues/1750
+Reported-by: Sami Tolvanen <samitolvanen@google.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 ---
+ drivers/gpu/drm/meson/meson_encoder_cvbs.c | 7 ++++---
+ 1 file changed, 4 insertions(+), 3 deletions(-)
 
- arch/arm/boot/dts/imx6ull-colibri.dtsi | 8 ++++++++
- 1 file changed, 8 insertions(+)
-
-diff --git a/arch/arm/boot/dts/imx6ull-colibri.dtsi b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-index 577a424b0e1d..feb1fcd9a684 100644
---- a/arch/arm/boot/dts/imx6ull-colibri.dtsi
-+++ b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-@@ -24,6 +24,13 @@ backlight: backlight {
- 		status = "okay";
- 	};
+diff --git a/drivers/gpu/drm/meson/meson_encoder_cvbs.c b/drivers/gpu/drm/meson/meson_encoder_cvbs.c
+index 5675bc2a92cf..3f73b211fa8e 100644
+--- a/drivers/gpu/drm/meson/meson_encoder_cvbs.c
++++ b/drivers/gpu/drm/meson/meson_encoder_cvbs.c
+@@ -116,9 +116,10 @@ static int meson_encoder_cvbs_get_modes(struct drm_bridge *bridge,
+ 	return i;
+ }
  
-+	extcon_usbc_det: usbc-det {
-+		compatible = "linux,extcon-usb-gpio";
-+		id-gpio = <&gpio5 2 GPIO_ACTIVE_HIGH>; /* SODIMM 137 / USBC_DET */
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_snvs_usbc_det>;
-+	};
-+
- 	gpio-keys {
- 		compatible = "gpio-keys";
- 		pinctrl-names = "default";
-@@ -275,6 +282,7 @@ &uart5 {
- /* Colibri USBC */
- &usbotg1 {
- 	dr_mode = "otg";
-+	extcon = <&extcon_usbc_det>, <&extcon_usbc_det>;
- 	srp-disable;
- 	hnp-disable;
- 	adp-disable;
+-static int meson_encoder_cvbs_mode_valid(struct drm_bridge *bridge,
+-					const struct drm_display_info *display_info,
+-					const struct drm_display_mode *mode)
++static enum drm_mode_status
++meson_encoder_cvbs_mode_valid(struct drm_bridge *bridge,
++			      const struct drm_display_info *display_info,
++			      const struct drm_display_mode *mode)
+ {
+ 	if (meson_cvbs_get_mode(mode))
+ 		return MODE_OK;
+
+base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
 -- 
 2.38.1
 
