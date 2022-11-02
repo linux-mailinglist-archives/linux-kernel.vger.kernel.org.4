@@ -2,83 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9069961689B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:24:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C4EB96168A2
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:24:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231675AbiKBQX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 12:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35200 "EHLO
+        id S231163AbiKBQYi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 12:24:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231523AbiKBQX3 (ORCPT
+        with ESMTP id S231754AbiKBQYJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 12:23:29 -0400
-Received: from mail-qk1-x72a.google.com (mail-qk1-x72a.google.com [IPv6:2607:f8b0:4864:20::72a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 556512CE12
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 09:17:32 -0700 (PDT)
-Received: by mail-qk1-x72a.google.com with SMTP id f8so12059531qkg.3
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 09:17:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bJek6NkURfosAp/uchM0s6cEp+OyqcYE/P5UFkvDx6c=;
-        b=Beiw3KD5m0lV/hwTJJ4HkM8dOSrGiiegu49uo6QrhJ/Ek2JltLFdnlRfuJ90ZKJLk2
-         rs5qjFPoSzlBuFqtIsTu/wJ/tjYQqxoqW1vDt365YkD97j9BdBo5rSaSJ6zDYG5E5DZG
-         +MEwX2pHBQDnCfC5nl/IyrIz/5SVFK6FG2cSaXv1GiF7ZZl07BNezv3tJC68lIxQ6Ppc
-         TCl2T74zLwlCLik6amA+9TaPYdh0eygJEGAVler8+KiHV6gYKC/mFGxgeC0e/V7B+i+v
-         aoqkyADe1sOKPFx0wcOGUyNO6xRXqpyx3ZrmggMS8pdCij2u1g62wuG3ha11P97XEIUQ
-         dDSA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bJek6NkURfosAp/uchM0s6cEp+OyqcYE/P5UFkvDx6c=;
-        b=8IUoU6PHSGCdwzU4VbJBXuenwG5nQ447zc1yhkP2+uO5ze4nFrMYdn5hvdpIoa9cML
-         z2pBHNIUf2iisR0CCXezx91IVd1pmxzPKJSm6q3K+zH+2QiKrz+0VjJ1KVTVYLBmefLX
-         OStiHjmtAt99jhM2W018dR7TsxVSFC1wUilbAZZTNe+wYgmSjBLJr+D2JzcsTv+6cM2L
-         LfrRtwVElHEcPp1VEmOigCl+hCErgHQwgPowYqrD+HubNOVKn+CDH7SdCbiRv8xe1P+v
-         mQ4qjF6gT3eLytONtrcJVX1lD2OGX3colAXw4q9pXqQN5puQNvsJx7itu2vWhR2mn8MK
-         KSmw==
-X-Gm-Message-State: ACrzQf1oecyLmKk/0YQLv+Af+V5PinM5+K/IoZYy2A2/ApRhUjBF7p30
-        bH1mzVKzRC7/6sIFOAc1UnaCxg==
-X-Google-Smtp-Source: AMsMyM6jI/HdsQJ1lS99LjoIpegy8BZrn9T/tm8NZcJHyPfkCUONRJvFwq4pMfMr751vTSJTlDVwgw==
-X-Received: by 2002:a37:de0a:0:b0:6fa:422c:1fda with SMTP id h10-20020a37de0a000000b006fa422c1fdamr8696702qkj.607.1667405851525;
-        Wed, 02 Nov 2022 09:17:31 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
-        by smtp.gmail.com with ESMTPSA id u21-20020ae9c015000000b006eecc4a0de9sm8578474qkk.62.2022.11.02.09.17.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 09:17:30 -0700 (PDT)
-Message-ID: <abc9ed33-26d2-b850-8c7a-78cb1735ddb2@linaro.org>
-Date:   Wed, 2 Nov 2022 12:17:29 -0400
+        Wed, 2 Nov 2022 12:24:09 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65238FD6;
+        Wed,  2 Nov 2022 09:19:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id AA2A7B8236B;
+        Wed,  2 Nov 2022 16:19:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 94C2BC433D6;
+        Wed,  2 Nov 2022 16:19:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667405955;
+        bh=fzJ4CnsGQWbTXfboP1sPJL+W4uTxIl+/qSJ9/kCCSe0=;
+        h=From:To:Cc:Subject:Date:From;
+        b=aDP0qW4zK1VPnYvuwnPkhvje0RhOPlsbsorxPBBAYSqcHAtE2fKCrfx3/P8IKjC4c
+         WpMQLDhKwXirS0C4xaTtKwcnHJOYcNt0iv9kODbB7ERWC6hH9lwSXg7/dfMZiKqa5o
+         8WKYgFbvKozUfEKWYH7qJBFkBCK38KJW+UaYV/DnataywfWNlJZ9a+8HGjM57H1agJ
+         hgPw1sR1WwrJoCEKkRSp2ZIvh6mCQB+iIDXbRaVHIihg2Bz8PnpytnQqt1EaCCRFXV
+         4ogoixf+jS6G6z9/X7eZ0VHXiC6NZHaGhXJImCqpQFKvbIdW6it0QPx4ZuWql1xaaV
+         U5CStX3Vbm9fQ==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     James Smart <james.smart@broadcom.com>,
+        Ram Vegesna <ram.vegesna@broadcom.com>,
+        "James E.J. Bottomley" <jejb@linux.ibm.com>,
+        "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc:     linux-scsi@vger.kernel.org, target-devel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] scsi: elx: libefc: Fix second parameter type in state callbacks
+Date:   Wed,  2 Nov 2022 09:19:06 -0700
+Message-Id: <20221102161906.2781508-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v5 1/3] dt-bindings: clock: add loongson-2 clock include
- file
-Content-Language: en-US
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, loongarch@lists.linux.dev
-References: <20221028025504.13247-1-zhuyinbo@loongson.cn>
- <01a38c4c-b42a-c170-3c3d-0b7e087bfaa4@linaro.org>
- <2bd0f05d-a5c4-3c5c-ccbc-3e3385cc0a1d@loongson.cn>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <2bd0f05d-a5c4-3c5c-ccbc-3e3385cc0a1d@loongson.cn>
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -86,29 +58,74 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28/10/2022 22:54, Yinbo Zhu wrote:
-> 
-> 
-> 在 2022/10/28 下午7:43, Krzysztof Kozlowski 写道:
->> On 27/10/2022 22:55, Yinbo Zhu wrote:
->>> This file defines all Loongson-2 SoC clock indexes, it should be
->>> included in the device tree in which there's device using the
->>> clocks.
->>>
->>> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
->>> Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->>> ---
->>> Change in v5:
->>> 		1. Replace loongson2/Loongson2 with loongson-2/Loongson-2.
->>> 		2. Replace soc with SoC.
->>>
->>
->> Where is the rest of the changelog?
-> What you're asking is where the replacement string is located.  it was 
-> in commit log.
+With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+indirect call targets are validated against the expected function
+pointer prototype to make sure the call target is valid to help mitigate
+ROP attacks. If they are not identical, there is a failure at run time,
+which manifests as either a kernel panic or thread getting killed. A
+proposed warning in clang aims to catch these at compile time, which
+reveals:
 
-I am asking why there is only v5 changelog? Where is v4, v3, v2?
+  drivers/scsi/elx/libefc/efc_node.c:811:22: error: incompatible function pointer types assigning to 'void (*)(struct efc_sm_ctx *, u32, void *)' (aka 'void (*)(struct efc_sm_ctx *, unsigned int, void *)') from 'void (*)(struct efc_sm_ctx *, enum efc_sm_event, void *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+                  ctx->current_state = state;
+                                    ^ ~~~~~
+  drivers/scsi/elx/libefc/efc_node.c:878:21: error: incompatible function pointer types assigning to 'void (*)(struct efc_sm_ctx *, u32, void *)' (aka 'void (*)(struct efc_sm_ctx *, unsigned int, void *)') from 'void (*)(struct efc_sm_ctx *, enum efc_sm_event, void *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+          node->nodedb_state = state;
+                            ^ ~~~~~
+  drivers/scsi/elx/libefc/efc_node.c:905:6: error: incompatible function pointer types assigning to 'void (*)(struct efc_sm_ctx *, enum efc_sm_event, void *)' from 'void (*)(struct efc_sm_ctx *, u32, void *)' (aka 'void (*)(struct efc_sm_ctx *, unsigned int, void *)') [-Werror,-Wincompatible-function-pointer-types-strict]
+                  pf = node->nodedb_state;
+                    ^ ~~~~~~~~~~~~~~~~~~
 
-Best regards,
-Krzysztof
+  drivers/scsi/elx/libefc/efc_device.c:455:22: error: incompatible function pointer types assigning to 'void (*)(struct efc_sm_ctx *, u32, void *)' (aka 'void (*)(struct efc_sm_ctx *, unsigned int, void *)') from 'void (struct efc_sm_ctx *, enum efc_sm_event, void *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+                  node->nodedb_state = __efc_d_init;
+                                    ^ ~~~~~~~~~~~~
+
+  drivers/scsi/elx/libefc/efc_sm.c:41:22: error: incompatible function pointer types assigning to 'void (*)(struct efc_sm_ctx *, u32, void *)' (aka 'void (*)(struct efc_sm_ctx *, unsigned int, void *)') from 'void (*)(struct efc_sm_ctx *, enum efc_sm_event, void *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+                  ctx->current_state = state;
+                                    ^ ~~~~~
+
+The type of the second parameter in the prototypes of ->current_state()
+and ->nodedb_state() ('u32') does not match the implementations, which
+have a second parameter type of 'enum efc_sm_event'. Update the
+prototypes to have the correct second parameter type, clearing up all
+the warnings and CFI failures.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/1750
+Reported-by: Sami Tolvanen <samitolvanen@google.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/scsi/elx/libefc/efclib.h | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
+
+diff --git a/drivers/scsi/elx/libefc/efclib.h b/drivers/scsi/elx/libefc/efclib.h
+index dde20891c2dd..57e338612812 100644
+--- a/drivers/scsi/elx/libefc/efclib.h
++++ b/drivers/scsi/elx/libefc/efclib.h
+@@ -58,10 +58,12 @@ enum efc_node_send_ls_acc {
+ #define EFC_LINK_STATUS_UP		0
+ #define EFC_LINK_STATUS_DOWN		1
+ 
++enum efc_sm_event;
++
+ /* State machine context header  */
+ struct efc_sm_ctx {
+ 	void (*current_state)(struct efc_sm_ctx *ctx,
+-			      u32 evt, void *arg);
++			      enum efc_sm_event evt, void *arg);
+ 
+ 	const char	*description;
+ 	void		*app;
+@@ -365,7 +367,7 @@ struct efc_node {
+ 	int			prev_evt;
+ 
+ 	void (*nodedb_state)(struct efc_sm_ctx *ctx,
+-			     u32 evt, void *arg);
++			     enum efc_sm_event evt, void *arg);
+ 	struct timer_list	gidpt_delay_timer;
+ 	u64			time_last_gidpt_msec;
+ 
+
+base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+-- 
+2.38.1
 
