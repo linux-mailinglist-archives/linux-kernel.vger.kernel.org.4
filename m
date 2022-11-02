@@ -2,121 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 97D9F61578B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 03:25:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 019E8615743
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 03:04:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230039AbiKBCZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 22:25:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49166 "EHLO
+        id S230118AbiKBCEI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 22:04:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34690 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbiKBCZd (ORCPT
+        with ESMTP id S229516AbiKBCED (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 22:25:33 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFCB64DD
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 19:25:29 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id b11so14934630pjp.2
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 19:25:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=NVMLoWhBO3smWYjRe8JlG4e5abrqqdBoJZY3LBsOWok=;
-        b=kG99P25HjBgpLUF5bSCezusrFavecyfkWN1KtJIfVpYe9wEQpJIPP6v/vbx50FkYmF
-         dZ2LXiC7+jEJR692C7ZVwuFNVlhpZntx9rNaniONrXYVz0t3wRg6mN+LdNEYxyYoQWUI
-         aeU5OzPhITdHStP/h/G1t6HmHzJ6miul3TYIQWZyN0kTxqEfBVdY4gK4dsUE9xnHnkQW
-         13E06uBz1NtOuL1YNOVp1XvI1lZ9VOT661qtzgPkU1C9LwkdHiGttukdtiA5dxpPw+9j
-         raLt9Nxp2MJB3ek5TtDlIv4PHped/KXzHQBQXLxzeBzlU8vo1xv1q91/jrAtza/B1iAX
-         o1+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=NVMLoWhBO3smWYjRe8JlG4e5abrqqdBoJZY3LBsOWok=;
-        b=f3hAhE/GW91x5uIK2h0voVLZFT5NmJTezYHGDXVEL5Icrn1/hmd3Gz+kT8Awy2uCkP
-         Mqe3txeCCdNgxrwh2z0B/1X/kJ//C30xJvBWpiHCO7r2jnL0GRv4sqryOZye9C9J6HfI
-         Uh77Mh4d5beOh4ALow2EDZZbcLdxuUhtYad1o1yzVLNjEkmKzOI/ADI4xHwlc/ysgXbu
-         Z+CzSrIMZmEC695zBn5brp0CcT43EovMm9xtEGFRTBjkxJqHUH2iUhLqHW1gw+36ggaZ
-         pJSyNLK6b8lPnw9H7GKsZuRGo0Kd/JBCDCiWgHa4lA9HUKKW5/cClkGYBs1u9Y5LpFXD
-         fEJQ==
-X-Gm-Message-State: ACrzQf1WtcqsIPzfiSor9+3a7Lx7ccg+cm+O5/lyuzVuVOrxsuTacGd1
-        e1KeYocsajwTkIj8T9KQQL0YLw==
-X-Google-Smtp-Source: AMsMyM43thENVfIBk2batYPleifjpAa4i8DNg6r23LeH0bKunT6q58WuTqC68bwwJf0yQZ9XWAuVcw==
-X-Received: by 2002:a17:903:110f:b0:178:a07e:e643 with SMTP id n15-20020a170903110f00b00178a07ee643mr21757437plh.41.1667355929362;
-        Tue, 01 Nov 2022 19:25:29 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id g18-20020a170902869200b0017f592a7eccsm1189675plo.298.2022.11.01.19.25.28
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Nov 2022 19:25:28 -0700 (PDT)
-Message-ID: <79c5d83f-27b2-dbe0-826b-bcb671e0766f@kernel.dk>
-Date:   Tue, 1 Nov 2022 20:25:27 -0600
+        Tue, 1 Nov 2022 22:04:03 -0400
+Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1950A11477;
+        Tue,  1 Nov 2022 19:04:00 -0700 (PDT)
+Received: from mail02.huawei.com (unknown [172.30.67.143])
+        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N299J70l0zKG3f;
+        Wed,  2 Nov 2022 10:01:24 +0800 (CST)
+Received: from huaweicloud.com (unknown [10.175.127.227])
+        by APP2 (Coremail) with SMTP id Syh0CgCnP9QN0GFjGqzfBA--.48110S4;
+        Wed, 02 Nov 2022 10:03:59 +0800 (CST)
+From:   Yu Kuai <yukuai1@huaweicloud.com>
+To:     jack@suse.cz, axboe@kernel.dk, paolo.valente@linaro.org
+Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
+        yukuai1@huaweicloud.com, yi.zhang@huawei.com
+Subject: [PATCH -next v4 0/5] multiple cleanup patches for bfqd
+Date:   Wed,  2 Nov 2022 10:25:37 +0800
+Message-Id: <20221102022542.3621219-1-yukuai1@huaweicloud.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 4/4] blk-mq: improve readability of blk_mq_alloc_request()
-Content-Language: en-US
-To:     Jinlong Chen <nickyc975@zju.edu.cn>, Christoph Hellwig <hch@lst.de>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <cover.1667314759.git.nickyc975@zju.edu.cn>
- <81fcbc046c9ea96cdfd8e20d1edc8e64c4d08153.1667314759.git.nickyc975@zju.edu.cn>
- <20221101173727.GC20690@lst.de>
- <3caa5abc.16387a.1843622d8cf.Coremail.nickyc975@zju.edu.cn>
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <3caa5abc.16387a.1843622d8cf.Coremail.nickyc975@zju.edu.cn>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: Syh0CgCnP9QN0GFjGqzfBA--.48110S4
+X-Coremail-Antispam: 1UD129KBjvdXoWrKry3Gw15CFW7CF48uw45ZFb_yoW3KFg_Xa
+        s7AFWfCFnrC3W5Ca48AF15Aay0k3yrXw1DKF98trZxJr17tF4jy347tr4xXan0qan7Ga4Y
+        yr1Yvr4fJr1jqjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUIcSsGvfJTRUUUbz8FF20E14v26r4j6ryUM7CY07I20VC2zVCF04k26cxKx2IYs7xG
+        6rWj6s0DM7CIcVAFz4kK6r1j6r18M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8w
+        A2z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j
+        6F4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oV
+        Cq3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0
+        I7IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r
+        4UM4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxG
+        rwCFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4
+        vE14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IY
+        x2IY67AKxVWUJVWUCwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Jr0_Gr1lIxAIcVCF04k26c
+        xKx2IYs7xG6rW3Jr0E3s1lIxAIcVC2z280aVAFwI0_Jr0_Gr1lIxAIcVC2z280aVCY1x02
+        67AKxVWUJVW8JbIYCTnIWIevJa73UjIFyTuYvjfUoOJ5UUUUU
+X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/1/22 8:19 PM, Jinlong Chen wrote:
->> On Tue, Nov 01, 2022 at 11:11:37PM +0800, Jinlong Chen wrote:
->>> Add a helper blk_mq_alloc_request_nocache() to alloc request without
->>> cache. This makes blk_mq_alloc_request() more readable.
->>>
->>> Signed-off-by: Jinlong Chen <nickyc975@zju.edu.cn>
->>> ---
->>>  block/blk-mq.c | 47 +++++++++++++++++++++++++++++------------------
->>>  1 file changed, 29 insertions(+), 18 deletions(-)
->>>
->>> diff --git a/block/blk-mq.c b/block/blk-mq.c
->>> index 87a6348a0d0a..2fae111a42c8 100644
->>> --- a/block/blk-mq.c
->>> +++ b/block/blk-mq.c
->>> @@ -572,36 +572,47 @@ static struct request *blk_mq_alloc_cached_request(struct request_queue *q,
->>>  	return rq;
->>>  }
->>>  
->>> +static struct request *blk_mq_alloc_request_nocache(struct request_queue *q,
->>> +		blk_opf_t opf, blk_mq_req_flags_t flags)
->>
->> The name is a bit odd, but I can't think off a better one.
->>
->>> +	struct blk_mq_alloc_data data = {
->>>  			.q		= q,
->>>  			.flags		= flags,
->>>  			.cmd_flags	= opf,
->>>  			.nr_tags	= 1,
->>>  		};
->>
->> And this now has superflous indenation.  Overall, while the separate
->> helper looks marginally nicer, I'm not really sure it is worth the
->> churn.
-> 
-> I'll drop the patch if you think it is not worth the churn. But I
-> started doing this because of the following goto statement:
+From: Yu Kuai <yukuai3@huawei.com>
 
-Please just drop it, I don't think it's an improvement.
+Changes in v4:
+ - move first two patches from v3 into another thread.
+ - add patch 1
+
+Changes in v3:
+ - resend v2 with new mail address
+
+Changes in v2:
+ - add missing blank line in patch 1.
+ - remove patch 7,8, since they are wrong.
+ - add reviewed-by tag
+
+Yu Kuai (5):
+  block, bfq: remove set but not used variable in
+    __bfq_entity_update_weight_prio
+  block, bfq: factor out code to update 'active_entities'
+  block, bfq: cleanup bfq_activate_requeue_entity()
+  block, bfq: remove dead code for updating 'rq_in_driver'
+  block, bfq: don't declare 'bfqd' as type 'void *' in bfq_group
+
+ block/bfq-cgroup.c  |  2 +-
+ block/bfq-iosched.c | 16 ---------
+ block/bfq-iosched.h |  2 +-
+ block/bfq-wf2q.c    | 88 ++++++++++++++++++---------------------------
+ 4 files changed, 37 insertions(+), 71 deletions(-)
 
 -- 
-Jens Axboe
-
+2.31.1
 
