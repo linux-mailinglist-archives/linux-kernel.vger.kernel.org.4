@@ -2,52 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B807616087
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 11:08:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 48A8C61608F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 11:09:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230396AbiKBKI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 06:08:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
+        id S230283AbiKBKI6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 06:08:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbiKBKIJ (ORCPT
+        with ESMTP id S230384AbiKBKIX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 06:08:09 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531C227142
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 03:07:45 -0700 (PDT)
-Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 41381660293F;
-        Wed,  2 Nov 2022 10:07:43 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667383663;
-        bh=dOsyMJtPdAV3jUm/GhRp03PrdsruZCqyjWbSMeaW3o4=;
-        h=From:To:Cc:Subject:Date:From;
-        b=ihmo7pC9gmxuRgb4GL9+EjnPNKr7SgIk+u7e2rgbj6C7ewb3Fuug+lWHh0ER1ep3B
-         3egtMbqPVnt1qmwPVf1FBbr8O0dmrop2UH/ryB2KrqCi6GlsLYygiQzsSlAcrdbmuW
-         rDN5M3shLv77U2N0VpQ9OH2ZYn6hz7i/geud+D3uALLODBjkbjSwzCy7lUT+lVx6yS
-         AX2dJqyxD8foOyz0h0/LXl+Qq7GdMbtnBZ9Rmuwd/mPAtatymHQdAqaqnPHTPQzO7K
-         E/k/h+V8wclxsdBoX2tg7AB7EAdo95O1r6IDVdAqenVAYaQL9WoUJvKEMW4UE0jeZ4
-         I5hUnHxo6Vgnw==
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-To:     jassisinghbrar@gmail.com
-Cc:     matthias.bgg@gmail.com, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-Subject: [PATCH] mailbox: mtk-cmdq-mailbox: Use platform data directly instead of copying
-Date:   Wed,  2 Nov 2022 11:07:36 +0100
-Message-Id: <20221102100736.37815-1-angelogioacchino.delregno@collabora.com>
-X-Mailer: git-send-email 2.37.2
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        Wed, 2 Nov 2022 06:08:23 -0400
+Received: from mailout3.samsung.com (mailout3.samsung.com [203.254.224.33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D036A27DF2
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 03:08:02 -0700 (PDT)
+Received: from epcas2p1.samsung.com (unknown [182.195.41.53])
+        by mailout3.samsung.com (KnoxPortal) with ESMTP id 20221102100758epoutp038640cbe95fce170a05c0faf716d01734~jvJ8AKJ250500705007epoutp03O
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 10:07:58 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout3.samsung.com 20221102100758epoutp038640cbe95fce170a05c0faf716d01734~jvJ8AKJ250500705007epoutp03O
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1667383678;
+        bh=c1yrA7+mY0/E6pYmHduyjhr1A56b4q1KtHaiQtno14g=;
+        h=Subject:Reply-To:From:To:CC:Date:References:From;
+        b=BTvEfXEm1NLPEhkuX3h4sBCBn7L7TGUedAi+L21ouyEY0u65xqAUL5zE2js8xgO3Z
+         7A3VKPVnboTUmReRiaRnM2WEyknPAQKdCmsk1NgamZg0WJMTeIBWrgceppT34I4BQT
+         Xi5weXtMDe2dJsEHCMR9CtR8Gzr8APYNQWYdaL4k=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas2p2.samsung.com (KnoxPortal) with ESMTP id
+        20221102100757epcas2p25ed87b9cfb33de7d4fc1e92f8f444eb8~jvJ7uUBM-2151121511epcas2p2d;
+        Wed,  2 Nov 2022 10:07:57 +0000 (GMT)
+Received: from epsmges2p2.samsung.com (unknown [182.195.36.88]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4N2Myj2hStz4x9Pr; Wed,  2 Nov
+        2022 10:07:57 +0000 (GMT)
+X-AuditID: b6c32a46-ad1fd70000012ff6-42-6362417d1287
+Received: from epcas2p2.samsung.com ( [182.195.41.54]) by
+        epsmges2p2.samsung.com (Symantec Messaging Gateway) with SMTP id
+        02.CF.12278.D7142636; Wed,  2 Nov 2022 19:07:57 +0900 (KST)
+Mime-Version: 1.0
+Subject: [PATCH v1] f2fs: avoid victim selection from previous victim
+ section
+Reply-To: yonggil.song@samsung.com
+Sender: Yonggil Song <yonggil.song@samsung.com>
+From:   Yonggil Song <yonggil.song@samsung.com>
+To:     "jaegeuk@kernel.org" <jaegeuk@kernel.org>,
+        "chao@kernel.org" <chao@kernel.org>,
+        "linux-f2fs-devel@lists.sourceforge.net" 
+        <linux-f2fs-devel@lists.sourceforge.net>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+CC:     Seokhwan Kim <sukka.kim@samsung.com>,
+        Eunhee Rho <eunhee83.rho@samsung.com>
+X-Priority: 3
+X-Content-Kind-Code: NORMAL
+X-CPGS-Detection: blocking_info_exchange
+X-Drm-Type: N,general
+X-Msg-Generator: Mail
+X-Msg-Type: PERSONAL
+X-Reply-Demand: N
+Message-ID: <20221102100756epcms2p23dfabe90c467313ce094c5c81a99c6d7@epcms2p2>
+Date:   Wed, 02 Nov 2022 19:07:56 +0900
+X-CMS-MailID: 20221102100756epcms2p23dfabe90c467313ce094c5c81a99c6d7
+Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: AUTO_CONFIDENTIAL
+CMS-TYPE: 102P
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrHKsWRmVeSWpSXmKPExsWy7bCmmW6tY1KywfZGAYvTU88yWfx80sFm
+        8WT9LGaLS4vcLS7vmsNmsapjLqPF1PNHmBzYPTat6mTz2L3gM5NH35ZVjB6fN8kFsERl22Sk
+        JqakFimk5iXnp2TmpdsqeQfHO8ebmhkY6hpaWpgrKeQl5qbaKrn4BOi6ZeYAHaCkUJaYUwoU
+        CkgsLlbSt7Mpyi8tSVXIyC8usVVKLUjJKTAv0CtOzC0uzUvXy0stsTI0MDAyBSpMyM6Yt/IG
+        a8E5zootl74wNjC+Ze9i5OCQEDCR2LJVsIuRi0NIYAejRP/9IywgcV4BQYm/O4S7GDk5hAX8
+        JWacP8gCYgsJKElcO9DLAhHXl9i8eBk7iM0moCvxd8NyMFtE4BWjxJnVoiA2s0CgxM07H5hA
+        bAkBXokZ7U9ZIGxpie3LtzJC2BoSP5b1MkPYohI3V79lh7HfH5sPVSMi0XrvLFSNoMSDn7uh
+        4pISiw6dh5qfL/F3xXU2CLtGYmtDG1RcX+Jax0awvbwCvhKvbs4Fi7MIqEoceTQLqt5FYsel
+        40wQN8tLbH87hxkUDMwCmhLrd+lDQkpZ4sgtFogKPomOw3/ZYb7aMe8J1CY1ic2bNrNC2DIS
+        Fx63QV3pIXH/wy1mSAgGShx9dp9xAqPCLEQ4z0KydxbC3gWMzKsYxVILinPTU4uNCozgMZuc
+        n7uJEZwQtdx2ME55+0HvECMTB+MhRgkOZiUR3vqz0clCvCmJlVWpRfnxRaU5qcWHGE2BPp7I
+        LCWanA9MyXkl8YYmlgYmZmaG5kamBuZK4rxdM7SShQTSE0tSs1NTC1KLYPqYODilGpiWvVSb
+        7njLTSP9f2p1VWR/zOvGiZK1l5c1O31cZ3RkZ6ThtQ8Bl9UkzjN2G187XbNjkk7LwtWJPzmn
+        2ZQt9g8Xcdf/tMjnZYBaoGF1U19T54ESv4uLDkY/+rFvmlrDR896+UmCTxedSF+2W2VXwxbL
+        heeO3XnzxDG5guvsKoFHdqUrnR5aJ/lPKLOvb5MoWxyvvq9wyq2FHTXK1mqnv74yPd7SUrB2
+        zd+dOzQ3PMgq1XvKZCmRZn05+vuCSI+EmTxHZvpbtmzqWmF0USbJ/NzpZMYQ23Mb9D68fHNj
+        VWGgs+inFfd2aViaf9zw6BrniTuFqvO3ZfNklfkbny3dWScwzVld1lXGYknn6Z0hgteVWIoz
+        Eg21mIuKEwHMJD9REQQAAA==
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221102100756epcms2p23dfabe90c467313ce094c5c81a99c6d7
+References: <CGME20221102100756epcms2p23dfabe90c467313ce094c5c81a99c6d7@epcms2p2>
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,331 +96,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Copying platform data to struct cmdq serves to no purpose, as that
-data is never modified during runtime: it's worth at this point
-storing a pointer to gce_plat in gce and.
+When f2fs chooses GC victim in large section & LFS mode,
+next_victim_seg[gc_type] is referenced first. After segment is freed,
+next_victim_seg[gc_type] has the next segment number.
+However, next_victim_seg[gc_type] still has the last segment number
+even after the last segment of section is freed. In this case, when f2fs
+chooses a victim for the next GC round, the last segment of previous victim
+section is chosen as a victim.
 
-Remove all duplicated `struct gce_plat` members from `struct gce`
-and reuse the platform data across the driver to save some memory.
+Initialize next_victim_seg[gc_type] to NULL_SEGNO for the last segment in
+large section.
 
-Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Signed-off-by: Yonggil Song <yonggil.song@samsung.com>
 ---
+ fs/f2fs/gc.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-This commit applies only on top of series [1]
-
-[1]: https://patchwork.kernel.org/project/linux-mediatek/list/?series=684195
-
- drivers/mailbox/mtk-cmdq-mailbox.c | 88 +++++++++++++-----------------
- 1 file changed, 39 insertions(+), 49 deletions(-)
-
-diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
-index c5229f377c5e..a460ee26eb11 100644
---- a/drivers/mailbox/mtk-cmdq-mailbox.c
-+++ b/drivers/mailbox/mtk-cmdq-mailbox.c
-@@ -75,15 +75,11 @@ struct cmdq {
- 	struct mbox_controller	mbox;
- 	void __iomem		*base;
- 	int			irq;
--	u32			thread_nr;
- 	u32			irq_mask;
-+	const struct gce_plat	*pdata;
- 	struct cmdq_thread	*thread;
- 	struct clk_bulk_data	clocks[CMDQ_GCE_NUM_MAX];
- 	bool			suspended;
--	u8			shift_pa;
--	bool			control_by_sw;
--	bool			sw_ddr_en;
--	u32			gce_num;
- };
+diff --git a/fs/f2fs/gc.c b/fs/f2fs/gc.c
+index 4546e01b2ee0..10677d53ef0e 100644
+--- a/fs/f2fs/gc.c
++++ b/fs/f2fs/gc.c
+@@ -1744,8 +1744,9 @@ static int do_garbage_collect(struct f2fs_sb_info *sbi,
+ 				get_valid_blocks(sbi, segno, false) == 0)
+ 			seg_freed++;
  
- struct gce_plat {
-@@ -96,21 +92,21 @@ struct gce_plat {
- 
- static void cmdq_sw_ddr_enable(struct cmdq *cmdq, bool enable)
- {
--	WARN_ON(clk_bulk_enable(cmdq->gce_num, cmdq->clocks));
-+	WARN_ON(clk_bulk_enable(cmdq->pdata->gce_num, cmdq->clocks));
- 
- 	if (enable)
- 		writel(GCE_DDR_EN | GCE_CTRL_BY_SW, cmdq->base + GCE_GCTL_VALUE);
- 	else
- 		writel(GCE_CTRL_BY_SW, cmdq->base + GCE_GCTL_VALUE);
- 
--	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
-+	clk_bulk_disable(cmdq->pdata->gce_num, cmdq->clocks);
- }
- 
- u8 cmdq_get_shift_pa(struct mbox_chan *chan)
- {
- 	struct cmdq *cmdq = container_of(chan->mbox, struct cmdq, mbox);
- 
--	return cmdq->shift_pa;
-+	return cmdq->pdata->shift;
- }
- EXPORT_SYMBOL(cmdq_get_shift_pa);
- 
-@@ -144,10 +140,10 @@ static void cmdq_init(struct cmdq *cmdq)
- 	int i;
- 	u32 gctl_regval = 0;
- 
--	WARN_ON(clk_bulk_enable(cmdq->gce_num, cmdq->clocks));
--	if (cmdq->control_by_sw)
-+	WARN_ON(clk_bulk_enable(cmdq->pdata->gce_num, cmdq->clocks));
-+	if (cmdq->pdata->control_by_sw)
- 		gctl_regval = GCE_CTRL_BY_SW;
--	if (cmdq->sw_ddr_en)
-+	if (cmdq->pdata->sw_ddr_en)
- 		gctl_regval |= GCE_DDR_EN;
- 
- 	if (gctl_regval)
-@@ -156,7 +152,7 @@ static void cmdq_init(struct cmdq *cmdq)
- 	writel(CMDQ_THR_ACTIVE_SLOT_CYCLES, cmdq->base + CMDQ_THR_SLOT_CYCLES);
- 	for (i = 0; i <= CMDQ_MAX_EVENT; i++)
- 		writel(i, cmdq->base + CMDQ_SYNC_TOKEN_UPDATE);
--	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
-+	clk_bulk_disable(cmdq->pdata->gce_num, cmdq->clocks);
- }
- 
- static int cmdq_thread_reset(struct cmdq *cmdq, struct cmdq_thread *thread)
-@@ -201,7 +197,7 @@ static void cmdq_task_insert_into_thread(struct cmdq_task *task)
- 				prev_task->pkt->cmd_buf_size, DMA_TO_DEVICE);
- 	prev_task_base[CMDQ_NUM_CMD(prev_task->pkt) - 1] =
- 		(u64)CMDQ_JUMP_BY_PA << 32 |
--		(task->pa_base >> task->cmdq->shift_pa);
-+		(task->pa_base >> task->cmdq->pdata->shift);
- 	dma_sync_single_for_device(dev, prev_task->pa_base,
- 				   prev_task->pkt->cmd_buf_size, DMA_TO_DEVICE);
- 
-@@ -235,7 +231,7 @@ static void cmdq_task_handle_error(struct cmdq_task *task)
- 	next_task = list_first_entry_or_null(&thread->task_busy_list,
- 			struct cmdq_task, list_entry);
- 	if (next_task)
--		writel(next_task->pa_base >> cmdq->shift_pa,
-+		writel(next_task->pa_base >> cmdq->pdata->shift,
- 		       thread->base + CMDQ_THR_CURR_ADDR);
- 	cmdq_thread_resume(thread);
- }
-@@ -266,7 +262,7 @@ static void cmdq_thread_irq_handler(struct cmdq *cmdq,
- 	else
- 		return;
- 
--	curr_pa = readl(thread->base + CMDQ_THR_CURR_ADDR) << cmdq->shift_pa;
-+	curr_pa = readl(thread->base + CMDQ_THR_CURR_ADDR) << cmdq->pdata->shift;
- 
- 	list_for_each_entry_safe(task, tmp, &thread->task_busy_list,
- 				 list_entry) {
-@@ -289,7 +285,7 @@ static void cmdq_thread_irq_handler(struct cmdq *cmdq,
- 
- 	if (list_empty(&thread->task_busy_list)) {
- 		cmdq_thread_disable(cmdq, thread);
--		clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
-+		clk_bulk_disable(cmdq->pdata->gce_num, cmdq->clocks);
+-		if (__is_large_section(sbi) && segno + 1 < end_segno)
+-			sbi->next_victim_seg[gc_type] = segno + 1;
++		if (__is_large_section(sbi))
++			sbi->next_victim_seg[gc_type] =
++				(segno + 1 < end_segno) ? segno + 1 : NULL_SEGNO;
+ skip:
+ 		f2fs_put_page(sum_page, 0);
  	}
- }
- 
-@@ -303,7 +299,7 @@ static irqreturn_t cmdq_irq_handler(int irq, void *dev)
- 	if (!(irq_status ^ cmdq->irq_mask))
- 		return IRQ_NONE;
- 
--	for_each_clear_bit(bit, &irq_status, cmdq->thread_nr) {
-+	for_each_clear_bit(bit, &irq_status, cmdq->pdata->thread_nr) {
- 		struct cmdq_thread *thread = &cmdq->thread[bit];
- 
- 		spin_lock_irqsave(&thread->chan->lock, flags);
-@@ -323,7 +319,7 @@ static int cmdq_suspend(struct device *dev)
- 
- 	cmdq->suspended = true;
- 
--	for (i = 0; i < cmdq->thread_nr; i++) {
-+	for (i = 0; i < cmdq->pdata->thread_nr; i++) {
- 		thread = &cmdq->thread[i];
- 		if (!list_empty(&thread->task_busy_list)) {
- 			task_running = true;
-@@ -334,10 +330,10 @@ static int cmdq_suspend(struct device *dev)
- 	if (task_running)
- 		dev_warn(dev, "exist running task(s) in suspend\n");
- 
--	if (cmdq->sw_ddr_en)
-+	if (cmdq->pdata->sw_ddr_en)
- 		cmdq_sw_ddr_enable(cmdq, false);
- 
--	clk_bulk_unprepare(cmdq->gce_num, cmdq->clocks);
-+	clk_bulk_unprepare(cmdq->pdata->gce_num, cmdq->clocks);
- 
- 	return 0;
- }
-@@ -346,10 +342,10 @@ static int cmdq_resume(struct device *dev)
- {
- 	struct cmdq *cmdq = dev_get_drvdata(dev);
- 
--	WARN_ON(clk_bulk_prepare(cmdq->gce_num, cmdq->clocks));
-+	WARN_ON(clk_bulk_prepare(cmdq->pdata->gce_num, cmdq->clocks));
- 	cmdq->suspended = false;
- 
--	if (cmdq->sw_ddr_en)
-+	if (cmdq->pdata->sw_ddr_en)
- 		cmdq_sw_ddr_enable(cmdq, true);
- 
- 	return 0;
-@@ -359,10 +355,10 @@ static int cmdq_remove(struct platform_device *pdev)
- {
- 	struct cmdq *cmdq = platform_get_drvdata(pdev);
- 
--	if (cmdq->sw_ddr_en)
-+	if (cmdq->pdata->sw_ddr_en)
- 		cmdq_sw_ddr_enable(cmdq, false);
- 
--	clk_bulk_unprepare(cmdq->gce_num, cmdq->clocks);
-+	clk_bulk_unprepare(cmdq->pdata->gce_num, cmdq->clocks);
- 	return 0;
- }
- 
-@@ -388,7 +384,7 @@ static int cmdq_mbox_send_data(struct mbox_chan *chan, void *data)
- 	task->pkt = pkt;
- 
- 	if (list_empty(&thread->task_busy_list)) {
--		WARN_ON(clk_bulk_enable(cmdq->gce_num, cmdq->clocks));
-+		WARN_ON(clk_bulk_enable(cmdq->pdata->gce_num, cmdq->clocks));
- 
- 		/*
- 		 * The thread reset will clear thread related register to 0,
-@@ -398,9 +394,9 @@ static int cmdq_mbox_send_data(struct mbox_chan *chan, void *data)
- 		 */
- 		WARN_ON(cmdq_thread_reset(cmdq, thread) < 0);
- 
--		writel(task->pa_base >> cmdq->shift_pa,
-+		writel(task->pa_base >> cmdq->pdata->shift,
- 		       thread->base + CMDQ_THR_CURR_ADDR);
--		writel((task->pa_base + pkt->cmd_buf_size) >> cmdq->shift_pa,
-+		writel((task->pa_base + pkt->cmd_buf_size) >> cmdq->pdata->shift,
- 		       thread->base + CMDQ_THR_END_ADDR);
- 
- 		writel(thread->priority, thread->base + CMDQ_THR_PRIORITY);
-@@ -409,20 +405,20 @@ static int cmdq_mbox_send_data(struct mbox_chan *chan, void *data)
- 	} else {
- 		WARN_ON(cmdq_thread_suspend(cmdq, thread) < 0);
- 		curr_pa = readl(thread->base + CMDQ_THR_CURR_ADDR) <<
--			cmdq->shift_pa;
-+			cmdq->pdata->shift;
- 		end_pa = readl(thread->base + CMDQ_THR_END_ADDR) <<
--			cmdq->shift_pa;
-+			cmdq->pdata->shift;
- 		/* check boundary */
- 		if (curr_pa == end_pa - CMDQ_INST_SIZE ||
- 		    curr_pa == end_pa) {
- 			/* set to this task directly */
--			writel(task->pa_base >> cmdq->shift_pa,
-+			writel(task->pa_base >> cmdq->pdata->shift,
- 			       thread->base + CMDQ_THR_CURR_ADDR);
- 		} else {
- 			cmdq_task_insert_into_thread(task);
- 			smp_mb(); /* modify jump before enable thread */
- 		}
--		writel((task->pa_base + pkt->cmd_buf_size) >> cmdq->shift_pa,
-+		writel((task->pa_base + pkt->cmd_buf_size) >> cmdq->pdata->shift,
- 		       thread->base + CMDQ_THR_END_ADDR);
- 		cmdq_thread_resume(thread);
- 	}
-@@ -461,7 +457,7 @@ static void cmdq_mbox_shutdown(struct mbox_chan *chan)
- 	}
- 
- 	cmdq_thread_disable(cmdq, thread);
--	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
-+	clk_bulk_disable(cmdq->pdata->gce_num, cmdq->clocks);
- 
- done:
- 	/*
-@@ -501,7 +497,7 @@ static int cmdq_mbox_flush(struct mbox_chan *chan, unsigned long timeout)
- 
- 	cmdq_thread_resume(thread);
- 	cmdq_thread_disable(cmdq, thread);
--	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
-+	clk_bulk_disable(cmdq->pdata->gce_num, cmdq->clocks);
- 
- out:
- 	spin_unlock_irqrestore(&thread->chan->lock, flags);
-@@ -548,7 +544,6 @@ static int cmdq_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct cmdq *cmdq;
- 	int err, i;
--	struct gce_plat *plat_data;
- 	struct device_node *phandle = dev->of_node;
- 	struct device_node *node;
- 	int alias_id = 0;
-@@ -567,18 +562,13 @@ static int cmdq_probe(struct platform_device *pdev)
- 	if (cmdq->irq < 0)
- 		return cmdq->irq;
- 
--	plat_data = (struct gce_plat *)of_device_get_match_data(dev);
--	if (!plat_data) {
-+	cmdq->pdata = device_get_match_data(dev);
-+	if (!cmdq->pdata) {
- 		dev_err(dev, "failed to get match data\n");
- 		return -EINVAL;
- 	}
- 
--	cmdq->thread_nr = plat_data->thread_nr;
--	cmdq->shift_pa = plat_data->shift;
--	cmdq->control_by_sw = plat_data->control_by_sw;
--	cmdq->sw_ddr_en = plat_data->sw_ddr_en;
--	cmdq->gce_num = plat_data->gce_num;
--	cmdq->irq_mask = GENMASK(cmdq->thread_nr - 1, 0);
-+	cmdq->irq_mask = GENMASK(cmdq->pdata->thread_nr - 1, 0);
- 	err = devm_request_irq(dev, cmdq->irq, cmdq_irq_handler, IRQF_SHARED,
- 			       "mtk_cmdq", cmdq);
- 	if (err < 0) {
-@@ -589,10 +579,10 @@ static int cmdq_probe(struct platform_device *pdev)
- 	dev_dbg(dev, "cmdq device: addr:0x%p, va:0x%p, irq:%d\n",
- 		dev, cmdq->base, cmdq->irq);
- 
--	if (cmdq->gce_num > 1) {
-+	if (cmdq->pdata->gce_num > 1) {
- 		for_each_child_of_node(phandle->parent, node) {
- 			alias_id = of_alias_get_id(node, clk_name);
--			if (alias_id >= 0 && alias_id < cmdq->gce_num) {
-+			if (alias_id >= 0 && alias_id < cmdq->pdata->gce_num) {
- 				cmdq->clocks[alias_id].id = clk_names[alias_id];
- 				cmdq->clocks[alias_id].clk = of_clk_get(node, 0);
- 				if (IS_ERR(cmdq->clocks[alias_id].clk)) {
-@@ -614,12 +604,12 @@ static int cmdq_probe(struct platform_device *pdev)
- 	}
- 
- 	cmdq->mbox.dev = dev;
--	cmdq->mbox.chans = devm_kcalloc(dev, cmdq->thread_nr,
-+	cmdq->mbox.chans = devm_kcalloc(dev, cmdq->pdata->thread_nr,
- 					sizeof(*cmdq->mbox.chans), GFP_KERNEL);
- 	if (!cmdq->mbox.chans)
- 		return -ENOMEM;
- 
--	cmdq->mbox.num_chans = cmdq->thread_nr;
-+	cmdq->mbox.num_chans = cmdq->pdata->thread_nr;
- 	cmdq->mbox.ops = &cmdq_mbox_chan_ops;
- 	cmdq->mbox.of_xlate = cmdq_xlate;
- 
-@@ -627,12 +617,12 @@ static int cmdq_probe(struct platform_device *pdev)
- 	cmdq->mbox.txdone_irq = false;
- 	cmdq->mbox.txdone_poll = false;
- 
--	cmdq->thread = devm_kcalloc(dev, cmdq->thread_nr,
-+	cmdq->thread = devm_kcalloc(dev, cmdq->pdata->thread_nr,
- 					sizeof(*cmdq->thread), GFP_KERNEL);
- 	if (!cmdq->thread)
- 		return -ENOMEM;
- 
--	for (i = 0; i < cmdq->thread_nr; i++) {
-+	for (i = 0; i < cmdq->pdata->thread_nr; i++) {
- 		cmdq->thread[i].base = cmdq->base + CMDQ_THR_BASE +
- 				CMDQ_THR_SIZE * i;
- 		INIT_LIST_HEAD(&cmdq->thread[i].task_busy_list);
-@@ -647,7 +637,7 @@ static int cmdq_probe(struct platform_device *pdev)
- 
- 	platform_set_drvdata(pdev, cmdq);
- 
--	WARN_ON(clk_bulk_prepare(cmdq->gce_num, cmdq->clocks));
-+	WARN_ON(clk_bulk_prepare(cmdq->pdata->gce_num, cmdq->clocks));
- 
- 	cmdq_init(cmdq);
- 
 -- 
-2.37.2
-
+2.34.1
