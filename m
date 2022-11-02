@@ -2,94 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BB496165B4
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:03:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5A3BB6165B7
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:04:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230414AbiKBPDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 11:03:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
+        id S229468AbiKBPE2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 11:04:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231154AbiKBPCz (ORCPT
+        with ESMTP id S230182AbiKBPER (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 11:02:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D041D2B610;
-        Wed,  2 Nov 2022 08:02:47 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EF10619F7;
-        Wed,  2 Nov 2022 15:02:47 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18473C433D6;
-        Wed,  2 Nov 2022 15:02:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667401366;
-        bh=ySDnWLtgKmB4MsWkDhRm3ekTNs1QeMnC8N/ulBhv1O4=;
-        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-        b=uFAgba06loLQK4xeCO8L6yA1xDpNGCVUqS0F6XDlPaNvRw47cvnlE0yTRg1aWmZJX
-         Fu+xOO+Rj99idT4VZ7z2PAkz9tqY7QppEk4mvh3BXh7SkYcM9BhU/YaPjmpvMB+lct
-         3N2V/glp6DGf0z7z0CsXxXIKXVakb3R7tAJjp+ETSbZIwm3jY0HqvMuS3aMO6greDd
-         fuYl11+ZtPng1WsxcnpQg9sfLkQpxyCMztoaSHT1HBco9e+ClOV3t2WC0TK/HNh54j
-         QzJdE9l8NlIC0G+ZwRxhslXH8bBuF1JytES2U4t84R0lcOj/XtI0is46ful6PrRMiY
-         fYl3Vt481po1g==
-From:   Mark Brown <broonie@kernel.org>
-To:     Jerome Brunet <jbrunet@baylibre.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Kevin Hilman <khilman@baylibre.com>
-Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
-        linux-amlogic@lists.infradead.org,
-        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
-In-Reply-To: <20221027-b4-spicc-burst-delay-fix-v2-0-8cc2bab3417a@linaro.org>
-References: <20221027-b4-spicc-burst-delay-fix-v2-0-8cc2bab3417a@linaro.org>
-Subject: Re: [PATCH v2] spi: meson-spicc: fix do_div build error on non-arm64
-Message-Id: <166740136480.261515.18042223753301117319.b4-ty@kernel.org>
-Date:   Wed, 02 Nov 2022 15:02:44 +0000
+        Wed, 2 Nov 2022 11:04:17 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 54BD12B253
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 08:03:57 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id g10so5345867qkl.6
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 08:03:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Zy78pOro/kNGaH6GiKHB1Btqlcj1EjPqbvOYH931OQc=;
+        b=Elh+yNpir9fVQH/ZqSBfiGNl24FRuTTs6B2iJO5xtICf02Lftb/tBUCWPDcIlAezKv
+         prMSGtaIbjTka4ojowDRQbWUxRqD4OaS0AU7jxtT9KNSWtZYhBDNjCuv6vsC3GuWiDJo
+         Sfo0iPKlqgZlzwBeSZNrex4iwr8AusiEpqU5SRJMCbQvSAYP1u3JYiT2mXngOA4sa0Gj
+         B985w7XSBFH5sAbNNv9V3qQfWkExTY9svD15unM0ZybnpHS+feMl3caGbQpvAJc36VIV
+         YESW61ElTlpJr5Civdksv2QCQt5rnBQ64YBHQVOypRK/5ENzfMvqNfLhAsGFqy7ieGR8
+         E2Tg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zy78pOro/kNGaH6GiKHB1Btqlcj1EjPqbvOYH931OQc=;
+        b=DrBrVqe0LcWxlbLLaNdv3C1b7vC6kqjTfh6tU54AS2ZPxM59q2l3CXioi3s7s6n28C
+         COZxwEYy/Iq3oBe2S5GwRsiNyvpN7j4jLHgGV0AbsAtDvKvra774LSrh0WMN9Id3hv8R
+         n1/WTNz0mqlziX2IhslvwRMeKk2dOu7KnBqeDRkMg9Mfgds0AkK/6Xrb2Z/sWAA2UvqS
+         z3cM/3N725XsC6GIne78sfA0Q3wfsg95QrB3AxAbEdWTIqrdAZsdESRxSoewr8pD+dFE
+         WiFf2PkhBWTgVzQ7G+bmhsVzmU3Z0ncrD2pN/y/gGbL1Lz0HYjg9zY7uOsWPFf6XbJdI
+         e07w==
+X-Gm-Message-State: ACrzQf2RdLKAmFNUivF6L3bYsNXVSMPYXav0VjV8H5sAwScD+uYOdj4E
+        bpOT1Ge6k1W41sz5FecNCSciLw==
+X-Google-Smtp-Source: AMsMyM5nABmPNo1XLYdsPzLxGDL/SItBhtuUNMUriLzYSJvmRMWrahFZimJxCAyJWz6ozdsyYVpVEw==
+X-Received: by 2002:a05:620a:29cd:b0:6d2:c5d6:6fe0 with SMTP id s13-20020a05620a29cd00b006d2c5d66fe0mr18452610qkp.148.1667401412454;
+        Wed, 02 Nov 2022 08:03:32 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
+        by smtp.gmail.com with ESMTPSA id fb24-20020a05622a481800b003a51d65b8basm5786562qtb.36.2022.11.02.08.03.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 08:03:31 -0700 (PDT)
+Message-ID: <54e6c11b-d7f6-bb72-8604-652993b2d132@linaro.org>
+Date:   Wed, 2 Nov 2022 11:03:30 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.10.0-dev-fc921
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v2 1/4] dt-bindings: pwm: Add Apple PWM controller
+Content-Language: en-US
+To:     Sasha Finkelstein <fnkl.kernel@gmail.com>,
+        thierry.reding@gmail.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org
+Cc:     marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io,
+        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+References: <20221102141513.49289-1-fnkl.kernel@gmail.com>
+ <20221102141513.49289-2-fnkl.kernel@gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221102141513.49289-2-fnkl.kernel@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 02 Nov 2022 09:46:01 +0100, Neil Armstrong wrote:
-> This fixes :
-> error: passing argument 1 of '__div64_32' from incompatible pointer type
+On 02/11/2022 10:15, Sasha Finkelstein wrote:
+> Apple SoCs such as the M1 contain a PWM controller used
+> among other things to control the keyboard backlight.
 > 
-> By passing an uint64_t as first variable to do_div().
-> 
-> 
+> Signed-off-by: Sasha Finkelstein <fnkl.kernel@gmail.com>
 
-Applied to
 
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Thanks!
+Best regards,
+Krzysztof
 
-[1/1] spi: meson-spicc: fix do_div build error on non-arm64
-      commit: 134af9aa88453aeb9224e407092530ebba366c6c
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
