@@ -2,178 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7A728616505
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:22:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E53161650B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:24:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231573AbiKBOWg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 10:22:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48172 "EHLO
+        id S230500AbiKBOYh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 10:24:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55806 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231462AbiKBOV6 (ORCPT
+        with ESMTP id S230414AbiKBOYb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 10:21:58 -0400
-Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E91E1F630
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 07:21:56 -0700 (PDT)
-Received: by mail-pj1-x102a.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so2054522pjl.3
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 07:21:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c/pMCaexTxPLJj78ppz2hR1Nnq2hMOxwXWSwZaAwP1o=;
-        b=v2KPaSNwlUsp7p+WI5eQrzk4CxEQ6P+VRict3TlT67cdkOV/KtVsTQn1bBV14Y2xFO
-         M8iBDtfXrhY2DbRs3tQQNOkLjkdUY82UJJqDY+Yl/unoGbQJNfn398w3vhZPkbwkrS2h
-         5JC21Q1z1i3DqZn9MSKDNQEhrzRa0DvrsJKeuxCwN4H0Za6QySEnjA90r53MOB9JEY0w
-         UMISsBQmaJHGYYCzVoSXOGHlHeaahNz1VAxpoL4LfN/bcaTQ3gGtzt0fqqGW183CHhjC
-         w1FSWrIobeM+RnDn2GHoAUhyA07K5CPRng9lsDQuK1MpgoOo3DiUlY/lSh6Ke8Q6EUv7
-         o7jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c/pMCaexTxPLJj78ppz2hR1Nnq2hMOxwXWSwZaAwP1o=;
-        b=u7jgZtmGILqt+ejioe8kUf9MxIpnMfJe/01Hn+YiidNm+GxK76yKl9KVGddMBD3Xd2
-         tbtZG6bdQNiEGB/w5MywGHdsbaAQjpENtA+4ojyJT0jNfmmrUxKIclzf8vJwueqt9PYh
-         D/pBbgqn2VHYfI+TFqHrxhelqPaFEgEzzAVITq/Rb5gMdGSI0qRX4AfRBz4bykF9zuCh
-         usgfIHUuvL+ZQ3jpV+6tSkEnw6HYGXLjGoxKMtYYZxbQVSQj9kL1I7PgjwyJu04dvgZs
-         EmXrHH644zGG131AnucWxl9HngYm8Iw8ziwYPowpr4pWLcx0cu8Pl2Caocjouop6oa+S
-         3NMg==
-X-Gm-Message-State: ACrzQf3Cx+Pc8jVIOfA0NZKoslGP8lQPJTiOeV0EUOtibwICOoQulOHg
-        aWDDkM1VfcCV9rt6k51M2WIbfA==
-X-Google-Smtp-Source: AMsMyM4qK/lnzUIzNqln7RZX8vMCbyXMe2wNHwxwm70Vj3P2QkQS7yGpFjKhbkoOYB6isVoY+KTCpA==
-X-Received: by 2002:a17:903:11c4:b0:178:634b:1485 with SMTP id q4-20020a17090311c400b00178634b1485mr24234234plh.142.1667398915892;
-        Wed, 02 Nov 2022 07:21:55 -0700 (PDT)
-Received: from localhost.localdomain (80.251.214.228.16clouds.com. [80.251.214.228])
-        by smtp.gmail.com with ESMTPSA id o28-20020aa7979c000000b0056b8181861esm8817773pfp.19.2022.11.02.07.21.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 07:21:55 -0700 (PDT)
-From:   Shawn Guo <shawn.guo@linaro.org>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Kevin Hilman <khilman@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Shawn Guo <shawn.guo@linaro.org>
-Subject: [PATCH v3 4/4] PM: domains: Power off[on] domain in hibernate .freeze[thaw]_noirq hook
-Date:   Wed,  2 Nov 2022 22:21:04 +0800
-Message-Id: <20221102142104.2006554-5-shawn.guo@linaro.org>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221102142104.2006554-1-shawn.guo@linaro.org>
-References: <20221102142104.2006554-1-shawn.guo@linaro.org>
+        Wed, 2 Nov 2022 10:24:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6AF242A704
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 07:24:28 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 5A820B822DD
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 14:24:27 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E52EAC43147
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 14:24:25 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667399065;
+        bh=uO1Wv+ReevzIk1aXtBRREBtT/tgyabwShw4JBUSnx6k=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=UNWJ/4jpUzZFIB7tPJV/eqMaxCh+PYp4P7Aq2szKTVXCULfLz10BbAhBDKtn7qon7
+         qCNQVVXYd8Rulhr4Qq76/2tUh+peqQ1Xtjhnk/XkaYwbxs2BkZH/jwIpmG++6e1ptc
+         M5Rikc5GMKxE97zUoPxQiafVfiTMYdNSJ1T0XEGhXwkloj+ZKycNRFA5j145qIAGJo
+         66Q7B7Y+0XQE9nhPCcxajawU42eAMsG2/zleyYIRr3HHJ34gDx5ybrdzuvsWp3Cil1
+         h2xtFFZ0lpbUQSocP8NEWBNCU1QPkCl8/NhbylGIUZH6XfcpA7F9jL9whYWHFuTQNV
+         83Vz7gBgTpJhw==
+Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-3701a0681daso133041657b3.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 07:24:25 -0700 (PDT)
+X-Gm-Message-State: ACrzQf3yJfxPcE0m2yDAmdTyBPBwRZqh1CwRqyxbUVAAkGOriyfGEYfN
+        BfeS2vp/Q3sN3BcqpwYgrZpo8NY7575UDr+MC7g=
+X-Google-Smtp-Source: AMsMyM4ABQsof+4Xlk8ax7jbRQ+7bPAZ4K1/9vveI4fArkhRYZ2W2wwyMUVBNLw66TPXUcGd25zoAo2WgbXtEQJIcyo=
+X-Received: by 2002:a05:690c:825:b0:36a:b160:21b with SMTP id
+ by5-20020a05690c082500b0036ab160021bmr23933191ywb.211.1667399064738; Wed, 02
+ Nov 2022 07:24:24 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20220911211443.581481-1-michal.winiarski@intel.com> <20220911211443.581481-2-michal.winiarski@intel.com>
+In-Reply-To: <20220911211443.581481-2-michal.winiarski@intel.com>
+From:   Oded Gabbay <ogabbay@kernel.org>
+Date:   Wed, 2 Nov 2022 16:23:57 +0200
+X-Gmail-Original-Message-ID: <CAFCwf11=hKGm93oF1A5PLhdvdo2ujYJWyt4qAqK-KQQqe6ngDA@mail.gmail.com>
+Message-ID: <CAFCwf11=hKGm93oF1A5PLhdvdo2ujYJWyt4qAqK-KQQqe6ngDA@mail.gmail.com>
+Subject: Re: [PATCH v5 1/3] drm: Use XArray instead of IDR for minors
+To:     =?UTF-8?Q?Micha=C5=82_Winiarski?= <michal.winiarski@intel.com>
+Cc:     dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Simon Ser <contact@emersion.fr>,
+        Matthew Wilcox <willy@infradead.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On platforms which use SHUTDOWN as hibernation mode, the genpd noirq
-hooks will be called like below.
+On Mon, Sep 12, 2022 at 12:17 AM Micha=C5=82 Winiarski
+<michal.winiarski@intel.com> wrote:
+>
+> IDR is deprecated, and since XArray manages its own state with internal
+> locking, it simplifies the locking on DRM side.
+> Additionally, don't use the IRQ-safe variant, since operating on drm
+> minor is not done in IRQ context.
+>
+> Signed-off-by: Micha=C5=82 Winiarski <michal.winiarski@intel.com>
+> Suggested-by: Matthew Wilcox <willy@infradead.org>
+> ---
+>  drivers/gpu/drm/drm_drv.c | 51 ++++++++++++++-------------------------
+>  1 file changed, 18 insertions(+), 33 deletions(-)
+>
+> diff --git a/drivers/gpu/drm/drm_drv.c b/drivers/gpu/drm/drm_drv.c
+> index 8214a0b1ab7f..61d24cdcd0f8 100644
+> --- a/drivers/gpu/drm/drm_drv.c
+> +++ b/drivers/gpu/drm/drm_drv.c
+> @@ -34,6 +34,7 @@
+>  #include <linux/pseudo_fs.h>
+>  #include <linux/slab.h>
+>  #include <linux/srcu.h>
+> +#include <linux/xarray.h>
+>
+>  #include <drm/drm_cache.h>
+>  #include <drm/drm_client.h>
+> @@ -53,8 +54,7 @@ MODULE_AUTHOR("Gareth Hughes, Leif Delgass, Jos=C3=A9 F=
+onseca, Jon Smirl");
+>  MODULE_DESCRIPTION("DRM shared core routines");
+>  MODULE_LICENSE("GPL and additional rights");
+>
+> -static DEFINE_SPINLOCK(drm_minor_lock);
+> -static struct idr drm_minors_idr;
+> +static DEFINE_XARRAY_ALLOC(drm_minors_xa);
+>
+>  /*
+>   * If the drm core fails to init for whatever reason,
+> @@ -98,21 +98,19 @@ static struct drm_minor **drm_minor_get_slot(struct d=
+rm_device *dev,
+>  static void drm_minor_alloc_release(struct drm_device *dev, void *data)
+>  {
+>         struct drm_minor *minor =3D data;
+> -       unsigned long flags;
+>
+>         WARN_ON(dev !=3D minor->dev);
+>
+>         put_device(minor->kdev);
+>
+> -       spin_lock_irqsave(&drm_minor_lock, flags);
+> -       idr_remove(&drm_minors_idr, minor->index);
+> -       spin_unlock_irqrestore(&drm_minor_lock, flags);
+> +       xa_erase(&drm_minors_xa, minor->index);
+>  }
+>
+> +#define DRM_MINOR_LIMIT(t) ({ typeof(t) _t =3D (t); XA_LIMIT(64 * _t, 64=
+ * _t + 63); })
+> +
+>  static int drm_minor_alloc(struct drm_device *dev, unsigned int type)
+>  {
+>         struct drm_minor *minor;
+> -       unsigned long flags;
+>         int r;
+>
+>         minor =3D drmm_kzalloc(dev, sizeof(*minor), GFP_KERNEL);
+> @@ -122,21 +120,10 @@ static int drm_minor_alloc(struct drm_device *dev, =
+unsigned int type)
+>         minor->type =3D type;
+>         minor->dev =3D dev;
+>
+> -       idr_preload(GFP_KERNEL);
+> -       spin_lock_irqsave(&drm_minor_lock, flags);
+> -       r =3D idr_alloc(&drm_minors_idr,
+> -                     NULL,
+> -                     64 * type,
+> -                     64 * (type + 1),
+> -                     GFP_NOWAIT);
+> -       spin_unlock_irqrestore(&drm_minor_lock, flags);
+> -       idr_preload_end();
+> -
+> +       r =3D xa_alloc(&drm_minors_xa, &minor->index, NULL, DRM_MINOR_LIM=
+IT(type), GFP_KERNEL);
+>         if (r < 0)
+>                 return r;
+>
+> -       minor->index =3D r;
+> -
+>         r =3D drmm_add_action_or_reset(dev, drm_minor_alloc_release, mino=
+r);
+>         if (r)
+>                 return r;
+> @@ -152,7 +139,7 @@ static int drm_minor_alloc(struct drm_device *dev, un=
+signed int type)
+>  static int drm_minor_register(struct drm_device *dev, unsigned int type)
+>  {
+>         struct drm_minor *minor;
+> -       unsigned long flags;
+> +       void *entry;
+>         int ret;
+>
+>         DRM_DEBUG("\n");
+> @@ -172,9 +159,12 @@ static int drm_minor_register(struct drm_device *dev=
+, unsigned int type)
+>                 goto err_debugfs;
+>
+>         /* replace NULL with @minor so lookups will succeed from now on *=
+/
+> -       spin_lock_irqsave(&drm_minor_lock, flags);
+> -       idr_replace(&drm_minors_idr, minor, minor->index);
+> -       spin_unlock_irqrestore(&drm_minor_lock, flags);
+> +       entry =3D xa_cmpxchg(&drm_minors_xa, minor->index, NULL, &minor, =
+GFP_KERNEL);
+I believe we should pass in "minor", without the &, as &minor will
+give you the address of the local pointer.
 
-    genpd_freeze_noirq()         genpd_restore_noirq()
-          ↓                            ↑
-    Create snapshot image        Restore target kernel
-          ↓                            ↑
-    genpd_thaw_noirq()           genpd_freeze_noirq()
-          ↓                            ↑
-    Write snapshot image         Read snapshot image
-          ↓                            ↑
-    power_down()                 Kernel boot
+Oded
 
-As of today suspend hooks genpd_suspend[resume]_noirq() manages domain
-on/off state, but hibernate hooks genpd_freeze[thaw]_noirq() doesn't.
-This results in a different behavior of domain power state between suspend
-and hibernate freeze, i.e. domain is powered off for the former while on
-for the later.  It causes a problem on platforms like i.MX where the
-domain needs to be powered on/off by calling clock and regulator interface.
-When the platform restores from hibernation, the domain is off in hardware
-and genpd_restore_noirq() tries to power it on, but will never succeed
-because software state of domain (clock and regulator) is left on from the
-last hibernate freeze, so kernel thinks that clock and regulator are
-enabled while they are actually not turned on in hardware.  The
-consequence would be that devices in the power domain will access
-registers without clock or power, and cause hardware lockup.
-
-Power off[on] domain in hibernate .freeze[thaw]_noirq hook for reasons:
-
-- Align the behavior between suspend and hibernate freeze.
-- Have power state of domains stay in sync between hardware and software
-  for hibernate freeze, and thus fix the lockup issue seen on i.MX
-  platform.
-
-Signed-off-by: Shawn Guo <shawn.guo@linaro.org>
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
----
- drivers/base/power/domain.c | 35 ++++-------------------------------
- 1 file changed, 4 insertions(+), 31 deletions(-)
-
-diff --git a/drivers/base/power/domain.c b/drivers/base/power/domain.c
-index 7cee9439fd21..2f0787d5101b 100644
---- a/drivers/base/power/domain.c
-+++ b/drivers/base/power/domain.c
-@@ -1307,24 +1307,11 @@ static int genpd_resume_noirq(struct device *dev)
-  */
- static int genpd_freeze_noirq(struct device *dev)
- {
--	const struct generic_pm_domain *genpd;
--	int ret = 0;
--
- 	dev_dbg(dev, "%s()\n", __func__);
- 
--	genpd = dev_to_genpd(dev);
--	if (IS_ERR(genpd))
--		return -EINVAL;
--
--	ret = pm_generic_freeze_noirq(dev);
--	if (ret)
--		return ret;
--
--	if (genpd->dev_ops.stop && genpd->dev_ops.start &&
--	    !pm_runtime_status_suspended(dev))
--		ret = genpd_stop_dev(genpd, dev);
--
--	return ret;
-+	return genpd_finish_suspend(dev,
-+				    pm_generic_freeze_noirq,
-+				    pm_generic_thaw_noirq);
- }
- 
- /**
-@@ -1336,23 +1323,9 @@ static int genpd_freeze_noirq(struct device *dev)
-  */
- static int genpd_thaw_noirq(struct device *dev)
- {
--	const struct generic_pm_domain *genpd;
--	int ret = 0;
--
- 	dev_dbg(dev, "%s()\n", __func__);
- 
--	genpd = dev_to_genpd(dev);
--	if (IS_ERR(genpd))
--		return -EINVAL;
--
--	if (genpd->dev_ops.stop && genpd->dev_ops.start &&
--	    !pm_runtime_status_suspended(dev)) {
--		ret = genpd_start_dev(genpd, dev);
--		if (ret)
--			return ret;
--	}
--
--	return pm_generic_thaw_noirq(dev);
-+	return genpd_finish_resume(dev, pm_generic_thaw_noirq);
- }
- 
- /**
--- 
-2.25.1
-
+> +       if (xa_is_err(entry)) {
+> +               ret =3D xa_err(entry);
+> +               goto err_debugfs;
+> +       }
+> +       WARN_ON(entry);
+>
+>         DRM_DEBUG("new minor registered %d\n", minor->index);
+>         return 0;
+> @@ -187,16 +177,13 @@ static int drm_minor_register(struct drm_device *de=
+v, unsigned int type)
+>  static void drm_minor_unregister(struct drm_device *dev, unsigned int ty=
+pe)
+>  {
+>         struct drm_minor *minor;
+> -       unsigned long flags;
+>
+>         minor =3D *drm_minor_get_slot(dev, type);
+>         if (!minor || !device_is_registered(minor->kdev))
+>                 return;
+>
+>         /* replace @minor with NULL so lookups will fail from now on */
+> -       spin_lock_irqsave(&drm_minor_lock, flags);
+> -       idr_replace(&drm_minors_idr, NULL, minor->index);
+> -       spin_unlock_irqrestore(&drm_minor_lock, flags);
+> +       xa_store(&drm_minors_xa, minor->index, NULL, GFP_KERNEL);
+>
+>         device_del(minor->kdev);
+>         dev_set_drvdata(minor->kdev, NULL); /* safety belt */
+> @@ -215,13 +202,12 @@ static void drm_minor_unregister(struct drm_device =
+*dev, unsigned int type)
+>  struct drm_minor *drm_minor_acquire(unsigned int minor_id)
+>  {
+>         struct drm_minor *minor;
+> -       unsigned long flags;
+>
+> -       spin_lock_irqsave(&drm_minor_lock, flags);
+> -       minor =3D idr_find(&drm_minors_idr, minor_id);
+> +       xa_lock(&drm_minors_xa);
+> +       minor =3D xa_load(&drm_minors_xa, minor_id);
+>         if (minor)
+>                 drm_dev_get(minor->dev);
+> -       spin_unlock_irqrestore(&drm_minor_lock, flags);
+> +       xa_unlock(&drm_minors_xa);
+>
+>         if (!minor) {
+>                 return ERR_PTR(-ENODEV);
+> @@ -1037,7 +1023,7 @@ static void drm_core_exit(void)
+>         unregister_chrdev(DRM_MAJOR, "drm");
+>         debugfs_remove(drm_debugfs_root);
+>         drm_sysfs_destroy();
+> -       idr_destroy(&drm_minors_idr);
+> +       WARN_ON(!xa_empty(&drm_minors_xa));
+>         drm_connector_ida_destroy();
+>  }
+>
+> @@ -1046,7 +1032,6 @@ static int __init drm_core_init(void)
+>         int ret;
+>
+>         drm_connector_ida_init();
+> -       idr_init(&drm_minors_idr);
+>         drm_memcpy_init_early();
+>
+>         ret =3D drm_sysfs_init();
+> --
+> 2.37.3
+>
