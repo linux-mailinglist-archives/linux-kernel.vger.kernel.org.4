@@ -2,129 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BE0436170B4
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 23:31:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 556A46170B8
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 23:32:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231520AbiKBWbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 18:31:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41306 "EHLO
+        id S231546AbiKBWbz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 18:31:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231514AbiKBWa7 (ORCPT
+        with ESMTP id S231218AbiKBWbu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 18:30:59 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E18DBC36
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 15:30:57 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id j7-20020a056e02154700b003007885e7beso259634ilu.20
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 15:30:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=F9t5rxiD3HbBUPq6/6mfgx1apalEX8dQGz5+gh984xo=;
-        b=CFAV127WvtFPcQiNTIchS34UnoejU3rzlHCDJxou9OLahLAWYlRrQsD7aCFHVt4mH2
-         LOLbwiy7KJaxPdKD5MkPaJXgjeMIxhIidPtXqy+Cl3mcFBIkr5bEVuFGzmJvn246XOJS
-         ysRnJc1dkhJQgUtStZlfj2l8O+Xgp47kXzYFKIp49nxrxLl+nDLAAjPFYhBMAu30sxjq
-         LEga43rptNSAypoDniwGzyw1KAcdYSqOSgH0RkuMqYe+cvSTVieRIoHvU62G2r8twR2y
-         pZnFs7T1GVe+CJmHmSG+qe9Razw9X2L1i2xwP2qdbMrnWdOiBWOdjIhyLrZJObxDt5Zl
-         Gung==
-X-Gm-Message-State: ACrzQf3/Y7TTWdGdN48kV0g96149QGOypPJ3ZOPNYC4NTRbbp6XyNYEO
-        iN5qXAJk5NHWgt9brdkyDz+BvR9NB3hAVh8iXkFCLwGhYnAt
-X-Google-Smtp-Source: AMsMyM5Oh95NtQfvBOGDmU7xx1PnSvfcLj5yYyut7wTKcKLky28OCiIBzDZeQutliXIvAwa4206qexk2Wb8wclQJa0FMKAzHvlCE
+        Wed, 2 Nov 2022 18:31:50 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56D0865E3;
+        Wed,  2 Nov 2022 15:31:49 -0700 (PDT)
+Received: from pps.filterd (m0127361.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A2M098E006615;
+        Wed, 2 Nov 2022 22:31:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=fky39m8nQf+woEzTA5Y8KhT4xAJLqTECx7ts/LTg4G4=;
+ b=hXwFwRKAeqvSDFD5Nk1JgKFrocDY4NdkLTQvSIhEDBLQgIjDS1ngH6wfDIrgWtFolcSe
+ NV7qW1lGbXVgIU5Rz6eClk2EH5SOeK96lf/NF1EUVlCOY5movL5MThg9tIdOIGviFGQh
+ T7pbvAaLo+sJrR+CyF/77hACPMkKTKk7ziorKUNIZEB4P6NOoK5aPTSvK9hp6pRJar3O
+ yB1VraUNRXYhkz9FGH9Ox1EUNeSSPlM0GHfQzMdZCC1xaSj2ziUEAMQjWJejAQLrTfP9
+ Cw6XSmQnXVuezfJgjcnkF6xSWh34T9oTuC0mxVxH0F4138vx93iUdkuWYvU+0CR2OZki Yg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kkxvkvdg1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 22:31:36 +0000
+Received: from m0127361.ppops.net (m0127361.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A2MIrvM024935;
+        Wed, 2 Nov 2022 22:31:36 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kkxvkvdew-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 22:31:35 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A2MKD66009030;
+        Wed, 2 Nov 2022 22:31:33 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma03fra.de.ibm.com with ESMTP id 3kgut8npwv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 22:31:33 +0000
+Received: from d06av25.portsmouth.uk.ibm.com (d06av25.portsmouth.uk.ibm.com [9.149.105.61])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A2MVUuj33620256
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Nov 2022 22:31:30 GMT
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 91DC011C06F;
+        Wed,  2 Nov 2022 22:31:30 +0000 (GMT)
+Received: from d06av25.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8939211C06E;
+        Wed,  2 Nov 2022 22:31:29 +0000 (GMT)
+Received: from thinkpad (unknown [9.171.6.109])
+        by d06av25.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Wed,  2 Nov 2022 22:31:29 +0000 (GMT)
+Date:   Wed, 2 Nov 2022 23:31:27 +0100
+From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Jann Horn <jannh@google.com>,
+        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: mm: delay rmap removal until after TLB flush
+Message-ID: <20221102233127.423a6112@thinkpad>
+In-Reply-To: <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com>
+References: <B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com>
+        <CAHk-=wgzT1QsSCF-zN+eS06WGVTBg4sf=6oTMg95+AEq7QrSCQ@mail.gmail.com>
+        <47678198-C502-47E1-B7C8-8A12352CDA95@gmail.com>
+        <CAHk-=wjzngbbwHw4nAsqo_RpyOtUDk5G+Wus=O0w0A6goHvBWA@mail.gmail.com>
+        <CAHk-=wijU_YHSZq5N7vYK+qHPX0aPkaePaGOyWk4aqMvvSXxJA@mail.gmail.com>
+        <140B437E-B994-45B7-8DAC-E9B66885BEEF@gmail.com>
+        <CAHk-=wjX_P78xoNcGDTjhkgffs-Bhzcwp-mdsE1maeF57Sh0MA@mail.gmail.com>
+        <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
+        <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
+        <CAHk-=wiwt4LC-VmqvYrphraF0=yQV=CQimDCb0XhtXwk8oKCCA@mail.gmail.com>
+        <Y1+XCALog8bW7Hgl@hirez.programming.kicks-ass.net>
+        <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
+        <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
+Content-Type: text/plain; charset=US-ASCII
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: -Hwy5sQnZ-UsY13arSJV7ojGnJ2nPK57
+X-Proofpoint-GUID: PdCd33Glyi7_bnQwqUmI7VO4EjOPpWd2
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-X-Received: by 2002:a92:cc49:0:b0:300:d9d7:fe36 with SMTP id
- t9-20020a92cc49000000b00300d9d7fe36mr218061ilq.225.1667428256652; Wed, 02 Nov
- 2022 15:30:56 -0700 (PDT)
-Date:   Wed, 02 Nov 2022 15:30:56 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000ed23c905ec846460@google.com>
-Subject: [syzbot] WARNING in __btrfs_free_extent
-From:   syzbot <syzbot+560e6a32d484d7293e37@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-02_15,2022-11-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 bulkscore=0
+ suspectscore=0 clxscore=1015 priorityscore=1501 malwarescore=0
+ phishscore=0 impostorscore=0 spamscore=0 mlxscore=0 adultscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211020146
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, 31 Oct 2022 11:43:30 -0700
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-syzbot found the following issue on:
+> Updated subject line, and here's the link to the original discussion
+> for new people:
+> 
+>     https://lore.kernel.org/all/B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com/
+> 
+> On Mon, Oct 31, 2022 at 10:28 AM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+> >
+> > Ok. At that point we no longer have the pte or the virtual address, so
+> > it's not going to be exactly the same debug output.
+> >
+> > But I think it ends up being fairly natural to do
+> >
+> >         VM_WARN_ON_ONCE_PAGE(page_mapcount(page) < 0, page);
+> >
+> > instead, and I've fixed that last patch up to do that.
+> 
+> Ok, so I've got a fixed set of patches based on the feedback from
+> PeterZ, and also tried to do the s390 updates for this blindly, and
+> pushed them out into a git branch:
+> 
+>     https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/log/?h=mmu_gather-race-fix
+> 
+> If people really want to see the patches in email again, I can do
+> that, but most of you already have, and the changes are either trivial
+> fixes or the s390 updates.
+> 
+> For the s390 people that I've now added to the participant list maybe
+> the git tree is fine - and the fundamental explanation of the problem
+> is in that top-most commit (with the three preceding commits being
+> prep-work). Or that link to the thread about this all.
+> 
+> That top-most commit is also where I tried to fix things up for s390
+> that uses its own non-gathering TLB flush due to
+> CONFIG_MMU_GATHER_NO_GATHER.
+> 
+> NOTE NOTE NOTE! Unlike my regular git branch, this one may end up
+> rebased etc for further comments and fixes. So don't consider that
+> stable, it's still more of an RFC branch.
+> 
+> At a minimum I'll update it with Ack's etc, assuming I get those, and
+> my s390 changes are entirely untested and probably won't work.
+> 
+> As far as I can tell, s390 doesn't actually *have* the problem that
+> causes this change, because of its synchronous TLB flush, but it
+> obviously needs to deal with the change of rmap zapping logic.
 
-HEAD commit:    b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=1661bcea880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
-dashboard link: https://syzkaller.appspot.com/bug?extid=560e6a32d484d7293e37
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15e9ab22880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=152ed4fc880000
+Correct, we need to flush already when we change a PTE, which is
+done in ptep_get_and_clear() etc. Only exception would be lazy
+flushing when only one active thread is attached, then we would
+flush later in flush_tlb_mm/range(), or as soon as another thread
+is attached (IIRC).
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/24728b72a896/disk-b229b6ca.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/10a3c40c60e1/vmlinux-b229b6ca.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/69f963b02b7e/bzImage-b229b6ca.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/1f4e6872e39d/mount_2.gz
+So it seems straight forward to just call page_zap_pte_rmap()
+from our private __tlb_remove_page_size() implementation.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+560e6a32d484d7293e37@syzkaller.appspotmail.com
+Just wondering a bit why you did not also add the
+VM_WARN_ON_ONCE_PAGE(page_mapcount(page) < 0, page), like
+in the generic change.
 
-BTRFS info (device loop0): enabling ssd optimizations
-------------[ cut here ]------------
-BTRFS: Transaction aborted (error -12)
-WARNING: CPU: 1 PID: 3604 at fs/btrfs/extent-tree.c:3067 __btrfs_free_extent+0xbf6/0x2540 fs/btrfs/extent-tree.c:3067
-Modules linked in:
-CPU: 1 PID: 3604 Comm: syz-executor311 Not tainted 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-RIP: 0010:__btrfs_free_extent+0xbf6/0x2540 fs/btrfs/extent-tree.c:3067
-Code: fa 31 c0 e8 7e 29 ae 06 4c 8b 64 24 08 4c 8b 6c 24 10 eb 1a e8 8b 2e 04 fe 48 c7 c7 a0 32 da 8a 44 89 fe 31 c0 e8 da cc cb fd <0f> 0b b3 01 44 0f b6 c3 4c 89 ef 48 c7 c6 00 40 da 8a ba fb 0b 00
-RSP: 0018:ffffc90003c4f600 EFLAGS: 00010246
-RAX: 1d499b28e27a2c00 RBX: ffff88802756c001 RCX: ffff88801ee1d7c0
-RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
-RBP: ffffc90003c4f780 R08: ffffffff816b8dfd R09: ffffed1017364f13
-R10: ffffed1017364f13 R11: 1ffff11017364f12 R12: ffff8880277d2a50
-R13: ffff888070ce3150 R14: 0000000000000001 R15: 00000000fffffff4
-FS:  00005555567bf300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 00007f1911b2a300 CR3: 000000001e181000 CR4: 00000000003506e0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- btrfs_run_delayed_refs_for_head+0xe20/0x1df0 fs/btrfs/extent-tree.c:1943
- __btrfs_run_delayed_refs+0x25f/0x490 fs/btrfs/extent-tree.c:2008
- btrfs_run_delayed_refs+0x13b/0x4a0 fs/btrfs/extent-tree.c:2139
- btrfs_commit_transaction+0x3a9/0x3760 fs/btrfs/transaction.c:2123
- sync_filesystem+0x1bc/0x220 fs/sync.c:66
- __do_sys_syncfs fs/sync.c:160 [inline]
- __se_sys_syncfs+0x8f/0x110 fs/sync.c:149
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fa6dc2ca1e9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007ffc86519f18 EFLAGS: 00000246 ORIG_RAX: 0000000000000132
-RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007fa6dc2ca1e9
-RDX: 0000000000000f20 RSI: 000000000000c0c2 RDI: 0000000000000003
-RBP: 00007ffc86519f20 R08: 0000000000000001 R09: 00007fa6dc330036
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000004
-R13: 0000000000000000 R14: 0000100000000000 R15: 0000000000000000
- </TASK>
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+Acked-by: Gerald Schaefer <gerald.schaefer@linux.ibm.com> # s390
