@@ -2,74 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C2EE861601A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:42:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CB6B616025
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:43:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbiKBJl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 05:41:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53124 "EHLO
+        id S230136AbiKBJni (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 05:43:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230153AbiKBJlx (ORCPT
+        with ESMTP id S229457AbiKBJne (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 05:41:53 -0400
-Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5778222B28
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 02:41:52 -0700 (PDT)
-Received: by mail-pj1-x1033.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so1426724pjk.1
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 02:41:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ZZjjsfhVpVmcKXTEAXNtkm7mljVLUHPV6/kXC2ILvLk=;
-        b=adDXi8Yok5j/QS1Hd0PWyyALEH6R9tJTsIbSAWlQ/AXtawOjzK452sQCf1g9NHbd0t
-         X93cZ4qPH//xgANbOAwuONnYWtpVmnhQJ2cAGZy0NpekfVrFZpOLpdsmzbX/It4MCQ3f
-         bsWrjcjWIHmzlMmOeRWYWhBzs/1dZCD3V+xs4=
+        Wed, 2 Nov 2022 05:43:34 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B38AF22B2F
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 02:42:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667382155;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iA0sGfa+ahBDJMGfDHR9LxRbe1IWFp0fRmP5we1ndrY=;
+        b=XfyYE8VqaHLYhYINxp6XKNcJqPmPft61la9Fl2S5mLzUCjgLq78b8MNcIgMXjZWYAu/S4P
+        Sf6TJXMSjldOnQ3XaEkVqSMKUGRdXp7MP9qikiKHor9boU6hQmwBFtkFtZrROhcqVnkRtL
+        vvsXWPJHCCzuz8+UKmKyrQAQkx6F5fg=
+Received: from mail-qt1-f199.google.com (mail-qt1-f199.google.com
+ [209.85.160.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-106-VWV9skfXOmWzolFsxzZN5g-1; Wed, 02 Nov 2022 05:42:34 -0400
+X-MC-Unique: VWV9skfXOmWzolFsxzZN5g-1
+Received: by mail-qt1-f199.google.com with SMTP id v12-20020ac8578c000000b003a50eb13e29so8667983qta.3
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 02:42:34 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZZjjsfhVpVmcKXTEAXNtkm7mljVLUHPV6/kXC2ILvLk=;
-        b=YuP3czmFmQ6Six0BxHk7CCrnmYL+rviw7qFVHijwTSEi/zyTsOdO3btuqNZEe+CeA2
-         GOJVJ21ljEHPW/CXDkeUaWrb66NAIHFHdZbzIBR04XcwaAoqxd7ZRhDclrAzgs7Mibsw
-         hWCIQtNBW0x1SFw5gr8QPDg2LgafntKz7f6CFCs1BIRSyFzXfU5RMAwE9t54TbSvCdXT
-         31KldklxFMOwlDzsvVQc7YP3ddzoTQL79kMXzKwCvoFZEoC4XZPMddtnkOnbEnTnZWos
-         NAWbkx2C2MczPTK/pSA3E0tIcRuViy0R9DWaP2eNgvydUJmBSfiMD9MdWojf5fdTZiMF
-         cbYQ==
-X-Gm-Message-State: ACrzQf2deMuxKG6+fou0joTrqrhgjlJF2wtrbCIx8iDvROpeUOK3OXBv
-        ih26eXHndyhRUgs4yvNusXG47g==
-X-Google-Smtp-Source: AMsMyM52YklWkHCnOHxtQRQyhs05T/jj5R+sIap/eItkZFEUIuRECDv4bxs6he5KZD3NLJVtrqKUPA==
-X-Received: by 2002:a17:90a:e545:b0:213:9c27:cded with SMTP id ei5-20020a17090ae54500b002139c27cdedmr7680602pjb.208.1667382111831;
-        Wed, 02 Nov 2022 02:41:51 -0700 (PDT)
-Received: from [192.168.0.168] ([103.99.10.63])
-        by smtp.gmail.com with ESMTPSA id 3-20020a620403000000b0056da2bf607csm4326244pfe.214.2022.11.02.02.41.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 02:41:51 -0700 (PDT)
-Message-ID: <39586b57-aad2-d9ca-df12-67f1dfe60258@linuxfoundation.org>
-Date:   Wed, 2 Nov 2022 03:41:47 -0600
+        bh=iA0sGfa+ahBDJMGfDHR9LxRbe1IWFp0fRmP5we1ndrY=;
+        b=EqiHDeutVgNAt/mCbWKbKkS4IAQmOavFQU4//+UcHx/prYo59wc3PwyRIX0ds8Oicj
+         DSwfIBEnt+FUBVQuWgvZr3YHCWk5zrxpizb5Vrhk66bj2FGHlar9v4PooYfPx9TMBzu8
+         okahSkEt53NrbrhSiTh31vlBuJiQHxRbuX3JxqpwaxzgNSFJb4Lqfp/dThmMfXHSpNNg
+         iuV2Z4LgKPxlOjVV5GQ8d2ENvcxh4OTFMp0WF9utCNot+RVGBF5MLU1/LfhUVYar8wVU
+         BD7KD+2Sbw0rIrgiX5wxHXxXSkPCq48pgxqSTqwvaTlfKTFeoic3+Zc1icx94G/iLg3T
+         BQ2Q==
+X-Gm-Message-State: ACrzQf1+yX4xgh3+KRacQBSCuDusD04WVk23aTRdoxfOM8wvb4QR4qAS
+        ewBVMSoPsie6D2cTgLk/6AAkxJQudAX/7GWJTA4Zcsn/ie7m4rDb1i1SjQqFENQ9AXq5Wz26noC
+        2ZOJhyAqeW4dy9entYRokI1MC
+X-Received: by 2002:a0c:e3d3:0:b0:4bb:c033:76fc with SMTP id e19-20020a0ce3d3000000b004bbc03376fcmr19147800qvl.117.1667382154197;
+        Wed, 02 Nov 2022 02:42:34 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4g7XSgjzk5GrqDqTREUMG4zF+wpaO4A5LDwUXjacchdFaECWsUVyjkZbcH8ClLWm8iO8DpNA==
+X-Received: by 2002:a0c:e3d3:0:b0:4bb:c033:76fc with SMTP id e19-20020a0ce3d3000000b004bbc03376fcmr19147785qvl.117.1667382153979;
+        Wed, 02 Nov 2022 02:42:33 -0700 (PDT)
+Received: from sgarzare-redhat (host-82-53-134-234.retail.telecomitalia.it. [82.53.134.234])
+        by smtp.gmail.com with ESMTPSA id bj38-20020a05620a192600b006bb366779a4sm1821377qkb.6.2022.11.02.02.42.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 02:42:33 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 10:42:24 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Dexuan Cui <decui@microsoft.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, arseny.krasnov@kaspersky.com,
+        netdev@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, kys@microsoft.com,
+        haiyangz@microsoft.com, stephen@networkplumber.org,
+        wei.liu@kernel.org, linux-hyperv@vger.kernel.org,
+        frederic.dalleau@docker.com
+Subject: Re: [PATCH v2 2/2] vsock: fix possible infinite sleep in
+ vsock_connectible_wait_data()
+Message-ID: <20221102094224.2n2p6cakjtd4n2yf@sgarzare-redhat>
+References: <20221101021706.26152-1-decui@microsoft.com>
+ <20221101021706.26152-3-decui@microsoft.com>
+ <20221102093137.2il5u7opfyddheis@sgarzare-redhat>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 4/5] selftests/resctrl: Cleanup properly when an error
- occurs in CAT test
-Content-Language: en-US
-To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20221101094341.3383073-1-tan.shaopeng@jp.fujitsu.com>
- <20221101094341.3383073-5-tan.shaopeng@jp.fujitsu.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221101094341.3383073-5-tan.shaopeng@jp.fujitsu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1; format=flowed
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221102093137.2il5u7opfyddheis@sgarzare-redhat>
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,107 +87,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/1/22 03:43, Shaopeng Tan wrote:
-> After creating a child process with fork() in CAT test, if there is
-> an error occurs or such as a SIGINT signal is received, the parent
-> process will be terminated immediately, but the child process will not
-> be killed and also umount_resctrlfs() will not be called.
-> 
-> Add a signal handler like other tests to kill child process, umount
-> resctrlfs, cleanup result files, etc. when an error occurs.
-> 
-> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-> ---
->   tools/testing/selftests/resctrl/cat_test.c | 28 +++++++++++++++-------
->   1 file changed, 19 insertions(+), 9 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
-> index 6a8306b0a109..5f81817f4366 100644
-> --- a/tools/testing/selftests/resctrl/cat_test.c
-> +++ b/tools/testing/selftests/resctrl/cat_test.c
-> @@ -98,12 +98,21 @@ void cat_test_cleanup(void)
->   	remove(RESULT_FILE_NAME2);
->   }
->   
-> +static void ctrl_handler(int signo)
-> +{
-> +	kill(bm_pid, SIGKILL);
-> +	umount_resctrlfs();
-> +	tests_cleanup();
-> +	ksft_print_msg("Ending\n\n");
+On Wed, Nov 02, 2022 at 10:31:37AM +0100, Stefano Garzarella wrote:
+>On Mon, Oct 31, 2022 at 07:17:06PM -0700, Dexuan Cui wrote:
+>>Currently vsock_connectible_has_data() may miss a wakeup operation
+>>between vsock_connectible_has_data() == 0 and the prepare_to_wait().
+>>
+>>Fix the race by adding the process to the wait queue before checking
+>>vsock_connectible_has_data().
+>>
+>>Fixes: b3f7fd54881b ("af_vsock: separate wait data loop")
+>>Signed-off-by: Dexuan Cui <decui@microsoft.com>
+>>---
+>>
+>>Changes in v2 (Thanks Stefano!):
+>> Fixed a typo in the commit message.
+>> Removed the unnecessary finish_wait() at the end of the loop.
+>
+>LGTM:
+>
+>Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
+>
 
-Is there a reason to print this message? Remove it unless it serves
-a purpose.
+And I would add
 
-> +
-> +	exit(EXIT_SUCCESS);
-> +}
-> +
->   int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
->   {
->   	unsigned long l_mask, l_mask_1;
->   	int ret, pipefd[2], sibling_cpu_no;
->   	char pipe_message;
-> -	pid_t bm_pid;
+Reported-by: Frédéric Dalleau <frederic.dalleau@docker.com>
 
-Odd. bm_pid is used below - why remove it here?
+Since Frédéric posted a similar patch some months ago (I lost it because 
+netdev and I were not in cc):
+https://lore.kernel.org/virtualization/20220824074251.2336997-2-frederic.dalleau@docker.com/
 
->   
->   	cache_size = 0;
->   
-> @@ -181,17 +190,19 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
->   		strcpy(param.filename, RESULT_FILE_NAME1);
->   		param.num_of_runs = 0;
->   		param.cpu_no = sibling_cpu_no;
-> +	} else {
-> +		/* set up ctrl-c handler */
-> +		if (signal(SIGINT, ctrl_handler) == SIG_ERR ||
-> +		    signal(SIGHUP, ctrl_handler) == SIG_ERR ||
-> +		    signal(SIGTERM, ctrl_handler) == SIG_ERR)
-> +			printf("Failed to catch SIGNAL!\n");
+Thanks,
+Stefano
 
-Is perror() more appropriate here?
-
->   	}
->   
->   	remove(param.filename);
->   
->   	ret = cat_val(&param);
-> -	if (ret)
-> -		return ret;
-> -
-> -	ret = check_results(&param);
-> -	if (ret)
-> -		return ret;
-> +	if (ret == 0)
-> +		ret = check_results(&param);
-
-Why not use a goto in error case to do umount_resctrlfs() instead of changing
-the conditionals?
-
->   
->   	if (bm_pid == 0) {
->   		/* Tell parent that child is ready */
-> @@ -201,7 +212,6 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
->   		    sizeof(pipe_message)) {
->   			close(pipefd[1]);
->   			perror("# failed signaling parent process");
-> -			return errno;
->   		}
->   
->   		close(pipefd[1]);
-> @@ -226,5 +236,5 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
->   	if (bm_pid)
->   		umount_resctrlfs();
->   
-> -	return 0;
-> +	return ret;
->   }
-
-
-With these changes made:
-
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
-
-thanks,
--- Shuah
