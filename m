@@ -2,124 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 06C71615D19
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 08:46:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 756F7615D1B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 08:47:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230406AbiKBHqh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 03:46:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57928 "EHLO
+        id S230418AbiKBHrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 03:47:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230398AbiKBHqe (ORCPT
+        with ESMTP id S230026AbiKBHrS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 03:46:34 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0159225C78
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 00:46:34 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id y4so15814324plb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 00:46:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=NUw9xWmpIf0XS62mp9HMnjP0huIdNjfhlXFV3m0hYXU=;
-        b=ALwiQ3aIbPe1VylTTzdBSb36+7VaoGpR40jzyMrSs+dWBsj61OkBBotNGw2KFClzWu
-         eZVG4iT1Q1ikdYQsG49wDAR4YH0KvxRWkGTmqQ4yGn9PLXpewid9khtyHRLkXn1Ybm7n
-         ueoe569BEuZBjz6JqPqYqEfyBLAvNQ7ZAJZY0As9oUivEw2rMva0ZaPLBwZMAr+eKU59
-         3Dq+DNeefM6yXYdvpIsP3lwVZ3p2ZOxtS7M0sqigJ+LrwS7uxH/YNUVaEOzcq6MeTXSa
-         tvHMc7zW4WBaq/5dDyKeba+6Wb/EzIvNbAk0GfNLYfUnFUD5B4VPyIbRRUvc8OGEww7J
-         5I8Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=NUw9xWmpIf0XS62mp9HMnjP0huIdNjfhlXFV3m0hYXU=;
-        b=QHVYdBqjFjAutMCEo0pg3JiCSKg5BlvPXrA/7OyzDWLKactYtkRlqqgMZ2O2EyM2OC
-         2i9V1aQybVdDdbJ9nX24IA16p3GLbRLXGErLuaMn+ZlPiLFIOuQDYK2T5gVwzJOuMWgH
-         ODvPVaCAsN1M+P6V2TuXBUTYvCDrOutA2BIEPSsDBoTX0TXg+2+hfnQ5MP7l6rcKovxL
-         xHz1RIwnjtN18ccW8e9wKY3M5rcfVq0MnE/VBbTeVlXk+jmIVD9x6WoEtB1wDXpgsn8D
-         o3muYD8hSWajyftWaxg2c1h1Z0JDmU6BygfyFJpbHxEaqPWwJJ98x9lWOU9WziNHaFn4
-         cnVw==
-X-Gm-Message-State: ACrzQf1idR6GuICWR4/yVTEf8xGUf2npdIP8iLofCfaBh5/23wZqRYTb
-        xp1WDsB9d8leAYk2T3VNiuk=
-X-Google-Smtp-Source: AMsMyM5g0umuJwKDdnxNghIjoT8k4b5z28vu7fFz2BeFZE9cAw7CylIrWGBIXzYsDsHIP5BIUQkS5w==
-X-Received: by 2002:a17:90a:f0d1:b0:213:473e:6ff0 with SMTP id fa17-20020a17090af0d100b00213473e6ff0mr23905780pjb.87.1667375193476;
-        Wed, 02 Nov 2022 00:46:33 -0700 (PDT)
-Received: from hyeyoo ([114.29.91.56])
-        by smtp.gmail.com with ESMTPSA id q17-20020a17090311d100b00186985198a4sm7631816plh.169.2022.11.02.00.46.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 00:46:32 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 16:46:27 +0900
-From:   Hyeonggon Yoo <42.hyeyoo@gmail.com>
-To:     Liu Shixin <liushixin2@huawei.com>
-Cc:     Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Roman Gushchin <roman.gushchin@linux.dev>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 0/3] Refactor __kmem_cache_create() and fix memory leak
-Message-ID: <Y2IgUwTH/dO06Tot@hyeyoo>
-References: <20221031134747.3049593-1-liushixin2@huawei.com>
+        Wed, 2 Nov 2022 03:47:18 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6C89025E8C;
+        Wed,  2 Nov 2022 00:47:17 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id AB4A31F8B0;
+        Wed,  2 Nov 2022 07:47:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1667375235; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
+        bh=QXxgpBh7/7Ngps7X8Ud2Cswcq3gje0X5VBuwnN65KQc=;
+        b=n8TLRKVn9h8Rnp5Qz1eBqnKdpz+LlW+wk2cr0jH2R9Mf0D6vec0wj4098jH0FEygWoopCM
+        Q5RZbiPcLUOekkdwOsPUF5q5FEqI7LAbyV7+H26oaUgT5DwGL0giJK6ol20V5ZG91ZcSQO
+        DoOjkLWZ/z8qlJoUOLpd9l1cZ5vykT4=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 52AB51376E;
+        Wed,  2 Nov 2022 07:47:15 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id Hyq9EoMgYmOBcgAAMHmgww
+        (envelope-from <jgross@suse.com>); Wed, 02 Nov 2022 07:47:15 +0000
+From:   Juergen Gross <jgross@suse.com>
+To:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        linux-pm@vger.kernel.org
+Cc:     Juergen Gross <jgross@suse.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Pavel Machek <pavel@ucw.cz>, Andy Lutomirski <luto@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH v5 00/16] x86: make PAT and MTRR independent from each other
+Date:   Wed,  2 Nov 2022 08:46:57 +0100
+Message-Id: <20221102074713.21493-1-jgross@suse.com>
+X-Mailer: git-send-email 2.35.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221031134747.3049593-1-liushixin2@huawei.com>
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,HK_RANDOM_ENVFROM,
-        HK_RANDOM_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 09:47:44PM +0800, Liu Shixin wrote:
-> I found a memory leak of kobj->name in sysfs_slab_add() which is introduced
-> by 80da026a8e5d ("mm/slub: fix slab double-free in case of duplicate sysfs filename").
-> Following the rules stated in the comment for kobject_init_and_add():
+Today PAT can't be used without MTRR being available, unless MTRR is at
+least configured via CONFIG_MTRR and the system is running as Xen PV
+guest. In this case PAT is automatically available via the hypervisor,
+but the PAT MSR can't be modified by the kernel and MTRR is disabled.
 
-Thank you for reporting this! Indeed it seems tried to fix double free but
-introduced a leak.
+The same applies to a kernel built with no MTRR support: it won't
+allow to use the PAT MSR, even if there is no technical reason for
+that, other than setting up PAT on all CPUs the same way (which is a
+requirement of the processor's cache management) is relying on some
+MTRR specific code.
 
->  If this function returns an error, kobject_put() must be called to
->  properly clean up the memory associated with the object.
-> 
-> We should use kobject_put() to free kobject.
+Fix all of that by:
 
-But what to do if a cache is created early and later sysfs_slab_add() failed?
-(Which is unlikely on normal condition)
+- moving the function needed by PAT from MTRR specific code one level
+  up
+- reworking the init sequences of MTRR and PAT to be more similar to
+  each other without calling PAT from MTRR code
+- removing the dependency of PAT on MTRR
 
-With this series it introduces use-after-free if sysfs_slab_add() in
-slab_sysfs_init() failed.  Should we just call BUG() or something like that?
+There is some more cleanup done reducing code size.
 
-> But we can't simply add kobject_put() since it will free kmem_cache too.
-> If we use kobject_put(), we need to skip other release functions.
-> 
-> In this series, We refactor the code to separate sysfs_slab_add() and
-> debugfs_slab_add() from __kmem_cache_create(), and then use kobject_put()
-> to free kobject in sysfs_slab_add(). This can fix the memory leak of
-> kobject->name.
-> 
-> v1->v2: Fix build error reported by kernel test robot <lkp@intel.com>.
-> 
-> Liu Shixin (3):
->   mm/slab_common: Move cache_name to create_cache()
->   mm/slub: Refactor __kmem_cache_create()
->   mm/slub: Fix memory leak of kobj->name in sysfs_slab_add()
-> 
->  include/linux/slub_def.h | 11 +++++++++
->  mm/slab_common.c         | 44 ++++++++++++++++++----------------
->  mm/slub.c                | 52 ++++++++++------------------------------
->  3 files changed, 48 insertions(+), 59 deletions(-)
-> 
-> -- 
-> 2.25.1
-> 
+Note that patches 1+2 have already been applied to tip.git x86/cpu.
+They are included in this series only for reference.
+
+Changes in V5:
+- addressed comments
+
+Changes in V4:
+- new patches 10, 14, 15, 16
+- split up old patch 4 into 3 patches
+- addressed comments
+
+Changes in V3:
+- replace patch 1 by just adding a comment
+
+Changes in V2:
+- complete rework of the patches based on comments by Boris Petkov
+- added several patches to the series
+
+Juergen Gross (16):
+  x86/mtrr: add comment for set_mtrr_state() serialization
+  x86/mtrr: remove unused cyrix_set_all() function
+  x86/mtrr: replace use_intel() with a local flag
+  x86/mtrr: rename prepare_set() and post_set()
+  x86/mtrr: split MTRR specific handling from cache dis/enabling
+  x86: move some code out of arch/x86/kernel/cpu/mtrr
+  x86/mtrr: Disentangle MTRR init from PAT init.
+  x86/mtrr: remove set_all callback from struct mtrr_ops
+  x86/mtrr: simplify mtrr_bp_init()
+  x86/mtrr: get rid of __mtrr_enabled bool
+  x86/mtrr: let cache_aps_delayed_init replace mtrr_aps_delayed_init
+  x86/mtrr: add a stop_machine() handler calling only cache_cpu_init()
+  x86: decouple PAT and MTRR handling
+  x86: switch cache_ap_init() to hotplug callback
+  x86: do MTRR/PAT setup on all secondary CPUs in parallel
+  x86/mtrr: simplify mtrr_ops initialization
+
+ arch/x86/include/asm/cacheinfo.h   |  19 ++++
+ arch/x86/include/asm/memtype.h     |   5 +-
+ arch/x86/include/asm/mtrr.h        |  17 +--
+ arch/x86/kernel/cpu/cacheinfo.c    | 173 +++++++++++++++++++++++++++++
+ arch/x86/kernel/cpu/common.c       |   2 +-
+ arch/x86/kernel/cpu/mtrr/amd.c     |   8 +-
+ arch/x86/kernel/cpu/mtrr/centaur.c |   8 +-
+ arch/x86/kernel/cpu/mtrr/cyrix.c   |  42 +------
+ arch/x86/kernel/cpu/mtrr/generic.c | 127 ++++-----------------
+ arch/x86/kernel/cpu/mtrr/mtrr.c    | 171 ++++------------------------
+ arch/x86/kernel/cpu/mtrr/mtrr.h    |  15 +--
+ arch/x86/kernel/setup.c            |  14 +--
+ arch/x86/kernel/smpboot.c          |   9 +-
+ arch/x86/mm/pat/memtype.c          | 152 +++++++++----------------
+ arch/x86/power/cpu.c               |   3 +-
+ include/linux/cpuhotplug.h         |   1 +
+ 16 files changed, 308 insertions(+), 458 deletions(-)
 
 -- 
-Thanks,
-Hyeonggon
+2.35.3
+
