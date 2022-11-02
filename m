@@ -2,130 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B3AA6615F64
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:17:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 600A6615F67
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:17:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiKBJRU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 05:17:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47576 "EHLO
+        id S231281AbiKBJRu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 05:17:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231474AbiKBJQx (ORCPT
+        with ESMTP id S230060AbiKBJRb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 05:16:53 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3296928718
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 02:14:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667380478;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=XFG3X5y9S7va/OVhuAw/JvhOPfXEnrd2/y2bVN5C4mk=;
-        b=UqmFpA3JF7wJJDbAySVLrR6x21z1Z+r6EOWRBcIbYEAHw152U6ekZvy5cAg54v06PjPvwi
-        X48pP4fKgUiieOMkinJG/f5Lxd7RIX6Zok3+1U4u9Pt+kTP/OzeG1dwKjPrwlU00+3oAIc
-        IdDwvPtuhlo1gd3IexKdfOoIgHvJRcg=
-Received: from mail-wm1-f69.google.com (mail-wm1-f69.google.com
- [209.85.128.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-451--z5JwHiMPx-AeJ3NYB54Hw-1; Wed, 02 Nov 2022 05:14:37 -0400
-X-MC-Unique: -z5JwHiMPx-AeJ3NYB54Hw-1
-Received: by mail-wm1-f69.google.com with SMTP id v188-20020a1cacc5000000b003cf76c4ae66so805141wme.7
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 02:14:36 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:subject:organization:from
-         :references:cc:to:content-language:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=XFG3X5y9S7va/OVhuAw/JvhOPfXEnrd2/y2bVN5C4mk=;
-        b=PM9hNfLhSRlyF+RHOLlpLrROwP8t+itHMrk0SNyir1QpwBYXZvLk6PvVvxCb7GLYX/
-         /UmtwGWhAVXPEA3EJQzgHb2/CJTOifEcXD5+FUUH+LNFCzhYjE8pFnmYxXyvs0kGUvmz
-         PulD2Wu0CoSY8p8OUK6T7yJX49TYJhbdf2DvfPRVwkdv0oMg9/4ClBVObXUpPCiA6h7Y
-         P7hZjglJwuWs1ilBl5UJ8jd6Yv3EWS1lgbp+vJrCRWA5lcv65PSTUg/Bgjw84UwLSah3
-         HSkxmP4Yt+x4isdizz9Z84I25RsD/mVGUlhRtwDwMCXMPScXRNmALfM7GwvchfW8KT4A
-         QqQQ==
-X-Gm-Message-State: ACrzQf3NuXM1BWZX7pTChat6zo/tVGylAb1237F53vWMJWh5dnOoHAqh
-        a77W7fBw1HXsN5gFTGcjb54l45BbqCUfKOOojgV1twvPxhpjG059CyZxnORBUVWOAdocTZl86i4
-        IamHwR2JyVKJjP/o1gHp4ukGG
-X-Received: by 2002:a5d:67cf:0:b0:236:6f36:6029 with SMTP id n15-20020a5d67cf000000b002366f366029mr14216094wrw.224.1667380475875;
-        Wed, 02 Nov 2022 02:14:35 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5yHT6EACT7euGAbQbbD1Ul7ttmBJSp82YcXjpsu9Gih7KBgsTkA/cMIhPwxyCfSuN3zvrMMw==
-X-Received: by 2002:a5d:67cf:0:b0:236:6f36:6029 with SMTP id n15-20020a5d67cf000000b002366f366029mr14216067wrw.224.1667380475623;
-        Wed, 02 Nov 2022 02:14:35 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c705:f100:af38:1d1f:66f4:48c7? (p200300cbc705f100af381d1f66f448c7.dip0.t-ipconnect.de. [2003:cb:c705:f100:af38:1d1f:66f4:48c7])
-        by smtp.gmail.com with ESMTPSA id h17-20020a5d6e11000000b002356c051b9csm12188701wrz.66.2022.11.02.02.14.34
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 02:14:35 -0700 (PDT)
-Message-ID: <13c0caee-82e9-c295-b1b4-6d2bff132b72@redhat.com>
-Date:   Wed, 2 Nov 2022 10:14:34 +0100
-MIME-Version: 1.0
+        Wed, 2 Nov 2022 05:17:31 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE2A22873C;
+        Wed,  2 Nov 2022 02:15:33 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A27Qs4X030407;
+        Wed, 2 Nov 2022 09:14:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=pp1;
+ bh=jdQmEeOgiNwFLWeVWTgZR2yrp3zoMERFpz3XBL1Qh2Q=;
+ b=kvng6NqwcOm32s3C8WnR2rCvgyxMbP0BVBLoaLLr6pOhfD61/fB4JjqORTiY2Pi0cJS1
+ m60ZcidPWydDQe0LqqlsZtIV1Icvf1KIyk+j2lHIPJv6A6uwBvjN2ddYeXx/QYdZIq8d
+ 2mxqkbSu42LHzPRX6+3wkOtRtr/u0cNBLUD2P/FTDkb3L935l9dRj40kHh8qUzwx9xxa
+ LdSKmDag2l9r8NkUHdDuUVDrvKVYN9klnmKDiIZgHrkK+81BfOXE/GqTIwO12WuKd4cP
+ G6YjSGo3paPy0DUiuC9UDlktICuILWZp/a1FwzM2dHPRkN/gtUXdBSeTthOMr/OLut65 Gw== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kjruhgf0d-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 09:14:50 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A29AnwJ001370;
+        Wed, 2 Nov 2022 09:14:50 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kjruhgeyb-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 09:14:49 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A29CcIa030019;
+        Wed, 2 Nov 2022 09:14:47 GMT
+Received: from b06cxnps3074.portsmouth.uk.ibm.com (d06relay09.portsmouth.uk.ibm.com [9.149.109.194])
+        by ppma04ams.nl.ibm.com with ESMTP id 3kgut96ca1-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 09:14:47 +0000
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (b06wcsmtp001.portsmouth.uk.ibm.com [9.149.105.160])
+        by b06cxnps3074.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A29EiaQ2097862
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Nov 2022 09:14:44 GMT
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 773F4A405F;
+        Wed,  2 Nov 2022 09:14:44 +0000 (GMT)
+Received: from b06wcsmtp001.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6673EA405B;
+        Wed,  2 Nov 2022 09:14:43 +0000 (GMT)
+Received: from [9.179.6.48] (unknown [9.179.6.48])
+        by b06wcsmtp001.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Wed,  2 Nov 2022 09:14:43 +0000 (GMT)
+Message-ID: <50458458-9b57-aa5a-0d67-692cc4dbf2ad@linux.ibm.com>
+Date:   Wed, 2 Nov 2022 10:14:42 +0100
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
+ Thunderbird/102.3.0
+Subject: Re: mm: delay rmap removal until after TLB flush
 Content-Language: en-US
-To:     Jason Gunthorpe <jgg@nvidia.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+To:     Linus Torvalds <torvalds@linux-foundation.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@de.ibm.com>
+Cc:     Nadav Amit <nadav.amit@gmail.com>, Jann Horn <jannh@google.com>,
+        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Peter Xu <peterx@redhat.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        syzbot+f0b97304ef90f0d0b1dc@syzkaller.appspotmail.com
-References: <20221031152524.173644-1-david@redhat.com>
- <Y1/0e12ZJT6+N0kI@nvidia.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-Subject: Re: [PATCH v1] mm/gup: disallow FOLL_FORCE|FOLL_WRITE on hugetlb
- mappings
-In-Reply-To: <Y1/0e12ZJT6+N0kI@nvidia.com>
+        kernel list <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        linux-arch <linux-arch@vger.kernel.org>
+References: <B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com>
+ <CAHk-=wgzT1QsSCF-zN+eS06WGVTBg4sf=6oTMg95+AEq7QrSCQ@mail.gmail.com>
+ <47678198-C502-47E1-B7C8-8A12352CDA95@gmail.com>
+ <CAHk-=wjzngbbwHw4nAsqo_RpyOtUDk5G+Wus=O0w0A6goHvBWA@mail.gmail.com>
+ <CAHk-=wijU_YHSZq5N7vYK+qHPX0aPkaePaGOyWk4aqMvvSXxJA@mail.gmail.com>
+ <140B437E-B994-45B7-8DAC-E9B66885BEEF@gmail.com>
+ <CAHk-=wjX_P78xoNcGDTjhkgffs-Bhzcwp-mdsE1maeF57Sh0MA@mail.gmail.com>
+ <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
+ <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
+ <CAHk-=wiwt4LC-VmqvYrphraF0=yQV=CQimDCb0XhtXwk8oKCCA@mail.gmail.com>
+ <Y1+XCALog8bW7Hgl@hirez.programming.kicks-ass.net>
+ <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
+ <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com>
+From:   Christian Borntraeger <borntraeger@linux.ibm.com>
+In-Reply-To: <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: HD-L18mDYpAabN4ya7S1LgpqD4jDlWsh
+X-Proofpoint-ORIG-GUID: pThod4uwjyNzWhf_DluG1jRsTwt2kGSi
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-02_06,2022-11-01_02,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0
+ priorityscore=1501 mlxscore=0 suspectscore=0 phishscore=0 impostorscore=0
+ lowpriorityscore=0 spamscore=0 adultscore=0 mlxlogscore=999 malwarescore=0
+ clxscore=1011 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211020051
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31.10.22 17:14, Jason Gunthorpe wrote:
-> On Mon, Oct 31, 2022 at 04:25:24PM +0100, David Hildenbrand wrote:
->> Cc: Andrew Morton <akpm@linux-foundation.org>
->> Cc: Mike Kravetz <mike.kravetz@oracle.com>
->> Cc: Peter Xu <peterx@redhat.com>
->> Cc: John Hubbard <jhubbard@nvidia.com>
->> Cc: Jason Gunthorpe <jgg@nvidia.com>
->> Reported-by: syzbot+f0b97304ef90f0d0b1dc@syzkaller.appspotmail.com
->> Signed-off-by: David Hildenbrand <david@redhat.com>
->> ---
+Am 31.10.22 um 19:43 schrieb Linus Torvalds:
+> Updated subject line, and here's the link to the original discussion
+> for new people:
+> 
+>      https://lore.kernel.org/all/B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com/
+> 
+> On Mon, Oct 31, 2022 at 10:28 AM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
 >>
->> I assume this has been broken at least since 2014, when mm/gup.c came to
->> life. I failed to come up with a suitable Fixes tag quickly.
+>> Ok. At that point we no longer have the pte or the virtual address, so
+>> it's not going to be exactly the same debug output.
+>>
+>> But I think it ends up being fairly natural to do
+>>
+>>          VM_WARN_ON_ONCE_PAGE(page_mapcount(page) < 0, page);
+>>
+>> instead, and I've fixed that last patch up to do that.
 > 
-> I'm worried this would break RDMA over hugetlbfs maps - which is a
-> real thing people do.
+> Ok, so I've got a fixed set of patches based on the feedback from
+> PeterZ, and also tried to do the s390 updates for this blindly, and
+> pushed them out into a git branch:
 > 
-> MikeK do you have test cases?
+>      https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/log/?h=mmu_gather-race-fix
+> 
+> If people really want to see the patches in email again, I can do
+> that, but most of you already have, and the changes are either trivial
+> fixes or the s390 updates.
+> 
+> For the s390 people that I've now added to the participant list maybe
+> the git tree is fine - and the fundamental explanation of the problem
+> is in that top-most commit (with the three preceding commits being
+> prep-work). Or that link to the thread about this all.
 
-This patch here only silences the warning. The warning+failing is 
-already in 6.0, and so far nobody (besides syzbot) complained.
+Adding Gerald.
 
-RDMA (due to FOLL_FORCE) would now fail (instead of doing something 
-wrong) on MAP_PRIVATE hugetlb mappings that are R/O. Do we have any 
-actual examples of such RDMA usage? I was able to understand why this 
-case (MAP_PRIVATE, PROT_READ) is important for !hugetlb, but I don't 
-immediately see under which situations this would apply to hugetlb.
+> 
+> That top-most commit is also where I tried to fix things up for s390
+> that uses its own non-gathering TLB flush due to
+> CONFIG_MMU_GATHER_NO_GATHER.
+> 
+> NOTE NOTE NOTE! Unlike my regular git branch, this one may end up
+> rebased etc for further comments and fixes. So don't consider that
+> stable, it's still more of an RFC branch.
+> 
+> At a minimum I'll update it with Ack's etc, assuming I get those, and
+> my s390 changes are entirely untested and probably won't work.
+> 
+> As far as I can tell, s390 doesn't actually *have* the problem that
+> causes this change, because of its synchronous TLB flush, but it
+> obviously needs to deal with the change of rmap zapping logic.
+> 
+> Also added a few people who are explicitly listed as being mmu_gather
+> maintainers. Maybe people saw the discussion on the linux-mm list, but
+> let's make it explicit.
+> 
+> Do people have any objections to this approach, or other suggestions?
+> 
+> I do *not* consider this critical, so it's a "queue for 6.2" issue for me.
+> 
+> It probably makes most sense to queue in the -MM tree (after the thing
+> is acked and people agree), but I can keep that branch alive too and
+> just deal with it all myself as well.
+> 
+> Anybody?
+> 
+>                       Linus
 
-While we could implement FOLL_FORCE for hugetlb, at least for RDMA we 
-will be moving away from FOLL_FORCE instead --- I'll be posting these 
-patches shortly.
+It certainly needs a build fix for s390:
 
-So considering upcoming changes, at least RDMA is rather a bad excuse 
-for more widespread FOLL_FORCE support.
 
--- 
-Thanks,
-
-David / dhildenb
-
+In file included from kernel/sched/core.c:78:
+./arch/s390/include/asm/tlb.h: In function '__tlb_remove_page_size':
+./arch/s390/include/asm/tlb.h:50:17: error: implicit declaration of function 'page_zap_pte_rmap' [-Werror=implicit-function-declaration]
+    50 |                 page_zap_pte_rmap(page);
+       |                 ^~~~~~~~~~~~~~~~~
