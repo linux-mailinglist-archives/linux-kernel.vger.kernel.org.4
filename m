@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CD5761685C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:20:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A38FD616861
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:21:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231574AbiKBQUp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 12:20:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38238 "EHLO
+        id S231397AbiKBQVC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 12:21:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231305AbiKBQUZ (ORCPT
+        with ESMTP id S231395AbiKBQU2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 12:20:25 -0400
-Received: from mail-wm1-x32c.google.com (mail-wm1-x32c.google.com [IPv6:2a00:1450:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EBDC231232
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 09:14:49 -0700 (PDT)
-Received: by mail-wm1-x32c.google.com with SMTP id v7so5201783wmn.0
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 09:14:49 -0700 (PDT)
+        Wed, 2 Nov 2022 12:20:28 -0400
+Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F6E93136F
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 09:14:52 -0700 (PDT)
+Received: by mail-wr1-x429.google.com with SMTP id bk15so25227694wrb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 09:14:52 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=bytedance-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZXj/+tvutn9072ZUAQ/Fj8mIysO5PQhhp6FCeEN8Zrw=;
-        b=A1TppZwD1Iw4IiArSoEXOboBO1payKvnhkZBo3OOtZHRLZ4/rXNVt6HQfaMag0SB3I
-         o7IG79mBlebjo+m4QnYUOSccej3xGTMo2gfsJxfeykR32qFtNfnKcKC/xBPaneuroKb1
-         FZmHjMcT+hD//AuJYINwjZTuxoioQ+LfktSZbFrIy8ZZbm0bZt1wYOF6wRd7RphI1kmt
-         2xqKYWexAvzjDguIaLOmSDiOSrsYLM4XEGpfZzTZO4lq9uDHcZIq0T6w+mgWVR4gjLOD
-         JVRPHC8kAAdfUu+ij3PWrhXEBc5OiM6ZdIrP/JUKHIaVIJoX2aguWijsZNu16WKRGULF
-         HxRQ==
+        bh=r6tj+7sNHNnTbkzs8ZeKL5miL5fHgtHHC3d2WQTSFbE=;
+        b=KuAbtL9XTBizhGI/s9UKTASCs9n5mCuzpUBAjDKPpPPbTBikgNbBtzoyDhdJz3rdNU
+         mmnuIzpAEBxAKkL+DSU3LgSNMu7c5yAJmdwZrv3aqDlQYsO7Ila4V+71ZfNrywCdFHeQ
+         qz+K94xhrzF57uJqLYDnlI27OVmAWXosKtVna3HQNbDzOffVPx8/KVkDFCHIYs+85RoB
+         2pIindGfcIhgS8XCYFTKhsqqN5wJwSPlJEbGfiTQOJ2fr0OI9nBwpHz9KNF4c4QZfMYH
+         1imRxckHe24zPJoQfARJnpU3RhMO+dr1NG35zgb/SwU0IahY+x1Gdzd60NEOPYSKZ5Il
+         VTRw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZXj/+tvutn9072ZUAQ/Fj8mIysO5PQhhp6FCeEN8Zrw=;
-        b=m4fjbW2sq01LkLofD8r2GgLSpn++D6kp361zS/QSnSy5N8hhczuep6Hod9TCPSkLeL
-         yOctBpp+BzyQ1UyN4GmO0QIixEs++FF/qjtEOjMdWImHI8yEkuze4lT3coGIfQkE1mZ1
-         pE5vZktFWjyGYr9WQStBOX1bWimHukRGql52BQLfV7YFYqxPjXEi2CBk2yYk34hrLLmK
-         WS3bMIhW6SSAoNAEwvWHvn4lNPtzj4SQrNYuHyrsfsu5XTvpF7NzqFurS+p1Z1W544dQ
-         lCnYUPVwDkGAxgDIdHWoKQtATSEaLXC5ja130MtPGyWWa27nX9nLeFG/BdNa0lKNCwjB
-         82TQ==
-X-Gm-Message-State: ACrzQf1j++gQR5scr3J5HhQyoMTd++cv2k9F8HF5kr2TxE1DmjrGq0gZ
-        mxDmxZ7WjiJ6j8FbR/EDCQinsEr4S8zxDAbF
-X-Google-Smtp-Source: AMsMyM7qHohe8t2aLsIgDI8jervh0lNgxUy3saJvw7Yjrle9KJulmdFLIMMRUOI9RkGHuYDYlrh0IQ==
-X-Received: by 2002:a05:600c:4313:b0:3cf:894d:1d05 with SMTP id p19-20020a05600c431300b003cf894d1d05mr896047wme.32.1667405659085;
-        Wed, 02 Nov 2022 09:14:19 -0700 (PDT)
+        bh=r6tj+7sNHNnTbkzs8ZeKL5miL5fHgtHHC3d2WQTSFbE=;
+        b=G7sFD6WcoZYLY4bSYnCxyEgJSeaNwh/A6UFExLOGoKxv/h9jzW304/5m+2EgCdk7K9
+         v5IbYvmjIEMrEtvyikWiGpY+Cp7lLkC2UOFmz6geW97R2Wjb5yrUGs7+gdcnWg+CVHpT
+         HpEE0xcjdDeH3ruUtq3wBeW4xCXXb4hV6+PM7pIUlIvq+3ENX3ya6knUfFkdTzzIQHjk
+         h6eueKnNSpDkJlLOdrQsThI1AGYBNfPgeBCTGwwAK/A/BVmNamNy7jSwFiTdnrBSRPHc
+         Kam1LlO41iW4Fk/0UNQHFVlSfEt9oKFF1bz0/0FlnCrKz9IyhbdmDzWzCxiP3fTUZ98Z
+         B96w==
+X-Gm-Message-State: ACrzQf1TFq+LD0qnCaaQbOK4cz2O5/HL/RweDbXbNEWZLOMjfvmfv62J
+        dpWb3B8GzkOb1Oxdnq8QOvNh4SyJ9BFMmho9
+X-Google-Smtp-Source: AMsMyM7D3GBwOzz5QAuoLmf+oB2TmG0p9ILQukZoZQKCpczeNQrlwRKtrJtUrLcSObIcUbD2rOZ3WQ==
+X-Received: by 2002:a5d:5410:0:b0:236:fe1:bb74 with SMTP id g16-20020a5d5410000000b002360fe1bb74mr15694845wrv.512.1667405660181;
+        Wed, 02 Nov 2022 09:14:20 -0700 (PDT)
 Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b4d7:0:6a08:9b26:ab04:7065])
-        by smtp.gmail.com with ESMTPSA id m17-20020a5d56d1000000b0022cc6b8df5esm13230923wrw.7.2022.11.02.09.14.18
+        by smtp.gmail.com with ESMTPSA id m17-20020a5d56d1000000b0022cc6b8df5esm13230923wrw.7.2022.11.02.09.14.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 09:14:18 -0700 (PDT)
+        Wed, 02 Nov 2022 09:14:19 -0700 (PDT)
 From:   Usama Arif <usama.arif@bytedance.com>
 To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
@@ -59,9 +59,9 @@ To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         maz@kernel.org, steven.price@arm.com, mark.rutland@arm.com
 Cc:     fam.zheng@bytedance.com, liangma@liangbit.com,
         punit.agrawal@bytedance.com, Usama Arif <usama.arif@bytedance.com>
-Subject: [RFC 1/6] KVM: arm64: Document PV-lock interface
-Date:   Wed,  2 Nov 2022 16:13:35 +0000
-Message-Id: <20221102161340.2982090-2-usama.arif@bytedance.com>
+Subject: [RFC 2/6] KVM: arm64: Add SMCCC paravirtualised lock calls
+Date:   Wed,  2 Nov 2022 16:13:36 +0000
+Message-Id: <20221102161340.2982090-3-usama.arif@bytedance.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221102161340.2982090-1-usama.arif@bytedance.com>
 References: <20221102161340.2982090-1-usama.arif@bytedance.com>
@@ -76,124 +76,68 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Introduce a paravirtualization interface for KVM/arm64 to obtain whether
-the VCPU is currently running or not.
+Add two new SMCCC compatible hypercalls for PV lock features:
+  PV_LOCK_FEATURES:   0xC6000020
+  PV_LOCK_PREEMPTED:  0xC6000021
 
-The PV lock structure of the guest is allocated by user space.
-
-A hypercall interface is provided for the guest to interrogate the
-hypervisor's support for this interface and the location of the shared
-memory structures.
+Also add the header file which defines the ABI for the paravirtualized
+lock features we're about to add.
 
 Signed-off-by: Zengruan Ye <yezengruan@huawei.com>
 Signed-off-by: Usama Arif <usama.arif@bytedance.com>
 ---
- Documentation/virt/kvm/arm/pvlock.rst   | 64 +++++++++++++++++++++++++
- Documentation/virt/kvm/devices/vcpu.rst | 23 +++++++++
- 2 files changed, 87 insertions(+)
- create mode 100644 Documentation/virt/kvm/arm/pvlock.rst
+ arch/arm64/include/asm/pvlock-abi.h | 17 +++++++++++++++++
+ include/linux/arm-smccc.h           | 13 +++++++++++++
+ 2 files changed, 30 insertions(+)
+ create mode 100644 arch/arm64/include/asm/pvlock-abi.h
 
-diff --git a/Documentation/virt/kvm/arm/pvlock.rst b/Documentation/virt/kvm/arm/pvlock.rst
+diff --git a/arch/arm64/include/asm/pvlock-abi.h b/arch/arm64/include/asm/pvlock-abi.h
 new file mode 100644
-index 000000000000..766aeef50b2d
+index 000000000000..3f4574071679
 --- /dev/null
-+++ b/Documentation/virt/kvm/arm/pvlock.rst
-@@ -0,0 +1,64 @@
-+.. SPDX-License-Identifier: GPL-2.0
++++ b/arch/arm64/include/asm/pvlock-abi.h
+@@ -0,0 +1,17 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++/*
++ * Copyright(c) 2019 Huawei Technologies Co., Ltd
++ * Author: Zengruan Ye <yezengruan@huawei.com>
++ *         Usama Arif <usama.arif@bytedance.com>
++ */
 +
-+Paravirtualized lock support for arm64
-+======================================
++#ifndef __ASM_PVLOCK_ABI_H
++#define __ASM_PVLOCK_ABI_H
 +
-+KVM/arm64 provides hypervisor service calls for paravirtualized guests to check
-+whether a VCPU is currently running or not.
++struct pvlock_vcpu_state {
++	__le64 preempted;
++	/* Structure must be 64 byte aligned, pad to that size */
++	u8 padding[56];
++} __packed;
 +
-+Two new SMCCC compatible hypercalls are defined:
-+
-+* PV_LOCK_FEATURES:   0xC6000020
-+* PV_LOCK_PREEMPTED:  0xC6000021
-+
-+The existence of the PV_LOCK hypercall should be probed using the SMCCC 1.1
-+ARCH_FEATURES mechanism before calling it.
-+
-+PV_LOCK_FEATURES
-+    ============= ========    ==========
-+    Function ID:  (uint32)    0xC6000020
-+    PV_call_id:   (uint32)    The function to query for support.
-+                              Currently only PV_LOCK_PREEMPTED is supported.
-+    Return value: (int64)     NOT_SUPPORTED (-1) or SUCCESS (0) if the relevant
-+                              PV-lock feature is supported by the hypervisor.
-+    ============= ========    ==========
-+
-+PV_LOCK_PREEMPTED
-+    ============= ========    ==========
-+    Function ID:  (uint32)    0xC6000021
-+    Return value: (int64)     IPA of the pv lock data structure for this
-+                              VCPU. On failure:
-+                              NOT_SUPPORTED (-1)
-+    ============= ========    ==========
-+
-+The IPA returned by PV_LOCK_PREEMPTED should be mapped by the guest as normal
-+memory with inner and outer write back caching attributes, in the inner
-+shareable domain.
-+
-+PV_LOCK_PREEMPTED returns the structure for the calling VCPU.
-+
-+PV lock state
-+-------------
-+
-+The structure pointed to by the PV_LOCK_PREEMPTED hypercall is as follows:
-+
-++-----------+-------------+-------------+---------------------------------+
-+| Field     | Byte Length | Byte Offset | Description                     |
-++===========+=============+=============+=================================+
-+| preempted |      8      |      0      | Indicate if the VCPU that owns  |
-+|           |             |             | this struct is running or not.  |
-+|           |             |             | Non-zero values mean the VCPU   |
-+|           |             |             | has been preempted. Zero means  |
-+|           |             |             | the VCPU is not preempted.      |
-++-----------+-------------+-------------+---------------------------------+
-+
-+The preempted field will be updated to 1 by the hypervisor prior to scheduling
-+a VCPU. When the VCPU is scheduled out, the preempted field will be updated
-+to 0 by the hypervisor.
-+
-+The structure will be present within a reserved region of the normal memory
-+given to the guest. The guest should not attempt to write into this memory.
-+There is a structure per VCPU of the guest.
-+
-+For the user space interface see Documentation/virt/kvm/devices/vcpu.rst
-+section "4. GROUP: KVM_ARM_VCPU_PVLOCK_CTRL".
-diff --git a/Documentation/virt/kvm/devices/vcpu.rst b/Documentation/virt/kvm/devices/vcpu.rst
-index 716aa3edae14..223ac2fe62f0 100644
---- a/Documentation/virt/kvm/devices/vcpu.rst
-+++ b/Documentation/virt/kvm/devices/vcpu.rst
-@@ -263,3 +263,26 @@ From the destination VMM process:
++#endif
+diff --git a/include/linux/arm-smccc.h b/include/linux/arm-smccc.h
+index 220c8c60e021..6360333e0f64 100644
+--- a/include/linux/arm-smccc.h
++++ b/include/linux/arm-smccc.h
+@@ -151,6 +151,19 @@
+ 			   ARM_SMCCC_OWNER_STANDARD_HYP,	\
+ 			   0x21)
  
- 7. Write the KVM_VCPU_TSC_OFFSET attribute for every vCPU with the
-    respective value derived in the previous step.
++/* Paravirtualised lock calls */
++#define ARM_SMCCC_HV_PV_LOCK_FEATURES				\
++	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL,			\
++			   ARM_SMCCC_SMC_64,			\
++			   ARM_SMCCC_OWNER_VENDOR_HYP,		\
++			   0x20)
 +
-+5. GROUP: KVM_ARM_VCPU_PVLOCK_CTRL
-+==================================
++#define ARM_SMCCC_HV_PV_LOCK_PREEMPTED				\
++	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL,			\
++			   ARM_SMCCC_SMC_64,			\
++			   ARM_SMCCC_OWNER_VENDOR_HYP,		\
++			   0x21)
 +
-+:Architectures: ARM64
-+
-+5.1 ATTRIBUTE: KVM_ARM_VCPU_PVLOCK_IPA
-+--------------------------------------
-+
-+:Parameters: 64-bit base address
-+
-+Returns:
-+
-+	 =======  ======================================
-+	 -ENXIO   PV lock not implemented
-+	 -EEXIST  Base address already set for this VCPU
-+	 -EINVAL  Base address not 64 byte aligned
-+	 =======  ======================================
-+
-+Specifies the base address of the pv lock structure for this VCPU. The
-+base address must be 64 byte aligned and exist within a valid guest memory
-+region. See Documentation/virt/kvm/arm/pvlock.rst for more information
-+including the layout of the pv lock structure.
+ /* TRNG entropy source calls (defined by ARM DEN0098) */
+ #define ARM_SMCCC_TRNG_VERSION					\
+ 	ARM_SMCCC_CALL_VAL(ARM_SMCCC_FAST_CALL,			\
 -- 
 2.25.1
 
