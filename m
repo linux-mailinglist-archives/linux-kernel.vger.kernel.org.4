@@ -2,92 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7E736615758
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 03:09:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B54A61575A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 03:11:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229945AbiKBCJ5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 22:09:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39504 "EHLO
+        id S230024AbiKBCLN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 22:11:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39784 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229866AbiKBCJy (ORCPT
+        with ESMTP id S229546AbiKBCLK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 22:09:54 -0400
-Received: from mail-pf1-x436.google.com (mail-pf1-x436.google.com [IPv6:2607:f8b0:4864:20::436])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D68CC1D65D
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 19:09:52 -0700 (PDT)
-Received: by mail-pf1-x436.google.com with SMTP id d10so15135193pfh.6
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 19:09:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=B/9nbqKAy6prDAS3oMmtklZfg/ZbEspQaEJ48FmeAmc=;
-        b=TrwwCrLqC7JAM1Uu/+yafOAtWgX5dY7pPM2NvZ69AMrgl3UEFM/DscGiTUUHN3pc+L
-         uS7v2QJimbqhm1WnG9dnmFDRtAK7Yte8g4pmcY2GKK2Ytn0tZg9J9Dfz0LlYaXEDDxsx
-         iiTD4UyqQ9/VzWkjBXBux22f7w4atH83ns9iux6Su51579Sjj45hARf3lqY0yH2OoybV
-         v0M5WTlBw12gNGR7yEzNR+v5pJXL2RhLDZb6KkB4LTw9dVwWz1JNVzxYWwMm3Og/CFZy
-         yEUtvs6A3IVvM93m1EbIcurAyJwCjGIC2c1FgMU708u88XVXA0b3UxJKLzPm463agT6c
-         ZJiQ==
+        Tue, 1 Nov 2022 22:11:10 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 291CC1DA58
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 19:10:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667355011;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=HKtiJAznjl4o7tzKpvXz+33cgiY1FnbaLSS2bZTJyzw=;
+        b=fxMlFBtO4SkYB72/XJ3rV92WgJykKZ48CysemJZx8tRMC/HsjOheZy7sDg7DbA4iGZWfSQ
+        tf/oe2/48CO8HbvNxRLhah3FFX4EBBltrmETkgSg9RGZvgpoqJ7dihRBZAbRnsXwy1LR8/
+        xvXJEQKVTi0QMj1DJ3vGv6e/XtNFp9s=
+Received: from mail-yb1-f199.google.com (mail-yb1-f199.google.com
+ [209.85.219.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-73-Gw5TEJH_NbG3AwfkIEdzCQ-1; Tue, 01 Nov 2022 22:10:10 -0400
+X-MC-Unique: Gw5TEJH_NbG3AwfkIEdzCQ-1
+Received: by mail-yb1-f199.google.com with SMTP id 129-20020a250087000000b006ca5c621bacso14791656yba.3
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 19:10:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=B/9nbqKAy6prDAS3oMmtklZfg/ZbEspQaEJ48FmeAmc=;
-        b=psD4u+EbtuLSQH7KB+6UpXyg1fRx4fpodOztjLyk4DvpEx45WxytfXI6GQQlBeAYRG
-         gx1tGul1zSu0xSQjjGgr4iFKinxD92pw9dFvfq49LpP3JHuDdp6xtkrxjz7EvGdRsVfd
-         kKbEmzJ85Hh35cJE9jq/qFcIoJ9a6IW7X4rmpOBq2fFOcMwlDD9Ly8hg9ia6l/DQEE9b
-         uoUVUIdnUjoDVk4TYRqTk3/jT9tjFloj6AGo88Sv2BQc5GI5Dbrzg2EE8PFQ177zyPuT
-         9TEp+uIkAnshXKktgXorKWMis0AnPbRrYjKpJPR2HHbBPNL46BK3hL5Sp1CT8GxN2fmC
-         b15Q==
-X-Gm-Message-State: ACrzQf1owz1q1ty12L9qAQoc0Qpsy7DxaP8djYDtUH1C8H3+rxTMBQ/h
-        M+VT4iGo1Z54JFX4NpBU+WhmXA==
-X-Google-Smtp-Source: AMsMyM6nfZ1Xf117LD/8Qlkj1bOJKmYdrnP9WwitZHJYBeZMfYqBJCmperWW+vBpF2o56y/62TQwcQ==
-X-Received: by 2002:a63:35c6:0:b0:470:d38:7c63 with SMTP id c189-20020a6335c6000000b004700d387c63mr17783pga.249.1667354992155;
-        Tue, 01 Nov 2022 19:09:52 -0700 (PDT)
-Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id k1-20020a170902c40100b0016c9e5f291bsm7018876plk.111.2022.11.01.19.09.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Nov 2022 19:09:51 -0700 (PDT)
-Message-ID: <7f7e59cb-e0b8-0db5-7c46-11aea963bcfa@kernel.dk>
-Date:   Tue, 1 Nov 2022 20:09:44 -0600
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HKtiJAznjl4o7tzKpvXz+33cgiY1FnbaLSS2bZTJyzw=;
+        b=p1r1muqtyFQyUn0HL7jeqIAe9EECr+A8P+wJSJtr6qfDTG3hsrhztzumOazNnXlVwf
+         xrkH3aeqSbGbdsWnAub41yqeR5ixejL0363LkDWVy3L9uyYK8GtJ+DFa5LaHrkhmaY0N
+         47PvNsp9E1HCsAh4q1LQtW0n5JTtDrBVpcJ+zMuJ7QKvXRpCOCWISxcdZBVbTVVpVa4z
+         c+1843aOoEfLJRDDBRTktDF7LudxCggkSBuhLBQaKgvSkVEEyzUqKxQ8utUQCi1wF4pr
+         mUbr6e9oHjyALIm/pJ3ZkgQNd4JRvypw/aNdGFSgY4QbhRa3yZg/9uxxvf5QjsZItImk
+         Opfg==
+X-Gm-Message-State: ACrzQf1MZTKQpXi5iBbLr8XrxiDPSzG9gjW19uyAe4B3kuL0aALm0E7t
+        3xAXqms4wfF6v9I81r076dvwVoNy+a0k4CAsNHjIkhF9bEp/WT4CGd8wKx4eE4e+ZftLmvD/oIG
+        oV148f7nyzW5vSy8SyltFV/T4SnpBDX4A/Ln1XhEN
+X-Received: by 2002:a25:606:0:b0:6cc:8667:75ec with SMTP id 6-20020a250606000000b006cc866775ecmr13652759ybg.268.1667355009509;
+        Tue, 01 Nov 2022 19:10:09 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM73ykhN4g5SK97bzLZnQyCGja6CdJI4IqdqvI/6omJoTDlnfs2LfIHf4QnlA3lnPocfKx8f2qL54ZlwbgyHqX0=
+X-Received: by 2002:a25:606:0:b0:6cc:8667:75ec with SMTP id
+ 6-20020a250606000000b006cc866775ecmr13652754ybg.268.1667355009284; Tue, 01
+ Nov 2022 19:10:09 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH -next v4 1/5] block, bfq: remove set but not used variable
- in __bfq_entity_update_weight_prio
-To:     Yu Kuai <yukuai1@huaweicloud.com>, jack@suse.cz,
-        paolo.valente@linaro.org
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yi.zhang@huawei.com
-References: <20221102022542.3621219-1-yukuai1@huaweicloud.com>
- <20221102022542.3621219-2-yukuai1@huaweicloud.com>
-Content-Language: en-US
-From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <20221102022542.3621219-2-yukuai1@huaweicloud.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
-X-Spam-Level: *
+References: <20221004062536.280712-1-leobras@redhat.com> <Yz1/TVUV+KnLvodg@fuller.cnet>
+ <b23b08274ccff99fb341ea272e968f72c2e289ce.camel@redhat.com>
+ <3d6d47035f8897542a4786eef5a6b8885f4caaf0.camel@redhat.com> <Y2FY8fOVsYCXmg+8@fuller.cnet>
+In-Reply-To: <Y2FY8fOVsYCXmg+8@fuller.cnet>
+From:   Leonardo Bras Soares Passos <leobras@redhat.com>
+Date:   Tue, 1 Nov 2022 23:09:58 -0300
+Message-ID: <CAJ6HWG4FsGcgujRAL6ejD7GzNB_af5+dp-v2iV8Wm4y+dFrmrA@mail.gmail.com>
+Subject: Re: [PATCH v1 1/1] crypto/pcrypt: Do not use isolated CPUs for callback
+To:     Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     Steffen Klassert <steffen.klassert@secunet.com>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S. Miller" <davem@davemloft.net>,
+        linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/1/22 8:25 PM, Yu Kuai wrote:
-> From: Yu Kuai <yukuai3@huawei.com>
-> 
-> After the patch "block, bfq: cleanup bfq_weights_tree add/remove apis"),
-> the local variable 'bfqd' is not used anymore, thus remove it.
+On Tue, Nov 1, 2022 at 2:42 PM Marcelo Tosatti <mtosatti@redhat.com> wrote:
+>
+> On Tue, Oct 11, 2022 at 03:20:39PM -0300, Leonardo Br=C3=A1s wrote:
+> > On Fri, 2022-10-07 at 18:42 -0300, Leonardo Br=C3=A1s wrote:
+> > > On Wed, 2022-10-05 at 09:57 -0300, Marcelo Tosatti wrote:
+> > > > On Tue, Oct 04, 2022 at 03:25:37AM -0300, Leonardo Bras wrote:
+> > > > > Currently pcrypt_aead_init_tfm() will pick callback cpus (ctx->cb=
+_cpu)
+> > > > > from any online cpus. Later padata_reorder() will queue_work_on()=
+ the
+> > > > > chosen cb_cpu.
+> > > > >
+> > > > > This is undesired if the chosen cb_cpu is listed as isolated (i.e=
+. using
+> > > > > isolcpus=3D... kernel parameter), since the work queued will inte=
+rfere with
+> > > > > the workload on the isolated cpu.
+> > > > >
+> > > > > Make sure isolated cpus are not used for pcrypt.
+> > > > >
+> > > > > Signed-off-by: Leonardo Bras <leobras@redhat.com>
+> > > > > ---
+> > > > >  crypto/pcrypt.c | 10 +++++++---
+> > > > >  1 file changed, 7 insertions(+), 3 deletions(-)
+> > > > >
+> > > > > diff --git a/crypto/pcrypt.c b/crypto/pcrypt.c
+> > > > > index 9d10b846ccf73..9017d08c91a8d 100644
+> > > > > --- a/crypto/pcrypt.c
+> > > > > +++ b/crypto/pcrypt.c
+> > > > > @@ -16,6 +16,7 @@
+> > > > >  #include <linux/kobject.h>
+> > > > >  #include <linux/cpu.h>
+> > > > >  #include <crypto/pcrypt.h>
+> > > > > +#include <linux/sched/isolation.h>
+> > > > >
+> > > > >  static struct padata_instance *pencrypt;
+> > > > >  static struct padata_instance *pdecrypt;
+> > > > > @@ -175,13 +176,16 @@ static int pcrypt_aead_init_tfm(struct cryp=
+to_aead *tfm)
+> > > > >         struct pcrypt_instance_ctx *ictx =3D aead_instance_ctx(in=
+st);
+> > > > >         struct pcrypt_aead_ctx *ctx =3D crypto_aead_ctx(tfm);
+> > > > >         struct crypto_aead *cipher;
+> > > > > +       struct cpumask non_isolated;
+> > > > > +
+> > > > > +       cpumask_and(&non_isolated, cpu_online_mask, housekeeping_=
+cpumask(HK_TYPE_DOMAIN));
+> > > >
+> > > > Since certain systems do not use isolcpus=3Ddomain, so please use a=
+ flag
+> > > > that is setup by nohz_full=3D, for example HK_FLAG_MISC:
+> > > >
+> > > > static int __init housekeeping_nohz_full_setup(char *str)
+> > > > {
+> > > >         unsigned long flags;
+> > > >
+> > > >         flags =3D HK_FLAG_TICK | HK_FLAG_WQ | HK_FLAG_TIMER | HK_FL=
+AG_RCU |
+> > > >                 HK_FLAG_MISC | HK_FLAG_KTHREAD;
+> > > >
+> > > >         return housekeeping_setup(str, flags);
+> > > > }
+> > > > __setup("nohz_full=3D", housekeeping_nohz_full_setup);
+> > >
+> > > Oh, sure.
+> > > Since we are talking about WorkQueues, I think it makes sense to pick
+> > > HK_FLAG_WQ.
+> > >
+> > > >
+> > > > Also, shouldnt you use cpumask_t ?/
+> > >
+> > > Yeah, I think so.
+> > > I was quick to choose the 'struct cpumask' because all functions woul=
+d operate
+> > > in this variable type, but yeah, I think it makes sense to have this =
+variable
+> > > being opaque here.
+> >
+> > In fact, it seems neither 'struct cpumask' nor 'cpumask_t' are recommen=
+ded to be
+> > used allocated in the stack, due to the large size it can get (up to 1k=
+B).
+> >
+> > At include/linux/cpumask.h we have:
+> > 'cpumask_var_t: struct cpumask for stack usage'
+> > which should work better at least for init functions like this.
+> >
+> > In other cases, I see 'static cpumask_t' being used to avoid the alloca=
+tion
+> > overhead, but it's probably due to the functions being called in very s=
+pecific
+> > scenarios. It could mean trouble if multiple cpus try to use it at once=
+.
+> >
+> > What do you recommend on it?
+>
+> Sorry for the delay. I suppose allocating and freeing is OK in this conte=
+xt, since
+> its initialization time and not a hot path?
 
-Please add a Fixes tag.
+Yeah, it makes sense this way. I will allocate as suggested!
+(Unless my other change gets in, so this new variable and a lot of
+overhead can be avoided.)
 
--- 
-Jens Axboe
-
+Thanks Marcelo!
 
