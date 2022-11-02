@@ -2,68 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9D31617301
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 00:46:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5085D617303
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 00:46:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbiKBXqE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 19:46:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59182 "EHLO
+        id S230233AbiKBXqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 19:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230294AbiKBXpl (ORCPT
+        with ESMTP id S229551AbiKBXqF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 19:45:41 -0400
-Received: from mail-pf1-x42a.google.com (mail-pf1-x42a.google.com [IPv6:2607:f8b0:4864:20::42a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27E5F193
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 16:44:37 -0700 (PDT)
-Received: by mail-pf1-x42a.google.com with SMTP id y13so117832pfp.7
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 16:44:37 -0700 (PDT)
+        Wed, 2 Nov 2022 19:46:05 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 52311EB
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 16:46:00 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id 64so211950pgc.5
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 16:46:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=fae7R4asXuAhnZRQbDhAUUiqdf8KffVDMSIbnVzQ284=;
-        b=KAhyFkm2kBJ7UxLyeT1kw+/IixN8m1v+/lj85dSYExqSyGbXmSjNkWqK0AkNQDpAXr
-         BlvhqCz55hxjd5giSG2bYdKcmlih7M4imgurWTuz8Q4xZ71EGSambnjoO5KJFdSc+2bg
-         vr8H7h4lKicMawf89A25FFxqAp+F87KmjHjG7+N5Z7Csgska9EpqnMuGImrS6BtKUfYm
-         6/m71rbI30nrrniGQRHUwidU5nHdpGQxAVtgJ+mdNaUoA+A+Lctzpv9u429YlvofXxur
-         kmO+GwXmlc5SIz93r4l0VUHgjiijMaplRNDl5WqIuW6qljuJK9pgjg9ITmI8w2UF7d3p
-         E/rA==
+        bh=PxnrF5yXGCzBk6DuHEJc9aTEx7Jr1C20HXqasxjld9I=;
+        b=foT9bmxt+RZUSdC8GunvebUXVC5zFCL3KCnne9B6lNVSkp4oEUxJz8Qu2eKO38p5rf
+         QFDgFhnaoJOt24v44q/UcrVM0y3JD7KOsJSsz5syx/qZxINhm8AeEyHXr3AGA0YPrWUL
+         Cdyb7ziJC9/WoJiwD3soz46KqRF58jmJgsREd+udlkVDvHR0Ds8ZaZVGag2BiamqVTk8
+         f5TuwXJ8sScV+DACm6zL2EGK6+TfBrp+cM0QjFOGOYxwsrjf9gUaNxqpAUd1dPBryHla
+         NKlzL5YZAhfHPsBdWGypf7M/5wJ0YnP6ImZKr44zlveTFsieuFiZO0LshYqvc2UJgbHS
+         5SHA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=fae7R4asXuAhnZRQbDhAUUiqdf8KffVDMSIbnVzQ284=;
-        b=grWpSL9156GjdCd1hYqeE/ZHK8KfW6GbYTNkIj5wPaubRyooBASn5dXJX6zLwMU/cs
-         H5Gj+tfSRWJXvAwIORPja19QjtvB4uGuH1e0rPq/fBp4QxSlG/YekfXbsAg1ONx2IvnA
-         CSUc0uU+Vvrp4E5QYHaWpiYovZBQlopzRkK2WKxMPDuGxCasVAma41i7GcLPyxrNVGi+
-         3/+F6+u6Hw1UpsFWU/g3klUX97GOgx16WqVbQjkbMOoRtVpJ5uMkcKKzvSGYLLORUgIC
-         yfu5GKdX9FAk1PDjB6nRpcsyzjMXqAKrvJsis6hCl5/ltelXe6Db8wlnz2HIXAzqp5jr
-         S3Uw==
-X-Gm-Message-State: ACrzQf0iMZKGNlqoKCBLPsIyGcve0TOosNkb3FnPMm1ls6J3dxP3N+Zh
-        nDJFXndk5a6nwDiakfMWrc7Z1Q==
-X-Google-Smtp-Source: AMsMyM7Skq+LiQwc4p37pSLLv4dvHJacOam7OiDQlpW/Zh2JX96Fp2zX7SD73rjR9gfRaw76YadE6g==
-X-Received: by 2002:a62:8141:0:b0:56b:c435:f003 with SMTP id t62-20020a628141000000b0056bc435f003mr27504886pfd.15.1667432676524;
-        Wed, 02 Nov 2022 16:44:36 -0700 (PDT)
+        bh=PxnrF5yXGCzBk6DuHEJc9aTEx7Jr1C20HXqasxjld9I=;
+        b=COijPXsNDZpcCYXkSwzs0KFSCzTB37nEA4b/Ugl2ILkKXbkZ5LouUczyayKJfK+4dU
+         imiGGB5jKUW/+DT1C+kjNKEpqZ1FY9qFmWwPtFacEQ+sRmXC59ANEjsmTBRnMUgNUq8j
+         0TJN2Xy0O6MNqGOO4Dc3101hYoKi/P0rtkQ8g9SR07TR0GCsdJ6ALbFwP1B6qaKg7nI6
+         pFD8K/CBYLIlfUr73jF2eJ77IDWhnwkL+WWj3cgWyukYqFvwRO5c83fuczcfmiII+FlS
+         BD+VtTqmyThgNJ/+RQ1EHHHPnG0kc2XUA1aPIXtF9cM4kMF/YKGFpwyHY/VnyPygn/Xg
+         hvlA==
+X-Gm-Message-State: ACrzQf2Dmymobr3jpTH81ntAR4X2MFWZdA6nvi4KDY1nNwGKM0hqLGEk
+        +OKBnR5Z/K+a6Vor9gJ0GthBQg==
+X-Google-Smtp-Source: AMsMyM4MThYbzDwazYy/pifB316ku5meLYAnINTWxrULu+jof2vSlpkfGVVeXHEd7w2usP1MOmbjXg==
+X-Received: by 2002:a62:174a:0:b0:56b:9fc2:4ebd with SMTP id 71-20020a62174a000000b0056b9fc24ebdmr11036716pfx.21.1667432759752;
+        Wed, 02 Nov 2022 16:45:59 -0700 (PDT)
 Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id b189-20020a621bc6000000b0056b818142a2sm8999521pfb.109.2022.11.02.16.44.36
+        by smtp.gmail.com with ESMTPSA id im23-20020a170902bb1700b00186ae20e8dcsm8810730plb.271.2022.11.02.16.45.59
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 16:44:36 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 23:44:32 +0000
+        Wed, 02 Nov 2022 16:45:59 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 23:45:56 +0000
 From:   Sean Christopherson <seanjc@google.com>
 To:     Vipin Sharma <vipinsh@google.com>
 Cc:     pbonzini@redhat.com, dmatlack@google.com, andrew.jones@linux.dev,
         wei.w.wang@intel.com, kvm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 4/7] KVM: selftests: Use SZ_1G from sizes.h in
- max_guest_memory_test.c
-Message-ID: <Y2MA4DKCOTiBnAn8@google.com>
+Subject: Re: [PATCH v8 5/7] KVM: selftests: Shorten the test args in
+ memslot_modification_stress_test.c
+Message-ID: <Y2MBNA7pLIb6ugU2@google.com>
 References: <20221102232737.1351745-1-vipinsh@google.com>
- <20221102232737.1351745-5-vipinsh@google.com>
+ <20221102232737.1351745-6-vipinsh@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221102232737.1351745-5-vipinsh@google.com>
+In-Reply-To: <20221102232737.1351745-6-vipinsh@google.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
@@ -76,10 +76,79 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 On Wed, Nov 02, 2022, Vipin Sharma wrote:
-> Replace size_1gb defined in max_guest_memory_test.c with the SZ_1G from
-> linux/sizes.h header file.
-> 
+> Change test args memslot_modification_delay and nr_memslot_modifications
+> to delay and nr_iterations for simplicity.
+
+Suggested-by: Sean Christopherson <seanjc@google.com>
+
+I don't care about the credit so much as I don't want you getting yelled at for
+one of my random ideas :-)
+
 > Signed-off-by: Vipin Sharma <vipinsh@google.com>
 > ---
+>  .../kvm/memslot_modification_stress_test.c     | 18 +++++++++---------
+>  1 file changed, 9 insertions(+), 9 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/kvm/memslot_modification_stress_test.c b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
+> index d7ddc8a105a2..d6089ccaa484 100644
+> --- a/tools/testing/selftests/kvm/memslot_modification_stress_test.c
+> +++ b/tools/testing/selftests/kvm/memslot_modification_stress_test.c
+> @@ -87,8 +87,8 @@ static void add_remove_memslot(struct kvm_vm *vm, useconds_t delay,
+>  }
+>  
+>  struct test_params {
+> -	useconds_t memslot_modification_delay;
+> -	uint64_t nr_memslot_modifications;
+> +	useconds_t delay;
+> +	uint64_t nr_iterations;
+>  	bool partition_vcpu_memory_access;
+>  };
+>  
+> @@ -107,8 +107,8 @@ static void run_test(enum vm_guest_mode mode, void *arg)
+>  
+>  	pr_info("Started all vCPUs\n");
+>  
+> -	add_remove_memslot(vm, p->memslot_modification_delay,
+> -			   p->nr_memslot_modifications);
+> +	add_remove_memslot(vm, p->delay,
+> +			   p->nr_iterations);
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+This wrap is no longer necessary (which was part of the motivation for the
+rename).
+
+>  	run_vcpus = false;
+>  
+> @@ -144,8 +144,8 @@ int main(int argc, char *argv[])
+>  	int max_vcpus = kvm_check_cap(KVM_CAP_MAX_VCPUS);
+>  	int opt;
+>  	struct test_params p = {
+> -		.memslot_modification_delay = 0,
+> -		.nr_memslot_modifications =
+> +		.delay = 0,
+> +		.nr_iterations =
+>  			DEFAULT_MEMSLOT_MODIFICATION_ITERATIONS,
+>  		.partition_vcpu_memory_access = true
+>  	};
+> @@ -158,8 +158,8 @@ int main(int argc, char *argv[])
+>  			guest_modes_cmdline(optarg);
+>  			break;
+>  		case 'd':
+> -			p.memslot_modification_delay = atoi_paranoid(optarg);
+> -			TEST_ASSERT(p.memslot_modification_delay >= 0,
+> +			p.delay = atoi_paranoid(optarg);
+> +			TEST_ASSERT(p.delay >= 0,
+>  				    "A negative delay is not supported.");
+>  			break;
+>  		case 'b':
+> @@ -175,7 +175,7 @@ int main(int argc, char *argv[])
+>  			p.partition_vcpu_memory_access = false;
+>  			break;
+>  		case 'i':
+> -			p.nr_memslot_modifications = atoi_paranoid(optarg);
+> +			p.nr_iterations = atoi_paranoid(optarg);
+>  			break;
+>  		case 'h':
+>  		default:
+> -- 
+> 2.38.1.273.g43a17bfeac-goog
+> 
