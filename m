@@ -2,111 +2,120 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1F68C61663C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:33:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EA7FF616649
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:35:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbiKBPdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 11:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48868 "EHLO
+        id S230370AbiKBPfA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 11:35:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229533AbiKBPdj (ORCPT
+        with ESMTP id S230267AbiKBPe4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 11:33:39 -0400
-Received: from mx0b-002e3701.pphosted.com (mx0b-002e3701.pphosted.com [148.163.143.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E28A81F60E;
-        Wed,  2 Nov 2022 08:33:34 -0700 (PDT)
-Received: from pps.filterd (m0134424.ppops.net [127.0.0.1])
-        by mx0b-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A2F25FC002713;
-        Wed, 2 Nov 2022 15:33:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=date : from : to : cc :
- subject : message-id : references : mime-version : content-type :
- in-reply-to; s=pps0720; bh=GURUunwbIEHWjIMSeeVSXk/3eFsEGc4H3mumzBPrFB0=;
- b=oAggLX3Tqg0IpVOK9w3101MejQGFbtOQrCC06S3mwOmMx5vUC2pF7kwRPtyXfctx9/Ms
- WgJ/1g1iRPknX/ASCdoFbLFx75y3SXOlUo+uFz+rxSwKxA8RvyGFoY50y/ruesWYfCCq
- 0/Vc3j2mhLg3Ycmod7Egg3BYlh++GdNzCkJF/IMrlxtpHZQPY7c0xG+p6GS7cTvR92Y4
- 7htmV/wvq313/lFePcol5h7rpB9ZjPJMbxuO9GET72CyTw3o7SRX2THl5XC55TJWPrBG
- id7053QTl4NraCSyb6cN7z4fUEmniq5+2A3N2BlhiGJ4l5JHlLZJ/RS45eUK4syF64w+ Cw== 
-Received: from p1lg14880.it.hpe.com (p1lg14880.it.hpe.com [16.230.97.201])
-        by mx0b-002e3701.pphosted.com (PPS) with ESMTPS id 3kkfs8wv5b-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Nov 2022 15:33:29 +0000
-Received: from p1lg14885.dc01.its.hpecorp.net (unknown [10.119.18.236])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Wed, 2 Nov 2022 11:34:56 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5EF6A27CD1
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 08:33:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667403229;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=OypQqLWai0VaMJwiQgOKKG3cobC5fKhMwKsuUswxphk=;
+        b=GFIXWQA3mkDgWIVjwlZgeLxG8Jm8wKiU2xCNH1q2+HNefmBYStkevu2lOMi8M3QjgM9k8y
+        UHpzwXj6pmHWsE1Ig5QXA0mjOc71uZTM1GpsByFLq8vwtF2Co9A5tSjScPRm7q8Ug8RxXY
+        2bn3KGz216/9EEggmMtVPPkE6zAplIo=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-210-ywcGUWlbNua3SadPps_K9w-1; Wed, 02 Nov 2022 11:33:42 -0400
+X-MC-Unique: ywcGUWlbNua3SadPps_K9w-1
+Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by p1lg14880.it.hpe.com (Postfix) with ESMTPS id 095DD8040FF;
-        Wed,  2 Nov 2022 15:33:29 +0000 (UTC)
-Received: from hpe.com (unknown [16.231.227.36])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (Client did not present a certificate)
-        by p1lg14885.dc01.its.hpecorp.net (Postfix) with ESMTPS id CA3A2804BD4;
-        Wed,  2 Nov 2022 15:33:27 +0000 (UTC)
-Date:   Wed, 2 Nov 2022 10:33:25 -0500
-From:   Dimitri Sivanich <sivanich@hpe.com>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Steve Wahl <steve.wahl@hpe.com>, Mike Travis <mike.travis@hpe.com>,
-        Dimitri Sivanich <dimitri.sivanich@hpe.com>,
-        Russ Anderson <russ.anderson@hpe.com>,
-        Robin Holt <robinmholt@gmail.com>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        linux-acpi@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: 16-bit _SEG vs 8 bit PCIe Flit mode Segment
-Message-ID: <20221102153325.GA221768@hpe.com>
-References: <20221101144905.GA1258094@bhelgaas>
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2C0D91C0A589;
+        Wed,  2 Nov 2022 15:33:36 +0000 (UTC)
+Received: from localhost (unknown [10.39.194.37])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 917E71121339;
+        Wed,  2 Nov 2022 15:33:35 +0000 (UTC)
+From:   Cornelia Huck <cohuck@redhat.com>
+To:     Eric Farman <farman@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>
+Cc:     Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org, Eric Farman <farman@linux.ibm.com>
+Subject: Re: [PATCH v2 7/7] vfio: Remove vfio_free_device
+In-Reply-To: <20221102150152.2521475-8-farman@linux.ibm.com>
+Organization: Red Hat GmbH
+References: <20221102150152.2521475-1-farman@linux.ibm.com>
+ <20221102150152.2521475-8-farman@linux.ibm.com>
+User-Agent: Notmuch/0.37 (https://notmuchmail.org)
+Date:   Wed, 02 Nov 2022 16:33:34 +0100
+Message-ID: <87pme5s75d.fsf@redhat.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221101144905.GA1258094@bhelgaas>
-X-Proofpoint-GUID: 4AB-RdUpHLN0KUpDl0-X434VfrsYQHNL
-X-Proofpoint-ORIG-GUID: 4AB-RdUpHLN0KUpDl0-X434VfrsYQHNL
-X-HPE-SCL: -1
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-02_13,2022-11-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 bulkscore=0
- malwarescore=0 phishscore=0 impostorscore=0 spamscore=0 suspectscore=0
- adultscore=0 lowpriorityscore=0 clxscore=1011 mlxlogscore=670
- priorityscore=1501 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211020100
-X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Bjorn,
+On Wed, Nov 02 2022, Eric Farman <farman@linux.ibm.com> wrote:
 
-Thanks for letting us know about this.
+> With the "mess" sorted out, we should be able to inline the
+> vfio_free_device call introduced by commit cb9ff3f3b84c
+> ("vfio: Add helpers for unifying vfio_device life cycle")
+> and remove them from driver release callbacks.
+>
+> Signed-off-by: Eric Farman <farman@linux.ibm.com>
+> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
+> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+> ---
+>  drivers/gpu/drm/i915/gvt/kvmgt.c      |  1 -
+>  drivers/s390/cio/vfio_ccw_ops.c       |  2 --
+>  drivers/s390/crypto/vfio_ap_ops.c     |  6 ------
+>  drivers/vfio/fsl-mc/vfio_fsl_mc.c     |  1 -
+>  drivers/vfio/pci/vfio_pci_core.c      |  1 -
+>  drivers/vfio/platform/vfio_amba.c     |  1 -
+>  drivers/vfio/platform/vfio_platform.c |  1 -
+>  drivers/vfio/vfio_main.c              | 22 ++++------------------
+>  include/linux/vfio.h                  |  1 -
+>  samples/vfio-mdev/mbochs.c            |  1 -
+>  samples/vfio-mdev/mdpy.c              |  1 -
+>  samples/vfio-mdev/mtty.c              |  1 -
+>  12 files changed, 4 insertions(+), 35 deletions(-)
 
-This is just to let you know that, while we are still investigating this,
-our UV3 Broadwell era systems do use more than 8 bits for the segment #.
+Reviewed-by: Cornelia Huck <cohuck@redhat.com>
 
-From lscpi on UV3:
-  1007:3f:08.0 System peripheral: Intel Corporation Xeon E7 v2/Xeon E5 v2/Core i7 QPI Link 0 (rev 07)
-
-Dimitri
-
-On Tue, Nov 01, 2022 at 09:49:05AM -0500, Bjorn Helgaas wrote:
-> ACPI r6.5, sec 6.5.6, currently says the low 16 bits of _SEG are the
-> PCI Segment Group number.  PCIe r6.0, sec 2.2.1.2, added Flit mode
-> with TLP headers that may contain an 8-bit Segment number.
-> 
-> ACPI currently says _SEG is purely a software thing and has no
-> connection to any physical entities.  But this may get a little blurry
-> when Segment numbers appear in TLPs.  For example, AER header logs
-> will likely contain the Flit Segment, and we'll need to correlate that
-> with the _SEG-derived identifiers Linux uses.
-> 
-> One possibility is to reduce the width of _SEG to 8 bits to match the
-> Flit mode Segment and require them to be identical.
-> 
-> I'm trying to figure out whether that would break any existing
-> systems.  I've heard rumors that large systems like SGI UV may use
-> more than 8 bits of _SEG.  But I don't know any details.
-> 
-> Bjorn
