@@ -2,52 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6C9BC61660E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:26:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AE0F616617
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:27:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230254AbiKBP0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 11:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38876 "EHLO
+        id S230273AbiKBP1k (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 11:27:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39528 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230224AbiKBP0B (ORCPT
+        with ESMTP id S229676AbiKBP1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 11:26:01 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3EE991409A
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 08:26:00 -0700 (PDT)
+        Wed, 2 Nov 2022 11:27:39 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CFF713E2B;
+        Wed,  2 Nov 2022 08:27:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E21B6B8233D
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 15:25:58 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD4FAC433B5;
-        Wed,  2 Nov 2022 15:25:56 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 49386B8233C;
+        Wed,  2 Nov 2022 15:27:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EBB6AC433D6;
+        Wed,  2 Nov 2022 15:27:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667402757;
-        bh=hGx+6YDUsiGnguDXLfFqKT39GRFMP/Uu3APqDdfj8VI=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=lZqy94Pqj8EW3jOLG3l7Bn5qWcflGeeQrQ2aXEPTTLim/2BOfS84/XDX9hZ1CA5MF
-         07J5fQoAf+GOtybBC0b7RRqNwEGASwUUsX9zN89OaS3S8Mq/QHVCAhVcyxoeNL+jV8
-         ZXhn+p49r1Sp/gTlBogoGPdabtwT+XPsZdevJsh1QbiGgQSXRQQr0lPu8IA1sijYlm
-         4UAXUZlyNRyvgBxm+xrASJGTAvejkT9j4qn9ujsoVP/Z8nPSqG+R7aYQhDKbHJuWlU
-         h3NOW80DaL+c/FOS47MxZJ+YOAJdo6Xnerom5o85kIdyH0JsaWVMGg211ndQfpn+DN
-         4Ul89CjYwfcnw==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>
-Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev,
-        patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 2/2] drm/amdgpu: Fix type of second parameter in odn_edit_dpm_table() callback
-Date:   Wed,  2 Nov 2022 08:25:40 -0700
-Message-Id: <20221102152540.2389891-2-nathan@kernel.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221102152540.2389891-1-nathan@kernel.org>
-References: <20221102152540.2389891-1-nathan@kernel.org>
+        s=k20201202; t=1667402855;
+        bh=hUMH3kogeaEGr2FmRDxDjl277jnXJkiytyvOR+dvAgo=;
+        h=From:To:Cc:Subject:Date:From;
+        b=QcmfDof65Dj/WWk3IHoJ+u78L27TQc6+kJIR5G0PrG2kohGJhF3rBnI9wHS7VHgHK
+         N8HiNvWQ/13NR5v/RJd2qaJ7E/iFNUEXmZN/AYEwQnSDGaPsvq44WdwfAz+TJAd8sf
+         KX+ik7vapmvV5cbtkkIP6own963IhU7OMU2ozEMr6+PSTH+WdIVwYm4nhgWe2w+oK9
+         lEM420OrJzOdyrl04JrCEleFEZOOdxwzSKac2MrAc9VF5ifIb3nKfEU1YrVlwRdj5q
+         lsczXwErPnDVLizIrrYwe8Fg2osMLMg/fKZwjkejOAHkkEIMmOfJwRz897pHFwYYHG
+         nar8nxzSdfl/w==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan+linaro@kernel.org>)
+        id 1oqFeB-0000C8-8M; Wed, 02 Nov 2022 16:27:19 +0100
+From:   Johan Hovold <johan+linaro@kernel.org>
+To:     Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>
+Cc:     Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>
+Subject: [PATCH] thermal: qcom-spmi-adc-tm5: suppress probe-deferral error message
+Date:   Wed,  2 Nov 2022 16:26:30 +0100
+Message-Id: <20221102152630.696-1-johan+linaro@kernel.org>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
@@ -59,68 +61,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-indirect call targets are validated against the expected function
-pointer prototype to make sure the call target is valid to help mitigate
-ROP attacks. If they are not identical, there is a failure at run time,
-which manifests as either a kernel panic or thread getting killed. A
-proposed warning in clang aims to catch these at compile time, which
-reveals:
+Drivers should not be logging errors on probe deferral. Switch to using
+dev_err_probe() to log failures when parsing the devicetree to avoid
+errors like:
 
-  drivers/gpu/drm/amd/amdgpu/../pm/swsmu/amdgpu_smu.c:3008:29: error: incompatible function pointer types initializing 'int (*)(void *, uint32_t, long *, uint32_t)' (aka 'int (*)(void *, unsigned int, long *, unsigned int)') with an expression of type 'int (void *, enum PP_OD_DPM_TABLE_COMMAND, long *, uint32_t)' (aka 'int (void *, enum PP_OD_DPM_TABLE_COMMAND, long *, unsigned int)') [-Werror,-Wincompatible-function-pointer-types-strict]
-          .odn_edit_dpm_table      = smu_od_edit_dpm_table,
-                                     ^~~~~~~~~~~~~~~~~~~~~
-  1 error generated.
+	qcom-spmi-adc-tm5 c440000.spmi:pmic@0:adc-tm@3400: get dt data failed: -517
 
-There are only two implementations of ->odn_edit_dpm_table() in 'struct
-amd_pm_funcs': smu_od_edit_dpm_table() and pp_odn_edit_dpm_table(). One
-has a second parameter type of 'enum PP_OD_DPM_TABLE_COMMAND' and the
-other uses 'u32'. Ultimately, smu_od_edit_dpm_table() calls
-->od_edit_dpm_table() from 'struct pptable_funcs' and
-pp_odn_edit_dpm_table() calls ->odn_edit_dpm_table() from 'struct
-pp_hwmgr_func', which both have a second parameter type of 'enum
-PP_OD_DPM_TABLE_COMMAND'.
+when a channel is not yet available.
 
-Update the type parameter in both the prototype in 'struct amd_pm_funcs'
-and pp_odn_edit_dpm_table() to 'enum PP_OD_DPM_TABLE_COMMAND', which
-cleans up the warning.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-Reported-by: Sami Tolvanen <samitolvanen@google.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
 ---
- drivers/gpu/drm/amd/include/kgd_pp_interface.h   | 3 ++-
- drivers/gpu/drm/amd/pm/powerplay/amd_powerplay.c | 3 ++-
- 2 files changed, 4 insertions(+), 2 deletions(-)
+ drivers/thermal/qcom/qcom-spmi-adc-tm5.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/drivers/gpu/drm/amd/include/kgd_pp_interface.h b/drivers/gpu/drm/amd/include/kgd_pp_interface.h
-index a40ead44778a..d18162e9ed1d 100644
---- a/drivers/gpu/drm/amd/include/kgd_pp_interface.h
-+++ b/drivers/gpu/drm/amd/include/kgd_pp_interface.h
-@@ -354,7 +354,8 @@ struct amd_pm_funcs {
- 	int (*get_power_profile_mode)(void *handle, char *buf);
- 	int (*set_power_profile_mode)(void *handle, long *input, uint32_t size);
- 	int (*set_fine_grain_clk_vol)(void *handle, uint32_t type, long *input, uint32_t size);
--	int (*odn_edit_dpm_table)(void *handle, uint32_t type, long *input, uint32_t size);
-+	int (*odn_edit_dpm_table)(void *handle, enum PP_OD_DPM_TABLE_COMMAND type,
-+				  long *input, uint32_t size);
- 	int (*set_mp1_state)(void *handle, enum pp_mp1_state mp1_state);
- 	int (*smu_i2c_bus_access)(void *handle, bool acquire);
- 	int (*gfx_state_change_set)(void *handle, uint32_t state);
-diff --git a/drivers/gpu/drm/amd/pm/powerplay/amd_powerplay.c b/drivers/gpu/drm/amd/pm/powerplay/amd_powerplay.c
-index ec055858eb95..1159ae114dd0 100644
---- a/drivers/gpu/drm/amd/pm/powerplay/amd_powerplay.c
-+++ b/drivers/gpu/drm/amd/pm/powerplay/amd_powerplay.c
-@@ -838,7 +838,8 @@ static int pp_set_fine_grain_clk_vol(void *handle, uint32_t type, long *input, u
- 	return hwmgr->hwmgr_func->set_fine_grain_clk_vol(hwmgr, type, input, size);
- }
+diff --git a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+index a3310bf061cb..c70615d2d771 100644
+--- a/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
++++ b/drivers/thermal/qcom/qcom-spmi-adc-tm5.c
+@@ -1031,10 +1031,8 @@ static int adc_tm5_probe(struct platform_device *pdev)
+ 		return irq;
  
--static int pp_odn_edit_dpm_table(void *handle, uint32_t type, long *input, uint32_t size)
-+static int pp_odn_edit_dpm_table(void *handle, enum PP_OD_DPM_TABLE_COMMAND type,
-+				 long *input, uint32_t size)
- {
- 	struct pp_hwmgr *hwmgr = handle;
+ 	ret = adc_tm5_get_dt_data(adc_tm, node);
+-	if (ret) {
+-		dev_err(dev, "get dt data failed: %d\n", ret);
+-		return ret;
+-	}
++	if (ret)
++		return dev_err_probe(dev, ret, "get dt data failed\n");
  
+ 	ret = adc_tm->data->init(adc_tm);
+ 	if (ret) {
 -- 
-2.38.1
+2.37.3
 
