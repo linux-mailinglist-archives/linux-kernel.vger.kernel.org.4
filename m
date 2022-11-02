@@ -2,54 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C848C6168B1
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:25:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1F0A6168B4
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:25:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231824AbiKBQZJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 12:25:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41060 "EHLO
+        id S231418AbiKBQZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 12:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44772 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231222AbiKBQYe (ORCPT
+        with ESMTP id S231758AbiKBQYf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 12:24:34 -0400
-Received: from mail-io1-f69.google.com (mail-io1-f69.google.com [209.85.166.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 27A095FA4
+        Wed, 2 Nov 2022 12:24:35 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696CE6248
         for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 09:19:49 -0700 (PDT)
-Received: by mail-io1-f69.google.com with SMTP id f25-20020a5d8799000000b006a44e33ddb6so14476243ion.1
+Received: by mail-il1-f198.google.com with SMTP id i11-20020a056e02152b00b003007c106191so16787935ilu.9
         for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 09:19:49 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=to:from:subject:message-id:date:mime-version:x-gm-message-state
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=WuSpMg6jpkSc98wDnd1IFQKREWSr/w4x6W3idg3S90w=;
-        b=6596ZQ98ur+tBWjcZsrKzY3nH44IjxO6utJnJ9w0EYkus0xw8Ab1kvRnZEivz4EWRT
-         3OTVdWF7nOlzkEyqJfaNBJELBJjhFy7EHIU+HtyZkysD0A3IRxLdvxquXoSJnlhOsYhu
-         REciiSofXVw/hI25+S3x5g9j3sduyk8jMMVrsdLZALKf46bghZI5kmdHGF/MMIY1IffJ
-         uyxahfv3H2dHW5Asn++VOfZganBecGUDw/e6nnhdAzd5d/2nH4afFgZZ7pCk+pmmrpyD
-         nHgB4CCC3iZD8ElbuH3iMYuGsjjucH45mOuJaDnHSDby+BgRtcG3xs5N/TIwIQ9q0tYf
-         SmQw==
-X-Gm-Message-State: ACrzQf1gqsthIB8X1moEZqWAtUkceDBBE78hbyk/0SZFkUB4SsgIy6t9
-        gbQN4CNWSyQCFichWV50G/HXHK0z5DhhMqF+EK7jKuD1LNWl
-X-Google-Smtp-Source: AMsMyM62P8DExrr3vduoVun5da4oeuWTM1WY1lHqwKQS3qoKYtsNBk1NKJRUldNCSgK0JuFEA95WrPuYBa1SINXO7p+YyIpzpm3h
+        bh=7Pv570SEvnmFF3irGKaCn8miqYpUbWAxcs7BzkE51DA=;
+        b=ix+FTHdI93EwL6upR0xoAH77ievtJgsBqllWOFhpK61LwmzmbDoRsuWMtsEyCvussa
+         Gbg5h5gfiO8XWkxk0wTe4uSOXTuhZoH96VEzmfVhwtS3DVOpxK/jY6XVJowyHkff/UAd
+         gFu/EYh2nvObMAdA1qc/IkvIYpo9IjNPucusv4IF/FjpNBWif71shiNQ6fzC+vviXcMi
+         QUgbw2L+NgzhUwAv0hpk5X8nu16uTuFiYg2ng1v9eg0PNkl2u6H8dhSSCcx/eja0BF2x
+         HcZG3JzAYifZLgsX0We7b8thxTyLyjuEQkImupE5TQLJtvJ9ttx3WOMOCUW0vAAd2oPf
+         a3gA==
+X-Gm-Message-State: ACrzQf0HjUMM6EfklovrEAHze3LkO023nJDuRowL2d03uPyKuXOrVqKD
+        mAKzh5VjH/w4+3Wrhrn4NMdEILUEh44PLyy4gm4a9uvkwAqa
+X-Google-Smtp-Source: AMsMyM4sFq040U2C8tvm3d3YRBUdzdH1I4h7UiuQIjP4qkaYcpMkOF1TrdPykSmFLqxUVkVuakMltVWoS1/gw1tqo+bFiq+6yAGk
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:be3:b0:300:c33d:4ad7 with SMTP id
- d3-20020a056e020be300b00300c33d4ad7mr6499696ilu.150.1667405988511; Wed, 02
+X-Received: by 2002:a92:c70f:0:b0:300:9aa6:a0d2 with SMTP id
+ a15-20020a92c70f000000b003009aa6a0d2mr13737762ilp.317.1667405988797; Wed, 02
  Nov 2022 09:19:48 -0700 (PDT)
 Date:   Wed, 02 Nov 2022 09:19:48 -0700
 X-Google-Appengine-App-Id: s~syzkaller
 X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a4496905ec7f35b7@google.com>
-Subject: [syzbot] BUG: unable to handle kernel paging request in vmx_handle_exit_irqoff
-From:   syzbot <syzbot+8cdd16fd5a6c0565e227@syzkaller.appspotmail.com>
-To:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
-        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mingo@redhat.com, pbonzini@redhat.com, seanjc@google.com,
-        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, x86@kernel.org
+Message-ID: <000000000000a8a5cc05ec7f35fd@google.com>
+Subject: [syzbot] possible deadlock in btrfs_lock_root_node
+From:   syzbot <syzbot+a033efd03287efd49df1@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -60,105 +58,194 @@ Hello,
 
 syzbot found the following issue on:
 
-HEAD commit:    61c3426aca2c Add linux-next specific files for 20221102
-git tree:       linux-next
-console output: https://syzkaller.appspot.com/x/log.txt?x=1238c561880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=acb529cc910d907c
-dashboard link: https://syzkaller.appspot.com/bug?extid=8cdd16fd5a6c0565e227
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
+git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
+console output: https://syzkaller.appspot.com/x/log.txt?x=10bc7961880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
+dashboard link: https://syzkaller.appspot.com/bug?extid=a033efd03287efd49df1
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+userspace arch: arm64
 
 Unfortunately, I don't have any reproducer for this issue yet.
 
 Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/cc56d88dd6a3/disk-61c3426a.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/5921b65b080f/vmlinux-61c3426a.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/39cbd355fedd/bzImage-61c3426a.xz
+disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
 
 IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8cdd16fd5a6c0565e227@syzkaller.appspotmail.com
+Reported-by: syzbot+a033efd03287efd49df1@syzkaller.appspotmail.com
 
-BUG: unable to handle page fault for address: fffffbc0000001d8
-#PF: supervisor read access in kernel mode
-#PF: error_code(0x0000) - not-present page
-PGD 23ffe4067 P4D 23ffe4067 PUD 0 
-Oops: 0000 [#1] PREEMPT SMP KASAN
-CPU: 0 PID: 5970 Comm: syz-executor.4 Not tainted 6.1.0-rc3-next-20221102-syzkaller #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-RIP: 0010:gate_offset arch/x86/include/asm/desc_defs.h:100 [inline]
-RIP: 0010:handle_external_interrupt_irqoff arch/x86/kvm/vmx/vmx.c:6818 [inline]
-RIP: 0010:vmx_handle_exit_irqoff arch/x86/kvm/vmx/vmx.c:6830 [inline]
-RIP: 0010:vmx_handle_exit_irqoff+0x334/0x750 arch/x86/kvm/vmx/vmx.c:6822
-Code: 00 01 be 01 03 00 00 48 89 ef e8 27 a4 e8 ff e9 96 fd ff ff e8 9d 3d 5c 00 48 89 e8 48 ba 00 00 00 00 00 fc ff df 48 c1 e8 03 <0f> b6 0c 10 48 8d 45 01 48 89 c6 48 c1 ee 03 0f b6 14 16 48 89 ee
-RSP: 0018:ffffc90005667b38 EFLAGS: 00010806
-RAX: 1fffffc0000001d8 RBX: ffff88804eabc000 RCX: ffffc9000a923000
-RDX: dffffc0000000000 RSI: ffffffff8120a3b3 RDI: 0000000000000005
-RBP: fffffe0000000ec0 R08: 0000000000000005 R09: 0000000080000000
-R10: 0000000080000000 R11: 0000000000000000 R12: 00000000800000ec
-R13: 0000000080000000 R14: 00000000142ec3c6 R15: ffff88804eabc038
-FS:  00007f1a62148700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: fffffbc0000001d8 CR3: 0000000025903000 CR4: 00000000003526f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-Call Trace:
- <TASK>
- vcpu_enter_guest+0x33d1/0x59e0 arch/x86/kvm/x86.c:10815
- vcpu_run arch/x86/kvm/x86.c:10964 [inline]
- kvm_arch_vcpu_ioctl_run+0xa80/0x2b90 arch/x86/kvm/x86.c:11185
- kvm_vcpu_ioctl+0x570/0xfc0 arch/x86/kvm/../../../virt/kvm/kvm_main.c:4065
+======================================================
+WARNING: possible circular locking dependency detected
+6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0 Not tainted
+------------------------------------------------------
+syz-executor.3/1107 is trying to acquire lock:
+ffff000112e0b598 (&mm->mmap_lock){++++}-{3:3}, at: __might_fault+0x54/0xb4 mm/memory.c:5576
+
+but task is already holding lock:
+ffff00011a821388 (btrfs-root-00){++++}-{3:3}, at: __btrfs_tree_read_lock fs/btrfs/locking.c:134 [inline]
+ffff00011a821388 (btrfs-root-00){++++}-{3:3}, at: btrfs_tree_read_lock fs/btrfs/locking.c:140 [inline]
+ffff00011a821388 (btrfs-root-00){++++}-{3:3}, at: btrfs_read_lock_root_node+0x13c/0x1c0 fs/btrfs/locking.c:279
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #3 (btrfs-root-00){++++}-{3:3}:
+       down_write_nested+0x64/0xd8 kernel/locking/rwsem.c:1662
+       __btrfs_tree_lock fs/btrfs/locking.c:196 [inline]
+       btrfs_tree_lock fs/btrfs/locking.c:203 [inline]
+       btrfs_lock_root_node+0x140/0x1d0 fs/btrfs/locking.c:256
+       commit_cowonly_roots+0x64/0x3b8 fs/btrfs/transaction.c:1284
+       btrfs_commit_transaction+0x948/0x12d8 fs/btrfs/transaction.c:2366
+       btrfs_commit_super+0x84/0xa0 fs/btrfs/disk-io.c:4426
+       close_ctree+0x1dc/0x60c fs/btrfs/disk-io.c:4580
+       btrfs_put_super+0x20/0x30 fs/btrfs/super.c:392
+       generic_shutdown_super+0x8c/0x190 fs/super.c:491
+       kill_anon_super+0x24/0x44 fs/super.c:1085
+       btrfs_kill_super+0x24/0x3c fs/btrfs/super.c:2440
+       deactivate_locked_super+0x70/0xe8 fs/super.c:332
+       deactivate_super+0xd0/0xd4 fs/super.c:363
+       cleanup_mnt+0x1f8/0x234 fs/namespace.c:1186
+       __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
+       task_work_run+0xc4/0x14c kernel/task_work.c:177
+       resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+       do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
+       prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+       exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+       el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+       el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+
+-> #2 (&fs_info->reloc_mutex){+.+.}-{3:3}:
+       __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
+       __mutex_lock kernel/locking/mutex.c:747 [inline]
+       mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
+       btrfs_commit_transaction+0x824/0x12d8 fs/btrfs/transaction.c:2306
+       btrfs_commit_super+0x84/0xa0 fs/btrfs/disk-io.c:4426
+       close_ctree+0x1dc/0x60c fs/btrfs/disk-io.c:4580
+       btrfs_put_super+0x20/0x30 fs/btrfs/super.c:392
+       generic_shutdown_super+0x8c/0x190 fs/super.c:491
+       kill_anon_super+0x24/0x44 fs/super.c:1085
+       btrfs_kill_super+0x24/0x3c fs/btrfs/super.c:2440
+       deactivate_locked_super+0x70/0xe8 fs/super.c:332
+       deactivate_super+0xd0/0xd4 fs/super.c:363
+       cleanup_mnt+0x1f8/0x234 fs/namespace.c:1186
+       __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
+       task_work_run+0xc4/0x14c kernel/task_work.c:177
+       resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
+       do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
+       prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
+       exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
+       el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:637
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+       el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+
+-> #1 (sb_internal#2){.+.+}-{0:0}:
+       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
+       __sb_start_write include/linux/fs.h:1826 [inline]
+       sb_start_intwrite include/linux/fs.h:1948 [inline]
+       start_transaction+0x360/0x944 fs/btrfs/transaction.c:683
+       btrfs_join_transaction+0x30/0x40 fs/btrfs/transaction.c:795
+       btrfs_dirty_inode+0x50/0x140 fs/btrfs/inode.c:6103
+       btrfs_update_time+0x1c0/0x1e8 fs/btrfs/inode.c:6145
+       inode_update_time fs/inode.c:1872 [inline]
+       touch_atime+0x1f0/0x4a8 fs/inode.c:1945
+       file_accessed include/linux/fs.h:2516 [inline]
+       btrfs_file_mmap+0x50/0x88 fs/btrfs/file.c:2407
+       call_mmap include/linux/fs.h:2192 [inline]
+       mmap_region+0x7fc/0xc14 mm/mmap.c:1752
+       do_mmap+0x644/0x97c mm/mmap.c:1540
+       vm_mmap_pgoff+0xe8/0x1d0 mm/util.c:552
+       ksys_mmap_pgoff+0x1cc/0x278 mm/mmap.c:1586
+       __do_sys_mmap arch/arm64/kernel/sys.c:28 [inline]
+       __se_sys_mmap arch/arm64/kernel/sys.c:21 [inline]
+       __arm64_sys_mmap+0x58/0x6c arch/arm64/kernel/sys.c:21
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+       el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+
+-> #0 (&mm->mmap_lock){++++}-{3:3}:
+       check_prev_add kernel/locking/lockdep.c:3095 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+       validate_chain kernel/locking/lockdep.c:3829 [inline]
+       __lock_acquire+0x1530/0x30a4 kernel/locking/lockdep.c:5053
+       lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
+       __might_fault+0x7c/0xb4 mm/memory.c:5577
+       _copy_to_user include/linux/uaccess.h:134 [inline]
+       copy_to_user include/linux/uaccess.h:160 [inline]
+       btrfs_ioctl_get_subvol_rootref+0x3a8/0x4bc fs/btrfs/ioctl.c:3203
+       btrfs_ioctl+0xa08/0xa64 fs/btrfs/ioctl.c:5556
+       vfs_ioctl fs/ioctl.c:51 [inline]
+       __do_sys_ioctl fs/ioctl.c:870 [inline]
+       __se_sys_ioctl fs/ioctl.c:856 [inline]
+       __arm64_sys_ioctl+0xd0/0x140 fs/ioctl.c:856
+       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+       el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
+
+other info that might help us debug this:
+
+Chain exists of:
+  &mm->mmap_lock --> &fs_info->reloc_mutex --> btrfs-root-00
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(btrfs-root-00);
+                               lock(&fs_info->reloc_mutex);
+                               lock(btrfs-root-00);
+  lock(&mm->mmap_lock);
+
+ *** DEADLOCK ***
+
+1 lock held by syz-executor.3/1107:
+ #0: ffff00011a821388 (btrfs-root-00){++++}-{3:3}, at: __btrfs_tree_read_lock fs/btrfs/locking.c:134 [inline]
+ #0: ffff00011a821388 (btrfs-root-00){++++}-{3:3}, at: btrfs_tree_read_lock fs/btrfs/locking.c:140 [inline]
+ #0: ffff00011a821388 (btrfs-root-00){++++}-{3:3}, at: btrfs_read_lock_root_node+0x13c/0x1c0 fs/btrfs/locking.c:279
+
+stack backtrace:
+CPU: 1 PID: 1107 Comm: syz-executor.3 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
+Call trace:
+ dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
+ show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
+ __dump_stack lib/dump_stack.c:88 [inline]
+ dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
+ dump_stack+0x1c/0x58 lib/dump_stack.c:113
+ print_circular_bug+0x2c4/0x2c8 kernel/locking/lockdep.c:2053
+ check_noncircular+0x14c/0x154 kernel/locking/lockdep.c:2175
+ check_prev_add kernel/locking/lockdep.c:3095 [inline]
+ check_prevs_add kernel/locking/lockdep.c:3214 [inline]
+ validate_chain kernel/locking/lockdep.c:3829 [inline]
+ __lock_acquire+0x1530/0x30a4 kernel/locking/lockdep.c:5053
+ lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
+ __might_fault+0x7c/0xb4 mm/memory.c:5577
+ _copy_to_user include/linux/uaccess.h:134 [inline]
+ copy_to_user include/linux/uaccess.h:160 [inline]
+ btrfs_ioctl_get_subvol_rootref+0x3a8/0x4bc fs/btrfs/ioctl.c:3203
+ btrfs_ioctl+0xa08/0xa64 fs/btrfs/ioctl.c:5556
  vfs_ioctl fs/ioctl.c:51 [inline]
  __do_sys_ioctl fs/ioctl.c:870 [inline]
  __se_sys_ioctl fs/ioctl.c:856 [inline]
- __x64_sys_ioctl+0x193/0x200 fs/ioctl.c:856
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7f1a6148b5a9
-Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
-RSP: 002b:00007f1a62148168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
-RAX: ffffffffffffffda RBX: 00007f1a615abf80 RCX: 00007f1a6148b5a9
-RDX: 0000000000000000 RSI: 000000000000ae80 RDI: 0000000000000005
-RBP: 00007f1a614e67b0 R08: 0000000000000000 R09: 0000000000000000
-R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffcaaf540cf R14: 00007f1a62148300 R15: 0000000000022000
- </TASK>
-Modules linked in:
-CR2: fffffbc0000001d8
----[ end trace 0000000000000000 ]---
-RIP: 0010:gate_offset arch/x86/include/asm/desc_defs.h:100 [inline]
-RIP: 0010:handle_external_interrupt_irqoff arch/x86/kvm/vmx/vmx.c:6818 [inline]
-RIP: 0010:vmx_handle_exit_irqoff arch/x86/kvm/vmx/vmx.c:6830 [inline]
-RIP: 0010:vmx_handle_exit_irqoff+0x334/0x750 arch/x86/kvm/vmx/vmx.c:6822
-Code: 00 01 be 01 03 00 00 48 89 ef e8 27 a4 e8 ff e9 96 fd ff ff e8 9d 3d 5c 00 48 89 e8 48 ba 00 00 00 00 00 fc ff df 48 c1 e8 03 <0f> b6 0c 10 48 8d 45 01 48 89 c6 48 c1 ee 03 0f b6 14 16 48 89 ee
-RSP: 0018:ffffc90005667b38 EFLAGS: 00010806
-RAX: 1fffffc0000001d8 RBX: ffff88804eabc000 RCX: ffffc9000a923000
-RDX: dffffc0000000000 RSI: ffffffff8120a3b3 RDI: 0000000000000005
-RBP: fffffe0000000ec0 R08: 0000000000000005 R09: 0000000080000000
-R10: 0000000080000000 R11: 0000000000000000 R12: 00000000800000ec
-R13: 0000000080000000 R14: 00000000142ec3c6 R15: ffff88804eabc038
-FS:  00007f1a62148700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: fffffbc0000001d8 CR3: 0000000025903000 CR4: 00000000003526f0
-DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-----------------
-Code disassembly (best guess):
-   0:	00 01                	add    %al,(%rcx)
-   2:	be 01 03 00 00       	mov    $0x301,%esi
-   7:	48 89 ef             	mov    %rbp,%rdi
-   a:	e8 27 a4 e8 ff       	callq  0xffe8a436
-   f:	e9 96 fd ff ff       	jmpq   0xfffffdaa
-  14:	e8 9d 3d 5c 00       	callq  0x5c3db6
-  19:	48 89 e8             	mov    %rbp,%rax
-  1c:	48 ba 00 00 00 00 00 	movabs $0xdffffc0000000000,%rdx
-  23:	fc ff df
-  26:	48 c1 e8 03          	shr    $0x3,%rax
-* 2a:	0f b6 0c 10          	movzbl (%rax,%rdx,1),%ecx <-- trapping instruction
-  2e:	48 8d 45 01          	lea    0x1(%rbp),%rax
-  32:	48 89 c6             	mov    %rax,%rsi
-  35:	48 c1 ee 03          	shr    $0x3,%rsi
-  39:	0f b6 14 16          	movzbl (%rsi,%rdx,1),%edx
-  3d:	48 89 ee             	mov    %rbp,%rsi
+ __arm64_sys_ioctl+0xd0/0x140 fs/ioctl.c:856
+ __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
+ invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
+ el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
+ do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
+ el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
+ el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
+ el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
 
 
 ---
