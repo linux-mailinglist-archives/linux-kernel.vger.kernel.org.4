@@ -2,337 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 977A36170AE
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 23:30:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE0436170B4
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 23:31:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231476AbiKBWaQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 18:30:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40730 "EHLO
+        id S231520AbiKBWbE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 18:31:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41306 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230175AbiKBWaO (ORCPT
+        with ESMTP id S231514AbiKBWa7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 18:30:14 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 992DC959B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 15:30:12 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id cl5so241116wrb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 15:30:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=jms.id.au; s=google;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9n8sGvPP+TowhsrDlUS2g6QOItwoCJK1HaaC6LkI2GU=;
-        b=FMMjLZ+C7Rp3e7iSbVu8nPmQVwj2Cc7utbq+XfsCt510oX3wKH2qnlWHkk/+e9x/iA
-         9V3bgRP9NcoaG8Scejt24CR1JayfCg6AiGUTZDMXveiqaEQbyReE7VRZkWkX6DCYV/wo
-         zlCnFElE9GwRqkeW3xl8sltNXBldPG3DQ/D6Q=
+        Wed, 2 Nov 2022 18:30:59 -0400
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E18DBC36
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 15:30:57 -0700 (PDT)
+Received: by mail-il1-f199.google.com with SMTP id j7-20020a056e02154700b003007885e7beso259634ilu.20
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 15:30:57 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9n8sGvPP+TowhsrDlUS2g6QOItwoCJK1HaaC6LkI2GU=;
-        b=juQYA56vp/tNZNd3617WW2+Xrw4oo4mdiocQVRMmgzxqTW8aw6zjHtGudpBtBwLDpW
-         F4b0kJjNnVX3ppIiKvMnjCvdZ6sBEgPMMngeCHGJoGDU/dVNSzH/UvV4ex3nOk7z/TsP
-         vkgNFl7seAUTWCHhDr2+Dlw3sOlTSHkwF0djZwFLrSdG9QGlfSQYhF4qKYNmfs+SalY9
-         /EvVQUqUZ3xdojBT6v3kDluKRB+7pKQ0kGrGvOtygUhyRIrGFXdPGKuyzUu2Ncqb8dNN
-         cHYP7Md6qi1MFV2ZqO/oGp+dFSlLeAxaC0rR7pBSiiePKwkyNFwLd1+g3D3A6YYyTpJC
-         6bUw==
-X-Gm-Message-State: ACrzQf31SouclHnUA9CuitFKQNa6loQC8IyjPLbdPgcVJuAnGggoQQoS
-        mjS8Cj5loh5iB2gSzRsbmLFEXbGAWTi6bBNZrvk=
-X-Google-Smtp-Source: AMsMyM5BGRj2h7Q+N0lt+Hxwo83HYrV7eJPioCZTLE4SVROAdq8OB5aMDR3mnELajFnnkxm52KdjOvKqntq2k8x3mZk=
-X-Received: by 2002:adf:e19e:0:b0:22e:64de:39fa with SMTP id
- az30-20020adfe19e000000b0022e64de39famr16147629wrb.369.1667428210957; Wed, 02
- Nov 2022 15:30:10 -0700 (PDT)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=F9t5rxiD3HbBUPq6/6mfgx1apalEX8dQGz5+gh984xo=;
+        b=CFAV127WvtFPcQiNTIchS34UnoejU3rzlHCDJxou9OLahLAWYlRrQsD7aCFHVt4mH2
+         LOLbwiy7KJaxPdKD5MkPaJXgjeMIxhIidPtXqy+Cl3mcFBIkr5bEVuFGzmJvn246XOJS
+         ysRnJc1dkhJQgUtStZlfj2l8O+Xgp47kXzYFKIp49nxrxLl+nDLAAjPFYhBMAu30sxjq
+         LEga43rptNSAypoDniwGzyw1KAcdYSqOSgH0RkuMqYe+cvSTVieRIoHvU62G2r8twR2y
+         pZnFs7T1GVe+CJmHmSG+qe9Razw9X2L1i2xwP2qdbMrnWdOiBWOdjIhyLrZJObxDt5Zl
+         Gung==
+X-Gm-Message-State: ACrzQf3/Y7TTWdGdN48kV0g96149QGOypPJ3ZOPNYC4NTRbbp6XyNYEO
+        iN5qXAJk5NHWgt9brdkyDz+BvR9NB3hAVh8iXkFCLwGhYnAt
+X-Google-Smtp-Source: AMsMyM5Oh95NtQfvBOGDmU7xx1PnSvfcLj5yYyut7wTKcKLky28OCiIBzDZeQutliXIvAwa4206qexk2Wb8wclQJa0FMKAzHvlCE
 MIME-Version: 1.0
-References: <20221101112134.673869-1-j.neuschaefer@gmx.net>
-In-Reply-To: <20221101112134.673869-1-j.neuschaefer@gmx.net>
-From:   Joel Stanley <joel@jms.id.au>
-Date:   Wed, 2 Nov 2022 22:29:58 +0000
-Message-ID: <CACPK8XfnRExua7ZhyAkMNUNwUtmcXrBL3phf9ZMCzpBMN452hw@mail.gmail.com>
-Subject: Re: [PATCH v3] ARM: Add wpcm450_defconfig for Nuvoton WPCM450
-To:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-Cc:     openbmc@lists.ozlabs.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Russell King <linux@armlinux.org.uk>
+X-Received: by 2002:a92:cc49:0:b0:300:d9d7:fe36 with SMTP id
+ t9-20020a92cc49000000b00300d9d7fe36mr218061ilq.225.1667428256652; Wed, 02 Nov
+ 2022 15:30:56 -0700 (PDT)
+Date:   Wed, 02 Nov 2022 15:30:56 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ed23c905ec846460@google.com>
+Subject: [syzbot] WARNING in __btrfs_free_extent
+From:   syzbot <syzbot+560e6a32d484d7293e37@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,UPPERCASE_50_75 autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 1 Nov 2022 at 11:22, Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.ne=
-t> wrote:
->
-> This defconfig aims to offer a reasonable set of defaults for all
-> systems running on a Nuvoton WPCM450 chip.
+Hello,
 
-I was going to ask if we could instead have a common nuvoton
-defconfig, but this is an ARMv5 part so we can't also select the ARMv7
-npcm750.
+syzbot found the following issue on:
 
-Reviewed-by: Joel Stanley <joel@jms.id.au>
+HEAD commit:    b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=1661bcea880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
+dashboard link: https://syzkaller.appspot.com/bug?extid=560e6a32d484d7293e37
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=15e9ab22880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=152ed4fc880000
 
->
-> Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-> ---
-> v3:
-> - Regenerate for 6.1-rc1 and enable a few Nuvoton-specific options as
->   well as the PECI subsystem
->
-> v2:
-> - Regenerate for 5.19-rc1
-> ---
->  MAINTAINERS                        |   1 +
->  arch/arm/configs/wpcm450_defconfig | 213 +++++++++++++++++++++++++++++
->  2 files changed, 214 insertions(+)
->  create mode 100644 arch/arm/configs/wpcm450_defconfig
->
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index cf0f185023724..cac5a4ad4eb8a 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -2543,6 +2543,7 @@ S:        Maintained
->  W:     https://github.com/neuschaefer/wpcm450/wiki
->  F:     Documentation/devicetree/bindings/*/*wpcm*
->  F:     arch/arm/boot/dts/nuvoton-wpcm450*
-> +F:     arch/arm/configs/wpcm450_defconfig
->  F:     arch/arm/mach-npcm/wpcm450.c
->  F:     drivers/*/*/*wpcm*
->  F:     drivers/*/*wpcm*
-> diff --git a/arch/arm/configs/wpcm450_defconfig b/arch/arm/configs/wpcm45=
-0_defconfig
-> new file mode 100644
-> index 0000000000000..702f2bf909f93
-> --- /dev/null
-> +++ b/arch/arm/configs/wpcm450_defconfig
-> @@ -0,0 +1,213 @@
-> +CONFIG_SYSVIPC=3Dy
-> +CONFIG_NO_HZ_IDLE=3Dy
-> +CONFIG_HIGH_RES_TIMERS=3Dy
-> +CONFIG_PREEMPT=3Dy
-> +CONFIG_IKCONFIG=3Dy
-> +CONFIG_IKCONFIG_PROC=3Dy
-> +CONFIG_LOG_BUF_SHIFT=3D19
-> +CONFIG_CGROUPS=3Dy
-> +CONFIG_BLK_DEV_INITRD=3Dy
-> +CONFIG_CC_OPTIMIZE_FOR_SIZE=3Dy
-> +CONFIG_PROFILING=3Dy
-> +# CONFIG_ARCH_MULTI_V7 is not set
-> +CONFIG_ARCH_NPCM=3Dy
-> +CONFIG_ARCH_WPCM450=3Dy
-> +CONFIG_CPU_DCACHE_WRITETHROUGH=3Dy
-> +CONFIG_AEABI=3Dy
-> +CONFIG_UACCESS_WITH_MEMCPY=3Dy
-> +# CONFIG_ATAGS is not set
-> +CONFIG_ARM_APPENDED_DTB=3Dy
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/24728b72a896/disk-b229b6ca.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/10a3c40c60e1/vmlinux-b229b6ca.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/69f963b02b7e/bzImage-b229b6ca.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/1f4e6872e39d/mount_2.gz
 
-Do you use this? OpenBMC systems tend to just use FIT, so we don't
-need this option.
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+560e6a32d484d7293e37@syzkaller.appspotmail.com
 
-> +CONFIG_KEXEC=3Dy
-> +CONFIG_CPU_FREQ=3Dy
+BTRFS info (device loop0): enabling ssd optimizations
+------------[ cut here ]------------
+BTRFS: Transaction aborted (error -12)
+WARNING: CPU: 1 PID: 3604 at fs/btrfs/extent-tree.c:3067 __btrfs_free_extent+0xbf6/0x2540 fs/btrfs/extent-tree.c:3067
+Modules linked in:
+CPU: 1 PID: 3604 Comm: syz-executor311 Not tainted 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+RIP: 0010:__btrfs_free_extent+0xbf6/0x2540 fs/btrfs/extent-tree.c:3067
+Code: fa 31 c0 e8 7e 29 ae 06 4c 8b 64 24 08 4c 8b 6c 24 10 eb 1a e8 8b 2e 04 fe 48 c7 c7 a0 32 da 8a 44 89 fe 31 c0 e8 da cc cb fd <0f> 0b b3 01 44 0f b6 c3 4c 89 ef 48 c7 c6 00 40 da 8a ba fb 0b 00
+RSP: 0018:ffffc90003c4f600 EFLAGS: 00010246
+RAX: 1d499b28e27a2c00 RBX: ffff88802756c001 RCX: ffff88801ee1d7c0
+RDX: 0000000000000000 RSI: 0000000080000000 RDI: 0000000000000000
+RBP: ffffc90003c4f780 R08: ffffffff816b8dfd R09: ffffed1017364f13
+R10: ffffed1017364f13 R11: 1ffff11017364f12 R12: ffff8880277d2a50
+R13: ffff888070ce3150 R14: 0000000000000001 R15: 00000000fffffff4
+FS:  00005555567bf300(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f1911b2a300 CR3: 000000001e181000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ btrfs_run_delayed_refs_for_head+0xe20/0x1df0 fs/btrfs/extent-tree.c:1943
+ __btrfs_run_delayed_refs+0x25f/0x490 fs/btrfs/extent-tree.c:2008
+ btrfs_run_delayed_refs+0x13b/0x4a0 fs/btrfs/extent-tree.c:2139
+ btrfs_commit_transaction+0x3a9/0x3760 fs/btrfs/transaction.c:2123
+ sync_filesystem+0x1bc/0x220 fs/sync.c:66
+ __do_sys_syncfs fs/sync.c:160 [inline]
+ __se_sys_syncfs+0x8f/0x110 fs/sync.c:149
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7fa6dc2ca1e9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffc86519f18 EFLAGS: 00000246 ORIG_RAX: 0000000000000132
+RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007fa6dc2ca1e9
+RDX: 0000000000000f20 RSI: 000000000000c0c2 RDI: 0000000000000003
+RBP: 00007ffc86519f20 R08: 0000000000000001 R09: 00007fa6dc330036
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000004
+R13: 0000000000000000 R14: 0000100000000000 R15: 0000000000000000
+ </TASK>
 
-Does the wpcm do frequency scaling? If not you could disable this.
 
-> +CONFIG_CPU_FREQ_STAT=3Dy
-> +CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND=3Dy
-> +CONFIG_CPU_IDLE=3Dy
-> +CONFIG_KPROBES=3Dy
-> +CONFIG_JUMP_LABEL=3Dy
-> +CONFIG_STRICT_KERNEL_RWX=3Dy
-> +CONFIG_MODULES=3Dy
-> +CONFIG_MODULE_UNLOAD=3Dy
-> +CONFIG_NET=3Dy
-> +CONFIG_PACKET=3Dy
-> +CONFIG_PACKET_DIAG=3Dy
-> +CONFIG_UNIX=3Dy
-> +CONFIG_UNIX_DIAG=3Dy
-> +CONFIG_INET=3Dy
-> +CONFIG_IP_MULTICAST=3Dy
-> +CONFIG_IP_PNP=3Dy
-> +CONFIG_IP_PNP_DHCP=3Dy
-> +CONFIG_IP_PNP_BOOTP=3Dy
-> +CONFIG_NET_DSA=3Dy
-> +CONFIG_NET_DSA_TAG_DSA=3Dy
-> +CONFIG_NET_DSA_TAG_EDSA=3Dy
-> +CONFIG_NET_DSA_TAG_TRAILER=3Dy
-> +CONFIG_NET_PKTGEN=3Dm
-> +# CONFIG_WIRELESS is not set
-> +CONFIG_DEVTMPFS=3Dy
-> +CONFIG_DEVTMPFS_MOUNT=3Dy
-> +CONFIG_MTD=3Dy
-> +CONFIG_MTD_CMDLINE_PARTS=3Dy
-> +CONFIG_MTD_BLOCK=3Dy
-> +CONFIG_MTD_SPI_NOR=3Dy
-> +CONFIG_MTD_UBI=3Dy
-> +CONFIG_MTD_UBI_FASTMAP=3Dy
-> +CONFIG_MTD_UBI_BLOCK=3Dy
-> +CONFIG_BLK_DEV_LOOP=3Dy
-> +CONFIG_SRAM=3Dy
-> +CONFIG_EEPROM_AT24=3Dy
-> +CONFIG_SCSI=3Dy
-> +# CONFIG_SCSI_PROC_FS is not set
-> +# CONFIG_SCSI_LOWLEVEL is not set
-> +CONFIG_NETDEVICES=3Dy
-> +# CONFIG_NET_VENDOR_ALACRITECH is not set
-> +# CONFIG_NET_VENDOR_AMAZON is not set
-> +# CONFIG_NET_VENDOR_AQUANTIA is not set
-> +# CONFIG_NET_VENDOR_ARC is not set
-> +# CONFIG_NET_VENDOR_BROADCOM is not set
-> +# CONFIG_NET_VENDOR_CADENCE is not set
-> +# CONFIG_NET_VENDOR_CAVIUM is not set
-> +# CONFIG_NET_VENDOR_CIRRUS is not set
-> +# CONFIG_NET_VENDOR_CORTINA is not set
-> +# CONFIG_NET_VENDOR_EZCHIP is not set
-> +# CONFIG_NET_VENDOR_FARADAY is not set
-> +# CONFIG_NET_VENDOR_GOOGLE is not set
-> +# CONFIG_NET_VENDOR_HISILICON is not set
-> +# CONFIG_NET_VENDOR_HUAWEI is not set
-> +# CONFIG_NET_VENDOR_INTEL is not set
-> +# CONFIG_NET_VENDOR_MARVELL is not set
-> +# CONFIG_NET_VENDOR_MELLANOX is not set
-> +# CONFIG_NET_VENDOR_MICREL is not set
-> +# CONFIG_NET_VENDOR_MICROCHIP is not set
-> +# CONFIG_NET_VENDOR_MICROSEMI is not set
-> +# CONFIG_NET_VENDOR_NI is not set
-> +# CONFIG_NET_VENDOR_NATSEMI is not set
-> +# CONFIG_NET_VENDOR_NETRONOME is not set
-> +# CONFIG_NET_VENDOR_PENSANDO is not set
-> +# CONFIG_NET_VENDOR_QUALCOMM is not set
-> +# CONFIG_NET_VENDOR_RENESAS is not set
-> +# CONFIG_NET_VENDOR_ROCKER is not set
-> +# CONFIG_NET_VENDOR_SAMSUNG is not set
-> +# CONFIG_NET_VENDOR_SEEQ is not set
-> +# CONFIG_NET_VENDOR_SOLARFLARE is not set
-> +# CONFIG_NET_VENDOR_SMSC is not set
-> +# CONFIG_NET_VENDOR_SOCIONEXT is not set
-> +# CONFIG_NET_VENDOR_STMICRO is not set
-> +# CONFIG_NET_VENDOR_SYNOPSYS is not set
-> +# CONFIG_NET_VENDOR_VIA is not set
-> +# CONFIG_NET_VENDOR_WIZNET is not set
-> +# CONFIG_NET_VENDOR_XILINX is not set
-> +CONFIG_REALTEK_PHY=3Dy
-> +# CONFIG_WLAN is not set
-> +CONFIG_INPUT_FF_MEMLESS=3Dy
-> +CONFIG_INPUT_EVDEV=3Dy
-> +CONFIG_KEYBOARD_QT1070=3Dm
-> +CONFIG_KEYBOARD_GPIO=3Dy
-> +# CONFIG_INPUT_MOUSE is not set
-> +CONFIG_VT_HW_CONSOLE_BINDING=3Dy
-> +CONFIG_LEGACY_PTY_COUNT=3D16
-> +CONFIG_SERIAL_8250=3Dy
-> +CONFIG_SERIAL_8250_CONSOLE=3Dy
-> +CONFIG_SERIAL_8250_NR_UARTS=3D6
-> +CONFIG_SERIAL_8250_RUNTIME_UARTS=3D6
-> +CONFIG_SERIAL_8250_EXTENDED=3Dy
-> +CONFIG_SERIAL_8250_MANY_PORTS=3Dy
-> +CONFIG_SERIAL_OF_PLATFORM=3Dy
-> +CONFIG_NPCM7XX_KCS_IPMI_BMC=3Dy
-> +CONFIG_IPMI_KCS_BMC_CDEV_IPMI=3Dy
-> +CONFIG_IPMI_KCS_BMC_SERIO=3Dy
-> +CONFIG_HW_RANDOM=3Dy
-> +# CONFIG_HW_RANDOM_NPCM is not set
-> +CONFIG_I2C=3Dy
-> +# CONFIG_I2C_COMPAT is not set
-> +CONFIG_I2C_CHARDEV=3Dy
-> +CONFIG_I2C_MUX=3Dy
-> +CONFIG_I2C_NPCM=3Dy
-> +CONFIG_SPI=3Dy
-> +CONFIG_SPI_NPCM_PSPI=3Dy
-> +CONFIG_PINCTRL_SINGLE=3Dy
-> +CONFIG_PINCTRL_WPCM450=3Dy
-> +CONFIG_POWER_SUPPLY=3Dy
-> +CONFIG_SENSORS_NPCM7XX=3Dy
-> +# CONFIG_THERMAL is not set
-> +CONFIG_WATCHDOG=3Dy
-> +CONFIG_NPCM7XX_WATCHDOG=3Dy
-> +CONFIG_MFD_SYSCON=3Dy
-> +CONFIG_REGULATOR=3Dy
-> +CONFIG_REGULATOR_FIXED_VOLTAGE=3Dy
-> +CONFIG_FB=3Dy
-> +CONFIG_FB_MODE_HELPERS=3Dy
-> +# CONFIG_HID is not set
-> +CONFIG_USB_CHIPIDEA=3Dy
-> +CONFIG_USB_CHIPIDEA_UDC=3Dy
-> +CONFIG_USB_GADGET=3Dy
-> +CONFIG_USB_CONFIGFS=3Dy
-> +CONFIG_USB_CONFIGFS_SERIAL=3Dy
-> +CONFIG_USB_CONFIGFS_ACM=3Dy
-> +CONFIG_USB_CONFIGFS_EEM=3Dy
-> +CONFIG_USB_CONFIGFS_MASS_STORAGE=3Dy
-> +CONFIG_USB_CONFIGFS_F_FS=3Dy
-> +CONFIG_USB_CONFIGFS_F_HID=3Dy
-> +CONFIG_NEW_LEDS=3Dy
-> +CONFIG_LEDS_CLASS=3Dy
-> +CONFIG_LEDS_GPIO=3Dy
-> +CONFIG_LEDS_TRIGGERS=3Dy
-> +CONFIG_LEDS_TRIGGER_TIMER=3Dy
-> +CONFIG_LEDS_TRIGGER_HEARTBEAT=3Dy
-> +CONFIG_LEDS_TRIGGER_DEFAULT_ON=3Dy
-> +CONFIG_DMADEVICES=3Dy
-> +CONFIG_SYNC_FILE=3Dy
-> +# CONFIG_VIRTIO_MENU is not set
-> +# CONFIG_VHOST_MENU is not set
-> +CONFIG_STAGING=3Dy
-> +# CONFIG_IOMMU_SUPPORT is not set
-> +CONFIG_PWM=3Dy
-> +CONFIG_GENERIC_PHY=3Dy
-> +CONFIG_PECI=3Dy
-> +CONFIG_PECI_CPU=3Dy
-> +CONFIG_MSDOS_FS=3Dy
-> +CONFIG_VFAT_FS=3Dy
-> +CONFIG_TMPFS=3Dy
-> +CONFIG_UBIFS_FS=3Dy
-> +CONFIG_SQUASHFS=3Dy
-> +CONFIG_SQUASHFS_XZ=3Dy
-> +CONFIG_SQUASHFS_ZSTD=3Dy
-> +# CONFIG_NETWORK_FILESYSTEMS is not set
-> +CONFIG_NLS_CODEPAGE_437=3Dy
-> +CONFIG_NLS_CODEPAGE_850=3Dy
-> +CONFIG_NLS_ISO8859_1=3Dy
-> +CONFIG_NLS_ISO8859_2=3Dy
-> +CONFIG_NLS_UTF8=3Dy
-> +CONFIG_KEYS=3Dy
-> +CONFIG_HARDENED_USERCOPY=3Dy
-> +CONFIG_FORTIFY_SOURCE=3Dy
-> +CONFIG_CRYPTO_RSA=3Dy
-> +CONFIG_CRYPTO_AES=3Dy
-> +CONFIG_CRYPTO_CBC=3Dm
-> +CONFIG_CRYPTO_PCBC=3Dm
-> +CONFIG_CRYPTO_CCM=3Dy
-> +CONFIG_CRYPTO_GCM=3Dy
-> +CONFIG_CRYPTO_CMAC=3Dy
-> +CONFIG_CRYPTO_SHA256=3Dy
-> +CONFIG_ASYMMETRIC_KEY_TYPE=3Dy
-> +CONFIG_ASYMMETRIC_PUBLIC_KEY_SUBTYPE=3Dy
-> +CONFIG_X509_CERTIFICATE_PARSER=3Dy
-> +CONFIG_PKCS7_MESSAGE_PARSER=3Dy
-> +CONFIG_SYSTEM_TRUSTED_KEYRING=3Dy
-> +CONFIG_CRC_CCITT=3Dy
-> +CONFIG_CRC_ITU_T=3Dm
-> +CONFIG_LIBCRC32C=3Dy
-> +CONFIG_PRINTK_TIME=3Dy
-> +CONFIG_DEBUG_KERNEL=3Dy
-> +CONFIG_MAGIC_SYSRQ=3Dy
-> +CONFIG_DEBUG_FS=3Dy
-> +# CONFIG_SCHED_DEBUG is not set
-> +# CONFIG_DEBUG_PREEMPT is not set
-> +# CONFIG_FTRACE is not set
-> +CONFIG_IO_STRICT_DEVMEM=3Dy
-> +CONFIG_DEBUG_USER=3Dy
-> +CONFIG_DEBUG_LL=3Dy
-> +CONFIG_DEBUG_LL_UART_8250=3Dy
-> +CONFIG_DEBUG_UART_PHYS=3D0xb8000000
-> +CONFIG_DEBUG_UART_VIRT=3D0x0ff000000
-> +CONFIG_DEBUG_UART_8250_WORD=3Dy
-> +CONFIG_EARLY_PRINTK=3Dy
-> --
-> 2.35.1
->
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
