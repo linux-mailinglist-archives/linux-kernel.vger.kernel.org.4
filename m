@@ -2,113 +2,275 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75CAE616072
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 11:06:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 21414616075
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 11:07:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbiKBKF5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 06:05:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34866 "EHLO
+        id S230248AbiKBKHA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 06:07:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbiKBKFw (ORCPT
+        with ESMTP id S229761AbiKBKG6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 06:05:52 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77AC3248EF;
-        Wed,  2 Nov 2022 03:05:46 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id c15-20020a17090a1d0f00b0021365864446so1466347pjd.4;
-        Wed, 02 Nov 2022 03:05:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eMZGynsVBldapEggqqWQswcP13k8N/tUCzBN2hX6JyE=;
-        b=d9lCCQ8FCYRg9DNALNcFIs8V9hUc0Hqr0lFto04YGeUtZeaMJ+pAU2GnyLFefClHPm
-         SPKDAQOGwJHWQJSzaFKWANRX4pwQp71ztCoeNMnuZ1yajxuCGEjM5k3BOaO3mptSdwO+
-         vzsoKVxIwpAlFUr3qH+AlbrlXgEBehnEjRvQgSng+zrEEDy8N2YdPVP5Lqvj6KKGJf9W
-         25v2MC7LL3+5MFywyKrIZZIQnlx54IIL9emLxScDB3ftSqy7B141yqn/KzkKLabImFFq
-         yF4Y6CLJ1HpelOO02uIy1dpNuOLD/3dC72ThmEm3f6k8tIiEOwiyHWDDRbk1xYI0Kt7K
-         Dfdw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eMZGynsVBldapEggqqWQswcP13k8N/tUCzBN2hX6JyE=;
-        b=5fOaPh/bLU/7+v4Y4xuuzGwHUDKyt69jUfQB3VSk5H+bVVg+E5x2rcgVc46QH/lM5P
-         DbWF2ny9ph47FpUcK+GTFHTKXXvKoJRQwwt4qy7Z1626JwLIOeV31jJqFcA5vb59S+86
-         BWGNyKbFj8EwwJ6/kTEMtkP2qi1eyvr8zRqUj7ATtcl9oabNRqkruUjx7uZvQU8UvOL/
-         D3LbVLUSuo+9oj7DHIrJvd8bgnPSvC4L/xL4qSxxw8m9jf5nHKsZCO5viDbFVjUM597W
-         MqoKlXisfYRg4kwFwfdIFPNaLKzKy6DQxEUpW8IvCnfStFFPZeNM5Xz/S1uERTYc/sO6
-         UKaA==
-X-Gm-Message-State: ACrzQf23i6ri77nyxeAhqhjqsQhHOnBeM+pMH45DcjRn8gVy5w5yafIa
-        yE7ZyKv+4pcpWvyKn3O2Xac=
-X-Google-Smtp-Source: AMsMyM6N/TVoUpFfF8uqOCgAGyxQlYCLDX1VKzXJpP7qR0LgZ0g7sekiQ7GxJ7VGtfFiKQTDGcpEIw==
-X-Received: by 2002:a17:90b:4a04:b0:213:587b:204e with SMTP id kk4-20020a17090b4a0400b00213587b204emr24733399pjb.98.1667383545929;
-        Wed, 02 Nov 2022 03:05:45 -0700 (PDT)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id 9-20020a631749000000b0046f1e8cb30dsm7229747pgx.26.2022.11.02.03.05.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 03:05:45 -0700 (PDT)
-Message-ID: <b705e85b-c58b-fea4-508f-99ca4bc830b0@gmail.com>
-Date:   Wed, 2 Nov 2022 19:05:39 +0900
+        Wed, 2 Nov 2022 06:06:58 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C64AF23E91;
+        Wed,  2 Nov 2022 03:06:55 -0700 (PDT)
+Received: from kwepemi500008.china.huawei.com (unknown [172.30.72.57])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N2MxP6Dghzbc85;
+        Wed,  2 Nov 2022 18:06:49 +0800 (CST)
+Received: from localhost.localdomain (10.67.165.2) by
+ kwepemi500008.china.huawei.com (7.221.188.139) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 2 Nov 2022 18:06:53 +0800
+From:   Yihang Li <liyihang9@huawei.com>
+To:     <jejb@linux.ibm.com>, <martin.petersen@oracle.com>
+CC:     <bvanassche@acm.org>, <john.garry@huawei.com>,
+        <chenxiang66@hisilicon.com>, <daejun7.park@samsung.com>,
+        <damien.lemoal@opensource.wdc.com>, <yanaijie@huawei.com>,
+        <duoming@zju.edu.cn>, <linux-scsi@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <prime.zeng@hisilicon.com>,
+        <yangxingui@huawei.com>, <linuxarm@huawei.com>,
+        <liyihang9@huawei.com>
+Subject: [PATCH] scsi: libsas: Check and update the link rate during discovery
+Date:   Wed, 2 Nov 2022 18:05:55 +0800
+Message-ID: <20221102100555.3537275-1-liyihang9@huawei.com>
+X-Mailer: git-send-email 2.30.0
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 0/2] Documentation: Start Spanish translation and
- include HOWTO
-To:     Bagas Sanjaya <bagasdotme@gmail.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Carlos Bilbao <carlos.bilbao@amd.com>
-Cc:     linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        bilbao@vt.edu, willy@infradead.org,
-        miguel.ojeda.sandonis@gmail.com, Akira Yokosawa <akiyks@gmail.com>
-References: <20221024145521.69465-1-carlos.bilbao@amd.com>
- <87wn8ext0m.fsf@meer.lwn.net> <5fd2092e-2f3e-27c0-66a9-94e02efa1e8d@amd.com>
- <87edumxow2.fsf@meer.lwn.net>
- <0d210871-a24a-8e61-b734-ae6df992011d@gmail.com>
-Content-Language: en-US
-From:   Akira Yokosawa <akiyks@gmail.com>
-In-Reply-To: <0d210871-a24a-8e61-b734-ae6df992011d@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.165.2]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemi500008.china.huawei.com (7.221.188.139)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Nov 2022 16:13:57 +0700, Bagas Sanjaya wrote:
-> On 11/2/22 05:59, Jonathan Corbet wrote:
->>
->> I'm sorry, it was b4 that complained, not git.  To see it happen, try:
->>
->>   b4 am 20221024145521.69465-1-carlos.bilbao@amd.com
->>
->> There were, in fact, two zero-width spaces in there, and two more in
->> Junio Hamano's name.  I've taken them all out, and learned all about
->> searching for weird characters in Emacs as a side benefit :)
->>
->> Series is now applied, thanks.
->>
-> 
-> Hi jon,
-> 
-> There is still outstanding issue regarding language identifier slug [1],
-> which isn't addressed yet.
-> 
-> [1]: https://lore.kernel.org/linux-doc/48b4a5a1-2a52-4159-699b-9db73a012892@gmail.com/
-To be clear, I'm OK with sp_SP/ with the explanation given in the changelog
-of v3 1/2.
+   +----------+              +----------+
+   |          |              |          |
+   |          |--- 12.0 G ---|          |--- 12.0 G --- SAS  disk
+   |initiator |              | Expander |
+   | device   |--- 12.0 G ---|          |--- 12.0 G --- SAS  disk
+   |          |              |          |
+   |          |--- 12.0 G ---|          |--- 6.0 G --- SATA disk
+   |          |              |          |
+   |      phy0|--- 12.0 G ---|          |--- 6.0 G --- SATA disk
+   |          |              |          |
+   +----------+              +----------+
 
-Regards,
-Akira
+In the scenario where the expander device is connected to a wide port,
+the preceding figure shows the link topology after initialization.
+All physical PHYs negotiate connections at the rate of 12 Gbit, and
+the expander SATA PHY negotiates connections at the rate of 6 Gbit.
 
-> [2]: https://lore.kernel.org/linux-doc/Y0ork19pGMhZq8qn@debian.me/
-> 
-> Thanks.
-> 
+We found that when the FIO was running, if phy0 was link down due to link
+instability, and the link connection was reestablished after a period of
+time. During the physical link disconnection, the physical PHY gradually
+decreases the link rate, attempts to renegotiate the link rate and
+establish the connection. This is an HW behavior. When the physical PHY
+try to re-establish the link at a link rate of 3 Gbit and the physical
+link is successfully established, the negotiated link rate is 3 Gbit.
+Like this:
+
+   +----------+              +----------+
+   |          |              |          |
+   |          |--- 12.0 G ---|          |--- 12.0 G --- SAS  disk
+   |initiator |              | Expander |
+   | device   |--- 12.0 G ---|          |--- 12.0 G --- SAS  disk
+   |          |              |          |
+   |          |--- 12.0 G ---|          |--- 6.0 G --- SATA disk
+   |          |              |          |
+   |      phy0|--- 3.0 G ----|          |--- 6.0 G --- SATA disk
+   |          |              |          |
+   +----------+              +----------+
+
+SATA disk which connected to expander PHY maybe reject IO request due to
+the connection setup error (OPEN_REJECT-CONNECTION RATE NOT SUPPORTED).
+The log as follows:
+
+[175712.419423] hisi_sas_v3_hw 0000:74:02.0: erroneous completion iptt=2985 task=00000000268357f1 dev id=10 exp 0x500e004aaaaaaa1f phy9 addr=500e004aaaaaaa09 CQ hdr: 0x102b 0xa0ba9 0x1000 0x20000 Error info: 0x200 0x0 0x0 0x0
+
+After analysis, it is concluded that: when one of the physical links
+connected on the wide port is re-established, the link rate of the port
+and expander device and the expander SATA PHY are not updated. As a
+result, the expander PHY attached to a SATA PHY is using link rate
+(6.0 Gbit) greater than the physical PHY link rate (3.0 Gbit).
+
+Therefore, add function sas_check_port_linkrate() to check whether the
+link rate of physical PHY which is connected to the wide port changes
+after the phy up occur, if the link rate of the newly established
+physical phy is lower than the link rate of the port, a smaller link rate
+value is transmitted to port->linkrate.
+
+Use the sas_update_linkrate_root_expander() function to update the root
+expander link rate. Traverse all expanders connected to the port, check
+and update expander PHYs that need to be updated and triggers revalidation.
+
+Signed-off-by: Yihang Li <liyihang9@huawei.com>
+---
+ drivers/scsi/libsas/sas_discover.c | 19 ++++++-
+ drivers/scsi/libsas/sas_expander.c | 79 ++++++++++++++++++++++++++++++
+ drivers/scsi/libsas/sas_internal.h |  1 +
+ 3 files changed, 98 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/scsi/libsas/sas_discover.c b/drivers/scsi/libsas/sas_discover.c
+index 110549030bcf..57b5446a3a21 100644
+--- a/drivers/scsi/libsas/sas_discover.c
++++ b/drivers/scsi/libsas/sas_discover.c
+@@ -164,6 +164,20 @@ static int sas_get_port_device(struct asd_sas_port *port)
+ 	return 0;
+ }
+ 
++static void sas_check_port_linkrate(struct asd_sas_port *port)
++{
++	u32 link_rate = port->linkrate;
++	struct asd_sas_phy *phy;
++
++	list_for_each_entry(phy, &port->phy_list, port_phy_el)
++		link_rate = min(link_rate, phy->linkrate);
++
++	if (port->linkrate != link_rate) {
++		port->linkrate = link_rate;
++		sas_update_linkrate_root_expander(port->port_dev);
++	}
++}
++
+ /* ---------- Discover and Revalidate ---------- */
+ 
+ int sas_notify_lldd_dev_found(struct domain_device *dev)
+@@ -434,8 +448,11 @@ static void sas_discover_domain(struct work_struct *work)
+ 
+ 	clear_bit(DISCE_DISCOVER_DOMAIN, &port->disc.pending);
+ 
+-	if (port->port_dev)
++	if (port->port_dev) {
++		if (dev_is_expander(port->port_dev->dev_type))
++			sas_check_port_linkrate(port);
+ 		return;
++	}
+ 
+ 	error = sas_get_port_device(port);
+ 	if (error)
+diff --git a/drivers/scsi/libsas/sas_expander.c b/drivers/scsi/libsas/sas_expander.c
+index 5ce251830104..6f067cc6f2e2 100644
+--- a/drivers/scsi/libsas/sas_expander.c
++++ b/drivers/scsi/libsas/sas_expander.c
+@@ -1951,6 +1951,75 @@ static int sas_discover_new(struct domain_device *dev, int phy_id)
+ 	return res;
+ }
+ 
++static void sas_ex_update_linkrate(struct domain_device *parent)
++{
++	struct expander_device *ex = &parent->ex_dev;
++	int i = 0, end = ex->num_phys;
++
++	for ( ; i < end; i++) {
++		struct ex_phy *ex_phy = &ex->ex_phy[i];
++		struct domain_device *child;
++
++		list_for_each_entry(child, &parent->ex_dev.children, siblings)
++			if (SAS_ADDR(child->sas_addr) ==
++			    SAS_ADDR(ex_phy->attached_sas_addr))
++				break;
++
++		if (dev_is_sata(child)) {
++			if (child->linkrate > parent->min_linkrate) {
++				struct sas_phy_linkrates rates = {
++					.maximum_linkrate = parent->min_linkrate,
++					.minimum_linkrate = parent->min_linkrate,
++				};
++
++				sas_smp_phy_control(parent, i,
++						    PHY_FUNC_LINK_RESET, &rates);
++				ex_phy->phy_change_count = -1;
++			}
++		}
++
++		if (dev_is_expander(child->dev_type)) {
++			child->min_linkrate = min(parent->min_linkrate,
++						  ex_phy->linkrate);
++			child->max_linkrate = max(parent->max_linkrate,
++						  ex_phy->linkrate);
++			child->linkrate = min(ex_phy->linkrate,
++					      child->max_linkrate);
++			ex_phy->phy_change_count = -1;
++		}
++	}
++}
++
++static void sas_ex_level_update(struct asd_sas_port *port, const int level)
++{
++	struct domain_device *dev;
++
++	list_for_each_entry(dev, &port->dev_list, dev_list_node) {
++		if (dev_is_expander(dev->dev_type)) {
++			struct sas_expander_device *ex =
++				rphy_to_expander_device(dev->rphy);
++
++			if (level == ex->level)
++				sas_ex_update_linkrate(dev);
++		}
++	}
++}
++
++void sas_update_linkrate_root_expander(struct domain_device *dev)
++{
++	struct asd_sas_port *port = dev->port;
++	struct sas_expander_device *ex = rphy_to_expander_device(dev->rphy);
++	int level;
++
++	dev->linkrate = port->linkrate;
++	dev->min_linkrate = port->linkrate;
++	dev->max_linkrate = port->linkrate;
++	dev->ex_dev.ex_change_count = -1;
++
++	for (level = ex->level; level <= port->disc.max_level; level++)
++		sas_ex_level_update(port, level);
++}
++
+ static bool dev_type_flutter(enum sas_device_type new, enum sas_device_type old)
+ {
+ 	if (old == new)
+@@ -2013,6 +2082,7 @@ static int sas_rediscover_dev(struct domain_device *dev, int phy_id,
+ 	} else if (SAS_ADDR(sas_addr) == SAS_ADDR(phy->attached_sas_addr) &&
+ 		   dev_type_flutter(type, phy->attached_dev_type)) {
+ 		struct domain_device *ata_dev = sas_ex_to_ata(dev, phy_id);
++		enum sas_linkrate linkrate = phy->linkrate;
+ 		char *action = "";
+ 
+ 		sas_ex_phy_discover(dev, phy_id);
+@@ -2021,6 +2091,15 @@ static int sas_rediscover_dev(struct domain_device *dev, int phy_id,
+ 			action = ", needs recovery";
+ 		pr_debug("ex %016llx phy%02d broadcast flutter%s\n",
+ 			 SAS_ADDR(dev->sas_addr), phy_id, action);
++
++		if (linkrate != phy->linkrate) {
++			pr_debug("ex %016llx phy%d linkrate changed from %d to %d\n",
++				 SAS_ADDR(dev->sas_addr), phy_id,
++				 linkrate, phy->linkrate);
++			sas_unregister_devs_sas_addr(dev, phy_id, last);
++			phy->phy_change_count = -1;
++			ex->ex_change_count = -1;
++		}
+ 		return res;
+ 	}
+ 
+diff --git a/drivers/scsi/libsas/sas_internal.h b/drivers/scsi/libsas/sas_internal.h
+index b54bcf3c9a9d..d26ef24370f6 100644
+--- a/drivers/scsi/libsas/sas_internal.h
++++ b/drivers/scsi/libsas/sas_internal.h
+@@ -48,6 +48,7 @@ int sas_show_oob_mode(enum sas_oob_mode oob_mode, char *buf);
+ 
+ int  sas_register_phys(struct sas_ha_struct *sas_ha);
+ void sas_unregister_phys(struct sas_ha_struct *sas_ha);
++void sas_update_linkrate_root_expander(struct domain_device *dev);
+ 
+ struct asd_sas_event *sas_alloc_event(struct asd_sas_phy *phy, gfp_t gfp_flags);
+ void sas_free_event(struct asd_sas_event *event);
+-- 
+2.30.0
+
