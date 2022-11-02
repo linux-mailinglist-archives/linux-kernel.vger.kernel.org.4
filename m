@@ -2,147 +2,234 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F068616082
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 11:07:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 20FEA61607D
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 11:07:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbiKBKHo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 06:07:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35388 "EHLO
+        id S229487AbiKBKH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 06:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230265AbiKBKHW (ORCPT
+        with ESMTP id S230209AbiKBKHR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 06:07:22 -0400
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2085.outbound.protection.outlook.com [40.107.93.85])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92E1C23EB4;
-        Wed,  2 Nov 2022 03:07:17 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=eYgWAnGx1EkMvINxo+KedobuHzDSNaSQTxSut+wnYOo6hCoSe8ouYi6KrIAOthaP2rz/43Jn7rkFIgobkeBn5kfQvVhRPG4We6N7QhW8crmjyw49e9tRtAj5eX0XVjGatu4i4tVbFtfthGINyf596cmJfWICGZ5pxl3O2VzOfwTWjCuRgZXer+yZNnQeH5Lw+F18Xk0qIRZdQBJVB5bNdyD8S8/8zIba1FtuitCY+vnxwanFBa+HWgwKu+waa+xr0zCqPKTPLA8i3g66eo+Wnl0UpFGtVyDhmJX3YRmP5EhP0rJmpRA+ErJT04zB+Rd49zsdOIEQgnKkjfGndOHAJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=MUPAl5Zix7oHtUGAMN6qayVD5kt8XgrUTJB/qERvbJQ=;
- b=F4q70WA6UYS+Lsx1mb2Aa9IQ3cLXynNRUEKN/yqV/rb606EzIwcNAcUM4LOSR+VqvklCWK2VmPrh5tkuWSqjj8NMKzMlMQUJmwkcNBtKl9K5Bas7ujWkVuNkAqlN1qrqitZoJXSW8xFXMLFcyzw+BiyC2mnl5iM0XJqHw+pgYzvE9MQEImWc7K+li5OlRNcmLXrREGngT7eVqezBIs/2RfzIqWE8bBeJWuM+9fzNLuLHupEG6UW6EtkK8LZLs0+wrkE+FTXwL/4jbsqNA0cAM6mA9vMCfR46Ut5yFwiiYhErvUgQjGs/IiqvAAqEQwq+o4l1Z7mjtejO4q/IRlKz0A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.118.232) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=MUPAl5Zix7oHtUGAMN6qayVD5kt8XgrUTJB/qERvbJQ=;
- b=cpiO8ZR5jtDlc2K13KP7NNk+Z4g+ltIC7x9FMBneyjn+1XTe3GsuheDNu88idzJ2/RLC2usuu6arcJ5ELZRP4NZ449C9txmCMp9DHbZjQdYn+6ar3CDkExGdqL47QW1IAMHiJn/6CkS44jFeiiXeVsdKsqBrSAT/yYnIHFn+xXkzumX4q/Fqp2Gd3jPF9X5iSn2QTExn6RD1v7xL6Ewh5AWp7TIRS35TsDsw4u07tIHosRFedoisuszWpNKIEjKn0hDOaByerqbjeBaMytLCRrA+ENR15ziJfIJFoljL8I2RuVzA/iuFeBIIYGSwxAMDYGigskXxR5kB0YMkwcWDrA==
-Received: from BN9PR03CA0777.namprd03.prod.outlook.com (2603:10b6:408:13a::32)
- by LV2PR12MB6014.namprd12.prod.outlook.com (2603:10b6:408:170::18) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.21; Wed, 2 Nov
- 2022 10:07:16 +0000
-Received: from BN8NAM11FT075.eop-nam11.prod.protection.outlook.com
- (2603:10b6:408:13a:cafe::9c) by BN9PR03CA0777.outlook.office365.com
- (2603:10b6:408:13a::32) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.21 via Frontend
- Transport; Wed, 2 Nov 2022 10:07:16 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.118.232)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.118.232 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.118.232; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.118.232) by
- BN8NAM11FT075.mail.protection.outlook.com (10.13.176.208) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5791.20 via Frontend Transport; Wed, 2 Nov 2022 10:07:15 +0000
-Received: from drhqmail203.nvidia.com (10.126.190.182) by mail.nvidia.com
- (10.127.129.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Wed, 2 Nov 2022
- 03:07:05 -0700
-Received: from drhqmail203.nvidia.com (10.126.190.182) by
- drhqmail203.nvidia.com (10.126.190.182) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Wed, 2 Nov 2022 03:07:05 -0700
-Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.126.190.182) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29 via Frontend
- Transport; Wed, 2 Nov 2022 03:07:05 -0700
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
-        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 5.4 00/64] 5.4.223-rc1 review
-In-Reply-To: <20221102022051.821538553@linuxfoundation.org>
-References: <20221102022051.821538553@linuxfoundation.org>
-X-NVConfidentiality: public
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+        Wed, 2 Nov 2022 06:07:17 -0400
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9E5B23EB1
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 03:07:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1667383636; x=1698919636;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=JCX4B4TGkjLJ3lQDVKPLvWo4xblaY/2CTtdZ/PqgQVk=;
+  b=VfSG+zTMBfIWKiFZCpMJREBwN4+oRaPLwsfE524BgONJTtLr6iLKCRE+
+   ODdY/KqBF8lSiyJh8GEZVOZrttFG4n9su9HI8CJ7Hjcbi4duiuCe/RL6F
+   89gLcV4/yZz1bZrjhHFGOuWa/5tZztGeshFY6FgasB0dHGQWsDXwytfnC
+   le78pgW8zuxAUcZYQEwqZjpKinyKis0jjkob6Ga46LQHU72RamotvpBJ3
+   hQSivAEyf4kNrjzhzwnwYxuCgluYbJ4vzCxPZ1XAV66Jyryz+wEkb+PVj
+   WruvuTlerB7q3iK7He+Zf0r7MqekmZXldXUt4+uAjImhAzD0xFEKm9BA3
+   g==;
+X-IronPort-AV: E=Sophos;i="5.95,232,1661788800"; 
+   d="scan'208";a="213591756"
+Received: from h199-255-45-14.hgst.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 02 Nov 2022 18:07:15 +0800
+IronPort-SDR: zUJE+lwWC5Hiasl17oZCFR7UaIBhJl3Pv5DHyzlY/SnabCrRezkKyImOsn+Jy9JQYRd3Fh0xTW
+ gS56JQfGusM4UQVWP/XbGEozeSI7BEPkFUVfxCqVqfqvdx/VUSoaOsPlsZceiZuCnFcg6uQh9S
+ GNNg550tTrZX2OnkL+naJv2sqoMvzdw7M5JWqUpd/TKMISBuivK9FY2Qxk+he2bkBoNyTJQqUk
+ K6i7zKrPjQe4HSviQP6UVSIftv19fVpSH5CohygWlSap7MUJq2oEwrB16GKqc4jnExVrs5vtO3
+ oJ/jjvOnRmLTkzhU+ShVl1tZ
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 02 Nov 2022 02:26:29 -0700
+IronPort-SDR: QFIBqwNDfEv8JNS4Df0sF8ngbdor94qooIZ9kQUdirbYKuqPNu7nR+VSbdGYTQx5rVtJZSYEIY
+ i3WAzyxSEmq/MR67zR0c/E8cIMN+Lbn9s1uqkVdqcqeBQtimp4LG/tgzoyWWTLjfx39cgf/wO1
+ aNf2sgnOUb6LAD0ditP6ibWEsuUYjQFW5bfdvIa0pJXEo6xckw65jfWUXW7hSO7B22brI7vnAN
+ 6Bm4iPMgEvN+154PMLMP8KSRpCz86Sdm51cBv4fbAbnNRBkiBz47PMalGyA7k6A5BhBgwg41Fo
+ G0M=
+WDCIronportException: Internal
+Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
+  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 02 Nov 2022 03:07:14 -0700
+Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4N2Mxs4sCxz1Rx15
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 03:07:13 -0700 (PDT)
+Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
+        reason="pass (just generated, assumed good)"
+        header.d=opensource.wdc.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
+        opensource.wdc.com; h=content-transfer-encoding:content-type
+        :in-reply-to:organization:from:references:to:content-language
+        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
+        1667383632; x=1669975633; bh=JCX4B4TGkjLJ3lQDVKPLvWo4xblaY/2CTtd
+        Z/PqgQVk=; b=aJLmfK8b3OTnEGUsPon9oaWQU+LVvyVpsghSH0LStXwT6c5iLrX
+        /f7ZUwWc7439u17JVyLYGmt3tb2TrVgwCKxYrJth/8JeWnzaw+dWmHIxOu6oxjTU
+        qPjS7kODMRuGAd7PkN4L7TWdsZzuRPjZ53aYHXxVA9/5KF6L5/VtUiEyHT5+gSrf
+        qSitLo1Yz+lJ7+KqfLAWQEbrJkEm3pFJUJKaUQ0jgcL955cJxft0ksw8Gov9OdVJ
+        tcAKF26bOZdu72uGqaXe7pblnEsh784LWvOnA/rRtrNVcdQAS01v6oj1avDON/xf
+        FK0H19MGhBpgvyyt21ZAehJPSNFB6MZt/CQ==
+X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
+Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
+        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
+        with ESMTP id uFkvISJKParY for <linux-kernel@vger.kernel.org>;
+        Wed,  2 Nov 2022 03:07:12 -0700 (PDT)
+Received: from [10.225.163.24] (unknown [10.225.163.24])
+        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4N2Mxm3H54z1RvTp;
+        Wed,  2 Nov 2022 03:07:07 -0700 (PDT)
+Message-ID: <ff0c2ab7-8e82-40d9-1adf-78ee12846e1f@opensource.wdc.com>
+Date:   Wed, 2 Nov 2022 19:07:06 +0900
 MIME-Version: 1.0
-Message-ID: <ee498ee3-2c4e-469b-8cdf-a8f3c2fcfd7d@drhqmail203.nvidia.com>
-Date:   Wed, 2 Nov 2022 03:07:05 -0700
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: BN8NAM11FT075:EE_|LV2PR12MB6014:EE_
-X-MS-Office365-Filtering-Correlation-Id: c8aacc82-8fff-4722-758f-08dabcba04f9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: k9t9P5SfC46ycNtDhUbI6+/fQ2p5o6d/DvYcXRuVEuMjdwWunRcLATxVhZ3vAyGNMp1UaI9StIcUH91ynjqscfermo8wxFIaDlEcuTnArSqSb9GMD/n5TgW+/1ssxweCLfxhun31U+3M+yT0yl45sFuXzQfeW9gHbJkUAbLOipeITP6Ow4x02CbrZX4Zx3YlbCm34wHX0skvDQRIkxYG4pzV1ccdrCKXhOOhUsFAkG8IKjK/lh+igVSeECvRm5sfVagwl+Bsn2Ju2Npxq4oU2jCkLhokvYkc1QeMB4E7kwH3MyudqLtZZ/BMN9llTo+AO56SP2IUT7hmolRAzsLo0xXfubjTj/1hfwv8DO7hCkN05d0usd4EpL6eD0fi+7BKpoUMb+PidlvZGTTvTDhSbpkyxmckwjl9bXLXG3VfZNd4elfy1+l2E2Sip8sEocTCcdhKjr7g5M11fYoxpxsKkvXEGQN3lSGKx8WaRm3aZe4fAQ4t+2lItnnahGLEgkYJRaTFOBbCcgYv5DpAwpbpEv0SNn+zjGulESQbq1lXHDMOQZ8lSdxrp+FrlgiBgeI96sk3wkxTvbPkN2jWq4oPvxyh2y5uzJWXd/SUErvvyJm5CUBBkbwxIsGA76+gMvLlhqRJvRt4Qkxi2ZqDDC3FrKGcf/l7a/FC4JZ2zvEmkVmWbG+IRzfTLZ/ZtsEXghBJydgZY6wvBHmDsGCkrfM5M9+kKrvcsj+QOmmv8UbYex0tE8AEvJDNIjSGQXd0Rc7FNEyrtkphpxxAl0PT+CWogcW15bW8D+yLF2drPgsdZPN2UOayBlPJuuBt3KdbGjVlXTKC0HVAntFRXstNGcNWJSWdKYo67JoWEHNeN7km3UQ=
-X-Forefront-Antispam-Report: CIP:216.228.118.232;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc7edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(39860400002)(346002)(396003)(376002)(136003)(451199015)(46966006)(36840700001)(40470700004)(47076005)(426003)(7636003)(186003)(31696002)(86362001)(36860700001)(356005)(7416002)(2906002)(5660300002)(8676002)(70206006)(8936002)(82310400005)(4326008)(40460700003)(54906003)(70586007)(82740400003)(26005)(336012)(6916009)(316002)(478600001)(966005)(41300700001)(40480700001)(31686004);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2022 10:07:15.7711
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: c8aacc82-8fff-4722-758f-08dabcba04f9
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.118.232];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: BN8NAM11FT075.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV2PR12MB6014
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH RFC v3 2/7] ata: libata-scsi: Add
+ ata_internal_queuecommand()
+Content-Language: en-US
+To:     John Garry <john.g.garry@oracle.com>,
+        John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, hare@suse.de, bvanassche@acm.org,
+        hch@lst.de, ming.lei@redhat.com, niklas.cassel@wdc.com
+Cc:     axboe@kernel.dk, jinpu.wang@cloud.ionos.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linuxarm@huawei.com, john.garry2@mail.dcu.ie
+References: <1666693976-181094-1-git-send-email-john.garry@huawei.com>
+ <1666693976-181094-3-git-send-email-john.garry@huawei.com>
+ <08fdb698-0df3-7bc8-e6af-7d13cc96acfa@opensource.wdc.com>
+ <83d9dc82-ea37-4a3c-7e67-1c097f777767@huawei.com>
+ <9a2f30cc-d0e9-b454-d7cd-1b0bd3cf0bb9@opensource.wdc.com>
+ <0e60fab5-8a76-9b7e-08cf-fb791e01ae08@huawei.com>
+ <71b56949-e4d7-fd94-c44a-867080b7a4fa@opensource.wdc.com>
+ <b03b37a2-35dc-5218-7279-ae68678a47ff@huawei.com>
+ <0e4994f7-f131-39b0-c876-f447b71566cd@opensource.wdc.com>
+ <05cf6d61-987b-025d-b694-a58981226b97@oracle.com>
+From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
+Organization: Western Digital Research
+In-Reply-To: <05cf6d61-987b-025d-b694-a58981226b97@oracle.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 02 Nov 2022 03:33:26 +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.223 release.
-> There are 64 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 11/2/22 18:52, John Garry wrote:
+> Hi Damien,
 > 
-> Responses should be made by Fri, 04 Nov 2022 02:20:38 +0000.
-> Anything received after that time might be too late.
+>>>>>
+>>>>> Please also note that for AHCI, I make reserved depth =1, while for SAS
+>>>>> controllers it is greater. This means that in theory we could alloc > 1x
+>>>>> reserved command for SATA disk, but I don't think it matters.
+>>>> Yes, 1 is enough. However, is 1 reserved out of 32 total, meaning that
+>>>> the
+>>>> user can only use 31 tags ? or is it 32+1 reserved ? which we can do
+>>>> since
+>>>> when using the reserved request, we will not use a hw tag (all reserved
+>>>> requests will be non-ncq).
+>>>>
+>>>> The 32 + 1 scheme will work.
+>>>
+>>> Yes, 32 + 1 is what we want. I now think that there is a mistake in my
+>>> code in this series for ahci.
+>>>
+>>> So I think we need for ahci:
+>>>
+>>> can_queue = 33 >
+>> Hmm.. For ATA, can_queue should be only 32. nr_tags is going to be 33
+>> though as we include one tag for a reserved command. No ? (may be I
+>> misunderstand can_queue though).
 > 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.223-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
+> Yes, we want nr_tags=33. But according to semantics of can_queue, it 
+> includes total of regular and reserved tags. This is because tag_set 
+> depth is total of regular and reserved tags, and we subtract reserved 
+> tags from total depth in blk_mq_init_bitmaps():
 > 
-> thanks,
+> int blk_mq_init_bitmaps(.., unsigned int queue_depth, unsigned int 
+> reserved, ..)
+> {
+> 	unsigned int depth = queue_depth - reserved;
+> 	...
 > 
-> greg k-h
+> 	if (bt_alloc(bitmap_tags, depth, round_robin, node
+> 
+> 
+> So we want a change like this as well:
+> 
+> diff --git a/drivers/ata/ahci.h b/drivers/ata/ahci.h
+> index da7ee8bec165..cbcc337055a7 100644
+> --- a/drivers/ata/ahci.h
+> +++ b/drivers/ata/ahci.h
+> @@ -390,7 +390,7 @@ extern const struct attribute_group 
+> *ahci_sdev_groups[];
+>   */
+> #define AHCI_SHT(drv_name)                                             \
+>         __ATA_BASE_SHT(drv_name),                                       \
+> -       .can_queue              = AHCI_MAX_CMDS,                        \
+> +       .can_queue              = AHCI_MAX_CMDS + 1,                    \
+>         .sg_tablesize           = AHCI_MAX_SG,                          \
+>         .dma_boundary           = AHCI_DMA_BOUNDARY,                    \
+>         .shost_groups           = ahci_shost_groups,
+> 
+> I know it seems strange, but still 32 tags will only ever be available 
+> for non-internal commands (as it is today) and 1 for ata internal command.
+> 
+>>
+>>> nr_reserved_cmds = 1
+>>>
+>>> while I only have can_queue = 32
+>>
+>> Which seems right to me.
+>>
+>>>
+>>> I need to check that again for ahci driver and AHCI SHT...
+>>>
+>>>> But for CDL command completion handling, we
+>>>> will need a NCQ command to do a read log, to avoid forcing a queue drain.
+>>>> For that to reliably work, we'll need a 31+1+1 setup...
+>>>>
+>>>
+>>> So is your idea to permanently reserve 1 more command from 32 commands ?
+>>
+>> Yes. Command Duration Limits has this weird case were commands may be
+>> failed when exceeding their duration limit with a "good status" and
+>> "sense data available bit" set. This case was defined to avoid the queue
+>> stall that happens with any NCQ error. The way to handle this without
+>> relying on EH (as that would also cause a queue drain) is to issue an
+>> NCQ read log command to fetch the "sense data for successful NCQ
+>> commands" log, to retrieve the sense data for the completed command and
+>> check if it really failed or not. So we absolutely need a reserved
+>> command for this, Without a reserved command, it is a nightmare to
+>> support (tag reuse would be another solution, but it is horrible).
+>>
+>>> Or re-use 1 from 32 (and still also have 1 separate internal command)?
+>>
+>> I am not yet 100% sure if we can treat that internal NCQ read log like
+>> any other read/write request... If we can, then the 1-out-of-32
+>> reservation would not be needed. Need to revisit all the cases we need
+>> to take care of (because in the middle of this CDL completion handling,
+>> regular NCQ errors can happen, resulting in a drive reset that could
+>> wreck everything as we lose the sense data for the completed requests).
+>>
+>> In any case, I think that we can deal with that extra reserved command
+>> on top of you current series. No need to worry about it for now I think.
+>>
+> 
+> So are you saying that you are basing current CDL support on libata 
+> internally managing this extra reserved tag (and so do not need this 
+> SCSI midlayer reserved tag support yet)?
 
-All tests passing for Tegra ...
+Not really. For now, it is using libata EH, that is, when we need the
+internal command for the read log, we know the device is idle and no
+command is on-going. So we send a non-NCQ command which does not have a tag.
 
-Test results for stable-v5.4:
-    10 builds:	10 pass, 0 fail
-    26 boots:	26 pass, 0 fail
-    59 tests:	59 pass, 0 fail
+Ideally, all of this should use a real reserved tag to allow for an NCQ
+read log outside of EH, avoiding the drive queue drain.
 
-Linux version:	5.4.223-rc1-g01e7d36eb536
-Boards tested:	tegra124-jetson-tk1, tegra186-p2771-0000,
-                tegra194-p2972-0000, tegra20-ventana,
-                tegra210-p2371-2180, tegra210-p3450-0000,
-                tegra30-cardhu-a04
+> 
+> Thanks,
+> John
 
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
+-- 
+Damien Le Moal
+Western Digital Research
 
-Jon
