@@ -2,69 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A0CF616A3F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:12:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 056276169FF
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:08:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230259AbiKBRMW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:12:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37602 "EHLO
+        id S231279AbiKBRHh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:07:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231628AbiKBRLk (ORCPT
+        with ESMTP id S231185AbiKBRH1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:11:40 -0400
-Received: from mail-pg1-x532.google.com (mail-pg1-x532.google.com [IPv6:2607:f8b0:4864:20::532])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A01E1A04C;
-        Wed,  2 Nov 2022 10:11:39 -0700 (PDT)
-Received: by mail-pg1-x532.google.com with SMTP id q1so16753666pgl.11;
-        Wed, 02 Nov 2022 10:11:39 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=g3FwrdOXirpvuI71plfb4en5QdORvGmwK8vjtjrbqCY=;
-        b=aZurwhW5CjSNzRBZFaCtmB1HgWHbhp0eR6jNQW/ObU2vasTqsskyUE45GOd9uNrFnF
-         CaWoD33gdMXaB+Z6MTfO+Sqt17DiPuiPP9hwFwdfY4iNa7prRVNAfyRg6mfljD+LU0pe
-         V95Jc6FYjucId3PktJyRnmKFLP/EwaVsQv/G9s9xF6fld9czdVJuKBjlnVeRjF0t9JaZ
-         9gHUw6Ohv5kU93xsjvOzTXWKzsW4VUWKvnaNYy6sU91glzdAONT10RNlXqZXNL48wgbU
-         mOU97X9WoR+c74+TTD1JRWKtxdyNw5EEEFXtt/T7iH+8EgP9C5ygybqRA+ONza0Gmcwp
-         RQ+A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=g3FwrdOXirpvuI71plfb4en5QdORvGmwK8vjtjrbqCY=;
-        b=TlvMHP0U8RAu/Xfbf7Clvg5bxJ9We+vrjIhLd+XQ03eUKoXHhSQeIPkVmC0ABOQV3p
-         ZGk6e26VHvyBnviw+Uvgw5Eze49FJEbNuaw/VYb+FD0iBW/FvajzAFD8+rNropBsAEZE
-         q9i9ZyqRvqgdlldHAVsVSPD+KoIu2VMr8jJJUTR1bW6FzhZkaGJizA/c2Awvleu/17RG
-         coOaXV916SU/6+UHQX08YPA/jFNVaikJmv9RzCAKPAaRO0teJDpZhOsfobe0Ubn0VlGG
-         KwQvnGh/t+qVOyJ3QqpLGtDWFHbjmXp1zEBh9AzQMKsn1DE1m/WoOYSg95kCEZjQHxlg
-         qUGA==
-X-Gm-Message-State: ACrzQf24M0IlWpJLWxzuv5RSpUgFWOgh/Kj15ebDCp7BmmRo0A/+Fe84
-        gOlXRbgd/kRD/IbzkpgvAI8=
-X-Google-Smtp-Source: AMsMyM4rauc2E3YNdM2+SqjDdZDS0uxIT7X9COLIvdi+22KDCynNxHjfjGpWuklSO0EGeInmGAuiPA==
-X-Received: by 2002:a62:5486:0:b0:56e:3a98:dcc with SMTP id i128-20020a625486000000b0056e3a980dccmr400740pfb.63.1667409098797;
-        Wed, 02 Nov 2022 10:11:38 -0700 (PDT)
-Received: from ubuntu ([175.124.254.119])
-        by smtp.gmail.com with ESMTPSA id e11-20020a63500b000000b0042fe1914e26sm7793550pgb.37.2022.11.02.10.11.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 10:11:38 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 10:11:34 -0700
-From:   Hyunwoo Kim <imv4bel@gmail.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     Takashi Iwai <tiwai@suse.de>, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, imv4bel@gmail.com
-Subject: Re: [PATCH RE-SEND] media: dvb-core: Fix UAF due to refcount races
- at releasing
-Message-ID: <20221102171134.GA491335@ubuntu>
-References: <20221031100245.23702-1-tiwai@suse.de>
+        Wed, 2 Nov 2022 13:07:27 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 454C71275A;
+        Wed,  2 Nov 2022 10:07:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1667408847; x=1698944847;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=T+TGu5fyZMwsB1bNV8M5ZhUO/Mv6ZJpYkYI2sMe6tBU=;
+  b=Wo1lwrNavGPj36brrWbSfBVXl/iumMPS2gaDw7hhcfC9VXrgI8TlKXcw
+   ero3OEJxdnIgz19E+4ZPkiuI1QlMPrDpOfTKeKwHV6cyZZhNuf3mXLjjQ
+   OBGAtVOstTbDGfsyADXsCP6fYGsAXWZqI3Q3j7AUoear/w7k7aIlmTmNh
+   /WlqoFNNtaqfRFGidRwflmM9Q3s/K/6xQuh+UlaYvvpm/FbuqxMYVq4ZX
+   thh9YTNGJTXSTyqSWyanCe5oMbkMZZisAkF6wi17t/+SU65idX5Dp2afz
+   HYX68m4z1ofW06+zS/wVKfbIIlqgxWoxU3e+9CB1ZC/M1+sIPOTeoIzV+
+   g==;
+X-IronPort-AV: E=Sophos;i="5.95,234,1661842800"; 
+   d="scan'208";a="187332013"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Nov 2022 10:07:26 -0700
+Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 2 Nov 2022 10:07:24 -0700
+Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
+ (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
+ Transport; Wed, 2 Nov 2022 10:07:24 -0700
+Date:   Wed, 2 Nov 2022 18:12:07 +0100
+From:   Horatiu Vultur <horatiu.vultur@microchip.com>
+To:     Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+CC:     <netdev@vger.kernel.org>, <davem@davemloft.net>, <kuba@kernel.org>,
+        <linux-kernel@vger.kernel.org>, <bryan.whitehead@microchip.com>,
+        <pabeni@redhat.com>, <edumazet@google.com>, <olteanv@gmail.com>,
+        <linux@armlinux.org.uk>, <UNGLinuxDriver@microchip.com>,
+        <andrew@lunn.ch>, <Ian.Saturley@microchip.com>
+Subject: Re: [PATCH net-next V6 1/2] net: lan743x: Remove unused argument in
+ lan743x_common_regs( )
+Message-ID: <20221102171207.omyob44532fu4bvm@soft-dev3-1>
+References: <20221102104834.5555-1-Raju.Lakkaraju@microchip.com>
+ <20221102104834.5555-2-Raju.Lakkaraju@microchip.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="utf-8"
 Content-Disposition: inline
-In-Reply-To: <20221031100245.23702-1-tiwai@suse.de>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+In-Reply-To: <20221102104834.5555-2-Raju.Lakkaraju@microchip.com>
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,15 +66,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Dear media people,
+The 11/02/2022 16:18, Raju Lakkaraju wrote:
 
-This CVE-2022-41218 has been a long time since the vulnerability details and PoC code were released:
-https://www.openwall.com/lists/oss-security/2022/09/24/1
+Hi Raju,
 
-However, many distros are still vulnerable to this issue.
+> Remove the unused argument (i.e. struct ethtool_regs *regs) in
+> lan743x_common_regs( ) function arguments.
+> 
+> Signed-off-by: Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
+> ---
+>  drivers/net/ethernet/microchip/lan743x_ethtool.c | 8 ++------
+>  1 file changed, 2 insertions(+), 6 deletions(-)
+> 
+> diff --git a/drivers/net/ethernet/microchip/lan743x_ethtool.c b/drivers/net/ethernet/microchip/lan743x_ethtool.c
+> index 88f9484cc2a7..fd59708ac4b5 100644
+> --- a/drivers/net/ethernet/microchip/lan743x_ethtool.c
+> +++ b/drivers/net/ethernet/microchip/lan743x_ethtool.c
+> @@ -1190,15 +1190,11 @@ static int lan743x_ethtool_set_wol(struct net_device *netdev,
+>  }
+>  #endif /* CONFIG_PM */
+>  
+> -static void lan743x_common_regs(struct net_device *dev,
+> -				struct ethtool_regs *regs, void *p)
+> -
+> +static void lan743x_common_regs(struct net_device *dev, void *p)
+>  {
+>  	struct lan743x_adapter *adapter = netdev_priv(dev);
+>  	u32 *rb = p;
+>  
+> -	memset(p, 0, (MAX_LAN743X_ETH_REGS * sizeof(u32)));
+> -
 
-If you don't mind, could you please tell me the progress of this patch?
+It seems that you do more here than what you said.
+You remove the unused argument but you also remove the memset. And it
+is a problem because p is not initialized anymore.
 
+>  	rb[ETH_PRIV_FLAGS] = adapter->flags;
+>  	rb[ETH_ID_REV]     = lan743x_csr_read(adapter, ID_REV);
+>  	rb[ETH_FPGA_REV]   = lan743x_csr_read(adapter, FPGA_REV);
+> @@ -1230,7 +1226,7 @@ static void lan743x_get_regs(struct net_device *dev,
+>  {
+>  	regs->version = LAN743X_ETH_REG_VERSION;
+>  
+> -	lan743x_common_regs(dev, regs, p);
+> +	lan743x_common_regs(dev, p);
+>  }
+>  
+>  static void lan743x_get_pauseparam(struct net_device *dev,
+> -- 
+> 2.25.1
+> 
 
-Best Regards,
-Hyunwoo Kim.
+-- 
+/Horatiu
