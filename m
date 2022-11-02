@@ -2,111 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82EE0616DE0
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 20:33:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5AB9B616DE9
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 20:39:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231197AbiKBTdm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 15:33:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51798 "EHLO
+        id S230161AbiKBTjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 15:39:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230179AbiKBTdg (ORCPT
+        with ESMTP id S229742AbiKBTjq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 15:33:36 -0400
-Received: from mail-pl1-x633.google.com (mail-pl1-x633.google.com [IPv6:2607:f8b0:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A09F338AC
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 12:33:35 -0700 (PDT)
-Received: by mail-pl1-x633.google.com with SMTP id p21so13679876plr.7
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 12:33:35 -0700 (PDT)
+        Wed, 2 Nov 2022 15:39:46 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A35112E
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 12:39:45 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id gw22so4279195pjb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 12:39:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
+        d=google.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Is8uxYlhyk8bBxYXj/AJ+5Ed7risnbmV/bZZuRONlGw=;
-        b=YgTo3g4CWnxassQXwnQGCJRK8UV2dkG1gd5qUAMt9TS//89B3+EgDk8JBHMqQRWbqE
-         SasIIt6rr9pasf/tRkH/JpmtucjEENqYnz4Ij31JPs/tyYvKfhh0Xab/ZL8Kv52Brl9z
-         k+6eHolz1b5J42Hw8E/CNYhE3n7UgliU9iEI8=
+        bh=Oy/+InM7thBp0kwixsoFXfh5sgFzh+UFZjFGkPyLYAQ=;
+        b=AlcBvu+Y8a9n0rxdCd7zQ9e17/IgiXWiW1brOwB5ZbqKr0SLoquafVF2YULPC3vlet
+         uSvOds2cnLBsHxmhHE7ndhPTYL5pauSfC7xzaQss2UczgTV3VYIG6/OP33iqNuAJKL+d
+         LvWvNA2iJGJPbsOQpB/Dji8i51YZCf6Q/ISjFxFbxFbku9lnCGmjRd0Dgdx9WZGItFV/
+         2AiTf+3QkbGxpIrmP/8lnU62kw9iNvAiIoGPBkKzwLwHrqSFwtZxTIHgIhpOED9s7cKB
+         3c4cmTHomEsxZCom4U2kcddeyipmi4giT/3jA5bvxdMV/McfpAXZhOh+lEB408GUCwPX
+         AW1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Is8uxYlhyk8bBxYXj/AJ+5Ed7risnbmV/bZZuRONlGw=;
-        b=MjUXPMLeh+Dx4sdk5eI1MwKmInFGLJ+Ao89Jd5fnAR4D5xjeHzMEueKWf9ItNod3f2
-         jsCGtn1a80D7Er2UM/dvkXFvkCPbrzKdl8GV7Xs0PLw/ZiriiJnb8BUrNWG1jkt5cCjW
-         hBRj8JimGAf87nEx+qKeJUfbv8ztJPGvIOdd5tWwTkWAHIrwq4Ie1kU4GsFgQqHqdT8X
-         6RbNIDkly5TDFSBNjlnWmXrjeZykvH8vsFo5m1pi8oSmBX/aWuJ3HN1vXFyLrxnKIMb9
-         8w1+aYKi5O6QHumD0hcLIFyi6b30VtiVfPBNpqUGTmJ7AImG3JuHUtWYLr9w26N/YyoZ
-         WKng==
-X-Gm-Message-State: ACrzQf1oIWG0+HTOWW89cKz8dxMi3upES4eA8aOwed3q55jE6tUoLDWU
-        aAcoF3XisYH5TqXXPHEW/XMRLw==
-X-Google-Smtp-Source: AMsMyM53U0WVK/IltYw2wXUwLPZJui+ftOfV8T9ZqcZx2iahytioyLerdzpOUR84Yg1+mPoG2ixzFA==
-X-Received: by 2002:a17:902:7446:b0:186:a3a1:782d with SMTP id e6-20020a170902744600b00186a3a1782dmr26452013plt.76.1667417615186;
-        Wed, 02 Nov 2022 12:33:35 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id s7-20020a170902988700b001811a197797sm8605891plp.194.2022.11.02.12.33.34
+        bh=Oy/+InM7thBp0kwixsoFXfh5sgFzh+UFZjFGkPyLYAQ=;
+        b=pQ5RcICDHoq8zZIS200cCPU2NoGovmpxHNsiAZ4Gp6va6rmo/vOGpStwxtOc1JRMse
+         XN9QQqJcj2WJsTx9AnqmQqaUztNU7Nxo9I8jVLmiaV9Ew5ON9lKqD91nlJWsrkXthsJP
+         iW1tJaxK0ZeJWim9PWNwZrhbxF1eZv53g0iGzoVb4X+id0GiqLeAKk6fc2uM3vmrnnLg
+         UG9vd2a4JAPtbDoTOUesjHfJfMNiuECt7ut6YrVC253FAVEJ9DD3XLqm5JrRo3SqqXoo
+         mW74guuHxocjIffQTLZvBnH4nwCGfGVSCqqpenILeyklWu9AjJHHCKSSd3fOzs3DbfH/
+         BGvQ==
+X-Gm-Message-State: ACrzQf2iW8MCl0saGPXwx50ckZ8XsqqBW/EX5ela4WIFOOJa7ZJKm08j
+        EWioap+dJof4SqNgP/Lh5EW7OPgS/5wQeA==
+X-Google-Smtp-Source: AMsMyM4nTTPc3fRpd+P93lNOuXEOQVEyD2E+BsPyWFnexxUNkM1wQSGyy2pTEo93wVPY4+XonbOyww==
+X-Received: by 2002:a17:90b:3144:b0:215:db2e:bc6e with SMTP id ip4-20020a17090b314400b00215db2ebc6emr1492273pjb.12.1667417984739;
+        Wed, 02 Nov 2022 12:39:44 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id w2-20020aa79542000000b0054ee4b632dasm8813384pfq.169.2022.11.02.12.39.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 12:33:34 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 12:33:33 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Rasmus Villemoes <rasmus.villemoes@prevas.dk>
-Cc:     Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
-        luc.vanoostenryck@gmail.com, nathan@kernel.org,
-        ndesaulniers@google.com, trix@redhat.com, dlatypov@google.com,
-        vitor@massaru.org, gustavoars@kernel.org,
-        linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
-        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
-        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
-        airlied@linux.ie, daniel@ffwll.ch, linux-kernel@vger.kernel.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-sparse@vger.kernel.org, arnd@kernel.org, mchehab@kernel.org,
-        mauro.chehab@linux.intel.com
-Subject: Re: [PATCH v5] overflow: Introduce overflows_type() and
- castable_to_type()
-Message-ID: <202211021233.02BF0D38@keescook>
-References: <20220926191109.1803094-1-keescook@chromium.org>
- <20221024201125.1416422-1-gwan-gyeong.mun@intel.com>
- <307b90cb-b80d-6ce3-14ae-4a0b2ee5e447@prevas.dk>
+        Wed, 02 Nov 2022 12:39:44 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 19:39:40 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Bo Liu <liubo03@inspur.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] KVM: replace DEFINE_SIMPLE_ATTRIBUTE with
+ DEFINE_DEBUGFS_ATTRIBUTE
+Message-ID: <Y2LHfJYjd1PxPVQq@google.com>
+References: <20221101072506.7307-1-liubo03@inspur.com>
+ <c0b98151-16b6-6d8f-1765-0f7d46682d60@redhat.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <307b90cb-b80d-6ce3-14ae-4a0b2ee5e447@prevas.dk>
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <c0b98151-16b6-6d8f-1765-0f7d46682d60@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 12:52:32PM +0100, Rasmus Villemoes wrote:
-> On 24/10/2022 22.11, Gwan-gyeong Mun wrote:
-> > From: Kees Cook <keescook@chromium.org>
+On Wed, Nov 02, 2022, Paolo Bonzini wrote:
+> On 11/1/22 08:25, Bo Liu wrote:
+> > Fix the following coccicheck warning:
+> >    virt/kvm/kvm_main.c:3847:0-23: WARNING
+> >      vcpu_get_pid_fops should be defined with DEFINE_DEBUGFS_ATTRIBUTE
 > > 
-> > Implement a robust overflows_type() macro to test if a variable or
-> > constant value would overflow another variable or type. This can be
-> > used as a constant expression for static_assert() (which requires a
-> > constant expression[1][2]) when used on constant values. This must be
-> > constructed manually, since __builtin_add_overflow() does not produce
-> > a constant expression[3].
+> > Signed-off-by: Bo Liu <liubo03@inspur.com>
+> > ---
+> >   virt/kvm/kvm_main.c | 2 +-
+> >   1 file changed, 1 insertion(+), 1 deletion(-)
 > > 
-> > Additionally adds castable_to_type(), similar to __same_type(), but for
-> > checking if a constant value would overflow if cast to a given type.
-> > 
+> > diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> > index f1df24c2bc84..3f383f27d3d7 100644
+> > --- a/virt/kvm/kvm_main.c
+> > +++ b/virt/kvm/kvm_main.c
+> > @@ -3844,7 +3844,7 @@ static int vcpu_get_pid(void *data, u64 *val)
+> >   	return 0;
+> >   }
+> > -DEFINE_SIMPLE_ATTRIBUTE(vcpu_get_pid_fops, vcpu_get_pid, NULL, "%llu\n");
+> > +DEFINE_DEBUGFS_ATTRIBUTE(vcpu_get_pid_fops, vcpu_get_pid, NULL, "%llu\n");
+> >   static void kvm_create_vcpu_debugfs(struct kvm_vcpu *vcpu)
+> >   {
 > 
-> > +#define __overflows_type_constexpr(x, T) (			\
-> > +	is_unsigned_type(typeof(x)) ?				\
-> > +		(x) > type_max(typeof(T)) ? 1 : 0		\
-> > +	: is_unsigned_type(typeof(T)) ?				\
-> > +		(x) < 0 || (x) > type_max(typeof(T)) ? 1 : 0	\
-> > +		: (x) < type_min(typeof(T)) ||			\
-> > +		  (x) > type_max(typeof(T)) ? 1 : 0)
-> > +
+> If you really wanted to do this, you would also have to replace
+> debugfs_create_file with debugfs_create_file_unsafe.
 > 
-> Can't all these instances of "foo ? 1 : 0" be simplified to "foo"? That
-> would improve the readability of this thing somewhat IMO.
+> However, this is not a good idea.  The rationale in the .cocci file is that
+> "DEFINE_SIMPLE_ATTRIBUTE + debugfs_create_file() imposes some significant
+> overhead", but this should not really be relevant for a debugfs file.
+> 
+> Such a patch would only make sense if there was a version of
+> debugfs_create_file_unsafe() with a less-terrible name (e.g.
+> debugfs_create_simple_attr?), which could _only_ be used with fops created
+> by DEFINE_DEBUGFS_ATTRIBUTE.  Without such a type-safe trick, the .cocci
+> file is only adding confusion to perfectly fine code.
 
-Oh, good point. :P I'll fix these.
+Heh, some serious deja vu here[1].  This is the second case of identical, flawed
+patches being sent in response to misguided coccinelle warnings in a rather short
+amount of time, the "return min(r, 0)" horror being the other case[2][3].
 
--- 
-Kees Cook
+The min() thing is supposed to be fixed by commit aeb300c1dbfc ("coccinelle: misc:
+minmax: suppress patch generation for err returns").  Is that patch broken, or are
+folks just running old scripts?
+
+As for the DEFINE_DEBUGFS_ATTRIBUTE check, can that warning be downgraded (is that
+even a thing?) or even deleted?  As much as I enjoyed the opportunity to learn more
+about debugfs, the unnecessary confusion and wasted time was/is annoying.
+
+[1] https://lore.kernel.org/all/Yxoo1A2fmlAWruyV@google.com
+[2] https://lore.kernel.org/all/8881d7b4-0c31-cafd-1158-0d42c1c7f43a@redhat.com
+[3] https://lore.kernel.org/all/d8a518c4a4014307b30020b38022d633@AcuMS.aculab.com
