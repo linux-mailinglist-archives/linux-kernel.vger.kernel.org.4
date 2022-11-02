@@ -2,73 +2,79 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F85F616971
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5DF14616977
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:43:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbiKBQmZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 12:42:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36884 "EHLO
+        id S229752AbiKBQmz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 12:42:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231982AbiKBQl2 (ORCPT
+        with ESMTP id S232099AbiKBQmE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 12:41:28 -0400
-Received: from mout02.posteo.de (mout02.posteo.de [185.67.36.66])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B6532F003
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 09:36:31 -0700 (PDT)
-Received: from submission (posteo.de [185.67.36.169]) 
-        by mout02.posteo.de (Postfix) with ESMTPS id 862A5240104
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 17:36:30 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=posteo.eu; s=2017;
-        t=1667406990; bh=eX+FMAd7NbANmWSe6IpcRzcWqKRI+kaeuU5bT7kgyII=;
-        h=Date:Subject:To:Cc:From:From;
-        b=AoMJOF8aLhv55QdO+2kHB1Ft0H9z7RhF/YMNHghRZcEzUGU67WkA97r0IDjOQJnES
-         Y2UfJJeAhlpPy9WnErMyUpO/a06LzXZTW+/v3jkvF6cL2mt4gEihTEoTlTGmBvVCBv
-         ozFc5TDTwLhspwxIiZ5PYoRfmKA9RSr5sQLDLqcAsa7wYkvq5lgloTjhHMYOj3BjYr
-         6/CgVX9+tG2nwG4RmnTmCfPkJkSP84R/LqOOEeA+yF+N27R4EFR5AXb15czip0OHvO
-         3dYO4ezBiRROP/opkga6tY258CrvNcdGePgqXcBOANeOQBJNNNz7wcXZwjSoW8LSxR
-         rzZ479geuaylQ==
-Received: from customer (localhost [127.0.0.1])
-        by submission (posteo.de) with ESMTPSA id 4N2Xb1552zz6ts9;
-        Wed,  2 Nov 2022 17:36:29 +0100 (CET)
-Message-ID: <1c8c03ab-9aa1-d059-11ad-9cafbb0478c5@posteo.de>
-Date:   Wed,  2 Nov 2022 16:36:29 +0000
+        Wed, 2 Nov 2022 12:42:04 -0400
+Received: from mail-oi1-f174.google.com (mail-oi1-f174.google.com [209.85.167.174])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1F132ED4F;
+        Wed,  2 Nov 2022 09:37:06 -0700 (PDT)
+Received: by mail-oi1-f174.google.com with SMTP id l127so3367168oia.8;
+        Wed, 02 Nov 2022 09:37:06 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=8IPGxGLkD8As1GeJY5oeoH1phDYt4Av4JKr4840Jm8Y=;
+        b=ADowVvC+MoMKVj+hjspVatZ+eNLYar0xS00x12LMbMAAois4xhSU5XSoXdEhxAwLU7
+         +rMDxCVwYs3YYOhS8u31mO0lJVoyYffsj+7vbDB11OxeJ+V86iKw8YvfUXDv0f1vQYJj
+         cSWiE677XhIu0lVvQ0meBk08/KVW0IKgkXKZcRkRc1XSq2v/1B2Z/cuOyyB1ZSIAyYQ/
+         Y/1fOhks5NG0kWua8IeWBvhZGaDBtfmXJZ7wI5PdXSeDHOqTE3vOL7EofRGSPKO2GFaa
+         Crf+xY65nxAL5GDW91CFrubKjYaRbVzBNyT3SfZEw2QWrrIowHXoYHPUcw5PyBj9SJ8k
+         s5uw==
+X-Gm-Message-State: ACrzQf1j0+uWg+3xm+EJyy0z7YSP0ap6PHQZ8uOVlN6OI9ESvS2A2R0Q
+        yuK5W8/GotShedP6gAuZJg==
+X-Google-Smtp-Source: AMsMyM6PfkexEnFF5ueqQBi7Z38vRQ66nOVbGxRwh7cGgAQdHJAYlhuoFPMkoiRF/71lDerNONVVNw==
+X-Received: by 2002:a05:6808:118c:b0:34f:9fc9:ce15 with SMTP id j12-20020a056808118c00b0034f9fc9ce15mr5868351oil.220.1667407025923;
+        Wed, 02 Nov 2022 09:37:05 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id n1-20020a4ad401000000b00425806a20f5sm4603995oos.3.2022.11.02.09.37.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 09:37:05 -0700 (PDT)
+Received: (nullmailer pid 4012210 invoked by uid 1000);
+        Wed, 02 Nov 2022 16:37:07 -0000
+Date:   Wed, 2 Nov 2022 11:37:07 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        linux-pm@vger.kernel.or, linux-arm-kernel@lists.infradead.org,
+        Zhang Rui <rui.zhang@intel.com>
+Subject: Re: [PATCH 2/2] dt-bindings: thermal: mediatek: add compatible
+ string for MT7986 SoC
+Message-ID: <166740702669.4012151.14909545026991021834.robh@kernel.org>
 MIME-Version: 1.0
-Subject: Re: [REGRESSION 6.0.x / 6.1.x] NULL dereferencing at tracing
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     linux-kernel@vger.kernel.org, regressions@lists.linux.dev,
-        tiwai@suse.de
-References: <e693eb6b-28d0-d091-3df3-60f2b591c0e7@posteo.de>
- <71829e56-a13f-0462-37a7-a4d64c16f561@posteo.de>
- <25d7e982-f959-d86c-a6e7-5efd1db1e75c@posteo.de>
- <20221102120338.254741f7@rorschach.local.home>
-Content-Language: en-US, de-DE
-Reply-To: 20221031144850.5522b036@rorschach.local.home
-From:   postix@posteo.eu
-In-Reply-To: <20221102120338.254741f7@rorschach.local.home>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02.11.22 17:03, Steven Rostedt wrote:
- > Could you add this patch.
- >
- > https://lore.kernel.org/all/20221101191009.1e7378c8@rorschach.local.home/
 
+On Mon, 31 Oct 2022 22:16:53 +0000, Daniel Golle wrote:
+> Add compatible string 'mediatek,mt7986-thermal' for V3 thermal unit
+> found in MT7981 and MT7986 SoCs.
+> 
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> ---
+>  Documentation/devicetree/bindings/thermal/mediatek-thermal.txt | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-Thanks, this patch fixes the issue for me! Please see the final dmesg 
-output [1].
-
-[1] https://paste.opensuse.org/e8d4fa46
-
-
-All the best
-
---AD
+Acked-by: Rob Herring <robh@kernel.org>
