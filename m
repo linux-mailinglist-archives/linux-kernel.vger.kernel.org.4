@@ -2,69 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 24C7D616189
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:14:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EB78F61617F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:13:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbiKBLNN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 07:13:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50606 "EHLO
+        id S230398AbiKBLNK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 07:13:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiKBLNG (ORCPT
+        with ESMTP id S230295AbiKBLNG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 2 Nov 2022 07:13:06 -0400
-Received: from mail-pl1-x636.google.com (mail-pl1-x636.google.com [IPv6:2607:f8b0:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DA722793E
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 04:12:53 -0700 (PDT)
-Received: by mail-pl1-x636.google.com with SMTP id v17so13228650plo.1
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 04:12:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1OuwW2usJdNl/cGqK4nMOpD/moR27gN+SLRJ4Leuu4k=;
-        b=dRw3oxn3H53aACjL3GYfw7dtwdvsMK1880QSOHc59/ENT8bkAlKRHZT/hOalamoG8/
-         9lc50vfEbZWhSJJZjkhZLOmtLUSU31heslpkhmNAjYYxFkXjS8j/5WSP4db2CM/uG950
-         Hl4ntpNuQxjSezhjmi+JIW4nge0sJbjJM0mrk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=1OuwW2usJdNl/cGqK4nMOpD/moR27gN+SLRJ4Leuu4k=;
-        b=Jo1IsgZ0QsVoa7uKl3d5Bijqbf8J48CbeXpQEDB+5vcyqoZkl3RqRBbE0AgAUx28zP
-         sY/CeKOUwI9Lj41vvCpTffjMZulE3zgcMuQBfYMmhtL6BXUo5k9JMXUB1WGABdEihTQw
-         7bpSUsR5E8GibfqyuCbZtoNBFDvTAluVEkC4pYl3W4tBg/3ID48LdcNqIhrN9rttCrEE
-         ts5LtX9MzuCFTGbAP9QzIGNWuWgropJyAZRcrteaWPbeKy+oynsJLWHrvt6MYz/h5NyZ
-         /155gbyPt/CidbNpW/r3x6MtrZmiGOWP76VGQtZmMxKlQ0AVh3xetCscaAs7yGqzu5p/
-         MpoQ==
-X-Gm-Message-State: ACrzQf3wWGsSrMVxUrL29slfALNPEr2BQHKfP0Irm0uYhZtbhvW2GCz5
-        zn+4ur0NH7L37RGCfsmSQef+gQ==
-X-Google-Smtp-Source: AMsMyM5kCsXr8PIzvmvnr/4VaFllwoBCEHVIe32zo8K09x0XPU02eVQneRy/Zg3f6cB6QlU9qF/Exw==
-X-Received: by 2002:a17:90a:ca13:b0:213:b85a:3bdb with SMTP id x19-20020a17090aca1300b00213b85a3bdbmr21181722pjt.97.1667387514709;
-        Wed, 02 Nov 2022 04:11:54 -0700 (PDT)
-Received: from hsinyi-z840.tpe.corp.google.com ([2401:fa00:1:10:c30f:38e9:6ba:158b])
-        by smtp.gmail.com with ESMTPSA id z20-20020aa79f94000000b0056246403534sm8251048pfr.88.2022.11.02.04.11.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 04:11:54 -0700 (PDT)
-From:   Hsin-Yi Wang <hsinyi@chromium.org>
-To:     Douglas Anderson <dianders@chromium.org>,
-        Sean Paul <seanpaul@chromium.org>
-Cc:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 2/2] drm/bridge: anx7625: register content protect property
-Date:   Wed,  2 Nov 2022 19:11:47 +0800
-Message-Id: <20221102111148.1810314-2-hsinyi@chromium.org>
-X-Mailer: git-send-email 2.38.0.135.g90850a2211-goog
-In-Reply-To: <20221102111148.1810314-1-hsinyi@chromium.org>
-References: <20221102111148.1810314-1-hsinyi@chromium.org>
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E78F124969;
+        Wed,  2 Nov 2022 04:12:52 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 4AB1033725;
+        Wed,  2 Nov 2022 11:12:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1667387560; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IGslLuYGqB44VKqgWWsPNfEWkuclkAOR5dtiKT3iivc=;
+        b=u8ae5WzBrpmlJffHlLWFbpv3efj9JyD7G6wjhBbzZuGnGVN4odZTmkpD0/JhmPwX7LbBBe
+        61yMzwIvO1FCdc66dGM/Q0qbmS+gt+61Aas1rJfYAuPtNq9WuT/VZGe+gXaD73OidK0DI0
+        VwGdZ3wMQ5uHNJTy1tBxa7MLL04Miu8=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1667387560;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=IGslLuYGqB44VKqgWWsPNfEWkuclkAOR5dtiKT3iivc=;
+        b=TKLyUci5Ez3KeN45FsP6tRI63ZUX/B/grSuh76qt0yhqdxCw7Gi3swvJ5VUXgKyBNsNxJ1
+        3fJ7sK0ZCAO4RjDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 39869139D3;
+        Wed,  2 Nov 2022 11:12:40 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id DLLaDahQYmMpagAAMHmgww
+        (envelope-from <hare@suse.de>); Wed, 02 Nov 2022 11:12:40 +0000
+Message-ID: <39f9afc5-9aab-6f7c-b67a-e74e694543d4@suse.de>
+Date:   Wed, 2 Nov 2022 12:12:39 +0100
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH RFC v3 2/7] ata: libata-scsi: Add
+ ata_internal_queuecommand()
+Content-Language: en-US
+To:     Damien Le Moal <damien.lemoal@opensource.wdc.com>,
+        John Garry <john.g.garry@oracle.com>,
+        John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, bvanassche@acm.org, hch@lst.de,
+        ming.lei@redhat.com, niklas.cassel@wdc.com
+Cc:     axboe@kernel.dk, jinpu.wang@cloud.ionos.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linuxarm@huawei.com, john.garry2@mail.dcu.ie
+References: <1666693976-181094-1-git-send-email-john.garry@huawei.com>
+ <1666693976-181094-3-git-send-email-john.garry@huawei.com>
+ <08fdb698-0df3-7bc8-e6af-7d13cc96acfa@opensource.wdc.com>
+ <83d9dc82-ea37-4a3c-7e67-1c097f777767@huawei.com>
+ <9a2f30cc-d0e9-b454-d7cd-1b0bd3cf0bb9@opensource.wdc.com>
+ <0e60fab5-8a76-9b7e-08cf-fb791e01ae08@huawei.com>
+ <71b56949-e4d7-fd94-c44a-867080b7a4fa@opensource.wdc.com>
+ <b03b37a2-35dc-5218-7279-ae68678a47ff@huawei.com>
+ <0e4994f7-f131-39b0-c876-f447b71566cd@opensource.wdc.com>
+ <05cf6d61-987b-025d-b694-a58981226b97@oracle.com>
+ <ff0c2ab7-8e82-40d9-1adf-78ee12846e1f@opensource.wdc.com>
+From:   Hannes Reinecke <hare@suse.de>
+In-Reply-To: <ff0c2ab7-8e82-40d9-1adf-78ee12846e1f@opensource.wdc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,26 +90,57 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Set support_hdcp so the connector can register content protect proterty
-when it's initializing.
+On 11/2/22 11:07, Damien Le Moal wrote:
+> On 11/2/22 18:52, John Garry wrote:
+>> Hi Damien,
+>>
+[ .. ]
+>>>> Or re-use 1 from 32 (and still also have 1 separate internal command)?
+>>>
+>>> I am not yet 100% sure if we can treat that internal NCQ read log like
+>>> any other read/write request... If we can, then the 1-out-of-32
+>>> reservation would not be needed. Need to revisit all the cases we need
+>>> to take care of (because in the middle of this CDL completion handling,
+>>> regular NCQ errors can happen, resulting in a drive reset that could
+>>> wreck everything as we lose the sense data for the completed requests).
+>>>
+>>> In any case, I think that we can deal with that extra reserved command
+>>> on top of you current series. No need to worry about it for now I think.
+>>>
+>>
+>> So are you saying that you are basing current CDL support on libata
+>> internally managing this extra reserved tag (and so do not need this
+>> SCSI midlayer reserved tag support yet)?
+> 
+> Not really. For now, it is using libata EH, that is, when we need the
+> internal command for the read log, we know the device is idle and no
+> command is on-going. So we send a non-NCQ command which does not have a tag.
+> 
+> Ideally, all of this should use a real reserved tag to allow for an NCQ
+> read log outside of EH, avoiding the drive queue drain.
+> 
+But with the current design you'll only get that if you reserve one 
+precious tag.
 
-Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
----
- drivers/gpu/drm/bridge/analogix/anx7625.c | 1 +
- 1 file changed, 1 insertion(+)
+OTOH, we might not need that tag at all, as _if_ we get an error for a 
+specific command the tag associated with it is necessarily free after 
+completion, right?
 
-diff --git a/drivers/gpu/drm/bridge/analogix/anx7625.c b/drivers/gpu/drm/bridge/analogix/anx7625.c
-index b0ff1ecb80a50..0636ac59c7399 100644
---- a/drivers/gpu/drm/bridge/analogix/anx7625.c
-+++ b/drivers/gpu/drm/bridge/analogix/anx7625.c
-@@ -2680,6 +2680,7 @@ static int anx7625_i2c_probe(struct i2c_client *client,
- 	platform->bridge.type = platform->pdata.panel_bridge ?
- 				    DRM_MODE_CONNECTOR_eDP :
- 				    DRM_MODE_CONNECTOR_DisplayPort;
-+	platform->bridge.support_hdcp = true;
- 
- 	drm_bridge_add(&platform->bridge);
- 
+So we only need to find a way of 're-using' that tag, then we won't have 
+to set aside a reserved tag and everything would be dandy...
+
+Maybe we can stop processing when we receive an error (should be doing 
+that anyway as otherwise the log might be overwritten), then we should 
+be having a pretty good chance of getting that tag.
+Or, precisely, getting _any_ tag as at least one tag is free at that point.
+Hmm?
+
+Cheers,
+
+Hannes
 -- 
-2.38.0.135.g90850a2211-goog
+Dr. Hannes Reinecke		           Kernel Storage Architect
+hare@suse.de			                  +49 911 74053 688
+SUSE Software Solutions Germany GmbH, Maxfeldstr. 5, 90409 Nürnberg
+HRB 36809 (AG Nürnberg), GF: Felix Imendörffer
 
