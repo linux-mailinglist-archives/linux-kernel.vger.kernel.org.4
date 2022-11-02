@@ -2,55 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41C43615F8D
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:22:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AFCA6615F85
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:22:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229880AbiKBJWi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 05:22:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53038 "EHLO
+        id S229975AbiKBJWd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 05:22:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231351AbiKBJVU (ORCPT
+        with ESMTP id S231341AbiKBJVU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 2 Nov 2022 05:21:20 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B5D1659C;
-        Wed,  2 Nov 2022 02:20:07 -0700 (PDT)
-Date:   Wed, 02 Nov 2022 09:20:04 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2FE6365A2;
+        Wed,  2 Nov 2022 02:20:08 -0700 (PDT)
+Date:   Wed, 02 Nov 2022 09:20:05 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667380805;
+        s=2020; t=1667380806;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TbwfrCrvtuAvxUh4bsLS6G61Og5QZLgQO4inPEEtQHQ=;
-        b=wuPg6dgwLLNQx5YAXMTXciSqwavydhUmrXdMoKzA7cACFuKVHn4nz/TX5uUlUL1iQjye6d
-        Qu+W1ljNlrEpT3OWgIZzF9VrvnxF7f2jF6NKD91xiFWdM4UmhIYjlTFmReaCa98e/9On30
-        5G35E+lOk99kBB8wbi3YSrLy54j3J6yxDi52PRdwHwzFNuDhW1EDUs5QrQycz9gcEFvdXW
-        jvQoqpqQg8JH7Uyf7sqQmegffz5Kjlp0prsFnwkLc4Lk6V/W6cOESE+qU6pE3L0ce4W9Vl
-        pohRfJw+AeQDRomL0OuLET1lqcsDFCtdkvuMTpFhYEa4fgY3vGW1AtACsent0A==
+        bh=XCaIO1zUHpx41jxtR0vGc0NZJ7OQkBuM2m8u8UjxdHo=;
+        b=PcYpkm+q3HRc7m19SblIX7HrOb2jKeWbrcVWUbi8vyzUGiGkrvqfDsXMf2bFRlYSsc2rDX
+        kL8jjZmMpnBKpadO4on4DU88N42gvQROENwhO2ln1P0hhi+CuHOz6Si5XNLjnTlH6tVgZP
+        aXJ+PHJL+Pqvgs5SUOvTa9uqv8aVVBPLHPMwGq/GEKi+SG+fncYtCkiIffZfvXZyUBwmvH
+        KP6Y1yuTCqfOk0OeCjrdRNebmPmvMvlEDggpbRX8x3v9YDL8B4f5sqCk4k0rKC20ECQE6S
+        +zAAq8ZToW0h5Basq1UkSdDUIzHVB+1w+1PYdet0ZsRavqGWrelf6m1rwImo8Q==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667380805;
+        s=2020e; t=1667380806;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=TbwfrCrvtuAvxUh4bsLS6G61Og5QZLgQO4inPEEtQHQ=;
-        b=9DdBlAnWGXOyjJU0fERnuB0KNDALLwe16Pn0LsDxZBUKvEdG6ebdU35g80JfdnhR8Q+WW/
-        mWP8ZzqVNKJJsoDA==
+        bh=XCaIO1zUHpx41jxtR0vGc0NZJ7OQkBuM2m8u8UjxdHo=;
+        b=8CPITZNFi+Dv+G261vs28vH2Ad4gjNmaiToIOG5lDsSnIe7SLAhYUoq7dV3tV1FmrKUHpa
+        AIk45FDF0fvMGCCg==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] objtool: Add option to generate prefix symbols
+Subject: [tip: x86/core] objtool: Avoid O(bloody terrible) behaviour -- an ode
+ to libelf
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
         Yujie Liu <yujie.liu@intel.com>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20221028194453.526899822@infradead.org>
-References: <20221028194453.526899822@infradead.org>
+In-Reply-To: <20221028194453.461658986@infradead.org>
+References: <20221028194453.461658986@infradead.org>
 MIME-Version: 1.0
-Message-ID: <166738080414.7716.5006663778628933694.tip-bot2@tip-bot2>
+Message-ID: <166738080540.7716.10737738024182403591.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,179 +67,203 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     9f2899fe36a623885d8576604cb582328ad32b3c
-Gitweb:        https://git.kernel.org/tip/9f2899fe36a623885d8576604cb582328ad32b3c
+Commit-ID:     13f60e80e15dd0657c90bcca372ba045630ed9de
+Gitweb:        https://git.kernel.org/tip/13f60e80e15dd0657c90bcca372ba045630ed9de
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Fri, 28 Oct 2022 15:50:42 +02:00
+AuthorDate:    Fri, 28 Oct 2022 20:29:51 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 01 Nov 2022 13:44:09 +01:00
+CommitterDate: Tue, 01 Nov 2022 13:44:08 +01:00
 
-objtool: Add option to generate prefix symbols
+objtool: Avoid O(bloody terrible) behaviour -- an ode to libelf
 
-When code is compiled with:
+Due to how gelf_update_sym*() requires an Elf_Data pointer, and how
+libelf keeps Elf_Data in a linked list per section,
+elf_update_symbol() ends up having to iterate this list on each
+update to find the correct Elf_Data for the index'ed symbol.
 
-  -fpatchable-function-entry=${PADDING_BYTES},${PADDING_BYTES}
+By allocating one Elf_Data per new symbol, the list grows per new
+symbol, giving an effective O(n^2) insertion time. This is obviously
+bloody terrible.
 
-functions will have PADDING_BYTES of NOP in front of them. Unwinders
-and other things that symbolize code locations will typically
-attribute these bytes to the preceding function.
+Therefore over-allocate the Elf_Data when an extention is needed.
+Except it turns out libelf disregards Elf_Scn::sh_size in favour of
+the sum of Elf_Data::d_size. IOW it will happily write out all the
+unused space and fill it with:
 
-Given that these bytes nominally belong to the following symbol this
-mis-attribution is confusing.
+  0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND
 
-Inspired by the fact that CFI_CLANG emits __cfi_##name symbols to
-claim these bytes, allow objtool to emit __pfx_##name symbols to do
-the same.
+entries (aka zeros). Which obviously violates the STB_LOCAL placement
+rule, and is a general pain in the backside for not being the desired
+behaviour.
 
-Therefore add the objtool --prefix=N argument, to conditionally place
-a __pfx_##name symbol at N bytes ahead of symbol 'name' when: all
-these preceding bytes are NOP and name-N is an instruction boundary.
+Manually fix-up the Elf_Data size to avoid this problem before calling
+elf_update().
+
+This significantly improves performance when adding a significant
+number of symbols.
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Tested-by: Yujie Liu <yujie.liu@intel.com>
-Link: https://lkml.kernel.org/r/20221028194453.526899822@infradead.org
+Link: https://lkml.kernel.org/r/20221028194453.461658986@infradead.org
 ---
- tools/objtool/builtin-check.c           |  1 +-
- tools/objtool/check.c                   | 33 +++++++++++++++++++++++-
- tools/objtool/elf.c                     | 31 +++++++++++++++++++++++-
- tools/objtool/include/objtool/builtin.h |  1 +-
- tools/objtool/include/objtool/elf.h     |  2 +-
- 5 files changed, 67 insertions(+), 1 deletion(-)
+ tools/objtool/elf.c                 | 89 ++++++++++++++++++++++++++--
+ tools/objtool/include/objtool/elf.h |  2 +-
+ 2 files changed, 84 insertions(+), 7 deletions(-)
 
-diff --git a/tools/objtool/builtin-check.c b/tools/objtool/builtin-check.c
-index 0a04f8e..95fcece 100644
---- a/tools/objtool/builtin-check.c
-+++ b/tools/objtool/builtin-check.c
-@@ -75,6 +75,7 @@ const struct option check_options[] = {
- 	OPT_BOOLEAN('r', "retpoline", &opts.retpoline, "validate and annotate retpoline usage"),
- 	OPT_BOOLEAN(0,   "rethunk", &opts.rethunk, "validate and annotate rethunk usage"),
- 	OPT_BOOLEAN(0,   "unret", &opts.unret, "validate entry unret placement"),
-+	OPT_INTEGER(0,   "prefix", &opts.prefix, "generate prefix symbols"),
- 	OPT_BOOLEAN('l', "sls", &opts.sls, "validate straight-line-speculation mitigations"),
- 	OPT_BOOLEAN('s', "stackval", &opts.stackval, "validate frame pointer rules"),
- 	OPT_BOOLEAN('t', "static-call", &opts.static_call, "annotate static calls"),
-diff --git a/tools/objtool/check.c b/tools/objtool/check.c
-index 7936312..27f35f5 100644
---- a/tools/objtool/check.c
-+++ b/tools/objtool/check.c
-@@ -3417,7 +3417,8 @@ static int validate_branch(struct objtool_file *file, struct symbol *func,
- 
- 		if (func && insn_func(insn) && func != insn_func(insn)->pfunc) {
- 			/* Ignore KCFI type preambles, which always fall through */
--			if (!strncmp(func->name, "__cfi_", 6))
-+			if (!strncmp(func->name, "__cfi_", 6) ||
-+			    !strncmp(func->name, "__pfx_", 6))
- 				return 0;
- 
- 			WARN("%s() falls through to next function %s()",
-@@ -3972,6 +3973,34 @@ static bool ignore_unreachable_insn(struct objtool_file *file, struct instructio
- 	return false;
- }
- 
-+static int add_prefix_symbol(struct objtool_file *file, struct symbol *func,
-+			     struct instruction *insn)
-+{
-+	if (!opts.prefix)
-+		return 0;
-+
-+	for (;;) {
-+		struct instruction *prev = list_prev_entry(insn, list);
-+		u64 offset;
-+
-+		if (&prev->list == &file->insn_list)
-+			break;
-+
-+		if (prev->type != INSN_NOP)
-+			break;
-+
-+		offset = func->offset - prev->offset;
-+		if (offset >= opts.prefix) {
-+			if (offset == opts.prefix)
-+				elf_create_prefix_symbol(file->elf, func, opts.prefix);
-+			break;
-+		}
-+		insn = prev;
-+	}
-+
-+	return 0;
-+}
-+
- static int validate_symbol(struct objtool_file *file, struct section *sec,
- 			   struct symbol *sym, struct insn_state *state)
- {
-@@ -3990,6 +4019,8 @@ static int validate_symbol(struct objtool_file *file, struct section *sec,
- 	if (!insn || insn->ignore || insn->visited)
- 		return 0;
- 
-+	add_prefix_symbol(file, sym, insn);
-+
- 	state->uaccess = sym->uaccess_safe;
- 
- 	ret = validate_branch(file, insn_func(insn), insn, *state);
 diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-index 36dc787..3d636d1 100644
+index 3ad89d9..36dc787 100644
 --- a/tools/objtool/elf.c
 +++ b/tools/objtool/elf.c
-@@ -819,6 +819,37 @@ elf_create_section_symbol(struct elf *elf, struct section *sec)
+@@ -634,6 +634,12 @@ static int elf_update_symbol(struct elf *elf, struct section *symtab,
+ 
+ 		/* end-of-list */
+ 		if (!symtab_data) {
++			/*
++			 * Over-allocate to avoid O(n^2) symbol creation
++			 * behaviour.  The down side is that libelf doesn't
++			 * like this; see elf_truncate_section() for the fixup.
++			 */
++			int num = max(1U, sym->idx/3);
+ 			void *buf;
+ 
+ 			if (idx) {
+@@ -647,28 +653,34 @@ static int elf_update_symbol(struct elf *elf, struct section *symtab,
+ 			if (t)
+ 				shndx_data = elf_newdata(t);
+ 
+-			buf = calloc(1, entsize);
++			buf = calloc(num, entsize);
+ 			if (!buf) {
+ 				WARN("malloc");
+ 				return -1;
+ 			}
+ 
+ 			symtab_data->d_buf = buf;
+-			symtab_data->d_size = entsize;
++			symtab_data->d_size = num * entsize;
+ 			symtab_data->d_align = 1;
+ 			symtab_data->d_type = ELF_T_SYM;
+ 
+-			symtab->sh.sh_size += entsize;
+ 			symtab->changed = true;
++			symtab->truncate = true;
+ 
+ 			if (t) {
+-				shndx_data->d_buf = &sym->sec->idx;
+-				shndx_data->d_size = sizeof(Elf32_Word);
++				buf = calloc(num, sizeof(Elf32_Word));
++				if (!buf) {
++					WARN("malloc");
++					return -1;
++				}
++
++				shndx_data->d_buf = buf;
++				shndx_data->d_size = num * sizeof(Elf32_Word);
+ 				shndx_data->d_align = sizeof(Elf32_Word);
+ 				shndx_data->d_type = ELF_T_WORD;
+ 
+-				symtab_shndx->sh.sh_size += sizeof(Elf32_Word);
+ 				symtab_shndx->changed = true;
++				symtab_shndx->truncate = true;
+ 			}
+ 
+ 			break;
+@@ -770,6 +782,14 @@ non_local:
+ 		return NULL;
+ 	}
+ 
++	symtab->sh.sh_size += symtab->sh.sh_entsize;
++	symtab->changed = true;
++
++	if (symtab_shndx) {
++		symtab_shndx->sh.sh_size += sizeof(Elf32_Word);
++		symtab_shndx->changed = true;
++	}
++
  	return sym;
  }
  
-+static int elf_add_string(struct elf *elf, struct section *strtab, char *str);
-+
-+struct symbol *
-+elf_create_prefix_symbol(struct elf *elf, struct symbol *orig, long size)
+@@ -1286,6 +1306,60 @@ int elf_write_reloc(struct elf *elf, struct reloc *reloc)
+ 	return 0;
+ }
+ 
++/*
++ * When Elf_Scn::sh_size is smaller than the combined Elf_Data::d_size
++ * do you:
++ *
++ *   A) adhere to the section header and truncate the data, or
++ *   B) ignore the section header and write out all the data you've got?
++ *
++ * Yes, libelf sucks and we need to manually truncate if we over-allocate data.
++ */
++static int elf_truncate_section(struct elf *elf, struct section *sec)
 +{
-+	struct symbol *sym = calloc(1, sizeof(*sym));
-+	size_t namelen = strlen(orig->name) + sizeof("__pfx_");
-+	char *name = malloc(namelen);
++	u64 size = sec->sh.sh_size;
++	bool truncated = false;
++	Elf_Data *data = NULL;
++	Elf_Scn *s;
 +
-+	if (!sym || !name) {
-+		perror("malloc");
-+		return NULL;
++	s = elf_getscn(elf->elf, sec->idx);
++	if (!s) {
++		WARN_ELF("elf_getscn");
++		return -1;
 +	}
 +
-+	snprintf(name, namelen, "__pfx_%s", orig->name);
++	for (;;) {
++		/* get next data descriptor for the relevant section */
++		data = elf_getdata(s, data);
 +
-+	sym->name = name;
-+	sym->sec = orig->sec;
++		if (!data) {
++			if (size) {
++				WARN("end of section data but non-zero size left\n");
++				return -1;
++			}
++			return 0;
++		}
 +
-+	sym->sym.st_name = elf_add_string(elf, NULL, name);
-+	sym->sym.st_info = orig->sym.st_info;
-+	sym->sym.st_value = orig->sym.st_value - size;
-+	sym->sym.st_size = size;
++		if (truncated) {
++			/* when we remove symbols */
++			WARN("truncated; but more data\n");
++			return -1;
++		}
 +
-+	sym = __elf_create_symbol(elf, sym);
-+	if (sym)
-+		elf_add_symbol(elf, sym);
++		if (!data->d_size) {
++			WARN("zero size data");
++			return -1;
++		}
 +
-+	return sym;
++		if (data->d_size > size) {
++			truncated = true;
++			data->d_size = size;
++		}
++
++		size -= data->d_size;
++	}
 +}
 +
- int elf_add_reloc_to_insn(struct elf *elf, struct section *sec,
- 			  unsigned long offset, unsigned int type,
- 			  struct section *insn_sec, unsigned long insn_off)
-diff --git a/tools/objtool/include/objtool/builtin.h b/tools/objtool/include/objtool/builtin.h
-index 22092a9..f341b62 100644
---- a/tools/objtool/include/objtool/builtin.h
-+++ b/tools/objtool/include/objtool/builtin.h
-@@ -26,6 +26,7 @@ struct opts {
- 	bool stackval;
- 	bool static_call;
- 	bool uaccess;
-+	int prefix;
+ int elf_write(struct elf *elf)
+ {
+ 	struct section *sec;
+@@ -1296,6 +1370,9 @@ int elf_write(struct elf *elf)
  
- 	/* options: */
- 	bool backtrace;
+ 	/* Update changed relocation sections and section headers: */
+ 	list_for_each_entry(sec, &elf->sections, list) {
++		if (sec->truncate)
++			elf_truncate_section(elf, sec);
++
+ 		if (sec->changed) {
+ 			s = elf_getscn(elf->elf, sec->idx);
+ 			if (!s) {
 diff --git a/tools/objtool/include/objtool/elf.h b/tools/objtool/include/objtool/elf.h
-index 9e96a61..b6974e3 100644
+index d285331..9e96a61 100644
 --- a/tools/objtool/include/objtool/elf.h
 +++ b/tools/objtool/include/objtool/elf.h
-@@ -146,6 +146,8 @@ static inline bool has_multiple_files(struct elf *elf)
- struct elf *elf_open_read(const char *name, int flags);
- struct section *elf_create_section(struct elf *elf, const char *name, unsigned int sh_flags, size_t entsize, int nr);
+@@ -38,7 +38,7 @@ struct section {
+ 	Elf_Data *data;
+ 	char *name;
+ 	int idx;
+-	bool changed, text, rodata, noinstr, init;
++	bool changed, text, rodata, noinstr, init, truncate;
+ };
  
-+struct symbol *elf_create_prefix_symbol(struct elf *elf, struct symbol *orig, long size);
-+
- int elf_add_reloc(struct elf *elf, struct section *sec, unsigned long offset,
- 		  unsigned int type, struct symbol *sym, s64 addend);
- int elf_add_reloc_to_insn(struct elf *elf, struct section *sec,
+ struct symbol {
