@@ -2,115 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 203E6616DF6
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 20:47:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57595616DFC
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 20:49:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbiKBTr3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 15:47:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55250 "EHLO
+        id S230207AbiKBTtO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 15:49:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56212 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiKBTr0 (ORCPT
+        with ESMTP id S230017AbiKBTtG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 15:47:26 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E93E0EE37
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 12:47:24 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id j12so17580341plj.5
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 12:47:24 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XZUg37uJOYfpvjSeVnjDTPG9wFYr/ltSGt4/E37UDaE=;
-        b=T6n+ZNy6EJsuUFK142/EHb28MY0RHQS0F3csirBX1F4szkFH3Oa1GmcjrbMzMqlehR
-         PvjsJwJm7zQIiFKAQ+k5bRqj3r5MNjpdC5QRkWxNtnvQEVAEPB0xpqh4V/qBgfoZFH/0
-         X3Dr4HnK3V1IBtSh/4vfOTaOu0DmXUFWj6fWoc4wVthF+lGODGd5TBZPkeQhh2JpHeyp
-         ZJoFYF8I+pq6CfhphcrQl+pAJSgexA1ATjhi8/HGr0ViJe2DXVkDmdTX0/O3PAlo5tHC
-         1qsWaUE1rHB77yvUEvxqLKB8XZrzBsq5tHtS1s84o8MbSlwJZiAU4a0qutIvlFqV3sub
-         sUAg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=XZUg37uJOYfpvjSeVnjDTPG9wFYr/ltSGt4/E37UDaE=;
-        b=dqaNgYbMWXkJ7ajdcUwF4AnhMxrMAWvLE13usOk3FX91Oqsxxq4qfcMTauYSbXomyr
-         uPd9pyND3sJNEj2x8FQM93Zy0lmy7iviWfc7i8jzSm7G5uIqpYLiESGZw+CtRNYuKGWb
-         7h9e7KuVuHZwq5qoGG+W8P1GbEmNOoZDq6OHYRv+1hGSnbnHsvxyrz5kyqa+HDPHGql6
-         HalVW6itUJAXJIjam6ddVGf2RJZrxNDw2JYoTT6anrU3CZcfzdMldW/ba3041RyJUOBD
-         WGL8VwVh9y5nYmRQwu4uieCOudJ3JLhMOSAzu+XXN7oOz075KY41j+i3hYltKjRj7gJq
-         i4oA==
-X-Gm-Message-State: ACrzQf2pYu1Xhfc5BckNN4qLtOKrQd2XHrWygpARwGTAulD+C1UeL6WS
-        VlfyBScPBm5wGXt9LeZsOpTlUg==
-X-Google-Smtp-Source: AMsMyM7oyCdBbkPZUPhhDvi7k1UptHvFb1HUn9nf2o5jtHc+LvzTsYv4dx5WGGQHkKa1hX1esfULbw==
-X-Received: by 2002:a17:902:f686:b0:187:16a0:fd2b with SMTP id l6-20020a170902f68600b0018716a0fd2bmr20793406plg.91.1667418444372;
-        Wed, 02 Nov 2022 12:47:24 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id h18-20020a63df52000000b00434272fe870sm7937729pgj.88.2022.11.02.12.47.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 12:47:24 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 19:47:20 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Anish Ghulati <aghulati@google.com>
-Subject: Re: [PATCH] KVM: x86: Use SRCU to protect zap in
- __kvm_set_or_clear_apicv_inhibit
-Message-ID: <Y2LJSE5nuHZJV7fF@google.com>
-References: <20221102193020.1091939-1-bgardon@google.com>
-MIME-Version: 1.0
+        Wed, 2 Nov 2022 15:49:06 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC0C6D67;
+        Wed,  2 Nov 2022 12:49:04 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A2IIWQH010990;
+        Wed, 2 Nov 2022 19:48:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : references : content-type : in-reply-to :
+ mime-version; s=pp1; bh=ZpgHRdfL/PCPvt/oLWblbnONuZmPNKwE3Dml7DHi9W4=;
+ b=iwHuU+YmxC9VDgMTRP6RIXPKGhVfhrohDMht5Wuio5Dr+FytgQfmE3LFs3rj58NCgnaq
+ hL4iLPsVhwLc0m0lDJW3itn/OVy7TPyhn9sThVF7yrWQO55IFSQXaRheZ2emjp+spzM0
+ KO06Kq3GVekHji/9+YfROhLO5VJRj7/mr9C771vQfdfnZVWYCOh9SqzAmL5JNu9I4cOE
+ mmPI2F8XjCKgZ8G9yZi2uZx8Ag7rTeD9xVu4UGOUQZeV5XPEBBiBRULAxOXJbexMLiWe
+ 1DWcOPo1ca3IqNvlVoY4FY6AzJboPuoIMxWxidzpp6rYhArA3PVZxCEl/UyzIFu4jNhz mA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kkvbydavu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 19:48:50 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A2J7Qgl012433;
+        Wed, 2 Nov 2022 19:48:50 GMT
+Received: from ppma02fra.de.ibm.com (47.49.7a9f.ip4.static.sl-reverse.com [159.122.73.71])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kkvbydav2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 19:48:50 +0000
+Received: from pps.filterd (ppma02fra.de.ibm.com [127.0.0.1])
+        by ppma02fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A2Jb903026962;
+        Wed, 2 Nov 2022 19:48:48 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma02fra.de.ibm.com with ESMTP id 3kgut9djuu-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 19:48:48 +0000
+Received: from d06av26.portsmouth.uk.ibm.com (d06av26.portsmouth.uk.ibm.com [9.149.105.62])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A2Jmi17131832
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Nov 2022 19:48:44 GMT
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A7EC2AE045;
+        Wed,  2 Nov 2022 19:48:44 +0000 (GMT)
+Received: from d06av26.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 10496AE04D;
+        Wed,  2 Nov 2022 19:48:44 +0000 (GMT)
+Received: from osiris (unknown [9.145.72.45])
+        by d06av26.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed,  2 Nov 2022 19:48:43 +0000 (GMT)
+Date:   Wed, 2 Nov 2022 20:48:42 +0100
+From:   Heiko Carstens <hca@linux.ibm.com>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Alexandra Winter <wintera@linux.ibm.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH 1/3] s390/ctcm: Fix return type of ctc{mp,}m_tx()
+Message-ID: <Y2LJmr8gE2I7gOP5@osiris>
+References: <20221102163252.49175-1-nathan@kernel.org>
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221102193020.1091939-1-bgardon@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221102163252.49175-1-nathan@kernel.org>
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: DuVgliAug7XDRy9FdO2XYNOCFotwB4f6
+X-Proofpoint-ORIG-GUID: j9ddi9CrRnHLmls-L0esyfSCrumPwTUN
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+MIME-Version: 1.0
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-02_14,2022-11-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=671
+ priorityscore=1501 spamscore=0 malwarescore=0 adultscore=0
+ lowpriorityscore=0 suspectscore=0 clxscore=1011 mlxscore=0 impostorscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211020128
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022, Ben Gardon wrote:
-> kvm_zap_gfn_range must be called in an SRCU read-critical section, but
+Hi Nathan,
 
-Please add parantheses when referencing functions, i.e. kvm_zap_gfn_range().
+On Wed, Nov 02, 2022 at 09:32:50AM -0700, Nathan Chancellor wrote:
+> should s390 select ARCH_SUPPORTS_CFI_CLANG in the future.
 
-> there is no SRCU annotation in __kvm_set_or_clear_apicv_inhibit.
+Yes, s390 should select that :)
 
-__kvm_set_or_clear_apicv_inhibit()
+But, is there any switch or option I need to set when compiling clang,
+so it knows about the kcfi sanitizer?
 
-> Add the needed SRCU annotation.
+I get:
+clang-16: error: unsupported option '-fsanitize=kcfi' for target 's390x-ibm-linux'
 
-It's not an annotation, acquiring SRCU is very much functional code.
-
-> Tested: ran tools/testing/selftests/kvm/x86_64/debug_regs on a DBG
-> 	build. This patch causes the suspicious RCU warning to disappear.
-> 	Note that the warning is hit in __kvm_zap_rmaps, so
-> 	kvm_memslots_have_rmaps must return true in order for this to
-> 	repro (i.e. the TDP MMU must be off or nesting in use.)
-
-Please provide the stack trace or at least a verbal description of what paths
-can reach __kvm_set_or_clear_apicv_inhibit() without holding SRCU, i.e. explain
-why this bug isn't being hit left and right.
-
-E.g.
-
-  Unconditionally take KVM's SRCU lock in __kvm_set_or_clear_apicv_inhibit()
-  when zapping virtual APIC SPTEs.  SRCU must be held when zapping SPTEs in
-  shadow MMUs to protect the gfn=>memslot translation (the TDP MMU walks all
-  roots and so doesn't dereference memslots).
-
-  In most cases, the inhibits are updated during KVM_RUN and so SRCU is
-  already held, but other ioctls() can also modify inhibits and don't
-  acquire SRCU, e.g. KVM_SET_GUEST_DEBUG and KVM_SET_LAPIC.  Acquire SRCU
-  unconditionally to avoid playing whack-a-mole, as nesting SRCU locks is
-  safe and this is not a hot path.
-
-> Fixes: 36222b117e36 ("KVM: x86: don't disable APICv memslot when inhibited")
-
-Reported-by?  IIRC this originated in a syzkaller report?
+> clang --version
+clang version 16.0.0 (https://github.com/llvm/llvm-project.git e02110e2ab4dd71b276e887483f0e6e286d243ed)
