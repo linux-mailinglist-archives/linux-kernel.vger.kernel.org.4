@@ -2,146 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2576615DAB
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 09:28:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13807615DB0
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 09:31:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230315AbiKBI24 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 04:28:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34496 "EHLO
+        id S230273AbiKBIbW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 04:31:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36428 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiKBI2w (ORCPT
+        with ESMTP id S230006AbiKBIbS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 04:28:52 -0400
-Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7DB9313E31
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 01:28:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667377731; x=1698913731;
-  h=from:to:cc:subject:references:date:in-reply-to:
-   message-id:mime-version;
-  bh=QOcqKq3LeDc4b3+vhsnKQIF0ZdWtllvhnZ+gxttaUdg=;
-  b=GE9IM4LpPCY2Yt1pz+PO35nY3/FiAOY/g6SEYv0JgmwFjPFBZUMDiGfk
-   /Fn1xoqZWunidyYks2zbEpdyPlOA1VRi21a4zrW/6rzVItrN9xho8sG7F
-   byD2fvYNMJTUgI4TnXHm70utvoOBu00pnMmXnrdlgWJvZ2xVm9utDd2Y5
-   AaxZDx+2dEsgmdSMrKueEf9KcFla1lh7Y57T2aosovxLbFYL3HyHQPM6y
-   0j0qkscKnIa/HMV2vhcUBTBp+fee9X8FgiwOUHEpGSXNNrvV1fQycOX9y
-   pnRdJiHxsfbm83z7bEt3d6WVM7VvT3Wv+48JrqQqf/WR1oj/uSSTvHSTr
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="310451582"
-X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
-   d="scan'208";a="310451582"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 01:28:51 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="809194684"
-X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
-   d="scan'208";a="809194684"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 01:28:47 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Bharata B Rao <bharata@amd.com>,
-        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Jagdish Gediya <jvgediya.oss@gmail.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Tim Chen <tim.c.chen@intel.com>, Wei Xu <weixugc@google.com>,
-        Yang Shi <shy828301@gmail.com>
-Subject: Re: [RFC] memory tiering: use small chunk size and more tiers
-References: <59291b98-6907-0acf-df11-6d87681027cc@linux.ibm.com>
-        <8735b8jy9k.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <0d938c9f-c810-b10a-e489-c2b312475c52@amd.com>
-        <87tu3oibyr.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <07912a0d-eb91-a6ef-2b9d-74593805f29e@amd.com>
-        <87leowepz6.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <Y2Eui+kKvwj8ip+T@dhcp22.suse.cz>
-        <878rkuchpm.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <Y2IhiSnpQsmY7khx@dhcp22.suse.cz>
-        <87bkppbx75.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <Y2Inot4i4xUGH60O@dhcp22.suse.cz>
-Date:   Wed, 02 Nov 2022 16:28:08 +0800
-In-Reply-To: <Y2Inot4i4xUGH60O@dhcp22.suse.cz> (Michal Hocko's message of
-        "Wed, 2 Nov 2022 09:17:38 +0100")
-Message-ID: <877d0dbw13.fsf@yhuang6-desk2.ccr.corp.intel.com>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
+        Wed, 2 Nov 2022 04:31:18 -0400
+Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E765240B1
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 01:31:17 -0700 (PDT)
+Received: by mail-ej1-x633.google.com with SMTP id f27so43305301eje.1
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 01:31:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=nathanrossi.com; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ZDm9tTOGqq33c/OJ9p8krRntRWFT8P4+dZq4i09Xj6A=;
+        b=iokDAwOEKIbW970m7zGF/56C0wURNahX2Sdi9RmCTYE/2LpdXu8WhVWx5Nalm6yf/8
+         FDA8B/kVWDQSFpIO+p3nVDeqPU3xM7msp/vNuB7hzm9GoZ8sf7ZCJmQ8ST8LtjlhlL5j
+         ytuNEjEqn9K4Dj7drdcAETo/1VCOCHBf53RhRgZEeK0R3VYxh336X8WblI3m+jtPHGrC
+         HeSrE98l4enROXQwWcnPu/KBVR9kV1nzVPm61YOhbSM/09fa3KFwpqDdWso5aIScBKiy
+         a/mLMD5pjB/j4+M+4LXHbJy+BsvuRZjBpTf0lq5ZGksOsXNEDHAgYb57Mbc5kUR0y+tG
+         hyoQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ZDm9tTOGqq33c/OJ9p8krRntRWFT8P4+dZq4i09Xj6A=;
+        b=D6rK8qViM9yHlC7W1g7OTA7JjSAvgSDvWWxnWVtwiK5Uag4aq6sBhLHYJCT9U+cKRl
+         UUMgDYEKPt9s91R8idMB03L/TxwxbO1jnSvrXv4QMybGj9GPcIPMCJ/WagdyMf6v0ysZ
+         VpZS6FPqaGopne+XgqtknasyZOaB/8eVmQlLEOTeto2VR1drthjihCQLsDx60UiMBPMI
+         l0DDLFHdBuVBnCYU3gZzIo63LtQ+W1Ituhni+pB3u6F5md/3MpfGyRa6vxLOPCRzRJbc
+         PRFCbX6ZYgLDa6yOCfkch6KPdTkIYXrjz1D9rgwYzoeFsIk4Li7rQHjbSg4R1rfoaGKH
+         Y7PQ==
+X-Gm-Message-State: ACrzQf1AmqEn0s82LwaLUqwTGAumoLxqVDav1DWLfaZ1Xgkxcznssk/h
+        1uZV/xVVYCu2lKWzcIUQUM2e5BfcPFktaxAuifC0kw==
+X-Google-Smtp-Source: AMsMyM4Wlkgm63ReSpBURV3XOq+44U6tTaT4EEuKQKgeYwwcmG/mJs4ovHvGEioWWSqKZPC8e4foGrIbZ2s0dXuBd90=
+X-Received: by 2002:a17:907:3c81:b0:77a:327a:815f with SMTP id
+ gl1-20020a1709073c8100b0077a327a815fmr22874433ejc.422.1667377875641; Wed, 02
+ Nov 2022 01:31:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20220602065544.2552771-1-nathan@nathanrossi.com> <20221002175648.jzxcvka46vylbs2d@pali>
+In-Reply-To: <20221002175648.jzxcvka46vylbs2d@pali>
+From:   Nathan Rossi <nathan@nathanrossi.com>
+Date:   Wed, 2 Nov 2022 18:31:04 +1000
+Message-ID: <CA+aJhH2kbAFYOSkDpxO4_1ZPfJmd11v6tmz2yAL-PO2irQWZ0w@mail.gmail.com>
+Subject: Re: [PATCH] PCI/ASPM: Wait for data link active after retraining
+To:     =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Nathan Rossi <nathan.rossi@digi.com>,
+        Bjorn Helgaas <bhelgaas@google.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Michal Hocko <mhocko@suse.com> writes:
-
-> On Wed 02-11-22 16:02:54, Huang, Ying wrote:
->> Michal Hocko <mhocko@suse.com> writes:
->> 
->> > On Wed 02-11-22 08:39:49, Huang, Ying wrote:
->> >> Michal Hocko <mhocko@suse.com> writes:
->> >> 
->> >> > On Mon 31-10-22 09:33:49, Huang, Ying wrote:
->> >> > [...]
->> >> >> In the upstream implementation, 4 tiers are possible below DRAM.  That's
->> >> >> enough for now.  But in the long run, it may be better to define more.
->> >> >> 100 possible tiers below DRAM may be too extreme.
->> >> >
->> >> > I am just curious. Is any configurations with more than couple of tiers
->> >> > even manageable? I mean applications have been struggling even with
->> >> > regular NUMA systems for years and vast majority of them is largerly
->> >> > NUMA unaware. How are they going to configure for a more complex system
->> >> > when a) there is no resource access control so whatever you aim for
->> >> > might not be available and b) in which situations there is going to be a
->> >> > demand only for subset of tears (GPU memory?) ?
->> >> 
->> >> Sorry for confusing.  I think that there are only several (less than 10)
->> >> tiers in a system in practice.  Yes, here, I suggested to define 100 (10
->> >> in the later text) POSSIBLE tiers below DRAM.  My intention isn't to
->> >> manage a system with tens memory tiers.  Instead, my intention is to
->> >> avoid to put 2 memory types into one memory tier by accident via make
->> >> the abstract distance range of each memory tier as small as possible.
->> >> More possible memory tiers, smaller abstract distance range of each
->> >> memory tier.
->> >
->> > TBH I do not really understand how tweaking ranges helps anything.
->> > IIUC drivers are free to assign any abstract distance so they will clash
->> > without any higher level coordination.
->> 
->> Yes.  That's possible.  Each memory tier corresponds to one abstract
->> distance range.  The larger the range is, the higher the possibility of
->> clashing is.  So I suggest to make the abstract distance range smaller
->> to reduce the possibility of clashing.
+On Mon, 3 Oct 2022 at 03:56, Pali Roh=C3=A1r <pali@kernel.org> wrote:
 >
-> I am sorry but I really do not understand how the size of the range
-> actually addresses a fundamental issue that each driver simply picks
-> what it wants. Is there any enumeration defining basic characteristic of
-> each tier? How does a driver developer knows which tear to assign its
-> driver to?
+> Hello!
+>
+> On Thursday 02 June 2022 06:55:44 Nathan Rossi wrote:
+> > From: Nathan Rossi <nathan.rossi@digi.com>
+> >
+> > When retraining the link either the child or the parent device may have
+> > the data link layer state machine of the respective devices move out of
+> > the active state despite the physical link training being completed.
+> > Depending on how long is takes for the devices to return to the active
+> > state, the device may not be ready and any further reads/writes to the
+> > device can fail.
+> >
+> > This issue is present with the pci-mvebu controller paired with a devic=
+e
+> > supporting ASPM but without advertising the Slot Clock, where during
+> > boot the pcie_aspm_cap_init call would cause common clocks to be made
+> > consistent and then retrain the link. However the data link layer would
+> > not be active before any device initialization (e.g. ASPM capability
+> > queries, BAR configuration) causing improper configuration of the devic=
+e
+> > without error.
+>
+> There is the known issue in marvell pcie controllers. They completely
+> drop the link for PCIe GEN1 cards when Target Link Speed (Link Control2)
+> in Root Port is configured to 5.0 GT/s or higher value and OS issues
+> Retrain Link (Link Control).
 
-The smaller range size will not guarantee anything.  It just tries to
-help the default behavior.
+In the configuration we are having issues with, the downstream device
+is indeed a 2.5GT downstream, and the upstream is configured to
+support 2.5GT and 5GT (Armada 385). So it does make sense that this
+known issue would apply. I tested setting the target speed to 2.5GT
+within mvebu_pcie_setup_hw before the retraining occurs, and it does
+resolve the retraining delay/link drop. So this issue is indeed the
+problem we are having. Is this behaviour mentioned in any errata?
 
-The drivers are expected to assign the abstract distance based on the
-memory latency/bandwidth, etc.  And the abstract distance range of a
-memory tier corresponds to a memory latency/bandwidth range too.  So, if
-the size of the abstract distance range is smaller, the possibility for
-two types of memory with different latency/bandwidth to clash on
-the abstract distance range is lower.
+>
+> I think the proper way should be to workaround root of this issue by
+> programming Target Link Speed in Link Control2 register to required
+> value, instead of hacking couple of other places which are just
+> implication of that issue...
 
-Clashing isn't a totally disaster.  We plan to provide a per-memory-type
-knob to offset the abstract distance provided by driver.  Then, we can
-move clashing memory types away if necessary.
+By programming the Target Link Speed, are you referring to programming
+the value like other controller drivers do with dtb configuration?
+Relying on this would be problematic for our design (mixed downstream
+link speed variants). Does it make more sense to set the Target Link
+Speed when the retrain bit is being set in Link Control (e.g. in the
+mvebu_pci_bridge_emul_pcie_conf_write function) essentially preventing
+the retraining from causing the link to drop only when the issue is
+expected to present itself (Link Status at 2.5GT)?
 
-Best Regards,
-Huang, Ying
+Thanks,
+Nathan
+
+>
+> I can reproduce it for example with Qualcomm Atheros ath9k/ath10k wifi
+> cards which have another issue that they go into "broken" state when
+> in-band reset (e.g. pcie hot reset or pcie link down) is issues multiple
+> times without longer delay.
+>
+> These two bugs (first in marvell pcie controller and second in wifi
+> card) cause that setting kernel ASPM cause disappearing card from bus
+> until cpu/board reset (or pcie warm reset; if board supports it at
+> runtime without going to POR).
+>
+> I guess you are just observing result of this issue here.
+>
+> > To ensure the child device is accessible, after the link retraining use
+> > pcie_wait_for_link to perform the associated state checks and any neede=
+d
+> > delays.
+> >
+> > Signed-off-by: Nathan Rossi <nathan.rossi@digi.com>
+> > ---
+> >  drivers/pci/pcie/aspm.c | 3 ++-
+> >  1 file changed, 2 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+> > index a96b7424c9..4b8a1810be 100644
+> > --- a/drivers/pci/pcie/aspm.c
+> > +++ b/drivers/pci/pcie/aspm.c
+> > @@ -288,7 +288,8 @@ static void pcie_aspm_configure_common_clock(struct=
+ pcie_link_state *link)
+> >               reg16 &=3D ~PCI_EXP_LNKCTL_CCC;
+> >       pcie_capability_write_word(parent, PCI_EXP_LNKCTL, reg16);
+> >
+> > -     if (pcie_retrain_link(link))
+> > +     /* Retrain link and then wait for the link to become active */
+> > +     if (pcie_retrain_link(link) && pcie_wait_for_link(parent, true))
+> >               return;
+> >
+> >       /* Training failed. Restore common clock configurations */
+> > ---
+> > 2.36.1
