@@ -2,51 +2,51 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1B8FB615AD8
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 04:42:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6F240615AF0
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 04:44:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbiKBDmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 23:42:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58378 "EHLO
+        id S229714AbiKBDoW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 23:44:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60970 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230221AbiKBDmO (ORCPT
+        with ESMTP id S230228AbiKBDoP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 23:42:14 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7152926ADB
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 20:42:12 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id q9so198395pfg.5
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 20:42:12 -0700 (PDT)
+        Tue, 1 Nov 2022 23:44:15 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3430C26D6
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 20:44:15 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id io19so15387020plb.8
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 20:44:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Oo23rdptXeonGeV+R+rAP3rUmFYr9yR6UUbFic0TMHM=;
-        b=Ej7aSHjtyIcfBIc+mXwGkpDPO/8iWJd7WvOMKVWE7hrCgZlw4b1fV14PjOH/sqi9Ky
-         wnr7vwVt2ZDmK1TGnqgdOOQ4GN1Fmd/cv1wdliqW+KcABkCoMKjLQ3g7x01FizZH6HD3
-         5x/CFyTc7nUU+7RAJG0dswlsWc9Z+xc3laUiU=
+        bh=ZuDhCs/uN/Jh8YtacbftAAQuLE1EzgHWJYodom4FpBg=;
+        b=L832lV6gy8GwQ7EizdFm30fABkOF6M7+bcGz9Dtad7YavJluIno2A1T1cUcQh1Lv43
+         r3VTQaXWTxQ9CY9Md+pBFUy1QuewIbwW7BsdsCauHwOkp1SfNA6hGvFnjMCuzseIlaF6
+         HAdo1IPrYARu4v7Vn/8IPlP6aNX8uhMPuWqQY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Oo23rdptXeonGeV+R+rAP3rUmFYr9yR6UUbFic0TMHM=;
-        b=Y342bTdrPkDfw5O911UljnVREuOT9BEVHJBwJeosTz8NVu3KNWJ6pX822M2rIR6/16
-         79KaLCHHum5DdOEOA3h3WZO3/edbUe+UP5NUB3FjmvlE3tSFhwiH2D+daKdUhdkbVbTf
-         QVT0l0w2/4OhyYA+/eEroHP1xxQadWQxOCGOj28ehmvGcloKEZUK7Y8XTNRtRKd/dAL5
-         xwL+9sIYpSr9Kf6huCZkmOm1svoF7f1v6sdKYzqvaPKDMzG7IC3W43SZ6bxwg3mfBBeb
-         vQbfu9h0oSdPuFlqYMfLAF0+33M65jvYxHcW3Xs5jLwKvwDb2ydn2GDenq1zdWO+G73B
-         bZbQ==
-X-Gm-Message-State: ACrzQf0rMWjG9H0t9FCSZk8TU5wlgqw+se7l7Jrt3kHq1rGv1aJOp8Hh
-        hZ3wQIu1MY6JefcFKa/LIjlWzA==
-X-Google-Smtp-Source: AMsMyM5bZXD48076Ge2HXaXwzUt1HHHf5Ug7/VXNl31WPVwEIU4kov8PXoyBU4VaX/MbTOVpkAxAcQ==
-X-Received: by 2002:a63:501f:0:b0:46f:a711:c455 with SMTP id e31-20020a63501f000000b0046fa711c455mr15000744pgb.402.1667360532351;
-        Tue, 01 Nov 2022 20:42:12 -0700 (PDT)
+        bh=ZuDhCs/uN/Jh8YtacbftAAQuLE1EzgHWJYodom4FpBg=;
+        b=mwHUWMnzJLNwCmnFDnyRntmf5vPF+KZXvBq1K9F7kscBlkRu76+Z8f0tmCPoVuiu8r
+         VMjqnlgI9wpmVFUenARw8QIMF5sVulPjnKyDaTpGBYoAKb4NFANFd06pkWTXgnRWWD2I
+         t2XLJkWplHfT++LFdWDvyp14jzRHrSz4kvoKiZqd5wNbw4eKzMmYTL5UNikoEyojOOJY
+         c9hoIKKXfxfWChuuL2asCMNiH/0NQjMH/n+t5XrFVM9+mZ9gJinmZtgpYHdsSScoRCcq
+         5M2MwPioQBhJwhQTyFN3FtevzV3Q2kxnDNrStADxmbfgVeo7L2poP8v4h+eTpf7kAwai
+         Zhtg==
+X-Gm-Message-State: ACrzQf3lc80CfGxnJ5kVEozMNH23bpJ0pEKr/V3lFYD/3Ba6Geq7OEuq
+        yYqSBVsMEQ7qd1AvgGAqRS02+B3tOkLNFQ==
+X-Google-Smtp-Source: AMsMyM6P0xtQ3chlVxS/o5oJDRkd2Vw7NeSDqVzZj/NsDFNGuR8Ipp3Q5hJSGUIQkbeEejPA4OO6Wg==
+X-Received: by 2002:a17:90b:2248:b0:210:10dc:a314 with SMTP id hk8-20020a17090b224800b0021010dca314mr39574351pjb.15.1667360654765;
+        Tue, 01 Nov 2022 20:44:14 -0700 (PDT)
 Received: from google.com ([240f:75:7537:3187:f558:dfb0:7cb7:44d9])
-        by smtp.gmail.com with ESMTPSA id r1-20020a17090a1bc100b0020dda7efe61sm318368pjr.5.2022.11.01.20.42.08
+        by smtp.gmail.com with ESMTPSA id d81-20020a621d54000000b0056bc5ad4862sm7239890pfd.28.2022.11.01.20.44.12
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 20:42:11 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 12:42:06 +0900
+        Tue, 01 Nov 2022 20:44:14 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 12:44:09 +0900
 From:   Sergey Senozhatsky <senozhatsky@chromium.org>
 To:     Nhat Pham <nphamcs@gmail.com>
 Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
@@ -55,7 +55,7 @@ Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
         ddstreet@ieee.org, vitaly.wool@konsulko.com
 Subject: Re: [PATCH v2 5/5] zsmalloc: Implement writeback mechanism for
  zsmalloc
-Message-ID: <Y2HnDi4K7lxKkptY@google.com>
+Message-ID: <Y2HniaEe1QjzSzCh@google.com>
 References: <202210272158.7swYwd23-lkp@intel.com>
  <20221027182736.513530-1-nphamcs@gmail.com>
 MIME-Version: 1.0
@@ -73,32 +73,27 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 On (22/10/27 11:27), Nhat Pham wrote:
 [..]
-> +static int zs_reclaim_page(struct zs_pool *pool, unsigned int retries)
-> +{
-> +	int i, obj_idx, ret = 0;
-> +	unsigned long handle;
-> +	struct zspage *zspage;
-> +	struct page *page;
-> +	enum fullness_group fullness;
-> +
-> +	/* Lock LRU and fullness list */
-> +	spin_lock(&pool->lock);
-> +	if (!pool->ops || !pool->ops->evict || list_empty(&pool->lru) ||
-> +			retries == 0) {
-> +		spin_unlock(&pool->lock);
-> +		return -EINVAL;
-> +	}
-> +
-> +	for (i = 0; i < retries; i++) {
-> +		struct size_class *class;
-> +
-> +		zspage = list_last_entry(&pool->lru, struct zspage, lru);
-> +		list_del(&zspage->lru);
-> +
-> +		/* zs_free may free objects, but not the zspage and handles */
-> +		zspage->under_reclaim = true;
-> +
-> +		/* Lock backing pages into place */
-> +		lock_zspage(zspage);
+> @@ -482,6 +504,7 @@ static struct zpool_driver zs_zpool_driver = {
+>  	.malloc_support_movable = true,
+>  	.malloc =		  zs_zpool_malloc,
+>  	.free =			  zs_zpool_free,
+> +	.shrink =     zs_zpool_shrink,
 
-Does this call into the scheduler under pool->lock spinlock?
+This should use tabs, just like the rest of fields.
+
+>  	.map =			  zs_zpool_map,
+>  	.unmap =		  zs_zpool_unmap,
+>  	.total_size =		  zs_zpool_total_size,
+> @@ -955,6 +978,21 @@ static int trylock_zspage(struct zspage *zspage)
+>  	return 0;
+>  }
+> 
+> +/*
+> + * Free all the deferred handles whose objects are freed in zs_free.
+> + */
+> +static void free_handles(struct zs_pool *pool, struct zspage *zspage)
+> +{
+> +	unsigned long handle = (unsigned long) zspage->deferred_handles;
+
+A nit: we don't put a white space in cases like this.
+IOW (unsigned long)zspage->.... here in everywhere else in this series.
