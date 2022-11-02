@@ -2,191 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41BED615A8F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 04:33:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68DD1615A89
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 04:33:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbiKBDdU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 23:33:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52046 "EHLO
+        id S231268AbiKBDc6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 23:32:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231214AbiKBDdQ (ORCPT
+        with ESMTP id S231208AbiKBDcx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 23:33:16 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE4556410;
-        Tue,  1 Nov 2022 20:33:15 -0700 (PDT)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A228qSQ028553;
-        Tue, 1 Nov 2022 20:33:07 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=t/t8YWjTBTSfESnDJzPGM67pwS+EY3mGI/poEzAcR3w=;
- b=RpfCmBtVj6G04Xduza8/Ckjwy+kSL5tbCLeNM89Cnir6TTHf5Wpd2rnswk0yWsq8tHI5
- 38OheIjOo8dxi+lVDpZO0Gi+TaZAgLeJif6v0CVe7GGkPOxu4ChIwFbP35To+a4tcK6K
- lychugu+rUVqLVbDLCvJXXI4ukPsqG1DJ4YJFh2hSCAgnGZju1l7EehWwR1syDZ35QCE
- 3AEbOT8qJvb7e4dTa3UTXQJsAcVXKRoVQB+LS4/9oin8/UXBPKzDg1DUgUNC00+Poq12
- Agc11dAbwekajCSumuWbrdfFucibbBFT2IK+zd7aVDvNF3q8moHB8uwN0QmDU/ZeGJ08 pg== 
-Received: from dc5-exch01.marvell.com ([199.233.59.181])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3kkfgv88vn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Tue, 01 Nov 2022 20:33:07 -0700
-Received: from DC5-EXCH01.marvell.com (10.69.176.38) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server (TLS) id 15.0.1497.2; Tue, 1 Nov
- 2022 20:33:05 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH01.marvell.com
- (10.69.176.38) with Microsoft SMTP Server id 15.0.1497.2 via Frontend
- Transport; Tue, 1 Nov 2022 20:33:05 -0700
-Received: from localhost.localdomain (unknown [10.28.36.165])
-        by maili.marvell.com (Postfix) with ESMTP id 2BDFF3F705D;
-        Tue,  1 Nov 2022 20:33:02 -0700 (PDT)
-From:   Ratheesh Kannoth <rkannoth@marvell.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>
-CC:     <sgoutham@marvell.com>, Ratheesh Kannoth <rkannoth@marvell.com>
-Subject: [net PATCH] octeontx2-pf: Fix SQE threshold checking
-Date:   Wed, 2 Nov 2022 09:02:40 +0530
-Message-ID: <20221102033240.1923677-1-rkannoth@marvell.com>
-X-Mailer: git-send-email 2.25.1
+        Tue, 1 Nov 2022 23:32:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F0C3826481;
+        Tue,  1 Nov 2022 20:32:52 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id A30C4B82063;
+        Wed,  2 Nov 2022 03:32:51 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1C3AC433C1;
+        Wed,  2 Nov 2022 03:32:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667359970;
+        bh=z+Z6VZbpWX1sIyW/6+Qo7h9xWCq56kkiLYfY6H+5Mxc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=krNtCIGKaKRe/8K0+pgWXFgyIXUnEoFVzl232FKBjnJDn9q5XHUoptgtGfI0jLyHB
+         FK9KgcFeQVpqWeijj6a3PGb+M6bgWLKELXMzGlA5I+C5rl/aDdhKe+MmnaZNbLpXaE
+         g0CSvkoopScG1AFv80QQ7oKv42iplc9W7H366M/AyqX8pZhUEJYNoR2EkChrjLe/mz
+         2VBHf97yNkxRgrkHBuz895ocQ33Yns/prROABjnvmfigL+qdi/EeJ55ygB66rY+hdU
+         LjsC4ppC6n9cdsG3tT/H39sINYGCxAr8htAOl3wqWQFBiSz0FiqszgszOWUt9fyXBs
+         JtqTdNKpdJpcQ==
+Date:   Tue, 1 Nov 2022 22:32:47 -0500
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Arnaud POULIQUEN <arnaud.pouliquen@foss.st.com>
+Cc:     Deepak Kumar Singh <quic_deesin@quicinc.com>,
+        bjorn.andersson@linaro.org, swboyd@chromium.org,
+        quic_clew@quicinc.com, mathieu.poirier@linaro.org,
+        linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-remoteproc@vger.kernel.org
+Subject: Re: [PATCH V3 0/3] rpmsg signaling/flowcontrol patches
+Message-ID: <20221102033247.7aadwbj3fojtpsnh@builder.lan>
+References: <1663133102-10671-1-git-send-email-quic_deesin@quicinc.com>
+ <74224354-8543-559b-240b-0eda4d68fc52@foss.st.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: pEbjPQJXvWoq13ZvcoDMtM-3TH_6JOZ0
-X-Proofpoint-GUID: pEbjPQJXvWoq13ZvcoDMtM-3TH_6JOZ0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-01_12,2022-11-01_02,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <74224354-8543-559b-240b-0eda4d68fc52@foss.st.com>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Current way of checking available SQE count which is based on
-HW updated SQB count could result in driver submitting an SQE
-even before CQE for the previously transmitted SQE at the same
-index is processed in NAPI resulting losing SKB pointers,
-hence a leak. Fix this by checking a consumer index which
-is updated once CQE is processed.
+On Wed, Sep 14, 2022 at 09:50:48AM +0200, Arnaud POULIQUEN wrote:
+> Hi Deepak,
+> 
+> On 9/14/22 07:24, Deepak Kumar Singh wrote:
+> > [Changes from V2]:
+> > Trivial review comment fixes.
+> > Avoid TIOCM_DTR etc signals in glink layer, use native signal macros only.
+> > Glink layer to provide only flowcontrol on/off interface, no specific signal passing/receiving to client.
+> 
+> 
+> Please, could you have a look to my series that implements
+> your proposed interface for the virtio rpmsg [1]?
+> It would be nice that your API takes into account update to
+> support of the rpmsg virtio implementation proposed in [08/10] rpmsg: Add the
+> destination address in rpmsg_set_flow_control[2]
+> 
 
-Fixes: 3ca6c4c882a7 ("octeontx2-pf: Add packet transmission support")
-Signed-off-by: Ratheesh Kannoth <rkannoth@marvell.com>
-Reviewed-by: Sunil Kovvuri Goutham <sgoutham@marvell.com>
----
- .../marvell/octeontx2/nic/otx2_common.c       |  2 +-
- .../marvell/octeontx2/nic/otx2_txrx.c         | 32 +++++++++++--------
- .../marvell/octeontx2/nic/otx2_txrx.h         |  1 +
- 3 files changed, 21 insertions(+), 14 deletions(-)
+Your proposal seems reasonable Arnaud, for virtio it makes sense to
+provide the destination address in the API as well.
 
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-index 9ac9e6615ae7..0a7046a916ac 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_common.c
-@@ -898,6 +898,7 @@ static int otx2_sq_init(struct otx2_nic *pfvf, u16 qidx, u16 sqb_aura)
- 	}
- 
- 	sq->head = 0;
-+	sq->cons_head = 0;
- 	sq->sqe_per_sqb = (pfvf->hw.sqb_size / sq->sqe_size) - 1;
- 	sq->num_sqbs = (qset->sqe_cnt + sq->sqe_per_sqb) / sq->sqe_per_sqb;
- 	/* Set SQE threshold to 10% of total SQEs */
-@@ -1599,7 +1600,6 @@ int otx2_nix_config_bp(struct otx2_nic *pfvf, bool enable)
- 	req->bpid_per_chan = 0;
- #endif
- 
--
- 	return otx2_sync_mbox_msg(&pfvf->mbox);
- }
- EXPORT_SYMBOL(otx2_nix_config_bp);
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-index 5ec11d71bf60..ef10aef3cda0 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.c
-@@ -441,6 +441,7 @@ static int otx2_tx_napi_handler(struct otx2_nic *pfvf,
- 				struct otx2_cq_queue *cq, int budget)
- {
- 	int tx_pkts = 0, tx_bytes = 0, qidx;
-+	struct otx2_snd_queue *sq;
- 	struct nix_cqe_tx_s *cqe;
- 	int processed_cqe = 0;
- 
-@@ -451,6 +452,9 @@ static int otx2_tx_napi_handler(struct otx2_nic *pfvf,
- 		return 0;
- 
- process_cqe:
-+	qidx = cq->cq_idx - pfvf->hw.rx_queues;
-+	sq = &pfvf->qset.sq[qidx];
-+
- 	while (likely(processed_cqe < budget) && cq->pend_cqe) {
- 		cqe = (struct nix_cqe_tx_s *)otx2_get_next_cqe(cq);
- 		if (unlikely(!cqe)) {
-@@ -458,18 +462,20 @@ static int otx2_tx_napi_handler(struct otx2_nic *pfvf,
- 				return 0;
- 			break;
- 		}
-+
- 		if (cq->cq_type == CQ_XDP) {
--			qidx = cq->cq_idx - pfvf->hw.rx_queues;
--			otx2_xdp_snd_pkt_handler(pfvf, &pfvf->qset.sq[qidx],
--						 cqe);
-+			otx2_xdp_snd_pkt_handler(pfvf, sq, cqe);
- 		} else {
--			otx2_snd_pkt_handler(pfvf, cq,
--					     &pfvf->qset.sq[cq->cint_idx],
--					     cqe, budget, &tx_pkts, &tx_bytes);
-+			otx2_snd_pkt_handler(pfvf, cq, sq, cqe, budget,
-+					     &tx_pkts, &tx_bytes);
- 		}
-+
- 		cqe->hdr.cqe_type = NIX_XQE_TYPE_INVALID;
- 		processed_cqe++;
- 		cq->pend_cqe--;
-+
-+		sq->cons_head++;
-+		sq->cons_head &= (sq->sqe_cnt - 1);
- 	}
- 
- 	/* Free CQEs to HW */
-@@ -1072,17 +1078,17 @@ bool otx2_sq_append_skb(struct net_device *netdev, struct otx2_snd_queue *sq,
- {
- 	struct netdev_queue *txq = netdev_get_tx_queue(netdev, qidx);
- 	struct otx2_nic *pfvf = netdev_priv(netdev);
--	int offset, num_segs, free_sqe;
-+	int offset, num_segs, free_desc;
- 	struct nix_sqe_hdr_s *sqe_hdr;
- 
--	/* Check if there is room for new SQE.
--	 * 'Num of SQBs freed to SQ's pool - SQ's Aura count'
--	 * will give free SQE count.
-+	/* Check if there is enough room between producer
-+	 * and consumer index.
- 	 */
--	free_sqe = (sq->num_sqbs - *sq->aura_fc_addr) * sq->sqe_per_sqb;
-+	free_desc = (sq->cons_head - sq->head - 1 + sq->sqe_cnt) & (sq->sqe_cnt - 1);
-+	if (free_desc < sq->sqe_thresh)
-+		return false;
- 
--	if (free_sqe < sq->sqe_thresh ||
--	    free_sqe < otx2_get_sqe_count(pfvf, skb))
-+	if (free_desc < otx2_get_sqe_count(pfvf, skb))
- 		return false;
- 
- 	num_segs = skb_shinfo(skb)->nr_frags + 1;
-diff --git a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.h b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.h
-index fbe62bbfb789..93cac2c2664c 100644
---- a/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.h
-+++ b/drivers/net/ethernet/marvell/octeontx2/nic/otx2_txrx.h
-@@ -79,6 +79,7 @@ struct sg_list {
- struct otx2_snd_queue {
- 	u8			aura_id;
- 	u16			head;
-+	u16			cons_head;
- 	u16			sqe_size;
- 	u32			sqe_cnt;
- 	u16			num_sqbs;
--- 
-2.25.1
+It's a kernel-internal API so we could change it, but let's try to avoid
+that by adding the address from the start.
 
+Regards,
+Bjorn
+
+> Thanks,
+> Arnaud
+> 
+> [1] https://lore.kernel.org/lkml/e54bcfcb-8e37-9caa-b330-a7411820b7ce@foss.st.com/T/
+> [2]https://lore.kernel.org/lkml/e54bcfcb-8e37-9caa-b330-a7411820b7ce@foss.st.com/T/#m7340a8e70fb0d8935869c4cef96863abda555c96
+> 
+> > 
+> > Deepak Kumar Singh (3):
+> >   rpmsg: core: Add signal API support
+> >   rpmsg: glink: Add support to handle signals command
+> >   rpmsg: char: Add TIOCMGET/TIOCMSET ioctl support
+> > 
+> >  drivers/rpmsg/qcom_glink_native.c | 63 +++++++++++++++++++++++++++++++++++++++
+> >  drivers/rpmsg/rpmsg_char.c        | 60 ++++++++++++++++++++++++++++++++-----
+> >  drivers/rpmsg/rpmsg_core.c        | 20 +++++++++++++
+> >  drivers/rpmsg/rpmsg_internal.h    |  2 ++
+> >  include/linux/rpmsg.h             | 15 ++++++++++
+> >  5 files changed, 152 insertions(+), 8 deletions(-)
+> > 
