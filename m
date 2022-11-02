@@ -2,61 +2,64 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 51626615BD1
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 06:31:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 73BF0615BD3
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 06:31:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiKBFbc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 01:31:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35992 "EHLO
+        id S229962AbiKBFbj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 01:31:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiKBFba (ORCPT
+        with ESMTP id S229850AbiKBFbc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 01:31:30 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 63DA7266A
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 22:31:29 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id h193so6621691pgc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 22:31:29 -0700 (PDT)
+        Wed, 2 Nov 2022 01:31:32 -0400
+Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C65B266A
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 22:31:31 -0700 (PDT)
+Received: by mail-pl1-x632.google.com with SMTP id j12so15561188plj.5
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 22:31:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=xiaomi-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1Uhhi8iG3JhPMCXLvwtLoUGRfn2nByYcmLb85IgK3n0=;
-        b=2gEPNh8HGtbQcEhGFpzmgIfZdoM28gwiSbPfaWMhmz7QIktWqW7733RPi09KI1Xh9e
-         pxGmZia+JRCptRyWv8OH5VlVhydWua06dAtf3xGL80oiY6rB6m7OSiGKIFnU6UDbsp/B
-         VLbqc7uqgn7lUEILAjImBgrGUJTdMSpNHrjZxnSF5plbHgvpJgE5dpGD7F2Rz3leguYa
-         E3QoAR1i/B+BAFL0iCv6Ba/08QM5p49gY6o8Rp/gEgMPyiZMsorzsQk2n8bzYBk0YNgg
-         udhY4Jeukk4PjsdbKIh3fmEosq196M9kZtni5dAUTdOjKUlIcP/PvKjSnSe/KCqDfB74
-         psIg==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=GX3TbmGjInf7cKqyQc4waVJupgYK+B/rVkHEoTnFRb4=;
+        b=WmFdW8gZmTpS4JhdK4R6MvnFBKs6rBEo8fVdPzp1KND8PXgiJMdHlvE5eYNyXJB/+f
+         gSYJ8Q87Brp3EQOwkAcvUDQBBYXkl3R/DuDsHRehLXjewwPROyOCUTqA2vOMBe0g7WTR
+         l64X3Q3hImetK3Idhf1+jmJX//aC7A4yVa4BJjILGtyE1XHWgQ76bunNqGP2EQCaAA9c
+         X6LYNFZ8kIK47xOriZHVN7rVFOji96Mc4Sw//d3nCp9OheED28+10HCLI5W0q8eTl0Ts
+         L6Zg9veJMlQ3Nd6DuewE1X9wmJ56PMf4Oz8asebmHFT02XIVkg+1s/gwXoK4+PPwS0d9
+         hT6A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=1Uhhi8iG3JhPMCXLvwtLoUGRfn2nByYcmLb85IgK3n0=;
-        b=itjrPoPvxsIYM27JWJ3eHVProUZg0fCSidmCnMj0xI5qVA/kLcRmY64cUEAdbcAN1P
-         SVH7MP9Tfh9cAD99bAYZcvSWvA5DHx2Xozg7lGy9qbNTDR6tOkNr98cYNpLph/eOTZOP
-         oUM2tlw1ak1hEmmPSc4/jqG5GtD7N++BREukvW3U713ledoF5IKY62ByedkC2nNHLYSP
-         xOgIuyp93W3/Hd/TYLEZYu9EUItGWUMBS0TJaPNvzI1+wqFtZiIqAXZrjhF7KypGLOrf
-         0K6KfvOW1915usN6aFA1k/7g/wFAJ1tqncQ7NAeCbmms+QkJwYLxXfDM2VU8aiHphZIa
-         Kx2w==
-X-Gm-Message-State: ACrzQf2q/rAjJogk3buN1eYz5xNMi8rY8c8P6VD7Xz5m+YSIAWCwrdzF
-        Y1dO2ihV4wn+vFcX3/PRlsUuBttgzlJeig==
-X-Google-Smtp-Source: AMsMyM6HTj0QStfkW8lklz0PVaHYZKyRMEZzPx361AAY3kDT1T+OjZrU4aJTuGFEmVm6yDnuIAsMqQ==
-X-Received: by 2002:a63:66c3:0:b0:470:8fd:7bae with SMTP id a186-20020a6366c3000000b0047008fd7baemr1329430pgc.277.1667367088973;
-        Tue, 01 Nov 2022 22:31:28 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=GX3TbmGjInf7cKqyQc4waVJupgYK+B/rVkHEoTnFRb4=;
+        b=udjrjbpOPfiYsRpqhKn+Q2jyPVhX/U639oMtf6UwIc8KNddqEnh3cmAr2AW/ZP5gvQ
+         qEy72N/NrL4Rz+w1UEXKerBKXe1FU++e+LWBmjCbjBw1xfFKhu0Obj2BuTn9E5xKMa9+
+         xEHKEeJb61cBT09R16cohxoP0Sq5a90+3x1EHqcK/ik/mcUxxDdevlRLEro2QTPRCgmv
+         BKvmyEH8ZSZvUwMWoWHg23yFZVuY9m9vZp6rgv07QhzyXFnRwrdwlTM7BRopumXWdpvU
+         NC5yAzUF++WS4+ORVBg6FiT13ptqFJED+qcgwpKxSb8zsrLjRo9+jSRHPl5w3lalax7r
+         Ec6Q==
+X-Gm-Message-State: ACrzQf22ezdTUbo4aWEBUWpFkrlJt77lu6fCUxHtXCr3LR67p88k02M5
+        ROQk+Axl4g3jWk608JlyNNG8NA9X2TZLQQ==
+X-Google-Smtp-Source: AMsMyM7tTDK6u9L0KtTscd2g1O2p7Ao40FmYOBSprZ+ACxENSFHl+EVRXBkaZNaW8BptsL7qk/6gAA==
+X-Received: by 2002:a17:90b:3883:b0:213:a9e8:492c with SMTP id mu3-20020a17090b388300b00213a9e8492cmr22507685pjb.77.1667367091142;
+        Tue, 01 Nov 2022 22:31:31 -0700 (PDT)
 Received: from ubuntu18.mioffice.cn ([2408:8607:1b00:7:9e7b:efff:fe41:a22a])
-        by smtp.gmail.com with ESMTPSA id u10-20020a170902e80a00b00186b69157ecsm7276367plg.202.2022.11.01.22.31.27
+        by smtp.gmail.com with ESMTPSA id u10-20020a170902e80a00b00186b69157ecsm7276367plg.202.2022.11.01.22.31.29
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 22:31:28 -0700 (PDT)
+        Tue, 01 Nov 2022 22:31:30 -0700 (PDT)
 From:   Jiaming Li <lijiaming3@xiaomi.corp-partner.google.com>
 To:     alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org
 Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
         lijiaming3 <lijiaming3@xiaomi.com>
-Subject: [RESEND PATCH 0/4] Implement File-Based optimization functionality
-Date:   Wed,  2 Nov 2022 13:30:54 +0800
-Message-Id: <20221102053058.21021-1-lijiaming3@xiaomi.corp-partner.google.com>
+Subject: [RESEND PATCH 1/4] scsi:ufs:remove sanity check
+Date:   Wed,  2 Nov 2022 13:30:55 +0800
+Message-Id: <20221102053058.21021-2-lijiaming3@xiaomi.corp-partner.google.com>
 X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221102053058.21021-1-lijiaming3@xiaomi.corp-partner.google.com>
+References: <20221102053058.21021-1-lijiaming3@xiaomi.corp-partner.google.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -70,43 +73,38 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: lijiaming3 <lijiaming3@xiaomi.com>
 
-Stoage devices have a long lifespan. Device performance over its
-lifespan is not constant and may deteriorate over time. To remedy
-this, JEDEC came up with the UFS File-Based-Optimization (FBO)
-extension (JC-64.1-22-67). The FBO feature improves this performance
-regression via physical defragmentation of the LBA ranges that are
-associated with specific files.
+UFS descriptors assumed to have a 2 bytes header:
+ - Offset 0 - descriptor size
+ - Offset 1 - descriptor id
+However, the ufs spec does not mandates this, and as a matter of
+fact, QUERY_DESC_DESC_TYPE_OFFSET is not being used anymore now.
+And future descriptors no longer follow this assumption. So
+remove this as preparation of introducing the FBO descriptor.
 
-This feature expects the following host-device dialog:
-1) The host let the device know of lba range(s) of interest. Those
-   ranges are typically associated with a specific file. One can
-   obtain it from the iNode of the file and some offset calculations.
-2) The host ask the device for the current physical fragmentation
-   level of this file.
-3) Should it requires, the host instruct the device to perform
-   defragmentation.
-4) Upon successful termination of the defragmentation phase, the host
-   may ask for the new fragmentation level of the file.
+Signed-off-by: lijiaming3 <lijiaming3@xiaomi.com>
+---
+ drivers/ufs/core/ufshcd.c | 8 --------
+ 1 file changed, 8 deletions(-)
 
-lijiaming3 (4):
-  scsi:ufs:remove sanity check
-  scsi:ufs:add File-Based Optimization descriptor
-  scsi:ufs:add FBO module
-  scsi:ufs:add fbo functionality
-
- Documentation/ABI/testing/sysfs-driver-ufs | 129 +++++
- drivers/ufs/core/Kconfig                   |  12 +
- drivers/ufs/core/Makefile                  |   1 +
- drivers/ufs/core/ufs-sysfs.c               |  26 ++
- drivers/ufs/core/ufsfbo.c                  | 519 +++++++++++++++++++++
- drivers/ufs/core/ufsfbo.h                  |  23 +
- drivers/ufs/core/ufshcd.c                  |  15 +-
- include/ufs/ufs.h                          |  16 +
- include/ufs/ufshcd.h                       |   1 +
- 9 files changed, 734 insertions(+), 8 deletions(-)
- create mode 100644 drivers/ufs/core/ufsfbo.c
- create mode 100644 drivers/ufs/core/ufsfbo.h
-
+diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
+index b1f59a5fe632..4bc5b8563a62 100644
+--- a/drivers/ufs/core/ufshcd.c
++++ b/drivers/ufs/core/ufshcd.c
+@@ -3458,14 +3458,6 @@ int ufshcd_read_desc_param(struct ufs_hba *hba,
+ 		goto out;
+ 	}
+ 
+-	/* Sanity check */
+-	if (desc_buf[QUERY_DESC_DESC_TYPE_OFFSET] != desc_id) {
+-		dev_err(hba->dev, "%s: invalid desc_id %d in descriptor header\n",
+-			__func__, desc_buf[QUERY_DESC_DESC_TYPE_OFFSET]);
+-		ret = -EINVAL;
+-		goto out;
+-	}
+-
+ 	/* Update descriptor length */
+ 	buff_len = desc_buf[QUERY_DESC_LENGTH_OFFSET];
+ 	ufshcd_update_desc_length(hba, desc_id, desc_index, buff_len);
 -- 
 2.38.1
 
