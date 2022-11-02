@@ -2,320 +2,451 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 209A1615C29
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 07:18:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C319615C2C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 07:18:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbiKBGS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 02:18:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37362 "EHLO
+        id S230132AbiKBGSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 02:18:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230103AbiKBGSY (ORCPT
+        with ESMTP id S230165AbiKBGSf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 02:18:24 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F4A25C7B
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 23:18:22 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id l6so15328152pjj.0
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 23:18:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=h0d5aCVPRTVrfRa+Qu4ZFoByM5Lhhf9AZF5J+3bpC/M=;
-        b=Ny0gpAJSShyPpcJLqRwRbmw/0WJGjqpn49vntdcZHq0u3pzx/+RdHFQceVu20fS8nx
-         tinZ6IROpAZf7Za60oNA0P6u3bnXF4qH7i992xR6iRShZx34GoVp34iaS7DRD2IAyA0Z
-         9ZcJtm2ElTzRurp4D3yNxJ3so5ql3vgeoZ8f0AhOcc8UYcWqXbuww3eFhDFV4qe8ZAvr
-         caoWdfjuzhzdPwXtJc0y1Pb5SmsJTlUjWSvwjBPltx3qwSqh/X4ZJ/f8eF3lp+o86e4x
-         yDkU4jJXb1tYVJjffaT7scKPIN4IYyWgDmBFLBMt5gLNWL4pFQrQqcFCNMyyIMeGHXeR
-         bfjA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h0d5aCVPRTVrfRa+Qu4ZFoByM5Lhhf9AZF5J+3bpC/M=;
-        b=HK30yOzAhtnx20Ni0mNszFyZ262ofBfZqnRPCGxxy8kHpH/nh3p7LvtyE5eC2rplUd
-         AD6Nq4zQ/irKyGNYN3EIJcOjQMCzjAi9XcYz5hnbYHSXDz4pMAya/yFAS2LgK/GgpaaM
-         y0VCiCpbngLEpzMJXdshsPpNeF6YeXO319faZLDKLnx5B9WDaw/13sCwNbova3pdQJSY
-         P8QSJ5Pa2i36ua0tMGW+BQdl6AjYsRoG0LyYBxBvN91aB1TYbYixwhEh0xmP7SII6gA+
-         gw5wPs2ewDxXr8TlTSP0JcUTgJoIQ1k6FZug9tEGxz2CduKN6tAQB1VGJ08zsgf1tdYm
-         3bbA==
-X-Gm-Message-State: ACrzQf0N3gFi5PxGoY0+FIe4UC938QLcgWUFEqLsHyo6dc4lw6FXwsod
-        uKMTPt/zLBgEt/S5W6t/TWr+CQ==
-X-Google-Smtp-Source: AMsMyM7tdx3msXcDSRjzengMv7BnjG3CokZXlPZh9RQr5YedHUAgqS+vzQiPxXN9ulEJ1GVtVzG0qA==
-X-Received: by 2002:a17:903:444:b0:187:428:1317 with SMTP id iw4-20020a170903044400b0018704281317mr23080646plb.151.1667369901803;
-        Tue, 01 Nov 2022 23:18:21 -0700 (PDT)
-Received: from localhost ([122.172.84.80])
-        by smtp.gmail.com with ESMTPSA id c12-20020a170902d48c00b00186a6b63525sm7401974plg.120.2022.11.01.23.18.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 23:18:21 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 11:48:19 +0530
-From:   Viresh Kumar <viresh.kumar@linaro.org>
-To:     Hector Martin <marcan@marcan.st>
-Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Sven Peter <sven@svenpeter.dev>,
-        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Marc Zyngier <maz@kernel.org>,
-        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 4/5] cpufreq: apple-soc: Add new driver to control
- Apple SoC CPU P-states
-Message-ID: <20221102061819.dyl5ah6qffntqieh@vireshk-i7>
-References: <20221024043925.25379-1-marcan@marcan.st>
- <20221024043925.25379-5-marcan@marcan.st>
+        Wed, 2 Nov 2022 02:18:35 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE1F25EBB;
+        Tue,  1 Nov 2022 23:18:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667369910; x=1698905910;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=pEWjkZqQxuIkuHHzF4BhxNUgWNmPWXIV6oZqI6S3AV8=;
+  b=S/CIADRpM6IKxvtDlekmHyLgbbSWlndUnqVgezaDzvQQNm2usg/4hU0W
+   L0IWnFMKw1CHNbwEJN9ehZKKYMN3PHcghtFcSpgZtIgAbTReT37JqniUk
+   8+hAp0RcPeg7gXwKOnEKyJu0XtAIDPPwkFTOyAUnjQ3pGSiUeP3ECGuU8
+   4DT7Vscet4kq+GnM7Uvj31KKJJgEZPRCnnlWi4uCSC52nYDTmB8JrIpJv
+   W6Pqj/6/X8AMzy9whKMxfVHdQ8wlylII9lDyPrRjBDRDPuPuhO/15H/mj
+   g+ALq4iCgMUW63mF3ocPNFzxI5hk7YlFHspp+mia67hl3UzHHALwKyy+M
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="309321159"
+X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
+   d="scan'208";a="309321159"
+Received: from orsmga003.jf.intel.com ([10.7.209.27])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 23:18:29 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="585278798"
+X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
+   d="scan'208";a="585278798"
+Received: from rossschx-mobl1.amr.corp.intel.com (HELO [10.209.44.13]) ([10.209.44.13])
+  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 23:18:29 -0700
+Message-ID: <55497719-4c51-e209-dd10-0f4ee0d95ad5@linux.intel.com>
+Date:   Tue, 1 Nov 2022 23:18:29 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221024043925.25379-5-marcan@marcan.st>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Firefox/102.0 Thunderbird/102.2.2
+Subject: Re: [PATCH v16 2/3] virt: Add TDX guest driver
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+        Shuah Khan <shuah@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "H . Peter Anvin" <hpa@zytor.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Tony Luck <tony.luck@intel.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Wander Lairson Costa <wander@redhat.com>,
+        Isaku Yamahata <isaku.yamahata@gmail.com>,
+        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
+        khalid.elmously@canonical.com, philip.cox@canonical.com,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org
+References: <20221028002820.3303030-1-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <20221028002820.3303030-3-sathyanarayanan.kuppuswamy@linux.intel.com>
+ <Y1t18Aw2RbP+oj9D@kroah.com>
+ <01f437c1-9330-6fb5-d692-6cd500d8adf8@linux.intel.com>
+ <Y14fX1Ni1taUxtFk@kroah.com>
+From:   Sathyanarayanan Kuppuswamy 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>
+In-Reply-To: <Y14fX1Ni1taUxtFk@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 24-10-22, 13:39, Hector Martin wrote:
-> diff --git a/drivers/cpufreq/apple-soc-cpufreq.c b/drivers/cpufreq/apple-soc-cpufreq.c
-> +struct apple_soc_cpufreq_info {
-> +	u64 max_pstate;
-> +	u64 cur_pstate_mask;
-> +	u64 cur_pstate_shift;
-> +};
-> +
-> +struct apple_cpu_priv {
-> +	struct device *cpu_dev;
-> +	void __iomem *reg_base;
-> +	const struct apple_soc_cpufreq_info *info;
-> +};
-> +
-> +static struct cpufreq_driver apple_soc_cpufreq_driver;
-> +
-> +const struct apple_soc_cpufreq_info soc_t8103_info = {
+Hi Greg,
 
-static ? For other instances too.
+On 10/29/22 11:53 PM, Greg Kroah-Hartman wrote:
+> On Sat, Oct 29, 2022 at 04:17:39PM -0700, Sathyanarayanan Kuppuswamy wrote:
+>> Hi Greg
+>>
+>> On 10/27/22 11:25 PM, Greg Kroah-Hartman wrote:
+>>> On Thu, Oct 27, 2022 at 05:28:19PM -0700, Kuppuswamy Sathyanarayanan wrote:
+>>
+>>>> +
+>>>> +static long tdx_guest_ioctl(struct file *file, unsigned int cmd,
+>>>> +			    unsigned long arg)
+>>>> +{
+>>>> +	switch (cmd) {
+>>>> +	case TDX_CMD_GET_REPORT:
+>>>> +		return tdx_get_report((void __user *)arg);
+>>>
+>>> You know the type of this pointer here, why not cast it instead of
+>>> having to cast it from void * again?
+>>
+>> The only place we use arg pointer is in copy_from_user() function,
+>> which expects void __user * pointer. So why cast it as struct
+>> tdx_report_req * here?
+> 
+> Because then your function will show the true type and you don't have to
+> cast it again.
+> 
+>>>> +MODULE_AUTHOR("Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>");
+>>>> +MODULE_DESCRIPTION("TDX Guest Driver");
+>>>> +MODULE_LICENSE("GPL");
+>>>> diff --git a/include/uapi/linux/tdx-guest.h b/include/uapi/linux/tdx-guest.h
+>>>> new file mode 100644
+>>>> index 000000000000..29453e6a7ced
+>>>> --- /dev/null
+>>>> +++ b/include/uapi/linux/tdx-guest.h
+>>>> @@ -0,0 +1,55 @@
+>>>> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
+>>>> +/*
+>>>> + * Userspace interface for TDX guest driver
+>>>> + *
+>>>> + * Copyright (C) 2022 Intel Corporation
+>>>> + */
+>>>> +
+>>>> +#ifndef _UAPI_LINUX_TDX_GUEST_H_
+>>>> +#define _UAPI_LINUX_TDX_GUEST_H_
+>>>> +
+>>>> +#include <linux/ioctl.h>
+>>>> +#include <linux/types.h>
+>>>> +
+>>>> +/* Length of the REPORTDATA used in TDG.MR.REPORT TDCALL */
+>>>> +#define TDX_REPORTDATA_LEN              64
+>>>> +
+>>>> +/* Length of TDREPORT used in TDG.MR.REPORT TDCALL */
+>>>> +#define TDX_REPORT_LEN                  1024
+>>>
+>>> As these are fixed values, why do you have to say them again in the
+>>> structure?
+>>
+>> These length recommendations are provided by the TDX Module, and there is
+>> a slight possibility that the TDX Module will increase the maximum size
+>> of the REPORTDATA and TDREPORT in the future.
+> 
+> We do not write kernel code for "slight possibilities sometime in the
+> future".
+> 
+>> To handle such length
+>> changes, rather than inventing a new IOCTL for it in the future, making
+>> the current one flexible to handle such changes seems better.
+> 
+> Please work through the code and see how that would really look, and
+> what would break if you were to change that in the future (remember
+> kernel code and userspace code is not upgraded at the same time.)
+> 
+>> One less ABI
+>> to maintain is always better, right? My initial design did use fixed size
+>> buffers like you have recommended, but later changed it as per review
+>> suggestion to make the ABI flexible.
+> 
+> Again, work through and try to determine if the added complexity will
+> really work here.
+> 
+> What is wrong with just adding a new ioctl if in the future, you really
+> do need to change something?  That way you are sure that nothing will
+> break and userspace will be finen with it.  It is not like you are
+> forbidden to add new ioctls later, you would have to change the kernel
+> code no matter what anyway.
+> 
+> Keep it simple please.
 
-> +	.max_pstate = 15,
-> +	.cur_pstate_mask = APPLE_DVFS_STATUS_CUR_PS_T8103,
-> +	.cur_pstate_shift = APPLE_DVFS_STATUS_CUR_PS_SHIFT_T8103,
-> +};
-> +
-> +const struct apple_soc_cpufreq_info soc_t8112_info = {
-> +	.max_pstate = 31,
-> +	.cur_pstate_mask = APPLE_DVFS_STATUS_CUR_PS_T8112,
-> +	.cur_pstate_shift = APPLE_DVFS_STATUS_CUR_PS_SHIFT_T8112,
-> +};
-> +
-> +const struct apple_soc_cpufreq_info soc_default_info = {
-> +	.max_pstate = 15,
-> +	.cur_pstate_mask = 0, /* fallback */
-> +};
-> +
-> +static const struct of_device_id apple_soc_cpufreq_of_match[] = {
-> +	{
-> +		.compatible = "apple,t8103-cluster-cpufreq",
-> +		.data = &soc_t8103_info,
-> +	},
-> +	{
 
-Isn't the preferred way for this is "}, {" instead ?
+The following are potential solutions to the possible kernel/userspace
+mix/match issue that may arise in the future if the acceptable reportdata
+length, tdreport length, or subtype values change.
 
-I couldn't find this in Coding Guidelines, but somehow remember that
-to be the preferred format.
+I've attempted to do a sample implementation as you have suggested to
+check the pros and cons for both solutions. Please let me know what you
+think. Personally I prefer solution 2, as it handles the issue you have
+raised and also keeps the ABI flexible.
 
-> +		.compatible = "apple,t8112-cluster-cpufreq",
-> +		.data = &soc_t8112_info,
-> +	},
-> +	{
-> +		.compatible = "apple,cluster-cpufreq",
-> +		.data = &soc_default_info,
-> +	},
-> +	{}
-> +};
-> +
-> +static unsigned int apple_soc_cpufreq_get_rate(unsigned int cpu)
-> +{
-> +	struct cpufreq_policy *policy = cpufreq_cpu_get_raw(cpu);
-> +	struct apple_cpu_priv *priv = policy->driver_data;
-> +	unsigned int pstate;
-> +	unsigned int i;
+Solution 1:
+------------
 
-Merge these two ?
+This is based on your suggestion. I have dropped the IOCTL req members for
+reportdata length (rpd_len), tdreport length (tdr_len) and subtype. I have
+also used fixed size buffers to handle the current requirements.
 
-> +
-> +	if (priv->info->cur_pstate_mask) {
-> +		u64 reg = readq_relaxed(priv->reg_base + APPLE_DVFS_STATUS);
-> +
-> +		pstate = (reg & priv->info->cur_pstate_mask) >>  priv->info->cur_pstate_shift;
-> +	} else {
-> +		/*
-> +		 * For the fallback case we might not know the layout of DVFS_STATUS,
-> +		 * so just use the command register value (which ignores boost limitations).
-> +		 */
-> +		u64 reg = readq_relaxed(priv->reg_base + APPLE_DVFS_CMD);
-> +
-> +		pstate = FIELD_GET(APPLE_DVFS_CMD_PS1, reg);
-> +	}
-> +
-> +	for (i = 0; policy->freq_table[i].frequency != CPUFREQ_TABLE_END; i++)
+Pros: Implementation is simple and clean.
 
-You may want to use, cpufreq_for_each_valid_entry(), or some other
-generic iterator here.
+Cons: May need to add new IOCTL for any future requirement updates.
 
-> +		if (policy->freq_table[i].driver_data == pstate)
-> +			return policy->freq_table[i].frequency;
-> +
-> +	dev_err(priv->cpu_dev, "could not find frequency for pstate %d\n",
-> +		pstate);
-> +	return 0;
-> +}
-> +
-> +static int apple_soc_cpufreq_set_target(struct cpufreq_policy *policy,
-> +					unsigned int index)
-> +{
-> +	struct apple_cpu_priv *priv = policy->driver_data;
-> +	unsigned int pstate = policy->freq_table[index].driver_data;
-> +	u64 reg;
-> +
-> +	/* Fallback for newer SoCs */
-> +	if (index > priv->info->max_pstate)
-> +		index = priv->info->max_pstate;
-> +
-> +	if (readq_poll_timeout_atomic(priv->reg_base + APPLE_DVFS_CMD, reg,
-> +				      !(reg & APPLE_DVFS_CMD_BUSY), 2,
-> +				      APPLE_DVFS_TRANSITION_TIMEOUT)) {
-> +		return -EIO;
-> +	}
-> +
-> +	reg &= ~(APPLE_DVFS_CMD_PS1 | APPLE_DVFS_CMD_PS2);
-> +	reg |= FIELD_PREP(APPLE_DVFS_CMD_PS1, pstate);
-> +	reg |= FIELD_PREP(APPLE_DVFS_CMD_PS2, pstate);
-> +	reg |= APPLE_DVFS_CMD_SET;
-> +
-> +	writeq_relaxed(reg, priv->reg_base + APPLE_DVFS_CMD);
-> +
-> +	return 0;
-> +}
-> +
-> +static unsigned int apple_soc_cpufreq_fast_switch(struct cpufreq_policy *policy,
-> +						  unsigned int target_freq)
-> +{
-> +	if (apple_soc_cpufreq_set_target(policy, policy->cached_resolved_idx) < 0)
-> +		return 0;
-> +
-> +	return policy->freq_table[policy->cached_resolved_idx].frequency;
-> +}
-> +
-> +static int apple_soc_cpufreq_find_cluster(struct cpufreq_policy *policy,
-> +					  void __iomem **reg_base,
-> +					  const struct apple_soc_cpufreq_info **info)
-> +{
-> +	struct of_phandle_args args;
-> +	const struct of_device_id *match;
-> +	int ret = 0;
-> +
-> +	ret = of_perf_domain_get_sharing_cpumask(policy->cpu, "performance-domains",
-> +						 "#performance-domain-cells",
-> +						 policy->cpus, &args);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	match = of_match_node(apple_soc_cpufreq_of_match, args.np);
-> +	of_node_put(args.np);
-> +	if (!match)
-> +		return -ENODEV;
-> +
-> +	*info = match->data;
-> +
-> +	*reg_base = of_iomap(args.np, 0);
-> +	if (IS_ERR(*reg_base))
-> +		return PTR_ERR(*reg_base);
-> +
-> +	return 0;
-> +}
-> +
-> +static struct freq_attr *apple_soc_cpufreq_hw_attr[] = {
-> +	&cpufreq_freq_attr_scaling_available_freqs,
-> +	NULL,
-> +	NULL,
-> +};
-> +
-> +static int apple_soc_cpufreq_init(struct cpufreq_policy *policy)
-> +{
-> +	int ret, i;
-> +	unsigned int transition_latency;
-> +	void __iomem *reg_base;
-> +	struct device *cpu_dev;
-> +	struct apple_cpu_priv *priv;
-> +	const struct apple_soc_cpufreq_info *info;
-> +	struct cpufreq_frequency_table *freq_table;
-> +
-> +	cpu_dev = get_cpu_device(policy->cpu);
-> +	if (!cpu_dev) {
-> +		pr_err("failed to get cpu%d device\n", policy->cpu);
-> +		return -ENODEV;
-> +	}
-> +
-> +	ret = dev_pm_opp_of_add_table(cpu_dev);
-> +	if (ret < 0) {
-> +		dev_err(cpu_dev, "%s: failed to add OPP table: %d\n", __func__, ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = apple_soc_cpufreq_find_cluster(policy, &reg_base, &info);
-> +	if (ret) {
-> +		dev_err(cpu_dev, "%s: failed to get cluster info: %d\n", __func__, ret);
-> +		return ret;
-> +	}
-> +
-> +	ret = dev_pm_opp_set_sharing_cpus(cpu_dev, policy->cpus);
+Following are the ABI and IOCTL handler implementation details (Note: it
+is not the complete code, only included required details to show how the
+implementation looks):
 
-Why do you need this ? The OPP core should be able to find this
-information by itself in your case AFAIU. The OPP core will refer
-"operating-points-v2 = <&pcluster_opp>" and find that the cores are
-related.
+--- /dev/null
++++ b/include/uapi/linux/tdx-guest.h
+@@ -0,0 +1,41 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++/*
++ * Userspace interface for TDX guest driver
++ *
++ * Copyright (C) 2022 Intel Corporation
++ */
++
++#ifndef _UAPI_LINUX_TDX_GUEST_H_
++#define _UAPI_LINUX_TDX_GUEST_H_
++
++#include <linux/ioctl.h>
++#include <linux/types.h>
++
++/* Length of the REPORTDATA used in TDG.MR.REPORT TDCALL */
++#define TDX_REPORTDATA_LEN              64
++
++/* Length of TDREPORT used in TDG.MR.REPORT TDCALL */
++#define TDX_REPORT_LEN                  1024
++
++/**
++ * struct tdx_report_req - Request struct for TDX_CMD_GET_REPORT IOCTL.
++ *
++ * @reportdata: User buffer with REPORTDATA to be included into TDREPORT.
++ *              Typically it can be some nonce provided by attestation
++ *              service, so the generated TDREPORT can be uniquely verified.
++ * @tdreport: User buffer to store TDREPORT output from TDCALL[TDG.MR.REPORT].
++ */
++struct tdx_report_req {
++       __u8 reportdata[TDX_REPORTDATA_LEN];
++       __u8 tdreport[TDX_REPORT_LEN];
++};
 
-> +	if (ret) {
-> +		dev_err(cpu_dev, "%s: failed to mark OPPs as shared: %d\n", __func__, ret);
-> +		goto out_iounmap;
-> +	}
-> +
-> +	ret = dev_pm_opp_get_opp_count(cpu_dev);
-> +	if (ret <= 0) {
-> +		dev_dbg(cpu_dev, "OPP table is not ready, deferring probe\n");
+--- /dev/null
++++ b/drivers/virt/coco/tdx-guest/tdx-guest.c
+@@ -0,0 +1,102 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * TDX guest user interface driver
++ *
++ * Copyright (C) 2022 Intel Corporation
++ */
++
++#include <linux/kernel.h>
++#include <linux/miscdevice.h>
++#include <linux/mm.h>
++#include <linux/module.h>
++#include <linux/mod_devicetable.h>
++#include <linux/string.h>
++#include <linux/uaccess.h>
++
++#include <uapi/linux/tdx-guest.h>
++
++#include <asm/cpu_device_id.h>
++#include <asm/tdx.h>
++
++static long tdx_get_report(struct tdx_report_req __user *ureq)
++{
++       u8 *reportdata, *tdreport;
++       long ret;
++
++       reportdata = kmalloc(TDX_REPORTDATA_LEN, GFP_KERNEL);
++       if (!reportdata)
++               return -ENOMEM;
++
++       tdreport = kzalloc(TDX_REPORT_LEN, GFP_KERNEL);
++       if (!tdreport) {
++               ret = -ENOMEM;
++               goto out;
++       }
++
++       if (copy_from_user(reportdata, ureq->reportdata, TDX_REPORTDATA_LEN)) {
++               ret = -EFAULT;
++               goto out;
++       }
++
++       /* Generate TDREPORT using "TDG.MR.REPORT" TDCALL */
++       ret = tdx_mcall_get_report(reportdata, tdreport);
++       if (ret)
++               goto out;
++
++       if (copy_to_user(ureq->tdreport, tdreport, TDX_REPORT_LEN))
++               ret = -EFAULT;
++
++out:
++       kfree(reportdata);
++       kfree(tdreport);
++
++       return ret;
++}
++
++static long tdx_guest_ioctl(struct file *file, unsigned int cmd,
++                           unsigned long arg)
++{
++       switch (cmd) {
++       case TDX_CMD_GET_REPORT:
++               return tdx_get_report((struct tdx_report_req __user *)arg);
++       default:
++               return -ENOTTY;
++       }
++}
 
-Why would this happen in your case ?
+Solution 2:
+-----------
 
-> +		ret = -EPROBE_DEFER;
-> +		goto out_free_opp;
-> +	}
-> +
-> +	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
-> +	if (!priv) {
-> +		ret = -ENOMEM;
-> +		goto out_free_opp;
-> +	}
-> +
-> +	ret = dev_pm_opp_init_cpufreq_table(cpu_dev, &freq_table);
-> +	if (ret) {
-> +		dev_err(cpu_dev, "failed to init cpufreq table: %d\n", ret);
-> +		goto out_free_priv;
-> +	}
-> +
-> +	/* Get OPP levels (p-state indexes) and stash them in driver_data */
-> +	for (i = 0; freq_table[i].frequency != CPUFREQ_TABLE_END; i++) {
-> +		unsigned long rate = freq_table[i].frequency * 1000;
-> +		struct dev_pm_opp *opp = dev_pm_opp_find_freq_floor(cpu_dev, &rate);
+In this version, I removed all length and subtype related checks in the
+kernel (in tdx get report()) and instead passed the user input directly
+to TDG.MR.TDCALL, allowing the TDX Module to return success or failure
+based on the user input. Because the kernel does not directly impose any
+length or subtype constraints, the userspace/kernel mix/match issue will
+not occur.
 
-Shouldn't you use dev_pm_opp_find_freq_exact() here ?
+Pros:
+
+ABI is flexible and we don't have to add new IOCTL if the acceptable
+reportlength ,tdreport length or subtype values are changed by the
+TDX Module in the future.
+
+Cons:
+
+For now, userspace will pass fixed values to length and subtype members. So
+they not currently useful.
+
+Following are the ABI and IOCTL handler implementation details (Note: it
+is not the complete code, only included required details to show how the
+implementation looks):
+
+--- /dev/null
++++ b/include/uapi/linux/tdx-guest.h
+@@ -0,0 +1,49 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++/*
++ * Userspace interface for TDX guest driver
++ *
++ * Copyright (C) 2022 Intel Corporation
++ */
++
++#ifndef _UAPI_LINUX_TDX_GUEST_H_
++#define _UAPI_LINUX_TDX_GUEST_H_
++
++#include <linux/ioctl.h>
++#include <linux/types.h>
++
++/**
++ * struct tdx_report_req - Request struct for TDX_CMD_GET_REPORT IOCTL.
++ *
++ * @reportdata: Address of user buffer with user-defined REPORTDATA to be
++ *              included into TDREPORT. Typically it can be some nonce
++ *              provided by attestation service, so the generated TDREPORT
++ *              can be uniquely verified.
++ * @tdreport: Address of user buffer to store TDREPORT output from
++ *            TDCALL[TDG.MR.REPORT].
++ * @rpd_len: Length of the REPORTDATA. For acceptable values, refer to TDX
++ *           module specification v1.0 sec titled "TDG.MR.REPORT Leaf".
++ * @tdr_len: Length of the TDREPORT. For acceptable values, refer to TDX
++ *           module specification v1.0 sec titled "TDG.MR.REPORT Leaf".
++ * @subtype: Subtype of TDREPORT. For acceptable values, refer to TDX
++ *           module specification v1.0 sec titled "TDG.MR.REPORT Leaf".
++ * @reserved: Reserved entries to handle future requirements. Must be filled
++ *            with zeroes.
++ */
++struct tdx_report_req {
++       __u64 reportdata;
++       __u64 tdreport;
++       __u32 rpd_len;
++       __u32 tdr_len;
++       __u8 subtype;
++       __u8 reserved[7];
++};
+
+--- /dev/null
++++ b/drivers/virt/coco/tdx-guest/tdx-guest.c
+@@ -0,0 +1,110 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * TDX guest user interface driver
++ *
++ * Copyright (C) 2022 Intel Corporation
++ */
++
++#include <linux/kernel.h>
++#include <linux/miscdevice.h>
++#include <linux/mm.h>
++#include <linux/module.h>
++#include <linux/mod_devicetable.h>
++#include <linux/string.h>
++#include <linux/uaccess.h>
++
++#include <uapi/linux/tdx-guest.h>
++
++#include <asm/cpu_device_id.h>
++#include <asm/tdx.h>
++
++static long tdx_get_report(struct tdx_report_req __user *argp)
++{
++       u8 *reportdata, *tdreport;
++       struct tdx_report_req req;
++       long ret;
++
++       if (copy_from_user(&req, argp, sizeof(req)))
++               return -EFAULT;
++
++       if (memchr_inv(req.reserved, 0, sizeof(req.reserved)))
++               return -EINVAL;
++
++       reportdata = kmalloc(req.rpd_len, GFP_KERNEL);
++       if (!reportdata)
++               return -ENOMEM;
++
++       tdreport = kzalloc(req.tdr_len, GFP_KERNEL);
++       if (!tdreport) {
++               ret = -ENOMEM;
++               goto out;
++       }
++
++       if (copy_from_user(reportdata, u64_to_user_ptr(req.reportdata),
++                          req.rpd_len)) {
++               ret = -EFAULT;
++               goto out;
++       }
++
++       /* Generate TDREPORT using "TDG.MR.REPORT" TDCALL */
++       ret = tdx_mcall_get_report(reportdata, tdreport, req.subtype);
++       if (ret)
++               goto out;
++
++       if (copy_to_user(u64_to_user_ptr(req.tdreport), tdreport, req.tdr_len))
++               ret = -EFAULT;
++
++out:
++       kfree(reportdata);
++       kfree(tdreport);
++
++       return ret;
++}
++
++static long tdx_guest_ioctl(struct file *file, unsigned int cmd,
++                           unsigned long arg)
++{
++       switch (cmd) {
++       case TDX_CMD_GET_REPORT:
++               return tdx_get_report((struct tdx_report_req __user *)arg);
++       default:
++               return -ENOTTY;
++       }
++}
+
+
+> 
+> greg k-h
 
 -- 
-viresh
+Sathyanarayanan Kuppuswamy
+Linux Kernel Developer
