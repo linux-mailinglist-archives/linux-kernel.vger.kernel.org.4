@@ -2,140 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DBD8616F7F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 22:14:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AEF95616F83
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 22:18:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231278AbiKBVOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 17:14:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54552 "EHLO
+        id S229880AbiKBVSY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 17:18:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231476AbiKBVOY (ORCPT
+        with ESMTP id S229457AbiKBVSU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 17:14:24 -0400
-Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06AABBC8C;
-        Wed,  2 Nov 2022 14:14:14 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.west.internal (Postfix) with ESMTP id A8C8E2B06827;
-        Wed,  2 Nov 2022 17:14:09 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Wed, 02 Nov 2022 17:14:13 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1667423649; x=1667430849; bh=ya
-        z7HB+tA0RP33F5tMpk/jLLItyrZaFvVEGA2nFMTHI=; b=Ky05TEuWIr83oUh3MP
-        VKNL8ENuHV9gUlhetBL9nyBnWkmhW3b7eJIJQvsEX4i8mrWKj7fAD2YoYyBb89E9
-        ISKn14UJ31abDLZFWzZCCaQnTLi78oerrmjr+5hmV9sA3hFI3L8ZV1Kiu7AX9QXR
-        PDBaluynehd9n3eiw+gtrXx+RWa959jyR7nphlxGnum8rHgJTzq02ZExi1nIGFid
-        EJO+kCiPv0YbKVpF7c2OrK1fuI/2gu/r+1T0aqwqS9P/ypb1+DPbh35ga9d9WHYp
-        FylKYS+Rg2UR7pBcU7lZ5OPVMq4ERDjJJCu0ll46FiB93Ht82Uh6f5WuN9oIyHug
-        tC5Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1667423649; x=1667430849; bh=yaz7HB+tA0RP33F5tMpk/jLLItyr
-        ZaFvVEGA2nFMTHI=; b=kXuKgSJSeQyH8zkQnQLj2ogT1FjQ404UQUbzOXrHjtoL
-        O5jybhnZTvUTvWSm0JarvjTauAp3ZsZ+r+wmdYPHpVddWzaXL8v+kKFMg4LptKuU
-        za4Nn6AFZHdJ8Ew6kOJjOVtyV+RbvW0VGJP+2xRX3dEy0QIR7itrmJOonvxViJoT
-        AoF3E4PNZiUZ9aaP1YucG7Uv9v8Eqwth9//su3HfO8kpjAFt2r6d9BaJJidv+bKw
-        mNZEQxt0P2yMJj0u53Zl8vkHso9nSQJzXMgYh5xL1AvTD3D0XGhltZ2SmyCHlpRE
-        TQHb95HDxl2N1T/q559g2R0z+nX6Aaenk06fEmM9mA==
-X-ME-Sender: <xms:n91iY-Xiau9PyhDECPWzFgSUDYb5YvoQDfa-aFayS-W-TkmT-EE9PQ>
-    <xme:n91iY6l1bgFgvYiO7TIQuOyH8InOlHtvWmclxCUM0Brvq0SEJSum6PG8m5a0XQRlh
-    XyrODlUak8pt2VGdKM>
-X-ME-Received: <xmr:n91iYyZH6tYal8m3G_iR8obDtjV5uHdUdfR2NM2ruYYM4CfTnC6uoZBViw5Wcm_5RZe2Bw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudejgddugeeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
-    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
-    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
-    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
-X-ME-Proxy: <xmx:n91iY1Xbl82GIObQKlhVWjYLikh-vdemfP8sXrF8OKJdnJGBq_55bQ>
-    <xmx:n91iY4mFVh0Wa1sREv4w7MfcVUVMVuR6uCI7ESrbU6QB3ckNyn8ixg>
-    <xmx:n91iY6eNAqPKPeE5l9TMMHmoRplO_cTttQ8P4OovIUVmAbCtz4rcFQ>
-    <xmx:od1iY_xvsCuIie0PpHuS7NS8eqps2ru8p5ovcRyadUjFuTveg1l2617acAo>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 2 Nov 2022 17:14:06 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 5751D104449; Thu,  3 Nov 2022 00:14:04 +0300 (+03)
-Date:   Thu, 3 Nov 2022 00:14:04 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
+        Wed, 2 Nov 2022 17:18:20 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0ED31BC2
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 14:17:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667423844;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=IHTGds9MfIzizVOKWUvyRmvhOQ74hdBvvx9ULgkSqlk=;
+        b=T1mW3j/4KLr7PAhgdJtJwfL66W40iRzRV8513IEPhV9YluULenakpuv8PCQjq/1WiDN/h7
+        2hG1T/Ftn/jU/gOP9UE3NzuO07+wHWz1dXVBcxMF8DEllagWCDT/HBAOs5l7LjdbzjrM45
+        H+RERRWtUGLj23G1VjDXUKI/i1F7FuM=
+Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
+ [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-580-uooQa6j3NiOJg7kkjvXjDg-1; Wed, 02 Nov 2022 17:17:23 -0400
+X-MC-Unique: uooQa6j3NiOJg7kkjvXjDg-1
+Received: by mail-qk1-f197.google.com with SMTP id u6-20020a05620a430600b006e47fa02576so16639599qko.22
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 14:17:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IHTGds9MfIzizVOKWUvyRmvhOQ74hdBvvx9ULgkSqlk=;
+        b=Dos3imQFHp8mJ2njuuipR+X3QqxGZtnR9L6mrdAnMVVYR/6N8CEGLQpFyQrB1eS+qU
+         NXIx4MZjkrN8rHuCQbipq4Y28xx+HQhYOlmiizsl0PxQL8Bo05EwejP0hlKaBz4HtaF3
+         FBdJ0l5W48h/m9lzHBd0q64nhyDbkfqHNdSfw26UbKdArbKSc0Wu3B6g75g3LiCbEqq9
+         XjmRxkA3EDt8gc1oUyhjGnioibJ03/15gwyAWQ1/36xhZ/xJv7X8PgTwKh1oseRaBNDW
+         mC4LtJBDKDs7Frhe6sRacyuTvG4/Ue4BvwTbXPrIZU5Kymzo/E+uJ1IEQLokdMipkKyH
+         i45w==
+X-Gm-Message-State: ACrzQf2OsGLcqneob9ZaEKOLMmUXeNDGWC2rlTkhYhEVJqvvNuxTy6DB
+        441C0ec83JV67KXuzS4NJOEB9Lf3JhmmOBbXe9wkSukjPnYh/PW1rhUUf9PDGzV6FoNFEsShjGF
+        VX3Ky/i/vONgJZYTMAcYcZsmC
+X-Received: by 2002:a05:620a:17a4:b0:6ee:bf6f:2e3a with SMTP id ay36-20020a05620a17a400b006eebf6f2e3amr19497760qkb.690.1667423843385;
+        Wed, 02 Nov 2022 14:17:23 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7DXTVoVuZ6bnlwcHndCdDko8cEy6gHXoM/8e0hFqLoiKB6Vl89LbBpxAIz4NOIjKzTfbX+uQ==
+X-Received: by 2002:a05:620a:17a4:b0:6ee:bf6f:2e3a with SMTP id ay36-20020a05620a17a400b006eebf6f2e3amr19497742qkb.690.1667423843163;
+        Wed, 02 Nov 2022 14:17:23 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id bp6-20020a05620a458600b006cf9084f7d0sm9177478qkb.4.2022.11.02.14.17.21
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 14:17:22 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 17:17:20 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     James Houghton <jthoughton@google.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
         Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        mhocko@suse.com, Muchun Song <songmuchun@bytedance.com>,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
- create restricted user memory
-Message-ID: <20221102211404.l5whyif3j3k67fv2@box.shutemov.name>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
- <20221031174738.fklhlia5fmaiinpe@amd.com>
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Rik van Riel <riel@surriel.com>
+Subject: Re: [PATCH RFC 04/10] mm/hugetlb: Make userfaultfd_huge_must_wait()
+ RCU-safe
+Message-ID: <Y2LeYALtTmeM423H@x1n>
+References: <20221030212929.335473-1-peterx@redhat.com>
+ <20221030212929.335473-5-peterx@redhat.com>
+ <CADrL8HWpvAozbfqGyr0=4M6bu-ecQ7mQXb3xzvMTjpCPH3OVcg@mail.gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221031174738.fklhlia5fmaiinpe@amd.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <CADrL8HWpvAozbfqGyr0=4M6bu-ecQ7mQXb3xzvMTjpCPH3OVcg@mail.gmail.com>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 12:47:38PM -0500, Michael Roth wrote:
+On Wed, Nov 02, 2022 at 11:06:16AM -0700, James Houghton wrote:
+> On Sun, Oct 30, 2022 at 2:29 PM Peter Xu <peterx@redhat.com> wrote:
+> >
+> > RCU makes sure the pte_t* won't go away from under us.  Please refer to the
+> > comment above huge_pte_offset() for more information.
+> >
+> > Signed-off-by: Peter Xu <peterx@redhat.com>
+> > ---
+> >  fs/userfaultfd.c | 4 ++++
+> >  1 file changed, 4 insertions(+)
+> >
+> > diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> > index 07c81ab3fd4d..4e813e68e4f8 100644
+> > --- a/fs/userfaultfd.c
+> > +++ b/fs/userfaultfd.c
+> > @@ -243,6 +243,9 @@ static inline bool userfaultfd_huge_must_wait(struct userfaultfd_ctx *ctx,
+> >
+> >         mmap_assert_locked(mm);
+> >
+> > +       /* For huge_pte_offset() */
+> > +       rcu_read_lock();
 > 
-> In v8 there was some discussion about potentially passing the page/folio
-> and order as part of the invalidation callback, I ended up needing
-> something similar for SEV-SNP, and think it might make sense for other
-> platforms. This main reasoning is:
-> 
->   1) restoring kernel directmap:
-> 
->      Currently SNP (and I believe TDX) need to either split or remove kernel
->      direct mappings for restricted PFNs, since there is no guarantee that
->      other PFNs within a 2MB range won't be used for non-restricted
->      (which will cause an RMP #PF in the case of SNP since the 2MB
->      mapping overlaps with guest-owned pages)
+> userfaultfd_huge_must_wait is called after we set the task's state to
+> blocking. Is it always safe to call rcu_read_lock (and
+> rcu_read_unlock) in this case? (With my basic understanding of RCU,
+> this seems like it should be safe, but I'm not sure.)
 
-That's news to me. Where the restriction for SNP comes from? There's no
-such limitation on TDX side AFAIK?
+I'm not aware of an issue here, but please shoot if you have any further
+concerns or clues, because I'm definitely not a rcu person so I can
+overlook things.
 
-Could you point me to relevant documentation if there's any?
+What I remember is my smoke test should be with LOCKDEP, it didn't trigger
+anything so far I think.
 
 -- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Peter Xu
+
