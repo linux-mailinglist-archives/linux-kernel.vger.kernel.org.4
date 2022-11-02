@@ -2,82 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AE01616A57
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:15:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 24F85616A5B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:15:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbiKBRPS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:15:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41330 "EHLO
+        id S231289AbiKBRPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:15:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230497AbiKBRPL (ORCPT
+        with ESMTP id S230500AbiKBRPU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:15:11 -0400
-Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A4B6399
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 10:15:09 -0700 (PDT)
-Received: by mail-lj1-x233.google.com with SMTP id u2so25950070ljl.3
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 10:15:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Y2G9zAjcBQvptALVWhMCLTUKJpJ/ntkvAuBFzHIVao0=;
-        b=g8o78olqBCoQGPXOE8LAf1/SCjNxsUN6+HYFP69w+yKIO9hmeNBP7VLKjT9gpEckP1
-         QskGY4iIISNWtuuJ/lNwRFnhM93LvohbgyRZ5DtlJsFvaSkRgkUvqMoz/cARK5HC06Wu
-         Qu0tMtEl1EW3k8bNbW558NeZMGnOJnx4QSMt1CrK3tQ2LQypiq5SbndKfer4yvI/RnNw
-         Im1zqCzW1KbNwk7gsiNZoe/EFFQXoFVEZaZolmjFPPDX632UPYzIibz0NojKSR0tdSNt
-         aT5poRS0WfC57Ufdqtr2K/VgWu5lsHyxZRjTj0egVSXR7IjR22VBTRRGH9PLkFkaTWzs
-         CJjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y2G9zAjcBQvptALVWhMCLTUKJpJ/ntkvAuBFzHIVao0=;
-        b=FU3fGeYm8BSl1P1K/PMn3OgVs4BHKYfxFg1U96SEtxthy+nJON7Ob3y/uBOhHea8cT
-         FsKCcWZ9q7ZkgNG9WHJaEciZGtH1IuiXCOm2ttL5JpNuzhExtBBjfbusuPj06M5eHuQ6
-         XTaMoAXEF4pN6SHTvbhM7Jggqq5yKQgEydLY9IP2yzCP8TC962sZHmzn/WGlTelfO7o1
-         WceQIpxK6LiFB7KNWnzgOebVCxLlH6G5/FxjQvRpGZawmlVDclKUEizSUEvkhzW4wTBP
-         KEVJSdSPVsyWMWoiUcpHUH2c+u8xjBw/LWz59Lr0Ng5TjEAxmvDdxkVOUTK+1gyUhmJe
-         6McA==
-X-Gm-Message-State: ACrzQf3J6T3lVx+2tBOZt9bb6LG2olROLTckgIBgwv0WCs8+Z+9LZCyj
-        LTME8TgxExA6sngEoEXQ868pww==
-X-Google-Smtp-Source: AMsMyM6BVYOYmT8ompZoc+LlEr1AorwmGjZcVmWGutVwZqsdA1Tsvx9GKgqcDW220eOVU7tZn9PAUg==
-X-Received: by 2002:a05:651c:c90:b0:277:45f6:1b2c with SMTP id bz16-20020a05651c0c9000b0027745f61b2cmr7949204ljb.15.1667409308240;
-        Wed, 02 Nov 2022 10:15:08 -0700 (PDT)
-Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id u7-20020a2e9f07000000b00276d2537921sm2250544ljk.59.2022.11.02.10.15.07
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 10:15:07 -0700 (PDT)
-Message-ID: <da9720c2-ddc7-1a00-2608-0ef64c072cdd@linaro.org>
-Date:   Wed, 2 Nov 2022 20:15:06 +0300
+        Wed, 2 Nov 2022 13:15:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69241091;
+        Wed,  2 Nov 2022 10:15:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 965CBB823F6;
+        Wed,  2 Nov 2022 17:15:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1B682C433C1;
+        Wed,  2 Nov 2022 17:15:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667409316;
+        bh=qK3bx7QoAh9fwPJHJizhUKV9fbdiG40FN0gZzQ2hwIg=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=n03OxBc7g3UloZP5Z04sZpbPDxEhvFkRIXuQ0rcShfJ0CirVAxiXaKK6TJEJpUQZw
+         JKU0gfhRV03o/QSNwHlTKskHaW7Zeg3jGsvarI1i1naMUOLbus8RMTLOD23ulMuD26
+         FKcz82vtDP50uvekdh1h2tCM7PcWq3Rf+m5EajFQ1eYdHYpLmnpS1qKgE3BYyJvQ4E
+         pMurRK7lH/3wAE+N6SQBdtXsT25zauiLT53iw89YJ2hYVeyzg2rsyJFNcv8l2kQPcs
+         guppyO8qQUwq5UqxHF9MppL02VvMqW1H/vJ0enJ6mFjUALAdhmd1SKug5oY0fQo3Hu
+         24jkyAkKAGxGA==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] drm/msm/dp: remove limitation of link rate at 5.4G to
- support HBR3
-Content-Language: en-GB
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, vkoul@kernel.org,
-        daniel@ffwll.ch, airlied@linux.ie, agross@kernel.org,
-        quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>
-References: <1667237245-24988-1-git-send-email-quic_khsieh@quicinc.com>
- <94b507e8-5b94-12ae-4c81-95f5d36279d5@linaro.org>
- <deb60200-5a37-ec77-9515-0c0c89022174@quicinc.com>
- <CAD=FV=X_fs_4JYcRvAwkU9mAafOten9WdyzPfSVWdAU=ZMo8zg@mail.gmail.com>
- <155e4171-187c-4ecf-5a9b-12f0c2207524@linaro.org>
- <CAD=FV=Wk5rBSq9Mx1GCO0QFYckKV9KUFKL36Ld7dQX1ypHVcYw@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <CAD=FV=Wk5rBSq9Mx1GCO0QFYckKV9KUFKL36Ld7dQX1ypHVcYw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Subject: Re: [PATCH] ath11k: Fix QCN9074 firmware boot on x86
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20221022042728.43015-1-stachecki.tyler@gmail.com>
+References: <20221022042728.43015-1-stachecki.tyler@gmail.com>
+To:     "Tyler J. Stachecki" <stachecki.tyler@gmail.com>
+Cc:     unlisted-recipients:; (no To-header on input)
+        "Tyler J. Stachecki" <stachecki.tyler@gmail.com>,
+        Kalle Valo <kvalo@codeaurora.org>,
+        "David S. Miller" <davem@davemloft.net>,
+        Jakub Kicinski <kuba@kernel.org>,
+        ath11k@lists.infradead.org (open list:QUALCOMM ATHEROS ATH11K WIRELESS
+        DRIVER),
+        linux-wireless@vger.kernel.org (open list:NETWORKING DRIVERS (WIRELESS)),
+        netdev@vger.kernel.org (open list:NETWORKING DRIVERS),
+        linux-kernel@vger.kernel.org (open list)
+Illegal-Object: Syntax error in Cc: address found on vger.kernel.org:
+        Cc:     unlisted-recipients:; (no To-header on input)"Tyler J. Stachecki" <stachecki.tyler@gmail.com>
+                                                                     ^-missing end of address
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <166740930971.12704.12404773753216417373.kvalo@kernel.org>
+Date:   Wed,  2 Nov 2022 17:15:13 +0000 (UTC)
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -85,116 +65,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01/11/2022 17:37, Doug Anderson wrote:
-> Hi,
+"Tyler J. Stachecki" <stachecki.tyler@gmail.com> wrote:
+
+> The 2.7.0 series of QCN9074's firmware requests 5 segments
+> of memory instead of 3 (as in the 2.5.0 series).
 > 
-> On Mon, Oct 31, 2022 at 5:15 PM Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
->>
->> On 01/11/2022 03:08, Doug Anderson wrote:
->>> Hi,
->>>
->>> On Mon, Oct 31, 2022 at 2:11 PM Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
->>>>
->>>> Hi Dmitry,
->>>>
->>>>
->>>> Link rate is advertised by sink, but adjusted (reduced the link rate)
->>>> by host during link training.
->>>>
->>>> Therefore should be fine if host did not support HBR3 rate.
->>>>
->>>> It will reduce to lower link rate during link training procedures.
->>>>
->>>> kuogee
->>>>
->>>> On 10/31/2022 11:46 AM, Dmitry Baryshkov wrote:
->>>>> On 31/10/2022 20:27, Kuogee Hsieh wrote:
->>>>>> An HBR3-capable device shall also support TPS4. Since TPS4 feature
->>>>>> had been implemented already, it is not necessary to limit link
->>>>>> rate at HBR2 (5.4G). This patch remove this limitation to support
->>>>>> HBR3 (8.1G) link rate.
->>>>>
->>>>> The DP driver supports several platforms including sdm845 and can
->>>>> support, if I'm not mistaken, platforms up to msm8998/sdm630/660.
->>>>> Could you please confirm that all these SoCs have support for HBR3?
->>>>>
->>>>> With that fact being confirmed:
->>>>>
->>>>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
->>>>>
->>>>>
->>>>>>
->>>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
->>>>>> ---
->>>>>>     drivers/gpu/drm/msm/dp/dp_panel.c | 4 ----
->>>>>>     1 file changed, 4 deletions(-)
->>>>>>
->>>>>> diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c
->>>>>> b/drivers/gpu/drm/msm/dp/dp_panel.c
->>>>>> index 5149ceb..3344f5a 100644
->>>>>> --- a/drivers/gpu/drm/msm/dp/dp_panel.c
->>>>>> +++ b/drivers/gpu/drm/msm/dp/dp_panel.c
->>>>>> @@ -78,10 +78,6 @@ static int dp_panel_read_dpcd(struct dp_panel
->>>>>> *dp_panel)
->>>>>>         if (link_info->num_lanes > dp_panel->max_dp_lanes)
->>>>>>             link_info->num_lanes = dp_panel->max_dp_lanes;
->>>>>>     -    /* Limit support upto HBR2 until HBR3 support is added */
->>>>>> -    if (link_info->rate >=
->>>>>> (drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4)))
->>>>>> -        link_info->rate = drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4);
->>>>>> -
->>>>>>         drm_dbg_dp(panel->drm_dev, "version: %d.%d\n", major, minor);
->>>>>>         drm_dbg_dp(panel->drm_dev, "link_rate=%d\n", link_info->rate);
->>>>>>         drm_dbg_dp(panel->drm_dev, "lane_count=%d\n",
->>>>>> link_info->num_lanes);
->>>
->>> Stephen might remember better, but I could have sworn that the problem
->>> was that there might be something in the middle that couldn't support
->>> the higher link rate. In other words, I think we have:
->>>
->>> SoC <--> TypeC Port Controller <--> Display
->>>
->>> The SoC might support HBR3 and the display might support HBR3, but the
->>> TCPC (Type C Port Controller) might not. I think that the TCPC is a
->>> silent/passive component so it can't really let anyone know about its
->>> limitations.
->>>
->>> In theory I guess you could rely on link training to just happen to
->>> fail if you drive the link too fast for the TCPC to handle. Does this
->>> actually work reliably?
->>>
->>> I think the other option that was discussed in the past was to add
->>> something in the device tree for this. Either you could somehow model
->>> the TCPC in DRM and thus know that a given model of TCPC limits the
->>> link rate or you could hack in a property in the DP controller to
->>> limit it.
->>
->> Latest pmic_glink proposal from Bjorn include adding the drm_bridge for
->> the TCPC. Such bridge can in theory limit supported modes and rates.
+> The first segment (11M) is too large to be kalloc'd in one
+> go on x86 and requires piecemeal 1MB allocations, as was
+> the case with the prior public firmware (2.5.0, 15M).
 > 
-> Excellent! Even so, I think this isn't totally a solved problem,
-> right? Even though a bridge seems like a good place for this, last I
-> remember checking the bridge API wasn't expressive enough to solve
-> this problem. A bridge could limit pixel clocks just fine, but here we
-> need to take into account other considerations to know if a given
-> pixel clock can work at 5.4 GHz or not. For instance, if we're at 4
-> lanes we could maybe make a given pixel clock at 5.4 GHz but not if we
-> only have 2 lanes. I don't think that the DP controller passes the
-> number of lanes to other parts of the bridge chain, though maybe
-> there's some trick for it?
+> Since f6f92968e1e5, ath11k will break the memory requests,
+> but only if there were fewer than 3 segments requested by
+> the firmware. It seems that 5 segments works fine and
+> allows QCN9074 to boot on x86 with firmware 2.7.0, so
+> change things accordingly.
+> 
+> Tested-on: QCN9074 hw1.0 PCI WLAN.HK.2.7.0.1-01744-QCAHKSWPL_SILICONZ-1
+> Tested-on: QCN9074 hw1.0 PCI WLAN.HK.2.5.0.1-01208-QCAHKSWPL_SILICONZ-1
+> Tested-on: WCN6855 hw2.0 PCI WLAN.HSP.1.1-03125-QCAHSPSWPL_V1_V2_SILICONZ_LITE-3.6510.16
+> 
+> Signed-off-by: Tyler J. Stachecki <stachecki.tyler@gmail.com>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
 
-I hope that somebody would fix MSM DP's data-lanes property usage to 
-follow the usual way (a part of DT graph). Then it would be possible to 
-query the amount of the lanes from the bridge.
+Patch applied to ath-current branch of ath.git, thanks.
 
-> ...I guess the other problem is that all existing users aren't
-> currently modeling their TCPC in this way. What happens to them?
-
-There are no existing users. Bryan implemented TCPM support at some 
-point, but we never pushed this upstream.
+3a89b6dec992 wifi: ath11k: Fix QCN9074 firmware boot on x86
 
 -- 
-With best wishes
-Dmitry
+https://patchwork.kernel.org/project/linux-wireless/patch/20221022042728.43015-1-stachecki.tyler@gmail.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
