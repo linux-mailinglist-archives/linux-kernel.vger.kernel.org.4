@@ -2,92 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 045876161C9
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:29:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A7BDD6161CC
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:33:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230002AbiKBL3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 07:29:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60238 "EHLO
+        id S230072AbiKBLcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 07:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60984 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiKBL3c (ORCPT
+        with ESMTP id S229493AbiKBLcw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 07:29:32 -0400
-Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F87C29372;
-        Wed,  2 Nov 2022 04:29:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667388570; x=1698924570;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=xHltA9cDNqr066zntg/UF56nyb2JOcr0In8V89pVlbU=;
-  b=C7SDQU7KHg5XN2Tr0qvT+lrylnk/1Ojd3MkbMOV3EueA5VoV9h1iTH2h
-   64rggZwD0fF3tIpXbWaLj9sbM20Y3gan3J1bCkoQiM5IUJOll7soDuvs1
-   hatmFMXb4NfNxUGsjFH+UgGDM0cYl+r1mOaoXN6I2MAWlyhh4C2tLveBZ
-   xF4bF0/QEiXIlY732ShhBuNDGX72W7fSSRsuWcyyTe2ot/mLwuVOFmR5d
-   ap2ns3FVtmLnTm3U6rfr73PPdAusWz4CTkFczRp+XoyPasAuxbTITuGMO
-   MtcQ5HpX+1GQw3GpPr2Up7ar30Hv0abJVjYnD+InHhaniBbt+ZIzIdxml
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="371474382"
-X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
-   d="scan'208";a="371474382"
-Received: from fmsmga004.fm.intel.com ([10.253.24.48])
-  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 04:29:30 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="703235434"
-X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
-   d="scan'208";a="703235434"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by fmsmga004.fm.intel.com with ESMTP; 02 Nov 2022 04:29:27 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@intel.com>)
-        id 1oqBvx-0069TA-1p;
-        Wed, 02 Nov 2022 13:29:25 +0200
-Date:   Wed, 2 Nov 2022 13:29:25 +0200
-From:   Andy Shevchenko <andriy.shevchenko@intel.com>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        Pasha Tatashin <pasha.tatashin@soleen.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-mm@kvack.org, linux-hardening@vger.kernel.org
-Subject: Re: [PATCH 21/30] mm: Use kstrtobool() instead of strtobool()
-Message-ID: <Y2JUlb6qzV/MqxnY@smile.fi.intel.com>
-References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
- <03f9401a6c8b87a1c786a2138d16b048f8d0eb53.1667336095.git.christophe.jaillet@wanadoo.fr>
- <202211011543.20ACBF9@keescook>
+        Wed, 2 Nov 2022 07:32:52 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B9F224966
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 04:32:51 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 1CC92B82191
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:32:50 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F11EC433C1;
+        Wed,  2 Nov 2022 11:32:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667388768;
+        bh=yoHsM6tzdVUYkSoFF8KSjoXXJcut+N1ohrZ0gOth29Y=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=MmSYfK+Uxc8Af0fr9SSp1F2vFXBAAiNMWRKCQsYuYy1waaPZCBtnUFINCX7N3SM4W
+         s13tuFdamtC6JI4h3QBVAqdxWZrQPJfB8CVyG1XTgKfIfYMA55jI/oXhGvlMPPMEXF
+         B6TcVEnxrF900DtBvHOfSn6JMuqjvOoP+qd20yU2qEFmalPHp6h8dd26vEQHB9hKXE
+         H+rNXTtKpSRZeNKTWEvimkPYEZe+vpc5qop5CQtfVbgwG0GfK/+RokTZYxTJ79fVQh
+         SJiOnMArcxS6O5OsTgtDqtt8ss+/ovo0r5ongKtQ612I6Q3WROm26opwe4bKWmXdwl
+         UwwPsJEWDKkJQ==
+Date:   Wed, 2 Nov 2022 11:32:42 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Venkata Prasad Potturu <venkataprasad.potturu@amd.com>
+Cc:     Venkata Prasad Potturu 
+        <venkataprasad.potturu@amd.corp-partner.google.com>,
+        alsa-devel@alsa-project.org, vsujithkumar.reddy@amd.com,
+        Vijendar.Mukunda@amd.com, Basavaraj.Hiregoudar@amd.com,
+        Sunil-kumar.Dommati@amd.com, ssabakar@amd.com,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        Ajit Kumar Pandey <AjitKumar.Pandey@amd.com>,
+        Akihiko Odaki <akihiko.odaki@gmail.com>,
+        ye xingchen <ye.xingchen@zte.com.cn>,
+        open list <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] CHROMIUM: ASoC: amd: acp: Add tdm support for codecs in
+ machine driver
+Message-ID: <Y2JVWmJsprt0xnKH@sirena.org.uk>
+References: <20221028103443.30375-1-venkataprasad.potturu@amd.corp-partner.google.com>
+ <Y1u1vj0K3m33wCTd@sirena.org.uk>
+ <b384e012-31c5-8412-8b05-cd026c5d6a0f@amd.com>
+ <Y2EttkwUvMReQcqg@sirena.org.uk>
+ <ca006546-9b0c-34df-2a33-a4f10b68f815@amd.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="6S2eJXa8E4+Y1UCq"
 Content-Disposition: inline
-In-Reply-To: <202211011543.20ACBF9@keescook>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <ca006546-9b0c-34df-2a33-a4f10b68f815@amd.com>
+X-Cookie: Now, let's SEND OUT for QUICHE!!
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 03:47:20PM -0700, Kees Cook wrote:
-> On Tue, Nov 01, 2022 at 10:14:09PM +0100, Christophe JAILLET wrote:
 
-...
+--6S2eJXa8E4+Y1UCq
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-> This seems in keeping with the removal of the simple_*str*() helpers:
-> https://docs.kernel.org/process/deprecated.html#simple-strtol-simple-strtoll-simple-strtoul-simple-strtoull
+On Wed, Nov 02, 2022 at 10:59:07AM +0530, Venkata Prasad Potturu wrote:
+> On 11/1/22 20:01, Mark Brown wrote:
+> > On Tue, Nov 01, 2022 at 03:15:08PM +0530, Venkata Prasad Potturu wrote:
 
-That piece of the documentation is partially wrong. Nobody will going to remove
-simple_strtox() due to their convenience when it's related to parse something
-from the stream. Yes, overflow is possible, but here is a trade-off.
+> > Right, that's what the code does but why is this something that should
+> > be controlled in this fashion?
 
-Note, kstrtox() may not work at early boot stages when we need to parse stream
-(with mixed digits and text and symbols) without acquiring space from the heap,
-i.o.w. RO strings.
+> This machine driver is common for TDM mode and I2S mode, user can select TDM
+> mode or I2S mode.
 
--- 
-With Best Regards,
-Andy Shevchenko
+Why would the user choose one value or the other, and why would this
+choice be something that only changes at module load time?  If this is
+user controllable I'd really expect it to be runtime controllable.
+You're not explaining why this is a module parameter.
 
+--6S2eJXa8E4+Y1UCq
+Content-Type: application/pgp-signature; name="signature.asc"
 
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNiVVkACgkQJNaLcl1U
+h9BonQf/WOzgZDEZv8RNQ4jP23/wuknKo8guxsWKck2+1KjS6H71fYA8QQov0Ram
+ctytaYT07gWmnwqOU7rNk8dOsMLeqSi4fRaOrX9P5D2QJ8Q6HF7IgBHN4b9QMqLe
+/SuNdWvkY+rgkiaZOuMzXAw4xVXao0B1TG3feHqgeYeO3h4Gkozy6n2tQOn/ETBg
+N6szVTLGRqzGQeb12XBkpJmeQwUrA3VagVeV6CQquMUdnf4Q9xAsPi9LWYVpS73U
+lh4digzscLLrlU/yZxbqz4gJqrZ+iGbQRBa2cD16pDueAIuDBtSh9Dx+k95Y0MvS
+VY5i0Qe/maNcCPV4537jKuwcMxlkLA==
+=DdXj
+-----END PGP SIGNATURE-----
+
+--6S2eJXa8E4+Y1UCq--
