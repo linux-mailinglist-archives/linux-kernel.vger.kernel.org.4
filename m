@@ -2,187 +2,455 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B221A61604C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:58:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FF7B616070
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 11:05:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbiKBJ6e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 05:58:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33400 "EHLO
+        id S230087AbiKBKF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 06:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiKBJ63 (ORCPT
+        with ESMTP id S229459AbiKBKFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 05:58:29 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7EB3711172;
-        Wed,  2 Nov 2022 02:58:27 -0700 (PDT)
-X-UUID: 3110575c23ae46959253cfbe0a6b0869-20221102
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=MIME-Version:Content-Transfer-Encoding:Content-ID:Content-Type:In-Reply-To:References:Message-ID:Date:Subject:CC:To:From; bh=P8sHLA4+kgIqfYE/EMFM37I93H0Yy6t9peVVZsb/ckY=;
-        b=YjKbt5tpNcCwkc7fB6YcjLQpBklM2N6tr/VrIS1hVGQisAysB/V2id1i+0mCm19haEd8zZJrHf7ueu/gWgwQP9Oz0+0SD5j5DQMczWRX2n6eseC5PL1W1FQd+kyOsGQnEfh2g05vxvA6wUiVIMdQQOU6H+2i5NkSbe7W7Sctae0=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:23bedf73-e492-4698-a700-d60315f45e55,IP:0,U
-        RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-        release,TS:0
-X-CID-META: VersionHash:62cd327,CLOUDID:8e4a35eb-84ac-4628-a416-bc50d5503da6,B
-        ulkID:nil,BulkQuantity:0,Recheck:0,SF:102,TC:nil,Content:0,EDM:-3,IP:nil,U
-        RL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: 3110575c23ae46959253cfbe0a6b0869-20221102
-Received: from mtkmbs11n2.mediatek.inc [(172.21.101.187)] by mailgw01.mediatek.com
-        (envelope-from <elvis.wang@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 2019246187; Wed, 02 Nov 2022 17:58:23 +0800
-Received: from mtkmbs10n1.mediatek.inc (172.21.101.34) by
- mtkmbs10n2.mediatek.inc (172.21.101.183) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.792.3;
- Wed, 2 Nov 2022 17:58:21 +0800
-Received: from APC01-TYZ-obe.outbound.protection.outlook.com (172.21.101.239)
- by mtkmbs10n1.mediatek.com (172.21.101.34) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Wed, 2 Nov 2022 17:58:21 +0800
+        Wed, 2 Nov 2022 06:05:23 -0400
+Received: from mx0a-00069f02.pphosted.com (mx0a-00069f02.pphosted.com [205.220.165.32])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376C822BF1;
+        Wed,  2 Nov 2022 03:05:22 -0700 (PDT)
+Received: from pps.filterd (m0246627.ppops.net [127.0.0.1])
+        by mx0b-00069f02.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A28J3jf004146;
+        Wed, 2 Nov 2022 10:04:52 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=message-id : date :
+ subject : to : cc : references : from : in-reply-to : content-type :
+ content-transfer-encoding : mime-version; s=corp-2022-7-12;
+ bh=pAQMXe3kD7GEYKxaolQnH864TTZ2R1KEXidBed1/g1M=;
+ b=XmB4n0svnEMsQK8ALQFVMjerXZAswsEqoDoL7WQq8IR3M42NKPf18QJ5/hyoPBi0wiqf
+ UVxFfIeAXQKusMpznVTKMMj5byWR/4s5k10Tj/ynd4/TJXvA9JebZUiWWcNELEJ13yR/
+ utOvaFolOzUBrcEuEgwzLQC0vTpSb7donqbgXoDUkmvrq+olrrzPYyksZGLFWMwJH6YY
+ XdakvaJuBY67T7+R/pxQ0tbUgePj0oCm4yYlq4Uw/BLRUpqPuyuC50NTKLkGHacKf35z
+ W7bKiQPI+ullvq+rtRYKYnbn/54BI3vj90GwQGr1e01w+2TMWXMQqjk2WDnJbJ2U98AE mw== 
+Received: from phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (phxpaimrmta03.appoci.oracle.com [138.1.37.129])
+        by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 3kgts199wh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 02 Nov 2022 10:04:52 +0000
+Received: from pps.filterd (phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com [127.0.0.1])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (8.17.1.5/8.17.1.5) with ESMTP id 2A290AQE013946;
+        Wed, 2 Nov 2022 10:04:51 GMT
+Received: from nam12-bn8-obe.outbound.protection.outlook.com (mail-bn8nam12lp2177.outbound.protection.outlook.com [104.47.55.177])
+        by phxpaimrmta03.imrmtpd1.prodappphxaev1.oraclevcn.com (PPS) with ESMTPS id 3kgtm5b89u-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 02 Nov 2022 10:04:51 +0000
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=W0q7vjLEzLsoolq4X7bNjInJeKy7ZfH8nnVI2bHOrQhohm50TF5jBFC2Cc3hEG3SKDNYogSOvWIwYHitMPO6bgm7oEBgFo0poZxj6MHHFYISTd2/92Nm/KR0alQCelm1dJiuq7e/vJrQwuuWL8hti8bum0gLNdHg1p035Sk+7b8lztDTWcIM4fncu7y+AcIGlJrGob+oIzRuv5X9TIeL0blFfpIaZYgKCszIiTER4TmJ5q0bTTiPRRrd8bf1nNG+8UOYMEHtpPMYx4X9FSlNCyjABx1+2Z0xQ5MPhMOqxPK8m4dRpP4GPCcQJKjeIukMCxhhK+m4/XFk5A2T6bDrVg==
+ b=QWVQIh49Gyht7exJddyoS1lihuMv8sTtJP+P3LfWyRvO2Yzs8YD1OgeNrKmHi1LJsluGVsEhR9Z1JbL058HmiFEC/gFc5TrS8BCQQDykmkL5d4McZcIBAZgGHElLVogjUv3+A/3gGn/0kk2W9OUC792TM67Inr9I+vEfnvqurX4HFoi5eDP+0EbdfwrqOQqjYJ3QmWfM9Ey77cYpszDlLLPr4aBPuc+OGlApxT57nAgfB2mQVKEorvuwLObD2wNN96Ux8er8++kOhcUVhJH2YdGcTt1D233g/5t2kfUDHXKA2i2YW42Fl2LvQZQQ9SRnnG16yP984Ry5f7Ki2LsjCQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=P8sHLA4+kgIqfYE/EMFM37I93H0Yy6t9peVVZsb/ckY=;
- b=NA6nckyZk3ACOjo7kltwQ6f38pXYjNzyHmyUA8J2XSoloyp6HiMCCTlwEChElXaYODGf2PD5AejtbnpjanqzwgI0L5sbkYyi/rfXwGhXNBOOsZKvEJLxnGF3PF7mcMes/rZSsjY6g08SFQHAL9fpN3VierZRu+k6DVt1o8Xjm0zIkwFLezv2Bpo2H5YhLYw3JnCu2Fu0D+S72CxlAdw58V211UDBYOTCRJYgX3UAwZm2WN/XeocIIQ74zydydbOQezA0+OQKuEt7AeLHWqGGqpHSbUt3gUF5q/43Pl+t3jUsJPJJa2a1m5Bpwdxz/OOqUq4F5nSKpqFDc7Wm+b+vVg==
+ bh=pAQMXe3kD7GEYKxaolQnH864TTZ2R1KEXidBed1/g1M=;
+ b=nbBCSbklqmhl7CXiUstfUvKfo+ESau2X88ZjPdkgK3g8idqRcXEwv3qgDpfWnjdIXFfj+v3pDUhXrVYr58Otn5P4gBMvvW+rwJDQnxl/KdwTo07X/K8G8nH1AqQ/0w1+t4kZim+4egedTLv+btfHtFgfJX2S/VFNL6d096UXeGJsGe1jkju3fmtKN467i89aMdLQ+M5/AL9xgeqaAfaZitkMZxJ9uCoKuX9YDoZnD2UQYsI1JNs2CmqlG4GjWREjmGub2m01HsSLRBjoPBvUGnXl0Q1J/mPhvIcgC+WAzvEAJYactk0GgJecscqQvh4dQwm3zp9wuJsXxUD7uTpYPg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=mediatek.com; dmarc=pass action=none header.from=mediatek.com;
- dkim=pass header.d=mediatek.com; arc=none
+ smtp.mailfrom=oracle.com; dmarc=pass action=none header.from=oracle.com;
+ dkim=pass header.d=oracle.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mediateko365.onmicrosoft.com; s=selector2-mediateko365-onmicrosoft-com;
+ d=oracle.onmicrosoft.com; s=selector2-oracle-onmicrosoft-com;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=P8sHLA4+kgIqfYE/EMFM37I93H0Yy6t9peVVZsb/ckY=;
- b=sQP5cVSxIFdFlEP82jwt/tilHqKAIPS8oP7c0wMARpI4302K6644yHsg0BiFA4QhblCqnjv1exDdFqtj+6qVNrMvdRgVRP5/Z9feziHX8IlrovT7QQDiPJmU/Yxs8M3dfFD2HszyYHyH0FQAi284iqnTVSkDbnlr1EOe8wmbp/Q=
-Received: from SG2PR03MB3228.apcprd03.prod.outlook.com (2603:1096:4:d::22) by
- PSAPR03MB5509.apcprd03.prod.outlook.com (2603:1096:301:75::8) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5791.17; Wed, 2 Nov 2022 09:58:20 +0000
-Received: from SG2PR03MB3228.apcprd03.prod.outlook.com
- ([fe80::9f80:493b:36dc:30bd]) by SG2PR03MB3228.apcprd03.prod.outlook.com
- ([fe80::9f80:493b:36dc:30bd%3]) with mapi id 15.20.5791.017; Wed, 2 Nov 2022
- 09:58:20 +0000
-From:   =?utf-8?B?RWx2aXMgV2FuZyAo546L5YabKQ==?= <Elvis.Wang@mediatek.com>
-To:     "jassisinghbrar@gmail.com" <jassisinghbrar@gmail.com>,
-        "matthias.bgg@gmail.com" <matthias.bgg@gmail.com>,
-        "angelogioacchino.delregno@collabora.com" 
-        <angelogioacchino.delregno@collabora.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "krzysztof.kozlowski+dt@linaro.org" 
-        <krzysztof.kozlowski+dt@linaro.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-mediatek@lists.infradead.org" 
-        <linux-mediatek@lists.infradead.org>,
-        =?utf-8?B?SG91bG9uZyBXZWkgKOmtj+WOmum+mSk=?= 
-        <houlong.wei@mediatek.com>,
-        =?utf-8?B?SmFzb24tSkggTGluICjmnpfnnb/npaUp?= 
-        <Jason-JH.Lin@mediatek.com>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "krzysztof.kozlowski@linaro.org" <krzysztof.kozlowski@linaro.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        =?utf-8?B?UmV4LUJDIENoZW4gKOmZs+afj+i+sCk=?= 
-        <Rex-BC.Chen@mediatek.com>
-Subject: Re: [PATCH v2 1/2] dt-bingings: gce: add gce header file for mt8188
-Thread-Topic: [PATCH v2 1/2] dt-bingings: gce: add gce header file for mt8188
-Thread-Index: AQHY64RNwdaqaV1/j0yoBxgZriLaI64oiCUAgALkF4A=
-Date:   Wed, 2 Nov 2022 09:58:20 +0000
-Message-ID: <2f0e05a74f8b7997682262aca926b7d1544a037e.camel@mediatek.com>
-References: <20221029105017.20734-1-Elvis.Wang@mediatek.com>
-         <20221029105017.20734-2-Elvis.Wang@mediatek.com>
-         <e0d37670-cb88-3a20-5230-9f14411edec1@collabora.com>
-In-Reply-To: <e0d37670-cb88-3a20-5230-9f14411edec1@collabora.com>
-Accept-Language: zh-CN, en-US
+ bh=pAQMXe3kD7GEYKxaolQnH864TTZ2R1KEXidBed1/g1M=;
+ b=nQHu0gJkshOgA+d//hsF7b6nS4qEBWZru9bfI3ykihBJI9uuAHGJ61ceaAsv5gThqqVATUf5w+kWEWtgIFfNTzmr3S80lqJQm9zbUA/7bELarWO4IEyRMLU1Gmi30L2p6VexPZBohAlmLjOmQ3ykkesA241Bix6iY3q7g7W7LIc=
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com (2603:10b6:5:212::20)
+ by CO6PR10MB5620.namprd10.prod.outlook.com (2603:10b6:303:14b::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.21; Wed, 2 Nov
+ 2022 10:04:48 +0000
+Received: from DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::d0c4:8da4:2702:8b3b]) by DM6PR10MB4313.namprd10.prod.outlook.com
+ ([fe80::d0c4:8da4:2702:8b3b%4]) with mapi id 15.20.5791.020; Wed, 2 Nov 2022
+ 10:04:47 +0000
+Message-ID: <152bcd77-bcd6-ea75-0572-01e0f16902aa@oracle.com>
+Date:   Wed, 2 Nov 2022 10:04:44 +0000
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH RFC v3 21/22] scsi: libsas: Queue internal abort commands
+ as requests
 Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=mediatek.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: SG2PR03MB3228:EE_|PSAPR03MB5509:EE_
-x-ms-office365-filtering-correlation-id: bf655e27-e514-4c5d-124f-08dabcb8c5b1
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: oOXmdA8YqACwaOEi+VEmrlCrQOW/uU27oj+5g5Rj0K9lo1Slvy63/Xt7pvVa2nTIo5kAnM2e+R/+386BfHm+cigzgKX9hJtXvdOa+6rfIOZ2cwneMM4EyW0H6lcqHLaoSZkBkAwHpwFsoPUI8S2zG3YjF75pja5T9ZJrhyqN4/S1N8ev6ojxjT1LQ1d9fD3G/jaeAT43DvGICHimEOj0hD+onkVdX1qsZUC3/KPOh1x9cRJiyHXdO5K5Lopq/qLtXYFONWD8+fROjINQCCsqO06Zjh9zi7DQhsVOFD7WyIexCLFW7yB4VzN/57XeznM9BRuX6sNt+BFMD0sexJS6NRMHCqTLi62Q16JkS9xwX+vta38tZdgKFOWNEoYPwXcljaV7bzUA53a5XQGMZyNXX+27HgBM9KiQC5+IeLRW2aePSBfsHMrCwnjLRYZv0In14wFSZJIkpuPQcW1kAzmToF3GmPwi99JdDwy2BxRWXZGAwdHCRD4osMkKHeyJQXHUZEUmkWokh0HymGlwa4u1Mx3nKMnj7wESTU5xHdYXRKX0ZUWm486fEi/GHD3lsnmcxVXjoHjRNUQ8nCSxNBRZX1liPu6NQgJdN2KSMxMRbUwOUG3H34CtORXC6VzpToD4ezcUD6ev7no+UQ2xKOWiFbvlrfTSaEIy1LlBQKSX4qj5QoInkZqAyFN8V6wtPko0BAmRhS420ZRiUf0JwZrt2BahoRQoeDOZlhN0AJTIXLH6SrjF7N3UqjULxCRYr8JxdWw4PODXQtnW/iNPLF/VSw==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SG2PR03MB3228.apcprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(366004)(39860400002)(136003)(376002)(396003)(346002)(451199015)(54906003)(85182001)(110136005)(76116006)(5660300002)(6512007)(2616005)(66476007)(26005)(4001150100001)(186003)(4744005)(2906002)(66446008)(4326008)(66946007)(66556008)(41300700001)(7416002)(36756003)(478600001)(107886003)(64756008)(8676002)(86362001)(316002)(6506007)(83380400001)(71200400001)(8936002)(38100700002)(6486002)(122000001)(38070700005);DIR:OUT;SFP:1102;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?bGJNY1JTN2M5M29iL2ZkVzN5Q0ltKzRUZFIySldjRmdXcDZaYVdKdGhZTGor?=
- =?utf-8?B?VVlBVWhsS2MrSk43ZW9XMWc5TG1wTzlORlRuWEJ5eGJxMjFEYkk1b2N1L0NW?=
- =?utf-8?B?d3Vqa0FjRTF1WGsxQ0dKdmFRMGF6T2YyR2lwMERRV291MEVmNTRzbVpZYzdK?=
- =?utf-8?B?OTErdDNlVk5OcFV2d0lFZ3lRUEZtK0ZZa1p3ZGZJeERtaHVtNHYwOTYwdG5z?=
- =?utf-8?B?TTRrKzNJazZtQUx0T1hvdjJkTWdZTnJ0MUFGWmFzTHg0TUp3N1cwV1g2Mmp0?=
- =?utf-8?B?MVpWWERoMDlHcDZvNktVdDVsTTduTWlneEVaaUJGRmdZUnRNOStkZjh3ZWRZ?=
- =?utf-8?B?QjhXQ2FlOXRRcVB6bmFmY0pnaUdUcW83MlR1QlVBNkQxWWx3SDhZU3pCSDBU?=
- =?utf-8?B?YW9FanFnNkIvb1VOUHYySFI1ZFdibkpQZFhFaHMzVlBnbkI1SVJXNlUrWDZD?=
- =?utf-8?B?Y2pnYWFzNVNtcFdnUWdUK1NweVBrZkFlRUNVa0t0SFdOc0VzVTBNaXJqbjh5?=
- =?utf-8?B?M2N2aWJNSXk3bEphK3dOWU83WHN0NEw2UHcvazZXYmZuSlgzMWZLaXRVelZK?=
- =?utf-8?B?MFJISXo4Y2pteWhWT1E1VFBrMjhCZk05NlJLbDZjMDRGSUlFVUFOdGhBMUJy?=
- =?utf-8?B?K3hPcEViUUJLWDhyRE4xN2VHSUhrdVB0VGYvdVpINmd6OXZMeVYzS0dGK1V4?=
- =?utf-8?B?RFNYWlZmVlBtRUxnbUFtY2RxTWxjbkNiYjlSbFk3dFEzQ0k4dS9keHVMb2Zh?=
- =?utf-8?B?WHd2WGZNbFRSK0VJMDJQdUhZNjFiY25CNVJRWkRzdnZVblJhZzlKb2NtMmhO?=
- =?utf-8?B?UXl3UG1rTzlxS28vVE9Rb052Q0l5Qnh1RzFKSnpkNUdYeEV4OFhlYlExOVdj?=
- =?utf-8?B?cGJKSUozcThuSzJDMzBUUkQxZ3cyVDYybkVjQTB5bkxmZkhUY2pSRGJUd0NG?=
- =?utf-8?B?TExSUlF5YXh5V0NtV2dyN0VFMVNKUjlGaXVEZnYrOURLVzA3L0lZNVhGOVY4?=
- =?utf-8?B?ZGxrR25ORlNjaHpoZEJQY1dHTGVrL01VcHNBWUM4bGFRTjR3dUdTT3kwVjk4?=
- =?utf-8?B?NytmcytLQnNCODJOZ1F6LzI1OXA2U2lJa2xPcDNvWk5Uc3hpZGZKZXQvSnI1?=
- =?utf-8?B?TWV4OE1VVGl4b2pWVW0vWlQzdUpzUmg4SmhSNjVndSttTG4xazQyYmQ4ZVNw?=
- =?utf-8?B?QS9Gc2NpUkN3bS8yZ1AzZy9VdTFzOXFoRWtZQ1NIOUU2ZVd1RXkvSjVSNTZM?=
- =?utf-8?B?dGoxaTdodEF5YXJFak5RWDE5N0hwNTJFYTMveDFTL3N4RHkyeTFaWTMrMVNt?=
- =?utf-8?B?QlVhc2pUaFNLdk1TczFzd0VYWEFCRldoOHJSZmcxZHhNYW9KZ09id2p0TWk4?=
- =?utf-8?B?ZHlzbzlyY2FkNktwYkYxT0F0c1VXSjArMlRoS2kzcEp3c3BRMWl5QllDcnFu?=
- =?utf-8?B?aE96SzVYMHVZVGt1VkVnTHJQOVJycXNtWFFUcnNNam0wU3Q5ckZyNGx1QkF4?=
- =?utf-8?B?SnlZclRNWUVJQXcvaXlQa3duajJNZW5kOWxlRmZsaDJ3eVVTby9VZ3lMNENT?=
- =?utf-8?B?MzZLYUgzblpWRVJ5YlREa0IzQThOQS96UkVBYjh5bFZxQURCaTJGWm51TCty?=
- =?utf-8?B?RDYzdWxlU0VWTDgwU0x3aEtyVXV6aXBjQzloZ3hQZ3J5M1RHL0lBdStsSjdP?=
- =?utf-8?B?TlRqdnpVcGpLQkVJeVZqeWFQSzFsUDV1c0RwNVBERXZTK1JRSW5LK2lmMzk0?=
- =?utf-8?B?TlBOSnRMYXRIclQvd05ucDh0VHo0TVdyRlhBM3c0cmsvdURZWkc5TmdvYUI5?=
- =?utf-8?B?dWlhZis2UFFCcHFRamt0SUtNR3poTDJ6Rk1kM3RSdjd3NXNEZkN0MTdicXVP?=
- =?utf-8?B?aW8yeW5Gc01CTG5OTXJZT1lHeWtmRVZIenIxYlMwWEtKUDR3RndUcG4rV0Zx?=
- =?utf-8?B?OGF6MytGU0Rzam5FS0RUTkF6d1lzSDBrTjdTMmx4RGsyVldMeW9VYmhhK3pS?=
- =?utf-8?B?MHNkeERzcWZ4RzdwMEZUVFFLbEhUYWg2eDZCK1k5UHR6TkxzTUR3RXdvV2VC?=
- =?utf-8?B?T3VJc3V1eDhPbllMWGtBb1d3RHJMdFdyaTEvNmVxa0RKMGFsUVJWd1hJeXB2?=
- =?utf-8?B?VUY4RllmWWxLR2hKSko3eDFHaGd4Uk5QaVZwc05HUjNGY2g3VStObXhZcWV6?=
- =?utf-8?B?SkE9PQ==?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <4F215FBA5DEF4742AA584A4CBEB8BC83@apcprd03.prod.outlook.com>
-Content-Transfer-Encoding: base64
+To:     "chenxiang (M)" <chenxiang66@hisilicon.com>,
+        John Garry <john.garry@huawei.com>, axboe@kernel.dk,
+        damien.lemoal@opensource.wdc.com, jejb@linux.ibm.com,
+        martin.petersen@oracle.com, jinpu.wang@cloud.ionos.com,
+        hare@suse.de, bvanassche@acm.org, hch@lst.de, ming.lei@redhat.com,
+        niklas.cassel@wdc.com
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
+        linuxarm@huawei.com
+References: <1666693096-180008-1-git-send-email-john.garry@huawei.com>
+ <1666693096-180008-22-git-send-email-john.garry@huawei.com>
+ <0cbc86ea-09c9-2654-a795-9230e4b00a1e@hisilicon.com>
+From:   John Garry <john.g.garry@oracle.com>
+Organization: Oracle Corporation
+In-Reply-To: <0cbc86ea-09c9-2654-a795-9230e4b00a1e@hisilicon.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: LO2P265CA0067.GBRP265.PROD.OUTLOOK.COM
+ (2603:10a6:600:60::31) To DM6PR10MB4313.namprd10.prod.outlook.com
+ (2603:10b6:5:212::20)
 MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR10MB4313:EE_|CO6PR10MB5620:EE_
+X-MS-Office365-Filtering-Correlation-Id: 251ededc-da51-43e7-c064-08dabcb9ac60
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: cRttI+ezXGg21+afNbBRKAsFnAIphMhN6uTHD5tgwjL59R1dZQlqDeLhp0VxJKnKQJ6hxkGLxEttU6qlYo0Esod0Eg95/EvqqpndlQoHWdQohE2/utO8mWVDt5pC7ql9dJmWJbzCeqSWEpqBHK3VKq8lBttZQYucIy7uYa6Kdjau6TURLEG3LqU7e4w95OjKf9uVPeMzBaJ5vzPDsWk1tYFqaFFKEIJTGqw5gUtcByJjINgEERB9394uk7btb/upGYbkXMTKRoL26j3Atr55Gw6umiwoIDXLnIXio++97IvXjA0xsfOYqsQJ6XXVFxL2hUvvpmrQ0jU3AT+JyeeMiamGp6FAMETqsDGwT8FBkPgo3M2VFFT7v90ivcb0D2SG46wHYnDiKcaM5Dk3ShMaOQrO1ZB6zbaKJgY8YF5taHNt15JQ4AJzdWvoOkAdFLvVMPh7NY1g+FPP4532E+N0+pFdINFdXPJYaEuORuzou2NOYrdB3JycqfAvd8h/TNaVkTGqQmkZWfDfuJcIETcnF+2J9M46Cwddzwd036M4l7pFBpgD91CYwwFSKGpgE2r/B7fHy2UYeyP/6FNJfWmArFj8b70YXUPIfpFfXwEsXyjEZVWLxxao5U0KoAjxVom+SQiYoLsvmgNkHE4kSe3w3GpqZoon3KgnoOAdHGq4QH0tQl6Z0GMxGwKtiE9LcGa9vXhBt3fJ4LHGk1m8tYLNudIk6vTUxwNR4zfxUsA4MuxNKpEA9Sen0CipmlDgjqNHno4AxllrTbw1yHMQHsGg6YKQLs1D4UfertPNBvFwzwo0yJiF3NEfcVKl+JQKf3Dr
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR10MB4313.namprd10.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(39860400002)(346002)(136003)(366004)(396003)(451199015)(921005)(2906002)(31696002)(8676002)(110136005)(86362001)(36756003)(26005)(41300700001)(66556008)(66476007)(6512007)(66946007)(4326008)(186003)(478600001)(8936002)(5660300002)(6486002)(2616005)(7416002)(36916002)(6506007)(53546011)(316002)(6666004)(38100700002)(31686004)(83380400001)(45980500001)(43740500002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?aHlLTE0wZ3JnKzNHVE5TWVBkWFJ2bEN1QVd2cjZCbWh6MHUyZUNFM2tiSTQ5?=
+ =?utf-8?B?ZjdaOXZoZUNESVNycDJDNExVQXhEemtwbTZoZEVOcGN2ZHIvbzhGQ0hyaVdZ?=
+ =?utf-8?B?MHYxOTFoaE5pNWl3WUVkQm5MWG51S2Z0S296cGVJQVZTbXBkS1NGZ05vOVN1?=
+ =?utf-8?B?QjdqQW4vU2RBdisvblcyT3pHclkzSW1YbU9yZVIwanB0RG5yVnZJYkYwVkxs?=
+ =?utf-8?B?YTNEdEtyTXRuYk4ybmR0ek8zT2RvLys3UHJVSkVNNnR3cFc2MEdUbTM3Nys4?=
+ =?utf-8?B?TnZvTXVnUEdKblM1YVVsakVnOHgyeDR3VG5ISFJTL1VkTWFwaWM1OGRNd2F1?=
+ =?utf-8?B?bXZwckVqQ1haK1lsekNybXVKQlFxd2tkZG1yZjRtemNpUEM4Yk9XMnFCemJs?=
+ =?utf-8?B?Vlg2MWlkS1lRMXBuR29GM1VGSTQ4SjNzT3ZtbXFTNnFTTWhGclovUUZ1Ylhi?=
+ =?utf-8?B?aVh1TjRBRStsMXdVQk5ub0YzYURhMStoZUFXM0ZrdytDbzB6bDBzdlQ3MGR4?=
+ =?utf-8?B?bnRRbjFwVkF2Q2RST001SWJNbS9NY0M2eEVBZFNjQ2RncGpZSVNTRXJVclp4?=
+ =?utf-8?B?VVByWE40WVF2NXdyTlFSbndWbXRNT0w4emFQSjhpa0JWTnhQYzA0aGtFQU82?=
+ =?utf-8?B?ckgxemdLTGVhSFRqQUdlbFYyQnM4ZTJMREdiYnpIeVdiZXVlaS9Td0FCOXBk?=
+ =?utf-8?B?QUM1V2p0NDV2MzlheFlkOWtpNk5CcW9yVUVTZ25PTVB2RU04Rko0TzhUSkZn?=
+ =?utf-8?B?Z1NoNHRwVWQ4ZUxMS0wrTjhQdTBPdXJuSXlDRWRRMFVoVWUzNmh2L2dPakxK?=
+ =?utf-8?B?YWFqQVRGeHRENC9nSUs5WXNFVjFPc3grT0M3UnZQcEFYWTcxczhiQ1VRQkhS?=
+ =?utf-8?B?bDVobGplSFE5TEIrYmFYZHArRi9WZDgxR3RFME9kekM1eEhrUk5nSGk3R2Rx?=
+ =?utf-8?B?dm1QUXZQQnh3Z25xMENYSnVlR0NoeTRlaitiZFhianUvM3diMmVONnRiemxy?=
+ =?utf-8?B?RmRrY0ViZ3lKTDA0YlVVUWxyQkM0aWJMUTMyUEZtbGNyOHg0UmU0T09JSGR6?=
+ =?utf-8?B?dmJrcDlFUGl3WWxJTjVFYklvR1QyMWtJdFliNkVFM0J4OTlpTkZvaC9JdjFm?=
+ =?utf-8?B?bjg5K1VTbzBJVjV2Z0JkNGR0RGo2YmROekFVTTRMQUR1bEwvMVZIYUxsb3A5?=
+ =?utf-8?B?YkI1elVZNkJ0Tjc4V05KbmtSRHVaZ3lIdlp6SDN1cEtQRUZhZlR1RllJWGlh?=
+ =?utf-8?B?VmlRaTJkNGZieXZKcWFyMEEwVUU3TTgrVVZKQU9tcUl4d0JlVkdDdHBqeDcz?=
+ =?utf-8?B?MHdXeG5sTkxjTEptUGwwNXhnN2JMSlVsd3p1bFk4Z0pjOVhKOURtSmdqaFNF?=
+ =?utf-8?B?UWsvaTNFdk1vUkkxdnlaWDBFUitCS2IzcCsxOEd3SDYremVkTk5SY2ZjNGQ1?=
+ =?utf-8?B?d2lKS0Vpc2RqckV3OHZJSzVLNkNZVkFoWUx0bnRLY2M3bTRoM1h2NlBBaHBP?=
+ =?utf-8?B?bW5ZVW1ibm13cGJ2cEN6UmlVTzNWdUdQNU1ZN1FlNWUrei9DQ3NKQk5Ha2l0?=
+ =?utf-8?B?RXBqNVZHR09IeTN0TWZCZmNxRFZZNERvWTk0Y2grVGJleCtLQXZHOUE4MUtE?=
+ =?utf-8?B?VVhnMlJudlJjZnc0c01OelYzcDZDbkRDeFZtdjNRbFBzcCtMUnF3Tk4vSDVm?=
+ =?utf-8?B?bDc3dDkrWGR4SHg2NkV5UEI2Y21abHh6OUg0ZHV3MVpmTFJFUnRyUFFucFNv?=
+ =?utf-8?B?VjZ6aVF2aGljUjI5MHJGV2VGTG5lODlqZGxwcDdNZ2RSLzgrTXBoYzcxQzRG?=
+ =?utf-8?B?TUdidWZTemxneDRBeW1TVEZYLzN4UmY0RVhMR0xWdmYyOXVNRGpIaVMrMWto?=
+ =?utf-8?B?QzQ0TXJHVFlEcm5Gc1h3RFBSeWx1QjhhZUJ5SEZaME5NNmNSaXpWWGJDeEhL?=
+ =?utf-8?B?RUl6YzhtNkxlTTl3UGRoWHpBRmVOazJ0cm0xd1UyVlY1MXpzenBSazUyYlBD?=
+ =?utf-8?B?L2E1UnhOenpFRDlFTnNTNHlEeG5zajlWUld2WmVlMER4dk1PRjN1d3N2SzJp?=
+ =?utf-8?B?UDgyZnNZbHVid05jZzlKRkJFRm9vdWZSRGwvVEJKSCtoVEFqNnBjdEFHRHQ0?=
+ =?utf-8?B?cFJvTEZGaHo3enJwUXJhYTFxWUl3cUIrSzZIcVZFRFVqRzVFR3FBVlRJYk5u?=
+ =?utf-8?B?UEE9PQ==?=
+X-OriginatorOrg: oracle.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 251ededc-da51-43e7-c064-08dabcb9ac60
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR10MB4313.namprd10.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: SG2PR03MB3228.apcprd03.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: bf655e27-e514-4c5d-124f-08dabcb8c5b1
-X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Nov 2022 09:58:20.2598
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2022 10:04:47.5214
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: a7687ede-7a6b-4ef6-bace-642f677fbe31
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: krXjceUwNyiy12WzYBTscrgYTcs3A1qDO0kyCqGwxZO0zeBhufJX1EW8tcdnjjnskLzNPCOMKRV6Ke4Gi5sHHw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PSAPR03MB5509
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 4e2c6054-71cb-48f1-bd6c-3a9705aca71b
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: 6PJ9nrJvpOr+THZUeqtMTZcWwQhTpHa/ZMU53m4OAGU6PRSCRpvquHEEn4k0TExrl5IiuuX0A5JKJLl53TdZVg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO6PR10MB5620
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-02_06,2022-11-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 adultscore=0 spamscore=0 bulkscore=0
+ suspectscore=0 phishscore=0 malwarescore=0 mlxscore=0 mlxlogscore=999
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211020061
+X-Proofpoint-GUID: YHYDSal3wmaC2V2BaeheOMuMsg762lzm
+X-Proofpoint-ORIG-GUID: YHYDSal3wmaC2V2BaeheOMuMsg762lzm
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-T24gTW9uLCAyMDIyLTEwLTMxIGF0IDE0OjQ5ICswMTAwLCBBbmdlbG9HaW9hY2NoaW5vIERlbCBS
-ZWdubyB3cm90ZToNCj4gSWwgMjkvMTAvMjIgMTI6NTAsIEVsdmlzLldhbmcgaGEgc2NyaXR0bzoN
-Cj4gPiBGcm9tOiBFbHZpcyBXYW5nIDxFbHZpcy5XYW5nQG1lZGlhdGVrLmNvbT4NCj4gPiANCj4g
-PiBhZGQgZ2NlIGhlYWRlciBmaWxlIHRvIGRlZmluZSB0aGUgZ2NlIHRocmVhZCBwcmlvcml0eSwg
-Z2NlIHN1YnN5cw0KPiA+IGlkLA0KPiA+ICAgZXZlbnQgYW5kIGNvbnN0YW50IGZvciBtdDgxODgu
-DQo+ID4gdjIgLSB1c2UgdmVuZG9yIGluIGZpbGVuYW1lLCB1c2UgRHVhbCBsaWNlbnNlLg0KPiA+
-IA0KPiA+IFNpZ25lZC1vZmYtYnk6IEVsdmlzIFdhbmcgPEVsdmlzLldhbmdAbWVkaWF0ZWsuY29t
-Pg0KPiA+IFJldmlld2VkLWJ5OiBCby1DaGVuIENoZW4gPHJleC1iYy5jaGVuQG1lZGlhdGVrLmNv
-bT4NCj4gPiBSZXZpZXdlZC1ieTogS3J6eXN6dG9mIEtvemxvd3NraSA8a3J6eXN6dG9mLmtvemxv
-d3NraUBsaW5hcm8ub3JnPg0KPiA+IA0KPiA+IFRoYW5rcyBmb3IgdGhlIHJldmlld3MsIEkgaGF2
-ZSBmaXhlZCB0aGVtLg0KPiANCj4gSSBjYW4ndCBzZWUgd2hlcmUvd2hlbiBLcnp5c3p0b2YgZ2F2
-ZSB5b3UgaGlzIFItYiB0YWcuIERyb3AgaXQuDQoNClNvcnJ5IGZvciB0aGUgdW5uZWNlc3Nhcnkg
-bWlzdW5kZXJzdGFuZGluZywNClJlZ2FyZGluZyB0aGUgIlJldmlld2QtYnkiIGluIHRoZSBtZXNz
-YWdlLCBteSBwcmV2aW91cyB1bmRlcnN0YW5kaW5nDQp3YXMgd3JvbmcuIEkgdW5kZXJzdGFuZCBp
-cyB3aG8gcmV2aWV3ZWQgaXQgbm90IGFjY2VwdGVkIGl0LiBJIHdpbGwNCmRlbGV0ZSBpdCBpbiB0
-aGUgbmV4dCB2ZXJzaW9uLCB0aGFua3MuDQoNCj4gDQo+IEFsc28sIHBsZWFzZSBmaXggdGhlIHR5
-cG8gaW4gdGhlIGNvbW1pdCB0aXRsZS4gcy9iaW5naW5ncy9iaW5kaW5ncy9nLg0KDQp3aWxsIGZp
-eCBpbiBuZXh0IHZlcnNpb24sIHRoYW5rcyBmb3IgdGhlIHJldmlldy4NCg0KPiANCj4gUmVnYXJk
-cywNCj4gQW5nZWxvDQo+IA0KDQoNCg0K
+On 29/10/2022 02:15, chenxiang (M) wrote:
+> Hi John,
+> 
+> For internal abort commands, it allocates and deliver requests through 
+> sdev->request_queue.
+> 
+> Is it possible that we still need to send internal abort commands even 
+> if sdev is freed?
+> 
+> I  notices that in sas_destruct_devices, it calls sas_rphy_delete() to 
+> remove target, and then call i->dft->lldd_dev_gone()
+> 
+> which will call internal abort commands.
+
+Good question. I did not properly check the removal path and, indeed, 
+the sdev would be gone when we call lldd_dev_gone -> 
+internal_task_abort_dev, so that should fail to execute.
+
+However I do wonder why we really need to call internal_task_abort_dev 
+in the lldd_dev_gone callback. At the point lldd_dev_gone is called all 
+IO should be complete - indeed, it is now accounted for as requests 
+associated with the sdev. If it is really required to be called (HW 
+requirement?) then maybe it could be relocated to sdev/starget teardown 
+callback.
+
+Thanks,
+John
+
+> 
+> 
+> 
+> 在 2022/10/25 18:18, John Garry 写道:
+>> Like what we did for SMP commands, send internal abort commands through
+>> the block layer.
+>>
+>> At this point we can delete special handling in sas_task_abort() for SAS
+>> "internal" commands, as every slow task now has a request associated.
+>>
+>> Function sas_task_internal_timedout() is no longer referenced, so delete
+>> it.
+>>
+>> Signed-off-by: John Garry <john.garry@huawei.com>
+>> ---
+>>   drivers/scsi/hisi_sas/hisi_sas_main.c | 36 +++++++++----------
+>>   drivers/scsi/libsas/sas_expander.c    |  2 +-
+>>   drivers/scsi/libsas/sas_init.c        | 12 +++++--
+>>   drivers/scsi/libsas/sas_internal.h    |  3 +-
+>>   drivers/scsi/libsas/sas_scsi_host.c   | 52 ++++++---------------------
+>>   include/scsi/libsas.h                 |  1 -
+>>   6 files changed, 38 insertions(+), 68 deletions(-)
+>>
+>> diff --git a/drivers/scsi/hisi_sas/hisi_sas_main.c 
+>> b/drivers/scsi/hisi_sas/hisi_sas_main.c
+>> index fe2752d24fe8..65475775c844 100644
+>> --- a/drivers/scsi/hisi_sas/hisi_sas_main.c
+>> +++ b/drivers/scsi/hisi_sas/hisi_sas_main.c
+>> @@ -465,7 +465,7 @@ static int hisi_sas_queue_command(struct sas_task 
+>> *task, gfp_t gfp_flags)
+>>       struct hisi_sas_port *port;
+>>       struct hisi_hba *hisi_hba;
+>>       struct hisi_sas_slot *slot;
+>> -    struct request *rq = NULL;
+>> +    struct request *rq;
+>>       struct device *dev;
+>>       int rc;
+>> @@ -485,6 +485,21 @@ static int hisi_sas_queue_command(struct sas_task 
+>> *task, gfp_t gfp_flags)
+>>       hisi_hba = dev_to_hisi_hba(device);
+>>       dev = hisi_hba->dev;
+>> +    rq = sas_task_find_rq(task);
+>> +    if (rq) {
+>> +        unsigned int dq_index;
+>> +        u32 blk_tag;
+>> +
+>> +        blk_tag = blk_mq_unique_tag(rq);
+>> +        dq_index = blk_mq_unique_tag_to_hwq(blk_tag);
+>> +        dq = &hisi_hba->dq[dq_index];
+>> +    } else {
+>> +        struct Scsi_Host *shost = hisi_hba->shost;
+>> +        struct blk_mq_queue_map *qmap = 
+>> &shost->tag_set.map[HCTX_TYPE_DEFAULT];
+>> +        int queue = qmap->mq_map[raw_smp_processor_id()];
+>> +
+>> +        dq = &hisi_hba->dq[queue];
+>> +    }
+>>       switch (task->task_proto) {
+>>       case SAS_PROTOCOL_SSP:
+>> @@ -519,22 +534,6 @@ static int hisi_sas_queue_command(struct sas_task 
+>> *task, gfp_t gfp_flags)
+>>                   return -ECOMM;
+>>           }
+>> -
+>> -        rq = sas_task_find_rq(task);
+>> -        if (rq) {
+>> -            unsigned int dq_index;
+>> -            u32 blk_tag;
+>> -
+>> -            blk_tag = blk_mq_unique_tag(rq);
+>> -            dq_index = blk_mq_unique_tag_to_hwq(blk_tag);
+>> -            dq = &hisi_hba->dq[dq_index];
+>> -        } else {
+>> -            struct Scsi_Host *shost = hisi_hba->shost;
+>> -            struct blk_mq_queue_map *qmap = 
+>> &shost->tag_set.map[HCTX_TYPE_DEFAULT];
+>> -            int queue = qmap->mq_map[raw_smp_processor_id()];
+>> -
+>> -            dq = &hisi_hba->dq[queue];
+>> -        }
+>>           break;
+>>       case SAS_PROTOCOL_INTERNAL_ABORT:
+>>           if (!hisi_hba->hw->prep_abort)
+>> @@ -543,13 +542,10 @@ static int hisi_sas_queue_command(struct 
+>> sas_task *task, gfp_t gfp_flags)
+>>           if (test_bit(HISI_SAS_HW_FAULT_BIT, &hisi_hba->flags))
+>>               return -EIO;
+>> -        hisi_hba = dev_to_hisi_hba(device);
+>> -
+>>           if (unlikely(test_bit(HISI_SAS_REJECT_CMD_BIT, 
+>> &hisi_hba->flags)))
+>>               return -EINVAL;
+>>           port = to_hisi_sas_port(sas_port);
+>> -        dq = &hisi_hba->dq[task->abort_task.qid];
+>>           break;
+>>       default:
+>>           dev_err(hisi_hba->dev, "task prep: unknown/unsupported proto 
+>> (0x%x)\n",
+>> diff --git a/drivers/scsi/libsas/sas_expander.c 
+>> b/drivers/scsi/libsas/sas_expander.c
+>> index cc41127ea5cc..e852f1565fe7 100644
+>> --- a/drivers/scsi/libsas/sas_expander.c
+>> +++ b/drivers/scsi/libsas/sas_expander.c
+>> @@ -50,7 +50,7 @@ static int smp_execute_task_sg(struct domain_device 
+>> *dev,
+>>               break;
+>>           }
+>> -        task = sas_alloc_slow_task_rq(dev, GFP_KERNEL);
+>> +        task = sas_alloc_slow_task_rq(dev, GFP_KERNEL, -1U);
+>>           if (!task) {
+>>               res = -ENOMEM;
+>>               break;
+>> diff --git a/drivers/scsi/libsas/sas_init.c 
+>> b/drivers/scsi/libsas/sas_init.c
+>> index 5f9e71a54799..c3f602bd2c4c 100644
+>> --- a/drivers/scsi/libsas/sas_init.c
+>> +++ b/drivers/scsi/libsas/sas_init.c
+>> @@ -56,7 +56,7 @@ struct sas_task *sas_alloc_slow_task(gfp_t flags)
+>>       return task;
+>>   }
+>> -struct sas_task *sas_alloc_slow_task_rq(struct domain_device *device, 
+>> gfp_t flags)
+>> +struct sas_task *sas_alloc_slow_task_rq(struct domain_device *device, 
+>> gfp_t flags, unsigned int qid)
+>>   {
+>>       struct sas_ha_struct *sas_ha = device->port->ha;
+>>       struct Scsi_Host *shost = sas_ha->core.shost;
+>> @@ -86,8 +86,14 @@ struct sas_task *sas_alloc_slow_task_rq(struct 
+>> domain_device *device, gfp_t flag
+>>       task->dev = device;
+>>       task->task_done = sas_task_complete_internal;
+>> -    rq = scsi_alloc_request(sdev->request_queue, REQ_OP_DRV_IN,
+>> -                BLK_MQ_REQ_RESERVED | BLK_MQ_REQ_NOWAIT);
+>> +    if (qid == -1U) {
+>> +        rq = scsi_alloc_request(sdev->request_queue, REQ_OP_DRV_IN,
+>> +                    BLK_MQ_REQ_RESERVED | BLK_MQ_REQ_NOWAIT);
+>> +    } else {
+>> +        rq = scsi_alloc_request_hwq(sdev->request_queue, REQ_OP_DRV_IN,
+>> +                    BLK_MQ_REQ_RESERVED | BLK_MQ_REQ_NOWAIT,
+>> +                    qid);
+>> +    }
+>>       if (IS_ERR(rq)) {
+>>           sas_free_task(task);
+>>           return NULL;
+>> diff --git a/drivers/scsi/libsas/sas_internal.h 
+>> b/drivers/scsi/libsas/sas_internal.h
+>> index 9b58948c57c2..af4a4bf88830 100644
+>> --- a/drivers/scsi/libsas/sas_internal.h
+>> +++ b/drivers/scsi/libsas/sas_internal.h
+>> @@ -54,7 +54,8 @@ void sas_free_event(struct asd_sas_event *event);
+>>   struct sas_task *sas_alloc_task(gfp_t flags);
+>>   struct sas_task *sas_alloc_slow_task(gfp_t flags);
+>> -struct sas_task *sas_alloc_slow_task_rq(struct domain_device *device, 
+>> gfp_t flags);
+>> +struct sas_task *sas_alloc_slow_task_rq(struct domain_device *device, 
+>> gfp_t flags,
+>> +                      unsigned int qid);
+>>   void sas_free_task(struct sas_task *task);
+>>   int  sas_register_ports(struct sas_ha_struct *sas_ha);
+>> diff --git a/drivers/scsi/libsas/sas_scsi_host.c 
+>> b/drivers/scsi/libsas/sas_scsi_host.c
+>> index e6ee8dd56a45..a93e019a7dbf 100644
+>> --- a/drivers/scsi/libsas/sas_scsi_host.c
+>> +++ b/drivers/scsi/libsas/sas_scsi_host.c
+>> @@ -920,23 +920,6 @@ void sas_task_complete_internal(struct sas_task 
+>> *task)
+>>       scsi_done(scmd);
+>>   }
+>> -void sas_task_internal_timedout(struct timer_list *t)
+>> -{
+>> -    struct sas_task_slow *slow = from_timer(slow, t, timer);
+>> -    struct sas_task *task = slow->task;
+>> -    bool is_completed = true;
+>> -    unsigned long flags;
+>> -
+>> -    spin_lock_irqsave(&task->task_state_lock, flags);
+>> -    if (!(task->task_state_flags & SAS_TASK_STATE_DONE)) {
+>> -        task->task_state_flags |= SAS_TASK_STATE_ABORTED;
+>> -        is_completed = false;
+>> -    }
+>> -    spin_unlock_irqrestore(&task->task_state_lock, flags);
+>> -
+>> -    if (!is_completed)
+>> -        complete(&task->slow_task->completion);
+>> -}
+>>   enum blk_eh_timer_return sas_internal_timeout(struct scsi_cmnd *scmd)
+>>   {
+>>       struct sas_task *task = TO_SAS_TASK(scmd);
+>> @@ -978,28 +961,23 @@ static int sas_execute_internal_abort(struct 
+>> domain_device *device,
+>>       int res, retry;
+>>       for (retry = 0; retry < TASK_RETRY; retry++) {
+>> -        task = sas_alloc_slow_task(GFP_KERNEL);
+>> +        struct request *rq;
+>> +
+>> +        task = sas_alloc_slow_task_rq(device, GFP_KERNEL, qid);
+>>           if (!task)
+>>               return -ENOMEM;
+>>           task->dev = device;
+>>           task->task_proto = SAS_PROTOCOL_INTERNAL_ABORT;
+>> -        task->task_done = sas_task_internal_done;
+>> -        task->slow_task->timer.function = sas_task_internal_timedout;
+>> -        task->slow_task->timer.expires = jiffies + TASK_TIMEOUT;
+>> -        add_timer(&task->slow_task->timer);
+>> +        task->task_done = sas_task_complete_internal;
+>>           task->abort_task.tag = tag;
+>>           task->abort_task.type = type;
+>> -        task->abort_task.qid = qid;
+>> -        res = i->dft->lldd_execute_task(task, GFP_KERNEL);
+>> -        if (res) {
+>> -            del_timer_sync(&task->slow_task->timer);
+>> -            pr_err("Executing internal abort failed %016llx (%d)\n",
+>> -                   SAS_ADDR(device->sas_addr), res);
+>> -            break;
+>> -        }
+>> +        rq = scsi_cmd_to_rq(task->uldd_task);
+>> +        rq->timeout = TASK_TIMEOUT;
+>> +
+>> +        blk_execute_rq_nowait(rq, true);
+>>           wait_for_completion(&task->slow_task->completion);
+>>           res = TMF_RESP_FUNC_FAILED;
+>> @@ -1069,7 +1047,7 @@ int sas_execute_tmf(struct domain_device 
+>> *device, void *parameter,
+>>       for (retry = 0; retry < TASK_RETRY; retry++) {
+>>           struct request *rq;
+>> -        task = sas_alloc_slow_task_rq(device, GFP_KERNEL);
+>> +        task = sas_alloc_slow_task_rq(device, GFP_KERNEL, -1U);
+>>           if (!task)
+>>               return -ENOMEM;
+>> @@ -1251,17 +1229,7 @@ void sas_task_abort(struct sas_task *task)
+>>   {
+>>       struct scsi_cmnd *sc = task->uldd_task;
+>> -    /* Escape for libsas internal commands */
+>> -    if (!sc) {
+>> -        struct sas_task_slow *slow = task->slow_task;
+>> -
+>> -        if (!slow)
+>> -            return;
+>> -        if (!del_timer(&slow->timer))
+>> -            return;
+>> -        slow->timer.function(&slow->timer);
+>> -        return;
+>> -    }
+>> +    WARN_ON_ONCE(!sc);
+>>       if (dev_is_sata(task->dev) && !task->slow_task)
+>>           sas_ata_task_abort(task);
+>> diff --git a/include/scsi/libsas.h b/include/scsi/libsas.h
+>> index f02156ccd376..60543d8b01d4 100644
+>> --- a/include/scsi/libsas.h
+>> +++ b/include/scsi/libsas.h
+>> @@ -565,7 +565,6 @@ enum sas_internal_abort {
+>>   struct sas_internal_abort_task {
+>>       enum sas_internal_abort type;
+>> -    unsigned int qid;
+>>       u16 tag;
+>>   };
+> 
+> 
+> 
+
