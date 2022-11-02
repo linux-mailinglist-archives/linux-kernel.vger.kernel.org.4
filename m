@@ -2,58 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8492061698C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:45:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D48F161698A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:45:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232083AbiKBQpI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 12:45:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48404 "EHLO
+        id S232077AbiKBQpE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 12:45:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44604 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232069AbiKBQoj (ORCPT
+        with ESMTP id S230394AbiKBQoj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 2 Nov 2022 12:44:39 -0400
-Received: from mail-pj1-x1049.google.com (mail-pj1-x1049.google.com [IPv6:2607:f8b0:4864:20::1049])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CEE7111D
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 09:40:43 -0700 (PDT)
-Received: by mail-pj1-x1049.google.com with SMTP id g6-20020a17090a300600b00212f609f6aeso1484265pjb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 09:40:43 -0700 (PDT)
+Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8048510B4
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 09:40:45 -0700 (PDT)
+Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-367f94b9b16so162842097b3.11
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 09:40:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=KIew2SL18zFJ6u7nCVq8c3JgfzFW65AAtUvUlav4Acg=;
-        b=airvtcUYcZZ8MHdLIhi3pbgBZi6gh+e7/dZtX9JFrnv3hRtBujUKQyyGPN5qk0Y8nt
-         phFxU+70nNgIiGjKiWMhXn7b5yoptQzXEk/ouwpXGh75dSrNYJZOiKAWOP5BemNzSyOb
-         Tdm7veavPLEGXo+SKLYqgOFO2HTT3xiaufEW51KFiU/3PveV9Ab3/jCb/8ZXNnG8ZvPO
-         fqZoPNkoOLVgF7ooqKPcI7pY/L+91nIxxuC+u6uuAIZT3uXaxqRhc1/TtxEUpufDFc7D
-         SdR6pl37Hb2iD4VJQ/Xc/ZkU02fVDASFIoCgeLGeG0hmO67+MmID9x2/2hIDUMztta0u
-         2K6w==
+        bh=YpyV4sjuN6nTtNbz4mfvOqF+6FZYm3YsT8sqkJTRsbo=;
+        b=tYOdkg3vf+59PIaLFlt3AchFCjbgSfE5+sKR/Ibm9yt6tvf4L9pmL54S+KOmiWse82
+         LH5y2tsuRIQlIw6+jxyiY+OBIrhZ59fPZKJj9ay1usM6BRCSTyP5B7d0hybfCT3bG7K6
+         bVKYaq4DI4E+j1yO6LoRWzS8Ie91OLuCW982zwz/Es9Xl1EedNUp/WcVIGO40vJ/nQIs
+         vG9QINdWWcmb7eFn7AQS0fAe0OTQ0OCKgaoQj9O7tEZ4GjxlXFkLmRGvj9MN+JhMwkj2
+         4S3KK+LP8iupGAOh/1/c2ii1SS7tBoc2Pt/u4ZQZ0dHrHcfX7i8Lb9NNDlY+L7q2bMea
+         gDLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
          :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KIew2SL18zFJ6u7nCVq8c3JgfzFW65AAtUvUlav4Acg=;
-        b=ziuKwIaL199Bsw/fEzIYr3ntwh872iENILEdloFiUuLtw/T61NH5THygxJAvrNq8SN
-         6+A9EzxA/js6w8pxaDqv/i+Q5f2bWOoB2HkLX+3D6K7Osp/awJfjcig+ukWQAqJzc5tc
-         pjlq/EH9+l3NRO7fjoZEggR9zr1BsHTFKEnsBk/DszI2fbKfKrnN6XJ1KsGh26feCRzs
-         GV4atOnZsbk1gjXMAklM+C1HfrJ4KxSBuIOjXkw+W7tSLZCQRKVwU28ZypH4qcqlx5Gm
-         X1VvxsVWX7ZBqvGm2bmRcv8orwV6+ny7puh0JoE+QyrES5whuKtwmp4z3lwIzYn8UBwj
-         x7SQ==
-X-Gm-Message-State: ACrzQf0+JNFbZ1IxubQYFncMd3Iqj86DtfEaGbXfN3LxFmKEaH70JMMJ
-        t7wNM32EdFVn2E0PzplV0L3yVpC682tTlA==
-X-Google-Smtp-Source: AMsMyM7x+8G0NGet5ElLFPpgVE1ZOycEBuAmGNMhefOHK43o90KXXvGE2DRmoND9PgyrSrJYcU9JTQaesGRpgQ==
+        bh=YpyV4sjuN6nTtNbz4mfvOqF+6FZYm3YsT8sqkJTRsbo=;
+        b=D4qKFX3Dw0p9+5LVMAQtN2O+6g5tgIsLWc5nKzj6yg/UW+1VOhCppPisd6CDdE55bQ
+         bcum+FRLJQSCM8/KIkGVIM+wcnsp5Z7u2SzACNr2eW1oYLcvqh1fjVXkZzwfH8WJ+m69
+         eOUfqGXvBSkIjX6WQChOa9ZMCpU6dorSD8bzNfZ6k/d6RJHIGLPleKm2hSaDljNKIMEP
+         D9tnDJLxEOfZNQd6LEzSXPT56WJ1fJfMSa213ILMkrp/wLUy+8elPpaJl8+/HipemBnb
+         iTkuDxeviKDkDZidfAo7N0Q3ed5+cW8x4Yh2f9PBv75MLiBTl4byOt82MCnmalPZJ0iQ
+         ke6w==
+X-Gm-Message-State: ACrzQf1kDhxoPz/+guGLhu9BTObnkyFFasoOf+d5SntF9pHGvdEyA2bZ
+        RBjWGM/FW1+GjYfAoiXR4lARt5UmnPARtA==
+X-Google-Smtp-Source: AMsMyM6r3wwMHH1GQ3q0cp+5dQlmVo9cwzuc3IxzUtlriNpj4R6ZlD1q/C4MgEsEqTbg+/80TR2+m7HA8Rnxkw==
 X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
- (user=dlatypov job=sendgmr) by 2002:a17:90b:1bc1:b0:213:e2af:b1f4 with SMTP
- id oa1-20020a17090b1bc100b00213e2afb1f4mr17299469pjb.47.1667407243096; Wed,
- 02 Nov 2022 09:40:43 -0700 (PDT)
-Date:   Wed,  2 Nov 2022 09:40:04 -0700
+ (user=dlatypov job=sendgmr) by 2002:a81:1e10:0:b0:36b:532a:52be with SMTP id
+ e16-20020a811e10000000b0036b532a52bemr23987758ywe.54.1667407244828; Wed, 02
+ Nov 2022 09:40:44 -0700 (PDT)
+Date:   Wed,  2 Nov 2022 09:40:05 -0700
 In-Reply-To: <20221102164005.2516646-1-dlatypov@google.com>
 Mime-Version: 1.0
 References: <20221102164005.2516646-1-dlatypov@google.com>
 X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
-Message-ID: <20221102164005.2516646-2-dlatypov@google.com>
-Subject: [PATCH 2/3] kunit: tool: unit tests all check parser errors,
- standardize formatting a bit
+Message-ID: <20221102164005.2516646-3-dlatypov@google.com>
+Subject: [PATCH 3/3] kunit: tool: remove redundant file.close() call in unit test
 From:   Daniel Latypov <dlatypov@google.com>
 To:     brendanhiggins@google.com, davidgow@google.com
 Cc:     rmoar@google.com, linux-kernel@vger.kernel.org,
@@ -70,224 +69,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let's verify that the parser isn't reporting any errors for valid
-inputs.
-
-This change also
-* does result.status checking on one line
-* makes sure we consistently do it outside of the `with` block
+We're using a `with` block above, so the file object is already closed.
 
 Signed-off-by: Daniel Latypov <dlatypov@google.com>
 ---
- tools/testing/kunit/kunit_tool_test.py | 93 +++++++++++---------------
- 1 file changed, 38 insertions(+), 55 deletions(-)
+ tools/testing/kunit/kunit_tool_test.py | 2 --
+ 1 file changed, 2 deletions(-)
 
 diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 9fa4babb2506..0063773c0fc4 100755
+index 0063773c0fc4..c41567eaf3c3 100755
 --- a/tools/testing/kunit/kunit_tool_test.py
 +++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -133,33 +133,29 @@ class KUnitParserTest(unittest.TestCase):
- 		all_passed_log = test_data_path('test_is_test_passed-all_passed.log')
- 		with open(all_passed_log) as file:
- 			result = kunit_parser.parse_run_tests(file.readlines())
--		self.assertEqual(
--			kunit_parser.TestStatus.SUCCESS,
--			result.status)
-+		self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.status)
-+		self.assertEqual(result.counts.errors, 0)
- 
- 	def test_parse_successful_nested_tests_log(self):
- 		all_passed_log = test_data_path('test_is_test_passed-all_passed_nested.log')
- 		with open(all_passed_log) as file:
- 			result = kunit_parser.parse_run_tests(file.readlines())
--		self.assertEqual(
--			kunit_parser.TestStatus.SUCCESS,
--			result.status)
-+		self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.status)
-+		self.assertEqual(result.counts.errors, 0)
- 
- 	def test_kselftest_nested(self):
- 		kselftest_log = test_data_path('test_is_test_passed-kselftest.log')
- 		with open(kselftest_log) as file:
- 			result = kunit_parser.parse_run_tests(file.readlines())
--			self.assertEqual(
--				kunit_parser.TestStatus.SUCCESS,
--				result.status)
-+		self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.status)
-+		self.assertEqual(result.counts.errors, 0)
- 
- 	def test_parse_failed_test_log(self):
- 		failed_log = test_data_path('test_is_test_passed-failure.log')
- 		with open(failed_log) as file:
- 			result = kunit_parser.parse_run_tests(file.readlines())
--		self.assertEqual(
--			kunit_parser.TestStatus.FAILURE,
--			result.status)
-+		self.assertEqual(kunit_parser.TestStatus.FAILURE, result.status)
-+		self.assertEqual(result.counts.errors, 0)
- 
- 	def test_no_header(self):
- 		empty_log = test_data_path('test_is_test_passed-no_tests_run_no_header.log')
-@@ -167,9 +163,8 @@ class KUnitParserTest(unittest.TestCase):
- 			result = kunit_parser.parse_run_tests(
- 				kunit_parser.extract_tap_lines(file.readlines()))
- 		self.assertEqual(0, len(result.subtests))
--		self.assertEqual(
--			kunit_parser.TestStatus.FAILURE_TO_PARSE_TESTS,
--			result.status)
-+		self.assertEqual(kunit_parser.TestStatus.FAILURE_TO_PARSE_TESTS, result.status)
-+		self.assertEqual(result.counts.errors, 1)
- 
- 	def test_missing_test_plan(self):
- 		missing_plan_log = test_data_path('test_is_test_passed-'
-@@ -180,9 +175,7 @@ class KUnitParserTest(unittest.TestCase):
- 				file.readlines()))
- 		# A missing test plan is not an error.
- 		self.assertEqual(result.counts, kunit_parser.TestCounts(passed=10, errors=0))
--		self.assertEqual(
--			kunit_parser.TestStatus.SUCCESS,
--			result.status)
-+		self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.status)
- 
- 	def test_no_tests(self):
- 		header_log = test_data_path('test_is_test_passed-no_tests_run_with_header.log')
-@@ -190,9 +183,8 @@ class KUnitParserTest(unittest.TestCase):
- 			result = kunit_parser.parse_run_tests(
- 				kunit_parser.extract_tap_lines(file.readlines()))
- 		self.assertEqual(0, len(result.subtests))
--		self.assertEqual(
--			kunit_parser.TestStatus.NO_TESTS,
--			result.status)
-+		self.assertEqual(kunit_parser.TestStatus.NO_TESTS, result.status)
-+		self.assertEqual(result.counts.errors, 1)
- 
- 	def test_no_tests_no_plan(self):
- 		no_plan_log = test_data_path('test_is_test_passed-no_tests_no_plan.log')
-@@ -203,7 +195,7 @@ class KUnitParserTest(unittest.TestCase):
+@@ -239,8 +239,6 @@ class KUnitParserTest(unittest.TestCase):
  		self.assertEqual(
- 			kunit_parser.TestStatus.NO_TESTS,
- 			result.subtests[0].subtests[0].status)
--		self.assertEqual(1, result.counts.errors)
-+		self.assertEqual(result.counts, kunit_parser.TestCounts(passed=1, errors=1))
+ 			"example",
+ 			result.subtests[1].name)
+-		file.close()
+-
  
- 
- 	def test_no_kunit_output(self):
-@@ -215,6 +207,7 @@ class KUnitParserTest(unittest.TestCase):
- 		print_mock.assert_any_call(StrContains('could not find any KTAP output!'))
- 		print_mock.stop()
- 		self.assertEqual(0, len(result.subtests))
-+		self.assertEqual(result.counts.errors, 1)
- 
- 	def test_skipped_test(self):
- 		skipped_log = test_data_path('test_skip_tests.log')
-@@ -222,18 +215,16 @@ class KUnitParserTest(unittest.TestCase):
- 			result = kunit_parser.parse_run_tests(file.readlines())
- 
- 		# A skipped test does not fail the whole suite.
--		self.assertEqual(
--			kunit_parser.TestStatus.SUCCESS,
--			result.status)
-+		self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.status)
-+		self.assertEqual(result.counts, kunit_parser.TestCounts(passed=4, skipped=1))
- 
- 	def test_skipped_all_tests(self):
- 		skipped_log = test_data_path('test_skip_all_tests.log')
- 		with open(skipped_log) as file:
- 			result = kunit_parser.parse_run_tests(file.readlines())
- 
--		self.assertEqual(
--			kunit_parser.TestStatus.SKIPPED,
--			result.status)
-+		self.assertEqual(kunit_parser.TestStatus.SKIPPED, result.status)
-+		self.assertEqual(result.counts, kunit_parser.TestCounts(skipped=5))
- 
- 	def test_ignores_hyphen(self):
- 		hyphen_log = test_data_path('test_strip_hyphen.log')
-@@ -241,9 +232,7 @@ class KUnitParserTest(unittest.TestCase):
- 			result = kunit_parser.parse_run_tests(file.readlines())
- 
- 		# A skipped test does not fail the whole suite.
--		self.assertEqual(
--			kunit_parser.TestStatus.SUCCESS,
--			result.status)
-+		self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.status)
- 		self.assertEqual(
- 			"sysctl_test",
- 			result.subtests[0].name)
-@@ -257,55 +246,49 @@ class KUnitParserTest(unittest.TestCase):
+ 	def test_ignores_prefix_printk_time(self):
  		prefix_log = test_data_path('test_config_printk_time.log')
- 		with open(prefix_log) as file:
- 			result = kunit_parser.parse_run_tests(file.readlines())
--			self.assertEqual(
--				kunit_parser.TestStatus.SUCCESS,
--				result.status)
--			self.assertEqual('kunit-resource-test', result.subtests[0].name)
-+		self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.status)
-+		self.assertEqual('kunit-resource-test', result.subtests[0].name)
-+		self.assertEqual(result.counts.errors, 0)
- 
- 	def test_ignores_multiple_prefixes(self):
- 		prefix_log = test_data_path('test_multiple_prefixes.log')
- 		with open(prefix_log) as file:
- 			result = kunit_parser.parse_run_tests(file.readlines())
--			self.assertEqual(
--				kunit_parser.TestStatus.SUCCESS,
--				result.status)
--			self.assertEqual('kunit-resource-test', result.subtests[0].name)
-+		self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.status)
-+		self.assertEqual('kunit-resource-test', result.subtests[0].name)
-+		self.assertEqual(result.counts.errors, 0)
- 
- 	def test_prefix_mixed_kernel_output(self):
- 		mixed_prefix_log = test_data_path('test_interrupted_tap_output.log')
- 		with open(mixed_prefix_log) as file:
- 			result = kunit_parser.parse_run_tests(file.readlines())
--			self.assertEqual(
--				kunit_parser.TestStatus.SUCCESS,
--				result.status)
--			self.assertEqual('kunit-resource-test', result.subtests[0].name)
-+		self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.status)
-+		self.assertEqual('kunit-resource-test', result.subtests[0].name)
-+		self.assertEqual(result.counts.errors, 0)
- 
- 	def test_prefix_poundsign(self):
- 		pound_log = test_data_path('test_pound_sign.log')
- 		with open(pound_log) as file:
- 			result = kunit_parser.parse_run_tests(file.readlines())
--			self.assertEqual(
--				kunit_parser.TestStatus.SUCCESS,
--				result.status)
--			self.assertEqual('kunit-resource-test', result.subtests[0].name)
-+		self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.status)
-+		self.assertEqual('kunit-resource-test', result.subtests[0].name)
-+		self.assertEqual(result.counts.errors, 0)
- 
- 	def test_kernel_panic_end(self):
- 		panic_log = test_data_path('test_kernel_panic_interrupt.log')
- 		with open(panic_log) as file:
- 			result = kunit_parser.parse_run_tests(file.readlines())
--			self.assertEqual(
--				kunit_parser.TestStatus.TEST_CRASHED,
--				result.status)
--			self.assertEqual('kunit-resource-test', result.subtests[0].name)
-+		self.assertEqual(kunit_parser.TestStatus.TEST_CRASHED, result.status)
-+		self.assertEqual('kunit-resource-test', result.subtests[0].name)
-+		self.assertGreaterEqual(result.counts.errors, 1)
- 
- 	def test_pound_no_prefix(self):
- 		pound_log = test_data_path('test_pound_no_prefix.log')
- 		with open(pound_log) as file:
- 			result = kunit_parser.parse_run_tests(file.readlines())
--			self.assertEqual(
--				kunit_parser.TestStatus.SUCCESS,
--				result.status)
--			self.assertEqual('kunit-resource-test', result.subtests[0].name)
-+		self.assertEqual(kunit_parser.TestStatus.SUCCESS, result.status)
-+		self.assertEqual('kunit-resource-test', result.subtests[0].name)
-+		self.assertEqual(result.counts.errors, 0)
- 
- def line_stream_from_strs(strs: Iterable[str]) -> kunit_parser.LineStream:
- 	return kunit_parser.LineStream(enumerate(strs, start=1))
 -- 
 2.38.1.273.g43a17bfeac-goog
 
