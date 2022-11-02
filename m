@@ -2,114 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD778616887
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:22:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E567261687E
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:22:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231641AbiKBQWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 12:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33888 "EHLO
+        id S231421AbiKBQWm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 12:22:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35330 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231424AbiKBQVk (ORCPT
+        with ESMTP id S231499AbiKBQVe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 12:21:40 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2562631ED2
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 09:15:23 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id x18so973758qki.4
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 09:15:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VUIqt5qgvlwR23A+HVBIo3LzIMemIRkCkHJ4mOyl2J8=;
-        b=FVlskIjr+sENRJWrtAh2zV8qqLujiM4y+aUUEzUPCKxu10SAzprl2BTMKUDXeAXmsa
-         pTBQN5MOerOiiIU+/htxqxDfmOZdm0HsTjVqJeLWIzCHgLCgTULqjUwDQPsR5htfSfdP
-         TXsdihcdQ4ldzdjkA1xRdlp3ulMwrXCBglBz7GIv2AVmd1wXV0NYSDXS1cSgYWiNwNIb
-         zvR0/0VXuq7jK27wEB8R66hrMMyHG0uMp2KYin1AcEQ6AQNy+qmjYISDrFb4QUyq+6X7
-         ZQRZqE58xVizemJiCDA4J54F6ApQY2/EFAQTLeVD1EadMIcZ0UheXRPHvdlSIupGH7p/
-         9XGA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VUIqt5qgvlwR23A+HVBIo3LzIMemIRkCkHJ4mOyl2J8=;
-        b=at09R/w031oZGt74ZuGXzCKHBGXcwRaf5u+4A0pe0sPHgtE3nVVAWbiO8YJFczLrXW
-         BSV6hzoft8UX/aApJoHEvEQwKuK3/ofcmlwygz+k0kq0hovUobpt7hE9KWst/BQX8hTz
-         Fg897Q6rjDY2+D+Ed7/HYY6ycStc2hmUC5NArVzqulF2jv3ar/clATOU3/RfBxrgzcxn
-         WRbts57/EtN8u/vcvnJnWmx3vQeEuKFuyTFQE1MOh+MSAA9y4RcE3G1rAJpOTyLvLB6/
-         bIrkdmCJ9P96w2fptuejkROx0Rb7FuDi1sPKZwu0J40yV1qVBFnfXRIH11E13/01HAju
-         RJvQ==
-X-Gm-Message-State: ACrzQf32vgGcBxg99Lo16gG0cEVmXwC3zuDxwjjS6Wa0jbrrT82kQ1EB
-        6ze3J4K7dAIz3fb8BxoaMZa+OA==
-X-Google-Smtp-Source: AMsMyM41FmWXlA5k6IlmlP57QHOAFPhcgS/Hs4YLXIX7ot05fxx9yV2omsjHYy2A++h3HUiXZE8iBg==
-X-Received: by 2002:a37:8847:0:b0:6fa:4e9a:7fbc with SMTP id k68-20020a378847000000b006fa4e9a7fbcmr5790560qkd.576.1667405716686;
-        Wed, 02 Nov 2022 09:15:16 -0700 (PDT)
-Received: from krzk-bin.. ([2601:586:5000:570:28d9:4790:bc16:cc93])
-        by smtp.gmail.com with ESMTPSA id h12-20020ac8548c000000b003a4ec43f2b5sm6831571qtq.72.2022.11.02.09.15.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 09:15:16 -0700 (PDT)
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Vladimir Oltean <olteanv@gmail.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 2/2] dt-bindings: net: dsa-port: constrain number of 'reg' in ports
-Date:   Wed,  2 Nov 2022 12:15:12 -0400
-Message-Id: <20221102161512.53399-2-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221102161512.53399-1-krzysztof.kozlowski@linaro.org>
-References: <20221102161512.53399-1-krzysztof.kozlowski@linaro.org>
+        Wed, 2 Nov 2022 12:21:34 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3FF131EC7
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 09:15:21 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id A42A221E9F;
+        Wed,  2 Nov 2022 16:15:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1667405714; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=0ltRSvD+MBT0/eZowW+t0lbg4zeEUtzQRQMUxfd+dLc=;
+        b=Ia+9q/A1gQ3ByrTl0c7R3Gle155cWOybT1S1hFJtgXPdv8N2weiwKkF/rr+4o+zEFBwAS+
+        iV7ltM6DkCGr0GibiXH08/I1Ud3U/nIWKHad3vLvlbFqAOEjJ5TmvZApoY/QhKhiCWiKNn
+        cH1KqunG/vE62dAO92DdeJr4B6BHJd4=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 871DA139D3;
+        Wed,  2 Nov 2022 16:15:14 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id PkbYHZKXYmNIHAAAMHmgww
+        (envelope-from <mhocko@suse.com>); Wed, 02 Nov 2022 16:15:14 +0000
+Date:   Wed, 2 Nov 2022 17:15:13 +0100
+From:   Michal Hocko <mhocko@suse.com>
+To:     Yang Shi <shy828301@gmail.com>
+Cc:     Zach O'Keefe <zokeefe@google.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mm: don't warn if the node is offlined
+Message-ID: <Y2KXkVmRWOpPT/MI@dhcp22.suse.cz>
+References: <20221031183122.470962-1-shy828301@gmail.com>
+ <Y2BHcBCR2FIJgU4w@dhcp22.suse.cz>
+ <CAAa6QmQt9Us8YpirQGXV0_AetuPS+EOqMSGqNn6KW24HXvwO_A@mail.gmail.com>
+ <Y2DQr06mNzk0ITX1@dhcp22.suse.cz>
+ <CAHbLzkonsnr4yxUOpMpoch1eCVNgR5hC9YaMkPR=fSV2Uszc6g@mail.gmail.com>
+ <CAAa6QmRe1zMp8P-gZjR63Fg6KhOw+fP-v7SQWLNKuc2Y9ZxvyA@mail.gmail.com>
+ <Y2IerOXJ+ZoRTHcs@dhcp22.suse.cz>
+ <CAHbLzkrBNzsorc9oCq1=ri0uq1xbQ+m+u2gQX5GYrb=Z7n4siA@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAHbLzkrBNzsorc9oCq1=ri0uq1xbQ+m+u2gQX5GYrb=Z7n4siA@mail.gmail.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-'reg' without any constraints allows multiple items which is not the
-intention in DSA port schema (as physical port is expected to have only
-one address).
+On Wed 02-11-22 09:03:57, Yang Shi wrote:
+> On Wed, Nov 2, 2022 at 12:39 AM Michal Hocko <mhocko@suse.com> wrote:
+> >
+> > On Tue 01-11-22 12:13:35, Zach O'Keefe wrote:
+> > [...]
+> > > This is slightly tangential - but I don't want to send a new mail
+> > > about it -- but I wonder if we should be doing __GFP_THISNODE +
+> > > explicit node vs having hpage_collapse_find_target_node() set a
+> > > nodemask. We could then provide fallback nodes for ties, or if some
+> > > node contained > some threshold number of pages.
+> >
+> > I would simply go with something like this (not even compile tested):
+> 
+> Thanks, Michal. It is definitely an option. As I talked with Zach, I'm
+> not sure whether it is worth making the code more complicated for such
+> micro optimization or not. Removing __GFP_THISNODE or even removing
+> the node balance code should be fine too IMHO. TBH I doubt there would
+> be any noticeable difference.
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
----
-
-Changes since v2:
-1. New patch
----
- Documentation/devicetree/bindings/net/dsa/dsa-port.yaml | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml b/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
-index 10ad7e71097b..9abb8eba5fad 100644
---- a/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
-+++ b/Documentation/devicetree/bindings/net/dsa/dsa-port.yaml
-@@ -19,7 +19,8 @@ allOf:
- 
- properties:
-   reg:
--    description: Port number
-+    items:
-+      - description: Port number
- 
-   label:
-     description:
+I do agree that an explicit nodes (quasi)round robin sounds over
+engineered. It makes some sense to try to target the prevalent node
+though because this code can be executed from khugepaged and therefore
+allocating with a completely different affinity than the original fault.
 -- 
-2.34.1
-
+Michal Hocko
+SUSE Labs
