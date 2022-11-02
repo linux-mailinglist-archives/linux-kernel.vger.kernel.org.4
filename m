@@ -2,33 +2,33 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F38586159F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 04:22:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37CDA615A51
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 04:29:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230329AbiKBDWH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 23:22:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40828 "EHLO
+        id S231218AbiKBD3D (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 23:29:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230402AbiKBDVw (ORCPT
+        with ESMTP id S231193AbiKBD2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 23:21:52 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 365FE25C72;
-        Tue,  1 Nov 2022 20:21:36 -0700 (PDT)
+        Tue, 1 Nov 2022 23:28:46 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 14B2926119;
+        Tue,  1 Nov 2022 20:28:44 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 51CB061729;
-        Wed,  2 Nov 2022 03:21:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 84C30C433C1;
-        Wed,  2 Nov 2022 03:21:34 +0000 (UTC)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 38E72CE1E47;
+        Wed,  2 Nov 2022 03:28:42 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A367C433C1;
+        Wed,  2 Nov 2022 03:28:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-        s=korg; t=1667359295;
-        bh=OYzpxmX0dk5QIF/zWcNloYxs3KNUb9iY8g+TtXuxYDc=;
+        s=korg; t=1667359720;
+        bh=1ypsYs0QgWP1CIogU6al4Phh1irrXEaF+w+ry2gtOAU=;
         h=From:To:Cc:Subject:Date:From;
-        b=gWPejywZQEFwBf1/1HXMHtzLGh0WimDno6ii0Awaidy68EX3C+FpO2iAXKFl/iHrF
-         2RhRQ5TZkhi8tI+i06MvLV4Szl+XFq6FLzOB5cpNd/EnxWC3aMf89koBm3aR0nDs6A
-         //ilFRG9G+t335VDE0DLTez7NjwAFRrH7RgiIR0s=
+        b=E8CELCiC5Z670bkN+uaCCI+5/fgD80RWWfiYC0wA9FRE7Wl3C9/FLWz6n82XvDofX
+         GRwSDmTRklYM07HEybv0e4Zz65ob4ZXvWeAvA27mEwIt0FX1iamJzN+xhZSsSV4YXf
+         huPSk1lxz6iWPixVvzUnSGKUYDb94V+0RQYhbQGw=
 From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 To:     stable@vger.kernel.org
 Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
@@ -38,20 +38,21 @@ Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
         lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
         f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
         srw@sladewatkins.net
-Subject: [PATCH 5.4 00/64] 5.4.223-rc1 review
-Date:   Wed,  2 Nov 2022 03:33:26 +0100
-Message-Id: <20221102022051.821538553@linuxfoundation.org>
+Subject: [PATCH 4.19 00/78] 4.19.264-rc1 review
+Date:   Wed,  2 Nov 2022 03:33:45 +0100
+Message-Id: <20221102022052.895556444@linuxfoundation.org>
 X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
 User-Agent: quilt/0.67
 X-stable: review
 X-Patchwork-Hint: ignore
-X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.223-rc1.gz
+X-KernelTest-Patch: http://kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.264-rc1.gz
 X-KernelTest-Tree: git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git
-X-KernelTest-Branch: linux-5.4.y
+X-KernelTest-Branch: linux-4.19.y
 X-KernelTest-Patches: git://git.kernel.org/pub/scm/linux/kernel/git/stable/stable-queue.git
-X-KernelTest-Version: 5.4.223-rc1
+X-KernelTest-Version: 4.19.264-rc1
 X-KernelTest-Deadline: 2022-11-04T02:20+00:00
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
@@ -62,8 +63,8 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is the start of the stable review cycle for the 5.4.223 release.
-There are 64 patches in this series, all will be posted as a response
+This is the start of the stable review cycle for the 4.19.264 release.
+There are 78 patches in this series, all will be posted as a response
 to this one.  If anyone has any issues with these being applied, please
 let me know.
 
@@ -71,9 +72,9 @@ Responses should be made by Fri, 04 Nov 2022 02:20:38 +0000.
 Anything received after that time might be too late.
 
 The whole patch series can be found in one patch at:
-	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.223-rc1.gz
+	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.19.264-rc1.gz
 or in the git tree and branch at:
-	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.19.y
 and the diffstat can be found below.
 
 thanks,
@@ -84,22 +85,13 @@ greg k-h
 Pseudo-Shortlog of commits:
 
 Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-    Linux 5.4.223-rc1
+    Linux 4.19.264-rc1
 
 Biju Das <biju.das.jz@bp.renesas.com>
     can: rcar_canfd: rcar_canfd_handle_global_receive(): fix IRQ storm on global FIFO receive
 
-Vladimir Oltean <vladimir.oltean@nxp.com>
-    net: enetc: survive memory pressure without crashing
-
-Tariq Toukan <tariqt@nvidia.com>
-    net/mlx5: Fix possible use-after-free in async command interface
-
 Hyong Youb Kim <hyonkim@cisco.com>
     net/mlx5e: Do not increment ESN when updating IPsec ESN state
-
-Nicolas Dichtel <nicolas.dichtel@6wind.com>
-    nh: fix scope used to find saddr when adding non gw nh
 
 Yang Yingliang <yangyingliang@huawei.com>
     net: ehea: fix possible memory leak in ehea_register_port()
@@ -185,35 +177,17 @@ Randy Dunlap <rdunlap@infradead.org>
 Nathan Huckleberry <nhuck@google.com>
     drm/msm: Fix return type of mdp4_lvds_connector_mode_valid
 
-Alexander Stein <alexander.stein@ew.tq-group.com>
-    media: v4l2: Fix v4l2_i2c_subdev_set_name function documentation
-
 Wei Yongjun <weiyongjun1@huawei.com>
     net: ieee802154: fix error return code in dgram_bind()
 
 Rik van Riel <riel@surriel.com>
     mm,hugetlb: take hugetlb_lock before decrementing h->resv_huge_pages
 
-Chen Zhou <chenzhou10@huawei.com>
-    cgroup-v1: add disabled controller check in cgroup1_parse_param()
-
 M. Vefa Bicakci <m.v.b@runbox.com>
     xen/gntdev: Prevent leaking grants
 
 Jan Beulich <jbeulich@suse.com>
     Xen/gntdev: don't ignore kernel unmapping error
-
-Chandan Babu R <chandan.babu@oracle.com>
-    xfs: force the log after remapping a synchronous-writes file
-
-Chandan Babu R <chandan.babu@oracle.com>
-    xfs: clear XFS_DQ_FREEING if we can't lock the dquot buffer to flush
-
-Chandan Babu R <chandan.babu@oracle.com>
-    xfs: finish dfops on every insert range shift iteration
-
-Heiko Carstens <hca@linux.ibm.com>
-    s390/pci: add missing EX_TABLE entries to __pcistg_mio_inuser()/__pcilg_mio_inuser()
 
 Heiko Carstens <hca@linux.ibm.com>
     s390/futex: add missing EX_TABLE entry to __futex_atomic_op()
@@ -248,9 +222,6 @@ Matti Vaittinen <mazziesaccount@gmail.com>
 Mathias Nyman <mathias.nyman@linux.intel.com>
     xhci: Remove device endpoints from bandwidth list when freeing the device
 
-Tony O'Brien <tony.obrien@alliedtelesis.co.nz>
-    mtd: rawnand: marvell: Use correct logic for nand-keep-config
-
 Jens Glathe <jens.glathe@oldschoolsolutions.biz>
     usb: xhci: add XHCI_SPURIOUS_SUCCESS to ASM1042 despite being a V0.96 controller
 
@@ -275,47 +246,136 @@ Steven Rostedt (Google) <rostedt@goodmis.org>
 Anssi Hannula <anssi.hannula@bitwise.fi>
     can: kvaser_usb: Fix possible completions during init_completion
 
+Seth Jenkins <sethjenkins@google.com>
+    mm: /proc/pid/smaps_rollup: fix no vma's null-deref
+
+Gaurav Kohli <gauravkohli@linux.microsoft.com>
+    hv_netvsc: Fix race between VF offering and VF association message from host
+
+Nick Desaulniers <ndesaulniers@google.com>
+    Makefile.debug: re-enable debug info for .S files
+
+Werner Sembach <wse@tuxedocomputers.com>
+    ACPI: video: Force backlight native for more TongFang devices
+
+Chen-Yu Tsai <wenst@chromium.org>
+    media: v4l2-mem2mem: Apply DST_QUEUE_OFF_BASE on MMAP buffers across ioctls
+
+Jerry Snitselaar <jsnitsel@redhat.com>
+    iommu/vt-d: Clean up si_domain in the init_dmars() error path
+
 Yang Yingliang <yangyingliang@huawei.com>
-    can: j1939: transport: j1939_session_skb_drop_old(): spin_unlock_irqrestore() before kfree_skb()
+    net: hns: fix possible memory leak in hnae_ae_register()
+
+Zhengchao Shao <shaozhengchao@huawei.com>
+    net: sched: cake: fix null pointer access issue when cake_init() fails
+
+Xiaobo Liu <cppcoffee@gmail.com>
+    net/atm: fix proc_mpc_write incorrect return value
+
+José Expósito <jose.exposito89@gmail.com>
+    HID: magicmouse: Do not set BTN_MOUSE on double report
+
+Alexander Potapenko <glider@google.com>
+    tipc: fix an information leak in tipc_topsrv_kern_subscr
+
+Mark Tomlinson <mark.tomlinson@alliedtelesis.co.nz>
+    tipc: Fix recognition of trial period
+
+Tony Luck <tony.luck@intel.com>
+    ACPI: extlog: Handle multiple records
+
+Filipe Manana <fdmanana@suse.com>
+    btrfs: fix processing of delayed tree block refs during backref walking
+
+Filipe Manana <fdmanana@suse.com>
+    btrfs: fix processing of delayed data refs during backref walking
+
+Jean-Francois Le Fillatre <jflf_kernel@gmx.com>
+    r8152: add PID for the Lenovo OneLink+ Dock
+
+James Morse <james.morse@arm.com>
+    arm64: errata: Remove AES hwcap for COMPAT tasks
+
+Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+    media: venus: dec: Handle the case where find_format fails
+
+Eric Ren <renzhengeek@gmail.com>
+    KVM: arm64: vgic: Fix exit condition in scan_its_table()
+
+Kai-Heng Feng <kai.heng.feng@canonical.com>
+    ata: ahci: Match EM_MAX_SLOTS with SATA_PMP_MAX_PORTS
+
+Alexander Stein <alexander.stein@ew.tq-group.com>
+    ata: ahci-imx: Fix MODULE_ALIAS
+
+Zhang Rui <rui.zhang@intel.com>
+    hwmon/coretemp: Handle large core ID value
+
+Borislav Petkov <bp@suse.de>
+    x86/microcode/AMD: Apply the patch early on every logical thread
+
+Joseph Qi <joseph.qi@linux.alibaba.com>
+    ocfs2: fix BUG when iput after ocfs2_mknod fails
+
+Joseph Qi <joseph.qi@linux.alibaba.com>
+    ocfs2: clear dinode links count in case of error
 
 
 -------------
 
 Diffstat:
 
- Makefile                                           |   4 +-
+ Documentation/arm64/silicon-errata.txt             |   2 +
+ Makefile                                           |   8 +-
  arch/arc/include/asm/io.h                          |   2 +-
  arch/arc/mm/ioremap.c                              |   2 +-
+ arch/arm64/Kconfig                                 |  16 ++++
+ arch/arm64/include/asm/cpucaps.h                   |   3 +-
+ arch/arm64/kernel/cpu_errata.c                     |  17 ++++
+ arch/arm64/kernel/cpufeature.c                     |  13 ++-
  arch/s390/include/asm/futex.h                      |   3 +-
- arch/s390/pci/pci_mmio.c                           |   8 +-
+ arch/x86/kernel/cpu/microcode/amd.c                |  16 +++-
  arch/x86/kernel/unwind_orc.c                       |   2 +-
+ drivers/acpi/acpi_extlog.c                         |  33 ++++---
+ drivers/acpi/video_detect.c                        |  64 +++++++++++++
+ drivers/ata/ahci.h                                 |   2 +-
+ drivers/ata/ahci_imx.c                             |   2 +-
  drivers/base/power/domain.c                        |   4 +
  .../gpu/drm/msm/disp/mdp4/mdp4_lvds_connector.c    |   5 +-
  drivers/gpu/drm/msm/dsi/dsi.c                      |   6 ++
  drivers/gpu/drm/msm/hdmi/hdmi.c                    |   5 ++
+ drivers/hid/hid-magicmouse.c                       |   2 +-
+ drivers/hwmon/coretemp.c                           |  56 ++++++++----
  drivers/iio/light/tsl2583.c                        |   2 +-
+ drivers/iommu/intel-iommu.c                        |   5 ++
+ drivers/media/platform/qcom/venus/vdec.c           |   2 +
  drivers/media/platform/vivid/vivid-core.c          |  22 +++++
  drivers/media/platform/vivid/vivid-core.h          |   2 +
  drivers/media/platform/vivid/vivid-vid-cap.c       |  27 ++++--
  drivers/media/v4l2-core/v4l2-dv-timings.c          |  14 +++
+ drivers/media/v4l2-core/v4l2-mem2mem.c             |  62 +++++++++----
  drivers/mmc/core/sdio_bus.c                        |   3 +-
- drivers/mtd/nand/raw/marvell_nand.c                |   2 +-
  drivers/net/can/mscan/mpc5xxx_can.c                |   8 +-
  drivers/net/can/rcar/rcar_canfd.c                  |   6 +-
  drivers/net/can/usb/kvaser_usb/kvaser_usb_hydra.c  |   4 +-
  drivers/net/can/usb/kvaser_usb/kvaser_usb_leaf.c   |   4 +-
  drivers/net/ethernet/amd/xgbe/xgbe-phy-v2.c        |  17 ++--
- drivers/net/ethernet/freescale/enetc/enetc.c       |   5 ++
+ drivers/net/ethernet/hisilicon/hns/hnae.c          |   4 +-
  drivers/net/ethernet/ibm/ehea/ehea_main.c          |   1 +
  drivers/net/ethernet/intel/i40e/i40e_ethtool.c     | 100 ++++++++++++---------
  drivers/net/ethernet/intel/i40e/i40e_type.h        |   4 +
  drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.c |  43 ++++++---
  drivers/net/ethernet/intel/i40e/i40e_virtchnl_pf.h |   1 +
  drivers/net/ethernet/lantiq_etop.c                 |   1 -
- drivers/net/ethernet/mellanox/mlx5/core/cmd.c      |  10 +--
  .../ethernet/mellanox/mlx5/core/en_accel/ipsec.c   |   3 -
  drivers/net/ethernet/micrel/ksz884x.c              |   2 +-
  drivers/net/ethernet/socionext/netsec.c            |   2 +
+ drivers/net/hyperv/hyperv_net.h                    |   3 +
+ drivers/net/hyperv/netvsc.c                        |   4 +
+ drivers/net/hyperv/netvsc_drv.c                    |  20 +++++
+ drivers/net/usb/cdc_ether.c                        |   7 ++
+ drivers/net/usb/r8152.c                            |   1 +
  drivers/usb/core/quirks.c                          |   9 ++
  drivers/usb/dwc3/gadget.c                          |   8 +-
  drivers/usb/gadget/udc/bdc/bdc_udc.c               |   1 +
@@ -323,25 +383,23 @@ Diffstat:
  drivers/usb/host/xhci-pci.c                        |   8 +-
  drivers/video/fbdev/smscufx.c                      |  55 ++++++------
  drivers/xen/gntdev.c                               |  30 +++++--
+ fs/btrfs/backref.c                                 |  46 ++++++----
  fs/kernfs/dir.c                                    |   5 +-
- fs/xfs/xfs_bmap_util.c                             |   2 +-
- fs/xfs/xfs_file.c                                  |  17 +++-
- fs/xfs/xfs_qm.c                                    |   1 +
- include/linux/mlx5/driver.h                        |   2 +-
- include/media/v4l2-common.h                        |   3 +-
+ fs/ocfs2/namei.c                                   |  23 +++--
+ fs/proc/task_mmu.c                                 |   2 +-
  include/uapi/linux/videodev2.h                     |   3 +-
- kernel/cgroup/cgroup-v1.c                          |   3 +
  kernel/power/hibernate.c                           |   2 +-
  mm/hugetlb.c                                       |   2 +-
- net/can/j1939/transport.c                          |   4 +-
+ net/atm/mpoa_proc.c                                |   3 +-
  net/core/net_namespace.c                           |   7 ++
  net/ieee802154/socket.c                            |   4 +-
- net/ipv4/nexthop.c                                 |   2 +-
  net/ipv4/tcp_input.c                               |   3 +-
  net/kcm/kcmsock.c                                  |  23 +++--
  net/mac802154/rx.c                                 |   5 +-
  net/openvswitch/datapath.c                         |   3 +-
- net/tipc/topsrv.c                                  |  16 +++-
+ net/sched/sch_cake.c                               |   4 +
+ net/tipc/discover.c                                |   2 +-
+ net/tipc/topsrv.c                                  |  18 ++--
  sound/aoa/soundbus/i2sbus/core.c                   |   7 +-
  sound/pci/ac97/ac97_codec.c                        |   1 +
  sound/pci/au88x0/au88x0.h                          |   6 +-
@@ -349,6 +407,7 @@ Diffstat:
  sound/synth/emux/emux.c                            |   7 +-
  tools/iio/iio_utils.c                              |   4 +
  tools/perf/util/auxtrace.c                         |  10 ++-
- 66 files changed, 423 insertions(+), 176 deletions(-)
+ virt/kvm/arm/vgic/vgic-its.c                       |   5 +-
+ 82 files changed, 718 insertions(+), 247 deletions(-)
 
 
