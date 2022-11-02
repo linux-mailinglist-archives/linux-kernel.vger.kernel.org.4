@@ -2,186 +2,194 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3AD156166B1
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:58:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2C5EB6166BA
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:59:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230376AbiKBP6n (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 11:58:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37222 "EHLO
+        id S231167AbiKBP7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 11:59:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37950 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231136AbiKBP6X (ORCPT
+        with ESMTP id S230193AbiKBP6u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 11:58:23 -0400
-Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF9162B623
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 08:58:22 -0700 (PDT)
-Received: by mail-pj1-x1035.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so2286605pjk.1
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 08:58:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=j4EsJAG1TrXRZNimC+sMPr+IdV0Qvg5OrKkaMfSaj1E=;
-        b=IUvndRCTGt5Xl47Ya3xVX2Bw4Ivs6Gc/j8IPRNUqoa+3ZctcL6Iug0S6iLA5qvSdOR
-         YrPG13hT39AewL7ADMdtty1gRM13oK6pAFt43NRu+ZKfAp2KImldP1otUE8kckEd5hWg
-         chLs8bMKss672M5E8LfZMF4fHn2cRhZdh5gtsjMch0M1nQGMNfFVcIDjGKs+rELx4qzB
-         oFrjBg7Bpjod10e0ybnwfXU102jzahmLGYNax2o+ma8ghD7RmXq0jVljgkUyPudbASoA
-         1nTZT8f9u4NUcFT7Fa3oX+JkYQ3g0SW6WAdQOtEtrgm1x/7r2HQ6v7dC5qd8NGKH3y8p
-         z4sQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=j4EsJAG1TrXRZNimC+sMPr+IdV0Qvg5OrKkaMfSaj1E=;
-        b=CndzroXTmORJ+AOneMMhBfjWeghf33QcYleM21OksUqnrhP/oCT7SsbKki70bymNoT
-         PqRpeafxhvYY68oR8nM/8eaVb6g7lOqEwCewIp/xBjGUk63n+uZCzLhbUH9nW+OZUETN
-         IEki63z5VW9Uc0y07DFGw18G3N+PjRGoTNU+bmYX9fwRC50JL3yTfvr5z9e1KdmOd3+g
-         1iUh+ZVwRy1tcgqGoVkGZ5HsDznv3AKYNNtIgrakj4v1Ajp4ZPdpp9Jiyv4SqRWBC6IF
-         6tZQnUd6tEmzDJBExXsS1TrFH9ZuWel4k1q5pMi6v2CEIrN9vGBPSmfa1iBdRdSNsR9M
-         leaA==
-X-Gm-Message-State: ACrzQf2cSnXBgZbUtO0Oawun4BSUjxwwljAnniZWS8+YZwlp5nbxUUx9
-        OK667YVIBRv3YfrI5XGe2AVDfatm/lwipDrObpExjsE9
-X-Google-Smtp-Source: AMsMyM79ajq5j/u8rRdWFZi8p1hBzBRJSFdsN/TeyLwHrzVLSmbFkEdDyEv2R9FODKPfPqU6Fl8yMTfi7fkSi1zKMFc=
-X-Received: by 2002:a17:902:e88e:b0:187:27a7:c8a9 with SMTP id
- w14-20020a170902e88e00b0018727a7c8a9mr14490752plg.169.1667404702121; Wed, 02
- Nov 2022 08:58:22 -0700 (PDT)
+        Wed, 2 Nov 2022 11:58:50 -0400
+Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01olkn2017.outbound.protection.outlook.com [40.92.99.17])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E542BB0A;
+        Wed,  2 Nov 2022 08:58:46 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=D8zx23gSFiKXhU9W7qBQf44Tj0qxEZXpqPzqHhky0l4wCoHzvH44jaUy67zRohyCV3LHUZvc3zxTnmQzzf77PJjPnpuSdSlD4W9j/8ivpQU7bKGYiVySh9ypB6+7ZTtJuSp35ngSnLLIQUOvpGiLh9z4JmVme3vsrEB7w4v7SnFBn8zdjDIMyb2uN56va8TKA/lGbnd8xbdQHVUMBec/kjAWDT8p1fNXUUjHCu6w7v4UFAfgVEHWXrmvXzowy4syMkzZZkCA7J+bTQOGcqtxD4qzDswTPmCVmrJGq5hNDY/KUqzA4JW2Rznor1vhIdmk/w3bOmRGn6uh3I9Ca9tNCQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=/xQxRB+vXWAaN6lf7I9+zqAqmt3lidWLUa0xSH7X+hw=;
+ b=kJIaBC99mT7RxyQu5XkVZoPPxjvkIikZMOkPCGsVf3Tstvm08VUGtgalp5WcNmXFdrSeP5i8EnhV1gQlR57+qdCCiDrcfV2n97qzvnu8VtLpLNauvGtqoFhIAqy2yrEUUDkGxB9apRO2Pc+qhxYlsXXQZe9Qb51cwd9G8JcB+YxLJEwiDIX3ttT0cjNXzZ1mRyFgjpU6GreKwSiQIstw1fjL7ZPppjsXjmlCNtbS3WIIMvye3Skckk108MTfi0+W6VtKgsDXr6JCqy3r9cu9F4vgODlqq3qB47indn2eNX/NqOYLtSfpKZ5mhin1DnJolBeqwmBpU7BYIYA0cohQoQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=/xQxRB+vXWAaN6lf7I9+zqAqmt3lidWLUa0xSH7X+hw=;
+ b=YWpC3q2UCJljzO5os7oRs2r1qTqlhvWxP9WKS/Icy5RVAL/T4cVID/nsnUdvD9jIxTlx66D4LOGMCKfGFt7rHMy4LKvJ1YVBPA8HieAJVq/Usuf3WrdSkZI4ElpxnnmQSyn5NXIty44Un3ihQev+El4NKh5O/fyzvrKNwu7irdyWTRzQnE8mAqmYZBFLdXOt/pC/wQdiss/pD78C2WjjA6bfWqjk51PTpViflsU/FlUCXxr3hd0TPZXHYqPAcQub0ATjm7YjwADjSdxsmU8+Wcvg/TsOFGOTiR4Kjg6UOPfc8V0jcvvSpkGYw0O9zCx6vJnokPReil2Jl0vOEu1ULQ==
+Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:152::9)
+ by OS3P286MB2422.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:151::10) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.19; Wed, 2 Nov
+ 2022 15:58:42 +0000
+Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::c90e:cbf3:c23d:43a5]) by TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+ ([fe80::c90e:cbf3:c23d:43a5%9]) with mapi id 15.20.5791.022; Wed, 2 Nov 2022
+ 15:58:42 +0000
+From:   Dawei Li <set_pte_at@outlook.com>
+To:     sumit.semwal@linaro.org, christian.koenig@amd.com
+Cc:     benjamin.gaignard@collabora.com, labbott@redhat.com,
+        Brian.Starkey@arm.com, jstultz@google.com, afd@ti.com,
+        sspatil@android.com, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org, Dawei Li <set_pte_at@outlook.com>
+Subject: [PATCH v3] dma-buf: fix racing conflict of dma_heap_add()
+Date:   Wed,  2 Nov 2022 23:58:23 +0800
+Message-ID: <TYCP286MB2323D71DEC1D008BEA6F7ABBCA399@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.25.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-TMN:  [Hb13McbHy8iya2slT4EkVubLNUyTNzO/]
+X-ClientProxiedBy: SGAP274CA0006.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b6::18)
+ To TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:152::9)
+X-Microsoft-Original-Message-ID: <20221102155823.406044-1-set_pte_at@outlook.com>
 MIME-Version: 1.0
-References: <20221031183122.470962-1-shy828301@gmail.com> <Y2BHcBCR2FIJgU4w@dhcp22.suse.cz>
- <CAAa6QmQt9Us8YpirQGXV0_AetuPS+EOqMSGqNn6KW24HXvwO_A@mail.gmail.com>
- <Y2DQr06mNzk0ITX1@dhcp22.suse.cz> <CAHbLzkonsnr4yxUOpMpoch1eCVNgR5hC9YaMkPR=fSV2Uszc6g@mail.gmail.com>
- <Y2IY4odZJHCwC16t@dhcp22.suse.cz>
-In-Reply-To: <Y2IY4odZJHCwC16t@dhcp22.suse.cz>
-From:   Yang Shi <shy828301@gmail.com>
-Date:   Wed, 2 Nov 2022 08:58:09 -0700
-Message-ID: <CAHbLzkq0C_EDpivHK5OdCfZPVt814P5r92pnPoNfW=CiXyCeww@mail.gmail.com>
-Subject: Re: [PATCH] mm: don't warn if the node is offlined
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     "Zach O'Keefe" <zokeefe@google.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: TYCP286MB2323:EE_|OS3P286MB2422:EE_
+X-MS-Office365-Filtering-Correlation-Id: 52dd0f8a-61d7-4684-9574-08dabceb1d59
+X-MS-Exchange-SLBlob-MailProps: ZLYX9kf+sFZrWcqlYuxsQ4SinJ0dkCiqXcsavXO7jaSL3FwrSbAMOCLBPddQdbgOgPvnX69oxlNgKJ13hRvJznrLWDHsVacx/W3igzW+0IarXyvR90JSYQOssUT4M9UQ9pn45aEYld6rL6Z7thebJwH4CTCPdVsI8sOSlhCLLx7EkaIJV1CVvk3qPXrGFGxqhyQH70hgYXtXNCAx/ZbqE5GzvwcM23aX2CfS34ueYVW06gNOy/1Xk5AqIc3hemdUfECHrkBoNspWEhHy6blrgUjbi/a5dJxqgIqGIjTRktm9zTFXH13YIGDwLThb+rxl3jSzeeYOqJxZkp2wZ9X3tF5CKL1a4K792NeH0deN+nHJ+Vmc6ZFZmzb/ccXfZdTwEAjUKbBd9KW7MQx6apt2OKbaD4juwuREzkziQs2SWcr6heVQbMkrL2TbDAQpVyMyEE3JAPK3FqXjTTJkI9qWYdlVTBTTwl1iVSIcCr0eRCNOyt+GIYVr9n827wU2ZzbmpgDh8/rCTtSKTljLlSQTJ0YcO61dUo3OFoi1ZsX+1xppMIcvFqo+HceSmjRCVq9vaYd/DF0uUAhYSStRRNKfeB1Zaed/7iC7aNy6lCnfkQ+GMl8vXFcxlCxBNZW8XbIQpYh/vBN6Gn0+0gXyKyhSvSO6zyQr01qUar4rlh2bzz9AdPwaIwkuWEjZ373L7Dnn5bJbEnQvIl7QXI1JTy4I7j9L8DqoPYDgqUINEpSmCK1tQGfl2FUgwgbP+u8MHzj/BtV3uP/ggMeXHCNxyRnWLU0QQrb7RTT2guMROYrqzStA/zMSrFyZOA==
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: 9yBYn2OGZXdgfuBEJGo+7riIFDC5SgdaYSlouJwrH0jR9JzJADrhs9ziS3SSjIVaQsHL0bXHXBxRoNfluDm77FenEagX4z/uqrJ3pfuFD0Q+G1Q6bDOTwKutM5bNEknezWABkbKSuW+1hfXNErVCmv1KmjAgTQwzNSnlinusp88TcDcMiNKt3/Bau/04hdcPN31r5DbAEnoRdjhmQeu+wsgYTvTxH8FfPi7klhQ298uqxW+u6LYhbjqrgDDKRY9kt8QaRH+3mvRhYf2RGgm5xhBNVPE+GSSf5RXChKVb1Ev57RUhAbPNN/1XZRnjm3uLaL+IUwR8JPnNHtOoqKp3iIC1+txKP9cjvnRROtaECkpPxkGZnnCCaTmwYxfaTGkOhTv4t8CGlAH/TSlOCiwlI02u//jR9xcQUU7IdMJJzTSOrZI0O16YCiopHABEzH17rRwmhMXmtWuLVE5OE6B0z28qVFjtSMBXiWJktUO64MdJFCZWUNeILnnko7ZFf9IQ6UgxpENQFm4P8zNUgdOJr77H+W8d6jphoTX5fTsMTgcbF36CgKl9vg+UazqlfWPv21luXXYXoQqMZc21+rcNnqRKXx0EY6d3Vz7ZgbYfzlMxw4AOae6hBQdAjFGK5nI0l0mpAzeXXrClo2pePF8tMjGxYscrnjmSCf96y5pM0rG1ZE1f8YdV+bErkxOF+8cY
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?h48OKdY6rzvSrL0/xp2r3+NSu0oqJ1WsAou+sGycyCUnWj0VQ42s/Y1gGzRd?=
+ =?us-ascii?Q?fx4KblE7IYeIyxh4w630lQqQf+0Xnm+0jdtJaE0c2pKo+VbcyR28iGyMS8v0?=
+ =?us-ascii?Q?bXra7Lo8FU/7q+BTigC8UIC1O2mXm9BOUewQhlPmSOdDx7kSEBlZio4mMB4U?=
+ =?us-ascii?Q?kT97IBMeCcgu5I/wzHsSvakqN8B4a82aIeFYchHWIUDTL71a2COW6/b+jKEd?=
+ =?us-ascii?Q?X22cOKHNILP8fmpoSGqIWp4Oxam6YrhfT8Y29b5RXVA1+Sy1srI+e+UuyNnN?=
+ =?us-ascii?Q?rgJuVSAjZJffyE4AHroYtD3NBfh8sVY9AN2vj48rRuD+at73mCNNlWAgHa2Q?=
+ =?us-ascii?Q?mz109Wul3129ZIZOg2iS8TnJBIjLGlu7rq+X7T5l5fZx4qzYvI3WkexDtqn5?=
+ =?us-ascii?Q?z+9mnrm5pE8uXHq4kCqNABImC0hFTcWmajX02/JHn+8afOU6u+Uyy1l29pJ4?=
+ =?us-ascii?Q?5xyXsoJgLiBOzRyhrX1RMnvM5DvGqDspNfHrTfoTQP+gFcCWKf1oaBzuM+gK?=
+ =?us-ascii?Q?q3txn1GIMl62W8hSGdVYroR6ktKI1TiW85/EarQwfQb0u2HdPv3coPTIRhFp?=
+ =?us-ascii?Q?0Yg046d8cVrHSL2Ygwjcj2YbrJkrSNQLnJrr0GQdwr/zX2fRPWs7uM6oFnVP?=
+ =?us-ascii?Q?Yc7siO8aMrqE7pAx1QW+x9uL+dXPDMUeRqWJSFfB8R3P3az8yVe1f+axpj/b?=
+ =?us-ascii?Q?550JKweCDWNvbK/lvI+UpmZalM/z5Jlr0Y26oWtk0ukDulUkgVnSv3QJucQe?=
+ =?us-ascii?Q?g+yuj00mtYdJ26XXKDEn1yfTaSdcx8PKlqEF3YIn7TSx106xeoH/lTCPnIYH?=
+ =?us-ascii?Q?CCsYsTYxJvsg5G1xJIuMVIWlY4gbgmrvxi3vLKVenP6jR30DoiyAIlo3YR0a?=
+ =?us-ascii?Q?amHS2o8cDkS+JSnyBcUmiewYsCnFTIDUSEvEJhYSN8FRze7oyzWaiZIf/OyY?=
+ =?us-ascii?Q?iJXKyVr3Jr98WZGxMRMHhmytiNjNPKxFH1MsElspo05o1ng2bB5kh3F5lUFU?=
+ =?us-ascii?Q?1KlivwVX1ObOVLufGwKcIVWLOs18sRMx7D2S/MPq4ItzhvGwY/WQZ+u3cf7s?=
+ =?us-ascii?Q?5p0Fr7opWXBYPDxSm2CXvMD3VSi3aqTWAM5SH+R0f2aCHY0n/3bxmF96+GuA?=
+ =?us-ascii?Q?IuXYNyfFUp4eSjb5QR1Y/dMe/ZOzwpSbPfej/KURGStKVnUzRCuelRFKRH/O?=
+ =?us-ascii?Q?5wZNsUUCSU4SHy4Z0XpToj6WYx10poST0xChP4VxIt/pIXWU9VyYqNfuCedU?=
+ =?us-ascii?Q?FdBPByMplf8LyG/5vG4RVWgsT/dJYaA20Q0zAx8y3Q=3D=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 52dd0f8a-61d7-4684-9574-08dabceb1d59
+X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2022 15:58:42.4905
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3P286MB2422
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 2, 2022 at 12:14 AM Michal Hocko <mhocko@suse.com> wrote:
->
-> On Tue 01-11-22 10:12:49, Yang Shi wrote:
-> > On Tue, Nov 1, 2022 at 12:54 AM Michal Hocko <mhocko@suse.com> wrote:
-> > >
-> > > On Mon 31-10-22 17:05:06, Zach O'Keefe wrote:
-> > > > On Mon, Oct 31, 2022 at 3:08 PM Michal Hocko <mhocko@suse.com> wrote:
-> > > > >
-> > > > > On Mon 31-10-22 11:31:22, Yang Shi wrote:
-> > > > > > Syzbot reported the below splat:
-> > > > > >
-> > > > > > WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 __alloc_pages_node include/linux/gfp.h:221 [inline]
-> > > > > > WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-> > > > > > WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-> > > > > > Modules linked in:
-> > > > > > CPU: 1 PID: 3646 Comm: syz-executor210 Not tainted 6.1.0-rc1-syzkaller-00454-ga70385240892 #0
-> > > > > > Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-> > > > > > RIP: 0010:__alloc_pages_node include/linux/gfp.h:221 [inline]
-> > > > > > RIP: 0010:hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
-> > > > > > RIP: 0010:alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
-> > > > > > Code: e5 01 4c 89 ee e8 6e f9 ae ff 4d 85 ed 0f 84 28 fc ff ff e8 70 fc ae ff 48 8d 6b ff 4c 8d 63 07 e9 16 fc ff ff e8 5e fc ae ff <0f> 0b e9 96 fa ff ff 41 bc 1a 00 00 00 e9 86 fd ff ff e8 47 fc ae
-> > > > > > RSP: 0018:ffffc90003fdf7d8 EFLAGS: 00010293
-> > > > > > RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
-> > > > > > RDX: ffff888077f457c0 RSI: ffffffff81cd8f42 RDI: 0000000000000001
-> > > > > > RBP: ffff888079388c0c R08: 0000000000000001 R09: 0000000000000000
-> > > > > > R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
-> > > > > > R13: dffffc0000000000 R14: 0000000000000000 R15: 0000000000000000
-> > > > > > FS:  00007f6b48ccf700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-> > > > > > CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > > > > > CR2: 00007f6b48a819f0 CR3: 00000000171e7000 CR4: 00000000003506e0
-> > > > > > DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
-> > > > > > DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
-> > > > > > Call Trace:
-> > > > > >  <TASK>
-> > > > > >  collapse_file+0x1ca/0x5780 mm/khugepaged.c:1715
-> > > > >
-> > > > > This is quite weird, isn't it? alloc_charge_hpage is selecting the most
-> > > > > busy node (as per collapse_control). How come this can be an offline
-> > > > > node? Is a parallel memory hotplug happening?
-> > > >
-> > > > TBH -- I did not look closely at the syzbot reproducer (let alone
-> > > > attempt to run it) and assumed this was the case. Taking a quick look,
-> > > > at least memory hot remove is enabled:
-> > > >
-> > > > CONFIG_ARCH_ENABLE_MEMORY_HOTPLUG=y
-> > > > CONFIG_ARCH_ENABLE_MEMORY_HOTREMOVE=y
-> > > > CONFIG_MEMORY_HOTPLUG=y
-> > > > CONFIG_MEMORY_HOTPLUG_DEFAULT_ONLINE=y
-> > > > CONFIG_MEMORY_HOTREMOVE=y
-> > > >
-> > > > But looking at the C reproducer, I don't immediately see anywhere
-> > > > where we offline nodes. I'll try to run this tomorrow to make sure I'm
-> > > > not missing something real here.
-> > >
-> > > Looking slightly closer at hpage_collapse_scan_file I think that it is
-> > > possible that xas_for_each simply doesn't find any entries in the page
-> > > cache and with khugepaged_max_ptes_none == HPAGE_PMD_NR we can fall back
-> > > to collapse_file even without any real entries.
-> >
-> > The khugepaged_max_ptes_none can't be HPAGE_PMD_NR, it must be <=
-> > (HPAGE_PMD_NR - 1), but MADV_COLLAPSE does ignore it.
->
-> OK, I see.
->
-> > But a closer look at the code about how to pick up the preferred node,
-> > there seems to be a corner case for MADV_COLLAPSE.
-> >
-> > The code tried to do some balance if several nodes have the same hit
-> > record. Basically it does conceptually:
-> >     * If the target_node <= last_target_node, then iterate from
-> > last_target_node + 1 to MAX_NUMNODES (1024 on default config)
-> >     * If the max_value == node_load[nid], then target_node = nid
->
-> Correct
->
-> > So assuming the system has 2 nodes, the target_node is 0 and the
-> > last_target_node is 1, if MADV_COLLAPSE path is hit, then it may
-> > return 2 for target_node, but it is actually not existing (offline),
-> > so the warn is triggered.
->
-> How can node_load[2] > 0 (IIUC max_value > 0 here) if the node is
-> offline (other than a race with hotplug)?
+Racing conflict could be:
+task A                 task B
+list_for_each_entry
+strcmp(h->name))
+                       list_for_each_entry
+                       strcmp(h->name)
+kzalloc                kzalloc
+......                 .....
+device_create          device_create
+list_add
+                       list_add
 
-The max_value may be 0 if there is no entry in page cache for that range IIUC.
+The root cause is that task B has no idea about the fact someone
+else(A) has inserted heap with same name when it calls list_add,
+so a potential collision occurs.
 
->
-> > The below patch should be able to fix it:
-> >
-> > diff --git a/mm/khugepaged.c b/mm/khugepaged.c
-> > index ea0d186bc9d4..d24405e6736b 100644
-> > --- a/mm/khugepaged.c
-> > +++ b/mm/khugepaged.c
-> > @@ -787,7 +787,8 @@ static int hpage_collapse_find_target_node(struct
-> > collapse_control *cc)
-> >         if (target_node <= cc->last_target_node)
-> >                 for (nid = cc->last_target_node + 1; nid < MAX_NUMNODES;
-> >                      nid++)
-> > -                       if (max_value == cc->node_load[nid]) {
-> > +                       if (node_online(nid) &&
-> > +                           max_value == cc->node_load[nid]) {
-> >                                 target_node = nid;
-> >                                 break;
-> >                         }
->
-> Node, this is equally racy. node_online might become false right after
-> the check.
+v1: https://lore.kernel.org/all/TYCP286MB2323950197F60FC3473123B7CA349@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM/
 
-Yes, my point is this could filter out the non-existing node case, for
-example, the system just has 2 nodes physically, but MAX_NUMNODES > 2.
-It doesn't prevent offlining, it is still racy, just like other
-__GFP_THISNODE call sites.
+v1->v2: Narrow down locking scope, check the existence of heap before
+insertion, as suggested by Andrew Davis.
 
-> --
-> Michal Hocko
-> SUSE Labs
+v2->v3: Remove double checking.
+
+Fixes: c02a81fba74f ("dma-buf: Add dma-buf heaps framework")
+
+base-commit: 447fb14bf07905b880c9ed1ea92c53d6dd0649d7
+
+Signed-off-by: Dawei Li <set_pte_at@outlook.com>
+---
+ drivers/dma-buf/dma-heap.c | 29 +++++++++++++++--------------
+ 1 file changed, 15 insertions(+), 14 deletions(-)
+
+diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
+index 8f5848aa144f..7a25e98259ea 100644
+--- a/drivers/dma-buf/dma-heap.c
++++ b/drivers/dma-buf/dma-heap.c
+@@ -233,18 +233,6 @@ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
+ 		return ERR_PTR(-EINVAL);
+ 	}
+ 
+-	/* check the name is unique */
+-	mutex_lock(&heap_list_lock);
+-	list_for_each_entry(h, &heap_list, list) {
+-		if (!strcmp(h->name, exp_info->name)) {
+-			mutex_unlock(&heap_list_lock);
+-			pr_err("dma_heap: Already registered heap named %s\n",
+-			       exp_info->name);
+-			return ERR_PTR(-EINVAL);
+-		}
+-	}
+-	mutex_unlock(&heap_list_lock);
+-
+ 	heap = kzalloc(sizeof(*heap), GFP_KERNEL);
+ 	if (!heap)
+ 		return ERR_PTR(-ENOMEM);
+@@ -283,13 +271,26 @@ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
+ 		err_ret = ERR_CAST(dev_ret);
+ 		goto err2;
+ 	}
+-	/* Add heap to the list */
++
+ 	mutex_lock(&heap_list_lock);
++	/* check the name is unique */
++	list_for_each_entry(h, &heap_list, list) {
++		if (!strcmp(h->name, exp_info->name)) {
++			mutex_unlock(&heap_list_lock);
++			pr_err("dma_heap: Already registered heap named %s\n",
++			       exp_info->name);
++			err_ret = ERR_PTR(-EINVAL);
++			goto err3;
++		}
++	}
++
++	/* Add heap to the list */
+ 	list_add(&heap->list, &heap_list);
+ 	mutex_unlock(&heap_list_lock);
+ 
+ 	return heap;
+-
++err3:
++	device_destroy(dma_heap_class, heap->heap_devt);
+ err2:
+ 	cdev_del(&heap->heap_cdev);
+ err1:
+-- 
+2.25.1
+
