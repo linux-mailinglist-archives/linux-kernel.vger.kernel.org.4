@@ -2,300 +2,195 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3CF0A6163E2
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:31:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2F8A76163EE
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:37:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231258AbiKBNbf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 09:31:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37668 "EHLO
+        id S230231AbiKBNhV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 09:37:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230420AbiKBNbb (ORCPT
+        with ESMTP id S229823AbiKBNhS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 09:31:31 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772502AC42
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 06:31:29 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id g12so28275462lfh.3
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 06:31:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
-         :user-agent:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qt810txVALNNyUdY4OEJ1D3fYrKTdtnWDD3u56EERwI=;
-        b=3xmqrEhp6kIZuyPMYnSPokp0VKivtqklDyyWKzYNWn7RZ9r32jO+TYfFJYvac4ILFA
-         HN8cAoqwO36KNOPekRjuxDsqK6LQuARHGNBy7DDo2ods9roVUhZI42CQh5OFNUZKbTfG
-         F9gCKBM7koia5e0VuYUIfiKOHb3GGXspmKJ7JmSWnnDslrPKhxbER3LVZJ8JhFK+Is6V
-         V64OO2OHY3kFRAvTWv/NIU604DON7dRgX2bQETft6CwN1IGmZVn9qrvWFUZ5OmHKlnZ2
-         TVsTmVfPlMVH8huodx3nlqli2FqtWsmNB+OZqtu3f39Bn7ooCpAkDJ2DQH11Qrs6wy8W
-         5zog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:mime-version:in-reply-to:references
-         :user-agent:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qt810txVALNNyUdY4OEJ1D3fYrKTdtnWDD3u56EERwI=;
-        b=3d4vU3d/jsqON3AHulCD1uBVqnA/hKCwb6bFuyiBepEYM/8d3aCGe4mz985STQkGmc
-         Gm5F/Fou73bGHK+XPYurVWLRonV6tIQ6tKkasW0x+GLbZOWvHFmfNIh7TicK6qnhyfe9
-         LkuGUMtWrERifpE099xJNBbJ9x6phV+wjdZfK4mwsLnuCXIsrlV2b7NkeRAXESkNuSa0
-         dF/YpJCGJ5/CAtKRLyfPS1pkVP8j6n3S+I/vmsfWaeo2nl5sTr/8apebh9e9bF2d1ZUb
-         4KGOl5Vtj6rkTZ7JOHoRe4dT25Hnd7mUdeY2N6PQXdWVEhhDS5tzSxB1d3Db/creObBP
-         rqIw==
-X-Gm-Message-State: ACrzQf3NadMbiYcMlxUDHyUD9Nc5zSvqGTF2he51fITve2SW1aIKnXhp
-        LPGPSRtRVG+mAg96gi4eT9ibpTIbLD2fTYj6YpRCyA==
-X-Google-Smtp-Source: AMsMyM7NEe/GaJR4NF+KA5B639tBCDJwn4kT6yPPjmVJnVe6xV1T07jvraVMLccE++55BYXBEE26QqdBGn1uy3S8WHM=
-X-Received: by 2002:ac2:5e33:0:b0:4a2:1d16:5cc2 with SMTP id
- o19-20020ac25e33000000b004a21d165cc2mr8578793lfg.620.1667395887603; Wed, 02
- Nov 2022 06:31:27 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 2 Nov 2022 13:31:27 +0000
-From:   Guillaume Ranquet <granquet@baylibre.com>
-User-Agent: meli 0.7.2
-References: <20220919-v2-0-8419dcf4f09d@baylibre.com> <20220919-v2-2-8419dcf4f09d@baylibre.com>
- <c91ee3ce-3f30-a3ef-bb38-8571e488b6b6@linaro.org>
-In-Reply-To: <c91ee3ce-3f30-a3ef-bb38-8571e488b6b6@linaro.org>
+        Wed, 2 Nov 2022 09:37:18 -0400
+Received: from mga05.intel.com (mga05.intel.com [192.55.52.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70DF52AC66
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 06:37:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667396236; x=1698932236;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=Q91NMD6XfZ2xY8l4FsEk3jmPUcBruDrCV+ByTDntWMg=;
+  b=HTGM/6uzUtNQsFrznRxNpeHYtea+hwmp9YkAuNPyKCpie2QgIoI92SZC
+   HJx8S+8KbKSVOGI0j7sSVXLmFkjSYj9HWj7mOA9mKeVGt6T4XtPANyVag
+   ks6966xvKz8Gat8oGvOHP5Gye+6gG0l6ExB9fO1B+0HzpvEC4OemFAdeO
+   1mOb5RWtNi/5gkaNPD2X3zlksJIPJqV8S5tpye3vZwOfVT/EPKaWwZXUw
+   akjsy4b1Ht/KrSnak+AM3Atv1NKoIEhSnRntoRCmA7R703z8Emsd/+ifz
+   TLTR7fFt9+RW5eAs9xeijxWac5U6X9iwvhDeNAe8A4Gb+1mpsPV+A0+yw
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="395714413"
+X-IronPort-AV: E=Sophos;i="5.95,234,1661842800"; 
+   d="scan'208";a="395714413"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 06:37:16 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="697810467"
+X-IronPort-AV: E=Sophos;i="5.95,234,1661842800"; 
+   d="scan'208";a="697810467"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by fmsmga008.fm.intel.com with ESMTP; 02 Nov 2022 06:36:59 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oqDvN-000Em5-13;
+        Wed, 02 Nov 2022 13:36:57 +0000
+Date:   Wed, 02 Nov 2022 21:36:07 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "Paul E. McKenney" <paulmck@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [paulmck-rcu:rcu/next] BUILD SUCCESS
+ 9399f613f2fe4ef95fd86c54b6efd98076dcfe12
+Message-ID: <63627247.CloVBrstU+OzPqaV%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-Date:   Wed, 2 Nov 2022 13:31:26 +0000
-Message-ID: <CABnWg9t3w4o4rmNosvYCpqG-h8DESerajH7OsXEYofRf2kr1Xg@mail.gmail.com>
-Subject: Re: [PATCH v2 02/12] dt-bindings: display: mediatek: add MT8195 hdmi bindings
-To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Chunfeng Yun <chunfeng.yun@mediatek.com>,
-        David Airlie <airlied@gmail.com>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Jitao shi <jitao.shi@mediatek.com>, CK Hu <ck.hu@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        Kishon Vijay Abraham I <kishon@ti.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-Cc:     stuart.lee@mediatek.com, linux-phy@lists.infradead.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        linux-kernel@vger.kernel.org, mac.shen@mediatek.com,
-        linux-mediatek@lists.infradead.org, dri-devel@lists.freedesktop.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 14 Oct 2022 18:08, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org> wrote:
->On 14/10/2022 11:15, Guillaume Ranquet wrote:
->> Add mt8195 SoC bindings for hdmi and hdmi-ddc
->>
->> Signed-off-by: Guillaume Ranquet <granquet@baylibre.com>
->> ---
->>  .../bindings/display/mediatek/mediatek,hdmi.yaml   | 67 +++++++++++++++++-----
->>  .../display/mediatek/mediatek,mt8195-hdmi-ddc.yaml | 51 ++++++++++++++++
->>  2 files changed, 104 insertions(+), 14 deletions(-)
->>
->> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
->> index bdaf0b51e68c..955026cd7ca5 100644
->> --- a/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
->> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,hdmi.yaml
->> @@ -21,26 +21,21 @@ properties:
->>        - mediatek,mt7623-hdmi
->>        - mediatek,mt8167-hdmi
->>        - mediatek,mt8173-hdmi
->> +      - mediatek,mt8195-hdmi
->>
->>    reg:
->>      maxItems: 1
->>
->> -  interrupts:
->> -    maxItems: 1
->> -
->
->This change is not really explained in commit msg...
->
->>    clocks:
->> -    items:
->> -      - description: Pixel Clock
->> -      - description: HDMI PLL
->> -      - description: Bit Clock
->> -      - description: S/PDIF Clock
->> +    minItems: 4
->> +    maxItems: 4
->>
->>    clock-names:
->> -    items:
->> -      - const: pixel
->> -      - const: pll
->> -      - const: bclk
->> -      - const: spdif
->> +    minItems: 4
->> +    maxItems: 4
->> +
->> +  interrupts:
->> +    maxItems: 1
->>
->>    phys:
->>      maxItems: 1
->> @@ -58,6 +53,9 @@ properties:
->>      description: |
->>        phandle link and register offset to the system configuration registers.
->>
->> +  power-domains:
->> +    maxItems: 1
->> +
->>    ports:
->>      $ref: /schemas/graph.yaml#/properties/ports
->>
->> @@ -86,9 +84,50 @@ required:
->>    - clock-names
->>    - phys
->>    - phy-names
->> -  - mediatek,syscon-hdmi
->>    - ports
->>
->> +allOf:
->> +  - if:
->> +      properties:
->> +        compatible:
->> +          contains:
->> +            const: mediatek,mt8195-hdmi
->> +    then:
->> +      properties:
->> +        clocks:
->> +          items:
->> +            - description: APB
->> +            - description: HDCP
->> +            - description: HDCP 24M
->> +            - description: Split HDMI
->> +        clock-names:
->> +          items:
->> +            - const: hdmi_apb_sel
->> +            - const: hdcp_sel
->> +            - const: hdcp24_sel
->> +            - const: split_hdmi
->> +
->> +      required:
->> +        - power-domains
->> +    else:
->> +      properties:
->> +        clocks:
->> +          items:
->> +            - description: Pixel Clock
->> +            - description: HDMI PLL
->> +            - description: Bit Clock
->> +            - description: S/PDIF Clock
->> +
->> +        clock-names:
->> +          items:
->> +            - const: pixel
->> +            - const: pll
->> +            - const: bclk
->> +            - const: spdif
->> +
->> +      required:
->> +        - mediatek,syscon-hdmi
->> +
->>  additionalProperties: false
->>
->>  examples:
->> diff --git a/Documentation/devicetree/bindings/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml b/Documentation/devicetree/bindings/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml
->> new file mode 100644
->> index 000000000000..0fe0a2a2f17f
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml
->> @@ -0,0 +1,51 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +%YAML 1.2
->> +---
->> +$id: http://devicetree.org/schemas/display/mediatek/mediatek,mt8195-hdmi-ddc.yaml#
->> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->> +
->> +title: Mediatek HDMI DDC for mt8195
->> +
->> +maintainers:
->> +  - CK Hu <ck.hu@mediatek.com>
->> +  - Jitao shi <jitao.shi@mediatek.com>
->> +
->> +description: |
->> +  The HDMI DDC i2c controller is used to interface with the HDMI DDC pins.
->> +
->> +properties:
->> +  compatible:
->> +    enum:
->> +      - mediatek,mt8195-hdmi-ddc
->
->I think I wrote it - you already have bindings for HDMI DDC. I doubt
->that these are different and it looks like you model the bindings
->according to your driver. That's not the way.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/paulmck/linux-rcu.git rcu/next
+branch HEAD: 9399f613f2fe4ef95fd86c54b6efd98076dcfe12  locking/memory-barriers.txt: Improve documentation for writel() example
 
-Hi Krzysztof,
+elapsed time: 1037m
 
-I've made a separate binding as this new IP is integrated into the
-HDMI hw block.
-The difference it makes is that the hw is slightly simpler to describe
-as the IP doesn't
-have it's own range of registers or an interrupt line.
+configs tested: 113
+configs skipped: 3
 
-I can use the "legacy mediatek mtk ddc binding" if I modify it to have
-the reg and
-interrupt properties not being required for mt8195.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Would that work better for you?
+gcc tested configs:
+um                             i386_defconfig
+um                           x86_64_defconfig
+arc                                 defconfig
+s390                             allmodconfig
+alpha                               defconfig
+s390                                defconfig
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+s390                             allyesconfig
+sh                               allmodconfig
+ia64                             allmodconfig
+i386                             allyesconfig
+i386                                defconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+sparc                             allnoconfig
+xtensa                    smp_lx200_defconfig
+arm                          gemini_defconfig
+sh                 kfr2r09-romimage_defconfig
+xtensa                       common_defconfig
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+x86_64                           rhel-8.3-kvm
+x86_64                           rhel-8.3-syz
+x86_64                         rhel-8.3-kunit
+m68k                        m5272c3_defconfig
+sh                          r7780mp_defconfig
+sh                          r7785rp_defconfig
+sparc64                          alldefconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+i386                 randconfig-a016-20221031
+i386                 randconfig-a012-20221031
+i386                 randconfig-a015-20221031
+i386                 randconfig-a013-20221031
+i386                 randconfig-a014-20221031
+i386                 randconfig-a011-20221031
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+arm64                            alldefconfig
+powerpc                 linkstation_defconfig
+m68k                        stmark2_defconfig
+arm                            mps2_defconfig
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+arc                  randconfig-r043-20221101
+mips                         db1xxx_defconfig
+mips                            ar7_defconfig
+sh                     sh7710voipgw_defconfig
+arm                             ezx_defconfig
+arm                           sama5_defconfig
+ia64                            zx1_defconfig
+x86_64                        randconfig-a002
+x86_64                        randconfig-a006
+x86_64                        randconfig-a004
+arm                       omap2plus_defconfig
+arm                          iop32x_defconfig
+riscv                    nommu_k210_defconfig
+sh                        sh7757lcr_defconfig
+openrisc                    or1ksim_defconfig
+x86_64               randconfig-k001-20221031
+arm                      footbridge_defconfig
+powerpc                     taishan_defconfig
+sh                  sh7785lcr_32bit_defconfig
+alpha                             allnoconfig
+i386                 randconfig-c001-20221031
+x86_64                        randconfig-a015
+x86_64                        randconfig-a013
+x86_64                        randconfig-a011
+powerpc                     stx_gp3_defconfig
+ia64                        generic_defconfig
+sh                          rsk7203_defconfig
+sh                      rts7751r2d1_defconfig
+i386                          randconfig-c001
+sparc                       sparc64_defconfig
+sh                          lboxre2_defconfig
 
->
->> +
->> +  clocks:
->> +    maxItems: 1
->> +
->> +  clock-names:
->> +    items:
->> +      - const: ddc
->> +
->> +  mediatek,hdmi:
->> +    $ref: /schemas/types.yaml#/definitions/phandle
->> +    description:
->> +      A phandle to the mt8195 hdmi controller
->> +
->> +required:
->> +  - compatible
->> +  - clocks
->> +  - clock-names
->> +
->> +additionalProperties: false
->> +
->> +examples:
->> +  - |
->> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
->> +    #include <dt-bindings/interrupt-controller/irq.h>
->> +    hdmiddc0: ddc_i2c {
->
->Node names should be generic - ddc.
->https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
->
->No underscores in node names.
->
->Additionally I2C devices have addresses on the bus. Why this one doesn't?
->
+clang tested configs:
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+arm                        vexpress_defconfig
+powerpc                       ebony_defconfig
+powerpc                      obs600_defconfig
+riscv                randconfig-r042-20221101
+hexagon              randconfig-r041-20221101
+hexagon              randconfig-r045-20221101
+s390                 randconfig-r044-20221101
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a005
+x86_64                        randconfig-a003
+x86_64                        randconfig-a001
+arm                        mvebu_v5_defconfig
+powerpc                   microwatt_defconfig
+arm                         bcm2835_defconfig
+mips                           ip28_defconfig
+arm                      pxa255-idp_defconfig
+mips                      bmips_stb_defconfig
+i386                          randconfig-a013
+i386                          randconfig-a015
+i386                          randconfig-a011
+i386                 randconfig-a003-20221031
+i386                 randconfig-a002-20221031
+i386                 randconfig-a004-20221031
+i386                 randconfig-a005-20221031
+i386                 randconfig-a001-20221031
+i386                 randconfig-a006-20221031
 
-This is an i2c adapter, not a device.
-And as it lives inside the HDMI hw block, I've omitted using an address here.
-
-Is this valid? or should this be expressed differently?
-
-Thx,
-Guillaume.
-
->> +      compatible = "mediatek,mt8195-hdmi-ddc";
->> +      mediatek,hdmi = <&hdmi0>;
->> +      clocks = <&clk26m>;
->> +      clock-names = "ddc";
->> +    };
->> +
->> +...
->>
->
->Best regards,
->Krzysztof
->
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
