@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D99D9616D90
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 20:13:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29CCE616D94
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 20:14:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbiKBTNY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 15:13:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40982 "EHLO
+        id S230292AbiKBTNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 15:13:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbiKBTNO (ORCPT
+        with ESMTP id S230312AbiKBTNW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 15:13:14 -0400
+        Wed, 2 Nov 2022 15:13:22 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E996AE3B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 12:12:24 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4604C2E8
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 12:12:30 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667416343;
+        s=mimecast20190719; t=1667416349;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=6YPbVJPY8MtPnMTid4uTdi1CU5/wNXrXzoHJaI5QF0k=;
-        b=KFFQXIaYwDlSjIFvvgxo7Jp7wbTncilBY/f3NnKKY9NN8/GaokhB+jLdG/aH5lUk42QRzI
-        ScyKA+M5ei9UtZOTon6O4PW7XtETBAMBKYzGOHIVtp9g/dGn3VKxZUp+ECN4i9ngiGGFcX
-        TD4nEKmhT/KCiWrHKLh4l9J/XmgEuAk=
+        bh=BQ7PDKfmtoPRA+bF4Km9GFm2Sx9d/OhosQnplgpAu2o=;
+        b=NGV7p2/ZxLHGNAUQwrXlQhDMXUfUp0HYY0bqkkDpWKez3f58c6OKcQV7o9TC1e0o4RVicS
+        2Q5rFHgOf4RiG/zRGBNZJHsLczGC5nc0opZZ/MWG8ACKZgAmE2ufeKi9ngUgc+LipK1+0B
+        t0HYeG93duaXi4PgI04xh4VuYEQqSFU=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-542-rpR-vEwkMu-2AEpRHiq6RQ-1; Wed, 02 Nov 2022 15:12:19 -0400
-X-MC-Unique: rpR-vEwkMu-2AEpRHiq6RQ-1
+ us-mta-324-w_zaXqGEP3CwXYU0lh2CSw-1; Wed, 02 Nov 2022 15:12:23 -0400
+X-MC-Unique: w_zaXqGEP3CwXYU0lh2CSw-1
 Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 3DD773804060;
-        Wed,  2 Nov 2022 19:12:19 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BF8E72A5954A;
+        Wed,  2 Nov 2022 19:12:22 +0000 (UTC)
 Received: from t480s.fritz.box (unknown [10.39.192.243])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5E840492CA5;
-        Wed,  2 Nov 2022 19:12:15 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 904AF49BB60;
+        Wed,  2 Nov 2022 19:12:19 +0000 (UTC)
 From:   David Hildenbrand <david@redhat.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
@@ -54,9 +54,9 @@ Cc:     linux-mm@kvack.org, linuxppc-dev@lists.ozlabs.org,
         Nicholas Piggin <npiggin@gmail.com>,
         Mike Rapoport <rppt@kernel.org>,
         Anshuman Khandual <anshuman.khandual@arm.com>
-Subject: [PATCH v1 1/6] mm/mprotect: allow clean exclusive anon pages to be writable
-Date:   Wed,  2 Nov 2022 20:12:04 +0100
-Message-Id: <20221102191209.289237-2-david@redhat.com>
+Subject: [PATCH v1 2/6] mm/mprotect: minor can_change_pte_writable() cleanups
+Date:   Wed,  2 Nov 2022 20:12:05 +0100
+Message-Id: <20221102191209.289237-3-david@redhat.com>
 In-Reply-To: <20221102191209.289237-1-david@redhat.com>
 References: <20221102191209.289237-1-david@redhat.com>
 MIME-Version: 1.0
@@ -72,51 +72,65 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Nadav Amit <namit@vmware.com>
+We want to replicate this code for handling PMDs soon.
 
-Anonymous pages might have the dirty bit clear, but this should not
-prevent mprotect from making them writable if they are exclusive.
-Therefore, skip the test whether the page is dirty in this case.
+(1) No need to crash the kernel, warning and rejecting is good enough. As
+    this will no longer get optimized out, drop the pte_write() check: no
+    harm would be done.
 
-Note that there are already other ways to get a writable PTE mapping an
-anonymous page that is clean: for example, via MADV_FREE. In an ideal
-world, we'd have a different indication from the FS whether writenotify
-is still required.
+(2) Add a comment why PROT_NONE mapped pages are excluded.
 
-Signed-off-by: Nadav Amit <namit@vmware.com>
-[ return directly; update description ]
+(3) Add a comment regarding MAP_SHARED handling and why we rely on the
+    dirty bit in the PTE.
+
 Signed-off-by: David Hildenbrand <david@redhat.com>
 ---
- mm/mprotect.c | 7 +++----
- 1 file changed, 3 insertions(+), 4 deletions(-)
+ mm/mprotect.c | 19 ++++++++++++++-----
+ 1 file changed, 14 insertions(+), 5 deletions(-)
 
 diff --git a/mm/mprotect.c b/mm/mprotect.c
-index 8d770855b591..86a28c0e190f 100644
+index 86a28c0e190f..72aabffb7871 100644
 --- a/mm/mprotect.c
 +++ b/mm/mprotect.c
-@@ -46,7 +46,7 @@ static inline bool can_change_pte_writable(struct vm_area_struct *vma,
+@@ -44,8 +44,10 @@ static inline bool can_change_pte_writable(struct vm_area_struct *vma,
+ {
+ 	struct page *page;
  
- 	VM_BUG_ON(!(vma->vm_flags & VM_WRITE) || pte_write(pte));
+-	VM_BUG_ON(!(vma->vm_flags & VM_WRITE) || pte_write(pte));
++	if (WARN_ON_ONCE(!(vma->vm_flags & VM_WRITE)))
++		return false;
  
--	if (pte_protnone(pte) || !pte_dirty(pte))
-+	if (pte_protnone(pte))
++	/* Don't touch entries that are not even readable. */
+ 	if (pte_protnone(pte))
  		return false;
  
- 	/* Do we need write faults for softdirty tracking? */
-@@ -65,11 +65,10 @@ static inline bool can_change_pte_writable(struct vm_area_struct *vma,
- 		 * the PT lock.
+@@ -59,15 +61,22 @@ static inline bool can_change_pte_writable(struct vm_area_struct *vma,
+ 
+ 	if (!(vma->vm_flags & VM_SHARED)) {
+ 		/*
+-		 * We can only special-case on exclusive anonymous pages,
+-		 * because we know that our write-fault handler similarly would
+-		 * map them writable without any additional checks while holding
+-		 * the PT lock.
++		 * Writable MAP_PRIVATE mapping: We can only special-case on
++		 * exclusive anonymous pages, because we know that our
++		 * write-fault handler similarly would map them writable without
++		 * any additional checks while holding the PT lock.
  		 */
  		page = vm_normal_page(vma, addr, pte);
--		if (!page || !PageAnon(page) || !PageAnonExclusive(page))
--			return false;
-+		return page && PageAnon(page) && PageAnonExclusive(page);
+ 		return page && PageAnon(page) && PageAnonExclusive(page);
  	}
  
--	return true;
-+	return pte_dirty(pte);
++	/*
++	 * Writable MAP_SHARED mapping: "clean" might indicate that the FS still
++	 * needs a real write-fault for writenotify
++	 * (see vma_wants_writenotify()). If "dirty", the assumption is that the
++	 * FS was already notified and we can simply mark the PTE writable
++	 * just like the write-fault handler would do.
++	 */
+ 	return pte_dirty(pte);
  }
  
- static unsigned long change_pte_range(struct mmu_gather *tlb,
 -- 
 2.38.1
 
