@@ -2,141 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45CD9616B78
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:04:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE8CF616B86
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:05:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231209AbiKBSE1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 14:04:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32884 "EHLO
+        id S231238AbiKBSFW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 14:05:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230514AbiKBSES (ORCPT
+        with ESMTP id S231236AbiKBSFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:04:18 -0400
-Received: from mail-lj1-x22b.google.com (mail-lj1-x22b.google.com [IPv6:2a00:1450:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB04E636A
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:04:16 -0700 (PDT)
-Received: by mail-lj1-x22b.google.com with SMTP id j14so26052366ljh.12
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 11:04:16 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Kfl6EFy+1s5bebZ58ocWUAzBJujFa0//d6FDWMOKEcw=;
-        b=SaXwCsrB+vSTWBTUlZwxUMaiJCMhuj7VIZED5OXyJOCUlXiQaiDQwJ/MSJayjkKHM/
-         vTjQzMXvCMRvo3y0S2fJZzloAi5OLabbagctrDPJSlGpQ1yUX8rKEwL6O4RSOhQZGCKS
-         8mMQO2vH7e9lQU0QdsNphPijYAsfVEmIKFAp6lw+TxgJgmiScNXu7Q0IPCSBMDoGWlCt
-         1ePymdyFvKf/WqNl188pmuSJbc1PZqiOOtoIg9BjUZs1MF60pVNXpB1/5cYepWmoIySK
-         AuRQaBiP1exX4Rt3ILS8sAHY+MEnfzeeCW07mSiaVvOE8Lkaf1aZEB3Ksov72hejpsZB
-         tszQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Kfl6EFy+1s5bebZ58ocWUAzBJujFa0//d6FDWMOKEcw=;
-        b=qhXSP8P1Ds5h7qh/GdOHmWCWMLdIg+G0TiJDT7VTjlHBblBxWGrQ3xa90rKU5630Yp
-         XPaijg7d3OPLuQW14F45n6V6KnJQd9DsnKDzf6NFGAAcZpSq27qLVxAdcW27Evo0G7R2
-         dYTkiDrfeqO9eppMNsqZ26+8xDXjmYpS+Ok+d4GotWw3xTmWADJM17/REaEwc7mckLea
-         zM1DxgYqRfPiH4YsEoEfR7seWz96aRXo1CkMWqmNGeFPgLc2FxdkGNiiAwvl4BW70IO9
-         i4tIp70Qw4O6Fsr7VQjMr1Tntw+y7JiVNL1ewVvzN9/wwDsK8YR2WGX6pQ/5aDsO8XKW
-         hsfw==
-X-Gm-Message-State: ACrzQf3VZzXRbttV7lfA3fkSNt8glgzu2vJHmMC6UMZWZ4lWM8sIC6J8
-        I3sFYQ36X0YVBU4XHDIi/ofbBA==
-X-Google-Smtp-Source: AMsMyM58C3ychgVlZPLXgqKxRoKbGoginKLDpoFrcYy25cZZt/ccz2yj7LHG+bD2o/zHBO0g9oxgjQ==
-X-Received: by 2002:a2e:870f:0:b0:277:2600:9d05 with SMTP id m15-20020a2e870f000000b0027726009d05mr9463378lji.144.1667412255202;
-        Wed, 02 Nov 2022 11:04:15 -0700 (PDT)
-Received: from [10.10.15.130] ([192.130.178.91])
-        by smtp.gmail.com with ESMTPSA id bf26-20020a2eaa1a000000b00261ccf566e3sm2200139ljb.65.2022.11.02.11.04.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 11:04:14 -0700 (PDT)
-Message-ID: <60643572-4148-cea5-e64d-ec6534b0c407@linaro.org>
-Date:   Wed, 2 Nov 2022 21:04:13 +0300
+        Wed, 2 Nov 2022 14:05:09 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC6B72EF19;
+        Wed,  2 Nov 2022 11:05:07 -0700 (PDT)
+Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A2HvRK8021920;
+        Wed, 2 Nov 2022 18:04:47 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=DYV6UhlxBjAVhUwnUSfoiUxcFgJpAGe3cb+kiFS//ko=;
+ b=A/5TWOpZ6Q+PPzRcEALKyEY/6yCizUdad0FFpEE+QXWouXi24dc/jIlggChSg7dIJH+Z
+ CGeimhqgbJ056v6hp99/yG0Ff5vIHHPXGvWbgixnEhctAVaPW9xveScqUOf9vx9dG56c
+ pdykAI4fVjcnY6geCTQZSibaO+HaxYsXZLsmk/+HDr/Gs83s6TK6CVoktJBaeT6m7G2I
+ cAHGPD2cXSVqBC7zAd8QNDPmFXvUwl3siupi67ZdaqVO3SX+MO+e64mBfxZvBWh0Knxp
+ R8TnYBO5fGMr5lJPYsI+Cbd1VRimDDRPcZh2Oo+gygqV9Cf988nqVET7gq79Lt76qgMg nQ== 
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kkm40132q-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 18:04:47 +0000
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+        by NASANPPMTA03.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A2I4kEN018416
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 2 Nov 2022 18:04:46 GMT
+Received: from [10.134.65.5] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 2 Nov 2022
+ 11:04:45 -0700
+Message-ID: <28eaa4bd-a9ee-c415-57c4-a9a56ffeef18@quicinc.com>
+Date:   Wed, 2 Nov 2022 11:04:45 -0700
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH] drm/msm/dp: remove limitation of link rate at 5.4G to
- support HBR3
-Content-Language: en-GB
-To:     Doug Anderson <dianders@chromium.org>
-Cc:     Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, vkoul@kernel.org,
-        daniel@ffwll.ch, airlied@linux.ie, agross@kernel.org,
-        quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>
-References: <1667237245-24988-1-git-send-email-quic_khsieh@quicinc.com>
- <94b507e8-5b94-12ae-4c81-95f5d36279d5@linaro.org>
- <deb60200-5a37-ec77-9515-0c0c89022174@quicinc.com>
- <CAD=FV=X_fs_4JYcRvAwkU9mAafOten9WdyzPfSVWdAU=ZMo8zg@mail.gmail.com>
- <155e4171-187c-4ecf-5a9b-12f0c2207524@linaro.org>
- <CAD=FV=Wk5rBSq9Mx1GCO0QFYckKV9KUFKL36Ld7dQX1ypHVcYw@mail.gmail.com>
- <CAD=FV=XTOUjVAGFWZ6xTkcNOrCT1p73aU-=KJNYUOxsS-BQsyA@mail.gmail.com>
- <c5aedb31-3881-50e7-f747-e75b18c3f4b8@linaro.org>
- <CAD=FV=WPde5wVOGCKQYGuGwgCwRebox4FF0MgV_2pPCTsfo_UA@mail.gmail.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <CAD=FV=WPde5wVOGCKQYGuGwgCwRebox4FF0MgV_2pPCTsfo_UA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v6 10/21] gunyah: rsc_mgr: Add resource manager RPC core
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>
+CC:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        "Srivatsa Vaddagiri" <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        "Will Deacon" <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Arnd Bergmann" <arnd@arndb.de>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Kalle Valo <kvalo@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221026185846.3983888-1-quic_eberman@quicinc.com>
+ <20221026185846.3983888-11-quic_eberman@quicinc.com>
+ <Y2FfKCKZ3N8rOqcT@kroah.com>
+ <3d2858fe-ea3e-159c-faff-5052cba1e08c@quicinc.com>
+ <Y2Hbl4y9Hioybxmq@kroah.com>
+From:   Elliot Berman <quic_eberman@quicinc.com>
+In-Reply-To: <Y2Hbl4y9Hioybxmq@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: qoEDl_mkLKaCYoFGnVLHFqai4C07Z8lz
+X-Proofpoint-ORIG-GUID: qoEDl_mkLKaCYoFGnVLHFqai4C07Z8lz
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-02_13,2022-11-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
+ clxscore=1015 mlxlogscore=657 impostorscore=0 malwarescore=0
+ lowpriorityscore=0 mlxscore=0 phishscore=0 suspectscore=0
+ priorityscore=1501 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.12.0-2210170000 definitions=main-2211020117
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/11/2022 20:28, Doug Anderson wrote:
-> Hi,
-> 
-> On Wed, Nov 2, 2022 at 10:23 AM Dmitry Baryshkov
-> <dmitry.baryshkov@linaro.org> wrote:
+
+
+On 11/1/2022 7:53 PM, Greg Kroah-Hartman wrote:
+> On Tue, Nov 01, 2022 at 05:12:58PM -0700, Elliot Berman wrote:
 >>
->>> 1. Someone figures out how to model this with the bridge chain and
->>> then we only allow HBR3 if we detect we've got a TCPC that supports
->>> it. This seems like the cleanest / best but feels like a long pole.
->>> Not only have we been trying to get the TCPC-modeled-as-a-bridge stuff
->>> landed for a long time but even when we do it we still don't have a
->>> solution for how to communicate the number of lanes and other stuff
->>> between the TCPC and the DP controller so we have to enrich the bridge
->>> interface.
 >>
->> I think we'd need some OOB interface. For example for DSI interfaces we
->> have mipi_dsi_device struct to communicate such OOB data.
+>> On 11/1/2022 11:02 AM, Greg Kroah-Hartman wrote:
+>>> On Wed, Oct 26, 2022 at 11:58:35AM -0700, Elliot Berman wrote:
+>>>> The resource manager is a special virtual machine which is always
+>>>> running on a Gunyah system. It provides APIs for creating and destroying
+>>>> VMs, secure memory management, sharing/lending of memory between VMs,
+>>>> and setup of inter-VM communication. Calls to the resource manager are
+>>>> made via message queues.
+>>>>
+>>>> This patch implements the basic probing and RPC mechanism to make those
+>>>> API calls. Request/response calls can be made with gh_rm_call.
+>>>> Drivers can also register to notifications pushed by RM via
+>>>> gh_rm_register_notifier
+>>>>
+>>>> Specific API calls that resource manager supports will be implemented in
+>>>> subsequent patches.
+>>>>
+>>>> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+>>>> ---
+>>>>    MAINTAINERS                    |   2 +-
+>>>>    drivers/virt/gunyah/Kconfig    |  15 +
+>>>>    drivers/virt/gunyah/Makefile   |   3 +
+>>>>    drivers/virt/gunyah/rsc_mgr.c  | 602 +++++++++++++++++++++++++++++++++
+>>>>    drivers/virt/gunyah/rsc_mgr.h  |  34 ++
+>>>>    include/linux/gunyah_rsc_mgr.h |  26 ++
+>>>>    6 files changed, 681 insertions(+), 1 deletion(-)
+>>>>    create mode 100644 drivers/virt/gunyah/rsc_mgr.c
+>>>>    create mode 100644 drivers/virt/gunyah/rsc_mgr.h
+>>>>    create mode 100644 include/linux/gunyah_rsc_mgr.h
+>>>>
+>>>> diff --git a/MAINTAINERS b/MAINTAINERS
+>>>> index 586539eadd3b..e072a0d2e553 100644
+>>>> --- a/MAINTAINERS
+>>>> +++ b/MAINTAINERS
+>>>> @@ -8945,7 +8945,7 @@ F:	Documentation/virt/gunyah/
+>>>>    F:	arch/arm64/gunyah/
+>>>>    F:	drivers/mailbox/gunyah-msgq.c
+>>>>    F:	drivers/virt/gunyah/
+>>>> -F:	include/linux/gunyah.h
+>>>> +F:	include/linux/gunyah*.h
+>>>>    HABANALABS PCI DRIVER
+>>>>    M:	Oded Gabbay <ogabbay@kernel.org>
+>>>> diff --git a/drivers/virt/gunyah/Kconfig b/drivers/virt/gunyah/Kconfig
+>>>> index 127156a678a6..4de88d80aa7b 100644
+>>>> --- a/drivers/virt/gunyah/Kconfig
+>>>> +++ b/drivers/virt/gunyah/Kconfig
+>>>> @@ -10,3 +10,18 @@ config GUNYAH
+>>>>    	  Say Y/M here to enable the drivers needed to interact in a Gunyah
+>>>>    	  virtual environment.
+>>>> +
+>>>> +config GUNYAH_RESORUCE_MANAGER
+>>>> +	tristate "Gunyah Resource Manager"
+>>>> +	select MAILBOX
+>>>> +	select GUNYAH_MESSAGE_QUEUES
+>>>> +	depends on GUNYAH
+>>>> +	default y
+>>>
+>>> You only have "default y" if your machine can not boot without it.
+>>> Please do not add that here.
+>>>
 >>
->> Also take a note regarding data-lanes from my previous email.
+>> There's a guideline in Documentation/kbuild/kconfig-language.rst to provide
+>> some sane defaults for subdriver behavior. Here, CONFIG_GUNYAH is default n.
+>> It's unlikely for someone to want to have Linux with base Gunyah support
+>> (hypercalls and hypervisor detection) without also having the Resource
+>> Manager driver. If it's better, I could change to default m?
 > 
-> Right, we can somehow communicate the max link rate through the bridge
-> chain to the DP controller in an OOB manner that would work.
+> Why is this a separate build option at all anyway?  If you want
+> CONFIG_GUNYAH why would you ever turn this off?  So why even allow it to
+> be an option?  Just always built it depending on the main option.
+> 
 
-I'd note that our dp_panel has some notion of such OOB data. So do AUX 
-drivers including the panel-edp. My suggestion would be to consider both 
-of them while modelling the OOB data.
+Ack.
 
-> 
-> 
->>> 2. We add in a DT property to the display controller node that says
->>> the max link rate for use on this board. This feels like a hack, but
->>> maybe it's not too bad. Certainly it would be incredibly simple to
->>> implement. Actually... ...one could argue that even if we later model
->>> the TCPC as a bridge that this property would still be valid / useful!
->>> You could certainly imagine that the SoC supports HBR3 and the TCPC
->>> supports HBR3 but that the board routing between the SoC and the TCPC
->>> is bad and only supports HBR2. In this case the only way out is
->>> essentially a "board constraint" AKA a DT property in the DP
->>> controller.
+I'll also end up removing CONFIG_GUNYAH_MESSAGE_QUEUES from patch 9 as well.
+
+>>>> +/* Resource Manager Header */
+>>>> +struct gh_rm_rpc_hdr {
+>>>> +	u8 version : 4, hdr_words : 4;
+>>>> +	u8 type : 2, fragments : 6;
+>>>
+>>> Ick, that's hard to read.  One variable per line please?
 >>
->> We have been discussing similar topics with Abhinav. Krzysztof suggested
->> using link-frequencies property to provide max and min values.
+>> Ack.
+>>
+>>> And why the bit packed stuff?  Are you sure this is the way to do this?
+>>> Why not use a bitmask instead?
+>>>
+>>
+>> I felt bit packed implementation is cleaner and easier to map to
+>> understanding what the fields are used for.
 > 
-> This sounds good to me and seems worth doing even if we eventually do #1.
+> Ah, so this isn't what is on the "wire", then don't use a bitfield like
+> this, use a real variable and that will be faster and simpler to
+> understand.
+> 
 
-And the bonus point is that it can be done easily.
+This is what's on the "wire". Whether I use bitfield or bit packed would 
+be functionally the same and is just a cosmetic change IMO.
 
--- 
-With best wishes
-Dmitry
+>>>> +static struct gh_rsc_mgr *__rsc_mgr;
+>>>
+>>> Sorry, no, you don't get to just limit yourself to one of these.  Please
+>>> make this properly handle any number of "resource managers", static
+>>> variables like this is not ok.
+>>>
+>>
+>> There will only ever be one resource manager. optee, psci, and qcom_scm use
+>> a similar approach.
+> 
+> And all of those are also wrong.
+> 
+> There is no need for this variable at all, you are doing extra work to
+> make this a "single" device.  Just always work off of the device that
+> the driver core gave you and all is good and you will have no limits on
+> how many different ones you eventually get.  It will be less code
+> overall, so it's the right thing to do.
+> 
 
+Ack
+
+>>>> +SRCU_NOTIFIER_HEAD_STATIC(gh_rm_notifier);
+>>>
+>>> Why do you need a notifier list?
+>>>
+>>> Who will register for this?  For what?  Why?
+>>>
+>>
+>> The majority of notifications that RM sends to Linux will be related to VM
+>> state, e.g. "VM crashed." I've not added the handling in VM manager yet to
+>> reduce the number of patches in this series. It was used in the previous
+>> series for the console driver. I can remove for now and re-introduce it once
+>> VM manager makes use?
+> 
+> Please remove if you are not using it.  Notifier lists are almost always
+> wrong when it comes to the driver model, so please don't add them now,
+> we can discuss it later if you feel it really needs to be introduced
+> then.
+> 
+
+Ack
+
+>>>> +static struct platform_driver gh_rm_driver = {
+>>>> +	.probe = gh_rm_drv_probe,
+>>>> +	.remove = gh_rm_drv_remove,
+>>>> +	.driver = {
+>>>> +		.name = "gh_rsc_mgr",
+>>>> +		.of_match_table = gh_rm_of_match,
+>>>> +	},
+>>>
+>>> Wait, why is this a platform driver?  This is binding to a real device
+>>> on a real bus, not a random platform description in DT, right?
+>>
+>> This a binding for a real device and not a "random platform description" in
+>> DT to get the driver probed.
+>>
+>>> Or is it controlled by your DT?  I can't figure that out here, sorry.
+>>
+>> There is some info in Patch 2 about why the DT node exists and how it looks.
+>> Essentially, The DT node is provided by Gunyah during boot and describes how
+>> Linux can communicate with resource manager.
+> 
+> Ick, ok, for now let's leave this alone but for dynamic devices, you
+> should never use a platform device.  All devices that hang off of this
+> controller better not be platform devices, but belong to the bus type of
+> your new bus, right?
+> 
+
+That's correct.
