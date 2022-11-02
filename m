@@ -2,101 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 41CAA616C3C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:33:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 83100616C4F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:35:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230197AbiKBSdd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 14:33:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55434 "EHLO
+        id S230498AbiKBSfL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 14:35:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56146 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbiKBSda (ORCPT
+        with ESMTP id S229850AbiKBSfJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:33:30 -0400
-Received: from mail-qt1-x82d.google.com (mail-qt1-x82d.google.com [IPv6:2607:f8b0:4864:20::82d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 015AC2A941
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:33:29 -0700 (PDT)
-Received: by mail-qt1-x82d.google.com with SMTP id fz10so6196030qtb.3
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 11:33:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7jsBbxM68g4hu49oQPI04Z6ZuqRO93ekJAZVTY7G7PE=;
-        b=XlNJsDQtwzg6thDxRfW7oyVabaE2Dtnv/wbgUbwPgBy0+XqBFYVwi6qmv4HscjWEhM
-         VWhx/y99ZMsZUYDtYCoc6a1jm+hVyYv2ejTZz+QNyQyGu3suM0zFQ9GKJwgi74JdnRkx
-         sNqwWk8UtdsMQgiEO5V/DSnwsTwFP7i/NkY7FNDPoku9AtLwgZETxiAi+4d6VmpAH9MW
-         EFCN0NRMtXbQ5Crk+lHl0Gv0AjPMFmDmxpbOHNnbStfBxmwaUgFXqA7wbC5aJJiaGpzj
-         zny1gvUh/5vZgBheuq20VWSeVuegfW2/ZcASG0Bf+9W0I0c2vCnRSAxGlWXJheqybn2/
-         5wCA==
+        Wed, 2 Nov 2022 14:35:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 703922FFDD
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:34:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667414050;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iOwZQK5qeETgL3wqlfHaHMAHqEn7+FhbLCJ4P7hdM2o=;
+        b=AUtQ+S2xKMYXFQEbsiHOvNjJXSAp6C37S2qBKL7jBd6FLIOpe3Xpt8EOwn/MapnpV3KoGz
+        wbp6F+nAso5uk7/tw/VzoSJN7NxnhOaLf9HvG7tmiP/32Q19yvivHxinRAU1iXTZQQa7ec
+        EMgEsC0oM4WfuN/164eFobDdbhHvEtg=
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com
+ [209.85.222.199]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-472-pdCgIrklML2H_P3P6EZf7w-1; Wed, 02 Nov 2022 14:34:09 -0400
+X-MC-Unique: pdCgIrklML2H_P3P6EZf7w-1
+Received: by mail-qk1-f199.google.com with SMTP id h8-20020a05620a284800b006b5c98f09fbso16163621qkp.21
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 11:34:09 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7jsBbxM68g4hu49oQPI04Z6ZuqRO93ekJAZVTY7G7PE=;
-        b=jFlAMfU51BfLipgJ6jxGLCy9a8toaCNOzuTZO+sApNcFGHihjMS+aleofqPYgDiJcb
-         zeu9Pt/Ppu81+RusHyrew5QVgXUyw0tOIIJakn5BeuEVBGeyCdt54yR7w1d47KsZeRib
-         dRM0lu/z6mEpNnQC/lCHQkCUL3yy1q1ilpl2OSYL1L2hImolYMtZ0ReHzrlLfDHdMQSx
-         12A7Y6De6/l2gCkLEobO/r6XvOu95wxFWSe6nOe20gg0q4ZrJ/Xk9GGH2TcI9/OUjwZA
-         iBo/m0+QmRR6z0x3iqAEvfi+tiAPxogHNYwNFKgGRKKaXGgZ5Vf2HEcnF81FxPYzsoxe
-         Q6/A==
-X-Gm-Message-State: ACrzQf367HG6dM0tddc5jQQmggoiyONUxjEwDb8Z4Dvqkk/mDlbdZeiX
-        7tRvplMV9cRSukQkU8zJy6ZeRA==
-X-Google-Smtp-Source: AMsMyM72M7UDRorVLYAV/MhAIyKp6TXC/eN/z5Cvcc/FAEYGFSLv+6M0ttEcE0C6XUuL3Ts2Z+wFVg==
-X-Received: by 2002:a05:622a:1014:b0:39c:c5ef:c768 with SMTP id d20-20020a05622a101400b0039cc5efc768mr20344412qte.525.1667414008128;
-        Wed, 02 Nov 2022 11:33:28 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
-        by smtp.gmail.com with ESMTPSA id u12-20020a05620a454c00b006ea7f9d8644sm9125353qkp.96.2022.11.02.11.33.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 11:33:27 -0700 (PDT)
-Message-ID: <1c057273-2651-dafc-0b13-e3b958ac1d2f@linaro.org>
-Date:   Wed, 2 Nov 2022 14:33:26 -0400
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=iOwZQK5qeETgL3wqlfHaHMAHqEn7+FhbLCJ4P7hdM2o=;
+        b=G1gUpNAgyBt4I3f2UvSWW3WRoSKjTlx62ZIv7HFNc38D9ZoAfoDCnvZMZqEObPEWeS
+         0h6RpQiaN6asw9REcpRxDOHnnYWILRrc28OcPbHcDPaeLg5SY6L7vS0gjNPoMPumJc4i
+         vX5P3HO4V3w2YCaJt587vvf7E1Jvc0oOcnueUxq3SYjJZIElISEOv2GWTBM4dTeGjRlA
+         6DbLhKIPForwOcO3RhyzqVasfY5HA/Emf1sZSd6xXVYO9lpl/zlUvPmlzAD7QT4dO3tv
+         bmmiA9tQiLcZSpq4b2zNgEGFMjLMOPodsDT3drUqAG14ruUnYx9t8tmuNYjv47kvB/jP
+         NCMQ==
+X-Gm-Message-State: ACrzQf39Pj4APvCv9gdiBJghW3j9sal423gtjUC48u+xMk1EXNIUqKwy
+        nrH0uHOzX0r5mFg+f+YvlCCSPjUU7eaRQFrNltRi1LcHrE2Gn6UJVP3PLng1phon2INbyF2AKe0
+        eRD7Pu1pj7Fuqqe+Cpsxvsv/l
+X-Received: by 2002:a05:622a:183:b0:3a5:4255:a0fe with SMTP id s3-20020a05622a018300b003a54255a0femr5122037qtw.441.1667414048629;
+        Wed, 02 Nov 2022 11:34:08 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM513iTu4ts5GTQjgBcRtTQiZ5hV5vnGyMiejNr5eqgULDfvGkfyMfW7xqa9AO3zDpp+iTddyQ==
+X-Received: by 2002:a05:622a:183:b0:3a5:4255:a0fe with SMTP id s3-20020a05622a018300b003a54255a0femr5122009qtw.441.1667414048423;
+        Wed, 02 Nov 2022 11:34:08 -0700 (PDT)
+Received: from vschneid.remote.csb ([149.71.65.94])
+        by smtp.gmail.com with ESMTPSA id w187-20020a3794c4000000b006eed47a1a1esm8757820qkd.134.2022.11.02.11.34.02
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 11:34:06 -0700 (PDT)
+From:   Valentin Schneider <vschneid@redhat.com>
+To:     linux-alpha@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-snps-arc@lists.infradead.org,
+        linux-arm-kernel@lists.infradead.org, linux-csky@vger.kernel.org,
+        linux-hexagon@vger.kernel.org, linux-ia64@vger.kernel.org,
+        loongarch@lists.linux.dev, linux-mips@vger.kernel.org,
+        openrisc@lists.librecores.org, linux-parisc@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, linux-riscv@lists.infradead.org,
+        linux-s390@vger.kernel.org, linux-sh@vger.kernel.org,
+        sparclinux@vger.kernel.org, linux-xtensa@linux-xtensa.org,
+        x86@kernel.org
+Cc:     "Paul E. McKenney" <paulmck@kernel.org>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Sebastian Andrzej Siewior <bigeasy@linutronix.de>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "H. Peter Anvin" <hpa@zytor.com>, Marc Zyngier <maz@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Guo Ren <guoren@kernel.org>,
+        "David S. Miller" <davem@davemloft.net>
+Subject: [RFC PATCH v2 2/8] trace: Add trace_ipi_send_cpumask()
+Date:   Wed,  2 Nov 2022 18:33:30 +0000
+Message-Id: <20221102183336.3120536-1-vschneid@redhat.com>
+X-Mailer: git-send-email 2.31.1
+In-Reply-To: <20221102182949.3119584-1-vschneid@redhat.com>
+References: <20221102182949.3119584-1-vschneid@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v2 2/2] ARM: dts: qcom: pm8941: fix iadc node
-Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        afd@ti.com, Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221031182456.952648-1-luca@z3ntu.xyz>
- <20221031182456.952648-2-luca@z3ntu.xyz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221031182456.952648-2-luca@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/10/2022 14:24, Luca Weiss wrote:
-> The spmi-pmic bindings require the iadc node to be named just 'adc'.
-> 
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@somainline.org>
-> Reviewed-by: Neil Armstrong <neil.armstrong@linaro.org>
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
-> Changes in v2:
-> * Drop changing double compatible, now bindings are adjusted
-> * Pick up tags
-> 
+trace_ipi_raise() is unsuitable for generically tracing IPI sources due to
+its "reason" argument being an uninformative string (on arm64 all you get
+is "Function call interrupts" for SMP calls).
 
+Add a variant of it that takes a exports a target CPU, a callsite and a
+callback.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Valentin Schneider <vschneid@redhat.com>
+---
+ include/trace/events/ipi.h | 22 ++++++++++++++++++++++
+ 1 file changed, 22 insertions(+)
 
-Best regards,
-Krzysztof
+diff --git a/include/trace/events/ipi.h b/include/trace/events/ipi.h
+index 0be71dad6ec03..b1125dc27682c 100644
+--- a/include/trace/events/ipi.h
++++ b/include/trace/events/ipi.h
+@@ -35,6 +35,28 @@ TRACE_EVENT(ipi_raise,
+ 	TP_printk("target_mask=%s (%s)", __get_bitmask(target_cpus), __entry->reason)
+ );
+ 
++TRACE_EVENT(ipi_send_cpumask,
++
++	TP_PROTO(const struct cpumask *cpumask, unsigned long callsite, void *callback),
++
++	TP_ARGS(cpumask, callsite, callback),
++
++	TP_STRUCT__entry(
++		__cpumask(cpumask)
++		__field(void *, callsite)
++		__field(void *, callback)
++	),
++
++	TP_fast_assign(
++		__assign_cpumask(cpumask, cpumask_bits(cpumask));
++		__entry->callsite = (void *)callsite;
++		__entry->callback = callback;
++	),
++
++	TP_printk("cpumask=%s callsite=%pS callback=%pS",
++		  __get_cpumask(cpumask), __entry->callsite, __entry->callback)
++);
++
+ DECLARE_EVENT_CLASS(ipi_handler,
+ 
+ 	TP_PROTO(const char *reason),
+-- 
+2.31.1
 
