@@ -2,99 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB4CC6161F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:44:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7D3A6161FA
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:45:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230249AbiKBLov (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 07:44:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43072 "EHLO
+        id S230337AbiKBLp2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 07:45:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43448 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230306AbiKBLoi (ORCPT
+        with ESMTP id S230520AbiKBLpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 07:44:38 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D682128E01;
-        Wed,  2 Nov 2022 04:44:32 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id 128so16037056pga.1;
-        Wed, 02 Nov 2022 04:44:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=KcGv5Q7FeBS6XrUIkFhAj+jX0IyfzopjVBjybBsLOts=;
-        b=NIRcuK4gA8z2XwxCgqp9Dx/4mNr7Muhwf3kBaLGGNGk+uTXlEPN4veC+ztIPfZcDpG
-         dPce3bE+p52PIK48GF4y5SLT6SZn+6d+4DZWr0NDfyVRVCpSttxyUsnr1Cugrz24zEh5
-         ZNu9CBU0pkTqFBoa7OV7kseKNU3xeoIijtz595GAaIIAFqWKGkjRnedDDj67q4YoaKrs
-         p6IybNn6dYnYMv7z8y25J6SCMTzqlPt62Ee869kVbfuxQX/WTEeT1SOx3oRxeglKhBDy
-         vQkitQenfhlIOV4Xn4qrwOaUKeDYwWQplKnaI+hJXuQW6sj+z1SWNwQDDXomw7mgCldf
-         xU4A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=KcGv5Q7FeBS6XrUIkFhAj+jX0IyfzopjVBjybBsLOts=;
-        b=3j8JLB1Pg8xQ7T9epvUDcopgNwm4RsgnfhPzEMYdZe+P4bMxxJ+u+W5iVUDLPmggn2
-         zIA69qj6tqrzo/zSIafpxh5oNoAGW7edk1iGZqjMy1YhYJ83pqF+/K8r4VWAiTTOZG2P
-         wWX+F/acS2cKju1pZaLpMI8F9EQb5ydtitTGdHEhaqj5OhTCOcLWP32HlXq27gWQYaTA
-         HiIX6HBSZHmCr88GzJ6NAeX+60uPhEGQ6vkIOfvXl+uIQ1t7cBwf8e/bakRgp7VrqC5s
-         tzZHHI6/64Dndfw1g2jw47SPrTBCQCzEmCebWG7watJTjMGPCytmFa0MWjlqsaPzlGt+
-         /sow==
-X-Gm-Message-State: ACrzQf04oKX/HPoLa089K/7vg0dqZSWWyiSGMyJeRVOCuFb6+NihMfwo
-        MbYeDL5rtPYoDoQZezaxq/LAPEOBbFu3/FQK
-X-Google-Smtp-Source: AMsMyM5O4vlXZIVegdrEV7nsF6V+3nEid7nYAMcHEv2iar9n+VNzQrOtoJjE40XkUwLaO3K87P0AwA==
-X-Received: by 2002:a62:32c2:0:b0:56b:2cce:d46a with SMTP id y185-20020a6232c2000000b0056b2cced46amr24448117pfy.36.1667389472415;
-        Wed, 02 Nov 2022 04:44:32 -0700 (PDT)
-Received: from Zbook.localdomain ([129.227.152.6])
-        by smtp.gmail.com with ESMTPSA id a11-20020a170902eccb00b00172e19c5f8bsm8169978plh.168.2022.11.02.04.44.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 04:44:32 -0700 (PDT)
-From:   Yuwei Guan <ssawgyw@gmail.com>
-X-Google-Original-From: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
-To:     paolo.valente@linaro.org, axboe@kernel.dk, tj@kernel.org,
-        josef@toxicpanda.com
-Cc:     linux-block@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Yuwei.Guan@zeekrlife.com
-Subject: [PATCH 5/5] block, bfq: change type for "bfq_large_burst_thresh"
-Date:   Wed,  2 Nov 2022 19:43:54 +0800
-Message-Id: <20221102114354.162-6-Yuwei.Guan@zeekrlife.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221102114354.162-1-Yuwei.Guan@zeekrlife.com>
-References: <20221102114354.162-1-Yuwei.Guan@zeekrlife.com>
+        Wed, 2 Nov 2022 07:45:08 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10ED82871A;
+        Wed,  2 Nov 2022 04:45:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 7764EB821DF;
+        Wed,  2 Nov 2022 11:45:00 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F37ECC433D6;
+        Wed,  2 Nov 2022 11:44:58 +0000 (UTC)
+Date:   Wed, 2 Nov 2022 07:44:57 -0400
+From:   Steven Rostedt <rostedt@goodmis.org>
+To:     Leonid Ravich <leonid.ravich@toganetworks.com>
+Cc:     "linux-trace-kernel@vger.kernel.org" 
+        <IMCEAMAILTO-linux-trace-kernel+40vger+2Ekernel+2Eorg@eurprd02.prod.outlook.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Yigal Korman <yigal.korman@toganetworks.com>
+Subject: Re: BUG:  ib_mad ftrace event unsupported migration
+Message-ID: <20221102074457.08f538a8@rorschach.local.home>
+In-Reply-To: <VI1PR02MB623706DA8A01842834FC191089399@VI1PR02MB6237.eurprd02.prod.outlook.com>
+References: <VI1PR02MB623706DA8A01842834FC191089399@VI1PR02MB6237.eurprd02.prod.outlook.com>
+X-Mailer: Claws Mail 3.17.8 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-"int" type is more suitable for "bfq_large_burst_thresh",
-so change it from "unsigned long" to "int".
+On Wed, 2 Nov 2022 10:49:26 +0000
+Leonid Ravich <leonid.ravich@toganetworks.com> wrote:
 
-Signed-off-by: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
----
- block/bfq-iosched.h | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> after investigation  looks like there is a broken assumption of rb_end_commit and rb_start_commit are on same CPU (no migration) during trace 
+> looking in ib_mad trace  in include/trace/events/ib_mad.h there is a call to create_mad_addr_info during  TP assign which sleeps (at least under mlx5 ib driver)
 
-diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
-index b022e5ec0871..df866936380e 100644
---- a/block/bfq-iosched.h
-+++ b/block/bfq-iosched.h
-@@ -701,7 +701,7 @@ struct bfq_data {
- 	/* Maximum burst size above which the current queue-activation
- 	 * burst is deemed as 'large'.
- 	 */
--	unsigned long bfq_large_burst_thresh;
-+	int bfq_large_burst_thresh;
- 	/* true if a large queue-activation burst is in progress */
- 	bool large_burst;
- 	/*
--- 
-2.34.1
+Wait, WHAT?
 
+> 
+> so the scenario looks :
+> 
+> rb_start_commit - buffer 0xffffa0984777e400  CPU 1 pid 1368
+> switch from 1368 to 1605
+> thread 1368 () is migrating from 1 to 0
+> rb_end_commit - buffer 0xffffa09847c14a00  CPU 0 pid 1368
+
+That's a MAJOR bug with the use case of tracepoints!
+
+> 
+> before starting throwing some patch into the the air  I would like to align with you the approach we should take here. 
+> 
+> my suggestion here : 
+> - ftrace infra should verify no migration happen  (end and start happens on same CPU)  in case not we will  throw warning for the issue  .
+
+The scheduler should have. On entering the ring buffer code
+ring_buffer_lock_reserver() it disables preemption and does not
+re-enable it until ring_buffer_unlock_commit().
+
+The only way to migrate is if you re-enable preemption. WHICH IS A BUG!
+
+> - ftrace users will be responsible to avoid migration during TP assign (RDMA in my case)
+
+Yes, it is responsible to do that. Just like it's up to users of
+spin_locks to not enable preemption and migrate while holding one.
+Entering the ring buffer code is the same as holding a spin_lock except
+that the ring buffer code allows for reentrancy.
+
+> 
+> please let me know what do you think 
+
+I think that whatever enabled preemption in the ib_mad trace event
+needs to be fixed.
+
+-- Steve
