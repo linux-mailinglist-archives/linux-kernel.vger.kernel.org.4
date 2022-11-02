@@ -2,100 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B913A616314
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:53:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72DED616317
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:54:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231197AbiKBMxH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 08:53:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33230 "EHLO
+        id S231202AbiKBMyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 08:54:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35148 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231199AbiKBMxE (ORCPT
+        with ESMTP id S229493AbiKBMx6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 08:53:04 -0400
-Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 143CE24F11
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 05:53:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=h2SE5RwKBCcdzUwbfaFdZfsZyswNYZ6Fa+MR9Z7llwo=; b=JOtPhia4qQjDFmq7/FCisGmLAq
-        C/3jwbcF1PMvrLjIB7K7o4ODEpIVynbT2B+DuP624X/aoG43q56GDsTicBTkA2l5T+tVcIwGvw5fx
-        S4fCJVaBG8fAueb4d0qxhCX3w1hnnLC6ClEntC7kib+bSTUWTKRh6AMNSNNypctakH7lVplAxpFhT
-        bPXwtvwbtBr0oI1miYeSM5nnwYLfu6BZExWN2DDqZMre0rJxmZoLpUG+R3rsAtKGx1FUbB+FtkUH4
-        4rM2uvoEPfVAkgJHadM5YF6nkyOpFCIzLJhqC2ExdTlANpKQVaBEmt+n1YJbFtaoySKzwp5G8IJ8Z
-        RPp17Dng==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oqDEw-005WV4-0O; Wed, 02 Nov 2022 12:53:06 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id C57C530031B;
-        Wed,  2 Nov 2022 13:53:00 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id B6B0720B1E7E3; Wed,  2 Nov 2022 13:53:00 +0100 (CET)
-Date:   Wed, 2 Nov 2022 13:53:00 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Marco Elver <elver@google.com>
-Subject: Re: [PATCH 4/5] kmsan: make sure PREEMPT_RT is off
-Message-ID: <Y2JoLOXtvmcVx8mU@hirez.programming.kicks-ass.net>
-References: <20221102110611.1085175-1-glider@google.com>
- <20221102110611.1085175-4-glider@google.com>
+        Wed, 2 Nov 2022 08:53:58 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F291BE8F
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 05:53:58 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id y203so2181253pfb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 05:53:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Sz/uTvOc0gNmc74MGKA7yKeLqyFqD/joiI1SxwVZLms=;
+        b=QPdi/N4K5dyZqaYEUPuN9znsrKWsfwh430NiiDRtLqBi68OaRPBOl96baYFkKsMkW1
+         MIV+la4+jbn7eO2JQcTLj1zwSYJb4vcWrd3nicT4aGNBMWvfnXdFlfpuri9yfU6ubTIx
+         LV6UoHd+XtwFQ26ci3dm7rIF/3I6LSKXypVlaASscdUXkVE5BCs3xch9xcwYBpWGNGQy
+         eTqjccvNYTtd8MenSpHX38ShXMZdSnl0juF/vyuZft+SjjOuxKZF6703U6qQiMfYyAiY
+         PZy0PyXYm20turCTicXMm7npZ1kg4dbru1HZomSQvnn0QRKDA3AhYFwCzuxwXSMwrIA0
+         ucPw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:subject:message-id:date:from:reply-to:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Sz/uTvOc0gNmc74MGKA7yKeLqyFqD/joiI1SxwVZLms=;
+        b=AGjZY5UGW8tKzGTFPy5PjHEytFNMd9v6UgTUA/9V7Gyciu1Nuuc0Ad11MjNrmMSkmr
+         QumO7/+kwUdgEWKoVZ/BqonhQMm3clenzalpduoqPQW8O9KjyE6CkfAJOh+Cos5pCdTv
+         pTylH5LWMtd2ih67v/Gtkabl7S/5HCa8JanCKuSbGtU9jzgFeDVbfUQDy5XaIwTyG/Mn
+         Cx6ZZEQR7qmZBTEOorsXGoDha9r1JFQQLn6lv79/bsbPJl3eZ6Amy3VhQwfVggTq2hdN
+         utivGvyLMJc4gi7gbNP/zSzPYMaX9V3ppSuyCLABwCyEELMthC0/+A3z6Oi5SB+eFaaV
+         9nHQ==
+X-Gm-Message-State: ACrzQf2lfEcHyNc9P/crjHMaqtWcrZXJRA+YqZJbe8T2Ks65t4xPf0+Z
+        BPWBaN/ThQvSnxjfBQx5gGbd5FzYjlEwvNR7qFU=
+X-Google-Smtp-Source: AMsMyM61U4kP/AwEmx8Ns6pmnpFl496NGTJPCi6lwLLzFsCz6P1xbep001BwiJUJhMONLwJUM07ev4VRsIE6EmmBRTg=
+X-Received: by 2002:a63:1058:0:b0:44f:a1cb:7eec with SMTP id
+ 24-20020a631058000000b0044fa1cb7eecmr22145975pgq.117.1667393637418; Wed, 02
+ Nov 2022 05:53:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221102110611.1085175-4-glider@google.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+Received: by 2002:a05:7022:662c:b0:46:197b:656c with HTTP; Wed, 2 Nov 2022
+ 05:53:56 -0700 (PDT)
+Reply-To: rihabmanyang1993@gmail.com
+From:   Rihab Manyang <omardiakhate751@gmail.com>
+Date:   Wed, 2 Nov 2022 12:53:56 +0000
+Message-ID: <CAAs2n97EyR3k29iVguxQoczvTjWeSjC00wTF0g+BD9inBzwh1Q@mail.gmail.com>
+Subject: HI DEAR..
+To:     undisclosed-recipients:;
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
+        autolearn_force=no version=3.4.6
+X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
+        *      https://www.dnswl.org/, no trust
+        *      [2607:f8b0:4864:20:0:0:0:432 listed in]
+        [list.dnswl.org]
+        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
+        *      [score: 0.5000]
+        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
+        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
+        *       in digit
+        *      [omardiakhate751[at]gmail.com]
+        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
+        *      digit
+        *      [rihabmanyang1993[at]gmail.com]
+        * -0.0 SPF_PASS SPF: sender matches SPF record
+        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
+        *      provider
+        *      [omardiakhate751[at]gmail.com]
+        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
+        *       valid
+        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
+        *      envelope-from domain
+        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
+        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
+        *      author's domain
+        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
+        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
+        *      different freemails
+X-Spam-Level: *****
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 12:06:10PM +0100, Alexander Potapenko wrote:
-> As pointed out by Peter Zijlstra, __msan_poison_alloca() does not play
-> well with IRQ code when PREEMPT_RT is on, because in that mode even
-> GFP_ATOMIC allocations cannot be performed.
-> 
-> Fixing this would require making stackdepot completely lockless, which
-> is quite challenging and may be excessive for the time being.
-> 
-> Instead, make sure KMSAN is incompatible with PREEMPT_RT, like other
-> debug configs are.
-> 
-> Cc: Andrew Morton <akpm@linux-foundation.org>
-> Cc: Dmitry Vyukov <dvyukov@google.com>
-> Cc: Marco Elver <elver@google.com>
-> Cc: Peter Zijlstra (Intel) <peterz@infradead.org>
-> Link: https://lore.kernel.org/lkml/20221025221755.3810809-1-glider@google.com/
-> Signed-off-by: Alexander Potapenko <glider@google.com>
-
-Acked-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-
-> ---
->  lib/Kconfig.kmsan | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/lib/Kconfig.kmsan b/lib/Kconfig.kmsan
-> index b2489dd6503fa..ef2c8f256c57d 100644
-> --- a/lib/Kconfig.kmsan
-> +++ b/lib/Kconfig.kmsan
-> @@ -12,6 +12,7 @@ config KMSAN
->  	bool "KMSAN: detector of uninitialized values use"
->  	depends on HAVE_ARCH_KMSAN && HAVE_KMSAN_COMPILER
->  	depends on SLUB && DEBUG_KERNEL && !KASAN && !KCSAN
-> +	depends on !PREEMPT_RT
->  	select STACKDEPOT
->  	select STACKDEPOT_ALWAYS_INIT
->  	help
-> -- 
-> 2.38.1.273.g43a17bfeac-goog
-> 
+-- 
+My name is Rihab Manyang,i am here to search for a business partner and
+friend who will help me to invest my fund in his country.
