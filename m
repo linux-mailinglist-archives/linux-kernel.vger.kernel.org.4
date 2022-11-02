@@ -2,123 +2,186 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12BB7616AB2
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:29:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B62E616AB9
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:29:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231290AbiKBR25 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:28:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54352 "EHLO
+        id S231515AbiKBR3Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:29:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231417AbiKBR2w (ORCPT
+        with ESMTP id S231512AbiKBR3L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:28:52 -0400
-Received: from mail-ej1-x636.google.com (mail-ej1-x636.google.com [IPv6:2a00:1450:4864:20::636])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43C3EE69
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 10:28:50 -0700 (PDT)
-Received: by mail-ej1-x636.google.com with SMTP id t25so47235433ejb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 10:28:50 -0700 (PDT)
+        Wed, 2 Nov 2022 13:29:11 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF8E21130;
+        Wed,  2 Nov 2022 10:29:09 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id z5-20020a17090a8b8500b00210a3a2364fso4021502pjn.0;
+        Wed, 02 Nov 2022 10:29:09 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=X2+9yxVt9jWEvW8G1POIGEGcQSupOLAIpJg0gweghVs=;
-        b=EgGB89Zg2h2E8cHoQjjgPCz2n0IaFrtoRPxndhM06adDo28bUdZZyYjM7q7PGcAuCO
-         qrK1/JRrMVIgQ54XSYURFj9EiicVAjN1F6gMP1c632DyLUMlyDJIn0yQ1+VaCn4KYaHU
-         OW4PLBRpp/FdhTOokAVnaOpXhTYDriLrSphdI=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XngaLyoddCmH4VlYM2PfyFy1z8QIlSHJsQqMTNSL+fY=;
+        b=LFmDcNdVJo4K4/FarOGyy+iYSahg3fpZVoW20EDjy0GMIKfgTNw8fvtAhQ15msH1Qk
+         VHt/frVwIRzA+95aTCRBawF42Gjwv69pcfAiYAtFa+IxWw2c0L81a72SzNLI/zhYVV0t
+         K0ZHQnNrJhHrs41sUlChWL8od2BcBx7+xb65Sk1Jcosp5Emqdq+E1yeRQzcf4I9RGVys
+         8ZCwtkteD0c7nGMW6HOZLCT7XbRkNkFFlndsU3/uIegcdYqiHKLssHEw65pubDMfcOz6
+         H3vQiqJ9dW6NCjeFtTBEAmTHFWCogGMbqctU+cPtFHx9OfivrJ2DvIF1PBdYIYi7VXf1
+         hMPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=X2+9yxVt9jWEvW8G1POIGEGcQSupOLAIpJg0gweghVs=;
-        b=ag5WvWahjlN3dkVDfVG0rqsxU47cS4RlNZx+g8bdIjiGyQVThVNh1Qrj1CXg0BR77M
-         lvo4QOfAiyuarKDEA2fOzJv105ac6l6LE1kKTDn+Dk9ArczJbW22gEmz7ZGw8U8eRoG3
-         19YxTD63jzQMVCB7/bxCJDj58/Z4IkCU9d4LFpUzYyJFXCGRGIM7dpeA2yaRij+hfzIW
-         wgoO28ragLeoYKBpEiyn7+s8Yg3rggnrHINbvBg0W+V5epj7f1TSosQKTSBrg9N2qbuL
-         JCt6aHfOaBXxwi9h2rZK+Wigyhn6RJbRlMD3Xfsp9z7zY275xHvb/dU3Mg90YDhHCQrS
-         JLHQ==
-X-Gm-Message-State: ACrzQf1U9F0BL0+zzJZZk9ksxr3gywvZOAUFFSlx66MK5hgFJzvRf/GI
-        pKtXEQLul/QohO2IKo+Y8K4gRptivB62w9EU
-X-Google-Smtp-Source: AMsMyM4NQnUcTTMuQqDkcAsRChXgtdQQUXbjaQFF7DHZh5/Jlv5ZB3HN2AuLN3lFrInaiCGi54pztw==
-X-Received: by 2002:a17:907:d2a:b0:7ad:e0c5:4bd7 with SMTP id gn42-20020a1709070d2a00b007ade0c54bd7mr13944454ejc.177.1667410118777;
-        Wed, 02 Nov 2022 10:28:38 -0700 (PDT)
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com. [209.85.128.53])
-        by smtp.gmail.com with ESMTPSA id gz24-20020a170906f2d800b00771cb506149sm5645771ejb.59.2022.11.02.10.28.36
-        for <linux-kernel@vger.kernel.org>
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XngaLyoddCmH4VlYM2PfyFy1z8QIlSHJsQqMTNSL+fY=;
+        b=rszwyG6zHme+cXKv/nV3uJZLtZ/1sqOF6SNhzKcPXjyv35ctpTEIoQ8p5UvGa4fZkK
+         DsNDtfxhNQhMl7UgYIgpMppSvipA/GXuwDN7m5Os2WuYmK8N8bTORTKfXyqfd+wH+fqr
+         aJgphCxJ+j7WFebJw6WjNkVfWbANTqIN1awXxm+9Ls5IDAZIuddccvAmVRJkOJ5QHW3P
+         JiuKnG2KAURXtf3iL23J7QvkaZ8OMgV/PwN445T6kJHzglCxwtroLSIsevtbqX63v8DK
+         FsBhcbABj6Ift+SpgkRE8A/kgGUyyAd9GpJCvRcQGoe77JV7aTtWXPBMp5qd+qKCMecd
+         YD5w==
+X-Gm-Message-State: ACrzQf26OX4C+3hfPW1fYnXy80mduJP4py5TIjLXnetNGUgDIXSmiEYg
+        KVatFTG1pqQH24U2pVLxXUM=
+X-Google-Smtp-Source: AMsMyM468ueCiGPw9Rp6pG6tj4yCN+Kg/96HSi3gaDaAY7Jy/SDnxCyzS2YodJhnzcubFb/rCwO4cw==
+X-Received: by 2002:a17:902:ab89:b0:186:7cfc:cde8 with SMTP id f9-20020a170902ab8900b001867cfccde8mr26293355plr.9.1667410149118;
+        Wed, 02 Nov 2022 10:29:09 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:1a:efea::75b])
+        by smtp.gmail.com with ESMTPSA id d6-20020a170903230600b0016f196209c9sm8651878plh.123.2022.11.02.10.28.55
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 10:28:37 -0700 (PDT)
-Received: by mail-wm1-f53.google.com with SMTP id ay14-20020a05600c1e0e00b003cf6ab34b61so1744890wmb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 10:28:36 -0700 (PDT)
-X-Received: by 2002:a05:600c:2212:b0:3cf:6068:3c40 with SMTP id
- z18-20020a05600c221200b003cf60683c40mr16617338wml.57.1667410116349; Wed, 02
- Nov 2022 10:28:36 -0700 (PDT)
+        Wed, 02 Nov 2022 10:29:08 -0700 (PDT)
+Message-ID: <b0aa0d72-d3f3-93a9-1fa9-553c1c0351ee@gmail.com>
+Date:   Thu, 3 Nov 2022 01:28:54 +0800
 MIME-Version: 1.0
-References: <1667237245-24988-1-git-send-email-quic_khsieh@quicinc.com>
- <94b507e8-5b94-12ae-4c81-95f5d36279d5@linaro.org> <deb60200-5a37-ec77-9515-0c0c89022174@quicinc.com>
- <CAD=FV=X_fs_4JYcRvAwkU9mAafOten9WdyzPfSVWdAU=ZMo8zg@mail.gmail.com>
- <155e4171-187c-4ecf-5a9b-12f0c2207524@linaro.org> <CAD=FV=Wk5rBSq9Mx1GCO0QFYckKV9KUFKL36Ld7dQX1ypHVcYw@mail.gmail.com>
- <CAD=FV=XTOUjVAGFWZ6xTkcNOrCT1p73aU-=KJNYUOxsS-BQsyA@mail.gmail.com> <c5aedb31-3881-50e7-f747-e75b18c3f4b8@linaro.org>
-In-Reply-To: <c5aedb31-3881-50e7-f747-e75b18c3f4b8@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 2 Nov 2022 10:28:22 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=WPde5wVOGCKQYGuGwgCwRebox4FF0MgV_2pPCTsfo_UA@mail.gmail.com>
-Message-ID: <CAD=FV=WPde5wVOGCKQYGuGwgCwRebox4FF0MgV_2pPCTsfo_UA@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/dp: remove limitation of link rate at 5.4G to
- support HBR3
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, vkoul@kernel.org,
-        daniel@ffwll.ch, airlied@linux.ie, agross@kernel.org,
-        quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.13.1
+Subject: Re: [PATCH 03/12] x86/hyperv: Reorder code in prep for subsequent
+ patch
+Content-Language: en-US
+To:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, luto@kernel.org,
+        peterz@infradead.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, lpieralisi@kernel.org,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
+        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, dan.j.williams@intel.com,
+        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        iommu@lists.linux.dev
+References: <1666288635-72591-1-git-send-email-mikelley@microsoft.com>
+ <1666288635-72591-4-git-send-email-mikelley@microsoft.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <1666288635-72591-4-git-send-email-mikelley@microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On 10/21/2022 1:57 AM, Michael Kelley wrote:
+> Reorder some code as preparation for a subsequent patch.  No
+> functional change.
+> 
+> Signed-off-by: Michael Kelley <mikelley@microsoft.com>
 
-On Wed, Nov 2, 2022 at 10:23 AM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> > 1. Someone figures out how to model this with the bridge chain and
-> > then we only allow HBR3 if we detect we've got a TCPC that supports
-> > it. This seems like the cleanest / best but feels like a long pole.
-> > Not only have we been trying to get the TCPC-modeled-as-a-bridge stuff
-> > landed for a long time but even when we do it we still don't have a
-> > solution for how to communicate the number of lanes and other stuff
-> > between the TCPC and the DP controller so we have to enrich the bridge
-> > interface.
->
-> I think we'd need some OOB interface. For example for DSI interfaces we
-> have mipi_dsi_device struct to communicate such OOB data.
->
-> Also take a note regarding data-lanes from my previous email.
-
-Right, we can somehow communicate the max link rate through the bridge
-chain to the DP controller in an OOB manner that would work.
-
-
-> > 2. We add in a DT property to the display controller node that says
-> > the max link rate for use on this board. This feels like a hack, but
-> > maybe it's not too bad. Certainly it would be incredibly simple to
-> > implement. Actually... ...one could argue that even if we later model
-> > the TCPC as a bridge that this property would still be valid / useful!
-> > You could certainly imagine that the SoC supports HBR3 and the TCPC
-> > supports HBR3 but that the board routing between the SoC and the TCPC
-> > is bad and only supports HBR2. In this case the only way out is
-> > essentially a "board constraint" AKA a DT property in the DP
-> > controller.
->
-> We have been discussing similar topics with Abhinav. Krzysztof suggested
-> using link-frequencies property to provide max and min values.
-
-This sounds good to me and seems worth doing even if we eventually do #1.
+Reviewed-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
+> ---
+>   arch/x86/hyperv/ivm.c | 68 +++++++++++++++++++++++++--------------------------
+>   1 file changed, 34 insertions(+), 34 deletions(-)
+> 
+> diff --git a/arch/x86/hyperv/ivm.c b/arch/x86/hyperv/ivm.c
+> index 1dbcbd9..f33c67e 100644
+> --- a/arch/x86/hyperv/ivm.c
+> +++ b/arch/x86/hyperv/ivm.c
+> @@ -235,40 +235,6 @@ void hv_ghcb_msr_read(u64 msr, u64 *value)
+>   EXPORT_SYMBOL_GPL(hv_ghcb_msr_read);
+>   #endif
+>   
+> -enum hv_isolation_type hv_get_isolation_type(void)
+> -{
+> -	if (!(ms_hyperv.priv_high & HV_ISOLATION))
+> -		return HV_ISOLATION_TYPE_NONE;
+> -	return FIELD_GET(HV_ISOLATION_TYPE, ms_hyperv.isolation_config_b);
+> -}
+> -EXPORT_SYMBOL_GPL(hv_get_isolation_type);
+> -
+> -/*
+> - * hv_is_isolation_supported - Check system runs in the Hyper-V
+> - * isolation VM.
+> - */
+> -bool hv_is_isolation_supported(void)
+> -{
+> -	if (!cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
+> -		return false;
+> -
+> -	if (!hypervisor_is_type(X86_HYPER_MS_HYPERV))
+> -		return false;
+> -
+> -	return hv_get_isolation_type() != HV_ISOLATION_TYPE_NONE;
+> -}
+> -
+> -DEFINE_STATIC_KEY_FALSE(isolation_type_snp);
+> -
+> -/*
+> - * hv_isolation_type_snp - Check system runs in the AMD SEV-SNP based
+> - * isolation VM.
+> - */
+> -bool hv_isolation_type_snp(void)
+> -{
+> -	return static_branch_unlikely(&isolation_type_snp);
+> -}
+> -
+>   /*
+>    * hv_mark_gpa_visibility - Set pages visible to host via hvcall.
+>    *
+> @@ -387,3 +353,37 @@ void hv_unmap_memory(void *addr)
+>   {
+>   	vunmap(addr);
+>   }
+> +
+> +enum hv_isolation_type hv_get_isolation_type(void)
+> +{
+> +	if (!(ms_hyperv.priv_high & HV_ISOLATION))
+> +		return HV_ISOLATION_TYPE_NONE;
+> +	return FIELD_GET(HV_ISOLATION_TYPE, ms_hyperv.isolation_config_b);
+> +}
+> +EXPORT_SYMBOL_GPL(hv_get_isolation_type);
+> +
+> +/*
+> + * hv_is_isolation_supported - Check system runs in the Hyper-V
+> + * isolation VM.
+> + */
+> +bool hv_is_isolation_supported(void)
+> +{
+> +	if (!cpu_feature_enabled(X86_FEATURE_HYPERVISOR))
+> +		return false;
+> +
+> +	if (!hypervisor_is_type(X86_HYPER_MS_HYPERV))
+> +		return false;
+> +
+> +	return hv_get_isolation_type() != HV_ISOLATION_TYPE_NONE;
+> +}
+> +
+> +DEFINE_STATIC_KEY_FALSE(isolation_type_snp);
+> +
+> +/*
+> + * hv_isolation_type_snp - Check system runs in the AMD SEV-SNP based
+> + * isolation VM.
+> + */
+> +bool hv_isolation_type_snp(void)
+> +{
+> +	return static_branch_unlikely(&isolation_type_snp);
+> +}
