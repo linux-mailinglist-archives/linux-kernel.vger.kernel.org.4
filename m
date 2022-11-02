@@ -2,176 +2,247 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4396E616E28
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 21:01:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6AEE8616E34
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 21:02:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbiKBUBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 16:01:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37204 "EHLO
+        id S230132AbiKBUCM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 16:02:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37678 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbiKBUBL (ORCPT
+        with ESMTP id S230454AbiKBUBr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 16:01:11 -0400
-Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB296E53;
-        Wed,  2 Nov 2022 13:01:08 -0700 (PDT)
-Received: by mail-oi1-x22d.google.com with SMTP id n83so20312191oif.11;
-        Wed, 02 Nov 2022 13:01:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NdYxLy6u/2PaTIupg+k2bBdapnT54tEDA9Zj5rVwx9I=;
-        b=bAVCp0ivJaQO14A0QNklaSQIqSD0fnB3qCvfGZk24diiJXROl20vlLybQHTqWsCAmd
-         G/OXrtfBqqVagHhnVljb3P4K1POpC+oMSjohUKIAU26KLaKRJc4r1uPq6NiktKorDDIa
-         czZhkVpV7cjbJw10jQ6cLNEiH4zM80BpD4X2GUYYKDEKQZlQfVZlX8/S2HUzIS5GT1Mx
-         UYarHeMq11u0lkibbOD8CWVpdyogUHObFPoBf83nIh6+PJWshohpERwc34q55ZiK2mYu
-         lL2/t29Z1BzWqlfoblPJuC6Gua9PE/lVxDcwcijz3jyG78oDxRo+KiwAPxxl0R9Id/M3
-         E2jA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NdYxLy6u/2PaTIupg+k2bBdapnT54tEDA9Zj5rVwx9I=;
-        b=RLU6ucL1+CyQqg6Q/Nh3kB/YugtA0rmHQ8/syAyzteqOs6gmY4BidQMETJcdlRL0YD
-         SrCPi0L2HbLb+1SgS1rsBEq6Uu7cqq2YkwsWvY0wNiQZwpB98SPrjkl/XvHOAIDmgGmX
-         OZFfP0nCvIIYIf2/CMqRQ35k8OxoCl2qv1tbTV3IJAMuEeYOyTZVgdaAoTZlrNv22tAZ
-         xAsqEtU+hGQJdVfzuzBogxl7+vNnyHJgJ662L88F167DyBOkVQbZpES5oB5Lo7La8aMw
-         ma+qRHcetydQrjcXEfDHgHCdRzlAH2WtKnrBBZCVxVJWC0u3VcEE1iTg+NvdhsoVO9LL
-         N66Q==
-X-Gm-Message-State: ACrzQf09e9aS/wASMcF2S/2r3rsKSVdAl9dnUfzI1Nn/JFBSe0swD0ot
-        hnVCmnHSMqxmWDyJvrGioIs=
-X-Google-Smtp-Source: AMsMyM7NdmpoQP25PH2Uc/dA20RwnF8f9qcE3BAQDocFFzqpofVxY8PDrwxFWjupI0R/+C+yTZmhlg==
-X-Received: by 2002:a05:6808:1442:b0:35a:1542:a1a6 with SMTP id x2-20020a056808144200b0035a1542a1a6mr8584650oiv.243.1667419267979;
-        Wed, 02 Nov 2022 13:01:07 -0700 (PDT)
-Received: from auvcetillem1m1.corp.emc.net ([143.166.81.254])
-        by smtp.gmail.com with ESMTPSA id n29-20020a0568080a1d00b003549397fde4sm4873182oij.54.2022.11.02.13.01.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 13:01:07 -0700 (PDT)
-From:   Stuart Hayes <stuart.w.hayes@gmail.com>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>,
-        Viresh Kumar <viresh.kumar@linaro.org>,
-        Stuart Hayes <stuart.w.hayes@gmail.com>,
-        Kyle Meyer <kyle.meyer@hpe.com>
-Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] cpufreq: acpi: Defer setting boost MSRs
-Date:   Wed,  2 Nov 2022 14:59:57 -0500
-Message-Id: <20221102195957.82871-1-stuart.w.hayes@gmail.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 2 Nov 2022 16:01:47 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7B3F51036;
+        Wed,  2 Nov 2022 13:01:44 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A2IGRv4010825;
+        Wed, 2 Nov 2022 20:00:51 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=ZEYHGwsVZ9i/ZMrlW5q0nkckbHNYGw87m2YtJ0AKGxQ=;
+ b=SXQ6VNpBNqZccLcMEzpdnny3NQLI105hgcR4DrBs/B//53X3no+zl9A0Jm012IoyLGY1
+ DS8OdPIG20oiGDEfEVCCzw0JgLjbWQVRdzOo4WynVDVw4LSgpZwCb7j5GAHd7rmybdIB
+ gJ2eWJ6nEKpZyw6fZlzCL1OfckGzioarDT/G+QHBAmEpzISRk45wptQbib2lDBXvXtML
+ pgOtAtrRdR2MdaSe5xBdrQHLlEGnElo9HmxpjJs+5FjYjn4UtP3vqbhtC5cj3Ww1ouGO
+ GAtAgve4864DPAmw/vj9KowwwHBPmiE5Od3nB2zr6rO9699u2mbtE1MvzUI4VxYbbYoX vg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kkvbydnfq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 20:00:51 +0000
+Received: from m0098421.ppops.net (m0098421.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A2Jeqvv013125;
+        Wed, 2 Nov 2022 20:00:50 GMT
+Received: from ppma04dal.us.ibm.com (7a.29.35a9.ip4.static.sl-reverse.com [169.53.41.122])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kkvbydneg-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 20:00:50 +0000
+Received: from pps.filterd (ppma04dal.us.ibm.com [127.0.0.1])
+        by ppma04dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A2JolxS021521;
+        Wed, 2 Nov 2022 20:00:49 GMT
+Received: from b01cxnp23032.gho.pok.ibm.com (b01cxnp23032.gho.pok.ibm.com [9.57.198.27])
+        by ppma04dal.us.ibm.com with ESMTP id 3kgutabwbh-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 20:00:49 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com ([9.208.128.112])
+        by b01cxnp23032.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A2K0lv166650482
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Nov 2022 20:00:47 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id CCF7258054;
+        Wed,  2 Nov 2022 20:00:46 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 0E5B458070;
+        Wed,  2 Nov 2022 20:00:43 +0000 (GMT)
+Received: from [9.160.116.108] (unknown [9.160.116.108])
+        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  2 Nov 2022 20:00:42 +0000 (GMT)
+Message-ID: <431304f4-cbe9-6453-cd3a-0843972ca368@linux.ibm.com>
+Date:   Wed, 2 Nov 2022 16:00:42 -0400
 MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2 1/7] vfio/ccw: create a parent struct
+Content-Language: en-US
+To:     Eric Farman <farman@linux.ibm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>
+Cc:     Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20221102150152.2521475-1-farman@linux.ibm.com>
+ <20221102150152.2521475-2-farman@linux.ibm.com>
+ <df037cd2e564acaa14c5a3358fd3386df29ad61e.camel@linux.ibm.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <df037cd2e564acaa14c5a3358fd3386df29ad61e.camel@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: 3fpTBz1LZ22r3buesVDvJ_LOREDV8ITb
+X-Proofpoint-ORIG-GUID: 5kUYJ_dzxBTVeb9OuF-AJbfKjVSjRI8Q
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-02_14,2022-11-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
+ priorityscore=1501 spamscore=0 malwarescore=0 adultscore=0
+ lowpriorityscore=0 suspectscore=0 clxscore=1015 mlxscore=0 impostorscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211020128
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When acpi-cpufreq is loaded, boost is enabled on every CPU (by setting an
-MSR) before the driver is registered with cpufreq.  This can be very time
-consuming, because it is done with a CPU hotplug startup callback, and
-cpuhp_setup_state() schedules the callback (cpufreq_boost_online()) to run
-on each CPU one at a time, waiting for each to run before calling the next.
+On 11/2/22 3:29 PM, Eric Farman wrote:
+> On Wed, 2022-11-02 at 16:01 +0100, Eric Farman wrote:
+>> Move the stuff associated with the mdev parent (and thus the
+>> subchannel struct) into its own struct, and leave the rest in
+>> the existing private structure.
+>>
+>> The subchannel will point to the parent, and the parent will point
+>> to the private, for the areas where one or both are needed. Further
+>> separation of these structs will follow.
+>>
+>> Signed-off-by: Eric Farman <farman@linux.ibm.com>
+>> ---
+>>  drivers/s390/cio/vfio_ccw_drv.c     | 96 ++++++++++++++++++++++++---
+>> --
+>>  drivers/s390/cio/vfio_ccw_ops.c     |  8 ++-
+>>  drivers/s390/cio/vfio_ccw_private.h | 20 ++++--
+>>  3 files changed, 100 insertions(+), 24 deletions(-)
+>>
+>> diff --git a/drivers/s390/cio/vfio_ccw_drv.c
+>> b/drivers/s390/cio/vfio_ccw_drv.c
+>> index 7f5402fe857a..06022fb37b9d 100644
+>> --- a/drivers/s390/cio/vfio_ccw_drv.c
+>> +++ b/drivers/s390/cio/vfio_ccw_drv.c
 
-If cpufreq_register_driver() fails--if, for example, there are no ACPI
-P-states present--this is wasted time.
+...
 
-Since cpufreq already sets up a CPU hotplug startup callback if and when
-acpi-cpufreq is registered, set the boost MSRs in acpi_cpufreq_cpu_init(),
-which is called by the cpufreq cpuhp callback.  This allows acpi-cpufreq to
-exit quickly if it is loaded but not needed.
+>>  static int vfio_ccw_sch_probe(struct subchannel *sch)
+>>  {
+>>         struct pmcw *pmcw = &sch->schib.pmcw;
+>>         struct vfio_ccw_private *private;
+>> +       struct vfio_ccw_parent *parent;
+>>         int ret = -ENOMEM;
+>>  
+>>         if (pmcw->qf) {
+>> @@ -213,41 +246,62 @@ static int vfio_ccw_sch_probe(struct subchannel
+>> *sch)
+>>                 return -ENODEV;
+>>         }
+>>  
+>> +       parent = kzalloc(sizeof(*parent), GFP_KERNEL);
+>> +       if (IS_ERR(parent))
+>> +               return PTR_ERR(parent);
+>> +
+>> +       dev_set_name(&parent->dev, "parent");
+>> +       parent->dev.parent = &sch->dev;
+>> +       parent->dev.release = &vfio_ccw_free_parent;
+>> +       ret = device_register(&parent->dev);
+>> +       if (ret)
+>> +               goto out_free;
+>> +
+>>         private = vfio_ccw_alloc_private(sch);
+>> -       if (IS_ERR(private))
+>> +       if (IS_ERR(private)) {
+>> +               put_device(&parent->dev);
+> 
+> This should've been device_unregister. (I could rearrange the code a
+> bit to avoid the mix of returns/gotos around here, but since the whole
+> series is trying to separate these two structs that seems unnecessary.)
+> 
+>>                 return PTR_ERR(private);
+>> +       }
+>>  
+>> -       dev_set_drvdata(&sch->dev, private);
+>> +       dev_set_drvdata(&sch->dev, parent);
+>> +       dev_set_drvdata(&parent->dev, private);
+>>  
+>> -       private->mdev_type.sysfs_name = "io";
+>> -       private->mdev_type.pretty_name = "I/O subchannel (Non-QDIO)";
+>> -       private->mdev_types[0] = &private->mdev_type;
+>> -       ret = mdev_register_parent(&private->parent, &sch->dev,
+>> +       parent->mdev_type.sysfs_name = "io";
+>> +       parent->mdev_type.pretty_name = "I/O subchannel (Non-QDIO)";
+>> +       parent->mdev_types[0] = &parent->mdev_type;
+>> +       ret = mdev_register_parent(&parent->parent, &sch->dev,
+>>                                    &vfio_ccw_mdev_driver,
+>> -                                  private->mdev_types, 1);
+>> +                                  parent->mdev_types, 1);
+>>         if (ret)
+>> -               goto out_free;
+>> +               goto out_unreg;
+>>  
+>>         VFIO_CCW_MSG_EVENT(4, "bound to subchannel %x.%x.%04x\n",
+>>                            sch->schid.cssid, sch->schid.ssid,
+>>                            sch->schid.sch_no);
+>>         return 0;
+>>  
+>> +out_unreg:
+>> +       device_unregister(&parent->dev);
+>>  out_free:
+>> +       dev_set_drvdata(&parent->dev, NULL);
+>>         dev_set_drvdata(&sch->dev, NULL);
+>>         vfio_ccw_free_private(private);
+>> +       put_device(&parent->dev);
+> 
+> While this...
+> 
+>>         return ret;
+>>  }
+>>  
+>>  static void vfio_ccw_sch_remove(struct subchannel *sch)
+>>  {
+>> -       struct vfio_ccw_private *private = dev_get_drvdata(&sch-
+>>> dev);
+>> +       struct vfio_ccw_parent *parent = dev_get_drvdata(&sch->dev);
+>> +       struct vfio_ccw_private *private = dev_get_drvdata(&parent-
+>>> dev);
+>>  
+>> -       mdev_unregister_parent(&private->parent);
+>> +       mdev_unregister_parent(&parent->parent);
+>>  
+>> +       device_unregister(&parent->dev);
+>>         dev_set_drvdata(&sch->dev, NULL);
+>>  
+>>         vfio_ccw_free_private(private);
+>> +       put_device(&parent->dev);
+> 
+> ...and this shouldn't even be there. Sorry for the brain fog.
+> 
 
-On one system with 192 CPUs, this patch speeds up boot by about 30 seconds.
-
-Signed-off-by: Stuart Hayes <stuart.w.hayes@gmail.com>
----
- drivers/cpufreq/acpi-cpufreq.c | 31 +++----------------------------
- 1 file changed, 3 insertions(+), 28 deletions(-)
-
-diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
-index 1bb2b90ebb21..cb167263de72 100644
---- a/drivers/cpufreq/acpi-cpufreq.c
-+++ b/drivers/cpufreq/acpi-cpufreq.c
-@@ -535,15 +535,6 @@ static void free_acpi_perf_data(void)
- 	free_percpu(acpi_perf_data);
- }
- 
--static int cpufreq_boost_online(unsigned int cpu)
--{
--	/*
--	 * On the CPU_UP path we simply keep the boost-disable flag
--	 * in sync with the current global state.
--	 */
--	return boost_set_msr(acpi_cpufreq_driver.boost_enabled);
--}
--
- static int cpufreq_boost_down_prep(unsigned int cpu)
- {
- 	/*
-@@ -897,6 +888,8 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
- 	if (perf->states[0].core_frequency * 1000 != freq_table[0].frequency)
- 		pr_warn(FW_WARN "P-state 0 is not max freq\n");
- 
-+	set_boost(policy, acpi_cpufreq_driver.boost_enabled);
-+
- 	return result;
- 
- err_unreg:
-@@ -916,6 +909,7 @@ static int acpi_cpufreq_cpu_exit(struct cpufreq_policy *policy)
- 
- 	pr_debug("%s\n", __func__);
- 
-+	cpufreq_boost_down_prep(policy->cpu);
- 	policy->fast_switch_possible = false;
- 	policy->driver_data = NULL;
- 	acpi_processor_unregister_performance(data->acpi_perf_cpu);
-@@ -972,25 +966,9 @@ static void __init acpi_cpufreq_boost_init(void)
- 	acpi_cpufreq_driver.set_boost = set_boost;
- 	acpi_cpufreq_driver.boost_enabled = boost_state(0);
- 
--	/*
--	 * This calls the online callback on all online cpu and forces all
--	 * MSRs to the same value.
--	 */
--	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "cpufreq/acpi:online",
--				cpufreq_boost_online, cpufreq_boost_down_prep);
--	if (ret < 0) {
--		pr_err("acpi_cpufreq: failed to register hotplug callbacks\n");
--		return;
--	}
- 	acpi_cpufreq_online = ret;
- }
- 
--static void acpi_cpufreq_boost_exit(void)
--{
--	if (acpi_cpufreq_online > 0)
--		cpuhp_remove_state_nocalls(acpi_cpufreq_online);
--}
--
- static int __init acpi_cpufreq_init(void)
- {
- 	int ret;
-@@ -1032,7 +1010,6 @@ static int __init acpi_cpufreq_init(void)
- 	ret = cpufreq_register_driver(&acpi_cpufreq_driver);
- 	if (ret) {
- 		free_acpi_perf_data();
--		acpi_cpufreq_boost_exit();
- 	}
- 	return ret;
- }
-@@ -1041,8 +1018,6 @@ static void __exit acpi_cpufreq_exit(void)
- {
- 	pr_debug("%s\n", __func__);
- 
--	acpi_cpufreq_boost_exit();
--
- 	cpufreq_unregister_driver(&acpi_cpufreq_driver);
- 
- 	free_acpi_perf_data();
--- 
-2.31.1
+Thanks, with these changes I no longer see refcount underflows.  I'll continue reviewing with those changes presumed for v3.
 
