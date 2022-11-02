@@ -2,97 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ECC01617094
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 23:22:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E80B61709E
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 23:23:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230370AbiKBWW2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 18:22:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37320 "EHLO
+        id S231485AbiKBWXQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 18:23:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbiKBWW0 (ORCPT
+        with ESMTP id S230132AbiKBWXJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 18:22:26 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E2FEA474
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 15:22:25 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 23AF061C7B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 22:22:25 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 34911C433D6;
-        Wed,  2 Nov 2022 22:22:24 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667427744;
-        bh=tHrNBW9mMlHHU97INamlJtFogG4JV+2Fd+CPniqM56M=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=f+UN9Hsk9O5pYn6r2EWR5jGCatbDYYprh7TtCc0u5H1/2qvSOgHNstQ6oGqnQi9Z7
-         KmAUwwTIIbDA15fjbG2Gp0rcLqqYfn3/zHQZDMAlOCxMrxIhDiFLOIIgO/o7Wxc8CA
-         QjU4ht38UYUN97aT9DtpfX/msdvheL4uI+yHp3uoN++km0TIbPiwhNnEx7LywpJ8OD
-         u7CSfw5lSUrG0TlqdWymM7kCCw8PZ8LBpaDaXTrDrrsXF99aDkoWh0FW16FLnU4cRz
-         t/tornJFlUDL00mq9rW6sQrSkvc35dGL2r2EGRJb3Z+dEPbzpawtVGQz24cz98JTGL
-         E30DT8B744tuA==
-Date:   Wed, 2 Nov 2022 15:22:22 -0700
-From:   Josh Poimboeuf <jpoimboe@kernel.org>
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, djwong@kernel.org,
-        yujie.liu@intel.com, tglx@linutronix.de, joao.moreira@intel.com,
-        samitolvanen@google.com
-Subject: Re: [PATCH 3/5] objtool: Avoid O(bloody terrible) behaviour -- an
- ode to libelf
-Message-ID: <20221102222222.r4xkj6uynlj6n2t6@treble>
-References: <20221028194022.388521751@infradead.org>
- <20221028194453.461658986@infradead.org>
+        Wed, 2 Nov 2022 18:23:09 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 636745FDD;
+        Wed,  2 Nov 2022 15:23:08 -0700 (PDT)
+Date:   Wed, 02 Nov 2022 22:23:04 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1667427786;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SAMX8ZfmH3vXs4ns1qUTMjw38glCAwWY6fHEzJZ3b3o=;
+        b=ywNC0eXjj3rXE+MmLzEGIRBKV6hBu9hs495dq8QlmFzL5raU6Hzg8VGAIOP8HJawqNBSvy
+        oO4+lxS7r+sFuYLIMU7Ej+txBUM1V75/hPXPDlSFaMTcXyztH6Qy4M1y4C7jvXWzizKvH1
+        gEZacD6GXJoqRTTDgwutMZrMX2wp6gvF1Un/SrgxloNT8zj9RPlgDW5IvV7O3m9725Q6bj
+        d28tm9TfwYtVFtnxm9X7zsOHYhCPj+r6yGFG9dfjv8WIifs2MPjSQB1zxMZIQnwr2JRJvp
+        E1SowzK0ClvrZDQQDRRrWHxxj7LpCjvW/MsdPCKDQNlayB38SyUmx/dNWuwK5w==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1667427786;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=SAMX8ZfmH3vXs4ns1qUTMjw38glCAwWY6fHEzJZ3b3o=;
+        b=esV+tWklemYRXEVmZB9UbLPrd42OBAa0cQ8hOAtGfQFgvfg9QUGT/ZrS59jz9ZeOJMmuJe
+        FzRL20dAgfOMfbBw==
+From:   "tip-bot2 for Kan Liang" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: perf/urgent] perf/x86/intel: Add Cooper Lake stepping to
+ isolation_ucodes[]
+Cc:     Kan Liang <kan.liang@linux.intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
+        stable@vger.kernel.org, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221031154550.571663-1-kan.liang@linux.intel.com>
+References: <20221031154550.571663-1-kan.liang@linux.intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221028194453.461658986@infradead.org>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <166742778433.6127.17896330702614964032.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 09:40:25PM +0200, Peter Zijlstra wrote:
-> Due to how gelf_update_sym*() requires an Elf_Data pointer, and how
-> libelf keeps Elf_Data in a linked list per section,
-> elf_update_symbol() ends up having to iterate this list on each
-> update to find the correct Elf_Data for the index'ed symbol.
-> 
-> By allocating one Elf_Data per new symbol, the list grows per new
-> symbol, giving an effective O(n^2) insertion time. This is obviously
-> bloody terrible.
-> 
-> Therefore over-allocate the Elf_Data when an extention is needed.
-> Except it turns out libelf disregards Elf_Scn::sh_size in favour of
-> the sum of Elf_Data::d_size. IOW it will happily write out all the
-> unused space and fill it with:
-> 
->   0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND
-> 
-> entries (aka zeros). Which obviously violates the STB_LOCAL placement
-> rule, and is a general pain in the backside for not being the desired
-> behaviour.
-> 
-> Manually fix-up the Elf_Data size to avoid this problem before calling
-> elf_update().
-> 
-> This significantly improves performance when adding a significant
-> number of symbols.
-> 
-> Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+The following commit has been merged into the perf/urgent branch of tip:
 
-Instead of going through libelf to add each symbol, and
-adjusting/shifting/reallocating the d_buf one symbol at a time, it would
-probably be a lot easier (and faster) to just manually do all that at
-the end, just before writing the file.
+Commit-ID:     6f8faf471446844bb9c318e0340221049d5c19f4
+Gitweb:        https://git.kernel.org/tip/6f8faf471446844bb9c318e0340221049d5c19f4
+Author:        Kan Liang <kan.liang@linux.intel.com>
+AuthorDate:    Mon, 31 Oct 2022 08:45:50 -07:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Wed, 02 Nov 2022 12:22:07 +01:00
 
-See for example what kpatch does:
+perf/x86/intel: Add Cooper Lake stepping to isolation_ucodes[]
 
-  https://github.com/dynup/kpatch/blob/master/kpatch-build/kpatch-elf.c#L725
+The intel_pebs_isolation quirk checks both model number and stepping.
+Cooper Lake has a different stepping (11) than the other Skylake Xeon.
+It cannot benefit from the optimization in commit 9b545c04abd4f
+("perf/x86/kvm: Avoid unnecessary work in guest filtering").
 
--- 
-Josh
+Add the stepping of Cooper Lake into the isolation_ucodes[] table.
+
+Signed-off-by: Kan Liang <kan.liang@linux.intel.com>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Cc: stable@vger.kernel.org
+Link: https://lkml.kernel.org/r/20221031154550.571663-1-kan.liang@linux.intel.com
+---
+ arch/x86/events/intel/core.c | 1 +
+ 1 file changed, 1 insertion(+)
+
+diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+index a646a5f..1b92bf0 100644
+--- a/arch/x86/events/intel/core.c
++++ b/arch/x86/events/intel/core.c
+@@ -4911,6 +4911,7 @@ static const struct x86_cpu_desc isolation_ucodes[] = {
+ 	INTEL_CPU_DESC(INTEL_FAM6_SKYLAKE_X,		 5, 0x00000000),
+ 	INTEL_CPU_DESC(INTEL_FAM6_SKYLAKE_X,		 6, 0x00000000),
+ 	INTEL_CPU_DESC(INTEL_FAM6_SKYLAKE_X,		 7, 0x00000000),
++	INTEL_CPU_DESC(INTEL_FAM6_SKYLAKE_X,		11, 0x00000000),
+ 	INTEL_CPU_DESC(INTEL_FAM6_SKYLAKE_L,		 3, 0x0000007c),
+ 	INTEL_CPU_DESC(INTEL_FAM6_SKYLAKE,		 3, 0x0000007c),
+ 	INTEL_CPU_DESC(INTEL_FAM6_KABYLAKE,		 9, 0x0000004e),
