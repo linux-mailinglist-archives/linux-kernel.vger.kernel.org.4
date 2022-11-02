@@ -2,76 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 328B5615789
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 03:24:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97D9F61578B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 03:25:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230000AbiKBCYs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 22:24:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48736 "EHLO
+        id S230039AbiKBCZg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 22:25:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49166 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229841AbiKBCYp (ORCPT
+        with ESMTP id S229841AbiKBCZd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 22:24:45 -0400
-Received: from mail-pl1-x62c.google.com (mail-pl1-x62c.google.com [IPv6:2607:f8b0:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EBBD6577
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 19:24:44 -0700 (PDT)
-Received: by mail-pl1-x62c.google.com with SMTP id p21so11405237plr.7
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 19:24:44 -0700 (PDT)
+        Tue, 1 Nov 2022 22:25:33 -0400
+Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFCB64DD
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 19:25:29 -0700 (PDT)
+Received: by mail-pj1-x102e.google.com with SMTP id b11so14934630pjp.2
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 19:25:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=kernel-dk.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=S7UBdmk5MbBq8xf2xERnJFzAhfjmMFD1Ky4jz35lNF8=;
-        b=Ov3ploiPrzbeq6flPiF5LhBY7nXtGzNgcCAIY30CnXl+B32v/IR7MR9/Rr7Y5yuWlK
-         yzO9kkalrV7/xaphq3qK7InlXhNHnVNq0gvmWKqYQsr1S3A+U5F/XTl2w9rtiOy3zn72
-         QhjChHTrUAzLJd39wvxVjEkG4pGXGaVaBK5U4flJlX+0boaeHtRZWOuZGTIWo+dBjlv0
-         it64h/ou+b/y6xcAl7s8bSFN3dLtinvtt7Fo3iRcOSBVO1DSzdGijmNgbb4LafoQvvNq
-         yw3BWEYKEKxP9N8XKSQox7JZixChmshToPYAbDvxd9BeL5DzUEr8Aa6lKQKQTfXr4Kvd
-         EFlg==
+        bh=NVMLoWhBO3smWYjRe8JlG4e5abrqqdBoJZY3LBsOWok=;
+        b=kG99P25HjBgpLUF5bSCezusrFavecyfkWN1KtJIfVpYe9wEQpJIPP6v/vbx50FkYmF
+         dZ2LXiC7+jEJR692C7ZVwuFNVlhpZntx9rNaniONrXYVz0t3wRg6mN+LdNEYxyYoQWUI
+         aeU5OzPhITdHStP/h/G1t6HmHzJ6miul3TYIQWZyN0kTxqEfBVdY4gK4dsUE9xnHnkQW
+         13E06uBz1NtOuL1YNOVp1XvI1lZ9VOT661qtzgPkU1C9LwkdHiGttukdtiA5dxpPw+9j
+         raLt9Nxp2MJB3ek5TtDlIv4PHped/KXzHQBQXLxzeBzlU8vo1xv1q91/jrAtza/B1iAX
+         o1+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S7UBdmk5MbBq8xf2xERnJFzAhfjmMFD1Ky4jz35lNF8=;
-        b=rqmq8LSUbLo+hzXzLi25J9AvjDkYzYtIuuI5eOiTp6KCjvXFYgTq5Qk3zPADKmH37o
-         Zq4cwsYcT/vPqdeFQ7SjE8E4geVysYRmsgmhhUzMonyv58TqKvnKVvRTBv/RC8bSPZ6g
-         KVAtxp6tHeB1wwZAOOugJXTTtWM9YW22APk7xdN4TC2rEAAfND9a+OYZ6lFwyVzJ3gip
-         ivgVUubakGiAD0ZFMcsHdwgRfPfged6blh4B+T0YnXSCpdB9xAK2MWuECq+zXOA5+ghY
-         hevOPWOTlhDcD8uhKpiyNfhDTOm6QdER5tP+Zmw0nPbD/udnxGaHOT15NPSLVPhE3aq5
-         j9xg==
-X-Gm-Message-State: ACrzQf1OBvA816bJBI/S8sb+rFu4A+uWq8ZXE/eLSNtHq33NA6mMazWt
-        ccqsO5WMJh218g556sZMxpHw+A==
-X-Google-Smtp-Source: AMsMyM7f3lJIE5Nd37JDrODYmcoJXutEpbXq+qiZ6RiEAYOekxd2L2qLxa6g18v1swxU0Uu3FLNHng==
-X-Received: by 2002:a17:903:41cc:b0:186:b756:a5f0 with SMTP id u12-20020a17090341cc00b00186b756a5f0mr22440171ple.132.1667355884067;
-        Tue, 01 Nov 2022 19:24:44 -0700 (PDT)
+        bh=NVMLoWhBO3smWYjRe8JlG4e5abrqqdBoJZY3LBsOWok=;
+        b=f3hAhE/GW91x5uIK2h0voVLZFT5NmJTezYHGDXVEL5Icrn1/hmd3Gz+kT8Awy2uCkP
+         Mqe3txeCCdNgxrwh2z0B/1X/kJ//C30xJvBWpiHCO7r2jnL0GRv4sqryOZye9C9J6HfI
+         Uh77Mh4d5beOh4ALow2EDZZbcLdxuUhtYad1o1yzVLNjEkmKzOI/ADI4xHwlc/ysgXbu
+         Z+CzSrIMZmEC695zBn5brp0CcT43EovMm9xtEGFRTBjkxJqHUH2iUhLqHW1gw+36ggaZ
+         pJSyNLK6b8lPnw9H7GKsZuRGo0Kd/JBCDCiWgHa4lA9HUKKW5/cClkGYBs1u9Y5LpFXD
+         fEJQ==
+X-Gm-Message-State: ACrzQf1WtcqsIPzfiSor9+3a7Lx7ccg+cm+O5/lyuzVuVOrxsuTacGd1
+        e1KeYocsajwTkIj8T9KQQL0YLw==
+X-Google-Smtp-Source: AMsMyM43thENVfIBk2batYPleifjpAa4i8DNg6r23LeH0bKunT6q58WuTqC68bwwJf0yQZ9XWAuVcw==
+X-Received: by 2002:a17:903:110f:b0:178:a07e:e643 with SMTP id n15-20020a170903110f00b00178a07ee643mr21757437plh.41.1667355929362;
+        Tue, 01 Nov 2022 19:25:29 -0700 (PDT)
 Received: from [192.168.1.136] ([198.8.77.157])
-        by smtp.gmail.com with ESMTPSA id z7-20020aa79587000000b0056bb4bbfb9bsm7377584pfj.95.2022.11.01.19.24.42
+        by smtp.gmail.com with ESMTPSA id g18-20020a170902869200b0017f592a7eccsm1189675plo.298.2022.11.01.19.25.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Nov 2022 19:24:43 -0700 (PDT)
-Message-ID: <0ddaf04b-84b5-8173-a67c-5dadce684108@kernel.dk>
-Date:   Tue, 1 Nov 2022 20:24:41 -0600
+        Tue, 01 Nov 2022 19:25:28 -0700 (PDT)
+Message-ID: <79c5d83f-27b2-dbe0-826b-bcb671e0766f@kernel.dk>
+Date:   Tue, 1 Nov 2022 20:25:27 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.0
-Subject: Re: [PATCH -next v4 1/5] block, bfq: remove set but not used variable
- in __bfq_entity_update_weight_prio
+Subject: Re: [PATCH 4/4] blk-mq: improve readability of blk_mq_alloc_request()
 Content-Language: en-US
-To:     Yu Kuai <yukuai1@huaweicloud.com>, jack@suse.cz,
-        paolo.valente@linaro.org
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yi.zhang@huawei.com,
-        "yukuai (C)" <yukuai3@huawei.com>
-References: <20221102022542.3621219-1-yukuai1@huaweicloud.com>
- <20221102022542.3621219-2-yukuai1@huaweicloud.com>
- <7f7e59cb-e0b8-0db5-7c46-11aea963bcfa@kernel.dk>
- <ee543096-ae21-99d3-f3a5-483deab03a5f@kernel.dk>
- <61725ff6-6da3-3d3c-4261-7f05c57ab9da@huaweicloud.com>
+To:     Jinlong Chen <nickyc975@zju.edu.cn>, Christoph Hellwig <hch@lst.de>
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <cover.1667314759.git.nickyc975@zju.edu.cn>
+ <81fcbc046c9ea96cdfd8e20d1edc8e64c4d08153.1667314759.git.nickyc975@zju.edu.cn>
+ <20221101173727.GC20690@lst.de>
+ <3caa5abc.16387a.1843622d8cf.Coremail.nickyc975@zju.edu.cn>
 From:   Jens Axboe <axboe@kernel.dk>
-In-Reply-To: <61725ff6-6da3-3d3c-4261-7f05c57ab9da@huaweicloud.com>
+In-Reply-To: <3caa5abc.16387a.1843622d8cf.Coremail.nickyc975@zju.edu.cn>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=1.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_SBL_CSS,
         SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
@@ -82,28 +77,44 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/1/22 8:18 PM, Yu Kuai wrote:
-> Hi,
-> 
-> 在 2022/11/02 10:11, Jens Axboe 写道:
->> On 11/1/22 8:09 PM, Jens Axboe wrote:
->>> On 11/1/22 8:25 PM, Yu Kuai wrote:
->>>> From: Yu Kuai <yukuai3@huawei.com>
->>>>
->>>> After the patch "block, bfq: cleanup bfq_weights_tree add/remove apis"),
->>>> the local variable 'bfqd' is not used anymore, thus remove it.
+On 11/1/22 8:19 PM, Jinlong Chen wrote:
+>> On Tue, Nov 01, 2022 at 11:11:37PM +0800, Jinlong Chen wrote:
+>>> Add a helper blk_mq_alloc_request_nocache() to alloc request without
+>>> cache. This makes blk_mq_alloc_request() more readable.
 >>>
->>> Please add a Fixes tag.
+>>> Signed-off-by: Jinlong Chen <nickyc975@zju.edu.cn>
+>>> ---
+>>>  block/blk-mq.c | 47 +++++++++++++++++++++++++++++------------------
+>>>  1 file changed, 29 insertions(+), 18 deletions(-)
+>>>
+>>> diff --git a/block/blk-mq.c b/block/blk-mq.c
+>>> index 87a6348a0d0a..2fae111a42c8 100644
+>>> --- a/block/blk-mq.c
+>>> +++ b/block/blk-mq.c
+>>> @@ -572,36 +572,47 @@ static struct request *blk_mq_alloc_cached_request(struct request_queue *q,
+>>>  	return rq;
+>>>  }
+>>>  
+>>> +static struct request *blk_mq_alloc_request_nocache(struct request_queue *q,
+>>> +		blk_opf_t opf, blk_mq_req_flags_t flags)
 >>
->> Looks like the rest were good to go, so I added it myself.
+>> The name is a bit odd, but I can't think off a better one.
+>>
+>>> +	struct blk_mq_alloc_data data = {
+>>>  			.q		= q,
+>>>  			.flags		= flags,
+>>>  			.cmd_flags	= opf,
+>>>  			.nr_tags	= 1,
+>>>  		};
+>>
+>> And this now has superflous indenation.  Overall, while the separate
+>> helper looks marginally nicer, I'm not really sure it is worth the
+>> churn.
 > 
-> Thanks for helping out. I'm not sure which commit id to use since the
-> fixed patch is not in linux-next yet, does the commit id stay the same
-> when the patch applied from for-6.2 to next ?
+> I'll drop the patch if you think it is not worth the churn. But I
+> started doing this because of the following goto statement:
 
-linux-next shas are not stable, but since you're sending this to the
-linux-block list and against the block tree, that's obviously where
-you'd find that commit.
+Please just drop it, I don't think it's an improvement.
 
 -- 
 Jens Axboe
