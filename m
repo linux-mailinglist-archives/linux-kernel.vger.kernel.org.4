@@ -2,123 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F039616D2D
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:50:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BE2EB616D32
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:52:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231703AbiKBSup (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 14:50:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42920 "EHLO
+        id S231682AbiKBSwY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 14:52:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49646 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231752AbiKBSud (ORCPT
+        with ESMTP id S231336AbiKBSwV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:50:33 -0400
-Received: from mail-oi1-x22e.google.com (mail-oi1-x22e.google.com [IPv6:2607:f8b0:4864:20::22e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CFB5D22505;
-        Wed,  2 Nov 2022 11:50:32 -0700 (PDT)
-Received: by mail-oi1-x22e.google.com with SMTP id n186so2816735oih.7;
-        Wed, 02 Nov 2022 11:50:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xkro2mEfGgqHjQSLdYSXtUVFZaecXrTiFKLF9xcuNAE=;
-        b=Q5Qgebhy//4ker67ANEAwkDUXvofa0yQUoqJGlJPVx1fnaFF1FPTNBKM6p5vW+g7ul
-         Fnn/KOThwp+dGjE9aqlX/NONFGzYYMvAGZr0YP8jlrdbX512iIZG30ODmNWjPvpqOStY
-         D8On9qPHLh4IZ/uLfSuqP6qEbftBvCek6EBwirP+NS+8Q/eW0NYCRmWOyzBAxaQKGx97
-         tUbcvNJuwBpR2bDe13W6cPOfRsqNtGyKTk0w/teKazhChHylKMyixQPrk2bbuf3Gh3zR
-         CDoiNx7CdMrTdLKkNQ+RjYgPnNDC54Sp7g+n83jti6sNO7ko9qLhBYQPsyFN1x6ZHkRw
-         ap2w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=xkro2mEfGgqHjQSLdYSXtUVFZaecXrTiFKLF9xcuNAE=;
-        b=gREXqxW3a0TW/YYZfsysF9MFGFN/aY2x6iuOPPgZ/gjR5XbIHVdzZKsZDsNYp19Bmv
-         nyxwjGeHE1xcUhA3JeQpA+rxt+TnrOzxKb14CdLXGbl6aONENcLLhMNAY2sQW7uvaws8
-         NCQ9UekjqI0aG8UPyBPpQOm0e3qZTyeUkBe+z8x1t8swaZ+REt+xWy9nNgx6A36CV1r1
-         DjWzKL+GUaXQktoLQFuvVLfsNeykmMIkt/XZpAkZwcSzGZ/UIMRWXE55eQBm7jM9iexe
-         ku3XCaQlzYyMlkj4j1VeY+rHcUB0A3gepSWemdQiVxxdafKVHZVg6JcTVE4/SYLKUAW4
-         UZ0Q==
-X-Gm-Message-State: ACrzQf2Ki6mHqd8BKiwnd/5c/rDB70HV5SZIsVbOcRHXBmWTjbhUK6pi
-        FbV5Yw+nqcWCN8xEXqUQqSo=
-X-Google-Smtp-Source: AMsMyM4wRjOrLkZkv0Wsv4fSrtftM2IOJS3YQdgCg/XxQIIq/516uB1XZxhl0G7ZD+y8CqcqDNXoGA==
-X-Received: by 2002:aca:c088:0:b0:35a:436c:39de with SMTP id q130-20020acac088000000b0035a436c39demr1579444oif.290.1667415032177;
-        Wed, 02 Nov 2022 11:50:32 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id bl8-20020a056808308800b0035028730c90sm4798536oib.1.2022.11.02.11.50.31
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 11:50:31 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 2 Nov 2022 11:50:30 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     "Rafael J . Wysocki" <rafael@kernel.org>
-Cc:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 0/9] thermal/core: Protect thermal device operations
- against removal
-Message-ID: <20221102185030.GA2026081@roeck-us.net>
-References: <20221017130910.2307118-1-linux@roeck-us.net>
+        Wed, 2 Nov 2022 14:52:21 -0400
+Received: from mail.netfilter.org (mail.netfilter.org [217.70.188.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 9B196CEF;
+        Wed,  2 Nov 2022 11:52:20 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 19:52:14 +0100
+From:   Pablo Neira Ayuso <pablo@netfilter.org>
+To:     Michael Lilja <michael.lilja@gmail.com>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org
+Subject: Re: [PATCH] Periodically flow expire from flow offload tables
+Message-ID: <Y2K8XnFZvZeD4MEg@salvia>
+References: <20221023171658.69761-1-michael.lilja@gmail.com>
+ <Y1fC5K0EalIYuB7Y@salvia>
+ <381FF5B6-4FEF-45E9-92D6-6FE927A5CC2D@gmail.com>
+ <Y1fd+DEPZ8xM2x5B@salvia>
+ <F754AC3A-D89A-4CF7-97AE-CA59B18A758E@gmail.com>
+ <Y1kQ9FhrwxCKIdoe@salvia>
+ <25246B91-B5BE-43CA-9D98-67950F17F0A1@gmail.com>
+ <03E5D5FA-5A0D-4E5A-BA32-3FE51764C02E@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221017130910.2307118-1-linux@roeck-us.net>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <03E5D5FA-5A0D-4E5A-BA32-3FE51764C02E@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Wed, Oct 26, 2022 at 09:40:11PM +0200, Michael Lilja wrote:
+> Hi,
+> 
+> I just quickly tried following the flow_offload_teardown() path instead of clearing IPS_OFFLOAD in flow_offload_del() and it does have some side effects. The flow is added again before the HW has actually reported it to be NF_FLOW_HW_DEAD. 
+> 
+> The sequence with my patch is:
+>   : Retire -> Remove from hw tables -> Remove from sw tables -> kfree(flow) -> flow_offload_add()
+> 
+> But if flow_offload_teardown() is called on expire I see:
+>   : Retire -> Remove from hw tables -> flow_offload_add() -> Remove from sw tables -> kfree(flow)
+>  
+> I need to investigate why this happens, maybe the IPS_OFFLOAD flag is cleared too early and should not be cleared until the flow is actually removed, like I do? Maybe the issue is not seen before because on timeout or flow_is_dying() no packet arrive to create the flow again prematurely?
 
-On Mon, Oct 17, 2022 at 06:09:01AM -0700, Guenter Roeck wrote:
-> Accesses to thermal zones, and with it to thermal zone device operations,
-> are still possible after the thermal zone device has been unregistered.
-> For example, thermal_zone_get_temp() can be called from temp_show()
-> in thermal_sysfs.c if the sysfs attribute was opened before the thermal
-> device was unregistered. This is problematic and may result in crashes
-> since the operations data structure and the underlying code may be gone
-> when the calls are made.
-> 
-> The following series solves the problem by protecting accesses to thermal
-> device operations with the thermal device mutex, and by verifying that the
-> thermal device is still registered after the mutex has been acquired.
-> 
-> This was previously sent as RFC/RFT as single patch [1]. The code was reworked
-> to match thermal subsystem changes made between v6.0 and v6.1, and it was
-> split into several patches to simplify review.
-> 
+Hm, IPS_OFFLOAD should be cleared from flow_offload_del() then, it is
+cleared too early.
 
-Any thoughts / comments / feedback on this series ?
-
-Thanks,
-Guenter
-
-> [1] https://lore.kernel.org/linux-pm/20221004033936.1047691-1-linux@roeck-us.net/
-> 
-> ----------------------------------------------------------------
-> Guenter Roeck (9):
->       thermal/core: Destroy thermal zone device mutex in release function
->       thermal/core: Delete device under thermal device zone lock
->       thermal/core: Ensure that thermal device is registered in thermal_zone_get_temp
->       thermal/core: Move parameter validation from __thermal_zone_get_temp to thermal_zone_get_temp
->       thermal/core: Introduce locked version of thermal_zone_device_update
->       thermal/core: Protect hwmon accesses to thermal operations with thermal zone mutex
->       thermal/core: Protect sysfs accesses to thermal operations with thermal zone mutex
->       thermal/core: Remove thermal_zone_set_trips()
->       thermal/core: Protect thermal device operations against thermal device removal
-> 
->  drivers/thermal/thermal_core.c    | 76 ++++++++++++++++++++++++--------------
->  drivers/thermal/thermal_core.h    |  3 +-
->  drivers/thermal/thermal_helpers.c | 65 ++++++++++++++++++++++-----------
->  drivers/thermal/thermal_hwmon.c   | 14 +++++--
->  drivers/thermal/thermal_sysfs.c   | 77 +++++++++++++++++++++++++++++++++------
->  5 files changed, 169 insertions(+), 66 deletions(-)
+I'll post a fix for nf.git first then I propose to follow up on this
+flowtable feature. I'll keep you on Cc.
