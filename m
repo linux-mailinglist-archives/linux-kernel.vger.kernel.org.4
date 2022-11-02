@@ -2,93 +2,53 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CEF1616F5A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 22:05:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BF044616F57
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 22:05:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231441AbiKBVFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 17:05:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50512 "EHLO
+        id S231429AbiKBVFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 17:05:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50214 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230499AbiKBVFp (ORCPT
+        with ESMTP id S230123AbiKBVFR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 17:05:45 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7C8DFBA
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 14:05:44 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A2JTVqw023555;
-        Wed, 2 Nov 2022 21:04:06 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=rC0roGr/5SlhhcwPh6Z3ZFgwAoKnXl1OYijcbifeGBs=;
- b=CuZFazWdj2W1/O7m3emL3SXIvl5IsrkmH7tKQZEhKEek4lRo3eOKOWbXSArgHzNXWSoj
- H2bMQtpN/mPCltHa/H7dyqmkwM7HSEGAmW0gzWNEATGdxwn1aCg0sWfk/j6PfVwRtO3M
- SMkse33y50lh2mz1BzzDj4QerLptjkFNgqGduZYHBgS5YyzWR8VELUHPhHZe9SdAVN1P
- 4sZODbQAJ07k53+bfoMLb1zKyfzhQya9aJb+qi5eXCec+ig2pAFARmdavfXxgfSNWjP3
- JgarAsrxZAaHW2+/2A9wZgaX+29O6DEANMv+pZxdrWFHXJ3hop8SWNqrHLO5auaWyRzE ZA== 
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kkv6cgn8g-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Nov 2022 21:04:06 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A2L45Fw008653
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 2 Nov 2022 21:04:05 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 2 Nov 2022
- 14:04:03 -0700
-Message-ID: <5979d266-e864-cc1c-fe2b-2c81f5223076@quicinc.com>
-Date:   Wed, 2 Nov 2022 15:04:02 -0600
+        Wed, 2 Nov 2022 17:05:17 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1022EDF31
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 14:05:17 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B4880B8250A
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 21:05:15 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26B53C433D6;
+        Wed,  2 Nov 2022 21:05:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667423114;
+        bh=Qx1Z0ButEyWpo8X9guW947tzbbEMRctWfpxqnwuqzkc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=E2ZaMDBrXAeWBVhRZvTXGCsybElLDGyIKyZpfTb3IUhmX8areS6HyWJ39l87jfzEs
+         qMC0yYBp/CkhFgz4ixuWbtsvPb+Q+VcmmYEh/GjGtL85EMilZKu9Yu12dnUbWbz1cc
+         mex4efMIHoCQJm6QFlKmapPYdHiwae8TXYVXm2A3lo/IeebxrYt7S28b9B6j3Sm3NE
+         mmWDOWclhYCmGIh1iujrBK2t7SL0nNndq/pXL4iiG3dZe+SWE5DHvmxNhPzGj4Sygo
+         VsM+fxhJtgCUYUfr03CkACt9k2k6eLrPuAHPrb2AN6CvaGEQL3jDJagqGtYleJhTJh
+         QLj9GgFJUGJhQ==
+Date:   Wed, 2 Nov 2022 14:05:12 -0700
+From:   Josh Poimboeuf <jpoimboe@kernel.org>
+To:     "Jiri Slaby (SUSE)" <jirislaby@kernel.org>
+Cc:     peterz@infradead.org, linux-kernel@vger.kernel.org,
+        Jiri Slaby <jslaby@suse.cz>, Jason Baron <jbaron@akamai.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ard Biesheuvel <ardb@kernel.org>
+Subject: Re: [PATCH] MAINTAINERS: add static_call_inline.c to STATIC
+ BRANCH/CALL
+Message-ID: <20221102210512.nnspywtg265z7pst@treble>
+References: <20221102084134.4094-1-jirislaby@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [RFC PATCH v2 1/3] drivers/accel: define kconfig and register a
- new major
-Content-Language: en-US
-To:     Oded Gabbay <ogabbay@kernel.org>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-CC:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>
-References: <20221102203405.1797491-1-ogabbay@kernel.org>
- <20221102203405.1797491-2-ogabbay@kernel.org>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20221102203405.1797491-2-ogabbay@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: odC8jKcvU_ivvp5zxTUagHRw-HlMtXBP
-X-Proofpoint-GUID: odC8jKcvU_ivvp5zxTUagHRw-HlMtXBP
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-02_15,2022-11-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
- phishscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=999 bulkscore=0
- impostorscore=0 priorityscore=1501 malwarescore=0 spamscore=0 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211020139
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221102084134.4094-1-jirislaby@kernel.org>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,34 +56,23 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/2/2022 2:34 PM, Oded Gabbay wrote:
-> diff --git a/drivers/accel/accel_drv.c b/drivers/accel/accel_drv.c
-> new file mode 100644
-> index 000000000000..6132765ea054
-> --- /dev/null
-> +++ b/drivers/accel/accel_drv.c
-> @@ -0,0 +1,112 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +
-> +/*
-> + * Copyright 2022 HabanaLabs, Ltd.
-> + * All Rights Reserved.
-> + *
-> + */
-> +
-> +#include <linux/module.h>
+On Wed, Nov 02, 2022 at 09:41:34AM +0100, Jiri Slaby (SUSE) wrote:
+> From: Jiri Slaby <jslaby@suse.cz>
+> 
+> Commit 8fd4ddda2f49 (static_call: Don't make __static_call_return0
+> static) split static_call.c and static_call_inline.c was created. This
+> was not reflected in MAINTAINERS.
+> 
+> Fix it now by adding a static_call*.c glob.
+> 
+> Cc: Peter Zijlstra <peterz@infradead.org>
+> Cc: Josh Poimboeuf <jpoimboe@kernel.org>
+> Cc: Jason Baron <jbaron@akamai.com>
+> Cc: Steven Rostedt <rostedt@goodmis.org>
+> Cc: Ard Biesheuvel <ardb@kernel.org>
+> Signed-off-by: Jiri Slaby <jslaby@suse.cz>
 
-Alphebetical order?
+Acked-by: Josh Poimboeuf <jpoimboe@kernel.org>
 
-> +#include <linux/debugfs.h>
-> +#include <linux/device.h>
-> +
-> +#include <drm/drm_accel.h>
-> +#include <drm/drm_ioctl.h>
-> +#include <drm/drm_print.h>
-> +
-> +static struct dentry *accel_debugfs_root;
-> +struct class *accel_class;
-
-Static?
-
+-- 
+Josh
