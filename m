@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92CEC6163B2
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:18:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6D8FD6163C4
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:20:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231424AbiKBNSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 09:18:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57616 "EHLO
+        id S231560AbiKBNSm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 09:18:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57634 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231358AbiKBNR7 (ORCPT
+        with ESMTP id S231396AbiKBNSG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 09:17:59 -0400
-Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EEE2AC47;
-        Wed,  2 Nov 2022 06:17:58 -0700 (PDT)
+        Wed, 2 Nov 2022 09:18:06 -0400
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.196])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9A32AC5F;
+        Wed,  2 Nov 2022 06:18:04 -0700 (PDT)
 Received: from toolbox.toradex.int ([31.10.206.125]) by mrelay.perfora.net
- (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0LtHdl-1p0yDn1v8V-012osu;
- Wed, 02 Nov 2022 14:12:28 +0100
+ (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0M9IQC-1ok7er1wYI-00CmlF;
+ Wed, 02 Nov 2022 14:12:32 +0100
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Peter Chen <peter.chen@kernel.org>,
@@ -25,42 +25,40 @@ Cc:     Peter Chen <peter.chen@kernel.org>,
         Fabio Estevam <festevam@gmail.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Max Krummenacher <max.krummenacher@toradex.com>,
         NXP Linux Team <linux-imx@nxp.com>,
         Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Philippe Schenker <philippe.schenker@toradex.com>,
         Rob Herring <robh+dt@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 5/6] arm64: dts: verdin-imx8mp: add gpio usb-b connector
-Date:   Wed,  2 Nov 2022 14:12:02 +0100
-Message-Id: <20221102131203.35648-6-marcel@ziswiler.com>
+Subject: [PATCH v1 6/6] arm64: dts: verdin-imx8mp: dahlia: mark usb_2 permanently attached
+Date:   Wed,  2 Nov 2022 14:12:03 +0100
+Message-Id: <20221102131203.35648-7-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20221102131203.35648-1-marcel@ziswiler.com>
 References: <20221102131203.35648-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:Thh1AqQcIwoSO03vPLA6TTxnuAnbPtVYneMdFj+HuDRIGQAeuRD
- NRR2h5qvlY6CkGx6t5HTh2xxFKlT/rFpu42Jk2PCvCC3DfznnxV4Ce7UVaLA0ksoJf++Yho
- TUba8ahYACbcIdtXQXX8IEdIIg5qUlkCdWepabkwGTLH0KCqyrrO7xbIpQ76Y0Eu+JkTWuo
- /3WqlN5POZL/hXjQpN3Nw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:3PxX5/Xx1r0=:HpeQu/2fiqp6vYV2s2CxJR
- V7tSLXtI/XjKgOSwZraif69eBZ29pGkYcTLiUFossbkiqPpyndIljVOAyMiIFb4YvlIQ2haxz
- kvLi40rnjDnBBj2zIwDhVpElQjgWMwgXtIC8BsVg0qux0xzhyR3JlvuewxYQBsWPQiubLtJ6X
- zMu0ljtP8xGF+0caGFNSzJt3o0v/+JGmRrn7KhtVfKlkNrcZdc9IHfRGv7+kM5llHd0TZ4PFR
- UMlGEWRNTItP6UqYrjTEqThsctEWd4gYGLC5pKfHzFAtOBAwB+N/wzu2V7aPrBsBIp3X2vLdC
- zuXxh8IDK73mgdDuYiVMdN++yPitGmRADSy8MOgCmMEB4xrYUS2lLJpYvuMkKT82MCMhbCFg/
- 8YcRCIO0fKI+4/aKIxilronWhcGz8+5pLM3UxuN5eXfVAjIEaASXmLxAuZeGquaSMRvmOpS46
- 8dKHRyl/jwQs8RDWarIgdg0sVZmhY8FCC20PWHGMK3dd/nNTWDWNyc8SmVul5ZnPw0poqdf2w
- J2HpfVoVFMRxMhc9n5PW3lmeiztpLM7qOYch748gKqKwxJS01nT21DUAsQf1LyiYnrs//3Ac4
- zZ5Mzi8q4blqqybavnpnkAf7HzpFelzg2iTcgI8OzX7kBvpF5yXpe0XvIahvLjoVz4+0w1DlU
- NXnK0ElnqXTf74SJKHIQ37TCptuK5ha036yNtlhHY3lSXtuZ5AWXMTiGz+HYwvPMN4k0EKMDq
- 2fqCETQVqSh6CKJKo+JWr6rJZs7hBNNuecQvCYDk3xDgJrSs8FP05f1nREWBNm+i0EmOhEvDQ
- nuVA4ZQ
+X-Provags-ID: V03:K1:/xmmR9cJUMqOUV0/TLDPRyZVYiIyvc1gu9OFauZZQGRmT8gaQDY
+ gzEG0zKK2L6jCuKKOiEU0eyTIitkusx5axawO62t4zGvYosmM8KQ32UTZsaOsCscaEaGvMv
+ +mqcjJE7XREmIsaOhsh4r5OjYLdQdO5dAs4gOEPltSOdTgMeXmFnPJJe81OaaxGAWsiZY1a
+ Gx+Hx1q8PgbQfHyon+71g==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:vso6NIYTwqU=:NYEBGq8soSbWxijF72aksR
+ PxcT5l3ssFzbi06j0URD4tsq3EVQABniKcJYe0CIh/dK+OJUer2OfR/KBqDqEZglKAn7wB/Ek
+ PZj3fT9Kg1iR9IaGToRaB7LGWNPBCzTBgxRR5d2Jc5vHhyn3AASxFPs62IEpyY9WcU8/Xp4IM
+ 4p0s/f6/nNh0fqgf8u2RK5U8MnTj12Zf17U8J0htdH/A9EbNMb3NxyHxUVJWDjBRBSa8Od371
+ 5KBrfNt520AjgfGjyBNn2l+2npnNv+VM5wY2NloRZhw1bMtdWPer+lVYKmSZ5Ud2UfSnz5Q3o
+ 3qdofY4dP62ICC+BbPVhJImKcqpdW0J53FpTwf0g0CIhA51/dE77Pw9oRAjXkEhpXPwrWovF6
+ +55TQkh9QyBgB4Qnoz/5ijYP3x+91odd4pBu4BZuckUMXTNcrRT4YOC24my6LE//sPRXJyFjV
+ 2ZalNr0OsOVt3h97EtAUzlUL3K0B8Jbdy8WS5q/X16D2oI39Tsgmf2TcJprkaK9g3uIEzu/kG
+ vlxBsf4LdlyeL+4mKM0HR2UWT5G+MfwOxVkD2LPqZ2GL60za5H9Twfz3rhObWV2cglohyzlfM
+ Ago2Z3KY+ytDthSY8GdMFYiJ6dEpIqOFCetoT8FIG6ZiF2Moinu5rvLu6XbCfqN0tADTI8LiJ
+ UzOFu8c1prypbMYHXw+Gh3Qy4SWZHwuaxAc6k44CdVxvRSReh2no4/OtM8a9yI0mHSW2W8kwz
+ movnIBxaU0tG0xaal9PskUrGUdHd6RPZXJUdbOZBbR9a3yxVnQkQ0PODAzUjqt5Sby1mKe0EL
+ 1Nrq8mc1sw5nlt+cR/BjVfT3k9UfA==
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -69,52 +67,28 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Add GPIO USB-B connector (gpio-usb-b-connector) functionality using
-Verdin USB_1_ID.
+As both Dahlia and the Verdin Development Board have on-carrier
+permanently attached USB hubs mark Verdin USB_2 as such.
 
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
+
 ---
 
- .../boot/dts/freescale/imx8mp-verdin.dtsi     | 20 +++++++++++++------
- 1 file changed, 14 insertions(+), 6 deletions(-)
+ arch/arm64/boot/dts/freescale/imx8mp-verdin-dahlia.dtsi | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-index 795e02df9f29..6a1890a4b5d8 100644
---- a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-@@ -814,18 +814,26 @@ &usb3_0 {
- 	pinctrl-0 = <&pinctrl_usb_1_oc_n>;
- };
- 
--&usb3_phy0 {
--	vbus-supply = <&reg_usb1_vbus>;
--};
--
- &usb_dwc3_0 {
-+	/* dual role only, not full featured OTG */
- 	adp-disable;
- 	dr_mode = "otg";
- 	hnp-disable;
- 	maximum-speed = "high-speed";
--	pinctrl-names = "default";
--	pinctrl-0 = <&pinctrl_usb_1_id>;
-+	role-switch-default-mode = "peripheral";
- 	srp-disable;
-+	usb-role-switch;
-+
-+	connector {
-+		compatible = "gpio-usb-b-connector", "usb-b-connector";
-+		id-gpios = <&gpio2 10 GPIO_ACTIVE_HIGH>;
-+		label = "Type-C";
-+		pinctrl-names = "default";
-+		pinctrl-0 = <&pinctrl_usb_1_id>;
-+		self-powered;
-+		type = "micro";
-+		vbus-supply = <&reg_usb1_vbus>;
-+	};
- };
+diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin-dahlia.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin-dahlia.dtsi
+index 4b8f86f63081..80db1ad7c230 100644
+--- a/arch/arm64/boot/dts/freescale/imx8mp-verdin-dahlia.dtsi
++++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin-dahlia.dtsi
+@@ -116,6 +116,7 @@ &usb3_phy0 {
  
  /* Verdin USB_2 */
+ &usb3_1 {
++	fsl,permanently-attached;
+ 	status = "okay";
+ };
+ 
 -- 
 2.36.1
 
