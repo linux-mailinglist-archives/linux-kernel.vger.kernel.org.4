@@ -2,67 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4A585616E38
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 21:03:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA076616E2B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 21:01:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230045AbiKBUDe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 16:03:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39256 "EHLO
+        id S230362AbiKBUBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 16:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229899AbiKBUD3 (ORCPT
+        with ESMTP id S230371AbiKBUBY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 16:03:29 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 87EA4BF8
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 13:03:28 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id b2so13742eja.6
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 13:03:28 -0700 (PDT)
+        Wed, 2 Nov 2022 16:01:24 -0400
+Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85370194;
+        Wed,  2 Nov 2022 13:01:23 -0700 (PDT)
+Received: by mail-wm1-x32b.google.com with SMTP id m7-20020a05600c090700b003cf8a105d9eso119356wmp.5;
+        Wed, 02 Nov 2022 13:01:23 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PDnrSW+2135+Xqb7eTyI0FY4hstVp+d9eOCLWyHr250=;
-        b=gCvOUF5kPz358SzEWhcIlHuAGTOF/oPvE9is9fj0H1d5LVVPLp+tJcHtlKKYGafmm5
-         kKPmZSM6PCXwG4zAF5fh2naeS5xI4vbk+9vBEfV2fqu0RMFXtL4UL7fOTMDCijqoraOQ
-         NGpG5OjEIHg1j3ma9noCF4Q8qROcR8JLSmH5Rgh6hE4vipunr8aS2bVfPR0cPBLJIZjH
-         3b8wsxTJwYrIaBLWqvFwlv4J0hF1m3PCuwkmGhYg/LM1qU2sPm1aKRECFkTNDgzwCF9n
-         XKEB50M3PWfXe8HFnJevp0nBSGgvN1ykspoF3TAUZXt1/8kHmke4UVB58mOu7FQOYb4/
-         EbAQ==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XdmYTvu+zYpj7KgYKCU+/zaBOvuZZ8jatmz3kLIrPfg=;
+        b=LHTa4kwK97AZu9XWzAgU7Ru4ce6dgEG3bB7pKdLyPyFxbvs7RASuKfWO+c88RO3ZlA
+         NqhRNGXeRWleEUFpfrTUhDsQLYvN6WGBTtMCME0uragCWUKeaWcplcfGNWHoOUhYh+/F
+         ix2JnFTMt4TYs/5Fvw5DVvHkXhHQQXPjykKB3d3dkimwpu/ZseyEPfGewc64vFSLXqEf
+         hJQ47i/T69WUcpf5HIV5bDX1T7R2JovtVx0XRABVJ2921jzDrD5E1OgvWy20Tkk+1iA0
+         6NTe2blaQSPBPBz7wVwqFTlCh6OVdBOTu9NjsF07bLsb7oH8FlocZbZkNEBDbG2qg3JL
+         ToUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PDnrSW+2135+Xqb7eTyI0FY4hstVp+d9eOCLWyHr250=;
-        b=29EKiSU12Qj3R7OFOPUxsedoD5jtfrSwlzRQRVwwG3IB0M1wg/AsWL/fadPnVSxxNA
-         Ayue0Bt2rgwtggLOLwArUGCwiGReXUxeZ+6oVW86wgyS6Eb7OUZ0Ded+jCSL5G1qPmTx
-         2R20MDyR/m5dHbaG4AZN//f87MmXI85mh1XdxNkyWnZukRIjklDy/M0usWYVhfCrJIK1
-         hBOpuk3HgaQeYMp/4+dT4K7oWEOgamD44qOA/A/Hg7FiMADMQIMZ9QvI7xdBPn3w+CuP
-         2bGeQHs1VsJwupFmrLCgv9vz8RWAif+kUU6RWBaJ2t1zvJR/z+GPGFjLXZFst7ND99mI
-         eoIw==
-X-Gm-Message-State: ACrzQf3DHDDKuWSY1nTpl/BiHjpcWSEKF9fUBDhU8Ia+fNdC8NUwHy5w
-        pH1GBof+U2bTVfrQcLw5d64=
-X-Google-Smtp-Source: AMsMyM4mrW5FGAdWh0XXYf6GbrwWeEVYGtq6S+ZebIemMpHR0alzU5UP+UBv46vWVo3qw/K7+NJuUA==
-X-Received: by 2002:a17:906:8a57:b0:7ad:69fb:3a with SMTP id gx23-20020a1709068a5700b007ad69fb003amr25232087ejc.179.1667419406921;
-        Wed, 02 Nov 2022 13:03:26 -0700 (PDT)
-Received: from ZBook.localdomain (86-90-194-80.fixed.kpn.net. [86.90.194.80])
-        by smtp.gmail.com with ESMTPSA id o3-20020a170906768300b0079e552fd860sm5752239ejm.152.2022.11.02.13.03.25
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XdmYTvu+zYpj7KgYKCU+/zaBOvuZZ8jatmz3kLIrPfg=;
+        b=8BDQZVjtsRP66LSLViXqDpn5KPAvpaW8aGAMIReHYuy24fFHLVA2gXA7D4YJwNRLUI
+         Zc4/ys9Ez3Xy6wd69Yr+Ihlx33s6ciuc//uV8W9XLPALJPJgijB9LVA7mjsUJw3XDliA
+         Zml3pTWY+d4GfRlki5ruw5WJI/eR+SO7ospA2uKUGAS4o3eRgR+TdGU9TZakuN5o4BjT
+         lSv1cbt1Txy/1E66kmHrYwoxnlsVETrM5F/U8ezxjDtrUJzOjRhQF/OW7r5HvOGz6sf3
+         IFTtZUMMKEXNixSNvsTQxTCxPbmyIZhUr7VEp8DUpQ9Zaz12xFTJS+S7TO+lOmsj1/2K
+         STnw==
+X-Gm-Message-State: ACrzQf083ke3h4rqcWwERYzjIpNlpAm2mkk3kE7hqEh1YzbfrHjsaPIw
+        PU9LfnVjsZt/L3gFeb8zPN+Cn5m5AmhQew==
+X-Google-Smtp-Source: AMsMyM6MbmWWEKKewgppk+dMC8e39nJ0CkTBH2iM6ZEo5pt5EirJqQdLGrpbKFuWKQLhHZxm+6CqpQ==
+X-Received: by 2002:a05:600c:6885:b0:3bd:d782:623c with SMTP id fn5-20020a05600c688500b003bdd782623cmr16703442wmb.102.1667419281857;
+        Wed, 02 Nov 2022 13:01:21 -0700 (PDT)
+Received: from leonid-Inspiron-3421 (93-172-205-151.bb.netvision.net.il. [93.172.205.151])
+        by smtp.gmail.com with ESMTPSA id z7-20020a05600c0a0700b003cf483ee8e0sm3649378wmp.24.2022.11.02.13.01.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 13:03:26 -0700 (PDT)
-From:   Jerom van der Sar <jerom.vandersar@gmail.com>
-To:     gregkh@linuxfoundation.org
-Cc:     philipp.g.hortmann@gmail.com, error27@gmail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Jerom van der Sar <jerom.vandersar@gmail.com>
-Subject: [PATCH v4] staging: rtl8192e: space formatting fixes in rtl_cam.c
-Date:   Wed,  2 Nov 2022 21:00:58 +0100
-Message-Id: <20221102200057.397-1-jerom.vandersar@gmail.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <Y2IbI8ib5+k+bVRo@kroah.com>
-References: <Y2IbI8ib5+k+bVRo@kroah.com>
+        Wed, 02 Nov 2022 13:01:20 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 22:01:17 +0200
+From:   Leonid Ravich <lravich@gmail.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Leonid Ravich <leonid.ravich@toganetworks.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Yigal Korman <yigal.korman@toganetworks.com>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>
+Subject: Re: BUG:  ib_mad ftrace event unsupported migration
+Message-ID: <Y2LMjYNAE5LwtcOp@leonid-Inspiron-3421>
+References: <VI1PR02MB623706DA8A01842834FC191089399@VI1PR02MB6237.eurprd02.prod.outlook.com>
+ <20221102074457.08f538a8@rorschach.local.home>
+ <Y2JqX3vC1mG/JDex@ziepe.ca>
+ <VI1PR02MB623731066685B6E249F71A3189399@VI1PR02MB6237.eurprd02.prod.outlook.com>
+ <Y2J4/NQMhRORqnZ0@ziepe.ca>
+ <20221102101719.6cbcca6b@rorschach.local.home>
+ <Y2J9lAqBvjjPUmJf@ziepe.ca>
+ <20221102115947.000897fa@rorschach.local.home>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221102115947.000897fa@rorschach.local.home>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
@@ -73,50 +84,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Fixed a few coding style issues in rtl_cam.c: two times lack of
-spaces around binary operators. Some other warnings still remain.
-These issues were found by scripts/checkpatch.pl.
+> On Wed, 2 Nov 2022 11:24:20 -0300
+> Jason Gunthorpe <jgg@ziepe.ca> wrote:
+> 
+> > No, it doesn't muck with preemption, it will have some sleeping lock,
+> > eg mlx5_ib_query_pkey() does a memory allocation as the first thing
+> > 
+> > It seems like a bug that calling kmalloc(GFP_KERNEL)/might_sleep()
+> > from within a tracepoint doesn't trigger a warning?
+> 
+> Has nothing to do with tracepoints. You could call it a bug that it
+> doesn't trigger a warning when preemption is disabled. But then again,
+> it would if you enabled DEBUG_PREEMPT and possibly LOCKDEP too. So, I chalk
+> this up to a lack of proper testing.
+>
 
-This patch helps clean up the rtl8192e driver in staging, making it
-easier to read and maintain.
+disagree, without CONFIG_PREEMPTION (which is the default case in some
+destros) we will not get any warning, because there will not be
+preamption disable.
 
-Signed-off-by: Jerom van der Sar <jerom.vandersar@gmail.com>
----
-Changes in v4:
- - Reverted more double blank line formatting fixes to make the patch
-   even smaller.
-
-Changes in v3:
-  - Fixed faulty dot at the end of the patch sign-off.
-
-Changes in v2:
-  - Reverted some formatting fixes to make the diff easier to review.
-
- drivers/staging/rtl8192e/rtl8192e/rtl_cam.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c b/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c
-index 41faeb4b9b9b..41bff46d1b3a 100644
---- a/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c
-+++ b/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c
-@@ -17,7 +17,7 @@ void rtl92e_cam_reset(struct net_device *dev)
- {
- 	u32 ulcommand = 0;
- 
--	ulcommand |= BIT31|BIT30;
-+	ulcommand |= BIT31 | BIT30;
- 	rtl92e_writel(dev, RWCAM, ulcommand);
- }
- 
-@@ -107,7 +107,7 @@ void rtl92e_set_key(struct net_device *dev, u8 EntryNo, u8 KeyIndex,
- 
- 	for (i = 0; i < CAM_CONTENT_COUNT; i++) {
- 		TargetCommand  = i + CAM_CONTENT_COUNT * EntryNo;
--		TargetCommand |= BIT31|BIT16;
-+		TargetCommand |= BIT31 | BIT16;
- 
- 		if (i == 0) {
- 			TargetContent = (u32)(*(MacAddr+0)) << 16 |
--- 
-2.34.1
-
+second issue I see and maybe it is only me, is that the assuption of
+atomicity in trace is not a common knowledge for trace users.     
