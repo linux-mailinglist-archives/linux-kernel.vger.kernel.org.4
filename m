@@ -2,171 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7943461665F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:42:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D01761665A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:42:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230435AbiKBPmj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 11:42:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55038 "EHLO
+        id S230045AbiKBPmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 11:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230426AbiKBPmf (ORCPT
+        with ESMTP id S229561AbiKBPmV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 11:42:35 -0400
-Received: from mail-pg1-x536.google.com (mail-pg1-x536.google.com [IPv6:2607:f8b0:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59CAE2A25B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 08:42:32 -0700 (PDT)
-Received: by mail-pg1-x536.google.com with SMTP id h193so7870087pgc.10
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 08:42:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=d3T+apdPM9d/LVHvl4ssAZf/YXXS8AT6BrLPp56q6P4=;
-        b=bRoabxpWUjHKwQUA6JkZZIwcLtRde9H8Szf/vDnUvurleAFiQWwrgedTkyfECR07EJ
-         mNanCNLUePcOioA5/z/Bd0mCa+5+wDqMb/e9sEZ+R8d5HdEpoZACHT+IL5IxcrgXOoWK
-         63A4KtRgpD3JAY53QPxFEmVw+xDNCq8/IDxPjY3sCsQZLJNHoPN7WN2XcYJw0ddSCnWN
-         fSpJTl28VbRjRmg+gyk69ngOl6UuZmsaST0LfN0VGB9jGH/2ocnGfX8MTSxMCLu4wFWE
-         kAhpn8McWI0chHoTqw9HNUY+CnKLHkFvT+hH3lx50zat5pE6CgrNK33JbMTzJECZmyFb
-         Sf4w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=d3T+apdPM9d/LVHvl4ssAZf/YXXS8AT6BrLPp56q6P4=;
-        b=SKvgRDGfdVo4at70rit3CtmoJuTY2J9cSBL+LgTB6G3YPI3NpzziFjLL1wGhlCqZHI
-         9MbWhlp/8SX1gW74ujxxQTlIgyhGyJzlqcsIprMr20h9Vsz88mutHdPwvsei7/9lRe9s
-         7HGEBaXYrKOOwsLj3awgVv9/t8uf0UBcO6XJ2T80/4rsFJSEItjX+CGaj4fZ8KgCZnXE
-         KFDbtTiIaiNpi4R99h1f7zzrgAl47AS6Wp1d8bFVdAjryuyzrSvLPj06d/bxwjAs+Gsv
-         KXVEMLI9ahSSSQ6bxpDhyrMu40+4PTeNCBUtAsKTgUpDbOqrg8jxdS0f5J7CUaenVJjM
-         4XxA==
-X-Gm-Message-State: ACrzQf27Xu+Z4PhliL2eOH2hHOLsotD2iaHVCp//TOvv5vjakz1t/Fla
-        ivAe72S+Vd8vVOSj+m6eDi6zC9OZdWdMQRZb4/VkKlFtnfLXbA==
-X-Google-Smtp-Source: AMsMyM5VlkFzEUiLRxmTPergQNEyNQ9URlJgnCoi+4jtnGNY54X56u4XM8yxlyw/sQGfd4bQDtFzgTMLMYWYGFCjToA=
-X-Received: by 2002:a05:6a00:170a:b0:563:a40a:b5e1 with SMTP id
- h10-20020a056a00170a00b00563a40ab5e1mr25480891pfc.40.1667403751851; Wed, 02
- Nov 2022 08:42:31 -0700 (PDT)
+        Wed, 2 Nov 2022 11:42:21 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0247213D14
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 08:42:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 809E561920
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 15:42:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31D96C433C1;
+        Wed,  2 Nov 2022 15:42:18 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667403738;
+        bh=RTU4MJOahPxQfCprS6dXSJ2bZU9D7vmWqFb7hhBnnks=;
+        h=From:To:Cc:Subject:Date:From;
+        b=nj1itTaPmyeeCs1glxmOJOEgYHi2qenyZdtfMmFxDLb6RkKgSb8ximzR3or++OZvb
+         o3kRbCDxiGm7/ju/RBv5l9o1+4lm1GODplKBOpsqP8+kRC4p4mdfoSeNVRTDrDEnss
+         xJq44D1a/pEaxS7PErjZmtT1BA9cRSpIfl/mvyCS0WGFCBo7E2j1YbJUEh8nObZFje
+         OabUmowetibTC6TqsmCiZ6BoOqt5kb0vO8ZUkhz5q6xBbCBUocFknhZci0hr6yOlm2
+         OUrjI0iljGmaC2seHYbjucGiJYf8baJqougkWOhZ2RtGXZXaoZGudhGkYXCIvLNEMm
+         qPKFMarAjG8Mg==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Stefan Agner <stefan@agner.ch>, Alison Wang <alison.wang@nxp.com>
+Cc:     dri-devel@lists.freedesktop.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH] drm/fsl-dcu: Fix return type of fsl_dcu_drm_connector_mode_valid()
+Date:   Wed,  2 Nov 2022 08:42:15 -0700
+Message-Id: <20221102154215.78059-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221026141631.696863-1-dinguyen@kernel.org> <20221026141631.696863-4-dinguyen@kernel.org>
-In-Reply-To: <20221026141631.696863-4-dinguyen@kernel.org>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Wed, 2 Nov 2022 16:41:55 +0100
-Message-ID: <CAPDyKFpe30P7HzF4yfo=oPt5EwytMtkcCdBakUXkeUYtbmHt7g@mail.gmail.com>
-Subject: Re: [PATCHv6 4/6] mmc: dw_mmc-pltfm: socfpga: add method to configure clk-phase
-To:     Dinh Nguyen <dinguyen@kernel.org>
-Cc:     jh80.chung@samsung.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, mturquette@baylibre.com,
-        sboyd@kernel.org, linux-mmc@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 26 Oct 2022 at 16:16, Dinh Nguyen <dinguyen@kernel.org> wrote:
->
-> The clock-phase settings for the SDMMC controller in the SoCFPGA
-> platforms reside in a register in the System Manager. Add a method
-> to access that register through the syscon interface.
->
-> Signed-off-by: Dinh Nguyen <dinguyen@kernel.org>
-> ---
-> v6: not getting the clk-phase-sd-hs is not a hard failure
-> v5: change error handling from of_property_read_variable_u32_array()
->     support arm32 by reading the reg_shift
-> v4: no change
-> v3: add space before &socfpga_drv_data
-> v2: simplify clk-phase calculations
->
-> make property optional in driver
-> ---
->  drivers/mmc/host/dw_mmc-pltfm.c | 43 ++++++++++++++++++++++++++++++++-
->  1 file changed, 42 insertions(+), 1 deletion(-)
->
-> diff --git a/drivers/mmc/host/dw_mmc-pltfm.c b/drivers/mmc/host/dw_mmc-pltfm.c
-> index 9901208be797..fff6222d58e4 100644
-> --- a/drivers/mmc/host/dw_mmc-pltfm.c
-> +++ b/drivers/mmc/host/dw_mmc-pltfm.c
-> @@ -17,10 +17,16 @@
->  #include <linux/mmc/host.h>
->  #include <linux/mmc/mmc.h>
->  #include <linux/of.h>
-> +#include <linux/mfd/altera-sysmgr.h>
-> +#include <linux/regmap.h>
->
->  #include "dw_mmc.h"
->  #include "dw_mmc-pltfm.h"
->
-> +#define SOCFPGA_DW_MMC_CLK_PHASE_STEP  45
-> +#define SYSMGR_SDMMC_CTRL_SET(smplsel, drvsel, reg_shift) \
-> +       ((((smplsel) & 0x7) << reg_shift) | (((drvsel) & 0x7) << 0))
-> +
->  int dw_mci_pltfm_register(struct platform_device *pdev,
->                           const struct dw_mci_drv_data *drv_data)
->  {
-> @@ -62,9 +68,44 @@ const struct dev_pm_ops dw_mci_pltfm_pmops = {
->  };
->  EXPORT_SYMBOL_GPL(dw_mci_pltfm_pmops);
->
-> +static int dw_mci_socfpga_priv_init(struct dw_mci *host)
-> +{
-> +       struct device_node *np = host->dev->of_node;
-> +       struct regmap *sys_mgr_base_addr;
-> +       u32 clk_phase[2] = {0}, reg_offset, reg_shift;
-> +       int i, rc, hs_timing;
-> +
-> +       rc = of_property_read_variable_u32_array(np, "clk-phase-sd-hs", &clk_phase[0], 2, 0);
-> +       if (rc < 0) {
-> +               dev_info(host->dev, "Optional: clk-phase-sd-hs not found!\n");
+With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+indirect call targets are validated against the expected function
+pointer prototype to make sure the call target is valid to help mitigate
+ROP attacks. If they are not identical, there is a failure at run time,
+which manifests as either a kernel panic or thread getting killed. A
+proposed warning in clang aims to catch these at compile time, which
+reveals:
 
-Printing things about missing optional features doesn't really make
-sense. Please drop this.
+  drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c:74:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_connector *, struct drm_display_mode *)' with an expression of type 'int (struct drm_connector *, struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+          .mode_valid = fsl_dcu_drm_connector_mode_valid,
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+  1 error generated.
 
-> +               return 0;
-> +       }
-> +
-> +       sys_mgr_base_addr = altr_sysmgr_regmap_lookup_by_phandle(np, "altr,sysmgr-syscon");
-> +       if (IS_ERR(sys_mgr_base_addr)) {
-> +               dev_info(host->dev, "Optional: failed to find altr,sys-mgr regmap!\n");
+->mode_valid() in 'struct drm_connector_helper_funcs' expects a return
+type of 'enum drm_mode_status', not 'int'. Adjust the return type of
+fsl_dcu_drm_connector_mode_valid() to match the prototype's to resolve
+the warning and CFI failure.
 
-If the clk-phase-sd-hs property is found above, the altr,sysmgr-syscon
-property is required, isn't it?
+Link: https://github.com/ClangBuiltLinux/linux/issues/1750
+Reported-by: Sami Tolvanen <samitolvanen@google.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c | 5 +++--
+ 1 file changed, 3 insertions(+), 2 deletions(-)
 
-In that case, perhaps this deserves a dev_warn instead?
+diff --git a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c
+index 4d4a715b429d..2c2b92324a2e 100644
+--- a/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c
++++ b/drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c
+@@ -60,8 +60,9 @@ static int fsl_dcu_drm_connector_get_modes(struct drm_connector *connector)
+ 	return drm_panel_get_modes(fsl_connector->panel, connector);
+ }
+ 
+-static int fsl_dcu_drm_connector_mode_valid(struct drm_connector *connector,
+-					    struct drm_display_mode *mode)
++static enum drm_mode_status
++fsl_dcu_drm_connector_mode_valid(struct drm_connector *connector,
++				 struct drm_display_mode *mode)
+ {
+ 	if (mode->hdisplay & 0xf)
+ 		return MODE_ERROR;
 
-> +               return 0;
-> +       }
-> +
-> +       of_property_read_u32_index(np, "altr,sysmgr-syscon", 1, &reg_offset);
-> +       of_property_read_u32_index(np, "altr,sysmgr-syscon", 2, &reg_shift);
-> +
-> +       for (i = 0; i < ARRAY_SIZE(clk_phase); i++)
-> +               clk_phase[i] /= SOCFPGA_DW_MMC_CLK_PHASE_STEP;
-> +
-> +       hs_timing = SYSMGR_SDMMC_CTRL_SET(clk_phase[0], clk_phase[1], reg_shift);
-> +       regmap_write(sys_mgr_base_addr, reg_offset, hs_timing);
-> +
-> +       return 0;
-> +}
-> +
-> +static const struct dw_mci_drv_data socfpga_drv_data = {
-> +       .init           = dw_mci_socfpga_priv_init,
-> +};
-> +
->  static const struct of_device_id dw_mci_pltfm_match[] = {
->         { .compatible = "snps,dw-mshc", },
-> -       { .compatible = "altr,socfpga-dw-mshc", },
-> +       { .compatible = "altr,socfpga-dw-mshc", .data = &socfpga_drv_data, },
->         { .compatible = "img,pistachio-dw-mshc", },
->         {},
->  };
+base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+-- 
+2.38.1
 
-Kind regards
-Uffe
