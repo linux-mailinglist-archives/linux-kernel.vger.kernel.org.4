@@ -2,85 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 861FB61635B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:06:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 180CE61635D
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:06:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230468AbiKBNGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 09:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45884 "EHLO
+        id S230317AbiKBNGr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 09:06:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229962AbiKBNGa (ORCPT
+        with ESMTP id S231269AbiKBNGn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 09:06:30 -0400
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 34A8BBCAE;
-        Wed,  2 Nov 2022 06:06:30 -0700 (PDT)
-Received: by mail-wm1-f50.google.com with SMTP id t4so10624293wmj.5;
-        Wed, 02 Nov 2022 06:06:30 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=cZOR+AsyvMFr6m+rsPfEb64MpZyMWXOK2GQIuhfnojY=;
-        b=kbzzTs97BRxBvcIpkj5jrSqQeRIqYGUQ67ee/UUt0F7PRs28QlTWJ60Wmw+FFxSFvg
-         cXlRV+lLhex0SnYm7Vb68Z2/QTTHMNXJLJ9CRIyx8QooiNVlowwlT/cnvTtSm6ZTQr8R
-         DRJuecOzuWsi5ntVOEUNOGXOrWqzbmyCDgkXV6sIZYVb9PbVqqNlDtQEbaffGXImcRRQ
-         WtEeYq8lpOfadq5R/M0oA0bl+Ny2j0id35vtRoddmzrjMKYkdpFtaGYN3RTU2Y1R84E1
-         5WkJgBG0u8g1c6TtnQqs9W3/rioSiVCofw+a8mGHOnA8ehG4bcoGFWdu68FMx7E2jg0c
-         HndA==
-X-Gm-Message-State: ACrzQf2gJJrdh6Unmu0+Z7MpIHzYJqE0HEnR3ixT7wulfG4107JPgLiT
-        Usp5wC7AVNTVmnVpEe2vCv4=
-X-Google-Smtp-Source: AMsMyM5fZ8uol08GARA634SedyOiScuLmBmhhesa8Bb43rYCLOmJKXIm/4DfWOp74+9DUuVtNkar5g==
-X-Received: by 2002:a05:600c:42c9:b0:3cf:69d4:72d9 with SMTP id j9-20020a05600c42c900b003cf69d472d9mr13375572wme.93.1667394388589;
-        Wed, 02 Nov 2022 06:06:28 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id o40-20020a05600c512800b003cf54b77bfesm2066989wms.28.2022.11.02.06.06.27
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 06:06:27 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 13:06:21 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     Jeffrey Hugo <quic_jhugo@quicinc.com>
-Cc:     decui@microsoft.com, quic_carlv@quicinc.com, wei.liu@kernel.org,
-        kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        lpieralisi@kernel.org, bhelgaas@google.com,
-        linux-hyperv@vger.kernel.org, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mikelley@microsoft.com,
-        robh@kernel.org, kw@linux.com, helgaas@kernel.org,
-        alex.williamson@redhat.com, boqun.feng@gmail.com,
-        Boqun.Feng@microsoft.com
-Subject: Re: [PATCH v2] PCI: hv: Fix the definition of vector in
- hv_compose_msi_msg()
-Message-ID: <Y2JrTWk+bVuYF3Af@liuwe-devbox-debian-v2>
-References: <20221027205256.17678-1-decui@microsoft.com>
- <4dafab73-9957-f1df-69fe-3cfa59fb22fb@quicinc.com>
+        Wed, 2 Nov 2022 09:06:43 -0400
+Received: from smtpout.efficios.com (smtpout.efficios.com [IPv6:2607:5300:203:5aae::31e5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A49EBCAE;
+        Wed,  2 Nov 2022 06:06:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=efficios.com;
+        s=smtpout1; t=1667394398;
+        bh=BGBLi28IGb/j9Rsc8sOXjZnGnF7UAm518xzGIru/4uI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=E400qiJQMQb/70O6znFxeZi92l/uqb80PsPOgXu3cvpXHsXWob/LCsWOnqePjlsoV
+         OpAUYHN/JmjyNSGguieK/2hwDo7nn5gn/MnAeaWoSR7SbRPZ0v6nnU2sCfyrMUYxvV
+         uyNBXx645mma6vnH8qOtLVf7LZh/kYfkWFxC2HFTv2qAcs/HhyheQtOy+daB8GEKIf
+         R31nAD3B5pZhOQkMAnntr+9C9DGZmNia1+QA7gAyxSesFVjsxTBdgBVndkhfZWCtSY
+         DAEoACQBtL5Cod5rQ4JJPyKTtpwI45wmyWwNfYmlQewJSixa0lNUJl7JjGWWmSFeZq
+         iSA79j3rAhf4w==
+Received: from thinkos.internal.efficios.com (192-222-180-24.qc.cable.ebox.net [192.222.180.24])
+        by smtpout.efficios.com (Postfix) with ESMTPSA id 4N2Rwt4HwVzfTB;
+        Wed,  2 Nov 2022 09:06:38 -0400 (EDT)
+From:   Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+To:     Peter Zijlstra <peterz@infradead.org>
+Cc:     linux-kernel@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        "Paul E . McKenney" <paulmck@kernel.org>,
+        Boqun Feng <boqun.feng@gmail.com>,
+        "H . Peter Anvin" <hpa@zytor.com>, Paul Turner <pjt@google.com>,
+        linux-api@vger.kernel.org, Peter Oskolkov <posk@posk.io>,
+        Mathieu Desnoyers <mathieu.desnoyers@efficios.com>,
+        Mark Rutland <mark.rutland@arm.com>
+Subject: [PATCH] rseq: Use pr_warn_once() when deprecated/unknown ABI flags are encountered
+Date:   Wed,  2 Nov 2022 09:06:35 -0400
+Message-Id: <20221102130635.7379-1-mathieu.desnoyers@efficios.com>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4dafab73-9957-f1df-69fe-3cfa59fb22fb@quicinc.com>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 08:08:03AM -0600, Jeffrey Hugo wrote:
-> On 10/27/2022 2:52 PM, Dexuan Cui wrote:
-> > The local variable 'vector' must be u32 rather than u8: see the
-> > struct hv_msi_desc3.
-> > 
-> > 'vector_count' should be u16 rather than u8: see struct hv_msi_desc,
-> > hv_msi_desc2 and hv_msi_desc3.
-> > 
-> > Fixes: a2bad844a67b ("PCI: hv: Fix interrupt mapping for multi-MSI")
-> > Signed-off-by: Dexuan Cui <decui@microsoft.com>
-> > Cc: Jeffrey Hugo <quic_jhugo@quicinc.com>
-> > Cc: Carl Vanderlip <quic_carlv@quicinc.com>
-> 
-> Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com>
+These commits use WARN_ON_ONCE() and kill the offending processes when
+deprecated and unknown flags are encountered:
 
-Applied to hyperv-fixes. Thanks.
+commit c17a6ff93213 ("rseq: Kill process when unknown flags are encountered in ABI structures")
+commit 0190e4198e47 ("rseq: Deprecate RSEQ_CS_FLAG_NO_RESTART_ON_* flags")
+
+The WARN_ON_ONCE() triggered by userspace input prevents use of
+Syzkaller to fuzz the rseq system call.
+
+Replace this WARN_ON_ONCE() by pr_warn_once() messages which contain
+actually useful information.
+
+Reported-by: Mark Rutland <mark.rutland@arm.com>
+Signed-off-by: Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
+Acked-by: Mark Rutland <mark.rutland@arm.com>
+Acked-by: Paul E. McKenney <paulmck@kernel.org>
+---
+ kernel/rseq.c | 19 +++++++++++++++++--
+ 1 file changed, 17 insertions(+), 2 deletions(-)
+
+diff --git a/kernel/rseq.c b/kernel/rseq.c
+index bda8175f8f99..d38ab944105d 100644
+--- a/kernel/rseq.c
++++ b/kernel/rseq.c
+@@ -171,12 +171,27 @@ static int rseq_get_rseq_cs(struct task_struct *t, struct rseq_cs *rseq_cs)
+ 	return 0;
+ }
+ 
++static bool rseq_warn_flags(const char *str, u32 flags)
++{
++	u32 test_flags;
++
++	if (!flags)
++		return false;
++	test_flags = flags & RSEQ_CS_NO_RESTART_FLAGS;
++	if (test_flags)
++		pr_warn_once("Deprecated flags (%u) in %s ABI structure", test_flags, str);
++	test_flags = flags & ~RSEQ_CS_NO_RESTART_FLAGS;
++	if (test_flags)
++		pr_warn_once("Unknown flags (%u) in %s ABI structure", test_flags, str);
++	return true;
++}
++
+ static int rseq_need_restart(struct task_struct *t, u32 cs_flags)
+ {
+ 	u32 flags, event_mask;
+ 	int ret;
+ 
+-	if (WARN_ON_ONCE(cs_flags & RSEQ_CS_NO_RESTART_FLAGS) || cs_flags)
++	if (rseq_warn_flags("rseq_cs", cs_flags))
+ 		return -EINVAL;
+ 
+ 	/* Get thread flags. */
+@@ -184,7 +199,7 @@ static int rseq_need_restart(struct task_struct *t, u32 cs_flags)
+ 	if (ret)
+ 		return ret;
+ 
+-	if (WARN_ON_ONCE(flags & RSEQ_CS_NO_RESTART_FLAGS) || flags)
++	if (rseq_warn_flags("rseq", flags))
+ 		return -EINVAL;
+ 
+ 	/*
+-- 
+2.30.2
+
