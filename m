@@ -2,84 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 234FC615C90
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 07:57:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C62C7615C94
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 07:58:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiKBG5g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 02:57:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51910 "EHLO
+        id S230179AbiKBG6U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 02:58:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230188AbiKBG5b (ORCPT
+        with ESMTP id S229770AbiKBG6S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 02:57:31 -0400
-Received: from smtp.smtpout.orange.fr (smtp-28.smtpout.orange.fr [80.12.242.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7130927166
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 23:57:28 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id q7ghoDgDmjJi0q7ghoGZUx; Wed, 02 Nov 2022 07:57:26 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Wed, 02 Nov 2022 07:57:26 +0100
-X-ME-IP: 86.243.100.34
-Message-ID: <a0df7655-ac8c-0834-0872-2fa97d5b8797@wanadoo.fr>
-Date:   Wed, 2 Nov 2022 07:57:23 +0100
+        Wed, 2 Nov 2022 02:58:18 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 438CA25EB6
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 23:58:17 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1667372295;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=XgBppt+XcBVJ8E15lm+WvBKPfh2wbve87IQ7ntUCiho=;
+        b=qVH/mhT3tQhyE9AR5MtgKA6qShk3koX9pzjsy2VbUck8cYrhfvraaDv4bQN3vrm9G4i92b
+        MI/5rhJL24ukc7UtIl+frNOJ2Rdvh7lVUHm0VfqL4oVBa/9qmmcOvB3EznK9XABd4Jr0rP
+        rTykMvDKULAv6vdOs9bc+2EI9Dksszo=
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 06/30] nvme: Use kstrtobool() instead of strtobool()
-To:     Christoph Hellwig <hch@lst.de>
-Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
-        Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-nvme@lists.infradead.org
-References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
- <2e8d7f2f3cb754982f5fe99f2e13cf72db9d6dba.1667336095.git.christophe.jaillet@wanadoo.fr>
- <20221102064747.GA8903@lst.de>
-Content-Language: fr, en-US
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-In-Reply-To: <20221102064747.GA8903@lst.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Subject: Re: [PATCH v2 8/9] mm/hugeltb_cgroup: convert
+ hugetlb_cgroup_commit_charge*() to folios
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <20221101223059.460937-9-sidhartha.kumar@oracle.com>
+Date:   Wed, 2 Nov 2022 14:57:37 +0800
+Cc:     linux-kernel@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mina Almasry <almasrymina@google.com>, linmiaohe@huawei.com,
+        minhquangbui99@gmail.com, aneesh.kumar@linux.ibm.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <A1EE18E6-EBAD-48D6-844F-E1F8B8BD8F80@linux.dev>
+References: <20221101223059.460937-1-sidhartha.kumar@oracle.com>
+ <20221101223059.460937-9-sidhartha.kumar@oracle.com>
+To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 02/11/2022 à 07:47, Christoph Hellwig a écrit :
-> What are th other 29 patches doing in this series?  Due to the lack of
-> context individual patches from series have to through /dev/null here,
-> sorry.
-> 
-
-Hi,
-
-in each patch, in order to give some context, I wrote:
-    ---
-    This patch is part of a serie that axes all usages of strtobool().
-    Each patch can be applied independently from the other ones.
-
-    The last patch of the serie removes the definition of strtobool().
-
-    You may not be in copy of the cover letter. So, if needed, it is
-    available at [1].
-
-    [1]: 
-https://lore.kernel.org/all/cover.1667336095.git.christophe.jaillet@wanadoo.fr/
 
 
-What is the best strategy for sending such patches?
+> On Nov 2, 2022, at 06:30, Sidhartha Kumar <sidhartha.kumar@oracle.com> =
+wrote:
+>=20
+> Convert hugetlb_cgroup_commit_charge*() to internally use folios to =
+clean
+> up the code after __set_hugetlb_cgroup() was changed to take a folio.
+>=20
+> Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
+> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
 
-Should I send only individual patches?
-Should everybody be in copy of all patches? Or at least of the cover letter?
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
 
+Thanks.
 
-Some patches have already been Acked or even applied. So I'll wait a bit 
-so that things stabilize before resending what is remaining.
-
-CJ
