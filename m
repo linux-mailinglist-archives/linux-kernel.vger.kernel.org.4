@@ -2,202 +2,208 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C20236161BB
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:26:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3DC966161C2
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:29:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230222AbiKBLZ7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 07:25:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58768 "EHLO
+        id S230123AbiKBL2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 07:28:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59994 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbiKBLZ4 (ORCPT
+        with ESMTP id S229493AbiKBL2s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 07:25:56 -0400
-Received: from esa2.hgst.iphmx.com (esa2.hgst.iphmx.com [68.232.143.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6B5B227DE3
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 04:25:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1667388355; x=1698924355;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=TMLQrUTJOuanaRsKmkyrbCftoNV6xvpScUeT6XiFWnc=;
-  b=evulD9S19F92C8hbUXL+inNiD6iCSnOyLGGQgV+bobbaQn860zm2Tl5s
-   KbjoYRVmDp33uH1m3qbyBawg4WrRshnvW4pDaPofNw/sg5cJkJLQPgbQ4
-   pICmFfoDdZzCTug90R1U7FDtqEcHPRMOG64st0XcOMcIIghootpL8UfW3
-   FwAvM+xriNz37q4Gf5upNJBZCsE+1EjTf9ghY6TMlO8IZrM/sPdADlSVH
-   oIYuFzUXUHLt+HVex91D3gyvi5tB0rqGzGubEzqIlcB4epw/Sjdm3GO8O
-   xkE3giHAcGYdJ6gix+tuqtCYDPYQ69TzV2cfjlHQIaaQ9LM05ZHeIHRL1
+        Wed, 2 Nov 2022 07:28:48 -0400
+Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDEE24965;
+        Wed,  2 Nov 2022 04:28:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667388526; x=1698924526;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=MSeDC5BJZuIF2kjwOsoj5YC6pn7MObeQq/I9kASzO7Q=;
+  b=BpQLsJGpqsUBNiEev8n2cG7yqDgpa9afBatooGimWEERVh1yq0V//kGr
+   WlHzM4Wr3Mt3jykffLax04qQ1ottX1RIB8W9Ye1dQAGr+Oxe8wY/EpdrO
+   KC4eFabq3m2JEtWk6PLam/gOsPoF1UJbng+nInOuIf2Ndt85zJpwiK0b4
+   C6oEBigdKstgNBXMIVHfP3HFUF3Dvz1MlXLXDHFFLS9agxSaWUQ/G06Wv
+   GTmUpie/+WPHbwt5uhlwkyLbotWulrFqRXVan/iyzDAq+Dbx6l8SaCBvO
+   SVXyprFc2TeIqzwLTaCPmP9c+1UPrUpwUDNkuP6yjm33V1DODbN2LQKEo
    w==;
-X-IronPort-AV: E=Sophos;i="5.95,232,1661788800"; 
-   d="scan'208";a="319639729"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 02 Nov 2022 19:25:53 +0800
-IronPort-SDR: 3rGpKJEuz58qtbaI/GnMy3hYks4FnCDUEbJV3WluP/hiRV3gaOSSZzL63INgkA6OxH4Nk5Shs9
- N6k4OUnfxDgwzm0zt1nUroOIQYw3AYys/zLRcfqAm09GpcG9Sb+MqPt0ME1bVNSXKc66+PtUyI
- y2ux1OiXNhqf3cywvBqGmsqOfqxrj85vwgqL5PzMAb/Xmd2db0vDiNVVDvMvlfpvIZt615m2V1
- EzgMHZ9YgNYWn7TMWXXx0maM9XVoL+vDNv7t70yTT0RaaoIgIweTqdcLqbhGfaF+JHJlNw74mA
- ma0=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 02 Nov 2022 03:39:22 -0700
-IronPort-SDR: B74b8XGdNG1VDcl9qyB7kLZW656XAV4VbFPGzu1mf0iZEKfz9KO1XSRafl8kU/yEfJgFEcT7wg
- oAPjsBOL9bp5lnTVaxem6a2RexauEifyk3YJXvOnbvWFvpUeEhhpdW5h5QgviuUUB3xDnNA++Q
- JET8DTWEv4fDhXOnT5eYTMu87PX1U0QLsPUEOAQGDCL/XNyxH0t7WXUDzDpyMpDm2FJ6cqsPRE
- ZCH+lTlOPd96TgAiaOiRZ1G3FcSYFfBuxiV0ZE0s/UimqNoAYNOD0tSTbOj3gOihNSJNDDsXCh
- XtM=
-WDCIronportException: Internal
-Received: from usg-ed-osssrv.wdc.com ([10.3.10.180])
-  by uls-op-cesaip01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 02 Nov 2022 04:25:53 -0700
-Received: from usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTP id 4N2Phc2kZMz1RWxq
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 04:25:52 -0700 (PDT)
-Authentication-Results: usg-ed-osssrv.wdc.com (amavisd-new); dkim=pass
-        reason="pass (just generated, assumed good)"
-        header.d=opensource.wdc.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=
-        opensource.wdc.com; h=content-transfer-encoding:content-type
-        :in-reply-to:organization:from:references:to:content-language
-        :subject:user-agent:mime-version:date:message-id; s=dkim; t=
-        1667388350; x=1669980351; bh=TMLQrUTJOuanaRsKmkyrbCftoNV6xvpScUe
-        T6XiFWnc=; b=SmDrBMJJnhvWUFxaUlGNiG27FrNO3FrQKy3NGqCvsxlFEq7oA9u
-        MYiuy9R6pnRET443szhTsplFWw1uYJmPF4tw+HsTfEbs/H/XHc8kWEqOioONzAd9
-        qCl17NUGnOUD3u7zalTlFo6NnKVSsEL89JaNchbZKGtZclTE6vPj8bDgxnGkcQQc
-        koGmlNgb/uahK3HnS7ofyrleAUm8rHBdi5YCR8irZDJFphLddrUTlrQPsJF+zfF7
-        Ou3VI8TwO9/rfnG5f8cjUnGwFJqnOqHFbCD91m8hVL96b51SJndtBM/WspgW0BOK
-        opAYfDAlrGmU0u9SdB5UlTjqfIo1VhOmnlQ==
-X-Virus-Scanned: amavisd-new at usg-ed-osssrv.wdc.com
-Received: from usg-ed-osssrv.wdc.com ([127.0.0.1])
-        by usg-ed-osssrv.wdc.com (usg-ed-osssrv.wdc.com [127.0.0.1]) (amavisd-new, port 10026)
-        with ESMTP id Csibro7CeFDJ for <linux-kernel@vger.kernel.org>;
-        Wed,  2 Nov 2022 04:25:50 -0700 (PDT)
-Received: from [10.225.163.24] (unknown [10.225.163.24])
-        by usg-ed-osssrv.wdc.com (Postfix) with ESMTPSA id 4N2PhW5sj3z1RvLy;
-        Wed,  2 Nov 2022 04:25:47 -0700 (PDT)
-Message-ID: <0de1c3fd-4be7-1690-0780-720505c3692b@opensource.wdc.com>
-Date:   Wed, 2 Nov 2022 20:25:46 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH RFC v3 2/7] ata: libata-scsi: Add
- ata_internal_queuecommand()
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="311102905"
+X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
+   d="scan'208";a="311102905"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 04:28:28 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="809247207"
+X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
+   d="scan'208";a="809247207"
+Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
+  by orsmga005.jf.intel.com with ESMTP; 02 Nov 2022 04:28:28 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 2 Nov 2022 04:28:27 -0700
+Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 2 Nov 2022 04:28:27 -0700
+Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
+ fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31 via Frontend Transport; Wed, 2 Nov 2022 04:28:27 -0700
+Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.43) by
+ edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2375.31; Wed, 2 Nov 2022 04:28:27 -0700
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=HRz4MjQPdIuoKMMsS8LB6Oo8GGhndR18nnUnMYZg6Dry/rmhV8rwd2e+8tf3769bL5Y0op+laHkBfWrrlZg8l3mT4ZUdV6Pvh3yVsXnVpgRmf0t1u6GOOeqVnquPMCTWKQKFAUMM83wY9/EYxd0VjuFJeSG56oDaMXXZY3xpP3HeAVluyHB6gFYJ6sunItMKKf+MIJ5SnEZpysv5i7lOPfWugqrRrxxUGWza7sP00DvYKyXEzt9VU6yfDI/jC6wq8ZKySS10pVjbiD7ldDBTkufoJ1qDEE0sGb3QHdDbticD8d0A+PWjzr5ISBCGEfMqBnLn0C6XLFoTyhSnAnSKoQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Mu7+X7HqC4Hb9sZQkUk6rXuNT8L2CAhQOzi7dkXocqc=;
+ b=LBm4jaoRew5fAa1+/T9GUIq1L+dIJLdZyKEsmJhDG4jyUIX+ExJOkaWg4oPE6sr9tLf8fBVvVCMFthhdHG5mqSKm0RgPmpJ+PHTq0vl9JElm617amt7fOMOQIiZ2hs31UcuBzHFJCasVvWOtyAyQuuK6zch6F1MBPVZT1thvOBYI+ZwEjfssU3KvBgE5LAbVs9ol6HATr78WI4JnlTaLZ2EDzk+LsXPbvGD6v6LzZR5hmS1uF+bj11ytw0NG0Ll9GtAuo8Q8LyvS3jwtnrH/NaFJpjw7/eEgc6x9G4fzyVBLQCtHvOHGWLg5E7sVqWyboQfF7Z8qgNhJPkj4UVNv/A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from CH0PR11MB5409.namprd11.prod.outlook.com (2603:10b6:610:d0::7)
+ by SA2PR11MB5097.namprd11.prod.outlook.com (2603:10b6:806:11a::24) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.20; Wed, 2 Nov
+ 2022 11:28:25 +0000
+Received: from CH0PR11MB5409.namprd11.prod.outlook.com
+ ([fe80::be9d:e93e:4ec:166b]) by CH0PR11MB5409.namprd11.prod.outlook.com
+ ([fe80::be9d:e93e:4ec:166b%7]) with mapi id 15.20.5791.022; Wed, 2 Nov 2022
+ 11:28:25 +0000
+Message-ID: <4b39009c-b7aa-8e6c-61c8-f08c03720cb6@intel.com>
+Date:   Wed, 2 Nov 2022 13:27:31 +0200
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
+ Thunderbird/91.12.0
+Subject: Re: [PATCH v5] overflow: Introduce overflows_type() and
+ castable_to_type()
 Content-Language: en-US
-To:     Hannes Reinecke <hare@suse.de>,
-        John Garry <john.g.garry@oracle.com>,
-        John Garry <john.garry@huawei.com>, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, bvanassche@acm.org, hch@lst.de,
-        ming.lei@redhat.com, niklas.cassel@wdc.com
-Cc:     axboe@kernel.dk, jinpu.wang@cloud.ionos.com,
-        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-ide@vger.kernel.org, linux-scsi@vger.kernel.org,
-        linuxarm@huawei.com, john.garry2@mail.dcu.ie
-References: <1666693976-181094-1-git-send-email-john.garry@huawei.com>
- <1666693976-181094-3-git-send-email-john.garry@huawei.com>
- <08fdb698-0df3-7bc8-e6af-7d13cc96acfa@opensource.wdc.com>
- <83d9dc82-ea37-4a3c-7e67-1c097f777767@huawei.com>
- <9a2f30cc-d0e9-b454-d7cd-1b0bd3cf0bb9@opensource.wdc.com>
- <0e60fab5-8a76-9b7e-08cf-fb791e01ae08@huawei.com>
- <71b56949-e4d7-fd94-c44a-867080b7a4fa@opensource.wdc.com>
- <b03b37a2-35dc-5218-7279-ae68678a47ff@huawei.com>
- <0e4994f7-f131-39b0-c876-f447b71566cd@opensource.wdc.com>
- <05cf6d61-987b-025d-b694-a58981226b97@oracle.com>
- <ff0c2ab7-8e82-40d9-1adf-78ee12846e1f@opensource.wdc.com>
- <39f9afc5-9aab-6f7c-b67a-e74e694543d4@suse.de>
-From:   Damien Le Moal <damien.lemoal@opensource.wdc.com>
-Organization: Western Digital Research
-In-Reply-To: <39f9afc5-9aab-6f7c-b67a-e74e694543d4@suse.de>
-Content-Type: text/plain; charset=UTF-8
+To:     Kees Cook <keescook@chromium.org>
+CC:     <arnd@kernel.org>, <mauro.chehab@linux.intel.com>,
+        <tvrtko.ursulin@linux.intel.com>, <airlied@linux.ie>,
+        <trix@redhat.com>, <dlatypov@google.com>, <llvm@lists.linux.dev>,
+        <ndesaulniers@google.com>, <linux-kernel@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>, <gustavoars@kernel.org>,
+        <nathan@kernel.org>, <linux-sparse@vger.kernel.org>,
+        <linux-hardening@vger.kernel.org>, <rodrigo.vivi@intel.com>,
+        <mchehab@kernel.org>, <intel-gfx@lists.freedesktop.org>,
+        <luc.vanoostenryck@gmail.com>, <vitor@massaru.org>
+References: <20220926191109.1803094-1-keescook@chromium.org>
+ <20221024201125.1416422-1-gwan-gyeong.mun@intel.com>
+ <ffcfb7ce-7646-c827-8d29-7c41e4b121d6@intel.com>
+ <202210290029.3CD089A86C@keescook>
+ <850085e1-e420-b6eb-104d-15694a400bb7@intel.com>
+ <202211011605.2D8C927C2@keescook>
+From:   Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
+In-Reply-To: <202211011605.2D8C927C2@keescook>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-ClientProxiedBy: AM5PR0701CA0015.eurprd07.prod.outlook.com
+ (2603:10a6:203:51::25) To CH0PR11MB5409.namprd11.prod.outlook.com
+ (2603:10b6:610:d0::7)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH0PR11MB5409:EE_|SA2PR11MB5097:EE_
+X-MS-Office365-Filtering-Correlation-Id: a468e6ec-215e-4845-4b33-08dabcc55abe
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: jnlVuSOK25PTpGGmPebA46X6bTCQwRi7KklnXLX2oqYNSZ/fVk4mRjzvrLcLvVQvQF0n6U+wYUc4FNjTB1ps3Y21MEbeOYZfG6BEnQex7vE7wNugHSjnPF2qhCDVBT0CzPrciu3h8iK3jpJf5sc36jDb2BOnVMOPT315kI0PSSrLW3trvqzYWw0AmlTaIYnqSvUPwOWD67Vxt2ZWQGKB+J7tlmFhIZoqstiTA/OCY0xhaiorqhuqbcp1P7BzJb1gd1AlIA66mUH3+tPZpTH0xbuFIEJ8wU6ggsTTrzQryda1FFrStF0qkA/g5CEFIQ8au/zPfY4BqXUva0iejt/kerBDqooOMj7u7y/gW70M5BB49Ke1kBtCHNpAdYoxF8ZEI7bBehwDCDm8MLoB8wWokdaYTp2yr1RFJKI4O6dHjaXGsMWrvHEwjWDkSTgGyaP8S9EqOgrJRgEFOcFtWl9rTvHYHa6VoxTEDsZDgmw4WCaxhvxHgyjkjjt2JPiygNYfkpRBN88wWGpaRqNMzSEWMtcQSgiqTv+qpXZEFp0ZnjDPvUSlZt4zdBZHMNxZBgVNBZp0Ec2zpteb4w46a5VlrV+lPKdOfhPsGTbRaZqHYWKdzNxfGcUkAn03ooxZIPrVzJa14RN75R4nRzA1i18UFKRpGccudiN1aTZenMOQt2RuCg4KMU0Jv8MNZWfgAM+tRvg2Amh4t/FO9jnRMqZeKsEBW7ulFcYW4KzIAwCVhKfI6kvTfxWp16pK+jwlyChkQ05meJ1i3c5AzOI5WhRvbrV2eP460lCmGdggj9PP8TM30lrsu6OAkPjO4q9y68rB
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR11MB5409.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(346002)(376002)(396003)(366004)(39860400002)(451199015)(2906002)(66946007)(478600001)(4326008)(66476007)(8676002)(66556008)(5660300002)(6916009)(7416002)(8936002)(316002)(966005)(6486002)(83380400001)(6512007)(38100700002)(82960400001)(6506007)(31696002)(53546011)(6666004)(41300700001)(86362001)(186003)(26005)(31686004)(2616005)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Um9VUWlKN2hvdGUyNXdpOHhlcGI4MkZLME1oV3krRjJzWXRtbzc4K29zNDN3?=
+ =?utf-8?B?TXl4TWxJcEV4bEJ2WGFsYmZTcGsrdG96Z3ltUllLelVZMXU0Wmo5aHhPUE5Q?=
+ =?utf-8?B?ZFNzbmlzOTNWTzhGSmk0c2o3dUxvcVN0L1MyWE9QcyttMWtsWEZKcDV0Q2ZE?=
+ =?utf-8?B?TlU2dTV5TTlLcm4zc3p6dzVwS1FBNFExQ20xTmtZd3V1UmFucFZwMGZTRVNx?=
+ =?utf-8?B?Rnh1djlXZDIyWXUxL1NOZXRTTi8yNEU1SFZwVmJYS2RMbzU2MGRGc3piajJE?=
+ =?utf-8?B?Z0tHZis3YzlWZER1Ti9GcjMydGhqQ3dBZ2dIcU4rNnpDTHY4a2lrRUJSeTVw?=
+ =?utf-8?B?NWFEL29pR0p1RFdWaWRwajBHcTVCV1l4K1pBNUR2U2pwNk8zK1N4ZzNxZ2ZN?=
+ =?utf-8?B?WmpOM3d2RVJFNjlwSHVKdG5BRTk1b0hnbXBjNjdEYjZJZElta3FOWlJEdE9u?=
+ =?utf-8?B?VHI5TlJEVUZpL3pCeXdmNTIrWkI3eVNrd3d3SGNhTjM0OUhBRzlHbk9lYmpr?=
+ =?utf-8?B?MXVmUUdNMVdNUFlmOEFsMnl4Ty9PQnpUVGlBNzZyS3NlMjNNQ3F3NElDTi8x?=
+ =?utf-8?B?MkVKK1Q0aUdpTjMyS29uV1RDREpDbWdwR0prQTZFRnJEREF1WDhpeUVFeS8x?=
+ =?utf-8?B?aFZJUHRydHBrK25lYkxZNDlJcGZBQnM4alkvOGxqQkVUWEQ3aWZybVZPSFNE?=
+ =?utf-8?B?ak9pL0Zld2s1RjFIem1oa3B2Q2dQcUsyUjNtL0hLbXJJaGhvbDN4TmE3ZXRj?=
+ =?utf-8?B?UWxBY2NBSWQzdy9tNy9sWlYwczVPNm0rTDZCRjFUYlpteWFETHlhRnN2dTV4?=
+ =?utf-8?B?QW9zT3pIc2pWOWZldU55ai9pOEpURjQ0WUJ3MnFnVEl0RmtGTUlRMElzYTJT?=
+ =?utf-8?B?VjBXaTJUU3UvejZuQVM1MDBySkhINmNFTVE4UXcwMGFKeUMxL0R4T3Z2YXlI?=
+ =?utf-8?B?bmd0N1JwM2JlRXJJM1k5OFoxN0psdkhmT2wzS2RzN2NqdWxDc2psekVQSmpU?=
+ =?utf-8?B?M1dwNElJSWRuQUc3NFJ1L0grc0trKzBxMWpTUklsaWlBN3diV0IwZm1iV1BO?=
+ =?utf-8?B?ODdXVW5KLy9oSHkxeGgxTldkZzV6ZXNWQ3FpTW0va1YzdlNHdW5CRHduQXJu?=
+ =?utf-8?B?YnBHWE1Fa1UxS0l3eXBTcTFXSUVud2MySllSclVWVWlqSk9FYllKWEh4UGV2?=
+ =?utf-8?B?TEhWczF6RGtyZXM0WkZjNTV0QVJhZTZIN3VvMnFOQzlNcFNUZjlwM2E2Wkli?=
+ =?utf-8?B?U0NwVm02MWZMalVocllDYmpBazFsL3g5d1dOOXRBRXVwblBlTS91cXBWOTAw?=
+ =?utf-8?B?MHQxWXlCMXhGNzliT2pJcURPWVVVR1paQlJQZklKalhISnpDMjd4Tll2Nmdz?=
+ =?utf-8?B?VmNqN3V4bTBlVU4vRk1zMjV3OGtVaUxJM3pRdE5HWC9IQks1VktLcGg0K1dL?=
+ =?utf-8?B?MHVLR3BOdjg4K1lIMDJnck9aVjdLb0s5Q3hsbTQ3RGZzN1Yvc3ZOMnhqTVhq?=
+ =?utf-8?B?OHRIWVNTQ2V0OE9TOEFNMTVIRytWUzh6NWRmTW15YUFJVUFRT0dSY2dkV3BF?=
+ =?utf-8?B?NnpVL3ozZWdtK3g4a0k0VXB3dEVwQk5hTGJxMm0vN1hxUG5lKzExUkl1bTJo?=
+ =?utf-8?B?T010SE03S202c0Qwd05uc2JiN0UwNlhjbEphTGtzMWYvSlNQU2hRRlFyU1FL?=
+ =?utf-8?B?SmtVc0gxcjhOUTRFdkYvaC94RzI0TVp0SDJDYmxmZXhNcGlsQmg1ZGk1b2xT?=
+ =?utf-8?B?SEQ5L3RaUHlNTDN2ZVJNUVpCM29hRFdIdjhxWmdFcjdkdzhlV0hZQU5jYysv?=
+ =?utf-8?B?MjJuWm95WHI5bC81RHAveVl2clRBb05pQVJ6M3N5RVlUM3lGYXFVam1UVFFi?=
+ =?utf-8?B?cW1EVUk4Z29rNXJRL0pyRFlpd2ZiQWtrV3RyTHRtYUI5UzdWR09KRitpYlJl?=
+ =?utf-8?B?a29jUytOWVBuSWN6cnVQSENVV0ozQWVkSGZTUFBscVVBZzRkWTVSRDNhbmEw?=
+ =?utf-8?B?MGRNUTRmc1FKWCtZRUFxaDdka2hBUGtWTXl5TGxtNEJWOVZnRlZBM2pjUnlO?=
+ =?utf-8?B?dTg2MGI1dUdaWDNNYXZVYXQ2eEdPYllKaCs4NFFmMTNLais4WitlMlc2aytU?=
+ =?utf-8?B?aXhCR28vaDFVQm9USmhMYVRsN2RiTEliajZ3cThRaFpsZU9nUmhZWmN2VXg5?=
+ =?utf-8?B?Znc9PQ==?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: a468e6ec-215e-4845-4b33-08dabcc55abe
+X-MS-Exchange-CrossTenant-AuthSource: CH0PR11MB5409.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2022 11:28:25.2422
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: uY0QHqGf3cGLXJtjussbn1cOQa27bESAIWsh0ETAnPaOw1ZtrOVr1TaunxUYKmDA1cGR1YaHwNmsgiDHhfVfq6FSM7BYguCWU75ajR/DEI0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5097
+X-OriginatorOrg: intel.com
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/2/22 20:12, Hannes Reinecke wrote:
-> On 11/2/22 11:07, Damien Le Moal wrote:
->> On 11/2/22 18:52, John Garry wrote:
->>> Hi Damien,
+
+
+On 11/2/22 1:06 AM, Kees Cook wrote:
+> On Sat, Oct 29, 2022 at 11:01:38AM +0300, Gwan-gyeong Mun wrote:
+>>
+>>
+>> On 10/29/22 10:32 AM, Kees Cook wrote:
+>>> On Sat, Oct 29, 2022 at 08:55:43AM +0300, Gwan-gyeong Mun wrote:
+>>>> Hi Kees,
 >>>
-> [ .. ]
->>>>> Or re-use 1 from 32 (and still also have 1 separate internal command)?
->>>>
->>>> I am not yet 100% sure if we can treat that internal NCQ read log like
->>>> any other read/write request... If we can, then the 1-out-of-32
->>>> reservation would not be needed. Need to revisit all the cases we need
->>>> to take care of (because in the middle of this CDL completion handling,
->>>> regular NCQ errors can happen, resulting in a drive reset that could
->>>> wreck everything as we lose the sense data for the completed requests).
->>>>
->>>> In any case, I think that we can deal with that extra reserved command
->>>> on top of you current series. No need to worry about it for now I think.
->>>>
+>>> Hi! :)
 >>>
->>> So are you saying that you are basing current CDL support on libata
->>> internally managing this extra reserved tag (and so do not need this
->>> SCSI midlayer reserved tag support yet)?
->>
->> Not really. For now, it is using libata EH, that is, when we need the
->> internal command for the read log, we know the device is idle and no
->> command is on-going. So we send a non-NCQ command which does not have a tag.
->>
->> Ideally, all of this should use a real reserved tag to allow for an NCQ
->> read log outside of EH, avoiding the drive queue drain.
->>
-> But with the current design you'll only get that if you reserve one 
-> precious tag.
-
-yes, which is annoying. Back to the days where ATA max qd was 31...
-
-> OTOH, we might not need that tag at all, as _if_ we get an error for a 
-> specific command the tag associated with it is necessarily free after 
-> completion, right?
-
-Well, it is not really free. It is unused as far as the device is
-concerned since the command that needs to be checked completed. But not
-free yet since we need to do the read log first before being able to
-scsi-complete the command (which will free the tag). So if we use the
-regular submission path to issue the read log, we must be guaranteed that
-we can get a tag, otherwise we will deadlock. Hence the need to reserve
-one tag.
-
-
-> So we only need to find a way of 're-using' that tag, then we won't have 
-> to set aside a reserved tag and everything would be dandy...
-
-I tried that. It is very ugly... Problem is that integration with EH in
-case a real NCQ error happens when all that read-log-complete dance is
-happening is hard. And don't get me started with the need to save/restore
-the scsi command context of the command we are reusing the tag from.
-
-And given that the code is changing to use regular submission path for
-internal commands, right now, we need a reserved tag. Or a way to "borrow"
-the tag from a request that we need to check. Which means we need some
-additional api to not always try to allocate a tag.
-
+>>>> I've updated to v5 with the last comment of Nathan.
+>>>> Could you please kindly review what more is needed as we move forward with
+>>>> this patch?
+>>>
+>>> It looks fine to me -- I assume it'll go via the drm tree? Would you
+>>> rather I carry the non-drm changes in my tree instead?
+>>>
+>> Hi!
+>> Yes, I think it would be better to run this patch on your tree.
+>> this patch moves the macro of i915 to overflows.h and modifies one part of
+>> drm's driver code, but I think this part can be easily applied when merging
+>> into the drm tree.
 > 
-> Maybe we can stop processing when we receive an error (should be doing 
-> that anyway as otherwise the log might be overwritten), then we should 
-> be having a pretty good chance of getting that tag.
-
-Hmmm.... that would be no better than using EH which does stop processing
-until the internal house keeping is done.
-
-> Or, precisely, getting _any_ tag as at least one tag is free at that point.
-> Hmm?
-
-See above. Not free, but usable as far as the device is concerned since we
-have at least on command we need to check completed at the device level
-(but not yet completed from scsi/block layer point of view).
-
+> I've rebased it to the hardening tree, and it should appear in -next
+> shortly:
 > 
-> Cheers,
+> https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?h=for-next/hardening&id=5904fcb776d0b518be96bca43f258db90f26ba9a
 > 
-> Hannes
+Thanks for making this patch go forward.
 
--- 
-Damien Le Moal
-Western Digital Research
-
+G.G.
