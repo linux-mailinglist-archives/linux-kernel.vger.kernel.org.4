@@ -2,127 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D0DFF6168E8
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:30:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A60976168E4
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:30:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231922AbiKBQap (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 12:30:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
+        id S229590AbiKBQak (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 12:30:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47168 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231861AbiKBQaM (ORCPT
+        with ESMTP id S231673AbiKBQaL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 12:30:12 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.18])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81D861AD98;
-        Wed,  2 Nov 2022 09:26:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.de; s=s31663417;
-        t=1667406376; bh=rJgbLL+FBceI4uWxw9o8fqzyiU5e5oNjbPi2SaLVtdk=;
-        h=X-UI-Sender-Class:Date:From:To:Subject;
-        b=nmN4oUtR+81ZhLCPh/c1t8RkUz+5MMHinX9EfWqgu8Un1E+5LwqoJjPVRwCo7cUZq
-         36fWxq+DB5WxVYMkQWbKIukkwnaqYorPSu+l3IuFQjgpuwl3lK0+fqWwEkSuz6/71d
-         iE4UuN1RCYZI078jYKLtsNk9z8yytdRXsydD+5LPGXPL1zvb6256hnn1P17ppVRQdP
-         xzKuZIZHHxb4t82zqMF7IJHfFyicrIwJWsBek6VUUzerqHocPqOZs0e37HjeWE9fVY
-         tmqw6Fu7xmXxjDXCPkaoMnzdu9mIgVuguzjIOM+Xe8F0n10ovMGwWdZbu0Wq+LymuF
-         B5s9XhqheQuCw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from p100 ([92.116.147.88]) by mail.gmx.net (mrgmx005
- [212.227.17.190]) with ESMTPSA (Nemesis) id 1M1Hdw-1oruC20Nyc-002oEe; Wed, 02
- Nov 2022 17:26:16 +0100
-Date:   Wed, 2 Nov 2022 17:26:13 +0100
-From:   Helge Deller <deller@gmx.de>
-To:     Linus Torvalds <torvalds@linux-foundation.org>,
-        linux-kernel@vger.kernel.org, linux-parisc@vger.kernel.org,
-        James Bottomley <James.Bottomley@hansenpartnership.com>,
-        John David Anglin <dave.anglin@bell.net>
-Subject: [GIT PULL] parisc architecture fixes for v6.1-rc4
-Message-ID: <Y2KaFoe7n4lkr25c@p100>
+        Wed, 2 Nov 2022 12:30:11 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDF0618349
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 09:26:18 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id p16so5430911wmc.3
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 09:26:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=zv7Fq5k50QWQLxnPbss2vXizhHRaHgo0CLWyEMOtNXY=;
+        b=XLT+2bOf52xM6JdQqN+Tbi3UN/LLLCaptLMtL5KvSTYPvI/lUr4ONN2+m47aatNmUE
+         rdrtReOAY4RmLpenQiqcMEofRRUhxktec1oIjlF4j6H6wmkxi5XEDnpOZ9QGJaSBxv+F
+         LhWZTjMyJ0KzHsT2tice4ZplDy8smvhGjPpxQ+xekviGu2gOZfr+P+dYshaOnkeqsqVi
+         uLKwI/Sm12ueV22i0iRvO64/ABCyk4cZb6c2neFCEhma60LYtaOmfJBEUoWMY7xkEKJ/
+         WLGsayqA2AIVW/hhoObdJU0oqJ/+fBkdyyFvsfYKhIOtXxaDfx5ozca5oUxePLiG0MUO
+         U5Rg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:references:cc:to
+         :content-language:subject:reply-to:from:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zv7Fq5k50QWQLxnPbss2vXizhHRaHgo0CLWyEMOtNXY=;
+        b=Zs9ly2UgGl+VAS3eGCIJQG1e4cYfa/9VlbxjfXdbG7Pa9QLHFkcnJEKrLqxNUVWJRg
+         OHf+sqUONz1wCi6MY5sMtUenRv8c/L/e82aCL2p9fjKVrJxRg6PkD5FKkfKcji4edr09
+         7UzkS47gnf9zfSyWfvkJT2L1iocQoBI+6w8USVDQlSkWYA7WsMuwzIWeXSYK3kA1LRZX
+         lsbCK72iJlUqdde5xEUwup6Ekc9tUwn7TYpo0VvHonf3ZgspwcSc6KhZ3pxncxyhyYF/
+         3P4yeIRu6wqU5TQFMJXx5wKVPkCPEkpEDz3lObwJQNwAvLMcyfy+0eAVX8AV3bQb7aTV
+         /1ww==
+X-Gm-Message-State: ACrzQf0xn4h9eQMvygRyHHOprUC7kR35oquDW7U3cm1ld9navO8+YXvA
+        nP3qf1H2r8mNKnDc0gGsrWQboQ==
+X-Google-Smtp-Source: AMsMyM58DL/hkAn4DnGcSmAn4Lnobs2eqhlbRBLy1/I33qod5riKNI2cBWPxvRt82gxskj2IR0PZIw==
+X-Received: by 2002:a05:600c:4ed1:b0:3cf:86ab:3a0f with SMTP id g17-20020a05600c4ed100b003cf86ab3a0fmr2853053wmq.106.1667406377451;
+        Wed, 02 Nov 2022 09:26:17 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:3541:e8cb:4c8c:e204? ([2a01:e0a:982:cbb0:3541:e8cb:4c8c:e204])
+        by smtp.gmail.com with ESMTPSA id v7-20020a05600c444700b003c70191f267sm2844571wmn.39.2022.11.02.09.26.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 09:26:17 -0700 (PDT)
+Message-ID: <f7f0ced5-d8b8-08cb-e354-780dc69a68cd@linaro.org>
+Date:   Wed, 2 Nov 2022 17:26:16 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Provags-ID: V03:K1:xHbuEPnV5UQKfq1zLYVpnAvTryrB5+ElqFEDJ3HzOPkPDNMUQWn
- sRERA0xrMomSyGNxnlM9MEB1tHRQ4r0rywmKVMNT5AYtZyzroRs3JAlwn2RnydopAgkhLuf
- 9X9Rt33ZxoLSl+03AlgZlWjukNteFrWFeYtVs8bDkdVPoTlBNFYj7B0lxFfKS82exwwo4t3
- A1JjcpObgFh13w+QArLiw==
-UI-OutboundReport: notjunk:1;M01:P0:qJ9MS02Cxrk=;PSb2fFkwTQlJh/G3lCdnleb3ebP
- 4spYwm014E5mtDPSfcQi2fM33E3ySSlXiE1BTtSGNP3mshrMH5mqKm+oVimZ0CHI0DULbGNtm
- 7E+Es4w3cReofjTwWzWy+JrjEZs9mQh23O0VMAd3YPI49AkQq5797J+B3mk+spLVnyuT0dFX+
- Yq2wEAP0Y7unJ7y49xEgRAJVOgdNYxwpiid3r5/dPN0qMFNsh1t63lYJD2o9DGCztIhB+Rqd/
- 0nZLGKzOglkXXix/05rP8mM7ldzvfxt6OLLgzz6LhZMAoDX7bdDpXTOdqvGie5T2D2+U9U+8p
- UDC0toDa065xetkgGQOOXG/gsKd9y1dzqncW73j27wM4wxlD0fIaez2vznR/KN/0F1N3y3KsC
- gMocExGInbA0IkbXp2h0bBwMwTivHLrlytYRnbfdHVwWoXmC+zX0ZO3PWbqNnSibB7qZ5/q7+
- rpDP3DGr+7YG7rWpOuWeNO+6d9Xlgf8gxeIhzpCZUCtk+z6jGsskbTeMLnXvUFtvFsC81fVLX
- 6JanIZCxpFm3+MoH2SH689xp+eEEmFTSOPC8z9rpbKXiw3l4fajUJ+PxukdKRkLz1LfGhdKc8
- KAjfPphjbBb1YM8+YcAtR1jBX1PECMVnF2DWYkW9vERbAn0w+AJ5H1beaTitlfoohYE5pM0r2
- IdPefkb0BLe9Zx4K+9/zt1NuJ/pLgR4IlblKzFw12s/m0dRsgbMvKlKm1Yr1bqexOTx1Es6tc
- ZCRqGbpO3cIfVtZpVRQOe1++uUsjLIObpdbE7FH+IgdDfKxS8Ydz5SzolvfWwu+oI3pXEbYuw
- MrTQqcZU3/fApnDFVk2AbViYQXucauZg/ucOFkHq/LjXdDzBhX5m6JfiyhCFr4MxM5DEmo7yM
- kOCOE79mIWayorFpHC/5nrz8ikdohU07/c22QdFeECeG9CRtQCx/65QRT7cAyW9O2br2UlGX/
- eL6Vpi/+sRqcbB/WA4u8Dj6KmXE=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH 1/4] dt-bindings: reset: document Odroid Go Ultra
+ power-off
+Content-Language: en-US
+To:     Rob Herring <robh@kernel.org>
+Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Sebastian Reichel <sre@kernel.org>,
+        Jerome Brunet <jbrunet@baylibre.com>,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
+        devicetree@vger.kernel.org
+References: <20221031-b4-odroid-go-ultra-initial-v1-0-42e3dbea86d5@linaro.org>
+ <20221031-b4-odroid-go-ultra-initial-v1-1-42e3dbea86d5@linaro.org>
+ <20221102162344.GA3993882-robh@kernel.org>
+Organization: Linaro Developer Services
+In-Reply-To: <20221102162344.GA3993882-robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus,
+Hi,
 
-please pull some fixes for the parisc architecture for 6.1-rc4.
+On 02/11/2022 17:23, Rob Herring wrote:
+> On Mon, Oct 31, 2022 at 05:47:25PM +0100, Neil Armstrong wrote:
+>> The Hardkernel Odroid Go Ultra poweroff scheme requires requesting a poweroff
+>> to its two PMICs in order, this represents the poweroff scheme needed to complet
+>> a clean poeroff of the system.
+>>
+>> Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+>> ---
+>>   .../reset/hardkernel,odroid-go-ultra-poweroff.yaml | 42 ++++++++++++++++++++++
+>>   1 file changed, 42 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/power/reset/hardkernel,odroid-go-ultra-poweroff.yaml b/Documentation/devicetree/bindings/power/reset/hardkernel,odroid-go-ultra-poweroff.yaml
+>> new file mode 100644
+>> index 000000000000..65e42258717c
+>> --- /dev/null
+>> +++ b/Documentation/devicetree/bindings/power/reset/hardkernel,odroid-go-ultra-poweroff.yaml
+>> @@ -0,0 +1,42 @@
+>> +# SPDX-License-Identifier: GPL-2.0
+>> +%YAML 1.2
+>> +---
+>> +$id: http://devicetree.org/schemas/power/reset/hardkernel,odroid-go-ultra-poweroff.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Hardkernel Odroid Go Ultra poweroff
+>> +
+>> +maintainers:
+>> +  - Neil Armstrong <neil.armstrong@linaro.org>
+>> +
+>> +description:
+>> +  The Hardkernel Odroid Go Ultra poweroff scheme requires requesting a poweroff
+>> +  to its two PMICs in order, this represents the poweroff scheme needed to complete
+>> +  a clean poeroff of the system.
+> 
+> You don't really need a node for this. Test against the top level
+> compatible and then find the PMIC nodes by their compatible strings.
 
-This patchset handles mostly oddities with the serial port 8250_gsc.c driver.
-Although the name suggests it's just for serial ports on the GSC bus (e.g. in
-older PA-RISC machines), it handles serial ports on PA-RISC PCI devices (e.g.
-on the SuperIO chip) as well.
-Thus this patchset renames the driver to 8250_parisc and fixes the config
-dependencies.
-The other change is a cleanup on how the device IDs of devices in a PA-RISC
-machine are shown at startup.
+Hmm ok, indeed would be simpler.
 
-Thanks,
-Helge
+Neil
 
------
+> 
+>> +
+>> +properties:
+>> +  compatible:
+>> +    const: hardkernel,odroid-go-ultra-poweroff
+>> +
+>> +  hardkernel,rk817-pmic:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>> +    description: Phandle to the RK817 PMIC node
+>> +
+>> +  hardkernel,rk818-pmic:
+>> +    $ref: /schemas/types.yaml#/definitions/phandle
+>> +    description: Phandle to the RK818 PMIC node
+>> +
+>> +required:
+>> +  - compatible
+>> +  - hardkernel,rk817-pmic
+>> +  - hardkernel,rk818-pmic
+>> +
+>> +additionalProperties: false
+>> +
+>> +examples:
+>> +  - |
+>> +    poweroff {
+>> +        compatible = "hardkernel,odroid-go-ultra-poweroff";
+>> +        hardkernel,rk817-pmic = <&rk817>;
+>> +        hardkernel,rk818-pmic = <&rk818>;
+>> +    };
+>>
+>> -- 
+>> b4 0.10.1
+>>
 
-The following changes since commit 9abf2313adc1ca1b6180c508c25f22f9395cc780:
-
-  Linux 6.1-rc1 (2022-10-16 15:36:24 -0700)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux.git tags/parisc-for-6.1-2
-
-for you to fetch changes up to 2b6ae0962b421103feb41a80406732944b0665b3:
-
-  parisc: Avoid printing the hardware path twice (2022-10-31 15:37:14 +0100)
-
-----------------------------------------------------------------
-parisc architecture fixes for kernel v6.1-rc4:
-
-Rename the serial port 8250_gsc.c driver to 8250_parisc.c and cleanup
-how the device IDs of devices in a PA-RISC machine are shown at startup.
-
-----------------------------------------------------------------
-Helge Deller (5):
-      parisc: Make 8250_gsc driver dependend on CONFIG_PARISC
-      parisc/serial: Rename 8250_gsc.c to 8250_parisc.c
-      parisc: Use signed char for hardware path in pdc.h
-      parisc: Export iosapic_serial_irq() symbol for serial port driver
-      parisc: Avoid printing the hardware path twice
-
-Lukas Bulwahn (1):
-      MAINTAINERS: adjust entry after renaming parisc serial driver
-
- MAINTAINERS                                        |  2 +-
- arch/parisc/include/asm/hardware.h                 | 12 ++++----
- arch/parisc/include/uapi/asm/pdc.h                 | 36 ++++++++--------------
- arch/parisc/kernel/drivers.c                       | 14 ++++-----
- drivers/parisc/iosapic.c                           |  1 +
- drivers/parisc/pdc_stable.c                        | 34 ++++++++++----------
- .../tty/serial/8250/{8250_gsc.c => 8250_parisc.c}  |  0
- drivers/tty/serial/8250/Kconfig                    |  4 +--
- drivers/tty/serial/8250/Makefile                   |  2 +-
- 9 files changed, 47 insertions(+), 58 deletions(-)
- rename drivers/tty/serial/8250/{8250_gsc.c => 8250_parisc.c} (100%)
