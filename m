@@ -2,73 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B7AC2616D46
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:59:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E01C5616D49
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 20:00:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231830AbiKBS7b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 14:59:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55494 "EHLO
+        id S231737AbiKBTAB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 15:00:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55160 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231792AbiKBS7O (ORCPT
+        with ESMTP id S231873AbiKBS7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:59:14 -0400
-Received: from mail-lj1-x236.google.com (mail-lj1-x236.google.com [IPv6:2a00:1450:4864:20::236])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16B69F1F
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:59:05 -0700 (PDT)
-Received: by mail-lj1-x236.google.com with SMTP id j14so26221011ljh.12
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 11:59:05 -0700 (PDT)
+        Wed, 2 Nov 2022 14:59:35 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 524BE140A2
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:59:18 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id g62so17219660pfb.10
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 11:59:18 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=t75DvuVjvU8ErKkB8sfDwtGNgCI+Z6sqJYaVzvmVK/A=;
-        b=MUP/AG+NNiZBTgmNQ6OfMmSid3DDYp7HtQco7foq508VnUZGteDOI+eFJ14oaHh0kV
-         zy5pxl4sKYUklIfLktqU4bfR3vTxjchIkJZCU+8SnbaLYpmjAAfnl+D7T507mSmJGUDP
-         W4sLJeyFJbgStOpJ0ZewD6MNe7V036GCuC0ctZbubE9g3url7E6yH3rpCGF2fwcOu/v9
-         uQrqpV2jjd+sYeXxVUcrnLfoV4/QdnuPNaVf9/QZgNAIRJPGygLTuwin+mm0CrDJ9yMl
-         TEzTwBrKzWwqeXds+YBIeHyfOFyvjP9ZgggNMUJtiNgSuj4A8y61GD1gqp+lP6Ks8ljI
-         7P1w==
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ozfijFL6oisXA0Rywz9UlgsF3nC4xugKejf2BN/hMCQ=;
+        b=WjSssknYHNDKNXVAC4m9Z+qWXUWoIjb1R2WF95ECyXQqK9TnGf9BQGsa8R9v5iDyCO
+         r1g/IWi7jmIjmD6bG/mUPj9AeS0CYRsAdUVGcSIYibRi+zcuRcKQicApfrpp6qvDRM9M
+         R5DUTmbCEO/GCAZQvPNVi1CzszkRIayc1PMse6Zv0JgaZACrOrQNXkJ8G+4zOjgXV8rG
+         v8qgLotiQyEJpBz5emzw8XXTUrO8iGmIdNQVEQIW+jGYp821AqYfC+q4sk22c9nF6evs
+         TyVDiFoijZCCo9XMliQtfGnUsrJ1vRlABl+C7ziz4tgiflT2Y50XwhC41K/QKF2ToH/a
+         PwCg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=t75DvuVjvU8ErKkB8sfDwtGNgCI+Z6sqJYaVzvmVK/A=;
-        b=43V6YitVEwCE09gLrMbGKwdpJB/65jasofcmX/Ugened+n1Xaz7KsBnx/WRiuyFzJj
-         PSSbrDIOiQKeW3XAcHjxvt6b0Nyv0IPgdXEy5h8rnDSrr0uLEfbJ9Rg322DTyR26oORz
-         1sU0GTvhBqiRbHUO9P+nhPmZ85FnQyOQub7Er8hhoo6KwBrmjo6ysicmI5Tj90cd+z/p
-         HK4TqBgGb7Xn/w9DLHoYPuvdq7qAV+IbPBfcQOqIyHIS93GYqeiMpW62bhtkkvTNh3G/
-         0DEqUJePkp3Fde/i9VDs3vIxzy7vdQflIR/zw8vSwmV99/ZqsJVXtuiV4ZRlgx8iDZje
-         Xtmw==
-X-Gm-Message-State: ACrzQf2b25KS4i25TEGq7mCJ55TM4mNQh0zaC0zHKjgoOoGMFW27UOmq
-        629qrG/XtRdf+FIyBrzGfWxm4zNUpC6sjX4GfDD8oA==
-X-Google-Smtp-Source: AMsMyM7BJbGl07H3PmzfwOoksLa52lkbMBKu2vdfiDt6LeVz6JfHt+wc3jYY53SxUNF0LsDH0MlDeXt7k/2BrK6oRhI=
-X-Received: by 2002:a2e:98ce:0:b0:277:4887:944d with SMTP id
- s14-20020a2e98ce000000b002774887944dmr7585040ljj.426.1667415543120; Wed, 02
- Nov 2022 11:59:03 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ozfijFL6oisXA0Rywz9UlgsF3nC4xugKejf2BN/hMCQ=;
+        b=T6Yb6EPQTea6fl9mxGj0ATQ8aUEkiFnRoV8Ox0CSjYMZOQc9Wily9JsHPTdiPGKRUN
+         m8SVKhqwclJZyPo5IKbFKs+wYdk1jsTnnS0vurheKoQrBpI8CHncbsosgi12riQ+PaPC
+         5mpePW6acGAJPNWcnLrR/UbCPSpgjRDIZjMMydLSVZYO6OWj0jLm5wD61C7OLM00LB+f
+         lkMMMf7ks6/ZXscGbX1DRVi0QW3I21dRy13SLEuRd27e1Fg63uZwaA9P9R+tC1snna1t
+         XimCQ4l1ZMZu7maXpGcoxGOZ611Q4ysTXES2YrnTU6gNNDbrrd7us1Qjrtei2cwCPaqs
+         dIvg==
+X-Gm-Message-State: ACrzQf2wTH3jiGCJFL6AN3k/dBlUHJenPMNKDJlqq9sZN5ZGHSKncLhp
+        BQBCOd3QM5qOhq8yt03JvdeFJn/6lvn4Ww==
+X-Google-Smtp-Source: AMsMyM7pZQ31wit4DKIfpjFcUOZdw5alHxSslQKpojZbI31esAaJxU+LL0AH44hmWerSfc/wAQ4JBA==
+X-Received: by 2002:a63:1041:0:b0:46e:c6eb:22ee with SMTP id 1-20020a631041000000b0046ec6eb22eemr22767269pgq.442.1667415557761;
+        Wed, 02 Nov 2022 11:59:17 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id mg7-20020a17090b370700b0020d3662cc77sm1786677pjb.48.2022.11.02.11.59.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 11:59:17 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 18:59:13 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     isaku.yamahata@intel.com, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
+        Marc Zyngier <maz@kernel.org>, Will Deacon <will@kernel.org>,
+        isaku.yamahata@gmail.com, Kai Huang <kai.huang@intel.com>,
+        Chao Gao <chao.gao@intel.com>,
+        Atish Patra <atishp@atishpatra.org>,
+        Shaokun Zhang <zhangshaokun@hisilicon.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Huang Ying <ying.huang@intel.com>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Borislav Petkov <bp@alien8.de>
+Subject: Re: [PATCH v5 00/30] KVM: hardware enable/disable reorganize
+Message-ID: <Y2K+AQG+44sKFWDV@google.com>
+References: <cover.1663869838.git.isaku.yamahata@intel.com>
+ <Y0da+Sj3BjYnMoh3@google.com>
+ <Y0jfwi5yo0oMQ5lv@google.com>
+ <38d7f8af-3cf0-0d5b-3fda-a2a3326f7b28@redhat.com>
 MIME-Version: 1.0
-References: <20221031183122.470962-1-shy828301@gmail.com> <Y2BHcBCR2FIJgU4w@dhcp22.suse.cz>
- <CAAa6QmQt9Us8YpirQGXV0_AetuPS+EOqMSGqNn6KW24HXvwO_A@mail.gmail.com>
- <Y2DQr06mNzk0ITX1@dhcp22.suse.cz> <CAHbLzkonsnr4yxUOpMpoch1eCVNgR5hC9YaMkPR=fSV2Uszc6g@mail.gmail.com>
- <CAAa6QmRe1zMp8P-gZjR63Fg6KhOw+fP-v7SQWLNKuc2Y9ZxvyA@mail.gmail.com>
- <Y2IerOXJ+ZoRTHcs@dhcp22.suse.cz> <CAHbLzkrBNzsorc9oCq1=ri0uq1xbQ+m+u2gQX5GYrb=Z7n4siA@mail.gmail.com>
- <Y2KXkVmRWOpPT/MI@dhcp22.suse.cz> <CAHbLzkosQf8OoL+u+gkfO5-fvCNUuDxEa08FUfks1M4AS7tmjw@mail.gmail.com>
- <Y2KtKVpR69P+E0xT@dhcp22.suse.cz> <CAHbLzkpirnzJSu0SHGRbhFMsH7ZzHtL5ZMXjrBoy8r=UywVhMg@mail.gmail.com>
-In-Reply-To: <CAHbLzkpirnzJSu0SHGRbhFMsH7ZzHtL5ZMXjrBoy8r=UywVhMg@mail.gmail.com>
-From:   "Zach O'Keefe" <zokeefe@google.com>
-Date:   Wed, 2 Nov 2022 11:58:26 -0700
-Message-ID: <CAAa6QmQ+4XndbtE_=mcaC5OaeK4g42dKYfY5FmYoRDTKGO-3nA@mail.gmail.com>
-Subject: Re: [PATCH] mm: don't warn if the node is offlined
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     Michal Hocko <mhocko@suse.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Davidoff <davidoff@qedmf.net>,
-        Bob Liu <lliubbo@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <38d7f8af-3cf0-0d5b-3fda-a2a3326f7b28@redhat.com>
 X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
         ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,73 +85,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 2, 2022 at 11:18 AM Yang Shi <shy828301@gmail.com> wrote:
->
-> On Wed, Nov 2, 2022 at 10:47 AM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Wed 02-11-22 10:36:07, Yang Shi wrote:
-> > > On Wed, Nov 2, 2022 at 9:15 AM Michal Hocko <mhocko@suse.com> wrote:
-> > > >
-> > > > On Wed 02-11-22 09:03:57, Yang Shi wrote:
-> > > > > On Wed, Nov 2, 2022 at 12:39 AM Michal Hocko <mhocko@suse.com> wrote:
-> > > > > >
-> > > > > > On Tue 01-11-22 12:13:35, Zach O'Keefe wrote:
-> > > > > > [...]
-> > > > > > > This is slightly tangential - but I don't want to send a new mail
-> > > > > > > about it -- but I wonder if we should be doing __GFP_THISNODE +
-> > > > > > > explicit node vs having hpage_collapse_find_target_node() set a
-> > > > > > > nodemask. We could then provide fallback nodes for ties, or if some
-> > > > > > > node contained > some threshold number of pages.
-> > > > > >
-> > > > > > I would simply go with something like this (not even compile tested):
-> > > > >
-> > > > > Thanks, Michal. It is definitely an option. As I talked with Zach, I'm
-> > > > > not sure whether it is worth making the code more complicated for such
-> > > > > micro optimization or not. Removing __GFP_THISNODE or even removing
-> > > > > the node balance code should be fine too IMHO. TBH I doubt there would
-> > > > > be any noticeable difference.
-> > > >
-> > > > I do agree that an explicit nodes (quasi)round robin sounds over
-> > > > engineered. It makes some sense to try to target the prevalent node
-> > > > though because this code can be executed from khugepaged and therefore
-> > > > allocating with a completely different affinity than the original fault.
-> > >
-> > > Yeah, the corner case comes from the node balance code, it just tries
-> > > to balance between multiple prevalent nodes, so you agree to remove it
-> > > IIRC?
-> >
-> > Yeah, let's just collect all good nodes into a nodemask and keep
-> > __GFP_THISNODE in place. You can consider having the nodemask per collapse_control
-> > so that you allocate it only once in the struct lifetime.
->
-> Actually my intention is more aggressive, just remove that node balance code.
->
+On Wed, Nov 02, 2022, Paolo Bonzini wrote:
+> On 10/14/22 06:04, Sean Christopherson wrote:
+> > Good news (from a certain point of view):
+> > The reason that the "generic h/w enabling" doesn't help much is because after sorting
+> > out the myriad issues in KVM initialization, which is even more of a bug-ridden mess
+> > than I initially thought, kvm_init() no longer has_any_  arch hooks.  All the compat
+> > checks and whatnot are handled in x86, so tweaking those for TDX should be easier,
+> > or at the very least, we should have more options.
+> > 
+> > Sorting everything out is proving to be a nightmare, but I think I have the initial
+> > coding done.  Testing will be fun.  It'll likely be next week before I can post
+> > anything.
+> 
+> Hi Sean,
+> 
+> is this the same series that you mentioned a couple hours ago in reply to
+> Isaku?
 
-The balancing code dates back to 2013 commit 9f1b868a13ac ("mm: thp:
-khugepaged: add policy for finding target node") where it was made to
-satisfy "numactl --interleave=all". I don't know why any real
-workloads would want this -- but there very well could be a valid use
-case. If not, I think it could be removed independent of what we do
-with __GFP_THISNODE and nodemask.
-
-Balancing aside -- I haven't fully thought through what an ideal (and
-further overengineered) solution would be for numa, but one (perceived
-- not measured) issue that khugepaged might have (MADV_COLLAPSE
-doesn't have the choice) is on systems with many, many nodes with
-source pages sprinkled across all of them. Should we collapse these
-pages into a single THP from the node with the most (but could still
-be a small %) pages? Probably there are better candidates. So, maybe a
-khugepaged-only check for max_value > (HPAGE_PMD_NR >> 1) or something
-makes sense.
-
-> >
-> > And as mentioned in other reply it would be really nice to hide this
-> > under CONFIG_NUMA (in a standalong follow up of course).
->
-> The hpage_collapse_find_target_node() function itself is defined under
-> CONFIG_NUMA.
->
-> >
-> > --
-> > Michal Hocko
-> > SUSE Labs
+Yep.
