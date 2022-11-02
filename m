@@ -2,330 +2,198 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E2104616572
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:00:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED1736165A3
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:02:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230182AbiKBPAI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 11:00:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43720 "EHLO
+        id S230398AbiKBPCi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 11:02:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45074 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230046AbiKBPAF (ORCPT
+        with ESMTP id S230340AbiKBPCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 11:00:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A24E2B621
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 07:58:53 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667401132;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=aIUui6XemfDmNnKveTsJ7okhqXcH8eMwCddrAWsAvh8=;
-        b=ULhpDMkovA5QMBRTybJ5vdXEGGadofOClT37OX1k4q921b7d2XWD8iWrOO/wWjAbGZpVQW
-        XgesZl7iGTBzs3JSVLbu43awbyErpzfgCm2qOSSMq363UbF/gDGEs1rrLS01C4LxnOlSir
-        scEmml6LC7bYnySNBQweGt7SfTeyCLE=
-Received: from mail-wr1-f72.google.com (mail-wr1-f72.google.com
- [209.85.221.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-595-w1WI3L_lMc6IvMOvPWnYMA-1; Wed, 02 Nov 2022 10:58:51 -0400
-X-MC-Unique: w1WI3L_lMc6IvMOvPWnYMA-1
-Received: by mail-wr1-f72.google.com with SMTP id o13-20020adfa10d000000b00232c00377a0so4975319wro.13
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 07:58:51 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aIUui6XemfDmNnKveTsJ7okhqXcH8eMwCddrAWsAvh8=;
-        b=i1xBcnV2hF23bekMDjVC0E9PLKuVsPeHcgY5iDLyMgGewXkAXTsbbmGePEb/piEkql
-         anR0X5Np42RI2knqf84LgSLLYlW9TsWSRgT4JEenmk59Mg5688XpbucL7V5hph6LYE1H
-         nhJGhmdQ5jWGVYiG/572MgiGrItlIHHayfnethFB284if6pB8F1aMQYyzU2m07U6jlJS
-         cl1E3HzAWCg9pFXQfWKeghWDOuQknhr6dMadRLE1rgMW83+iGbBb0mlBO4q2BMT2W/LI
-         9TxC25JqA0l0/jW7mAITX6WFKVoc+yKYmay5WtA2NcSHtzA8KevGqSsjhZ49zckgQra6
-         qbrQ==
-X-Gm-Message-State: ACrzQf0fmTtPzc3ocE1p2vFqeWvLiyjgbcqJhjGTBAnFDMD+tEaAAueE
-        9m++5KknBd3XZu2lFz8mPQNmiI7m02HOqevzK2c0Tp7A4zhVpsZDNoehsNbd/USktRPff1yFIip
-        QdAtDQKxnnUjGsmnCzpxO+ejE
-X-Received: by 2002:adf:f98a:0:b0:236:677c:2407 with SMTP id f10-20020adff98a000000b00236677c2407mr15876803wrr.578.1667401130341;
-        Wed, 02 Nov 2022 07:58:50 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4xFdFHDutoVz3RfLfUXOtfgbF9PYQtxkvFyArdcYq9THDvS/zsbOexyln9yYO1AvwtquS0yA==
-X-Received: by 2002:adf:f98a:0:b0:236:677c:2407 with SMTP id f10-20020adff98a000000b00236677c2407mr15876772wrr.578.1667401130077;
-        Wed, 02 Nov 2022 07:58:50 -0700 (PDT)
-Received: from fedora (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id m39-20020a05600c3b2700b003bfaba19a8fsm2424488wms.35.2022.11.02.07.58.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 07:58:49 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Jinank Jain <jinankjain@linux.microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, arnd@arndb.de, peterz@infradead.org,
-        jpoimboe@kernel.org, jinankjain@linux.microsoft.com,
-        seanjc@google.com, kirill.shutemov@linux.intel.com,
-        ak@linux.intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH 2/6] hv: Setup synic registers in case of nested root
- partition
-In-Reply-To: <78973f0cfed8a19fced95875c0142a08386e66ed.1667394408.git.jinankjain@microsoft.com>
-References: <cover.1667394408.git.jinankjain@microsoft.com>
- <78973f0cfed8a19fced95875c0142a08386e66ed.1667394408.git.jinankjain@microsoft.com>
-Date:   Wed, 02 Nov 2022 15:58:48 +0100
-Message-ID: <871qqls8rb.fsf@redhat.com>
+        Wed, 2 Nov 2022 11:02:21 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3BDC72982B;
+        Wed,  2 Nov 2022 08:02:18 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A2DnJ1C025757;
+        Wed, 2 Nov 2022 15:02:03 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : content-transfer-encoding : mime-version; s=pp1;
+ bh=UB/R2lgefHPHQSvdUiaAq3ILQiFWcLwsNx4+zmWhhIk=;
+ b=HEX9/r0SygZ8TgGETmJhlnB/H7l18W8JWWZbeZI5fR3gbjkBX0L4oDxMCVVVJ68n0ZTb
+ c7pNw5485XMaFKGhsSyo9QqM3P8HsubfzVJiWT97MsXQD3ORmkh7kZ4/5CLyMGZWTXMW
+ nJWBRFXSYDsqC/po6x+TfRNOImBIXRFIyG0vEoUIG3ycWtDFo5UWMbdvp+JLOrAPynCB
+ 55JSmYBekMDX5IgZX5XjCWGu1L7m7xp37Sj3fzIAQ3QcWwbZZfPAAA7/s6Ll/XfW5rVw
+ FKHs5YyEmUZPuJsbtkApbY+Nm7/gNRad0SHl4jiREAQyMiuewr2Q0C6m+mssrdb5qi6I aA== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kkss6b9en-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 15:02:02 +0000
+Received: from m0098409.ppops.net (m0098409.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A2DnKsm025848;
+        Wed, 2 Nov 2022 15:02:02 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kkss6b9cr-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 15:02:01 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A2EosbR017404;
+        Wed, 2 Nov 2022 15:01:57 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04ams.nl.ibm.com with ESMTP id 3kgut9706a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 15:01:57 +0000
+Received: from d06av21.portsmouth.uk.ibm.com (d06av21.portsmouth.uk.ibm.com [9.149.105.232])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A2F1sXs25559570
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Nov 2022 15:01:54 GMT
+Received: from d06av21.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 21EE152052;
+        Wed,  2 Nov 2022 15:01:54 +0000 (GMT)
+Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
+        by d06av21.portsmouth.uk.ibm.com (Postfix) with ESMTPS id 0BD955204F;
+        Wed,  2 Nov 2022 15:01:54 +0000 (GMT)
+Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 4958)
+        id C9E6BE01BC; Wed,  2 Nov 2022 16:01:53 +0100 (CET)
+From:   Eric Farman <farman@linux.ibm.com>
+To:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>
+Cc:     Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org, Eric Farman <farman@linux.ibm.com>
+Subject: [PATCH v2 0/7] vfio-ccw parent rework
+Date:   Wed,  2 Nov 2022 16:01:45 +0100
+Message-Id: <20221102150152.2521475-1-farman@linux.ibm.com>
+X-Mailer: git-send-email 2.34.1
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: giE1FvulF18FIx78kR1PLtIr11DWW1b8
+X-Proofpoint-ORIG-GUID: ld2AgWS6yzQppxgLjXXl59g3Tl71O3Gi
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-02_11,2022-11-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0
+ priorityscore=1501 mlxscore=0 clxscore=1015 impostorscore=0 bulkscore=0
+ lowpriorityscore=0 suspectscore=0 phishscore=0 malwarescore=0 adultscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211020093
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Jinank Jain <jinankjain@linux.microsoft.com> writes:
+Hi all,
 
-> Child partitions are free to allocate SynIC message and event page but in
-> case of root partition it must use the pages allocated by Microsoft
-> Hypervisor (MSHV). Base address for these pages can be found using
-> synthetic MSRs exposed by MSHV. There is a slight difference in those MSRs
-> for nested vs non-nested root partition.
->
-> Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
-> ---
->  arch/x86/include/asm/hyperv-tlfs.h | 11 ++++++
->  drivers/hv/hv.c                    | 55 ++++++++++++++++++------------
->  2 files changed, 45 insertions(+), 21 deletions(-)
->
-> diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
-> index d9a611565859..0319091e2019 100644
-> --- a/arch/x86/include/asm/hyperv-tlfs.h
-> +++ b/arch/x86/include/asm/hyperv-tlfs.h
-> @@ -225,6 +225,17 @@ enum hv_isolation_type {
->  #define HV_REGISTER_SINT14			0x4000009E
->  #define HV_REGISTER_SINT15			0x4000009F
->  
-> +/*
-> + * Define synthetic interrupt controller model specific registers for
-> + * nested hypervisor.
-> + */
-> +#define HV_REGISTER_NESTED_SCONTROL            0x40001080
-> +#define HV_REGISTER_NESTED_SVERSION            0x40001081
-> +#define HV_REGISTER_NESTED_SIEFP               0x40001082
-> +#define HV_REGISTER_NESTED_SIMP                0x40001083
-> +#define HV_REGISTER_NESTED_EOM                 0x40001084
-> +#define HV_REGISTER_NESTED_SINT0               0x40001090
-> +
->  /*
->   * Synthetic Timer MSRs. Four timers per vcpu.
->   */
-> diff --git a/drivers/hv/hv.c b/drivers/hv/hv.c
-> index 4d6480d57546..92ee910561c4 100644
-> --- a/drivers/hv/hv.c
-> +++ b/drivers/hv/hv.c
-> @@ -25,6 +25,11 @@
->  /* The one and only */
->  struct hv_context hv_context;
->  
-> +#define REG_SIMP (hv_nested ? HV_REGISTER_NESTED_SIMP : HV_REGISTER_SIMP)
-> +#define REG_SIEFP (hv_nested ? HV_REGISTER_NESTED_SIEFP : HV_REGISTER_SIEFP)
-> +#define REG_SCTRL (hv_nested ? HV_REGISTER_NESTED_SCONTROL : HV_REGISTER_SCONTROL)
-> +#define REG_SINT0 (hv_nested ? HV_REGISTER_NESTED_SINT0 : HV_REGISTER_SINT0)
-> +
->  /*
->   * hv_init - Main initialization routine.
->   *
-> @@ -147,7 +152,7 @@ int hv_synic_alloc(void)
->  		 * Synic message and event pages are allocated by paravisor.
->  		 * Skip these pages allocation here.
->  		 */
-> -		if (!hv_isolation_type_snp()) {
-> +		if (!hv_isolation_type_snp() && !hv_root_partition) {
->  			hv_cpu->synic_message_page =
->  				(void *)get_zeroed_page(GFP_ATOMIC);
->  			if (hv_cpu->synic_message_page == NULL) {
-> @@ -188,8 +193,16 @@ void hv_synic_free(void)
->  		struct hv_per_cpu_context *hv_cpu
->  			= per_cpu_ptr(hv_context.cpu_context, cpu);
->  
-> -		free_page((unsigned long)hv_cpu->synic_event_page);
-> -		free_page((unsigned long)hv_cpu->synic_message_page);
-> +		if (hv_root_partition) {
-> +			if (hv_cpu->synic_event_page != NULL)
-> +				memunmap(hv_cpu->synic_event_page);
-> +
-> +			if (hv_cpu->synic_message_page != NULL)
-> +				memunmap(hv_cpu->synic_message_page);
-> +		} else {
-> +			free_page((unsigned long)hv_cpu->synic_event_page);
-> +			free_page((unsigned long)hv_cpu->synic_message_page);
-> +		}
->  		free_page((unsigned long)hv_cpu->post_msg_page);
->  	}
->  
-> @@ -213,10 +226,10 @@ void hv_synic_enable_regs(unsigned int cpu)
->  	union hv_synic_scontrol sctrl;
->  
->  	/* Setup the Synic's message page */
-> -	simp.as_uint64 = hv_get_register(HV_REGISTER_SIMP);
-> +	simp.as_uint64 = hv_get_register(REG_SIMP);
+Here is an update to the vfio-ccw lifecycle changes that have been discussed
+in various forms over the past year [1][2] or so, and which I dusted off
+recently.
 
-To avoid all this code churn (here and in the next patch dealing with
-EOM), would it make sense to move the logic picking nested/non-nested
-register into hv_{get,set}_register() instead?
+Patches 1-5 rework the behavior of the vfio-ccw driver's private struct.
+In summary, the mdev pieces are split out of vfio_ccw_private and into a
+new vfio_ccw_parent struct that will continue to follow today's lifecycle.
+The remainder (bulk) of the private struct moves to follow the mdev
+probe/remove pair. There's opportunity for further separation of the
+things in the private struct, which would simplify some of the vfio-ccw
+code, but it got too hairy as I started that. Once vfio-ccw is no longer
+considered unique, those cleanups can happen at our leisure. 
 
-E.g. something like (untested, incomplete):
+Patch 6 removes the trickery where vfio-ccw uses vfio_init_device instead of
+vfio_alloc_device, and thus removes vfio_init_device from the outside world.
 
-static inline u32 hv_get_nested_reg(u32 reg) {
-	switch (reg) {
-	HV_REGISTER_SIMP: return HV_REGISTER_NESTED_SIMP;
-        HV_REGISTER_NESTED_SVERSION: return HV_REGISTER_NESTED_SVERSION;
-        ...
- 	default: return reg;
-	}
+Patch 7 removes vfio_free_device from vfio-ccw and the other drivers (hello,
+CC list!), letting it be handled by vfio_device_release directly.
 
-}
+Looking forward to the feedback.
 
-static inline u64 hv_get_register(unsigned int reg)
-{
-	u64 value;
+Thanks,
+Eric
 
-	if (hv_nested)
-		reg = hv_get_nested_reg(reg);
+[1] https://lore.kernel.org/kvm/0-v3-57c1502c62fd+2190-ccw_mdev_jgg@nvidia.com/
+[2] https://lore.kernel.org/kvm/20220602171948.2790690-1-farman@linux.ibm.com/
 
-	if (hv_is_synic_reg(reg) && hv_isolation_type_snp())
-		hv_ghcb_msr_read(reg, &value);
-	else
-		rdmsrl(reg, value);
-	return value;
-}
+v1->v2:
+ - Rebase to 6.1-rc3
+ - Patch 1:
+   [EF] s/device_initialize/device_register/ and associated adjustments
+   [MR] Add WARN_ON(!private) in vfio_ccw_sch_quiesce()
+   [MR] Move struct vfio_ccw_parent to _private.h, instead of standalone file
+ - Patch 2:
+   [MR] Added r-b (Thank you!)
+ - Patch 3:
+   [MR] Update commit message to point to introduction of private->release_comp
+   [MR] Replace the remnants of vfio_ccw_alloc_private with a straight kzalloc
+   [MR] Added r-b (Thank you!)
+ - Patch 5:
+   [KT] Added r-b (Thank you!)
+ - Patch 6:
+   [JG] Make vfio_init_device static
+   [KT] Added r-b (Thank you!)
+ - Patch 7:
+   [JG, KT] Added r-b (Thank you!)
+v1: https://lore.kernel.org/kvm/20221019162135.798901-1-farman@linux.ibm.com/
 
-static inline void hv_set_register(unsigned int reg, u64 value)
-{
-	if (hv_nested)
-		reg = hv_get_nested_reg(reg);
+Eric Farman (7):
+  vfio/ccw: create a parent struct
+  vfio/ccw: remove private->sch
+  vfio/ccw: move private initialization to callback
+  vfio/ccw: move private to mdev lifecycle
+  vfio/ccw: remove release completion
+  vfio/ccw: replace vfio_init_device with _alloc_
+  vfio: Remove vfio_free_device
 
-	if (hv_is_synic_reg(reg) && hv_isolation_type_snp()) {
-		hv_ghcb_msr_write(reg, value);
-
-		/* Write proxy bit via wrmsl instruction */
-		if (reg >= HV_REGISTER_SINT0 &&
-		    reg <= HV_REGISTER_SINT15)
-			wrmsrl(reg, value | 1 << 20);
-	} else {
-		wrmsrl(reg, value);
-	}
-}
-
-
->  	simp.simp_enabled = 1;
->  
-> -	if (hv_isolation_type_snp()) {
-> +	if (hv_isolation_type_snp() || hv_root_partition) {
->  		hv_cpu->synic_message_page
->  			= memremap(simp.base_simp_gpa << HV_HYP_PAGE_SHIFT,
->  				   HV_HYP_PAGE_SIZE, MEMREMAP_WB);
-> @@ -227,13 +240,13 @@ void hv_synic_enable_regs(unsigned int cpu)
->  			>> HV_HYP_PAGE_SHIFT;
->  	}
->  
-> -	hv_set_register(HV_REGISTER_SIMP, simp.as_uint64);
-> +	hv_set_register(REG_SIMP, simp.as_uint64);
->  
->  	/* Setup the Synic's event page */
-> -	siefp.as_uint64 = hv_get_register(HV_REGISTER_SIEFP);
-> +	siefp.as_uint64 = hv_get_register(REG_SIEFP);
->  	siefp.siefp_enabled = 1;
->  
-> -	if (hv_isolation_type_snp()) {
-> +	if (hv_isolation_type_snp() || hv_root_partition) {
->  		hv_cpu->synic_event_page =
->  			memremap(siefp.base_siefp_gpa << HV_HYP_PAGE_SHIFT,
->  				 HV_HYP_PAGE_SIZE, MEMREMAP_WB);
-> @@ -245,12 +258,12 @@ void hv_synic_enable_regs(unsigned int cpu)
->  			>> HV_HYP_PAGE_SHIFT;
->  	}
->  
-> -	hv_set_register(HV_REGISTER_SIEFP, siefp.as_uint64);
-> +	hv_set_register(REG_SIEFP, siefp.as_uint64);
->  
->  	/* Setup the shared SINT. */
->  	if (vmbus_irq != -1)
->  		enable_percpu_irq(vmbus_irq, 0);
-> -	shared_sint.as_uint64 = hv_get_register(HV_REGISTER_SINT0 +
-> +	shared_sint.as_uint64 = hv_get_register(REG_SINT0 +
->  					VMBUS_MESSAGE_SINT);
->  
->  	shared_sint.vector = vmbus_interrupt;
-> @@ -266,14 +279,14 @@ void hv_synic_enable_regs(unsigned int cpu)
->  #else
->  	shared_sint.auto_eoi = 0;
->  #endif
-> -	hv_set_register(HV_REGISTER_SINT0 + VMBUS_MESSAGE_SINT,
-> +	hv_set_register(REG_SINT0 + VMBUS_MESSAGE_SINT,
->  				shared_sint.as_uint64);
->  
->  	/* Enable the global synic bit */
-> -	sctrl.as_uint64 = hv_get_register(HV_REGISTER_SCONTROL);
-> +	sctrl.as_uint64 = hv_get_register(REG_SCTRL);
->  	sctrl.enable = 1;
->  
-> -	hv_set_register(HV_REGISTER_SCONTROL, sctrl.as_uint64);
-> +	hv_set_register(REG_SCTRL, sctrl.as_uint64);
->  }
->  
->  int hv_synic_init(unsigned int cpu)
-> @@ -297,17 +310,17 @@ void hv_synic_disable_regs(unsigned int cpu)
->  	union hv_synic_siefp siefp;
->  	union hv_synic_scontrol sctrl;
->  
-> -	shared_sint.as_uint64 = hv_get_register(HV_REGISTER_SINT0 +
-> +	shared_sint.as_uint64 = hv_get_register(REG_SINT0 +
->  					VMBUS_MESSAGE_SINT);
->  
->  	shared_sint.masked = 1;
->  
->  	/* Need to correctly cleanup in the case of SMP!!! */
->  	/* Disable the interrupt */
-> -	hv_set_register(HV_REGISTER_SINT0 + VMBUS_MESSAGE_SINT,
-> +	hv_set_register(REG_SINT0 + VMBUS_MESSAGE_SINT,
->  				shared_sint.as_uint64);
->  
-> -	simp.as_uint64 = hv_get_register(HV_REGISTER_SIMP);
-> +	simp.as_uint64 = hv_get_register(REG_SIMP);
->  	/*
->  	 * In Isolation VM, sim and sief pages are allocated by
->  	 * paravisor. These pages also will be used by kdump
-> @@ -320,9 +333,9 @@ void hv_synic_disable_regs(unsigned int cpu)
->  	else
->  		simp.base_simp_gpa = 0;
->  
-> -	hv_set_register(HV_REGISTER_SIMP, simp.as_uint64);
-> +	hv_set_register(REG_SIMP, simp.as_uint64);
->  
-> -	siefp.as_uint64 = hv_get_register(HV_REGISTER_SIEFP);
-> +	siefp.as_uint64 = hv_get_register(REG_SIEFP);
->  	siefp.siefp_enabled = 0;
->  
->  	if (hv_isolation_type_snp())
-> @@ -330,12 +343,12 @@ void hv_synic_disable_regs(unsigned int cpu)
->  	else
->  		siefp.base_siefp_gpa = 0;
->  
-> -	hv_set_register(HV_REGISTER_SIEFP, siefp.as_uint64);
-> +	hv_set_register(REG_SIEFP, siefp.as_uint64);
->  
->  	/* Disable the global synic bit */
-> -	sctrl.as_uint64 = hv_get_register(HV_REGISTER_SCONTROL);
-> +	sctrl.as_uint64 = hv_get_register(REG_SCTRL);
->  	sctrl.enable = 0;
-> -	hv_set_register(HV_REGISTER_SCONTROL, sctrl.as_uint64);
-> +	hv_set_register(REG_SCTRL, sctrl.as_uint64);
->  
->  	if (vmbus_irq != -1)
->  		disable_percpu_irq(vmbus_irq);
+ drivers/gpu/drm/i915/gvt/kvmgt.c      |   1 -
+ drivers/s390/cio/vfio_ccw_chp.c       |   5 +-
+ drivers/s390/cio/vfio_ccw_drv.c       | 174 +++++++++++---------------
+ drivers/s390/cio/vfio_ccw_fsm.c       |  27 ++--
+ drivers/s390/cio/vfio_ccw_ops.c       | 107 +++++++++++-----
+ drivers/s390/cio/vfio_ccw_private.h   |  37 ++++--
+ drivers/s390/crypto/vfio_ap_ops.c     |   6 -
+ drivers/vfio/fsl-mc/vfio_fsl_mc.c     |   1 -
+ drivers/vfio/pci/vfio_pci_core.c      |   1 -
+ drivers/vfio/platform/vfio_amba.c     |   1 -
+ drivers/vfio/platform/vfio_platform.c |   1 -
+ drivers/vfio/vfio_main.c              |  32 ++---
+ include/linux/vfio.h                  |   3 -
+ samples/vfio-mdev/mbochs.c            |   1 -
+ samples/vfio-mdev/mdpy.c              |   1 -
+ samples/vfio-mdev/mtty.c              |   1 -
+ 16 files changed, 197 insertions(+), 202 deletions(-)
 
 -- 
-Vitaly
+2.34.1
 
