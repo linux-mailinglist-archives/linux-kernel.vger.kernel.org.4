@@ -2,45 +2,45 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 30F36616901
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:31:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 64A89616906
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:31:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231588AbiKBQba (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 12:31:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49834 "EHLO
+        id S230477AbiKBQbo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 12:31:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49892 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231459AbiKBQaa (ORCPT
+        with ESMTP id S230159AbiKBQab (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 12:30:30 -0400
+        Wed, 2 Nov 2022 12:30:31 -0400
 Received: from mx1.veeam.com (mx1.veeam.com [216.253.77.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91E902DA9F;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B1022DAAA;
         Wed,  2 Nov 2022 09:27:08 -0700 (PDT)
 Received: from mail.veeam.com (prgmbx01.amust.local [172.24.128.102])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx1.veeam.com (Postfix) with ESMTPS id 466F441CB2;
-        Wed,  2 Nov 2022 11:52:07 -0400 (EDT)
+        by mx1.veeam.com (Postfix) with ESMTPS id D147A41CBA;
+        Wed,  2 Nov 2022 11:52:08 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
-        s=mx1-2022; t=1667404327;
-        bh=7Gy2FlvL/wsrYyYUvsUavGTs6YWl0W4OQ5X0fITrOMM=;
+        s=mx1-2022; t=1667404329;
+        bh=V7c2nAUoIUMYEO/y10bbV2+rvIV7pzVSYmtkwZdyl9A=;
         h=From:To:Subject:Date:In-Reply-To:References:From;
-        b=Hc8/l/DvPHWVlKyIV7mr+y/cQA8a5xbBOpD6qvnVSEKHtmkQa7PP6f69zCN8kjNWG
-         e1VkhHeMD6Gzv4h2WfLBCKm7AL7T3chUNlj70kpMutAjxEJw9ujydcXnvRtnrDUWjt
-         EeNbZASMp0kpd5zLVus4VUZ8ObKr5DJXlE385HCUTP7g4meSMF4M3W1iEIkLsXHcq3
-         oqezaZTAk7ioYsvNaxjX54pJBBNolR1HgyGLitHPqpxKrGGCURBCF0tyxc91KY3N8h
-         mqqK34QYUbXRUjMnt9s5uGzyAlpCLV1awjSkqmzrus8mH/plWDqD7Ie0luuKD6mpei
-         R7F1r41zml69Q==
+        b=UODVqB1YD5ksKMWoR18BDX2P3K36znMI5AQQzF7NQAXG/rTfKRe8jONe3ScHqzepo
+         Z9pnAsOU6d0ay+DcLmIy8LIrwRk4l8Lrk3rX4nQQUtVtEuPXf4yWjdXyv+rMpQ063N
+         jNy5JkkXpRRSEDJSGL4G9lbIDVm4qsSwO0e89oH2VMbvet5IvrkY7nzNQ37gZvOitD
+         VgRbo37BX5/DVJJzlS2RX9Hayni7V3vXDHD33xcW6sCp9s3WAfOZ0BP1D5ctX4KjfA
+         kVJtsycPMbb55bW+CxFBitSZR0dVorHJs7EIXtdzDIMSerNscyaWlNa/qfUSb/+Csr
+         LQkEq7lWt7G4g==
 Received: from ssh-deb10-ssd-vb.amust.local (172.24.10.107) by
  prgmbx01.amust.local (172.24.128.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.12; Wed, 2 Nov 2022 16:51:28 +0100
+ 15.2.1118.12; Wed, 2 Nov 2022 16:51:30 +0100
 From:   Sergei Shtepa <sergei.shtepa@veeam.com>
 To:     <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <hch@infradead.org>,
         <sergei.shtepa@veeam.com>
-Subject: [PATCH v1 09/17] lock, blksnap: buffer in memory for the minimum data storage unit
-Date:   Wed, 2 Nov 2022 16:50:53 +0100
-Message-ID: <20221102155101.4550-10-sergei.shtepa@veeam.com>
+Subject: [PATCH v1 10/17] block, blksnap: functions and structures for performing block I/O operations
+Date:   Wed, 2 Nov 2022 16:50:54 +0100
+Message-ID: <20221102155101.4550-11-sergei.shtepa@veeam.com>
 X-Mailer: git-send-email 2.20.1
 In-Reply-To: <20221102155101.4550-1-sergei.shtepa@veeam.com>
 References: <20221102155101.4550-1-sergei.shtepa@veeam.com>
@@ -62,238 +62,315 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The struct diff_buffer describes a buffer in memory for the minimum data
-storage block of the original block device (struct chunk).
-Buffer allocation and release functions allow to reduce the number of
-allocations and releases of a large number of memory pages.
+Provides synchronous and asynchronous block I/O operations for the
+buffer of the minimum data storage block (struct diff_buffer).
 
 Signed-off-by: Sergei Shtepa <sergei.shtepa@veeam.com>
 ---
- drivers/block/blksnap/diff_buffer.c | 132 ++++++++++++++++++++++++++++
- drivers/block/blksnap/diff_buffer.h |  75 ++++++++++++++++
- 2 files changed, 207 insertions(+)
- create mode 100644 drivers/block/blksnap/diff_buffer.c
- create mode 100644 drivers/block/blksnap/diff_buffer.h
+ drivers/block/blksnap/diff_io.c | 168 ++++++++++++++++++++++++++++++++
+ drivers/block/blksnap/diff_io.h | 118 ++++++++++++++++++++++
+ 2 files changed, 286 insertions(+)
+ create mode 100644 drivers/block/blksnap/diff_io.c
+ create mode 100644 drivers/block/blksnap/diff_io.h
 
-diff --git a/drivers/block/blksnap/diff_buffer.c b/drivers/block/blksnap/diff_buffer.c
+diff --git a/drivers/block/blksnap/diff_io.c b/drivers/block/blksnap/diff_io.c
 new file mode 100644
-index 000000000000..b24dc7b71e2f
+index 000000000000..7945734994d5
 --- /dev/null
-+++ b/drivers/block/blksnap/diff_buffer.c
-@@ -0,0 +1,132 @@
++++ b/drivers/block/blksnap/diff_io.c
+@@ -0,0 +1,168 @@
 +// SPDX-License-Identifier: GPL-2.0
-+#define pr_fmt(fmt) KBUILD_MODNAME "-diff-buffer: " fmt
-+#include "params.h"
-+#include "diff_buffer.h"
-+#include "diff_area.h"
++#define pr_fmt(fmt) KBUILD_MODNAME "-diff-io: " fmt
 +
-+static void diff_buffer_free(struct diff_buffer *diff_buffer)
-+{
-+	size_t inx = 0;
-+
-+	if (unlikely(!diff_buffer))
-+		return;
-+
-+	for (inx = 0; inx < diff_buffer->page_count; inx++) {
-+		struct page *page = diff_buffer->pages[inx];
-+
-+		if (page)
-+			__free_page(page);
-+	}
-+
-+	kfree(diff_buffer);
-+}
-+
-+static struct diff_buffer *
-+diff_buffer_new(size_t page_count, size_t buffer_size, gfp_t gfp_mask)
-+{
-+	struct diff_buffer *diff_buffer;
-+	size_t inx = 0;
-+	struct page *page;
-+
-+	if (unlikely(page_count <= 0))
-+		return NULL;
-+
-+	/*
-+	 * In case of overflow, it is better to get a null pointer
-+	 * than a pointer to some memory area. Therefore + 1.
-+	 */
-+	diff_buffer = kzalloc(sizeof(struct diff_buffer) +
-+				      (page_count + 1) * sizeof(struct page *),
-+			      gfp_mask);
-+	if (!diff_buffer)
-+		return NULL;
-+
-+	INIT_LIST_HEAD(&diff_buffer->link);
-+	diff_buffer->size = buffer_size;
-+	diff_buffer->page_count = page_count;
-+
-+	for (inx = 0; inx < page_count; inx++) {
-+		page = alloc_page(gfp_mask);
-+		if (!page)
-+			goto fail;
-+
-+		diff_buffer->pages[inx] = page;
-+	}
-+	return diff_buffer;
-+fail:
-+	diff_buffer_free(diff_buffer);
-+	return NULL;
-+}
-+
-+struct diff_buffer *diff_buffer_take(struct diff_area *diff_area,
-+				     const bool is_nowait)
-+{
-+	struct diff_buffer *diff_buffer = NULL;
-+	sector_t chunk_sectors;
-+	size_t page_count;
-+	size_t buffer_size;
-+
-+	spin_lock(&diff_area->free_diff_buffers_lock);
-+	diff_buffer = list_first_entry_or_null(&diff_area->free_diff_buffers,
-+					       struct diff_buffer, link);
-+	if (diff_buffer) {
-+		list_del(&diff_buffer->link);
-+		atomic_dec(&diff_area->free_diff_buffers_count);
-+	}
-+	spin_unlock(&diff_area->free_diff_buffers_lock);
-+
-+	/* Return free buffer if it was found in a pool */
-+	if (diff_buffer)
-+		return diff_buffer;
-+
-+	/* Allocate new buffer */
-+	chunk_sectors = diff_area_chunk_sectors(diff_area);
-+	page_count = round_up(chunk_sectors, PAGE_SECTORS) / PAGE_SECTORS;
-+	buffer_size = chunk_sectors << SECTOR_SHIFT;
-+
-+	diff_buffer =
-+		diff_buffer_new(page_count, buffer_size,
-+				is_nowait ? (GFP_NOIO | GFP_NOWAIT) : GFP_NOIO);
-+	if (unlikely(!diff_buffer)) {
-+		if (is_nowait)
-+			return ERR_PTR(-EAGAIN);
-+		else
-+			return ERR_PTR(-ENOMEM);
-+	}
-+
-+	return diff_buffer;
-+}
-+
-+void diff_buffer_release(struct diff_area *diff_area,
-+			 struct diff_buffer *diff_buffer)
-+{
-+	if (atomic_read(&diff_area->free_diff_buffers_count) >
-+	    free_diff_buffer_pool_size) {
-+		diff_buffer_free(diff_buffer);
-+		return;
-+	}
-+	spin_lock(&diff_area->free_diff_buffers_lock);
-+	list_add_tail(&diff_buffer->link, &diff_area->free_diff_buffers);
-+	atomic_inc(&diff_area->free_diff_buffers_count);
-+	spin_unlock(&diff_area->free_diff_buffers_lock);
-+}
-+
-+void diff_buffer_cleanup(struct diff_area *diff_area)
-+{
-+	struct diff_buffer *diff_buffer = NULL;
-+
-+	do {
-+		spin_lock(&diff_area->free_diff_buffers_lock);
-+		diff_buffer =
-+			list_first_entry_or_null(&diff_area->free_diff_buffers,
-+						 struct diff_buffer, link);
-+		if (diff_buffer) {
-+			list_del(&diff_buffer->link);
-+			atomic_dec(&diff_area->free_diff_buffers_count);
-+		}
-+		spin_unlock(&diff_area->free_diff_buffers_lock);
-+
-+		if (diff_buffer)
-+			diff_buffer_free(diff_buffer);
-+	} while (diff_buffer);
-+}
-diff --git a/drivers/block/blksnap/diff_buffer.h b/drivers/block/blksnap/diff_buffer.h
-new file mode 100644
-index 000000000000..d1ff80452552
---- /dev/null
-+++ b/drivers/block/blksnap/diff_buffer.h
-@@ -0,0 +1,75 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+#ifndef __BLK_SNAP_DIFF_BUFFER_H
-+#define __BLK_SNAP_DIFF_BUFFER_H
-+
-+#include <linux/types.h>
-+#include <linux/slab.h>
-+#include <linux/list.h>
 +#include <linux/blkdev.h>
++#include <linux/slab.h>
++#include "diff_io.h"
++#include "diff_buffer.h"
 +
-+struct diff_area;
++struct bio_set diff_io_bioset;
 +
-+/**
-+ * struct diff_buffer - Difference buffer.
-+ * @link:
-+ *	The list header allows to create a pool of the diff_buffer structures.
-+ * @size:
-+ *	Count of bytes in the buffer.
-+ * @page_count:
-+ *	The number of pages reserved for the buffer.
-+ * @pages:
-+ *	An array of pointers to pages.
-+ *
-+ * Describes the memory buffer for a chunk in the memory.
-+ */
-+struct diff_buffer {
-+	struct list_head link;
-+	size_t size;
-+	size_t page_count;
-+	struct page *pages[0];
-+};
-+
-+/**
-+ * struct diff_buffer_iter - Iterator for &struct diff_buffer.
-+ * @page:
-+ *      A pointer to the current page.
-+ * @offset:
-+ *      The offset in bytes in the current page.
-+ * @bytes:
-+ *      The number of bytes that can be read or written from the current page.
-+ *
-+ * It is convenient to use when copying data from or to &struct bio_vec.
-+ */
-+struct diff_buffer_iter {
-+	struct page *page;
-+	size_t offset;
-+	size_t bytes;
-+};
-+
-+static inline bool diff_buffer_iter_get(struct diff_buffer *diff_buffer,
-+					size_t buff_offset,
-+					struct diff_buffer_iter *iter)
++int diff_io_init(void)
 +{
-+	if (diff_buffer->size <= buff_offset)
-+		return false;
++	return bioset_init(&diff_io_bioset, 64, 0,
++			   BIOSET_NEED_BVECS | BIOSET_NEED_RESCUER);
++}
 +
-+	iter->page = diff_buffer->pages[buff_offset >> PAGE_SHIFT];
-+	iter->offset = (size_t)(buff_offset & (PAGE_SIZE - 1));
-+	/*
-+	 * The size cannot exceed the size of the page, taking into account
-+	 * the offset in this page.
-+	 * But at the same time it is unacceptable to go beyond the allocated
-+	 * buffer.
-+	 */
-+	iter->bytes = min_t(size_t, (PAGE_SIZE - iter->offset),
-+			    (diff_buffer->size - buff_offset));
++void diff_io_done(void)
++{
++	bioset_exit(&diff_io_bioset);
++}
 +
-+	return true;
++static void diff_io_notify_cb(struct work_struct *work)
++{
++	struct diff_io_async *async =
++		container_of(work, struct diff_io_async, work);
++
++	might_sleep();
++	async->notify_cb(async->ctx);
++}
++
++static void diff_io_endio(struct bio *bio)
++{
++	struct diff_io *diff_io = bio->bi_private;
++
++	if (bio->bi_status != BLK_STS_OK)
++		diff_io->error = -EIO;
++
++	if (diff_io->is_sync_io)
++		complete(&diff_io->notify.sync.completion);
++	else
++		queue_work(system_wq, &diff_io->notify.async.work);
++
++	bio_put(bio);
++}
++
++static inline struct diff_io *diff_io_new(bool is_write, bool is_nowait)
++{
++	struct diff_io *diff_io;
++	gfp_t gfp_mask = is_nowait ? (GFP_NOIO | GFP_NOWAIT) : GFP_NOIO;
++
++	diff_io = kzalloc(sizeof(struct diff_io), gfp_mask);
++	if (unlikely(!diff_io))
++		return NULL;
++
++	diff_io->error = 0;
++	diff_io->is_write = is_write;
++
++	return diff_io;
++}
++
++struct diff_io *diff_io_new_sync(bool is_write)
++{
++	struct diff_io *diff_io;
++
++	diff_io = diff_io_new(is_write, false);
++	if (unlikely(!diff_io))
++		return NULL;
++
++	diff_io->is_sync_io = true;
++	init_completion(&diff_io->notify.sync.completion);
++	return diff_io;
++}
++
++struct diff_io *diff_io_new_async(bool is_write, bool is_nowait,
++				  void (*notify_cb)(void *ctx), void *ctx)
++{
++	struct diff_io *diff_io;
++
++	diff_io = diff_io_new(is_write, is_nowait);
++	if (unlikely(!diff_io))
++		return NULL;
++
++	diff_io->is_sync_io = false;
++	INIT_WORK(&diff_io->notify.async.work, diff_io_notify_cb);
++	diff_io->notify.async.ctx = ctx;
++	diff_io->notify.async.notify_cb = notify_cb;
++	return diff_io;
++}
++
++static inline bool check_page_aligned(sector_t sector)
++{
++	return !(sector & ((1ull << (PAGE_SHIFT - SECTOR_SHIFT)) - 1));
++}
++
++static inline unsigned short calc_page_count(sector_t sectors)
++{
++	return round_up(sectors, PAGE_SECTORS) / PAGE_SECTORS;
++}
++
++int diff_io_do(struct diff_io *diff_io, struct diff_region *diff_region,
++	       struct diff_buffer *diff_buffer, const bool is_nowait)
++{
++	int ret = 0;
++	struct bio *bio = NULL;
++	struct page **current_page_ptr;
++	unsigned short nr_iovecs;
++	sector_t processed = 0;
++	unsigned int opf = REQ_SYNC |
++		(diff_io->is_write ? REQ_OP_WRITE | REQ_FUA : REQ_OP_READ);
++	gfp_t gfp_mask = GFP_NOIO | (is_nowait ? GFP_NOWAIT : 0);
++
++	if (unlikely(!check_page_aligned(diff_region->sector))) {
++		pr_err("Difference storage block should be aligned to PAGE_SIZE\n");
++		ret = -EINVAL;
++		goto fail;
++	}
++
++	nr_iovecs = calc_page_count(diff_region->count);
++	if (unlikely(nr_iovecs > diff_buffer->page_count)) {
++		pr_err("The difference storage block is larger than the buffer size\n");
++		ret = -EINVAL;
++		goto fail;
++	}
++
++	bio = bio_alloc_bioset(diff_region->bdev, nr_iovecs, opf, gfp_mask,
++			       &diff_io_bioset);
++	if (unlikely(!bio)) {
++		if (is_nowait)
++			ret = -EAGAIN;
++		else
++			ret = -ENOMEM;
++		goto fail;
++	}
++
++	bio_set_flag(bio, BIO_FILTERED);
++
++	bio->bi_end_io = diff_io_endio;
++	bio->bi_private = diff_io;
++	bio->bi_iter.bi_sector = diff_region->sector;
++	current_page_ptr = diff_buffer->pages;
++	while (processed < diff_region->count) {
++		sector_t bvec_len_sect;
++		unsigned int bvec_len;
++
++		bvec_len_sect = min_t(sector_t, PAGE_SECTORS,
++				      diff_region->count - processed);
++		bvec_len = (unsigned int)(bvec_len_sect << SECTOR_SHIFT);
++
++		if (bio_add_page(bio, *current_page_ptr, bvec_len, 0) == 0) {
++			bio_put(bio);
++			return -EFAULT;
++		}
++
++		current_page_ptr++;
++		processed += bvec_len_sect;
++	}
++	submit_bio_noacct(bio);
++
++	if (diff_io->is_sync_io)
++		wait_for_completion_io(&diff_io->notify.sync.completion);
++
++	return 0;
++fail:
++	if (bio)
++		bio_put(bio);
++	return ret;
++}
++
+diff --git a/drivers/block/blksnap/diff_io.h b/drivers/block/blksnap/diff_io.h
+new file mode 100644
+index 000000000000..918dbb460dd4
+--- /dev/null
++++ b/drivers/block/blksnap/diff_io.h
+@@ -0,0 +1,118 @@
++/* SPDX-License-Identifier: GPL-2.0 */
++#ifndef __BLK_SNAP_DIFF_IO_H
++#define __BLK_SNAP_DIFF_IO_H
++
++#include <linux/workqueue.h>
++#include <linux/completion.h>
++
++struct diff_buffer;
++
++/**
++ * struct diff_region - Describes the location of the chunks data on
++ *	difference storage.
++ * @bdev:
++ *	The target block device.
++ * @sector:
++ *	The sector offset of the region's first sector.
++ * @count:
++ *	The count of sectors in the region.
++ */
++struct diff_region {
++	struct block_device *bdev;
++	sector_t sector;
++	sector_t count;
 +};
 +
-+struct diff_buffer *diff_buffer_take(struct diff_area *diff_area,
-+				     const bool is_nowait);
-+void diff_buffer_release(struct diff_area *diff_area,
-+			 struct diff_buffer *diff_buffer);
-+void diff_buffer_cleanup(struct diff_area *diff_area);
-+#endif /* __BLK_SNAP_DIFF_BUFFER_H */
++/**
++ * struct diff_io_sync - Structure for notification about completion of
++ *	synchronous I/O.
++ * @completion:
++ *	Indicates that the request has been processed.
++ *
++ * Allows to wait for completion of the I/O operation in the
++ * current thread.
++ */
++struct diff_io_sync {
++	struct completion completion;
++};
++
++/**
++ * struct diff_io_async - Structure for notification about completion of
++ *	asynchronous I/O.
++ * @work:
++ *	The &struct work_struct allows to schedule execution of an I/O operation
++ *	in a separate process.
++ * @notify_cb:
++ *	A pointer to the callback function that will be executed when
++ *	the I/O execution is completed.
++ * @ctx:
++ *	The context for the callback function &notify_cb.
++ *
++ * Allows to schedule execution of an I/O operation.
++ */
++struct diff_io_async {
++	struct work_struct work;
++	void (*notify_cb)(void *ctx);
++	void *ctx;
++};
++
++/**
++ * struct diff_io - Structure for I/O maintenance.
++ * @error:
++ *	Zero if the I/O operation is successful, or an error code if it fails.
++ * @is_write:
++ *	Indicates that a write operation is being performed.
++ * @is_sync_io:
++ *	Indicates that the operation is being performed synchronously.
++ * @notify:
++ *	This union may contain the diff_io_sync or diff_io_async structure
++ *	for synchronous or asynchronous request.
++ *
++ * The request to perform an I/O operation is executed for a region of sectors.
++ * Such a region may contain several bios. It is necessary to notify about the
++ * completion of processing of all bios. The diff_io structure allows to do it.
++ */
++struct diff_io {
++	int error;
++	bool is_write;
++	bool is_sync_io;
++	union {
++		struct diff_io_sync sync;
++		struct diff_io_async async;
++	} notify;
++};
++
++int diff_io_init(void);
++void diff_io_done(void);
++
++static inline void diff_io_free(struct diff_io *diff_io)
++{
++	kfree(diff_io);
++}
++
++struct diff_io *diff_io_new_sync(bool is_write);
++static inline struct diff_io *diff_io_new_sync_read(void)
++{
++	return diff_io_new_sync(false);
++};
++static inline struct diff_io *diff_io_new_sync_write(void)
++{
++	return diff_io_new_sync(true);
++};
++
++struct diff_io *diff_io_new_async(bool is_write, bool is_nowait,
++				  void (*notify_cb)(void *ctx), void *ctx);
++static inline struct diff_io *
++diff_io_new_async_read(void (*notify_cb)(void *ctx), void *ctx, bool is_nowait)
++{
++	return diff_io_new_async(false, is_nowait, notify_cb, ctx);
++};
++static inline struct diff_io *
++diff_io_new_async_write(void (*notify_cb)(void *ctx), void *ctx, bool is_nowait)
++{
++	return diff_io_new_async(true, is_nowait, notify_cb, ctx);
++};
++
++int diff_io_do(struct diff_io *diff_io, struct diff_region *diff_region,
++	       struct diff_buffer *diff_buffer, const bool is_nowait);
++#endif /* __BLK_SNAP_DIFF_IO_H */
 -- 
 2.20.1
 
