@@ -2,127 +2,112 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AB6B461627A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:11:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F344C61627F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:14:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbiKBMLx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 08:11:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37312 "EHLO
+        id S229887AbiKBMOO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 08:14:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiKBMLu (ORCPT
+        with ESMTP id S229518AbiKBMOL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 08:11:50 -0400
-Received: from mail-wr1-x429.google.com (mail-wr1-x429.google.com [IPv6:2a00:1450:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2819B2339E;
-        Wed,  2 Nov 2022 05:11:49 -0700 (PDT)
-Received: by mail-wr1-x429.google.com with SMTP id j15so24241338wrq.3;
-        Wed, 02 Nov 2022 05:11:49 -0700 (PDT)
+        Wed, 2 Nov 2022 08:14:11 -0400
+Received: from mail-yw1-x1131.google.com (mail-yw1-x1131.google.com [IPv6:2607:f8b0:4864:20::1131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E0CB823BCB
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 05:14:10 -0700 (PDT)
+Received: by mail-yw1-x1131.google.com with SMTP id 00721157ae682-3691e040abaso164228037b3.9
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 05:14:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=2IkJAPMWkO5FOeNL3Mj+9WKsIqTWMXPw/hrooudOQns=;
-        b=PmL5Pde9zKOoDZ/SSJGPGWD4UAwpixZI2QmGylJGefMPo5sAgFsdn7vRx5AlqIdZ+W
-         gKBjuH/qb8cj8IPg5bwx5G3HO7eJRDav6bjvsEzcnH+RjqjHXWanATiFUuRBt+QjEqIV
-         +NzI/OhtDw1eF6F43JCdqCtAqaL3NmnFQDN+edYA5CReEvJT/rpzXQGoqnkVVfZEp9oh
-         DU3QSN3ZYHNDrfb4nFxfBaot4Eszq4Rf62UWkMbmk/xpAWaNzQdNhTKZynJf1jx7CZ22
-         dGQ3DtLnMCHEvHfRZ87B8jRS+ik+J8yomu5btznv3It7b7kZkymNssKIeXhm0Mq5dqWu
-         K+gA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=EZG/ByG3yJYBkXj69Uab2Z/6HK+E8SMP0+2AXC/lf1A=;
+        b=AkNUUmqO/Y45WxuoBR0rRaklH4OHqR+yZ5YeF6JnVQmYmTjluAaV46qVgaOKJ2mmgM
+         PBqqDqdSWLLqNZ45Xbhc9B3t+OD2sBNtUXc4stMQoQBI48nwjPKRzZqbUNLP46fnP13T
+         lQmPaz8cpBM0wcs0z2tUJuejy8JXAcpI/+Hs5tpVWFSQAdsg7I4Jl4sDzhvROmrGNqdQ
+         MWBorzdi2SMHTwJ7sALIh4+WOqexvrkM688bwEJwNkjYffRbHc4ARbU+DnpEWbp7wI+u
+         1X56Ly/vyk7iOdRZ842EBbJE8Gr+ggILqwOTMmQvHR0dIVSvVeQbheizloGpALSZYzdr
+         XbjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
-         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=2IkJAPMWkO5FOeNL3Mj+9WKsIqTWMXPw/hrooudOQns=;
-        b=Y1gC7uUlR7yaGBqL5YuzUXtqbe1dnyCyMUCwWH9rNZRq0Wgt64IedWo48wy9pLgt1+
-         TgIu50748+kLDsVPS5nuvJYP5a9/qvrOEwQsVzY5lqtm/sK9EeGGCuEJUnRAfOTfM09L
-         E3BJfo2meP42M0JXXLkmE7P/Ye1wdTesXh0yIvgZBnz0Jb6HTZ5xLXtZjqL06s5zL1jH
-         i9ryHcbMzhmU175qJEgSu8pw9jC0EbMrQ4NerDcIMd8dtRV78ZoB+VkX1qd5hieYWfEA
-         98IABI1w19eRnarIC17q/GWN8aGDqnoI5x7G4v3Va2s7aMXwkfwRAvNOe4J5xwmwOH8P
-         Yazw==
-X-Gm-Message-State: ACrzQf3zdKQUYJLN8AA5l4XUc3+32QyOOmsbOKq4W0VZEsVw75Ka68SD
-        bQRH6MUIqhICkouiGlxiYjg=
-X-Google-Smtp-Source: AMsMyM6nrBzn9BvmDGarhI0IVXpoMaHROpOSRCOg8Pl+EpzbujmE32Ke/rtLlcz9O2arvdNS2lzsyw==
-X-Received: by 2002:a5d:59ae:0:b0:236:6861:a89d with SMTP id p14-20020a5d59ae000000b002366861a89dmr15474105wrr.437.1667391107742;
-        Wed, 02 Nov 2022 05:11:47 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id v16-20020a05600c445000b003cf78aafdd7sm2032822wmn.39.2022.11.02.05.11.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 05:11:47 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 15:11:43 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     oe-kbuild@lists.linux.dev,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        Greg KH <greg@kroah.com>, Jiri Kosina <jikos@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Shuah Khan <skhan@linuxfoundation.org>
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev,
-        Tero Kristo <tero.kristo@linux.intel.com>,
-        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
-        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org,
-        Benjamin Tissoires <benjamin.tissoires@redhat.com>
-Subject: Re: [PATCH hid v11 07/14] HID: bpf: introduce hid_hw_request()
-Message-ID: <202210291931.zGXW0epb-lkp@intel.com>
+        bh=EZG/ByG3yJYBkXj69Uab2Z/6HK+E8SMP0+2AXC/lf1A=;
+        b=oA5nw8swqH7xNa4HS1WGJrAn1dMVdckNkVz6PFwbAXvMVBtCedw80UElSALXqFcPFL
+         xtwWdwEPBTYvmzbl6FdqxLebfuuRoJ76UcjVWgVaqsdOGPobsy4lTqwXaAbvkdGfCi2L
+         gpM+/2VhGtpo4HiQarCfrmN40tyco0Mmd4ZPiuHXmVo/2bqvpy9iaZJQwH3A8NLOPRhM
+         L6jBDqWmfGC8f46pahXjhPH40Qfvyx/14BggflCIqZMcOdEJJwv+t36cuWmO3PO3fz9a
+         QBAycQhbuQktyoMb0q2pLoRjXnXFf4bP4ur5NZhSmR93na9Y2kDvVqG+o5xXYU8nUKR3
+         y5hw==
+X-Gm-Message-State: ACrzQf29QplzKpX+hFtdOG2n+ILZVtKWJvHMbbhZ5baUGozkGWjiRQF4
+        kv84G3lW/8OExM+SYzk4evuh1Kq0IZvFtjE/1n17lQ==
+X-Google-Smtp-Source: AMsMyM78NfzDgrg2IPxctI0tS2AzDrlpnwtNUe18UdnC0fjfl1bmHHKpixedQ85u2WDA5JObnaAM2Jkhsl48huvRB6I=
+X-Received: by 2002:a81:9e47:0:b0:361:468a:7221 with SMTP id
+ n7-20020a819e47000000b00361468a7221mr23413942ywj.155.1667391250013; Wed, 02
+ Nov 2022 05:14:10 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221025093458.457089-8-benjamin.tissoires@redhat.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20221031122224.1846221-1-ajye_huang@compal.corp-partner.google.com>
+ <20221031122224.1846221-3-ajye_huang@compal.corp-partner.google.com> <549e1ff6-821a-1c26-0a4f-021bed27b093@collabora.com>
+In-Reply-To: <549e1ff6-821a-1c26-0a4f-021bed27b093@collabora.com>
+From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+Date:   Wed, 2 Nov 2022 20:13:58 +0800
+Message-ID: <CALprXBbL6HDaZhGU5eG6cnDP_rqymvamjTNGy7acaOk1rTMNmA@mail.gmail.com>
+Subject: Re: [PATCH v5 2/2] ASoC: mediatek: mt8186-rt5682: Modify machine
+ driver for two DMICs case
+To:     AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Cc:     linux-kernel@vger.kernel.org, Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        "chunxu . li" <chunxu.li@mediatek.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        =?UTF-8?B?TsOtY29sYXMgRiAuIFIgLiBBIC4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Benjamin,
+Hi AngeloGioacchino,
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Benjamin-Tissoires/Introduce-eBPF-support-for-HID-devices/20221025-173852
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/hid/hid.git master
-patch link:    https://lore.kernel.org/r/20221025093458.457089-8-benjamin.tissoires%40redhat.com
-patch subject: [PATCH hid v11 07/14] HID: bpf: introduce hid_hw_request()
-config: riscv-randconfig-m041-20221029
-compiler: riscv32-linux-gcc (GCC) 12.1.0
+On Wed, Nov 2, 2022 at 6:44 PM AngeloGioacchino Del Regno
+<angelogioacchino.delregno@collabora.com> wrote:
+>
+> > A "dmic-gpios" property is used for a mixer control to switch
+> > the dmic signal source between the Front and Rear Dmic.
+> >
+> > Refer to this one as an example,
+> > commit 3cfbf07c6d27
+> > ("ASoC: qcom: sc7180: Modify machine driver for 2mic")
+> >
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
+> > +static const char * const dmic_mux_text[] = {
+> > +     "FrontMic",
+> > +     "RearMic",
+>
+> Why are the two words joined?
+> s/FrontMic/Front Mic/g
+> s/RearMic/Rear Mic/g
+>
+> Like that, we keep it consistent with the naming that was given in the commit
+> that you mentioned in the commit description.
+>
+> Regards,
+> Angelo
 
-smatch warnings:
-drivers/hid/bpf/hid_bpf_dispatch.c:297 hid_bpf_hw_request() warn: variable dereferenced before check 'ctx' (see line 289)
-
-vim +/ctx +297 drivers/hid/bpf/hid_bpf_dispatch.c
-
-eaf51f2d4f8561 Benjamin Tissoires 2022-10-25  285  noinline int
-eaf51f2d4f8561 Benjamin Tissoires 2022-10-25  286  hid_bpf_hw_request(struct hid_bpf_ctx *ctx, __u8 *buf, size_t buf__sz,
-eaf51f2d4f8561 Benjamin Tissoires 2022-10-25  287  		   enum hid_report_type rtype, enum hid_class_request reqtype)
-eaf51f2d4f8561 Benjamin Tissoires 2022-10-25  288  {
-eaf51f2d4f8561 Benjamin Tissoires 2022-10-25 @289  	struct hid_device *hdev = (struct hid_device *)ctx->hid; /* discard const */
-                                                                                                       ^^^^^^^^
-Dereference
-
-eaf51f2d4f8561 Benjamin Tissoires 2022-10-25  290  	struct hid_report *report;
-eaf51f2d4f8561 Benjamin Tissoires 2022-10-25  291  	struct hid_report_enum *report_enum;
-eaf51f2d4f8561 Benjamin Tissoires 2022-10-25  292  	u8 *dma_data;
-eaf51f2d4f8561 Benjamin Tissoires 2022-10-25  293  	u32 report_len;
-eaf51f2d4f8561 Benjamin Tissoires 2022-10-25  294  	int ret;
-eaf51f2d4f8561 Benjamin Tissoires 2022-10-25  295  
-eaf51f2d4f8561 Benjamin Tissoires 2022-10-25  296  	/* check arguments */
-eaf51f2d4f8561 Benjamin Tissoires 2022-10-25 @297  	if (!ctx || !hid_bpf_ops || !buf)
-                                                             ^^^
-Checked too late.
-
-eaf51f2d4f8561 Benjamin Tissoires 2022-10-25  298  		return -EINVAL;
-eaf51f2d4f8561 Benjamin Tissoires 2022-10-25  299  
-eaf51f2d4f8561 Benjamin Tissoires 2022-10-25  300  	switch (rtype) {
-eaf51f2d4f8561 Benjamin Tissoires 2022-10-25  301  	case HID_INPUT_REPORT:
-eaf51f2d4f8561 Benjamin Tissoires 2022-10-25  302  	case HID_OUTPUT_REPORT:
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
-
-
+Thank you for your review.
+Yes, you are correct, I should keep the string format consistent with
+the commit I mentioned in descriptions to avoid confusion.
+I will submit the next. Thanks. Regards.
