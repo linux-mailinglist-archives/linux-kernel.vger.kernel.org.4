@@ -2,72 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5315A616B8D
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:06:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 566D1616B8F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:07:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbiKBSGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 14:06:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35462 "EHLO
+        id S230510AbiKBSGx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 14:06:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35712 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230292AbiKBSGb (ORCPT
+        with ESMTP id S230499AbiKBSGn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:06:31 -0400
-Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED3A2EF49
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:06:29 -0700 (PDT)
-Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-3691e040abaso173741887b3.9
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 11:06:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=o0CEgw9X5vfyuwIxQqcN7xcNuir05YO/amlYwdnAC9g=;
-        b=jd3KIXC0Wu2EC6lt2E6e8osyw7VO19Sg2LkwuZAQ4qagtKZhYV2I4zssMwNkNTol5k
-         Wu9tOb4gUJ/jNMJm3GR7wIbmBeOJpPqXEoAgok3s6e5o52CRzVN3HGbHdLNoSoQ+hY7r
-         /tBV1B4SisUltG+1QjMwwPIYNPJUqVsLkaU4BmA87QHkySjts5hHQsZ8lIx557FG7Z/u
-         Rwa3bmI2f4IhIQfKNggcaKO6rKqU6i7BXc/jKiA7oVgl1XPy5SRIZzfiNF5QhWcNxvh6
-         uNjecfOsEL/JXfKjPWiIM3rwP+yuKZ1Is5ZKBgYNR5ZmLmI7yyB7g1MWzJaC/WfiEoIH
-         bJ+w==
+        Wed, 2 Nov 2022 14:06:43 -0400
+Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C77F2EF69
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:06:43 -0700 (PDT)
+Received: by mail-il1-f198.google.com with SMTP id h6-20020a92c266000000b00300624bf414so18175015ild.14
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 11:06:43 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=o0CEgw9X5vfyuwIxQqcN7xcNuir05YO/amlYwdnAC9g=;
-        b=wkiUDuyjdUsr807WbGqGeAqKuB8gotciAtEMLy+kqxqeUvmd3HXy2KXwNCuhhnYQ7I
-         Ngy2dvK51jEt3wyyakF2XK3TsIVVKxDFQDF+aQEZl4iVpkD6lSY6M1kuO5m8mgP3M+xk
-         PO8wTNhzTHUZGPYQ4kgVgTZlJJs0KQD7k4zm+a9f4L91bmOWct4rlhYEKLyjywbEhxDK
-         h0hEu5dBhY8Qo6SeS1WNxor/Vd9/fXBYX92X+yzYlYVw9TL79o7E40+pneiWcz3gO6E9
-         R6GaHu9wdVeY0G+vW/p+IXDh4AP8541DrxIvy1gV5XAi1yPPsqLeW76i53BOOydgHxcE
-         j41Q==
-X-Gm-Message-State: ACrzQf1DNJL8P73rEAQaum4uUXhBQH1286oEExcuDNmtVRFE9CTdqwbr
-        x3I8wJ11Esdob++379xf4QPMeQZKxgPaBoc8G0bodw==
-X-Google-Smtp-Source: AMsMyM5bBk2ioGe0NmqvZ65KgqUjR5BrZT6NnVCCub3vHX+oK4glVSvyGeBEXDTV1x6ppQboIsconfbATdm+J444dcw=
-X-Received: by 2002:a81:8945:0:b0:373:5c0c:9b4a with SMTP id
- z66-20020a818945000000b003735c0c9b4amr3242958ywf.490.1667412389003; Wed, 02
- Nov 2022 11:06:29 -0700 (PDT)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=q9DM+dSTltJpPeB5NG0nQSIBurTpKE/AraTlYTnn+p4=;
+        b=Efu1O7BbmXzIcmacSrR3j8n7W5E0ruce9Zaj7hvVvipsELJ30zN5ASJAkr9zpSIIFS
+         NtP1PQxvzo2/oXHGZpx1mjqIoYrHIjS69sk0p3NrMlGjv0wEsJ9RwKuMU1uTd6XYNe2Z
+         E8J0iDjxRnO9XlzwA6qbhKuQMzrncfmHOrpFg1gHfg94lOZhqfiJSt5Z/nm8jwNeMUnk
+         xdrboZepvI8bL//LuABm+qZLrb6NdRlUmdu7rVPybr/t2YpYE3Sqv6UrCQy7MFdsV1BJ
+         b0hptIRyTSOp3NptWTf+0fcpQAnbUdiUGOhdVjrMcvUWqjoe+SsbuKg5CoFAIeJMOMBB
+         onhA==
+X-Gm-Message-State: ACrzQf0iQYHaIYVmRZ8BfYeblf1uf4A1NBaSlQcJ22rYPFnvFlEEGtyh
+        joywFkvWHuGavSSwmmgV6bp2k3Yiee4ee0EQ881sSqpLltaI
+X-Google-Smtp-Source: AMsMyM6cac5Pzrl8neaFAD4OUwhD3WW+pfKknek5X1+KAiHTUuHkumAlpeEgmVpRhCe83NT+X4hz4V/xUc+o8wdTn47Zqxm3W63O
 MIME-Version: 1.0
-References: <20221030212929.335473-1-peterx@redhat.com> <20221030212929.335473-5-peterx@redhat.com>
-In-Reply-To: <20221030212929.335473-5-peterx@redhat.com>
-From:   James Houghton <jthoughton@google.com>
-Date:   Wed, 2 Nov 2022 11:06:16 -0700
-Message-ID: <CADrL8HWpvAozbfqGyr0=4M6bu-ecQ7mQXb3xzvMTjpCPH3OVcg@mail.gmail.com>
-Subject: Re: [PATCH RFC 04/10] mm/hugetlb: Make userfaultfd_huge_must_wait() RCU-safe
-To:     Peter Xu <peterx@redhat.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        David Hildenbrand <david@redhat.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Rik van Riel <riel@surriel.com>
+X-Received: by 2002:a05:6e02:16ca:b0:2ff:7c9b:3ab5 with SMTP id
+ 10-20020a056e0216ca00b002ff7c9b3ab5mr15335279ilx.9.1667412402327; Wed, 02 Nov
+ 2022 11:06:42 -0700 (PDT)
+Date:   Wed, 02 Nov 2022 11:06:42 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000ef589805ec80b371@google.com>
+Subject: [syzbot] kernel BUG in dev_args_match_device
+From:   syzbot <syzbot+031687116258450f9853@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_DIGITS,
+        FROM_LOCAL_HEX,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,47 +55,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 30, 2022 at 2:29 PM Peter Xu <peterx@redhat.com> wrote:
->
-> RCU makes sure the pte_t* won't go away from under us.  Please refer to the
-> comment above huge_pte_offset() for more information.
->
-> Signed-off-by: Peter Xu <peterx@redhat.com>
-> ---
->  fs/userfaultfd.c | 4 ++++
->  1 file changed, 4 insertions(+)
->
-> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
-> index 07c81ab3fd4d..4e813e68e4f8 100644
-> --- a/fs/userfaultfd.c
-> +++ b/fs/userfaultfd.c
-> @@ -243,6 +243,9 @@ static inline bool userfaultfd_huge_must_wait(struct userfaultfd_ctx *ctx,
->
->         mmap_assert_locked(mm);
->
-> +       /* For huge_pte_offset() */
-> +       rcu_read_lock();
+Hello,
 
-userfaultfd_huge_must_wait is called after we set the task's state to
-blocking. Is it always safe to call rcu_read_lock (and
-rcu_read_unlock) in this case? (With my basic understanding of RCU,
-this seems like it should be safe, but I'm not sure.)
+syzbot found the following issue on:
 
-- James
+HEAD commit:    b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
+git tree:       upstream
+console output: https://syzkaller.appspot.com/x/log.txt?x=1744c1fc880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
+dashboard link: https://syzkaller.appspot.com/bug?extid=031687116258450f9853
+compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+
+Unfortunately, I don't have any reproducer for this issue yet.
+
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/24728b72a896/disk-b229b6ca.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/10a3c40c60e1/vmlinux-b229b6ca.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/69f963b02b7e/bzImage-b229b6ca.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+031687116258450f9853@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+kernel BUG at fs/btrfs/ctree.h:3710!
+invalid opcode: 0000 [#1] PREEMPT SMP KASAN
+CPU: 0 PID: 2686 Comm: syz-executor.5 Not tainted 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+RIP: 0010:assertfail+0x1a/0x1c fs/btrfs/ctree.h:3710
+Code: 00 00 e8 7e 9c 55 f7 eb e3 e8 77 9c 55 f7 eb dc 89 f1 48 89 fe 48 c7 c7 60 c8 db 8a 48 c7 c2 40 ed db 8a 31 c0 e8 27 86 ff ff <0f> 0b e8 54 9c 55 f7 48 c7 c7 60 f9 82 91 e9 e8 f9 e7 f9 89 f1 48
+RSP: 0018:ffffc90003a4fd80 EFLAGS: 00010246
+RAX: 0000000000000057 RBX: 0000000000000000 RCX: 88ff9485f0ebf200
+RDX: ffffc90004609000 RSI: 0000000000003f0f RDI: 0000000000003f10
+RBP: ffffc90003a4fe70 R08: ffffffff816b8dfd R09: fffff52000749f69
+R10: fffff52000749f69 R11: 1ffff92000749f68 R12: ffffc90003a4fe60
+R13: dffffc0000000000 R14: ffff88807f3e4000 R15: ffffc90003a4fe60
+FS:  00007f0048a6c700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000555e09b0b000 CR3: 000000003ba9d000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ dev_args_match_device+0x1e6/0x220 fs/btrfs/volumes.c:6921
+ btrfs_find_device+0xbb/0x250 fs/btrfs/volumes.c:6950
+ btrfs_ioctl_dev_info+0x3f0/0xb20 fs/btrfs/ioctl.c:3740
+ vfs_ioctl fs/ioctl.c:51 [inline]
+ __do_sys_ioctl fs/ioctl.c:870 [inline]
+ __se_sys_ioctl+0xfb/0x170 fs/ioctl.c:856
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f0047c8b5a9
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f0048a6c168 EFLAGS: 00000246 ORIG_RAX: 0000000000000010
+RAX: ffffffffffffffda RBX: 00007f0047dac050 RCX: 00007f0047c8b5a9
+RDX: 0000000020000980 RSI: 00000000d000941e RDI: 0000000000000003
+RBP: 00007f0047ce67b0 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000000
+R13: 00007ffc080c58df R14: 00007f0048a6c300 R15: 0000000000022000
+ </TASK>
+Modules linked in:
+---[ end trace 0000000000000000 ]---
+RIP: 0010:assertfail+0x1a/0x1c fs/btrfs/ctree.h:3710
+Code: 00 00 e8 7e 9c 55 f7 eb e3 e8 77 9c 55 f7 eb dc 89 f1 48 89 fe 48 c7 c7 60 c8 db 8a 48 c7 c2 40 ed db 8a 31 c0 e8 27 86 ff ff <0f> 0b e8 54 9c 55 f7 48 c7 c7 60 f9 82 91 e9 e8 f9 e7 f9 89 f1 48
+RSP: 0018:ffffc90003a4fd80 EFLAGS: 00010246
+RAX: 0000000000000057 RBX: 0000000000000000 RCX: 88ff9485f0ebf200
+RDX: ffffc90004609000 RSI: 0000000000003f0f RDI: 0000000000003f10
+RBP: ffffc90003a4fe70 R08: ffffffff816b8dfd R09: fffff52000749f69
+R10: fffff52000749f69 R11: 1ffff92000749f68 R12: ffffc90003a4fe60
+R13: dffffc0000000000 R14: ffff88807f3e4000 R15: ffffc90003a4fe60
+FS:  00007f0048a6c700(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020000980 CR3: 000000003ba9d000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
 
 
-> +
->         ptep = huge_pte_offset(mm, address, vma_mmu_pagesize(vma));
->
->         if (!ptep)
-> @@ -261,6 +264,7 @@ static inline bool userfaultfd_huge_must_wait(struct userfaultfd_ctx *ctx,
->         if (!huge_pte_write(pte) && (reason & VM_UFFD_WP))
->                 ret = true;
->  out:
-> +       rcu_read_unlock();
->         return ret;
->  }
->  #else
-> --
-> 2.37.3
->
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
