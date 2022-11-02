@@ -2,127 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DD1D3617027
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 23:00:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 16B3B61702C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 23:02:53 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbiKBWAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 18:00:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49314 "EHLO
+        id S230340AbiKBWCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 18:02:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiKBWAW (ORCPT
+        with ESMTP id S230123AbiKBWCr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 18:00:22 -0400
-Received: from mail-ed1-x531.google.com (mail-ed1-x531.google.com [IPv6:2a00:1450:4864:20::531])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D5579FDC
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 15:00:20 -0700 (PDT)
-Received: by mail-ed1-x531.google.com with SMTP id z18so385659edb.9
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 15:00:20 -0700 (PDT)
+        Wed, 2 Nov 2022 18:02:47 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD6A9FDC
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 15:02:46 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id k5so9947174pjo.5
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 15:02:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uFa9ZhCMepZq24Vnn18j9j7JCVeUv8BABqc0vmgQSBA=;
-        b=O567pRj2nj/frtcM+5YvZA8T0NCYHcrKp1+VVHNo7zrReLYbWbbK5nEbPZ8ffn/h9S
-         yp2vVrBSNGkANUAzIU1cQlcSJA4kucix3t3nMPpmC0uQYE9WT0BlM0L2I1zEjWN4dDvE
-         IWTcoJBMuwp4XbjzsXhdsIHitJC9KoNBa9V7j4M+Er2DsesgSAkl+CKca4cPtcSw+fNr
-         SSaBHJXh3MDfmKq6+2VVS/B+jOGH0G2EsNpv27q4DxLTHX9Pp919rEIFjHdj7t9zkRH2
-         Yb9+yTqHsCzLDJA67KC4Y0AhZHceGvfVkI7cHFezlpYYea8YkejH+Kny3mO1yXzVoG6m
-         QPFQ==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=tDdQ76HTuetM+x0U50OZVmoiEGjK/pNJ2DGCTRImjr8=;
+        b=KQiJkZtePhI2flEsUJPvJWcVFKJ+OroKKLIqrw7gi+MX+q2049MD3JdT/HnYDFu9WR
+         zLFsSCKGQMStyQIn1lzgksLz8eM0HdHrRUXnS3XiBPbgf+cvVwhSqUXkg1CPQQjS8peH
+         VqixHIIJaqwe+pLijCFPO7sKai856yU/ibvqI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uFa9ZhCMepZq24Vnn18j9j7JCVeUv8BABqc0vmgQSBA=;
-        b=l/ZTuqqnnTTlBj6SwUa4Pflv0tz4qNcYUN7r8lPxhs9SpPr/kDDVEK4aX0Bt6K8+2L
-         FgbYNC/ReX18VuW90cg64HKHXRNOFclHQD9MssA+sNfXTR8dbDHbRRWewwScJLnA1jsG
-         dQ/IvX5vWBuKDogb4hmY+Jj/nomxiTWRIJqAN1roMN/QO0fXrEAYmaeADW6MylhSAlWi
-         Y76C1DfFbxhNMk0wGts8PzKHehilDCIDrIMlCNOQXzLWcXnVWdK0PKfikiYf0Ggd37oN
-         8Mpn3pKxIrHJtgpnzd3rlMKgHjecIsHz/QItS9XLqieGUzlvX5oQ4Lbnr+4IJ4a1IA7f
-         SPEA==
-X-Gm-Message-State: ACrzQf16F/fUO5aqQoJHFZfJ52Vuo08888gxP/ujtl5IVMQUhmYnGDSc
-        OSbhBH107NGYn86n4PgTN1Q=
-X-Google-Smtp-Source: AMsMyM6+9FbULypkREv1lMx4Gsy5w2aJ7DhhKyi4VArUJlIvoL56XephMvx0Vp0E70gKWsieAIbO4w==
-X-Received: by 2002:aa7:c78d:0:b0:454:fe1d:8eb1 with SMTP id n13-20020aa7c78d000000b00454fe1d8eb1mr26411467eds.59.1667426418859;
-        Wed, 02 Nov 2022 15:00:18 -0700 (PDT)
-Received: from ?IPV6:2003:c7:8f2a:b839:703d:34d9:ac18:ee1c? (p200300c78f2ab839703d34d9ac18ee1c.dip0.t-ipconnect.de. [2003:c7:8f2a:b839:703d:34d9:ac18:ee1c])
-        by smtp.gmail.com with ESMTPSA id l17-20020a1709063d3100b00782fbb7f5f7sm5896446ejf.113.2022.11.02.15.00.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 15:00:18 -0700 (PDT)
-Message-ID: <2fea9cb6-04a0-c709-9263-a35badad4d20@gmail.com>
-Date:   Wed, 2 Nov 2022 23:00:17 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=tDdQ76HTuetM+x0U50OZVmoiEGjK/pNJ2DGCTRImjr8=;
+        b=O0ZQx7qHy2tSB0xn+fo+8TC3N7VS7tpa70Hy4z/FH1rhqew83FrnfoE9zqr3Jbde7z
+         /GbWPjhb0NuQlMuocyh8DJtTOePPkzdm8/9NZTzAZu47xUj+VfTDgiOnZJoRMuQXrbsw
+         11z3hhYrXzsChUQ/AVnw70AGrSQcSWiCwy+O2KqW2aanVxyvJz/qs+cijV2HCzv2vBBI
+         kDXE/la3hzZY4NikYyfUWTgEcCyFafUYpHGVrLIBAUoqmqR2fQw5kGUq2pHFP+tUafU1
+         ecE3enqdG3TR4YbJQMElceWp03yQqadLTgiS9iwpjS9bZAmqe25cQQ8UfgcRFYc1PKMn
+         SaHw==
+X-Gm-Message-State: ACrzQf3RPGX5wUi/4t3kC463lfa8BHlklvcNwjMLAD3tOyRVj8R+xZ7X
+        /9uWbbaEAAln3T6lrnTwKd8UGFUfEO5uTg==
+X-Google-Smtp-Source: AMsMyM4WkfzMykXnG15VA0dkbaFs2pJjZSHDWxSbgybvMUsbX2OvhgJaXXTBVFr7hoOw8Zjy6TVn2g==
+X-Received: by 2002:a17:90b:1095:b0:213:ee6a:f268 with SMTP id gj21-20020a17090b109500b00213ee6af268mr16266724pjb.213.1667426566071;
+        Wed, 02 Nov 2022 15:02:46 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a20-20020a621a14000000b0056c6e59fb69sm8926019pfa.83.2022.11.02.15.02.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 15:02:45 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 15:02:44 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     William Breathitt Gray <william.gray@linaro.org>,
+        linux-iio@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
+        Patrick Havelange <patrick.havelange@essensium.com>,
+        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
+        Oleksij Rempel <linux@rempel-privat.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Julien Panis <jpanis@baylibre.com>,
+        David Lechner <david@lechnology.com>,
+        linux-arm-kernel@lists.infradead.org,
+        linux-stm32@st-md-mailman.stormreply.com,
+        linux-omap@vger.kernel.org
+Subject: Re: [PATCH 1/4] counter: Adjust final parameter type in function and
+ signal callbacks
+Message-ID: <202211021501.88D8147@keescook>
+References: <20221102172217.2860740-1-nathan@kernel.org>
+ <202211021216.FF49E84C69@keescook>
+ <Y2LR13xrrauVmeXP@dev-arch.thelio-3990X>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH v4] staging: rtl8192e: space formatting fixes in rtl_cam.c
-Content-Language: en-US
-To:     Jerom van der Sar <jerom.vandersar@gmail.com>,
-        gregkh@linuxfoundation.org
-Cc:     error27@gmail.com, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org
-References: <Y2IbI8ib5+k+bVRo@kroah.com>
- <20221102200057.397-1-jerom.vandersar@gmail.com>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <20221102200057.397-1-jerom.vandersar@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2LR13xrrauVmeXP@dev-arch.thelio-3990X>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/2/22 21:00, Jerom van der Sar wrote:
-> Fixed a few coding style issues in rtl_cam.c: two times lack of
-> spaces around binary operators. Some other warnings still remain.
-> These issues were found by scripts/checkpatch.pl.
+On Wed, Nov 02, 2022 at 01:23:51PM -0700, Nathan Chancellor wrote:
+> Right, I am not the biggest fan of this change myself and it is entirely
+> possible that I am misreading the warnings from the commit message but I
+> do not see how
 > 
-> This patch helps clean up the rtl8192e driver in staging, making it
-> easier to read and maintain.
+>         comp_node.comp.signal_u32_read = counter->ops->signal_read;
 > 
-> Signed-off-by: Jerom van der Sar <jerom.vandersar@gmail.com>
-> ---
-> Changes in v4:
->   - Reverted more double blank line formatting fixes to make the patch
->     even smaller.
+> and
 > 
-> Changes in v3:
->    - Fixed faulty dot at the end of the patch sign-off.
+>         comp_node.comp.count_u32_read = counter->ops->function_read;
 > 
-> Changes in v2:
->    - Reverted some formatting fixes to make the diff easier to review.
+> in counter_add_watch(),
 > 
->   drivers/staging/rtl8192e/rtl8192e/rtl_cam.c | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
+>         comp.signal_u32_read = counter->ops->signal_read;
 > 
-> diff --git a/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c b/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c
-> index 41faeb4b9b9b..41bff46d1b3a 100644
-> --- a/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c
-> +++ b/drivers/staging/rtl8192e/rtl8192e/rtl_cam.c
-> @@ -17,7 +17,7 @@ void rtl92e_cam_reset(struct net_device *dev)
->   {
->   	u32 ulcommand = 0;
->   
-> -	ulcommand |= BIT31|BIT30;
-> +	ulcommand |= BIT31 | BIT30;
->   	rtl92e_writel(dev, RWCAM, ulcommand);
->   }
->   
-> @@ -107,7 +107,7 @@ void rtl92e_set_key(struct net_device *dev, u8 EntryNo, u8 KeyIndex,
->   
->   	for (i = 0; i < CAM_CONTENT_COUNT; i++) {
->   		TargetCommand  = i + CAM_CONTENT_COUNT * EntryNo;
-> -		TargetCommand |= BIT31|BIT16;
-> +		TargetCommand |= BIT31 | BIT16;
->   
->   		if (i == 0) {
->   			TargetContent = (u32)(*(MacAddr+0)) << 16 |
+> in counter_signal_attrs_create(), and
+> 
+>         comp.count_u32_read = counter->ops->function_read;
+>         comp.count_u32_write = counter->ops->function_write;
+> 
+> in counter_count_attrs_create() are currently safe under kCFI, since the
+> final parameter type of the prototypes in 'struct counter_ops' does not
+> match the final parameter type of the prototypes in 'struct
+> counter_comp'. I would expect the indirect calls in counter_get_data()
+> and counter_comp_u32_show() to fail currently.
 
-Please rebase. I cannot apply your patch.
+Ah! Thank you -- those were the places I couldn't find.
 
-Bye Philipp
+-- 
+Kees Cook
