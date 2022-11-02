@@ -2,96 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A49A1615C0C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 07:06:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7862615C0D
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 07:06:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbiKBGGI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 02:06:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57004 "EHLO
+        id S230024AbiKBGGT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 02:06:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiKBGGF (ORCPT
+        with ESMTP id S230018AbiKBGGO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 02:06:05 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 24573DE87;
-        Tue,  1 Nov 2022 23:06:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id ACFD8617DC;
-        Wed,  2 Nov 2022 06:06:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0DD0C433D6;
-        Wed,  2 Nov 2022 06:05:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667369162;
-        bh=bvrPUQ1AkdtWDIkrPLtRNfBzvHOW7CeSneSnNTmKJ2o=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LwYTWx42wGb7JaWR7zd6arvecdUoOxnekCLqF9GagZ6p3oZkyfLd38l2C6kPNKPKg
-         2p0V4MA72gH6i73YrS5WVRvT1U3FVI2+DZeSIoI+yLSOGIqN0XCDfMAR5+rsLE8Rvh
-         Hva8ARZU+u5QVDBYfoqxGDM3tRGsyBnn7BX4mO4n/4B3fDVKxr4KjE+F9LLMnAby4L
-         /fBLka4RB8U7FMxWWhshc+UBeZyHR330jinhi7Uq3qZEmGepUFluhcH13u0WD6FqjO
-         w1eGoFeUt3Kz+zyh5Hf82ZPoua2dmeakiDoCKG9I4Ma2Gmlk6AZkTJQF6ae24zEBSe
-         +UOgluERW5cmw==
-Date:   Wed, 2 Nov 2022 06:05:54 +0000
-From:   Will Deacon <will@kernel.org>
-To:     Parav Pandit <parav@nvidia.com>
-Cc:     bagasdotme@gmail.com, arnd@arndb.de, stern@rowland.harvard.edu,
-        parri.andrea@gmail.com, peterz@infradead.org, boqun.feng@gmail.com,
-        npiggin@gmail.com, dhowells@redhat.com, j.alglave@ucl.ac.uk,
-        luc.maranget@inria.fr, paulmck@kernel.org, akiyks@gmail.com,
-        dlustig@nvidia.com, joel@joelfernandes.org, corbet@lwn.net,
-        linux-kernel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-doc@vger.kernel.org
-Subject: Re: [PATCH v5] locking/memory-barriers.txt: Improve documentation
- for writel() example
-Message-ID: <20221102060553.GA15438@willie-the-truck>
-References: <20221027201000.219731-1-parav@nvidia.com>
+        Wed, 2 Nov 2022 02:06:14 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7632A233BC
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 23:06:09 -0700 (PDT)
+Received: from kwepemi500016.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N2Gbc2PxlzmVHJ;
+        Wed,  2 Nov 2022 14:06:04 +0800 (CST)
+Received: from [10.174.176.230] (10.174.176.230) by
+ kwepemi500016.china.huawei.com (7.221.188.220) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Wed, 2 Nov 2022 14:06:07 +0800
+Message-ID: <dfcd3ebe-6dbc-ccf0-32dc-4934e862aabc@huawei.com>
+Date:   Wed, 2 Nov 2022 14:06:06 +0800
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221027201000.219731-1-parav@nvidia.com>
-User-Agent: Mutt/1.10.1 (2018-07-13)
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.1.0
+Subject: Re: [PATCH] comedi: Fix potential memory leak in comedi_init()
+To:     Greg KH <gregkh@linuxfoundation.org>
+CC:     Ian Abbott <abbotti@mev.co.uk>, <hsweeten@visionengravers.com>,
+        <zhangxuezhi1@coolpad.com>, <fmhess@users.sourceforge.net>,
+        <linux-kernel@vger.kernel.org>
+References: <20221101032125.27337-1-shangxiaojing@huawei.com>
+ <Y2CkW5EVLiLUoNWh@kroah.com>
+ <32c291d7-0e87-ec1f-e2af-28d7f8ca0981@huawei.com>
+ <5b8ee99d-2358-39c5-b663-2d1c80353639@mev.co.uk>
+ <04bf1874-77bc-ce73-28e2-04fe4d098e58@mev.co.uk>
+ <dac94e1e-068b-c046-c8ea-1a8405ce91bd@huawei.com>
+ <Y2HdC8N+DroZ8BKu@kroah.com>
+From:   shangxiaojing <shangxiaojing@huawei.com>
+In-Reply-To: <Y2HdC8N+DroZ8BKu@kroah.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Originating-IP: [10.174.176.230]
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemi500016.china.huawei.com (7.221.188.220)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 11:10:00PM +0300, Parav Pandit wrote:
-> The cited commit describes that when using writel(), explicit wmb()
-> is not needed. wmb() is an expensive barrier. writel() uses the needed
-> platform specific barrier instead of wmb().
+
+
+On 2022/11/2 10:59, Greg KH wrote:
+> On Wed, Nov 02, 2022 at 10:51:35AM +0800, shangxiaojing wrote:
+>>
+>>
+>> On 2022/11/2 0:41, Ian Abbott wrote:
+>>> On 01/11/2022 11:40, Ian Abbott wrote:
+>>>> On 01/11/2022 06:16, shangxiaojing wrote:
+>>>>>
+>>>>>
+>>>>> On 2022/11/1 12:45, Greg KH wrote:
+>>>>>> On Tue, Nov 01, 2022 at 11:21:25AM +0800, Shang XiaoJing wrote:
+>>>>>>> comedi_init() will goto out_unregister_chrdev_region if cdev_add()
+>>>>>>> failed, which won't free the resource alloced in kobject_set_name().
+>>>>>>> Call kfree_const() to free the leaked name before goto
+>>>>>>> out_unregister_chrdev_region.
+>>>>>>>
+>>>>>>> unreferenced object 0xffff8881000fa8c0 (size 8):
+>>>>>>>     comm "modprobe", pid 239, jiffies 4294905173 (age 51.308s)
+>>>>>>>     hex dump (first 8 bytes):
+>>>>>>>       63 6f 6d 65 64 69 00 ff                          comedi..
+>>>>>>>     backtrace:
+>>>>>>>       [<000000005f9878f7>] __kmalloc_node_track_caller+0x4c/0x1c0
+>>>>>>>       [<000000000fd70302>] kstrdup+0x3f/0x70
+>>>>>>>       [<000000009428bc33>] kstrdup_const+0x46/0x60
+>>>>>>>       [<00000000ed50d9de>] kvasprintf_const+0xdb/0xf0
+>>>>>>>       [<00000000b2766964>] kobject_set_name_vargs+0x3c/0xe0
+>>>>>>>       [<00000000f2424ef7>] kobject_set_name+0x62/0x90
+>>>>>>>       [<000000005d5a125b>] 0xffffffffa0013098
+>>>>>>>       [<00000000f331e663>] do_one_initcall+0x7a/0x380
+>>>>>>>       [<00000000aa7bac96>] do_init_module+0x5c/0x230
+>>>>>>>       [<000000005fd72335>] load_module+0x227d/0x2420
+>>>>>>>       [<00000000ad550cf1>] __do_sys_finit_module+0xd5/0x140
+>>>>>>>       [<00000000069a60c5>] do_syscall_64+0x3f/0x90
+>>>>>>>       [<00000000c5e0d521>] entry_SYSCALL_64_after_hwframe+0x63/0xcd
+>>>>>>>
+>>>>>>> Fixes: ed9eccbe8970 ("Staging: add comedi core")
+>>>>>>> Signed-off-by: Shang XiaoJing <shangxiaojing@huawei.com>
+>>>>>>> ---
+>>>>>>>    drivers/comedi/comedi_fops.c | 5 ++++-
+>>>>>>>    1 file changed, 4 insertions(+), 1 deletion(-)
+>>>>>>>
+>>>>>>> diff --git a/drivers/comedi/comedi_fops.c
+>>>>>>> b/drivers/comedi/comedi_fops.c
+>>>>>>> index e2114bcf815a..2c508c2cf6f6 100644
+>>>>>>> --- a/drivers/comedi/comedi_fops.c
+>>>>>>> +++ b/drivers/comedi/comedi_fops.c
+>>>>>>> @@ -3379,8 +3379,11 @@ static int __init comedi_init(void)
+>>>>>>>        retval = cdev_add(&comedi_cdev, MKDEV(COMEDI_MAJOR, 0),
+>>>>>>>                  COMEDI_NUM_MINORS);
+>>>>>>> -    if (retval)
+>>>>>>> +    if (retval) {
+>>>>>>> +        kfree_const(comedi_cdev.kobj.name);
+>>>>>>> +        comedi_cdev.kobj.name = NULL;
+>>>>>>>            goto out_unregister_chrdev_region;
+>>>>>>> +    }
+>>>>>>
+>>>>>> A driver should never have to poke around in the internals of a cdev
+>>>>>> object like this.  Please fix the cdev core to not need this if
+>>>>>> cdev_add() fails.
+>>>>
+>>>> Or at least there should be a function that can be called to undo
+>>>> the allocations of kobject_set_name().
+>>>
+>>> Looking at it a bit more, cdev_init() calls kobject_init(), and
+>>> kobject_init() requires a matching call to kobject_put().  Nothing is
+>>> calling kobject_put() in this situation.  Calling cdev_del() will call
+>>> kobject_put(), so is that the correct way to clean up after cdev_init()
+>>> if the call to cdev_add() fails?
+>>>
+>>
+>> Some cdev call cdev_del() when cdev_add() failed (like init_dvbdev()), and
+>> at that time the cdev_unmap() in cdev_del() won't do anything due to the
+>> failure of cdev_add(), which is calling the kobject_put() when cdev_add()
+>> failed. But I'm not sure which one is better.
 > 
-> writeX() section of "KERNEL I/O BARRIER EFFECTS" already describes
-> ordering of I/O accessors with MMIO writes.
+> My point is that no one calling the cdev_add() call should have to do
+> this type of "cleanup"  The cdev code should do it automatically, we
+> don't want to have to audit every user of cdev_add() today, and in the
+> future for forever, to ensure they got it right.
 > 
-> Hence add the comment for pseudo code of writel() and remove confusing
-> text around writel() and wmb().
+> Let's fix it up in the cdev code itself please.  The kobject in a cdev
+> is a very odd thing, it's not the "normal" type of kobject that you
+> expect, so the cdev code should handle all of that on its own and that
+> should not "leak" into any caller.
 > 
-> commit 5846581e3563 ("locking/memory-barriers.txt: Fix broken DMA vs. MMIO ordering example")
-> 
-> Signed-off-by: Parav Pandit <parav@nvidia.com>
-> ---
-> changelog:
-> v4->v5:
-> - Used suggested documentation update from Will
-> - Added comment to the writel() pseudo code example
-> - updated commit log for newer changes
 
-Sorry for the delay on this, I'm really behind on patches at the moment.
-This patch looks good to me, so thanks for doing it. You can either add
-my:
+ok, I'll fix in cdev code and send v2.
 
-Acked-by: Will Deacon <will@kernel.org>
-
-or, since we worked on this together:
-
-Co-developed-by: Will Deacon <will@kernel.org>
-Signed-off-by: Will Deacon <will@kernel.org>
-
-Cheers,
-
-Will
+Thanks,
+-- 
+Shang XiaoJing
