@@ -2,117 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 87BFB6160BF
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 11:24:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 55A086160C2
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 11:24:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230312AbiKBKYD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 06:24:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42288 "EHLO
+        id S230165AbiKBKYv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 06:24:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42594 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiKBKYB (ORCPT
+        with ESMTP id S229688AbiKBKYs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 06:24:01 -0400
-Received: from mail-pj1-x102c.google.com (mail-pj1-x102c.google.com [IPv6:2607:f8b0:4864:20::102c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4D652270
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 03:24:00 -0700 (PDT)
-Received: by mail-pj1-x102c.google.com with SMTP id p15-20020a17090a348f00b002141615576dso1664995pjb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 03:24:00 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=jTP63kQwOw1YO+WrEKDysOnr36FxfbvLN7e4W99sGyg=;
-        b=SjxUIEHrr1myH5WYkP+7nEZ/j4tFv1FWQYYo/B6f9yRmaXWlGXeTFt3cFD2GJaZZjq
-         bhrJTCBNiDXW4OvsvDeGANs3++n4jVZzr6QuSAHrNI4bbhGvZI9ge8s7K9Yy5wG8xfIb
-         RnYg9D4LIbJjjli1+lmVcHcTrpFxPW83bvYHCvH82tS7w6gyB0fWi+oD/uT58z0Xf4cJ
-         BlFLx+NyXWD2/Lia2aix3aSYxWgMSbTSgpNUxy9+sfZikF0zVxp3AzK/I2QLFKb/Jg8e
-         WI3IG/d1+MT3uUdpdH4/silRtSFrKo5h9eDVU56RZ8/DRFLcW8JSpuuHi2ETQKhehiy5
-         1IIg==
+        Wed, 2 Nov 2022 06:24:48 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22D124BCD
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 03:24:46 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id j7-20020a056e02154700b003007885e7beso16799481ilu.20
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 03:24:46 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=jTP63kQwOw1YO+WrEKDysOnr36FxfbvLN7e4W99sGyg=;
-        b=O80isSKdjDT+QvfwR+xeJ7rOMDU0f9xRff4lEM3gPHWhW/2zNQ3aGZQzKSoQcojoOn
-         h7gQU/PTirsfj68kYaQp80GuogEhYrFAUePSdsDylEe0Rr0oxcRrKlihMQTYWz17QrlE
-         KVQphhMz1DWq473ZLQLDut34wXNUwy/GBGwACwHNqFoaS9xySLu0aXMNwCT4ItgvmRbh
-         NAKIa+PxXJsmduqg6Qq14lrrAoh8TxxNfZT10TNt8G3G8LBlfRQsbAT8K667nnq7Hsax
-         6uQlw4MUsfMb6FuPE+XtbV6OaqR2kcs3BpZGCIA9JiyT50avBjB7k44GnJ4rw+NNYctL
-         CScA==
-X-Gm-Message-State: ACrzQf3VFDMQVwWFtuyb0M+eOQeltp3dfoNkxxt+tP3o+393wxa3dZcH
-        3JtmX20lClDr5effJ2Nz2tQFpg==
-X-Google-Smtp-Source: AMsMyM74nfxQldBgt3dzAkimFGpm81YKM2RK1fMlbG87Z1BjhhyNSfRo0bgLmITRvHFUn2FQgkcuaQ==
-X-Received: by 2002:a17:90b:4a42:b0:213:383f:cd21 with SMTP id lb2-20020a17090b4a4200b00213383fcd21mr41550560pjb.23.1667384639784;
-        Wed, 02 Nov 2022 03:23:59 -0700 (PDT)
-Received: from C02CV1DAMD6P.bytedance.net ([139.177.225.227])
-        by smtp.gmail.com with ESMTPSA id x5-20020a170902ec8500b00177f82f0789sm7973613plg.198.2022.11.02.03.23.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 03:23:59 -0700 (PDT)
-From:   Chengming Zhou <zhouchengming@bytedance.com>
-To:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        vincent.guittot@linaro.org, dietmar.eggemann@arm.com,
-        rostedt@goodmis.org, bsegall@google.com, mgorman@suse.de,
-        bristot@redhat.com, vschneid@redhat.com
-Cc:     linux-kernel@vger.kernel.org,
-        Chengming Zhou <zhouchengming@bytedance.com>
-Subject: [PATCH] sched/core: Minor optimize ttwu_runnable()
-Date:   Wed,  2 Nov 2022 18:23:43 +0800
-Message-Id: <20221102102343.57845-1-zhouchengming@bytedance.com>
-X-Mailer: git-send-email 2.35.1
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qe4WNd93mX+EjZAZzx27OolHw122E3xiRIqW7icjVMc=;
+        b=T2jsSwlXsGYl56mSwU+wCEfMIaoKnBcUWJMl83+EAewwfVTt0819t0KAQ+eUE9p5nB
+         LkmQYaD5uZjjbFfE+Ad2aWZFmUoHWJ39MyFvPaCcXY1E16IPxGD9ay9Lc0lT5guGLPyH
+         Y97itFLNdVW4CpCCxRnqJNZDyyK+5vDv0m9Ndwm+LoptptneQauJowceJwZAQfmP0GRh
+         Q/jZ9Reuew7/TPs1p4EM9pALgppZlU+iKnXsTlpdAJakwZL5f0XU5WM3bgbnUGik5VIC
+         aRZKSG1G6Z22xTbyTPFDJu4Gt8szoRx4vt6K4bpom5GxX4TcP2tzWHu8UpF18DkJZt5v
+         4sqQ==
+X-Gm-Message-State: ACrzQf1RMnjSWXURNea4ehisFDhu2vMzOxNhyzKqgsgZ+YSa+VIPf97v
+        0WHhBn2YSfiJeyhKXiap17VJTrHpa0L94jjVfGbcZSGoMYUt
+X-Google-Smtp-Source: AMsMyM6BTFKYR3WBDxUEE1qjqiyMu0X3uBEGrHLvNH1UP50P/gGpkV0jP/A+hN9YMyE4vRfi26vF2vzKdc+JF1YQLr/a2i+kc7/+
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Received: by 2002:a6b:6710:0:b0:6ce:cc99:b11 with SMTP id
+ b16-20020a6b6710000000b006cecc990b11mr12384343ioc.74.1667384686008; Wed, 02
+ Nov 2022 03:24:46 -0700 (PDT)
+Date:   Wed, 02 Nov 2022 03:24:45 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <000000000000e9df4305ec7a3fc7@google.com>
+Subject: [syzbot] WARNING in __perf_event_overflow
+From:   syzbot <syzbot+589d998651a580e6135d@syzkaller.appspotmail.com>
+To:     acme@kernel.org, alexander.shishkin@linux.intel.com,
+        bpf@vger.kernel.org, jolsa@kernel.org,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        mark.rutland@arm.com, mingo@redhat.com, namhyung@kernel.org,
+        netdev@vger.kernel.org, peterz@infradead.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-ttwu_runnable() is used as a fast wakeup path when the wakee task
-is between set_current_state() and schedule(), in which case all
-we need to do is change p->state back to TASK_RUNNING. So we don't
-need to update_rq_clock() and check_preempt_curr() in this case.
+Hello,
 
-Some performance numbers using mmtests/perfpipe on Intel Xeon server:
+syzbot found the following issue on:
 
-                           linux-next                patched
-Min       Time        8.67 (   0.00%)        8.66 (   0.13%)
-1st-qrtle Time        8.83 (   0.00%)        8.72 (   1.19%)
-2nd-qrtle Time        8.90 (   0.00%)        8.76 (   1.57%)
-3rd-qrtle Time        8.98 (   0.00%)        8.82 (   1.82%)
-Max-1     Time        8.67 (   0.00%)        8.66 (   0.13%)
-Max-5     Time        8.67 (   0.00%)        8.66 (   0.13%)
-Max-10    Time        8.79 (   0.00%)        8.69 (   1.09%)
-Max-90    Time        9.01 (   0.00%)        8.84 (   1.94%)
-Max-95    Time        9.02 (   0.00%)        8.85 (   1.86%)
-Max-99    Time        9.02 (   0.00%)        8.88 (   1.56%)
-Max       Time        9.59 (   0.00%)        8.89 (   7.29%)
-Amean     Time        8.92 (   0.00%)        8.77 *   1.65%*
+HEAD commit:    88619e77b33d net: stmmac: rk3588: Allow multiple gmac cont..
+git tree:       bpf
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=11842046880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a66c6c673fb555e8
+dashboard link: https://syzkaller.appspot.com/bug?extid=589d998651a580e6135d
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11eabcea880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10f7e632880000
 
-Signed-off-by: Chengming Zhou <zhouchengming@bytedance.com>
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/f8435d5c2c21/disk-88619e77.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/551d8a013e81/vmlinux-88619e77.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/7d3f5c29064d/bzImage-88619e77.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+589d998651a580e6135d@syzkaller.appspotmail.com
+
+------------[ cut here ]------------
+WARNING: CPU: 0 PID: 3607 at kernel/events/core.c:9313 __perf_event_overflow+0x498/0x540 kernel/events/core.c:9313
+Modules linked in:
+CPU: 0 PID: 3607 Comm: syz-executor100 Not tainted 6.1.0-rc2-syzkaller-00073-g88619e77b33d #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+RIP: 0010:__perf_event_overflow+0x498/0x540 kernel/events/core.c:9313
+Code: 80 3c 02 00 0f 85 b2 00 00 00 48 8b 83 20 02 00 00 48 ff 80 b8 01 00 00 e9 5b fe ff ff 45 31 f6 e9 a2 fd ff ff e8 f8 ae dd ff <0f> 0b e9 47 fe ff ff 4c 89 e7 e8 39 ff 29 00 e9 b2 fb ff ff e8 0f
+RSP: 0000:ffffc90003c4fb00 EFLAGS: 00010046
+RAX: 0000000080010000 RBX: ffff888011a891d0 RCX: 0000000000000000
+RDX: ffff88801a4d57c0 RSI: ffffffff819eecc8 RDI: 0000000000000001
+RBP: ffffc90003c4fb80 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000020 R11: 0000000000000001 R12: 0000000000000020
+R13: ffff888011a895f4 R14: 0000000000000000 R15: 0000000000000000
+FS:  0000555555a8e300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000020000648 CR3: 000000007c988000 CR4: 00000000003506f0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ perf_swevent_hrtimer+0x34f/0x3c0 kernel/events/core.c:10729
+ __run_hrtimer kernel/time/hrtimer.c:1685 [inline]
+ __hrtimer_run_queues+0x1c6/0xfb0 kernel/time/hrtimer.c:1749
+ hrtimer_interrupt+0x31c/0x790 kernel/time/hrtimer.c:1811
+ local_apic_timer_interrupt arch/x86/kernel/apic/apic.c:1096 [inline]
+ __sysvec_apic_timer_interrupt+0x17c/0x640 arch/x86/kernel/apic/apic.c:1113
+ sysvec_apic_timer_interrupt+0x40/0xc0 arch/x86/kernel/apic/apic.c:1107
+ asm_sysvec_apic_timer_interrupt+0x16/0x20 arch/x86/include/asm/idtentry.h:649
+RIP: 0033:0x7f74350afae5
+Code: 00 c7 04 25 b0 06 00 20 00 00 00 00 c7 04 25 b4 06 00 20 00 00 00 00 48 c7 04 25 b8 06 00 20 4f ff ff ff e8 ed e2 03 00 31 ff <e8> a6 75 00 00 66 0f 1f 44 00 00 41 57 41 56 41 55 41 54 55 53 48
+RSP: 002b:00007fffceb2b0e0 EFLAGS: 00000246
+RAX: 0000000000000003 RBX: 000000000000a025 RCX: 00007f74350edde9
+RDX: 0000000000000000 RSI: 0000000000000000 RDI: 0000000000000000
+RBP: 0000000000000000 R08: 0000000000000008 R09: 00007fffceb2b278
+R10: 00000000ffffffff R11: 0000000000000246 R12: 00007fffceb2b0ec
+R13: 431bde82d7b634db R14: 0000000000000000 R15: 0000000000000000
+ </TASK>
+
+
 ---
- kernel/sched/core.c | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
 
-diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-index 87c9cdf37a26..3785418de127 100644
---- a/kernel/sched/core.c
-+++ b/kernel/sched/core.c
-@@ -3718,9 +3718,8 @@ static int ttwu_runnable(struct task_struct *p, int wake_flags)
- 
- 	rq = __task_rq_lock(p, &rf);
- 	if (task_on_rq_queued(p)) {
--		/* check_preempt_curr() may use rq clock */
--		update_rq_clock(rq);
--		ttwu_do_wakeup(rq, p, wake_flags, &rf);
-+		WRITE_ONCE(p->__state, TASK_RUNNING);
-+		trace_sched_wakeup(p);
- 		ret = 1;
- 	}
- 	__task_rq_unlock(rq, &rf);
--- 
-2.37.2
-
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
