@@ -2,143 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7979A6162B2
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:27:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92A1A6162BA
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:30:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230153AbiKBM1q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 08:27:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43728 "EHLO
+        id S230312AbiKBMa3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 08:30:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiKBM1n (ORCPT
+        with ESMTP id S230197AbiKBMaX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 08:27:43 -0400
-Received: from mail-pf1-x430.google.com (mail-pf1-x430.google.com [IPv6:2607:f8b0:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8053329C96;
-        Wed,  2 Nov 2022 05:27:42 -0700 (PDT)
-Received: by mail-pf1-x430.google.com with SMTP id y13so16261871pfp.7;
-        Wed, 02 Nov 2022 05:27:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=KZvGB1ExMcp29WtIMrBo+pEgQiFER5J1+0To0GGikI0=;
-        b=TZ5N8vp7LxMUgK1giVGCRI03mSK3u5QitWCDZNcODGHQX6bb5mVZ7Um6nnOCPaIWLp
-         k5ava7cWu/CS/AGNfANz0Kn4mAjYhlGXwITIKwQvkjffaDl/06JTtZc8wfr0o6TvwOtA
-         rCLEcyVNWxsu7cS4cg0bBLNkJ4xZELwvVWhWC+2+Evnbq0hYgNhAXB3MqI0CFO7hpPl9
-         rBuua9ChdWE8Uo/+E/Y4mKeLeq2PJ7yP8OVLh3Xyk4F9nHIZdKm/zH+ikbkhSNo4mK1l
-         amlyrqTbNGD8jSPsHZyV0RXmfhRznLW00tt0fYE2Ff7Xwbf5e/7ptppCCWzGnGMuAEsV
-         Ieew==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=KZvGB1ExMcp29WtIMrBo+pEgQiFER5J1+0To0GGikI0=;
-        b=M6HyN44gXnv0JdQ7oPsd7QNNq8+CgWhiOXyGpi+shXX+2K6ZSG4d0SAi5xBf8CzrAX
-         qWtmErS9ZeoI6up32URlsEwZCI0wqbus8iIKMqoCxt99vh9ealOSNG2JKuSkJAMoZukl
-         Auno0lT7lfPd0LQHS2K+RDF4LuZ01GO3Ox3vDh8cGlpYf32iDB1L8PIdgif9+opitLdV
-         cagWNTQnmvsX8d0fRIEL3zJ4/y+eX35xFS6t1uWMRquvrzsn9ai8nkN9k+Yc7BwxYCrd
-         BncElVRiRPGX0am3e+XMViiM8dd0ZUjhx4nvS7oIWeGwxWvjakDnwCqPem4M+XGp9pIr
-         9Icw==
-X-Gm-Message-State: ACrzQf2Vm0gsyo/5Xm2NwqHQDc5E27uP64ONvPwTxPayJMROFlYt3VZs
-        9wIL2dDRPWKM8BzZ7xjDYNQ=
-X-Google-Smtp-Source: AMsMyM4oSSfM/dS5vcLfsfK3Hxn8c6M15elG4Jf6+x9YzIdJJ7IS1EjYwIVz3eHO9HVTA2UokzE9SA==
-X-Received: by 2002:a63:188:0:b0:43c:22e9:2d10 with SMTP id 130-20020a630188000000b0043c22e92d10mr21549310pgb.12.1667392061827;
-        Wed, 02 Nov 2022 05:27:41 -0700 (PDT)
-Received: from localhost ([111.196.209.15])
-        by smtp.gmail.com with ESMTPSA id m10-20020a170902f64a00b001769cfa5cd4sm8236429plg.49.2022.11.02.05.27.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 05:27:41 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 20:27:39 +0800
-From:   Rongwei Zhang <pudh4418@gmail.com>
-To:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Ralf Baechle <ralf@linux-mips.org>,
-        Maxim Uvarov <muvarov@gmail.com>
-Cc:     Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Rongwei Zhang <pudh4418@gmail.com>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        llvm@lists.linux.dev
-Subject: [PATCH] MIPS: fix duplicate definitions for exported symbols
-Message-ID: <Y2JiO+67E1NyFgca@pudh-loong.localdomain>
+        Wed, 2 Nov 2022 08:30:23 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A14CE23170
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 05:30:22 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 55FB2B82236
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 12:30:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id F239DC4347C;
+        Wed,  2 Nov 2022 12:30:19 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667392220;
+        bh=tJRbm7zsQBu7ns6y4PDKDFo9e65Q/MoyvUbkyu+uD8E=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=bku4bzS/B5Hn0OD+nXht6T7u9j/9ha3Gg1COT/OCWeklnqREeC7TpBl3gtROAHqqV
+         1H+9iBMfnz/mJ5qgHmPFVHuuRop6OP5oyClDfrrnqX4guOWFJFByanBIXzMfItr4aQ
+         GgFqGF7JVofIo0FqJsqg43gJP2LUzVWmSZzR8iNmCIMZUXUDQ8oNw5U90secVsqQbh
+         PaXC+4citC0ILeCq1elCu5WRn3GtnmxgYCKGxplBzW/r9Qwyyy3PW3dZ7JscSiGZMt
+         839ACcjeKao3B8AnDi6466zsfe5M3mS5H8mobCa45mKQE5JtpNhPSZXdj7sBHHRPm4
+         NQJ/thHXxYbkg==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D8EF0C395FF;
+        Wed,  2 Nov 2022 12:30:19 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH 1/5] platform/chrome: cros_ec_lpc: Move mec_init/destroy to
+ device probe/remove
+From:   patchwork-bot+chrome-platform@kernel.org
+Message-Id: <166739221988.25408.11930632346687523785.git-patchwork-notify@kernel.org>
+Date:   Wed, 02 Nov 2022 12:30:19 +0000
+References: <20221028141411.1.I0728421299079b104710c202d5d7095b2674fd8c@changeid>
+In-Reply-To: <20221028141411.1.I0728421299079b104710c202d5d7095b2674fd8c@changeid>
+To:     Brian Norris <briannorris@chromium.org>
+Cc:     bleung@chromium.org, groeck@chromium.org,
+        chrome-platform@lists.linux.dev, linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Building with clang-14 fails with:
+Hello:
 
-AS      arch/mips/kernel/relocate_kernel.o
-<unknown>:0: error: symbol 'kexec_args' is already defined
-<unknown>:0: error: symbol 'secondary_kexec_args' is already defined
-<unknown>:0: error: symbol 'kexec_start_address' is already defined
-<unknown>:0: error: symbol 'kexec_indirection_page' is already defined
-<unknown>:0: error: symbol 'relocate_new_kernel_size' is already defined
+This series was applied to chrome-platform/linux.git (for-next)
+by Tzung-Bi Shih <tzungbi@kernel.org>:
 
-It turns out EXPORT defined in asm/asm.h expands to a symbol definition,
-so there is no need to define these symbols again. Remove duplicated
-symbol definitions.
+On Fri, 28 Oct 2022 14:14:45 -0700 you wrote:
+> Disregarding the weird global state hiding in this cros_ec_lpc_mec_*()
+> stuff, it belongs in device probe/remove. We shouldn't assume we can
+> access hardware resources when the device isn't attached to the driver.
+> 
+> Signed-off-by: Brian Norris <briannorris@chromium.org>
+> ---
+> 
+> [...]
 
-Fixes: 7aa1c8f47e7e ("MIPS: kdump: Add support")
-Signed-off-by: Rongwei Zhang <pudh4418@gmail.com>
----
- arch/mips/kernel/relocate_kernel.S | 15 +++++----------
- 1 file changed, 5 insertions(+), 10 deletions(-)
+Here is the summary with links:
+  - [1/5] platform/chrome: cros_ec_lpc: Move mec_init/destroy to device probe/remove
+    (no matching commit)
+  - [2/5] platform/chrome: cros_ec_lpc: Mark PROBE_PREFER_ASYNCHRONOUS
+    https://git.kernel.org/chrome-platform/c/bd88b965ae8c
+  - [3/5] platform/chrome: cros_ec_debugfs: Set PROBE_PREFER_ASYNCHRONOUS
+    https://git.kernel.org/chrome-platform/c/692a68ad7f3c
+  - [4/5] platform/chrome: cros_ec_lightbar: Set PROBE_PREFER_ASYNCHRONOUS
+    https://git.kernel.org/chrome-platform/c/873ab3e886b5
+  - [5/5] platform/chrome: cros_ec_spi: Set PROBE_PREFER_ASYNCHRONOUS
+    https://git.kernel.org/chrome-platform/c/015e4b05c377
 
-diff --git a/arch/mips/kernel/relocate_kernel.S b/arch/mips/kernel/relocate_kernel.S
-index cfde14b48fd8..f5b2ef979b43 100644
---- a/arch/mips/kernel/relocate_kernel.S
-+++ b/arch/mips/kernel/relocate_kernel.S
-@@ -145,8 +145,7 @@ LEAF(kexec_smp_wait)
-  * kexec_args[0..3] are used to prepare register values.
-  */
- 
--kexec_args:
--	EXPORT(kexec_args)
-+EXPORT(kexec_args)
- arg0:	PTR_WD		0x0
- arg1:	PTR_WD		0x0
- arg2:	PTR_WD		0x0
-@@ -159,8 +158,7 @@ arg3:	PTR_WD		0x0
-  * their registers a0-a3. secondary_kexec_args[0..3] are used
-  * to prepare register values.
-  */
--secondary_kexec_args:
--	EXPORT(secondary_kexec_args)
-+EXPORT(secondary_kexec_args)
- s_arg0: PTR_WD		0x0
- s_arg1: PTR_WD		0x0
- s_arg2: PTR_WD		0x0
-@@ -171,19 +169,16 @@ kexec_flag:
- 
- #endif
- 
--kexec_start_address:
--	EXPORT(kexec_start_address)
-+EXPORT(kexec_start_address)
- 	PTR_WD		0x0
- 	.size		kexec_start_address, PTRSIZE
- 
--kexec_indirection_page:
--	EXPORT(kexec_indirection_page)
-+EXPORT(kexec_indirection_page)
- 	PTR_WD		0
- 	.size		kexec_indirection_page, PTRSIZE
- 
- relocate_new_kernel_end:
- 
--relocate_new_kernel_size:
--	EXPORT(relocate_new_kernel_size)
-+EXPORT(relocate_new_kernel_size)
- 	PTR_WD		relocate_new_kernel_end - relocate_new_kernel
- 	.size		relocate_new_kernel_size, PTRSIZE
+You are awesome, thank you!
 -- 
-2.38.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
