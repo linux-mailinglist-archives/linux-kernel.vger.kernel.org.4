@@ -2,113 +2,73 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68AE5616BC9
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:10:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A14CF616BCB
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:14:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231597AbiKBSKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 14:10:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37164 "EHLO
+        id S230253AbiKBSOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 14:14:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231557AbiKBSKX (ORCPT
+        with ESMTP id S230199AbiKBSOc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:10:23 -0400
-Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8922D3055A
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:09:32 -0700 (PDT)
-Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A2HBXXT011227;
-        Wed, 2 Nov 2022 18:09:24 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
- subject : message-id : content-type : mime-version; s=pp1;
- bh=VOfZR1bfgraHOMF0H2A4SdBgmD4c0rbRbY/XavBwa1Y=;
- b=Yh9X3toCIYMLmmxtgI+miLyc8gO8gV0gSuTgldwyAbNb79EjR/WjFKT2muCoSCnCaGRC
- wIualL00FcSlWJRTfTmp7/kUKonwM3G0ixhozFeh2TPSNYRVTKp3IbeyfvZ3VFZY1lzb
- qpHOxxQY7IsQ0gs8FPGAinZQBQCJM+A5btZmnuHDcHF8TQ+agScJ8m+odQUMBR8vO7xx
- sz1mz5OGbc2V4+RJD5l/0vK3v/Byvzl+C3/B8yFNGEDTl7ZpJ1psf33tYpj2uiQowXyM
- knZ90yAOCCA9MqtzTEIBgRurLIRo1y4CWVzRzh26AhgTPyIBslHt1oZdveXaIisUy/vK IQ== 
-Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kkvbyaehx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Nov 2022 18:09:23 +0000
-Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
-        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A2I5a9e032273;
-        Wed, 2 Nov 2022 18:09:22 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04fra.de.ibm.com with ESMTP id 3kgut8wfpv-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Nov 2022 18:09:21 +0000
-Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A2I9Ie2197148
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 2 Nov 2022 18:09:18 GMT
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id D8491A404D;
-        Wed,  2 Nov 2022 18:09:18 +0000 (GMT)
-Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7E33EA4040;
-        Wed,  2 Nov 2022 18:09:18 +0000 (GMT)
-Received: from localhost (unknown [9.171.5.179])
-        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Wed,  2 Nov 2022 18:09:18 +0000 (GMT)
-Date:   Wed, 2 Nov 2022 19:09:17 +0100
-From:   Vasily Gorbik <gor@linux.ibm.com>
-To:     Muchun Song <songmuchun@bytedance.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Andrew Morton <akpm@linux-foundation.org>
-Cc:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] mm: hugetlb_vmemmap: include missing linux/moduleparam.h
-Message-ID: <patch.git-296b83ca939b.your-ad-here.call-01667411912-ext-5073@work.hours>
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-X-Patchwork-Bot: notify
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: Ec98p4g_hAQ4m1_VWDE0Alz8zEb-aPWF
-X-Proofpoint-ORIG-GUID: Ec98p4g_hAQ4m1_VWDE0Alz8zEb-aPWF
-X-Proofpoint-UnRewURL: 0 URL was un-rewritten
+        Wed, 2 Nov 2022 14:14:32 -0400
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D4023BC1
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:14:31 -0700 (PDT)
+Received: by mail-il1-f200.google.com with SMTP id d19-20020a056e020c1300b00300b5a12c44so8987163ile.15
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 11:14:31 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=mrPtUGwKy/PHlitjy/whP0A7GNzhbWYSIBUmh5L+PS0=;
+        b=F7OPQOhWJok3zkRtmQXwt8EK8UPgEkNqw5Z/QneE9sf5Qk2G9pHUcI9eXwrVWLy85j
+         hCKLCnIehe4Zpd2SvUnTBE2ftPzumPxPjINZufI6Q3Vg8/hw4P5lN5zJkqAIJg0ilzHc
+         9jWN+H6v79rAYXYChLOFWriBAN2f6CY2rlzfsv7ZAQ/E5U+FS2DqK0T/kkXMnM2PDjhn
+         p+E866EG+twWCF1fzKxZdKpkUPaZegD1etkIKUYktHaY+H+F1cp+rD1JU+ebTAHC2tnR
+         h9dP6W8Bd1hbG5yxIfJkjGE8uAknK4bXfaFeWllC9K3vvEuSwh/BGsrsjpAx1sXnKep6
+         yREw==
+X-Gm-Message-State: ACrzQf2nJuOqsn1WZybebSwrIfPAZfSn1u7MHnmwlgkyHWlh7fqUMKqz
+        7H0nN4EjT0VtHgRq4LYrIDbU9EsPHr/js8mbllbCQqBTcIgQ
+X-Google-Smtp-Source: AMsMyM6Ts05xrBZy3OHeDywLh4tO+KHxpOy0FToNdS9vo4StWp3uNo8ICvNqaBRzRQo4tf3E+WrsV/ZI9YyNn+10g+idAJrfW5Wg
 MIME-Version: 1.0
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-02_14,2022-11-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=912
- priorityscore=1501 spamscore=0 malwarescore=0 adultscore=0
- lowpriorityscore=0 suspectscore=0 clxscore=1011 mlxscore=0 impostorscore=0
- bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211020117
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a05:6e02:13c4:b0:300:ac44:b69c with SMTP id
+ v4-20020a056e0213c400b00300ac44b69cmr12482117ilj.300.1667412865355; Wed, 02
+ Nov 2022 11:14:25 -0700 (PDT)
+Date:   Wed, 02 Nov 2022 11:14:25 -0700
+In-Reply-To: <20221102135324.3935-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000088962f05ec80cf2b@google.com>
+Subject: Re: [syzbot] possible deadlock in static_key_slow_inc (2)
+From:   syzbot <syzbot+c39682e86c9d84152f93@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The kernel test robot reported build failures with a 'randconfig' on s390:
->> mm/hugetlb_vmemmap.c:421:11: error: a function declaration without a
-prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
-   core_param(hugetlb_free_vmemmap, vmemmap_optimize_enabled, bool, 0);
-             ^
+Hello,
 
-Link: https://lore.kernel.org/linux-mm/202210300751.rG3UDsuc-lkp@intel.com/
-Reported-by: kernel test robot <lkp@intel.com>
-Fixes: 30152245c63b ("mm: hugetlb_vmemmap: replace early_param() with core_param()")
-Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
----
- mm/hugetlb_vmemmap.c | 1 +
- 1 file changed, 1 insertion(+)
+syzbot tried to test the proposed patch but the build/boot failed:
 
-diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
-index ba2a2596fb4e..4962dd1ba4a6 100644
---- a/mm/hugetlb_vmemmap.c
-+++ b/mm/hugetlb_vmemmap.c
-@@ -11,6 +11,7 @@
- #define pr_fmt(fmt)	"HugeTLB: " fmt
- 
- #include <linux/pgtable.h>
-+#include <linux/moduleparam.h>
- #include <linux/bootmem_info.h>
- #include <asm/pgalloc.h>
- #include <asm/tlbflush.h>
--- 
-2.38.1
+kernel/cgroup/legacy_freezer.c:353:35: error: passing argument 1 of 'static_key_slow_inc_cpuslocked' from incompatible pointer type [-Werror=incompatible-pointer-types]
+kernel/cgroup/legacy_freezer.c:364:36: error: passing argument 1 of 'static_key_slow_dec_cpuslocked' from incompatible pointer type [-Werror=incompatible-pointer-types]
+kernel/cgroup/legacy_freezer.c:382:2: error: implicit declaration of function 'cpus_read_lock'; did you mean 'rcu_read_lock'? [-Werror=implicit-function-declaration]
+kernel/cgroup/legacy_freezer.c:411:2: error: implicit declaration of function 'cpus_read_unlock'; did you mean 'rcu_read_unlock'? [-Werror=implicit-function-declaration]
+
+
+Tested on:
+
+commit:         a2c65a9d net: dsa: fall back to default tagger if we c..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git
+dashboard link: https://syzkaller.appspot.com/bug?extid=c39682e86c9d84152f93
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=127fa2ca880000
+
