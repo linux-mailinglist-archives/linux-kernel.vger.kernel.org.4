@@ -2,99 +2,59 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 82C06616404
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:46:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC696616407
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:47:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230473AbiKBNqs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 09:46:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42436 "EHLO
+        id S231179AbiKBNrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 09:47:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230280AbiKBNqp (ORCPT
+        with ESMTP id S231140AbiKBNqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 09:46:45 -0400
-Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEEB2AE25
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 06:46:41 -0700 (PDT)
-Received: from mxct.zte.com.cn (unknown [192.168.251.13])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4N2Sq36x3lz5PkGl;
-        Wed,  2 Nov 2022 21:46:39 +0800 (CST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
+        Wed, 2 Nov 2022 09:46:54 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C1462AE16;
+        Wed,  2 Nov 2022 06:46:50 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mxct.zte.com.cn (FangMail) with ESMTPS id 4N2Sq03SQJz4x5TB;
-        Wed,  2 Nov 2022 21:46:36 +0800 (CST)
-Received: from xaxapp03.zte.com.cn ([10.88.40.52])
-        by mse-fl2.zte.com.cn with SMTP id 2A2DkUMV086818;
-        Wed, 2 Nov 2022 21:46:30 +0800 (+08)
-        (envelope-from zhang.songyi@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Wed, 2 Nov 2022 21:46:33 +0800 (CST)
-Date:   Wed, 2 Nov 2022 21:46:33 +0800 (CST)
-X-Zmail-TransId: 2af9636274b9ffffffffb20f7d44
-X-Mailer: Zmail v1.0
-Message-ID: <202211022146335400497@zte.com.cn>
-Mime-Version: 1.0
-From:   <zhang.songyi@zte.com.cn>
-To:     <steffen.klassert@secunet.com>
-Cc:     <herbert@gondor.apana.org.au>, <davem@davemloft.net>,
-        <edumazet@google.com>, <kuba@kernel.org>, <pabeni@redhat.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <zhang.songyi@zte.com.cn>, <jiang.xuexin@zte.com.cn>,
-        <xue.zhihong@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIG5ldDogYWZfa2V5OiByZW1vdmUgcmVkdW5kYW50IHJldCB2YXJpYWJsZQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2A2DkUMV086818
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 636274BF.001 by FangMail milter!
-X-FangMail-Envelope: 1667396799/4N2Sq36x3lz5PkGl/636274BF.001/192.168.251.13/[192.168.251.13]/mxct.zte.com.cn/<zhang.songyi@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 636274BF.001/4N2Sq36x3lz5PkGl
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        by dfw.source.kernel.org (Postfix) with ESMTPS id EB2196199D;
+        Wed,  2 Nov 2022 13:46:49 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49602C433D7;
+        Wed,  2 Nov 2022 13:46:48 +0000 (UTC)
+Date:   Wed, 2 Nov 2022 13:46:44 +0000
+From:   Catalin Marinas <catalin.marinas@arm.com>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Will Deacon <will@kernel.org>, linux-kernel@vger.kernel.org,
+        kernel-janitors@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH 24/30] arm64: cpufeature: Use kstrtobool() instead of
+ strtobool()
+Message-ID: <Y2J0xJ61iclx6WZG@arm.com>
+References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
+ <5a1b329cda34aec67615c0d2fd326eb0d6634bf7.1667336095.git.christophe.jaillet@wanadoo.fr>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5a1b329cda34aec67615c0d2fd326eb0d6634bf7.1667336095.git.christophe.jaillet@wanadoo.fr>
+X-Spam-Status: No, score=-6.7 required=5.0 tests=BAYES_00,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From a09ddf4bd144610fd17bdbf07f0c27700d805e6f Mon Sep 17 00:00:00 2001
-From: zhang songyi <zhang.songyi@zte.com.cn>
-Date: Wed, 2 Nov 2022 21:05:39 +0800
-Subject: [PATCH linux-next] net: af_key: remove redundant ret variable
+On Tue, Nov 01, 2022 at 10:14:12PM +0100, Christophe JAILLET wrote:
+> strtobool() is the same as kstrtobool().
+> However, the latter is more used within the kernel.
+> 
+> In order to remove strtobool() and slightly simplify kstrtox.h, switch to
+> the other function name.
+> 
+> While at it, include the corresponding header file (<linux/kstrtox.h>)
+> 
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
 
-Return value from pfkey_net_init() directly instead of taking this in
-another redundant variable.
-
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
----
- net/key/af_key.c | 5 +----
- 1 file changed, 1 insertion(+), 4 deletions(-)
-
-diff --git a/net/key/af_key.c b/net/key/af_key.c
-index 213287814328..ec37825b1c15 100644
---- a/net/key/af_key.c
-+++ b/net/key/af_key.c
-@@ -3863,14 +3863,11 @@ static struct xfrm_mgr pfkeyv2_mgr =
- static int __net_init pfkey_net_init(struct net *net)
- {
-    struct netns_pfkey *net_pfkey = net_generic(net, pfkey_net_id);
--   int rv;
-
-    INIT_HLIST_HEAD(&net_pfkey->table);
-    atomic_set(&net_pfkey->socks_nr, 0);
-
--   rv = pfkey_init_proc(net);
--
--   return rv;
-+   return pfkey_init_proc(net);
- }
-
- static void __net_exit pfkey_net_exit(struct net *net)
---
-2.15.2
+Acked-by: Catalin Marinas <catalin.marinas@arm.com>
