@@ -2,97 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC2AE616550
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:45:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2802616552
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:47:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229709AbiKBOpS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 10:45:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40182 "EHLO
+        id S229912AbiKBOrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 10:47:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40556 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229534AbiKBOpP (ORCPT
+        with ESMTP id S229770AbiKBOrJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 10:45:15 -0400
-Received: from mail-io1-xd32.google.com (mail-io1-xd32.google.com [IPv6:2607:f8b0:4864:20::d32])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0BAEB29CA0
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 07:45:14 -0700 (PDT)
-Received: by mail-io1-xd32.google.com with SMTP id y6so12210437iof.9
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 07:45:14 -0700 (PDT)
+        Wed, 2 Nov 2022 10:47:09 -0400
+Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41EB12A71C
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 07:47:04 -0700 (PDT)
+Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-13b103a3e5dso20557984fac.2
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 07:47:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=GN/nbg0NqP+NEJxaNuJMBwfso2nkMgjJidOrNm8QtFU=;
-        b=bQBxfhiwJB0A4fnRM2tR0zguyn2rI99KjpRcf0nQeq/QIVCJGTuiYvCHKuBlLL0NNj
-         /mANaogE5KnAetT3XRwoZSlT7BR8O4rLYKBjefVL4hXzv0tGCMZIpBk0qFzkbBB22gCl
-         It7iC828jxpzx6GVOb2AmbCsW0xvONfcUTX2LdpBqdzIhRjfL3uxdWLq4PCD13KKNAgx
-         /rRrGLJLXOMTNQcyF/cmUMs6c6Ci+CsLysZKYxxyco5j0gejhEXRRaZMiteuroGkZu+e
-         y75GXKMoexi6OXL36K/R+V0+9aV4EJj8NnsuG1eV9E2LCX1vCE/OUrOrQTUWDTzMyQdX
-         4CjA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=VshapdH3qET+2A6w1tOn4K606r3mUYcBf7u3/yyiKmk=;
+        b=X1ZE7dBE8BaXuX49QNjyAiYn/xRrnl37HJQP+g4AAanP5xN2owJH/6UXFJIyxXomaA
+         U9vHvAqFOSeZxeXKizH32CmTQKnDecpwP6keQSD2cVWUa2xRtOsTEiPjpg/fr+5CQ4dH
+         8UvcafbvgUU7l7nJ+ihSc8hKhRMs38ogZaoM+eLCcBPdjYeOxo9qCFQrOPs5YBzRhiEZ
+         T7nUuIFGkBCxWDcdSxNH7XyE68DAiVl5s7SRysSDGVuoVokC0j0SoxQtuU547mDFFO5H
+         DXW4P4QEehA03BUO/uJpRdW8e2g7Vai6zERny4iD35McHq63cSQVclhMwd7QX4repfk3
+         PvVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=GN/nbg0NqP+NEJxaNuJMBwfso2nkMgjJidOrNm8QtFU=;
-        b=pOQVZf6tjwAB3rf/88TxRunwHjjg7mGNajW9jg1dv0xbnyqVruLXr31WUpTngijU1A
-         xMiQTLvxWHTmNkh5O+neR/T8ABVFFAZ3Xdg1oJUwALPABd5/Fv/NZ9WLDCJGWhyQhkj3
-         VLueO2O+3o3rSI7Bv7/Tdj0XMrr1A1XWbxIiYCmZ8sJrigki8ExSdylGu9+8BvXyuiA6
-         ViWbPjXAKcHQtvXVwmEfJuPHV8Nx7ELkomfnTz5IQ4TNcvw94uuC0V7Sv+2FZKnfxZpu
-         cvwVORrsc8zv0mq6gafhbobVAKZrjuCjop/OeRYpvzMbTZPL34vi4bfVr6M02FH8cYVQ
-         GNGw==
-X-Gm-Message-State: ACrzQf3d0vyCkdKt9SwjcTu02X+ToAdiF8e/9+sbj+96M22o0bkz48Vc
-        owNEReUKwHHcGRfA5a+LEwFvVw==
-X-Google-Smtp-Source: AMsMyM7yWb1iHppp84a2Y0gyk1Y2/6pYyWpNY0suhiLLKynG3JDkyOIyPAPGHLSUj31cTL6X3dEb9g==
-X-Received: by 2002:a05:6602:2d82:b0:6d4:cc5d:b980 with SMTP id k2-20020a0566022d8200b006d4cc5db980mr1891378iow.80.1667400313218;
-        Wed, 02 Nov 2022 07:45:13 -0700 (PDT)
-Received: from [127.0.0.1] ([207.135.234.126])
-        by smtp.gmail.com with ESMTPSA id t4-20020a92b104000000b002ff32b2ab1esm4615692ilh.1.2022.11.02.07.45.12
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 07:45:12 -0700 (PDT)
-From:   Jens Axboe <axboe@kernel.dk>
-To:     Jinlong Chen <nickyc975@zju.edu.cn>
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        chaitanyak@nvidia.com, hch@lst.de
-In-Reply-To: <cover.1667356813.git.nickyc975@zju.edu.cn>
-References: <cover.1667356813.git.nickyc975@zju.edu.cn>
-Subject: Re: [PATCH v2 0/2] some random cleanups for blk-mq.c
-Message-Id: <166740031203.45892.11870428706627551730.b4-ty@kernel.dk>
-Date:   Wed, 02 Nov 2022 08:45:12 -0600
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VshapdH3qET+2A6w1tOn4K606r3mUYcBf7u3/yyiKmk=;
+        b=5utaOGA9fnNxll3t0Aa/0w51CR9NwP2WDcmnnAp3BzWkeZ7YElGPJYOgN1XLKhec6t
+         KkrWpCIrJspY3ZxC3ETePHqr0CqdtWTblEZKgCu85uCc/WnVsSQOlk70V1h5q6gvcOCG
+         0WGF5+b0urmNj3R1vA7gYFoJcAzvxgMqFJiwP43LFys+qqAADp71yzP7Ek7hjQxWZOfo
+         7DkwZK5rbM4W6EPDifCYdbnjHMJ9BdqlRuO7JpW9bth7wSavqwN8E5paX46w/5m7yg0Z
+         GCvsTFTwipp0wUTDJWRYPZyjD9zzjsGN6HpLt7Zf3xlLlRpAUSDei3T2eWwxOhaH0+ja
+         RMTQ==
+X-Gm-Message-State: ACrzQf3y6lDwJ6uT01BqewXgs6GQ0hJ1lNfk4Cp3vQwpI72QmXJ1F49s
+        VjlhEw2ojxjJQXgsl4B2yGfFxVKHC329+rNfybxJHw==
+X-Google-Smtp-Source: AMsMyM6QxPwtfVBskW0LjxpxIYQ2c4UogHIRy9qjgf9g6nZKZhC3zZ4Y6yQoBx5UEqAXzC3o99IvOnndpchatQK0HJY=
+X-Received: by 2002:a05:6870:9a05:b0:132:ebf:dc61 with SMTP id
+ fo5-20020a0568709a0500b001320ebfdc61mr14579207oab.76.1667400423352; Wed, 02
+ Nov 2022 07:47:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.11.0-dev-d9ed3
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+References: <20221102132811.70858-1-luwei32@huawei.com>
+In-Reply-To: <20221102132811.70858-1-luwei32@huawei.com>
+From:   Neal Cardwell <ncardwell@google.com>
+Date:   Wed, 2 Nov 2022 10:46:36 -0400
+Message-ID: <CADVnQy=uE68AWKuSddKEt3T2X=HUYzs0SQPX31+HgafuysJzkA@mail.gmail.com>
+Subject: Re: [patch net v3] tcp: prohibit TCP_REPAIR_OPTIONS if data was
+ already sent
+To:     Lu Wei <luwei32@huawei.com>
+Cc:     edumazet@google.com, davem@davemloft.net, yoshfuji@linux-ipv6.org,
+        dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com,
+        xemul@parallels.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Nov 2022 10:52:28 +0800, Jinlong Chen wrote:
-> Patch 1 improves the error handling blk_mq_alloc_rq_map(). Patch 2
-> improves readability of blk_mq_alloc_cached_request().
-> 
-> Changes in v2:
-> - drop wrong and worthless patches, suggested by Christoph, Jens and
->   Chaitanya
-> - remove silly goto-return-NULL in patch 1 (patch 2 originally), suggested
->   by Christoph and Jens
-> 
-> [...]
+On Wed, Nov 2, 2022 at 8:23 AM Lu Wei <luwei32@huawei.com> wrote:
+>
+> If setsockopt with option name of TCP_REPAIR_OPTIONS and opt_code
+> of TCPOPT_SACK_PERM is called to enable sack after data is sent
+> and before data is acked, ...
 
-Applied, thanks!
+This "before data is acked" phrase does not quite seem to match the
+sequence below, AFAICT?
 
-[1/2] blk-mq: improve error handling in blk_mq_alloc_rq_map()
-      commit: 7edfd68165b8dab8cde231728ff092a625469eb7
-[2/2] blk-mq: use if-else instead of goto in blk_mq_alloc_cached_request()
-      commit: 4046728253751adb41b05e85ebd686210efde1ad
+How about something like:
 
-Best regards,
--- 
-Jens Axboe
+ If setsockopt TCP_REPAIR_OPTIONS with opt_code TCPOPT_SACK_PERM
+ is called to enable SACK after data is sent and the data sender receives a
+ dupack, ...
 
 
+> ... it will trigger a warning in function
+> tcp_verify_left_out() as follows:
+>
+> ============================================
+> WARNING: CPU: 8 PID: 0 at net/ipv4/tcp_input.c:2132
+> tcp_timeout_mark_lost+0x154/0x160
+> tcp_enter_loss+0x2b/0x290
+> tcp_retransmit_timer+0x50b/0x640
+> tcp_write_timer_handler+0x1c8/0x340
+> tcp_write_timer+0xe5/0x140
+> call_timer_fn+0x3a/0x1b0
+> __run_timers.part.0+0x1bf/0x2d0
+> run_timer_softirq+0x43/0xb0
+> __do_softirq+0xfd/0x373
+> __irq_exit_rcu+0xf6/0x140
+>
+> The warning is caused in the following steps:
+> 1. a socket named socketA is created
+> 2. socketA enters repair mode without build a connection
+> 3. socketA calls connect() and its state is changed to TCP_ESTABLISHED
+>    directly
+> 4. socketA leaves repair mode
+> 5. socketA calls sendmsg() to send data, packets_out and sack_outs(dup
+>    ack receives) increase
+> 6. socketA enters repair mode again
+> 7. socketA calls setsockopt with TCPOPT_SACK_PERM to enable sack
+> 8. retransmit timer expires, it calls tcp_timeout_mark_lost(), lost_out
+>    increases
+> 9. sack_outs + lost_out > packets_out triggers since lost_out and
+>    sack_outs increase repeatly
+>
+> In function tcp_timeout_mark_lost(), tp->sacked_out will be cleared if
+> Step7 not happen and the warning will not be triggered. As suggested by
+> Denis and Eric, TCP_REPAIR_OPTIONS should be prohibited if data was
+> already sent. So this patch checks tp->segs_out, only TCP_REPAIR_OPTIONS
+> can be set only if tp->segs_out is 0.
+>
+> socket-tcp tests in CRIU has been tested as follows:
+> $ sudo ./test/zdtm.py run -t zdtm/static/socket-tcp*  --keep-going \
+>        --ignore-taint
+>
+> socket-tcp* represent all socket-tcp tests in test/zdtm/static/.
+>
+> Fixes: b139ba4e90dc ("tcp: Repair connection-time negotiated parameters")
+> Signed-off-by: Lu Wei <luwei32@huawei.com>
+> ---
+>  net/ipv4/tcp.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+> index ef14efa1fb70..1f5cc32cf0cc 100644
+> --- a/net/ipv4/tcp.c
+> +++ b/net/ipv4/tcp.c
+> @@ -3647,7 +3647,7 @@ int do_tcp_setsockopt(struct sock *sk, int level, int optname,
+>         case TCP_REPAIR_OPTIONS:
+>                 if (!tp->repair)
+>                         err = -EINVAL;
+> -               else if (sk->sk_state == TCP_ESTABLISHED)
+> +               else if (sk->sk_state == TCP_ESTABLISHED && !tp->segs_out)
+
+The tp->segs_out field is only 32 bits wide. By my math, at 200
+Gbit/sec with 1500 byte MTU it can wrap roughly every 260 secs. So a
+caller could get unlucky or carefully sequence its call to
+TCP_REPAIR_OPTIONS (based on packets sent so far) to mess up the
+accounting and trigger the kernel warning.
+
+How about using some other method to determine if this is safe?
+Perhaps using tp->bytes_sent, which is a 64-bit field, which by my
+math would take 23 years to wrap at 200 Gbit/sec?
+
+If we're more paranoid about wrapping we could also check
+tp->packets_out, and refuse to allow TCP_REPAIR_OPTIONS if either
+tp->bytes_sent or tp->packets_out are non-zero. (Or if we're even more
+paranoid I suppose we could have a special new bit to track whether
+we've ever sent something, but that probably seems like overkill?)
+
+neal
