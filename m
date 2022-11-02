@@ -2,219 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B9C53616A6E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:18:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DC382616A79
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:19:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbiKBRSX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:18:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44362 "EHLO
+        id S231288AbiKBRTo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:19:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiKBRSS (ORCPT
+        with ESMTP id S230241AbiKBRTj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:18:18 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2487D18382;
-        Wed,  2 Nov 2022 10:18:17 -0700 (PDT)
-Received: from W11-BEAU-MD.localdomain (unknown [76.135.50.127])
-        by linux.microsoft.com (Postfix) with ESMTPSA id E93AC20C28B1;
-        Wed,  2 Nov 2022 10:18:15 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E93AC20C28B1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1667409496;
-        bh=PijDPxC99EGe4UfAODPhh1O0gXNCRVakwzvHbnK/s2c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JKKMnV8PE86oIcyuLYPtV4rwN8IL9wgzRNcGrCCJVS0axmNSGlu3QoelJj4xQRn6N
-         fu/+qh6eybHLEV0I3WOL+byedunFcoCQuwOxhURW3lzPxr00Vi16FQb+OT/PZ2SoYP
-         OgrN921e/ssk14OcShO7sT4hbDM4gsWLGuELSzsk=
-Date:   Wed, 2 Nov 2022 10:18:09 -0700
-From:   Beau Belgrave <beaub@linux.microsoft.com>
-To:     Mathieu Desnoyers <mathieu.desnoyers@efficios.com>
-Cc:     rostedt@goodmis.org, mhiramat@kernel.org,
-        dcook@linux.microsoft.com, alanau@linux.microsoft.com,
-        linux-trace-devel@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH 0/2] tracing/user_events: Remote write ABI
-Message-ID: <20221102171809.GA69@W11-BEAU-MD.localdomain>
-References: <20221027224011.2075-1-beaub@linux.microsoft.com>
- <96d9f066-2f39-78e6-9be7-f9c69235615e@efficios.com>
- <20221028221728.GA162@W11-BEAU-MD.localdomain>
- <01d10e59-0ea6-e60f-8561-84aa5dee40d3@efficios.com>
- <20221031165314.GA129@W11-BEAU-MD.localdomain>
- <3ff4d759-307e-31a2-4124-98de9e423d7e@efficios.com>
+        Wed, 2 Nov 2022 13:19:39 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 390912316F
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 10:18:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667409522;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=6bHZ6RhzwZqcFqy+ASS3SxP9gnDv328z5/6b9PXyycI=;
+        b=Y7aAyWVOOrYvBbCk4BjCxTMfFOPgtXsIoIYezsW4ctl6CpFpvv00ED6HNRZ1vSc1ElUODh
+        OHpPIj5F6Pevq1pZySZPVQkA6pu3/nAuWstUYGqg4UV3qnBIY5JV8wwXsYszWh00WGNpzz
+        nFFfDcafV2NcoEa4e52psJ6EJgxTPl8=
+Received: from mail-ed1-f69.google.com (mail-ed1-f69.google.com
+ [209.85.208.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-348-9yGJfBLhPT6v_ZzSz7lDYw-1; Wed, 02 Nov 2022 13:18:41 -0400
+X-MC-Unique: 9yGJfBLhPT6v_ZzSz7lDYw-1
+Received: by mail-ed1-f69.google.com with SMTP id z15-20020a05640240cf00b00461b253c220so12525251edb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 10:18:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=6bHZ6RhzwZqcFqy+ASS3SxP9gnDv328z5/6b9PXyycI=;
+        b=tAG0NVya+7yhmoE+3ZVC133/8XziR2gC4tbPErT19QSwz8j3/bTq6r74IIM/3mTDcA
+         DpPHa7gf5WozdeWj72LdlI0VnFZbF6Mq2PUNwqJZn9FlEbtKFMRaWNy7Ektzrg4isUkA
+         Tcqo3uN02N2P16LVyJ/oN+gyB+ZvCYbZ3uYVjEhHWCCy0GJ3Z1LFEnZTFFwGxhByWfGV
+         FZsBIQdzJG9tXziQ18+QrZRmiOBpiMn60wrXLOyNXbwtPmOC0SXNf4ik8UnVF3D6g4Zk
+         QN6kKN9eMsrWVhGiaZxYuCuYUiqZSkBbgjvI60pej+GXsytF4qtsTEyjh6bxuG/E3+HX
+         NQPw==
+X-Gm-Message-State: ACrzQf078Q8QZK6Hw/Jv3nFfJ6BKJ5qeHtEy7BuXXM/R4A3OH1QGylI6
+        Wo5F2sBED7SHOyzYqJvwrmXmJxvAPgwPwQNdUdw8YIuELvKUgxcAQIYul+dTxroDG/lwyYOFQv8
+        HvU6qUuz4tEF/DUQuYLxI859t
+X-Received: by 2002:aa7:ce8d:0:b0:461:50fd:e358 with SMTP id y13-20020aa7ce8d000000b0046150fde358mr25568800edv.194.1667409518908;
+        Wed, 02 Nov 2022 10:18:38 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4/x6PwTbAurOsVP1zVclwSL+Yxg9TvaRFUydU5orfswpNxKcJmxdeZGEr7BJDb268QdsewlQ==
+X-Received: by 2002:aa7:ce8d:0:b0:461:50fd:e358 with SMTP id y13-20020aa7ce8d000000b0046150fde358mr25568766edv.194.1667409518634;
+        Wed, 02 Nov 2022 10:18:38 -0700 (PDT)
+Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
+        by smtp.googlemail.com with ESMTPSA id d7-20020aa7ce07000000b004589da5e5cesm6056704edv.41.2022.11.02.10.18.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 10:18:37 -0700 (PDT)
+Message-ID: <a817ec49-adae-50b5-6c3e-8e4e91d91e93@redhat.com>
+Date:   Wed, 2 Nov 2022 18:18:36 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <3ff4d759-307e-31a2-4124-98de9e423d7e@efficios.com>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v5 0/8] KVM: x86: Intel LBR related perf cleanups
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, Like Xu <like.xu.linux@gmail.com>
+References: <20221006000314.73240-1-seanjc@google.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20221006000314.73240-1-seanjc@google.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 09:46:31AM -0400, Mathieu Desnoyers wrote:
-> On 2022-10-31 12:53, Beau Belgrave wrote:
-> > On Sat, Oct 29, 2022 at 09:58:26AM -0400, Mathieu Desnoyers wrote:
-> > > On 2022-10-28 18:17, Beau Belgrave wrote:
-> > > > On Fri, Oct 28, 2022 at 05:50:04PM -0400, Mathieu Desnoyers wrote:
-> > > > > On 2022-10-27 18:40, Beau Belgrave wrote:
-> > > 
-> > > [...]
-> > > > 
-> > > > > > 
-> > > > > > NOTE:
-> > > > > > User programs that wish to have the enable bit shared across forks
-> > > > > > either need to use a MAP_SHARED allocated address or register a new
-> > > > > > address and file descriptor. If MAP_SHARED cannot be used or new
-> > > > > > registrations cannot be done, then it's allowable to use MAP_PRIVATE
-> > > > > > as long as the forked children never update the page themselves. Once
-> > > > > > the page has been updated, the page from the parent will be copied over
-> > > > > > to the child. This new copy-on-write page will not receive updates from
-> > > > > > the kernel until another registration has been performed with this new
-> > > > > > address.
-> > > > > 
-> > > > > This seems rather odd. I would expect that if a parent process registers
-> > > > > some instrumentation using private mappings for enabled state through the
-> > > > > user events ioctl, and then forks, the child process would seamlessly be
-> > > > > traced by the user events ABI while being able to also change the enabled
-> > > > > state from the userspace tracer libraries (which would trigger COW).
-> > > > > Requiring the child to re-register to user events is rather odd.
-> > > > > 
-> > > > 
-> > > > It's the COW that is the problem, see below.
-> > > > 
-> > > > > What is preventing us from tracing the child without re-registration in this
-> > > > > scenario ?
-> > > > > 
-> > > > 
-> > > > Largely knowing when the COW occurs on a specific page. We don't make
-> > > > the mappings, so I'm unsure if we can ask to be notified easily during
-> > > > these times or not. If we could, that would solve this. I'm glad you are
-> > > > thinking about this. The note here was exactly to trigger this
-> > > > discussion :)
-> > > > 
-> > > > I believe this is the same as a Futex, I'll take another look at that
-> > > > code to see if they've come up with anything regarding this.
-> > > > 
-> > > > Any ideas?
-> > > 
-> > > Based on your description of the symptoms, AFAIU, upon registration of a
-> > > given user event associated with a mm_struct, the user events ioctl appears
-> > > to translates the virtual address into a page pointer immediately, and keeps
-> > > track of that page afterwards. This means it loses track of the page when
-> > > COW occurs.
-> > > 
-> > 
-> > No, we keep the memory descriptor and virtual address so we can properly
-> > resolve to page per-process.
-> > 
-> > > Why not keep track of the registered virtual address and struct_mm
-> > > associated with the event rather than the page ? Whenever a state change is
-> > > needed, the virtual-address-to-page translation will be performed again. If
-> > > it follows a COW, it will get the new copied page. If it happens that no COW
-> > > was done, it should map to the original page. If the mapping is shared, the
-> > > kernel would update that shared page. If the mapping is private, then the
-> > > kernel would COW the page before updating it.
-> > > 
-> > > Thoughts ?
-> > > 
-> > 
-> > I think you are forgetting about page table entries. My understanding is
-> > the process will have the VMAs copied on fork, but the page table
-> > entries will be marked read-only. Then when the write access occurs, the
-> > COW is created (since the PTE says readonly, but the VMA says writable).
-> > However, that COW page is now only mapped within that forked process
-> > page table.
-> > 
-> > This requires tracking the child memory descriptors in addition to the
-> > parent. The most straightforward way I see this happening is requiring
-> > user side to mmap the user_event_data fd that is used for write. This
-> > way when fork occurs in dup_mm() / dup_mmap() that mmap'd
-> > user_event_data will get open() / close() called per-fork. I could then
-> > copy the enablers from the parent but with the child's memory descriptor
-> > to allow proper lookup.
-> > 
-> > This is like fork before COW, it's a bummer I cannot see a way to do
-> > this per-page. Doing the above would work, but it requires copying all
-> > the enablers, not just the one that changed after the fork.
+On 10/6/22 02:03, Sean Christopherson wrote:
+> PeterZ, I dropped your ACK from v4 because the perf patches were completely
+> broken.
 > 
-> This brings an overall design concern I have with user-events: AFAIU, the
-> lifetime of the user event registration appears to be linked to the lifetime
-> of a file descriptor.
+> Fix a bug where KVM incorrectly advertises PMU_CAP_LBR_FMT to userspace if
+> perf has disabled LBRs, e.g. because probing one or more LBR MSRs during
+> setup hit a #GP.
 > 
-
-The lifetime of the user_event is linked to the lifetime of the
-tracepoint. The tracepoint stays alive until someone explicitly
-tries to delete it via the del IOCTL.
-
-If the delete is attempted and there are references out to that
-user_event, either via perf/ftrace or any open files or mm_stucts it
-will not be allowed to go away.
-
-The user_event does not go away automatically upon file release (last
-close). However, when that file goes away, obviously the caller no
-longer can write to it. This is why there are user_events within the
-group, and then there are per-file user_event_refs. It allows for
-tracking these lifetimes and writes in isolation.
-
-> What happens when that file descriptor is duplicated and send over to
-> another process through unix sockets credentials ? Does it mean that the
-> kernel have a handle on the wrong process to update the "enabled" state?
+> The non-KVM patch cleans up a KVM-specific perf API to fix a benign bug
+> where KVM ignores the error return from the API.
 > 
-
-You'll have to expand upon this more, if the FD is duplicated and
-installed into another process, then the "enabled" state is still at
-whatever mm_struct registered it. If that new process wants to have an
-enabled state, it must register in it's own process if it wasn't from a
-fork. The mm_struct can only change pages in that process, it cannot
-jump across to another process. This is why the fork case needs an
-enabler clone with a new mm_struct, and why if it gets duplicated in an
-odd way into another process, that process must register it's own
-enabler states.
-
-> Also, what happens on execve system call if the file descriptor representing
-> the user event is not marked as close-on-exec ? Does it mean the kernel can
-> corrupt user-space memory of the after-exec loaded binary when it attempts
-> to update the "enabled" state ?
+> The remaining patches clean up KVM's PERF_CAPABILITIES mess, which makes
+> everything far more complex than it needs to be by
 > 
-
-I believe it could if the memory descriptor remains, callers should
-mark it close-on-exec to prevent this. None of this was a problem
-with the old ABI :)
-
-For clarity, since I cannot tell:
-Are you advocating for a different approach here or just calling out
-we need to add guidance to user space programs to do the right thing?
-
-> If I get this right, I suspect we might want to move the lifetime of the
-> user event registration to the memory space (mm_struct).
+> v5:
+>   - Drop perf patches that removed stubs.  The stubs are sadly necessary
+>     when CPU_SUP_INTEL=n && KVM_INTEL={m,y}, which is possible due to
+>     KVM_INTEL effectively depending on INTEL || CENTAUR || ZHAOXIN.
+>     [hint provided by kernel test robot].
+>   - Add a patch to ignore guest CPUID on host userspace MSR writes.
+>   - Add supported PERF_CAPABILITIES to kvm_caps to simplify code for all
+>     parties.
 > 
-
-If that file or mmap I proposed stays open, the enablers will stay open.
-The enabler keeps the mm_struct alive, not the other way around.
-
-I'm not sure I follow under what condition you'd have an enabler /
-user_event around with a mm_struct that has gone away. The enabler keeps
-the mm_struct alive until the enabler goes away to prevent any funny
-business. That appears to fit more inline with what others have done in
-the kernel than trying to tie the enabler to the mm_struct lifetime.
-
-If a memory descriptor goes away, then it's FD's should close (Is there
-ever a case this is not true?). If the FD's go away, the enablers close
-down, if the enablers close down, the user_event ref's drop to 0. The
-user_event can then be deleted via an explicit IOCTL, and will only work
-if at that point in time the ref count is still 0.
-
-> Thanks,
+> v4
+>   - https://lore.kernel.org/all/20220901173258.925729-1-seanjc@google.com:
+>   - Make vmx_get_perf_capabilities() non-inline to avoid references to
+>     x86_perf_get_lbr() when CPU_SUP_INTEL=n. [kernel test robot]
 > 
-> Mathieu
+> v3:
+>   - https://lore.kernel.org/all/20220831000051.4015031-1-seanjc@google.com
+>   - Drop patches for bug #1 (already merged).
+>   - Drop misguided "clean up the capability check" patch. [Like]
 > 
-> -- 
-> Mathieu Desnoyers
-> EfficiOS Inc.
-> https://www.efficios.com
+> v2:
+>   - https://lore.kernel.org/all/20220803192658.860033-1-seanjc@google.com
+>   - Add patches to fix bug #2. [Like]
+>   - Add a patch to clean up the capability check.
+>   - Tweak the changelog for the PMU refresh bug fix to call out that
+>     KVM should disallow changing feature MSRs after KVM_RUN. [Like]
+> 
+> v1: https://lore.kernel.org/all/20220727233424.2968356-1-seanjc@google.com
+> 
+> Sean Christopherson (8):
+>    perf/x86/core: Zero @lbr instead of returning -1 in x86_perf_get_lbr()
+>      stub
+>    KVM: VMX: Advertise PMU LBRs if and only if perf supports LBRs
+>    KVM: VMX: Fold vmx_supported_debugctl() into vcpu_supported_debugctl()
+>    KVM: VMX: Ignore guest CPUID for host userspace writes to DEBUGCTL
+>    KVM: x86: Track supported PERF_CAPABILITIES in kvm_caps
+>    KVM: x86: Init vcpu->arch.perf_capabilities in common x86 code
+>    KVM: x86: Handle PERF_CAPABILITIES in common x86's
+>      kvm_get_msr_feature()
+>    KVM: x86: Directly query supported PERF_CAPABILITIES for WRMSR checks
+> 
+>   arch/x86/events/intel/lbr.c       |  6 +---
+>   arch/x86/include/asm/perf_event.h |  6 ++--
+>   arch/x86/kvm/svm/svm.c            |  3 +-
+>   arch/x86/kvm/vmx/capabilities.h   | 37 ----------------------
+>   arch/x86/kvm/vmx/pmu_intel.c      |  1 -
+>   arch/x86/kvm/vmx/vmx.c            | 51 +++++++++++++++++++++++--------
+>   arch/x86/kvm/x86.c                | 14 ++++-----
+>   arch/x86/kvm/x86.h                |  1 +
+>   8 files changed, 52 insertions(+), 67 deletions(-)
+> 
+> 
+> base-commit: e18d6152ff0f41b7f01f9817372022df04e0d354
 
-Thanks,
--Beau
+Queued, with patches 2-4 destined to kvm/master.
+
+Paolo
+
