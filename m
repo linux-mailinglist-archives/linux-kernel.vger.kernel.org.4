@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E068D615BD7
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 06:31:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4BE0E615BD9
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 06:31:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiKBFbs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 01:31:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36032 "EHLO
+        id S229496AbiKBFbx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 01:31:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36190 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiKBFbi (ORCPT
+        with ESMTP id S229518AbiKBFbk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 01:31:38 -0400
-Received: from mail-pg1-x52b.google.com (mail-pg1-x52b.google.com [IPv6:2607:f8b0:4864:20::52b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4D272714C
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 22:31:35 -0700 (PDT)
-Received: by mail-pg1-x52b.google.com with SMTP id b5so15326562pgb.6
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 22:31:35 -0700 (PDT)
+        Wed, 2 Nov 2022 01:31:40 -0400
+Received: from mail-pf1-x435.google.com (mail-pf1-x435.google.com [IPv6:2607:f8b0:4864:20::435])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 256E527145
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 22:31:38 -0700 (PDT)
+Received: by mail-pf1-x435.google.com with SMTP id y13so15451154pfp.7
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 22:31:38 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=xiaomi-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Lc4GmW9txqDoA8MM/0Y4l6ly3F19+LNl4kUujoracOw=;
-        b=fcc3IYhEBjiQBC8ASnv7gGOQddgn7OPoqKGdhWmfOqf1K1FMaq1yps33s857m3UQBr
-         W0+SJrYJ/UFB02MiPTDYoSwFgbdg31zRVMkTDqKsU4MVSrqO5DP5QBXFe3deOUy862t9
-         A5EdF8rE+MttgJqFimTnMaqLmkfxMX7sTQhGiulNkSrSAC2V5QgLwoKguPIR5Bnjdcuh
-         ++ulJS8L0YNcwkc8mED5XbrnRyACqzhVyCOUzYWbV+9xpuBdjxEr8s0of6B/Fy4KODIh
-         hBnl/0mAln78BFAIpbb7y8XjbZwrp/X8oFd6alaTPjKiAq65Q9SbHpoqE9VJedw1imUn
-         upOw==
+        bh=eDHE6t3UxgVbbxIruEWL1ehqThIK+KLXLQWZKh+uV0Q=;
+        b=4iAm+JQWM7i0hJ0Ytlz2hDejZRPKk89vBrqcwpvUhuIHeZrjRl20QqxE0Z6jcsW4VM
+         7yJqw4A8XhBiPB3O8h4sqVp7gboNAY7/LAAsB7EZ6TXTHTicf3qsNDEVVNRNH+s/1X6c
+         R6T72avhP46cRgd203cj+xj1oXBAVAWaOc7ySsF78wa2NEpgZ9YqDyqygYAPp0+hVNIi
+         ioVCh8TWAI/He6tjBkUNFPt0jp9BVDO38HWyICxvUBQEVu/HaokcznvEVXUpSxv5brGT
+         FmB2ve96quvc3mJuVfNOFXdPsQIG+P2ZPat0DZxWbrzlCYgaGPBHJlVEsf3wley40d1T
+         hrPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Lc4GmW9txqDoA8MM/0Y4l6ly3F19+LNl4kUujoracOw=;
-        b=ZUgcCugVkcwyx+bpJLrm9yT2yOeh5SEiH1YYWryiMFsIqEdmkakEUoJ0eEyO9dxcBI
-         slCLjy/r/3FqfyiwBDcUV4pfFrfy0mre69ak7RLl0U7iHQQcN+CHb5qI9OA6k5E/iGE3
-         GwmlbJMX8gzNMiiKhIVHRpuafuoD6BhVXapKwcxOtZpTH1/qUlr7h+2oaN5dVEL2yFQ2
-         jndiljOM1UvVt8k9RptcBycRUnXaYs7sVWBKoHY0920A5Tm3O/Oa15R+B30/CQEy5Rn3
-         uJmdnBB6vFuSxR8LLQJdzlkg+PSKP8lOg+VIPHrdgTwNTFm2LAQffIWwiZWlrvKKTEV6
-         QL8g==
-X-Gm-Message-State: ACrzQf3LQVaojBh3lWendBTabqnjYaTU4G5g76Mr1oFQtnbzPnt4SGGF
-        yqJjPJX9i6O3nuWVQM/Ryj5X9g==
-X-Google-Smtp-Source: AMsMyM41497Ku2kkIH2pBsgMV+rlqBd7gmrbqLYbGO57+tFsGah3avd2yLGWEcY0XyhtwY6pLJJkLQ==
-X-Received: by 2002:a63:f47:0:b0:46a:e00c:24c7 with SMTP id 7-20020a630f47000000b0046ae00c24c7mr20321723pgp.239.1667367095360;
-        Tue, 01 Nov 2022 22:31:35 -0700 (PDT)
+        bh=eDHE6t3UxgVbbxIruEWL1ehqThIK+KLXLQWZKh+uV0Q=;
+        b=G1Ox/f+P6nMXYdJxwjrJGShCnlsuuUKlQS6cCy0P9FjK6DpO5QAxER5JvggftTzBaZ
+         lpOn2MyLz7BZSPAn6uBTb8eUp+2zgwNmXUpm2tSpeMMxlWJ/J14sDUocnw/sK3/vKfll
+         fBVDX+OD8qLCs8WNLjK5nIPfCu6CFDh/NOJCgOJGzfcIPkIsXWIEFw3BzI/sQicpc/Q6
+         8pIg7LHE2fPJrjZWZRTtjTMad4Zk1B9g+13zBp7QhkCMacw6ahCV2n7sghstubSdjjrz
+         H8307UBBQlmd0ukGbF4NLMtyq66E2uNX+TOkZBnbBGbgICrHSA7Zm/16RsdiHlF0ULdO
+         lQXA==
+X-Gm-Message-State: ACrzQf2Pe+LfgxZy3LYFQFBoTIK0fQsgi0eEuyxUDIffS7BKnCzX3dsu
+        5RO1pFhYfMbMhCCFDsmAo1GIpQ==
+X-Google-Smtp-Source: AMsMyM47c20eDGyI561r1pO/Lp2twkNvjbITsK4SV5xNqHCgPiGJdsGTTh8UnRbQ8WSMAEEr6A8M2w==
+X-Received: by 2002:a05:6a00:994:b0:56c:fa42:4f46 with SMTP id u20-20020a056a00099400b0056cfa424f46mr23272534pfg.9.1667367097554;
+        Tue, 01 Nov 2022 22:31:37 -0700 (PDT)
 Received: from ubuntu18.mioffice.cn ([2408:8607:1b00:7:9e7b:efff:fe41:a22a])
-        by smtp.gmail.com with ESMTPSA id u10-20020a170902e80a00b00186b69157ecsm7276367plg.202.2022.11.01.22.31.33
+        by smtp.gmail.com with ESMTPSA id u10-20020a170902e80a00b00186b69157ecsm7276367plg.202.2022.11.01.22.31.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 22:31:35 -0700 (PDT)
+        Tue, 01 Nov 2022 22:31:37 -0700 (PDT)
 From:   Jiaming Li <lijiaming3@xiaomi.corp-partner.google.com>
 To:     alim.akhtar@samsung.com, avri.altman@wdc.com, bvanassche@acm.org
 Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
         lijiaming3 <lijiaming3@xiaomi.com>
-Subject: [RESEND PATCH 3/4] scsi:ufs:add FBO module
-Date:   Wed,  2 Nov 2022 13:30:57 +0800
-Message-Id: <20221102053058.21021-4-lijiaming3@xiaomi.corp-partner.google.com>
+Subject: [RESEND PATCH 4/4] scsi:ufs:add fbo functionality
+Date:   Wed,  2 Nov 2022 13:30:58 +0800
+Message-Id: <20221102053058.21021-5-lijiaming3@xiaomi.corp-partner.google.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221102053058.21021-1-lijiaming3@xiaomi.corp-partner.google.com>
 References: <20221102053058.21021-1-lijiaming3@xiaomi.corp-partner.google.com>
@@ -73,261 +73,550 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: lijiaming3 <lijiaming3@xiaomi.com>
 
-add fbo module, determine whether the device supports
-the FBO function and initialize FBO related info
+add fbo analysis and defrag function
+
+We can send LBA info to the device as a comma separated string. Each
+adjacent pair represents a range:<open-lba>,<close-lba>.
+e.g. The LBA range of the file is 0x1234,0x3456;0x4567,0x5678
+	echo 0x1234,0x3456,0x4567,0x5678 > fbo_send_lba
+
+Then you can instrcut the device to analyzes the file info use following
+command:
+	echo 1 > fbo_operation_ctrl
+
+Use the following cmd to view the fragmentation progress status
+	cat fbo_prog_state
+
+After the value of "fbo_prog_state" changes from "1" to "2", it means
+the fragment analyzes completed, ust the following cmd to check file's
+LBA fragment state
+	cat fbo_lba_frag_state
+
+The data format follows the structure specified by spec
+	===============================
+	00  02  00  00  00  00  00  00
+	00  00  12  34  00  22  23  07
+	00  00  45  67  00  22  23  00
+	===============================
+
+The host then may instruct the device to execute optimization procedure to
+improve the regression level
+	echo 2 > fbo_operation_ctrl
+
+Use the following cmd to view the fragment optimization status, After the
+value of "fbo_prog_state" changes to "3", it means the fragment
+optimization completed
+	cat fbo_prog_state
 
 Signed-off-by: lijiaming3 <lijiaming3@xiaomi.com>
 ---
- drivers/ufs/core/Kconfig  |  12 ++++
- drivers/ufs/core/Makefile |   1 +
- drivers/ufs/core/ufsfbo.c | 120 ++++++++++++++++++++++++++++++++++++++
- drivers/ufs/core/ufsfbo.h |  23 ++++++++
- drivers/ufs/core/ufshcd.c |   4 ++
- include/ufs/ufs.h         |   3 +
- include/ufs/ufshcd.h      |   1 +
- 7 files changed, 164 insertions(+)
- create mode 100644 drivers/ufs/core/ufsfbo.c
- create mode 100644 drivers/ufs/core/ufsfbo.h
+ Documentation/ABI/testing/sysfs-driver-ufs |  64 ++++
+ drivers/ufs/core/ufsfbo.c                  | 399 +++++++++++++++++++++
+ drivers/ufs/core/ufshcd.c                  |   3 +
+ 3 files changed, 466 insertions(+)
 
-diff --git a/drivers/ufs/core/Kconfig b/drivers/ufs/core/Kconfig
-index e11978171403..30d3b6f07f5b 100644
---- a/drivers/ufs/core/Kconfig
-+++ b/drivers/ufs/core/Kconfig
-@@ -58,3 +58,15 @@ config SCSI_UFS_HWMON
- 	  a hardware monitoring device will be created for the UFS device.
+diff --git a/Documentation/ABI/testing/sysfs-driver-ufs b/Documentation/ABI/testing/sysfs-driver-ufs
+index 63daccbf7a8d..3792a444d0e2 100644
+--- a/Documentation/ABI/testing/sysfs-driver-ufs
++++ b/Documentation/ABI/testing/sysfs-driver-ufs
+@@ -1775,3 +1775,67 @@ Description:	This file shows the alignment requirement of UFS file-based
+ 		specifications - FBO extension.
  
- 	  If unsure, say N.
+ 		The file is read only.
 +
-+config SCSI_UFS_FBO
-+	bool "Support UFS File-based Optimization"
-+	depends on SCSI_UFSHCD
-+	help
-+	  The UFS FBO feature improves sequential read performance. The host send
-+	  the LBA info to device first. And then instrut the device to analyse the
-+	  LBA fragment info. After the analysis, the host can instruct the device to
-+	  return the LBA's fragmented state. Then the host can decide whether to
-+	  optimize based on the fragmentation status. After the	defragmentation is
-+	  concluded, it is expected that the sequential read performance will be
-+	  improved.
-diff --git a/drivers/ufs/core/Makefile b/drivers/ufs/core/Makefile
-index 62f38c5bf857..af7870126815 100644
---- a/drivers/ufs/core/Makefile
-+++ b/drivers/ufs/core/Makefile
-@@ -8,3 +8,4 @@ ufshcd-core-$(CONFIG_SCSI_UFS_CRYPTO)	+= ufshcd-crypto.o
- ufshcd-core-$(CONFIG_SCSI_UFS_HPB)	+= ufshpb.o
- ufshcd-core-$(CONFIG_SCSI_UFS_FAULT_INJECTION) += ufs-fault-injection.o
- ufshcd-core-$(CONFIG_SCSI_UFS_HWMON)	+= ufs-hwmon.o
-+ufshcd-core-$(CONFIG_SCSI_UFS_FBO)	+= ufsfbo.o
-\ No newline at end of file
++What:		/sys/class/scsi_device/*/device/fbo_dev_ctrl/fbo_support
++Date:		November 2022
++Contact:	li jiaming <lijiaming3@xiaomi.com>
++Description:	This file shows the support state of UFS file-based optimization.
++
++		The file is read only.
++
++What:		/sys/class/scsi_device/*/device/fbo_dev_ctrl/fbo_prog_state
++Date:		November 2022
++Contact:	li jiaming <lijiaming3@xiaomi.com>
++Description:	This file shows the state of UFS file-based optimization. The
++		current driver implementation supports 5 states:
++
++		==  ====================================================
++		0h   UFS FBO progress state is idle
++		1h   UFS FBO progress state is on-going
++		2h   UFS FBO progress state is complete analysis
++		3h   UFS FBO progress state is complete optimization
++		FF   UFS FBO progress state is general error
++		==  ====================================================
++		The file is read only.
++
++What:		/sys/class/scsi_device/*/device/fbo_dev_ctrl/fbo_operation_ctrl
++Date:		November 2022
++Contact:	li jiaming <lijiaming3@xiaomi.com>
++Description:	This file controls the operation of UFS file-based optimization.
++		Echo different value to this file to make device perform different funcs.
++		The value are as follows
++		==  ==============================================================
++		0h   Device shall stop FBO analysis and FBO optimization operation
++		1h   Start FBO analysis based on the current LBA range
++		2h   Start FBO optimization based on the current LBA range
++		==  ==============================================================
++		The file is write only.
++
++What:		/sys/class/scsi_device/*/device/fbo_dev_ctrl/fbo_exe_threshold
++Date:		November 2022
++Contact:	li jiaming <lijiaming3@xiaomi.com>
++Description:	This file shows and sets the execute level of UFS file-based
++		optimization. It means the device will do optimization operation for
++		the ranges which fragment level equal or greater than this value .The
++		value ranges from 0x0 to 0xA.
++
++What:		/sys/class/scsi_device/*/device/fbo_dev_ctrl/fbo_send_lba
++Date:		November 2022
++Contact:	li jiaming <lijiaming3@xiaomi.com>
++Description:	This file provides an interface for host to send LBA ranges to
++		the device for UFS file-based optimization. First, we obtain the iNode
++		info of the file, which can be used to find out the corresponding block
++		address of the file, then add the offset of each partition to obtain the
++		LBA of the file. We can send LBA info to the device as a comma separated
++		string. Each adjacent pair represents a range:<open-lba>,<close-lba>.
++		e.g. The LBA range of the file is 0x1234,0x3456;0x4567,0x5678
++			echo 0x1234,0x3456,0x4567,0x5678 > fbo_send_lba
++
++		The file is write only.
++
++What:		/sys/class/scsi_device/*/device/fbo_dev_ctrl/fbo_lba_frag_state
++Date:		November 2022
++Contact:	li jiaming <lijiaming3@xiaomi.com>
++Description:	This file provides an interface for host to obtain the LBA
++		ranges fragment state sent by read buffer command of UFS file-based
++		optimization. We should read this info when the FBO analysis is completed
 diff --git a/drivers/ufs/core/ufsfbo.c b/drivers/ufs/core/ufsfbo.c
-new file mode 100644
-index 000000000000..81326fd2fb3d
---- /dev/null
+index 81326fd2fb3d..303b7b7f1a2c 100644
+--- a/drivers/ufs/core/ufsfbo.c
 +++ b/drivers/ufs/core/ufsfbo.c
-@@ -0,0 +1,120 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Universal Flash Storage File-based Optimization
-+ *
-+ * Copyright (C) 2022 Xiaomi Mobile Software Co., Ltd
-+ *
-+ * Authors:
-+ *		lijiaming <lijiaming3@xiaomi.com>
-+ */
+@@ -14,6 +14,18 @@
+ #include <scsi/scsi_device.h>
+ #include <asm/unaligned.h>
+ 
++#define FBO_RW_BUF_HDR_SIZE 4
++#define FBO_RW_ENTRY_SIZE 8
++#define FBO_LBA_RANGE_LENGTH 4096
 +
-+#include "ufshcd-priv.h"
-+#include "ufsfbo.h"
-+#include <scsi/scsi_cmnd.h>
-+#include <scsi/scsi_device.h>
-+#include <asm/unaligned.h>
-+
-+/**
-+ * struct ufsfbo_dev_info - FBO device related info
-+ * @fbo_version: UFS file-based optimization Version
-+ * @fbo_rec_lrs: Recommended LBA Range Size In Bytes
-+ * @fbo_max_lrs: The Max LBA Range Size To Be Used By The Host
-+ * @fbo_min_lrs: The Min LBA Range Size To Be Used By The Host
-+ * @fbo_max_lrc: The Max Number Of LBA Ranges Supported By Read/Write Buffer Cmd
-+ * @fbo_lra: Alignment Requirement. 0 Means No Align Requirement
-+ * @fbo_exec_threshold: the execute level of UFS file-based optimization
-+ */
-+struct ufsfbo_dev_info {
-+	u16 fbo_version;
-+	u32 fbo_rec_lrs;
-+	u32 fbo_max_lrs;
-+	u32 fbo_min_lrs;
-+	int fbo_max_lrc;
-+	int fbo_lra;
-+	u8  fbo_exec_threshold;
-+};
-+/**
-+ * struct ufsfbo_ctrl - FBO ctrl structure
-+ * @hba: Per adapter private structure
-+ * @fbo_dev_info: FBO device related info
-+ * @fbo_lba_cnt: Number of LBA required to do FBO
-+ */
-+struct ufsfbo_ctrl {
-+	struct ufs_hba *hba;
-+	struct ufsfbo_dev_info fbo_dev_info;
-+	int fbo_lba_cnt;
++enum UFSFBO_PROG_STATE {
++	FBO_PROG_IDLE   = 0x0,
++	FBO_PROG_ON_GOING   = 0x1,
++	FBO_PROG_ANALYSIS_COMPLETE  = 0x2,
++	FBO_PROG_OPTIMIZATION_COMPLETE  = 0x3,
++	FBO_PROG_INTERNAL_ERR   = 0xff,
 +};
 +
-+static int ufsfbo_get_dev_info(struct ufs_hba *hba, struct ufsfbo_ctrl *fbo_ctrl)
+ /**
+  * struct ufsfbo_dev_info - FBO device related info
+  * @fbo_version: UFS file-based optimization Version
+@@ -45,6 +57,393 @@ struct ufsfbo_ctrl {
+ 	int fbo_lba_cnt;
+ };
+ 
++static void ufsfbo_fill_rw_buffer(unsigned char *cdb, int size, u8 opcode)
 +{
-+	int ret;
-+	u32 val;
-+	u8 *desc_buf;
-+	int buf_len;
-+	struct ufsfbo_dev_info *fbo_info = &fbo_ctrl->fbo_dev_info;
++	cdb[0] = opcode;
++	cdb[1] = 0x2;
++	cdb[2] = opcode == WRITE_BUFFER ? 0x1 : 0x2;
++	put_unaligned_be24(size, &cdb[6]);
++}
 +
-+	buf_len = hba->desc_size[QUERY_DESC_IDN_FBO];
-+	desc_buf = kmalloc(buf_len, GFP_KERNEL);
-+	if (!desc_buf)
-+		return -ENOMEM;
++static ssize_t fbo_support_show(struct device *dev,
++				   struct device_attribute *attr, char *buf)
++{
++	struct scsi_device *sdev = to_scsi_device(dev);
++	struct ufs_hba *hba = shost_priv(sdev->host);
++	u8 val = 0;
 +
-+	ret = ufshcd_query_descriptor_retry(hba, UPIU_QUERY_OPCODE_READ_DESC,
-+					QUERY_DESC_IDN_FBO, 0, 0, desc_buf, &buf_len);
-+	if (ret) {
-+		dev_err(hba->dev, "%s: Failed reading FBO Desc. ret = %d\n",
-+				__func__, ret);
++	if (hba->fbo_ctrl)
++		val = 1;
++
++	return sysfs_emit(buf, "%d\n", val);
++}
++static DEVICE_ATTR_RO(fbo_support);
++
++static int ufsfbo_get_fbo_prog_state(struct ufs_hba *hba, int *prog_state)
++{
++	int ret = 0, attr = -1;
++
++	down(&hba->host_sem);
++	if (!ufshcd_is_user_access_allowed(hba)) {
++		ret = -EBUSY;
 +		goto out;
 +	}
-+
-+	fbo_info->fbo_version = get_unaligned_be16(desc_buf + FBO_DESC_PARAM_VERSION);
-+	fbo_info->fbo_rec_lrs = get_unaligned_be32(desc_buf + FBO_DESC_PARAM_REC_LBA_RANGE_SIZE);
-+	fbo_info->fbo_max_lrs = get_unaligned_be32(desc_buf + FBO_DESC_PARAM_MAX_LBA_RANGE_SIZE);
-+	fbo_info->fbo_min_lrs = get_unaligned_be32(desc_buf + FBO_DESC_PARAM_MIN_LBA_RANGE_SIZE);
-+	fbo_info->fbo_max_lrc = desc_buf[FBO_DESC_PARAM_MAX_LBA_RANGE_CONUT];
-+	fbo_info->fbo_lra = get_unaligned_be16(desc_buf + FBO_DESC_PARAM_MAX_LBA_RANGE_ALIGNMENT);
-+
++	ufshcd_rpm_get_sync(hba);
 +	ret = ufshcd_query_attr_retry(hba, UPIU_QUERY_OPCODE_READ_ATTR,
-+				QUERY_ATTR_IDN_FBO_LEVEL_EXE, 0, 0, &val);
++			QUERY_ATTR_IDN_FBO_PROG_STATE, 0, 0, &attr);
++	ufshcd_rpm_put_sync(hba);
 +	if (ret) {
-+		dev_err(hba->dev, "%s: Failed reading FBO Attr. ret = %d\n",
-+				__func__, ret);
++		pr_err("Query attr fbo prog state failed.");
 +		goto out;
 +	}
 +
-+	fbo_info->fbo_exec_threshold = val;
++	switch (attr) {
++	case 0x0:
++	case 0x1:
++	case 0x2:
++	case 0x3:
++	case 0xff:
++		*prog_state = attr;
++		break;
++	default:
++		pr_info("Unknown fbo prog state attr(%d)", attr);
++		ret = -EINVAL;
++		break;
++	}
 +
 +out:
-+	kfree(desc_buf);
++	up(&hba->host_sem);
 +	return ret;
 +}
 +
-+int ufsfbo_probe(struct ufs_hba *hba, const u8 *desc_buf)
++static ssize_t fbo_prog_state_show(struct device *dev,
++				   struct device_attribute *attr, char *buf)
 +{
-+	struct ufsfbo_ctrl *fbo_ctrl;
-+	u32 ext_ufs_feature;
++	int fbo_prog_state;
++	struct scsi_device *sdev = to_scsi_device(dev);
++	struct ufs_hba *hba = shost_priv(sdev->host);
 +
-+	ext_ufs_feature = get_unaligned_be32(desc_buf + DEVICE_DESC_PARAM_EXT_UFS_FEATURE_SUP);
++	if (ufsfbo_get_fbo_prog_state(hba, &fbo_prog_state)) {
++		pr_err("Get fbo prog state failed.");
++		return -EINVAL;
++	}
 +
-+	if (!(ext_ufs_feature & UFS_DEV_FBO_SUP))
-+		return -EOPNOTSUPP;
++	return sysfs_emit(buf, "%d\n", fbo_prog_state);
++}
++static DEVICE_ATTR_RO(fbo_prog_state);
 +
-+	fbo_ctrl = kzalloc(sizeof(struct ufsfbo_ctrl), GFP_KERNEL);
-+	if (!fbo_ctrl)
++static ssize_t fbo_operation_ctrl_store(struct device *dev,
++				    struct device_attribute *attr,
++				    const char *buf, size_t count)
++{
++	int ret = 0;
++	u32 val;
++	struct scsi_device *sdev = to_scsi_device(dev);
++	struct ufs_hba *hba = shost_priv(sdev->host);
++
++	if (kstrtouint(buf, 0, &val))
++		return -EINVAL;
++
++	down(&hba->host_sem);
++	if (!ufshcd_is_user_access_allowed(hba)) {
++		ret = -EBUSY;
++		goto out;
++	}
++
++	ufshcd_rpm_get_sync(hba);
++	ret = ufshcd_query_attr_retry(hba, UPIU_QUERY_OPCODE_WRITE_ATTR,
++			QUERY_ATTR_IDN_FBO_CONTROL, 0, 0, &val);
++	ufshcd_rpm_put_sync(hba);
++
++out:
++	up(&hba->host_sem);
++	return ret ? ret : count;
++}
++
++static DEVICE_ATTR_WO(fbo_operation_ctrl);
++
++static ssize_t fbo_exe_threshold_show(struct device *dev,
++				   struct device_attribute *attr, char *buf)
++{
++	struct scsi_device *sdev = to_scsi_device(dev);
++	struct ufs_hba *hba = shost_priv(sdev->host);
++	struct ufsfbo_ctrl *fbo_ctrl = hba->fbo_ctrl;
++
++	return sysfs_emit(buf, "%d\n", fbo_ctrl->fbo_dev_info.fbo_exec_threshold);
++}
++
++static int ufsfbo_set_exe_level(struct ufs_hba *hba, u32 val)
++{
++	int ret = 0, fbo_prog_state = 0;
++
++	ret = ufsfbo_get_fbo_prog_state(hba, &fbo_prog_state);
++	if (ret) {
++		pr_err("Get fbo prog state failed.");
++		return -EINVAL;
++	}
++
++	if (fbo_prog_state == FBO_PROG_IDLE || fbo_prog_state == FBO_PROG_ANALYSIS_COMPLETE ||
++		fbo_prog_state == FBO_PROG_OPTIMIZATION_COMPLETE) {
++		down(&hba->host_sem);
++		if (!ufshcd_is_user_access_allowed(hba)) {
++			ret = -EBUSY;
++			goto out;
++		}
++		ufshcd_rpm_get_sync(hba);
++		ret = ufshcd_query_attr_retry(hba, UPIU_QUERY_OPCODE_WRITE_ATTR,
++				QUERY_ATTR_IDN_FBO_LEVEL_EXE, 0, 0, &val);
++		ufshcd_rpm_put_sync(hba);
++	} else {
++		pr_err("Illegal fbo prog state");
++		return -EINVAL;
++	}
++
++out:
++	up(&hba->host_sem);
++	return ret;
++}
++
++static ssize_t fbo_exe_threshold_store(struct device *dev,
++				    struct device_attribute *attr,
++				    const char *buf, size_t count)
++{
++	u32 val;
++	int ret = 0;
++	struct scsi_device *sdev = to_scsi_device(dev);
++	struct ufs_hba *hba = shost_priv(sdev->host);
++	struct ufsfbo_ctrl *fbo_ctrl = hba->fbo_ctrl;
++
++	if (kstrtouint(buf, 0, &val))
++		return -EINVAL;
++
++	if (val < 0 || val > 10)
++		return -EINVAL;
++
++	ret = ufsfbo_set_exe_level(hba, val);
++	if (ret) {
++		pr_err("Set exec threshold failed.");
++		return -EINVAL;
++	}
++
++	fbo_ctrl->fbo_dev_info.fbo_exec_threshold = val;
++
++	return ret ? ret : count;
++}
++
++static DEVICE_ATTR_RW(fbo_exe_threshold);
++
++static int ufsfbo_issue_read_frag_level(struct scsi_device *sdev, char *buf, int para_len)
++{
++	int ret = 0;
++	unsigned char cdb[10] = {};
++	struct scsi_sense_hdr sshdr = {};
++
++	ufsfbo_fill_rw_buffer(cdb, para_len, READ_BUFFER);
++
++	ret = scsi_execute_req(sdev, cdb, DMA_FROM_DEVICE, buf, para_len,
++			&sshdr, msecs_to_jiffies(15000), 0, NULL);
++	if (ret)
++		pr_err("Read Buffer failed,sense key:0x%x;asc:0x%x;ascq:0x%x",
++			(int)sshdr.sense_key, (int)sshdr.asc, (int)sshdr.ascq);
++
++	return ret;
++}
++
++static ssize_t fbo_lba_frag_state_show(struct device *dev,
++					struct device_attribute *attr, char *buf)
++{
++	int i, ret, count = 0;
++	int para_len = 0;
++	int vaild_body_size = 0;
++	char *fbo_read_buffer;
++	struct scsi_device *sdev = to_scsi_device(dev);
++	struct ufs_hba *hba = shost_priv(sdev->host);
++	struct ufsfbo_ctrl *fbo_ctrl = hba->fbo_ctrl;
++
++	fbo_read_buffer = kzalloc(FBO_LBA_RANGE_LENGTH, GFP_KERNEL);
++	if (!fbo_read_buffer)
 +		return -ENOMEM;
 +
-+	if (ufsfbo_get_dev_info(hba, fbo_ctrl))
-+		return -EOPNOTSUPP;
++	para_len = FBO_RW_BUF_HDR_SIZE + FBO_RW_ENTRY_SIZE +
++		fbo_ctrl->fbo_lba_cnt * FBO_RW_ENTRY_SIZE;
 +
-+	hba->fbo_ctrl = fbo_ctrl;
-+	fbo_ctrl->hba = hba;
++	ret = ufsfbo_issue_read_frag_level(sdev, fbo_read_buffer, para_len);
++	if (ret) {
++		pr_err("Get lba range level failed");
++		goto out;
++	}
++
++	/* we allocated 4k, but reading only the relevant ReadBuffer size */
++	vaild_body_size = FBO_RW_ENTRY_SIZE + (fbo_ctrl->fbo_lba_cnt * FBO_RW_ENTRY_SIZE);
++	for (i = 0; i < vaild_body_size; i++) {
++		count += snprintf(buf + count, PAGE_SIZE - count,
++				"%02x  ", fbo_read_buffer[i + FBO_RW_BUF_HDR_SIZE]);
++		if (!((i + 1) % 8))
++			count += snprintf(buf + count, PAGE_SIZE - count, "\n");
++	}
++out:
++	kfree(fbo_read_buffer);
++	return ret ? ret : count;
++}
++
++static DEVICE_ATTR_RO(fbo_lba_frag_state);
++
++static int ufsfbo_check_lba_range_format(struct ufs_hba *hba, char *buf)
++{
++	char *p;
++	int lba_pairs = 0;
++	struct ufsfbo_ctrl *fbo_ctrl = hba->fbo_ctrl;
++
++	p = strstr(buf, ",");
++	if (!p || buf[strlen(buf) - 1] == ',') {
++		pr_err("Invalid lba range format, input lba range separated by ','");
++		return -EINVAL;
++	}
++
++	while (p) {
++		lba_pairs++;
++		p += 1;
++		p = strstr(p, ",");
++	}
++	/*
++	 * The input buffer is a comma delimited pairs of LBAs: open,close,
++	 * and so on.  So there should be an even number of LBAs, and odd
++	 * number of commas.
++	 */
++	if (lba_pairs % 2)
++		lba_pairs++;
++	else
++		return -EINVAL;
++
++	if (lba_pairs / 2 > fbo_ctrl->fbo_dev_info.fbo_max_lrc)
++		return -EINVAL;
++
++	fbo_ctrl->fbo_lba_cnt = lba_pairs / 2;
++	return 0;
++}
++
++static int ufsfbo_parse_lba_list(struct ufs_hba *hba, char *buf, char *lba_buf)
++{
++	char *lba_ptr;
++	struct ufsfbo_ctrl *fbo_ctrl = hba->fbo_ctrl;
++	struct ufsfbo_dev_info *fbo_dev_info = &fbo_ctrl->fbo_dev_info;
++	u64 lba_range_tmp, start_lba, lba_len;
++	int len_index = 1, lba_info_offset = FBO_RW_BUF_HDR_SIZE + FBO_RW_ENTRY_SIZE;
++
++	lba_buf[5] = fbo_ctrl->fbo_lba_cnt;
++
++	while ((lba_ptr = strsep(&buf, ",")) != NULL) {
++		if (kstrtou64(lba_ptr, 16, &lba_range_tmp))
++			return -EINVAL;
++
++		if (len_index % 2) {
++			start_lba = lba_range_tmp;
++			put_unaligned_be32(start_lba, lba_buf + lba_info_offset);
++		} else {
++			if (lba_range_tmp < start_lba)
++				return -EINVAL;
++
++			lba_len = lba_range_tmp - start_lba + 1;
++			if (lba_len < fbo_dev_info->fbo_min_lrs ||
++				lba_len > fbo_dev_info->fbo_max_lrs)
++				return -EINVAL;
++
++			put_unaligned_be24(lba_len, lba_buf + lba_info_offset + 4);
++			lba_info_offset += FBO_RW_ENTRY_SIZE;
++		}
++		len_index++;
++	}
 +
 +	return 0;
 +}
 +
-+void ufsfbo_remove(struct ufs_hba *hba)
++static int ufsfbo_issue_lba_list_write(struct scsi_device *sdev, char *buf)
 +{
-+	if (!hba->fbo_ctrl)
-+		return;
++	int ret = 0;
++	struct ufs_hba *hba = shost_priv(sdev->host);
++	struct ufsfbo_ctrl *fbo_ctrl = hba->fbo_ctrl;
++	int fbo_lba_cnt = fbo_ctrl->fbo_lba_cnt;
++	struct scsi_sense_hdr sshdr = {};
++	char *buf_lba;
++	unsigned char cdb[10] = {};
++	int para_len = FBO_RW_BUF_HDR_SIZE + FBO_RW_ENTRY_SIZE + fbo_lba_cnt * FBO_RW_ENTRY_SIZE;
 +
-+	kfree(hba->fbo_ctrl);
++	buf_lba = kzalloc(FBO_LBA_RANGE_LENGTH, GFP_KERNEL);
++	if (!buf_lba) {
++		ret = -ENOMEM;
++		return ret;
++	}
++
++	ret = ufsfbo_parse_lba_list(hba, buf, buf_lba);
++	if (ret) {
++		pr_err("Init buf_lba fail");
++		goto out;
++	}
++
++	ufsfbo_fill_rw_buffer(cdb, para_len, WRITE_BUFFER);
++
++	ret = scsi_execute_req(sdev, cdb, DMA_TO_DEVICE, buf_lba, para_len,
++			&sshdr, msecs_to_jiffies(15000), 0, NULL);
++	if (ret)
++		pr_err("Write Buffer failed,sense key:0x%x;asc:0x%x;ascq:0x%x",
++			(int)sshdr.sense_key, (int)sshdr.asc, (int)sshdr.ascq);
++
++out:
++	kfree(buf_lba);
++	return ret;
 +}
-diff --git a/drivers/ufs/core/ufsfbo.h b/drivers/ufs/core/ufsfbo.h
-new file mode 100644
-index 000000000000..843fa8a75c2c
---- /dev/null
-+++ b/drivers/ufs/core/ufsfbo.h
-@@ -0,0 +1,23 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Universal Flash Storage File-based Optimization
-+ *
-+ * Copyright (C) 2022 Xiaomi Mobile Software Co., Ltd
-+ *
-+ * Authors:
-+ *		lijiaming <lijiaming3@xiaomi.com>
-+ */
 +
-+#ifndef _UFSFBO_H_
-+#define _UFSFBO_H_
++static ssize_t fbo_send_lba_store(struct device *dev,
++				    struct device_attribute *attr,
++				    const char *buf, size_t count)
++{
++	int ret = 0, fbo_prog_state = 0;
++	char *buf_ptr;
++	struct scsi_device *sdev = to_scsi_device(dev);
++	struct ufs_hba *hba = shost_priv(sdev->host);
 +
-+#ifdef CONFIG_SCSI_UFS_FBO
-+int ufsfbo_probe(struct ufs_hba *hba, const u8 *desc_buf);
-+void ufsfbo_remove(struct ufs_hba *hba);
-+extern const struct attribute_group ufs_sysfs_fbo_param_group;
-+#else
-+static inline int ufsfbo_probe(struct ufs_hba *hba, const u8 *desc_buf) {}
-+static inline void ufsfbo_remove(struct ufs_hba *hba) {}
-+#endif
++	if (!buf)
++		return -EINVAL;
 +
-+#endif /* _UFSFBO_H_ */
++	buf_ptr = kstrdup(buf, GFP_KERNEL);
++	if (unlikely(!buf_ptr))
++		return -ENOMEM;
++
++	if (ufsfbo_check_lba_range_format(hba, buf_ptr))
++		goto out;
++
++	if (ufsfbo_get_fbo_prog_state(hba, &fbo_prog_state))
++		goto out;
++
++	if (fbo_prog_state == FBO_PROG_IDLE) {
++		ret = ufsfbo_issue_lba_list_write(sdev, buf_ptr);
++	} else {
++		ret = -EINVAL;
++		pr_err("Invalid fbo state");
++	}
++
++out:
++	kfree(buf_ptr);
++	return ret ? ret : count;
++}
++
++static DEVICE_ATTR_WO(fbo_send_lba);
++
++static struct attribute *fbo_dev_ctrl_attrs[] = {
++	&dev_attr_fbo_support.attr,
++	&dev_attr_fbo_prog_state.attr,
++	&dev_attr_fbo_operation_ctrl.attr,
++	&dev_attr_fbo_exe_threshold.attr,
++	&dev_attr_fbo_send_lba.attr,
++	&dev_attr_fbo_lba_frag_state.attr,
++	NULL,
++};
++
++const struct attribute_group ufs_sysfs_fbo_param_group = {
++	.name = "fbo_dev_ctrl",
++	.attrs = fbo_dev_ctrl_attrs,
++};
++
+ static int ufsfbo_get_dev_info(struct ufs_hba *hba, struct ufsfbo_ctrl *fbo_ctrl)
+ {
+ 	int ret;
 diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 4bc5b8563a62..f769fcb72392 100644
+index f769fcb72392..410263e2fada 100644
 --- a/drivers/ufs/core/ufshcd.c
 +++ b/drivers/ufs/core/ufshcd.c
-@@ -35,6 +35,7 @@
- #include "ufs_bsg.h"
- #include "ufshcd-crypto.h"
- #include "ufshpb.h"
-+#include "ufsfbo.h"
- #include <asm/unaligned.h>
- 
- #define CREATE_TRACE_POINTS
-@@ -7778,6 +7779,8 @@ static int ufs_get_device_desc(struct ufs_hba *hba)
- 
- 	ufshcd_wb_probe(hba, desc_buf);
- 
-+	ufsfbo_probe(hba, desc_buf);
-+
- 	ufshcd_temp_notif_probe(hba, desc_buf);
- 
- 	/*
-@@ -9534,6 +9537,7 @@ void ufshcd_remove(struct ufs_hba *hba)
- 	ufs_hwmon_remove(hba);
- 	ufs_bsg_remove(hba);
- 	ufshpb_remove(hba);
-+	ufsfbo_remove(hba);
- 	ufs_sysfs_remove_nodes(hba->dev);
- 	blk_mq_destroy_queue(hba->tmf_queue);
- 	blk_mq_free_tag_set(&hba->tmf_tag_set);
-diff --git a/include/ufs/ufs.h b/include/ufs/ufs.h
-index c3fd954ce005..2ab79760dafe 100644
---- a/include/ufs/ufs.h
-+++ b/include/ufs/ufs.h
-@@ -165,6 +165,9 @@ enum attr_idn {
- 	QUERY_ATTR_IDN_AVAIL_WB_BUFF_SIZE       = 0x1D,
- 	QUERY_ATTR_IDN_WB_BUFF_LIFE_TIME_EST    = 0x1E,
- 	QUERY_ATTR_IDN_CURR_WB_BUFF_SIZE        = 0x1F,
-+	QUERY_ATTR_IDN_FBO_CONTROL		= 0x31,
-+	QUERY_ATTR_IDN_FBO_LEVEL_EXE		= 0X32,
-+	QUERY_ATTR_IDN_FBO_PROG_STATE		= 0x33,
- };
- 
- /* Descriptor idn for Query requests */
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index 9f28349ebcff..5c7367a54bbb 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -973,6 +973,7 @@ struct ufs_hba {
- 	struct delayed_work debugfs_ee_work;
- 	u32 debugfs_ee_rate_limit_ms;
+@@ -8294,6 +8294,9 @@ static const struct attribute_group *ufshcd_driver_groups[] = {
+ #ifdef CONFIG_SCSI_UFS_HPB
+ 	&ufs_sysfs_hpb_stat_group,
+ 	&ufs_sysfs_hpb_param_group,
++#endif
++#ifdef CONFIG_SCSI_UFS_FBO
++	&ufs_sysfs_fbo_param_group,
  #endif
-+	struct ufsfbo_ctrl *fbo_ctrl;
- 	u32 luns_avail;
- 	bool complete_put;
+ 	NULL,
  };
 -- 
 2.38.1
