@@ -2,104 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A821615D6D
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 09:14:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E362615D76
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 09:16:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229907AbiKBIOp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 04:14:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49870 "EHLO
+        id S230141AbiKBIQN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 04:16:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiKBIOm (ORCPT
+        with ESMTP id S230171AbiKBIQA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 04:14:42 -0400
-Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B15971F9DD
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 01:14:38 -0700 (PDT)
-Received: by mail-ej1-x634.google.com with SMTP id t25so43223679ejb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 01:14:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=D14YT3XLwuvaV8kqztxV7M3vETwAqi+zmM/96cR0AHc=;
-        b=GpxpLcagq0joGePZScEoh0i3uH5ugjVvEjPoxt6kBCBuuyzlqo35cKCnfHJbdie61w
-         5924bp2eq0lkMdv6rrVStc/1EDNUfXLLfHgyzrWuin2h2jlj4y0iYMtNajL4TmLzDdNs
-         qH3BGDP7oIMrRmR4ievX+HdXwMyP9WjFo5MJtElo6QNB+baDZ1ZOxIBLHWQ/k3DKhnyC
-         cqwwEIMjTqU7dz+O55o01joMEgDoWIbpj7ggH1OouJ/WJT6ZtBCwS9BmiyxqWwkSvWW2
-         vcpFf4ICDsu+KcmJO0q9Wc+movMbILbPOvqFKyHIv6XByLlDdw4aOKUzACk+rlX6nORq
-         RzJA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=D14YT3XLwuvaV8kqztxV7M3vETwAqi+zmM/96cR0AHc=;
-        b=sFJOAMeUglHb0CYTsNVABdlWYlLQgUPMTt5wJHMfd52imfTNdVwLuBt91jSh93Y7A0
-         WWZEXknjrVEc6rSGR+9wPDBhnywpBcItqp2Ht4F3AR+In1l14yJjAGkHQIub2TsyJf/Q
-         hFiFYEfYnppsUIIWVdAjEjyuuFAx5Te/yNF/GZoNt82LVSdvYTKiB+Kwgfe7XWKCrhZI
-         eZ7A5bXCLLnsl6q4/NLxIgw6KhzaG4vZMBoTwM2/SPnypqRjta4VdlEqY2lYabXLBTMs
-         d9B4ZgvOjPvF9KRE/n6hLfZEe71AzwhDFh9dUvZc+2QTGUQ4aAxL0ETyojqIxhAsFqBs
-         ACqA==
-X-Gm-Message-State: ACrzQf0rEMl48umShnTKXB4mFJyDM7uQjUzENXD6UPK+TU/oaBSFJ3kP
-        1zuBlGMpKKLUERST2yPvUuT8FQ==
-X-Google-Smtp-Source: AMsMyM4Hi9Yx2VNLrU6zltuTqYjap+HJCkqA9L0ASaNW32WvbmixRlXRCpjN14oizcYbeHci3HBLOw==
-X-Received: by 2002:a17:907:1b24:b0:76d:7b9d:2f8b with SMTP id mp36-20020a1709071b2400b0076d7b9d2f8bmr22307335ejc.414.1667376877280;
-        Wed, 02 Nov 2022 01:14:37 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-748-2a9a-a2a6-1362.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:748:2a9a:a2a6:1362])
-        by smtp.gmail.com with ESMTPSA id w25-20020aa7d299000000b00463bc1ddc76sm1522773edq.28.2022.11.02.01.14.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 01:14:36 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 09:14:35 +0100
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     Bo Liu <liubo03@inspur.com>
-Cc:     anup@brainfault.org, atishp@atishpatra.org,
-        paul.walmsley@sifive.com, palmer@dabbelt.com,
-        aou@eecs.berkeley.edu, kvm@vger.kernel.org,
-        kvm-riscv@lists.infradead.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] RISC-V: KVM: use vma_lookup() instead of
- find_vma_intersection()
-Message-ID: <20221102080749.dcp76ow2sfv5hhx3@kamzik>
-References: <20221101053811.5884-1-liubo03@inspur.com>
+        Wed, 2 Nov 2022 04:16:00 -0400
+Received: from smtpbguseast3.qq.com (smtpbguseast3.qq.com [54.243.244.52])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 51A491FCD9;
+        Wed,  2 Nov 2022 01:15:56 -0700 (PDT)
+X-QQ-mid: bizesmtp65t1667376944t1aaelus
+Received: from localhost.localdomain ( [113.57.152.160])
+        by bizesmtp.qq.com (ESMTP) with 
+        id ; Wed, 02 Nov 2022 16:15:43 +0800 (CST)
+X-QQ-SSF: 01400000000000B0E000000A0000020
+X-QQ-FEAT: +ynUkgUhZJnFi+nBwbjX5Y6S1DXktWOdmidqSUs8sMgNyFzkIDG30PQjjlYry
+        uKGj47UpcJ25qQSY87LcC8fEFDed43t65dtRZsDFV7hFlax4ZIsd7Lw0Sxwa8Vmd3eEHp07
+        OpRLotAh/nYXqXuoF0iFxfM6VRj3zgxhPnQcJ34cud2dbT4LKLoDs9gVnA1r10kJZ9avufC
+        7vWvpqJL/VuLzDM1rf0Q9AZRM/cmFwwWLJmEUl1XYxzYxMm6JDZI9pjLti43molP2mHgTyO
+        04AnLrIscXwn4FeIocgQt4/m2XRwSFyHXm/x5TJG4gbrACLz1O8sFs4MvP5V626vBYFFb/g
+        U1+6JgVdOWWsxgU2tnR9wImzlVkJa89N0C6dUMXrXbhT7w4avx4zU5+6a0EtvJeGEcSweVH
+X-QQ-GoodBg: 1
+From:   Chen Linxuan <chenlinxuan@uniontech.com>
+To:     Jonathan Corbet <corbet@lwn.net>
+Cc:     Chen Linxuan <chenlinxuan@uniontech.com>,
+        Yuan Haisheng <heysion@deepin.com>,
+        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org,
+        linux-doc@vger.kernel.org
+Subject: [PATCH] Documentation: update the description of TracerPid in procfs.rst
+Date:   Wed,  2 Nov 2022 16:15:17 +0800
+Message-Id: <20221102081517.19770-1-chenlinxuan@uniontech.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221101053811.5884-1-liubo03@inspur.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-QQ-SENDSIZE: 520
+Feedback-ID: bizesmtp:uniontech.com:qybglogicsvr:qybglogicsvr6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 01:38:11AM -0400, Bo Liu wrote:
-> vma_lookup() finds the vma of a specific address with a cleaner interface
-> and is more readable.
-> 
-> Signed-off-by: Bo Liu <liubo03@inspur.com>
-> ---
->  arch/riscv/kvm/mmu.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/arch/riscv/kvm/mmu.c b/arch/riscv/kvm/mmu.c
-> index 3620ecac2fa1..5942d10c9736 100644
-> --- a/arch/riscv/kvm/mmu.c
-> +++ b/arch/riscv/kvm/mmu.c
-> @@ -632,7 +632,7 @@ int kvm_riscv_gstage_map(struct kvm_vcpu *vcpu,
->  
->  	mmap_read_lock(current->mm);
->  
-> -	vma = find_vma_intersection(current->mm, hva, hva + 1);
-> +	vma = vma_lookup(current->mm, hva);
->  	if (unlikely(!vma)) {
->  		kvm_err("Failed to find VMA for hva 0x%lx\n", hva);
->  		mmap_read_unlock(current->mm);
-> -- 
-> 2.27.0
-> 
->
+When the tracer of process is outside of current pid namespace, field
+`TracerPid` in /proc/<pid>/status will be 0, too, just like this process
+not have been traced.
 
-Reviewed-by: Andrew Jones <ajones@ventanamicro.com>
+This is because that function `task_pid_nr_ns` used to get the pid of
+tracer will return 0 in this situation.
+
+Co-authored-by: Yuan Haisheng <heysion@deepin.com>
+Signed-off-by: Chen Linxuan <chenlinxuan@uniontech.com>
+---
+ Documentation/filesystems/proc.rst | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/Documentation/filesystems/proc.rst b/Documentation/filesystems/proc.rst
+index 898c99eae8e4..e98e0277f05e 100644
+--- a/Documentation/filesystems/proc.rst
++++ b/Documentation/filesystems/proc.rst
+@@ -245,7 +245,8 @@ It's slow but very precise.
+  Ngid                        NUMA group ID (0 if none)
+  Pid                         process id
+  PPid                        process id of the parent process
+- TracerPid                   PID of process tracing this process (0 if not)
++ TracerPid                   PID of process tracing this process (0 if not, or
++                             the tracer is outside of the current pid namespace)
+  Uid                         Real, effective, saved set, and  file system UIDs
+  Gid                         Real, effective, saved set, and  file system GIDs
+  FDSize                      number of file descriptor slots currently allocated
+-- 
+2.38.1
+
