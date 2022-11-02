@@ -2,116 +2,92 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 23BCB6161BE
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:28:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 045876161C9
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:29:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiKBL1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 07:27:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59322 "EHLO
+        id S230002AbiKBL3e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 07:29:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60238 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiKBL1g (ORCPT
+        with ESMTP id S229493AbiKBL3c (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 07:27:36 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA399248DC;
-        Wed,  2 Nov 2022 04:27:35 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e741329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e741:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3F6BC1EC059D;
-        Wed,  2 Nov 2022 12:27:34 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1667388454;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=yICoADaQMVMzDnnLd9qSZOhWGA6H9/WvnEz/OK5eX7Q=;
-        b=S1atLxaEuLaJ/+CK/dqlknDpST2LhW/3u+eYKdl6ClrAKnMqw61jNH8w4PO0e02jNHS0kC
-        shBVTW4qpXJJb1k4DRNQ3FgDYM6DOQm9H+b1PuFSSlhAjdFm16bl5Ochou662KZCkO3wp4
-        04JhwBQACZ1QdCH14YrOC+MY7cKm4Hg=
-Date:   Wed, 2 Nov 2022 12:27:33 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     "Kalra, Ashish" <ashish.kalra@amd.com>
-Cc:     "x86@kernel.org" <x86@kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
-        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
-        "tglx@linutronix.de" <tglx@linutronix.de>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "jroedel@suse.de" <jroedel@suse.de>,
-        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
-        "hpa@zytor.com" <hpa@zytor.com>,
-        "ardb@kernel.org" <ardb@kernel.org>,
-        "pbonzini@redhat.com" <pbonzini@redhat.com>,
-        "seanjc@google.com" <seanjc@google.com>,
-        "vkuznets@redhat.com" <vkuznets@redhat.com>,
-        "jmattson@google.com" <jmattson@google.com>,
-        "luto@kernel.org" <luto@kernel.org>,
-        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
-        "slp@redhat.com" <slp@redhat.com>,
-        "pgonda@google.com" <pgonda@google.com>,
-        "peterz@infradead.org" <peterz@infradead.org>,
-        "srinivas.pandruvada@linux.intel.com" 
-        <srinivas.pandruvada@linux.intel.com>,
-        "rientjes@google.com" <rientjes@google.com>,
-        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
-        "tobin@ibm.com" <tobin@ibm.com>,
-        "Roth, Michael" <Michael.Roth@amd.com>,
-        "vbabka@suse.cz" <vbabka@suse.cz>,
-        "kirill@shutemov.name" <kirill@shutemov.name>,
-        "ak@linux.intel.com" <ak@linux.intel.com>,
-        "tony.luck@intel.com" <tony.luck@intel.com>,
-        "marcorr@google.com" <marcorr@google.com>,
-        "sathyanarayanan.kuppuswamy@linux.intel.com" 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>,
-        "alpergun@google.com" <alpergun@google.com>,
-        "dgilbert@redhat.com" <dgilbert@redhat.com>,
-        "jarkko@kernel.org" <jarkko@kernel.org>
-Subject: Re: [PATCH Part2 v6 07/49] x86/sev: Invalid pages from direct map
- when adding it to RMP table
-Message-ID: <Y2JUJfKLS/ghCP0R@zn.tnic>
-References: <cover.1655761627.git.ashish.kalra@amd.com>
- <243778c282cd55a554af9c11d2ecd3ff9ea6820f.1655761627.git.ashish.kalra@amd.com>
- <YuFvbm/Zck9Tr5pq@zn.tnic>
- <SN6PR12MB27676E6CEDF242F2D33CA2AB8E9A9@SN6PR12MB2767.namprd12.prod.outlook.com>
- <Yuu3ZK+/hL+saV27@zn.tnic>
- <6e9f3d48-1777-6710-cb1d-3f2f38c0328e@amd.com>
+        Wed, 2 Nov 2022 07:29:32 -0400
+Received: from mga06.intel.com (mga06b.intel.com [134.134.136.31])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F87C29372;
+        Wed,  2 Nov 2022 04:29:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667388570; x=1698924570;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=xHltA9cDNqr066zntg/UF56nyb2JOcr0In8V89pVlbU=;
+  b=C7SDQU7KHg5XN2Tr0qvT+lrylnk/1Ojd3MkbMOV3EueA5VoV9h1iTH2h
+   64rggZwD0fF3tIpXbWaLj9sbM20Y3gan3J1bCkoQiM5IUJOll7soDuvs1
+   hatmFMXb4NfNxUGsjFH+UgGDM0cYl+r1mOaoXN6I2MAWlyhh4C2tLveBZ
+   xF4bF0/QEiXIlY732ShhBuNDGX72W7fSSRsuWcyyTe2ot/mLwuVOFmR5d
+   ap2ns3FVtmLnTm3U6rfr73PPdAusWz4CTkFczRp+XoyPasAuxbTITuGMO
+   MtcQ5HpX+1GQw3GpPr2Up7ar30Hv0abJVjYnD+InHhaniBbt+ZIzIdxml
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="371474382"
+X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
+   d="scan'208";a="371474382"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 04:29:30 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="703235434"
+X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
+   d="scan'208";a="703235434"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by fmsmga004.fm.intel.com with ESMTP; 02 Nov 2022 04:29:27 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@intel.com>)
+        id 1oqBvx-0069TA-1p;
+        Wed, 02 Nov 2022 13:29:25 +0200
+Date:   Wed, 2 Nov 2022 13:29:25 +0200
+From:   Andy Shevchenko <andriy.shevchenko@intel.com>
+To:     Kees Cook <keescook@chromium.org>
+Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+        Pasha Tatashin <pasha.tatashin@soleen.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-mm@kvack.org, linux-hardening@vger.kernel.org
+Subject: Re: [PATCH 21/30] mm: Use kstrtobool() instead of strtobool()
+Message-ID: <Y2JUlb6qzV/MqxnY@smile.fi.intel.com>
+References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
+ <03f9401a6c8b87a1c786a2138d16b048f8d0eb53.1667336095.git.christophe.jaillet@wanadoo.fr>
+ <202211011543.20ACBF9@keescook>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6e9f3d48-1777-6710-cb1d-3f2f38c0328e@amd.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <202211011543.20ACBF9@keescook>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 10:12:35PM -0500, Kalra, Ashish wrote:
-> Following up on this, now, set_memory_present() is a static interface,
-> so will need do add a new external API like set_memory_p() similar
-> to set_memory_np().
+On Tue, Nov 01, 2022 at 03:47:20PM -0700, Kees Cook wrote:
+> On Tue, Nov 01, 2022 at 10:14:09PM +0100, Christophe JAILLET wrote:
 
-It is called set_memory_p() now and you can "un-static" it. :)
+...
 
-> So currently there is no interface defined for changing the attribute of a
-> range to present or restoring the range in the direct map.
+> This seems in keeping with the removal of the simple_*str*() helpers:
+> https://docs.kernel.org/process/deprecated.html#simple-strtol-simple-strtoll-simple-strtoul-simple-strtoull
 
-No?
+That piece of the documentation is partially wrong. Nobody will going to remove
+simple_strtox() due to their convenience when it's related to parse something
+from the stream. Yes, overflow is possible, but here is a trade-off.
 
-static int set_memory_p(unsigned long *addr, int numpages)
-{
-        return change_page_attr_set(addr, numpages, __pgprot(_PAGE_PRESENT), 0);
-}
-
-:-)
+Note, kstrtox() may not work at early boot stages when we need to parse stream
+(with mixed digits and text and symbols) without acquiring space from the heap,
+i.o.w. RO strings.
 
 -- 
-Regards/Gruss,
-    Boris.
+With Best Regards,
+Andy Shevchenko
 
-https://people.kernel.org/tglx/notes-about-netiquette
+
