@@ -2,53 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DC477616396
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:15:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D27C61639C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:17:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231349AbiKBNPb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 09:15:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56706 "EHLO
+        id S231360AbiKBNPe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 09:15:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56718 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231331AbiKBNP2 (ORCPT
+        with ESMTP id S231274AbiKBNPa (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 09:15:28 -0400
+        Wed, 2 Nov 2022 09:15:30 -0400
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D32233B6;
-        Wed,  2 Nov 2022 06:15:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10CD1B1EC;
+        Wed,  2 Nov 2022 06:15:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1667394927; x=1698930927;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=6iK9mY5qqDaeZWS9d2Uy0TPR3A7tuD5t2+NlvJr7Z1A=;
-  b=QkZZGfrtm4ZOAhkOOY4OlevxqJmO6D4hAlSPCe1+u2FqRCqr3Tr9ufbP
-   PHOZWjuYDAAMqhUOradFJRaocO7XzDL9hf8eA0Fws20LjMcxFv54WFmxO
-   LWpfK4nknveJpt7TcpNFAD7E2NlB1ArmtV7CGwqI0mk5q79U7GwrTuV5+
-   Sh4sIA26PSA/KR5v7iWTF4xxjsqpNRceIB3fXns84SRqO3kEJZ/qcbHYB
-   il/ouYGkIGNGrocm5mHU+B7cGoIIzzl9V8tczl+DKg6vbt+Mcj5DQnzBH
-   rP6BV389d5sgetO5uBqlNX56l5pZECN0f10bTwEcdETVGrHysTQLC3q6N
-   w==;
+  t=1667394929; x=1698930929;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=uXuzhvPyv6xg359W3x9w2dPsRgkMqQ3i/Hqi9z1zrn8=;
+  b=wD8LoQq6hdMQoyvQ1uwhncJ7UjHZ99/meSwf63j2VhxEAN2j8a9pFrrr
+   tHg3yg8k6Q+R9Tgxuy/tVT8H7NyDvIs4f5Yk+PoFXs4IQI58zAA0Qy6W2
+   Evp+riAAVcw9wV7b9rOAOE/rwupm3Ze3dwpjbYScwug+D5MVz9PiRNaDn
+   OmBEzn0RwoaYmcRSxKBp0ezxNhWIpf7l3h2G/Py+hTm4jP5qXQQtJ6aQC
+   TUm+g5lElQROIpCwqSUJ12zIcgS6GOcmBAIfIyWGM9ZPU5RBf9fmXHRVa
+   Jg0uTCkE8GfveLTgbYpMyS/NJHL63VslPyW6FraYHl8t6EGE8DNCLnn7J
+   A==;
 X-IronPort-AV: E=Sophos;i="5.95,234,1661842800"; 
-   d="scan'208";a="187289360"
+   d="scan'208";a="187289393"
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Nov 2022 06:15:27 -0700
+  by esa5.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Nov 2022 06:15:29 -0700
 Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 2 Nov 2022 06:15:25 -0700
+ 15.1.2507.12; Wed, 2 Nov 2022 06:15:27 -0700
 Received: from ROB-ULT-M18282.microchip.com (10.10.115.15) by
  chn-vm-ex01.mchp-main.com (10.10.85.143) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 2 Nov 2022 06:15:23 -0700
+ 15.1.2507.12 via Frontend Transport; Wed, 2 Nov 2022 06:15:25 -0700
 From:   Eugen Hristev <eugen.hristev@microchip.com>
 To:     <linux-kernel@vger.kernel.org>, <linux-media@vger.kernel.org>,
         <hverkuil-cisco@xs4all.nl>, <jacopo@jmondi.org>
 CC:     <linux-arm-kernel@lists.infradead.org>,
         <linux-staging@lists.linux.dev>,
         Eugen Hristev <eugen.hristev@microchip.com>
-Subject: [PATCH v11 0/6] media: atmel: atmel-isc: driver redesign
-Date:   Wed, 2 Nov 2022 15:14:54 +0200
-Message-ID: <20221102131500.476024-1-eugen.hristev@microchip.com>
+Subject: [PATCH v11 1/6] media: atmel: atmel-isc: move to staging
+Date:   Wed, 2 Nov 2022 15:14:55 +0200
+Message-ID: <20221102131500.476024-2-eugen.hristev@microchip.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221102131500.476024-1-eugen.hristev@microchip.com>
+References: <20221102131500.476024-1-eugen.hristev@microchip.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -62,138 +64,544 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The Atmel ISC driver is not compliant with media controller specification.
+In order to evolve this driver, it has to move to media controller, to
+support enhanced features and future products which embed it.
+The move to media controller involves several changes which are
+not backwards compatible with the current usability of the driver.
 
-This series is a continuation of the series that converts the atmel-isc driver
-to media controller paradigm:
-https://lore.kernel.org/lkml/20220503095127.48710-1-eugen.hristev@microchip.com/T/#mccad96a3122f2817bf1ae1db7eddf1a8cecb2749
+The best example is the way the format is propagated from the top video
+driver /dev/videoX down to the sensor.
 
-As discussed on ML, the current Atmel ISC driver is moved to staging to keep the
-existing users happy, and readded to platform/microchip under a different
-Kconfig symbol and with the new media controller support which was reviewed in
-v10.
-I kept the original v10 patches on top of the movement of the driver
-to make it more clear what the conversion to media controller brings.
+In a simple configuration sensor ==> isc , the isc just calls subdev s_fmt
+and controls the sensor directly. This is achieved by having a lot of code
+inside the driver that will query the subdev at probe time and make a list
+of formats which are usable.
+Basically the user has nothing to configure, as the isc will handle
+everything at the top level. This is an easy way to capture, but also comes
+with the drawback of lack of flexibility.
+In a more complicated pipeline
+sensor ==> controller 1 ==> controller 2 ==> isc
+this will not be achievable, as controller 1 and controller 2 might be
+media-controller configurable, and will not propagate the formats down to
+the sensor.
 
-Please let me know if this is okay or acceptable to take as it is,
-and if it complies with the requirements for the subsystem/ABI breakage, etc.
+After discussions with the media maintainers, the decision is to move
+Atmel ISC to staging as-is, to keep the Kconfig symbols and the users
+to the driver in staging. Thus, all the existing users of the non
+media-controller paradigm will continue to be happy and use the old config
+way.
 
-Thanks to everyone for reviewing and helping in the discussions !
+The next step is to readd the driver in the media subsystem with a different
+symbol, with the conversion to media controller done, and new users
+of the driver will be able to use all the new features.
 
-PLEASE NOTE: the series depends on the patch:
-vb2: add support for (un)prepare_streaming queue ops
-by Hans Verkuil
+This patch is merely a file move to staging, not affecting any of the users.
 
-I have a different patch as the last in the series that uses the new callbacks
-(and only that patch is dependant on the
-vb2: add support for (un)prepare_streaming queue ops
-)
+The exported symbols had to be renamed to atmel_* to avoid duplication when
+the future Microchip ISC driver will be added to media subsystem.
 
-Eugen
-
-Changes in v11:
-- moved atmel isc to staging
-- created platform/microchip to host the new MICROCHIP_ISC driver
-- it was natural to move the MICROCHIP_CSI2DC here
-- on top, add the patches that move to media controller
-
-Full series history:
-
-Changes in v10:
--> split the series into this first fixes part.
--> moved IO_MC addition from first patch to the second patch on the driver changes
--> edited commit messages
--> DT nodes now disabled by default.
-
-Changes in v9:
--> kernel robot reported isc_link_validate is not static, changed to static.
-
-Changes in v8:
--> scaler: modified crop bounds to have the exact source size
-
-Changes in v7:
--> scaler: modified crop bounds to have maximum isc size
--> format propagation: did small changes as per Jacopo review
-
-
-Changes in v6:
--> worked a bit on scaler, added try crop and other changes as per Jacopo review
--> worked on isc-base enum_fmt , reworked as per Jacopo review
-
-Changes in v5:
--> removed patch that removed the 'stop' variable as it was still required
--> added two new trivial patches
--> reworked some parts of the scaler and format propagation after discussions with Jacopo
-
-
-Changes in v4:
--> as reviewed by Hans, added new patch to remove the 'stop' variable and reworked
-one patch that was using it
--> as reviewed by Jacopo, reworked some parts of the media controller implementation
-
-
-Changes in v3:
-- change in bindings, small fixes in csi2dc driver and conversion to mc
-for the isc-base.
-- removed some MAINTAINERS patches and used patterns in MAINTAINERS
-
-Changes in v2:
-- integrated many changes suggested by Jacopo in the review of the v1 series.
-- add a few new patches
-
-Eugen Hristev (6):
-  media: atmel: atmel-isc: move to staging
-  media: atmel: move microchip_csi2dc to dedicated microchip platform
-  media: microchip: re-add ISC driver as Microchip ISC
-  media: microchip: microchip-isc: prepare for media controller support
-  media: microchip: microchip-isc: implement media controller
-  media: microchip: microchip-isc: move media_pipeline_* to (un)prepare
-    cb
-
- MAINTAINERS                                   |    8 +-
- drivers/media/platform/Kconfig                |    1 +
- drivers/media/platform/Makefile               |    1 +
- drivers/media/platform/atmel/Kconfig          |   51 -
- drivers/media/platform/atmel/Makefile         |    7 -
- drivers/media/platform/microchip/Kconfig      |   61 +
- drivers/media/platform/microchip/Makefile     |    9 +
- .../{atmel => microchip}/microchip-csi2dc.c   |    0
- .../platform/microchip/microchip-isc-base.c   | 2040 +++++++++++++++++
- .../microchip-isc-clk.c}                      |    4 +-
- .../platform/microchip/microchip-isc-regs.h   |  413 ++++
- .../platform/microchip/microchip-isc-scaler.c |  267 +++
- .../media/platform/microchip/microchip-isc.h  |  400 ++++
- .../microchip/microchip-sama5d2-isc.c         |  683 ++++++
- .../microchip/microchip-sama7g5-isc.c         |  646 ++++++
- drivers/staging/media/Kconfig                 |    2 +
- drivers/staging/media/Makefile                |    1 +
- drivers/staging/media/atmel/Kconfig           |   40 +
- drivers/staging/media/atmel/Makefile          |    8 +
- .../media}/atmel/atmel-isc-base.c             |   20 +-
- drivers/staging/media/atmel/atmel-isc-clk.c   |  311 +++
- .../media}/atmel/atmel-isc-regs.h             |    0
- .../media}/atmel/atmel-isc.h                  |   16 +-
- .../media}/atmel/atmel-sama5d2-isc.c          |   18 +-
- .../media}/atmel/atmel-sama7g5-isc.c          |   18 +-
- 25 files changed, 4926 insertions(+), 99 deletions(-)
- create mode 100644 drivers/media/platform/microchip/Kconfig
- create mode 100644 drivers/media/platform/microchip/Makefile
- rename drivers/media/platform/{atmel => microchip}/microchip-csi2dc.c (100%)
- create mode 100644 drivers/media/platform/microchip/microchip-isc-base.c
- rename drivers/media/platform/{atmel/atmel-isc-clk.c => microchip/microchip-isc-clk.c} (99%)
- create mode 100644 drivers/media/platform/microchip/microchip-isc-regs.h
- create mode 100644 drivers/media/platform/microchip/microchip-isc-scaler.c
- create mode 100644 drivers/media/platform/microchip/microchip-isc.h
- create mode 100644 drivers/media/platform/microchip/microchip-sama5d2-isc.c
- create mode 100644 drivers/media/platform/microchip/microchip-sama7g5-isc.c
+Signed-off-by: Eugen Hristev <eugen.hristev@microchip.com>
+---
+ MAINTAINERS                                   |  4 +-
+ drivers/media/platform/atmel/Kconfig          | 36 -----------------
+ drivers/media/platform/atmel/Makefile         |  6 ---
+ drivers/staging/media/Kconfig                 |  2 +
+ drivers/staging/media/Makefile                |  1 +
+ drivers/staging/media/atmel/Kconfig           | 40 +++++++++++++++++++
+ drivers/staging/media/atmel/Makefile          |  8 ++++
+ .../media}/atmel/atmel-isc-base.c             | 20 +++++-----
+ .../media}/atmel/atmel-isc-clk.c              |  8 ++--
+ .../media}/atmel/atmel-isc-regs.h             |  0
+ .../media}/atmel/atmel-isc.h                  | 16 ++++----
+ .../media}/atmel/atmel-sama5d2-isc.c          | 18 ++++-----
+ .../media}/atmel/atmel-sama7g5-isc.c          | 18 ++++-----
+ 13 files changed, 93 insertions(+), 84 deletions(-)
  create mode 100644 drivers/staging/media/atmel/Kconfig
  create mode 100644 drivers/staging/media/atmel/Makefile
  rename drivers/{media/platform => staging/media}/atmel/atmel-isc-base.c (99%)
- create mode 100644 drivers/staging/media/atmel/atmel-isc-clk.c
+ rename drivers/{media/platform => staging/media}/atmel/atmel-isc-clk.c (97%)
  rename drivers/{media/platform => staging/media}/atmel/atmel-isc-regs.h (100%)
  rename drivers/{media/platform => staging/media}/atmel/atmel-isc.h (96%)
  rename drivers/{media/platform => staging/media}/atmel/atmel-sama5d2-isc.c (97%)
  rename drivers/{media/platform => staging/media}/atmel/atmel-sama7g5-isc.c (97%)
 
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 307775bfbf99..8b28d8d4c55e 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -13488,8 +13488,8 @@ L:	linux-media@vger.kernel.org
+ S:	Supported
+ F:	Documentation/devicetree/bindings/media/atmel,isc.yaml
+ F:	Documentation/devicetree/bindings/media/microchip,xisc.yaml
+-F:	drivers/media/platform/atmel/atmel-isc*
+-F:	drivers/media/platform/atmel/atmel-sama*-isc*
++F:	drivers/staging/media/atmel/atmel-isc*
++F:	drivers/staging/media/atmel/atmel-sama*-isc*
+ F:	include/linux/atmel-isc-media.h
+ 
+ MICROCHIP ISI DRIVER
+diff --git a/drivers/media/platform/atmel/Kconfig b/drivers/media/platform/atmel/Kconfig
+index f399dba62e17..f438a98542e8 100644
+--- a/drivers/media/platform/atmel/Kconfig
++++ b/drivers/media/platform/atmel/Kconfig
+@@ -2,42 +2,6 @@
+ 
+ comment "Atmel media platform drivers"
+ 
+-config VIDEO_ATMEL_ISC
+-	tristate "ATMEL Image Sensor Controller (ISC) support"
+-	depends on V4L_PLATFORM_DRIVERS
+-	depends on VIDEO_DEV && COMMON_CLK
+-	depends on ARCH_AT91 || COMPILE_TEST
+-	select MEDIA_CONTROLLER
+-	select VIDEO_V4L2_SUBDEV_API
+-	select VIDEOBUF2_DMA_CONTIG
+-	select REGMAP_MMIO
+-	select V4L2_FWNODE
+-	select VIDEO_ATMEL_ISC_BASE
+-	help
+-	   This module makes the ATMEL Image Sensor Controller available
+-	   as a v4l2 device.
+-
+-config VIDEO_ATMEL_XISC
+-	tristate "ATMEL eXtended Image Sensor Controller (XISC) support"
+-	depends on V4L_PLATFORM_DRIVERS
+-	depends on VIDEO_DEV && COMMON_CLK
+-	depends on ARCH_AT91 || COMPILE_TEST
+-	select VIDEOBUF2_DMA_CONTIG
+-	select REGMAP_MMIO
+-	select V4L2_FWNODE
+-	select VIDEO_ATMEL_ISC_BASE
+-	select MEDIA_CONTROLLER
+-	select VIDEO_V4L2_SUBDEV_API
+-	help
+-	   This module makes the ATMEL eXtended Image Sensor Controller
+-	   available as a v4l2 device.
+-
+-config VIDEO_ATMEL_ISC_BASE
+-	tristate
+-	default n
+-	help
+-	  ATMEL ISC and XISC common code base.
+-
+ config VIDEO_ATMEL_ISI
+ 	tristate "ATMEL Image Sensor Interface (ISI) support"
+ 	depends on V4L_PLATFORM_DRIVERS
+diff --git a/drivers/media/platform/atmel/Makefile b/drivers/media/platform/atmel/Makefile
+index 794e8f739287..86f77030e6e2 100644
+--- a/drivers/media/platform/atmel/Makefile
++++ b/drivers/media/platform/atmel/Makefile
+@@ -1,10 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-atmel-isc-objs = atmel-sama5d2-isc.o
+-atmel-xisc-objs = atmel-sama7g5-isc.o
+-atmel-isc-common-objs = atmel-isc-base.o atmel-isc-clk.o
+ 
+ obj-$(CONFIG_VIDEO_ATMEL_ISI) += atmel-isi.o
+-obj-$(CONFIG_VIDEO_ATMEL_ISC_BASE) += atmel-isc-common.o
+-obj-$(CONFIG_VIDEO_ATMEL_ISC) += atmel-isc.o
+-obj-$(CONFIG_VIDEO_ATMEL_XISC) += atmel-xisc.o
+ obj-$(CONFIG_VIDEO_MICROCHIP_CSI2DC) += microchip-csi2dc.o
+diff --git a/drivers/staging/media/Kconfig b/drivers/staging/media/Kconfig
+index d4f03b203ae5..072fab838374 100644
+--- a/drivers/staging/media/Kconfig
++++ b/drivers/staging/media/Kconfig
+@@ -20,6 +20,8 @@ menuconfig STAGING_MEDIA
+ if STAGING_MEDIA && MEDIA_SUPPORT
+ 
+ # Please keep them in alphabetic order
++source "drivers/staging/media/atmel/Kconfig"
++
+ source "drivers/staging/media/atomisp/Kconfig"
+ 
+ source "drivers/staging/media/imx/Kconfig"
+diff --git a/drivers/staging/media/Makefile b/drivers/staging/media/Makefile
+index a387692b84f2..dbfeb03ea41f 100644
+--- a/drivers/staging/media/Makefile
++++ b/drivers/staging/media/Makefile
+@@ -1,4 +1,5 @@
+ # SPDX-License-Identifier: GPL-2.0
++obj-$(CONFIG_VIDEO_ATMEL_ISC_BASE)	+= atmel/
+ obj-$(CONFIG_INTEL_ATOMISP)     += atomisp/
+ obj-$(CONFIG_VIDEO_CPIA2)	+= deprecated/cpia2/
+ obj-$(CONFIG_VIDEO_IMX_MEDIA)	+= imx/
+diff --git a/drivers/staging/media/atmel/Kconfig b/drivers/staging/media/atmel/Kconfig
+new file mode 100644
+index 000000000000..73cef959f236
+--- /dev/null
++++ b/drivers/staging/media/atmel/Kconfig
+@@ -0,0 +1,40 @@
++# SPDX-License-Identifier: GPL-2.0-only
++
++comment "Atmel media platform drivers"
++
++config VIDEO_ATMEL_ISC
++	tristate "ATMEL Image Sensor Controller (ISC) support"
++	depends on V4L_PLATFORM_DRIVERS
++	depends on VIDEO_DEV && COMMON_CLK
++	depends on ARCH_AT91 || COMPILE_TEST
++	select MEDIA_CONTROLLER
++	select VIDEO_V4L2_SUBDEV_API
++	select VIDEOBUF2_DMA_CONTIG
++	select REGMAP_MMIO
++	select V4L2_FWNODE
++	select VIDEO_ATMEL_ISC_BASE
++	help
++	   This module makes the ATMEL Image Sensor Controller available
++	   as a v4l2 device.
++
++config VIDEO_ATMEL_XISC
++	tristate "ATMEL eXtended Image Sensor Controller (XISC) support"
++	depends on V4L_PLATFORM_DRIVERS
++	depends on VIDEO_DEV && COMMON_CLK
++	depends on ARCH_AT91 || COMPILE_TEST
++	select VIDEOBUF2_DMA_CONTIG
++	select REGMAP_MMIO
++	select V4L2_FWNODE
++	select VIDEO_ATMEL_ISC_BASE
++	select MEDIA_CONTROLLER
++	select VIDEO_V4L2_SUBDEV_API
++	help
++	   This module makes the ATMEL eXtended Image Sensor Controller
++	   available as a v4l2 device.
++
++config VIDEO_ATMEL_ISC_BASE
++	tristate
++	default n
++	help
++	  ATMEL ISC and XISC common code base.
++
+diff --git a/drivers/staging/media/atmel/Makefile b/drivers/staging/media/atmel/Makefile
+new file mode 100644
+index 000000000000..34eaeeac5bba
+--- /dev/null
++++ b/drivers/staging/media/atmel/Makefile
+@@ -0,0 +1,8 @@
++# SPDX-License-Identifier: GPL-2.0-only
++atmel-isc-objs = atmel-sama5d2-isc.o
++atmel-xisc-objs = atmel-sama7g5-isc.o
++atmel-isc-common-objs = atmel-isc-base.o atmel-isc-clk.o
++
++obj-$(CONFIG_VIDEO_ATMEL_ISC_BASE) += atmel-isc-common.o
++obj-$(CONFIG_VIDEO_ATMEL_ISC) += atmel-isc.o
++obj-$(CONFIG_VIDEO_ATMEL_XISC) += atmel-xisc.o
+diff --git a/drivers/media/platform/atmel/atmel-isc-base.c b/drivers/staging/media/atmel/atmel-isc-base.c
+similarity index 99%
+rename from drivers/media/platform/atmel/atmel-isc-base.c
+rename to drivers/staging/media/atmel/atmel-isc-base.c
+index 9e5317a7d516..99e61bbfc9bc 100644
+--- a/drivers/media/platform/atmel/atmel-isc-base.c
++++ b/drivers/staging/media/atmel/atmel-isc-base.c
+@@ -1221,7 +1221,7 @@ static const struct v4l2_file_operations isc_fops = {
+ 	.poll		= vb2_fop_poll,
+ };
+ 
+-irqreturn_t isc_interrupt(int irq, void *dev_id)
++irqreturn_t atmel_isc_interrupt(int irq, void *dev_id)
+ {
+ 	struct isc_device *isc = (struct isc_device *)dev_id;
+ 	struct regmap *regmap = isc->regmap;
+@@ -1267,7 +1267,7 @@ irqreturn_t isc_interrupt(int irq, void *dev_id)
+ 
+ 	return ret;
+ }
+-EXPORT_SYMBOL_GPL(isc_interrupt);
++EXPORT_SYMBOL_GPL(atmel_isc_interrupt);
+ 
+ static void isc_hist_count(struct isc_device *isc, u32 *min, u32 *max)
+ {
+@@ -1934,14 +1934,14 @@ static int isc_async_complete(struct v4l2_async_notifier *notifier)
+ 	return ret;
+ }
+ 
+-const struct v4l2_async_notifier_operations isc_async_ops = {
++const struct v4l2_async_notifier_operations atmel_isc_async_ops = {
+ 	.bound = isc_async_bound,
+ 	.unbind = isc_async_unbind,
+ 	.complete = isc_async_complete,
+ };
+-EXPORT_SYMBOL_GPL(isc_async_ops);
++EXPORT_SYMBOL_GPL(atmel_isc_async_ops);
+ 
+-void isc_subdev_cleanup(struct isc_device *isc)
++void atmel_isc_subdev_cleanup(struct isc_device *isc)
+ {
+ 	struct isc_subdev_entity *subdev_entity;
+ 
+@@ -1952,9 +1952,9 @@ void isc_subdev_cleanup(struct isc_device *isc)
+ 
+ 	INIT_LIST_HEAD(&isc->subdev_entities);
+ }
+-EXPORT_SYMBOL_GPL(isc_subdev_cleanup);
++EXPORT_SYMBOL_GPL(atmel_isc_subdev_cleanup);
+ 
+-int isc_pipeline_init(struct isc_device *isc)
++int atmel_isc_pipeline_init(struct isc_device *isc)
+ {
+ 	struct device *dev = isc->dev;
+ 	struct regmap *regmap = isc->regmap;
+@@ -1993,17 +1993,17 @@ int isc_pipeline_init(struct isc_device *isc)
+ 
+ 	return 0;
+ }
+-EXPORT_SYMBOL_GPL(isc_pipeline_init);
++EXPORT_SYMBOL_GPL(atmel_isc_pipeline_init);
+ 
+ /* regmap configuration */
+ #define ATMEL_ISC_REG_MAX    0xd5c
+-const struct regmap_config isc_regmap_config = {
++const struct regmap_config atmel_isc_regmap_config = {
+ 	.reg_bits       = 32,
+ 	.reg_stride     = 4,
+ 	.val_bits       = 32,
+ 	.max_register	= ATMEL_ISC_REG_MAX,
+ };
+-EXPORT_SYMBOL_GPL(isc_regmap_config);
++EXPORT_SYMBOL_GPL(atmel_isc_regmap_config);
+ 
+ MODULE_AUTHOR("Songjun Wu");
+ MODULE_AUTHOR("Eugen Hristev");
+diff --git a/drivers/media/platform/atmel/atmel-isc-clk.c b/drivers/staging/media/atmel/atmel-isc-clk.c
+similarity index 97%
+rename from drivers/media/platform/atmel/atmel-isc-clk.c
+rename to drivers/staging/media/atmel/atmel-isc-clk.c
+index 2059fe376b00..d442b5f4c931 100644
+--- a/drivers/media/platform/atmel/atmel-isc-clk.c
++++ b/drivers/staging/media/atmel/atmel-isc-clk.c
+@@ -277,7 +277,7 @@ static int isc_clk_register(struct isc_device *isc, unsigned int id)
+ 	return 0;
+ }
+ 
+-int isc_clk_init(struct isc_device *isc)
++int atmel_isc_clk_init(struct isc_device *isc)
+ {
+ 	unsigned int i;
+ 	int ret;
+@@ -293,9 +293,9 @@ int isc_clk_init(struct isc_device *isc)
+ 
+ 	return 0;
+ }
+-EXPORT_SYMBOL_GPL(isc_clk_init);
++EXPORT_SYMBOL_GPL(atmel_isc_clk_init);
+ 
+-void isc_clk_cleanup(struct isc_device *isc)
++void atmel_isc_clk_cleanup(struct isc_device *isc)
+ {
+ 	unsigned int i;
+ 
+@@ -308,4 +308,4 @@ void isc_clk_cleanup(struct isc_device *isc)
+ 			clk_unregister(isc_clk->clk);
+ 	}
+ }
+-EXPORT_SYMBOL_GPL(isc_clk_cleanup);
++EXPORT_SYMBOL_GPL(atmel_isc_clk_cleanup);
+diff --git a/drivers/media/platform/atmel/atmel-isc-regs.h b/drivers/staging/media/atmel/atmel-isc-regs.h
+similarity index 100%
+rename from drivers/media/platform/atmel/atmel-isc-regs.h
+rename to drivers/staging/media/atmel/atmel-isc-regs.h
+diff --git a/drivers/media/platform/atmel/atmel-isc.h b/drivers/staging/media/atmel/atmel-isc.h
+similarity index 96%
+rename from drivers/media/platform/atmel/atmel-isc.h
+rename to drivers/staging/media/atmel/atmel-isc.h
+index ff60ba020cb9..dfc030b5a08f 100644
+--- a/drivers/media/platform/atmel/atmel-isc.h
++++ b/drivers/staging/media/atmel/atmel-isc.h
+@@ -350,13 +350,13 @@ struct isc_device {
+ 	u32				formats_list_size;
+ };
+ 
+-extern const struct regmap_config isc_regmap_config;
+-extern const struct v4l2_async_notifier_operations isc_async_ops;
+-
+-irqreturn_t isc_interrupt(int irq, void *dev_id);
+-int isc_pipeline_init(struct isc_device *isc);
+-int isc_clk_init(struct isc_device *isc);
+-void isc_subdev_cleanup(struct isc_device *isc);
+-void isc_clk_cleanup(struct isc_device *isc);
++extern const struct regmap_config atmel_isc_regmap_config;
++extern const struct v4l2_async_notifier_operations atmel_isc_async_ops;
++
++irqreturn_t atmel_isc_interrupt(int irq, void *dev_id);
++int atmel_isc_pipeline_init(struct isc_device *isc);
++int atmel_isc_clk_init(struct isc_device *isc);
++void atmel_isc_subdev_cleanup(struct isc_device *isc);
++void atmel_isc_clk_cleanup(struct isc_device *isc);
+ 
+ #endif
+diff --git a/drivers/media/platform/atmel/atmel-sama5d2-isc.c b/drivers/staging/media/atmel/atmel-sama5d2-isc.c
+similarity index 97%
+rename from drivers/media/platform/atmel/atmel-sama5d2-isc.c
+rename to drivers/staging/media/atmel/atmel-sama5d2-isc.c
+index 9881d89a645b..ba0614f981a2 100644
+--- a/drivers/media/platform/atmel/atmel-sama5d2-isc.c
++++ b/drivers/staging/media/atmel/atmel-sama5d2-isc.c
+@@ -408,7 +408,7 @@ static int atmel_isc_probe(struct platform_device *pdev)
+ 	if (IS_ERR(io_base))
+ 		return PTR_ERR(io_base);
+ 
+-	isc->regmap = devm_regmap_init_mmio(dev, io_base, &isc_regmap_config);
++	isc->regmap = devm_regmap_init_mmio(dev, io_base, &atmel_isc_regmap_config);
+ 	if (IS_ERR(isc->regmap)) {
+ 		ret = PTR_ERR(isc->regmap);
+ 		dev_err(dev, "failed to init register map: %d\n", ret);
+@@ -419,7 +419,7 @@ static int atmel_isc_probe(struct platform_device *pdev)
+ 	if (irq < 0)
+ 		return irq;
+ 
+-	ret = devm_request_irq(dev, irq, isc_interrupt, 0,
++	ret = devm_request_irq(dev, irq, atmel_isc_interrupt, 0,
+ 			       "atmel-sama5d2-isc", isc);
+ 	if (ret < 0) {
+ 		dev_err(dev, "can't register ISR for IRQ %u (ret=%i)\n",
+@@ -464,7 +464,7 @@ static int atmel_isc_probe(struct platform_device *pdev)
+ 	/* sama5d2-isc : ISPCK is required and mandatory */
+ 	isc->ispck_required = true;
+ 
+-	ret = isc_pipeline_init(isc);
++	ret = atmel_isc_pipeline_init(isc);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -481,7 +481,7 @@ static int atmel_isc_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
+-	ret = isc_clk_init(isc);
++	ret = atmel_isc_clk_init(isc);
+ 	if (ret) {
+ 		dev_err(dev, "failed to init isc clock: %d\n", ret);
+ 		goto unprepare_hclk;
+@@ -523,7 +523,7 @@ static int atmel_isc_probe(struct platform_device *pdev)
+ 			goto cleanup_subdev;
+ 		}
+ 
+-		subdev_entity->notifier.ops = &isc_async_ops;
++		subdev_entity->notifier.ops = &atmel_isc_async_ops;
+ 
+ 		ret = v4l2_async_nf_register(&isc->v4l2_dev,
+ 					     &subdev_entity->notifier);
+@@ -567,7 +567,7 @@ static int atmel_isc_probe(struct platform_device *pdev)
+ 	pm_runtime_disable(dev);
+ 
+ cleanup_subdev:
+-	isc_subdev_cleanup(isc);
++	atmel_isc_subdev_cleanup(isc);
+ 
+ unregister_v4l2_device:
+ 	v4l2_device_unregister(&isc->v4l2_dev);
+@@ -575,7 +575,7 @@ static int atmel_isc_probe(struct platform_device *pdev)
+ unprepare_hclk:
+ 	clk_disable_unprepare(isc->hclock);
+ 
+-	isc_clk_cleanup(isc);
++	atmel_isc_clk_cleanup(isc);
+ 
+ 	return ret;
+ }
+@@ -586,14 +586,14 @@ static int atmel_isc_remove(struct platform_device *pdev)
+ 
+ 	pm_runtime_disable(&pdev->dev);
+ 
+-	isc_subdev_cleanup(isc);
++	atmel_isc_subdev_cleanup(isc);
+ 
+ 	v4l2_device_unregister(&isc->v4l2_dev);
+ 
+ 	clk_disable_unprepare(isc->ispck);
+ 	clk_disable_unprepare(isc->hclock);
+ 
+-	isc_clk_cleanup(isc);
++	atmel_isc_clk_cleanup(isc);
+ 
+ 	return 0;
+ }
+diff --git a/drivers/media/platform/atmel/atmel-sama7g5-isc.c b/drivers/staging/media/atmel/atmel-sama7g5-isc.c
+similarity index 97%
+rename from drivers/media/platform/atmel/atmel-sama7g5-isc.c
+rename to drivers/staging/media/atmel/atmel-sama7g5-isc.c
+index 8b11aa8340d7..01ababdfcbd9 100644
+--- a/drivers/media/platform/atmel/atmel-sama7g5-isc.c
++++ b/drivers/staging/media/atmel/atmel-sama7g5-isc.c
+@@ -397,7 +397,7 @@ static int microchip_xisc_probe(struct platform_device *pdev)
+ 	if (IS_ERR(io_base))
+ 		return PTR_ERR(io_base);
+ 
+-	isc->regmap = devm_regmap_init_mmio(dev, io_base, &isc_regmap_config);
++	isc->regmap = devm_regmap_init_mmio(dev, io_base, &atmel_isc_regmap_config);
+ 	if (IS_ERR(isc->regmap)) {
+ 		ret = PTR_ERR(isc->regmap);
+ 		dev_err(dev, "failed to init register map: %d\n", ret);
+@@ -408,7 +408,7 @@ static int microchip_xisc_probe(struct platform_device *pdev)
+ 	if (irq < 0)
+ 		return irq;
+ 
+-	ret = devm_request_irq(dev, irq, isc_interrupt, 0,
++	ret = devm_request_irq(dev, irq, atmel_isc_interrupt, 0,
+ 			       "microchip-sama7g5-xisc", isc);
+ 	if (ret < 0) {
+ 		dev_err(dev, "can't register ISR for IRQ %u (ret=%i)\n",
+@@ -453,7 +453,7 @@ static int microchip_xisc_probe(struct platform_device *pdev)
+ 	/* sama7g5-isc : ISPCK does not exist, ISC is clocked by MCK */
+ 	isc->ispck_required = false;
+ 
+-	ret = isc_pipeline_init(isc);
++	ret = atmel_isc_pipeline_init(isc);
+ 	if (ret)
+ 		return ret;
+ 
+@@ -470,7 +470,7 @@ static int microchip_xisc_probe(struct platform_device *pdev)
+ 		return ret;
+ 	}
+ 
+-	ret = isc_clk_init(isc);
++	ret = atmel_isc_clk_init(isc);
+ 	if (ret) {
+ 		dev_err(dev, "failed to init isc clock: %d\n", ret);
+ 		goto unprepare_hclk;
+@@ -513,7 +513,7 @@ static int microchip_xisc_probe(struct platform_device *pdev)
+ 			goto cleanup_subdev;
+ 		}
+ 
+-		subdev_entity->notifier.ops = &isc_async_ops;
++		subdev_entity->notifier.ops = &atmel_isc_async_ops;
+ 
+ 		ret = v4l2_async_nf_register(&isc->v4l2_dev,
+ 					     &subdev_entity->notifier);
+@@ -536,7 +536,7 @@ static int microchip_xisc_probe(struct platform_device *pdev)
+ 	return 0;
+ 
+ cleanup_subdev:
+-	isc_subdev_cleanup(isc);
++	atmel_isc_subdev_cleanup(isc);
+ 
+ unregister_v4l2_device:
+ 	v4l2_device_unregister(&isc->v4l2_dev);
+@@ -544,7 +544,7 @@ static int microchip_xisc_probe(struct platform_device *pdev)
+ unprepare_hclk:
+ 	clk_disable_unprepare(isc->hclock);
+ 
+-	isc_clk_cleanup(isc);
++	atmel_isc_clk_cleanup(isc);
+ 
+ 	return ret;
+ }
+@@ -555,13 +555,13 @@ static int microchip_xisc_remove(struct platform_device *pdev)
+ 
+ 	pm_runtime_disable(&pdev->dev);
+ 
+-	isc_subdev_cleanup(isc);
++	atmel_isc_subdev_cleanup(isc);
+ 
+ 	v4l2_device_unregister(&isc->v4l2_dev);
+ 
+ 	clk_disable_unprepare(isc->hclock);
+ 
+-	isc_clk_cleanup(isc);
++	atmel_isc_clk_cleanup(isc);
+ 
+ 	return 0;
+ }
 -- 
 2.25.1
 
