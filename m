@@ -2,76 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07103616C17
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:26:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B0332616C16
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:26:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbiKBS0S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 14:26:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51262 "EHLO
+        id S230302AbiKBS0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 14:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51254 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231205AbiKBS0K (ORCPT
+        with ESMTP id S231196AbiKBS0I (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:26:10 -0400
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFE521820
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:26:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1667413556; bh=3rsRCttLKAT5Ls6ZOU7vfsBpZ4yDty9OCgC/PPt1JXE=;
-        h=X-EA-Auth:Date:From:To:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=VHo226tcGq6UkmmWik3FzNW7FW9WJbOzLQlCk+VAlngP8Tp64JJ/2aRF5H2+92d0c
-         3NfJCVoiHE1iinESUU0q9/f3HcypAD0ZcinH7TFqLvgbiC3XK+VNySHBO8uCPCWXzv
-         gReUxirIfkWPIkSNGWmXHEAhksERW8UqilzYzVGk=
-Received: by b-6.in.mailobj.net [192.168.90.16] with ESMTP
-        via [213.182.55.206]
-        Wed,  2 Nov 2022 19:25:56 +0100 (CET)
-X-EA-Auth: 7Y3vbvCxeKCXYF2dtoftR5y3E0Kq3g1f7d/kmFDKtPxssrWWzjpYDtCX9eq9wTBkViFvAUaJC4feBDOKJPlqNt2PoPHZRaRK
-Date:   Wed, 2 Nov 2022 23:55:52 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     outreachy@lists.linux.dev, Sven Van Asbroeck <TheSven73@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH] staging: fieldbus: convert snprintf to scnprintf
-Message-ID: <Y2K2MD7+WBu4QouU@qemulion>
+        Wed, 2 Nov 2022 14:26:08 -0400
+Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F6921834
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:26:06 -0700 (PDT)
+Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-3701a0681daso139663217b3.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 11:26:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ULxNV0Y7ObC/UK3IdOnSD/Vynj/215SLWO43fDO8Lz8=;
+        b=TAWW3m8UL5LDFG8C5gf7E3dMuHygxgu6yswn9PmrqsByIQCZ0c30noNS+qq6tWhn1B
+         Z0g3s4wyuwoWgQ/SfCSK9KWahrIm58SDkKbPOjM/KJzKSnxwk9yw2fyfT6hB264wI1TH
+         /aneHQVowmTlQPO4/kfq+HbuB73l8yxkcEZEbKb9sa42tv7EkRZlwc+UjqwbvEhoAlXl
+         a9+m0pkRgC5CHjT7iljQ8DGTMySEZmn1frCJLkAO+NsjrZZeAaWx2z/WAWW8rDDsWnF5
+         n0YBGD834JmcA2b2ZTNW9x84QF3HrHM2VcVbWy/mD5xjXK+iHjk5wSHgiBG9PE1SnC90
+         UDvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=ULxNV0Y7ObC/UK3IdOnSD/Vynj/215SLWO43fDO8Lz8=;
+        b=QYiDnIsIvCDgidNcEpjGD9Uvla+sUEUkn28YfoT0COaUEbmhdvrRbQG+cRjVy9tr2U
+         mT8t9ITcDeN/zY87GTNpybZpHI38DWAUYfMFm1UGtIQXAi6DX+QpwT+Qp4C/Cy6WqVoN
+         bSxstW/MBqx9GXm68uo99i9KBMfwPAypEYZfDnS7qXenYUBocE7k4jp3FqvZ9r1+v8U6
+         BRKJWmYVoSV3nRCT0LU8zrpRVIFA0DhKJA1/00cPnoTS0tHv5lRacmplMeZYqLppoPu7
+         XVQPrb4bAuF4T3hPoukw+4NneGNUTbHoIqq1LEfJorHuOMt1rWhSLGEIbnL72o563Srq
+         3eaQ==
+X-Gm-Message-State: ACrzQf1kw0xrDpWRUYIS63A+b+MJ8152UunwhLiw7Q4bW1c/mqhuZV7B
+        s/L4/ltCS6gsayRelFXcXPGRzf9eocZJpZwj1rIbKWbb8JVg1A==
+X-Google-Smtp-Source: AMsMyM5/s1ZlPxsmc3KM9M9KFHK/LBqCyXGfiUT6gJBpOWlkIyFLGxflMfDIytZ89otdK5GJcFlOsxP73GBwQZ2Sh6U=
+X-Received: by 2002:a81:c11:0:b0:36a:bcf0:6340 with SMTP id
+ 17-20020a810c11000000b0036abcf06340mr24170753ywm.467.1667413565888; Wed, 02
+ Nov 2022 11:26:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <20221024051744.GA48642@debian> <20221101085153.12ccae1c@kernel.org>
+ <CAJLv34RKj6u_7EZwYWiNujC-R4nxKHJ24DVYqydgHPy88NqMPA@mail.gmail.com> <CANn89iJeg+wQUdi7i=EbSS7Z__j+LEakPab3oKD7_Rr4hmV_xg@mail.gmail.com>
+In-Reply-To: <CANn89iJeg+wQUdi7i=EbSS7Z__j+LEakPab3oKD7_Rr4hmV_xg@mail.gmail.com>
+From:   Eric Dumazet <edumazet@google.com>
+Date:   Wed, 2 Nov 2022 11:25:54 -0700
+Message-ID: <CANn89iKKFABZxAv5PkNmCVZTyHxqghC9zoRSvbfDo+04qrHH9w@mail.gmail.com>
+Subject: Re: [PATCH net-next] gro: avoid checking for a failed search
+To:     Richard Gobert <richardbgobert@gmail.com>
+Cc:     Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
+        pabeni@redhat.com, lixiaoyan@google.com, alexanderduyck@fb.com,
+        steffen.klassert@secunet.com, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-It is recommended to use scnprintf instead of snprintf to accurately
-return the size of the encoded data. Following article [1] has details
-on the reason for this kernel level migration. This issue was identified
-using coccicheck.
+On Wed, Nov 2, 2022 at 11:20 AM Eric Dumazet <edumazet@google.com> wrote:
+>
+> On Wed, Nov 2, 2022 at 9:46 AM Richard Gobert <richardbgobert@gmail.com> wrote:
+> >
+> > > Why does it matter? You see a measurable perf win?
+> >
+> > In the common case, we will exit the loop with a break,
+> > so this patch eliminates an unnecessary check.
+> >
+> > On some architectures this optimization might be done
+> > automatically by the compiler, but I think it will be better
+> > to make it explicit here. Although on x86 this optimization
+> > happens automatically, I noticed that on my build target
+> > (ARM/GCC) this does change the binary.
+>
+> What about taking this as an opportunity to reduce the indentation
+> level by one tab ?
+>
+> Untested patch:
+>
+> diff --git a/net/core/gro.c b/net/core/gro.c
+> index bc9451743307bc380cca96ae6995aa0a3b83d185..ddfe92c9a5e869d241931b72d6b3426a0e858468
+> 100644
+> --- a/net/core/gro.c
+> +++ b/net/core/gro.c
+> @@ -491,43 +491,44 @@ static enum gro_result dev_gro_receive(struct
+> napi_struct *napi, struct sk_buff
+>         list_for_each_entry_rcu(ptype, head, list) {
+>                 if (ptype->type != type || !ptype->callbacks.gro_receive)
+>                         continue;
+> +               goto found_ptype;
+> +       }
+> +       rcu_read_unlock();
+> +       goto normal;
 
-[1] https://lwn.net/Articles/69419/
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
- drivers/staging/fieldbus/dev_core.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Or even better:
 
-diff --git a/drivers/staging/fieldbus/dev_core.c b/drivers/staging/fieldbus/dev_core.c
-index 5aab734606ea..d51f2b02d5e6 100644
---- a/drivers/staging/fieldbus/dev_core.c
-+++ b/drivers/staging/fieldbus/dev_core.c
-@@ -70,7 +70,7 @@ static ssize_t card_name_show(struct device *dev, struct device_attribute *attr,
- 	 * card_name was provided by child driver, could potentially be long.
- 	 * protect against buffer overrun.
- 	 */
--	return snprintf(buf, PAGE_SIZE, "%s\n", fb->card_name);
-+	return scnprintf(buf, PAGE_SIZE, "%s\n", fb->card_name);
- }
- static DEVICE_ATTR_RO(card_name);
-
---
-2.34.1
-
-
-
+        list_for_each_entry_rcu(ptype, head, list) {
+               if (ptype->type == type && ptype->callbacks.gro_receive)
+                       goto found_ptype;
+       }
+       rcu_read_unlock();
+       goto normal;
