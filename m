@@ -2,116 +2,182 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA11E616BC0
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:09:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6E1A6616BAD
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:08:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231497AbiKBSJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 14:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37328 "EHLO
+        id S230514AbiKBSIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 14:08:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231271AbiKBSI3 (ORCPT
+        with ESMTP id S229971AbiKBSIL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:08:29 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0898D10A5;
-        Wed,  2 Nov 2022 11:08:28 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id b2so47505317eja.6;
-        Wed, 02 Nov 2022 11:08:27 -0700 (PDT)
+        Wed, 2 Nov 2022 14:08:11 -0400
+Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599FE2EF69
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:08:10 -0700 (PDT)
+Received: by mail-lf1-x132.google.com with SMTP id b3so4390484lfv.2
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 11:08:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=VdOwqqxxYEZRd9acvNPnTYoR6lmdOOAyvQmf0ex2vO8=;
-        b=HCjeFIP8UyzZhiT1DfZSmx9y0DaO9+xtJgKkH2ojsI4ewcVjk9DRYxTLcrOZeDekjq
-         A43BnfqCo1CclbOe4QwMVAKshpXEaatIwlFqjhgabD4haNE/C0CBWd8g0A7DpXG6P/cF
-         UZT1mEUmWiz6OmECxCcTOXMCEkjUENtYt5l4bEUMDjwImhhUDz98GLoTmJfDw68/v1Qb
-         vqSXiP8YzopVl/1a21kUMvX19dpsoexISLnBjyvAVAmxn7KAARKrsbDHP77G+ax14U4W
-         3qbeIvDWgaa7o2UWu6OIMk4H4i2iG1bdZw0m2Vmc7HK0RPrVYDktYw9UTo72OGVM17Zn
-         tIpw==
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=m6s+mDwTFEybSnfsv9FLfpZxULcbiJ7Ktz0jYPN4zbg=;
+        b=oZ190qKXbUdI3pa/TkZ7GnFQDtDHYWG8bjZi1njg37scSepa9KpKnNxCF5ZM/IM+KQ
+         Np/CHo9hpZWYYqOyMwWGXHorI5H2uxm7feX7c3TtuTfuYs5myB2q7dizQUWdWBfEbsKE
+         fwoSJGuEqhARSqpzkQV8FkHnpWPtOw232JAeI=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=VdOwqqxxYEZRd9acvNPnTYoR6lmdOOAyvQmf0ex2vO8=;
-        b=LlEhxmcPjAdNyGNWNk2SUYs+lrLCqBvXxSiQdaptNY7JKw1NevQQ74+DvqXUSDDm/D
-         ccnTzVgzQkiIS1J0E/kihXy78KIW50+3mHBpaZU7FKYorSgLF+73VfY/gj3bPdOG7MmD
-         xnt7kCmFHjTo9Qn00rgOzSHw3jX6jbA1muNQZAGbQVK+I4eDGH9x85X6kRWrajywvmYq
-         P2SSl6tABLagE07s5/ogFhHNUS/gUV4r14TmILK6mKzlLuKjMXeoft0hqDhXP7dgUMAf
-         pZAqVbta+b+pVoh1ExflcWS0AokoOTk4Cbps69shMVjdNi5cdHkopkVnrcdPK833OKyd
-         niOg==
-X-Gm-Message-State: ACrzQf20ql7ZlF+99yExmXEBMNKqlzzAvv7wxHL+ZNkSe9N2OMIc4HGb
-        SzFWxAVVriua+U/gZGS2DK6Ql4u39kE=
-X-Google-Smtp-Source: AMsMyM5ESq06l/CLF/S76CA9K2WIH6qaugl08P/TEhcqmBK3ysB98KByBVKRNooXPHlpgNsVAjagNw==
-X-Received: by 2002:a17:906:5dae:b0:78e:302f:4218 with SMTP id n14-20020a1709065dae00b0078e302f4218mr26430520ejv.22.1667412506572;
-        Wed, 02 Nov 2022 11:08:26 -0700 (PDT)
-Received: from kista.localdomain (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id gy8-20020a170906f24800b007317f017e64sm5677460ejb.134.2022.11.02.11.08.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 11:08:26 -0700 (PDT)
-From:   Jernej Skrabec <jernej.skrabec@gmail.com>
-To:     mripard@kernel.org, paul.kocialkowski@bootlin.com
-Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
-        samuel@sholland.org, hverkuil-cisco@xs4all.nl,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: [PATCH v2 08/11] media: cedrus: prefer untiled capture format
-Date:   Wed,  2 Nov 2022 19:08:07 +0100
-Message-Id: <20221102180810.267252-9-jernej.skrabec@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221102180810.267252-1-jernej.skrabec@gmail.com>
-References: <20221102180810.267252-1-jernej.skrabec@gmail.com>
+        h=cc:to:subject:message-id:date:user-agent:from:references
+         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m6s+mDwTFEybSnfsv9FLfpZxULcbiJ7Ktz0jYPN4zbg=;
+        b=tgJFB8CGGAGFTRMEtft1NBau80UQ4LbJI8HCw2eZqvHQmC5CwMlYfu2VbFxMnogF/O
+         KlwAfYtVXlAAMxth5Xgj5MfO3Eq0p8JM2L6ug1W2J0bd5HErHWZdZiBLlvupRbHkOOVb
+         lsJz+Br9nVxt7ysU6DqYQ+c2OLqmemPwGUm9d6NFeCLDMsyMhRGO3hAYTh5iiX0XOZiT
+         21zq7O+dIpTJ7egGJrzO0RpHgmU2vvavCaTl9q+FfDQP+dPtS+b+r2kB4GvFyy6hieqU
+         AxD5yyPMu8sgnIlefiSVA2499iOwSOpVCY3x3B892wP4TnTZzJNeLd9O8rw6kBK7/G8e
+         99rg==
+X-Gm-Message-State: ACrzQf1fcwNdhVWG6n4CGVbx1BVA6N/E7/z64pE5nOUJY4u87iqYgaD2
+        yFB7E2FBnLFWtpcxFISoIUs1rUEXp9YUqytQ5aQCJg==
+X-Google-Smtp-Source: AMsMyM74PhTMtaDdojPE3Gl+8/j0gbeo2ZUKzdZSx7kiyQHT7FwZ/NQ9JAOxrEN2lb9nIwl2MLZuQl03p4TzbuBym/Y=
+X-Received: by 2002:a05:6512:3dac:b0:4a4:8044:9c3 with SMTP id
+ k44-20020a0565123dac00b004a4804409c3mr9462216lfv.145.1667412488653; Wed, 02
+ Nov 2022 11:08:08 -0700 (PDT)
+Received: from 753933720722 named unknown by gmailapi.google.com with
+ HTTPREST; Wed, 2 Nov 2022 11:08:08 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221102042933.mdlfknp45ajyrrpn@builder.lan>
+References: <20221101233421.997149-1-swboyd@chromium.org> <20221102024927.n5mjyzyqyapveapa@builder.lan>
+ <CAE-0n50uVf-xapfX5A_c7XU7gV58HrKBOf5DCUPCcahPrgkU0Q@mail.gmail.com> <20221102042933.mdlfknp45ajyrrpn@builder.lan>
+From:   Stephen Boyd <swboyd@chromium.org>
+User-Agent: alot/0.10
+Date:   Wed, 2 Nov 2022 11:08:08 -0700
+Message-ID: <CAE-0n52389Pmp1dxHbtGijK_x+0xGyJ4q4rFRpa6L2KkZHKX5Q@mail.gmail.com>
+Subject: Re: [PATCH] clk: qcom: gdsc: Remove direct runtime PM calls
+To:     Bjorn Andersson <andersson@kernel.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, patches@lists.linux.dev,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Satya Priya <quic_c_skakit@quicinc.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-While all generations of display engine on Allwinner SoCs support
-untiled format, only first generation supports tiled format.  Let's
-move untiled format up, so it can be picked before tiled one. If
-Cedrus variant doesn't support untiled format, tiled will still be
-picked as default format.
+Quoting Bjorn Andersson (2022-11-01 21:29:33)
+> On Tue, Nov 01, 2022 at 08:29:20PM -0700, Stephen Boyd wrote:
+> > Quoting Bjorn Andersson (2022-11-01 19:49:27)
+> > >
+> > > It's correct that adding the GDSCs as subdomains for the device's
+> > > parent-domain will ensure that enabling a GDSC will propagate up and
+> > > turn on the (typically) rpmhpd resource.
+> > >
+> > > But the purpose for the explicit calls was to ensure that the clock
+> > > controller itself is accessible. It's been a while since I looked at
+> > > this, but iirc letting MMCX to turn off would cause the register access
+> > > during dispcc probing to fail - similar to how
+> > > clk_pm_runtime_get()/put() ensures the clock registers are accessible.
+> >
+> > The dispcc and videocc on sm8250 don't use pm_clk APIs. They do use
+> > pm_runtime APIs during probe (i.e. pm_runtime_resume_and_get()). That
+> > will enable the MMCX domain and keep it on.
+>
+> There's a corresponding pm_runtime_put() at the end of
+> disp_cc_sm8250_probe(), so this vote should be released.
 
-Acked-by: Paul Kocialkowski <paul.kocialkowski@bootlin.com>
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
----
- drivers/staging/media/sunxi/cedrus/cedrus_video.c | 8 ++++----
- 1 file changed, 4 insertions(+), 4 deletions(-)
+Correct.
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_video.c b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-index f6305ffe2c4f..dec5d3ae4871 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_video.c
-@@ -55,15 +55,15 @@ static struct cedrus_format cedrus_formats[] = {
- 		.directions	= CEDRUS_DECODE_SRC,
- 		.capabilities	= CEDRUS_CAPABILITY_VP8_DEC,
- 	},
--	{
--		.pixelformat	= V4L2_PIX_FMT_NV12_32L32,
--		.directions	= CEDRUS_DECODE_DST,
--	},
- 	{
- 		.pixelformat	= V4L2_PIX_FMT_NV12,
- 		.directions	= CEDRUS_DECODE_DST,
- 		.capabilities	= CEDRUS_CAPABILITY_UNTILED,
- 	},
-+	{
-+		.pixelformat	= V4L2_PIX_FMT_NV12_32L32,
-+		.directions	= CEDRUS_DECODE_DST,
-+	},
- };
- 
- #define CEDRUS_FORMATS_COUNT	ARRAY_SIZE(cedrus_formats)
--- 
-2.38.1
+>
+> While registering clocks, the framework will clk_pm_runtime_get()/put()
+> while accessing registers. The argument that was given when introducing
+> the calls in the probe was the same, covering the direct regmap
+> accesses...
+>
+> And I guess it avoids flipping the genpd on/off for each resource being
+> accessed.
 
+I don't think the genpd framework accesses anything when a genpd is
+registered. The clock controller is pm_runtime_resume_and_get() during
+the time the gdscs are registered with genpd, so there isn't any more
+need to get the runtime PM state of the clock controller during this
+time. The PM runtime put comes after qcom_cc_probe(). We should be good.
+
+>
+> > Then when the GDSCs are
+> > registered it will create genpds for each GDSC and make them subdomains
+> > of the 'dev->pm_domain' genpd for MMCX. If the GDSCs are enabled at
+> > probe time they will increment the count on MMCX to put the count into
+> > sync between MMCX and the GDSC provided.
+> >
+>
+> This does not fit my argument; if the purpose is for pm_runtime to
+> provide access to the registers (and the subdomain ensuring that the
+> GDSC is powered), we should have a pm_runtime_put() after each operation
+> (analog to clk_pm_runtime_put()).
+
+I believe registration/probe of the GDSCs is covered, the device is
+runtime resumed there. After that I'm not 100% positive, but with the
+GDSC as a subdomain of the clock controller's domain it will at least
+turn on MMCX before trying to enable the GDSC.
+
+>
+> > The clk framework also has runtime PM calls throughout the code to make
+> > sure the device is runtime resumed when it is accessed. Maybe the
+> > problem is if probe defers and enough runtime puts are called to runtime
+> > suspend the device thus disabling MMCX?
+>
+> Iirc the problem at hand was really that without any other votes for
+> MMCX, the register accesses during probe, gdsc and reset registration
+> would access registers without power.
+
+Makes sense. The runtime PM get call for the clock controller in the
+probe will keep MMCX enabled.
+
+>
+> > Can MMCX really ever be disabled
+> > or does disabling it act as a one way disable where you can never enable
+> > it again?
+> >
+>
+> I've not seen any indications of that.
+>
+> Only the side effect that if you set_performance_state() MMCX lower than
+> required during continuous splash the whole SoC get hosed.
+
+I see. That sounds different.
+
+>
+> > Or maybe this is the problem where not all constraints are determined
+> > yet but we're letting runtime PM put calls from the dispcc device shut
+> > down the entire multimedia subsystem while other devices that are within
+> > the same domain haven't probed and been able to sync their state but
+> > they're actively accessing the bus (i.e. continuous splash screen). I
+> > could see this problem being avoided by the pm_runtime_get() call in
+> > gdsc registration keeping MMCX on forever because there isn't a matching
+> > put anywhere.
+> >
+>
+> This implementation predates 41fff779d794 ("clk: qcom: gdsc: Bump parent
+> usage count when GDSC is found enabled"), so no this was not introduced
+> to hide the issue of
+> yet-to-be-probed-devices-not-voting-for-their-resources.
+>
+> This problem has been avoided by tying rpmhpd to sync_state and
+> requiring that people boot their systems with pd_ignore_unused.
+
+Heh ok.
