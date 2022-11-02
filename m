@@ -2,132 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F047A616BDC
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:19:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5372A616BE4
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:20:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231354AbiKBSTm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 14:19:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45136 "EHLO
+        id S229996AbiKBSUT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 14:20:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231289AbiKBSTj (ORCPT
+        with ESMTP id S231431AbiKBSUN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:19:39 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB372F016;
-        Wed,  2 Nov 2022 11:19:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 2 Nov 2022 14:20:13 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB9B2F388;
+        Wed,  2 Nov 2022 11:20:09 -0700 (PDT)
+Received: from notapiano.myfiosgateway.com (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 28106B82429;
-        Wed,  2 Nov 2022 18:19:37 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA534C43145;
-        Wed,  2 Nov 2022 18:19:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667413175;
-        bh=ByC8WrBr65R1FHnYm1bG2iBmanhGcnHFrTlrNhwgv9I=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=bvxGXj7UcpjIlwlOO3Si5m4Boq+XXLd0gL/TvGFf/LtJd7Ph0QNwzv13RXPo4nFKr
-         ux+mAfYvQZ/T7HQuv3qWrU6rgoxXhUGtiadfAHIr0Y0BDKg+V4qPJOa6zg6Y0nURWT
-         mc5Jz/XC/APTUiCVdkfMmCpLeRNuhDQfnHmM9TLEj/6AmuLeyd3OUIfnVHqaMWDTPV
-         2EWLYW0AsKCy/tlIw/R7B1zrLIpup7xuibv+D33vs48IO+QFfuSvcFSPSPR1IS0fi+
-         GwQEK83D1BZu+duczaPKs5sLPZQXDq42lajbd7jhwg46rDbfVReAVp54hweOjkdMbS
-         z4C0cnzwlZRHQ==
-Received: by mail-lf1-f49.google.com with SMTP id g7so29602180lfv.5;
-        Wed, 02 Nov 2022 11:19:35 -0700 (PDT)
-X-Gm-Message-State: ACrzQf26isgZVdhYIpzg83U+PK+DGwyS0WoY1zDDPSoGrQChapRDA75Y
-        uF87BPsvwBYIUygWi0mYOEiYK79q5Q4SSmBZAw==
-X-Google-Smtp-Source: AMsMyM6XQ3NC5gBobYHWQcBcHOobrD1WFx27yP9ubnkL/AtrLYNZY8dUZB57wcoTBz1HIHNzPxaicM/OyX8pqvkFHwA=
-X-Received: by 2002:a19:5048:0:b0:4b1:3856:e422 with SMTP id
- z8-20020a195048000000b004b13856e422mr2174132lfj.368.1667413173675; Wed, 02
- Nov 2022 11:19:33 -0700 (PDT)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id EC23566028BD;
+        Wed,  2 Nov 2022 18:20:05 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667413207;
+        bh=73yq3hSmCgnnBnC9+ZUyzTnv19Mj0CWcIsrmUiNrmxI=;
+        h=From:To:Cc:Subject:Date:From;
+        b=omK34qDxLzEuDlGtMXDGhcAOcY4mxHxqYYS4VJQp20qGEOIofJX3PmEhQrJXS6RHt
+         39fe/AbQJxKAqXZ5KKlg0k2gP/D8pbZGTl18E4kHjW8sgEB7KyxV5F/NifoYyI38q7
+         gooAraSdx3SvF0rz3tpLFwGOLuMPcERWAJwZTI8C3m7cDuFfa0uBSwupvNbd6+etB8
+         /fuf9ZEXDZJDRknvb7egxXCZ+R56vncD21qZh1ad1nHwQEGPICo018iLqy/CUMuvSF
+         6j1KQfr2dKLFmOarx6lC4Hs+V5HFf0VDMCPQxmM0+/G9KxGg7Wo27Hy1iumSxnEUlk
+         0WSHSrkT3SLig==
+From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>
+To:     Mark Brown <broonie@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Chen-Yu Tsai <wenst@chromium.org>,
+        =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
+        <nfraprado@collabora.com>, Andy Gross <agross@kernel.org>,
+        Derek Fang <derek.fang@realtek.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Oder Chiou <oder_chiou@realtek.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Takashi Iwai <tiwai@suse.com>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/8] Adjust usage of rt5682(s) power supply properties
+Date:   Wed,  2 Nov 2022 14:19:54 -0400
+Message-Id: <20221102182002.255282-1-nfraprado@collabora.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221101095156.30591-1-billy_tsai@aspeedtech.com>
- <20221101095156.30591-2-billy_tsai@aspeedtech.com> <20221101184033.GA1879756-robh@kernel.org>
- <C4090559-71D3-4DC4-A994-474D375DC4EF@aspeedtech.com>
-In-Reply-To: <C4090559-71D3-4DC4-A994-474D375DC4EF@aspeedtech.com>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 2 Nov 2022 13:19:24 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+eiFO9JyJW=2SB-HLHJLrXggO+7kwG8G-6Zt=K2QnFUA@mail.gmail.com>
-Message-ID: <CAL_Jsq+eiFO9JyJW=2SB-HLHJLrXggO+7kwG8G-6Zt=K2QnFUA@mail.gmail.com>
-Subject: Re: [v2 1/3] dt-bindings: Add bindings for aspeed pwm-tach.
-To:     Billy Tsai <billy_tsai@aspeedtech.com>
-Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "linux@roeck-us.net" <linux@roeck-us.net>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>,
-        "garnermic@meta.com" <garnermic@meta.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 1, 2022 at 10:21 PM Billy Tsai <billy_tsai@aspeedtech.com> wrote:
->
-> Hi Rob,
->
-> On 2022/11/2, 2:40 AM, "Rob Herring" <robh@kernel.org> wrote:
->
->   >  On Tue, Nov 01, 2022 at 05:51:54PM +0800, Billy Tsai wrote:
->   >  > This patch adds device binding for aspeed pwm-tach device which is a
->   >  > multi-function device include pwm and tach function and pwm/tach device
->   >  > bindings which should be the child-node of pwm-tach device.
->   >  >
->   >  > Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
->   >  > ---
->   >  >  .../bindings/hwmon/aspeed,ast2600-tach.yaml   | 48 ++++++++++++
->   >  >  .../bindings/mfd/aspeed,ast2600-pwm-tach.yaml | 76 +++++++++++++++++++
->   >  >  .../bindings/pwm/aspeed,ast2600-pwm.yaml      | 64 ++++++++++++++++
->   >  >  3 files changed, 188 insertions(+)
->   >  >  create mode 100644 Documentation/devicetree/bindings/hwmon/aspeed,ast2600-tach.yaml
->   >  >  create mode 100644 Documentation/devicetree/bindings/mfd/aspeed,ast2600-pwm-tach.yaml
->   >  >  create mode 100644 Documentation/devicetree/bindings/pwm/aspeed,ast2600-pwm.yaml
->
->   >  I'm pretty sure I've said this before, but I'm not taking more fan
->   >  controller bindings without comming up with a common binding. Please see
->   >  this series[1] and help ensure it meets your needs.
->
->   >  Rob
->
->   >  [1] 20221013094838.1529153-2-Naresh.Solanki@9elements.com <https://lore.kernel.org/all/<a href=>/">https://lore.kernel.org/all/20221013094838.1529153-2-Naresh.Solanki@9elements.com/
->
-> The link you provide doesn't meet my needs. This is fan binding.
 
-A PWM and Tach controller is for fans, no?
+This series sets straight the usage of power supply properties for the
+rt5682 and rt5682s audio codecs.
 
-As I said, contribute to it so that it does meet your needs.
+These properties were already being used by sc7180-trogdor.dtsi (and
+derived DTs like sc7180-trogdor-kingoftown.dtsi).
 
-> As I told before
-> "This patch doesn't use to binding the fan control h/w. It is used to binding the two independent h/w blocks.
-> One is used to provide pwm output and another is used to monitor the speed of the input."
-> My patch is used to point out that the pwm and the tach is the different function and don't need to
-> bind together. You can not only combine them as the fan usage but also treat them as the individual module for
-> use. For example: the pwm can use to be the beeper (pwm-beeper.c), the tach can be used to monitor any device's speed.
+We start by documenting the power supplies that are already in use and
+then add few others that were missing to the bindings.
 
-That all sounds like requirements that you have which you should
-ensure the fan binding can support.
+Then we update the drivers to also support the new supplies.
 
-I've already said to use the PWM binding in the fan binding exactly
-for the purpose of hooking up the PWMs to other things. Whether the
-tach controller is useful for something other than fans, I don't know.
-Seems less likely. The max6639 also has a tach controller. So if other
-uses are possible for you, then it could be possible for any other h/w
-like the max6639.
+Finally we update the trogdor DTs so they have the newly added but
+required supplies and remove a superfluous one that was causing
+warnings.
 
-Rob
+v1: https://lore.kernel.org/all/20221028205540.3197304-1-nfraprado@collabora.com
+
+Changes in v2:
+- Made new supply names uppercase to be consistent with the existing
+  ones
+
+Nícolas F. R. A. Prado (8):
+  ASoC: dt-bindings: realtek,rt5682s: Add AVDD and MICVDD supplies
+  ASoC: dt-bindings: realtek,rt5682s: Add DBVDD and LDO1-IN supplies
+  ASoC: dt-bindings: rt5682: Add AVDD, MICVDD and VBAT supplies
+  ASoC: dt-bindings: rt5682: Add DBVDD and LDO1-IN supplies
+  ASoC: rt5682s: Support DBVDD and LDO1-IN supplies
+  ASoC: rt5682: Support DBVDD and LDO1-IN supplies
+  arm64: dts: qcom: sc7180-trogdor: Add missing supplies for rt5682
+  arm64: dts: qcom: sc7180-trogdor: Remove VBAT supply from rt5682s
+
+ .../bindings/sound/realtek,rt5682s.yaml       | 23 +++++++++++++++++++
+ .../devicetree/bindings/sound/rt5682.txt      | 20 ++++++++++++++++
+ .../dts/qcom/sc7180-trogdor-kingoftown.dtsi   |  1 +
+ ...0-trogdor-wormdingler-rev1-boe-rt5682s.dts |  1 +
+ ...0-trogdor-wormdingler-rev1-inx-rt5682s.dts |  1 +
+ arch/arm64/boot/dts/qcom/sc7180-trogdor.dtsi  |  2 ++
+ sound/soc/codecs/rt5682.c                     |  2 ++
+ sound/soc/codecs/rt5682.h                     |  2 +-
+ sound/soc/codecs/rt5682s.c                    | 22 ++++++++++++++++++
+ sound/soc/codecs/rt5682s.h                    |  2 ++
+ 10 files changed, 75 insertions(+), 1 deletion(-)
+
+-- 
+2.38.1
+
