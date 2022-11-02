@@ -2,131 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BB9C4615747
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 03:04:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A27761578E
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 03:26:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230161AbiKBCEV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 22:04:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34696 "EHLO
+        id S230071AbiKBC0s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 22:26:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49682 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230039AbiKBCED (ORCPT
+        with ESMTP id S229841AbiKBC0q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 22:04:03 -0400
-Received: from dggsgout11.his.huawei.com (dggsgout11.his.huawei.com [45.249.212.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D679A186C9;
-        Tue,  1 Nov 2022 19:04:02 -0700 (PDT)
-Received: from mail02.huawei.com (unknown [172.30.67.143])
-        by dggsgout11.his.huawei.com (SkyGuard) with ESMTP id 4N299p0BQBzl21b;
-        Wed,  2 Nov 2022 10:01:50 +0800 (CST)
-Received: from huaweicloud.com (unknown [10.175.127.227])
-        by APP2 (Coremail) with SMTP id Syh0CgCnP9QN0GFjGqzfBA--.48110S9;
-        Wed, 02 Nov 2022 10:04:01 +0800 (CST)
-From:   Yu Kuai <yukuai1@huaweicloud.com>
-To:     jack@suse.cz, axboe@kernel.dk, paolo.valente@linaro.org
-Cc:     cgroups@vger.kernel.org, linux-block@vger.kernel.org,
-        linux-kernel@vger.kernel.org, yukuai3@huawei.com,
-        yukuai1@huaweicloud.com, yi.zhang@huawei.com
-Subject: [PATCH -next v4 5/5] block, bfq: don't declare 'bfqd' as type 'void *' in bfq_group
-Date:   Wed,  2 Nov 2022 10:25:42 +0800
-Message-Id: <20221102022542.3621219-6-yukuai1@huaweicloud.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <20221102022542.3621219-1-yukuai1@huaweicloud.com>
-References: <20221102022542.3621219-1-yukuai1@huaweicloud.com>
+        Tue, 1 Nov 2022 22:26:46 -0400
+Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2262B101F;
+        Tue,  1 Nov 2022 19:26:46 -0700 (PDT)
+Received: by mail-oi1-f172.google.com with SMTP id t62so7079356oib.12;
+        Tue, 01 Nov 2022 19:26:46 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=date:subject:message-id:references:in-reply-to:cc:to:from
+         :mime-version:content-transfer-encoding:x-gm-message-state:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=Z7wgwmcMN0aOSvjSNMK3d1DT5tRxcKf3IKzFgi4PqZ0=;
+        b=7VBxN8Dw6jg7F3r54V1zy95e0qGJvED6/qCFhg8inmSZ0xOxDWa6+h22oXu8OnOsKq
+         6/8oD80cXiDpyKQr6caUAICollDFifL4RVg0fQAKmGb40J5QQVYzPJQG8NyokpZZX2t9
+         BB6PAdnrI0FKBVEBtY7Xk0/TRCySaN2WnfqbwD2PvuQqly3YqclwLQu2IxWpxRp2g0qr
+         OXs75WbpzjfECgmwqtB4lw5/9iCgPCIdXQkh7wQl68Afk40xx6x1yuxOlN2/W1L2A0RZ
+         W7TyK7O/PWP+A9sMmuZIh75FpVjcj4CQthi1rFR176RijfSqMP+eRX4wMNVJFyoHfhcY
+         7jgg==
+X-Gm-Message-State: ACrzQf29H3wCioKv8G3Ev2pIL5nB7EmZM89L/3BcGbLrs/A4DHuBpaU1
+        N3P4hjtV6IC1iiLkwXrAAg==
+X-Google-Smtp-Source: AMsMyM66naeyVSMuS948l2kqige7YFKNS3NgC3RA6WWltBUsU1e6Wab27jahJacjUOwAGymZvQVz6w==
+X-Received: by 2002:a05:6808:2391:b0:35a:2d2d:59d9 with SMTP id bp17-20020a056808239100b0035a2d2d59d9mr3150517oib.121.1667356005350;
+        Tue, 01 Nov 2022 19:26:45 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id n17-20020a05680803b100b00354978180d8sm4094920oie.22.2022.11.01.19.26.44
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 19:26:44 -0700 (PDT)
+Received: (nullmailer pid 2640481 invoked by uid 1000);
+        Wed, 02 Nov 2022 02:26:46 -0000
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: Syh0CgCnP9QN0GFjGqzfBA--.48110S9
-X-Coremail-Antispam: 1UD129KBjvJXoW7Kw4UAFy5Wr47Gw4UCr45ZFb_yoW8tw43p3
-        ZIq3WDWrWftrn3Wr4UA3Wjqr93twn3C34DKa4kX34avFy7trnFqan0yw18Z3W09FZxCrsr
-        Z34j93ykZr17twUanT9S1TB71UUUUUUqnTZGkaVYY2UrUUUUjbIjqfuFe4nvWSU5nxnvy2
-        9KBjDU0xBIdaVrnRJUUU9K14x267AKxVWrJVCq3wAFc2x0x2IEx4CE42xK8VAvwI8IcIk0
-        rVWrJVCq3wAFIxvE14AKwVWUJVWUGwA2048vs2IY020E87I2jVAFwI0_JF0E3s1l82xGYI
-        kIc2x26xkF7I0E14v26ryj6s0DM28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48ve4kI8wA2
-        z4x0Y4vE2Ix0cI8IcVAFwI0_tr0E3s1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI0_Gr1j6F
-        4UJwA2z4x0Y4vEx4A2jsIE14v26rxl6s0DM28EF7xvwVC2z280aVCY1x0267AKxVW0oVCq
-        3wAS0I0E0xvYzxvE52x082IY62kv0487Mc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7
-        IYx2IY67AKxVWUJVWUGwAv7VC2z280aVAFwI0_Jr0_Gr1lOx8S6xCaFVCjc4AY6r1j6r4U
-        M4x0Y48IcxkI7VAKI48JM4x0x7Aq67IIx4CEVc8vx2IErcIFxwCF04k20xvY0x0EwIxGrw
-        CFx2IqxVCFs4IE7xkEbVWUJVW8JwC20s026c02F40E14v26r1j6r18MI8I3I0E7480Y4vE
-        14v26r106r1rMI8E67AF67kF1VAFwI0_Jw0_GFylIxkGc2Ij64vIr41lIxAIcVC0I7IYx2
-        IY67AKxVWUCVW8JwCI42IY6xIIjxv20xvEc7CjxVAFwI0_Cr0_Gr1UMIIF0xvE42xK8VAv
-        wI8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14
-        v26r4j6r4UJbIYCTnIWIevJa73UjIFyTuYvjfUOBTYUUUUU
-X-CM-SenderInfo: 51xn3trlr6x35dzhxuhorxvhhfrp/
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+From:   Rob Herring <robh@kernel.org>
+To:     Naresh Solanki <naresh.solanki@9elements.com>
+Cc:     devicetree@vger.kernel.org,
+        Patrick Rudolph <patrick.rudolph@9elements.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Marcello Sylvester Bauer <sylv@sylv.io>,
+        linux-kernel@vger.kernel.org,
+        Naresh Solanki <Naresh.Solanki@9elements.com>,
+        Lee Jones <lee@kernel.org>
+In-Reply-To: <20221101165344.3455723-2-Naresh.Solanki@9elements.com>
+References: <20221101165344.3455723-1-Naresh.Solanki@9elements.com>
+ <20221101165344.3455723-2-Naresh.Solanki@9elements.com>
+Message-Id: <166735596163.2638605.204510355280686379.robh@kernel.org>
+Subject: Re: [PATCH v4 1/2] dt-bindings: mfd: Add bindings for MAX5970 and MAX5978
+Date:   Tue, 01 Nov 2022 21:26:46 -0500
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Yu Kuai <yukuai3@huawei.com>
 
-Prevent unnecessary format conversion for bfqg->bfqd in multiple
-places.
+On Tue, 01 Nov 2022 17:53:43 +0100, Naresh Solanki wrote:
+> From: Marcello Sylvester Bauer <sylv@sylv.io>
+> 
+> The MAX597x is a hot swap controller with configurable fault protection.
+> It also has 10bit ADC for current & voltage measurements.
+> 
+> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
+> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
+> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> ---
+>  .../devicetree/bindings/mfd/max5970.yaml      | 164 ++++++++++++++++++
+>  1 file changed, 164 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/mfd/max5970.yaml
+> 
 
-Signed-off-by: Yu Kuai <yukuai3@huawei.com>
-Reviewed-by: Jan Kara <jack@suse.cz>
-Acked-by: Paolo Valente <paolo.valente@unimore.it>
----
- block/bfq-cgroup.c  | 2 +-
- block/bfq-iosched.h | 2 +-
- block/bfq-wf2q.c    | 6 ++----
- 3 files changed, 4 insertions(+), 6 deletions(-)
+My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
-diff --git a/block/bfq-cgroup.c b/block/bfq-cgroup.c
-index 4c37398e0b99..d57872cc05ed 100644
---- a/block/bfq-cgroup.c
-+++ b/block/bfq-cgroup.c
-@@ -224,7 +224,7 @@ void bfqg_stats_update_io_add(struct bfq_group *bfqg, struct bfq_queue *bfqq,
- {
- 	blkg_rwstat_add(&bfqg->stats.queued, opf, 1);
- 	bfqg_stats_end_empty_time(&bfqg->stats);
--	if (!(bfqq == ((struct bfq_data *)bfqg->bfqd)->in_service_queue))
-+	if (!(bfqq == bfqg->bfqd->in_service_queue))
- 		bfqg_stats_set_start_group_wait_time(bfqg, bfqq_group(bfqq));
- }
- 
-diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
-index 76363841d8ff..9fa89577322d 100644
---- a/block/bfq-iosched.h
-+++ b/block/bfq-iosched.h
-@@ -931,7 +931,7 @@ struct bfq_group {
- 	struct bfq_entity entity;
- 	struct bfq_sched_data sched_data;
- 
--	void *bfqd;
-+	struct bfq_data *bfqd;
- 
- 	struct bfq_queue *async_bfqq[2][IOPRIO_NR_LEVELS];
- 	struct bfq_queue *async_idle_bfqq;
-diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
-index 4d4b84e7bf3e..b02b53658ed4 100644
---- a/block/bfq-wf2q.c
-+++ b/block/bfq-wf2q.c
-@@ -222,9 +222,8 @@ static void bfq_inc_active_entities(struct bfq_entity *entity)
- {
- 	struct bfq_sched_data *sd = entity->sched_data;
- 	struct bfq_group *bfqg = container_of(sd, struct bfq_group, sched_data);
--	struct bfq_data *bfqd = (struct bfq_data *)bfqg->bfqd;
- 
--	if (bfqg != bfqd->root_group)
-+	if (bfqg != bfqg->bfqd->root_group)
- 		bfqg->active_entities++;
- }
- 
-@@ -232,9 +231,8 @@ static void bfq_dec_active_entities(struct bfq_entity *entity)
- {
- 	struct bfq_sched_data *sd = entity->sched_data;
- 	struct bfq_group *bfqg = container_of(sd, struct bfq_group, sched_data);
--	struct bfq_data *bfqd = (struct bfq_data *)bfqg->bfqd;
- 
--	if (bfqg != bfqd->root_group)
-+	if (bfqg != bfqg->bfqd->root_group)
- 		bfqg->active_entities--;
- }
- 
--- 
-2.31.1
+yamllint warnings/errors:
+
+dtschema/dtc warnings/errors:
+Documentation/devicetree/bindings/mfd/max5970.example.dts:21.22-34.19: Warning (i2c_bus_reg): /example-0/i2c/leds: missing or empty reg property
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/max5970.example.dtb: regulator@3a: 'vss2-supply' does not match any of the regexes: 'pinctrl-[0-9]+'
+	From schema: /builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/mfd/max5970.yaml
+
+doc reference errors (make refcheckdocs):
+
+See https://patchwork.ozlabs.org/patch/
+
+This check can fail if there are any dependencies. The base for a patch
+series is generally the most recent rc1.
+
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit.
 
