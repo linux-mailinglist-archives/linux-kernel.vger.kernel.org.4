@@ -2,127 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CFF40615DD3
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 09:35:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3375B615DE0
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 09:36:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230345AbiKBIfu convert rfc822-to-8bit (ORCPT
-        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 2 Nov 2022 04:35:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42798 "EHLO
+        id S230387AbiKBIgg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 04:36:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43702 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230304AbiKBIfn (ORCPT
+        with ESMTP id S229518AbiKBIgc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 04:35:43 -0400
-Received: from eu-smtp-delivery-151.mimecast.com (eu-smtp-delivery-151.mimecast.com [185.58.86.151])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10C671AD8A
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 01:35:39 -0700 (PDT)
-Received: from AcuMS.aculab.com (156.67.243.121 [156.67.243.121]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_CBC_SHA384) id
- uk-mta-191-guNOfW50N0qHgkOwqcty6g-1; Wed, 02 Nov 2022 08:35:37 +0000
-X-MC-Unique: guNOfW50N0qHgkOwqcty6g-1
-Received: from AcuMS.Aculab.com (10.202.163.4) by AcuMS.aculab.com
- (10.202.163.4) with Microsoft SMTP Server (TLS) id 15.0.1497.42; Wed, 2 Nov
- 2022 08:35:35 +0000
-Received: from AcuMS.Aculab.com ([::1]) by AcuMS.aculab.com ([::1]) with mapi
- id 15.00.1497.042; Wed, 2 Nov 2022 08:35:35 +0000
-From:   David Laight <David.Laight@ACULAB.COM>
-To:     'Tejun Heo' <tj@kernel.org>, Jiri Slaby <jirislaby@kernel.org>
-CC:     Christoph Hellwig <hch@infradead.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Martin Liska <mliska@suse.cz>,
-        Josef Bacik <josef@toxicpanda.com>,
-        Jens Axboe <axboe@kernel.dk>,
-        "cgroups@vger.kernel.org" <cgroups@vger.kernel.org>,
-        "linux-block@vger.kernel.org" <linux-block@vger.kernel.org>
-Subject: RE: [PATCH] block/blk-iocost (gcc13): cast enum members to int in
- prints
-Thread-Topic: [PATCH] block/blk-iocost (gcc13): cast enum members to int in
- prints
-Thread-Index: AQHY7hGH734dfSyX20WOi86L/FtKtq4rTpIA
-Date:   Wed, 2 Nov 2022 08:35:34 +0000
-Message-ID: <2b975ee3117e45aaa7882203cf9a4db8@AcuMS.aculab.com>
-References: <20221031114520.10518-1-jirislaby@kernel.org>
- <Y1++fLJXkeZgtXR2@infradead.org> <Y2AMcSPAJpj6obSA@slm.duckdns.org>
- <d833ad15-f458-d43d-cab7-de62ff54a939@kernel.org>
- <Y2FNa4bGhJoevRKT@slm.duckdns.org>
-In-Reply-To: <Y2FNa4bGhJoevRKT@slm.duckdns.org>
-Accept-Language: en-GB, en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-ms-exchange-transport-fromentityheader: Hosted
-x-originating-ip: [10.202.205.107]
+        Wed, 2 Nov 2022 04:36:32 -0400
+Received: from conssluserg-03.nifty.com (conssluserg-03.nifty.com [210.131.2.82])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3F181A19C;
+        Wed,  2 Nov 2022 01:36:31 -0700 (PDT)
+Received: from mail-oi1-f175.google.com (mail-oi1-f175.google.com [209.85.167.175]) (authenticated)
+        by conssluserg-03.nifty.com with ESMTP id 2A28aEJ8031478;
+        Wed, 2 Nov 2022 17:36:15 +0900
+DKIM-Filter: OpenDKIM Filter v2.10.3 conssluserg-03.nifty.com 2A28aEJ8031478
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nifty.com;
+        s=dec2015msa; t=1667378175;
+        bh=dDwYrbtyAzndbrpCPMQ4b/+qE79Xq0pwlBypNXvEf3A=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=hOiuqSR/T/VgZje1tOrN54QWDUjrUnwK7i0VH4Dn58fTfeskL0xqmHUU+sxeap0vg
+         hQpcvuvxoTaHcXsKSZELTb+wts+8t4i5vNZvPchML3PlPfoYtdwhJ73cWoQAjVYzbn
+         +ckPsMAc90obxKLGkhfble2BYlZ/KK56u86OQMliiyYkayy7+ZDTqJ4+N40quGfbY+
+         aNUlk6muhgm8QeAVx0TlxOy7d4a2usyjDkljMi1QpzZmvICXqcNiQIl3XpFK/UpNxt
+         ykFm/j/F/V/a5d5N3t4bc4mrrkcRu6PIrQL64LmvzVadCUrAZyNV1sE3lKaejCSM3C
+         huEWXbEPO3Oqg==
+X-Nifty-SrcIP: [209.85.167.175]
+Received: by mail-oi1-f175.google.com with SMTP id s206so18533463oie.3;
+        Wed, 02 Nov 2022 01:36:15 -0700 (PDT)
+X-Gm-Message-State: ACrzQf15/rspUDvsD5fZCd3K9/AJZrQi3ggDXluLhUlpWVLvDY1ypJRb
+        +aAZD2tWGxuML7FMDJabcEamhRzHiKuoXl+uzEs=
+X-Google-Smtp-Source: AMsMyM7MA9H+75leTUw+wTyqhbVuf/JWA9dHb0mF86T4B0fWwDRVUst3soNL69NFhihQMYFJp/3Sc3kgaa95UX0Mq0U=
+X-Received: by 2002:a05:6808:13cf:b0:35a:3617:d5da with SMTP id
+ d15-20020a05680813cf00b0035a3617d5damr2199262oiw.287.1667378174040; Wed, 02
+ Nov 2022 01:36:14 -0700 (PDT)
 MIME-Version: 1.0
-X-Mimecast-Spam-Score: 0
-X-Mimecast-Originator: aculab.com
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8BIT
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221023191055.85098-1-masahiroy@kernel.org> <8c04e9bbc8d48946c60ff56ef7f20bef74e3c401.camel@pengutronix.de>
+In-Reply-To: <8c04e9bbc8d48946c60ff56ef7f20bef74e3c401.camel@pengutronix.de>
+From:   Masahiro Yamada <masahiroy@kernel.org>
+Date:   Wed, 2 Nov 2022 17:35:37 +0900
+X-Gmail-Original-Message-ID: <CAK7LNATzANbYu9E1w5k0BxG_R8TpuZvxUv==T32iiRcfdNrxVA@mail.gmail.com>
+Message-ID: <CAK7LNATzANbYu9E1w5k0BxG_R8TpuZvxUv==T32iiRcfdNrxVA@mail.gmail.com>
+Subject: Re: [PATCH] kconfig: fix segmentation fault in menuconfig search
+To:     Johannes Zink <j.zink@pengutronix.de>
+Cc:     linux-kbuild@vger.kernel.org,
+        Ariel Marcovitch <arielmarcovitch@gmail.com>,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.2 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Tejun Heo
-> Sent: 01 November 2022 16:47
-> 
-> Hello,
-> 
-> On Tue, Nov 01, 2022 at 06:46:56AM +0100, Jiri Slaby wrote:
-> > Yes. The real problem is that using anything else then an INT_MIN <= x <=
-> > INT_MAX _constant_ in an enum is undefined in ANSI C < 2x (in particular, 1
-> > << x is undefined too). gcc manual defines unsigned int on the top of that
-> > as defined too (so this holds for our -std=g*).
+On Tue, Nov 1, 2022 at 2:31 AM Johannes Zink <j.zink@pengutronix.de> wrote:
+>
+> Hi Masahiro,
+>
+> On Mon, 2022-10-24 at 04:10 +0900, Masahiro Yamada wrote:
+> > Since commit d05377e184fc ("kconfig: Create links to main menu items
+> > in search"), menuconfig shows a jump key next to "Main menu" if the
+> > nearest visible parent is the rootmenu. If you press that jump key,
+> > menuconfig crashes with a segmentation fault.
 > >
-> > > I suppose the most reasonable thing to do here is just splitting them into
-> > > separate enum definitions. Does anyone know how this behavior change came to
-> > > be?
+> > For example, do this:
 > >
-> > C2x which introduces un/signed long enums. See the bug I linked in the
-> > commit log:
-> > https://gcc.gnu.org/bugzilla/show_bug.cgi?id=36113
-> 
-> I see. So, it was an extension but the new standard is defined differently
-> and we're gonna end up with that behavior.
-> 
-> > The change is also turned on in < C2x on purpose. AIUI, unless there is too
-> > much breakage. So we'd need to sort it out in (rather distant) future anyway
-> > (when we come up to -std=g2x).
-> 
-> The part that the new behavior applying to <C2x feels like an odd decision.
-> I'm having a hard time seeing the upsides in doing so but maybe that's just
-> me not knowing the area well enough.
-> 
-> > > Do we know whether clang is gonna be changed the same way?
+> >   $ make ARCH=arm64 allnoconfig menuconfig
 > >
-> > In C2x, Likely. In < C2x, dunno what'd be the default.
-> 
-> It looks like we can do one of the following two:
-> 
-> * If gcc actually changes the behavior for <c2x, split the enums according
->   to their sizes. This feels rather silly but I can't think of a better way
->   to cater to divergent compiler behaviors.
-> 
-> * If gcc doesn't change the behavior for <c2x, there's nothing to do for the
->   time being. Later when we switch to -std=g2x, we can just change the
->   format strings to use the now larger types.
-> 
-> Does the above make sense?
+> > Press '/' to search for the string "ACPI". Press '1' to choose
+> > "(1) Main menu". Then, menuconfig crashed with a segmentation fault.
+> >
+> > The following code in search_conf()
+> >
+> >     conf(targets[i]->parent, targets[i]);
+> >
+> > results in NULL pointer dereference because targets[i] is the
+> > rootmenu,
+> > which does not have a parent.
+> >
+> > Commit d05377e184fc tried to fix the issue of top-level items not
+> > having
+> > a jump key, but adding the "Main menu" was not the right fix.
+> >
+> > The correct fix is to show the searched item itself. This fixes
+> > another
+> > weird behavior described in the comment block.
+> >
+> > Fixes: d05377e184fc ("kconfig: Create links to main menu items in
+> > search")
+> > Reported-by: Johannes Zink <j.zink@pengutronix.de>
+> > Signed-off-by: Masahiro Yamada <masahiroy@kernel.org>
+>
+> Sorry for the delay, I eventually found time to test your patch, and it
+> fixes the issue I reported. Thank you for helping out, feel free to add
+> my
+>
+> Tested-by: Johannes Zink <j.zink@pengutronix.de>
 
-I think the enums have to be split.
-There will be other side effects of promoting the constants to 64bit
-that are much more difficult to detect than the warnings from printf.
 
-I'm also not sure whether the type is even consistent for 32bit
-and 64bit builds.
-Casts are (sort of) horrid.
+Applied to linux-kbuild/fixes.
 
-	David
 
--
-Registered Address Lakeside, Bramley Road, Mount Farm, Milton Keynes, MK1 1PT, UK
-Registration No: 1397386 (Wales)
 
+> > ---
+> >
+> >  scripts/kconfig/menu.c | 23 ++++-------------------
+> >  1 file changed, 4 insertions(+), 19 deletions(-)
+> >
+> > diff --git a/scripts/kconfig/menu.c b/scripts/kconfig/menu.c
+> > index 62b6313f51c8..109325f31bef 100644
+> > --- a/scripts/kconfig/menu.c
+> > +++ b/scripts/kconfig/menu.c
+> > @@ -722,8 +722,8 @@ static void get_prompt_str(struct gstr *r, struct
+> > property *prop,
+> >         if (!expr_eq(prop->menu->dep, prop->visible.expr))
+> >                 get_dep_str(r, prop->visible.expr, "  Visible if: ");
+> >
+> > -       menu = prop->menu->parent;
+> > -       for (i = 0; menu && i < 8; menu = menu->parent) {
+> > +       menu = prop->menu;
+> > +       for (i = 0; menu != &rootmenu && i < 8; menu = menu->parent)
+> > {
+> >                 bool accessible = menu_is_visible(menu);
+> >
+> >                 submenu[i++] = menu;
+> > @@ -733,16 +733,7 @@ static void get_prompt_str(struct gstr *r,
+> > struct property *prop,
+> >         if (head && location) {
+> >                 jump = xmalloc(sizeof(struct jump_key));
+> >
+> > -               if (menu_is_visible(prop->menu)) {
+> > -                       /*
+> > -                        * There is not enough room to put the hint
+> > at the
+> > -                        * beginning of the "Prompt" line. Put the
+> > hint on the
+> > -                        * last "Location" line even when it would
+> > belong on
+> > -                        * the former.
+> > -                        */
+> > -                       jump->target = prop->menu;
+> > -               } else
+> > -                       jump->target = location;
+> > +               jump->target = location;
+> >
+> >                 if (list_empty(head))
+> >                         jump->index = 0;
+> > @@ -758,13 +749,7 @@ static void get_prompt_str(struct gstr *r,
+> > struct property *prop,
+> >                 menu = submenu[i];
+> >                 if (jump && menu == location)
+> >                         jump->offset = strlen(r->s);
+> > -
+> > -               if (menu == &rootmenu)
+> > -                       /* The real rootmenu prompt is ugly */
+> > -                       str_printf(r, "%*cMain menu", j, ' ');
+> > -               else
+> > -                       str_printf(r, "%*c-> %s", j, ' ',
+> > menu_get_prompt(menu));
+> > -
+> > +               str_printf(r, "%*c-> %s", j, ' ',
+> > menu_get_prompt(menu));
+> >                 if (menu->sym) {
+> >                         str_printf(r, " (%s [=%s])", menu->sym->name
+> > ?
+> >                                 menu->sym->name : "<choice>",
+>
+> --
+> Pengutronix e.K.                | Johannes Zink                  |
+> Steuerwalder Str. 21            | https://www.pengutronix.de/    |
+> 31137 Hildesheim, Germany       | Phone: +49-5121-206917-0       |
+> Amtsgericht Hildesheim, HRA 2686| Fax:   +49-5121-206917-5555    |
+>
+
+
+-- 
+Best Regards
+Masahiro Yamada
