@@ -2,98 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 041A8616F18
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 21:47:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 32A7D616F1C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 21:48:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229975AbiKBUrl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 16:47:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39036 "EHLO
+        id S230509AbiKBUsS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 16:48:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39898 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231362AbiKBUri (ORCPT
+        with ESMTP id S229493AbiKBUsP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 16:47:38 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7B4A7640
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 13:47:36 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id h24so82719qta.7
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 13:47:36 -0700 (PDT)
+        Wed, 2 Nov 2022 16:48:15 -0400
+Received: from mail-oi1-x231.google.com (mail-oi1-x231.google.com [IPv6:2607:f8b0:4864:20::231])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F6F765D9;
+        Wed,  2 Nov 2022 13:48:15 -0700 (PDT)
+Received: by mail-oi1-x231.google.com with SMTP id n186so3143936oih.7;
+        Wed, 02 Nov 2022 13:48:15 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9FUCKdR5muWG/ydu/yl+po0EfXtg7fWrig8KkqMX+yM=;
-        b=FWmAttP5TwXac8ajZcb9YnhcjZRhjKSyxV3D8215oGsRblrGAedT7Um2FC9YfmcWl6
-         eLeeRpWglMSi/1Nq8d6lwbl5y4GBwfnTEtt0AaE5RujOstqGlDOtAo+jNGmHMYjzXY22
-         ZRVpsIv8QgWRUM173q3ZRq0I9LT2K6FbFIjd4/cURC1216cxoCxjD88eLbsNRj1SjrHT
-         WMlGVBqb0tl+MA+SfXI0KViQvYb3sDYaOkvJLXqpE9hfqRJmCzI5U8yuNE0xulo9KsZj
-         6hPfJbQUIuIHvwczlZzGO9SbynFkSbzT672BqVxtA0obXoM1Nj5TG4DrIsT/0o98BHrF
-         za6Q==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1R+kPdUwpILgSxzae/u/gpRu4jldLuHqjWFbxDw4WVs=;
+        b=V9JnLImy+JyZXXXE/VotKasJjk7dEVynobUp+nN4iVZ5L8Ov5fs/OL7IuPPFpTeCHP
+         CxHfsyshrcEN3YZNnmQ9x10WtyeHrezctAEsLH5/4Qt3zmSw0desubheZgVcrhycoBsY
+         LlOW6WxoAuyhmSZfwmq6hnI9umxALGdSZfB58PH17Dk7q90Psm46TbfVw6Fzo1M4+L1F
+         2vJcwBSqamCQTz0gZBKM52ulds3tou64OvWXfMagbiHU/krccTk/Pw/lm1hhOMsNmuG0
+         nP6aCMD+LLuTCsgfmB3rh8EWMPGS7AS4HfPa3j5jKWLSxGfrTthPGhZOo8TMcsO2+vE7
+         NE7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9FUCKdR5muWG/ydu/yl+po0EfXtg7fWrig8KkqMX+yM=;
-        b=amj0nzZjkg1MG5XiWZNyo2d2PsrS8yWqDSh/R3w6uZTRsTQ1yvRB6DiYi87HP9bY71
-         zx25RmKqg6cIjalRk44BjSwxr3jjwXxafuroWOucpJizuADtFA1Ao3J5uac9Xv7Ivcrf
-         GjwLqtYewSBIEOnxq5c22JB2dPEHTrgmVrX52+pRdBG46lboMsnOqs2pP9bAUHHp0RzM
-         VKR3jj6tFDJgwXFdDqj6a1JvxzEF2HcmPeQSP5LIs7102jDaoHJVaIhbfiR72r+3cWdP
-         32LbtKOL3bCJFl4X8xaJSOl3Zvvb6BUAffTuyeJY5cKFiVKsd7p6YwJowpqgGjfe0VZe
-         W3SQ==
-X-Gm-Message-State: ACrzQf3eiojkOxqtgxbxN4fESkp4OCdA9Ba45i7MyLGMcgmpHmzbJF9q
-        E2MfJQP402FHamMVH4U5qfjcIg==
-X-Google-Smtp-Source: AMsMyM57MVsTku28IGR7kZ3gGsrJhSjU3Cp3FR7vGK6HxubhMZ9RMqYFZQEhv2VU2+XGyeeB3vDkyw==
-X-Received: by 2002:a05:622a:4d3:b0:3a5:c99:9471 with SMTP id q19-20020a05622a04d300b003a50c999471mr21455056qtx.325.1667422056067;
-        Wed, 02 Nov 2022 13:47:36 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
-        by smtp.gmail.com with ESMTPSA id bl33-20020a05620a1aa100b006ed61f18651sm9223641qkb.16.2022.11.02.13.47.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 13:47:35 -0700 (PDT)
-Message-ID: <060ad3b1-8a44-60d0-29d2-bdec6fd939c6@linaro.org>
-Date:   Wed, 2 Nov 2022 16:47:34 -0400
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=1R+kPdUwpILgSxzae/u/gpRu4jldLuHqjWFbxDw4WVs=;
+        b=PSI9elObqP5CgKutG4xMVVGvDp+vnXmqgu8xBNOz6PYxbFwDHufCyXrFwNb3zR2F95
+         TwUeK59vq6NkrD3Z0phiptfb4ycR4Va7i/sjc5U/F9kjX29exDxQKAVNXhPGvf+hXd02
+         FUs5DJa4/1Q/gQeot3d7qV6sGmkMzyvftWTYdOsyq97aOvSkHzdGpDGdF10nFJ8ieZFD
+         Ll8xHfMp76IAo4uCCKIY4uTecNyjMV/cYJstbnAIHicmamdIpj65EtCx2EWmtyceicUN
+         xx1oV3Q1It83c4CicHpK8pU1c5hsjPma1ZFPEuL1J7xE4+iOJ5lF2OyWjrphQOuWg3GR
+         GiRg==
+X-Gm-Message-State: ACrzQf0I/CpwsEwwzfeLVAlLAPfGVpNNOc9NmpsBPvelfRPtcHlkHJPp
+        RtMjHTzwDNgJkQ0vz0YRUa8=
+X-Google-Smtp-Source: AMsMyM7YjsxFiz6JcexC8tue/fTcMAq7RLth3HOCMWC5GYPADqBFwBpAh+2MIPSNixPw0Cx6asJfRg==
+X-Received: by 2002:a05:6808:1527:b0:35a:4051:7287 with SMTP id u39-20020a056808152700b0035a40517287mr2365779oiw.5.1667422094783;
+        Wed, 02 Nov 2022 13:48:14 -0700 (PDT)
+Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
+        by smtp.gmail.com with ESMTPSA id s6-20020a056808008600b00354b619a375sm4931739oic.0.2022.11.02.13.48.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 13:48:14 -0700 (PDT)
+Sender: Guenter Roeck <groeck7@gmail.com>
+Date:   Wed, 2 Nov 2022 13:48:13 -0700
+From:   Guenter Roeck <linux@roeck-us.net>
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+Subject: Re: [PATCH 6.0 000/240] 6.0.7-rc1 review
+Message-ID: <20221102204813.GH2089083@roeck-us.net>
+References: <20221102022111.398283374@linuxfoundation.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 10/20] arm64: dts: Update cache properties for marvell
-Content-Language: en-US
-To:     Pierre Gondois <pierre.gondois@arm.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Rob.Herring@arm.com, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Andrew Lunn <andrew@lunn.ch>,
-        Gregory Clement <gregory.clement@bootlin.com>,
-        Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-        Vadym Kochan <vadym.kochan@plvision.eu>,
-        Chris Packham <chris.packham@alliedtelesis.co.nz>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org
-References: <20221031092020.532456-1-pierre.gondois@arm.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221031092020.532456-1-pierre.gondois@arm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221102022111.398283374@linuxfoundation.org>
+X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/10/2022 05:20, Pierre Gondois wrote:
-> The DeviceTree Specification v0.3 specifies that the cache node
-> 'compatible' and 'cache-level' properties are 'required'. Cf.
-> s3.8 Multi-level and Shared Cache Nodes
+On Wed, Nov 02, 2022 at 03:29:35AM +0100, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.7 release.
+> There are 240 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> The recently added init_of_cache_level() function checks
-> these properties. Add them if missing.
+> Responses should be made by Fri, 04 Nov 2022 02:20:38 +0000.
+> Anything received after that time might be too late.
 > 
-> Signed-off-by: Pierre Gondois <pierre.gondois@arm.com>
 
-Your threading is broken.
+Build results:
+	total: 152 pass: 152 fail: 0
+Qemu test results:
+	total: 500 pass: 500 fail: 0
 
-Best regards,
-Krzysztof
+Tested-by: Guenter Roeck <linux@roeck-us.net>
 
+Guenter
