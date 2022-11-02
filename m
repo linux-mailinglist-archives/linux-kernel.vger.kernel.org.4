@@ -2,99 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AC36F616E01
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 20:51:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EEFE5616E07
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 20:53:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230017AbiKBTv4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 15:51:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59576 "EHLO
+        id S230233AbiKBTw7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 15:52:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiKBTvx (ORCPT
+        with ESMTP id S229949AbiKBTw5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 15:51:53 -0400
-Received: from mail-qt1-x835.google.com (mail-qt1-x835.google.com [IPv6:2607:f8b0:4864:20::835])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D796B11463
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 12:51:51 -0700 (PDT)
-Received: by mail-qt1-x835.google.com with SMTP id c15so5077861qtw.8
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 12:51:51 -0700 (PDT)
+        Wed, 2 Nov 2022 15:52:57 -0400
+Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03BAA11445;
+        Wed,  2 Nov 2022 12:52:57 -0700 (PDT)
+Received: by mail-pg1-x534.google.com with SMTP id e129so17138888pgc.9;
+        Wed, 02 Nov 2022 12:52:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=joelfernandes.org; s=google;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=3DKcNQJ3RVEMM8vP+7GPSWzcDvUtzfV2i4+1GcoEVYE=;
-        b=t/YKU2dmdzc3uJKYgMEHvq97DflAJLAihtzWhjZkX3UYffGjvnwWZItD5ig4U9YMEH
-         wBiEn9AXWqOzPgT6Hb94xcep1Sh3E6zvqljAjUxQxZA8yRkxefLoVFszdJhUFqIKjsdD
-         RHZed6UIzzjo4fcW6h518z1XrlkaPg7IcU0f4=
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=aYp24omPHN0bbvzzSbeOByhwh1045NSDj6myAMlpHzs=;
+        b=X0cRKUPXI37K7E3OEd1U5rMMpOGGxC03pJ+1EwjWJdmI5LiX4uczxOBMELWxd9KcAv
+         73WNbc7D4Eag/SnB2DUJCJm5RcLvdceBox8LMtCDqSX5Bf3E/+zLJwZuTIud3FmGaqy7
+         NqTfck6bQQr7c4vYO5rj8eDmBSjGheN4utrC1tkHmdQebMxpOX9FHCT32HD/whTL8w0p
+         r9GyVZDD70+xV8kGpFO2OTmXxj/HD7vTPQ2YeqvoghFMrpH0j6B0hSQfVeH50y+0l0/k
+         IU4B3GEIiBDb/pftzMakfIru1eU9oEkWwW46y+Gci90eEvuukNwPmldLYbWGvTuNHByz
+         SOVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:in-reply-to:cc:references:message-id:date:subject:mime-version
-         :from:content-transfer-encoding:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3DKcNQJ3RVEMM8vP+7GPSWzcDvUtzfV2i4+1GcoEVYE=;
-        b=QYdJVhxmQJTjaaXr/BtWgs7CbE7pgV8YzOTsxI30qRP4LO1XBMCP/pws3QqKOpFjJu
-         F62jvEa88S1pPgwItCdfekcPPmcaJ53aPvkYEvG1aVw8ebQ6b74AYSHa0OVmziNf8htI
-         U0pREb/zLnQo6ejit6YqFz0vk8N5F+NCVUImjg8kuLKC1zLx7esMUzil9eLgXaiAHlvw
-         UeeEapYmih2Tr7oP0qf3RjCS2cFnfPb9jg7rXUFmcgGQYPj7yzdKrIPzXOxGf23TdFve
-         vKSoCsjnKp+8DA8/RaiIxeapLUrhExcNcRk1iLxZL2WohEdtCHztR1SdYFU1dyFAm20D
-         Y/ig==
-X-Gm-Message-State: ACrzQf1jd8WWs8xuvddEuJKjX+nt7VQysi/MxYIeZrWB1lDDiPXXNIba
-        7xF+gna2PFDva9OChhWRmqx5aA==
-X-Google-Smtp-Source: AMsMyM7upmT3EwxwMAmeY2BOX7RVYtPqaPk4aHLcnlD09U86cii2ogN6TWpJxWcZuXadk4MC9OhUMQ==
-X-Received: by 2002:ac8:5a42:0:b0:39d:136e:8a43 with SMTP id o2-20020ac85a42000000b0039d136e8a43mr20991571qta.372.1667418710987;
-        Wed, 02 Nov 2022 12:51:50 -0700 (PDT)
-Received: from smtpclient.apple (c-73-148-104-166.hsd1.va.comcast.net. [73.148.104.166])
-        by smtp.gmail.com with ESMTPSA id bj41-20020a05620a192900b006f7ee901674sm9159593qkb.2.2022.11.02.12.51.50
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 12:51:50 -0700 (PDT)
-Content-Type: text/plain; charset=utf-8
-Content-Transfer-Encoding: quoted-printable
-From:   Joel Fernandes <joel@joelfernandes.org>
-Mime-Version: 1.0 (1.0)
-Subject: Re: [PATCH RFC] rcu/kfree: Do not request RCU when not needed
-Date:   Wed, 2 Nov 2022 15:51:49 -0400
-Message-Id: <ED8E1017-A219-4815-BA28-5F44A2FB8FF2@joelfernandes.org>
-References: <20221102183237.GO5600@paulmck-ThinkPad-P17-Gen-1>
-Cc:     Uladzislau Rezki <urezki@gmail.com>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221102183237.GO5600@paulmck-ThinkPad-P17-Gen-1>
-To:     paulmck@kernel.org
-X-Mailer: iPhone Mail (19G82)
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=aYp24omPHN0bbvzzSbeOByhwh1045NSDj6myAMlpHzs=;
+        b=HXqTMylk9xB1G2VZJ8hzcC4oP1v2gr68MJbgKxPJvf/KZFUppeAsKF8hcsFKYJ24gf
+         gjRFsQDf6JgUKYpjzqWz8/VQQvpyN1c8YCzO1u9Oi1MWDDVL1uUQRYNh79wOn9G4BNfM
+         lGa0cqD6+pr9KZn8Yx+g+ZqbgAW9KgyhqLQs4/h7Dx4AVz4x7VWWTzi/Iwh09+toTyjX
+         y01/ok2YFLy7HxnmOajULfgQmC5a4b6S39dLdeDnYy6bqFnbxrka4AITsYQjflMWlvrE
+         yPYUPqn5gEJFfLN3YzPKIRlUdGf9EgApbLy9F8t0Im2VLN2X7bHOE+jTQqsU1P9q1fUb
+         8mCQ==
+X-Gm-Message-State: ACrzQf0jTV5XpNKF1Lr0hZuCBAo825e56An0ElbRzpLQmT7tvErv/uMF
+        wAJbdlT89ioFiSqd9IFGmqhGYtznkHuhVnwRHBE=
+X-Google-Smtp-Source: AMsMyM7jyv2hDc2xFubeC6LWZ79sPVywK7e70UBBaJ8PriKu575coH1OTW9AAD17pG20IROdxSkjMJcCos+BZXAV5HU=
+X-Received: by 2002:a63:d905:0:b0:46f:8979:30cf with SMTP id
+ r5-20020a63d905000000b0046f897930cfmr21275910pgg.87.1667418776200; Wed, 02
+ Nov 2022 12:52:56 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221023171658.69761-1-michael.lilja@gmail.com>
+ <Y1fC5K0EalIYuB7Y@salvia> <381FF5B6-4FEF-45E9-92D6-6FE927A5CC2D@gmail.com>
+ <Y1fd+DEPZ8xM2x5B@salvia> <F754AC3A-D89A-4CF7-97AE-CA59B18A758E@gmail.com>
+ <Y1kQ9FhrwxCKIdoe@salvia> <25246B91-B5BE-43CA-9D98-67950F17F0A1@gmail.com>
+ <03E5D5FA-5A0D-4E5A-BA32-3FE51764C02E@gmail.com> <Y2K8XnFZvZeD4MEg@salvia>
+In-Reply-To: <Y2K8XnFZvZeD4MEg@salvia>
+From:   Michael Lilja <michael.lilja@gmail.com>
+Date:   Wed, 2 Nov 2022 20:52:45 +0100
+Message-ID: <CAHgAcbNOCSzQrCScdGumgFD6+X0BjdMgHdCiY4fkanPN_Qg86Q@mail.gmail.com>
+Subject: Re: [PATCH] Periodically flow expire from flow offload tables
+To:     Pablo Neira Ayuso <pablo@netfilter.org>
+Cc:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Jozsef Kadlecsik <kadlec@netfilter.org>,
+        Florian Westphal <fw@strlen.de>, netdev@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        netfilter-devel@vger.kernel.org, coreteam@netfilter.org
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hi,
 
-
-> On Nov 2, 2022, at 2:32 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
->=20
-> =EF=BB=BFOn Wed, Nov 02, 2022 at 06:30:24PM +0100, Uladzislau Rezki wrote:=
-
->>>=20
->>> to wait for a GP. Or if the poll_state_synchronize_rcu(oldstate)) !=3D 0=
-
->>> queue_rcu_work().
->>>=20
->> A small fix. If poll_state_synchronize_rcu(oldstate)) =3D=3D 0 then
->> queue_rcu_work() since a GP is still in progress.
->=20
-> Both get_state_synchronize_rcu() and poll_state_synchronize_rcu()
-> may be invoked from interrupt handlers.  And from NMI handlers,
-> for that matter.
-
-Thanks for clarifying. I meant to say cond_synchronize_rcu() cannot be calle=
-d from interrupt context, but I made that comment before Vlad cooked his pat=
-ch.
-
-Thanks,
-
- - Joel
-
-
->                            Thanx, Paul
+thanks. I have been too busy elsewhere so I have not yet looked at
+patching the IPS_OFFLOAD myself. When I quickly looked at it last
+week, the IPS_OFFLOAD got set a few places, so I'm not sure there is a
+race somewhere still.
