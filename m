@@ -2,62 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 344B16162D9
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:40:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7F036162DB
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:40:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231174AbiKBMkv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 08:40:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49036 "EHLO
+        id S230478AbiKBMk4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 08:40:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231171AbiKBMkh (ORCPT
+        with ESMTP id S230526AbiKBMkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 08:40:37 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3252B2A254;
-        Wed,  2 Nov 2022 05:40:23 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id i3so16265507pfc.11;
-        Wed, 02 Nov 2022 05:40:23 -0700 (PDT)
+        Wed, 2 Nov 2022 08:40:39 -0400
+Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A25EE2A247;
+        Wed,  2 Nov 2022 05:40:26 -0700 (PDT)
+Received: by mail-pg1-x52d.google.com with SMTP id r18so16101667pgr.12;
+        Wed, 02 Nov 2022 05:40:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XWycHaP8mfKxEznoLfJrfhCyqFQA+DINLzwU4BVGVxk=;
-        b=Vjz6n77GwFrjTad3BeT91Wjt9YM/ZuHb/Ihplqu7Quq40BkVDlbSXLkn7IGbIEwTJd
-         WIMpL3Nla3r0fZ+BqFRPC8liWRTn/03ai1RK4lOrYcR8lpTLISCbHi/hzjq/K5lY8Lxh
-         YBHY0Kv4f2eFOSIkqYHMiYlQyNFjJsVadJ0YyWbgU8V7jYNanDRspS2SLiCu83lIEymE
-         sgzAZs/HBhERYNmbcNYfGdP/nkZgYrRxxyRB30yKe1p+PaSsOqQnhbotmUqEXJf/JdC3
-         1XsaKzluGl8R1u7G6w2z/R9pCik9nWdnnMlgYgBFB6/SCCVovyj0vTX8Bg3H5uIP3AM5
-         VHVA==
+        bh=xe5a5Ru1/XT66dpFkqWwNZmEbEp5/a1fNwas3qwNPCU=;
+        b=fvAtYKUe/Ychvwzd3I6de24IsN9RvsNMpvWnbYipWTg9V/fFoanLqa14uuE+ntvDWK
+         h8mU0mz+E4mGizz4oj/RxVnY2IbPW6+/YCesr865G//rNRjEdiMaa8+U23s3W6TG7RgL
+         e17kyY0mdJ2CwVGAmxuqHp4AGc+Br+VwqwQLQnad4QqHzcvDbvjvCVG31SV++RcVkDuW
+         aZP6F9oShASUvqHGDGj8TVH0tqbIIyhmGrRozBtvBnR4NsiGWdXzWnPCEO5KIisMI97n
+         BRw3mfUf/zrLRnjW6/nK7HrOn1yw4qLtZrjqwh40+R+0KMEapx5P0Y5HwHrPw2cbSipH
+         XPIQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=XWycHaP8mfKxEznoLfJrfhCyqFQA+DINLzwU4BVGVxk=;
-        b=CcYlAy+iHjkRc3BcOCZ3xszBC0z0FHg23TbrdoUZxMepIohwLY3pZMDhRj13w+UW89
-         irSy3mUadsEDXEwct0BOID96B/IKAvihzyRXDapPuqz1vpwCmAH0K8vFaZ4Pd88bpkng
-         Qdene8cp/CZtTqdty7acE/Pzze5xQjyl7Tgikqk+hv0gpW/0qmalFZVR1nSo1Vx1G5fH
-         HHAHXPysos2TnP2+t2UzzhidhnCrTlC7Z2AsNJ0e7h+OZlJ0AgwESI1zW6DMXQdjaTXv
-         ur//F69eOjt0dL/cIgQefxbZdde/r2xpcmfyfZIYNHM+sUuWXtI2qaxq8opNU1thLu4r
-         8qmQ==
-X-Gm-Message-State: ACrzQf0TOHAQZmNUphUnz5PyvBITh/ieqbxOo4YO3nt+kkrTY3fkjl2C
-        MAEI1B+fyI6eLXpp8aMggyPtj0rq+2Hg2D3y
-X-Google-Smtp-Source: AMsMyM6+peOYHtwZjDWKqsEc76ZhDpUihRXvTF1OtSrg2x70YIx+HB/0VsHCP9OFhoKDCBnafaeWJA==
-X-Received: by 2002:a05:6a00:1152:b0:56c:dd9c:da94 with SMTP id b18-20020a056a00115200b0056cdd9cda94mr24949120pfm.66.1667392822584;
-        Wed, 02 Nov 2022 05:40:22 -0700 (PDT)
+        bh=xe5a5Ru1/XT66dpFkqWwNZmEbEp5/a1fNwas3qwNPCU=;
+        b=cvu8wp5Z8kvKo9IFFdtVnxmqmck+1kjyRmjJbxtV0vthww7eGzeJbiBLSOl83KF9MI
+         xYrg+6Zdl/XpRxD9lE5Lb5I+mTiZ2qTtd7ZH6w8xxKfmfGk+tKddzBTfSxa/mF5QseV0
+         tyYMkRbBE1sd8Kn9il2C/urmPuoXo2fPj4bqR8QBZ8FzGmyeBe1KfixZ5kAhsG8k5zce
+         cljs+4l09K44C/7fP8O/dXaUgq/9VQM4DXKCS6yjuqEORfrws1QOQFJHfEhLKQ0ruG1p
+         pdV/+7eNknzlywlhyl8qfHdc7TaB6+425HxLWcLYaUaC7EnEs5bn16zhuCMuSWeBNdS3
+         ukrg==
+X-Gm-Message-State: ACrzQf0EhLfM+wZPaOsDsftk4rShRqVNB3rrwm1FX8WIb5lI7Ck4hlBA
+        cMf9q7u7nKri7ff7ZeJV3fQ=
+X-Google-Smtp-Source: AMsMyM5MCQt8YBiAHYQm8dtgMBBm25GSFqCMceamsEH0a5pp0vWc93EyVnrzHmyWsvpdMYABjKxCYg==
+X-Received: by 2002:a63:24d:0:b0:452:87c1:9781 with SMTP id 74-20020a63024d000000b0045287c19781mr21723627pgc.512.1667392826161;
+        Wed, 02 Nov 2022 05:40:26 -0700 (PDT)
 Received: from Zbook.localdomain ([129.227.152.6])
-        by smtp.gmail.com with ESMTPSA id f19-20020aa79693000000b0056c003f9169sm8339360pfk.196.2022.11.02.05.40.20
+        by smtp.gmail.com with ESMTPSA id f19-20020aa79693000000b0056c003f9169sm8339360pfk.196.2022.11.02.05.40.24
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 05:40:22 -0700 (PDT)
+        Wed, 02 Nov 2022 05:40:25 -0700 (PDT)
 From:   Yuwei Guan <ssawgyw@gmail.com>
 X-Google-Original-From: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
 To:     paolo.valente@linaro.org, axboe@kernel.dk
 Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
         Yuwei.Guan@zeekrlife.com
-Subject: [PATCH 4/5] block, bfq: change "secs" to "sects" for bfq log in bfq_bfqq_served()
-Date:   Wed,  2 Nov 2022 20:39:55 +0800
-Message-Id: <20221102123956.230-5-Yuwei.Guan@zeekrlife.com>
+Subject: [PATCH 5/5] block, bfq: print bfqq addr for each bfq_log_bfqq log
+Date:   Wed,  2 Nov 2022 20:39:56 +0800
+Message-Id: <20221102123956.230-6-Yuwei.Guan@zeekrlife.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20221102123956.230-1-Yuwei.Guan@zeekrlife.com>
 References: <20221102123956.230-1-Yuwei.Guan@zeekrlife.com>
@@ -73,26 +73,106 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Let "sects" short for sectors, as "secs" is reminiscent of seconds.
+Print bfqq addr for each bfq_log_bfqq log, which can improve readability
+of bfq log.
 
 Signed-off-by: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
 ---
- block/bfq-wf2q.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ block/bfq-iosched.c | 15 +++++++--------
+ block/bfq-iosched.h |  4 +++-
+ block/bfq-wf2q.c    |  3 +--
+ 3 files changed, 11 insertions(+), 11 deletions(-)
 
-diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
-index 8fc3da4c23bb..f57ed0b037f3 100644
---- a/block/bfq-wf2q.c
-+++ b/block/bfq-wf2q.c
-@@ -823,7 +823,7 @@ void bfq_bfqq_served(struct bfq_queue *bfqq, int served)
- 		st->vtime += bfq_delta(served, st->wsum);
- 		bfq_forget_idle(st);
+diff --git a/block/bfq-iosched.c b/block/bfq-iosched.c
+index 9c626fba41c8..432c5337d7c2 100644
+--- a/block/bfq-iosched.c
++++ b/block/bfq-iosched.c
+@@ -5253,7 +5253,7 @@ void bfq_put_queue(struct bfq_queue *bfqq)
+ 	struct hlist_node *n;
+ 	struct bfq_group *bfqg = bfqq_group(bfqq);
+ 
+-	bfq_log_bfqq(bfqq->bfqd, bfqq, "put_queue: %p %d", bfqq, bfqq->ref);
++	bfq_log_bfqq(bfqq->bfqd, bfqq, "put_queue: ref %d", bfqq->ref);
+ 
+ 	bfqq->ref--;
+ 	if (bfqq->ref)
+@@ -5356,7 +5356,7 @@ static void bfq_exit_bfqq(struct bfq_data *bfqd, struct bfq_queue *bfqq)
+ 		bfq_schedule_dispatch(bfqd);
  	}
--	bfq_log_bfqq(bfqq->bfqd, bfqq, "bfqq_served %d secs", served);
-+	bfq_log_bfqq(bfqq->bfqd, bfqq, "bfqq_served %d sects", served);
+ 
+-	bfq_log_bfqq(bfqd, bfqq, "exit_bfqq: %p, %d", bfqq, bfqq->ref);
++	bfq_log_bfqq(bfqd, bfqq, "exit_bfqq: ref %d", bfqq->ref);
+ 
+ 	bfq_put_cooperator(bfqq);
+ 
+@@ -5772,8 +5772,8 @@ static struct bfq_queue *bfq_get_queue(struct bfq_data *bfqd,
+ 			      * guarantee that this queue is not freed
+ 			      * until its group goes away.
+ 			      */
+-		bfq_log_bfqq(bfqd, bfqq, "get_queue, bfqq not in async: %p, %d",
+-			     bfqq, bfqq->ref);
++		bfq_log_bfqq(bfqd, bfqq, "get_queue, bfqq not in async: ref %d",
++			     bfqq->ref);
+ 		*async_bfqq = bfqq;
+ 	}
+ 
+@@ -6803,8 +6803,8 @@ static struct bfq_queue *bfq_init_rq(struct request *rq)
+ 	bfqq_request_allocated(bfqq);
+ 	bfqq->ref++;
+ 	bic->requests++;
+-	bfq_log_bfqq(bfqd, bfqq, "get_request %p: bfqq %p, %d",
+-		     rq, bfqq, bfqq->ref);
++	bfq_log_bfqq(bfqd, bfqq, "get_request %p: bfqq ref %d",
++		     rq, bfqq->ref);
+ 
+ 	rq->elv.priv[0] = bic;
+ 	rq->elv.priv[1] = bfqq;
+@@ -6936,8 +6936,7 @@ static void __bfq_put_async_bfqq(struct bfq_data *bfqd,
+ 	if (bfqq) {
+ 		bfq_bfqq_move(bfqd, bfqq, bfqd->root_group);
+ 
+-		bfq_log_bfqq(bfqd, bfqq, "put_async_bfqq: putting %p, %d",
+-			     bfqq, bfqq->ref);
++		bfq_log_bfqq(bfqd, bfqq, "put_async_bfqq: ref %d", bfqq->ref);
+ 		bfq_put_queue(bfqq);
+ 		*bfqq_ptr = NULL;
+ 	}
+diff --git a/block/bfq-iosched.h b/block/bfq-iosched.h
+index 71f721670ab6..8851ffcb7a0d 100644
+--- a/block/bfq-iosched.h
++++ b/block/bfq-iosched.h
+@@ -24,7 +24,7 @@
+ #define BFQ_DEFAULT_GRP_IOPRIO	0
+ #define BFQ_DEFAULT_GRP_CLASS	IOPRIO_CLASS_BE
+ 
+-#define MAX_BFQQ_NAME_LENGTH 16
++#define MAX_BFQQ_NAME_LENGTH 32
+ 
+ /*
+  * Soft real-time applications are extremely more latency sensitive
+@@ -1090,6 +1090,8 @@ static inline void bfq_bfqq_name(struct bfq_queue *bfqq, char *str, int len)
+ 		snprintf(str, len, "bfq%d%c", bfqq->pid, type);
+ 	else
+ 		snprintf(str, len, "bfqSHARED-%c", type);
++
++	snprintf(str, len, "%s %p", str, bfqq);
  }
  
- /**
+ #ifdef CONFIG_BFQ_GROUP_IOSCHED
+diff --git a/block/bfq-wf2q.c b/block/bfq-wf2q.c
+index f57ed0b037f3..7ab4094af35a 100644
+--- a/block/bfq-wf2q.c
++++ b/block/bfq-wf2q.c
+@@ -513,8 +513,7 @@ static void bfq_get_entity(struct bfq_entity *entity)
+ 
+ 	if (bfqq) {
+ 		bfqq->ref++;
+-		bfq_log_bfqq(bfqq->bfqd, bfqq, "get_entity: %p %d",
+-			     bfqq, bfqq->ref);
++		bfq_log_bfqq(bfqq->bfqd, bfqq, "get_entity: ref %d", bfqq->ref);
+ 	}
+ }
+ 
 -- 
 2.34.1
 
