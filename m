@@ -2,75 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B4361601C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:42:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2EE861601A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:42:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiKBJmP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 05:42:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
+        id S230381AbiKBJl7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 05:41:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53124 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229877AbiKBJmK (ORCPT
+        with ESMTP id S230153AbiKBJlx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 05:42:10 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 368E122BDC;
-        Wed,  2 Nov 2022 02:42:06 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A29Ivv7010134;
-        Wed, 2 Nov 2022 09:41:55 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id; s=qcppdkim1;
- bh=/QZZc3grguwORo1yJe+PG5HwABOwaG+12JG/N0MDOc4=;
- b=MdsR+E7VHLfs0sumt1hUK6gVYgfwgsS89uX0HMSy8n/K87FXAWReDQOmMw3NLbdspaB0
- onJ2YrMa6Cp+qJjbx5oewlcYzyYyff/SsN/tm0VvRWV0jtZJYvvE6Jq9OHCBsucKAuiE
- ZU6K7+47kvGKWdqA+kJCNiaiVLnzU75xunIbsENru+0u/LZyArwEyXyb0SCPmyRq127r
- T/x3no2uVE7ChAIUlFZU9W7yCPnnHeOgf4pXJMhHpS/wmDfHv9kOBZm74Iw6dsYf/Pvh
- 3j4ekeWg319bJdIm6LYueGN2yiKYWdKRbVdGwZLnSriNd87Lo6p/Ye8YSKKuPfGWvb+R ow== 
-Received: from aptaippmta01.qualcomm.com (tpe-colo-wan-fw-bordernet.qualcomm.com [103.229.16.4])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kkja3ggk2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Nov 2022 09:41:55 +0000
-Received: from pps.filterd (APTAIPPMTA01.qualcomm.com [127.0.0.1])
-        by APTAIPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTP id 2A29fqgd026445;
-        Wed, 2 Nov 2022 09:41:52 GMT
-Received: from pps.reinject (localhost [127.0.0.1])
-        by APTAIPPMTA01.qualcomm.com (PPS) with ESMTPS id 3khdq7sex1-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-        Wed, 02 Nov 2022 09:41:52 +0000
-Received: from APTAIPPMTA01.qualcomm.com (APTAIPPMTA01.qualcomm.com [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A29fp2u026440;
-        Wed, 2 Nov 2022 09:41:51 GMT
-Received: from cbsp-sh-gv.qualcomm.com (CBSP-SH-gv.ap.qualcomm.com [10.231.249.68])
-        by APTAIPPMTA01.qualcomm.com (PPS) with ESMTP id 2A29fpLI026439;
-        Wed, 02 Nov 2022 09:41:51 +0000
-Received: by cbsp-sh-gv.qualcomm.com (Postfix, from userid 4098150)
-        id C20ED36CB; Wed,  2 Nov 2022 17:41:49 +0800 (CST)
-From:   Qiang Yu <quic_qianyu@quicinc.com>
-To:     mani@kernel.org, loic.poulain@linaro.org
-Cc:     mhi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, quic_cang@quicinc.com,
-        mrana@quicinc.com, Qiang Yu <quic_qianyu@quicinc.com>
-Subject: [PATCH v2] bus: mhi: host: Add session ID to MHI controller
-Date:   Wed,  2 Nov 2022 17:41:47 +0800
-Message-Id: <1667382107-14306-1-git-send-email-quic_qianyu@quicinc.com>
-X-Mailer: git-send-email 2.7.4
-X-QCInternal: smtphost
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 2ow7Dv-jBa3d3Ro5nMJVrfijwG-et0e-
-X-Proofpoint-GUID: 2ow7Dv-jBa3d3Ro5nMJVrfijwG-et0e-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-02_06,2022-11-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
- priorityscore=1501 suspectscore=0 mlxlogscore=999 bulkscore=0 adultscore=0
- clxscore=1011 phishscore=0 mlxscore=0 malwarescore=0 lowpriorityscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211020058
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=no
+        Wed, 2 Nov 2022 05:41:53 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5778222B28
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 02:41:52 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id q1-20020a17090a750100b002139ec1e999so1426724pjk.1
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 02:41:52 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ZZjjsfhVpVmcKXTEAXNtkm7mljVLUHPV6/kXC2ILvLk=;
+        b=adDXi8Yok5j/QS1Hd0PWyyALEH6R9tJTsIbSAWlQ/AXtawOjzK452sQCf1g9NHbd0t
+         X93cZ4qPH//xgANbOAwuONnYWtpVmnhQJ2cAGZy0NpekfVrFZpOLpdsmzbX/It4MCQ3f
+         bsWrjcjWIHmzlMmOeRWYWhBzs/1dZCD3V+xs4=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZZjjsfhVpVmcKXTEAXNtkm7mljVLUHPV6/kXC2ILvLk=;
+        b=YuP3czmFmQ6Six0BxHk7CCrnmYL+rviw7qFVHijwTSEi/zyTsOdO3btuqNZEe+CeA2
+         GOJVJ21ljEHPW/CXDkeUaWrb66NAIHFHdZbzIBR04XcwaAoqxd7ZRhDclrAzgs7Mibsw
+         hWCIQtNBW0x1SFw5gr8QPDg2LgafntKz7f6CFCs1BIRSyFzXfU5RMAwE9t54TbSvCdXT
+         31KldklxFMOwlDzsvVQc7YP3ddzoTQL79kMXzKwCvoFZEoC4XZPMddtnkOnbEnTnZWos
+         NAWbkx2C2MczPTK/pSA3E0tIcRuViy0R9DWaP2eNgvydUJmBSfiMD9MdWojf5fdTZiMF
+         cbYQ==
+X-Gm-Message-State: ACrzQf2deMuxKG6+fou0joTrqrhgjlJF2wtrbCIx8iDvROpeUOK3OXBv
+        ih26eXHndyhRUgs4yvNusXG47g==
+X-Google-Smtp-Source: AMsMyM52YklWkHCnOHxtQRQyhs05T/jj5R+sIap/eItkZFEUIuRECDv4bxs6he5KZD3NLJVtrqKUPA==
+X-Received: by 2002:a17:90a:e545:b0:213:9c27:cded with SMTP id ei5-20020a17090ae54500b002139c27cdedmr7680602pjb.208.1667382111831;
+        Wed, 02 Nov 2022 02:41:51 -0700 (PDT)
+Received: from [192.168.0.168] ([103.99.10.63])
+        by smtp.gmail.com with ESMTPSA id 3-20020a620403000000b0056da2bf607csm4326244pfe.214.2022.11.02.02.41.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 02:41:51 -0700 (PDT)
+Message-ID: <39586b57-aad2-d9ca-df12-67f1dfe60258@linuxfoundation.org>
+Date:   Wed, 2 Nov 2022 03:41:47 -0600
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v3 4/5] selftests/resctrl: Cleanup properly when an error
+ occurs in CAT test
+Content-Language: en-US
+To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
+        Fenghua Yu <fenghua.yu@intel.com>,
+        Reinette Chatre <reinette.chatre@intel.com>,
+        Shuah Khan <shuah@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20221101094341.3383073-1-tan.shaopeng@jp.fujitsu.com>
+ <20221101094341.3383073-5-tan.shaopeng@jp.fujitsu.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20221101094341.3383073-5-tan.shaopeng@jp.fujitsu.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -78,69 +77,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Session ID to be used during BHI transfers to recognize a
-particular session are currently not being stored in the MHI
-controller structure. Store them to allow for debug enhancement
-described below.
+On 11/1/22 03:43, Shaopeng Tan wrote:
+> After creating a child process with fork() in CAT test, if there is
+> an error occurs or such as a SIGINT signal is received, the parent
+> process will be terminated immediately, but the child process will not
+> be killed and also umount_resctrlfs() will not be called.
+> 
+> Add a signal handler like other tests to kill child process, umount
+> resctrlfs, cleanup result files, etc. when an error occurs.
+> 
+> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
+> ---
+>   tools/testing/selftests/resctrl/cat_test.c | 28 +++++++++++++++-------
+>   1 file changed, 19 insertions(+), 9 deletions(-)
+> 
+> diff --git a/tools/testing/selftests/resctrl/cat_test.c b/tools/testing/selftests/resctrl/cat_test.c
+> index 6a8306b0a109..5f81817f4366 100644
+> --- a/tools/testing/selftests/resctrl/cat_test.c
+> +++ b/tools/testing/selftests/resctrl/cat_test.c
+> @@ -98,12 +98,21 @@ void cat_test_cleanup(void)
+>   	remove(RESULT_FILE_NAME2);
+>   }
+>   
+> +static void ctrl_handler(int signo)
+> +{
+> +	kill(bm_pid, SIGKILL);
+> +	umount_resctrlfs();
+> +	tests_cleanup();
+> +	ksft_print_msg("Ending\n\n");
 
-Sometimes, we may find some error logs and want to see what
-happens on device side when host is printing these error logs.
-Session id can help us find the logs we want on device side
-quickly, especially when we are faced with a huge amount of logs.
+Is there a reason to print this message? Remove it unless it serves
+a purpose.
 
-Signed-off-by: Qiang Yu <quic_qianyu@quicinc.com>
----
-v1->v2: modify commit message.
+> +
+> +	exit(EXIT_SUCCESS);
+> +}
+> +
+>   int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+>   {
+>   	unsigned long l_mask, l_mask_1;
+>   	int ret, pipefd[2], sibling_cpu_no;
+>   	char pipe_message;
+> -	pid_t bm_pid;
 
- drivers/bus/mhi/host/boot.c | 8 ++++----
- include/linux/mhi.h         | 1 +
- 2 files changed, 5 insertions(+), 4 deletions(-)
+Odd. bm_pid is used below - why remove it here?
 
-diff --git a/drivers/bus/mhi/host/boot.c b/drivers/bus/mhi/host/boot.c
-index 1c69fee..79a0eec 100644
---- a/drivers/bus/mhi/host/boot.c
-+++ b/drivers/bus/mhi/host/boot.c
-@@ -229,7 +229,7 @@ static int mhi_fw_load_bhi(struct mhi_controller *mhi_cntrl,
- 			   dma_addr_t dma_addr,
- 			   size_t size)
- {
--	u32 tx_status, val, session_id;
-+	u32 tx_status, val;
- 	int i, ret;
- 	void __iomem *base = mhi_cntrl->bhi;
- 	rwlock_t *pm_lock = &mhi_cntrl->pm_lock;
-@@ -251,16 +251,16 @@ static int mhi_fw_load_bhi(struct mhi_controller *mhi_cntrl,
- 		goto invalid_pm_state;
- 	}
- 
--	session_id = MHI_RANDOM_U32_NONZERO(BHI_TXDB_SEQNUM_BMSK);
-+	mhi_cntrl->session_id = MHI_RANDOM_U32_NONZERO(BHI_TXDB_SEQNUM_BMSK);
- 	dev_dbg(dev, "Starting image download via BHI. Session ID: %u\n",
--		session_id);
-+		mhi_cntrl->session_id);
- 	mhi_write_reg(mhi_cntrl, base, BHI_STATUS, 0);
- 	mhi_write_reg(mhi_cntrl, base, BHI_IMGADDR_HIGH,
- 		      upper_32_bits(dma_addr));
- 	mhi_write_reg(mhi_cntrl, base, BHI_IMGADDR_LOW,
- 		      lower_32_bits(dma_addr));
- 	mhi_write_reg(mhi_cntrl, base, BHI_IMGSIZE, size);
--	mhi_write_reg(mhi_cntrl, base, BHI_IMGTXDB, session_id);
-+	mhi_write_reg(mhi_cntrl, base, BHI_IMGTXDB, mhi_cntrl->session_id);
- 	read_unlock_bh(pm_lock);
- 
- 	/* Wait for the image download to complete */
-diff --git a/include/linux/mhi.h b/include/linux/mhi.h
-index a5441ad..8b3c934 100644
---- a/include/linux/mhi.h
-+++ b/include/linux/mhi.h
-@@ -405,6 +405,7 @@ struct mhi_controller {
- 	u32 minor_version;
- 	u32 serial_number;
- 	u32 oem_pk_hash[MHI_MAX_OEM_PK_HASH_SEGMENTS];
-+	u32 session_id;
- 
- 	struct mhi_event *mhi_event;
- 	struct mhi_cmd *mhi_cmd;
--- 
-2.7.4
+>   
+>   	cache_size = 0;
+>   
+> @@ -181,17 +190,19 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+>   		strcpy(param.filename, RESULT_FILE_NAME1);
+>   		param.num_of_runs = 0;
+>   		param.cpu_no = sibling_cpu_no;
+> +	} else {
+> +		/* set up ctrl-c handler */
+> +		if (signal(SIGINT, ctrl_handler) == SIG_ERR ||
+> +		    signal(SIGHUP, ctrl_handler) == SIG_ERR ||
+> +		    signal(SIGTERM, ctrl_handler) == SIG_ERR)
+> +			printf("Failed to catch SIGNAL!\n");
 
+Is perror() more appropriate here?
+
+>   	}
+>   
+>   	remove(param.filename);
+>   
+>   	ret = cat_val(&param);
+> -	if (ret)
+> -		return ret;
+> -
+> -	ret = check_results(&param);
+> -	if (ret)
+> -		return ret;
+> +	if (ret == 0)
+> +		ret = check_results(&param);
+
+Why not use a goto in error case to do umount_resctrlfs() instead of changing
+the conditionals?
+
+>   
+>   	if (bm_pid == 0) {
+>   		/* Tell parent that child is ready */
+> @@ -201,7 +212,6 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+>   		    sizeof(pipe_message)) {
+>   			close(pipefd[1]);
+>   			perror("# failed signaling parent process");
+> -			return errno;
+>   		}
+>   
+>   		close(pipefd[1]);
+> @@ -226,5 +236,5 @@ int cat_perf_miss_val(int cpu_no, int n, char *cache_type)
+>   	if (bm_pid)
+>   		umount_resctrlfs();
+>   
+> -	return 0;
+> +	return ret;
+>   }
+
+
+With these changes made:
+
+Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+
+thanks,
+-- Shuah
