@@ -2,61 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BEEF561726D
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 00:25:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 53382617271
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 00:25:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231536AbiKBXZK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 19:25:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40716 "EHLO
+        id S230224AbiKBXZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 19:25:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231378AbiKBXYG (ORCPT
+        with ESMTP id S230394AbiKBXYI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 19:24:06 -0400
-Received: from mail-pg1-x534.google.com (mail-pg1-x534.google.com [IPv6:2607:f8b0:4864:20::534])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CBA6DF93;
-        Wed,  2 Nov 2022 16:20:21 -0700 (PDT)
-Received: by mail-pg1-x534.google.com with SMTP id v3so175756pgh.4;
-        Wed, 02 Nov 2022 16:20:21 -0700 (PDT)
+        Wed, 2 Nov 2022 19:24:08 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC43210FCE;
+        Wed,  2 Nov 2022 16:20:26 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id k22so91424pfd.3;
+        Wed, 02 Nov 2022 16:20:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Zl1LKmv4RLjwNkqEhUgdxCW+8uunPRUGj73i8adfR+c=;
-        b=Zral2Tj/aqfFI6R5Pqa5+FbaXdIvhtCzWT9QuQkI1+iVSW6VPfvqYzp5hZbaGyM9zV
-         dviv0OaZpUtGn+8f3wdQhkx8rhgri5HxRR5b7zoIsvQhSHZ/XEpT2lBzZUyHER398uIo
-         Q2woa/bwgmHk85q/XSl4Pxxrcfi26Bp8OdIo9KBB2pUKqzhwlgKJwDjQjnO/9PzrfmDG
-         lpocig4tQCJfGtwVIIomgjZt2tYopKPbZw7X9iOFDecI9rPcUrz2z+JiyHpgyJFqCVZz
-         fTWV6omQ7w4zOLKfWc8vE0NZNN7IFZ6FTIiyRK9O2blO6De32TTBZCVAFxBn3346LjBp
-         p+2w==
+        bh=WS1e+43uL+FT/xkdxSFm6nee4mo2YYL1lmvIqpiOoFU=;
+        b=eNAW09APtQMwcF8srtLQ4v8T0sRnvgNmfHGFMZdDwC5B5NONfljMrDCUSdXxhZxwAS
+         Si8f5RiURn8L/pDIk4NbK0PLKvOa7/cphvsv2PAk05tU/zHdSrErO4Tn9/5HTvSAEtg4
+         lloTdn1gVPlq+FLxaAtcBdz2Q+90hZULEalsqBD79E7eNlFV8N1Qp16tg64WEBLNN27y
+         +ezxfpXb6N0KSdbh3UxwH8EnTRlBfNmcRVbvdyC5A1qYNNtqFT/IKBzoMMB12zEXybfD
+         GRRF3owJwOlceGHIY33m7J39WzvkUNZl+dSZqvRpG/1vDqeJ2BtCDUSYLqHi3rgFbUxA
+         ZSGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=Zl1LKmv4RLjwNkqEhUgdxCW+8uunPRUGj73i8adfR+c=;
-        b=VX1Z1iN+Na5Kl1vW4DO50r/+C9UJotVAM1uXxcyXjUiHqnkIZNU/E4TJBfYaWn17zz
-         Tr9RtyN2CCLeQnfAcVKRdvmufqXMt++f02sFCb+J8iaLAUpmx5ZwzsQ+D3OwIcp8b/Fw
-         JNJpwCe/w9RLsvqgL7zJxLLyLIjz+nkzdimkwUNoPIMoDdL6CGtLBw7Ph29XcJK+vJDU
-         hTd+CQ3TRvVRLQlub+Gt5ckrRc1ANcBjdx26sbl3amSIsh3p4z9yz6+/kT2Maf5vJe67
-         7jUnRsxKxYMosoq57i/YOCxFAwnUVo0hwWMS0v4ESHeKCC0ei6du4y5tQWIFhndF/Z2A
-         Rl4g==
-X-Gm-Message-State: ACrzQf2N5e8N6Kyk7CFuBj8Ovyt634u0orh4G6UUEfT5MT3KEVDr0we+
-        Xnb7ZGdIVuQMgRlLChEu5zM=
-X-Google-Smtp-Source: AMsMyM6dCoQNWzn7ubeBVKYazgU6QRjmm+3+vw/zeNXUI4k5UYmv2ktqNQxKSozLyBhDVQ2DNB2HXQ==
-X-Received: by 2002:a63:105e:0:b0:46e:9bac:1c3 with SMTP id 30-20020a63105e000000b0046e9bac01c3mr22873269pgq.388.1667431210664;
-        Wed, 02 Nov 2022 16:20:10 -0700 (PDT)
+        bh=WS1e+43uL+FT/xkdxSFm6nee4mo2YYL1lmvIqpiOoFU=;
+        b=p8E/kToKpD1qANu8dEtojRKzFj+lhiPJvzcUHjNH6uqizoMAeLFosrNn+SKjwMYV9D
+         hNy5stvv8m2dWC3111S21oj0UwAVHQ7ZIhQMooTXP3li09U0LmZLL7jyxmXNoD56GTsn
+         /rhxXQ0A7xrtM4k2BxHmAMyvtPH/ChQuho5u3qHEVfFgwxG7akRLa4/IE0zOS9wy1Xug
+         uTCJ/KyRAzDJ+b2iJxTm1kGtc3GgZ65U8QUKYN06/DxAvQ/RZEhOebD/RShxH+HqitAa
+         hCeYym06nthUTTei70/3MB8nDCZ6tZL3cn+1GVPpdo5E4fJHc9EerLqEWiP4P101uOe8
+         w6OA==
+X-Gm-Message-State: ACrzQf1DtFU/8AHXL2KShovBESCE8+KwipQqZeBFZeHK40M8ucXsLszR
+        uTFZEKBsJChCapaHI4FMWoI=
+X-Google-Smtp-Source: AMsMyM4yOyeidT69MU0rVlgLhd+AuM79JodeBGbGUxHzsG5/nuu+7RMKT3vHWbJdgXDu52dKfwjQsQ==
+X-Received: by 2002:a63:f903:0:b0:46f:1b5:b4fd with SMTP id h3-20020a63f903000000b0046f01b5b4fdmr23233195pgi.544.1667431212859;
+        Wed, 02 Nov 2022 16:20:12 -0700 (PDT)
 Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:a6ae:11ff:fe11:fcc3])
-        by smtp.gmail.com with ESMTPSA id p8-20020a170902780800b00186e2123506sm8842073pll.300.2022.11.02.16.20.09
+        by smtp.gmail.com with ESMTPSA id p8-20020a170902780800b00186e2123506sm8842073pll.300.2022.11.02.16.20.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 16:20:09 -0700 (PDT)
+        Wed, 02 Nov 2022 16:20:12 -0700 (PDT)
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     Tony Lindgren <tony@atomide.com>, Mark Brown <broonie@kernel.org>
 Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-omap@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 2/3] ASoC: tlv320aic3x: remove support for platform data
-Date:   Wed,  2 Nov 2022 16:20:03 -0700
-Message-Id: <20221102232004.1721864-2-dmitry.torokhov@gmail.com>
+Subject: [PATCH 3/3] ASoC: tlv320aic3x: switch to using gpiod API
+Date:   Wed,  2 Nov 2022 16:20:04 -0700
+Message-Id: <20221102232004.1721864-3-dmitry.torokhov@gmail.com>
 X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
 In-Reply-To: <20221102232004.1721864-1-dmitry.torokhov@gmail.com>
 References: <20221102232004.1721864-1-dmitry.torokhov@gmail.com>
@@ -72,181 +72,230 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Switch the driver from legacy gpio API that is deprecated to the newer
+gpiod API that respects line polarities described in ACPI/DT.
+
+The driver still tries to support shared reset lines, by first trying to
+allocate the reset GPIO normally, and then non-exclusively, although the
+utility of such support is questionable, toggling reset line from one
+driver/instance will result in all chips being reset, potentially at an
+inopportune moment.
+
+Note that this change depends on commit fbbbcd177a27 ("gpiolib: of: add
+quirk for locating reset lines with legacy bindings") to translate
+request for "reset" GPIO to the legacy name "gpio-reset" in case when
+proper name is not used.
+
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- include/sound/tlv320aic3x.h    | 65 ----------------------------------
- sound/soc/codecs/tlv320aic3x.c | 12 +++----
- sound/soc/codecs/tlv320aic3x.h | 43 ++++++++++++++++++++++
- 3 files changed, 48 insertions(+), 72 deletions(-)
- delete mode 100644 include/sound/tlv320aic3x.h
+ sound/soc/codecs/tlv320aic3x.c | 108 ++++++++++++---------------------
+ 1 file changed, 39 insertions(+), 69 deletions(-)
 
-diff --git a/include/sound/tlv320aic3x.h b/include/sound/tlv320aic3x.h
-deleted file mode 100644
-index b660a9ed05ec..000000000000
---- a/include/sound/tlv320aic3x.h
-+++ /dev/null
-@@ -1,65 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * Platform data for Texas Instruments TLV320AIC3x codec
-- *
-- * Author: Jarkko Nikula <jarkko.nikula@bitmer.com>
-- */
--#ifndef __TLV320AIC3x_H__
--#define __TLV320AIC3x_H__
--
--/* GPIO API */
--enum {
--	AIC3X_GPIO1_FUNC_DISABLED		= 0,
--	AIC3X_GPIO1_FUNC_AUDIO_WORDCLK_ADC	= 1,
--	AIC3X_GPIO1_FUNC_CLOCK_MUX		= 2,
--	AIC3X_GPIO1_FUNC_CLOCK_MUX_DIV2		= 3,
--	AIC3X_GPIO1_FUNC_CLOCK_MUX_DIV4		= 4,
--	AIC3X_GPIO1_FUNC_CLOCK_MUX_DIV8		= 5,
--	AIC3X_GPIO1_FUNC_SHORT_CIRCUIT_IRQ	= 6,
--	AIC3X_GPIO1_FUNC_AGC_NOISE_IRQ		= 7,
--	AIC3X_GPIO1_FUNC_INPUT			= 8,
--	AIC3X_GPIO1_FUNC_OUTPUT			= 9,
--	AIC3X_GPIO1_FUNC_DIGITAL_MIC_MODCLK	= 10,
--	AIC3X_GPIO1_FUNC_AUDIO_WORDCLK		= 11,
--	AIC3X_GPIO1_FUNC_BUTTON_IRQ		= 12,
--	AIC3X_GPIO1_FUNC_HEADSET_DETECT_IRQ	= 13,
--	AIC3X_GPIO1_FUNC_HEADSET_DETECT_OR_BUTTON_IRQ	= 14,
--	AIC3X_GPIO1_FUNC_ALL_IRQ		= 16
--};
--
--enum {
--	AIC3X_GPIO2_FUNC_DISABLED		= 0,
--	AIC3X_GPIO2_FUNC_HEADSET_DETECT_IRQ	= 2,
--	AIC3X_GPIO2_FUNC_INPUT			= 3,
--	AIC3X_GPIO2_FUNC_OUTPUT			= 4,
--	AIC3X_GPIO2_FUNC_DIGITAL_MIC_INPUT	= 5,
--	AIC3X_GPIO2_FUNC_AUDIO_BITCLK		= 8,
--	AIC3X_GPIO2_FUNC_HEADSET_DETECT_OR_BUTTON_IRQ = 9,
--	AIC3X_GPIO2_FUNC_ALL_IRQ		= 10,
--	AIC3X_GPIO2_FUNC_SHORT_CIRCUIT_OR_AGC_IRQ = 11,
--	AIC3X_GPIO2_FUNC_HEADSET_OR_BUTTON_PRESS_OR_SHORT_CIRCUIT_IRQ = 12,
--	AIC3X_GPIO2_FUNC_SHORT_CIRCUIT_IRQ	= 13,
--	AIC3X_GPIO2_FUNC_AGC_NOISE_IRQ		= 14,
--	AIC3X_GPIO2_FUNC_BUTTON_PRESS_IRQ	= 15
--};
--
--enum aic3x_micbias_voltage {
--	AIC3X_MICBIAS_OFF = 0,
--	AIC3X_MICBIAS_2_0V = 1,
--	AIC3X_MICBIAS_2_5V = 2,
--	AIC3X_MICBIAS_AVDDV = 3,
--};
--
--struct aic3x_setup_data {
--	unsigned int gpio_func[2];
--};
--
--struct aic3x_pdata {
--	int gpio_reset; /* < 0 if not used */
--	struct aic3x_setup_data *setup;
--
--	/* Selects the micbias voltage */
--	enum aic3x_micbias_voltage micbias_vg;
--};
--
--#endif
 diff --git a/sound/soc/codecs/tlv320aic3x.c b/sound/soc/codecs/tlv320aic3x.c
-index 08938801daec..9b2bb99cc165 100644
+index 9b2bb99cc165..56e795a00e22 100644
 --- a/sound/soc/codecs/tlv320aic3x.c
 +++ b/sound/soc/codecs/tlv320aic3x.c
-@@ -45,7 +45,6 @@
- #include <sound/soc.h>
- #include <sound/initval.h>
- #include <sound/tlv.h>
--#include <sound/tlv320aic3x.h>
- 
- #include "tlv320aic3x.h"
- 
-@@ -66,6 +65,10 @@ struct aic3x_disable_nb {
- 	struct aic3x_priv *aic3x;
+@@ -32,12 +32,12 @@
+ #include <linux/moduleparam.h>
+ #include <linux/init.h>
+ #include <linux/delay.h>
++#include <linux/err.h>
+ #include <linux/pm.h>
+ #include <linux/i2c.h>
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/of.h>
+-#include <linux/of_gpio.h>
+ #include <linux/slab.h>
+ #include <sound/core.h>
+ #include <sound/pcm.h>
+@@ -56,8 +56,6 @@ static const char *aic3x_supply_names[AIC3X_NUM_SUPPLIES] = {
+ 	"DRVDD",	/* ADC Analog and Output Driver Voltage */
  };
  
-+struct aic3x_setup_data {
-+	unsigned int gpio_func[2];
-+};
-+
- /* codec private data */
- struct aic3x_priv {
- 	struct snd_soc_component *component;
-@@ -1748,7 +1751,6 @@ static const struct reg_sequence aic3007_class_d[] = {
+-static LIST_HEAD(reset_list);
+-
+ struct aic3x_priv;
  
- int aic3x_probe(struct device *dev, struct regmap *regmap, kernel_ulong_t driver_data)
+ struct aic3x_disable_nb {
+@@ -80,9 +78,9 @@ struct aic3x_priv {
+ 	unsigned int dai_fmt;
+ 	unsigned int tdm_delay;
+ 	unsigned int slot_width;
+-	struct list_head list;
+ 	int master;
+-	int gpio_reset;
++	struct gpio_desc *gpio_reset;
++	bool shared_reset;
+ 	int power;
+ 	u16 model;
+ 
+@@ -1369,8 +1367,8 @@ static int aic3x_regulator_event(struct notifier_block *nb,
+ 		 * Put codec to reset and require cache sync as at least one
+ 		 * of the supplies was disabled
+ 		 */
+-		if (gpio_is_valid(aic3x->gpio_reset))
+-			gpio_set_value(aic3x->gpio_reset, 0);
++		if (aic3x->gpio_reset)
++			gpiod_set_value(aic3x->gpio_reset, 1);
+ 		regcache_mark_dirty(aic3x->regmap);
+ 	}
+ 
+@@ -1390,9 +1388,9 @@ static int aic3x_set_power(struct snd_soc_component *component, int power)
+ 			goto out;
+ 		aic3x->power = 1;
+ 
+-		if (gpio_is_valid(aic3x->gpio_reset)) {
++		if (aic3x->gpio_reset) {
+ 			udelay(1);
+-			gpio_set_value(aic3x->gpio_reset, 1);
++			gpiod_set_value(aic3x->gpio_reset, 0);
+ 		}
+ 
+ 		/* Sync reg_cache with the hardware */
+@@ -1598,19 +1596,6 @@ static int aic3x_init(struct snd_soc_component *component)
+ 	return 0;
+ }
+ 
+-static bool aic3x_is_shared_reset(struct aic3x_priv *aic3x)
+-{
+-	struct aic3x_priv *a;
+-
+-	list_for_each_entry(a, &reset_list, list) {
+-		if (gpio_is_valid(aic3x->gpio_reset) &&
+-		    aic3x->gpio_reset == a->gpio_reset)
+-			return true;
+-	}
+-
+-	return false;
+-}
+-
+ static int aic3x_component_probe(struct snd_soc_component *component)
  {
--	struct aic3x_pdata *pdata = dev->platform_data;
- 	struct aic3x_priv *aic3x;
- 	struct aic3x_setup_data *ai3x_setup;
- 	struct device_node *np = dev->of_node;
-@@ -1768,11 +1770,7 @@ int aic3x_probe(struct device *dev, struct regmap *regmap, kernel_ulong_t driver
- 	regcache_cache_only(aic3x->regmap, true);
- 
- 	dev_set_drvdata(dev, aic3x);
--	if (pdata) {
--		aic3x->gpio_reset = pdata->gpio_reset;
--		aic3x->setup = pdata->setup;
--		aic3x->micbias_vg = pdata->micbias_vg;
--	} else if (np) {
-+	if (np) {
- 		ai3x_setup = devm_kzalloc(dev, sizeof(*ai3x_setup), GFP_KERNEL);
+ 	struct aic3x_priv *aic3x = snd_soc_component_get_drvdata(component);
+@@ -1775,19 +1760,6 @@ int aic3x_probe(struct device *dev, struct regmap *regmap, kernel_ulong_t driver
  		if (!ai3x_setup)
  			return -ENOMEM;
-diff --git a/sound/soc/codecs/tlv320aic3x.h b/sound/soc/codecs/tlv320aic3x.h
-index 14298f9e6d9b..066e5a6322b8 100644
---- a/sound/soc/codecs/tlv320aic3x.h
-+++ b/sound/soc/codecs/tlv320aic3x.h
-@@ -298,4 +298,47 @@ enum {
- #define AIC3X_BUTTON_DEBOUNCE_SHIFT 	0
- #define AIC3X_BUTTON_DEBOUNCE_MASK	3
  
-+/* GPIO API */
-+enum {
-+	AIC3X_GPIO1_FUNC_DISABLED		= 0,
-+	AIC3X_GPIO1_FUNC_AUDIO_WORDCLK_ADC	= 1,
-+	AIC3X_GPIO1_FUNC_CLOCK_MUX		= 2,
-+	AIC3X_GPIO1_FUNC_CLOCK_MUX_DIV2		= 3,
-+	AIC3X_GPIO1_FUNC_CLOCK_MUX_DIV4		= 4,
-+	AIC3X_GPIO1_FUNC_CLOCK_MUX_DIV8		= 5,
-+	AIC3X_GPIO1_FUNC_SHORT_CIRCUIT_IRQ	= 6,
-+	AIC3X_GPIO1_FUNC_AGC_NOISE_IRQ		= 7,
-+	AIC3X_GPIO1_FUNC_INPUT			= 8,
-+	AIC3X_GPIO1_FUNC_OUTPUT			= 9,
-+	AIC3X_GPIO1_FUNC_DIGITAL_MIC_MODCLK	= 10,
-+	AIC3X_GPIO1_FUNC_AUDIO_WORDCLK		= 11,
-+	AIC3X_GPIO1_FUNC_BUTTON_IRQ		= 12,
-+	AIC3X_GPIO1_FUNC_HEADSET_DETECT_IRQ	= 13,
-+	AIC3X_GPIO1_FUNC_HEADSET_DETECT_OR_BUTTON_IRQ	= 14,
-+	AIC3X_GPIO1_FUNC_ALL_IRQ		= 16
-+};
+-		ret = of_get_named_gpio(np, "reset-gpios", 0);
+-		if (ret >= 0) {
+-			aic3x->gpio_reset = ret;
+-		} else {
+-			ret = of_get_named_gpio(np, "gpio-reset", 0);
+-			if (ret > 0) {
+-				dev_warn(dev, "Using deprecated property \"gpio-reset\", please update your DT");
+-				aic3x->gpio_reset = ret;
+-			} else {
+-				aic3x->gpio_reset = -1;
+-			}
+-		}
+-
+ 		if (of_property_read_u32_array(np, "ai3x-gpio-func",
+ 					ai3x_setup->gpio_func, 2) >= 0) {
+ 			aic3x->setup = ai3x_setup;
+@@ -1812,29 +1784,43 @@ int aic3x_probe(struct device *dev, struct regmap *regmap, kernel_ulong_t driver
+ 		} else {
+ 			aic3x->micbias_vg = AIC3X_MICBIAS_OFF;
+ 		}
+-
+-	} else {
+-		aic3x->gpio_reset = -1;
+ 	}
+ 
+ 	aic3x->model = driver_data;
+ 
+-	if (gpio_is_valid(aic3x->gpio_reset) &&
+-	    !aic3x_is_shared_reset(aic3x)) {
+-		ret = gpio_request(aic3x->gpio_reset, "tlv320aic3x reset");
+-		if (ret != 0)
+-			goto err;
+-		gpio_direction_output(aic3x->gpio_reset, 0);
++	aic3x->gpio_reset = devm_gpiod_get_optional(dev, "reset",
++						    GPIOD_OUT_HIGH);
++	ret = PTR_ERR_OR_ZERO(aic3x->gpio_reset);
++	if (ret) {
++		if (ret != -EBUSY)
++			return ret;
 +
-+enum {
-+	AIC3X_GPIO2_FUNC_DISABLED		= 0,
-+	AIC3X_GPIO2_FUNC_HEADSET_DETECT_IRQ	= 2,
-+	AIC3X_GPIO2_FUNC_INPUT			= 3,
-+	AIC3X_GPIO2_FUNC_OUTPUT			= 4,
-+	AIC3X_GPIO2_FUNC_DIGITAL_MIC_INPUT	= 5,
-+	AIC3X_GPIO2_FUNC_AUDIO_BITCLK		= 8,
-+	AIC3X_GPIO2_FUNC_HEADSET_DETECT_OR_BUTTON_IRQ = 9,
-+	AIC3X_GPIO2_FUNC_ALL_IRQ		= 10,
-+	AIC3X_GPIO2_FUNC_SHORT_CIRCUIT_OR_AGC_IRQ = 11,
-+	AIC3X_GPIO2_FUNC_HEADSET_OR_BUTTON_PRESS_OR_SHORT_CIRCUIT_IRQ = 12,
-+	AIC3X_GPIO2_FUNC_SHORT_CIRCUIT_IRQ	= 13,
-+	AIC3X_GPIO2_FUNC_AGC_NOISE_IRQ		= 14,
-+	AIC3X_GPIO2_FUNC_BUTTON_PRESS_IRQ	= 15
-+};
++		/*
++		 * Apparently there are setups where the codec is sharing
++		 * its reset line. Try to get it non-exclusively, although
++		 * the utility of this is unclear: how do we make sure that
++		 * resetting one chip will not disturb the others that share
++		 * the same line?
++		 */
++		aic3x->gpio_reset = devm_gpiod_get(dev, "reset",
++				GPIOD_ASIS | GPIOD_FLAGS_BIT_NONEXCLUSIVE);
++		ret = PTR_ERR_OR_ZERO(aic3x->gpio_reset);
++		if (ret)
++			return ret;
 +
-+enum aic3x_micbias_voltage {
-+	AIC3X_MICBIAS_OFF = 0,
-+	AIC3X_MICBIAS_2_0V = 1,
-+	AIC3X_MICBIAS_2_5V = 2,
-+	AIC3X_MICBIAS_AVDDV = 3,
-+};
++		aic3x->shared_reset = true;
+ 	}
+ 
++	gpiod_set_consumer_name(aic3x->gpio_reset, "tlv320aic3x reset");
 +
- #endif /* _AIC3X_H */
+ 	for (i = 0; i < ARRAY_SIZE(aic3x->supplies); i++)
+ 		aic3x->supplies[i].supply = aic3x_supply_names[i];
+ 
+ 	ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(aic3x->supplies),
+ 				      aic3x->supplies);
+-	if (ret != 0) {
++	if (ret) {
+ 		dev_err(dev, "Failed to request supplies: %d\n", ret);
+-		goto err_gpio;
++		return ret;
+ 	}
+ 
+ 	aic3x_configure_ocmv(dev, aic3x);
+@@ -1843,26 +1829,14 @@ int aic3x_probe(struct device *dev, struct regmap *regmap, kernel_ulong_t driver
+ 		ret = regmap_register_patch(aic3x->regmap, aic3007_class_d,
+ 					    ARRAY_SIZE(aic3007_class_d));
+ 		if (ret != 0)
+-			dev_err(dev, "Failed to init class D: %d\n",
+-				ret);
++			dev_err(dev, "Failed to init class D: %d\n", ret);
+ 	}
+ 
+ 	ret = devm_snd_soc_register_component(dev, &soc_component_dev_aic3x, &aic3x_dai, 1);
+-
+-	if (ret != 0)
+-		goto err_gpio;
+-
+-	INIT_LIST_HEAD(&aic3x->list);
+-	list_add(&aic3x->list, &reset_list);
++	if (ret)
++		return ret;
+ 
+ 	return 0;
+-
+-err_gpio:
+-	if (gpio_is_valid(aic3x->gpio_reset) &&
+-	    !aic3x_is_shared_reset(aic3x))
+-		gpio_free(aic3x->gpio_reset);
+-err:
+-	return ret;
+ }
+ EXPORT_SYMBOL(aic3x_probe);
+ 
+@@ -1870,13 +1844,9 @@ void aic3x_remove(struct device *dev)
+ {
+ 	struct aic3x_priv *aic3x = dev_get_drvdata(dev);
+ 
+-	list_del(&aic3x->list);
+-
+-	if (gpio_is_valid(aic3x->gpio_reset) &&
+-	    !aic3x_is_shared_reset(aic3x)) {
+-		gpio_set_value(aic3x->gpio_reset, 0);
+-		gpio_free(aic3x->gpio_reset);
+-	}
++	/* Leave the codec in reset state */
++	if (aic3x->gpio_reset && !aic3x->shared_reset)
++		gpiod_set_value(aic3x->gpio_reset, 1);
+ }
+ EXPORT_SYMBOL(aic3x_remove);
+ 
 -- 
 2.38.1.273.g43a17bfeac-goog
 
