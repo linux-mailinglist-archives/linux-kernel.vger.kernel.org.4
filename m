@@ -2,129 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 522D361651E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:29:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4B24F616525
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:30:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230232AbiKBO27 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 10:28:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59778 "EHLO
+        id S231679AbiKBOaL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 10:30:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60568 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231278AbiKBO24 (ORCPT
+        with ESMTP id S229934AbiKBO3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 10:28:56 -0400
-Received: from mail-ed1-x535.google.com (mail-ed1-x535.google.com [IPv6:2a00:1450:4864:20::535])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A411A2A704;
-        Wed,  2 Nov 2022 07:28:52 -0700 (PDT)
-Received: by mail-ed1-x535.google.com with SMTP id y69so26719701ede.5;
-        Wed, 02 Nov 2022 07:28:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=JN9e6KnO28jwqscnNvWI6DFGM8wjQ/Z+ADfn8tI1rrU=;
-        b=cXi1du0jLioRrdro2Mry3RZROvpWveZLs8DPOyXerdCZf6h6nZD0lf6u1zu/YVq31h
-         j8Vss8GXlGDyZQqG0Na4QOK0eomYRW9p08zUDzOpLte/26uETzBysY37ACu2tovmqzPd
-         X5jsSdBPrJqtA4eLd6m9+H/QRjweSmCKcKxJeDo/dtmeETXf+1Db9u6HdWus93fbZY3W
-         2v6o65DYAb06bXGEb5X/3/T5mF/KKz0tU5eLW2nXPQeQQssOktOmB8KeSgN+5IaM2cif
-         n+LTx5th6PvvsN75OJx7FAr6Or/h0+WK23Fn0XpOSy94EE8/9PNgCgbb5Q+FRlNJGGuk
-         2TFQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=JN9e6KnO28jwqscnNvWI6DFGM8wjQ/Z+ADfn8tI1rrU=;
-        b=2A3FdV2Jg23CmyDJYHqzdw+cmZX1wkVwtn+ujYv++AI/DFbSMo1JpsOct6euewlbeg
-         JBoMDAzOJUr4WtlrbM/xZuoMRVsm0Hts+XSXQmUmLmeFC8XvR3AuV5RwERvqA8s/j9CA
-         yMvFOzrLu/SpU4NNoBWcOR2G8MpvIMrALBaFpHsihczUSZ4vKL5xUSQKu7ddMXXT5M1D
-         Xadyo3dtDb0QnXVvyXziKDb+7O44AjYi/KLHVSoAs8oEZqos1I8snTDvI0N2SCt5Kf9G
-         /yNlPOQbzP5Pa5v6uKJX9coXMBOLijhTDqabOayrEomN3M+OiwioUd5Vw+1nVXFpnZ0R
-         11sA==
-X-Gm-Message-State: ACrzQf1Z1G6xUqRJhsAF0us9h+qjWohX4LvMk5GhInQZBXDQNnPkULnk
-        tLmn7zJJ61OFKoWcm8mSmRUyhvDmGUobvg==
-X-Google-Smtp-Source: AMsMyM56KVIWrxndO7Iw7G/EJqZjqfE4f1bezoOgvKn27JAwbOIAkXkMrCk3OX5AqIagDmjBX/0O0g==
-X-Received: by 2002:a05:6402:2a03:b0:463:11e7:cd5f with SMTP id ey3-20020a0564022a0300b0046311e7cd5fmr21575119edb.274.1667399331132;
-        Wed, 02 Nov 2022 07:28:51 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id u9-20020a1709061da900b0079800b81709sm5470994ejh.219.2022.11.02.07.28.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 07:28:50 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Wed, 2 Nov 2022 15:28:47 +0100
-To:     Hao Sun <sunhao.th@gmail.com>
-Cc:     Jiri Olsa <olsajiri@gmail.com>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        andrii@kernel.org, ast@kernel.org, bpf <bpf@vger.kernel.org>,
-        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
-        kpsingh@kernel.org, martin.lau@linux.dev, sdf@google.com,
-        song@kernel.org, yhs@fb.com
-Subject: Re: WARNING in bpf_bprintf_prepare
-Message-ID: <Y2J+n7SqmtfyA7ZM@krava>
-References: <CACkBjsakT_yWxnSWr4r-0TpPvbKm9-OBmVUhJb7hV3hY8fdCkw@mail.gmail.com>
- <Y1pqWPRmP0M+hcXf@krava>
- <CACkBjsbP-iw-gpnYN=Ormcu2zXAeOgjeptjGAFXNNJRRVhRAag@mail.gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CACkBjsbP-iw-gpnYN=Ormcu2zXAeOgjeptjGAFXNNJRRVhRAag@mail.gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        Wed, 2 Nov 2022 10:29:53 -0400
+Received: from esa4.hgst.iphmx.com (esa4.hgst.iphmx.com [216.71.154.42])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9A202B19B;
+        Wed,  2 Nov 2022 07:29:42 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
+  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
+  t=1667399383; x=1698935383;
+  h=from:to:cc:subject:date:message-id;
+  bh=5kjv+Eofbg6EEagVUtsebL/TmswxuzBGGl0iDd2sZaI=;
+  b=pG9IhfjdUGXQ/kxaYNXNNCTowoMJc/6SlcWoZIzX8FuHdr0x4VPpFRiq
+   Gz6Zu+InqnMsfHcnjgf0+PUs2NpQRRYDrPni8iU3dUXy0mM0iOBc4Po9W
+   vuazxSMNEKNQ/ZSemE0MdKkiWio+95pyr4qUV9LQ/dO1EZZrTdERj4ubm
+   6uH+lddcny2ITC2l4vo/bnjzFHw9v9EjAXZP8XRSV4PBzHRiCUyZGUF2a
+   CVKm6LPn7niBJbpsW0yswPOOiFV33dWbcbs0ZZqUNA5EMFg8xZVGA74BW
+   kK7vDe/OOAoETyg788IvH7/ASyLrsJtAmhufUuQHeJY/e2ysnDtHmH7Ue
+   w==;
+X-IronPort-AV: E=Sophos;i="5.95,234,1661788800"; 
+   d="scan'208";a="213607169"
+Received: from uls-op-cesaip01.wdc.com (HELO uls-op-cesaep01.wdc.com) ([199.255.45.14])
+  by ob1.hgst.iphmx.com with ESMTP; 02 Nov 2022 22:29:42 +0800
+IronPort-SDR: Glrt0U51kRzVgTuIg9Q//0eWCWoMRntqizlxRbx5yGtwL+sUmPMUlVbSunUBhSguG+lNbmbp09
+ RScG+S01WZnc57VjGWcBGgQm0k/5NcD/WF3+n9Zvi5LxbSlw5smqEtZa7+/OQ0nsYPyr4INE4V
+ eGcgoS5tsAsV3wBOzxA7vDrANdDy/cagTBrNQgjSa3RkXrdby6ODrA8sOfK5/hkuAvaKi6Wj8l
+ URa1eW2b9lE3QM4X+/NPjxAIDFEu00GuUT68dLd+JcibIu3fTcnSwWOCHtVDAMtagWTMzlJvtw
+ GcE=
+Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
+  by uls-op-cesaep01.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 02 Nov 2022 06:48:55 -0700
+IronPort-SDR: uESj0/LdP+QqMomig9AN2xK4/BAuRV24flBO2w+o8d+h7ehzW6FX/ZKSCN5AmpyJAA1Qm+7xDb
+ PKCTiPPhLyYbzDAVjgQL91Q9Mj/EJFipeViB2Yuy4oYb9ojbPJ/bua8QvWlSPS3HXt97S2eHvC
+ fXkPtzPIVp2Y7yM2kCynTVGzxP9w7WUmibI+K+yTclW3zA0efmvSN/hKz78NqwoEbxBN6hueHt
+ pDpBmvIoyEpWVbURqGWp8+Y+oBj3LH/fVB2CJOxWCYJ0uh2jEForLKk2h+UOAT96LNHOnrwf9Q
+ uss=
+WDCIronportException: Internal
+Received: from ilb001078.ad.shared (HELO ilb001078.sdcorp.global.sandisk.com) ([10.45.31.219])
+  by uls-op-cesaip01.wdc.com with ESMTP; 02 Nov 2022 07:29:40 -0700
+From:   Arthur Simchaev <Arthur.Simchaev@wdc.com>
+To:     martin.petersen@oracle.com
+Cc:     beanhuo@micron.com, linux-scsi@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Arthur Simchaev <Arthur.Simchaev@wdc.com>
+Subject: [PATCH v2 0/4] ufs: core: Always read the descriptors with max length
+Date:   Wed,  2 Nov 2022 16:29:09 +0200
+Message-Id: <1667399353-10228-1-git-send-email-Arthur.Simchaev@wdc.com>
+X-Mailer: git-send-email 2.7.4
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Oct 27, 2022 at 07:45:16PM +0800, Hao Sun wrote:
-> Jiri Olsa <olsajiri@gmail.com> 于2022年10月27日周四 19:24写道：
-> >
-> > On Thu, Oct 27, 2022 at 10:27:28AM +0800, Hao Sun wrote:
-> > > Hi,
-> > >
-> > > The following warning can be triggered with the C reproducer in the link.
-> > > Syzbot also reported this several days ago, Jiri posted a patch that
-> > > uses bpf prog `active` field to fix this by 05b24ff9b2cfab (bpf:
-> > > Prevent bpf program recursion...) according to syzbot dashboard
-> > > (https://syzkaller.appspot.com/bug?id=179313fb375161d50a98311a28b8e2fc5f7350f9).
-> > > But this warning can still be triggered on 247f34f7b803
-> > > (Linux-v6.1-rc2) that already merged the patch, so it seems that this
-> > > still is an issue.
-> > >
-> > > HEAD commit: 247f34f7b803 Linux 6.1-rc2
-> > > git tree: upstream
-> > > console output: https://pastebin.com/raw/kNw8JCu5
-> > > kernel config: https://pastebin.com/raw/sE5QK5HL
-> > > C reproducer: https://pastebin.com/raw/X96ASi27
-> >
-> > hi,
-> > right, that fix addressed that issue for single bpf program,
-> > and it won't prevent if there are multiple programs hook on
-> > contention_begin tracepoint and calling bpf_trace_printk,
-> >
-> > I'm not sure we can do something there.. will check
-> >
-> > do you run just the reproducer, or you load the server somehow?
-> > I cannot hit the issue so far
-> >
-> 
-> Hi,
-> 
-> Last email has format issues, resend it here.
-> 
-> I built the kernel with the config in the link, which contains
-> “CONFIG_CMDLINE="earlyprintk=serial net.ifnames=0
-> sysctl.kernel.hung_task_all_cpu_backtrace=1 panic_on_warn=1 …”, and
-> boot the kernel with normal qemu setup and then the warning can be
-> triggered by executing the reproducer.
-> 
-> Also, I’m willing to test the proposed patch if any.
+v1--v2:
+  Fix argument warning in ufshpb.c
 
-fyi I reproduced that.. will check if we can do anything about that
+Read any descriptor with a maximum size of QUERY_DESC_MAX_SIZE.
+According to the spec the device rerurns the actual size.
+Thus can improve code readability and save CPU cycles.
+While at it, cleanup few leftovers around the descriptor size parameter.
 
-thanks,
-jirka
+Suggested-by: Bean Huo <beanhuo@micron.com>
+
+Arthur Simchaev (4):
+  ufs:core: Remove redundant wb check
+  ufs:core: Remove redundant desc_size variable from hba
+  ufs: core: Remove len parameter from ufshcd_set_active_icc_lvl
+  ufs: core: Remove ufshcd_map_desc_id_to_length function
+
+ drivers/ufs/core/ufs_bsg.c     |   7 +--
+ drivers/ufs/core/ufshcd-priv.h |   3 --
+ drivers/ufs/core/ufshcd.c      | 100 ++++++++++-------------------------------
+ drivers/ufs/core/ufshpb.c      |   5 +--
+ include/ufs/ufshcd.h           |   1 -
+ 5 files changed, 26 insertions(+), 90 deletions(-)
+
+-- 
+2.7.4
+
