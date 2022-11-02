@@ -2,117 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16B3B61702C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 23:02:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDB43617037
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 23:05:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230340AbiKBWCu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 18:02:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50264 "EHLO
+        id S230387AbiKBWF2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 18:05:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51514 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbiKBWCr (ORCPT
+        with ESMTP id S229681AbiKBWFZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 18:02:47 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8FD6A9FDC
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 15:02:46 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id k5so9947174pjo.5
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 15:02:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tDdQ76HTuetM+x0U50OZVmoiEGjK/pNJ2DGCTRImjr8=;
-        b=KQiJkZtePhI2flEsUJPvJWcVFKJ+OroKKLIqrw7gi+MX+q2049MD3JdT/HnYDFu9WR
-         zLFsSCKGQMStyQIn1lzgksLz8eM0HdHrRUXnS3XiBPbgf+cvVwhSqUXkg1CPQQjS8peH
-         VqixHIIJaqwe+pLijCFPO7sKai856yU/ibvqI=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tDdQ76HTuetM+x0U50OZVmoiEGjK/pNJ2DGCTRImjr8=;
-        b=O0ZQx7qHy2tSB0xn+fo+8TC3N7VS7tpa70Hy4z/FH1rhqew83FrnfoE9zqr3Jbde7z
-         /GbWPjhb0NuQlMuocyh8DJtTOePPkzdm8/9NZTzAZu47xUj+VfTDgiOnZJoRMuQXrbsw
-         11z3hhYrXzsChUQ/AVnw70AGrSQcSWiCwy+O2KqW2aanVxyvJz/qs+cijV2HCzv2vBBI
-         kDXE/la3hzZY4NikYyfUWTgEcCyFafUYpHGVrLIBAUoqmqR2fQw5kGUq2pHFP+tUafU1
-         ecE3enqdG3TR4YbJQMElceWp03yQqadLTgiS9iwpjS9bZAmqe25cQQ8UfgcRFYc1PKMn
-         SaHw==
-X-Gm-Message-State: ACrzQf3RPGX5wUi/4t3kC463lfa8BHlklvcNwjMLAD3tOyRVj8R+xZ7X
-        /9uWbbaEAAln3T6lrnTwKd8UGFUfEO5uTg==
-X-Google-Smtp-Source: AMsMyM4WkfzMykXnG15VA0dkbaFs2pJjZSHDWxSbgybvMUsbX2OvhgJaXXTBVFr7hoOw8Zjy6TVn2g==
-X-Received: by 2002:a17:90b:1095:b0:213:ee6a:f268 with SMTP id gj21-20020a17090b109500b00213ee6af268mr16266724pjb.213.1667426566071;
-        Wed, 02 Nov 2022 15:02:46 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id a20-20020a621a14000000b0056c6e59fb69sm8926019pfa.83.2022.11.02.15.02.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 15:02:45 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 15:02:44 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     William Breathitt Gray <william.gray@linaro.org>,
-        linux-iio@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Patrick Havelange <patrick.havelange@essensium.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Julien Panis <jpanis@baylibre.com>,
-        David Lechner <david@lechnology.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-omap@vger.kernel.org
-Subject: Re: [PATCH 1/4] counter: Adjust final parameter type in function and
- signal callbacks
-Message-ID: <202211021501.88D8147@keescook>
-References: <20221102172217.2860740-1-nathan@kernel.org>
- <202211021216.FF49E84C69@keescook>
- <Y2LR13xrrauVmeXP@dev-arch.thelio-3990X>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2LR13xrrauVmeXP@dev-arch.thelio-3990X>
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 2 Nov 2022 18:05:25 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5DB94617B;
+        Wed,  2 Nov 2022 15:05:24 -0700 (PDT)
+Received: from pps.filterd (m0098419.ppops.net [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A2Lcs8L030144;
+        Wed, 2 Nov 2022 22:05:00 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : subject :
+ from : to : cc : date : in-reply-to : references : content-type :
+ mime-version : content-transfer-encoding; s=pp1;
+ bh=7dbezdsWrjkeeMK5twTGOFsoXL1sQg9vzSRIDM1zxyY=;
+ b=Bqf5ObwD15lBCgLE6ZdCXPnYGEKFxHtfFJ6e0kWJi0hulVwLosbCrj7lk+AwWDraU/Aq
+ QhNsCWo1EYpwJ36tm8delRQdJze8CkC6rUy5tgjMEAMYSOETdKgqPrxk5OPgRGUX6vr7
+ Dq7JVP4CfE3f/JQ+D/XMrZ7+jboUH1XkYs5Th55w0MAOvKvKRQSsrApUrU2yneXxGweP
+ l2Pe2Fs1TYI5eujOfO2bcxu6eFPF45OvDnpOkEiQB0TJE3ytINRf501MubMAONAJV6u+
+ Bbr9xwjpOAbcdm3pOgNm5TNze7Zn5qqkHIy4658wMkzvAWWYFWHRDtkGxP6WsMT4mzHC Xg== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3km0dk8s58-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 22:04:59 +0000
+Received: from m0098419.ppops.net (m0098419.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A2M4mJY032545;
+        Wed, 2 Nov 2022 22:04:59 GMT
+Received: from ppma02dal.us.ibm.com (a.bd.3ea9.ip4.static.sl-reverse.com [169.62.189.10])
+        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3km0dk8s4k-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 22:04:59 +0000
+Received: from pps.filterd (ppma02dal.us.ibm.com [127.0.0.1])
+        by ppma02dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A2Los9W018270;
+        Wed, 2 Nov 2022 22:04:58 GMT
+Received: from b03cxnp07028.gho.boulder.ibm.com (b03cxnp07028.gho.boulder.ibm.com [9.17.130.15])
+        by ppma02dal.us.ibm.com with ESMTP id 3kgutampy0-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 22:04:58 +0000
+Received: from smtpav04.dal12v.mail.ibm.com ([9.208.128.131])
+        by b03cxnp07028.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A2M4wnv524918
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Nov 2022 22:04:59 GMT
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 1F6E25806D;
+        Wed,  2 Nov 2022 22:04:57 +0000 (GMT)
+Received: from smtpav04.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 49CAD58056;
+        Wed,  2 Nov 2022 22:04:56 +0000 (GMT)
+Received: from li-f45666cc-3089-11b2-a85c-c57d1a57929f.ibm.com (unknown [9.160.53.174])
+        by smtpav04.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  2 Nov 2022 22:04:56 +0000 (GMT)
+Message-ID: <ef7375db277ac6a9398ee31a27e95eed717c4832.camel@linux.ibm.com>
+Subject: Re: [PATCH] ima: Fix memory leak in __ima_inode_hash()
+From:   Mimi Zohar <zohar@linux.ibm.com>
+To:     Roberto Sassu <roberto.sassu@huaweicloud.com>,
+        dmitry.kasatkin@gmail.com, paul@paul-moore.com, jmorris@namei.org,
+        serge@hallyn.com
+Cc:     linux-integrity@vger.kernel.org,
+        linux-security-module@vger.kernel.org, bpf@vger.kernel.org,
+        linux-kernel@vger.kernel.org, isaac.jmatt@gmail.com,
+        Roberto Sassu <roberto.sassu@huawei.com>,
+        stable@vger.kernel.org
+Date:   Wed, 02 Nov 2022 18:04:55 -0400
+In-Reply-To: <20221102163006.1039343-1-roberto.sassu@huaweicloud.com>
+References: <20221102163006.1039343-1-roberto.sassu@huaweicloud.com>
+Content-Type: text/plain; charset="ISO-8859-15"
+X-Mailer: Evolution 3.28.5 (3.28.5-18.el8) 
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: GNyIH1ZTOMz_JqqTwmGGKkMDxZn7WlVK
+X-Proofpoint-GUID: FKRu6htgPJkjapMQl1NhLG56MGNwlI9N
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-02_15,2022-11-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 phishscore=0
+ adultscore=0 mlxscore=0 mlxlogscore=867 bulkscore=0 impostorscore=0
+ lowpriorityscore=0 clxscore=1015 malwarescore=0 priorityscore=1501
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211020146
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 01:23:51PM -0700, Nathan Chancellor wrote:
-> Right, I am not the biggest fan of this change myself and it is entirely
-> possible that I am misreading the warnings from the commit message but I
-> do not see how
-> 
->         comp_node.comp.signal_u32_read = counter->ops->signal_read;
-> 
-> and
-> 
->         comp_node.comp.count_u32_read = counter->ops->function_read;
-> 
-> in counter_add_watch(),
-> 
->         comp.signal_u32_read = counter->ops->signal_read;
-> 
-> in counter_signal_attrs_create(), and
-> 
->         comp.count_u32_read = counter->ops->function_read;
->         comp.count_u32_write = counter->ops->function_write;
-> 
-> in counter_count_attrs_create() are currently safe under kCFI, since the
-> final parameter type of the prototypes in 'struct counter_ops' does not
-> match the final parameter type of the prototypes in 'struct
-> counter_comp'. I would expect the indirect calls in counter_get_data()
-> and counter_comp_u32_show() to fail currently.
+Hi Roberto,
 
-Ah! Thank you -- those were the places I couldn't find.
+On Wed, 2022-11-02 at 17:30 +0100, Roberto Sassu wrote:
+> From: Roberto Sassu <roberto.sassu@huawei.com>
 
--- 
-Kees Cook
+Any chance you could fix your mailer?
+
+> 
+> Commit f3cc6b25dcc5 ("ima: always measure and audit files in policy") lets
+> measurement or audit happen even if the file digest cannot be calculated.
+> 
+> As a result, iint->ima_hash could have been allocated despite
+> ima_collect_measurement() returning an error.
+> 
+> Since ima_hash belongs to a temporary inode metadata structure, declared
+> at the beginning of __ima_inode_hash(), just add a kfree() call if
+> ima_collect_measurement() returns an error different from -ENOMEM (in that
+> case, ima_hash should not have been allocated).
+> 
+> Cc: stable@vger.kernel.org
+> Fixes: 280fe8367b0d ("ima: Always return a file measurement in ima_file_hash()")
+> Signed-off-by: Roberto Sassu <roberto.sassu@huawei.com>
+
+Thanks,
+
+Reviewed-by: Mimi Zohar <zohar@linux.ibm.com>
+
