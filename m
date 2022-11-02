@@ -2,329 +2,376 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 293F66170BB
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 23:34:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B79206170BE
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 23:35:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230196AbiKBWeC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 18:34:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42366 "EHLO
+        id S231475AbiKBWfY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 18:35:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229516AbiKBWd7 (ORCPT
+        with ESMTP id S229516AbiKBWfV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 18:33:59 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C246B65E3;
-        Wed,  2 Nov 2022 15:33:57 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id k2so76592qkk.7;
-        Wed, 02 Nov 2022 15:33:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jghAwM8O77qNsX5ylF4aUMHAtVnZKZQ1M8+R/5pBzT0=;
-        b=nkLWQNFEFioMwqqh0LoOH22rSx9eGFg5xXVrmzAgklEC2pssPksA6a9ctgyVCLKraz
-         oVCGhLVua3FKhg+tgq7c5c5MrdmCy2DovBjWQHeV+Gy0VjxJ2wcSG30PHUpJZfyjMCNp
-         zEQaZFBt0XB/LfMomirlvzGIKWM92tuVhVImyOaXCz2yEJHBgNq6eL5RKVuwa2yQKqtF
-         TvnqweDLLwFxZKtNz59fJ4NarViSA6/0zsnVDYS2xM2qbPVneNxIpiJFmo/0XYAOB8Xs
-         N8OILRfuSCKHLVx+T6U2q8p6Xau0cZ1MBOzipU/Dt5cEBDFF6jcGyMhmqB5/saR9SWwW
-         zROQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jghAwM8O77qNsX5ylF4aUMHAtVnZKZQ1M8+R/5pBzT0=;
-        b=7P/CiNzdJwXz6Nb/o50bPGdvRGfDYGn82CLqwK03QOawUgH9foGaFkmgDnTRjIFuB3
-         saZppZ8jKFl8ODOs0DPVI9CDtXGgxaWIyZgb1kyugSKb36FrEt953XOOGbOmVR22IPXn
-         zO9exmUBXzja7frRus1i1Udvy/d2k4bDXaR8rrLnxHHLp8gWoptBkqG4+SgiVb6hUx+4
-         JyZp7+B9xJOCgPRVRG8b7sNs/OfujDlC3CBJD1tCr2ZMPXq4um8GkymogenMhdLEGfFM
-         DiAiLMM4QOGc9+Uv/c26DjWKCTeF3TXfMUHsLHbotbH9wvAVebyvetv3gFOvRXjUEuOn
-         fQrg==
-X-Gm-Message-State: ACrzQf1LhIy5CW9NRbMvPI9tIclQ8HrZG9c2VfKerv4GQSFNlQf4oY2X
-        tb1N8cx9pcVrP0SOIADg8g0=
-X-Google-Smtp-Source: AMsMyM6+N2KW2cUrG1EWb9tH3WABxZKVeVhPkHtX5GS3rJ6W8714MIzsLndP6LQXWJvNAwxd+iTH8A==
-X-Received: by 2002:a05:620a:8d8:b0:6fa:696a:685 with SMTP id z24-20020a05620a08d800b006fa696a0685mr3061526qkz.250.1667428436753;
-        Wed, 02 Nov 2022 15:33:56 -0700 (PDT)
-Received: from [10.69.53.73] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id w12-20020a05620a424c00b006bbc3724affsm9518914qko.45.2022.11.02.15.33.54
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 15:33:56 -0700 (PDT)
-Message-ID: <9842ee9c-5fcc-5458-2779-ad9b88468b48@gmail.com>
-Date:   Wed, 2 Nov 2022 15:33:53 -0700
+        Wed, 2 Nov 2022 18:35:21 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 498DFBC34;
+        Wed,  2 Nov 2022 15:35:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id D6549B824FA;
+        Wed,  2 Nov 2022 22:35:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E891C433C1;
+        Wed,  2 Nov 2022 22:35:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667428516;
+        bh=Om3QRnnYQbp26+VRHx4KigiYKkeJ2zYlKKUn85uboR8=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=pjdQVRYuP5GYuEsXnZH+YCVcvsJopXm/BJZ2vO1koF+0IjJJHhnO/17OvWEbzj0R6
+         iK5729OfIfhuVNDE4YxYufV+554yXmmp0zU2GXHlcHoqRrKFOD3lYQMWjtH5we6aJt
+         tVuuHEqcakAoeD1epF1i73alrRfh5YzMk9mTBbiQmAkNOG+inwqMiYapf4JCjrmw68
+         nwFb1qJAUgIJer0hUJyNZCMXE8KlOo+FSpVlGt5gDc/YVy82V/HBFQt/wysEYqkyma
+         dA1uR6bS8xVmPesK3/llPOSyy3zXCNkLsUGp3vrJPVnB4YTvrFwD2x/OkMiWkT4Xy0
+         FmfxIsX74J5eQ==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id 3147A5C1813; Wed,  2 Nov 2022 15:35:16 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 15:35:16 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC] rcu/kfree: Do not request RCU when not needed
+Message-ID: <20221102223516.GT5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221102184911.GP5600@paulmck-ThinkPad-P17-Gen-1>
+ <755B5ED1-653D-4E57-B114-77CDE10A9033@joelfernandes.org>
+ <20221102202813.GR5600@paulmck-ThinkPad-P17-Gen-1>
+ <CAEXW_YQ+SxBoNUkPHhC3O0DJNQtZomN_4GPtvaWuDs5sSU4FAw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.1.2
-Subject: Re: [PATCH v3 0/9] mm: introduce Designated Movable Blocks
-To:     Mel Gorman <mgorman@suse.de>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Mike Rapoport <rppt@kernel.org>, Borislav Petkov <bp@suse.de>,
-        "Paul E. McKenney" <paulmck@kernel.org>,
-        Neeraj Upadhyay <quic_neeraju@quicinc.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Damien Le Moal <damien.lemoal@opensource.wdc.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Michal Hocko <mhocko@suse.com>,
-        KOSAKI Motohiro <kosaki.motohiro@jp.fujitsu.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        David Hildenbrand <david@redhat.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-References: <20221020215318.4193269-1-opendmb@gmail.com>
- <20221026105500.n6ddzqqf5ozjswsp@suse.de>
-Content-Language: en-US
-From:   Doug Berger <opendmb@gmail.com>
-In-Reply-To: <20221026105500.n6ddzqqf5ozjswsp@suse.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAEXW_YQ+SxBoNUkPHhC3O0DJNQtZomN_4GPtvaWuDs5sSU4FAw@mail.gmail.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/26/2022 3:55 AM, Mel Gorman wrote:
-> On Thu, Oct 20, 2022 at 02:53:09PM -0700, Doug Berger wrote:
->> MOTIVATION:
->> Some Broadcom devices (e.g. 7445, 7278) contain multiple memory
->> controllers with each mapped in a different address range within
->> a Uniform Memory Architecture. Some users of these systems have
->> expressed the desire to locate ZONE_MOVABLE memory on each
->> memory controller to allow user space intensive processing to
->> make better use of the additional memory bandwidth.
->> Unfortunately, the historical monotonic layout of zones would
->> mean that if the lowest addressed memory controller contains
->> ZONE_MOVABLE memory then all of the memory available from
->> memory controllers at higher addresses must also be in the
->> ZONE_MOVABLE zone. This would force all kernel memory accesses
->> onto the lowest addressed memory controller and significantly
->> reduce the amount of memory available for non-movable
->> allocations.
->>
+On Wed, Nov 02, 2022 at 05:26:40PM -0400, Joel Fernandes wrote:
+> On Wed, Nov 2, 2022 at 4:28 PM Paul E. McKenney <paulmck@kernel.org> wrote:
+> >
+> > On Wed, Nov 02, 2022 at 03:46:59PM -0400, Joel Fernandes wrote:
+> > >
+> > >
+> > > > On Nov 2, 2022, at 2:49 PM, Paul E. McKenney <paulmck@kernel.org> wrote:
+> > > >
+> > > > ﻿On Wed, Nov 02, 2022 at 07:31:40PM +0100, Uladzislau Rezki wrote:
+> > > >>> On Wed, Nov 02, 2022 at 01:29:17PM -0400, Joel Fernandes wrote:
+> > > >>> On Wed, Nov 2, 2022 at 1:24 PM Uladzislau Rezki <urezki@gmail.com> wrote:
+> > > >>>>
+> > > >>>> On Wed, Nov 02, 2022 at 09:35:44AM -0700, Paul E. McKenney wrote:
+> > > >>>>> On Wed, Nov 02, 2022 at 12:13:17PM -0400, Joel Fernandes wrote:
+> > > >>>>>> On Wed, Nov 2, 2022 at 8:37 AM Uladzislau Rezki <urezki@gmail.com> wrote:
+> > > >>>>>>>
+> > > >>>>>>> On Sat, Oct 29, 2022 at 01:28:56PM +0000, Joel Fernandes (Google) wrote:
+> > > >>>>>>>> On ChromeOS, I am (almost) always seeing the optimization trigger.
+> > > >>>>>>>> Tested boot up and trace_printk'ing how often it triggers.
+> > > >>>>>>>>
+> > > >>>>>>>> Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > >>>>>>>> ---
+> > > >>>>>>>> kernel/rcu/tree.c | 18 +++++++++++++++++-
+> > > >>>>>>>> 1 file changed, 17 insertions(+), 1 deletion(-)
+> > > >>>>>>>>
+> > > >>>>>>>> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > >>>>>>>> index 591187b6352e..3e4c50b9fd33 100644
+> > > >>>>>>>> --- a/kernel/rcu/tree.c
+> > > >>>>>>>> +++ b/kernel/rcu/tree.c
+> > > >>>>>>>> @@ -2935,6 +2935,7 @@ struct kfree_rcu_cpu_work {
+> > > >>>>>>>>
+> > > >>>>>>>> /**
+> > > >>>>>>>>  * struct kfree_rcu_cpu - batch up kfree_rcu() requests for RCU grace period
+> > > >>>>>>>> + * @rdp: The rdp of the CPU that this kfree_rcu corresponds to.
+> > > >>>>>>>>  * @head: List of kfree_rcu() objects not yet waiting for a grace period
+> > > >>>>>>>>  * @bkvhead: Bulk-List of kvfree_rcu() objects not yet waiting for a grace period
+> > > >>>>>>>>  * @krw_arr: Array of batches of kfree_rcu() objects waiting for a grace period
+> > > >>>>>>>> @@ -2964,6 +2965,8 @@ struct kfree_rcu_cpu {
+> > > >>>>>>>>      struct kfree_rcu_cpu_work krw_arr[KFREE_N_BATCHES];
+> > > >>>>>>>>      raw_spinlock_t lock;
+> > > >>>>>>>>      struct delayed_work monitor_work;
+> > > >>>>>>>> +     struct rcu_data *rdp;
+> > > >>>>>>>> +     unsigned long last_gp_seq;
+> > > >>>>>>>>      bool initialized;
+> > > >>>>>>>>      int count;
+> > > >>>>>>>>
+> > > >>>>>>>> @@ -3167,6 +3170,7 @@ schedule_delayed_monitor_work(struct kfree_rcu_cpu *krcp)
+> > > >>>>>>>>                      mod_delayed_work(system_wq, &krcp->monitor_work, delay);
+> > > >>>>>>>>              return;
+> > > >>>>>>>>      }
+> > > >>>>>>>> +     krcp->last_gp_seq = krcp->rdp->gp_seq;
+> > > >>>>>>>>      queue_delayed_work(system_wq, &krcp->monitor_work, delay);
+> > > >>>>>>>> }
+> > > >>>>>>>>
+> > > >>>>>>>> @@ -3217,7 +3221,17 @@ static void kfree_rcu_monitor(struct work_struct *work)
+> > > >>>>>>>>                      // be that the work is in the pending state when
+> > > >>>>>>>>                      // channels have been detached following by each
+> > > >>>>>>>>                      // other.
+> > > >>>>>>>> -                     queue_rcu_work(system_wq, &krwp->rcu_work);
+> > > >>>>>>>> +                     //
+> > > >>>>>>>> +                     // NOTE about gp_seq wrap: In case of gp_seq overflow,
+> > > >>>>>>>> +                     // it is possible for rdp->gp_seq to be less than
+> > > >>>>>>>> +                     // krcp->last_gp_seq even though a GP might be over. In
+> > > >>>>>>>> +                     // this rare case, we would just have one extra GP.
+> > > >>>>>>>> +                     if (krcp->last_gp_seq &&
+> > > >>>>>>>>
+> > > >>>>>>> This check can be eliminated i think. A kfree_rcu_cpu is defined as
+> > > >>>>>>> static so by default the last_gp_set is set to zero.
+> > > >>>>>>
+> > > >>>>>> Ack.
+> > > >>>>>>
+> > > >>>>>>>> @@ -4802,6 +4816,8 @@ static void __init kfree_rcu_batch_init(void)
+> > > >>>>>>>>      for_each_possible_cpu(cpu) {
+> > > >>>>>>>>              struct kfree_rcu_cpu *krcp = per_cpu_ptr(&krc, cpu);
+> > > >>>>>>>>
+> > > >>>>>>>> +             krcp->rdp = per_cpu_ptr(&rcu_data, cpu);
+> > > >>>>>>>> +             krcp->last_gp_seq = 0;
+> > > >>>>>>>>
+> > > >>>>>>> Yep. This one can be just dropped.
+> > > >>>>>>>
+> > > >>>>>>> But all the rest looks good :) I will give it a try from test point of
+> > > >>>>>>> view. It is interested from the memory footprint point of view.
+> > > >>>>>>
+> > > >>>>>> Ack. Thanks. Even though we should not sample rdp->gp_seq, I think it
+> > > >>>>>> is still worth a test.
+> > > >>>>>
+> > > >>>>> Just for completeness, the main purpose of rdp->gp_seq is to reject
+> > > >>>>> quiescent states that were seen during already-completed grace periods.
+> > > >>>>>
+> > > >>>> So it means that instead of gp_seq reading we should take a snaphshot
+> > > >>>> of the current state:
+> > > >>>>
+> > > >>>> snp = get_state_synchronize_rcu();
+> > > >>>>
+> > > >>>> and later on do a:
+> > > >>>>
+> > > >>>> cond_synchronize_rcu(snp);
+> > > >>>>
+> > > >>>> to wait for a GP.
+> > > >>>
+> > > >>> This can't be called from the timer IRQ handler though (monitor)
+> > > >>>
+> > > >>>> Or if the poll_state_synchronize_rcu(oldstate)) != 0
+> > > >>>> queue_rcu_work().
+> > > >>>
+> > > >>> But something like this should be possible (maybe)
+> > > >>>
+> > > >>>> Sorry for a description using the RCU API functions name :)
+> > > >>>
+> > > >>> I believe you will have to call rcu_poll_gp_seq_start() as well if you
+> > > >>> are using polled API. I am planning to look at this properly more,
+> > > >>> soon. Right now I am going to write up the rcutop doc and share with
+> > > >>> you guys.
+> > > >>>
+> > > >>> (Maybe RCU polling is the right thing to do as we reuse all the infra
+> > > >>> and any corner case it is handling)
+> > > >>>
+> > > >> OK. This is in my todo list also. Since we have discussed it let's move
+> > > >> it forward.
+> > > >>
+> > > >> Below what i have came up with to switch for polling APIs:
+> > > >>
+> > > >>> From 799ce1653d159ef3d35f34a284f738c2c267c75f Mon Sep 17 00:00:00 2001
+> > > >> From: "Uladzislau Rezki (Sony)" <urezki@gmail.com>
+> > > >> Date: Wed, 2 Nov 2022 19:26:27 +0100
+> > > >> Subject: [PATCH 1/1] rcu: kvfree_rcu: Reduce a memory footptint by using
+> > > >> polling APIs
+> > > >>
+> > > >> Total time taken by all kfree'ers: 6564718459 ns, loops: 10000, batches: 1110, memory footprint: 5057MB
+> > > >> Total time taken by all kfree'ers: 8431051895 ns, loops: 10000, batches: 1109, memory footprint: 2749MB
+> > > >> Total time taken by all kfree'ers: 9477830789 ns, loops: 10000, batches: 1158, memory footprint: 2934MB
+> > > >> Total time taken by all kfree'ers: 9950211144 ns, loops: 10000, batches: 981, memory footprint: 2704MB
+> > > >>
+> > > >> with a patch:
+> > > >>
+> > > >> Total time taken by all kfree'ers: 7712110118 ns, loops: 10000, batches: 1660, memory footprint: 91MB
+> > > >> Total time taken by all kfree'ers: 7002403664 ns, loops: 10000, batches: 1482, memory footprint: 86MB
+> > > >> Total time taken by all kfree'ers: 7842282319 ns, loops: 10000, batches: 1738, memory footprint: 86MB
+> > > >> Total time taken by all kfree'ers: 7230161977 ns, loops: 10000, batches: 1542, memory footprint: 72MB
+> > > >>
+> > > >> Tested with NOCB option, all offloading CPUs:
+> > > >>
+> > > >> kvm.sh --memory 10G --torture rcuscale --allcpus --duration 1 \
+> > > >>  --kconfig CONFIG_NR_CPUS=64 \
+> > > >>  --kconfig CONFIG_RCU_NOCB_CPU=y \
+> > > >>  --kconfig CONFIG_RCU_NOCB_CPU_DEFAULT_ALL=y \
+> > > >>  --bootargs "rcuscale.kfree_rcu_test=1 rcuscale.kfree_nthreads=16 \
+> > > >>  rcuscale.holdoff=20 rcuscale.kfree_loops=10000 torture.disable_onoff_at_boot" --trust-make
+> > > >>
+> > > >> According to data there is a big gain in memory footprint with a patch.
+> > > >> It is because of call_rcu() and call_rcu_flush() take more effort and
+> > > >> time to queue a callback and then wait for a gp.
+> > > >>
+> > > >> With polling API:
+> > > >>  a) we do not need to queue any callback;
+> > > >>  b) we might not even need wait for a GP completion.
+> > > >>
+> > > >> Signed-off-by: Uladzislau Rezki (Sony) <urezki@gmail.com>
+> > > >> ---
+> > > >> kernel/rcu/tree.c | 21 ++++++++++++++++-----
+> > > >> 1 file changed, 16 insertions(+), 5 deletions(-)
+> > > >>
+> > > >> diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > >> index 76973d716921..17c3d6f2c55b 100644
+> > > >> --- a/kernel/rcu/tree.c
+> > > >> +++ b/kernel/rcu/tree.c
+> > > >> @@ -2919,18 +2919,20 @@ struct kvfree_rcu_bulk_data {
+> > > >>    ((PAGE_SIZE - sizeof(struct kvfree_rcu_bulk_data)) / sizeof(void *))
+> > > >>
+> > > >> /**
+> > > >> + * @rcu_work: A work to reclaim a memory after a grace period
+> > > >>  * struct kfree_rcu_cpu_work - single batch of kfree_rcu() requests
+> > > >> - * @rcu_work: Let queue_rcu_work() invoke workqueue handler after grace period
+> > > >>  * @head_free: List of kfree_rcu() objects waiting for a grace period
+> > > >>  * @bkvhead_free: Bulk-List of kvfree_rcu() objects waiting for a grace period
+> > > >>  * @krcp: Pointer to @kfree_rcu_cpu structure
+> > > >> + * @gp_snap: A snapshot of current grace period
+> > > >>  */
+> > > >>
+> > > >> struct kfree_rcu_cpu_work {
+> > > >> -    struct rcu_work rcu_work;
+> > > >> +    struct work_struct rcu_work;
+> > > >>    struct rcu_head *head_free;
+> > > >>    struct kvfree_rcu_bulk_data *bkvhead_free[FREE_N_CHANNELS];
+> > > >>    struct kfree_rcu_cpu *krcp;
+> > > >> +    unsigned long gp_snap;
+> > > >> };
+> > > >>
+> > > >> /**
+> > > >> @@ -3066,10 +3068,12 @@ static void kfree_rcu_work(struct work_struct *work)
+> > > >>    struct kfree_rcu_cpu_work *krwp;
+> > > >>    int i, j;
+> > > >>
+> > > >> -    krwp = container_of(to_rcu_work(work),
+> > > >> +    krwp = container_of(work,
+> > > >>                struct kfree_rcu_cpu_work, rcu_work);
+> > > >>    krcp = krwp->krcp;
+> > > >>
+> > > >> +    cond_synchronize_rcu(krwp->gp_snap);
+> > > >
+> > > > Might this provoke OOMs in case of callback flooding?
+> > > >
+> > > > An alternative might be something like this:
+> > > >
+> > > >    if (!poll_state_synchronize_rcu(krwp->gp_snap)) {
+> > > >        queue_rcu_work(system_wq, &krwp->rcu_work);
+> > > >        return;
+> > > >    }
+> > > >
+> > > > Either way gets you a non-lazy callback in the case where a grace
+> > > > period has not yet elapsed.
+> > > > Or am I missing something that prevents OOMs here?
+> > >
+> > > The memory consumptions appears to be much less in his testing with the onslaught of kfree, which makes OOM probably less likely.
+> > >
+> > > Though, was your reasoning that in case of a grace period not elapsing, we need a non lazy callback queued, so as to make the reclaim happen sooner?
+> > >
+> > > If so, the cond_synchronize_rcu() should already be conditionally queueing non-lazy CB since we don’t make synchronous users wait for seconds. Or did I miss something?
+> >
+> > My concern is that the synchronize_rcu() will block a kworker kthread
+> > for some time, and that in callback-flood situations this might slow
+> > things down due to exhausting the supply of kworkers.
+> >
+> > In contrast, use of queue_rcu_work() frees up the kworker to handle
+> > other pages that are filling up.
+> >
+> > Perhaps your point is that the delay from synchronize_rcu() should make
+> > the following pages take the fastpath through cond_synchronize_rcu()?
+> >
+> > Either way, it might well be that context-switch overhead forces us
+> > to batch these things somehow.  But let's worry about that when and if
+> > it actually happens.
 > 
-> I didn't review the first version of this patch because others, particularly
-> David Hildenbrand highlighted many of the concerns I had. I broadly followed
-> the discussion but didn't respond because I live in a permanent state of
-> having too much to do but with a new version, I have to say something.
-I am familiar with that state and as a beneficiary of your hard work 
-I'll take the opportunity to say thanks and I appreciate you taking the 
-time to respond.
+> Your point sounds reasonable. Though we'd hope cmwq scales worker
+> thread count as needed, but we shouldn't probably stress it.
 
-> 
-> The three big questions he initially asked were
-> 
-> 	How large are these areas typically?
-> 	How large are they in comparison to other memory in the system?
-> 	How is this memory currently presented to the system?
-> 	Can you share some more how exactly ZONE_MOVABLE would help here to make
-> 		better use of the memory bandwidth?
-> 
-> Zones are about addressing limitations primarily and frankly, ZONE_MOVABLE
-> was a bad idea in retrospect. Today, the preferred approach would have
-> been to create a separate NUMA node with distance-1 to the local node
-> (fudge by adding 1 to the local distance "10" for zonelist purposes)
-> that was ZONE_MOVABLE with the zonelists structured such that GFP_MOVABLE
-> allocations would prefer the "movable" node first.
-I'm afraid I don't completely follow what you are suggesting here.
+It is especially inadvisable to stress it during OOM events, when the
+workqueue system might well get an allocation failure when it tries
+creating another kworker kthread.  And we do want this to work well when
+at/near OOM, because this is one of the things that can free memory.  ;-)
 
-> While I don't recall
-> why I did not take that approach, it most likely was because CONFIG_NUMA
-> was not always set, it was only intended for hugetlbfs allocations and
-> maybe I didn't have the necessary skill or foresight to take that approach.
-It remains true that CONFIG_NUMA is not always set and that is a key 
-motivator for this patch set. For example, Google is moving to a common 
-GKI kernel for their Google TV platform that they are requiring vendors 
-to support. Currently the arm64 GKI kernel does not set CONFIG_NUMA and 
-it seems unlikely that we will be able to get all vendors to accept such 
-a change.
+> Though I am thinking, workqueue context is normally used to invoke
+> code that can block, and would the issue you mentioned affect those as
+> well, or affect RCU when those non-RCU work items block. So for
+> example, when other things in the system that can queue things on the
+> system_wq and block.  (I might be throwing darts in the dark).
+> 
+> To be safe, we can implement your suggestion which is basically a form
+> of my initial patch.
+> 
+> Should we add Tejun to the thread?
 
-> 
-> Hotplugs requirements are somewhat different, the primary motivation that
-> I'm aware of is being able to guarantee they can be offlined, particularly
-> nodes, which can be done in some circumstances. Generally hotplug does
-> not care what uses the memory as long as it can be removed later. The
-> requirements for restricted access to high speed memory is different.
-This is effectively the same requirement that an implementation of 
-'reusable' reserved memory has. A driver that owns reserved memory may 
-not care what uses the memory as long as the memory can be reclaimed 
-when the driver needs it. This is functionally analogous to memory 
-hotplug. Reserved memory that is 'reusable' and compatible with 
-'shared-dma-pool' uses the CMA implementation, but there is room for an 
-alternative implementation that shares the memory more aggressively. 
-This is a separate motivator for Designated Movable Block support, but I 
-am deferring that discussion since it is desirable to have a more 
-extended debate over APIs and such.
+Let's get organized first, but that would be a good thing.  Or I could
+reach out to Tejun internally.
 
-> 
-> There is a high degree of uncertainity of how these regions are to be
-> used by applications to get access to the high speed memory, to quote
-> 
-> 	I'm not certain what is typical because these systems are highly
-> 	configurable and Broadcom's customers have different ideas about
-> 	application processing.
-> 
-> 	...
-> 
-> 	The Designated Movable Block concept introduced here has the
-> 	potential to offer useful services to different constituencies. I
-> 	tried to highlight this in my V1 patch set with the hope of
-> 	attracting some interest, but it can complicate the overall
-> 	discussion, so I would like to maybe narrow the discussion here. It
-> 	may be good to keep them in mind when assessing the overall value,
-> 	but perhaps the "other opportunities" can be covered as a follow
-> 	on discussion.
-> 
-> I note the "potential" part here because we don't actually know.
-I used "potential" here not as in "it might be useful", but rather that 
-"different constituencies (i.e. people outside of the Broadcom 
-ecosystem) might also find them useful".
+For but one thing to get organized about, maybe kfree_rcu() should be
+using a workqueue with the WQ_MEM_RECLAIM flag set.
 
-> A
-> major limitation of ZONE_MOVABLE is that there is no way of controlling
-> access from userspace to restrict the high-speed memory to a designated
-> application, only to all applications in general. The primary interface
-> to control access to memory with different characteristics is mempolicies
-> which is NUMA orientated, not zone orientated. So, if there is a special
-> application that requires exclusive access, it's very difficult to configure
-> based on zones.  Furthermore, page table pages mapping data located in the
-> high-speed region are stored in the slower memory which potentially impacts
-> the performance if the working set of the application exceeds TLB reach.
-> Finally, while there is mention that Broadcom may have some special
-> interface to determine what applications can use the high-speed region,
-> it's hardware-specific as opposed to something that belongs in the core mm.
-> 
-> I agree that keeping the high-speed memory in a local node and using "sticky"
-> pageblocks or CMA has limitations of its own but in itself, that does not
-> justify using ZONE_MOVABLE in my opinion. The statement that ARM can have
-> multiple controllers with equal distance and bandwidth (if I'm reading it
-> correctly) but places them in different zones.... that's just a bit weird if
-> there are no other addressing limitations. It's not obvious why ARM would do
-> that, but it also does not matter because it shouldn't be a core mm concern.
-There appears to be some confusion regarding my explanation of multiple 
-memory controllers on a device like the BCM7278. There is no inherent 
-performance difference between the two memory controllers and their 
-attached DRAM. They merely provide the opportunity to perform memory 
-accesses in parallel for different physical address ranges. The physical 
-address ranges were selected by the SoC designers for reasons only known 
-to them, but I'm sure they had no consideration of zones in their 
-decision making. The selection of zones remains an artifact of the 
-design of Linux.
+							Thanx, Paul
 
-Since the BCM7278 contains a 4-core SMP cluster and each core can have 
-multiple outstanding memory transactions the speed of DDR transactions 
-can create a bottleneck for the system. If each memory controller has an 
-effective bandwidth of X then, provided the system memory accesses can 
-be distributed across both memory controllers, the combined effective 
-bandwidth can be additive (X + X = 2X). Of course the actual result is 
-highly dependent on the dependent clause "provided the system memory 
-accesses can be distributed across both memory controllers". The 
-accesses do not need to be evenly distributed to gain a benefit. We just 
-want to reduce any idle time on each memory controller.
-
-It was observed that the monotonic zone layout for a non-NUMA system 
-(like this one) creates a bias for kernel space to use lower physical 
-memory addresses and user space to use higher physical memory addresses. 
-Broadcom customers requested the ability to locate movablecore memory 
-within the physical address range of each memory controller and reported 
-that it improved their system performance. Unfortunately, I do not have 
-access to their data and I doubt they would allow me to share it if I 
-did. I don't believe this is really about trying to optimize the 
-performance of a specific application as much as trying to prevent 
-overall system performance degradation from underutilized memory bandwidth.
-
+> thanks,
 > 
-> There are already examples of where memory is physically "local" to
-> the CPU but has different bandwidth or latency including High Bandwidth
-> (HBM), Sub-NUMA Clustering (SNC), PMEM as a memory-life device and some
-> AMD EPYC Chips, particularly the first generation where a sockets memory
-> controllers had different distances. With the broadcom controllers,
-> it sounds like a local memory controller but the bandwidth available
-> differs. It's functionally equivalent to HBM.
-The bandwidth available does not differ, but if too few transactions 
-target one of the memory controllers, that controllers bandwidth is 
-underutilized.
-
+>  - Joel
 > 
-> The fact that the memory access is physically local to the CPU socket is
-> irrelevant when the characteristics of that locality differs. NUMA stands
-> for Non-Uniform Memory Access and if bandwidth to different address ranges
-> differs, then the system is inherently NUMA even if that is inconvenient.
-The bandwidth to different address ranges does not differ. A single 
-threaded application should see no performance difference regardless of 
-where its memory is located. However, if multiple application threads 
-are executing in parallel and the memory is divided between the memory 
-controllers they will be able to do more work per unit of time than if 
-the memory is predominantly located on one memory controller.
-
-> 
-> While I have not evaluated the implementation in detail, there is already
-> infrastructure dealing with tiered memory (memory that is local but has
-> different characteristics) with support for moving memory between tiers
-> depending on access patterns. Memory policies can be used to restrict
-> access to what processes can access the higher bandwidth memory. Given the
-> use case for DSM, I suspect that the intent is "application data uses high
-> bandwidth memory where possible and kernel uses lower bandwidth memory"
-> which is probably fine for an appliance because there is only one workload
-> but it's not a generic solution suitable.
-> 
-> Going back to the original questions;
-> 
-> 	How large are these areas typically?
-> 	How large are they in comparison to other memory in the system?
-> 
-> I am treating this as the same question because the consequencs are the
-> same. A high ratio of !MOVABLE:MOVABLE can cause big problems including
-> premature OOM, surprising reclaim behaviour etc
-This is what makes the current movablecore implementation unacceptable. 
-In order to get any movablecore memory in the lower physical address 
-range requires all of the upper physical address range to be movablecore 
-which is horribly unbalanced. Specifying a value like 
-'movablecore=256M@2G,512M' with this patch set allows us to specify 
-512MB of total movablecore with 256MB of it at a physical address within 
-the lower memory controller and the remainder at the highest addresses 
-of the upper memory controller.
-
-> 
-> 	How is this memory currently presented to the system?
-> 
-> It's local, but with different characteristics so it's inherently NUMA
-> because it's Non-Uniform, there is no getting away from that.
-It does not have different characteristics.
-
-> 
-> 	Can you share some more how exactly ZONE_MOVABLE would help here to make
-> 		better use of the memory bandwidth?
-> 
-> In the appliance case, it doesn't matter if the intent is that "all
-> application data should use high bandwidth memory where possible and
-> the application phase behaviour is predictable" and that may very well
-> work fine for the users of the Broadcom platforms with multiple memory
-> controllers. It does not work at all for the general where access must
-> be restricted to a subset of tasks in a general system that can only be
-> controlled with memory policies.
-> 
-> The high bandwidth memory should be representated as a NUMA node, optionally
-> to create that node as ZONE_MOVABLE and relying on the zonelists to select
-> the movable zone as the first preference.
-> 
-This patch set is fundamentally about greater control over the placement 
-of movablecore memory. The current implementation of movablecore 
-requires all of the ZONE_MOVABLE memory to be located at the highest 
-physical addresses of the system when CONFIG_NUMA is not set. Allowing 
-the specification of a base address allows greater flexibility on 
-systems where there are benefits.
-
-Thanks again for your time,
-     Doug
-
-
+> >
+> >                                                         Thanx, Paul
+> >
+> > > Thanks,
+> > >
+> > > - Joel
+> > >
+> > > >
+> > > >                            Thanx, Paul
+> > > >
+> > > >> +
+> > > >>    raw_spin_lock_irqsave(&krcp->lock, flags);
+> > > >>    // Channels 1 and 2.
+> > > >>    for (i = 0; i < FREE_N_CHANNELS; i++) {
+> > > >> @@ -3194,6 +3198,13 @@ static void kfree_rcu_monitor(struct work_struct *work)
+> > > >>        if ((krcp->bkvhead[0] && !krwp->bkvhead_free[0]) ||
+> > > >>            (krcp->bkvhead[1] && !krwp->bkvhead_free[1]) ||
+> > > >>                (krcp->head && !krwp->head_free)) {
+> > > >> +            /*
+> > > >> +             * Take a snapshot for this krwp. Please note no
+> > > >> +             * more any objects can be added to this krwp free
+> > > >> +             * channels.
+> > > >> +             */
+> > > >> +            krwp->gp_snap = get_state_synchronize_rcu();
+> > > >> +
+> > > >>            // Channel 1 corresponds to the SLAB-pointer bulk path.
+> > > >>            // Channel 2 corresponds to vmalloc-pointer bulk path.
+> > > >>            for (j = 0; j < FREE_N_CHANNELS; j++) {
+> > > >> @@ -3217,7 +3228,7 @@ static void kfree_rcu_monitor(struct work_struct *work)
+> > > >>            // be that the work is in the pending state when
+> > > >>            // channels have been detached following by each
+> > > >>            // other.
+> > > >> -            queue_rcu_work(system_wq, &krwp->rcu_work);
+> > > >> +            queue_work(system_wq, &krwp->rcu_work);
+> > > >>        }
+> > > >>    }
+> > > >>
+> > > >> @@ -4808,7 +4819,7 @@ static void __init kfree_rcu_batch_init(void)
+> > > >>        struct kfree_rcu_cpu *krcp = per_cpu_ptr(&krc, cpu);
+> > > >>
+> > > >>        for (i = 0; i < KFREE_N_BATCHES; i++) {
+> > > >> -            INIT_RCU_WORK(&krcp->krw_arr[i].rcu_work, kfree_rcu_work);
+> > > >> +            INIT_WORK(&krcp->krw_arr[i].rcu_work, kfree_rcu_work);
+> > > >>            krcp->krw_arr[i].krcp = krcp;
+> > > >>        }
+> > > >>
+> > > >> --
+> > > >> 2.30.2
+> > > >>
+> > > >> --
+> > > >> Uladzislau Rezki
