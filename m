@@ -2,111 +2,157 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89AB7616420
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:55:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2BEFE616426
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:56:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230098AbiKBNzb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 09:55:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46200 "EHLO
+        id S231137AbiKBNz7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 09:55:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiKBNz1 (ORCPT
+        with ESMTP id S230452AbiKBNzx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 09:55:27 -0400
-Received: from mail-wr1-x42d.google.com (mail-wr1-x42d.google.com [IPv6:2a00:1450:4864:20::42d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC31A29CB2
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 06:55:21 -0700 (PDT)
-Received: by mail-wr1-x42d.google.com with SMTP id k8so24688436wrh.1
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 06:55:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=liIWxgnrKB54svAZTpFgbikolxVnlfVc0BGgGZkfhjg=;
-        b=Z9Y0jFYRdBXTbT/NsetraCzA6Hx/LsJK8GvYTwmGE7/44i5Dos9kQhq4dyTmyLbP+6
-         PfJdJNfxHY4KFvT+XX97pojpx1ufh/8Up64nZcKAmyVqDq9nzPOgtGzG5PmE9V/LgW1w
-         /EU7qjBFX04dYaGRArio8gk19Cbw5xbsAxtxNqXmxXtBhtwVP6atTXX1ui3h/Gnt13BM
-         0O6/r05ywa3CbkZ4NmLrSxi4aFxbDJHoDSSdzzatYfCldit1bn+1ZLyxrOjXZ95qmoJM
-         MHubLiH2tyKfgaRnLU6RoJgmbm7q3SgwNBVfpatEPe4Cyu3hutzQ2QTT40rAfcis7qPh
-         C9pg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=liIWxgnrKB54svAZTpFgbikolxVnlfVc0BGgGZkfhjg=;
-        b=kaEMNAkfn5RHjeLy8VNTqKnLfTgUWCbWBwR9LAEj8pVgfzaFQYKUvwLUxcsAQswE47
-         OPQ2TyYC+V+t2pt6m0HvKMziMRuYlvpxP7zmxxyuUHkalC+nM2s0Qjo74yRZg4F2x/Dj
-         EqTUxA0z64y8HaryVY4iatwVRj0kH2uOAIcYR8ieN1DbFNuidOpH4f+WPCLAyjSU4u+b
-         PG3Z6OOf2WJy5piBSzmcAZ/Gt5tVUYNs5Za+AqMR2doRnVYoKP2yzw8sz5/gt/PUcWge
-         AU/xzmwZrYjQyTnQbNTmF09RN5411fkMZtqcBprljE8Vjlh5Y05/TESR8cWpGi5fjR3n
-         5Smg==
-X-Gm-Message-State: ACrzQf2bM3dz7Rs9dWEgHyxiolY2N56IPCnR715weqidW8kT/ljAKsdd
-        SVI06lyRLtStdgR+6dkPcGhXRw==
-X-Google-Smtp-Source: AMsMyM402qsrhIO6ldQJS2gMhEnDQv3oqTkbMUS2+MeWiGtoJh42ic09+34ohyg5+1+SYhUV3rE4KA==
-X-Received: by 2002:a5d:598d:0:b0:236:8ef5:867d with SMTP id n13-20020a5d598d000000b002368ef5867dmr14927482wri.162.1667397320480;
-        Wed, 02 Nov 2022 06:55:20 -0700 (PDT)
-Received: from maple.lan (cpc141216-aztw34-2-0-cust174.18-1.cable.virginm.net. [80.7.220.175])
-        by smtp.gmail.com with ESMTPSA id b9-20020a5d45c9000000b0022e36c1113fsm12491311wrs.13.2022.11.02.06.55.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 06:55:20 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 13:55:18 +0000
-From:   Daniel Thompson <daniel.thompson@linaro.org>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     linux-arm-msm@vger.kernel.org,
-        ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        Lee Jones <lee@kernel.org>, Jingoo Han <jingoohan1@gmail.com>,
-        Pavel Machek <pavel@ucw.cz>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Kiran Gunda <kgunda@codeaurora.org>,
-        dri-devel@lists.freedesktop.org, linux-leds@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: backlight: qcom-wled: Add PMI8950
- compatible
-Message-ID: <Y2J2xp9w4Hvethb7@maple.lan>
-References: <20221101161801.1058969-1-luca@z3ntu.xyz>
+        Wed, 2 Nov 2022 09:55:53 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-eastusazon11021022.outbound.protection.outlook.com [52.101.52.22])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D214629CB2;
+        Wed,  2 Nov 2022 06:55:49 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=H4/RVqoukgjJ6SZ8AQbZC2QT20Tya0cQpXPVjVsEL8+rolErrQuJVkQJ2HG+7yEDwx3ERVtAD3nGIOIGE1OWFLBFkCHJsKvi1KLLpMaAzq+wfgqmxQPyObEu4rUuwusGOsH7CY2boK0vqm1G9f6JJ/S+uwzs0zhYMFE0yh/OrGYRasUk0XkRp5p97jbRoOh2ekJwSERA7SvoJTiVtYGMhgurh1PnPIBbfnfww8lEB0G7h9PPWAHeGhe7vTTZ4tX5O6Dk0qOzxA938lXTsPFVmFDRFWv0cHiw5Lk181EioSQ0nrvQhTqj2j0nlVUhllzoNHGLFBcB3JoRA1NU1idfkQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=2GwMY7fctFknB4GITi199+ETVJCIK+fY56ehYgytQEU=;
+ b=Mw/D8UDLZ03dXwMO744IbOI1z7AZtlkw9HXu6McQ6DQAvoHY0vtCm9FLFy7U0rNrCz24vt3DAv7tUgNr5FSgqfKahSfNBwxRBvdSwFiQZFE5ApkcFy+8FhSvGyEGaSOlbtW1JFzIxiWYV2ACl0FQK5ufGN0giCjkBmE94rROYq4N5mPjIHYyKDmpH2liAaHaHEzSOKdRM6ATQP3KrPYDkyXbFtjxTwzwxVNQBom9UrI/aOsQwXc+rODBTb7eSl4/5m9en/SnsIRPFOHW5PBZKnwazeoWi2Z4j/NX52z4gG8eDofZ732T33g9Y15yaNn/ZX7zPiNbEIOUHiJ6qZO7Gg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=2GwMY7fctFknB4GITi199+ETVJCIK+fY56ehYgytQEU=;
+ b=V0fkG30i3qK4XtyVWI+ui/D3OLayWclYoRQdfpO5ASpfLC/6SdvqcAx2PcDoxpmMdIg9Zir0Qq0oNzVWHKsdSVBaJbECrrkXoOODxXFH/XdpJLvsXmiD8hSnWfiKdlcvugffL60m+Ca0qBAXDdnCntDsjFCfQEa9zR7e4VEINrw=
+Received: from PH7PR21MB3116.namprd21.prod.outlook.com (2603:10b6:510:1d0::10)
+ by DM6PR21MB1417.namprd21.prod.outlook.com (2603:10b6:5:254::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.4; Wed, 2 Nov
+ 2022 13:55:47 +0000
+Received: from PH7PR21MB3116.namprd21.prod.outlook.com
+ ([fe80::4cf9:b21c:c2bf:e5f3]) by PH7PR21MB3116.namprd21.prod.outlook.com
+ ([fe80::4cf9:b21c:c2bf:e5f3%9]) with mapi id 15.20.5813.005; Wed, 2 Nov 2022
+ 13:55:47 +0000
+From:   Haiyang Zhang <haiyangz@microsoft.com>
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>,
+        Saurabh Singh Sengar <ssengar@microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        "wei.liu@kernel.org" <wei.liu@kernel.org>,
+        Dexuan Cui <decui@microsoft.com>,
+        "davem@davemloft.net" <davem@davemloft.net>,
+        "edumazet@google.com" <edumazet@google.com>,
+        "kuba@kernel.org" <kuba@kernel.org>,
+        "pabeni@redhat.com" <pabeni@redhat.com>,
+        "colin.i.king@googlemail.com" <colin.i.king@googlemail.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "netdev@vger.kernel.org" <netdev@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+Subject: RE: [PATCH] net: mana: Assign interrupts to CPUs based on NUMA nodes
+Thread-Topic: [PATCH] net: mana: Assign interrupts to CPUs based on NUMA nodes
+Thread-Index: AQHY7bgKO9lsOHP8+kCmdcQzq8fpp64rqTJQ
+Date:   Wed, 2 Nov 2022 13:55:47 +0000
+Message-ID: <PH7PR21MB31161ED47D7742D5F499BB93CA399@PH7PR21MB3116.namprd21.prod.outlook.com>
+References: <1667282761-11547-1-git-send-email-ssengar@linux.microsoft.com>
+In-Reply-To: <1667282761-11547-1-git-send-email-ssengar@linux.microsoft.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=9c00726a-d48f-4d95-bec0-f3295df11b37;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-11-02T13:52:16Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: PH7PR21MB3116:EE_|DM6PR21MB1417:EE_
+x-ms-office365-filtering-correlation-id: b6041cec-0a14-4613-70b2-08dabcd9f177
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: tBHiKJc2RiuRw17r3B5yHBI47UHM2HW2tm0b69ZKtn99Sqg3z6NYWPLp2lo3kWwQA4MA/GG8jGQ3lsWEKHf53YdtXjxTZUXKpLlkFkgvoqxkjp47I1SblxBcrEddlLaPmNmgpsx7IvDQx1BlJmYhhmZBLAH9U1Fj9soqGr9owHBbkMgSOkL3m2dzMckGMjEbqmiH4aCQX1Kexk65n3axNDWmbowiZJ7GZyytakd6/HqayyY153plc9f256EY1u33qvlGn/SXuEjYF3LtamJkCdnqsiEdTDMcapCz5RYti10WmKk4yxFInhaAOkVbFZK8i0VZXcGO4Fa4MKy8QqCUVh9CNJU9n1DOdIcDtymDefn4NZ8Zv5QmrL+bUfmEx5hM0YQTEr6Fo77ZCMeHFTZbae7cxfDRjTY1R0xB/mkCHTEJpPiGAr6h1tTsqjiP1U3vzGxo2CcXiWtdqeiUB9SXBKU/8Oae7rL0hnlZjrIupQhfTJZay5YoI3HZUIcDg9fbLmUaewUWOwurg/KEI5C9idgHZ/pGJyuKhKoCU9Lx8hiS/N49uVDmyHzZpVMIYCfsKxQ2/FEEeIIprSONqE4JyEVW0yX+1297RGmzkjpZYGDp7HhEpFk5jYW6FrSdHGM0wk253VOYBfFbemfqwQg2a54HkZozbH3ihzy9IQG8KB8P4WEGyc0z9rjxJ4Z/2KP23TJUZ27UVK2EuLLXZkgduZf1HjWgYNTcQLE7NiMvV5cKr0zxcr1+H9XScv1D7jFK3CUbj936JRKkSoSahVwoOh0nej9WjtwfNs+uU+o1dPFiqEtuVAI0rQp1XNgHYAOc7yCsjUHPgANFqaIlOqAuCw==
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PH7PR21MB3116.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(376002)(396003)(39860400002)(366004)(451199015)(6636002)(8936002)(52536014)(110136005)(66446008)(41300700001)(66556008)(64756008)(316002)(66476007)(76116006)(5660300002)(66946007)(7416002)(10290500003)(4744005)(8676002)(8990500004)(2906002)(921005)(38070700005)(478600001)(71200400001)(122000001)(6506007)(26005)(9686003)(7696005)(53546011)(38100700002)(83380400001)(33656002)(82960400001)(82950400001)(186003)(55016003)(86362001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?PfbDs58KK/y6tXQ/DNWuzd8xFa3VKGAxcQyclAqnd7MDYRJTfB2lWF7U6BNE?=
+ =?us-ascii?Q?rL10ZIWSECfImvkeAMwQ6xR3ylph67t4n61d86d3WO0GE6/nZoslqPyWAKyw?=
+ =?us-ascii?Q?gxE7G3eI3rbqm67+Wmpj5gl3ZrL5atbwkQ2BrJMYpjvvDVGJI1yA3tpsKbKk?=
+ =?us-ascii?Q?tj1Yfg54w52oZbCpWbqgifuq+jQOXvpAEtnOc57lX6DgB+721yZ3bfD6kzX4?=
+ =?us-ascii?Q?ectnlcw0lH9Y2BflnJnkhDYUQ3mbDeRqjQS9dXSd87ZKKJkESr6qTxlgeyzG?=
+ =?us-ascii?Q?grpLTnvFqt3NUOt9uXJLwpjmvbGt99D8YECLsWTkcJfAprCHSz1dbhJni12g?=
+ =?us-ascii?Q?LNbt0BqFaHdVsHhFORCwwr4EbsuSKLf23RzywkJP/duCnEqcdnOCwIuQPzwg?=
+ =?us-ascii?Q?V6CMBfXCwO1I7jO4zzCtM0S6niuGQI92BDAjGdimfKkBNkyJDpP+UBcyMQmt?=
+ =?us-ascii?Q?XzZ5rSxENa8eafL5kE9Zzjurrjab3u+Ai+vWmXNg89U3tGfStcMT6FuHfqFk?=
+ =?us-ascii?Q?AWKj+ttKDQIZ1av3Dp5sBvt9+1QNfcc2Z/1ysOiql0mM2RHNEeqXGwqChFGA?=
+ =?us-ascii?Q?8TZNSQZiuDpvABYZs/n85cqM5kmGrBNUJwWLLarbiHS6GgohAgsyg5M+rMVG?=
+ =?us-ascii?Q?23Jpr1QlTbs9wX/XW2Hkvda1lRNmZjTGOm0KL6tx4jRtqjH4m/hv5L9eNGnL?=
+ =?us-ascii?Q?HxEoYDuDHfAYJ7btYW0kwS3krGdCAwV/K+p7yDoUvyVt2PO7lKYPT5iLqf3q?=
+ =?us-ascii?Q?W1OIZBR4LurCCvJnRj68DUWGsDqVtfLDTg/PGGjAn1d7Cs840jUikOe9r5lP?=
+ =?us-ascii?Q?Y+M6Zy9TQoLGPg5VKQdjizftd9c9kKbUnsJgqT1PyeulcGg1+m67XE4UFzSK?=
+ =?us-ascii?Q?RsnGla2zOKL/+AHXDvdi/yOFtyWy08iS8Kh8GxgdHWFUzHmmeCxddvucxvyZ?=
+ =?us-ascii?Q?7lDreoup/+zwC9YZnQ8VlU005nqbPKiIhyOH4hPOUBGSeDSmWuTxjMUWRioi?=
+ =?us-ascii?Q?JTCJ6bDZLaGbp4e5wJ9k1mx+Xa+g/eeFHtiYlkHLPtWEMxWEPKhCq8NZ2kgL?=
+ =?us-ascii?Q?A1a/dQBFtKA+CURrtibEAUZyTktLbcP7sVVBKj6LrvW66bV4l7ZJx85K3qRX?=
+ =?us-ascii?Q?U8om87trIosA/K0oMbgGMUVUoJ9fns/PlpxUwEDbPkag7oPYfWH3SwqUDsCZ?=
+ =?us-ascii?Q?dvCHSUsboVwAZ/1rhGhbSdDZuCU7P8NN2igN2DQ5nwv56zAJZRQxTvWR3yTF?=
+ =?us-ascii?Q?kPeqVF/YAu+uRlXtbtzLtEkNqjAz7mn+ZaN0NlCHXTEHbUFCziDLOe1z0nMC?=
+ =?us-ascii?Q?bsIIdxJsc4b0Dl7xyKSyM2wlJG1gOex/0fiIBkmawM+S7c+/0zuRJY/+EVwI?=
+ =?us-ascii?Q?5dd1gLiDdTu+B/8K9lxJqZKnpEg4OZoIp5aljUY0GUbhz28BGp6REsLD8W/y?=
+ =?us-ascii?Q?/DnxfLTrCinQEprReo9NMru672Wy4kL71ODL061vbok9X3Q7s7HRP1NOnI16?=
+ =?us-ascii?Q?CHZ8kX9B1fi0SDhE4UsQaNXeqpgjj/Qh5K/KPZmqyoxa5zCylJ4o5CihCma1?=
+ =?us-ascii?Q?NlP5nabnYKIVSX6TUBHVtr6cS6wh3ebrFZmgY3dO?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221101161801.1058969-1-luca@z3ntu.xyz>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: PH7PR21MB3116.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b6041cec-0a14-4613-70b2-08dabcd9f177
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Nov 2022 13:55:47.0783
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: 1JiY3Xnu207+F55SDxHmPLSmSGXCl+Y4Q2nNAWyKJdHTywUYpEBkGGcyLzsl4RZ/7LcLO1e6pZE5qpHZXEIT6Q==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR21MB1417
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 05:17:59PM +0100, Luca Weiss wrote:
-> Document the compatible for the wled block found in PMI8950.
->
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-
-FWIW:
-Reviewed-by: Daniel Thompson <daniel.thompson@linaro.org>
 
 
-> ---
-> Changes since v2:
-> * New patch
->
->  Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml b/Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml
-> index 4c15693f7a01..5ac8605a53b1 100644
-> --- a/Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml
-> +++ b/Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml
-> @@ -19,6 +19,7 @@ properties:
->    compatible:
->      enum:
->        - qcom,pm8941-wled
-> +      - qcom,pmi8950-wled
->        - qcom,pmi8994-wled
->        - qcom,pmi8998-wled
->        - qcom,pm660l-wled
-> --
-> 2.38.1
->
+> -----Original Message-----
+> From: Saurabh Sengar <ssengar@linux.microsoft.com>
+> Sent: Tuesday, November 1, 2022 2:06 AM
+> To: Saurabh Singh Sengar <ssengar@microsoft.com>; KY Srinivasan
+> <kys@microsoft.com>; Haiyang Zhang <haiyangz@microsoft.com>;
+> wei.liu@kernel.org; Dexuan Cui <decui@microsoft.com>;
+> davem@davemloft.net; edumazet@google.com; kuba@kernel.org;
+> pabeni@redhat.com; ssengar@linux.microsoft.com;
+> colin.i.king@googlemail.com; vkuznets@redhat.com; linux-
+> hyperv@vger.kernel.org; netdev@vger.kernel.org; linux-
+> kernel@vger.kernel.org; Michael Kelley (LINUX) <mikelley@microsoft.com>
+> Subject: [PATCH] net: mana: Assign interrupts to CPUs based on NUMA nodes
+>=20
+> In large VMs with multiple NUMA nodes, network performance is usually
+> best if network interrupts are all assigned to the same virtual NUMA
+> node. This patch assigns online CPU according to a numa aware policy,
+> local cpus are returned first, followed by non-local ones, then it wraps
+> around.
+>=20
+> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+
+Reviewed-by: Haiyang Zhang <haiyangz@microsoft.com>
+
+Thank you.
+
