@@ -2,123 +2,106 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D5E16615D46
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 09:03:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 801DA615D51
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 09:05:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbiKBID4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 04:03:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39272 "EHLO
+        id S230368AbiKBIF1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 04:05:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230342AbiKBIDv (ORCPT
+        with ESMTP id S230335AbiKBIFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 04:03:51 -0400
-Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9CD572714E
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 01:03:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667376230; x=1698912230;
-  h=from:to:cc:subject:in-reply-to:references:date:
-   message-id:mime-version;
-  bh=zUefAtldfFyX3o9cPUjfIV+mhHKwUmckyuph/rt9rAA=;
-  b=ilJ1HYNiRiUWHBNH+IKNz14bpOhwj7l+0hB4WTH0Jpx31hf1QDsGztzx
-   wRfNEa6PD35pz7eVxGhyBy4jxkY4IszsPQ0BY5APIN9HDg/cRioceDwoh
-   ht4j/g7nDraVNVFyKXxKNE0Mz7DhxOXwa1CeYe5CBChvHIpvBHQhHUW9J
-   uumCh69lfvqNAfOYtcNPS/mSvdBs90tT76Ws4myTWtWpEzhobFlESFXYV
-   tAKBPdsyjXHkHu3p1WxIgxiMMN3vw0IYQw9nsMZFkIASuZq35DvRCzYja
-   te04CeXRQJtBCIpN4KLEEAdUvI7EPcfaDiqMcPwJKReAJcN3wqAJPP+kY
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="336018499"
-X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
-   d="scan'208";a="336018499"
-Received: from orsmga002.jf.intel.com ([10.7.209.21])
-  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 01:03:45 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="634167933"
-X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
-   d="scan'208";a="634167933"
-Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
-  by orsmga002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 01:03:40 -0700
-From:   "Huang, Ying" <ying.huang@intel.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Bharata B Rao <bharata@amd.com>,
-        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Jagdish Gediya <jvgediya.oss@gmail.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Tim Chen <tim.c.chen@intel.com>, Wei Xu <weixugc@google.com>,
-        Yang Shi <shy828301@gmail.com>
-Subject: Re: [RFC] memory tiering: use small chunk size and more tiers
-In-Reply-To: <Y2IhiSnpQsmY7khx@dhcp22.suse.cz> (Michal Hocko's message of
-        "Wed, 2 Nov 2022 08:51:37 +0100")
-References: <578c9b89-10eb-1e23-8868-cdd6685d8d4e@linux.ibm.com>
-        <877d0kk5uf.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <59291b98-6907-0acf-df11-6d87681027cc@linux.ibm.com>
-        <8735b8jy9k.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <0d938c9f-c810-b10a-e489-c2b312475c52@amd.com>
-        <87tu3oibyr.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <07912a0d-eb91-a6ef-2b9d-74593805f29e@amd.com>
-        <87leowepz6.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <Y2Eui+kKvwj8ip+T@dhcp22.suse.cz>
-        <878rkuchpm.fsf@yhuang6-desk2.ccr.corp.intel.com>
-        <Y2IhiSnpQsmY7khx@dhcp22.suse.cz>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
-Date:   Wed, 02 Nov 2022 16:02:54 +0800
-Message-ID: <87bkppbx75.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        Wed, 2 Nov 2022 04:05:23 -0400
+Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A35F827168;
+        Wed,  2 Nov 2022 01:05:20 -0700 (PDT)
+Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
+        by perceval.ideasonboard.com (Postfix) with ESMTPSA id B93E810D2;
+        Wed,  2 Nov 2022 09:05:16 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
+        s=mail; t=1667376317;
+        bh=nEN27WtNls/1wXLTvXo+jO3/nuFgNwPbR4HWZHPU4sE=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=t6uQ6IOgjDgFrjk6ZvUif4roImt4eTcv07i1/jZ4zTfSzgHDqnAgAlQ3w9VAIBSJG
+         p8D1c831YAywy01cED1f26f7BkZubjLpveewtRLy3LlaBw9Xo+vrvehkvJkNcn+E1D
+         PsJRZGasBiX+8+0Lyijd6pVd6XgXWXUTmp44dboI=
+Message-ID: <bb565f1e-a17c-a32d-145a-631ab12d2acd@ideasonboard.com>
+Date:   Wed, 2 Nov 2022 10:05:13 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=ascii
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v4 6/8] media: i2c: add DS90UB960 driver
+Content-Language: en-US
+To:     devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org
+Cc:     Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        satish.nagireddy@getcruise.com
+References: <20221101132032.1542416-1-tomi.valkeinen@ideasonboard.com>
+ <20221101132032.1542416-7-tomi.valkeinen@ideasonboard.com>
+From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+In-Reply-To: <20221101132032.1542416-7-tomi.valkeinen@ideasonboard.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Michal Hocko <mhocko@suse.com> writes:
+On 01/11/2022 15:20, Tomi Valkeinen wrote:
+> Add driver for TI DS90UB960 FPDLink-3 Deserializer.
+> 
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> ---
+>   drivers/media/i2c/Kconfig     |   16 +
+>   drivers/media/i2c/Makefile    |    2 +
+>   drivers/media/i2c/ds90ub960.c | 4198 +++++++++++++++++++++++++++++++++
+>   include/media/i2c/ds90ub9xx.h |   16 +
+>   4 files changed, 4232 insertions(+)
+>   create mode 100644 drivers/media/i2c/ds90ub960.c
+>   create mode 100644 include/media/i2c/ds90ub9xx.h
+> 
+> diff --git a/drivers/media/i2c/Kconfig b/drivers/media/i2c/Kconfig
+> index 7806d4b81716..2a78889e3487 100644
+> --- a/drivers/media/i2c/Kconfig
+> +++ b/drivers/media/i2c/Kconfig
+> @@ -1595,4 +1595,20 @@ config VIDEO_THS7303
+>   
+>   endmenu
+>   
+> +#
+> +# Video serializers and deserializers (e.g. FPDLink)
+> +#
+> +
+> +menu "Video serializers and deserializers"
+> +
+> +config VIDEO_DS90UB960
+> +	tristate "TI DS90UB960 Deserializer"
+> +	depends on OF_GPIO
+> +	select I2C_ATR
+> +	help
+> +	  Device driver for the Texas Instruments DS90UB960
+> +	  FPD-Link III Deserializer
+> +
+> +endmenu
 
-> On Wed 02-11-22 08:39:49, Huang, Ying wrote:
->> Michal Hocko <mhocko@suse.com> writes:
->> 
->> > On Mon 31-10-22 09:33:49, Huang, Ying wrote:
->> > [...]
->> >> In the upstream implementation, 4 tiers are possible below DRAM.  That's
->> >> enough for now.  But in the long run, it may be better to define more.
->> >> 100 possible tiers below DRAM may be too extreme.
->> >
->> > I am just curious. Is any configurations with more than couple of tiers
->> > even manageable? I mean applications have been struggling even with
->> > regular NUMA systems for years and vast majority of them is largerly
->> > NUMA unaware. How are they going to configure for a more complex system
->> > when a) there is no resource access control so whatever you aim for
->> > might not be available and b) in which situations there is going to be a
->> > demand only for subset of tears (GPU memory?) ?
->> 
->> Sorry for confusing.  I think that there are only several (less than 10)
->> tiers in a system in practice.  Yes, here, I suggested to define 100 (10
->> in the later text) POSSIBLE tiers below DRAM.  My intention isn't to
->> manage a system with tens memory tiers.  Instead, my intention is to
->> avoid to put 2 memory types into one memory tier by accident via make
->> the abstract distance range of each memory tier as small as possible.
->> More possible memory tiers, smaller abstract distance range of each
->> memory tier.
->
-> TBH I do not really understand how tweaking ranges helps anything.
-> IIUC drivers are free to assign any abstract distance so they will clash
-> without any higher level coordination.
+Looks like I'm missing proper dependencies and selects from this and the 
+ub913 and ub953 drivers. I'll fix those.
 
-Yes.  That's possible.  Each memory tier corresponds to one abstract
-distance range.  The larger the range is, the higher the possibility of
-clashing is.  So I suggest to make the abstract distance range smaller
-to reduce the possibility of clashing.
+  Tomi
 
-Best Regards,
-Huang, Ying
