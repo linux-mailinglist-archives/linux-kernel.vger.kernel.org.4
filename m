@@ -2,159 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EC34616382
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:13:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9E8E86163C2
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:20:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231293AbiKBNLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 09:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51298 "EHLO
+        id S231564AbiKBNSr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 09:18:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57644 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231130AbiKBNLn (ORCPT
+        with ESMTP id S231405AbiKBNSJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 09:11:43 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042E02A42B;
-        Wed,  2 Nov 2022 06:11:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1667394701; x=1698930701;
-  h=message-id:subject:from:to:cc:date:in-reply-to:
-   references:content-transfer-encoding:mime-version;
-  bh=MyZzeDiz5FTyiiKbmj7rYEgdW8PqPC9gOy+Y13MENvg=;
-  b=dVuNbbYebDc+z5opb0hehyvEILtgMK+M+2WRAAmQuLU89WhvvKBUSK/0
-   NiZitwSU/LYqRilQ6cBWyJRhmPdzHrmJHmh1UG+5+h0fKEqTmERbo3yZK
-   +C1tfSpFdmQKqD9Ikuvirn58Ck15e5fQHMJXuPzqke4Tc2xoSi2gb1zPc
-   8OXcGwr5UpenBwvH9QxywvXicQu6DFY62+GB0dIFx26oIRLTOuv946b/y
-   9dCNhOtGAx55TZF+4Wyb4YJgxrI9TZ78P7U9dTNKKfq5XN1cE4zY4rwh2
-   iZlHBJKQBfVU/TAemRFz+j2MiFLriYsWrYlxKM6PXYGMZWumbqrLpinQd
-   w==;
-X-IronPort-AV: E=Sophos;i="5.95,234,1661842800"; 
-   d="scan'208";a="185020498"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Nov 2022 06:11:40 -0700
-Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 2 Nov 2022 06:11:40 -0700
-Received: from den-dk-m31857.microchip.com (10.10.115.15) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
- 15.1.2507.12 via Frontend Transport; Wed, 2 Nov 2022 06:11:37 -0700
-Message-ID: <e9d662682b00a976ad1dedf361a18b5f28aac8fb.camel@microchip.com>
-Subject: Re: [PATCH net-next v2 2/5] net: microchip: sparx5: Adding more tc
- flower keys for the IS2 VCAP
-From:   Steen Hegelund <steen.hegelund@microchip.com>
-To:     Jakub Kicinski <kuba@kernel.org>
-CC:     Casper Andersson <casper.casan@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        "Wan Jiabing" <wanjiabing@vivo.com>,
-        Nathan Huckleberry <nhuck@google.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>
-Date:   Wed, 2 Nov 2022 14:11:37 +0100
-In-Reply-To: <20221101084925.7d8b7641@kernel.org>
-References: <20221028144540.3344995-1-steen.hegelund@microchip.com>
-         <20221028144540.3344995-3-steen.hegelund@microchip.com>
-         <20221031103747.uk76tudphqdo6uto@wse-c0155>
-         <51622bfd3fe718139cece38493946c2860ebdf77.camel@microchip.com>
-         <20221031184128.1143d51e@kernel.org>
-         <741b628857168a6844b6c2e0482beb7df9b56520.camel@microchip.com>
-         <20221101084925.7d8b7641@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.1 
+        Wed, 2 Nov 2022 09:18:09 -0400
+Received: from mout.perfora.net (mout.perfora.net [74.208.4.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 057302AC71;
+        Wed,  2 Nov 2022 06:18:07 -0700 (PDT)
+Received: from toolbox.toradex.int ([31.10.206.125]) by mrelay.perfora.net
+ (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0Lr0QH-1pThI82vyt-00ed8W;
+ Wed, 02 Nov 2022 14:12:12 +0100
+From:   Marcel Ziswiler <marcel@ziswiler.com>
+To:     linux-arm-kernel@lists.infradead.org
+Cc:     Peter Chen <peter.chen@kernel.org>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Fabio Estevam <festevam@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Max Krummenacher <max.krummenacher@toradex.com>,
+        NXP Linux Team <linux-imx@nxp.com>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Philippe Schenker <philippe.schenker@toradex.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Sascha Hauer <s.hauer@pengutronix.de>,
+        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/6] arm64: dts: verdin-imx8mp: usb dual-role switching et. al.
+Date:   Wed,  2 Nov 2022 14:11:57 +0100
+Message-Id: <20221102131203.35648-1-marcel@ziswiler.com>
+X-Mailer: git-send-email 2.36.1
 MIME-Version: 1.0
-X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Provags-ID: V03:K1:QvXz3Icm2Ptr1VtiLwp0geZ+zH9109fsySwBGkQrAvNT/gLM7j9
+ y4oNs6tIC9Hy6o18/vACKBomOlt/90QFUGs/c7563AVW0NzVTELj2GgE/T5S7oKkwrbk2ir
+ zO7A3HIut63Fot8FH4SIHLCiZZsCeqoEgj042e8VGgVPIrD/wwzmHhAKY16NvEi6vZv2cWt
+ BrPa5zlSB25drPBR078DA==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:ISAneY4YKFs=:LZUiO1jz/uvYI8T33anxDZ
+ vxX3LFgwfYBoPgB1lo1iMO59qlSB3AqCmqi5phyBbtQsnQbC4rcXACdmcHuF+CB6fq2rIgbmc
+ UBIEocDaWRUjuRo6/eUWa62/VxcV8s7QeihxteQmSRp7ADX2i4A0XiL7sbGKOfof1c2CHu/3C
+ nsttMUX17jUzNUg4YkdqwM9LTbkasvYO8W6KWhg0do2BCHGENuK4V1s8o0jK97LcVXc3wP8qS
+ eQ9soI8zi34XV4n34iqWis5IhpItt6CHUbePNtB2eZhDYdVeY/rESD2+63b2/4nWp5dCeBBEQ
+ 4bX8jxZzp5kwgAEbz5Xl+jX1TRUDXe/K82186ktuTrayLf2zWvuH4vdTnI1H6giIvU6l9wzJK
+ oGpEQ/oZfYtwrC7AmY1nWZp8e6sxd56/YJkAg/VmL/Rkro6GUXTZ1hF8+hqPtugbFiUm6gJkl
+ i0xrZGFol495bNO29LyQ1jGgyt2o8BjnrzUiLOOzo5o5ysr1vEKgwHobf+fAVOjVEKZXivIJx
+ InxfoSNifTUWJFdlZdGQbqR85C0oDmAl1K3rib2IPFbyOzB2g7BfxHa1LRiBygfL7sCc1NXNG
+ LfYipVlC3YECzDmlejqg+NFiJPsnwpPUVAj8UT8/Ws+mq1dvBEFWbYb5TRX3Xaq9u0dH0NF0S
+ UMivPg/sKQU+Fs8t0mHiLiLsRnGiRtgmriIqs8fZNidFITlrkkc0mkKNpD2UJbFHqieGyp/cz
+ lNxzzihhXgFDpDJBA75APVKHZziEMR3ZeDwfijh/bFGriuJDMwZM0309L3ssIIpZ5GMNg7Yv6
+ kIG5Cy3
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Jacub,
+From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-On Tue, 2022-11-01 at 08:49 -0700, Jakub Kicinski wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
-e
-> content is safe
->=20
-> On Tue, 1 Nov 2022 08:31:16 +0100 Steen Hegelund wrote:
-> > > Previous series in this context means previous revision or something
-> > > that was already merged?
-> >=20
-> > Casper refers to this series (the first of the VCAP related series) tha=
-t was
-> > merged on Oct 24th:
-> >=20
-> > https://lore.kernel.org/all/20221020130904.1215072-1-steen.hegelund@mic=
-rochip.com/
->=20
-> Alright, looks like this is only in net-next so no risk of breaking
-> existing users.
->=20
-> That said you should reject filters you can't support with an extack
-> message set. Also see below.
->=20
-> > > > tc filter add dev eth3 ingress chain 8000000 prio 10 handle 10 \
-> > >=20
-> > > How are you using chains?
-> >=20
-> > The chain ids are referring to the VCAP instances and their lookups.=C2=
-=A0 There
-> > are some more details
-> > about this in the series I referred to above.
-> >=20
-> > The short version is that this allows you to select where in the frame
-> > processing flow your rule
-> > will be inserted (using ingress or egress and the chain id).
-> >=20
-> > > I thought you need to offload FLOW_ACTION_GOTO to get to a chain,
-> > > and I get no hits on this driver.
-> >=20
-> > I have not yet added the goto action, but one use of that is to chain a
-> > filter from one VCAP
-> > instance/lookup to another.
-> >=20
-> > The goto action will be added in a soon-to-come series.=C2=A0 I just wa=
-nted to
-> > avoid a series getting too
-> > large, but on the other hand each of them should provide functionality =
-that
-> > you can use in practice.
->=20
-> The behavior of the offload must be the same as the SW implementation.
-> It sounds like in your case it very much isn't, as adding rules to
-> a magic chain in SW, without the goto will result in the rules being
-> unused.
 
-I have sent a version 4 of the series, but I realized after sending it, tha=
-t I
-was probably not understanding the implications of what you were saying
-entirely.
+This series is an assortment of USB dual-role specific commits as
+follows:
 
-As far as I understand it now, I need to have a matchall rule that does a g=
-oto
-from chain 0 (as this is where all traffic processing starts) to my first I=
-S2
-VCAP chain and this rule activates the IS2 VCAP lookup.
+Improvement of pinctrl for vbus-supplies:
+As we are using two fixed regulators for Verdin USB_1_EN (SODIMM 155)
+and Verdin USB_2_EN (SODIMM 185), those should be muxed as GPIOs rather
+than OTG_PWR.
 
-Each of the rules in this VCAP chain need to point to the next chain etc.
+Removal of USB_2 over-current detection disabling:
+The disable-over-current property is only applicable for the
+ci-hdrc-usb2 and dwc2 drivers while the i.MX 8M Plus integrates dwc3
+IP. Therefore remove this property which does not really serve any
+purpose here.
 
-If the matchall rule is deleted the IS2 VCAP lookups should be disabled as =
-there
-is no longer any way to reach the VCAP chains.
+Addition of USB_1 over-current detection:
+Add Verdin USB_1 over-current detection functionality via Verdin
+USB_1_OC# (SODIMM 157) being active-low and removing its previous
+gpio_hog3 mapping.
 
-Does that sound OK?
+Disabling of USB port power controls:
+Disable port power control on Verdin USB_1/2 as we use regular
+fixed-regulators with Verdin USB_1/2_EN as enable GPIOs.
 
-BR
-Steen
+Addition of GPIO USB-B connector:
+Add GPIO USB-B connector (gpio-usb-b-connector) functionality using
+Verdin USB_1_ID.
+
+Marking USB_2 as permanently attached:
+As both Dahlia and the Verdin Development Board have on-carrier
+permanently attached USB hubs mark Verdin USB_2 as such.
+
+Note:
+Currently, I am still seeing a rare race condition of sorts when booting
+the system with Verdin USB_1 as a host port with a USB memory stick
+plugged in. This exact patch series applied on top of NXP's latest
+downstream 5.15.52_2.1.0 release (together with backporting a few more
+dwc3-specific patches) actually makes this same use case work very
+reliably. However, NXP also keeps further downstream-only patches which
+I plan to further investigate and hopefully upstream a proper fix for
+soon.
+
+
+Marcel Ziswiler (6):
+  arm64: dts: verdin-imx8mp: improve pinctrl for vbus-supplies
+  arm64: dts: verdin-imx8mp: remove usb_2 over-current detection
+    disabling
+  arm64: dts: verdin-imx8mp: add usb_1 over-current detection
+  arm64: dts: verdin-imx8mp: disable usb port power control
+  arm64: dts: verdin-imx8mp: add gpio usb-b connector
+  arm64: dts: verdin-imx8mp: dahlia: mark usb_2 permanently attached
+
+ .../dts/freescale/imx8mp-verdin-dahlia.dtsi   |  1 +
+ .../boot/dts/freescale/imx8mp-verdin.dtsi     | 40 ++++++++++++++-----
+ 2 files changed, 32 insertions(+), 9 deletions(-)
+
+-- 
+2.36.1
 
