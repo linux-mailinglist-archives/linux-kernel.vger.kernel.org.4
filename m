@@ -2,210 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 67CDF616330
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:59:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 130DC616333
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:59:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231232AbiKBM70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 08:59:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40212 "EHLO
+        id S231237AbiKBM7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 08:59:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231215AbiKBM7X (ORCPT
+        with ESMTP id S230233AbiKBM7p (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 08:59:23 -0400
-X-Greylist: delayed 99233 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 02 Nov 2022 05:59:21 PDT
-Received: from out162-62-57-49.mail.qq.com (out162-62-57-49.mail.qq.com [162.62.57.49])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0B0A2871B;
-        Wed,  2 Nov 2022 05:59:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foxmail.com;
-        s=s201512; t=1667393957;
-        bh=stZjbsbh1QGjqNPL6prVTAW1AvJUHAcq+yDf+xactvU=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References;
-        b=yL05dZrfLeMUOj4gruBroqn84DUNXdSpZrTVtTCmHEj3MF9sogTme39DKRqY4zPtR
-         fEBHXAXIi+wupYplwnv7E/AUQ7F46RtOz81YnTtqkX/lUSnDRfbGSeVd5zqpVP4zTy
-         AElWs3DeGaJFayhCyd1LHofHC/J2f8U4C+4Ekpbg=
-Received: from localhost.localdomain ([39.156.73.13])
-        by newxmesmtplogicsvrszc2-0.qq.com (NewEsmtp) with SMTP
-        id ECC23E84; Wed, 02 Nov 2022 20:59:12 +0800
-X-QQ-mid: xmsmtpt1667393952tgoyzzrog
-Message-ID: <tencent_B91CA31B889B06CF4292592F97892A53AF08@qq.com>
-X-QQ-XMAILINFO: OZsapEVPoiO6T7UaXCU2GP2B98Bn/6Oj0GGHqbSaMeFY4dM6yCDCzIYZga8oGS
-         Do/Q7K59QjCbX9HFc/nC+5m6Ydadnko/0vF1fOKB9+gAd+c73JctMJsTx+lFPmiC1tKEorfsa+YI
-         AWg4rzXMWHIcxDtFXMH16ke60IY/DlzAXO3UCrSiWlcfEz5gD+yLoYua6NA7Sn64F75J+RJEf++v
-         oBZHNv/KH8RmQ4zRmJlSYN9f6nuMo0BG4ASGMYUZia92+p+k24WJAnbRsg/79bjyeGgR4oUPkhdj
-         nppcnjdrBO9Crx1t+A/zJeoKRQYsGK606zj+z4nQuy81EGdSk/mvzhjd9ciNGeSxlKOjzJrCOwd/
-         rrF0e54jkkMqGySf6mHe52JDUZ0b3FmxE+zY/vuFB/1Us0eTd2+2F7Ynm5t7yMoKoD4ZSTuAX3N4
-         D4VkqTGYv0hxVTyId2oCiH4xvsCsimUCZXybfwHQVyZQj/vY1HGNtr7Wbe7x/eFb76v4Xn7V9Ezw
-         peXOo9iTu1ua7ncWeTKTCCx0gh94rgZF2+v5tSGMeupRuOVbdZ5uS6ve6SupgRxoZTLUNYprA4au
-         2x60gGkynfyrUaLmjuSpRs/K+GsifhfBSD/StaokSCXyIcyU30QEvyAGHMSBrA1b7Mf1BRYr621D
-         tg+Mur6B7sR68dYRzw5ji/053oRTmtuglBL3F6iQ1cEaTppSzXfi1VHYD49HEW2K9Y39zk+E6SZO
-         yaXOm58TasqRwN/1WzkYsk4CfugD6DsLblEzS+Y1tYJEQPkz0EndR6ULQU54NGkTUX3X+T5upzKj
-         i7PMrOTBYvgWrp9v6bHJJhs928ZQQSyxhs3/UBQIBcPiTnACQtvqBzWQDjYPSW+J6dshWPIzHUdb
-         58WvZAb6Hecx1/6tvkxGivRBILXFWbURwINbXgFJBJyJWaNXH6zAiR9PuA+57H/8/+d94jC8UuGF
-         uBCHepGNO9/hQyo/a7Cb+YQq0I5ZUYs6E81k9smxkutwGT2+2eott+ctUxAgPhTdJiN2baJiHRVN
-         gTz8luaA==
-From:   Rong Tao <rtoax@foxmail.com>
-To:     daniel@iogearbox.net
-Cc:     andrii.nakryiko@gmail.com, andrii@kernel.org, ast@kernel.org,
-        bpf@vger.kernel.org, david.laight@aculab.com, haoluo@google.com,
-        john.fastabend@gmail.com, jolsa@kernel.org, kpsingh@kernel.org,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        martin.lau@linux.dev, mykolal@fb.com, rongtao@cestc.cn,
-        rtoax@foxmail.com, sdf@google.com, shuah@kernel.org,
-        song@kernel.org, yhs@fb.com
-Subject: [PATCH bpf-next] selftests/bpf: cgroup_helpers.c: Fix strncpy() fortify warning
-Date:   Wed,  2 Nov 2022 20:59:10 +0800
-X-OQ-MSGID: <20221102125910.465060-1-rtoax@foxmail.com>
-X-Mailer: git-send-email 2.31.1
-In-Reply-To: <fe0e300f-a857-dc42-f9f8-c524be6b212f@iogearbox.net>
-References: <fe0e300f-a857-dc42-f9f8-c524be6b212f@iogearbox.net>
+        Wed, 2 Nov 2022 08:59:45 -0400
+Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9FD2871D
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 05:59:44 -0700 (PDT)
+Received: by mail-pg1-x52e.google.com with SMTP id b62so5795535pgc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 05:59:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=compal-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Y7JeNjduJ11iTjItlrELM3uT2g5gNbw14nHXxfp2BQo=;
+        b=KPv16VgSY+zS/r0qBRp9hB7SGa38CEdYWE8qXB+FuB+/CGBU/BGQakBKmqCwFgRkTx
+         3d3eGwXk7jed+3ksnRqcUhjjLqTSdLQSwduXMA/1y45BGUR2vHTtJj4Xe8BbKkz51UK9
+         ntKVKdYdde655Jj8YsfI38h/1qxED8fTfgRMzxU9J6+dgD9Ev+j46DDfhUgPPzbB/WMJ
+         WWx0nDilpyH6UQghabPcUKFVkyn0EmS/kybPV8rLJSoHWFrgabZTaP1GmN3pXG+mxH34
+         bwbViDK28GpqXvpo1e08gjfg6nkMVh5eBK6LjaW4IwMH6GWJvwXPS2/hNM3tisMOmngI
+         Oyfw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Y7JeNjduJ11iTjItlrELM3uT2g5gNbw14nHXxfp2BQo=;
+        b=0gSzHHHgXdc7PCL/degKAGOM1EXOK2Mq+j0AF6J9OZWbGEWztsSwlXH1eCz/WXIKNk
+         ohcL+OKfYwOBJdsYzl7aw5Wx35hTlIRNce0g5P5Q8FQ9lsgi3T8JF2inNFToolQPXYGC
+         h4574m1m+nfMap8pyE46J8AdYw77p2i0OM56dfuhYsHTHaAhO/09gHdOjgQhLI+bB4y6
+         9mvPxq5TSmuZSnBBpoGON6eM48O2veVn+3WOnnJ/YFSdpp7A+Ph/7D7MPgGaXr0BFjPe
+         Nxqyq21oP15vlruR36OPrPSV3d6g6eglKwOj9sOmkSTNAXQ64ocd03Fp3ZizLQPIL6su
+         Nclg==
+X-Gm-Message-State: ACrzQf1KD2iUQvk2uwgxxozC+GauZQizFYwxQaBtpxTSQBSbHeenqa5+
+        TcIbkN8ldDteeH6WZFbdK2SK1zSi0Sg3pg==
+X-Google-Smtp-Source: AMsMyM45Yjmw8JpdtXQkZ9vOIRK40sRXZtsKoP2XWwt+qHD2TbV0WaKrxJVHL1PtY7KzniIjkj5zsA==
+X-Received: by 2002:a63:93:0:b0:470:9d3:7d48 with SMTP id 141-20020a630093000000b0047009d37d48mr2183665pga.425.1667393983888;
+        Wed, 02 Nov 2022 05:59:43 -0700 (PDT)
+Received: from localhost.localdomain (118-167-210-180.dynamic-ip.hinet.net. [118.167.210.180])
+        by smtp.gmail.com with ESMTPSA id k14-20020a170902d58e00b0017f59ebafe7sm8259345plh.212.2022.11.02.05.59.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 05:59:43 -0700 (PDT)
+From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+To:     linux-kernel@vger.kernel.org
+Cc:     Mark Brown <broonie@kernel.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        linux-mediatek@lists.infradead.org,
+        "chunxu . li" <chunxu.li@mediatek.com>,
+        Takashi Iwai <tiwai@suse.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Jiaxin Yu <jiaxin.yu@mediatek.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Ajye Huang <ajye_huang@compal.corp-partner.google.com>,
+        =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
+        <nfraprado@collabora.com>, linux-arm-kernel@lists.infradead.org,
+        devicetree@vger.kernel.org, alsa-devel@alsa-project.org
+Subject: [PATCH v6 0/2] Modify documentation and machine driver for mt8186_rt1019_rt5682s sound card
+Date:   Wed,  2 Nov 2022 20:59:34 +0800
+Message-Id: <20221102125936.2176748-1-ajye_huang@compal.corp-partner.google.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=0.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        HELO_DYNAMIC_IPADDR,RCVD_IN_DNSWL_NONE,RDNS_DYNAMIC,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rong Tao <rongtao@cestc.cn>
+v6:
+- dmic codec driver: 
+  - Modify "FrontMic" to "Front Mic" and "RearMic" to "Rear Mic"
+    to consisit with commit 3cfbf07c6d27 mentioned in description.
 
-Move libbpf_strlcpy() to libbpf_common.h, and replace strncpy() with
-libbpf_strlcpy(), fix compile warning.
+v5:
+- Documentation: 
+  - Add #include <dt-bindings/gpio/gpio.h> in order to use
+    GPIO_ACTIVE_HIGH.
+  - Remove the change-id in message.
 
-We can't use libbpf_internal.h directly, because it introduces a lot of
-header dependency issues. So move libbpf_strlcpy() into libbpf_common.h,
-and if you need to use the libbpf_strlcpy() function, you need to include
-the header file libbpf.h
+v4:
+- Documentation: 
+  - Fix the FATAL ERROR: Unable to parse input tree.
 
-How to reproduce this compilation warning:
+v3:
+- Documentation: 
+  - Add an explain example in description.
+  - Add the pinctrl-name and pinctrl id in its example.
 
-$ make -C samples/bpf
-cgroup_helpers.c: In function ‘__enable_controllers’:
-cgroup_helpers.c:80:17: warning: ‘strncpy’ specified bound 4097 equals destination size [-Wstringop-truncation]
-   80 |                 strncpy(enable, controllers, sizeof(enable));
-      |                 ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+v2:
+- dmic codec driver: 
+  - Remove the unnecessary use of_property_read_bool()
 
-Signed-off-by: Rong Tao <rongtao@cestc.cn>
----
- tools/lib/bpf/libbpf_common.h                | 19 +++++++++++++++++++
- tools/lib/bpf/libbpf_internal.h              | 19 -------------------
- tools/testing/selftests/bpf/cgroup_helpers.c |  3 ++-
- tools/testing/selftests/bpf/xsk.c            | 19 -------------------
- 4 files changed, 21 insertions(+), 39 deletions(-)
+v1:
+- Documentation: Add dmic-gpios optional prop for two DMICs case.
+- dmic codec driver: 
+  - "dmic-gpios" property is used for amixer control to switch
+     the dmic signal source between the Front and Rear Dmic.
 
-diff --git a/tools/lib/bpf/libbpf_common.h b/tools/lib/bpf/libbpf_common.h
-index 9a7937f339df..9d5132e0bec9 100644
---- a/tools/lib/bpf/libbpf_common.h
-+++ b/tools/lib/bpf/libbpf_common.h
-@@ -70,4 +70,23 @@
- 		};							    \
- 	})
- 
-+/* Copy up to sz - 1 bytes from zero-terminated src string and ensure that dst
-+ * is zero-terminated string no matter what (unless sz == 0, in which case
-+ * it's a no-op). It's conceptually close to FreeBSD's strlcpy(), but differs
-+ * in what is returned. Given this is internal helper, it's trivial to extend
-+ * this, when necessary. Use this instead of strncpy inside libbpf source code.
-+ */
-+static inline void libbpf_strlcpy(char *dst, const char *src, size_t sz)
-+{
-+	size_t i;
-+
-+	if (sz == 0)
-+		return;
-+
-+	sz--;
-+	for (i = 0; i < sz && src[i]; i++)
-+		dst[i] = src[i];
-+	dst[i] = '\0';
-+}
-+
- #endif /* __LIBBPF_LIBBPF_COMMON_H */
-diff --git a/tools/lib/bpf/libbpf_internal.h b/tools/lib/bpf/libbpf_internal.h
-index 377642ff51fc..902110ffb7a6 100644
---- a/tools/lib/bpf/libbpf_internal.h
-+++ b/tools/lib/bpf/libbpf_internal.h
-@@ -191,25 +191,6 @@ static inline void *libbpf_reallocarray(void *ptr, size_t nmemb, size_t size)
- 	return realloc(ptr, total);
- }
- 
--/* Copy up to sz - 1 bytes from zero-terminated src string and ensure that dst
-- * is zero-terminated string no matter what (unless sz == 0, in which case
-- * it's a no-op). It's conceptually close to FreeBSD's strlcpy(), but differs
-- * in what is returned. Given this is internal helper, it's trivial to extend
-- * this, when necessary. Use this instead of strncpy inside libbpf source code.
-- */
--static inline void libbpf_strlcpy(char *dst, const char *src, size_t sz)
--{
--	size_t i;
--
--	if (sz == 0)
--		return;
--
--	sz--;
--	for (i = 0; i < sz && src[i]; i++)
--		dst[i] = src[i];
--	dst[i] = '\0';
--}
--
- __u32 get_kernel_version(void);
- 
- struct btf;
-diff --git a/tools/testing/selftests/bpf/cgroup_helpers.c b/tools/testing/selftests/bpf/cgroup_helpers.c
-index e914cc45b766..e3bfe2b13018 100644
---- a/tools/testing/selftests/bpf/cgroup_helpers.c
-+++ b/tools/testing/selftests/bpf/cgroup_helpers.c
-@@ -11,6 +11,7 @@
- #include <fcntl.h>
- #include <unistd.h>
- #include <ftw.h>
-+#include <bpf/libbpf.h>
- 
- #include "cgroup_helpers.h"
- 
-@@ -77,7 +78,7 @@ static int __enable_controllers(const char *cgroup_path, const char *controllers
- 		enable[len] = 0;
- 		close(fd);
- 	} else {
--		strncpy(enable, controllers, sizeof(enable));
-+		libbpf_strlcpy(enable, controllers, sizeof(enable));
- 	}
- 
- 	snprintf(path, sizeof(path), "%s/cgroup.subtree_control", cgroup_path);
-diff --git a/tools/testing/selftests/bpf/xsk.c b/tools/testing/selftests/bpf/xsk.c
-index 0b3ff49c740d..4b6890e2a0a9 100644
---- a/tools/testing/selftests/bpf/xsk.c
-+++ b/tools/testing/selftests/bpf/xsk.c
-@@ -521,25 +521,6 @@ static int xsk_create_bpf_link(struct xsk_socket *xsk)
- 	return 0;
- }
- 
--/* Copy up to sz - 1 bytes from zero-terminated src string and ensure that dst
-- * is zero-terminated string no matter what (unless sz == 0, in which case
-- * it's a no-op). It's conceptually close to FreeBSD's strlcpy(), but differs
-- * in what is returned. Given this is internal helper, it's trivial to extend
-- * this, when necessary. Use this instead of strncpy inside libbpf source code.
-- */
--static inline void libbpf_strlcpy(char *dst, const char *src, size_t sz)
--{
--        size_t i;
--
--        if (sz == 0)
--                return;
--
--        sz--;
--        for (i = 0; i < sz && src[i]; i++)
--                dst[i] = src[i];
--        dst[i] = '\0';
--}
--
- static int xsk_get_max_queues(struct xsk_socket *xsk)
- {
- 	struct ethtool_channels channels = { .cmd = ETHTOOL_GCHANNELS };
+Thanks for the review!
+
+Ajye Huang (2):
+  ASoC: mediatek: dt-bindings: modify machine bindings for two MICs case
+  ASoC: mediatek: mt8186-rt5682: Modify machine driver for two DMICs
+    case
+
+ .../sound/mt8186-mt6366-rt1019-rt5682s.yaml   |  14 ++-
+ .../mt8186/mt8186-mt6366-rt1019-rt5682s.c     | 102 +++++++++++++++++-
+ 2 files changed, 114 insertions(+), 2 deletions(-)
+
 -- 
-2.31.1
+2.25.1
 
