@@ -2,124 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A6E6170A1
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 23:23:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 082E06170A7
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 23:27:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231557AbiKBWXZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 18:23:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37622 "EHLO
+        id S231429AbiKBW1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 18:27:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39660 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231441AbiKBWXM (ORCPT
+        with ESMTP id S229971AbiKBW1b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 18:23:12 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5ED7A5FDD;
-        Wed,  2 Nov 2022 15:23:11 -0700 (PDT)
-Date:   Wed, 02 Nov 2022 22:23:08 -0000
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667427790;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1+R7xQ8RtTS9a9/douIT3hpjJzZ5GXp4iqAZ9Ds+ke4=;
-        b=0BDe881xgYQS58dZsjPGWychrR8INfWa9kJ+vkzO9ROwGalky1tNoG4CrOtn4y717/138g
-        4AX7he95JBXJ02Buhg7tJdLgzFJRH0XF/2ztbZMvC1jFLwfqwlBPoeoJ6yZtUbbFaERTzR
-        wmhbY80mzI6nwN7yAPMdCinK2VqZY533nS9XybN/824S7uQjlaXCCdCGP0mxZPWiyTaWGY
-        Lim0boFwUfIkbmrMYODUahjZpWUAPvDoL4EFOJ86SS6/K6E4s7sGd1WNY4TNzv7Jnj0Gn5
-        3nJqWye0uzXHkZ/BPYdsFaOn078S2H//H9Mo2zELKOCWo0ja5JNNoHtBiWFlhg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667427790;
-        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
-         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-         content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=1+R7xQ8RtTS9a9/douIT3hpjJzZ5GXp4iqAZ9Ds+ke4=;
-        b=3hYmvUt6DWuVgi0kMkvYBfgjlWDBliNEq49+8EuClxLLweGqPRTQW2g9c0TxPaCAKzDgUl
-        VET7D3hlzMrG7kBw==
-From:   "tip-bot2 for David Gow" <tip-bot2@linutronix.de>
-Sender: tip-bot2@linutronix.de
-Reply-to: linux-kernel@vger.kernel.org
-To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: perf/urgent] perf/hw_breakpoint: test: Skip the test if
- dependencies unmet
-Cc:     David Gow <davidgow@google.com>,
-        "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Daniel Latypov <dlatypov@google.com>,
-        Marco Elver <elver@google.com>, x86@kernel.org,
-        linux-kernel@vger.kernel.org
-In-Reply-To: <20221026141040.1609203-1-davidgow@google.com>
-References: <20221026141040.1609203-1-davidgow@google.com>
+        Wed, 2 Nov 2022 18:27:31 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A139D46
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 15:27:30 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id i3so17655235pfc.11
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 15:27:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=IkisCoYjfZaTobaBNzuvGkutbPUag6VJeOaYOz4JBAQ=;
+        b=AQER4z7tFb0LF1x7APVk/7A/ow3nhFpQBzb68WILdjmb9/J8BP/+FmiJvfG/QJG3QM
+         myCt6XknexcTh1afQOzkYqHg8wCsST+fj2NblSGEUsBMiki0qmOGhddpgZ6GGy4/MH65
+         TgAD3S4a/p9hO82cEg+68U4CrTdIdUHPAG/zEQ+irNvDFzKG+S5L83bK/J9tQjyCijSB
+         wyevGfiFC/AjWJ9WZH7/tPskPrghURJoVM2YFY9q8vaPQ+v+sGxEzEIIAaOHljoGoKmj
+         kT7iBrNzbRSBPZzFt2HT7rQfrfvnND9m1HiZvcKPlDOG1KSCpvgtWYY/ywOe1umw03s0
+         qr3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=IkisCoYjfZaTobaBNzuvGkutbPUag6VJeOaYOz4JBAQ=;
+        b=Hb+VwR0mtJL+EaR025SdVE9FKJUXJDbM/Kp1RI1T49Yi7miOJXkbouC5cZaW47wyjB
+         gdtAIhxA3POcp2m96ImLQtbl1zAVDCedVfLVt87qSDLUoZDOrcq2nS7pKDY4SnTJ7/13
+         SAtkaZgbjap+e/vYzWgQQaj5Q8f28sGv++GMtz/p9u9eXec9aoB/IYQCTF096QMMnvs8
+         2DtVFZeNPW8QyzjME700sKAwEEGiqJyOTupmyKYST84rp4wbq6QmHZX8CXJpjWkM4F4A
+         jB8CoFtcbR4221VYIuG7IC6bEPfj1k02GGJEFf1ITWcjBIB7/V9pqLX+eXM+w0K21zmR
+         S/IA==
+X-Gm-Message-State: ACrzQf0WNaxkbBlWPh57qa8E3PMGvR2i1nvUZGJT7jmKztXhWuyxuITI
+        XQfY4f/hGNugShyqc5KyMEfF6Q==
+X-Google-Smtp-Source: AMsMyM63tr6xPjeShe/zYBHapBuuod3N0OMncBiNhz5WYrNqwP+Xm85PGNLPsqIvQnFwbXrjZ5rQeA==
+X-Received: by 2002:a05:6a02:10a:b0:461:26b8:1c95 with SMTP id bg10-20020a056a02010a00b0046126b81c95mr22449088pgb.503.1667428049896;
+        Wed, 02 Nov 2022 15:27:29 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id t29-20020aa7947d000000b005625d6d2999sm8945409pfq.187.2022.11.02.15.27.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 15:27:29 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 22:27:26 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Ben Gardon <bgardon@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Anish Ghulati <aghulati@google.com>,
+        Greg Thelen <gthelen@google.com>
+Subject: Re: [PATCH v2] KVM: x86: Use SRCU to protect zap in
+ __kvm_set_or_clear_apicv_inhibit()
+Message-ID: <Y2Luzh+6aErzgeU4@google.com>
+References: <20221102205359.1260980-1-bgardon@google.com>
 MIME-Version: 1.0
-Message-ID: <166742778877.6127.16460958693964479938.tip-bot2@tip-bot2>
-Robot-ID: <tip-bot2@linutronix.de>
-Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221102205359.1260980-1-bgardon@google.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The following commit has been merged into the perf/urgent branch of tip:
+On Wed, Nov 02, 2022, Ben Gardon wrote:
+> kvm_zap_gfn_range() must be called in an SRCU read-critical section, but
+> there is no SRCU annotation in __kvm_set_or_clear_apicv_inhibit(). This
+> can lead to the following warning via
+> kvm_arch_vcpu_ioctl_set_guest_debug() if a Shadow MMU is in use (TDP
+> MMU disabled or nesting):
+> 
+> [ 1416.659809] =============================
+> [ 1416.659810] WARNING: suspicious RCU usage
+> [ 1416.659839] 6.1.0-dbg-DEV #1 Tainted: G S        I
+> [ 1416.659853] -----------------------------
+> [ 1416.659854] include/linux/kvm_host.h:954 suspicious rcu_dereference_check() usage!
+> [ 1416.659856]
+> ...
+> [ 1416.659904]  dump_stack_lvl+0x84/0xaa
+> [ 1416.659910]  dump_stack+0x10/0x15
+> [ 1416.659913]  lockdep_rcu_suspicious+0x11e/0x130
+> [ 1416.659919]  kvm_zap_gfn_range+0x226/0x5e0
+> [ 1416.659926]  ? kvm_make_all_cpus_request_except+0x18b/0x1e0
+> [ 1416.659935]  __kvm_set_or_clear_apicv_inhibit+0xcc/0x100
+> [ 1416.659940]  kvm_arch_vcpu_ioctl_set_guest_debug+0x350/0x390
+> [ 1416.659946]  kvm_vcpu_ioctl+0x2fc/0x620
+> [ 1416.659955]  __se_sys_ioctl+0x77/0xc0
+> [ 1416.659962]  __x64_sys_ioctl+0x1d/0x20
+> [ 1416.659965]  do_syscall_64+0x3d/0x80
+> [ 1416.659969]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> Always take the KVM SRCU read lock in __kvm_set_or_clear_apicv_inhibit()
+> to protect the GFN to memslot translation. The SRCU read lock is not
+> technically required when no Shadow MMUs are in use, since the TDP MMU
+> walks the paging structures from the roots and does not need to look up
+> GFN translations in the memslots, but make the SRCU locking
+> unconditional for simplicty.
+> 
+> In most cases, the SRCU locking is taken care of in the vCPU run loop,
+> but when called through the KVM_SET_GUEST_DEBUG IOCTL, the SRCU read
+> lock is missing.
 
-Commit-ID:     4b18cb3f74dcfc183c2434e17bfce09ce6302e37
-Gitweb:        https://git.kernel.org/tip/4b18cb3f74dcfc183c2434e17bfce09ce6302e37
-Author:        David Gow <davidgow@google.com>
-AuthorDate:    Wed, 26 Oct 2022 22:10:40 +08:00
-Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Wed, 02 Nov 2022 12:22:05 +01:00
+Nit, it not just KVM_SET_GUEST_DEBUG.  If it were just KVM_SET_GUEST_DEBUG, I
+might have advocated putting the fix KVM_SET_GUEST_DEBUG.
 
-perf/hw_breakpoint: test: Skip the test if dependencies unmet
+> Tested: ran tools/testing/selftests/kvm/x86_64/debug_regs on a DBG
+> 	build. This patch causes the suspicious RCU warning to disappear.
+> 	Note that the warning is hit in __kvm_zap_rmaps(), so
+> 	kvm_memslots_have_rmaps() must return true in order for this to
+> 	repro (i.e. the TDP MMU must be off or nesting in use.)
+> 
+> Reported-by: Greg Thelen <gthelen@google.com>
+> Fixes: 36222b117e36 ("KVM: x86: don't disable APICv memslot when inhibited")
+> Signed-off-by: Ben Gardon <bgardon@google.com>
+> ---
 
-Running the test currently fails on non-SMP systems, despite being
-enabled by default. This means that running the test with:
-
- ./tools/testing/kunit/kunit.py run --arch x86_64 hw_breakpoint
-
-results in every hw_breakpoint test failing with:
-
- # test_one_cpu: failed to initialize: -22
- not ok 1 - test_one_cpu
-
-Instead, use kunit_skip(), which will mark the test as skipped, and give
-a more comprehensible message:
-
- ok 1 - test_one_cpu # SKIP not enough cpus
-
-This makes it more obvious that the test is not suited to the test
-environment, and so wasn't run, rather than having run and failed.
-
-Signed-off-by: David Gow <davidgow@google.com>
-Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Reviewed-by: Daniel Latypov <dlatypov@google.com>
-Acked-by: Marco Elver <elver@google.com>
-Link: https://lore.kernel.org/r/20221026141040.1609203-1-davidgow@google.com
----
- kernel/events/hw_breakpoint_test.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/kernel/events/hw_breakpoint_test.c b/kernel/events/hw_breakpoint_test.c
-index 5ced822..c57610f 100644
---- a/kernel/events/hw_breakpoint_test.c
-+++ b/kernel/events/hw_breakpoint_test.c
-@@ -295,11 +295,11 @@ static int test_init(struct kunit *test)
- {
- 	/* Most test cases want 2 distinct CPUs. */
- 	if (num_online_cpus() < 2)
--		return -EINVAL;
-+		kunit_skip(test, "not enough cpus");
- 
- 	/* Want the system to not use breakpoints elsewhere. */
- 	if (hw_breakpoint_is_used())
--		return -EBUSY;
-+		kunit_skip(test, "hw breakpoint already in use");
- 
- 	return 0;
- }
+Reviewed-by: Sean Christopherson <seanjc@google.com>
