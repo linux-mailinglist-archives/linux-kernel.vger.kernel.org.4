@@ -2,98 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C9677615FC1
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:31:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0A269615FD0
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:32:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230173AbiKBJbS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 05:31:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43098 "EHLO
+        id S229504AbiKBJcz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 05:32:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229468AbiKBJbM (ORCPT
+        with ESMTP id S229637AbiKBJcv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 05:31:12 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3961210E2;
-        Wed,  2 Nov 2022 02:31:12 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id CA3D9618C4;
-        Wed,  2 Nov 2022 09:31:11 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D6ABC433C1;
-        Wed,  2 Nov 2022 09:31:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667381471;
-        bh=Gg/fPN5aJjIxWUU4f2lqbCwhG9+mABQUoLO1LEyugvA=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=VA9kqUgFzHW7TNNVFU0PUVwRSgugIQCwLDDSfTZD2GL2XxifBiQZCkHerKlJKxwKk
-         36kvIAXAXK1hOwjS1jaxYUKTxJQk7ngM4NiLMhq1NdjL2UMrAuQKeHvbnMLgppjteZ
-         AXvP/1y6CiiQv46HYtuDYqLXjU879ewH68iKsMWoFMZ+gnUcC2JQlDVZvfLS46/tKJ
-         0qtz+1tbUIw+rdzWFs19fqtGsOG/Rj/IR/O3Q3dHFyXpq0bVfeVaC66fWnbxCY4eHG
-         Q8fw64tP8w/G1HbUSZe3sn2sb7Q4kVUNmPgEKIZqQcazF5PPB2BFui3kIZUq7FGkS0
-         VAxKq7ffmvGrQ==
-Date:   Wed, 2 Nov 2022 10:31:03 +0100
-From:   Lorenzo Pieralisi <lpieralisi@kernel.org>
-To:     Sudeep Holla <sudeep.holla@arm.com>, catalin.marinas@arm.com,
-        will@kernel.org
-Cc:     Besar Wicaksono <bwicaksono@nvidia.com>, rafael@kernel.org,
-        lenb@kernel.org, guohanjun@huawei.com, linux-tegra@vger.kernel.org,
-        treding@nvidia.com, jonathanh@nvidia.com, vsethi@nvidia.com,
-        linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH v2] ACPI: ARM Performance Monitoring Unit Table (APMT)
- initial support
-Message-ID: <Y2I411GOEkiqlCBg@lpieralisi>
-References: <20220929002834.32664-1-bwicaksono@nvidia.com>
- <20221014105938.fyy6jns5fsu5xd7q@bogus>
+        Wed, 2 Nov 2022 05:32:51 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BC0813F8A
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 02:31:46 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667381505;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=FiXyFbNQfgw1EbxRUL2H94emHZF9fnomkSKKEY8Wyhw=;
+        b=V7MrpPYaCoCQytswCrFkezV6dc19wkNirVYzr3S42jh/mvmaeyRWzgQBV/EKqodoivsRfC
+        M/0lurqfsxhssyWjYte7ZzMXGPOOxP+s7bAmNYF5GPOIf3V8MrcklsYPmETs+5kn0YuO9w
+        vX7mFc1Xqxb1NUp/taSkj35muy9a9FQ=
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
+ [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-615-H2DoG2IZMVSOoOcgvlwSow-1; Wed, 02 Nov 2022 05:31:44 -0400
+X-MC-Unique: H2DoG2IZMVSOoOcgvlwSow-1
+Received: by mail-qk1-f200.google.com with SMTP id h8-20020a05620a284800b006b5c98f09fbso14975528qkp.21
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 02:31:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=FiXyFbNQfgw1EbxRUL2H94emHZF9fnomkSKKEY8Wyhw=;
+        b=sE9kozp+m3leMntgkDDSrSNiV4bzodb2Nsq5dXZJYvWQLzOqArzAv9FoxyJORiXiYG
+         6M2PJUfOJqCj+QWS0jYrHIFVkNAUZ/Ga3/b+ESvNXQoKKl8+Rr+TEB58mnjNFoXyJo50
+         uZXv1E5S7SDqtqGm7wOYqtQTU5zJ0DRPCQXLWyvPxEaVjjFpv4N2vYVLhrKlaL4ku5Dv
+         gAX6xEKSLv8MICLxbGOxQIP1lV8d4DUPUdQ6oo+JgK7vQ1d4PQsXrckEKvKN12FwHiHb
+         VPFcm2Bzxl2niTSZ0ba8+w1bTzv5PKQoc/H0z6zUukIMXTFrHZ/nZnAL6/gnMmN41o5n
+         sX8Q==
+X-Gm-Message-State: ACrzQf0BSc3VK/nPgp1uK4qPuzTSvAwkAgk8nlFwEWN0McW/RycHqSPz
+        gEFFFPSPQzgtcRoJDK3mRc6rUhQwjJ87M1OEVeoV7xlEppzN5NNeacATfIx0du7lxnMVn/vfzUC
+        YNPPAqXXcHF40tiNMth3Ta2zY
+X-Received: by 2002:a0c:e2d4:0:b0:4bb:5902:922c with SMTP id t20-20020a0ce2d4000000b004bb5902922cmr20026053qvl.57.1667381504105;
+        Wed, 02 Nov 2022 02:31:44 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7fwcDDdofDJz+WZYfF1ydzjXTJWpUN8/UcIhN3q3TEjSy7NElKUQE03Ks6CSlPZF4dfR2Qnw==
+X-Received: by 2002:a0c:e2d4:0:b0:4bb:5902:922c with SMTP id t20-20020a0ce2d4000000b004bb5902922cmr20026034qvl.57.1667381503910;
+        Wed, 02 Nov 2022 02:31:43 -0700 (PDT)
+Received: from sgarzare-redhat (host-82-53-134-234.retail.telecomitalia.it. [82.53.134.234])
+        by smtp.gmail.com with ESMTPSA id bs33-20020a05620a472100b006fa617ac616sm486080qkb.49.2022.11.02.02.31.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 02:31:43 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 10:31:37 +0100
+From:   Stefano Garzarella <sgarzare@redhat.com>
+To:     Dexuan Cui <decui@microsoft.com>
+Cc:     davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, arseny.krasnov@kaspersky.com,
+        netdev@vger.kernel.org, virtualization@lists.linux-foundation.org,
+        linux-kernel@vger.kernel.org, kys@microsoft.com,
+        haiyangz@microsoft.com, stephen@networkplumber.org,
+        wei.liu@kernel.org, linux-hyperv@vger.kernel.org
+Subject: Re: [PATCH v2 2/2] vsock: fix possible infinite sleep in
+ vsock_connectible_wait_data()
+Message-ID: <20221102093137.2il5u7opfyddheis@sgarzare-redhat>
+References: <20221101021706.26152-1-decui@microsoft.com>
+ <20221101021706.26152-3-decui@microsoft.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20221014105938.fyy6jns5fsu5xd7q@bogus>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221101021706.26152-3-decui@microsoft.com>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 14, 2022 at 11:59:38AM +0100, Sudeep Holla wrote:
-> Hi Besar,
-> 
-> On Wed, Sep 28, 2022 at 07:28:34PM -0500, Besar Wicaksono wrote:
-> > ARM Performance Monitoring Unit Table describes the properties of PMU
-> > support in ARM-based system. The APMT table contains a list of nodes,
-> > each represents a PMU in the system that conforms to ARM CoreSight PMU
-> > architecture. The properties of each node include information required
-> > to access the PMU (e.g. MMIO base address, interrupt number) and also
-> > identification. For more detailed information, please refer to the
-> > specification below:
-> >  * APMT: https://developer.arm.com/documentation/den0117/latest
-> >  * ARM Coresight PMU:
-> >         https://developer.arm.com/documentation/ihi0091/latest
-> > 
-> > The initial support adds the detection of APMT table and generic
-> > infrastructure to create platform devices for ARM CoreSight PMUs.
-> > Similar to IORT the root pointer of APMT is preserved during runtime
-> > and each PMU platform device is given a pointer to the corresponding
-> > APMT node.
-> > 
-> 
-> This looks good to me know.
-> 
-> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-> 
-> Hi Lorenzo,
-> 
-> Not sure if there are any other arm specific ACPI changes in the queue
-> for v6.2. Can you please add this too ?
+On Mon, Oct 31, 2022 at 07:17:06PM -0700, Dexuan Cui wrote:
+>Currently vsock_connectible_has_data() may miss a wakeup operation
+>between vsock_connectible_has_data() == 0 and the prepare_to_wait().
+>
+>Fix the race by adding the process to the wait queue before checking
+>vsock_connectible_has_data().
+>
+>Fixes: b3f7fd54881b ("af_vsock: separate wait data loop")
+>Signed-off-by: Dexuan Cui <decui@microsoft.com>
+>---
+>
+>Changes in v2 (Thanks Stefano!):
+>  Fixed a typo in the commit message.
+>  Removed the unnecessary finish_wait() at the end of the loop.
 
-Hi Catalin, Will,
+LGTM:
 
-would you mind picking this patch up for v6.2 please ?
+Reviewed-by: Stefano Garzarella <sgarzare@redhat.com>
 
-Thank you very much.
+>
+> net/vmw_vsock/af_vsock.c | 5 ++++-
+> 1 file changed, 4 insertions(+), 1 deletion(-)
+>
+>diff --git a/net/vmw_vsock/af_vsock.c b/net/vmw_vsock/af_vsock.c
+>index d258fd43092e..884eca7f6743 100644
+>--- a/net/vmw_vsock/af_vsock.c
+>+++ b/net/vmw_vsock/af_vsock.c
+>@@ -1905,8 +1905,11 @@ static int vsock_connectible_wait_data(struct sock *sk,
+> 	err = 0;
+> 	transport = vsk->transport;
+>
+>-	while ((data = vsock_connectible_has_data(vsk)) == 0) {
+>+	while (1) {
+> 		prepare_to_wait(sk_sleep(sk), wait, TASK_INTERRUPTIBLE);
+>+		data = vsock_connectible_has_data(vsk);
+>+		if (data != 0)
+>+			break;
+>
+> 		if (sk->sk_err != 0 ||
+> 		    (sk->sk_shutdown & RCV_SHUTDOWN) ||
+>-- 
+>2.25.1
+>
 
-Lorenzo
