@@ -2,111 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 007A9616B2D
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:47:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 25198616B31
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:49:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231448AbiKBRrd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:47:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46436 "EHLO
+        id S231452AbiKBRt0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:49:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47458 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231579AbiKBRrZ (ORCPT
+        with ESMTP id S231255AbiKBRtY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:47:25 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9845927B18
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 10:47:23 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 4B48E1F855;
-        Wed,  2 Nov 2022 17:47:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1667411242; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Wed, 2 Nov 2022 13:49:24 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69ACE65F1
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 10:48:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667411305;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=bIXibXXjjmnVVHx6xjVFUipVPFmWAiVSbZzEqPxgGqU=;
-        b=gIsTGpGgO0MrSHOFFGoAwL+viqPrxOnfGXqwBcdrDNOz2aiMyvX2X8419Cvfk6GWPGoJB5
-        4mQ8qcsOKYh6eF3aAb36+YLp1iq5ueprzeCyLwRpHHa8LEezhpAVTTS1aLnc+19TdlZ+lT
-        CfQWH4wz9OsbO9obcDsQtc+EpgcMwQ8=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3089A139D3;
-        Wed,  2 Nov 2022 17:47:22 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id e3wLCiqtYmMKSQAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 02 Nov 2022 17:47:22 +0000
-Date:   Wed, 2 Nov 2022 18:47:21 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     Yang Shi <shy828301@gmail.com>
-Cc:     Zach O'Keefe <zokeefe@google.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] mm: don't warn if the node is offlined
-Message-ID: <Y2KtKVpR69P+E0xT@dhcp22.suse.cz>
-References: <20221031183122.470962-1-shy828301@gmail.com>
- <Y2BHcBCR2FIJgU4w@dhcp22.suse.cz>
- <CAAa6QmQt9Us8YpirQGXV0_AetuPS+EOqMSGqNn6KW24HXvwO_A@mail.gmail.com>
- <Y2DQr06mNzk0ITX1@dhcp22.suse.cz>
- <CAHbLzkonsnr4yxUOpMpoch1eCVNgR5hC9YaMkPR=fSV2Uszc6g@mail.gmail.com>
- <CAAa6QmRe1zMp8P-gZjR63Fg6KhOw+fP-v7SQWLNKuc2Y9ZxvyA@mail.gmail.com>
- <Y2IerOXJ+ZoRTHcs@dhcp22.suse.cz>
- <CAHbLzkrBNzsorc9oCq1=ri0uq1xbQ+m+u2gQX5GYrb=Z7n4siA@mail.gmail.com>
- <Y2KXkVmRWOpPT/MI@dhcp22.suse.cz>
- <CAHbLzkosQf8OoL+u+gkfO5-fvCNUuDxEa08FUfks1M4AS7tmjw@mail.gmail.com>
+        bh=pe1MTRhzbzYJXNC8ZzbEb7/kFiwr8hS1jq1jIPOUpDg=;
+        b=hjCsLQg1tpyHdNku0T0k46jLFCPRfqv/dCW0YpmVjpza0u4axdDBQP54zUoaBFw5VJ2U4Z
+        ctc9P6uxurS3W2cw+TuhF7SjymGFHoV/Po7+spLRaV/GOUQhbYxr4766YnGXiURlKBda3o
+        AxQyXegcJtOBJVgIjRdt+0wbe+hn08o=
+Received: from mail-ed1-f70.google.com (mail-ed1-f70.google.com
+ [209.85.208.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-390-S3QHjisAMeqd9YS53Xb9KA-1; Wed, 02 Nov 2022 13:48:24 -0400
+X-MC-Unique: S3QHjisAMeqd9YS53Xb9KA-1
+Received: by mail-ed1-f70.google.com with SMTP id t4-20020a056402524400b004620845ba7bso12485287edd.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 10:48:23 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pe1MTRhzbzYJXNC8ZzbEb7/kFiwr8hS1jq1jIPOUpDg=;
+        b=l/cxulFMtcOB5BtDZRwNtwqhBmvWzg5+pMYixZtYj56CGNr38cm/jnQwRDl2xWI1Te
+         HxmDcyAzDXtycrvV6vxD2ocC/po3shVyWhKf/KwjBruIjvH5ylSe2MDbVbvz+qOkXS68
+         ZHh89F96lopeK5ex5JboVr73skGUroIHsKokv8BMaxXjhmsiaPw/V67cDJrn5kVLxr0T
+         yAuRtedu/4h1YTsT+F+4ZLwnuX1pRejIjisxFx1LUZpsQHVI+4O7AlnjkZN6N9cxdLj6
+         VFtevKJPeY4AbileYjgyZ4ew5Q7giC8aBgK5npskcIIQEFSGxdfsfE/hsZtnx93T2I/n
+         2jYg==
+X-Gm-Message-State: ACrzQf1mXdH5zbsNLk/LVPUqJ0IZoXMVa8k1RnGHMP1IEMNEaQtkwHTb
+        3S0/hWeJkFAlAVi6q7pCq80jWWatDz+OO4+1bEt3q8qx9VY3z6RBFzrGeOF8i7Tgc266qLgvnxz
+        U78Suf4+9P0VvKYg5gvfI419b
+X-Received: by 2002:a17:907:25c5:b0:782:978d:c3da with SMTP id ae5-20020a17090725c500b00782978dc3damr23904934ejc.623.1667411303029;
+        Wed, 02 Nov 2022 10:48:23 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM74RsEKYfiF1K+ilXBz5IRpRcQ6QbazxTl4W61C8I2sNbPLEdiwQWWgWPW6e/198iHCZuLjvw==
+X-Received: by 2002:a17:907:25c5:b0:782:978d:c3da with SMTP id ae5-20020a17090725c500b00782978dc3damr23904917ejc.623.1667411302805;
+        Wed, 02 Nov 2022 10:48:22 -0700 (PDT)
+Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
+        by smtp.googlemail.com with ESMTPSA id f17-20020a05640214d100b0044e937ddcabsm6106057edx.77.2022.11.02.10.48.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 10:48:22 -0700 (PDT)
+Message-ID: <c0b98151-16b6-6d8f-1765-0f7d46682d60@redhat.com>
+Date:   Wed, 2 Nov 2022 18:48:19 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAHbLzkosQf8OoL+u+gkfO5-fvCNUuDxEa08FUfks1M4AS7tmjw@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] KVM: replace DEFINE_SIMPLE_ATTRIBUTE with
+ DEFINE_DEBUGFS_ATTRIBUTE
+Content-Language: en-US
+To:     Bo Liu <liubo03@inspur.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221101072506.7307-1-liubo03@inspur.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20221101072506.7307-1-liubo03@inspur.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 02-11-22 10:36:07, Yang Shi wrote:
-> On Wed, Nov 2, 2022 at 9:15 AM Michal Hocko <mhocko@suse.com> wrote:
-> >
-> > On Wed 02-11-22 09:03:57, Yang Shi wrote:
-> > > On Wed, Nov 2, 2022 at 12:39 AM Michal Hocko <mhocko@suse.com> wrote:
-> > > >
-> > > > On Tue 01-11-22 12:13:35, Zach O'Keefe wrote:
-> > > > [...]
-> > > > > This is slightly tangential - but I don't want to send a new mail
-> > > > > about it -- but I wonder if we should be doing __GFP_THISNODE +
-> > > > > explicit node vs having hpage_collapse_find_target_node() set a
-> > > > > nodemask. We could then provide fallback nodes for ties, or if some
-> > > > > node contained > some threshold number of pages.
-> > > >
-> > > > I would simply go with something like this (not even compile tested):
-> > >
-> > > Thanks, Michal. It is definitely an option. As I talked with Zach, I'm
-> > > not sure whether it is worth making the code more complicated for such
-> > > micro optimization or not. Removing __GFP_THISNODE or even removing
-> > > the node balance code should be fine too IMHO. TBH I doubt there would
-> > > be any noticeable difference.
-> >
-> > I do agree that an explicit nodes (quasi)round robin sounds over
-> > engineered. It makes some sense to try to target the prevalent node
-> > though because this code can be executed from khugepaged and therefore
-> > allocating with a completely different affinity than the original fault.
+On 11/1/22 08:25, Bo Liu wrote:
+> Fix the following coccicheck warning:
+>    virt/kvm/kvm_main.c:3847:0-23: WARNING
+>      vcpu_get_pid_fops should be defined with DEFINE_DEBUGFS_ATTRIBUTE
 > 
-> Yeah, the corner case comes from the node balance code, it just tries
-> to balance between multiple prevalent nodes, so you agree to remove it
-> IIRC?
+> Signed-off-by: Bo Liu <liubo03@inspur.com>
+> ---
+>   virt/kvm/kvm_main.c | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/virt/kvm/kvm_main.c b/virt/kvm/kvm_main.c
+> index f1df24c2bc84..3f383f27d3d7 100644
+> --- a/virt/kvm/kvm_main.c
+> +++ b/virt/kvm/kvm_main.c
+> @@ -3844,7 +3844,7 @@ static int vcpu_get_pid(void *data, u64 *val)
+>   	return 0;
+>   }
+>   
+> -DEFINE_SIMPLE_ATTRIBUTE(vcpu_get_pid_fops, vcpu_get_pid, NULL, "%llu\n");
+> +DEFINE_DEBUGFS_ATTRIBUTE(vcpu_get_pid_fops, vcpu_get_pid, NULL, "%llu\n");
+>   
+>   static void kvm_create_vcpu_debugfs(struct kvm_vcpu *vcpu)
+>   {
 
-Yeah, let's just collect all good nodes into a nodemask and keep
-__GFP_THISNODE in place. You can consider having the nodemask per collapse_control
-so that you allocate it only once in the struct lifetime.
+If you really wanted to do this, you would also have to replace 
+debugfs_create_file with debugfs_create_file_unsafe.
 
-And as mentioned in other reply it would be really nice to hide this
-under CONFIG_NUMA (in a standalong follow up of course).
+However, this is not a good idea.  The rationale in the .cocci file is 
+that "DEFINE_SIMPLE_ATTRIBUTE + debugfs_create_file() imposes some 
+significant overhead", but this should not really be relevant for a 
+debugfs file.
 
--- 
-Michal Hocko
-SUSE Labs
+Such a patch would only make sense if there was a version of 
+debugfs_create_file_unsafe() with a less-terrible name (e.g. 
+debugfs_create_simple_attr?), which could _only_ be used with fops 
+created by DEFINE_DEBUGFS_ATTRIBUTE.  Without such a type-safe trick, 
+the .cocci file is only adding confusion to perfectly fine code.
+
+Paolo
+
