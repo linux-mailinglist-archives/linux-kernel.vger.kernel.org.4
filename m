@@ -2,119 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6BB7A616B2B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:47:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D50C7616B2A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:47:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231577AbiKBRrI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:47:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46094 "EHLO
+        id S231433AbiKBRq4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:46:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46078 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231452AbiKBRq5 (ORCPT
+        with ESMTP id S230012AbiKBRqy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:46:57 -0400
-Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F3EE812ACD
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 10:46:56 -0700 (PDT)
-Received: by mail-qk1-x735.google.com with SMTP id f8so12250377qkg.3
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 10:46:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=njYRHOF8PBTOLR5X1IwiLISD8+wycAUFRyOLehmMkJc=;
-        b=INH8sAb66bVfcoHPStGz2SdVBAzB6hdoGdL//UtvQE9vOiLzeirTWz7OGAcLeiCZdg
-         YbbgF/mQWUv7cQoUqML8Lx2quVrDN9f2D183Pe1eEJuqu9n1gXCp93QjTfGDvqjOkTiF
-         8wzwxGQGyDe+TiUhumc/0akfnkdmtM/eidS6hYy4YORaVu4ojYk3U4tQ1Q9m60wuU0N1
-         OeRDqOSAGfBeCDOjcCfExKw/4UIvJtywIQZkjb+TUO/XpkHuWRXTFyTUOigQ5TWG5iZB
-         axFaqWfJ32fkSW+ydAZCsWWDLxTgkickUvCfJhKdy9qEjy8Ty4M/vZ8tNVRspZM3V7uZ
-         Qbqg==
+        Wed, 2 Nov 2022 13:46:54 -0400
+Received: from mail-il1-f197.google.com (mail-il1-f197.google.com [209.85.166.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B08AF23BC8
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 10:46:53 -0700 (PDT)
+Received: by mail-il1-f197.google.com with SMTP id j20-20020a056e02219400b00300a22a7fe0so10644464ila.3
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 10:46:53 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=njYRHOF8PBTOLR5X1IwiLISD8+wycAUFRyOLehmMkJc=;
-        b=gXjHk2jwh2C7kXKE35GOMtCRbQtPcobIW/EWKbTqRJUZ/ZFjkilYr9WRxoXyKpf7c/
-         4duqqR87tHsKhpIQBWYRDePzad78vrreXJ8ce3Q2j1YBN2fAszGbnadXA3ib03MJH1f6
-         wQ5H03FOMkeuJtHQnW7hx+Arq2wIeFYHSZweIRNVzwgNCexN3dpxN66gedpYPAAbejZC
-         NwZCYb+L5BpIYaGTzsqRl3fV/D5zxOTItaidU/rXmuIp0VJ9orvemDMh+PAXRJ8X/tOs
-         ruuva/NuxzeC3Wv6PFNRm050XM7RduTyPcPY1qwXEQZ1Mpof3sFvFqa2GrxrwB0aFbUb
-         DT8g==
-X-Gm-Message-State: ACrzQf0QTlknbHpX5tCo7fIrFEAZrKwgvnqNqQWsPO3YPrEOwPgRX2xy
-        llreXPmtay7YUSdric24lBw3VpF6Zgk=
-X-Google-Smtp-Source: AMsMyM5pT2XRn7fZYnwSWeaXYyp29ab20WRqnqEr7824A/FIUNktIagNP+r3ImOwFfhwY1pv+8p0ig==
-X-Received: by 2002:a05:620a:12bc:b0:6fa:65d7:30d1 with SMTP id x28-20020a05620a12bc00b006fa65d730d1mr2213804qki.323.1667411216142;
-        Wed, 02 Nov 2022 10:46:56 -0700 (PDT)
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com. [209.85.128.179])
-        by smtp.gmail.com with ESMTPSA id bn4-20020a05620a2ac400b006f9f714cb6asm8709968qkb.50.2022.11.02.10.46.55
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 10:46:55 -0700 (PDT)
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-367b8adf788so173197137b3.2
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 10:46:55 -0700 (PDT)
-X-Received: by 2002:a81:6a46:0:b0:367:6708:9f1b with SMTP id
- f67-20020a816a46000000b0036767089f1bmr25315551ywc.56.1667411215348; Wed, 02
- Nov 2022 10:46:55 -0700 (PDT)
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Fu2Jh4mtVJYh4m6XIh04CrENtI12FDONZF290zEmHHA=;
+        b=AiZtnV2Dkr58MBCIJhz/k6dFLL9HQDIiJbHluijA98Czi8o3JhkTAXp7WhXh1VRL0E
+         aIKsgxtKf4/qDJkSw/o441zELeUEnoTlvfsoI452SgN4edx+8IuwP2jwYj/DVM9HR5C8
+         FBhKJvrtD69ri8e1Qk9huYd9lTnoL1Gia6AZGhMIZTJBwLNEEq1ZwBX1nb+MDY8z6je4
+         cviJRwfGsnE/FAaFo6ZgNcV+6cm+s4Ghhhavu+deQaEhn8a3R1wDXUJYoW0ml2Cqdbdb
+         M36AQ+FKyBWs5mmbtgNgZyszsBcvEKz25VaE57g8GGOg5TrPMiPwcKWrwblUaLLyQDDj
+         ps4A==
+X-Gm-Message-State: ACrzQf2ja3oml6ygINZ6S7Pc6t4/hjZClcV+im+qkx3VKYNy2z4HqEbD
+        mZhzaeglK0zmhqJDSN6gm6DyJzD1mKskwxtp0bDVJCXAr0WH
+X-Google-Smtp-Source: AMsMyM7X/DQrD0nktD6nvPbDSJURuMPQQuwt9AapXbFXj4H0UDTMmKKbah7SXCKKHJaeOxtJr5dl2KFSyOoboq13dEo6LjT9ampP
 MIME-Version: 1.0
-References: <20221030220203.31210-1-axboe@kernel.dk>
-In-Reply-To: <20221030220203.31210-1-axboe@kernel.dk>
-From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
-Date:   Wed, 2 Nov 2022 13:46:16 -0400
-X-Gmail-Original-Message-ID: <CA+FuTSfj5jn8Wui+az2BrcpDFYF5m5ehwLiswwHMPJ2MK+S_Jw@mail.gmail.com>
-Message-ID: <CA+FuTSfj5jn8Wui+az2BrcpDFYF5m5ehwLiswwHMPJ2MK+S_Jw@mail.gmail.com>
-Subject: Re: [PATCHSET v3 0/5] Add support for epoll min_wait
-To:     Jens Axboe <axboe@kernel.dk>
-Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+X-Received: by 2002:a05:6638:31c2:b0:35a:c5b1:b567 with SMTP id
+ n2-20020a05663831c200b0035ac5b1b567mr15556454jav.58.1667411213038; Wed, 02
+ Nov 2022 10:46:53 -0700 (PDT)
+Date:   Wed, 02 Nov 2022 10:46:53 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000000c379205ec806d6e@google.com>
+Subject: [syzbot] WARNING in btrfs_commit_transaction
+From:   syzbot <syzbot+9c37714c07194d816417@syzkaller.appspotmail.com>
+To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sun, Oct 30, 2022 at 6:02 PM Jens Axboe <axboe@kernel.dk> wrote:
->
-> Hi,
->
-> tldr - we saw a 6-7% CPU reduction with this patch. See patch 6 for
-> full numbers.
->
-> This adds support for EPOLL_CTL_MIN_WAIT, which allows setting a minimum
-> time that epoll_wait() should wait for events on a given epoll context.
-> Some justification and numbers are in patch 6, patches 1-5 are really
-> just prep patches or cleanups.
->
-> Sending this out to get some input on the API, basically. This is
-> obviously a per-context type of operation in this patchset, which isn't
-> necessarily ideal for any use case. Questions to be debated:
->
-> 1) Would we want this to be available through epoll_wait() directly?
->    That would allow this to be done on a per-epoll_wait() basis, rather
->    than be tied to the specific context.
->
-> 2) If the answer to #1 is yes, would we still want EPOLL_CTL_MIN_WAIT?
->
-> I think there are pros and cons to both, and perhaps the answer to both is
-> "yes". There are some benefits to doing this at epoll setup time, for
-> example - it nicely isolates it to that part rather than needing to be
-> done dynamically everytime epoll_wait() is called. This also helps the
-> application code, as it can turn off any busy'ness tracking based on if
-> the setup accepted EPOLL_CTL_MIN_WAIT or not.
->
-> Anyway, tossing this out there as it yielded quite good results in some
-> initial testing, we're running more of it. Sending out a v3 now since
-> someone reported that nonblock issue which is annoying. Hoping to get some
-> more discussion this time around, or at least some...
+Hello,
 
-My main question is whether the cycle gains justify the code
-complexity and runtime cost in all other epoll paths.
+syzbot found the following issue on:
 
-Syscall overhead is quite dependent on architecture and things like KPTI.
+HEAD commit:    b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
+git tree:       upstream
+console+strace: https://syzkaller.appspot.com/x/log.txt?x=12db9c7e880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=a66c6c673fb555e8
+dashboard link: https://syzkaller.appspot.com/bug?extid=9c37714c07194d816417
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17401632880000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=13176716880000
 
-Indeed, I was also wondering whether an extra timeout arg to
-epoll_wait would give the same feature with less side effects. Then no
-need for that new ctrl API.
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/ba5b49fa77de/disk-b229b6ca.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/7c061f2ae4dc/vmlinux-b229b6ca.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/bc45c1300e9b/bzImage-b229b6ca.xz
+mounted in repro: https://storage.googleapis.com/syzbot-assets/62077524a72d/mount_0.gz
+
+Bisection is inconclusive: the issue happens on the oldest tested release.
+
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=14e432a6880000
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=16e432a6880000
+console output: https://syzkaller.appspot.com/x/log.txt?x=12e432a6880000
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+9c37714c07194d816417@syzkaller.appspotmail.com
+
+BTRFS info (device loop0): clearing compat-ro feature flag for FREE_SPACE_TREE (0x1)
+BTRFS info (device loop0): clearing compat-ro feature flag for FREE_SPACE_TREE_VALID (0x2)
+BTRFS info (device loop0): checking UUID tree
+BTRFS warning (device loop0): Skipping commit of aborted transaction.
+------------[ cut here ]------------
+BTRFS: Transaction aborted (error -12)
+WARNING: CPU: 0 PID: 3608 at fs/btrfs/transaction.c:1958 cleanup_transaction fs/btrfs/transaction.c:1958 [inline]
+WARNING: CPU: 0 PID: 3608 at fs/btrfs/transaction.c:1958 btrfs_commit_transaction.cold+0x356/0xae3 fs/btrfs/transaction.c:2531
+Modules linked in:
+CPU: 0 PID: 3608 Comm: syz-executor286 Not tainted 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+RIP: 0010:cleanup_transaction fs/btrfs/transaction.c:1958 [inline]
+RIP: 0010:btrfs_commit_transaction.cold+0x356/0xae3 fs/btrfs/transaction.c:2531
+Code: fe ff ff e8 fa 28 27 f8 0f 0b e9 3f fe ff ff 31 db e9 d9 fe ff ff e8 e7 28 27 f8 44 89 ee 48 c7 c7 60 a5 37 8a e8 44 4a f4 ff <0f> 0b bb 01 00 00 00 e9 b9 fe ff ff e8 c7 28 27 f8 48 8b 95 00 ff
+RSP: 0018:ffffc9000402fc70 EFLAGS: 00010286
+RAX: 0000000000000000 RBX: ffff888077eb4000 RCX: 0000000000000000
+RDX: ffff88807c599d40 RSI: ffffffff81621b98 RDI: fffff52000805f80
+RBP: ffffc9000402fdf0 R08: 0000000000000005 R09: 0000000000000000
+R10: 0000000080000000 R11: 0000000046525442 R12: 0000000000000000
+R13: 00000000fffffff4 R14: ffff8880704d60a8 R15: ffff888077eb4000
+FS:  0000555556f2b300(0000) GS:ffff8880b9a00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007ffe136c1ee0 CR3: 000000006fa8b000 CR4: 0000000000350ef0
+Call Trace:
+ <TASK>
+ btrfs_sync_fs+0x169/0x810 fs/btrfs/super.c:1527
+ sync_fs_one_sb fs/sync.c:84 [inline]
+ sync_fs_one_sb+0x107/0x140 fs/sync.c:80
+ iterate_supers+0x13c/0x290 fs/super.c:723
+ ksys_sync+0xa8/0x150 fs/sync.c:104
+ __do_sys_sync+0xa/0x10 fs/sync.c:113
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7ff58bb49179
+Code: ff ff c3 66 2e 0f 1f 84 00 00 00 00 00 0f 1f 40 00 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 c0 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007ffeb9ddd228 EFLAGS: 00000246 ORIG_RAX: 00000000000000a2
+RAX: ffffffffffffffda RBX: 0000000000000001 RCX: 00007ff58bb49179
+RDX: 0000000000000230 RSI: 000000000000c0c2 RDI: 00007ffeb9ddd230
+RBP: 00007ffeb9ddd230 R08: 0000000000000001 R09: 00007ff58bbb0035
+R10: 0000000000000000 R11: 0000000000000246 R12: 0000000000000003
+R13: 0000000000000000 R14: 0000100000000000 R15: 0000000000000000
+ </TASK>
+
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
+syzbot can test patches for this issue, for details see:
+https://goo.gl/tpsmEJ#testing-patches
