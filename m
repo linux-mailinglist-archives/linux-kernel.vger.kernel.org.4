@@ -2,22 +2,22 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35E526163B4
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:18:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 92CEC6163B2
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:18:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbiKBNSb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 09:18:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57622 "EHLO
+        id S231424AbiKBNSf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 09:18:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231368AbiKBNSA (ORCPT
+        with ESMTP id S231358AbiKBNR7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 09:18:00 -0400
+        Wed, 2 Nov 2022 09:17:59 -0400
 Received: from mout.perfora.net (mout.perfora.net [74.208.4.194])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A26262AC4E;
-        Wed,  2 Nov 2022 06:17:59 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98EEE2AC47;
+        Wed,  2 Nov 2022 06:17:58 -0700 (PDT)
 Received: from toolbox.toradex.int ([31.10.206.125]) by mrelay.perfora.net
- (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0Lkw9T-1pQvL20RwD-00anec;
- Wed, 02 Nov 2022 14:12:25 +0100
+ (mreueus002 [74.208.5.2]) with ESMTPSA (Nemesis) id 0LtHdl-1p0yDn1v8V-012osu;
+ Wed, 02 Nov 2022 14:12:28 +0100
 From:   Marcel Ziswiler <marcel@ziswiler.com>
 To:     linux-arm-kernel@lists.infradead.org
 Cc:     Peter Chen <peter.chen@kernel.org>,
@@ -33,31 +33,31 @@ Cc:     Peter Chen <peter.chen@kernel.org>,
         Sascha Hauer <s.hauer@pengutronix.de>,
         Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH v1 4/6] arm64: dts: verdin-imx8mp: disable usb port power control
-Date:   Wed,  2 Nov 2022 14:12:01 +0100
-Message-Id: <20221102131203.35648-5-marcel@ziswiler.com>
+Subject: [PATCH v1 5/6] arm64: dts: verdin-imx8mp: add gpio usb-b connector
+Date:   Wed,  2 Nov 2022 14:12:02 +0100
+Message-Id: <20221102131203.35648-6-marcel@ziswiler.com>
 X-Mailer: git-send-email 2.36.1
 In-Reply-To: <20221102131203.35648-1-marcel@ziswiler.com>
 References: <20221102131203.35648-1-marcel@ziswiler.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Provags-ID: V03:K1:ezSwXDhrGUhbO41+Hg5e7FqLOXhDA9Lo/PmMeLS1/Z3DrwzK2PZ
- OcWAB7cixj3ZVWQg3eQjk0FRRJ0lyMUHbItra6p8/BU1V/ABQNGHWc5BuID39PbzLEkg/cg
- i4W5STJ93CobpkH/eNXkyXF0FDsWnt5EGKgZ5ipR78e4/YwoPV1HMw9cetho5IJjH3hPNGg
- cnN94Ew2C2leFWZtlf3pw==
-X-UI-Out-Filterresults: notjunk:1;V03:K0:1NDYnwyTszc=:z1x7q1Ea8Qwjikh2SLyqBh
- 49eZBXI7pum6ahcONCmBsm0gtqqIMH8AhIvZPZIPTtXcgA17Tu8uBJyvkZL/KYCANjwZFU1Oo
- wwqo8aRqw4DEyl2hOPO4jyXaL6JmUuXH6uA+p/ROyLGlixplQ2Dlf1udccz+M1VUgIB+UTdB0
- DGkr+Qh1KAKAjb9cbqhHHZ3UqI3FFM5fVYyUkemZJuSDVVAQHG/UDZpd5q4fDCnWnJ1oLv9Kr
- nnZMz1KpqM0Mz3Jn5SdSmgzkZ+zydOVZzf1y7X+GmUsv2sJX8NLrUI9/MWz0yVguGUlwW64nd
- 8l3cBnZwcNxYLfudI80dGB4UYhXY/4YXrm7FzNpNRrvRWGCvSRlteXDJqCkObPdJZUpPumkAh
- C/N4vf33F1WucDxS5k/1kK7wYEeQ4JO6+HiCStyzqzP+1UYEu+Fs8RSCHYlAWDqwUN1KpT4VY
- 9fpkz79++0HDUduOSAshwzdPPTCD7xVQPFXDbRfL0rNFJu1uDvW/nhYct1rmQ83QcedxcMN6e
- pnlxrYe9inITgIlYlSDj5uRmeJVy0ydxIKTs0Lyj/rMeA8RuUe/AQKA8tlPXtWicdSvw2SQDt
- EFdmn2HsIOiyrSbX9j6jKQC38RKrFSPm0AtNpw5NyMDFOpeuadXzglKDO0EVcO+5eBbc48Q3F
- kLN+ISDqqtOkGOG6/pZuyCf77kN/N7jrtYyLhWuNSPDoxRV100UvIeqlH49gCdqKEpAS7Vcev
- BGba7+W9cfauI83Irtfn374i+J/32mSAEm15yG4WN9p54KyOdYZXRpu7wXxhErgUzbH6MkeC7
- Q1dvhKu
+X-Provags-ID: V03:K1:Thh1AqQcIwoSO03vPLA6TTxnuAnbPtVYneMdFj+HuDRIGQAeuRD
+ NRR2h5qvlY6CkGx6t5HTh2xxFKlT/rFpu42Jk2PCvCC3DfznnxV4Ce7UVaLA0ksoJf++Yho
+ TUba8ahYACbcIdtXQXX8IEdIIg5qUlkCdWepabkwGTLH0KCqyrrO7xbIpQ76Y0Eu+JkTWuo
+ /3WqlN5POZL/hXjQpN3Nw==
+X-UI-Out-Filterresults: notjunk:1;V03:K0:3PxX5/Xx1r0=:HpeQu/2fiqp6vYV2s2CxJR
+ V7tSLXtI/XjKgOSwZraif69eBZ29pGkYcTLiUFossbkiqPpyndIljVOAyMiIFb4YvlIQ2haxz
+ kvLi40rnjDnBBj2zIwDhVpElQjgWMwgXtIC8BsVg0qux0xzhyR3JlvuewxYQBsWPQiubLtJ6X
+ zMu0ljtP8xGF+0caGFNSzJt3o0v/+JGmRrn7KhtVfKlkNrcZdc9IHfRGv7+kM5llHd0TZ4PFR
+ UMlGEWRNTItP6UqYrjTEqThsctEWd4gYGLC5pKfHzFAtOBAwB+N/wzu2V7aPrBsBIp3X2vLdC
+ zuXxh8IDK73mgdDuYiVMdN++yPitGmRADSy8MOgCmMEB4xrYUS2lLJpYvuMkKT82MCMhbCFg/
+ 8YcRCIO0fKI+4/aKIxilronWhcGz8+5pLM3UxuN5eXfVAjIEaASXmLxAuZeGquaSMRvmOpS46
+ 8dKHRyl/jwQs8RDWarIgdg0sVZmhY8FCC20PWHGMK3dd/nNTWDWNyc8SmVul5ZnPw0poqdf2w
+ J2HpfVoVFMRxMhc9n5PW3lmeiztpLM7qOYch748gKqKwxJS01nT21DUAsQf1LyiYnrs//3Ac4
+ zZ5Mzi8q4blqqybavnpnkAf7HzpFelzg2iTcgI8OzX7kBvpF5yXpe0XvIahvLjoVz4+0w1DlU
+ NXnK0ElnqXTf74SJKHIQ37TCptuK5ha036yNtlhHY3lSXtuZ5AWXMTiGz+HYwvPMN4k0EKMDq
+ 2fqCETQVqSh6CKJKo+JWr6rJZs7hBNNuecQvCYDk3xDgJrSs8FP05f1nREWBNm+i0EmOhEvDQ
+ nuVA4ZQ
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
         RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
@@ -69,38 +69,52 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 
-Disable port power control on Verdin USB_1/2 as we use regular
-fixed-regulators with Verdin USB_1/2_EN as enable GPIOs.
+Add GPIO USB-B connector (gpio-usb-b-connector) functionality using
+Verdin USB_1_ID.
 
 Signed-off-by: Marcel Ziswiler <marcel.ziswiler@toradex.com>
 ---
 
- arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi | 5 +++++
- 1 file changed, 5 insertions(+)
+ .../boot/dts/freescale/imx8mp-verdin.dtsi     | 20 +++++++++++++------
+ 1 file changed, 14 insertions(+), 6 deletions(-)
 
 diff --git a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-index 85af2875fb70..795e02df9f29 100644
+index 795e02df9f29..6a1890a4b5d8 100644
 --- a/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
 +++ b/arch/arm64/boot/dts/freescale/imx8mp-verdin.dtsi
-@@ -808,6 +808,7 @@ &uart4 {
- 
- /* Verdin USB_1 */
- &usb3_0 {
-+	fsl,disable-port-power-control;
- 	fsl,over-current-active-low;
- 	pinctrl-names = "default";
+@@ -814,18 +814,26 @@ &usb3_0 {
  	pinctrl-0 = <&pinctrl_usb_1_oc_n>;
-@@ -828,6 +829,10 @@ &usb_dwc3_0 {
+ };
+ 
+-&usb3_phy0 {
+-	vbus-supply = <&reg_usb1_vbus>;
+-};
+-
+ &usb_dwc3_0 {
++	/* dual role only, not full featured OTG */
+ 	adp-disable;
+ 	dr_mode = "otg";
+ 	hnp-disable;
+ 	maximum-speed = "high-speed";
+-	pinctrl-names = "default";
+-	pinctrl-0 = <&pinctrl_usb_1_id>;
++	role-switch-default-mode = "peripheral";
+ 	srp-disable;
++	usb-role-switch;
++
++	connector {
++		compatible = "gpio-usb-b-connector", "usb-b-connector";
++		id-gpios = <&gpio2 10 GPIO_ACTIVE_HIGH>;
++		label = "Type-C";
++		pinctrl-names = "default";
++		pinctrl-0 = <&pinctrl_usb_1_id>;
++		self-powered;
++		type = "micro";
++		vbus-supply = <&reg_usb1_vbus>;
++	};
  };
  
  /* Verdin USB_2 */
-+&usb3_1 {
-+	fsl,disable-port-power-control;
-+};
-+
- &usb3_phy1 {
- 	vbus-supply = <&reg_usb2_vbus>;
- };
 -- 
 2.36.1
 
