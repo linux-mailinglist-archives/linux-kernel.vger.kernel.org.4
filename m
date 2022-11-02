@@ -2,51 +2,47 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DB866164F3
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:20:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8545D6164F2
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:20:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231659AbiKBOUa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 10:20:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46384 "EHLO
+        id S231600AbiKBOU2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 10:20:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiKBOTy (ORCPT
+        with ESMTP id S230216AbiKBOTx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 10:19:54 -0400
+        Wed, 2 Nov 2022 10:19:53 -0400
 Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB2C21F630;
-        Wed,  2 Nov 2022 07:19:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3C63D27933;
+        Wed,  2 Nov 2022 07:19:51 -0700 (PDT)
 Received: from pps.filterd (m0167088.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A2DYXQq004588;
-        Wed, 2 Nov 2022 10:19:51 -0400
-Received: from nwd2mta3.analog.com ([137.71.173.56])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3kka3dd94u-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Nov 2022 10:19:50 -0400
-Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
-        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 2A2EJn9B003554
-        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A2E1agT004560;
         Wed, 2 Nov 2022 10:19:49 -0400
-Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
- ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Wed, 2 Nov 2022 10:19:48 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by
- ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.14; Wed, 2 Nov 2022 10:19:48 -0400
+Received: from nwd2mta4.analog.com ([137.71.173.58])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3kka3dd94a-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 10:19:49 -0400
+Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
+        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 2A2EJmpW017360
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 2 Nov 2022 10:19:48 -0400
+Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
+ (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Wed, 2 Nov 2022
+ 10:19:47 -0400
 Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
  (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Wed, 2 Nov 2022 10:19:48 -0400
+ Transport; Wed, 2 Nov 2022 10:19:47 -0400
 Received: from rbolboac.ad.analog.com ([10.48.65.139])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2A2EJWOr005631;
-        Wed, 2 Nov 2022 10:19:42 -0400
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2A2EJWOs005631;
+        Wed, 2 Nov 2022 10:19:43 -0400
 From:   Ramona Bolboaca <ramona.bolboaca@analog.com>
 To:     <jic23@kernel.org>, <linux-iio@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     Ramona Bolboaca <ramona.bolboaca@analog.com>
-Subject: [PATCH 5/8] iio: imu: adis16400: Fix deadlock in probe
-Date:   Wed, 2 Nov 2022 16:18:40 +0200
-Message-ID: <20221102141843.122182-6-ramona.bolboaca@analog.com>
+Subject: [PATCH 6/8] staging: iio: accel: adis16203: Fix deadlock in probe
+Date:   Wed, 2 Nov 2022 16:18:41 +0200
+Message-ID: <20221102141843.122182-7-ramona.bolboaca@analog.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221102141843.122182-1-ramona.bolboaca@analog.com>
 References: <20221102141843.122182-1-ramona.bolboaca@analog.com>
@@ -54,8 +50,8 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
 X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: 0R3hhO91_kF4DArVTu_5AnNupHXBW1BA
-X-Proofpoint-ORIG-GUID: 0R3hhO91_kF4DArVTu_5AnNupHXBW1BA
+X-Proofpoint-GUID: 7vBulrEn1GGQi-_iwTnj2J49dhRJax_x
+X-Proofpoint-ORIG-GUID: 7vBulrEn1GGQi-_iwTnj2J49dhRJax_x
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-02_10,2022-11-02_01,2022-06-22_01
@@ -82,19 +78,19 @@ once inside adis_enable_irq).
 Fixes: 100bfa38c8cb ("iio: imu: adis[16480]: group RW into a single lock in adis_enable_irq()")
 Signed-off-by: Ramona Bolboaca <ramona.bolboaca@analog.com>
 ---
- drivers/iio/imu/adis16400.c | 2 +-
+ drivers/staging/iio/accel/adis16203.c | 2 +-
  1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iio/imu/adis16400.c b/drivers/iio/imu/adis16400.c
-index 17bb0c40a149..c02fc35dceb4 100644
---- a/drivers/iio/imu/adis16400.c
-+++ b/drivers/iio/imu/adis16400.c
-@@ -445,7 +445,7 @@ static int adis16400_initial_setup(struct iio_dev *indio_dev)
- 	st->adis.spi->mode = SPI_MODE_3;
- 	spi_setup(st->adis.spi);
+diff --git a/drivers/staging/iio/accel/adis16203.c b/drivers/staging/iio/accel/adis16203.c
+index 62d5397ff1f9..c0e4c9266b5f 100644
+--- a/drivers/staging/iio/accel/adis16203.c
++++ b/drivers/staging/iio/accel/adis16203.c
+@@ -285,7 +285,7 @@ static int adis16203_probe(struct spi_device *spi)
+ 		return ret;
  
--	ret = adis_initial_startup(&st->adis);
-+	ret = __adis_initial_startup(&st->adis);
+ 	/* Get the device into a sane initial state */
+-	ret = adis_initial_startup(st);
++	ret = __adis_initial_startup(st);
  	if (ret)
  		return ret;
  
