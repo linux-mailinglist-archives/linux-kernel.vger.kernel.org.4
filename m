@@ -2,117 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 83C85616D52
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 20:01:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3420F616D58
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 20:03:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231728AbiKBTB0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 15:01:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55530 "EHLO
+        id S231724AbiKBTDt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 15:03:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59476 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231663AbiKBTBQ (ORCPT
+        with ESMTP id S231742AbiKBTDr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 15:01:16 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68AA922C
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 12:01:14 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id g10so5859761qkl.6
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 12:01:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sVOm0gkttgsBAWPoT64yXGgGPw+pzS3zQxWBnd3fbbM=;
-        b=i/HQi3+YSYC4jl29Z8UKo0eGiXSyRDdGn4mkSvN62YT4Kv6F+iAA5WlbkShic6K7Ge
-         dpfcxIaQTgRrZWIyS0J60QvBV+WO9zPMfIl+beTkO3MBAJ9Sfu2qHgIkCc9rrVSOfNB4
-         wJ7PHYjlTi2SG6BrbqfSTnRlqwRYx8VgYcEEmoS6mZ6lNRElq9RYyY9T/LQkMEuQm2hY
-         QY/Fw0Mo0DdH3usOMcc0KfEwcjxiEnOhYSrfq7oo5GnqsWdJ/kWV9f8wPW8JXHnfljXy
-         3rwpmi2qMBH50/rjntk4qkn2aww2sKw6FRjXQcLURrNfKwDXr3NWDJxXHX7ahRdMEFMc
-         SG6w==
+        Wed, 2 Nov 2022 15:03:47 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A20072C0
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 12:02:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667415773;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=UqcZSn2dIGg+txRUz0yg2pNp7hn+WnfiER5ZgqstaLw=;
+        b=SQPVj7ssE2pl2mwGhEHrqCLZGeUWfwwTvJv53d4uQOxww0vM6Oscj/2pDWWgzqgkiqRWyz
+        7aNrV2yeoiLioOpXFUyBTJrq9lC9XcBG7y8mYc/BVRQS77b06sN+LyG8uBpW+J5XWZaVDB
+        r8TXdvc6KtibiwZn+SXCav7rmZTZ8Hs=
+Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
+ [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-35-NDWALGgFMo-Mv8dH-Zh2jA-1; Wed, 02 Nov 2022 15:02:52 -0400
+X-MC-Unique: NDWALGgFMo-Mv8dH-Zh2jA-1
+Received: by mail-qt1-f197.google.com with SMTP id i4-20020ac813c4000000b003a5044a818cso11134929qtj.11
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 12:02:52 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sVOm0gkttgsBAWPoT64yXGgGPw+pzS3zQxWBnd3fbbM=;
-        b=DyWach67hxFaHcR/YEFMb4vqp+3brVXqFyxrMMusNqciGjiEDo96SBpw8kqE0QU5tR
-         ZZpnAuCR2EmHGP9hgW+c1fp8GibVPzsAlDPMmzszldJQVfh8DMrVB2zjwt4A7PC+DF+9
-         dcNFjfCDiAx9q6kha3vuoz66M5X4GpBOixojd6BWNSX/gLRb8b2nNWnqY4g4ujvvckE9
-         glYqMJeB7pliSpZKTXj+hyNH931XyrHJ9Y/lU7q+F1p2ArhgrNOgbEQC9qadm/kuspMY
-         j6R/Wgr3zRlED58KQ8s+2Vwv/TB0u9t/TiFh/09+eWyRDA7MlnHSpCg8/4TwBqOGF2p6
-         P9kA==
-X-Gm-Message-State: ACrzQf1yZXco6np9T6/5PzZcwbCg5kXe/Wd7ebZTXolBvvq7CVuNvquX
-        KsVft3oJWrjwpestq/jZuNJv0g==
-X-Google-Smtp-Source: AMsMyM5G/bzcAiZVcMOSMNvjC2XSgKcFvvH+T7uTTncVFc0P+4YkvEk+N6yFwcrX6orIRxb2K63QhQ==
-X-Received: by 2002:ae9:d806:0:b0:6f1:15cc:d870 with SMTP id u6-20020ae9d806000000b006f115ccd870mr18717294qkf.114.1667415673550;
-        Wed, 02 Nov 2022 12:01:13 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
-        by smtp.gmail.com with ESMTPSA id de36-20020a05620a372400b006ce9e880c6fsm8844655qkb.111.2022.11.02.12.01.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 12:01:12 -0700 (PDT)
-Message-ID: <91ebdf1b-d6e2-47a2-ae1c-bc1848bb74c2@linaro.org>
-Date:   Wed, 2 Nov 2022 15:01:11 -0400
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UqcZSn2dIGg+txRUz0yg2pNp7hn+WnfiER5ZgqstaLw=;
+        b=Ex8iKmbVQbHvfvx9HZ8OpsHqAVHt/QZhvnemreZ36uvlUaTPVcrYNOvDyWNFqDddqH
+         oolgjQqEj7eSMSQuVNBhhYJL0GfknKvdS33Haf09jPfnufWXNwZoQWM0EGyMKLWhQUY1
+         qv/HGCgUyK88gkxPCkaWyrQ2+8qOARcXN8wPQcENbL01uCDXHLqM5t8aReKxFLk0HBin
+         6M8Ub/eDtBw9EoMbanT8paDN8UYUY0Z65/vh7eAYYVnIHOBzBkazzip/uWTI92k6eL9C
+         t/X8Ilqa/kpPPxRtGOUSQAqRs/93JUu27LPp7sG9tTHegEQoEzApaO9Nhccp+Ai2kkHF
+         utVg==
+X-Gm-Message-State: ACrzQf2KPbde6XVp0JJBcmyK9apZ/nR8xpz0EfCt2VA83OvPovO2U1xi
+        Hj4mzcSAJjp+vwgPyBcdr06Sg4C6rOvZWhMDZmeBKyHbblojHpi5mdP22hd+CLN/zSRSPesGX9x
+        +imOBOwveg4MOj6cc5m/ZRzzw
+X-Received: by 2002:a0c:e28a:0:b0:4b9:e578:1581 with SMTP id r10-20020a0ce28a000000b004b9e5781581mr22708703qvl.102.1667415767051;
+        Wed, 02 Nov 2022 12:02:47 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6MCTCf/l3AxomdMLN6xadr+DHXOXgwS23JyXphBskH+IPvIsI6jm68HNZtMx+QppTeytMxpA==
+X-Received: by 2002:a0c:e28a:0:b0:4b9:e578:1581 with SMTP id r10-20020a0ce28a000000b004b9e5781581mr22708077qvl.102.1667415757850;
+        Wed, 02 Nov 2022 12:02:37 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id fx7-20020a05622a4ac700b003a4f6a566e9sm6990905qtb.83.2022.11.02.12.02.36
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 12:02:36 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 15:02:35 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Matthew Wilcox <willy@infradead.org>
+Cc:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org,
+        Hugh Dickins <hughd@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>
+Subject: Re: [PATCH 3/5] userfualtfd: Replace lru_cache functions with
+ folio_add functions
+Message-ID: <Y2K+y7wnhC4vbnP2@x1n>
+References: <20221101175326.13265-1-vishal.moola@gmail.com>
+ <20221101175326.13265-4-vishal.moola@gmail.com>
+ <Y2Fl/pZyLSw/ddZY@casper.infradead.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH V2 1/2] dt-bindings: remoteproc: imx_rproc: add
- fsl,startup-delay-ms
-Content-Language: en-US
-To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, andersson@kernel.org,
-        mathieu.poirier@linaro.org, shawnguo@kernel.org,
-        s.hauer@pengutronix.de, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
-        linux-remoteproc@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-References: <20221102112451.128110-1-peng.fan@oss.nxp.com>
- <20221102112451.128110-2-peng.fan@oss.nxp.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221102112451.128110-2-peng.fan@oss.nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: multipart/mixed; boundary="XtXX9UT9oQ4Z3Adt"
+Content-Disposition: inline
+In-Reply-To: <Y2Fl/pZyLSw/ddZY@casper.infradead.org>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/11/2022 07:24, Peng Fan (OSS) wrote:
-> From: Peng Fan <peng.fan@nxp.com>
+
+--XtXX9UT9oQ4Z3Adt
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+
+On Tue, Nov 01, 2022 at 06:31:26PM +0000, Matthew Wilcox wrote:
+> On Tue, Nov 01, 2022 at 10:53:24AM -0700, Vishal Moola (Oracle) wrote:
+> > Replaces lru_cache_add() and lru_cache_add_inactive_or_unevictable()
+> > with folio_add_lru() and folio_add_lru_vma(). This is in preparation for
+> > the removal of lru_cache_add().
 > 
-> add fsl,startup-delay-ms property indicating delay some time after just
-> kicks remote processor.
+> Ummmmm.  Reviewing this patch reveals a bug (not introduced by your
+> patch).  Look:
+> 
+> mfill_atomic_install_pte:
+>         bool page_in_cache = page->mapping;
+> 
+> mcontinue_atomic_pte:
+>         ret = shmem_get_folio(inode, pgoff, &folio, SGP_NOALLOC);
+> ...
+>         page = folio_file_page(folio, pgoff);
+>         ret = mfill_atomic_install_pte(dst_mm, dst_pmd, dst_vma, dst_addr,
+>                                        page, false, wp_copy);
+> 
+> That says pretty plainly that mfill_atomic_install_pte() can be passed
+> a tail page from shmem, and if it is ...
+> 
+>         if (page_in_cache) {
+> ...
+>         } else {
+>                 page_add_new_anon_rmap(page, dst_vma, dst_addr);
+>                 lru_cache_add_inactive_or_unevictable(page, dst_vma);
+>         }
+> 
+> it'll get put on the rmap as an anon page!
 
-Start sentences with capital letter.
+Hmm yeah.. thanks Matthew!
+
+Does the patch attached look reasonable to you?
+
+Copying Axel too.
 
 > 
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> ---
->  .../devicetree/bindings/remoteproc/fsl,imx-rproc.yaml         | 4 ++++
->  1 file changed, 4 insertions(+)
+> > Signed-off-by: Vishal Moola (Oracle) <vishal.moola@gmail.com>
+> > ---
+> >  mm/userfaultfd.c | 6 ++++--
+> >  1 file changed, 4 insertions(+), 2 deletions(-)
+> > 
+> > diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+> > index e24e8a47ce8a..2560973b00d8 100644
+> > --- a/mm/userfaultfd.c
+> > +++ b/mm/userfaultfd.c
+> > @@ -66,6 +66,7 @@ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+> >  	bool vm_shared = dst_vma->vm_flags & VM_SHARED;
+> >  	bool page_in_cache = page->mapping;
+> >  	spinlock_t *ptl;
+> > +	struct folio *folio;
+> >  	struct inode *inode;
+> >  	pgoff_t offset, max_off;
+> >  
+> > @@ -113,14 +114,15 @@ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+> >  	if (!pte_none_mostly(*dst_pte))
+> >  		goto out_unlock;
+> >  
+> > +	folio = page_folio(page);
+> >  	if (page_in_cache) {
+> >  		/* Usually, cache pages are already added to LRU */
+> >  		if (newly_allocated)
+> > -			lru_cache_add(page);
+> > +			folio_add_lru(folio);
+> >  		page_add_file_rmap(page, dst_vma, false);
+> >  	} else {
+> >  		page_add_new_anon_rmap(page, dst_vma, dst_addr);
+> > -		lru_cache_add_inactive_or_unevictable(page, dst_vma);
+> > +		folio_add_lru_vma(folio, dst_vma);
+> >  	}
+> >  
+> >  	/*
+> > -- 
+> > 2.38.1
+> > 
+> > 
 > 
-> diff --git a/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
-> index ad3b8d4ccd91..d99d3342ad52 100644
-> --- a/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
-> +++ b/Documentation/devicetree/bindings/remoteproc/fsl,imx-rproc.yaml
-> @@ -76,6 +76,10 @@ properties:
->        This property is to specify the resource id of the remote processor in SoC
->        which supports SCFW
->  
-> +  fsl,startup-delay-ms:
-> +    $ref: "/schemas/types.yaml#/definitions/uint32"
 
-Drop quotes.
+-- 
+Peter Xu
 
-> +    description: Startup time that remote processor ready for communication
+--XtXX9UT9oQ4Z3Adt
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: attachment;
+	filename="0001-mm-shmem-Use-page_mapping-to-detect-page-cache-for-u.patch"
 
-Looks quite hacky...
+From 4eea0908b4890745bedd931283c1af91f509d039 Mon Sep 17 00:00:00 2001
+From: Peter Xu <peterx@redhat.com>
+Date: Wed, 2 Nov 2022 14:41:52 -0400
+Subject: [PATCH] mm/shmem: Use page_mapping() to detect page cache for uffd
+ continue
+Content-type: text/plain
 
-Best regards,
-Krzysztof
+mfill_atomic_install_pte() checks page->mapping to detect whether one page
+is used in the page cache.  However as pointed out by Matthew, the page can
+logically be a tail page rather than always the head in the case of uffd
+minor mode with UFFDIO_CONTINUE.  It means we could wrongly install one pte
+with shmem thp tail page assuming it's an anonymous page.
+
+It's not that clear even for anonymous page, since normally anonymous pages
+also have page->mapping being setup with the anon vma. It's safe here only
+because the only such caller to mfill_atomic_install_pte() is always
+passing in a newly allocated page (mcopy_atomic_pte()), whose page->mapping
+is not yet setup.  However that's not extremely obvious either.
+
+For either of above, use page_mapping() instead.
+
+And this should be stable material.
+
+Cc: Andrea Arcangeli <aarcange@redhat.com>
+Cc: Hugh Dickins <hughd@google.com>
+Cc: Axel Rasmussen <axelrasmussen@google.com>
+Cc: stable@vger.kernel.org
+Reported-by: Matthew Wilcox <willy@infradead.org>
+Signed-off-by: Peter Xu <peterx@redhat.com>
+---
+ mm/userfaultfd.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+index 3d0fef3980b3..650ab6cfd5f4 100644
+--- a/mm/userfaultfd.c
++++ b/mm/userfaultfd.c
+@@ -64,7 +64,7 @@ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+ 	pte_t _dst_pte, *dst_pte;
+ 	bool writable = dst_vma->vm_flags & VM_WRITE;
+ 	bool vm_shared = dst_vma->vm_flags & VM_SHARED;
+-	bool page_in_cache = page->mapping;
++	bool page_in_cache = page_mapping(page);
+ 	spinlock_t *ptl;
+ 	struct inode *inode;
+ 	pgoff_t offset, max_off;
+-- 
+2.37.3
+
+
+--XtXX9UT9oQ4Z3Adt--
 
