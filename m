@@ -2,248 +2,163 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 48264615B45
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 05:05:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2706F615B49
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 05:05:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229530AbiKBEF3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 00:05:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47440 "EHLO
+        id S229578AbiKBEFu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 00:05:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229504AbiKBEF0 (ORCPT
+        with ESMTP id S229534AbiKBEFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 00:05:26 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CFAE2220EB
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 21:05:24 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 90AC91FB;
-        Tue,  1 Nov 2022 21:05:30 -0700 (PDT)
-Received: from [10.162.42.7] (unknown [10.162.42.7])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1033C3F5A1;
-        Tue,  1 Nov 2022 21:05:21 -0700 (PDT)
-Message-ID: <7102f269-c3f9-f3e5-d5f3-da7eaf9a2e6d@arm.com>
-Date:   Wed, 2 Nov 2022 09:35:17 +0530
+        Wed, 2 Nov 2022 00:05:46 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 59179220F0;
+        Tue,  1 Nov 2022 21:05:45 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id E393E6177E;
+        Wed,  2 Nov 2022 04:05:44 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 92E26C433C1;
+        Wed,  2 Nov 2022 04:05:43 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667361944;
+        bh=zilE+0RPH4nsjm2cmooo/wxfBWawFsnYOnsjqA7FRNk=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+        b=eXzxB4AFqOshlaCSpr8zLi4B4oS8dxpACsfxpI4no0CyRCqguxDgD3L+sGGoXHlcM
+         7MKaVB0PQD9n9jeXh3W+Te+jFN6vQmKx1biVmtNhkBZYVC/qu6l0VZaWsOMN5YPDph
+         XfTBmq5aBgr/6ABeWRXgYiL4+K7VQsrDrWTRZGC/Rw+DKjc4NVlR7vaxEIaASByMtM
+         xadYLIccjt/VBJXErJTLQXLiRqUIPAkY99ArR1S/lhi2oDaQhYNMISibADY4Xv5b0K
+         WJ48e7rxTYEufCNjbD9k8QUGUnJmMGZ3evh6CMm7uvS4QeQmA9TNpH7dP6KkcNB1Vp
+         rmLoLqjqk5IyQ==
+Date:   Tue, 1 Nov 2022 21:05:42 -0700
+From:   Jakub Kicinski <kuba@kernel.org>
+To:     zhongbaisong <zhongbaisong@huawei.com>
+Cc:     Daniel Borkmann <daniel@iogearbox.net>, <edumazet@google.com>,
+        <davem@davemloft.net>, <pabeni@redhat.com>,
+        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
+        <netdev@vger.kernel.org>, <ast@kernel.org>, <song@kernel.org>,
+        <yhs@fb.com>, <haoluo@google.com>,
+        Alexander Potapenko <glider@google.com>,
+        Marco Elver <elver@google.com>,
+        Dmitry Vyukov <dvyukov@google.com>,
+        Linux MM <linux-mm@kvack.org>, <kasan-dev@googlegroups.com>,
+        Kees Cook <keescook@chromium.org>
+Subject: Re: [PATCH -next] bpf, test_run: fix alignment problem in
+ bpf_prog_test_run_skb()
+Message-ID: <20221101210542.724e3442@kernel.org>
+In-Reply-To: <ca6253bd-dcf4-2625-bc41-4b9a7774d895@huawei.com>
+References: <20221101040440.3637007-1-zhongbaisong@huawei.com>
+        <eca17bfb-c75f-5db1-f194-5b00c2a0c6f2@iogearbox.net>
+        <ca6253bd-dcf4-2625-bc41-4b9a7774d895@huawei.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] arm64/mm: Simplify and document pte_to_phys() for 52 bit
- addresses
-Content-Language: en-US
-To:     Ard Biesheuvel <ardb@kernel.org>
-Cc:     linux-arm-kernel@lists.infradead.org,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>, Mark Brown <broonie@kernel.org>,
-        Mark Rutland <mark.rutland@arm.com>,
-        linux-kernel@vger.kernel.org
-References: <20221031082421.1957288-1-anshuman.khandual@arm.com>
- <CAMj1kXHmt=_LWLZP-sce0uCV5GsxQCNL+9y6vERuPc3tM2FrQQ@mail.gmail.com>
-From:   Anshuman Khandual <anshuman.khandual@arm.com>
-In-Reply-To: <CAMj1kXHmt=_LWLZP-sce0uCV5GsxQCNL+9y6vERuPc3tM2FrQQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 2 Nov 2022 10:59:44 +0800 zhongbaisong wrote:
+> On 2022/11/2 0:45, Daniel Borkmann wrote:
+> > [ +kfence folks ] =20
+>=20
+> + cc: Alexander Potapenko, Marco Elver, Dmitry Vyukov
+>=20
+> Do you have any suggestions about this problem?
 
++ Kees who has been sending similar patches for drivers
 
-On 10/31/22 15:17, Ard Biesheuvel wrote:
-> Hello Anshuman,
-> 
-> On Mon, 31 Oct 2022 at 09:24, Anshuman Khandual
-> <anshuman.khandual@arm.com> wrote:
->>
->> pte_to_phys() assembly definition does multiple bits field transformations
->> to derive physical address, embedded inside a page table entry. Unlike its
->> C counter part i.e __pte_to_phys(), pte_to_phys() is not very apparent. It
->> simplifies these operations, by deriving all positions and widths in macro
->> format and documenting individual steps in the physical address extraction.
->> While here, this also updates __pte_to_phys() and __phys_to_pte_val().
->>
->> Cc: Catalin Marinas <catalin.marinas@arm.com>
->> Cc: Will Deacon <will@kernel.org>
->> Cc: Mark Brown <broonie@kernel.org>
->> Cc: Mark Rutland <mark.rutland@arm.com>
->> Cc: Ard Biesheuvel <ardb@kernel.org>
->> Cc: linux-arm-kernel@lists.infradead.org
->> Cc: linux-kernel@vger.kernel.org
->> Signed-off-by: Anshuman Khandual <anshuman.khandual@arm.com>
->> ---
->> This applies on v6.1-rc3.
->>
->>  arch/arm64/include/asm/assembler.h     | 37 +++++++++++++++++++++++---
->>  arch/arm64/include/asm/pgtable-hwdef.h |  5 ++++
->>  arch/arm64/include/asm/pgtable.h       |  4 +--
->>  3 files changed, 41 insertions(+), 5 deletions(-)
->>
->> diff --git a/arch/arm64/include/asm/assembler.h b/arch/arm64/include/asm/assembler.h
->> index e5957a53be39..aea320b04d85 100644
->> --- a/arch/arm64/include/asm/assembler.h
->> +++ b/arch/arm64/include/asm/assembler.h
->> @@ -661,9 +661,40 @@ alternative_endif
->>
->>         .macro  pte_to_phys, phys, pte
->>  #ifdef CONFIG_ARM64_PA_BITS_52
->> -       ubfiz   \phys, \pte, #(48 - 16 - 12), #16
->> -       bfxil   \phys, \pte, #16, #32
->> -       lsl     \phys, \phys, #16
->> +       /*
->> +        * Physical address needs to be derived from the given page table
->> +        * entry according to the following formula.
->> +        *
->> +        *      phys = pte[47..16] | (pte[15..12] << 36)
->> +        *
->> +        * These instructions here retrieve the embedded 52 bits physical
->> +        * address in phys[51..0]. This involves copying over both higher
->> +        * and lower addresses into phys[35..0] which is then followed by
->> +        * 16 bit left shift.
->> +        *
->> +        * Get higher 4 bits
->> +        *
->> +        *      phys[35..20] = pte[15..0] i.e phys[35..32] = pte[15..12]
->> +        *
->> +        * Get lower 32 bits
->> +        *
->> +        *      phys[31..0] = pte[47..16]
->> +        *
->> +        * Till now
->> +        *
->> +        *      phys[35..0] = pte[51..16]
->> +        *
->> +        * Left shift
->> +        *
->> +        *      phys[51..0]  = phys[35..0] << 16
->> +        *
->> +        * Finally
->> +        *
->> +        *      phys[51..16] = pte[47..16] | (pte[15..12] << 36)
->> +        */
->> +       ubfiz   \phys, \pte, #HIGH_ADDR_SHIFT, #HIGH_ADDR_BITS_MAX
->> +       bfxil   \phys, \pte, #PAGE_SHIFT, #(LOW_ADDR_BITS_MAX - PAGE_SHIFT)
->> +       lsl     \phys, \phys, #PAGE_SHIFT
-> 
-> 
-> I think the wall of text is unnecessary, tbh. And substituting every
+> > On 11/1/22 5:04 AM, Baisong Zhong wrote: =20
+> >> Recently, we got a syzkaller problem because of aarch64
+> >> alignment fault if KFENCE enabled.
+> >>
+> >> When the size from user bpf program is an odd number, like
+> >> 399, 407, etc, it will cause skb shard info's alignment access,
+> >> as seen below:
+> >>
+> >> BUG: KFENCE: use-after-free read in __skb_clone+0x23c/0x2a0=20
+> >> net/core/skbuff.c:1032
+> >>
+> >> Use-after-free read at 0xffff6254fffac077 (in kfence-#213):
+> >> =C2=A0 __lse_atomic_add arch/arm64/include/asm/atomic_lse.h:26 [inline]
+> >> =C2=A0 arch_atomic_add arch/arm64/include/asm/atomic.h:28 [inline]
+> >> =C2=A0 arch_atomic_inc include/linux/atomic-arch-fallback.h:270 [inlin=
+e]
+> >> =C2=A0 atomic_inc include/asm-generic/atomic-instrumented.h:241 [inlin=
+e]
+> >> =C2=A0 __skb_clone+0x23c/0x2a0 net/core/skbuff.c:1032
+> >> =C2=A0 skb_clone+0xf4/0x214 net/core/skbuff.c:1481
+> >> =C2=A0 ____bpf_clone_redirect net/core/filter.c:2433 [inline]
+> >> =C2=A0 bpf_clone_redirect+0x78/0x1c0 net/core/filter.c:2420
+> >> =C2=A0 bpf_prog_d3839dd9068ceb51+0x80/0x330
+> >> =C2=A0 bpf_dispatcher_nop_func include/linux/bpf.h:728 [inline]
+> >> =C2=A0 bpf_test_run+0x3c0/0x6c0 net/bpf/test_run.c:53
+> >> =C2=A0 bpf_prog_test_run_skb+0x638/0xa7c net/bpf/test_run.c:594
+> >> =C2=A0 bpf_prog_test_run kernel/bpf/syscall.c:3148 [inline]
+> >> =C2=A0 __do_sys_bpf kernel/bpf/syscall.c:4441 [inline]
+> >> =C2=A0 __se_sys_bpf+0xad0/0x1634 kernel/bpf/syscall.c:4381
+> >>
+> >> kfence-#213: 0xffff6254fffac000-0xffff6254fffac196, size=3D407,=20
+> >> cache=3Dkmalloc-512
+> >>
+> >> allocated by task 15074 on cpu 0 at 1342.585390s:
+> >> =C2=A0 kmalloc include/linux/slab.h:568 [inline]
+> >> =C2=A0 kzalloc include/linux/slab.h:675 [inline]
+> >> =C2=A0 bpf_test_init.isra.0+0xac/0x290 net/bpf/test_run.c:191
+> >> =C2=A0 bpf_prog_test_run_skb+0x11c/0xa7c net/bpf/test_run.c:512
+> >> =C2=A0 bpf_prog_test_run kernel/bpf/syscall.c:3148 [inline]
+> >> =C2=A0 __do_sys_bpf kernel/bpf/syscall.c:4441 [inline]
+> >> =C2=A0 __se_sys_bpf+0xad0/0x1634 kernel/bpf/syscall.c:4381
+> >> =C2=A0 __arm64_sys_bpf+0x50/0x60 kernel/bpf/syscall.c:4381
+> >>
+> >> To fix the problem, we round up allocations with kmalloc_size_roundup()
+> >> so that build_skb()'s use of kize() is always alignment and no special
+> >> handling of the memory is needed by KFENCE.
+> >>
+> >> Fixes: 1cf1cae963c2 ("bpf: introduce BPF_PROG_TEST_RUN command")
+> >> Signed-off-by: Baisong Zhong <zhongbaisong@huawei.com>
+> >> ---
+> >> =C2=A0 net/bpf/test_run.c | 1 +
+> >> =C2=A0 1 file changed, 1 insertion(+)
+> >>
+> >> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
+> >> index 13d578ce2a09..058b67108873 100644
+> >> --- a/net/bpf/test_run.c
+> >> +++ b/net/bpf/test_run.c
+> >> @@ -774,6 +774,7 @@ static void *bpf_test_init(const union bpf_attr=20
+> >> *kattr, u32 user_size,
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (user_size > size)
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return ERR_PTR(=
+-EMSGSIZE);
+> >> +=C2=A0=C2=A0=C2=A0 size =3D kmalloc_size_roundup(size);
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 data =3D kzalloc(size + headroom + tail=
+room, GFP_USER); =20
+> >=20
+> > The fact that you need to do this roundup on call sites feels broken, n=
+o?
+> > Was there some discussion / consensus that now all k*alloc() call sites
+> > would need to be fixed up? Couldn't this be done transparently in k*all=
+oc()
+> > when KFENCE is enabled? I presume there may be lots of other such occas=
+ions
+> > in the kernel where similar issue triggers, fixing up all call-sites fe=
+els
+> > like ton of churn compared to api-internal, generic fix.
+> >  =20
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (!data)
+> >> =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return ERR_PTR(=
+-ENOMEM);
+> >> =20
+> >=20
+> > Thanks,
+> > Daniel
+> > =20
+>=20
+>=20
 
-Okay.
-
-> occurrence of the constant value 16 with PAGE_SHIFT is slightly
-> misleading, as the entire calculation only makes sense for 64k granule
-> size, but that doesn't mean the constant is intrinsically tied to the
-> page size.
-
-The field shift operations are dependent on PAGE_SHIFT because lower
-[(PAGE_SHIFT - 1)..0] bits just always get masked out in the end and
-also the higher physical address bits are embedded inside these lower
-bits in the PTE encoding. Same pattern emerges for FEAT_LPA2 as well.
-
-> 
->>  #else
->>         and     \phys, \pte, #PTE_ADDR_MASK
->>  #endif
-> 
-> 
-> If you want to clarify this and make it more self documenting, should
-> we perhaps turn it into something like
-> 
->   and \phys, \pte, #PTE_ADDR_MASK        // isolate PTE address bits
-> #ifdef CONFIG_ARM64_PA_BITS_52
->   orr \phys, \phys, \phys, lsl #48 - 12  // copy bits [27:12] into [63:48]
->   and \phys, \phys, #0xfffffffff0000     // retain the address bits [51:16]
-> #endif
-
-Yes, this makes more sense.
-
-Although, the constants can be derived
-
-#0xfffffffff0000 could be GENMASK_ULL(PHYS_MASK_SHIFT - 1, PAGE_SHIFT)
-#48 - 12	 could be LOW_ADDR_BITS_MAX - HIGH_ADDR_BITS_MIN (as per the current proposal)
-
-On FEAT_LPA2, it would be
-
-#0xffffffffff000 could be GENMASK_ULL(PHYS_MASK_SHIFT - 1, PAGE_SHIFT)
-#50 - 8		 could be LOW_ADDR_BITS_MAX - HIGH_ADDR_BITS_MIN (as per the current proposal)
-
-Is not making macros from these relevant bit positions make sense, which
-can also be reasoned about for FEAT_LPA2 as well ?
-
-> 
-> 
->> diff --git a/arch/arm64/include/asm/pgtable-hwdef.h b/arch/arm64/include/asm/pgtable-hwdef.h
->> index 5ab8d163198f..683ca2378960 100644
->> --- a/arch/arm64/include/asm/pgtable-hwdef.h
->> +++ b/arch/arm64/include/asm/pgtable-hwdef.h
->> @@ -157,6 +157,11 @@
->>
->>  #define PTE_ADDR_LOW           (((_AT(pteval_t, 1) << (48 - PAGE_SHIFT)) - 1) << PAGE_SHIFT)
->>  #ifdef CONFIG_ARM64_PA_BITS_52
->> +#define LOW_ADDR_BITS_MAX      48
->> +#define HIGH_ADDR_BITS_MAX     16
->> +#define HIGH_ADDR_BITS_MIN     12
->> +#define HIGH_ADDR_WIDTH                (HIGH_ADDR_BITS_MAX - HIGH_ADDR_BITS_MIN)
->> +#define HIGH_ADDR_SHIFT                (LOW_ADDR_BITS_MAX - PAGE_SHIFT - PAGE_SHIFT + HIGH_ADDR_WIDTH)
-> 
-> Why are you subtracting PAGE_SHIFT twice here?
-> 
->>  #define PTE_ADDR_HIGH          (_AT(pteval_t, 0xf) << 12)
->>  #define PTE_ADDR_MASK          (PTE_ADDR_LOW | PTE_ADDR_HIGH)
->>  #else
->> diff --git a/arch/arm64/include/asm/pgtable.h b/arch/arm64/include/asm/pgtable.h
->> index 71a1af42f0e8..014bac4a69e9 100644
->> --- a/arch/arm64/include/asm/pgtable.h
->> +++ b/arch/arm64/include/asm/pgtable.h
->> @@ -77,11 +77,11 @@ extern unsigned long empty_zero_page[PAGE_SIZE / sizeof(unsigned long)];
->>  static inline phys_addr_t __pte_to_phys(pte_t pte)
->>  {
->>         return (pte_val(pte) & PTE_ADDR_LOW) |
->> -               ((pte_val(pte) & PTE_ADDR_HIGH) << 36);
->> +               ((pte_val(pte) & PTE_ADDR_HIGH) << (PHYS_MASK_SHIFT - PAGE_SHIFT));
-> 
-> Same here. PHYS_MASK_SHIFT - PAGE_SHIFT happens to equal 36, but that
-> does not mean the placement of the high address bits in the PTE is
-> fundamentally tied to the dimensions of the granule or physical
-> address space.
-
-Right, my bad. This move the higher address bits from their current
-position some where inside [(PAGE_SHIFT - 1)..0], all the way after
-LOW_ADDR_BITS_MAX.
-
-So as per the current proposal, it should be
-
-[LOW_ADDR_BITS_MAX (48) - HIGH_ADDR_BITS_MIN (12)]
-
-The same can be reasoned about for FEAT_LPA2 as well.
-
-[LOW_ADDR_BITS_MAX (50) - HIGH_ADDR_BITS_MIN (8)]
-
-> 
-> I think it makes sense to have a macro somewhere that specifies the
-> shift of the high address bits between a PTE and a physical address,
-> but it is just a property of how the ARM ARM happens to define the PTE
-> format, so I don't think it makes sense to define it in terms of
-> PAGE_SHIFT or PHYS_MASK_SHIFT.
-
-Agreed, LOW_ADDR_BITS_MAX which specifies where the lower end address
-ends and HIGH_ADDR_BITS_MIN which specifies where the higher end address
-begins are good markers to define functions, to extract physical address
-from a given page table entry. Thoughts ?
-
-> 
-> 
-> 
->>  }
->>  static inline pteval_t __phys_to_pte_val(phys_addr_t phys)
->>  {
->> -       return (phys | (phys >> 36)) & PTE_ADDR_MASK;
->> +       return (phys | (phys >> (PHYS_MASK_SHIFT - PAGE_SHIFT))) & PTE_ADDR_MASK;
->>  }
->>  #else
->>  #define __pte_to_phys(pte)     (pte_val(pte) & PTE_ADDR_MASK)
->> --
->> 2.25.1
->>
