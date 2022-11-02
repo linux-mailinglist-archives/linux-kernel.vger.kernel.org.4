@@ -2,54 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D26A6164E8
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:20:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C8DB6164EC
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:20:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231557AbiKBOUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 10:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46990 "EHLO
+        id S231594AbiKBOUG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 10:20:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46216 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231511AbiKBOTu (ORCPT
+        with ESMTP id S231540AbiKBOTv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 10:19:50 -0400
+        Wed, 2 Nov 2022 10:19:51 -0400
 Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C6BE9286D9;
-        Wed,  2 Nov 2022 07:19:46 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B2A15FE2;
+        Wed,  2 Nov 2022 07:19:47 -0700 (PDT)
 Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
-        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A2DJb88007938;
-        Wed, 2 Nov 2022 10:19:44 -0400
-Received: from nwd2mta4.analog.com ([137.71.173.58])
-        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3kjn9tusn4-1
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A2DEL5x007910;
+        Wed, 2 Nov 2022 10:19:45 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3kjn9tusn6-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Nov 2022 10:19:44 -0400
-Received: from ASHBMBX8.ad.analog.com (ASHBMBX8.ad.analog.com [10.64.17.5])
-        by nwd2mta4.analog.com (8.14.7/8.14.7) with ESMTP id 2A2EJhZn017351
+        Wed, 02 Nov 2022 10:19:45 -0400
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 2A2EJilp003528
         (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 2 Nov 2022 10:19:43 -0400
-Received: from ASHBMBX8.ad.analog.com (10.64.17.5) by ASHBMBX8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Wed, 2 Nov 2022
- 10:19:42 -0400
-Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx8.ad.analog.com
- (10.64.17.5) with Microsoft SMTP Server id 15.2.986.14 via Frontend
- Transport; Wed, 2 Nov 2022 10:19:42 -0400
+        Wed, 2 Nov 2022 10:19:44 -0400
+Received: from ASHBCASHYB4.ad.analog.com (10.64.17.132) by
+ ASHBMBX9.ad.analog.com (10.64.17.10) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Wed, 2 Nov 2022 10:19:43 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by
+ ASHBCASHYB4.ad.analog.com (10.64.17.132) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.986.14; Wed, 2 Nov 2022 10:19:43 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Wed, 2 Nov 2022 10:19:43 -0400
 Received: from rbolboac.ad.analog.com ([10.48.65.139])
-        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2A2EJWOm005631;
-        Wed, 2 Nov 2022 10:19:35 -0400
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2A2EJWOn005631;
+        Wed, 2 Nov 2022 10:19:38 -0400
 From:   Ramona Bolboaca <ramona.bolboaca@analog.com>
 To:     <jic23@kernel.org>, <linux-iio@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 CC:     Ramona Bolboaca <ramona.bolboaca@analog.com>
-Subject: [PATCH 0/8] Remove adis_initial_startup usage
-Date:   Wed, 2 Nov 2022 16:18:35 +0200
-Message-ID: <20221102141843.122182-1-ramona.bolboaca@analog.com>
+Subject: [PATCH 1/8] iio: accel: adis16201: Fix deadlock in probe
+Date:   Wed, 2 Nov 2022 16:18:36 +0200
+Message-ID: <20221102141843.122182-2-ramona.bolboaca@analog.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221102141843.122182-1-ramona.bolboaca@analog.com>
+References: <20221102141843.122182-1-ramona.bolboaca@analog.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 7BIT
 Content-Type:   text/plain; charset=US-ASCII
 X-ADIRuleOP-NewSCL: Rule Triggered
-X-Proofpoint-GUID: Iw3BbsWuu5OXtXl4tT9LCxAi97tIwlGM
-X-Proofpoint-ORIG-GUID: Iw3BbsWuu5OXtXl4tT9LCxAi97tIwlGM
+X-Proofpoint-GUID: HRg_R_olgPtKTyfxXBsvD84gGyet-OtH
+X-Proofpoint-ORIG-GUID: HRg_R_olgPtKTyfxXBsvD84gGyet-OtH
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-02_10,2022-11-02_01,2022-06-22_01
@@ -67,31 +73,31 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove adis_initial_startup usage due to the fact that it leads to a deadlock.
-The same mutex is acquired twice, without releasing it, once inside
-adis_initial_startup and once inside adis_enable_irq.
-Instead of adis_initial_startup, use __adis_initial_startup.
+Use __adis_initial_startup instead of adis_initial_startup to
+avoid deadlock.
+When using adis_initial_startup mutex_lock is called twice,
+without releasing it (once inside adis_initial_startup and
+once inside adis_enable_irq).
 
-Ramona Bolboaca (8):
-  iio: accel: adis16201: Fix deadlock in probe
-  iio: accel: adis16209: Fix deadlock in probe
-  iio: gyro: adis16136: Fix deadlock in probe
-  iio: gyro: adis16260: Fix deadlock in probe
-  iio: imu: adis16400: Fix deadlock in probe
-  staging: iio: accel: adis16203: Fix deadlock in probe
-  staging: iio: accel: adis16240: Fix deadlock in probe
-  iio: imu: adis: Remove adis_initial_startup function
+Fixes: 100bfa38c8cb ("iio: imu: adis[16480]: group RW into a single lock in adis_enable_irq()")
+Signed-off-by: Ramona Bolboaca <ramona.bolboaca@analog.com>
+---
+ drivers/iio/accel/adis16201.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
- drivers/iio/accel/adis16201.c         |  2 +-
- drivers/iio/accel/adis16209.c         |  2 +-
- drivers/iio/gyro/adis16136.c          |  2 +-
- drivers/iio/gyro/adis16260.c          |  2 +-
- drivers/iio/imu/adis16400.c           |  2 +-
- drivers/staging/iio/accel/adis16203.c |  2 +-
- drivers/staging/iio/accel/adis16240.c |  2 +-
- include/linux/iio/imu/adis.h          | 12 ------------
- 8 files changed, 7 insertions(+), 19 deletions(-)
-
+diff --git a/drivers/iio/accel/adis16201.c b/drivers/iio/accel/adis16201.c
+index dfb8e2e5bdf5..d054721859b3 100644
+--- a/drivers/iio/accel/adis16201.c
++++ b/drivers/iio/accel/adis16201.c
+@@ -281,7 +281,7 @@ static int adis16201_probe(struct spi_device *spi)
+ 	if (ret)
+ 		return ret;
+ 
+-	ret = adis_initial_startup(st);
++	ret = __adis_initial_startup(st);
+ 	if (ret)
+ 		return ret;
+ 
 -- 
 2.25.1
 
