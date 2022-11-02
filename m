@@ -2,128 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B33D616FB9
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 22:27:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 929CA616FB8
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 22:27:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229968AbiKBV11 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 17:27:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33830 "EHLO
+        id S230136AbiKBV1V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 17:27:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33508 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230300AbiKBV1S (ORCPT
+        with ESMTP id S230165AbiKBV1Q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 17:27:18 -0400
-Received: from NAM12-BN8-obe.outbound.protection.outlook.com (mail-bn8nam12on2069.outbound.protection.outlook.com [40.107.237.69])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E3CAADFBC;
-        Wed,  2 Nov 2022 14:27:16 -0700 (PDT)
+        Wed, 2 Nov 2022 17:27:16 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-eastusazon11021014.outbound.protection.outlook.com [52.101.52.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE769E02D;
+        Wed,  2 Nov 2022 14:27:10 -0700 (PDT)
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=dnEyxpEgCLBUr11R4tfOG52fK4v1GHFzYhQ+/c5HFLP35fGnIAUMhL3wEzSbrp1vSIYxBouHzlV1HeRLRw4MulpM75UFecOotXjw/rVO38aziYGaR5q89jMIhaeFtFNzP7I6iFoVqqNXXdMdP4nQglPxfNBe+HKCisK6q5HjDHw8S2xgyBxKPdOGtXP+O3mbeGlghI3U5bvGc9xa1aK98hLulW+gAC8bdTzM0H1VMjAz9U7LdjoVKThdEcmMLxAhn/pbSasoxqLi2LT6gB62BWtPU0WfqVuDyCj1o563T0ENWmbd8rZDOxSjMWkwmTFlc8OUFUpXjMCPoOz406VdZA==
+ b=TTLaGJFcMwQTP3F+LVpl5S88i6YwfP+KFU3TMoyArVvBHko36eoAVfIPuDzip6AykQjkAog9mC02GH6OmJ7l6uX4nYxYuzXZC90y1MQeNNhfg2Pq56KP6hi/hdDdY2/kCuQ6afoUR15wsjtHwpiWvbYu7qAtOlqkr87/sTiRQ/Ka5Y31skpwuvJGBKAjuF48afqqApwjElwfaQugfygwwnqtTftenglZeco0z22ER0gNu4LhvzTrSYWiC3SthsUuVTApBa/40iI3tVw7pA2u3iQKx1cKwOKiV1fqEWOu8bv7anspnkCD710T27WNE4tCojDjUyYU3hSAJ/APLcUr8g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector9901;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=6HOpdvixxTPUhGk84Cr9YvdY4Oa5RaCqh51pwnSr8Pw=;
- b=jPZ3BIXAxxSpMw5ONlBpCFrx+X02du4dFaskw4TW6qX6fqiAowREeHkvANMc4ejAKmFpw4Fs8w3oohGTt3Fbyvqynfzjzh0DasYTvcivJ2lZggusmJkSqRGmpYrqrBk2y5vSbZuqPPgDdoKIWfl9A9iB1UBparrP1eeXsc4FDTPhKGst0/fmC5P9Tb3mS1jskLZ6ISu2YYyH7R+W4AVaHFpm+ifKDKndUqz2sZcgCELcOskxBiTg999PcYfmpZoMXlV96plzBrnlJGjrGlC6PxTx5kehtL37JofRpDpnjNGRICk4KJCCTvoS/XXUvOGc8Ygw/PBaVWsEO9gbBqNx6g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=shutemov.name smtp.mailfrom=amd.com;
- dmarc=pass (p=quarantine sp=quarantine pct=100) action=none
- header.from=amd.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ bh=Lym0FUYkv1k3WIqOtAylhejjJdhzJLqVjfNfDqsvm84=;
+ b=PciYrDgDmC4ZHzPTzwyq47OWNFiS0GPcOFsKHbkPVUFSPGN1WC5pE+mL9u0f0XB8LGb8O9o11z0J03V2PCCQy7wZ8TwM5oxoNJs6HP2hCmYHXgpRE7iNR8gs7Nz4FjNsosYIZn5OkA2ok4S3ZAC41UXT32zMtyle7g07ox57jzTBPFP+O6RMyxFSORS0XwKCLzLf3/qUe+X+iYwU4AOa9FspDMMh3h6wdANnV+XFDVMtytAoPpNg36PhRsCly8gI3Bt4YCuFyVxzYLESoKoPEmvt1YJ939o7Z/TUI13Zk2QkJDE7SdxfzjNGlAd32br5EQ/bMy0oScziH0fFxbhS6g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=6HOpdvixxTPUhGk84Cr9YvdY4Oa5RaCqh51pwnSr8Pw=;
- b=YDKe2vZMKlBVF9x5uyjg0aE35gk6c80qghVEX2QkjQgWJKBmCutUmlfCiZESc5dKdDUZvrx0E9UsX0p2bTDETwt/o2l5E/TlOUQ5S8JoTXOXszdNiy7UEQqAIhF0uhgA9NSsm07rFlnO2303o8BZJVL9LP99zZ4eiEsY/bh80bY=
-Received: from DM6PR17CA0020.namprd17.prod.outlook.com (2603:10b6:5:1b3::33)
- by SJ0PR12MB6783.namprd12.prod.outlook.com (2603:10b6:a03:44e::11) with
+ bh=Lym0FUYkv1k3WIqOtAylhejjJdhzJLqVjfNfDqsvm84=;
+ b=NyoFBbz+cY1fhm/rYLUhO/jJh5E1pqW2Py1De6vQwzlVwbgUp6GLmZy86L95obhzvX01pE2Rmvvq4woYOvAO2xqjT/EV9khbED/1tEpIhMoUN6+Em8BJ+vItn/poDayL+bwpSKY8uswL7fQ0sDQjrMln/7o9kY20K5msK3j//xQ=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by CY5PR21MB3710.namprd21.prod.outlook.com (2603:10b6:930:c::16) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.19; Wed, 2 Nov
- 2022 21:27:13 +0000
-Received: from DM6NAM11FT081.eop-nam11.prod.protection.outlook.com
- (2603:10b6:5:1b3:cafe::f1) by DM6PR17CA0020.outlook.office365.com
- (2603:10b6:5:1b3::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.15 via Frontend
- Transport; Wed, 2 Nov 2022 21:27:13 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- DM6NAM11FT081.mail.protection.outlook.com (10.13.172.136) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5791.20 via Frontend Transport; Wed, 2 Nov 2022 21:27:13 +0000
-Received: from localhost (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 2 Nov
- 2022 16:27:12 -0500
-Date:   Wed, 2 Nov 2022 16:26:56 -0500
-From:   Michael Roth <michael.roth@amd.com>
-To:     "Kirill A. Shutemov" <kirill@shutemov.name>
-CC:     Chao Peng <chao.p.peng@linux.intel.com>, <kvm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-fsdevel@vger.kernel.org>, <linux-arch@vger.kernel.org>,
-        <linux-api@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-        <qemu-devel@nongnu.org>, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.4; Wed, 2 Nov
+ 2022 21:27:07 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::f565:80ed:8070:474b]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::f565:80ed:8070:474b%8]) with mapi id 15.20.5813.004; Wed, 2 Nov 2022
+ 21:27:07 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>,
+        Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
+CC:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
         Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        <x86@kernel.org>, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        <luto@kernel.org>, <jun.nakajima@intel.com>,
-        <dave.hansen@intel.com>, <ak@linux.intel.com>, <david@redhat.com>,
-        <aarcange@redhat.com>, <ddutile@redhat.com>, <dhildenb@redhat.com>,
-        Quentin Perret <qperret@google.com>, <tabba@google.com>,
-        <mhocko@suse.com>, Muchun Song <songmuchun@bytedance.com>,
-        <wei.w.wang@intel.com>
-Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
- create restricted user memory
-Message-ID: <20221102212656.6giugw542jdxsvhh@amd.com>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
- <20221031174738.fklhlia5fmaiinpe@amd.com>
- <20221102211404.l5whyif3j3k67fv2@box.shutemov.name>
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH 2/4] drivers/clocksource/hyper-v: Introduce TSC MSR
+ register structure
+Thread-Topic: [PATCH 2/4] drivers/clocksource/hyper-v: Introduce TSC MSR
+ register structure
+Thread-Index: AQHY7hfGdFg8W+TW4UePjgHc2LBts64r/kcQgAAHSwCAAA0egIAADK+AgAAFBAA=
+Date:   Wed, 2 Nov 2022 21:27:07 +0000
+Message-ID: <BYAPR21MB1688B5A6005EAA6980E07DA2D7399@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <166732356767.9827.4925884794177179249.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+ <166732386986.9827.12356845572628674464.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+ <BYAPR21MB1688C426F44E40E1415DCD21D7399@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <CA+DrgLzYpFHUzYmvP_qhTMkaYhjRsgW3eaQfMYYpGiE2AHzjLw@mail.gmail.com>
+ <BYAPR21MB1688D5D33AC0D7D88AF6FD7BD7399@BYAPR21MB1688.namprd21.prod.outlook.com>
+ <CA+DrgLzLATDPvO-Ngi5O5kMx-zqBVYtx+GmM=8E5y3P1X0fMsw@mail.gmail.com>
+In-Reply-To: <CA+DrgLzLATDPvO-Ngi5O5kMx-zqBVYtx+GmM=8E5y3P1X0fMsw@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=6d06a8be-b48d-42be-9f49-3cb43bfbd030;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-11-02T21:15:52Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|CY5PR21MB3710:EE_
+x-ms-office365-filtering-correlation-id: 6c049bd3-0c29-41b4-8801-08dabd18fecc
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: mMyA2DtFAQnOPnS7x1ds+2yjyUHb7kC+gZafN6BjY0T+Guy0egjzTHLR1+9PB5FOsOLyyUzPvMq3n+wRZitV0UbOwIDJUs8Zx8uj77aCL7Tv+tDWpJ7V9/qnsxvWLZFbe6L38zzApa3c2ykqr7geJJVRB/25OJ4/+KtTHD94O88ixBBrvu78f7V2ko0n9fIbQkAbB+sSZe1/4GxImzO2x5IZOZV5hN4lEoOcAW7AtKRrFpWJLOiN8YcXwzGf5me8rWy5LQiWaogRTsuTn/6gSMNMhlEGx4XV0dpcOxQc5Vjn+ZGHUW60O4zsO6IeEucHm7AW4o87illmWqPlBfIV0zFSXEvShPC7d8QsWnHubT5aDsWS8Uyo8exqFYr4Xvr984ai6jciFigSV/XXyr+WS+CqwkagrAD0obST4SPS2u3Hvr/RxY2SD5WGiHup5dRCb2WWv0XCSJQxEooscGXXsnfTHtV4gUZ4khMikb1LIe4CF/YQNmatKWs6Ruvsah8jQ0YMzYDnR5DFKHG+mm8YfwRL+ZgnxLDm7rAHOlKnxphRpeQJHFFg3qhFey7AWoNPosFUgf9l+TJy7tTeCZKVO5TCvay32GbzrPqDgrNl4mRRlhjbgYStFQMwmfZYp7EGc6ygskBtqQ6wIjSjbBRiHWcXeluqp5tN/JjB3NlPesX3iknWKzHxsHc44hHARK4pcH1UKwgYl0EvrmowyHHc4RbzlXsjGn2aebRC7Z19Lvr9U1xgqhB+OGCcqrx2KrOaxJb/CbHMCC3BWOVQq89g3Fy5iHtyEX4YcAtrhiGY/VZN+eJ10DxFYRbvmDUHD2VK
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(136003)(366004)(396003)(376002)(39860400002)(451199015)(5660300002)(8936002)(186003)(66899015)(41300700001)(8990500004)(83380400001)(26005)(2906002)(9686003)(38100700002)(316002)(86362001)(110136005)(82960400001)(54906003)(478600001)(82950400001)(4326008)(122000001)(55016003)(38070700005)(64756008)(6506007)(66476007)(66556008)(76116006)(52536014)(66946007)(7696005)(66446008)(8676002)(10290500003)(33656002)(71200400001);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?koi8-r?Q?tOKHJZ57tdsD9d/g7AwH6bHTEi3YgFZInGLHugAdJ16s/uPfkUPV4yqM0VltfP?=
+ =?koi8-r?Q?GTr7oEdcLlDIVTqksAFmjW7CGPSe+LzLIBNNdnPleubIzc0XZ1Bc0DwYjK2xjq?=
+ =?koi8-r?Q?YnIX27SXIIuUzx/xf4Us/RUgr6l1u/PKjdSnuzS9nRKaMwyATLE4YbPbRzH/6G?=
+ =?koi8-r?Q?ULTMyCNPCrnnGRMRdIn06tZjrxT3Fp645UBumwB/ftzC3bZ1uBQsbKXlWH5K1N?=
+ =?koi8-r?Q?q66MFCYDzzImz5vadO60OJpNt72zJtqkENM4ob9F88S06TtoF6BKDxb6lt28kP?=
+ =?koi8-r?Q?YBNpH3MPjTDTIgYdy02nAlocjxIU57Tl3AgSgxdOONApVbV/2r8MYGn4OxOXlB?=
+ =?koi8-r?Q?YPtDqtFOsIW+b7rtYBhRFC2UDIq9T3bVaomZlaz48JJgxhVu/vY42/SS1/skcf?=
+ =?koi8-r?Q?ZnRNfc6E1XVMUUJBMYZfaPu1Vp2S5V1QL4QwBh+7DgXWIVqbD0aVpeJB0sNnJs?=
+ =?koi8-r?Q?exN9Z4YZnz1FqTcVXxUrhBlcPOvPJ3MAkwejX608y72gaMxkrP8AwQWEC8mizE?=
+ =?koi8-r?Q?vmyMfQwrJqEah1HJCRyclXDt4tn9Q+JXSvHURunQOQOgnVQI4VwMa/JujdKB26?=
+ =?koi8-r?Q?ogGnkvA78xm9qNY2QZCDVifTR/CWK9qi56vyzV4O+oesipH6HhbfYb7jRMwUD2?=
+ =?koi8-r?Q?VlSfKfa9XYNB1nTIk8I93IovOkbRN+a+JEqizcvEZ1JcoCcQ+hwIsloyvjZoxe?=
+ =?koi8-r?Q?+59J15ei8BZxqAI49jfWIxA4ztz7UQgObbKKf9mw78inpPBG7htHfRyJzQD9H/?=
+ =?koi8-r?Q?fnokRv/Ngzra4OaoSMEaxKm92jYsInDOirUlBhsxutSLcYelGIpee8JH/LCpaJ?=
+ =?koi8-r?Q?Nk6Lg1HSwCewSg2JWftpKysB+2biwIsEEC7taoQJQ7Je7hioyKd605tlvaxQT2?=
+ =?koi8-r?Q?Q4Rk7Q9HdWgvk1anv/C1sodqDHsCte4npD9qAIl7eOvYtYKbZXGOq6MqZf048y?=
+ =?koi8-r?Q?BANCGwOIUIffrtDwFDTwdGJf9T5mp1f1XTls75IfDw9OTibugEjfAdNIJB7mL/?=
+ =?koi8-r?Q?HdhGzvlAKtBE7dcIzfggqsqArD2MCzLIEF33LP+yYS/BUAKZk97WiBwFABOh9h?=
+ =?koi8-r?Q?8FbsSwl5M6XgNUp93ebC7fAK280s5ov5ruSLthAXuCMEJ6iPfxjUienCoPA4y7?=
+ =?koi8-r?Q?cEnaqfym88CRxnaNDtk5+1TNsNQIFNcKgasgh1abqpaD0NplmSwt6kS7Nr2XA2?=
+ =?koi8-r?Q?LBjRLj8UccK0mEVbwNqQNLS5hTz4fUANArn9kH9yAIw4u+0zoG/2ZI1uSDxxQa?=
+ =?koi8-r?Q?RecOdlaxGSjfNHdYbqXSmLeEC+Vq0KXry2YdnZ+ONGnf/V4k1xI0aEufKQ+t4S?=
+ =?koi8-r?Q?tqg2c3Hj0wzvu1nBnOqd1sVPE78gyqD2BAaMMmA0wd4yD9CJ7Xf+4neFCchWOC?=
+ =?koi8-r?Q?kNvKuX/qjwGDk595P/C+9nqKNH5vg0Wtv6n8NOWg20+dddNBZzmSZkd9P/EhB0?=
+ =?koi8-r?Q?W3p834fkOG0RxUjefh9Na0f00WqBes/JXvtGZUqZLA2kQQCiPHGq6IK1LMobkw?=
+ =?koi8-r?Q?9FZlgQIXKTaYBW08Fvx3miS1B2785oAWhKdOfm9Ht6/V6WQWCuWlfofWrjwXnl?=
+ =?koi8-r?Q?Yhxu5JHJpA=3D=3D?=
+Content-Type: text/plain; charset="koi8-r"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221102211404.l5whyif3j3k67fv2@box.shutemov.name>
-X-Originating-IP: [10.180.168.240]
-X-ClientProxiedBy: SATLEXMB03.amd.com (10.181.40.144) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6NAM11FT081:EE_|SJ0PR12MB6783:EE_
-X-MS-Office365-Filtering-Correlation-Id: de5815e3-d15f-4939-3067-08dabd1901fc
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: j2EItDXdgy1qVdqJxR4GEQrDaZ3DofdFzS+LNVJ6NsAJTMVFdBSp6zUpoaPvMWb6267FNjpOK3GF0L3xXcyq5uWRNLuq/Ufi4fc+ayxaUgAqwRo9rfluD4KybXiyZZkiAzOPeFB5kHGevljPKuxckYaN9ZREL/xrn9reHrF51j9Jtbtl4uHTHmj3fIYMmQVw1UvXacSTWAfgLOgY1ajIt+FHI7moRMF0bhhC1P6hC2h74Bu9XyAx4wShywFQZIoUbktcSgP2tS1Cs5jrQC/Oj3pWbOa9BZBYGZymrthBCap+Ro5nt2PPpjksvWECVuAPoXl12GfJIae/dQHmYbzGp4w01iMWCHWC9TnK9Ldx+q5jVs/o49bliHpyBYZDd8oIO8lsBU+FUjwFpFR2iu1qPlYZv51mMJoyUyMB9+hyUoVBR7coUvKyOPy0NguANTaArge8yyEuu7CphmRAvPo7bzFbIXHJU/b5j7a0E0zijVMfhWRVBz/nlXsZSKNYjjawjN4W7W4kjsz8ijEeKvj4kbLv5fGAsriKqEezuLPaSt08x+tqe4UI+TcxnHD4N1Sr1ZMjIyZlZFVONyxcmneXuOHmQiRerPQNmOSV7ylXag19ZczMTaJ6hI0iLDMwCBulYMjpw4eTEl243osrt4sPO67dBldmi9cTvkV+FBaRQxyxxKidT98W7E8jJE4xc8b2Ad4OdFhWzxOKa7QiuVKAsE/V9uxvLDLS6oCnFjdxCNz6+fidm5sAPmXEhy+X9qeMGvpjx5hupHqTkmx8jms/nYBjncmOrcR5JMWkY+VjwL8vWL+/Wq1dft740rMPewc/E4aOUi6BbVaeic5mLrHqbw==
-X-Forefront-Antispam-Report: CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(136003)(39860400002)(346002)(451199015)(46966006)(40470700004)(36840700001)(47076005)(186003)(6666004)(26005)(36860700001)(54906003)(1076003)(478600001)(336012)(426003)(2616005)(40480700001)(83380400001)(2906002)(16526019)(40460700003)(44832011)(7406005)(82310400005)(70586007)(5660300002)(8676002)(70206006)(7416002)(8936002)(316002)(966005)(4326008)(41300700001)(86362001)(36756003)(82740400003)(81166007)(356005)(6916009)(36900700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2022 21:27:13.0077
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6c049bd3-0c29-41b4-8801-08dabd18fecc
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Nov 2022 21:27:07.7872
  (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: de5815e3-d15f-4939-3067-08dabd1901fc
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource: DM6NAM11FT081.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6783
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: aRZ9C41sSrtqCvmbQsh1+u0H/uVFHP2SZS31uA5jvC977v5Wi7FIid4usIt3gqGCm4NGM+XK2pYF2JWuLN78YdZRnZX96AijtpDm7G8iXZ0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CY5PR21MB3710
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -131,39 +131,90 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 12:14:04AM +0300, Kirill A. Shutemov wrote:
-> On Mon, Oct 31, 2022 at 12:47:38PM -0500, Michael Roth wrote:
-> > 
-> > In v8 there was some discussion about potentially passing the page/folio
-> > and order as part of the invalidation callback, I ended up needing
-> > something similar for SEV-SNP, and think it might make sense for other
-> > platforms. This main reasoning is:
-> > 
-> >   1) restoring kernel directmap:
-> > 
-> >      Currently SNP (and I believe TDX) need to either split or remove kernel
-> >      direct mappings for restricted PFNs, since there is no guarantee that
-> >      other PFNs within a 2MB range won't be used for non-restricted
-> >      (which will cause an RMP #PF in the case of SNP since the 2MB
-> >      mapping overlaps with guest-owned pages)
-> 
-> That's news to me. Where the restriction for SNP comes from? There's no
-> such limitation on TDX side AFAIK?
-> 
-> Could you point me to relevant documentation if there's any?
+From: Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>  Sent: Wednes=
+day, November 2, 2022 1:58 PM
 
-I could be mistaken, I haven't looked into the specific documentation and was
-going off of this discussion from a ways back:
+>  =D3=D2, 2 =CE=CF=D1=C2. 2022 =C7. =D7 13:30, Michael Kelley (LINUX) <mai=
+lto:mikelley@microsoft.com>:
+> From: Stanislav Kinsburskiy <mailto:stanislav.kinsburskiy@gmail.com>=9A S=
+ent: Wednesday, November 2, 2022 12:26 PM
+>
+> > > It makes sense to have the tsc_page global variable so that we can
+> > > handle the root partition and guest partition cases with common code,
+> > > even though the TSC page memory originates differently in the two cas=
+es.
+> > >
+> > > But do we also need a tsc_pfn global variable and getter function?=9A=
+ When
+> > > the PFN is needed, conversion from the tsc_page virtual address to th=
+e PFN
+> > > isn't hard, and such a conversion is needed in only a couple of place=
+s.=9A To me,
+> > > it's simpler to keep a single global variable and getter function (i.=
+e.,
+> > > hv_get_tsc_page), and do the conversions where needed.=9A =9AAdding t=
+sc_pfn
+> > > and the getter function introduces a fair amount of code churn for no=
+t much
+> > > benefit.=9A It's a judgment call, but that's my $.02.
+> >
+> > As I replied to Anirudh , AFAIK virt_to_phys doesn't work for remapped =
+pages.
+> > Another option would be to read the MSR each time PFN has to be returne=
+d to
+> > the vvar mapping function (i.e. on every fork), which introduces unnece=
+ssary
+> > performance regression..
+> > Another modification would be to make pfn a static variable and initial=
+ize it
+> > once in hv_get_tsc_pfn() on first access. But I like this implementatio=
+n=9Aless.
 
-  https://lore.kernel.org/all/YWb8WG6Ravbs1nbx@google.com/
+> > Valid point about virt_to_phys().=9A But virt_to_hvpfn() does the right=
+ thing.=9A It
+> > distinguishes between kernel addresses in the main linear mapping and
+> > vmalloc() addresses, which is what you get from memremap().=9A But I ha=
+ven't
+> > looked through all the places virt_to_hvpfn() would be needed to make s=
+ure
+> > it's safe to use.
+>
+> Yeah, I guess virt_to_hvpfn() will do.
+> But I'm not sure it the current code should be reworked to use it: it wou=
+ld save only a
+> few lines of code, but will remove the explicit distinguishment between r=
+oot and guest
+> partitions,=9Acurrently reflected in the code.
+> Please, let me know if you insist on reworking the series to use virt_to_=
+hvpfn().
 
-Sean, is my read of that correct? Do you happen to know where there's
-some documentation on that for the TDX side?
+Your call.  I'm OK with leaving things "as is" due to the additional comple=
+xity
+of dealing with the vmalloc() address that comes from memremap().
+=9A
+> > However, thinking about virt_to_hvpfn(), there's a problem with Anirudh=
+'s
+> > earlier patch set that started using __phys_to_pfn().=9A That won't wor=
+k correctly
+> > if the guest page size is not 4K because it will return a PFN based on =
+the guest
+> > page size, not based on Hyper-V's expectation that the PFN is based on =
+a
+> > 4K page size.=9A So that needs to be fixed either way.
 
-Thanks,
+> Could you elaborate more on the problem?=9A
+=9A
+The key is to recognize that PFNs are inherently interpreted in the context
+of the page size.  Consider Guest Physical Address (GPA)  0x12340000.
+If the page size is 4096, the PFN is 0x12340.  If the page size is 64K, the=
+ PFN
+is 0x1234.  Hyper-V is always expecting PFNs in the context of a page size
+of 4096.  But Linux guests running on Hyper-V on ARM64 could have a
+guest page size of 64K, even though Hyper-V itself is using a page size
+of 4096.  For my example, in an ARM64 VM with 64K page size,
+__phys_to_pfn(0x12340000) would return 0x1234.  If that value is
+stored in the PFN field of the MSR, Hyper-V will think the GPA is
+0x1234000 when it should be 0x12340000.
 
-Mike
-
-> 
-> -- 
->   Kiryl Shutsemau / Kirill A. Shutemov
+Michael
+=9A
