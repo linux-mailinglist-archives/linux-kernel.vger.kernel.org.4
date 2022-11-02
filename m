@@ -2,233 +2,160 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 73D0961652F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:30:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 810A4616534
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:32:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231624AbiKBOas (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 10:30:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60738 "EHLO
+        id S231160AbiKBOb4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 10:31:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60992 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231582AbiKBOaA (ORCPT
+        with ESMTP id S231598AbiKBObh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 10:30:00 -0400
-Received: from esa5.hgst.iphmx.com (esa5.hgst.iphmx.com [216.71.153.144])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 33B1C2A957;
-        Wed,  2 Nov 2022 07:29:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1667399397; x=1698935397;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references;
-  bh=+e9nf+rVBfAa2c/WjCtcUpaxL45lHT++qX95yYgmOY0=;
-  b=fiP3aczDV9w8fFtZY8u7vn+53F5siv8PNFPz5q7aL2GMri+QvU/NYEzH
-   GaUmW7aqkF6xxNTNnBxakOL/6lrvWFvBn9qkTtNF5PzgPXP8RF5dQ0Qq4
-   7O/9AlNWSVlLvVVVpzE0R4WgE8Hxf3N26DQPoHW2TVhpkirfnRNeoBlUy
-   +ttp681W9ob0/EgYyfwTVmZhUmSVQnkbRVrOlMX+KjA25f+lrmMNq9Hoz
-   JlnWjN4W0fV+qwYrdExNbrqerXEkeyZIJFc6TqXNg1FZRYHl82Ix0i8C2
-   6aECOA11vsoEkW1pAcbNpEF8UD3fpwtW5iLM8TJS/e+OKezzYga6mQ92V
-   A==;
-X-IronPort-AV: E=Sophos;i="5.95,234,1661788800"; 
-   d="scan'208";a="215319626"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 02 Nov 2022 22:29:56 +0800
-IronPort-SDR: jy8v/t3MXDOGg9MJ6zv4cbg0LLYUzUpv0PkQY6bBj3ITggQaWnzFLwjP524UTo2SN0ss9KaktK
- BtakqFAbbpmtt0F3FDdbvEp5ExsE5HxsUpIPu8BTHBBedo+T8GcTDwC6oKbbK+LFTZxzMf2OXY
- SpuUrPx97qZhzKn9J6ACRCSWO2xAbLqdzhsGes2VmourV05wW27qRVl7Z5Y4ZMagRHB3p8b841
- muOsiS4CDkhgzEqYPKTMvQiZslr+T+kQE0xwQcR0LOq4pXkeRftgTsTxLIWcWBpZKJmClEuza9
- Otg=
-Received: from uls-op-cesaip01.wdc.com ([10.248.3.36])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 02 Nov 2022 06:43:25 -0700
-IronPort-SDR: 1V0GFg2in1LN3SSCzO/ZbxAw+GnY3EUZAZmcKPLCA7VSdDBM/8qoB8edxiWxTyfBkahvLSGyYf
- 4l248NI16rIze2SoCbVmiDO8/3kNuo36ZyKN908o36mPgPI2YUjuxLk8WXDz2avYHRn/DV8Wxl
- llbx3c4pk7k9zNDDVXlgDOy1NuA5BiISB1l+B1ysyJut2Sb+thl/eefMSZAJlBILsVBPMcI2wj
- VKlghsFmjrW7Ob7T/eQnlgS5Nc1BvR1EBtydqsS7iSjIHqCpIdTnHxMzt84A7DBve7ShQusHfQ
- zkE=
-WDCIronportException: Internal
-Received: from ilb001078.ad.shared (HELO ilb001078.sdcorp.global.sandisk.com) ([10.45.31.219])
-  by uls-op-cesaip01.wdc.com with ESMTP; 02 Nov 2022 07:29:55 -0700
-From:   Arthur Simchaev <Arthur.Simchaev@wdc.com>
-To:     martin.petersen@oracle.com
-Cc:     beanhuo@micron.com, linux-scsi@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Arthur Simchaev <Arthur.Simchaev@wdc.com>
-Subject: [PATCH v2 4/4] ufs: core: Remove ufshcd_map_desc_id_to_length function
-Date:   Wed,  2 Nov 2022 16:29:13 +0200
-Message-Id: <1667399353-10228-5-git-send-email-Arthur.Simchaev@wdc.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1667399353-10228-1-git-send-email-Arthur.Simchaev@wdc.com>
-References: <1667399353-10228-1-git-send-email-Arthur.Simchaev@wdc.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 2 Nov 2022 10:31:37 -0400
+Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4787C2B19C
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 07:31:20 -0700 (PDT)
+Received: by mail-wr1-x42e.google.com with SMTP id cl5so13187954wrb.9
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 07:31:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=fvcd8aKkXATuRfEipojhsSmbkitfupBiLaEwnV78heo=;
+        b=jrxAY3MgHeVIzcyiNPKtsXJk9dLguqghP/Fjfj+2bzpqzI8Prp73eTJhQjhB0ZFgnj
+         ENkFqMekQANYww6qdtbL9fPFhaXN8sqUohuYgloCXlrnxY94ynjMY7v/GtVWYSyGfDDn
+         qS2raTJYrrg6bpoLfy+Mm9I3Pe7Z+XR4H1igv3t80BCiwD8ZbSNUjfSDpImNN6LQYZW5
+         LA65QwR/6sBqIRaw62mH++XBTgi2BkxGzlprT7asQsa4ZCGo77VPfN1/LUROW6AFRuu7
+         koDCbwNY6WxkZbgrjHZwxSYViQQf0rwbw2gTK4aFN2KmlXQkad5K9XYDq5DY6UeMFUvb
+         VBxg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=fvcd8aKkXATuRfEipojhsSmbkitfupBiLaEwnV78heo=;
+        b=I9lXvbChMtAXNB8ICzbInaKpQA/kQyTAqLmEwwBFIrmcIBNbLykwEz09csgo91/D7O
+         ZD3y9tWtOsQCjOieFxUd0Iue0lHdgmdEffdmQVmRL5UsRkPpssTvhF11m1MGiKlA4dik
+         DMqNml1n+Opg74j7yOaD5ybqPfh5Qb8DQ6aDkMJQdr0iGJyfjoiN59ET2x/0HiGAEy3R
+         AA6OGtQ5I6chc4GgwRLPhrCpPBqHVktfpEqGK85DKip++M+oYGg/Dxpu47j0kdI+qd40
+         ws/wX5AkPZ4H7oMplchHDQPlnIfyC6AzSLC2xraB9MzlxGVNkiqjCZ0koPmeleGkYMek
+         TZUw==
+X-Gm-Message-State: ACrzQf3i7vM3X6vH4RkcfSKUuaML+Kdx58tckiIz/8mnaZPOHM9VcEmW
+        ubj+63D2iRvV/vqyzfBxzODaH76jDD7BFZeppdrjNQ==
+X-Google-Smtp-Source: AMsMyM6v9a6vVf5kY2HXjmezSGtsXJpE3LiX+IsFEVWUIFUbTph4Gtnxq3ntkjCtOuZTkp2cjAllhreubO89xhIpzUw=
+X-Received: by 2002:a5d:4ac8:0:b0:236:781a:8d2d with SMTP id
+ y8-20020a5d4ac8000000b00236781a8d2dmr15833263wrs.715.1667399478686; Wed, 02
+ Nov 2022 07:31:18 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221019170835.155381-1-tony.luck@intel.com> <20221021200120.175753-1-tony.luck@intel.com>
+ <20221021200120.175753-2-tony.luck@intel.com> <a60484bf-2107-8bc4-acdc-5f582f9637af@huawei.com>
+ <SJ1PR11MB6083F63D86CDF7810F5ACDA3FC329@SJ1PR11MB6083.namprd11.prod.outlook.com>
+ <CAG_fn=WG2-k74zKv2_-jAqU+WDraJDnFZ_hM58FPgswnXs=BrA@mail.gmail.com>
+In-Reply-To: <CAG_fn=WG2-k74zKv2_-jAqU+WDraJDnFZ_hM58FPgswnXs=BrA@mail.gmail.com>
+From:   Alexander Potapenko <glider@google.com>
+Date:   Wed, 2 Nov 2022 15:30:42 +0100
+Message-ID: <CAG_fn=UQUAQGNEGisADkgpe=MHg-8QcNZdgtJPmaLxyLdLc_NA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] mm, hwpoison: Try to recover from copy-on write faults
+To:     "Luck, Tony" <tony.luck@intel.com>
+Cc:     Miaohe Lin <linmiaohe@huawei.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Shuai Xue <xueshuai@linux.alibaba.com>,
+        "Williams, Dan J" <dan.j.williams@intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>,
+        Naoya Horiguchi <naoya.horiguchi@nec.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There shouldn't be any restriction of the descriptor size
-(not the descriptor id for that matter) up to QUERY_DESC_MAX_SIZE.
-According to the spec, the caller can use any descriptor size,
-and it is up to the device to return the actual size.
-Therefore there shouldn't be any sizes hardcoded in the kernel,
-nor any need to cache it, hence ufshcd_map_desc_id_to_length function is redundant.
-always read the descriptors with QUERY_DESC_MAX_SIZE size.
+On Wed, Nov 2, 2022 at 3:27 PM Alexander Potapenko <glider@google.com> wrot=
+e:
+>
+> On Fri, Oct 28, 2022 at 6:14 PM Luck, Tony <tony.luck@intel.com> wrote:
+> >
+> > >> +    vfrom =3D kmap_local_page(from);
+> > >> +    vto =3D kmap_local_page(to);
+> > >> +    ret =3D copy_mc_to_kernel(vto, vfrom, PAGE_SIZE);
+> > >
+> > > In copy_user_highpage(), kmsan_unpoison_memory(page_address(to), PAGE=
+_SIZE) is done after the copy when
+> > > __HAVE_ARCH_COPY_USER_HIGHPAGE isn't defined. Do we need to do someth=
+ing similar here? But I'm not familiar
+> > > with kmsan, so I can easy be wrong.
+> >
+> > It looks like that kmsan_unpoison_memory() call was added recently, aft=
+er I copied
+> > copy_user_highpage() to create copy_mc_user_highpage(). I'm not familia=
+r with
+> > kmsan either. Adding Alexander to this thread since they added that cod=
+e.
+> >
+>
+> Given that copy_mc_user_highpage() replaces one of the calls to
+> copy_user_highpage(), it sure makes sense to call
+> kmsan_unpoison_memory() here.
+>
+> KMSAN tracks the status (initialized/uninitialized) of the kernel
+> memory. Newly allocated memory is marked uninitialized, copying memory
+> preserves its status, and writing constants to that memory makes it
+> initialized.
+> Userspace memory does not have its status tracked by KMSAN, so when
+> values are copied from the userspace, KMSAN does nothing with their
+> status.
+> That's why every (successful) copy_from_user event should be followed
+> by kmsan_unpoison_memory(), which marks the corresponding kernel
+> buffer initialized - otherwise the status of that buffer may get
+> stale.
+>
+> > > Anyway, this patch looks good to me. Thanks.
+> > >
+> > > Reviewed-by: Miaohe Lin <linmiaohe@huawei.com>
+Reviewed-by: Alexander Potapenko <glider@google.com>
 
-Suggested-by: Bean Huo <beanhuo@micron.com>
+> >
+> > Thanks for the review.
+> >
+> > -Tony
+>
+>
+>
+> --
+> Alexander Potapenko
+> Software Engineer
+>
+> Google Germany GmbH
+> Erika-Mann-Stra=C3=9Fe, 33
+> 80636 M=C3=BCnchen
+>
+> Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+> Registergericht und -nummer: Hamburg, HRB 86891
+> Sitz der Gesellschaft: Hamburg
 
-Signed-off-by: Arthur Simchaev <Arthur.Simchaev@wdc.com>
----
- drivers/ufs/core/ufs_bsg.c     |  7 +------
- drivers/ufs/core/ufshcd-priv.h |  3 ---
- drivers/ufs/core/ufshcd.c      | 46 +++++++++++-------------------------------
- drivers/ufs/core/ufshpb.c      |  4 +---
- 4 files changed, 14 insertions(+), 46 deletions(-)
 
-diff --git a/drivers/ufs/core/ufs_bsg.c b/drivers/ufs/core/ufs_bsg.c
-index b99e3f3..dc441ac 100644
---- a/drivers/ufs/core/ufs_bsg.c
-+++ b/drivers/ufs/core/ufs_bsg.c
-@@ -16,16 +16,11 @@ static int ufs_bsg_get_query_desc_size(struct ufs_hba *hba, int *desc_len,
- 				       struct utp_upiu_query *qr)
- {
- 	int desc_size = be16_to_cpu(qr->length);
--	int desc_id = qr->idn;
- 
- 	if (desc_size <= 0)
- 		return -EINVAL;
- 
--	ufshcd_map_desc_id_to_length(hba, desc_id, desc_len);
--	if (!*desc_len)
--		return -EINVAL;
--
--	*desc_len = min_t(int, *desc_len, desc_size);
-+	*desc_len = min_t(int, QUERY_DESC_MAX_SIZE, desc_size);
- 
- 	return 0;
- }
-diff --git a/drivers/ufs/core/ufshcd-priv.h b/drivers/ufs/core/ufshcd-priv.h
-index a9e8e1f..c52e2f3 100644
---- a/drivers/ufs/core/ufshcd-priv.h
-+++ b/drivers/ufs/core/ufshcd-priv.h
-@@ -70,9 +70,6 @@ int ufshcd_read_string_desc(struct ufs_hba *hba, u8 desc_index,
- int ufshcd_hold(struct ufs_hba *hba, bool async);
- void ufshcd_release(struct ufs_hba *hba);
- 
--void ufshcd_map_desc_id_to_length(struct ufs_hba *hba, enum desc_idn desc_id,
--				  int *desc_length);
--
- int ufshcd_send_uic_cmd(struct ufs_hba *hba, struct uic_command *uic_cmd);
- 
- int ufshcd_exec_raw_upiu_cmd(struct ufs_hba *hba,
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index 9cc3abd..fc0695f 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -3369,20 +3369,6 @@ int ufshcd_query_descriptor_retry(struct ufs_hba *hba,
- }
- 
- /**
-- * ufshcd_map_desc_id_to_length - map descriptor IDN to its length
-- * @hba: Pointer to adapter instance
-- * @desc_id: descriptor idn value
-- * @desc_len: mapped desc length (out)
-- */
--void ufshcd_map_desc_id_to_length(struct ufs_hba *hba, enum desc_idn desc_id,
--				  int *desc_len)
--{
--	/*Always returns QUERY_DESC_MAX_SIZE*/
--	*desc_len = QUERY_DESC_MAX_SIZE;
--}
--EXPORT_SYMBOL(ufshcd_map_desc_id_to_length);
--
--/**
-  * ufshcd_read_desc_param - read the specified descriptor parameter
-  * @hba: Pointer to adapter instance
-  * @desc_id: descriptor idn value
-@@ -3402,26 +3388,13 @@ int ufshcd_read_desc_param(struct ufs_hba *hba,
- {
- 	int ret;
- 	u8 *desc_buf;
--	int buff_len;
-+	int buff_len = QUERY_DESC_MAX_SIZE;
- 	bool is_kmalloc = true;
- 
- 	/* Safety check */
- 	if (desc_id >= QUERY_DESC_IDN_MAX || !param_size)
- 		return -EINVAL;
- 
--	/* Get the length of descriptor */
--	ufshcd_map_desc_id_to_length(hba, desc_id, &buff_len);
--	if (!buff_len) {
--		dev_err(hba->dev, "%s: Failed to get desc length\n", __func__);
--		return -EINVAL;
--	}
--
--	if (param_offset >= buff_len) {
--		dev_err(hba->dev, "%s: Invalid offset 0x%x in descriptor IDN 0x%x, length 0x%x\n",
--			__func__, param_offset, desc_id, buff_len);
--		return -EINVAL;
--	}
--
- 	/* Check whether we need temp memory */
- 	if (param_offset != 0 || param_size < buff_len) {
- 		desc_buf = kzalloc(buff_len, GFP_KERNEL);
-@@ -3434,15 +3407,23 @@ int ufshcd_read_desc_param(struct ufs_hba *hba,
- 
- 	/* Request for full descriptor */
- 	ret = ufshcd_query_descriptor_retry(hba, UPIU_QUERY_OPCODE_READ_DESC,
--					desc_id, desc_index, 0,
--					desc_buf, &buff_len);
--
-+					    desc_id, desc_index, 0,
-+					    desc_buf, &buff_len);
- 	if (ret) {
- 		dev_err(hba->dev, "%s: Failed reading descriptor. desc_id %d, desc_index %d, param_offset %d, ret %d\n",
- 			__func__, desc_id, desc_index, param_offset, ret);
- 		goto out;
- 	}
- 
-+	/* Update descriptor length */
-+	buff_len = desc_buf[QUERY_DESC_LENGTH_OFFSET];
-+
-+	if (param_offset >= buff_len) {
-+		dev_err(hba->dev, "%s: Invalid offset 0x%x in descriptor IDN 0x%x, length 0x%x\n",
-+			__func__, param_offset, desc_id, buff_len);
-+		return -EINVAL;
-+	}
-+
- 	/* Sanity check */
- 	if (desc_buf[QUERY_DESC_DESC_TYPE_OFFSET] != desc_id) {
- 		dev_err(hba->dev, "%s: invalid desc_id %d in descriptor header\n",
-@@ -3451,9 +3432,6 @@ int ufshcd_read_desc_param(struct ufs_hba *hba,
- 		goto out;
- 	}
- 
--	/* Update descriptor length */
--	buff_len = desc_buf[QUERY_DESC_LENGTH_OFFSET];
--
- 	if (is_kmalloc) {
- 		/* Make sure we don't copy more data than available */
- 		if (param_offset >= buff_len)
-diff --git a/drivers/ufs/core/ufshpb.c b/drivers/ufs/core/ufshpb.c
-index 3d69a81c..11f8aa6 100644
---- a/drivers/ufs/core/ufshpb.c
-+++ b/drivers/ufs/core/ufshpb.c
-@@ -2382,12 +2382,10 @@ static int ufshpb_get_lu_info(struct ufs_hba *hba, int lun,
- {
- 	u16 max_active_rgns;
- 	u8 lu_enable;
--	int size;
-+	int size = QUERY_DESC_MAX_SIZE;
- 	int ret;
- 	char desc_buf[QUERY_DESC_MAX_SIZE];
- 
--	ufshcd_map_desc_id_to_length(hba, QUERY_DESC_IDN_UNIT, &size);
--
- 	ufshcd_rpm_get_sync(hba);
- 	ret = ufshcd_query_descriptor_retry(hba, UPIU_QUERY_OPCODE_READ_DESC,
- 					    QUERY_DESC_IDN_UNIT, lun, 0,
--- 
-2.7.4
 
+--=20
+Alexander Potapenko
+Software Engineer
+
+Google Germany GmbH
+Erika-Mann-Stra=C3=9Fe, 33
+80636 M=C3=BCnchen
+
+Gesch=C3=A4ftsf=C3=BChrer: Paul Manicle, Liana Sebastian
+Registergericht und -nummer: Hamburg, HRB 86891
+Sitz der Gesellschaft: Hamburg
