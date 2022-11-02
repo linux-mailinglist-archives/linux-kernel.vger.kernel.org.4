@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29173615F52
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:15:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6FD1E615F54
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:15:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231578AbiKBJO4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 05:14:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43590 "EHLO
+        id S230330AbiKBJPD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 05:15:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43622 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231464AbiKBJNj (ORCPT
+        with ESMTP id S231341AbiKBJNu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 05:13:39 -0400
+        Wed, 2 Nov 2022 05:13:50 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F10F2935B;
-        Wed,  2 Nov 2022 02:12:55 -0700 (PDT)
-Date:   Wed, 02 Nov 2022 09:12:52 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 772EE29364;
+        Wed,  2 Nov 2022 02:12:56 -0700 (PDT)
+Date:   Wed, 02 Nov 2022 09:12:53 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667380374;
+        s=2020; t=1667380375;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QBGb15kTgZTC7LVKUgw7F/Ft/+M/1NqTiaauPnWiM6A=;
-        b=n4SrdBuILriDh71DF6zX5KTeg1RrX6uOwHjQJEqXSJlcDmR/vDqtBU6aRCvygAeE6P9ngA
-        3loIOS4KAPxPt2jNZmz3/v0V3Bcmx+U8G1HJsFJkteAIjAymUepcT7UfDei1M/TVhQ1f1L
-        tqv78Hoa7M30ASJo6Hh8yd5CeJbtBHyPs7IoRB7F7lvA70E/ylGkLPNiqjyorp0xyik6xj
-        XfKoxoIaBZuhdjDh27pSDLFhwhZ6XyqMHKzAuRD4wAzfzLrsk2VyHJYCULSwNxkjLJ3nTs
-        nxlovx1QHVzvL2T+41c04R9invFV5qixfHrCHyED+xmXWryhUKeaMDJgUMIg1g==
+        bh=oMREbSjW1m1DQRIRobOJxb5WF+kSzXiQo4pLiuFB+9U=;
+        b=H/8/yUcd8R/Of3fTGJL6zoT8ERF7Jc/zIW1itBszOao4E+qWJJmvnXakiOYnfTZ2grepIA
+        fr4Fp+y+gJL9nQLDwYl7tuuGozlXy5is1rmgmRl+ih2nENufb3LGDUljvX/KZJmnOsz2nD
+        V0P29xM/z+0vh7Vi3yXM8Rx9SHlnq6MEHDeT6n+SAUVD4XFtxZ5+zrI9+tc4c9KUhFTt7a
+        JvYBIMPz1N8DiDJlDgoXyWddBh/uQnw58nnYNQCbGEwUMnGMhuqVIkJbQwqorzxP1P0FeT
+        I5euODlWio0QsyVrZAkdGMXYkDEXjw1ZKXtLn8Wm+t1fkwPT+Y9WeQ9Yjw4UBg==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667380374;
+        s=2020e; t=1667380375;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=QBGb15kTgZTC7LVKUgw7F/Ft/+M/1NqTiaauPnWiM6A=;
-        b=VzzbJVcGoVnWOG+f3D4AbeYFwn1tqq70rL+JUGpF2e4GE1jMX62aCxsVsG9RyHvO5s9vCV
-        qAJJCn5lUB4GqCCw==
+        bh=oMREbSjW1m1DQRIRobOJxb5WF+kSzXiQo4pLiuFB+9U=;
+        b=9QUDXiZeBBe6Lzl1bfCFhYiXnCF/oaqw2pZbMemy/gQSw/95y7oLEIv3kJ2MpX/y7p1Y+Q
+        wvxUcXjFRU5y6BDQ==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mm] x86/mm: Use mm_alloc() in poking_init()
+Subject: [tip: x86/mm] mm: Move mm_cachep initialization to mm_init()
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20221025201057.816175235@infradead.org>
-References: <20221025201057.816175235@infradead.org>
+In-Reply-To: <20221025201057.751153381@infradead.org>
+References: <20221025201057.751153381@infradead.org>
 MIME-Version: 1.0
-Message-ID: <166738037248.7716.549727763487721317.tip-bot2@tip-bot2>
+Message-ID: <166738037356.7716.15264994823926137234.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -65,66 +65,100 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/mm branch of tip:
 
-Commit-ID:     107b6828a7cde2de0bb293588a59892831cef78b
-Gitweb:        https://git.kernel.org/tip/107b6828a7cde2de0bb293588a59892831cef78b
+Commit-ID:     a2e87952bf54b99e8d560c095a2c75ebc676e1fb
+Gitweb:        https://git.kernel.org/tip/a2e87952bf54b99e8d560c095a2c75ebc676e1fb
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Tue, 25 Oct 2022 21:38:21 +02:00
+AuthorDate:    Tue, 25 Oct 2022 21:38:18 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 01 Nov 2022 13:43:57 +01:00
+CommitterDate: Tue, 01 Nov 2022 13:43:56 +01:00
 
-x86/mm: Use mm_alloc() in poking_init()
+mm: Move mm_cachep initialization to mm_init()
 
-Instead of duplicating init_mm, allocate a fresh mm. The advantage is
-that mm_alloc() has much simpler dependencies. Additionally it makes
-more conceptual sense, init_mm has no (and must not have) user state
-to duplicate.
+In order to allow using mm_alloc() much earlier, move initializing
+mm_cachep into mm_init().
 
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20221025201057.816175235@infradead.org
+Link: https://lkml.kernel.org/r/20221025201057.751153381@infradead.org
 ---
- arch/x86/mm/init.c         | 2 +-
- include/linux/sched/task.h | 1 -
- kernel/fork.c              | 5 -----
- 3 files changed, 1 insertion(+), 7 deletions(-)
+ include/linux/sched/task.h |  1 +
+ init/main.c                |  1 +
+ kernel/fork.c              | 32 ++++++++++++++++++--------------
+ 3 files changed, 20 insertions(+), 14 deletions(-)
 
-diff --git a/arch/x86/mm/init.c b/arch/x86/mm/init.c
-index 9121bc1..d398735 100644
---- a/arch/x86/mm/init.c
-+++ b/arch/x86/mm/init.c
-@@ -801,7 +801,7 @@ void __init poking_init(void)
- 	spinlock_t *ptl;
- 	pte_t *ptep;
- 
--	poking_mm = copy_init_mm();
-+	poking_mm = mm_alloc();
- 	BUG_ON(!poking_mm);
- 
- 	/*
 diff --git a/include/linux/sched/task.h b/include/linux/sched/task.h
-index 8431558..357e006 100644
+index d6c4816..8431558 100644
 --- a/include/linux/sched/task.h
 +++ b/include/linux/sched/task.h
-@@ -91,7 +91,6 @@ extern void exit_itimers(struct task_struct *);
- extern pid_t kernel_clone(struct kernel_clone_args *kargs);
- struct task_struct *create_io_thread(int (*fn)(void *), void *arg, int node);
- struct task_struct *fork_idle(int);
--struct mm_struct *copy_init_mm(void);
- extern pid_t kernel_thread(int (*fn)(void *), void *arg, unsigned long flags);
- extern pid_t user_mode_thread(int (*fn)(void *), void *arg, unsigned long flags);
- extern long kernel_wait4(pid_t, int __user *, int, struct rusage *);
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 451ce80..6142c58 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -2592,11 +2592,6 @@ struct task_struct * __init fork_idle(int cpu)
- 	return task;
+@@ -65,6 +65,7 @@ extern void sched_dead(struct task_struct *p);
+ void __noreturn do_task_dead(void);
+ void __noreturn make_task_dead(int signr);
+ 
++extern void mm_cache_init(void);
+ extern void proc_caches_init(void);
+ 
+ extern void fork_init(void);
+diff --git a/init/main.c b/init/main.c
+index aa21add..f1d1a54 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -860,6 +860,7 @@ static void __init mm_init(void)
+ 	/* Should be run after espfix64 is set up. */
+ 	pti_init();
+ 	kmsan_init_runtime();
++	mm_cache_init();
  }
  
--struct mm_struct *copy_init_mm(void)
--{
--	return dup_mm(NULL, &init_mm);
--}
+ #ifdef CONFIG_RANDOMIZE_KSTACK_OFFSET
+diff --git a/kernel/fork.c b/kernel/fork.c
+index 08969f5..451ce80 100644
+--- a/kernel/fork.c
++++ b/kernel/fork.c
+@@ -3015,10 +3015,27 @@ static void sighand_ctor(void *data)
+ 	init_waitqueue_head(&sighand->signalfd_wqh);
+ }
+ 
+-void __init proc_caches_init(void)
++void __init mm_cache_init(void)
+ {
+ 	unsigned int mm_size;
+ 
++	/*
++	 * The mm_cpumask is located at the end of mm_struct, and is
++	 * dynamically sized based on the maximum CPU number this system
++	 * can have, taking hotplug into account (nr_cpu_ids).
++	 */
++	mm_size = sizeof(struct mm_struct) + cpumask_size();
++
++	mm_cachep = kmem_cache_create_usercopy("mm_struct",
++			mm_size, ARCH_MIN_MMSTRUCT_ALIGN,
++			SLAB_HWCACHE_ALIGN|SLAB_PANIC|SLAB_ACCOUNT,
++			offsetof(struct mm_struct, saved_auxv),
++			sizeof_field(struct mm_struct, saved_auxv),
++			NULL);
++}
++
++void __init proc_caches_init(void)
++{
+ 	sighand_cachep = kmem_cache_create("sighand_cache",
+ 			sizeof(struct sighand_struct), 0,
+ 			SLAB_HWCACHE_ALIGN|SLAB_PANIC|SLAB_TYPESAFE_BY_RCU|
+@@ -3036,19 +3053,6 @@ void __init proc_caches_init(void)
+ 			SLAB_HWCACHE_ALIGN|SLAB_PANIC|SLAB_ACCOUNT,
+ 			NULL);
+ 
+-	/*
+-	 * The mm_cpumask is located at the end of mm_struct, and is
+-	 * dynamically sized based on the maximum CPU number this system
+-	 * can have, taking hotplug into account (nr_cpu_ids).
+-	 */
+-	mm_size = sizeof(struct mm_struct) + cpumask_size();
 -
- /*
-  * This is like kernel_clone(), but shaved down and tailored to just
-  * creating io_uring workers. It returns a created task, or an error pointer.
+-	mm_cachep = kmem_cache_create_usercopy("mm_struct",
+-			mm_size, ARCH_MIN_MMSTRUCT_ALIGN,
+-			SLAB_HWCACHE_ALIGN|SLAB_PANIC|SLAB_ACCOUNT,
+-			offsetof(struct mm_struct, saved_auxv),
+-			sizeof_field(struct mm_struct, saved_auxv),
+-			NULL);
+ 	vm_area_cachep = KMEM_CACHE(vm_area_struct, SLAB_PANIC|SLAB_ACCOUNT);
+ 	mmap_init();
+ 	nsproxy_cache_init();
