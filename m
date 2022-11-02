@@ -2,46 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9F4D96168F7
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:31:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 808C96168F2
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:31:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231495AbiKBQbM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 12:31:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51072 "EHLO
+        id S231944AbiKBQbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 12:31:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbiKBQa3 (ORCPT
+        with ESMTP id S231693AbiKBQaR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 12:30:29 -0400
+        Wed, 2 Nov 2022 12:30:17 -0400
 Received: from mx1.veeam.com (mx1.veeam.com [216.253.77.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7C97E2DA9D;
-        Wed,  2 Nov 2022 09:27:07 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 89C492D768;
+        Wed,  2 Nov 2022 09:27:05 -0700 (PDT)
 Received: from mail.veeam.com (prgmbx01.amust.local [172.24.128.102])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mx1.veeam.com (Postfix) with ESMTPS id AA6D141CDE;
-        Wed,  2 Nov 2022 11:51:50 -0400 (EDT)
+        by mx1.veeam.com (Postfix) with ESMTPS id 01BA741CFE;
+        Wed,  2 Nov 2022 11:51:54 -0400 (EDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=veeam.com;
-        s=mx1-2022; t=1667404310;
-        bh=OHKw2Y24NEK51ghFh6NlAXRAmdKb1WQljbkubdtdUAA=;
-        h=From:To:Subject:Date:From;
-        b=eqiBjpgiBrZFhvUBURD1MAlU15e1oZPGzWqHlAQMg16SLE3sKWUBNxBVDKQzsFavh
-         f+PGtvAPFPmr0VqrVUjMu+7sA6ihnHBYbP1Ht7L5vDY2k/scOfiSna0w1sjqfG7v0e
-         P2PbmhNS1r+hQ/1KpkV7xOLDYL2aHVwDSlIb56Xwh3oBgcwtq2i4VArzST/5P302Ey
-         rN7dhdgbc3xew4F0LxrqcFkzNbyjCqBDl1qJFlQ23r24B4rcOXpdVnB7gB77nDvvZ4
-         0MZFwdXMAuBrLQuAQ4VuHMl4CpKSglLFsxifr9ad3Jz9lVsQf/5u/954tWZtv3/Ghd
-         q5ZnGZPKRGEyA==
+        s=mx1-2022; t=1667404314;
+        bh=FQ7kEDAbp6PcE3xe0/TDQaXiNLJBJYmY6HnkYK6PjJ4=;
+        h=From:To:Subject:Date:In-Reply-To:References:From;
+        b=oBXwWGMuygZvqK7BHvcibBi94jS7stvjg3JeFDgzFF7AM3wAkOVNVpf8r6gRViQlw
+         NwbFvcHzIaqh1DDeW2jXbvFzbiwQuyr6cm8lSHn813o+Ie65/50W9ep0XAh1wvZ8zT
+         uvqfBsszecTUO9fiUSMiN5xXWwNkxJztZVigNoRKRTs2QQV+o2ImNDWFNZLntD1yNw
+         60iSGc/5vRrpm7tmf9FRGpZamMziPc12JlI3xUwB8caFj1Gfsz19wUekW5cgYS72Vk
+         Z0V0tJNCoGvDovWkko/AYQpKKZoWIu7gcdWAYFtoUIBF9k1wzCsujQOdHlNWnF8sZU
+         A6cXwjPdCaPFw==
 Received: from ssh-deb10-ssd-vb.amust.local (172.24.10.107) by
  prgmbx01.amust.local (172.24.128.102) with Microsoft SMTP Server
  (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1118.12; Wed, 2 Nov 2022 16:51:13 +0100
+ 15.2.1118.12; Wed, 2 Nov 2022 16:51:15 +0100
 From:   Sergei Shtepa <sergei.shtepa@veeam.com>
 To:     <axboe@kernel.dk>, <linux-block@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>, <hch@infradead.org>,
         <sergei.shtepa@veeam.com>
-Subject: [PATCH v1 00/17] blksnap - creating non-persistent snapshots for backup
-Date:   Wed, 2 Nov 2022 16:50:44 +0100
-Message-ID: <20221102155101.4550-1-sergei.shtepa@veeam.com>
+Subject: [PATCH v1 01/17] block, bdev_filter: enable block device filters
+Date:   Wed, 2 Nov 2022 16:50:45 +0100
+Message-ID: <20221102155101.4550-2-sergei.shtepa@veeam.com>
 X-Mailer: git-send-email 2.20.1
+In-Reply-To: <20221102155101.4550-1-sergei.shtepa@veeam.com>
+References: <20221102155101.4550-1-sergei.shtepa@veeam.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
@@ -60,162 +62,237 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi all.
+Allows to attach block device filters to the block devices. Kernel
+modules can use this functionality to extend the capabilities of the
+block layer.
 
-I suggest a modified version of the blksnap kernel module for consideration.
-It allows to create non-persistent snapshots of any block devices. The main
-purpose of such snapshots is to create a backup of block devices.
+Signed-off-by: Sergei Shtepa <sergei.shtepa@veeam.com>
+---
+ block/bdev.c              | 73 +++++++++++++++++++++++++++++++++++++++
+ block/blk-core.c          | 19 ++++++++--
+ include/linux/blk_types.h |  2 ++
+ include/linux/blkdev.h    | 64 ++++++++++++++++++++++++++++++++++
+ 4 files changed, 156 insertions(+), 2 deletions(-)
 
-A snapshot is created simultaneously for several block devices, ensuring
-their mutual consistency in the backup.
-
-A change tracker is implemented in the module. It allows to determine
-which blocks were changed during the time between the last snapshot
-created and any of the previous snapshots of the same generation.
-This allows to implement incremental and differential backups.
-
-An arbitrary range of sectors on any block device can be used to store
-snapshot changes. The size of the storage for changes can be increased after the
-snapshot is created by adding new sector ranges. This allows to create a
-storage of differences in individual files on a file system that can occupy
-the entire space of a block device and increase the storage of differences
-as needed.
-
-To create images of snapshots of block devices, the module stores blocks
-of the original block device that have been changed since the snapshot was
-taken. To do this, the module intercepts write requests and reads blocks
-that need to be overwritten. This algorithm guarantees the safety of the
-data of the original block device in case of overflow of the snapshot and
-even in case of unpredictable critical errors.
-
-To connect and disconnect the module to the block layer, the concept of a
-block device filter is introduced. Functions for connecting filters are
-added to the block layer and the ability to intercept I/O requests is
-provided.
-
-The blksnap module was created specifically for upstream based on the
-experience of operating the out-of-tree veeamsnap module, which is part of
-the Veeam Agent for Linux product. I am sure that the module will be in
-demand by other creators of backup tools and will save them from having to
-use their out-of-tree kernel modules.
-
-A tool, a library for working with blksnap, tests and some documentations
-can be found at www.github.com/veeam/blksnap.
-
-The first version was suggested at 13.06.2022. Many thanks to Christoph Hellwig
-and Randy Dunlap for the review of that version. In this version, I tried to
-eliminate all the defects.
-
-Changes:
-- Forgotten "static" declarations have been added.
-- The text of the comments has been corrected.
-- It is possible to connect only one filter, since there are no others in
-  upstream.
-- Do not have additional locks for attach/detach filter.
-- blksnap.h moved to include/uapi/.
-- #pragma once and commented code removed.
-- uuid_t removed from user API.
-- Removed default values for module parameters from the configuration file.
-- The debugging code for tracking memory leaks has been removed.
-- Simplified Makefile.
-- Optimized work with large memory buffers, CBT tables are now in virtual
-  memory.
-- The allocation code of minor numbers has been optimized.
-- The implementation of the snapshot image block device has been simplified,
-  now it is a bio-based block device.
-- Removed initialization of global variables with null values.
-- Only one bio is used to copy one chunk.
-- Checked on ppc64le.
-
-Sergei Shtepa (17):
-  block, bdev_filter: enable block device filters
-  block, blksnap: header file of the module interface
-  block, blksnap: module management interface functions
-  block, blksnap: init() and exit() functions
-  block, blksnap: interaction with sysfs
-  block, blksnap: attaching and detaching the filter and handling a bios
-  block, blksnap: map of change block tracking
-  block, blksnap: minimum data storage unit of the original block device
-  lock, blksnap: buffer in memory for the minimum data storage unit
-  block, blksnap: functions and structures for performing block I/O
-    operations
-  block, blksnap: storage for storing difference blocks
-  lock, blksnap: event queue from the difference storage
-  block, blksnap: owner of information about overwritten blocks of the
-    original block device
-  block, blksnap: snapshot image block device
-  block, blksnap: snapshot
-  block, blksnap: Kconfig and Makefile
-  block, blksnap: adds a blksnap to the kernel tree
-
- block/bdev.c                         |  73 +++
- block/blk-core.c                     |  19 +-
- drivers/block/Kconfig                |   2 +
- drivers/block/Makefile               |   2 +
- drivers/block/blksnap/Kconfig        |  12 +
- drivers/block/blksnap/Makefile       |  18 +
- drivers/block/blksnap/cbt_map.c      | 268 +++++++++++
- drivers/block/blksnap/cbt_map.h      | 114 +++++
- drivers/block/blksnap/chunk.c        | 349 ++++++++++++++
- drivers/block/blksnap/chunk.h        | 139 ++++++
- drivers/block/blksnap/ctrl.c         | 408 ++++++++++++++++
- drivers/block/blksnap/ctrl.h         |   9 +
- drivers/block/blksnap/diff_area.c    | 656 ++++++++++++++++++++++++++
- drivers/block/blksnap/diff_area.h    | 177 +++++++
- drivers/block/blksnap/diff_buffer.c  | 132 ++++++
- drivers/block/blksnap/diff_buffer.h  |  75 +++
- drivers/block/blksnap/diff_io.c      | 168 +++++++
- drivers/block/blksnap/diff_io.h      | 118 +++++
- drivers/block/blksnap/diff_storage.c | 292 ++++++++++++
- drivers/block/blksnap/diff_storage.h |  93 ++++
- drivers/block/blksnap/event_queue.c  |  86 ++++
- drivers/block/blksnap/event_queue.h  |  63 +++
- drivers/block/blksnap/main.c         | 164 +++++++
- drivers/block/blksnap/params.h       |  12 +
- drivers/block/blksnap/snapimage.c    | 319 +++++++++++++
- drivers/block/blksnap/snapimage.h    |  73 +++
- drivers/block/blksnap/snapshot.c     | 654 ++++++++++++++++++++++++++
- drivers/block/blksnap/snapshot.h     |  78 ++++
- drivers/block/blksnap/sysfs.c        |  79 ++++
- drivers/block/blksnap/sysfs.h        |   7 +
- drivers/block/blksnap/tracker.c      | 672 +++++++++++++++++++++++++++
- drivers/block/blksnap/tracker.h      |  74 +++
- drivers/block/blksnap/version.h      |  10 +
- include/linux/blk_types.h            |   2 +
- include/linux/blkdev.h               |  64 +++
- include/uapi/linux/blksnap.h         | 467 +++++++++++++++++++
- 36 files changed, 5946 insertions(+), 2 deletions(-)
- create mode 100644 drivers/block/blksnap/Kconfig
- create mode 100644 drivers/block/blksnap/Makefile
- create mode 100644 drivers/block/blksnap/cbt_map.c
- create mode 100644 drivers/block/blksnap/cbt_map.h
- create mode 100644 drivers/block/blksnap/chunk.c
- create mode 100644 drivers/block/blksnap/chunk.h
- create mode 100644 drivers/block/blksnap/ctrl.c
- create mode 100644 drivers/block/blksnap/ctrl.h
- create mode 100644 drivers/block/blksnap/diff_area.c
- create mode 100644 drivers/block/blksnap/diff_area.h
- create mode 100644 drivers/block/blksnap/diff_buffer.c
- create mode 100644 drivers/block/blksnap/diff_buffer.h
- create mode 100644 drivers/block/blksnap/diff_io.c
- create mode 100644 drivers/block/blksnap/diff_io.h
- create mode 100644 drivers/block/blksnap/diff_storage.c
- create mode 100644 drivers/block/blksnap/diff_storage.h
- create mode 100644 drivers/block/blksnap/event_queue.c
- create mode 100644 drivers/block/blksnap/event_queue.h
- create mode 100644 drivers/block/blksnap/main.c
- create mode 100644 drivers/block/blksnap/params.h
- create mode 100644 drivers/block/blksnap/snapimage.c
- create mode 100644 drivers/block/blksnap/snapimage.h
- create mode 100644 drivers/block/blksnap/snapshot.c
- create mode 100644 drivers/block/blksnap/snapshot.h
- create mode 100644 drivers/block/blksnap/sysfs.c
- create mode 100644 drivers/block/blksnap/sysfs.h
- create mode 100644 drivers/block/blksnap/tracker.c
- create mode 100644 drivers/block/blksnap/tracker.h
- create mode 100644 drivers/block/blksnap/version.h
- create mode 100644 include/uapi/linux/blksnap.h
-
+diff --git a/block/bdev.c b/block/bdev.c
+index d699ecdb3260..8c2899267569 100644
+--- a/block/bdev.c
++++ b/block/bdev.c
+@@ -427,6 +427,7 @@ static void init_once(void *data)
+ 
+ static void bdev_evict_inode(struct inode *inode)
+ {
++	bdev_filter_detach(I_BDEV(inode));
+ 	truncate_inode_pages_final(&inode->i_data);
+ 	invalidate_inode_buffers(inode); /* is it needed here? */
+ 	clear_inode(inode);
+@@ -502,6 +503,7 @@ struct block_device *bdev_alloc(struct gendisk *disk, u8 partno)
+ 		return NULL;
+ 	}
+ 	bdev->bd_disk = disk;
++	bdev->bd_filter = NULL;
+ 	return bdev;
+ }
+ 
+@@ -1092,3 +1094,74 @@ void bdev_statx_dioalign(struct inode *inode, struct kstat *stat)
+ 
+ 	blkdev_put_no_open(bdev);
+ }
++
++/**
++ * bdev_filter_attach - Attach a filter to the original block device.
++ * @bdev:
++ *	Block device.
++ * @flt:
++ *	Pointer to the filter structure.
++ *
++ * Before adding a filter, it is necessary to initialize &struct bdev_filter.
++ *
++ * The bdev_filter_detach() function allows to detach the filter from the block
++ * device.
++ *
++ * Return:
++ * 0 - OK
++ * -EALREADY - a filter with this name already exists
++ */
++int bdev_filter_attach(struct block_device *bdev,
++				     struct bdev_filter *flt)
++{
++	int ret = 0;
++
++	blk_mq_freeze_queue(bdev->bd_queue);
++	blk_mq_quiesce_queue(bdev->bd_queue);
++
++	if (bdev->bd_filter)
++		ret = -EALREADY;
++	else
++		bdev->bd_filter = flt;
++
++	blk_mq_unquiesce_queue(bdev->bd_queue);
++	blk_mq_unfreeze_queue(bdev->bd_queue);
++
++	return ret;
++}
++EXPORT_SYMBOL(bdev_filter_attach);
++
++/**
++ * bdev_filter_detach - Detach a filter from the block device.
++ * @bdev:
++ *	Block device.
++ *
++ * The filter should be added using the bdev_filter_attach() function.
++ *
++ * Return:
++ * 0 - OK
++ * -ENOENT - the filter was not found in the linked list
++ */
++int bdev_filter_detach(struct block_device *bdev)
++{
++	int ret = 0;
++	struct bdev_filter *flt = NULL;
++
++	blk_mq_freeze_queue(bdev->bd_queue);
++	blk_mq_quiesce_queue(bdev->bd_queue);
++
++	flt = bdev->bd_filter;
++	if (flt)
++		bdev->bd_filter = NULL;
++	else
++		ret = -ENOENT;
++
++	blk_mq_unquiesce_queue(bdev->bd_queue);
++	blk_mq_unfreeze_queue(bdev->bd_queue);
++
++	if (flt)
++		bdev_filter_put(flt);
++
++	return ret;
++}
++EXPORT_SYMBOL(bdev_filter_detach);
+diff --git a/block/blk-core.c b/block/blk-core.c
+index 17667159482e..497c635eb794 100644
+--- a/block/blk-core.c
++++ b/block/blk-core.c
+@@ -679,9 +679,24 @@ void submit_bio_noacct_nocheck(struct bio *bio)
+ 	 * to collect a list of requests submited by a ->submit_bio method while
+ 	 * it is active, and then process them after it returned.
+ 	 */
+-	if (current->bio_list)
++	if (current->bio_list) {
+ 		bio_list_add(&current->bio_list[0], bio);
+-	else if (!bio->bi_bdev->bd_disk->fops->submit_bio)
++		return;
++	}
++
++	if (bio->bi_bdev->bd_filter && !bio_flagged(bio, BIO_FILTERED)) {
++		bool pass;
++
++		pass = bio->bi_bdev->bd_filter->fops->submit_bio_cb(bio);
++		bio_set_flag(bio, BIO_FILTERED);
++		if (!pass) {
++			bio->bi_status = BLK_STS_OK;
++			bio_endio(bio);
++			return;
++		}
++	}
++
++	if (!bio->bi_bdev->bd_disk->fops->submit_bio)
+ 		__submit_bio_noacct_mq(bio);
+ 	else
+ 		__submit_bio_noacct(bio);
+diff --git a/include/linux/blk_types.h b/include/linux/blk_types.h
+index e0b098089ef2..3b58c69cbf9d 100644
+--- a/include/linux/blk_types.h
++++ b/include/linux/blk_types.h
+@@ -68,6 +68,7 @@ struct block_device {
+ #ifdef CONFIG_FAIL_MAKE_REQUEST
+ 	bool			bd_make_it_fail;
+ #endif
++	struct bdev_filter	*bd_filter;
+ } __randomize_layout;
+ 
+ #define bdev_whole(_bdev) \
+@@ -333,6 +334,7 @@ enum {
+ 	BIO_QOS_MERGED,		/* but went through rq_qos merge path */
+ 	BIO_REMAPPED,
+ 	BIO_ZONE_WRITE_LOCKED,	/* Owns a zoned device zone write lock */
++	BIO_FILTERED,		/* bio has already been filtered */
+ 	BIO_FLAG_LAST
+ };
+ 
+diff --git a/include/linux/blkdev.h b/include/linux/blkdev.h
+index 50e358a19d98..91d1b4ee38d4 100644
+--- a/include/linux/blkdev.h
++++ b/include/linux/blkdev.h
+@@ -1549,4 +1549,68 @@ struct io_comp_batch {
+ 
+ #define DEFINE_IO_COMP_BATCH(name)	struct io_comp_batch name = { }
+ 
++/**
++ * struct bdev_filter_operations - List of callback functions for the filter.
++ *
++ * @submit_bio_cb:
++ *	A callback function for bio processing.
++ * @detach_cb:
++ *	A callback function to disable the filter when removing a block
++ *	device from the system.
++ */
++struct bdev_filter_operations {
++	bool (*submit_bio_cb)(struct bio *bio);
++	void (*detach_cb)(struct kref *kref);
++};
++/**
++ * struct bdev_filter - Block device filter.
++ *
++ * @kref:
++ *	Kernel reference counter.
++ * @fops:
++ *	The pointer to &struct bdev_filter_operations with callback
++ *	functions for the filter.
++ */
++struct bdev_filter {
++	struct kref kref;
++	const struct bdev_filter_operations *fops;
++};
++/**
++ * bdev_filter_init - Initialization of the filter structure.
++ * @flt:
++ *	Pointer to the &struct bdev_filter to be initialized.
++ * @fops:
++ *	The callback functions for the filter.
++ */
++static inline void bdev_filter_init(struct bdev_filter *flt,
++		const struct bdev_filter_operations *fops)
++{
++	kref_init(&flt->kref);
++	flt->fops = fops;
++};
++
++/**
++ * bdev_filter_get - Incremnent reference counter.
++ * @flt:
++ *	Pointer to the &struct bdev_filter.
++ */
++static inline void bdev_filter_get(struct bdev_filter *flt)
++{
++	kref_get(&flt->kref);
++}
++
++/**
++ * bdev_filter_put - Decrement reference counter and detach filter.
++ * @flt:
++ *	Pointer to the &struct bdev_filter.
++ */
++static inline void bdev_filter_put(struct bdev_filter *flt)
++{
++	kref_put(&flt->kref, flt->fops->detach_cb);
++};
++
++int bdev_filter_attach(struct block_device *bdev, struct bdev_filter *flt);
++int bdev_filter_detach(struct block_device *bdev);
++
++
+ #endif /* _LINUX_BLKDEV_H */
 -- 
 2.20.1
 
