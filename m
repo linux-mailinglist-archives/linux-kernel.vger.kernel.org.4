@@ -2,76 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A0703616F21
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 21:51:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AA76A616F2A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 21:52:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230394AbiKBUvQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 16:51:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41478 "EHLO
+        id S231382AbiKBUwd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 16:52:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41680 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiKBUvN (ORCPT
+        with ESMTP id S231394AbiKBUwQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 16:51:13 -0400
-Received: from mail-oa1-x29.google.com (mail-oa1-x29.google.com [IPv6:2001:4860:4864:20::29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E84EBF8;
-        Wed,  2 Nov 2022 13:51:12 -0700 (PDT)
-Received: by mail-oa1-x29.google.com with SMTP id 586e51a60fabf-13c569e5ff5so5972fac.6;
-        Wed, 02 Nov 2022 13:51:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vz0GfozIpsPUBz1QIRbwEXWEh5SPtHrHm1HOdjXnaj0=;
-        b=hCFn13MzPnpqEf9Kex9dFGEIZm/M1JDpAf+dzr8CboGw1nWgBItdLYanDTl/cDX3G1
-         ProzILPf/rOP0RkYBo6mvWZLI7EW/cZJPnoZVBP7qt6phrByah4FQy+qHohtT4EUJy9g
-         03TvqPir9RhNYeGLPO/OQamLMvgsEttzTLICkzgFsqG2IwueeOMwpEhV1KJYp2MpTPGq
-         Pb8p1hl+2fCTRphE6udzIIrGiXfyLuNJuD1MZafR197LxxlcMpZ/VLiH0YVdSQgRvNie
-         fbIY262E+PmQSNAaIygFcPhip7M87skMd93jB6DECsySj4OVd69IzBtKA49nvyF6/KSd
-         EphA==
+        Wed, 2 Nov 2022 16:52:16 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 751365585
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 13:51:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667422285;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=oR5BqgUdMPYHt7RBSvr6JxSAHZ0ghv1vkqRRC1Z5JNE=;
+        b=NB3fWdzDoWWAaA3ejesPJB8GnaGtlp6NIB421Xitr+MV7/rD+xp3hN/LEvE7bndgfqHu92
+        Vn8pok2FEKrm7nHFWzfgPw2Jlm29Qkoi9cMuUvq00LcYTJXF4QOTQ6IQkafB0l3hqmX0po
+        dy+I9L5F4kV1Ndt3UBvkrD0oJmmVH8I=
+Received: from mail-qk1-f198.google.com (mail-qk1-f198.google.com
+ [209.85.222.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-55-3OdVyq60OZCNObaYkxu8mA-1; Wed, 02 Nov 2022 16:51:24 -0400
+X-MC-Unique: 3OdVyq60OZCNObaYkxu8mA-1
+Received: by mail-qk1-f198.google.com with SMTP id bq13-20020a05620a468d00b006fa5a75759aso3165176qkb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 13:51:24 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vz0GfozIpsPUBz1QIRbwEXWEh5SPtHrHm1HOdjXnaj0=;
-        b=z4MiN/W8c8Y46J30qTHJpNAMyemdnNHEGu4iV45ILGWqB4B58qYK98gHHfWf7hQ1WO
-         xtfgBkctF6zW/CDdus5V+kNWmLwQwiVa/ugj9sZrK5U9ufemNvPd9RRMFsMmtgoceYCj
-         ZBBRqd9SsQQZWD6HBNzscMapRw2C6o6Eae+TfGOFTLi1mryhLehfqNsi5XlqwNM5x2l6
-         p/BfF1PXD9ytUc0GKtDsTjhh5/1Rv3L76iDLnaOn22rlpqqG7jneZn8Cllt0Rdl67NaX
-         ypyvbf8wdhO9pEvib6airxKsz/ZXSOh+Ixk26fHlm2aT9JdJsqpmWaFPmORS288M4rvH
-         25kQ==
-X-Gm-Message-State: ACrzQf2dvD/X8ta0Fx5VJqHkJufqWc/uvk1hiRV2VBZlRmNOgZjwPmw1
-        s/tleLafT7tD6dAxOdXDcsI=
-X-Google-Smtp-Source: AMsMyM72H2oEil2phBMfeD9kNgmomI5srb1Ke1q9WqklFVafKYt4AHmFWvYO6aQguvqiB69jFm8Bcw==
-X-Received: by 2002:a05:6870:e2d6:b0:13c:a47a:c477 with SMTP id w22-20020a056870e2d600b0013ca47ac477mr16170494oad.269.1667422271417;
-        Wed, 02 Nov 2022 13:51:11 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id s35-20020a4a96a6000000b004806f494d2fsm857957ooi.11.2022.11.02.13.51.10
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=oR5BqgUdMPYHt7RBSvr6JxSAHZ0ghv1vkqRRC1Z5JNE=;
+        b=awrQKTzk56R+N6dQ1uVwMIUCTGbOky8BHjIrdwDb1Nl/kQAaWB/onpKraOovwKfTV+
+         vXleOi5q1Vm/CWGqolBVTRf2ddx+AyWy7jevSBbUxozeWXBZItUrCp/BRAGTYBZJdTEr
+         Fx+MLVcI4mGCC2HQvmGwC8nyTKDWGknGQyJ2omre7cXIp/sup5WUpAziLHTbwdLs7YD4
+         G/a15RGr7So6ndWTGAxIZ1qjxxXhfHmj7lvPejALmLcSSuz3FHPiY93SPT7ZFBWo+vQa
+         i0gY6bEu3wRAIrzIyYo29DoLdQtaPuAD5UpUOVmp+PtCIhTAiWBx5DbAhKy5DAaIOElc
+         BMFg==
+X-Gm-Message-State: ACrzQf0qZ4Lt7OM25/wZ4jRx6in7reUqYgeJMWj6colyRI4N7w9jIT4l
+        S0Jlf49rXNFEJOpHKQ4XViCDMfu5EaGkE6aqqFUVsCAcUyMDxkY3RHd0ETVzUwlO0VS6PDFdaut
+        fVRQutGSyHqHmfsWMpn2KRQN9
+X-Received: by 2002:ac8:7493:0:b0:3a5:287b:d6c8 with SMTP id v19-20020ac87493000000b003a5287bd6c8mr13850209qtq.241.1667422283966;
+        Wed, 02 Nov 2022 13:51:23 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5z0sDnzwMjh5BpqiSm0cjc6QcEARteCcLX1X6LhHxG+A3UaBmwN01/wAzwejujYQEP3qWbyQ==
+X-Received: by 2002:ac8:7493:0:b0:3a5:287b:d6c8 with SMTP id v19-20020ac87493000000b003a5287bd6c8mr13850185qtq.241.1667422283733;
+        Wed, 02 Nov 2022 13:51:23 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id h22-20020ac85156000000b003a533886612sm3377442qtn.3.2022.11.02.13.51.22
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 13:51:10 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 2 Nov 2022 13:51:10 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Quan Nguyen <quan@os.amperecomputing.com>
-Cc:     Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-        Open Source Submission <patches@amperecomputing.com>,
-        Bagas Sanjaya <bagasdotme@gmail.com>,
-        linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Phong Vo <phong@os.amperecomputing.com>,
-        thang@os.amperecomputing.com, openbmc@lists.ozlabs.org
-Subject: Re: [PATCH] docs: hwmon: (smpro-hwmon) Improve grammar and formatting
-Message-ID: <20221102205110.GA2089605@roeck-us.net>
-References: <20221102062103.3135417-1-quan@os.amperecomputing.com>
+        Wed, 02 Nov 2022 13:51:23 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 16:51:21 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Nadav Amit <nadav.amit@gmail.com>
+Cc:     kernel list <linux-kernel@vger.kernel.org>, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        James Houghton <jthoughton@google.com>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Rik van Riel <riel@surriel.com>
+Subject: Re: [PATCH RFC 02/10] mm/hugetlb: Comment huge_pte_offset() for its
+ locking requirements
+Message-ID: <Y2LYSYLj94ajCaOI@x1n>
+References: <20221030212929.335473-1-peterx@redhat.com>
+ <20221030212929.335473-3-peterx@redhat.com>
+ <F09923E5-605F-476E-976F-C7EABDF64938@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221102062103.3135417-1-quan@os.amperecomputing.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+In-Reply-To: <F09923E5-605F-476E-976F-C7EABDF64938@gmail.com>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,171 +87,46 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 01:21:03PM +0700, Quan Nguyen wrote:
-> Improve documentation grammar and formatting for the
-> Ampere(R)'s Altra(R) SMpro hwmon driver.
+On Mon, Oct 31, 2022 at 10:46:52PM -0700, Nadav Amit wrote:
+> On Oct 30, 2022, at 2:29 PM, Peter Xu <peterx@redhat.com> wrote:
 > 
-> Thanks Bagas for the changes in the link below.
+> > huge_pte_offset() is potentially a pgtable walker, looking up pte_t* for a
+> > hugetlb address.
+> > 
+> > Normally, it's always safe to walk the pgtable as long as we're with the
+> > mmap lock held for either read or write, because that guarantees the
+> > pgtable pages will always be valid during the process.
+> > 
+> > But it's not true for hugetlbfs: hugetlbfs has the pmd sharing feature, it
+> > means that even with mmap lock held, the PUD pgtable page can still go away
+> > from under us if pmd unsharing is possible during the walk.
+> > 
+> > It's not always the case, e.g.:
+> > 
+> >  (1) If the mapping is private we're not prone to pmd sharing or
+> >      unsharing, so it's okay.
+> > 
+> >  (2) If we're with the hugetlb vma lock held for either read/write, it's
+> >      okay too because pmd unshare cannot happen at all.
+> > 
+> > Document all these explicitly for huge_pte_offset(), because it's really
+> > not that obvious.  This also tells all the callers on what it needs to
+> > guarantee huge_pte_offset() thread-safety.
+> > 
+> > Signed-off-by: Peter Xu <peterx@redhat.com>
+> > ---
+> > arch/arm64/mm/hugetlbpage.c | 32 ++++++++++++++++++++++++++++++++
 > 
-> Link: https://lore.kernel.org/lkml/Y1aHiaZ1OpHZIzS9@google.com/T/#mfea2167b99384486a1b75d9304536015116c1821
-> Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
-> Reviewed-by: Bagas Sanjaya <bagasdotme@gmail.com>
+> Please excuse my ignorant question - is there something specific for arm64
+> code here? Other archs seem to have similar code, no?
 
-Applied to hwmon-next.
+Oops, sorry, I meant to add this to the version in mm/hugetlb.c.  Or maybe
+to linux/hugetlb.h would make more sense.
 
-Thanks,
-Guenter
+I should probably also mention that for any arch that does not support pmd
+sharing at all (afaik, any arch outside arm, x86 and riscv), the shared
+mapping locking rule should be the same as private.
 
-> ---
->  Documentation/hwmon/smpro-hwmon.rst | 111 ++++++++++++++--------------
->  1 file changed, 56 insertions(+), 55 deletions(-)
-> 
-> diff --git a/Documentation/hwmon/smpro-hwmon.rst b/Documentation/hwmon/smpro-hwmon.rst
-> index 3a9b14dacf89..fb7b3665735b 100644
-> --- a/Documentation/hwmon/smpro-hwmon.rst
-> +++ b/Documentation/hwmon/smpro-hwmon.rst
-> @@ -7,39 +7,39 @@ Supported chips:
->  
->    * Ampere(R) Altra(R)
->  
-> -    Prefix: 'smpro'
-> +    Prefix: ``smpro``
->  
-> -    Reference: Altra SoC BMC Interface Specification
-> +    Reference: `Altra SoC BMC Interface Specification`
->  
->  Author: Thu Nguyen <thu@os.amperecomputing.com>
->  
->  Description
->  -----------
-> -This driver supports hardware monitoring for Ampere(R) Altra(R) SoC's based on the
-> -SMpro co-processor (SMpro).
-> -The following sensor types are supported by the driver:
-> +The smpro-hwmon driver supports hardware monitoring for Ampere(R) Altra(R)
-> +SoCs based on the SMpro co-processor (SMpro).  The following sensor metrics
-> +are supported by the driver:
->  
->    * temperature
->    * voltage
->    * current
->    * power
->  
-> -The SMpro interface provides the registers to query the various sensors and
-> +The interface provides the registers to query the various sensors and
->  their values which are then exported to userspace by this driver.
->  
->  Usage Notes
->  -----------
->  
-> -SMpro hwmon driver creates at least two sysfs files for each sensor.
-> +The driver creates at least two sysfs files for each sensor.
->  
-> -* File ``<sensor_type><idx>_label`` reports the sensor label.
-> -* File ``<sensor_type><idx>_input`` returns the sensor value.
-> +* ``<sensor_type><idx>_label`` reports the sensor label.
-> +* ``<sensor_type><idx>_input`` returns the sensor value.
->  
-> -The sysfs files are allocated in the SMpro root fs folder.
-> -There is one root folder for each SMpro instance.
-> +The sysfs files are allocated in the SMpro rootfs folder, with one root
-> +directory for each instance.
->  
-> -When the SoC is turned off, the driver will fail to read registers
-> -and return -ENXIO.
-> +When the SoC is turned off, the driver will fail to read registers and
-> +return ``-ENXIO``.
->  
->  Sysfs entries
->  -------------
-> @@ -48,48 +48,49 @@ The following sysfs files are supported:
->  
->  * Ampere(R) Altra(R):
->  
-> -============    =============   ======  ===============================================
-> -Name            Unit            Perm    Description
-> -temp1_input     milli Celsius   RO      SoC temperature
-> -temp2_input     milli Celsius   RO      Max temperature reported among SoC VRDs
-> -temp2_crit      milli Celsius   RO      SoC VRD HOT Threshold temperature
-> -temp3_input     milli Celsius   RO      Max temperature reported among DIMM VRDs
-> -temp4_input     milli Celsius   RO      Max temperature reported among Core VRDs
-> -temp5_input     milli Celsius   RO      Temperature of DIMM0 on CH0
-> -temp5_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
-> -temp6_input     milli Celsius   RO      Temperature of DIMM0 on CH1
-> -temp6_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
-> -temp7_input     milli Celsius   RO      Temperature of DIMM0 on CH2
-> -temp7_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
-> -temp8_input     milli Celsius   RO      Temperature of DIMM0 on CH3
-> -temp8_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
-> -temp9_input     milli Celsius   RO      Temperature of DIMM0 on CH4
-> -temp9_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
-> -temp10_input    milli Celsius   RO      Temperature of DIMM0 on CH5
-> -temp10_crit     milli Celsius   RO      MEM HOT Threshold for all DIMMs
-> -temp11_input    milli Celsius   RO      Temperature of DIMM0 on CH6
-> -temp11_crit     milli Celsius   RO      MEM HOT Threshold for all DIMMs
-> -temp12_input    milli Celsius   RO      Temperature of DIMM0 on CH7
-> -temp12_crit     milli Celsius   RO      MEM HOT Threshold for all DIMMs
-> -temp13_input    milli Celsius   RO      Max temperature reported among RCA VRDs
-> -in0_input       milli Volts     RO      Core voltage
-> -in1_input       milli Volts     RO      SoC voltage
-> -in2_input       milli Volts     RO      DIMM VRD1 voltage
-> -in3_input       milli Volts     RO      DIMM VRD2 voltage
-> -in4_input       milli Volts     RO      RCA VRD voltage
-> -cur1_input      milli Amperes   RO      Core VRD current
-> -cur2_input      milli Amperes   RO      SoC VRD current
-> -cur3_input      milli Amperes   RO      DIMM VRD1 current
-> -cur4_input      milli Amperes   RO      DIMM VRD2 current
-> -cur5_input      milli Amperes   RO      RCA VRD current
-> -power1_input    micro Watts     RO      Core VRD power
-> -power2_input    micro Watts     RO      SoC VRD power
-> -power3_input    micro Watts     RO      DIMM VRD1 power
-> -power4_input    micro Watts     RO      DIMM VRD2 power
-> -power5_input    micro Watts     RO      RCA VRD power
-> -============    =============   ======  ===============================================
-> -
-> -Example::
-> +  ============    =============  ======  ===============================================
-> +  Name            Unit           Perm    Description
-> +  ============    =============  ======  ===============================================
-> +  temp1_input     millicelsius   RO      SoC temperature
-> +  temp2_input     millicelsius   RO      Max temperature reported among SoC VRDs
-> +  temp2_crit      millicelsius   RO      SoC VRD HOT Threshold temperature
-> +  temp3_input     millicelsius   RO      Max temperature reported among DIMM VRDs
-> +  temp4_input     millicelsius   RO      Max temperature reported among Core VRDs
-> +  temp5_input     millicelsius   RO      Temperature of DIMM0 on CH0
-> +  temp5_crit      millicelsius   RO      MEM HOT Threshold for all DIMMs
-> +  temp6_input     millicelsius   RO      Temperature of DIMM0 on CH1
-> +  temp6_crit      millicelsius   RO      MEM HOT Threshold for all DIMMs
-> +  temp7_input     millicelsius   RO      Temperature of DIMM0 on CH2
-> +  temp7_crit      millicelsius   RO      MEM HOT Threshold for all DIMMs
-> +  temp8_input     millicelsius   RO      Temperature of DIMM0 on CH3
-> +  temp8_crit      millicelsius   RO      MEM HOT Threshold for all DIMMs
-> +  temp9_input     millicelsius   RO      Temperature of DIMM0 on CH4
-> +  temp9_crit      millicelsius   RO      MEM HOT Threshold for all DIMMs
-> +  temp10_input    millicelsius   RO      Temperature of DIMM0 on CH5
-> +  temp10_crit     millicelsius   RO      MEM HOT Threshold for all DIMMs
-> +  temp11_input    millicelsius   RO      Temperature of DIMM0 on CH6
-> +  temp11_crit     millicelsius   RO      MEM HOT Threshold for all DIMMs
-> +  temp12_input    millicelsius   RO      Temperature of DIMM0 on CH7
-> +  temp12_crit     millicelsius   RO      MEM HOT Threshold for all DIMMs
-> +  temp13_input    millicelsius   RO      Max temperature reported among RCA VRDs
-> +  in0_input       millivolts     RO      Core voltage
-> +  in1_input       millivolts     RO      SoC voltage
-> +  in2_input       millivolts     RO      DIMM VRD1 voltage
-> +  in3_input       millivolts     RO      DIMM VRD2 voltage
-> +  in4_input       millivolts     RO      RCA VRD voltage
-> +  cur1_input      milliamperes   RO      Core VRD current
-> +  cur2_input      milliamperes   RO      SoC VRD current
-> +  cur3_input      milliamperes   RO      DIMM VRD1 current
-> +  cur4_input      milliamperes   RO      DIMM VRD2 current
-> +  cur5_input      milliamperes   RO      RCA VRD current
-> +  power1_input    microwatts     RO      Core VRD power
-> +  power2_input    microwatts     RO      SoC VRD power
-> +  power3_input    microwatts     RO      DIMM VRD1 power
-> +  power4_input    microwatts     RO      DIMM VRD2 power
-> +  power5_input    microwatts     RO      RCA VRD power
-> +  ============    =============  ======  ===============================================
-> +
-> +  Example::
->  
->      # cat in0_input
->      830
+-- 
+Peter Xu
+
