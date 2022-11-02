@@ -2,106 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AA076616E2B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 21:01:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CF32616E31
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 21:01:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbiKBUBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 16:01:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37348 "EHLO
+        id S230419AbiKBUBi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 16:01:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37404 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230371AbiKBUBY (ORCPT
+        with ESMTP id S230387AbiKBUB3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 16:01:24 -0400
-Received: from mail-wm1-x32b.google.com (mail-wm1-x32b.google.com [IPv6:2a00:1450:4864:20::32b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85370194;
-        Wed,  2 Nov 2022 13:01:23 -0700 (PDT)
-Received: by mail-wm1-x32b.google.com with SMTP id m7-20020a05600c090700b003cf8a105d9eso119356wmp.5;
-        Wed, 02 Nov 2022 13:01:23 -0700 (PDT)
+        Wed, 2 Nov 2022 16:01:29 -0400
+Received: from mail-pj1-x102a.google.com (mail-pj1-x102a.google.com [IPv6:2607:f8b0:4864:20::102a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 20B2DC3B
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 13:01:28 -0700 (PDT)
+Received: by mail-pj1-x102a.google.com with SMTP id h14so17249415pjv.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 13:01:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
+        d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=XdmYTvu+zYpj7KgYKCU+/zaBOvuZZ8jatmz3kLIrPfg=;
-        b=LHTa4kwK97AZu9XWzAgU7Ru4ce6dgEG3bB7pKdLyPyFxbvs7RASuKfWO+c88RO3ZlA
-         NqhRNGXeRWleEUFpfrTUhDsQLYvN6WGBTtMCME0uragCWUKeaWcplcfGNWHoOUhYh+/F
-         ix2JnFTMt4TYs/5Fvw5DVvHkXhHQQXPjykKB3d3dkimwpu/ZseyEPfGewc64vFSLXqEf
-         hJQ47i/T69WUcpf5HIV5bDX1T7R2JovtVx0XRABVJ2921jzDrD5E1OgvWy20Tkk+1iA0
-         6NTe2blaQSPBPBz7wVwqFTlCh6OVdBOTu9NjsF07bLsb7oH8FlocZbZkNEBDbG2qg3JL
-         ToUQ==
+        bh=crDMk0R12pE4R+rJIlvy8EsGZM7TBfRAPYKWnpWAGHY=;
+        b=UK9/AZo0Gy9FmiPW3MCdfsBkfo+eIrkJ8azyv3CjPHoN4MhEkiNCR8PNH7yhFsYAOV
+         OcpJgIYxLNKdG/2WV1Ir7KHesKgC3PaVShkuvcivzT1/xw5yHoEnTL+CL4JhdOo7Cq6/
+         kZ7Q7PuO5Kq6Dkv2HcO0D8R73xSRLPR7rqXcY=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=XdmYTvu+zYpj7KgYKCU+/zaBOvuZZ8jatmz3kLIrPfg=;
-        b=8BDQZVjtsRP66LSLViXqDpn5KPAvpaW8aGAMIReHYuy24fFHLVA2gXA7D4YJwNRLUI
-         Zc4/ys9Ez3Xy6wd69Yr+Ihlx33s6ciuc//uV8W9XLPALJPJgijB9LVA7mjsUJw3XDliA
-         Zml3pTWY+d4GfRlki5ruw5WJI/eR+SO7ospA2uKUGAS4o3eRgR+TdGU9TZakuN5o4BjT
-         lSv1cbt1Txy/1E66kmHrYwoxnlsVETrM5F/U8ezxjDtrUJzOjRhQF/OW7r5HvOGz6sf3
-         IFTtZUMMKEXNixSNvsTQxTCxPbmyIZhUr7VEp8DUpQ9Zaz12xFTJS+S7TO+lOmsj1/2K
-         STnw==
-X-Gm-Message-State: ACrzQf083ke3h4rqcWwERYzjIpNlpAm2mkk3kE7hqEh1YzbfrHjsaPIw
-        PU9LfnVjsZt/L3gFeb8zPN+Cn5m5AmhQew==
-X-Google-Smtp-Source: AMsMyM6MbmWWEKKewgppk+dMC8e39nJ0CkTBH2iM6ZEo5pt5EirJqQdLGrpbKFuWKQLhHZxm+6CqpQ==
-X-Received: by 2002:a05:600c:6885:b0:3bd:d782:623c with SMTP id fn5-20020a05600c688500b003bdd782623cmr16703442wmb.102.1667419281857;
-        Wed, 02 Nov 2022 13:01:21 -0700 (PDT)
-Received: from leonid-Inspiron-3421 (93-172-205-151.bb.netvision.net.il. [93.172.205.151])
-        by smtp.gmail.com with ESMTPSA id z7-20020a05600c0a0700b003cf483ee8e0sm3649378wmp.24.2022.11.02.13.01.19
+        bh=crDMk0R12pE4R+rJIlvy8EsGZM7TBfRAPYKWnpWAGHY=;
+        b=E7SX3q9JtVejJ5yyqNmbc3Y3m7FbfVtP190er9A8zXNNwHbQWXRowATLWQgBIP+sd0
+         Vey4MGAVQQZOEHrbstZZHx04lMcUGbM0VYNSCQecKhri/If8Mv4vz+/DVD63CEe/Yrro
+         lo/vdgkR62QJIm2iUY7G+GkClFrx/dJ2kHlAqwBwQBYWVnGHvEbS4WW3A6chpKscAaIP
+         oOFWadS5J0jylHVlcVB04xntfxd1yz2Hy7jvezmxjQzHQAXKtpiKzmZLFliaMLVLpIXw
+         zSwI1yKOcfLdZM7GWTAn/Xhex+4tFOcVzCn8TyJRcIgzbBW4OoXx+Yto0VWm19QG9U7S
+         Rapw==
+X-Gm-Message-State: ACrzQf3RtMNGLkoe0l1iagUeoz1xQq78GtSpocdwqUBxiI/DaH5eZSAd
+        M/6nSgKLT49bxGviYCfDWOD7sQ==
+X-Google-Smtp-Source: AMsMyM6jJViHjLqCoTS++I8Qer6oLGbkwZ5YrvtcOzrUTmAZhCWRZ2VARz0FuIZVfUtOhdEVS0FtHA==
+X-Received: by 2002:a17:903:41ca:b0:186:a68e:c06d with SMTP id u10-20020a17090341ca00b00186a68ec06dmr25774406ple.61.1667419287620;
+        Wed, 02 Nov 2022 13:01:27 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id z184-20020a6233c1000000b0056c47a5c34dsm8825142pfz.122.2022.11.02.13.01.27
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 13:01:20 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 22:01:17 +0200
-From:   Leonid Ravich <lravich@gmail.com>
-To:     Steven Rostedt <rostedt@goodmis.org>
-Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
-        Leonid Ravich <leonid.ravich@toganetworks.com>,
-        "mingo@redhat.com" <mingo@redhat.com>,
-        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Yigal Korman <yigal.korman@toganetworks.com>,
-        "linux-trace-kernel@vger.kernel.org" 
-        <linux-trace-kernel@vger.kernel.org>
-Subject: Re: BUG:  ib_mad ftrace event unsupported migration
-Message-ID: <Y2LMjYNAE5LwtcOp@leonid-Inspiron-3421>
-References: <VI1PR02MB623706DA8A01842834FC191089399@VI1PR02MB6237.eurprd02.prod.outlook.com>
- <20221102074457.08f538a8@rorschach.local.home>
- <Y2JqX3vC1mG/JDex@ziepe.ca>
- <VI1PR02MB623731066685B6E249F71A3189399@VI1PR02MB6237.eurprd02.prod.outlook.com>
- <Y2J4/NQMhRORqnZ0@ziepe.ca>
- <20221102101719.6cbcca6b@rorschach.local.home>
- <Y2J9lAqBvjjPUmJf@ziepe.ca>
- <20221102115947.000897fa@rorschach.local.home>
+        Wed, 02 Nov 2022 13:01:27 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 13:01:26 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Heiko Carstens <hca@linux.ibm.com>,
+        Sami Tolvanen <samitolvanen@google.com>
+Cc:     Nathan Chancellor <nathan@kernel.org>,
+        Alexandra Winter <wintera@linux.ibm.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH 1/3] s390/ctcm: Fix return type of ctc{mp,}m_tx()
+Message-ID: <202211021259.9169F5CBE@keescook>
+References: <20221102163252.49175-1-nathan@kernel.org>
+ <Y2LJmr8gE2I7gOP5@osiris>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221102115947.000897fa@rorschach.local.home>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y2LJmr8gE2I7gOP5@osiris>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> On Wed, 2 Nov 2022 11:24:20 -0300
-> Jason Gunthorpe <jgg@ziepe.ca> wrote:
+On Wed, Nov 02, 2022 at 08:48:42PM +0100, Heiko Carstens wrote:
+> On Wed, Nov 02, 2022 at 09:32:50AM -0700, Nathan Chancellor wrote:
+> > should s390 select ARCH_SUPPORTS_CFI_CLANG in the future.
 > 
-> > No, it doesn't muck with preemption, it will have some sleeping lock,
-> > eg mlx5_ib_query_pkey() does a memory allocation as the first thing
-> > 
-> > It seems like a bug that calling kmalloc(GFP_KERNEL)/might_sleep()
-> > from within a tracepoint doesn't trigger a warning?
+> Yes, s390 should select that :)
 > 
-> Has nothing to do with tracepoints. You could call it a bug that it
-> doesn't trigger a warning when preemption is disabled. But then again,
-> it would if you enabled DEBUG_PREEMPT and possibly LOCKDEP too. So, I chalk
-> this up to a lack of proper testing.
->
+> But, is there any switch or option I need to set when compiling clang,
+> so it knows about the kcfi sanitizer?
+> 
+> I get:
+> clang-16: error: unsupported option '-fsanitize=kcfi' for target 's390x-ibm-linux'
+> 
+> > clang --version
+> clang version 16.0.0 (https://github.com/llvm/llvm-project.git e02110e2ab4dd71b276e887483f0e6e286d243ed)
 
-disagree, without CONFIG_PREEMPTION (which is the default case in some
-destros) we will not get any warning, because there will not be
-preamption disable.
+You'll need the "generic arch support": https://reviews.llvm.org/D135411
+which is _almost_ landed. Testing would be welcome, for sure!
 
-second issue I see and maybe it is only me, is that the assuption of
-atomicity in trace is not a common knowledge for trace users.     
+Sami, do you have any notes on what common things were needed to get
+arm64 and x86_64 booting under kCFI? My only oh-so-helpful notes are
+"keep CFI away from early boot code". :P
+
+-- 
+Kees Cook
