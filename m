@@ -2,71 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84FAB616F24
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 21:51:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 373D6616F25
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 21:52:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231136AbiKBUvu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 16:51:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41728 "EHLO
+        id S231321AbiKBUwL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 16:52:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41734 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiKBUvr (ORCPT
+        with ESMTP id S229770AbiKBUwI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 16:51:47 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8046BF8
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 13:51:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667422306; x=1698958306;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:content-transfer-encoding:in-reply-to;
-  bh=8lSLo6unKBIVu/Pe4mXrssODSBsaBtahdn8WEaLm5ks=;
-  b=jNv5kCK1kzX8WYEOeKZzulozFvpEbZZr0SVdznWOznZHNmBv3EVBKUjC
-   7ZWLrqxc675XAP9AwcKQaM17vI58quzuDHiaC9p8S2rMFvP52sCV59hJY
-   YW9ZYT8aMsq8046nFk0xs252vmADyfyGjuT5JlACIcbJRApYwPcYuGCwh
-   GIF/PijucjNmobrOpkZm5RgkfuobW9+ZqrLR5uFJ6/fhXHHlcr3/jqGvE
-   gFDQcq0WzkBAljV65BiN+uajm68/42tFHoiAkrLqQSuCvr0REZWjVWYBZ
-   ItwYYVqBQlKk3NriNEJO5y7U9KAkRJShjRndZIZetBDz++ZBOWyGYJnE7
-   Q==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="292834391"
-X-IronPort-AV: E=Sophos;i="5.95,234,1661842800"; 
-   d="scan'208";a="292834391"
-Received: from orsmga001.jf.intel.com ([10.7.209.18])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 13:51:46 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="667721074"
-X-IronPort-AV: E=Sophos;i="5.95,234,1661842800"; 
-   d="scan'208";a="667721074"
-Received: from stinkpipe.fi.intel.com (HELO stinkbox) ([10.237.72.191])
-  by orsmga001.jf.intel.com with SMTP; 02 Nov 2022 13:51:41 -0700
-Received: by stinkbox (sSMTP sendmail emulation); Wed, 02 Nov 2022 22:51:41 +0200
-Date:   Wed, 2 Nov 2022 22:51:40 +0200
-From:   Ville =?iso-8859-1?Q?Syrj=E4l=E4?= <ville.syrjala@linux.intel.com>
-To:     Naoya Horiguchi <naoya.horiguchi@linux.dev>
-Cc:     linux-mm@kvack.org, Andrew Morton <akpm@linux-foundation.org>,
-        David Hildenbrand <david@redhat.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Liu Shixin <liushixin2@huawei.com>,
-        Yang Shi <shy828301@gmail.com>,
-        Oscar Salvador <osalvador@suse.de>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Naoya Horiguchi <naoya.horiguchi@nec.com>,
-        linux-kernel@vger.kernel.org, intel-gfx@lists.freedesktop.org,
-        regressions@lists.linux.dev
-Subject: Re: [mm-unstable PATCH v7 2/8] mm/hugetlb: make pud_huge() and
- follow_huge_pud() aware of non-present pud entry
-Message-ID: <Y2LYXItKQyaJTv8j@intel.com>
-References: <20220714042420.1847125-1-naoya.horiguchi@linux.dev>
- <20220714042420.1847125-3-naoya.horiguchi@linux.dev>
+        Wed, 2 Nov 2022 16:52:08 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 185F8E0D
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 13:52:07 -0700 (PDT)
+Received: from pps.filterd (m0098409.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A2KLTQo022441;
+        Wed, 2 Nov 2022 20:51:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
+ : date : message-id : mime-version : content-transfer-encoding; s=pp1;
+ bh=3Vo7kFNZKuw3z5FeVY3FfDysBAcb781H5upJaig0ErE=;
+ b=ao2pkhdbdF50UBy8jNvZ9vKC4OkgjVtlRumFIzWQa6WH31li2sjP8ow47kEMPcTNcyPH
+ 0ZlfZ+F4g5MkIRfySZXp0jM5XrnlTk4bLmsI1SyXMSgbI+u6slAib1YZs1rmDUYTJNzL
+ VqllgWWs2NWen1Ywt4myW5eXQH68LW4lUrc/QOC0iM7f1t4RPPPsjkoxBNZfqTHfDeqr
+ 4KMt0NmtXjoMSN32LzrIcHhR6QFNM7p6s3Aeg+GLBw1gDN2w8QJ0fLAVWySfOU2t6pow
+ oXNQOCSny84+eYvKYkWd+Hu2BK7VcXhpJyFSD/oxEPOSPUzFb3ixryvufiGnWsgOE8cB zg== 
+Received: from ppma01dal.us.ibm.com (83.d6.3fa9.ip4.static.sl-reverse.com [169.63.214.131])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kkyh18r4c-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 20:51:53 +0000
+Received: from pps.filterd (ppma01dal.us.ibm.com [127.0.0.1])
+        by ppma01dal.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A2Kpfkk025181;
+        Wed, 2 Nov 2022 20:51:52 GMT
+Received: from b03cxnp08027.gho.boulder.ibm.com (b03cxnp08027.gho.boulder.ibm.com [9.17.130.19])
+        by ppma01dal.us.ibm.com with ESMTP id 3kgutav8qt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 20:51:52 +0000
+Received: from smtpav05.dal12v.mail.ibm.com ([9.208.128.132])
+        by b03cxnp08027.gho.boulder.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A2KpmB916253478
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Nov 2022 20:51:48 GMT
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 8575358052;
+        Wed,  2 Nov 2022 20:51:50 +0000 (GMT)
+Received: from smtpav05.dal12v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 80C9F5805D;
+        Wed,  2 Nov 2022 20:51:49 +0000 (GMT)
+Received: from slate16.aus.stglabs.ibm.com (unknown [9.65.200.160])
+        by smtpav05.dal12v.mail.ibm.com (Postfix) with ESMTP;
+        Wed,  2 Nov 2022 20:51:49 +0000 (GMT)
+From:   Eddie James <eajames@linux.ibm.com>
+To:     linux-fsi@lists.ozlabs.org
+Cc:     linux-kernel@vger.kernel.org, broonie@kernel.org,
+        gregkh@linuxfoundation.org, rafael@kernel.org, jk@ozlabs.org,
+        joel@jms.id.au, alistair@popple.id.au, eajames@linux.ibm.com
+Subject: [PATCH v2 0/5] fsi: Add regmap and refactor sbefifo
+Date:   Wed,  2 Nov 2022 15:51:43 -0500
+Message-Id: <20221102205148.1334459-1-eajames@linux.ibm.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20220714042420.1847125-3-naoya.horiguchi@linux.dev>
-X-Patchwork-Hint: comment
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: nNQRhG22lDT2iYZdY7mGaMV64I4AuWeW
+X-Proofpoint-ORIG-GUID: nNQRhG22lDT2iYZdY7mGaMV64I4AuWeW
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-02_15,2022-11-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=473 phishscore=0
+ lowpriorityscore=0 spamscore=0 clxscore=1011 priorityscore=1501
+ adultscore=0 suspectscore=0 impostorscore=0 bulkscore=0 malwarescore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211020135
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,66 +81,56 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Jul 14, 2022 at 01:24:14PM +0900, Naoya Horiguchi wrote:
-> +/*
-> + * pud_huge() returns 1 if @pud is hugetlb related entry, that is normal
-> + * hugetlb entry or non-present (migration or hwpoisoned) hugetlb entry.
-> + * Otherwise, returns 0.
-> + */
->  int pud_huge(pud_t pud)
->  {
-> -	return !!(pud_val(pud) & _PAGE_PSE);
-> +	return !pud_none(pud) &&
-> +		(pud_val(pud) & (_PAGE_PRESENT|_PAGE_PSE)) != _PAGE_PRESENT;
->  }
+The SBEFIFO hardware can now be attached over a new I2C endpoint interface
+called the I2C Responder (I2CR). In order to use the existing SBEFIFO
+driver, add a regmap driver for the FSI bus and an endpoint driver for the
+I2CR. Then, refactor the SBEFIFO and OCC drivers to clean up and use the
+new regmap driver or the I2CR interface.
 
-Hi,
+Changes since v1:
+ - Instead of a regmap driver for the I2CR, just have a private interface
+   driver for FSI, since SBEFIFO is likely the only user.
 
-This causes i915 to trip a BUG_ON() on x86-32 when I start X.
+Eddie James (5):
+  regmap: Add FSI bus support
+  drivers: fsi: Add I2C Responder driver
+  drivers: fsi: Rename sbefifo and occ sources
+  drivers: fsi: separate char device code for occ and sbefifo
+  drivers: fsi: occ and sbefifo refactor
 
-[  225.777375] kernel BUG at mm/memory.c:2664!
-[  225.777391] invalid opcode: 0000 [#1] PREEMPT SMP
-[  225.777405] CPU: 0 PID: 2402 Comm: Xorg Not tainted 6.1.0-rc3-bdg+ #86
-[  225.777415] Hardware name:  /8I865G775-G, BIOS F1 08/29/2006
-[  225.777421] EIP: __apply_to_page_range+0x24d/0x31c
-[  225.777437] Code: ff ff 8b 55 e8 8b 45 cc e8 0a 11 ec ff 89 d8 83 c4 28 5b 5e 5f 5d c3 81 7d e0 a0 ef 96 c1 74 ad 8b 45 d0 e8 2d 83 49 00 eb a3 <0f> 0b 25 00 f0 ff ff 81 eb 00 00 00 40 01 c3 8b 45 ec 8b 00 e8 76
-[  225.777446] EAX: 00000001 EBX: c53a3b58 ECX: b5c00000 EDX: c258aa00
-[  225.777454] ESI: b5c00000 EDI: b5900000 EBP: c4b0fdb4 ESP: c4b0fd80
-[  225.777462] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 00010202
-[  225.777470] CR0: 80050033 CR2: b5900000 CR3: 053a3000 CR4: 000006d0
-[  225.777479] Call Trace:
-[  225.777486]  ? i915_memcpy_init_early+0x63/0x63 [i915]
-[  225.777684]  apply_to_page_range+0x21/0x27
-[  225.777694]  ? i915_memcpy_init_early+0x63/0x63 [i915]
-[  225.777870]  remap_io_mapping+0x49/0x75 [i915]
-[  225.778046]  ? i915_memcpy_init_early+0x63/0x63 [i915]
-[  225.778220]  ? mutex_unlock+0xb/0xd
-[  225.778231]  ? i915_vma_pin_fence+0x6d/0xf7 [i915]
-[  225.778420]  vm_fault_gtt+0x2a9/0x8f1 [i915]
-[  225.778644]  ? lock_is_held_type+0x56/0xe7
-[  225.778655]  ? lock_is_held_type+0x7a/0xe7
-[  225.778663]  ? 0xc1000000
-[  225.778670]  __do_fault+0x21/0x6a
-[  225.778679]  handle_mm_fault+0x708/0xb21
-[  225.778686]  ? mt_find+0x21e/0x5ae
-[  225.778696]  exc_page_fault+0x185/0x705
-[  225.778704]  ? doublefault_shim+0x127/0x127
-[  225.778715]  handle_exception+0x130/0x130
-[  225.778723] EIP: 0xb700468a
-[  225.778730] Code: 44 24 40 8b 7c 24 1c 89 47 54 8b 44 24 5c 65 2b 05 14 00 00 00 0f 85 8a 01 00 00 83 c4 6c 5b 5e 5f 5d c3 8b 44 24 1c 8b 40 28 <c7> 00 00 00 00 00 8b 44 24 20 8d 90 20 1b 00 00 8b 02 83 e8 01 89
-[  225.778738] EAX: b5900000 EBX: b7148000 ECX: 00000000 EDX: 00000000
-[  225.778745] ESI: 0103eb60 EDI: b7148000 EBP: b6cf7000 ESP: bfd76650
-[  225.778752] DS: 007b ES: 007b FS: 0000 GS: 0033 SS: 007b EFLAGS: 00010246
-[  225.778761]  ? doublefault_shim+0x127/0x127
-[  225.778769] Modules linked in: i915 prime_numbers i2c_algo_bit iosf_mbi drm_buddy video wmi drm_display_helper drm_kms_helper syscopyarea sysfillrect sysimgblt fb_sys_fops ttm drm drm_panel_orientation_quirks backlight cfg80211 rfkill sch_fq_codel xt_tcpudp xt_multiport xt_state iptable_filter iptable_nat nf_nat nf_conntrack nf_defrag_ipv4 ip_tables x_tables binfmt_misc i2c_dev iTCO_wdt snd_intel8x0 snd_ac97_codec ac97_bus snd_pcm snd_timer psmouse i2c_i801 snd i2c_smbus uhci_hcd i2c_core pcspkr soundcore lpc_ich mfd_core ehci_pci ehci_hcd skge intel_agp intel_gtt usbcore agpgart usb_common rng_core parport_pc parport evdev
-[  225.778899] ---[ end trace 0000000000000000 ]---
-[  225.778906] EIP: __apply_to_page_range+0x24d/0x31c
-[  225.778916] Code: ff ff 8b 55 e8 8b 45 cc e8 0a 11 ec ff 89 d8 83 c4 28 5b 5e 5f 5d c3 81 7d e0 a0 ef 96 c1 74 ad 8b 45 d0 e8 2d 83 49 00 eb a3 <0f> 0b 25 00 f0 ff ff 81 eb 00 00 00 40 01 c3 8b 45 ec 8b 00 e8 76
-[  225.778924] EAX: 00000001 EBX: c53a3b58 ECX: b5c00000 EDX: c258aa00
-[  225.778931] ESI: b5c00000 EDI: b5900000 EBP: c4b0fdb4 ESP: c4b0fd80
-[  225.778938] DS: 007b ES: 007b FS: 00d8 GS: 0033 SS: 0068 EFLAGS: 00010202
-[  225.778946] CR0: 80050033 CR2: b5900000 CR3: 053a3000 CR4: 000006d0
+ drivers/base/regmap/Kconfig      |    6 +-
+ drivers/base/regmap/Makefile     |    1 +
+ drivers/base/regmap/regmap-fsi.c |  231 ++++++
+ drivers/fsi/Kconfig              |   32 +-
+ drivers/fsi/Makefile             |    9 +-
+ drivers/fsi/fsi-occ.c            |  766 --------------------
+ drivers/fsi/fsi-sbefifo.c        | 1144 ------------------------------
+ drivers/fsi/i2cr.c               |  116 +++
+ drivers/fsi/i2cr.h               |   19 +
+ drivers/fsi/occ-cdev.c           |  157 ++++
+ drivers/fsi/occ.c                |  536 ++++++++++++++
+ drivers/fsi/occ.h                |   57 ++
+ drivers/fsi/sbefifo-cdev.c       |  218 ++++++
+ drivers/fsi/sbefifo-fsi.c        |   68 ++
+ drivers/fsi/sbefifo-i2c.c        |   73 ++
+ drivers/fsi/sbefifo.c            |  797 +++++++++++++++++++++
+ drivers/fsi/sbefifo.h            |   50 ++
+ include/linux/regmap.h           |   37 +
+ 18 files changed, 2398 insertions(+), 1919 deletions(-)
+ create mode 100644 drivers/base/regmap/regmap-fsi.c
+ delete mode 100644 drivers/fsi/fsi-occ.c
+ delete mode 100644 drivers/fsi/fsi-sbefifo.c
+ create mode 100644 drivers/fsi/i2cr.c
+ create mode 100644 drivers/fsi/i2cr.h
+ create mode 100644 drivers/fsi/occ-cdev.c
+ create mode 100644 drivers/fsi/occ.c
+ create mode 100644 drivers/fsi/occ.h
+ create mode 100644 drivers/fsi/sbefifo-cdev.c
+ create mode 100644 drivers/fsi/sbefifo-fsi.c
+ create mode 100644 drivers/fsi/sbefifo-i2c.c
+ create mode 100644 drivers/fsi/sbefifo.c
+ create mode 100644 drivers/fsi/sbefifo.h
 
 -- 
-Ville Syrjälä
-Intel
+2.31.1
+
