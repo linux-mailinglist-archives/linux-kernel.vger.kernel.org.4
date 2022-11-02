@@ -2,107 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C8CC616ED8
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 21:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DBCF616EDB
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 21:39:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230337AbiKBUhk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 16:37:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33042 "EHLO
+        id S231150AbiKBUj1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 16:39:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230056AbiKBUhi (ORCPT
+        with ESMTP id S230087AbiKBUjZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 16:37:38 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43EB46374
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 13:37:37 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id f8so12598294qkg.3
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 13:37:37 -0700 (PDT)
+        Wed, 2 Nov 2022 16:39:25 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2924FBD5
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 13:39:25 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id h21so87090qtu.2
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 13:39:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=eKjiSgeUcjiYsL+rjal3rG7HgsFAJEM2LA39Z2mWIKk=;
-        b=weoWs85NXxmwTHkGUU8b1jQfa/aoegEYBIVr5fBH0uDHW6JNBljTau6Asit3PtidLX
-         vqQ3B//9q2ksTrRocZpOjmVcRQcnKw6GzHhjaQgX5dX2SUwhp7B35ZlsybqohOSznm11
-         5GAJm2eBnh4xftVag689EcPq0WhcxJDsjXmf/2/leTIIYAMQElaNefk3BySxmMahV1dz
-         G/lk56ZTsqZ4cdZLbir6Oq0hL6XD8HtQLmU/gCU7kDKQOSf2nrxjKTGXVc7sqcR8kycK
-         OPyAwwyji6/JHV23cjSjSOovdoCB+KVjGrRrbu2M/mwX3SEV1k1vX2FX4mmVwelX6jjQ
-         JeNQ==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bXnvSC1TaspuA9x5JTm6vgC+Sjs7jb9jSpqNRLf7Mjg=;
+        b=C2n9FPrtSJEa5vf2rRbzphnBxVAA39duYTrJDMU0+f39HLuOyyZax125VxViH5d91o
+         kW8gI6sKaqT1v4TEnRBpKy5vaqjaCsIhDc2si/nJqGGGLaA6XZYXWmfO5hWqSFjUQT/B
+         F1YxTjF9AsOdcYrYxfIEsExhBE/pJ4z+hqBP5uZjtDzvSfXshZqu/7C6T+6InMmquyOi
+         HuV5jYLoV+EBrN3B0RpbMEMo/Q66mLOgfY0j6EtN3pH3flopeCOBcJ7Wi46MAlNHMhhB
+         0zikHU1t4jfS+YWl2ujxpBOEOrRu7D3es7kkQZ699WjHMjQkzkGqczYWwlrCZDA3vdgN
+         qw+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=eKjiSgeUcjiYsL+rjal3rG7HgsFAJEM2LA39Z2mWIKk=;
-        b=VxN8iwpVSkVqCzXnhOWr8tdPiwfaFEWkIbC3QS9NoCXc2moZEzcxy+cFTokXCUON+y
-         HD4BbU8pEWcArxQhDKqFqnWMlQv+uilMgRYddIMB5/0vjBEIWNYvjWfKNzkNcnanatnJ
-         5Y3pNlHF4rnN5A4cCdpK0LFdogIejRxS8FFu/e4vjnfcPk/RiLHfWdJ10IHRsvzZW4B5
-         uscTTSUiod1TvZHBRUMuYwZCIxMeqzaa2NDd0BsHKtZ0WKe6XbuLHfFH7ZydBmpZ8fc6
-         Y98flx3osW7u2LaGJw0ba9DCSxJbVO1xVzNP3MtlbmFoCZtY4BWvnjoLaetxwu/Rbwf1
-         uDGQ==
-X-Gm-Message-State: ACrzQf2ZjUlzNuMnJYqxGx5HM2QgaBviRZZHLB5tCNr7l8zCe0vcvmJ2
-        j4k8eHaS/YVCPxjtORkr06fqiQ==
-X-Google-Smtp-Source: AMsMyM5X695WX6ALriWJYQBKl3p4NPTNACCM4HfPhptmWfffFaWgY9I3wqvWulZZXoz5JDJYO3Euuw==
-X-Received: by 2002:ae9:e111:0:b0:6fa:1ea0:69e1 with SMTP id g17-20020ae9e111000000b006fa1ea069e1mr16402503qkm.370.1667421456408;
-        Wed, 02 Nov 2022 13:37:36 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
-        by smtp.gmail.com with ESMTPSA id bp6-20020a05620a458600b006cf9084f7d0sm9116253qkb.4.2022.11.02.13.37.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 13:37:36 -0700 (PDT)
-Message-ID: <cb40865b-6121-d4a9-a4e3-1f705f90948c@linaro.org>
-Date:   Wed, 2 Nov 2022 16:37:34 -0400
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bXnvSC1TaspuA9x5JTm6vgC+Sjs7jb9jSpqNRLf7Mjg=;
+        b=I4Ydwr0mM49t2XDooWxV1JVJw1JGJ9yY+k4MskI87t0HwNogppCtwgPtU4dS1q9Ty7
+         anR044aeRWcKHOenQI5FLilpiM5h7Sqf0cJAxFjGjUxNrLF0+NNn824wEPCt1evmSvrt
+         O4CaS0oAPFOKQA5SjHRvV/3SaYh0+SLqNeVqCzJm7SDuceXGPgLvHjGJbw2HaXVSQ1D6
+         Yv6r+UMJ5WjZozno8BR3/WEasTxAN3xzyKYzN8qrlb72p685tg4w6BmhtGIkff6yjavQ
+         XhO3ELTG9Ae9peQqgSlpaC2EiM3M9OT5QdaPElWMFZQ9mlsIr5xfTFusAgOrFaoQdBr9
+         iBgw==
+X-Gm-Message-State: ACrzQf0dowjv+AsRLaDtvhlqO8KTsMKXfdsWJzRAW1tPAva+Xgl0NfDC
+        MpBsNu6xdyWBBxf82l5/T14SrMwFnQnqxsvEplPvOA==
+X-Google-Smtp-Source: AMsMyM72euYlWWo3F5kT1U8Hzqu/wTTPX+za/Deafi+rOqeKcOEWDgt22/T4ZZfIIAEi+yP5s6gTeN5EhJaWeVS14sE=
+X-Received: by 2002:ac8:7ef3:0:b0:3a5:108b:4cc0 with SMTP id
+ r19-20020ac87ef3000000b003a5108b4cc0mr20753701qtc.436.1667421564237; Wed, 02
+ Nov 2022 13:39:24 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH net-next] dt-bindings: net: xlnx,axi-ethernet: convert
- bindings document to yaml
-Content-Language: en-US
-To:     Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     michal.simek@xilinx.com, radhey.shyam.pandey@xilinx.com,
-        netdev@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        anirudha.sarangi@amd.com, harini.katakam@amd.com, git@amd.com
-References: <20221102090332.3602018-1-sarath.babu.naidu.gaddam@amd.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221102090332.3602018-1-sarath.babu.naidu.gaddam@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <20221102193020.1091939-1-bgardon@google.com> <Y2LJSE5nuHZJV7fF@google.com>
+In-Reply-To: <Y2LJSE5nuHZJV7fF@google.com>
+From:   Ben Gardon <bgardon@google.com>
+Date:   Wed, 2 Nov 2022 13:39:13 -0700
+Message-ID: <CANgfPd_WRRSP0uokotCMXWxb+vWmSoFRopbM8i9nyfb_ys0VXw@mail.gmail.com>
+Subject: Re: [PATCH] KVM: x86: Use SRCU to protect zap in __kvm_set_or_clear_apicv_inhibit
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        David Matlack <dmatlack@google.com>,
+        Anish Ghulati <aghulati@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/11/2022 05:03, Sarath Babu Naidu Gaddam wrote:
-> From: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-> 
-> Convert the bindings document for Xilinx AXI Ethernet Subsystem
-> from txt to yaml. No changes to existing binding description.
-> 
-> Signed-off-by: Radhey Shyam Pandey <radhey.shyam.pandey@xilinx.com>
-> Signed-off-by: Sarath Babu Naidu Gaddam <sarath.babu.naidu.gaddam@amd.com>
-> ---
->  .../bindings/net/xilinx_axienet.txt           |  99 ------------
->  .../bindings/net/xlnx,axi-ethernet.yaml       | 150 ++++++++++++++++++
->  MAINTAINERS                                   |   1 +
->  3 files changed, 151 insertions(+), 99 deletions(-)
->  delete mode 100644 Documentation/devicetree/bindings/net/xilinx_axienet.txt
->  create mode 100644 Documentation/devicetree/bindings/net/xlnx,axi-ethernet.yaml
+On Wed, Nov 2, 2022 at 12:47 PM Sean Christopherson <seanjc@google.com> wrote:
+>
+> On Wed, Nov 02, 2022, Ben Gardon wrote:
+> > kvm_zap_gfn_range must be called in an SRCU read-critical section, but
+>
+> Please add parantheses when referencing functions, i.e. kvm_zap_gfn_range().
+>
+> > there is no SRCU annotation in __kvm_set_or_clear_apicv_inhibit.
+>
+> __kvm_set_or_clear_apicv_inhibit()
+>
+> > Add the needed SRCU annotation.
+>
+> It's not an annotation, acquiring SRCU is very much functional code.
 
-There was a v2 of this:
+Right, totally true. Will correct.
 
-https://lore.kernel.org/linux-devicetree/20220920055703.13246-2-sarath.babu.naidu.gaddam@amd.com/
+>
+> > Tested: ran tools/testing/selftests/kvm/x86_64/debug_regs on a DBG
+> >       build. This patch causes the suspicious RCU warning to disappear.
+> >       Note that the warning is hit in __kvm_zap_rmaps, so
+> >       kvm_memslots_have_rmaps must return true in order for this to
+> >       repro (i.e. the TDP MMU must be off or nesting in use.)
+>
+> Please provide the stack trace or at least a verbal description of what paths
+> can reach __kvm_set_or_clear_apicv_inhibit() without holding SRCU, i.e. explain
+> why this bug isn't being hit left and right.
+>
+> E.g.
+>
+>   Unconditionally take KVM's SRCU lock in __kvm_set_or_clear_apicv_inhibit()
+>   when zapping virtual APIC SPTEs.  SRCU must be held when zapping SPTEs in
+>   shadow MMUs to protect the gfn=>memslot translation (the TDP MMU walks all
+>   roots and so doesn't dereference memslots).
+>
+>   In most cases, the inhibits are updated during KVM_RUN and so SRCU is
+>   already held, but other ioctls() can also modify inhibits and don't
+>   acquire SRCU, e.g. KVM_SET_GUEST_DEBUG and KVM_SET_LAPIC.  Acquire SRCU
+>   unconditionally to avoid playing whack-a-mole, as nesting SRCU locks is
+>   safe and this is not a hot path.
+>
+> > Fixes: 36222b117e36 ("KVM: x86: don't disable APICv memslot when inhibited")
+>
+> Reported-by?  IIRC this originated in a syzkaller report?
 
-Reviewer's time is precious. Don't waste it.
-
-Best regards,
-Krzysztof
-
+This was found on an non-upstream Google kernel by Greg Thelen, but a
+great point. I'll credit him in v2.
