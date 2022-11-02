@@ -2,204 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1343F616CEF
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 715E9616CE6
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:45:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231637AbiKBSpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 14:45:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
+        id S231599AbiKBSpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 14:45:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40024 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231591AbiKBSpN (ORCPT
+        with ESMTP id S231588AbiKBSpI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:45:13 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF232D1C1;
-        Wed,  2 Nov 2022 11:45:12 -0700 (PDT)
-Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A2ISDvt007072;
-        Wed, 2 Nov 2022 18:44:53 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=eCXx/OsYufkYxy4ZALNhvkML+K3ZqFlk3NgDcY3sh3A=;
- b=dmQIPnk5dhUgFAjS0qattXuAUG7Cgr3rN7TVzZVPIuegSMADc1n1HdOZRjmmVTpyIecH
- U23ovYCAGQpGpDuNvf5ztfBJEPMWCNTH3gP9o1bXLPEuVvizuD7mYlq5ZpFznm5vM3vu
- 4DYmpEcQtG39KHsYKwSnDf6+2xoTQlzg/jshHz6kLsU7MHqSzKop7+qjgKpCKnzWu9Br
- 99G0OACnn2d2DWS2uwKPlBycPLv/iIOzrP6/WjsPaBNJnxEi4y7HkdqlGc+6agzMBjCE
- p4jcKxyvyIqjrKqsNvR9KXrnrFedUFc5H/XZyGnFpg4lciIeC3LweFeMkeIg/I2jEjy+ JA== 
-Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kktux8rd2-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Nov 2022 18:44:53 +0000
-Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
-        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A2IiqJA024235
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 2 Nov 2022 18:44:52 GMT
-Received: from [10.134.65.5] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 2 Nov 2022
- 11:44:51 -0700
-Message-ID: <7c59a115-36c5-c954-5610-ef5ef1dbb83e@quicinc.com>
-Date:   Wed, 2 Nov 2022 11:44:51 -0700
+        Wed, 2 Nov 2022 14:45:08 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 56BCF2EF73
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:45:06 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id s20so5957832qkg.5
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 11:45:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=qwMjg0saElDDpZvRFhfvApzBKYcp7fB4XgxFqTJpFWI=;
+        b=iGaADkhPbx01tqF1+AYct8FpWGDExhUT2ThVozEDuaLinordiXkfGKDZpED19wmdIp
+         gXoCt6vU+OA79pnmBQTyTQ4nfrFkGI4DNHP7o9BhEAnjd+u8NRo8BW7r3Q0mdz539oLN
+         tVWVrYO8X1atqcXLlOd1aKpzCxaKFmbFfwObPNU+OSowx4qHLKMXDh746xPhIZ6pX62S
+         A/bUZ4W3kYHaExw5AgcH8cks2eKcfFscaYfeWwvwDC7AeXwdAZtiXw+qpTsY/gE7rgpE
+         /I8/DTlg/hLmd9HOumtV4uncWgUKqgTz2i8gJQnlmEU+2zBkvs+rs3l7gDxl907ltBtC
+         j/uw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qwMjg0saElDDpZvRFhfvApzBKYcp7fB4XgxFqTJpFWI=;
+        b=dx8CXSl5zlK/DEkFaxCNcyE3Bf6x6BfNiwCPhqhOJWyKRc85Z71vjTP5Bb0sMWcTb9
+         8c6wfXjSzyj9cuA0xKYUea/UEurFNYBN2rggR4DRyVRGHgp/awd7SX3pVZYuVBi3hb/j
+         VWNpPSmvldNWkanUIBrYLVSGf7POvI9abymIsVJ3NQvjpLhpl/GXSCk4eCkez1E0r9Kv
+         iZCyfocpxQwWaeeWbz1prbwzFYo7IFLomXAsCGQ3z0AiTCAPVB12hjd1ig4/l31cq+Ms
+         djYsapdGnw/jwBfAisvi5b1DUdmdU0q1S2Y1rOCBm5C71iHoi+sou+LknKbNek4nQlBY
+         am+w==
+X-Gm-Message-State: ACrzQf1RA9cCkRSYa2LrVgdgl707AEtzlE3gyecJE3gSY9PEefviVKqR
+        Q5OgujkMVN+uSkDx+EXGP5ZJ8A==
+X-Google-Smtp-Source: AMsMyM7qMH4VE42ylFBZd3s7+XZqRDReXC3eIHhr14XAC1ZQJeiWIRtuqGId4UaNsQI7xBD3vRaSbQ==
+X-Received: by 2002:a05:620a:13fa:b0:6fa:15e3:a277 with SMTP id h26-20020a05620a13fa00b006fa15e3a277mr17133309qkl.479.1667414705461;
+        Wed, 02 Nov 2022 11:45:05 -0700 (PDT)
+Received: from krzk-bin.. ([2601:586:5000:570:28d9:4790:bc16:cc93])
+        by smtp.gmail.com with ESMTPSA id w16-20020a05620a425000b006e54251993esm9090413qko.97.2022.11.02.11.45.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 11:45:04 -0700 (PDT)
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Heiko Stuebner <heiko@sntech.de>,
+        Sebastian Reichel <sre@kernel.org>,
+        Hans de Goede <hdegoede@redhat.com>,
+        Marek Szyprowski <m.szyprowski@samsung.com>,
+        Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+        Purism Kernel Team <kernel@puri.sm>,
+        Orson Zhai <orsonzhai@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Chunyan Zhang <zhang.lyra@gmail.com>,
+        Dmitry Osipenko <digetx@gmail.com>,
+        Chris Zhong <zyw@rock-chips.com>,
+        Zhang Qing <zhangqing@rock-chips.com>,
+        =?UTF-8?q?Pali=20Roh=C3=A1r?= <pali@kernel.org>,
+        "Andrew F. Davis" <afd@ti.com>,
+        Artur Rojek <contact@artur-rojek.eu>,
+        Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+        Markus Laine <markus.laine@fi.rohmeurope.com>,
+        Mikko Mutanen <mikko.mutanen@fi.rohmeurope.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-rockchip@lists.infradead.org, linux-pm@vger.kernel.org
+Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 1/3] dt-bindings: power: supply: define monitored-battery in common place
+Date:   Wed,  2 Nov 2022 14:44:59 -0400
+Message-Id: <20221102184501.109148-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v6 13/21] gunyah: vm_mgr: Introduce basic VM Manager
-Content-Language: en-US
-To:     Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Marc Zyngier" <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Kalle Valo <kvalo@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221026185846.3983888-1-quic_eberman@quicinc.com>
- <20221026185846.3983888-14-quic_eberman@quicinc.com>
- <c1f86c53-1d9f-4faf-9313-de86d33e3739@app.fastmail.com>
-From:   Elliot Berman <quic_eberman@quicinc.com>
-In-Reply-To: <c1f86c53-1d9f-4faf-9313-de86d33e3739@app.fastmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: sguAIVPz2AzPhPEn9JpkakpXfZDrhloX
-X-Proofpoint-GUID: sguAIVPz2AzPhPEn9JpkakpXfZDrhloX
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-02_13,2022-11-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
- malwarescore=0 adultscore=0 priorityscore=1501 phishscore=0 bulkscore=0
- clxscore=1015 suspectscore=0 spamscore=0 mlxlogscore=977 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
- definitions=main-2211020122
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Define the type of monitored-battery in power-supply.yaml common schema.
+Reference the schema where applicable to enforce the above in bindings
+which have monitored-battery property.
 
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-On 11/2/2022 12:31 AM, Arnd Bergmann wrote:
-> On Wed, Oct 26, 2022, at 20:58, Elliot Berman wrote:
-> 
->> +static const struct file_operations gh_vm_fops = {
->> +	.unlocked_ioctl = gh_vm_ioctl,
->> +	.release = gh_vm_release,
->> +	.llseek = noop_llseek,
->> +};
-> 
-> There should be a .compat_ioctl entry here, otherwise it is
-> impossible to use from 32-bit tasks. If all commands have
-> arguments passed through a pointer to a properly defined
-> structure, you can just set it to compat_ptr_ioctl.
-> 
+---
 
-Ack.
+Changes since v1:
+1. Re-work the patch - define the type in power-supply.yaml.
+---
+ Documentation/devicetree/bindings/mfd/ene-kb930.yaml        | 6 +++---
+ Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml   | 2 ++
+ Documentation/devicetree/bindings/power/supply/bq27xxx.yaml | 2 --
+ .../devicetree/bindings/power/supply/ingenic,battery.yaml   | 4 ++--
+ .../devicetree/bindings/power/supply/power-supply.yaml      | 6 ++++++
+ .../devicetree/bindings/power/supply/rohm,bd99954.yaml      | 1 +
+ .../devicetree/bindings/power/supply/sc2731-charger.yaml    | 1 -
+ 7 files changed, 14 insertions(+), 8 deletions(-)
 
->> +static long gh_dev_ioctl_create_vm(unsigned long arg)
->> +{
->> +	struct gunyah_vm *ghvm;
->> +	struct file *file;
->> +	int fd, err;
->> +
->> +	/* arg reserved for future use. */
->> +	if (arg)
->> +		return -EINVAL;
-> 
-> Do you have something specific in mind here? If 'create'
-> is the only command you support, and it has no arguments,
-> it would be easier to do it implicitly during open() and
-> have each fd opened from /dev/gunyah represent a new VM.
-> 
+diff --git a/Documentation/devicetree/bindings/mfd/ene-kb930.yaml b/Documentation/devicetree/bindings/mfd/ene-kb930.yaml
+index 06ed9ec8f4bb..7c0a42390f18 100644
+--- a/Documentation/devicetree/bindings/mfd/ene-kb930.yaml
++++ b/Documentation/devicetree/bindings/mfd/ene-kb930.yaml
+@@ -13,6 +13,8 @@ description: |
+ maintainers:
+   - Dmitry Osipenko <digetx@gmail.com>
+ 
++$ref: /schemas/power/supply/power-supply.yaml
++
+ properties:
+   compatible:
+     items:
+@@ -22,15 +24,13 @@ properties:
+   reg:
+     maxItems: 1
+ 
+-  monitored-battery: true
+-  power-supplies: true
+   system-power-controller: true
+ 
+ required:
+   - compatible
+   - reg
+ 
+-additionalProperties: false
++unevaluatedProperties: false
+ 
+ examples:
+   - |
+diff --git a/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml b/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml
+index 935e17099213..269fb85b2027 100644
+--- a/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml
++++ b/Documentation/devicetree/bindings/mfd/rockchip,rk817.yaml
+@@ -124,6 +124,8 @@ properties:
+       The child node for the charger to hold additional properties. If a
+       battery is not in use, this node can be omitted.
+     type: object
++    $ref: /schemas/power/supply/power-supply.yaml
++
+     properties:
+       monitored-battery:
+         description: |
+diff --git a/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml b/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
+index 65fc6049efc1..347d4433adc5 100644
+--- a/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
++++ b/Documentation/devicetree/bindings/power/supply/bq27xxx.yaml
+@@ -60,13 +60,11 @@ properties:
+ 
+   monitored-battery:
+     description: |
+-       phandle of battery characteristics node.
+        The fuel gauge uses the following battery properties:
+        - energy-full-design-microwatt-hours
+        - charge-full-design-microamp-hours
+        - voltage-min-design-microvolt
+        Both or neither of the *-full-design-*-hours properties must be set.
+-       See Documentation/devicetree/bindings/power/supply/battery.yaml
+ 
+   power-supplies: true
+ 
+diff --git a/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml b/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
+index 46527038bf22..42fcfc026972 100644
+--- a/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
++++ b/Documentation/devicetree/bindings/power/supply/ingenic,battery.yaml
+@@ -10,6 +10,8 @@ title: Ingenic JZ47xx battery bindings
+ maintainers:
+   - Artur Rojek <contact@artur-rojek.eu>
+ 
++$ref: power-supply.yaml#
++
+ properties:
+   compatible:
+     oneOf:
+@@ -28,8 +30,6 @@ properties:
+ 
+   monitored-battery:
+     description: >
+-      phandle to a "simple-battery" compatible node.
+-
+       This property must be a phandle to a node using the format described
+       in battery.yaml, with the following properties being required:
+       - voltage-min-design-microvolt: drained battery voltage,
+diff --git a/Documentation/devicetree/bindings/power/supply/power-supply.yaml b/Documentation/devicetree/bindings/power/supply/power-supply.yaml
+index 2f672e6e8d72..4e54c937973e 100644
+--- a/Documentation/devicetree/bindings/power/supply/power-supply.yaml
++++ b/Documentation/devicetree/bindings/power/supply/power-supply.yaml
+@@ -18,4 +18,10 @@ properties:
+       This property is added to a supply in order to list the devices which
+       supply it power, referenced by their phandles.
+ 
++  monitored-battery:
++    $ref: /schemas/types.yaml#/definitions/phandle
++    description:
++      The battery (with "simple-battery" compatible) being monitored by this
++      power supply.
++
+ additionalProperties: true
+diff --git a/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml b/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
+index 24b06957b4ca..14d9b42eda27 100644
+--- a/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
++++ b/Documentation/devicetree/bindings/power/supply/rohm,bd99954.yaml
+@@ -18,6 +18,7 @@ description: |
+   provides a Dual-source Battery Charger, two port BC1.2 detection and a
+   Battery Monitor.
+ 
++$ref: power-supply.yaml#
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/power/supply/sc2731-charger.yaml b/Documentation/devicetree/bindings/power/supply/sc2731-charger.yaml
+index eeb043f9bb4f..735f7d372ae1 100644
+--- a/Documentation/devicetree/bindings/power/supply/sc2731-charger.yaml
++++ b/Documentation/devicetree/bindings/power/supply/sc2731-charger.yaml
+@@ -28,7 +28,6 @@ properties:
+       The charger uses the following battery properties
+       - charge-term-current-microamp: current for charge termination phase.
+       - constant-charge-voltage-max-microvolt: maximum constant input voltage.
+-      See Documentation/devicetree/bindings/power/supply/battery.yaml
+ 
+ additionalProperties: false
+ 
+-- 
+2.34.1
 
-I'd like the argument here to support different types of virtual 
-machines. I want to leave open what "different types" can be in case 
-something new comes up in the future, but immediately "different type" 
-would correspond to a few different authentication mechanisms for 
-virtual machines that Gunyah supports.
-
-In this series, I'm only supporting unauthenticated virtual machines 
-because they are the simplest to get up and running from a Linux 
-userspace. When I introduce the other authentication mechanisms, I'll 
-expand much more on how they work, but I'll give quick overview here. 
-Other authentication mechanisms that are currently supported by Gunyah 
-are "protected VM" and, on Qualcomm platforms, "PIL/carveout VMs". 
-Protected VMs are *loosely* similar to the protected firmware design for 
-KVM and intended to support Android virtualization use cases. 
-PIL/carevout VMs are special virtual machines that can run on Qualcomm 
-firmware which authenticate in a way similar to remoteproc firmware (MDT 
-loader).
-
->> +	ghvm = gunyah_vm_alloc();
->> +	if (IS_ERR_OR_NULL(ghvm))
->> +		return PTR_ERR(ghvm) ? : -ENOMEM;
-> 
-> If you find yourself using IS_ERR_OR_NULL(), you have
-> usually made a mistake. In this case, the gunyah_vm_alloc()
-> function is badly defined and should just return -ENOMEM
-> for an allocation failure.
-> 
-
-Ack
-
->> +static struct gunyah_rsc_mgr_device_id vm_mgr_ids[] = {
->> +	{ .name = GH_RM_DEVICE_VM_MGR },
->> +	{}
->> +};
->> +MODULE_DEVICE_TABLE(gunyah_rsc_mgr, vm_mgr_ids);
->> +
->> +static struct gh_rm_driver vm_mgr_drv = {
->> +	.drv = {
->> +		.name = KBUILD_MODNAME,
->> +		.probe = vm_mgr_probe,
->> +		.remove = vm_mgr_remove,
->> +	},
->> +	.id_table = vm_mgr_ids,
->> +};
->> +module_gh_rm_driver(vm_mgr_drv);
-> 
-> It looks like the gunyah_rsc_mgr_device_id in this case is
-> purely internal to the kernel, so you are adding abstraction
-> layers to something that does not need to be abstracted
-> because the host side has no corresponding concept of
-> devices.
-> 
-> I'm correct, you can just turn the entire bus/device/driver
-> structure within your code into simple function calls, where
-> the main code calls vm_mgr_probe() as an exported function
-> instead of creating a device.
-
-Ack. I can do this, although I am nervous about this snowballing into a 
-situation where I have a mega-module.
-
- > Please stop beating everything in a single module.
-
-https://lore.kernel.org/all/250945d2-3940-9830-63e5-beec5f44010b@linaro.org/
-
-Thanks,
-Elliot
