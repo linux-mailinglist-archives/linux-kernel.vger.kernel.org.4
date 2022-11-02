@@ -2,125 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A22BB61716C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 00:09:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71DB161716F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 00:10:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229688AbiKBXJQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 19:09:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54154 "EHLO
+        id S229561AbiKBXKU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 19:10:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiKBXJG (ORCPT
+        with ESMTP id S229436AbiKBXKS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 19:09:06 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 893049598;
-        Wed,  2 Nov 2022 16:09:05 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 31E5961C83;
-        Wed,  2 Nov 2022 23:09:05 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6902CC433D6;
-        Wed,  2 Nov 2022 23:09:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667430544;
-        bh=KQVVvJul3e+LIRCa1krQLfyrxLZ8eSmofw8+KlVwyfE=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=KW4pmUZxgeEgHwtbwqAp7z2VpcFJa7XuBKVRpqn3H2HrM7AIBRSDocPrtxzRM65of
-         yANiQGN6Ok3eqH/tGg9eOSNq0FB5FoMVuIAdQ3C758gdwc0Cp9UPynE75lYjnp9l39
-         cfqKqMAErQRRmw09KfLVK8PnYAVRMFcLKi0dOXtrzKoNbB60jECxjpMorkwifL1blo
-         B/crLZP6oDzNZ0uTYzrCQz0/H4oAIl9flIX3BSjNULso0pOERcLiQdreoADa1PVr3q
-         tW2L4PvwFCTfIB5tKIPuTOFcI6h8ALGtTYCWcbUqjkvFpDjII/Szyr1yfqQ73mP7ZG
-         Z3EQ3SaWfaZDw==
-Date:   Wed, 2 Nov 2022 18:09:02 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-Cc:     Kishon Vijay Abraham I <kishon@ti.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Om Prakash Singh <omp@nvidia.com>,
-        Vidya Sagar <vidyas@nvidia.com>, linux-pci@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3] PCI: pci-epf-test: Register notifier if only
- core_init_notifier is enabled
-Message-ID: <20221102230902.GA6576@bhelgaas>
+        Wed, 2 Nov 2022 19:10:18 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 16BD4103A
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 16:10:17 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id i12so64419qvs.2
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 16:10:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=zE0kVQMhsKgnJAXV7culWIr2zj+2e0F5QP+AlSJYD+Y=;
+        b=dOV0aaoUE3p9Hy61orb7bJZTfU2WsUVnpXr/iauN/Z+XQgYlGCt+M+YZmHhgYm9moj
+         MitOzjtGguR6/KmO1vxd7HJtIorAeU22lhxkFAA+bVJ0XSZvuTBxE1sDoeOV5FQD2TS1
+         AuT7D/bz13frTlIaq/GCHDUwGY099YbrH4M+U5omCpCCK7GvE6ZapiQmSWfsWunmcXDM
+         yawhV9iiDAEWQb+pmEmOF31y8+HlQlIkC5qOdzuny+/UrWbGCW9eOws1TMn1iQCUlldS
+         dVDzU6h50FRWtZveuLg8POHyK0zimg2RcvuAl/uZarfc3hS0Z46NHpACbLKfIQDf24/k
+         tVKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zE0kVQMhsKgnJAXV7culWIr2zj+2e0F5QP+AlSJYD+Y=;
+        b=ops9p59dNuz0sov2OVMMRQRxXH0RO/6SKENzkR+h19WHgMVQTM0MVNWvmCKED5L/yC
+         3vJvbbzIrBsl+b+fYYxdifFjQREytngt/1rPjnAGQr2a9ugzpH/+wUs+aXFOtvhVhwfA
+         a61HpPII2gwcYmHJ2C2BpkfPlM3WGDbmnSf+1kdgz9cv24ZgXjSD+YArMdwM7lodnlr9
+         V/CY2dbdKJZY6ln9ky5HT/ETk2ehOTuVCpmzrCO6WFmsgWGmmJnCiiP+ScL5pRuIBozm
+         0Kt5QjXC1/YarTgd8wqfCfAjI8Bfd/YBPOMbZ4x+lfSgsS+3fEfqDaJRP16EHwnO/wZm
+         SOZA==
+X-Gm-Message-State: ACrzQf2Y12YX4y1k2BXAgZBV4MriIZQVJgRLnmVgsHOqL8EhpSGDsV0D
+        Zxlchhagsf3M62tULD49vZDUNEcYzMM=
+X-Google-Smtp-Source: AMsMyM49HFay1oCFeYZsCvuMO7u4Kyrp4Jx5suQBjJyjbayAsNR3jNJzO/TRUnmIkYOm8ePFUPiv2A==
+X-Received: by 2002:a05:6214:29e7:b0:4bb:db02:de63 with SMTP id jv7-20020a05621429e700b004bbdb02de63mr21614384qvb.69.1667430616182;
+        Wed, 02 Nov 2022 16:10:16 -0700 (PDT)
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com. [209.85.128.176])
+        by smtp.gmail.com with ESMTPSA id l8-20020a05620a28c800b006fa2cadf1efsm7022183qkp.68.2022.11.02.16.10.15
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 16:10:15 -0700 (PDT)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-3704852322fso556907b3.8
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 16:10:15 -0700 (PDT)
+X-Received: by 2002:a0d:d897:0:b0:36a:fc80:fa9f with SMTP id
+ a145-20020a0dd897000000b0036afc80fa9fmr26054201ywe.43.1667430615534; Wed, 02
+ Nov 2022 16:10:15 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0faa0138-ae2b-42e0-d378-665527f0b660@socionext.com>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221030220203.31210-1-axboe@kernel.dk> <CA+FuTSfj5jn8Wui+az2BrcpDFYF5m5ehwLiswwHMPJ2MK+S_Jw@mail.gmail.com>
+ <02e5bf45-f877-719b-6bf8-c4ac577187a8@kernel.dk>
+In-Reply-To: <02e5bf45-f877-719b-6bf8-c4ac577187a8@kernel.dk>
+From:   Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Date:   Wed, 2 Nov 2022 19:09:38 -0400
+X-Gmail-Original-Message-ID: <CA+FuTSd-HvtPVwRto0EGExm-Pz7dGpxAt+1sTb51P_QBd-N9KQ@mail.gmail.com>
+Message-ID: <CA+FuTSd-HvtPVwRto0EGExm-Pz7dGpxAt+1sTb51P_QBd-N9KQ@mail.gmail.com>
+Subject: Re: [PATCHSET v3 0/5] Add support for epoll min_wait
+To:     Jens Axboe <axboe@kernel.dk>
+Cc:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 06:31:07PM +0900, Kunihiko Hayashi wrote:
-> Hi Bjorn,
-> 
-> On 2022/10/29 2:06, Bjorn Helgaas wrote:
-> > On Thu, Aug 25, 2022 at 06:01:01PM +0900, Kunihiko Hayashi wrote:
-> > > Need to register pci_epf_test_notifier function event if only
-> > > core_init_notifier is enabled.
-> > > 
-> > > Fixes: 5e50ee27d4a5 ("PCI: pci-epf-test: Add support to defer core
-> > initialization")
-> > > Signed-off-by: Kunihiko Hayashi <hayashi.kunihiko@socionext.com>
-> > > Acked-by: Om Prakash Singh <omp@nvidia.com>
-> > > Acked-by: Kishon Vijay Abraham I <kishon@ti.com>
-> > > ---
-> > >   drivers/pci/endpoint/functions/pci-epf-test.c | 2 +-
-> > >   1 file changed, 1 insertion(+), 1 deletion(-)
-> > > 
-> > > This patch is a part of series "PCI: endpoint: Fix core_init_notifier
-> > feature".
-> > > The rest of the patches have been withdrawn.
-> > > 
-> > > Changes since v2:
-> > > - Add Acked-by lines
-> > > 
-> > > Changes since v1:
-> > > - Add Acked-by lines
-> > > 
-> > > diff --git a/drivers/pci/endpoint/functions/pci-epf-test.c
-> > b/drivers/pci/endpoint/functions/pci-epf-test.c
-> > > index 36b1801a061b..55283d2379a6 100644
-> > > --- a/drivers/pci/endpoint/functions/pci-epf-test.c
-> > > +++ b/drivers/pci/endpoint/functions/pci-epf-test.c
-> > > @@ -979,7 +979,7 @@ static int pci_epf_test_bind(struct pci_epf *epf)
-> > >   	if (ret)
-> > >   		epf_test->dma_supported = false;
-> > > -	if (linkup_notifier) {
-> > > +	if (linkup_notifier || core_init_notifier) {
-> > >   		epf->nb.notifier_call = pci_epf_test_notifier;
-> > >   		pci_epc_register_notifier(epc, &epf->nb);
-> > 
-> > Why does pci_epc_register_notifier() even exist?  It's not used at all
-> > except for this test code.
-> > 
-> > It would be better if infrastructure like this were connected with
-> > some user of it.
+On Wed, Nov 2, 2022 at 1:54 PM Jens Axboe <axboe@kernel.dk> wrote:
 >
-> This call was added by the commit 5779dd0a7dbd
-> ("PCI: endpoint: Use notification chain mechanism to notify EPC events to EPF").
-> 
-> I haven't followed the discussion, however, this commit say: "This
-> will also enable to add more events (in addition to linkup) in the
-> future."
+> On 11/2/22 11:46 AM, Willem de Bruijn wrote:
+> > On Sun, Oct 30, 2022 at 6:02 PM Jens Axboe <axboe@kernel.dk> wrote:
+> >>
+> >> Hi,
+> >>
+> >> tldr - we saw a 6-7% CPU reduction with this patch. See patch 6 for
+> >> full numbers.
+> >>
+> >> This adds support for EPOLL_CTL_MIN_WAIT, which allows setting a minimum
+> >> time that epoll_wait() should wait for events on a given epoll context.
+> >> Some justification and numbers are in patch 6, patches 1-5 are really
+> >> just prep patches or cleanups.
+> >>
+> >> Sending this out to get some input on the API, basically. This is
+> >> obviously a per-context type of operation in this patchset, which isn't
+> >> necessarily ideal for any use case. Questions to be debated:
+> >>
+> >> 1) Would we want this to be available through epoll_wait() directly?
+> >>    That would allow this to be done on a per-epoll_wait() basis, rather
+> >>    than be tied to the specific context.
+> >>
+> >> 2) If the answer to #1 is yes, would we still want EPOLL_CTL_MIN_WAIT?
+> >>
+> >> I think there are pros and cons to both, and perhaps the answer to both is
+> >> "yes". There are some benefits to doing this at epoll setup time, for
+> >> example - it nicely isolates it to that part rather than needing to be
+> >> done dynamically everytime epoll_wait() is called. This also helps the
+> >> application code, as it can turn off any busy'ness tracking based on if
+> >> the setup accepted EPOLL_CTL_MIN_WAIT or not.
+> >>
+> >> Anyway, tossing this out there as it yielded quite good results in some
+> >> initial testing, we're running more of it. Sending out a v3 now since
+> >> someone reported that nonblock issue which is annoying. Hoping to get some
+> >> more discussion this time around, or at least some...
+> >
+> > My main question is whether the cycle gains justify the code
+> > complexity and runtime cost in all other epoll paths.
+> >
+> > Syscall overhead is quite dependent on architecture and things like KPTI.
+>
+> Definitely interested in experiences from other folks, but what other
+> runtime costs do you see compared to the baseline?
 
-5779dd0a7dbd was 2.5 years ago.  It was probably a mistake to merge it
-then.  Usually we add infrastructure when we have a user for it,
-either in the very same patch or at least in a subsequent patch of the
-series.  
+Nothing specific. Possible cost from added branches and moving local
+variables into structs with possibly cold cachelines.
 
-But Lorenzo has already merged this, so I guess this is moot.
+> > Indeed, I was also wondering whether an extra timeout arg to
+> > epoll_wait would give the same feature with less side effects. Then no
+> > need for that new ctrl API.
+>
+> That was my main question in this posting - what's the best api? The
+> current one, epoll_wait() addition, or both? The nice thing about the
+> current one is that it's easy to integrate into existing use cases, as
+> the decision to do batching on the userspace side or by utilizing this
+> feature can be kept in the setup path. If you do epoll_wait() and get
+> -1/EINVAL or false success on older kernels, then that's either a loss
+> because of thinking it worked, or a fast path need to check for this
+> specifically every time you call epoll_wait() rather than just at
+> init/setup time.
+>
+> But this is very much the question I already posed and wanted to
+> discuss...
 
-He probably wouldn't object to a second patch that removes the fixed
-infrastructure if nobody uses it.  We can easily resurrect it if a
-need arises, and if that happens, we'll be glad that it has been
-fixed!
+I see the value in being able to detect whether the feature is present.
 
-Bjorn
+But a pure epoll_wait implementation seems a lot simpler to me, and
+more elegant: timeout is an argument to epoll_wait already.
+
+A new epoll_wait variant would have to be a new system call, so it
+would be easy to infer support for the feature.
+
+>
+> --
+> Jens Axboe
