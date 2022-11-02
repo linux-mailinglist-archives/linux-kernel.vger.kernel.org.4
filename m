@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C0D0615F93
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:23:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCF40615F94
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:23:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230375AbiKBJXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 05:23:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53042 "EHLO
+        id S231189AbiKBJXN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 05:23:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231496AbiKBJVW (ORCPT
+        with ESMTP id S230317AbiKBJVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 2 Nov 2022 05:21:22 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8AC65F6;
-        Wed,  2 Nov 2022 02:20:10 -0700 (PDT)
-Date:   Wed, 02 Nov 2022 09:20:07 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B5965FB;
+        Wed,  2 Nov 2022 02:20:11 -0700 (PDT)
+Date:   Wed, 02 Nov 2022 09:20:09 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667380809;
+        s=2020; t=1667380810;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/1hOlCFXWXbokLJXphBjWmebB9fCZGdGULZTZDJxqFc=;
-        b=z/CI8IXsGrWbYOfyuQaLZ0SDqpZT8T2riOAxz7x/Uf7Ja+hjb3vTBzJ3le4f/ROdIKMl38
-        z4j3w93nCo90korkUyUntWoGEm150XDjow2+pq+fnWXvuwyhwVelUytroTin66oeza0WUc
-        5rwXKQf7iwLwymElnRGoxWWWOkxeIZaQKqo8yt+qdPJaR2xwI59A7rlf0Nkv6Y0y0w/5T4
-        1J3V1mBnbgfbC7dHNiTtcAXcdEmcv+QNFwzSf11IXS5bZHcXPSNGRW1HDmpDunIiiIn+Xh
-        JmYhx/AyuooS6z7Igegh9+zovMbtzgHz1ZG6iz7anY1GyQcchA7iCIa0EMKb8w==
+        bh=gekW2k4HioQEvgXlGpgUbXsFnaC1UdihEoBTHF91PPQ=;
+        b=QotaKAXMjo/QCPjtlD2sqG1wVxSq8Sd0mN55mFCsZ/MXAxzvDpSlec9oT9bTFdq4dnVMGg
+        4NFTg7zo2BdU6Vffn72YtUSSRzFfHyl5i16ypllZ0EczSWUSDsJiz4Wvngvqcjf4Pa21a5
+        FIwe8SqbjQRqEktj7KUO+OgkHYQhEUCmTmK1RrbMQD3tyfvLiHV/x/M2z5L+lJoFIAVASG
+        P/EQpPpx7is9otfafkmBiMxBAFG5fj8gQzwi/07RKcv0muUBwGpSyEdiPCA6/BvxLYOJuG
+        FyNKbBi98WTfXa3IEJcxQanTLi43Ud7VRfZSU0Qur9io0f0YQjJ2ApN+YQiJ3g==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667380809;
+        s=2020e; t=1667380810;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=/1hOlCFXWXbokLJXphBjWmebB9fCZGdGULZTZDJxqFc=;
-        b=7WtS51dSoXz5BrMbzaVUMtZ/dgdHKJZUdlV02iuVcR4uLXhy6xvBxoDxUeB3ZtO6n+eWya
-        +BVfXsNNwgBndaBw==
+        bh=gekW2k4HioQEvgXlGpgUbXsFnaC1UdihEoBTHF91PPQ=;
+        b=EUEpKhXzTtazEZ/EfzvuZsU4SEV0H9rWi5kPGRFQUP9aju7ZATf0HSr60CbV/oPlEmhfYI
+        pabq2po6YJDSWdBg==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] kallsyms: Revert "Take callthunks into account"
-Cc:     "Reported-by: kernel test robot" <yujie.liu@intel.com>,
+Subject: [tip: x86/core] x86: Unconfuse CONFIG_ and X86_FEATURE_ namespaces
+Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
         "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <202210241614.2ae4c1f5-yujie.liu@intel.com>
-References: <202210241614.2ae4c1f5-yujie.liu@intel.com>
+In-Reply-To: <Y1+fL4qQEIGZEEKB@hirez.programming.kicks-ass.net>
+References: <Y1+fL4qQEIGZEEKB@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-Message-ID: <166738080795.7716.3207497322812603185.tip-bot2@tip-bot2>
+Message-ID: <166738080914.7716.7783697764206767069.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,152 +66,44 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     5ebddd7c4951c50142bcb239d4c6a82eff15759e
-Gitweb:        https://git.kernel.org/tip/5ebddd7c4951c50142bcb239d4c6a82eff15759e
+Commit-ID:     b1f37ef655cf372f96015bf54abdb76a91aff27e
+Gitweb:        https://git.kernel.org/tip/b1f37ef655cf372f96015bf54abdb76a91aff27e
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Fri, 28 Oct 2022 15:26:51 +02:00
+AuthorDate:    Mon, 31 Oct 2022 11:10:56 +01:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Tue, 01 Nov 2022 13:44:08 +01:00
+CommitterDate: Tue, 01 Nov 2022 13:44:07 +01:00
 
-kallsyms: Revert "Take callthunks into account"
+x86: Unconfuse CONFIG_ and X86_FEATURE_ namespaces
 
-This is a full revert of commit:
+Lukas reported someone fat fingered the CONFIG_ symbol; fix er up.
 
-  f1389181622a ("kallsyms: Take callthunks into account")
-
-The commit assumes a number of things that are not quite right.
-Notably it assumes every symbol has PADDING_BYTES in front of it that
-are not claimed by another symbol.
-
-This is not true; even when compiled with:
-
-  -fpatchable-function-entry=${PADDING_BYTES},${PADDING_BYTES}
-
-Notably things like .cold subfunctions do not need to adhere to this
-change in ABI. It it also not true when build with CFI_CLANG, which
-claims these PADDING_BYTES in the __cfi_##name symbol.
-
-Once the prefix bytes are not consistent and or otherwise claimed the
-approach this patch takes goes out the window and kallsym resolution
-will report invalid symbol names.
-
-Therefore revert this to make room for another approach.
-
-Reported-by: Reported-by: kernel test robot <yujie.liu@intel.com>
+Fixes: 5d8213864ade ("x86/retbleed: Add SKL return thunk")
+Reported-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Tested-by: Yujie Liu <yujie.liu@intel.com>
-Link: https://lore.kernel.org/r/202210241614.2ae4c1f5-yujie.liu@intel.com
-Link: https://lkml.kernel.org/r/20221028194453.330970755@infradead.org
+Link: https://lkml.kernel.org/r/Y1+fL4qQEIGZEEKB@hirez.programming.kicks-ass.net
 ---
- kernel/kallsyms.c | 45 +++++----------------------------------------
- 1 file changed, 5 insertions(+), 40 deletions(-)
+ arch/x86/include/asm/nospec-branch.h | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
-index cc244c0..60c20f3 100644
---- a/kernel/kallsyms.c
-+++ b/kernel/kallsyms.c
-@@ -293,12 +293,6 @@ static unsigned long get_symbol_pos(unsigned long addr,
- 	return low;
- }
- 
--#ifdef CONFIG_FUNCTION_PADDING_BYTES
--#define PADDING_BYTES	CONFIG_FUNCTION_PADDING_BYTES
--#else
--#define PADDING_BYTES	0
--#endif
--
- /*
-  * Lookup an address but don't bother to find any names.
+diff --git a/arch/x86/include/asm/nospec-branch.h b/arch/x86/include/asm/nospec-branch.h
+index 82580ad..3ab90f2 100644
+--- a/arch/x86/include/asm/nospec-branch.h
++++ b/arch/x86/include/asm/nospec-branch.h
+@@ -285,7 +285,7 @@
   */
-@@ -306,25 +300,13 @@ int kallsyms_lookup_size_offset(unsigned long addr, unsigned long *symbolsize,
- 				unsigned long *offset)
- {
- 	char namebuf[KSYM_NAME_LEN];
--	int ret;
--
--	addr += PADDING_BYTES;
+ .macro UNTRAIN_RET
+ #if defined(CONFIG_CPU_UNRET_ENTRY) || defined(CONFIG_CPU_IBPB_ENTRY) || \
+-	defined(CONFIG_X86_FEATURE_CALL_DEPTH)
++	defined(CONFIG_CALL_DEPTH_TRACKING)
+ 	ANNOTATE_UNRET_END
+ 	ALTERNATIVE_3 "",						\
+ 		      CALL_ZEN_UNTRAIN_RET, X86_FEATURE_UNRET,		\
+@@ -296,7 +296,7 @@
  
- 	if (is_ksym_addr(addr)) {
- 		get_symbol_pos(addr, symbolsize, offset);
--		ret = 1;
--		goto found;
--	}
--
--	ret = !!module_address_lookup(addr, symbolsize, offset, NULL, NULL, namebuf);
--	if (!ret) {
--		ret = !!__bpf_address_lookup(addr, symbolsize,
--					     offset, namebuf);
-+		return 1;
- 	}
--found:
--	if (ret && offset)
--		*offset -= PADDING_BYTES;
--	return ret;
-+	return !!module_address_lookup(addr, symbolsize, offset, NULL, NULL, namebuf) ||
-+	       !!__bpf_address_lookup(addr, symbolsize, offset, namebuf);
- }
- 
- static const char *kallsyms_lookup_buildid(unsigned long addr,
-@@ -337,8 +319,6 @@ static const char *kallsyms_lookup_buildid(unsigned long addr,
- 	namebuf[KSYM_NAME_LEN - 1] = 0;
- 	namebuf[0] = 0;
- 
--	addr += PADDING_BYTES;
--
- 	if (is_ksym_addr(addr)) {
- 		unsigned long pos;
- 
-@@ -368,8 +348,6 @@ static const char *kallsyms_lookup_buildid(unsigned long addr,
- 
- found:
- 	cleanup_symbol_name(namebuf);
--	if (ret && offset)
--		*offset -= PADDING_BYTES;
- 	return ret;
- }
- 
-@@ -396,8 +374,6 @@ int lookup_symbol_name(unsigned long addr, char *symname)
- 	symname[0] = '\0';
- 	symname[KSYM_NAME_LEN - 1] = '\0';
- 
--	addr += PADDING_BYTES;
--
- 	if (is_ksym_addr(addr)) {
- 		unsigned long pos;
- 
-@@ -425,8 +401,6 @@ int lookup_symbol_attrs(unsigned long addr, unsigned long *size,
- 	name[0] = '\0';
- 	name[KSYM_NAME_LEN - 1] = '\0';
- 
--	addr += PADDING_BYTES;
--
- 	if (is_ksym_addr(addr)) {
- 		unsigned long pos;
- 
-@@ -443,8 +417,6 @@ int lookup_symbol_attrs(unsigned long addr, unsigned long *size,
- 		return res;
- 
- found:
--	if (offset)
--		*offset -= PADDING_BYTES;
- 	cleanup_symbol_name(name);
- 	return 0;
- }
-@@ -470,15 +442,8 @@ static int __sprint_symbol(char *buffer, unsigned long address,
- 	len = strlen(buffer);
- 	offset -= symbol_offset;
- 
--	if (add_offset) {
--		char s = '+';
--
--		if ((long)offset < 0) {
--			s = '-';
--			offset = 0UL - offset;
--		}
--		len += sprintf(buffer + len, "%c%#lx/%#lx", s, offset, size);
--	}
-+	if (add_offset)
-+		len += sprintf(buffer + len, "+%#lx/%#lx", offset, size);
- 
- 	if (modname) {
- 		len += sprintf(buffer + len, " [%s", modname);
+ .macro UNTRAIN_RET_FROM_CALL
+ #if defined(CONFIG_CPU_UNRET_ENTRY) || defined(CONFIG_CPU_IBPB_ENTRY) || \
+-	defined(CONFIG_X86_FEATURE_CALL_DEPTH)
++	defined(CONFIG_CALL_DEPTH_TRACKING)
+ 	ANNOTATE_UNRET_END
+ 	ALTERNATIVE_3 "",						\
+ 		      CALL_ZEN_UNTRAIN_RET, X86_FEATURE_UNRET,		\
