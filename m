@@ -2,62 +2,70 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52EBC61610F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 11:40:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4524F6160BB
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 11:21:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231137AbiKBKkW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 06:40:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53048 "EHLO
+        id S230019AbiKBKVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 06:21:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41220 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231165AbiKBKjp (ORCPT
+        with ESMTP id S229996AbiKBKVH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 06:39:45 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00BF22704;
-        Wed,  2 Nov 2022 03:39:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667385583; x=1698921583;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=QzUjkSMafkPbPgE1dNobZk1ze8uLc0QV5kQo05Y3j5w=;
-  b=XcRuCCBUYdbiVjy7GkuySixhp6YwR/JEToxRar4otLWrrOhCXg5qVahU
-   BERfxLkPTN+Yi3d+29mXMLtZN5ioivu2bugndIPYUhdwrSIZfwMbUTg6f
-   Dk5FF7495BJg616rZHaMV/OR5ahkUULHUBHgmw4kKWTkCJ9AZLFmp2Rjv
-   KMI3jsAGU12ajRr31KplsUHPeu0OrfcfwIC51qHqPseHTWoPVaSXziwJk
-   +qb75nuaq1aQV7NoQm+z6AqcFNb1rnrs8YbCcwdBcPfSGYK0mM87u+j0O
-   rS1JGfsJ79GKpebKD60o0hPeDSCIrHyO0/qZ8nVMdkF5+8U79jJQv7fzi
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="308092066"
-X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
-   d="scan'208";a="308092066"
-Received: from fmsmga008.fm.intel.com ([10.253.24.58])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 03:39:40 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="697760090"
-X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
-   d="scan'208";a="697760090"
-Received: from ahunter6-mobl1.ger.corp.intel.com (HELO [10.0.2.15]) ([10.252.47.170])
-  by fmsmga008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 03:39:38 -0700
-Message-ID: <ded98e91-ed36-6457-54d6-ad03303a743f@intel.com>
-Date:   Wed, 2 Nov 2022 12:19:44 +0200
+        Wed, 2 Nov 2022 06:21:07 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AADEE24BCA;
+        Wed,  2 Nov 2022 03:21:06 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id f9so15852372pgj.2;
+        Wed, 02 Nov 2022 03:21:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=w+v+Uk4ph8G3ivevMkDD1+/l5JO6IeLjWfLLSRXlGKg=;
+        b=GVZOwlOBgXY+2rToRwZ6Q4ktnqTnUjC1UK4TrgdxvWLKFpuYvjriu5/Q49S7RJgJBz
+         G0dYOCm1P4oLO42bh/MEIxiQH2wF3DNQGVYsaa20gnhNCmKYRxKe/fhSKVD87ve7g10g
+         iDawmziHNrZ5+07pjlmw84SjAkFXaGj0dQFvZincZNE7IPbzkem201AUYnmNQyRAC6yI
+         9FMDDgE0vlOKefKr+WYYwWYTLgdDWEh8reaaq2Gj6znuZU8YzBg+NwpcWHH3P3LlT/3d
+         YxbzTJ5+EnLzF32Le8sc67JbK+ckjX4C1oDBWzCY0miH0uphW+8pQB6cGmYGWXcTb6lG
+         7pHA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=w+v+Uk4ph8G3ivevMkDD1+/l5JO6IeLjWfLLSRXlGKg=;
+        b=yZzAPVTEnGBn6KFXL4fKgCd6EZXqD+0Qt4OQQE7eWNEFg8/yt1xxnx+Kn0XLT6Ikg2
+         08nKMAaOcNuQwEA7Nu4VbireStmTDejQeETtgqr6Amv1yyUwgt1z6PWRCpgyLReITQ8X
+         MGgqM1L0X+2IRhsoRYyxxA0j5ljIZIPsjeywDmd3vzed6nT58AbQ/8RzCt2JatWz5gQZ
+         pQ5HZLUw8alYPorMJY3fwVS6p153B3hs7NzNtUQRCmVf1bOoxi8Hs9Q02BbQo63WDWQO
+         sc7vqTRfvHiPFCHkzZZ5/uUyPcnrfrNH3vUpQHrblpI59G8AydSeITAV8OJj9/NgklUY
+         1r+Q==
+X-Gm-Message-State: ACrzQf35j8gqBB1yfWJI5Ozs+0K5xMFjj26Kr0uwvfW8WuOFaqZe1IYa
+        TJhkUr8oVbb99AShGt0Uuns=
+X-Google-Smtp-Source: AMsMyM4LOhJz5rxgtFjV6yVXQUawGjAc8IinLj4FnHJo3GNB+7LqwgTK52RVRShmpwXtpX0XTr2vdw==
+X-Received: by 2002:a63:ce54:0:b0:46a:e2a9:c7f6 with SMTP id r20-20020a63ce54000000b0046ae2a9c7f6mr20856483pgi.264.1667384466034;
+        Wed, 02 Nov 2022 03:21:06 -0700 (PDT)
+Received: from localhost.localdomain (2403-580a-80ed--90b3-8553.ip6.aussiebb.net. [2403:580a:80ed::90b3:8553])
+        by smtp.gmail.com with ESMTPSA id d12-20020a170902654c00b00176acd80f69sm7919680pln.102.2022.11.02.03.21.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 03:21:05 -0700 (PDT)
+From:   James Calligeros <jcalligeros99@gmail.com>
+To:     viresh.kumar@linaro.org
+Cc:     asahi@lists.linux.dev, jcalligeros99@gmail.com,
+        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, nm@ti.com,
+        sboyd@kernel.org, vireshk@kernel.org
+Subject: Re: [PATCH v2] OPP: decouple dt properties in opp_parse_supplies()
+Date:   Wed,  2 Nov 2022 20:20:13 +1000
+Message-Id: <20221102102011.11623-1-jcalligeros99@gmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221102090228.odyt7ykdkcbdx4lw@vireshk-i7>
+References: <20221102090228.odyt7ykdkcbdx4lw@vireshk-i7>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.1
-Subject: Re: [PATCH] mmc: sdhci-pci: Set PROBE_PREFER_ASYNCHRONOUS
-Content-Language: en-US
-To:     Brian Norris <briannorris@chromium.org>
-Cc:     linux-kernel@vger.kernel.org, linux-mmc@vger.kernel.org,
-        Adrian Hunter <adrian.hunter@intel.com>
-References: <20221028155633.1.I6c4bfb31e88fad934e7360242cb662e01612c1bb@changeid>
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20221028155633.1.I6c4bfb31e88fad934e7360242cb662e01612c1bb@changeid>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -65,38 +73,86 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/10/22 01:56, Brian Norris wrote:
-> This driver often takes on the order of 10ms to start, but in some cases
-> as much as 190ms. It shouldn't have many cross-device dependencies to
-> race with, nor racy access to shared state with other drivers, so this
-> should be a relatively low risk change. We've done similarly with a
-> variety of other MMC host drivers already.
-> 
-> This driver was pinpointed as part of a survey of top slowest initcalls
-> (i.e., are built in, and probing synchronously) on a lab of ChromeOS
-> systems.
-> 
-> Signed-off-by: Brian Norris <briannorris@chromium.org>
+>> The opp-microwatt property was added with the intention of providing
+>> platforms a way to specify a precise value for the power consumption
+>> of a device at a given OPP to enable better energy-aware scheduling
+>> decisions by informing the kernel of the total static and dynamic
+>> power of a device at a given OPP, removing the reliance on the EM
+>> subsystem's often flawed estimations. This property is parsed by
+>> opp_parse_supplies(), which creates a hard dependency on the
+>> opp-microvolt property.
+>> 
+>> Some platforms, such as Apple Silicon, do not describe their devices'
+>> voltage regulators in the DT as they cannot be controlled by the kernel
+>> and/or rely on opaque firmware algorithms to control their voltage and
+>> current characteristics at runtime. We can, however, experimentally
+>> determine the power consumption of a given device at a given OPP, taking
+>> advantage of opp-microwatt to provide EAS on such devices as was initially
+>> intended.
 
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+>Do you supply a regulator to the OPP core for your platform ?
 
-> ---
-> 
->  drivers/mmc/host/sdhci-pci-core.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/mmc/host/sdhci-pci-core.c b/drivers/mmc/host/sdhci-pci-core.c
-> index 34ea1acbb3cc..0449630acbb3 100644
-> --- a/drivers/mmc/host/sdhci-pci-core.c
-> +++ b/drivers/mmc/host/sdhci-pci-core.c
-> @@ -2281,7 +2281,8 @@ static struct pci_driver sdhci_driver = {
->  	.probe =	sdhci_pci_probe,
->  	.remove =	sdhci_pci_remove,
->  	.driver =	{
-> -		.pm =   &sdhci_pci_pm_ops
-> +		.pm =   &sdhci_pci_pm_ops,
-> +		.probe_type = PROBE_PREFER_ASYNCHRONOUS,
->  	},
->  };
->  
+On Apple SoCs, all the regulators are controlled transparently
+by the hardware/firmware. The CPUfreq driver requests a pstate as
+described in the OPP table by setting some bits in some registers, and
+the platform handles everything else.
+
+Not only is there no use for the voltage and current information from
+the kernel's perspective since there's nothing to control, we don't
+even really have a way to reliably model their behaviour.
+
+What we can do, however, is use energy counter registers in the core
+clusters to determine energy consumption at a given pstate and register
+that with the OPP core using the opp-microwatt property. Given that its
+stated purpose is to enable such behaviour, requiring it to be coupled
+to opp-microvolt is a major design deficiency.
+
+>> Fixes: 4f9a7a1dc2a2 ("OPP: Add "opp-microwatt" supporting code")
+
+>I won't call it a fix, we are trying to use this information in a
+>different way here, that's all.
+
+My interpretation of the commit message for 32bf8bc9a077 is that this
+is the way in which the property was intended to be used, and that it not
+working like this is a bug. Quoting the commit message, "Some of the platforms
+don't expose voltage information, thus it's not possible to use EM
+registration using DT. This patch aims to fix it." 
+
+There is probably a bigger discussion to be had on whether or not parsing
+opp-microwatt for the purpose of EM registration should be entangled in
+opp_parse_supplies() at all, but that's by the by.
+
+>If there is a regulator, then we must have microvolt property.
+>amps/watts are optional.
+
+I noticed no adverse effects from not having opp-microvolt in my testing of
+this patch, possibly because the data is not used to actually puppeteer any
+supplies. This goes back to the greater discussion, though. If we're going
+to use opp_parse_supplies() to do EM registration stuff then having the
+check for a valid representation of an actual VRM should probably happen
+elsewhere, where a valid VRM is actually a hard requirement of the code being
+run.
+
+>> -			return -EINVAL;
+>> -		}
+>>  	}
+>>  
+>> -	if (unlikely(supplies == -1)) {
+>> -		/* Initialize regulator_count */
+>> -		supplies = opp_table->regulator_count = 1;
+>> -	} else if (unlikely(!supplies)) {
+>> -		dev_err(dev, "%s: opp-microvolt wasn't expected\n", __func__);
+>> -		return -EINVAL;
+>> +	if (prop_mv) {
+>> +		vcount = of_property_count_u32_elems(opp->np, name);
+>> +		if (unlikely(supplies == -1))
+>> +			supplies = opp_table->regulator_count = vcount;
+
+>This is wrong. There can be one or three entries per regulator here.
+>Target or min/max/target. If the supplies value is -1, we can only
+>support one regulator, i.e. one or three entries total.
+
+Ack.
+
+- James
 
