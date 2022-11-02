@@ -2,208 +2,116 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3DC966161C2
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:29:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 23BCB6161BE
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:28:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230123AbiKBL2v (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 07:28:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59994 "EHLO
+        id S229912AbiKBL1j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 07:27:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59322 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiKBL2s (ORCPT
+        with ESMTP id S229770AbiKBL1g (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 07:28:48 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCDEE24965;
-        Wed,  2 Nov 2022 04:28:46 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667388526; x=1698924526;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=MSeDC5BJZuIF2kjwOsoj5YC6pn7MObeQq/I9kASzO7Q=;
-  b=BpQLsJGpqsUBNiEev8n2cG7yqDgpa9afBatooGimWEERVh1yq0V//kGr
-   WlHzM4Wr3Mt3jykffLax04qQ1ottX1RIB8W9Ye1dQAGr+Oxe8wY/EpdrO
-   KC4eFabq3m2JEtWk6PLam/gOsPoF1UJbng+nInOuIf2Ndt85zJpwiK0b4
-   C6oEBigdKstgNBXMIVHfP3HFUF3Dvz1MlXLXDHFFLS9agxSaWUQ/G06Wv
-   GTmUpie/+WPHbwt5uhlwkyLbotWulrFqRXVan/iyzDAq+Dbx6l8SaCBvO
-   SVXyprFc2TeIqzwLTaCPmP9c+1UPrUpwUDNkuP6yjm33V1DODbN2LQKEo
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="311102905"
-X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
-   d="scan'208";a="311102905"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 04:28:28 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="809247207"
-X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
-   d="scan'208";a="809247207"
-Received: from fmsmsx602.amr.corp.intel.com ([10.18.126.82])
-  by orsmga005.jf.intel.com with ESMTP; 02 Nov 2022 04:28:28 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx602.amr.corp.intel.com (10.18.126.82) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 2 Nov 2022 04:28:27 -0700
-Received: from fmsmsx610.amr.corp.intel.com (10.18.126.90) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 2 Nov 2022 04:28:27 -0700
-Received: from FMSEDG603.ED.cps.intel.com (10.1.192.133) by
- fmsmsx610.amr.corp.intel.com (10.18.126.90) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31 via Frontend Transport; Wed, 2 Nov 2022 04:28:27 -0700
-Received: from NAM02-SN1-obe.outbound.protection.outlook.com (104.47.57.43) by
- edgegateway.intel.com (192.55.55.68) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2375.31; Wed, 2 Nov 2022 04:28:27 -0700
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=HRz4MjQPdIuoKMMsS8LB6Oo8GGhndR18nnUnMYZg6Dry/rmhV8rwd2e+8tf3769bL5Y0op+laHkBfWrrlZg8l3mT4ZUdV6Pvh3yVsXnVpgRmf0t1u6GOOeqVnquPMCTWKQKFAUMM83wY9/EYxd0VjuFJeSG56oDaMXXZY3xpP3HeAVluyHB6gFYJ6sunItMKKf+MIJ5SnEZpysv5i7lOPfWugqrRrxxUGWza7sP00DvYKyXEzt9VU6yfDI/jC6wq8ZKySS10pVjbiD7ldDBTkufoJ1qDEE0sGb3QHdDbticD8d0A+PWjzr5ISBCGEfMqBnLn0C6XLFoTyhSnAnSKoQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Mu7+X7HqC4Hb9sZQkUk6rXuNT8L2CAhQOzi7dkXocqc=;
- b=LBm4jaoRew5fAa1+/T9GUIq1L+dIJLdZyKEsmJhDG4jyUIX+ExJOkaWg4oPE6sr9tLf8fBVvVCMFthhdHG5mqSKm0RgPmpJ+PHTq0vl9JElm617amt7fOMOQIiZ2hs31UcuBzHFJCasVvWOtyAyQuuK6zch6F1MBPVZT1thvOBYI+ZwEjfssU3KvBgE5LAbVs9ol6HATr78WI4JnlTaLZ2EDzk+LsXPbvGD6v6LzZR5hmS1uF+bj11ytw0NG0Ll9GtAuo8Q8LyvS3jwtnrH/NaFJpjw7/eEgc6x9G4fzyVBLQCtHvOHGWLg5E7sVqWyboQfF7Z8qgNhJPkj4UVNv/A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from CH0PR11MB5409.namprd11.prod.outlook.com (2603:10b6:610:d0::7)
- by SA2PR11MB5097.namprd11.prod.outlook.com (2603:10b6:806:11a::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.20; Wed, 2 Nov
- 2022 11:28:25 +0000
-Received: from CH0PR11MB5409.namprd11.prod.outlook.com
- ([fe80::be9d:e93e:4ec:166b]) by CH0PR11MB5409.namprd11.prod.outlook.com
- ([fe80::be9d:e93e:4ec:166b%7]) with mapi id 15.20.5791.022; Wed, 2 Nov 2022
- 11:28:25 +0000
-Message-ID: <4b39009c-b7aa-8e6c-61c8-f08c03720cb6@intel.com>
-Date:   Wed, 2 Nov 2022 13:27:31 +0200
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.12.0
-Subject: Re: [PATCH v5] overflow: Introduce overflows_type() and
- castable_to_type()
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>
-CC:     <arnd@kernel.org>, <mauro.chehab@linux.intel.com>,
-        <tvrtko.ursulin@linux.intel.com>, <airlied@linux.ie>,
-        <trix@redhat.com>, <dlatypov@google.com>, <llvm@lists.linux.dev>,
-        <ndesaulniers@google.com>, <linux-kernel@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <gustavoars@kernel.org>,
-        <nathan@kernel.org>, <linux-sparse@vger.kernel.org>,
-        <linux-hardening@vger.kernel.org>, <rodrigo.vivi@intel.com>,
-        <mchehab@kernel.org>, <intel-gfx@lists.freedesktop.org>,
-        <luc.vanoostenryck@gmail.com>, <vitor@massaru.org>
-References: <20220926191109.1803094-1-keescook@chromium.org>
- <20221024201125.1416422-1-gwan-gyeong.mun@intel.com>
- <ffcfb7ce-7646-c827-8d29-7c41e4b121d6@intel.com>
- <202210290029.3CD089A86C@keescook>
- <850085e1-e420-b6eb-104d-15694a400bb7@intel.com>
- <202211011605.2D8C927C2@keescook>
-From:   Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>
-In-Reply-To: <202211011605.2D8C927C2@keescook>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: AM5PR0701CA0015.eurprd07.prod.outlook.com
- (2603:10a6:203:51::25) To CH0PR11MB5409.namprd11.prod.outlook.com
- (2603:10b6:610:d0::7)
+        Wed, 2 Nov 2022 07:27:36 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA399248DC;
+        Wed,  2 Nov 2022 04:27:35 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e741329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e741:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 3F6BC1EC059D;
+        Wed,  2 Nov 2022 12:27:34 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1667388454;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=yICoADaQMVMzDnnLd9qSZOhWGA6H9/WvnEz/OK5eX7Q=;
+        b=S1atLxaEuLaJ/+CK/dqlknDpST2LhW/3u+eYKdl6ClrAKnMqw61jNH8w4PO0e02jNHS0kC
+        shBVTW4qpXJJb1k4DRNQ3FgDYM6DOQm9H+b1PuFSSlhAjdFm16bl5Ochou662KZCkO3wp4
+        04JhwBQACZ1QdCH14YrOC+MY7cKm4Hg=
+Date:   Wed, 2 Nov 2022 12:27:33 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kalra, Ashish" <ashish.kalra@amd.com>
+Cc:     "x86@kernel.org" <x86@kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        "linux-coco@lists.linux.dev" <linux-coco@lists.linux.dev>,
+        "linux-mm@kvack.org" <linux-mm@kvack.org>,
+        "linux-crypto@vger.kernel.org" <linux-crypto@vger.kernel.org>,
+        "tglx@linutronix.de" <tglx@linutronix.de>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "jroedel@suse.de" <jroedel@suse.de>,
+        "Lendacky, Thomas" <Thomas.Lendacky@amd.com>,
+        "hpa@zytor.com" <hpa@zytor.com>,
+        "ardb@kernel.org" <ardb@kernel.org>,
+        "pbonzini@redhat.com" <pbonzini@redhat.com>,
+        "seanjc@google.com" <seanjc@google.com>,
+        "vkuznets@redhat.com" <vkuznets@redhat.com>,
+        "jmattson@google.com" <jmattson@google.com>,
+        "luto@kernel.org" <luto@kernel.org>,
+        "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>,
+        "slp@redhat.com" <slp@redhat.com>,
+        "pgonda@google.com" <pgonda@google.com>,
+        "peterz@infradead.org" <peterz@infradead.org>,
+        "srinivas.pandruvada@linux.intel.com" 
+        <srinivas.pandruvada@linux.intel.com>,
+        "rientjes@google.com" <rientjes@google.com>,
+        "dovmurik@linux.ibm.com" <dovmurik@linux.ibm.com>,
+        "tobin@ibm.com" <tobin@ibm.com>,
+        "Roth, Michael" <Michael.Roth@amd.com>,
+        "vbabka@suse.cz" <vbabka@suse.cz>,
+        "kirill@shutemov.name" <kirill@shutemov.name>,
+        "ak@linux.intel.com" <ak@linux.intel.com>,
+        "tony.luck@intel.com" <tony.luck@intel.com>,
+        "marcorr@google.com" <marcorr@google.com>,
+        "sathyanarayanan.kuppuswamy@linux.intel.com" 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        "alpergun@google.com" <alpergun@google.com>,
+        "dgilbert@redhat.com" <dgilbert@redhat.com>,
+        "jarkko@kernel.org" <jarkko@kernel.org>
+Subject: Re: [PATCH Part2 v6 07/49] x86/sev: Invalid pages from direct map
+ when adding it to RMP table
+Message-ID: <Y2JUJfKLS/ghCP0R@zn.tnic>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <243778c282cd55a554af9c11d2ecd3ff9ea6820f.1655761627.git.ashish.kalra@amd.com>
+ <YuFvbm/Zck9Tr5pq@zn.tnic>
+ <SN6PR12MB27676E6CEDF242F2D33CA2AB8E9A9@SN6PR12MB2767.namprd12.prod.outlook.com>
+ <Yuu3ZK+/hL+saV27@zn.tnic>
+ <6e9f3d48-1777-6710-cb1d-3f2f38c0328e@amd.com>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH0PR11MB5409:EE_|SA2PR11MB5097:EE_
-X-MS-Office365-Filtering-Correlation-Id: a468e6ec-215e-4845-4b33-08dabcc55abe
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: jnlVuSOK25PTpGGmPebA46X6bTCQwRi7KklnXLX2oqYNSZ/fVk4mRjzvrLcLvVQvQF0n6U+wYUc4FNjTB1ps3Y21MEbeOYZfG6BEnQex7vE7wNugHSjnPF2qhCDVBT0CzPrciu3h8iK3jpJf5sc36jDb2BOnVMOPT315kI0PSSrLW3trvqzYWw0AmlTaIYnqSvUPwOWD67Vxt2ZWQGKB+J7tlmFhIZoqstiTA/OCY0xhaiorqhuqbcp1P7BzJb1gd1AlIA66mUH3+tPZpTH0xbuFIEJ8wU6ggsTTrzQryda1FFrStF0qkA/g5CEFIQ8au/zPfY4BqXUva0iejt/kerBDqooOMj7u7y/gW70M5BB49Ke1kBtCHNpAdYoxF8ZEI7bBehwDCDm8MLoB8wWokdaYTp2yr1RFJKI4O6dHjaXGsMWrvHEwjWDkSTgGyaP8S9EqOgrJRgEFOcFtWl9rTvHYHa6VoxTEDsZDgmw4WCaxhvxHgyjkjjt2JPiygNYfkpRBN88wWGpaRqNMzSEWMtcQSgiqTv+qpXZEFp0ZnjDPvUSlZt4zdBZHMNxZBgVNBZp0Ec2zpteb4w46a5VlrV+lPKdOfhPsGTbRaZqHYWKdzNxfGcUkAn03ooxZIPrVzJa14RN75R4nRzA1i18UFKRpGccudiN1aTZenMOQt2RuCg4KMU0Jv8MNZWfgAM+tRvg2Amh4t/FO9jnRMqZeKsEBW7ulFcYW4KzIAwCVhKfI6kvTfxWp16pK+jwlyChkQ05meJ1i3c5AzOI5WhRvbrV2eP460lCmGdggj9PP8TM30lrsu6OAkPjO4q9y68rB
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CH0PR11MB5409.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(136003)(346002)(376002)(396003)(366004)(39860400002)(451199015)(2906002)(66946007)(478600001)(4326008)(66476007)(8676002)(66556008)(5660300002)(6916009)(7416002)(8936002)(316002)(966005)(6486002)(83380400001)(6512007)(38100700002)(82960400001)(6506007)(31696002)(53546011)(6666004)(41300700001)(86362001)(186003)(26005)(31686004)(2616005)(36756003)(43740500002)(45980500001);DIR:OUT;SFP:1102;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Um9VUWlKN2hvdGUyNXdpOHhlcGI4MkZLME1oV3krRjJzWXRtbzc4K29zNDN3?=
- =?utf-8?B?TXl4TWxJcEV4bEJ2WGFsYmZTcGsrdG96Z3ltUllLelVZMXU0Wmo5aHhPUE5Q?=
- =?utf-8?B?ZFNzbmlzOTNWTzhGSmk0c2o3dUxvcVN0L1MyWE9QcyttMWtsWEZKcDV0Q2ZE?=
- =?utf-8?B?TlU2dTV5TTlLcm4zc3p6dzVwS1FBNFExQ20xTmtZd3V1UmFucFZwMGZTRVNx?=
- =?utf-8?B?Rnh1djlXZDIyWXUxL1NOZXRTTi8yNEU1SFZwVmJYS2RMbzU2MGRGc3piajJE?=
- =?utf-8?B?Z0tHZis3YzlWZER1Ti9GcjMydGhqQ3dBZ2dIcU4rNnpDTHY4a2lrRUJSeTVw?=
- =?utf-8?B?NWFEL29pR0p1RFdWaWRwajBHcTVCV1l4K1pBNUR2U2pwNk8zK1N4ZzNxZ2ZN?=
- =?utf-8?B?WmpOM3d2RVJFNjlwSHVKdG5BRTk1b0hnbXBjNjdEYjZJZElta3FOWlJEdE9u?=
- =?utf-8?B?VHI5TlJEVUZpL3pCeXdmNTIrWkI3eVNrd3d3SGNhTjM0OUhBRzlHbk9lYmpr?=
- =?utf-8?B?MXVmUUdNMVdNUFlmOEFsMnl4Ty9PQnpUVGlBNzZyS3NlMjNNQ3F3NElDTi8x?=
- =?utf-8?B?MkVKK1Q0aUdpTjMyS29uV1RDREpDbWdwR0prQTZFRnJEREF1WDhpeUVFeS8x?=
- =?utf-8?B?aFZJUHRydHBrK25lYkxZNDlJcGZBQnM4alkvOGxqQkVUWEQ3aWZybVZPSFNE?=
- =?utf-8?B?ak9pL0Zld2s1RjFIem1oa3B2Q2dQcUsyUjNtL0hLbXJJaGhvbDN4TmE3ZXRj?=
- =?utf-8?B?UWxBY2NBSWQzdy9tNy9sWlYwczVPNm0rTDZCRjFUYlpteWFETHlhRnN2dTV4?=
- =?utf-8?B?QW9zT3pIc2pWOWZldU55ai9pOEpURjQ0WUJ3MnFnVEl0RmtGTUlRMElzYTJT?=
- =?utf-8?B?VjBXaTJUU3UvejZuQVM1MDBySkhINmNFTVE4UXcwMGFKeUMxL0R4T3Z2YXlI?=
- =?utf-8?B?bmd0N1JwM2JlRXJJM1k5OFoxN0psdkhmT2wzS2RzN2NqdWxDc2psekVQSmpU?=
- =?utf-8?B?M1dwNElJSWRuQUc3NFJ1L0grc0trKzBxMWpTUklsaWlBN3diV0IwZm1iV1BO?=
- =?utf-8?B?ODdXVW5KLy9oSHkxeGgxTldkZzV6ZXNWQ3FpTW0va1YzdlNHdW5CRHduQXJu?=
- =?utf-8?B?YnBHWE1Fa1UxS0l3eXBTcTFXSUVud2MySllSclVWVWlqSk9FYllKWEh4UGV2?=
- =?utf-8?B?TEhWczF6RGtyZXM0WkZjNTV0QVJhZTZIN3VvMnFOQzlNcFNUZjlwM2E2Wkli?=
- =?utf-8?B?U0NwVm02MWZMalVocllDYmpBazFsL3g5d1dOOXRBRXVwblBlTS91cXBWOTAw?=
- =?utf-8?B?MHQxWXlCMXhGNzliT2pJcURPWVVVR1paQlJQZklKalhISnpDMjd4Tll2Nmdz?=
- =?utf-8?B?VmNqN3V4bTBlVU4vRk1zMjV3OGtVaUxJM3pRdE5HWC9IQks1VktLcGg0K1dL?=
- =?utf-8?B?MHVLR3BOdjg4K1lIMDJnck9aVjdLb0s5Q3hsbTQ3RGZzN1Yvc3ZOMnhqTVhq?=
- =?utf-8?B?OHRIWVNTQ2V0OE9TOEFNMTVIRytWUzh6NWRmTW15YUFJVUFRT0dSY2dkV3BF?=
- =?utf-8?B?NnpVL3ozZWdtK3g4a0k0VXB3dEVwQk5hTGJxMm0vN1hxUG5lKzExUkl1bTJo?=
- =?utf-8?B?T010SE03S202c0Qwd05uc2JiN0UwNlhjbEphTGtzMWYvSlNQU2hRRlFyU1FL?=
- =?utf-8?B?SmtVc0gxcjhOUTRFdkYvaC94RzI0TVp0SDJDYmxmZXhNcGlsQmg1ZGk1b2xT?=
- =?utf-8?B?SEQ5L3RaUHlNTDN2ZVJNUVpCM29hRFdIdjhxWmdFcjdkdzhlV0hZQU5jYysv?=
- =?utf-8?B?MjJuWm95WHI5bC81RHAveVl2clRBb05pQVJ6M3N5RVlUM3lGYXFVam1UVFFi?=
- =?utf-8?B?cW1EVUk4Z29rNXJRL0pyRFlpd2ZiQWtrV3RyTHRtYUI5UzdWR09KRitpYlJl?=
- =?utf-8?B?a29jUytOWVBuSWN6cnVQSENVV0ozQWVkSGZTUFBscVVBZzRkWTVSRDNhbmEw?=
- =?utf-8?B?MGRNUTRmc1FKWCtZRUFxaDdka2hBUGtWTXl5TGxtNEJWOVZnRlZBM2pjUnlO?=
- =?utf-8?B?dTg2MGI1dUdaWDNNYXZVYXQ2eEdPYllKaCs4NFFmMTNLais4WitlMlc2aytU?=
- =?utf-8?B?aXhCR28vaDFVQm9USmhMYVRsN2RiTEliajZ3cThRaFpsZU9nUmhZWmN2VXg5?=
- =?utf-8?B?Znc9PQ==?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: a468e6ec-215e-4845-4b33-08dabcc55abe
-X-MS-Exchange-CrossTenant-AuthSource: CH0PR11MB5409.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2022 11:28:25.2422
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: uY0QHqGf3cGLXJtjussbn1cOQa27bESAIWsh0ETAnPaOw1ZtrOVr1TaunxUYKmDA1cGR1YaHwNmsgiDHhfVfq6FSM7BYguCWU75ajR/DEI0=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA2PR11MB5097
-X-OriginatorOrg: intel.com
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <6e9f3d48-1777-6710-cb1d-3f2f38c0328e@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Tue, Nov 01, 2022 at 10:12:35PM -0500, Kalra, Ashish wrote:
+> Following up on this, now, set_memory_present() is a static interface,
+> so will need do add a new external API like set_memory_p() similar
+> to set_memory_np().
 
+It is called set_memory_p() now and you can "un-static" it. :)
 
-On 11/2/22 1:06 AM, Kees Cook wrote:
-> On Sat, Oct 29, 2022 at 11:01:38AM +0300, Gwan-gyeong Mun wrote:
->>
->>
->> On 10/29/22 10:32 AM, Kees Cook wrote:
->>> On Sat, Oct 29, 2022 at 08:55:43AM +0300, Gwan-gyeong Mun wrote:
->>>> Hi Kees,
->>>
->>> Hi! :)
->>>
->>>> I've updated to v5 with the last comment of Nathan.
->>>> Could you please kindly review what more is needed as we move forward with
->>>> this patch?
->>>
->>> It looks fine to me -- I assume it'll go via the drm tree? Would you
->>> rather I carry the non-drm changes in my tree instead?
->>>
->> Hi!
->> Yes, I think it would be better to run this patch on your tree.
->> this patch moves the macro of i915 to overflows.h and modifies one part of
->> drm's driver code, but I think this part can be easily applied when merging
->> into the drm tree.
-> 
-> I've rebased it to the hardening tree, and it should appear in -next
-> shortly:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/kees/linux.git/commit/?h=for-next/hardening&id=5904fcb776d0b518be96bca43f258db90f26ba9a
-> 
-Thanks for making this patch go forward.
+> So currently there is no interface defined for changing the attribute of a
+> range to present or restoring the range in the direct map.
 
-G.G.
+No?
+
+static int set_memory_p(unsigned long *addr, int numpages)
+{
+        return change_page_attr_set(addr, numpages, __pgprot(_PAGE_PRESENT), 0);
+}
+
+:-)
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
