@@ -2,151 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9B72E615EC1
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:03:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27352615EC5
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:03:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230211AbiKBJDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 05:03:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34562 "EHLO
+        id S231303AbiKBJDn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 05:03:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231271AbiKBJCS (ORCPT
+        with ESMTP id S231285AbiKBJCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 05:02:18 -0400
-Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B3E27FF6
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 02:02:00 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.west.internal (Postfix) with ESMTP id 2303F3200909;
-        Wed,  2 Nov 2022 05:01:57 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Wed, 02 Nov 2022 05:01:58 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
-        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to; s=fm3; t=1667379716; x=1667466116; bh=48VenoOPol
-        gMO139tezfkS2fXuf8/WKG9H0qot9z5VY=; b=Jmz2uxkX8LspX9gsCjI+UgokQU
-        B4jdfxcVaO8tilJN8wiOlE/nMhwNR/dyxDy+lhWtrOrfC7bvdOano80yspJRTr22
-        a/zSeQ3KFu6bN7GEcJ7QT/0y0GpybjjKbzO0rl+SIAiWTsaVI20WGrL6qwGRvPHJ
-        PJtLZfl/Msa4LGh139y/8hcIXt8rZZQ/nMDLy1rEHueAIpjMDv9xyf8ElBAQZBhE
-        otba3eOEuDnhKBfL8WDAdKkQAjHqMg47ZsMQ4VA4zGxUjKIUXzmggYna/r/syaDu
-        k6TjRkbTsDibFbybjH8hHctJd/+vOL2zNb3IUARB4qNEvZqAJfjmptwXPlvA==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1667379716; x=1667466116; bh=48VenoOPolgMO139tezfkS2fXuf8
-        /WKG9H0qot9z5VY=; b=BfKnTLpp3/fwmxWOpdJfLd3PgUMOFkY7QswAA8qUZC8H
-        aX8Y7x5UdnTvj2geJ4KWu5kex/cZDf37f7cOTH7pzqSjekc9wgTlnbG8bM/V7DFZ
-        nQn0QiFL9pp0kkaU4bSLl1Tlv/SdgEpPLOQRKC9C3Ly4CLSHx883VbyIaFR5A14p
-        /0EoEZ5CnDTeVp8leE3u8WwTKYhh6YCe+it7OzdbwHUp2R2xurJ8TbnnTjyARAHN
-        3C4QUac1oVBxjyviiBda+KNWB2JigGFCR7F5Cpy7hY9n1FoWz25Ur5C28OfKtnPe
-        qelrM368KKv1Ygat5o92ZVxiPrfdUqCsvNuKmt4J3Q==
-X-ME-Sender: <xms:BDJiY2At2Bk4KnZ64rT2kArsofpSjrBCyNzQ5u3t4PCz5IKLp8Dw8Q>
-    <xme:BDJiYwiuRZbbNvtenNvfU2639XCiZyulNfpf7KSxsIMTs9wU-1xL36EQYX5YzbXae
-    IquCLRyGcq1CgQghgQ>
-X-ME-Received: <xmr:BDJiY5mhxuxsCvj9dYUwWXqOXNXCy4Uo5Uh5HplbCatP4HeB6okXQrGrkksBwpO82s52HxZwkjtifLJ9EmR0hpWJVSB6T0J5ON6-Pxj_roVPQQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudeigdduvdeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
-    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
-    htthgvrhhnpeejveefheefkeeiffegveelveetgffffeektdefuefhtedtgeejhefggedu
-    ffffudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
-    hmrgigihhmvgestggvrhhnohdrthgvtghh
-X-ME-Proxy: <xmx:BDJiY0ywsTGRzR5iKOzmk8neUh_SO-0iR8WXzRRjUoNeGZK6GsRWJw>
-    <xmx:BDJiY7QcYHc90Y__5tokjUbWlb3nz9phu9WwZsnuRUDnrMIa4I50lA>
-    <xmx:BDJiY_aMjDwmM-Y3RR2Ww3RMdkB-uGU-Cnm8fNtds8j2c54yNU2JIA>
-    <xmx:BDJiYwJElyHPKfMA3qgShq9XQIHCYWU-mFMXr2s2OLf2lI4MiqNbQA>
-Feedback-ID: i8771445c:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 2 Nov 2022 05:01:55 -0400 (EDT)
-Date:   Wed, 2 Nov 2022 10:01:53 +0100
-From:   Maxime Ripard <maxime@cerno.tech>
-To:     =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
-Cc:     emma@anholt.net, airlied@gmail.com, daniel@ffwll.ch,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] drm/vc4: hdmi: Fix pointer dereference before check
-Message-ID: <20221102090153.tujblkvd3jlhdtxr@houat>
-References: <20221029093413.546103-1-jose.exposito89@gmail.com>
+        Wed, 2 Nov 2022 05:02:33 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD0F1286CF
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 02:02:31 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id m6-20020a17090a5a4600b00212f8dffec9so1365803pji.0
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 02:02:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3lW+SEAwaQj22Ep5QkmznnP/cF5sNnG1Gxo6Sa2AZ74=;
+        b=zMACeZbTZl8Q3wbIi8TRiige4VbN1aGqtrYun5aTANcuZZe+p7qmASVXONqOc8BnjO
+         EXUpfbpmLT4aldBZy+mhaQUupoCUeZZt6VqjUbjTA9X4Zx3bRl3erk2FCZAgbGp7SbmI
+         1xnzVLkngnIJP+qZvFQ1rW/oLf4sRdaTM8kS6enQOg0wRQ215McLO0h9oGWZPvVnsl9D
+         FerDzddgYMI4QPktFlJyuv7L6Q54iEHyS7k5k2aX6/fOVvEu2UapwdObqqF0mf9Zw2yc
+         VBsphQ7BS33X/JO7bmpx6UWnuCfJXDYNgtfzX7OKuD7AyX9aWhXpBzu03Pc+GrnrujDL
+         YNTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3lW+SEAwaQj22Ep5QkmznnP/cF5sNnG1Gxo6Sa2AZ74=;
+        b=M2LqfOrXLiBo5YMmlXlL3WZnnmcszgzzohpTyO/bQwlWtwPOGiuFWMJWMTu1CUtScP
+         eTDjklJ7EKXY9Ma/26kT89svtkIBUa+12UdespwMf7JNoBv9b3yN0USkZGtDSG88jHUV
+         VQz6pBy/KYrXkThY81cZ4kJTGYr5Rki23hbooiD3ApRwC6uf9zN5VZ4w5/fqLjxkVBjk
+         yed0oZ4mjj7FIr1UC6wxXIPxcoqdRytgZqKaVQ6myB2BcCT8BDJbUA+zCk3GQJOnGtve
+         2pyrZPpsBs3yvVQnApEvPEBIk0CHWqmmglznJzvTWqf7yq0ZoSO2m47BxN5pFkyhBLyU
+         ey5A==
+X-Gm-Message-State: ACrzQf2Kaz5LKbJcNhqIXcUkMsBCYYZpBn1fc7MRdI9KKSgr0pGnDN70
+        qjSToKhOAxx4V/vrFC+zBPSy8eu5bBMyrA==
+X-Google-Smtp-Source: AMsMyM6PALNUlom1rlSsoWaB+9NYnSm8AiAITHIXsiK1BSybVbtqKeCAusR4sDxJ3wdLnUx7GI0NlQ==
+X-Received: by 2002:a17:902:8e88:b0:185:3cea:6335 with SMTP id bg8-20020a1709028e8800b001853cea6335mr23860226plb.96.1667379751258;
+        Wed, 02 Nov 2022 02:02:31 -0700 (PDT)
+Received: from localhost ([122.172.84.80])
+        by smtp.gmail.com with ESMTPSA id a3-20020a170902ecc300b001868ed86a95sm7830304plh.174.2022.11.02.02.02.30
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 02:02:30 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 14:32:28 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     James Calligeros <jcalligeros99@gmail.com>
+Cc:     vireshk@kernel.org, sboyd@kernel.org, nm@ti.com,
+        linux-pm@vger.kernel.org, asahi@lists.linux.dev,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] OPP: decouple dt properties in opp_parse_supplies()
+Message-ID: <20221102090228.odyt7ykdkcbdx4lw@vireshk-i7>
+References: <20221030101546.29306-1-jcalligeros99@gmail.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="2piuzv5jj7zmiqf3"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221029093413.546103-1-jose.exposito89@gmail.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221030101546.29306-1-jcalligeros99@gmail.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On 30-10-22, 20:15, James Calligeros wrote:
+> The opp-microwatt property was added with the intention of providing
+> platforms a way to specify a precise value for the power consumption
+> of a device at a given OPP to enable better energy-aware scheduling
+> decisions by informing the kernel of the total static and dynamic
+> power of a device at a given OPP, removing the reliance on the EM
+> subsystem's often flawed estimations. This property is parsed by
+> opp_parse_supplies(), which creates a hard dependency on the
+> opp-microvolt property.
+> 
+> Some platforms, such as Apple Silicon, do not describe their devices'
+> voltage regulators in the DT as they cannot be controlled by the kernel
+> and/or rely on opaque firmware algorithms to control their voltage and
+> current characteristics at runtime. We can, however, experimentally
+> determine the power consumption of a given device at a given OPP, taking
+> advantage of opp-microwatt to provide EAS on such devices as was initially
+> intended.
 
---2piuzv5jj7zmiqf3
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+Do you supply a regulator to the OPP core for your platform ?
 
-Hi,
+> Allow platforms to specify and consume any subset of opp-microvolt,
+> opp-microamp, or opp-microwatt without a hard dependency on opp-microvolt
+> to enable this functionality on such platforms.
+> 
+> Fixes: 4f9a7a1dc2a2 ("OPP: Add "opp-microwatt" supporting code")
 
-On Sat, Oct 29, 2022 at 11:34:13AM +0200, Jos=E9 Exp=F3sito wrote:
-> Commit 6bed2ea3cb38 ("drm/vc4: hdmi: Reset link on hotplug") introduced
-> the vc4_hdmi_reset_link() function. This function dereferences the
-> "connector" pointer before checking whether it is NULL or not.
->=20
-> Rework variable assignment to avoid this issue.
->=20
-> Fixes: 6bed2ea3cb38 ("drm/vc4: hdmi: Reset link on hotplug")
-> Signed-off-by: Jos=E9 Exp=F3sito <jose.exposito89@gmail.com>
+I won't call it a fix, we are trying to use this information in a
+different way here, that's all.
+
+> Signed-off-by: James Calligeros <jcalligeros99@gmail.com>
 > ---
->  drivers/gpu/drm/vc4/vc4_hdmi.c | 10 +++++++---
->  1 file changed, 7 insertions(+), 3 deletions(-)
->=20
-> diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdm=
-i.c
-> index 4a73fafca51b..07d058b6afb7 100644
-> --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
-> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
-> @@ -319,9 +319,9 @@ static int reset_pipe(struct drm_crtc *crtc,
->  static int vc4_hdmi_reset_link(struct drm_connector *connector,
->  			       struct drm_modeset_acquire_ctx *ctx)
+> Changes since v1:
+> Fixed bad reference (opp to opp_table)
+> 
+>  drivers/opp/of.c | 198 +++++++++++++++++++++++++----------------------
+>  1 file changed, 104 insertions(+), 94 deletions(-)
+> 
+> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+> index 605d68673f92..0fa25c3a959e 100644
+> --- a/drivers/opp/of.c
+> +++ b/drivers/opp/of.c
+> @@ -581,166 +581,176 @@ static bool _opp_is_supported(struct device *dev, struct opp_table *opp_table,
+>  static int opp_parse_supplies(struct dev_pm_opp *opp, struct device *dev,
+>  			      struct opp_table *opp_table)
 >  {
-> -	struct drm_device *drm =3D connector->dev;
-> -	struct vc4_hdmi *vc4_hdmi =3D connector_to_vc4_hdmi(connector);
-> -	struct drm_encoder *encoder =3D &vc4_hdmi->encoder.base;
-> +	struct drm_device *drm;
-> +	struct vc4_hdmi *vc4_hdmi;
-> +	struct drm_encoder *encoder;
->  	struct drm_connector_state *conn_state;
->  	struct drm_crtc_state *crtc_state;
->  	struct drm_crtc *crtc;
-> @@ -332,6 +332,10 @@ static int vc4_hdmi_reset_link(struct drm_connector =
-*connector,
->  	if (!connector)
->  		return 0;
-> =20
-> +	drm =3D connector->dev;
-> +	vc4_hdmi =3D connector_to_vc4_hdmi(connector);
-> +	encoder =3D &vc4_hdmi->encoder.base;
-> +
+> -	u32 *microvolt, *microamp = NULL, *microwatt = NULL;
+> +	u32 *microvolt = NULL, *microamp = NULL, *microwatt = NULL;
+>  	int supplies = opp_table->regulator_count;
+>  	int vcount, icount, pcount, ret, i, j;
+> -	struct property *prop = NULL;
+> +	struct property *prop_mv = NULL, *prop_ma = NULL, *prop_mw = NULL;
+>  	char name[NAME_MAX];
+>  
+>  	/* Search for "opp-microvolt-<name>" */
+>  	if (opp_table->prop_name) {
+>  		snprintf(name, sizeof(name), "opp-microvolt-%s",
+>  			 opp_table->prop_name);
+> -		prop = of_find_property(opp->np, name, NULL);
+> +		prop_mv = of_find_property(opp->np, name, NULL);
+>  	}
+>  
+> -	if (!prop) {
+> +	if (!prop_mv) {
+>  		/* Search for "opp-microvolt" */
+>  		sprintf(name, "opp-microvolt");
+> -		prop = of_find_property(opp->np, name, NULL);
+> -
+> -		/* Missing property isn't a problem, but an invalid entry is */
+> -		if (!prop) {
+> -			if (unlikely(supplies == -1)) {
+> -				/* Initialize regulator_count */
+> -				opp_table->regulator_count = 0;
+> -				return 0;
+> -			}
+> +		prop_mv = of_find_property(opp->np, name, NULL);
+>  
+> -			if (!supplies)
+> -				return 0;
+> -
+> -			dev_err(dev, "%s: opp-microvolt missing although OPP managing regulators\n",
+> -				__func__);
 
-I don't think that's right. Connector shouldn't be NULL to begin with,
-how did you notice this?
+Catching such errors are important and so the opp-microvolt property
+was made compulsory earlier.
 
-Maxime
+If there is a regulator, then we must have microvolt property.
+amps/watts are optional.
 
---2piuzv5jj7zmiqf3
-Content-Type: application/pgp-signature; name="signature.asc"
+> -			return -EINVAL;
+> -		}
+>  	}
+>  
+> -	if (unlikely(supplies == -1)) {
+> -		/* Initialize regulator_count */
+> -		supplies = opp_table->regulator_count = 1;
+> -	} else if (unlikely(!supplies)) {
+> -		dev_err(dev, "%s: opp-microvolt wasn't expected\n", __func__);
+> -		return -EINVAL;
+> +	if (prop_mv) {
+> +		vcount = of_property_count_u32_elems(opp->np, name);
+> +		if (unlikely(supplies == -1))
+> +			supplies = opp_table->regulator_count = vcount;
 
------BEGIN PGP SIGNATURE-----
+This is wrong. There can be one or three entries per regulator here.
+Target or min/max/target. If the supplies value is -1, we can only
+support one regulator, i.e. one or three entries total.
 
-iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY2IyAQAKCRDj7w1vZxhR
-xclpAQDwusHvGhXtWLqUZjV4oaBclOlKnVClFcnplMVjERHSHAD+MZOvuaDd+PPh
-thSlYBgAKiDk4ReeyGf+XLKy4NCa0QE=
-=T/lW
------END PGP SIGNATURE-----
+I didn't look at rest of the patch yet. Lets discuss this a bit first.
 
---2piuzv5jj7zmiqf3--
+-- 
+viresh
