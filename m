@@ -2,324 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8915F615989
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 04:13:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ABA756159AD
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 04:16:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229468AbiKBDNp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 23:13:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33290 "EHLO
+        id S230137AbiKBDQf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 23:16:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230425AbiKBDMz (ORCPT
+        with ESMTP id S230262AbiKBDPo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 23:12:55 -0400
-Received: from mail-io1-f71.google.com (mail-io1-f71.google.com [209.85.166.71])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BC60248C5
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 20:12:40 -0700 (PDT)
-Received: by mail-io1-f71.google.com with SMTP id bx19-20020a056602419300b006bcbf3b91fdso13124918iob.13
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 20:12:40 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=loDCBxhW8nfOBxRigXju8ECAHUU0s3sQgs+KQ5Jx9ac=;
-        b=alqb5JjjYmipYDCiWRKxxc85a+uUQcYkIEX409TAyjBKmwvTq+cLMmvff8ZqAe23Tl
-         xThVd0+tLVSSbsxSCxU+GBcHq2Hj+rsekumiXDQRlYNPm8uHh+0rE0PcOF+Zyy/CDNVC
-         GFgKsrE9o/rCipKwo+U6h1e+ggb7D0/v2To64RNHheKTWsM3KMkcRuNfMasl3woUVRQV
-         /b5lMlEJDRgfWyZMqYPBa35yJ3kHyhafy2EPK9QuQyu9PTAsizuMFlXufqfRTnIg/3AX
-         oMUCsQOpFvkKu46WetA33UG+wXHFsOx62WUdghkHLVTbM0stVXQ0NLOV1UYmnMEGA1TM
-         Q+JQ==
-X-Gm-Message-State: ACrzQf1jPqLCMzru4rMPulN3GfxvKv4aJir+ZdJzmXSq5NWZhPijC8gJ
-        IHl/sHBjxxfPuBxieXjnuGybro61Bp9p2rD9V9WheWhO6P9k
-X-Google-Smtp-Source: AMsMyM4FWUFn2gUJUy/c9Ed7RcOX5BhfGlQHvi6AQyy32RMNxsBhf+r8JeU616o57TxtUZzsK3HUNpv4V3ZJe2N6OqeaEkVr1dUn
+        Tue, 1 Nov 2022 23:15:44 -0400
+Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B808624BF3
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 20:15:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667358941; x=1698894941;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version:content-transfer-encoding;
+  bh=m48/xeNHXwikdkMS7hl7niHQHFI4b3Rpl1Ik4bOU1Mg=;
+  b=ZpjXUsckfKQah9dBf6v0L1g8n2WAEIkWDHAdkquSXxD7D6TNyuGobXyV
+   nXCjhk4zpwZXdrB9BFx26fjSFuEReRa83EvUwxPCPqiL8mMJ16Q3Qq/X4
+   FkSNtVvK/0jBX1EnBK54npff5fCY/hRkqnOlmEbpFzJPvtDJp53dcfVxC
+   soT6WCYsBcHrnhvxb47If32pgx79GcJdLB9Gw/VOhGMUDNdsdS46Yn2rV
+   uF2W2A1fDP7cu7tTdNyntmipVXwblAeOne5Ec3lqxb46pp2rsRQtP8lXm
+   hrH/TjfsSAlehWmPwUK4wJ2ygyOVsQYeoAYTAiVrwWFaCqx+WYEnWx0KD
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="309299210"
+X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
+   d="scan'208";a="309299210"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 20:15:28 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="703106234"
+X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
+   d="scan'208";a="703106234"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga004-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 20:15:25 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Hesham Almatary <hesham.almatary@huawei.com>
+Cc:     haoxin <xhao@linux.alibaba.com>, <linux-kernel@vger.kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Zi Yan <ziy@nvidia.com>, Yang Shi <shy828301@gmail.com>,
+        Baolin Wang <baolin.wang@linux.alibaba.com>,
+        Oscar Salvador <osalvador@suse.de>,
+        "Matthew Wilcox" <willy@infradead.org>, <yangyicong@hisilicon.com>,
+        <v-songbaohua@oppo.com>, <21cnbao@gmail.com>, <linux-mm@kvack.org>
+Subject: Re: [RFC 0/6] migrate_pages(): batch TLB flushing
+References: <20220921060616.73086-1-ying.huang@intel.com>
+        <393d6318-aa38-01ed-6ad8-f9eac89bf0fc@linux.alibaba.com>
+        <520d44e0-b7a9-b841-047a-d2707f3df3fe@huawei.com>
+Date:   Wed, 02 Nov 2022 11:14:41 +0800
+In-Reply-To: <520d44e0-b7a9-b841-047a-d2707f3df3fe@huawei.com> (Hesham
+        Almatary's message of "Tue, 1 Nov 2022 14:49:17 +0000")
+Message-ID: <87h6ziavz2.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:606:b0:300:c570:74d6 with SMTP id
- t6-20020a056e02060600b00300c57074d6mr3754548ils.152.1667358759824; Tue, 01
- Nov 2022 20:12:39 -0700 (PDT)
-Date:   Tue, 01 Nov 2022 20:12:39 -0700
-In-Reply-To: <000000000000f48ffe05ec534218@google.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000097b4b005ec743600@google.com>
-Subject: Re: [syzbot] INFO: task hung in f2fs_issue_checkpoint
-From:   syzbot <syzbot+8c1c6ffb39e290968f8d@syzkaller.appspotmail.com>
-To:     chao@kernel.org, jaegeuk@kernel.org,
-        linux-f2fs-devel@lists.sourceforge.net,
-        linux-kernel@vger.kernel.org, syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_NONE,URIBL_SBL_A autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-syzbot has found a reproducer for the following issue on:
+Hesham Almatary <hesham.almatary@huawei.com> writes:
 
-HEAD commit:    b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
-git tree:       upstream
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=12e47046880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=a66c6c673fb555e8
-dashboard link: https://syzkaller.appspot.com/bug?extid=8c1c6ffb39e290968f8d
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1585b5ea880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1551f6da880000
+> On 9/27/2022 12:21 PM, haoxin wrote:
+>> Hi, Huang
+>>
+>> ( 2022/9/21 H2:06, Huang Ying S:
+>>> From: "Huang, Ying" <ying.huang@intel.com>
+>>>
+>>> Now, migrate_pages() migrate pages one by one, like the fake code as
+>>> follows,
+>>>
+>>>   for each page
+>>>    unmap
+>>>    flush TLB
+>>>    copy
+>>>    restore map
+>>>
+>>> If multiple pages are passed to migrate_pages(), there are
+>>> opportunities to batch the TLB flushing and copying. That is, we can
+>>> change the code to something as follows,
+>>>
+>>>   for each page
+>>>    unmap
+>>>   for each page
+>>>    flush TLB
+>>>   for each page
+>>>    copy
+>>>   for each page
+>>>    restore map
+>>>
+>>> The total number of TLB flushing IPI can be reduced considerably. And
+>>> we may use some hardware accelerator such as DSA to accelerate the
+>>> page copying.
+>>>
+>>> So in this patch, we refactor the migrate_pages() implementation and
+>>> implement the TLB flushing batching. Base on this, hardware
+>>> accelerated page copying can be implemented.
+>>>
+>>> If too many pages are passed to migrate_pages(), in the naive batched
+>>> implementation, we may unmap too many pages at the same time. The
+>>> possibility for a task to wait for the migrated pages to be mapped
+>>> again increases. So the latency may be hurt. To deal with this
+>>> issue, the max number of pages be unmapped in batch is restricted to
+>>> no more than HPAGE_PMD_NR. That is, the influence is at the same
+>>> level of THP migration.
+>>>
+>>> We use the following test to measure the performance impact of the
+>>> patchset,
+>>>
+>>> On a 2-socket Intel server,
+>>>
+>>>  - Run pmbench memory accessing benchmark
+>>>
+>>>  - Run `migratepages` to migrate pages of pmbench between node 0 and
+>>>   node 1 back and forth.
+>>>
+>> As the pmbench can not run on arm64 machine, so i use lmbench instead.
+>> I test case like this: (i am not sure whether it is reasonable,
+>> but it seems worked)
+>> ./bw_mem -N10000 10000m rd &
+>> time migratepages pid node0 node1
+>>
+> FYI, I have ported pmbench to AArch64 [1]. The project seems to be
+> abandoned on bitbucket,
+>
+> I wonder if it makes sense to fork it elsewhere and push the pending PRs there.
+>
+>
+> [1] https://bitbucket.org/jisooy/pmbench/pull-requests/5
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/ba5b49fa77de/disk-b229b6ca.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/7c061f2ae4dc/vmlinux-b229b6ca.xz
-kernel image: https://storage.googleapis.com/syzbot-assets/bc45c1300e9b/bzImage-b229b6ca.xz
-mounted in repro: https://storage.googleapis.com/syzbot-assets/f95889b8a293/mount_0.gz
+Maybe try to contact the original author with email firstly?
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+8c1c6ffb39e290968f8d@syzkaller.appspotmail.com
+Best Regards,
+Huang, Ying
 
-INFO: task syz-executor969:3642 blocked for more than 143 seconds.
-      Not tainted 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor969 state:D stack:28520 pid:3642  ppid:3605   flags:0x00004004
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5191 [inline]
- __schedule+0xae9/0x53f0 kernel/sched/core.c:6503
- schedule+0xda/0x1b0 kernel/sched/core.c:6579
- schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1911
- do_wait_for_common kernel/sched/completion.c:85 [inline]
- __wait_for_common+0x1ca/0x5c0 kernel/sched/completion.c:106
- f2fs_issue_checkpoint+0x358/0x460 fs/f2fs/checkpoint.c:1882
- f2fs_sync_fs+0x240/0x4c0 fs/f2fs/super.c:1656
- sync_fs_one_sb fs/sync.c:84 [inline]
- sync_fs_one_sb+0x107/0x140 fs/sync.c:80
- iterate_supers+0x13c/0x290 fs/super.c:723
- ksys_sync+0xa8/0x150 fs/sync.c:104
- __do_sys_sync+0xa/0x10 fs/sync.c:113
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fa42b72e519
-RSP: 002b:00007ffc2d6fae78 EFLAGS: 00000246
- ORIG_RAX: 00000000000000a2
-RAX: ffffffffffffffda RBX: 0000000020010ba0 RCX: 00007fa42b72e519
-RDX: 00007fa42b6ec363 RSI: 0000000000000003 RDI: 0000000000004c00
-RBP: 0000000000000000 R08: 0000555556fc22c0 R09: 0000000000000000
-R10: 00007ffc2d6fab80 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc2d6faea0 R14: 00007ffc2d6fae8c R15: 00007ffc2d6fae90
- </TASK>
-INFO: task syz-executor969:3643 blocked for more than 144 seconds.
-      Not tainted 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor969 state:D
- stack:28848 pid:3643  ppid:3603   flags:0x00004004
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5191 [inline]
- __schedule+0xae9/0x53f0 kernel/sched/core.c:6503
- schedule+0xda/0x1b0 kernel/sched/core.c:6579
- schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1911
- do_wait_for_common kernel/sched/completion.c:85 [inline]
- __wait_for_common+0x1ca/0x5c0 kernel/sched/completion.c:106
- f2fs_issue_checkpoint+0x358/0x460 fs/f2fs/checkpoint.c:1882
- f2fs_sync_fs+0x240/0x4c0 fs/f2fs/super.c:1656
- sync_fs_one_sb fs/sync.c:84 [inline]
- sync_fs_one_sb+0x107/0x140 fs/sync.c:80
- iterate_supers+0x13c/0x290 fs/super.c:723
- ksys_sync+0xa8/0x150 fs/sync.c:104
- __do_sys_sync+0xa/0x10 fs/sync.c:113
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fa42b72e519
-RSP: 002b:00007ffc2d6fae78 EFLAGS: 00000246
- ORIG_RAX: 00000000000000a2
-RAX: ffffffffffffffda RBX: 0000000020010ba0 RCX: 00007fa42b72e519
-RDX: 00007fa42b6ec363 RSI: 0000000000000003 RDI: 0000000000004c00
-RBP: 0000000000000000 R08: 0000555556fc22c0 R09: 0000000000000000
-R10: 00007ffc2d6fab80 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc2d6faea0 R14: 00007ffc2d6fae8c R15: 00007ffc2d6fae90
- </TASK>
-INFO: task syz-executor969:3644 blocked for more than 145 seconds.
-      Not tainted 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor969 state:D stack:28544 pid:3644  ppid:3602   flags:0x00004004
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5191 [inline]
- __schedule+0xae9/0x53f0 kernel/sched/core.c:6503
- schedule+0xda/0x1b0 kernel/sched/core.c:6579
- schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1911
- do_wait_for_common kernel/sched/completion.c:85 [inline]
- __wait_for_common+0x1ca/0x5c0 kernel/sched/completion.c:106
- f2fs_issue_checkpoint+0x358/0x460 fs/f2fs/checkpoint.c:1882
- f2fs_sync_fs+0x240/0x4c0 fs/f2fs/super.c:1656
- sync_fs_one_sb fs/sync.c:84 [inline]
- sync_fs_one_sb+0x107/0x140 fs/sync.c:80
- iterate_supers+0x13c/0x290 fs/super.c:723
- ksys_sync+0xa8/0x150 fs/sync.c:104
- __do_sys_sync+0xa/0x10 fs/sync.c:113
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fa42b72e519
-RSP: 002b:00007ffc2d6fae78 EFLAGS: 00000246 ORIG_RAX: 00000000000000a2
-RAX: ffffffffffffffda RBX: 0000000020010ba0 RCX: 00007fa42b72e519
-RDX: 00007fa42b6ec363 RSI: 0000000000000003 RDI: 0000000000004c00
-RBP: 0000000000000000 R08: 0000555556fc22c0 R09: 0000000000000000
-R10: 00007ffc2d6fab80 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc2d6faea0 R14: 00007ffc2d6fae8c R15: 00007ffc2d6fae90
- </TASK>
-INFO: task syz-executor969:3645 blocked for more than 146 seconds.
-      Not tainted 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor969 state:D
- stack:28400 pid:3645  ppid:3608   flags:0x00004004
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5191 [inline]
- __schedule+0xae9/0x53f0 kernel/sched/core.c:6503
- schedule+0xda/0x1b0 kernel/sched/core.c:6579
- schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1911
- do_wait_for_common kernel/sched/completion.c:85 [inline]
- __wait_for_common+0x1ca/0x5c0 kernel/sched/completion.c:106
- f2fs_issue_checkpoint+0x358/0x460 fs/f2fs/checkpoint.c:1882
- f2fs_sync_fs+0x240/0x4c0 fs/f2fs/super.c:1656
- sync_fs_one_sb fs/sync.c:84 [inline]
- sync_fs_one_sb+0x107/0x140 fs/sync.c:80
- iterate_supers+0x13c/0x290 fs/super.c:723
- ksys_sync+0xa8/0x150 fs/sync.c:104
- __do_sys_sync+0xa/0x10 fs/sync.c:113
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fa42b72e519
-RSP: 002b:00007ffc2d6fae78 EFLAGS: 00000246
- ORIG_RAX: 00000000000000a2
-RAX: ffffffffffffffda RBX: 0000000020010ba0 RCX: 00007fa42b72e519
-RDX: 00007fa42b6ec363 RSI: 0000000000000003 RDI: 0000000000004c00
-RBP: 0000000000000000 R08: 0000555556fc22c0 R09: 0000000000000000
-R10: 00007ffc2d6fab80 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc2d6faea0 R14: 00007ffc2d6fae8c R15: 00007ffc2d6fae90
- </TASK>
-INFO: task syz-executor969:3646 blocked for more than 147 seconds.
-      Not tainted 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor969 state:D
- stack:28520 pid:3646  ppid:3607   flags:0x00004004
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5191 [inline]
- __schedule+0xae9/0x53f0 kernel/sched/core.c:6503
- schedule+0xda/0x1b0 kernel/sched/core.c:6579
- schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1911
- do_wait_for_common kernel/sched/completion.c:85 [inline]
- __wait_for_common+0x1ca/0x5c0 kernel/sched/completion.c:106
- f2fs_issue_checkpoint+0x358/0x460 fs/f2fs/checkpoint.c:1882
- f2fs_sync_fs+0x240/0x4c0 fs/f2fs/super.c:1656
- sync_fs_one_sb fs/sync.c:84 [inline]
- sync_fs_one_sb+0x107/0x140 fs/sync.c:80
- iterate_supers+0x13c/0x290 fs/super.c:723
- ksys_sync+0xa8/0x150 fs/sync.c:104
- __do_sys_sync+0xa/0x10 fs/sync.c:113
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fa42b72e519
-RSP: 002b:00007ffc2d6fae78 EFLAGS: 00000246
- ORIG_RAX: 00000000000000a2
-RAX: ffffffffffffffda RBX: 0000000020010ba0 RCX: 00007fa42b72e519
-RDX: 00007fa42b6ec363 RSI: 0000000000000003 RDI: 0000000000004c00
-RBP: 0000000000000000 R08: 0000555556fc22c0 R09: 0000000000000000
-R10: 00007ffc2d6fab80 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc2d6faea0 R14: 00007ffc2d6fae8c R15: 00007ffc2d6fae90
- </TASK>
-INFO: task syz-executor969:3647 blocked for more than 148 seconds.
-      Not tainted 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
-"echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-task:syz-executor969 state:D
- stack:25760 pid:3647  ppid:3606   flags:0x00004004
-Call Trace:
- <TASK>
- context_switch kernel/sched/core.c:5191 [inline]
- __schedule+0xae9/0x53f0 kernel/sched/core.c:6503
- schedule+0xda/0x1b0 kernel/sched/core.c:6579
- schedule_timeout+0x1db/0x2a0 kernel/time/timer.c:1911
- do_wait_for_common kernel/sched/completion.c:85 [inline]
- __wait_for_common+0x1ca/0x5c0 kernel/sched/completion.c:106
- f2fs_issue_checkpoint+0x358/0x460 fs/f2fs/checkpoint.c:1882
- f2fs_sync_fs+0x240/0x4c0 fs/f2fs/super.c:1656
- sync_fs_one_sb fs/sync.c:84 [inline]
- sync_fs_one_sb+0x107/0x140 fs/sync.c:80
- iterate_supers+0x13c/0x290 fs/super.c:723
- ksys_sync+0xa8/0x150 fs/sync.c:104
- __do_sys_sync+0xa/0x10 fs/sync.c:113
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
-RIP: 0033:0x7fa42b72e519
-RSP: 002b:00007ffc2d6fae78 EFLAGS: 00000246
- ORIG_RAX: 00000000000000a2
-RAX: ffffffffffffffda RBX: 0000000020010ba0 RCX: 00007fa42b72e519
-RDX: 00007fa42b6ec363 RSI: 0000000000000003 RDI: 0000000000004c00
-RBP: 0000000000000000 R08: 0000555556fc22c0 R09: 0000000000000000
-R10: 00007ffc2d6fab80 R11: 0000000000000246 R12: 0000000000000000
-R13: 00007ffc2d6faea0 R14: 00007ffc2d6fae8c R15: 00007ffc2d6fae90
- </TASK>
-INFO: lockdep is turned off.
-NMI backtrace for cpu 0
-CPU: 0 PID: 27 Comm: khungtaskd Not tainted 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-Call Trace:
- <TASK>
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0xcd/0x134 lib/dump_stack.c:106
- nmi_cpu_backtrace.cold+0x24/0x18a lib/nmi_backtrace.c:111
- nmi_trigger_cpumask_backtrace+0x32f/0x3c0 lib/nmi_backtrace.c:62
- trigger_all_cpu_backtrace include/linux/nmi.h:148 [inline]
- check_hung_uninterruptible_tasks kernel/hung_task.c:220 [inline]
- watchdog+0xc71/0xfc0 kernel/hung_task.c:377
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-Sending NMI from CPU 0 to CPUs 1:
-NMI backtrace for cpu 1
-CPU: 1 PID: 9 Comm: kworker/u4:0 Not tainted 6.1.0-rc2-syzkaller-00105-gb229b6ca5abb #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-Workqueue: events_unbound toggle_allocation_gate
-RIP: 0010:native_apic_mem_read arch/x86/include/asm/apic.h:112 [inline]
-RIP: 0010:__xapic_wait_icr_idle arch/x86/kernel/apic/ipi.c:107 [inline]
-RIP: 0010:__default_send_IPI_dest_field+0x2e/0x130 arch/x86/kernel/apic/ipi.c:156
-Code: fc 55 53 89 d3 48 83 ec 08 83 fe 02 74 73 a0 60 f8 eb ff ff fb ff ff 84 c0 74 08 3c 03 0f 8e a8 00 00 00 8b 04 25 00 c3 5f ff <48> bd 60 f8 eb ff ff fb ff ff f6 c4 10 74 1e f3 90 0f b6 45 00 84
-RSP: 0018:ffffc900000e78a0 EFLAGS: 00000046
-RAX: 00000000000008fb RBX: 0000000000000800 RCX: 0000000000000000
-RDX: 0000000000000800 RSI: 00000000000000fb RDI: 0000000000000001
-RBP: 1ffff9200001cf1d R08: 0000000000000005 R09: 0000000000000001
-R10: 0000000000000001 R11: 0000000000000001 R12: 0000000000000001
-R13: ffffc900000e7908 R14: 0000000000000002 R15: dffffc0000000000
-FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
-CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-CR2: 0000562976970990 CR3: 000000000bc8e000 CR4: 0000000000350ee0
-Call Trace:
- <TASK>
- _flat_send_IPI_mask+0x4e/0x60 arch/x86/kernel/apic/apic_flat_64.c:56
- arch_send_call_function_single_ipi arch/x86/include/asm/smp.h:109 [inline]
- send_call_function_single_ipi+0x1e9/0x3b0 kernel/sched/core.c:3750
- smp_call_function_many_cond+0xe64/0x10a0 kernel/smp.c:967
- on_each_cpu_cond_mask+0x56/0xa0 kernel/smp.c:1155
- on_each_cpu include/linux/smp.h:71 [inline]
- text_poke_sync arch/x86/kernel/alternative.c:1311 [inline]
- text_poke_bp_batch+0x3f1/0x6b0 arch/x86/kernel/alternative.c:1555
- text_poke_flush arch/x86/kernel/alternative.c:1670 [inline]
- text_poke_flush arch/x86/kernel/alternative.c:1667 [inline]
- text_poke_finish+0x16/0x30 arch/x86/kernel/alternative.c:1677
- arch_jump_label_transform_apply+0x13/0x20 arch/x86/kernel/jump_label.c:146
- jump_label_update+0x32f/0x410 kernel/jump_label.c:801
- static_key_disable_cpuslocked+0x152/0x1b0 kernel/jump_label.c:207
- static_key_disable+0x16/0x20 kernel/jump_label.c:215
- toggle_allocation_gate mm/kfence/core.c:814 [inline]
- toggle_allocation_gate+0x183/0x390 mm/kfence/core.c:792
- process_one_work+0x9bf/0x1710 kernel/workqueue.c:2289
- worker_thread+0x665/0x1080 kernel/workqueue.c:2436
- kthread+0x2e4/0x3a0 kernel/kthread.c:376
- ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
- </TASK>
-
+>> o/patch w/patch
+>> real  0m0.035s   real  0m0.024s
+>> user  0m0.000s   user  0m0.000s
+>> sys  0m0.035s    sys  0m0.024s
+>>
+>> the migratepages time is reduced above 32%.
+>>
+>> But there has a problem, i see the batch flush is called by
+>> migrate_pages_batch
+>>   try_to_unmap_flush
+>>     arch_tlbbatch_flush(&tlb_ubc->arch); // there batch flush really work.
+>>
+>> But in arm64, the arch_tlbbatch_flush are not supported, becasue it
+>> not support CONFIG_ARCH_WANT_BATCHED_UNMAP_TLB_FLUSH yet.
+>>
+>> So, the tlb batch flush means no any flush is did, it is a empty func.
+>>
+>> Maybe this patch can help solve this problem.
+>> https://lore.kernel.org/linux-arm-kernel/20220921084302.43631-1-yangyicong@huawei.com/T/ 
+>>
+>>
+>>
+>>
+>>
+>>
