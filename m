@@ -2,52 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 318EF617162
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 00:03:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E2EE0617169
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 00:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230207AbiKBXDJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 19:03:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52958 "EHLO
+        id S230222AbiKBXJG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 19:09:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54130 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229547AbiKBXDH (ORCPT
+        with ESMTP id S229523AbiKBXIt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 19:03:07 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3967ED105;
-        Wed,  2 Nov 2022 16:03:06 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Wed, 2 Nov 2022 19:08:49 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 247A7103A;
+        Wed,  2 Nov 2022 16:08:49 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id ECFFDB82528;
-        Wed,  2 Nov 2022 23:03:04 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 64ECCC433D6;
-        Wed,  2 Nov 2022 23:03:03 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667430183;
-        bh=bFi5GLyHkJTTp2mySqmcb6bpgXQEzy01l8XhyjLqLwc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=IsiVrEYIQTvhRrDuo/Y+YcBBa26GjLjC5soSFr8/j8SbVhaO3dq0v0lkVx5jqjIjM
-         DpNuE1GnSE3i3VipHqD4BakhZRtRNBUj6QICP+4yYy/fLbJGBZPNjz/Ew4XFfbexDy
-         z2KMyI6WNZoBfkjZT5DDoEi+FCVWMVht7yf+fDiw3EwLGJ5IEs6R8rrBw1fpxB58oo
-         vk3gUp9PYW8ED7tooVNE1V2xzfJdjp6t4tzpTlk7B2TtA0+JXzprZJ0hzy+ksP5KPt
-         iHtgSTBDRjpqPQSAGvkgLPQG60/Ywylf9+6V61ooHgvnrObd3xSKItzW51dl0diyhD
-         OOLh3HRhxufrQ==
-Date:   Wed, 2 Nov 2022 18:03:02 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     Frank Li <Frank.Li@nxp.com>
-Cc:     mani@kernel.org, allenbh@gmail.com, bhelgaas@google.com,
-        dave.jiang@intel.com, imx@lists.linux.dev, jdmason@kudzu.us,
-        kw@linux.com, linux-kernel@vger.kernel.org,
-        linux-pci@vger.kernel.org, lpieralisi@kernel.org,
-        ntb@lists.linux.dev
-Subject: Re: [PATCH v16 0/7]  pci-epf-vntb clean up
-Message-ID: <20221102230302.GA6394@bhelgaas>
+        by smtp-out1.suse.de (Postfix) with ESMTPS id BA36121AE3;
+        Wed,  2 Nov 2022 23:08:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
+        t=1667430527;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lb7v7Z9TgGKj+751PZ6XzDrtwj3FCilA762eWMnVxCc=;
+        b=04swrYvudDEonFt9NMIwnG6Lf0Uv+W/dF80G40famkABlTI3RNHve9qllsiSQZbYPAUdYG
+        mA98y3H6zshqubmwF8BRTSJ7WQPVkPRRnSV8Vwk7A7yw3fV9xP58E1UYRSrJEexxtbqQQN
+        /5oiU6L//DH8KQiOoef2nr3UkrrOJmQ=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
+        s=susede2_ed25519; t=1667430527;
+        h=from:from:reply-to:reply-to:date:date:message-id:message-id:to:to:
+         cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=lb7v7Z9TgGKj+751PZ6XzDrtwj3FCilA762eWMnVxCc=;
+        b=Vl6+1e736RpApU6pxu7QupaopZDhMpg0rm/lbWtUeELDAj/quFg4Xe9bUWx5x59LHrDcdy
+        vUt1MSdQj8Oa4BCg==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7AD31139D3;
+        Wed,  2 Nov 2022 23:08:47 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id /+j6HH/4YmNUVAAAMHmgww
+        (envelope-from <dsterba@suse.cz>); Wed, 02 Nov 2022 23:08:47 +0000
+Date:   Thu, 3 Nov 2022 00:08:28 +0100
+From:   David Sterba <dsterba@suse.cz>
+To:     syzbot <syzbot+031687116258450f9853@syzkaller.appspotmail.com>
+Cc:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
+        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Subject: Re: [syzbot] kernel BUG in dev_args_match_device
+Message-ID: <20221102230828.GK5824@twin.jikos.cz>
+Reply-To: dsterba@suse.cz
+References: <000000000000ef589805ec80b371@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221102141014.1025893-1-Frank.Li@nxp.com>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+In-Reply-To: <000000000000ef589805ec80b371@google.com>
+User-Agent: Mutt/1.5.23.1-rc1 (2014-03-12)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SORTED_RECIPS,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -55,14 +72,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 10:10:07AM -0400, Frank Li wrote:
-> continue patch series https://www.spinics.net/lists/linux-pci/msg130372.html
-> https://www.spinics.net/lists/linux-pci/msg130924.html
+On Wed, Nov 02, 2022 at 11:06:42AM -0700, syzbot wrote:
+> Hello,
 > 
-> Lorenzo suggest create new series. Version number continue from old one
-> Change from v15 to v16
->   consistent subject
->   Add () after pci_epc_mem_free_addr
+> syzbot found the following issue on:
+> 
+> HEAD commit:    b229b6ca5abb Merge tag 'perf-tools-fixes-for-v6.1-2022-10-..
+> git tree:       upstream
+> console output: https://syzkaller.appspot.com/x/log.txt?x=1744c1fc880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=1d3548a4365ba17d
+> dashboard link: https://syzkaller.appspot.com/bug?extid=031687116258450f9853
+> compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
+> 
+> Unfortunately, I don't have any reproducer for this issue yet.
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/24728b72a896/disk-b229b6ca.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/10a3c40c60e1/vmlinux-b229b6ca.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/69f963b02b7e/bzImage-b229b6ca.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+031687116258450f9853@syzkaller.appspotmail.com
+> 
+> ------------[ cut here ]------------
+> kernel BUG at fs/btrfs/ctree.h:3710!
 
-Don't forget these comments on your v15:
-https://lore.kernel.org/r/20221101172006.GA1264778@bhelgaas
+This is cut just before the assertion failed message but it's in the
+full console log:
+
+[ 1143.555887][ T2686] assertion failed: (args->devid != (u64)-1) || args->missing, in fs/btrfs/volumes.c:6921
+
+6918 static bool dev_args_match_device(const struct btrfs_dev_lookup_args *args,                                                                                                                                     
+6919                                   const struct btrfs_device *device)                                                                                                                                            
+6920 {                                                                                                                                                                                                               
+6921         ASSERT((args->devid != (u64)-1) || args->missing);  
