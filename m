@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 834C7616D67
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 20:06:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B5A5616D6A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 20:06:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230106AbiKBTGh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 15:06:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34812 "EHLO
+        id S231774AbiKBTGl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 15:06:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34826 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231761AbiKBTG0 (ORCPT
+        with ESMTP id S231791AbiKBTG1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 15:06:26 -0400
+        Wed, 2 Nov 2022 15:06:27 -0400
 Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B00A8C4D;
-        Wed,  2 Nov 2022 12:06:25 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2396EC00;
+        Wed,  2 Nov 2022 12:06:27 -0700 (PDT)
 Received: from notapiano.myfiosgateway.com (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
         (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 19A4366028F8;
-        Wed,  2 Nov 2022 19:06:23 +0000 (GMT)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id A1F6A66028C5;
+        Wed,  2 Nov 2022 19:06:24 +0000 (GMT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667415984;
-        bh=cAWS2o7ezo8lcFTLvtHcfgbNs2i5XRzG1MatYzmAa7k=;
+        s=mail; t=1667415985;
+        bh=TnVNIWSbSWEvlbCLuZhMaEZgW/k9jezqptAq9ChuQVw=;
         h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=PG6t0H5cZwbo4xAkZShlrqbnZL965LVlR0PxoTqsItZVoxk392J3IfLeTwAR2CUBa
-         oW87ZVKbApzTsorMEeKZ+frpqCI/dhiUzqosZU7yjd/VVfdX6XEp7hNzj1QTmuOuFw
-         N/SLnt4MC244GyHTMFkq+sbuTCAzTtSsgBgWJsMKQtzwemJVfe5V6tVvNVk6W4REWR
-         /e8a7AwBxNKFaNGuuMqirgaLtbdyKOn2iQInzq0Y03umd4TPduhnvdnMw5rl4R4p1p
-         W/d4TgHvZCa1hOt1hfZaOyC6HQCvGlXi4oeDICIbV1EY4rWTX4DIvjrtCfki+zNss9
-         acIOQT9ZOYtSg==
+        b=RogDAN2ADhgHGvOQmXzG/+BOGYKMiUMTmAHqgUQ81jkihxJQDBH8JRbkFvZMmxSvv
+         WLw34Hzwa++X6mnO3O5ZkYdFC0bG391Hlbgxa5p7ZwdVkgGKu3uZX3W3eQTuZYVztU
+         lNKzaPSC+PBu3Cb47VKscs3wlFi0AKWNw5UayP+uSJojOY+y2y38zKLWcEUgBoGoPU
+         tc7nZxWNlyWj9WNPF5llT9xmVUAUq3aXwFt2l9w4Ca5aI91k7KiMR/4ukcoQEO8blL
+         dAg0pKTnhGBymQBmhdHuNMBBCQToCh414DDU7jxJVOhqXTY7ZHwJDrrx+4nO/ASc8q
+         RBhKqucVFsBFw==
 From:   =?UTF-8?q?N=C3=ADcolas=20F=2E=20R=2E=20A=2E=20Prado?= 
         <nfraprado@collabora.com>
 To:     Matthias Brugger <matthias.bgg@gmail.com>
@@ -44,9 +44,9 @@ Cc:     kernel@collabora.com, Chen-Yu Tsai <wenst@chromium.org>,
         Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
         linux-mediatek@lists.infradead.org
-Subject: [PATCH v3 2/5] arm64: dts: mediatek: asurada: Add display backlight
-Date:   Wed,  2 Nov 2022 15:06:08 -0400
-Message-Id: <20221102190611.283546-3-nfraprado@collabora.com>
+Subject: [PATCH v3 3/5] arm64: dts: mediatek: asurada: Enable internal display
+Date:   Wed,  2 Nov 2022 15:06:09 -0400
+Message-Id: <20221102190611.283546-4-nfraprado@collabora.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221102190611.283546-1-nfraprado@collabora.com>
 References: <20221102190611.283546-1-nfraprado@collabora.com>
@@ -62,8 +62,9 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the display backlight for the Asurada platform. It relies on the
-display PWM controller, so also enable and configure this component.
+The asurada platform has an ANX7625 bridge connecting the DSI's output
+to the internal eDP panel. Add and enable these devices in order to get
+a usable internal display.
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Tested-by: Chen-Yu Tsai <wenst@chromium.org>
@@ -72,62 +73,114 @@ Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
 (no changes since v1)
 
- .../boot/dts/mediatek/mt8192-asurada.dtsi     | 28 +++++++++++++++++++
- 1 file changed, 28 insertions(+)
+ .../boot/dts/mediatek/mt8192-asurada.dtsi     | 73 +++++++++++++++++++
+ 1 file changed, 73 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
-index fafca7428539..666021ca4d4f 100644
+index 666021ca4d4f..ace44827de17 100644
 --- a/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
 +++ b/arch/arm64/boot/dts/mediatek/mt8192-asurada.dtsi
-@@ -23,6 +23,16 @@ memory@40000000 {
- 		reg = <0 0x40000000 0 0x80000000>;
+@@ -198,6 +198,14 @@ wifi_restricted_dma_region: wifi@c0000000 {
  	};
- 
-+	backlight_lcd0: backlight-lcd0 {
-+		compatible = "pwm-backlight";
-+		pwms = <&pwm0 0 500000>;
-+		power-supply = <&ppvar_sys>;
-+		enable-gpios = <&pio 152 0>;
-+		brightness-levels = <0 1023>;
-+		num-interpolated-steps = <1023>;
-+		default-brightness-level = <576>;
-+	};
-+
- 	pp1000_dpbrdg: regulator-1v0-dpbrdg {
- 		compatible = "regulator-fixed";
- 		regulator-name = "pp1000_dpbrdg";
-@@ -838,6 +848,17 @@ pins-pcie-en-pp3300-wlan {
- 		};
- 	};
- 
-+	pwm0_pins: pwm0-default-pins {
-+		pins-pwm {
-+			pinmux = <PINMUX_GPIO40__FUNC_DISP_PWM>;
-+		};
-+
-+		pins-inhibit {
-+			pinmux = <PINMUX_GPIO152__FUNC_GPIO152>;
-+			output-high;
-+		};
-+	};
-+
- 	scp_pins: scp-pins {
- 		pins-vreq-vao {
- 			pinmux = <PINMUX_GPIO195__FUNC_SCP_VREQ_VAO>;
-@@ -899,6 +920,13 @@ &pmic {
- 	interrupts-extended = <&pio 214 IRQ_TYPE_LEVEL_HIGH>;
  };
  
-+&pwm0 {
++&dsi0 {
 +	status = "okay";
-+
-+	pinctrl-names = "default";
-+	pinctrl-0 = <&pwm0_pins>;
 +};
 +
- &scp {
++&dsi_out {
++	remote-endpoint = <&anx7625_in>;
++};
++
+ &i2c0 {
  	status = "okay";
  
+@@ -246,6 +254,53 @@ &i2c3 {
+ 	clock-frequency = <400000>;
+ 	pinctrl-names = "default";
+ 	pinctrl-0 = <&i2c3_pins>;
++
++	anx_bridge: anx7625@58 {
++		compatible = "analogix,anx7625";
++		reg = <0x58>;
++		pinctrl-names = "default";
++		pinctrl-0 = <&anx7625_pins>;
++		enable-gpios = <&pio 41 GPIO_ACTIVE_HIGH>;
++		reset-gpios = <&pio 42 GPIO_ACTIVE_HIGH>;
++		vdd10-supply = <&pp1000_mipibrdg>;
++		vdd18-supply = <&pp1800_mipibrdg>;
++		vdd33-supply = <&pp3300_mipibrdg>;
++
++		ports {
++			#address-cells = <1>;
++			#size-cells = <0>;
++
++			port@0 {
++				reg = <0>;
++
++				anx7625_in: endpoint {
++					remote-endpoint = <&dsi_out>;
++				};
++			};
++
++			port@1 {
++				reg = <1>;
++
++				anx7625_out: endpoint {
++					remote-endpoint = <&panel_in>;
++				};
++			};
++		};
++
++		aux-bus {
++			panel: panel {
++				compatible = "edp-panel";
++				power-supply = <&pp3300_mipibrdg>;
++				backlight = <&backlight_lcd0>;
++
++				port {
++					panel_in: endpoint {
++						remote-endpoint = <&anx7625_out>;
++					};
++				};
++			};
++		};
++	};
+ };
+ 
+ &i2c7 {
+@@ -256,6 +311,10 @@ &i2c7 {
+ 	pinctrl-0 = <&i2c7_pins>;
+ };
+ 
++&mipi_tx0 {
++	status = "okay";
++};
++
+ &mmc0 {
+ 	status = "okay";
+ 
+@@ -587,6 +646,20 @@ &pio {
+ 			  "AUD_DAT_MISO0",
+ 			  "AUD_DAT_MISO1";
+ 
++	anx7625_pins: anx7625-default-pins {
++		pins-out {
++			pinmux = <PINMUX_GPIO41__FUNC_GPIO41>,
++				 <PINMUX_GPIO42__FUNC_GPIO42>;
++			output-low;
++		};
++
++		pins-in {
++			pinmux = <PINMUX_GPIO6__FUNC_GPIO6>;
++			input-enable;
++			bias-pull-up;
++		};
++	};
++
+ 	cr50_int: cr50-irq-default-pins {
+ 		pins-gsc-ap-int-odl {
+ 			pinmux = <PINMUX_GPIO171__FUNC_GPIO171>;
 -- 
 2.38.1
 
