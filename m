@@ -2,140 +2,210 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E176E61667A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:48:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5472261667D
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:49:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230248AbiKBPsc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 11:48:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58778 "EHLO
+        id S230302AbiKBPtH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 11:49:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59144 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230161AbiKBPs2 (ORCPT
+        with ESMTP id S229591AbiKBPtD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 11:48:28 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ACD02A400
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 08:48:26 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id i12so12752659qvs.2
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 08:48:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DqcHEbUhCxHVF2jWXX9rIliz1pXonUtemL5GAsoaHYk=;
-        b=cjJzrwScQSgi/EZHgfDyhONjigKwZTUHGMRYmsipn6PDa/tNpPT/r2YTXbwn+PRKJ4
-         hvzoTNyiUfkrVhEJfrY/3QI261jDZLrgAhiEEfSyujwWfrmCA47QPAcaRWNz83HrWHcC
-         oSBkL/Puj1M+J8+qZCePxUcHVUMGN6VMGWnKOQIcaLXmxQlCOZoxjDMHjtrOTcHIqTM8
-         flR7MAuX6cP0wvRF6Hwx/xzO3ezPAqetNe8ghGHlaO57R5Y8am849P9vRJUIkM+YNNWq
-         rldzL5zpeBkMlu+KVhL+JAIcsiW8ZuqfkRkD4l68HPX4D2c5AdQNJVLVy4LNtv9FgbRt
-         RR9Q==
+        Wed, 2 Nov 2022 11:49:03 -0400
+Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9ECB828705;
+        Wed,  2 Nov 2022 08:49:02 -0700 (PDT)
+Received: by mail-oi1-f180.google.com with SMTP id v81so10927056oie.5;
+        Wed, 02 Nov 2022 08:49:02 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DqcHEbUhCxHVF2jWXX9rIliz1pXonUtemL5GAsoaHYk=;
-        b=ZYDTmeH8hw7yNBggwcY65Ar+VYuFObz/qfeejuL55wdfAcbJif9k0CmV5z8Pa+55Sx
-         ihMoPjUxKiqhnlmr7mQFLM+aNDEKwNjVfPC5IxVPxPLwEXV6+1q1P2T2L4AA5pikKOLk
-         lPYWXEMjqRWMK0MHcX0hm2KjYWTFWpZzSSZF+5j85NLhkL/X/qqh8xqy3AIWkVhPAwWS
-         0m+pvKAovb/dY2aY7X2v3JSw+8y8t+LeLNxH/P465p08/C5KclbXv1H5sXGIx7+Sjju3
-         Ao7Rhtt+qzAU0T/RbFpdXloxhqkIkpxN/xSc0X7ZxQVEr4swyvzGlMK6O8c3dxYtWWj5
-         p0AA==
-X-Gm-Message-State: ACrzQf1v2pEqtv89ZW4IH6uX6EJoJtUJySpz0jeStbLzO2AgqrjFtIEJ
-        2dLaXUlK/6FfBHcyf6vJbuTwPg==
-X-Google-Smtp-Source: AMsMyM5lWMNbK9eIVv4y7NtTus+Bm2qBB8TllawiBRSGYs8TQbhuMAvGKmpM6iRqg5hbBhBe4lXZUQ==
-X-Received: by 2002:a05:6214:ccd:b0:4bb:663c:8018 with SMTP id 13-20020a0562140ccd00b004bb663c8018mr22348600qvx.24.1667404105566;
-        Wed, 02 Nov 2022 08:48:25 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
-        by smtp.gmail.com with ESMTPSA id w20-20020a05620a445400b006cbe3be300esm1361638qkp.12.2022.11.02.08.48.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 08:48:24 -0700 (PDT)
-Message-ID: <4d981879-f6e2-8046-1a34-f11abfb19187@linaro.org>
-Date:   Wed, 2 Nov 2022 11:48:22 -0400
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] dt-bindings: net: constrain number of 'reg' in ethernet
- ports
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Bjorn Andersson <andersson@kernel.org>,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MK3UVrAsoEazhaDhY6mHs9+uO9hdI5iIrEDX4RIM6wM=;
+        b=gigAia1dXed5tVm23HK58GhQBgTWX1ZGiuJoXn5yrPCP+yCtqedpADr3akfnRw+qDG
+         SqGyOW/ElttBLJDVCk3MjpOZ4WahAYYjFhNKjqPGYEH4qs1+ghPD0z+OBMZSdZvd7I0s
+         7BnDKF5SYhQV8iCgmzqKUd8IqQMhuM0PeMrFBmev/XPWu+pueh3W0q2O2Y9SkRVvqC1A
+         XSjGQs4wozgrNNeDsrnO3XfTUKoeqo8pRXk3XhkvDM5+vJ0SYhTh1EVjBVNymzcM4Vhn
+         7UOmuLwN+DU7r2sebG6jq8A68jDlLNOVgD6ZwI5yLn0nD5q+sG+CWN55p21G2P6pg2H2
+         GHDg==
+X-Gm-Message-State: ACrzQf3s2CU28PocR6tfcFAVAqMlBdeRxPfyG3NTIXMfbkHJcSI9RFRG
+        vLeElxmnTe/66YqywfVLNw==
+X-Google-Smtp-Source: AMsMyM53RvLjBXzutVxPQ2VTXB5G2Da0JimPwS28acf+1jQgx+5W7vC+Vccv0RwZp5bzsMRmH/fzig==
+X-Received: by 2002:a05:6808:41:b0:359:fe9f:49d8 with SMTP id v1-20020a056808004100b00359fe9f49d8mr10334426oic.148.1667404141774;
+        Wed, 02 Nov 2022 08:49:01 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id d1-20020a4aeb81000000b00480fd9f311esm4606347ooj.13.2022.11.02.08.49.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 08:49:01 -0700 (PDT)
+Received: (nullmailer pid 3959461 invoked by uid 1000);
+        Wed, 02 Nov 2022 15:49:03 -0000
+Date:   Wed, 2 Nov 2022 10:49:03 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Chester Lin <clin@suse.com>
+Cc:     Linus Walleij <linus.walleij@linaro.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Steen Hegelund <Steen.Hegelund@microchip.com>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        UNGLinuxDriver@microchip.com, Sergey Shtylyov <s.shtylyov@omp.ru>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Martin Botka <martin.botka@somainline.org>,
-        Taniya Das <tdas@codeaurora.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Vinod Koul <vkoul@kernel.org>,
-        krishna Lanka <quic_vamslank@quicinc.com>,
-        Iskren Chernev <iskren.chernev@gmail.com>,
-        Del Regno <angelogioacchino.delregno@somainline.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Govind Singh <govinds@codeaurora.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Vladimir Oltean <vladimir.oltean@nxp.com>,
-        Claudiu Manoil <claudiu.manoil@nxp.com>,
-        Alexandre Belloni <alexandre.belloni@bootlin.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        s32@nxp.com, linux-gpio@vger.kernel.org,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        netdev@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-renesas-soc@vger.kernel.org
-References: <20221028140326.43470-1-krzysztof.kozlowski@linaro.org>
- <20221028140326.43470-2-krzysztof.kozlowski@linaro.org>
- <20221031185737.GA3249912-robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221031185737.GA3249912-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        linux-arm-kernel@lists.infradead.org,
+        Larisa Grigore <larisa.grigore@nxp.com>,
+        Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>,
+        Andreas =?iso-8859-1?Q?F=E4rber?= <afaerber@suse.de>,
+        Matthias Brugger <mbrugger@suse.com>
+Subject: Re: [PATCH 1/2] dt-bindings: pinctrl: add schema for NXP S32 SoCs
+Message-ID: <20221102154903.GA3726664-robh@kernel.org>
+References: <20221031100843.14579-1-clin@suse.com>
+ <20221031100843.14579-2-clin@suse.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221031100843.14579-2-clin@suse.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/10/2022 14:57, Rob Herring wrote:
-> On Fri, Oct 28, 2022 at 10:03:25AM -0400, Krzysztof Kozlowski wrote:
->> 'reg' without any constraints allows multiple items which is not the
->> intention for Ethernet controller's port number.
->>
+On Mon, Oct 31, 2022 at 06:08:42PM +0800, Chester Lin wrote:
+> Add DT schema for the pinctrl driver of NXP S32 SoC family.
 > 
-> Shouldn't this constrained by dsa-port.yaml (or the under review 
-> ethernet switch schemas that split out the DSA parts)?
+> Signed-off-by: Larisa Grigore <larisa.grigore@nxp.com>
+> Signed-off-by: Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>
+> Signed-off-by: Chester Lin <clin@suse.com>
+> ---
+>  .../pinctrl/nxp,s32cc-siul2-pinctrl.yaml      | 91 +++++++++++++++++++
+>  1 file changed, 91 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/pinctrl/nxp,s32cc-siul2-pinctrl.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/pinctrl/nxp,s32cc-siul2-pinctrl.yaml b/Documentation/devicetree/bindings/pinctrl/nxp,s32cc-siul2-pinctrl.yaml
+> new file mode 100644
+> index 000000000000..eafb9091cbf7
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pinctrl/nxp,s32cc-siul2-pinctrl.yaml
+> @@ -0,0 +1,91 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +# Copyright (c) 2022 NXP
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pinctrl/nxp,s32cc-siul2-pinctrl.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: NXP S32 Common Chassis SIUL2 iomux controller
+> +
+> +maintainers:
+> +  - Ghennadi Procopciuc <Ghennadi.Procopciuc@nxp.com>
+> +  - Chester Lin <clin@suse.com>
+> +
+> +description: |
+> +  Core driver for the pin controller found on S32 Common Chassis SoC.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - nxp,s32g-siul2-pinctrl
+> +
+> +  reg:
+> +    minItems: 5
+> +    maxItems: 6
+> +    description: A list of register regions to be reserved.
 
-dsa-port should indeed have such change (I'll send one), but these
-schemas do not reference it.
+Need to be explicit about what each entry is.
 
-They reference only ethernet-controller, which does not even mention
-'reg' port. I'll describe it better in commit msg.
+> +
+> +  nxp,pins:
+> +    $ref: /schemas/types.yaml#/definitions/uint32-array
+> +    description:
+> +      A list of [start, end] pin ID boundaries that correspond to each of
+> +      the register regions reserved.
 
-ethernet-switch is not yet referenced in the schemas changed here. It
-would not be applicable to asix,ax88178.yaml and microchip,lan95xx.yaml.
-To others - probably it would be applicable.
+Looks like a matrix rather than an array.
 
-Best regards,
-Krzysztof
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - nxp,pins
+> +
+> +patternProperties:
+> +  '_pins$':
 
+s/_/-/
+
+> +    type: object
+
+       additionalProperties: false
+
+(and a blank line after)
+
+> +    patternProperties:
+> +      '_grp[0-9]$':
+
+s/_/-/
+
+> +        type: object
+> +        allOf:
+> +          - $ref: pinmux-node.yaml#
+> +          - $ref: pincfg-node.yaml#
+
+           unevaluatedProperties: false
+
+> +        description:
+> +          Pinctrl node's client devices specify pin muxes using subnodes,
+> +          which in turn use the standard properties below.
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +
+> +    pinctrl: siul2-pinctrl@4009c240 {
+
+pinctrl@...
+
+> +        compatible = "nxp,s32g-siul2-pinctrl";
+> +
+> +              /* MSCR range */
+> +        reg = <0x4009c240 0x198>,
+> +              <0x44010400 0x2c>,
+> +              <0x44010480 0xbc>,
+> +              /* MSCR range */
+> +              <0x4009ca40 0x150>,
+> +              <0x44010c1c 0x45c>,
+> +              <0x440110f8 0x108>;
+
+What is in these holes in the memory map? Is this part of some larger 
+block? If so, that block needs to be described.
+
+> +
+> +                   /* MSCR range */
+> +        nxp,pins = <0   101>,
+> +                   <112 122>,
+> +                   <144 190>,
+> +                   /* IMCR range */
+> +                   <512 595>,
+> +                   <631 909>,
+> +                   <942 1007>;
+> +
+> +        llce_can0_pins {
+> +            llce_can0_grp0 {
+> +                pinmux = <0x2b0>;
+> +                input-enable;
+> +                slew-rate = <0x00>;
+> +            };
+> +
+> +            llce_can0_grp1 {
+> +                pinmux = <0x2c2>;
+> +                output-enable;
+> +                slew-rate = <0x00>;
+> +            };
+> +        };
+> +    };
+> +...
+> -- 
+> 2.37.3
+> 
+> 
