@@ -2,182 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6E1A6616BAD
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:08:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E7E06616BC4
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:09:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230514AbiKBSIO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 14:08:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37058 "EHLO
+        id S231445AbiKBSJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 14:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiKBSIL (ORCPT
+        with ESMTP id S231330AbiKBSIb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:08:11 -0400
-Received: from mail-lf1-x132.google.com (mail-lf1-x132.google.com [IPv6:2a00:1450:4864:20::132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 599FE2EF69
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:08:10 -0700 (PDT)
-Received: by mail-lf1-x132.google.com with SMTP id b3so4390484lfv.2
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 11:08:10 -0700 (PDT)
+        Wed, 2 Nov 2022 14:08:31 -0400
+Received: from mail-ed1-x530.google.com (mail-ed1-x530.google.com [IPv6:2a00:1450:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2613EDE87;
+        Wed,  2 Nov 2022 11:08:29 -0700 (PDT)
+Received: by mail-ed1-x530.google.com with SMTP id a5so27694262edb.11;
+        Wed, 02 Nov 2022 11:08:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=m6s+mDwTFEybSnfsv9FLfpZxULcbiJ7Ktz0jYPN4zbg=;
-        b=oZ190qKXbUdI3pa/TkZ7GnFQDtDHYWG8bjZi1njg37scSepa9KpKnNxCF5ZM/IM+KQ
-         Np/CHo9hpZWYYqOyMwWGXHorI5H2uxm7feX7c3TtuTfuYs5myB2q7dizQUWdWBfEbsKE
-         fwoSJGuEqhARSqpzkQV8FkHnpWPtOw232JAeI=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=lOVecSCg58WLAt5MFbBf+7umb5iX32HjizH1LHXmtzY=;
+        b=c4sCG5TAZ2UUoS2lgWb76UO1do1+DNv9lhf4f4V7zz8ljX4X5EhvcAsgEefuVLOg+q
+         gaywl+w/4OLpyHt3F/9Bwyiwk5P2gVSKETjqXN25CxxveeMkl1P02LTapxNRpEbc4ncS
+         y0DtjSpEZpoo2aYks0chPXEMt1SraV5egn74lh0bqLCfULmWstsxoJQzoNKJwcM24qu5
+         exgx3cKeSyDCHntD25R80Aed0dN9MnlXk9pnJP8nJ5srwQ3D4KTDuWMqgQDoOgnlpd23
+         V9+2EcH2DuN9nLi3yQK1rC1Vva6WPZ/ddX8HBC+0qQqm0AeUMYHozRY7sbi8QTnZCa4A
+         ZmUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m6s+mDwTFEybSnfsv9FLfpZxULcbiJ7Ktz0jYPN4zbg=;
-        b=tgJFB8CGGAGFTRMEtft1NBau80UQ4LbJI8HCw2eZqvHQmC5CwMlYfu2VbFxMnogF/O
-         KlwAfYtVXlAAMxth5Xgj5MfO3Eq0p8JM2L6ug1W2J0bd5HErHWZdZiBLlvupRbHkOOVb
-         lsJz+Br9nVxt7ysU6DqYQ+c2OLqmemPwGUm9d6NFeCLDMsyMhRGO3hAYTh5iiX0XOZiT
-         21zq7O+dIpTJ7egGJrzO0RpHgmU2vvavCaTl9q+FfDQP+dPtS+b+r2kB4GvFyy6hieqU
-         AxD5yyPMu8sgnIlefiSVA2499iOwSOpVCY3x3B892wP4TnTZzJNeLd9O8rw6kBK7/G8e
-         99rg==
-X-Gm-Message-State: ACrzQf1fcwNdhVWG6n4CGVbx1BVA6N/E7/z64pE5nOUJY4u87iqYgaD2
-        yFB7E2FBnLFWtpcxFISoIUs1rUEXp9YUqytQ5aQCJg==
-X-Google-Smtp-Source: AMsMyM74PhTMtaDdojPE3Gl+8/j0gbeo2ZUKzdZSx7kiyQHT7FwZ/NQ9JAOxrEN2lb9nIwl2MLZuQl03p4TzbuBym/Y=
-X-Received: by 2002:a05:6512:3dac:b0:4a4:8044:9c3 with SMTP id
- k44-20020a0565123dac00b004a4804409c3mr9462216lfv.145.1667412488653; Wed, 02
- Nov 2022 11:08:08 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Wed, 2 Nov 2022 11:08:08 -0700
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=lOVecSCg58WLAt5MFbBf+7umb5iX32HjizH1LHXmtzY=;
+        b=iVBIUEsbDfcNNWMdmXzJoWo0KUCkXwwcFBtn/W2OKN4dMdX+CMuUrFc5/ppccJN7LM
+         qippLe6N9H+Und5iZKapWjFu76Ga6rAR4WfABg1x4PIFgYM9EEvdcfWsnYdcyJL5Uvi8
+         Due5jsQ2Ephea+eViC8b5GhZtsopUImoBV2Dw3T7Ttocf/PfwwMRnL5530D13vwDpeXV
+         p0GjEoFEIzbUAwrYErl9SWVy91ktV1wv0KpAOizKrU3knaTb4OB9ZILXeBR8kU1Kom2+
+         DHHUaHIZ9xZoO2NFT9Do5AwvS1KUEErUeirLkkJEUNNEX4XMz+Cg3Oc01RMctE9DhFwW
+         QLwg==
+X-Gm-Message-State: ACrzQf0hCdZwJbA1/xGctILHLtoKNf5LNVtrdsz1gEEKUIqSO7EtyQ7I
+        6/fimpJ7PJbm1oi5u1BpjhM=
+X-Google-Smtp-Source: AMsMyM6muLY2M00Knxi/o8lVph4GJlPIjeZVu+nV5Y9ZTqSo+P6497kNAnSyQ3n27WFCtlCImp3mvg==
+X-Received: by 2002:a05:6402:249b:b0:460:cb11:27d4 with SMTP id q27-20020a056402249b00b00460cb1127d4mr25895603eda.410.1667412507718;
+        Wed, 02 Nov 2022 11:08:27 -0700 (PDT)
+Received: from kista.localdomain (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
+        by smtp.gmail.com with ESMTPSA id gy8-20020a170906f24800b007317f017e64sm5677460ejb.134.2022.11.02.11.08.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 11:08:27 -0700 (PDT)
+From:   Jernej Skrabec <jernej.skrabec@gmail.com>
+To:     mripard@kernel.org, paul.kocialkowski@bootlin.com
+Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
+        samuel@sholland.org, hverkuil-cisco@xs4all.nl,
+        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
+        linux-kernel@vger.kernel.org,
+        Jernej Skrabec <jernej.skrabec@gmail.com>
+Subject: [PATCH v2 09/11] media: cedrus: initialize controls a bit later
+Date:   Wed,  2 Nov 2022 19:08:08 +0100
+Message-Id: <20221102180810.267252-10-jernej.skrabec@gmail.com>
+X-Mailer: git-send-email 2.38.1
+In-Reply-To: <20221102180810.267252-1-jernej.skrabec@gmail.com>
+References: <20221102180810.267252-1-jernej.skrabec@gmail.com>
 MIME-Version: 1.0
-In-Reply-To: <20221102042933.mdlfknp45ajyrrpn@builder.lan>
-References: <20221101233421.997149-1-swboyd@chromium.org> <20221102024927.n5mjyzyqyapveapa@builder.lan>
- <CAE-0n50uVf-xapfX5A_c7XU7gV58HrKBOf5DCUPCcahPrgkU0Q@mail.gmail.com> <20221102042933.mdlfknp45ajyrrpn@builder.lan>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Wed, 2 Nov 2022 11:08:08 -0700
-Message-ID: <CAE-0n52389Pmp1dxHbtGijK_x+0xGyJ4q4rFRpa6L2KkZHKX5Q@mail.gmail.com>
-Subject: Re: [PATCH] clk: qcom: gdsc: Remove direct runtime PM calls
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, patches@lists.linux.dev,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Satya Priya <quic_c_skakit@quicinc.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Bjorn Andersson (2022-11-01 21:29:33)
-> On Tue, Nov 01, 2022 at 08:29:20PM -0700, Stephen Boyd wrote:
-> > Quoting Bjorn Andersson (2022-11-01 19:49:27)
-> > >
-> > > It's correct that adding the GDSCs as subdomains for the device's
-> > > parent-domain will ensure that enabling a GDSC will propagate up and
-> > > turn on the (typically) rpmhpd resource.
-> > >
-> > > But the purpose for the explicit calls was to ensure that the clock
-> > > controller itself is accessible. It's been a while since I looked at
-> > > this, but iirc letting MMCX to turn off would cause the register access
-> > > during dispcc probing to fail - similar to how
-> > > clk_pm_runtime_get()/put() ensures the clock registers are accessible.
-> >
-> > The dispcc and videocc on sm8250 don't use pm_clk APIs. They do use
-> > pm_runtime APIs during probe (i.e. pm_runtime_resume_and_get()). That
-> > will enable the MMCX domain and keep it on.
->
-> There's a corresponding pm_runtime_put() at the end of
-> disp_cc_sm8250_probe(), so this vote should be released.
+While it doesn't matter if controls are initialized before or after
+queues and formats from open handler standpoint, initializing them last
+helps keeping s_ctrl handler simpler, since everything has already valid
+values.
 
-Correct.
+This is just preparation for follow up changes. No functional change is
+intended.
 
->
-> While registering clocks, the framework will clk_pm_runtime_get()/put()
-> while accessing registers. The argument that was given when introducing
-> the calls in the probe was the same, covering the direct regmap
-> accesses...
->
-> And I guess it avoids flipping the genpd on/off for each resource being
-> accessed.
+Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+---
+ drivers/staging/media/sunxi/cedrus/cedrus.c | 14 +++++++-------
+ 1 file changed, 7 insertions(+), 7 deletions(-)
 
-I don't think the genpd framework accesses anything when a genpd is
-registered. The clock controller is pm_runtime_resume_and_get() during
-the time the gdscs are registered with genpd, so there isn't any more
-need to get the runtime PM state of the clock controller during this
-time. The PM runtime put comes after qcom_cc_probe(). We should be good.
+diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
+index 37b1df9a9d6a..6a2c08928613 100644
+--- a/drivers/staging/media/sunxi/cedrus/cedrus.c
++++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
+@@ -355,27 +355,27 @@ static int cedrus_open(struct file *file)
+ 	file->private_data = &ctx->fh;
+ 	ctx->dev = dev;
+ 
+-	ret = cedrus_init_ctrls(dev, ctx);
+-	if (ret)
+-		goto err_free;
+-
+ 	ctx->fh.m2m_ctx = v4l2_m2m_ctx_init(dev->m2m_dev, ctx,
+ 					    &cedrus_queue_init);
+ 	if (IS_ERR(ctx->fh.m2m_ctx)) {
+ 		ret = PTR_ERR(ctx->fh.m2m_ctx);
+-		goto err_ctrls;
++		goto err_free;
+ 	}
+ 
+ 	cedrus_reset_out_format(ctx);
+ 
++	ret = cedrus_init_ctrls(dev, ctx);
++	if (ret)
++		goto err_m2m_release;
++
+ 	v4l2_fh_add(&ctx->fh);
+ 
+ 	mutex_unlock(&dev->dev_mutex);
+ 
+ 	return 0;
+ 
+-err_ctrls:
+-	v4l2_ctrl_handler_free(&ctx->hdl);
++err_m2m_release:
++	v4l2_m2m_ctx_release(ctx->fh.m2m_ctx);
+ err_free:
+ 	kfree(ctx);
+ 	mutex_unlock(&dev->dev_mutex);
+-- 
+2.38.1
 
->
-> > Then when the GDSCs are
-> > registered it will create genpds for each GDSC and make them subdomains
-> > of the 'dev->pm_domain' genpd for MMCX. If the GDSCs are enabled at
-> > probe time they will increment the count on MMCX to put the count into
-> > sync between MMCX and the GDSC provided.
-> >
->
-> This does not fit my argument; if the purpose is for pm_runtime to
-> provide access to the registers (and the subdomain ensuring that the
-> GDSC is powered), we should have a pm_runtime_put() after each operation
-> (analog to clk_pm_runtime_put()).
-
-I believe registration/probe of the GDSCs is covered, the device is
-runtime resumed there. After that I'm not 100% positive, but with the
-GDSC as a subdomain of the clock controller's domain it will at least
-turn on MMCX before trying to enable the GDSC.
-
->
-> > The clk framework also has runtime PM calls throughout the code to make
-> > sure the device is runtime resumed when it is accessed. Maybe the
-> > problem is if probe defers and enough runtime puts are called to runtime
-> > suspend the device thus disabling MMCX?
->
-> Iirc the problem at hand was really that without any other votes for
-> MMCX, the register accesses during probe, gdsc and reset registration
-> would access registers without power.
-
-Makes sense. The runtime PM get call for the clock controller in the
-probe will keep MMCX enabled.
-
->
-> > Can MMCX really ever be disabled
-> > or does disabling it act as a one way disable where you can never enable
-> > it again?
-> >
->
-> I've not seen any indications of that.
->
-> Only the side effect that if you set_performance_state() MMCX lower than
-> required during continuous splash the whole SoC get hosed.
-
-I see. That sounds different.
-
->
-> > Or maybe this is the problem where not all constraints are determined
-> > yet but we're letting runtime PM put calls from the dispcc device shut
-> > down the entire multimedia subsystem while other devices that are within
-> > the same domain haven't probed and been able to sync their state but
-> > they're actively accessing the bus (i.e. continuous splash screen). I
-> > could see this problem being avoided by the pm_runtime_get() call in
-> > gdsc registration keeping MMCX on forever because there isn't a matching
-> > put anywhere.
-> >
->
-> This implementation predates 41fff779d794 ("clk: qcom: gdsc: Bump parent
-> usage count when GDSC is found enabled"), so no this was not introduced
-> to hide the issue of
-> yet-to-be-probed-devices-not-voting-for-their-resources.
->
-> This problem has been avoided by tying rpmhpd to sync_state and
-> requiring that people boot their systems with pd_ignore_unused.
-
-Heh ok.
