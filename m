@@ -2,76 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 95CCA615EBF
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:03:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9B72E615EC1
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:03:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231372AbiKBJDL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 05:03:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34972 "EHLO
+        id S230211AbiKBJDU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 05:03:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231236AbiKBJCN (ORCPT
+        with ESMTP id S231271AbiKBJCS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 05:02:13 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8040627FC3
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 02:01:55 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id i3so15800181pfc.11
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 02:01:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=w7Zdgirtqci69Swtp5BTZmwtPa1KkHmxW1ALdvVO1eA=;
-        b=axpjrmZwJoHqm006PdecGiKFxCVrDtI7fmM+51qQj5/T8wCSt9eLlIOuHkYqtu8uHX
-         FEIppYhPZ/F7JWjwBYb22b844jLJgqYJ9fR2AhR9yDVrRXpfyvi+o8nx9PS+wbpGb94z
-         5g9U6rL4KdRNHXwtLqWGSv7c+nSF5RltTj6cE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w7Zdgirtqci69Swtp5BTZmwtPa1KkHmxW1ALdvVO1eA=;
-        b=4zt6Sx6Vpwt39LbFA/M04VrK4hPL8xq8Hrzbemm5DfOkYvyZ9gSi1m/cTsY3ePopLg
-         TZWHyA8aarrMe2WwtHXDmlJl5f+oqGQN1EXKnXhxFwHv7RGL/pPivS1uw/KcAV618Vsr
-         zx2h3iKcQ6GmAiVnx2nq175Tkp8n6xUqcnJ0Ub/tuT9YU9KYicmWS4LNa1IZ6iN+i0gJ
-         NZ907vMjbrqotaHMHgZI0clzbcbI9vjEy8DhwHFsv0fBw8652Gm50jX68ooyV1kpltC/
-         +6U/amp11cg7HI52puVFbfaH8XNNyEDIxBdQ09F3spiHTv+vZ5vIKMvJbDPFZ4Z1gU+9
-         Loyw==
-X-Gm-Message-State: ACrzQf1L46a7KdscmMJTEG1ax3unNXZ0OLFfx7U+cnR1I1UZ5GphIu1i
-        FFbt+p2xt/igOZPt/M7UXqzw8A==
-X-Google-Smtp-Source: AMsMyM6vJRkcQJOubMUTLQ3rPRqmAmsqzmIotexq3LlKl74q6mKvTOwCSRfnQPDG7o68l2G984cvVg==
-X-Received: by 2002:a63:450c:0:b0:443:94a1:3703 with SMTP id s12-20020a63450c000000b0044394a13703mr20116187pga.565.1667379714982;
-        Wed, 02 Nov 2022 02:01:54 -0700 (PDT)
-Received: from [192.168.0.168] ([103.99.10.63])
-        by smtp.gmail.com with ESMTPSA id d62-20020a623641000000b005627ddbc7a4sm7944965pfa.191.2022.11.02.02.01.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 02:01:54 -0700 (PDT)
-Message-ID: <d2567709-9ce8-a49c-b073-a7d35fd2ec8f@linuxfoundation.org>
-Date:   Wed, 2 Nov 2022 03:01:47 -0600
+        Wed, 2 Nov 2022 05:02:18 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 19B3E27FF6
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 02:02:00 -0700 (PDT)
+Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
+        by mailout.west.internal (Postfix) with ESMTP id 2303F3200909;
+        Wed,  2 Nov 2022 05:01:57 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute1.internal (MEProxy); Wed, 02 Nov 2022 05:01:58 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=cerno.tech; h=cc
+        :cc:content-type:date:date:from:from:in-reply-to:in-reply-to
+        :message-id:mime-version:references:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1667379716; x=1667466116; bh=48VenoOPol
+        gMO139tezfkS2fXuf8/WKG9H0qot9z5VY=; b=Jmz2uxkX8LspX9gsCjI+UgokQU
+        B4jdfxcVaO8tilJN8wiOlE/nMhwNR/dyxDy+lhWtrOrfC7bvdOano80yspJRTr22
+        a/zSeQ3KFu6bN7GEcJ7QT/0y0GpybjjKbzO0rl+SIAiWTsaVI20WGrL6qwGRvPHJ
+        PJtLZfl/Msa4LGh139y/8hcIXt8rZZQ/nMDLy1rEHueAIpjMDv9xyf8ElBAQZBhE
+        otba3eOEuDnhKBfL8WDAdKkQAjHqMg47ZsMQ4VA4zGxUjKIUXzmggYna/r/syaDu
+        k6TjRkbTsDibFbybjH8hHctJd/+vOL2zNb3IUARB4qNEvZqAJfjmptwXPlvA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1667379716; x=1667466116; bh=48VenoOPolgMO139tezfkS2fXuf8
+        /WKG9H0qot9z5VY=; b=BfKnTLpp3/fwmxWOpdJfLd3PgUMOFkY7QswAA8qUZC8H
+        aX8Y7x5UdnTvj2geJ4KWu5kex/cZDf37f7cOTH7pzqSjekc9wgTlnbG8bM/V7DFZ
+        nQn0QiFL9pp0kkaU4bSLl1Tlv/SdgEpPLOQRKC9C3Ly4CLSHx883VbyIaFR5A14p
+        /0EoEZ5CnDTeVp8leE3u8WwTKYhh6YCe+it7OzdbwHUp2R2xurJ8TbnnTjyARAHN
+        3C4QUac1oVBxjyviiBda+KNWB2JigGFCR7F5Cpy7hY9n1FoWz25Ur5C28OfKtnPe
+        qelrM368KKv1Ygat5o92ZVxiPrfdUqCsvNuKmt4J3Q==
+X-ME-Sender: <xms:BDJiY2At2Bk4KnZ64rT2kArsofpSjrBCyNzQ5u3t4PCz5IKLp8Dw8Q>
+    <xme:BDJiYwiuRZbbNvtenNvfU2639XCiZyulNfpf7KSxsIMTs9wU-1xL36EQYX5YzbXae
+    IquCLRyGcq1CgQghgQ>
+X-ME-Received: <xmr:BDJiY5mhxuxsCvj9dYUwWXqOXNXCy4Uo5Uh5HplbCatP4HeB6okXQrGrkksBwpO82s52HxZwkjtifLJ9EmR0hpWJVSB6T0J5ON6-Pxj_roVPQQ>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudeigdduvdeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesghdtreertddtudenucfhrhhomhepofgrgihi
+    mhgvucftihhprghrugcuoehmrgigihhmvgestggvrhhnohdrthgvtghhqeenucggtffrrg
+    htthgvrhhnpeejveefheefkeeiffegveelveetgffffeektdefuefhtedtgeejhefggedu
+    ffffudenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpe
+    hmrgigihhmvgestggvrhhnohdrthgvtghh
+X-ME-Proxy: <xmx:BDJiY0ywsTGRzR5iKOzmk8neUh_SO-0iR8WXzRRjUoNeGZK6GsRWJw>
+    <xmx:BDJiY7QcYHc90Y__5tokjUbWlb3nz9phu9WwZsnuRUDnrMIa4I50lA>
+    <xmx:BDJiY_aMjDwmM-Y3RR2Ww3RMdkB-uGU-Cnm8fNtds8j2c54yNU2JIA>
+    <xmx:BDJiYwJElyHPKfMA3qgShq9XQIHCYWU-mFMXr2s2OLf2lI4MiqNbQA>
+Feedback-ID: i8771445c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 2 Nov 2022 05:01:55 -0400 (EDT)
+Date:   Wed, 2 Nov 2022 10:01:53 +0100
+From:   Maxime Ripard <maxime@cerno.tech>
+To:     =?utf-8?B?Sm9zw6kgRXhww7NzaXRv?= <jose.exposito89@gmail.com>
+Cc:     emma@anholt.net, airlied@gmail.com, daniel@ffwll.ch,
+        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] drm/vc4: hdmi: Fix pointer dereference before check
+Message-ID: <20221102090153.tujblkvd3jlhdtxr@houat>
+References: <20221029093413.546103-1-jose.exposito89@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH] selftests/vDSO: Add riscv getcpu & gettimeofday test
-To:     guoren@kernel.org, arnd@arndb.de, shuah@kernel.org
-Cc:     linux-arch@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-kselftest@vger.kernel.org,
-        "haocheng . zy" <haocheng.zy@linux.alibaba.com>,
-        Mao Han <han_mao@linux.alibaba.com>,
-        Guo Ren <guoren@linux.alibaba.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Elliott Hughes <enh@google.com>,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20221102081531.882149-1-guoren@kernel.org>
-Content-Language: en-US
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221102081531.882149-1-guoren@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="2piuzv5jj7zmiqf3"
+Content-Disposition: inline
+In-Reply-To: <20221029093413.546103-1-jose.exposito89@gmail.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,77 +84,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/2/22 02:15, guoren@kernel.org wrote:
-> From: Guo Ren <guoren@kernel.org>
-> 
-> Enable vDSO getcpu & gettimeofday test for riscv. But only riscv64
-> supports __vdso_gettimeofday and riscv32 is under development.
-> 
-> VERSION
-> {
->          LINUX_4.15 {
->          global:
->                  __vdso_rt_sigreturn;
->                  __vdso_gettimeofday;
->                  __vdso_clock_gettime;
->                  __vdso_clock_getres;
->                  __vdso_getcpu;
->                  __vdso_flush_icache;
->          local: *;
->          };
-> }
-> 
-> Co-developed-by: haocheng.zy <haocheng.zy@linux.alibaba.com>
-> Signed-off-by: haocheng.zy <haocheng.zy@linux.alibaba.com>
-> Suggested-by: Mao Han <han_mao@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@linux.alibaba.com>
-> Signed-off-by: Guo Ren <guoren@kernel.org>
-> Cc: Paul Walmsley <paul.walmsley@sifive.com>
-> Cc: Palmer Dabbelt <palmer@dabbelt.com>
-> Cc: Elliott Hughes <enh@google.com>
+
+--2piuzv5jj7zmiqf3
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+
+Hi,
+
+On Sat, Oct 29, 2022 at 11:34:13AM +0200, Jos=E9 Exp=F3sito wrote:
+> Commit 6bed2ea3cb38 ("drm/vc4: hdmi: Reset link on hotplug") introduced
+> the vc4_hdmi_reset_link() function. This function dereferences the
+> "connector" pointer before checking whether it is NULL or not.
+>=20
+> Rework variable assignment to avoid this issue.
+>=20
+> Fixes: 6bed2ea3cb38 ("drm/vc4: hdmi: Reset link on hotplug")
+> Signed-off-by: Jos=E9 Exp=F3sito <jose.exposito89@gmail.com>
 > ---
->   tools/testing/selftests/vDSO/vdso_test_getcpu.c       | 5 +++++
->   tools/testing/selftests/vDSO/vdso_test_gettimeofday.c | 3 +++
->   2 files changed, 8 insertions(+)
-> 
-> diff --git a/tools/testing/selftests/vDSO/vdso_test_getcpu.c b/tools/testing/selftests/vDSO/vdso_test_getcpu.c
-> index fc25ede131b8..1e474f406a87 100644
-> --- a/tools/testing/selftests/vDSO/vdso_test_getcpu.c
-> +++ b/tools/testing/selftests/vDSO/vdso_test_getcpu.c
-> @@ -14,8 +14,13 @@
->   #include "../kselftest.h"
->   #include "parse_vdso.h"
->   
-> +#if defined(__riscv)
-> +const char *version = "LINUX_4.15";
-> +const char *name = "__vdso_getcpu";> +#else
->   const char *version = "LINUX_2.6";
->   const char *name = "__vdso_getcpu";
-> +#endif
+>  drivers/gpu/drm/vc4/vc4_hdmi.c | 10 +++++++---
+>  1 file changed, 7 insertions(+), 3 deletions(-)
+>=20
+> diff --git a/drivers/gpu/drm/vc4/vc4_hdmi.c b/drivers/gpu/drm/vc4/vc4_hdm=
+i.c
+> index 4a73fafca51b..07d058b6afb7 100644
+> --- a/drivers/gpu/drm/vc4/vc4_hdmi.c
+> +++ b/drivers/gpu/drm/vc4/vc4_hdmi.c
+> @@ -319,9 +319,9 @@ static int reset_pipe(struct drm_crtc *crtc,
+>  static int vc4_hdmi_reset_link(struct drm_connector *connector,
+>  			       struct drm_modeset_acquire_ctx *ctx)
+>  {
+> -	struct drm_device *drm =3D connector->dev;
+> -	struct vc4_hdmi *vc4_hdmi =3D connector_to_vc4_hdmi(connector);
+> -	struct drm_encoder *encoder =3D &vc4_hdmi->encoder.base;
+> +	struct drm_device *drm;
+> +	struct vc4_hdmi *vc4_hdmi;
+> +	struct drm_encoder *encoder;
+>  	struct drm_connector_state *conn_state;
+>  	struct drm_crtc_state *crtc_state;
+>  	struct drm_crtc *crtc;
+> @@ -332,6 +332,10 @@ static int vc4_hdmi_reset_link(struct drm_connector =
+*connector,
+>  	if (!connector)
+>  		return 0;
+> =20
+> +	drm =3D connector->dev;
+> +	vc4_hdmi =3D connector_to_vc4_hdmi(connector);
+> +	encoder =3D &vc4_hdmi->encoder.base;
+> +
 
-name is same in both cases. Move it out of ifdef.
+I don't think that's right. Connector shouldn't be NULL to begin with,
+how did you notice this?
 
->   
->   struct getcpu_cache;
->   typedef long (*getcpu_t)(unsigned int *, unsigned int *,
-> diff --git a/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c b/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-> index 8ccc73ed8240..e411f287a426 100644
-> --- a/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-> +++ b/tools/testing/selftests/vDSO/vdso_test_gettimeofday.c
-> @@ -27,6 +27,9 @@
->   #if defined(__aarch64__)
->   const char *version = "LINUX_2.6.39";
->   const char *name = "__kernel_gettimeofday";
-> +#elif defined(__riscv)
-> +const char *version = "LINUX_4.15";
-> +const char *name = "__vdso_gettimeofday";
->   #else
->   const char *version = "LINUX_2.6";
->   const char *name = "__vdso_gettimeofday";
+Maxime
 
-Rest looks fine.
+--2piuzv5jj7zmiqf3
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+-----BEGIN PGP SIGNATURE-----
 
-thanks,
--- Shuah
+iHUEABYKAB0WIQRcEzekXsqa64kGDp7j7w1vZxhRxQUCY2IyAQAKCRDj7w1vZxhR
+xclpAQDwusHvGhXtWLqUZjV4oaBclOlKnVClFcnplMVjERHSHAD+MZOvuaDd+PPh
+thSlYBgAKiDk4ReeyGf+XLKy4NCa0QE=
+=T/lW
+-----END PGP SIGNATURE-----
+
+--2piuzv5jj7zmiqf3--
