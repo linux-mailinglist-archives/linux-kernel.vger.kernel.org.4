@@ -2,115 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 185E7616FC9
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 22:31:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CF6F616FCE
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 22:31:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbiKBVbJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 17:31:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37184 "EHLO
+        id S230499AbiKBVbT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 17:31:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230106AbiKBVbG (ORCPT
+        with ESMTP id S230374AbiKBVbP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 17:31:06 -0400
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6271EDF31
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 14:31:02 -0700 (PDT)
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A2LQbru031291;
-        Wed, 2 Nov 2022 21:30:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=8M4oNJWBxl6J9cF9aFri0vLNH3Y5FE7K8nXrAL0guLc=;
- b=i1L6aPKtVZRGXOQMyvSgw4r0vkHAQ0rhXQFGFiBvfrXtC25bD2qm1jopOdWisdqVuA/x
- RZItexTxAwyCTqZ85eBoCu9jobTy6KWvxPxqMJdMhbPTh4dEM3abXM0unkDPY8PGz8BQ
- YDVdRRvHgpEuteKLtjPwhCKcMEEZiz9T9t714g73PigK5St/LI3EtqEx/3wqtGDfOQN7
- T4X2rOCj9A9/A0VAlOokkSlDicsrLHWKEPQbvf+M4Y3baITZ46kzb9qT1FLrRUcDn/Vz
- iksmgNUmYt6RR8RKEmu53YUvBffqVbtNySzr/1gv8fa8J3EOiaCNQh4sggx8p75yGkzj Tw== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kkw41gsdt-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Nov 2022 21:30:30 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A2LUTNe005843
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 2 Nov 2022 21:30:29 GMT
-Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 2 Nov 2022
- 14:30:28 -0700
-Message-ID: <b6faacac-46f2-7643-7796-b34840fc94f5@quicinc.com>
-Date:   Wed, 2 Nov 2022 15:30:27 -0600
+        Wed, 2 Nov 2022 17:31:15 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3AE8DE0AC;
+        Wed,  2 Nov 2022 14:31:12 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id C9D7F61C35;
+        Wed,  2 Nov 2022 21:31:11 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A4DBAC433C1;
+        Wed,  2 Nov 2022 21:31:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667424671;
+        bh=uj1On4sityXve9n4oIzQfWoyfP20tL7E6nqXIQO6hhw=;
+        h=Date:Subject:To:References:From:In-Reply-To:From;
+        b=oYtrJabWAjMaLg5J+fC3o6K0oFCrEWf26yhgKJCiSrdQtwF+TJCOjcouJBAOSzI3x
+         4fTtxtWi9RvoQAr5P5aVrzeTur9p8up8mJOvRCejPHrizZex2j4HYwGsgdawOakUhU
+         JGevFV4YUbIZOnYgsjHP8+bVNBxm4z8gTY+YoEtLoqnCk0e6AWJHVX378VaXDHEbNi
+         viPEqUpSe39UNJ4NkcCfMkTvexrizdxXxTw2PQfj/NbRXoQ1cVmcBVMRhK1vuIBt/w
+         nh+I68opL2yfL6mXlYSZ37gQkzgja4t27OiDJQdu4mqqhvJNlinU/ZSy7j1TlKqCP2
+         bkcQiGQWgh92Q==
+Message-ID: <2854316e-0874-c8f7-b090-96217dd4a4e5@kernel.org>
+Date:   Wed, 2 Nov 2022 17:31:08 -0400
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
- Thunderbird/91.6.0
-Subject: Re: [RFC PATCH v2 3/3] drm: initialize accel framework
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [v3 1/3] dt-bindings: Add bindings for aspeed pwm-tach.
 Content-Language: en-US
-To:     Oded Gabbay <ogabbay@kernel.org>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        Alex Deucher <alexander.deucher@amd.com>
-CC:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
-        Jiho Chu <jiho.chu@samsung.com>,
-        Daniel Stone <daniel@fooishbar.org>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        Christoph Hellwig <hch@infradead.org>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Jagan Teki <jagan@amarulasolutions.com>,
-        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
-        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>
-References: <20221102203405.1797491-1-ogabbay@kernel.org>
- <20221102203405.1797491-4-ogabbay@kernel.org>
-From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
-In-Reply-To: <20221102203405.1797491-4-ogabbay@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+To:     Billy Tsai <billy_tsai@aspeedtech.com>, jdelvare@suse.com,
+        linux@roeck-us.net, robh+dt@kernel.org, joel@jms.id.au,
+        andrew@aj.id.au, lee.jones@linaro.org, thierry.reding@gmail.com,
+        u.kleine-koenig@pengutronix.de, p.zabel@pengutronix.de,
+        linux-hwmon@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-aspeed@lists.ozlabs.org, linux-kernel@vger.kernel.org,
+        linux-pwm@vger.kernel.org, BMC-SW@aspeedtech.com,
+        garnermic@meta.com
+References: <20221102083601.10456-1-billy_tsai@aspeedtech.com>
+ <20221102083601.10456-2-billy_tsai@aspeedtech.com>
+From:   Krzysztof Kozlowski <krzk@kernel.org>
+In-Reply-To: <20221102083601.10456-2-billy_tsai@aspeedtech.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 1ML62Efs16CUbymup6sHIAEFHeWbnW3l
-X-Proofpoint-GUID: 1ML62Efs16CUbymup6sHIAEFHeWbnW3l
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-02_15,2022-11-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- impostorscore=0 malwarescore=0 lowpriorityscore=0 phishscore=0
- mlxlogscore=999 mlxscore=0 priorityscore=1501 bulkscore=0 clxscore=1015
- adultscore=0 spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211020142
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/2/2022 2:34 PM, Oded Gabbay wrote:
-> @@ -163,7 +174,11 @@ static int drm_minor_register(struct drm_device *dev, unsigned int type)
->   
->   	ret = drm_debugfs_init(minor, minor->index, drm_debugfs_root);
->   	if (ret) {
-> -		DRM_ERROR("DRM: Failed to initialize /sys/kernel/debug/dri.\n");
-> +		if (minor->type == DRM_MINOR_ACCEL)
-> +			DRM_ERROR("DRM: Failed to initialize /sys/kernel/debug/accel.\n");
-> +		else
-> +			DRM_ERROR("DRM: Failed to initialize /sys/kernel/debug/dri.\n");
-> +
->   		goto err_debugfs;
->   	}
->   
+On 02/11/2022 04:35, Billy Tsai wrote:
+> This patch adds device binding for aspeed pwm-tach device which is a
+> multi-function device include pwm and tach function and pwm/tach device
+> bindings which should be the child-node of pwm-tach device.
+> 
+> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
+> ---
+>  .../bindings/hwmon/aspeed,ast2600-tach.yaml   | 48 ++++++++++++
+>  .../bindings/mfd/aspeed,ast2600-pwm-tach.yaml | 76 +++++++++++++++++++
+>  .../bindings/pwm/aspeed,ast2600-pwm.yaml      | 64 ++++++++++++++++
+>  3 files changed, 188 insertions(+)
 
-This doesn't look right.  Don't you need to call drm_debugfs_init() with 
-accel_debugfs_root for the case - minor->type == DRM_MINOR_ACCEL? 
-Unless I fail to understand something, this will put all the accel 
-devices under /sys/kernel/debug/dri
+You sent several versions and still did not Cc me...
+
+My previous feedback applies.
+
+Best regards,
+Krzysztof
+
