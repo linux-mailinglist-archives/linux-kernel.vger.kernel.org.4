@@ -2,56 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 540EA615ABF
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 04:40:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B8FB615AD8
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 04:42:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbiKBDkO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 23:40:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57230 "EHLO
+        id S230193AbiKBDmX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 23:42:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58378 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229785AbiKBDkK (ORCPT
+        with ESMTP id S230221AbiKBDmO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 23:40:10 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 557CF26AC1;
-        Tue,  1 Nov 2022 20:40:09 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id D74796172F;
-        Wed,  2 Nov 2022 03:40:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF521C433D7;
-        Wed,  2 Nov 2022 03:40:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667360408;
-        bh=YvIE6halxY+/sZPI1kuhiNcmZGBmKfv091gJ/Usx2HU=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=dECRwqqCEG/Ct8DxQAtr8C782XsNfmXDEDV81c7jZKYHL8WkVDivFge03dx1WFqYt
-         3hddwowmUhVE6gknEMzNvvrV/wsz7JrN/ozMeEGjaaXPWIOWIRxp/9h1MoLIOiQwMK
-         m0UZXjj7iZf3lHXapvRo4IscVwD5GGkerF9tXaUcG2hsHqrP6COh96FjjIeZ4htbmF
-         mFB4YySnu96McpPBejZ3mdmdv/jEG+W6tPmK+BTEau0MTtdnms9iVycaeqUqzdkPd/
-         o6R0GM1r1Aiww/bDz31IF28c5O+5WQA6FehCguOjobRPpTDlLwwpKqIIcU0ZqSxyhr
-         9dYRFoLcyoG/A==
-Date:   Tue, 1 Nov 2022 20:40:06 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Andrew Lunn <andrew@lunn.ch>
-Cc:     Andy Ren <andy.ren@getcruise.com>, netdev@vger.kernel.org,
-        richardbgobert@gmail.com, davem@davemloft.net,
-        wsa+renesas@sang-engineering.com, edumazet@google.com,
-        petrm@nvidia.com, pabeni@redhat.com, corbet@lwn.net,
-        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
-        roman.gushchin@linux.dev
-Subject: Re: [PATCH net-next v2] netconsole: Enable live renaming for
- network interfaces used by netconsole
-Message-ID: <20221101204006.75b46660@kernel.org>
-In-Reply-To: <Y2G+SYXyZAB/r3X0@lunn.ch>
-References: <20221102002420.2613004-1-andy.ren@getcruise.com>
-        <Y2G+SYXyZAB/r3X0@lunn.ch>
+        Tue, 1 Nov 2022 23:42:14 -0400
+Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7152926ADB
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 20:42:12 -0700 (PDT)
+Received: by mail-pf1-x433.google.com with SMTP id q9so198395pfg.5
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 20:42:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Oo23rdptXeonGeV+R+rAP3rUmFYr9yR6UUbFic0TMHM=;
+        b=Ej7aSHjtyIcfBIc+mXwGkpDPO/8iWJd7WvOMKVWE7hrCgZlw4b1fV14PjOH/sqi9Ky
+         wnr7vwVt2ZDmK1TGnqgdOOQ4GN1Fmd/cv1wdliqW+KcABkCoMKjLQ3g7x01FizZH6HD3
+         5x/CFyTc7nUU+7RAJG0dswlsWc9Z+xc3laUiU=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Oo23rdptXeonGeV+R+rAP3rUmFYr9yR6UUbFic0TMHM=;
+        b=Y342bTdrPkDfw5O911UljnVREuOT9BEVHJBwJeosTz8NVu3KNWJ6pX822M2rIR6/16
+         79KaLCHHum5DdOEOA3h3WZO3/edbUe+UP5NUB3FjmvlE3tSFhwiH2D+daKdUhdkbVbTf
+         QVT0l0w2/4OhyYA+/eEroHP1xxQadWQxOCGOj28ehmvGcloKEZUK7Y8XTNRtRKd/dAL5
+         xwL+9sIYpSr9Kf6huCZkmOm1svoF7f1v6sdKYzqvaPKDMzG7IC3W43SZ6bxwg3mfBBeb
+         vQbfu9h0oSdPuFlqYMfLAF0+33M65jvYxHcW3Xs5jLwKvwDb2ydn2GDenq1zdWO+G73B
+         bZbQ==
+X-Gm-Message-State: ACrzQf0rMWjG9H0t9FCSZk8TU5wlgqw+se7l7Jrt3kHq1rGv1aJOp8Hh
+        hZ3wQIu1MY6JefcFKa/LIjlWzA==
+X-Google-Smtp-Source: AMsMyM5bZXD48076Ge2HXaXwzUt1HHHf5Ug7/VXNl31WPVwEIU4kov8PXoyBU4VaX/MbTOVpkAxAcQ==
+X-Received: by 2002:a63:501f:0:b0:46f:a711:c455 with SMTP id e31-20020a63501f000000b0046fa711c455mr15000744pgb.402.1667360532351;
+        Tue, 01 Nov 2022 20:42:12 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:f558:dfb0:7cb7:44d9])
+        by smtp.gmail.com with ESMTPSA id r1-20020a17090a1bc100b0020dda7efe61sm318368pjr.5.2022.11.01.20.42.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 20:42:11 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 12:42:06 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Nhat Pham <nphamcs@gmail.com>
+Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, minchan@kernel.org,
+        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
+        ddstreet@ieee.org, vitaly.wool@konsulko.com
+Subject: Re: [PATCH v2 5/5] zsmalloc: Implement writeback mechanism for
+ zsmalloc
+Message-ID: <Y2HnDi4K7lxKkptY@google.com>
+References: <202210272158.7swYwd23-lkp@intel.com>
+ <20221027182736.513530-1-nphamcs@gmail.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221027182736.513530-1-nphamcs@gmail.com>
+X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -59,25 +71,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Nov 2022 01:48:09 +0100 Andrew Lunn wrote:
-> Changing the interface name while running is probably not an
-> issue. There are a few drivers which report the name to the firmware,
-> presumably for logging, and phoning home, but it should not otherwise
-> affect the hardware.
+On (22/10/27 11:27), Nhat Pham wrote:
+[..]
+> +static int zs_reclaim_page(struct zs_pool *pool, unsigned int retries)
+> +{
+> +	int i, obj_idx, ret = 0;
+> +	unsigned long handle;
+> +	struct zspage *zspage;
+> +	struct page *page;
+> +	enum fullness_group fullness;
+> +
+> +	/* Lock LRU and fullness list */
+> +	spin_lock(&pool->lock);
+> +	if (!pool->ops || !pool->ops->evict || list_empty(&pool->lru) ||
+> +			retries == 0) {
+> +		spin_unlock(&pool->lock);
+> +		return -EINVAL;
+> +	}
+> +
+> +	for (i = 0; i < retries; i++) {
+> +		struct size_class *class;
+> +
+> +		zspage = list_last_entry(&pool->lru, struct zspage, lru);
+> +		list_del(&zspage->lru);
+> +
+> +		/* zs_free may free objects, but not the zspage and handles */
+> +		zspage->under_reclaim = true;
+> +
+> +		/* Lock backing pages into place */
+> +		lock_zspage(zspage);
 
-Agreed. BTW I wonder if we really want to introduce a netconsole
-specific uAPI for this or go ahead with something more general.
-A sysctl for global "allow UP rename"?
-
-We added the live renaming for failover a while back and there were 
-no reports of user space breaking as far as I know. So perhaps nobody
-actually cares and we should allow renaming all interfaces while UP?
-For backwards compat we can add a sysctl as mentioned or a rtnetlink 
-"I know what I'm doing" flag? 
-
-Maybe print an info message into the logs for a few releases to aid
-debug?
-
-IOW either there is a reason we don't allow rename while up, and
-netconsole being bound to an interface is immaterial. Or there is 
-no reason and we should allow all.
+Does this call into the scheduler under pool->lock spinlock?
