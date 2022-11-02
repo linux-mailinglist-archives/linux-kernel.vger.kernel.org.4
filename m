@@ -2,107 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 79CCC6164CA
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:17:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B04AA6164B1
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:15:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231473AbiKBORu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 10:17:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42374 "EHLO
+        id S230451AbiKBOPr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 10:15:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231446AbiKBORd (ORCPT
+        with ESMTP id S229570AbiKBOPp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 10:17:33 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 845FB27DFA;
-        Wed,  2 Nov 2022 07:17:25 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id q9so45768231ejd.0;
-        Wed, 02 Nov 2022 07:17:25 -0700 (PDT)
+        Wed, 2 Nov 2022 10:15:45 -0400
+Received: from mail-ed1-x529.google.com (mail-ed1-x529.google.com [IPv6:2a00:1450:4864:20::529])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0303825C76
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 07:15:43 -0700 (PDT)
+Received: by mail-ed1-x529.google.com with SMTP id y69so26657271ede.5
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 07:15:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=2OvsFvC7MAbEsOX8IFvWXL3yuohBpehZrnsumSS6l5Y=;
-        b=I94xNZB032xN/I+xFwgS4i1xMTczslDTtHMUVGoshdZ/3RqrcVx6ggSO1gkrF1gjfX
-         HKSBKCCRFP9Z4qEjiUmsiuNI1YiJqpJ1t+ucH8Bd0egieDq1dJ94kTcY4WT9Pw82pCI/
-         ceAau4TdeCCagvYuTewmK7nvHyHUWj0Eb27ptkWPZpNvDL/GLSK1GQ3DhE2S4d9nBEYK
-         8LgPm4QDL6s80i/5BTfLNm/jgp7DtF8Kmp5I5tcRaVuDgjZxT0KgA0eVrod8TB+vh9Zc
-         7nbC69J1/ujjz21XwP4fvMs1jXgDwCMXLwORccXtYMeE7mqSiKf8QiaE1voLWuGOPNJQ
-         n0hQ==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=7PYnB7xW2Wi33w4OvOPbxiAvVHx7kf/RZ/bLDiGg/bE=;
+        b=lyGZjJw8emxz4I8SOPX27gIod982UVGqmJS5GMu08w3F2FaEiEPQeQncTFZBZxHiwR
+         Odgib04ABhDWpw9F/KcpVWauZBSf5/pqx1AAASJj6j4fKdAgY37h2KZAbit+zFZPVSSp
+         nWdZ/Rvj6JRPXCqeHqNyO98TXCd29fe0Ipdnwr06eSZbnyHGMq7PptK6jC2sEiPGXKdu
+         YsJEqdenxZBh03G3EnqRAsckMX2hL334FVR0z72DZbMghb5lW4VAfGLy/gJzcsYvgMbD
+         Op567n382pFq9Io20n5SLADuRvATSTTH1nCwO6GU2TnTg17CW4ySbAj4edq5VhYT2/4c
+         cMjg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2OvsFvC7MAbEsOX8IFvWXL3yuohBpehZrnsumSS6l5Y=;
-        b=EsHVu3ZfH5rQIUZm/EypbMaUN1le3zQjeSf8Yp3VmL4SQE2nUayerHI7FBC7B4yjUE
-         8aRY8FH/SeL5n8xq64x902LXsjnUO/Ep2n1w7PxhNZrQWYKpcO8jCf2VcZUNo/xXPL5l
-         PmZut3S9cIL9iXiP81udIRSNfhhnnu7IV3Ql5e+KUrkiDFBdjq2PXMMFytWccFYewd3e
-         s7fDTiq4/TyEeMFDBuVaIewYmwMbYKnu7Afa3pCQ+eBU3cPgPnJAggC/Qh0I6iX3db48
-         HUEERcuzVNUEq2nYBJjZZVj3/x9SRr4Lt3Ro+jTqDIG1VfCsqGY3hND/xzGcnQx9KvO3
-         He7g==
-X-Gm-Message-State: ACrzQf1kVzdcn4ehfDJWrO6UFh7N4AjA9KB31r1NLnZwjCbHSpkfo9oz
-        L+WVWeCaMtSR9nUtCtMgwH+lafSwQq0=
-X-Google-Smtp-Source: AMsMyM6DJtDJPn0GY0qzDwdPhWqfhXVOLLPpbFKX7ji9TiBh0loGXmAORNtJMyy/1fK9D3LQR0FDtg==
-X-Received: by 2002:a17:906:58c9:b0:7a7:dcba:a987 with SMTP id e9-20020a17090658c900b007a7dcbaa987mr23908623ejs.88.1667398644094;
-        Wed, 02 Nov 2022 07:17:24 -0700 (PDT)
-Received: from localhost ([88.227.60.86])
-        by smtp.gmail.com with UTF8SMTPSA id f21-20020aa7d855000000b00458d383a6ddsm5826495eds.44.2022.11.02.07.17.23
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 07:17:23 -0700 (PDT)
-From:   Sasha Finkelstein <fnkl.kernel@gmail.com>
-To:     thierry.reding@gmail.com, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io,
-        asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-pwm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Sasha Finkelstein <fnkl.kernel@gmail.com>
-Subject: [PATCH v2 4/4] MAINTAINERS: Add entries for Apple PWM driver
-Date:   Wed,  2 Nov 2022 17:15:13 +0300
-Message-Id: <20221102141513.49289-5-fnkl.kernel@gmail.com>
-X-Mailer: git-send-email 2.24.3 (Apple Git-128)
-In-Reply-To: <20221102141513.49289-1-fnkl.kernel@gmail.com>
-References: <20221102141513.49289-1-fnkl.kernel@gmail.com>
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=7PYnB7xW2Wi33w4OvOPbxiAvVHx7kf/RZ/bLDiGg/bE=;
+        b=I2jlUt18xkiTdwOONJ49mquaQVCDtfFdsNYzEfl/HBUTDWFPn847uM5JFJoDR6+kU9
+         lo2Oz4PLaiV5uB/CXXkRmiOsa0qBbhaKOAZxx2Iq+C6GRALbpLahTdsz/t9F83mjqYhW
+         LQl1C8FK/fAW+8xMi2AnypjR2314Tupdx6gQZOzVt4XNNuGmLdBfH+5AeyC3ZRhEB7OK
+         5hSKGLNr4JDKZnnUQPJ1hiuQ8nd+cq01OmCuskZ9de3XDJFluS+gDLM8dcKcwHde046h
+         7ferRKQisrZC/AXWAW7F1jwHHpof9DW7Rfh4jvRjlGpc+POce/0Wh6iBQeVNkr/BxeY8
+         HAbw==
+X-Gm-Message-State: ACrzQf2kNUtem111eeTzzyGx1NP63iN+4RtO7HpaTi7KTvk9vjODRUGf
+        mStvv/c4wylcxQ7LNlTVmBWQTo/cMUCOjw9UFNdCKwjHku1j0Q==
+X-Google-Smtp-Source: AMsMyM6CMF86OMHDnR7HQnsrniHgGl54WWSOkEJKKkIYK9favUb62WLbrcteXqTV7ZOulDDAmHkDgC2Y39SH/9be3GQ=
+X-Received: by 2002:aa7:d996:0:b0:461:88b8:c581 with SMTP id
+ u22-20020aa7d996000000b0046188b8c581mr24954621eds.111.1667398540334; Wed, 02
+ Nov 2022 07:15:40 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 2 Nov 2022 19:45:29 +0530
+Message-ID: <CA+G9fYv5-og6kr8PgGCg-wYUK3PGCQmvbY1YYews5-C8XwxSww@mail.gmail.com>
+Subject: KASAN / KUNIT: testing ran on qemu-arm and list of failures
+To:     open list <linux-kernel@vger.kernel.org>,
+        linux-stable <stable@vger.kernel.org>
+Cc:     Kees Cook <keescook@chromium.org>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        David Gow <davidgow@google.com>,
+        Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>,
+        Vitor Massaru Iha <vitor@massaru.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the MAINTAINERS entries for the driver
+This is a report to get a quick update on kasan on qemu-arm.
 
-Signed-off-by: Sasha Finkelstein <fnkl.kernel@gmail.com>
----
- MAINTAINERS | 2 ++
- 1 file changed, 2 insertions(+)
+The KASAN / KUNIT testing ran on qemu-arm and the following test cases failed
+and the kernel crashed.
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 379945f82a64..414812941714 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -1908,6 +1908,7 @@ F:	Documentation/devicetree/bindings/nvmem/apple,efuses.yaml
- F:	Documentation/devicetree/bindings/pci/apple,pcie.yaml
- F:	Documentation/devicetree/bindings/pinctrl/apple,pinctrl.yaml
- F:	Documentation/devicetree/bindings/power/apple*
-+F:	Documentation/devicetree/bindings/pwm/apple,s5l-fpwm.yaml
- F:	Documentation/devicetree/bindings/watchdog/apple,wdt.yaml
- F:	arch/arm64/boot/dts/apple/
- F:	drivers/clk/clk-apple-nco.c
-@@ -1921,6 +1922,7 @@ F:	drivers/mailbox/apple-mailbox.c
- F:	drivers/nvme/host/apple.c
- F:	drivers/nvmem/apple-efuses.c
- F:	drivers/pinctrl/pinctrl-apple-gpio.c
-+F:	drivers/pwm/pwm-apple.c
- F:	drivers/soc/apple/*
- F:	drivers/watchdog/apple_wdt.c
- F:	include/dt-bindings/interrupt-controller/apple-aic.h
--- 
-2.37.3
+Following tests failed,
+    kasan_strings - FAILED
+    vmalloc_oob - FAILED
+    kasan_memchr - FAILED
+    kasan - FAILED
+    kasan_bitops_generic - FAILED
 
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+
+Boot and test log:
+[    0.000000] Linux version 6.0.7-rc1 (tuxmake@tuxmake)
+(arm-linux-gnueabihf-gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld
+(GNU Binutils for Debian) 2.35.2) #1 SMP @1667356522
+[    0.000000] CPU: ARMv7 Processor [410fd034] revision 4 (ARMv7), cr=10c5383d
+...
+[    0.000000] kasan: Mapping kernel virtual memory block:
+c0000000-f0000000 at shadow: b7000000-bd000000
+[    0.000000] kasan: Mapping kernel virtual memory block:
+bfe00000-c0000000 at shadow: b6fc0000-b7000000
+[    0.000000] kasan: Kernel address sanitizer initialized
+...
+[   81.058636]     ok 41 - kmem_cache_double_destroy
+[   81.059932]     # kasan_memchr: EXPECTATION FAILED at lib/test_kasan.c:920
+[   81.059932]     KASAN failure expected in \"kasan_ptr_result =
+memchr(ptr, '1', size + 1)\", but none occurred
+[   81.063106]     not ok 42 - kasan_memchr
+...
+[   81.221595]     # kasan_strings: EXPECTATION FAILED at lib/test_kasan.c:975
+[   81.221595]     KASAN failure expected in \"kasan_ptr_result =
+strchr(ptr, '1')\", but none occurred
+[   81.223903]     # kasan_strings: EXPECTATION FAILED at lib/test_kasan.c:977
+[   81.223903]     KASAN failure expected in \"kasan_ptr_result =
+strrchr(ptr, '1')\", but none occurred
+...
+[  429.920201] Insufficient stack space to handle exception!
+[  429.920232] Task stack:     [0xfa000000..0xfa004000]
+[  429.925226] IRQ stack:      [0xf0808000..0xf080c000]
+[  429.927424] Overflow stack: [0xc4190000..0xc4191000]
+[  429.929785] Internal error: kernel stack overflow: 0 [#1] SMP ARM
+[  429.933101] Modules linked in: usbtest pci_endpoint_test
+pci_epf_test preemptirq_delay_test soc_utils_test(N) snd_soc_core
+ac97_bus snd_pcm_dmaengine snd_pcm snd_timer snd soundcore cfg80211
+bluetooth crc32_arm_ce sha2_arm_ce sha256_arm sha1_arm_ce sha1_arm
+aes_arm_ce crypto_simd
+[  429.946324] CPU: 1 PID: 3390 Comm: grep Tainted: G    B
+N 6.0.7-rc1 #1
+[  429.950389] Hardware name: Generic DT based system
+[  429.952979] PC is at trace_hardirqs_off+0x0/0x16c
+[  429.955349] LR is at __dabt_svc+0x48/0x80
+...
+[  902.927481] Insufficient stack space to handle exception!
+[  902.927520] Task stack:     [0xfa138000..0xfa13c000]
+[  902.932386] IRQ stack:      [0xf0800000..0xf0804000]
+[  902.934770] Overflow stack: [0xc418f000..0xc4190000]
+[  902.937770] Internal error: kernel stack overflow: 0 [#3] SMP ARM
+[  902.941255] Modules linked in: usbtest pci_endpoint_test
+pci_epf_test preemptirq_delay_test soc_utils_test(N) snd_soc_core
+ac97_bus snd_pcm_dmaengine snd_pcm snd_timer snd soundcore cfg80211
+bluetooth crc32_arm_ce sha2_arm_ce sha256_arm sha1_arm_ce sha1_arm
+aes_arm_ce crypto_simd
+[  902.954667] CPU: 0 PID: 3440 Comm: agetty Tainted: G    B D
+ N 6.0.7-rc1 #1
+[  902.959155] Hardware name: Generic DT based system
+[  902.961688] PC is at trace_hardirqs_off+0x0/0x16c
+[  902.964151] LR is at __dabt_svc+0x48/0x80
+[  902.966393] pc : [<c04c98fc>]    lr : [<c0300b28>]    psr: 400c0193
+[  902.969925] sp : fa138008  ip : 00000051  fp : fa13be74
+[  902.973008] r10: c6175180  r9 : ce082c00  r8 : fa1380b8
+[  902.976025] r7 : fa13803c  r6 : ffffffff  r5 : 200c0193  r4 : c05eb00c
+[  902.979718] r3 : c1b29438  r2 : fa138054  r1 : be42701f  r0 : 00000051
+[  902.983275] Flags: nZcv  IRQs off  FIQs on  Mode SVC_32  ISA ARM
+Segment none
+[  902.986903] Control: 10c5383d  Table: 498d806a  DAC: 00000051
+[  902.989830] Register r0 information: non-paged memory
+[  902.992732] Register r1 information: non-paged memory
+[  902.995532] Register r2 information: 4-page vmalloc region starting
+at 0xfa138000 allocated at kernel_clone+0xb0/0x53c
+[  903.001090] Register r3 information: non-slab/vmalloc memory
+[  903.004149] Register r4 information: non-slab/vmalloc memory
+[  903.007262] Register r5 information: non-paged memory
+[  903.010091] Register r6 information: non-paged memory
+[  903.012782] Register r7 information: 4-page vmalloc region starting
+at 0xfa138000 allocated at kernel_clone+0xb0/0x53c
+[  903.018743] Register r8 information: 4-page vmalloc region starting
+at 0xfa138000 allocated at kernel_clone+0xb0/0x53c
+[  903.024227] Register r9 information: slab task_struct start
+ce082c00 pointer offset 0
+[  903.028265] Register r10 information: slab mm_struct start c6175180
+pointer offset 0 size 168
+[  903.033051] Register r11 information: 4-page vmalloc region
+starting at 0xfa138000 allocated at kernel_clone+0xb0/0x53c
+[  903.038677] Register r12 information: non-paged memory
+[  903.041458] Process agetty (pid: 3440, stack limit = 0xa4d91b13)
+...
+[  905.331477]  trace_hardirqs_off from __dabt_svc+0x48/0x80
+[  905.334275] Exception stack(0xfa138008 to 0xfa138050)
+[  905.337192] 8000:                   fa1380f8 be42701f fa1380f8
+00000003 be427035 fa1380b8
+[  905.341804] 8020: c31192e0 00000005 fa1380b8 c3119330 c6175180
+fa13be74 00000051 fa138054
+[  905.346074] 8040: c1b29438 c05eb00c 200c0193 ffffffff
+[  905.348746]  __dabt_svc from __asan_load4+0x30/0x88
+[  905.351332]  __asan_load4 from do_translation_fault+0x34/0x124
+[  905.354779]  do_translation_fault from do_DataAbort+0x54/0xf4
+[  905.358091]  do_DataAbort from __dabt_svc+0x50/0x80
+[  905.360842] Exception stack(0xfa1380b8 to 0xfa138100)
+
+[1] https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.0.y/build/v6.0.6-241-g436175d0f780/testrun/12809413/suite/log-parser-test/test/check-kernel-bug/details/
+[2] https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-6.0.y/build/v6.0.6-241-g436175d0f780/testrun/12809413/suite/log-parser-test/test/check-kernel-bug/log
+
+metadata:
+  git_ref: linux-6.0.y
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+  git_sha: 436175d0f780af8302164b3102ecf0ff99f7a376
+  git_describe: v6.0.6-241-g436175d0f780
+  kernel_version: 6.0.7-rc1
+  kernel-config: https://builds.tuxbuild.com/2GyMQxdakmLexUwkh1d3VjAfSgv/config
+  build-url: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc/-/pipelines/683032123
+  artifact-location: https://builds.tuxbuild.com/2GyMQxdakmLexUwkh1d3VjAfSgv
+  toolchain: gcc-10
+
+
+--
+Linaro LKFT
+https://lkft.linaro.org
