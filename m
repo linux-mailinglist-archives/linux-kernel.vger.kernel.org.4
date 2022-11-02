@@ -2,36 +2,34 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5DB03615C96
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 07:58:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7004615C98
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 07:59:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230184AbiKBG6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 02:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54170 "EHLO
+        id S229971AbiKBG7j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 02:59:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56748 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiKBG6q (ORCPT
+        with ESMTP id S230093AbiKBG7f (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 02:58:46 -0400
+        Wed, 2 Nov 2022 02:59:35 -0400
 Received: from verein.lst.de (verein.lst.de [213.95.11.211])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B26AB8E;
-        Tue,  1 Nov 2022 23:58:45 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5135E261B;
+        Tue,  1 Nov 2022 23:59:33 -0700 (PDT)
 Received: by verein.lst.de (Postfix, from userid 2407)
-        id 695646732D; Wed,  2 Nov 2022 07:58:41 +0100 (CET)
-Date:   Wed, 2 Nov 2022 07:58:41 +0100
+        id 8F0406732D; Wed,  2 Nov 2022 07:59:30 +0100 (CET)
+Date:   Wed, 2 Nov 2022 07:59:30 +0100
 From:   Christoph Hellwig <hch@lst.de>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     Christoph Hellwig <hch@lst.de>, Keith Busch <kbusch@kernel.org>,
-        Jens Axboe <axboe@fb.com>, Sagi Grimberg <sagi@grimberg.me>,
-        Chaitanya Kulkarni <kch@nvidia.com>,
-        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-nvme@lists.infradead.org
-Subject: Re: [PATCH 06/30] nvme: Use kstrtobool() instead of strtobool()
-Message-ID: <20221102065841.GA9020@lst.de>
-References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr> <2e8d7f2f3cb754982f5fe99f2e13cf72db9d6dba.1667336095.git.christophe.jaillet@wanadoo.fr> <20221102064747.GA8903@lst.de> <a0df7655-ac8c-0834-0872-2fa97d5b8797@wanadoo.fr>
+To:     Jinlong Chen <nickyc975@zju.edu.cn>
+Cc:     axboe@kernel.dk, hch@lst.de, chaitanyak@nvidia.com,
+        linux-block@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 1/2] blk-mq: improve error handling in
+ blk_mq_alloc_rq_map()
+Message-ID: <20221102065930.GA9096@lst.de>
+References: <cover.1667358114.git.nickyc975@zju.edu.cn> <bbbc2d9b17b137798c7fb92042141ca4cbbc58cc.1667358114.git.nickyc975@zju.edu.cn>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <a0df7655-ac8c-0834-0872-2fa97d5b8797@wanadoo.fr>
+In-Reply-To: <bbbc2d9b17b137798c7fb92042141ca4cbbc58cc.1667358114.git.nickyc975@zju.edu.cn>
 User-Agent: Mutt/1.5.17 (2007-11-01)
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
         SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
@@ -41,7 +39,6 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 07:57:23AM +0100, Christophe JAILLET wrote:
-> What is the best strategy for sending such patches?
+Looks good:
 
-Just send them per subsystems as mini series or individual patches.
+Reviewed-by: Christoph Hellwig <hch@lst.de>
