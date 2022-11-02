@@ -2,78 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 273A66156D5
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 02:00:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 495596156D7
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 02:01:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229516AbiKBBA2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 21:00:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38224 "EHLO
+        id S229650AbiKBBBo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 21:01:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38794 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229528AbiKBBAZ (ORCPT
+        with ESMTP id S229528AbiKBBBl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 21:00:25 -0400
-Received: from mail-ej1-x62c.google.com (mail-ej1-x62c.google.com [IPv6:2a00:1450:4864:20::62c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08DD71F60B;
-        Tue,  1 Nov 2022 18:00:25 -0700 (PDT)
-Received: by mail-ej1-x62c.google.com with SMTP id d26so41365170eje.10;
-        Tue, 01 Nov 2022 18:00:24 -0700 (PDT)
+        Tue, 1 Nov 2022 21:01:41 -0400
+Received: from mail-oi1-x242.google.com (mail-oi1-x242.google.com [IPv6:2607:f8b0:4864:20::242])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 727FD95B2;
+        Tue,  1 Nov 2022 18:01:40 -0700 (PDT)
+Received: by mail-oi1-x242.google.com with SMTP id r83so17750666oih.2;
+        Tue, 01 Nov 2022 18:01:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=cKOPjxW6hMffC27C/SCX+FUVc2eMjho9VRyb1I26W+A=;
-        b=WMeekXVXt4lsAnluw5FHfJXlbxIcWLcnK0/RbVL1jCWnwcib9Y/v8p/XxVAeCBO9DQ
-         sNQ6Q/hQkfJCuB3h5z7fiH09wV2j3CsLzSjQKJoaCnjvn1vOZcv9Y8Ofna042Tng4guC
-         RR742cQGy1mL7xZVk/+8ThiEG0hcPC3AdbHs8LmE0YtoDzy6PpgN4TU8VmDowr2XB4vs
-         IK77xH1Q1BB6X24V0KWE1p8qBtzIiupySA3AMX5CiqITFm2O+IggA3y0nmWZoGhTAwb6
-         gpmNVwNjfxUrSO8STeE10KBGR4kV7qNLS+RqCG9FXfiKc6sdLUaI3q0Nc3jZvXLShbMe
-         q1Iw==
+        bh=JPxKHoqs1nZBvvoGdz9zFUuB17/tBWtWnfP0oY5ArZ0=;
+        b=hUImzmZkcLjPzntgFucjeUqEBnNC8+NXL+wLHnZpI1n3L8/sVEpygNiulWbru+npFN
+         AENvQTch6VxL4ORCFwKgGbM2iZRReJ5DKSBI13h6gij6mtZmPRXWioL9kKAZ7WlHvooB
+         /8goqcBT6DQBixygb5UTg9RSwHh7zpiqgHGvLREj11Jra157x+W0W2L61FzibMySsnCW
+         2k3WPDOjXsgVKvdbMUz90fe46u+pKb6ZHZANHeZPfgfDje/CocMOrmBoZCQlGDncgwpg
+         HWSAKD3VjcsHoZRjpmnF2YWANbnNaFOqeJ4hhDJdUo6xIzYExnoRP0CjcYWQ7ZyAATHj
+         xExw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=cKOPjxW6hMffC27C/SCX+FUVc2eMjho9VRyb1I26W+A=;
-        b=ygecsmz1MENijTEyWn0tdEpxy5J1UHK6oB+1Z3KlNp0QxZDqJIAIyYU4qwecLF4CIO
-         Fj0hAjDUg6yahO9WSCGfst1WrqHrueqCiRDlkjt0ghLc4FZ4SuTL86oDeFyhfWDM96Cy
-         +uUcuT6gCLpFDxKIi5SGw0zrn0d9zEqjAPvCrShwhyVVyxf0i8Mqj3x8iu8wDJ35y4xE
-         o7DOgqePbtZ54bK4lmGeF+D8BoxZHWAGTqM2JnWLWiixfdFvJCpmimvtZs4vamqpDYLo
-         T6SJIrXEBUH6TIRCO2l9UnmryPxILNCeE4SwOOHWBRp1Opa87L+FuBULFFYBgm+9T3yw
-         oEgQ==
-X-Gm-Message-State: ACrzQf3Q8Kep7rWvu0HOsy/B+LGmgJpOUeix6BLautUqVbyHpgRFL+7x
-        AuWs/KZLVDlnJYQbFxv+whIVd/RVoNcK6Y7zdZQ=
-X-Google-Smtp-Source: AMsMyM7c/ABaJaKAKRpL8Ijw/KO0JHwmCdEqPhD5GS9nFJ96c+cfsR284v8V2kqJHwH5onhRriMFhzTVZ3Xb/F628+Q=
-X-Received: by 2002:a17:906:c14f:b0:793:30e1:96be with SMTP id
- dp15-20020a170906c14f00b0079330e196bemr21349587ejc.447.1667350823464; Tue, 01
- Nov 2022 18:00:23 -0700 (PDT)
+        bh=JPxKHoqs1nZBvvoGdz9zFUuB17/tBWtWnfP0oY5ArZ0=;
+        b=qv7ArsbC1baeDj6DJksjE60niVfRwHPIlKk6/sr+Uo201iQ0fj2ZRQt2vyaERR8W2L
+         bl3HKcCikzvbyM0KCsjBNur5ybSJ/KT/gkhteYizfk4Ln+xy6HC5BXoukY0X46+HkK4b
+         KXuXLQLMtjFeGmcmnIXNJp3pvX+1SiGAhAZGAwIav8uupSXfVJuW5kQvtKKBjoTCNl87
+         6p9tkzVCaS2Nj251anl2fE2WNZm0XUEYtp15/5nljkM1XXZxT23LJn5fQxocmSXmRrls
+         /dNs3TFWlxMqzYjxC/K+U6xiEXR4dNr/12enuqwHvolZzniOhhjYNadmAftVkPKk+PMS
+         m8IA==
+X-Gm-Message-State: ACrzQf3KtW9cUbi0uwAQyPpwytQT8mOZJ0Obuyar4fuh5eXsGaJrdMUK
+        cVzkq8Bv2U7wWWFE4x4Hdzlf1+YHeP6ZNHPhIjA=
+X-Google-Smtp-Source: AMsMyM66y7cS1rBa8dySVenleqU8yLcDEXNMxb+zPgXIXGEXgffgP3QLgYa9rW7VKq8Bg18KANBck4oMLnL1FHVTHc0=
+X-Received: by 2002:a05:6808:f10:b0:355:ba4:257e with SMTP id
+ m16-20020a0568080f1000b003550ba4257emr11888702oiw.58.1667350899693; Tue, 01
+ Nov 2022 18:01:39 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221019220242.4746-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221019220242.4746-3-prabhakar.mahadev-lad.rj@bp.renesas.com> <CAMuHMdU6+qNQh2vFic89cnqDmUoyhrJTROCHPdoPguXAEnZMfA@mail.gmail.com>
-In-Reply-To: <CAMuHMdU6+qNQh2vFic89cnqDmUoyhrJTROCHPdoPguXAEnZMfA@mail.gmail.com>
-From:   "Lad, Prabhakar" <prabhakar.csengg@gmail.com>
-Date:   Wed, 2 Nov 2022 00:59:57 +0000
-Message-ID: <CA+V-a8sv9QVDfokN5LExu9p5GeCuHb99-mxBpugDk6J2LSB8SQ@mail.gmail.com>
-Subject: Re: [RFC PATCH v3 2/2] soc: renesas: Add L2 cache management for
- RZ/Five SoC
-To:     Geert Uytterhoeven <geert@linux-m68k.org>
-Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <anup@brainfault.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
+References: <20221020222416.3415511-1-void@manifault.com> <20221020222416.3415511-2-void@manifault.com>
+ <20221101000239.pbbmym4mbdbmnzjd@macbook-pro-4.dhcp.thefacebook.com>
+ <Y2FhXC/s5GUkbr9P@maniforge.dhcp.thefacebook.com> <CAADnVQ+KZcFZdC=W_qZ3kam9yAjORtpN-9+Ptg_Whj-gRxCZNQ@mail.gmail.com>
+ <Y2GRQhsyQMNCOZMT@maniforge.dhcp.thefacebook.com> <CAP01T75R+8WF7jAi5=9cvXfpKtKi9Dq6VxpuYyu7NbWjCtozNg@mail.gmail.com>
+ <20221102003222.2isv2ewxxamoe6lw@macbook-pro-4.dhcp.thefacebook.com>
+In-Reply-To: <20221102003222.2isv2ewxxamoe6lw@macbook-pro-4.dhcp.thefacebook.com>
+From:   Kumar Kartikeya Dwivedi <memxor@gmail.com>
+Date:   Wed, 2 Nov 2022 06:30:59 +0530
+Message-ID: <CAP01T75cXDoKxj4c7YYrv2YLCLpRdsuWc9fVbV0Qzxii9wneGQ@mail.gmail.com>
+Subject: Re: [PATCH bpf-next v6 1/3] bpf: Allow trusted pointers to be passed
+ to KF_TRUSTED_ARGS kfuncs
+To:     Alexei Starovoitov <alexei.starovoitov@gmail.com>
+Cc:     David Vernet <void@manifault.com>, bpf <bpf@vger.kernel.org>,
+        Alexei Starovoitov <ast@kernel.org>,
+        Daniel Borkmann <daniel@iogearbox.net>,
+        Andrii Nakryiko <andrii@kernel.org>,
+        Martin KaFai Lau <martin.lau@linux.dev>,
+        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
+        John Fastabend <john.fastabend@gmail.com>,
+        KP Singh <kpsingh@kernel.org>,
+        Stanislav Fomichev <sdf@google.com>,
+        Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Kernel Team <kernel-team@fb.com>, Tejun Heo <tj@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
@@ -85,78 +82,115 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Geert,
+On Wed, 2 Nov 2022 at 06:02, Alexei Starovoitov
+<alexei.starovoitov@gmail.com> wrote:
+>
+> On Wed, Nov 02, 2022 at 04:01:11AM +0530, Kumar Kartikeya Dwivedi wrote:
+> > On Wed, 2 Nov 2022 at 03:06, David Vernet <void@manifault.com> wrote:
+> > >
+> > > On Tue, Nov 01, 2022 at 01:22:39PM -0700, Alexei Starovoitov wrote:
+> > > > On Tue, Nov 1, 2022 at 11:11 AM David Vernet <void@manifault.com> wrote:
+> > > > >
+> > > > > > What kind of bpf prog will be able to pass 'struct nf_conn___init *' into these bpf_ct_* ?
+> > > > > > We've introduced / vs nf_conf specifically to express the relationship
+> > > > > > between allocated nf_conn and other nf_conn-s via different types.
+> > > > > > Why is this not enough?
+> > > > >
+> > > > > Kumar should have more context here (he originally suggested this in
+> > > > > [0]),
+> > > >
+> > > > Quoting:
+> > > > "
+> > > > Unfortunately a side effect of this change is that now since
+> > > > PTR_TO_BTF_ID without ref_obj_id is considered trusted, the bpf_ct_*
+> > > > functions would begin working with tp_btf args.
+> > > > "
+> > > > I couldn't find any tracepoint that has nf_conn___init as an argument.
+> > > > The whole point of that new type was to return it to bpf prog,
+> > > > so the verifier type matches it when it's passed into bpf_ct_*
+> > > > in turn.
+> > > > So I don't see a need for a new OWNED flag still.
+> > > > If nf_conn___init is passed into tracepoint it's a bug and
+> > > > we gotta fix it.
+> > >
+> > > Yep, this is what I'm seeing as well. I think you're right that
+> > > KF_OWNED_ARGS is just strictly unnecessary and that creating wrapper
+> > > types is the way to enable an ownership model like this.
+> > >
+> >
+> > It's not just nf_conn___init. Some CT helpers also take nf_conn.
+> > e.g. bpf_ct_change_timeout, bpf_ct_change_status.
+> > Right now they are only allowed in XDP and TC programs, so the tracing
+> > args part is not a problem _right now_.
+>
+> ... and it will be fine to use bpf_ct_change_timeout from tp_btf as well.
+>
+> > So currently it may not be possible to pass such a trusted but
+> > ref_obj_id == 0 nf_conn to those helpers.
+> > But based on changes unrelated to this, it may become possible in the
+> > future to obtain such a trusted nf_conn pointer.
+>
+> From kfunc's pov trusted pointer means valid pointer.
+> It doesn't need to be ref_obj_id refcounted from the verifier pov.
+> It can be refcounted on the kernel side and it will be trusted.
+> The code that calls trace_*() passes only trusted pointers into tp-s.
+> If there is a tracepoint somewhere in the kernel that uses a volatile
+> pointer to potentially uaf kernel object it's a bug that should be fixed.
+>
 
-On Tue, Nov 1, 2022 at 1:38 PM Geert Uytterhoeven <geert@linux-m68k.org> wrote:
->
-> Hi Prabhakar,
->
-> On Thu, Oct 20, 2022 at 12:02 AM Prabhakar <prabhakar.csengg@gmail.com> wrote:
-> > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> >
-> > On the AX45MP core, cache coherency is a specification option so it may
-> > not be supported. In this case DMA will fail. As a workaround, firstly we
-> > allocate a global dma coherent pool from which DMA allocations are taken
-> > and marked as non-cacheable + bufferable using the PMA region as specified
-> > in the device tree. Synchronization callbacks are implemented to
-> > synchronize when doing DMA transactions.
-> >
-> > The Andes AX45MP core has a Programmable Physical Memory Attributes (PMA)
-> > block that allows dynamic adjustment of memory attributes in the runtime.
-> > It contains a configurable amount of PMA entries implemented as CSR
-> > registers to control the attributes of memory locations in interest.
-> >
-> > Below are the memory attributes supported:
-> > * Device, Non-bufferable
-> > * Device, bufferable
-> > * Memory, Non-cacheable, Non-bufferable
-> > * Memory, Non-cacheable, Bufferable
-> > * Memory, Write-back, No-allocate
-> > * Memory, Write-back, Read-allocate
-> > * Memory, Write-back, Write-allocate
-> > * Memory, Write-back, Read and Write-allocate
-> >
-> > This patch adds support to configure the memory attributes of the memory
-> > regions as passed from the l2 cache node and exposes the cache management
-> > ops.
-> >
-> > More info about PMA (section 10.3):
-> > http://www.andestech.com/wp-content/uploads/AX45MP-1C-Rev.-5.0.0-Datasheet.pdf
-> >
-> > This feature is based on the work posted [0] by Vincent Chen
-> > <vincentc@andestech.com> for the Andes AndeStart RISC-V CPU.
-> >
-> > [0] https://lore.kernel.org/lkml/1540982130-28248-1-git-send-email-vincentc@andestech.com/
-> >
-> > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
->
-> Thanks for your patch!
->
-> > --- a/arch/riscv/include/asm/errata_list.h
-> > +++ b/arch/riscv/include/asm/errata_list.h
-> > @@ -89,6 +89,7 @@ asm volatile(ALTERNATIVE(                                             \
-> >  #define ALT_THEAD_PMA(_val)
-> >  #endif
-> >
-> > +#ifdef CONFIG_ERRATA_THEAD_CMO
-> >  /*
-> >   * dcache.ipa rs1 (invalidate, physical address)
-> >   * | 31 - 25 | 24 - 20 | 19 - 15 | 14 - 12 | 11 - 7 | 6 - 0 |
-> > @@ -143,5 +144,6 @@ asm volatile(ALTERNATIVE_2(                                         \
-> >         : "a0")
-> >
-> >  #endif /* __ASSEMBLY__ */
-> > +#endif
->
-> FTR, the new #endif should be above the old #endif.
->
-> I noticed because after rebasing on top of commit 65e9fb081877a18c
-> ("drivers/perf: riscv_pmu_sbi: add support for PMU variant on T-Head
-> C9xx cores") in riscv/for-next, the build failed because the new
-> ALT_SBI_PMU_OVERFLOW() definition ended up inside both #endifs,
-> instead of between.
->
-Thanks for pointing this out.
+This is all fine. I'm asking you to distinguish between
+trusted-not-refcounted and trusted-and-refcounted.
+It is necessary for nf_conn, since the object can be reused if the
+refcount is not held.
+Some other CPU could be reusing the same memory and allocating a new
+nf_conn on it while we change its status.
+So it's not ok to call bpf_ct_change_timeout/status on trusted
+nf_conn, but only on trusted+refcounted nf_conn.
 
-Cheers,
-Prabhakar
+Trusted doesn't capture the difference between 'valid' vs 'valid and
+owned by prog' anymore with the new definition
+for PTR_TO_BTF_ID.
+
+Yes, in most cases the tracepoints/tracing functions whitelisted will
+have the caller ensure that,
+but we should then allow trusted nf_conn in those hooks explicitly,
+not implicitly by default everywhere.
+Until then it should be restricted to ref_obj_id > 0 IMO as it is right now.
+
+> > It is a requirement of those kfuncs that the nf_conn has its refcount
+> > held while they are called.
+>
+> and it will be. Just not by the verifier.
+>
+> > KF_TRUSTED_ARGS was encoding this requirement before, but it wouldn't anymore.
+> > It seems better to me to keep that restriction instead of relaxing it,
+> > if it is part of the contract.
+>
+> Disagree as explained above.
+>
+> > It is fine to not require people to dive into these details and just
+> > use KF_TRUSTED_ARGS in general, but we need something to cover special
+> > cases like these where the object is only stable while we hold an
+> > active refcount, RCU protection is not enough against reuse.
+>
+> This is not related to RCU. Let's not mix RCU concerns in here.
+> It's a different topic.
+>
+
+What I meant is that in the normal case, usually objects aren't reused
+while the RCU read lock is held.
+In case of nf_conn, the refcount needs to be held to ensure that,
+since it uses SLAB_TYPESAFE_BY_RCU.
+This is why bpf_ct_lookup needs to bump the refcount and match the key
+after that again, and cannot just return the looked up ct directly.
+
+> > It could be 'expert only' __ref suffix on the nf_conn arg, or
+> > KF_OWNED_ARGS, or something else.
+>
+> I'm still against that.
+>
+
+I understand (and agree) that you don't want to complicate things further.
+It's fine if you want to deal with this later when the above concern
+materializes. But it will be yet another thing to keep in mind for the
+future.
