@@ -2,60 +2,83 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C90F616105
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 11:38:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1A0BD616108
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 11:39:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230420AbiKBKiE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 06:38:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52702 "EHLO
+        id S230504AbiKBKjq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 06:39:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52976 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231192AbiKBKhZ (ORCPT
+        with ESMTP id S231137AbiKBKjL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 06:37:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D4C62936F;
-        Wed,  2 Nov 2022 03:37:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 593E0B82078;
-        Wed,  2 Nov 2022 10:37:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B5FCC433C1;
-        Wed,  2 Nov 2022 10:37:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667385436;
-        bh=e2Pf5tH9e17qtvqUbk6y6qwTol1CmGJDuVLGWQfNJnk=;
-        h=From:To:Cc:Subject:References:Date:In-Reply-To:From;
-        b=HIxbx8DHYPho2RHu1Xsl9LnJcKqCx5XP7a590YE6XgcTl2oSfpmTlRvuQV+C8/QXT
-         DvNKTMOZXc9I1SRY4APGau56HT9JI43hbRJWksUZqhV4r7HFJeuHZx65pomTierPhw
-         re6VR15yDCDStv/evTW0BOALRJZ9Pgwc1/2TtwDwQAfaUdX7VRWqiPSH95VlS/hDrr
-         xbd1j48WS7hSflxkq145uKYVD6lLR3nDykLZ/n2v2f3PqbH0z3zHa7vpJ6ISg372Lc
-         aigBXpnYowkCCVIZ3JT96A2ecIP7KvaNAJGhlx6cbp+HbwK7TqVKdGXWHwgrObhk4m
-         yMAtfN/Gw4u2A==
-From:   Kalle Valo <kvalo@kernel.org>
-To:     Tyler Stachecki <stachecki.tyler@gmail.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        "open list\:QUALCOMM ATHEROS ATH11K WIRELESS DRIVER" 
-        <ath11k@lists.infradead.org>,
-        "open list\:NETWORKING DRIVERS \(WIRELESS\)" 
-        <linux-wireless@vger.kernel.org>,
-        "open list\:NETWORKING DRIVERS" <netdev@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] ath11k: Fix QCN9074 firmware boot on x86
-References: <20221022042728.43015-1-stachecki.tyler@gmail.com>
-        <87y1sug2bl.fsf@kernel.org>
-        <CAC6wqPXjtkiP8pZ_nTXdZva6JnQLWbW7p+ukyAZO6scF5CR7Rw@mail.gmail.com>
-        <87edulvrj0.fsf@kernel.org>
-Date:   Wed, 02 Nov 2022 12:37:09 +0200
-In-Reply-To: <87edulvrj0.fsf@kernel.org> (Kalle Valo's message of "Wed, 02 Nov
-        2022 07:45:07 +0200")
-Message-ID: <87pme5fxre.fsf@kernel.org>
-User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/26.1 (gnu/linux)
+        Wed, 2 Nov 2022 06:39:11 -0400
+Received: from mail-wm1-x32a.google.com (mail-wm1-x32a.google.com [IPv6:2a00:1450:4864:20::32a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C9F219C31
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 03:38:32 -0700 (PDT)
+Received: by mail-wm1-x32a.google.com with SMTP id i5-20020a1c3b05000000b003cf47dcd316so987631wma.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 03:38:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:reply-to:organization:from
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=hRYCRL/SBQ45Ja/04fjZY/45c3An/3ZI+v6TZQZgOFs=;
+        b=JkjxUWpdZACAbfgRAF8iqhXJ/9ga/2EeSTQJMmEiZPH6vIlZdzVFvJujbP30Y9VN0r
+         evr3SnPsLcUFNrW6Fat3FEFpwWgVNAXyKaDdMiZsqf5w0+6V6aGk8hmRyoM0bhNABD/Y
+         lbXeXdwmOHD95Mx7m2KpQhUyssC8D6igfIa/Yeb1aPkLmbUCUFFeJEC9trFTbqO+Fcrj
+         kGjd4MfPFtZnQ7HYhXkF/p237RXpQB5ucgS+GaaSR7KZNt23Zq4goV3vG7k/T2U+lMi9
+         XxVdCFBzoFyeqlxhnBndvV9wqL+xTvT52eVIByvylSheN432OE3ucWCDAf/l5Lqes+AL
+         d/Ag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:reply-to:organization:from
+         :references:cc:to:content-language:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hRYCRL/SBQ45Ja/04fjZY/45c3An/3ZI+v6TZQZgOFs=;
+        b=3fWZmpN4YuQfAuiV5rcGjyXULHhZQ4qk42byq/1cuVso4BvKGTU7+bHZj3ye7SXhkQ
+         6PXYhZXzvGYt7p4lyKIzjOSVqQxoQYcpit5LmEPd2XlJyZssY+tBrj1ndWsYgjPRiL9k
+         GB0YixX5ps0BWeBYq9KnKmoXFQ6/oxo7sswYCTPzMOE3ln4VS1WeE1iWrPd05zUkjXfa
+         Nk/WP33514asDN4jfFdZINcY6Q45R++46jhtKzsSavAyjLg+jlDqK67sUKRAdr/nlLvA
+         F3S8wJF+u/gpd5JrTWxCWTCXCAk8ND4woe5LiQj7EBtOxcEZzaE8BiSNC2MgQxltyWM3
+         53LQ==
+X-Gm-Message-State: ACrzQf1lxPqS48KCgu+WNFsimuJGfgKqEw3pPaRG/Dlm0UUKlYd95/T8
+        /Wi+/tzUMQTTnG+yu5HG5wxkIg==
+X-Google-Smtp-Source: AMsMyM7+g1dcKLFTAyXXyWWdBiZhU3NGuGjw8oKD1SRd73NeAVaUVT5p/5IUP9D2SvUeXDKXmcIvSQ==
+X-Received: by 2002:a05:600c:42c9:b0:3cf:69d4:72d9 with SMTP id j9-20020a05600c42c900b003cf69d472d9mr12879993wme.93.1667385510803;
+        Wed, 02 Nov 2022 03:38:30 -0700 (PDT)
+Received: from ?IPV6:2a01:e0a:982:cbb0:6bae:ac40:a798:cbb4? ([2a01:e0a:982:cbb0:6bae:ac40:a798:cbb4])
+        by smtp.gmail.com with ESMTPSA id x21-20020a1c7c15000000b003b492753826sm1546169wmc.43.2022.11.02.03.38.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 03:38:30 -0700 (PDT)
+Message-ID: <ea0fd9da-4fdc-9d9b-f3ea-e74fae6d3723@linaro.org>
+Date:   Wed, 2 Nov 2022 11:38:29 +0100
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v2 2/3] regulator: dt-bindings: qcom,usb-vbus-regulator:
+ change node name
+Content-Language: en-US
+To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        afd@ti.com, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Wesley Cheng <quic_wcheng@quicinc.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+References: <20221031173933.936147-1-luca@z3ntu.xyz>
+ <20221031173933.936147-2-luca@z3ntu.xyz>
+From:   Neil Armstrong <neil.armstrong@linaro.org>
+Organization: Linaro Developer Services
+Reply-To: neil.armstrong@linaro.org
+In-Reply-To: <20221031173933.936147-2-luca@z3ntu.xyz>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,53 +86,37 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Kalle Valo <kvalo@kernel.org> writes:
+Hi,
 
-> Tyler Stachecki <stachecki.tyler@gmail.com> writes:
->
->> On Tue, Nov 1, 2022 at 10:46 AM Kalle Valo <kvalo@kernel.org> wrote:
->>>
->>> "Tyler J. Stachecki" <stachecki.tyler@gmail.com> writes:
->>>
->>> > The 2.7.0 series of QCN9074's firmware requests 5 segments
->>> > of memory instead of 3 (as in the 2.5.0 series).
->>> >
->>> > The first segment (11M) is too large to be kalloc'd in one
->>> > go on x86 and requires piecemeal 1MB allocations, as was
->>> > the case with the prior public firmware (2.5.0, 15M).
->>> >
->>> > Since f6f92968e1e5, ath11k will break the memory requests,
->>> > but only if there were fewer than 3 segments requested by
->>> > the firmware. It seems that 5 segments works fine and
->>> > allows QCN9074 to boot on x86 with firmware 2.7.0, so
->>> > change things accordingly.
->>> >
->>> > Signed-off-by: Tyler J. Stachecki <stachecki.tyler@gmail.com>
->>>
->>> Ouch, that's pretty bad. Thanks for fixing this!
->>>
->>> Does the 2.5.0.1 firmware branch still work with this patch? It's
->>> important that we don't break the old firmware.
->>>
->>> --
->>> https://patchwork.kernel.org/project/linux-wireless/list/
->>>
->>> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
->>
->> Yep, tested the patch with all 3 combinations, below:
->>
->> QCN9074:
->> WLAN.HK.2.7.0.1-01744-QCAHKSWPL_SILICONZ-1
->> WLAN.HK.2.5.0.1-01208-QCAHKSWPL_SILICONZ-1
->>
->> WCN6855:
->> WLAN.HSP.1.1-03125-QCAHSPSWPL_V1_V2_SILICONZ_LITE-3.6510.16
->
-> Excellent, I'll add Tested-on tags for these. Thank you again.
+On 31/10/2022 18:39, Luca Weiss wrote:
+> usb-vbus-regulator is a better generic node name than dcdc to change the
+> example to match.
 
-I'll think I'll queue this to v6.1, it's an important fix to have.
+Subject is wrong, should be something like:
+dt-bindings: regulator: qcom,usb-vbus-regulator: update example node name
 
--- 
-https://patchwork.kernel.org/project/linux-wireless/list/
+> 
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+> Changes in v2:
+> * New patch
+> 
+>   .../devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml  | 2 +-
+>   1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml b/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
+> index dbe78cd4adba..b1cff3adb21b 100644
+> --- a/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
+> +++ b/Documentation/devicetree/bindings/regulator/qcom,usb-vbus-regulator.yaml
+> @@ -33,7 +33,7 @@ examples:
+>        pm8150b {
+>           #address-cells = <1>;
+>           #size-cells = <0>;
+> -        pm8150b_vbus: dcdc@1100 {
+> +        pm8150b_vbus: usb-vbus-regulator@1100 {
+>               compatible = "qcom,pm8150b-vbus-reg";
+>               reg = <0x1100>;
+>           };
 
-https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
+Thanks,
+Neil
