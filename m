@@ -2,99 +2,159 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A88B361636D
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:11:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7EC34616382
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:13:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbiKBNLp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 09:11:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51188 "EHLO
+        id S231293AbiKBNLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 09:11:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51298 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230005AbiKBNLj (ORCPT
+        with ESMTP id S231130AbiKBNLn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 09:11:39 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D219C2A278;
-        Wed,  2 Nov 2022 06:11:38 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 71E1761961;
-        Wed,  2 Nov 2022 13:11:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9765BC433D7;
-        Wed,  2 Nov 2022 13:11:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667394697;
-        bh=PwLPF38SQ68KPHSo/edAK/nii2BZZ+nmTOGG5coVmB4=;
-        h=Date:From:To:cc:Subject:In-Reply-To:References:From;
-        b=drDLJ2FAAU//GqeOW1L5uJ5HL16Z31tGhov+yjPeAr3vwGAKNg3f/a3Ri6EqwZR6r
-         GKIzIAXsko4/sVpm7A91yY7fcvopL1uGew7iGtIkp5J1ozT1w8opCT0Tf4fuvlMJkn
-         +s57pI+4JJJET51S68KnZisP6hN4jCNzwRCdhx6BNcv2gPPql8tDu8F9hL5jjgH3hn
-         dXjaTyvxmRUD5r19kj3qYe5DJWvlzJkRlpTbL0VGZwSNu3jGRhhw+dLF9enMQpMZ50
-         sylSvRAxvrvH5gkQ2yYqIInPHw4tIztWARFFP7zonhfhuK7VjvcDB4eizQGQZwWhbR
-         DIyTFCyfmyjYA==
-Date:   Wed, 2 Nov 2022 14:11:34 +0100 (CET)
-From:   Jiri Kosina <jikos@kernel.org>
-To:     Colin Ian King <colin.i.king@gmail.com>
-cc:     Benjamin Tissoires <benjamin.tissoires@redhat.com>,
-        linux-input@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] HID: asus: Remove variable count
-In-Reply-To: <20221024161102.2171702-1-colin.i.king@gmail.com>
-Message-ID: <nycvar.YFH.7.76.2211021411290.29912@cbobk.fhfr.pm>
-References: <20221024161102.2171702-1-colin.i.king@gmail.com>
-User-Agent: Alpine 2.21 (LSU 202 2017-01-01)
+        Wed, 2 Nov 2022 09:11:43 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 042E02A42B;
+        Wed,  2 Nov 2022 06:11:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1667394701; x=1698930701;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=MyZzeDiz5FTyiiKbmj7rYEgdW8PqPC9gOy+Y13MENvg=;
+  b=dVuNbbYebDc+z5opb0hehyvEILtgMK+M+2WRAAmQuLU89WhvvKBUSK/0
+   NiZitwSU/LYqRilQ6cBWyJRhmPdzHrmJHmh1UG+5+h0fKEqTmERbo3yZK
+   +C1tfSpFdmQKqD9Ikuvirn58Ck15e5fQHMJXuPzqke4Tc2xoSi2gb1zPc
+   8OXcGwr5UpenBwvH9QxywvXicQu6DFY62+GB0dIFx26oIRLTOuv946b/y
+   9dCNhOtGAx55TZF+4Wyb4YJgxrI9TZ78P7U9dTNKKfq5XN1cE4zY4rwh2
+   iZlHBJKQBfVU/TAemRFz+j2MiFLriYsWrYlxKM6PXYGMZWumbqrLpinQd
+   w==;
+X-IronPort-AV: E=Sophos;i="5.95,234,1661842800"; 
+   d="scan'208";a="185020498"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa2.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Nov 2022 06:11:40 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 2 Nov 2022 06:11:40 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Wed, 2 Nov 2022 06:11:37 -0700
+Message-ID: <e9d662682b00a976ad1dedf361a18b5f28aac8fb.camel@microchip.com>
+Subject: Re: [PATCH net-next v2 2/5] net: microchip: sparx5: Adding more tc
+ flower keys for the IS2 VCAP
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     Jakub Kicinski <kuba@kernel.org>
+CC:     Casper Andersson <casper.casan@gmail.com>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        "Wan Jiabing" <wanjiabing@vivo.com>,
+        Nathan Huckleberry <nhuck@google.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Daniel Machon <daniel.machon@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>
+Date:   Wed, 2 Nov 2022 14:11:37 +0100
+In-Reply-To: <20221101084925.7d8b7641@kernel.org>
+References: <20221028144540.3344995-1-steen.hegelund@microchip.com>
+         <20221028144540.3344995-3-steen.hegelund@microchip.com>
+         <20221031103747.uk76tudphqdo6uto@wse-c0155>
+         <51622bfd3fe718139cece38493946c2860ebdf77.camel@microchip.com>
+         <20221031184128.1143d51e@kernel.org>
+         <741b628857168a6844b6c2e0482beb7df9b56520.camel@microchip.com>
+         <20221101084925.7d8b7641@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.1 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, 24 Oct 2022, Colin Ian King wrote:
+Hi Jacub,
 
-> Variable count is just being incremented and it's never used
-> anywhere else. The variable and the increment are redundant so
-> remove it.
-> 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
-> ---
->  drivers/hid/hid-asus.c | 4 +---
->  1 file changed, 1 insertion(+), 3 deletions(-)
-> 
-> diff --git a/drivers/hid/hid-asus.c b/drivers/hid/hid-asus.c
-> index b59c3dafa6a4..f99752b998f3 100644
-> --- a/drivers/hid/hid-asus.c
-> +++ b/drivers/hid/hid-asus.c
-> @@ -219,14 +219,13 @@ static void asus_report_tool_width(struct asus_drvdata *drvdat)
->  {
->  	struct input_mt *mt = drvdat->input->mt;
->  	struct input_mt_slot *oldest;
-> -	int oldid, count, i;
-> +	int oldid, i;
->  
->  	if (drvdat->tp->contact_size < 5)
->  		return;
->  
->  	oldest = NULL;
->  	oldid = mt->trkid;
-> -	count = 0;
->  
->  	for (i = 0; i < mt->num_slots; ++i) {
->  		struct input_mt_slot *ps = &mt->slots[i];
-> @@ -238,7 +237,6 @@ static void asus_report_tool_width(struct asus_drvdata *drvdat)
->  			oldest = ps;
->  			oldid = id;
->  		}
-> -		count++;
->  	}
+On Tue, 2022-11-01 at 08:49 -0700, Jakub Kicinski wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know th=
+e
+> content is safe
+>=20
+> On Tue, 1 Nov 2022 08:31:16 +0100 Steen Hegelund wrote:
+> > > Previous series in this context means previous revision or something
+> > > that was already merged?
+> >=20
+> > Casper refers to this series (the first of the VCAP related series) tha=
+t was
+> > merged on Oct 24th:
+> >=20
+> > https://lore.kernel.org/all/20221020130904.1215072-1-steen.hegelund@mic=
+rochip.com/
+>=20
+> Alright, looks like this is only in net-next so no risk of breaking
+> existing users.
+>=20
+> That said you should reject filters you can't support with an extack
+> message set. Also see below.
+>=20
+> > > > tc filter add dev eth3 ingress chain 8000000 prio 10 handle 10 \
+> > >=20
+> > > How are you using chains?
+> >=20
+> > The chain ids are referring to the VCAP instances and their lookups.=C2=
+=A0 There
+> > are some more details
+> > about this in the series I referred to above.
+> >=20
+> > The short version is that this allows you to select where in the frame
+> > processing flow your rule
+> > will be inserted (using ingress or egress and the chain id).
+> >=20
+> > > I thought you need to offload FLOW_ACTION_GOTO to get to a chain,
+> > > and I get no hits on this driver.
+> >=20
+> > I have not yet added the goto action, but one use of that is to chain a
+> > filter from one VCAP
+> > instance/lookup to another.
+> >=20
+> > The goto action will be added in a soon-to-come series.=C2=A0 I just wa=
+nted to
+> > avoid a series getting too
+> > large, but on the other hand each of them should provide functionality =
+that
+> > you can use in practice.
+>=20
+> The behavior of the offload must be the same as the SW implementation.
+> It sounds like in your case it very much isn't, as adding rules to
+> a magic chain in SW, without the goto will result in the rules being
+> unused.
 
-Applied, thanks.
+I have sent a version 4 of the series, but I realized after sending it, tha=
+t I
+was probably not understanding the implications of what you were saying
+entirely.
 
--- 
-Jiri Kosina
-SUSE Labs
+As far as I understand it now, I need to have a matchall rule that does a g=
+oto
+from chain 0 (as this is where all traffic processing starts) to my first I=
+S2
+VCAP chain and this rule activates the IS2 VCAP lookup.
+
+Each of the rules in this VCAP chain need to point to the next chain etc.
+
+If the matchall rule is deleted the IS2 VCAP lookups should be disabled as =
+there
+is no longer any way to reach the VCAP chains.
+
+Does that sound OK?
+
+BR
+Steen
 
