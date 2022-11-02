@@ -2,121 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96B8F616F52
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 22:03:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8CEF1616F5A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 22:05:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbiKBVDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 17:03:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
+        id S231441AbiKBVFq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 17:05:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230123AbiKBVC5 (ORCPT
+        with ESMTP id S230499AbiKBVFp (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 17:02:57 -0400
-Received: from qproxy2-pub.mail.unifiedlayer.com (qproxy2-pub.mail.unifiedlayer.com [69.89.16.161])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B87DF28
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 14:02:56 -0700 (PDT)
-Received: from gproxy3-pub.mail.unifiedlayer.com (gproxy3-pub.mail.unifiedlayer.com [69.89.30.42])
-        by qproxy2.mail.unifiedlayer.com (Postfix) with ESMTP id DB5DC8045FCE
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 21:02:45 +0000 (UTC)
-Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
-        by progateway5.mail.pro1.eigbox.com (Postfix) with ESMTP id CD15510048769
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 21:02:14 +0000 (UTC)
-Received: from box5620.bluehost.com ([162.241.219.59])
-        by cmsmtp with ESMTP
-        id qKsHoH0yDPi3DqKsIoaJaj; Wed, 02 Nov 2022 21:02:14 +0000
-X-Authority-Reason: nr=8
-X-Authority-Analysis: v=2.4 cv=KK2fsHJo c=1 sm=1 tr=0 ts=6362dad6
- a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
- a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
- a=9xFQ1JgjjksA:10:nop_rcvd_month_year
- a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
- a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
- a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
-        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
-        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
-        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-        List-Subscribe:List-Post:List-Owner:List-Archive;
-        bh=kntjp5DhkGEbjfi4BGXgAHclj1vDWZR2bRChXXuNe5U=; b=neyrZhtSAXTjObqK7bhhXCcR5U
-        PLbJfplkS1LLsjNynztfV2fvN/BAwnPqQrLHDI/roMsMXMqNMwkbJS2Trt62qODUCN8Cg/2xEMp0z
-        63C43ZJKgAvBXpKkr9iyoeCLi6AgV44+8IWTH3OSUvP3MaDZ6sABo4eWBDAruL9SYLdODjdx9OTRx
-        6amO3i72d1gu25MjJ/kT5LiAXEVFFvd/8gm81FKjB2XuOfa4+J0t9zScUBZnNuWgLXwyXTzq+T7Jg
-        Uc/f5mWP7ZpiKYMSv+/sgMKMYuukqYqUsKXmx2p+VOTfZ8MOhuTXATBWUj1Lb8JxpRTzVxFonnxvA
-        Ig/XCknw==;
-Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:56362 helo=[10.0.1.48])
-        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
-        (Exim 4.95)
-        (envelope-from <re@w6rz.net>)
-        id 1oqKsF-0027q4-KR;
-        Wed, 02 Nov 2022 15:02:11 -0600
-Subject: Re: [PATCH 5.15 000/132] 5.15.77-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-References: <20221102022059.593236470@linuxfoundation.org>
-In-Reply-To: <20221102022059.593236470@linuxfoundation.org>
-From:   Ron Economos <re@w6rz.net>
-Message-ID: <bd31023f-e65d-0427-30cb-ce5b46093cf4@w6rz.net>
-Date:   Wed, 2 Nov 2022 14:02:07 -0700
-User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
- Thunderbird/78.14.0
+        Wed, 2 Nov 2022 17:05:45 -0400
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3D7C8DFBA
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 14:05:44 -0700 (PDT)
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A2JTVqw023555;
+        Wed, 2 Nov 2022 21:04:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=rC0roGr/5SlhhcwPh6Z3ZFgwAoKnXl1OYijcbifeGBs=;
+ b=CuZFazWdj2W1/O7m3emL3SXIvl5IsrkmH7tKQZEhKEek4lRo3eOKOWbXSArgHzNXWSoj
+ H2bMQtpN/mPCltHa/H7dyqmkwM7HSEGAmW0gzWNEATGdxwn1aCg0sWfk/j6PfVwRtO3M
+ SMkse33y50lh2mz1BzzDj4QerLptjkFNgqGduZYHBgS5YyzWR8VELUHPhHZe9SdAVN1P
+ 4sZODbQAJ07k53+bfoMLb1zKyfzhQya9aJb+qi5eXCec+ig2pAFARmdavfXxgfSNWjP3
+ JgarAsrxZAaHW2+/2A9wZgaX+29O6DEANMv+pZxdrWFHXJ3hop8SWNqrHLO5auaWyRzE ZA== 
+Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kkv6cgn8g-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 21:04:06 +0000
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+        by NALASPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A2L45Fw008653
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 2 Nov 2022 21:04:05 GMT
+Received: from [10.226.59.182] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 2 Nov 2022
+ 14:04:03 -0700
+Message-ID: <5979d266-e864-cc1c-fe2b-2c81f5223076@quicinc.com>
+Date:   Wed, 2 Nov 2022 15:04:02 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8; format=flowed
-Content-Transfer-Encoding: 7bit
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:91.0) Gecko/20100101
+ Thunderbird/91.6.0
+Subject: Re: [RFC PATCH v2 1/3] drivers/accel: define kconfig and register a
+ new major
 Content-Language: en-US
-X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
-X-AntiAbuse: Primary Hostname - box5620.bluehost.com
-X-AntiAbuse: Original Domain - vger.kernel.org
-X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
-X-AntiAbuse: Sender Address Domain - w6rz.net
-X-BWhitelist: no
-X-Source-IP: 73.162.232.9
-X-Source-L: No
-X-Exim-ID: 1oqKsF-0027q4-KR
-X-Source: 
-X-Source-Args: 
-X-Source-Dir: 
-X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:56362
-X-Source-Auth: re@w6rz.net
-X-Email-Count: 4
-X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
-X-Local-Domain: yes
+To:     Oded Gabbay <ogabbay@kernel.org>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>, Arnd Bergmann <arnd@arndb.de>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        <linux-kernel@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        Alex Deucher <alexander.deucher@amd.com>
+CC:     Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+        Maxime Ripard <mripard@kernel.org>,
+        Thomas Zimmermann <tzimmermann@suse.de>,
+        Yuji Ishikawa <yuji2.ishikawa@toshiba.co.jp>,
+        Jiho Chu <jiho.chu@samsung.com>,
+        Daniel Stone <daniel@fooishbar.org>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        Christoph Hellwig <hch@infradead.org>,
+        Kevin Hilman <khilman@baylibre.com>,
+        Jagan Teki <jagan@amarulasolutions.com>,
+        Jacek Lawrynowicz <jacek.lawrynowicz@linux.intel.com>,
+        Maciej Kwapulinski <maciej.kwapulinski@linux.intel.com>
+References: <20221102203405.1797491-1-ogabbay@kernel.org>
+ <20221102203405.1797491-2-ogabbay@kernel.org>
+From:   Jeffrey Hugo <quic_jhugo@quicinc.com>
+In-Reply-To: <20221102203405.1797491-2-ogabbay@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: odC8jKcvU_ivvp5zxTUagHRw-HlMtXBP
+X-Proofpoint-GUID: odC8jKcvU_ivvp5zxTUagHRw-HlMtXBP
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-02_15,2022-11-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 mlxscore=0
+ phishscore=0 lowpriorityscore=0 suspectscore=0 mlxlogscore=999 bulkscore=0
+ impostorscore=0 priorityscore=1501 malwarescore=0 spamscore=0 adultscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211020139
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/1/22 7:31 PM, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.77 release.
-> There are 132 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 04 Nov 2022 02:20:38 +0000.
-> Anything received after that time might be too late.
->
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.77-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
->
-> thanks,
->
-> greg k-h
+On 11/2/2022 2:34 PM, Oded Gabbay wrote:
+> diff --git a/drivers/accel/accel_drv.c b/drivers/accel/accel_drv.c
+> new file mode 100644
+> index 000000000000..6132765ea054
+> --- /dev/null
+> +++ b/drivers/accel/accel_drv.c
+> @@ -0,0 +1,112 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +/*
+> + * Copyright 2022 HabanaLabs, Ltd.
+> + * All Rights Reserved.
+> + *
+> + */
+> +
+> +#include <linux/module.h>
 
-Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
+Alphebetical order?
 
-Tested-by: Ron Economos <re@w6rz.net>
+> +#include <linux/debugfs.h>
+> +#include <linux/device.h>
+> +
+> +#include <drm/drm_accel.h>
+> +#include <drm/drm_ioctl.h>
+> +#include <drm/drm_print.h>
+> +
+> +static struct dentry *accel_debugfs_root;
+> +struct class *accel_class;
+
+Static?
 
