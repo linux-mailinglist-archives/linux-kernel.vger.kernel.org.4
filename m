@@ -2,124 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96CEF616D25
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:49:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D3A92616D28
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:50:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbiKBSty (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 14:49:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43350 "EHLO
+        id S231262AbiKBSuQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 14:50:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43094 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231536AbiKBSt2 (ORCPT
+        with ESMTP id S231778AbiKBStm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:49:28 -0400
-Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 026CE3121E
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:49:13 -0700 (PDT)
-Received: by mail-qk1-x734.google.com with SMTP id l9so12358998qkk.11
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 11:49:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=vJYNZtf6bcoMnKqaGiq/9/aXJ5dsTFIfamsATLeB19E=;
-        b=su9C3G8MIg7QWTFg8X40a81l1pos9whecNkXv05SZCVv+Ifq5/Lnwt2vr1Mb3MLuIQ
-         jRDedwfIwrB71P37sh22Y4/0wD8UqyzKEZzEh02MJZUwMEQFcO5dOUAFaR9UtAPt36jH
-         +NNP2HWHC6hFOsr/iEvUj7AbwFGSyb5wYB88wcSSpZEO6YR7ELmy9c791KfrDJIMxUYI
-         ooT60YMIA4kC6fqE9keso+2NvSE2Feil4aQJ8LtpS3yIsbOa+wFRCid3h08+7r2uhoew
-         ZtyOTEQ0l+lhc07lbsGCV/lSw+Lt1gs5woqu8nyK9eFwAXAXjC6jh7xz6zZX0hR+um9A
-         x4Mw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=vJYNZtf6bcoMnKqaGiq/9/aXJ5dsTFIfamsATLeB19E=;
-        b=xG5PHVTx7rZkdTxodKrMf/8eqmLoOHcgCGsFbK67JuSm38wuG22D4X4PbxCcYVQ+Qa
-         yZKQA+1s91lHFAdsiPM3PuM/uUPh2kcSFBDVfp3i4Vk3Zp1qvY1DfXpJD2U6rvNbT0Tb
-         0dghTvZFduDRlPRGDdyf2uBHTmk2NfUOcyd73bWq38ANWfBwgZlc1pb2/TcsfOq/GHR0
-         9a4OCjlcjP4+67tPl6h9+vLEq2pIL08e9U/Y+k+FDh8D4Ud5wGzkrZGAWy+p5FNy4Oh4
-         vO6QiVGs8YgBaxoofQ0hhjTcU0E21ogxPjERPEpmnu+2YvGuF7p81uU5YVt9nSqu0Zzk
-         cC4Q==
-X-Gm-Message-State: ACrzQf3HbxhQPFwoJCaZ4ZKfYwb6WriDjDu7n5NBpkLZrNlz+vjtkNHP
-        Q/hJvjDzWFFHMuhjGpeK7cunAQ==
-X-Google-Smtp-Source: AMsMyM4QrsNd0t8S2FzfTh26X1GqKLWJtIRgo6E0399IOn8EDRnsAkEWhLADnj/2PxhsqfSVcY2Vlg==
-X-Received: by 2002:a37:65c9:0:b0:6fa:1ef8:fa10 with SMTP id z192-20020a3765c9000000b006fa1ef8fa10mr15636685qkb.648.1667414953134;
-        Wed, 02 Nov 2022 11:49:13 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
-        by smtp.gmail.com with ESMTPSA id q4-20020ac87344000000b0039442ee69c5sm6861556qtp.91.2022.11.02.11.49.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 11:49:12 -0700 (PDT)
-Message-ID: <f387a864-5683-f4a1-ee9a-3c92b2ca5e1c@linaro.org>
-Date:   Wed, 2 Nov 2022 14:49:11 -0400
+        Wed, 2 Nov 2022 14:49:42 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC6FD2BEF
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:49:32 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e741329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e741:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 683951EC0426;
+        Wed,  2 Nov 2022 19:49:31 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1667414971;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=mxQPFn4VApQbB8DR3S7WCXnD5Fw6PWq0YrvohTIv6T0=;
+        b=DGCSacQnm9py2kWOxRnUFJJBaB/7uju6cLCKCJfO/Z57vhznDBC3OG6XXP6RT0NlNnhWVC
+        sOBJYulAsrSlJOTdxxbR4jgCUWyH081sWheuRMz2bCZyyecu4b7HdEeP3W2jnO9JCty8bM
+        B5fnXC7IU/UeoHh/BGRnJds8maQIOnc=
+Date:   Wed, 2 Nov 2022 19:49:31 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Eric DeVolder <eric.devolder@oracle.com>
+Cc:     linux-kernel@vger.kernel.org, x86@kernel.org,
+        kexec@lists.infradead.org, ebiederm@xmission.com,
+        dyoung@redhat.com, bhe@redhat.com, vgoyal@redhat.com,
+        tglx@linutronix.de, mingo@redhat.com, dave.hansen@linux.intel.com,
+        hpa@zytor.com, nramas@linux.microsoft.com, thomas.lendacky@amd.com,
+        robh@kernel.org, efault@gmx.de, rppt@kernel.org, david@redhat.com,
+        sourabhjain@linux.ibm.com, konrad.wilk@oracle.com,
+        boris.ostrovsky@oracle.com
+Subject: Re: [PATCH v13 7/7] x86/crash: add x86 crash hotplug support
+Message-ID: <Y2K7u+KfkdBxJ01h@zn.tnic>
+References: <20221031193604.28779-1-eric.devolder@oracle.com>
+ <20221031193604.28779-8-eric.devolder@oracle.com>
+ <Y2A4TqyOaPYBu4Hk@zn.tnic>
+ <1c11a429-b5a9-fb55-fbef-b49e760e2d1e@oracle.com>
+ <Y2I3zQ9ZU+C9Kgf7@zn.tnic>
+ <06ef6e4b-1f42-d50f-1328-4f82fb34dd4d@oracle.com>
+ <Y2KYls/Ji5E+4kPP@zn.tnic>
+ <c08bb557-846c-0f82-391a-3eeda7e6ea67@oracle.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] dt-bindings: net: nxp,sja1105: document spi-cpol
-Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>
-Cc:     Andrew Lunn <andrew@lunn.ch>, Vladimir Oltean <olteanv@gmail.com>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Vivien Didelot <vivien.didelot@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        "David S. Miller" <davem@davemloft.net>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Florian Fainelli <f.fainelli@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org
-References: <20221102161211.51139-1-krzysztof.kozlowski@linaro.org>
- <166741398630.127357.13160524174654511434.robh@kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <166741398630.127357.13160524174654511434.robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <c08bb557-846c-0f82-391a-3eeda7e6ea67@oracle.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/11/2022 14:35, Rob Herring wrote:
-> 
-> On Wed, 02 Nov 2022 12:12:11 -0400, Krzysztof Kozlowski wrote:
->> Some boards use SJA1105 Ethernet Switch with SPI CPOL, so document this
->> to fix dtbs_check warnings:
->>
->>   arch/arm64/boot/dts/freescale/fsl-lx2160a-bluebox3.dtb: ethernet-switch@0: Unevaluated properties are not allowed ('spi-cpol' was unexpected)
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> ---
->>  Documentation/devicetree/bindings/net/dsa/nxp,sja1105.yaml | 2 ++
->>  1 file changed, 2 insertions(+)
->>
-> 
-> Running 'make dtbs_check' with the schema in this patch gives the
-> following warnings. Consider if they are expected or the schema is
-> incorrect. These may not be new warnings.
-> 
-> Note that it is not yet a requirement to have 0 warnings for dtbs_check.
-> This will change in the future.
-> 
-> Full log is available here: https://patchwork.ozlabs.org/patch/
-> 
-> 
-> ethernet-switch@1: Unevaluated properties are not allowed ('#address-cells', '#size-cells', 'fsl,spi-cs-sck-delay', 'fsl,spi-sck-cs-delay', 'spi-cpha' were unexpected)
-> 	arch/arm/boot/dts/ls1021a-tsn.dtb
+On Wed, Nov 02, 2022 at 11:54:08AM -0500, Eric DeVolder wrote:
+> Technically the answer is no; cpu hotplug events are independent of memory
+> hotplug events, but both are written into the elfcorehdr, so in reality
+> yes... The elfcorehdr contains a single list of Phdrs describing CPUs and
+> crash memory ranges; the entire list is re-written on a hotplug change.
 
-I'll add cpha, but fsl,spi-cs-sck-delay are coming from unconverted
-schema - spi-fsl-dspi.txt.
+Then technically also yes. Otherwise your crash information will contain
+wrong CPU numbers.
 
-> 
-> switch@0: Unevaluated properties are not allowed ('clocks', 'reset-gpios', 'spi-cpha' were unexpected)
-> 	arch/arm/boot/dts/imx6qp-prtwd3.dtb
-> 	arch/arm/boot/dts/stm32mp151a-prtt1c.dtb
-> 
+How has that not been a problem until now...?
 
-Best regards,
-Krzysztof
+I.e., offline a bunch of CPUs and then cause a crash dump.
 
+Hmm.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
