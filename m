@@ -2,118 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F11EF616CB6
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:44:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1343F616CEF
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:45:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231347AbiKBSoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 14:44:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39116 "EHLO
+        id S231637AbiKBSpV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 14:45:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40008 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231262AbiKBSoI (ORCPT
+        with ESMTP id S231591AbiKBSpN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:44:08 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E281E2CDC5;
-        Wed,  2 Nov 2022 11:44:07 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e741329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e741:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 72DBB1EC0430;
-        Wed,  2 Nov 2022 19:44:06 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1667414646;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=iOr/2V0DoRyu5jKtmDX0XiBrZE84Kn1Pob6d6OL2TAQ=;
-        b=P8xIFXf059+smEe6r5YZYLEbBvKhvHMQlCDMpFuQpPIyUL+0Na11Qye0LmeFzVkyGcJ0Ue
-        fIrCmtMkvbI9pekV7eZIq4LZ2B96yVhn3hhIe318CHOxpV0wNqptu2eHkXK4/tBD234sAI
-        ZmyjnjRhdV4j8e7O51OrF3B1uOD5hfo=
-Date:   Wed, 2 Nov 2022 19:44:02 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Andrew Jones <ajones@ventanamicro.com>
-Cc:     Yury Norov <yury.norov@gmail.com>, x86@kernel.org,
-        linux-riscv <linux-riscv@lists.infradead.org>,
-        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        openrisc@lists.librecores.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        "open list:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
-        <linuxppc-dev@lists.ozlabs.org>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-s390@vger.kernel.org
-Subject: Re: [PATCH v3 2/2] x86: Fix /proc/cpuinfo cpumask warning
-Message-ID: <Y2K6clNJBn0SbWU+@zn.tnic>
-References: <20221014155845.1986223-1-ajones@ventanamicro.com>
- <20221014155845.1986223-3-ajones@ventanamicro.com>
- <20221028074828.b66uuqqfbrnjdtab@kamzik>
- <Y1vrMMtRwb0Lekl0@yury-laptop>
- <Y1vvMlwf/4EA/8WW@zn.tnic>
- <CAAH8bW_DkvPCH0-q2Bfe0OJ72r63mRM3GP7NKOFrhe3zMO2gbQ@mail.gmail.com>
- <Y1v+Ed6mRN9gisJS@zn.tnic>
- <20221031080604.6xei6c4e3ckhsvmy@kamzik>
- <Y1+OUawGJDjh4DOJ@zn.tnic>
- <20221031100327.r7tswmpszvs5ot5n@kamzik>
+        Wed, 2 Nov 2022 14:45:13 -0400
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BF232D1C1;
+        Wed,  2 Nov 2022 11:45:12 -0700 (PDT)
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A2ISDvt007072;
+        Wed, 2 Nov 2022 18:44:53 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=qcppdkim1;
+ bh=eCXx/OsYufkYxy4ZALNhvkML+K3ZqFlk3NgDcY3sh3A=;
+ b=dmQIPnk5dhUgFAjS0qattXuAUG7Cgr3rN7TVzZVPIuegSMADc1n1HdOZRjmmVTpyIecH
+ U23ovYCAGQpGpDuNvf5ztfBJEPMWCNTH3gP9o1bXLPEuVvizuD7mYlq5ZpFznm5vM3vu
+ 4DYmpEcQtG39KHsYKwSnDf6+2xoTQlzg/jshHz6kLsU7MHqSzKop7+qjgKpCKnzWu9Br
+ 99G0OACnn2d2DWS2uwKPlBycPLv/iIOzrP6/WjsPaBNJnxEi4y7HkdqlGc+6agzMBjCE
+ p4jcKxyvyIqjrKqsNvR9KXrnrFedUFc5H/XZyGnFpg4lciIeC3LweFeMkeIg/I2jEjy+ JA== 
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kktux8rd2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 18:44:53 +0000
+Received: from nasanex01b.na.qualcomm.com (corens_vlan604_snip.qualcomm.com [10.53.140.1])
+        by NASANPPMTA01.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A2IiqJA024235
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 2 Nov 2022 18:44:52 GMT
+Received: from [10.134.65.5] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 2 Nov 2022
+ 11:44:51 -0700
+Message-ID: <7c59a115-36c5-c954-5610-ef5ef1dbb83e@quicinc.com>
+Date:   Wed, 2 Nov 2022 11:44:51 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221031100327.r7tswmpszvs5ot5n@kamzik>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v6 13/21] gunyah: vm_mgr: Introduce basic VM Manager
+Content-Language: en-US
+To:     Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC:     Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Mark Rutland" <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        "Marc Zyngier" <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Kalle Valo <kvalo@kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-doc@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221026185846.3983888-1-quic_eberman@quicinc.com>
+ <20221026185846.3983888-14-quic_eberman@quicinc.com>
+ <c1f86c53-1d9f-4faf-9313-de86d33e3739@app.fastmail.com>
+From:   Elliot Berman <quic_eberman@quicinc.com>
+In-Reply-To: <c1f86c53-1d9f-4faf-9313-de86d33e3739@app.fastmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: sguAIVPz2AzPhPEn9JpkakpXfZDrhloX
+X-Proofpoint-GUID: sguAIVPz2AzPhPEn9JpkakpXfZDrhloX
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-02_13,2022-11-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ malwarescore=0 adultscore=0 priorityscore=1501 phishscore=0 bulkscore=0
+ clxscore=1015 suspectscore=0 spamscore=0 mlxlogscore=977 impostorscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2210170000
+ definitions=main-2211020122
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 11:03:27AM +0100, Andrew Jones wrote:
-> Currently (after the revert of 78e5a3399421)
 
-After the revert?
 
-That commit is still in the latest Linus tree.
+On 11/2/2022 12:31 AM, Arnd Bergmann wrote:
+> On Wed, Oct 26, 2022, at 20:58, Elliot Berman wrote:
+> 
+>> +static const struct file_operations gh_vm_fops = {
+>> +	.unlocked_ioctl = gh_vm_ioctl,
+>> +	.release = gh_vm_release,
+>> +	.llseek = noop_llseek,
+>> +};
+> 
+> There should be a .compat_ioctl entry here, otherwise it is
+> impossible to use from 32-bit tasks. If all commands have
+> arguments passed through a pointer to a properly defined
+> structure, you can just set it to compat_ptr_ioctl.
+> 
 
-> with DEBUG_PER_CPU_MAPS we'll get a warning splat when the cpu is
-> outside the range [-1, nr_cpu_ids)
+Ack.
 
-Yah, that range makes sense.
+>> +static long gh_dev_ioctl_create_vm(unsigned long arg)
+>> +{
+>> +	struct gunyah_vm *ghvm;
+>> +	struct file *file;
+>> +	int fd, err;
+>> +
+>> +	/* arg reserved for future use. */
+>> +	if (arg)
+>> +		return -EINVAL;
+> 
+> Do you have something specific in mind here? If 'create'
+> is the only command you support, and it has no arguments,
+> it would be easier to do it implicitly during open() and
+> have each fd opened from /dev/gunyah represent a new VM.
+> 
 
-> and cpumask_next() will call find_next_bit() with the input plus one anyway.
-> find_next_bit() doesn't explicity document what happens when an input is
-> outside the range, but it currently returns the bitmap size without any
-> side effects, which means cpumask_next() will return nr_cpu_ids.
+I'd like the argument here to support different types of virtual 
+machines. I want to leave open what "different types" can be in case 
+something new comes up in the future, but immediately "different type" 
+would correspond to a few different authentication mechanisms for 
+virtual machines that Gunyah supports.
 
-That is good to have in the commit message.
+In this series, I'm only supporting unauthenticated virtual machines 
+because they are the simplest to get up and running from a Linux 
+userspace. When I introduce the other authentication mechanisms, I'll 
+expand much more on how they work, but I'll give quick overview here. 
+Other authentication mechanisms that are currently supported by Gunyah 
+are "protected VM" and, on Qualcomm platforms, "PIL/carveout VMs". 
+Protected VMs are *loosely* similar to the protected firmware design for 
+KVM and intended to support Android virtualization use cases. 
+PIL/carevout VMs are special virtual machines that can run on Qualcomm 
+firmware which authenticate in a way similar to remoteproc firmware (MDT 
+loader).
 
-> show_cpuinfo() doesn't try to show anything in that case and stops its
-> loop, or, IOW, things work fine now with an input of nr_cpu_ids - 1. But,
-> show_cpuinfo() is just getting away with a violated cpumask_next()
-> contract, which 78e5a3399421 exposed. How about a new commit message like
-> this
+>> +	ghvm = gunyah_vm_alloc();
+>> +	if (IS_ERR_OR_NULL(ghvm))
+>> +		return PTR_ERR(ghvm) ? : -ENOMEM;
+> 
+> If you find yourself using IS_ERR_OR_NULL(), you have
+> usually made a mistake. In this case, the gunyah_vm_alloc()
+> function is badly defined and should just return -ENOMEM
+> for an allocation failure.
+> 
 
-You're making it sound more complex than it is. All you wanna say is:
+Ack
 
-"Filter out invalid cpumask_next() inputs by checking its first argument
-against nr_cpu_ids because cpumask_next() will call find_next_bit() with
-the input plus one but the valid range for n is [-1, nr_cpu_ids)."
+>> +static struct gunyah_rsc_mgr_device_id vm_mgr_ids[] = {
+>> +	{ .name = GH_RM_DEVICE_VM_MGR },
+>> +	{}
+>> +};
+>> +MODULE_DEVICE_TABLE(gunyah_rsc_mgr, vm_mgr_ids);
+>> +
+>> +static struct gh_rm_driver vm_mgr_drv = {
+>> +	.drv = {
+>> +		.name = KBUILD_MODNAME,
+>> +		.probe = vm_mgr_probe,
+>> +		.remove = vm_mgr_remove,
+>> +	},
+>> +	.id_table = vm_mgr_ids,
+>> +};
+>> +module_gh_rm_driver(vm_mgr_drv);
+> 
+> It looks like the gunyah_rsc_mgr_device_id in this case is
+> purely internal to the kernel, so you are adding abstraction
+> layers to something that does not need to be abstracted
+> because the host side has no corresponding concept of
+> devices.
+> 
+> I'm correct, you can just turn the entire bus/device/driver
+> structure within your code into simple function calls, where
+> the main code calls vm_mgr_probe() as an exported function
+> instead of creating a device.
 
-But that thing with the revert above needs to be clarified first.
+Ack. I can do this, although I am nervous about this snowballing into a 
+situation where I have a mega-module.
 
-Thx.
+ > Please stop beating everything in a single module.
 
--- 
-Regards/Gruss,
-    Boris.
+https://lore.kernel.org/all/250945d2-3940-9830-63e5-beec5f44010b@linaro.org/
 
-https://people.kernel.org/tglx/notes-about-netiquette
+Thanks,
+Elliot
