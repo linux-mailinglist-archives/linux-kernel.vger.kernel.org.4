@@ -2,66 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7E65616E22
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 21:00:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4396E616E28
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 21:01:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbiKBUAW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 16:00:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35556 "EHLO
+        id S230306AbiKBUBQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 16:01:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37204 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230374AbiKBUAD (ORCPT
+        with ESMTP id S230374AbiKBUBL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 16:00:03 -0400
-Received: from mail-pj1-x102e.google.com (mail-pj1-x102e.google.com [IPv6:2607:f8b0:4864:20::102e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DCFED194
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 12:59:20 -0700 (PDT)
-Received: by mail-pj1-x102e.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso3106190pjg.5
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 12:59:20 -0700 (PDT)
+        Wed, 2 Nov 2022 16:01:11 -0400
+Received: from mail-oi1-x22d.google.com (mail-oi1-x22d.google.com [IPv6:2607:f8b0:4864:20::22d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB296E53;
+        Wed,  2 Nov 2022 13:01:08 -0700 (PDT)
+Received: by mail-oi1-x22d.google.com with SMTP id n83so20312191oif.11;
+        Wed, 02 Nov 2022 13:01:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xTlEc+TwvUwH4QO7vIX81PZfuP6PZEvZ9DCLC/XDVPw=;
-        b=Da2Tkm1nScX/U5I2jMWmKou8fXW4etyob6wD/3/kfuYL5zhqiXQHxF/mB7vIfBQr/m
-         JlGucOwtE6bRHi9K+rhHrWT3f2nQYyquha0Za5oQsTxmaYoB8w9O2+9y7xcbCL1kzW1N
-         8o8t4sMvo6w3/Oi/XZ4FNTC16116JU4dZ2EBBbBI302gwtu5XB60XFIp8Y7MGLDIVMXn
-         A6l2IKAzxIQmoolS0C+l6TcsS4oMRLMnbpHnEBjVPTZJ3Ki0hSgR+nTt6XdwK+qz68EH
-         WGrPQ5DM6GLxu0Aej+IZ4LhQ/1cb14UE6bg/cqItDbNvmf4rVlMPDGbxrHe38+qX6elR
-         nFcg==
+        bh=NdYxLy6u/2PaTIupg+k2bBdapnT54tEDA9Zj5rVwx9I=;
+        b=bAVCp0ivJaQO14A0QNklaSQIqSD0fnB3qCvfGZk24diiJXROl20vlLybQHTqWsCAmd
+         G/OXrtfBqqVagHhnVljb3P4K1POpC+oMSjohUKIAU26KLaKRJc4r1uPq6NiktKorDDIa
+         czZhkVpV7cjbJw10jQ6cLNEiH4zM80BpD4X2GUYYKDEKQZlQfVZlX8/S2HUzIS5GT1Mx
+         UYarHeMq11u0lkibbOD8CWVpdyogUHObFPoBf83nIh6+PJWshohpERwc34q55ZiK2mYu
+         lL2/t29Z1BzWqlfoblPJuC6Gua9PE/lVxDcwcijz3jyG78oDxRo+KiwAPxxl0R9Id/M3
+         E2jA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=xTlEc+TwvUwH4QO7vIX81PZfuP6PZEvZ9DCLC/XDVPw=;
-        b=m9PiBTBCvANR8EwYyAGfA1K12A2KDhfHB9BwGBMEh2h51rHwW5KvMVXF9E+aO86QnL
-         ZI1yDvbN4hH4GOw60AOCqDHtFWbYGvky9V7H8Fi/zG4HSbs1FdilTcEgaZtnC0woAJdk
-         upziZNuNo7dOwUPmSiu55y5ESPeAbK+Mbpd+5M/j/+f8qSart7vqrLcegFb8rPP+PXU+
-         hM1C2ZuXN2GtwGi4t7GApl1K3szL4n00QLtfgmYW1dJwtbXAnJFcIWX62/itR+a8y1/W
-         /MHSbBk+l/v6zAfuHuGly+d69NEQkto8MicuDfVLqxSfrXWQdYKwflLfZIXatl47+ad5
-         NobA==
-X-Gm-Message-State: ACrzQf2gQjv1q/tsh3yrCdVTrOMPzcLtKls2OJ76m8CSevkxNUa9mL23
-        uETRV/UutPV1YsjtkGmZNfg=
-X-Google-Smtp-Source: AMsMyM6xr4NMN2eMK3hCghPDMLTRzAK3wTcOFMxNhnOCA8mBK8fv37f/h/FU7rx7wHbOsucG2WOdYw==
-X-Received: by 2002:a17:90a:fa0b:b0:213:ead5:92d7 with SMTP id cm11-20020a17090afa0b00b00213ead592d7mr16688766pjb.147.1667419160296;
-        Wed, 02 Nov 2022 12:59:20 -0700 (PDT)
-Received: from localhost ([2a00:79e1:abd:4a00:2703:3c72:eb1a:cffd])
-        by smtp.gmail.com with ESMTPSA id o10-20020a62f90a000000b005625d5ae760sm9058299pfh.11.2022.11.02.12.59.19
+        bh=NdYxLy6u/2PaTIupg+k2bBdapnT54tEDA9Zj5rVwx9I=;
+        b=RLU6ucL1+CyQqg6Q/Nh3kB/YugtA0rmHQ8/syAyzteqOs6gmY4BidQMETJcdlRL0YD
+         SrCPi0L2HbLb+1SgS1rsBEq6Uu7cqq2YkwsWvY0wNiQZwpB98SPrjkl/XvHOAIDmgGmX
+         OZFfP0nCvIIYIf2/CMqRQ35k8OxoCl2qv1tbTV3IJAMuEeYOyTZVgdaAoTZlrNv22tAZ
+         xAsqEtU+hGQJdVfzuzBogxl7+vNnyHJgJ662L88F167DyBOkVQbZpES5oB5Lo7La8aMw
+         ma+qRHcetydQrjcXEfDHgHCdRzlAH2WtKnrBBZCVxVJWC0u3VcEE1iTg+NvdhsoVO9LL
+         N66Q==
+X-Gm-Message-State: ACrzQf09e9aS/wASMcF2S/2r3rsKSVdAl9dnUfzI1Nn/JFBSe0swD0ot
+        hnVCmnHSMqxmWDyJvrGioIs=
+X-Google-Smtp-Source: AMsMyM7NdmpoQP25PH2Uc/dA20RwnF8f9qcE3BAQDocFFzqpofVxY8PDrwxFWjupI0R/+C+yTZmhlg==
+X-Received: by 2002:a05:6808:1442:b0:35a:1542:a1a6 with SMTP id x2-20020a056808144200b0035a1542a1a6mr8584650oiv.243.1667419267979;
+        Wed, 02 Nov 2022 13:01:07 -0700 (PDT)
+Received: from auvcetillem1m1.corp.emc.net ([143.166.81.254])
+        by smtp.gmail.com with ESMTPSA id n29-20020a0568080a1d00b003549397fde4sm4873182oij.54.2022.11.02.13.01.07
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 12:59:19 -0700 (PDT)
-From:   Rob Clark <robdclark@gmail.com>
-To:     dri-devel@lists.freedesktop.org
-Cc:     Rob Clark <robdclark@chromium.org>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        linux-kernel@vger.kernel.org (open list)
-Subject: [PATCH] drm/syncobj: Remove unused field
-Date:   Wed,  2 Nov 2022 12:59:44 -0700
-Message-Id: <20221102195945.352241-1-robdclark@gmail.com>
-X-Mailer: git-send-email 2.38.1
+        Wed, 02 Nov 2022 13:01:07 -0700 (PDT)
+From:   Stuart Hayes <stuart.w.hayes@gmail.com>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Stuart Hayes <stuart.w.hayes@gmail.com>,
+        Kyle Meyer <kyle.meyer@hpe.com>
+Cc:     linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] cpufreq: acpi: Defer setting boost MSRs
+Date:   Wed,  2 Nov 2022 14:59:57 -0500
+Message-Id: <20221102195957.82871-1-stuart.w.hayes@gmail.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -74,31 +71,107 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Rob Clark <robdclark@chromium.org>
+When acpi-cpufreq is loaded, boost is enabled on every CPU (by setting an
+MSR) before the driver is registered with cpufreq.  This can be very time
+consuming, because it is done with a CPU hotplug startup callback, and
+cpuhp_setup_state() schedules the callback (cpufreq_boost_online()) to run
+on each CPU one at a time, waiting for each to run before calling the next.
 
-Seems to be a leftover after commit e7cdf5c82f17 ("drm/syncobj: Stop
-reusing the same struct file for all syncobj -> fd").
+If cpufreq_register_driver() fails--if, for example, there are no ACPI
+P-states present--this is wasted time.
 
-Signed-off-by: Rob Clark <robdclark@chromium.org>
+Since cpufreq already sets up a CPU hotplug startup callback if and when
+acpi-cpufreq is registered, set the boost MSRs in acpi_cpufreq_cpu_init(),
+which is called by the cpufreq cpuhp callback.  This allows acpi-cpufreq to
+exit quickly if it is loaded but not needed.
+
+On one system with 192 CPUs, this patch speeds up boot by about 30 seconds.
+
+Signed-off-by: Stuart Hayes <stuart.w.hayes@gmail.com>
 ---
- include/drm/drm_syncobj.h | 4 ----
- 1 file changed, 4 deletions(-)
+ drivers/cpufreq/acpi-cpufreq.c | 31 +++----------------------------
+ 1 file changed, 3 insertions(+), 28 deletions(-)
 
-diff --git a/include/drm/drm_syncobj.h b/include/drm/drm_syncobj.h
-index 6cf7243a1dc5..affc4d8e50e2 100644
---- a/include/drm/drm_syncobj.h
-+++ b/include/drm/drm_syncobj.h
-@@ -57,10 +57,6 @@ struct drm_syncobj {
- 	 * @lock: Protects &cb_list and write-locks &fence.
- 	 */
- 	spinlock_t lock;
--	/**
--	 * @file: A file backing for this syncobj.
--	 */
--	struct file *file;
- };
+diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+index 1bb2b90ebb21..cb167263de72 100644
+--- a/drivers/cpufreq/acpi-cpufreq.c
++++ b/drivers/cpufreq/acpi-cpufreq.c
+@@ -535,15 +535,6 @@ static void free_acpi_perf_data(void)
+ 	free_percpu(acpi_perf_data);
+ }
  
- void drm_syncobj_free(struct kref *kref);
+-static int cpufreq_boost_online(unsigned int cpu)
+-{
+-	/*
+-	 * On the CPU_UP path we simply keep the boost-disable flag
+-	 * in sync with the current global state.
+-	 */
+-	return boost_set_msr(acpi_cpufreq_driver.boost_enabled);
+-}
+-
+ static int cpufreq_boost_down_prep(unsigned int cpu)
+ {
+ 	/*
+@@ -897,6 +888,8 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
+ 	if (perf->states[0].core_frequency * 1000 != freq_table[0].frequency)
+ 		pr_warn(FW_WARN "P-state 0 is not max freq\n");
+ 
++	set_boost(policy, acpi_cpufreq_driver.boost_enabled);
++
+ 	return result;
+ 
+ err_unreg:
+@@ -916,6 +909,7 @@ static int acpi_cpufreq_cpu_exit(struct cpufreq_policy *policy)
+ 
+ 	pr_debug("%s\n", __func__);
+ 
++	cpufreq_boost_down_prep(policy->cpu);
+ 	policy->fast_switch_possible = false;
+ 	policy->driver_data = NULL;
+ 	acpi_processor_unregister_performance(data->acpi_perf_cpu);
+@@ -972,25 +966,9 @@ static void __init acpi_cpufreq_boost_init(void)
+ 	acpi_cpufreq_driver.set_boost = set_boost;
+ 	acpi_cpufreq_driver.boost_enabled = boost_state(0);
+ 
+-	/*
+-	 * This calls the online callback on all online cpu and forces all
+-	 * MSRs to the same value.
+-	 */
+-	ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "cpufreq/acpi:online",
+-				cpufreq_boost_online, cpufreq_boost_down_prep);
+-	if (ret < 0) {
+-		pr_err("acpi_cpufreq: failed to register hotplug callbacks\n");
+-		return;
+-	}
+ 	acpi_cpufreq_online = ret;
+ }
+ 
+-static void acpi_cpufreq_boost_exit(void)
+-{
+-	if (acpi_cpufreq_online > 0)
+-		cpuhp_remove_state_nocalls(acpi_cpufreq_online);
+-}
+-
+ static int __init acpi_cpufreq_init(void)
+ {
+ 	int ret;
+@@ -1032,7 +1010,6 @@ static int __init acpi_cpufreq_init(void)
+ 	ret = cpufreq_register_driver(&acpi_cpufreq_driver);
+ 	if (ret) {
+ 		free_acpi_perf_data();
+-		acpi_cpufreq_boost_exit();
+ 	}
+ 	return ret;
+ }
+@@ -1041,8 +1018,6 @@ static void __exit acpi_cpufreq_exit(void)
+ {
+ 	pr_debug("%s\n", __func__);
+ 
+-	acpi_cpufreq_boost_exit();
+-
+ 	cpufreq_unregister_driver(&acpi_cpufreq_driver);
+ 
+ 	free_acpi_perf_data();
 -- 
-2.38.1
+2.31.1
 
