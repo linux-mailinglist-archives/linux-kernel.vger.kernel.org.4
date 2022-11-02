@@ -2,194 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C5EB6166BA
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D7DE6166B5
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:59:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231167AbiKBP7O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 11:59:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37950 "EHLO
+        id S229534AbiKBP6t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 11:58:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230193AbiKBP6u (ORCPT
+        with ESMTP id S231140AbiKBP6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 11:58:50 -0400
-Received: from JPN01-TYC-obe.outbound.protection.outlook.com (mail-tycjpn01olkn2017.outbound.protection.outlook.com [40.92.99.17])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22E542BB0A;
-        Wed,  2 Nov 2022 08:58:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=D8zx23gSFiKXhU9W7qBQf44Tj0qxEZXpqPzqHhky0l4wCoHzvH44jaUy67zRohyCV3LHUZvc3zxTnmQzzf77PJjPnpuSdSlD4W9j/8ivpQU7bKGYiVySh9ypB6+7ZTtJuSp35ngSnLLIQUOvpGiLh9z4JmVme3vsrEB7w4v7SnFBn8zdjDIMyb2uN56va8TKA/lGbnd8xbdQHVUMBec/kjAWDT8p1fNXUUjHCu6w7v4UFAfgVEHWXrmvXzowy4syMkzZZkCA7J+bTQOGcqtxD4qzDswTPmCVmrJGq5hNDY/KUqzA4JW2Rznor1vhIdmk/w3bOmRGn6uh3I9Ca9tNCQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=/xQxRB+vXWAaN6lf7I9+zqAqmt3lidWLUa0xSH7X+hw=;
- b=kJIaBC99mT7RxyQu5XkVZoPPxjvkIikZMOkPCGsVf3Tstvm08VUGtgalp5WcNmXFdrSeP5i8EnhV1gQlR57+qdCCiDrcfV2n97qzvnu8VtLpLNauvGtqoFhIAqy2yrEUUDkGxB9apRO2Pc+qhxYlsXXQZe9Qb51cwd9G8JcB+YxLJEwiDIX3ttT0cjNXzZ1mRyFgjpU6GreKwSiQIstw1fjL7ZPppjsXjmlCNtbS3WIIMvye3Skckk108MTfi0+W6VtKgsDXr6JCqy3r9cu9F4vgODlqq3qB47indn2eNX/NqOYLtSfpKZ5mhin1DnJolBeqwmBpU7BYIYA0cohQoQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
- dkim=none; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=/xQxRB+vXWAaN6lf7I9+zqAqmt3lidWLUa0xSH7X+hw=;
- b=YWpC3q2UCJljzO5os7oRs2r1qTqlhvWxP9WKS/Icy5RVAL/T4cVID/nsnUdvD9jIxTlx66D4LOGMCKfGFt7rHMy4LKvJ1YVBPA8HieAJVq/Usuf3WrdSkZI4ElpxnnmQSyn5NXIty44Un3ihQev+El4NKh5O/fyzvrKNwu7irdyWTRzQnE8mAqmYZBFLdXOt/pC/wQdiss/pD78C2WjjA6bfWqjk51PTpViflsU/FlUCXxr3hd0TPZXHYqPAcQub0ATjm7YjwADjSdxsmU8+Wcvg/TsOFGOTiR4Kjg6UOPfc8V0jcvvSpkGYw0O9zCx6vJnokPReil2Jl0vOEu1ULQ==
-Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:152::9)
- by OS3P286MB2422.JPNP286.PROD.OUTLOOK.COM (2603:1096:604:151::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.19; Wed, 2 Nov
- 2022 15:58:42 +0000
-Received: from TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- ([fe80::c90e:cbf3:c23d:43a5]) by TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
- ([fe80::c90e:cbf3:c23d:43a5%9]) with mapi id 15.20.5791.022; Wed, 2 Nov 2022
- 15:58:42 +0000
-From:   Dawei Li <set_pte_at@outlook.com>
-To:     sumit.semwal@linaro.org, christian.koenig@amd.com
-Cc:     benjamin.gaignard@collabora.com, labbott@redhat.com,
-        Brian.Starkey@arm.com, jstultz@google.com, afd@ti.com,
-        sspatil@android.com, linux-media@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
-        linux-kernel@vger.kernel.org, Dawei Li <set_pte_at@outlook.com>
-Subject: [PATCH v3] dma-buf: fix racing conflict of dma_heap_add()
-Date:   Wed,  2 Nov 2022 23:58:23 +0800
-Message-ID: <TYCP286MB2323D71DEC1D008BEA6F7ABBCA399@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
-X-Mailer: git-send-email 2.25.1
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-TMN:  [Hb13McbHy8iya2slT4EkVubLNUyTNzO/]
-X-ClientProxiedBy: SGAP274CA0006.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b6::18)
- To TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM (2603:1096:400:152::9)
-X-Microsoft-Original-Message-ID: <20221102155823.406044-1-set_pte_at@outlook.com>
+        Wed, 2 Nov 2022 11:58:25 -0400
+Received: from mail-ot1-f46.google.com (mail-ot1-f46.google.com [209.85.210.46])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 308352B63F;
+        Wed,  2 Nov 2022 08:58:24 -0700 (PDT)
+Received: by mail-ot1-f46.google.com with SMTP id 16-20020a9d0490000000b0066938311495so10515074otm.4;
+        Wed, 02 Nov 2022 08:58:24 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9Oa2mr0U3KqvEwJuScZMv4vEnQCNwkxhCzMMRCjtQd8=;
+        b=wPET9zyytL3stC8A0a0u1P7kADbVOfllYv8NNNoz14nD2Vk94OCFPlSXaXmLkefVxY
+         Z+/dyMZfymCTbGmZQVrIx/wPfDb9lEavcr0hp5uwSiBsLdqwdOcg+/XP5NJPC3RqX1U4
+         5PdOmVpGbsrgsfG2kKlC7nYdAxn2AsNi4mxmTeWYQhN7UimAa1JVxoNi45AHhugfTMNh
+         QfJWeFRRq9UaZ7HH0PAKNzVS36iikWgOlDb+yzID1o9VtfF9dQMcvHiuPlOWzwsp/Qbx
+         X0TnRFe+7ViCq6Jv63rDjulZNK3u2UTpmf7bzq+8QhWhnWN5eKL8wGQNlK07icg/aQQX
+         fC1A==
+X-Gm-Message-State: ACrzQf1knNmJhrBR7rdfVnHzFqo04iH07rHpWSfv+0+kiQGZBKI3H5O+
+        aENTWVMPAA57ZVdSFM5R+A==
+X-Google-Smtp-Source: AMsMyM7YzP5LC5WYCWNyfVyHoLOCA5UFQJcFWDv0tjZ9hGCO3ONQ/cAk17lE/lNMBrsl1AJeXpEwGQ==
+X-Received: by 2002:a05:6830:4114:b0:661:c422:191a with SMTP id w20-20020a056830411400b00661c422191amr12437806ott.286.1667404703323;
+        Wed, 02 Nov 2022 08:58:23 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id l4-20020a0568301d6400b0066c495a651dsm4050628oti.38.2022.11.02.08.58.22
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 08:58:22 -0700 (PDT)
+Received: (nullmailer pid 3969605 invoked by uid 1000);
+        Wed, 02 Nov 2022 15:58:24 -0000
+Date:   Wed, 2 Nov 2022 10:58:24 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Joy Zou <joy.zou@nxp.com>
+Cc:     shengjiu.wang@nxp.com, festevam@gmail.com, s.hauer@pengutronix.de,
+        shawnguo@kernel.org, dev@lynxeye.de, devicetree@vger.kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, kernel@pengutronix.de,
+        martink@posteo.de, vkoul@kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        alexander.stein@ew.tq-group.com, robh+dt@kernel.org,
+        linux-kernel@vger.kernel.org, david@ixit.cz, linux-imx@nxp.com,
+        hongxing.zhu@nxp.com, aford173@gmail.com, peng.fan@nxp.com,
+        dmaengine@vger.kernel.org
+Subject: Re: [PATCH v9 1/2] dt-bindings: fsl-imx-sdma: Convert imx sdma to DT
+ schema
+Message-ID: <166740470387.3969545.8351119964620233012.robh@kernel.org>
+References: <20221031105028.598502-1-joy.zou@nxp.com>
+ <20221031105028.598502-2-joy.zou@nxp.com>
 MIME-Version: 1.0
-X-MS-Exchange-MessageSentRepresentingType: 1
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: TYCP286MB2323:EE_|OS3P286MB2422:EE_
-X-MS-Office365-Filtering-Correlation-Id: 52dd0f8a-61d7-4684-9574-08dabceb1d59
-X-MS-Exchange-SLBlob-MailProps: ZLYX9kf+sFZrWcqlYuxsQ4SinJ0dkCiqXcsavXO7jaSL3FwrSbAMOCLBPddQdbgOgPvnX69oxlNgKJ13hRvJznrLWDHsVacx/W3igzW+0IarXyvR90JSYQOssUT4M9UQ9pn45aEYld6rL6Z7thebJwH4CTCPdVsI8sOSlhCLLx7EkaIJV1CVvk3qPXrGFGxqhyQH70hgYXtXNCAx/ZbqE5GzvwcM23aX2CfS34ueYVW06gNOy/1Xk5AqIc3hemdUfECHrkBoNspWEhHy6blrgUjbi/a5dJxqgIqGIjTRktm9zTFXH13YIGDwLThb+rxl3jSzeeYOqJxZkp2wZ9X3tF5CKL1a4K792NeH0deN+nHJ+Vmc6ZFZmzb/ccXfZdTwEAjUKbBd9KW7MQx6apt2OKbaD4juwuREzkziQs2SWcr6heVQbMkrL2TbDAQpVyMyEE3JAPK3FqXjTTJkI9qWYdlVTBTTwl1iVSIcCr0eRCNOyt+GIYVr9n827wU2ZzbmpgDh8/rCTtSKTljLlSQTJ0YcO61dUo3OFoi1ZsX+1xppMIcvFqo+HceSmjRCVq9vaYd/DF0uUAhYSStRRNKfeB1Zaed/7iC7aNy6lCnfkQ+GMl8vXFcxlCxBNZW8XbIQpYh/vBN6Gn0+0gXyKyhSvSO6zyQr01qUar4rlh2bzz9AdPwaIwkuWEjZ373L7Dnn5bJbEnQvIl7QXI1JTy4I7j9L8DqoPYDgqUINEpSmCK1tQGfl2FUgwgbP+u8MHzj/BtV3uP/ggMeXHCNxyRnWLU0QQrb7RTT2guMROYrqzStA/zMSrFyZOA==
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: 9yBYn2OGZXdgfuBEJGo+7riIFDC5SgdaYSlouJwrH0jR9JzJADrhs9ziS3SSjIVaQsHL0bXHXBxRoNfluDm77FenEagX4z/uqrJ3pfuFD0Q+G1Q6bDOTwKutM5bNEknezWABkbKSuW+1hfXNErVCmv1KmjAgTQwzNSnlinusp88TcDcMiNKt3/Bau/04hdcPN31r5DbAEnoRdjhmQeu+wsgYTvTxH8FfPi7klhQ298uqxW+u6LYhbjqrgDDKRY9kt8QaRH+3mvRhYf2RGgm5xhBNVPE+GSSf5RXChKVb1Ev57RUhAbPNN/1XZRnjm3uLaL+IUwR8JPnNHtOoqKp3iIC1+txKP9cjvnRROtaECkpPxkGZnnCCaTmwYxfaTGkOhTv4t8CGlAH/TSlOCiwlI02u//jR9xcQUU7IdMJJzTSOrZI0O16YCiopHABEzH17rRwmhMXmtWuLVE5OE6B0z28qVFjtSMBXiWJktUO64MdJFCZWUNeILnnko7ZFf9IQ6UgxpENQFm4P8zNUgdOJr77H+W8d6jphoTX5fTsMTgcbF36CgKl9vg+UazqlfWPv21luXXYXoQqMZc21+rcNnqRKXx0EY6d3Vz7ZgbYfzlMxw4AOae6hBQdAjFGK5nI0l0mpAzeXXrClo2pePF8tMjGxYscrnjmSCf96y5pM0rG1ZE1f8YdV+bErkxOF+8cY
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?h48OKdY6rzvSrL0/xp2r3+NSu0oqJ1WsAou+sGycyCUnWj0VQ42s/Y1gGzRd?=
- =?us-ascii?Q?fx4KblE7IYeIyxh4w630lQqQf+0Xnm+0jdtJaE0c2pKo+VbcyR28iGyMS8v0?=
- =?us-ascii?Q?bXra7Lo8FU/7q+BTigC8UIC1O2mXm9BOUewQhlPmSOdDx7kSEBlZio4mMB4U?=
- =?us-ascii?Q?kT97IBMeCcgu5I/wzHsSvakqN8B4a82aIeFYchHWIUDTL71a2COW6/b+jKEd?=
- =?us-ascii?Q?X22cOKHNILP8fmpoSGqIWp4Oxam6YrhfT8Y29b5RXVA1+Sy1srI+e+UuyNnN?=
- =?us-ascii?Q?rgJuVSAjZJffyE4AHroYtD3NBfh8sVY9AN2vj48rRuD+at73mCNNlWAgHa2Q?=
- =?us-ascii?Q?mz109Wul3129ZIZOg2iS8TnJBIjLGlu7rq+X7T5l5fZx4qzYvI3WkexDtqn5?=
- =?us-ascii?Q?z+9mnrm5pE8uXHq4kCqNABImC0hFTcWmajX02/JHn+8afOU6u+Uyy1l29pJ4?=
- =?us-ascii?Q?5xyXsoJgLiBOzRyhrX1RMnvM5DvGqDspNfHrTfoTQP+gFcCWKf1oaBzuM+gK?=
- =?us-ascii?Q?q3txn1GIMl62W8hSGdVYroR6ktKI1TiW85/EarQwfQb0u2HdPv3coPTIRhFp?=
- =?us-ascii?Q?0Yg046d8cVrHSL2Ygwjcj2YbrJkrSNQLnJrr0GQdwr/zX2fRPWs7uM6oFnVP?=
- =?us-ascii?Q?Yc7siO8aMrqE7pAx1QW+x9uL+dXPDMUeRqWJSFfB8R3P3az8yVe1f+axpj/b?=
- =?us-ascii?Q?550JKweCDWNvbK/lvI+UpmZalM/z5Jlr0Y26oWtk0ukDulUkgVnSv3QJucQe?=
- =?us-ascii?Q?g+yuj00mtYdJ26XXKDEn1yfTaSdcx8PKlqEF3YIn7TSx106xeoH/lTCPnIYH?=
- =?us-ascii?Q?CCsYsTYxJvsg5G1xJIuMVIWlY4gbgmrvxi3vLKVenP6jR30DoiyAIlo3YR0a?=
- =?us-ascii?Q?amHS2o8cDkS+JSnyBcUmiewYsCnFTIDUSEvEJhYSN8FRze7oyzWaiZIf/OyY?=
- =?us-ascii?Q?iJXKyVr3Jr98WZGxMRMHhmytiNjNPKxFH1MsElspo05o1ng2bB5kh3F5lUFU?=
- =?us-ascii?Q?1KlivwVX1ObOVLufGwKcIVWLOs18sRMx7D2S/MPq4ItzhvGwY/WQZ+u3cf7s?=
- =?us-ascii?Q?5p0Fr7opWXBYPDxSm2CXvMD3VSi3aqTWAM5SH+R0f2aCHY0n/3bxmF96+GuA?=
- =?us-ascii?Q?IuXYNyfFUp4eSjb5QR1Y/dMe/ZOzwpSbPfej/KURGStKVnUzRCuelRFKRH/O?=
- =?us-ascii?Q?5wZNsUUCSU4SHy4Z0XpToj6WYx10poST0xChP4VxIt/pIXWU9VyYqNfuCedU?=
- =?us-ascii?Q?FdBPByMplf8LyG/5vG4RVWgsT/dJYaA20Q0zAx8y3Q=3D=3D?=
-X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 52dd0f8a-61d7-4684-9574-08dabceb1d59
-X-MS-Exchange-CrossTenant-AuthSource: TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2022 15:58:42.4905
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
-X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: OS3P286MB2422
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221031105028.598502-2-joy.zou@nxp.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Racing conflict could be:
-task A                 task B
-list_for_each_entry
-strcmp(h->name))
-                       list_for_each_entry
-                       strcmp(h->name)
-kzalloc                kzalloc
-......                 .....
-device_create          device_create
-list_add
-                       list_add
 
-The root cause is that task B has no idea about the fact someone
-else(A) has inserted heap with same name when it calls list_add,
-so a potential collision occurs.
+On Mon, 31 Oct 2022 18:50:27 +0800, Joy Zou wrote:
+> Convert the i.MX SDMA binding to DT schema format using json-schema.
+> 
+> The compatibles fsl,imx31-to1-sdma, fsl,imx31-to2-sdma, fsl,imx35-to1-sdma
+> and fsl,imx35-to2-sdma are not used. So need to delete it. The compatibles
+> fsl,imx50-sdma, fsl,imx6sll-sdma and fsl,imx6sl-sdma are added. The
+> original binding don't list all compatible used.
+> 
+> In addition, add new peripheral types HDMI Audio.
+> 
+> Signed-off-by: Joy Zou <joy.zou@nxp.com>
+> ---
+> Changes in v9:
+> add the dma-common quotes.
+> delete the dma-controller quotes.
+> 
+> Changes in v8:
+> add the dma-controller quotes.
+> delete #dma-cells in required.
+> 
+> Changes in v6:
+> delete tag Acked-by from commit message.
+> 
+> Changes in v5:
+> modify the commit message fromat.
+> add additionalProperties, because delete the quotes in patch v4.
+> delete unevaluatedProperties due to similar to additionalProperties.
+> modification fsl,sdma-event-remap items and description.
+> 
+> Changes in v4:
+> modify the commit message.
+> delete the quotes in patch.
+> modify the compatible in patch.
+> delete maxitems and add items for clock-names property.
+> add iram property.
+> 
+> Changes in v3:
+> modify the commit message.
+> modify the filename.
+> modify the maintainer.
+> delete the unnecessary comment.
+> modify the compatible and run dt_binding_check and dtbs_check.
+> add clocks and clock-names property.
+> delete the reg description and add maxItems.
+> delete the interrupts description and add maxItems.
+> add ref for gpr property.
+> modify the fsl,sdma-event-remap ref type and add items.
+> delete consumer example.
+> 
+> Changes in v2:
+> convert imx sdma bindings to DT schema.
+> ---
+>  .../devicetree/bindings/dma/fsl,imx-sdma.yaml | 149 ++++++++++++++++++
+>  .../devicetree/bindings/dma/fsl-imx-sdma.txt  | 118 --------------
+>  2 files changed, 149 insertions(+), 118 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/dma/fsl,imx-sdma.yaml
+>  delete mode 100644 Documentation/devicetree/bindings/dma/fsl-imx-sdma.txt
+> 
 
-v1: https://lore.kernel.org/all/TYCP286MB2323950197F60FC3473123B7CA349@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM/
-
-v1->v2: Narrow down locking scope, check the existence of heap before
-insertion, as suggested by Andrew Davis.
-
-v2->v3: Remove double checking.
-
-Fixes: c02a81fba74f ("dma-buf: Add dma-buf heaps framework")
-
-base-commit: 447fb14bf07905b880c9ed1ea92c53d6dd0649d7
-
-Signed-off-by: Dawei Li <set_pte_at@outlook.com>
----
- drivers/dma-buf/dma-heap.c | 29 +++++++++++++++--------------
- 1 file changed, 15 insertions(+), 14 deletions(-)
-
-diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
-index 8f5848aa144f..7a25e98259ea 100644
---- a/drivers/dma-buf/dma-heap.c
-+++ b/drivers/dma-buf/dma-heap.c
-@@ -233,18 +233,6 @@ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
- 		return ERR_PTR(-EINVAL);
- 	}
- 
--	/* check the name is unique */
--	mutex_lock(&heap_list_lock);
--	list_for_each_entry(h, &heap_list, list) {
--		if (!strcmp(h->name, exp_info->name)) {
--			mutex_unlock(&heap_list_lock);
--			pr_err("dma_heap: Already registered heap named %s\n",
--			       exp_info->name);
--			return ERR_PTR(-EINVAL);
--		}
--	}
--	mutex_unlock(&heap_list_lock);
--
- 	heap = kzalloc(sizeof(*heap), GFP_KERNEL);
- 	if (!heap)
- 		return ERR_PTR(-ENOMEM);
-@@ -283,13 +271,26 @@ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
- 		err_ret = ERR_CAST(dev_ret);
- 		goto err2;
- 	}
--	/* Add heap to the list */
-+
- 	mutex_lock(&heap_list_lock);
-+	/* check the name is unique */
-+	list_for_each_entry(h, &heap_list, list) {
-+		if (!strcmp(h->name, exp_info->name)) {
-+			mutex_unlock(&heap_list_lock);
-+			pr_err("dma_heap: Already registered heap named %s\n",
-+			       exp_info->name);
-+			err_ret = ERR_PTR(-EINVAL);
-+			goto err3;
-+		}
-+	}
-+
-+	/* Add heap to the list */
- 	list_add(&heap->list, &heap_list);
- 	mutex_unlock(&heap_list_lock);
- 
- 	return heap;
--
-+err3:
-+	device_destroy(dma_heap_class, heap->heap_devt);
- err2:
- 	cdev_del(&heap->heap_cdev);
- err1:
--- 
-2.25.1
-
+Reviewed-by: Rob Herring <robh@kernel.org>
