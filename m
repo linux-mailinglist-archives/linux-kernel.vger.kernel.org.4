@@ -2,99 +2,256 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 69103615C8A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 07:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7438C615C8E
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 07:57:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230178AbiKBGzG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 02:55:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50694 "EHLO
+        id S230137AbiKBG5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 02:57:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51504 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230137AbiKBGy7 (ORCPT
+        with ESMTP id S229853AbiKBG5M (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 02:54:59 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4629A2613B
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 23:54:58 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so1269031pji.1
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 23:54:58 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=SAOkUsCOtaiUhMk86kQHicWY7yq03GggkInJiFKNa+Q=;
-        b=MEzPbgg3wLi8HrCN3s9iVF+0j0Dc4kIb18s95oTCxTrDTyY+/m2vVdT/sUzuJxecn4
-         Hzrno2UsQl5r3KZFn9b2YyR6ba5g+A4KBmbwC1fZ4Ad+luHhZA0i0AK/EJt4exBYhuC9
-         jiBXxdr2rpgDbI1r+ec3LZmDbhrPuA8XdHHVIdRnWB+AfsVaDv5X9Kg9nCDSmKprYYCA
-         4DCUHZRJaPiWGBZLOQ2k5PqDONrpf3VHnHSk4jM3kQChui4sC2Mp9b81qK3A/XCnQ7s/
-         zY3PWdqhuE+CNAhJYlaKPliCWGxkmeMhHv4TEIQqj8oICpAASQAgg/LhD9QwBYZh1P/s
-         fh6A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=SAOkUsCOtaiUhMk86kQHicWY7yq03GggkInJiFKNa+Q=;
-        b=TDbARbAarOCSO4WqweoXAAatqZz5yzTBoWCEP153ibTVxY3Se5iO6Aq9aUG6QpeZGp
-         X3oZ+kGg41v1gZ/pQg0NMBivESE2b0qRf7ne1N7Vj0Pz/SjYaJnNTde9AcSLszl0g1La
-         3rVp6RFfU+kpZZ/uVV5dTiXbCD30ZAKu0QUiOx1ofQZytWlbQ6eINxV8wdWbLw/UOfCC
-         trSwgFRewemodCHChrSFzaupIMxXEF3ZOzB08PincpHFUCk/iviNXa+AYShjDqe+xmHu
-         +qIcOscuMMXz6EYtQk0onAFd5mzZvSCy7/+Yz+F88VCwKfrQmRpqJXk+z3PX/XmE23Z0
-         563g==
-X-Gm-Message-State: ACrzQf3XFYpPM6ZJWBbioTnDNZVjyfFkRFYEFivSI4w/K+Ql7WDrRy+r
-        L847NHoztCDQ9mf1nph+A3yk
-X-Google-Smtp-Source: AMsMyM4rGLfxyF9kzZE9+p2ectELM6qqF7ZVRIHqYdn6aPcQGYorkM+oB/Tc8aqySRcJD/Zehi5olA==
-X-Received: by 2002:a17:902:ab89:b0:186:7cfc:cde8 with SMTP id f9-20020a170902ab8900b001867cfccde8mr23636607plr.9.1667372097729;
-        Tue, 01 Nov 2022 23:54:57 -0700 (PDT)
-Received: from thinkpad ([117.193.209.178])
-        by smtp.gmail.com with ESMTPSA id m10-20020a170902f64a00b001769cfa5cd4sm7505787plg.49.2022.11.01.23.54.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 23:54:56 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 12:24:48 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     andersson@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        rafael@kernel.org, robh+dt@kernel.org, johan@kernel.org,
-        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2 7/7] cpufreq: qcom-hw: Add CPU clock provider support
-Message-ID: <20221102065448.GA10650@thinkpad>
-References: <20221025073254.1564622-1-manivannan.sadhasivam@linaro.org>
- <20221025073254.1564622-8-manivannan.sadhasivam@linaro.org>
- <20221102042849.q3qnaoebeudpbpnv@vireshk-i7>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221102042849.q3qnaoebeudpbpnv@vireshk-i7>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Wed, 2 Nov 2022 02:57:12 -0400
+Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404A6222AE
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 23:57:11 -0700 (PDT)
+Content-Type: text/plain;
+        charset=us-ascii
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1667372229;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=iIxI+9EdE71N9U8wkgda/gJcxSWf1ZLf+S0jdoHjU94=;
+        b=bm+T8nHMkC2FiaBL6bT6D7Jp5dV7ZRaVcMbFwFuhGWcbAB8f3tsQ0Unf8lHQ/O5EpWTX29
+        rErDDT7YaZNsbp3h+zHZAm4+dmPOob5twLdMCgfLLLfq122GS8KSGawxwqPtNg7Q0O5am3
+        JVAYzJDFdrNbe+8CqglfMwox9tB6rWw=
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.200.110.1.12\))
+Subject: Re: [PATCH v2 7/9] mm/hugetlb_cgroup: convert
+ hugetlb_cgroup_uncharge_page() to folios
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Muchun Song <muchun.song@linux.dev>
+In-Reply-To: <20221101223059.460937-8-sidhartha.kumar@oracle.com>
+Date:   Wed, 2 Nov 2022 14:56:48 +0800
+Cc:     linux-kernel@vger.kernel.org,
+        Linux Memory Management List <linux-mm@kvack.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Matthew Wilcox <willy@infradead.org>,
+        Mina Almasry <almasrymina@google.com>, linmiaohe@huawei.com,
+        minhquangbui99@gmail.com, aneesh.kumar@linux.ibm.com
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <C406644F-2DDF-4404-9D00-41199DE033DB@linux.dev>
+References: <20221101223059.460937-1-sidhartha.kumar@oracle.com>
+ <20221101223059.460937-8-sidhartha.kumar@oracle.com>
+To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 09:58:49AM +0530, Viresh Kumar wrote:
-> On 25-10-22, 13:02, Manivannan Sadhasivam wrote:
-> >  	for (i = 0; i < num_domains; i++) {
-> >  		struct qcom_cpufreq_data *data = &qcom_cpufreq.data[i];
-> > +		static struct clk_init_data init = {};
-> 
-> Why not make this part of a driver level structure instead of static ?
-> And what will {} do ? Initialize to 0 ? static would have already done
-> that.
-> 
 
-Good catch! "static" is not needed here.
 
-Thanks,
-Mani
+> On Nov 2, 2022, at 06:30, Sidhartha Kumar <sidhartha.kumar@oracle.com> =
+wrote:
+>=20
+> Continue to use a folio inside free_huge_page() by converting
+> hugetlb_cgroup_uncharge_page*() to folios.
+>=20
+> Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
+> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
 
-> -- 
-> viresh
 
--- 
-மணிவண்ணன் சதாசிவம்
+Reviewed-by: Muchun Song <songmuchun@bytedance.com>
+
+A nit below.
+
+> ---
+> include/linux/hugetlb_cgroup.h | 16 ++++++++--------
+> mm/hugetlb.c                   | 15 +++++++++------
+> mm/hugetlb_cgroup.c            | 21 ++++++++++-----------
+> 3 files changed, 27 insertions(+), 25 deletions(-)
+>=20
+> diff --git a/include/linux/hugetlb_cgroup.h =
+b/include/linux/hugetlb_cgroup.h
+> index 789b6fef176d..c70f92fe493e 100644
+> --- a/include/linux/hugetlb_cgroup.h
+> +++ b/include/linux/hugetlb_cgroup.h
+> @@ -158,10 +158,10 @@ extern void hugetlb_cgroup_commit_charge(int =
+idx, unsigned long nr_pages,
+> extern void hugetlb_cgroup_commit_charge_rsvd(int idx, unsigned long =
+nr_pages,
+>      struct hugetlb_cgroup *h_cg,
+>      struct page *page);
+> -extern void hugetlb_cgroup_uncharge_page(int idx, unsigned long =
+nr_pages,
+> - struct page *page);
+> -extern void hugetlb_cgroup_uncharge_page_rsvd(int idx, unsigned long =
+nr_pages,
+> -      struct page *page);
+> +extern void hugetlb_cgroup_uncharge_folio(int idx, unsigned long =
+nr_pages,
+> + struct folio *folio);
+> +extern void hugetlb_cgroup_uncharge_folio_rsvd(int idx, unsigned long =
+nr_pages,
+> +      struct folio *folio);
+>=20
+> extern void hugetlb_cgroup_uncharge_cgroup(int idx, unsigned long =
+nr_pages,
+>   struct hugetlb_cgroup *h_cg);
+> @@ -254,14 +254,14 @@ hugetlb_cgroup_commit_charge_rsvd(int idx, =
+unsigned long nr_pages,
+> {
+> }
+>=20
+> -static inline void hugetlb_cgroup_uncharge_page(int idx, unsigned =
+long nr_pages,
+> - struct page *page)
+> +static inline void hugetlb_cgroup_uncharge_folio(int idx, unsigned =
+long nr_pages,
+> + struct folio *folio)
+> {
+> }
+>=20
+> -static inline void hugetlb_cgroup_uncharge_page_rsvd(int idx,
+> +static inline void hugetlb_cgroup_uncharge_folio_rsvd(int idx,
+>     unsigned long nr_pages,
+> -     struct page *page)
+> +     struct folio *folio)
+> {
+> }
+> static inline void hugetlb_cgroup_uncharge_cgroup(int idx,
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 387b8d74107d..2ecc0a6cf883 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -1726,10 +1726,10 @@ void free_huge_page(struct page *page)
+>=20
+> spin_lock_irqsave(&hugetlb_lock, flags);
+> folio_clear_hugetlb_migratable(folio);
+> - hugetlb_cgroup_uncharge_page(hstate_index(h),
+> -     pages_per_huge_page(h), page);
+> - hugetlb_cgroup_uncharge_page_rsvd(hstate_index(h),
+> -  pages_per_huge_page(h), page);
+> + hugetlb_cgroup_uncharge_folio(hstate_index(h),
+> +     pages_per_huge_page(h), folio);
+> + hugetlb_cgroup_uncharge_folio_rsvd(hstate_index(h),
+> +  pages_per_huge_page(h), folio);
+> if (restore_reserve)
+> h->resv_huge_pages++;
+>=20
+> @@ -2855,6 +2855,7 @@ struct page *alloc_huge_page(struct =
+vm_area_struct *vma,
+> struct hugepage_subpool *spool =3D subpool_vma(vma);
+> struct hstate *h =3D hstate_vma(vma);
+> struct page *page;
+> + struct folio *folio;
+> long map_chg, map_commit;
+> long gbl_chg;
+> int ret, idx;
+> @@ -2918,6 +2919,7 @@ struct page *alloc_huge_page(struct =
+vm_area_struct *vma,
+> * a reservation exists for the allocation.
+> */
+> page =3D dequeue_huge_page_vma(h, vma, addr, avoid_reserve, gbl_chg);
+> +
+
+Redundant blank line.
+
+> if (!page) {
+> spin_unlock_irq(&hugetlb_lock);
+> page =3D alloc_buddy_huge_page_with_mpol(h, vma, addr);
+> @@ -2932,6 +2934,7 @@ struct page *alloc_huge_page(struct =
+vm_area_struct *vma,
+> set_page_refcounted(page);
+> /* Fall through */
+> }
+> + folio =3D page_folio(page);
+> hugetlb_cgroup_commit_charge(idx, pages_per_huge_page(h), h_cg, page);
+> /* If allocation is not consuming a reservation, also store the
+> * hugetlb_cgroup pointer on the page.
+> @@ -2961,8 +2964,8 @@ struct page *alloc_huge_page(struct =
+vm_area_struct *vma,
+> rsv_adjust =3D hugepage_subpool_put_pages(spool, 1);
+> hugetlb_acct_memory(h, -rsv_adjust);
+> if (deferred_reserve)
+> - hugetlb_cgroup_uncharge_page_rsvd(hstate_index(h),
+> - pages_per_huge_page(h), page);
+> + hugetlb_cgroup_uncharge_folio_rsvd(hstate_index(h),
+> + pages_per_huge_page(h), folio);
+> }
+> return page;
+>=20
+> diff --git a/mm/hugetlb_cgroup.c b/mm/hugetlb_cgroup.c
+> index 351ffb40261c..7793401acc12 100644
+> --- a/mm/hugetlb_cgroup.c
+> +++ b/mm/hugetlb_cgroup.c
+> @@ -349,11 +349,10 @@ void hugetlb_cgroup_commit_charge_rsvd(int idx, =
+unsigned long nr_pages,
+> /*
+>  * Should be called with hugetlb_lock held
+>  */
+> -static void __hugetlb_cgroup_uncharge_page(int idx, unsigned long =
+nr_pages,
+> -   struct page *page, bool rsvd)
+> +static void __hugetlb_cgroup_uncharge_folio(int idx, unsigned long =
+nr_pages,
+> +   struct folio *folio, bool rsvd)
+> {
+> struct hugetlb_cgroup *h_cg;
+> - struct folio *folio =3D page_folio(page);
+>=20
+> if (hugetlb_cgroup_disabled())
+> return;
+> @@ -371,27 +370,27 @@ static void __hugetlb_cgroup_uncharge_page(int =
+idx, unsigned long nr_pages,
+> css_put(&h_cg->css);
+> else {
+> unsigned long usage =3D
+> - h_cg->nodeinfo[page_to_nid(page)]->usage[idx];
+> + h_cg->nodeinfo[folio_nid(folio)]->usage[idx];
+> /*
+> * This write is not atomic due to fetching usage and writing
+> * to it, but that's fine because we call this with
+> * hugetlb_lock held anyway.
+> */
+> - WRITE_ONCE(h_cg->nodeinfo[page_to_nid(page)]->usage[idx],
+> + WRITE_ONCE(h_cg->nodeinfo[folio_nid(folio)]->usage[idx],
+>   usage - nr_pages);
+> }
+> }
+>=20
+> -void hugetlb_cgroup_uncharge_page(int idx, unsigned long nr_pages,
+> -  struct page *page)
+> +void hugetlb_cgroup_uncharge_folio(int idx, unsigned long nr_pages,
+> +  struct folio *folio)
+> {
+> - __hugetlb_cgroup_uncharge_page(idx, nr_pages, page, false);
+> + __hugetlb_cgroup_uncharge_folio(idx, nr_pages, folio, false);
+> }
+>=20
+> -void hugetlb_cgroup_uncharge_page_rsvd(int idx, unsigned long =
+nr_pages,
+> -       struct page *page)
+> +void hugetlb_cgroup_uncharge_folio_rsvd(int idx, unsigned long =
+nr_pages,
+> +       struct folio *folio)
+> {
+> - __hugetlb_cgroup_uncharge_page(idx, nr_pages, page, true);
+> + __hugetlb_cgroup_uncharge_folio(idx, nr_pages, folio, true);
+> }
+>=20
+> static void __hugetlb_cgroup_uncharge_cgroup(int idx, unsigned long =
+nr_pages,
+> --=20
+> 2.31.1
+>=20
+>=20
+
