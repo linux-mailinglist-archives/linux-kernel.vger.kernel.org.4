@@ -2,108 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 367EC616343
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:02:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D6EB6162A5
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:23:25 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231253AbiKBNB5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 09:01:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42202 "EHLO
+        id S230376AbiKBMXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 08:23:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230320AbiKBNBw (ORCPT
+        with ESMTP id S230139AbiKBMXT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 09:01:52 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 411712872D
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 06:01:51 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id n83so19094314oif.11
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 06:01:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yggPcK5TIy9S6ZT52DUYZYz36AXCmMT/bN7wqCeS1aw=;
-        b=GGoxflpeBD4PlWvUvbzWx/ExOWXpLVPaGPWsA5VJ7zBECqzFfKTDyYrSvR9QX44E4Z
-         0L830fD72/n3XPMb//OpKzXSwLW7xNUJsHBkCLwIv6jFEFrgwTds5T1+dNAw7nyXDDHm
-         k9mxk85yYzWyn6/Rd23eT+G76vju+rvKmlLwP/KuJcMXJbojryZ92nsxTrvF79wZK+Zg
-         Speo3j7nNv7IaR4Ome2EJZ5jibL+lr5cXatvdXglwK/ALECdVLnwwsfaAegHCppkCo35
-         QPVVxDDOGjd3sb5iBw7cm0t9NtocEy4lGYfBuFEE94H/CLMO0la4smU+p2seJ4nwiY9O
-         Ty7A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=yggPcK5TIy9S6ZT52DUYZYz36AXCmMT/bN7wqCeS1aw=;
-        b=1rQv2Ot5uV5EWC9cGhD9MO0QVmnHwNM+slJACNeqBtAgZDD17W8A2Ek9Bta78HJn3K
-         oFasIMn2UYNjqweMCJRSwfMRRslTUhDeheW03wFA9G9bhd12L7KtjDjOKyYZmrbFxYWD
-         qrMnQVJEg58fBUxZha7KykFo9GkXXvEcTPCEJB9Bh2lpcfGv2pY9V1QSDBBwhygFBxDh
-         2i7bj7LHC6yUV2Tq608yD8cx5pnE5NsNDbrAaxy0INgjf2rlv931yPNIJCRWQ8eSJQ5U
-         W9KGqYGF9dTcoWVA6O/6DbSyBGIjBgN5wM2OEfUvlagzO313fOuqEwSo3BvpNj9IU2k9
-         nYSg==
-X-Gm-Message-State: ACrzQf2y89uFn339+8xJVLZugyC5gopcODvGAVt6yIQKWD7sHNjMMfGN
-        c0JWIVv38fzkumhIMs6Ev9jHk+3b+otESu2fGLg=
-X-Google-Smtp-Source: AMsMyM6qZQxXTSO2TswGy9TB1D8Odto/9aPMXtUQBP2MbhygDgD/F+xKh7vTLDPRvs/CUg5hTSU2HPJ9sIao/ppsy6k=
-X-Received: by 2002:a05:6808:14d2:b0:354:c733:abd3 with SMTP id
- f18-20020a05680814d200b00354c733abd3mr13266615oiw.96.1667394110491; Wed, 02
- Nov 2022 06:01:50 -0700 (PDT)
+        Wed, 2 Nov 2022 08:23:19 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE6228729;
+        Wed,  2 Nov 2022 05:23:18 -0700 (PDT)
+Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N2Qym37bnzbc7c;
+        Wed,  2 Nov 2022 20:23:12 +0800 (CST)
+Received: from huawei.com (10.175.101.6) by kwepemi500015.china.huawei.com
+ (7.221.188.92) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 2 Nov
+ 2022 20:23:15 +0800
+From:   Lu Wei <luwei32@huawei.com>
+To:     <edumazet@google.com>, <davem@davemloft.net>,
+        <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>, <kuba@kernel.org>,
+        <pabeni@redhat.com>, <xemul@parallels.com>,
+        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: [patch net v3] tcp: prohibit TCP_REPAIR_OPTIONS if data was already sent
+Date:   Wed, 2 Nov 2022 21:28:11 +0800
+Message-ID: <20221102132811.70858-1-luwei32@huawei.com>
+X-Mailer: git-send-email 2.31.1
 MIME-Version: 1.0
-References: <20221016174158.16638-1-fmdefrancesco@gmail.com>
- <CADnq5_MDp6WUYTUO+Lo=XMSLdaYcwu5i2MWid9u1U2hKiyqoYg@mail.gmail.com> <1753145.VLH7GnMWUR@suse>
-In-Reply-To: <1753145.VLH7GnMWUR@suse>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Wed, 2 Nov 2022 09:01:38 -0400
-Message-ID: <CADnq5_MfEGsxKxh459DZsHUjUspQLd7zagtrEeFMC4Upk-zTEw@mail.gmail.com>
-Subject: Re: [RESEND PATCH] drm/amd/amdgpu: Replace kmap() with kmap_local_page()
-To:     "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-Cc:     Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>,
-        "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Hawking Zhang <Hawking.Zhang@amd.com>,
-        Felix Kuehling <Felix.Kuehling@amd.com>,
-        Tao Zhou <tao.zhou1@amd.com>, Jack Xiao <Jack.Xiao@amd.com>,
-        amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, Ira Weiny <ira.weiny@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FREEMAIL_REPLY,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.101.6]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemi500015.china.huawei.com (7.221.188.92)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 1, 2022 at 7:21 PM Fabio M. De Francesco
-<fmdefrancesco@gmail.com> wrote:
->
-> On luned=C3=AC 17 ottobre 2022 18:53:24 CET Alex Deucher wrote:
-> > Applied.  Thanks!
-> >
->
-> The same report about which I just wrote in my previous email to you is a=
-lso
-> referring to this patch which later changed status to "Not Applicable".
->
-> It points to https://patchwork.linuxtv.org/project/linux-media/patch/
-> 20220812175753.22926-1-fmdefrancesco@gmail.com/
->
-> Can you please let me understand why?
+If setsockopt with option name of TCP_REPAIR_OPTIONS and opt_code
+of TCPOPT_SACK_PERM is called to enable sack after data is sent
+and before data is acked, it will trigger a warning in function
+tcp_verify_left_out() as follows:
 
-I'm not sure I understand what you are asking.  The patch is applied:
-https://gitlab.freedesktop.org/agd5f/linux/-/commit/a2c554262d39f81be7422fd=
-8bee2f2fe3779f7f5
+============================================
+WARNING: CPU: 8 PID: 0 at net/ipv4/tcp_input.c:2132
+tcp_timeout_mark_lost+0x154/0x160
+tcp_enter_loss+0x2b/0x290
+tcp_retransmit_timer+0x50b/0x640
+tcp_write_timer_handler+0x1c8/0x340
+tcp_write_timer+0xe5/0x140
+call_timer_fn+0x3a/0x1b0
+__run_timers.part.0+0x1bf/0x2d0
+run_timer_softirq+0x43/0xb0
+__do_softirq+0xfd/0x373
+__irq_exit_rcu+0xf6/0x140
 
-Alex
+The warning is caused in the following steps:
+1. a socket named socketA is created
+2. socketA enters repair mode without build a connection
+3. socketA calls connect() and its state is changed to TCP_ESTABLISHED
+   directly
+4. socketA leaves repair mode
+5. socketA calls sendmsg() to send data, packets_out and sack_outs(dup
+   ack receives) increase
+6. socketA enters repair mode again
+7. socketA calls setsockopt with TCPOPT_SACK_PERM to enable sack
+8. retransmit timer expires, it calls tcp_timeout_mark_lost(), lost_out
+   increases
+9. sack_outs + lost_out > packets_out triggers since lost_out and
+   sack_outs increase repeatly
 
->
-> Thanks,
->
-> Fabio
->
->
->
+In function tcp_timeout_mark_lost(), tp->sacked_out will be cleared if
+Step7 not happen and the warning will not be triggered. As suggested by
+Denis and Eric, TCP_REPAIR_OPTIONS should be prohibited if data was
+already sent. So this patch checks tp->segs_out, only TCP_REPAIR_OPTIONS
+can be set only if tp->segs_out is 0.
+
+socket-tcp tests in CRIU has been tested as follows:
+$ sudo ./test/zdtm.py run -t zdtm/static/socket-tcp*  --keep-going \
+       --ignore-taint
+
+socket-tcp* represent all socket-tcp tests in test/zdtm/static/.
+
+Fixes: b139ba4e90dc ("tcp: Repair connection-time negotiated parameters")
+Signed-off-by: Lu Wei <luwei32@huawei.com>
+---
+ net/ipv4/tcp.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
+index ef14efa1fb70..1f5cc32cf0cc 100644
+--- a/net/ipv4/tcp.c
++++ b/net/ipv4/tcp.c
+@@ -3647,7 +3647,7 @@ int do_tcp_setsockopt(struct sock *sk, int level, int optname,
+ 	case TCP_REPAIR_OPTIONS:
+ 		if (!tp->repair)
+ 			err = -EINVAL;
+-		else if (sk->sk_state == TCP_ESTABLISHED)
++		else if (sk->sk_state == TCP_ESTABLISHED && !tp->segs_out)
+ 			err = tcp_repair_options_est(sk, optval, optlen);
+ 		else
+ 			err = -EPERM;
+-- 
+2.31.1
+
