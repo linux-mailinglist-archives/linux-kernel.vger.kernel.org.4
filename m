@@ -2,89 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C3E9616AA7
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:27:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C17B616AE7
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:38:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230266AbiKBR12 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:27:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51574 "EHLO
+        id S230519AbiKBRiG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:38:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34210 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229695AbiKBR1Y (ORCPT
+        with ESMTP id S230526AbiKBRh5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:27:24 -0400
-Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E7A42AE3C;
-        Wed,  2 Nov 2022 10:27:24 -0700 (PDT)
-Received: by mail-oi1-f170.google.com with SMTP id v81so11214581oie.5;
-        Wed, 02 Nov 2022 10:27:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ifRIrN2+L2LydC7Ca35u4u1RwYmqQ9szqpTS0BaJOwE=;
-        b=wtFreRAwHjMySS8BQTRlqyWWrXtPrfAamO38TbZQOkp27ebHqGJwJyqPUxfTa4/Fa2
-         10YlXhhIR/WgyIDnbRzHHaZaksJDQ/g4PsIE4ImnNo5iNS4KIpvjXrPd9L+MLhbk70Bb
-         P/uqDsUlAp+0yErjJGC5LQbpWELpoNakFUBLODXGhBUcGafFTtJZYfn4f/NVKohPtwhh
-         0OfXIniAUr+/w47VjpRiVbvux1QSAPjVdW3tjfqMqDeEr9BPW2eX5dSDJxhG1xH8WM+r
-         +hrLzjVavHouuVVMVCHYFTOeRfxzwol95TKL21YgDrdDYJqTC69MtwaLEmb8l97NKhKW
-         yijQ==
-X-Gm-Message-State: ACrzQf3LjJVsswsWFs8AmOcBsO4Zt8skGvdFPetjrLJga3UcitAiiE7L
-        eRNrh8hzaH9VxQWH8o9L5w==
-X-Google-Smtp-Source: AMsMyM7xrCBK0w336R2YqOXPF4takiYgAsBY+jVtwpcJgFYPp2ZdiQg4Ai6Rfwwd4fC6K/LGdGt8Eg==
-X-Received: by 2002:a05:6808:308d:b0:355:4f60:c9c6 with SMTP id bl13-20020a056808308d00b003554f60c9c6mr22737474oib.101.1667410043534;
-        Wed, 02 Nov 2022 10:27:23 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id t24-20020a4ac898000000b0049b17794d19sm3436776ooq.20.2022.11.02.10.27.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 10:27:23 -0700 (PDT)
-Received: (nullmailer pid 4190109 invoked by uid 1000);
-        Wed, 02 Nov 2022 17:27:24 -0000
-Date:   Wed, 2 Nov 2022 12:27:24 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-Cc:     devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        satish.nagireddy@getcruise.com
-Subject: Re: [PATCH v4 4/8] dt-bindings: media: add bindings for TI DS90UB913
-Message-ID: <20221102172724.GA4189270-robh@kernel.org>
-References: <20221101132032.1542416-1-tomi.valkeinen@ideasonboard.com>
- <20221101132032.1542416-5-tomi.valkeinen@ideasonboard.com>
+        Wed, 2 Nov 2022 13:37:57 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 859A62E6B5
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 10:37:56 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CAA68B820D6
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 17:37:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E01EEC433C1;
+        Wed,  2 Nov 2022 17:37:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667410673;
+        bh=C7djWQbBJX1AM7fSvtoWtTiF2BgIva+pASKAjGZVevU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=odUT8QDh+qqr4P3f6EboSgGzToIq6ljdiISZHN7EIT3GuRbEUzStj66n/ONbIs/39
+         ZF4ZBaZd5KpfFDMvgRoZxbPx0t7+7ufnbDe2PGz1fAPssxhwtht1dD/PRgfvxF244o
+         3Vj7KqrscxfgNNyM7XbqDb0MTJaxtcLIdUUXbFElgRq+ArV0rqY02VqNuP/ASo1v5m
+         nYo0q+tu6idts2WGIcTxoTV7Wqy18/2LR0tDT/53iX9S/bT2BzENBmY0wki0+ODLtP
+         R/DYbNlh2mEksAb9vOVEd2EZjoSxepk8soefhHWWI3g9PFEb46DmVWL36Ikj6UaWnZ
+         hbh68oPdfPIig==
+Date:   Thu, 3 Nov 2022 01:28:11 +0800
+From:   Jisheng Zhang <jszhang@kernel.org>
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Conor Dooley <conor.dooley@microchip.com>,
+        kernel test robot <lkp@intel.com>
+Subject: Re: [PATCH] riscv: vdso: fix section overlapping under some
+ conditions
+Message-ID: <Y2Koq5QELaoBe7nj@xhacker>
+References: <20221031175842.1699-1-jszhang@kernel.org>
+ <20221101091942.k7pgcbbkudgjk4ae@kamzik>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221101132032.1542416-5-tomi.valkeinen@ideasonboard.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221101091942.k7pgcbbkudgjk4ae@kamzik>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 03:20:28PM +0200, Tomi Valkeinen wrote:
-> Add DT bindings for TI DS90UB913 FPDLink-3 Serializer.
+On Tue, Nov 01, 2022 at 10:19:42AM +0100, Andrew Jones wrote:
+> On Tue, Nov 01, 2022 at 01:58:42AM +0800, Jisheng Zhang wrote:
+> > lkp reported a build error, I tried the config and can reproduce
+> > build error as below:
+> > 
+> >   VDSOLD  arch/riscv/kernel/vdso/vdso.so.dbg
+> > ld.lld: error: section .note file range overlaps with .text
+> > >>> .note range is [0x7C8, 0x803]
+> > >>> .text range is [0x800, 0x1993]
+> > 
+> > ld.lld: error: section .text file range overlaps with .dynamic
+> > >>> .text range is [0x800, 0x1993]
+> > >>> .dynamic range is [0x808, 0x937]
+> > 
+> > ld.lld: error: section .note virtual address range overlaps with .text
+> > >>> .note range is [0x7C8, 0x803]
+> > >>> .text range is [0x800, 0x1993]
+> > 
+> > Fix it by removing the hardcoding 0x800 and related comments.
+> > 
+> > Link: https://lore.kernel.org/lkml/202210122123.Cc4FPShJ-lkp@intel.com/#r
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
+> > ---
+> >  arch/riscv/kernel/vdso/vdso.lds.S | 8 +-------
+> >  1 file changed, 1 insertion(+), 7 deletions(-)
+> > 
+> > diff --git a/arch/riscv/kernel/vdso/vdso.lds.S b/arch/riscv/kernel/vdso/vdso.lds.S
+> > index 01d94aae5bf5..344209d2e128 100644
+> > --- a/arch/riscv/kernel/vdso/vdso.lds.S
+> > +++ b/arch/riscv/kernel/vdso/vdso.lds.S
+> > @@ -31,13 +31,7 @@ SECTIONS
+> >  
+> >  	.rodata		: { *(.rodata .rodata.* .gnu.linkonce.r.*) }
+> >  
+> > -	/*
+> > -	 * This linker script is used both with -r and with -shared.
+> > -	 * For the layouts to match, we need to skip more than enough
+> > -	 * space for the dynamic symbol table, etc. If this amount is
+> > -	 * insufficient, ld -shared will error; simply increase it here.
+> > -	 */
+> > -	. = 0x800;
 > 
-> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-> ---
->  .../bindings/media/i2c/ti,ds90ub913.yaml      | 127 ++++++++++++++++++
->  1 file changed, 127 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub913.yaml
+> Hi Jisheng,
 
-Similar comments for this one.
+Hi Andrew,
 
-Rob
+> 
+> Removing this hard coded value is a good thing, but I don't understand
+> why, if it was necessary before, that it's no longer necessary. Can you
+> please explain that in the commit message? If the linker improved in
+
+To be honest, I dunno. The hardcoded 0x800 was there from day1, maybe
+Palmer knew the details.
+
+> this regard, then do we need to document a new minimum linker version?
+
+
+> 
+> > +	. = ALIGN(16);
+> 
+> Aligning text to a 4-byte boundary makes sense to me, but I don't
+
+Aha, I think align text to 4byte is fine. In my old memories, I was
+told to align function entry at 16byte boundary, I'm not sure this
+is still true.
+
+PS: I just sent out v2 of this fix. The fix method is different and
+think v2 is the correct fix while this v1 is an improvement.
