@@ -2,64 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A8679615EE2
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:07:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B7927615F21
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:12:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230121AbiKBJHM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 05:07:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39420 "EHLO
+        id S231368AbiKBJMr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 05:12:47 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229709AbiKBJGh (ORCPT
+        with ESMTP id S231394AbiKBJLx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 05:06:37 -0400
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FBE286D9;
-        Wed,  2 Nov 2022 02:04:21 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1667379861; x=1698915861;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=2y36wopekY/PRkNF2CE6hHuB05RYLqpv0O0dYrPYkxY=;
-  b=UKV9TRI/tLMbftC3nD98Dx2OCnCbK+Zrs3KPujushOWiA3qvaY3gjEjk
-   wJWn8CgeUb82hk/eiKmHFIpNzzmesvmM9E2iL3NqUdkT+qtt/0966TO3A
-   6jxCQ3T7VPNsocmzYX6PxPTA1W0Vn9vNJmWX1BUJhusaQ9oro8uLWYyxy
-   45his6u214rscVHk8eEkDzA2chqSuJvu2rVEuLz/80waS1wVeQDAgFZG5
-   dDoQyCPJxCQfS8b6+07hcS1I+MllHRol7FJX59B2/yu4B8DrbCNezlSZp
-   +MZ7QluyBt3sLxwSyVR7FjQ9COmhraNW5BziM2UrbpKfWq4Yo904ApqpL
-   Q==;
-X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
-   d="scan'208";a="181560616"
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa4.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Nov 2022 02:04:20 -0700
-Received: from chn-vm-ex04.mchp-main.com (10.10.85.152) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.12; Wed, 2 Nov 2022 02:04:19 -0700
-Received: from localhost (10.10.115.15) by chn-vm-ex04.mchp-main.com
- (10.10.85.152) with Microsoft SMTP Server id 15.1.2507.12 via Frontend
- Transport; Wed, 2 Nov 2022 02:04:19 -0700
-Date:   Wed, 2 Nov 2022 10:09:02 +0100
-From:   Horatiu Vultur <horatiu.vultur@microchip.com>
-To:     Raju Lakkaraju <Raju.Lakkaraju@microchip.com>
-CC:     <netdev@vger.kernel.org>, <davem@davemloft.net>, <kuba@kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bryan.whitehead@microchip.com>,
-        <pabeni@redhat.com>, <edumazet@google.com>, <olteanv@gmail.com>,
-        <linux@armlinux.org.uk>, <UNGLinuxDriver@microchip.com>,
-        <andrew@lunn.ch>, <Ian.Saturley@microchip.com>
-Subject: Re: [PATCH net-next V5] net: lan743x: Add support to SGMII register
- dump for PCI11010/PCI11414 chips
-Message-ID: <20221102090902.kv7kgynxpo6zihus@soft-dev3-1>
-References: <20221102052802.5460-1-Raju.Lakkaraju@microchip.com>
- <20221102083154.jjf5ht5s7ekvwd4n@soft-dev3-1>
- <20221102084642.GA27153@raju-project-pc>
-MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-In-Reply-To: <20221102084642.GA27153@raju-project-pc>
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,UPPERCASE_50_75 autolearn=ham
+        Wed, 2 Nov 2022 05:11:53 -0400
+Received: from mail-ej1-x632.google.com (mail-ej1-x632.google.com [IPv6:2a00:1450:4864:20::632])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7287B28709;
+        Wed,  2 Nov 2022 02:11:07 -0700 (PDT)
+Received: by mail-ej1-x632.google.com with SMTP id f27so43550966eje.1;
+        Wed, 02 Nov 2022 02:11:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RAlb1kax7HoNKVQNf77d4ZzCjwa1EAZi7nCZnHO7gmQ=;
+        b=kW7Gstv8G1/BMZNg//WXpApV3OoQDMXLECH/Np0uSFWFEIR+Hx5AQdjUGBY5xCyjQS
+         UzB4TfT+lCA4pyxk0YwVFGBgCszHttKC3zL0jT+Veh5QcTaDLSPIopqCF/ccoWNvpyDo
+         IFVZY6+T5hq5DYp4Pf54JjqZuGn/jJGpB9OzwdXan3bWVJbFnvzRGi98V7vyJ+ox/k/H
+         92JlpJSDjV7qoPbT33Lj8DfCaVtDLUHUXioKMz6riDWRoi2cN7ZkzYxqRQfvkhASCSMs
+         g6vyEDVXx9JEO9ely4EiFecYNoQy6O/P7JGiHxNKYQkedOD6aFJWvZyOVI6S3zKvT+dX
+         EKFw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RAlb1kax7HoNKVQNf77d4ZzCjwa1EAZi7nCZnHO7gmQ=;
+        b=lEC7KAOaMCECkhCx3/qyVYuRsuoIaMuaiwR0hfT/NFfCDMJV0PPyR4DR/4q2UFi+Nk
+         +nLusmRYwMsa4JX4mZUhQbjfWB8Wl93D8oNu/15B2xtA3A4JxPMDaV3bG/jgJCSIye7s
+         hNwl4jhaRLS409EEMWXh/c2srlCeTx/8f6rjnT95JSE/WxaoOSWmh0VHRx9KuZ83PvJg
+         gJHI0mhrAwh1ey9BXHp+w1s93dple+CfsUcym8ISqbzuyFIWS+OeLIOeC49TTLx8z6a2
+         jouING974ahhazxYAXpTA1Ztz7a7C36QVGEwd11nMaX8XyLfJthFyLlxrIQOAupZDYYD
+         oXPg==
+X-Gm-Message-State: ACrzQf1dducJHvZ64KD6rWqFY7MOmF/FyUk95p822biq1O7hsQxF5j99
+        rNPLmV0OQylimW8YiFu/eeh1IK+euMk=
+X-Google-Smtp-Source: AMsMyM5WPTsGoNprGbFwhLCPYvhspYFy6eGwpy3YhnGj8i1h1uGL7+nA0L/FuDrxByuh0ay8j2udAg==
+X-Received: by 2002:a17:907:86a0:b0:78d:df8b:4d17 with SMTP id qa32-20020a17090786a000b0078ddf8b4d17mr22146988ejc.254.1667380265806;
+        Wed, 02 Nov 2022 02:11:05 -0700 (PDT)
+Received: from felia.fritz.box (200116b826ffdf0094d0303451b23214.dip.versatel-1u1.de. [2001:16b8:26ff:df00:94d0:3034:51b2:3214])
+        by smtp.gmail.com with ESMTPSA id bx18-20020a0564020b5200b00459012e5145sm5556331edb.70.2022.11.02.02.11.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 02:11:05 -0700 (PDT)
+From:   Lukas Bulwahn <lukas.bulwahn@gmail.com>
+To:     Thomas Gleixner <tglx@linutronix.de>
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Subject: [PATCH] clockevents: repair kernel-doc for clockevent_delta2ns()
+Date:   Wed,  2 Nov 2022 10:10:48 +0100
+Message-Id: <20221102091048.15068-1-lukas.bulwahn@gmail.com>
+X-Mailer: git-send-email 2.17.1
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -67,115 +66,33 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The 11/02/2022 14:16, Raju Lakkaraju wrote:
-> > > +static void lan743x_sgmii_regs(struct net_device *dev, void *p)
-> > > +{
-> > > +	struct lan743x_adapter *adp = netdev_priv(dev);
-> > > +	u32 *rb = p;
-> > > +	u16 idx;
-> > > +	int val;
-> > > +	struct {
-> > > +		u8 id;
-> > > +		u8 dev;
-> > > +		u16 addr;
-> > > +	} regs[] = {
-> > > +		{ ETH_SR_VSMMD_DEV_ID1,                MDIO_MMD_VEND1, 0x0002},
-> > > +		{ ETH_SR_VSMMD_DEV_ID2,                MDIO_MMD_VEND1, 0x0003},
-> > > +		{ ETH_SR_VSMMD_PCS_ID1,                MDIO_MMD_VEND1, 0x0004},
-> > > +		{ ETH_SR_VSMMD_PCS_ID2,                MDIO_MMD_VEND1, 0x0005},
-> > > +		{ ETH_SR_VSMMD_STS,                    MDIO_MMD_VEND1, 0x0008},
-> > > +		{ ETH_SR_VSMMD_CTRL,                   MDIO_MMD_VEND1, 0x0009},
-> > > +		{ ETH_SR_MII_CTRL,                     MDIO_MMD_VEND2, 0x0000},
-> > > +		{ ETH_SR_MII_STS,                      MDIO_MMD_VEND2, 0x0001},
-> > > +		{ ETH_SR_MII_DEV_ID1,                  MDIO_MMD_VEND2, 0x0002},
-> > > +		{ ETH_SR_MII_DEV_ID2,                  MDIO_MMD_VEND2, 0x0003},
-> > > +		{ ETH_SR_MII_AN_ADV,                   MDIO_MMD_VEND2, 0x0004},
-> > > +		{ ETH_SR_MII_LP_BABL,                  MDIO_MMD_VEND2, 0x0005},
-> > > +		{ ETH_SR_MII_EXPN,                     MDIO_MMD_VEND2, 0x0006},
-> > > +		{ ETH_SR_MII_EXT_STS,                  MDIO_MMD_VEND2, 0x000F},
-> > > +		{ ETH_SR_MII_TIME_SYNC_ABL,            MDIO_MMD_VEND2, 0x0708},
-> > > +		{ ETH_SR_MII_TIME_SYNC_TX_MAX_DLY_LWR, MDIO_MMD_VEND2, 0x0709},
-> > > +		{ ETH_SR_MII_TIME_SYNC_TX_MAX_DLY_UPR, MDIO_MMD_VEND2, 0x070A},
-> > > +		{ ETH_SR_MII_TIME_SYNC_TX_MIN_DLY_LWR, MDIO_MMD_VEND2, 0x070B},
-> > > +		{ ETH_SR_MII_TIME_SYNC_TX_MIN_DLY_UPR, MDIO_MMD_VEND2, 0x070C},
-> > > +		{ ETH_SR_MII_TIME_SYNC_RX_MAX_DLY_LWR, MDIO_MMD_VEND2, 0x070D},
-> > > +		{ ETH_SR_MII_TIME_SYNC_RX_MAX_DLY_UPR, MDIO_MMD_VEND2, 0x070E},
-> > > +		{ ETH_SR_MII_TIME_SYNC_RX_MIN_DLY_LWR, MDIO_MMD_VEND2, 0x070F},
-> > > +		{ ETH_SR_MII_TIME_SYNC_RX_MIN_DLY_UPR, MDIO_MMD_VEND2, 0x0710},
-> > > +		{ ETH_VR_MII_DIG_CTRL1,                MDIO_MMD_VEND2, 0x8000},
-> > > +		{ ETH_VR_MII_AN_CTRL,                  MDIO_MMD_VEND2, 0x8001},
-> > > +		{ ETH_VR_MII_AN_INTR_STS,              MDIO_MMD_VEND2, 0x8002},
-> > > +		{ ETH_VR_MII_TC,                       MDIO_MMD_VEND2, 0x8003},
-> > > +		{ ETH_VR_MII_DBG_CTRL,                 MDIO_MMD_VEND2, 0x8005},
-> > > +		{ ETH_VR_MII_EEE_MCTRL0,               MDIO_MMD_VEND2, 0x8006},
-> > > +		{ ETH_VR_MII_EEE_TXTIMER,              MDIO_MMD_VEND2, 0x8008},
-> > > +		{ ETH_VR_MII_EEE_RXTIMER,              MDIO_MMD_VEND2, 0x8009},
-> > > +		{ ETH_VR_MII_LINK_TIMER_CTRL,          MDIO_MMD_VEND2, 0x800A},
-> > > +		{ ETH_VR_MII_EEE_MCTRL1,               MDIO_MMD_VEND2, 0x800B},
-> > > +		{ ETH_VR_MII_DIG_STS,                  MDIO_MMD_VEND2, 0x8010},
-> > > +		{ ETH_VR_MII_ICG_ERRCNT1,              MDIO_MMD_VEND2, 0x8011},
-> > > +		{ ETH_VR_MII_GPIO,                     MDIO_MMD_VEND2, 0x8015},
-> > > +		{ ETH_VR_MII_EEE_LPI_STATUS,           MDIO_MMD_VEND2, 0x8016},
-> > > +		{ ETH_VR_MII_EEE_WKERR,                MDIO_MMD_VEND2, 0x8017},
-> > > +		{ ETH_VR_MII_MISC_STS,                 MDIO_MMD_VEND2, 0x8018},
-> > > +		{ ETH_VR_MII_RX_LSTS,                  MDIO_MMD_VEND2, 0x8020},
-> > > +		{ ETH_VR_MII_GEN2_GEN4_TX_BSTCTRL0,    MDIO_MMD_VEND2, 0x8038},
-> > > +		{ ETH_VR_MII_GEN2_GEN4_TX_LVLCTRL0,    MDIO_MMD_VEND2, 0x803A},
-> > > +		{ ETH_VR_MII_GEN2_GEN4_TXGENCTRL0,     MDIO_MMD_VEND2, 0x803C},
-> > > +		{ ETH_VR_MII_GEN2_GEN4_TXGENCTRL1,     MDIO_MMD_VEND2, 0x803D},
-> > > +		{ ETH_VR_MII_GEN4_TXGENCTRL2,          MDIO_MMD_VEND2, 0x803E},
-> > > +		{ ETH_VR_MII_GEN2_GEN4_TX_STS,         MDIO_MMD_VEND2, 0x8048},
-> > > +		{ ETH_VR_MII_GEN2_GEN4_RXGENCTRL0,     MDIO_MMD_VEND2, 0x8058},
-> > > +		{ ETH_VR_MII_GEN2_GEN4_RXGENCTRL1,     MDIO_MMD_VEND2, 0x8059},
-> > > +		{ ETH_VR_MII_GEN4_RXEQ_CTRL,           MDIO_MMD_VEND2, 0x805B},
-> > > +		{ ETH_VR_MII_GEN4_RXLOS_CTRL0,         MDIO_MMD_VEND2, 0x805D},
-> > > +		{ ETH_VR_MII_GEN2_GEN4_MPLL_CTRL0,     MDIO_MMD_VEND2, 0x8078},
-> > > +		{ ETH_VR_MII_GEN2_GEN4_MPLL_CTRL1,     MDIO_MMD_VEND2, 0x8079},
-> > > +		{ ETH_VR_MII_GEN2_GEN4_MPLL_STS,       MDIO_MMD_VEND2, 0x8088},
-> > > +		{ ETH_VR_MII_GEN2_GEN4_LVL_CTRL,       MDIO_MMD_VEND2, 0x8090},
-> > > +		{ ETH_VR_MII_GEN4_MISC_CTRL2,          MDIO_MMD_VEND2, 0x8093},
-> > > +		{ ETH_VR_MII_GEN2_GEN4_MISC_CTRL0,     MDIO_MMD_VEND2, 0x8099},
-> > > +		{ ETH_VR_MII_GEN2_GEN4_MISC_CTRL1,     MDIO_MMD_VEND2, 0x809A},
-> > > +		{ ETH_VR_MII_SNPS_CR_CTRL,             MDIO_MMD_VEND2, 0x80A0},
-> > > +		{ ETH_VR_MII_SNPS_CR_ADDR,             MDIO_MMD_VEND2, 0x80A1},
-> > > +		{ ETH_VR_MII_SNPS_CR_DATA,             MDIO_MMD_VEND2, 0x80A2},
-> > > +		{ ETH_VR_MII_DIG_CTRL2,                MDIO_MMD_VEND2, 0x80E1},
-> > > +		{ ETH_VR_MII_DIG_ERRCNT,               MDIO_MMD_VEND2, 0x80E2},
-> > > +	};
-> > > +
-> > > +	for (idx = 0; idx < ARRAY_SIZE(regs) / sizeof(regs[0]); idx++) {
-> > 
-> > Is this correct?
-> 
-> Yes.
-> 
-> > You have 62 entries but you go only over the first 15. Or am I
-> > misunderstood something?
-> 
-> Your ethtool application don't have SGMII register dump register
-> definitions.
-> Once This patch accept by Linux community, I will submit ethtool application
-> changes to "Ethtool development community".
-> 
-> For your reference, Please find the attached file
-> (sgmii_sgmii_regdump_cmd.txt).
+Since the introduction of clockevents, i.e., commit d316c57ff6bf
+("clockevents: add core functionality"), there has been a mismatch between
+the function and the kernel-doc comment for clockevent_delta2ns().
 
-I don't think this has anything to do with ethtool.
-Your array has 64 entries and the for loop goes from 0 to 15. So it
-doesn't read all the registers. Of course ethtool will dump all the
-registers but only first 15 might have a value different than 0. After
-that all of them will be 0 regardless if in the HW is a different value.
+Hence, ./scripts/kernel-doc -none kernel/time/clockevents.c warns about it.
 
+Adjust the kernel-doc comment for clockevent_delta2ns() for make W=1
+happiness.
 
-> > 
-> > > +		val = lan743x_sgmii_read(adp, regs[idx].dev, regs[idx].addr);
-> > > +		if (val < 0)
-> > > +			rb[regs[idx].id] = 0xFFFF;
-> > > +		else
-> > > +			rb[regs[idx].id] = val;
-> > > +	}
-> > > +}
-> > > +
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+---
+ kernel/time/clockevents.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
+diff --git a/kernel/time/clockevents.c b/kernel/time/clockevents.c
+index 5d85014d59b5..960143b183cd 100644
+--- a/kernel/time/clockevents.c
++++ b/kernel/time/clockevents.c
+@@ -76,7 +76,7 @@ static u64 cev_delta2ns(unsigned long latch, struct clock_event_device *evt,
+ }
+ 
+ /**
+- * clockevents_delta2ns - Convert a latch value (device ticks) to nanoseconds
++ * clockevent_delta2ns - Convert a latch value (device ticks) to nanoseconds
+  * @latch:	value to convert
+  * @evt:	pointer to clock event device descriptor
+  *
 -- 
-/Horatiu
+2.17.1
+
