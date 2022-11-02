@@ -2,76 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A913D616C10
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:25:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2E7B616C15
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:26:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbiKBSZN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 14:25:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50492 "EHLO
+        id S230265AbiKBSZq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 14:25:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50530 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230210AbiKBSY4 (ORCPT
+        with ESMTP id S230046AbiKBSZL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:24:56 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4125221278;
-        Wed,  2 Nov 2022 11:24:55 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id i12so13071600qvs.2;
-        Wed, 02 Nov 2022 11:24:55 -0700 (PDT)
+        Wed, 2 Nov 2022 14:25:11 -0400
+Received: from mail-yw1-x1133.google.com (mail-yw1-x1133.google.com [IPv6:2607:f8b0:4864:20::1133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04E4A29C92
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:25:11 -0700 (PDT)
+Received: by mail-yw1-x1133.google.com with SMTP id 00721157ae682-3701a0681daso139639397b3.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 11:25:10 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bAxK6YFmky/qIZ4/dsMrrkPwupDe2/XOhrW+jM9nuZo=;
-        b=Q4TGWjjmvsV0i++UUxIoGn0BfuMSVO5ZQHAjHRTHywLrr2e/k1iovtSR3RjaM+OHmM
-         bvfSrGC/0MESeNXlHe7EHVB4/SnNWwSJTU8IWzDbII0F/mlrXkoWZXlTmFav4jkQwpel
-         YV0fRrR0Zo/VZHUr7aLAKLrfu3jjE1yiVMVWIv4JMTw0O8593f0SR1P5w4GfUeqXprpt
-         W/2/R/+tjdxG6VSoWkivEVCvsdI9XN2Pj8EpCXnuus405Gsxs1VFy8yj0J2XXhRc0CgH
-         5xpnIMA9Xs9YKrIR7Aizo7IR0wzUj7QDTZjxOCYnHARPqQ8Bgd3N3bVutG/KYzzS9q1o
-         5y5g==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1kbwkKX+sRp/asQjjFL1Ko1bMveXw+rKnglQsWanHFs=;
+        b=WoCBgkCh/p6HxXfamrMPBXHTO77bRvWGttUgmqw+WH/QBssnreuw9HqD/817VzgGi+
+         67vdfJFhskGx7uMhIsupnsX34oTJSPeegqCuTWyLSTOLf9cW35kK6YT/TRBbdOYsi7Hv
+         fVIHwOXodpfWouv/PyX5z+kMVOqnYpOwWFnLrhUWMwjlSAyIhDvI3C14tr5kcUYLxrZI
+         uSBfbtHCxgNfKV77n6RagNUYrNYkKUWec3H7ktXMbRgDiAtyll4ELilPrkoutmmgcppO
+         YL+aXIgKbD5yWV9CIlqm94zJfR94shXMlwyM3r0abqm5AvmH8LXlC7FAsXTRUiQTNZSy
+         Gvmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bAxK6YFmky/qIZ4/dsMrrkPwupDe2/XOhrW+jM9nuZo=;
-        b=r4fImUC8qMYDe5E4FgjruOnvcJVavo9r0kEKfZr2JerTdB9fvQwU21d0b/Mr0Kku+s
-         QwHFsTUNmtWXZofxIjS/X2eSWWnzML9HI0nqVEBwvnzLHwYNn5nWHvYQafHZS11GYbRc
-         oNOohh+g26xXyfO641z3Wg/gTy31TgUaIgeEJ/WInA/ZhBGTi0d08mmq2WdiBNqpn/sJ
-         qoZXObirHcy2lftylEmPe4CT+Z9dHvIkCJvIV8GYWlo2d+nDKH7+IIWWDamCZgGxL2oI
-         XjQrN9H+8IyKtyyICOCwXjkgZ+yM1MsKKw85gU/YuHccMA2zhdHrLCD0CQjouS3pDjEj
-         1plQ==
-X-Gm-Message-State: ACrzQf3xJo4FTwbhfUj5d050utcHGxZGnDl39hTtmvNgv/BgO1y7pRxs
-        il0dquBGLhELiY6mWWBGwyw=
-X-Google-Smtp-Source: AMsMyM7KX6sJPc7+0Yi6Aq0zfSZke1j1ZMjz81yEFb/qRLnMce6k9XhYzoHSlwpSoVCrTej1JBu3fQ==
-X-Received: by 2002:ad4:5d6a:0:b0:4bb:d900:ff56 with SMTP id fn10-20020ad45d6a000000b004bbd900ff56mr19873181qvb.74.1667413494342;
-        Wed, 02 Nov 2022 11:24:54 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id b15-20020ac8540f000000b0039cc22a2c49sm6904548qtq.47.2022.11.02.11.24.49
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 11:24:53 -0700 (PDT)
-Message-ID: <725be691-2209-72c0-8ccd-5ffae920943c@gmail.com>
-Date:   Wed, 2 Nov 2022 11:24:47 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1kbwkKX+sRp/asQjjFL1Ko1bMveXw+rKnglQsWanHFs=;
+        b=hRUyMYARpFrl/Jf2XuKDjrt9tjawSihaFepVceIhi7ULaxcoVl1/iBynTwfrj0m1XO
+         PnpA+MhakW71/kuFkAlcpBgbDjcxC4lNRsyxyajh/oSqDDi0K9gQLfLldXPYp3CXrUN6
+         DGJ8VZ9MPAek1Q412PJJFUeuWVZ0MyMy14ykpN5okEZ0aS1AwwZwGlLBTnJjTq4aPxRJ
+         8pFk0rf1PiphJLvATK9IgARDxkI1lb2PH9nQoyUjXpH9dE4sKuTddT+wqK0yeiGwduRa
+         V1212lNaexHui/o2NFQg5vDk3IllhBPISZDds7Ud0KSSHQvzKNbfYE0JtFlu10Bvo2KK
+         OzaA==
+X-Gm-Message-State: ACrzQf3BV/aHLMn3IzuP0spFZrIfZ4gQ9rQ3Wac2EMxaRbh+RCRqqYmu
+        xgO/idt9jMtNHYjBrNfS060ymJQjpF7NzAXjHsb5Xg==
+X-Google-Smtp-Source: AMsMyM5v/eJW9i50DN+NzVD9ezpb5qYX9pClKltAKgGxNJ4qekRpyxbWDvoTpBtXBXf1CBt9SsO0OKaqyWyjtDUvwQ4=
+X-Received: by 2002:a81:4e8f:0:b0:36a:7e82:92a5 with SMTP id
+ c137-20020a814e8f000000b0036a7e8292a5mr23866656ywb.395.1667413510115; Wed, 02
+ Nov 2022 11:25:10 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 5.15 000/132] 5.15.77-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
-References: <20221102022059.593236470@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221102022059.593236470@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221030212929.335473-1-peterx@redhat.com> <20221030212929.335473-8-peterx@redhat.com>
+In-Reply-To: <20221030212929.335473-8-peterx@redhat.com>
+From:   James Houghton <jthoughton@google.com>
+Date:   Wed, 2 Nov 2022 11:24:57 -0700
+Message-ID: <CADrL8HUJZMGaWtyVCcXUfmU3neTO4Q6e=3Fi5=osiEVH9jRZ=w@mail.gmail.com>
+Subject: Re: [PATCH RFC 07/10] mm/hugetlb: Make hugetlb_follow_page_mask() RCU-safe
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Rik van Riel <riel@surriel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,29 +75,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/1/22 19:31, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.15.77 release.
-> There are 132 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 04 Nov 2022 02:20:38 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.77-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Sun, Oct 30, 2022 at 2:29 PM Peter Xu <peterx@redhat.com> wrote:
+>
+> RCU makes sure the pte_t* won't go away from under us.  Please refer to the
+> comment above huge_pte_offset() for more information.
+>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>  mm/hugetlb.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+>
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index 9869c12e6460..85214095fb85 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -6229,10 +6229,12 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+>         if (WARN_ON_ONCE(flags & FOLL_PIN))
+>                 return NULL;
+>
+> +       /* For huge_pte_offset() */
+> +       rcu_read_lock();
+>  retry:
+>         pte = huge_pte_offset(mm, haddr, huge_page_size(h));
+>         if (!pte)
+> -               return NULL;
+> +               goto out_rcu;
+>
+>         ptl = huge_pte_lock(h, mm, pte);
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+Just to make sure -- this huge_pte_lock doesn't count as "blocking"
+(for the purposes of what is allowed in an RCU read-side critical
+section), right? If so, great! But I think we need to call
+`rcu_read_unlock` before entering `__migration_entry_wait_huge`, as
+that function really can block.
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+- James
 
+>         entry = huge_ptep_get(pte);
+> @@ -6266,6 +6268,8 @@ struct page *hugetlb_follow_page_mask(struct vm_area_struct *vma,
+>         }
+>  out:
+>         spin_unlock(ptl);
+> +out_rcu:
+> +       rcu_read_unlock();
+>         return page;
+>  }
+>
+> --
+> 2.37.3
+>
