@@ -2,201 +2,165 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8450F6161FD
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:47:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68D00616211
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:52:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230241AbiKBLrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 07:47:55 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45062 "EHLO
+        id S230331AbiKBLwp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 07:52:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiKBLrw (ORCPT
+        with ESMTP id S229591AbiKBLwl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 07:47:52 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9991827DFE;
-        Wed,  2 Nov 2022 04:47:51 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 32BD01F8BE;
-        Wed,  2 Nov 2022 11:47:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1667389670; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EbYrB+1vSr1UNNNQD2qKBkA3iRJw6rUD5tHYLyLGBgc=;
-        b=GrfCe/K3Gq9onijd8HxqKWriuCUf7AHUaKmTSSqv0mwUMm52w//PrrSB0C35cAcngThhWN
-        YJy7FbWhMfhj5hwUU4A7nCNHJI5mOFKS/bNaZIKLhY91GqrQAPWvpi13ej7p2+EwSuMFSu
-        0qlB8PohHeFWBhrY8cspLyaqsGZgsjY=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1667389670;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=EbYrB+1vSr1UNNNQD2qKBkA3iRJw6rUD5tHYLyLGBgc=;
-        b=hPnMxSoREYA/EjsRPO0RTlto/fa/D7ZKhpnHpylfB+C+agSTt93hUMpq6jqt4d88xJ6zOj
-        gHh7F5b7ebtJTLDQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D04B0139D3;
-        Wed,  2 Nov 2022 11:47:49 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id HHUgMOVYYmNmfQAAMHmgww
-        (envelope-from <lhenriques@suse.de>); Wed, 02 Nov 2022 11:47:49 +0000
-Received: from localhost (brahms.olymp [local])
-        by brahms.olymp (OpenSMTPD) with ESMTPA id 77ce4722;
-        Wed, 2 Nov 2022 11:48:51 +0000 (UTC)
-Date:   Wed, 2 Nov 2022 11:48:51 +0000
-From:   =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
-To:     Xiubo Li <xiubli@redhat.com>
-Cc:     Ilya Dryomov <idryomov@gmail.com>,
-        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [RFC PATCH] ceph: allow encrypting a directory while not having
- Ax caps
-Message-ID: <Y2JZI1QOl3dXBVUb@suse.de>
-References: <20221027112653.12122-1-lhenriques@suse.de>
- <a992d844-6d75-e134-60e1-acb8c8972ff3@redhat.com>
+        Wed, 2 Nov 2022 07:52:41 -0400
+Received: from EUR02-AM0-obe.outbound.protection.outlook.com (mail-am0eur02on2129.outbound.protection.outlook.com [40.107.247.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2E1128E08;
+        Wed,  2 Nov 2022 04:52:38 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=ZBOD6VHWRfO3UkwdsUgvBggYsuICMRPgajfsl5HgQZwW/NaC735TUqFyF9t9Y1Sp14d/yerW4BWMvGGCK+bPDk/j5bT4mhZHLUsXpXjAMXMMokgBpEj3bBpK4M2C3yaYXb+9XunQfk9QjQdnbwV/apxL4NOdxnBvvWyL8UR8h1e4/mkW3XLJbxDDaWRoKKXg5MZG7+05M/9BDm7hnov7N9ugF7654yeINmZGcQrqR0yPPscdnqzYtqYRsWR9I7BZOLoNzQ0gHM6jTIQZ8nhKwDu96ZedikCL8w4yhxOTy8bVJ8CnKQIzlOS5dadxqrfQEaoBBjib5hRBjOifkbwKCg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=uPlMNuvu4V2MXQvMbxjST7BoY7NL6NYYdHxzgmHtqI8=;
+ b=NgWPay6bOTzxdpgB4O2QEvI89XwlRT/eVlK75+DYnhF0BCkMs+kyjXMPQxx94MUT0GgmTPhDRbj9cIBxAZIgkKg5wC5H+EbObMB2djSM5KkNBnKJmz1rSHY0WFWstuq2Ba4vlH4HY5ZBIdLt4K2shkNQC+cBjId9mIgZQdMW1nnBOdFWxDd/ltV7hquajAlhw0zu7FJ4qLKfTbREReBu+rcOLkwcSdJPEPoChqM/kzTqZBqDk257Z6rZd2SNgQd1mdC+85vOhTpfDymO00BB01UaJWDDIEBgDt145K8JMX8w0RTfC1X0GLYBssCABmt0TcPB0H8h/5Rdw0b7plp+9w==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=prevas.dk; dmarc=pass action=none header.from=prevas.dk;
+ dkim=pass header.d=prevas.dk; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prevas.dk;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=uPlMNuvu4V2MXQvMbxjST7BoY7NL6NYYdHxzgmHtqI8=;
+ b=A1Q5cOdzcGLlXPN6cbpunJcOc4wTF/4yE2aWfRa0IF16w4K/WGVVh4OjGT9zUpIniphKL10TwmJ6CN7Cw+s1wD1fdGn2BgI6d0u7SRA6QDpJKN1VDtH/bXNdefRPAgeTEWFEjeInjPSHldg5VN5UtItwYGNLfGGnLVbH9D78iKE=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=prevas.dk;
+Received: from DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:10:34a::22)
+ by PR3PR10MB4062.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:a2::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.21; Wed, 2 Nov
+ 2022 11:52:36 +0000
+Received: from DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::732f:4316:a0be:bdbc]) by DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
+ ([fe80::732f:4316:a0be:bdbc%3]) with mapi id 15.20.5769.016; Wed, 2 Nov 2022
+ 11:52:36 +0000
+Message-ID: <307b90cb-b80d-6ce3-14ae-4a0b2ee5e447@prevas.dk>
+Date:   Wed, 2 Nov 2022 12:52:32 +0100
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v5] overflow: Introduce overflows_type() and
+ castable_to_type()
+Content-Language: en-US
+To:     Gwan-gyeong Mun <gwan-gyeong.mun@intel.com>, keescook@chromium.org
+Cc:     luc.vanoostenryck@gmail.com, nathan@kernel.org,
+        ndesaulniers@google.com, trix@redhat.com, dlatypov@google.com,
+        vitor@massaru.org, gustavoars@kernel.org,
+        linux-hardening@vger.kernel.org, llvm@lists.linux.dev,
+        jani.nikula@linux.intel.com, joonas.lahtinen@linux.intel.com,
+        rodrigo.vivi@intel.com, tvrtko.ursulin@linux.intel.com,
+        airlied@linux.ie, daniel@ffwll.ch, linux-kernel@vger.kernel.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-sparse@vger.kernel.org, arnd@kernel.org, mchehab@kernel.org,
+        mauro.chehab@linux.intel.com
+References: <20220926191109.1803094-1-keescook@chromium.org>
+ <20221024201125.1416422-1-gwan-gyeong.mun@intel.com>
+From:   Rasmus Villemoes <rasmus.villemoes@prevas.dk>
+In-Reply-To: <20221024201125.1416422-1-gwan-gyeong.mun@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: GV3P280CA0023.SWEP280.PROD.OUTLOOK.COM
+ (2603:10a6:150:b::24) To DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
+ (2603:10a6:10:34a::22)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <a992d844-6d75-e134-60e1-acb8c8972ff3@redhat.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DU0PR10MB5266:EE_|PR3PR10MB4062:EE_
+X-MS-Office365-Filtering-Correlation-Id: d98265cb-4295-412d-9afd-08dabcc8bc1f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ZtqCAf3UC2Eccoy8hMC4iyObmYrpLDHlUfm9RwU/7f5WbiDltnjF7d71Ve++udH8fYv9PkdcP67kumbVMynZNgYlfrlk5jtQme6oYJnEUsY8MZ0GuMB/dWEoHcUQRu0cbBd6NjwaJJo1wP3ns2z2bWLNazOqJIbw6Xcjplx5yDCrTvbt7kWo8wVAQwV3+C6wrekAcUzkz8Mfir4+qhkuEa9JZ9ExcHB+v/tsufUw8sKM4qzEUBJ1SxIjk2IsMC2WgDgsvqXnIPjy3GEvvPH3p5btAEKtt3WQMUJdZyTUK53b/wkn3/iZ80MNpfH7SNq6ofRFqIoyySzpgj3GAdX9nzbgI+Q+TRI+7yLxFW9+casGZr8JdfGdcSHz/v0qf5WjoHfdcoZYktonJFQAYqkI8tBb3Go6/N0cjKR7LO+XQc83swuLBjyh1KiiSC4QGLxSvx/OCLbNyOTQSkjnVapjtFxjhCxmpEoYjX8ur+k+/cpNC3jDESru76v2UtBUAceltJkS17kP93FEbAZWxEufk/DfdBSEZnTiE3hEJS94OXIYSzz8mD3YJd5FOdNEgRTLa4Og7WxUlSnFWt2o+aRJmb2lRbEiU8FiUVVYawQVeOzrNwXc3wd4JTgfZRJC6sLnD6KLGX9Kn+wLTGB8gGun4vbdnvvEVdlK2Pt7zZ7OJJUScLWg417j2VK5sP677e06QOwu6s8avgvG5A2Pdo0JO2N77N8kEAqRD5Klx28340U7Y95UgfatLny3gxkVfIs4+eaoK+j0G/NReJcKhEHogKt5idQT59v3vnh9HqtjDMfUHqs81/WF93O5fM5yDKuw
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(136003)(346002)(366004)(39850400004)(376002)(396003)(451199015)(66946007)(6512007)(6666004)(26005)(52116002)(7416002)(2906002)(6506007)(36756003)(44832011)(66556008)(4326008)(8676002)(66476007)(38100700002)(316002)(478600001)(8936002)(38350700002)(8976002)(6486002)(31696002)(86362001)(41300700001)(5660300002)(31686004)(2616005)(186003)(45980500001)(43740500002);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?RjRndGp3M0pQUUl0bWhBZnh1THcySEdSa25ic09IODBoeWs4YlliRDdhVDI5?=
+ =?utf-8?B?NEZGdk85THZNTzJDMlhNUWxEdFUyWXc1bHZIcWxncGNlMnY1SWpySmFYUDVK?=
+ =?utf-8?B?ODI5Rlk1ajRLWlNrVXAraFFXWFVNYUF5Z05VRVphMnZMbnZZeTNENUNpaE5Y?=
+ =?utf-8?B?N1JxSTVHeFFDcnFBYTEwRk1lbEp6QVk2NHEvUkFrMjh4K0cwa0loN2gzdzVK?=
+ =?utf-8?B?eHN3Wkp2SDluc3Y3c0d1OWFoOTJ5anZCeTJ1TmFwZG5QL0o0SEJtWTV3ZklZ?=
+ =?utf-8?B?OGtQbnlYbGorUEsyTUt2QW8rZk0vZFVhUXhXT09DSVdVMkhJRzNrTWVsc1Fv?=
+ =?utf-8?B?Sk1oSnpPNVNmekRZK2VoWmFKakpTZWFzclFLZDV4VnVJTWFXekVsYXFJS1Bn?=
+ =?utf-8?B?WXdWSzJITTRpbGxRQ3ZxZjFvQ2pIS1VObnluSWFIUVc0eDhwaVBDQzJpSlcx?=
+ =?utf-8?B?dll4cHl1V3ZYNXBldjhUb2RZb1p4RFI4Y2xzcTBUMWtHZXU2VnBCRFREMlZ0?=
+ =?utf-8?B?VGM4SThGOFMrS0FPRE1zb1lYQllzck1YdnRhUjFIb2tIakhsRUJvZ2NiM2No?=
+ =?utf-8?B?eTBCUFkrVmpibVVodDFDa2NDRE5lem9aOFI0RmkxTnJnVTZ5ZGJTV1V6MjNi?=
+ =?utf-8?B?VWV2bExLWFQ0eWtXQTNRbmZna2tmM0hsVGtiUGt3b1pwYlVCZ1gzK3dKdmRm?=
+ =?utf-8?B?S25RQUlUVFF1MGd6ZEFKUTJJdEFLOTNYY3NZMFI0cld3cjZzZlJ2bjNXTFBE?=
+ =?utf-8?B?cThHR0NHdUw0MU1KNGxOWURIbnJwdnNwbk9NeDBISEg4QlVQNEFvQWlJMEhn?=
+ =?utf-8?B?anlZZGE4ZjZYRkl1SWxoYUI2RVFjRmpmRDllR3lNbVhWZlpUMzhsSjhmcXJB?=
+ =?utf-8?B?UG9kOXNUL0F5ekJKVkFHc2Q3WW1KRFB5Q0RpRDFRNUN4WDh6RFA4Z0d2YlZi?=
+ =?utf-8?B?UGxXcDhDeWV5NE92U2QzRWlYRGpjMHVwUGxFK1doMzRENUVqNXErdVQyQ1N2?=
+ =?utf-8?B?NWhHVUY5NjNHY3JkRTdpa05MMTZhSDlMS0RVZHFqUm9UWW9ZZVl0WmtvSE5X?=
+ =?utf-8?B?WHpTSFRBbzEyTTZZYWJiWG83L0ZXb1owelRsT2gxREJvaCtzZy9YVFVPRXND?=
+ =?utf-8?B?alk4Q0ZuYXpsaHpjVjlON1ZCYWlEcDd1UDd3dFA5QWVDMUFzUnkzUTk0NVNO?=
+ =?utf-8?B?U3JJdEpoclQ1VWpURTlZRFFBZ3YvTTdpVGlPclRFWjA1TmxKN2Q1TlQvWnlK?=
+ =?utf-8?B?ank1RjZFZUNqak4wdGx6elpEN3JWZGZpUFM2dytscWJXMWhtNlRGUXN3T1N0?=
+ =?utf-8?B?T0cvOEl1bDJBT2RtVlZOdVpEU1c1WWZHbFdGYTdvTzJDVXV4N2NqM3dJd3Ey?=
+ =?utf-8?B?R3NoRjFuV0RWaTBNYUNxU1BsZnV4eEt0M29waHJVdVhobUVSTUVoTXFNbFp2?=
+ =?utf-8?B?cDNqVzFSRFBqaDg5TjJNOC9oUnVySHVGL3ZqVkJuS0pqMC9qZ2hvcis2K09t?=
+ =?utf-8?B?dlB3ZHpqVzBQZUxFeW4xMWpBZkU3WHNKYndBUHZEOGw4Y1JCei9oS1o0a09u?=
+ =?utf-8?B?OWpYeTIxVFVoaXV1UzRMMEV0RUN1ckQ3T1FTOHBxVlNELzZEa1hXYVNqRkZ1?=
+ =?utf-8?B?eTdacFlXU0lxTHZvSlRGekxsSDVGMk84dElERnNZYTB2TkdMeWhKR0ljdDc1?=
+ =?utf-8?B?ZDVJY1RTZUxwckNndHAvK3BRenFNRDU2OThueERibStZb1N6YSsrV3JCMjZF?=
+ =?utf-8?B?azRaazJ1YmVlNUhsa0o1Qk9jOWVETFNJUHZSYnU2QWtNWVZZV3AzaGpMai9w?=
+ =?utf-8?B?Vzg0bTNhZ3pxUVFwa0J3U2hyQkhGNDlyU0loRXYyenFrYk9iSTZiYXpVYXRW?=
+ =?utf-8?B?VGt1SVYyem90cGRtbWMveHBaN1FZNDJ4UFE4dEMwQnl1WE9kN0JXbDR3aXhi?=
+ =?utf-8?B?K2o4NWxac0dBUjEvQ1JqbGFjU0NUWXlWUEE2M3l3OWRrMUN3aFQ4ZzlMQzFP?=
+ =?utf-8?B?YkU0NzhwenFZTHlJTE5DaDFxVFVLSmFKb1dUcmV3QjZpVUxMbTVZY2dBNkFq?=
+ =?utf-8?B?b04zdTRhTVpBeU44QlRod0MxZjFQaTVubC9mNURIemk4NXltdWtpay9tSFlC?=
+ =?utf-8?B?dTBqYlpycHlPV1NxZDRmU0hLcTVBcFVxZWJYNW9taUxmdFZHVDFUenJ4aGdC?=
+ =?utf-8?B?TWc9PQ==?=
+X-OriginatorOrg: prevas.dk
+X-MS-Exchange-CrossTenant-Network-Message-Id: d98265cb-4295-412d-9afd-08dabcc8bc1f
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR10MB5266.EURPRD10.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2022 11:52:36.3733
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: d350cf71-778d-4780-88f5-071a4cb1ed61
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /IA1FbjiF9JIZRXcEy0dkIlTg0K9M+3CmpD8j9Nkf93w95qMQ4idFktuR0/E3yvfbrvduSjTtLg/sb/yJu29dgcLCoUnUBo0XLuQSnMpxGU=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PR3PR10MB4062
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 05:15:51PM +0800, Xiubo Li wrote:
+On 24/10/2022 22.11, Gwan-gyeong Mun wrote:
+> From: Kees Cook <keescook@chromium.org>
 > 
-> On 27/10/2022 19:26, Luís Henriques wrote:
-> > If a client doesn't have Fx caps on a directory, it will get errors while
-> > trying encrypt it:
-> > 
-> > ceph: handle_cap_grant: cap grant attempt to change fscrypt_auth on non-I_NEW inode (old len 0 new len 48)
-> > fscrypt (ceph, inode 1099511627812): Error -105 getting encryption context
-> > 
-> > A simple way to reproduce this is to use two clients:
-> > 
-> >      client1 # mkdir /mnt/mydir
-> > 
-> >      client2 # ls /mnt/mydir
-> > 
-> >      client1 # fscrypt encrypt /mnt/mydir
-> >      client1 # echo hello > /mnt/mydir/world
-> > 
-> > This happens because, in __ceph_setattr(), we only initialize
-> > ci->fscrypt_auth if we have Ax.  If we don't have, we'll need to do that
-> > later, in handle_cap_grant().
-> > 
-> > Signed-off-by: Luís Henriques <lhenriques@suse.de>
-> > ---
-> > Hi!
-> > 
-> > To be honest, I'm not really sure about the conditions in the 'if': shall
-> > I bother checking it's really a dir and that it is empty?
-> > 
-> > Cheers,
-> > --
-> > Luís
-> > 
-> >   fs/ceph/caps.c | 26 +++++++++++++++++++++++---
-> >   1 file changed, 23 insertions(+), 3 deletions(-)
-> > 
-> > diff --git a/fs/ceph/caps.c b/fs/ceph/caps.c
-> > index 443fce066d42..e33b5c276cf3 100644
-> > --- a/fs/ceph/caps.c
-> > +++ b/fs/ceph/caps.c
-> > @@ -3511,9 +3511,29 @@ static void handle_cap_grant(struct inode *inode,
-> >   		     from_kuid(&init_user_ns, inode->i_uid),
-> >   		     from_kgid(&init_user_ns, inode->i_gid));
-> >   #if IS_ENABLED(CONFIG_FS_ENCRYPTION)
-> > -		if (ci->fscrypt_auth_len != extra_info->fscrypt_auth_len ||
-> > -		    memcmp(ci->fscrypt_auth, extra_info->fscrypt_auth,
-> > -			   ci->fscrypt_auth_len))
-> > +		if ((ci->fscrypt_auth_len == 0) &&
-> > +		    (extra_info->fscrypt_auth_len > 0) &&
-> > +		    S_ISDIR(inode->i_mode) &&
-> > +		    (ci->i_rsubdirs + ci->i_rfiles == 1)) {
-> > +			/*
-> > +			 * We'll get here when setting up an encrypted directory
-> > +			 * but we don't have Fx in that directory, i.e. other
-> > +			 * clients have accessed this directory too.
-> > +			 */
-> > +			ci->fscrypt_auth = kmemdup(extra_info->fscrypt_auth,
-> > +						   extra_info->fscrypt_auth_len,
-> > +						   GFP_KERNEL);
-> > +			if (ci->fscrypt_auth) {
-> > +				inode->i_flags |= S_ENCRYPTED;
-> > +				ci->fscrypt_auth_len = extra_info->fscrypt_auth_len;
-> > +			} else {
-> > +				pr_err("Failed to alloc memory for %llx.%llx fscrypt_auth\n",
-> > +					ceph_vinop(inode));
-> > +			}
-> > +			dout("ino %llx.%llx is now encrypted\n", ceph_vinop(inode));
-> > +		} else if (ci->fscrypt_auth_len != extra_info->fscrypt_auth_len ||
-> > +			   memcmp(ci->fscrypt_auth, extra_info->fscrypt_auth,
-> > +				  ci->fscrypt_auth_len))
-> >   			pr_warn_ratelimited("%s: cap grant attempt to change fscrypt_auth on non-I_NEW inode (old len %d new len %d)\n",
-> >   				__func__, ci->fscrypt_auth_len, extra_info->fscrypt_auth_len);
-> >   #endif
+> Implement a robust overflows_type() macro to test if a variable or
+> constant value would overflow another variable or type. This can be
+> used as a constant expression for static_assert() (which requires a
+> constant expression[1][2]) when used on constant values. This must be
+> constructed manually, since __builtin_add_overflow() does not produce
+> a constant expression[3].
 > 
-> Hi Luis,
+> Additionally adds castable_to_type(), similar to __same_type(), but for
+> checking if a constant value would overflow if cast to a given type.
 > 
-> Thanks for your time on this bug.
-> 
-> IMO we should fix this in ceph_fill_inode():
-> 
->  995 #ifdef CONFIG_FS_ENCRYPTION
->  996         if (iinfo->fscrypt_auth_len && (inode->i_state & I_NEW)) {
->  997                 kfree(ci->fscrypt_auth);
->  998                 ci->fscrypt_auth_len = iinfo->fscrypt_auth_len;
->  999                 ci->fscrypt_auth = iinfo->fscrypt_auth;
-> 1000                 iinfo->fscrypt_auth = NULL;
-> 1001                 iinfo->fscrypt_auth_len = 0;
-> 1002                 inode_set_flags(inode, S_ENCRYPTED, S_ENCRYPTED);
-> 1003         }
-> 1004 #endif
-> 
-> The setattr will get a reply from MDS including the fscrypt auth info, I
-> think the kclient just drop it here.
 
-I've done some testing and I don't really see this code kfree'ing a valid
-fscrypt_auth here.  However, I guess it is possible to fix this issue here
-too, but in a different way, by changing that 'if' condition to:
+> +#define __overflows_type_constexpr(x, T) (			\
+> +	is_unsigned_type(typeof(x)) ?				\
+> +		(x) > type_max(typeof(T)) ? 1 : 0		\
+> +	: is_unsigned_type(typeof(T)) ?				\
+> +		(x) < 0 || (x) > type_max(typeof(T)) ? 1 : 0	\
+> +		: (x) < type_min(typeof(T)) ||			\
+> +		  (x) > type_max(typeof(T)) ? 1 : 0)
+> +
 
-	if (iinfo->fscrypt_auth_len &&
-	    ((inode->i_state & I_NEW) || (ci->fscrypt_auth_len == 0))) {
-	...
-	}
+Can't all these instances of "foo ? 1 : 0" be simplified to "foo"? That
+would improve the readability of this thing somewhat IMO.
 
-I'm not really sure if this is sane though.  When we loose the 'Ax' caps
-(another client as accessed the directory we're encrypting), we also seem
-to loose the I_NEW state.  Using the above code seems to work for the
-testcase in my patch, but I'm not sure it won't break something else.
-
-Cheers,
---
-Luís
-
-> If we fix it in handle_cap_grant() I am afraid this bug still exists. What
-> if there is no any new caps will be issued or revoked recently and then
-> access to the directory ?
-> 
-> Thanks
-> 
-> - Xiubo
-> 
-> > 
-> 
+Rasmus
 
