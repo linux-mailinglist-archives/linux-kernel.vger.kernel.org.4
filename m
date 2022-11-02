@@ -2,91 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72C6D615731
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 03:01:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0389061574A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 03:04:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229988AbiKBCBX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 22:01:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33020 "EHLO
+        id S229971AbiKBCEu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 22:04:50 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiKBCBU (ORCPT
+        with ESMTP id S229935AbiKBCEi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 22:01:20 -0400
-Received: from mail-ej1-x62e.google.com (mail-ej1-x62e.google.com [IPv6:2a00:1450:4864:20::62e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB7B512ACA;
-        Tue,  1 Nov 2022 19:01:17 -0700 (PDT)
-Received: by mail-ej1-x62e.google.com with SMTP id kt23so41609838ejc.7;
-        Tue, 01 Nov 2022 19:01:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=wpkpMG7UiwPayNiAZQIqA2owOEcKN042OlaP9NIKByQ=;
-        b=PSI3BxsZxQhkVlAwBWePeEx4KtAfoo+szxImTtRUReTiDfr9ZDx6Sm5NPHqenJcNxT
-         C1Cc1XtX2d+q26GnaWUsavd/r/VG2SddcvxNhRrceGmgd8jXDP3zO8nuuVuiXE9yg8Hv
-         VromHHJwnoFv47aFFD6im43jbHCHm0qV2ut4Mm6hghqXVKBTtMMrOPSX4Es8NmfRxURn
-         Y2nNK2sDRLTEQ4u2C+01zkX51+PYOkgLN2dDilBwbJVMVTnY515pXXOwSNQHmXwZgrRC
-         ZExHO0WidqM2hqoKFAVYfQ30DpWzZE83Qd9SU2LqqYcsm7iUQBgPH/cZK8jnKEybEFn/
-         rKrQ==
+        Tue, 1 Nov 2022 22:04:38 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F3CE5FFE
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 19:03:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667354620;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=gev6P7R24DpRq36R8wXz2kmWLBFI3J+84j/AqTpnyIw=;
+        b=MOfBEerS645VWd2Qb57pO0cwOt987+X4dKwuWwO6qyXAW8y3ldOzlJN3azWUAB26wa71/W
+        GeBhquCw4zdKKYaVdGVcUiH8UmwdAYhui2vnQ2IB3KkxT74ITXMM4tFW/Md5L6/7oI43i7
+        +VjjZ5zjQoDzjNkGiWeNLdZ3NHblI0M=
+Received: from mail-oi1-f198.google.com (mail-oi1-f198.google.com
+ [209.85.167.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-17-CPM4xjpvOa2ACdhgQh_huQ-1; Tue, 01 Nov 2022 22:03:39 -0400
+X-MC-Unique: CPM4xjpvOa2ACdhgQh_huQ-1
+Received: by mail-oi1-f198.google.com with SMTP id z203-20020aca33d4000000b0035a0c54ff88so3397296oiz.6
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 19:03:39 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wpkpMG7UiwPayNiAZQIqA2owOEcKN042OlaP9NIKByQ=;
-        b=cgRV5/DyRKhMj01OIeUrLC6eWhGYLbnLGj5xQZeRvEQN0czm4IOkAvgIBr1u5Vn+4o
-         1RMmg2shoMW5l7mRnCzsQpldKVoAUFo3RpTHoH/VsFdKHoY4I9Ge1GZrjt105SSJex0Q
-         C9MyQrlnobGjz8cE7Tl4uuBuZlvqYXkoy1BcnEh093jL2d0e8dXxTm2lm4bej5ffDQUF
-         4Al2Y1IaOonsfKDLsW8uI51x3m7ZLflyWafQxaNn5/NQU/B5dDBSCIh2VgOw2im3lH9t
-         F7ep5+lj5LtaTgc34z/yaAwBbKPTFHToPX5taKLfJW44dbcZ99vtsMe4BawFLeQrfdQl
-         PwzQ==
-X-Gm-Message-State: ACrzQf1LEj69j6zNOfBDQruvaCua3lfpdAzPQMAtOPfb2Zn2tLrz/32M
-        zbkg4ho9d72OKhakyxVmeaKwgnbM7yWAj4KD7DU=
-X-Google-Smtp-Source: AMsMyM5uJ5eWQp6S+6Z4C0hK1rcz1qVltZNk5Qi3uW9GAkUnX1SsK5gFIxVzAh58sQenfPHh535CfkF5IlSn2uxJo/M=
-X-Received: by 2002:a17:906:8a7b:b0:7ac:baef:6de1 with SMTP id
- hy27-20020a1709068a7b00b007acbaef6de1mr21277925ejc.734.1667354476420; Tue, 01
- Nov 2022 19:01:16 -0700 (PDT)
+        bh=gev6P7R24DpRq36R8wXz2kmWLBFI3J+84j/AqTpnyIw=;
+        b=3oMPtiSkbt4PDQlpzSs/gBb+5WRqSrmlmSMGB72U1YTje9w2awUoIRMrocx/1xhNsA
+         zsSc3f+g8Ely84El3zuTpn7+QWj4x7CtEEjjFaLZM+QJPi606sMeB190zZ5dAWiF12oK
+         3cuAV8Ugoa9aWZk3lu4o45qFsCnmoCI34gcNN2TqrI7wUnbQqpuVKWDC+6zRccEDA6im
+         b1CDTfrA1xLyRa95IHxMx5jNZBeQ5dqCRcvGYFkdEUUIb8maBDN0wVQhoJcW5X5Pe+0Z
+         jE4ZU8P8CcvgZbv5e3foMV2TBMJnJ+j/Pk6U+59Bgw3+3mHzGIA10ZaZ9EPdIVUoOewI
+         iukw==
+X-Gm-Message-State: ACrzQf2iz1XqJo+lhTCFhEip5hqbg72dTfMTjkNl2EVeNjceDgvc0n5I
+        SR4zSrtgKHvt8r4k60xqCK2lKGeY2wqFMMDjrnVbPqllYLyr+kHzNXNA+uOwejVZB8K+LoBvwDl
+        2MkWfnyueDsyU1LoA6X5k8dsp
+X-Received: by 2002:a05:6830:3704:b0:660:fe76:3cb7 with SMTP id bl4-20020a056830370400b00660fe763cb7mr10900890otb.21.1667354618882;
+        Tue, 01 Nov 2022 19:03:38 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7DG+li/A7VpDvIKqUuzfPg7gI21EhhlFF8vXWlawemkea0Kk/ubRWrfCId3EkcApts7tUZ1g==
+X-Received: by 2002:a05:6830:3704:b0:660:fe76:3cb7 with SMTP id bl4-20020a056830370400b00660fe763cb7mr10900864otb.21.1667354618638;
+        Tue, 01 Nov 2022 19:03:38 -0700 (PDT)
+Received: from LeoBras.redhat.com ([2804:1b3:a802:1099:7cb2:3a49:6197:5307])
+        by smtp.gmail.com with ESMTPSA id h15-20020a9d6f8f000000b00665919f7823sm4526624otq.8.2022.11.01.19.03.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 19:03:38 -0700 (PDT)
+From:   Leonardo Bras <leobras@redhat.com>
+To:     Ingo Molnar <mingo@redhat.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Michal Hocko <mhocko@kernel.org>,
+        Roman Gushchin <roman.gushchin@linux.dev>,
+        Shakeel Butt <shakeelb@google.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Frederic Weisbecker <frederic@kernel.org>,
+        Leonardo Bras <leobras@redhat.com>,
+        Phil Auld <pauld@redhat.com>,
+        Marcelo Tosatti <mtosatti@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: [PATCH v1 0/3] Avoid scheduling cache draining to isolated cpus
+Date:   Tue,  1 Nov 2022 23:02:40 -0300
+Message-Id: <20221102020243.522358-1-leobras@redhat.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221026185846.3983888-1-quic_eberman@quicinc.com>
- <20221026185846.3983888-3-quic_eberman@quicinc.com> <CABb+yY3JVNPG3dcyHNFxEeGEu3MN_pAOh3+cwexPPe2YG6SNUg@mail.gmail.com>
- <fb7e101f-8de0-d77e-30e1-74b882b19583@quicinc.com> <CABb+yY08jP+Q5xvzLf=7F1tULP6-eZz5EDiK9mBj2fAv=iZa_A@mail.gmail.com>
- <4cb58489-cd42-1868-9add-0c360065de23@quicinc.com> <CABb+yY2GA90RLazHZL7sLtC+ka-P8y6s00V2BVF4OMPTDi-rKg@mail.gmail.com>
- <62f7402d-f0e7-8e8a-e1a4-958ddbcf8d8b@quicinc.com>
-In-Reply-To: <62f7402d-f0e7-8e8a-e1a4-958ddbcf8d8b@quicinc.com>
-From:   Jassi Brar <jassisinghbrar@gmail.com>
-Date:   Tue, 1 Nov 2022 21:01:04 -0500
-Message-ID: <CABb+yY0-rtt5CfzGA_D3THnfTO1pgstmVo2_1McEJ=JMdTcD2Q@mail.gmail.com>
-Subject: Re: [PATCH v6 02/21] dt-bindings: Add binding for gunyah hypervisor
-To:     Elliot Berman <quic_eberman@quicinc.com>
-Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        linux-arm-kernel@lists.infradead.org,
-        Mark Rutland <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Kalle Valo <kvalo@kernel.org>, devicetree@vger.kernel.org,
-        linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -94,89 +94,70 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 1, 2022 at 7:12 PM Elliot Berman <quic_eberman@quicinc.com> wrote:
->
->
->
-> On 11/1/2022 2:58 PM, Jassi Brar wrote:
-> > On Tue, Nov 1, 2022 at 3:35 PM Elliot Berman <quic_eberman@quicinc.com> wrote:
-> >>
-> >>
-> >>
-> >> On 11/1/2022 9:23 AM, Jassi Brar wrote:
-> >>> On Mon, Oct 31, 2022 at 10:20 PM Elliot Berman <quic_eberman@quicinc.com> wrote:
-> >>>>
-> >>>> Hi Jassi,
-> >>>>
-> >>>> On 10/27/2022 7:33 PM, Jassi Brar wrote:
-> >>>>    > On Wed, Oct 26, 2022 at 1:59 PM Elliot Berman
-> >>>> <quic_eberman@quicinc.com> wrote:
-> >>>>    > .....
-> >>>>    >> +
-> >>>>    >> +        gunyah-resource-mgr@0 {
-> >>>>    >> +            compatible = "gunyah-resource-manager-1-0",
-> >>>> "gunyah-resource-manager";
-> >>>>    >> +            interrupts = <GIC_SPI 3 IRQ_TYPE_EDGE_RISING>, /* TX
-> >>>> full IRQ */
-> >>>>    >> +                         <GIC_SPI 4 IRQ_TYPE_EDGE_RISING>; /* RX
-> >>>> empty IRQ */
-> >>>>    >> +            reg = <0x00000000 0x00000000>, <0x00000000 0x00000001>;
-> >>>>    >> +                  /* TX, RX cap ids */
-> >>>>    >> +        };
-> >>>>    >>
-> >>>>    > All these resources are used only by the mailbox controller driver.
-> >>>>    > So, this should be the mailbox controller node, rather than the
-> >>>>    > mailbox user.> One option is to load gunyah-resource-manager as a
-> >>>> module that relies
-> >>>>    > on the gunyah-mailbox provider. That would also avoid the "Allow
-> >>>>    > direct registration to a channel" hack patch.
-> >>>>
-> >>>> A message queue to another guest VM wouldn't be known at boot time and
-> >>>> thus couldn't be described on the devicetree.
-> >>>>
-> >>> I think you need to implement of_xlate() ... or please tell me what
-> >>> exactly you need to specify in the dt.
-> >>
-> >> Dynamically created virtual machines can't be known on the dt, so there
-> >> is nothing to specify in the DT. There couldn't be a devicetree node for
-> >> the message queue client because that client is only exists once the VM
-> >> is created by userspace.
-> >>
-> > The underlying "physical channel" is the synchronous SMC instruction,
-> > which remains 1 irrespective of the number of mailbox instances
-> > created.
->
-> I disagree that the physical channel is the SMC instruction. Regardless
-> though, there are num_online_cpus() "physical channels" with this
-> perspective.
->
-> > So basically you are sharing one resource among users. Why doesn't the
-> > RM request the "smc instruction" channel once and share it among
-> > users?
->
-> I suppose in this scenario, a single mailbox channel would represent all
-> message queues? This would cause Linux to serialize *all* message queue
-> hypercalls. Sorry, I can only think negative implications.
->
-> Error handling needs to move into clients: if a TX message queue becomes
-> full or an RX message queue becomes empty, then we'll need to return
-> error back to the client right away. The clients would need to register
-> for the RTS/RTR interrupts to know when to send/receive messages and
-> have retry error handling. If the mailbox controller retried for the
-> clients as currently proposed, then we could get into a scenario where a
-> message queue could never be ready to send/receive and thus stuck
-> forever trying to process that message. The effect here would be that
-> the mailbox controller becomes a wrapper to some SMC instructions that
-> aren't related at the SMC instruction level.
->
-> A single channel would limit performance of SMP systems because only one
-> core could send/receive a message. There is no such limitation for
-> message queues to behave like this.
->
-This is just an illusion. If Gunyah can handle multiple calls from a
-VM parallely, even with the "bind-client-to-channel" hack you can't
-make sure different channels run on different cpu cores.  If you are
-ok with that, you could simply populate a mailbox controller with N
-channels and allocate them in any order the clients ask.
+Patch #1 expands housekeepíng_any_cpu() so we can find housekeeping cpus
+closer (NUMA) to any desired CPU, instead of only the current CPU.
 
--j
+### Performance argument that motivated the change:
+There could be an argument of why would that be needed, since the current
+CPU is probably acessing the current cacheline, and so having a CPU closer
+to the current one is always the best choice since the cache invalidation
+will take less time. OTOH, there could be cases like this which uses
+perCPU variables, and we can have up to 3 different CPUs touching the
+cacheline:
+
+C1 - Isolated CPU: The perCPU data 'belongs' to this one
+C2 - Scheduling CPU: Schedule some work to be done elsewhere, current cpu
+C3 - Housekeeping CPU: This one will do the work
+
+Most of the times the cacheline is touched, it should be by C1. Some times
+a C2 will schedule work to run on C3, since C1 is isolated.
+
+If C1 and C2 are in different NUMA nodes, we could have C3 either in
+C2 NUMA node (housekeeping_any_cpu()) or in C1 NUMA node 
+(housekeeping_any_cpu_from(C1). 
+
+If C3 is in C2 NUMA node, there will be a faster invalidation when C3
+tries to get cacheline exclusivity, and then a slower invalidation when
+this happens in C1, when it's working in its data.
+
+If C3 is in C1 NUMA node, there will be a slower invalidation when C3
+tries to get cacheline exclusivity, and then a faster invalidation when
+this happens in C1.
+
+The thing is: it should be better to wait less when doing kernel work
+on an isolated CPU, even at the cost of some housekeeping CPU waiting
+a few more cycles.
+###
+
+Patch #2 changes the locking strategy of memcg_stock_pcp->stock_lock from
+local_lock to spinlocks, so it can be later used to do remote percpu
+cache draining on patch #3. Most performance concerns should be pointed
+in the commit log.
+
+Patch #3 implements the remote per-CPU cache drain, making use of both 
+patches #2 and #3. Performance-wise, in non-isolated scenarios, it should
+introduce an extra function call and a single test to check if the CPU is
+isolated. 
+
+On scenarios with isolation enabled on boot, it will also introduce an
+extra test to check in the cpumask if the CPU is isolated. If it is,
+there will also be an extra read of the cpumask to look for a
+housekeeping CPU.
+
+Please, provide any feedback on that!
+Thanks a lot for reading!
+
+Leonardo Bras (3):
+  sched/isolation: Add housekeepíng_any_cpu_from()
+  mm/memcontrol: Change stock_lock type from local_lock_t to spinlock_t
+  mm/memcontrol: Add drain_remote_stock(), avoid drain_stock on isolated
+    cpus
+
+ include/linux/sched/isolation.h | 11 +++--
+ kernel/sched/isolation.c        |  8 ++--
+ mm/memcontrol.c                 | 83 ++++++++++++++++++++++-----------
+ 3 files changed, 69 insertions(+), 33 deletions(-)
+
+-- 
+2.38.1
+
