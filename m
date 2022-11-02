@@ -2,101 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84B2D61670F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:06:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CAB97616713
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:07:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230186AbiKBQG2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 12:06:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46034 "EHLO
+        id S231208AbiKBQHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 12:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiKBQGY (ORCPT
+        with ESMTP id S229548AbiKBQHJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 12:06:24 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F37D25EB4;
-        Wed,  2 Nov 2022 09:06:22 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E3A2E6158D;
-        Wed,  2 Nov 2022 16:06:21 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F660C433C1;
-        Wed,  2 Nov 2022 16:06:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667405181;
-        bh=uC/huKB8ojZr8E05891PDIL9GMzoWr5Ol6Vawz7NAHA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=qbRk6eCBhBWgx0CQOO8Ik3q+htKp2pOYraMX06ybmCfSfqt/k/glkH97uTHhjR0M6
-         hcGl8TwcwSEkKCclmwA+UvEd0fxu/Q+nq0yIqgPoMzz44jRTlrU3KiD3Lfh5AaGsSg
-         AYsmL3hr5pyJBOQQlncDwfP36xRqSCg5hYB+cOiUUcF4dSZ59FBpN4vv43478FM6kk
-         Vk2piNjs/G9UgECa0gQIiO4dZk6bIz4cGlIDiJWEGzGqpM20K9TjtVWgun7EVKBBjq
-         swIQumGh12Wn9Bt5g/0FQlavdScVCqIdG5UM/M1wtcK84sqR2JCyArpj6QTUsk3str
-         Zt28kbB47Q4JA==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Thomas Sailer <t.sailer@alumni.ethz.ch>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>
-Cc:     linux-hams@vger.kernel.org, netdev@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] hamradio: baycom_epp: Fix return type of baycom_send_packet()
-Date:   Wed,  2 Nov 2022 09:06:10 -0700
-Message-Id: <20221102160610.1186145-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.38.1
+        Wed, 2 Nov 2022 12:07:09 -0400
+Received: from mail-ot1-f49.google.com (mail-ot1-f49.google.com [209.85.210.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C755D25EB4;
+        Wed,  2 Nov 2022 09:07:08 -0700 (PDT)
+Received: by mail-ot1-f49.google.com with SMTP id l42-20020a9d1b2d000000b0066c6366fbc3so3944012otl.3;
+        Wed, 02 Nov 2022 09:07:08 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Th6/ZO+U3Z/edcN2KgziGNJueIvFPLRfv4u6mt7jrck=;
+        b=hF2sSnXEKF8hYLa+CdJJ2ibf1lzzfR8iWB1szCDsucs6i5WcCYPAT/FjuMBK7VqOue
+         MhO1j6o9LPFRn6AFid31rQ4++XcT8of0wcBL2dusTUkZ/1qI/5RqW7bd+MTAQzQx1HwA
+         FR5R9nW1bVoynQojMmI2cMqVf3VPk2qP+2NhWrnbSUtI9h9jJ/TLFUdwjsGpwJKHylZ1
+         It3SEd/hWOkmqAdQFijmIg14pPfJ9m1WW003W4Hqw2Fho2PV/52Dn4dVCRGBaTh2tRNM
+         rlrU/Jvva5enJx7syA5oUannLsW8NTngJEcfHqGtJy9okUcRyWm97wS6e2X847fjob6I
+         9kaw==
+X-Gm-Message-State: ACrzQf22/7GwoNPYmIe9/bqSpH6QPYevtJIZX3fQGTkqGo5n+YK33KWe
+        kBMMNNKb7vN3I5lu2Hq3Is5fVAuHUQ==
+X-Google-Smtp-Source: AMsMyM6xwEveyhcFQBvttzseNwCLpoSlmkHUq7T6+pg7ZTNvsWy4AVnWNkyGh5Hr2jjsAMZHehEz9g==
+X-Received: by 2002:a9d:63d4:0:b0:66c:572d:e067 with SMTP id e20-20020a9d63d4000000b0066c572de067mr7949792otl.86.1667405228068;
+        Wed, 02 Nov 2022 09:07:08 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id s37-20020a05687024a500b00127d2005ea1sm6215390oaq.18.2022.11.02.09.07.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 09:07:07 -0700 (PDT)
+Received: (nullmailer pid 3979089 invoked by uid 1000);
+        Wed, 02 Nov 2022 16:07:09 -0000
+Date:   Wed, 2 Nov 2022 11:07:09 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Billy Tsai <billy_tsai@aspeedtech.com>
+Cc:     joel@jms.id.au, devicetree@vger.kernel.org,
+        linux-aspeed@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, colin.king@canonical.com,
+        robh+dt@kernel.org, andrew@aj.id.au, linux-kernel@vger.kernel.org,
+        BMC-SW@aspeedtech.com, jic23@kernel.org, lars@metafoo.de,
+        linux-iio@vger.kernel.org
+Subject: Re: [PATCH 2/2] dt-bindings: iio: adc: Remove the property
+ "aspeed,trim-data-valid"
+Message-ID: <166740522806.3978983.397017282901820216.robh@kernel.org>
+References: <20221031113208.19194-1-billy_tsai@aspeedtech.com>
+ <20221031113208.19194-2-billy_tsai@aspeedtech.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221031113208.19194-2-billy_tsai@aspeedtech.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-indirect call targets are validated against the expected function
-pointer prototype to make sure the call target is valid to help mitigate
-ROP attacks. If they are not identical, there is a failure at run time,
-which manifests as either a kernel panic or thread getting killed. A
-proposed warning in clang aims to catch these at compile time, which
-reveals:
 
-  drivers/net/hamradio/baycom_epp.c:1119:25: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-          .ndo_start_xmit      = baycom_send_packet,
-                                ^~~~~~~~~~~~~~~~~~
-  1 error generated.
+On Mon, 31 Oct 2022 19:32:08 +0800, Billy Tsai wrote:
+> The valid of the trimming data will use the otp default value as a
+> criterion.
+> 
+> Signed-off-by: Billy Tsai <billy_tsai@aspeedtech.com>
+> ---
+>  .../devicetree/bindings/iio/adc/aspeed,ast2600-adc.yaml    | 7 -------
+>  1 file changed, 7 deletions(-)
+> 
 
-->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
-'netdev_tx_t', not 'int'. Adjust the return type of baycom_send_packet()
-to match the prototype's to resolve the warning and CFI failure.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/net/hamradio/baycom_epp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/net/hamradio/baycom_epp.c b/drivers/net/hamradio/baycom_epp.c
-index 791b4a53d69f..bd3b0c2655a2 100644
---- a/drivers/net/hamradio/baycom_epp.c
-+++ b/drivers/net/hamradio/baycom_epp.c
-@@ -758,7 +758,7 @@ static void epp_bh(struct work_struct *work)
-  * ===================== network driver interface =========================
-  */
- 
--static int baycom_send_packet(struct sk_buff *skb, struct net_device *dev)
-+static netdev_tx_t baycom_send_packet(struct sk_buff *skb, struct net_device *dev)
- {
- 	struct baycom_state *bc = netdev_priv(dev);
- 
-
-base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
--- 
-2.38.1
-
+Acked-by: Rob Herring <robh@kernel.org>
