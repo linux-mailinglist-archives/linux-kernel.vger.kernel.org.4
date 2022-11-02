@@ -2,82 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id AAB7E616C1A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:26:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 88C6A616C1C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:28:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230362AbiKBS0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 14:26:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51466 "EHLO
+        id S229770AbiKBS2X (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 14:28:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbiKBS0Y (ORCPT
+        with ESMTP id S229436AbiKBS2U (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:26:24 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623CB2F3B7;
-        Wed,  2 Nov 2022 11:26:18 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 10042B82432;
-        Wed,  2 Nov 2022 18:26:17 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A64C433B5;
-        Wed,  2 Nov 2022 18:26:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667413575;
-        bh=0OnF8htTtPrhW90XoJmnZ9HiTpzXeY8j4Qxh7eEPkcM=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=J5jL15/ZggiB//3835TMN3jw4jGvTN1hbV83U0GggX7zajZoFFU3MaXHAncNCHZNP
-         uYCl/DjFc3ueFj3RhLeg5yKAiHyZAIXA7kwOf4DeHEeJOoYgI8Pk9hAb9IJEfJq2r7
-         96HucyLcPfdqfGCGYrBjouQ6xrquHVYLpnSPMOBKyhYSVyx9llOSWj/61PZn484DTW
-         VSwYiS+w8J4+5jVBCFdF20YcJwJrEN/WGwnEL0YhdYZ7c/gA0XmMzo5I4y4+ni3Bt6
-         oJCoxJYW3+gTkcq70+PQoTDVQd23r279Ag2a+vHYnlnTTM6j3lkcfbyGBEkpFzNuH2
-         Clg5RWQwjeWfQ==
-Received: by mail-lf1-f46.google.com with SMTP id b2so29600586lfp.6;
-        Wed, 02 Nov 2022 11:26:15 -0700 (PDT)
-X-Gm-Message-State: ACrzQf2Wm77KXoDxcwtGWj8qAZZtfR0sqB719nVd5c9yoiO6gVCo79JP
-        M1jifYn2UWzQzenPycVUDUYiCR6myG7MfHKpiQ==
-X-Google-Smtp-Source: AMsMyM7kjGNrP3+8CtQwqjr4zosxnOmrv8yYX7CqgC43OsFofOIvtBA61DXFtaoqkMCrosPPhD7KyRmyDY2H7UVJfF0=
-X-Received: by 2002:a19:f24b:0:b0:4ab:cd12:d282 with SMTP id
- d11-20020a19f24b000000b004abcd12d282mr10160512lfk.74.1667413573707; Wed, 02
- Nov 2022 11:26:13 -0700 (PDT)
+        Wed, 2 Nov 2022 14:28:20 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2D591EEC8
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:28:19 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id v8so5852587qkg.12
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 11:28:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=Tkh6E9H5or1YlWc4iLnwjF2u8GuATub7/RIB4RZroEI=;
+        b=PUV2oYskmBz3NBHQa4xg86wO3U87o5XqjQwsvV7oSoiTe/piGIP5nBJpJ45viq+R2Z
+         bAj40imTzIsGbqe0Q7TSsJdMOqjUHrqbe1jzVK5k0jJ0wCIP4faAmk2wQnUzpuSnBsj1
+         Y3Q9jDnJzlfkaTRvkFbL51E9vliot00WDNmm8=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Tkh6E9H5or1YlWc4iLnwjF2u8GuATub7/RIB4RZroEI=;
+        b=JudKP1Tr69jW5AfSfn0E+hXFfgrEk8oW0y5jgYDJI0vA5Odq9glYWo6yiX3815UHyf
+         VF+9EFGjJCuafmHyYSolfCGuv8PrMkC6BQx+d1hV5vpa6rN3xGbwM2GW3qrXCDIanThS
+         YQQnGEmwP7iPNrml0HUqH+lw4ADHc9o0Vl+TO8C4O8mkwk9cuspr3oQsyEZaFfwvC74W
+         WLERBtKFhOqN3YkPZ+1Cbe4IkYbbxCFWZSuXGoV5S2UIM6QcqI9A0mPz3tVJMCJX9R2d
+         VTV68sXYEuYM3fJ3TsYlTGsXS0K9iMDZCD1yvMW27/Zp24eO5xBc/2cIikfm0uXEVP6I
+         H3Qw==
+X-Gm-Message-State: ACrzQf1Z5NHcr4f9mCNFzA1aMoRCHabe9MARmPF4xZsMhb0a26MV7OR4
+        zvF01qWUTeZ7DDRT61bnfA/A/LxCIjvStg==
+X-Google-Smtp-Source: AMsMyM5yuoOGp9tQ7TAUtjJfndkpg73kgaCxm4KRuG/6CKVhfssKYNSLHdqfgSeR+3QIuZBIK99dKw==
+X-Received: by 2002:a37:af06:0:b0:6f9:9485:fb11 with SMTP id y6-20020a37af06000000b006f99485fb11mr18392527qke.387.1667413698551;
+        Wed, 02 Nov 2022 11:28:18 -0700 (PDT)
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com. [209.85.128.181])
+        by smtp.gmail.com with ESMTPSA id l10-20020a37f90a000000b006b9c9b7db8bsm9000696qkj.82.2022.11.02.11.28.17
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 11:28:17 -0700 (PDT)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-333a4a5d495so174286477b3.10
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 11:28:17 -0700 (PDT)
+X-Received: by 2002:a81:8241:0:b0:370:5fad:47f0 with SMTP id
+ s62-20020a818241000000b003705fad47f0mr16875068ywf.441.1667413697206; Wed, 02
+ Nov 2022 11:28:17 -0700 (PDT)
 MIME-Version: 1.0
-References: <136157bd1f94c64504f87ee2db6b3ed0a8dcc3de.1667254476.git.daniel@makrotopia.org>
- <1216e96b279d08230cb2aa61d536f44c1e9b800a.1667254476.git.daniel@makrotopia.org>
-In-Reply-To: <1216e96b279d08230cb2aa61d536f44c1e9b800a.1667254476.git.daniel@makrotopia.org>
-From:   Rob Herring <robh@kernel.org>
-Date:   Wed, 2 Nov 2022 13:26:04 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqKBtgXYFqkMmUxp6W0S45KxecVo+Qp261b2-7L7bOJDAw@mail.gmail.com>
-Message-ID: <CAL_JsqKBtgXYFqkMmUxp6W0S45KxecVo+Qp261b2-7L7bOJDAw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] dt-bindings: thermal: mediatek: add compatible string
- for MT7986 SoC
-To:     Daniel Golle <daniel@makrotopia.org>
-Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Amit Kucheria <amitk@kernel.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
+References: <B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com>
+ <CAHk-=wgzT1QsSCF-zN+eS06WGVTBg4sf=6oTMg95+AEq7QrSCQ@mail.gmail.com>
+ <47678198-C502-47E1-B7C8-8A12352CDA95@gmail.com> <CAHk-=wjzngbbwHw4nAsqo_RpyOtUDk5G+Wus=O0w0A6goHvBWA@mail.gmail.com>
+ <CAHk-=wijU_YHSZq5N7vYK+qHPX0aPkaePaGOyWk4aqMvvSXxJA@mail.gmail.com>
+ <140B437E-B994-45B7-8DAC-E9B66885BEEF@gmail.com> <CAHk-=wjX_P78xoNcGDTjhkgffs-Bhzcwp-mdsE1maeF57Sh0MA@mail.gmail.com>
+ <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
+ <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
+ <CAHk-=wiwt4LC-VmqvYrphraF0=yQV=CQimDCb0XhtXwk8oKCCA@mail.gmail.com>
+ <Y1+XCALog8bW7Hgl@hirez.programming.kicks-ass.net> <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
+ <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com>
+ <50458458-9b57-aa5a-0d67-692cc4dbf2ad@linux.ibm.com> <CAHk-=wja5+tuvbV6vzJSbLBWSR8--WUq-ss0j0K-JQXe_EsqhQ@mail.gmail.com>
+In-Reply-To: <CAHk-=wja5+tuvbV6vzJSbLBWSR8--WUq-ss0j0K-JQXe_EsqhQ@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Wed, 2 Nov 2022 11:28:01 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wikAVbx6OUUGXpgVZNzTKK_dHhn6HyNvcf5eRKC+LkF9g@mail.gmail.com>
+Message-ID: <CAHk-=wikAVbx6OUUGXpgVZNzTKK_dHhn6HyNvcf5eRKC+LkF9g@mail.gmail.com>
+Subject: Re: mm: delay rmap removal until after TLB flush
+To:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Jann Horn <jannh@google.com>,
+        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        linux-arch <linux-arch@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 6:08 PM Daniel Golle <daniel@makrotopia.org> wrote:
+On Wed, Nov 2, 2022 at 10:55 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
 >
-> Add compatible string 'mediatek,mt7986-thermal' for V3 thermal unit
-> found in MT7981 and MT7986 SoCs.
->
-> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
-> ---
->  Documentation/devicetree/bindings/thermal/mediatek-thermal.txt | 1 +
->  1 file changed, 1 insertion(+)
+> So I'll do that minimal fix and update that branch, but if s390 people
+> end up having a better fix, please holler.
 
-Resending as the reply headers got lost...
+I've updated the branch with that, so hopefully s390 builds now.
 
-Acked-by: Rob Herring <robh@kernel.org>
+I also fixed a typo in the commit message and added Peter's ack. Other
+than that it's all the same it was before.
+
+                 Linus
