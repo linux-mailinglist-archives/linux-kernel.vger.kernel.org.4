@@ -2,74 +2,46 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5441E615C6A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 07:47:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4AF2615C6C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 07:47:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229846AbiKBGri (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 02:47:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47404 "EHLO
+        id S229436AbiKBGr5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 02:47:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47492 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiKBGrg (ORCPT
+        with ESMTP id S229927AbiKBGrw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 02:47:36 -0400
-Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 506F710FF1
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 23:47:35 -0700 (PDT)
-Content-Type: text/plain;
-        charset=us-ascii
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1667371653;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=dF889jQ7QNG5mkzx+GbJdYjy1UVqNctQcUxUm5YSiJc=;
-        b=pc6oGSzZYZenmgctBBOWffBiZjwM2Sah6VJacbJiR4iN9O623QPCCms83QkxFHcOZ5UHKQ
-        Y0LW+Q4dSdHMAd+qEUPbmTBD7ec+vLWtl1M2eNGXRlotLGHw21/VMatw6Sg9uk90C/eePt
-        4Uj8Fz/hiVoUVMTVfSW9mxuWcgwqgXs=
+        Wed, 2 Nov 2022 02:47:52 -0400
+Received: from verein.lst.de (verein.lst.de [213.95.11.211])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2A9F425EA7;
+        Tue,  1 Nov 2022 23:47:51 -0700 (PDT)
+Received: by verein.lst.de (Postfix, from userid 2407)
+        id 997646732D; Wed,  2 Nov 2022 07:47:47 +0100 (CET)
+Date:   Wed, 2 Nov 2022 07:47:47 +0100
+From:   Christoph Hellwig <hch@lst.de>
+To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc:     Keith Busch <kbusch@kernel.org>, Jens Axboe <axboe@fb.com>,
+        Christoph Hellwig <hch@lst.de>,
+        Sagi Grimberg <sagi@grimberg.me>,
+        Chaitanya Kulkarni <kch@nvidia.com>,
+        linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
+        linux-nvme@lists.infradead.org
+Subject: Re: [PATCH 06/30] nvme: Use kstrtobool() instead of strtobool()
+Message-ID: <20221102064747.GA8903@lst.de>
+References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr> <2e8d7f2f3cb754982f5fe99f2e13cf72db9d6dba.1667336095.git.christophe.jaillet@wanadoo.fr>
 MIME-Version: 1.0
-Subject: Re: [PATCH v2 4/9] mm/hugetlb_cgroup: convert hugetlb_cgroup_migrate
- to folios
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <20221101223059.460937-5-sidhartha.kumar@oracle.com>
-Date:   Wed, 2 Nov 2022 14:47:16 +0800
-Cc:     linux-kernel@vger.kernel.org,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        Matthew Wilcox <willy@infradead.org>, almasrymina@google.com,
-        linmiaohe@huawei.com, minhquangbui99@gmail.com,
-        aneesh.kumar@linux.ibm.com
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <7200AC55-42FF-44E8-A790-61AC712F0F2A@linux.dev>
-References: <20221101223059.460937-1-sidhartha.kumar@oracle.com>
- <20221101223059.460937-5-sidhartha.kumar@oracle.com>
-To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <2e8d7f2f3cb754982f5fe99f2e13cf72db9d6dba.1667336095.git.christophe.jaillet@wanadoo.fr>
+User-Agent: Mutt/1.5.17 (2007-11-01)
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-> On Nov 2, 2022, at 06:30, Sidhartha Kumar <sidhartha.kumar@oracle.com> =
-wrote:
->=20
-> Cleans up intermediate page to folio conversion code in
-> hugetlb_cgroup_migrate() by changing its arguments from pages to =
-folios.
->=20
-> Signed-off-by: Sidhartha Kumar <sidhartha.kumar@oracle.com>
-> Reviewed-by: Mike Kravetz <mike.kravetz@oracle.com>
-
-Reviewed-by: Muchun Song <songmuchun@bytedance.com>
-
-Thanks.
-
+What are th other 29 patches doing in this series?  Due to the lack of
+context individual patches from series have to through /dev/null here,
+sorry.
