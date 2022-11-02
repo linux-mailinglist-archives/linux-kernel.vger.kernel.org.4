@@ -2,226 +2,357 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A09026169FE
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:07:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 489D46169FC
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:07:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231219AbiKBRHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:07:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33654 "EHLO
+        id S231158AbiKBRH2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:07:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33958 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231167AbiKBRHZ (ORCPT
+        with ESMTP id S230418AbiKBRHW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:07:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A716120BF
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 10:06:28 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667408787;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=MzSlArbLjLwuYh4coYhcF492GFrAwrpr5F1CiSw7i+g=;
-        b=KRIut3ohCRr0wqfwdMdctFBSiWsDZ0hNSD3SESZXb3+9LoIC9IJqRM04qn72V83mGlrZ7m
-        ++WOGMLc/7dl7aRW9U8WuRkdzLD7nzZGvhDkDW64bzO6hF7RLWxNG9P1m+frN0tgWVbi1O
-        4lEmpXNKUnNYryYKGBjlZru1X3UaaK4=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-642--j5pS9ysNIOvzTMIf2oO7A-1; Wed, 02 Nov 2022 13:06:26 -0400
-X-MC-Unique: -j5pS9ysNIOvzTMIf2oO7A-1
-Received: by mail-ej1-f72.google.com with SMTP id hc43-20020a17090716ab00b0078e28567ffbso10382273ejc.15
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 10:06:26 -0700 (PDT)
+        Wed, 2 Nov 2022 13:07:22 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 78D23120A1
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 10:07:20 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id m6-20020a17090a5a4600b00212f8dffec9so2483239pji.0
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 10:07:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=z60DP3IMVx0PgF9XoRWoSbcT5zhGjG4qF0GcGyDN/6s=;
+        b=dvi2lMLG9DYOkxlDlG+HeXOP5KkxvRZBS+MOB8MTFmsk3QF8Lh/Ro4/mVsgpL3Aunr
+         AsMjm0RamScqgwwyFA7tgIy3o0mrT6S911XO3cuvQmMZ1Ok5Zq7sB18wZ7vyTZJPD+2r
+         qMw+fBY8W8hCAM2urjRUmMSa98yJwipB6d+Xc=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MzSlArbLjLwuYh4coYhcF492GFrAwrpr5F1CiSw7i+g=;
-        b=1bIyolZpxO9Jikh8nLLjG2jLaY9UEl+/flSJPdh26uszWMTrGDaklNSzNiHKipXeky
-         c3YsFPrsssPAPj5j63HCyLYBZR03Ed0NT9hmDM25aJ2jbo+5NJXWsYvimpza6wcrc5Fq
-         hQHI2t5EerODkJtrG1/bEE9tG9GWac4jgMjzkfCKqupwMYl8fUVBicZkRQLSZe2qPUeb
-         MB0toAtYunB2X0+bvKBoJXI3u3fEzGpKY+OlogNQHNuT9jd7uA2c+CKV7HLNphqFR0i7
-         +yWsRa+AIJuJE0ueKvsvZhzNuM6B3VCel0iDn7inlBhF21GuBxlg00L/Ca+50wJ0486H
-         +NEQ==
-X-Gm-Message-State: ACrzQf2kJt7hGPeq0dl/GMlfcjx+LDdU01kgulSPbcuamcwPG8H/H5NZ
-        HXiBHjzc5qdq0dI2cGUEijGgavfJxbujzJ8q5Z6tTATVNfnHqUKCtCkG5EXR/NsUlTfPtvm8lRf
-        SFfTRwuawWXCN0TUIJrWonqWz
-X-Received: by 2002:aa7:c1d9:0:b0:463:aeaf:3383 with SMTP id d25-20020aa7c1d9000000b00463aeaf3383mr10397472edp.253.1667408785383;
-        Wed, 02 Nov 2022 10:06:25 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4a5aiauK1J6VQYUF9mjlkxz4BZlsbuGTOro+zFT5daW27YWQJ+DquzsEIfrHyUKJnR8l1zDg==
-X-Received: by 2002:aa7:c1d9:0:b0:463:aeaf:3383 with SMTP id d25-20020aa7c1d9000000b00463aeaf3383mr10397444edp.253.1667408785114;
-        Wed, 02 Nov 2022 10:06:25 -0700 (PDT)
-Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
-        by smtp.googlemail.com with ESMTPSA id g11-20020a170906394b00b007abafe43c3bsm5575689eje.86.2022.11.02.10.06.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 10:06:24 -0700 (PDT)
-Message-ID: <bb2e70cb-002d-8032-d8c2-bb64dd2476a0@redhat.com>
-Date:   Wed, 2 Nov 2022 18:06:20 +0100
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z60DP3IMVx0PgF9XoRWoSbcT5zhGjG4qF0GcGyDN/6s=;
+        b=PBF9ATTsrudQ/PtlkPFKgPgaGfiN0fy3+zyTMtmq7jMjHJ4WC9kcTnGwyMeMSWy/FR
+         wXcbBBVtdvb6nHJ61cYRq/o9giraUUgR7pDgOg4MYTFDGhmCrWiD/+nNlA+mb5X9xDSi
+         gHfMwR3r08ZHFTINyLDoZcsrfuA/uUHA4Esi2C79M4aS7cnapWAqA/cbRx6zlaXyB8qW
+         F+yOlx2Nw2e33JBsoy8+Ffc9HxFS9ansBc9bBYCdTSqLPjEW6LitXUkiInLfkZ6DZTQx
+         EG84z/ppJLlsU+8sgcLdP3MyzPFALKbBJfeyBYd9EpT1D4D8VHlE5mLFiEvSBdm3qVZ9
+         pZHQ==
+X-Gm-Message-State: ACrzQf3Z2MzgE3fU4D4GarVk6iJGatvhVo9ywY2Yi7q3i7ZZ5WXKj5fR
+        V+ngcmpv2inKczfeY1qoy4DRwY+iauwSZA==
+X-Google-Smtp-Source: AMsMyM6AKNnkgiRFAAD+XCA6VVUXb4HIYP5FrlTYKEIt8bl3YKcjm6xD5pfY3uA8JhL9icd3Hx4X4A==
+X-Received: by 2002:a17:902:dac3:b0:186:a437:f4b8 with SMTP id q3-20020a170902dac300b00186a437f4b8mr25604701plx.70.1667408839962;
+        Wed, 02 Nov 2022 10:07:19 -0700 (PDT)
+Received: from smtp.gmail.com ([2620:15c:11a:201:4437:8d79:dd1:7eb8])
+        by smtp.gmail.com with ESMTPSA id j6-20020a17090a2a8600b002137d3da760sm1685034pjd.39.2022.11.02.10.07.18
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 10:07:19 -0700 (PDT)
+From:   Stephen Boyd <swboyd@chromium.org>
+To:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>
+Cc:     linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org,
+        patches@lists.linux.dev, Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Satya Priya <quic_c_skakit@quicinc.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: [PATCH v2] clk: qcom: gdsc: Remove direct runtime PM calls
+Date:   Wed,  2 Nov 2022 10:07:17 -0700
+Message-Id: <20221102170717.1262547-1-swboyd@chromium.org>
+X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v4 1/4] mm/gup: Add FOLL_INTERRUPTIBLE
-Content-Language: en-US
-To:     Peter Xu <peterx@redhat.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Sean Christopherson <seanjc@google.com>,
-        John Hubbard <jhubbard@nvidia.com>,
-        David Matlack <dmatlack@google.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
-        David Hildenbrand <david@redhat.com>,
-        Linux MM Mailing List <linux-mm@kvack.org>,
-        Mike Kravetz <mike.kravetz@oracle.com>
-References: <20221011195809.557016-1-peterx@redhat.com>
- <20221011195809.557016-2-peterx@redhat.com>
-From:   Paolo Bonzini <pbonzini@redhat.com>
-In-Reply-To: <20221011195809.557016-2-peterx@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 10/11/22 21:58, Peter Xu wrote:
-> We have had FAULT_FLAG_INTERRUPTIBLE but it was never applied to GUPs.  One
-> issue with it is that not all GUP paths are able to handle signal delivers
-> besides SIGKILL.
-> 
-> That's not ideal for the GUP users who are actually able to handle these
-> cases, like KVM.
-> 
-> KVM uses GUP extensively on faulting guest pages, during which we've got
-> existing infrastructures to retry a page fault at a later time.  Allowing
-> the GUP to be interrupted by generic signals can make KVM related threads
-> to be more responsive.  For examples:
-> 
->    (1) SIGUSR1: which QEMU/KVM uses to deliver an inter-process IPI,
->        e.g. when the admin issues a vm_stop QMP command, SIGUSR1 can be
->        generated to kick the vcpus out of kernel context immediately,
-> 
->    (2) SIGINT: which can be used with interactive hypervisor users to stop a
->        virtual machine with Ctrl-C without any delays/hangs,
-> 
->    (3) SIGTRAP: which grants GDB capability even during page faults that are
->        stuck for a long time.
-> 
-> Normally hypervisor will be able to receive these signals properly, but not
-> if we're stuck in a GUP for a long time for whatever reason.  It happens
-> easily with a stucked postcopy migration when e.g. a network temp failure
-> happens, then some vcpu threads can hang death waiting for the pages.  With
-> the new FOLL_INTERRUPTIBLE, we can allow GUP users like KVM to selectively
-> enable the ability to trap these signals.
-> 
-> Reviewed-by: John Hubbard <jhubbard@nvidia.com>
-> Reviewed-by: David Hildenbrand <david@redhat.com>
-> Signed-off-by: Peter Xu <peterx@redhat.com>
+We shouldn't be calling runtime PM APIs from within the genpd
+enable/disable path for a couple reasons.
 
-If no one shouts I will queue the series for 6.2, but it would be nice 
-to get an ACK from the mm folks.
+First, this causes an AA lockdep splat because genpd can call into genpd
+code again while holding the genpd lock.
 
-> ---
->   include/linux/mm.h |  1 +
->   mm/gup.c           | 33 +++++++++++++++++++++++++++++----
->   mm/hugetlb.c       |  5 ++++-
->   3 files changed, 34 insertions(+), 5 deletions(-)
-> 
-> diff --git a/include/linux/mm.h b/include/linux/mm.h
-> index 21f8b27bd9fd..488a9f4cce07 100644
-> --- a/include/linux/mm.h
-> +++ b/include/linux/mm.h
-> @@ -2897,6 +2897,7 @@ struct page *follow_page(struct vm_area_struct *vma, unsigned long address,
->   #define FOLL_SPLIT_PMD	0x20000	/* split huge pmd before returning */
->   #define FOLL_PIN	0x40000	/* pages must be released via unpin_user_page */
->   #define FOLL_FAST_ONLY	0x80000	/* gup_fast: prevent fall-back to slow gup */
-> +#define FOLL_INTERRUPTIBLE  0x100000 /* allow interrupts from generic signals */
->   
->   /*
->    * FOLL_PIN and FOLL_LONGTERM may be used in various combinations with each
-> diff --git a/mm/gup.c b/mm/gup.c
-> index 5abdaf487460..d51e7ccaef32 100644
-> --- a/mm/gup.c
-> +++ b/mm/gup.c
-> @@ -970,8 +970,17 @@ static int faultin_page(struct vm_area_struct *vma,
->   		fault_flags |= FAULT_FLAG_WRITE;
->   	if (*flags & FOLL_REMOTE)
->   		fault_flags |= FAULT_FLAG_REMOTE;
-> -	if (locked)
-> +	if (locked) {
->   		fault_flags |= FAULT_FLAG_ALLOW_RETRY | FAULT_FLAG_KILLABLE;
-> +		/*
-> +		 * FAULT_FLAG_INTERRUPTIBLE is opt-in. GUP callers must set
-> +		 * FOLL_INTERRUPTIBLE to enable FAULT_FLAG_INTERRUPTIBLE.
-> +		 * That's because some callers may not be prepared to
-> +		 * handle early exits caused by non-fatal signals.
-> +		 */
-> +		if (*flags & FOLL_INTERRUPTIBLE)
-> +			fault_flags |= FAULT_FLAG_INTERRUPTIBLE;
-> +	}
->   	if (*flags & FOLL_NOWAIT)
->   		fault_flags |= FAULT_FLAG_ALLOW_RETRY | FAULT_FLAG_RETRY_NOWAIT;
->   	if (*flags & FOLL_TRIED) {
-> @@ -1380,6 +1389,22 @@ int fixup_user_fault(struct mm_struct *mm,
->   }
->   EXPORT_SYMBOL_GPL(fixup_user_fault);
->   
-> +/*
-> + * GUP always responds to fatal signals.  When FOLL_INTERRUPTIBLE is
-> + * specified, it'll also respond to generic signals.  The caller of GUP
-> + * that has FOLL_INTERRUPTIBLE should take care of the GUP interruption.
-> + */
-> +static bool gup_signal_pending(unsigned int flags)
-> +{
-> +	if (fatal_signal_pending(current))
-> +		return true;
-> +
-> +	if (!(flags & FOLL_INTERRUPTIBLE))
-> +		return false;
-> +
-> +	return signal_pending(current);
-> +}
-> +
->   /*
->    * Please note that this function, unlike __get_user_pages will not
->    * return 0 for nr_pages > 0 without FOLL_NOWAIT
-> @@ -1461,11 +1486,11 @@ static __always_inline long __get_user_pages_locked(struct mm_struct *mm,
->   		 * Repeat on the address that fired VM_FAULT_RETRY
->   		 * with both FAULT_FLAG_ALLOW_RETRY and
->   		 * FAULT_FLAG_TRIED.  Note that GUP can be interrupted
-> -		 * by fatal signals, so we need to check it before we
-> +		 * by fatal signals of even common signals, depending on
-> +		 * the caller's request. So we need to check it before we
->   		 * start trying again otherwise it can loop forever.
->   		 */
-> -
-> -		if (fatal_signal_pending(current)) {
-> +		if (gup_signal_pending(flags)) {
->   			if (!pages_done)
->   				pages_done = -EINTR;
->   			break;
-> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> index e070b8593b37..202f3ad7f35c 100644
-> --- a/mm/hugetlb.c
-> +++ b/mm/hugetlb.c
-> @@ -6206,9 +6206,12 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
->   				fault_flags |= FAULT_FLAG_WRITE;
->   			else if (unshare)
->   				fault_flags |= FAULT_FLAG_UNSHARE;
-> -			if (locked)
-> +			if (locked) {
->   				fault_flags |= FAULT_FLAG_ALLOW_RETRY |
->   					FAULT_FLAG_KILLABLE;
-> +				if (flags & FOLL_INTERRUPTIBLE)
-> +					fault_flags |= FAULT_FLAG_INTERRUPTIBLE;
-> +			}
->   			if (flags & FOLL_NOWAIT)
->   				fault_flags |= FAULT_FLAG_ALLOW_RETRY |
->   					FAULT_FLAG_RETRY_NOWAIT;
+WARNING: possible recursive locking detected
+5.19.0-rc2-lockdep+ #7 Not tainted
+--------------------------------------------
+kworker/2:1/49 is trying to acquire lock:
+ffffffeea0370788 (&genpd->mlock){+.+.}-{3:3}, at: genpd_lock_mtx+0x24/0x30
+
+but task is already holding lock:
+ffffffeea03710a8 (&genpd->mlock){+.+.}-{3:3}, at: genpd_lock_mtx+0x24/0x30
+
+other info that might help us debug this:
+ Possible unsafe locking scenario:
+
+       CPU0
+       ----
+  lock(&genpd->mlock);
+  lock(&genpd->mlock);
+
+ *** DEADLOCK ***
+
+ May be due to missing lock nesting notation
+
+3 locks held by kworker/2:1/49:
+ #0: 74ffff80811a5748 ((wq_completion)pm){+.+.}-{0:0}, at: process_one_work+0x320/0x5fc
+ #1: ffffffc008537cf8 ((work_completion)(&genpd->power_off_work)){+.+.}-{0:0}, at: process_one_work+0x354/0x5fc
+ #2: ffffffeea03710a8 (&genpd->mlock){+.+.}-{3:3}, at: genpd_lock_mtx+0x24/0x30
+
+stack backtrace:
+CPU: 2 PID: 49 Comm: kworker/2:1 Not tainted 5.19.0-rc2-lockdep+ #7
+Hardware name: Google Lazor (rev3 - 8) with KB Backlight (DT)
+Workqueue: pm genpd_power_off_work_fn
+Call trace:
+ dump_backtrace+0x1a0/0x200
+ show_stack+0x24/0x30
+ dump_stack_lvl+0x7c/0xa0
+ dump_stack+0x18/0x44
+ __lock_acquire+0xb38/0x3634
+ lock_acquire+0x180/0x2d4
+ __mutex_lock_common+0x118/0xe30
+ mutex_lock_nested+0x70/0x7c
+ genpd_lock_mtx+0x24/0x30
+ genpd_runtime_suspend+0x2f0/0x414
+ __rpm_callback+0xdc/0x1b8
+ rpm_callback+0x4c/0xcc
+ rpm_suspend+0x21c/0x5f0
+ rpm_idle+0x17c/0x1e0
+ __pm_runtime_idle+0x78/0xcc
+ gdsc_disable+0x24c/0x26c
+ _genpd_power_off+0xd4/0x1c4
+ genpd_power_off+0x2d8/0x41c
+ genpd_power_off_work_fn+0x60/0x94
+ process_one_work+0x398/0x5fc
+ worker_thread+0x42c/0x6c4
+ kthread+0x194/0x1b4
+ ret_from_fork+0x10/0x20
+
+Second, this confuses runtime PM on CoachZ for the camera devices by
+causing the camera clock controller's runtime PM usage_count to go
+negative after resuming from suspend. This is because runtime PM is
+being used on the clock controller while runtime PM is disabled for the
+device.
+
+The reason for the negative count is because a GDSC is represented as a
+genpd and each genpd that is attached to a device is resumed during the
+noirq phase of system wide suspend/resume (see the noirq suspend ops
+assignment in pm_genpd_init() for more details). The camera GDSCs are
+attached to camera devices with the 'power-domains' property in DT.
+Every device has runtime PM disabled in the late system suspend phase
+via __device_suspend_late(). Runtime PM is not usable until runtime PM
+is enabled in device_resume_early(). The noirq phases run after the
+'late' and before the 'early' phase of suspend/resume. When the genpds
+are resumed in genpd_resume_noirq(), we call down into gdsc_enable()
+that calls pm_runtime_resume_and_get() and that returns -EACCES to
+indicate failure to resume because runtime PM is disabled for all
+devices.
+
+Upon closer inspection, calling runtime PM APIs like this in the GDSC
+driver doesn't make sense. It was intended to make sure the GDSC for the
+clock controller providing other GDSCs was enabled, specifically the
+MMCX GDSC for the display clk controller on SM8250 (sm8250-dispcc), so
+that GDSC register accesses succeeded. That will already happen because
+we make the 'dev->pm_domain' a parent domain of each GDSC we register in
+gdsc_register() via pm_genpd_add_subdomain(). When any of these GDSCs
+are accessed, we'll enable the parent domain (in this specific case
+MMCX).
+
+We also remove any getting of runtime PM during registration, because
+when a genpd is registered it increments the count on the parent if the
+genpd itself is already enabled. And finally, the runtime PM state of
+the clk controller registering the GDSC shouldn't matter to the
+subdomain setup. Therefore we always assign 'dev' unconditionally so
+when GDSCs are removed we properly unlink the GDSC from the clk
+controller's pm_domain.
+
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc: Johan Hovold <johan+linaro@kernel.org>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Taniya Das <quic_tdas@quicinc.com>
+Cc: Satya Priya <quic_c_skakit@quicinc.com>
+Cc: Douglas Anderson <dianders@chromium.org>
+Cc: Matthias Kaehlcke <mka@chromium.org>
+Reported-by: Stephen Boyd <swboyd@chromium.org>
+Fixes: 1b771839de05 ("clk: qcom: gdsc: enable optional power domain support")
+Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+---
+
+Changes from v1 (https://lore.kernel.org/r/20221101233421.997149-1-swboyd@chromium.org):
+ * Fix ret thinko
+ * Update kerneldoc on 'dev' member
+
+ drivers/clk/qcom/gdsc.c | 62 +++++------------------------------------
+ drivers/clk/qcom/gdsc.h |  2 +-
+ 2 files changed, 8 insertions(+), 56 deletions(-)
+
+diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+index 7cf5e130e92f..36d44eec03b6 100644
+--- a/drivers/clk/qcom/gdsc.c
++++ b/drivers/clk/qcom/gdsc.c
+@@ -11,7 +11,6 @@
+ #include <linux/kernel.h>
+ #include <linux/ktime.h>
+ #include <linux/pm_domain.h>
+-#include <linux/pm_runtime.h>
+ #include <linux/regmap.h>
+ #include <linux/regulator/consumer.h>
+ #include <linux/reset-controller.h>
+@@ -56,22 +55,6 @@ enum gdsc_status {
+ 	GDSC_ON
+ };
+ 
+-static int gdsc_pm_runtime_get(struct gdsc *sc)
+-{
+-	if (!sc->dev)
+-		return 0;
+-
+-	return pm_runtime_resume_and_get(sc->dev);
+-}
+-
+-static int gdsc_pm_runtime_put(struct gdsc *sc)
+-{
+-	if (!sc->dev)
+-		return 0;
+-
+-	return pm_runtime_put_sync(sc->dev);
+-}
+-
+ /* Returns 1 if GDSC status is status, 0 if not, and < 0 on error */
+ static int gdsc_check_status(struct gdsc *sc, enum gdsc_status status)
+ {
+@@ -271,8 +254,9 @@ static void gdsc_retain_ff_on(struct gdsc *sc)
+ 	regmap_update_bits(sc->regmap, sc->gdscr, mask, mask);
+ }
+ 
+-static int _gdsc_enable(struct gdsc *sc)
++static int gdsc_enable(struct generic_pm_domain *domain)
+ {
++	struct gdsc *sc = domain_to_gdsc(domain);
+ 	int ret;
+ 
+ 	if (sc->pwrsts == PWRSTS_ON)
+@@ -328,22 +312,11 @@ static int _gdsc_enable(struct gdsc *sc)
+ 	return 0;
+ }
+ 
+-static int gdsc_enable(struct generic_pm_domain *domain)
++static int gdsc_disable(struct generic_pm_domain *domain)
+ {
+ 	struct gdsc *sc = domain_to_gdsc(domain);
+ 	int ret;
+ 
+-	ret = gdsc_pm_runtime_get(sc);
+-	if (ret)
+-		return ret;
+-
+-	return _gdsc_enable(sc);
+-}
+-
+-static int _gdsc_disable(struct gdsc *sc)
+-{
+-	int ret;
+-
+ 	if (sc->pwrsts == PWRSTS_ON)
+ 		return gdsc_assert_reset(sc);
+ 
+@@ -388,18 +361,6 @@ static int _gdsc_disable(struct gdsc *sc)
+ 	return 0;
+ }
+ 
+-static int gdsc_disable(struct generic_pm_domain *domain)
+-{
+-	struct gdsc *sc = domain_to_gdsc(domain);
+-	int ret;
+-
+-	ret = _gdsc_disable(sc);
+-
+-	gdsc_pm_runtime_put(sc);
+-
+-	return ret;
+-}
+-
+ static int gdsc_init(struct gdsc *sc)
+ {
+ 	u32 mask, val;
+@@ -447,11 +408,6 @@ static int gdsc_init(struct gdsc *sc)
+ 				return ret;
+ 		}
+ 
+-		/* ...and the power-domain */
+-		ret = gdsc_pm_runtime_get(sc);
+-		if (ret)
+-			goto err_disable_supply;
+-
+ 		/*
+ 		 * Votable GDSCs can be ON due to Vote from other masters.
+ 		 * If a Votable GDSC is ON, make sure we have a Vote.
+@@ -459,14 +415,14 @@ static int gdsc_init(struct gdsc *sc)
+ 		if (sc->flags & VOTABLE) {
+ 			ret = gdsc_update_collapse_bit(sc, false);
+ 			if (ret)
+-				goto err_put_rpm;
++				goto err_disable_supply;
+ 		}
+ 
+ 		/* Turn on HW trigger mode if supported */
+ 		if (sc->flags & HW_CTRL) {
+ 			ret = gdsc_hwctrl(sc, true);
+ 			if (ret < 0)
+-				goto err_put_rpm;
++				goto err_disable_supply;
+ 		}
+ 
+ 		/*
+@@ -496,13 +452,10 @@ static int gdsc_init(struct gdsc *sc)
+ 
+ 	ret = pm_genpd_init(&sc->pd, NULL, !on);
+ 	if (ret)
+-		goto err_put_rpm;
++		goto err_disable_supply;
+ 
+ 	return 0;
+ 
+-err_put_rpm:
+-	if (on)
+-		gdsc_pm_runtime_put(sc);
+ err_disable_supply:
+ 	if (on && sc->rsupply)
+ 		regulator_disable(sc->rsupply);
+@@ -541,8 +494,7 @@ int gdsc_register(struct gdsc_desc *desc,
+ 	for (i = 0; i < num; i++) {
+ 		if (!scs[i])
+ 			continue;
+-		if (pm_runtime_enabled(dev))
+-			scs[i]->dev = dev;
++		scs[i]->dev = dev;
+ 		scs[i]->regmap = regmap;
+ 		scs[i]->rcdev = rcdev;
+ 		ret = gdsc_init(scs[i]);
+diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
+index 981a12c8502d..47de72834a85 100644
+--- a/drivers/clk/qcom/gdsc.h
++++ b/drivers/clk/qcom/gdsc.h
+@@ -30,7 +30,7 @@ struct reset_controller_dev;
+  * @resets: ids of resets associated with this gdsc
+  * @reset_count: number of @resets
+  * @rcdev: reset controller
+- * @dev: the device holding the GDSC, used for pm_runtime calls
++ * @dev: the device providing the GDSC
+  */
+ struct gdsc {
+ 	struct generic_pm_domain	pd;
+
+base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+-- 
+https://chromeos.dev
 
