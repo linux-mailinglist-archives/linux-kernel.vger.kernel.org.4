@@ -2,137 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C87F46168C3
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:28:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B45716168CB
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:29:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231705AbiKBQ2h (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 12:28:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44400 "EHLO
+        id S231649AbiKBQ3T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 12:29:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44840 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231163AbiKBQ2Q (ORCPT
+        with ESMTP id S231588AbiKBQ2r (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 12:28:16 -0400
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 006242CDE8;
-        Wed,  2 Nov 2022 09:23:43 -0700 (PDT)
-Received: by mail-oi1-f169.google.com with SMTP id s206so19735024oie.3;
-        Wed, 02 Nov 2022 09:23:43 -0700 (PDT)
+        Wed, 2 Nov 2022 12:28:47 -0400
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 652A1BC5;
+        Wed,  2 Nov 2022 09:24:38 -0700 (PDT)
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-12c8312131fso20861229fac.4;
+        Wed, 02 Nov 2022 09:24:38 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ArImpJZNyMuqB41SlvrWbpD1C1fAYza6cCSGrdURoHQ=;
-        b=1SK+navsNYN5SKtd+I3ENB8dTBN6CKhDUFd4Tuwkv1bzRrZHjwmGhRcaRl7PcLm4ru
-         m9yKYNkpaSwPsAds4zPrMxqsJCQI4suLGmbh8AP7C6EaIIYEyA50AXoT16ml+27wlZKF
-         b2yBf2eegb5zepFsinCOVnCf1MoBrj0VTTztLYHcdJcKzQa7WTmYKQe4rDHRVxuGX9HU
-         JDEPaAV+rukgNFHb5jxn7B8bB2bclKL8Mj1/t4NGQmcVEBzWYcUiNLyF5Wi5XBp101RA
-         8I+Fw0b+IGbGT04IG80QdJDlbpye94AnFwyxziE326ZESxNZJt3tQrUunAliFDfoLItv
-         pBuw==
-X-Gm-Message-State: ACrzQf3kseozTO7ZMsALDD/NOHtzVulJow7f4voUviCHZKY82bSARqJ2
-        PPWunySncVsaHGPjZ28p2A==
-X-Google-Smtp-Source: AMsMyM4x7Ze5gmyrwMejMf5OYTUdwzld0GDFsHu6nva22uV0UXFmTGNXQ/gF7bSrV5yC0cuzzrGVSw==
-X-Received: by 2002:aca:db45:0:b0:354:b943:9e5b with SMTP id s66-20020acadb45000000b00354b9439e5bmr13918471oig.277.1667406223095;
-        Wed, 02 Nov 2022 09:23:43 -0700 (PDT)
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TymtfC49QCmqyHl8QfkMefC0X7Dx2Oap8HRgSBbJllo=;
+        b=N2FIY1pr8kZ82475fo9dmgGGIa2TJA/MMbB2t/736CTRjAnIYkxB5wJqbzvA+6zYYm
+         /J8zrzUveTrh4TRnEm5sgQz3SDzn4dqukXoR10okCf/oMVD7vyFnxjW7ZfTY0dIHRz+p
+         MasDFMHLu5nIpA0qf82w4MS2KmWlv6Kj8sLvpCydqL4bVU7atdmkbGn/wKkKw/elyOG1
+         2ct/SLjUmgwlhri59mH6tYUAW0UlDwAqTNPRFNo5P3lM4QrCtfP/plWsDaJMZYJqk9EL
+         8KWfV70b91AnT2s1r4Ku5/XjMkhwbW50sjzhJiZhxITp0aBHoWnEJxHgWi8k/NXdTIT2
+         8DPQ==
+X-Gm-Message-State: ACrzQf3pjQvzKxv5vhN/t6DWteftgXmIqQXv2TD+5nwXsSstXSnCwq6N
+        KNPAoKKoN3UcpHkk8GUT6A==
+X-Google-Smtp-Source: AMsMyM6h/TEdVbnmz3cAGb9ZgLtOAdeHBDX+uj0jE4B4sLIw7YTn9d735BJOdrhMxnqs7TAuN7Ktrw==
+X-Received: by 2002:a05:6871:9f:b0:131:52e5:fe7b with SMTP id u31-20020a056871009f00b0013152e5fe7bmr15173055oaa.80.1667406277603;
+        Wed, 02 Nov 2022 09:24:37 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bl8-20020a056808308800b0035028730c90sm4664594oib.1.2022.11.02.09.23.42
+        by smtp.gmail.com with ESMTPSA id e8-20020a544f08000000b00354b575424csm4682216oiy.29.2022.11.02.09.24.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 09:23:42 -0700 (PDT)
-Received: (nullmailer pid 3997053 invoked by uid 1000);
-        Wed, 02 Nov 2022 16:23:44 -0000
-Date:   Wed, 2 Nov 2022 11:23:44 -0500
+        Wed, 02 Nov 2022 09:24:37 -0700 (PDT)
+Received: (nullmailer pid 3998144 invoked by uid 1000);
+        Wed, 02 Nov 2022 16:24:38 -0000
+Date:   Wed, 2 Nov 2022 11:24:38 -0500
 From:   Rob Herring <robh@kernel.org>
 To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+Cc:     linux-kernel@vger.kernel.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>,
+        linux-arm-kernel@lists.infradead.org,
+        Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org,
         Kevin Hilman <khilman@baylibre.com>,
-        Sebastian Reichel <sre@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Jerome Brunet <jbrunet@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-amlogic@lists.infradead.org,
-        devicetree@vger.kernel.org
-Subject: Re: [PATCH 1/4] dt-bindings: reset: document Odroid Go Ultra
- power-off
-Message-ID: <20221102162344.GA3993882-robh@kernel.org>
+        linux-amlogic@lists.infradead.org
+Subject: Re: [PATCH 3/4] dt-bindings: amlogic: document Odroid Go Ultra
+ compatible
+Message-ID: <166740627837.3998090.4730126926923594945.robh@kernel.org>
 References: <20221031-b4-odroid-go-ultra-initial-v1-0-42e3dbea86d5@linaro.org>
- <20221031-b4-odroid-go-ultra-initial-v1-1-42e3dbea86d5@linaro.org>
+ <20221031-b4-odroid-go-ultra-initial-v1-3-42e3dbea86d5@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221031-b4-odroid-go-ultra-initial-v1-1-42e3dbea86d5@linaro.org>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20221031-b4-odroid-go-ultra-initial-v1-3-42e3dbea86d5@linaro.org>
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
+        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 05:47:25PM +0100, Neil Armstrong wrote:
-> The Hardkernel Odroid Go Ultra poweroff scheme requires requesting a poweroff
-> to its two PMICs in order, this represents the poweroff scheme needed to complet
-> a clean poeroff of the system.
+
+On Mon, 31 Oct 2022 17:47:27 +0100, Neil Armstrong wrote:
+> This documents the Odroid Go Ultra, a portable gaming device,
+> with the following characteristics:
+> - Amlogic S922X SoC
+> - RK817 & RK818 PMICs
+> - 2GiB LPDDR4
+> - On board 16GiB eMMC
+> - Micro SD Card slot
+> - 5inch 854×480 MIPI-DSI TFT LCD
+> - Earphone stereo jack, 0.5Watt 8Ω Mono speaker
+> - Li-Polymer 3.7V/4000mAh Battery
+> - USB-A 2.0 Host Connector
+> - x16 GPIO Input Buttons
+> - 2x ADC Analog Joysticks
+> - USB-C Port for USB2 Device and Charging
 > 
 > Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 > ---
->  .../reset/hardkernel,odroid-go-ultra-poweroff.yaml | 42 ++++++++++++++++++++++
->  1 file changed, 42 insertions(+)
+>  Documentation/devicetree/bindings/arm/amlogic.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> diff --git a/Documentation/devicetree/bindings/power/reset/hardkernel,odroid-go-ultra-poweroff.yaml b/Documentation/devicetree/bindings/power/reset/hardkernel,odroid-go-ultra-poweroff.yaml
-> new file mode 100644
-> index 000000000000..65e42258717c
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/reset/hardkernel,odroid-go-ultra-poweroff.yaml
-> @@ -0,0 +1,42 @@
-> +# SPDX-License-Identifier: GPL-2.0
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/reset/hardkernel,odroid-go-ultra-poweroff.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Hardkernel Odroid Go Ultra poweroff
-> +
-> +maintainers:
-> +  - Neil Armstrong <neil.armstrong@linaro.org>
-> +
-> +description:
-> +  The Hardkernel Odroid Go Ultra poweroff scheme requires requesting a poweroff
-> +  to its two PMICs in order, this represents the poweroff scheme needed to complete
-> +  a clean poeroff of the system.
 
-You don't really need a node for this. Test against the top level 
-compatible and then find the PMIC nodes by their compatible strings.
-
-> +
-> +properties:
-> +  compatible:
-> +    const: hardkernel,odroid-go-ultra-poweroff
-> +
-> +  hardkernel,rk817-pmic:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: Phandle to the RK817 PMIC node
-> +
-> +  hardkernel,rk818-pmic:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: Phandle to the RK818 PMIC node
-> +
-> +required:
-> +  - compatible
-> +  - hardkernel,rk817-pmic
-> +  - hardkernel,rk818-pmic
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    poweroff {
-> +        compatible = "hardkernel,odroid-go-ultra-poweroff";
-> +        hardkernel,rk817-pmic = <&rk817>;
-> +        hardkernel,rk818-pmic = <&rk818>;
-> +    };
-> 
-> -- 
-> b4 0.10.1
-> 
+Acked-by: Rob Herring <robh@kernel.org>
