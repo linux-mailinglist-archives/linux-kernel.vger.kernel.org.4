@@ -2,73 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A14CF616BCB
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:14:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E08D0616BD0
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:16:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230253AbiKBSOg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 14:14:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42498 "EHLO
+        id S230489AbiKBSP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 14:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230199AbiKBSOc (ORCPT
+        with ESMTP id S230435AbiKBSPz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:14:32 -0400
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60D4023BC1
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:14:31 -0700 (PDT)
-Received: by mail-il1-f200.google.com with SMTP id d19-20020a056e020c1300b00300b5a12c44so8987163ile.15
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 11:14:31 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:in-reply-to:date:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mrPtUGwKy/PHlitjy/whP0A7GNzhbWYSIBUmh5L+PS0=;
-        b=F7OPQOhWJok3zkRtmQXwt8EK8UPgEkNqw5Z/QneE9sf5Qk2G9pHUcI9eXwrVWLy85j
-         hCKLCnIehe4Zpd2SvUnTBE2ftPzumPxPjINZufI6Q3Vg8/hw4P5lN5zJkqAIJg0ilzHc
-         9jWN+H6v79rAYXYChLOFWriBAN2f6CY2rlzfsv7ZAQ/E5U+FS2DqK0T/kkXMnM2PDjhn
-         p+E866EG+twWCF1fzKxZdKpkUPaZegD1etkIKUYktHaY+H+F1cp+rD1JU+ebTAHC2tnR
-         h9dP6W8Bd1hbG5yxIfJkjGE8uAknK4bXfaFeWllC9K3vvEuSwh/BGsrsjpAx1sXnKep6
-         yREw==
-X-Gm-Message-State: ACrzQf2nJuOqsn1WZybebSwrIfPAZfSn1u7MHnmwlgkyHWlh7fqUMKqz
-        7H0nN4EjT0VtHgRq4LYrIDbU9EsPHr/js8mbllbCQqBTcIgQ
-X-Google-Smtp-Source: AMsMyM6Ts05xrBZy3OHeDywLh4tO+KHxpOy0FToNdS9vo4StWp3uNo8ICvNqaBRzRQo4tf3E+WrsV/ZI9YyNn+10g+idAJrfW5Wg
+        Wed, 2 Nov 2022 14:15:55 -0400
+Received: from mail-m118207.qiye.163.com (mail-m118207.qiye.163.com [115.236.118.207])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 392B81DF02
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:15:54 -0700 (PDT)
+Received: from lyc-workstation.. (unknown [221.212.176.48])
+        by mail-m118207.qiye.163.com (HMail) with ESMTPA id 2C69B9021E0;
+        Thu,  3 Nov 2022 02:15:52 +0800 (CST)
+From:   YingChi Long <me@inclyc.cn>
+To:     bp@alien8.de
+Cc:     chang.seok.bae@intel.com, dave.hansen@linux.intel.com,
+        david.laight@aculab.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org, me@inclyc.cn, mingo@redhat.com,
+        ndesaulniers@google.com, pbonzini@redhat.com, tglx@linutronix.de,
+        x86@kernel.org
+Subject: [PATCH v4] x86/fpu: use _Alignof to avoid UB in TYPE_ALIGN
+Date:   Thu,  3 Nov 2022 02:14:25 +0800
+Message-Id: <20221102181425.2122504-1-me@inclyc.cn>
+X-Mailer: git-send-email 2.37.4
+In-Reply-To: <Y2KhCyofvfG5W5hE@zn.tnic>
+References: <Y2KhCyofvfG5W5hE@zn.tnic>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:13c4:b0:300:ac44:b69c with SMTP id
- v4-20020a056e0213c400b00300ac44b69cmr12482117ilj.300.1667412865355; Wed, 02
- Nov 2022 11:14:25 -0700 (PDT)
-Date:   Wed, 02 Nov 2022 11:14:25 -0700
-In-Reply-To: <20221102135324.3935-1-hdanton@sina.com>
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <00000000000088962f05ec80cf2b@google.com>
-Subject: Re: [syzbot] possible deadlock in static_key_slow_inc (2)
-From:   syzbot <syzbot+c39682e86c9d84152f93@syzkaller.appspotmail.com>
-To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+        tZV1koWUFPN1dZLVlBSVdZDwkaFQgSH1lBWRoZShhWH0wYGB0YHRpLHkJJVQIWExYaEhckFA4PWV
+        dZGBILWUFZSUlKVUlKSVVKTE1VT0NZV1kWGg8SFR0UWUFZT0tIVUpKS0hNSlVKS0tVS1kG
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MRg6Igw6FTlLCTQfHykBTxMR
+        TSgaFDJVSlVKTU1MT0pJQk5ISkNNVTMWGhIXVRYeOxIVGBcCGFUYFUVZV1kSC1lBWUlJSlVJSklV
+        SkxNVU9DWVdZCAFZQUhNTkw3Bg++
+X-HM-Tid: 0a84398e868b2d29kusn2c69b9021e0
+X-Spam-Status: No, score=0.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+Link: https://www.open-std.org/jtc1/sc22/wg14/www/docs/n2350.htm
 
-syzbot tried to test the proposed patch but the build/boot failed:
+WG14 N2350 made very clear that it is an undefined behavior having type
+definitions with in "offsetof". Replace the macro "TYPE_ALIGN" to
+builtin "_Alignof" to avoid undefined behavior.
 
-kernel/cgroup/legacy_freezer.c:353:35: error: passing argument 1 of 'static_key_slow_inc_cpuslocked' from incompatible pointer type [-Werror=incompatible-pointer-types]
-kernel/cgroup/legacy_freezer.c:364:36: error: passing argument 1 of 'static_key_slow_dec_cpuslocked' from incompatible pointer type [-Werror=incompatible-pointer-types]
-kernel/cgroup/legacy_freezer.c:382:2: error: implicit declaration of function 'cpus_read_lock'; did you mean 'rcu_read_lock'? [-Werror=implicit-function-declaration]
-kernel/cgroup/legacy_freezer.c:411:2: error: implicit declaration of function 'cpus_read_unlock'; did you mean 'rcu_read_unlock'? [-Werror=implicit-function-declaration]
+I've grepped all source files to find any type definitions within
+"offsetof".
 
+    offsetof\(struct .*\{ .*,
 
-Tested on:
+This implementation of macro "TYPE_ALIGN" seemes to be the only case of
+type definitions within offsetof in the kernel codebase.
 
-commit:         a2c65a9d net: dsa: fall back to default tagger if we c..
-git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git
-dashboard link: https://syzkaller.appspot.com/bug?extid=c39682e86c9d84152f93
-compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-patch:          https://syzkaller.appspot.com/x/patch.diff?x=127fa2ca880000
+Link: https://reviews.llvm.org/D133574
+
+A clang patch has been made that rejects any definitions within
+__builtin_offsetof (usually #defined with "offsetof"), and tested
+compiling the kernel using clang, there are no error if this patch
+applied.
+
+Link: https://gcc.gnu.org/onlinedocs/gcc/Alignment.html
+Link: https://godbolt.org/z/sPs1GEhbT
+
+ISO C11 _Alignof is subtly different from the GNU C extension
+__alignof__. __alignof__ is the preferred alignment and _Alignof the
+minimal alignment. For 'long long' on x86 these are 8 and 4
+respectively.
+
+The macro TYPE_ALIGN has behavior that matches _Alignof rather than
+__alignof__.
+
+Signed-off-by: YingChi Long <me@inclyc.cn>
+Reviewed-by: Nick Desaulniers <ndesaulniers@google.com>
+---
+v4:
+- commit message changes suggested by Borislav Petkov
+
+v3:
+- commit message changes suggested by Nick and David
+
+v3: https://lore.kernel.org/all/20221006141442.2475978-1-me@inclyc.cn/
+
+v2: https://lore.kernel.org/all/20220927153338.4177854-1-me@inclyc.cn/
+---
+ arch/x86/kernel/fpu/init.c | 7 ++-----
+ 1 file changed, 2 insertions(+), 5 deletions(-)
+
+diff --git a/arch/x86/kernel/fpu/init.c b/arch/x86/kernel/fpu/init.c
+index 8946f89761cc..851eb13edc01 100644
+--- a/arch/x86/kernel/fpu/init.c
++++ b/arch/x86/kernel/fpu/init.c
+@@ -133,9 +133,6 @@ static void __init fpu__init_system_generic(void)
+ 	fpu__init_system_mxcsr();
+ }
+
+-/* Get alignment of the TYPE. */
+-#define TYPE_ALIGN(TYPE) offsetof(struct { char x; TYPE test; }, test)
+-
+ /*
+  * Enforce that 'MEMBER' is the last field of 'TYPE'.
+  *
+@@ -143,8 +140,8 @@ static void __init fpu__init_system_generic(void)
+  * because that's how C aligns structs.
+  */
+ #define CHECK_MEMBER_AT_END_OF(TYPE, MEMBER) \
+-	BUILD_BUG_ON(sizeof(TYPE) != ALIGN(offsetofend(TYPE, MEMBER), \
+-					   TYPE_ALIGN(TYPE)))
++	BUILD_BUG_ON(sizeof(TYPE) !=         \
++		     ALIGN(offsetofend(TYPE, MEMBER), _Alignof(TYPE)))
+
+ /*
+  * We append the 'struct fpu' to the task_struct:
+--
+2.37.4
 
