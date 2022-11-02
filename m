@@ -2,96 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2C4D616C40
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:33:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB78E616C67
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:36:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbiKBSdp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 14:33:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55542 "EHLO
+        id S231265AbiKBSg0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 14:36:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56698 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231152AbiKBSdm (ORCPT
+        with ESMTP id S231181AbiKBSgJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:33:42 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3919E2EF5A
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:33:41 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id z30so12326610qkz.13
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 11:33:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Q92riiS7ubzxoWF6UuL2jfQgGcw0qGoG//c8sRPlZ6Q=;
-        b=kGcLjV7SmNNbbGA/s5728760o5U/Yl+OT//qiK+lbm1ZFISPUnYEn8Gi1sB78euRC8
-         vszdivvxXScOtJ1ZFruWtROVGOoHJ0As/vBBHiwRZrQyUCENP770io+HaedrF9VMiZvP
-         uq0YYkkB1g/zE4DSaz1E9mNmI/Fwubaj7oVYqEZl7yr1Mlxqv+DGVt6lv9auwZEKlWZ0
-         BshgmtK3Ko3qg950J6/jr+hJWnQWCCpfZfB5xf8R1w36/bh7O/Xa979/DozoS7RwRcxT
-         /XgllTzxF0MZNp2G5hkr+JhWfDvtdGmmV2WUgtYtYfyx6WDXOrYQeqnWs7Cg9SKMUO/V
-         Zp9Q==
+        Wed, 2 Nov 2022 14:36:09 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA46C2F676
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:34:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667414061;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=u2LZi3yU3n7R/W4GuO9j//JNe6TLauoqoSJ+PuigISI=;
+        b=Y6RmZFOR73EALSyfaV2bE0L24NL5a41dlOm8eBdCP9amuAKVt23asQgFgwCxZGIS0O9P8A
+        lRHAmPAYusRvClFbzkTs/wr9srl8z3P1XOuJMFkQoCzdzl1t+VDXV6x1107Y7J1g9nkSkm
+        9ZqoCyjc6DypKIKWoie1+/4B1vPUXQ4=
+Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
+ [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-369-uTSVHww9Paiazf0g_1oFwg-1; Wed, 02 Nov 2022 14:34:20 -0400
+X-MC-Unique: uTSVHww9Paiazf0g_1oFwg-1
+Received: by mail-qt1-f198.google.com with SMTP id g3-20020ac84b63000000b003a529c62a92so6145112qts.23
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 11:34:19 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Q92riiS7ubzxoWF6UuL2jfQgGcw0qGoG//c8sRPlZ6Q=;
-        b=h+MtV92IZLdGADjSbK5T6lGf13h7P1cwwl3+nqKaK9ZxHdLQ5ocBP2f9IZhkoGjO6x
-         gI0V9C1s7r14gMPFfKKUoDLMK9RzT8ubezoFlhg4Lj81Xg3ST1JKmMUmfrq67aUzMRZr
-         8XvgnZ9wgHK+KyJEczeSWcwQVE2IYTx8gJ4sWMpbHj2El09ozSd47jr++ptKHU5fgEsu
-         j7naDOk+8+u4tLOdRHymjS3KB8zFf9Oq+c86FqF/RSpkwLALZfAkE6mvKx5+LFveOxO7
-         ulUvwGy+KEpOzciXMDRk8HkSGZW1JxccHbNOze2X0PRRzC3mHorcohzaSD3LpxideqUi
-         YGkw==
-X-Gm-Message-State: ACrzQf1CL4A0aCZGbe+HRC3JoXblelIFxnQbtPCB5moy1trnME3rnvg8
-        W58lIU/RMA09Vz6tdDMKFIklCg==
-X-Google-Smtp-Source: AMsMyM6n+O//qDHsWRWUhV8NoPCYi8OjtMbiw8u1VyQm+AKGMgDct3y60PhFqUC4AGL9jpSTDfaFcQ==
-X-Received: by 2002:a05:620a:ecd:b0:6fa:2bb0:7d86 with SMTP id x13-20020a05620a0ecd00b006fa2bb07d86mr12957581qkm.296.1667414020390;
-        Wed, 02 Nov 2022 11:33:40 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
-        by smtp.gmail.com with ESMTPSA id cm8-20020a05622a250800b003a530a32f67sm3506976qtb.65.2022.11.02.11.33.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 11:33:39 -0700 (PDT)
-Message-ID: <9619c472-4fad-c71c-591c-12f5ef7e0a79@linaro.org>
-Date:   Wed, 2 Nov 2022 14:33:38 -0400
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=u2LZi3yU3n7R/W4GuO9j//JNe6TLauoqoSJ+PuigISI=;
+        b=P0C4VrEfH+CGBvGfQ2BYcHHYGoUz7nOOlVw8En80/tvY0RhuWgEk083ARfcn42NbVD
+         H+xiTPcdbdnpHMSx5cTMR6Wh/aKpdEsN9bioStae8xnD7bXrVYXrIPgv7zJ9L0SeglvA
+         uSDV6w7yEgvu9eCq18IvnmB8XPmPKSW2YRCjtvKgCwnoYEMavBJHfoX851mdngQZhn3a
+         a9/tCatFqxtU4zMSiBas5NKBXIGYqhY+pXudztEcxkX+PMz8wife229EIp30q+PT4tGS
+         W9LDXSCgtNEc95PxQrzkQJfdwBT7C8RW5hXKkZBPQF9SCDSJBNX0gboHKiQkN/HX3Chv
+         +9ew==
+X-Gm-Message-State: ACrzQf15a4UHo+NDfHFkbUoyj4z0pHg6Tp9VDirHkWZXtuEe12wrAXhD
+        PU885vomo9oQY1hMPmoyZJoFsppLAEBOFKtm0dkCtkBIZUjIHCYLPbRs79xTK+YBh4AwRiprU9W
+        Vtav44DFb3MbXpwGIh/Z9FwRS
+X-Received: by 2002:a05:6214:20e2:b0:4bb:7aa5:bf0a with SMTP id 2-20020a05621420e200b004bb7aa5bf0amr22430252qvk.112.1667414059596;
+        Wed, 02 Nov 2022 11:34:19 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5c7dwIqNgpqOLvhPHAiOA2g1SXDg3luIhlombymy6f4ZTzz3+a5A/2CAiuRdtosOetG1hbOw==
+X-Received: by 2002:a05:6214:20e2:b0:4bb:7aa5:bf0a with SMTP id 2-20020a05621420e200b004bb7aa5bf0amr22430223qvk.112.1667414059378;
+        Wed, 02 Nov 2022 11:34:19 -0700 (PDT)
+Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
+        by smtp.gmail.com with ESMTPSA id f20-20020a05620a409400b006bbf85cad0fsm9161228qko.20.2022.11.02.11.34.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 11:34:18 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 14:34:17 -0400
+From:   Peter Xu <peterx@redhat.com>
+To:     Anatoly Pugachev <matorola@gmail.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     David Miller <davem@davemloft.net>, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org, Hugh Dickins <hughd@google.com>,
+        "Kirill A . Shutemov" <kirill@shutemov.name>,
+        Alistair Popple <apopple@nvidia.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Minchan Kim <minchan@kernel.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        David Hildenbrand <david@redhat.com>,
+        Andi Kleen <andi.kleen@intel.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Huang Ying <ying.huang@intel.com>,
+        Vlastimil Babka <vbabka@suse.cz>, sparclinux@vger.kernel.org
+Subject: Re: dpkg fails on sparc64 (was: [PATCH v4 4/7] mm/thp: Carry over
+ dirty bit when thp splits on pmd)
+Message-ID: <Y2K4Kd8JRWa1noLB@x1n>
+References: <20220811161331.37055-1-peterx@redhat.com>
+ <20220811161331.37055-5-peterx@redhat.com>
+ <20221021160603.GA23307@u164.east.ru>
+ <Y1Wbi4yyVvDtg4zN@x1n>
+ <CADxRZqy+cMHN4FjtDr7-LOyVf0y+G8MPiBoGiTEsSj48jBfVnw@mail.gmail.com>
+ <Y1f2IR+h4i2+/swj@x1n>
+ <CADxRZqz+Sk=yxrJQ8B7UVkrcct9w6nUeiaaVn7QTFL59isFLDA@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v2 1/2] dt-bindings: iio/adc: qcom,spmi-iadc: use double
- compatibles
-Content-Language: en-US
-To:     Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org
-Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
-        afd@ti.com, Jonathan Cameron <jic23@kernel.org>,
-        Lars-Peter Clausen <lars@metafoo.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221031182456.952648-1-luca@z3ntu.xyz>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221031182456.952648-1-luca@z3ntu.xyz>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <CADxRZqz+Sk=yxrJQ8B7UVkrcct9w6nUeiaaVn7QTFL59isFLDA@mail.gmail.com>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/10/2022 14:24, Luca Weiss wrote:
-> As in other bindings, let's use specific compatibles together with the
-> fallback compatible. Adjust the bindings for it.
+On Tue, Nov 01, 2022 at 04:13:20PM +0300, Anatoly Pugachev wrote:
+> On Tue, Oct 25, 2022 at 5:43 PM Peter Xu <peterx@redhat.com> wrote:
+> >
+> > On Tue, Oct 25, 2022 at 01:22:45PM +0300, Anatoly Pugachev wrote:
+> > > On Sun, Oct 23, 2022 at 10:53 PM Peter Xu <peterx@redhat.com> wrote:
+> > > > On Fri, Oct 21, 2022 at 07:06:03PM +0300, Anatoly Pugachev wrote:
+> > > > >
+> > > > >     Link: https://lkml.kernel.org/r/20220811161331.37055-5-peterx@redhat.com
+> >
+> > Maybe we need to have the minimum revert for v6.1 before we have more
+> > clues.
 > 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
-> Changes in v2:
-> * New patch
+> Just a quick update on 6.1.0-rc3
+> 
+> Tested again with 6.1.0-rc3, segfaults dpkg... applied patch - no dpkg
+> segfaults.
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Andrew, shall we apply the minimum revert for this patch for now?  The
+one-liner was attached in this email I replied to Anatoly:
 
-Best regards,
-Krzysztof
+https://lore.kernel.org/all/Y1Wbi4yyVvDtg4zN@x1n/
+
+Thanks,
+
+-- 
+Peter Xu
 
