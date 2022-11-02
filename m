@@ -2,211 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0BB1615F12
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:09:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2340615EF9
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:09:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231134AbiKBJJy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 05:09:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39562 "EHLO
+        id S229950AbiKBJJK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 05:09:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39494 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230400AbiKBJJA (ORCPT
+        with ESMTP id S229650AbiKBJIk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 05:09:00 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8144827FE8;
-        Wed,  2 Nov 2022 02:08:58 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 2CC4AB8216C;
-        Wed,  2 Nov 2022 09:08:57 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CD2C4C43140;
-        Wed,  2 Nov 2022 09:08:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667380135;
-        bh=K0quaz+Wfm7vLUHKdy0xGgalRWdTdZS5W06aFhvSiKw=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=SRg6Pw5mWkRR1qbrh14cI4Q1E4F1kwqcD2A8jdseXcDVTOUL7JX69X+kKpEWXA/tF
-         dIDwk/SlfzHt1LBYTArtqAQRUFiqy0SBCLA6jVw+1ftDvDzCv5KTp0ATbn6c8x34A5
-         khhxI9f7ZGYfsaB9kPWn0w0LT2xNMgtLwiaijVTPhW0VjLaVs7XF9B0cIRRtkzDQeJ
-         BwQwUEvJ4TDGDVsAGvvLAh45G9Do0yC9+lftpmsMWGbq3Ge3I22fGRcz0Murv81HPH
-         CA1HalWm4/iTmG3HN2QLdjDtNfa4SeVVH0StfAQoN75P9zuDkIWM5HygjAoUeZRCU9
-         HP/yTi4L84eqQ==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan+linaro@kernel.org>)
-        id 1oq9jj-0006B7-OF; Wed, 02 Nov 2022 10:08:39 +0100
-From:   Johan Hovold <johan+linaro@kernel.org>
-To:     Lorenzo Pieralisi <lpieralisi@kernel.org>,
-        stanimir.k.varbanov@gmail.com
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        =?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-        Brian Masney <bmasney@redhat.com>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pci@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Georgi Djakov <djakov@kernel.org>
-Subject: [PATCH v3 2/2] PCI: qcom: Add basic interconnect support
-Date:   Wed,  2 Nov 2022 10:07:05 +0100
-Message-Id: <20221102090705.23634-3-johan+linaro@kernel.org>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221102090705.23634-1-johan+linaro@kernel.org>
-References: <20221102090705.23634-1-johan+linaro@kernel.org>
+        Wed, 2 Nov 2022 05:08:40 -0400
+Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D6C7F2037D
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 02:08:38 -0700 (PDT)
+Received: by mail-pg1-x533.google.com with SMTP id s196so15703429pgs.3
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 02:08:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HD0bdYs4uYk5v3EHw8KUqVXfFnsjPtpcr4RW87EyNM8=;
+        b=psOLh3CR2Munijk8osqBwWon2rheb999k0sR7fQWluVBKKVs4zYnIBNVqm0o7zBmrW
+         Jb6hMszS7kp5PfuAVaz4w2xRPDMK4n6IVJT3PVa0xaFZ71A+Wq339qVIW3Rg8E2iv3we
+         k77qxRwfP/+h7PRm5AL3004NoD5soLS/IveE6Z6MwnXsaczcF1ZyuqB5hDxaEs3xVk6Q
+         XPMeBPQJDC2rKKLtKm6DRNzrU5aVUlyCnjydsMUFPOjChohdREwQ4yocz8pstzCvVdgt
+         d7OPsNEqV+e9g1LkdrqV5v8YJ7GO8isnVj1axjPbpnrTKklvPvCRWaRzRwNVNeVzOOzD
+         E1dg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HD0bdYs4uYk5v3EHw8KUqVXfFnsjPtpcr4RW87EyNM8=;
+        b=ZvjQKnrIE1cguOuq2mHzQKI8QshekEXatfNxAofFYrhBdu26WcCbq6GELchjBgs+9Z
+         wknbsUADQnp/kmqcpUS50RtHHHXKu3LoMrfl81+KY8o2w+OxtrbnqaRNEZuSSxykIs9B
+         mJDRt1hWqkh4xWnsQ0hWixlw5LWQRsNRByIJrGs24w/lh1996a31XVwi7VMfg8n52tMk
+         af7X4eDn6jZ+sEIlPrhY0sbZxY5IjZpqJe3ihhMbH0kx5dhxZdDrMztSoEKh+Xq4YCXy
+         tVcCfgyADWrRkJNMfFy4th6WVbjWtjZPi6HBKL7CAMdMnuqmnHcvulnzIp5WuPxFvfNy
+         XR2g==
+X-Gm-Message-State: ACrzQf2KXY1+jRfEIysHQjOwOVyiUiblXk5jbrHuvNW4O7gu8CoBmY6e
+        JVJvFQbdkrGJs9/Vhgoyih6u
+X-Google-Smtp-Source: AMsMyM4WNTqySmX6NVkI0Wj/L6h7nVPA0AUcGX0BpHNKlQUsAVkkgNmAnj59q4LStiF8nqewZM7ViA==
+X-Received: by 2002:a05:6a00:2402:b0:52c:81cf:8df8 with SMTP id z2-20020a056a00240200b0052c81cf8df8mr24606462pfh.60.1667380118322;
+        Wed, 02 Nov 2022 02:08:38 -0700 (PDT)
+Received: from localhost.localdomain ([117.193.209.178])
+        by smtp.gmail.com with ESMTPSA id c12-20020a170902d48c00b0017f36638010sm7856126plg.276.2022.11.02.02.08.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 02:08:37 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     andersson@kernel.org, viresh.kumar@linaro.org,
+        krzysztof.kozlowski+dt@linaro.org, rafael@kernel.org,
+        robh+dt@kernel.org
+Cc:     johan@kernel.org, devicetree@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v4 0/3] qcom-cpufreq-hw: Add CPU clock provider support
+Date:   Wed,  2 Nov 2022 14:38:15 +0530
+Message-Id: <20221102090818.65321-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Qualcomm platforms like SC8280XP and SA8540P, interconnect bandwidth
-must be requested before enabling interconnect clocks.
+Hello,
 
-Add basic support for managing an optional "pcie-mem" interconnect path
-by setting a low constraint before enabling clocks and updating it after
-the link is up.
+This series adds clock provider support to the Qcom CPUFreq driver for
+supplying the clocks to the CPU cores in Qcom SoCs.
 
-Note that it is not possible for a controller driver to set anything but
-a maximum peak bandwidth as expected average bandwidth will vary with
-use case and actual use (and power policy?). This very much remains an
-unresolved problem with the interconnect framework.
+The Qualcomm platforms making use of CPUFreq HW Engine (EPSS/OSM) supply
+clocks to the CPU cores. But this is not represented clearly in devicetree.
+There is no clock coming out of the CPUFreq HW node to the CPU. This created
+an issue [1] with the OPP core when a recent enhancement series was submitted.
+Eventhough the issue got fixed in the OPP framework in the meantime, that's
+not a proper solution and this series aims to fix it properly.
 
-Also note that no constraint is set for the SC8280XP/SA8540P "cpu-pcie"
-path for now as it is not clear what an appropriate constraint would be
-(and the system does not crash when left unspecified).
+There was also an attempt made by Viresh [2] to fix the issue by moving the
+clocks supplied to the CPUFreq HW node to the CPU. But that was not accepted
+since those clocks belong to the CPUFreq HW node only.
 
-Fixes: 70574511f3fc ("PCI: qcom: Add support for SC8280XP")
-Reviewed-by: Brian Masney <bmasney@redhat.com>
-Acked-by: Georgi Djakov <djakov@kernel.org>
-Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
----
- drivers/pci/controller/dwc/pcie-qcom.c | 76 ++++++++++++++++++++++++++
- 1 file changed, 76 insertions(+)
+The proposal here is to add clock provider support to the Qcom CPUFreq HW
+driver to supply clocks to the CPUs that comes out of the EPSS/OSM block.
+This correctly reflects the hardware implementation.
 
-diff --git a/drivers/pci/controller/dwc/pcie-qcom.c b/drivers/pci/controller/dwc/pcie-qcom.c
-index 7db94a22238d..91b113d0c02a 100644
---- a/drivers/pci/controller/dwc/pcie-qcom.c
-+++ b/drivers/pci/controller/dwc/pcie-qcom.c
-@@ -12,6 +12,7 @@
- #include <linux/crc8.h>
- #include <linux/delay.h>
- #include <linux/gpio/consumer.h>
-+#include <linux/interconnect.h>
- #include <linux/interrupt.h>
- #include <linux/io.h>
- #include <linux/iopoll.h>
-@@ -224,6 +225,7 @@ struct qcom_pcie {
- 	union qcom_pcie_resources res;
- 	struct phy *phy;
- 	struct gpio_desc *reset;
-+	struct icc_path *icc_mem;
- 	const struct qcom_pcie_cfg *cfg;
- };
- 
-@@ -1644,6 +1646,74 @@ static const struct dw_pcie_ops dw_pcie_ops = {
- 	.start_link = qcom_pcie_start_link,
- };
- 
-+static int qcom_pcie_icc_init(struct qcom_pcie *pcie)
-+{
-+	struct dw_pcie *pci = pcie->pci;
-+	int ret;
-+
-+	pcie->icc_mem = devm_of_icc_get(pci->dev, "pcie-mem");
-+	if (IS_ERR(pcie->icc_mem))
-+		return PTR_ERR(pcie->icc_mem);
-+
-+	/*
-+	 * Some Qualcomm platforms require interconnect bandwidth constraints
-+	 * to be set before enabling interconnect clocks.
-+	 *
-+	 * Set an initial peak bandwidth corresponding to single-lane Gen 1
-+	 * for the pcie-mem path.
-+	 */
-+	ret = icc_set_bw(pcie->icc_mem, 0, MBps_to_icc(250));
-+	if (ret) {
-+		dev_err(pci->dev, "failed to set interconnect bandwidth: %d\n",
-+			ret);
-+		return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void qcom_pcie_icc_update(struct qcom_pcie *pcie)
-+{
-+	struct dw_pcie *pci = pcie->pci;
-+	u32 offset, status, bw;
-+	int speed, width;
-+	int ret;
-+
-+	if (!pcie->icc_mem)
-+		return;
-+
-+	offset = dw_pcie_find_capability(pci, PCI_CAP_ID_EXP);
-+	status = readw(pci->dbi_base + offset + PCI_EXP_LNKSTA);
-+
-+	/* Only update constraints if link is up. */
-+	if (!(status & PCI_EXP_LNKSTA_DLLLA))
-+		return;
-+
-+	speed = FIELD_GET(PCI_EXP_LNKSTA_CLS, status);
-+	width = FIELD_GET(PCI_EXP_LNKSTA_NLW, status);
-+
-+	switch (speed) {
-+	case 1:
-+		bw = MBps_to_icc(250);
-+		break;
-+	case 2:
-+		bw = MBps_to_icc(500);
-+		break;
-+	default:
-+		WARN_ON_ONCE(1);
-+		fallthrough;
-+	case 3:
-+		bw = MBps_to_icc(985);
-+		break;
-+	}
-+
-+	ret = icc_set_bw(pcie->icc_mem, 0, width * bw);
-+	if (ret) {
-+		dev_err(pci->dev, "failed to set interconnect bandwidth: %d\n",
-+			ret);
-+	}
-+}
-+
- static int qcom_pcie_probe(struct platform_device *pdev)
- {
- 	struct device *dev = &pdev->dev;
-@@ -1704,6 +1774,10 @@ static int qcom_pcie_probe(struct platform_device *pdev)
- 		goto err_pm_runtime_put;
- 	}
- 
-+	ret = qcom_pcie_icc_init(pcie);
-+	if (ret)
-+		goto err_pm_runtime_put;
-+
- 	ret = pcie->cfg->ops->get_resources(pcie);
- 	if (ret)
- 		goto err_pm_runtime_put;
-@@ -1722,6 +1796,8 @@ static int qcom_pcie_probe(struct platform_device *pdev)
- 		goto err_phy_exit;
- 	}
- 
-+	qcom_pcie_icc_update(pcie);
-+
- 	return 0;
- 
- err_phy_exit:
+The clock provider is a simple one that just provides the frequency of the
+clocks supplied to each frequency domain in the SoC using .recalc_rate()
+callback. The frequency supplied by the driver will be the actual frequency
+that comes out of the EPSS/OSM block after the DCVS operation. This frequency
+is not same as what the CPUFreq framework has set but it is the one that gets
+supplied to the CPUs after throttling by LMh.
+
+This series has been tested on SM8450 based dev board with the OPP hack removed
+and hence there is a DTS change only for that platform. Once this series gets
+accepted, rest of the platform DTS can also be modified and finally the hack on
+the OPP core can be dropped.
+
+Thanks,
+Mani
+
+[1] https://lore.kernel.org/lkml/YsxSkswzsqgMOc0l@hovoldconsulting.com/
+[2] https://lore.kernel.org/lkml/20220801054255.GA12039@thinkpad/t/
+
+Changes in v4:
+
+* Rebased on top of cpufreq/arm/linux-next branch
+
+Changes in v3:
+
+* Submitted the cpufreq driver cleanup patches as a separate series as
+  suggested by Viresh
+* Removed static keyword from clk_init_data declaration
+
+Changes in v2:
+
+* Moved the qcom_cpufreq_data allocation to probe
+* Added single clock provider with multiple clks for each freq domain
+* Moved soc_data to qcom_cpufreq struct
+* Added Rob's review for binding
+
+Manivannan Sadhasivam (3):
+  dt-bindings: cpufreq: cpufreq-qcom-hw: Add cpufreq clock provider
+  arm64: dts: qcom: sm8450: Supply clock from cpufreq node to CPUs
+  cpufreq: qcom-hw: Add CPU clock provider support
+
+ .../bindings/cpufreq/cpufreq-qcom-hw.yaml     | 12 ++++++
+ arch/arm64/boot/dts/qcom/sm8450.dtsi          |  9 ++++
+ drivers/cpufreq/qcom-cpufreq-hw.c             | 43 +++++++++++++++++++
+ 3 files changed, 64 insertions(+)
+
 -- 
-2.37.3
+2.25.1
 
