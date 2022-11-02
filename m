@@ -2,55 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F304D615F90
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:22:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9C0D0615F93
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:23:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231423AbiKBJWu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 05:22:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56518 "EHLO
+        id S230375AbiKBJXK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 05:23:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231384AbiKBJVV (ORCPT
+        with ESMTP id S231496AbiKBJVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 05:21:21 -0400
+        Wed, 2 Nov 2022 05:21:22 -0400
 Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 69BAF65B2;
-        Wed,  2 Nov 2022 02:20:09 -0700 (PDT)
-Date:   Wed, 02 Nov 2022 09:20:06 -0000
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AA8AC65F6;
+        Wed,  2 Nov 2022 02:20:10 -0700 (PDT)
+Date:   Wed, 02 Nov 2022 09:20:07 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667380808;
+        s=2020; t=1667380809;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nudvF3fvqi8ECd2W4ikTN2udZW9zEH3pE60NXtrDRM4=;
-        b=K7zPOdxMNBmKhsvhY+60TS80VAORApqH36t9c3E+rqwpxDi7wEI+k3YJVt1eBn0+cFph/m
-        fcBYC5xT/FnB8JhsL2LhASlP239XH0pqUohKQ9iVmtvGCOnDMaM27j13T1Ku+4vJRRXQ4P
-        jBk+i/noMmjFVdehSL2MAhVIm6+25vBVuR440me0enxn3Yu/UzaYN6mY67O44g6JwcRz8E
-        XHuScW8R32C/G4IGy34EzKt4LyJKaUFnijKmYFLC9JERqNDrmG6Cpq7klNZ0KNWODGg/LS
-        Eogm+cGz8v0C2wKDf8ZldljVdpfGz7zEb6eT8SrqhTWAIRDoDZAYEffLJEFejg==
+        bh=/1hOlCFXWXbokLJXphBjWmebB9fCZGdGULZTZDJxqFc=;
+        b=z/CI8IXsGrWbYOfyuQaLZ0SDqpZT8T2riOAxz7x/Uf7Ja+hjb3vTBzJ3le4f/ROdIKMl38
+        z4j3w93nCo90korkUyUntWoGEm150XDjow2+pq+fnWXvuwyhwVelUytroTin66oeza0WUc
+        5rwXKQf7iwLwymElnRGoxWWWOkxeIZaQKqo8yt+qdPJaR2xwI59A7rlf0Nkv6Y0y0w/5T4
+        1J3V1mBnbgfbC7dHNiTtcAXcdEmcv+QNFwzSf11IXS5bZHcXPSNGRW1HDmpDunIiiIn+Xh
+        JmYhx/AyuooS6z7Igegh9+zovMbtzgHz1ZG6iz7anY1GyQcchA7iCIa0EMKb8w==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667380808;
+        s=2020e; t=1667380809;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=nudvF3fvqi8ECd2W4ikTN2udZW9zEH3pE60NXtrDRM4=;
-        b=EOrPgFGiLYvA6KbNMxAlS7bUq5buxfoeAxaQl+vIp7D2dd8kwpYDmSGuDWyvbn8+q9pHlK
-        0ryYLpYkPxa6mXDg==
+        bh=/1hOlCFXWXbokLJXphBjWmebB9fCZGdGULZTZDJxqFc=;
+        b=7WtS51dSoXz5BrMbzaVUMtZ/dgdHKJZUdlV02iuVcR4uLXhy6xvBxoDxUeB3ZtO6n+eWya
+        +BVfXsNNwgBndaBw==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/core] objtool: Slice up elf_create_section_symbol()
-Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>,
-        Yujie Liu <yujie.liu@intel.com>, x86@kernel.org,
+Subject: [tip: x86/core] kallsyms: Revert "Take callthunks into account"
+Cc:     "Reported-by: kernel test robot" <yujie.liu@intel.com>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
-In-Reply-To: <20221028194453.396634875@infradead.org>
-References: <20221028194453.396634875@infradead.org>
+In-Reply-To: <202210241614.2ae4c1f5-yujie.liu@intel.com>
+References: <202210241614.2ae4c1f5-yujie.liu@intel.com>
 MIME-Version: 1.0
-Message-ID: <166738080669.7716.12446365852735816600.tip-bot2@tip-bot2>
+Message-ID: <166738080795.7716.3207497322812603185.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -66,121 +66,152 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/core branch of tip:
 
-Commit-ID:     4c91be8e926c6b3734d59b9348e305431484d42b
-Gitweb:        https://git.kernel.org/tip/4c91be8e926c6b3734d59b9348e305431484d42b
+Commit-ID:     5ebddd7c4951c50142bcb239d4c6a82eff15759e
+Gitweb:        https://git.kernel.org/tip/5ebddd7c4951c50142bcb239d4c6a82eff15759e
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Fri, 28 Oct 2022 15:49:26 +02:00
+AuthorDate:    Fri, 28 Oct 2022 15:26:51 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
 CommitterDate: Tue, 01 Nov 2022 13:44:08 +01:00
 
-objtool: Slice up elf_create_section_symbol()
+kallsyms: Revert "Take callthunks into account"
 
-In order to facilitate creation of more symbol types, slice up
-elf_create_section_symbol() to extract a generic helper that deals
-with adding ELF symbols.
+This is a full revert of commit:
 
+  f1389181622a ("kallsyms: Take callthunks into account")
+
+The commit assumes a number of things that are not quite right.
+Notably it assumes every symbol has PADDING_BYTES in front of it that
+are not claimed by another symbol.
+
+This is not true; even when compiled with:
+
+  -fpatchable-function-entry=${PADDING_BYTES},${PADDING_BYTES}
+
+Notably things like .cold subfunctions do not need to adhere to this
+change in ABI. It it also not true when build with CFI_CLANG, which
+claims these PADDING_BYTES in the __cfi_##name symbol.
+
+Once the prefix bytes are not consistent and or otherwise claimed the
+approach this patch takes goes out the window and kallsym resolution
+will report invalid symbol names.
+
+Therefore revert this to make room for another approach.
+
+Reported-by: Reported-by: kernel test robot <yujie.liu@intel.com>
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
 Tested-by: Yujie Liu <yujie.liu@intel.com>
-Link: https://lkml.kernel.org/r/20221028194453.396634875@infradead.org
+Link: https://lore.kernel.org/r/202210241614.2ae4c1f5-yujie.liu@intel.com
+Link: https://lkml.kernel.org/r/20221028194453.330970755@infradead.org
 ---
- tools/objtool/elf.c | 56 +++++++++++++++++++++++++++-----------------
- 1 file changed, 35 insertions(+), 21 deletions(-)
+ kernel/kallsyms.c | 45 +++++----------------------------------------
+ 1 file changed, 5 insertions(+), 40 deletions(-)
 
-diff --git a/tools/objtool/elf.c b/tools/objtool/elf.c
-index 89b37cd..3ad89d9 100644
---- a/tools/objtool/elf.c
-+++ b/tools/objtool/elf.c
-@@ -717,11 +717,11 @@ static int elf_update_symbol(struct elf *elf, struct section *symtab,
+diff --git a/kernel/kallsyms.c b/kernel/kallsyms.c
+index cc244c0..60c20f3 100644
+--- a/kernel/kallsyms.c
++++ b/kernel/kallsyms.c
+@@ -293,12 +293,6 @@ static unsigned long get_symbol_pos(unsigned long addr,
+ 	return low;
  }
  
- static struct symbol *
--elf_create_section_symbol(struct elf *elf, struct section *sec)
-+__elf_create_symbol(struct elf *elf, struct symbol *sym)
+-#ifdef CONFIG_FUNCTION_PADDING_BYTES
+-#define PADDING_BYTES	CONFIG_FUNCTION_PADDING_BYTES
+-#else
+-#define PADDING_BYTES	0
+-#endif
+-
+ /*
+  * Lookup an address but don't bother to find any names.
+  */
+@@ -306,25 +300,13 @@ int kallsyms_lookup_size_offset(unsigned long addr, unsigned long *symbolsize,
+ 				unsigned long *offset)
  {
- 	struct section *symtab, *symtab_shndx;
- 	Elf32_Word first_non_local, new_idx;
--	struct symbol *sym, *old;
-+	struct symbol *old;
+ 	char namebuf[KSYM_NAME_LEN];
+-	int ret;
+-
+-	addr += PADDING_BYTES;
  
- 	symtab = find_section_by_name(elf, ".symtab");
- 	if (symtab) {
-@@ -731,27 +731,16 @@ elf_create_section_symbol(struct elf *elf, struct section *sec)
- 		return NULL;
- 	}
- 
--	sym = calloc(1, sizeof(*sym));
--	if (!sym) {
--		perror("malloc");
--		return NULL;
+ 	if (is_ksym_addr(addr)) {
+ 		get_symbol_pos(addr, symbolsize, offset);
+-		ret = 1;
+-		goto found;
 -	}
 -
--	sym->name = sec->name;
--	sym->sec = sec;
-+	new_idx = symtab->sh.sh_size / symtab->sh.sh_entsize;
- 
--	// st_name 0
--	sym->sym.st_info = GELF_ST_INFO(STB_LOCAL, STT_SECTION);
--	// st_other 0
--	// st_value 0
--	// st_size 0
-+	if (GELF_ST_BIND(sym->sym.st_info) != STB_LOCAL)
-+		goto non_local;
- 
- 	/*
- 	 * Move the first global symbol, as per sh_info, into a new, higher
- 	 * symbol index. This fees up a spot for a new local symbol.
- 	 */
- 	first_non_local = symtab->sh.sh_info;
--	new_idx = symtab->sh.sh_size / symtab->sh.sh_entsize;
- 	old = find_symbol_by_index(elf, first_non_local);
- 	if (old) {
- 		old->idx = new_idx;
-@@ -769,18 +758,43 @@ elf_create_section_symbol(struct elf *elf, struct section *sec)
- 		new_idx = first_non_local;
+-	ret = !!module_address_lookup(addr, symbolsize, offset, NULL, NULL, namebuf);
+-	if (!ret) {
+-		ret = !!__bpf_address_lookup(addr, symbolsize,
+-					     offset, namebuf);
++		return 1;
  	}
- 
-+	/*
-+	 * Either way, we will add a LOCAL symbol.
-+	 */
-+	symtab->sh.sh_info += 1;
-+
-+non_local:
- 	sym->idx = new_idx;
- 	if (elf_update_symbol(elf, symtab, symtab_shndx, sym)) {
- 		WARN("elf_update_symbol");
- 		return NULL;
- 	}
- 
--	/*
--	 * Either way, we added a LOCAL symbol.
--	 */
--	symtab->sh.sh_info += 1;
-+	return sym;
-+}
-+
-+static struct symbol *
-+elf_create_section_symbol(struct elf *elf, struct section *sec)
-+{
-+	struct symbol *sym = calloc(1, sizeof(*sym));
-+
-+	if (!sym) {
-+		perror("malloc");
-+		return NULL;
-+	}
- 
--	elf_add_symbol(elf, sym);
-+	sym->name = sec->name;
-+	sym->sec = sec;
-+
-+	// st_name 0
-+	sym->sym.st_info = GELF_ST_INFO(STB_LOCAL, STT_SECTION);
-+	// st_other 0
-+	// st_value 0
-+	// st_size 0
-+
-+	sym = __elf_create_symbol(elf, sym);
-+	if (sym)
-+		elf_add_symbol(elf, sym);
- 
- 	return sym;
+-found:
+-	if (ret && offset)
+-		*offset -= PADDING_BYTES;
+-	return ret;
++	return !!module_address_lookup(addr, symbolsize, offset, NULL, NULL, namebuf) ||
++	       !!__bpf_address_lookup(addr, symbolsize, offset, namebuf);
  }
+ 
+ static const char *kallsyms_lookup_buildid(unsigned long addr,
+@@ -337,8 +319,6 @@ static const char *kallsyms_lookup_buildid(unsigned long addr,
+ 	namebuf[KSYM_NAME_LEN - 1] = 0;
+ 	namebuf[0] = 0;
+ 
+-	addr += PADDING_BYTES;
+-
+ 	if (is_ksym_addr(addr)) {
+ 		unsigned long pos;
+ 
+@@ -368,8 +348,6 @@ static const char *kallsyms_lookup_buildid(unsigned long addr,
+ 
+ found:
+ 	cleanup_symbol_name(namebuf);
+-	if (ret && offset)
+-		*offset -= PADDING_BYTES;
+ 	return ret;
+ }
+ 
+@@ -396,8 +374,6 @@ int lookup_symbol_name(unsigned long addr, char *symname)
+ 	symname[0] = '\0';
+ 	symname[KSYM_NAME_LEN - 1] = '\0';
+ 
+-	addr += PADDING_BYTES;
+-
+ 	if (is_ksym_addr(addr)) {
+ 		unsigned long pos;
+ 
+@@ -425,8 +401,6 @@ int lookup_symbol_attrs(unsigned long addr, unsigned long *size,
+ 	name[0] = '\0';
+ 	name[KSYM_NAME_LEN - 1] = '\0';
+ 
+-	addr += PADDING_BYTES;
+-
+ 	if (is_ksym_addr(addr)) {
+ 		unsigned long pos;
+ 
+@@ -443,8 +417,6 @@ int lookup_symbol_attrs(unsigned long addr, unsigned long *size,
+ 		return res;
+ 
+ found:
+-	if (offset)
+-		*offset -= PADDING_BYTES;
+ 	cleanup_symbol_name(name);
+ 	return 0;
+ }
+@@ -470,15 +442,8 @@ static int __sprint_symbol(char *buffer, unsigned long address,
+ 	len = strlen(buffer);
+ 	offset -= symbol_offset;
+ 
+-	if (add_offset) {
+-		char s = '+';
+-
+-		if ((long)offset < 0) {
+-			s = '-';
+-			offset = 0UL - offset;
+-		}
+-		len += sprintf(buffer + len, "%c%#lx/%#lx", s, offset, size);
+-	}
++	if (add_offset)
++		len += sprintf(buffer + len, "+%#lx/%#lx", offset, size);
+ 
+ 	if (modname) {
+ 		len += sprintf(buffer + len, " [%s", modname);
