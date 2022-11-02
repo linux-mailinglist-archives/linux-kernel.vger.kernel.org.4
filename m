@@ -2,131 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 39ADF61565F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 01:04:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACD3D615665
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 01:05:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiKBAEG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 20:04:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40874 "EHLO
+        id S229877AbiKBAFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 20:05:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41440 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiKBAEF (ORCPT
+        with ESMTP id S229756AbiKBAFm (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 20:04:05 -0400
-Received: from mail-oa1-f50.google.com (mail-oa1-f50.google.com [209.85.160.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC7CCE6;
-        Tue,  1 Nov 2022 17:04:03 -0700 (PDT)
-Received: by mail-oa1-f50.google.com with SMTP id 586e51a60fabf-13c2cfd1126so18621517fac.10;
-        Tue, 01 Nov 2022 17:04:03 -0700 (PDT)
+        Tue, 1 Nov 2022 20:05:42 -0400
+Received: from mail-yb1-xb29.google.com (mail-yb1-xb29.google.com [IPv6:2607:f8b0:4864:20::b29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 603BFFAFD
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 17:05:41 -0700 (PDT)
+Received: by mail-yb1-xb29.google.com with SMTP id n130so19229966yba.10
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 17:05:41 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=LXVjpmcuceSLtVtq1KwkEZZvIzkOBdTR9+384qptIxA=;
+        b=gY0XqIBcT72x+5mIHCPS8JMRAncFIGnhE9GY7Cn5NPnWk4IRHMt0JMqWu6DH90gzVc
+         CHoUTiZPAQrnS/2fpZPWdo0998e+aHizZckzTlZvfGoKECQUr7hQYrT91Jrdwj8L9ytm
+         DF7dq6zseQf0BPwvHgd/G9MfnW4J1KBOPwTjy0i+yOwLk3+QZGJdonLAVXhBGSZm6idB
+         gtdVjKVZWDHQbbXp2bK3t9hmaiB4OGj8P4J6R1Vo1agDCf+oxQop9P6seYMRN/FP3Bc/
+         /0jV5xUupHu/9i4wodfQv3Jf9DyvQ9qXM+Nhvawy+j0Q/7Vr17KQJ5qQrI1XnXInJe/B
+         Pmmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=sRe4Rhg+AzQ1C8960wXYonENiHb2NOvfma+pJy2edvA=;
-        b=u2T4eS6MeB8AjRZLB0FAmEZgb5u5aoVI9souGYuhrkE+Cve2nUG2qjE8aPxm1zsRnt
-         awUypBGKSm6s/me62C9lLXHEt0sqFQRWt+6/8E3PyrBhzie4RL4Npb6l+f1DlHpn2VyD
-         Eg6qO4wIFsz1VCSYuQGe+ORvEQF9oQl5p4yHpD7JkI0HLAGPpIZAc81Dajsq7ZkdfnAi
-         kiNVvp3xZ3NICVwgrLErnaLWme8pZ74PZaRLB8eTzVkoZ6K3hW8oyGwwk0CUJqP7UOUd
-         0zcUcV85M6THp3o2L4jnpVOktoo2J1ma7yRNLyyQhzxtp4eOGLCM2wfjp3Wf155VRzvb
-         9f9Q==
-X-Gm-Message-State: ACrzQf32osLOsVh1uE77nb2ZWMb+k1+/z73yx7hCE1120rhhmBVgN+Wk
-        2LbKvhghbDTCoSHqH/MSoWg2+5Fv3sPkQMY7UyrVQlGs
-X-Google-Smtp-Source: AMsMyM6ChSMuBRK6j4CncDwXG+bn2htdD9iQH62m7TfMQ1M8+hUcqoVh0iMamhCUVlpw5QQzi1IUm6VFZ327A9jPEcs=
-X-Received: by 2002:a05:6870:d18f:b0:13b:a366:f448 with SMTP id
- a15-20020a056870d18f00b0013ba366f448mr12277351oac.209.1667347442908; Tue, 01
- Nov 2022 17:04:02 -0700 (PDT)
+        bh=LXVjpmcuceSLtVtq1KwkEZZvIzkOBdTR9+384qptIxA=;
+        b=mLNjdvilVeBU+9aoFoX+Iiufgd1CcuyCcJY0uQK0Hpacjq1/1Jt/Tm1ORpRRZ0ycxq
+         1qnSwOlHK3l75AuoyaD26FsKabxO7p7bhGCuVCQuGa90zgho1oAgu9ilbZCmFs+HxHqn
+         l68VTpSBdXBkQ7kWiRMAnbGlOuujpvTQF+XO+DronCn2LWBXHraWEx0gtS8c7sishAgs
+         oryUTV6ijCALd2t5fwhWlyjg6Ye+vj/Fl+k5+o4b8JcT4jV62nZyz/KHB/FJuaKM58OK
+         mL9UgeV4M5kDb4r03GghOCOBdmsgCltnJFGZizAd5UC1aiGqLHxOleKOvSTcX6HZ9Eco
+         ukQQ==
+X-Gm-Message-State: ACrzQf0W6VwJQcnwyc74grSt7iIWFxRsHSLfm0OIqeVxoMvg1WicByFY
+        Xvc1itf7LMejZUbnOW6BsDoVwkD9DGKQE0pJr1yvjg==
+X-Google-Smtp-Source: AMsMyM7XHfcExfov1AZxC0aYOPIhc1Njm8sLYHakec7c8IDdtD3Rx445uxhfyVQggY9P/Cp7QQeM1XBRcgOs2Ij28ZA=
+X-Received: by 2002:a05:6902:1cb:b0:6cf:e925:5baa with SMTP id
+ u11-20020a05690201cb00b006cfe9255baamr256079ybh.636.1667347540410; Tue, 01
+ Nov 2022 17:05:40 -0700 (PDT)
 MIME-Version: 1.0
-References: <166731050151.2100653.8202870942871353491.stgit@devnote3>
-In-Reply-To: <166731050151.2100653.8202870942871353491.stgit@devnote3>
-From:   Namhyung Kim <namhyung@kernel.org>
-Date:   Tue, 1 Nov 2022 17:03:51 -0700
-Message-ID: <CAM9d7chbMQ5Zxn00-VTbvaarBu1rkWZopqQCxfQqFq0Cnr_C+A@mail.gmail.com>
-Subject: Re: [PATCH v2 0/3] tools/perf: Fix perf probe crash by clang DWARF5 file
-To:     "Masami Hiramatsu (Google)" <mhiramat@kernel.org>
-Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Jiri Olsa <jolsa@kernel.org>, linux-perf-users@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Steven Rostedt <rostedt@goodmis.org>
+References: <TYCP286MB23235BB803E3A778C85B50F7CA379@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+In-Reply-To: <TYCP286MB23235BB803E3A778C85B50F7CA379@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+From:   "T.J. Mercier" <tjmercier@google.com>
+Date:   Tue, 1 Nov 2022 17:05:28 -0700
+Message-ID: <CABdmKX0iR-YAfR+rLczPDa5W9Y+JMYs5RKMK8bkjs3z80TgL6A@mail.gmail.com>
+Subject: Re: [PATCH v2] dma-buf: fix racing conflict of dma_heap_add()
+To:     Dawei Li <set_pte_at@outlook.com>
+Cc:     sumit.semwal@linaro.org, christian.koenig@amd.com,
+        benjamin.gaignard@collabora.com, labbott@redhat.com,
+        Brian.Starkey@arm.com, jstultz@google.com, afd@ti.com,
+        sspatil@android.com, linux-media@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linaro-mm-sig@lists.linaro.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Masami,
-
-On Tue, Nov 1, 2022 at 6:48 AM Masami Hiramatsu (Google)
-<mhiramat@kernel.org> wrote:
+On Mon, Oct 31, 2022 at 7:53 AM Dawei Li <set_pte_at@outlook.com> wrote:
 >
-> Hi,
+> Racing conflict could be:
+> task A                 task B
+> list_for_each_entry
+> strcmp(h->name))
+>                        list_for_each_entry
+>                        strcmp(h->name)
+> kzalloc                kzalloc
+> ......                 .....
+> device_create          device_create
+> list_add
+>                        list_add
 >
-> Here is the 2nd version of the patches for perf probe which improves the
-> robustness against clang DWARF5 file.
+> The root cause is that task B has no idea about the fact someone
+> else(A) has inserted heap with same name when it calls list_add,
+> so a potential collision occurs.
 >
-> Since the Clang generates a bit different DWARF5 file, the perf probe
-> crashes or failes to analyze it. There are actually fragile code against
-> it, so I fixed it ([1/3]) to avoid crash by SEGV. And make it accepts
-> Clang's DWARF5 file ([2/3],[3/3]).
+> v1: https://lore.kernel.org/all/TYCP286MB2323950197F60FC3473123B7CA349@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM/
 >
-> Without this series, the perf probe crashes with the DWARF5 file
-> which generated by clang as below;
+> v1->v2: Narrow down locking scope, check the existence of heap before
+> insertion, as suggested by Andrew Davis.
 >
->   $ ./perf probe -k $BIN_PATH/vmlinux -s $SRC_PATH -L vfs_read:10
->   Segmentation fault
+> Fixes: c02a81fba74f ("dma-buf: Add dma-buf heaps framework")
 >
-> This series fixes it to handle such file correctly;
+> base-commit: 447fb14bf07905b880c9ed1ea92c53d6dd0649d7
 >
->   $ ./perf probe -k $BIN_PATH/vmlinux -s $SRC_PATH -L vfs_read:10
->   <vfs_read@$SRC_PATH/fs/read_write.c:10>
->
->        11         ret = rw_verify_area(READ, file, pos, count);
->        12         if (ret)
->                            return ret;
->
->
-> On the DWARF5 specification, Sec 2.14, there is
-> "The value 0 indicates that no source file has been specified."
-> for DW_AT_decl_file, but clang generated DWARF5 will use the value 0.
->
-> This issue is discussed on DWARF std ML;
-> https://www.mail-archive.com/dwarf-discuss@lists.dwarfstd.org/msg00884.html
->
-> And suggested that removing this part from the specification.
-> http://wiki.dwarfstd.org/index.php?title=DWARF5_Line_Table_File_Numbers
->
-> So as far as I understand, this is out of standard at this moment,
-> but the standard itself has a discussion on this part. And maybe updated
-> as currently clang does in the next release/revision.
->
-> Thank you,
->
+> Signed-off-by: Dawei Li <set_pte_at@outlook.com>
 > ---
+>  drivers/dma-buf/dma-heap.c | 37 ++++++++++++++++++++++++++++---------
+>  1 file changed, 28 insertions(+), 9 deletions(-)
 >
-> Masami Hiramatsu (Google) (3):
->       tools/perf: Fix to avoid crashing if DW_AT_decl_file is NULL
->       tools/perf: Fix to use dwarf_attr_integrate for generic attr accessor
->       tools/perf: Fix to get declared file name from clang DWARF5
-
-Acked-by: Namhyung Kim <namhyung@kernel.org>
-
-Thanks,
-Namhyung
-
-
+> diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
+> index 8f5848aa144f..1c787a147e3a 100644
+> --- a/drivers/dma-buf/dma-heap.c
+> +++ b/drivers/dma-buf/dma-heap.c
+> @@ -216,9 +216,21 @@ const char *dma_heap_get_name(struct dma_heap *heap)
+>         return heap->name;
+>  }
 >
+> +static inline bool dma_heap_exist(const char *name)
+> +{
+> +       struct dma_heap *h;
+> +
+> +       list_for_each_entry(h, &heap_list, list) {
+> +               if (!strcmp(h->name, name))
+> +                       return true;
+> +       }
+> +
+> +       return false;
+> +}
+> +
+>  struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
+>  {
+> -       struct dma_heap *heap, *h, *err_ret;
+> +       struct dma_heap *heap, *err_ret;
+>         struct device *dev_ret;
+>         unsigned int minor;
+>         int ret;
+> @@ -235,13 +247,11 @@ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
 >
->  tools/perf/util/dwarf-aux.c    |   58 ++++++++++++++++++++++++++++------------
->  tools/perf/util/dwarf-aux.h    |    3 ++
->  tools/perf/util/probe-finder.c |   37 +++++++++++++++++---------
->  3 files changed, 68 insertions(+), 30 deletions(-)
+>         /* check the name is unique */
+>         mutex_lock(&heap_list_lock);
+> -       list_for_each_entry(h, &heap_list, list) {
+> -               if (!strcmp(h->name, exp_info->name)) {
+> -                       mutex_unlock(&heap_list_lock);
+> -                       pr_err("dma_heap: Already registered heap named %s\n",
+> -                              exp_info->name);
+> -                       return ERR_PTR(-EINVAL);
+> -               }
+> +       if (dma_heap_exist(exp_info->name)) {
+> +               mutex_unlock(&heap_list_lock);
+> +               pr_err("dma_heap: Already registered heap named %s\n",
+> +                      exp_info->name);
+> +               return ERR_PTR(-EINVAL);
+
+Hi Dawei,
+What Andrew was suggesting was that you entirely move the check from
+here to the critical section down below, not duplicate the check. I
+don't think we want to check this twice. We should be able to do this
+by taking the heap_list_lock only once.
+
+>         }
+>         mutex_unlock(&heap_list_lock);
 >
+> @@ -283,13 +293,22 @@ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
+>                 err_ret = ERR_CAST(dev_ret);
+>                 goto err2;
+>         }
+> +
+>         /* Add heap to the list */
+>         mutex_lock(&heap_list_lock);
+> +       if (unlikely(dma_heap_exist(exp_info->name))) {
+> +               mutex_unlock(&heap_list_lock);
+> +               pr_err("dma_heap: Already registered heap named %s\n",
+> +                      exp_info->name);
+> +               err_ret = ERR_PTR(-EINVAL);
+> +               goto err3;
+> +       }
+>         list_add(&heap->list, &heap_list);
+>         mutex_unlock(&heap_list_lock);
+>
+>         return heap;
+> -
+> +err3:
+> +       device_destroy(dma_heap_class, heap->heap_devt);
+>  err2:
+>         cdev_del(&heap->heap_cdev);
+>  err1:
 > --
-> Masami Hiramatsu (Google) <mhiramat@kernel.org>
+> 2.25.1
+>
