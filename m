@@ -2,124 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2DFE0616A6B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:17:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 995B5616A70
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:18:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230006AbiKBRRL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:17:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43760 "EHLO
+        id S231157AbiKBRSa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:18:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44434 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230241AbiKBRRI (ORCPT
+        with ESMTP id S230241AbiKBRSV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:17:08 -0400
-Received: from mail2-relais-roc.national.inria.fr (mail2-relais-roc.national.inria.fr [192.134.164.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0BBE21E0A;
-        Wed,  2 Nov 2022 10:17:05 -0700 (PDT)
+        Wed, 2 Nov 2022 13:18:21 -0400
+Received: from mail-lj1-x233.google.com (mail-lj1-x233.google.com [IPv6:2a00:1450:4864:20::233])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08087193D8
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 10:18:20 -0700 (PDT)
+Received: by mail-lj1-x233.google.com with SMTP id x21so24538363ljg.10
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 10:18:19 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=inria.fr; s=dc;
-  h=date:from:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=Hwlkw4yAnCdRiQ+TM46iAZW7QPfAAgCdGvGqNHRyplo=;
-  b=H5UvIVYTfCSfCsJKvK0mipZhvhRzj9y8kKLh86gNspOg4Ze7Dcy8Ys3O
-   gldI0+jMNErr2iMaqtJsOvJMVxpQuEpIvlRQr3v01N3cdqZLlz+mS7Gjt
-   C7nPoQRkj62ttpQ5YKEv4lrhBw4Sk+sBcGeOL2bLmUuZwcB8fjjU6FoCK
-   M=;
-Authentication-Results: mail2-relais-roc.national.inria.fr; dkim=none (message not signed) header.i=none; spf=SoftFail smtp.mailfrom=julia.lawall@inria.fr; dmarc=fail (p=none dis=none) d=inria.fr
-X-IronPort-AV: E=Sophos;i="5.95,234,1661810400"; 
-   d="scan'208";a="72701514"
-Received: from dt-lawall.paris.inria.fr ([128.93.67.65])
-  by mail2-relais-roc.national.inria.fr with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 18:17:04 +0100
-Date:   Wed, 2 Nov 2022 18:17:04 +0100 (CET)
-From:   Julia Lawall <julia.lawall@inria.fr>
-To:     "Jason A. Donenfeld" <Jason@zx2c4.com>
-cc:     Kees Cook <keescook@chromium.org>, cocci@inria.fr,
-        Linus Torvalds <torvalds@linux-foundation.org>,
-        Alexey Dobriyan <adobriyan@gmail.com>,
-        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
-        mm-commits@vger.kernel.org, masahiroy@kernel.org,
-        gregkh@linuxfoundation.org, andriy.shevchenko@linux.intel.com,
-        Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [cocci] [PATCH -mm] -funsigned-char, x86: make struct
- p4_event_bind::cntr signed array
-In-Reply-To: <Y1ku+jfRAyezq6Nz@zx2c4.com>
-Message-ID: <b72d866d-1dce-7260-7f1e-54be9fd25e97@inria.fr>
-References: <20221020000356.177CDC433C1@smtp.kernel.org> <Y1EZuQcO8UoN91cX@localhost.localdomain> <CAHmME9prEhkHqQmtDGCSFunNnxiKdE_8FHKiksyqebUN63U81Q@mail.gmail.com> <CAHk-=whFow9Wd6C8htoRUt5wXbwf1i_qbuArBbhXOPqYsTFvtw@mail.gmail.com>
- <CAHmME9qBZqTd0D_gr8nE+DUzCrC0fxZNZK=7u+21jbgtFgAJBg@mail.gmail.com> <CAHk-=wjZDC9o8iwF+bU91Hx40HjGOpMui+VoFCDJkaGCu=rG4A@mail.gmail.com> <202210201151.ECC19BC97A@keescook> <Y1iSYddi3BpP8gvf@zx2c4.com> <Y1ku+jfRAyezq6Nz@zx2c4.com>
+        d=chromium.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=RknuEqUoiunPXi2OLjUbhlEwq60lRe2RTsR6hdfQJ0Y=;
+        b=RRnZ2dze/6CLhyKFhxGEw08Ckp4XwE8DWxZ0rZxAOcMdf5vdt9kUpYu0i/LLqPGehj
+         pYwLBE+/5Qto0rQ3PGtpUP8z7cfs5Z97tOSErjIiA7F6Gr0KhuXI0VS03iRzDSRFYUNa
+         ZtYLM10ihngzyi4eQW3AMFVgmfH2JF5B4VVzM=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=RknuEqUoiunPXi2OLjUbhlEwq60lRe2RTsR6hdfQJ0Y=;
+        b=FU+zJuEx9DFQgUzOByGiNqfr6QqIRNPrxFhIblz5vekkNfkmK9L3VJy4eOH3RjL5uk
+         pPNyXEu9wmk+j7zlCxlV8/FBR1Q5BYV1Nh/xlfeCTMWvOrusGRIZfxDNqdH4YIMT7X14
+         WkEC3gV9fIyB1FlICEVZPhJVvSCR6nyXmJ00NjdXd8ZuWEDFDDyH0uzTBNopgJORYGR5
+         f5DlKiuxjC4L5wLXc7ba+D8adPkwzZ3QpK1otzrD57MzfnBagB2+WKb8y6RYbV5r2J+B
+         CcRzFiZf8CGYLzIYZjH2YQOadkOu9GjzYoHT1lKmyqn0Cx7f0aGysd49v/ZTFIV+JvzA
+         udjw==
+X-Gm-Message-State: ACrzQf2zgKkVXLZH88mEB4c/9phcXZgihMDf/KCFlYH9SounDNEPGEpX
+        eO/tPO9Ij0jKEg9pItbUeXbLSwRKV5WyfmfcXGqPPw==
+X-Google-Smtp-Source: AMsMyM7GIYG7A4ghgZ0+aS8SyddPotFMK2d1/uL5kMGl7GKycv3x9BCqeqPj62YF1UHA3B/H7CEDTV/OSueDj54yRvU=
+X-Received: by 2002:a05:651c:19a8:b0:277:3cb2:d9f9 with SMTP id
+ bx40-20020a05651c19a800b002773cb2d9f9mr9918004ljb.278.1667409498411; Wed, 02
+ Nov 2022 10:18:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+References: <20220805222126.142525-1-jeffxu@google.com> <202208081018.9C782F184C@keescook>
+ <CABi2SkVXMUVhSTJezfHt_BKxyKP+x++9oveuB3qJZL7N672UKw@mail.gmail.com> <202211011933.DD0979338@keescook>
+In-Reply-To: <202211011933.DD0979338@keescook>
+From:   Jeff Xu <jeffxu@chromium.org>
+Date:   Wed, 2 Nov 2022 10:18:07 -0700
+Message-ID: <CABi2SkWGo9Jrd=i1e2PoDWYGenGhR=pG=yGsQP5VLmizTmg-iA@mail.gmail.com>
+Subject: Re: [PATCH v2 0/5] mm/memfd: MFD_NOEXEC for memfd_create
+To:     Kees Cook <keescook@chromium.org>
+Cc:     jeffxu@google.com, skhan@linuxfoundation.org,
+        akpm@linux-foundation.org, dmitry.torokhov@gmail.com,
+        dverkamp@chromium.org, hughd@google.com, jorgelo@chromium.org,
+        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-mm@kvack.org, mnissler@chromium.org, jannh@google.com,
+        linux-hardening@vger.kernel.org, Aleksa Sarai <cyphar@cyphar.com>,
+        dev@opencontainers.org, Christian Brauner <brauner@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On Wed, 26 Oct 2022, Jason A. Donenfeld wrote:
-
-> On Wed, Oct 26, 2022 at 03:50:25AM +0200, Jason A. Donenfeld wrote:
-> > The traditional objdump comparison does work, though. It produces a good
+On Tue, Nov 1, 2022 at 7:45 PM Kees Cook <keescook@chromium.org> wrote:
 >
-> Another thing that appears to work well is just using Coccinelle
-> scripts. I've had some success just scrolling through the results of:
+> On Tue, Nov 01, 2022 at 04:14:39PM -0700, Jeff Xu wrote:
+> > Sorry for the long overdue reply.
 >
->     @@
->     char c;
->     expression E;
->     @@
->     (
->     * E > c
->     |
->     * E >= c
->     |
->     * E < c
->     |
->     * E <= c
->     )
+> No worries! I am a fan of thread necromancy. :)
 >
-> That also triggers on explicitly signed chars, and examining those
-> reveals that quite a bit of code in the tree already does do the right
-> thing, which is good.
+> > [...]
+> > 1> memfd_create:
+> > Add two flags:
+> > #define MFD_EXEC                      0x0008
+> > #define MFD_NOEXEC_SEAL    0x0010
+> > This lets application to set executable bit explicitly.
+> > (If application set both, it will be rejected)
 >
-> From looking at this and objdump output, it looks like most naked-char
-> usage that isn't for strings is actually already assuming it's unsigned,
-> using it as a byte. I'll continue to churn, and I'm sure I'll miss a few
-> things here and there, but all and all, I don't think this is looking as
-> terrible as I initially feared.
+> So no MFD_NOEXEC without seal? (I'm fine with that.)
 >
-> I'm CC'ing the Coccinelle people to see if they have any nice ideas on
-> improvements. Specifically, the thing we're trying to identify is:
+no MFD_NOEXEC because memfd can be chmod to add x after creation,
+it is not secure.
+
+no MFD_EXEC_SEAL because it is better to apply both w and x seal
+within the same function call, and w seal can't be applied at creation time.
+
+> > 2> For old application that doesn't set executable bit:
+> > Add a pid name-spaced sysctl.kernel.pid_mfd_noexec, with:
 >
->   - Usage of vanilla `char`, without a `signed` or `unsigned` qualifier,
->     where:
-
-Try putting
-
-disable optional_qualifier
-
-between the initial @@, to avoid the implicit matching of signed and
-unsigned.
-
->   - It's not being used for characters; and
->   - It's doing something that assumes it is signed, such as various
->     types of comparisons or decrements.
-
-I took a quick look at the article, but I'm not completely sure what you
-are getting at here.  Could you give some examples of what you do and
-don't want to find?
-
-You don't want the case where c is 'x', for some x?
-
-julia
-
-> LWN wrote a summary of the general problem, in case that helps describe
-> what would be useful: https://lwn.net/SubscriberLink/911914/f90c2ed1af23cbc4/
+> bikeshed: vm.memfd_noexec
+> (doesn't belong in "kernel", and seems better suited to "vm" than "fs")
 >
-> Any nice Cocci tricks for this?
+SG, will use vm.memfd_noexec
+
+> > value = 0: Default_EXEC
+> >      Honor MFD_EXEC and MFD_NOEXEC_SEAL
+> >      When none is set, will fall back to original behavior (EXEC)
 >
-> Jason
+> Yeah. Rephrasing for myself to understand more clearly:
 >
+> "memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL act like MFD_EXEC
+> was set."
+>
+> > value = 1: Default_NOEXEC_SEAL
+> >       Honor MFD_EXEC and MFD_NOEXEC_SEAL
+> >       When none is set, will default to MFD_NOEXEC_SEAL
+>
+> "memfd_create() without MFD_EXEC nor MFD_NOEXEC_SEAL act like
+> MFD_NOEXEC_SEAL was set."
+>
+Copy, this is clearer. Thanks.
+
+> Also, I think there should be a pr_warn_ratelimited() when
+> memfd_create() is used without either bit, so that there is some
+> pressure to please adjust their API calls to explicitly set a bit.
+>
+Sure
+
+> > 3> Add a pid name-spaced sysctl kernel.pid_mfd_noexec_enforced: with:
+> > value = 0: default, not enforced.
+> > value = 1: enforce NOEXEC_SEAL (overwrite everything)
+>
+> How about making this just mode "value 2" for the first sysctl?
+> "memfd_create() without MFD_NOEXEC_SEAL will be rejected."
+>
+Good point. Kernel overwriting  might not be a good practice.
+I will add to vm.mfd_noexec.
+value = 2: "memfd_create() without MFD_NOEXEC_SEAL will be rejected."
+
+Thanks!
+Jeff
+
+> -Kees
+>
+> --
+> Kees Cook
