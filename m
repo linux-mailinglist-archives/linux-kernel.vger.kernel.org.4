@@ -2,88 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CAA1616ABE
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:29:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 141BD616AC7
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:30:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231516AbiKBR3f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:29:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56102 "EHLO
+        id S230123AbiKBRaj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:30:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56914 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231546AbiKBR33 (ORCPT
+        with ESMTP id S231523AbiKBRaL (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:29:29 -0400
-Received: from mail-ot1-f53.google.com (mail-ot1-f53.google.com [209.85.210.53])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C6955FD5;
-        Wed,  2 Nov 2022 10:29:22 -0700 (PDT)
-Received: by mail-ot1-f53.google.com with SMTP id 16-20020a9d0490000000b0066938311495so10654217otm.4;
-        Wed, 02 Nov 2022 10:29:22 -0700 (PDT)
+        Wed, 2 Nov 2022 13:30:11 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C93317418
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 10:30:06 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id l14so25581708wrw.2
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 10:30:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=g+rK1oS5b52BUstGwWG9rUx1UdvvX13i+yEKBaYvTNQ=;
+        b=VD4MJW+qcwgnBm9szQ6+h6/LW+4yTBmfI3sFDOf2xthoO7MmLBx1eTeGY3MeeFuEb7
+         oGNDRpU1BzApBH2MZ7e8VOXw2pp0wZ9ZsMQRbrYBFsQ2ikSt4M+RrDX9Hi6CuZNFkmKy
+         tAWUw0M1kWfDgdW6vEA/N0WAdFI+Kh+s8LFASUK3kbZhooz33+bdWnMNuPkcCQL4Y++K
+         pTQ1TnPNk4ModOIomsgcehbQmISc7NNLnEaBEfs8grDehp7C8gg9+Safmkl/71BkP4IR
+         1mXl5xH+AfW6hfVHd1RyE13RPzYwn6/rJTE0W+Db0wRzHuqQSA3uaNExWFkBh34KGDNU
+         KZ8Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LEpRB2dhc51/gCDHhrS4K+eUaEu05u03r4bcPUfjBNY=;
-        b=bwIekMpFoAYtBrfBQ5QNSBKvxaFcBeRucYijLCjwArwAHEXj2Tlo8ODcxHKkm9VCKw
-         aIldED8yyBmcKtJ5z7oCTMJ5yoTB46aF4SwB36csYABd5efz4k6THqomvxaDalLmsN9i
-         8HNSJxM2sQDDU5FTtkIciXtG8e9LrPX241lAGnJpCDGP0goFdQsjQ1BLoB0NFzk/R0Pz
-         r3IDDL3In8W28icedCzXCQi4FH5+pIVYP8SnSrtIIUg/0OUxk4cIEdsdSBvs6ywhXk0n
-         iQYjg0tAkY+RLXI7bTzXK7zSPNATU3udmDwlCOpPmNx2ASVr0x3KVhXluGi7wP3ZbTrr
-         U9Uw==
-X-Gm-Message-State: ACrzQf2ZsFxfNytskQ6ixsvABtJ6HZIc8R9v2dS3y6eo3WMSVIWUno51
-        TO9mjQ2P06EubBycnH0gaw==
-X-Google-Smtp-Source: AMsMyM70U1ELYK0+O7pqLeORhCvc6X7y6ep05YXLtd19VAaeHVJOLJpBotoWzAb5C71Jea3ggzrG6Q==
-X-Received: by 2002:a05:6830:6203:b0:65c:39a9:4007 with SMTP id cd3-20020a056830620300b0065c39a94007mr12686538otb.92.1667410161329;
-        Wed, 02 Nov 2022 10:29:21 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id bl8-20020a056808308800b0035028730c90sm4724159oib.1.2022.11.02.10.29.20
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 10:29:20 -0700 (PDT)
-Received: (nullmailer pid 4192956 invoked by uid 1000);
-        Wed, 02 Nov 2022 17:29:22 -0000
-Date:   Wed, 2 Nov 2022 12:29:22 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Luca Weiss <luca@z3ntu.xyz>
-Cc:     Lee Jones <lee@kernel.org>,
-        Daniel Thompson <daniel.thompson@linaro.org>,
-        phone-devel@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, Jingoo Han <jingoohan1@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>, Pavel Machek <pavel@ucw.cz>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        ~postmarketos/upstreaming@lists.sr.ht,
-        Bjorn Andersson <andersson@kernel.org>,
-        Kiran Gunda <kgunda@codeaurora.org>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-leds@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: backlight: qcom-wled: Add PMI8950
- compatible
-Message-ID: <166741016166.4192902.16881683175503637947.robh@kernel.org>
-References: <20221101161801.1058969-1-luca@z3ntu.xyz>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=g+rK1oS5b52BUstGwWG9rUx1UdvvX13i+yEKBaYvTNQ=;
+        b=tiHGm49qGnPa+s2XjpVI64zb/RU4VYIw7xSicoPoEuDFl4pmakOVN/eGRSIY+fMYAe
+         FHnzl1pcnsO0o1L7IvjpqG02AG0ZKuz0fEk68jtM2nCOLm3Ml0mDwwt3Xybzt5hcB+Oz
+         kBTOqMDEmj/fsrsdu99/g57oGYo6nKG4HYHiTs3UTDNqTICuL7znP8Q41GfDZaMZUZh8
+         qa3u5dE3i+CfzrsL1AYJaltzN7Pga/+uRnW0zZmZZAd4H6RxsUIDrNeDCJiKgVA1+ubv
+         jwTVOhNUOHjFpOeGloeXw0Oq34t9elVHkiVQILQXCaYudyBpBvHtsbv82G6d2APhE9nI
+         1Bgg==
+X-Gm-Message-State: ACrzQf3KAo4N6gG/+aRDRZCwzDLaFFvsI2UMhSyp4TQrZBmrnse4mJP6
+        lekYhAyzXFVZvUIrGmFTXfrOFWRwN13mZoUwc4JEOw==
+X-Google-Smtp-Source: AMsMyM4+uiTjeEtL+Z6dWj5D18OHpZ4bBgrqXby9zaGCPTR2QKHUYJzfcJMmInKTZJQKz5CYR/UtzCeAgzxhi5IkKQA=
+X-Received: by 2002:a5d:6743:0:b0:236:6301:918 with SMTP id
+ l3-20020a5d6743000000b0023663010918mr16200534wrw.247.1667410205063; Wed, 02
+ Nov 2022 10:30:05 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221101161801.1058969-1-luca@z3ntu.xyz>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+References: <20221102112451.128110-1-peng.fan@oss.nxp.com>
+In-Reply-To: <20221102112451.128110-1-peng.fan@oss.nxp.com>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Wed, 2 Nov 2022 11:29:53 -0600
+Message-ID: <CANLsYky1j_BMD-Dg1Lath4bftE-0qPEod7fxcaN3UkKUpjP7dw@mail.gmail.com>
+Subject: Re: [PATCH V2 0/2] remoteproc: imx: add start up delay
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     andersson@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 2 Nov 2022 at 05:23, Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
+>
+> From: Peng Fan <peng.fan@nxp.com>
+>
+> V2:
+>  Rebased on linux-next
+>
+> V1:
+>  https://lore.kernel.org/lkml/20220609123500.3492475-1-peng.fan@oss.nxp.com/
+>
+> There is case that after remoteproc start remote processor[M4], the M4
+> runs slow and before M4 finish its own rpmsg framework initialization,
+> linux sends out vring kick message, then M4 firmware drops the kick
+> message. Some NXP released Cortex-M[x] images has such limitation that
+> it requires linux sends out vring kick message after M4 firmware finish
+> its rpmsg framework initialization.
+>
+> The best case is to use a method to let M4 notify Linux that M4 has
+> finished initialization, but we could not patch released firmware,
+> then update driver to detect notification.
+>
+> So add delay before linux send out vring kick message. It is not good to
+> use a fixed time delay in driver, so I choose to get that from device
+> tree.
+>
 
-On Tue, 01 Nov 2022 17:17:59 +0100, Luca Weiss wrote:
-> Document the compatible for the wled block found in PMI8950.
-> 
-> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
-> ---
-> Changes since v2:
-> * New patch
-> 
->  Documentation/devicetree/bindings/leds/backlight/qcom-wled.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+From where I stand this is a hack to hide the lack of motivation to
+enact the real solution that is outlined above.  I also wonder how
+these problems were not caught during the testing phase.  Either find
+a way to upgrade your firmware or keep this in your internal tree.
 
-Acked-by: Rob Herring <robh@kernel.org>
+> Peng Fan (2):
+>   dt-bindings: remoteproc: imx_rproc: add fsl,startup-delay-ms
+>   remoteproc: imx_rproc: delay after kick remote processor
+>
+>  .../devicetree/bindings/remoteproc/fsl,imx-rproc.yaml    | 4 ++++
+>  drivers/remoteproc/imx_rproc.c                           | 9 +++++++++
+>  2 files changed, 13 insertions(+)
+>
+> --
+> 2.37.1
+>
