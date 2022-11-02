@@ -2,32 +2,32 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7438C615C8E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 07:57:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9682A615C8D
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 07:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230137AbiKBG5R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 02:57:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51504 "EHLO
+        id S230141AbiKBG5O (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 02:57:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229853AbiKBG5M (ORCPT
+        with ESMTP id S229752AbiKBG5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 02:57:12 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 404A6222AE
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 23:57:11 -0700 (PDT)
+        Wed, 2 Nov 2022 02:57:11 -0400
+Received: from out0.migadu.com (out0.migadu.com [IPv6:2001:41d0:2:267::])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9353826AF3
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 23:57:09 -0700 (PDT)
 Content-Type: text/plain;
         charset=us-ascii
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1667372229;
+        t=1667372228;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
         bh=iIxI+9EdE71N9U8wkgda/gJcxSWf1ZLf+S0jdoHjU94=;
-        b=bm+T8nHMkC2FiaBL6bT6D7Jp5dV7ZRaVcMbFwFuhGWcbAB8f3tsQ0Unf8lHQ/O5EpWTX29
-        rErDDT7YaZNsbp3h+zHZAm4+dmPOob5twLdMCgfLLLfq122GS8KSGawxwqPtNg7Q0O5am3
-        JVAYzJDFdrNbe+8CqglfMwox9tB6rWw=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.200.110.1.12\))
+        b=C9YUghnftq/TfXN6bX7Qrxu+0o0Cb87r01qreIupnvLomHcUTtag/dkaEjED/fghkFTYP2
+        XhkQz/7jNm31OG7DuaSn60TIY4rw8Mma4J7ME6TKaOCXh0WX0+cGy0KxOFxYafN4Y58Ssf
+        +0eqjGzdW3TKGyyVK8dBE/eDa1mbWRE=
+MIME-Version: 1.0
 Subject: Re: [PATCH v2 7/9] mm/hugetlb_cgroup: convert
  hugetlb_cgroup_uncharge_page() to folios
 X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
@@ -50,7 +50,7 @@ To:     Sidhartha Kumar <sidhartha.kumar@oracle.com>
 X-Migadu-Flow: FLOW_OUT
 X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=unavailable autolearn_force=no version=3.4.6
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
