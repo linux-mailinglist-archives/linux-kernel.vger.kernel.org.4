@@ -2,106 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 27012616CB3
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:42:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F11EF616CB6
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:44:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231435AbiKBSmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 14:42:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36740 "EHLO
+        id S231347AbiKBSoM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 14:44:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39116 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230086AbiKBSmo (ORCPT
+        with ESMTP id S231262AbiKBSoI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:42:44 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB32A657E;
-        Wed,  2 Nov 2022 11:42:43 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id k26so7862298qkg.2;
-        Wed, 02 Nov 2022 11:42:43 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=UnB/iiYCoj9JxhGUlWNmGFpgfzGIDKnr6BfjYADidfM=;
-        b=mgZDbBqMlbMh24yUr68+4lerWRJfeVoKfI2iv82gSDPWwx/LVdWnJStgX/Ka/iotY2
-         utIv4j7In63e5ngwgX3ylMqRBSG+ZlS2uXVPIOypL6hIdur3q9FL/OihkE+j6moRJWyp
-         h3mLySPrO/cH24MG6TlkusGDAER5WGvxtRfeBHKum718fAxuwjJSx5lUPMbCWhV1yl/R
-         sXf+BGqUaR7VNqRYG2vfmkcdEXg2fSDKOWx3l+BLeRhmJVTQqXsAY8M0uy2i3x0O0AsG
-         /bnqaJsxFW2IluthjPeY+0Uc0EfJwLkKPRg4lC/evCE73VNe0Lmkl/JUkd0C4Y+PskGz
-         CXaQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UnB/iiYCoj9JxhGUlWNmGFpgfzGIDKnr6BfjYADidfM=;
-        b=Zp8y5te4Df6eBvbEYvJPBALhI7tPfcfY6sUrDuGBpY3+HGu2xq5/89Ma9loMsbCjDU
-         Ocvf2j/HnMStcabFFuowGqAGOXuf1qgPHQ1s2KyXqCtw3+85ui+7oFlT+zIvd1ZzGg7t
-         prB9+gK6J4GsRs3sYNMWrkh0IAU8x92o8fnI3W2IQI1L1wRsvMlFiFLfesTJSaucCDdW
-         70akcmsdxi/CC77aGVHEkRe8HD5abw9ZvdV5oM7QlorfHHA8xgXOahkWa3Gv21ZJY4Hb
-         dYmgB2cfCqV+bYKeDceM8Jo3wMfXkjTxASQUhX4Qzf2xmwa1pl7StQhV36YgPM9+cnOw
-         byoQ==
-X-Gm-Message-State: ACrzQf3Nv0o0VTEuIgzOdHZ6YkfYAWFT43L7PT7A1KLwy7G0wUwz3V4A
-        0/fs9+LnxFdVlkZrBTO1/ZQ=
-X-Google-Smtp-Source: AMsMyM4yYZQoPSoricm6jRD97DoXPAV8DxOXgAY0RZ6i0gSA3F4L+U9CDZ/vSWBUORa0fdRnenQX6Q==
-X-Received: by 2002:a37:5e41:0:b0:6ce:79e2:68af with SMTP id s62-20020a375e41000000b006ce79e268afmr18698594qkb.239.1667414562785;
-        Wed, 02 Nov 2022 11:42:42 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id w10-20020a05620a444a00b006cfc01b4461sm9189729qkp.118.2022.11.02.11.42.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 11:42:42 -0700 (PDT)
-Message-ID: <2bf50933-802b-8340-4146-cc6c409d372c@gmail.com>
-Date:   Wed, 2 Nov 2022 11:42:36 -0700
+        Wed, 2 Nov 2022 14:44:08 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E281E2CDC5;
+        Wed,  2 Nov 2022 11:44:07 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e741329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e741:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 72DBB1EC0430;
+        Wed,  2 Nov 2022 19:44:06 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1667414646;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=iOr/2V0DoRyu5jKtmDX0XiBrZE84Kn1Pob6d6OL2TAQ=;
+        b=P8xIFXf059+smEe6r5YZYLEbBvKhvHMQlCDMpFuQpPIyUL+0Na11Qye0LmeFzVkyGcJ0Ue
+        fIrCmtMkvbI9pekV7eZIq4LZ2B96yVhn3hhIe318CHOxpV0wNqptu2eHkXK4/tBD234sAI
+        ZmyjnjRhdV4j8e7O51OrF3B1uOD5hfo=
+Date:   Wed, 2 Nov 2022 19:44:02 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Yury Norov <yury.norov@gmail.com>, x86@kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        openrisc@lists.librecores.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "open list:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] x86: Fix /proc/cpuinfo cpumask warning
+Message-ID: <Y2K6clNJBn0SbWU+@zn.tnic>
+References: <20221014155845.1986223-1-ajones@ventanamicro.com>
+ <20221014155845.1986223-3-ajones@ventanamicro.com>
+ <20221028074828.b66uuqqfbrnjdtab@kamzik>
+ <Y1vrMMtRwb0Lekl0@yury-laptop>
+ <Y1vvMlwf/4EA/8WW@zn.tnic>
+ <CAAH8bW_DkvPCH0-q2Bfe0OJ72r63mRM3GP7NKOFrhe3zMO2gbQ@mail.gmail.com>
+ <Y1v+Ed6mRN9gisJS@zn.tnic>
+ <20221031080604.6xei6c4e3ckhsvmy@kamzik>
+ <Y1+OUawGJDjh4DOJ@zn.tnic>
+ <20221031100327.r7tswmpszvs5ot5n@kamzik>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 6.0 000/240] 6.0.7-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
-References: <20221102022111.398283374@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221102022111.398283374@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20221031100327.r7tswmpszvs5ot5n@kamzik>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/1/22 19:29, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 6.0.7 release.
-> There are 240 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 04 Nov 2022 02:20:38 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.7-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Mon, Oct 31, 2022 at 11:03:27AM +0100, Andrew Jones wrote:
+> Currently (after the revert of 78e5a3399421)
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+After the revert?
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+That commit is still in the latest Linus tree.
+
+> with DEBUG_PER_CPU_MAPS we'll get a warning splat when the cpu is
+> outside the range [-1, nr_cpu_ids)
+
+Yah, that range makes sense.
+
+> and cpumask_next() will call find_next_bit() with the input plus one anyway.
+> find_next_bit() doesn't explicity document what happens when an input is
+> outside the range, but it currently returns the bitmap size without any
+> side effects, which means cpumask_next() will return nr_cpu_ids.
+
+That is good to have in the commit message.
+
+> show_cpuinfo() doesn't try to show anything in that case and stops its
+> loop, or, IOW, things work fine now with an input of nr_cpu_ids - 1. But,
+> show_cpuinfo() is just getting away with a violated cpumask_next()
+> contract, which 78e5a3399421 exposed. How about a new commit message like
+> this
+
+You're making it sound more complex than it is. All you wanna say is:
+
+"Filter out invalid cpumask_next() inputs by checking its first argument
+against nr_cpu_ids because cpumask_next() will call find_next_bit() with
+the input plus one but the valid range for n is [-1, nr_cpu_ids)."
+
+But that thing with the revert above needs to be clarified first.
+
+Thx.
+
 -- 
-Florian
+Regards/Gruss,
+    Boris.
 
+https://people.kernel.org/tglx/notes-about-netiquette
