@@ -2,106 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B14B0616B33
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:50:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB708616B36
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:51:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231473AbiKBRum (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:50:42 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52032 "EHLO
+        id S231167AbiKBRvp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:51:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52416 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231436AbiKBRuj (ORCPT
+        with ESMTP id S229704AbiKBRvo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:50:39 -0400
-Received: from mail-qt1-x831.google.com (mail-qt1-x831.google.com [IPv6:2607:f8b0:4864:20::831])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD1462D77C;
-        Wed,  2 Nov 2022 10:50:38 -0700 (PDT)
-Received: by mail-qt1-x831.google.com with SMTP id l2so7118073qtq.11;
-        Wed, 02 Nov 2022 10:50:38 -0700 (PDT)
+        Wed, 2 Nov 2022 13:51:44 -0400
+Received: from alexa-out-sd-01.qualcomm.com (alexa-out-sd-01.qualcomm.com [199.106.114.38])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B10D02D1C8;
+        Wed,  2 Nov 2022 10:51:43 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CRZEan3NfgrT4VK7068yRQxbI/GUnjcqKXl3lAB0/ok=;
-        b=mlGALt0BHtpUKDMrYFh2gtKO+blRh5meqUilXOBvg8laYEGDab4y87YHGZO5JD8MpJ
-         SjHmn8gJ26KYJ2Ri9NtYaTwag3QkYZ2ZfymLTUApepX2dTMoQK2ALlOGYg1jsTe0aQjf
-         GIQv4wPH+HCAOVmoNPfHEh9GVoLC7Wei1fH0wEumyfU+30osWUXCFQ3lvyczkABsgxpp
-         6JsPg36Pm9CLp0Bskv9qeHQ6JsS1g3jblsc6kTE7ctujhRfE0dENIyMCjuwS0jAf2aOE
-         A5WFDEilUzRGSJGNq02E4JsRKvRWt5tKwJ9XZGl/ZvpHGc0SEfo3GI35NZbjFvONNg3V
-         gGoA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CRZEan3NfgrT4VK7068yRQxbI/GUnjcqKXl3lAB0/ok=;
-        b=23AMAmMB/DX/ufBwxn/rfF28sk+7Gp756JTm+H3dW0w33CxSLN7qwhuXsEbik5ErdO
-         RF3biCIDIr2uJMsx94/7wgI7iDdTR4Fb0WV4pT3L8OkbxZYQq5FLHiehWaJlWameyvtT
-         a19d0gF9/I218dXyzWFBlOzBgU2T9KmkzcrNaqepHbPlx2CR+6WFVowAT4uS9muGOHtt
-         DDWY93Yeh1GO2HbY4NdPBGVwpcLdVa961uQFtKqdhGp2CsNvspkXV02wnqg6IRluoYWx
-         7UEsrGVFZ1zInhzvGcrPL8uwjiWpuKtvXMUBKObgwEQTWQYoGzgWTZeld+K8fIUC7Q9y
-         5BUQ==
-X-Gm-Message-State: ACrzQf0YV/sc+XiAaK3+qbT7AXZIr35sQUNVLMvmnzaUsT38UnDddWOI
-        HznMjb744i3yEVVmecMyJZm17XT+gVi1ew==
-X-Google-Smtp-Source: AMsMyM6XEL91aH2CWjdS98WCCWDzMHmTULvcNfPORFbx5ZuPrvgFRDsfOlPMYIPzEHTQW5jf2npRKg==
-X-Received: by 2002:a05:622a:1793:b0:39c:f3cd:e725 with SMTP id s19-20020a05622a179300b0039cf3cde725mr21314518qtk.333.1667411437861;
-        Wed, 02 Nov 2022 10:50:37 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id l1-20020a05620a28c100b006bbc09af9f5sm9011239qkp.101.2022.11.02.10.50.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 10:50:37 -0700 (PDT)
-Message-ID: <b5eeb462-f5c9-37a7-f2f3-f90a7c89a632@gmail.com>
-Date:   Wed, 2 Nov 2022 10:50:30 -0700
+  d=quicinc.com; i=@quicinc.com; q=dns/txt; s=qcdkim;
+  t=1667411503; x=1698947503;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=osroUKWDK6R36kkp7No9NzAj/w4+ub0gq1/3KEb7bE0=;
+  b=lBakJiTk4WyxYOPOlfi6XHZaY+fXL23QT1Utvnzo0ba9WadjtSzbdM/K
+   4nt+98T9NfWrvX2pGEx9HM4dl4VBeOBQKFGP0uBbi6+2uQn+t3P4gSJj/
+   zKG1vFykYJuaSo6sRZNuP0EiG80zDeSDtJa+J6XpteI1iKDt4zlwRC5DR
+   Q=;
+Received: from unknown (HELO ironmsg04-sd.qualcomm.com) ([10.53.140.144])
+  by alexa-out-sd-01.qualcomm.com with ESMTP; 02 Nov 2022 10:51:43 -0700
+X-QCInternal: smtphost
+Received: from nasanex01b.na.qualcomm.com ([10.46.141.250])
+  by ironmsg04-sd.qualcomm.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 10:51:42 -0700
+Received: from quicinc.com (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 2 Nov 2022
+ 10:51:41 -0700
+Date:   Wed, 2 Nov 2022 10:51:40 -0700
+From:   Guru Das Srinagesh <quic_gurus@quicinc.com>
+To:     Richard Acayan <mailingradian@gmail.com>
+CC:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Robert Marko <robimarko@gmail.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>,
+        <~postmarketos/upstreaming@lists.sr.ht>,
+        <phone-devel@vger.kernel.org>
+Subject: Re: [PATCH 3/4] dt-bindings: firmware: scm: add sdm670 compatible
+Message-ID: <20221102175140.GA16769@quicinc.com>
+References: <20221101235722.53955-1-mailingradian@gmail.com>
+ <20221101235722.53955-4-mailingradian@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 5.4 00/64] 5.4.223-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
-References: <20221102022051.821538553@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221102022051.821538553@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221101235722.53955-4-mailingradian@gmail.com>
+User-Agent: Mutt/1.5.24 (2015-08-30)
+X-Originating-IP: [10.80.80.8]
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/1/22 19:33, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.4.223 release.
-> There are 64 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On Nov 01 2022 19:57, Richard Acayan wrote:
+> The Snapdragon 670 uses SCM as for PSCI power management. Document the
+> appropriate compatible string for it.
 > 
-> Responses should be made by Fri, 04 Nov 2022 02:20:38 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.4.223-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.4.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+> Signed-off-by: Richard Acayan <mailingradian@gmail.com>
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
-
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
-
+Reviewed-by: Guru Das Srinagesh <quic_gurus@quicinc.com>
