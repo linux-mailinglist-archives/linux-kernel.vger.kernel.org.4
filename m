@@ -2,56 +2,58 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB207616A1A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:10:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 56DC1616A1E
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:10:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230312AbiKBRKc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:10:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36160 "EHLO
+        id S229887AbiKBRKm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:10:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36390 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229996AbiKBRK1 (ORCPT
+        with ESMTP id S230421AbiKBRKh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:10:27 -0400
+        Wed, 2 Nov 2022 13:10:37 -0400
 Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 958481707A;
-        Wed,  2 Nov 2022 10:10:26 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1667F1CB17;
+        Wed,  2 Nov 2022 10:10:35 -0700 (PDT)
 Received: (Authenticated sender: kory.maincent@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 7C67C100004;
-        Wed,  2 Nov 2022 17:10:19 +0000 (UTC)
+        by mail.gandi.net (Postfix) with ESMTPSA id E8A9610000B;
+        Wed,  2 Nov 2022 17:10:26 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1667409025;
+        t=1667409034;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=wdwS+mYVi4ML2nO4sgk8gy4I60gyxdMdtfIOvOw4A8M=;
-        b=Zh8Q+a2CHaJCLr8+0y4ODpmoIy7Lj7udfg+eeAeopyQEIEV10VtWxDL4LiKs/uWuvybKuw
-        /CC1Fvg5Jsg4KppD6bbCnngypqP63D9ygBYHPJfF0vq9VDoR7f5vB+j0Oa4b0mMl5x1H7+
-        C+IUHA6OpEd0vzLGnCqIqA/cWlMHhCyshMFztn7naTGStmBcXDE0TF/VC2uogRLrZWFkfn
-        ideF8FRW/Zp7qFFVHYObwBkulpV1IhG1jgCLlmzFtTUNLitnnxy4323ABQDLobflEPWzH/
-        hx1jRngGpiZRGyZ+x0bFvSvzYATUHEHCL2oYcpMvkqW6+L6/iW+KoT6AwqGgcA==
+        bh=KYBK5k2s8EG/YP+dGH+hD0jM9bq3cBqVP2T7Rex7x7Y=;
+        b=jgmnROX/jjYlKksIviewePdP+mRJJwCfsGZCr+BaSDRMVENY1TedvNF/hE4yeBMqwaIyY/
+        DMMC6szGy8gWvrglPkJ14/EkcKxgGI0jyxnVxdkS4iaWTTTwVdoTkYnTIZ47sn3utn8982
+        z/ertK095Cc9xbqDatSlFnR9NuYZTMmU9+UiWQkHYt1QYu9qKu5DHzjDjIjH8uQjZ8Vx0k
+        IrrYObdUTgGcaprMaByz9U5AUkooYFx14G2qO9AUoA6uX/PiyghntfG5bdw730cMG39U6d
+        klb3cOP5nL3u+QSHxhS5PXRk7AGUicBRKU0JB99UwA0FxN0q2b5Kc7CMNGjpMw==
 From:   =?UTF-8?q?K=C3=B6ry=20Maincent?= <kory.maincent@bootlin.com>
-To:     viresh.kumar@linaro.org, Bhavna Yadav <bhavna.yadav@st.com>,
-        Rajeev Kumar <rajeev-dlh.kumar@st.com>,
+To:     viresh.kumar@linaro.org, Rajeev Kumar <rajeev-dlh.kumar@st.com>,
         Deepak Sikri <deepak.sikri@st.com>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>,
+        Vipul Kumar Samar <vipulkumar.samar@st.com>,
+        Bhavna Yadav <bhavna.yadav@st.com>,
         Vipin Kumar <vipin.kumar@st.com>,
         linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
         linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
 Cc:     Kory Maincent <kory.maincent@bootlin.com>,
         thomas.petazzoni@bootlin.com, Viresh Kumar <vireshk@kernel.org>,
-        soc@kernel.org, Rob Herring <robh+dt@kernel.org>,
+        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
+        Rob Herring <robh+dt@kernel.org>,
         Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
         Russell King <linux@armlinux.org.uk>,
         Michael Turquette <mturquette@baylibre.com>,
         Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Sudeep Holla <sudeep.holla@arm.com>,
         Gregory CLEMENT <gregory.clement@bootlin.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
         Alexandre Ghiti <alexandre.ghiti@canonical.com>,
         Vijay Kumar Mishra <vijay.kumar@st.com>
-Subject: [PATCH v2 1/6] arm: configs: spear6xx: Refresh defconfig
-Date:   Wed,  2 Nov 2022 18:10:05 +0100
-Message-Id: <20221102171012.49150-2-kory.maincent@bootlin.com>
+Subject: [PATCH v2 2/6] arm: dts: spear600: Fix clcd interrupt
+Date:   Wed,  2 Nov 2022 18:10:06 +0100
+Message-Id: <20221102171012.49150-3-kory.maincent@bootlin.com>
 X-Mailer: git-send-email 2.25.1
 In-Reply-To: <20221102171012.49150-1-kory.maincent@bootlin.com>
 References: <20221102171012.49150-1-kory.maincent@bootlin.com>
@@ -69,48 +71,29 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 From: Kory Maincent <kory.maincent@bootlin.com>
 
-Refresh the defconfig to follow the changes made over the year.
-I ensure important options have not gone away.
-I drop the gpio sysfs config as it is useless to keep it alone without
-CONFIG_EXPERT.
+Interrupt 12 of the Interrupt controller belongs to the SMI controller,
+the right one for the display controller is the interrupt 13.
 
+Fixes: 8113ba917dfa ("ARM: SPEAr: DT: Update device nodes")
 Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- arch/arm/configs/spear6xx_defconfig | 5 -----
- 1 file changed, 5 deletions(-)
+ arch/arm/boot/dts/spear600.dtsi | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/arch/arm/configs/spear6xx_defconfig b/arch/arm/configs/spear6xx_defconfig
-index 3d631b1f3cfa..1cf0621d2154 100644
---- a/arch/arm/configs/spear6xx_defconfig
-+++ b/arch/arm/configs/spear6xx_defconfig
-@@ -11,7 +11,6 @@ CONFIG_PARTITION_ADVANCED=y
- CONFIG_BINFMT_MISC=y
- CONFIG_NET=y
- CONFIG_MTD=y
--CONFIG_MTD_OF_PARTS=y
- CONFIG_MTD_BLOCK=y
- CONFIG_MTD_RAW_NAND=y
- CONFIG_MTD_NAND_FSMC=y
-@@ -28,19 +27,15 @@ CONFIG_NETDEVICES=y
- # CONFIG_NET_VENDOR_SMSC is not set
- CONFIG_STMMAC_ETH=y
- # CONFIG_WLAN is not set
--CONFIG_INPUT_FF_MEMLESS=y
--# CONFIG_INPUT_MOUSEDEV_PSAUX is not set
- # CONFIG_INPUT_KEYBOARD is not set
- # CONFIG_INPUT_MOUSE is not set
- # CONFIG_LEGACY_PTYS is not set
- CONFIG_SERIAL_AMBA_PL011=y
- CONFIG_SERIAL_AMBA_PL011_CONSOLE=y
--CONFIG_RAW_DRIVER=y
- CONFIG_I2C=y
- CONFIG_I2C_DESIGNWARE_PLATFORM=y
- CONFIG_SPI=y
- CONFIG_SPI_PL022=y
--CONFIG_GPIO_SYSFS=y
- CONFIG_GPIO_PL061=y
- # CONFIG_HWMON is not set
- CONFIG_WATCHDOG=y
+diff --git a/arch/arm/boot/dts/spear600.dtsi b/arch/arm/boot/dts/spear600.dtsi
+index fd41243a0b2c..9d5a04a46b14 100644
+--- a/arch/arm/boot/dts/spear600.dtsi
++++ b/arch/arm/boot/dts/spear600.dtsi
+@@ -47,7 +47,7 @@ clcd: clcd@fc200000 {
+ 			compatible = "arm,pl110", "arm,primecell";
+ 			reg = <0xfc200000 0x1000>;
+ 			interrupt-parent = <&vic1>;
+-			interrupts = <12>;
++			interrupts = <13>;
+ 			status = "disabled";
+ 		};
+ 
 -- 
 2.25.1
 
