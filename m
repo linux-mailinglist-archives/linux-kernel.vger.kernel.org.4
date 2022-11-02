@@ -2,182 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76ABB61643F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:01:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E11DB61642F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:00:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231189AbiKBOBO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 10:01:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53228 "EHLO
+        id S230425AbiKBOAZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 10:00:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231178AbiKBOAw (ORCPT
+        with ESMTP id S229752AbiKBOAX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 10:00:52 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 7D61FDEE4;
-        Wed,  2 Nov 2022 07:00:40 -0700 (PDT)
-Received: from jinankjain-dranzer.zrrkmle5drku1h0apvxbr2u2ee.ix.internal.cloudapp.net (unknown [20.188.121.5])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 763AB20C28B1;
-        Wed,  2 Nov 2022 07:00:36 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 763AB20C28B1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1667397640;
-        bh=MyBVSH3Ll+JQcfxsQR5E214HQaujrBVenBGi5YJLMdk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=IgZqv3/GyWH6b9VFX48CzmYFuvbr0PhFfEqBwVJrfk5uqr7ymTJiBMEn+Qri8UmE+
-         4l33XEu3qCthDq3/Ux/NkEYE2ZtqjDs9b8cwZxy42aAEV36pCW9sBUC+68i6mFR+pS
-         i0wTK0ccxnzWF2mbOHAeI7RyRzshRz0DX4IcQfjk=
-From:   Jinank Jain <jinankjain@linux.microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, arnd@arndb.de, peterz@infradead.org,
-        jpoimboe@kernel.org, jinankjain@linux.microsoft.com,
-        seanjc@google.com, kirill.shutemov@linux.intel.com,
-        ak@linux.intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: [PATCH 4/6] hv: Add an interface to do nested hypercalls
-Date:   Wed,  2 Nov 2022 14:00:15 +0000
-Message-Id: <c57e4e2f77fd3096f185a85519aebc2ab98e8342.1667394408.git.jinankjain@microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1667394408.git.jinankjain@microsoft.com>
-References: <cover.1667394408.git.jinankjain@microsoft.com>
+        Wed, 2 Nov 2022 10:00:23 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C8E6B5F52
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 07:00:18 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so2208804pji.1
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 07:00:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=monstr-eu.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UsJlfOgqiHgUxbwmXIMpsu5a+7TfV6gKqVgE2IVuVWw=;
+        b=AHEPyvF6yJhpDPvZ8ro4YgNh/1b3ocEAMuI5HfpiDWENSPwoMudTtWa89Cu9MNghcI
+         XnvfBLm5zKyTIL++yTuLk18tUTZ4ZG3YCv5l4MUzk/otRcanr1rGZ/ppKm00oahLog9H
+         +ubnqs+SdzlTzcuFg3ASbmFgvBF4t5KTwgI9JBt2jrcWpeUjS3Q5UsoN6GHnhA5ChtjE
+         j7EkUBJLld3iBHt/oOI06qx0TSlwF52IWdr5cNBP5XQ6A+U3RD1IEzklyOcvIDL+JGCK
+         yMGPPpz4BJExg/rZDmJsOnitiANXG+NGOx2WCMP9JjCCpsyoJBBOdIO5ztzfMY7dRWSX
+         OXvw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UsJlfOgqiHgUxbwmXIMpsu5a+7TfV6gKqVgE2IVuVWw=;
+        b=SJRiD8gBrRrQ/qlZnkTEmmRD0UwIi/0Br5XVR9KKjigtRRGUBTi53zGi+ecz4pMU1g
+         X1QG8HB4CYthbkynLeYBTtZsFWbGN8nAeJzk2XIu1HAUE7ahZCVzLaegkJbYCv5NTCZl
+         6aiB2yun81ZmDwOOJoNUtUQHqV+6L7J+fTQFbZ329OWLYJbb+u6S2CABjX6CjpnbTTSp
+         PmzvlWlUFMk15QRfK+f3X6AMS4vAK4YlGPgX79V1Y3YKAoMEH/CQm+Peh7fOBsk7qFLR
+         Pi81rl22wFnlxB3vV4TZwtaUWeDaW+8kyK9CvPvs/XFu0/PqyYWkSpmE+uEpcfcWNs2y
+         fUqQ==
+X-Gm-Message-State: ACrzQf2mSYvJ1oj51X1lkPEcqGuqLW7RlnffF/kguIjWyjb1Tyhq5ryE
+        5I1l67idLMaY7OzT6Uo5FM83Qg==
+X-Google-Smtp-Source: AMsMyM6yV8ivNbcxAFIU13pFb/62Dk7GdMTsYKKajObauYtzqrNkOCFepVJeBDJgkfsgk1NarljTIQ==
+X-Received: by 2002:a17:902:ce82:b0:187:3591:edac with SMTP id f2-20020a170902ce8200b001873591edacmr9749767plg.153.1667397618240;
+        Wed, 02 Nov 2022 07:00:18 -0700 (PDT)
+Received: from [172.20.7.43] ([12.157.112.82])
+        by smtp.gmail.com with ESMTPSA id q12-20020a170902a3cc00b00176ba091cd3sm8294561plb.196.2022.11.02.07.00.16
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 07:00:17 -0700 (PDT)
+Message-ID: <42b902eb-1ff3-2e44-8128-34d9a86ce8a1@monstr.eu>
+Date:   Wed, 2 Nov 2022 07:00:16 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] mmc: sdhci-of-arasan: Add support for dynamic
+ configuration
+To:     Adrian Hunter <adrian.hunter@intel.com>,
+        Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Michal Simek <michal.simek@xilinx.com>,
+        Philipp Zabel <p.zabel@pengutronix.de>
+Cc:     linux-mmc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, saikrishna12468@gmail.com,
+        git@amd.com
+References: <20221019054857.8286-1-sai.krishna.potthuri@amd.com>
+ <54973f0b-33ab-6cbb-82ce-be769fe82bd9@intel.com>
+Content-Language: en-US
+From:   Michal Simek <monstr@monstr.eu>
+In-Reply-To: <54973f0b-33ab-6cbb-82ce-be769fe82bd9@intel.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-According to TLFS, in order to communicate to L0 hypervisor there needs
-to be an additional bit set in the control register. This communication
-is required to perform priviledged instructions which can only be
-performed by L0 hypervisor. An example of that could be setting up the
-VMBus infrastructure.
 
-Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
----
- arch/x86/include/asm/hyperv-tlfs.h |  3 ++-
- arch/x86/include/asm/mshyperv.h    | 42 +++++++++++++++++++++++++++---
- include/asm-generic/hyperv-tlfs.h  |  1 +
- include/asm-generic/mshyperv.h     |  1 +
- 4 files changed, 42 insertions(+), 5 deletions(-)
 
-diff --git a/arch/x86/include/asm/hyperv-tlfs.h b/arch/x86/include/asm/hyperv-tlfs.h
-index 0319091e2019..fd066226f12b 100644
---- a/arch/x86/include/asm/hyperv-tlfs.h
-+++ b/arch/x86/include/asm/hyperv-tlfs.h
-@@ -380,7 +380,8 @@ struct hv_nested_enlightenments_control {
- 		__u32 reserved:31;
- 	} features;
- 	struct {
--		__u32 reserved;
-+		__u32 inter_partition_comm:1;
-+		__u32 reserved:31;
- 	} hypercallControls;
- } __packed;
- 
-diff --git a/arch/x86/include/asm/mshyperv.h b/arch/x86/include/asm/mshyperv.h
-index 61f0c206bff0..4ce9c3c9025d 100644
---- a/arch/x86/include/asm/mshyperv.h
-+++ b/arch/x86/include/asm/mshyperv.h
-@@ -74,10 +74,16 @@ static inline u64 hv_do_hypercall(u64 control, void *input, void *output)
- 	return hv_status;
- }
- 
-+/* Hypercall to the L0 hypervisor */
-+static inline u64 hv_do_nested_hypercall(u64 control, void *input, void *output)
-+{
-+	return hv_do_hypercall(control | HV_HYPERCALL_NESTED, input, output);
-+}
-+
- /* Fast hypercall with 8 bytes of input and no output */
--static inline u64 hv_do_fast_hypercall8(u16 code, u64 input1)
-+static inline u64 _hv_do_fast_hypercall8(u64 control, u16 code, u64 input1)
- {
--	u64 hv_status, control = (u64)code | HV_HYPERCALL_FAST_BIT;
-+	u64 hv_status;
- 
- #ifdef CONFIG_X86_64
- 	{
-@@ -105,10 +111,24 @@ static inline u64 hv_do_fast_hypercall8(u16 code, u64 input1)
- 		return hv_status;
- }
- 
-+static inline u64 hv_do_fast_hypercall8(u16 code, u64 input1)
-+{
-+	u64 control = (u64)code | HV_HYPERCALL_FAST_BIT;
-+
-+	return _hv_do_fast_hypercall8(control, code, input1);
-+}
-+
-+static inline u64 hv_do_fast_nested_hypercall8(u16 code, u64 input1)
-+{
-+	u64 control = (u64)code | HV_HYPERCALL_FAST_BIT | HV_HYPERCALL_NESTED;
-+
-+	return _hv_do_fast_hypercall8(control, code, input1);
-+}
-+
- /* Fast hypercall with 16 bytes of input */
--static inline u64 hv_do_fast_hypercall16(u16 code, u64 input1, u64 input2)
-+static inline u64 _hv_do_fast_hypercall16(u64 control, u16 code, u64 input1, u64 input2)
- {
--	u64 hv_status, control = (u64)code | HV_HYPERCALL_FAST_BIT;
-+	u64 hv_status;
- 
- #ifdef CONFIG_X86_64
- 	{
-@@ -139,6 +159,20 @@ static inline u64 hv_do_fast_hypercall16(u16 code, u64 input1, u64 input2)
- 	return hv_status;
- }
- 
-+static inline u64 hv_do_fast_hypercall16(u16 code, u64 input1, u64 input2)
-+{
-+	u64 control = (u64)code | HV_HYPERCALL_FAST_BIT;
-+
-+	return _hv_do_fast_hypercall16(control, code, input1, input2);
-+}
-+
-+static inline u64 hv_do_fast_nested_hypercall16(u16 code, u64 input1, u64 input2)
-+{
-+	u64 control = (u64)code | HV_HYPERCALL_FAST_BIT | HV_HYPERCALL_NESTED;
-+
-+	return _hv_do_fast_hypercall16(control, code, input1, input2);
-+}
-+
- extern struct hv_vp_assist_page **hv_vp_assist_page;
- 
- static inline struct hv_vp_assist_page *hv_get_vp_assist_page(unsigned int cpu)
-diff --git a/include/asm-generic/hyperv-tlfs.h b/include/asm-generic/hyperv-tlfs.h
-index fdce7a4cfc6f..c67836dd8468 100644
---- a/include/asm-generic/hyperv-tlfs.h
-+++ b/include/asm-generic/hyperv-tlfs.h
-@@ -185,6 +185,7 @@ enum HV_GENERIC_SET_FORMAT {
- #define HV_HYPERCALL_VARHEAD_OFFSET	17
- #define HV_HYPERCALL_VARHEAD_MASK	GENMASK_ULL(26, 17)
- #define HV_HYPERCALL_RSVD0_MASK		GENMASK_ULL(31, 27)
-+#define HV_HYPERCALL_NESTED		BIT(31)
- #define HV_HYPERCALL_REP_COMP_OFFSET	32
- #define HV_HYPERCALL_REP_COMP_1		BIT_ULL(32)
- #define HV_HYPERCALL_REP_COMP_MASK	GENMASK_ULL(43, 32)
-diff --git a/include/asm-generic/mshyperv.h b/include/asm-generic/mshyperv.h
-index 7256e2cb7b67..86297ca74399 100644
---- a/include/asm-generic/mshyperv.h
-+++ b/include/asm-generic/mshyperv.h
-@@ -53,6 +53,7 @@ extern void * __percpu *hyperv_pcpu_input_arg;
- extern void * __percpu *hyperv_pcpu_output_arg;
- 
- extern u64 hv_do_hypercall(u64 control, void *inputaddr, void *outputaddr);
-+extern u64 hv_do_nested_hypercall(u64 control, void *inputaddr, void *outputaddr);
- extern u64 hv_do_fast_hypercall8(u16 control, u64 input8);
- extern bool hv_isolation_type_snp(void);
- 
+On 11/2/22 02:37, Adrian Hunter wrote:
+> On 19/10/22 08:48, Sai Krishna Potthuri wrote:
+>> Add dynamic configuration support for Xilinx ZynqMP which takes care of
+>> configuring the SD secure space configuration registers using EEMI APIs,
+>> performing SD reset assert and deassert.
+>> High level sequence:
+>> - Check for the PM dynamic configuration support, if no error proceed with
+>> SD dynamic configurations(next steps) otherwise skip the dynamic
+>> configuration.
+>> - Put the SD Controller in reset.
+>> - Configure SD Fixed configurations.
+>> - Configure the SD Slot Type.
+>> - Configure the BASE_CLOCK.
+>> - Configure the 8-bit support.
+>> - Bring the SD Controller out of reset.
+>> - Wait for 1msec delay.
+>>
+>> Signed-off-by: Sai Krishna Potthuri <sai.krishna.potthuri@amd.com>
+> 
+> Can we get an Ack from xilinx folks?
+Xilinx was acquired by AMD some time ago. This has been tested and reviewed 
+internally already. But
+
+Acked-by: Michal Simek <michal.simek@amd.com>
+
+Thanks,
+Michal
+
 -- 
-2.25.1
+Michal Simek, Ing. (M.Eng), OpenPGP -> KeyID: FE3D1F91
+w: www.monstr.eu p: +42-0-721842854
+Maintainer of Linux kernel - Xilinx Microblaze
+Maintainer of Linux kernel - Xilinx Zynq ARM and ZynqMP ARM64 SoCs
+U-Boot custodian - Xilinx Microblaze/Zynq/ZynqMP/Versal SoCs
 
