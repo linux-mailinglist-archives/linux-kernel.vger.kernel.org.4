@@ -2,50 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 04F1261668C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:53:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8E0FD616690
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:53:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230460AbiKBPxO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 11:53:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32926 "EHLO
+        id S230507AbiKBPx0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 11:53:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33236 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230366AbiKBPxL (ORCPT
+        with ESMTP id S230480AbiKBPxX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 11:53:11 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F36412BB34
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 08:53:09 -0700 (PDT)
+        Wed, 2 Nov 2022 11:53:23 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5F40965FF;
+        Wed,  2 Nov 2022 08:53:22 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 9BA88B8236B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 15:53:08 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A406CC433D7;
-        Wed,  2 Nov 2022 15:53:06 +0000 (UTC)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id F278361A3C;
+        Wed,  2 Nov 2022 15:53:21 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 318C6C433D7;
+        Wed,  2 Nov 2022 15:53:19 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667404387;
-        bh=1uIdbgrfwhx0R+OMdlVdLSgX+ISrJXXxfTiu3acQa9U=;
-        h=From:To:Cc:Subject:Date:From;
-        b=sn5mQZD634YpH/ylGcaZeJgoWJjEt/rRHp//FwBRskERP9XMhH8hFrm67lq//pOEM
-         wcFApNGwnNvxV+hegJzONrBrVjQscveyo5FeBV6T+0EaXzETciaFd1ISU4x7vYiOR2
-         8WObpBaaOm/2XwUXwyK6oDPkhC0u2cfl6oJ+ws0JNrylnoMqbgldOX7l2WRGJEswdJ
-         hq7YFTylOCYF2UCSE2XkHaPBhh4LZZpy4MpuAo70C7cXqG772kPuCObxo3WTgOz8+u
-         74iZGfnj1dvgokxCwaLInnvheb2arkrj6caOhNXgPYAPqmuRffHz+9qi52hmIMzxl0
-         XXOqBKxcCj5dw==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Neil Armstrong <neil.armstrong@linaro.org>
-Cc:     dri-devel@lists.freedesktop.org, linux-amlogic@lists.infradead.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH] drm/meson: Fix return type of meson_encoder_cvbs_mode_valid()
-Date:   Wed,  2 Nov 2022 08:52:42 -0700
-Message-Id: <20221102155242.1927166-1-nathan@kernel.org>
-X-Mailer: git-send-email 2.38.1
+        s=k20201202; t=1667404401;
+        bh=YIMhsZZSiri86laUeio2ZJ5MI9Auku8tWuRwUZZgrU4=;
+        h=Subject:From:In-Reply-To:References:To:Cc:Date:From;
+        b=vCBRfzG2osYYmCwiur2EJub3kpny7uDgdG3oyZFS2/uu2sG2QqoIuqMacbHs9w3Bm
+         DLbNgBUeVxcEvKnct2F+UVfLMw62d5nUHqyvijxTINuc1X+nvQ+xvW2CM/Bu6e5ip0
+         0EocG+ZCx9QL3sPtXA/ApRuXjeMKfs2M3nHvJt+iCfPPbGrO8+0WWHCVtriaboSlkz
+         Ukv6eQmSN8BrJWb8UX4JB8FgOVz339WQpDtdLFfLNHNFzXSM8cMp9rVSuCTieqxaAq
+         XhoH/4kI74Z66BxeL4YAGzqi0OXIj+bgZlWbO7yeYQbaFYmvxPm9sm/L9khZOz85pz
+         LWXTbSUn+1FNQ==
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] ath9k: remove variable sent
+From:   Kalle Valo <kvalo@kernel.org>
+In-Reply-To: <20221024153954.2168503-1-colin.i.king@gmail.com>
+References: <20221024153954.2168503-1-colin.i.king@gmail.com>
+To:     Colin Ian King <colin.i.king@gmail.com>
+Cc:     =?utf-8?q?Toke_H=C3=B8iland-J=C3=B8rgensen?= <toke@toke.dk>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+User-Agent: pwcli/0.1.1-git (https://github.com/kvalo/pwcli/) Python/3.7.3
+Message-ID: <166740439390.20386.10524681182247555003.kvalo@kernel.org>
+Date:   Wed,  2 Nov 2022 15:53:19 +0000 (UTC)
 X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -55,51 +59,22 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-indirect call targets are validated against the expected function
-pointer prototype to make sure the call target is valid to help mitigate
-ROP attacks. If they are not identical, there is a failure at run time,
-which manifests as either a kernel panic or thread getting killed. A
-proposed warning in clang aims to catch these at compile time, which
-reveals:
+Colin Ian King <colin.i.king@gmail.com> wrote:
 
-  drivers/gpu/drm/meson/meson_encoder_cvbs.c:211:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_bridge *, const struct drm_display_info *, const struct drm_display_mode *)' with an expression of type 'int (struct drm_bridge *, const struct drm_display_info *, const struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-          .mode_valid = meson_encoder_cvbs_mode_valid,
-                        ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-  1 error generated.
+> Variable sent is just being incremented and it's never used
+> anywhere else. The variable and the increment are redundant so
+> remove it.
+> 
+> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Acked-by: Toke Høiland-Jørgensen <toke@toke.dk>
+> Signed-off-by: Kalle Valo <quic_kvalo@quicinc.com>
 
-->mode_valid() in 'struct drm_bridge_funcs' expects a return type of
-'enum drm_mode_status', not 'int'. Adjust the return type of
-meson_encoder_cvbs_mode_valid() to match the prototype's to resolve the
-warning and CFI failure.
+Patch applied to ath-next branch of ath.git, thanks.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-Reported-by: Sami Tolvanen <samitolvanen@google.com>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/gpu/drm/meson/meson_encoder_cvbs.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+4f6620cd6bbd wifi: ath9k: remove variable sent
 
-diff --git a/drivers/gpu/drm/meson/meson_encoder_cvbs.c b/drivers/gpu/drm/meson/meson_encoder_cvbs.c
-index 5675bc2a92cf..3f73b211fa8e 100644
---- a/drivers/gpu/drm/meson/meson_encoder_cvbs.c
-+++ b/drivers/gpu/drm/meson/meson_encoder_cvbs.c
-@@ -116,9 +116,10 @@ static int meson_encoder_cvbs_get_modes(struct drm_bridge *bridge,
- 	return i;
- }
- 
--static int meson_encoder_cvbs_mode_valid(struct drm_bridge *bridge,
--					const struct drm_display_info *display_info,
--					const struct drm_display_mode *mode)
-+static enum drm_mode_status
-+meson_encoder_cvbs_mode_valid(struct drm_bridge *bridge,
-+			      const struct drm_display_info *display_info,
-+			      const struct drm_display_mode *mode)
- {
- 	if (meson_cvbs_get_mode(mode))
- 		return MODE_OK;
-
-base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
 -- 
-2.38.1
+https://patchwork.kernel.org/project/linux-wireless/patch/20221024153954.2168503-1-colin.i.king@gmail.com/
+
+https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches
 
