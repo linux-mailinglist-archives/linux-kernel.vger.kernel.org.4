@@ -2,140 +2,296 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D1831616380
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:13:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82595616387
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:14:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbiKBNM7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 09:12:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52088 "EHLO
+        id S231363AbiKBNNS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 09:13:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52720 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231321AbiKBNMh (ORCPT
+        with ESMTP id S231360AbiKBNNI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 09:12:37 -0400
-Received: from EUR04-HE1-obe.outbound.protection.outlook.com (mail-eopbgr70118.outbound.protection.outlook.com [40.107.7.118])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4BBEB2A707;
-        Wed,  2 Nov 2022 06:12:35 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=Fs99JQf0MK4cEU77sj+1cBP07Rf3J3vKruUL3+lxNr64age4uI7uoRMT/LUlCepHNpxRZdbEXK+ktXt/L9kbuHgf63s4Lyyl/GsxM639HfI/GQ9H31JDbDSM3FyBqQI3kJZ4+Hac3aO3zwXn5VitexUN/ICZr834zlja2cW5YOetYZA7D5RxFPjuPE9AJ/By4jnMLO5S8FTJae8211lPl4vcFWjU6bBaM/E3JXdjkzdkoGlBBuzbBXqLztj1PUsRcIZNOdek6O8uh8SNdfFRDAbWG+iOY4shj58yhHk+d7jwir2FRXLEwn/TJsx249DbjSaOogl0MLcg1+wKB4jBqA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=yGuyGeveLuINKGABQSsQj4A9XmxK7iF+jxbSiFi8qFs=;
- b=MNiq/3gmNZElAOs5xHCefuWTypvG8WgCAGvWZLZ3++oqiqGtTbLe4rj5XwzEY81yb72XATQvzwyWoiYdktxEkFphgG0tAL7FsLP/NJZabYGQr0U9UFKAAfZTtAW6+fyptxC2Kq38k2b4VKtGbiI4weMQpoF1m6R9cyaxzxSgG2sEoi39uMR/lMyO8NMdRzxXd49Hp4Znf9HJFv60QkUKGWdVcg7hDUmIEOwn7zvwPgTShjHnfAE/+2FhlklXvX6/H5b/u7xtIMwHgJfUsZ6BUwRCedQit8aRW4EufyKJsocTw+5YKxlh51PLaVYKXmS/LAetwRn12DoLrb464IneHQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=fail (sender ip is
- 217.111.95.7) smtp.rcpttodomain=gmail.com smtp.mailfrom=arri.de; dmarc=none
- action=none header.from=arri.de; dkim=none (message not signed); arc=none
+        Wed, 2 Nov 2022 09:13:08 -0400
+Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CF9972AC5B
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 06:13:05 -0700 (PDT)
+Received: by mail-ej1-x62b.google.com with SMTP id bj12so45065593ejb.13
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 06:13:05 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
- d=arrigroup.onmicrosoft.com; s=selector1-arrigroup-onmicrosoft-com;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=yGuyGeveLuINKGABQSsQj4A9XmxK7iF+jxbSiFi8qFs=;
- b=ZQAFv4/bvzy/IFo2uTfZkslGn9a4VhixbSA/hykhIyHG0DPiplyWNBwewIR3CIzNb2ZsdVHjW6JcGA5urwG4kiA1oSY/CTzPtU2DpoRXY5u9YummrQvkNuOWq1hrrPoJBhVDwJuaXwyHeC0ybqiEnDjnkp/BPYAG/smUIOVtnZc=
-Received: from FR0P281CA0125.DEUP281.PROD.OUTLOOK.COM (2603:10a6:d10:97::20)
- by PA4PR07MB7198.eurprd07.prod.outlook.com (2603:10a6:102:d7::24) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.20; Wed, 2 Nov
- 2022 13:12:32 +0000
-Received: from VE1EUR02FT063.eop-EUR02.prod.protection.outlook.com
- (2603:10a6:d10:97:cafe::ff) by FR0P281CA0125.outlook.office365.com
- (2603:10a6:d10:97::20) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.20 via Frontend
- Transport; Wed, 2 Nov 2022 13:12:32 +0000
-X-MS-Exchange-Authentication-Results: spf=fail (sender IP is 217.111.95.7)
- smtp.mailfrom=arri.de; dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=arri.de;
-Received-SPF: Fail (protection.outlook.com: domain of arri.de does not
- designate 217.111.95.7 as permitted sender) receiver=protection.outlook.com;
- client-ip=217.111.95.7; helo=mta.arri.de;
-Received: from mta.arri.de (217.111.95.7) by
- VE1EUR02FT063.mail.protection.outlook.com (10.152.13.148) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.5791.20 via Frontend Transport; Wed, 2 Nov 2022 13:12:32 +0000
-Received: from n95hx1g2.localnet (192.168.54.23) by mta.arri.de (10.10.18.5)
- with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.32; Wed, 2 Nov
- 2022 14:12:31 +0100
-From:   Christian Eggers <ceggers@arri.de>
-To:     <olteanv@gmail.com>, <Arun.Ramadoss@microchip.com>
-CC:     <andrew@lunn.ch>, <linux-kernel@vger.kernel.org>,
-        <UNGLinuxDriver@microchip.com>, <vivien.didelot@gmail.com>,
-        <linux@armlinux.org.uk>, <Tristram.Ha@microchip.com>,
-        <f.fainelli@gmail.com>, <kuba@kernel.org>, <edumazet@google.com>,
-        <pabeni@redhat.com>, <richardcochran@gmail.com>,
-        <netdev@vger.kernel.org>, <Woojung.Huh@microchip.com>,
-        <davem@davemloft.net>, <b.hutchman@gmail.com>
-Subject: Re: [RFC Patch net-next 0/6] net: dsa: microchip: add gPTP support for LAN937x switch
-Date:   Wed, 2 Nov 2022 14:12:25 +0100
-Message-ID: <21674031.EfDdHjke4D@n95hx1g2>
-Organization: Arnold & Richter Cine Technik GmbH & Co. Betriebs KG
-In-Reply-To: <cd9bed118823c23bb0080f904fab9371e4eb9a25.camel@microchip.com>
-References: <d8459511785de2f6d503341ce5f87c6e6064d7b5.camel@microchip.com> <20221026214455.3n5f7eqp3duuie22@skbuf> <cd9bed118823c23bb0080f904fab9371e4eb9a25.camel@microchip.com>
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:mime-version:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=QUjwHcc5iP8LJfwAwqI4zShh2qdmd6vKeNQ9Qw9lUg4=;
+        b=xoEPLUCgSEEQ+s1fQMunmbEK8wBT0fiqpS/gCPRkguwbOR4/hVZAbgSMm1ckVd5B7u
+         cgwCVOW3AEo3sZ1RTFnjytE7Jvkd1/X2tXazxmhAYVZTTzl5CUpQetoDxnvRJy59GI4Q
+         Yyvmtq+F7iww7QSGMQAIrH+9lQLMcZWVon/8WU72eTzNSHvzKzmTvaWmDiyK4s2Q6E4F
+         PoxHkFcjng8OMM+uZQb8jEVSYNlt9rny1AHlImfXJdIDm7V9GNJKycrGEnlccNqPjQnv
+         akO1xaOUaibXHTSHxQEjbJzbX4/plufsshrWb1arg2VVWR+zwMn4U3T7O+rYfxnZ1R4U
+         eVZA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QUjwHcc5iP8LJfwAwqI4zShh2qdmd6vKeNQ9Qw9lUg4=;
+        b=0orpH+6wXKc64USW3ep5zSXN3IZp84q6wQtIcaRLNgu6euc2t8q8cfeFc2M0AfoIwg
+         munPSmpgKdPrbK39iH4vvF8cCKb2NPTx3a4z2lRRM7cuau611sYRQPdmYAFKr6S81frf
+         49qJTJRSjLlPQKRlBB32NsrdU1EWZojHz9rBFgFLSy+4GjNzXgLD6d7hZrlAj0KxjkXb
+         uZUmOo4P0cdxGUU8IJBpK4XdKEr78dkLia1nUDpxIiQCJarR6LQEkbVUpFWwwJqwI8Jl
+         uZgQKl56ONXuLpC1gkBQ8wPk/DFdHZFvYT/eXEFKq8ITPXo8u0s9mi3W/Gabwl1rJ1Ya
+         OLug==
+X-Gm-Message-State: ACrzQf0N4/nnd3Ns3tKcj7V7xuryzpUgnU/ZK8zwWBpaAM4zGEhmVfl9
+        im3+hXs3Nq3kBZBINuqeaZzyB5uG+PO3wV1637z9iQ==
+X-Google-Smtp-Source: AMsMyM41jO9qIkuc8SdzW/Fkpcpgm/4zCGsEaCWeieb7HdzYnEdU3ra91DaSS3svxX682ybVjTvlMPjOBRa8YCn7aAQ=
+X-Received: by 2002:a17:907:6e1b:b0:78e:15a3:5be6 with SMTP id
+ sd27-20020a1709076e1b00b0078e15a35be6mr23760746ejc.750.1667394784224; Wed, 02
+ Nov 2022 06:13:04 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
-X-Originating-IP: [192.168.54.23]
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: VE1EUR02FT063:EE_|PA4PR07MB7198:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1d7b0fd2-eea9-46f6-cea8-08dabcd3e6d9
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: Zc1cblWb3G95+k31MGd664I7hcDa2dpeVaeRbLyhCCbkTlUDClVousos51EUwbpPoDuvJdvK1uZsYbZ8eyWI3F4RX94VjjV4kvR85lnGLjJO8KjZX+A3ErYL1frpY8Mlff5aP0ybZJ7DIhKXHCh6fqVRZgetH+rnxaP/6jmHDeCoTShbFhyUotd6zf2xrA7pA4A0xMQiyN/3QO64uDwtgeXuy8Sb79zCPp6+VyRPyoJcNLC45ds+HgmKEhm0twd6D8SEnKpXWTbdhZDmIV+Q3O4jHMvpSti7ZQrGpgdTTNSZAKK0D5QrC05u85ec7ORSXOetj7us0Kewpt68rt4mmsCvxbMLYet/IvmKPWDdzw8qiw+bXNbUesmTPiwnCPw56/dvkZZQya6KOmUfl1IsKvLRavX00qaNPlclPM1WX6T50PYDRp/kUMuuIy/Q1122XXMuL1w88XWv9yB30ljkcAdNzn1g212lByz161LGcK8EkukYZSUJ/yr3JY361LYXTTYBJVU6dRBiODyVyIoC1Unh4q/EDlXAYcU3XWuC5lHjyQMkY5dgodjGDnLNxfWEaia5P7O1CX2kKpBnuYrgmRxrhGm0KNsVwZ77rRpHz9RF8wHI45TlQ1X83JESBpZ97Jdl8xFQp9SxlBT8/xxwPl8Skc3Cb830vcWUOKCvvGjS4TOflI27yre8p4WNtFTLjbpHmDVpU0N87AQ3tqPIVKoSWM2tiwrLiF6M+X/eDb3ok2szkC55cYjA/6jUjauxnHRKLUSCZ1wIhLUCceiZYIaohGxdsX1g/h0wUlg/G3U=
-X-Forefront-Antispam-Report: CIP:217.111.95.7;CTRY:DE;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mta.arri.de;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230022)(4636009)(39850400004)(136003)(396003)(346002)(376002)(451199015)(36840700001)(46966006)(86362001)(36860700001)(9576002)(8936002)(2906002)(16526019)(186003)(83380400001)(9686003)(82740400003)(336012)(356005)(47076005)(426003)(81166007)(110136005)(54906003)(41300700001)(70206006)(70586007)(6666004)(107886003)(4326008)(8676002)(450100002)(316002)(40480700001)(33716001)(82310400005)(5660300002)(478600001)(36916002)(26005)(39026012)(36900700001);DIR:OUT;SFP:1102;
-X-OriginatorOrg: arri.de
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2022 13:12:32.2876
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1d7b0fd2-eea9-46f6-cea8-08dabcd3e6d9
-X-MS-Exchange-CrossTenant-Id: e6a73a5a-614d-4c51-b3e3-53b660a9433a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=e6a73a5a-614d-4c51-b3e3-53b660a9433a;Ip=[217.111.95.7];Helo=[mta.arri.de]
-X-MS-Exchange-CrossTenant-AuthSource: VE1EUR02FT063.eop-EUR02.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PA4PR07MB7198
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Wed, 2 Nov 2022 18:42:52 +0530
+Message-ID: <CA+G9fYsGFoC5TciCuijZXLx48TZnoTSkq=iUgb+vFdi9EYTucw@mail.gmail.com>
+Subject: qemu-i386: perf: BUG: kernel NULL pointer dereference, address: 00000148
+To:     linux-perf-users@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>
+Cc:     Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
+        Marco Elver <elver@google.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Arun,
+Following kernel BUG: noticed on qemu-i386 while running perf test suite
+on stable-rc 6.0.7-rc1 the image was built with gcc-11.
 
-On Thursday, 27 October 2022, 17:51:54 CEST, Arun.Ramadoss@microchip.com wrote:
-> I tried to bring up the KSZ9563 setup following are my observation
-> - With this patch series, I am getting the Null pointer exception.
-> - After applying the patch provided by you, switch probe is successful.
-> 
-> Usually I test the gPTP using the following command
-> # ptp4l -f ~/ptp4l/gPTP.cfg -i lan1
-> 
-> How did you test this PTP in your setup, so that I can also get the
-> same result as below.
+The System did not recover after the crash.
 
-as the KSZ9563 supports no 2-step time stamping, I use 1-step with E2E.
-The problem with E2E is, that the "master/slave" filter
-on the KSZ9563 filters out some message types.  In order to circumvent
-this, I use the KSZ as slave_only for the first tests.  Later I would like
-to use P2P, but this requires additional implementation in the driver. 
+Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-> > > Maybe this could be mentioned somewhere (e.g. extra line in file
-> > > header of
-> > > ksz_ptp.c). 
-> 
-> Sure, I will add it in the File Header in the next version.
-thanks.
+syscalls:sys_enter_openat event fields: Ok
+ 17: Setup struct perf_event_attr                                    :
+--- start ---
+test child forked, pid 433
+Using CPUID AuthenticAMD-23-1-2
+/usr/libexec/perf-core/tests/attr.py:142: DeprecationWarning: The
+SafeConfigParser class has been renamed to ConfigParser in Python 3.2.
+This alias will be removed in Python 3.12. Use ConfigParser directly
+instead.
+  parser = configparser.SafeConfigParser()
+running '/usr/libexec/perf-core/tests/attr/test-record-no-samples'
+/usr/libexec/perf-core/tests/attr.py:201: DeprecationWarning: The
+SafeConfigParser class has been renamed to ConfigParser in Python 3.2.
+This alias will be removed in Python 3.12. Use ConfigParser directly
+instead.
+  parser_event = configparser.SafeConfigParser()
+/usr/libexec/perf-core/tests/attr.py:215: DeprecationWarning: The
+SafeConfigParser class has been renamed to ConfigParser in Python 3.2.
+This alias will be removed in Python 3.12. Use ConfigParser directly
+instead.
+  parser_base = configparser.SafeConfigParser()
+running '/usr/libexec/perf-core/tests/attr/test-record-graph-fp-aarch64'
+test limitation 'aarch64'
+skipped [i686] '/usr/libexec/perf-core/tests/attr/test-record-graph-fp-aarch64'
+running '/usr/libexec/perf-core/tests/attr/test-record-branch-filter-any_ret'
+unsupp  '/usr/libexec/perf-core/tests/attr/test-record-branch-filter-any_ret'
+running '/usr/libexec/perf-core/tests/attr/test-record-branch-filter-ind_call'
+unsupp  '/usr/libexec/perf-core/tests/attr/test-record-branch-filter-ind_call'
+running '/usr/libexec/perf-core/tests/attr/test-record-spe-physical-address'
+test limitation 'aarch64'
+skipped [i686] '/usr/libexec/perf-core/tests/attr/test-record-spe-physical-address'
+running '/usr/libexec/perf-core/tests/attr/test-record-C0'
+[  115.046512] perf: interrupt took too long (11109 > 11096), lowering
+kernel.perf_event_max_sample_rate to 18000
+running '/usr/libexec/perf-core/tests/attr/test-record-group'
+[  116.006600] BUG: kernel NULL pointer dereference, address: 00000148
+[  116.008309] #PF: supervisor read access in kernel mode
+[  116.009527] #PF: error_code(0x0000) - not-present page
+[  116.010809] *pde = 00000000
+[  116.011454] Oops: 0000 [#1] PREEMPT SMP
+[  116.012144] CPU: 2 PID: 449 Comm: perf-exec Not tainted 6.0.7-rc1 #1
+[  116.013256] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.12.0-1 04/01/2014
+[  116.014710] EIP: x86_pmu_enable_event+0x4a/0x190
+[  116.015617] Code: 64 a1 10 2c 8d c6 85 c0 75 16 8b 5d f4 8b 75 f8
+8b 7d fc 89 ec 5d c3 8d b4 26 00 00 00 00 66 90 b8 43 bb 49 c6 e8 56
+13 fb 00 <8b> b3 48 01 00 00 b8 dc 39 8d c6 64 03 05 b0 28 8d c6 8b 38
+85 f6
+[  116.018642] EAX: 00000002 EBX: 00000000 ECX: c0010200 EDX: c649bb43
+[  116.019709] ESI: f51c6b00 EDI: f51c6c00 EBP: c34e1da4 ESP: c34e1d88
+[  116.020744] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00210002
+[  116.021847] CR0: 80050033 CR2: 00000148 CR3: 03e07000 CR4: 003506d0
+[  116.022930] DR0: 00000000 DR1: 00000000 DR2: 00000000 DR3: 00000000
+[  116.023674] DR6: ffff4ff0 DR7: 00000400
+[  116.024078] Call Trace:
+[  116.024348]  amd_pmu_enable_all+0x3d/0x50
+[  116.024776]  x86_pmu_enable+0x17c/0x370
+[  116.025179]  ctx_resched+0xad/0xf0
+[  116.025542]  perf_event_exec+0x338/0x400
+[  116.025956]  begin_new_exec+0x548/0xac0
+[  116.026358]  load_elf_binary+0x2ad/0x1360
+[  116.027063]  ? __kernel_read+0x12c/0x220
+[  116.027520]  ? _raw_read_unlock+0x1d/0x40
+[  116.027957]  ? load_misc_binary+0x1eb/0x290
+[  116.028404]  ? trace_preempt_on+0x29/0xe0
+[  116.028827]  ? load_misc_binary+0x1eb/0x290
+[  116.029287]  ? preempt_count_sub+0xc1/0x110
+[  116.029722]  ? bprm_execve+0x256/0x650
+[  116.030122]  ? preempt_count_sub+0xc1/0x110
+[  116.030600]  bprm_execve+0x260/0x650
+[  116.031006]  do_execveat_common+0x13f/0x1b0
+[  116.031482]  __ia32_sys_execve+0x35/0x40
+[  116.031897]  __do_fast_syscall_32+0x4c/0xc0
+[  116.032358]  do_fast_syscall_32+0x32/0x70
+[  116.032777]  do_SYSENTER_32+0x15/0x20
+[  116.033190]  entry_SYSENTER_32+0x98/0xf1
+[  116.033601] EIP: 0xb7eda549
+[  116.033903] Code: Unable to access opcode bytes at RIP 0xb7eda51f.
+[  116.034576] EAX: ffffffda EBX: bfa6d940 ECX: bfa730f8 EDX: 08ea9dc0
+[  116.035278] ESI: bfa73d61 EDI: bfa6d949 EBP: bfa6da38 ESP: bfa6d918
+[  116.035927] DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 007b EFLAGS: 00200296
+[  116.036624] Modules linked in:
+[  116.036961] CR2: 0000000000000148
+[  116.037315] ---[ end trace 0000000000000000 ]---
+[  116.037753] EIP: x86_pmu_enable_event+0x4a/0x190
+[  116.038190] Code: 64 a1 10 2c 8d c6 85 c0 75 16 8b 5d f4 8b 75 f8
+8b 7d fc 89 ec 5d c3 8d b4 26 00 00 00 00 66 90 b8 43 bb 49 c6 e8 56
+13 fb 00 <8b> b3 48 01 00 00 b8 dc 39 8d c6 64 03 05 b0 28 8d c6 8b 38
+85 f6
+[  116.039918] EAX: 00000002 EBX: 00000000 ECX: c0010200 EDX: c649bb43
+[  116.040509] ESI: f51c6b00 EDI: f51c6c00 EBP: c34e1da4 ESP: c34e1d88
+[  116.041092] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00210002
+[  116.041720] CR0: 80050033 CR2: b7eda51f CR3: 03e07000 CR4: 003506d0
+[  116.042301] DR0: 00000000 DR1: 00000000 DR2: 00000000 DR3: 00000000
+[  116.042895] DR6: ffff4ff0 DR7: 00000400
+[  116.043254] note: perf-exec[449] exited with preempt_count 2
+[  136.996781] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[  136.998413] rcu: 2-...0: (1 ticks this GP) idle=ed7c/1/0x40000000
+softirq=4094/4094 fqs=4847
+[  137.000598] (detected by 1, t=21002 jiffies, g=7361, q=198 ncpus=4)
+[  137.002418] Sending NMI from CPU 1 to CPUs 2:
+[  137.003676] NMI backtrace for cpu 2
+[  137.003689] CPU: 2 PID: 449 Comm: perf-exec Tainted: G      D
+     6.0.7-rc1 #1
+[  137.003694] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.12.0-1 04/01/2014
+[  137.003697] EIP: queued_spin_lock_slowpath+0x3a/0x2d0
+[  137.003710] Code: 3e 8d 74 26 00 ba 01 00 00 00 8d b6 00 00 00 00
+8b 03 85 c0 75 12 f0 0f b1 13 85 c0 75 f2 58 5b 5e 5f 5d c3 8d 74 26
+00 f3 90 <eb> e4 8d 74 26 00 81 fa 00 01 00 00 74 50 81 e2 00 ff ff ff
+85 d2
+[  137.003712] EAX: 00000001 EBX: c331e0c4 ECX: 00000000 EDX: 00000001
+[  137.003714] ESI: 00000002 EDI: c331e0c0 EBP: c34e1d94 ESP: c34e1d84
+[  137.003716] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00200002
+[  137.003720] CR0: 80050033 CR2: b7eda51f CR3: 03e07000 CR4: 003506d0
+[  137.003723] DR0: 00000000 DR1: 00000000 DR2: 00000000 DR3: 00000000
+[  137.003724] DR6: ffff4ff0 DR7: 00000400
+[  137.003725] Call Trace:
+[  137.003731]  _raw_spin_lock+0x31/0x40
+[  137.003737]  perf_event_task_tick+0x97/0x370
+[  137.003743]  ? task_tick_fair+0x77/0x2f0
+[  137.003747]  ? __wake_up+0x21/0x30
+[  137.003751]  ? update_rq_clock+0x39/0x200
+[  137.003754]  ? task_fork_fair+0x180/0x180
+[  137.003756]  scheduler_tick+0xbe/0x2b0
+[  137.003760]  ? task_fork_fair+0x180/0x180
+[  137.003761]  update_process_times+0x85/0x90
+[  137.003766]  tick_sched_handle+0x3d/0x60
+[  137.003769]  tick_sched_timer+0x92/0xb0
+[  137.003771]  __hrtimer_run_queues+0xb2/0x300
+[  137.003774]  ? tick_sched_do_timer+0xa0/0xa0
+[  137.003776]  hrtimer_interrupt+0x129/0x270
+[  137.003778]  ? _prb_read_valid+0x84/0x3c0
+[  137.003783]  ? sysvec_call_function_single+0x50/0x50
+[  137.003785]  __sysvec_apic_timer_interrupt+0x76/0x160
+[  137.003791]  ? debug_smp_processor_id+0x12/0x20
+[  137.003793]  sysvec_apic_timer_interrupt+0x31/0x50
+[  137.003794]  handle_exception+0x133/0x133
+[  137.003796] EIP: _raw_spin_unlock_irq+0x16/0x40
+[  137.003799] Code: c0 74 09 5d c3 8d b4 26 00 00 00 00 e8 73 25 00
+00 5d c3 90 3e 8d 74 26 00 55 89 e5 c6 00 00 e8 c0 cb 25 ff fb b8 01
+00 00 00 <e8> 45 b1 17 ff 64 a1 0c 77 8d c6 85 c0 74 0b 5d c3 8d b4 26
+00 00
+[  137.003801] EAX: 00000001 EBX: c26f24c0 ECX: c5111bf4 EDX: 00000001
+[  137.003802] ESI: c26f24c0 EDI: 00000000 EBP: c34e1f4c ESP: c34e1f4c
+[  137.003803] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00200246
+[  137.003805]  ? do_exit+0x54/0x9c0
+[  137.003809]  ? sysvec_call_function_single+0x50/0x50
+[  137.003811]  ? sysvec_call_function_single+0x50/0x50
+[  137.003812]  ? _raw_spin_unlock_irq+0x16/0x40
+[  137.003814]  do_exit+0x54/0x9c0
+[  137.003816]  ? vprintk+0x55/0x60
+[  137.003818]  make_task_dead+0x56/0x60
+[  137.003820]  rewind_stack_and_make_dead+0x11/0x20
+[  137.003824] EIP: 0xb7eda549
+[  137.003837] Code: Unable to access opcode bytes at RIP 0xb7eda51f.
+[  137.003838] EAX: ffffffda EBX: bfa6d940 ECX: bfa730f8 EDX: 08ea9dc0
+[  137.003839] ESI: bfa73d61 EDI: bfa6d949 EBP: bfa6da38 ESP: bfa6d918
+[  137.003840] DS: 007b ES: 007b FS: 0000 GS: 0000 SS: 007b EFLAGS: 00200296
+[  200.005419] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+[  200.010134] rcu: 2-...0: (1 ticks this GP) idle=ed7c/1/0x40000000
+softirq=4094/4094 fqs=19175
+[  200.011177] (detected by 1, t=84017 jiffies, g=7361, q=436 ncpus=4)
+[  200.011949] Sending NMI from CPU 1 to CPUs 2:
+[  200.012561] NMI backtrace for cpu 2
+[  200.012569] CPU: 2 PID: 449 Comm: perf-exec Tainted: G      D
+     6.0.7-rc1 #1
+[  200.012572] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996),
+BIOS 1.12.0-1 04/01/2014
+[  200.012574] EIP: queued_spin_lock_slowpath+0x3a/0x2d0
+[  200.012583] Code: 3e 8d 74 26 00 ba 01 00 00 00 8d b6 00 00 00 00
+8b 03 85 c0 75 12 f0 0f b1 13 85 c0 75 f2 58 5b 5e 5f 5d c3 8d 74 26
+00 f3 90 <eb> e4 8d 74 26 00 81 fa 00 01 00 00 74 50 81 e2 00 ff ff ff
+85 d2
+[  200.012585] EAX: 00000001 EBX: c331e0c4 ECX: 00000000 EDX: 00000001
+[  200.012587] ESI: 00000002 EDI: c331e0c0 EBP: c34e1d94 ESP: c34e1d84
+[  200.012588] DS: 007b ES: 007b FS: 00d8 GS: 0000 SS: 0068 EFLAGS: 00200002
+[  200.012592] CR0: 80050033 CR2: b7eda51f CR3: 03e07000 CR4: 003506d0
+[  200.012595] DR0: 00000000 DR1: 00000000 DR2: 00000000 DR3: 00000000
+[  200.012596] DR6: ffff4ff0 DR7: 00000400
+[  200.012597] Call Trace:
+[  200.012601]  _raw_spin_lock+0x31/0x40
+[  200.012606]  perf_event_task_tick+0x97/0x370
+[  200.012610]  ? task_tick_fair+0x77/0x2f0
+[  200.012613]  ? __wake_up+0x21/0x30
+[  200.012616]  ? update_rq_clock+0x39/0x200
+[  200.012618]  ? task_fork_fair+0x180/0x180
+[  200.012620]  scheduler_tick+0xbe/0x2b0
+[  200.012622]  ? task_fork_fair+0x180/0x180
+[  200.012624]  update_process_times+0x85/0x90
+[  200.012627]  tick_sched_handle+0x3d/0x60
+[  200.012629]  tick_sched_timer+0x92/0xb0
+[  200.012631]  __hrtimer_run_queues+0xb2/0x300
+[  200.012633]  ? tick_sched_do_timer+0xa0/0xa0
+[  200.012635]  hrtimer_interrupt+0x129/0x270
+[  200.012638]  ? _prb_read_valid+0x84/0x3c0
+[  200.012641]  ? sysvec_call_function_single+0x50/0x50
+[  200.012643]  __sysvec_apic_timer_interrupt+0x76/0x160
+[  200.012647]  ? debug_smp_processor_id+0x12/0x20
+[  200.012648]  sysvec_apic_timer_interrupt+0x31/0x50
+[  200.012650]  handle_exception+0x133/0x133
 
-> 
-> I thought 1PPS and periodic output are same, So I sent the 1PPS patch.
-> I need to look into periodic output.
-I fell the same when I first started with PTP... But maybe you can use
-same code for periodic output from my original patches.
 
-regards,
-Christian
+metadata:
+  git_ref: linux-6.0.y
+  git_repo: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+  git_sha: 436175d0f780af8302164b3102ecf0ff99f7a376
+  git_describe: v6.0.6-241-g436175d0f780
+  kernel_version: 6.0.7-rc1
+  kernel-config: https://builds.tuxbuild.com/2GyMhllOBAqVhs03YoIHIAE7E8c/config
+  build-url: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc/-/pipelines/683032123
+  artifact-location: https://builds.tuxbuild.com/2GyMhllOBAqVhs03YoIHIAE7E8c
+  toolchain: gcc-11
+
+Test full log link,
+https://lkft.validation.linaro.org/scheduler/job/5799947#L16491
 
 
-
-
+--
+Linaro LKFT
+https://lkft.linaro.org
