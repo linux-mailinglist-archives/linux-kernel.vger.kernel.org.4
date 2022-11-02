@@ -2,89 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DA04061698D
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:45:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B59C616996
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:46:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232089AbiKBQpL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 12:45:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45984 "EHLO
+        id S232071AbiKBQqn convert rfc822-to-8bit (ORCPT
+        <rfc822;lists+linux-kernel@lfdr.de>); Wed, 2 Nov 2022 12:46:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231924AbiKBQoo (ORCPT
+        with ESMTP id S232065AbiKBQq0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 12:44:44 -0400
-Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A48881159;
-        Wed,  2 Nov 2022 09:40:57 -0700 (PDT)
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-1322d768ba7so20910489fac.5;
-        Wed, 02 Nov 2022 09:40:57 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m+qIpBdMeiwMSdKxhevqq/k7KwaaJsQLzkW85JVdIao=;
-        b=DFjHh/zUlhLF146ohXsixdVd7nzc+Jok+rsiGLlhd2lSJQ3IgCPuAu3rbvzmOPITSG
-         rcs7JMmSL1qotArEWh3goYKnnRXSZf6wiMiFGNcplltX8+rQDuoc1L6bd+x5QDyS97Od
-         prBbp/MsMN1SFKIoEtSga/YNOqzYmHwo24gbQY91i/N8dnHfc0rh/n++empiU7k3e0PN
-         Udx16bnLaqRAiF/Bs/e6QeBIP7wwSXmhhnjW1bq8MVewtZBBwZ3S4zhbTHf84YV+cuFQ
-         TksLjoPDDtQgQgnrpOJ178Q8/SKiPMLl/Z7WHPupivIbBTnSwbLJsLfyhQnI/OJ2GSJ6
-         XAOQ==
-X-Gm-Message-State: ACrzQf1goGgqPao4QkyIN9kdAA8K4nGJlQMGv5vSq96Ijl4g3gnimOSu
-        7NNvrTCFD8ZV9VHoCYjy+A==
-X-Google-Smtp-Source: AMsMyM6f3lSc5rozDexOGm1YJwC+cz1fMbEXwplGHe3C/bKL7xZEBfeU6Fgy9bW+3b/j+e12LhudwQ==
-X-Received: by 2002:a05:6870:785:b0:131:e39c:9140 with SMTP id en5-20020a056870078500b00131e39c9140mr15365528oab.261.1667407256894;
-        Wed, 02 Nov 2022 09:40:56 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id i16-20020a056870a69000b0013b8b3710bfsm6213718oam.13.2022.11.02.09.40.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 09:40:56 -0700 (PDT)
-Received: (nullmailer pid 4016578 invoked by uid 1000);
-        Wed, 02 Nov 2022 16:40:58 -0000
-Date:   Wed, 2 Nov 2022 11:40:58 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Zev Weiss <zev@bewilderbeest.net>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>,
-        Laxman Dewangan <ldewangan@nvidia.com>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-kernel@vger.kernel.org,
-        Naresh Solanki <naresh.solanki@9elements.com>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        openbmc@lists.ozlabs.org, Mark Brown <broonie@kernel.org>
-Subject: Re: [PATCH v2 2/3] dt-bindings: regulator: Add regulator-output
- binding
-Message-ID: <166740725744.4016522.5256752936838143557.robh@kernel.org>
-References: <20221031233704.22575-1-zev@bewilderbeest.net>
- <20221031233704.22575-3-zev@bewilderbeest.net>
+        Wed, 2 Nov 2022 12:46:26 -0400
+Received: from relay.hostedemail.com (smtprelay0015.hostedemail.com [216.40.44.15])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92FB72ED48
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 09:42:50 -0700 (PDT)
+Received: from omf15.hostedemail.com (a10.router.float.18 [10.200.18.1])
+        by unirelay02.hostedemail.com (Postfix) with ESMTP id 240C612048C;
+        Wed,  2 Nov 2022 16:42:49 +0000 (UTC)
+Received: from [HIDDEN] (Authenticated sender: joe@perches.com) by omf15.hostedemail.com (Postfix) with ESMTPA id 0960E1A;
+        Wed,  2 Nov 2022 16:42:26 +0000 (UTC)
+Message-ID: <bfc8e714fbe80a16428a447768def5764083526d.camel@perches.com>
+Subject: Re: [PATCH V4 1/2] staging: vt6655: change the function name
+ s_vFillRTSHead
+From:   Joe Perches <joe@perches.com>
+To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>,
+        gregkh@linuxfoundation.org
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Date:   Wed, 02 Nov 2022 09:42:44 -0700
+In-Reply-To: <5a0649c6019f1717cb2e2e8fc4e262f3747d73a5.1667397591.git.tanjubrunostar0@gmail.com>
+References: <cover.1667397591.git.tanjubrunostar0@gmail.com>
+         <5a0649c6019f1717cb2e2e8fc4e262f3747d73a5.1667397591.git.tanjubrunostar0@gmail.com>
+Content-Type: text/plain; charset="ISO-8859-1"
+Content-Transfer-Encoding: 8BIT
+User-Agent: Evolution 3.44.4 (3.44.4-2.fc36) 
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221031233704.22575-3-zev@bewilderbeest.net>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
+X-Stat-Signature: txy8sj8bu5swc3afcnas4766rwkdzdge
+X-Rspamd-Server: rspamout06
+X-Rspamd-Queue-Id: 0960E1A
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,FORGED_SPF_HELO,
+        KHOP_HELO_FCRDNS,SPF_HELO_PASS,SPF_NONE,UNPARSEABLE_RELAY autolearn=no
         autolearn_force=no version=3.4.6
+X-Session-Marker: 6A6F6540706572636865732E636F6D
+X-Session-ID: U2FsdGVkX1/mxU+0uLylN+8cO5mkEBniTdxtqfnLOpM=
+X-HE-Tag: 1667407346-556323
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, 2022-11-02 at 14:08 +0000, Tanjuate Brunostar wrote:
+> Remove the use of Hungarian notation, which is not used in the Linux
+> kernel. Reported by checkpatch
+[]
+> diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+[]
+> @@ -23,7 +23,7 @@
+>   *      s_uGetTxRsvTime- get frame reserved time
+>   *      s_vFillCTSHead- fulfill CTS ctl header
+>   *      s_vFillFragParameter- Set fragment ctl parameter.
+> - *      s_vFillRTSHead- fulfill RTS ctl header
+> + *      fill_rts_header- fulfill RTS ctl header
+>   *      s_vFillTxKey- fulfill tx encrypt key
+>   *      s_vSWencryption- Software encrypt header
+>   *      vDMA0_tx_80211- tx 802.11 frame via dma0
+> @@ -85,15 +85,15 @@ static const unsigned short fb_opt1[2][5] = {
+>  #define DATADUR_A_F1    13
+>  
+>  /*---------------------  Static Functions  --------------------------*/
+> -static void s_vFillRTSHead(struct vnt_private *pDevice,
+> -			   unsigned char byPktType,
+> -			   void *pvRTS,
+> -			   unsigned int	cbFrameLength,
+> -			   bool bNeedAck,
+> -			   bool bDisCRC,
+> -			   struct ieee80211_hdr *hdr,
+> -			   unsigned short wCurrentRate,
+> -			   unsigned char byFBOption);
+> +static void fill_rts_head(struct vnt_private *pDevice,
+> +			  unsigned char byPktType,
+> +			  void *pvRTS,
+> +			  unsigned int	cbFrameLength,
+> +			  bool bNeedAck,
+> +			  bool bDisCRC,
+> +			  struct ieee80211_hdr *hdr,
+> +			  unsigned short wCurrentRate,
+> +			  unsigned char byFBOption);
 
-On Mon, 31 Oct 2022 16:37:03 -0700, Zev Weiss wrote:
-> This describes a power output supplied by a regulator, such as a
-> power outlet on a power distribution unit (PDU).
-> 
-> Signed-off-by: Zev Weiss <zev@bewilderbeest.net>
-> ---
-> 
-> Changes since v1:
->  - removed 'regulator-leave-on' property
-> 
->  .../bindings/regulator/regulator-output.yaml  | 39 +++++++++++++++++++
->  1 file changed, 39 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/regulator-output.yaml
-> 
+Please compile the files modified by your patches _before_ submitting them.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Note the mismatch in your naming for this function prototype and the
+actual function.
+
+fill_rts_head vs fill_rts_header.
+
+I believe this was already pointed out to you by the kernel robot.
