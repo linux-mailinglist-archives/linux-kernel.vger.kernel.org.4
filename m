@@ -2,134 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9DA61615FAF
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:28:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC23C615FB0
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:28:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230026AbiKBJ2R (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 05:28:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38690 "EHLO
+        id S230199AbiKBJ2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 05:28:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38696 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbiKBJ1i (ORCPT
+        with ESMTP id S230381AbiKBJ1j (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 05:27:38 -0400
-Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 209812704
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 02:27:34 -0700 (PDT)
-Received: by mail-pl1-x630.google.com with SMTP id p21so12150135plr.7
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 02:27:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tig2lIwdCA6JHTxsTU+TQaIXl+F0LsrnT5B9kKYjmGM=;
-        b=UfmqGin2l/Z2euAUtGeMyjYjWDvj+JP3yxy184yGkC4BcGbQ00r38NO326fvy+4D4Q
-         xExoTKA00rCLYzZ43hdcvBBAX6t5DiqdrJIVXrdpoXC8KuXHUBKpLfXnHRQVaQqK1keb
-         dzDOghZmgHKeYwJGW7GjqjOsBPkXV38qFgE1I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tig2lIwdCA6JHTxsTU+TQaIXl+F0LsrnT5B9kKYjmGM=;
-        b=Okrjx2GTWTaQnrH83kGrX4xtqrjEPHyQozTtzjnfh5V5ixgZUj5juB4prbKt887JHt
-         aQiBTIJaFQm4Uu38JTqiSJXUJDygTWYusUoYfTWFnmR+u/YiZEGkRWog0Tfy1CPz5Qc8
-         OU+hDMFMwnu8pe3AbQ8zoMBFcc7q0r2vq3pWo3+lCwLXgmJgN2lN99sGTA1cp5lxQqqD
-         +qmojIeVjdJ++z1FrNm6gbMbdEmiH//H700j3XjugOVJfiVCT5wlgkbb+FEb9V3Qycf5
-         kY25CO9ZxD2WLWjUaPJlVWSHJX0dy7BzcWN/cj6bLzAo1IcZ/VaAYyXM5smBDVU2g3bl
-         cItg==
-X-Gm-Message-State: ACrzQf0gdo1FILBBBRj2HAnkxYamgs7y4k15q7otOnEq8/7NtwqUFJqH
-        2g9pqEK6bUyXPUvL/xOLKYytKw==
-X-Google-Smtp-Source: AMsMyM6/+HMLV2bJylWsJLlfhWSxo5sVsqDjCrok+HHs+xbzWZtkQ3xcCh4Xb8pJk+IUUEygyTjHww==
-X-Received: by 2002:a17:902:cccd:b0:187:733:35d1 with SMTP id z13-20020a170902cccd00b00187073335d1mr22002052ple.26.1667381253581;
-        Wed, 02 Nov 2022 02:27:33 -0700 (PDT)
-Received: from [192.168.0.168] ([103.99.10.63])
-        by smtp.gmail.com with ESMTPSA id o68-20020a62cd47000000b0056283e2bdbdsm7964981pfg.138.2022.11.02.02.27.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 02:27:32 -0700 (PDT)
-Message-ID: <71707e1f-8805-d6c7-6a35-c74a5655d6cd@linuxfoundation.org>
-Date:   Wed, 2 Nov 2022 03:27:28 -0600
+        Wed, 2 Nov 2022 05:27:39 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 46B3AE12;
+        Wed,  2 Nov 2022 02:27:36 -0700 (PDT)
+Date:   Wed, 02 Nov 2022 09:27:33 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1667381254;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QwHtpybh8uWFCp4slmM5agXbdIBRLz4PaWVEeRw61p0=;
+        b=iw5sdEGqwTVUxG+i2IXxe5fj5Kmxyfm6Ykb6l0YWsKnnnlHb00FqkKTQ7+afx6fpCl/GEP
+        znDd53DKEs81+duQ336DMfwKm7difvItY/o8MMOv4NBdLYWHv7pVGQ3xzg+vbhQPalLM9c
+        EcrvgdxC0x2rSw3GXRbYq72sAftnd4YCSmdKa7qReL7tSfosCbn4A99+917mdH3YbS4uDd
+        lTT7XU8D2DF0T2G1F5z/ve/OWaQTylA7VE99nNd5K9XvemiRmBG28s67oFfFaB0+fgt/b1
+        +brseP3nwIYIyEDHsw8DQU9zpYrun/iVPhGwCDRjOWS5dnX4UbPVRpAaRQsJsg==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1667381254;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=QwHtpybh8uWFCp4slmM5agXbdIBRLz4PaWVEeRw61p0=;
+        b=ByfRd5Nj7z73Vgwk4FDSy7g/uoZSy7jOYJRyjpvIAjHOSMn8tdSNUcQwnwDQyY+bTvPR9Z
+        68Xs+QUUU3btIKCg==
+From:   "tip-bot2 for Lukas Bulwahn" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/cleanups] x86/boot: Repair kernel-doc for boot_kstrtoul()
+Cc:     Lukas Bulwahn <lukas.bulwahn@gmail.com>,
+        Borislav Petkov <bp@suse.de>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221031094835.15923-1-lukas.bulwahn@gmail.com>
+References: <20221031094835.15923-1-lukas.bulwahn@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v3 2/5] selftests/resctrl: Return MBA check result and
- make it to output message
-Content-Language: en-US
-To:     Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>,
-        Fenghua Yu <fenghua.yu@intel.com>,
-        Reinette Chatre <reinette.chatre@intel.com>,
-        Shuah Khan <shuah@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        Shuah Khan <skhan@linuxfoundation.org>
-References: <20221101094341.3383073-1-tan.shaopeng@jp.fujitsu.com>
- <20221101094341.3383073-3-tan.shaopeng@jp.fujitsu.com>
-From:   Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20221101094341.3383073-3-tan.shaopeng@jp.fujitsu.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-ID: <166738125354.7716.16790203039429417490.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/1/22 03:43, Shaopeng Tan wrote:
-> Since MBA check result is not returned, the MBA test result message
-> is always output as "ok" regardless of whether the MBA check result is
-> true or false.
-> 
-> Make output message to be "not ok" if MBA check result is failed.
-> 
-> Reviewed-by: Reinette Chatre <reinette.chatre@intel.com>
-> Signed-off-by: Shaopeng Tan <tan.shaopeng@jp.fujitsu.com>
-> ---
->   tools/testing/selftests/resctrl/mba_test.c | 8 ++++----
->   1 file changed, 4 insertions(+), 4 deletions(-)
-> 
-> diff --git a/tools/testing/selftests/resctrl/mba_test.c b/tools/testing/selftests/resctrl/mba_test.c
-> index 1a1bdb6180cf..5d14802add4d 100644
-> --- a/tools/testing/selftests/resctrl/mba_test.c
-> +++ b/tools/testing/selftests/resctrl/mba_test.c
-> @@ -51,7 +51,7 @@ static int mba_setup(int num, ...)
->   	return 0;
->   }
->   
-> -static void show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
-> +static bool show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
->   {
->   	int allocation, runs;
->   	bool failed = false;
-> @@ -97,6 +97,8 @@ static void show_mba_info(unsigned long *bw_imc, unsigned long *bw_resc)
->   		       failed ? "Fail:" : "Pass:");
->   	if (failed)
->   		ksft_print_msg("At least one test failed\n");
-> +
-> +	return failed;
+The following commit has been merged into the x86/cleanups branch of tip:
 
-Rename "failed" to "ret" - naming the variable "failed" is confusing.
+Commit-ID:     d632bf6ff1f6f733e1de9c5331fd643f4ecbe483
+Gitweb:        https://git.kernel.org/tip/d632bf6ff1f6f733e1de9c5331fd643f4ecbe483
+Author:        Lukas Bulwahn <lukas.bulwahn@gmail.com>
+AuthorDate:    Mon, 31 Oct 2022 10:48:35 +01:00
+Committer:     Borislav Petkov <bp@suse.de>
+CommitterDate: Wed, 02 Nov 2022 10:20:02 +01:00
 
->   }
->   
->   static int check_results(void)
-> @@ -132,9 +134,7 @@ static int check_results(void)
->   
->   	fclose(fp);
->   
-> -	show_mba_info(bw_imc, bw_resc);
-> -
-> -	return 0;
-> +	return show_mba_info(bw_imc, bw_resc);
->   }
->   
->   void mba_test_cleanup(void)
+x86/boot: Repair kernel-doc for boot_kstrtoul()
 
-With that change,
+Adjust the kernel-doc comment to have the proper function name:
+boot_kstrtoul().
 
-Reviewed-by: Shuah Khan <skhan@linuxfoundation.org>
+  [ bp: Massage commit message. ]
 
-thanks,
--- Shuah
+Signed-off-by: Lukas Bulwahn <lukas.bulwahn@gmail.com>
+Signed-off-by: Borislav Petkov <bp@suse.de>
+Link: https://lore.kernel.org/r/20221031094835.15923-1-lukas.bulwahn@gmail.com
+---
+ arch/x86/boot/string.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/arch/x86/boot/string.c b/arch/x86/boot/string.c
+index 8a3fff9..1c8541a 100644
+--- a/arch/x86/boot/string.c
++++ b/arch/x86/boot/string.c
+@@ -350,7 +350,7 @@ static int _kstrtoul(const char *s, unsigned int base, unsigned long *res)
+ }
+ 
+ /**
+- * kstrtoul - convert a string to an unsigned long
++ * boot_kstrtoul - convert a string to an unsigned long
+  * @s: The start of the string. The string must be null-terminated, and may also
+  *  include a single newline before its terminating null. The first character
+  *  may also be a plus sign, but not a minus sign.
