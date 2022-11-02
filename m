@@ -2,303 +2,197 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 372F56172CB
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 00:38:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D797E6172CF
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 00:39:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbiKBXi3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 19:38:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53178 "EHLO
+        id S230005AbiKBXjP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 19:39:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54762 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231492AbiKBXiJ (ORCPT
+        with ESMTP id S231474AbiKBXjA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 19:38:09 -0400
-Received: from mail-pl1-f202.google.com (mail-pl1-f202.google.com [209.85.214.202])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EDBB6547
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 16:29:26 -0700 (PDT)
-Received: by mail-pl1-f202.google.com with SMTP id d18-20020a170902ced200b001871dab2d59so212561plg.22
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 16:29:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=VE7RW56VayO0keHNnwyMULSgmJMIPboymyf3dnMpIn8=;
-        b=oBt2cyAGroEh99N7q1oP3Lyx5ZZvCvEPDzBzn78SuT6gpHQOdml/zL+SEucIpnDKoS
-         WT817zq7BrvRmiT0Tzwi1T5i46v8sxV23v2bTDIit+liSAF+p3bHNnsu8SNfwZ1ci9nC
-         t2hkz4czIuws/OduRXDygRCG4HMf/wggs8mPZlGMDM5sBngQIDfWvjioGbj83A28k2zU
-         jppfE0GmOOBeQoj+x9Z243mGLCT8kszHSl5JI3+VYSrcrf8UrXtQ5zGG7TWz70PZ2BTq
-         89mAqbXzJw8fx8kGYGaOvZYLPOExzM+zz+C07bGGgHo6LLisS13+Ih/HEHOjeFx/J52z
-         CPjw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=VE7RW56VayO0keHNnwyMULSgmJMIPboymyf3dnMpIn8=;
-        b=MUNw57ew/pSZMTQSxYRv6fj02yMZm4Xrxz/fjWNqkz7yvqXBrGDlCiGCaAgzmm6hos
-         0SHDL2sIVVrplw0VcI5UXTDL/tH/6/yIVXn/c2r0gz8H6yoiMkzVYeB7So4FVc/zmsD4
-         plRpx5GUZar1uHVz1bXZgpCnMTW7SaQ2rsdHVSqYrf5nMc4y631NB7bLuSeZnFo0rbyo
-         hgFu2b3Y/DoteVpeMrxJab6voPgUh9/Ad0k6iw5DCj1fubNF6bExw1hiAoICjbRDZNwB
-         9Nd5qpJGMW9o1jvun9ZhL7ECheNI1kjcvwi5rx6nh7I00Id7AAEf9wvgkXQ9NPAensxY
-         7RPQ==
-X-Gm-Message-State: ACrzQf2Afc10R3E22xSfWVudG5QhUrJ3347LpAjnqZSaPDeQoVcLC32v
-        zFuKnluECTYji+zEY9VmcmPOlyAAP/bi
-X-Google-Smtp-Source: AMsMyM6Amu75LLCI6ho6HTg/JAv+yT+t+ou4lZLXRrdPjIfyn9AgHpRkcWZK4SXH7msXKmAaRyUZzq+2OK3q
-X-Received: from vipin.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:479f])
- (user=vipinsh job=sendgmr) by 2002:a17:902:7c11:b0:178:a6ca:4850 with SMTP id
- x17-20020a1709027c1100b00178a6ca4850mr28014929pll.111.1667431673111; Wed, 02
- Nov 2022 16:27:53 -0700 (PDT)
-Date:   Wed,  2 Nov 2022 16:27:37 -0700
-In-Reply-To: <20221102232737.1351745-1-vipinsh@google.com>
-Mime-Version: 1.0
-References: <20221102232737.1351745-1-vipinsh@google.com>
-X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
-Message-ID: <20221102232737.1351745-8-vipinsh@google.com>
-Subject: [PATCH v8 7/7] KVM: selftests: Allowing running dirty_log_perf_test
- on specific CPUs
-From:   Vipin Sharma <vipinsh@google.com>
-To:     seanjc@google.com, pbonzini@redhat.com, dmatlack@google.com
-Cc:     andrew.jones@linux.dev, wei.w.wang@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Vipin Sharma <vipinsh@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        Wed, 2 Nov 2022 19:39:00 -0400
+Received: from na01-obe.outbound.protection.outlook.com (mail-eastusazon11021025.outbound.protection.outlook.com [52.101.52.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E5D9419C08;
+        Wed,  2 Nov 2022 16:30:23 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=a5YtWvCkOYnwO0Qh36aruE/oZTCFT00eOogHlygAQHb8I7cg5e541E7qI64whfqkbxagTTneRwCGLzngcF53D+3al+02wOrKOAYoTrVSFgYEXiZUjDWJ3qsBb2gPWZaJuNmQaKI3FS2JiMs8h9OzsQcapwApgJ4FcyALURdqSauC56Awu1NkIQs0o8Nb+BfvVZZQcQs/7tWz7NJsHtmRkTQiKg2LU7RRVSc7fcsH0Vw+bqri+fz00wsWtpL4w0QFseT5Vh7xFcfnHBrt+1nNaeEF4a5mRcQCZfPQZvttSdoN9vz7dCyn8GPMgrrD4BtUvWWI1O761B4BeY5dvZ0xBA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=yxGvyUScDsy0/kgj44Usi3eXQorrqk/19qeG2u6ZakU=;
+ b=n10uozMcEqCRL5BOJk/5jYO+nwxUHNjpQRUcQ5VBuN+AbrEH2YLO+CY4AmeXALmE1A6hPJPcAvD70SlsbJQGEXFDISZ4uo1iF1J8zo+IMQ98ugMRcjkV/mkVCY0uKLsW4td/yhXym402mxjkxO3ZGnuCyWrid9Ht3xx4lijyH+v4uOi88hnAun4xB5d0hv0hTepm99+O5CTv3SAaYoZAJtgrjqe9RuA2QcBEz9sNhO0rVmuXZrKWUrV7hIT38HadrgEq20yfbBrgGN91YoAo+xv8Dw9JjzQUUiXhtmoeIhHoW3hB1PX5iyXWRC0GNKOUgY7HbeHZLhcMRwnLOPlZOQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=microsoft.com; dmarc=pass action=none
+ header.from=microsoft.com; dkim=pass header.d=microsoft.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=yxGvyUScDsy0/kgj44Usi3eXQorrqk/19qeG2u6ZakU=;
+ b=iM4daDiIks5+UJDJg6+NGx2m3dWNZW66gdjw9XmzzRDyZZHGi4kIW2FHNjrVMxOURs8MZpLaju4nrZhLqswqEfHUaGhxvA3836I8+d41RvPxcAMN0AWJZc+IAWiW4zm3JeSL/0UxE4HKwbnIDarISsB3uwXVN2bbc5FOnpORCjE=
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com (2603:10b6:a02:bf::26)
+ by MN0PR21MB3360.namprd21.prod.outlook.com (2603:10b6:208:380::6) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5813.5; Wed, 2 Nov
+ 2022 23:30:15 +0000
+Received: from BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::f565:80ed:8070:474b]) by BYAPR21MB1688.namprd21.prod.outlook.com
+ ([fe80::f565:80ed:8070:474b%8]) with mapi id 15.20.5813.004; Wed, 2 Nov 2022
+ 23:30:15 +0000
+From:   "Michael Kelley (LINUX)" <mikelley@microsoft.com>
+To:     Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
+CC:     Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>,
+        KY Srinivasan <kys@microsoft.com>,
+        Haiyang Zhang <haiyangz@microsoft.com>,
+        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: RE: [PATCH v2 2/4] drivers/clocksource/hyper-v: Introduce TSC PFN
+ getter
+Thread-Topic: [PATCH v2 2/4] drivers/clocksource/hyper-v: Introduce TSC PFN
+ getter
+Thread-Index: AQHY7weQXCovCPj+PUGXTaK1x6iqXq4sRXJA
+Date:   Wed, 2 Nov 2022 23:30:15 +0000
+Message-ID: <BYAPR21MB1688D503DF583914F4EC0356D7399@BYAPR21MB1688.namprd21.prod.outlook.com>
+References: <166742670556.205987.18227942188746093700.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+ <166742684944.205987.13495997217797904022.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+In-Reply-To: <166742684944.205987.13495997217797904022.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+msip_labels: MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ActionId=2ba9d2a2-9271-40f5-bd81-eae40331ec35;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_ContentBits=0;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Enabled=true;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Method=Standard;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_Name=Internal;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SetDate=2022-11-02T23:20:53Z;MSIP_Label_f42aa342-8706-4288-bd11-ebb85995028c_SiteId=72f988bf-86f1-41af-91ab-2d7cd011db47;
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=microsoft.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: BYAPR21MB1688:EE_|MN0PR21MB3360:EE_
+x-ms-office365-filtering-correlation-id: 3ff8178d-f604-408c-324c-08dabd2a3241
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: TaKpkAOnRyuIdGNyvW0smprtaRYKb19ntbAuzqLDF5SNS9wkGfDsypTpIdw5mQMr3OWBUi15s3hx/jQG9IF134m+8ELyEcCSoeNc5DGYNU8EjHb+d+sxzp14Ei4PTHFfDTxJCYgqFt5x+m8yoOdLRQr8RXWfCCaBd1wDroF+TjlhADxyodWwl4nX9AhcSYhAShG6wcnMl3n1nTOqExYLsUW2aKhTLIPLO3UYT/7CxoUmfAuQOBYhUWFOJQ/pOpm7h6OJnE5V6SOoD7NHjuihadTpWLnhNorAGuegNM368I70Fmn4foOqXnQ9HSuisY/ZSC7VTK3bfXJuoGWBsBCzGxr/4GmAW8b4y6DXZeoEBFY6uEXHmnQx1EIU0cCltKPBdrhysy6cKPH9TTKU26o0BdrSgZ03JaZmUFtVNhft1Gag4LbgkvD3T5+HPNXYpoANUVTTLp0E++o+KN3W6NkT1MDd5e+zj9dfeuZ99iPJQVcWCKyDYgg2+p3gmHgxg+XJ2KDM4IdLSIFjZ6FQaq66YvfRS/e/wI335Ipcn9239Cz7eo0JVhJIwyymqbYohAjbs5Ps2pToSus5Sg8Hhcwu12N724B5PXEaYV4T8YDtil5662Rgm4k5SHav550DzG9bz2f1sM+3DRmMHiJPy2fnk20Guv0Ca7yaWBRgPKwJy58/zsShIODHolJCMxKi1kI8Br6vrUk088Gn/0hW+cvhaZtcBxSEBLa87f6dBuxG+7R1cMkHxAygd2OWpsadWCMAERtLfGk6vuvNTRh7+Sy3uSSFWv1iiBhOV14jM/wKZAElll7Ls3lqi2yyUyOO34NK
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR21MB1688.namprd21.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(396003)(39860400002)(346002)(366004)(136003)(451199015)(6862004)(52536014)(38070700005)(8936002)(33656002)(5660300002)(54906003)(82960400001)(86362001)(41300700001)(4326008)(316002)(66476007)(8676002)(66556008)(76116006)(64756008)(26005)(66946007)(66446008)(6506007)(7696005)(9686003)(83380400001)(10290500003)(186003)(55016003)(71200400001)(82950400001)(8990500004)(122000001)(478600001)(38100700002)(2906002);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?utf-8?B?Q0hkVk5ZQXphU2xZTWJRRWFwRGIwWE1sMmJDZWlJQjcwWTc0Yy84T1o3VS9r?=
+ =?utf-8?B?UkVJRGlzOHVtQXkvdjNXWURIcjRTaGlrOWJacTZZZFJ2RTdGdUJncGhQemgr?=
+ =?utf-8?B?eVptSUJuSUt4dEI3V0NuR3BtSTV6ZFdtbjRkWVpvdnhtdmgrR0Eyazg0OUxK?=
+ =?utf-8?B?L2VjN3NQSnJ5am5DeVpMR1VrbVZZZjNnSGRaSm9Zekw2QWFydTl5Z1k2cjJm?=
+ =?utf-8?B?L1hSV0pDQk5icnhPSG00M1JjcFkwODVBUEg4K2ZmYTlKMCtsbVNXM0Z5aG9y?=
+ =?utf-8?B?QVZSeThDQ2tTQ1BKYnI4dld2WnNwazVFMWUwdFptMEU2UGFnTEFpdjFteTJl?=
+ =?utf-8?B?TUR2YkVsK3hvcUVvZmF0Qklnc1Y0V2Q3M0REaTJtNjVUZm1MUEc5MVdQMUor?=
+ =?utf-8?B?TktUVVJqK1djYnhvdlRTSlB4Z2hEUENuQndYZ0Z5cnFDQ1dybnVRSGpwQjJY?=
+ =?utf-8?B?NzJlR3M2WlIyRnVrUU10NVNJZGFIL2pNblUrZHRIYy96aSsxTW1GNUd5WVZZ?=
+ =?utf-8?B?RWtLNDB5dCtWV2sxa3krWHlXZU1adVV1K1NFaEorakszR2JLd3VNTzJUcGFF?=
+ =?utf-8?B?SkNzMENCaHQ4MVRqaUpCN2VNVkwzT1pYTlRxK2srNU85OFhkZGlOR1lmWE9s?=
+ =?utf-8?B?QlRvT3U4dkVVTDRadlRGRUxqS2hKRklJUWR3NHIxWERTc0EvNmxPa3hOZGV0?=
+ =?utf-8?B?WVpzRE1UOTVFT3RNWFBDbUxyUmRjaHB2cDcxMlJYTm9qYVN3NEZ5UWFiR0lm?=
+ =?utf-8?B?dHdYR1YzMUlkY3Jydk1PT20waHJlbm9kZnZad0hCOENGdDJadjBkVW1ZT1Ra?=
+ =?utf-8?B?SFk1MWxQVWhnc01IangyQ2NKc3FyUG9NZS9tZ0s3WUozYlZHNnVDRmVxSUE3?=
+ =?utf-8?B?YzBNcUlYVENiWlVXL09ERVg4b3JoTDRKQ25pOEovYjlwT3dzaUNZb3VhNm5n?=
+ =?utf-8?B?V1pUMGd1UytLTnNwVzZlOERiaDNEaEdjN0VFc0JCZG5WNEZ3QnlTVHdxYk41?=
+ =?utf-8?B?eVJtSmNzdGwzQzE3dXRWL1Y3THlTbGcvN2hQK0QzS3ZpYnRDR0p6QklndlQx?=
+ =?utf-8?B?OFJqSFlJd25zNCtKUnNHM1hnZ0dnUXBFaUZtdXI2elZxbkNPWWMreGhpbDBh?=
+ =?utf-8?B?WDByWGdJZWFNbnI0dTE1YkRSQ0h0dXd5UXBJMVNUVjJRUTJKbElsZXViZSt5?=
+ =?utf-8?B?RU1nQ3dDYSt1Slo2ZE1lOEl3Vk5mOGpFK3llV2dPaVZYL1FGQ1o2cGI0Z21n?=
+ =?utf-8?B?RWplSnhrZGtGMW1lazlNVjVJSWErQklpQURGejNLMG1TdWxmcjJHbno4K2Nw?=
+ =?utf-8?B?Mk5CbGVYazZOY1pYejBkSzNxK09zZjVLVnhTdTJzOHcxaHZoRGZTbWFCaTRw?=
+ =?utf-8?B?UFNVZDJKWGFKNUgzcEZyajBjTUNvYm95VjdUZDM3NUJKbTBmM1JOQTdPdDdM?=
+ =?utf-8?B?aHVBOWc0cm9xeHJGNm8rUE5BWHZZVHhnNVFvL1N2TWYwcEtBaC91WDlXUFo4?=
+ =?utf-8?B?cFlwYzJNVUlJeFBOYmoxejZ3ajROZENmajFLV0U2WExvMWEydU96MHlTMDBR?=
+ =?utf-8?B?M2pGcElZK2Y5RmhoUjlNUjVZZjYrcUFiVjJRSEtGVmpGMnJZaC9HVW53VzNq?=
+ =?utf-8?B?U2liUzBTRDlCbE8zZFl3UkdKRjhUSzJ5STdYd0NZY2h4bG9GUVN5QlBsUjFs?=
+ =?utf-8?B?V3F4cWhIS3RmTmlMS0pha3JwQ1A1T3RTK3JuTVBMTGtPUHFjTUFOSU5OUTZw?=
+ =?utf-8?B?NHlkdnF3VHA1TENsMVJISG9IdmZBNVFyKzFJelJTYjFJMmdPMng0RjhjN21N?=
+ =?utf-8?B?RTZqdmt4d21rUCtmancwWTdKSk9iSERQOU55b3VrUUZPVjh0V3J3ZmM0UUcv?=
+ =?utf-8?B?Q2tmTGpQc1ppMDBpSGUwNHVzSTcrVFp4OEdFUlIxakxuOVo1NktrQ1VYUFVX?=
+ =?utf-8?B?QVZJYjNQcjdMWDh6Y0dJa1JMaDEzVUNyL2VRRklGZWVYdXNvMjhsdldTR1Ir?=
+ =?utf-8?B?QjdOZlZRZUxOdTFKYTdKNEdxd2hsNVBJVlVJSmZqK1BERWFkd2NBS2toMlRk?=
+ =?utf-8?B?Z0dNMnpacHcrOHNCdkVlVGNLWTZBRjhNRlExQytGYW45YUh0TVZFdTVTZzlJ?=
+ =?utf-8?B?SkhzbVFnOTl6WUd4bkFlZVNBQTRnUnZFU0tQTGFlOWNIUHVZRG8vMWxDUkV6?=
+ =?utf-8?B?V2c9PQ==?=
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: base64
+MIME-Version: 1.0
+X-OriginatorOrg: microsoft.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: BYAPR21MB1688.namprd21.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 3ff8178d-f604-408c-324c-08dabd2a3241
+X-MS-Exchange-CrossTenant-originalarrivaltime: 02 Nov 2022 23:30:15.5443
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 72f988bf-86f1-41af-91ab-2d7cd011db47
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: iNk1QOrAWLcgMfkpvou0tnBWsGVRtrUla4XIwhhUGSD62fh/2eKdfObcVmSF0IcJ6RmHwnLVTwdH3OoY2jFp0ma5HKUBfT2nuXqDOkeuc7M=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MN0PR21MB3360
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a command line option, -c, to pin vCPUs to physical CPUs (pCPUs),
-i.e.  to force vCPUs to run on specific pCPUs.
-
-Requirement to implement this feature came in discussion on the patch
-"Make page tables for eager page splitting NUMA aware"
-https://lore.kernel.org/lkml/YuhPT2drgqL+osLl@google.com/
-
-This feature is useful as it provides a way to analyze performance based
-on the vCPUs and dirty log worker locations, like on the different NUMA
-nodes or on the same NUMA nodes.
-
-To keep things simple, implementation is intentionally very limited,
-either all of the vCPUs will be pinned followed by an optional main
-thread or nothing will be pinned.
-
-Signed-off-by: Vipin Sharma <vipinsh@google.com>
-Suggested-by: David Matlack <dmatlack@google.com>
-Reviewed-by: Sean Christopherson <seanjc@google.com>
----
- .../selftests/kvm/dirty_log_perf_test.c       | 25 ++++++++-
- .../selftests/kvm/include/kvm_util_base.h     |  4 ++
- .../selftests/kvm/include/perf_test_util.h    |  4 ++
- tools/testing/selftests/kvm/lib/kvm_util.c    | 54 +++++++++++++++++++
- .../selftests/kvm/lib/perf_test_util.c        |  8 ++-
- 5 files changed, 92 insertions(+), 3 deletions(-)
-
-diff --git a/tools/testing/selftests/kvm/dirty_log_perf_test.c b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-index 4d639683b8ef..0612158329aa 100644
---- a/tools/testing/selftests/kvm/dirty_log_perf_test.c
-+++ b/tools/testing/selftests/kvm/dirty_log_perf_test.c
-@@ -353,7 +353,7 @@ static void help(char *name)
- 	puts("");
- 	printf("usage: %s [-h] [-i iterations] [-p offset] [-g] "
- 	       "[-m mode] [-n] [-b vcpu bytes] [-v vcpus] [-o] [-s mem type]"
--	       "[-x memslots]\n", name);
-+	       "[-x memslots] [-c physical cpus to run test on]\n", name);
- 	puts("");
- 	printf(" -i: specify iteration counts (default: %"PRIu64")\n",
- 	       TEST_HOST_LOOP_N);
-@@ -383,6 +383,17 @@ static void help(char *name)
- 	backing_src_help("-s");
- 	printf(" -x: Split the memory region into this number of memslots.\n"
- 	       "     (default: 1)\n");
-+	printf(" -c: Pin tasks to physical CPUs.  Takes a list of comma separated\n"
-+	       "     values (target pCPU), one for each vCPU, plus an optional\n"
-+	       "     entry for the main application task (specified via entry\n"
-+	       "     <nr_vcpus + 1>).  If used, entries must be provided for all\n"
-+	       "     vCPUs, i.e. pinning vCPUs is all or nothing.\n\n"
-+	       "     E.g. to create 3 vCPUs, pin vCPU0=>pCPU22, vCPU1=>pCPU23,\n"
-+	       "     vCPU2=>pCPU24, and pin the application task to pCPU50:\n\n"
-+	       "         ./dirty_log_perf_test -v 3 -c 22,23,24,50\n\n"
-+	       "     To leave the application task unpinned, drop the final entry:\n\n"
-+	       "         ./dirty_log_perf_test -v 3 -c 22,23,24\n\n"
-+	       "     (default: no pinning)\n");
- 	puts("");
- 	exit(0);
- }
-@@ -390,6 +401,7 @@ static void help(char *name)
- int main(int argc, char *argv[])
- {
- 	int max_vcpus = kvm_check_cap(KVM_CAP_MAX_VCPUS);
-+	const char *pcpu_list = NULL;
- 	struct test_params p = {
- 		.iterations = TEST_HOST_LOOP_N,
- 		.wr_fract = 1,
-@@ -406,11 +418,14 @@ int main(int argc, char *argv[])
- 
- 	guest_modes_append_default();
- 
--	while ((opt = getopt(argc, argv, "b:ef:ghi:m:nop:s:v:x:")) != -1) {
-+	while ((opt = getopt(argc, argv, "b:c:ef:ghi:m:nop:s:v:x:")) != -1) {
- 		switch (opt) {
- 		case 'b':
- 			guest_percpu_mem_size = parse_size(optarg);
- 			break;
-+		case 'c':
-+			pcpu_list = optarg;
-+			break;
- 		case 'e':
- 			/* 'e' is for evil. */
- 			run_vcpus_while_disabling_dirty_logging = true;
-@@ -456,6 +471,12 @@ int main(int argc, char *argv[])
- 		}
- 	}
- 
-+	if (pcpu_list) {
-+		kvm_parse_vcpu_pinning(pcpu_list, perf_test_args.vcpu_to_pcpu,
-+				       nr_vcpus);
-+		perf_test_args.pin_vcpus = true;
-+	}
-+
- 	TEST_ASSERT(p.iterations >= 2, "The test should have at least two iterations");
- 
- 	pr_info("Test iterations: %"PRIu64"\n",	p.iterations);
-diff --git a/tools/testing/selftests/kvm/include/kvm_util_base.h b/tools/testing/selftests/kvm/include/kvm_util_base.h
-index e42a09cd24a0..3bf2333ef95d 100644
---- a/tools/testing/selftests/kvm/include/kvm_util_base.h
-+++ b/tools/testing/selftests/kvm/include/kvm_util_base.h
-@@ -688,6 +688,10 @@ static inline struct kvm_vm *vm_create_with_one_vcpu(struct kvm_vcpu **vcpu,
- 
- struct kvm_vcpu *vm_recreate_with_one_vcpu(struct kvm_vm *vm);
- 
-+void kvm_pin_this_task_to_pcpu(uint32_t pcpu);
-+void kvm_parse_vcpu_pinning(const char *pcpus_string, uint32_t vcpu_to_pcpu[],
-+			    int nr_vcpus);
-+
- unsigned long vm_compute_max_gfn(struct kvm_vm *vm);
- unsigned int vm_calc_num_guest_pages(enum vm_guest_mode mode, size_t size);
- unsigned int vm_num_host_pages(enum vm_guest_mode mode, unsigned int num_guest_pages);
-diff --git a/tools/testing/selftests/kvm/include/perf_test_util.h b/tools/testing/selftests/kvm/include/perf_test_util.h
-index eaa88df0555a..849c875dd0ff 100644
---- a/tools/testing/selftests/kvm/include/perf_test_util.h
-+++ b/tools/testing/selftests/kvm/include/perf_test_util.h
-@@ -39,6 +39,10 @@ struct perf_test_args {
- 
- 	/* Run vCPUs in L2 instead of L1, if the architecture supports it. */
- 	bool nested;
-+	/* True if all vCPUs are pinned to pCPUs */
-+	bool pin_vcpus;
-+	/* The vCPU=>pCPU pinning map. Only valid if pin_vcpus is true. */
-+	uint32_t vcpu_to_pcpu[KVM_MAX_VCPUS];
- 
- 	struct perf_test_vcpu_args vcpu_args[KVM_MAX_VCPUS];
- };
-diff --git a/tools/testing/selftests/kvm/lib/kvm_util.c b/tools/testing/selftests/kvm/lib/kvm_util.c
-index f1cb1627161f..3b7710fb3784 100644
---- a/tools/testing/selftests/kvm/lib/kvm_util.c
-+++ b/tools/testing/selftests/kvm/lib/kvm_util.c
-@@ -11,6 +11,7 @@
- #include "processor.h"
- 
- #include <assert.h>
-+#include <sched.h>
- #include <sys/mman.h>
- #include <sys/types.h>
- #include <sys/stat.h>
-@@ -443,6 +444,59 @@ struct kvm_vcpu *vm_recreate_with_one_vcpu(struct kvm_vm *vm)
- 	return vm_vcpu_recreate(vm, 0);
- }
- 
-+void kvm_pin_this_task_to_pcpu(uint32_t pcpu)
-+{
-+	cpu_set_t mask;
-+	int r;
-+
-+	CPU_ZERO(&mask);
-+	CPU_SET(pcpu, &mask);
-+	r = sched_setaffinity(0, sizeof(mask), &mask);
-+	TEST_ASSERT(!r, "sched_setaffinity() failed for pCPU '%u'.\n", pcpu);
-+}
-+
-+static uint32_t parse_pcpu(const char *cpu_str, const cpu_set_t *allowed_mask)
-+{
-+	uint32_t pcpu = atoi_non_negative("CPU number", cpu_str);
-+
-+	TEST_ASSERT(CPU_ISSET(pcpu, allowed_mask),
-+		    "Not allowed to run on pCPU '%d', check cgroups?\n", pcpu);
-+	return pcpu;
-+}
-+
-+void kvm_parse_vcpu_pinning(const char *pcpus_string, uint32_t vcpu_to_pcpu[],
-+			    int nr_vcpus)
-+{
-+	cpu_set_t allowed_mask;
-+	char *cpu, *cpu_list;
-+	char delim[2] = ",";
-+	int i, r;
-+
-+	cpu_list = strdup(pcpus_string);
-+	TEST_ASSERT(cpu_list, "strdup() allocation failed.\n");
-+
-+	r = sched_getaffinity(0, sizeof(allowed_mask), &allowed_mask);
-+	TEST_ASSERT(!r, "sched_getaffinity() failed");
-+
-+	cpu = strtok(cpu_list, delim);
-+
-+	/* 1. Get all pcpus for vcpus. */
-+	for (i = 0; i < nr_vcpus; i++) {
-+		TEST_ASSERT(cpu, "pCPU not provided for vCPU '%d'\n", i);
-+		vcpu_to_pcpu[i] = parse_pcpu(cpu, &allowed_mask);
-+		cpu = strtok(NULL, delim);
-+	}
-+
-+	/* 2. Check if the main worker needs to be pinned. */
-+	if (cpu) {
-+		kvm_pin_this_task_to_pcpu(parse_pcpu(cpu, &allowed_mask));
-+		cpu = strtok(NULL, delim);
-+	}
-+
-+	TEST_ASSERT(!cpu, "pCPU list contains trailing garbage characters '%s'", cpu);
-+	free(cpu_list);
-+}
-+
- /*
-  * Userspace Memory Region Find
-  *
-diff --git a/tools/testing/selftests/kvm/lib/perf_test_util.c b/tools/testing/selftests/kvm/lib/perf_test_util.c
-index 9618b37c66f7..3a1d0a44419b 100644
---- a/tools/testing/selftests/kvm/lib/perf_test_util.c
-+++ b/tools/testing/selftests/kvm/lib/perf_test_util.c
-@@ -2,6 +2,8 @@
- /*
-  * Copyright (C) 2020, Google LLC.
-  */
-+#define _GNU_SOURCE
-+
- #include <inttypes.h>
- 
- #include "kvm_util.h"
-@@ -243,6 +245,10 @@ void __weak perf_test_setup_nested(struct kvm_vm *vm, int nr_vcpus, struct kvm_v
- static void *vcpu_thread_main(void *data)
- {
- 	struct vcpu_thread *vcpu = data;
-+	int vcpu_idx = vcpu->vcpu_idx;
-+
-+	if (perf_test_args.pin_vcpus)
-+		kvm_pin_this_task_to_pcpu(perf_test_args.vcpu_to_pcpu[vcpu_idx]);
- 
- 	WRITE_ONCE(vcpu->running, true);
- 
-@@ -255,7 +261,7 @@ static void *vcpu_thread_main(void *data)
- 	while (!READ_ONCE(all_vcpu_threads_running))
- 		;
- 
--	vcpu_thread_fn(&perf_test_args.vcpu_args[vcpu->vcpu_idx]);
-+	vcpu_thread_fn(&perf_test_args.vcpu_args[vcpu_idx]);
- 
- 	return NULL;
- }
--- 
-2.38.1.273.g43a17bfeac-goog
-
+RnJvbTogU3RhbmlzbGF2IEtpbnNidXJza2lpIDxza2luc2J1cnNraWlAbGludXgubWljcm9zb2Z0
+LmNvbT4gU2VudDogV2VkbmVzZGF5LCBOb3ZlbWJlciAyLCAyMDIyIDM6MDcgUE0NCj4gDQo+IEFu
+ZCByZXdvcmsgdGhlIGNvZGUgdG8gdXNlIGl0IGluc3RlYWQgb2YgdGhlIHBoeXNpY2FsIGFkZHJl
+c3MsIHdoaWNoIGlzbid0DQo+IHJlcXVpcmVkIGJ5IGl0c2VsZi4NCj4gDQo+IFRoaXMgaXMgYSBj
+bGVhbnVwIGFuZCBwcmVjdXJzb3IgcGF0Y2ggZm9yIHVwY29taW5nIHN1cHBvcnQgZm9yIFRTQyBw
+YWdlDQo+IG1hcHBpbmcgaW50byBNaWNyb3NvZnQgSHlwZXJ2aXNvciByb290IHBhcnRpdGlvbiwg
+d2hlcmUgVFNDIFBGTiB3aWxsIGJlDQo+IGRlZmluZWQgYnkgdGhlIGh5cGVydmlzb3IgYW5kIG5v
+dCBieSB0aGUga2VybmVsLg0KPiANCj4gU2lnbmVkLW9mZi1ieTogU3RhbmlzbGF2IEtpbnNidXJz
+a2l5IDxzdGFuaXNsYXYua2luc2J1cnNraXlAZ21haWwuY29tPg0KPiBDQzogIksuIFkuIFNyaW5p
+dmFzYW4iIDxreXNAbWljcm9zb2Z0LmNvbT4NCj4gQ0M6IEhhaXlhbmcgWmhhbmcgPGhhaXlhbmd6
+QG1pY3Jvc29mdC5jb20+DQo+IENDOiBXZWkgTGl1IDx3ZWkubGl1QGtlcm5lbC5vcmc+DQo+IEND
+OiBEZXh1YW4gQ3VpIDxkZWN1aUBtaWNyb3NvZnQuY29tPg0KPiBDQzogRGFuaWVsIExlemNhbm8g
+PGRhbmllbC5sZXpjYW5vQGxpbmFyby5vcmc+DQo+IENDOiBUaG9tYXMgR2xlaXhuZXIgPHRnbHhA
+bGludXRyb25peC5kZT4NCj4gQ0M6IGxpbnV4LWh5cGVydkB2Z2VyLmtlcm5lbC5vcmcNCj4gQ0M6
+IGxpbnV4LWtlcm5lbEB2Z2VyLmtlcm5lbC5vcmcNCj4gLS0tDQo+ICBkcml2ZXJzL2Nsb2Nrc291
+cmNlL2h5cGVydl90aW1lci5jIHwgICAxNCArKysrKysrKystLS0tLQ0KPiAgMSBmaWxlIGNoYW5n
+ZWQsIDkgaW5zZXJ0aW9ucygrKSwgNSBkZWxldGlvbnMoLSkNCj4gDQo+IGRpZmYgLS1naXQgYS9k
+cml2ZXJzL2Nsb2Nrc291cmNlL2h5cGVydl90aW1lci5jIGIvZHJpdmVycy9jbG9ja3NvdXJjZS9o
+eXBlcnZfdGltZXIuYw0KPiBpbmRleCBjNGRiZjQwYTNkM2UuLmQ0NDdiYzk5YTM5OSAxMDA2NDQN
+Cj4gLS0tIGEvZHJpdmVycy9jbG9ja3NvdXJjZS9oeXBlcnZfdGltZXIuYw0KPiArKysgYi9kcml2
+ZXJzL2Nsb2Nrc291cmNlL2h5cGVydl90aW1lci5jDQo+IEBAIC0zNjcsNiArMzY3LDEyIEBAIHN0
+YXRpYyB1bmlvbiB7DQo+ICB9IHRzY19wZyBfX2FsaWduZWQoUEFHRV9TSVpFKTsNCj4gDQo+ICBz
+dGF0aWMgc3RydWN0IG1zX2h5cGVydl90c2NfcGFnZSAqdHNjX3BhZ2UgPSAmdHNjX3BnLnBhZ2U7
+DQo+ICtzdGF0aWMgdW5zaWduZWQgbG9uZyB0c2NfcGZuOw0KPiArDQo+ICtzdGF0aWMgdW5zaWdu
+ZWQgbG9uZyBodl9nZXRfdHNjX3Bmbih2b2lkKQ0KPiArew0KPiArCXJldHVybiB0c2NfcGZuOw0K
+PiArfQ0KPiANCj4gIHN0cnVjdCBtc19oeXBlcnZfdHNjX3BhZ2UgKmh2X2dldF90c2NfcGFnZSh2
+b2lkKQ0KPiAgew0KPiBAQCAtNDA4LDEzICs0MTQsMTIgQEAgc3RhdGljIHZvaWQgc3VzcGVuZF9o
+dl9jbG9ja190c2Moc3RydWN0IGNsb2Nrc291cmNlICphcmcpDQo+IA0KPiAgc3RhdGljIHZvaWQg
+cmVzdW1lX2h2X2Nsb2NrX3RzYyhzdHJ1Y3QgY2xvY2tzb3VyY2UgKmFyZykNCj4gIHsNCj4gLQlw
+aHlzX2FkZHJfdCBwaHlzX2FkZHIgPSB2aXJ0X3RvX3BoeXModHNjX3BhZ2UpOw0KPiAgCXVuaW9u
+IGh2X3JlZmVyZW5jZV90c2NfbXNyIHRzY19tc3I7DQo+IA0KPiAgCS8qIFJlLWVuYWJsZSB0aGUg
+VFNDIHBhZ2UgKi8NCj4gIAl0c2NfbXNyLmFzX3VpbnQ2NCA9IGh2X2dldF9yZWdpc3RlcihIVl9S
+RUdJU1RFUl9SRUZFUkVOQ0VfVFNDKTsNCj4gIAl0c2NfbXNyLmVuYWJsZSA9IDE7DQo+IC0JdHNj
+X21zci5wZm4gPSBfX3BoeXNfdG9fcGZuKHBoeXNfYWRkcik7DQo+ICsJdHNjX21zci5wZm4gPSB0
+c2NfcGZuOw0KPiAgCWh2X3NldF9yZWdpc3RlcihIVl9SRUdJU1RFUl9SRUZFUkVOQ0VfVFNDLCB0
+c2NfbXNyLmFzX3VpbnQ2NCk7DQo+ICB9DQo+IA0KPiBAQCAtNDk4LDcgKzUwMyw2IEBAIHN0YXRp
+YyBfX2Fsd2F5c19pbmxpbmUgdm9pZCBodl9zZXR1cF9zY2hlZF9jbG9jayh2b2lkDQo+ICpzY2hl
+ZF9jbG9jaykge30NCj4gIHN0YXRpYyBib29sIF9faW5pdCBodl9pbml0X3RzY19jbG9ja3NvdXJj
+ZSh2b2lkKQ0KPiAgew0KPiAgCXVuaW9uIGh2X3JlZmVyZW5jZV90c2NfbXNyIHRzY19tc3I7DQo+
+IC0JcGh5c19hZGRyX3QJcGh5c19hZGRyOw0KPiANCj4gIAlpZiAoIShtc19oeXBlcnYuZmVhdHVy
+ZXMgJiBIVl9NU1JfUkVGRVJFTkNFX1RTQ19BVkFJTEFCTEUpKQ0KPiAgCQlyZXR1cm4gZmFsc2U7
+DQo+IEBAIC01MjMsNyArNTI3LDcgQEAgc3RhdGljIGJvb2wgX19pbml0IGh2X2luaXRfdHNjX2Ns
+b2Nrc291cmNlKHZvaWQpDQo+ICAJfQ0KPiANCj4gIAlodl9yZWFkX3JlZmVyZW5jZV9jb3VudGVy
+ID0gcmVhZF9odl9jbG9ja190c2M7DQo+IC0JcGh5c19hZGRyID0gdmlydF90b19waHlzKGh2X2dl
+dF90c2NfcGFnZSgpKTsNCj4gKwl0c2NfcGZuID0gX19waHlzX3RvX3Bmbih2aXJ0X3RvX3BoeXMo
+dHNjX3BhZ2UpKTsNCg0KSSBwcm9iYWJseSB3YXNuJ3Qgc3BlY2lmaWMgZW5vdWdoIHdoZW4gSSBz
+YWlkICJ5b3VyIGNob2ljZSIgaW4gbXkgcHJldmlvdXMNCmNvbW1lbnRzLiAgIFRoaXMgc2V0cyB0
+c2NfcGZuIHRvIGEgZ3Vlc3QgUEZOLiAgSW4gYSBndWVzdCB3aXRoIHBhZ2Ugc2l6ZQ0Kb3RoZXIg
+dGhhbiA0MDk2LCBpdCB3aWxsIGJlIHdyb25nIHdoZW4gc3RvcmVkIGludG8gdHNjX21zci5wZm4g
+YSBmZXcNCmxpbmVzIGJlbG93LiAgaHlwZXJ2X3RpbWVyLmMgaXMgY3VycmVudGx5IGFyY2hpdGVj
+dHVyZSBhbmQgcGFnZSBzaXplDQppbmRlcGVuZGVudCwgYW5kIGl0IG5lZWRzIHRvIHN0YXkgdGhh
+dCB3YXkuDQoNCj4gIAkvKg0KPiAgCSAqIFRoZSBIeXBlci1WIFRMRlMgc3BlY2lmaWVzIHRvIHBy
+ZXNlcnZlIHRoZSB2YWx1ZSBvZiByZXNlcnZlZA0KPiBAQCAtNTM0LDcgKzUzOCw3IEBAIHN0YXRp
+YyBib29sIF9faW5pdCBodl9pbml0X3RzY19jbG9ja3NvdXJjZSh2b2lkKQ0KPiAgCSAqLw0KPiAg
+CXRzY19tc3IuYXNfdWludDY0ID0gaHZfZ2V0X3JlZ2lzdGVyKEhWX1JFR0lTVEVSX1JFRkVSRU5D
+RV9UU0MpOw0KPiAgCXRzY19tc3IuZW5hYmxlID0gMTsNCj4gLQl0c2NfbXNyLnBmbiA9IF9fcGh5
+c190b19wZm4ocGh5c19hZGRyKTsNCj4gKwl0c2NfbXNyLnBmbiA9IHRzY19wZm47DQo+ICAJaHZf
+c2V0X3JlZ2lzdGVyKEhWX1JFR0lTVEVSX1JFRkVSRU5DRV9UU0MsIHRzY19tc3IuYXNfdWludDY0
+KTsNCj4gDQo+ICAJY2xvY2tzb3VyY2VfcmVnaXN0ZXJfaHooJmh5cGVydl9jc190c2MsIE5TRUNf
+UEVSX1NFQy8xMDApOw0KPiANCg0K
