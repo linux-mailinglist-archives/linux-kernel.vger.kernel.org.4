@@ -2,81 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96A98616A4F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:14:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6753616A55
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:15:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230124AbiKBROj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:14:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40338 "EHLO
+        id S230491AbiKBRPL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:15:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230075AbiKBRON (ORCPT
+        with ESMTP id S229531AbiKBRO4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:14:13 -0400
-Received: from mail-oi1-f172.google.com (mail-oi1-f172.google.com [209.85.167.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0FF925E99;
-        Wed,  2 Nov 2022 10:14:07 -0700 (PDT)
-Received: by mail-oi1-f172.google.com with SMTP id y67so19886168oiy.1;
-        Wed, 02 Nov 2022 10:14:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JTIZIOjl8oF+5s5jwaijQ6Kthz0JlQiH4L1lxXq0VtA=;
-        b=ihFX8qtC3EN5GYG1oHt6iJaQK4EC+rid4vMWu3uZdgeh43xVD1S+10sZCLDwPe02sA
-         J4KsHqjluFn+4XHOv+zPA8k7PM17MvE0OgErRHRM6TJYok4uZvK1zIHdN9oEA6dMjdLz
-         HnkzWbyqqc2osYE0a/YEo8r37yaeHAq34EfOPv0itlWn2JjKUYENdZwMsQDo1A2t4c3g
-         9nKjroQJrP/3toV+n9h3J02Y0YpPR437zOzPw6BPzIscoGhiBTYB+ALtC/v7mWImXTwU
-         FxBgYWNICEe5ZqBiq2krfg66C9Ch7cMd0Oj4d2YrsNgj4nDSiLc5mMHGmDUww9+pzePm
-         e+cg==
-X-Gm-Message-State: ACrzQf1DpioM3MUGpX/ztQ7b3iUMqr9MRi+X4AOc6SU/y3mSRhrun5jQ
-        8jVh270P5d7iw4qXxsazWA==
-X-Google-Smtp-Source: AMsMyM48p193/o2iDWjqe7mgVtGRjDXeBC3cmuZcEgnEuSbO7vYriIpF7gBPOO01bKgUQlv33gHJww==
-X-Received: by 2002:aca:6007:0:b0:35a:1bda:d213 with SMTP id u7-20020aca6007000000b0035a1bdad213mr7581750oib.181.1667409247069;
-        Wed, 02 Nov 2022 10:14:07 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id l25-20020a4acf19000000b0044b125e5dabsm4655265oos.35.2022.11.02.10.14.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 10:14:06 -0700 (PDT)
-Received: (nullmailer pid 4138810 invoked by uid 1000);
-        Wed, 02 Nov 2022 17:14:08 -0000
-Date:   Wed, 2 Nov 2022 12:14:08 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Jernej Skrabec <jernej.skrabec@gmail.com>
-Cc:     samuel@sholland.org, robh+dt@kernel.org,
-        linux-kernel@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-sunxi@lists.linux.dev, hverkuil-cisco@xs4all.nl,
-        wens@csie.org, mchehab@kernel.org, linux-media@vger.kernel.org
-Subject: Re: [PATCH 1/3] media: dt-bindings: media: Add Allwinner H6
- Deinterlace binding
-Message-ID: <166740924781.4138628.17832140187371545203.robh@kernel.org>
-References: <20221101123201.3021129-1-jernej.skrabec@gmail.com>
- <20221101123201.3021129-2-jernej.skrabec@gmail.com>
+        Wed, 2 Nov 2022 13:14:56 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9DEB2186;
+        Wed,  2 Nov 2022 10:14:55 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 10:14:38 -0700
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1667409294;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=xtTSxM1Q/qUYa04qDvMF9fQMU1lb3nJ4Yr7MTQ7VghU=;
+        b=HGPpAdSi8jBVZcmLugyVIGYvvWkqF3VSKjIyZSapgYT5aDBIwno6PFiycmuKqNRsi6eCEU
+        00g6vsaXFrHI8ZLMVDXPBYRRjci2zvrdgfTapXezF72FnhcQyMODDDKyeJs8AgdHDo+xZ1
+        Ak9oegP1g8hgVuDq9qb8v6diwqyoY50=
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+From:   Roman Gushchin <roman.gushchin@linux.dev>
+To:     Jakub Kicinski <kuba@kernel.org>
+Cc:     Andrew Lunn <andrew@lunn.ch>, Andy Ren <andy.ren@getcruise.com>,
+        netdev@vger.kernel.org, richardbgobert@gmail.com,
+        davem@davemloft.net, wsa+renesas@sang-engineering.com,
+        edumazet@google.com, petrm@nvidia.com, pabeni@redhat.com,
+        corbet@lwn.net, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH net-next v2] netconsole: Enable live renaming for network
+ interfaces used by netconsole
+Message-ID: <Y2KlfhfijyNl8yxT@P9FQF9L96D.corp.robot.car>
+References: <20221102002420.2613004-1-andy.ren@getcruise.com>
+ <Y2G+SYXyZAB/r3X0@lunn.ch>
+ <20221101204006.75b46660@kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221101123201.3021129-2-jernej.skrabec@gmail.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221101204006.75b46660@kernel.org>
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Tue, 01 Nov 2022 13:31:59 +0100, Jernej Skrabec wrote:
-> Allwinner H6 Deinterlace core is used for deinterlacing interlaced video
-> content.
+On Tue, Nov 01, 2022 at 08:40:06PM -0700, Jakub Kicinski wrote:
+> On Wed, 2 Nov 2022 01:48:09 +0100 Andrew Lunn wrote:
+> > Changing the interface name while running is probably not an
+> > issue. There are a few drivers which report the name to the firmware,
+> > presumably for logging, and phoning home, but it should not otherwise
+> > affect the hardware.
 > 
-> Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
-> ---
->  .../allwinner,sun50i-h6-deinterlace.yaml      | 74 +++++++++++++++++++
->  1 file changed, 74 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/media/allwinner,sun50i-h6-deinterlace.yaml
-> 
+> Agreed. BTW I wonder if we really want to introduce a netconsole
+> specific uAPI for this or go ahead with something more general.
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+Netconsole is a bit special because it brings an interface up very early.
+E.g. in our case without the netconsole the renaming is happening before
+the interface is brought up.
+
+I wonder if the netconsole-specific flag should allow renaming only once.
+
+> A sysctl for global "allow UP rename"?
+
+This will work for us, but I've no idea what it will break for other users
+and how to check it without actually trying to break :) And likely we won't
+learn about it for quite some time, asssuming they don't run net-next.
+
+> 
+> We added the live renaming for failover a while back and there were 
+> no reports of user space breaking as far as I know. So perhaps nobody
+> actually cares and we should allow renaming all interfaces while UP?
+> For backwards compat we can add a sysctl as mentioned or a rtnetlink 
+> "I know what I'm doing" flag? 
+> 
+> Maybe print an info message into the logs for a few releases to aid
+> debug?
+> 
+> IOW either there is a reason we don't allow rename while up, and
+> netconsole being bound to an interface is immaterial. Or there is 
+> no reason and we should allow all.
+
+My understanding is that it's not an issue for the kernel, but might be
+an issue for some userspace apps which do not expect it.
+
+If you prefer to go with the 'global sysctl' approach, how the path forward
+should look like?
+
+Thanks!
