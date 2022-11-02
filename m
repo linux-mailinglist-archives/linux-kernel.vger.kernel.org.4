@@ -2,123 +2,226 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C61616169F8
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:06:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A09026169FE
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:07:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230510AbiKBRGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:06:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33602 "EHLO
+        id S231219AbiKBRHc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:07:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230187AbiKBRGh (ORCPT
+        with ESMTP id S231167AbiKBRHZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:06:37 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D83312098
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 10:05:43 -0700 (PDT)
+        Wed, 2 Nov 2022 13:07:25 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A716120BF
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 10:06:28 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667408742;
+        s=mimecast20190719; t=1667408787;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=8g+IU1SbconJtIJvE9qWH+h96tYel1GhCAQmvBe4qsI=;
-        b=XJPEDlVKiPnFSfbr173eMLO2awzmTbJGCHwX+JP0CCqPlylroMJ43d/aEVu2Pntqx4+A13
-        AOoV6h/kMJNrjRZ7cfG7ErElrozcvNB7HX0m2Hdo4N+c5lpZlCYkhWe7Vxn4xVWnGBYuQO
-        tOi0j/9SOyeyKthezao8AYXvdoBjTKM=
-Received: from mail-vs1-f69.google.com (mail-vs1-f69.google.com
- [209.85.217.69]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=MzSlArbLjLwuYh4coYhcF492GFrAwrpr5F1CiSw7i+g=;
+        b=KRIut3ohCRr0wqfwdMdctFBSiWsDZ0hNSD3SESZXb3+9LoIC9IJqRM04qn72V83mGlrZ7m
+        ++WOGMLc/7dl7aRW9U8WuRkdzLD7nzZGvhDkDW64bzO6hF7RLWxNG9P1m+frN0tgWVbi1O
+        4lEmpXNKUnNYryYKGBjlZru1X3UaaK4=
+Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
+ [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-511-5sOtrS0DMVCGRQcarRjkyA-1; Wed, 02 Nov 2022 13:05:41 -0400
-X-MC-Unique: 5sOtrS0DMVCGRQcarRjkyA-1
-Received: by mail-vs1-f69.google.com with SMTP id t12-20020a05610210cc00b003ac8bb7b18fso2960378vsr.11
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 10:05:41 -0700 (PDT)
+ us-mta-642--j5pS9ysNIOvzTMIf2oO7A-1; Wed, 02 Nov 2022 13:06:26 -0400
+X-MC-Unique: -j5pS9ysNIOvzTMIf2oO7A-1
+Received: by mail-ej1-f72.google.com with SMTP id hc43-20020a17090716ab00b0078e28567ffbso10382273ejc.15
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 10:06:26 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8g+IU1SbconJtIJvE9qWH+h96tYel1GhCAQmvBe4qsI=;
-        b=Cmn8KQYqbZuT2lMLL1jb5VnUqlwgnOQ36Ty7f8Oqx/jXhS/Th1H5uLHJ3woPAQPqSU
-         OiFgJMtVSPOHSdvUv8d+wYl6JUtmp4wr+kaarhgfMzoW0xY3AG66+Nn6JGYSurKu5FSG
-         vlkKLRxThqzeDv9JMjcY8a6Jb6TmCEzKJX4Tp30z4H5eqFvxlrUozzxLyBxTPedpBXg+
-         qMvx/Nt+vcgnNztl5uKLIUcp/5G9YZVC9/2mHXibsGq7EdOX8eFf67UYOgYXjaHSZXRn
-         hCohH3MOy9dxHz6jtXVHWkrIuz0QqhUoAhdQtjixKWnIt9aCfNwIsFh8oL+pCZTdd9aU
-         skcw==
-X-Gm-Message-State: ACrzQf2YPwVH6zG9xL0JotFegAapglPP4oDYLvL196GFH8qNUiqUCzw9
-        N6jDLCwQaCzTs42ZG5kw52F01v4WKMcdPd0cE+y1aWWi/u3NlA44tfDI63sYwmdtPkqf1JQFzkX
-        Cl2GOfI9Kbp0D3FXUX2bttvo6f30jCDbw4xTY/nfV
-X-Received: by 2002:a67:dc0b:0:b0:3aa:304f:54bc with SMTP id x11-20020a67dc0b000000b003aa304f54bcmr12393814vsj.76.1667408740594;
-        Wed, 02 Nov 2022 10:05:40 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7ZVn7Uq6fOScLt3XDDum0YUD0JH7ATLN68jBf8DzysLFYF3QjlN0LTcHgv3m8T/SZU2rTj+ahxYImgUAhPpRU=
-X-Received: by 2002:a67:dc0b:0:b0:3aa:304f:54bc with SMTP id
- x11-20020a67dc0b000000b003aa304f54bcmr12393784vsj.76.1667408740326; Wed, 02
- Nov 2022 10:05:40 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=MzSlArbLjLwuYh4coYhcF492GFrAwrpr5F1CiSw7i+g=;
+        b=1bIyolZpxO9Jikh8nLLjG2jLaY9UEl+/flSJPdh26uszWMTrGDaklNSzNiHKipXeky
+         c3YsFPrsssPAPj5j63HCyLYBZR03Ed0NT9hmDM25aJ2jbo+5NJXWsYvimpza6wcrc5Fq
+         hQHI2t5EerODkJtrG1/bEE9tG9GWac4jgMjzkfCKqupwMYl8fUVBicZkRQLSZe2qPUeb
+         MB0toAtYunB2X0+bvKBoJXI3u3fEzGpKY+OlogNQHNuT9jd7uA2c+CKV7HLNphqFR0i7
+         +yWsRa+AIJuJE0ueKvsvZhzNuM6B3VCel0iDn7inlBhF21GuBxlg00L/Ca+50wJ0486H
+         +NEQ==
+X-Gm-Message-State: ACrzQf2kJt7hGPeq0dl/GMlfcjx+LDdU01kgulSPbcuamcwPG8H/H5NZ
+        HXiBHjzc5qdq0dI2cGUEijGgavfJxbujzJ8q5Z6tTATVNfnHqUKCtCkG5EXR/NsUlTfPtvm8lRf
+        SFfTRwuawWXCN0TUIJrWonqWz
+X-Received: by 2002:aa7:c1d9:0:b0:463:aeaf:3383 with SMTP id d25-20020aa7c1d9000000b00463aeaf3383mr10397472edp.253.1667408785383;
+        Wed, 02 Nov 2022 10:06:25 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4a5aiauK1J6VQYUF9mjlkxz4BZlsbuGTOro+zFT5daW27YWQJ+DquzsEIfrHyUKJnR8l1zDg==
+X-Received: by 2002:aa7:c1d9:0:b0:463:aeaf:3383 with SMTP id d25-20020aa7c1d9000000b00463aeaf3383mr10397444edp.253.1667408785114;
+        Wed, 02 Nov 2022 10:06:25 -0700 (PDT)
+Received: from ?IPV6:2001:b07:add:ec09:c399:bc87:7b6c:fb2a? ([2001:b07:add:ec09:c399:bc87:7b6c:fb2a])
+        by smtp.googlemail.com with ESMTPSA id g11-20020a170906394b00b007abafe43c3bsm5575689eje.86.2022.11.02.10.06.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 10:06:24 -0700 (PDT)
+Message-ID: <bb2e70cb-002d-8032-d8c2-bb64dd2476a0@redhat.com>
+Date:   Wed, 2 Nov 2022 18:06:20 +0100
 MIME-Version: 1.0
-References: <20221102161542.30669-1-sven@svenpeter.dev>
-In-Reply-To: <20221102161542.30669-1-sven@svenpeter.dev>
-From:   Eric Curtin <ecurtin@redhat.com>
-Date:   Wed, 2 Nov 2022 17:05:24 +0000
-Message-ID: <CAOgh=FxPmg_xDq=5xW3=NpGXHBWAZ-E57SiqsbVfNc7UXtq5sA@mail.gmail.com>
-Subject: Re: [PATCH] usb: typec: tipd: Prevent uninitialized event{1,2} in IRQ handler
-To:     Sven Peter <sven@svenpeter.dev>
-Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hector Martin <marcan@marcan.st>,
-        =?UTF-8?Q?Guido_G=C3=BCnther?= <agx@sigxcpu.org>,
-        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        asahi@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v4 1/4] mm/gup: Add FOLL_INTERRUPTIBLE
+Content-Language: en-US
+To:     Peter Xu <peterx@redhat.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     Sean Christopherson <seanjc@google.com>,
+        John Hubbard <jhubbard@nvidia.com>,
+        David Matlack <dmatlack@google.com>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Dr . David Alan Gilbert" <dgilbert@redhat.com>,
+        David Hildenbrand <david@redhat.com>,
+        Linux MM Mailing List <linux-mm@kvack.org>,
+        Mike Kravetz <mike.kravetz@oracle.com>
+References: <20221011195809.557016-1-peterx@redhat.com>
+ <20221011195809.557016-2-peterx@redhat.com>
+From:   Paolo Bonzini <pbonzini@redhat.com>
+In-Reply-To: <20221011195809.557016-2-peterx@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Nov 2022 at 16:24, Sven Peter <sven@svenpeter.dev> wrote:
->
-> If reading TPS_REG_INT_EVENT1/2 fails in the interrupt handler event1
-> and event2 may be uninitialized when they are used to determine
-> IRQ_HANDLED vs. IRQ_NONE in the error path.
->
-> Fixes: c7260e29dd20 ("usb: typec: tipd: Add short-circuit for no irqs")
-> Fixes: 45188f27b3d0 ("usb: typec: tipd: Add support for Apple CD321X")
-> Signed-off-by: Sven Peter <sven@svenpeter.dev>
+On 10/11/22 21:58, Peter Xu wrote:
+> We have had FAULT_FLAG_INTERRUPTIBLE but it was never applied to GUPs.  One
+> issue with it is that not all GUP paths are able to handle signal delivers
+> besides SIGKILL.
+> 
+> That's not ideal for the GUP users who are actually able to handle these
+> cases, like KVM.
+> 
+> KVM uses GUP extensively on faulting guest pages, during which we've got
+> existing infrastructures to retry a page fault at a later time.  Allowing
+> the GUP to be interrupted by generic signals can make KVM related threads
+> to be more responsive.  For examples:
+> 
+>    (1) SIGUSR1: which QEMU/KVM uses to deliver an inter-process IPI,
+>        e.g. when the admin issues a vm_stop QMP command, SIGUSR1 can be
+>        generated to kick the vcpus out of kernel context immediately,
+> 
+>    (2) SIGINT: which can be used with interactive hypervisor users to stop a
+>        virtual machine with Ctrl-C without any delays/hangs,
+> 
+>    (3) SIGTRAP: which grants GDB capability even during page faults that are
+>        stuck for a long time.
+> 
+> Normally hypervisor will be able to receive these signals properly, but not
+> if we're stuck in a GUP for a long time for whatever reason.  It happens
+> easily with a stucked postcopy migration when e.g. a network temp failure
+> happens, then some vcpu threads can hang death waiting for the pages.  With
+> the new FOLL_INTERRUPTIBLE, we can allow GUP users like KVM to selectively
+> enable the ability to trap these signals.
+> 
+> Reviewed-by: John Hubbard <jhubbard@nvidia.com>
+> Reviewed-by: David Hildenbrand <david@redhat.com>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
 
-Reviewed-by: Eric Curtin <ecurtin@redhat.com>
+If no one shouts I will queue the series for 6.2, but it would be nice 
+to get an ACK from the mm folks.
 
 > ---
->  drivers/usb/typec/tipd/core.c | 6 +++---
->  1 file changed, 3 insertions(+), 3 deletions(-)
->
-> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
-> index b637e8b378b3..2a77bab948f5 100644
-> --- a/drivers/usb/typec/tipd/core.c
-> +++ b/drivers/usb/typec/tipd/core.c
-> @@ -474,7 +474,7 @@ static void tps6598x_handle_plug_event(struct tps6598x *tps, u32 status)
->  static irqreturn_t cd321x_interrupt(int irq, void *data)
->  {
->         struct tps6598x *tps = data;
-> -       u64 event;
-> +       u64 event = 0;
->         u32 status;
->         int ret;
->
-> @@ -519,8 +519,8 @@ static irqreturn_t cd321x_interrupt(int irq, void *data)
->  static irqreturn_t tps6598x_interrupt(int irq, void *data)
->  {
->         struct tps6598x *tps = data;
-> -       u64 event1;
-> -       u64 event2;
-> +       u64 event1 = 0;
-> +       u64 event2 = 0;
->         u32 status;
->         int ret;
->
-> --
-> 2.25.1
->
->
+>   include/linux/mm.h |  1 +
+>   mm/gup.c           | 33 +++++++++++++++++++++++++++++----
+>   mm/hugetlb.c       |  5 ++++-
+>   3 files changed, 34 insertions(+), 5 deletions(-)
+> 
+> diff --git a/include/linux/mm.h b/include/linux/mm.h
+> index 21f8b27bd9fd..488a9f4cce07 100644
+> --- a/include/linux/mm.h
+> +++ b/include/linux/mm.h
+> @@ -2897,6 +2897,7 @@ struct page *follow_page(struct vm_area_struct *vma, unsigned long address,
+>   #define FOLL_SPLIT_PMD	0x20000	/* split huge pmd before returning */
+>   #define FOLL_PIN	0x40000	/* pages must be released via unpin_user_page */
+>   #define FOLL_FAST_ONLY	0x80000	/* gup_fast: prevent fall-back to slow gup */
+> +#define FOLL_INTERRUPTIBLE  0x100000 /* allow interrupts from generic signals */
+>   
+>   /*
+>    * FOLL_PIN and FOLL_LONGTERM may be used in various combinations with each
+> diff --git a/mm/gup.c b/mm/gup.c
+> index 5abdaf487460..d51e7ccaef32 100644
+> --- a/mm/gup.c
+> +++ b/mm/gup.c
+> @@ -970,8 +970,17 @@ static int faultin_page(struct vm_area_struct *vma,
+>   		fault_flags |= FAULT_FLAG_WRITE;
+>   	if (*flags & FOLL_REMOTE)
+>   		fault_flags |= FAULT_FLAG_REMOTE;
+> -	if (locked)
+> +	if (locked) {
+>   		fault_flags |= FAULT_FLAG_ALLOW_RETRY | FAULT_FLAG_KILLABLE;
+> +		/*
+> +		 * FAULT_FLAG_INTERRUPTIBLE is opt-in. GUP callers must set
+> +		 * FOLL_INTERRUPTIBLE to enable FAULT_FLAG_INTERRUPTIBLE.
+> +		 * That's because some callers may not be prepared to
+> +		 * handle early exits caused by non-fatal signals.
+> +		 */
+> +		if (*flags & FOLL_INTERRUPTIBLE)
+> +			fault_flags |= FAULT_FLAG_INTERRUPTIBLE;
+> +	}
+>   	if (*flags & FOLL_NOWAIT)
+>   		fault_flags |= FAULT_FLAG_ALLOW_RETRY | FAULT_FLAG_RETRY_NOWAIT;
+>   	if (*flags & FOLL_TRIED) {
+> @@ -1380,6 +1389,22 @@ int fixup_user_fault(struct mm_struct *mm,
+>   }
+>   EXPORT_SYMBOL_GPL(fixup_user_fault);
+>   
+> +/*
+> + * GUP always responds to fatal signals.  When FOLL_INTERRUPTIBLE is
+> + * specified, it'll also respond to generic signals.  The caller of GUP
+> + * that has FOLL_INTERRUPTIBLE should take care of the GUP interruption.
+> + */
+> +static bool gup_signal_pending(unsigned int flags)
+> +{
+> +	if (fatal_signal_pending(current))
+> +		return true;
+> +
+> +	if (!(flags & FOLL_INTERRUPTIBLE))
+> +		return false;
+> +
+> +	return signal_pending(current);
+> +}
+> +
+>   /*
+>    * Please note that this function, unlike __get_user_pages will not
+>    * return 0 for nr_pages > 0 without FOLL_NOWAIT
+> @@ -1461,11 +1486,11 @@ static __always_inline long __get_user_pages_locked(struct mm_struct *mm,
+>   		 * Repeat on the address that fired VM_FAULT_RETRY
+>   		 * with both FAULT_FLAG_ALLOW_RETRY and
+>   		 * FAULT_FLAG_TRIED.  Note that GUP can be interrupted
+> -		 * by fatal signals, so we need to check it before we
+> +		 * by fatal signals of even common signals, depending on
+> +		 * the caller's request. So we need to check it before we
+>   		 * start trying again otherwise it can loop forever.
+>   		 */
+> -
+> -		if (fatal_signal_pending(current)) {
+> +		if (gup_signal_pending(flags)) {
+>   			if (!pages_done)
+>   				pages_done = -EINTR;
+>   			break;
+> diff --git a/mm/hugetlb.c b/mm/hugetlb.c
+> index e070b8593b37..202f3ad7f35c 100644
+> --- a/mm/hugetlb.c
+> +++ b/mm/hugetlb.c
+> @@ -6206,9 +6206,12 @@ long follow_hugetlb_page(struct mm_struct *mm, struct vm_area_struct *vma,
+>   				fault_flags |= FAULT_FLAG_WRITE;
+>   			else if (unshare)
+>   				fault_flags |= FAULT_FLAG_UNSHARE;
+> -			if (locked)
+> +			if (locked) {
+>   				fault_flags |= FAULT_FLAG_ALLOW_RETRY |
+>   					FAULT_FLAG_KILLABLE;
+> +				if (flags & FOLL_INTERRUPTIBLE)
+> +					fault_flags |= FAULT_FLAG_INTERRUPTIBLE;
+> +			}
+>   			if (flags & FOLL_NOWAIT)
+>   				fault_flags |= FAULT_FLAG_ALLOW_RETRY |
+>   					FAULT_FLAG_RETRY_NOWAIT;
 
