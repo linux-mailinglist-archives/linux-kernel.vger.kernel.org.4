@@ -2,572 +2,138 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5B3F16172E8
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 00:40:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 406656172EB
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 00:41:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229457AbiKBXke (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 19:40:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56940 "EHLO
+        id S229823AbiKBXlH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 19:41:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58782 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbiKBXkJ (ORCPT
+        with ESMTP id S231645AbiKBXkg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 19:40:09 -0400
-Received: from mail-lf1-x129.google.com (mail-lf1-x129.google.com [IPv6:2a00:1450:4864:20::129])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E142911C0B
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 16:35:16 -0700 (PDT)
-Received: by mail-lf1-x129.google.com with SMTP id b2so230847lfp.6
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 16:35:16 -0700 (PDT)
+        Wed, 2 Nov 2022 19:40:36 -0400
+Received: from mail-wm1-x335.google.com (mail-wm1-x335.google.com [IPv6:2a00:1450:4864:20::335])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E293660FF
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 16:36:40 -0700 (PDT)
+Received: by mail-wm1-x335.google.com with SMTP id ja4-20020a05600c556400b003cf6e77f89cso3068655wmb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 16:36:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uQ0wfhoZS594CcswCtZW6AN89c8nyNXLYaRLAQZhu4M=;
-        b=QK3+SeH7bEHC/qE/HcrvmTBF4Lyvzjlwke8ibjL0yBoxuJA2mFWw4CSsgDbMpkPY6N
-         bKCDqm8wEDHe+2ixLIZ1/uOeVYR2i/kcXR6mJTlPs8J0u5AETogFxnRw7yoKOd5nSvJ7
-         0g2svNC2Kols7JK6k3LA/uY0DdNzYRGGwOZA2a6s5CFLdSE6IY2cUCkGeuav/fTLZV5Y
-         LmcR/Z46tZkt4d00Txcan9kpRniradC0bggbqw0NJSGYIbUPRNBtgAVqyX2OMXgGMg5U
-         HlSgVTzBduhUzQXhWDg0CusRtebIX9dZ30E327OEOFY+WNkuBIiepAQxOrCjNExi+VVH
-         aHiQ==
+        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=6GuXLQ6vhVDG4TgPBv/5Wsey/201XSbJAndndtIsyw0=;
+        b=bc6bpRmE6lctskpzg/AXlU4FdXZrTU55tsvvapbtRbQPXozNNZV1gLPl+skgOfh1+J
+         bGGQiRlB/J4BI31QhEXBwa7hHEy3/oGF8SRSqdvVyfoyRjr82+Y8vvDccRIdRBqPQixR
+         8NuMiRGQ2us8OUnx2isGDAqzdZpxZGyhNiW86pPtiTKxmj+XhT0q3JSRMbMKR1hVKfPy
+         A0ppjmldCrQj1dpv9G4Jc1nI9C20czMcSuQcEW8PK1zZw8KPPYjtrhVixUdqVoT6lnzn
+         jzyk/cBdHiyb34OzSoeuLSjkka8AXo9QBnDr/Ib7/uLlIOVSmlsv8j/9DfjWvWS1flqb
+         kNWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=uQ0wfhoZS594CcswCtZW6AN89c8nyNXLYaRLAQZhu4M=;
-        b=THNC39jxcoGi/3sXGSMiSS4Cm7o+TELAaurakCawl8avnE3Jg29hJ6AofUNnq/ShnR
-         OLvue2J/49nmUn7kVsX+FsehT7TlqaTMrlJSBJdyPf2lf9A+c4gHf642TeiX3ZecTkVm
-         bSs2l29hnsUwTDlZucc1HUse8h5Kx3Vt8twi/touZbgottkXoKnznvO+JxiNUk+6ywcu
-         a1r3fj+yVTcf4352p5YXbdCA4LynBnuWDUu6ngwhlDvKCaP8nLD+cjCMvmYl/t//iP9x
-         aIkCo3rLAmBOwVJ51fasqQAuMatvrnMe5Z3Ha9jUEIz/zfmhSIKul5cCX0UrSExH1QFC
-         HMRw==
-X-Gm-Message-State: ACrzQf2VGCQLGtKUQpd9oTKaXEkXuNI+P4ix7v2+002Mk5Gnlijzcznd
-        v4QcE+9VJ+zMn5a84pHUmSIgsshiETSQxA==
-X-Google-Smtp-Source: AMsMyM6LsjwZmj/iOZkgdov6QCqOrw/9H90y6ov9LGZ/VY4Nbzs7PCsbjwv5S8z0Nrk2/XjfurSKqg==
-X-Received: by 2002:a05:6512:22c2:b0:4a2:4f7b:29e2 with SMTP id g2-20020a05651222c200b004a24f7b29e2mr9848728lfu.389.1667432115124;
-        Wed, 02 Nov 2022 16:35:15 -0700 (PDT)
-Received: from [10.27.10.248] ([195.165.23.90])
-        by smtp.gmail.com with ESMTPSA id u16-20020a2ea170000000b0026c3ecf9a39sm2335465ljl.38.2022.11.02.16.35.14
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 16:35:14 -0700 (PDT)
-Message-ID: <1cc55f4f-0807-8ffd-a1c9-db2354012c54@linaro.org>
-Date:   Thu, 3 Nov 2022 02:35:13 +0300
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6GuXLQ6vhVDG4TgPBv/5Wsey/201XSbJAndndtIsyw0=;
+        b=6ZSuD0pkzgNMVsw2F5NvT3uL32XofHLI9TACXshPfo3keVq1ZzpdhRhMyTDxZ3eTug
+         zGKU6hsJhKCQn9E1mi6LQ9Bg3uzAJfbN/+2QhNxH2KERIrFIVQC5ikZYDcAZhBMzQ+Yu
+         RusvQZZodSEiKyks9NljwAujJ8+6hBYh47esVVRf2r4+YsnqGbPUvm/1lEQSh84zf/rS
+         46W/B/dPKH3EEzUZnsVDSatG4XgaSHa6PQeAqbTVFHz2C2iLzaaPtU41k6DCYf8EJHbL
+         zIGTPvzAwWedb2zbDEIbQVkSaMYmN3bdG3BOw4S+EBFT3TZIBWyMnm7U0nQPlhUR382v
+         n9Ow==
+X-Gm-Message-State: ACrzQf0hr2PTrN0mVgbNbREldYzzNEqt9SR287Z2DHNxHqJPYxDfvhgi
+        JAJRr5Xgf4r3KpC3wcknqoLpag==
+X-Google-Smtp-Source: AMsMyM7Qlrm740hSv4WADLaEG+xM3c17GxpMIfi2d2PRLdlsIKOw3KOye2lCX3jQnYsdvtUfIhRImA==
+X-Received: by 2002:a05:600c:5407:b0:3be:d303:d352 with SMTP id he7-20020a05600c540700b003bed303d352mr27141904wmb.94.1667432199495;
+        Wed, 02 Nov 2022 16:36:39 -0700 (PDT)
+Received: from localhost.localdomain (d.f.5.e.6.6.b.1.e.6.2.7.e.5.c.8.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0:8c5e:726e:1b66:e5fd])
+        by smtp.gmail.com with ESMTPSA id l14-20020a05600c1d0e00b003cf71b1f66csm4617231wms.0.2022.11.02.16.36.38
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 16:36:39 -0700 (PDT)
+From:   Phillip Potter <phil@philpotter.co.uk>
+To:     gregkh@linuxfoundation.org
+Cc:     Larry.Finger@lwfinger.net, paskripkin@gmail.com,
+        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: [PATCH] staging: r8188eu: change return type of rtw_set_802_11_disassociate to void
+Date:   Wed,  2 Nov 2022 23:36:37 +0000
+Message-Id: <20221102233637.6648-1-phil@philpotter.co.uk>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v3 02/12] drm/msm/dpu: Introduce SC8280XP
-Content-Language: en-GB
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Rob Clark <robdclark@gmail.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>
-Cc:     Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Kuogee Hsieh <quic_khsieh@quicinc.com>,
-        Sankeerth Billakanti <quic_sbillaka@quicinc.com>,
-        Johan Hovold <johan@kernel.org>, linux-arm-msm@vger.kernel.org,
-        dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221026032624.30871-1-quic_bjorande@quicinc.com>
- <20221026032624.30871-3-quic_bjorande@quicinc.com>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221026032624.30871-3-quic_bjorande@quicinc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 26/10/2022 06:26, Bjorn Andersson wrote:
-> From: Bjorn Andersson <bjorn.andersson@linaro.org>
-> 
-> The Qualcomm SC8280XP platform contains DPU version 8.0.0, has 9
-> interfaces, 2 DSI controllers and 4 DisplayPort controllers. Extend the
-> necessary definitions and describe the DPU in the SC8280XP.
-> 
-> Signed-off-by: Bjorn Andersson <bjorn.andersson@linaro.org>
-> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
-> ---
-> 
-> Change since v2:
-> - Dropped flag for hole in TOP
-> - Wrapped some lines to make checkpatch happier
-> 
->   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c    | 217 ++++++++++++++++++
->   .../gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h    |   1 +
->   .../gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c |  18 ++
->   .../gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h |   3 +
->   drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h   |   2 +
->   drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c       |   1 +
->   drivers/gpu/drm/msm/msm_drv.h                 |   1 +
->   drivers/gpu/drm/msm/msm_mdss.c                |   2 +
->   8 files changed, 245 insertions(+)
-> 
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> index 27f029fdc682..9964814be27a 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.c
-> @@ -79,6 +79,8 @@
->   
->   #define INTF_SC7280_MASK INTF_SC7180_MASK | BIT(DPU_DATA_HCTL_EN)
->   
-> +#define INTF_SC8280XP_MASK BIT(DPU_INTF_INPUT_CTRL) | BIT(DPU_INTF_TE) | BIT(DPU_DATA_HCTL_EN)
+Change return type of rtw_set_802_11_disassociate to void. This function
+always returns 'true' no matter what, so there is no need to return a
+value, and no need to check for it in the two call sites within
+rtw_wx_set_mlme.
 
-This is equal to INTF_SC7280_MASK
+Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
+---
+ drivers/staging/r8188eu/core/rtw_ioctl_set.c    | 4 +---
+ drivers/staging/r8188eu/include/rtw_ioctl_set.h | 2 +-
+ drivers/staging/r8188eu/os_dep/ioctl_linux.c    | 6 ++----
+ 3 files changed, 4 insertions(+), 8 deletions(-)
 
-> +
->   #define IRQ_SDM845_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
->   			 BIT(MDP_SSPP_TOP0_INTR2) | \
->   			 BIT(MDP_SSPP_TOP0_HIST_INTR) | \
-> @@ -124,6 +126,19 @@
->   			  BIT(MDP_AD4_0_INTR) | \
->   			  BIT(MDP_AD4_1_INTR))
->   
-> +#define IRQ_SC8280XP_MASK (BIT(MDP_SSPP_TOP0_INTR) | \
-> +			   BIT(MDP_SSPP_TOP0_INTR2) | \
-> +			   BIT(MDP_SSPP_TOP0_HIST_INTR) | \
-> +			   BIT(MDP_INTF0_7xxx_INTR) | \
-> +			   BIT(MDP_INTF1_7xxx_INTR) | \
-> +			   BIT(MDP_INTF2_7xxx_INTR) | \
-> +			   BIT(MDP_INTF3_7xxx_INTR) | \
-> +			   BIT(MDP_INTF4_7xxx_INTR) | \
-> +			   BIT(MDP_INTF5_7xxx_INTR) | \
-> +			   BIT(MDP_INTF6_7xxx_INTR) | \
-> +			   BIT(MDP_INTF7_7xxx_INTR) | \
-> +			   BIT(MDP_INTF8_7xxx_INTR))
-> +
->   #define WB_SM8250_MASK (BIT(DPU_WB_LINE_MODE) | \
->   			 BIT(DPU_WB_UBWC) | \
->   			 BIT(DPU_WB_YUV_CONFIG) | \
-> @@ -350,6 +365,20 @@ static const struct dpu_caps sc8180x_dpu_caps = {
->   	.max_vdeci_exp = MAX_VERT_DECIMATION,
->   };
->   
-> +static const struct dpu_caps sc8280xp_dpu_caps = {
-> +	.max_mixer_width = 2560,
-> +	.max_mixer_blendstages = 11,
-> +	.qseed_type = DPU_SSPP_SCALER_QSEED3LITE,
-> +	.smart_dma_rev = DPU_SSPP_SMART_DMA_V2, /* TODO: v2.5 */
-> +	.ubwc_version = DPU_HW_UBWC_VER_40,
-> +	.has_src_split = true,
-> +	.has_dim_layer = true,
-> +	.has_idle_pc = true,
-> +	.has_3d_merge = true,
-> +	.max_linewidth = 5120,
-> +	.pixel_ram_size = DEFAULT_PIXEL_RAM_SIZE,
-> +};
-> +
->   static const struct dpu_caps sm8250_dpu_caps = {
->   	.max_mixer_width = DEFAULT_DPU_OUTPUT_LINE_WIDTH,
->   	.max_mixer_blendstages = 0xb,
-> @@ -472,6 +501,24 @@ static const struct dpu_mdp_cfg sc8180x_mdp[] = {
->   	},
->   };
->   
-> +static const struct dpu_mdp_cfg sc8280xp_mdp[] = {
-> +	{
-> +	.name = "top_0", .id = MDP_TOP,
-> +	.base = 0x0, .len = 0x494,
-> +	.features = 0,
-> +	.highest_bank_bit = 0x3, /* TODO: 2 for LP_DDR4 */
-> +	.clk_ctrls[DPU_CLK_CTRL_VIG0] = { .reg_off = 0x2ac, .bit_off = 0},
-> +	.clk_ctrls[DPU_CLK_CTRL_VIG1] = { .reg_off = 0x2b4, .bit_off = 0},
-> +	.clk_ctrls[DPU_CLK_CTRL_VIG2] = { .reg_off = 0x2bc, .bit_off = 0},
-> +	.clk_ctrls[DPU_CLK_CTRL_VIG3] = { .reg_off = 0x2c4, .bit_off = 0},
-> +	.clk_ctrls[DPU_CLK_CTRL_DMA0] = { .reg_off = 0x2ac, .bit_off = 8},
-> +	.clk_ctrls[DPU_CLK_CTRL_DMA1] = { .reg_off = 0x2b4, .bit_off = 8},
-> +	.clk_ctrls[DPU_CLK_CTRL_CURSOR0] = { .reg_off = 0x2bc, .bit_off = 8},
-> +	.clk_ctrls[DPU_CLK_CTRL_CURSOR1] = { .reg_off = 0x2c4, .bit_off = 8},
-> +	.clk_ctrls[DPU_CLK_CTRL_REG_DMA] = { .reg_off = 0x2bc, .bit_off = 20},
-> +	},
-> +};
-> +
->   static const struct dpu_mdp_cfg sm8250_mdp[] = {
->   	{
->   	.name = "top_0", .id = MDP_TOP,
-> @@ -620,6 +667,45 @@ static const struct dpu_ctl_cfg sc7180_ctl[] = {
->   	},
->   };
->   
-> +static const struct dpu_ctl_cfg sc8280xp_ctl[] = {
-> +	{
-> +	.name = "ctl_0", .id = CTL_0,
-> +	.base = 0x15000, .len = 0x204,
-> +	.features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE) | BIT(DPU_CTL_VM_CFG),
-
-CTL_SC7280_MASK
-
-> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 9),
-> +	},
-> +	{
-> +	.name = "ctl_1", .id = CTL_1,
-> +	.base = 0x16000, .len = 0x204,
-> +	.features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE) | BIT(DPU_CTL_VM_CFG),
-> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 10),
-> +	},
-> +	{
-> +	.name = "ctl_2", .id = CTL_2,
-> +	.base = 0x17000, .len = 0x204,
-> +	.features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE) | BIT(DPU_CTL_VM_CFG),
-> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 11),
-> +	},
-> +	{
-> +	.name = "ctl_3", .id = CTL_3,
-> +	.base = 0x18000, .len = 0x204,
-> +	.features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE) | BIT(DPU_CTL_VM_CFG),
-> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 12),
-> +	},
-> +	{
-> +	.name = "ctl_4", .id = CTL_4,
-> +	.base = 0x19000, .len = 0x204,
-> +	.features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE) | BIT(DPU_CTL_VM_CFG),
-> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 13),
-> +	},
-> +	{
-> +	.name = "ctl_5", .id = CTL_5,
-> +	.base = 0x1a000, .len = 0x204,
-> +	.features = BIT(DPU_CTL_ACTIVE_CFG) | BIT(DPU_CTL_FETCH_ACTIVE) | BIT(DPU_CTL_VM_CFG),
-> +	.intr_start = DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 23),
-> +	},
-> +};
-> +
->   static const struct dpu_ctl_cfg sm8150_ctl[] = {
->   	{
->   	.name = "ctl_0", .id = CTL_0,
-> @@ -849,6 +935,34 @@ static const struct dpu_sspp_cfg sc7180_sspp[] = {
->   		sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
->   };
->   
-> +static const struct dpu_sspp_sub_blks sc8280xp_vig_sblk_0 =
-> +				_VIG_SBLK("0", 5, DPU_SSPP_SCALER_QSEED3LITE);
-> +static const struct dpu_sspp_sub_blks sc8280xp_vig_sblk_1 =
-> +				_VIG_SBLK("1", 6, DPU_SSPP_SCALER_QSEED3LITE);
-> +static const struct dpu_sspp_sub_blks sc8280xp_vig_sblk_2 =
-> +				_VIG_SBLK("2", 7, DPU_SSPP_SCALER_QSEED3LITE);
-> +static const struct dpu_sspp_sub_blks sc8280xp_vig_sblk_3 =
-> +				_VIG_SBLK("3", 8, DPU_SSPP_SCALER_QSEED3LITE);
-> +
-> +static const struct dpu_sspp_cfg sc8280xp_sspp[] = {
-> +	SSPP_BLK("sspp_0", SSPP_VIG0, 0x4000, VIG_SC7180_MASK,
-
-It should be either DPU_SSPP_SCALER_QSEED4 in the sblks above or 
-VIG_SM8250_MASK below.
-
-> +		 sc8280xp_vig_sblk_0, 0,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG0),
-> +	SSPP_BLK("sspp_1", SSPP_VIG1, 0x6000, VIG_SC7180_MASK,
-> +		 sc8280xp_vig_sblk_1, 4,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG1),
-> +	SSPP_BLK("sspp_2", SSPP_VIG2, 0x8000, VIG_SC7180_MASK,
-> +		 sc8280xp_vig_sblk_2, 8, SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG2),
-> +	SSPP_BLK("sspp_3", SSPP_VIG3, 0xa000, VIG_SC7180_MASK,
-> +		 sc8280xp_vig_sblk_3, 12,  SSPP_TYPE_VIG, DPU_CLK_CTRL_VIG3),
-> +	SSPP_BLK("sspp_8", SSPP_DMA0, 0x24000, DMA_SDM845_MASK,
-> +		 sdm845_dma_sblk_0, 1, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA0),
-> +	SSPP_BLK("sspp_9", SSPP_DMA1, 0x26000, DMA_SDM845_MASK,
-> +		 sdm845_dma_sblk_1, 5, SSPP_TYPE_DMA, DPU_CLK_CTRL_DMA1),
-> +	SSPP_BLK("sspp_10", SSPP_DMA2, 0x28000, DMA_CURSOR_SDM845_MASK,
-> +		 sdm845_dma_sblk_2, 9, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR0),
-> +	SSPP_BLK("sspp_11", SSPP_DMA3, 0x2a000, DMA_CURSOR_SDM845_MASK,
-> +		 sdm845_dma_sblk_3, 13, SSPP_TYPE_DMA, DPU_CLK_CTRL_CURSOR1),
-> +};
-> +
->   static const struct dpu_sspp_sub_blks sm8250_vig_sblk_0 =
->   				_VIG_SBLK("0", 5, DPU_SSPP_SCALER_QSEED3LITE);
->   static const struct dpu_sspp_sub_blks sm8250_vig_sblk_1 =
-> @@ -996,6 +1110,15 @@ static const struct dpu_lm_cfg sc7180_lm[] = {
->   		&sc7180_lm_sblk, PINGPONG_1, LM_0, 0),
->   };
->   
-> +static const struct dpu_lm_cfg sc8280xp_lm[] = {
-> +	LM_BLK("lm_0", LM_0, 0x44000, MIXER_SC7180_MASK, &sdm845_lm_sblk, PINGPONG_0, LM_1, DSPP_0),
-
-Doesn't sc8280xp support DPU_MIXER_SOURCESPLIT? If it does, it should be 
-MIXER_SDM845_MASK
-
-> +	LM_BLK("lm_1", LM_1, 0x45000, MIXER_SC7180_MASK, &sdm845_lm_sblk, PINGPONG_1, LM_0, DSPP_1),
-> +	LM_BLK("lm_2", LM_2, 0x46000, MIXER_SC7180_MASK, &sdm845_lm_sblk, PINGPONG_2, LM_3, DSPP_2),
-> +	LM_BLK("lm_3", LM_3, 0x47000, MIXER_SC7180_MASK, &sdm845_lm_sblk, PINGPONG_3, LM_2, DSPP_3),
-> +	LM_BLK("lm_4", LM_4, 0x48000, MIXER_SC7180_MASK, &sdm845_lm_sblk, PINGPONG_4, LM_5, 0),
-> +	LM_BLK("lm_5", LM_5, 0x49000, MIXER_SC7180_MASK, &sdm845_lm_sblk, PINGPONG_5, LM_4, 0),
-> +};
-> +
->   /* SM8150 */
->   
->   static const struct dpu_lm_cfg sm8150_lm[] = {
-> @@ -1154,6 +1277,21 @@ static struct dpu_pingpong_cfg sc7180_pp[] = {
->   	PP_BLK_TE("pingpong_1", PINGPONG_1, 0x70800, 0, sdm845_pp_sblk_te, -1, -1),
->   };
->   
-> +static struct dpu_pingpong_cfg sc8280xp_pp[] = {
-> +	PP_BLK_TE("pingpong_0", PINGPONG_0, 0x69000, MERGE_3D_0, sdm845_pp_sblk_te,
-> +		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8), -1),
-> +	PP_BLK_TE("pingpong_1", PINGPONG_1, 0x6a000, MERGE_3D_0, sdm845_pp_sblk_te,
-> +		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 9), -1),
-> +	PP_BLK_TE("pingpong_2", PINGPONG_2, 0x6b000, MERGE_3D_1, sdm845_pp_sblk_te,
-> +		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 10), -1),
-> +	PP_BLK_TE("pingpong_3", PINGPONG_3, 0x6c000, MERGE_3D_1, sdm845_pp_sblk_te,
-> +		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 11), -1),
-> +	PP_BLK_TE("pingpong_4", PINGPONG_4, 0x6d000, MERGE_3D_2, sdm845_pp_sblk_te,
-> +		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 30), -1),
-> +	PP_BLK_TE("pingpong_5", PINGPONG_5, 0x6e000, MERGE_3D_2, sdm845_pp_sblk_te,
-> +		  DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR2, 31), -1),
-> +};
-> +
->   static const struct dpu_pingpong_cfg sm8150_pp[] = {
->   	PP_BLK_TE("pingpong_0", PINGPONG_0, 0x70000, MERGE_3D_0, sdm845_pp_sblk_te,
->   			DPU_IRQ_IDX(MDP_SSPP_TOP0_INTR, 8),
-> @@ -1205,6 +1343,12 @@ static const struct dpu_pingpong_cfg sc7280_pp[] = {
->   	PP_BLK("pingpong_3", PINGPONG_3, 0x6c000, 0, sc7280_pp_sblk, -1, -1),
->   };
->   
-> +static const struct dpu_merge_3d_cfg sc8280xp_merge_3d[] = {
-> +	MERGE_3D_BLK("merge_3d_0", MERGE_3D_0, 0x4e000),
-> +	MERGE_3D_BLK("merge_3d_1", MERGE_3D_1, 0x4f000),
-> +	MERGE_3D_BLK("merge_3d_2", MERGE_3D_2, 0x50000),
-> +};
-> +
->   /*************************************************************
->    * DSC sub blocks config
->    *************************************************************/
-> @@ -1279,6 +1423,19 @@ static const struct dpu_intf_cfg sc8180x_intf[] = {
->   	INTF_BLK("intf_5", INTF_5, 0x6C800, INTF_DP, MSM_DP_CONTROLLER_2, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 22, 23),
->   };
->   
-> +/* TODO: INTF 3, 8 and 7 are used for MST, marked as INTF_NONE for now */
-> +static const struct dpu_intf_cfg sc8280xp_intf[] = {
-> +	INTF_BLK("intf_0", INTF_0, 0x34000, INTF_DP, MSM_DP_CONTROLLER_0, 24, INTF_SC8280XP_MASK, MDP_SSPP_TOP0_INTR, 24, 25),
-> +	INTF_BLK("intf_1", INTF_1, 0x35000, INTF_DSI, 0, 24, INTF_SC8280XP_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
-> +	INTF_BLK("intf_2", INTF_2, 0x36000, INTF_DSI, 1, 24, INTF_SC8280XP_MASK, MDP_SSPP_TOP0_INTR, 28, 29),
-> +	INTF_BLK("intf_3", INTF_3, 0x37000, INTF_NONE, MSM_DP_CONTROLLER_0, 24, INTF_SC8280XP_MASK, MDP_SSPP_TOP0_INTR, 30, 31),
-> +	INTF_BLK("intf_4", INTF_4, 0x38000, INTF_DP, MSM_DP_CONTROLLER_1, 24, INTF_SC8280XP_MASK, MDP_SSPP_TOP0_INTR, 20, 21),
-> +	INTF_BLK("intf_5", INTF_5, 0x39000, INTF_DP, MSM_DP_CONTROLLER_3, 24, INTF_SC8280XP_MASK, MDP_SSPP_TOP0_INTR, 22, 23),
-> +	INTF_BLK("intf_6", INTF_6, 0x3a000, INTF_DP, MSM_DP_CONTROLLER_2, 24, INTF_SC8280XP_MASK, MDP_SSPP_TOP0_INTR, 16, 17),
-> +	INTF_BLK("intf_7", INTF_7, 0x3b000, INTF_NONE, MSM_DP_CONTROLLER_2, 24, INTF_SC8280XP_MASK, MDP_SSPP_TOP0_INTR, 18, 19),
-> +	INTF_BLK("intf_8", INTF_8, 0x3c000, INTF_NONE, MSM_DP_CONTROLLER_1, 24, INTF_SC8280XP_MASK, MDP_SSPP_TOP0_INTR, 12, 13),
-> +};
-> +
->   static const struct dpu_intf_cfg qcm2290_intf[] = {
->   	INTF_BLK("intf_0", INTF_0, 0x00000, INTF_NONE, 0, 0, 0, 0, 0, 0),
->   	INTF_BLK("intf_1", INTF_1, 0x6A800, INTF_DSI, 0, 24, INTF_SC7180_MASK, MDP_SSPP_TOP0_INTR, 26, 27),
-> @@ -1381,6 +1538,14 @@ static const struct dpu_vbif_cfg sdm845_vbif[] = {
->   	},
->   };
->   
-> +static const struct dpu_reg_dma_cfg sc8280xp_regdma = {
-> +	.base = 0x0,
-> +	.version = 0x00020000,
-> +	.trigger_sel_off = 0x119c,
-> +	.xin_id = 7,
-> +	.clk_ctrl = DPU_CLK_CTRL_REG_DMA,
-> +};
-> +
->   static const struct dpu_reg_dma_cfg sdm845_regdma = {
->   	.base = 0x0, .version = 0x1, .trigger_sel_off = 0x119c
->   };
-> @@ -1623,6 +1788,33 @@ static const struct dpu_perf_cfg sc8180x_perf_data = {
->   	.min_llcc_ib = 800000,
->   	.min_dram_ib = 800000,
->   	.danger_lut_tbl = {0xf, 0xffff, 0x0},
-> +	.qos_lut_tbl = {
-> +		{.nentry = ARRAY_SIZE(sc7180_qos_linear),
-> +		.entries = sc7180_qos_linear
-> +		},
-> +		{.nentry = ARRAY_SIZE(sc7180_qos_macrotile),
-> +		.entries = sc7180_qos_macrotile
-> +		},
-> +		{.nentry = ARRAY_SIZE(sc7180_qos_nrt),
-> +		.entries = sc7180_qos_nrt
-> +		},
-> +		/* TODO: macrotile-qseed is different from macrotile */
-> +	},
-> +	.cdp_cfg = {
-> +		{.rd_enable = 1, .wr_enable = 1},
-> +		{.rd_enable = 1, .wr_enable = 0}
-> +	},
-> +	.clk_inefficiency_factor = 105,
-> +	.bw_inefficiency_factor = 120,
-> +};
-> +
-> +static const struct dpu_perf_cfg sc8280xp_perf_data = {
-> +	.max_bw_low = 13600000,
-> +	.max_bw_high = 18200000,
-> +	.min_core_ib = 2500000,
-> +	.min_llcc_ib = 0,
-> +	.min_dram_ib = 800000,
-> +	.danger_lut_tbl = {0xf, 0xffff, 0x0},
->   	.qos_lut_tbl = {
->   		{.nentry = ARRAY_SIZE(sc8180x_qos_linear),
->   		.entries = sc8180x_qos_linear
-> @@ -1848,6 +2040,30 @@ static const struct dpu_mdss_cfg sc8180x_dpu_cfg = {
->   	.mdss_irqs = IRQ_SC8180X_MASK,
->   };
->   
-> +static const struct dpu_mdss_cfg sc8280xp_dpu_cfg = {
-> +	.caps = &sc8280xp_dpu_caps,
-> +	.mdp_count = ARRAY_SIZE(sc8280xp_mdp),
-> +	.mdp = sc8280xp_mdp,
-> +	.ctl_count = ARRAY_SIZE(sc8280xp_ctl),
-> +	.ctl = sc8280xp_ctl,
-> +	.sspp_count = ARRAY_SIZE(sc8280xp_sspp),
-> +	.sspp = sc8280xp_sspp,
-> +	.mixer_count = ARRAY_SIZE(sc8280xp_lm),
-> +	.mixer = sc8280xp_lm,
-> +	.dspp_count = ARRAY_SIZE(sm8150_dspp),
-> +	.dspp = sm8150_dspp,
-> +	.pingpong_count = ARRAY_SIZE(sc8280xp_pp),
-> +	.pingpong = sc8280xp_pp,
-> +	.merge_3d_count = ARRAY_SIZE(sc8280xp_merge_3d),
-> +	.merge_3d = sc8280xp_merge_3d,
-> +	.intf_count = ARRAY_SIZE(sc8280xp_intf),
-> +	.intf = sc8280xp_intf,
-> +	.vbif_count = ARRAY_SIZE(sdm845_vbif),
-> +	.vbif = sdm845_vbif,
-> +	.perf = &sc8280xp_perf_data,
-> +	.mdss_irqs = IRQ_SC8280XP_MASK,
-> +};
-> +
->   static const struct dpu_mdss_cfg sm8250_dpu_cfg = {
->   	.caps = &sm8250_dpu_caps,
->   	.mdp_count = ARRAY_SIZE(sm8250_mdp),
-> @@ -1934,6 +2150,7 @@ static const struct dpu_mdss_hw_cfg_handler cfg_handler[] = {
->   	{ .hw_rev = DPU_HW_VER_620, .dpu_cfg = &sc7180_dpu_cfg},
->   	{ .hw_rev = DPU_HW_VER_650, .dpu_cfg = &qcm2290_dpu_cfg},
->   	{ .hw_rev = DPU_HW_VER_720, .dpu_cfg = &sc7280_dpu_cfg},
-> +	{ .hw_rev = DPU_HW_VER_800, .dpu_cfg = &sc8280xp_dpu_cfg},
->   };
->   
->   const struct dpu_mdss_cfg *dpu_hw_catalog_init(u32 hw_rev)
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> index 38aa38ab1568..c4c675c40a57 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_catalog.h
-> @@ -46,6 +46,7 @@
->   #define DPU_HW_VER_620	DPU_HW_VER(6, 2, 0) /* sc7180 v1.0 */
->   #define DPU_HW_VER_650	DPU_HW_VER(6, 5, 0) /* qcm2290|sm4125 */
->   #define DPU_HW_VER_720	DPU_HW_VER(7, 2, 0) /* sc7280 */
-> +#define DPU_HW_VER_800	DPU_HW_VER(8, 0, 0) /* sc8280xp */
->   
->   #define IS_MSM8996_TARGET(rev) IS_DPU_MAJOR_MINOR_SAME((rev), DPU_HW_VER_170)
->   #define IS_MSM8998_TARGET(rev) IS_DPU_MAJOR_MINOR_SAME((rev), DPU_HW_VER_300)
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
-> index cf1b6d84c18a..27d74c4d8a98 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.c
-> @@ -35,6 +35,9 @@
->   #define MDP_INTF_3_OFF_REV_7xxx             0x37000
->   #define MDP_INTF_4_OFF_REV_7xxx             0x38000
->   #define MDP_INTF_5_OFF_REV_7xxx             0x39000
-> +#define MDP_INTF_6_OFF_REV_7xxx             0x3a000
-> +#define MDP_INTF_7_OFF_REV_7xxx             0x3b000
-> +#define MDP_INTF_8_OFF_REV_7xxx             0x3c000
->   
->   /**
->    * struct dpu_intr_reg - array of DPU register sets
-> @@ -139,6 +142,21 @@ static const struct dpu_intr_reg dpu_intr_set[] = {
->   		MDP_INTF_5_OFF_REV_7xxx+INTF_INTR_EN,
->   		MDP_INTF_5_OFF_REV_7xxx+INTF_INTR_STATUS
->   	},
-> +	[MDP_INTF6_7xxx_INTR] = {
-> +		MDP_INTF_6_OFF_REV_7xxx+INTF_INTR_CLEAR,
-> +		MDP_INTF_6_OFF_REV_7xxx+INTF_INTR_EN,
-> +		MDP_INTF_6_OFF_REV_7xxx+INTF_INTR_STATUS
-> +	},
-> +	[MDP_INTF7_7xxx_INTR] = {
-> +		MDP_INTF_7_OFF_REV_7xxx+INTF_INTR_CLEAR,
-> +		MDP_INTF_7_OFF_REV_7xxx+INTF_INTR_EN,
-> +		MDP_INTF_7_OFF_REV_7xxx+INTF_INTR_STATUS
-> +	},
-> +	[MDP_INTF8_7xxx_INTR] = {
-> +		MDP_INTF_8_OFF_REV_7xxx+INTF_INTR_CLEAR,
-> +		MDP_INTF_8_OFF_REV_7xxx+INTF_INTR_EN,
-> +		MDP_INTF_8_OFF_REV_7xxx+INTF_INTR_STATUS
-> +	},
->   };
->   
->   #define DPU_IRQ_REG(irq_idx)	(irq_idx / 32)
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h
-> index 46443955443c..425465011c80 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_interrupts.h
-> @@ -31,6 +31,9 @@ enum dpu_hw_intr_reg {
->   	MDP_INTF3_7xxx_INTR,
->   	MDP_INTF4_7xxx_INTR,
->   	MDP_INTF5_7xxx_INTR,
-> +	MDP_INTF6_7xxx_INTR,
-> +	MDP_INTF7_7xxx_INTR,
-> +	MDP_INTF8_7xxx_INTR,
->   	MDP_INTR_MAX,
->   };
->   
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
-> index d3b0ed0a9c6c..d595096a4b1f 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_hw_mdss.h
-> @@ -214,6 +214,8 @@ enum dpu_intf {
->   	INTF_4,
->   	INTF_5,
->   	INTF_6,
-> +	INTF_7,
-> +	INTF_8,
->   	INTF_MAX
->   };
->   
-> diff --git a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> index 5e6e2626151e..db2e4bb4e208 100644
-> --- a/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> +++ b/drivers/gpu/drm/msm/disp/dpu1/dpu_kms.c
-> @@ -1304,6 +1304,7 @@ static const struct of_device_id dpu_dt_match[] = {
->   	{ .compatible = "qcom,sc7180-dpu", },
->   	{ .compatible = "qcom,sc7280-dpu", },
->   	{ .compatible = "qcom,sc8180x-dpu", },
-> +	{ .compatible = "qcom,sc8280xp-dpu", },
->   	{ .compatible = "qcom,sm8150-dpu", },
->   	{ .compatible = "qcom,sm8250-dpu", },
->   	{}
-> diff --git a/drivers/gpu/drm/msm/msm_drv.h b/drivers/gpu/drm/msm/msm_drv.h
-> index b2ea262296a4..2dd342e49de6 100644
-> --- a/drivers/gpu/drm/msm/msm_drv.h
-> +++ b/drivers/gpu/drm/msm/msm_drv.h
-> @@ -61,6 +61,7 @@ enum msm_dp_controller {
->   	MSM_DP_CONTROLLER_0,
->   	MSM_DP_CONTROLLER_1,
->   	MSM_DP_CONTROLLER_2,
-> +	MSM_DP_CONTROLLER_3,
->   	MSM_DP_CONTROLLER_COUNT,
->   };
->   
-> diff --git a/drivers/gpu/drm/msm/msm_mdss.c b/drivers/gpu/drm/msm/msm_mdss.c
-> index e13c5c12b775..7c391fab6263 100644
-> --- a/drivers/gpu/drm/msm/msm_mdss.c
-> +++ b/drivers/gpu/drm/msm/msm_mdss.c
-> @@ -208,6 +208,7 @@ static int msm_mdss_enable(struct msm_mdss *msm_mdss)
->   		writel_relaxed(0x420, msm_mdss->mmio + UBWC_STATIC);
->   		break;
->   	case DPU_HW_VER_600:
-> +	case DPU_HW_VER_800:
->   		/* TODO: 0x102e for LP_DDR4 */
->   		writel_relaxed(0x103e, msm_mdss->mmio + UBWC_STATIC);
->   		writel_relaxed(2, msm_mdss->mmio + UBWC_CTRL_2);
-> @@ -445,6 +446,7 @@ static const struct of_device_id mdss_dt_match[] = {
->   	{ .compatible = "qcom,sc7180-mdss" },
->   	{ .compatible = "qcom,sc7280-mdss" },
->   	{ .compatible = "qcom,sc8180x-mdss" },
-> +	{ .compatible = "qcom,sc8280xp-mdss" },
->   	{ .compatible = "qcom,sm8150-mdss" },
->   	{ .compatible = "qcom,sm8250-mdss" },
->   	{}
-
-Please split mdss into the separate patch.
-
+diff --git a/drivers/staging/r8188eu/core/rtw_ioctl_set.c b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
+index 786431826659..785c0dba508f 100644
+--- a/drivers/staging/r8188eu/core/rtw_ioctl_set.c
++++ b/drivers/staging/r8188eu/core/rtw_ioctl_set.c
+@@ -314,7 +314,7 @@ u8 rtw_set_802_11_infrastructure_mode(struct adapter *padapter,
+ 	return true;
+ }
+ 
+-u8 rtw_set_802_11_disassociate(struct adapter *padapter)
++void rtw_set_802_11_disassociate(struct adapter *padapter)
+ {
+ 	struct mlme_priv *pmlmepriv = &padapter->mlmepriv;
+ 
+@@ -328,8 +328,6 @@ u8 rtw_set_802_11_disassociate(struct adapter *padapter)
+ 	}
+ 
+ 	spin_unlock_bh(&pmlmepriv->lock);
+-
+-	return true;
+ }
+ 
+ u8 rtw_set_802_11_bssid_list_scan(struct adapter *padapter, struct ndis_802_11_ssid *pssid, int ssid_max_num)
+diff --git a/drivers/staging/r8188eu/include/rtw_ioctl_set.h b/drivers/staging/r8188eu/include/rtw_ioctl_set.h
+index abe460d6504d..c3eb2479f27b 100644
+--- a/drivers/staging/r8188eu/include/rtw_ioctl_set.h
++++ b/drivers/staging/r8188eu/include/rtw_ioctl_set.h
+@@ -12,7 +12,7 @@ u8 rtw_set_802_11_authentication_mode(struct adapter *adapt,
+ 				      enum ndis_802_11_auth_mode authmode);
+ u8 rtw_set_802_11_bssid(struct adapter *adapter, u8 *bssid);
+ u8 rtw_set_802_11_add_wep(struct adapter *adapter, struct ndis_802_11_wep *wep);
+-u8 rtw_set_802_11_disassociate(struct adapter *adapter);
++void rtw_set_802_11_disassociate(struct adapter *adapter);
+ u8 rtw_set_802_11_bssid_list_scan(struct adapter *adapter,
+ 				  struct ndis_802_11_ssid *pssid,
+ 				  int ssid_max_num);
+diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+index dda48a2a6d0c..04d9384d239a 100644
+--- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
++++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
+@@ -1020,12 +1020,10 @@ static int rtw_wx_set_mlme(struct net_device *dev,
+ 
+ 	switch (mlme->cmd) {
+ 	case IW_MLME_DEAUTH:
+-		if (!rtw_set_802_11_disassociate(padapter))
+-			ret = -1;
++		rtw_set_802_11_disassociate(padapter);
+ 		break;
+ 	case IW_MLME_DISASSOC:
+-		if (!rtw_set_802_11_disassociate(padapter))
+-			ret = -1;
++		rtw_set_802_11_disassociate(padapter);
+ 		break;
+ 	default:
+ 		return -EOPNOTSUPP;
 -- 
-With best wishes
-Dmitry
+2.38.1
 
