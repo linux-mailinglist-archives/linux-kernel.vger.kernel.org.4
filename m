@@ -2,112 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F1687615C25
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 07:18:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 84149615C24
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 07:18:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230089AbiKBGSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 02:18:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36954 "EHLO
+        id S230064AbiKBGSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 02:18:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36956 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbiKBGSE (ORCPT
+        with ESMTP id S229929AbiKBGSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 2 Nov 2022 02:18:04 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD10625C5A;
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD15225C64;
         Tue,  1 Nov 2022 23:18:03 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 6CB1FB820D0;
-        Wed,  2 Nov 2022 06:18:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6BF9C433C1;
-        Wed,  2 Nov 2022 06:18:00 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667369881;
-        bh=2OIjHvL54t1DXYOXYxp6qJOT614me6QcO9DL4rk9VrU=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=dU78BYohrAV0o2uZcHI1mnzDPyPziGY2J8TNpdf7qa+Akf5WnUHu5PJmHKL6z558Z
-         LWA3SSiessnH5waINDt9RJSa4akWUhCMtqAaiQXXkyfWsnhnTeminjdIZgKTJ5L3FT
-         40svmK4tGVUUMyRYktBwooTBoPD/gQccwMd0rmsi1lE2q7HDAnXVk4YVX7nhqjSjrc
-         EQQL4aWLVojoXIvNwN4O1R4Fg+bGGakJ7p5iwntdFJSeGiYE3BYRj97GewN1VDXkaQ
-         R2AC/KWUiGoHsWO84OPzKWvwG+1IwK1/+V22mMrOzUfWtY/kMEwAcFvRBo3Ha7IVJO
-         5n7+wkh0payQQ==
-Date:   Tue, 1 Nov 2022 23:17:58 -0700
-From:   Eric Biggers <ebiggers@kernel.org>
-To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
-        linux-f2fs-devel@lists.sourceforge.net
-Cc:     tytso@mit.edu, jaegeuk@kernel.org, linux-fscrypt@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Wei Chen <harperchen1110@gmail.com>
-Subject: f2fs_empty_dir() can be extremely slow on malicious disk images
-Message-ID: <Y2ILlpqFQVO9fH8B@sol.localdomain>
-References: <CAO4mrfc3sbZVj3QOdAVFqrZp+mEuPQTtQCQsQy-07W_BEFqZ2Q@mail.gmail.com>
- <CAO4mrfexzxeYwAkvWGfg=tEiczUWarO6y68KFD9EG9qZtGejng@mail.gmail.com>
+Received: by mail-wr1-f44.google.com with SMTP id cl5so11362498wrb.9;
+        Tue, 01 Nov 2022 23:18:03 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=TyoiXD+lZAYyIq5A3unxJbUvSr0umu7gv7mLSuqlSJ4=;
+        b=I/Zy5t0JCiZ7ddN+RFSrntl9sEe/07pscujEFvTKoQS5ZFv6NA456HRmg0+JR/INL0
+         FU1VXyFUa6ngvXRo+jE6p49cr0KSvqWOKWyhYGhhQyiLGBIjMlDyk1iOKEwHeCpqBagy
+         RuwJYCHHjU90z3O/6B2G4j5MnDLvMcqRqQWjrRrR3b635SBD4AYtnXFeok7Fy+M7yeK7
+         pQNFJQUKdpLCs/sZSGlpMa768rhRFlGTKSEPzEaATD0tX8r7m0hVKrxogzILEAXBNzt1
+         /BhuNGPuphqSZvj+pZRrc0z3hMHxFtY1epsy3K+df9O/j+HBngCfzZMBXk+b+rLHmrbA
+         Kkiw==
+X-Gm-Message-State: ACrzQf2tZTi4rMHWSiEXKeaoNcNk5l08D0yy1RkvowyOw0pQxjX6YPHA
+        RRBP1IE0yslf/b8vj/bN23k=
+X-Google-Smtp-Source: AMsMyM6NJ/87OZvYBlrVbXokU9DQLIfp/f10lKRDGr1BCob0gnkUi2pHO6BeN0qKMkHIYSEF8xWWvw==
+X-Received: by 2002:a05:6000:3c3:b0:236:b2ce:593e with SMTP id b3-20020a05600003c300b00236b2ce593emr12638679wrg.580.1667369882322;
+        Tue, 01 Nov 2022 23:18:02 -0700 (PDT)
+Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
+        by smtp.gmail.com with ESMTPSA id 7-20020a056000154700b00236644228besm12830609wry.40.2022.11.01.23.18.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Nov 2022 23:18:01 -0700 (PDT)
+Message-ID: <eeac01aa-5c3d-da4f-3acb-0698de23b2b4@kernel.org>
+Date:   Wed, 2 Nov 2022 07:18:00 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAO4mrfexzxeYwAkvWGfg=tEiczUWarO6y68KFD9EG9qZtGejng@mail.gmail.com>
-X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] ath11k (gcc13): synchronize
+ ath11k_mac_he_gi_to_nl80211_he_gi()'s return type
+Content-Language: en-US
+To:     Kalle Valo <kvalo@kernel.org>, Randy Dunlap <rdunlap@infradead.org>
+Cc:     Jeff Johnson <quic_jjohnson@quicinc.com>,
+        linux-kernel@vger.kernel.org, Martin Liska <mliska@suse.cz>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, ath11k@lists.infradead.org,
+        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
+References: <20221031114341.10377-1-jirislaby@kernel.org>
+ <55c4d139-0f22-e7ba-398a-e3e0d8919220@quicinc.com>
+ <833c7f2f-c140-5a0b-1efc-b858348206ec@kernel.org> <87bkprgj0b.fsf@kernel.org>
+ <503a3b36-2256-a9ce-cffe-5c0ed51f6f62@infradead.org>
+ <87tu3ifv8z.fsf@kernel.org>
+From:   Jiri Slaby <jirislaby@kernel.org>
+In-Reply-To: <87tu3ifv8z.fsf@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+f2fs list and maintainers]
-[changed subject from "INFO: task hung in fscrypt_ioctl_set_policy"]
+On 01. 11. 22, 18:19, Kalle Valo wrote:
+> I did assume it will take at least a year or two before people get used
+> to the new prefix, but my patchwork script has a check for this and it's
+> trivial to fix the subject before I commit the patch. So hopefully the
+> switch goes smoothly.
 
-On Mon, Oct 31, 2022 at 10:18:02PM +0800, Wei Chen wrote:
-> Dear Linux developers,
-> 
-> Here is the link to the reproducers.
-> 
-> C reproducer: https://drive.google.com/file/d/1mduYsYuoOKemH3qkvpDQwnAHAaaLUp0Y/view?usp=share_link
-> Syz reproducer:
-> https://drive.google.com/file/d/1mu-_w7dy_562vWRlQvTRbcBjG4_G7b2L/view?usp=share_link
-> 
-> The bug persists in the latest commit, v5.15.76 (4f5365f77018). I hope
-> it is helpful to you.
-> 
-> [ 1782.137186][   T30] INFO: task a.out:6910 blocked for more than 143 seconds.
-> [ 1782.139217][   T30]       Not tainted 5.15.76 #5
-> [ 1782.140388][   T30] "echo 0 >
-> /proc/sys/kernel/hung_task_timeout_secs" disables this message.
-> [ 1782.142524][   T30] task:a.out           state:D stack:14296 pid:
-> 6910 ppid:  6532 flags:0x00004004
-> [ 1782.144799][   T30] Call Trace:
-> [ 1782.145623][   T30]  <TASK>
-> [ 1782.146316][   T30]  __schedule+0x3e8/0x1850
-> [ 1782.152029][   T30]  ? mark_held_locks+0x49/0x70
-> [ 1782.153533][   T30]  ? mark_held_locks+0x10/0x70
-> [ 1782.154759][   T30]  ? __down_write_common.part.14+0x31f/0x7b0
-> [ 1782.156159][   T30]  schedule+0x4e/0xe0
-> [ 1782.158314][   T30]  __down_write_common.part.14+0x324/0x7b0
-> [ 1782.159704][   T30]  ? fscrypt_ioctl_set_policy+0xe0/0x200
-> [ 1782.161050][   T30]  fscrypt_ioctl_set_policy+0xe0/0x200
-> [ 1782.162330][   T30]  __f2fs_ioctl+0x9d6/0x45e0
-> [ 1782.163417][   T30]  f2fs_ioctl+0x64/0x240
-> [ 1782.164404][   T30]  ? __f2fs_ioctl+0x45e0/0x45e0
-> [ 1782.165554][   T30]  __x64_sys_ioctl+0xb6/0x100
-> [ 1782.166662][   T30]  do_syscall_64+0x34/0xb0
-> [ 1782.169947][   T30]  entry_SYSCALL_64_after_hwframe+0x61/0xcb
+I think so. It will take some turnarounds for you before this starts 
+appearing in git log output for every wireless driver. Then, people will 
+start picking the prefix up from there ;).
 
-Well, the quality of this bug report has a lot to be desired (not on upstream
-kernel, reproducer is full of totally irrelevant stuff, not sent to the mailing
-list of the filesystem whose disk image is being fuzzed, etc.).  But what is
-going on is that f2fs_empty_dir() doesn't consider the case of a directory with
-an extremely large i_size on a malicious disk image.
+thanks,
+-- 
+js
+suse labs
 
-Specifically, the reproducer mounts an f2fs image with a directory that has an
-i_size of 14814520042850357248, then calls FS_IOC_SET_ENCRYPTION_POLICY on it.
-That results in a call to f2fs_empty_dir() to check whether the directory is
-empty.  f2fs_empty_dir() then iterates through all 3616826182336513 blocks the
-directory allegedly contains to check whether any contain anything.  i_rwsem is
-held during this, so anything else that tries to take it will hang.
-
-I'll look into this more if needed, but Jaegeuk and Chao, do you happen to have
-any ideas for how f2fs_empty_dir() should be fixed?  Is there an easy way to
-just iterate through the blocks that are actually allocated?
-
-- Eric
