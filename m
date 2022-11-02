@@ -2,116 +2,82 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B0332616C16
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:26:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AAB7E616C1A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:26:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230302AbiKBS0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 14:26:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51254 "EHLO
+        id S230362AbiKBS0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 14:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231196AbiKBS0I (ORCPT
+        with ESMTP id S230370AbiKBS0Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:26:08 -0400
-Received: from mail-yw1-x112f.google.com (mail-yw1-x112f.google.com [IPv6:2607:f8b0:4864:20::112f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2F6921834
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:26:06 -0700 (PDT)
-Received: by mail-yw1-x112f.google.com with SMTP id 00721157ae682-3701a0681daso139663217b3.4
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 11:26:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ULxNV0Y7ObC/UK3IdOnSD/Vynj/215SLWO43fDO8Lz8=;
-        b=TAWW3m8UL5LDFG8C5gf7E3dMuHygxgu6yswn9PmrqsByIQCZ0c30noNS+qq6tWhn1B
-         Z0g3s4wyuwoWgQ/SfCSK9KWahrIm58SDkKbPOjM/KJzKSnxwk9yw2fyfT6hB264wI1TH
-         /aneHQVowmTlQPO4/kfq+HbuB73l8yxkcEZEbKb9sa42tv7EkRZlwc+UjqwbvEhoAlXl
-         a9+m0pkRgC5CHjT7iljQ8DGTMySEZmn1frCJLkAO+NsjrZZeAaWx2z/WAWW8rDDsWnF5
-         n0YBGD834JmcA2b2ZTNW9x84QF3HrHM2VcVbWy/mD5xjXK+iHjk5wSHgiBG9PE1SnC90
-         UDvw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ULxNV0Y7ObC/UK3IdOnSD/Vynj/215SLWO43fDO8Lz8=;
-        b=QYiDnIsIvCDgidNcEpjGD9Uvla+sUEUkn28YfoT0COaUEbmhdvrRbQG+cRjVy9tr2U
-         mT8t9ITcDeN/zY87GTNpybZpHI38DWAUYfMFm1UGtIQXAi6DX+QpwT+Qp4C/Cy6WqVoN
-         bSxstW/MBqx9GXm68uo99i9KBMfwPAypEYZfDnS7qXenYUBocE7k4jp3FqvZ9r1+v8U6
-         BRKJWmYVoSV3nRCT0LU8zrpRVIFA0DhKJA1/00cPnoTS0tHv5lRacmplMeZYqLppoPu7
-         XVQPrb4bAuF4T3hPoukw+4NneGNUTbHoIqq1LEfJorHuOMt1rWhSLGEIbnL72o563Srq
-         3eaQ==
-X-Gm-Message-State: ACrzQf1kw0xrDpWRUYIS63A+b+MJ8152UunwhLiw7Q4bW1c/mqhuZV7B
-        s/L4/ltCS6gsayRelFXcXPGRzf9eocZJpZwj1rIbKWbb8JVg1A==
-X-Google-Smtp-Source: AMsMyM5/s1ZlPxsmc3KM9M9KFHK/LBqCyXGfiUT6gJBpOWlkIyFLGxflMfDIytZ89otdK5GJcFlOsxP73GBwQZ2Sh6U=
-X-Received: by 2002:a81:c11:0:b0:36a:bcf0:6340 with SMTP id
- 17-20020a810c11000000b0036abcf06340mr24170753ywm.467.1667413565888; Wed, 02
- Nov 2022 11:26:05 -0700 (PDT)
+        Wed, 2 Nov 2022 14:26:24 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 623CB2F3B7;
+        Wed,  2 Nov 2022 11:26:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 10042B82432;
+        Wed,  2 Nov 2022 18:26:17 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A6A64C433B5;
+        Wed,  2 Nov 2022 18:26:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667413575;
+        bh=0OnF8htTtPrhW90XoJmnZ9HiTpzXeY8j4Qxh7eEPkcM=;
+        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+        b=J5jL15/ZggiB//3835TMN3jw4jGvTN1hbV83U0GggX7zajZoFFU3MaXHAncNCHZNP
+         uYCl/DjFc3ueFj3RhLeg5yKAiHyZAIXA7kwOf4DeHEeJOoYgI8Pk9hAb9IJEfJq2r7
+         96HucyLcPfdqfGCGYrBjouQ6xrquHVYLpnSPMOBKyhYSVyx9llOSWj/61PZn484DTW
+         VSwYiS+w8J4+5jVBCFdF20YcJwJrEN/WGwnEL0YhdYZ7c/gA0XmMzo5I4y4+ni3Bt6
+         oJCoxJYW3+gTkcq70+PQoTDVQd23r279Ag2a+vHYnlnTTM6j3lkcfbyGBEkpFzNuH2
+         Clg5RWQwjeWfQ==
+Received: by mail-lf1-f46.google.com with SMTP id b2so29600586lfp.6;
+        Wed, 02 Nov 2022 11:26:15 -0700 (PDT)
+X-Gm-Message-State: ACrzQf2Wm77KXoDxcwtGWj8qAZZtfR0sqB719nVd5c9yoiO6gVCo79JP
+        M1jifYn2UWzQzenPycVUDUYiCR6myG7MfHKpiQ==
+X-Google-Smtp-Source: AMsMyM7kjGNrP3+8CtQwqjr4zosxnOmrv8yYX7CqgC43OsFofOIvtBA61DXFtaoqkMCrosPPhD7KyRmyDY2H7UVJfF0=
+X-Received: by 2002:a19:f24b:0:b0:4ab:cd12:d282 with SMTP id
+ d11-20020a19f24b000000b004abcd12d282mr10160512lfk.74.1667413573707; Wed, 02
+ Nov 2022 11:26:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221024051744.GA48642@debian> <20221101085153.12ccae1c@kernel.org>
- <CAJLv34RKj6u_7EZwYWiNujC-R4nxKHJ24DVYqydgHPy88NqMPA@mail.gmail.com> <CANn89iJeg+wQUdi7i=EbSS7Z__j+LEakPab3oKD7_Rr4hmV_xg@mail.gmail.com>
-In-Reply-To: <CANn89iJeg+wQUdi7i=EbSS7Z__j+LEakPab3oKD7_Rr4hmV_xg@mail.gmail.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 2 Nov 2022 11:25:54 -0700
-Message-ID: <CANn89iKKFABZxAv5PkNmCVZTyHxqghC9zoRSvbfDo+04qrHH9w@mail.gmail.com>
-Subject: Re: [PATCH net-next] gro: avoid checking for a failed search
-To:     Richard Gobert <richardbgobert@gmail.com>
-Cc:     Jakub Kicinski <kuba@kernel.org>, davem@davemloft.net,
-        pabeni@redhat.com, lixiaoyan@google.com, alexanderduyck@fb.com,
-        steffen.klassert@secunet.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
+References: <136157bd1f94c64504f87ee2db6b3ed0a8dcc3de.1667254476.git.daniel@makrotopia.org>
+ <1216e96b279d08230cb2aa61d536f44c1e9b800a.1667254476.git.daniel@makrotopia.org>
+In-Reply-To: <1216e96b279d08230cb2aa61d536f44c1e9b800a.1667254476.git.daniel@makrotopia.org>
+From:   Rob Herring <robh@kernel.org>
+Date:   Wed, 2 Nov 2022 13:26:04 -0500
+X-Gmail-Original-Message-ID: <CAL_JsqKBtgXYFqkMmUxp6W0S45KxecVo+Qp261b2-7L7bOJDAw@mail.gmail.com>
+Message-ID: <CAL_JsqKBtgXYFqkMmUxp6W0S45KxecVo+Qp261b2-7L7bOJDAw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] dt-bindings: thermal: mediatek: add compatible string
+ for MT7986 SoC
+To:     Daniel Golle <daniel@makrotopia.org>
+Cc:     linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Matthias Brugger <matthias.bgg@gmail.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 2, 2022 at 11:20 AM Eric Dumazet <edumazet@google.com> wrote:
+On Mon, Oct 31, 2022 at 6:08 PM Daniel Golle <daniel@makrotopia.org> wrote:
 >
-> On Wed, Nov 2, 2022 at 9:46 AM Richard Gobert <richardbgobert@gmail.com> wrote:
-> >
-> > > Why does it matter? You see a measurable perf win?
-> >
-> > In the common case, we will exit the loop with a break,
-> > so this patch eliminates an unnecessary check.
-> >
-> > On some architectures this optimization might be done
-> > automatically by the compiler, but I think it will be better
-> > to make it explicit here. Although on x86 this optimization
-> > happens automatically, I noticed that on my build target
-> > (ARM/GCC) this does change the binary.
+> Add compatible string 'mediatek,mt7986-thermal' for V3 thermal unit
+> found in MT7981 and MT7986 SoCs.
 >
-> What about taking this as an opportunity to reduce the indentation
-> level by one tab ?
->
-> Untested patch:
->
-> diff --git a/net/core/gro.c b/net/core/gro.c
-> index bc9451743307bc380cca96ae6995aa0a3b83d185..ddfe92c9a5e869d241931b72d6b3426a0e858468
-> 100644
-> --- a/net/core/gro.c
-> +++ b/net/core/gro.c
-> @@ -491,43 +491,44 @@ static enum gro_result dev_gro_receive(struct
-> napi_struct *napi, struct sk_buff
->         list_for_each_entry_rcu(ptype, head, list) {
->                 if (ptype->type != type || !ptype->callbacks.gro_receive)
->                         continue;
-> +               goto found_ptype;
-> +       }
-> +       rcu_read_unlock();
-> +       goto normal;
+> Signed-off-by: Daniel Golle <daniel@makrotopia.org>
+> ---
+>  Documentation/devicetree/bindings/thermal/mediatek-thermal.txt | 1 +
+>  1 file changed, 1 insertion(+)
 
+Resending as the reply headers got lost...
 
-Or even better:
-
-        list_for_each_entry_rcu(ptype, head, list) {
-               if (ptype->type == type && ptype->callbacks.gro_receive)
-                       goto found_ptype;
-       }
-       rcu_read_unlock();
-       goto normal;
+Acked-by: Rob Herring <robh@kernel.org>
