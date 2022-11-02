@@ -2,50 +2,61 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C1F0A6168B4
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:25:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 117A06168B7
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:25:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231418AbiKBQZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 12:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44772 "EHLO
+        id S231665AbiKBQZs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 12:25:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44908 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231758AbiKBQYf (ORCPT
+        with ESMTP id S231566AbiKBQZQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 12:24:35 -0400
-Received: from mail-il1-f198.google.com (mail-il1-f198.google.com [209.85.166.198])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 696CE6248
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 09:19:49 -0700 (PDT)
-Received: by mail-il1-f198.google.com with SMTP id i11-20020a056e02152b00b003007c106191so16787935ilu.9
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 09:19:49 -0700 (PDT)
+        Wed, 2 Nov 2022 12:25:16 -0400
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 84E2A11458;
+        Wed,  2 Nov 2022 09:20:36 -0700 (PDT)
+Received: by mail-oi1-f169.google.com with SMTP id g10so19694859oif.10;
+        Wed, 02 Nov 2022 09:20:35 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7Pv570SEvnmFF3irGKaCn8miqYpUbWAxcs7BzkE51DA=;
-        b=ix+FTHdI93EwL6upR0xoAH77ievtJgsBqllWOFhpK61LwmzmbDoRsuWMtsEyCvussa
-         Gbg5h5gfiO8XWkxk0wTe4uSOXTuhZoH96VEzmfVhwtS3DVOpxK/jY6XVJowyHkff/UAd
-         gFu/EYh2nvObMAdA1qc/IkvIYpo9IjNPucusv4IF/FjpNBWif71shiNQ6fzC+vviXcMi
-         QUgbw2L+NgzhUwAv0hpk5X8nu16uTuFiYg2ng1v9eg0PNkl2u6H8dhSSCcx/eja0BF2x
-         HcZG3JzAYifZLgsX0We7b8thxTyLyjuEQkImupE5TQLJtvJ9ttx3WOMOCUW0vAAd2oPf
-         a3gA==
-X-Gm-Message-State: ACrzQf0HjUMM6EfklovrEAHze3LkO023nJDuRowL2d03uPyKuXOrVqKD
-        mAKzh5VjH/w4+3Wrhrn4NMdEILUEh44PLyy4gm4a9uvkwAqa
-X-Google-Smtp-Source: AMsMyM4sFq040U2C8tvm3d3YRBUdzdH1I4h7UiuQIjP4qkaYcpMkOF1TrdPykSmFLqxUVkVuakMltVWoS1/gw1tqo+bFiq+6yAGk
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RKKWK9K6CWf6w2to45DX20dIVqZ+sSvcl1JMYG3WwJw=;
+        b=2cwmM/mykORhXQelZ1t3spURpVjHGV9+SNLB0CHZ095KP6s5HEr0VvBRhcfYkti2x0
+         JI5Dv5uPJ69XN2vRmyPXYrcMcHH4I3vCui09yRxqHElis9mZNj5WZTPExJcuL2/8Ioy4
+         6GglZaAE1yW4mr7x0Ewll+5r6qigX82tOoz+fGhblaTXi/7Jqqm9YhQ/1KWQD9OD5t5f
+         XNueC2jv5DFpBPmtbKMEGGCblV0ZjAXlBrjNqxVIkIbk6TKVY3X3SNNt1WgJNx7hpVE4
+         G3NfpWPukIXBHbmN27GJfYTyNtnkRGsUe9RboJ8AMey+9+/Z4yY7njxEHzwS2T3FggrG
+         Xj5g==
+X-Gm-Message-State: ACrzQf1puGs1g92RD0QxEWmZK19SP+dCHo5kOBgxUi17HtLDO4yPBASy
+        6iS3zwmgeEiBQe4T0wmldQ==
+X-Google-Smtp-Source: AMsMyM40sRtEjjTznRjTUSlJ/AMyd6lq/Qrlg2HZsJu/yKJD8fE0cDXMOs+hQOcJRZdvBmdC206SNQ==
+X-Received: by 2002:aca:b954:0:b0:359:fb87:84f8 with SMTP id j81-20020acab954000000b00359fb8784f8mr10592816oif.19.1667406035152;
+        Wed, 02 Nov 2022 09:20:35 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id a9-20020a0568300b8900b00661a16f14a1sm1874828otv.15.2022.11.02.09.20.34
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 09:20:34 -0700 (PDT)
+Received: (nullmailer pid 3993707 invoked by uid 1000);
+        Wed, 02 Nov 2022 16:20:36 -0000
+Date:   Wed, 2 Nov 2022 11:20:36 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Luca Weiss <luca@z3ntu.xyz>
+Cc:     linux-input@vger.kernel.org, ~postmarketos/upstreaming@lists.sr.ht,
+        phone-devel@vger.kernel.org, afd@ti.com,
+        Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2] dt-bindings: input: Convert ti,drv260x to DT schema
+Message-ID: <20221102162036.GA3988703-robh@kernel.org>
+References: <20221031164141.919134-1-luca@z3ntu.xyz>
 MIME-Version: 1.0
-X-Received: by 2002:a92:c70f:0:b0:300:9aa6:a0d2 with SMTP id
- a15-20020a92c70f000000b003009aa6a0d2mr13737762ilp.317.1667405988797; Wed, 02
- Nov 2022 09:19:48 -0700 (PDT)
-Date:   Wed, 02 Nov 2022 09:19:48 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000a8a5cc05ec7f35fd@google.com>
-Subject: [syzbot] possible deadlock in btrfs_lock_root_node
-From:   syzbot <syzbot+a033efd03287efd49df1@syzkaller.appspotmail.com>
-To:     clm@fb.com, dsterba@suse.com, josef@toxicpanda.com,
-        linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org,
-        syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221031164141.919134-1-luca@z3ntu.xyz>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
         HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
         SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -54,204 +65,208 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Mon, Oct 31, 2022 at 05:41:41PM +0100, Luca Weiss wrote:
+> Convert the drv260x haptics binding to DT schema format.
+> 
+> The only notable change from .txt format is that vbat-supply is not
+> actually required, so don't make it a required property.
+> 
+> Signed-off-by: Luca Weiss <luca@z3ntu.xyz>
+> ---
+> @Andrew Davis: You maintain some other TI bindings, would you be willing
+> to also maintain this one? It was originally written by Dan Murphy but
+> apparently Dan no longer works for TI.
+> 
+> Changes since v1:
+> * add $ref to types as suggested by Rob
+> * change maintainer
+> 
+>  .../devicetree/bindings/input/ti,drv260x.txt  |  50 ---------
+>  .../devicetree/bindings/input/ti,drv260x.yaml | 102 ++++++++++++++++++
+>  2 files changed, 102 insertions(+), 50 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/input/ti,drv260x.txt
+>  create mode 100644 Documentation/devicetree/bindings/input/ti,drv260x.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/input/ti,drv260x.txt b/Documentation/devicetree/bindings/input/ti,drv260x.txt
+> deleted file mode 100644
+> index 4c5312eaaa85..000000000000
+> --- a/Documentation/devicetree/bindings/input/ti,drv260x.txt
+> +++ /dev/null
+> @@ -1,50 +0,0 @@
+> -* Texas Instruments - drv260x Haptics driver family
+> -
+> -Required properties:
+> -	- compatible - One of:
+> -		"ti,drv2604" - DRV2604
+> -		"ti,drv2605" - DRV2605
+> -		"ti,drv2605l" - DRV2605L
+> -	- reg -  I2C slave address
+> -	- vbat-supply - Required supply regulator
+> -	- mode - Power up mode of the chip (defined in include/dt-bindings/input/ti-drv260x.h)
+> -		DRV260X_LRA_MODE - Linear Resonance Actuator mode (Piezoelectric)
+> -		DRV260X_LRA_NO_CAL_MODE - This is a LRA Mode but there is no calibration
+> -				sequence during init.  And the device is configured for real
+> -				time playback mode (RTP mode).
+> -		DRV260X_ERM_MODE - Eccentric Rotating Mass mode (Rotary vibrator)
+> -	- library-sel - These are ROM based waveforms pre-programmed into the IC.
+> -				This should be set to set the library to use at power up.
+> -				(defined in include/dt-bindings/input/ti-drv260x.h)
+> -		DRV260X_LIB_EMPTY - Do not use a pre-programmed library
+> -		DRV260X_ERM_LIB_A - Pre-programmed Library
+> -		DRV260X_ERM_LIB_B - Pre-programmed Library
+> -		DRV260X_ERM_LIB_C - Pre-programmed Library
+> -		DRV260X_ERM_LIB_D - Pre-programmed Library
+> -		DRV260X_ERM_LIB_E - Pre-programmed Library
+> -		DRV260X_ERM_LIB_F - Pre-programmed Library
+> -		DRV260X_LIB_LRA - Pre-programmed LRA Library
+> -
+> -Optional properties:
+> -	- enable-gpio - gpio pin to enable/disable the device.
+> -	- vib-rated-mv - The rated voltage of the actuator in millivolts.
+> -			  If this is not set then the value will be defaulted to
+> -			  3.2 v.
+> -	- vib-overdrive-mv - The overdrive voltage of the actuator in millivolts.
+> -			  If this is not set then the value will be defaulted to
+> -			  3.2 v.
+> -Example:
+> -
+> -haptics: haptics@5a {
+> -	compatible = "ti,drv2605l";
+> -	reg = <0x5a>;
+> -	vbat-supply = <&vbat>;
+> -	enable-gpio = <&gpio1 28 GPIO_ACTIVE_HIGH>;
+> -	mode = <DRV260X_LRA_MODE>;
+> -	library-sel = <DRV260X_LIB_LRA>;
+> -	vib-rated-mv = <3200>;
+> -	vib-overdrive-mv = <3200>;
+> -}
+> -
+> -For more product information please see the link below:
+> -http://www.ti.com/product/drv2605
+> diff --git a/Documentation/devicetree/bindings/input/ti,drv260x.yaml b/Documentation/devicetree/bindings/input/ti,drv260x.yaml
+> new file mode 100644
+> index 000000000000..d8b9b9d5d9d9
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/input/ti,drv260x.yaml
+> @@ -0,0 +1,102 @@
+> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/input/ti,drv260x.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Texas Instruments - drv260x Haptics driver family
+> +
+> +maintainers:
+> +  - Andrew Davis <afd@ti.com>
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ti,drv2604
+> +      - ti,drv2605
+> +      - ti,drv2605l
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  vbat-supply:
+> +    description: Power supply to the haptic motor
+> +
+> +  mode:
 
-syzbot found the following issue on:
+This is somewhat problematic because we have multiple 'mode' properties 
+with different meanings. We already have to handle that, but Would be 
+nice to deprecate at some point given there is only 1 upstream dts using 
+it.
 
-HEAD commit:    bbed346d5a96 Merge branch 'for-next/core' into for-kernelci
-git tree:       git://git.kernel.org/pub/scm/linux/kernel/git/arm64/linux.git for-kernelci
-console output: https://syzkaller.appspot.com/x/log.txt?x=10bc7961880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=3a4a45d2d827c1e
-dashboard link: https://syzkaller.appspot.com/bug?extid=a033efd03287efd49df1
-compiler:       Debian clang version 13.0.1-++20220126092033+75e33f71c2da-1~exp1~20220126212112.63, GNU ld (GNU Binutils for Debian) 2.35.2
-userspace arch: arm64
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: |
+> +      Power up mode of the chip
+> +      (defined in include/dt-bindings/input/ti-drv260x.h)
+> +
+> +      DRV260X_LRA_MODE
+> +        Linear Resonance Actuator mode (Piezoelectric)
+> +
+> +      DRV260X_LRA_NO_CAL_MODE
+> +        This is a LRA Mode but there is no calibration sequence during init.
+> +        And the device is configured for real time playback mode (RTP mode).
+> +
+> +      DRV260X_ERM_MODE
+> +        Eccentric Rotating Mass mode (Rotary vibrator)
+> +    enum: [ 0, 1, 2 ]
+> +
+> +  library-sel:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: |
+> +      These are ROM based waveforms pre-programmed into the IC.
+> +      This should be set to set the library to use at power up.
+> +      (defined in include/dt-bindings/input/ti-drv260x.h)
+> +
+> +      DRV260X_LIB_EMPTY - Do not use a pre-programmed library
+> +      DRV260X_ERM_LIB_A - Pre-programmed Library
+> +      DRV260X_ERM_LIB_B - Pre-programmed Library
+> +      DRV260X_ERM_LIB_C - Pre-programmed Library
+> +      DRV260X_ERM_LIB_D - Pre-programmed Library
+> +      DRV260X_ERM_LIB_E - Pre-programmed Library
+> +      DRV260X_ERM_LIB_F - Pre-programmed Library
+> +      DRV260X_LIB_LRA - Pre-programmed LRA Library
+> +    enum: [ 0, 1, 2, 3, 4, 5, 6, 7 ]
+> +
+> +  enable-gpio:
 
-Unfortunately, I don't have any reproducer for this issue yet.
+Would be need to deprecate this and allow enable-gpios.
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/e8e91bc79312/disk-bbed346d.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/c1cb3fb3b77e/vmlinux-bbed346d.xz
+> +    maxItems: 1
+> +
+> +  vib-rated-mv:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: |
+> +      The rated voltage of the actuator in millivolts.
+> +      If this is not set then the value will be defaulted to 3200 mV.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+a033efd03287efd49df1@syzkaller.appspotmail.com
+default: 3200
 
-======================================================
-WARNING: possible circular locking dependency detected
-6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0 Not tainted
-------------------------------------------------------
-syz-executor.3/1107 is trying to acquire lock:
-ffff000112e0b598 (&mm->mmap_lock){++++}-{3:3}, at: __might_fault+0x54/0xb4 mm/memory.c:5576
+> +
+> +  vib-overdrive-mv:
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    description: |
+> +      The overdrive voltage of the actuator in millivolts.
+> +      If this is not set then the value will be defaulted to 3200 mV.
 
-but task is already holding lock:
-ffff00011a821388 (btrfs-root-00){++++}-{3:3}, at: __btrfs_tree_read_lock fs/btrfs/locking.c:134 [inline]
-ffff00011a821388 (btrfs-root-00){++++}-{3:3}, at: btrfs_tree_read_lock fs/btrfs/locking.c:140 [inline]
-ffff00011a821388 (btrfs-root-00){++++}-{3:3}, at: btrfs_read_lock_root_node+0x13c/0x1c0 fs/btrfs/locking.c:279
+default: 3200
 
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #3 (btrfs-root-00){++++}-{3:3}:
-       down_write_nested+0x64/0xd8 kernel/locking/rwsem.c:1662
-       __btrfs_tree_lock fs/btrfs/locking.c:196 [inline]
-       btrfs_tree_lock fs/btrfs/locking.c:203 [inline]
-       btrfs_lock_root_node+0x140/0x1d0 fs/btrfs/locking.c:256
-       commit_cowonly_roots+0x64/0x3b8 fs/btrfs/transaction.c:1284
-       btrfs_commit_transaction+0x948/0x12d8 fs/btrfs/transaction.c:2366
-       btrfs_commit_super+0x84/0xa0 fs/btrfs/disk-io.c:4426
-       close_ctree+0x1dc/0x60c fs/btrfs/disk-io.c:4580
-       btrfs_put_super+0x20/0x30 fs/btrfs/super.c:392
-       generic_shutdown_super+0x8c/0x190 fs/super.c:491
-       kill_anon_super+0x24/0x44 fs/super.c:1085
-       btrfs_kill_super+0x24/0x3c fs/btrfs/super.c:2440
-       deactivate_locked_super+0x70/0xe8 fs/super.c:332
-       deactivate_super+0xd0/0xd4 fs/super.c:363
-       cleanup_mnt+0x1f8/0x234 fs/namespace.c:1186
-       __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
-       task_work_run+0xc4/0x14c kernel/task_work.c:177
-       resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
-       do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
-       prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
-       exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
-       el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:637
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
-       el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-
--> #2 (&fs_info->reloc_mutex){+.+.}-{3:3}:
-       __mutex_lock_common+0xd4/0xca8 kernel/locking/mutex.c:603
-       __mutex_lock kernel/locking/mutex.c:747 [inline]
-       mutex_lock_nested+0x38/0x44 kernel/locking/mutex.c:799
-       btrfs_commit_transaction+0x824/0x12d8 fs/btrfs/transaction.c:2306
-       btrfs_commit_super+0x84/0xa0 fs/btrfs/disk-io.c:4426
-       close_ctree+0x1dc/0x60c fs/btrfs/disk-io.c:4580
-       btrfs_put_super+0x20/0x30 fs/btrfs/super.c:392
-       generic_shutdown_super+0x8c/0x190 fs/super.c:491
-       kill_anon_super+0x24/0x44 fs/super.c:1085
-       btrfs_kill_super+0x24/0x3c fs/btrfs/super.c:2440
-       deactivate_locked_super+0x70/0xe8 fs/super.c:332
-       deactivate_super+0xd0/0xd4 fs/super.c:363
-       cleanup_mnt+0x1f8/0x234 fs/namespace.c:1186
-       __cleanup_mnt+0x20/0x30 fs/namespace.c:1193
-       task_work_run+0xc4/0x14c kernel/task_work.c:177
-       resume_user_mode_work include/linux/resume_user_mode.h:49 [inline]
-       do_notify_resume+0x174/0x1f0 arch/arm64/kernel/signal.c:1127
-       prepare_exit_to_user_mode arch/arm64/kernel/entry-common.c:137 [inline]
-       exit_to_user_mode arch/arm64/kernel/entry-common.c:142 [inline]
-       el0_svc+0x9c/0x150 arch/arm64/kernel/entry-common.c:637
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
-       el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-
--> #1 (sb_internal#2){.+.+}-{0:0}:
-       percpu_down_read include/linux/percpu-rwsem.h:51 [inline]
-       __sb_start_write include/linux/fs.h:1826 [inline]
-       sb_start_intwrite include/linux/fs.h:1948 [inline]
-       start_transaction+0x360/0x944 fs/btrfs/transaction.c:683
-       btrfs_join_transaction+0x30/0x40 fs/btrfs/transaction.c:795
-       btrfs_dirty_inode+0x50/0x140 fs/btrfs/inode.c:6103
-       btrfs_update_time+0x1c0/0x1e8 fs/btrfs/inode.c:6145
-       inode_update_time fs/inode.c:1872 [inline]
-       touch_atime+0x1f0/0x4a8 fs/inode.c:1945
-       file_accessed include/linux/fs.h:2516 [inline]
-       btrfs_file_mmap+0x50/0x88 fs/btrfs/file.c:2407
-       call_mmap include/linux/fs.h:2192 [inline]
-       mmap_region+0x7fc/0xc14 mm/mmap.c:1752
-       do_mmap+0x644/0x97c mm/mmap.c:1540
-       vm_mmap_pgoff+0xe8/0x1d0 mm/util.c:552
-       ksys_mmap_pgoff+0x1cc/0x278 mm/mmap.c:1586
-       __do_sys_mmap arch/arm64/kernel/sys.c:28 [inline]
-       __se_sys_mmap arch/arm64/kernel/sys.c:21 [inline]
-       __arm64_sys_mmap+0x58/0x6c arch/arm64/kernel/sys.c:21
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
-       el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-
--> #0 (&mm->mmap_lock){++++}-{3:3}:
-       check_prev_add kernel/locking/lockdep.c:3095 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3214 [inline]
-       validate_chain kernel/locking/lockdep.c:3829 [inline]
-       __lock_acquire+0x1530/0x30a4 kernel/locking/lockdep.c:5053
-       lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
-       __might_fault+0x7c/0xb4 mm/memory.c:5577
-       _copy_to_user include/linux/uaccess.h:134 [inline]
-       copy_to_user include/linux/uaccess.h:160 [inline]
-       btrfs_ioctl_get_subvol_rootref+0x3a8/0x4bc fs/btrfs/ioctl.c:3203
-       btrfs_ioctl+0xa08/0xa64 fs/btrfs/ioctl.c:5556
-       vfs_ioctl fs/ioctl.c:51 [inline]
-       __do_sys_ioctl fs/ioctl.c:870 [inline]
-       __se_sys_ioctl fs/ioctl.c:856 [inline]
-       __arm64_sys_ioctl+0xd0/0x140 fs/ioctl.c:856
-       __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
-       invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
-       el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
-       do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
-       el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
-       el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
-       el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-
-other info that might help us debug this:
-
-Chain exists of:
-  &mm->mmap_lock --> &fs_info->reloc_mutex --> btrfs-root-00
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(btrfs-root-00);
-                               lock(&fs_info->reloc_mutex);
-                               lock(btrfs-root-00);
-  lock(&mm->mmap_lock);
-
- *** DEADLOCK ***
-
-1 lock held by syz-executor.3/1107:
- #0: ffff00011a821388 (btrfs-root-00){++++}-{3:3}, at: __btrfs_tree_read_lock fs/btrfs/locking.c:134 [inline]
- #0: ffff00011a821388 (btrfs-root-00){++++}-{3:3}, at: btrfs_tree_read_lock fs/btrfs/locking.c:140 [inline]
- #0: ffff00011a821388 (btrfs-root-00){++++}-{3:3}, at: btrfs_read_lock_root_node+0x13c/0x1c0 fs/btrfs/locking.c:279
-
-stack backtrace:
-CPU: 1 PID: 1107 Comm: syz-executor.3 Not tainted 6.0.0-rc7-syzkaller-18095-gbbed346d5a96 #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 09/30/2022
-Call trace:
- dump_backtrace+0x1c4/0x1f0 arch/arm64/kernel/stacktrace.c:156
- show_stack+0x2c/0x54 arch/arm64/kernel/stacktrace.c:163
- __dump_stack lib/dump_stack.c:88 [inline]
- dump_stack_lvl+0x104/0x16c lib/dump_stack.c:106
- dump_stack+0x1c/0x58 lib/dump_stack.c:113
- print_circular_bug+0x2c4/0x2c8 kernel/locking/lockdep.c:2053
- check_noncircular+0x14c/0x154 kernel/locking/lockdep.c:2175
- check_prev_add kernel/locking/lockdep.c:3095 [inline]
- check_prevs_add kernel/locking/lockdep.c:3214 [inline]
- validate_chain kernel/locking/lockdep.c:3829 [inline]
- __lock_acquire+0x1530/0x30a4 kernel/locking/lockdep.c:5053
- lock_acquire+0x100/0x1f8 kernel/locking/lockdep.c:5666
- __might_fault+0x7c/0xb4 mm/memory.c:5577
- _copy_to_user include/linux/uaccess.h:134 [inline]
- copy_to_user include/linux/uaccess.h:160 [inline]
- btrfs_ioctl_get_subvol_rootref+0x3a8/0x4bc fs/btrfs/ioctl.c:3203
- btrfs_ioctl+0xa08/0xa64 fs/btrfs/ioctl.c:5556
- vfs_ioctl fs/ioctl.c:51 [inline]
- __do_sys_ioctl fs/ioctl.c:870 [inline]
- __se_sys_ioctl fs/ioctl.c:856 [inline]
- __arm64_sys_ioctl+0xd0/0x140 fs/ioctl.c:856
- __invoke_syscall arch/arm64/kernel/syscall.c:38 [inline]
- invoke_syscall arch/arm64/kernel/syscall.c:52 [inline]
- el0_svc_common+0x138/0x220 arch/arm64/kernel/syscall.c:142
- do_el0_svc+0x48/0x164 arch/arm64/kernel/syscall.c:206
- el0_svc+0x58/0x150 arch/arm64/kernel/entry-common.c:636
- el0t_64_sync_handler+0x84/0xf0 arch/arm64/kernel/entry-common.c:654
- el0t_64_sync+0x18c/0x190 arch/arm64/kernel/entry.S:581
-
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - enable-gpio
+> +  - mode
+> +  - library-sel
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +    #include <dt-bindings/input/ti-drv260x.h>
+> +
+> +    i2c {
+> +        #address-cells = <1>;
+> +        #size-cells = <0>;
+> +
+> +        haptics@5a {
+> +            compatible = "ti,drv2605l";
+> +            reg = <0x5a>;
+> +            vbat-supply = <&vbat>;
+> +            enable-gpio = <&gpio1 28 GPIO_ACTIVE_HIGH>;
+> +            mode = <DRV260X_LRA_MODE>;
+> +            library-sel = <DRV260X_LIB_LRA>;
+> +            vib-rated-mv = <3200>;
+> +            vib-overdrive-mv = <3200>;
+> +        };
+> +    };
+> -- 
+> 2.38.1
+> 
+> 
