@@ -2,328 +2,264 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 648E4615F9A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:23:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D995C615F73
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:21:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229741AbiKBJXr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 05:23:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53106 "EHLO
+        id S230487AbiKBJVi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 05:21:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229650AbiKBJV0 (ORCPT
+        with ESMTP id S230519AbiKBJVR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 05:21:26 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B43A1101DD;
-        Wed,  2 Nov 2022 02:20:39 -0700 (PDT)
-Received: from pps.filterd (m0279868.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A297ufa013949;
-        Wed, 2 Nov 2022 09:20:18 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=from : to : cc :
- subject : date : message-id : in-reply-to : references : mime-version :
- content-type; s=qcppdkim1;
- bh=Kqwmw8Di1jxJG4NhZDwoiD/cwAWmU6HA2uK3Ku6PLQ8=;
- b=Vpnfx/2uzS8obzxprONXYjjHpzZ+np2LkqhaQILeMDBYb/aU5EPmI8HOrgE3w1CgvEgI
- 9IeuK5eOu3A5AM8C6Exv/DkbMK/jdDIP7afa8J3lsncWLoSKFzu3fH7ozCv86vQwBiSf
- UEYCpVPzIn4E1Q11G5doeabdKeL6dQaYqyYrPwM/Mnr4UCIvqRixZXwRttsfPzQriyrq
- bdiutjNd5WO3ij91SLCgD3sOPmpoe40MOEWJhmAvacLU3xW9IYdNNPvtEnYo1takNegJ
- pd5ASPVsNuqSkY8CJxa9L5SDizWYxXGCLrcQh63Y/oLp5/4TcH2a7MPEvBQdHDTn5Zsw cQ== 
-Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kkm40067v-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Nov 2022 09:20:18 +0000
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-        by NALASPPMTA05.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A29KH0E014697
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 2 Nov 2022 09:20:17 GMT
-Received: from jinlmao-gv.qualcomm.com (10.80.80.8) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.986.29; Wed, 2 Nov 2022 02:20:12 -0700
-From:   Mao Jinlong <quic_jinlmao@quicinc.com>
-To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-        Konrad Dybcio <konradybcio@gmail.com>,
-        Mike Leach <mike.leach@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-CC:     Mao Jinlong <quic_jinlmao@quicinc.com>,
-        Leo Yan <leo.yan@linaro.org>,
-        "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
-        <coresight@lists.linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        Tingwei Zhang <quic_tingweiz@quicinc.com>,
-        Yuanfang Zhang <quic_yuanfang@quicinc.com>,
-        Tao Zhang <quic_taozha@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Hao Zhang <quic_hazha@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>,
-        Bjorn Andersson <bjorn.andersson@linaro.org>
-Subject: [PATCH v14 9/9] arm64: dts: qcom: sm8250: Add tpdm mm/prng
-Date:   Wed, 2 Nov 2022 17:19:15 +0800
-Message-ID: <20221102091915.15281-10-quic_jinlmao@quicinc.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221102091915.15281-1-quic_jinlmao@quicinc.com>
-References: <20221102091915.15281-1-quic_jinlmao@quicinc.com>
+        Wed, 2 Nov 2022 05:21:17 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 04D2E647F;
+        Wed,  2 Nov 2022 02:20:01 -0700 (PDT)
+Date:   Wed, 02 Nov 2022 09:19:58 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1667380799;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VbDQoEBEQalCcwDd/vLZU9zQRL0nPpNFi0s6qMisUj8=;
+        b=fkLJBbOiGINc6f9ul8djcHRy9BA4lVKem1UKYqMBlQ3ZMRPVgoxfk68h9BV2rbFw3uMz30
+        58evs+3WmwE18Eu0LiM9L2UohCE9zeHfPEPo32vbCaHmi5rwcWBR4xr7DiYzT3mgR7CuVP
+        DqBh5uGOSqMIEjRYsf4NOnQt40ry+EQUAyLfdLgx0Ja5hGBWMtjI83zIconaGTovA530z5
+        72QJRY9HjmukgUJoLntgV9P2oPmRnpyGAsH6agz/upEjEBTGBGODwfzthdc6jKBTW4S9mg
+        PT6HskhRfHD+HkNhEiSLsD/f/aH/WClCAkPZTCqIl7MZP7VVPMJVcK3hkpQiiw==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1667380799;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=VbDQoEBEQalCcwDd/vLZU9zQRL0nPpNFi0s6qMisUj8=;
+        b=GmFA558kIoO3Zl1nJhEI9lcVkd8Eve38ajir3KA6jYPehCnCe3XHCg0eiBEPs1tUPQBUfX
+        ytcjuB4STz1vaBBA==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/core] x86/cfi: Add boot time hash randomization
+Cc:     Kees Cook <keescook@chromium.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <20221027092842.765195516@infradead.org>
+References: <20221027092842.765195516@infradead.org>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: lXt7saVbqtRhvxHWBz2KDI9DUtVuYq51
-X-Proofpoint-ORIG-GUID: lXt7saVbqtRhvxHWBz2KDI9DUtVuYq51
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-02_06,2022-11-01_02,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 adultscore=0
- clxscore=1015 mlxlogscore=831 impostorscore=0 malwarescore=0
- lowpriorityscore=0 mlxscore=0 phishscore=0 suspectscore=0
- priorityscore=1501 bulkscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2211020055
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Message-ID: <166738079813.7716.11159577231772690253.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add tpdm mm and tpdm prng for sm8250.
+The following commit has been merged into the x86/core branch of tip:
 
-+---------------+                +-------------+
-|  tpdm@6c08000 |                |tpdm@684C000 |
-+-------|-------+                +------|------+
-        |                               |
-+-------|-------+                       |
-| funnel@6c0b000|                       |
-+-------|-------+                       |
-        |                               |
-+-------|-------+                       |
-|funnel@6c2d000 |                       |
-+-------|-------+                       |
-        |                               |
-        |    +---------------+          |
-        +----- tpda@6004000  -----------+
-             +-------|-------+
-                     |
-             +-------|-------+
-             |funnel@6005000 |
-             +---------------+
+Commit-ID:     0c3e806ec0f9771fa1f34c60499097d9260a8bb7
+Gitweb:        https://git.kernel.org/tip/0c3e806ec0f9771fa1f34c60499097d9260a8bb7
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Thu, 27 Oct 2022 11:28:16 +02:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Tue, 01 Nov 2022 13:44:11 +01:00
 
-Signed-off-by: Mao Jinlong <quic_jinlmao@quicinc.com>
+x86/cfi: Add boot time hash randomization
+
+In order to avoid known hashes (from knowing the boot image),
+randomize the CFI hashes with a per-boot random seed.
+
+Suggested-by: Kees Cook <keescook@chromium.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Reviewed-by: Kees Cook <keescook@chromium.org>
+Link: https://lore.kernel.org/r/20221027092842.765195516@infradead.org
 ---
- arch/arm64/boot/dts/qcom/sm8250.dtsi | 173 +++++++++++++++++++++++++++
- 1 file changed, 173 insertions(+)
+ arch/x86/kernel/alternative.c | 120 +++++++++++++++++++++++++++++----
+ 1 file changed, 108 insertions(+), 12 deletions(-)
 
-diff --git a/arch/arm64/boot/dts/qcom/sm8250.dtsi b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-index 80193bb3c478..0914b4b9c862 100644
---- a/arch/arm64/boot/dts/qcom/sm8250.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sm8250.dtsi
-@@ -2746,6 +2746,76 @@
- 			};
- 		};
+diff --git a/arch/x86/kernel/alternative.c b/arch/x86/kernel/alternative.c
+index 9d3b587..aa7f791 100644
+--- a/arch/x86/kernel/alternative.c
++++ b/arch/x86/kernel/alternative.c
+@@ -711,6 +711,24 @@ enum cfi_mode {
+ };
  
-+		tpda@6004000 {
-+			compatible = "arm,primecell";
-+			reg = <0 0x06004000 0 0x1000>;
-+			reg-names = "tpda-base";
+ static enum cfi_mode cfi_mode __ro_after_init = CFI_DEFAULT;
++static bool cfi_rand __ro_after_init = true;
++static u32  cfi_seed __ro_after_init;
 +
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+					tpda_out_funnel_qatb: endpoint {
-+						remote-endpoint = <&funnel_qatb_in_tpda>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@9 {
-+					reg = <9>;
-+					tpda_9_in_tpdm_mm: endpoint {
-+						remote-endpoint = <&tpdm_mm_out_tpda9>;
-+					};
-+				};
-+
-+				port@17 {
-+					reg = <23>;
-+					tpda_23_in_tpdm_prng: endpoint {
-+						remote-endpoint = <&tpdm_prng_out_tpda_23>;
-+					};
-+				};
-+			};
-+		};
-+
-+		funnel@6005000 {
-+			compatible = "arm,primecell";
-+
-+			reg = <0 0x06005000 0 0x1000>;
-+			reg-names = "funnel-base";
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				port {
-+					funnel_qatb_out_funnel_in0: endpoint {
-+						remote-endpoint = <&funnel_in0_in_funnel_qatb>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+					funnel_qatb_in_tpda: endpoint {
-+						remote-endpoint = <&tpda_out_funnel_qatb>;
-+					};
-+				};
-+			};
-+		};
-+
- 		funnel@6041000 {
- 			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
- 			reg = <0 0x06041000 0 0x1000>;
-@@ -2765,6 +2835,13 @@
- 				#address-cells = <1>;
- 				#size-cells = <0>;
++/*
++ * Re-hash the CFI hash with a boot-time seed while making sure the result is
++ * not a valid ENDBR instruction.
++ */
++static u32 cfi_rehash(u32 hash)
++{
++	hash ^= cfi_seed;
++	while (unlikely(is_endbr(hash) || is_endbr(-hash))) {
++		bool lsb = hash & 1;
++		hash >>= 1;
++		if (lsb)
++			hash ^= 0x80200003;
++	}
++	return hash;
++}
  
-+				port@6 {
-+					reg = <6>;
-+					funnel_in0_in_funnel_qatb: endpoint {
-+						remote-endpoint = <&funnel_qatb_out_funnel_in0>;
-+					};
-+				};
-+
- 				port@7 {
- 					reg = <7>;
- 					funnel0_in7: endpoint {
-@@ -2883,6 +2960,23 @@
- 			};
- 		};
+ static __init int cfi_parse_cmdline(char *str)
+ {
+@@ -728,10 +746,13 @@ static __init int cfi_parse_cmdline(char *str)
+ 			cfi_mode = CFI_DEFAULT;
+ 		} else if (!strcmp(str, "off")) {
+ 			cfi_mode = CFI_OFF;
++			cfi_rand = false;
+ 		} else if (!strcmp(str, "kcfi")) {
+ 			cfi_mode = CFI_KCFI;
+ 		} else if (!strcmp(str, "fineibt")) {
+ 			cfi_mode = CFI_FINEIBT;
++		} else if (!strcmp(str, "norand")) {
++			cfi_rand = false;
+ 		} else {
+ 			pr_err("Ignoring unknown cfi option (%s).", str);
+ 		}
+@@ -856,7 +877,50 @@ static int cfi_disable_callers(s32 *start, s32 *end)
+ 	return 0;
+ }
  
-+		tpdm@684c000 {
-+			compatible = "arm,primecell";
-+			reg = <0 0x0684c000 0 0x1000>;
-+			reg-names = "tpdm-base";
++static int cfi_enable_callers(s32 *start, s32 *end)
++{
++	/*
++	 * Re-enable kCFI, undo what cfi_disable_callers() did.
++	 */
++	const u8 mov[] = { 0x41, 0xba };
++	s32 *s;
 +
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
++	for (s = start; s < end; s++) {
++		void *addr = (void *)s + *s;
++		u32 hash;
 +
-+			out-ports {
-+				port {
-+					tpdm_prng_out_tpda_23: endpoint {
-+						remote-endpoint = <&tpda_23_in_tpdm_prng>;
-+					};
-+				};
-+			};
-+		};
++		addr -= fineibt_caller_size;
++		hash = decode_caller_hash(addr);
++		if (!hash) /* nocfi callers */
++			continue;
 +
- 		funnel@6b04000 {
- 			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
- 			arm,primecell-periphid = <0x000bb908>;
-@@ -2967,6 +3061,85 @@
- 			};
- 		};
++		text_poke_early(addr, mov, 2);
++	}
++
++	return 0;
++}
++
+ /* .cfi_sites */
++static int cfi_rand_preamble(s32 *start, s32 *end)
++{
++	s32 *s;
++
++	for (s = start; s < end; s++) {
++		void *addr = (void *)s + *s;
++		u32 hash;
++
++		hash = decode_preamble_hash(addr);
++		if (WARN(!hash, "no CFI hash found at: %pS %px %*ph\n",
++			 addr, addr, 5, addr))
++			return -EINVAL;
++
++		hash = cfi_rehash(hash);
++		text_poke_early(addr + 1, &hash, 4);
++	}
++
++	return 0;
++}
++
+ static int cfi_rewrite_preamble(s32 *start, s32 *end)
+ {
+ 	s32 *s;
+@@ -879,6 +943,25 @@ static int cfi_rewrite_preamble(s32 *start, s32 *end)
+ }
  
-+		tpdm@6c08000 {
-+			compatible = "arm,primecell";
-+			reg = <0 0x06c08000 0 0x1000>;
-+			reg-names = "tpdm-base";
+ /* .retpoline_sites */
++static int cfi_rand_callers(s32 *start, s32 *end)
++{
++	s32 *s;
 +
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
++	for (s = start; s < end; s++) {
++		void *addr = (void *)s + *s;
++		u32 hash;
 +
-+			out-ports {
-+				port {
-+					tpdm_mm_out_funnel_dl_mm: endpoint {
-+						remote-endpoint = <&funnel_dl_mm_in_tpdm_mm>;
-+					};
-+				};
-+			};
-+		};
++		addr -= fineibt_caller_size;
++		hash = decode_caller_hash(addr);
++		if (hash) {
++			hash = -cfi_rehash(hash);
++			text_poke_early(addr + 2, &hash, 4);
++		}
++	}
 +
-+		funnel@6c0b000 {
-+			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
++	return 0;
++}
 +
-+			reg = <0 0x06c0b000 0 0x1000>;
-+			reg-names = "funnel-base";
+ static int cfi_rewrite_callers(s32 *start, s32 *end)
+ {
+ 	s32 *s;
+@@ -915,31 +998,44 @@ static void __apply_fineibt(s32 *start_retpoline, s32 *end_retpoline,
+ 			cfi_mode = CFI_FINEIBT;
+ 	}
+ 
+-	switch (cfi_mode) {
+-	case CFI_OFF:
+-		ret = cfi_disable_callers(start_retpoline, end_retpoline);
++	/*
++	 * Rewrite the callers to not use the __cfi_ stubs, such that we might
++	 * rewrite them. This disables all CFI. If this succeeds but any of the
++	 * later stages fails, we're without CFI.
++	 */
++	ret = cfi_disable_callers(start_retpoline, end_retpoline);
++	if (ret)
++		goto err;
 +
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
++	if (cfi_rand) {
++		if (builtin)
++			cfi_seed = get_random_u32();
 +
-+			out-ports {
-+				port {
-+					funnel_dl_mm_out_funnel_dl_center: endpoint {
-+					remote-endpoint = <&funnel_dl_center_in_funnel_dl_mm>;
-+					};
-+				};
-+			};
++		ret = cfi_rand_preamble(start_cfi, end_cfi);
+ 		if (ret)
+ 			goto err;
+ 
++		ret = cfi_rand_callers(start_retpoline, end_retpoline);
++		if (ret)
++			goto err;
++	}
 +
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
++	switch (cfi_mode) {
++	case CFI_OFF:
+ 		if (builtin)
+ 			pr_info("Disabling CFI\n");
+ 		return;
+ 
+ 	case CFI_KCFI:
++		ret = cfi_enable_callers(start_retpoline, end_retpoline);
++		if (ret)
++			goto err;
 +
-+				port@3 {
-+					reg = <3>;
-+					funnel_dl_mm_in_tpdm_mm: endpoint {
-+						remote-endpoint = <&tpdm_mm_out_funnel_dl_mm>;
-+					};
-+				};
-+			};
-+		};
-+
-+		funnel@6c2d000 {
-+			compatible = "arm,coresight-dynamic-funnel", "arm,primecell";
-+
-+			reg = <0 0x06c2d000 0 0x1000>;
-+			reg-names = "funnel-base";
-+
-+			clocks = <&aoss_qmp>;
-+			clock-names = "apb_pclk";
-+
-+			out-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+				port {
-+					tpdm_mm_out_tpda9: endpoint {
-+						remote-endpoint = <&tpda_9_in_tpdm_mm>;
-+					};
-+				};
-+			};
-+
-+			in-ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@2 {
-+					reg = <2>;
-+					funnel_dl_center_in_funnel_dl_mm: endpoint {
-+					remote-endpoint = <&funnel_dl_mm_out_funnel_dl_center>;
-+					};
-+				};
-+			};
-+		};
-+
- 		etm@7040000 {
- 			compatible = "arm,coresight-etm4x", "arm,primecell";
- 			reg = <0 0x07040000 0 0x1000>;
--- 
-2.17.1
-
+ 		if (builtin)
+ 			pr_info("Using kCFI\n");
+ 		return;
+ 
+ 	case CFI_FINEIBT:
+-		/*
+-		 * Rewrite the callers to not use the __cfi_ stubs, such that we might
+-		 * rewrite them. This disables all CFI. If this succeeds but any of the
+-		 * later stages fails, we're without CFI.
+-		 */
+-		ret = cfi_disable_callers(start_retpoline, end_retpoline);
+-		if (ret)
+-			goto err;
+-
+ 		ret = cfi_rewrite_preamble(start_cfi, end_cfi);
+ 		if (ret)
+ 			goto err;
