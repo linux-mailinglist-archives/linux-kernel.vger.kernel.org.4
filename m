@@ -2,108 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C1D8616088
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 11:08:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7B807616087
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 11:08:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbiKBKI3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 06:08:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36818 "EHLO
+        id S230396AbiKBKI0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 06:08:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230394AbiKBKIJ (ORCPT
+        with ESMTP id S230306AbiKBKIJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 2 Nov 2022 06:08:09 -0400
-Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2083.outbound.protection.outlook.com [40.107.92.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A9CA524F2F;
-        Wed,  2 Nov 2022 03:07:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=F6Hl7eQ14dPMBn/+ltC05kiNIl/AsWeQ7hzOqm7VqaA2huJiz0iFJYJhnLkOaQCyyTFE53XrAchS4Kyqd7ZOxm5Jfay//lq6YDA1Yvf8mLi4lEzgsjhHB3HQCahm+t8QLXhGoIVILrJAlqf32aJ0nWbQiFjLDbozjMNQytcBiIGNelglv/QjdafORGSQSujHCC63N3+gr/8m9stQ/6KQgan3XROXXcd0yQE+QkhaQudHyQ5jKwO2cckf/ttyOM2UaTMgbR9k/Vo/8gJ2Zw0pGRPyWPk3hhDQxc+e1YIg11YBGkafV/SmJXl/aoMB08KLgvz37b2uvaYGCZGX3kC0AQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=14lyjq0m0+hDZCT5z8Z8SmluMXbAzxBS1TgH6hWSq/w=;
- b=NA3EPDnAcItOn4iBG6ouvcHqNLZa37LbwQWPiRQVZn+3um0s280+o4qDxwy/jDO++0CsGHM18zFD0eQDcrLDxgLK4FE3ndbFRRUzGntGSPVw4amVwGmbQi0iZo3WdN2K4jEiHRJIXq+ZhxE59LlkN6tqgj9C4Sgk8ptgQhI9dpR5kgs/QAotqJbVjuxY5Vx5E4SKq6M/7fixUZOq5p2EWcSsBDTUQgL3woId0C/alMmwWieS3cQYXsohRZDNPrm8MNp23p99p6OWjuLuePSgtNYT/g65kY9vyux6Tx+HerXpTCAcgb/WQqBkNDZB37RW5z/ySszBPjVZTFdc0hvNJg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 216.228.117.160) smtp.rcpttodomain=linuxfoundation.org
- smtp.mailfrom=nvidia.com; dmarc=pass (p=reject sp=reject pct=100) action=none
- header.from=nvidia.com; dkim=none (message not signed); arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=Nvidia.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=14lyjq0m0+hDZCT5z8Z8SmluMXbAzxBS1TgH6hWSq/w=;
- b=eK0IEnsfjp+OiiNgBlbgE4beQiT4WUmiosCW7geVCjaGVAGOg9F2/viAAJJgE8gjcwDO9/8iGIJy2rTf7+EVetIdrhzvKBYTNCJ18RZRjXwiCt0oLuLvba+19j4WzwJpC3o0YIXH+19Ly/J3azZWEzgUE6+kXHiy2C8pAfP4VRqzFdHVD9BYFezlihtA6xCjrUCxpDNY9tvEUX3pTLOyov/aGGvdbuAVnBOgipQXqmeQI9YpdRKcMY8Pjoyz3S7OGVSr8EBb/kBs/2yiGNbmYH/PvgLI2MUQGog3AO3jPs07BzYOEvAdZz3Hk3E8GIavAGFiMOYV4QZcdw3yX7thpQ==
-Received: from MW4PR04CA0148.namprd04.prod.outlook.com (2603:10b6:303:84::33)
- by MW4PR12MB7288.namprd12.prod.outlook.com (2603:10b6:303:223::15) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.16; Wed, 2 Nov
- 2022 10:07:45 +0000
-Received: from CO1NAM11FT090.eop-nam11.prod.protection.outlook.com
- (2603:10b6:303:84:cafe::15) by MW4PR04CA0148.outlook.office365.com
- (2603:10b6:303:84::33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.20 via Frontend
- Transport; Wed, 2 Nov 2022 10:07:44 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 216.228.117.160)
- smtp.mailfrom=nvidia.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=nvidia.com;
-Received-SPF: Pass (protection.outlook.com: domain of nvidia.com designates
- 216.228.117.160 as permitted sender) receiver=protection.outlook.com;
- client-ip=216.228.117.160; helo=mail.nvidia.com; pr=C
-Received: from mail.nvidia.com (216.228.117.160) by
- CO1NAM11FT090.mail.protection.outlook.com (10.13.175.152) with Microsoft SMTP
- Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.5791.20 via Frontend Transport; Wed, 2 Nov 2022 10:07:44 +0000
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by mail.nvidia.com
- (10.129.200.66) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.26; Wed, 2 Nov 2022
- 03:07:31 -0700
-Received: from rnnvmail201.nvidia.com (10.129.68.8) by rnnvmail201.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Wed, 2 Nov 2022
- 03:07:31 -0700
-Received: from jonathanh-vm-01.nvidia.com (10.127.8.9) by mail.nvidia.com
- (10.129.68.8) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29 via Frontend
- Transport; Wed, 2 Nov 2022 03:07:30 -0700
-From:   Jon Hunter <jonathanh@nvidia.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        <patches@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-        <torvalds@linux-foundation.org>, <akpm@linux-foundation.org>,
-        <linux@roeck-us.net>, <shuah@kernel.org>, <patches@kernelci.org>,
-        <lkft-triage@lists.linaro.org>, <pavel@denx.de>,
-        <jonathanh@nvidia.com>, <f.fainelli@gmail.com>,
-        <sudipm.mukherjee@gmail.com>, <srw@sladewatkins.net>,
-        <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH 4.14 00/60] 4.14.298-rc1 review
-In-Reply-To: <20221102022051.081761052@linuxfoundation.org>
-References: <20221102022051.081761052@linuxfoundation.org>
-X-NVConfidentiality: public
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 531C227142
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 03:07:45 -0700 (PDT)
+Received: from IcarusMOD.eternityproject.eu (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 41381660293F;
+        Wed,  2 Nov 2022 10:07:43 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667383663;
+        bh=dOsyMJtPdAV3jUm/GhRp03PrdsruZCqyjWbSMeaW3o4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=ihmo7pC9gmxuRgb4GL9+EjnPNKr7SgIk+u7e2rgbj6C7ewb3Fuug+lWHh0ER1ep3B
+         3egtMbqPVnt1qmwPVf1FBbr8O0dmrop2UH/ryB2KrqCi6GlsLYygiQzsSlAcrdbmuW
+         rDN5M3shLv77U2N0VpQ9OH2ZYn6hz7i/geud+D3uALLODBjkbjSwzCy7lUT+lVx6yS
+         AX2dJqyxD8foOyz0h0/LXl+Qq7GdMbtnBZ9Rmuwd/mPAtatymHQdAqaqnPHTPQzO7K
+         E/k/h+V8wclxsdBoX2tg7AB7EAdo95O1r6IDVdAqenVAYaQL9WoUJvKEMW4UE0jeZ4
+         I5hUnHxo6Vgnw==
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+To:     jassisinghbrar@gmail.com
+Cc:     matthias.bgg@gmail.com, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+Subject: [PATCH] mailbox: mtk-cmdq-mailbox: Use platform data directly instead of copying
+Date:   Wed,  2 Nov 2022 11:07:36 +0100
+Message-Id: <20221102100736.37815-1-angelogioacchino.delregno@collabora.com>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Message-ID: <dd610696-b295-4832-a7a9-44b1c16c7827@rnnvmail201.nvidia.com>
-Date:   Wed, 2 Nov 2022 03:07:30 -0700
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CO1NAM11FT090:EE_|MW4PR12MB7288:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0d45f3d6-0917-4949-6126-08dabcba160f
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: YD9Bp4jxlM2fFtZ9FG/mhxEYx60iEgmSixKkqNFyp2ZPMROAnUiUZ8V2cQIy2qYAZeYRQ8eQNUUhubZ6p3qwz9QktrMOAkd/BSTJaf126U8fb5YcywDZ38V9lnRtfNSp+FGeOU1uxL0K+u64PNjmuH/euYyW6WQmwfPxXNZv+4GdBI1mli9lF5wV6bm8I9uQd3Xyd48HRtRn6MrIrI3xbcGJLYLO4Bekkq/tzrfK1eMnDvZRU2P9NK4qKCDzeaj9VcXuGwU4hbjvCJzwZq6Ah1IPzXEQ/b6hkn/e6N6aAVJZM2e53ITdFrnglSFFeukZeFHMTW3zy/AROVslFxrlR0FizHV6roRwN9BBxsNjmVRTMbPu0v0cRnET4GNN19s04SnEajMLHHISVp6KTiUi+KzeZjiGrDILcYLQSZPaHmx6eEM7BboS0e96UT263WTWnkzMwHgVUASvh3fvnNyRalgyOKqaY4uWpadcLou7O8Gq3nMgcuDXnexPaGCQQOrBWanwXYpS+P922j37ubOZpinzt1cMvGTAEDUGsB9BTeizdqSp10WzXowpSRLy5IYb59xSwni/iw+cz0oZM8oftr6yn2tOjAt4KAbejwbcdqSlmvYgzJFEvDdo8CA6TKa29YVg4xcOYtRR9eZ/At563Pu0TkZLEnOC8iU9OICIm9YTgPnA1gZmPeb3I4+5wA8IkX0zegiy8AhDhNGDoUsxx7OReqYs0mtG1tWFcZ0oc+731X+TJJxN8YASycKNr4GvoAZ/KQPb9K2Eoflgrs1COIufB877B5UDwQNJy+PM3hmeOjjA/c0FaOeEMopeJk+PX0jgiSYGa+XbehKz8EO1ILAYsjEAXqojJ2Gm8cdTUjU=
-X-Forefront-Antispam-Report: CIP:216.228.117.160;CTRY:US;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:mail.nvidia.com;PTR:dc6edge1.nvidia.com;CAT:NONE;SFS:(13230022)(4636009)(376002)(136003)(396003)(346002)(39860400002)(451199015)(46966006)(40470700004)(36840700001)(356005)(7636003)(966005)(36860700001)(82310400005)(82740400003)(26005)(54906003)(4326008)(2906002)(6916009)(70206006)(70586007)(8676002)(336012)(186003)(316002)(478600001)(47076005)(31696002)(40480700001)(31686004)(8936002)(86362001)(5660300002)(426003)(40460700003)(7416002)(41300700001);DIR:OUT;SFP:1101;
-X-OriginatorOrg: Nvidia.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2022 10:07:44.5298
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0d45f3d6-0917-4949-6126-08dabcba160f
-X-MS-Exchange-CrossTenant-Id: 43083d15-7273-40c1-b7db-39efd9ccc17a
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=43083d15-7273-40c1-b7db-39efd9ccc17a;Ip=[216.228.117.160];Helo=[mail.nvidia.com]
-X-MS-Exchange-CrossTenant-AuthSource: CO1NAM11FT090.eop-nam11.prod.protection.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW4PR12MB7288
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_NONE
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -111,36 +55,331 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 02 Nov 2022 03:34:21 +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.14.298 release.
-> There are 60 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 04 Nov 2022 02:20:38 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-4.14.298-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-4.14.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+Copying platform data to struct cmdq serves to no purpose, as that
+data is never modified during runtime: it's worth at this point
+storing a pointer to gce_plat in gce and.
 
-All tests passing for Tegra ...
+Remove all duplicated `struct gce_plat` members from `struct gce`
+and reuse the platform data across the driver to save some memory.
 
-Test results for stable-v4.14:
-    8 builds:	8 pass, 0 fail
-    16 boots:	16 pass, 0 fail
-    32 tests:	32 pass, 0 fail
+Signed-off-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+---
 
-Linux version:	4.14.298-rc1-g0ac5e522677d
-Boards tested:	tegra124-jetson-tk1, tegra20-ventana,
-                tegra210-p2371-2180, tegra30-cardhu-a04
+This commit applies only on top of series [1]
 
-Tested-by: Jon Hunter <jonathanh@nvidia.com>
+[1]: https://patchwork.kernel.org/project/linux-mediatek/list/?series=684195
 
-Jon
+ drivers/mailbox/mtk-cmdq-mailbox.c | 88 +++++++++++++-----------------
+ 1 file changed, 39 insertions(+), 49 deletions(-)
+
+diff --git a/drivers/mailbox/mtk-cmdq-mailbox.c b/drivers/mailbox/mtk-cmdq-mailbox.c
+index c5229f377c5e..a460ee26eb11 100644
+--- a/drivers/mailbox/mtk-cmdq-mailbox.c
++++ b/drivers/mailbox/mtk-cmdq-mailbox.c
+@@ -75,15 +75,11 @@ struct cmdq {
+ 	struct mbox_controller	mbox;
+ 	void __iomem		*base;
+ 	int			irq;
+-	u32			thread_nr;
+ 	u32			irq_mask;
++	const struct gce_plat	*pdata;
+ 	struct cmdq_thread	*thread;
+ 	struct clk_bulk_data	clocks[CMDQ_GCE_NUM_MAX];
+ 	bool			suspended;
+-	u8			shift_pa;
+-	bool			control_by_sw;
+-	bool			sw_ddr_en;
+-	u32			gce_num;
+ };
+ 
+ struct gce_plat {
+@@ -96,21 +92,21 @@ struct gce_plat {
+ 
+ static void cmdq_sw_ddr_enable(struct cmdq *cmdq, bool enable)
+ {
+-	WARN_ON(clk_bulk_enable(cmdq->gce_num, cmdq->clocks));
++	WARN_ON(clk_bulk_enable(cmdq->pdata->gce_num, cmdq->clocks));
+ 
+ 	if (enable)
+ 		writel(GCE_DDR_EN | GCE_CTRL_BY_SW, cmdq->base + GCE_GCTL_VALUE);
+ 	else
+ 		writel(GCE_CTRL_BY_SW, cmdq->base + GCE_GCTL_VALUE);
+ 
+-	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
++	clk_bulk_disable(cmdq->pdata->gce_num, cmdq->clocks);
+ }
+ 
+ u8 cmdq_get_shift_pa(struct mbox_chan *chan)
+ {
+ 	struct cmdq *cmdq = container_of(chan->mbox, struct cmdq, mbox);
+ 
+-	return cmdq->shift_pa;
++	return cmdq->pdata->shift;
+ }
+ EXPORT_SYMBOL(cmdq_get_shift_pa);
+ 
+@@ -144,10 +140,10 @@ static void cmdq_init(struct cmdq *cmdq)
+ 	int i;
+ 	u32 gctl_regval = 0;
+ 
+-	WARN_ON(clk_bulk_enable(cmdq->gce_num, cmdq->clocks));
+-	if (cmdq->control_by_sw)
++	WARN_ON(clk_bulk_enable(cmdq->pdata->gce_num, cmdq->clocks));
++	if (cmdq->pdata->control_by_sw)
+ 		gctl_regval = GCE_CTRL_BY_SW;
+-	if (cmdq->sw_ddr_en)
++	if (cmdq->pdata->sw_ddr_en)
+ 		gctl_regval |= GCE_DDR_EN;
+ 
+ 	if (gctl_regval)
+@@ -156,7 +152,7 @@ static void cmdq_init(struct cmdq *cmdq)
+ 	writel(CMDQ_THR_ACTIVE_SLOT_CYCLES, cmdq->base + CMDQ_THR_SLOT_CYCLES);
+ 	for (i = 0; i <= CMDQ_MAX_EVENT; i++)
+ 		writel(i, cmdq->base + CMDQ_SYNC_TOKEN_UPDATE);
+-	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
++	clk_bulk_disable(cmdq->pdata->gce_num, cmdq->clocks);
+ }
+ 
+ static int cmdq_thread_reset(struct cmdq *cmdq, struct cmdq_thread *thread)
+@@ -201,7 +197,7 @@ static void cmdq_task_insert_into_thread(struct cmdq_task *task)
+ 				prev_task->pkt->cmd_buf_size, DMA_TO_DEVICE);
+ 	prev_task_base[CMDQ_NUM_CMD(prev_task->pkt) - 1] =
+ 		(u64)CMDQ_JUMP_BY_PA << 32 |
+-		(task->pa_base >> task->cmdq->shift_pa);
++		(task->pa_base >> task->cmdq->pdata->shift);
+ 	dma_sync_single_for_device(dev, prev_task->pa_base,
+ 				   prev_task->pkt->cmd_buf_size, DMA_TO_DEVICE);
+ 
+@@ -235,7 +231,7 @@ static void cmdq_task_handle_error(struct cmdq_task *task)
+ 	next_task = list_first_entry_or_null(&thread->task_busy_list,
+ 			struct cmdq_task, list_entry);
+ 	if (next_task)
+-		writel(next_task->pa_base >> cmdq->shift_pa,
++		writel(next_task->pa_base >> cmdq->pdata->shift,
+ 		       thread->base + CMDQ_THR_CURR_ADDR);
+ 	cmdq_thread_resume(thread);
+ }
+@@ -266,7 +262,7 @@ static void cmdq_thread_irq_handler(struct cmdq *cmdq,
+ 	else
+ 		return;
+ 
+-	curr_pa = readl(thread->base + CMDQ_THR_CURR_ADDR) << cmdq->shift_pa;
++	curr_pa = readl(thread->base + CMDQ_THR_CURR_ADDR) << cmdq->pdata->shift;
+ 
+ 	list_for_each_entry_safe(task, tmp, &thread->task_busy_list,
+ 				 list_entry) {
+@@ -289,7 +285,7 @@ static void cmdq_thread_irq_handler(struct cmdq *cmdq,
+ 
+ 	if (list_empty(&thread->task_busy_list)) {
+ 		cmdq_thread_disable(cmdq, thread);
+-		clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
++		clk_bulk_disable(cmdq->pdata->gce_num, cmdq->clocks);
+ 	}
+ }
+ 
+@@ -303,7 +299,7 @@ static irqreturn_t cmdq_irq_handler(int irq, void *dev)
+ 	if (!(irq_status ^ cmdq->irq_mask))
+ 		return IRQ_NONE;
+ 
+-	for_each_clear_bit(bit, &irq_status, cmdq->thread_nr) {
++	for_each_clear_bit(bit, &irq_status, cmdq->pdata->thread_nr) {
+ 		struct cmdq_thread *thread = &cmdq->thread[bit];
+ 
+ 		spin_lock_irqsave(&thread->chan->lock, flags);
+@@ -323,7 +319,7 @@ static int cmdq_suspend(struct device *dev)
+ 
+ 	cmdq->suspended = true;
+ 
+-	for (i = 0; i < cmdq->thread_nr; i++) {
++	for (i = 0; i < cmdq->pdata->thread_nr; i++) {
+ 		thread = &cmdq->thread[i];
+ 		if (!list_empty(&thread->task_busy_list)) {
+ 			task_running = true;
+@@ -334,10 +330,10 @@ static int cmdq_suspend(struct device *dev)
+ 	if (task_running)
+ 		dev_warn(dev, "exist running task(s) in suspend\n");
+ 
+-	if (cmdq->sw_ddr_en)
++	if (cmdq->pdata->sw_ddr_en)
+ 		cmdq_sw_ddr_enable(cmdq, false);
+ 
+-	clk_bulk_unprepare(cmdq->gce_num, cmdq->clocks);
++	clk_bulk_unprepare(cmdq->pdata->gce_num, cmdq->clocks);
+ 
+ 	return 0;
+ }
+@@ -346,10 +342,10 @@ static int cmdq_resume(struct device *dev)
+ {
+ 	struct cmdq *cmdq = dev_get_drvdata(dev);
+ 
+-	WARN_ON(clk_bulk_prepare(cmdq->gce_num, cmdq->clocks));
++	WARN_ON(clk_bulk_prepare(cmdq->pdata->gce_num, cmdq->clocks));
+ 	cmdq->suspended = false;
+ 
+-	if (cmdq->sw_ddr_en)
++	if (cmdq->pdata->sw_ddr_en)
+ 		cmdq_sw_ddr_enable(cmdq, true);
+ 
+ 	return 0;
+@@ -359,10 +355,10 @@ static int cmdq_remove(struct platform_device *pdev)
+ {
+ 	struct cmdq *cmdq = platform_get_drvdata(pdev);
+ 
+-	if (cmdq->sw_ddr_en)
++	if (cmdq->pdata->sw_ddr_en)
+ 		cmdq_sw_ddr_enable(cmdq, false);
+ 
+-	clk_bulk_unprepare(cmdq->gce_num, cmdq->clocks);
++	clk_bulk_unprepare(cmdq->pdata->gce_num, cmdq->clocks);
+ 	return 0;
+ }
+ 
+@@ -388,7 +384,7 @@ static int cmdq_mbox_send_data(struct mbox_chan *chan, void *data)
+ 	task->pkt = pkt;
+ 
+ 	if (list_empty(&thread->task_busy_list)) {
+-		WARN_ON(clk_bulk_enable(cmdq->gce_num, cmdq->clocks));
++		WARN_ON(clk_bulk_enable(cmdq->pdata->gce_num, cmdq->clocks));
+ 
+ 		/*
+ 		 * The thread reset will clear thread related register to 0,
+@@ -398,9 +394,9 @@ static int cmdq_mbox_send_data(struct mbox_chan *chan, void *data)
+ 		 */
+ 		WARN_ON(cmdq_thread_reset(cmdq, thread) < 0);
+ 
+-		writel(task->pa_base >> cmdq->shift_pa,
++		writel(task->pa_base >> cmdq->pdata->shift,
+ 		       thread->base + CMDQ_THR_CURR_ADDR);
+-		writel((task->pa_base + pkt->cmd_buf_size) >> cmdq->shift_pa,
++		writel((task->pa_base + pkt->cmd_buf_size) >> cmdq->pdata->shift,
+ 		       thread->base + CMDQ_THR_END_ADDR);
+ 
+ 		writel(thread->priority, thread->base + CMDQ_THR_PRIORITY);
+@@ -409,20 +405,20 @@ static int cmdq_mbox_send_data(struct mbox_chan *chan, void *data)
+ 	} else {
+ 		WARN_ON(cmdq_thread_suspend(cmdq, thread) < 0);
+ 		curr_pa = readl(thread->base + CMDQ_THR_CURR_ADDR) <<
+-			cmdq->shift_pa;
++			cmdq->pdata->shift;
+ 		end_pa = readl(thread->base + CMDQ_THR_END_ADDR) <<
+-			cmdq->shift_pa;
++			cmdq->pdata->shift;
+ 		/* check boundary */
+ 		if (curr_pa == end_pa - CMDQ_INST_SIZE ||
+ 		    curr_pa == end_pa) {
+ 			/* set to this task directly */
+-			writel(task->pa_base >> cmdq->shift_pa,
++			writel(task->pa_base >> cmdq->pdata->shift,
+ 			       thread->base + CMDQ_THR_CURR_ADDR);
+ 		} else {
+ 			cmdq_task_insert_into_thread(task);
+ 			smp_mb(); /* modify jump before enable thread */
+ 		}
+-		writel((task->pa_base + pkt->cmd_buf_size) >> cmdq->shift_pa,
++		writel((task->pa_base + pkt->cmd_buf_size) >> cmdq->pdata->shift,
+ 		       thread->base + CMDQ_THR_END_ADDR);
+ 		cmdq_thread_resume(thread);
+ 	}
+@@ -461,7 +457,7 @@ static void cmdq_mbox_shutdown(struct mbox_chan *chan)
+ 	}
+ 
+ 	cmdq_thread_disable(cmdq, thread);
+-	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
++	clk_bulk_disable(cmdq->pdata->gce_num, cmdq->clocks);
+ 
+ done:
+ 	/*
+@@ -501,7 +497,7 @@ static int cmdq_mbox_flush(struct mbox_chan *chan, unsigned long timeout)
+ 
+ 	cmdq_thread_resume(thread);
+ 	cmdq_thread_disable(cmdq, thread);
+-	clk_bulk_disable(cmdq->gce_num, cmdq->clocks);
++	clk_bulk_disable(cmdq->pdata->gce_num, cmdq->clocks);
+ 
+ out:
+ 	spin_unlock_irqrestore(&thread->chan->lock, flags);
+@@ -548,7 +544,6 @@ static int cmdq_probe(struct platform_device *pdev)
+ 	struct device *dev = &pdev->dev;
+ 	struct cmdq *cmdq;
+ 	int err, i;
+-	struct gce_plat *plat_data;
+ 	struct device_node *phandle = dev->of_node;
+ 	struct device_node *node;
+ 	int alias_id = 0;
+@@ -567,18 +562,13 @@ static int cmdq_probe(struct platform_device *pdev)
+ 	if (cmdq->irq < 0)
+ 		return cmdq->irq;
+ 
+-	plat_data = (struct gce_plat *)of_device_get_match_data(dev);
+-	if (!plat_data) {
++	cmdq->pdata = device_get_match_data(dev);
++	if (!cmdq->pdata) {
+ 		dev_err(dev, "failed to get match data\n");
+ 		return -EINVAL;
+ 	}
+ 
+-	cmdq->thread_nr = plat_data->thread_nr;
+-	cmdq->shift_pa = plat_data->shift;
+-	cmdq->control_by_sw = plat_data->control_by_sw;
+-	cmdq->sw_ddr_en = plat_data->sw_ddr_en;
+-	cmdq->gce_num = plat_data->gce_num;
+-	cmdq->irq_mask = GENMASK(cmdq->thread_nr - 1, 0);
++	cmdq->irq_mask = GENMASK(cmdq->pdata->thread_nr - 1, 0);
+ 	err = devm_request_irq(dev, cmdq->irq, cmdq_irq_handler, IRQF_SHARED,
+ 			       "mtk_cmdq", cmdq);
+ 	if (err < 0) {
+@@ -589,10 +579,10 @@ static int cmdq_probe(struct platform_device *pdev)
+ 	dev_dbg(dev, "cmdq device: addr:0x%p, va:0x%p, irq:%d\n",
+ 		dev, cmdq->base, cmdq->irq);
+ 
+-	if (cmdq->gce_num > 1) {
++	if (cmdq->pdata->gce_num > 1) {
+ 		for_each_child_of_node(phandle->parent, node) {
+ 			alias_id = of_alias_get_id(node, clk_name);
+-			if (alias_id >= 0 && alias_id < cmdq->gce_num) {
++			if (alias_id >= 0 && alias_id < cmdq->pdata->gce_num) {
+ 				cmdq->clocks[alias_id].id = clk_names[alias_id];
+ 				cmdq->clocks[alias_id].clk = of_clk_get(node, 0);
+ 				if (IS_ERR(cmdq->clocks[alias_id].clk)) {
+@@ -614,12 +604,12 @@ static int cmdq_probe(struct platform_device *pdev)
+ 	}
+ 
+ 	cmdq->mbox.dev = dev;
+-	cmdq->mbox.chans = devm_kcalloc(dev, cmdq->thread_nr,
++	cmdq->mbox.chans = devm_kcalloc(dev, cmdq->pdata->thread_nr,
+ 					sizeof(*cmdq->mbox.chans), GFP_KERNEL);
+ 	if (!cmdq->mbox.chans)
+ 		return -ENOMEM;
+ 
+-	cmdq->mbox.num_chans = cmdq->thread_nr;
++	cmdq->mbox.num_chans = cmdq->pdata->thread_nr;
+ 	cmdq->mbox.ops = &cmdq_mbox_chan_ops;
+ 	cmdq->mbox.of_xlate = cmdq_xlate;
+ 
+@@ -627,12 +617,12 @@ static int cmdq_probe(struct platform_device *pdev)
+ 	cmdq->mbox.txdone_irq = false;
+ 	cmdq->mbox.txdone_poll = false;
+ 
+-	cmdq->thread = devm_kcalloc(dev, cmdq->thread_nr,
++	cmdq->thread = devm_kcalloc(dev, cmdq->pdata->thread_nr,
+ 					sizeof(*cmdq->thread), GFP_KERNEL);
+ 	if (!cmdq->thread)
+ 		return -ENOMEM;
+ 
+-	for (i = 0; i < cmdq->thread_nr; i++) {
++	for (i = 0; i < cmdq->pdata->thread_nr; i++) {
+ 		cmdq->thread[i].base = cmdq->base + CMDQ_THR_BASE +
+ 				CMDQ_THR_SIZE * i;
+ 		INIT_LIST_HEAD(&cmdq->thread[i].task_busy_list);
+@@ -647,7 +637,7 @@ static int cmdq_probe(struct platform_device *pdev)
+ 
+ 	platform_set_drvdata(pdev, cmdq);
+ 
+-	WARN_ON(clk_bulk_prepare(cmdq->gce_num, cmdq->clocks));
++	WARN_ON(clk_bulk_prepare(cmdq->pdata->gce_num, cmdq->clocks));
+ 
+ 	cmdq_init(cmdq);
+ 
+-- 
+2.37.2
+
