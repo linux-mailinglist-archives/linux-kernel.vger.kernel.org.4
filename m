@@ -2,102 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 595BC616247
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:57:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6A59E61625A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:59:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230186AbiKBL5C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 07:57:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53258 "EHLO
+        id S230348AbiKBL5w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 07:57:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230102AbiKBL46 (ORCPT
+        with ESMTP id S230102AbiKBL5s (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 07:56:58 -0400
-Received: from mail-wm1-x330.google.com (mail-wm1-x330.google.com [IPv6:2a00:1450:4864:20::330])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 85355209A7
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 04:56:57 -0700 (PDT)
-Received: by mail-wm1-x330.google.com with SMTP id t1so6822809wmi.4
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 04:56:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=isovalent-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=3e9t+blyZILLQE6+pdIsU2hY3jSYuQx5qRFvKHlvSLE=;
-        b=qxJ9L9frQZsd+GiyQsLz4nLJjiTxQCyCQ4aU6KrpcMdz2BX4mmDrU7AnKEytp4Mmt/
-         FcbBjhuTbYqi8/gAWzie7RLuC9+ebGSF1sjLKek+3T9FRBRcPQqBGKOT9yHxsCrCwtxj
-         ngvrlZ0aXiC3CX6LDo5uOQnCJKALdFyHKXHRv4ScR7nI86UtCy/AbHDlKGfAzS9sOTAp
-         Zqjtiw61z/Hh0QJ7KQh9LvytNl54wcMPrAR34V3M69AgeEE3umxtyGqk44TdVFrk9XLd
-         AdjTsAP4m2IT0TfRHb/ziMm94np4auh7McAznjbfU8gEanwhTuIr69uV5AG5/xC2vhTK
-         mtGQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=3e9t+blyZILLQE6+pdIsU2hY3jSYuQx5qRFvKHlvSLE=;
-        b=4/MuJEsIfAFhBwFelREsaakxDpcVLGuSA3k8V6d2jmmIrlEfkoUh8tFOvvwkwGqWnd
-         MZsS06gW97f1ozFMs/XmZOMsUOaaINI09cl+g74D8E6AyiJhtMOr3p/LMnuyHfZKML4A
-         xEifmrcANgHs3lyq7PFoDs703cGP2WXckz/geydYbncZ7ZtKi19tzWCX8TRNHk1GA8ea
-         rdFINpL1FSBrYYCB7tCcOUbst0nt9MOL8MqcnAHJyelKshqZ8mBNnwyEUkVpe3goSyFy
-         kUUoEEi4D53GxyJYXQ7kDC+nxpd9NPe9PUcg4+qMMpowhO9JVCEGale5MgoE7XLzR74o
-         YW5g==
-X-Gm-Message-State: ACrzQf3ElvEqtiWEH3slHTBduruOtgsHqXBe3YM/s9Wa8oo3ymdDIeQ+
-        BncJ5AzUVwXH3sStcb/Ew7HS8oQSXdresJdc
-X-Google-Smtp-Source: AMsMyM7SxlNvhz8doHhCL3CXM9xeACf776xPP8VH08abG36RMKjRN/S8EL6Etwoz7L9l5PvypYpL/w==
-X-Received: by 2002:a05:600c:4ecf:b0:3cf:8762:1a67 with SMTP id g15-20020a05600c4ecf00b003cf87621a67mr1700311wmq.41.1667390216130;
-        Wed, 02 Nov 2022 04:56:56 -0700 (PDT)
-Received: from [192.168.178.32] ([51.155.200.13])
-        by smtp.gmail.com with ESMTPSA id ck7-20020a5d5e87000000b00235da296623sm13002090wrb.31.2022.11.02.04.56.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 04:56:55 -0700 (PDT)
-Message-ID: <6927ffa1-e7f5-6691-dc86-da6c0d628c4f@isovalent.com>
-Date:   Wed, 2 Nov 2022 11:56:55 +0000
+        Wed, 2 Nov 2022 07:57:48 -0400
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3575D201A3;
+        Wed,  2 Nov 2022 04:57:48 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1667390268; x=1698926268;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=eHXjCjR53EpmujEkku0tYqKqKQxplCZnvIGw4J5fU5o=;
+  b=iUgyuB5pzPAraouWrSyKO/36yi/3KjM31hCDnlmvo5nJy0gy+3g8Dte2
+   w3aY9iH7iRoB99hXXH6o9pd/Ai2c+wuxrx8c4+IwhXsKWopOtWdp+77En
+   9ABMJH+lmcsWbvCQpqTEYx92lS50GMWRvi+DadBDR7l3Ck7Q9igElYjGT
+   rrSYBkvDjSoUJWnXcmUGeeIUQPvgFouEcZTWA4GA5AlzqYg76lqwIsONj
+   7kzfbRkI4HXPRYvc3Kt1bf5Avxv8N3vO7pbUQ8REAZ0XCB+PSxVZb7MyI
+   S3Tn7+eBOSFkzy5XvGPy7sXR4STWWlODRANH8DHTD+eooVtM6aEet3DDj
+   g==;
+X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
+   d="scan'208";a="121449310"
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/AES256-SHA256; 02 Nov 2022 04:57:47 -0700
+Received: from chn-vm-ex02.mchp-main.com (10.10.85.144) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.12; Wed, 2 Nov 2022 04:57:46 -0700
+Received: from den-dk-m31857.microchip.com (10.10.115.15) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server id
+ 15.1.2507.12 via Frontend Transport; Wed, 2 Nov 2022 04:57:43 -0700
+From:   Steen Hegelund <steen.hegelund@microchip.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+CC:     Steen Hegelund <steen.hegelund@microchip.com>,
+        <UNGLinuxDriver@microchip.com>,
+        Randy Dunlap <rdunlap@infradead.org>,
+        "Casper Andersson" <casper.casan@gmail.com>,
+        Russell King <rmk+kernel@armlinux.org.uk>,
+        Wan Jiabing <wanjiabing@vivo.com>,
+        "Nathan Huckleberry" <nhuck@google.com>,
+        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        "Daniel Machon" <daniel.machon@microchip.com>,
+        Horatiu Vultur <horatiu.vultur@microchip.com>,
+        Lars Povlsen <lars.povlsen@microchip.com>
+Subject: [PATCH net-next v4 0/7] Extend TC key support for Sparx5 IS2 VCAP
+Date:   Wed, 2 Nov 2022 12:57:30 +0100
+Message-ID: <20221102115737.4118808-1-steen.hegelund@microchip.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [RESEND PATCH] bpftool: Support use full prog name in prog
- subcommand
-Content-Language: en-GB
-To:     Tao Chen <chentao.kernel@linux.alibaba.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Martin KaFai Lau <martin.lau@linux.dev>,
-        Song Liu <song@kernel.org>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>,
-        Stanislav Fomichev <sdf@google.com>
-Cc:     bpf@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <2851b8859666a02878bc897d6c2fb51c80cadce8.1667356049.git.chentao.kernel@linux.alibaba.com>
-From:   Quentin Monnet <quentin@isovalent.com>
-In-Reply-To: <2851b8859666a02878bc897d6c2fb51c80cadce8.1667356049.git.chentao.kernel@linux.alibaba.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Spam-Status: No, score=-5.5 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-2022-11-02 10:35 UTC+0800 ~ Tao Chen <chentao.kernel@linux.alibaba.com>
-> Now that the commit: <b662000aff84> ("bpftool: Adding support for BTF
-> program names") supported show the full prog name, we can also use
-> the full prog name more than 16 (BPF_OBJ_NAME_LEN) chars in prog
-> subcommand, such as "bpftool prog show name PROG_NAME".
-> 
-> Signed-off-by: Tao Chen <chentao.kernel@linux.alibaba.com>
+This provides extended tc flower filter key support for the Sparx5 VCAP
+functionality.
 
-Thanks! But you mean you want something like this, correct?
+It builds on top of the initial IS2 VCAP support found in this series:
 
-	# ./bpftool prog pin \
-		name prog_with_a_very_long_name /sys/fs/bpf/foo
+https://lore.kernel.org/all/20221020130904.1215072-1-steen.hegelund@microchip.com/
 
-This is already possible since commit d55dfe587bc0 ("bpftool: Remove
-BPF_OBJ_NAME_LEN restriction when looking up bpf program by name"). Your
-first version of the patch was based on a version that didn't have this
-commit, but bpftool from bpf-next already supports this.
+Overview:
+=========
 
-Quentin
+The added flower filter key (dissector) support is this:
+
+- ipv4_addr (sip and dip)
+- ipv6_addr (sip and dip)
+- control (IPv4 fragments)
+- portnum (tcp and udp port numbers)
+- basic (L3 and L4 protocol)
+- vlan (outer vlan tag info)
+- tcp (tcp flags)
+- ip (tos field)
+
+The IS2 VCAP supports classified VLAN information which amounts to the
+outer VLAN info in case of multiple tags.
+
+Functionality:
+==============
+
+Before frames can match IS2 VCAP rules with e.g an IPv4 source address, the
+IS2 VCAPs keyset configuration must include keyset that contains a IPv4
+source address and this must be configured for the lookup/port/traffic-type
+that you want to match on.
+
+The Sparx5 IS2 VCAP has the following traffic types:
+
+- Non-Ethernet frames
+- IPv4 Unicast frames
+- IPv4 Multicast frames
+- IPv6 Unicast frames
+- IPv6 Multicast frames
+- ARP frames
+
+So to cover IPv4 traffic the two IPv4 categories must be configured with a
+keyset that contains IPv4 address information such as the
+VCAP_KFS_IP4_TCP_UDP keyset.
+
+The IPv4 and IPv6 traffic types are configured with useful default keysets,
+in later series we will use the tc template functionality when we want to
+change these defaults.
+
+The flower filter must contain a goto action as its last action and the
+chain id must specify a destination outside the current VCAP lookup.
+
+Delivery:
+=========
+
+This is current plan for delivering the full VCAP feature set of Sparx5:
+
+Version History:
+================
+v4      Add support for TC flower filter goto action and a check of the
+        actions: check action combinations and the goto chain id.
+
+v3      Add some more details to the explanation in the commit message
+        about support for MAC_ETYPE keysets and "protocol all" as well as
+        the classified VLAN information.  This is done to help testing the
+        feature.
+        No implementation changes in this version.
+
+v2      Split one of the KUNIT tests into 3 tests to fix a kernel robot
+        build warning.
+
+v1      Initial version
+
+Steen Hegelund (7):
+  net: microchip: sparx5: Differentiate IPv4 and IPv6 traffic in keyset
+    config
+  net: microchip: sparx5: Adding more tc flower keys for the IS2 VCAP
+  net: microchip: sparx5: Find VCAP lookup from chain id
+  net: microchip: sparx5: Adding TC goto action and action checking
+  net: microchip: sparx5: Match keys in configured port keysets
+  net: microchip: sparx5: Let VCAP API validate added key- and
+    actionfields
+  net: microchip: sparx5: Adding KUNIT tests of key/action values in
+    VCAP API
+
+ .../microchip/sparx5/sparx5_tc_flower.c       | 481 +++++++++++++++++-
+ .../microchip/sparx5/sparx5_vcap_impl.c       | 168 +++++-
+ .../net/ethernet/microchip/vcap/vcap_api.c    | 268 +++++++++-
+ .../ethernet/microchip/vcap/vcap_api_client.h |  15 +
+ .../ethernet/microchip/vcap/vcap_api_kunit.c  | 447 ++++++++++++++++
+ 5 files changed, 1338 insertions(+), 41 deletions(-)
+
+-- 
+2.38.1
+
