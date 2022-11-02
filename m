@@ -2,132 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDAE2616388
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:14:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD88261638C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:14:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231310AbiKBNOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 09:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54714 "EHLO
+        id S231303AbiKBNOq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 09:14:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54962 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231295AbiKBNOH (ORCPT
+        with ESMTP id S231340AbiKBNOh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 09:14:07 -0400
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [IPv6:2001:4b98:dc4:8::223])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517ED2A42A
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 06:14:04 -0700 (PDT)
-Received: (Authenticated sender: miquel.raynal@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 0C7ED60006;
-        Wed,  2 Nov 2022 13:14:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1667394843;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=SWrjuLHxDOvHyRY+U2MUirlxhgSugyGnR6jFnCK6J/g=;
-        b=EfOmzAaN1DB3s2DQVMtv9NHt0sLwwUN6mz10ZWzs6Rb1vVz/2VRgUKHyR/pjktiK3nETXw
-        hzbNkbqx1QWnYRsC48nk4Y7EEFnm9ZztrVgf1egOSibQEmf0t7OpqT+nhd3VuE5wz/FXFI
-        UgV9/LFUsIqZ4Qbz9XHgWMa5xMSRb+SKUFboGubWGbmBpaqw/OWLL/HbtbNUqAbq13Rg+I
-        8MjghpnA5Jhu2MXl8/bIO4HNALnS+GLw2/Ha4N1pqUEwPhqodwitU88mpNvaYLwlSZ72Kk
-        7qk6yJfbX7lUpxwxQgghAO9A2PKb9IjzaaaHPwgNTLM7R2G1m4Oftny4+N8U2Q==
-Date:   Wed, 2 Nov 2022 14:14:00 +0100
-From:   Miquel Raynal <miquel.raynal@bootlin.com>
-To:     Roger Quadros <rogerq@kernel.org>
-Cc:     Colin Foster <colin.foster@in-advantage.com>,
-        linux-kernel@vger.kernel.org, linux-mtd@lists.infradead.org,
-        Pratyush Yadav <p.yadav@ti.com>,
-        Uwe =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= 
-        <u.kleine-koenig@pengutronix.de>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Richard Weinberger <richard@nod.at>
-Subject: Re: Barebox / Kernel Omap ECC inconsistency?
-Message-ID: <20221102141400.31125365@xps-13>
-In-Reply-To: <ec160658-e251-bfdc-05ac-631bd4c716dc@kernel.org>
-References: <Y2FvB5D0K4MBii8N@COLIN-DESKTOP1.localdomain>
-        <ec160658-e251-bfdc-05ac-631bd4c716dc@kernel.org>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+        Wed, 2 Nov 2022 09:14:37 -0400
+Received: from mail-yw1-x112c.google.com (mail-yw1-x112c.google.com [IPv6:2607:f8b0:4864:20::112c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 01B192AC61;
+        Wed,  2 Nov 2022 06:14:36 -0700 (PDT)
+Received: by mail-yw1-x112c.google.com with SMTP id 00721157ae682-3691e040abaso165718017b3.9;
+        Wed, 02 Nov 2022 06:14:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=h4Qt4+7BCtKcn4LLoSu0RRkNEJEJ/wzm8INNJC+mbcM=;
+        b=TAHjqFBWfeOX0IQXjYQCEXWx9G6UWa4lAB+NgrEPgjS2Y9Gex05iuxYzLfsooQV3vU
+         WMausD7iXUy85YoOK8v3QLs5BxH2hFRpLQrcCEXfFvbsyXxvF33yrx3CYuT9NWXK4w0x
+         gPeeA8NTjn+4cIVlxPIxLo6nnqkzbHvfgpdBtJv23pnMfz3quqNiPPEkFx9j5zAHUDAN
+         TYLa0CwL7OAg229kNs0IHhMqugKjKHD+qT+elblhLn5qa48zDjX4PatcdKjER5Rx0qKZ
+         pdxA5a+V7V4gN6SPZWsyY2aDcd7u9Dr2Tf5ytxToa7G1yNyA8KHoVyewcqqw4RHckE+j
+         1oLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=h4Qt4+7BCtKcn4LLoSu0RRkNEJEJ/wzm8INNJC+mbcM=;
+        b=NjjHgj+0+/Brpa42JNhz80dYnV5HTipTCZ0s1LlWoVJELvTQ8wpaXiRO2JZuEhT8bJ
+         Q0Mfwcy1qjcMpUw+BGsS2TNaNCmHx3cCA7LKjGSRTncMLYoE9MYp6LE0mgzb0Kl1of57
+         Vg8CejfyO3nzvWrUVUS50P8WSri0gZWpqHJMlXrVjOV7DM/s22LVRg65dXU/uuKWK3aU
+         DiJ+phtO0G1m65IxCOBq1tq53ZP/XZFyKXVThSf78QQ1RJWdH45htGM194nT0u2viWD3
+         6EPzjDu6ChyFTF1riwiTVwu9vHQQHDOU9Dxmo6mzanXBVqfPH4W5hU83pwWbD5jsy+Wa
+         RE7g==
+X-Gm-Message-State: ACrzQf1M1rUNBPDTRg3+KuFeB9jb2RuHLeDHzOKUJM1R1BcVtjGjP7Yf
+        rtRSF0TwzUvt90xCuKhDt5s7YmDOw+pvV4by4Eg81mQfHq0=
+X-Google-Smtp-Source: AMsMyM7Go2dY4fPx7yT1HB5yw/V5bGz2LMNKt7XKGTUmWQ3Q0pzGo+mbmi+3J34k1bvQE6nHMv/vWR40e30Kn2HfgAU=
+X-Received: by 2002:a81:6208:0:b0:367:f222:df0d with SMTP id
+ w8-20020a816208000000b00367f222df0dmr24153950ywb.422.1667394875814; Wed, 02
+ Nov 2022 06:14:35 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <CABDcava8ADBNrVNh+7A2jG-LgEipcapU8dVh8p+jX-D4kgfzRg@mail.gmail.com>
+In-Reply-To: <CABDcava8ADBNrVNh+7A2jG-LgEipcapU8dVh8p+jX-D4kgfzRg@mail.gmail.com>
+From:   Guillermo Rodriguez Garcia <guille.rodriguez@gmail.com>
+Date:   Wed, 2 Nov 2022 14:14:24 +0100
+Message-ID: <CABDcava_0n2-WdyW6xO-18hTPNLpdnGVGoMY4QtPhnEVYT90-w@mail.gmail.com>
+Subject: fs: layered device driver to write to evdev
+To:     linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
+Cc:     Christoph Hellwig <hch@lst.de>, Al Viro <viro@zeniv.linux.org.uk>,
+        Linus Torvalds <torvalds@linux-foundation.org>,
+        Luis Chamberlain <mcgrof@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Kees Cook <keescook@chromium.org>,
+        Iurii Zaikin <yzaikin@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Colin,
+Hi all,
 
-rogerq@kernel.org wrote on Wed, 2 Nov 2022 09:12:27 +0200:
+I have a number of embedded boards that integrate a pwm-based buzzer
+device, and use the pwm-beeper device driver in order to control this.
 
-> Hi Colin,
->=20
-> On 01/11/2022 21:09, Colin Foster wrote:
-> > Hello,
-> >=20
-> > I'm trying to revive a product that runs on a Phytec OMAP 4460 SOM. I
-> > submitted a .dts RFC a month or so ago, and plan to perform the
-> > suggestions and resubmit, but I'm up against one main hurdle that seems
-> > to be related to flash OOB/ECC. (get_maintainers on
-> > drivers/mtd/nand/raw/omap2.c is how I got this email list)
-> >=20
-> > Barebox has "native" support for the Phytec SOM:
-> > https://git.pengutronix.de/cgit/barebox/tree/arch/arm/boards/phytec-phy=
-core-omap4460
-> >=20
-> > It seems like Barebox is writing and expecting ECC bits to start at an
-> > offset of 12 bytes, while the kernel (and Barebox comments suggest) the
-> > ECC bytes should start at 2. I'm seeing this with
-> > `nanddump -n -o -l 0x41000 -f mtdxnanddump /dev/mtdx`
-> >=20
-> > Barebox created partition with UBI (mtd3)
-> > ...
-> > 00000800  ff ff ff ff ff ff ff ff  ff ff ff ff 56 49 fd 17
-> > 00000810  b2 25 60 1a 42 1d eb 56  5d ff ff ff ff ff ff ff
-> > ...
-> >=20
-> > Kernel created partition with UBI (mtd4)
-> > ...
-> > 00000800  ff ff 07 73 04 ac 57 6b  9b 1f 92 49 ab e0 b9 ff
-> > 00000810  ff ff ff ff ff ff ff ff  ff ff ff ff ff ff ff ff
-> > ...
-> >=20
-> >=20
-> > My question:=20
-> >=20
-> > Am I right to assume this is an issue in Barebox? Perhaps this is just =
-a =20
->=20
-> I'm guessing so. Both u-boot and Linux for OMAP put the ECC bytes right
-> after the Bad block marker which is 2 bytes.
+However the pwm-beeper device driver only supports simple (play /
+stop) ioctls, so I had implemented a "layered" device driver that
+would talk to the pwm-beeper device (through evdev), and provide
+additional ioctls to userspace so that an application could say e.g.
+"beep for 50ms", and the driver would take care of the timing.
 
-Yep. I checked, this has been like that since at least 2014, I don't
-think we changed the layout in U-Boot/Linux "recently"... (I haven't
-checked earlier, by laziness).
+This layered device driver used set_fs + vfs_write to talk to the
+underlying device. However, since [1] this no longer works.
 
-> https://elixir.bootlin.com/linux/latest/source/drivers/mtd/nand/raw/omap2=
-.c#L1729
-> https://elixir.bootlin.com/linux/latest/source/drivers/mtd/nand/raw/omap2=
-.c#L134
->=20
-> > bug that has been fairly dormant for 15 years. If that is the case, I
-> > assume there's probably no hope in getting this mainlined, and "native"
-> > barebox support is just a ruse.
-> >=20
-> > If that isn't the case, is there a hidden "shift OOB by 10" config
-> > option that I'm missing? Or am I interpreting this data incorrectly?
-> >=20
-> >=20
-> > Any suggestions would be greatly appreciated. =20
->=20
-> You should fix the OMAP NAND driver/config in Barebox to match that
-> with Linux OMAP NAND driver if you want them to run on the same system.
+I understand that device drivers should implement ->write_iter if they
+need to be written from kernel space, but evdev does not support this.
+What is the recommended way to have a layered device driver that can
+talk to evdev ?
 
-Agreed.
+Thanks in advance,
 
-Thanks,
-Miqu=C3=A8l
+(If possible, please CC me in any replies)
+
+ [1]: https://lore.kernel.org/lkml/20200626075836.1998185-9-hch@lst.de/
+
+-- 
+Guillermo Rodriguez Garcia
+guille.rodriguez@gmail.com
