@@ -2,97 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0A57D616F02
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 21:45:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FAA0616F08
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 21:45:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231326AbiKBUpU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 16:45:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36376 "EHLO
+        id S231356AbiKBUpf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 16:45:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36500 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbiKBUpR (ORCPT
+        with ESMTP id S231337AbiKBUpc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 16:45:17 -0400
-Received: from mail-oi1-x235.google.com (mail-oi1-x235.google.com [IPv6:2607:f8b0:4864:20::235])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C9366471;
-        Wed,  2 Nov 2022 13:45:16 -0700 (PDT)
-Received: by mail-oi1-x235.google.com with SMTP id v81so11772098oie.5;
-        Wed, 02 Nov 2022 13:45:16 -0700 (PDT)
+        Wed, 2 Nov 2022 16:45:32 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2B9D66559
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 13:45:31 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id z6so87446qtv.5
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 13:45:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WSiWPJniiLxzsO2IMiTjGqMh4d3SMmf0JzhNe976ryo=;
-        b=I8c780hRp3L9X3806uZwlBW1cU6xUdYgk4w+ZiYe0rwOddJKq6yBcaPz0oF1YxfJaE
-         SYU3u/735UxSaDIowp8o5fYJyKXvApm5AHc9NrgqWQqb33/pjMVNO1LcD8vVdLDyowdT
-         L+fyvqPMZGvFRE/AlVstiokInwsRwVr0zyHfMKzBCshVSIZo22+pXjluNqkwmM6rpP1+
-         Qx5iGZWCddOZ+tyS/0KVcVrl52Q0AP14t0j/nyeUE2Bvh7NdNzGtxfdo3tAm+At97B8V
-         Eog4/ocyrxkyv+kZD9h4QTMj62vry3BsMjg3mqiU3/DMft46BD4nmKZN3v7JdZ6FUbMp
-         UDiw==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=NsgBnhD+StlYkJHjbJPv8coG9/eowe5XzdG3zACEu0g=;
+        b=kZz4fGbechWDCheoNWKozSE4TKIO6InaTFx5I3D7nkDm7xbo8Xxb4OZa3Vlx3J4InU
+         fViWih5UD5YOsQ/6scKHEmEIVaS1V9Y4jWTbxjQjlbNJ9vTneotv/lJR6aQeeIDuPHnB
+         C9K48XnJPc4djN3YSxV25lfojGVpTf+NCDD4JCFWcDQ+tIJNgJZDocyf3jtvpd4V3kex
+         W6F0oVczqneXLm15AL4wtH8R9nHZyw1/Q/r7FpAdHXRIEH+hoVVvCtfJ7SvSgJL+dhuO
+         qruSq8I3QLdwiyYIJ6MgJHjxTkDyYNQMs5SlWjOm4r1hRKJ1CxLNeEz3quPMN0uFapwM
+         PNcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WSiWPJniiLxzsO2IMiTjGqMh4d3SMmf0JzhNe976ryo=;
-        b=xPPnFzGxsWRq4ryUc3KsOnkSZbnbcU5XLtFJL89EDXJ5uOk0HRqCG2hgiPM2hBZ3sW
-         AJjNf3jkUaP29LB49XSzzQjdD/rAJcp7aD8pam0aEgVJUqVwESKjagH/5QeZeAVu+/pJ
-         1NgODBFbsNjJw8M9fFaIeM15W97WmsUcO8W5yOOCuLFcVfUInM++QqzkuXb6l8HKW548
-         pYyFSskPBfd58BLMi3oqOBJN10BsHVng5QgwZhhKl6vy49Qff5tPZaVXvKPN+lpeU/2C
-         nETTePnuNfD2QGxv31SRtyj6wjt/iS6b9TJ7I3CktBBX3sOZ9kDApnv7dyN0frC6tEYs
-         y0Ww==
-X-Gm-Message-State: ACrzQf1sHCriluBEXATW5aFgg3u4AeC6b9JElp5BBDPFQHNiQL0tSRvy
-        koZMYFBOJPgyll14PfstS0E=
-X-Google-Smtp-Source: AMsMyM78I1JgVRU8WE1CtV6sWVA2ugCovJYFth9g0/88Bk/jU2d56hsGL67Xvh5zoTMmAsPg0OI8zw==
-X-Received: by 2002:aca:4303:0:b0:354:cbc8:d269 with SMTP id q3-20020aca4303000000b00354cbc8d269mr14242321oia.115.1667421915999;
-        Wed, 02 Nov 2022 13:45:15 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id g13-20020a544f8d000000b0035437f4deefsm4946401oiy.26.2022.11.02.13.45.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 13:45:15 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 2 Nov 2022 13:45:14 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
-        srw@sladewatkins.net
-Subject: Re: [PATCH 4.14 00/60] 4.14.298-rc1 review
-Message-ID: <20221102204514.GC2089083@roeck-us.net>
-References: <20221102022051.081761052@linuxfoundation.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NsgBnhD+StlYkJHjbJPv8coG9/eowe5XzdG3zACEu0g=;
+        b=G/aq/A2+dx9pLPxIlgcz1HMLoCYXfuaw/yi/bidHPMJbT5x/+Xqg4EYeojN7E4mrXU
+         9VCj2aeQs5MdIQvPe07pgRmho9lyIkFVukkprnZO8Rc0jtVLsN+hLvGoQchjIQZQZCgy
+         C4aLN5VWhylMiA5d+mJqqVyZUgcgg56Uo1XjnPt+in71AGE/zI1V41a+obeKP1E+frjk
+         OiSpRjkpXFeBWoQwtrQ9lN/PiIHofzGDAlk9d/5PcC9kOXGl9yyucidgX8wlrQzpF41a
+         O2cPXq6NTd2w7MwM5U0o0BnSJ9ViJAC9UgGS2AlZYeED4fWnhDQxq41G5IaIUbJ9BMfB
+         Sd3A==
+X-Gm-Message-State: ACrzQf2Eb+GH4nUS5CXu3wJrwJMlcVC2WY1fcuW2UAncqrrb2YZLvIAY
+        XO1pc7z/5El/FhD/12wy/79hBQ==
+X-Google-Smtp-Source: AMsMyM5QI/mHGZBEb3PXe/1szUOQbbEBHCmLJnY1CHrW+2T+GlHfVm0lp/6P7wb4CDfKpSOUvPf+Ww==
+X-Received: by 2002:ac8:5bc9:0:b0:3a5:71c:61ac with SMTP id b9-20020ac85bc9000000b003a5071c61acmr21649224qtb.680.1667421930347;
+        Wed, 02 Nov 2022 13:45:30 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
+        by smtp.gmail.com with ESMTPSA id he40-20020a05622a602800b0039a55f78792sm7102776qtb.89.2022.11.02.13.45.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 13:45:30 -0700 (PDT)
+Message-ID: <2bde4bd8-44d3-7049-95c3-3f3f658ca304@linaro.org>
+Date:   Wed, 2 Nov 2022 16:45:28 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221102022051.081761052@linuxfoundation.org>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 02/10] arm64: dts: qcom: sm6350: Add pinctrl for SDHCI 2
+Content-Language: en-US
+To:     Marijn Suijten <marijn.suijten@somainline.org>,
+        phone-devel@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@somainline.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Martin Botka <martin.botka@somainline.org>,
+        Jami Kettunen <jami.kettunen@somainline.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Luca Weiss <luca@z3ntu.xyz>, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221030073232.22726-1-marijn.suijten@somainline.org>
+ <20221030073232.22726-3-marijn.suijten@somainline.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221030073232.22726-3-marijn.suijten@somainline.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 03:34:21AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.14.298 release.
-> There are 60 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+On 30/10/2022 03:32, Marijn Suijten wrote:
+> Use the generic pin functions specifically for sdc2.
 > 
-> Responses should be made by Fri, 04 Nov 2022 02:20:38 +0000.
-> Anything received after that time might be too late.
-> 
+> Signed-off-by: Marijn Suijten <marijn.suijten@somainline.org>
+> ---
+>  arch/arm64/boot/dts/qcom/sm6350.dtsi | 44 ++++++++++++++++++++++++++++
 
-Build results:
-	total: 170 pass: 170 fail: 0
-Qemu test results:
-	total: 422 pass: 422 fail: 0
 
-Tested-by: Guenter Roeck <linux@roeck-us.net>
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Guenter
+
+Best regards,
+Krzysztof
+
