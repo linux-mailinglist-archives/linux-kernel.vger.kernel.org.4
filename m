@@ -2,239 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DFEA616268
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:07:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DB1B61626B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:08:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230324AbiKBMHY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 08:07:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35248 "EHLO
+        id S230520AbiKBMIj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 08:08:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35842 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229512AbiKBMHX (ORCPT
+        with ESMTP id S230366AbiKBMIg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 08:07:23 -0400
-Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3669D64F7
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 05:07:21 -0700 (PDT)
-Received: from SHSend.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
-        by SHSQR01.spreadtrum.com with ESMTPS id 2A2C6eDg084573
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NO);
-        Wed, 2 Nov 2022 20:06:40 +0800 (CST)
-        (envelope-from zhaoyang.huang@unisoc.com)
-Received: from bj03382pcu.spreadtrum.com (10.0.74.65) by
- BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
- 15.0.1497.23; Wed, 2 Nov 2022 20:06:41 +0800
-From:   "zhaoyang.huang" <zhaoyang.huang@unisoc.com>
-To:     Andrew Morton <akpm@linux-foundation.org>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Zhaoyang Huang <huangzhaoyang@gmail.com>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <ke.wang@unisoc.com>,
-        <steve.kang@unisoc.com>
-Subject: [RFC PATCH] mm: introduce accounting of page_owner via backtrace
-Date:   Wed, 2 Nov 2022 20:06:21 +0800
-Message-ID: <1667390781-17515-1-git-send-email-zhaoyang.huang@unisoc.com>
-X-Mailer: git-send-email 1.9.1
-MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.0.74.65]
-X-ClientProxiedBy: SHCAS01.spreadtrum.com (10.0.1.201) To
- BJMBX01.spreadtrum.com (10.0.64.7)
-X-MAIL: SHSQR01.spreadtrum.com 2A2C6eDg084573
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 2 Nov 2022 08:08:36 -0400
+Received: from out30-43.freemail.mail.aliyun.com (out30-43.freemail.mail.aliyun.com [115.124.30.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D43B722516;
+        Wed,  2 Nov 2022 05:08:34 -0700 (PDT)
+X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R831e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=chentao.kernel@linux.alibaba.com;NM=1;PH=DS;RN=12;SR=0;TI=SMTPD_---0VTo8Xcs_1667390902;
+Received: from VM20210331-5.tbsite.net(mailfrom:chentao.kernel@linux.alibaba.com fp:SMTPD_---0VTo8Xcs_1667390902)
+          by smtp.aliyun-inc.com;
+          Wed, 02 Nov 2022 20:08:30 +0800
+From:   Tao Chen <chentao.kernel@linux.alibaba.com>
+To:     "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        Oliver Hartkopp <socketcan@hartkopp.net>,
+        Petr Machata <petrm@nvidia.com>,
+        Kees Cook <keescook@chromium.org>,
+        Harshit Mogalapalli <harshit.m.mogalapalli@oracle.com>
+Cc:     netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Tao Chen <chentao.kernel@linux.alibaba.com>
+Subject: [PATCH net-next] netlink: Fix potential skb memleak in netlink_ack
+Date:   Wed,  2 Nov 2022 20:08:20 +0800
+Message-Id: <7a382b9503d10d235238ca55938bc933d92a1de7.1667389213.git.chentao.kernel@linux.alibaba.com>
+X-Mailer: git-send-email 2.2.1
+X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+We should clean the skb resource if nlmsg_put/append failed
+, so fix it.
 
-Page_owner could be accounted and sort via its backtrace, which could
-simplify the output.
-
-Signed-off-by: Zhaoyang Huang <zhaoyang.huang@unisoc.com>
+Fiexs: commit 738136a0e375 ("netlink: split up copies in the
+ack construction")
+Signed-off-by: Tao Chen <chentao.kernel@linux.alibaba.com>
 ---
- include/linux/page_owner.h |   7 +++
- mm/page_owner.c            | 113 +++++++++++++++++++++++++++++++++++++++++++++
- 2 files changed, 120 insertions(+)
+ net/netlink/af_netlink.c | 4 +++-
+ 1 file changed, 3 insertions(+), 1 deletion(-)
 
-diff --git a/include/linux/page_owner.h b/include/linux/page_owner.h
-index 119a0c9..c86a342 100644
---- a/include/linux/page_owner.h
-+++ b/include/linux/page_owner.h
-@@ -3,6 +3,13 @@
- #define __LINUX_PAGE_OWNER_H
+diff --git a/net/netlink/af_netlink.c b/net/netlink/af_netlink.c
+index c6b8207e..9d73dae 100644
+--- a/net/netlink/af_netlink.c
++++ b/net/netlink/af_netlink.c
+@@ -2500,7 +2500,7 @@ void netlink_ack(struct sk_buff *in_skb, struct nlmsghdr *nlh, int err,
  
- #include <linux/jump_label.h>
-+#include <linux/stackdepot.h>
-+
-+struct hash_object {
-+	int count;
-+	depot_stack_handle_t trace_hash;
-+	struct rb_node rb_node;
-+};
+ 	skb = nlmsg_new(payload + tlvlen, GFP_KERNEL);
+ 	if (!skb)
+-		goto err_bad_put;
++		goto err_skb;
  
- #ifdef CONFIG_PAGE_OWNER
- extern struct static_key_false page_owner_inited;
-diff --git a/mm/page_owner.c b/mm/page_owner.c
-index e4c6f3f..3d014fd 100644
---- a/mm/page_owner.c
-+++ b/mm/page_owner.c
-@@ -42,6 +42,12 @@ struct page_owner {
- static depot_stack_handle_t early_handle;
+ 	rep = nlmsg_put(skb, NETLINK_CB(in_skb).portid, nlh->nlmsg_seq,
+ 			NLMSG_ERROR, sizeof(*errmsg), flags);
+@@ -2528,6 +2528,8 @@ void netlink_ack(struct sk_buff *in_skb, struct nlmsghdr *nlh, int err,
+ 	return;
  
- static void init_early_allocated_pages(void);
-+static void store_user_hash(depot_stack_handle_t trace_hash, int count);
-+static DEFINE_SPINLOCK(stack_hash_lock);
-+static struct hash_object ho_pool[8192];
-+static int ho_pool_free_count = ARRAY_SIZE(ho_pool);
-+struct rb_root user_hash_root = RB_ROOT;
-+
- 
- static int __init early_page_owner_param(char *buf)
- {
-@@ -152,6 +158,8 @@ void __reset_page_owner(struct page *page, unsigned short order)
- 		page_owner->free_handle = handle;
- 		page_owner->free_ts_nsec = free_ts_nsec;
- 		page_ext = page_ext_next(page_ext);
-+		if (!i)
-+			store_user_hash(page_owner->handle, -(1 << order));
- 	}
- }
- 
-@@ -190,6 +198,7 @@ noinline void __set_page_owner(struct page *page, unsigned short order,
- 		return;
- 
- 	handle = save_stack(gfp_mask);
-+	store_user_hash(handle, 1 << order);
- 	__set_page_owner_handle(page_ext, handle, order, gfp_mask);
- }
- 
-@@ -570,6 +579,105 @@ void __dump_page_owner(const struct page *page)
- 	return 0;
- }
- 
-+static void store_user_hash(depot_stack_handle_t trace_hash, int count)
-+{
-+	struct rb_node *rb_parent;
-+	unsigned int trace_hash_parent;
-+	struct rb_node **link = &user_hash_root.rb_node;
-+	struct hash_object *hash_parent = NULL;
-+	struct hash_object *hash_object = NULL;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&stack_hash_lock, flags);
-+	while (*link) {
-+		rb_parent = *link;
-+		hash_parent = rb_entry(rb_parent, struct hash_object, rb_node);
-+		trace_hash_parent = hash_parent->trace_hash;
-+		if (trace_hash < trace_hash_parent)
-+			link = &hash_parent->rb_node.rb_left;
-+		else if (trace_hash_parent < trace_hash)
-+			link = &hash_parent->rb_node.rb_right;
-+		else {
-+			hash_object = rb_entry(*link, struct hash_object, rb_node);
-+			hash_object->count += count;
-+			if (!RB_EMPTY_ROOT(&user_hash_root)
-+					&& !hash_object->count) {
-+				rb_erase(&hash_object->rb_node, &user_hash_root);
-+			}
-+			spin_unlock_irqrestore(&stack_hash_lock, flags);
-+			return;
-+		}
-+	}
-+	/*
-+	 * hash_object is the 1st node represent this trace_hash
-+	 * insert it to user_hash_root
-+	 */
-+	hash_object = ho_pool_free_count ? &ho_pool[--ho_pool_free_count] : NULL;
-+	if (!hash_object) {
-+		spin_unlock_irqrestore(&stack_hash_lock, flags);
-+		return;
-+	}
-+	hash_object->trace_hash = trace_hash;
-+	/* add the node to rb tree*/
-+	rb_link_node(&hash_object->rb_node, rb_parent, link);
-+	rb_insert_color(&hash_object->rb_node, &user_hash_root);
-+	spin_unlock_irqrestore(&stack_hash_lock, flags);
-+	return;
-+}
-+static ssize_t print_owner_stack(struct file *file, char __user *buf, size_t count, loff_t *ppos)
-+{
-+	struct hash_object *object;
-+	struct rb_node *rb;
-+	unsigned long *entries;
-+	unsigned int nr_entries;
-+	char *kbuf;
-+	int i, ret = 0;
-+	unsigned long flags;
-+
-+	count = min_t(size_t, count, PAGE_SIZE);
-+	kbuf = kmalloc(count, GFP_KERNEL);
-+	if (!kbuf)
-+		return -ENOMEM;
-+
-+	rb = file->private_data ? (struct rb_node *)file->private_data : rb_first(&user_hash_root);
-+	if(!rb)
-+		return 0;
-+	spin_lock_irqsave(&stack_hash_lock, flags);
-+	object = rb_entry(rb, struct hash_object, rb_node);
-+	if (object) {
-+		while (!object->trace_hash || object->count <= 0) {
-+			rb = rb_next(rb);
-+			object = rb ? rb_entry(rb, struct hash_object, rb_node) : NULL;
-+			if (!object) {
-+				spin_unlock_irqrestore(&stack_hash_lock, flags);
-+				kfree(kbuf);
-+				return 0;
-+			}
-+		}
-+		nr_entries = stack_depot_fetch(object->trace_hash, &entries);
-+		ret += snprintf(kbuf + ret, count - ret, "count %d\n", object->count);
-+		if (ret >= count)
-+			goto err;
-+		for (i = 0; i < nr_entries; i++) {
-+			void *ptr = (void *)entries[i];
-+			ret += snprintf(kbuf + ret, count - ret, "    [<%p>] %pS\n", ptr, ptr);
-+			if (ret >= count)
-+				goto err;
-+		}
-+	}
-+	file->private_data = (void *)rb_next(rb);
-+	spin_unlock_irqrestore(&stack_hash_lock, flags);
-+	if (copy_to_user(buf, kbuf, ret))
-+		ret = -EFAULT;
-+
-+	kfree(kbuf);
-+	return ret;
-+err:
-+	spin_unlock_irqrestore(&stack_hash_lock, flags);
-+	kfree(kbuf);
-+	return -ENOMEM;
-+}
-+
- static void init_pages_in_zone(pg_data_t *pgdat, struct zone *zone)
- {
- 	unsigned long pfn = zone->zone_start_pfn;
-@@ -661,6 +769,9 @@ static void init_early_allocated_pages(void)
- static const struct file_operations proc_page_owner_operations = {
- 	.read		= read_page_owner,
- };
-+static const struct file_operations proc_page_owner_simple_operations = {
-+	.read		= print_owner_stack,
-+};
- 
- static int __init pageowner_init(void)
- {
-@@ -671,6 +782,8 @@ static int __init pageowner_init(void)
- 
- 	debugfs_create_file("page_owner", 0400, NULL, NULL,
- 			    &proc_page_owner_operations);
-+	debugfs_create_file("page_owner_simple", 0400, NULL, NULL,
-+			    &proc_page_owner_simple_operations);
- 
- 	return 0;
+ err_bad_put:
++	kfree_skb(skb);
++err_skb:
+ 	NETLINK_CB(in_skb).sk->sk_err = ENOBUFS;
+ 	sk_error_report(NETLINK_CB(in_skb).sk);
  }
 -- 
-1.9.1
+2.2.1
 
