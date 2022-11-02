@@ -2,130 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 771FD615B4E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 05:14:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DF73615B60
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 05:20:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229684AbiKBEOK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 00:14:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51618 "EHLO
+        id S229841AbiKBET4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 00:19:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiKBEOH (ORCPT
+        with ESMTP id S229462AbiKBETu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 00:14:07 -0400
-Received: from mail-pg1-x533.google.com (mail-pg1-x533.google.com [IPv6:2607:f8b0:4864:20::533])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CCE0223146
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 21:14:03 -0700 (PDT)
-Received: by mail-pg1-x533.google.com with SMTP id h193so6504214pgc.10
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 21:14:03 -0700 (PDT)
+        Wed, 2 Nov 2022 00:19:50 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E9FCB1707D;
+        Tue,  1 Nov 2022 21:19:49 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id b1-20020a17090a7ac100b00213fde52d49so831216pjl.3;
+        Tue, 01 Nov 2022 21:19:49 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=c30GhC3CoSosVopfRUjx7dVhkmM5E32hTKQ81gMJsz8=;
-        b=CMdN+AncmaG8HzjUzD9ywczQaU/TKgxywNgXU/V1Ac3MzLcrIYrGtAEky0EN0t9Z+R
-         kziHTMp/GxnodGxxW8GiqtstZ2gv4PQpowivv1e7YIieaYETHVrvPK18tNiO122bulaI
-         EXqiS6Flg0fa12XxofyPl6OT+HjtsLwAn0iLo=
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5keqTtPI9E/C6kmYZ6zrLzVi1P0iB+SBY54miNIX3PM=;
+        b=W7DQrcn1dwoipKG7MoiSCGRtQbcVbDxbHnTjy0PgMXL2gC2mNbo6XajRNZHQak1yxv
+         H2cd2E10Z45IAW19sjm2fCKVSasp93T1mz2PdrkbBbvPRocT63lItmQ9F45QaHW3vsMM
+         NxavBZQsT2jqgc27rjbNdqgweHOSkEsXK4MmpG06Da776Dw1eZaLdFFeD66VQCQhQzmF
+         q4HGUYTqHQ26K3lyWHyEiH9PMTEnrPWTqx69X+zpgSX6x8Cx42jqV39wIUMaMbtyWpLb
+         2gFK5T6vnUfTVbFs+lcukYp//Dk6Qbvn08tZ20Ectr6XY1qBMBJzcC/LRUQmOdGfLwwS
+         N1iw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c30GhC3CoSosVopfRUjx7dVhkmM5E32hTKQ81gMJsz8=;
-        b=NNsMZ8Y4y4n8rFKBlcaLE4NnG2DeBbrEzihO5qSwGfR4+ABDb62DozYl+AHlFx1l77
-         6vKuhxI9ziTMdiSPHaC0IE24+FtLff3fjxXpwRHKHap/4dwJjOq338VWwUDu6tNpGOsP
-         bKnf9V0vk24f4UlMBwWkEVptA/BTd3A2NOw2S0E+NNVrO36TcCVu9DVa4d2soa8pzcWN
-         f29+hHLA3LZK7MoVU6XmE3MyC8sx0+M/bxj5gagzsqvtmMzeklCs0PTlUca4zlw7QG8Q
-         ZuWyMCcEnfGNFwBZUeNlegc5ne/Xx8rZ2PHXwbkcSRh5pYBy+092sKsHCQiOQAODVY26
-         EC+Q==
-X-Gm-Message-State: ACrzQf3vyHmTJW0k3d3oDKoa1kTh8sry9DOIm4voeEBomHYkH/2WxerZ
-        z9G725F9/hnHQHKUP+E7tc0dmg==
-X-Google-Smtp-Source: AMsMyM6oSQXsw+x4LT1N+XG0H91Ng+MhsL+HQJ99odIHJfJ9qXaMBWV8NxtN5U8+WL9yAk+X7o0AMQ==
-X-Received: by 2002:a63:d211:0:b0:46f:6229:c380 with SMTP id a17-20020a63d211000000b0046f6229c380mr19785356pgg.621.1667362443346;
-        Tue, 01 Nov 2022 21:14:03 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:f558:dfb0:7cb7:44d9])
-        by smtp.gmail.com with ESMTPSA id l6-20020a170903244600b00187197c499asm5386872pls.164.2022.11.01.21.14.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 21:14:02 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 13:13:58 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Nhat Pham <nphamcs@gmail.com>
-Cc:     akpm@linux-foundation.org, hannes@cmpxchg.org, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org, minchan@kernel.org,
-        ngupta@vflare.org, senozhatsky@chromium.org, sjenning@redhat.com,
-        ddstreet@ieee.org, vitaly.wool@konsulko.com
-Subject: Re: [PATCH v2 5/5] zsmalloc: Implement writeback mechanism for
- zsmalloc
-Message-ID: <Y2HuhiyorAHFO+Ss@google.com>
-References: <202210272158.7swYwd23-lkp@intel.com>
- <20221027182736.513530-1-nphamcs@gmail.com>
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5keqTtPI9E/C6kmYZ6zrLzVi1P0iB+SBY54miNIX3PM=;
+        b=DIgpMvvKFbbnSTuN1D01jcPDuC/u2B+gqa58dOT80mCIdQEYBuyL0Br9/mxndx1ygC
+         HJuVVf80o/zu1fskYQCHK+9QEUmD64NMBb7Q9x1jb4aiGQ5uEDd6RmCO9d7RsrJnLWa7
+         n08go8elc5tLwcpYSUQzgpD5J2AMBMptS4B+JuK/PzNQpyPUYWvC0HjIUaDPexVLChUS
+         vL458tU/q5Tdhan89XNzBcdygedbadmr5OJOfHG+Vw+yoYjBrLmIHuClXRxFGddlLtAx
+         riCQOyU57YHjxwtBne1FTHjXX+fWpWF9wmo2smTt/eC6DUS/TO2AFZBBQhMGQax2YMxs
+         tz7A==
+X-Gm-Message-State: ACrzQf39mjOQqKTZxwUS4VYu793rorWP8ihuwQqS9cWyIGICAff+QYCk
+        LxA5vEM1ICJ2fv1cWrXsUYefewMPCgdS8g==
+X-Google-Smtp-Source: AMsMyM4Tzy8kXq9CySKjOz7rMt313amDlXD8V9bWf6aGEafrOPEk9R07XoeRjhWQHjbAG+hdTCYPlQ==
+X-Received: by 2002:a17:90b:2684:b0:213:8a8:b5df with SMTP id pl4-20020a17090b268400b0021308a8b5dfmr23634380pjb.77.1667362789311;
+        Tue, 01 Nov 2022 21:19:49 -0700 (PDT)
+Received: from [192.168.43.80] (subs03-180-214-233-86.three.co.id. [180.214.233.86])
+        by smtp.gmail.com with ESMTPSA id 10-20020a63154a000000b004393f60db36sm6640647pgv.32.2022.11.01.21.19.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 01 Nov 2022 21:19:48 -0700 (PDT)
+Message-ID: <b1914779-0303-3d37-a504-e1715f7ee0af@gmail.com>
+Date:   Wed, 2 Nov 2022 11:19:44 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221027182736.513530-1-nphamcs@gmail.com>
-X-Spam-Status: No, score=-3.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH] Documentation: process: Describe kernel version prefix
+ for third option
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, linux-doc@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sasha Levin <sashal@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, Pavel Machek <pavel@denx.de>,
+        Biju Das <biju.das.jz@bp.renesas.com>
+References: <20221101131743.371340-1-bagasdotme@gmail.com>
+ <Y2EfhWxk0j/oVLJx@kroah.com>
+Content-Language: en-US
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <Y2EfhWxk0j/oVLJx@kroah.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/10/27 11:27), Nhat Pham wrote:
-> +
-> +static int zs_zpool_shrink(void *pool, unsigned int pages,
-> +			unsigned int *reclaimed)
-> +{
-> +	unsigned int total = 0;
-> +	int ret = -EINVAL;
-> +
-> +	while (total < pages) {
-> +		ret = zs_reclaim_page(pool, 8);
-> +		if (ret < 0)
-> +			break;
-> +		total++;
-> +	}
-> +
-> +	if (reclaimed)
-> +		*reclaimed = total;
-> +
-> +	return ret;
-> +}
+On 11/1/22 20:30, Greg Kroah-Hartman wrote:
+> 
+> No, sorry, this is not needed and does not have to be in the subject
+> line at all.
+> 
+> The current wording is fine, it's just that people don't always read it.
+> 
+> so consider this a NAK.
+> 
 
-The name collides with shrinker callbacks (compaction). That's a bit
-confusing, took me some time.
+Hi Greg,
 
-> @@ -482,6 +504,7 @@ static struct zpool_driver zs_zpool_driver = {
->  	.malloc_support_movable = true,
->  	.malloc =		  zs_zpool_malloc,
->  	.free =			  zs_zpool_free,
-> +	.shrink =     zs_zpool_shrink,
->  	.map =			  zs_zpool_map,
->  	.unmap =		  zs_zpool_unmap,
->  	.total_size =		  zs_zpool_total_size,
-> @@ -955,6 +978,21 @@ static int trylock_zspage(struct zspage *zspage)
->  	return 0;
->  }
+There was a case when a submitter submitted multiple backports (which
+qualified for third option) without specifying the prefix, hence a
+reviewer complained [1].
 
-[..]
+[1]: https://lore.kernel.org/all/20221101074351.GA8310@amd/
 
-> +#ifdef CONFIG_ZPOOL
-> +static int zs_reclaim_page(struct zs_pool *pool, unsigned int retries)
-> +{
-> +	int i, obj_idx, ret = 0;
-> +	unsigned long handle;
-> +	struct zspage *zspage;
-> +	struct page *page;
-> +	enum fullness_group fullness;
-> +
-> +	/* Lock LRU and fullness list */
-> +	spin_lock(&pool->lock);
-> +	if (!pool->ops || !pool->ops->evict || list_empty(&pool->lru) ||
+-- 
+An old man doll... just what I always wanted! - Clara
 
-You don't need pool->lock for pool->ops/pool->ops->evict checks.
-
-But, more importantly, I don't understand why is it even checked here?
-Why do we use ops->evict? Why cannot we call into zsmalloc evict
-directly? All of these are statically defined in zsmalloc, just don't
-provide .shrink if !define CONFIG_ZPOOL? Under what circumstances
-zsmalloc can provide .shrink but no ->evict?
