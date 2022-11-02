@@ -2,87 +2,89 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C837B616FBE
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 22:28:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C390F616FBA
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 22:27:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231205AbiKBV2Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 17:28:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34404 "EHLO
+        id S231237AbiKBV1s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 17:27:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231259AbiKBV2A (ORCPT
+        with ESMTP id S230155AbiKBV1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 17:28:00 -0400
-Received: from mail-yw1-x112e.google.com (mail-yw1-x112e.google.com [IPv6:2607:f8b0:4864:20::112e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 792F5FADB
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 14:27:55 -0700 (PDT)
-Received: by mail-yw1-x112e.google.com with SMTP id 00721157ae682-3691e040abaso178636677b3.9
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 14:27:55 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z+pZVFaJ0a9yMn0DeC1TZTmd+BvS0kFwaSjb1eq920A=;
-        b=GzQwOQasEgu++Sa8R7GBkzKuvcMGYKK1UUBnnyDTlz+24PoGsUeFmITxDx7paYRO99
-         IZauKiJl1o06uH7WHWe4tT5qRA5bYIEXFsLxfITW28OHHoBmO4O4CRzv8Nvms7xFGjK+
-         ozoGe9KUfI4TiMmJqm8iKnmlo/ScIRapbmP7deISNe+Mh9MKPqZ3URPyG7yoHHqQ9B/J
-         Af2DblTlGlL/4TgPJaIttEoQKUffHzJkbadigBwUr8eQbYZDmHlElbEc3x7IULwjH7Lp
-         pNFoe7E43FFoMDkjU/xHOXmmUCkkIW7mmamjeCLchbzv1PYGkPy83qNGs+nZjhRm6khi
-         jiBQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z+pZVFaJ0a9yMn0DeC1TZTmd+BvS0kFwaSjb1eq920A=;
-        b=OKjhrga0PNa3XMr1eV2CC6hrXdnIEv7lZeiWCrs0mdvfOXPbN3iiW1cWYJQahrcBtd
-         dy15JIJMjhnurQ034ILNy1bkh+Mggz3ikse9e+p6795mOIyqZGVP8GTFpZqpuxFfdVEd
-         fMd0gz1IeNlWmC2t39584yb2jTqHNEXRkwyZIX5ww8j/VfhUgIRLXpPmWcMnGdftyTXo
-         VfVNvhjhasK/7/nMKatUuPg/zRJfPLPFCVaKRFMCA6rJWKzkHzGrIx9V5wd+fDWKPHUM
-         pJD8ZkD1hF7HKo2FzRxsFqQ1EbDFF+A/AN1mayhi03YAJtbxVCSFIUzud6RECQYNvRAP
-         KHKw==
-X-Gm-Message-State: ACrzQf2lDdBKK6UxSCSQdyQDybtiA1+XpITYiAm7O+JXh2wKck4Pb5iw
-        la85ErAp2St9YTQwnfMAnTp7InNDQBOnnP0DpHrdwg==
-X-Google-Smtp-Source: AMsMyM7vy4hPxpGT4s8wrSfsYJ+X0GIWjt4pOIwnx76uvSUjhusOlRJcSZENQZZVkBCQl/L91PWixv/Qf/ngsuvxjRo=
-X-Received: by 2002:a81:ad09:0:b0:370:5b7:bef2 with SMTP id
- l9-20020a81ad09000000b0037005b7bef2mr25818029ywh.47.1667424474380; Wed, 02
- Nov 2022 14:27:54 -0700 (PDT)
+        Wed, 2 Nov 2022 17:27:41 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0528F65EE
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 14:27:23 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 97F2861C44
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 21:27:22 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 27F11C433D7;
+        Wed,  2 Nov 2022 21:27:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667424442;
+        bh=qk3WhYN0kO40DMSpVGgAC+mVC6gMWgPy/g4sj7gLlgY=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=n1RS7cdff4KTSgCDowoPo9tt5T5p7HnhNGvML/tLSKR2scEM+KF2Co+j4D1FKKlla
+         7u2qfKSSnfn35BloMD3J0rqaV9JWElB2mU0NToamvJpwRHpqs9SYZZOTWC1ic195fu
+         rK1x03v6qogyLbbUk+4h1PHDNEpsWGV7TF6ebgrs=
+Date:   Wed, 2 Nov 2022 22:28:15 +0100
+From:   Greg KH <gregkh@linuxfoundation.org>
+To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+Cc:     linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
+        outreachy@lists.linux.dev
+Subject: Re: [PATCH v2] staging: vt6655: change 2 variable names wFB_Opt0 and
+ wFB_Opt1
+Message-ID: <Y2Lg78AU54mtCWVi@kroah.com>
+References: <Y2JvO29KoDJCyw7R@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
 MIME-Version: 1.0
-References: <20221102211350.625011-1-dima@arista.com> <20221102211350.625011-2-dima@arista.com>
-In-Reply-To: <20221102211350.625011-2-dima@arista.com>
-From:   Eric Dumazet <edumazet@google.com>
-Date:   Wed, 2 Nov 2022 14:27:43 -0700
-Message-ID: <CANn89i+7pbdiw1=7DTrvdQ2NrRUb33oBFKCHHG2b6xNwrNEbZw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] net/tcp: Separate tcp_md5sig_info allocation into tcp_md5sig_info_add()
-To:     Dmitry Safonov <dima@arista.com>
-Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Bob Gilligan <gilligan@arista.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        netdev@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2JvO29KoDJCyw7R@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 2, 2022 at 2:14 PM Dmitry Safonov <dima@arista.com> wrote:
->
-> Add a helper to allocate tcp_md5sig_info, that will help later to
-> do/allocate things when info allocated, once per socket.
->
-> Signed-off-by: Dmitry Safonov <dima@arista.com>
+On Wed, Nov 02, 2022 at 01:23:07PM +0000, Tanjuate Brunostar wrote:
+> These variables are named using Hungarian notation, which is not used
+> in the Linux kernel.
+> 
+> Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
 > ---
+>  drivers/staging/vt6655/rxtx.c | 32 ++++++++++++++++----------------
+>  1 file changed, 16 insertions(+), 16 deletions(-)
+> 
 
+Hi,
 
-Reviewed-by: Eric Dumazet <edumazet@google.com>
+This is the friendly patch-bot of Greg Kroah-Hartman.  You have sent him
+a patch that has triggered this response.  He used to manually respond
+to these common problems, but in order to save his sanity (he kept
+writing the same thing over and over, yet to different people), I was
+created.  Hopefully you will not take offence and will fix the problem
+in your patch and resubmit it so that it can be accepted into the Linux
+kernel tree.
+
+You are receiving this message because of the following common error(s)
+as indicated below:
+
+- This looks like a new version of a previously submitted patch, but you
+  did not list below the --- line any changes from the previous version.
+  Please read the section entitled "The canonical patch format" in the
+  kernel file, Documentation/SubmittingPatches for what needs to be done
+  here to properly describe this.
+
+If you wish to discuss this problem further, or you have questions about
+how to resolve this issue, please feel free to respond to this email and
+Greg will reply once he has dug out from the pending patches received
+from other developers.
+
+thanks,
+
+greg k-h's patch email bot
