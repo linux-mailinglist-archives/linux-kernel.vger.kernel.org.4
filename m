@@ -2,102 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCB41616A41
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:13:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BCC026169F6
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:04:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229752AbiKBRNE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:13:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38924 "EHLO
+        id S230426AbiKBRES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:04:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbiKBRM6 (ORCPT
+        with ESMTP id S229591AbiKBREP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:12:58 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08D722019F
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 10:12:36 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8B8CC61A95
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 17:12:36 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 862F8C433C1;
-        Wed,  2 Nov 2022 17:12:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667409156;
-        bh=+kXg0AnyKL/yScM5ZpSouZN8e2TVAvvNgXX6EJiKW7E=;
-        h=From:To:Cc:Subject:Date:From;
-        b=hEgCoycpB6J1T5HC+Re6SnkeRnP0QfYP5e7wbcT445y0reEll/Ej5UdZqRVSgVeo3
-         WI/VAofvqGsFYIkEJLxUdf6M/ru616OjmF1WxnsgseWwz5+3oGTiw0kAZSHTuKNE1U
-         9oTPfVjciyp4R+LzZMBytiaU/0YUq3ThTkstBKvQRfjLZd1F3YfQ5AwfeytFUcafRS
-         u3fV9MW17Fq0JxKAgPfkFOVC1kG8nz7FNSO9WYLozhIawafKn2VtljzKP4iWvo8s23
-         aoI2M8rh4f80884o6pEVI63dgdBBqEDvawTlbu5+OtYs2efuj1TX9BuxjwmDUaeZHb
-         P4NpjrMfbBY6Q==
-From:   Jisheng Zhang <jszhang@kernel.org>
-To:     Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>
-Cc:     linux-riscv@lists.infradead.org, linux-kernel@vger.kernel.org,
-        kernel test robot <lkp@intel.com>
-Subject: [PATCH v2] riscv: vdso: fix section overlapping under some conditions
-Date:   Thu,  3 Nov 2022 01:02:54 +0800
-Message-Id: <20221102170254.1925-1-jszhang@kernel.org>
-X-Mailer: git-send-email 2.37.2
+        Wed, 2 Nov 2022 13:04:15 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F145911A32;
+        Wed,  2 Nov 2022 10:04:14 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A2H469x093702;
+        Wed, 2 Nov 2022 12:04:06 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1667408646;
+        bh=rl4c4YwFqiQVdsamqsJtbq5KyzgRfRYaj2DX1UVoJmU=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=l2B/1W2SoTmechaDRa5Idx+/k4Xc2NBSKcD+X22Oe+If1ZOSc8Z2wvaXqE4UKb0q5
+         YwExipL20RjTAIGkWMUFH7G7txM3orCKHwdfIx/DD+RN0HiBSGUxe4b7YNnF7iL/x/
+         AX3Esh54tuOSnuiIxjCBF6pQEUt6PhQma4UQIvJw=
+Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A2H46QH080418
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 2 Nov 2022 12:04:06 -0500
+Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE103.ent.ti.com
+ (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 2 Nov
+ 2022 12:04:06 -0500
+Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE113.ent.ti.com
+ (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Wed, 2 Nov 2022 12:04:06 -0500
+Received: from [10.249.33.217] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A2H45Pj118344;
+        Wed, 2 Nov 2022 12:04:05 -0500
+Message-ID: <4f954c08-6a2e-93b5-6806-7b27b247496e@ti.com>
+Date:   Wed, 2 Nov 2022 12:04:04 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 1/3] arm64: dts: ti: k3-am65-main: drop RNG clock
+Content-Language: en-US
+To:     Nishanth Menon <nm@ti.com>, Jayesh Choudhary <j-choudhary@ti.com>
+CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <j-keerthy@ti.com>, <krzysztof.kozlowski+dt@linaro.org>,
+        <s-anna@ti.com>, <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20221031213237.52275-1-j-choudhary@ti.com>
+ <20221031213237.52275-2-j-choudhary@ti.com>
+ <20221102151706.krsi5lujydb4nswa@daybreak>
+From:   Andrew Davis <afd@ti.com>
+In-Reply-To: <20221102151706.krsi5lujydb4nswa@daybreak>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-lkp reported a build error, I tried the config and can reproduce
-build error as below:
+On 11/2/22 10:17 AM, Nishanth Menon wrote:
+> On 03:02-20221101, Jayesh Choudhary wrote:
+>> Drop RNG clock property as it is not controlled by rng-driver.
+> 
+> Does'nt tell me what is the alternative? why is the hardware description
+> not sufficient for control?
+> 
+> https://software-dl.ti.com/tisci/esd/latest/5_soc_doc/am65x_sr2/clocks.html#clocks-for-sa2-ul0-device
+> Looks like a perfectly valid description - do we have a bug and firmware
+> does'nt allow control here?
+> 
 
-  VDSOLD  arch/riscv/kernel/vdso/vdso.so.dbg
-ld.lld: error: section .note file range overlaps with .text
->>> .note range is [0x7C8, 0x803]
->>> .text range is [0x800, 0x1993]
+We have three input clocks feeding the SA2UL module, x1, x2, pka. PKA goes
+to the PKA sub-module (isn't it nice when they make things simple). But x1 and
+x2 are miscellaneous and bus clocks respectively and route to several sub-modules.
 
-ld.lld: error: section .text file range overlaps with .dynamic
->>> .text range is [0x800, 0x1993]
->>> .dynamic range is [0x808, 0x937]
+All we drop here is the clock handle in the RNG sub-module, as that sub-module is
+not the owner of that clock (the parent SA2UL is). The alternative we could implement
+is to move the clock node up to the parent SA2UL node.
 
-ld.lld: error: section .note virtual address range overlaps with .text
->>> .note range is [0x7C8, 0x803]
->>> .text range is [0x800, 0x1993]
+>>
+>> Fixes: b366b2409c97 ("arm64: dts: ti: k3-am6: Add crypto accelarator node")
+>> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
+>> ---
+>>   arch/arm64/boot/dts/ti/k3-am65-main.dtsi | 1 -
+>>   1 file changed, 1 deletion(-)
+>>
+>> diff --git a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
+>> index 4005a73cfea9..e166d7b7e3a1 100644
+>> --- a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
+>> +++ b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
+>> @@ -126,7 +126,6 @@ rng: rng@4e10000 {
+>>   			compatible = "inside-secure,safexcel-eip76";
+>>   			reg = <0x0 0x4e10000 0x0 0x7d>;
+>>   			interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
+>> -			clocks = <&k3_clks 136 1>;
+> 
+> Does this mean that the crypto module's power-domains property should be
+> dropped as well?
+> 
 
-Fix it by setting DISABLE_BRANCH_PROFILING which will disable branch
-tracing for vdso, thus avoid useless _ftrace_annotated_branch section
-and _ftrace_branch section. Although we can also fix it by removing
-the hardcoded .text begin address, but I think that's another story
-and should be put into another patch.
+Why? the power-domains property is in the correct spot (up in the parent node).
 
-Link: https://lore.kernel.org/lkml/202210122123.Cc4FPShJ-lkp@intel.com/#r
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Jisheng Zhang <jszhang@kernel.org>
----
+Now it is true we cant actually shut the SA2UL down since it is owned
+by the security processor, but since it is marked TI_SCI_PD_SHARED this
+should be fine.
 
-Since v1:
- - fix the issue by setting DISABLE_BRANCH_PROFILING
+Andrew
 
- arch/riscv/kernel/vdso/Makefile | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/arch/riscv/kernel/vdso/Makefile b/arch/riscv/kernel/vdso/Makefile
-index f2e065671e4d..d6092ff678fd 100644
---- a/arch/riscv/kernel/vdso/Makefile
-+++ b/arch/riscv/kernel/vdso/Makefile
-@@ -17,6 +17,7 @@ vdso-syms += flush_icache
- obj-vdso = $(patsubst %, %.o, $(vdso-syms)) note.o
- 
- ccflags-y := -fno-stack-protector
-+ccflags-y += -DDISABLE_BRANCH_PROFILING
- 
- ifneq ($(c-gettimeofday-y),)
-   CFLAGS_vgettimeofday.o += -fPIC -include $(c-gettimeofday-y)
--- 
-2.37.2
-
+>>   			status = "disabled"; /* Used by OP-TEE */
+>>   		};
+>>   	};
+>> -- 
+>> 2.25.1
+>>
+> 
