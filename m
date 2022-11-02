@@ -2,451 +2,281 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2C319615C2C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 07:18:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF0FB615C35
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 07:22:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230132AbiKBGSs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 02:18:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37562 "EHLO
+        id S229531AbiKBGWV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 02:22:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38890 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230165AbiKBGSf (ORCPT
+        with ESMTP id S230075AbiKBGWS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 02:18:35 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5BE1F25EBB;
-        Tue,  1 Nov 2022 23:18:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667369910; x=1698905910;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=pEWjkZqQxuIkuHHzF4BhxNUgWNmPWXIV6oZqI6S3AV8=;
-  b=S/CIADRpM6IKxvtDlekmHyLgbbSWlndUnqVgezaDzvQQNm2usg/4hU0W
-   L0IWnFMKw1CHNbwEJN9ehZKKYMN3PHcghtFcSpgZtIgAbTReT37JqniUk
-   8+hAp0RcPeg7gXwKOnEKyJu0XtAIDPPwkFTOyAUnjQ3pGSiUeP3ECGuU8
-   4DT7Vscet4kq+GnM7Uvj31KKJJgEZPRCnnlWi4uCSC52nYDTmB8JrIpJv
-   W6Pqj/6/X8AMzy9whKMxfVHdQ8wlylII9lDyPrRjBDRDPuPuhO/15H/mj
-   g+ALq4iCgMUW63mF3ocPNFzxI5hk7YlFHspp+mia67hl3UzHHALwKyy+M
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="309321159"
-X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
-   d="scan'208";a="309321159"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 23:18:29 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="585278798"
-X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
-   d="scan'208";a="585278798"
-Received: from rossschx-mobl1.amr.corp.intel.com (HELO [10.209.44.13]) ([10.209.44.13])
-  by orsmga003-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 23:18:29 -0700
-Message-ID: <55497719-4c51-e209-dd10-0f4ee0d95ad5@linux.intel.com>
-Date:   Tue, 1 Nov 2022 23:18:29 -0700
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.2.2
-Subject: Re: [PATCH v16 2/3] virt: Add TDX guest driver
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        Shuah Khan <shuah@kernel.org>,
+        Wed, 2 Nov 2022 02:22:18 -0400
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (mail-dm6nam12on2092.outbound.protection.outlook.com [40.107.243.92])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E8DC425EA8;
+        Tue,  1 Nov 2022 23:22:16 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=BY9E0RXr+V+JxRHns5xHoBhZwVfkNbmkYQpvK7f0ys/4XAbndWslc4A6c4p3BtOMlx/31x/gintkhyxEfM1/Bx+3MGjdKR1l5aVke5aRwoWm0CKTEJy78N+N4wzy5bj4fK9XpRZpQU07XlTfc6Rv2p4Osi8VqRbi55akykCSjSAutKTdz3J4Wj4DSE3BNOaWKlJvOyhpFZDDimVwv4y0HDt/QmEGXbyab8zPtY84SRzDvBaUqOHle6o/nsRAbaR+r3x8AVS++otiN5uLn4duY37YQvJnYKwSzvMUGQ6sD8YOiJbFW4XUGOdgoOSZ9tYi/aGxoH2rsMLynEzfbMSXyw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=6ry8pFc20PzL+G+6Aq+qUOSE42ml9EzM3SxC9OYDN8s=;
+ b=UQWV6cddWa5de41kH8KLzDOLLguikdQu78zfaw+mTVORL8aeQuATUMcsI+kuPG0ViR05brTpqRaWmAAwP+jdoA4rBsVmU8SuW2245sExguZaXQ0k1OcPrUCUnik4x8NHg509AAZMFxYtqRLrpUOZ8hvAptMQ7aZNQytPD/zXSYiT68Ak9nihsjboAZgBWJ60z84AaR2GhtyV7sTK72VJ8t2hIszVd4UwCaNTBYmr4GmoiT2s/uScDp9EGwROjr04dPGr121iaynWzCRmRcBdiCYpPev/gz2Z0iRh+Hd3NpPf0daBRWOoPEizpl5VB10Q8GjtmJjl9czBh5s/MaKIBg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=os.amperecomputing.com; dmarc=pass action=none
+ header.from=os.amperecomputing.com; dkim=pass
+ header.d=os.amperecomputing.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=os.amperecomputing.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=6ry8pFc20PzL+G+6Aq+qUOSE42ml9EzM3SxC9OYDN8s=;
+ b=SWZzW6UxgDrc9ZCqbBTNQQHl/1KBnAKxq+jaADqdb1nS9n81g6SXG1lAsQzEFVYUGuFhx/KkJMnWsIgaGMsAyvO4iKkyAj0M6Se5xJ7CP+tC6kZfYIIyW3CfrDVrTbpGaLI94MTkgPw4qhKBGovkl0cNhxzDBKaBh42dj+LmJ7c=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=os.amperecomputing.com;
+Received: from SN4PR01MB7455.prod.exchangelabs.com (2603:10b6:806:202::11) by
+ DM6PR01MB3835.prod.exchangelabs.com (2603:10b6:5:87::18) with Microsoft SMTP
+ Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.5769.16; Wed, 2 Nov 2022 06:21:45 +0000
+Received: from SN4PR01MB7455.prod.exchangelabs.com ([fe80::44c1:e119:56:cd90])
+ by SN4PR01MB7455.prod.exchangelabs.com ([fe80::44c1:e119:56:cd90%7]) with
+ mapi id 15.20.5769.021; Wed, 2 Nov 2022 06:21:45 +0000
+From:   Quan Nguyen <quan@os.amperecomputing.com>
+To:     Jean Delvare <jdelvare@suse.com>,
+        Guenter Roeck <linux@roeck-us.net>,
         Jonathan Corbet <corbet@lwn.net>,
-        "H . Peter Anvin" <hpa@zytor.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Tony Luck <tony.luck@intel.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Wander Lairson Costa <wander@redhat.com>,
-        Isaku Yamahata <isaku.yamahata@gmail.com>,
-        marcelo.cerri@canonical.com, tim.gardner@canonical.com,
-        khalid.elmously@canonical.com, philip.cox@canonical.com,
-        linux-kernel@vger.kernel.org, linux-kselftest@vger.kernel.org,
-        linux-doc@vger.kernel.org
-References: <20221028002820.3303030-1-sathyanarayanan.kuppuswamy@linux.intel.com>
- <20221028002820.3303030-3-sathyanarayanan.kuppuswamy@linux.intel.com>
- <Y1t18Aw2RbP+oj9D@kroah.com>
- <01f437c1-9330-6fb5-d692-6cd500d8adf8@linux.intel.com>
- <Y14fX1Ni1taUxtFk@kroah.com>
-From:   Sathyanarayanan Kuppuswamy 
-        <sathyanarayanan.kuppuswamy@linux.intel.com>
-In-Reply-To: <Y14fX1Ni1taUxtFk@kroah.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        Open Source Submission <patches@amperecomputing.com>
+Cc:     Bagas Sanjaya <bagasdotme@gmail.com>, linux-hwmon@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Phong Vo <phong@os.amperecomputing.com>,
+        thang@os.amperecomputing.com, openbmc@lists.ozlabs.org,
+        Quan Nguyen <quan@os.amperecomputing.com>
+Subject: [PATCH] docs: hwmon: (smpro-hwmon) Improve grammar and formatting
+Date:   Wed,  2 Nov 2022 13:21:03 +0700
+Message-Id: <20221102062103.3135417-1-quan@os.amperecomputing.com>
+X-Mailer: git-send-email 2.35.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SI2PR06CA0010.apcprd06.prod.outlook.com
+ (2603:1096:4:186::6) To SN4PR01MB7455.prod.exchangelabs.com
+ (2603:10b6:806:202::11)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: SN4PR01MB7455:EE_|DM6PR01MB3835:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1aa1f40b-e7bd-463c-e544-08dabc9a83e7
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: ejrmvWHtbdT2QyKsJQJ3tVM27rOP/121tCQwEyRq07l46qgEgAO8Y3ZI5+H9Lwz/u3dsvg8blk9wDcXCF20Nv4qZUqKlGwK9TOC+YTUOpW1HArbR7Blwr9MUjngwm84yR2KIlkEyBiGzfLvoyLsXYNzX+Y9B26bYeExrMs/7T7lSSz6/xeCSdhd8twEycfyG1TFVhgL9UJ1uUwsM/xqUeCaz05D4cDctX7jSrZO67ZBlALgKUEXwi23+aXjlGlGHkxPV53Itf4461pKY+UUOdVTVrUrQEvOBiJncvSVnmaRwwAKjHHx5f03DqBco6T0XNKi8Fm6I/tVGCPOuWOXO1a/8WTeYEF2Tb1SD2sgsvhpb/Yj/66OpfpBYa4nfuKfrDqP2XNUtzHI7GCTQZGu3IChSeqZjsxuHvXNWvEPqhHYDT1Ae+VMYfQYNSYXtlVv9IiDSsV6lOMSpHMtffVs5FA1Ptu36f8vakWUW/tQtlEr6l99/hLDCR3FuLFYV8DzGB7PbCBhMbKi1isIoIl62kMJCiGnt8g3rm6KaljdMm/ouCtHC0i4NVcbxRCkPowu5lqJI5dtLfNpno9Lo9QvQKgePT3nJ2rcKrrhOJozXMKqJ8O++cUVoopt36HhLvV4Drq/Ik971q9XopaKyLgIEGdwwf2IMSIRHRnQJflDB4Fdnox+qlfcY3LG/IEjVa9Go9YrD3IQW+uIp3DAhVFeJyhIj/7eWOD0qVct1ivB4x8RVRdkYmrbryOzdv51HrXdqPFyq5ynL+ZXwXiSp5Fed1jFdfCJcbqompF+XyQs/NPs=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:SN4PR01MB7455.prod.exchangelabs.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(376002)(366004)(136003)(39850400004)(396003)(346002)(451199015)(6486002)(6506007)(478600001)(966005)(38350700002)(110136005)(38100700002)(54906003)(186003)(316002)(107886003)(8936002)(86362001)(6666004)(2906002)(2616005)(1076003)(83380400001)(66476007)(66556008)(52116002)(5660300002)(4326008)(66946007)(8676002)(26005)(6512007)(41300700001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?xp5euZGUHsLN/pX/io6PTgtnIi5SOuQjGT44nMM4yQs8t00pL3L3TFWaBpa3?=
+ =?us-ascii?Q?7M7CcAfMSe5mNVWIPnsL8hNprCfvS6eilGc5uNHtgvU3Ua6iR7eN+eM9WVJA?=
+ =?us-ascii?Q?SHGB6ng06fDikjDxsitQ12jmZVcXieOXXNSBcqFOAQXNu4ZZxddw9mNrW8u+?=
+ =?us-ascii?Q?2SqlS5I8/XyQM+jLvJudmn6FE8ZNmZleb+2iDJKXptp1dd6zELoEZU0hrqMV?=
+ =?us-ascii?Q?g/vCflixGGlTc8ulXso3T0goKezirNNSeUNabLVWkaXc00Bnfzu85qaGIlmm?=
+ =?us-ascii?Q?iEMcBMxC0vm/aq0+KnPOxMG5Xhu41zTKCJnI0oAjtTauR0D6dwxCGpgp7KUD?=
+ =?us-ascii?Q?d70b7JmJSOvYkNScNBZJlHHFEi0nQXvrbglhPVQ5SXBPPPsXPhpN8qN4xlVo?=
+ =?us-ascii?Q?X9jBBKxGnL10s4N0pDMWk0CWsRio4K6/dOhTO7oIU8okzQoaKfcWI9DDfKiG?=
+ =?us-ascii?Q?Oc7mAQk9kZC23mInRYBINWuGobTkaHjN5AftKH8h2BM5MR/14vleIQY6IEug?=
+ =?us-ascii?Q?tmx1xH890WhmO2Qzr1h+JOF0xltqwagAU+lLEvbPNqUjUbcg7sxLPcuqE2WM?=
+ =?us-ascii?Q?G9DTfaZWg9SoO5eqHwMDP1xapYtRFVJCttpjW7AuDGQOFFYjpc4+B5lUrAku?=
+ =?us-ascii?Q?ILY45qisIiN/GFtN1LvyQ+wdA9g+J12e0m8f7h2QA4bfAqPjvAcY416h9wxj?=
+ =?us-ascii?Q?P78TWb5GpP+tX/5lXA0HeA+D5wOpecE8S1RVKZ0zYM0GMJ7unnGVcw6DAVoh?=
+ =?us-ascii?Q?8gOrEXimuLvsIXFNwdWDlUp4AjGaEchWzGhwjneQUy4Zk+z5VgvRlJuwgbrl?=
+ =?us-ascii?Q?8zxZTFkZCw0m8Gaapi+umtT7pREY7Yc4OiWtOrBlOmFpydrW1s/xBibYtKwX?=
+ =?us-ascii?Q?FGN62J3FVX0Od2RgkDA6fxe1r3zLiBGZR7Uw17AOw5IUHD2XVYJAVWUsyruW?=
+ =?us-ascii?Q?OiIfGQWH/fQ4kfeo9s3VlDq6r+Lfo2lsq1tIjtjs/3hFKmNzWCYp4874vt52?=
+ =?us-ascii?Q?BitZUXaQBWtY7zIoOx5XN+XtQ14EcT4GI3ek4YUxByQzcevae0763Td9A4P6?=
+ =?us-ascii?Q?nmmr8Rdk2PdRSkX/U8lsokN/qJtG0myUUaDuev4/tPJ51UoBkPw1C+yU8clJ?=
+ =?us-ascii?Q?PhIlWfEQ0KFEgWcyBPxcPVR1N2/sZzCVD3FCuZ3ZMJqMWZvqyGcTPCjJHXVv?=
+ =?us-ascii?Q?7kxp8N5SQktOl8HephcQ5ylQ79d3QTDwUEM00D5fN41OejU6lxcYph55kRdb?=
+ =?us-ascii?Q?Q4slHUr2F9CDvd2+QBU2OUYF6cxvLtiUbyGYZziT13qgOYth4OUQOmJQAumD?=
+ =?us-ascii?Q?11IERfUWIdPM1bcj8Bfqv2Rq7AybW+sFBJu07FPgjQ3HjRFFntQjXx7Q7iKP?=
+ =?us-ascii?Q?ws7iDaklu0hCuwHIpwSYNjUBMpN0zBKpawIfb6gtQVCJzc1IlOc4EA8JLmJ9?=
+ =?us-ascii?Q?vYFgupPEOxH3X7NWKtPFVL3M689mii5jrIuizIbz2rjHEQZt99FYydG2efGa?=
+ =?us-ascii?Q?SRLyetDcML+BLDWZ2yZBqz96xC9U0eMx+ilWhf9JM4bLIoG72gjqSqtzqZm1?=
+ =?us-ascii?Q?Oxis4b/5dn3IDR0cSahHRWkusD658XyKbiCBpuryPXWoFHFO3rZCvRqAIlj2?=
+ =?us-ascii?Q?iMDQLFNiekyHhY5wWpk4y/Q=3D?=
+X-OriginatorOrg: os.amperecomputing.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1aa1f40b-e7bd-463c-e544-08dabc9a83e7
+X-MS-Exchange-CrossTenant-AuthSource: SN4PR01MB7455.prod.exchangelabs.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 02 Nov 2022 06:21:45.5707
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3bc2b170-fd94-476d-b0ce-4229bdc904a7
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: /HIPs8vPYyhdp/JRhhay8eiNpEqfzrIzvYmNrVF5tumBsLuxpdObngW8/oc/C65xPsRrytgHeDEEsZ3mVooAQNwapYlmlLcuVf5L4iApPk8=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR01MB3835
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+Improve documentation grammar and formatting for the
+Ampere(R)'s Altra(R) SMpro hwmon driver.
 
-On 10/29/22 11:53 PM, Greg Kroah-Hartman wrote:
-> On Sat, Oct 29, 2022 at 04:17:39PM -0700, Sathyanarayanan Kuppuswamy wrote:
->> Hi Greg
->>
->> On 10/27/22 11:25 PM, Greg Kroah-Hartman wrote:
->>> On Thu, Oct 27, 2022 at 05:28:19PM -0700, Kuppuswamy Sathyanarayanan wrote:
->>
->>>> +
->>>> +static long tdx_guest_ioctl(struct file *file, unsigned int cmd,
->>>> +			    unsigned long arg)
->>>> +{
->>>> +	switch (cmd) {
->>>> +	case TDX_CMD_GET_REPORT:
->>>> +		return tdx_get_report((void __user *)arg);
->>>
->>> You know the type of this pointer here, why not cast it instead of
->>> having to cast it from void * again?
->>
->> The only place we use arg pointer is in copy_from_user() function,
->> which expects void __user * pointer. So why cast it as struct
->> tdx_report_req * here?
-> 
-> Because then your function will show the true type and you don't have to
-> cast it again.
-> 
->>>> +MODULE_AUTHOR("Kuppuswamy Sathyanarayanan <sathyanarayanan.kuppuswamy@linux.intel.com>");
->>>> +MODULE_DESCRIPTION("TDX Guest Driver");
->>>> +MODULE_LICENSE("GPL");
->>>> diff --git a/include/uapi/linux/tdx-guest.h b/include/uapi/linux/tdx-guest.h
->>>> new file mode 100644
->>>> index 000000000000..29453e6a7ced
->>>> --- /dev/null
->>>> +++ b/include/uapi/linux/tdx-guest.h
->>>> @@ -0,0 +1,55 @@
->>>> +/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
->>>> +/*
->>>> + * Userspace interface for TDX guest driver
->>>> + *
->>>> + * Copyright (C) 2022 Intel Corporation
->>>> + */
->>>> +
->>>> +#ifndef _UAPI_LINUX_TDX_GUEST_H_
->>>> +#define _UAPI_LINUX_TDX_GUEST_H_
->>>> +
->>>> +#include <linux/ioctl.h>
->>>> +#include <linux/types.h>
->>>> +
->>>> +/* Length of the REPORTDATA used in TDG.MR.REPORT TDCALL */
->>>> +#define TDX_REPORTDATA_LEN              64
->>>> +
->>>> +/* Length of TDREPORT used in TDG.MR.REPORT TDCALL */
->>>> +#define TDX_REPORT_LEN                  1024
->>>
->>> As these are fixed values, why do you have to say them again in the
->>> structure?
->>
->> These length recommendations are provided by the TDX Module, and there is
->> a slight possibility that the TDX Module will increase the maximum size
->> of the REPORTDATA and TDREPORT in the future.
-> 
-> We do not write kernel code for "slight possibilities sometime in the
-> future".
-> 
->> To handle such length
->> changes, rather than inventing a new IOCTL for it in the future, making
->> the current one flexible to handle such changes seems better.
-> 
-> Please work through the code and see how that would really look, and
-> what would break if you were to change that in the future (remember
-> kernel code and userspace code is not upgraded at the same time.)
-> 
->> One less ABI
->> to maintain is always better, right? My initial design did use fixed size
->> buffers like you have recommended, but later changed it as per review
->> suggestion to make the ABI flexible.
-> 
-> Again, work through and try to determine if the added complexity will
-> really work here.
-> 
-> What is wrong with just adding a new ioctl if in the future, you really
-> do need to change something?  That way you are sure that nothing will
-> break and userspace will be finen with it.  It is not like you are
-> forbidden to add new ioctls later, you would have to change the kernel
-> code no matter what anyway.
-> 
-> Keep it simple please.
+Thanks Bagas for the changes in the link below.
 
+Link: https://lore.kernel.org/lkml/Y1aHiaZ1OpHZIzS9@google.com/T/#mfea2167b99384486a1b75d9304536015116c1821
+Signed-off-by: Quan Nguyen <quan@os.amperecomputing.com>
+---
+ Documentation/hwmon/smpro-hwmon.rst | 111 ++++++++++++++--------------
+ 1 file changed, 56 insertions(+), 55 deletions(-)
 
-The following are potential solutions to the possible kernel/userspace
-mix/match issue that may arise in the future if the acceptable reportdata
-length, tdreport length, or subtype values change.
-
-I've attempted to do a sample implementation as you have suggested to
-check the pros and cons for both solutions. Please let me know what you
-think. Personally I prefer solution 2, as it handles the issue you have
-raised and also keeps the ABI flexible.
-
-Solution 1:
-------------
-
-This is based on your suggestion. I have dropped the IOCTL req members for
-reportdata length (rpd_len), tdreport length (tdr_len) and subtype. I have
-also used fixed size buffers to handle the current requirements.
-
-Pros: Implementation is simple and clean.
-
-Cons: May need to add new IOCTL for any future requirement updates.
-
-Following are the ABI and IOCTL handler implementation details (Note: it
-is not the complete code, only included required details to show how the
-implementation looks):
-
---- /dev/null
-+++ b/include/uapi/linux/tdx-guest.h
-@@ -0,0 +1,41 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+/*
-+ * Userspace interface for TDX guest driver
-+ *
-+ * Copyright (C) 2022 Intel Corporation
-+ */
+diff --git a/Documentation/hwmon/smpro-hwmon.rst b/Documentation/hwmon/smpro-hwmon.rst
+index 3a9b14dacf89..fb7b3665735b 100644
+--- a/Documentation/hwmon/smpro-hwmon.rst
++++ b/Documentation/hwmon/smpro-hwmon.rst
+@@ -7,39 +7,39 @@ Supported chips:
+ 
+   * Ampere(R) Altra(R)
+ 
+-    Prefix: 'smpro'
++    Prefix: ``smpro``
+ 
+-    Reference: Altra SoC BMC Interface Specification
++    Reference: `Altra SoC BMC Interface Specification`
+ 
+ Author: Thu Nguyen <thu@os.amperecomputing.com>
+ 
+ Description
+ -----------
+-This driver supports hardware monitoring for Ampere(R) Altra(R) SoC's based on the
+-SMpro co-processor (SMpro).
+-The following sensor types are supported by the driver:
++The smpro-hwmon driver supports hardware monitoring for Ampere(R) Altra(R)
++SoCs based on the SMpro co-processor (SMpro).  The following sensor metrics
++are supported by the driver:
+ 
+   * temperature
+   * voltage
+   * current
+   * power
+ 
+-The SMpro interface provides the registers to query the various sensors and
++The interface provides the registers to query the various sensors and
+ their values which are then exported to userspace by this driver.
+ 
+ Usage Notes
+ -----------
+ 
+-SMpro hwmon driver creates at least two sysfs files for each sensor.
++The driver creates at least two sysfs files for each sensor.
+ 
+-* File ``<sensor_type><idx>_label`` reports the sensor label.
+-* File ``<sensor_type><idx>_input`` returns the sensor value.
++* ``<sensor_type><idx>_label`` reports the sensor label.
++* ``<sensor_type><idx>_input`` returns the sensor value.
+ 
+-The sysfs files are allocated in the SMpro root fs folder.
+-There is one root folder for each SMpro instance.
++The sysfs files are allocated in the SMpro rootfs folder, with one root
++directory for each instance.
+ 
+-When the SoC is turned off, the driver will fail to read registers
+-and return -ENXIO.
++When the SoC is turned off, the driver will fail to read registers and
++return ``-ENXIO``.
+ 
+ Sysfs entries
+ -------------
+@@ -48,48 +48,49 @@ The following sysfs files are supported:
+ 
+ * Ampere(R) Altra(R):
+ 
+-============    =============   ======  ===============================================
+-Name            Unit            Perm    Description
+-temp1_input     milli Celsius   RO      SoC temperature
+-temp2_input     milli Celsius   RO      Max temperature reported among SoC VRDs
+-temp2_crit      milli Celsius   RO      SoC VRD HOT Threshold temperature
+-temp3_input     milli Celsius   RO      Max temperature reported among DIMM VRDs
+-temp4_input     milli Celsius   RO      Max temperature reported among Core VRDs
+-temp5_input     milli Celsius   RO      Temperature of DIMM0 on CH0
+-temp5_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
+-temp6_input     milli Celsius   RO      Temperature of DIMM0 on CH1
+-temp6_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
+-temp7_input     milli Celsius   RO      Temperature of DIMM0 on CH2
+-temp7_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
+-temp8_input     milli Celsius   RO      Temperature of DIMM0 on CH3
+-temp8_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
+-temp9_input     milli Celsius   RO      Temperature of DIMM0 on CH4
+-temp9_crit      milli Celsius   RO      MEM HOT Threshold for all DIMMs
+-temp10_input    milli Celsius   RO      Temperature of DIMM0 on CH5
+-temp10_crit     milli Celsius   RO      MEM HOT Threshold for all DIMMs
+-temp11_input    milli Celsius   RO      Temperature of DIMM0 on CH6
+-temp11_crit     milli Celsius   RO      MEM HOT Threshold for all DIMMs
+-temp12_input    milli Celsius   RO      Temperature of DIMM0 on CH7
+-temp12_crit     milli Celsius   RO      MEM HOT Threshold for all DIMMs
+-temp13_input    milli Celsius   RO      Max temperature reported among RCA VRDs
+-in0_input       milli Volts     RO      Core voltage
+-in1_input       milli Volts     RO      SoC voltage
+-in2_input       milli Volts     RO      DIMM VRD1 voltage
+-in3_input       milli Volts     RO      DIMM VRD2 voltage
+-in4_input       milli Volts     RO      RCA VRD voltage
+-cur1_input      milli Amperes   RO      Core VRD current
+-cur2_input      milli Amperes   RO      SoC VRD current
+-cur3_input      milli Amperes   RO      DIMM VRD1 current
+-cur4_input      milli Amperes   RO      DIMM VRD2 current
+-cur5_input      milli Amperes   RO      RCA VRD current
+-power1_input    micro Watts     RO      Core VRD power
+-power2_input    micro Watts     RO      SoC VRD power
+-power3_input    micro Watts     RO      DIMM VRD1 power
+-power4_input    micro Watts     RO      DIMM VRD2 power
+-power5_input    micro Watts     RO      RCA VRD power
+-============    =============   ======  ===============================================
+-
+-Example::
++  ============    =============  ======  ===============================================
++  Name            Unit           Perm    Description
++  ============    =============  ======  ===============================================
++  temp1_input     millicelsius   RO      SoC temperature
++  temp2_input     millicelsius   RO      Max temperature reported among SoC VRDs
++  temp2_crit      millicelsius   RO      SoC VRD HOT Threshold temperature
++  temp3_input     millicelsius   RO      Max temperature reported among DIMM VRDs
++  temp4_input     millicelsius   RO      Max temperature reported among Core VRDs
++  temp5_input     millicelsius   RO      Temperature of DIMM0 on CH0
++  temp5_crit      millicelsius   RO      MEM HOT Threshold for all DIMMs
++  temp6_input     millicelsius   RO      Temperature of DIMM0 on CH1
++  temp6_crit      millicelsius   RO      MEM HOT Threshold for all DIMMs
++  temp7_input     millicelsius   RO      Temperature of DIMM0 on CH2
++  temp7_crit      millicelsius   RO      MEM HOT Threshold for all DIMMs
++  temp8_input     millicelsius   RO      Temperature of DIMM0 on CH3
++  temp8_crit      millicelsius   RO      MEM HOT Threshold for all DIMMs
++  temp9_input     millicelsius   RO      Temperature of DIMM0 on CH4
++  temp9_crit      millicelsius   RO      MEM HOT Threshold for all DIMMs
++  temp10_input    millicelsius   RO      Temperature of DIMM0 on CH5
++  temp10_crit     millicelsius   RO      MEM HOT Threshold for all DIMMs
++  temp11_input    millicelsius   RO      Temperature of DIMM0 on CH6
++  temp11_crit     millicelsius   RO      MEM HOT Threshold for all DIMMs
++  temp12_input    millicelsius   RO      Temperature of DIMM0 on CH7
++  temp12_crit     millicelsius   RO      MEM HOT Threshold for all DIMMs
++  temp13_input    millicelsius   RO      Max temperature reported among RCA VRDs
++  in0_input       millivolts     RO      Core voltage
++  in1_input       millivolts     RO      SoC voltage
++  in2_input       millivolts     RO      DIMM VRD1 voltage
++  in3_input       millivolts     RO      DIMM VRD2 voltage
++  in4_input       millivolts     RO      RCA VRD voltage
++  cur1_input      milliamperes   RO      Core VRD current
++  cur2_input      milliamperes   RO      SoC VRD current
++  cur3_input      milliamperes   RO      DIMM VRD1 current
++  cur4_input      milliamperes   RO      DIMM VRD2 current
++  cur5_input      milliamperes   RO      RCA VRD current
++  power1_input    microwatts     RO      Core VRD power
++  power2_input    microwatts     RO      SoC VRD power
++  power3_input    microwatts     RO      DIMM VRD1 power
++  power4_input    microwatts     RO      DIMM VRD2 power
++  power5_input    microwatts     RO      RCA VRD power
++  ============    =============  ======  ===============================================
 +
-+#ifndef _UAPI_LINUX_TDX_GUEST_H_
-+#define _UAPI_LINUX_TDX_GUEST_H_
-+
-+#include <linux/ioctl.h>
-+#include <linux/types.h>
-+
-+/* Length of the REPORTDATA used in TDG.MR.REPORT TDCALL */
-+#define TDX_REPORTDATA_LEN              64
-+
-+/* Length of TDREPORT used in TDG.MR.REPORT TDCALL */
-+#define TDX_REPORT_LEN                  1024
-+
-+/**
-+ * struct tdx_report_req - Request struct for TDX_CMD_GET_REPORT IOCTL.
-+ *
-+ * @reportdata: User buffer with REPORTDATA to be included into TDREPORT.
-+ *              Typically it can be some nonce provided by attestation
-+ *              service, so the generated TDREPORT can be uniquely verified.
-+ * @tdreport: User buffer to store TDREPORT output from TDCALL[TDG.MR.REPORT].
-+ */
-+struct tdx_report_req {
-+       __u8 reportdata[TDX_REPORTDATA_LEN];
-+       __u8 tdreport[TDX_REPORT_LEN];
-+};
-
---- /dev/null
-+++ b/drivers/virt/coco/tdx-guest/tdx-guest.c
-@@ -0,0 +1,102 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * TDX guest user interface driver
-+ *
-+ * Copyright (C) 2022 Intel Corporation
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/miscdevice.h>
-+#include <linux/mm.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/string.h>
-+#include <linux/uaccess.h>
-+
-+#include <uapi/linux/tdx-guest.h>
-+
-+#include <asm/cpu_device_id.h>
-+#include <asm/tdx.h>
-+
-+static long tdx_get_report(struct tdx_report_req __user *ureq)
-+{
-+       u8 *reportdata, *tdreport;
-+       long ret;
-+
-+       reportdata = kmalloc(TDX_REPORTDATA_LEN, GFP_KERNEL);
-+       if (!reportdata)
-+               return -ENOMEM;
-+
-+       tdreport = kzalloc(TDX_REPORT_LEN, GFP_KERNEL);
-+       if (!tdreport) {
-+               ret = -ENOMEM;
-+               goto out;
-+       }
-+
-+       if (copy_from_user(reportdata, ureq->reportdata, TDX_REPORTDATA_LEN)) {
-+               ret = -EFAULT;
-+               goto out;
-+       }
-+
-+       /* Generate TDREPORT using "TDG.MR.REPORT" TDCALL */
-+       ret = tdx_mcall_get_report(reportdata, tdreport);
-+       if (ret)
-+               goto out;
-+
-+       if (copy_to_user(ureq->tdreport, tdreport, TDX_REPORT_LEN))
-+               ret = -EFAULT;
-+
-+out:
-+       kfree(reportdata);
-+       kfree(tdreport);
-+
-+       return ret;
-+}
-+
-+static long tdx_guest_ioctl(struct file *file, unsigned int cmd,
-+                           unsigned long arg)
-+{
-+       switch (cmd) {
-+       case TDX_CMD_GET_REPORT:
-+               return tdx_get_report((struct tdx_report_req __user *)arg);
-+       default:
-+               return -ENOTTY;
-+       }
-+}
-
-Solution 2:
------------
-
-In this version, I removed all length and subtype related checks in the
-kernel (in tdx get report()) and instead passed the user input directly
-to TDG.MR.TDCALL, allowing the TDX Module to return success or failure
-based on the user input. Because the kernel does not directly impose any
-length or subtype constraints, the userspace/kernel mix/match issue will
-not occur.
-
-Pros:
-
-ABI is flexible and we don't have to add new IOCTL if the acceptable
-reportlength ,tdreport length or subtype values are changed by the
-TDX Module in the future.
-
-Cons:
-
-For now, userspace will pass fixed values to length and subtype members. So
-they not currently useful.
-
-Following are the ABI and IOCTL handler implementation details (Note: it
-is not the complete code, only included required details to show how the
-implementation looks):
-
---- /dev/null
-+++ b/include/uapi/linux/tdx-guest.h
-@@ -0,0 +1,49 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+/*
-+ * Userspace interface for TDX guest driver
-+ *
-+ * Copyright (C) 2022 Intel Corporation
-+ */
-+
-+#ifndef _UAPI_LINUX_TDX_GUEST_H_
-+#define _UAPI_LINUX_TDX_GUEST_H_
-+
-+#include <linux/ioctl.h>
-+#include <linux/types.h>
-+
-+/**
-+ * struct tdx_report_req - Request struct for TDX_CMD_GET_REPORT IOCTL.
-+ *
-+ * @reportdata: Address of user buffer with user-defined REPORTDATA to be
-+ *              included into TDREPORT. Typically it can be some nonce
-+ *              provided by attestation service, so the generated TDREPORT
-+ *              can be uniquely verified.
-+ * @tdreport: Address of user buffer to store TDREPORT output from
-+ *            TDCALL[TDG.MR.REPORT].
-+ * @rpd_len: Length of the REPORTDATA. For acceptable values, refer to TDX
-+ *           module specification v1.0 sec titled "TDG.MR.REPORT Leaf".
-+ * @tdr_len: Length of the TDREPORT. For acceptable values, refer to TDX
-+ *           module specification v1.0 sec titled "TDG.MR.REPORT Leaf".
-+ * @subtype: Subtype of TDREPORT. For acceptable values, refer to TDX
-+ *           module specification v1.0 sec titled "TDG.MR.REPORT Leaf".
-+ * @reserved: Reserved entries to handle future requirements. Must be filled
-+ *            with zeroes.
-+ */
-+struct tdx_report_req {
-+       __u64 reportdata;
-+       __u64 tdreport;
-+       __u32 rpd_len;
-+       __u32 tdr_len;
-+       __u8 subtype;
-+       __u8 reserved[7];
-+};
-
---- /dev/null
-+++ b/drivers/virt/coco/tdx-guest/tdx-guest.c
-@@ -0,0 +1,110 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * TDX guest user interface driver
-+ *
-+ * Copyright (C) 2022 Intel Corporation
-+ */
-+
-+#include <linux/kernel.h>
-+#include <linux/miscdevice.h>
-+#include <linux/mm.h>
-+#include <linux/module.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/string.h>
-+#include <linux/uaccess.h>
-+
-+#include <uapi/linux/tdx-guest.h>
-+
-+#include <asm/cpu_device_id.h>
-+#include <asm/tdx.h>
-+
-+static long tdx_get_report(struct tdx_report_req __user *argp)
-+{
-+       u8 *reportdata, *tdreport;
-+       struct tdx_report_req req;
-+       long ret;
-+
-+       if (copy_from_user(&req, argp, sizeof(req)))
-+               return -EFAULT;
-+
-+       if (memchr_inv(req.reserved, 0, sizeof(req.reserved)))
-+               return -EINVAL;
-+
-+       reportdata = kmalloc(req.rpd_len, GFP_KERNEL);
-+       if (!reportdata)
-+               return -ENOMEM;
-+
-+       tdreport = kzalloc(req.tdr_len, GFP_KERNEL);
-+       if (!tdreport) {
-+               ret = -ENOMEM;
-+               goto out;
-+       }
-+
-+       if (copy_from_user(reportdata, u64_to_user_ptr(req.reportdata),
-+                          req.rpd_len)) {
-+               ret = -EFAULT;
-+               goto out;
-+       }
-+
-+       /* Generate TDREPORT using "TDG.MR.REPORT" TDCALL */
-+       ret = tdx_mcall_get_report(reportdata, tdreport, req.subtype);
-+       if (ret)
-+               goto out;
-+
-+       if (copy_to_user(u64_to_user_ptr(req.tdreport), tdreport, req.tdr_len))
-+               ret = -EFAULT;
-+
-+out:
-+       kfree(reportdata);
-+       kfree(tdreport);
-+
-+       return ret;
-+}
-+
-+static long tdx_guest_ioctl(struct file *file, unsigned int cmd,
-+                           unsigned long arg)
-+{
-+       switch (cmd) {
-+       case TDX_CMD_GET_REPORT:
-+               return tdx_get_report((struct tdx_report_req __user *)arg);
-+       default:
-+               return -ENOTTY;
-+       }
-+}
-
-
-> 
-> greg k-h
-
++  Example::
+ 
+     # cat in0_input
+     830
 -- 
-Sathyanarayanan Kuppuswamy
-Linux Kernel Developer
+2.35.1
+
