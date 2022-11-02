@@ -2,74 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8202A616F4C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 22:00:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 96B8F616F52
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 22:03:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbiKBVAk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 17:00:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48674 "EHLO
+        id S230381AbiKBVDA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 17:03:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49334 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230468AbiKBVAh (ORCPT
+        with ESMTP id S230123AbiKBVC5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 17:00:37 -0400
-Received: from mail-ot1-x32c.google.com (mail-ot1-x32c.google.com [IPv6:2607:f8b0:4864:20::32c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 126A1DEB0;
-        Wed,  2 Nov 2022 14:00:36 -0700 (PDT)
-Received: by mail-ot1-x32c.google.com with SMTP id r13-20020a056830418d00b0065601df69c0so10968266otu.7;
-        Wed, 02 Nov 2022 14:00:36 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=2WXSgV6gSBWXpZYt5R9dSU2XRI96JBuHJqksyBnzBTo=;
-        b=JJAhyu9I9avCA18/elJljBaUZjEQ1AZLmiOifd0185Y3EK5HeaqP3S8tIt8gTFmmGA
-         pUPV11+zpMkm8yra868gdu+JPvay5L/Opwv9NVBz2bTgI31wiopDPuGVdDBOeOv79yeS
-         4wM2xoCUBswHSYlVSz0k6gih0dyDKp87PsHiT2VhdTtg84YFkXGF1EOFPpP8Y4ELfyVZ
-         RKc/OhQocTKutC17cYFdo5bsOWcjqpuibRaBoG6O8Hj8QFbePWHaTtJuU/i2cE9PfSfY
-         VPkhAfTwgP/OGt5nb9ZoCiysNro1ORT9McA5rRfRR9i9PAySfuTFBaiTO2OP2w2e75rt
-         q7Uw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=2WXSgV6gSBWXpZYt5R9dSU2XRI96JBuHJqksyBnzBTo=;
-        b=gPE5x/Vn9Uw41jzhNwDcHEAzN74YyJmEMoT4ljgzUwINxaohk4g4OwuszPlWd7twZg
-         R3bqi4tIh5PKcD8DqjR3TwoXL2P79ISC7pv3qkpYxpim1CR3331rbt1KEyFbvqTTveNs
-         KEz9Q4Nuhl8TnM7MYAfnyrCFhec2HjoPED6ZZ8WT3WyxBeu/8QROF7b8Bu4IpL9VnVS/
-         57rUctjr70wwVqkc/KDPezfWrLJ+rnXW/EicGuX2avwhR1J38SqCbNvZp/E3I7lDQ3T0
-         GwrRJc7E61fMfDbP0MsN1Gk5Q5j2YgYO/xJnrzFLs5LKub63d0zJdA4vt3N7f3/DWDNZ
-         kXWA==
-X-Gm-Message-State: ACrzQf0fSJekDfcFABpfxeYhZFK5BpNRFvRDN/dIzCdcQN25nGHerqP3
-        v8i3X6bo1WE0z66PsdUj+ut/IXcYQlE=
-X-Google-Smtp-Source: AMsMyM7RqN8N0Q2iqpfM+uj7CGLUUNmPLN0Njp1cAr0gX8/yKSAoMNpTFaPaf9mD9I+AIPicd5Qs7g==
-X-Received: by 2002:a05:6830:237d:b0:66c:4535:fe9c with SMTP id r29-20020a056830237d00b0066c4535fe9cmr11399540oth.30.1667422835383;
-        Wed, 02 Nov 2022 14:00:35 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w15-20020a4a274f000000b004805c328971sm4775759oow.42.2022.11.02.14.00.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 14:00:35 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Wed, 2 Nov 2022 14:00:33 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Eddie James <eajames@linux.ibm.com>
-Cc:     linux-watchdog@vger.kernel.org, wim@linux-watchdog.org,
-        joel@jms.id.au, andrew@aj.id.au, linux-aspeed@lists.ozlabs.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 2/2] ARM: dts: aspeed: Setup watchdog pre-timeout
- interrupt
-Message-ID: <20221102210033.GA2090211@roeck-us.net>
-References: <20221101205338.577427-1-eajames@linux.ibm.com>
- <20221101205338.577427-3-eajames@linux.ibm.com>
+        Wed, 2 Nov 2022 17:02:57 -0400
+Received: from qproxy2-pub.mail.unifiedlayer.com (qproxy2-pub.mail.unifiedlayer.com [69.89.16.161])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 79B87DF28
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 14:02:56 -0700 (PDT)
+Received: from gproxy3-pub.mail.unifiedlayer.com (gproxy3-pub.mail.unifiedlayer.com [69.89.30.42])
+        by qproxy2.mail.unifiedlayer.com (Postfix) with ESMTP id DB5DC8045FCE
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 21:02:45 +0000 (UTC)
+Received: from cmgw13.mail.unifiedlayer.com (unknown [10.0.90.128])
+        by progateway5.mail.pro1.eigbox.com (Postfix) with ESMTP id CD15510048769
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 21:02:14 +0000 (UTC)
+Received: from box5620.bluehost.com ([162.241.219.59])
+        by cmsmtp with ESMTP
+        id qKsHoH0yDPi3DqKsIoaJaj; Wed, 02 Nov 2022 21:02:14 +0000
+X-Authority-Reason: nr=8
+X-Authority-Analysis: v=2.4 cv=KK2fsHJo c=1 sm=1 tr=0 ts=6362dad6
+ a=30941lsx5skRcbJ0JMGu9A==:117 a=30941lsx5skRcbJ0JMGu9A==:17
+ a=dLZJa+xiwSxG16/P+YVxDGlgEgI=:19 a=IkcTkHD0fZMA:10:nop_charset_1
+ a=9xFQ1JgjjksA:10:nop_rcvd_month_year
+ a=-Ou01B_BuAIA:10:endurance_base64_authed_username_1 a=VwQbUJbxAAAA:8
+ a=HaFmDPmJAAAA:8 a=49j0FZ7RFL9ueZfULrUA:9 a=QEXdDO2ut3YA:10:nop_charset_2
+ a=AjGcO6oz07-iQ99wixmX:22 a=nmWuMzfKamIsx3l42hEX:22
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=w6rz.net;
+        s=default; h=Content-Transfer-Encoding:Content-Type:MIME-Version:Date:
+        Message-ID:From:In-Reply-To:References:Cc:To:Subject:Sender:Reply-To:
+        Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+        Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+        List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=kntjp5DhkGEbjfi4BGXgAHclj1vDWZR2bRChXXuNe5U=; b=neyrZhtSAXTjObqK7bhhXCcR5U
+        PLbJfplkS1LLsjNynztfV2fvN/BAwnPqQrLHDI/roMsMXMqNMwkbJS2Trt62qODUCN8Cg/2xEMp0z
+        63C43ZJKgAvBXpKkr9iyoeCLi6AgV44+8IWTH3OSUvP3MaDZ6sABo4eWBDAruL9SYLdODjdx9OTRx
+        6amO3i72d1gu25MjJ/kT5LiAXEVFFvd/8gm81FKjB2XuOfa4+J0t9zScUBZnNuWgLXwyXTzq+T7Jg
+        Uc/f5mWP7ZpiKYMSv+/sgMKMYuukqYqUsKXmx2p+VOTfZ8MOhuTXATBWUj1Lb8JxpRTzVxFonnxvA
+        Ig/XCknw==;
+Received: from c-73-162-232-9.hsd1.ca.comcast.net ([73.162.232.9]:56362 helo=[10.0.1.48])
+        by box5620.bluehost.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <re@w6rz.net>)
+        id 1oqKsF-0027q4-KR;
+        Wed, 02 Nov 2022 15:02:11 -0600
+Subject: Re: [PATCH 5.15 000/132] 5.15.77-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        f.fainelli@gmail.com, sudipm.mukherjee@gmail.com,
+        srw@sladewatkins.net
+References: <20221102022059.593236470@linuxfoundation.org>
+In-Reply-To: <20221102022059.593236470@linuxfoundation.org>
+From:   Ron Economos <re@w6rz.net>
+Message-ID: <bd31023f-e65d-0427-30cb-ce5b46093cf4@w6rz.net>
+Date:   Wed, 2 Nov 2022 14:02:07 -0700
+User-Agent: Mozilla/5.0 (X11; Linux armv7l; rv:78.0) Gecko/20100101
+ Thunderbird/78.14.0
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221101205338.577427-3-eajames@linux.ibm.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=utf-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Content-Language: en-US
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - box5620.bluehost.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - w6rz.net
+X-BWhitelist: no
+X-Source-IP: 73.162.232.9
+X-Source-L: No
+X-Exim-ID: 1oqKsF-0027q4-KR
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Source-Sender: c-73-162-232-9.hsd1.ca.comcast.net ([10.0.1.48]) [73.162.232.9]:56362
+X-Source-Auth: re@w6rz.net
+X-Email-Count: 4
+X-Source-Cap: d3NpeHJ6bmU7d3NpeHJ6bmU7Ym94NTYyMC5ibHVlaG9zdC5jb20=
+X-Local-Domain: yes
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,73 +97,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 03:53:38PM -0500, Eddie James wrote:
-> Specify the interrupt lines for the base SOCs that support it.
-> 
-> Signed-off-by: Eddie James <eajames@linux.ibm.com>
+On 11/1/22 7:31 PM, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 5.15.77 release.
+> There are 132 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 04 Nov 2022 02:20:38 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.15.77-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.15.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Built and booted successfully on RISC-V RV64 (HiFive Unmatched).
 
-> ---
->  arch/arm/boot/dts/aspeed-g5.dtsi | 3 +++
->  arch/arm/boot/dts/aspeed-g6.dtsi | 4 ++++
->  2 files changed, 7 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/aspeed-g5.dtsi b/arch/arm/boot/dts/aspeed-g5.dtsi
-> index 04f98d1dbb97..b4b98bf38e48 100644
-> --- a/arch/arm/boot/dts/aspeed-g5.dtsi
-> +++ b/arch/arm/boot/dts/aspeed-g5.dtsi
-> @@ -410,18 +410,21 @@ wdt1: watchdog@1e785000 {
->  				compatible = "aspeed,ast2500-wdt";
->  				reg = <0x1e785000 0x20>;
->  				clocks = <&syscon ASPEED_CLK_APB>;
-> +				interrupts = <27>;
->  			};
->  
->  			wdt2: watchdog@1e785020 {
->  				compatible = "aspeed,ast2500-wdt";
->  				reg = <0x1e785020 0x20>;
->  				clocks = <&syscon ASPEED_CLK_APB>;
-> +				interrupts = <27>;
->  			};
->  
->  			wdt3: watchdog@1e785040 {
->  				compatible = "aspeed,ast2500-wdt";
->  				reg = <0x1e785040 0x20>;
->  				clocks = <&syscon ASPEED_CLK_APB>;
-> +				interrupts = <27>;
->  				status = "disabled";
->  			};
->  
-> diff --git a/arch/arm/boot/dts/aspeed-g6.dtsi b/arch/arm/boot/dts/aspeed-g6.dtsi
-> index ebbcfe445d9c..d9379fd7b1c2 100644
-> --- a/arch/arm/boot/dts/aspeed-g6.dtsi
-> +++ b/arch/arm/boot/dts/aspeed-g6.dtsi
-> @@ -539,23 +539,27 @@ uart5: serial@1e784000 {
->  
->  			wdt1: watchdog@1e785000 {
->  				compatible = "aspeed,ast2600-wdt";
-> +				interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
->  				reg = <0x1e785000 0x40>;
->  			};
->  
->  			wdt2: watchdog@1e785040 {
->  				compatible = "aspeed,ast2600-wdt";
-> +				interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
->  				reg = <0x1e785040 0x40>;
->  				status = "disabled";
->  			};
->  
->  			wdt3: watchdog@1e785080 {
->  				compatible = "aspeed,ast2600-wdt";
-> +				interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
->  				reg = <0x1e785080 0x40>;
->  				status = "disabled";
->  			};
->  
->  			wdt4: watchdog@1e7850c0 {
->  				compatible = "aspeed,ast2600-wdt";
-> +				interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
->  				reg = <0x1e7850C0 0x40>;
->  				status = "disabled";
->  			};
+Tested-by: Ron Economos <re@w6rz.net>
+
