@@ -2,110 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E32966162E9
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:45:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C78456162CE
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:40:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230501AbiKBMpY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 08:45:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52524 "EHLO
+        id S230387AbiKBMkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 08:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48312 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229598AbiKBMpV (ORCPT
+        with ESMTP id S229459AbiKBMkJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 08:45:21 -0400
-X-Greylist: delayed 367 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 02 Nov 2022 05:45:20 PDT
-Received: from mxus.zte.com.cn (mxus.zte.com.cn [20.112.44.237])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE09238B8;
-        Wed,  2 Nov 2022 05:45:20 -0700 (PDT)
-Received: from mxhk.zte.com.cn (unknown [192.168.250.138])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mxus.zte.com.cn (FangMail) with ESMTPS id 4N2RJP5pstz9tyD7;
-        Wed,  2 Nov 2022 20:38:29 +0800 (CST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4N2RHq6VKpz5BNRf;
-        Wed,  2 Nov 2022 20:37:59 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2A2CbsFU049223;
-        Wed, 2 Nov 2022 20:37:54 +0800 (+08)
-        (envelope-from zhang.songyi@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Wed, 2 Nov 2022 20:37:57 +0800 (CST)
-Date:   Wed, 2 Nov 2022 20:37:57 +0800 (CST)
-X-Zmail-TransId: 2af9636264a57d5a1a4f
-X-Mailer: Zmail v1.0
-Message-ID: <202211022037573160098@zte.com.cn>
-Mime-Version: 1.0
-From:   <zhang.songyi@zte.com.cn>
-To:     <tony.luck@intel.com>
-Cc:     <bp@alien8.de>, <tglx@linutronix.de>, <mingo@redhat.com>,
-        <dave.hansen@linux.intel.com>, <x86@kernel.org>, <hpa@zytor.com>,
-        <linux-edac@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <jiang.xuexin@zte.com.cn>, <xue.zhihong@zte.com.cn>,
-        <zhang.songyi@zte.com.cn>
-Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIHg4Ni9NQ0UvQU1EOiByZW1vdmUgcmVkdW5kYW50IHJldCB2YXJpYWJsZQ==?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2A2CbsFU049223
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at 10-207-168-7 with ID 636264C4.000 by FangMail milter!
-X-FangMail-Envelope: 1667392710/4N2RJP5pstz9tyD7/636264C4.000/192.168.250.138/[192.168.250.138]/mxhk.zte.com.cn/<zhang.songyi@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 636264C4.000/4N2RJP5pstz9tyD7
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Wed, 2 Nov 2022 08:40:09 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B74B24952;
+        Wed,  2 Nov 2022 05:40:09 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id h14so16114292pjv.4;
+        Wed, 02 Nov 2022 05:40:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zHCEBjSk35W8v+qIx0wSklMRZE1O2YIm2XpIeOcui+w=;
+        b=KzOU+DB+/NX2fybtdftG4qJ/FyhmlBW+oXWuZZpOzotfkVJQA8Yo02XWNjCEJ7E8tT
+         CVAhew3y/xsV5yC/ZsjKV0N1E1NKU32NNEDNRtogBvVI783v6HVOnXORRz5oqyq8X9YC
+         B8/vdo01PExUhKvG3TQSojafqe6KHbJUd+8a3IjwRFr5VnL7eWgdHWECHgS3qWh4UXXF
+         nuz9Whq8NrHVc9M2Ex92YxPt97dpLb8QVZ+DIo8LeTTnUwX77jLfMb+y2FDj0gVswbSn
+         jDzPmL3NeDVJKuTknqA7e5IbfeTPiGIJRmxySDaHRw6s4G+ye/HZB7G1DxmDmB6wIaQ2
+         OYuw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zHCEBjSk35W8v+qIx0wSklMRZE1O2YIm2XpIeOcui+w=;
+        b=4nd8n5vLY7Ufhf51s0tor7yckOBuJ/nQWoKKTJIddAzn3xuPu6HZdbUQbeevotjweR
+         CZJRd72rCcL984Hw09Jhw1YFwg6ClvN6w7HXs+S9kZYKsX2zeMXX0Dp79R39TUiA0vze
+         JRMOrwxzMFbDKKJCgb6NKjTXDbxkQrvQO883zM+24PA3EDPV0TLKk95Yqoai1IdpumxX
+         8ioxi5Ur9yD0Ck3HPgQn2ZoENBCw1jvzzz1bcfOUUSjdnx1ylGs43RvgS1MXQ+9OoRe5
+         GUNHdsLR1XVGOrkCiqFCApFoFepfbOqIog0u3p9GOyz6xk79ShWBDl75HXJQ5xH233Ub
+         IA1w==
+X-Gm-Message-State: ACrzQf383PhcoZefF/4SD+5WCp/jVOVo39Px9HzShDZzwGQ2DBiwLrTA
+        KmkiWBp+/M5HEnLC6vDVNbs=
+X-Google-Smtp-Source: AMsMyM4hQpjdUDfRMpfRL9MeFrxvblEMLp8Dbwt4r+dcb/JrC97EhB/4Qw4eX0rsgmrqRdNF1FVNeg==
+X-Received: by 2002:a17:902:dac7:b0:187:411c:4f19 with SMTP id q7-20020a170902dac700b00187411c4f19mr5492492plx.100.1667392808549;
+        Wed, 02 Nov 2022 05:40:08 -0700 (PDT)
+Received: from Zbook.localdomain ([129.227.152.6])
+        by smtp.gmail.com with ESMTPSA id f19-20020aa79693000000b0056c003f9169sm8339360pfk.196.2022.11.02.05.40.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 05:40:08 -0700 (PDT)
+From:   Yuwei Guan <ssawgyw@gmail.com>
+X-Google-Original-From: Yuwei Guan <Yuwei.Guan@zeekrlife.com>
+To:     paolo.valente@linaro.org, axboe@kernel.dk
+Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Yuwei.Guan@zeekrlife.com
+Subject: [PATCH 0/5] A few patches for block bfq_log_bfqq()
+Date:   Wed,  2 Nov 2022 20:39:51 +0800
+Message-Id: <20221102123956.230-1-Yuwei.Guan@zeekrlife.com>
+X-Mailer: git-send-email 2.34.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From 7fd536f480bfd526f40870c1567caf3263a584e7 Mon Sep 17 00:00:00 2001
-From: zhang songyi <zhang.songyi@zte.com.cn>
-Date: Wed, 2 Nov 2022 16:48:44 +0800
-Subject: [PATCH linux-next] x86/MCE/AMD: remove redundant ret variable
+Hi,
 
-Return value from show() and store() directly instead of taking this in
-another redundant variable.
+This series contains some patches for bfq_log_bfqq() to improve bfq log 
+readability.
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
----
- arch/x86/kernel/cpu/mce/amd.c | 10 ++--------
- 1 file changed, 2 insertions(+), 8 deletions(-)
 
-diff --git a/arch/x86/kernel/cpu/mce/amd.c b/arch/x86/kernel/cpu/mce/amd.c
-index 10fb5b5c9efa..425d0803eeb6 100644
---- a/arch/x86/kernel/cpu/mce/amd.c
-+++ b/arch/x86/kernel/cpu/mce/amd.c
-@@ -1009,11 +1009,8 @@ static ssize_t show(struct kobject *kobj, struct attribute *attr, char *buf)
- {
-    struct threshold_block *b = to_block(kobj);
-    struct threshold_attr *a = to_attr(attr);
--   ssize_t ret;
+Yuwei Guan (5):
+  block, bfq: remove unnecessary value print
+  block, bfq: do bfq_set_next_ioprio_data() after setting sync mode and
+    pid
+  block, bfq: don't convert pid type in bfq_log_bfqq()
+  block, bfq: change "secs" to "sects" for bfq log in bfq_bfqq_served()
+  block, bfq: print bfqq addr for each bfq_log_bfqq log
 
--   ret = a->show ? a->show(b, buf) : -EIO;
--
--   return ret;
-+   return a->show ? a->show(b, buf) : -EIO;
- }
+ block/bfq-iosched.c | 27 ++++++++++++---------------
+ block/bfq-iosched.h |  4 +++-
+ block/bfq-wf2q.c    |  5 ++---
+ 3 files changed, 17 insertions(+), 19 deletions(-)
 
- static ssize_t store(struct kobject *kobj, struct attribute *attr,
-@@ -1021,11 +1018,8 @@ static ssize_t store(struct kobject *kobj, struct attribute *attr,
- {
-    struct threshold_block *b = to_block(kobj);
-    struct threshold_attr *a = to_attr(attr);
--   ssize_t ret;
--
--   ret = a->store ? a->store(b, buf, count) : -EIO;
+-- 
+2.34.1
 
--   return ret;
-+   return a->store ? a->store(b, buf, count) : -EIO;
- }
-
- static const struct sysfs_ops threshold_ops = {
---
-2.15.2
