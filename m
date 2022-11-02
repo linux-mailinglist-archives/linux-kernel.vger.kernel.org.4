@@ -2,100 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F2477616AE2
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:37:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8BCF8616A65
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:16:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230379AbiKBRhi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:37:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33872 "EHLO
+        id S229551AbiKBRQZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:16:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43050 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229772AbiKBRhe (ORCPT
+        with ESMTP id S231354AbiKBRQO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:37:34 -0400
-Received: from beige.elm.relay.mailchannels.net (beige.elm.relay.mailchannels.net [23.83.212.16])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF21E2E68F;
-        Wed,  2 Nov 2022 10:37:32 -0700 (PDT)
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-Received: from relay.mailchannels.net (localhost [127.0.0.1])
-        by relay.mailchannels.net (Postfix) with ESMTP id C6A126C2042;
-        Wed,  2 Nov 2022 17:37:31 +0000 (UTC)
-Received: from pdx1-sub0-mail-a225 (unknown [127.0.0.6])
-        (Authenticated sender: dreamhost)
-        by relay.mailchannels.net (Postfix) with ESMTPA id 03C5D6C2376;
-        Wed,  2 Nov 2022 17:37:31 +0000 (UTC)
-ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1667410651; a=rsa-sha256;
-        cv=none;
-        b=mBvmOt9b5IL2+BiX++E+PCamD+0uUOEMHu8lz+YXwplwzdj7dpuHj0FVjM6pKOKQrMNlaw
-        eGRXsP+C5C3jRY3ElmGUWkiX4JP9O8uaWXgOKGQlII1FeS5l1/Bii5+N/gEOJyDM7F/qQx
-        Jzmq4/32+8da6bL7TQT0jRMHLenOhFeCuZ70ZCXkagcyx6mGgv29/r43C95PcMNzNOkvqn
-        ql3HGAQiRdojVXuWVVoRkpwzEVCLZF+y34dzHuLONgyng1uaudByw2HewNOAFMYNMoX1m8
-        15ixnsX6N52veQKsbhO/AmuxMftt8pMkF0hDcqOMeL5dk+xbhfEPTJ1Lzf52lg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
- d=mailchannels.net;
-        s=arc-2022; t=1667410651;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references:dkim-signature;
-        bh=2NoUxIpLTDZ8lDvlY/HWORKVP66zScBnVQ1cm5Vtqow=;
-        b=IJB+2OLKVm96s8NQVB30fV5hQnH8qRLk+c2r2zoQ5X0c+cYE4pDUBE4JGM3ZNdYGzQqQ0F
-        WFIVoVMoZ7sdrz5Lnrfw2W0cdpmQuS3MqA1ssGEUkoqax6CcPJvZ+XZENPWCOjblzmC02y
-        wopm1Kgz/NXw55yCQSkBUh8vnunMV5W8UNyWL/hqdd1+qjJBD3jyPt6aoDxAB3jaipzdhE
-        9vXAykISYYsFJKNMRxDCkPJMPS18AKuTSDCFwErZ6JMz4fpFHukgaqnu6ZY7epY5N+BuMj
-        B8oLunfRTzb+7088r9aTvlVJ4iiQpmnZ/hzMmB1pJ0+9bG5zbckE9oEk4e7fiw==
-ARC-Authentication-Results: i=1;
-        rspamd-7fb88f4dd5-nc5q9;
-        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
-X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
-X-MC-Relay: Neutral
-X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
-X-MailChannels-Auth-Id: dreamhost
-X-Power-Versed: 79a5dbd969deb7c1_1667410651472_1928156444
-X-MC-Loop-Signature: 1667410651472:1870974050
-X-MC-Ingress-Time: 1667410651472
-Received: from pdx1-sub0-mail-a225 (pop.dreamhost.com [64.90.62.162])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
-        by 100.105.95.137 (trex/6.7.1);
-        Wed, 02 Nov 2022 17:37:31 +0000
-Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dave@stgolabs.net)
-        by pdx1-sub0-mail-a225 (Postfix) with ESMTPSA id 4N2YxP2pmYz3C;
-        Wed,  2 Nov 2022 10:37:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
-        s=dreamhost; t=1667410650;
-        bh=2NoUxIpLTDZ8lDvlY/HWORKVP66zScBnVQ1cm5Vtqow=;
-        h=Date:From:To:Cc:Subject:Content-Type;
-        b=HZ0t0e+BBK8h4WOCCysLyhqnMvrxvtvAxGyesobxPJKRAwEwT/uwQ3jTQN1NvxPWL
-         Woyjd/N2j4pIiiNJMYInalM1fV2MVLDYR4UkdB5Mt1nUBaf+G+X4YL58hkCUQCqIel
-         5iQTKMvqAFI5S9RSa5dYyZfnZZbYzuZ77gulwm6aeb4W7oITQjaS0c7bRtyenaA//x
-         avr1psxPYFyTJtdf+mXzUyiKyF3Xn4fpb2TOQyaOS2DiYbTmDb8g2v8bazdoy3c8oW
-         hAH7/WWOtWb2WjTMa7dGoAqfa7qRk4WRk9rk6sewbzfPnZx9JsAFmY4mSnZ1XtoN1i
-         /jpmxtsRIXZFA==
-Date:   Wed, 2 Nov 2022 10:15:24 -0700
-From:   Davidlohr Bueso <dave@stgolabs.net>
-To:     Bjorn Helgaas <helgaas@kernel.org>
-Cc:     Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Ira Weiny <ira.weiny@intel.com>, dave.jiang@intel.com,
-        alison.schofield@intel.com, bwidawsk@kernel.org,
-        vishal.l.verma@intel.com, a.manzanares@samsung.com,
-        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
-        Christoph Hellwig <hch@lst.de>
-Subject: Re: [PATCH 1/2] cxl/pci: Add generic MSI-X/MSI irq support
-Message-ID: <20221102171524.thsz2kwtirhxn7ee@offworld>
-References: <20221024133633.00000467@huawei.com>
- <20221025232535.GA579167@bhelgaas>
+        Wed, 2 Nov 2022 13:16:14 -0400
+Received: from mail-qt1-x829.google.com (mail-qt1-x829.google.com [IPv6:2607:f8b0:4864:20::829])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A494B240B2;
+        Wed,  2 Nov 2022 10:16:06 -0700 (PDT)
+Received: by mail-qt1-x829.google.com with SMTP id l2so7049413qtq.11;
+        Wed, 02 Nov 2022 10:16:06 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=qOws5RrrraQdImG7NAEUZloT5JDKMF2E4x52BNGTp6o=;
+        b=M4Nnssqn0CLZ6bbqRAXUeda+p4sEo2IVnHL5NiHzr+9OjC/1dvnz1f0eX+eMN0YM54
+         5wsDIp1jbQAhrAXR1VLjaGmA8ao2/w1zPdv/vpVWZIJRfNigbJta3XU5EFsIHUvy2lfn
+         mmkGPcKBSl1a2Fyp771XfMUZ0sPCdX8ICQc6cmKQePvDGJAD221Q9nVglpVhD4G5f6xp
+         ctmZrUGxrvfveHphhy4/uzKPWSx7v+Ot9DIJ29wfUP8kgwbLI/9peoHpcpvf3Fox7Oh2
+         z6PRaJV7UGJMliATe7e9D+6ggzmJpBUvZHFx0RMeOfBDK4oKIvBSLGvDlD3NqecFozSJ
+         0jkA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qOws5RrrraQdImG7NAEUZloT5JDKMF2E4x52BNGTp6o=;
+        b=RPISGnk242uMkfL27Um9IU/Ll9d66bJMKaUiSwSKCaQM+THogPgbXxxchFaG9xrwRa
+         FkpTUcVjwnRpj0WTBouL+Vg0ELyCPifaNGJxAALU0D+AGToFAOFkn3GauGLS7msYn0SM
+         pOE3cdOwnsW0rchbvE4kuOje8muGvSZZTZzu+5fc/apHmUsNrxYrfHKbFd7+XoKHGFf1
+         nHiGAoI9cQnInTEUS4sO5KjODpCObc/khDRTQA3gs5d8UrS3qkqJLmy1/+MN5cW+XTzl
+         C5AGkORjYytWMdOBXp2ANesqP0kM8VuewIG9tLIf3F+GBlaw97yoqOv3b3SN0SGbr7Cw
+         hylA==
+X-Gm-Message-State: ACrzQf2KOcTlG/GnvDX8BicsBBJ6eRbFvjKdN0RbvQbJBjS9lzyUCNXL
+        sKbpi6PmApCIKgH+4GBsne0=
+X-Google-Smtp-Source: AMsMyM4d5BBr3cpnwag87E2VXkpTPiRwe4/d3whuL1AvHhdmwd8wNJwXCpAKO2uwCl8bxsLc/gMZ9g==
+X-Received: by 2002:a05:622a:1cc8:b0:3a5:30df:5e0f with SMTP id bc8-20020a05622a1cc800b003a530df5e0fmr10831574qtb.634.1667409365696;
+        Wed, 02 Nov 2022 10:16:05 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id hg24-20020a05622a611800b00398a7c860c2sm6807322qtb.4.2022.11.02.10.16.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 10:16:05 -0700 (PDT)
+Message-ID: <cc5dd02f-7285-dfcf-76b1-bb258c8029fb@gmail.com>
+Date:   Wed, 2 Nov 2022 10:15:54 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii; format=flowed
-Content-Disposition: inline
-In-Reply-To: <20221025232535.GA579167@bhelgaas>
-User-Agent: NeoMutt/20220429
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH net-next 1/6] net: dsa: microchip: lan937x: add regmap
+ range validation
+Content-Language: en-US
+To:     Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     woojung.huh@microchip.com, UNGLinuxDriver@microchip.com,
+        andrew@lunn.ch, vivien.didelot@gmail.com, olteanv@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com
+References: <20221102041058.128779-1-rakesh.sankaranarayanan@microchip.com>
+ <20221102041058.128779-2-rakesh.sankaranarayanan@microchip.com>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221102041058.128779-2-rakesh.sankaranarayanan@microchip.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -103,91 +80,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, 25 Oct 2022, Bjorn Helgaas wrote:
+On 11/1/22 21:10, Rakesh Sankaranarayanan wrote:
+> Add regmap_range and regmap_access_table to define valid
+> register range for LAN937x switch family. LAN937x family
+> have sku id's LAN9370, LAN9371, LAN9372, LAN9373 and
+> LAN9374. regmap_range structure is arranged as Global
+> Registers followed by Port Registers but they are distributed
+> as Global Registers, T1 PHY Port Registers, Tx PHY Port Registers,
+> RGMII Port Registers, SGMII Port Registers. On 16 bit addressing,
+> most significant 4 bits are used for representing port number.
+> So valid range of two different T1 PHY ports within a sku
+> will differ on upper nibble only.
+> 
+> Signed-off-by: Rakesh Sankaranarayanan <rakesh.sankaranarayanan@microchip.com>
+> ---
+>   drivers/net/dsa/microchip/ksz_common.c | 1760 ++++++++++++++++++++++++
+>   1 file changed, 1760 insertions(+)
+> 
+> diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
+> index d612181b3226..b0905c5b701d 100644
+> --- a/drivers/net/dsa/microchip/ksz_common.c
+> +++ b/drivers/net/dsa/microchip/ksz_common.c
+> @@ -1030,6 +1030,1756 @@ static const struct regmap_access_table ksz9896_register_set = {
+>   	.n_yes_ranges = ARRAY_SIZE(ksz9896_valid_regs),
+>   };
+>   
+> +static const struct regmap_range lan9370_valid_regs[] = {
 
->> In short that calls:
->> /* Allocate the maximum possible number of MSI/MSI-X vectors */
->> nr_entries = pci_alloc_irq_vectors(dev, 1, PCIE_PORT_MAX_MSI_ENTRIES,
->>			PCI_IRQ_MSIX | PCI_IRQ_MSI);
->>
->> /* See how many and which Interrupt Message Numbers we actually use */
->> nvec = pcie_message_numbers(dev, mask, &pme, &aer, &dpc);
->>
->> if (nvec != nr_entries) {
->>	pci_free_irq_vectors(dev);
->>
->>	nr_entries = pci_alloc_irq_vectors(dev, nvec, nvec,
->>			PCI_IRQ_MSIX | PCI_IRQ_MSI);
->> }
->>
->> My worry here is that the implicit assumption is that the vectors
->> won't move if we reduce the overall number of vectors we are asking
->> for...
+Suggest you employ some macros for generating the valid register ranges 
+for ports since there is a lot of repetition, and chances are that new 
+registers may have to be added in the future, or corrected.
 
-This would also apply to what is currently in portdrv machinery, no?
+Between the fact that regmap makes you pull an entire subsystem into the 
+kernel image thus adding to code sections, plus these big tables of 
+register ranges adding to read-only data sections, this really makes me 
+wonder what benefit there is just to expose a debugfs interface for 
+dumping registers... value proposition does not seem so great to me.
+-- 
+Florian
 
->>
->> However, imagine the case that we have a feature the driver doesn't
->> know about that was previously at a higher vector.  After reducing
->> the vectors allocated the hardware might decide that feature needs
->> its own vector whereas some others can be combined.  Hence we'd end
->> up with a less than ideal packing for the features we actually
->> support.
->>
->> Could do something iterative to solve this if it actually matters
->> (increase number of vectors until the layout matches what we get
->> with max possible vectors).
-
-Maybe do a bounded retry loop until we get stable value?
-
-retry = 1;
-do {
-	pci_alloc_irq_vectors(1, 32);
-	nvecs = get_max_msgnum(); // max(pmu, events, mbox, isolation)
-	pci_free_irq_vectors();
-
-	pci_alloc_irq_vectors(nvecs, nvecs);
-	new_nvecs = get_max_msgnum();
-
-	if (likely(new_nvecs == nvecs))
-		return 0;
-
-	pci_free_irq_vectors();
-}  while (retry--);
-
-return -1; // no irq support
-
-But yeah I'm not sure how much we actually care about this. But if so,
-it  also might be worth re-visiting the generic table thing, as if
-nothing else it can standalone co-exist and avoid allocating any irqs
-altogether if we know a-priori that there is no irq support.
-
->
->Is this cxl code allocating vectors for devices that might also be
->claimed by portdrv?  I assume not because that sounds like a problem.
->
->Ugh.  I always feel like the portdrv design must be sub-optimal
->because this seems so hard to do cleanly.
->
->pci_alloc_irq_vectors() has a lot of magic inside it and is great for
->most drivers, but the PCIe service IRQs are definitely unusual and
->maybe it's not the best fit for this situation.
->
->If I understand correctly, Interrupt Message Numbers for all these
->PCIe services (hotplug, AER, DPC, etc) are restricted to 0-31 for both
->MSI and MSI-X, and the reason we don't just allocate 32 vectors all
->the time is to avoid consuming too many IRQs.
-
-Most CXL features that can have irqs will normally use only the first 16,
-with the exception of isolation (cxl 3.0), which per the spec is up to 32.
-
->The MSI case is ugly because the Interrupt Message Number can change
->when we set Multiple Message Enable.  Maybe we can separate it out and
->have a less than optimal solution for this case, like allocating one
->or two vectors and polling if that's not enough.  I expect most
->devices will support MSI-X.
-
-Would only supporting MSI-X be so terrible?
-
-Thanks,
-Davidlohr
