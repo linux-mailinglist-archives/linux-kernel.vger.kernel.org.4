@@ -2,137 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8315C615F59
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:15:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7DBC4615F5E
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:16:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231585AbiKBJPh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 05:15:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43588 "EHLO
+        id S230389AbiKBJP7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 05:15:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43628 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231294AbiKBJOo (ORCPT
+        with ESMTP id S229912AbiKBJPI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 05:14:44 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 03B6627FD5;
-        Wed,  2 Nov 2022 02:13:19 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 53B9766015E4;
-        Wed,  2 Nov 2022 09:13:17 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667380398;
-        bh=yddB8YzbDqd9GZ4u8pL6Zol8d3iPlUtOe1y4r884crs=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=jhctdhIkhVmddWdje6jcB76l5ca/7YUVPZs61kGwkJO/cVz37YWfDHEQSuK9YFGzC
-         7+IT0gHZC3aBoS2M+/NwNHePwRSV5dGRhhUU90yrfC4KS4w9fDSQQ50dmgTCkMl3lX
-         98yLtzUOTA8yZebHdWo2Q9qd72HMjMGAxkCA0Eg3wOEqB/RndIpxJsZJnlYMoCSAX8
-         8/nShXz+TBvnTZ7/Niu8zrTcL60yviUi9+uCKQUTjHa5khNmLElHyy9Aw/fdZ2C4OL
-         l8RY33ATCTYDNCf5XV5OnYtGNAxzxI+Db+Z1bgGSqoFosXFTR4jaHrd21u1C0hwgNv
-         +yNPSVRrSEghg==
-Message-ID: <1f0bb630-20b0-160e-a530-05fae7572b10@collabora.com>
-Date:   Wed, 2 Nov 2022 10:13:14 +0100
+        Wed, 2 Nov 2022 05:15:08 -0400
+Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22D8B286C4
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 02:13:29 -0700 (PDT)
+Received: by mail-pf1-x429.google.com with SMTP id y13so15849299pfp.7
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 02:13:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=z6bT5Xy6HJSVHzE3w5gAF7ODmVO+QE+Pvk+SDh7p/kA=;
+        b=E3pcsNmKJwCHYP4+h8cp2Qdi0ZJw93oQ2eEiTNWjZrSfcGDGnfVsIuW/78DL8qIpgu
+         JCyGeEIcLinSAAs92VkrT6MtUpexab0mwEAwwyV0wSrfDjZmsJ0uG4xGxyS1mT0qZI21
+         ldp1QWbxcfaWqcv6AMHUfjYVS9AXfgZ6szI9K/QFplxK5bdfdDd7xtNnWoz/uSaTXcaF
+         o450nTqt1yA5lE+/R+GloJYJlNpzJyIm8WIVPEvHSES6vXDHpj/HOsYh209vN0QaFIo5
+         V9LiLPX+DCRCRpgnJwAXFAniMJZcb/7UcPCWUC2orU9Hxkp+CFaVbkXKaGXvWY4zQbSL
+         NhAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=z6bT5Xy6HJSVHzE3w5gAF7ODmVO+QE+Pvk+SDh7p/kA=;
+        b=bRJCbTyPQYUvMr23fnbEFX7w4qufFxsqgmOQKXFO9dTD/kkCvqEVcFRNLwQjyW2aRi
+         38C6PnqMiIKCxWjyGvERrjhequR3OBseJtzCabtXviCSTYHF4hKcv4m2uI8tEeI3+QmI
+         UAORBqLdJ7MfhHdwNuduhxoPoamUfE8HsyAOJFyLvrytmeG4p5Hk29yf+T+AFptpp+Hq
+         LuCMRtDQ44ve2jWHT/BUVE+pZCMdOR1zmJcfm83ICelR6qTP3b2jyThce1K/c27I/Ece
+         aDIpdSsRntD1uPKec+w/PUti91GmzSGNak/WI+dCQUGNKfvlrjkl1u4vUE0a23mcGEpB
+         8q1A==
+X-Gm-Message-State: ACrzQf37PDqLOdks4GTN7lagrpteh+bnlZjxI3MRml40e7XxHp4QPbPB
+        7VVlip559XTT+L5Pgjyp7Umg
+X-Google-Smtp-Source: AMsMyM60KpzKt0yB7l73uqhrr+KKKC15Y6Stqq2UU7CyxVz3h8qGMEbpZm86IpTPJAbryyd5G3nJnA==
+X-Received: by 2002:a63:187:0:b0:43b:cf3c:c64d with SMTP id 129-20020a630187000000b0043bcf3cc64dmr20511639pgb.359.1667380408555;
+        Wed, 02 Nov 2022 02:13:28 -0700 (PDT)
+Received: from localhost.localdomain ([117.193.209.178])
+        by smtp.gmail.com with ESMTPSA id n4-20020a170903110400b001869394a372sm7847689plh.201.2022.11.02.02.13.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 02:13:27 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     andersson@kernel.org
+Cc:     konrad.dybcio@somainline.org, mturquette@baylibre.com,
+        sboyd@kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v2] clk: qcom: gcc-sm8250: Use retention mode for USB GDSCs
+Date:   Wed,  2 Nov 2022 14:43:20 +0530
+Message-Id: <20221102091320.66007-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v1 1/2] dt-bindings: dsp: mediatek: Add default clock
- sources for mt8186 dsp
-Content-Language: en-US
-To:     Tinghan Shen <tinghan.shen@mediatek.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Pierre-Louis Bossart <pierre-louis.bossart@linux.intel.com>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Peter Ujfalusi <peter.ujfalusi@linux.intel.com>,
-        Bard Liao <yung-chuan.liao@linux.intel.com>,
-        Ranjani Sridharan <ranjani.sridharan@linux.intel.com>,
-        Kai Vehmanen <kai.vehmanen@linux.intel.com>,
-        Daniel Baluta <daniel.baluta@nxp.com>,
-        Mark Brown <broonie@kernel.org>,
-        Jaroslav Kysela <perex@perex.cz>,
-        Takashi Iwai <tiwai@suse.com>,
-        Yaochun Hung <yc.hung@mediatek.com>
-Cc:     devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org, linux-kernel@vger.kernel.org,
-        sound-open-firmware@alsa-project.org, alsa-devel@alsa-project.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20221101061137.25731-1-tinghan.shen@mediatek.com>
- <20221101061137.25731-2-tinghan.shen@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221101061137.25731-2-tinghan.shen@mediatek.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 01/11/22 07:11, Tinghan Shen ha scritto:
-> Add the default clock sources used by mt8186 dsp.
-> 
-> Signed-off-by: Tinghan Shen <tinghan.shen@mediatek.com>
-> ---
->   .../devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml | 12 +++++++++---
->   1 file changed, 9 insertions(+), 3 deletions(-)
-> 
-> diff --git a/Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml b/Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml
-> index 3e63f79890b4..4cc0634c876b 100644
-> --- a/Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml
-> +++ b/Documentation/devicetree/bindings/dsp/mediatek,mt8186-dsp.yaml
-> @@ -35,11 +35,15 @@ properties:
->       items:
->         - description: mux for audio dsp clock
->         - description: mux for audio dsp local bus
-> +      - description: default clock source for dsp local bus
-> +      - description: default clock source for dsp core
->   
->     clock-names:
->       items:
->         - const: audiodsp
->         - const: adsp_bus
-> +      - const: mainpll_d2_d2
-> +      - const: clk26m
->   
->     power-domains:
->       maxItems: 1
-> @@ -82,9 +86,11 @@ examples:
->                 <0x1068f000 0x1000>;
->           reg-names = "cfg", "sram", "sec", "bus";
->           clocks = <&topckgen CLK_TOP_AUDIODSP>,
-> -                 <&topckgen CLK_TOP_ADSP_BUS>;
-> -        clock-names = "audiodsp",
-> -                      "adsp_bus";
-> +                 <&topckgen CLK_TOP_ADSP_BUS>,
-> +                 <&topckgen CLK_TOP_MAINPLL_D2_D2>,
-> +                 <&clk26m>;
-> +        clock-names = "audiodsp", "adsp_bus",
-> +                      "mainpll_d2_d2", "clk26m";
+USB controllers on SM8250 doesn't work after coming back from suspend.
+This can be fixed by keeping the USB GDSCs in retention mode so that
+hardware can keep them ON and put into rentention mode once the parent
+domain goes to a low power state.
 
-You are assigning those clocks just to be able to call clk_set_parent() in
-the DSP mt8186-clk driver... and that's not necessary, nor it is the best
-way of doing what you're trying to.
+Fixes: 3e5770921a88 ("clk: qcom: gcc: Add global clock controller driver for SM8250")
+Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+---
 
-In reality, you don't need to add new clocks and you don't need to manage
-that into the driver, as you can simply assign clock parents in devicetree
-... like:
+Changes in v2:
 
-assigned-clocks = <&topckgen CLK_TOP_AUDIODSP>, <&topckgen CLK_TOP_ADSP_BUS>;
-assigned-clock-parents = <&clk26m>, <&topckgen CLK_TOP_MAINPLL_D2_D2>;
+* Added Fixes tag (Stephen)
 
-without any clk_set_parent() call in the driver.
+ drivers/clk/qcom/gcc-sm8250.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-When the driver will call clk_prepare_enable() for top_audiodsp and/or for
-top_adsp_bus, the assigned parents' refcount will also be increased (and
-if the parent clock is not enabled, the clk framework will enable it).
-
-Regards,
-Angelo
+diff --git a/drivers/clk/qcom/gcc-sm8250.c b/drivers/clk/qcom/gcc-sm8250.c
+index 9755ef4888c1..a0ba37656b07 100644
+--- a/drivers/clk/qcom/gcc-sm8250.c
++++ b/drivers/clk/qcom/gcc-sm8250.c
+@@ -3267,7 +3267,7 @@ static struct gdsc usb30_prim_gdsc = {
+ 	.pd = {
+ 		.name = "usb30_prim_gdsc",
+ 	},
+-	.pwrsts = PWRSTS_OFF_ON,
++	.pwrsts = PWRSTS_RET_ON,
+ };
+ 
+ static struct gdsc usb30_sec_gdsc = {
+@@ -3275,7 +3275,7 @@ static struct gdsc usb30_sec_gdsc = {
+ 	.pd = {
+ 		.name = "usb30_sec_gdsc",
+ 	},
+-	.pwrsts = PWRSTS_OFF_ON,
++	.pwrsts = PWRSTS_RET_ON,
+ };
+ 
+ static struct gdsc hlos1_vote_mmnoc_mmu_tbu_hf0_gdsc = {
+-- 
+2.25.1
 
