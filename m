@@ -2,107 +2,129 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4145E616A34
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:11:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D25D6616A2A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:11:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230416AbiKBRLs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:11:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36626 "EHLO
+        id S231296AbiKBRLK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:11:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231255AbiKBRLF (ORCPT
+        with ESMTP id S231143AbiKBRKx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:11:05 -0400
-Received: from relay11.mail.gandi.net (relay11.mail.gandi.net [217.70.178.231])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4056E17E38;
-        Wed,  2 Nov 2022 10:11:04 -0700 (PDT)
-Received: (Authenticated sender: kory.maincent@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPSA id 957D3100009;
-        Wed,  2 Nov 2022 17:10:57 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1667409063;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
+        Wed, 2 Nov 2022 13:10:53 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 281F41CB1C
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 10:10:52 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id D2F7921D91;
+        Wed,  2 Nov 2022 17:10:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1667409050; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
          in-reply-to:in-reply-to:references:references;
-        bh=C2xVfnlmooK7Qg1BmLHoWVwjVfzC1dVIJEO1AD5E1VU=;
-        b=FwF9YkUVYzUrCoshasYZIRNKboNo6j1i0R4ypo9aBEDT5lyrnQWloO6wdIb3IXD9Hc0KGA
-        bLyFCSbR9kqnEUDp2so6a7Pxk/ablv5ycwC91CsTv+Vh5mpBxPfC/hx4QRMi6sy5ZtR9hB
-        AZMqkdZAdt/N6zVYqACerzJvn8yxIke3Ou+HN9V38aAv6MDbkfJtqulndK4Ib1xwE2Z6x6
-        R7lYDSFPvQU/SPcZQAb7hv1fP1qvDWzYZDT2W2G32zNyUyZm8WoaiaVQx5Heas1TB5NXr4
-        358zV1riX4xRPxQr82Jag2b6IEUy8q6hB6/vPA8gd93Db4f1mQKmHiAXe/0+/w==
-From:   =?UTF-8?q?K=C3=B6ry=20Maincent?= <kory.maincent@bootlin.com>
-To:     viresh.kumar@linaro.org, Bhavna Yadav <bhavna.yadav@st.com>,
-        Vijay Kumar Mishra <vijay.kumar@st.com>,
-        Rajeev Kumar <rajeev-dlh.kumar@st.com>,
-        Deepak Sikri <deepak.sikri@st.com>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org
-Cc:     Kory Maincent <kory.maincent@bootlin.com>,
-        thomas.petazzoni@bootlin.com, Viresh Kumar <vireshk@kernel.org>,
-        Shiraz Hashim <shiraz.linux.kernel@gmail.com>, soc@kernel.org,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Russell King <linux@armlinux.org.uk>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        Gregory CLEMENT <gregory.clement@bootlin.com>,
-        Neil Armstrong <neil.armstrong@linaro.org>,
-        Alexandre Ghiti <alexandre.ghiti@canonical.com>,
-        Vipul Kumar Samar <vipulkumar.samar@st.com>,
-        Vipin Kumar <vipin.kumar@st.com>
-Subject: [PATCH v2 6/6] clk: spear: Fix SSP clock definition on SPEAr600
-Date:   Wed,  2 Nov 2022 18:10:10 +0100
-Message-Id: <20221102171012.49150-7-kory.maincent@bootlin.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221102171012.49150-1-kory.maincent@bootlin.com>
-References: <20221102171012.49150-1-kory.maincent@bootlin.com>
+        bh=CN7rpKi1JV2qkEsMCHV68X0g7v+Lhbb9nJKm2oiwPZU=;
+        b=mAQp1ZgQJP0vX2tskn5KkVkJOI670pTg2w8TneMpJRXk8RExrcPyoSo+KGEFf1FcdmETE/
+        iVExAu+9vD44Rfo6/z2wnOzsXrUFPjqpjPG4u+jqHvz2okPQfidpFwDNBFz10cukhrlzQR
+        CMGQZp4gum5CS/Cm3JqrEcLCwGdTouw=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 83D7113AE0;
+        Wed,  2 Nov 2022 17:10:50 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id +vY3H5qkYmN1OAAAMHmgww
+        (envelope-from <mkoutny@suse.com>); Wed, 02 Nov 2022 17:10:50 +0000
+Date:   Wed, 2 Nov 2022 18:10:49 +0100
+From:   Michal =?iso-8859-1?Q?Koutn=FD?= <mkoutny@suse.com>
+To:     Tejun Heo <tj@kernel.org>
+Cc:     Josh Don <joshdon@google.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Juri Lelli <juri.lelli@redhat.com>,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        Dietmar Eggemann <dietmar.eggemann@arm.com>,
+        Steven Rostedt <rostedt@goodmis.org>,
+        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
+        Daniel Bristot de Oliveira <bristot@redhat.com>,
+        Valentin Schneider <vschneid@redhat.com>,
+        linux-kernel@vger.kernel.org,
+        Joel Fernandes <joel@joelfernandes.org>,
+        Christian Brauner <brauner@kernel.org>,
+        Zefan Li <lizefan.x@bytedance.com>
+Subject: Re: [PATCH v2] sched: async unthrottling for cfs bandwidth
+Message-ID: <20221102171049.GC10591@blackbody.suse.cz>
+References: <CABk29Nta-RJpTcybgOk9u4DH=1mwQFZsOxFuQ-UpCcTwzjzAuA@mail.gmail.com>
+ <Y2Bf+CeQ8x2jKQ3S@slm.duckdns.org>
+ <CABk29Nvqv-T1JuAq2cf9=AwRu=y1+YOR4xS2qnVo6+XpWd2UNQ@mail.gmail.com>
+ <Y2B6V1PPuCcTXGp6@slm.duckdns.org>
+ <CABk29Ns1VWEVRYENud4CW3JQPrcr79i_F2PBTANqt3t-LaYCfQ@mail.gmail.com>
+ <Y2FwVX42LIKXSTz3@slm.duckdns.org>
+ <CABk29Nua8ZsDfhY+x+VfYDkbkjfXLXTZ5JMVR9uiBygraxDM+g@mail.gmail.com>
+ <Y2GUg8CiI68ZBznr@slm.duckdns.org>
+ <CABk29Nvj8nRyD0HGo+gZ4CEr0kOJSsUbJnSNFs62D66EDTMGog@mail.gmail.com>
+ <Y2Gf3zxJqxRnkVyf@slm.duckdns.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha256;
+        protocol="application/pgp-signature"; boundary="QRj9sO5tAVLaXnSD"
+Content-Disposition: inline
+In-Reply-To: <Y2Gf3zxJqxRnkVyf@slm.duckdns.org>
+User-Agent: Mutt/1.10.1 (2018-07-13)
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Kory Maincent <kory.maincent@bootlin.com>
 
-There is no SPEAr600 device named "ssp-pl022.x". Instead, the description
-of the SSP (Synchronous Serial Port) was recently added to the Device Tree,
-and the device name is "xxx.spi", so we should associate the SSP gateable
-clock to these device names.
+--QRj9sO5tAVLaXnSD
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-Signed-off-by: Kory Maincent <kory.maincent@bootlin.com>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- drivers/clk/spear/spear6xx_clock.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
+On Tue, Nov 01, 2022 at 12:38:23PM -1000, Tejun Heo <tj@kernel.org> wrote:
+> (cc'ing Michal, Christian and Li for context)
 
-diff --git a/drivers/clk/spear/spear6xx_clock.c b/drivers/clk/spear/spear6xx_clock.c
-index ee0ed89f2954..adfa118520c3 100644
---- a/drivers/clk/spear/spear6xx_clock.c
-+++ b/drivers/clk/spear/spear6xx_clock.c
-@@ -326,13 +326,13 @@ void __init spear6xx_clk_init(void __iomem *misc_base)
- 
- 	clk = clk_register_gate(NULL, "ssp0_clk", "apb_clk", 0, PERIP1_CLK_ENB,
- 			SSP0_CLK_ENB, 0, &_lock);
--	clk_register_clkdev(clk, NULL, "ssp-pl022.0");
-+	clk_register_clkdev(clk, NULL, "d0100000.spi");
- 
- 	clk = clk_register_gate(NULL, "ssp1_clk", "apb_clk", 0, PERIP1_CLK_ENB,
- 			SSP1_CLK_ENB, 0, &_lock);
--	clk_register_clkdev(clk, NULL, "ssp-pl022.1");
-+	clk_register_clkdev(clk, NULL, "d0180000.spi");
- 
- 	clk = clk_register_gate(NULL, "ssp2_clk", "apb_clk", 0, PERIP1_CLK_ENB,
- 			SSP2_CLK_ENB, 0, &_lock);
--	clk_register_clkdev(clk, NULL, "ssp-pl022.2");
-+	clk_register_clkdev(clk, NULL, "d8180000.spi");
- }
--- 
-2.25.1
+Thanks.
 
+> > We're in the process of transitioning to using bw instead for this
+> > instead in order to maintain parallelism. Fixing bw is definitely
+> > going to be useful, but I'm afraid we'll still likely have some issues
+> > from low throughput for non-bw reasons (some of which we can't
+> > directly control, since arbitrary jobs can spin up and configure their
+> > hierarchy/threads in antagonistic ways, in effect pushing out the
+> > latency of some of their threads).
+>=20
+> Yeah, thanks for the explanation. Making the lock more granular is tedious
+> but definitely doable. I don't think I can work on it in the near future =
+but
+> will keep it on mind. If anyone's interested in attacking it, please be my
+> guest.
+
+=46rom my experience, throttling while holding kernel locks (not just
+cgroup_mutex) causes more trouble than plain cgroup_mutex scalability
+currently.
+But I acknowledge the latter issue too.
+
+Michal
+
+--QRj9sO5tAVLaXnSD
+Content-Type: application/pgp-signature; name="signature.asc"
+Content-Description: Digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYIAB0WIQTrXXag4J0QvXXBmkMkDQmsBEOquQUCY2KklwAKCRAkDQmsBEOq
+uZ9JAP4z/W1MGdhX6ZkuGKjgkWAmGksEpsGwm6hcT3ngQNH4PgEAm4jQZq/iaK4d
+P42yKxWJy4D0SNDA9w+Dx+N0GFXf6ww=
+=aZnM
+-----END PGP SIGNATURE-----
+
+--QRj9sO5tAVLaXnSD--
