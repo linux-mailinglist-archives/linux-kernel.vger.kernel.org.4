@@ -2,121 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 315BB61615C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:02:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8C5FD616155
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:01:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229539AbiKBLCZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 07:02:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46468 "EHLO
+        id S230208AbiKBLBl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 07:01:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46150 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230013AbiKBLCW (ORCPT
+        with ESMTP id S229513AbiKBLBj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 07:02:22 -0400
-Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D93C1C12F;
-        Wed,  2 Nov 2022 04:02:19 -0700 (PDT)
-Received: from booty.fritz.box (unknown [77.244.183.192])
-        (Authenticated sender: luca.ceresoli@bootlin.com)
-        by mail.gandi.net (Postfix) with ESMTPA id E13CDFF81B;
-        Wed,  2 Nov 2022 11:02:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-        t=1667386938;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=BsVwSyTy7VR6zA7SYC3DsZTfRvN6uc9dyTL1pmSjsKc=;
-        b=S9wMALCHC+8JwGZW0fLzV0Yl0hnE4rD+7X1HlvjAbPHVOE9uzHDWQWMVKB9odDx3QD1cma
-        grde237SUWw9gSJ1zZDAlB7eBlLjo7OGi+MBtMQVd3nIjRL+SZIksNHMxKDyXNzeQGo+eU
-        iU6BmZ2aDzL6ZrkXg2ip3K+pdJg3/SrLG+lr2T5EhhU8aWndjlbfC+uk5jx0Hd1UGRfbRs
-        6QjHSBOfKvvzuZwAYU0Uov+FEbsrVMORETB2FW3ZW6Hvdku2aEBPNFc6O7eM2gSo7IMpY6
-        vZ0SICKwlBKnqvrdlQVhP2/zn1TBi0jnMUqgulniY995e1OMxtn12ptSzk29XQ==
-From:   luca.ceresoli@bootlin.com
-To:     Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        Sowjanya Komatineni <skomatineni@nvidia.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Dmitry Osipenko <digetx@gmail.com>
-Cc:     Mauro Carvalho Chehab <mchehab+huawei@kernel.org>,
-        linux-media@vger.kernel.org, linux-tegra@vger.kernel.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        Luca Ceresoli <luca.ceresoli@bootlin.com>,
-        stable@vger.kernel.org
-Subject: [PATCH v2 2/2] staging: media: tegra-video: fix device_node use after free
-Date:   Wed,  2 Nov 2022 12:01:02 +0100
-Message-Id: <20221102110102.25050-2-luca.ceresoli@bootlin.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221102110102.25050-1-luca.ceresoli@bootlin.com>
-References: <20221102110102.25050-1-luca.ceresoli@bootlin.com>
+        Wed, 2 Nov 2022 07:01:39 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D541029361;
+        Wed,  2 Nov 2022 04:01:37 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667386897; x=1698922897;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=d5QvCOMsjMBr33OdD5oCaZxykkRV0ETIs7RVP9U9RZc=;
+  b=UquZEJQ7H6BK2r+Bsm7LS5BcgU58r4roA2OV50tbrv9S88Sc2gqjL2Iz
+   d3zNyRMFJQlg2TqHVi4GxqEy0mbYoTdsPnYj9c8L+FCUTJNpy+b3nHFDX
+   rkpmg2HHNtDg4W9ByQkbzTLWbwHFBa4N/T4/mpmciQIk8rat08gcGDMOa
+   jXbwh7+INY+JLEfY6OKYLYWKc/40zb8xAYZzxSz108RQymJAWBytQlDXx
+   LEHaYjpzmFrO85zmIoJshh8hgnuLN1pi+AOYMoQAEXF6GTSmqUCAjDRl2
+   GwvFiVsYGhEUIDfy0nSVz+6wFWiLB/+6K7JvaXK3KDIXmso7HLuI8jqzi
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="336054732"
+X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
+   d="scan'208";a="336054732"
+Received: from orsmga002.jf.intel.com ([10.7.209.21])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 04:01:36 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="634222033"
+X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
+   d="scan'208";a="634222033"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga002.jf.intel.com with ESMTP; 02 Nov 2022 04:01:33 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oqBUx-0068pG-1t;
+        Wed, 02 Nov 2022 13:01:31 +0200
+Date:   Wed, 2 Nov 2022 13:01:31 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     linuxppc-dev@lists.ozlabs.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        linux-acpi@vger.kernel.org
+Cc:     Qiang Zhao <qiang.zhao@nxp.com>, Li Yang <leoyang.li@nxp.com>,
+        Daniel Scally <djrscally@gmail.com>,
+        Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>
+Subject: Re: [PATCH v2 0/2] gpiolib: more cleanups to get rid of of_node
+Message-ID: <Y2JOCyWZfWnWZWHv@smile.fi.intel.com>
+References: <20221005152947.71696-1-andriy.shevchenko@linux.intel.com>
+ <Y1LsjgEHXz621by6@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1LsjgEHXz621by6@smile.fi.intel.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+On Fri, Oct 21, 2022 at 10:01:34PM +0300, Andy Shevchenko wrote:
+> On Wed, Oct 05, 2022 at 06:29:45PM +0300, Andy Shevchenko wrote:
+> > One more user outside of GPIO library and pin control folders needs
+> > to be updated to use fwnode instead of of_node. To make this easier
+> > introduce a helper in property.h and convert the user.
+> > 
+> > Note, the helper will be useful not only for the current users,
+> > but any future ones that want to replace of_device_is_compatible()
+> > with analogous fwnode API.
+> > 
+> > Changelog v2:
+> > - placed new helper correctly in the property.h
+> 
+> Any comments on the series?
 
-At probe time this code path is followed:
+I'm going to apply this to my branch with Sakari's tag since there is no answer
+from PPC maintainers for a month.
 
- * tegra_csi_init
-   * tegra_csi_channels_alloc
-     * for_each_child_of_node(node, channel) -- iterates over channels
-       * automatically gets 'channel'
-         * tegra_csi_channel_alloc()
-           * saves into chan->of_node a pointer to the channel OF node
-       * automatically gets and puts 'channel'
-       * now the node saved in chan->of_node has refcount 0, can disappear
-   * tegra_csi_channels_init
-     * iterates over channels
-       * tegra_csi_channel_init -- uses chan->of_node
-
-After that, chan->of_node keeps storing the node until the device is
-removed.
-
-of_node_get() the node and of_node_put() it during teardown to avoid any
-risk.
-
-Fixes: 1ebaeb09830f ("media: tegra-video: Add support for external sensor capture")
-Cc: stable@vger.kernel.org
-Cc: Sowjanya Komatineni <skomatineni@nvidia.com>
-Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-
----
-
-No changes in v2.
----
- drivers/staging/media/tegra-video/csi.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/staging/media/tegra-video/csi.c b/drivers/staging/media/tegra-video/csi.c
-index 6b59ef55c525..426e653bd55d 100644
---- a/drivers/staging/media/tegra-video/csi.c
-+++ b/drivers/staging/media/tegra-video/csi.c
-@@ -433,7 +433,7 @@ static int tegra_csi_channel_alloc(struct tegra_csi *csi,
- 	for (i = 0; i < chan->numgangports; i++)
- 		chan->csi_port_nums[i] = port_num + i * CSI_PORTS_PER_BRICK;
- 
--	chan->of_node = node;
-+	chan->of_node = of_node_get(node);
- 	chan->numpads = num_pads;
- 	if (num_pads & 0x2) {
- 		chan->pads[0].flags = MEDIA_PAD_FL_SINK;
-@@ -641,6 +641,7 @@ static void tegra_csi_channels_cleanup(struct tegra_csi *csi)
- 			media_entity_cleanup(&subdev->entity);
- 		}
- 
-+		of_node_put(chan->of_node);
- 		list_del(&chan->list);
- 		kfree(chan);
- 	}
 -- 
-2.34.1
+With Best Regards,
+Andy Shevchenko
+
 
