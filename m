@@ -2,164 +2,93 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 58D0761644B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:01:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F934616454
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:02:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231284AbiKBOBr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 10:01:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53292 "EHLO
+        id S231287AbiKBOCx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 10:02:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231187AbiKBOBN (ORCPT
+        with ESMTP id S230341AbiKBOCd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 10:01:13 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F2B441006B;
-        Wed,  2 Nov 2022 07:00:48 -0700 (PDT)
-Received: from jinankjain-dranzer.zrrkmle5drku1h0apvxbr2u2ee.ix.internal.cloudapp.net (unknown [20.188.121.5])
-        by linux.microsoft.com (Postfix) with ESMTPSA id E5565205DA2A;
-        Wed,  2 Nov 2022 07:00:44 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com E5565205DA2A
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1667397648;
-        bh=J4DNJwZlTDLqAsrM8lj5O6r1qnyNqnGW9RCCuM0lraM=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=k+t8SwzDmvpqc/NMa3N2qQmq/uulPf1lhHLNJrGiVeRSi7T0UCW0RC6+aG9FPMQEq
-         cRTvlZQCa6xjJgvkpnvB+TP7ZlMUcoHAF9u2KK+/nBhslGzXIyVWwSVfO7NTV7+tQ/
-         xKxq7J8zHbeHcGoeWi/FHQTHYmC6I23YtCpTrqMM=
-From:   Jinank Jain <jinankjain@linux.microsoft.com>
-Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
-        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
-        x86@kernel.org, hpa@zytor.com, arnd@arndb.de, peterz@infradead.org,
-        jpoimboe@kernel.org, jinankjain@linux.microsoft.com,
-        seanjc@google.com, kirill.shutemov@linux.intel.com,
-        ak@linux.intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: [PATCH 6/6] hv, mshv : Change interrupt vector for nested root partition
-Date:   Wed,  2 Nov 2022 14:00:17 +0000
-Message-Id: <22b6428cc90efb4ed970d61249c877b373a7002a.1667394408.git.jinankjain@microsoft.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <cover.1667394408.git.jinankjain@microsoft.com>
-References: <cover.1667394408.git.jinankjain@microsoft.com>
+        Wed, 2 Nov 2022 10:02:33 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id D312DCE21;
+        Wed,  2 Nov 2022 07:02:15 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CBD4D1FB;
+        Wed,  2 Nov 2022 07:02:21 -0700 (PDT)
+Received: from e126311.manchester.arm.com (unknown [10.57.67.104])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8EB4A3F534;
+        Wed,  2 Nov 2022 07:02:13 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 14:01:40 +0000
+From:   Kajetan Puchalski <kajetan.puchalski@arm.com>
+To:     Doug Smythies <dsmythies@telus.net>
+Cc:     rafael@kernel.org, daniel.lezcano@linaro.org, lukasz.luba@arm.com,
+        Dietmar.Eggemann@arm.com, yu.chen.surf@gmail.com,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH v3 2/2] cpuidle: teo: Introduce util-awareness
+Message-ID: <Y2J4RFiOeJ5XymlI@e126311.manchester.arm.com>
+References: <20221031121314.1381472-1-kajetan.puchalski@arm.com>
+ <20221031121314.1381472-3-kajetan.puchalski@arm.com>
+ <CAAYoRsUDxsbexq5KmNTk60Ki7V4q-LxHeCzJmm9DEB6O49ks2w@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAYoRsUDxsbexq5KmNTk60Ki7V4q-LxHeCzJmm9DEB6O49ks2w@mail.gmail.com>
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Traditionally we have been using the HYPERVISOR_CALLBACK_VECTOR to relay
-the VMBus interrupt. But this does not work in case of nested
-hypervisor. Microsoft Hypervisor reserves 0x31 to 0x34 as the interrupt
-vector range for VMBus and thus we have to use one of the vectors from
-that range and setup the IDT accordingly.
+On Mon, Oct 31, 2022 at 11:24:06PM -0700, Doug Smythies wrote:
 
-Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
+> Ignoring the metrics is not the correct thing to do.
+> Depending on the workflow, it can severely bias the idle states deeper
+> than they should be because most of the needed information to select
+> the appropriate shallow state is tossed out.
+
+Interesting, thanks for flagging this actually. Arguably it made sense
+originally but with v3 changes it probably causes more harm than good.
+
+From testing it on my own side it still looks all right without the
+skipping metrics part so I'm fine with just dropping it from the patch.
+V4 it is.
+
+I'll include my updated numbers and more tests in the new cover letter.
+
+> Example 1:
+> 2 pairs of ping pongs = 4 threads
+> Parameters chosen such that idle state 2 would be a most used state.
+> CPU frequency governor: Schedutil.
+> CPU frequency scaling driver: intel_cpufreq.
+> HWP: Disabled
+> Processor: i5-10600K (6 cores 12 cpus).
+> Kernel: 6.1-rc3
+> Run length: 1e8 cycles
+> Idle governor:
+> teo: 11.73 uSecs/loop ; idle state 1 ~3.5e6 exits/sec
+> menu: 12.1 uSecs/loop ; idle state 1 ~3.3e6 exits/sec
+> util-v3: 15.2 uSecs/loop ; idle state 1 ~200 exits/sec
+> util-v4: 11.63 uSecs/loop ; idle state 1 ~3.5e6 exits/sec
+> 
+> Where util-v4 is the same as this patch (util-v3) with the above code reverted.
+> 
+> Note: less time per loop is better.
+> 
+> Example 2: Same but parameters selected such that idle state 0 would
+> be a most used idle state.
+> Run Length: 4e8 cycles
+> Idle governor:
+> teo: 3.1 uSecs/loop ; idle state 0 ~1.2e6 exits/sec
+> menu:  3.1 uSecs/loop ; idle state 0 ~1.3e6 exits/sec
+> util-v3: 5.1 uSecs/loop ; idle state 0 ~4 exits/sec
+> util-v4: ? uSecs/loop ; idle state 0 ~1.2e6 exits/sec (partial result)
+
+Thanks a lot for the testing!
+
 ---
- arch/x86/include/asm/idtentry.h    |  2 ++
- arch/x86/include/asm/irq_vectors.h |  6 ++++++
- arch/x86/kernel/cpu/mshyperv.c     | 15 +++++++++++++++
- arch/x86/kernel/idt.c              |  9 +++++++++
- drivers/hv/vmbus_drv.c             |  3 ++-
- 5 files changed, 34 insertions(+), 1 deletion(-)
-
-diff --git a/arch/x86/include/asm/idtentry.h b/arch/x86/include/asm/idtentry.h
-index 72184b0b2219..c0648e3e4d4a 100644
---- a/arch/x86/include/asm/idtentry.h
-+++ b/arch/x86/include/asm/idtentry.h
-@@ -686,6 +686,8 @@ DECLARE_IDTENTRY_SYSVEC(POSTED_INTR_NESTED_VECTOR,	sysvec_kvm_posted_intr_nested
- DECLARE_IDTENTRY_SYSVEC(HYPERVISOR_CALLBACK_VECTOR,	sysvec_hyperv_callback);
- DECLARE_IDTENTRY_SYSVEC(HYPERV_REENLIGHTENMENT_VECTOR,	sysvec_hyperv_reenlightenment);
- DECLARE_IDTENTRY_SYSVEC(HYPERV_STIMER0_VECTOR,	sysvec_hyperv_stimer0);
-+DECLARE_IDTENTRY_SYSVEC(HYPERV_INTR_NESTED_VMBUS_VECTOR,
-+			sysvec_hyperv_nested_vmbus_intr);
- #endif
- 
- #if IS_ENABLED(CONFIG_ACRN_GUEST)
-diff --git a/arch/x86/include/asm/irq_vectors.h b/arch/x86/include/asm/irq_vectors.h
-index 43dcb9284208..729d19eab7f5 100644
---- a/arch/x86/include/asm/irq_vectors.h
-+++ b/arch/x86/include/asm/irq_vectors.h
-@@ -102,6 +102,12 @@
- #if IS_ENABLED(CONFIG_HYPERV)
- #define HYPERV_REENLIGHTENMENT_VECTOR	0xee
- #define HYPERV_STIMER0_VECTOR		0xed
-+/*
-+ * FIXME: Change this, once Microsoft Hypervisor changes its assumption
-+ * around VMBus interrupt vector allocation for nested root partition.
-+ * Or provides a better interface to detect this instead of hardcoding.
-+ */
-+#define HYPERV_INTR_NESTED_VMBUS_VECTOR	0x31
- #endif
- 
- #define LOCAL_TIMER_VECTOR		0xec
-diff --git a/arch/x86/kernel/cpu/mshyperv.c b/arch/x86/kernel/cpu/mshyperv.c
-index 2555535f5237..83aab88bf298 100644
---- a/arch/x86/kernel/cpu/mshyperv.c
-+++ b/arch/x86/kernel/cpu/mshyperv.c
-@@ -61,6 +61,21 @@ DEFINE_IDTENTRY_SYSVEC(sysvec_hyperv_callback)
- 	set_irq_regs(old_regs);
- }
- 
-+DEFINE_IDTENTRY_SYSVEC(sysvec_hyperv_nested_vmbus_intr)
-+{
-+	struct pt_regs *old_regs = set_irq_regs(regs);
-+
-+	inc_irq_stat(irq_hv_callback_count);
-+
-+	if (vmbus_handler)
-+		vmbus_handler();
-+
-+	if (ms_hyperv.hints & HV_DEPRECATING_AEOI_RECOMMENDED)
-+		ack_APIC_irq();
-+
-+	set_irq_regs(old_regs);
-+}
-+
- void hv_setup_vmbus_handler(void (*handler)(void))
- {
- 	vmbus_handler = handler;
-diff --git a/arch/x86/kernel/idt.c b/arch/x86/kernel/idt.c
-index a58c6bc1cd68..ace648856a0b 100644
---- a/arch/x86/kernel/idt.c
-+++ b/arch/x86/kernel/idt.c
-@@ -160,6 +160,15 @@ static const __initconst struct idt_data apic_idts[] = {
- # endif
- 	INTG(SPURIOUS_APIC_VECTOR,		asm_sysvec_spurious_apic_interrupt),
- 	INTG(ERROR_APIC_VECTOR,			asm_sysvec_error_interrupt),
-+#ifdef CONFIG_HYPERV
-+	/*
-+	 * This is a hack because we cannot install this interrupt handler via alloc_intr_gate
-+	 * as it does not allow interrupt vector less than FIRST_SYSTEM_VECTORS. And hyperv
-+	 * does not want anything other than 0x31-0x34 as the interrupt vector for vmbus
-+	 * interrupt in case of nested setup.
-+	 */
-+	INTG(HYPERV_INTR_NESTED_VMBUS_VECTOR, asm_sysvec_hyperv_nested_vmbus_intr),
-+#endif
- #endif
- };
- 
-diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-index 2f0cf75e811b..e6fb77fb44b9 100644
---- a/drivers/hv/vmbus_drv.c
-+++ b/drivers/hv/vmbus_drv.c
-@@ -2746,7 +2746,8 @@ static int __init hv_acpi_init(void)
- 	 * normal Linux IRQ mechanism is not used in this case.
- 	 */
- #ifdef HYPERVISOR_CALLBACK_VECTOR
--	vmbus_interrupt = HYPERVISOR_CALLBACK_VECTOR;
-+	vmbus_interrupt = hv_nested ? HYPERV_INTR_NESTED_VMBUS_VECTOR :
-+					    HYPERVISOR_CALLBACK_VECTOR;
- 	vmbus_irq = -1;
- #endif
- 
--- 
-2.25.1
-
+Kajetan
