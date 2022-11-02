@@ -2,43 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D6EB6162A5
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:23:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67C1C616346
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 14:02:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230376AbiKBMXW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 08:23:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41746 "EHLO
+        id S230396AbiKBNCa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 09:02:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42728 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbiKBMXT (ORCPT
+        with ESMTP id S230242AbiKBNC1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 08:23:19 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AEE6228729;
-        Wed,  2 Nov 2022 05:23:18 -0700 (PDT)
-Received: from kwepemi500015.china.huawei.com (unknown [172.30.72.55])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N2Qym37bnzbc7c;
-        Wed,  2 Nov 2022 20:23:12 +0800 (CST)
-Received: from huawei.com (10.175.101.6) by kwepemi500015.china.huawei.com
- (7.221.188.92) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 2 Nov
- 2022 20:23:15 +0800
-From:   Lu Wei <luwei32@huawei.com>
-To:     <edumazet@google.com>, <davem@davemloft.net>,
-        <yoshfuji@linux-ipv6.org>, <dsahern@kernel.org>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <xemul@parallels.com>,
-        <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: [patch net v3] tcp: prohibit TCP_REPAIR_OPTIONS if data was already sent
-Date:   Wed, 2 Nov 2022 21:28:11 +0800
-Message-ID: <20221102132811.70858-1-luwei32@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 2 Nov 2022 09:02:27 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1462F28724
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 06:02:26 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id l2so6531051qtq.11
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 06:02:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ziepe.ca; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=9ui2spH7Ijxdyz3Q6yHTW1U/bSitTRDpSp5cXJ8JASQ=;
+        b=L3mc3II/vblRGybKufSbD0XGkcv+/Ndo+Ncph5snlwdoLFIIf2N+eiTsnh/towV6SQ
+         teA8vs9GdfKuarodtBR4J1ToeItpWVaPXKrj1ul87TpPTYsSc3ZiNeeh5/yGuI71HCVT
+         0+Wfh6yPzkO9BRy8Qq5z2eU6tesodEKpfU8ey0AWdu1fn0duRiXQSyPulQNJXdZfRC4H
+         G+OpJ3M1z+/HSxOflPI8DdDwADuwtSATZGd0VHJY2yuyiGW/gU/5HPKXgvAGdAg5J2dS
+         aDauWRMkaJ4DgnDvbc/RHTLdkX71jWl7dpNkb4TU0d/ab6TuAYJpEndxgJoT6HlGFUR4
+         5KlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9ui2spH7Ijxdyz3Q6yHTW1U/bSitTRDpSp5cXJ8JASQ=;
+        b=r6QxIg3d4J2R334W7D+QT7IRry1mhrx63GpSxKlhSWb7Rx5dWStANYdsTcU/RTE1S9
+         s6Ht0jGK4S4rA1pjsC0SgKZR7sW/ioqoICInce2/RTlBECEQNRJVp1ZaL+P2zNb5k7Cg
+         4EjIc1AuueO/kk+rPvw8Yv78c6774kyQgJc9PrEX9iVQ0Ee3NpWIgH5ZxNB//TfTeku6
+         3EhdLWmSAf7e8OkCrg1+uQ9rOhtDvhwQiVFoNDWAnVnoRK3eiHsHCzm2sbhpMWe3+uMu
+         ps05C2HuoZxwhBkT5uzOWN1SLYmL7V58rZm4bHpShRkqcOWtLWLxVQQFtgZ41/sA0DXC
+         yNZQ==
+X-Gm-Message-State: ACrzQf2Yc0Y+8gl1VO2A0PhncuxgefuZC+oTVrRFtD35SEWEXTax6zqC
+        AIO8OpLoQedl92xjU4WWJLOB0g==
+X-Google-Smtp-Source: AMsMyM4hG3J43eMr0N8kd2RNr5CGjH8FZCEj0O/saxYELV47TVbI18Z/MhuWquKg2CIuAW2tEMh2mQ==
+X-Received: by 2002:ac8:60c3:0:b0:3a5:26c3:1a5e with SMTP id i3-20020ac860c3000000b003a526c31a5emr12641109qtm.247.1667394145195;
+        Wed, 02 Nov 2022 06:02:25 -0700 (PDT)
+Received: from ziepe.ca (hlfxns017vw-47-55-122-23.dhcp-dynamic.fibreop.ns.bellaliant.net. [47.55.122.23])
+        by smtp.gmail.com with ESMTPSA id u21-20020a37ab15000000b006fa1dc83a36sm7480299qke.64.2022.11.02.06.02.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 06:02:24 -0700 (PDT)
+Received: from jgg by wakko with local (Exim 4.95)
+        (envelope-from <jgg@ziepe.ca>)
+        id 1oqDNv-004VTc-Nq;
+        Wed, 02 Nov 2022 10:02:23 -0300
+Date:   Wed, 2 Nov 2022 10:02:23 -0300
+From:   Jason Gunthorpe <jgg@ziepe.ca>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Leonid Ravich <leonid.ravich@toganetworks.com>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <IMCEAMAILTO-linux-trace-kernel+40vger+2Ekernel+2Eorg@eurprd02.prod.outlook.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Yigal Korman <yigal.korman@toganetworks.com>
+Subject: Re: BUG:  ib_mad ftrace event unsupported migration
+Message-ID: <Y2JqX3vC1mG/JDex@ziepe.ca>
+References: <VI1PR02MB623706DA8A01842834FC191089399@VI1PR02MB6237.eurprd02.prod.outlook.com>
+ <20221102074457.08f538a8@rorschach.local.home>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemi500015.china.huawei.com (7.221.188.92)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221102074457.08f538a8@rorschach.local.home>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,70 +80,24 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-If setsockopt with option name of TCP_REPAIR_OPTIONS and opt_code
-of TCPOPT_SACK_PERM is called to enable sack after data is sent
-and before data is acked, it will trigger a warning in function
-tcp_verify_left_out() as follows:
+On Wed, Nov 02, 2022 at 07:44:57AM -0400, Steven Rostedt wrote:
+> > before starting throwing some patch into the the air  I would like to align with you the approach we should take here. 
+> > 
+> > my suggestion here : 
+> > - ftrace infra should verify no migration happen  (end and start happens on same CPU)  in case not we will  throw warning for the issue  .
+> 
+> The scheduler should have. On entering the ring buffer code
+> ring_buffer_lock_reserver() it disables preemption and does not
+> re-enable it until ring_buffer_unlock_commit().
+> 
+> The only way to migrate is if you re-enable preemption. WHICH IS A
+> BUG!
 
-============================================
-WARNING: CPU: 8 PID: 0 at net/ipv4/tcp_input.c:2132
-tcp_timeout_mark_lost+0x154/0x160
-tcp_enter_loss+0x2b/0x290
-tcp_retransmit_timer+0x50b/0x640
-tcp_write_timer_handler+0x1c8/0x340
-tcp_write_timer+0xe5/0x140
-call_timer_fn+0x3a/0x1b0
-__run_timers.part.0+0x1bf/0x2d0
-run_timer_softirq+0x43/0xb0
-__do_softirq+0xfd/0x373
-__irq_exit_rcu+0xf6/0x140
+So what on earth did that?
 
-The warning is caused in the following steps:
-1. a socket named socketA is created
-2. socketA enters repair mode without build a connection
-3. socketA calls connect() and its state is changed to TCP_ESTABLISHED
-   directly
-4. socketA leaves repair mode
-5. socketA calls sendmsg() to send data, packets_out and sack_outs(dup
-   ack receives) increase
-6. socketA enters repair mode again
-7. socketA calls setsockopt with TCPOPT_SACK_PERM to enable sack
-8. retransmit timer expires, it calls tcp_timeout_mark_lost(), lost_out
-   increases
-9. sack_outs + lost_out > packets_out triggers since lost_out and
-   sack_outs increase repeatly
+I'm guessing some driver's query_pkey op, but AFAIK we don't have any
+explicit pre-emption reenablements in the code - unless it is sneaky..
 
-In function tcp_timeout_mark_lost(), tp->sacked_out will be cleared if
-Step7 not happen and the warning will not be triggered. As suggested by
-Denis and Eric, TCP_REPAIR_OPTIONS should be prohibited if data was
-already sent. So this patch checks tp->segs_out, only TCP_REPAIR_OPTIONS
-can be set only if tp->segs_out is 0.
+Leonid what driver are you testing?
 
-socket-tcp tests in CRIU has been tested as follows:
-$ sudo ./test/zdtm.py run -t zdtm/static/socket-tcp*  --keep-going \
-       --ignore-taint
-
-socket-tcp* represent all socket-tcp tests in test/zdtm/static/.
-
-Fixes: b139ba4e90dc ("tcp: Repair connection-time negotiated parameters")
-Signed-off-by: Lu Wei <luwei32@huawei.com>
----
- net/ipv4/tcp.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index ef14efa1fb70..1f5cc32cf0cc 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -3647,7 +3647,7 @@ int do_tcp_setsockopt(struct sock *sk, int level, int optname,
- 	case TCP_REPAIR_OPTIONS:
- 		if (!tp->repair)
- 			err = -EINVAL;
--		else if (sk->sk_state == TCP_ESTABLISHED)
-+		else if (sk->sk_state == TCP_ESTABLISHED && !tp->segs_out)
- 			err = tcp_repair_options_est(sk, optval, optlen);
- 		else
- 			err = -EPERM;
--- 
-2.31.1
-
+Jason
