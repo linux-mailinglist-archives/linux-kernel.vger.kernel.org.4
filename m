@@ -2,368 +2,140 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5E510616F79
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 22:14:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0DBD8616F7F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 22:14:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231231AbiKBVOR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 17:14:17 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54418 "EHLO
+        id S231278AbiKBVOc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 17:14:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231160AbiKBVOE (ORCPT
+        with ESMTP id S231476AbiKBVOY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 17:14:04 -0400
-Received: from mail-wr1-x42f.google.com (mail-wr1-x42f.google.com [IPv6:2a00:1450:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 800B521A6
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 14:14:01 -0700 (PDT)
-Received: by mail-wr1-x42f.google.com with SMTP id bs21so80661wrb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 14:14:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=x7kcwsKp7WkaA2vP3SDunKTqiqNiXQErxFa/Nd+bXVk=;
-        b=Od7cBVmMSiun7fhrpMwsZVtCcjb/qk2sZltGfVHCvK+aMhoFD0sqfTaekWAQwzjhHF
-         dsEdRr/fCnF6pxbwaJ/RXvCnw5FXPl3FqqmEe7sFKQEYFkKoW44RTfjA4Le/jpA6peKE
-         nxNTPsiUqLHzILn3cOMrcy1Cgf5KkP9Hc19qZOcnyW651lTb6xF6c2yobG9NpNssZqUV
-         htfvuezY8cze30271VKFtbHG4dBaNGUbRwJY4aeQFJpkDbkvjWB6VCLAOzRt9zzbR61x
-         wDKIesMvYGaPSMAikYyy1j2uSDUSD9aBloiMwVCeaD4EkIwzU+QrLAp4ITlq5SrHC7sK
-         KIrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=x7kcwsKp7WkaA2vP3SDunKTqiqNiXQErxFa/Nd+bXVk=;
-        b=22y69dHZrE545ge1Vbz5UfRCJ30aknP4yAFS8mNsZUGZ7PhNN7pS8nPX8hCW9r8Kc2
-         sc92xd7GDkpxtT+ZpizfkwfBSWiFJ1EqS1cA9hGKSLIcKXe7KbH11r8ltJvzEx8UDFlS
-         yBZ0NlHds1nTSQgz5PlGqIcUP/jPBSYmjvwCdOEuwXKjStBYnE72/OJ6ktlhtF5gTqca
-         KrowZ3cD1sq6mk0hhfo95k3lqTK0z5tv4kWIrSSqXNEgMbThfBlp+wVrNkJaZ5W2ORMi
-         7DD7RVgLuFmCkGSqw952mhZ92tcVlB6wKASFe4Pd0s8scU0TvI/3TZ9EibO/i+A7WFXY
-         kvgg==
-X-Gm-Message-State: ACrzQf3x7BCsjOm3OWpNDYpZ8XOJLNlzL/D6E7pugq8ZfmX/0SXbyhUR
-        7gOC1UUa2NIoWuyLkpRWOu3R+OfqBq8vig==
-X-Google-Smtp-Source: AMsMyM7xSAGLuUUZB9qRcQkNKAX8Wys7gynP1WH3E/nPJ14fOqA1AtCvJHZl0eRm+dv+NdDXBFcaiA==
-X-Received: by 2002:adf:e9cc:0:b0:236:9a14:bd8c with SMTP id l12-20020adfe9cc000000b002369a14bd8cmr16492141wrn.433.1667423639736;
-        Wed, 02 Nov 2022 14:13:59 -0700 (PDT)
-Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id cc6-20020a5d5c06000000b002364835caacsm14179851wrb.112.2022.11.02.14.13.58
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 14:13:59 -0700 (PDT)
-From:   Dmitry Safonov <dima@arista.com>
-To:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>
-Cc:     Dmitry Safonov <dima@arista.com>,
-        Bob Gilligan <gilligan@arista.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        netdev@vger.kernel.org
-Subject: [PATCH 2/2] net/tcp: Disable TCP-MD5 static key on tcp_md5sig_info destruction
-Date:   Wed,  2 Nov 2022 21:13:50 +0000
-Message-Id: <20221102211350.625011-3-dima@arista.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221102211350.625011-1-dima@arista.com>
-References: <20221102211350.625011-1-dima@arista.com>
+        Wed, 2 Nov 2022 17:14:24 -0400
+Received: from wnew2-smtp.messagingengine.com (wnew2-smtp.messagingengine.com [64.147.123.27])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 06AABBC8C;
+        Wed,  2 Nov 2022 14:14:14 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailnew.west.internal (Postfix) with ESMTP id A8C8E2B06827;
+        Wed,  2 Nov 2022 17:14:09 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute4.internal (MEProxy); Wed, 02 Nov 2022 17:14:13 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm2; t=1667423649; x=1667430849; bh=ya
+        z7HB+tA0RP33F5tMpk/jLLItyrZaFvVEGA2nFMTHI=; b=Ky05TEuWIr83oUh3MP
+        VKNL8ENuHV9gUlhetBL9nyBnWkmhW3b7eJIJQvsEX4i8mrWKj7fAD2YoYyBb89E9
+        ISKn14UJ31abDLZFWzZCCaQnTLi78oerrmjr+5hmV9sA3hFI3L8ZV1Kiu7AX9QXR
+        PDBaluynehd9n3eiw+gtrXx+RWa959jyR7nphlxGnum8rHgJTzq02ZExi1nIGFid
+        EJO+kCiPv0YbKVpF7c2OrK1fuI/2gu/r+1T0aqwqS9P/ypb1+DPbh35ga9d9WHYp
+        FylKYS+Rg2UR7pBcU7lZ5OPVMq4ERDjJJCu0ll46FiB93Ht82Uh6f5WuN9oIyHug
+        tC5Q==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1667423649; x=1667430849; bh=yaz7HB+tA0RP33F5tMpk/jLLItyr
+        ZaFvVEGA2nFMTHI=; b=kXuKgSJSeQyH8zkQnQLj2ogT1FjQ404UQUbzOXrHjtoL
+        O5jybhnZTvUTvWSm0JarvjTauAp3ZsZ+r+wmdYPHpVddWzaXL8v+kKFMg4LptKuU
+        za4Nn6AFZHdJ8Ew6kOJjOVtyV+RbvW0VGJP+2xRX3dEy0QIR7itrmJOonvxViJoT
+        AoF3E4PNZiUZ9aaP1YucG7Uv9v8Eqwth9//su3HfO8kpjAFt2r6d9BaJJidv+bKw
+        mNZEQxt0P2yMJj0u53Zl8vkHso9nSQJzXMgYh5xL1AvTD3D0XGhltZ2SmyCHlpRE
+        TQHb95HDxl2N1T/q559g2R0z+nX6Aaenk06fEmM9mA==
+X-ME-Sender: <xms:n91iY-Xiau9PyhDECPWzFgSUDYb5YvoQDfa-aFayS-W-TkmT-EE9PQ>
+    <xme:n91iY6l1bgFgvYiO7TIQuOyH8InOlHtvWmclxCUM0Brvq0SEJSum6PG8m5a0XQRlh
+    XyrODlUak8pt2VGdKM>
+X-ME-Received: <xmr:n91iYyZH6tYal8m3G_iR8obDtjV5uHdUdfR2NM2ruYYM4CfTnC6uoZBViw5Wcm_5RZe2Bw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudejgddugeeiucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
+    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
+    cujfgurhepfffhvfevuffkfhggtggujgesthdttddttddtvdenucfhrhhomhepfdfmihhr
+    ihhllhcutedrucfuhhhuthgvmhhovhdfuceokhhirhhilhhlsehshhhuthgvmhhovhdrnh
+    grmhgvqeenucggtffrrghtthgvrhhnpefhieeghfdtfeehtdeftdehgfehuddtvdeuheet
+    tddtheejueekjeegueeivdektdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehkihhrihhllhesshhhuhhtvghmohhvrdhnrghmvg
+X-ME-Proxy: <xmx:n91iY1Xbl82GIObQKlhVWjYLikh-vdemfP8sXrF8OKJdnJGBq_55bQ>
+    <xmx:n91iY4mFVh0Wa1sREv4w7MfcVUVMVuR6uCI7ESrbU6QB3ckNyn8ixg>
+    <xmx:n91iY6eNAqPKPeE5l9TMMHmoRplO_cTttQ8P4OovIUVmAbCtz4rcFQ>
+    <xmx:od1iY_xvsCuIie0PpHuS7NS8eqps2ru8p5ovcRyadUjFuTveg1l2617acAo>
+Feedback-ID: ie3994620:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 2 Nov 2022 17:14:06 -0400 (EDT)
+Received: by box.shutemov.name (Postfix, from userid 1000)
+        id 5751D104449; Thu,  3 Nov 2022 00:14:04 +0300 (+03)
+Date:   Thu, 3 Nov 2022 00:14:04 +0300
+From:   "Kirill A. Shutemov" <kirill@shutemov.name>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
+        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
+        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        mhocko@suse.com, Muchun Song <songmuchun@bytedance.com>,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
+ create restricted user memory
+Message-ID: <20221102211404.l5whyif3j3k67fv2@box.shutemov.name>
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
+ <20221031174738.fklhlia5fmaiinpe@amd.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_NONE autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221031174738.fklhlia5fmaiinpe@amd.com>
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-To do that, separate two scenarios:
-- where it's the first MD5 key on the system, which means that enabling
-  of the static key may need to sleep;
-- copying of an existing key from a listening socket to the request
-  socket upon receiving a signed TCP segment, where static key was
-  already enabled (when the key was added to the listening socket).
+On Mon, Oct 31, 2022 at 12:47:38PM -0500, Michael Roth wrote:
+> 
+> In v8 there was some discussion about potentially passing the page/folio
+> and order as part of the invalidation callback, I ended up needing
+> something similar for SEV-SNP, and think it might make sense for other
+> platforms. This main reasoning is:
+> 
+>   1) restoring kernel directmap:
+> 
+>      Currently SNP (and I believe TDX) need to either split or remove kernel
+>      direct mappings for restricted PFNs, since there is no guarantee that
+>      other PFNs within a 2MB range won't be used for non-restricted
+>      (which will cause an RMP #PF in the case of SNP since the 2MB
+>      mapping overlaps with guest-owned pages)
 
-Now the life-time of the static branch for TCP-MD5 is until:
-- last tcp_md5sig_info is destroyed
-- last socket in time-wait state with MD5 key is closed.
+That's news to me. Where the restriction for SNP comes from? There's no
+such limitation on TDX side AFAIK?
 
-Which means that after all sockets with TCP-MD5 keys are gone, the
-system gets back the performance of disabled md5-key static branch.
+Could you point me to relevant documentation if there's any?
 
-Signed-off-by: Dmitry Safonov <dima@arista.com>
----
- include/net/tcp.h        | 10 ++++---
- net/ipv4/tcp.c           |  5 +---
- net/ipv4/tcp_ipv4.c      | 56 ++++++++++++++++++++++++++++++----------
- net/ipv4/tcp_minisocks.c |  9 ++++---
- net/ipv4/tcp_output.c    |  4 +--
- net/ipv6/tcp_ipv6.c      | 10 +++----
- 6 files changed, 63 insertions(+), 31 deletions(-)
-
-diff --git a/include/net/tcp.h b/include/net/tcp.h
-index 14d45661a84d..a0cdf013782a 100644
---- a/include/net/tcp.h
-+++ b/include/net/tcp.h
-@@ -1675,7 +1675,11 @@ int tcp_v4_md5_hash_skb(char *md5_hash, const struct tcp_md5sig_key *key,
- 			const struct sock *sk, const struct sk_buff *skb);
- int tcp_md5_do_add(struct sock *sk, const union tcp_md5_addr *addr,
- 		   int family, u8 prefixlen, int l3index, u8 flags,
--		   const u8 *newkey, u8 newkeylen, gfp_t gfp);
-+		   const u8 *newkey, u8 newkeylen);
-+int tcp_md5_key_copy(struct sock *sk, const union tcp_md5_addr *addr,
-+		     int family, u8 prefixlen, int l3index,
-+		     struct tcp_md5sig_key *key);
-+
- int tcp_md5_do_del(struct sock *sk, const union tcp_md5_addr *addr,
- 		   int family, u8 prefixlen, int l3index, u8 flags);
- struct tcp_md5sig_key *tcp_v4_md5_lookup(const struct sock *sk,
-@@ -1683,7 +1687,7 @@ struct tcp_md5sig_key *tcp_v4_md5_lookup(const struct sock *sk,
- 
- #ifdef CONFIG_TCP_MD5SIG
- #include <linux/jump_label.h>
--extern struct static_key_false tcp_md5_needed;
-+extern struct static_key_false_deferred tcp_md5_needed;
- struct tcp_md5sig_key *__tcp_md5_do_lookup(const struct sock *sk, int l3index,
- 					   const union tcp_md5_addr *addr,
- 					   int family);
-@@ -1691,7 +1695,7 @@ static inline struct tcp_md5sig_key *
- tcp_md5_do_lookup(const struct sock *sk, int l3index,
- 		  const union tcp_md5_addr *addr, int family)
- {
--	if (!static_branch_unlikely(&tcp_md5_needed))
-+	if (!static_branch_unlikely(&tcp_md5_needed.key))
- 		return NULL;
- 	return __tcp_md5_do_lookup(sk, l3index, addr, family);
- }
-diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-index ef14efa1fb70..936ed566cc89 100644
---- a/net/ipv4/tcp.c
-+++ b/net/ipv4/tcp.c
-@@ -4460,11 +4460,8 @@ bool tcp_alloc_md5sig_pool(void)
- 	if (unlikely(!READ_ONCE(tcp_md5sig_pool_populated))) {
- 		mutex_lock(&tcp_md5sig_mutex);
- 
--		if (!tcp_md5sig_pool_populated) {
-+		if (!tcp_md5sig_pool_populated)
- 			__tcp_alloc_md5sig_pool();
--			if (tcp_md5sig_pool_populated)
--				static_branch_inc(&tcp_md5_needed);
--		}
- 
- 		mutex_unlock(&tcp_md5sig_mutex);
- 	}
-diff --git a/net/ipv4/tcp_ipv4.c b/net/ipv4/tcp_ipv4.c
-index fae80b1a1796..f812d507fc9a 100644
---- a/net/ipv4/tcp_ipv4.c
-+++ b/net/ipv4/tcp_ipv4.c
-@@ -1064,7 +1064,7 @@ static void tcp_v4_reqsk_destructor(struct request_sock *req)
-  * We need to maintain these in the sk structure.
-  */
- 
--DEFINE_STATIC_KEY_FALSE(tcp_md5_needed);
-+DEFINE_STATIC_KEY_DEFERRED_FALSE(tcp_md5_needed, HZ);
- EXPORT_SYMBOL(tcp_md5_needed);
- 
- static bool better_md5_match(struct tcp_md5sig_key *old, struct tcp_md5sig_key *new)
-@@ -1177,9 +1177,6 @@ static int tcp_md5sig_info_add(struct sock *sk, gfp_t gfp)
- 	struct tcp_sock *tp = tcp_sk(sk);
- 	struct tcp_md5sig_info *md5sig;
- 
--	if (rcu_dereference_protected(tp->md5sig_info, lockdep_sock_is_held(sk)))
--		return 0;
--
- 	md5sig = kmalloc(sizeof(*md5sig), gfp);
- 	if (!md5sig)
- 		return -ENOMEM;
-@@ -1191,9 +1188,9 @@ static int tcp_md5sig_info_add(struct sock *sk, gfp_t gfp)
- }
- 
- /* This can be called on a newly created socket, from other files */
--int tcp_md5_do_add(struct sock *sk, const union tcp_md5_addr *addr,
--		   int family, u8 prefixlen, int l3index, u8 flags,
--		   const u8 *newkey, u8 newkeylen, gfp_t gfp)
-+static int __tcp_md5_do_add(struct sock *sk, const union tcp_md5_addr *addr,
-+			    int family, u8 prefixlen, int l3index, u8 flags,
-+			    const u8 *newkey, u8 newkeylen, gfp_t gfp)
- {
- 	/* Add Key to the list */
- 	struct tcp_md5sig_key *key;
-@@ -1220,9 +1217,6 @@ int tcp_md5_do_add(struct sock *sk, const union tcp_md5_addr *addr,
- 		return 0;
- 	}
- 
--	if (tcp_md5sig_info_add(sk, gfp))
--		return -ENOMEM;
--
- 	md5sig = rcu_dereference_protected(tp->md5sig_info,
- 					   lockdep_sock_is_held(sk));
- 
-@@ -1246,8 +1240,44 @@ int tcp_md5_do_add(struct sock *sk, const union tcp_md5_addr *addr,
- 	hlist_add_head_rcu(&key->node, &md5sig->head);
- 	return 0;
- }
-+
-+int tcp_md5_do_add(struct sock *sk, const union tcp_md5_addr *addr,
-+		   int family, u8 prefixlen, int l3index, u8 flags,
-+		   const u8 *newkey, u8 newkeylen)
-+{
-+	struct tcp_sock *tp = tcp_sk(sk);
-+
-+	if (!rcu_dereference_protected(tp->md5sig_info, lockdep_sock_is_held(sk))) {
-+		if (tcp_md5sig_info_add(sk, GFP_KERNEL))
-+			return -ENOMEM;
-+
-+		static_branch_inc(&tcp_md5_needed.key);
-+	}
-+
-+	return __tcp_md5_do_add(sk, addr, family, prefixlen, l3index, flags,
-+				newkey, newkeylen, GFP_KERNEL);
-+}
- EXPORT_SYMBOL(tcp_md5_do_add);
- 
-+int tcp_md5_key_copy(struct sock *sk, const union tcp_md5_addr *addr,
-+		     int family, u8 prefixlen, int l3index,
-+		     struct tcp_md5sig_key *key)
-+{
-+	struct tcp_sock *tp = tcp_sk(sk);
-+
-+	if (!rcu_dereference_protected(tp->md5sig_info, lockdep_sock_is_held(sk))) {
-+		if (tcp_md5sig_info_add(sk, sk_gfp_mask(sk, GFP_ATOMIC)))
-+			return -ENOMEM;
-+
-+		atomic_inc(&tcp_md5_needed.key.key.enabled);
-+	}
-+
-+	return __tcp_md5_do_add(sk, addr, family, prefixlen, l3index,
-+				key->flags, key->key, key->keylen,
-+				sk_gfp_mask(sk, GFP_ATOMIC));
-+}
-+EXPORT_SYMBOL(tcp_md5_key_copy);
-+
- int tcp_md5_do_del(struct sock *sk, const union tcp_md5_addr *addr, int family,
- 		   u8 prefixlen, int l3index, u8 flags)
- {
-@@ -1334,7 +1364,7 @@ static int tcp_v4_parse_md5_keys(struct sock *sk, int optname,
- 		return -EINVAL;
- 
- 	return tcp_md5_do_add(sk, addr, AF_INET, prefixlen, l3index, flags,
--			      cmd.tcpm_key, cmd.tcpm_keylen, GFP_KERNEL);
-+			      cmd.tcpm_key, cmd.tcpm_keylen);
- }
- 
- static int tcp_v4_md5_hash_headers(struct tcp_md5sig_pool *hp,
-@@ -1591,8 +1621,7 @@ struct sock *tcp_v4_syn_recv_sock(const struct sock *sk, struct sk_buff *skb,
- 		 * memory, then we end up not copying the key
- 		 * across. Shucks.
- 		 */
--		tcp_md5_do_add(newsk, addr, AF_INET, 32, l3index, key->flags,
--			       key->key, key->keylen, GFP_ATOMIC);
-+		tcp_md5_key_copy(newsk, addr, AF_INET, 32, l3index, key);
- 		sk_gso_disable(newsk);
- 	}
- #endif
-@@ -2284,6 +2313,7 @@ void tcp_v4_destroy_sock(struct sock *sk)
- 		tcp_clear_md5_list(sk);
- 		kfree_rcu(rcu_dereference_protected(tp->md5sig_info, 1), rcu);
- 		tp->md5sig_info = NULL;
-+		static_branch_slow_dec_deferred(&tcp_md5_needed);
- 	}
- #endif
- 
-diff --git a/net/ipv4/tcp_minisocks.c b/net/ipv4/tcp_minisocks.c
-index c375f603a16c..fb500160b8d2 100644
---- a/net/ipv4/tcp_minisocks.c
-+++ b/net/ipv4/tcp_minisocks.c
-@@ -291,13 +291,14 @@ void tcp_time_wait(struct sock *sk, int state, int timeo)
- 		 */
- 		do {
- 			tcptw->tw_md5_key = NULL;
--			if (static_branch_unlikely(&tcp_md5_needed)) {
-+			if (static_branch_unlikely(&tcp_md5_needed.key)) {
- 				struct tcp_md5sig_key *key;
- 
- 				key = tp->af_specific->md5_lookup(sk, sk);
- 				if (key) {
- 					tcptw->tw_md5_key = kmemdup(key, sizeof(*key), GFP_ATOMIC);
- 					BUG_ON(tcptw->tw_md5_key && !tcp_alloc_md5sig_pool());
-+					atomic_inc(&tcp_md5_needed.key.key.enabled);
- 				}
- 			}
- 		} while (0);
-@@ -337,11 +338,13 @@ EXPORT_SYMBOL(tcp_time_wait);
- void tcp_twsk_destructor(struct sock *sk)
- {
- #ifdef CONFIG_TCP_MD5SIG
--	if (static_branch_unlikely(&tcp_md5_needed)) {
-+	if (static_branch_unlikely(&tcp_md5_needed.key)) {
- 		struct tcp_timewait_sock *twsk = tcp_twsk(sk);
- 
--		if (twsk->tw_md5_key)
-+		if (twsk->tw_md5_key) {
- 			kfree_rcu(twsk->tw_md5_key, rcu);
-+			static_branch_slow_dec_deferred(&tcp_md5_needed);
-+		}
- 	}
- #endif
- }
-diff --git a/net/ipv4/tcp_output.c b/net/ipv4/tcp_output.c
-index c69f4d966024..86e71c8c76bc 100644
---- a/net/ipv4/tcp_output.c
-+++ b/net/ipv4/tcp_output.c
-@@ -766,7 +766,7 @@ static unsigned int tcp_syn_options(struct sock *sk, struct sk_buff *skb,
- 
- 	*md5 = NULL;
- #ifdef CONFIG_TCP_MD5SIG
--	if (static_branch_unlikely(&tcp_md5_needed) &&
-+	if (static_branch_unlikely(&tcp_md5_needed.key) &&
- 	    rcu_access_pointer(tp->md5sig_info)) {
- 		*md5 = tp->af_specific->md5_lookup(sk, sk);
- 		if (*md5) {
-@@ -922,7 +922,7 @@ static unsigned int tcp_established_options(struct sock *sk, struct sk_buff *skb
- 
- 	*md5 = NULL;
- #ifdef CONFIG_TCP_MD5SIG
--	if (static_branch_unlikely(&tcp_md5_needed) &&
-+	if (static_branch_unlikely(&tcp_md5_needed.key) &&
- 	    rcu_access_pointer(tp->md5sig_info)) {
- 		*md5 = tp->af_specific->md5_lookup(sk, sk);
- 		if (*md5) {
-diff --git a/net/ipv6/tcp_ipv6.c b/net/ipv6/tcp_ipv6.c
-index 2a3f9296df1e..3e3bdc120fc8 100644
---- a/net/ipv6/tcp_ipv6.c
-+++ b/net/ipv6/tcp_ipv6.c
-@@ -677,12 +677,11 @@ static int tcp_v6_parse_md5_keys(struct sock *sk, int optname,
- 	if (ipv6_addr_v4mapped(&sin6->sin6_addr))
- 		return tcp_md5_do_add(sk, (union tcp_md5_addr *)&sin6->sin6_addr.s6_addr32[3],
- 				      AF_INET, prefixlen, l3index, flags,
--				      cmd.tcpm_key, cmd.tcpm_keylen,
--				      GFP_KERNEL);
-+				      cmd.tcpm_key, cmd.tcpm_keylen);
- 
- 	return tcp_md5_do_add(sk, (union tcp_md5_addr *)&sin6->sin6_addr,
- 			      AF_INET6, prefixlen, l3index, flags,
--			      cmd.tcpm_key, cmd.tcpm_keylen, GFP_KERNEL);
-+			      cmd.tcpm_key, cmd.tcpm_keylen);
- }
- 
- static int tcp_v6_md5_hash_headers(struct tcp_md5sig_pool *hp,
-@@ -1382,9 +1381,8 @@ static struct sock *tcp_v6_syn_recv_sock(const struct sock *sk, struct sk_buff *
- 		 * memory, then we end up not copying the key
- 		 * across. Shucks.
- 		 */
--		tcp_md5_do_add(newsk, (union tcp_md5_addr *)&newsk->sk_v6_daddr,
--			       AF_INET6, 128, l3index, key->flags, key->key, key->keylen,
--			       sk_gfp_mask(sk, GFP_ATOMIC));
-+		tcp_md5_key_copy(newsk, (union tcp_md5_addr *)&newsk->sk_v6_daddr,
-+				 AF_INET6, 128, l3index, key);
- 	}
- #endif
- 
 -- 
-2.38.1
-
+  Kiryl Shutsemau / Kirill A. Shutemov
