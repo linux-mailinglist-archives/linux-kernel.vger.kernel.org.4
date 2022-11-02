@@ -2,279 +2,239 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 633016165EF
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:19:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3BE8E616602
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:23:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230233AbiKBPTb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 11:19:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58698 "EHLO
+        id S229927AbiKBPXH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 11:23:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36104 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230216AbiKBPS6 (ORCPT
+        with ESMTP id S229531AbiKBPXE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 11:18:58 -0400
-Received: from mail-pf1-x44a.google.com (mail-pf1-x44a.google.com [IPv6:2607:f8b0:4864:20::44a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDFC7167E2
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 08:18:54 -0700 (PDT)
-Received: by mail-pf1-x44a.google.com with SMTP id u3-20020a056a00124300b0056d4ab0c7cbso5270677pfi.7
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 08:18:54 -0700 (PDT)
+        Wed, 2 Nov 2022 11:23:04 -0400
+Received: from mail-qt1-x832.google.com (mail-qt1-x832.google.com [IPv6:2607:f8b0:4864:20::832])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 535106414
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 08:23:02 -0700 (PDT)
+Received: by mail-qt1-x832.google.com with SMTP id l15so797788qtv.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 08:23:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hsTBbsttl90Fa+N19NVctUh1BzwZcwgswyZuI7qyxHk=;
-        b=NYrwyTkAcp/4ElX1vA9LUtq4zvk9flLUJtFdLplOY2Vey+8UYvBYzFPe9J/IqbYjba
-         f9i1mdiFc05FBu6DOHdZpBaFOMLehkwHxZLU5pXqIQwb+8hwNHxzpFvw7pvqVgF1dM+O
-         VNeRzrra+5VeID/LqLW5iANI88adDScQlLnXXPI3aqkFAvkZaxAeWJb6u/Do09dDbF+o
-         e3Q4DuW1FlEhb7uPeeOp5BbDGWmjPnkboJvssNrSSg8CPYnFLZD0/GsP9ytx3TB3ZgEZ
-         NFIR8BjsZTNPkxzNxSvNLA43UqZV2fTWfl/JPKxdwknbSR3IITt0XTHGsvsmFH76wu+/
-         T0WA==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5DBOh0seZgVfpZ5tlyQZIQ8LgeABKZUQUWQr8sZ8L+M=;
+        b=OHUJ9LQ+YcZvdDRODUwinUi0s4L6WDWIhSOMy3lhOeAtiy05cbA6YnLCLpYkGl1ZZB
+         xWoZmwOGmI1ofM/jlpj+t6Bqs4uMbFfTiajcru0Ckv2Ih15i7W001X0lio0AXIPuyKzX
+         TQnS7LZRnGXWWkG3DrrZo5HGRmom2HIokZCV9v+N+4DH8cE2xUpgsL1phg6+lrRbGrbT
+         DDjbeCTptWa0tQlC8PnsPHkmomakmoVBpmGU6cgBVpuOI2EdnVWMjaPihhigSVZmeFbZ
+         HoAaMP+Uo220bFxfLSQZf1G/aR/aEIIHcf7/AIv6vM/eT9bh57JmrtHFPUbn54zQaa9Y
+         IfUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=hsTBbsttl90Fa+N19NVctUh1BzwZcwgswyZuI7qyxHk=;
-        b=7eXGsTwYcM+IaqzqkAvMtqX/8VOHHcHgQyAkPXqHJywTDgJY3Fw+kpn5ZxWeFQLxsF
-         ChpLreuoLiZwgvXRE9QRCwpUwOJCqYqBCmKNWL/Ua+OJWP6j8iIiBTVUJ83RPl+RlxFT
-         /Yb2p7wEVX3hPUroIWGvDbOzaQ3/0RokyT4hnu5oXn/72ZKM7vJNqKf3eG2bgjgDWv1j
-         NfsZ/to0nrpotblDDwpDTfC0ntPyYVEOb02/PdNdd/sV12yg6bn+WZeWzHNjsdR7J0KP
-         ja7B3eVvKiovf3CfpBQ/FUBoYVILU+2DcI86dsuVNCdtNPDmrrTNM2/74KY7056mwYKj
-         pTtw==
-X-Gm-Message-State: ACrzQf02M0DaU7Jn+NMFw/KrUoq95uVOXbCZ0jNDZnHYgF7gaTTDwNAz
-        WctJUo9KgDmn7qvGb+eZpPk8gHzrWqow9zpRGaZbSfAAbdGy5C3Z/eVzV4k1Is5IpGeEiIUpv+V
-        2Oj3gnctdRzjgBcniOX3qeyLuupTOasJGI4Wqdj1RNlc+kMJ9T0ClpQ4Y/RXd85KIZxSTfeYhy6
-        PEAkg2mm8=
-X-Google-Smtp-Source: AMsMyM6G3cNXhg1xnlTNdgHyoJAE9tueaFF9ca2neboJEhQZ5QkDMxCmmCloXJOICVn+QSrdSwJN964qEbO3BKC18A==
-X-Received: from dionnaglaze.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:2ee6])
- (user=dionnaglaze job=sendgmr) by 2002:a17:902:860a:b0:186:7eab:afa2 with
- SMTP id f10-20020a170902860a00b001867eabafa2mr25212259plo.46.1667402334319;
- Wed, 02 Nov 2022 08:18:54 -0700 (PDT)
-Date:   Wed,  2 Nov 2022 15:18:36 +0000
-In-Reply-To: <20221102151836.1310509-1-dionnaglaze@google.com>
-Mime-Version: 1.0
-References: <20221102151836.1310509-1-dionnaglaze@google.com>
-X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
-Message-ID: <20221102151836.1310509-5-dionnaglaze@google.com>
-Subject: [PATCH v5 4/4] virt/coco/sev-guest: interpret VMM errors from guest request
-From:   Dionna Glaze <dionnaglaze@google.com>
-To:     linux-kernel@vger.kernel.org, x86@kernel.org
-Cc:     Dionna Glaze <dionnaglaze@google.com>,
-        Tom Lendacky <Thomas.Lendacky@amd.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Peter Gonda <pgonda@google.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5DBOh0seZgVfpZ5tlyQZIQ8LgeABKZUQUWQr8sZ8L+M=;
+        b=Z6UN5udECjaXj0N1BuYy4XEA0dK8efa8W0Npz4mtb8rzg5YZR5Nz5VxkZpBMpdL3UC
+         2P/IyjZXBsKo8f8WQxaOCPkSU4JdJ5mFUNZgCH9mtr+fboqXcQQz2VUZfiv1UNVaTgo5
+         fdHkTdFsns8P+dJ+U0701jxbXJ/r8hiBe8rU0ekQD21qcFcquE9HfH/w5Z4m66Nvz1AG
+         yza3sa32gFfhCOvSTVvyo6e3yjAZguZfx6el4PW5y9Y1GA/Bb2MP1QSb7Y8cwQOICK0n
+         Xinkz1FgMot4/W8KP2oCqVd7fAj/b3EbQEHqXkgMQLDuFQtE/kUTDhroYpXkuPYMkP+n
+         yfEQ==
+X-Gm-Message-State: ACrzQf2jh43RFdDT8FKpXqLoRwOjCz+xH8wSDdM5ljhk6vqIlQd2CvRD
+        Xy+pBLCyBPYsJYBUxPKh2Witlw==
+X-Google-Smtp-Source: AMsMyM4xHlDk7Aw1fehJcfDTAAhh/xQs5ETuj4GUQm09yy35CI3KEq6yxgP08X9zUDqwqL5Su7YqFw==
+X-Received: by 2002:a05:622a:1751:b0:39c:cbba:d07d with SMTP id l17-20020a05622a175100b0039ccbbad07dmr19882299qtk.30.1667402581464;
+        Wed, 02 Nov 2022 08:23:01 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
+        by smtp.gmail.com with ESMTPSA id v5-20020a05620a0f0500b006bba46e5eeasm8731216qkl.37.2022.11.02.08.23.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 08:23:00 -0700 (PDT)
+Message-ID: <9f2a50db-0cfe-b9ce-11f4-be406cb9888e@linaro.org>
+Date:   Wed, 2 Nov 2022 11:22:59 -0400
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v2 2/2] dt-bindings: PCI: xilinx-nwl: Convert to YAML
+ schemas of Xilinx NWL PCIe Root Port Bridge
+Content-Language: en-US
+To:     Thippeswamy Havalige <thippeswamy.havalige@amd.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org
+Cc:     bhelgaas@google.com, michals@xilinx.com, robh+dt@kernel.org,
+        nagaradhesh.yeleswarapu@amd.com, bharat.kumar.gogada@amd.com
+References: <20221101052049.3946283-1-thippeswamy.havalige@amd.com>
+ <20221101052049.3946283-2-thippeswamy.havalige@amd.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221101052049.3946283-2-thippeswamy.havalige@amd.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The GHCB specification states that the upper 32 bits of exitinfo2 are
-for the VMM's error codes. The sev-guest ABI has already locked in
-that the fw_err status of the input will be 64 bits, and that
-BIT_ULL(32) means that the extended guest request's data buffer was too
-small, so we have to keep that ABI.
+On 01/11/2022 01:20, Thippeswamy Havalige wrote:
+> Convert to YAML schemas for Xilinx NWL PCIe Root Port Bridge
+> dt binding.
+> 
+> Signed-off-by: Thippeswamy Havalige <thippeswamy.havalige@amd.com>
+> ---
+>  .../bindings/pci/xilinx-nwl-pcie.txt          |  73 ----------
+>  .../bindings/pci/xlnx,nwl-pcie.yaml           | 137 ++++++++++++++++++
+>  2 files changed, 137 insertions(+), 73 deletions(-)
+>  delete mode 100644 Documentation/devicetree/bindings/pci/xilinx-nwl-pcie.txt
+>  create mode 100644 Documentation/devicetree/bindings/pci/xlnx,nwl-pcie.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/pci/xilinx-nwl-pcie.txt b/Documentation/devicetree/bindings/pci/xilinx-nwl-pcie.txt
+> deleted file mode 100644
+> index f56f8c58c5d9..000000000000
+> --- a/Documentation/devicetree/bindings/pci/xilinx-nwl-pcie.txt
+> +++ /dev/null
+> @@ -1,73 +0,0 @@
+> -* Xilinx NWL PCIe Root Port Bridge DT description
+> -
+> -Required properties:
+> -- compatible: Should contain "xlnx,nwl-pcie-2.11"
+> -- #address-cells: Address representation for root ports, set to <3>
+> -- #size-cells: Size representation for root ports, set to <2>
+> -- #interrupt-cells: specifies the number of cells needed to encode an
+> -	interrupt source. The value must be 1.
+> -- reg: Should contain Bridge, PCIe Controller registers location,
+> -	configuration space, and length
+> -- reg-names: Must include the following entries:
+> -	"breg": bridge registers
+> -	"pcireg": PCIe controller registers
+> -	"cfg": configuration space region
+> -- device_type: must be "pci"
+> -- interrupts: Should contain NWL PCIe interrupt
+> -- interrupt-names: Must include the following entries:
+> -	"msi1, msi0": interrupt asserted when an MSI is received
+> -	"intx": interrupt asserted when a legacy interrupt is received
+> -	"misc": interrupt asserted when miscellaneous interrupt is received
+> -- interrupt-map-mask and interrupt-map: standard PCI properties to define the
+> -	mapping of the PCI interface to interrupt numbers.
+> -- ranges: ranges for the PCI memory regions (I/O space region is not
+> -	supported by hardware)
+> -	Please refer to the standard PCI bus binding document for a more
+> -	detailed explanation
+> -- msi-controller: indicates that this is MSI controller node
+> -- msi-parent:  MSI parent of the root complex itself
+> -- legacy-interrupt-controller: Interrupt controller device node for Legacy
+> -	interrupts
+> -	- interrupt-controller: identifies the node as an interrupt controller
+> -	- #interrupt-cells: should be set to 1
+> -	- #address-cells: specifies the number of cells needed to encode an
+> -		address. The value must be 0.
+> -
+> -Optional properties:
+> -- dma-coherent: present if DMA operations are coherent
+> -- clocks: Input clock specifier. Refer to common clock bindings
+> -
+> -Example:
+> -++++++++
+> -
+> -nwl_pcie: pcie@fd0e0000 {
+> -	#address-cells = <3>;
+> -	#size-cells = <2>;
+> -	compatible = "xlnx,nwl-pcie-2.11";
+> -	#interrupt-cells = <1>;
+> -	msi-controller;
+> -	device_type = "pci";
+> -	interrupt-parent = <&gic>;
+> -	interrupts = <0 114 4>, <0 115 4>, <0 116 4>, <0 117 4>, <0 118 4>;
+> -	interrupt-names = "msi0", "msi1", "intx", "dummy", "misc";
+> -	interrupt-map-mask = <0x0 0x0 0x0 0x7>;
+> -	interrupt-map = <0x0 0x0 0x0 0x1 &pcie_intc 0x1>,
+> -			<0x0 0x0 0x0 0x2 &pcie_intc 0x2>,
+> -			<0x0 0x0 0x0 0x3 &pcie_intc 0x3>,
+> -			<0x0 0x0 0x0 0x4 &pcie_intc 0x4>;
+> -
+> -	msi-parent = <&nwl_pcie>;
+> -	reg = <0x0 0xfd0e0000 0x0 0x1000>,
+> -	      <0x0 0xfd480000 0x0 0x1000>,
+> -	      <0x80 0x00000000 0x0 0x1000000>;
+> -	reg-names = "breg", "pcireg", "cfg";
+> -	ranges = <0x02000000 0x00000000 0xe0000000 0x00000000 0xe0000000 0x00000000 0x10000000  /* non-prefetchable memory */
+> -		  0x43000000 0x00000006 0x00000000 0x00000006 0x00000000 0x00000002 0x00000000>;/* prefetchable memory */
+> -
+> -	pcie_intc: legacy-interrupt-controller {
+> -		interrupt-controller;
+> -		#address-cells = <0>;
+> -		#interrupt-cells = <1>;
+> -	};
+> -
+> -};
+> diff --git a/Documentation/devicetree/bindings/pci/xlnx,nwl-pcie.yaml b/Documentation/devicetree/bindings/pci/xlnx,nwl-pcie.yaml
+> new file mode 100644
+> index 000000000000..f6634be618a2
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/pci/xlnx,nwl-pcie.yaml
+> @@ -0,0 +1,137 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/pci/xlnx,nwl-pcie.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Xilinx NWL PCIe Root Port Bridge
+> +
+> +maintainers:
+> +  - Thippeswamy Havalige <thippeswamy.havalige@amd.com>
+> +
+> +allOf:
+> +  - $ref: /schemas/pci/pci-bus.yaml#
+> +  - $ref: /schemas/interrupt-controller/msi-controller.yaml#
+> +
+> +properties:
+> +  compatible:
+> +    const: xlnx,nwl-pcie-2.11
+> +
+> +  reg:
+> +    items:
+> +      - description: PCIe bridge registers location.
+> +      - description: PCIe Controller registers location.
+> +      - description: PCIe Configuration space region.
+> +
+> +  reg-names:
+> +    items:
+> +      - const: breg
 
-We can still interpret the upper 32 bits of exitinfo2 for the user
-anyway in case the request gets throttled. For safety, since the
-encryption algorithm in GHCBv2 is AES_GCM, we cannot return to user
-space without having completed the request with the current sequence
-number. If we were to return and the guest were to make another request
-but with different message contents, then that would be IV reuse.
+const: bridge
 
-When throttled, the driver will reschedule itself and then try
-again after sleeping half its ratelimit time to avoid a big wait queue.
-The ioctl may block indefinitely, but that has always been the case
-when deferring these requests to the host.
+> +      - const: pcireg
 
-Cc: Tom Lendacky <Thomas.Lendacky@amd.com>
-Cc: Paolo Bonzini <pbonzini@redhat.com>
-Cc: Joerg Roedel <jroedel@suse.de>
-Cc: Peter Gonda <pgonda@google.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>
-Cc: Dave Hansen <dave.hansen@linux.intel.com>
+const: pci
 
-Signed-off-by: Dionna Glaze <dionnaglaze@google.com>
----
- drivers/virt/coco/sev-guest/sev-guest.c | 50 ++++++++++++++++++++++---
- include/uapi/linux/sev-guest.h          | 18 ++++++++-
- 2 files changed, 60 insertions(+), 8 deletions(-)
+> +      - const: cfg
+> +
+> +  interrupts:
+> +    items:
+> +      - description: msi0 interrupt asserted when an MSI is received
+> +      - description: msi1 interrupt asserted when an MSI is received
+> +      - description: interrupt asserted when a legacy interrupt is received
+> +      - description: unused interrupt(dummy)
+> +      - description: interrupt asserted when miscellaneous interrupt is received
+> +
+> +  interrupt-names:
+> +    maxItems: 5
 
-diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
-index 0508c2f46f6b..43e110ad4aa9 100644
---- a/drivers/virt/coco/sev-guest/sev-guest.c
-+++ b/drivers/virt/coco/sev-guest/sev-guest.c
-@@ -14,6 +14,7 @@
- #include <linux/io.h>
- #include <linux/platform_device.h>
- #include <linux/miscdevice.h>
-+#include <linux/ratelimit.h>
- #include <linux/set_memory.h>
- #include <linux/fs.h>
- #include <crypto/aead.h>
-@@ -48,12 +49,22 @@ struct snp_guest_dev {
- 	struct snp_req_data input;
- 	u32 *os_area_msg_seqno;
- 	u8 *vmpck;
-+
-+	struct ratelimit_state rs;
- };
- 
- static u32 vmpck_id;
- module_param(vmpck_id, uint, 0444);
- MODULE_PARM_DESC(vmpck_id, "The VMPCK ID to use when communicating with the PSP.");
- 
-+static int rate_hz = 2;
-+module_param(rate_hz, int, 0444);
-+MODULE_PARM_DESC(vmpck_id, "The rate limit frequency to limit requests to.");
-+
-+static int rate_burst = 1;
-+module_param(rate_burst, int, 0444);
-+MODULE_PARM_DESC(rate_burst, "The rate limit burst amount to limit requests to.");
-+
- /* Mutex to serialize the shared buffer access and command handling. */
- static DEFINE_MUTEX(snp_cmd_mutex);
- 
-@@ -305,6 +316,7 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 				u8 type, void *req_buf, size_t req_sz, void *resp_buf,
- 				u32 resp_sz, __u64 *exitinfo2)
- {
-+	unsigned int vmm_err;
- 	u64 seqno;
- 	int rc;
- 
-@@ -320,9 +332,33 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 	if (rc)
- 		return rc;
- 
-+retry:
-+	/*
-+	 * Rate limit commands internally since the host can also throttle, and
-+	 * we don't want to create a tight request spin that could end up
-+	 * getting this VM throttled more heavily.
-+	 */
-+	if (!__ratelimit(&snp_dev->rs)) {
-+		sleep_timeout_interruptible((rate_hz * HZ) / 2);
-+		goto retry;
-+	}
- 	/* Call firmware to process the request */
- 	rc = snp_issue_guest_request(exit_code, &snp_dev->input, exitinfo2);
- 
-+	vmm_err = *exitinfo2 >> SNP_GUEST_VMM_ERR_SHIFT;
-+	/*
-+	 * The host may return EBUSY if the request has been throttled.
-+	 * We retry in the driver to avoid returning and reusing the message
-+	 * sequence number on a different message.
-+	 */
-+	if (vmm_err == SNP_GUEST_VMM_ERR_BUSY)
-+		goto retry;
-+
-+	if (vmm_err && vmm_err != SNP_GUEST_VMM_ERR_INVALID_LEN) {
-+		pr_err("sev-guest: host returned unknown error code: %d\n",
-+		       vmm_err);
-+		return -EINVAL;
-+	}
- 	if (rc)
- 		return rc;
- 
-@@ -375,7 +411,7 @@ static int get_report(struct snp_guest_dev *snp_dev, struct snp_guest_request_io
- 
- 	rc = handle_guest_request(snp_dev, SVM_VMGEXIT_GUEST_REQUEST, arg->msg_version,
- 				  SNP_MSG_REPORT_REQ, &req, sizeof(req), resp->data,
--				  resp_len, &arg->fw_err);
-+				  resp_len, &arg->exitinfo2);
- 	if (rc)
- 		goto e_free;
- 
-@@ -415,7 +451,7 @@ static int get_derived_key(struct snp_guest_dev *snp_dev, struct snp_guest_reque
- 
- 	rc = handle_guest_request(snp_dev, SVM_VMGEXIT_GUEST_REQUEST, arg->msg_version,
- 				  SNP_MSG_KEY_REQ, &req, sizeof(req), buf, resp_len,
--				  &arg->fw_err);
-+				  &arg->exitinfo2);
- 	if (rc)
- 		return rc;
- 
-@@ -477,10 +513,10 @@ static int get_ext_report(struct snp_guest_dev *snp_dev, struct snp_guest_reques
- 	snp_dev->input.data_npages = npages;
- 	ret = handle_guest_request(snp_dev, SVM_VMGEXIT_EXT_GUEST_REQUEST, arg->msg_version,
- 				   SNP_MSG_REPORT_REQ, &req.data,
--				   sizeof(req.data), resp->data, resp_len, &arg->fw_err);
-+				   sizeof(req.data), resp->data, resp_len, &arg->exitinfo2);
- 
- 	/* If certs length is invalid then copy the returned length */
--	if (arg->fw_err == SNP_GUEST_REQ_INVALID_LEN) {
-+	if (arg->vmm_error == SNP_GUEST_VMM_ERR_INVALID_LEN) {
- 		req.certs_len = snp_dev->input.data_npages << PAGE_SHIFT;
- 
- 		if (copy_to_user((void __user *)arg->req_data, &req, sizeof(req)))
-@@ -515,7 +551,7 @@ static long snp_guest_ioctl(struct file *file, unsigned int ioctl, unsigned long
- 	if (copy_from_user(&input, argp, sizeof(input)))
- 		return -EFAULT;
- 
--	input.fw_err = 0xff;
-+	input.exitinfo2 = SEV_RET_NO_FW_CALL;
- 
- 	/* Message version must be non-zero */
- 	if (!input.msg_version)
-@@ -546,7 +582,7 @@ static long snp_guest_ioctl(struct file *file, unsigned int ioctl, unsigned long
- 
- 	mutex_unlock(&snp_cmd_mutex);
- 
--	if (input.fw_err && copy_to_user(argp, &input, sizeof(input)))
-+	if (input.exitinfo2 && copy_to_user(argp, &input, sizeof(input)))
- 		return -EFAULT;
- 
- 	return ret;
-@@ -696,6 +732,8 @@ static int __init sev_guest_probe(struct platform_device *pdev)
- 	if (ret)
- 		goto e_free_cert_data;
- 
-+	ratelimit_state_init(&snp_dev->rs, rate_hz * HZ, rate_burst);
-+
- 	dev_info(dev, "Initialized SEV guest driver (using vmpck_id %d)\n", vmpck_id);
- 	return 0;
- 
-diff --git a/include/uapi/linux/sev-guest.h b/include/uapi/linux/sev-guest.h
-index 256aaeff7e65..8e4144aa78c9 100644
---- a/include/uapi/linux/sev-guest.h
-+++ b/include/uapi/linux/sev-guest.h
-@@ -52,8 +52,15 @@ struct snp_guest_request_ioctl {
- 	__u64 req_data;
- 	__u64 resp_data;
- 
--	/* firmware error code on failure (see psp-sev.h) */
--	__u64 fw_err;
-+	/* bits[63:32]: VMM error code, bits[31:0] firmware error code (see psp-sev.h) */
-+	union {
-+		__u64 exitinfo2;
-+		__u64 fw_err; /* Name deprecated in favor of others */
-+		struct {
-+			__u32 fw_error;
-+			__u32 vmm_error;
-+		};
-+	};
- };
- 
- struct snp_ext_report_req {
-@@ -77,4 +84,11 @@ struct snp_ext_report_req {
- /* Get SNP extended report as defined in the GHCB specification version 2. */
- #define SNP_GET_EXT_REPORT _IOWR(SNP_GUEST_REQ_IOC_TYPE, 0x2, struct snp_guest_request_ioctl)
- 
-+/* Guest message request EXIT_INFO_2 constants */
-+#define SNP_GUEST_FW_ERR_MASK		GENMASK_ULL(31, 0)
-+#define SNP_GUEST_VMM_ERR_SHIFT		32
-+
-+#define SNP_GUEST_VMM_ERR_INVALID_LEN	1
-+#define SNP_GUEST_VMM_ERR_BUSY		2
-+
- #endif /* __UAPI_LINUX_SEV_GUEST_H_ */
--- 
-2.38.1.273.g43a17bfeac-goog
+I didn't notice last time - what are the names? They need to be defined.
+
+> +
+> +  interrupt-map-mask:
+> +    items:
+> +      - const: 0
+> +      - const: 0
+> +      - const: 0
+> +      - const: 7
+> +
+
+Best regards,
+Krzysztof
 
