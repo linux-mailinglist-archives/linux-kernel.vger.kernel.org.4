@@ -2,96 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFFB161662C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:29:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 98196616631
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:29:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbiKBP3d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 11:29:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41442 "EHLO
+        id S230452AbiKBP3j (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 11:29:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230489AbiKBP3I (ORCPT
+        with ESMTP id S230495AbiKBP3J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 11:29:08 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A871DE87;
-        Wed,  2 Nov 2022 08:29:07 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id y16so25052497wrt.12;
-        Wed, 02 Nov 2022 08:29:07 -0700 (PDT)
+        Wed, 2 Nov 2022 11:29:09 -0400
+Received: from mail-qv1-xf2e.google.com (mail-qv1-xf2e.google.com [IPv6:2607:f8b0:4864:20::f2e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7BB6018E2D
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 08:29:07 -0700 (PDT)
+Received: by mail-qv1-xf2e.google.com with SMTP id i12so12709984qvs.2
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 08:29:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=vlDgVPwk9zxW4DatfSwtuEmtcIxF50e1Qm1Ff6dMXCM=;
-        b=Sil0QvMZ6r3C3cjkjxE0gkeyq5icakmlBmFx8brOG50r0nMfUN3s5FPmvaGCelkzQw
-         2NRVodtrXKFxQgv5Hp7HVdJgp2YcECeMOae4GyL/NA14Yx+9rdTWGmXsey9Z0662voqq
-         fCAm8Na1h9SKzXiW1A6sMHfxuGgsIlxXDexBQehHpBr9vaWbQDo0QsqaVLD0r9eNPTfp
-         gePt7iPMEq0PKgCAoyIXE4mmJ1pCN36kzpKI1aPsirzZ+VVbNspInWhO+Oecjue4Rt8L
-         BEGd+MSSOurdUScXgft5hmucTihSn/38hF0Tq+YeRynKi8Kur14T9NiQZH80B8u3km4J
-         GubQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HBUgvD/rqAGK+YRqMBW4phcXREVNhOcGxJwJ+qjyr1o=;
+        b=yMiW5wZeRixIDVPx2S6wWqAENq9ui2w590VhU8Q82s5HlMw1OC/McuiTNplTDQerBZ
+         nWSDgFKXMGPpg/Vyq4IBU/0iKFeXgMMLykjcp6vdiVFOquqA+fJcbfn5AAWesnG81kKZ
+         bO4cPVShoBQEBgH7trb7ygaWpmPMvNlcboYQLzGgzr+RGX9EfdIcTGVgEhUMKKlkvykQ
+         oMm4/hr4MrHbfs30mAY1ic8eqwEteKa1JdCpkRwFKznpPqC9QeXpNdUagSFIfHF/zkUq
+         DHAeEFI/j6pC7+zh8+Hf8HQHTErRoyTZTDt4ak5Z19NIRN3DRpCM9gzD8sZV+JsvI3WT
+         +j+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vlDgVPwk9zxW4DatfSwtuEmtcIxF50e1Qm1Ff6dMXCM=;
-        b=hrX8G99NkGtywVR9VkE56yqU+492LPXIXM8OUSnzBmkM5ny5/q+kti1oJnR/aDL3xc
-         TmHpmxWN3g2MkHrt0Rh+uY0uwZlYgDkWpYHMbm7mZuBtNP0oNAPhTGVfT6FW6Nis8hxk
-         Yq9tGR6froUQ/qs+AC0IuE39iHV2tumKN++WKbiZy/K5Ihg+bz++VRiGGd79dPqT1z4H
-         gCZwwo8XUoAqQRaBtk1BMWWJYOzP48h73Evqjn5rmbGCrx+GyNP3P35oKK4mWwgVhyBp
-         5t+B8EwnHUgq2/rRF58u+n9066QnJ2Z6kwueh3LjBnpGv47YnnmQmYyT6cBocnm3Ey9/
-         kC3Q==
-X-Gm-Message-State: ACrzQf3/k+0o6rFFyStsuTp34BQrmJ47HruyDT5ysROCpsjxQCtUa3l9
-        eDDkblt7nruyPH0iaFbRgpQ=
-X-Google-Smtp-Source: AMsMyM6Ni8f8wqql/3JbnazGeYIRFQ5AjQZUyijcgg0wjBGuVv6IRKmE6UMYKT5n3af1g1mLPiYf2g==
-X-Received: by 2002:a5d:4f8d:0:b0:236:714b:29f0 with SMTP id d13-20020a5d4f8d000000b00236714b29f0mr14936530wru.145.1667402945591;
-        Wed, 02 Nov 2022 08:29:05 -0700 (PDT)
-Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.gmail.com with ESMTPSA id n188-20020a1c27c5000000b003b49ab8ff53sm2475078wmn.8.2022.11.02.08.29.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 08:29:05 -0700 (PDT)
-From:   Colin Ian King <colin.i.king@gmail.com>
-To:     Han Xu <han.xu@nxp.com>, Haibo Chen <haibo.chen@nxp.com>,
-        Yogesh Gaur <yogeshgaur.83@gmail.com>,
-        Mark Brown <broonie@kernel.org>, linux-spi@vger.kernel.org
-Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: nxp-fspi: make const array ls1028a_soc_attr static
-Date:   Wed,  2 Nov 2022 15:29:04 +0000
-Message-Id: <20221102152904.143423-1-colin.i.king@gmail.com>
-X-Mailer: git-send-email 2.37.3
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HBUgvD/rqAGK+YRqMBW4phcXREVNhOcGxJwJ+qjyr1o=;
+        b=kyghxXQUxIPyg88HGWiGy70gbZvSiJVaOJC6wUpsAgizoaUY84JvDUBTf3R+DliIsP
+         UyBJ6eh7t7b/2jVRv57NOSuLjIbMuYA9yFulXHXq2KMDgOyXwAUvTKIZELn7dJTNw7R3
+         X5+yPhb46KSalffdUWbK1mZYKWqfwFZ1ImKlDOHyjBTJDieOtgtx52Yum1HDGL3zv1+I
+         GwahQB5QNlwVXcrenzlol7l98GqEM8SJBNtEGl8hfLMGdtmdhMHjL41JeY3h9YuPywDo
+         e3eaCni2dexEVsnxWAcrKNOy+RRrzTuvJQo1oP4Zz8PwqV0JD4BJPR58KJuJDmSfQBrx
+         2ozA==
+X-Gm-Message-State: ACrzQf3nOkdTJDoF/xIWNfsFaZHxQ+O9i7NNpvLBVX7qI4YHAldbgQeF
+        noMMx6rMCZev7bRqK0i2X7atFA==
+X-Google-Smtp-Source: AMsMyM4utp2+ndIufDJeNK+726MD7dtGV59X/4aZ5wQsoENyuaC3TKzF03FZtl52mGndJQCeR3Y4dw==
+X-Received: by 2002:ad4:5e8b:0:b0:4b9:98bf:92cc with SMTP id jl11-20020ad45e8b000000b004b998bf92ccmr21728371qvb.128.1667402946667;
+        Wed, 02 Nov 2022 08:29:06 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
+        by smtp.gmail.com with ESMTPSA id bm8-20020a05620a198800b006ed138e89f2sm8677531qkb.123.2022.11.02.08.29.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 08:29:06 -0700 (PDT)
+Message-ID: <3e374a0e-ab17-432a-67c5-bf8f459193fd@linaro.org>
+Date:   Wed, 2 Nov 2022 11:29:05 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 2/2] dt-bindings: mailbox: mediatek,gce-mailbox: add
+ mt8188 compatible name
+Content-Language: en-US
+To:     "Elvis.Wang" <Elvis.Wang@mediatek.com>,
+        Jassi Brar <jassisinghbrar@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     Houlong Wei <houlong.wei@mediatek.com>,
+        "jason-jh . lin" <jason-jh.lin@mediatek.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org
+References: <20221029105017.20734-1-Elvis.Wang@mediatek.com>
+ <20221029105017.20734-3-Elvis.Wang@mediatek.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221029105017.20734-3-Elvis.Wang@mediatek.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Don't populate the const array ls1028a_soc_attr on the stack, instead
-make it static. Also makes the object code smaller.
+On 29/10/2022 06:50, Elvis.Wang wrote:
+> From: Elvis Wang <Elvis.Wang@mediatek.com>
+> 
+> Add mt8188 compatible name.
+> 
+> Signed-off-by: Elvis Wang <Elvis.Wang@mediatek.com>
+> ---
+>  .../devicetree/bindings/mailbox/mediatek,gce-mailbox.yaml        | 1 +
+>  1 file changed, 1 insertion(+)
+> 
 
-Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
----
- drivers/spi/spi-nxp-fspi.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Looks ok, but you need to resend making it a proper patchset. Without
+fake tags.
 
-diff --git a/drivers/spi/spi-nxp-fspi.c b/drivers/spi/spi-nxp-fspi.c
-index d6a65a989ef8..1c1991a26c15 100644
---- a/drivers/spi/spi-nxp-fspi.c
-+++ b/drivers/spi/spi-nxp-fspi.c
-@@ -924,7 +924,7 @@ static int nxp_fspi_adjust_op_size(struct spi_mem *mem, struct spi_mem_op *op)
- 
- static void erratum_err050568(struct nxp_fspi *f)
- {
--	const struct soc_device_attribute ls1028a_soc_attr[] = {
-+	static const struct soc_device_attribute ls1028a_soc_attr[] = {
- 		{ .family = "QorIQ LS1028A" },
- 		{ /* sentinel */ }
- 	};
--- 
-2.37.3
+Best regards,
+Krzysztof
 
