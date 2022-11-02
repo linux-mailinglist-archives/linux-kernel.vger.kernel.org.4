@@ -2,109 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B1FA56168BA
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:27:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 052946168C7
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:29:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231460AbiKBQ1I (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 12:27:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45776 "EHLO
+        id S231559AbiKBQ3C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 12:29:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47552 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231708AbiKBQ0v (ORCPT
+        with ESMTP id S231320AbiKBQ2i (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 12:26:51 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E4FB2FC00
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 09:21:47 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id k2so6500407qkk.7
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 09:21:47 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BzdwyCqrWaOcYdqDsje/Pfj4rGdaFiKuTe+sRQfti2U=;
-        b=ykj6NA9kOVg6B0dagTF8Ms+5sjHUjwMU6i1UOEbRl9jMsN5B6v93vKT1wz544nwy9P
-         rGTkpVBuhCsIVfLjNb2INE/3rBcp27rmjRNATD923yOtt6W+/5Yq0e0o7+uZT7fJtm8V
-         gvj2wf1r1lSZj1044EBLOaaBgb8Vh6f5ysJ/xjd0B1Ee2hms5SB+PWUKKeUbcVoBPGR2
-         fP9Y3Ep4Ygjqiu8G7YUlL9UQIfBJsowwPjd6uBu/LwDhLjDOYRvZkkPGCtVXt2JcT/LR
-         qIU0AunM4TFGfax36gptplY/pmWCoGgROL/gtGRC5MyF0wcfpslo5u4AthrTYATq3sx5
-         lQCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=BzdwyCqrWaOcYdqDsje/Pfj4rGdaFiKuTe+sRQfti2U=;
-        b=ZqQy7D7ACPX4lLS2vJZu2gnQP3A4oruAkTVqWTMBasnDosdPNoOyLVy0d9GtYAsZVt
-         /h0Nh2HEcjljZ+JKRj3FWAACSkUy7aLngWvWG3Rv1QkV1faotr/8+qzaTHBDLG/yliZL
-         H3gRKmlK46GAdIF6dn4BRmjBtzlu04JdTNiqP6qnRH5Yy++09+/s2Rz0TODTJWT9LO4l
-         JKeb2s5wtdzg/WsKRlEWwzHwa8FFeaKXjKleerc823NVMuFQWtvqiCEtjNZFPwhCeg3u
-         8BFt2ImSMuCaXYyU1ptZnpFZ2AdchaifEa/kmXQHd2tNKwL79g2unkPCg5d80IqxyFEi
-         kTMA==
-X-Gm-Message-State: ACrzQf1Ag0S5/twU/RGdAoqqbc6svq7k2Buz29ZoHpUw2tGVfGfTRQ9P
-        vraLQuOLjXZBVnBuSV27o9jkSw==
-X-Google-Smtp-Source: AMsMyM68XM2j+qY6P1wbfbrvGxKf6ZdMXFmcBQMO7RkfWALHDlg8qZREQzzN1RoHrtr7EkQjnb+TFg==
-X-Received: by 2002:a05:620a:bc3:b0:6ef:418:de91 with SMTP id s3-20020a05620a0bc300b006ef0418de91mr18251614qki.653.1667406106613;
-        Wed, 02 Nov 2022 09:21:46 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
-        by smtp.gmail.com with ESMTPSA id ay30-20020a05620a179e00b006ef1a8f1b81sm8823954qkb.5.2022.11.02.09.21.45
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 09:21:46 -0700 (PDT)
-Message-ID: <6130bdbc-163a-c950-e2e1-07ef77124833@linaro.org>
-Date:   Wed, 2 Nov 2022 12:21:44 -0400
+        Wed, 2 Nov 2022 12:28:38 -0400
+Received: from mail.zytor.com (unknown [IPv6:2607:7c80:54:3::138])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99DFD13F;
+        Wed,  2 Nov 2022 09:24:16 -0700 (PDT)
+Received: from [127.0.0.1] ([73.223.250.219])
+        (authenticated bits=0)
+        by mail.zytor.com (8.17.1/8.17.1) with ESMTPSA id 2A2GN1Vs193304
+        (version=TLSv1.3 cipher=TLS_AES_128_GCM_SHA256 bits=128 verify=NO);
+        Wed, 2 Nov 2022 09:23:02 -0700
+DKIM-Filter: OpenDKIM Filter v2.11.0 mail.zytor.com 2A2GN1Vs193304
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zytor.com;
+        s=2022100601; t=1667406185;
+        bh=2qhL9paa9Bl7NcpRAYoQBHnYYys+tFYJuc63a/wNIYo=;
+        h=Date:From:To:CC:Subject:In-Reply-To:References:From;
+        b=KhcjIUs4JOQM6QdM8BkvkEYHy5B5naetJ5p05f4nXNwi7dHQsUlNXGHq9sSP+kGLB
+         w2D9rEwDL+UAMJpOa3ENcn+m28FA3FjKPH3C5UlwNkOjoPbY5xpuk0mRfLsaQaa6v2
+         CKW6UyQTl9lHGXaPWnv92pbKoRDNFr3vTo6ykHLkJtHG4pE8vCblV0HBXu0GQx2Ozk
+         sq1IZBPhFyr1NWLC+iQBEsiYH7oaPuFNwk9Gwyz4HoJtPoA7JleF+w8f9p8zSa46+i
+         VkstF+w7FahRyvNMT7YpOiWemAqf7ReKeNBGDhVbspPLUdPzlvFF6ymSsPK0bZI1y2
+         aKlLPae2S9gnQ==
+Date:   Wed, 02 Nov 2022 09:23:00 -0700
+From:   "H. Peter Anvin" <hpa@zytor.com>
+To:     "Elliott, Robert (Servers)" <elliott@hpe.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Borislav Petkov <bp@alien8.de>,
+        Maxim Levitsky <mlevitsk@redhat.com>
+CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "kvm@vger.kernel.org" <kvm@vger.kernel.org>,
+        Pawan Gupta <pawan.kumar.gupta@linux.intel.com>,
+        Ingo Molnar <mingo@redhat.com>,
+        Josh Poimboeuf <jpoimboe@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        Tony Luck <tony.luck@intel.com>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Tim Chen <tim.c.chen@linux.intel.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        "Chang S. Bae" <chang.seok.bae@intel.com>,
+        Jane Malalane <jane.malalane@citrix.com>,
+        Kees Cook <keescook@chromium.org>,
+        Kan Liang <kan.liang@linux.intel.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        "maintainer:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <x86@kernel.org>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Mark Rutland <mark.rutland@arm.com>,
+        "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
+        "open list:CRYPTO API" <linux-crypto@vger.kernel.org>
+Subject: =?US-ASCII?Q?RE=3A_=5BPATCH_v2_1/5=5D_perf/x86/intel/lbr=3A_use_?= =?US-ASCII?Q?setup=5Fclear=5Fcpu=5Fcap_instead_of_clear=5Fcpu=5Fcap?=
+User-Agent: K-9 Mail for Android
+In-Reply-To: <MW5PR84MB18428331677C881764E615D2AB399@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+References: <20220718141123.136106-1-mlevitsk@redhat.com> <20220718141123.136106-2-mlevitsk@redhat.com> <Yyh9RDbaRqUR1XSW@zn.tnic> <c105971a72dfe6d46ad75fb7e71f79ba716e081c.camel@redhat.com> <YzGlQBkCSJxY+8Jf@zn.tnic> <c1168e8bd9077a2cc9ef61ee06db7a4e8c0f1600.camel@redhat.com> <Y1EOBAaLbv2CXBDL@zn.tnic> <fd2cf028-bd83-57ff-7e6d-ef3ee11852a1@redhat.com> <MW5PR84MB18428331677C881764E615D2AB399@MW5PR84MB1842.NAMPRD84.PROD.OUTLOOK.COM>
+Message-ID: <EFDA4E40-4133-4CED-97FA-DC75AEA24556@zytor.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 09/11] arm64: dts: qcom: sc8280xp-x13s: Add PM8280_{1/2}
- VADC channels
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     andersson@kernel.org, konrad.dybcio@somainline.org,
-        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
-        johan+linaro@kernel.org, quic_jprakash@quicinc.com,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221027063006.9056-1-manivannan.sadhasivam@linaro.org>
- <20221027063006.9056-10-manivannan.sadhasivam@linaro.org>
- <5e66c095-898e-067e-1874-a3d2e5babf17@linaro.org>
- <20221029044831.GC5362@thinkpad> <20221030071659.GE5362@thinkpad>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221030071659.GE5362@thinkpad>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain;
+ charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.3 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RDNS_NONE,SPF_HELO_PASS,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 30/10/2022 03:16, Manivannan Sadhasivam wrote:
+On November 2, 2022 7:27:52 AM PDT, "Elliott, Robert (Servers)" <elliott@hp=
+e=2Ecom> wrote:
+>
+>> From: Paolo Bonzini <pbonzini@redhat=2Ecom>
+>=2E=2E=2E
+>> (2) in particular holds even on bare metal=2E  The kernel bug here is t=
+hat
+>> X86_FEATURE_AVX only tells you if the instructions are _present_, not i=
+f
+>> they are _usable_=2E   Indeed, the XCR0 check is present for all other
+>> files in arch/x86/crypto, either instead or in addition to
+>> boot_cpu_has(X86_FEATURE_AVX)=2E
+>>=20
+>> Maxim had sent a patch about a year ago to do it in aesni-intel-glue=2E=
+c
+>> but Dave told him to fix the dependencies instead
+>> (https://lore=2Ekernel=2Eorg/all/20211103124614=2E499580-1-
+>> mlevitsk@redhat=2Ecom/)=2E
+>>   What do you think of applying that patch instead?
+>
+>Most of the x86 crypto modules using X86_FEATURE_AVX do check
+>	cpu_has_xfeatures(XFEATURE_MASK_YMM, =2E=2E=2E
+>
+>so it's probably prudent to add it to the rest (or remove it everywhere
+>if it is not needed)=2E
+>
+>1=2E Currently checking XSAVE YMM:
+>  aria_aesni_avx_glue
+>  blake2s-glue
+>  camellia_aesni_avx2_glue	camellia_aesni_avx_glue
+>  cast5_avx_glue		cast6_avx_glue
+>  chacha_glue
+>  poly1305_glue
+>  serpent_avx2_glue		serpent_avx_glue
+>  sha1_ssse3_glue		sha256_ssse3_glue	sha512_ssse3_glue
+>  sm3_avx_glue
+>  sm4_aesni_avx2_glue	sm4_aesni_avx_glue
+>  twofish_avx_glue
+>
+>Currently not checking XSAVE YMM:
+>  aesni-intel_glue
+>  curve25519-x86_64
+>  nhpoly1305-avx2-glue
+>  polyval-clmulni_glue
+>
+>2=2E Similarly, modules using X86_FEATURE_AVX512F, X86_FEATURE_AVXX512VL
+>and/or X86_FEATURE_AVX512BW probably need to check XFEATURE_MASK_AVX512:
+>
+>Currently checking XSAVE AVX512:
+>  blake2s-glue
+>  poly1305_glue
+>
+>Currently not checking XSAVE AVX512:
+>  chacha_glue
+>
+>3=2E Similarly, modules using X86_FEATURE_XMM2 probably need to
+>check XFEATURE_MASK_SSE:
+>
+>Currently checking XSAVE SSE:
+>  aegis128-aesni-glue=20
+>
+>Current not checking XSAVE SSE:
+>  nhpoly1305-sse2_glue
+>  serpent_sse2_glue
+>
+>
+>
 
->>>
->>>> +		reg = <PM8350_ADC7_DIE_TEMP(1)>;
->>>> +		label = "pm8280_1_die_temp";
->>>> +		qcom,pre-scaling = <1 1>;
->>>> +	};
->>>> +
->>>> +	sys-therm1@144 {
->>>
->>> I would say sys-therm@... why do we need the "1" suffix in node name?
->>>
->>
->> Suffix represents the index of the thermistor as per the schematics but I guess
->> it can be dropped.
->>
-> 
-> I was wrong. Suffix is necessary since IIO core registers the channel based on
-> the node name, so it has to be unique.
-> 
-
-Makes sense then.
-
-Best regards,
-Krzysztof
-
+We have a dependency system for CPUID features=2E If you are going to do t=
+his (as opposed to "fixing" this in Qemu or just saying "don't do that, it =
+isn't a valid hardware configuration=2E"
