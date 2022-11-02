@@ -2,214 +2,527 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0F0E1616A9C
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:25:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AE468616AA2
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:26:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231415AbiKBRZX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:25:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50598 "EHLO
+        id S231474AbiKBR0c (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:26:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230266AbiKBRZU (ORCPT
+        with ESMTP id S230266AbiKBR0a (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:25:20 -0400
-Received: from mail-ej1-x62d.google.com (mail-ej1-x62d.google.com [IPv6:2a00:1450:4864:20::62d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 816E3275F8
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 10:25:19 -0700 (PDT)
-Received: by mail-ej1-x62d.google.com with SMTP id t25so47209647ejb.8
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 10:25:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=51rFW/enZ2vF1KbmVXVuw7m87Xy2muUBj8Dj5YrE91A=;
-        b=Kfs+EzFBbXIyUhE4JHfyW8Mt899KRAOuHrB0jOv9EpEZZQ308Gub/8ubosI+Y6y+lo
-         aRQ80VBACI7mZXpRkdJlK8KR7ThKSajTPJPtfC1FxfznjjF4cXJ+zfqs7b0crpdsGUTX
-         F0r4Rf5VMEyVyOylqC9As8UOsNQhHCfIIKCro=
+        Wed, 2 Nov 2022 13:26:30 -0400
+Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C596824BF2;
+        Wed,  2 Nov 2022 10:26:29 -0700 (PDT)
+Received: by mail-oi1-f176.google.com with SMTP id t62so9075173oib.12;
+        Wed, 02 Nov 2022 10:26:29 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=51rFW/enZ2vF1KbmVXVuw7m87Xy2muUBj8Dj5YrE91A=;
-        b=s4hsuGDuhhPhH+pmnKkkUmiCWj2sPbl3iKk/SaKnILrofigjZP6kKtQn/9bmyE3i28
-         SeuY2JjxdA52AI6nyDK9G2UTb88Cj40zME/qthb7QAGf1yhtDckdV/9u1TbdwvzIZHUC
-         WpyzhYyZF2r36MTepj6X3ZNJaFK1QPFy0z6Bk1CPjkV5OPkythhGvanJm2/E/+70RtSn
-         bMEBW1v5AxBe3atA/nPgXWnlwzLSGD0y/vUbnWdEBZ5QKHPc07JNkQfw4W4mXaMcW7t4
-         W/4ja2yJSaTuUrLhKUHWkcY9spd+PZBx1rqoOMTPrAyYU/86E1K3QyenIwf8M9b7Owxw
-         en6A==
-X-Gm-Message-State: ACrzQf2zAAz5Ov378N2KhDPBJU89yO9kAsvzh9XFfH6YdICORAgUVg/4
-        8ePZcdhSACpA4INmqTNIgnYUBnkFTRLaK4fC
-X-Google-Smtp-Source: AMsMyM5bVvt9iIyDC2da1QTT1hH49YHnZhXUQiOFPuUKWUbxa4qjYAZsZRrO86c2EE5o/qV/aaXmeA==
-X-Received: by 2002:a17:907:e88:b0:78d:fb98:6f5d with SMTP id ho8-20020a1709070e8800b0078dfb986f5dmr25959154ejc.5.1667409916737;
-        Wed, 02 Nov 2022 10:25:16 -0700 (PDT)
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com. [209.85.221.42])
-        by smtp.gmail.com with ESMTPSA id fj17-20020a1709069c9100b0078d4e39d87esm5652568ejc.225.2022.11.02.10.25.15
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 10:25:15 -0700 (PDT)
-Received: by mail-wr1-f42.google.com with SMTP id k8so25571519wrh.1
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 10:25:15 -0700 (PDT)
-X-Received: by 2002:a5d:6488:0:b0:22b:3b0b:5e72 with SMTP id
- o8-20020a5d6488000000b0022b3b0b5e72mr16149800wri.138.1667409914657; Wed, 02
- Nov 2022 10:25:14 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=i5ucE7utY+9rWJuTu+SYaTMIcDwxbMP5yxQMNvaqnTg=;
+        b=iH/smjJMb5gKhILE8hRRiWzuj9++SHuvRDZl6Jqk72F2iQ3YkSx6lZRYy4QeWS7I1N
+         CBi7mDI38HJAqB56L9pCRe2cEIuTSWxihypH6DCbUiF2gYA+IevgQI/pfx3FUsGvViLI
+         P4eEj36R0DBPFxE8R2X6D6oBLZtjPpXE+sTZGOXjxl1Ngr8bP6cUKmnWiyn2Lm+SSX92
+         ET/4lfLWuEk7YNan49KAXLu/KG5OjpIeaZtc0axd62rRFs4Tg/zv47iy5tSI9M7PkNhQ
+         QR2QMmfdk62BgAVz91zgZoN3t0YRfc6SraSsfBPLE1BQhymhl4h45VOfhyRA0QA6u7MP
+         raUQ==
+X-Gm-Message-State: ACrzQf3yRK3Gj8ClUIKeBc22jqVDE9dB3NV5hrD8iWGZ/rZ/93Mzn5pk
+        yzjxSiuP2PUX5WT91YuToU19Fc58/w==
+X-Google-Smtp-Source: AMsMyM5nhkVNaipfhuKJLdOHt1wApShkJVkAlyv5ykXDrA5lAUvDY75dHM3L7EmI5veCFgZI1soqyQ==
+X-Received: by 2002:a05:6808:144b:b0:35a:41f9:445f with SMTP id x11-20020a056808144b00b0035a41f9445fmr1611894oiv.171.1667409988929;
+        Wed, 02 Nov 2022 10:26:28 -0700 (PDT)
+Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
+        by smtp.gmail.com with ESMTPSA id a38-20020a056870d62600b0011bde9f5745sm6294369oaq.23.2022.11.02.10.26.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 10:26:28 -0700 (PDT)
+Received: (nullmailer pid 4189063 invoked by uid 1000);
+        Wed, 02 Nov 2022 17:26:30 -0000
+Date:   Wed, 2 Nov 2022 12:26:30 -0500
+From:   Rob Herring <robh@kernel.org>
+To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+Cc:     devicetree@vger.kernel.org, linux-i2c@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-media@vger.kernel.org,
+        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
+        Jacopo Mondi <jacopo@jmondi.org>,
+        Kieran Bingham <kieran.bingham@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
+        Luca Ceresoli <luca@lucaceresoli.net>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Matti Vaittinen <Matti.Vaittinen@fi.rohmeurope.com>,
+        Mauro Carvalho Chehab <mchehab@kernel.org>,
+        Peter Rosin <peda@axentia.se>,
+        Sakari Ailus <sakari.ailus@linux.intel.com>,
+        Vladimir Zapolskiy <vz@mleia.com>,
+        Wolfram Sang <wsa@the-dreams.de>,
+        satish.nagireddy@getcruise.com
+Subject: Re: [PATCH v4 3/8] dt-bindings: media: add bindings for TI DS90UB960
+Message-ID: <20221102172630.GA4140587-robh@kernel.org>
+References: <20221101132032.1542416-1-tomi.valkeinen@ideasonboard.com>
+ <20221101132032.1542416-4-tomi.valkeinen@ideasonboard.com>
 MIME-Version: 1.0
-References: <1667237245-24988-1-git-send-email-quic_khsieh@quicinc.com>
- <94b507e8-5b94-12ae-4c81-95f5d36279d5@linaro.org> <deb60200-5a37-ec77-9515-0c0c89022174@quicinc.com>
- <CAD=FV=X_fs_4JYcRvAwkU9mAafOten9WdyzPfSVWdAU=ZMo8zg@mail.gmail.com>
- <155e4171-187c-4ecf-5a9b-12f0c2207524@linaro.org> <CAD=FV=Wk5rBSq9Mx1GCO0QFYckKV9KUFKL36Ld7dQX1ypHVcYw@mail.gmail.com>
- <da9720c2-ddc7-1a00-2608-0ef64c072cdd@linaro.org>
-In-Reply-To: <da9720c2-ddc7-1a00-2608-0ef64c072cdd@linaro.org>
-From:   Doug Anderson <dianders@chromium.org>
-Date:   Wed, 2 Nov 2022 10:25:01 -0700
-X-Gmail-Original-Message-ID: <CAD=FV=V+ZgKaKbg5iX0i15ZfDO3MfBuHF8BGT3r8ZPmhTiNWDw@mail.gmail.com>
-Message-ID: <CAD=FV=V+ZgKaKbg5iX0i15ZfDO3MfBuHF8BGT3r8ZPmhTiNWDw@mail.gmail.com>
-Subject: Re: [PATCH] drm/msm/dp: remove limitation of link rate at 5.4G to
- support HBR3
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     Kuogee Hsieh <quic_khsieh@quicinc.com>, robdclark@gmail.com,
-        sean@poorly.run, swboyd@chromium.org, vkoul@kernel.org,
-        daniel@ffwll.ch, airlied@linux.ie, agross@kernel.org,
-        quic_abhinavk@quicinc.com, quic_sbillaka@quicinc.com,
-        freedreno@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Bjorn Andersson <andersson@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221101132032.1542416-4-tomi.valkeinen@ideasonboard.com>
+X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
+        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
+On Tue, Nov 01, 2022 at 03:20:27PM +0200, Tomi Valkeinen wrote:
+> Add DT bindings for TI DS90UB960 FPDLink-3 Deserializer.
+> 
+> Signed-off-by: Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> ---
+>  .../bindings/media/i2c/ti,ds90ub960.yaml      | 392 ++++++++++++++++++
+>  1 file changed, 392 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
+> new file mode 100644
+> index 000000000000..4456d9b3e2c7
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/media/i2c/ti,ds90ub960.yaml
+> @@ -0,0 +1,392 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/media/i2c/ti,ds90ub960.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Texas Instruments DS90UB9XX Family FPD-Link Deserializer Hubs
+> +
+> +maintainers:
+> +  - Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
+> +
+> +description: |
 
-On Wed, Nov 2, 2022 at 10:15 AM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On 01/11/2022 17:37, Doug Anderson wrote:
-> > Hi,
-> >
-> > On Mon, Oct 31, 2022 at 5:15 PM Dmitry Baryshkov
-> > <dmitry.baryshkov@linaro.org> wrote:
-> >>
-> >> On 01/11/2022 03:08, Doug Anderson wrote:
-> >>> Hi,
-> >>>
-> >>> On Mon, Oct 31, 2022 at 2:11 PM Kuogee Hsieh <quic_khsieh@quicinc.com> wrote:
-> >>>>
-> >>>> Hi Dmitry,
-> >>>>
-> >>>>
-> >>>> Link rate is advertised by sink, but adjusted (reduced the link rate)
-> >>>> by host during link training.
-> >>>>
-> >>>> Therefore should be fine if host did not support HBR3 rate.
-> >>>>
-> >>>> It will reduce to lower link rate during link training procedures.
-> >>>>
-> >>>> kuogee
-> >>>>
-> >>>> On 10/31/2022 11:46 AM, Dmitry Baryshkov wrote:
-> >>>>> On 31/10/2022 20:27, Kuogee Hsieh wrote:
-> >>>>>> An HBR3-capable device shall also support TPS4. Since TPS4 feature
-> >>>>>> had been implemented already, it is not necessary to limit link
-> >>>>>> rate at HBR2 (5.4G). This patch remove this limitation to support
-> >>>>>> HBR3 (8.1G) link rate.
-> >>>>>
-> >>>>> The DP driver supports several platforms including sdm845 and can
-> >>>>> support, if I'm not mistaken, platforms up to msm8998/sdm630/660.
-> >>>>> Could you please confirm that all these SoCs have support for HBR3?
-> >>>>>
-> >>>>> With that fact being confirmed:
-> >>>>>
-> >>>>> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> >>>>>
-> >>>>>
-> >>>>>>
-> >>>>>> Signed-off-by: Kuogee Hsieh <quic_khsieh@quicinc.com>
-> >>>>>> ---
-> >>>>>>     drivers/gpu/drm/msm/dp/dp_panel.c | 4 ----
-> >>>>>>     1 file changed, 4 deletions(-)
-> >>>>>>
-> >>>>>> diff --git a/drivers/gpu/drm/msm/dp/dp_panel.c
-> >>>>>> b/drivers/gpu/drm/msm/dp/dp_panel.c
-> >>>>>> index 5149ceb..3344f5a 100644
-> >>>>>> --- a/drivers/gpu/drm/msm/dp/dp_panel.c
-> >>>>>> +++ b/drivers/gpu/drm/msm/dp/dp_panel.c
-> >>>>>> @@ -78,10 +78,6 @@ static int dp_panel_read_dpcd(struct dp_panel
-> >>>>>> *dp_panel)
-> >>>>>>         if (link_info->num_lanes > dp_panel->max_dp_lanes)
-> >>>>>>             link_info->num_lanes = dp_panel->max_dp_lanes;
-> >>>>>>     -    /* Limit support upto HBR2 until HBR3 support is added */
-> >>>>>> -    if (link_info->rate >=
-> >>>>>> (drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4)))
-> >>>>>> -        link_info->rate = drm_dp_bw_code_to_link_rate(DP_LINK_BW_5_4);
-> >>>>>> -
-> >>>>>>         drm_dbg_dp(panel->drm_dev, "version: %d.%d\n", major, minor);
-> >>>>>>         drm_dbg_dp(panel->drm_dev, "link_rate=%d\n", link_info->rate);
-> >>>>>>         drm_dbg_dp(panel->drm_dev, "lane_count=%d\n",
-> >>>>>> link_info->num_lanes);
-> >>>
-> >>> Stephen might remember better, but I could have sworn that the problem
-> >>> was that there might be something in the middle that couldn't support
-> >>> the higher link rate. In other words, I think we have:
-> >>>
-> >>> SoC <--> TypeC Port Controller <--> Display
-> >>>
-> >>> The SoC might support HBR3 and the display might support HBR3, but the
-> >>> TCPC (Type C Port Controller) might not. I think that the TCPC is a
-> >>> silent/passive component so it can't really let anyone know about its
-> >>> limitations.
-> >>>
-> >>> In theory I guess you could rely on link training to just happen to
-> >>> fail if you drive the link too fast for the TCPC to handle. Does this
-> >>> actually work reliably?
-> >>>
-> >>> I think the other option that was discussed in the past was to add
-> >>> something in the device tree for this. Either you could somehow model
-> >>> the TCPC in DRM and thus know that a given model of TCPC limits the
-> >>> link rate or you could hack in a property in the DP controller to
-> >>> limit it.
-> >>
-> >> Latest pmic_glink proposal from Bjorn include adding the drm_bridge for
-> >> the TCPC. Such bridge can in theory limit supported modes and rates.
-> >
-> > Excellent! Even so, I think this isn't totally a solved problem,
-> > right? Even though a bridge seems like a good place for this, last I
-> > remember checking the bridge API wasn't expressive enough to solve
-> > this problem. A bridge could limit pixel clocks just fine, but here we
-> > need to take into account other considerations to know if a given
-> > pixel clock can work at 5.4 GHz or not. For instance, if we're at 4
-> > lanes we could maybe make a given pixel clock at 5.4 GHz but not if we
-> > only have 2 lanes. I don't think that the DP controller passes the
-> > number of lanes to other parts of the bridge chain, though maybe
-> > there's some trick for it?
->
-> I hope that somebody would fix MSM DP's data-lanes property usage to
-> follow the usual way (a part of DT graph). Then it would be possible to
-> query the amount of the lanes from the bridge.
+Don't need '|'
 
-Sorry, can you explain how exactly this works?
+> +  The TI DS90UB9XX devices are FPD-Link video deserializers with I2C and GPIO
+> +  forwarding.
+> +
+> +properties:
+> +  compatible:
+> +    enum:
+> +      - ti,ds90ub960-q1
+> +      - ti,ds90ub9702-q1
+> +
+> +  reg:
+> +    maxItems: 1
+> +    description:
+> +      i2c addresses for the deserializer and the serializers
+> +
+> +  reg-names:
+> +    items:
+> +      - const: main
 
-I suspect that _somehow_ we need to get info from the TCPC to the DP
-controller driver about the maximum link rate. I think anything where
-the TCPC uses mode_valid() to reject modes and tries to make decisions
-based on "pixel clock" is going to be bad. If nothing else, I think
-that during link training that DP controller can try many different
-things to see what works. It may try varying the number of lanes, the
-BPC, the link rate, etc. I don't think mode_valid() is called each
-time through here.
+'reg-names' is not all that useful with only 1 entry.
 
+> +
+> +  clocks:
+> +    maxItems: 1
+> +    description:
+> +      Reference clock connected to the REFCLK pin.
+> +
+> +  clock-names:
+> +    items:
+> +      - const: refclk
+> +
+> +  powerdown-gpios:
+> +    maxItems: 1
+> +    description:
+> +      Specifier for the GPIO connected to the PDB pin.
+> +
+> +  i2c-alias-pool:
 
-> > ...I guess the other problem is that all existing users aren't
-> > currently modeling their TCPC in this way. What happens to them?
->
-> There are no existing users. Bryan implemented TCPM support at some
-> point, but we never pushed this upstream.
+Something common or could be? If not, then needs a vendor prefix.
 
-I mean existing DP users, like sc7180-trogdor devices. If the TCPC
-isn't modeled, then these need to continue defaulting to HBR2 since at
-least some of the boards have HBR2-only TCPCs.
+> +    $ref: /schemas/types.yaml#/definitions/uint16-array
+> +    description:
+> +      i2c alias pool for remote devices.
+
+Needs a better description. What's an 'alias pool'?
+
+0-0xffff are valid values?
+
+> +
+> +  links:
+> +    type: object
+> +    additionalProperties: false
+> +
+> +    properties:
+> +      '#address-cells':
+> +        const: 1
+> +
+> +      '#size-cells':
+> +        const: 0
+> +
+> +      manual-strobe:
+> +        type: boolean
+> +        description:
+> +          Enable manual strobe position and EQ level
+> +
+> +    patternProperties:
+> +      '^link@[0-9a-f]+$':
+> +        type: object
+> +        additionalProperties: false
+> +        properties:
+> +          reg:
+> +            description: The link number
+> +            maxItems: 1
+> +
+> +          i2c-alias:
+
+Vendor prefix.
+
+> +            description: |
+> +              The i2c address used for the serializer. Transactions to this
+> +              address on the i2c bus where the deserializer resides are
+> +              forwarded to the serializer.
+> +
+> +          rx-mode:
+
+Vendor prefix. And so on...
+
+> +            $ref: /schemas/types.yaml#/definitions/uint32
+> +            enum:
+> +              - 0 # RAW10
+> +              - 1 # RAW12 HF
+> +              - 2 # RAW12 LF
+> +              - 3 # CSI2 SYNC
+> +              - 4 # CSI2 NON-SYNC
+> +            description: FPD-Link Input Mode
+> +
+> +          cdr-mode:
+> +            $ref: /schemas/types.yaml#/definitions/uint32
+> +            enum:
+> +              - 0 # FPD3
+> +              - 1 # FPD4
+> +            description: FPD-Link CDR Mode
+> +
+> +          strobe-pos:
+> +            $ref: /schemas/types.yaml#/definitions/int32
+> +            minimum: -13
+> +            maximum: 13
+> +            description: Manual strobe position, from -13 to 13
+
+No need to put constraints in free form text.
+
+> +
+> +          eq-level:
+> +            $ref: /schemas/types.yaml#/definitions/uint32
+> +            maximum: 14
+> +            description: Manual EQ level, from 0 to 14
+> +
+> +          serializer:
+> +            type: object
+> +            description: FPD-Link Serializer node
+> +
+> +        required:
+> +          - reg
+> +          - i2c-alias
+> +          - rx-mode
+> +          - serializer
+> +
+> +  ports:
+> +    $ref: /schemas/graph.yaml#/properties/ports
+> +
+> +    properties:
+> +      port@0:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+
+           additionalProperties: false
+
+> +        description: FPD-Link input 0
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: /schemas/media/video-interfaces.yaml#
+
+               unevaluatedProperties: false
+
+Same for the other port nodes
+
+> +
+> +      port@1:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        description: FPD-Link input 1
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: /schemas/media/video-interfaces.yaml#
+> +
+> +      port@2:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        description: FPD-Link input 2
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: /schemas/media/video-interfaces.yaml#
+> +
+> +      port@3:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        description: FPD-Link input 3
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: /schemas/media/video-interfaces.yaml#
+> +
+> +      port@4:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        description: CSI-2 Output 0
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: /schemas/media/video-interfaces.yaml#
+> +
+> +            properties:
+> +              clock-lanes:
+> +                maxItems: 1
+> +
+> +              data-lanes:
+> +                minItems: 1
+> +                maxItems: 4
+
+Why the constraints on this endpoint? Are the other ones actually using 
+properties from video-interfaces.yaml? If not, then just reference 
+/properties/port and drop 'endpoint' instead.
+
+> +
+> +      port@5:
+> +        $ref: /schemas/graph.yaml#/$defs/port-base
+> +        description: CSI-2 Output 1
+> +
+> +        properties:
+> +          endpoint:
+> +            $ref: /schemas/media/video-interfaces.yaml#
+> +
+> +            properties:
+> +              clock-lanes:
+> +                maxItems: 1
+> +
+> +              data-lanes:
+> +                minItems: 1
+> +                maxItems: 4
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - clocks
+> +  - clock-names
+> +  - ports
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    #include <dt-bindings/gpio/gpio.h>
+> +
+> +    i2c {
+> +      clock-frequency = <400000>;
+> +      #address-cells = <1>;
+> +      #size-cells = <0>;
+> +
+> +      deser@3d {
+> +        compatible = "ti,ds90ub960-q1";
+> +
+> +        reg-names = "main";
+> +        reg       = <0x3d>;
+> +
+> +        clock-names = "refclk";
+> +        clocks = <&fixed_clock>;
+> +
+> +        powerdown-gpios = <&pca9555 7 GPIO_ACTIVE_LOW>;
+> +
+> +        i2c-alias-pool = /bits/ 16 <0x4a 0x4b 0x4c 0x4d 0x4e 0x4f>;
+> +
+> +        ports {
+> +          #address-cells = <1>;
+> +          #size-cells = <0>;
+> +
+> +          /* Port 0, Camera 0 */
+> +          port@0 {
+> +            reg = <0>;
+> +
+> +            ub960_fpd3_1_in: endpoint {
+> +              remote-endpoint = <&ub953_1_out>;
+> +
+> +              rx-mode = <0>;
+
+Looks like this is not defined under 'endpoint'.
+
+> +            };
+> +          };
+> +
+> +          /* Port 0, Camera 1 */
+> +          port@1 {
+> +            reg = <1>;
+> +
+> +            ub960_fpd3_2_in: endpoint {
+> +              remote-endpoint = <&ub913_2_out>;
+> +
+> +              rx-mode = <0>;
+> +            };
+> +          };
+> +
+> +          /* Port 4, CSI-2 TX */
+> +          port@4 {
+> +            reg = <4>;
+> +            ds90ub960_0_csi_out: endpoint {
+> +              clock-lanes = <0>;
+> +              data-lanes = <1 2 3 4>;
+> +              link-frequencies = /bits/ 64 <800000000>;
+> +              remote-endpoint = <&csi2_phy0>;
+> +            };
+> +          };
+> +        };
+> +
+> +        links {
+> +          #address-cells = <1>;
+> +          #size-cells = <0>;
+> +
+> +          /* Link 0 has DS90UB953 serializer and IMX390 sensor */
+> +
+> +          link@0 {
+> +            reg = <0>;
+> +            i2c-alias = <68>;
+> +
+> +            rx-mode = <3>;
+> +
+> +            serializer1: serializer {
+> +              compatible = "ti,ds90ub953-q1";
+> +
+> +              gpio-controller;
+> +              #gpio-cells = <2>;
+> +
+> +              #clock-cells = <0>;
+> +
+> +              ports {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+> +                port@0 {
+> +                  reg = <0>;
+> +                  ub953_1_in: endpoint {
+> +                    clock-lanes = <0>;
+> +                    data-lanes = <1 2 3 4>;
+> +                    remote-endpoint = <&sensor_1_out>;
+> +                  };
+> +                };
+> +
+> +                port@1 {
+> +                  reg = <1>;
+> +
+> +                  ub953_1_out: endpoint {
+> +                    remote-endpoint = <&ub960_fpd3_1_in>;
+> +                  };
+> +                };
+> +              };
+> +
+> +              i2c {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+> +                sensor@21 {
+> +                  compatible = "sony,imx390";
+> +                  reg = <0x21>;
+> +
+> +                  clocks = <&clk_cam_27M>;
+> +                  clock-names = "inck";
+> +
+> +                  xclr-gpios = <&serializer1 0 GPIO_ACTIVE_LOW>;
+> +                  error0-gpios = <&serializer1 1 GPIO_ACTIVE_HIGH>;
+> +                  error1-gpios = <&serializer1 2 GPIO_ACTIVE_HIGH>;
+> +                  comready-gpios = <&serializer1 3 GPIO_ACTIVE_HIGH>;
+> +
+> +                  port {
+> +                    sensor_1_out: endpoint {
+> +                      remote-endpoint = <&ub953_1_in>;
+> +                    };
+> +                  };
+> +                };
+> +              };
+> +            };
+> +          };  /* End of link@0 */
+> +
+> +          /* Link 1 has DS90UB913 serializer and OV10635 sensor */
+> +
+> +          link@1 {
+> +            reg = <1>;
+> +            i2c-alias = <69>;
+> +
+> +            rx-mode = <0>;
+> +
+> +            serializer2: serializer {
+> +              compatible = "ti,ds90ub913a-q1";
+> +
+> +              gpio-controller;
+> +              #gpio-cells = <2>;
+> +
+> +              clocks = <&clk_cam_48M>;
+> +              clock-names = "clkin";
+> +
+> +              #clock-cells = <0>;
+> +
+> +              ports {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+> +                port@0 {
+> +                  reg = <0>;
+> +                  ub913_2_in: endpoint {
+> +                    remote-endpoint = <&sensor_2_out>;
+> +                  };
+> +                };
+> +
+> +                port@1 {
+> +                  reg = <1>;
+> +
+> +                  ub913_2_out: endpoint {
+> +                    remote-endpoint = <&ub960_fpd3_2_in>;
+> +                  };
+> +                };
+> +              };
+> +
+> +              i2c {
+> +                #address-cells = <1>;
+> +                #size-cells = <0>;
+> +
+> +                sensor@30 {
+> +                  compatible = "ovti,ov10635";
+> +                  reg = <0x30>;
+> +
+> +                  clocks = <&serializer2>;
+> +                  clock-names = "xvclk";
+> +
+> +                  powerdown-gpios = <&serializer2 0 GPIO_ACTIVE_HIGH>;
+> +
+> +                  port {
+> +                    sensor_2_out: endpoint {
+> +                      remote-endpoint = <&ub913_2_in>;
+> +                      hsync-active = <1>;
+> +                      vsync-active = <1>;
+> +                      pclk-sample = <0>;
+> +                      bus-width = <10>;
+> +                    };
+> +                  };
+> +                };
+> +              };
+> +            };
+> +          }; /* End of link@1 */
+> +        };
+> +      };
+> +    };
+> +...
+> -- 
+> 2.34.1
+> 
+> 
