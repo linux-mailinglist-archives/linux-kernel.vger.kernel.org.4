@@ -2,98 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72DED616317
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:54:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 74705616323
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:55:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231202AbiKBMyB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 08:54:01 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35148 "EHLO
+        id S231210AbiKBMzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 08:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229493AbiKBMx6 (ORCPT
+        with ESMTP id S230364AbiKBMy7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 08:53:58 -0400
-Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 02F291BE8F
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 05:53:58 -0700 (PDT)
-Received: by mail-pf1-x432.google.com with SMTP id y203so2181253pfb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 05:53:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Sz/uTvOc0gNmc74MGKA7yKeLqyFqD/joiI1SxwVZLms=;
-        b=QPdi/N4K5dyZqaYEUPuN9znsrKWsfwh430NiiDRtLqBi68OaRPBOl96baYFkKsMkW1
-         MIV+la4+jbn7eO2JQcTLj1zwSYJb4vcWrd3nicT4aGNBMWvfnXdFlfpuri9yfU6ubTIx
-         LV6UoHd+XtwFQ26ci3dm7rIF/3I6LSKXypVlaASscdUXkVE5BCs3xch9xcwYBpWGNGQy
-         eTqjccvNYTtd8MenSpHX38ShXMZdSnl0juF/vyuZft+SjjOuxKZF6703U6qQiMfYyAiY
-         PZy0PyXYm20turCTicXMm7npZ1kg4dbru1HZomSQvnn0QRKDA3AhYFwCzuxwXSMwrIA0
-         ucPw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=to:subject:message-id:date:from:reply-to:mime-version
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sz/uTvOc0gNmc74MGKA7yKeLqyFqD/joiI1SxwVZLms=;
-        b=AGjZY5UGW8tKzGTFPy5PjHEytFNMd9v6UgTUA/9V7Gyciu1Nuuc0Ad11MjNrmMSkmr
-         QumO7/+kwUdgEWKoVZ/BqonhQMm3clenzalpduoqPQW8O9KjyE6CkfAJOh+Cos5pCdTv
-         pTylH5LWMtd2ih67v/Gtkabl7S/5HCa8JanCKuSbGtU9jzgFeDVbfUQDy5XaIwTyG/Mn
-         Cx6ZZEQR7qmZBTEOorsXGoDha9r1JFQQLn6lv79/bsbPJl3eZ6Amy3VhQwfVggTq2hdN
-         utivGvyLMJc4gi7gbNP/zSzPYMaX9V3ppSuyCLABwCyEELMthC0/+A3z6Oi5SB+eFaaV
-         9nHQ==
-X-Gm-Message-State: ACrzQf2lfEcHyNc9P/crjHMaqtWcrZXJRA+YqZJbe8T2Ks65t4xPf0+Z
-        BPWBaN/ThQvSnxjfBQx5gGbd5FzYjlEwvNR7qFU=
-X-Google-Smtp-Source: AMsMyM61U4kP/AwEmx8Ns6pmnpFl496NGTJPCi6lwLLzFsCz6P1xbep001BwiJUJhMONLwJUM07ev4VRsIE6EmmBRTg=
-X-Received: by 2002:a63:1058:0:b0:44f:a1cb:7eec with SMTP id
- 24-20020a631058000000b0044fa1cb7eecmr22145975pgq.117.1667393637418; Wed, 02
- Nov 2022 05:53:57 -0700 (PDT)
+        Wed, 2 Nov 2022 08:54:59 -0400
+Received: from mx1.riseup.net (mx1.riseup.net [198.252.153.129])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F05127FF7
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 05:54:58 -0700 (PDT)
+Received: from fews2.riseup.net (fews2-pn.riseup.net [10.0.1.84])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256
+         client-signature RSA-PSS (2048 bits) client-digest SHA256)
+        (Client CN "mail.riseup.net", Issuer "R3" (not verified))
+        by mx1.riseup.net (Postfix) with ESMTPS id 4N2RgP4G25zDrlv;
+        Wed,  2 Nov 2022 12:54:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=riseup.net; s=squak;
+        t=1667393698; bh=2EScxvVf4CEAFnJ1x85WUOh+0IR4+MO62lijgUoxDcY=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=cOaprI7Dl0RghbprGxnDwaJ4nNIOrCwsRKAzs+GdTlglZDTa657PL6qI3hnCtQTtU
+         vKxt0W8rcnPcLal8HcDdRI35+0A84ShpykEssqFZpLcCbYeSBulj9eVfvLBsygcIy6
+         Kz73bMymWM1MENXXUEJABTg4HSFr1lG6kEWJlSP4=
+X-Riseup-User-ID: C6FF082C56E5869C497B894A5D21BE86CCBCAB92BD597CAFC797FB27602024E1
+Received: from [127.0.0.1] (localhost [127.0.0.1])
+         by fews2.riseup.net (Postfix) with ESMTPSA id 4N2RgJ4VmJz1xx2;
+        Wed,  2 Nov 2022 12:54:52 +0000 (UTC)
+Message-ID: <01fc5756-9eab-f464-0e13-82b96806caa3@riseup.net>
+Date:   Wed, 2 Nov 2022 09:54:49 -0300
 MIME-Version: 1.0
-Received: by 2002:a05:7022:662c:b0:46:197b:656c with HTTP; Wed, 2 Nov 2022
- 05:53:56 -0700 (PDT)
-Reply-To: rihabmanyang1993@gmail.com
-From:   Rihab Manyang <omardiakhate751@gmail.com>
-Date:   Wed, 2 Nov 2022 12:53:56 +0000
-Message-ID: <CAAs2n97EyR3k29iVguxQoczvTjWeSjC00wTF0g+BD9inBzwh1Q@mail.gmail.com>
-Subject: HI DEAR..
-To:     undisclosed-recipients:;
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: Yes, score=5.1 required=5.0 tests=BAYES_50,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,FREEMAIL_REPLYTO,FREEMAIL_REPLYTO_END_DIGIT,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,UNDISC_FREEM autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Report: * -0.0 RCVD_IN_DNSWL_NONE RBL: Sender listed at
-        *      https://www.dnswl.org/, no trust
-        *      [2607:f8b0:4864:20:0:0:0:432 listed in]
-        [list.dnswl.org]
-        *  0.8 BAYES_50 BODY: Bayes spam probability is 40 to 60%
-        *      [score: 0.5000]
-        *  0.0 SPF_HELO_NONE SPF: HELO does not publish an SPF Record
-        *  0.2 FREEMAIL_ENVFROM_END_DIGIT Envelope-from freemail username ends
-        *       in digit
-        *      [omardiakhate751[at]gmail.com]
-        *  0.2 FREEMAIL_REPLYTO_END_DIGIT Reply-To freemail username ends in
-        *      digit
-        *      [rihabmanyang1993[at]gmail.com]
-        * -0.0 SPF_PASS SPF: sender matches SPF record
-        *  0.0 FREEMAIL_FROM Sender email is commonly abused enduser mail
-        *      provider
-        *      [omardiakhate751[at]gmail.com]
-        *  0.1 DKIM_SIGNED Message has a DKIM or DK signature, not necessarily
-        *       valid
-        * -0.1 DKIM_VALID_EF Message has a valid DKIM or DK signature from
-        *      envelope-from domain
-        * -0.1 DKIM_VALID Message has at least one valid DKIM or DK signature
-        * -0.1 DKIM_VALID_AU Message has a valid DKIM or DK signature from
-        *      author's domain
-        *  3.0 UNDISC_FREEM Undisclosed recipients + freemail reply-to
-        *  1.0 FREEMAIL_REPLYTO Reply-To/From or Reply-To/body contain
-        *      different freemails
-X-Spam-Level: *****
+Subject: Re: [PATCH v5] drm/tests: Add back seed value information
+Content-Language: en-US
+To:     Arthur Grillo <arthurgrillo@riseup.net>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Javier Martinez Canillas <javierm@redhat.com>,
+        =?UTF-8?Q?Toke_H=c3=b8iland-J=c3=b8rgensen?= <toke@toke.dk>,
+        "Jason A. Donenfeld" <Jason@zx2c4.com>
+Cc:     =?UTF-8?Q?Micha=c5=82_Winiarski?= <michal.winiarski@intel.com>,
+        Daniel Latypov <dlatypov@google.com>,
+        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
+        melissa.srw@gmail.com, David Gow <davidgow@google.com>,
+        andrealmeid@riseup.net
+References: <20221028221755.340487-1-arthurgrillo@riseup.net>
+From:   =?UTF-8?Q?Ma=c3=adra_Canal?= <mairacanal@riseup.net>
+In-Reply-To: <20221028221755.340487-1-arthurgrillo@riseup.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
--- 
-My name is Rihab Manyang,i am here to search for a business partner and
-friend who will help me to invest my fund in his country.
+Hi Arthur,
+
+Thanks for the patch! Pushed to drm-misc-next.
+
+Best Regards,
+- Maíra Canal
+
+On 10/28/22 19:17, Arthur Grillo wrote:
+> As reported by Michał the drm_mm and drm_buddy unit tests lost the
+> printk with seed value after they were refactored into KUnit.
+> 
+> Add kunit_info with seed value information to assure reproducibility.
+> 
+> Reported-by: Michał Winiarski <michal.winiarski@intel.com>
+> Signed-off-by: Arthur Grillo <arthurgrillo@riseup.net>
+> ---
+> v1->v2: https://lore.kernel.org/all/20221026211458.68432-1-arthurgrillo@riseup.net/
+> - Correct compilation issues
+> - Change tags order
+> - Remove useless line change
+> - Write commit message in imperative form
+> - Remove redundant message part
+> - Correct some grammars nits
+> - Correct checkpatch issues
+> 
+> v2->v3: https://lore.kernel.org/all/20221027142903.200169-1-arthurgrillo@riseup.net/
+> - Change .init to .suite_init
+> - Correct some grammars nits
+> 
+> v3->v4: https://lore.kernel.org/all/20221028141246.280079-1-arthurgrillo@riseup.net/
+> - Correct compilation issues
+> 
+> v4->v5: https://lore.kernel.org/all/20221028141715.290903-1-arthurgrillo@riseup.net/
+> - Change functions names from init_suite to suite_init
+> ---
+>  drivers/gpu/drm/tests/drm_buddy_test.c | 6 ++++--
+>  drivers/gpu/drm/tests/drm_mm_test.c    | 8 ++++++--
+>  2 files changed, 10 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/gpu/drm/tests/drm_buddy_test.c b/drivers/gpu/drm/tests/drm_buddy_test.c
+> index 62f69589a72d..f8ee714df396 100644
+> --- a/drivers/gpu/drm/tests/drm_buddy_test.c
+> +++ b/drivers/gpu/drm/tests/drm_buddy_test.c
+> @@ -726,11 +726,13 @@ static void drm_test_buddy_alloc_limit(struct kunit *test)
+>  	drm_buddy_fini(&mm);
+>  }
+>  
+> -static int drm_buddy_init_test(struct kunit *test)
+> +static int drm_buddy_suite_init(struct kunit_suite *suite)
+>  {
+>  	while (!random_seed)
+>  		random_seed = get_random_u32();
+>  
+> +	kunit_info(suite, "Testing DRM buddy manager, with random_seed=0x%x\n", random_seed);
+> +
+>  	return 0;
+>  }
+>  
+> @@ -746,7 +748,7 @@ static struct kunit_case drm_buddy_tests[] = {
+>  
+>  static struct kunit_suite drm_buddy_test_suite = {
+>  	.name = "drm_buddy",
+> -	.init = drm_buddy_init_test,
+> +	.suite_init = drm_buddy_suite_init,
+>  	.test_cases = drm_buddy_tests,
+>  };
+>  
+> diff --git a/drivers/gpu/drm/tests/drm_mm_test.c b/drivers/gpu/drm/tests/drm_mm_test.c
+> index c4b66eeae203..89f12d3b4a21 100644
+> --- a/drivers/gpu/drm/tests/drm_mm_test.c
+> +++ b/drivers/gpu/drm/tests/drm_mm_test.c
+> @@ -2209,11 +2209,15 @@ static void drm_test_mm_color_evict_range(struct kunit *test)
+>  	vfree(nodes);
+>  }
+>  
+> -static int drm_mm_init_test(struct kunit *test)
+> +static int drm_mm_suite_init(struct kunit_suite *suite)
+>  {
+>  	while (!random_seed)
+>  		random_seed = get_random_u32();
+>  
+> +	kunit_info(suite,
+> +		   "Testing DRM range manager, with random_seed=0x%x max_iterations=%u max_prime=%u\n",
+> +		   random_seed, max_iterations, max_prime);
+> +
+>  	return 0;
+>  }
+>  
+> @@ -2246,7 +2250,7 @@ static struct kunit_case drm_mm_tests[] = {
+>  
+>  static struct kunit_suite drm_mm_test_suite = {
+>  	.name = "drm_mm",
+> -	.init = drm_mm_init_test,
+> +	.suite_init = drm_mm_suite_init,
+>  	.test_cases = drm_mm_tests,
+>  };
+>  
