@@ -2,179 +2,137 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DCBE8616B3B
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:52:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 028C9616B41
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:54:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231420AbiKBRwa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:52:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52730 "EHLO
+        id S230006AbiKBRyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229704AbiKBRw2 (ORCPT
+        with ESMTP id S230211AbiKBRyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:52:28 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 960412DAA2;
-        Wed,  2 Nov 2022 10:52:26 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 4BE5C1F855;
-        Wed,  2 Nov 2022 17:52:25 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1667411545; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2OOSqGkoURhhL4+gF2vwCqYB+UasaAQlh1zzbjnsH8o=;
-        b=wO7hUFISvjCPUpYpk+VsVF37M1mDlu6W0GzEuib0d3ku6zE7wO6qMRJknkxrVQOXEYu7ZS
-        9iacyul1G46jLeBOod3N9+Y3jkCvjx0xxiYnTcT5JWsKBt5/kRgZhE4VAoTr+J5yCUbn2X
-        knZiTFJKHX39331zBMJkY16+yviru3w=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1667411545;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=2OOSqGkoURhhL4+gF2vwCqYB+UasaAQlh1zzbjnsH8o=;
-        b=Vl+7TWNP/tw4XLj/8A+yhD1ExsCs3ceCbZdSU3q7ayohjTkWaSv2dgoR+MPr6mE88hzTX7
-        mEcrGapO0uaCctBQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 3B80D139D3;
-        Wed,  2 Nov 2022 17:52:25 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id Z+uDDlmuYmNXSwAAMHmgww
-        (envelope-from <jack@suse.cz>); Wed, 02 Nov 2022 17:52:25 +0000
-Received: by quack3.suse.cz (Postfix, from userid 1000)
-        id BE93BA0700; Wed,  2 Nov 2022 18:52:24 +0100 (CET)
-Date:   Wed, 2 Nov 2022 18:52:24 +0100
-From:   Jan Kara <jack@suse.cz>
-To:     Stephen Brennan <stephen.s.brennan@oracle.com>
-Cc:     Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Amir Goldstein <amir73il@gmail.com>,
-        Al Viro <viro@zeniv.linux.org.uk>
-Subject: Re: [PATCH v3 0/3] fsnotify: fix softlockups iterating over d_subdirs
-Message-ID: <20221102175224.iacden3lq4oksmof@quack3>
-References: <20221021010310.29521-1-stephen.s.brennan@oracle.com>
- <20221028001016.332663-1-stephen.s.brennan@oracle.com>
- <20221101175144.yu3l5qo5gfwfpatt@quack3>
- <877d0eh03t.fsf@oracle.com>
+        Wed, 2 Nov 2022 13:54:50 -0400
+Received: from mail-io1-xd2d.google.com (mail-io1-xd2d.google.com [IPv6:2607:f8b0:4864:20::d2d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3FD682EF08
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 10:54:49 -0700 (PDT)
+Received: by mail-io1-xd2d.google.com with SMTP id n191so15637907iod.13
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 10:54:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=kernel-dk.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=lXvclno+jyQQctV09xCPun3dWMxNCv1weH6yrqWHinI=;
+        b=zqZlL+Fvk1hgljzOk+cKOdGfyG5s6UgWQ0R2uYP7f1zx7xWSL9LqPAEdPfc/MoNEQZ
+         t054ZJmE3YLCIwo+8p0hAnYOL0hwOK9fsdwzzC6AARht0XYURR4MXZvDqEttNbMyzmtb
+         gyrUrw6TsdndnWktcASaBz66fG8BEzm5U1SfxulWpjOpclRyOtQmgKXjtH5ZGvU3/w5A
+         Mr+ceiXmV6543B+HaGTxVYYxXFGJZ0TfE0BCtd5n5/xz7vai4DohQCtD0gZtPbSzJDna
+         2CcaXgOE05XJ5sOwJdLdg+S3f4RAx8vMnCvTEiPpR+g0pGJ3fWdnmCs/+8ztBZ2i3H9e
+         +c2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=lXvclno+jyQQctV09xCPun3dWMxNCv1weH6yrqWHinI=;
+        b=N3+CyyjN7aE9UAeNYh+bGdzBxOLJ7nCrp0XEnmCOMhWPqmzWX8oNAU5B8IaO3sU7zS
+         V4ORnlu/JV/VBNBafT1sIUxJ4M7p8KzlnGqVmM9NG0IuZNECGMrtIk5GZ+EDXoQ4s4Gh
+         /Fr1GFPvpQbsIWZF0Pq7+6rElM85dBg/C1BvNWCQeCEnTOwhPetogDbjITbnGS69Mkqm
+         livNiw+YFJcavdPHRRRV7cg0u+lTmo8B4d7HzPSXoH4UU29pxuLXiIdY5Eig1NSen0gI
+         /ToKzGU3b6s7oob6t2PBVuBY65oG5QAvdPPniwdTOmN+og/XgO3CxkTt+I5qhCUfiQnL
+         UNBA==
+X-Gm-Message-State: ACrzQf0Q+R/fWuvtUTJzRF+Gku3OaTCq2Xc6s0xY5Zd+UwpdFuG55ExD
+        RTtePi8sQGpKhu4ohCSY/g1rfw==
+X-Google-Smtp-Source: AMsMyM7Uz7kyuV0u+yZfyJ0xx7p9CVYMaoTXa62eyRLqMmmQztWTvwWsKufxMYOeg7ol0y68bD+2iA==
+X-Received: by 2002:a6b:5d11:0:b0:6c7:46be:4719 with SMTP id r17-20020a6b5d11000000b006c746be4719mr17248097iob.190.1667411688572;
+        Wed, 02 Nov 2022 10:54:48 -0700 (PDT)
+Received: from [192.168.1.94] ([207.135.234.126])
+        by smtp.gmail.com with ESMTPSA id b6-20020a05660214c600b006a129b10229sm3496263iow.31.2022.11.02.10.54.47
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 10:54:48 -0700 (PDT)
+Message-ID: <02e5bf45-f877-719b-6bf8-c4ac577187a8@kernel.dk>
+Date:   Wed, 2 Nov 2022 11:54:47 -0600
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <877d0eh03t.fsf@oracle.com>
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_SOFTFAIL autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux aarch64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCHSET v3 0/5] Add support for epoll min_wait
+Content-Language: en-US
+To:     Willem de Bruijn <willemdebruijn.kernel@gmail.com>
+Cc:     linux-kernel@vger.kernel.org, netdev@vger.kernel.org
+References: <20221030220203.31210-1-axboe@kernel.dk>
+ <CA+FuTSfj5jn8Wui+az2BrcpDFYF5m5ehwLiswwHMPJ2MK+S_Jw@mail.gmail.com>
+From:   Jens Axboe <axboe@kernel.dk>
+In-Reply-To: <CA+FuTSfj5jn8Wui+az2BrcpDFYF5m5ehwLiswwHMPJ2MK+S_Jw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue 01-11-22 13:48:54, Stephen Brennan wrote:
-> Jan Kara <jack@suse.cz> writes:
-> > Hi Stephen!
-> >
-> > On Thu 27-10-22 17:10:13, Stephen Brennan wrote:
-> >> Here is v3 of the patch series. I've taken all of the feedback,
-> >> thanks Amir, Christian, Hilf, et al. Differences are noted in each
-> >> patch.
-> >> 
-> >> I caught an obvious and silly dentry reference leak: d_find_any_alias()
-> >> returns a reference, which I never called dput() on. With that change, I
-> >> no longer see the rpc_pipefs issue, but I do think I need more testing
-> >> and thinking through the third patch. Al, I'd love your feedback on that
-> >> one especially.
-> >> 
-> >> Thanks,
-> >> Stephen
-> >> 
-> >> Stephen Brennan (3):
-> >>   fsnotify: Use d_find_any_alias to get dentry associated with inode
-> >>   fsnotify: Protect i_fsnotify_mask and child flags with inode rwsem
-> >>   fsnotify: allow sleepable child flag update
-> >
-> > Thanks for the patches Stephen and I'm sorry for replying somewhat late.
+On 11/2/22 11:46 AM, Willem de Bruijn wrote:
+> On Sun, Oct 30, 2022 at 6:02 PM Jens Axboe <axboe@kernel.dk> wrote:
+>>
+>> Hi,
+>>
+>> tldr - we saw a 6-7% CPU reduction with this patch. See patch 6 for
+>> full numbers.
+>>
+>> This adds support for EPOLL_CTL_MIN_WAIT, which allows setting a minimum
+>> time that epoll_wait() should wait for events on a given epoll context.
+>> Some justification and numbers are in patch 6, patches 1-5 are really
+>> just prep patches or cleanups.
+>>
+>> Sending this out to get some input on the API, basically. This is
+>> obviously a per-context type of operation in this patchset, which isn't
+>> necessarily ideal for any use case. Questions to be debated:
+>>
+>> 1) Would we want this to be available through epoll_wait() directly?
+>>    That would allow this to be done on a per-epoll_wait() basis, rather
+>>    than be tied to the specific context.
+>>
+>> 2) If the answer to #1 is yes, would we still want EPOLL_CTL_MIN_WAIT?
+>>
+>> I think there are pros and cons to both, and perhaps the answer to both is
+>> "yes". There are some benefits to doing this at epoll setup time, for
+>> example - it nicely isolates it to that part rather than needing to be
+>> done dynamically everytime epoll_wait() is called. This also helps the
+>> application code, as it can turn off any busy'ness tracking based on if
+>> the setup accepted EPOLL_CTL_MIN_WAIT or not.
+>>
+>> Anyway, tossing this out there as it yielded quite good results in some
+>> initial testing, we're running more of it. Sending out a v3 now since
+>> someone reported that nonblock issue which is annoying. Hoping to get some
+>> more discussion this time around, or at least some...
 > 
-> Absolutely no worries, these things take time. Thanks for taking a look!
+> My main question is whether the cycle gains justify the code
+> complexity and runtime cost in all other epoll paths.
 > 
-> > The first patch is a nobrainer. The other two patches ... complicate things
-> > somewhat more complicated than I'd like. I guess I can live with them if we
-> > don't find a better solution but I'd like to discuss a bit more about
-> > alternatives.
-> 
-> Understood!
-> 
-> > So what would happen if we just clear DCACHE_FSNOTIFY_PARENT_WATCHED in
-> > __fsnotify_parent() for the dentry which triggered the event and does not
-> > have watched parent anymore and never bother with full children walk? I
-> > suppose your contention problems will be gone, we'll just pay the price of
-> > dget_parent() + fsnotify_inode_watches_children() for each child that
-> > falsely triggers instead of for only one. Maybe that's not too bad? After
-> > all any event upto this moment triggered this overhead as well...
-> 
-> This is an interesting idea. It came across my mind but I don't think I
-> considered it seriously because I assumed that it was too big a change.
-> But I suppose in the process I created an even bigger change :P
-> 
-> The false positive dget_parent() + fsnotify_inode_watches_children()
-> shouldn't be too bad. I could see a situation where there's a lot of
-> random accesses within a directory, where the dget_parent() could cause
-> some contention over the parent dentry. But to be fair, the performance
-> would have been the same or worse while fsnotify was active in that
-> case, and the contention would go away as most of the dentries get their
-> flags cleared. So I don't think this is a problem.
-> 
-> > Am I missing something?
-> 
-> I think there's one thing missed here. I understand you'd like to get
-> rid of the extra flag in the connector. But the advantage of the flag is
-> avoiding duplicate work by saving a bit of state. Suppose that a mark is
-> added to a connector, which causes fsnotify_inode_watches_children() to
-> become true. Then, any subsequent call to fsnotify_recalc_mask() must
-> call __fsnotify_update_child_dentry_flags(), even though the child
-> dentry flags don't need to be updated: they're already set. For (very)
-> large directories, this can take a few seconds, which means that we're
-> doing a few extra seconds of work each time a new mark is added to or
-> removed from a connector in that case. I can't imagine that's a super
-> common workload though, and I don't know if my customers do that (my
-> guess would be no).
+> Syscall overhead is quite dependent on architecture and things like KPTI.
 
-I understand. This basically matters for fsnotify_recalc_mask(). As a side
-note I've realized that your changes to fsnotify_recalc_mask() acquiring
-inode->i_rwsem for updating dentry flags in patch 2/3 are problematic for
-dnotify because that calls fsnotify_recalc_mask() under a spinlock.
-Furthermore it is somewhat worrying also for inotify & fanotify because it
-nests inode->i_rwsem inside fsnotify_group->lock however I'm not 100% sure
-something doesn't force the ordering the other way around (e.g. the removal
-of oneshot mark during modify event generation). Did you run tests with
-lockdep enabled?
+Definitely interested in experiences from other folks, but what other
+runtime costs do you see compared to the baseline?
 
-Anyway, if the lock ordering issues can be solved, I suppose we can
-optimize fsnotify_recalc_mask() like:
+> Indeed, I was also wondering whether an extra timeout arg to
+> epoll_wait would give the same feature with less side effects. Then no
+> need for that new ctrl API.
 
-	inode_lock(inode);
-	spin_lock(&conn->lock);
-	oldmask = inode->i_fsnotify_mask;
-	__fsnotify_recalc_mask(conn);
-	newmask = inode->i_fsnotify_mask;
-	spin_unlock(&conn->lock);
-	if (watching children changed(oldmask, newmask))
-		__fsnotify_update_child_dentry_flags(...)
-	inode_unlock(inode);
+That was my main question in this posting - what's the best api? The
+current one, epoll_wait() addition, or both? The nice thing about the
+current one is that it's easy to integrate into existing use cases, as
+the decision to do batching on the userspace side or by utilizing this
+feature can be kept in the setup path. If you do epoll_wait() and get
+-1/EINVAL or false success on older kernels, then that's either a loss
+because of thinking it worked, or a fast path need to check for this
+specifically every time you call epoll_wait() rather than just at
+init/setup time.
 
-And because everything is serialized by inode_lock, we don't have to worry
-about inode->i_fsnotify_mask and dentry flags getting out of sync or some
-mark addition returning before all children are marked for reporting
-events. No need for the connector flag AFAICT.
+But this is very much the question I already posed and wanted to
+discuss...
 
-But the locking issue needs to be resolved first in any case. I need to
-think some more...
-
-								Honza
 -- 
-Jan Kara <jack@suse.com>
-SUSE Labs, CR
+Jens Axboe
