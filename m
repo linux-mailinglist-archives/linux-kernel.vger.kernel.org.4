@@ -2,177 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 11A33616A47
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5D5B1616A4C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:14:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231146AbiKBRNv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:13:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38972 "EHLO
+        id S230274AbiKBROS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:14:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40340 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbiKBRNi (ORCPT
+        with ESMTP id S230500AbiKBRNz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:13:38 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E2D51DF3C;
-        Wed,  2 Nov 2022 10:13:37 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id D068022AF9;
-        Wed,  2 Nov 2022 17:13:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-        t=1667409215; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FjC+X+IGjVIQCN9uPjsHYAeg5Fp899IsmxwXbW3ArI4=;
-        b=EbfWZ5Ab0gfFfbSBI0QUXUrVicapq9089Yr2aPJG9yILWhz4bPAs7Hk2AhP3GF/YbCLwGP
-        Z5wg2sqGnniUp/+GuE8yHePIQbQRDqzhjQRth8zYBED/52vrIpTv+vfIT7YGpcCd88zeLD
-        xCBURvWdi3uVVF2GPCTj3HTfjoPT2vw=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-        s=susede2_ed25519; t=1667409215;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=FjC+X+IGjVIQCN9uPjsHYAeg5Fp899IsmxwXbW3ArI4=;
-        b=mdwAzgOj/hjLJzRWy7/A+VPgcC2iH8jTbPKjcSx6lAhkQVxtuHVoPT3h+0wvSSrKrwsFym
-        /IiOyLGTMamyQ4BQ==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 7A3A513AE0;
-        Wed,  2 Nov 2022 17:13:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id bNdiHD+lYmPaOQAAMHmgww
-        (envelope-from <afaerber@suse.de>); Wed, 02 Nov 2022 17:13:35 +0000
-Message-ID: <2a7ebef4-77cc-1c26-ec6d-86db5ee5a94b@suse.de>
-Date:   Wed, 2 Nov 2022 18:13:35 +0100
+        Wed, 2 Nov 2022 13:13:55 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4A0092D3;
+        Wed,  2 Nov 2022 10:13:54 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A2HDeqq111380;
+        Wed, 2 Nov 2022 12:13:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1667409220;
+        bh=9xXQl3ypMam93TQFZncK480oz+++LfFiwW9TqbQA7ow=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=WqN4PAWBfTgKqYPqWR9QfiQMUSEDkcgH7jMjSv6Cf7d6MMl030QQzz87vmOiCkhmW
+         wch90C6cgTFlDbDD20D2mJ1zuddtVjIe7cBPvqx+dTZoly+wJdzW+xxvRFeLfdBPy4
+         azLS9WnhAuCZ1JiBBvlQf09MX1qlI/AwwaJw6Pgg=
+Received: from DLEE107.ent.ti.com (dlee107.ent.ti.com [157.170.170.37])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A2HDeBh090547
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Wed, 2 Nov 2022 12:13:40 -0500
+Received: from DLEE109.ent.ti.com (157.170.170.41) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 2 Nov
+ 2022 12:13:40 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Wed, 2 Nov 2022 12:13:40 -0500
+Received: from [10.249.33.217] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A2HDd5N022592;
+        Wed, 2 Nov 2022 12:13:39 -0500
+Message-ID: <ef0636bd-bb23-19b0-ab8f-a37280fe4296@ti.com>
+Date:   Wed, 2 Nov 2022 12:13:39 -0500
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.2.2
-Subject: Re: [PATCH 2/5] dt-bindings: net: add schema for NXP S32CC dwmac glue
- driver
+Subject: Re: [PATCH v3] dma-buf: fix racing conflict of dma_heap_add()
 Content-Language: en-US
-To:     Rob Herring <robh@kernel.org>, Chester Lin <clin@suse.com>
-Cc:     "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Jan Petrous <jan.petrous@nxp.com>, netdev@vger.kernel.org,
-        s32@nxp.com, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        Matthias Brugger <mbrugger@suse.com>
-References: <20221031101052.14956-1-clin@suse.com>
- <20221031101052.14956-3-clin@suse.com>
- <20221102155515.GA3959603-robh@kernel.org>
-From:   =?UTF-8?Q?Andreas_F=c3=a4rber?= <afaerber@suse.de>
-Organization: SUSE Software Solutions Germany GmbH
-In-Reply-To: <20221102155515.GA3959603-robh@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+To:     Dawei Li <set_pte_at@outlook.com>, <sumit.semwal@linaro.org>,
+        <christian.koenig@amd.com>
+CC:     <benjamin.gaignard@collabora.com>, <labbott@redhat.com>,
+        <Brian.Starkey@arm.com>, <jstultz@google.com>,
+        <sspatil@android.com>, <linux-media@vger.kernel.org>,
+        <dri-devel@lists.freedesktop.org>,
+        <linaro-mm-sig@lists.linaro.org>, <linux-kernel@vger.kernel.org>
+References: <TYCP286MB2323D71DEC1D008BEA6F7ABBCA399@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+From:   Andrew Davis <afd@ti.com>
+In-Reply-To: <TYCP286MB2323D71DEC1D008BEA6F7ABBCA399@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Rob,
-
-On 02.11.22 16:55, Rob Herring wrote:
-> On Mon, Oct 31, 2022 at 06:10:49PM +0800, Chester Lin wrote:
->> Add the DT schema for the DWMAC Ethernet controller on NXP S32 Common
->> Chassis.
->>
->> Signed-off-by: Jan Petrous <jan.petrous@nxp.com>
->> Signed-off-by: Chester Lin <clin@suse.com>
->> ---
->>   .../bindings/net/nxp,s32cc-dwmac.yaml         | 145 ++++++++++++++++++
->>   1 file changed, 145 insertions(+)
->>   create mode 100644 Documentation/devicetree/bindings/net/nxp,s32cc-dwmac.yaml
->>
->> diff --git a/Documentation/devicetree/bindings/net/nxp,s32cc-dwmac.yaml b/Documentation/devicetree/bindings/net/nxp,s32cc-dwmac.yaml
->> new file mode 100644
->> index 000000000000..f6b8486f9d42
->> --- /dev/null
->> +++ b/Documentation/devicetree/bindings/net/nxp,s32cc-dwmac.yaml
->> @@ -0,0 +1,145 @@
->> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->> +# Copyright 2021-2022 NXP
->> +%YAML 1.2
->> +---
->> +$id: "http://devicetree.org/schemas/net/nxp,s32cc-dwmac.yaml#"
->> +$schema: "http://devicetree.org/meta-schemas/core.yaml#"
->> +
->> +title: NXP S32CC DWMAC Ethernet controller
->> +
->> +maintainers:
->> +  - Jan Petrous <jan.petrous@nxp.com>
->> +  - Chester Lin <clin@suse.com>
-[...]
->> +properties:
->> +  compatible:
->> +    contains:
+On 11/2/22 10:58 AM, Dawei Li wrote:
+> Racing conflict could be:
+> task A                 task B
+> list_for_each_entry
+> strcmp(h->name))
+>                         list_for_each_entry
+>                         strcmp(h->name)
+> kzalloc                kzalloc
+> ......                 .....
+> device_create          device_create
+> list_add
+>                         list_add
 > 
-> Drop 'contains'.
+> The root cause is that task B has no idea about the fact someone
+> else(A) has inserted heap with same name when it calls list_add,
+> so a potential collision occurs.
 > 
->> +      enum:
->> +        - nxp,s32cc-dwmac
-
-In the past you were adamant that we use concrete SoC-specific strings. 
-Here that would mean s32g2 or s32g274 instead of s32cc (which aims to 
-share with S32G3 IIUC).
-
-[...]
->> +  clocks:
->> +    items:
->> +      - description: Main GMAC clock
->> +      - description: Peripheral registers clock
->> +      - description: Transmit SGMII clock
->> +      - description: Transmit RGMII clock
->> +      - description: Transmit RMII clock
->> +      - description: Transmit MII clock
->> +      - description: Receive SGMII clock
->> +      - description: Receive RGMII clock
->> +      - description: Receive RMII clock
->> +      - description: Receive MII clock
->> +      - description:
->> +          PTP reference clock. This clock is used for programming the
->> +          Timestamp Addend Register. If not passed then the system
->> +          clock will be used.
+> v1: https://lore.kernel.org/all/TYCP286MB2323950197F60FC3473123B7CA349@TYCP286MB2323.JPNP286.PROD.OUTLOOK.COM/
 > 
-> If optional, then you need 'minItems'.
-[snip]
+> v1->v2: Narrow down locking scope, check the existence of heap before
+> insertion, as suggested by Andrew Davis.
+> 
+> v2->v3: Remove double checking.
 
-Do we have any precedence of bindings with *MII clocks like these?
+The above version info should be in a cover letter or below
+the --- line so it doesn't end up in the commit message in tree.
 
-AFAIU the reason there are so many here is that there are in fact 
-physically just five, but different parent clock configurations that 
-SCMI does not currently expose to Linux. Thus I was raising that we may 
-want to extend the SCMI protocol with some SET_PARENT operation that 
-could allow us to use less input clocks here, but obviously such a 
-standardization process will take time...
+> 
+> Fixes: c02a81fba74f ("dma-buf: Add dma-buf heaps framework")
+> 
+> base-commit: 447fb14bf07905b880c9ed1ea92c53d6dd0649d7
+> 
 
-What are your thoughts on how to best handle this here?
+Same as above, plus this is an odd base, maybe just use "v6.1-rc2".
 
-Not clear to me has been whether the PHY mode can be switched at runtime 
-(like DPAA2 on Layerscape allows for SFPs) or whether this is fixed by 
-board design. If the latter, the two out of six SCMI IDs could get 
-selected in TF-A, to have only physical clocks here in the binding.
+> Signed-off-by: Dawei Li <set_pte_at@outlook.com>
+> ---
+>   drivers/dma-buf/dma-heap.c | 29 +++++++++++++++--------------
+>   1 file changed, 15 insertions(+), 14 deletions(-)
+> 
+> diff --git a/drivers/dma-buf/dma-heap.c b/drivers/dma-buf/dma-heap.c
+> index 8f5848aa144f..7a25e98259ea 100644
+> --- a/drivers/dma-buf/dma-heap.c
+> +++ b/drivers/dma-buf/dma-heap.c
+> @@ -233,18 +233,6 @@ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
+>   		return ERR_PTR(-EINVAL);
+>   	}
+>   
+> -	/* check the name is unique */
+> -	mutex_lock(&heap_list_lock);
+> -	list_for_each_entry(h, &heap_list, list) {
+> -		if (!strcmp(h->name, exp_info->name)) {
+> -			mutex_unlock(&heap_list_lock);
+> -			pr_err("dma_heap: Already registered heap named %s\n",
+> -			       exp_info->name);
+> -			return ERR_PTR(-EINVAL);
+> -		}
+> -	}
+> -	mutex_unlock(&heap_list_lock);
+> -
+>   	heap = kzalloc(sizeof(*heap), GFP_KERNEL);
+>   	if (!heap)
+>   		return ERR_PTR(-ENOMEM);
+> @@ -283,13 +271,26 @@ struct dma_heap *dma_heap_add(const struct dma_heap_export_info *exp_info)
+>   		err_ret = ERR_CAST(dev_ret);
+>   		goto err2;
+>   	}
+> -	/* Add heap to the list */
+> +
+>   	mutex_lock(&heap_list_lock);
+> +	/* check the name is unique */
+> +	list_for_each_entry(h, &heap_list, list) {
+> +		if (!strcmp(h->name, exp_info->name)) {
+> +			mutex_unlock(&heap_list_lock);
+> +			pr_err("dma_heap: Already registered heap named %s\n",
+> +			       exp_info->name);
+> +			err_ret = ERR_PTR(-EINVAL);
+> +			goto err3;
+> +		}
+> +	}
+> +
+> +	/* Add heap to the list */
+>   	list_add(&heap->list, &heap_list);
+>   	mutex_unlock(&heap_list_lock);
+>   
+>   	return heap;
+> -
 
-Regards,
-Andreas
+Would like to keep this new line after the return statement.
 
--- 
-SUSE Software Solutions Germany GmbH
-Frankenstr. 146, 90461 Nürnberg, Germany
-GF: Ivo Totev, Andrew Myers, Andrew McDonald, Boudien Moerman
-HRB 36809 (AG Nürnberg)
+Andrew
 
+> +err3:
+> +	device_destroy(dma_heap_class, heap->heap_devt);
+>   err2:
+>   	cdev_del(&heap->heap_cdev);
+>   err1:
