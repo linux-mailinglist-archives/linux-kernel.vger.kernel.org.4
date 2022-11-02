@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 130DC616333
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:59:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B599616335
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 13:59:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231237AbiKBM7s (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 08:59:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40502 "EHLO
+        id S231260AbiKBM7w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 08:59:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40548 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230233AbiKBM7p (ORCPT
+        with ESMTP id S231239AbiKBM7t (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 08:59:45 -0400
-Received: from mail-pg1-x52e.google.com (mail-pg1-x52e.google.com [IPv6:2607:f8b0:4864:20::52e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AE9FD2871D
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 05:59:44 -0700 (PDT)
-Received: by mail-pg1-x52e.google.com with SMTP id b62so5795535pgc.0
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 05:59:44 -0700 (PDT)
+        Wed, 2 Nov 2022 08:59:49 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ECE7C28732
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 05:59:48 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id o7so12970687pjj.1
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 05:59:48 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=compal-corp-partner-google-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y7JeNjduJ11iTjItlrELM3uT2g5gNbw14nHXxfp2BQo=;
-        b=KPv16VgSY+zS/r0qBRp9hB7SGa38CEdYWE8qXB+FuB+/CGBU/BGQakBKmqCwFgRkTx
-         3d3eGwXk7jed+3ksnRqcUhjjLqTSdLQSwduXMA/1y45BGUR2vHTtJj4Xe8BbKkz51UK9
-         ntKVKdYdde655Jj8YsfI38h/1qxED8fTfgRMzxU9J6+dgD9Ev+j46DDfhUgPPzbB/WMJ
-         WWx0nDilpyH6UQghabPcUKFVkyn0EmS/kybPV8rLJSoHWFrgabZTaP1GmN3pXG+mxH34
-         bwbViDK28GpqXvpo1e08gjfg6nkMVh5eBK6LjaW4IwMH6GWJvwXPS2/hNM3tisMOmngI
-         Oyfw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8MOAU43uzzEUBwcN8jl9h6i5tY3MCh/3gF6pphcM5rw=;
+        b=AQ8kPTbbljZVxfnEfi0hbxKI6s+gMzT3qxWIe3ilfWN97UlKHjGVYW5BTYtNTaj/GR
+         r5YSNGanhu5FZjRo6qzDGNK92FQVb90OmXFyhITipQcw0DQ8X7WRdldd1lVriuxJs3u8
+         bclVsAx4PenGpbY2lU2i+m/kNgF3EyA0eELvzK2Hl8UfgFWodpYU4RQkOAPz4GnnjyY8
+         dnHZoYjqs0AKUBo9KRCmhkHdy37BtxaoMfhq869YnSsr0DhuorCXvBpPW2KJrh0lZcj8
+         m585Yw0icnATeNTAPidouJ8I/Ysoh3Crl1R2swI0tmLmCckEkpkplYx9g9uainWRrYOW
+         8r7w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Y7JeNjduJ11iTjItlrELM3uT2g5gNbw14nHXxfp2BQo=;
-        b=0gSzHHHgXdc7PCL/degKAGOM1EXOK2Mq+j0AF6J9OZWbGEWztsSwlXH1eCz/WXIKNk
-         ohcL+OKfYwOBJdsYzl7aw5Wx35hTlIRNce0g5P5Q8FQ9lsgi3T8JF2inNFToolQPXYGC
-         h4574m1m+nfMap8pyE46J8AdYw77p2i0OM56dfuhYsHTHaAhO/09gHdOjgQhLI+bB4y6
-         9mvPxq5TSmuZSnBBpoGON6eM48O2veVn+3WOnnJ/YFSdpp7A+Ph/7D7MPgGaXr0BFjPe
-         Nxqyq21oP15vlruR36OPrPSV3d6g6eglKwOj9sOmkSTNAXQ64ocd03Fp3ZizLQPIL6su
-         Nclg==
-X-Gm-Message-State: ACrzQf1KD2iUQvk2uwgxxozC+GauZQizFYwxQaBtpxTSQBSbHeenqa5+
-        TcIbkN8ldDteeH6WZFbdK2SK1zSi0Sg3pg==
-X-Google-Smtp-Source: AMsMyM45Yjmw8JpdtXQkZ9vOIRK40sRXZtsKoP2XWwt+qHD2TbV0WaKrxJVHL1PtY7KzniIjkj5zsA==
-X-Received: by 2002:a63:93:0:b0:470:9d3:7d48 with SMTP id 141-20020a630093000000b0047009d37d48mr2183665pga.425.1667393983888;
-        Wed, 02 Nov 2022 05:59:43 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8MOAU43uzzEUBwcN8jl9h6i5tY3MCh/3gF6pphcM5rw=;
+        b=0haNoDfZHYJpPOvw9vCcDiPsqRmi9yTiQN7YJIYmpo8tHhzAxMiKHcT5XmC5qA0n1t
+         Mc+MMJYrycYap9InjmOU6cOESwQwAosyZElNFQazxLyLv+W7NCVBnVT2PC1Oe6V2MumU
+         SbY+lacc/TdL/IgCCfEMsB9u+S6IZbtuLqSn1Uetg9WKfFz/Nmc66qZ0KA84X+QNEe98
+         LUs87nG7UASs6F5XIsTxF5ks3pfl4LYVkp6vdU7PsAF/Br/BZamfDc3VC1J0mk/WSId+
+         r5+A1HAZs8bVt12d3addrAFdhXdZHxuh/ffqIjnOl0iHRq3YF/4jG8BMBYQogcvsZGDh
+         ++gw==
+X-Gm-Message-State: ACrzQf0qedPWniAOI1ZLaVxktg5FfmNQkp9aKtWt38JQ1Y6813JOHSza
+        BAoPBYJ8OUCENCjT0+AB+EDPwfiLUbQCAg==
+X-Google-Smtp-Source: AMsMyM52YMs6itJcER5nB0dN3QV1+Sc4QPdClAE5epUFWcxb/aLsW2ay/8oaQDOlk0eVDD79VsWRUw==
+X-Received: by 2002:a17:902:e88e:b0:187:27a7:c8a9 with SMTP id w14-20020a170902e88e00b0018727a7c8a9mr13695292plg.169.1667393988129;
+        Wed, 02 Nov 2022 05:59:48 -0700 (PDT)
 Received: from localhost.localdomain (118-167-210-180.dynamic-ip.hinet.net. [118.167.210.180])
-        by smtp.gmail.com with ESMTPSA id k14-20020a170902d58e00b0017f59ebafe7sm8259345plh.212.2022.11.02.05.59.40
+        by smtp.gmail.com with ESMTPSA id k14-20020a170902d58e00b0017f59ebafe7sm8259345plh.212.2022.11.02.05.59.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 05:59:43 -0700 (PDT)
+        Wed, 02 Nov 2022 05:59:47 -0700 (PDT)
 From:   Ajye Huang <ajye_huang@compal.corp-partner.google.com>
 To:     linux-kernel@vger.kernel.org
 Cc:     Mark Brown <broonie@kernel.org>,
@@ -67,10 +68,12 @@ Cc:     Mark Brown <broonie@kernel.org>,
         =?UTF-8?q?N=C3=ADcolas=20F=20=2E=20R=20=2E=20A=20=2E=20Prado?= 
         <nfraprado@collabora.com>, linux-arm-kernel@lists.infradead.org,
         devicetree@vger.kernel.org, alsa-devel@alsa-project.org
-Subject: [PATCH v6 0/2] Modify documentation and machine driver for mt8186_rt1019_rt5682s sound card
-Date:   Wed,  2 Nov 2022 20:59:34 +0800
-Message-Id: <20221102125936.2176748-1-ajye_huang@compal.corp-partner.google.com>
+Subject: [PATCH v6 1/2] ASoC: mediatek: dt-bindings: modify machine bindings for two MICs case
+Date:   Wed,  2 Nov 2022 20:59:35 +0800
+Message-Id: <20221102125936.2176748-2-ajye_huang@compal.corp-partner.google.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221102125936.2176748-1-ajye_huang@compal.corp-partner.google.com>
+References: <20221102125936.2176748-1-ajye_huang@compal.corp-partner.google.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -82,47 +85,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-v6:
-- dmic codec driver: 
-  - Modify "FrontMic" to "Front Mic" and "RearMic" to "Rear Mic"
-    to consisit with commit 3cfbf07c6d27 mentioned in description.
+Add a property "dmic-gpios" for switching between two MICs.
 
-v5:
-- Documentation: 
-  - Add #include <dt-bindings/gpio/gpio.h> in order to use
-    GPIO_ACTIVE_HIGH.
-  - Remove the change-id in message.
+Signed-off-by: Ajye Huang <ajye_huang@compal.corp-partner.google.com>
+---
+ .../sound/mt8186-mt6366-rt1019-rt5682s.yaml        | 14 +++++++++++++-
+ 1 file changed, 13 insertions(+), 1 deletion(-)
 
-v4:
-- Documentation: 
-  - Fix the FATAL ERROR: Unable to parse input tree.
-
-v3:
-- Documentation: 
-  - Add an explain example in description.
-  - Add the pinctrl-name and pinctrl id in its example.
-
-v2:
-- dmic codec driver: 
-  - Remove the unnecessary use of_property_read_bool()
-
-v1:
-- Documentation: Add dmic-gpios optional prop for two DMICs case.
-- dmic codec driver: 
-  - "dmic-gpios" property is used for amixer control to switch
-     the dmic signal source between the Front and Rear Dmic.
-
-Thanks for the review!
-
-Ajye Huang (2):
-  ASoC: mediatek: dt-bindings: modify machine bindings for two MICs case
-  ASoC: mediatek: mt8186-rt5682: Modify machine driver for two DMICs
-    case
-
- .../sound/mt8186-mt6366-rt1019-rt5682s.yaml   |  14 ++-
- .../mt8186/mt8186-mt6366-rt1019-rt5682s.c     | 102 +++++++++++++++++-
- 2 files changed, 114 insertions(+), 2 deletions(-)
-
+diff --git a/Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml b/Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml
+index 4fc5b045d3cf..9d3139990237 100644
+--- a/Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml
++++ b/Documentation/devicetree/bindings/sound/mt8186-mt6366-rt1019-rt5682s.yaml
+@@ -21,6 +21,13 @@ properties:
+     $ref: "/schemas/types.yaml#/definitions/phandle"
+     description: The phandle of MT8186 ASoC platform.
+ 
++  dmic-gpios:
++    maxItems: 1
++    description:
++      dmic-gpios optional prop for switching between two DMICs.
++      Ex, the GPIO can control a MUX HW component to select
++      dmic clk and data form a Front or Rear dmic.
++
+   headset-codec:
+     type: object
+     additionalProperties: false
+@@ -63,14 +70,19 @@ required:
+ 
+ examples:
+   - |
++    #include <dt-bindings/gpio/gpio.h>
+ 
+     sound: mt8186-sound {
+         compatible = "mediatek,mt8186-mt6366-rt1019-rt5682s-sound";
+         mediatek,platform = <&afe>;
+         pinctrl-names = "aud_clk_mosi_off",
+-                        "aud_clk_mosi_on";
++                        "aud_clk_mosi_on",
++                        "aud_gpio_dmic_sec";
+         pinctrl-0 = <&aud_clk_mosi_off>;
+         pinctrl-1 = <&aud_clk_mosi_on>;
++        pinctrl-2 = <&aud_gpio_dmic_sec>;
++
++        dmic-gpios = <&pio 23 GPIO_ACTIVE_HIGH>;
+ 
+         headset-codec {
+             sound-dai = <&rt5682s>;
 -- 
 2.25.1
 
