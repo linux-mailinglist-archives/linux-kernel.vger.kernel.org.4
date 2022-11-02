@@ -2,78 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 54EA5616607
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:24:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E42B261660B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:26:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230075AbiKBPYr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 11:24:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38310 "EHLO
+        id S230302AbiKBP0E (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 11:26:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiKBPYn (ORCPT
+        with ESMTP id S229531AbiKBPZ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 11:24:43 -0400
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 743DA2198;
-        Wed,  2 Nov 2022 08:24:41 -0700 (PDT)
-Received: by mail-pl1-f175.google.com with SMTP id u6so16879734plq.12;
-        Wed, 02 Nov 2022 08:24:41 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y6owPkDy93z6wC8f3H0K525TdW4UnwvIg/U69eNerUk=;
-        b=AuFUbkm/0IrddHc3hZvxuNyBc+rg9tn2gXKc2O4sJiCpZ/gtjZM6gyB9BckfnUlgj+
-         JCK2JksEYJ5k5esE3e+llA/bXQzrRSCgSleJcihjsgHPiOvMf3lLVg8JiFXLOunpNHm2
-         ncTl5nwSWP1M02xfSERW1MpcwAPljUmeiTTr70YCU8kll2avonLyP85jRghrf5F3T1hG
-         NrnCigeTXzkk5pbNL6GQ6aM2qO7CLt7KipAbUHn52o3jSUcgxX070LieC2vPD5M/xdij
-         gH1d0QlRferetR7fhiT5BbXZ1BSeceIO9iP7s07msEV2yANXWJCYZBoxUta/xsZ/Lqou
-         xJ4A==
-X-Gm-Message-State: ACrzQf3wlr7hBix2MajSs7VgXQu1ujCiWQu6PotpGy2TJZ6S/AzvNeCo
-        N3ROfjP+MRvY/WcUBOGbNEA=
-X-Google-Smtp-Source: AMsMyM4taNBnHj3yVsBhn54Sd7IX1xg8AD63314AnysJ6GLl6NE137UVGKqUb6fuQH7kVtS0dFB8eg==
-X-Received: by 2002:a17:90a:a017:b0:213:ad3:4d1a with SMTP id q23-20020a17090aa01700b002130ad34d1amr43272148pjp.120.1667402680732;
-        Wed, 02 Nov 2022 08:24:40 -0700 (PDT)
-Received: from [192.168.51.14] ([98.51.102.78])
-        by smtp.gmail.com with ESMTPSA id e129-20020a621e87000000b0056164b52bd8sm8617076pfe.32.2022.11.02.08.24.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 08:24:39 -0700 (PDT)
-Message-ID: <3bd04b49-1345-65e4-34b2-9fe559b0da43@acm.org>
-Date:   Wed, 2 Nov 2022 08:24:38 -0700
+        Wed, 2 Nov 2022 11:25:59 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CA1C41409A
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 08:25:58 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 630E8B8233E
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 15:25:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 33201C433D7;
+        Wed,  2 Nov 2022 15:25:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667402756;
+        bh=QqCq9FzEZmwrlGUBhYrSUWsSyKinysXKHWy0D5tQtL4=;
+        h=From:To:Cc:Subject:Date:From;
+        b=bkmbP53Ss3pbEvxROWjwMOfrtTPAoXHyH7DZbjcZSPO5149qw+yo4OoSRbXpgz1Hz
+         wgJA5J2axERwrL6jS30ImQny7gt9cSBwhYch5rOR7jJJIcJbRIcBOl3ia1JJrFZE2a
+         z+Yyo2Wf80QzzzLM7UpMn8kpxIPRogJALrwXuw8XyRsw0/KMdAq5aVJZ2bO90zjrMV
+         o5hBDP2AXXEWdrDJDepWmQBLBZ/2h1HFXjqR1Dh89DJhwMUxFcwdSvIXmM94QbSufC
+         G+DPnXVJP+SVnVNO7IJ5JIXluGDbCMMpD29BK4twyzqa/ze8i5x+t9U5Dqdt7KP+JL
+         NaZT48+juTG+Q==
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Alex Deucher <alexander.deucher@amd.com>,
+        =?UTF-8?q?Christian=20K=C3=B6nig?= <christian.koenig@amd.com>,
+        "Pan, Xinhui" <Xinhui.Pan@amd.com>
+Cc:     amd-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, Kees Cook <keescook@chromium.org>,
+        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev,
+        patches@lists.linux.dev, Nathan Chancellor <nathan@kernel.org>
+Subject: [PATCH 1/2] drm/amdgpu: Fix type of second parameter in trans_msg() callback
+Date:   Wed,  2 Nov 2022 08:25:39 -0700
+Message-Id: <20221102152540.2389891-1-nathan@kernel.org>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.0
-Subject: Re: [RESEND PATCH 0/4] Implement File-Based optimization
- functionality
-Content-Language: en-US
-To:     Jiaming Li <lijiaming3@xiaomi.corp-partner.google.com>,
-        alim.akhtar@samsung.com, avri.altman@wdc.com
-Cc:     linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        lijiaming3 <lijiaming3@xiaomi.com>,
-        Christoph Hellwig <hch@lst.de>
-References: <20221102053058.21021-1-lijiaming3@xiaomi.corp-partner.google.com>
-From:   Bart Van Assche <bvanassche@acm.org>
-In-Reply-To: <20221102053058.21021-1-lijiaming3@xiaomi.corp-partner.google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/1/22 22:30, Jiaming Li wrote:
-> From: lijiaming3 <lijiaming3@xiaomi.com>
+With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+indirect call targets are validated against the expected function
+pointer prototype to make sure the call target is valid to help mitigate
+ROP attacks. If they are not identical, there is a failure at run time,
+which manifests as either a kernel panic or thread getting killed. A
+proposed warning in clang aims to catch these at compile time, which
+reveals:
 
-Hi Jiaming,
+  drivers/gpu/drm/amd/amdgpu/mxgpu_ai.c:412:15: error: incompatible function pointer types initializing 'void (*)(struct amdgpu_device *, u32, u32, u32, u32)' (aka 'void (*)(struct amdgpu_device *, unsigned int, unsigned int, unsigned int, unsigned int)') with an expression of type 'void (struct amdgpu_device *, enum idh_request, u32, u32, u32)' (aka 'void (struct amdgpu_device *, enum idh_request, unsigned int, unsigned int, unsigned int)') [-Werror,-Wincompatible-function-pointer-types-strict]
+          .trans_msg = xgpu_ai_mailbox_trans_msg,
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+  1 error generated.
 
-...@...corp-partner.google.com email addresses must NOT be used for 
-communication on open source mailing lists. Please use your Xiaomi.com 
-e-mail address for communication on open source mailing lists.
+  drivers/gpu/drm/amd/amdgpu/mxgpu_nv.c:435:15: error: incompatible function pointer types initializing 'void (*)(struct amdgpu_device *, u32, u32, u32, u32)' (aka 'void (*)(struct amdgpu_device *, unsigned int, unsigned int, unsigned int, unsigned int)') with an expression of type 'void (struct amdgpu_device *, enum idh_request, u32, u32, u32)' (aka 'void (struct amdgpu_device *, enum idh_request, unsigned int, unsigned int, unsigned int)') [-Werror,-Wincompatible-function-pointer-types-strict]
+          .trans_msg = xgpu_nv_mailbox_trans_msg,
+                      ^~~~~~~~~~~~~~~~~~~~~~~~~
+  1 error generated.
 
-Bart.
+The type of the second parameter in the prototype should be 'enum
+idh_request' instead of 'u32'. Update it to clear up the warnings.
+
+Link: https://github.com/ClangBuiltLinux/linux/issues/1750
+Reported-by: Sami Tolvanen <samitolvanen@google.com>
+Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+---
+ drivers/gpu/drm/amd/amdgpu/amdgpu_virt.h | 5 ++++-
+ 1 file changed, 4 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.h b/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.h
+index d94c31e68a14..bc4f079fd48c 100644
+--- a/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.h
++++ b/drivers/gpu/drm/amd/amdgpu/amdgpu_virt.h
+@@ -74,6 +74,8 @@ struct amdgpu_vf_error_buffer {
+ 	uint64_t data[AMDGPU_VF_ERROR_ENTRY_SIZE];
+ };
+ 
++enum idh_request;
++
+ /**
+  * struct amdgpu_virt_ops - amdgpu device virt operations
+  */
+@@ -83,7 +85,8 @@ struct amdgpu_virt_ops {
+ 	int (*req_init_data)(struct amdgpu_device *adev);
+ 	int (*reset_gpu)(struct amdgpu_device *adev);
+ 	int (*wait_reset)(struct amdgpu_device *adev);
+-	void (*trans_msg)(struct amdgpu_device *adev, u32 req, u32 data1, u32 data2, u32 data3);
++	void (*trans_msg)(struct amdgpu_device *adev, enum idh_request req,
++			  u32 data1, u32 data2, u32 data3);
+ };
+ 
+ /*
+
+base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+-- 
+2.38.1
 
