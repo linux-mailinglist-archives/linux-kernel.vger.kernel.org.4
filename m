@@ -2,53 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 57B43616941
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:37:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0487A616940
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:37:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231190AbiKBQhj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 12:37:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59428 "EHLO
+        id S230199AbiKBQhg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 12:37:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35652 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231157AbiKBQgy (ORCPT
+        with ESMTP id S231951AbiKBQhG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 12:36:54 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A43F30548
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 09:32:24 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id h10so12812826qvq.7
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 09:32:24 -0700 (PDT)
+        Wed, 2 Nov 2022 12:37:06 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9C95B30558
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 09:32:25 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id k26so7586248qkg.2
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 09:32:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fuc9/QP7Bq99BMsjZQ93rqfxRXvHLvB+iExe/1RqSE0=;
-        b=eH4qQTQH7l+DmWcmvt8NBT4516TegyhIOcmtqhvRmQmkZbskYegQN/oHgnQjtEyts4
-         ZMmjymjKwT15AXtEfeR3xDbrwU1FDVtjlBD69kpYqKptfyMrmSX1Q5oqpjXvHpXjPtxS
-         Q7VwD2suVVvuv+6p0SUII54NSX75Il5+YOPsj3SffuU9Cn2V1xSa+F/HOzKOAuK4skMv
-         bNmwWdTY0BPWEI0N1HN6PJZ/ZM5n74nwdDQoReWWz0Bywi9Wtk8zOeUqR/mIUmR1XKk3
-         J6coGodnwLatepAUxh7NiwWGpuOJ3KQq0ZRPQOGGus6G4F4mh48r+abH6hCOd1D4VKeN
-         JlBw==
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R5D1+3LHVdMJwKajv7SO69qf7x1hOCL/AE4jgAHhCSM=;
+        b=KHm5hi6WbxAjz6YvnD/HWlIbEaK+lebb1VJPBfWiQWkfVQYlucy9Dd4esZ2gs9/nnE
+         SsfH9RRvLtzCBRfMjdKbWY/EcCQsWdIsGQ6+s7YZ8gh59STq+/eZDZ9yuX3ZsIs5vp7z
+         OYUjPjFw3L0GALmatbBDoXsyWHSvifwKyI3CR5CnlLaIaSR3EViEvnBYEjfRzmMnWeLT
+         xdlxeJe8rzC+lsKI9596agHWfBv3pPVH95ZPr2pUCdvZPIwiDU/hLi9IyhqvsUpLKuxx
+         cx9379ncv19fw7kHm17VE+rgpOoXSnrc4fcM4q2boHPgwh98z1nWMWPyqG1hub2pHUPF
+         6JFA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fuc9/QP7Bq99BMsjZQ93rqfxRXvHLvB+iExe/1RqSE0=;
-        b=W1YgJdy4xk9Ja7C2aBGQ96E9+1O6lPOMGawOQiCCekhCR8fDHPTzc/187StgOiyqdv
-         jsJOYIRvz20VFm4ZQH+hlKSfGLqUzNMLhH8lEW35t5zRU8RgANc3ukT0X2/iCNd1y816
-         whwgqa2efB1WORNCBqxVhyhxb/ZIKvoA2p3gT6YW/Mhph6f9BoO5BKdcCz8Qe7CjVk2h
-         Tjy4hWW4h3U6wNAUcDgQzWg2zUuaOHs9Ix+BqWkQP5eMviaV0n49wa6HGSBJckYzCwOk
-         GlNxNJHQ/d4nZj1DVt/vlzinp+H0q+hPjRIgYPLjof3kLWHkUoQmB2JEQz0JN8fjvY4t
-         TVYw==
-X-Gm-Message-State: ACrzQf0bIaw99ZexEoH7OCygcKEKt6OTx9C1KLZs7CDJay4SDs+esew5
-        JtLsINW6McCjT9L+SdSiuTXT8w==
-X-Google-Smtp-Source: AMsMyM62yk1h+ACpFke4/NrH0cN1WANmQVh5FNIWnEi+z8uXOB4pt+yTptA8yhkeN8LkeHXLFDc6sQ==
-X-Received: by 2002:a05:6214:21ca:b0:4bb:4a55:b63b with SMTP id d10-20020a05621421ca00b004bb4a55b63bmr21822954qvh.0.1667406721637;
-        Wed, 02 Nov 2022 09:32:01 -0700 (PDT)
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R5D1+3LHVdMJwKajv7SO69qf7x1hOCL/AE4jgAHhCSM=;
+        b=vudckzxVdVEXK2LcEf8ydDqmejiLvz5h7P8WotL8N4KqzkUScesTQlzAYKz5abh+S0
+         9HqzUVMneRzf0CgYbq/+l1kgPqkTuvTkqb3SvECVbLFOq0dbrcCvMbFVFK7NT7gfD5gH
+         GpVcYofe/YV0hxMNC8bIuN/5O2Z9NIEEVJZCXVqdkgwhiAviEtrS0oPU7OvrvlSM/gMe
+         eV1JedHIAf8NQ+92Nn+lMxJQHFFsfuTGOpcVtpGRKov9/vk2wdi1n6q0TVJyvsC7Yq3j
+         PvNdkogai1RMxd1W1kh9Kqx2ghWyNaBDD4iW3iW4stczd+rsZCSkzekbWbJG8ghvcGUQ
+         mfiQ==
+X-Gm-Message-State: ACrzQf1JVkKB0FYb2TwwDnlOPzVAWIE2YZR18tOYKpwi875nOvsGBBvw
+        U7LikfXz9rjbxqrO20/SJOs28g==
+X-Google-Smtp-Source: AMsMyM4tvSjGogNRG4dJXUDecCo0uOoH0zc3j5In6pomN/nsRHeyfOG/uRJBWZk8vcgwUsAuUL6ptQ==
+X-Received: by 2002:a37:f50b:0:b0:6fa:12f2:974c with SMTP id l11-20020a37f50b000000b006fa12f2974cmr17500477qkk.171.1667406723715;
+        Wed, 02 Nov 2022 09:32:03 -0700 (PDT)
 Received: from krzk-bin.. ([2601:586:5000:570:28d9:4790:bc16:cc93])
-        by smtp.gmail.com with ESMTPSA id t19-20020ac865d3000000b0039cc47752casm6820888qto.77.2022.11.02.09.31.59
+        by smtp.gmail.com with ESMTPSA id t19-20020ac865d3000000b0039cc47752casm6820888qto.77.2022.11.02.09.32.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 09:32:01 -0700 (PDT)
+        Wed, 02 Nov 2022 09:32:03 -0700 (PDT)
 From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 To:     Bjorn Andersson <andersson@kernel.org>,
         Andy Gross <agross@kernel.org>,
@@ -79,10 +80,12 @@ To:     Bjorn Andersson <andersson@kernel.org>,
         devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
         Rob Herring <robh@kernel.org>
-Subject: [PATCH v2 1/2] dt-bindings: clock: qcom,gcc-ipq8074: Use common GCC schema
-Date:   Wed,  2 Nov 2022 12:31:52 -0400
-Message-Id: <20221102163153.55460-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH v2 2/2] dt-bindings: clock: qcom: Clean-up titles and descriptions
+Date:   Wed,  2 Nov 2022 12:31:53 -0400
+Message-Id: <20221102163153.55460-2-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221102163153.55460-1-krzysztof.kozlowski@linaro.org>
+References: <20221102163153.55460-1-krzysztof.kozlowski@linaro.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -95,62 +98,1631 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Reference common Qualcomm GCC schema to remove common pieces.
+Clean the Qualcomm SoCs clock bindings:
+1. Drop redundant "bindings" in title.
+2. Correct language grammar "<independent clause without verb>, which
+   supports" -> "provides".
+3. Use full path to the bindings header, so tools can validate it.
+4. Drop quotes where not needed.
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Reviewed-by: Jeffrey Hugo <quic_jhugo@quicinc.com> # msm8998
+Acked-by: Jeffrey Hugo <quic_jhugo@quicinc.com> # mmcc
 Acked-by: Rob Herring <robh@kernel.org>
 
 ---
 
 Changes since v1:
-1. Add Ack.
+1. Add Ack/Rb.
+2. Adjust subject (Rob).
 ---
- .../bindings/clock/qcom,gcc-ipq8074.yaml      | 25 +++----------------
- 1 file changed, 4 insertions(+), 21 deletions(-)
+ .../bindings/clock/qcom,a53pll.yaml           |  2 +-
+ .../devicetree/bindings/clock/qcom,a7pll.yaml |  2 +-
+ .../bindings/clock/qcom,aoncc-sm8250.yaml     |  2 +-
+ .../bindings/clock/qcom,audiocc-sm8250.yaml   |  2 +-
+ .../bindings/clock/qcom,camcc-sm8250.yaml     |  6 ++--
+ .../bindings/clock/qcom,dispcc-sm6125.yaml    |  9 +++---
+ .../bindings/clock/qcom,dispcc-sm6350.yaml    |  8 ++---
+ .../bindings/clock/qcom,dispcc-sm8x50.yaml    | 14 ++++-----
+ .../bindings/clock/qcom,gcc-apq8064.yaml      | 18 +++++------
+ .../bindings/clock/qcom,gcc-apq8084.yaml      | 10 +++----
+ .../bindings/clock/qcom,gcc-ipq8064.yaml      | 18 +++++------
+ .../bindings/clock/qcom,gcc-ipq8074.yaml      |  9 +++---
+ .../bindings/clock/qcom,gcc-msm8660.yaml      | 12 ++++----
+ .../bindings/clock/qcom,gcc-msm8909.yaml      |  9 +++---
+ .../bindings/clock/qcom,gcc-msm8916.yaml      | 16 +++++-----
+ .../bindings/clock/qcom,gcc-msm8976.yaml      |  9 +++---
+ .../bindings/clock/qcom,gcc-msm8994.yaml      |  9 +++---
+ .../bindings/clock/qcom,gcc-msm8996.yaml      |  7 ++---
+ .../bindings/clock/qcom,gcc-msm8998.yaml      |  9 +++---
+ .../bindings/clock/qcom,gcc-other.yaml        | 30 +++++++++----------
+ .../bindings/clock/qcom,gcc-qcm2290.yaml      |  9 +++---
+ .../bindings/clock/qcom,gcc-qcs404.yaml       |  9 +++---
+ .../bindings/clock/qcom,gcc-sc7180.yaml       |  9 +++---
+ .../bindings/clock/qcom,gcc-sc7280.yaml       |  9 +++---
+ .../bindings/clock/qcom,gcc-sc8180x.yaml      |  9 +++---
+ .../bindings/clock/qcom,gcc-sc8280xp.yaml     |  7 ++---
+ .../bindings/clock/qcom,gcc-sdm660.yaml       |  8 ++---
+ .../bindings/clock/qcom,gcc-sdm845.yaml       |  9 +++---
+ .../bindings/clock/qcom,gcc-sdx55.yaml        |  7 ++---
+ .../bindings/clock/qcom,gcc-sdx65.yaml        |  9 +++---
+ .../bindings/clock/qcom,gcc-sm6115.yaml       |  9 +++---
+ .../bindings/clock/qcom,gcc-sm6125.yaml       |  9 +++---
+ .../bindings/clock/qcom,gcc-sm6350.yaml       |  9 +++---
+ .../bindings/clock/qcom,gcc-sm8150.yaml       |  9 +++---
+ .../bindings/clock/qcom,gcc-sm8250.yaml       |  9 +++---
+ .../bindings/clock/qcom,gcc-sm8350.yaml       |  9 +++---
+ .../bindings/clock/qcom,gcc-sm8450.yaml       |  9 +++---
+ .../devicetree/bindings/clock/qcom,gcc.yaml   |  6 ++--
+ .../bindings/clock/qcom,gpucc-sdm660.yaml     |  4 +--
+ .../bindings/clock/qcom,gpucc-sm8350.yaml     |  9 +++---
+ .../devicetree/bindings/clock/qcom,gpucc.yaml | 22 +++++++-------
+ .../devicetree/bindings/clock/qcom,mmcc.yaml  |  4 +--
+ .../bindings/clock/qcom,msm8998-gpucc.yaml    |  8 ++---
+ .../bindings/clock/qcom,q6sstopcc.yaml        |  2 +-
+ .../bindings/clock/qcom,qcm2290-dispcc.yaml   |  8 ++---
+ .../bindings/clock/qcom,sc7180-camcc.yaml     |  9 +++---
+ .../bindings/clock/qcom,sc7180-dispcc.yaml    |  8 ++---
+ .../clock/qcom,sc7180-lpasscorecc.yaml        |  9 +++---
+ .../bindings/clock/qcom,sc7180-mss.yaml       |  7 ++---
+ .../bindings/clock/qcom,sc7280-camcc.yaml     |  6 ++--
+ .../bindings/clock/qcom,sc7280-dispcc.yaml    |  8 ++---
+ .../bindings/clock/qcom,sc7280-lpasscc.yaml   |  9 +++---
+ .../clock/qcom,sc7280-lpasscorecc.yaml        | 12 ++++----
+ .../bindings/clock/qcom,sdm845-camcc.yaml     |  8 ++---
+ .../bindings/clock/qcom,sdm845-dispcc.yaml    |  8 ++---
+ .../bindings/clock/qcom,sm6115-dispcc.yaml    |  7 ++---
+ .../bindings/clock/qcom,sm6375-gcc.yaml       |  9 +++---
+ .../bindings/clock/qcom,sm8450-camcc.yaml     |  8 ++---
+ .../bindings/clock/qcom,sm8450-dispcc.yaml    |  7 ++---
+ .../bindings/clock/qcom,videocc.yaml          | 20 ++++++-------
+ 60 files changed, 258 insertions(+), 289 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8074.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8074.yaml
-index 21470f52ce36..ac6711ed01ba 100644
---- a/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8074.yaml
-+++ b/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8074.yaml
-@@ -17,34 +17,17 @@ description: |
-   See also:
-   - dt-bindings/clock/qcom,gcc-ipq8074.h
+diff --git a/Documentation/devicetree/bindings/clock/qcom,a53pll.yaml b/Documentation/devicetree/bindings/clock/qcom,a53pll.yaml
+index fe6ca4f68bbe..525ebaa93c85 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,a53pll.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,a53pll.yaml
+@@ -4,7 +4,7 @@
+ $id: http://devicetree.org/schemas/clock/qcom,a53pll.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
  
-+allOf:
-+  - $ref: qcom,gcc.yaml#
-+
+-title: Qualcomm A53 PLL Binding
++title: Qualcomm A53 PLL clock
+ 
+ maintainers:
+   - Bjorn Andersson <andersson@kernel.org>
+diff --git a/Documentation/devicetree/bindings/clock/qcom,a7pll.yaml b/Documentation/devicetree/bindings/clock/qcom,a7pll.yaml
+index 0e96f693b050..809c34eb7d5a 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,a7pll.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,a7pll.yaml
+@@ -4,7 +4,7 @@
+ $id: http://devicetree.org/schemas/clock/qcom,a7pll.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm A7 PLL Binding
++title: Qualcomm A7 PLL clock
+ 
+ maintainers:
+   - Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+diff --git a/Documentation/devicetree/bindings/clock/qcom,aoncc-sm8250.yaml b/Documentation/devicetree/bindings/clock/qcom,aoncc-sm8250.yaml
+index c40a74b5d672..4ee2d5a29e23 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,aoncc-sm8250.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,aoncc-sm8250.yaml
+@@ -4,7 +4,7 @@
+ $id: http://devicetree.org/schemas/clock/qcom,aoncc-sm8250.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Clock bindings for LPASS Always ON Clock Controller on SM8250 SoCs
++title: LPASS Always ON Clock Controller on SM8250 SoCs
+ 
+ maintainers:
+   - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+diff --git a/Documentation/devicetree/bindings/clock/qcom,audiocc-sm8250.yaml b/Documentation/devicetree/bindings/clock/qcom,audiocc-sm8250.yaml
+index 915d76206ad0..acf37fb633f7 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,audiocc-sm8250.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,audiocc-sm8250.yaml
+@@ -4,7 +4,7 @@
+ $id: http://devicetree.org/schemas/clock/qcom,audiocc-sm8250.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Clock bindings for LPASS Audio Clock Controller on SM8250 SoCs
++title: LPASS Audio Clock Controller on SM8250 SoCs
+ 
+ maintainers:
+   - Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+diff --git a/Documentation/devicetree/bindings/clock/qcom,camcc-sm8250.yaml b/Documentation/devicetree/bindings/clock/qcom,camcc-sm8250.yaml
+index 9f239c3960d1..93ec1f598e6e 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,camcc-sm8250.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,camcc-sm8250.yaml
+@@ -4,16 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,camcc-sm8250.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Camera Clock & Reset Controller Binding for SM8250
++title: Qualcomm Camera Clock & Reset Controller on SM8250
+ 
+ maintainers:
+   - Jonathan Marek <jonathan@marek.ca>
+ 
+ description: |
+-  Qualcomm camera clock control module which supports the clocks, resets and
++  Qualcomm camera clock control module provides the clocks, resets and
+   power domains on SM8250.
+ 
+-  See also dt-bindings/clock/qcom,camcc-sm8250.h
++  See also:: include/dt-bindings/clock/qcom,camcc-sm8250.h
+ 
  properties:
    compatible:
-     const: qcom,gcc-ipq8074
+diff --git a/Documentation/devicetree/bindings/clock/qcom,dispcc-sm6125.yaml b/Documentation/devicetree/bindings/clock/qcom,dispcc-sm6125.yaml
+index 7a03ef19c947..8a210c4c5f82 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,dispcc-sm6125.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,dispcc-sm6125.yaml
+@@ -4,17 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,dispcc-sm6125.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
  
--  '#clock-cells':
--    const: 1
--
--  '#power-domain-cells':
--    const: 1
--
--  '#reset-cells':
--    const: 1
--
--  reg:
--    maxItems: 1
--
--  protected-clocks:
--    description:
--      Protected clock specifier list as per common clock binding.
--
- required:
-   - compatible
--  - reg
--  - '#clock-cells'
--  - '#power-domain-cells'
--  - '#reset-cells'
+-title: Qualcomm Display Clock Controller Binding for SM6125
++title: Qualcomm Display Clock Controller on SM6125
  
--additionalProperties: false
-+unevaluatedProperties: false
+ maintainers:
+   - Martin Botka <martin.botka@somainline.org>
  
- examples:
-   - |
+ description: |
+-  Qualcomm display clock control module which supports the clocks and
+-  power domains on SM6125.
++  Qualcomm display clock control module provides the clocks and power domains
++  on SM6125.
+ 
+-  See also:
+-    dt-bindings/clock/qcom,dispcc-sm6125.h
++  See also:: include/dt-bindings/clock/qcom,dispcc-sm6125.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,dispcc-sm6350.yaml b/Documentation/devicetree/bindings/clock/qcom,dispcc-sm6350.yaml
+index e706678b353a..8efac3fb159f 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,dispcc-sm6350.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,dispcc-sm6350.yaml
+@@ -4,16 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,dispcc-sm6350.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Display Clock & Reset Controller Binding for SM6350
++title: Qualcomm Display Clock & Reset Controller on SM6350
+ 
+ maintainers:
+   - Konrad Dybcio <konrad.dybcio@somainline.org>
+ 
+ description: |
+-  Qualcomm display clock control module which supports the clocks, resets and
+-  power domains on SM6350.
++  Qualcomm display clock control module provides the clocks, resets and power
++  domains on SM6350.
+ 
+-  See also dt-bindings/clock/qcom,dispcc-sm6350.h.
++  See also:: include/dt-bindings/clock/qcom,dispcc-sm6350.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,dispcc-sm8x50.yaml b/Documentation/devicetree/bindings/clock/qcom,dispcc-sm8x50.yaml
+index 7a8d375e055e..d6774db257f0 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,dispcc-sm8x50.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,dispcc-sm8x50.yaml
+@@ -4,19 +4,19 @@
+ $id: http://devicetree.org/schemas/clock/qcom,dispcc-sm8x50.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Display Clock & Reset Controller Binding for SM8150/SM8250/SM8350
++title: Qualcomm Display Clock & Reset Controller on SM8150/SM8250/SM8350
+ 
+ maintainers:
+   - Jonathan Marek <jonathan@marek.ca>
+ 
+ description: |
+-  Qualcomm display clock control module which supports the clocks, resets and
+-  power domains on SM8150/SM8250/SM8350.
++  Qualcomm display clock control module provides the clocks, resets and power
++  domains on SM8150/SM8250/SM8350.
+ 
+-  See also:
+-    dt-bindings/clock/qcom,dispcc-sm8150.h
+-    dt-bindings/clock/qcom,dispcc-sm8250.h
+-    dt-bindings/clock/qcom,dispcc-sm8350.h
++  See also::
++    include/dt-bindings/clock/qcom,dispcc-sm8150.h
++    include/dt-bindings/clock/qcom,dispcc-sm8250.h
++    include/dt-bindings/clock/qcom,dispcc-sm8350.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
+index 6b4efd64c154..09cd7a786871 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8064.yaml
+@@ -4,22 +4,22 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-apq8064.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for APQ8064/MSM8960
+-
+-allOf:
+-  - $ref: qcom,gcc.yaml#
++title: Qualcomm Global Clock & Reset Controller on APQ8064/MSM8960
+ 
+ maintainers:
+   - Stephen Boyd <sboyd@kernel.org>
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on APQ8064.
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on APQ8064.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-msm8960.h
+-  - dt-bindings/reset/qcom,gcc-msm8960.h
++  See also::
++    include/dt-bindings/clock/qcom,gcc-msm8960.h
++    include/dt-bindings/reset/qcom,gcc-msm8960.h
++
++allOf:
++  - $ref: qcom,gcc.yaml#
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8084.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8084.yaml
+index 397fb918e032..8ade176c24f4 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-apq8084.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-apq8084.yaml
+@@ -4,19 +4,19 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-apq8084.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for APQ8084
++title: Qualcomm Global Clock & Reset Controller on APQ8084
+ 
+ maintainers:
+   - Stephen Boyd <sboyd@kernel.org>
+   - Taniya Das <quic_tdas@quicinc.com>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on APQ8084.
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on APQ8084.
+ 
+   See also::
+-  - dt-bindings/clock/qcom,gcc-apq8084.h
+-  - dt-bindings/reset/qcom,gcc-apq8084.h
++    include/dt-bindings/clock/qcom,gcc-apq8084.h
++    include/dt-bindings/reset/qcom,gcc-apq8084.h
+ 
+ allOf:
+   - $ref: qcom,gcc.yaml#
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8064.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8064.yaml
+index 9eb91dd22557..f6b28061d2ab 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8064.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8064.yaml
+@@ -4,21 +4,21 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-ipq8064.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for IPQ8064
+-
+-allOf:
+-  - $ref: qcom,gcc.yaml#
++title: Qualcomm Global Clock & Reset Controller on IPQ8064
+ 
+ maintainers:
+   - Ansuel Smith <ansuelsmth@gmail.com>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on IPQ8064.
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on IPQ8064.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-ipq806x.h (qcom,gcc-ipq8064)
+-  - dt-bindings/reset/qcom,gcc-ipq806x.h (qcom,gcc-ipq8064)
++  See also::
++    include/dt-bindings/clock/qcom,gcc-ipq806x.h (qcom,gcc-ipq8064)
++    include/dt-bindings/reset/qcom,gcc-ipq806x.h (qcom,gcc-ipq8064)
++
++allOf:
++  - $ref: qcom,gcc.yaml#
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8074.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8074.yaml
+index ac6711ed01ba..27a0aa263afe 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8074.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-ipq8074.yaml
+@@ -4,18 +4,17 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-ipq8074.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Bindingfor IPQ8074
++title: Qualcomm Global Clock & Reset Controller on IPQ8074
+ 
+ maintainers:
+   - Stephen Boyd <sboyd@kernel.org>
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on IPQ8074.
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on IPQ8074.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-ipq8074.h
++  See also:: include/dt-bindings/clock/qcom,gcc-ipq8074.h
+ 
+ allOf:
+   - $ref: qcom,gcc.yaml#
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-msm8660.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-msm8660.yaml
+index 09b2ea60d356..c9e985548621 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-msm8660.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-msm8660.yaml
+@@ -4,22 +4,22 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-msm8660.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for MSM8660
++title: Qualcomm Global Clock & Reset Controller on MSM8660
+ 
+ maintainers:
+   - Stephen Boyd <sboyd@kernel.org>
+   - Taniya Das <quic_tdas@quicinc.com>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks and resets on
++  Qualcomm global clock control module provides the clocks and resets on
+   MSM8660
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-msm8660.h
+-  - dt-bindings/reset/qcom,gcc-msm8660.h
++  See also::
++    include/dt-bindings/clock/qcom,gcc-msm8660.h
++    include/dt-bindings/reset/qcom,gcc-msm8660.h
+ 
+ allOf:
+-  - $ref: "qcom,gcc.yaml#"
++  - $ref: qcom,gcc.yaml#
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-msm8909.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-msm8909.yaml
+index 2272ea5f78d0..6279a59c2e20 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-msm8909.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-msm8909.yaml
+@@ -4,17 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-msm8909.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for MSM8909
++title: Qualcomm Global Clock & Reset Controller on MSM8909
+ 
+ maintainers:
+   - Stephan Gerhold <stephan@gerhold.net>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on MSM8909.
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on MSM8909.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-msm8909.h
++  See also:: include/dt-bindings/clock/qcom,gcc-msm8909.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-msm8916.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-msm8916.yaml
+index 2ceb1e501ef9..ad84c0f7680b 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-msm8916.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-msm8916.yaml
+@@ -4,21 +4,21 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-msm8916.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for MSM8916 and MSM8939
++title: Qualcomm Global Clock & Reset Controller on MSM8916 and MSM8939
+ 
+ maintainers:
+   - Stephen Boyd <sboyd@kernel.org>
+   - Taniya Das <quic_tdas@quicinc.com>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on MSM8916 or MSM8939.
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on MSM8916 or MSM8939.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-msm8916.h
+-  - dt-bindings/clock/qcom,gcc-msm8939.h
+-  - dt-bindings/reset/qcom,gcc-msm8916.h
+-  - dt-bindings/reset/qcom,gcc-msm8939.h
++  See also::
++    include/dt-bindings/clock/qcom,gcc-msm8916.h
++    include/dt-bindings/clock/qcom,gcc-msm8939.h
++    include/dt-bindings/reset/qcom,gcc-msm8916.h
++    include/dt-bindings/reset/qcom,gcc-msm8939.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-msm8976.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-msm8976.yaml
+index 4b7d69518371..d2186e25f55f 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-msm8976.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-msm8976.yaml
+@@ -4,18 +4,17 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-msm8976.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for MSM8976
++title: Qualcomm Global Clock & Reset Controller on MSM8976
+ 
+ maintainers:
+   - Stephen Boyd <sboyd@kernel.org>
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on MSM8976.
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on MSM8976.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-msm8976.h
++  See also:: include/dt-bindings/clock/qcom,gcc-msm8976.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-msm8994.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-msm8994.yaml
+index 7b9fef6d9b23..8f0f20c1442a 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-msm8994.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-msm8994.yaml
+@@ -4,17 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-msm8994.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for MSM8994
++title: Qualcomm Global Clock & Reset Controller on MSM8994
+ 
+ maintainers:
+   - Konrad Dybcio <konrad.dybcio@somainline.org>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on MSM8994 and MSM8992.
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on MSM8994 and MSM8992.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-msm8994.h
++  See also:: include/dt-bindings/clock/qcom,gcc-msm8994.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-msm8996.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-msm8996.yaml
+index dfc5165db9f1..f77036ace31b 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-msm8996.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-msm8996.yaml
+@@ -4,18 +4,17 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-msm8996.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for MSM8996
++title: Qualcomm Global Clock & Reset Controller on MSM8996
+ 
+ maintainers:
+   - Stephen Boyd <sboyd@kernel.org>
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
++  Qualcomm global clock control module which provides the clocks, resets and
+   power domains on MSM8996.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-msm8996.h
++  See also:: include/dt-bindings/clock/qcom,gcc-msm8996.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-msm8998.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-msm8998.yaml
+index 544a2335cf05..2d5355cf9def 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-msm8998.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-msm8998.yaml
+@@ -4,18 +4,17 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-msm8998.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for MSM8998
++title: Qualcomm Global Clock & Reset Controller on MSM8998
+ 
+ maintainers:
+   - Stephen Boyd <sboyd@kernel.org>
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on MSM8998.
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on MSM8998.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-msm8998.h
++  See also:: include/dt-bindings/clock/qcom,gcc-msm8998.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml
+index 35fc22a19000..a76c21a242d8 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-other.yaml
+@@ -4,29 +4,29 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-other.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding
++title: Qualcomm Global Clock & Reset Controller
+ 
+ maintainers:
+   - Stephen Boyd <sboyd@kernel.org>
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains.
+-
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-ipq4019.h
+-  - dt-bindings/clock/qcom,gcc-ipq6018.h
+-  - dt-bindings/reset/qcom,gcc-ipq6018.h
+-  - dt-bindings/clock/qcom,gcc-msm8953.h
+-  - dt-bindings/clock/qcom,gcc-msm8974.h (qcom,gcc-msm8226 and qcom,gcc-msm8974)
+-  - dt-bindings/reset/qcom,gcc-msm8974.h (qcom,gcc-msm8226 and qcom,gcc-msm8974)
+-  - dt-bindings/clock/qcom,gcc-mdm9607.h
+-  - dt-bindings/clock/qcom,gcc-mdm9615.h
+-  - dt-bindings/reset/qcom,gcc-mdm9615.h
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains.
++
++  See also::
++    include/dt-bindings/clock/qcom,gcc-ipq4019.h
++    include/dt-bindings/clock/qcom,gcc-ipq6018.h
++    include/dt-bindings/reset/qcom,gcc-ipq6018.h
++    include/dt-bindings/clock/qcom,gcc-msm8953.h
++    include/dt-bindings/clock/qcom,gcc-msm8974.h (qcom,gcc-msm8226 and qcom,gcc-msm8974)
++    include/dt-bindings/reset/qcom,gcc-msm8974.h (qcom,gcc-msm8226 and qcom,gcc-msm8974)
++    include/dt-bindings/clock/qcom,gcc-mdm9607.h
++    include/dt-bindings/clock/qcom,gcc-mdm9615.h
++    include/dt-bindings/reset/qcom,gcc-mdm9615.h
+ 
+ allOf:
+-  - $ref: "qcom,gcc.yaml#"
++  - $ref: qcom,gcc.yaml#
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-qcm2290.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-qcm2290.yaml
+index aec37e3f5e30..c9bec4656f6e 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-qcm2290.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-qcm2290.yaml
+@@ -4,17 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-qcm2290.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for QCM2290
++title: Qualcomm Global Clock & Reset Controller on QCM2290
+ 
+ maintainers:
+   - Shawn Guo <shawn.guo@linaro.org>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets
+-  and power domains on QCM2290.
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on QCM2290.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-qcm2290.h
++  See also:: include/dt-bindings/clock/qcom,gcc-qcm2290.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-qcs404.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-qcs404.yaml
+index ce06f3f8c3e3..dca5775f79a4 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-qcs404.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-qcs404.yaml
+@@ -4,18 +4,17 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-qcs404.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Bindingfor QCS404
++title: Qualcomm Global Clock & Reset Controller on QCS404
+ 
+ maintainers:
+   - Stephen Boyd <sboyd@kernel.org>
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on QCS404.
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on QCS404.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-qcs404.h
++  See also:: include/dt-bindings/clock/qcom,gcc-qcs404.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sc7180.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sc7180.yaml
+index e4d490e65d14..06dce0c6b7d0 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-sc7180.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sc7180.yaml
+@@ -4,18 +4,17 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-sc7180.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for SC7180
++title: Qualcomm Global Clock & Reset Controller on SC7180
+ 
+ maintainers:
+   - Stephen Boyd <sboyd@kernel.org>
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on SC7180.
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on SC7180.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-sc7180.h
++  See also:: include/dt-bindings/clock/qcom,gcc-sc7180.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sc7280.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sc7280.yaml
+index ea61367e5abc..947b47168cec 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-sc7280.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sc7280.yaml
+@@ -4,17 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-sc7280.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for SC7280
++title: Qualcomm Global Clock & Reset Controller on SC7280
+ 
+ maintainers:
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on SC7280.
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on SC7280.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-sc7280.h
++  See also:: include/dt-bindings/clock/qcom,gcc-sc7280.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sc8180x.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sc8180x.yaml
+index 30b5d1215fa8..6c4846b34e4b 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-sc8180x.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sc8180x.yaml
+@@ -4,17 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-sc8180x.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for SC8180x
++title: Qualcomm Global Clock & Reset Controller on SC8180x
+ 
+ maintainers:
+   - Bjorn Andersson <bjorn.andersson@linaro.org>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on SC8180x.
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on SC8180x.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-sc8180x.h
++  See also:: include/dt-bindings/clock/qcom,gcc-sc8180x.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml
+index b1bf768530a3..c9d8e436d73a 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sc8280xp.yaml
+@@ -4,17 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-sc8280xp.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for SC8280xp
++title: Qualcomm Global Clock & Reset Controller on SC8280xp
+ 
+ maintainers:
+   - Bjorn Andersson <bjorn.andersson@linaro.org>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
++  Qualcomm global clock control module provides the clocks, resets and
+   power domains on SC8280xp.
+ 
+-  See also:
+-  - include/dt-bindings/clock/qcom,gcc-sc8280xp.h
++  See also:: include/dt-bindings/clock/qcom,gcc-sc8280xp.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sdm660.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sdm660.yaml
+index 68f47174b1b7..52e7412aace5 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-sdm660.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sdm660.yaml
+@@ -11,11 +11,11 @@ maintainers:
+   - Taniya Das <quic_tdas@quicinc.com>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on SDM630, SDM636 and SDM660
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on SDM630, SDM636 and SDM660
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-sdm660.h  (qcom,gcc-sdm630 and qcom,gcc-sdm660)
++  See also::
++    include/dt-bindings/clock/qcom,gcc-sdm660.h  (qcom,gcc-sdm630 and qcom,gcc-sdm660)
+ 
+ $ref: qcom,gcc.yaml#
+ 
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
+index e169d46c78f8..68e1b7822fe0 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sdm845.yaml
+@@ -4,18 +4,17 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-sdm845.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding
++title: Qualcomm Global Clock & Reset Controller on SDM670 and SDM845
+ 
+ maintainers:
+   - Stephen Boyd <sboyd@kernel.org>
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on SDM845
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on SDM670 and SDM845
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-sdm845.h
++  See also:: include/dt-bindings/clock/qcom,gcc-sdm845.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sdx55.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sdx55.yaml
+index 13ffa16e0833..68d3099c96ae 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-sdx55.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sdx55.yaml
+@@ -4,18 +4,17 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-sdx55.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for SDX55
++title: Qualcomm Global Clock & Reset Controller on SDX55
+ 
+ maintainers:
+   - Vinod Koul <vkoul@kernel.org>
+   - Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
++  Qualcomm global clock control module provides the clocks, resets and
+   power domains on SDX55
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-sdx55.h
++  See also:: include/dt-bindings/clock/qcom,gcc-sdx55.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sdx65.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sdx65.yaml
+index 8a1419c4d465..ba62baab916c 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-sdx65.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sdx65.yaml
+@@ -4,17 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-sdx65.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for SDX65
++title: Qualcomm Global Clock & Reset Controller on SDX65
+ 
+ maintainers:
+   - Vamsi krishna Lanka <quic_vamslank@quicinc.com>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on SDX65
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on SDX65
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-sdx65.h
++  See also:: include/dt-bindings/clock/qcom,gcc-sdx65.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sm6115.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sm6115.yaml
+index bb81a27a1b16..a5ad0a3da397 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-sm6115.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sm6115.yaml
+@@ -4,17 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-sm6115.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for SM6115 and SM4250
++title: Qualcomm Global Clock & Reset Controller on SM6115 and SM4250
+ 
+ maintainers:
+   - Iskren Chernev <iskren.chernev@gmail.com>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on SM4250/6115.
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on SM4250/6115.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-sm6115.h
++  See also:: include/dt-bindings/clock/qcom,gcc-sm6115.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sm6125.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sm6125.yaml
+index 03e84e15815c..8e37623788bd 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-sm6125.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sm6125.yaml
+@@ -4,17 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-sm6125.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for SM6125
++title: Qualcomm Global Clock & Reset Controller on SM6125
+ 
+ maintainers:
+   - Konrad Dybcio <konrad.dybcio@somainline.org>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on SM6125.
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on SM6125.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-sm6125.h
++  See also:: include/dt-bindings/clock/qcom,gcc-sm6125.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sm6350.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sm6350.yaml
+index cbe98c01c085..d1b26ab48eaf 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-sm6350.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sm6350.yaml
+@@ -4,17 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-sm6350.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for SM6350
++title: Qualcomm Global Clock & Reset Controller on SM6350
+ 
+ maintainers:
+   - Konrad Dybcio <konrad.dybcio@somainline.org>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on SM6350.
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on SM6350.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-sm6350.h
++  See also:: include/dt-bindings/clock/qcom,gcc-sm6350.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sm8150.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sm8150.yaml
+index 0333ccb07d8d..3ea0ff37a4cb 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-sm8150.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sm8150.yaml
+@@ -4,18 +4,17 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-sm8150.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for SM8150
++title: Qualcomm Global Clock & Reset Controller on SM8150
+ 
+ maintainers:
+   - Stephen Boyd <sboyd@kernel.org>
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on SM8150.
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on SM8150.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-sm8150.h
++  See also:: include/dt-bindings/clock/qcom,gcc-sm8150.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sm8250.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sm8250.yaml
+index 4e2a9cac0a91..b752542ee20c 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-sm8250.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sm8250.yaml
+@@ -4,18 +4,17 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-sm8250.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for SM8250
++title: Qualcomm Global Clock & Reset Controller on SM8250
+ 
+ maintainers:
+   - Stephen Boyd <sboyd@kernel.org>
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on SM8250.
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on SM8250.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-sm8250.h
++  See also:: include/dt-bindings/clock/qcom,gcc-sm8250.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sm8350.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sm8350.yaml
+index 3edbeca70a9c..703d9e075247 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-sm8350.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sm8350.yaml
+@@ -4,17 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-sm8350.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for SM8350
++title: Qualcomm Global Clock & Reset Controller on SM8350
+ 
+ maintainers:
+   - Vinod Koul <vkoul@kernel.org>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on SM8350.
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on SM8350.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-sm8350.h
++  See also:: include/dt-bindings/clock/qcom,gcc-sm8350.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc-sm8450.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc-sm8450.yaml
+index 102ce6862e24..9a31981fbeb2 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc-sm8450.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc-sm8450.yaml
+@@ -4,17 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc-sm8450.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for SM8450
++title: Qualcomm Global Clock & Reset Controller on SM8450
+ 
+ maintainers:
+   - Vinod Koul <vkoul@kernel.org>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on SM8450
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on SM8450
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,gcc-sm8450.h
++  See also:: include/dt-bindings/clock/qcom,gcc-sm8450.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+index 2ed27a2ef445..1ab416c83c8d 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gcc.yaml
+@@ -4,15 +4,15 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gcc.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding Common Bindings
++title: Qualcomm Global Clock & Reset Controller Common Bindings
+ 
+ maintainers:
+   - Stephen Boyd <sboyd@kernel.org>
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Common bindings for Qualcomm global clock control module which supports
+-  the clocks, resets and power domains.
++  Common bindings for Qualcomm global clock control module providing the
++  clocks, resets and power domains.
+ 
+ properties:
+   '#clock-cells':
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gpucc-sdm660.yaml b/Documentation/devicetree/bindings/clock/qcom,gpucc-sdm660.yaml
+index 3f70eb59aae3..0518ea963cdd 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gpucc-sdm660.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gpucc-sdm660.yaml
+@@ -4,13 +4,13 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gpucc-sdm660.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Graphics Clock & Reset Controller Binding for SDM630 and SDM660
++title: Qualcomm Graphics Clock & Reset Controller on SDM630 and SDM660
+ 
+ maintainers:
+   - AngeloGioacchino Del Regno <angelogioacchino.delregno@somainline.org>
+ 
+ description: |
+-  Qualcomm graphics clock control module which supports the clocks, resets and
++  Qualcomm graphics clock control module provides the clocks, resets and
+   power domains on SDM630 and SDM660.
+ 
+   See also dt-bindings/clock/qcom,gpucc-sdm660.h.
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gpucc-sm8350.yaml b/Documentation/devicetree/bindings/clock/qcom,gpucc-sm8350.yaml
+index 0a0546c079a9..fb7ae3d18503 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gpucc-sm8350.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gpucc-sm8350.yaml
+@@ -4,17 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gpucc-sm8350.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Graphics Clock & Reset Controller Binding
++title: Qualcomm Graphics Clock & Reset Controller on SM8350
+ 
+ maintainers:
+   - Robert Foss <robert.foss@linaro.org>
+ 
+ description: |
+-  Qualcomm graphics clock control module which supports the clocks, resets and
+-  power domains on Qualcomm SoCs.
++  Qualcomm graphics clock control module provides the clocks, resets and power
++  domains on Qualcomm SoCs.
+ 
+-  See also:
+-    dt-bindings/clock/qcom,gpucc-sm8350.h
++  See also:: include/dt-bindings/clock/qcom,gpucc-sm8350.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml b/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
+index a7d0af1bd9e0..7256c438a4cf 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,gpucc.yaml
+@@ -4,23 +4,23 @@
+ $id: http://devicetree.org/schemas/clock/qcom,gpucc.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Graphics Clock & Reset Controller Binding
++title: Qualcomm Graphics Clock & Reset Controller
+ 
+ maintainers:
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm graphics clock control module which supports the clocks, resets and
+-  power domains on Qualcomm SoCs.
++  Qualcomm graphics clock control module provides the clocks, resets and power
++  domains on Qualcomm SoCs.
+ 
+-  See also:
+-    dt-bindings/clock/qcom,gpucc-sdm845.h
+-    dt-bindings/clock/qcom,gpucc-sc7180.h
+-    dt-bindings/clock/qcom,gpucc-sc7280.h
+-    dt-bindings/clock/qcom,gpucc-sc8280xp.h
+-    dt-bindings/clock/qcom,gpucc-sm6350.h
+-    dt-bindings/clock/qcom,gpucc-sm8150.h
+-    dt-bindings/clock/qcom,gpucc-sm8250.h
++  See also::
++    include/dt-bindings/clock/qcom,gpucc-sdm845.h
++    include/dt-bindings/clock/qcom,gpucc-sc7180.h
++    include/dt-bindings/clock/qcom,gpucc-sc7280.h
++    include/dt-bindings/clock/qcom,gpucc-sc8280xp.h
++    include/dt-bindings/clock/qcom,gpucc-sm6350.h
++    include/dt-bindings/clock/qcom,gpucc-sm8150.h
++    include/dt-bindings/clock/qcom,gpucc-sm8250.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,mmcc.yaml b/Documentation/devicetree/bindings/clock/qcom,mmcc.yaml
+index 03faab5b6a41..7d034aeec804 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,mmcc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,mmcc.yaml
+@@ -4,14 +4,14 @@
+ $id: http://devicetree.org/schemas/clock/qcom,mmcc.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Multimedia Clock & Reset Controller Binding
++title: Qualcomm Multimedia Clock & Reset Controller
+ 
+ maintainers:
+   - Jeffrey Hugo <quic_jhugo@quicinc.com>
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm multimedia clock control module which supports the clocks, resets and
++  Qualcomm multimedia clock control module provides the clocks, resets and
+   power domains.
+ 
+ properties:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,msm8998-gpucc.yaml b/Documentation/devicetree/bindings/clock/qcom,msm8998-gpucc.yaml
+index d747bb58f0a7..2d8897991663 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,msm8998-gpucc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,msm8998-gpucc.yaml
+@@ -4,16 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,msm8998-gpucc.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Graphics Clock & Reset Controller Binding for MSM8998
++title: Qualcomm Graphics Clock & Reset Controller on MSM8998
+ 
+ maintainers:
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm graphics clock control module which supports the clocks, resets and
+-  power domains on MSM8998.
++  Qualcomm graphics clock control module provides the clocks, resets and power
++  domains on MSM8998.
+ 
+-  See also dt-bindings/clock/qcom,gpucc-msm8998.h.
++  See also:: include/dt-bindings/clock/qcom,gpucc-msm8998.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,q6sstopcc.yaml b/Documentation/devicetree/bindings/clock/qcom,q6sstopcc.yaml
+index bbaaf1e2a203..03fa30fe9253 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,q6sstopcc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,q6sstopcc.yaml
+@@ -11,7 +11,7 @@ maintainers:
+ 
+ properties:
+   compatible:
+-    const: "qcom,qcs404-q6sstopcc"
++    const: qcom,qcs404-q6sstopcc
+ 
+   reg:
+     items:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,qcm2290-dispcc.yaml b/Documentation/devicetree/bindings/clock/qcom,qcm2290-dispcc.yaml
+index 973e408c6268..4a00f2d41684 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,qcm2290-dispcc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,qcm2290-dispcc.yaml
+@@ -4,16 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,qcm2290-dispcc.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Display Clock & Reset Controller Binding for qcm2290
++title: Qualcomm Display Clock & Reset Controller on QCM2290
+ 
+ maintainers:
+   - Loic Poulain <loic.poulain@linaro.org>
+ 
+ description: |
+-  Qualcomm display clock control module which supports the clocks, resets and
+-  power domains on qcm2290.
++  Qualcomm display clock control module provides the clocks, resets and power
++  domains on qcm2290.
+ 
+-  See also dt-bindings/clock/qcom,dispcc-qcm2290.h.
++  See also:: include/dt-bindings/clock/qcom,dispcc-qcm2290.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,sc7180-camcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sc7180-camcc.yaml
+index f49027edfc44..098c8acf4bad 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,sc7180-camcc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,sc7180-camcc.yaml
+@@ -4,17 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,sc7180-camcc.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Camera Clock & Reset Controller Binding for SC7180
++title: Qualcomm Camera Clock & Reset Controller on SC7180
+ 
+ maintainers:
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm camera clock control module which supports the clocks, resets and
+-  power domains on SC7180.
++  Qualcomm camera clock control module provides the clocks, resets and power
++  domains on SC7180.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,camcc-sc7180.h
++  See also:: include/dt-bindings/clock/qcom,camcc-sc7180.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,sc7180-dispcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sc7180-dispcc.yaml
+index e94847f92770..95ad16d0abc3 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,sc7180-dispcc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,sc7180-dispcc.yaml
+@@ -4,16 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,sc7180-dispcc.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Display Clock & Reset Controller Binding for SC7180
++title: Qualcomm Display Clock & Reset Controller on SC7180
+ 
+ maintainers:
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm display clock control module which supports the clocks, resets and
+-  power domains on SC7180.
++  Qualcomm display clock control module provides the clocks, resets and power
++  domains on SC7180.
+ 
+-  See also dt-bindings/clock/qcom,dispcc-sc7180.h.
++  See also:: include/dt-bindings/clock/qcom,dispcc-sc7180.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,sc7180-lpasscorecc.yaml b/Documentation/devicetree/bindings/clock/qcom,sc7180-lpasscorecc.yaml
+index c54172fbf29f..f297694ef8b8 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,sc7180-lpasscorecc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,sc7180-lpasscorecc.yaml
+@@ -4,17 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,sc7180-lpasscorecc.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm LPASS Core Clock Controller Binding for SC7180
++title: Qualcomm LPASS Core Clock Controller on SC7180
+ 
+ maintainers:
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm LPASS core clock control module which supports the clocks and
+-  power domains on SC7180.
++  Qualcomm LPASS core clock control module provides the clocks and power
++  domains on SC7180.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,lpasscorecc-sc7180.h
++  See also:: include/dt-bindings/clock/qcom,lpasscorecc-sc7180.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,sc7180-mss.yaml b/Documentation/devicetree/bindings/clock/qcom,sc7180-mss.yaml
+index 970030986a86..1e856a8a996e 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,sc7180-mss.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,sc7180-mss.yaml
+@@ -4,16 +4,15 @@
+ $id: http://devicetree.org/schemas/clock/qcom,sc7180-mss.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Modem Clock Controller Binding for SC7180
++title: Qualcomm Modem Clock Controller on SC7180
+ 
+ maintainers:
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm modem clock control module which supports the clocks on SC7180.
++  Qualcomm modem clock control module provides the clocks on SC7180.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,mss-sc7180.h
++  See also:: include/dt-bindings/clock/qcom,mss-sc7180.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,sc7280-camcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sc7280-camcc.yaml
+index f27ca6f03ffa..b60adbad4590 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,sc7280-camcc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,sc7280-camcc.yaml
+@@ -4,16 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,sc7280-camcc.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Camera Clock & Reset Controller Binding for SC7280
++title: Qualcomm Camera Clock & Reset Controller on SC7280
+ 
+ maintainers:
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm camera clock control module which supports the clocks, resets and
++  Qualcomm camera clock control module provides the clocks, resets and
+   power domains on SC7280.
+ 
+-  See also dt-bindings/clock/qcom,camcc-sc7280.h
++  See also:: include/dt-bindings/clock/qcom,camcc-sc7280.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,sc7280-dispcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sc7280-dispcc.yaml
+index 2178666fb697..cfe6594a0a6b 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,sc7280-dispcc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,sc7280-dispcc.yaml
+@@ -4,16 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,sc7280-dispcc.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Display Clock & Reset Controller Binding for SC7280
++title: Qualcomm Display Clock & Reset Controller on SC7280
+ 
+ maintainers:
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm display clock control module which supports the clocks, resets and
+-  power domains on SC7280.
++  Qualcomm display clock control module provides the clocks, resets and power
++  domains on SC7280.
+ 
+-  See also dt-bindings/clock/qcom,dispcc-sc7280.h.
++  See also:: include/dt-bindings/clock/qcom,dispcc-sc7280.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscc.yaml b/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscc.yaml
+index 633887dc2f8a..6151fdebbff8 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscc.yaml
+@@ -4,17 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,sc7280-lpasscc.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm LPASS Core Clock Controller Binding for SC7280
++title: Qualcomm LPASS Core Clock Controller on SC7280
+ 
+ maintainers:
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm LPASS core clock control module which supports the clocks and
+-  power domains on SC7280.
++  Qualcomm LPASS core clock control module provides the clocks and power
++  domains on SC7280.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,lpass-sc7280.h
++  See also:: include/dt-bindings/clock/qcom,lpass-sc7280.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscorecc.yaml b/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscorecc.yaml
+index f50e284e5f46..447cdc447a0c 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscorecc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,sc7280-lpasscorecc.yaml
+@@ -4,18 +4,18 @@
+ $id: http://devicetree.org/schemas/clock/qcom,sc7280-lpasscorecc.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm LPASS Core & Audio Clock Controller Binding for SC7280
++title: Qualcomm LPASS Core & Audio Clock Controller on SC7280
+ 
+ maintainers:
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm LPASS core and audio clock control module which supports the
+-  clocks and power domains on SC7280.
++  Qualcomm LPASS core and audio clock control module provides the clocks and
++  power domains on SC7280.
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,lpasscorecc-sc7280.h
+-  - dt-bindings/clock/qcom,lpassaudiocc-sc7280.h
++  See also::
++    include/dt-bindings/clock/qcom,lpasscorecc-sc7280.h
++    include/dt-bindings/clock/qcom,lpassaudiocc-sc7280.h
+ 
+ properties:
+   clocks: true
+diff --git a/Documentation/devicetree/bindings/clock/qcom,sdm845-camcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sdm845-camcc.yaml
+index d4239ccae917..91d1f7918037 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,sdm845-camcc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,sdm845-camcc.yaml
+@@ -4,16 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,sdm845-camcc.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Camera Clock & Reset Controller Binding for SDM845
++title: Qualcomm Camera Clock & Reset Controller on SDM845
+ 
+ maintainers:
+   - Bjorn Andersson <bjorn.andersson@linaro.org>
+ 
+ description: |
+-  Qualcomm camera clock control module which supports the clocks, resets and
+-  power domains on SDM845.
++  Qualcomm camera clock control module provides the clocks, resets and power
++  domains on SDM845.
+ 
+-  See also dt-bindings/clock/qcom,camcc-sm845.h
++  See also:: include/dt-bindings/clock/qcom,camcc-sm845.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,sdm845-dispcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sdm845-dispcc.yaml
+index 4a3be733d042..76b53ce64e40 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,sdm845-dispcc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,sdm845-dispcc.yaml
+@@ -4,16 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,sdm845-dispcc.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Display Clock & Reset Controller Binding for SDM845
++title: Qualcomm Display Clock & Reset Controller on SDM845
+ 
+ maintainers:
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm display clock control module which supports the clocks, resets and
+-  power domains on SDM845.
++  Qualcomm display clock control module provides the clocks, resets and power
++  domains on SDM845.
+ 
+-  See also dt-bindings/clock/qcom,dispcc-sdm845.h.
++  See also:: include/dt-bindings/clock/qcom,dispcc-sdm845.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,sm6115-dispcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm6115-dispcc.yaml
+index 6660ff16ad1b..f802a2e7f818 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,sm6115-dispcc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,sm6115-dispcc.yaml
+@@ -10,11 +10,10 @@ maintainers:
+   - Bjorn Andersson <andersson@kernel.org>
+ 
+ description: |
+-  Qualcomm display clock control module which supports the clocks and
+-  power domains on SM6115.
++  Qualcomm display clock control module provides the clocks and power domains
++  on SM6115.
+ 
+-  See also:
+-    include/dt-bindings/clock/qcom,sm6115-dispcc.h
++  See also:: include/dt-bindings/clock/qcom,sm6115-dispcc.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,sm6375-gcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm6375-gcc.yaml
+index 3c573e1a1257..295d4bb1a966 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,sm6375-gcc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,sm6375-gcc.yaml
+@@ -4,17 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,sm6375-gcc.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Global Clock & Reset Controller Binding for SM6375
++title: Qualcomm Global Clock & Reset Controller on SM6375
+ 
+ maintainers:
+   - Konrad Dybcio <konrad.dybcio@somainline.org>
+ 
+ description: |
+-  Qualcomm global clock control module which supports the clocks, resets and
+-  power domains on SM6375
++  Qualcomm global clock control module provides the clocks, resets and power
++  domains on SM6375
+ 
+-  See also:
+-  - dt-bindings/clock/qcom,sm6375-gcc.h
++  See also:: include/dt-bindings/clock/qcom,sm6375-gcc.h
+ 
+ allOf:
+   - $ref: qcom,gcc.yaml#
+diff --git a/Documentation/devicetree/bindings/clock/qcom,sm8450-camcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm8450-camcc.yaml
+index 268f4c6ae0ee..a52a83fe2831 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,sm8450-camcc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,sm8450-camcc.yaml
+@@ -4,16 +4,16 @@
+ $id: http://devicetree.org/schemas/clock/qcom,sm8450-camcc.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Camera Clock & Reset Controller Binding for SM8450
++title: Qualcomm Camera Clock & Reset Controller on SM8450
+ 
+ maintainers:
+   - Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+ 
+ description: |
+-  Qualcomm camera clock control module which supports the clocks, resets and
+-  power domains on SM8450.
++  Qualcomm camera clock control module provides the clocks, resets and power
++  domains on SM8450.
+ 
+-  See also include/dt-bindings/clock/qcom,sm8450-camcc.h
++  See also:: include/dt-bindings/clock/qcom,sm8450-camcc.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,sm8450-dispcc.yaml b/Documentation/devicetree/bindings/clock/qcom,sm8450-dispcc.yaml
+index 1cc2457f8208..1dd1f696dcd3 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,sm8450-dispcc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,sm8450-dispcc.yaml
+@@ -10,11 +10,10 @@ maintainers:
+   - Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+ 
+ description: |
+-  Qualcomm display clock control module which supports the clocks, resets and
+-  power domains on SM8450.
++  Qualcomm display clock control module provides the clocks, resets and power
++  domains on SM8450.
+ 
+-  See also:
+-    include/dt-bindings/clock/qcom,sm8450-dispcc.h
++  See also:: include/dt-bindings/clock/qcom,sm8450-dispcc.h
+ 
+ properties:
+   compatible:
+diff --git a/Documentation/devicetree/bindings/clock/qcom,videocc.yaml b/Documentation/devicetree/bindings/clock/qcom,videocc.yaml
+index 3cdbcebdc1a1..e221985e743f 100644
+--- a/Documentation/devicetree/bindings/clock/qcom,videocc.yaml
++++ b/Documentation/devicetree/bindings/clock/qcom,videocc.yaml
+@@ -4,21 +4,21 @@
+ $id: http://devicetree.org/schemas/clock/qcom,videocc.yaml#
+ $schema: http://devicetree.org/meta-schemas/core.yaml#
+ 
+-title: Qualcomm Video Clock & Reset Controller Binding
++title: Qualcomm Video Clock & Reset Controller
+ 
+ maintainers:
+   - Taniya Das <tdas@codeaurora.org>
+ 
+ description: |
+-  Qualcomm video clock control module which supports the clocks, resets and
+-  power domains on Qualcomm SoCs.
+-
+-  See also:
+-    dt-bindings/clock/qcom,videocc-sc7180.h
+-    dt-bindings/clock/qcom,videocc-sc7280.h
+-    dt-bindings/clock/qcom,videocc-sdm845.h
+-    dt-bindings/clock/qcom,videocc-sm8150.h
+-    dt-bindings/clock/qcom,videocc-sm8250.h
++  Qualcomm video clock control module provides the clocks, resets and power
++  domains on Qualcomm SoCs.
++
++  See also::
++    include/dt-bindings/clock/qcom,videocc-sc7180.h
++    include/dt-bindings/clock/qcom,videocc-sc7280.h
++    include/dt-bindings/clock/qcom,videocc-sdm845.h
++    include/dt-bindings/clock/qcom,videocc-sm8150.h
++    include/dt-bindings/clock/qcom,videocc-sm8250.h
+ 
+ properties:
+   compatible:
 -- 
 2.34.1
 
