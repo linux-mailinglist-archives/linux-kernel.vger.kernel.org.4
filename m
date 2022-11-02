@@ -2,100 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8B34261666A
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:44:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 67D2A61666E
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:47:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230450AbiKBPnv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 11:43:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55790 "EHLO
+        id S229688AbiKBPq6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 11:46:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230489AbiKBPna (ORCPT
+        with ESMTP id S229548AbiKBPq4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 11:43:30 -0400
-Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7329328700
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 08:43:29 -0700 (PDT)
-Received: by mail-pj1-x102f.google.com with SMTP id b11so16618076pjp.2
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 08:43:29 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pWzb2SKkWTuON7pNcNwFRnwOMg1HNM3x+PlBBYRnE78=;
-        b=b1IH6B/wne44OiQXZ9i7FSHJfVW3zIn74ViSqHYAsPnDbPDFo4b0mp4Ea/23Y8yiZp
-         4Na6VVGOm+h4UD3nlKM9Rl3pFiFLTzf9UB+jUhfO+J4ZNn+X8eC78BvcBr769QMsJqUU
-         WTfGJ4gwtPde3j8W3mqjzgHAHbhf+xT06ghwE=
+        Wed, 2 Nov 2022 11:46:56 -0400
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77E7D28700;
+        Wed,  2 Nov 2022 08:46:42 -0700 (PDT)
+Received: by mail-wm1-f45.google.com with SMTP id v7so5150944wmn.0;
+        Wed, 02 Nov 2022 08:46:42 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=pWzb2SKkWTuON7pNcNwFRnwOMg1HNM3x+PlBBYRnE78=;
-        b=BX1QXP1m7lr62A8c3QS9QyRQbWbiyTIAFvGI/Wcu5fvP4ZoZywNjfnlEuAj13Vu0rF
-         AisQ0BTmhyX0rBjVkUc75Y6tO7DQXagUmNmaMwAl87GCQIR+QrzIy/I3qBT7Ua+z4VtD
-         dh7q+Xe6V4TQG2loNTIAEmMPpAcai7wZeu88eLR+il1hwaxc7Sp27FxFoTooFBPdYnLo
-         kqnbuVfGG8+oZgahlNxzO0lNGlKP6MUBePDzvtJ3XCbbkDRm3FoBPNaAr+GjRPVgHXmE
-         HWj4JPhch7hYqVTN1zkl6TAMOyDIkUzLDvG4Q3kwGwBxuS4IJCyML46A/ak5NgQmAhyv
-         GjfQ==
-X-Gm-Message-State: ACrzQf0tqeXedHZkz4Zy7UUDGf64tN9QOT7nQYFSd+irUOQnM+b+rjfo
-        lawmGSeXTnogMSVJ21HSuPIV4A==
-X-Google-Smtp-Source: AMsMyM7PDeQil3IUTDK8DEQhhfPtLai6Y8bKaPW2tqDAKdyYKrgbMX/ec7FMD6Z/EWccGgv35ijpyA==
-X-Received: by 2002:a17:903:32cf:b0:187:4b3a:15fd with SMTP id i15-20020a17090332cf00b001874b3a15fdmr2922849plr.99.1667403808948;
-        Wed, 02 Nov 2022 08:43:28 -0700 (PDT)
-Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
-        by smtp.gmail.com with ESMTPSA id w10-20020aa79a0a000000b0056c681af185sm8605569pfj.87.2022.11.02.08.43.28
+        bh=YRJj5yHCtXyXwwd/7M6wnfoyC3OaZHCqR6/Il7KJVw4=;
+        b=YZ+z89+UUB1rp/B0QDb2CC8aDRJHtbDyBnqMB9HvZgQB3KHODiQWTpqyvhwUaru2Io
+         cy8MzjUxkRhGEaqc/8qN+T1wCOnE4Fm5ZvJbmcbEGGHyJIIL3C4gDdNsoWi4BoTT4V+n
+         RNn3x/GkhPlmvFjFjSzD7ncnXvJCF32J63kloQGqU0stUC8Rz1zY3fi6qH2VjJDMY/fl
+         +6+rH29wsSblIVZM+cSHDVpWPLMpzzIas2sXkw1qrFVdk/CMR6g/nF25JPpuql7MnU0A
+         tK65E4u+QvvLk0mlHtlDac819CJPG5Vbw5j9dLM/hryzp0ba2WHgFq7Lnq6BpslE4nQK
+         vFUA==
+X-Gm-Message-State: ACrzQf1S8tF3HBaJsBzPop7cDeewN4XchH5lZeyVsPz7sTb124KuspI+
+        /9CXpu+FHtn+HKlyhAKfm98=
+X-Google-Smtp-Source: AMsMyM6k8mSDHtQtlxZJE5jvhiLoxUfBgoQYyUkqrFd/vlLTmsLRJ1mRFP00tCHGuKxtrcmzp2PZNg==
+X-Received: by 2002:a05:600c:2215:b0:3cf:74e9:a9e0 with SMTP id z21-20020a05600c221500b003cf74e9a9e0mr9699211wml.145.1667404000688;
+        Wed, 02 Nov 2022 08:46:40 -0700 (PDT)
+Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
+        by smtp.gmail.com with ESMTPSA id p125-20020a1c2983000000b003c21ba7d7d6sm2385982wmp.44.2022.11.02.08.46.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 08:43:28 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 08:43:27 -0700
-From:   Kees Cook <keescook@chromium.org>
-To:     Nathan Chancellor <nathan@kernel.org>
-Cc:     Stefan Agner <stefan@agner.ch>, Alison Wang <alison.wang@nxp.com>,
-        dri-devel@lists.freedesktop.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev
-Subject: Re: [PATCH] drm/fsl-dcu: Fix return type of
- fsl_dcu_drm_connector_mode_valid()
-Message-ID: <202211020843.A19F75B@keescook>
-References: <20221102154215.78059-1-nathan@kernel.org>
+        Wed, 02 Nov 2022 08:46:38 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 15:46:31 +0000
+From:   Wei Liu <wei.liu@kernel.org>
+To:     Jinank Jain <jinankjain@linux.microsoft.com>
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        x86@kernel.org, hpa@zytor.com, arnd@arndb.de, peterz@infradead.org,
+        jpoimboe@kernel.org, seanjc@google.com,
+        kirill.shutemov@linux.intel.com, ak@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org
+Subject: Re: [PATCH 6/6] hv, mshv : Change interrupt vector for nested root
+ partition
+Message-ID: <Y2KQ1w5GOd/PcN61@liuwe-devbox-debian-v2>
+References: <cover.1667394408.git.jinankjain@microsoft.com>
+ <22b6428cc90efb4ed970d61249c877b373a7002a.1667394408.git.jinankjain@microsoft.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221102154215.78059-1-nathan@kernel.org>
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <22b6428cc90efb4ed970d61249c877b373a7002a.1667394408.git.jinankjain@microsoft.com>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 08:42:15AM -0700, Nathan Chancellor wrote:
-> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-> indirect call targets are validated against the expected function
-> pointer prototype to make sure the call target is valid to help mitigate
-> ROP attacks. If they are not identical, there is a failure at run time,
-> which manifests as either a kernel panic or thread getting killed. A
-> proposed warning in clang aims to catch these at compile time, which
-> reveals:
+On Wed, Nov 02, 2022 at 02:00:17PM +0000, Jinank Jain wrote:
+> Traditionally we have been using the HYPERVISOR_CALLBACK_VECTOR to relay
+> the VMBus interrupt. But this does not work in case of nested
+> hypervisor. Microsoft Hypervisor reserves 0x31 to 0x34 as the interrupt
+> vector range for VMBus and thus we have to use one of the vectors from
+> that range and setup the IDT accordingly.
 > 
->   drivers/gpu/drm/fsl-dcu/fsl_dcu_drm_rgb.c:74:16: error: incompatible function pointer types initializing 'enum drm_mode_status (*)(struct drm_connector *, struct drm_display_mode *)' with an expression of type 'int (struct drm_connector *, struct drm_display_mode *)' [-Werror,-Wincompatible-function-pointer-types-strict]
->           .mode_valid = fsl_dcu_drm_connector_mode_valid,
->                         ^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
->   1 error generated.
-> 
-> ->mode_valid() in 'struct drm_connector_helper_funcs' expects a return
-> type of 'enum drm_mode_status', not 'int'. Adjust the return type of
-> fsl_dcu_drm_connector_mode_valid() to match the prototype's to resolve
-> the warning and CFI failure.
-> 
-> Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-> Reported-by: Sami Tolvanen <samitolvanen@google.com>
-> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+> Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
+> ---
+>  arch/x86/include/asm/idtentry.h    |  2 ++
+>  arch/x86/include/asm/irq_vectors.h |  6 ++++++
+[...]
+>  #if IS_ENABLED(CONFIG_ACRN_GUEST)
+> diff --git a/arch/x86/include/asm/irq_vectors.h b/arch/x86/include/asm/irq_vectors.h
+> index 43dcb9284208..729d19eab7f5 100644
+> --- a/arch/x86/include/asm/irq_vectors.h
+> +++ b/arch/x86/include/asm/irq_vectors.h
+> @@ -102,6 +102,12 @@
+>  #if IS_ENABLED(CONFIG_HYPERV)
+>  #define HYPERV_REENLIGHTENMENT_VECTOR	0xee
+>  #define HYPERV_STIMER0_VECTOR		0xed
+> +/*
+> + * FIXME: Change this, once Microsoft Hypervisor changes its assumption
+> + * around VMBus interrupt vector allocation for nested root partition.
+> + * Or provides a better interface to detect this instead of hardcoding.
+> + */
+> +#define HYPERV_INTR_NESTED_VMBUS_VECTOR	0x31
 
-Reviewed-by: Kees Cook <keescook@chromium.org>
+I would like to hear x86 maintainers opinion on this.
 
--- 
-Kees Cook
+Thanks,
+Wei.
