@@ -2,142 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7B78B615E02
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 09:39:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2B027615E06
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 09:40:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230527AbiKBIjn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 04:39:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45450 "EHLO
+        id S229496AbiKBIkL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 04:40:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45776 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231126AbiKBIj3 (ORCPT
+        with ESMTP id S230318AbiKBIkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 04:39:29 -0400
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [IPv6:2001:67c:2178:6::1d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D57EA27B09
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 01:39:27 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out2.suse.de (Postfix) with ESMTPS id 8EE7D1F88E;
-        Wed,  2 Nov 2022 08:39:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
-        t=1667378366; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=Zrv/qbRmfritn/KoivF6xxSnIGiDG+7iRGZc6nLU87g=;
-        b=smICCH+1F6L37F+OjERhcgElgE+cm3r9vpJj851v62rN4qlv122OhMJLjfIZAoIKH5DqwB
-        50odSK/f4LgovFBZPlAI80vWNeE7gLK7+6FPEGBwFH8IBe+WJYC2whQ+yZwgvf3wHEV9T0
-        BLyXOIV4eMKYfw7gJJ6OZrdUX+1T4rk=
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 542D3139D3;
-        Wed,  2 Nov 2022 08:39:26 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id HGP6Eb4sYmPyEAAAMHmgww
-        (envelope-from <mhocko@suse.com>); Wed, 02 Nov 2022 08:39:26 +0000
-Date:   Wed, 2 Nov 2022 09:39:25 +0100
-From:   Michal Hocko <mhocko@suse.com>
-To:     "Huang, Ying" <ying.huang@intel.com>
-Cc:     Bharata B Rao <bharata@amd.com>,
-        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Alistair Popple <apopple@nvidia.com>,
-        Dan Williams <dan.j.williams@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Davidlohr Bueso <dave@stgolabs.net>,
-        Hesham Almatary <hesham.almatary@huawei.com>,
-        Jagdish Gediya <jvgediya.oss@gmail.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-        Tim Chen <tim.c.chen@intel.com>, Wei Xu <weixugc@google.com>,
-        Yang Shi <shy828301@gmail.com>
-Subject: Re: [RFC] memory tiering: use small chunk size and more tiers
-Message-ID: <Y2IsvbOadq+TZx+R@dhcp22.suse.cz>
-References: <0d938c9f-c810-b10a-e489-c2b312475c52@amd.com>
- <87tu3oibyr.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <07912a0d-eb91-a6ef-2b9d-74593805f29e@amd.com>
- <87leowepz6.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <Y2Eui+kKvwj8ip+T@dhcp22.suse.cz>
- <878rkuchpm.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <Y2IhiSnpQsmY7khx@dhcp22.suse.cz>
- <87bkppbx75.fsf@yhuang6-desk2.ccr.corp.intel.com>
- <Y2Inot4i4xUGH60O@dhcp22.suse.cz>
- <877d0dbw13.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        Wed, 2 Nov 2022 04:40:06 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 29B2E24F29
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 01:40:05 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id t25so43377661ejb.8
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 01:40:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=e/jtuwgULBOycwGalh+zkT6mjLdV0jwG/bWZgUJxcW8=;
+        b=nRkmXPJgWNcU1eAeVmyDwZ7wmOLf3UxyJf1p03PwhRq4lDa78pIsXQ7Ty2cPuTcml1
+         kQLUesRT+qIw/TivDkTLF036tENc5gqUbdjzprZpng7t7mdSibHC9FYXQJyQf7G+XH3j
+         4DQF23XKCH9RBhhtDPxB25r0gVixcFJMGqC5nZpWLtNaYpj4R4R9lTIjW8pXNHFkkLWD
+         O8CtSRyKfIMvXoEmfTcRhTPeJ9J4trnoA+SrfkhmV6pS87l8tJ7odb8vIdXkYdXeF6GD
+         QAOwhs3h7FktPZwb1UOohta1jWsQAx4IO9lVoD5sJgpOq8OLGz9t4btkQV/n4Beu75he
+         48vQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=e/jtuwgULBOycwGalh+zkT6mjLdV0jwG/bWZgUJxcW8=;
+        b=KbyKfNNoDzhvr/NkED8MQuQTWOXel42j+f8GFq6OPm/j3W2OljuCTPrrWf/0h+5EMz
+         Vwkkz9UYd5Kvr0+HkTKYw3wINt9cwZ6aHzrKfFiNKFjGZWISLOGNroKl3YnDfSwVu6Qi
+         LVmrJY6x6O79evVhSDN2+rEJPmyFESFzN5cnjS02/IwEjP/alhSBacDnrrUYiULRB0HF
+         9SmTNFqXYHJI7rmHAwPdegTH+c9C/mRHaIImM3rFWv4Re0HzclsI9fi02XV1lS99GLw9
+         kJmtEqDwwTBy5De5Fey3/zt/TJpZ9XF50KxtoK1eOvMMuTKnp/cdimjToT0QeaWfgHUo
+         H32A==
+X-Gm-Message-State: ACrzQf3c9qDQsR0HsPSSYM/FjrDuRIX0qcDfurIp5nz0+9nOkxXhJ28F
+        izr4PJqU2xbxaStV+zu7sVvUeVIpdp+rnyOtC7bGUw==
+X-Google-Smtp-Source: AMsMyM5nzVcTT98Fh7PeXoFIpuR2xOrxd1QJPqjmAIoiBUnWh103tbbpfY8bXpvrDyFZz1aE+VvCY/S3/al36AN61Ik=
+X-Received: by 2002:a17:907:72cb:b0:7ad:7e95:63f5 with SMTP id
+ du11-20020a17090772cb00b007ad7e9563f5mr22321018ejc.383.1667378403649; Wed, 02
+ Nov 2022 01:40:03 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <877d0dbw13.fsf@yhuang6-desk2.ccr.corp.intel.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <20221027123432.1818530-1-robert.foss@linaro.org>
+ <20221027123432.1818530-4-robert.foss@linaro.org> <e32be4c0-56ea-6999-92e6-3b51792a5255@linaro.org>
+In-Reply-To: <e32be4c0-56ea-6999-92e6-3b51792a5255@linaro.org>
+From:   Robert Foss <robert.foss@linaro.org>
+Date:   Wed, 2 Nov 2022 09:39:52 +0100
+Message-ID: <CAG3jFyuvdTOisdP6qexaY3M+JQOHbRomqk4cCKRwS=L=ev6CWA@mail.gmail.com>
+Subject: Re: [PATCH v1 4/5] clk: qcom: dispcc-sm8250: Add missing EDP clocks
+ for sm8350
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     agross@kernel.org, bjorn.andersson@linaro.org,
+        konrad.dybcio@somainline.org, mturquette@baylibre.com,
+        sboyd@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
+        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org,
+        Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Jonathan Marek <jonathan@marek.ca>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed 02-11-22 16:28:08, Huang, Ying wrote:
-> Michal Hocko <mhocko@suse.com> writes:
-> 
-> > On Wed 02-11-22 16:02:54, Huang, Ying wrote:
-> >> Michal Hocko <mhocko@suse.com> writes:
-> >> 
-> >> > On Wed 02-11-22 08:39:49, Huang, Ying wrote:
-> >> >> Michal Hocko <mhocko@suse.com> writes:
-> >> >> 
-> >> >> > On Mon 31-10-22 09:33:49, Huang, Ying wrote:
-> >> >> > [...]
-> >> >> >> In the upstream implementation, 4 tiers are possible below DRAM.  That's
-> >> >> >> enough for now.  But in the long run, it may be better to define more.
-> >> >> >> 100 possible tiers below DRAM may be too extreme.
-> >> >> >
-> >> >> > I am just curious. Is any configurations with more than couple of tiers
-> >> >> > even manageable? I mean applications have been struggling even with
-> >> >> > regular NUMA systems for years and vast majority of them is largerly
-> >> >> > NUMA unaware. How are they going to configure for a more complex system
-> >> >> > when a) there is no resource access control so whatever you aim for
-> >> >> > might not be available and b) in which situations there is going to be a
-> >> >> > demand only for subset of tears (GPU memory?) ?
-> >> >> 
-> >> >> Sorry for confusing.  I think that there are only several (less than 10)
-> >> >> tiers in a system in practice.  Yes, here, I suggested to define 100 (10
-> >> >> in the later text) POSSIBLE tiers below DRAM.  My intention isn't to
-> >> >> manage a system with tens memory tiers.  Instead, my intention is to
-> >> >> avoid to put 2 memory types into one memory tier by accident via make
-> >> >> the abstract distance range of each memory tier as small as possible.
-> >> >> More possible memory tiers, smaller abstract distance range of each
-> >> >> memory tier.
-> >> >
-> >> > TBH I do not really understand how tweaking ranges helps anything.
-> >> > IIUC drivers are free to assign any abstract distance so they will clash
-> >> > without any higher level coordination.
-> >> 
-> >> Yes.  That's possible.  Each memory tier corresponds to one abstract
-> >> distance range.  The larger the range is, the higher the possibility of
-> >> clashing is.  So I suggest to make the abstract distance range smaller
-> >> to reduce the possibility of clashing.
+On Thu, 27 Oct 2022 at 14:42, Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+> On 27/10/2022 15:34, Robert Foss wrote:
+> > SM8350 supports embedded displayport, but the clocks for this
+> > were previously not enabled.
+>
+> I'd say 'not accounted for' instead. Bjorn has added eDP clocks, but
+> they were following the 8150 (no div_clk_src) and the offsets were not
+> updated.
+
+Ack.
+
+>
 > >
-> > I am sorry but I really do not understand how the size of the range
-> > actually addresses a fundamental issue that each driver simply picks
-> > what it wants. Is there any enumeration defining basic characteristic of
-> > each tier? How does a driver developer knows which tear to assign its
-> > driver to?
-> 
-> The smaller range size will not guarantee anything.  It just tries to
-> help the default behavior.
-> 
-> The drivers are expected to assign the abstract distance based on the
-> memory latency/bandwidth, etc.
-
-Would it be possible/feasible to have a canonical way to calculate the
-abstract distance from these characteristics by the core kernel so that
-drivers do not even have fall into that trap?
-
--- 
-Michal Hocko
-SUSE Labs
+> > Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> > ---
+> >   drivers/clk/qcom/dispcc-sm8250.c | 22 +++++++++++++++++++++-
+> >   1 file changed, 21 insertions(+), 1 deletion(-)
+> >
+> > diff --git a/drivers/clk/qcom/dispcc-sm8250.c b/drivers/clk/qcom/dispcc-sm8250.c
+> > index a7606580cf22..d2aaa44ed3d4 100644
+> > --- a/drivers/clk/qcom/dispcc-sm8250.c
+> > +++ b/drivers/clk/qcom/dispcc-sm8250.c
+> > @@ -462,6 +462,20 @@ static struct clk_branch disp_cc_mdss_edp_link_clk = {
+> >       },
+> >   };
+> >
+> > +static struct clk_regmap_div disp_cc_mdss_edp_link_div_clk_src = {
+> > +     .reg = 0x2288,
+> > +     .shift = 0,
+> > +     .width = 2,
+> > +     .clkr.hw.init = &(struct clk_init_data) {
+> > +             .name = "disp_cc_mdss_edp_link_div_clk_src",
+> > +             .parent_hws = (const struct clk_hw*[]){
+> > +                     &disp_cc_mdss_edp_link_clk_src.clkr.hw,
+> > +             },
+> > +             .num_parents = 1,
+> > +             .ops = &clk_regmap_div_ro_ops,
+> > +     },
+> > +};
+> > +
+> >   static struct clk_branch disp_cc_mdss_edp_link_intf_clk = {
+> >       .halt_reg = 0x2074,
+> >       .halt_check = BRANCH_HALT,
+> > @@ -471,7 +485,7 @@ static struct clk_branch disp_cc_mdss_edp_link_intf_clk = {
+> >               .hw.init = &(struct clk_init_data){
+> >                       .name = "disp_cc_mdss_edp_link_intf_clk",
+> >                       .parent_hws = (const struct clk_hw*[]){
+> > -                             &disp_cc_mdss_edp_link_clk_src.clkr.hw,
+> > +                             &disp_cc_mdss_edp_link_div_clk_src.clkr.hw,
+> >                       },
+> >                       .num_parents = 1,
+> >                       .flags = CLK_GET_RATE_NOCACHE,
+> > @@ -1175,6 +1189,7 @@ static struct clk_regmap *disp_cc_sm8250_clocks[] = {
+> >       [DISP_CC_MDSS_EDP_GTC_CLK_SRC] = &disp_cc_mdss_edp_gtc_clk_src.clkr,
+> >       [DISP_CC_MDSS_EDP_LINK_CLK] = &disp_cc_mdss_edp_link_clk.clkr,
+> >       [DISP_CC_MDSS_EDP_LINK_CLK_SRC] = &disp_cc_mdss_edp_link_clk_src.clkr,
+> > +     [DISP_CC_MDSS_EDP_LINK_DIV_CLK_SRC] = &disp_cc_mdss_edp_link_div_clk_src.clkr,
+> >       [DISP_CC_MDSS_EDP_LINK_INTF_CLK] = &disp_cc_mdss_edp_link_intf_clk.clkr,
+> >       [DISP_CC_MDSS_EDP_PIXEL_CLK] = &disp_cc_mdss_edp_pixel_clk.clkr,
+> >       [DISP_CC_MDSS_EDP_PIXEL_CLK_SRC] = &disp_cc_mdss_edp_pixel_clk_src.clkr,
+> > @@ -1285,7 +1300,11 @@ static int disp_cc_sm8250_probe(struct platform_device *pdev)
+> >                       &disp_cc_mdss_dp_pixel1_clk_src,
+> >                       &disp_cc_mdss_dp_pixel2_clk_src,
+> >                       &disp_cc_mdss_dp_pixel_clk_src,
+> > +                     &disp_cc_mdss_edp_aux_clk_src,
+> > +                     &disp_cc_mdss_edp_link_clk_src,
+> > +                     &disp_cc_mdss_edp_pixel_clk_src,
+> >                       &disp_cc_mdss_esc0_clk_src,
+> > +                     &disp_cc_mdss_esc1_clk_src,
+> >                       &disp_cc_mdss_mdp_clk_src,
+> >                       &disp_cc_mdss_pclk0_clk_src,
+> >                       &disp_cc_mdss_pclk1_clk_src,
+> > @@ -1297,6 +1316,7 @@ static int disp_cc_sm8250_probe(struct platform_device *pdev)
+> >                       &disp_cc_mdss_byte1_div_clk_src,
+> >                       &disp_cc_mdss_dp_link1_div_clk_src,
+> >                       &disp_cc_mdss_dp_link_div_clk_src,
+> > +                     &disp_cc_mdss_edp_link_div_clk_src,
+> >               };
+> >               unsigned int i;
+> >               static bool offset_applied;
+>
+> --
+> With best wishes
+> Dmitry
+>
