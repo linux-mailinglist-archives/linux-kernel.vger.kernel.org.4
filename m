@@ -2,171 +2,110 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99223615695
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 01:36:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EDFF61569A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 01:40:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229767AbiKBAge (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 20:36:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53364 "EHLO
+        id S229846AbiKBAkl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 20:40:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55368 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229927AbiKBAg3 (ORCPT
+        with ESMTP id S229795AbiKBAkj (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 20:36:29 -0400
-Received: from mail-wr1-x42e.google.com (mail-wr1-x42e.google.com [IPv6:2a00:1450:4864:20::42e])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0F28DECB
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 17:36:17 -0700 (PDT)
-Received: by mail-wr1-x42e.google.com with SMTP id cl5so10706356wrb.9
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 17:36:17 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=philpotter-co-uk.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tO0LAor4TdjnxnPqUvrC1prKZiIrkWSk8R0XYZ6tvt8=;
-        b=tWfKavahahchekF5H2ZJeJjY4YDSYtrcnHRU8WIS0QwxKhLPQdlDbE+fAftYAAgp/F
-         gt+hiEVITG4y8URcjz477i9kRCP5LwnfRlhryqiUTnTCkKYxvQsMO5wLm8g3znMfh3aO
-         Nrco703cnoJvhWPhpY22TX/A99tkKhnCKcJRxeGmUL2voo0A6MlEOC6/PgKzK+IZJm06
-         Qbpy7F3KsWjJVNQ4AOk1hfpTVQvp7O/ooKS2RIYMajsGcNsIFHBOnrWdlNPT2+Zp4CWg
-         B49cUOEf8j1a6hfW75PEpFEYfFGevfVO5SlaoXqlsViypk2LY5aY/mSJRikH1x+lRP0r
-         Y4Xg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tO0LAor4TdjnxnPqUvrC1prKZiIrkWSk8R0XYZ6tvt8=;
-        b=ylxcwOP7vIimJJeXn1hHitZnDY9jMCaVfoRpadMngI+YP+8FpKhAZC5t/9crstV9MA
-         GlCCC5NIU0cIfxskexfRqHJIk6qqzyC8pjQ0GS8Z+HSQ9swufvLAg08yBskzMeuGH2YL
-         yE5OeE1gA9URnfzZOn/mPjxtVJYX2NghPhaHV3hTx8KPa1yLJwyXMFiFsKP/iX/EmPlW
-         dlH1Azp0tKvXEigFF0b6rPxIBMzsNm6oqKXxVgzc10/QIKapmwLueYB2tUa9f0Dw9P00
-         vliP5SKbGq6iQaecdh7Fq0NXvtWrPYzd7T+hdc3eu1lU4WIAA2FQwrFRIHR9s8iOWxdO
-         fNrg==
-X-Gm-Message-State: ACrzQf28Px8PD0SLnPqX3gIAWbBP0K5276tZErtBqycIZrmFEJu+XC01
-        WqOT6rm61j6qcejmEOLI8FrPYg==
-X-Google-Smtp-Source: AMsMyM4gOR4Kt0AX11B0rtuVxAKEcfK5Ac2YWaihHg00v3NLVEiG2uON1m27o+rnjCt5dEsreUCfQg==
-X-Received: by 2002:a5d:63d1:0:b0:235:9aeb:e365 with SMTP id c17-20020a5d63d1000000b002359aebe365mr13612992wrw.77.1667349376421;
-        Tue, 01 Nov 2022 17:36:16 -0700 (PDT)
-Received: from localhost.localdomain (d.f.5.e.6.6.b.1.e.6.2.7.e.5.c.8.0.a.1.e.e.d.f.d.0.b.8.0.1.0.0.2.ip6.arpa. [2001:8b0:dfde:e1a0:8c5e:726e:1b66:e5fd])
-        by smtp.gmail.com with ESMTPSA id p5-20020a5d68c5000000b00236e834f050sm2600149wrw.35.2022.11.01.17.36.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 17:36:15 -0700 (PDT)
-From:   Phillip Potter <phil@philpotter.co.uk>
-To:     gregkh@linuxfoundation.org
-Cc:     Larry.Finger@lwfinger.net, paskripkin@gmail.com,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        dan.carpenter@oracle.com
-Subject: [PATCH] staging: r8188eu: convert rtw_setdatarate_cmd to correct error semantics
-Date:   Wed,  2 Nov 2022 00:36:13 +0000
-Message-Id: <20221102003613.971-1-phil@philpotter.co.uk>
-X-Mailer: git-send-email 2.38.1
+        Tue, 1 Nov 2022 20:40:39 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 73CCF140E4
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 17:40:38 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667349638; x=1698885638;
+  h=from:to:cc:subject:references:date:in-reply-to:
+   message-id:mime-version;
+  bh=fw+qL17DCZK+sk+sa8WqB43dA7mfh93h7iE5JgG3lx4=;
+  b=lYtSUisAs979oBUsDpK60WJ5SOZOcsANw4WVY4B4g6VGU3zB00hiziHc
+   Uy/znDop0ZTn451vL9r6Ih5WgGInsfZJRfq/wtr20WqgDrPhcR6EHhCLx
+   vf5A3sQeozBv9okP407802STWHvSPhULoEP5hS8JjU3MBlRAb0d2aNcE4
+   OJsEtr7xxTUQpLENhqNBMikhke+Xb479KVYK7FrIkS+DHt2pIeqpHCX0F
+   Gp6t/X9R4WCD/kER8261sRooWQt55NMB2m4SFb6FbNAp7xN65KoyCrckZ
+   ErLmfP4DzSVeN2DG6JQDH4wSI8vVloZsqyBvH0/9Ohxwr+U/GGGxwd/PZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="310380096"
+X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
+   d="scan'208";a="310380096"
+Received: from fmsmga006.fm.intel.com ([10.253.24.20])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 17:40:37 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10518"; a="879281950"
+X-IronPort-AV: E=Sophos;i="5.95,232,1661842800"; 
+   d="scan'208";a="879281950"
+Received: from yhuang6-desk2.sh.intel.com (HELO yhuang6-desk2.ccr.corp.intel.com) ([10.238.208.55])
+  by fmsmga006-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Nov 2022 17:40:33 -0700
+From:   "Huang, Ying" <ying.huang@intel.com>
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     Bharata B Rao <bharata@amd.com>,
+        Aneesh Kumar K V <aneesh.kumar@linux.ibm.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Alistair Popple <apopple@nvidia.com>,
+        Dan Williams <dan.j.williams@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Davidlohr Bueso <dave@stgolabs.net>,
+        Hesham Almatary <hesham.almatary@huawei.com>,
+        Jagdish Gediya <jvgediya.oss@gmail.com>,
+        Johannes Weiner <hannes@cmpxchg.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Tim Chen <tim.c.chen@intel.com>, Wei Xu <weixugc@google.com>,
+        Yang Shi <shy828301@gmail.com>
+Subject: Re: [RFC] memory tiering: use small chunk size and more tiers
+References: <20221027065925.476955-1-ying.huang@intel.com>
+        <578c9b89-10eb-1e23-8868-cdd6685d8d4e@linux.ibm.com>
+        <877d0kk5uf.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <59291b98-6907-0acf-df11-6d87681027cc@linux.ibm.com>
+        <8735b8jy9k.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <0d938c9f-c810-b10a-e489-c2b312475c52@amd.com>
+        <87tu3oibyr.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <07912a0d-eb91-a6ef-2b9d-74593805f29e@amd.com>
+        <87leowepz6.fsf@yhuang6-desk2.ccr.corp.intel.com>
+        <Y2Eui+kKvwj8ip+T@dhcp22.suse.cz>
+Date:   Wed, 02 Nov 2022 08:39:49 +0800
+In-Reply-To: <Y2Eui+kKvwj8ip+T@dhcp22.suse.cz> (Michal Hocko's message of
+        "Tue, 1 Nov 2022 15:34:51 +0100")
+Message-ID: <878rkuchpm.fsf@yhuang6-desk2.ccr.corp.intel.com>
+User-Agent: Gnus/5.13 (Gnus v5.13) Emacs/27.1 (gnu/linux)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=ascii
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Convert rtw_setdatarate_cmd function to use proper error return codes
-rather than _SUCCESS and _FAIL, and a simpler 'return 0;' style. For now,
-wrap rtw_enqueue_cmd call and return -EPERM if it fails, as converting
-this function makes more sense later on due to its large number of callers.
+Michal Hocko <mhocko@suse.com> writes:
 
-Also change rtw_wx_set_rate function to pass through the proper error
-code rather than just 0 or -1.
+> On Mon 31-10-22 09:33:49, Huang, Ying wrote:
+> [...]
+>> In the upstream implementation, 4 tiers are possible below DRAM.  That's
+>> enough for now.  But in the long run, it may be better to define more.
+>> 100 possible tiers below DRAM may be too extreme.
+>
+> I am just curious. Is any configurations with more than couple of tiers
+> even manageable? I mean applications have been struggling even with
+> regular NUMA systems for years and vast majority of them is largerly
+> NUMA unaware. How are they going to configure for a more complex system
+> when a) there is no resource access control so whatever you aim for
+> might not be available and b) in which situations there is going to be a
+> demand only for subset of tears (GPU memory?) ?
 
-Signed-off-by: Phillip Potter <phil@philpotter.co.uk>
----
- drivers/staging/r8188eu/core/rtw_cmd.c       | 18 +++++++-----------
- drivers/staging/r8188eu/include/rtw_cmd.h    |  2 +-
- drivers/staging/r8188eu/os_dep/ioctl_linux.c |  7 ++-----
- 3 files changed, 10 insertions(+), 17 deletions(-)
+Sorry for confusing.  I think that there are only several (less than 10)
+tiers in a system in practice.  Yes, here, I suggested to define 100 (10
+in the later text) POSSIBLE tiers below DRAM.  My intention isn't to
+manage a system with tens memory tiers.  Instead, my intention is to
+avoid to put 2 memory types into one memory tier by accident via make
+the abstract distance range of each memory tier as small as possible.
+More possible memory tiers, smaller abstract distance range of each
+memory tier.
 
-diff --git a/drivers/staging/r8188eu/core/rtw_cmd.c b/drivers/staging/r8188eu/core/rtw_cmd.c
-index fdc0c71e28a4..19b2f73d481d 100644
---- a/drivers/staging/r8188eu/core/rtw_cmd.c
-+++ b/drivers/staging/r8188eu/core/rtw_cmd.c
-@@ -340,33 +340,29 @@ u8 rtw_sitesurvey_cmd(struct adapter  *padapter, struct ndis_802_11_ssid *ssid,
- 	return res;
- }
- 
--u8 rtw_setdatarate_cmd(struct adapter *padapter, u8 *rateset)
-+int rtw_setdatarate_cmd(struct adapter *padapter, u8 *rateset)
- {
- 	struct cmd_obj *ph2c;
- 	struct setdatarate_parm *pbsetdataratepara;
- 	struct cmd_priv *pcmdpriv = &padapter->cmdpriv;
--	u8	res = _SUCCESS;
- 
- 	ph2c = kzalloc(sizeof(*ph2c), GFP_ATOMIC);
--	if (!ph2c) {
--		res = _FAIL;
--		goto exit;
--	}
-+	if (!ph2c)
-+		return -ENOMEM;
- 
- 	pbsetdataratepara = kzalloc(sizeof(*pbsetdataratepara), GFP_ATOMIC);
- 	if (!pbsetdataratepara) {
- 		kfree(ph2c);
--		res = _FAIL;
--		goto exit;
-+		return -ENOMEM;
- 	}
- 
- 	init_h2fwcmd_w_parm_no_rsp(ph2c, pbsetdataratepara, GEN_CMD_CODE(_SetDataRate));
- 	pbsetdataratepara->mac_id = 5;
- 	memcpy(pbsetdataratepara->datarates, rateset, NumRates);
--	res = rtw_enqueue_cmd(pcmdpriv, ph2c);
--exit:
-+	if (rtw_enqueue_cmd(pcmdpriv, ph2c) == _FAIL)
-+		return -EPERM;
- 
--	return res;
-+	return 0;
- }
- 
- void rtw_getbbrfreg_cmdrsp_callback(struct adapter *padapter,  struct cmd_obj *pcmd)
-diff --git a/drivers/staging/r8188eu/include/rtw_cmd.h b/drivers/staging/r8188eu/include/rtw_cmd.h
-index a740a9a101d8..c330a4435b31 100644
---- a/drivers/staging/r8188eu/include/rtw_cmd.h
-+++ b/drivers/staging/r8188eu/include/rtw_cmd.h
-@@ -727,7 +727,7 @@ u8 rtw_clearstakey_cmd(struct adapter *padapter, u8 *psta, u8 entry, u8 enqueue)
- u8 rtw_joinbss_cmd(struct adapter *padapter, struct wlan_network *pnetwork);
- u8 rtw_disassoc_cmd(struct adapter *padapter, u32 deauth_timeout_ms, bool enqueue);
- u8 rtw_setopmode_cmd(struct adapter *padapter, enum ndis_802_11_network_infra networktype);
--u8 rtw_setdatarate_cmd(struct adapter *padapter, u8 *rateset);
-+int rtw_setdatarate_cmd(struct adapter *padapter, u8 *rateset);
- u8 rtw_setrfintfs_cmd(struct adapter *padapter, u8 mode);
- 
- u8 rtw_gettssi_cmd(struct adapter *padapter, u8 offset, u8 *pval);
-diff --git a/drivers/staging/r8188eu/os_dep/ioctl_linux.c b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-index f3b3d7468539..dda48a2a6d0c 100644
---- a/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-+++ b/drivers/staging/r8188eu/os_dep/ioctl_linux.c
-@@ -1340,7 +1340,7 @@ static int rtw_wx_set_rate(struct net_device *dev,
- 			      struct iw_request_info *a,
- 			      union iwreq_data *wrqu, char *extra)
- {
--	int i, ret = 0;
-+	int i;
- 	struct adapter *padapter = (struct adapter *)rtw_netdev_priv(dev);
- 	u8 datarates[NumRates];
- 	u32	target_rate = wrqu->bitrate.value;
-@@ -1408,10 +1408,7 @@ static int rtw_wx_set_rate(struct net_device *dev,
- 		}
- 	}
- 
--	if (rtw_setdatarate_cmd(padapter, datarates) != _SUCCESS)
--		ret = -1;
--
--	return ret;
-+	return rtw_setdatarate_cmd(padapter, datarates);
- }
- 
- static int rtw_wx_get_rate(struct net_device *dev,
--- 
-2.38.1
-
+Best Regards,
+Huang, Ying
