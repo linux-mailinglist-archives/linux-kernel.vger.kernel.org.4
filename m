@@ -2,88 +2,124 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9AF2E616F73
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 22:12:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0CE9C616F74
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 22:14:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229561AbiKBVMk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 17:12:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53404 "EHLO
+        id S230220AbiKBVOC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 17:14:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54374 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231381AbiKBVMe (ORCPT
+        with ESMTP id S229548AbiKBVOA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 17:12:34 -0400
-Received: from mail-pl1-x632.google.com (mail-pl1-x632.google.com [IPv6:2607:f8b0:4864:20::632])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC8C5E02D;
-        Wed,  2 Nov 2022 14:12:26 -0700 (PDT)
-Received: by mail-pl1-x632.google.com with SMTP id b21so36170plc.9;
-        Wed, 02 Nov 2022 14:12:26 -0700 (PDT)
+        Wed, 2 Nov 2022 17:14:00 -0400
+Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 391ADBC2
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 14:13:59 -0700 (PDT)
+Received: by mail-wr1-x431.google.com with SMTP id h9so139360wrt.0
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 14:13:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=SIubiPo7zT5JJe+L0CchJwTPpEdYLEw2sGAtp4350gs=;
-        b=CnB6/zwTWr3MfwsAQZrhc9un2x2CcquEJn9y9MBorfQM7i78853QvADCeolFY0bc0e
-         iYfdfH++uJHK8GwANGol7IStY/laYsTMdnlKzfvrYJ9qLYO0IzDena0YckpY/LDfqxmy
-         ylwLVRM5xRZWalbXojFg7qMp7cdA/ruYqA0YmwOtcSF+OWcRLb0uPhP4xaxG4n1j52So
-         GK7AIebmbcO6uXFGWSGF+sIkKiLFm6agGwZIhG/G9BCP/pOG0tUmbxOnCMBsS+kWYeWx
-         IWUoOju9ClNC7I0LSEIloD5EwxZ16z/yLU2IyrEOKqaTKVWU+5es6mPiIzc9b/cTQ8wY
-         wvpg==
+        d=arista.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ns47bvu92RN1o/ST22gXYBYxxkJNfGwoF1/G0Fam6ZU=;
+        b=P/jap1+f1RnlBrKQ5nOOYo+gEz7RfjfVWA1cqgzorpmFJzBkbPumvPweSEymhIETKV
+         Wr3DgX9ti2aUAs4JLvBwgXbbVhjsXBMTpnrvOt9B9DRLpvOwjp0uQ4HS8IWTzzviU6ka
+         j+gVSFVhzAWBfXi9HaH6Ph/QnU9VU6wvJrpEXH0871rASpyoMbtjBP/YNr+g5hyFaUtV
+         lpCO9x1jo70oyWcOirhNbtJEEBqKUmdP3dt3/jmk+LgWRzLoh/eyj2Sz1vuVqBaLeJk9
+         EQ9LLt2eR/amdapxof8dOj4AzsKE1oyBn7vLS9iVGYAsd5KK6Fa/YRU6G9zwto8SjStt
+         SGUw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=SIubiPo7zT5JJe+L0CchJwTPpEdYLEw2sGAtp4350gs=;
-        b=u1ub37db1afuoK0NLWhP9C8J6mIpZj1SRfShS8oKaMPaobo2x/lRef2roB8RwebE/K
-         kGOYVkcs8SmHTWmXpp8EaoUBzyaI5RR5d60gkC6JZhotyrrcrpPWcLhylnfvp2xjNstK
-         4wvjVlJdQax22y0Qgvh6z4JttxWet2FFLpzRzQ0+EtfhXgSPJfhRvskid6mT/zsKmXSM
-         BbUsoLFMY55OKDmH2ma36ASKbAGSSAd6fiZfUyj5uTWoUFT14BtOnsa4uJXNK2++Dwgl
-         QwhMI4batS7N3cWNMmgxm0H0cmlUdE1WTM9/SoAxRQR/DtWfnaGYgKD9/HH+WqGiuKfE
-         Pv2A==
-X-Gm-Message-State: ACrzQf0lUskIhh6fpUxuU9Go4jYqYQrl+/y47clAQDoi+8/WPhjgsYpF
-        J8+WMhQIZ3IHo1JiW8Ce6lXwIM/d0+QLjxb0fjg=
-X-Google-Smtp-Source: AMsMyM4YZX18r4YFJQuWrrBszdVvGlOIfto5QLEius64s8tg50mFMIPYT4/u+gUPDqnMRgfRlZcilBoc+qmwqpBb4qw=
-X-Received: by 2002:a17:90b:3144:b0:215:db2e:bc6e with SMTP id
- ip4-20020a17090b314400b00215db2ebc6emr1855922pjb.12.1667423546267; Wed, 02
- Nov 2022 14:12:26 -0700 (PDT)
+        bh=Ns47bvu92RN1o/ST22gXYBYxxkJNfGwoF1/G0Fam6ZU=;
+        b=cSq3znmG7LWvHlHxfodqosryneqBjTViuJYH2ZF3/vw3UlYtgxqiPgUINkH1MHKIez
+         Ec9gKjaTavvn2lhlrUKAfJVcxrRjqeUs5tMM3XMqxnycKPIfcfkqLHbBir6Kv/Itdk2O
+         DGpkJG3QOAr6YG85NIuC7eX5JK8kD0vDKJ1Jy6UHFKflv52BYoBb1ocnn2UBmvmBV6U+
+         hgYqPNQv3WlchPdwUNhjHx6MZDR8Hwl6NgH+0DzJMDrxnaf+CAPcYvNT8g2515E+Kc3y
+         OO4CjnGzzzRhGVC5vT1PzH6cqeokjwWiRSueABPftIGz+JvImnIQafOhn7Uwm+oHQDo1
+         abKA==
+X-Gm-Message-State: ACrzQf3gCvQNHAP6q8vnVZVj23hQrNvGMGInmYJ/0O025OJB9rSeVYdt
+        k8TK4c1Z3rSZEB8ELk1QFyR0J8UoKWK6rw==
+X-Google-Smtp-Source: AMsMyM7ztfbtC4swakuetRFq6TocNcEe3huQmympPzaW2QCSFJcHJAaDgWSWPc1z2/XBuVIU79BjoA==
+X-Received: by 2002:adf:cc92:0:b0:236:77f0:ef5f with SMTP id p18-20020adfcc92000000b0023677f0ef5fmr16813625wrj.198.1667423637443;
+        Wed, 02 Nov 2022 14:13:57 -0700 (PDT)
+Received: from Mindolluin.ire.aristanetworks.com ([217.173.96.166])
+        by smtp.gmail.com with ESMTPSA id cc6-20020a5d5c06000000b002364835caacsm14179851wrb.112.2022.11.02.14.13.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 14:13:56 -0700 (PDT)
+From:   Dmitry Safonov <dima@arista.com>
+To:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
+        Eric Dumazet <edumazet@google.com>
+Cc:     Dmitry Safonov <dima@arista.com>,
+        Bob Gilligan <gilligan@arista.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Dmitry Safonov <0x7f454c46@gmail.com>,
+        Francesco Ruggeri <fruggeri@arista.com>,
+        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Salam Noureddine <noureddine@arista.com>,
+        netdev@vger.kernel.org
+Subject: [PATCH 0/2] net/tcp: Dynamically disable TCP-MD5 static key
+Date:   Wed,  2 Nov 2022 21:13:48 +0000
+Message-Id: <20221102211350.625011-1-dima@arista.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-References: <20221102022055.039689234@linuxfoundation.org>
-In-Reply-To: <20221102022055.039689234@linuxfoundation.org>
-From:   Allen Pais <stable.kernel.dev@gmail.com>
-Date:   Wed, 2 Nov 2022 14:12:15 -0700
-Message-ID: <CAJq+SaBVDr99kcJ-XacoGc0Ah9Ur1eOim1jG1Jf319Q9Qh0Jjw@mail.gmail.com>
-Subject: Re: [PATCH 5.10 00/91] 5.10.153-rc1 review
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> This is the start of the stable review cycle for the 5.10.153 release.
-> There are 91 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
->
-> Responses should be made by Fri, 04 Nov 2022 02:20:38 +0000.
-> Anything received after that time might be too late.
->
+The static key introduced by commit 6015c71e656b ("tcp: md5: add
+tcp_md5_needed jump label") is a fast-path optimization aimed at
+avoiding a cache line miss.
+Once an MD5 key is introduced in the system the static key is enabled
+and never disabled. Address this by disabling the static key when
+the last tcp_md5sig_info in system is destroyed.
+
+Previously it was submitted as a part of TCP-AO patches set [1].
+Now in attempt to split 36 patches submission, I send this independently.
+
+Cc: Bob Gilligan <gilligan@arista.com>
+Cc: David Ahern <dsahern@kernel.org>
+Cc: "David S. Miller" <davem@davemloft.net>
+Cc: Dmitry Safonov <0x7f454c46@gmail.com>
+Cc: Eric Dumazet <edumazet@google.com>
+Cc: Francesco Ruggeri <fruggeri@arista.com>
+Cc: Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>
+Cc: Jakub Kicinski <kuba@kernel.org>
+Cc: Paolo Abeni <pabeni@redhat.com>
+Cc: Salam Noureddine <noureddine@arista.com>
+Cc: netdev@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+
+[1]: https://lore.kernel.org/all/20221027204347.529913-1-dima@arista.com/T/#u
+
+Thanks,
+            Dmitry
+
+Dmitry Safonov (2):
+  net/tcp: Separate tcp_md5sig_info allocation into
+    tcp_md5sig_info_add()
+  net/tcp: Disable TCP-MD5 static key on tcp_md5sig_info destruction
+
+ include/net/tcp.h        | 10 ++++--
+ net/ipv4/tcp.c           |  5 +--
+ net/ipv4/tcp_ipv4.c      | 74 +++++++++++++++++++++++++++++++---------
+ net/ipv4/tcp_minisocks.c |  9 +++--
+ net/ipv4/tcp_output.c    |  4 +--
+ net/ipv6/tcp_ipv6.c      | 10 +++---
+ 6 files changed, 78 insertions(+), 34 deletions(-)
 
 
-Compiled and booted on my x86_64 and ARM64 test systems. No errors or
-regressions.
+base-commit: 8f71a2b3f435f29b787537d1abedaa7d8ebe6647
+-- 
+2.38.1
 
-Tested-by: Allen Pais <apais@linux.microsoft.com>
-
-Thanks.
