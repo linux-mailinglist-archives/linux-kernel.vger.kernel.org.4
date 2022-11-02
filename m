@@ -2,213 +2,113 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DAA9C616BC6
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:09:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 68AE5616BC9
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:10:58 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231394AbiKBSJh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 14:09:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37814 "EHLO
+        id S231597AbiKBSKz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 14:10:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37164 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231337AbiKBSIc (ORCPT
+        with ESMTP id S231557AbiKBSKX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:08:32 -0400
-Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8101D20984;
-        Wed,  2 Nov 2022 11:08:30 -0700 (PDT)
-Received: by mail-ej1-x62f.google.com with SMTP id b2so47505761eja.6;
-        Wed, 02 Nov 2022 11:08:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UnsNN7r2W9xkEzjhO5QJbPuVldjOL5oHt6w+pHrcgpM=;
-        b=HYcMm0Ufc9sLUzcVbUacmyLCBSPMGFY2g3U1wwwC0aff82njCuumTTQn90EMAJyhT5
-         XtEslqT4EgC6fr87jXNwXsVWmNLbsM8n88TM6jgrt/JATwt6q6Q6jI+FKV2+jpEqNfxi
-         6/GPUfQJ8brJyJuMYl3eemNdXiXZYVqzAOJhfOCU8IYe/cI5e+7w4uk0GagWQNcw60rl
-         SK1h+ZTRmv+TyC1it+zzwtIbF7rgPrc3W3pHtEyHSFwNhUEUqeesk4ng7okbObhNoHh6
-         rVCnMmf6ydzErb+2kxT9X0yvfwMFMwT5TOlfwWPPmLG+Y0kFLGx4wfou7c0NzLx/q1E1
-         PWwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UnsNN7r2W9xkEzjhO5QJbPuVldjOL5oHt6w+pHrcgpM=;
-        b=RDQeytblhvP/hT7ftVa1u97bcsH24R1GalalERuTrw4qDms7NalkQRe7kEenSB17LF
-         e5yVxB4mskR0ZBQqAy750NEIgrM2LTsJAr78L+88bviri5nT6SEChyf+PumLaRsI0DSv
-         EAX15r0J3DM9rlFnRtpu/bUewsJw/tZ8pJh6OP+onQ/c7mMY3fujfvFaYQvbeawFiugZ
-         yKWIAqpJ4uGiwMuwCSvZhTgt+nvf8fMXYpzesGzDy5cqtOC7sDh9O388r5ogphqORLrU
-         gYxLjrtYP0akStHxnXjBBI4+fjzyv3/m6YA3NVP01YZlcc/gMD0BweW42HMjZASJLEMU
-         ByVw==
-X-Gm-Message-State: ACrzQf1Ed3iXkf+90BsCBLWPp1znQdjO/LopohZGjdBlOfnMDWN/mL5l
-        8fvc0ePSI1XSNd49sEiyrpg=
-X-Google-Smtp-Source: AMsMyM5KASGBahil6cWvOOQ33GgPmn+YKHhSuh2FkeXY0JHcuKHQXj8pBygQZFJ+xHd50o0EsJoFIA==
-X-Received: by 2002:a17:906:8458:b0:7ac:a48d:a680 with SMTP id e24-20020a170906845800b007aca48da680mr25750562ejy.105.1667412509956;
-        Wed, 02 Nov 2022 11:08:29 -0700 (PDT)
-Received: from kista.localdomain (82-149-19-102.dynamic.telemach.net. [82.149.19.102])
-        by smtp.gmail.com with ESMTPSA id gy8-20020a170906f24800b007317f017e64sm5677460ejb.134.2022.11.02.11.08.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 11:08:29 -0700 (PDT)
-From:   Jernej Skrabec <jernej.skrabec@gmail.com>
-To:     mripard@kernel.org, paul.kocialkowski@bootlin.com
-Cc:     mchehab@kernel.org, gregkh@linuxfoundation.org, wens@csie.org,
-        samuel@sholland.org, hverkuil-cisco@xs4all.nl,
-        linux-media@vger.kernel.org, linux-staging@lists.linux.dev,
-        linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-        linux-kernel@vger.kernel.org,
-        Jernej Skrabec <jernej.skrabec@gmail.com>
-Subject: [PATCH v2 11/11] media: cedrus: h265: Support decoding 10-bit frames
-Date:   Wed,  2 Nov 2022 19:08:10 +0100
-Message-Id: <20221102180810.267252-12-jernej.skrabec@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221102180810.267252-1-jernej.skrabec@gmail.com>
-References: <20221102180810.267252-1-jernej.skrabec@gmail.com>
+        Wed, 2 Nov 2022 14:10:23 -0400
+Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8922D3055A
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:09:32 -0700 (PDT)
+Received: from pps.filterd (m0098421.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A2HBXXT011227;
+        Wed, 2 Nov 2022 18:09:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : content-type : mime-version; s=pp1;
+ bh=VOfZR1bfgraHOMF0H2A4SdBgmD4c0rbRbY/XavBwa1Y=;
+ b=Yh9X3toCIYMLmmxtgI+miLyc8gO8gV0gSuTgldwyAbNb79EjR/WjFKT2muCoSCnCaGRC
+ wIualL00FcSlWJRTfTmp7/kUKonwM3G0ixhozFeh2TPSNYRVTKp3IbeyfvZ3VFZY1lzb
+ qpHOxxQY7IsQ0gs8FPGAinZQBQCJM+A5btZmnuHDcHF8TQ+agScJ8m+odQUMBR8vO7xx
+ sz1mz5OGbc2V4+RJD5l/0vK3v/Byvzl+C3/B8yFNGEDTl7ZpJ1psf33tYpj2uiQowXyM
+ knZ90yAOCCA9MqtzTEIBgRurLIRo1y4CWVzRzh26AhgTPyIBslHt1oZdveXaIisUy/vK IQ== 
+Received: from ppma04fra.de.ibm.com (6a.4a.5195.ip4.static.sl-reverse.com [149.81.74.106])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kkvbyaehx-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 18:09:23 +0000
+Received: from pps.filterd (ppma04fra.de.ibm.com [127.0.0.1])
+        by ppma04fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A2I5a9e032273;
+        Wed, 2 Nov 2022 18:09:22 GMT
+Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
+        by ppma04fra.de.ibm.com with ESMTP id 3kgut8wfpv-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 18:09:21 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A2I9Ie2197148
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Nov 2022 18:09:18 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id D8491A404D;
+        Wed,  2 Nov 2022 18:09:18 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7E33EA4040;
+        Wed,  2 Nov 2022 18:09:18 +0000 (GMT)
+Received: from localhost (unknown [9.171.5.179])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
+        Wed,  2 Nov 2022 18:09:18 +0000 (GMT)
+Date:   Wed, 2 Nov 2022 19:09:17 +0100
+From:   Vasily Gorbik <gor@linux.ibm.com>
+To:     Muchun Song <songmuchun@bytedance.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Andrew Morton <akpm@linux-foundation.org>
+Cc:     Gerald Schaefer <gerald.schaefer@linux.ibm.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] mm: hugetlb_vmemmap: include missing linux/moduleparam.h
+Message-ID: <patch.git-296b83ca939b.your-ad-here.call-01667411912-ext-5073@work.hours>
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+X-Patchwork-Bot: notify
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: Ec98p4g_hAQ4m1_VWDE0Alz8zEb-aPWF
+X-Proofpoint-ORIG-GUID: Ec98p4g_hAQ4m1_VWDE0Alz8zEb-aPWF
+X-Proofpoint-UnRewURL: 0 URL was un-rewritten
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-02_14,2022-11-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=912
+ priorityscore=1501 spamscore=0 malwarescore=0 adultscore=0
+ lowpriorityscore=0 suspectscore=0 clxscore=1011 mlxscore=0 impostorscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211020117
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-10-bit frames needs extra buffer space when 8-bit capture format is
-used. Use previously prepared infrastructure to adjust buffer size.
+The kernel test robot reported build failures with a 'randconfig' on s390:
+>> mm/hugetlb_vmemmap.c:421:11: error: a function declaration without a
+prototype is deprecated in all versions of C [-Werror,-Wstrict-prototypes]
+   core_param(hugetlb_free_vmemmap, vmemmap_optimize_enabled, bool, 0);
+             ^
 
-Signed-off-by: Jernej Skrabec <jernej.skrabec@gmail.com>
+Link: https://lore.kernel.org/linux-mm/202210300751.rG3UDsuc-lkp@intel.com/
+Reported-by: kernel test robot <lkp@intel.com>
+Fixes: 30152245c63b ("mm: hugetlb_vmemmap: replace early_param() with core_param()")
+Signed-off-by: Vasily Gorbik <gor@linux.ibm.com>
 ---
- drivers/staging/media/sunxi/cedrus/cedrus.c   |  7 ++++
- drivers/staging/media/sunxi/cedrus/cedrus.h   |  1 +
- .../staging/media/sunxi/cedrus/cedrus_h265.c  | 35 +++++++++++++++++++
- .../staging/media/sunxi/cedrus/cedrus_regs.h  | 16 +++++++++
- 4 files changed, 59 insertions(+)
+ mm/hugetlb_vmemmap.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.c b/drivers/staging/media/sunxi/cedrus/cedrus.c
-index c36999e47591..909f769b3ede 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus.c
-@@ -75,6 +75,13 @@ static int cedrus_s_ctrl(struct v4l2_ctrl *ctrl)
- 	struct vb2_queue *vq = v4l2_m2m_get_vq(ctx->fh.m2m_ctx,
- 					       V4L2_BUF_TYPE_VIDEO_CAPTURE);
+diff --git a/mm/hugetlb_vmemmap.c b/mm/hugetlb_vmemmap.c
+index ba2a2596fb4e..4962dd1ba4a6 100644
+--- a/mm/hugetlb_vmemmap.c
++++ b/mm/hugetlb_vmemmap.c
+@@ -11,6 +11,7 @@
+ #define pr_fmt(fmt)	"HugeTLB: " fmt
  
-+	if (ctrl->id == V4L2_CID_STATELESS_HEVC_SPS) {
-+		const struct v4l2_ctrl_hevc_sps *sps = ctrl->p_new.p_hevc_sps;
-+
-+		ctx->bit_depth = max(sps->bit_depth_luma_minus8,
-+				     sps->bit_depth_chroma_minus8) + 8;
-+	}
-+
- 	if (!vb2_is_busy(vq) && !vb2_is_streaming(vq))
- 		cedrus_reset_cap_format(ctx);
- 
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus.h b/drivers/staging/media/sunxi/cedrus/cedrus.h
-index 774fe8048ce3..522c184e2afc 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus.h
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus.h
-@@ -119,6 +119,7 @@ struct cedrus_ctx {
- 	struct v4l2_pix_format		src_fmt;
- 	struct v4l2_pix_format		dst_fmt;
- 	struct cedrus_dec_ops		*current_codec;
-+	unsigned int			bit_depth;
- 
- 	struct v4l2_ctrl_handler	hdl;
- 	struct v4l2_ctrl		**ctrls;
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-index 5d3da50ce46a..fc9297232456 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_h265.c
-@@ -41,6 +41,19 @@ struct cedrus_h265_sram_pred_weight {
- 	__s8	offset;
- } __packed;
- 
-+static unsigned int cedrus_h265_2bit_size(unsigned int width,
-+					  unsigned int height)
-+{
-+	/*
-+	 * Vendor library additionally aligns width and height to 16,
-+	 * but all capture formats are already aligned to that anyway,
-+	 * so we can skip that here. All formats are also one form of
-+	 * YUV 4:2:0 or another, so we can safely assume multiplication
-+	 * factor of 1.5.
-+	 */
-+	return ALIGN(width / 4, 32) * height * 3 / 2;
-+}
-+
- static enum cedrus_irq_status cedrus_h265_irq_status(struct cedrus_ctx *ctx)
- {
- 	struct cedrus_dev *dev = ctx->dev;
-@@ -802,6 +815,18 @@ static int cedrus_h265_setup(struct cedrus_ctx *ctx, struct cedrus_run *run)
- 						      VE_DEC_H265_SRAM_OFFSET_PRED_WEIGHT_CHROMA_L1);
- 	}
- 
-+	if (ctx->bit_depth > 8) {
-+		unsigned int stride = ALIGN(ctx->dst_fmt.width / 4, 32);
-+
-+		reg = ctx->dst_fmt.sizeimage -
-+		      cedrus_h265_2bit_size(ctx->dst_fmt.width,
-+					    ctx->dst_fmt.height);
-+		cedrus_write(dev, VE_DEC_H265_OFFSET_ADDR_FIRST_OUT, reg);
-+
-+		reg = VE_DEC_H265_10BIT_CONFIGURE_FIRST_2BIT_STRIDE(stride);
-+		cedrus_write(dev, VE_DEC_H265_10BIT_CONFIGURE, reg);
-+	}
-+
- 	/* Enable appropriate interruptions. */
- 	cedrus_write(dev, VE_DEC_H265_CTRL, VE_DEC_H265_CTRL_IRQ_MASK);
- 
-@@ -874,6 +899,15 @@ static void cedrus_h265_trigger(struct cedrus_ctx *ctx)
- 	cedrus_write(dev, VE_DEC_H265_TRIGGER, VE_DEC_H265_TRIGGER_DEC_SLICE);
- }
- 
-+static unsigned int cedrus_h265_extra_cap_size(struct cedrus_ctx *ctx,
-+					       struct v4l2_pix_format *pix_fmt)
-+{
-+	if (ctx->bit_depth > 8)
-+		return cedrus_h265_2bit_size(pix_fmt->width, pix_fmt->height);
-+
-+	return 0;
-+}
-+
- struct cedrus_dec_ops cedrus_dec_ops_h265 = {
- 	.irq_clear	= cedrus_h265_irq_clear,
- 	.irq_disable	= cedrus_h265_irq_disable,
-@@ -882,4 +916,5 @@ struct cedrus_dec_ops cedrus_dec_ops_h265 = {
- 	.start		= cedrus_h265_start,
- 	.stop		= cedrus_h265_stop,
- 	.trigger	= cedrus_h265_trigger,
-+	.extra_cap_size	= cedrus_h265_extra_cap_size,
- };
-diff --git a/drivers/staging/media/sunxi/cedrus/cedrus_regs.h b/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
-index 655c05b389cf..05e6cbc548ab 100644
---- a/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
-+++ b/drivers/staging/media/sunxi/cedrus/cedrus_regs.h
-@@ -498,6 +498,22 @@
- 
- #define VE_DEC_H265_LOW_ADDR			(VE_ENGINE_DEC_H265 + 0x80)
- 
-+#define VE_DEC_H265_OFFSET_ADDR_FIRST_OUT	(VE_ENGINE_DEC_H265 + 0x84)
-+#define VE_DEC_H265_OFFSET_ADDR_SECOND_OUT	(VE_ENGINE_DEC_H265 + 0x88)
-+
-+#define VE_DEC_H265_SECOND_OUT_FMT_8BIT_PLUS_2BIT	0
-+#define VE_DEC_H265_SECOND_OUT_FMT_P010			1
-+#define VE_DEC_H265_SECOND_OUT_FMT_10BIT_4x4_TILED	2
-+
-+#define VE_DEC_H265_10BIT_CONFIGURE_SECOND_OUT_FMT(v) \
-+	SHIFT_AND_MASK_BITS(v, 24, 23)
-+#define VE_DEC_H265_10BIT_CONFIGURE_SECOND_2BIT_ENABLE	BIT(22)
-+#define VE_DEC_H265_10BIT_CONFIGURE_SECOND_2BIT_STRIDE(v) \
-+	SHIFT_AND_MASK_BITS(v, 21, 11)
-+#define VE_DEC_H265_10BIT_CONFIGURE_FIRST_2BIT_STRIDE(v) \
-+	SHIFT_AND_MASK_BITS(v, 10, 0)
-+#define VE_DEC_H265_10BIT_CONFIGURE		(VE_ENGINE_DEC_H265 + 0x8c)
-+
- #define VE_DEC_H265_LOW_ADDR_PRIMARY_CHROMA(a) \
- 	SHIFT_AND_MASK_BITS(a, 31, 24)
- #define VE_DEC_H265_LOW_ADDR_SECONDARY_CHROMA(a) \
+ #include <linux/pgtable.h>
++#include <linux/moduleparam.h>
+ #include <linux/bootmem_info.h>
+ #include <asm/pgalloc.h>
+ #include <asm/tlbflush.h>
 -- 
 2.38.1
-
