@@ -2,300 +2,136 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 53382617271
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 00:25:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DE5D61729C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 00:27:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230224AbiKBXZU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 19:25:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33720 "EHLO
+        id S231506AbiKBX1f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 19:27:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40704 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230394AbiKBXYI (ORCPT
+        with ESMTP id S231664AbiKBX0x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 19:24:08 -0400
-Received: from mail-pf1-x433.google.com (mail-pf1-x433.google.com [IPv6:2607:f8b0:4864:20::433])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC43210FCE;
-        Wed,  2 Nov 2022 16:20:26 -0700 (PDT)
-Received: by mail-pf1-x433.google.com with SMTP id k22so91424pfd.3;
-        Wed, 02 Nov 2022 16:20:26 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=WS1e+43uL+FT/xkdxSFm6nee4mo2YYL1lmvIqpiOoFU=;
-        b=eNAW09APtQMwcF8srtLQ4v8T0sRnvgNmfHGFMZdDwC5B5NONfljMrDCUSdXxhZxwAS
-         Si8f5RiURn8L/pDIk4NbK0PLKvOa7/cphvsv2PAk05tU/zHdSrErO4Tn9/5HTvSAEtg4
-         lloTdn1gVPlq+FLxaAtcBdz2Q+90hZULEalsqBD79E7eNlFV8N1Qp16tg64WEBLNN27y
-         +ezxfpXb6N0KSdbh3UxwH8EnTRlBfNmcRVbvdyC5A1qYNNtqFT/IKBzoMMB12zEXybfD
-         GRRF3owJwOlceGHIY33m7J39WzvkUNZl+dSZqvRpG/1vDqeJ2BtCDUSYLqHi3rgFbUxA
-         ZSGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WS1e+43uL+FT/xkdxSFm6nee4mo2YYL1lmvIqpiOoFU=;
-        b=p8E/kToKpD1qANu8dEtojRKzFj+lhiPJvzcUHjNH6uqizoMAeLFosrNn+SKjwMYV9D
-         hNy5stvv8m2dWC3111S21oj0UwAVHQ7ZIhQMooTXP3li09U0LmZLL7jyxmXNoD56GTsn
-         /rhxXQ0A7xrtM4k2BxHmAMyvtPH/ChQuho5u3qHEVfFgwxG7akRLa4/IE0zOS9wy1Xug
-         uTCJ/KyRAzDJ+b2iJxTm1kGtc3GgZ65U8QUKYN06/DxAvQ/RZEhOebD/RShxH+HqitAa
-         hCeYym06nthUTTei70/3MB8nDCZ6tZL3cn+1GVPpdo5E4fJHc9EerLqEWiP4P101uOe8
-         w6OA==
-X-Gm-Message-State: ACrzQf1DtFU/8AHXL2KShovBESCE8+KwipQqZeBFZeHK40M8ucXsLszR
-        uTFZEKBsJChCapaHI4FMWoI=
-X-Google-Smtp-Source: AMsMyM4yOyeidT69MU0rVlgLhd+AuM79JodeBGbGUxHzsG5/nuu+7RMKT3vHWbJdgXDu52dKfwjQsQ==
-X-Received: by 2002:a63:f903:0:b0:46f:1b5:b4fd with SMTP id h3-20020a63f903000000b0046f01b5b4fdmr23233195pgi.544.1667431212859;
-        Wed, 02 Nov 2022 16:20:12 -0700 (PDT)
-Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:a6ae:11ff:fe11:fcc3])
-        by smtp.gmail.com with ESMTPSA id p8-20020a170902780800b00186e2123506sm8842073pll.300.2022.11.02.16.20.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 16:20:12 -0700 (PDT)
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-To:     Tony Lindgren <tony@atomide.com>, Mark Brown <broonie@kernel.org>
-Cc:     Liam Girdwood <lgirdwood@gmail.com>, linux-omap@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH 3/3] ASoC: tlv320aic3x: switch to using gpiod API
-Date:   Wed,  2 Nov 2022 16:20:04 -0700
-Message-Id: <20221102232004.1721864-3-dmitry.torokhov@gmail.com>
-X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
-In-Reply-To: <20221102232004.1721864-1-dmitry.torokhov@gmail.com>
-References: <20221102232004.1721864-1-dmitry.torokhov@gmail.com>
+        Wed, 2 Nov 2022 19:26:53 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CE8513F0B;
+        Wed,  2 Nov 2022 16:21:07 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6951CB82537;
+        Wed,  2 Nov 2022 23:21:06 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4ECFC433D7;
+        Wed,  2 Nov 2022 23:21:04 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667431265;
+        bh=0K5Lst1NZVSbMpTrV9SZig3D7HzFybj8iwHGE8ITCh4=;
+        h=Date:From:To:Cc:Subject:In-Reply-To:From;
+        b=Yb/0r5FvolMYkO5d15jwm2hwsUmmHLjey8LwpzK3iu/zAar5Y40qzaF20KjIJAvc4
+         M3iqe6wS1FeZX8uuIz1QyPCMEyIZ4gz4AbFqhEV5wMrHR1n9LZlaGDLRGd7MEXvsW1
+         V813CzTOSuY4f5JcXEusuTCGDlP7nNfiOE855+//6eOs2Naa/q41pyIJS5vZH8JLLX
+         gTpQ1+KnAKxVxVMwauccjzB5W3/YqqvIW/6l4dmnVZc7otTDP48kMg2gHh9RX2ohR2
+         e+hG8O2xRMcSo9YGxGybuWIXp8uRvHOz4Cz+HjsVxg9oStE3AlgA+OmFWvi0qWyc2d
+         rzH/z9jWx4vxA==
+Date:   Wed, 2 Nov 2022 18:21:03 -0500
+From:   Bjorn Helgaas <helgaas@kernel.org>
+To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>, oohall@gmail.com,
+        Mahesh J Salgaonkar <mahesh@linux.ibm.com>,
+        Lukas Wunner <lukas@wunner.de>,
+        Kuppuswamy Sathyanarayanan 
+        <sathyanarayanan.kuppuswamy@linux.intel.com>,
+        Yazen Ghannam <yazen.ghannam@amd.com>,
+        Fontenot Nathan <Nathan.Fontenot@amd.com>
+Subject: Re: [PATCH 1/2] PCI: pciehp: Add support for OS-First Hotplug and
+ AER/DPC
+Message-ID: <20221102232103.GA7126@bhelgaas>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221101000719.36828-2-Smita.KoralahalliChannabasappa@amd.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Switch the driver from legacy gpio API that is deprecated to the newer
-gpiod API that respects line polarities described in ACPI/DT.
+On Tue, Nov 01, 2022 at 12:07:18AM +0000, Smita Koralahalli wrote:
+> Current systems support Firmware-First model for hot-plug. In this model,
 
-The driver still tries to support shared reset lines, by first trying to
-allocate the reset GPIO normally, and then non-exclusively, although the
-utility of such support is questionable, toggling reset line from one
-driver/instance will result in all chips being reset, potentially at an
-inopportune moment.
+I'm familiar with "firmware first" in the context of ACPI APEI.
 
-Note that this change depends on commit fbbbcd177a27 ("gpiolib: of: add
-quirk for locating reset lines with legacy bindings") to translate
-request for "reset" GPIO to the legacy name "gpio-reset" in case when
-proper name is not used.
+Is there more "firmware first" language in the spec related to
+hotplug?  Or is this just the ACPI hotplug implemented by acpiphp?  Or
+is there something in the PCIe spec that talks about some firmware
+interfaces needed in pciehp?  If so, please cite the specific
+sections.  I see you cite PCIe r6.0, sec 6.7.6, below, but I don't see
+the firmware mention there.
 
-Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
----
- sound/soc/codecs/tlv320aic3x.c | 108 ++++++++++++---------------------
- 1 file changed, 39 insertions(+), 69 deletions(-)
+> firmware holds the responsibilty for executing the HW sequencing actions on
+> an async or surprise add and removal events. Additionally, according to
+> Section 6.7.6 of PCIe Base Specification [1], firmware must also handle
+> the side-effects (DPC/AER events) reported on an async removal and is
+> abstract to the OS.
+> 
+> This model however, poses issues while rolling out updates or fixing bugs
+> as the servers need to be brought down for firmware updates. Hence,
+> introduce support for OS-First hot-plug and AER/DPC. Here, OS is
+> responsible for handling async add and remove along with handling of
+> AER/DPC events which are generated as a side-effect of async remove.
+> 
+> The implementation is as follows: On an async remove a DPC is triggered as
+> a side-effect along with an MSI to the OS. Determine it's an async remove
+> by checking for DPC Trigger Status in DPC Status Register and Surprise
+> Down Error Status in AER Uncorrected Error Status to be non-zero. If true,
+> treat the DPC event as a side-effect of async remove, clear the error
+> status registers and continue with hot-plug tear down routines. If not,
+> follow the existing routine to handle AER/DPC errors.
+> 
+> Dmesg before:
+> 
+> pcieport 0000:00:01.4: DPC: containment event, status:0x1f01 source:0x0000
+> pcieport 0000:00:01.4: DPC: unmasked uncorrectable error detected
+> pcieport 0000:00:01.4: PCIe Bus Error: severity=Uncorrected (Fatal), type=Transaction Layer, (Receiver ID)
+> pcieport 0000:00:01.4:   device [1022:14ab] error status/mask=00000020/04004000
+> pcieport 0000:00:01.4:    [ 5] SDES (First)
+> nvme nvme2: frozen state error detected, reset controller
+> pcieport 0000:00:01.4: DPC: Data Link Layer Link Active not set in 1000 msec
+> pcieport 0000:00:01.4: AER: subordinate device reset failed
+> pcieport 0000:00:01.4: AER: device recovery failed
+> pcieport 0000:00:01.4: pciehp: Slot(16): Link Down
+> nvme2n1: detected capacity change from 1953525168 to 0
+> pci 0000:04:00.0: Removing from iommu group 49
+> 
+> Dmesg after:
+> 
+> pcieport 0000:00:01.4: pciehp: Slot(16): Link Down
+> nvme1n1: detected capacity change from 1953525168 to 0
+> pci 0000:04:00.0: Removing from iommu group 37
+> pcieport 0000:00:01.4: pciehp: Slot(16): Card present
+> pci 0000:04:00.0: [8086:0a54] type 00 class 0x010802
+> pci 0000:04:00.0: reg 0x10: [mem 0x00000000-0x00003fff 64bit]
+> pci 0000:04:00.0: Max Payload Size set to 512 (was 128, max 512)
+> pci 0000:04:00.0: enabling Extended Tags
+> pci 0000:04:00.0: Adding to iommu group 37
+> pci 0000:04:00.0: BAR 0: assigned [mem 0xf2400000-0xf2403fff 64bit]
+> pcieport 0000:00:01.4: PCI bridge to [bus 04]
+> pcieport 0000:00:01.4:   bridge window [io 0x1000-0x1fff]
+> pcieport 0000:00:01.4:   bridge window [mem 0xf2400000-0xf24fffff]
+> pcieport 0000:00:01.4:   bridge window [mem 0x20080800000-0x200809fffff 64bit pref]
+> nvme nvme1: pci function 0000:04:00.0
+> nvme 0000:04:00.0: enabling device (0000 -> 0002)
+> nvme nvme1: 128/0/0 default/read/poll queues
 
-diff --git a/sound/soc/codecs/tlv320aic3x.c b/sound/soc/codecs/tlv320aic3x.c
-index 9b2bb99cc165..56e795a00e22 100644
---- a/sound/soc/codecs/tlv320aic3x.c
-+++ b/sound/soc/codecs/tlv320aic3x.c
-@@ -32,12 +32,12 @@
- #include <linux/moduleparam.h>
- #include <linux/init.h>
- #include <linux/delay.h>
-+#include <linux/err.h>
- #include <linux/pm.h>
- #include <linux/i2c.h>
--#include <linux/gpio.h>
-+#include <linux/gpio/consumer.h>
- #include <linux/regulator/consumer.h>
- #include <linux/of.h>
--#include <linux/of_gpio.h>
- #include <linux/slab.h>
- #include <sound/core.h>
- #include <sound/pcm.h>
-@@ -56,8 +56,6 @@ static const char *aic3x_supply_names[AIC3X_NUM_SUPPLIES] = {
- 	"DRVDD",	/* ADC Analog and Output Driver Voltage */
- };
- 
--static LIST_HEAD(reset_list);
--
- struct aic3x_priv;
- 
- struct aic3x_disable_nb {
-@@ -80,9 +78,9 @@ struct aic3x_priv {
- 	unsigned int dai_fmt;
- 	unsigned int tdm_delay;
- 	unsigned int slot_width;
--	struct list_head list;
- 	int master;
--	int gpio_reset;
-+	struct gpio_desc *gpio_reset;
-+	bool shared_reset;
- 	int power;
- 	u16 model;
- 
-@@ -1369,8 +1367,8 @@ static int aic3x_regulator_event(struct notifier_block *nb,
- 		 * Put codec to reset and require cache sync as at least one
- 		 * of the supplies was disabled
- 		 */
--		if (gpio_is_valid(aic3x->gpio_reset))
--			gpio_set_value(aic3x->gpio_reset, 0);
-+		if (aic3x->gpio_reset)
-+			gpiod_set_value(aic3x->gpio_reset, 1);
- 		regcache_mark_dirty(aic3x->regmap);
- 	}
- 
-@@ -1390,9 +1388,9 @@ static int aic3x_set_power(struct snd_soc_component *component, int power)
- 			goto out;
- 		aic3x->power = 1;
- 
--		if (gpio_is_valid(aic3x->gpio_reset)) {
-+		if (aic3x->gpio_reset) {
- 			udelay(1);
--			gpio_set_value(aic3x->gpio_reset, 1);
-+			gpiod_set_value(aic3x->gpio_reset, 0);
- 		}
- 
- 		/* Sync reg_cache with the hardware */
-@@ -1598,19 +1596,6 @@ static int aic3x_init(struct snd_soc_component *component)
- 	return 0;
- }
- 
--static bool aic3x_is_shared_reset(struct aic3x_priv *aic3x)
--{
--	struct aic3x_priv *a;
--
--	list_for_each_entry(a, &reset_list, list) {
--		if (gpio_is_valid(aic3x->gpio_reset) &&
--		    aic3x->gpio_reset == a->gpio_reset)
--			return true;
--	}
--
--	return false;
--}
--
- static int aic3x_component_probe(struct snd_soc_component *component)
- {
- 	struct aic3x_priv *aic3x = snd_soc_component_get_drvdata(component);
-@@ -1775,19 +1760,6 @@ int aic3x_probe(struct device *dev, struct regmap *regmap, kernel_ulong_t driver
- 		if (!ai3x_setup)
- 			return -ENOMEM;
- 
--		ret = of_get_named_gpio(np, "reset-gpios", 0);
--		if (ret >= 0) {
--			aic3x->gpio_reset = ret;
--		} else {
--			ret = of_get_named_gpio(np, "gpio-reset", 0);
--			if (ret > 0) {
--				dev_warn(dev, "Using deprecated property \"gpio-reset\", please update your DT");
--				aic3x->gpio_reset = ret;
--			} else {
--				aic3x->gpio_reset = -1;
--			}
--		}
--
- 		if (of_property_read_u32_array(np, "ai3x-gpio-func",
- 					ai3x_setup->gpio_func, 2) >= 0) {
- 			aic3x->setup = ai3x_setup;
-@@ -1812,29 +1784,43 @@ int aic3x_probe(struct device *dev, struct regmap *regmap, kernel_ulong_t driver
- 		} else {
- 			aic3x->micbias_vg = AIC3X_MICBIAS_OFF;
- 		}
--
--	} else {
--		aic3x->gpio_reset = -1;
- 	}
- 
- 	aic3x->model = driver_data;
- 
--	if (gpio_is_valid(aic3x->gpio_reset) &&
--	    !aic3x_is_shared_reset(aic3x)) {
--		ret = gpio_request(aic3x->gpio_reset, "tlv320aic3x reset");
--		if (ret != 0)
--			goto err;
--		gpio_direction_output(aic3x->gpio_reset, 0);
-+	aic3x->gpio_reset = devm_gpiod_get_optional(dev, "reset",
-+						    GPIOD_OUT_HIGH);
-+	ret = PTR_ERR_OR_ZERO(aic3x->gpio_reset);
-+	if (ret) {
-+		if (ret != -EBUSY)
-+			return ret;
-+
-+		/*
-+		 * Apparently there are setups where the codec is sharing
-+		 * its reset line. Try to get it non-exclusively, although
-+		 * the utility of this is unclear: how do we make sure that
-+		 * resetting one chip will not disturb the others that share
-+		 * the same line?
-+		 */
-+		aic3x->gpio_reset = devm_gpiod_get(dev, "reset",
-+				GPIOD_ASIS | GPIOD_FLAGS_BIT_NONEXCLUSIVE);
-+		ret = PTR_ERR_OR_ZERO(aic3x->gpio_reset);
-+		if (ret)
-+			return ret;
-+
-+		aic3x->shared_reset = true;
- 	}
- 
-+	gpiod_set_consumer_name(aic3x->gpio_reset, "tlv320aic3x reset");
-+
- 	for (i = 0; i < ARRAY_SIZE(aic3x->supplies); i++)
- 		aic3x->supplies[i].supply = aic3x_supply_names[i];
- 
- 	ret = devm_regulator_bulk_get(dev, ARRAY_SIZE(aic3x->supplies),
- 				      aic3x->supplies);
--	if (ret != 0) {
-+	if (ret) {
- 		dev_err(dev, "Failed to request supplies: %d\n", ret);
--		goto err_gpio;
-+		return ret;
- 	}
- 
- 	aic3x_configure_ocmv(dev, aic3x);
-@@ -1843,26 +1829,14 @@ int aic3x_probe(struct device *dev, struct regmap *regmap, kernel_ulong_t driver
- 		ret = regmap_register_patch(aic3x->regmap, aic3007_class_d,
- 					    ARRAY_SIZE(aic3007_class_d));
- 		if (ret != 0)
--			dev_err(dev, "Failed to init class D: %d\n",
--				ret);
-+			dev_err(dev, "Failed to init class D: %d\n", ret);
- 	}
- 
- 	ret = devm_snd_soc_register_component(dev, &soc_component_dev_aic3x, &aic3x_dai, 1);
--
--	if (ret != 0)
--		goto err_gpio;
--
--	INIT_LIST_HEAD(&aic3x->list);
--	list_add(&aic3x->list, &reset_list);
-+	if (ret)
-+		return ret;
- 
- 	return 0;
--
--err_gpio:
--	if (gpio_is_valid(aic3x->gpio_reset) &&
--	    !aic3x_is_shared_reset(aic3x))
--		gpio_free(aic3x->gpio_reset);
--err:
--	return ret;
- }
- EXPORT_SYMBOL(aic3x_probe);
- 
-@@ -1870,13 +1844,9 @@ void aic3x_remove(struct device *dev)
- {
- 	struct aic3x_priv *aic3x = dev_get_drvdata(dev);
- 
--	list_del(&aic3x->list);
--
--	if (gpio_is_valid(aic3x->gpio_reset) &&
--	    !aic3x_is_shared_reset(aic3x)) {
--		gpio_set_value(aic3x->gpio_reset, 0);
--		gpio_free(aic3x->gpio_reset);
--	}
-+	/* Leave the codec in reset state */
-+	if (aic3x->gpio_reset && !aic3x->shared_reset)
-+		gpiod_set_value(aic3x->gpio_reset, 1);
- }
- EXPORT_SYMBOL(aic3x_remove);
- 
--- 
-2.38.1.273.g43a17bfeac-goog
+Remove any lines that are not specifically relevant, e.g., I'm not
+sure whether the BARs, iommu, MPS, extended tags info is essential.
 
+Please indent the quoted material two spaces so it doesn't look like
+the narrative text.
+
+Thanks for working on this!
+
+Bjorn
