@@ -2,75 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 954E3616E73
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 21:19:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 10067616E76
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 21:20:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230526AbiKBUTW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 16:19:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49572 "EHLO
+        id S230365AbiKBUUO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 16:20:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230423AbiKBUTQ (ORCPT
+        with ESMTP id S229485AbiKBUUM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 16:19:16 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08738261A;
-        Wed,  2 Nov 2022 13:19:15 -0700 (PDT)
-Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 4828E66028C5;
-        Wed,  2 Nov 2022 20:19:12 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667420353;
-        bh=IxBxYLkllFHY1VeHaU1jFaJjbbRQUrXzekE6Kx8p+Ek=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=J++q28SWLyuojaBLnULuhR4mDTRp7d8R7KUH94ZcE7ItBoEhHaBYvA6DnCL5kGQuB
-         23fdoZhYd6T+aqI0YqxJunwV8/I/hwIDQ/tqafdeUy/uwS2m+73y+iollBOTaZdeZp
-         tY6dzEx8XAB+xOe40N+FTjgoYvTK75nupKPRlIStnWf6wRn+nFhN3U102hBzkIP8O6
-         rBocZo+F1wVRvEqXl9bx85D5oNMR0blt9nLtRWSA4qGb/geCPYR+/rmntBtyKKbfrZ
-         u7S2yyFORUH19nbRkPIg8RASjT8m6/TFh9uxZ+aKmI2yvVTtzpD9XIYeP6mwL7rIjW
-         GuCRBu9mHKZiQ==
-Date:   Wed, 2 Nov 2022 16:19:09 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     Allen-KH Cheng <allen-kh.cheng@mediatek.com>
-Cc:     Wim Van Sebroeck <wim@linux-watchdog.org>,
-        Guenter Roeck <linux@roeck-us.net>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        angelogioacchino.delregno@collabora.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com,
-        devicetree@vger.kernel.org, linux-watchdog@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH v3 3/7] arm64: dts: mediatek: mt7986: Fix watchdog
- compatible
-Message-ID: <20221102201909.zs66mpoyjjbsp63j@notapiano>
-References: <20221101090116.27130-1-allen-kh.cheng@mediatek.com>
- <20221101090116.27130-4-allen-kh.cheng@mediatek.com>
+        Wed, 2 Nov 2022 16:20:12 -0400
+Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A711FE07
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 13:20:11 -0700 (PDT)
+Received: by mail-pf1-x42f.google.com with SMTP id m6so17453275pfb.0
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 13:20:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9DjpWuBA9exOzLUYvqxZg1Cix0esC/PPOjwfygnWeME=;
+        b=LiDV59gEZWcERwqLtJpyFpunwq9VioEGhoQlabJ+/2PMgE8V2BXCgxJJ6uBk4XqOZP
+         LtquxJ6s33xnCmo2YekpzjPq1CnFqGcpD7lgm/WjNMel8i7oMl67r3OPcyw2znULQimS
+         KXQOqJsBOEUnGSmkIf1Di2D98TS2zraNPMdwpsjucWL11fZ14NTh/BE3HPitMuFBE6iC
+         IqHQHJXmK/l2UwxWZR3hu5K1IIG1QW5cb8aS8F8F9HAgA90VtHwkNvTIsVVYkioBBAAn
+         6ARurfgrRPezG81fwKEizuk2facw9IBsvzcn7c0It8jy3yz1g8dIhf3gY2Ws0U7lcX7H
+         7fJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9DjpWuBA9exOzLUYvqxZg1Cix0esC/PPOjwfygnWeME=;
+        b=LQok1zduBevl7bam5bancTAiBRS863fI9oENBR0VQwYk2S30KLT/Z+6SUJ3EF9cjCN
+         CdN2ByQbWzL5vJlXuFlA/kBk4TquSFRo8aDwO/rXVpOzH0eqAjhrm9Y0nmLFQTD4nLp3
+         jyfyJ+h8uxDHWZqGmN55WAfrCF/xnKpkeqwVqDms08xj8C+NYZTTVT/fD3DizL4ySKwW
+         hRKkq3jkgooJpDIv3DUASDWbEYz9BZhAE1IOZS20UvkuefJyOv2uH+avimH7/sIAsJGq
+         sqijg/z27ePpoFVPijcYz36GJnaYMPs7k5ACvTh9UuBgp0oVGOPuXDnRPkEc0flLhz8I
+         J9Jw==
+X-Gm-Message-State: ACrzQf0jP725dc5zoOpOs5O2qGtgZIJWJRqh1GrsYaDSuigOHw26BJGM
+        gZELs6r1fQ8Gbi5Q5X7d228=
+X-Google-Smtp-Source: AMsMyM4Hvi439RG9EixT+nWpTjrrJxbl8sgAOJl1+3mSajMFITJwd6AL7yU/bh3NnD3bo9yU7OqYog==
+X-Received: by 2002:a05:6a00:1da6:b0:56c:318a:f8ab with SMTP id z38-20020a056a001da600b0056c318af8abmr26972646pfw.82.1667420411185;
+        Wed, 02 Nov 2022 13:20:11 -0700 (PDT)
+Received: from google.com ([2620:15c:211:201:3fd5:8614:6eb0:846b])
+        by smtp.gmail.com with ESMTPSA id q5-20020a17090311c500b0017f49b41c12sm8782387plh.173.2022.11.02.13.20.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 13:20:10 -0700 (PDT)
+Sender: Minchan Kim <minchan.kim@gmail.com>
+Date:   Wed, 2 Nov 2022 13:20:09 -0700
+From:   Minchan Kim <minchan@kernel.org>
+To:     Sergey Senozhatsky <senozhatsky@chromium.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCHv4 3/9] zram: Factor out WB and non-WB zram read functions
+Message-ID: <Y2LQ+Wv/3xQmrfmL@google.com>
+References: <20221018045533.2396670-1-senozhatsky@chromium.org>
+ <20221018045533.2396670-4-senozhatsky@chromium.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221101090116.27130-4-allen-kh.cheng@mediatek.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221018045533.2396670-4-senozhatsky@chromium.org>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 05:01:12PM +0800, Allen-KH Cheng wrote:
-> MT7986's watchdog embeds a reset controller and needs only the
-> mediatek,mt7986-wdt compatible string as the MT6589 one is there
-> for watchdogs that don't have any reset controller capability.
+On Tue, Oct 18, 2022 at 01:55:27PM +0900, Sergey Senozhatsky wrote:
+> We will use non-WB variant in ZRAM page recompression path.
 > 
-> Fixes: 50137c150f5f ("arm64: dts: mediatek: add basic mt7986 support")
-> Signed-off-by: Allen-KH Cheng <allen-kh.cheng@mediatek.com>
+> Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+> ---
+>  drivers/block/zram/zram_drv.c | 73 ++++++++++++++++++++++++-----------
+>  1 file changed, 50 insertions(+), 23 deletions(-)
+> 
+> diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+> index a8ef3c0c3dae..94c62d7ea818 100644
+> --- a/drivers/block/zram/zram_drv.c
+> +++ b/drivers/block/zram/zram_drv.c
+> @@ -1314,8 +1314,30 @@ static void zram_free_page(struct zram *zram, size_t index)
+>  		~(1UL << ZRAM_LOCK | 1UL << ZRAM_UNDER_WB));
+>  }
+>  
+> -static int __zram_bvec_read(struct zram *zram, struct page *page, u32 index,
+> -				struct bio *bio, bool partial_io)
+> +/*
+> + * Reads a page from the writeback devices. Corresponding ZRAM slot
+> + * should be unlocked.
+> + */
+> +static int zram_read_from_writeback(struct zram *zram, struct page *page,
 
-Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+How about zram_read_from_bdev?
