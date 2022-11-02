@@ -2,165 +2,236 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2802616552
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:47:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 33CA161656D
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:58:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229912AbiKBOrP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 10:47:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40556 "EHLO
+        id S230123AbiKBO6Y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 10:58:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42596 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229770AbiKBOrJ (ORCPT
+        with ESMTP id S230115AbiKBO6F (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 10:47:09 -0400
-Received: from mail-oa1-x2d.google.com (mail-oa1-x2d.google.com [IPv6:2001:4860:4864:20::2d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 41EB12A71C
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 07:47:04 -0700 (PDT)
-Received: by mail-oa1-x2d.google.com with SMTP id 586e51a60fabf-13b103a3e5dso20557984fac.2
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 07:47:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VshapdH3qET+2A6w1tOn4K606r3mUYcBf7u3/yyiKmk=;
-        b=X1ZE7dBE8BaXuX49QNjyAiYn/xRrnl37HJQP+g4AAanP5xN2owJH/6UXFJIyxXomaA
-         U9vHvAqFOSeZxeXKizH32CmTQKnDecpwP6keQSD2cVWUa2xRtOsTEiPjpg/fr+5CQ4dH
-         8UvcafbvgUU7l7nJ+ihSc8hKhRMs38ogZaoM+eLCcBPdjYeOxo9qCFQrOPs5YBzRhiEZ
-         T7nUuIFGkBCxWDcdSxNH7XyE68DAiVl5s7SRysSDGVuoVokC0j0SoxQtuU547mDFFO5H
-         DXW4P4QEehA03BUO/uJpRdW8e2g7Vai6zERny4iD35McHq63cSQVclhMwd7QX4repfk3
-         PvVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VshapdH3qET+2A6w1tOn4K606r3mUYcBf7u3/yyiKmk=;
-        b=5utaOGA9fnNxll3t0Aa/0w51CR9NwP2WDcmnnAp3BzWkeZ7YElGPJYOgN1XLKhec6t
-         KkrWpCIrJspY3ZxC3ETePHqr0CqdtWTblEZKgCu85uCc/WnVsSQOlk70V1h5q6gvcOCG
-         0WGF5+b0urmNj3R1vA7gYFoJcAzvxgMqFJiwP43LFys+qqAADp71yzP7Ek7hjQxWZOfo
-         7DkwZK5rbM4W6EPDifCYdbnjHMJ9BdqlRuO7JpW9bth7wSavqwN8E5paX46w/5m7yg0Z
-         GCvsTFTwipp0wUTDJWRYPZyjD9zzjsGN6HpLt7Zf3xlLlRpAUSDei3T2eWwxOhaH0+ja
-         RMTQ==
-X-Gm-Message-State: ACrzQf3y6lDwJ6uT01BqewXgs6GQ0hJ1lNfk4Cp3vQwpI72QmXJ1F49s
-        VjlhEw2ojxjJQXgsl4B2yGfFxVKHC329+rNfybxJHw==
-X-Google-Smtp-Source: AMsMyM6QxPwtfVBskW0LjxpxIYQ2c4UogHIRy9qjgf9g6nZKZhC3zZ4Y6yQoBx5UEqAXzC3o99IvOnndpchatQK0HJY=
-X-Received: by 2002:a05:6870:9a05:b0:132:ebf:dc61 with SMTP id
- fo5-20020a0568709a0500b001320ebfdc61mr14579207oab.76.1667400423352; Wed, 02
- Nov 2022 07:47:03 -0700 (PDT)
+        Wed, 2 Nov 2022 10:58:05 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A8FA2A700;
+        Wed,  2 Nov 2022 07:58:03 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667401083; x=1698937083;
+  h=date:from:to:cc:subject:message-id:reply-to:references:
+   mime-version:in-reply-to;
+  bh=uie0uv8Iy7FMg7x2ZTUU5aJpcMzyu1e6Q6enp9LSoyY=;
+  b=ZiV4Qqs0Tt+CbXwtP/lHN/yu9lfS50Vv2S0cQq5gcuYJF66onjt18zGP
+   GfvBclorFR939PfYtZw8lA+rW3DwdpAW6BkiGfX+2eHLq1+O/oDxmyDWT
+   XfbTRvWSAl6O/CZu7F9zPxpYY9zlIXawPWpT1QU0/f6PbNzpptLfqtOsr
+   vPD58yWdqmGUGJ5aTXamr3u0t0Ii5h3crkal5pCJn9zveoFVW/kKKb2Fb
+   b3nu/QzL83xh8AbHlX/jn5Hf1AJ82pr5+DwpNHD9njXFwsovA5hrk2zx7
+   wOE9a1Jjs8Rxk8Hto0ovK14RHR9xSP0TJGNVGOwjgEXp2G5O3sm5wfna2
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="296875186"
+X-IronPort-AV: E=Sophos;i="5.95,234,1661842800"; 
+   d="scan'208";a="296875186"
+Received: from orsmga008.jf.intel.com ([10.7.209.65])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 07:58:03 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="665588091"
+X-IronPort-AV: E=Sophos;i="5.95,234,1661842800"; 
+   d="scan'208";a="665588091"
+Received: from chaop.bj.intel.com (HELO localhost) ([10.240.193.75])
+  by orsmga008.jf.intel.com with ESMTP; 02 Nov 2022 07:57:52 -0700
+Date:   Wed, 2 Nov 2022 22:53:25 +0800
+From:   Chao Peng <chao.p.peng@linux.intel.com>
+To:     Michael Roth <michael.roth@amd.com>
+Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
+        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
+        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        Wanpeng Li <wanpengli@tencent.com>,
+        Jim Mattson <jmattson@google.com>,
+        Joerg Roedel <joro@8bytes.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
+        Hugh Dickins <hughd@google.com>,
+        Jeff Layton <jlayton@kernel.org>,
+        "J . Bruce Fields" <bfields@fieldses.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
+        Steven Price <steven.price@arm.com>,
+        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
+        Vlastimil Babka <vbabka@suse.cz>,
+        Vishal Annapurve <vannapurve@google.com>,
+        Yu Zhang <yu.c.zhang@linux.intel.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
+        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
+        ddutile@redhat.com, dhildenb@redhat.com,
+        Quentin Perret <qperret@google.com>, tabba@google.com,
+        mhocko@suse.com, Muchun Song <songmuchun@bytedance.com>,
+        wei.w.wang@intel.com
+Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
+ create restricted user memory
+Message-ID: <20221102145325.GA4068513@chaop.bj.intel.com>
+Reply-To: Chao Peng <chao.p.peng@linux.intel.com>
+References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
+ <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
+ <20221031174738.fklhlia5fmaiinpe@amd.com>
+ <20221101113729.GA4015495@chaop.bj.intel.com>
+ <20221101151944.rhpav47pdulsew7l@amd.com>
+ <20221101193058.tpzkap3kbrbgasqi@amd.com>
 MIME-Version: 1.0
-References: <20221102132811.70858-1-luwei32@huawei.com>
-In-Reply-To: <20221102132811.70858-1-luwei32@huawei.com>
-From:   Neal Cardwell <ncardwell@google.com>
-Date:   Wed, 2 Nov 2022 10:46:36 -0400
-Message-ID: <CADVnQy=uE68AWKuSddKEt3T2X=HUYzs0SQPX31+HgafuysJzkA@mail.gmail.com>
-Subject: Re: [patch net v3] tcp: prohibit TCP_REPAIR_OPTIONS if data was
- already sent
-To:     Lu Wei <luwei32@huawei.com>
-Cc:     edumazet@google.com, davem@davemloft.net, yoshfuji@linux-ipv6.org,
-        dsahern@kernel.org, kuba@kernel.org, pabeni@redhat.com,
-        xemul@parallels.com, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221101193058.tpzkap3kbrbgasqi@amd.com>
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 2, 2022 at 8:23 AM Lu Wei <luwei32@huawei.com> wrote:
->
-> If setsockopt with option name of TCP_REPAIR_OPTIONS and opt_code
-> of TCPOPT_SACK_PERM is called to enable sack after data is sent
-> and before data is acked, ...
+On Tue, Nov 01, 2022 at 02:30:58PM -0500, Michael Roth wrote:
+> On Tue, Nov 01, 2022 at 10:19:44AM -0500, Michael Roth wrote:
+> > On Tue, Nov 01, 2022 at 07:37:29PM +0800, Chao Peng wrote:
+> > > On Mon, Oct 31, 2022 at 12:47:38PM -0500, Michael Roth wrote:
+> > > > On Tue, Oct 25, 2022 at 11:13:37PM +0800, Chao Peng wrote:
+> > > 
+> > > > 
+> > > >   3) Potentially useful for hugetlbfs support:
+> > > > 
+> > > >      One issue with hugetlbfs is that we don't support splitting the
+> > > >      hugepage in such cases, which was a big obstacle prior to UPM. Now
+> > > >      however, we may have the option of doing "lazy" invalidations where
+> > > >      fallocate(PUNCH_HOLE, ...) won't free a shmem-allocate page unless
+> > > >      all the subpages within the 2M range are either hole-punched, or the
+> > > >      guest is shut down, so in that way we never have to split it. Sean
+> > > >      was pondering something similar in another thread:
+> > > > 
+> > > >        https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Flore.kernel.org%2Flinux-mm%2FYyGLXXkFCmxBfu5U%40google.com%2F&amp;data=05%7C01%7CMichael.Roth%40amd.com%7C28ba5dbb51844f910dec08dabc1c99e6%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638029128345507924%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=bxcRfuJIgo1Z1G8HQ800HscE6y7RXRQwvWSkfc5M8Bs%3D&amp;reserved=0
+> > > > 
+> > > >      Issuing invalidations with folio-granularity ties in fairly well
+> > > >      with this sort of approach if we end up going that route.
+> > > 
+> > > There is semantics difference between the current one and the proposed
+> > > one: The invalidation range is exactly what userspace passed down to the
+> > > kernel (being fallocated) while the proposed one will be subset of that
+> > > (if userspace-provided addr/size is not aligned to power of two), I'm
+> > > not quite confident this difference has no side effect.
+> > 
+> > In theory userspace should not be allocating/hole-punching restricted
+> > pages for GPA ranges that are already mapped as private in the xarray,
+> > and KVM could potentially fail such requests (though it does currently).
+> > 
+> > But if we somehow enforced that, then we could rely on
+> > KVM_MEMORY_ENCRYPT_REG_REGION to handle all the MMU invalidation stuff,
+> > which would free up the restricted fd invalidation callbacks to be used
+> > purely to handle doing things like RMP/directmap fixups prior to returning
+> > restricted pages back to the host. So that was sort of my thinking why the
+> > new semantics would still cover all the necessary cases.
+> 
+> Sorry, this explanation is if we rely on userspace to fallocate() on 2MB
+> boundaries, and ignore any non-aligned requests in the kernel. But
+> that's not how I actually ended up implementing things, so I'm not sure
+> why answered that way...
+> 
+> In my implementation we actually do issue invalidations for fallocate()
+> even for non-2M-aligned GPA/offset ranges. For instance (assuming
+> restricted FD offset 0 corresponds to GPA 0), an fallocate() on GPA
+> range 0x1000-0x402000 would result in the following invalidations being
+> issued if everything was backed by a 2MB page:
+> 
+>   invalidate GPA: 0x001000-0x200000, Page: pfn_to_page(I), order:9
+>   invalidate GPA: 0x200000-0x400000, Page: pfn_to_page(J), order:9
+>   invalidate GPA: 0x400000-0x402000, Page: pfn_to_page(K), order:9
 
-This "before data is acked" phrase does not quite seem to match the
-sequence below, AFAICT?
+Only see this I understand what you are actually going to propose;)
 
-How about something like:
+So the memory range(start/end) will be still there and covers exactly
+what it should be from usrspace point of view, the page+order(or just
+folio) is really just a _hint_ for the invalidation callbacks. Looks
+ugly though.
 
- If setsockopt TCP_REPAIR_OPTIONS with opt_code TCPOPT_SACK_PERM
- is called to enable SACK after data is sent and the data sender receives a
- dupack, ...
+In v9 we use a invalidate_start/ invalidate_end pair to solve a race
+contention issue(https://lore.kernel.org/kvm/Y1LOe4JvnTbFNs4u@google.com/).
+To work with this, I believe we only need pass this hint info for
+invalidate_start() since at the invalidate_end() time, the page has
+already been discarded.
 
+Another worth-mentioning-thing is invalidate_start/end is not just
+invoked for hole punching, but also for allocation(e.g. default
+fallocate). While for allocation we can get the page only at the
+invalidate_end() time. But AFAICS, the invalidate() is called for
+fallocate(allocation) is because previously we rely on the existence in
+memory backing store to tell a page is private and we need notify KVM
+that the page is being converted from shared to private, but that is not
+true for current code and fallocate() is also not mandatory since KVM
+can call restrictedmem_get_page() to allocate dynamically, so I think we
+can remove the invalidation path for fallocate(allocation).
 
-> ... it will trigger a warning in function
-> tcp_verify_left_out() as follows:
->
-> ============================================
-> WARNING: CPU: 8 PID: 0 at net/ipv4/tcp_input.c:2132
-> tcp_timeout_mark_lost+0x154/0x160
-> tcp_enter_loss+0x2b/0x290
-> tcp_retransmit_timer+0x50b/0x640
-> tcp_write_timer_handler+0x1c8/0x340
-> tcp_write_timer+0xe5/0x140
-> call_timer_fn+0x3a/0x1b0
-> __run_timers.part.0+0x1bf/0x2d0
-> run_timer_softirq+0x43/0xb0
-> __do_softirq+0xfd/0x373
-> __irq_exit_rcu+0xf6/0x140
->
-> The warning is caused in the following steps:
-> 1. a socket named socketA is created
-> 2. socketA enters repair mode without build a connection
-> 3. socketA calls connect() and its state is changed to TCP_ESTABLISHED
->    directly
-> 4. socketA leaves repair mode
-> 5. socketA calls sendmsg() to send data, packets_out and sack_outs(dup
->    ack receives) increase
-> 6. socketA enters repair mode again
-> 7. socketA calls setsockopt with TCPOPT_SACK_PERM to enable sack
-> 8. retransmit timer expires, it calls tcp_timeout_mark_lost(), lost_out
->    increases
-> 9. sack_outs + lost_out > packets_out triggers since lost_out and
->    sack_outs increase repeatly
->
-> In function tcp_timeout_mark_lost(), tp->sacked_out will be cleared if
-> Step7 not happen and the warning will not be triggered. As suggested by
-> Denis and Eric, TCP_REPAIR_OPTIONS should be prohibited if data was
-> already sent. So this patch checks tp->segs_out, only TCP_REPAIR_OPTIONS
-> can be set only if tp->segs_out is 0.
->
-> socket-tcp tests in CRIU has been tested as follows:
-> $ sudo ./test/zdtm.py run -t zdtm/static/socket-tcp*  --keep-going \
->        --ignore-taint
->
-> socket-tcp* represent all socket-tcp tests in test/zdtm/static/.
->
-> Fixes: b139ba4e90dc ("tcp: Repair connection-time negotiated parameters")
-> Signed-off-by: Lu Wei <luwei32@huawei.com>
-> ---
->  net/ipv4/tcp.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/net/ipv4/tcp.c b/net/ipv4/tcp.c
-> index ef14efa1fb70..1f5cc32cf0cc 100644
-> --- a/net/ipv4/tcp.c
-> +++ b/net/ipv4/tcp.c
-> @@ -3647,7 +3647,7 @@ int do_tcp_setsockopt(struct sock *sk, int level, int optname,
->         case TCP_REPAIR_OPTIONS:
->                 if (!tp->repair)
->                         err = -EINVAL;
-> -               else if (sk->sk_state == TCP_ESTABLISHED)
-> +               else if (sk->sk_state == TCP_ESTABLISHED && !tp->segs_out)
+> 
+> So you still cover the same range, but the arch/platform callbacks can
+> then, as a best effort, do things like restore 2M directmap if they see
+> that the backing page is 2MB+ and the GPA range covers the entire range.
+> If the GPA doesn't covers the whole range, or the backing page is
+> order:0, then in that case we are still forced to leave the directmap
+> split.
+> 
+> But with that in place we can then improve on that by allowing for the
+> use of hugetlbfs.
+> 
+> We'd still be somewhat reliant on userspace to issue fallocate()'s on
+> 2M-aligned boundaries to some degree (guest teardown invalidations
+> could be issued as 2M-aligned, which would be the bulk of the pages
+> in most cases, but for discarding pages after private->shared
+> conversion we could still get fragmentation). This could maybe be
+> addressed by keeping track of those partial/non-2M-aligned fallocate()
+> requests and then issuing them as a batched 2M invalidation once all
+> the subpages have been fallocate(HOLE_PUNCH)'d. We'd need to enforce
+> that fallocate(PUNCH_HOLE) is preceeded by
+> KVM_MEMORY_ENCRYPT_UNREG_REGION to make sure MMU invalidations happen
+> though.
 
-The tp->segs_out field is only 32 bits wide. By my math, at 200
-Gbit/sec with 1500 byte MTU it can wrap roughly every 260 secs. So a
-caller could get unlucky or carefully sequence its call to
-TCP_REPAIR_OPTIONS (based on packets sent so far) to mess up the
-accounting and trigger the kernel warning.
+Don't understand why the sequence matters here, we should do MMU
+invalidation for both fallocate(PUNCH_HOLE) and
+KVM_MEMORY_ENCRYPT_UNREG_REGION, right?
 
-How about using some other method to determine if this is safe?
-Perhaps using tp->bytes_sent, which is a 64-bit field, which by my
-math would take 23 years to wrap at 200 Gbit/sec?
-
-If we're more paranoid about wrapping we could also check
-tp->packets_out, and refuse to allow TCP_REPAIR_OPTIONS if either
-tp->bytes_sent or tp->packets_out are non-zero. (Or if we're even more
-paranoid I suppose we could have a special new bit to track whether
-we've ever sent something, but that probably seems like overkill?)
-
-neal
+Thanks,
+Chao
+> 
+> Not sure on these potential follow-ups, but they all at least seem
+> compatible with the proposed invalidation scheme.
+> 
+> -Mike
+> 
+> > 
+> > -Mike
+> > 
+> > > 
+> > > > 
+> > > > I need to rework things for v9, and we'll probably want to use struct
+> > > > folio instead of struct page now, but as a proof-of-concept of sorts this
+> > > > is what I'd added on top of v8 of your patchset to implement 1) and 2):
+> > > > 
+> > > >   https://nam11.safelinks.protection.outlook.com/?url=https%3A%2F%2Fgithub.com%2Fmdroth%2Flinux%2Fcommit%2F127e5ea477c7bd5e4107fd44a04b9dc9e9b1af8b&amp;data=05%7C01%7CMichael.Roth%40amd.com%7C28ba5dbb51844f910dec08dabc1c99e6%7C3dd8961fe4884e608e11a82d994e183d%7C0%7C0%7C638029128345507924%7CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJBTiI6Ik1haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=iv%2BOMPe5AZuUtIW6bCH%2BRhJPljS14JrTXbQXptLG9fM%3D&amp;reserved=0
+> > > > 
+> > > > Does an approach like this seem reasonable? Should be work this into the
+> > > > base restricted memslot support?
+> > > 
+> > > If the above mentioned semantics difference is not a problem, I don't
+> > > have strong objection on this.
+> > > 
+> > > Sean, since you have much better understanding on this, what is your
+> > > take on this?
+> > > 
+> > > Chao
+> > > > 
+> > > > Thanks,
+> > > > 
+> > > > Mike
