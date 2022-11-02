@@ -2,130 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 082E06170A7
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 23:27:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADDB36170B0
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 23:30:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231429AbiKBW1e (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 18:27:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39660 "EHLO
+        id S231485AbiKBWam (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 18:30:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229971AbiKBW1b (ORCPT
+        with ESMTP id S230175AbiKBWak (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 18:27:31 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A139D46
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 15:27:30 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id i3so17655235pfc.11
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 15:27:30 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=IkisCoYjfZaTobaBNzuvGkutbPUag6VJeOaYOz4JBAQ=;
-        b=AQER4z7tFb0LF1x7APVk/7A/ow3nhFpQBzb68WILdjmb9/J8BP/+FmiJvfG/QJG3QM
-         myCt6XknexcTh1afQOzkYqHg8wCsST+fj2NblSGEUsBMiki0qmOGhddpgZ6GGy4/MH65
-         TgAD3S4a/p9hO82cEg+68U4CrTdIdUHPAG/zEQ+irNvDFzKG+S5L83bK/J9tQjyCijSB
-         wyevGfiFC/AjWJ9WZH7/tPskPrghURJoVM2YFY9q8vaPQ+v+sGxEzEIIAaOHljoGoKmj
-         kT7iBrNzbRSBPZzFt2HT7rQfrfvnND9m1HiZvcKPlDOG1KSCpvgtWYY/ywOe1umw03s0
-         qr3A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IkisCoYjfZaTobaBNzuvGkutbPUag6VJeOaYOz4JBAQ=;
-        b=Hb+VwR0mtJL+EaR025SdVE9FKJUXJDbM/Kp1RI1T49Yi7miOJXkbouC5cZaW47wyjB
-         gdtAIhxA3POcp2m96ImLQtbl1zAVDCedVfLVt87qSDLUoZDOrcq2nS7pKDY4SnTJ7/13
-         SAtkaZgbjap+e/vYzWgQQaj5Q8f28sGv++GMtz/p9u9eXec9aoB/IYQCTF096QMMnvs8
-         2DtVFZeNPW8QyzjME700sKAwEEGiqJyOTupmyKYST84rp4wbq6QmHZX8CXJpjWkM4F4A
-         jB8CoFtcbR4221VYIuG7IC6bEPfj1k02GGJEFf1ITWcjBIB7/V9pqLX+eXM+w0K21zmR
-         S/IA==
-X-Gm-Message-State: ACrzQf0WNaxkbBlWPh57qa8E3PMGvR2i1nvUZGJT7jmKztXhWuyxuITI
-        XQfY4f/hGNugShyqc5KyMEfF6Q==
-X-Google-Smtp-Source: AMsMyM63tr6xPjeShe/zYBHapBuuod3N0OMncBiNhz5WYrNqwP+Xm85PGNLPsqIvQnFwbXrjZ5rQeA==
-X-Received: by 2002:a05:6a02:10a:b0:461:26b8:1c95 with SMTP id bg10-20020a056a02010a00b0046126b81c95mr22449088pgb.503.1667428049896;
-        Wed, 02 Nov 2022 15:27:29 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id t29-20020aa7947d000000b005625d6d2999sm8945409pfq.187.2022.11.02.15.27.29
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 15:27:29 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 22:27:26 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Ben Gardon <bgardon@google.com>
-Cc:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        David Matlack <dmatlack@google.com>,
-        Anish Ghulati <aghulati@google.com>,
-        Greg Thelen <gthelen@google.com>
-Subject: Re: [PATCH v2] KVM: x86: Use SRCU to protect zap in
- __kvm_set_or_clear_apicv_inhibit()
-Message-ID: <Y2Luzh+6aErzgeU4@google.com>
-References: <20221102205359.1260980-1-bgardon@google.com>
+        Wed, 2 Nov 2022 18:30:40 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B1AA95A6;
+        Wed,  2 Nov 2022 15:30:39 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A2MMjMm026692;
+        Wed, 2 Nov 2022 22:30:09 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=9bcvBNVAtfWLhzk+C7N9ZU35vBoa+nKNpCdOWBorsPQ=;
+ b=F6JepXmZF6InnQfiXLpRCD45SFK0dRMYASUNqr3WS0Ls4Uojbm+kk2tuAYhpJGdsN3sk
+ oPVaAW9mltuK3t6QE8B1VDnnNJQiiaxsc6q8NI5vpBrgRU9n389BsvADlT5AyPwojGIT
+ s+lHXIHlLOeZrBn6a/qDDYLszKYJDvI4sE0E3m9XUc6S2G1euhrCfcaWTrz/+ZPTSslA
+ tskqzYPOg9iIgbEJk1TWNwAbrmRjTXuYulwDoRChJLzt9qlyoCHIwifLguYEIEK08JUt
+ DH9wVYdkr2nA7uFhYWpVaW6gTXZ3uS2iShFjtc9vJDwxBM8u7+r/IJJagZQp/gGTZmqs 3Q== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3km19v04av-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 22:30:08 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A2MMnqq027183;
+        Wed, 2 Nov 2022 22:30:08 GMT
+Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3km19v048j-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 22:30:08 +0000
+Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
+        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A2MKcvw018509;
+        Wed, 2 Nov 2022 22:30:05 GMT
+Received: from b06cxnps4075.portsmouth.uk.ibm.com (d06relay12.portsmouth.uk.ibm.com [9.149.109.197])
+        by ppma04ams.nl.ibm.com with ESMTP id 3kgut97mx2-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Wed, 02 Nov 2022 22:30:05 +0000
+Received: from d06av23.portsmouth.uk.ibm.com (d06av23.portsmouth.uk.ibm.com [9.149.105.59])
+        by b06cxnps4075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A2MU1RZ16319110
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Wed, 2 Nov 2022 22:30:01 GMT
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 7415FA404D;
+        Wed,  2 Nov 2022 22:30:01 +0000 (GMT)
+Received: from d06av23.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 6489DA4040;
+        Wed,  2 Nov 2022 22:30:00 +0000 (GMT)
+Received: from thinkpad (unknown [9.171.6.109])
+        by d06av23.portsmouth.uk.ibm.com (Postfix) with SMTP;
+        Wed,  2 Nov 2022 22:30:00 +0000 (GMT)
+Date:   Wed, 2 Nov 2022 23:29:58 +0100
+From:   Gerald Schaefer <gerald.schaefer@linux.ibm.com>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Jann Horn <jannh@google.com>,
+        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        linux-arch <linux-arch@vger.kernel.org>
+Subject: Re: mm: delay rmap removal until after TLB flush
+Message-ID: <20221102232958.3f5eaa53@thinkpad>
+In-Reply-To: <CAHk-=wja5+tuvbV6vzJSbLBWSR8--WUq-ss0j0K-JQXe_EsqhQ@mail.gmail.com>
+References: <B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com>
+        <CAHk-=wgzT1QsSCF-zN+eS06WGVTBg4sf=6oTMg95+AEq7QrSCQ@mail.gmail.com>
+        <47678198-C502-47E1-B7C8-8A12352CDA95@gmail.com>
+        <CAHk-=wjzngbbwHw4nAsqo_RpyOtUDk5G+Wus=O0w0A6goHvBWA@mail.gmail.com>
+        <CAHk-=wijU_YHSZq5N7vYK+qHPX0aPkaePaGOyWk4aqMvvSXxJA@mail.gmail.com>
+        <140B437E-B994-45B7-8DAC-E9B66885BEEF@gmail.com>
+        <CAHk-=wjX_P78xoNcGDTjhkgffs-Bhzcwp-mdsE1maeF57Sh0MA@mail.gmail.com>
+        <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
+        <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
+        <CAHk-=wiwt4LC-VmqvYrphraF0=yQV=CQimDCb0XhtXwk8oKCCA@mail.gmail.com>
+        <Y1+XCALog8bW7Hgl@hirez.programming.kicks-ass.net>
+        <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
+        <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com>
+        <50458458-9b57-aa5a-0d67-692cc4dbf2ad@linux.ibm.com>
+        <CAHk-=wja5+tuvbV6vzJSbLBWSR8--WUq-ss0j0K-JQXe_EsqhQ@mail.gmail.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221102205359.1260980-1-bgardon@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: x6KDpMx1-hZ1Wv6Lmf2TD7IsfYnRJzO5
+X-Proofpoint-GUID: 5beV_M9V3vzREGfV2fcnorJeJPYJUuNu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-02_15,2022-11-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 mlxscore=0
+ phishscore=0 impostorscore=0 suspectscore=0 bulkscore=0 mlxlogscore=712
+ lowpriorityscore=0 adultscore=0 priorityscore=1501 clxscore=1011
+ spamscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211020146
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022, Ben Gardon wrote:
-> kvm_zap_gfn_range() must be called in an SRCU read-critical section, but
-> there is no SRCU annotation in __kvm_set_or_clear_apicv_inhibit(). This
-> can lead to the following warning via
-> kvm_arch_vcpu_ioctl_set_guest_debug() if a Shadow MMU is in use (TDP
-> MMU disabled or nesting):
-> 
-> [ 1416.659809] =============================
-> [ 1416.659810] WARNING: suspicious RCU usage
-> [ 1416.659839] 6.1.0-dbg-DEV #1 Tainted: G S        I
-> [ 1416.659853] -----------------------------
-> [ 1416.659854] include/linux/kvm_host.h:954 suspicious rcu_dereference_check() usage!
-> [ 1416.659856]
-> ...
-> [ 1416.659904]  dump_stack_lvl+0x84/0xaa
-> [ 1416.659910]  dump_stack+0x10/0x15
-> [ 1416.659913]  lockdep_rcu_suspicious+0x11e/0x130
-> [ 1416.659919]  kvm_zap_gfn_range+0x226/0x5e0
-> [ 1416.659926]  ? kvm_make_all_cpus_request_except+0x18b/0x1e0
-> [ 1416.659935]  __kvm_set_or_clear_apicv_inhibit+0xcc/0x100
-> [ 1416.659940]  kvm_arch_vcpu_ioctl_set_guest_debug+0x350/0x390
-> [ 1416.659946]  kvm_vcpu_ioctl+0x2fc/0x620
-> [ 1416.659955]  __se_sys_ioctl+0x77/0xc0
-> [ 1416.659962]  __x64_sys_ioctl+0x1d/0x20
-> [ 1416.659965]  do_syscall_64+0x3d/0x80
-> [ 1416.659969]  entry_SYSCALL_64_after_hwframe+0x63/0xcd
-> 
-> Always take the KVM SRCU read lock in __kvm_set_or_clear_apicv_inhibit()
-> to protect the GFN to memslot translation. The SRCU read lock is not
-> technically required when no Shadow MMUs are in use, since the TDP MMU
-> walks the paging structures from the roots and does not need to look up
-> GFN translations in the memslots, but make the SRCU locking
-> unconditional for simplicty.
-> 
-> In most cases, the SRCU locking is taken care of in the vCPU run loop,
-> but when called through the KVM_SET_GUEST_DEBUG IOCTL, the SRCU read
-> lock is missing.
+On Wed, 2 Nov 2022 10:55:10 -0700
+Linus Torvalds <torvalds@linux-foundation.org> wrote:
 
-Nit, it not just KVM_SET_GUEST_DEBUG.  If it were just KVM_SET_GUEST_DEBUG, I
-might have advocated putting the fix KVM_SET_GUEST_DEBUG.
-
-> Tested: ran tools/testing/selftests/kvm/x86_64/debug_regs on a DBG
-> 	build. This patch causes the suspicious RCU warning to disappear.
-> 	Note that the warning is hit in __kvm_zap_rmaps(), so
-> 	kvm_memslots_have_rmaps() must return true in order for this to
-> 	repro (i.e. the TDP MMU must be off or nesting in use.)
+> On Wed, Nov 2, 2022 at 2:15 AM Christian Borntraeger
+> <borntraeger@linux.ibm.com> wrote:
+> >
+> > It certainly needs a build fix for s390:
+> >
+> > In file included from kernel/sched/core.c:78:
+> > ./arch/s390/include/asm/tlb.h: In function '__tlb_remove_page_size':
+> > ./arch/s390/include/asm/tlb.h:50:17: error: implicit declaration of function 'page_zap_pte_rmap' [-Werror=implicit-function-declaration]
+> >     50 |                 page_zap_pte_rmap(page);
+> >        |                 ^~~~~~~~~~~~~~~~~
 > 
-> Reported-by: Greg Thelen <gthelen@google.com>
-> Fixes: 36222b117e36 ("KVM: x86: don't disable APICv memslot when inhibited")
-> Signed-off-by: Ben Gardon <bgardon@google.com>
-> ---
+> Hmm. I'm not sure if I can add a
+> 
+>    #include <linux/rmap.h>
+> 
+> to that s390 asm header file without causing more issues.
+> 
+> The minimal damage would probably be to duplicate the declaration of
+> page_zap_pte_rmap() in the s390 asm/tlb.h header where it is used.
+> 
+> Not pretty to have two different declarations of that thing, but
+> anything that then includes both <asm/tlb.h> and <linux/rmap.h> (which
+> is much of mm) would then verify the consistency of  them.
+> 
+> So I'll do that minimal fix and update that branch, but if s390 people
+> end up having a better fix, please holler.
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+It compiles now with your duplicate declaration, but adding the #include
+also did not cause any damage, so that should also be OK.
