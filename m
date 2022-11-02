@@ -2,79 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 47E33616D87
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 20:10:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E189D616D88
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 20:10:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231163AbiKBTKV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 15:10:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38004 "EHLO
+        id S231140AbiKBTKb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 15:10:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36584 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231845AbiKBTJ7 (ORCPT
+        with ESMTP id S231847AbiKBTJ7 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Wed, 2 Nov 2022 15:09:59 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93C611006E
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 12:09:53 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id z6so11973152qtv.5
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 12:09:53 -0700 (PDT)
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 517541093
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 12:09:56 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id r61-20020a17090a43c300b00212f4e9cccdso2994506pjg.5
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 12:09:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=AIkEh7BXAQ8EfVcaCpQmqvlq6Pnzwaj79KpKIFXtqKk=;
-        b=D5NqaoeFxXGLhUM1iiPWsSusfvacuFdAOm6V8ErMS9WTejX9G+7XNSYvAnzL10LFFp
-         qE4b9Fd5IJns9Y169x8pYIfvEM0CEQ7UlfQ5ml7I2wQplpGk93Og//KQ6l66s2LeF7Ng
-         0QIQG2YvDP8l4BXttaBxEtpb+R11qglLFfU3r0tAVplqVAE9m+N5E+WLMYpPROr6YABD
-         dDv1ZnUkW2HQDoRNxvZRD8RCgvwZFB7bKffmiB6fpEfwy093n055DP70XMYf0MNtGMTY
-         cM6o2zeIscCb5OKxFh15wUhs+A2kcnIS8JdGXqbvwB/gsnlxMWnSn/3rzYMoDI8YAYem
-         JlNA==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=qNhnJbXAJF4UzyH8g8T6ZxMpszM79ChXkqdNt8W8NYI=;
+        b=VwmffTXNNVk9OBe+Hnb1vM8Qkem8njG1t/7NVdWtvzLrL7Silwy1LUoeD738n3tOxs
+         iK3jGMKaUFT7YdCmh+Gc9iJ/YxnaQ2rljYHzLP0L65O3V7/zav62TcWDBN+p4X1FC2G3
+         eyyWgcMxBcpZxnBLphn5OoB8FI5JAsGow22/M=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AIkEh7BXAQ8EfVcaCpQmqvlq6Pnzwaj79KpKIFXtqKk=;
-        b=LOaZB+UbtYbUc4CjUhGSKFzXiLm6XIAehggrYexeR9r0DzVmsFv1NlP+NCqACgN8g8
-         bbntRuv0TY+JbE53rhe0rDbt7hsEtWC9xZ6+BzEZqCkTjCb75ATNy4DdECi4xJu2FmZX
-         x7wTd9Sn3/yKMN6vhSpYa5jGcgHN1RTd3jGAFcWdG0LksKEW28gsu6UpfkgvbLcOF5P5
-         LT+frEMy5ucpofUwuAKl6rlvUDGzTHgT6Pfj0nbs5CHdlKltHJFMktRhIwWz6mmh8HxS
-         H+OmhytUj44v5mMIcTdZtnC3Dk7K0p5NtY3nBHG+RDCxnVr9NQbZMWQFjhzRHIAAcote
-         vB/w==
-X-Gm-Message-State: ACrzQf1GdS6OTzvrJnk0MLmpTvpFnowduHYWqeBjH5CgqPLcucIET9SM
-        ZHeLCtA6r/qQBKKSEX0QxGnhEw==
-X-Google-Smtp-Source: AMsMyM5rtL01pS0TQ+i5UNqkH3/BIoMq0q2RjMMZmpCfyVX3jZh1yBtxA1LpksWIIs0gVwKIiDmLaA==
-X-Received: by 2002:a05:622a:407:b0:39a:836:acfe with SMTP id n7-20020a05622a040700b0039a0836acfemr20925776qtx.133.1667416192736;
-        Wed, 02 Nov 2022 12:09:52 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
-        by smtp.gmail.com with ESMTPSA id bk20-20020a05620a1a1400b006f3e6933bacsm9098388qkb.113.2022.11.02.12.09.51
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 12:09:52 -0700 (PDT)
-Message-ID: <1fe8fd96-7770-0bda-c970-aa38d030ff3b@linaro.org>
-Date:   Wed, 2 Nov 2022 15:09:50 -0400
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qNhnJbXAJF4UzyH8g8T6ZxMpszM79ChXkqdNt8W8NYI=;
+        b=DjMJeoQFjfhXbk9/b81qpo2tp7DeWhvCxv8j4fGLPF19iEk7Xb7sVNhycURwTrOVJI
+         5hT9pjsp/K6bdEmTtHHdWJsL/YnY89I4pW4vPI7pFAvqc6MCMSJg/poj+ApHfqBVc7Xa
+         Zg7IYXvdyDIxznllFGFca0MByHSBh4SpPy+D6nMEs6GKmYEvEd0a84P3QIH5CAM/54lB
+         CmtpBu9yoqMyqK0XYEV8clC5dFFe7ElJBQj3f1vdz0wmMlYQwOUL56HOtbYNmKr1IgeA
+         55HhSjJNomcgXl3PKa/6By4Jbcv349gOaPaxJY3HUsQ/f/Q8cOfAX0I4CzlEJXsRNwd7
+         tNxg==
+X-Gm-Message-State: ACrzQf34s8/HJFMbumzEyQhhfR4Cx9GL8t8LqaDAT9GGR0UgfU+LjTpR
+        +WkfGCcZ6eqYciEkpNS5iK521w==
+X-Google-Smtp-Source: AMsMyM4DStPKStM8pFzW0+6/3LvqImBH8Zv6MGJVHGEF5VEN77SWeQxRJeBNzvxONcQowosistNujg==
+X-Received: by 2002:a17:902:e883:b0:187:27a7:c8a3 with SMTP id w3-20020a170902e88300b0018727a7c8a3mr14846919plg.32.1667416195682;
+        Wed, 02 Nov 2022 12:09:55 -0700 (PDT)
+Received: from www.outflux.net (smtp.outflux.net. [198.145.64.163])
+        by smtp.gmail.com with ESMTPSA id a16-20020aa794b0000000b005627d995a36sm8805579pfl.44.2022.11.02.12.09.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 12:09:55 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 12:09:54 -0700
+From:   Kees Cook <keescook@chromium.org>
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Alexandra Winter <wintera@linux.ibm.com>,
+        Wenjia Zhang <wenjia@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>,
+        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev,
+        linux-kernel@vger.kernel.org, patches@lists.linux.dev
+Subject: Re: [PATCH 2/3] s390/netiucv: Fix return type of netiucv_tx()
+Message-ID: <202211021209.8BAB0ABFCE@keescook>
+References: <20221102163252.49175-1-nathan@kernel.org>
+ <20221102163252.49175-2-nathan@kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v2 06/15] dt-bindings: ufs: Add "max-device-gear" property
- for UFS device
-Content-Language: en-US
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        martin.petersen@oracle.com, jejb@linux.ibm.com,
-        andersson@kernel.org, vkoul@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org
-Cc:     konrad.dybcio@somainline.org, robh+dt@kernel.org,
-        quic_cang@quicinc.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-phy@lists.infradead.org, linux-scsi@vger.kernel.org,
-        dmitry.baryshkov@linaro.org, ahalaney@redhat.com
-References: <20221031180217.32512-1-manivannan.sadhasivam@linaro.org>
- <20221031180217.32512-7-manivannan.sadhasivam@linaro.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221031180217.32512-7-manivannan.sadhasivam@linaro.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221102163252.49175-2-nathan@kernel.org>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -83,18 +79,28 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 31/10/2022 14:02, Manivannan Sadhasivam wrote:
-> The maximum gear supported by the UFS device can be specified using the
-> "max-device-gear" property. This allows the UFS controller to configure the
-> TX/RX gear before starting communication with the UFS device.
+On Wed, Nov 02, 2022 at 09:32:51AM -0700, Nathan Chancellor wrote:
+> With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
+> indirect call targets are validated against the expected function
+> pointer prototype to make sure the call target is valid to help mitigate
+> ROP attacks. If they are not identical, there is a failure at run time,
+> which manifests as either a kernel panic or thread getting killed. A
+> proposed warning in clang aims to catch these at compile time, which
+> reveals:
+> 
+>   drivers/s390/net/netiucv.c:1854:21: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
+>           .ndo_start_xmit         = netiucv_tx,
+>                                     ^~~~~~~~~~
+> 
+> ->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
+> 'netdev_tx_t', not 'int'. Adjust the return type of netiucv_tx() to
+> match the prototype's to resolve the warning and potential CFI failure,
+> should s390 select ARCH_SUPPORTS_CFI_CLANG in the future.
+> 
+> Link: https://github.com/ClangBuiltLinux/linux/issues/1750
+> Signed-off-by: Nathan Chancellor <nathan@kernel.org>
 
-This is confusing. The UFS PHY provides gear capability, so what is the
-"device" here? The attached memory? How could it report something else
-than phy?
+Reviewed-by: Kees Cook <keescook@chromium.org>
 
-The last sentence also suggests that you statically encode gear to avoid
-runtime negotiation.
-
-Best regards,
-Krzysztof
-
+-- 
+Kees Cook
