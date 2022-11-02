@@ -2,47 +2,52 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34A45615BAE
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 06:12:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F1687615C25
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 07:18:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiKBFMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 01:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60412 "EHLO
+        id S230089AbiKBGSN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 02:18:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiKBFMe (ORCPT
+        with ESMTP id S229927AbiKBGSE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 01:12:34 -0400
-Received: from szxga03-in.huawei.com (szxga03-in.huawei.com [45.249.212.189])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7CCAC252AB;
-        Tue,  1 Nov 2022 22:12:32 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.54])
-        by szxga03-in.huawei.com (SkyGuard) with ESMTP id 4N2FLS5S7NzJnJ3;
-        Wed,  2 Nov 2022 13:09:36 +0800 (CST)
-Received: from kwepemm600015.china.huawei.com (7.193.23.52) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 2 Nov 2022 13:12:30 +0800
-Received: from huawei.com (10.175.101.6) by kwepemm600015.china.huawei.com
- (7.193.23.52) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Wed, 2 Nov
- 2022 13:12:29 +0800
-From:   ChenXiaoSong <chenxiaosong2@huawei.com>
-To:     <sfrench@samba.org>, <pc@cjr.nz>, <lsahlber@redhat.com>
-CC:     <linux-cifs@vger.kernel.org>, <samba-technical@lists.samba.org>,
-        <linux-kernel@vger.kernel.org>, <chenxiaosong2@huawei.com>,
-        <yi.zhang@huawei.com>, <zhangxiaoxu5@huawei.com>
-Subject: [PATCH] cifs: fix use-after-free on the link name
-Date:   Wed, 2 Nov 2022 14:16:59 +0800
-Message-ID: <20221102061659.920334-1-chenxiaosong2@huawei.com>
-X-Mailer: git-send-email 2.31.1
+        Wed, 2 Nov 2022 02:18:04 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD10625C5A;
+        Tue,  1 Nov 2022 23:18:03 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 6CB1FB820D0;
+        Wed,  2 Nov 2022 06:18:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B6BF9C433C1;
+        Wed,  2 Nov 2022 06:18:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667369881;
+        bh=2OIjHvL54t1DXYOXYxp6qJOT614me6QcO9DL4rk9VrU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=dU78BYohrAV0o2uZcHI1mnzDPyPziGY2J8TNpdf7qa+Akf5WnUHu5PJmHKL6z558Z
+         LWA3SSiessnH5waINDt9RJSa4akWUhCMtqAaiQXXkyfWsnhnTeminjdIZgKTJ5L3FT
+         40svmK4tGVUUMyRYktBwooTBoPD/gQccwMd0rmsi1lE2q7HDAnXVk4YVX7nhqjSjrc
+         EQQL4aWLVojoXIvNwN4O1R4Fg+bGGakJ7p5iwntdFJSeGiYE3BYRj97GewN1VDXkaQ
+         R2AC/KWUiGoHsWO84OPzKWvwG+1IwK1/+V22mMrOzUfWtY/kMEwAcFvRBo3Ha7IVJO
+         5n7+wkh0payQQ==
+Date:   Tue, 1 Nov 2022 23:17:58 -0700
+From:   Eric Biggers <ebiggers@kernel.org>
+To:     Jaegeuk Kim <jaegeuk@kernel.org>, Chao Yu <chao@kernel.org>,
+        linux-f2fs-devel@lists.sourceforge.net
+Cc:     tytso@mit.edu, jaegeuk@kernel.org, linux-fscrypt@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Wei Chen <harperchen1110@gmail.com>
+Subject: f2fs_empty_dir() can be extremely slow on malicious disk images
+Message-ID: <Y2ILlpqFQVO9fH8B@sol.localdomain>
+References: <CAO4mrfc3sbZVj3QOdAVFqrZp+mEuPQTtQCQsQy-07W_BEFqZ2Q@mail.gmail.com>
+ <CAO4mrfexzxeYwAkvWGfg=tEiczUWarO6y68KFD9EG9qZtGejng@mail.gmail.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.175.101.6]
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemm600015.china.huawei.com (7.193.23.52)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAO4mrfexzxeYwAkvWGfg=tEiczUWarO6y68KFD9EG9qZtGejng@mail.gmail.com>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -50,144 +55,59 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-xfstests generic/011 reported use-after-free bug as follows:
+[+f2fs list and maintainers]
+[changed subject from "INFO: task hung in fscrypt_ioctl_set_policy"]
 
-  BUG: KASAN: use-after-free in __d_alloc+0x269/0x859
-  Read of size 15 at addr ffff8880078933a0 by task dirstress/952
+On Mon, Oct 31, 2022 at 10:18:02PM +0800, Wei Chen wrote:
+> Dear Linux developers,
+> 
+> Here is the link to the reproducers.
+> 
+> C reproducer: https://drive.google.com/file/d/1mduYsYuoOKemH3qkvpDQwnAHAaaLUp0Y/view?usp=share_link
+> Syz reproducer:
+> https://drive.google.com/file/d/1mu-_w7dy_562vWRlQvTRbcBjG4_G7b2L/view?usp=share_link
+> 
+> The bug persists in the latest commit, v5.15.76 (4f5365f77018). I hope
+> it is helpful to you.
+> 
+> [ 1782.137186][   T30] INFO: task a.out:6910 blocked for more than 143 seconds.
+> [ 1782.139217][   T30]       Not tainted 5.15.76 #5
+> [ 1782.140388][   T30] "echo 0 >
+> /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+> [ 1782.142524][   T30] task:a.out           state:D stack:14296 pid:
+> 6910 ppid:  6532 flags:0x00004004
+> [ 1782.144799][   T30] Call Trace:
+> [ 1782.145623][   T30]  <TASK>
+> [ 1782.146316][   T30]  __schedule+0x3e8/0x1850
+> [ 1782.152029][   T30]  ? mark_held_locks+0x49/0x70
+> [ 1782.153533][   T30]  ? mark_held_locks+0x10/0x70
+> [ 1782.154759][   T30]  ? __down_write_common.part.14+0x31f/0x7b0
+> [ 1782.156159][   T30]  schedule+0x4e/0xe0
+> [ 1782.158314][   T30]  __down_write_common.part.14+0x324/0x7b0
+> [ 1782.159704][   T30]  ? fscrypt_ioctl_set_policy+0xe0/0x200
+> [ 1782.161050][   T30]  fscrypt_ioctl_set_policy+0xe0/0x200
+> [ 1782.162330][   T30]  __f2fs_ioctl+0x9d6/0x45e0
+> [ 1782.163417][   T30]  f2fs_ioctl+0x64/0x240
+> [ 1782.164404][   T30]  ? __f2fs_ioctl+0x45e0/0x45e0
+> [ 1782.165554][   T30]  __x64_sys_ioctl+0xb6/0x100
+> [ 1782.166662][   T30]  do_syscall_64+0x34/0xb0
+> [ 1782.169947][   T30]  entry_SYSCALL_64_after_hwframe+0x61/0xcb
 
-  CPU: 1 PID: 952 Comm: dirstress Not tainted 6.1.0-rc3+ #77
-  Call Trace:
-   __dump_stack+0x23/0x29
-   dump_stack_lvl+0x51/0x73
-   print_address_description+0x67/0x27f
-   print_report+0x3e/0x5c
-   kasan_report+0x7b/0xa8
-   kasan_check_range+0x1b2/0x1c1
-   memcpy+0x22/0x5d
-   __d_alloc+0x269/0x859
-   d_alloc+0x45/0x20c
-   d_alloc_parallel+0xb2/0x8b2
-   lookup_open+0x3b8/0x9f9
-   open_last_lookups+0x63d/0xc26
-   path_openat+0x11a/0x261
-   do_filp_open+0xcc/0x168
-   do_sys_openat2+0x13b/0x3f7
-   do_sys_open+0x10f/0x146
-   __se_sys_creat+0x27/0x2e
-   __x64_sys_creat+0x55/0x6a
-   do_syscall_64+0x40/0x96
-   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Well, the quality of this bug report has a lot to be desired (not on upstream
+kernel, reproducer is full of totally irrelevant stuff, not sent to the mailing
+list of the filesystem whose disk image is being fuzzed, etc.).  But what is
+going on is that f2fs_empty_dir() doesn't consider the case of a directory with
+an extremely large i_size on a malicious disk image.
 
-  Allocated by task 952:
-   kasan_save_stack+0x1f/0x42
-   kasan_set_track+0x21/0x2a
-   kasan_save_alloc_info+0x17/0x1d
-   __kasan_kmalloc+0x7e/0x87
-   __kmalloc_node_track_caller+0x59/0x155
-   kstrndup+0x60/0xe6
-   parse_mf_symlink+0x215/0x30b
-   check_mf_symlink+0x260/0x36a
-   cifs_get_inode_info+0x14e1/0x1690
-   cifs_revalidate_dentry_attr+0x70d/0x964
-   cifs_revalidate_dentry+0x36/0x62
-   cifs_d_revalidate+0x162/0x446
-   lookup_open+0x36f/0x9f9
-   open_last_lookups+0x63d/0xc26
-   path_openat+0x11a/0x261
-   do_filp_open+0xcc/0x168
-   do_sys_openat2+0x13b/0x3f7
-   do_sys_open+0x10f/0x146
-   __se_sys_creat+0x27/0x2e
-   __x64_sys_creat+0x55/0x6a
-   do_syscall_64+0x40/0x96
-   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+Specifically, the reproducer mounts an f2fs image with a directory that has an
+i_size of 14814520042850357248, then calls FS_IOC_SET_ENCRYPTION_POLICY on it.
+That results in a call to f2fs_empty_dir() to check whether the directory is
+empty.  f2fs_empty_dir() then iterates through all 3616826182336513 blocks the
+directory allegedly contains to check whether any contain anything.  i_rwsem is
+held during this, so anything else that tries to take it will hang.
 
-  Freed by task 950:
-   kasan_save_stack+0x1f/0x42
-   kasan_set_track+0x21/0x2a
-   kasan_save_free_info+0x1c/0x34
-   ____kasan_slab_free+0x1c1/0x1d5
-   __kasan_slab_free+0xe/0x13
-   __kmem_cache_free+0x29a/0x387
-   kfree+0xd3/0x10e
-   cifs_fattr_to_inode+0xb6a/0xc8c
-   cifs_get_inode_info+0x3cb/0x1690
-   cifs_revalidate_dentry_attr+0x70d/0x964
-   cifs_revalidate_dentry+0x36/0x62
-   cifs_d_revalidate+0x162/0x446
-   lookup_open+0x36f/0x9f9
-   open_last_lookups+0x63d/0xc26
-   path_openat+0x11a/0x261
-   do_filp_open+0xcc/0x168
-   do_sys_openat2+0x13b/0x3f7
-   do_sys_open+0x10f/0x146
-   __se_sys_creat+0x27/0x2e
-   __x64_sys_creat+0x55/0x6a
-   do_syscall_64+0x40/0x96
-   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+I'll look into this more if needed, but Jaegeuk and Chao, do you happen to have
+any ideas for how f2fs_empty_dir() should be fixed?  Is there an easy way to
+just iterate through the blocks that are actually allocated?
 
-When opened a symlink, link name is from 'inode->i_link', but it may be
-reset to a new value when revalidate the dentry. If some processes get the
-link name on the race scenario, then UAF will happen on link name.
-
-Fix this by implementing 'get_link' interface to duplicate the link name.
-
-Fixes: 76894f3e2f71 ("cifs: improve symlink handling for smb2+")
-Signed-off-by: ChenXiaoSong <chenxiaosong2@huawei.com>
----
- fs/cifs/cifsfs.c | 21 ++++++++++++++++++++-
- fs/cifs/inode.c  |  5 -----
- 2 files changed, 20 insertions(+), 6 deletions(-)
-
-diff --git a/fs/cifs/cifsfs.c b/fs/cifs/cifsfs.c
-index d0b9fec111aa..bb9592594fcc 100644
---- a/fs/cifs/cifsfs.c
-+++ b/fs/cifs/cifsfs.c
-@@ -1143,8 +1143,27 @@ const struct inode_operations cifs_file_inode_ops = {
- 	.fiemap = cifs_fiemap,
- };
- 
-+const char *cifs_get_link(struct dentry *dentry, struct inode *inode,
-+			    struct delayed_call *done)
-+{
-+	char *target_path = NULL;
-+
-+	spin_lock(&inode->i_lock);
-+	if (likely(CIFS_I(inode)->symlink_target))
-+		target_path = kstrdup(CIFS_I(inode)->symlink_target,
-+				      GFP_ATOMIC);
-+	spin_unlock(&inode->i_lock);
-+
-+	if (target_path)
-+		set_delayed_call(done, kfree_link, target_path);
-+	else
-+		target_path = ERR_PTR(-EOPNOTSUPP);
-+
-+	return target_path;
-+}
-+
- const struct inode_operations cifs_symlink_inode_ops = {
--	.get_link = simple_get_link,
-+	.get_link = cifs_get_link,
- 	.permission = cifs_permission,
- 	.listxattr = cifs_listxattr,
- };
-diff --git a/fs/cifs/inode.c b/fs/cifs/inode.c
-index 9bde08d44617..4e2ca3c6e5c0 100644
---- a/fs/cifs/inode.c
-+++ b/fs/cifs/inode.c
-@@ -215,11 +215,6 @@ cifs_fattr_to_inode(struct inode *inode, struct cifs_fattr *fattr)
- 		kfree(cifs_i->symlink_target);
- 		cifs_i->symlink_target = fattr->cf_symlink_target;
- 		fattr->cf_symlink_target = NULL;
--
--		if (unlikely(!cifs_i->symlink_target))
--			inode->i_link = ERR_PTR(-EOPNOTSUPP);
--		else
--			inode->i_link = cifs_i->symlink_target;
- 	}
- 	spin_unlock(&inode->i_lock);
- 
--- 
-2.31.1
-
+- Eric
