@@ -2,140 +2,77 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BAC9616DB9
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 20:20:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3067616DBD
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 20:21:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230381AbiKBTU0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 15:20:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46580 "EHLO
+        id S230518AbiKBTVZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 15:21:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46930 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230259AbiKBTUV (ORCPT
+        with ESMTP id S229561AbiKBTVW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 15:20:21 -0400
-Received: from mail-qk1-x732.google.com (mail-qk1-x732.google.com [IPv6:2607:f8b0:4864:20::732])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D88241144
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 12:20:20 -0700 (PDT)
-Received: by mail-qk1-x732.google.com with SMTP id z1so6580625qkl.9
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 12:20:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=P7DzY3flKN/IpybPJ+aNMlwaIPUzPDi/AXVTF+yXVtg=;
-        b=AUVQvakkgdtd6Ucua94NDfZheJbQoUZUUGgBmjJJSyhbyRr6aiM/l9Y9CJ0JocoXJb
-         nh5lUAr1/U4VONjn0DNV82cFxP4lvdyqK6w0da+LQv8PVOgTjqx8xTWavJVez53QTcNg
-         89w12zTVsn8dQ+tEmfmkRMzY7GVT02OD7rR+ZwemjZznX7NQzNmtFbRXWw95br/DCXv3
-         by0MoapJqpgw4OIg3gulx4JdfUQ2CtN85QbQrDLx0zxBgLQWXL39XDcbLwi2drp5PEFA
-         ylMYFtSmusVeT5Rn/nmPElKnROzDnZZS+mn0nGns1QclM0XtHfq+5zrxD5H9xfnxH2Bp
-         qhLg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P7DzY3flKN/IpybPJ+aNMlwaIPUzPDi/AXVTF+yXVtg=;
-        b=OLZKGYybCGBsVdzdMmGMHdDZt3YVSwuXFl/Xa+CPsur6kBcdyz1sQSdnsIdhVOC5Si
-         rDtzUFFtfDEILwBeI33ynwwwgt7uLbUU66/N7KRmEgjQrnE6ZUg8L66Xjy1liSyI4Xz6
-         Hz3jdMl+u/aqCoS2hgjtTPe05ecgTL9B74Hxl3196J0FnI0vrKfPyPEDdxNXS6jD8Z+F
-         Jf9hbtCUAotjtDan8Mh7SZjOThKsPCPZPlMs1nXnXKaIyynXoBgV+TxEzqTA6XI9DlhO
-         ORtc+3v6+z10rnwk53f/98UzN/AySVgUqdQ7X3I2hiixFmzsYAk6WwGWj9tZLU9M2ERZ
-         qZ5w==
-X-Gm-Message-State: ACrzQf0Qu63dLgdjgBTKZLsis6YIIvfTzjTjozvaGiSR2LIVVc7ByMGU
-        0RhnjfmM62nWaGo3VQmx/CaKUw==
-X-Google-Smtp-Source: AMsMyM42nja1y3Ce02aFRPqpX8h8vuMLN2/7sgBMjWDNKce78YBCG+ayNZ6L7Ps8tVVz/BOlp/7Ltg==
-X-Received: by 2002:a05:620a:b14:b0:6fa:5e0b:d9fe with SMTP id t20-20020a05620a0b1400b006fa5e0bd9femr3596189qkg.594.1667416820026;
-        Wed, 02 Nov 2022 12:20:20 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
-        by smtp.gmail.com with ESMTPSA id ew12-20020a05622a514c00b003a51e8ef03dsm5774543qtb.62.2022.11.02.12.20.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 12:20:19 -0700 (PDT)
-Message-ID: <1a8bab07-46c4-1585-45ff-8780c02afd4e@linaro.org>
-Date:   Wed, 2 Nov 2022 15:20:18 -0400
+        Wed, 2 Nov 2022 15:21:22 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAF811144;
+        Wed,  2 Nov 2022 12:21:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=utt30JAJTgovEUnU7oZUHBSJjF7rzQywZWScCNuHRzY=; b=WPA3CheUPO+l2TLbtJ8F4sMjDY
+        wuzW0rXM8/YT9+GS5bvCyNPAOVDTCdMZDfDmnEQ43hM8popaQVmO8joNM3aFWyHduRQ4eui3OXRgq
+        eSafeyeT0YVoCmB3xSkQ6blaJFiS/555XUSI8y8stBxOr6eRzE5h1Gs8G6a1fiQz7ew/m2QUbY+D5
+        mA6b3eEuM+tkoyEHlmtTZHUjmeqoL7Qfi9TYfB9VSYpeMkhLIREIFq0uDEVrRSvjSq/3ahoR9Qfor
+        7/2A4QwC7pJ/PLrhQx2mIAtD6jS/CMbSMq2cnEwkdIUybVR4+Zkpju3W6ThTOF1jzL6Ryq/ih3woJ
+        cyc5vPEg==;
+Received: from willy by casper.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oqJId-005mDl-8K; Wed, 02 Nov 2022 19:21:19 +0000
+Date:   Wed, 2 Nov 2022 19:21:19 +0000
+From:   Matthew Wilcox <willy@infradead.org>
+To:     Peter Xu <peterx@redhat.com>
+Cc:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org,
+        Hugh Dickins <hughd@google.com>,
+        Axel Rasmussen <axelrasmussen@google.com>
+Subject: Re: [PATCH 3/5] userfualtfd: Replace lru_cache functions with
+ folio_add functions
+Message-ID: <Y2LDL8zjgxDPCzH9@casper.infradead.org>
+References: <20221101175326.13265-1-vishal.moola@gmail.com>
+ <20221101175326.13265-4-vishal.moola@gmail.com>
+ <Y2Fl/pZyLSw/ddZY@casper.infradead.org>
+ <Y2K+y7wnhC4vbnP2@x1n>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v11 2/2] arm64: dts: qcom: sagit: add initial device tree
- for sagit
-Content-Language: en-US
-To:     Dzmitry Sankouski <dsankouski@gmail.com>,
-        linux-kernel@vger.kernel.org
-Cc:     Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Kees Cook <keescook@chromium.org>,
-        Anton Vorontsov <anton@enomsg.org>,
-        Colin Cross <ccross@android.com>,
-        Tony Luck <tony.luck@intel.com>,
-        "open list:ARM/QUALCOMM SUPPORT" <linux-arm-msm@vger.kernel.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>
-References: <20221102155558.1895829-1-dsankouski@gmail.com>
- <20221102155558.1895829-3-dsankouski@gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221102155558.1895829-3-dsankouski@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2K+y7wnhC4vbnP2@x1n>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/11/2022 11:55, Dzmitry Sankouski wrote:
-> New device support - Xiaomi Mi6 phone
-> 
-> What works:
-> - storage
-> - usb
-> - power regulators
-> 
-> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
-> ---
+On Wed, Nov 02, 2022 at 03:02:35PM -0400, Peter Xu wrote:
+> Does the patch attached look reasonable to you?
 
-(...)
+Mmm, no.  If the page is in the swap cache, this will be "true".
 
-> +
-> +&blsp1_i2c5_sleep {
-> +	/delete-property/ bias-pull-up;
-> +	bias-disable;
-> +};
-> +
-> +&blsp1_uart3 {
-> +	status = "okay";
-> +
-> +	bluetooth {
-> +		compatible = "qcom,wcn3990-bt";
-> +
-> +		vddio-supply = <&vreg_s4a_1p8>;
-> +		vddxo-supply = <&vreg_l7a_1p8>;
-> +		vddrf-supply = <&vreg_l17a_1p3>;
-> +		vddch0-supply = <&vreg_l25a_3p3>;
-> +		max-speed = <3200000>;
-> +	};
-> +};
-> +
-> +&blsp1_uart3_on {
-> +	rx {
+> diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
+> index 3d0fef3980b3..650ab6cfd5f4 100644
+> --- a/mm/userfaultfd.c
+> +++ b/mm/userfaultfd.c
+> @@ -64,7 +64,7 @@ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
+>  	pte_t _dst_pte, *dst_pte;
+>  	bool writable = dst_vma->vm_flags & VM_WRITE;
+>  	bool vm_shared = dst_vma->vm_flags & VM_SHARED;
+> -	bool page_in_cache = page->mapping;
+> +	bool page_in_cache = page_mapping(page);
 
-This is a friendly reminder during the review process.
+We could do:
 
-It seems my previous comments were not fully addressed. Maybe my
-feedback got lost between the quotes, maybe you just forgot to apply it.
-Please go back to the previous discussion and either implement all
-requested changes or keep discussing them.
-
-Thank you.
-
-6.1-rc3 is not a proper rebase... You *must* include maintainers'
-entries. This *must* align with stuff has Bjorn. Also I expect it passes
-dtbs_check on stuff in the next.
-
-Best regards,
-Krzysztof
+	struct page *head = compound_head(page);
+	bool page_in_cache = head->mapping && !PageMappingFlags(head);
 
