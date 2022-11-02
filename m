@@ -2,65 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 16E2A616E89
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 21:24:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ADB7F616E8E
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 21:24:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbiKBUX6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 16:23:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52608 "EHLO
+        id S230427AbiKBUY1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 16:24:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52998 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiKBUXz (ORCPT
+        with ESMTP id S229531AbiKBUYZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 16:23:55 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2F645195;
-        Wed,  2 Nov 2022 13:23:55 -0700 (PDT)
+        Wed, 2 Nov 2022 16:24:25 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 861E2195;
+        Wed,  2 Nov 2022 13:24:24 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C988F61BB6;
-        Wed,  2 Nov 2022 20:23:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31530C433C1;
-        Wed,  2 Nov 2022 20:23:53 +0000 (UTC)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 3C0C0B82469;
+        Wed,  2 Nov 2022 20:24:23 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CCE7C433D6;
+        Wed,  2 Nov 2022 20:24:21 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667420634;
-        bh=SoPxowNL2wQMY8yb7AJeEyGxnbtrkZim847pUvBQbwE=;
+        s=k20201202; t=1667420661;
+        bh=50CRcZ5RN9P5gsD2ticqR1JUJpYrPM4a4xZBbRXt57g=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=LfjPqEtYXiCdkBLiD6Mb9K3XA51IVPUzGRUTvms6p8otl6PuFvxWJt1eNfolnsfMh
-         8dOIiVYrNAvWUbc0eNesbhfxuTxND9PyOfr87g31Ntyy1O1D+CTiL0Ie98zFKhuL6L
-         pQ6P5NPg9O9EYdY94YsL2yXqg36H/b9HAt0cdMS0OgSSvy64YmI0vtfYhObAcu3zvz
-         dNfsvy2LS2sTnLtx58wwVQmNFpMeTJG42JD4GtztqHso9Ufxk1sH8tTONFs9g9eRjR
-         Xm+yRgTchmBGh4Sk8fbw4WKFDXV+G1cCqTlkngWQBtrxjrVSY5vsGgYa9I9w0HKA3v
-         fRU/uLjxEBNqQ==
-Date:   Wed, 2 Nov 2022 13:23:51 -0700
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Kees Cook <keescook@chromium.org>
-Cc:     William Breathitt Gray <william.gray@linaro.org>,
-        linux-iio@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>,
-        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Patrick Havelange <patrick.havelange@essensium.com>,
-        Jarkko Nikula <jarkko.nikula@linux.intel.com>,
-        Oleksij Rempel <linux@rempel-privat.de>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Fabrice Gasnier <fabrice.gasnier@foss.st.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Julien Panis <jpanis@baylibre.com>,
-        David Lechner <david@lechnology.com>,
-        linux-arm-kernel@lists.infradead.org,
-        linux-stm32@st-md-mailman.stormreply.com,
-        linux-omap@vger.kernel.org
-Subject: Re: [PATCH 1/4] counter: Adjust final parameter type in function and
- signal callbacks
-Message-ID: <Y2LR13xrrauVmeXP@dev-arch.thelio-3990X>
-References: <20221102172217.2860740-1-nathan@kernel.org>
- <202211021216.FF49E84C69@keescook>
+        b=aM9vpPlhOfOnL5AirDKrnjVT5iUm8SsDRqhHIZnmvR2BEbv25oZcPwm8uVNNSi23z
+         99QLouqZpXOcmHlXHE9uiGsnLYxr8jhbSRUMkdz3zEWzhP6ODsDz+oWgXcJlQ3S7Tp
+         5RBPxNgDbhjo2iPEV5SsJhFS79acR1v9/Vj9oq7PnXNIy29up0Uj7KtTGP+WtKSPrS
+         ybz/YV+UirTB05fqmI09t1fk9m4g+HMenzGW0YaEDnUJSyKcpMdD5ex/lLlSN7oiTG
+         2DLAkjARb00Ah6iUx/gk608M1tJuCQ281h9+5N7hoJ1sZtLFurnT7P6vl8JLvKLBmh
+         tmdFVE19zhYsw==
+Date:   Wed, 2 Nov 2022 21:24:18 +0100
+From:   Wolfram Sang <wsa@kernel.org>
+To:     Weilong Chen <chenweilong@huawei.com>
+Cc:     yangyicong@hisilicon.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org,
+        andriy.shevchenko@linux.intel.com, f.fainelli@gmail.com,
+        jarkko.nikula@linux.intel.com, jdelvare@suse.de,
+        william.zhang@broadcom.com, jsd@semihalf.com,
+        conor.dooley@microchip.com, phil.edworthy@renesas.com,
+        tharunkumar.pasumarthi@microchip.com, semen.protsenko@linaro.org,
+        kfting@nuvoton.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH next v10 1/2] i2c: hisi: Add initial device tree support
+Message-ID: <Y2LR8uC6t1XqCv2I@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa@kernel.org>,
+        Weilong Chen <chenweilong@huawei.com>, yangyicong@hisilicon.com,
+        robh+dt@kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        andriy.shevchenko@linux.intel.com, f.fainelli@gmail.com,
+        jarkko.nikula@linux.intel.com, jdelvare@suse.de,
+        william.zhang@broadcom.com, jsd@semihalf.com,
+        conor.dooley@microchip.com, phil.edworthy@renesas.com,
+        tharunkumar.pasumarthi@microchip.com, semen.protsenko@linaro.org,
+        kfting@nuvoton.com, linux-i2c@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221101080728.143639-1-chenweilong@huawei.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="zlYDA4C+XDZaLiOa"
 Content-Disposition: inline
-In-Reply-To: <202211021216.FF49E84C69@keescook>
+In-Reply-To: <20221101080728.143639-1-chenweilong@huawei.com>
 X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -70,60 +71,40 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 12:21:23PM -0700, Kees Cook wrote:
-> On Wed, Nov 02, 2022 at 10:22:14AM -0700, Nathan Chancellor wrote:
-> > The ->signal_u32_read(), ->count_u32_read(), and ->count_u32_write()
-> > callbacks in 'struct counter_comp' expect the final parameter to have a
-> > type of 'u32' or 'u32 *' but the ops functions that are being assigned
-> > to those callbacks have an enumerated type as the final parameter. While
-> > these are compatible from an ABI perspective, they will fail the
-> > aforementioned CFI checks.
-> > 
-> > Adjust the type of the final parameter in the ->signal_read(),
-> > ->function_read(), and ->function_write() callbacks in 'struct
-> > counter_ops' and their implementations to match the prototypes in
-> > 'struct counter_comp' to clear up these warnings and CFI failures.
-> 
-> I don't understand these changes. Where do 'struct counter_comp'
-> and 'struct counter_ops' get confused? I can only find matching
-> ops/assignments/calls, so I must be missing something. This looks like
-> a loss of CFI granularity instead of having wrappers added if there is
-> an enum/u32 conversion needed somewhere.
 
-Right, I am not the biggest fan of this change myself and it is entirely
-possible that I am misreading the warnings from the commit message but I
-do not see how
+--zlYDA4C+XDZaLiOa
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-        comp_node.comp.signal_u32_read = counter->ops->signal_read;
+On Tue, Nov 01, 2022 at 04:07:27PM +0800, Weilong Chen wrote:
+> The HiSilicon I2C controller can be used on embedded platform, which
+> boot from devicetree.
+>=20
+> Signed-off-by: Weilong Chen <chenweilong@huawei.com>
+> Acked-by: Yicong Yang <yangyicong@hisilicon.com>
 
-and
+Applied to for-next, thanks!
 
-        comp_node.comp.count_u32_read = counter->ops->function_read;
 
-in counter_add_watch(),
+--zlYDA4C+XDZaLiOa
+Content-Type: application/pgp-signature; name="signature.asc"
 
-        comp.signal_u32_read = counter->ops->signal_read;
+-----BEGIN PGP SIGNATURE-----
 
-in counter_signal_attrs_create(), and
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmNi0fIACgkQFA3kzBSg
+KbZ+nRAAqlH+bviznGA5DyYmoUpYRfH/w4vGsyjfNbkDCTEa87jCpnvhrACCEo/U
+wlh4Z55Fj3SL757AfwVGuFWu8fab5eS9+6UjlcVRmp8tZZKOl42/U6Aho8Q1he8n
+f4ZnUz+4HKrv6Q0Zw7vzTjQXGM+b25FDkn/EOXopS65rb/Bs3Yi2pqOPMuv6biaZ
++x9UKlj98HHf4mLyT2o1moKq452CyOq9bN+6rttSMZB+gFkU00q/syhjwRx6LlYM
+bko3/c9VVMuXliNsY937rgVwUO3l30fI08CTpp0PvAB4QsMde1QWwOWDlotGnJfr
+Zi5QP/REdBMhaxxwjQYIR729y9GFSqW0aQDfb4symitYEcVjn3r1t3VOi1Ud2DeI
+0ued995H7XxdUe83yClELXRr9hFI+0Ye13Fp4c2zpOhoQvy5vhfHr03X2smMgWh0
+oOP0C22q2p4hStGfIjajwe2D5i4h7aCtrEksdVtocBWCCUKvuqHMuboKNvssJ4wa
+gOqzJazZfLxz+XmiQsHZqLLjkOlowU5JMZcgTiLe7ciJYhwGNDry6GGGlzDvU6RP
+Vgy6TMnU+HzaAdEPwEpIlt4v7K0EnK5RMMQ5sPGAHfTm8tJrGWMEQcU2PPV8ZZzL
+2+avOc+PLKj1FUcNmt9HUEhDBRvFyB/zmed++0A3euIfws4D2Po=
+=5sMc
+-----END PGP SIGNATURE-----
 
-        comp.count_u32_read = counter->ops->function_read;
-        comp.count_u32_write = counter->ops->function_write;
-
-in counter_count_attrs_create() are currently safe under kCFI, since the
-final parameter type of the prototypes in 'struct counter_ops' does not
-match the final parameter type of the prototypes in 'struct
-counter_comp'. I would expect the indirect calls in counter_get_data()
-and counter_comp_u32_show() to fail currently.
-
-I briefly looked at making the 'struct counter_comp' callbacks match the
-'struct counter_ops' ones but the COUNTER_COMP macros in
-include/linux/counter.h made it seem like these callbacks might be used
-by implementations that might use different enumerated types as the
-final parameter. I can look a little closer to see if we can make
-everything match.
-
-I am not sure how wrappers would work here, I can take a look into how
-feasible that is.
-
-Cheers,
-Nathan
+--zlYDA4C+XDZaLiOa--
