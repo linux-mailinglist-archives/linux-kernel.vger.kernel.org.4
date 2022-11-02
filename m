@@ -2,162 +2,201 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3517F616200
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:48:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8450F6161FD
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:47:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230306AbiKBLsQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 07:48:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45404 "EHLO
+        id S230241AbiKBLrz (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 07:47:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230298AbiKBLsK (ORCPT
+        with ESMTP id S229553AbiKBLrw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 07:48:10 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 510C228723;
-        Wed,  2 Nov 2022 04:48:07 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id j12so16330381plj.5;
-        Wed, 02 Nov 2022 04:48:07 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=lrt48o0wxQzQSNwn9v0lTmEHxq/zDXHhMvj06dfThtY=;
-        b=TY2LrmuIAoR+xdiGyBablBuIPoXvzxK6cMCmSG4gN3TWjqpd30TwaP+LzPRqMH1drI
-         +y/3lRjhS9NFfbNfUjgujDC5BH2NgR733/m96E7Oe4xYVN0ym+ftOuQKxbgaRke+rS6Z
-         Wp8r+sgub3NlWrpc/YSJBmmikuvfmKyqmXAfpmmKgFtXYQRJagntlifh68AauVxlB1BF
-         /AEeCt4+brNpUwI+Lb8j47PnhjsA/I+rvCuYnbhmFFhk6eEdUUyKjT2Ib6WrNtaapS5U
-         rU99ywZWfG7MKxJdg5hWcAKdNZSHE5x7Gph/KiaVXz1I8g5OMdi4zmVPKP1U7qf9/cNs
-         ozaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:content-language:cc:to:subject:from
-         :user-agent:mime-version:date:message-id:x-gm-message-state:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=lrt48o0wxQzQSNwn9v0lTmEHxq/zDXHhMvj06dfThtY=;
-        b=tKSbla9CumoMIV0Py4EjrTGWj245m8MALqX6d7GtCs9qbSm/451Rw17RnCmGndQ+en
-         +JckLjt67wZqggJhnQvaOcCcJ1kCWKhfs0MR8TtC9UqX2Q7DAmEQzKY7jq4McgeC0c+K
-         nJis1XT/ZV4X+/ohn9IMUpGPBF8qG962eJpP7ZXuyc6bcEWh9B7f5zDxJy3T2ZVlmdTa
-         XBLwhxwCVOoPPj38fcSmquqv1HsIkPhlUhV0ikCug2F2fQZzzY3us3bA8/PhDXCjNPva
-         +/+EAyt+k46PzYr+eSZ4m23rfDStuwgWKgu+uDFZFr0LtEiN+LH9nhxi1tVBBUtGAx/l
-         tFxw==
-X-Gm-Message-State: ACrzQf3VutA3WgvbXj6k/8j5Mpu/dNpR96tNmOitFzJLMGZv0GJahxm2
-        12fMlEwC/KRhhLGxqSsFcDQ=
-X-Google-Smtp-Source: AMsMyM7CtWB8wxg+vrruuJ9K0sE0Tig7eyYj0WyGmnUalTtz2/1PxHmG4YgJO+NqaE2OkWJQIkgbzw==
-X-Received: by 2002:a17:90b:4f45:b0:213:ccc6:87df with SMTP id pj5-20020a17090b4f4500b00213ccc687dfmr19537471pjb.227.1667389686843;
-        Wed, 02 Nov 2022 04:48:06 -0700 (PDT)
-Received: from [192.168.11.9] (KD106167171201.ppp-bb.dion.ne.jp. [106.167.171.201])
-        by smtp.gmail.com with ESMTPSA id 13-20020a62190d000000b00562cfc80864sm8295435pfz.36.2022.11.02.04.48.04
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 04:48:06 -0700 (PDT)
-Message-ID: <4e54c76a-138a-07e0-985a-dd83cb622208@gmail.com>
-Date:   Wed, 2 Nov 2022 20:48:01 +0900
-MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-From:   Akira Yokosawa <akiyks@gmail.com>
-Subject: [PATCH] docs/driver-api/miscellaneous: Remove kernel-doc of
- serial_core.c
-To:     Jiri Slaby <jslaby@suse.cz>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Jonathan Corbet <corbet@lwn.net>
-Cc:     Akira Yokosawa <akiyks@gmail.com>, linux-doc@vger.kernel.org,
+        Wed, 2 Nov 2022 07:47:52 -0400
+Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.220.29])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9991827DFE;
+        Wed,  2 Nov 2022 04:47:51 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out2.suse.de (Postfix) with ESMTPS id 32BD01F8BE;
+        Wed,  2 Nov 2022 11:47:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
+        t=1667389670; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EbYrB+1vSr1UNNNQD2qKBkA3iRJw6rUD5tHYLyLGBgc=;
+        b=GrfCe/K3Gq9onijd8HxqKWriuCUf7AHUaKmTSSqv0mwUMm52w//PrrSB0C35cAcngThhWN
+        YJy7FbWhMfhj5hwUU4A7nCNHJI5mOFKS/bNaZIKLhY91GqrQAPWvpi13ej7p2+EwSuMFSu
+        0qlB8PohHeFWBhrY8cspLyaqsGZgsjY=
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
+        s=susede2_ed25519; t=1667389670;
+        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=EbYrB+1vSr1UNNNQD2qKBkA3iRJw6rUD5tHYLyLGBgc=;
+        b=hPnMxSoREYA/EjsRPO0RTlto/fa/D7ZKhpnHpylfB+C+agSTt93hUMpq6jqt4d88xJ6zOj
+        gHh7F5b7ebtJTLDQ==
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id D04B0139D3;
+        Wed,  2 Nov 2022 11:47:49 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id HHUgMOVYYmNmfQAAMHmgww
+        (envelope-from <lhenriques@suse.de>); Wed, 02 Nov 2022 11:47:49 +0000
+Received: from localhost (brahms.olymp [local])
+        by brahms.olymp (OpenSMTPD) with ESMTPA id 77ce4722;
+        Wed, 2 Nov 2022 11:48:51 +0000 (UTC)
+Date:   Wed, 2 Nov 2022 11:48:51 +0000
+From:   =?iso-8859-1?Q?Lu=EDs?= Henriques <lhenriques@suse.de>
+To:     Xiubo Li <xiubli@redhat.com>
+Cc:     Ilya Dryomov <idryomov@gmail.com>,
+        Jeff Layton <jlayton@kernel.org>, ceph-devel@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Content-Language: en-US
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Subject: Re: [RFC PATCH] ceph: allow encrypting a directory while not having
+ Ax caps
+Message-ID: <Y2JZI1QOl3dXBVUb@suse.de>
+References: <20221027112653.12122-1-lhenriques@suse.de>
+ <a992d844-6d75-e134-60e1-acb8c8972ff3@redhat.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a992d844-6d75-e134-60e1-acb8c8972ff3@redhat.com>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Since merge of tty-6.0-rc1, "make htmldocs" with Sphinx >=3.1 emits
-a bunch of warnings indicating duplicate kernel-doc comments from
-drivers/tty/serial/serial_core.c.
+On Mon, Oct 31, 2022 at 05:15:51PM +0800, Xiubo Li wrote:
+> 
+> On 27/10/2022 19:26, Luís Henriques wrote:
+> > If a client doesn't have Fx caps on a directory, it will get errors while
+> > trying encrypt it:
+> > 
+> > ceph: handle_cap_grant: cap grant attempt to change fscrypt_auth on non-I_NEW inode (old len 0 new len 48)
+> > fscrypt (ceph, inode 1099511627812): Error -105 getting encryption context
+> > 
+> > A simple way to reproduce this is to use two clients:
+> > 
+> >      client1 # mkdir /mnt/mydir
+> > 
+> >      client2 # ls /mnt/mydir
+> > 
+> >      client1 # fscrypt encrypt /mnt/mydir
+> >      client1 # echo hello > /mnt/mydir/world
+> > 
+> > This happens because, in __ceph_setattr(), we only initialize
+> > ci->fscrypt_auth if we have Ax.  If we don't have, we'll need to do that
+> > later, in handle_cap_grant().
+> > 
+> > Signed-off-by: Luís Henriques <lhenriques@suse.de>
+> > ---
+> > Hi!
+> > 
+> > To be honest, I'm not really sure about the conditions in the 'if': shall
+> > I bother checking it's really a dir and that it is empty?
+> > 
+> > Cheers,
+> > --
+> > Luís
+> > 
+> >   fs/ceph/caps.c | 26 +++++++++++++++++++++++---
+> >   1 file changed, 23 insertions(+), 3 deletions(-)
+> > 
+> > diff --git a/fs/ceph/caps.c b/fs/ceph/caps.c
+> > index 443fce066d42..e33b5c276cf3 100644
+> > --- a/fs/ceph/caps.c
+> > +++ b/fs/ceph/caps.c
+> > @@ -3511,9 +3511,29 @@ static void handle_cap_grant(struct inode *inode,
+> >   		     from_kuid(&init_user_ns, inode->i_uid),
+> >   		     from_kgid(&init_user_ns, inode->i_gid));
+> >   #if IS_ENABLED(CONFIG_FS_ENCRYPTION)
+> > -		if (ci->fscrypt_auth_len != extra_info->fscrypt_auth_len ||
+> > -		    memcmp(ci->fscrypt_auth, extra_info->fscrypt_auth,
+> > -			   ci->fscrypt_auth_len))
+> > +		if ((ci->fscrypt_auth_len == 0) &&
+> > +		    (extra_info->fscrypt_auth_len > 0) &&
+> > +		    S_ISDIR(inode->i_mode) &&
+> > +		    (ci->i_rsubdirs + ci->i_rfiles == 1)) {
+> > +			/*
+> > +			 * We'll get here when setting up an encrypted directory
+> > +			 * but we don't have Fx in that directory, i.e. other
+> > +			 * clients have accessed this directory too.
+> > +			 */
+> > +			ci->fscrypt_auth = kmemdup(extra_info->fscrypt_auth,
+> > +						   extra_info->fscrypt_auth_len,
+> > +						   GFP_KERNEL);
+> > +			if (ci->fscrypt_auth) {
+> > +				inode->i_flags |= S_ENCRYPTED;
+> > +				ci->fscrypt_auth_len = extra_info->fscrypt_auth_len;
+> > +			} else {
+> > +				pr_err("Failed to alloc memory for %llx.%llx fscrypt_auth\n",
+> > +					ceph_vinop(inode));
+> > +			}
+> > +			dout("ino %llx.%llx is now encrypted\n", ceph_vinop(inode));
+> > +		} else if (ci->fscrypt_auth_len != extra_info->fscrypt_auth_len ||
+> > +			   memcmp(ci->fscrypt_auth, extra_info->fscrypt_auth,
+> > +				  ci->fscrypt_auth_len))
+> >   			pr_warn_ratelimited("%s: cap grant attempt to change fscrypt_auth on non-I_NEW inode (old len %d new len %d)\n",
+> >   				__func__, ci->fscrypt_auth_len, extra_info->fscrypt_auth_len);
+> >   #endif
+> 
+> Hi Luis,
+> 
+> Thanks for your time on this bug.
+> 
+> IMO we should fix this in ceph_fill_inode():
+> 
+>  995 #ifdef CONFIG_FS_ENCRYPTION
+>  996         if (iinfo->fscrypt_auth_len && (inode->i_state & I_NEW)) {
+>  997                 kfree(ci->fscrypt_auth);
+>  998                 ci->fscrypt_auth_len = iinfo->fscrypt_auth_len;
+>  999                 ci->fscrypt_auth = iinfo->fscrypt_auth;
+> 1000                 iinfo->fscrypt_auth = NULL;
+> 1001                 iinfo->fscrypt_auth_len = 0;
+> 1002                 inode_set_flags(inode, S_ENCRYPTED, S_ENCRYPTED);
+> 1003         }
+> 1004 #endif
+> 
+> The setattr will get a reply from MDS including the fscrypt auth info, I
+> think the kclient just drop it here.
 
-This is due to the kernel-doc directive for serial_core.c in
-serial/drivers.rst added in the merge. It conflicts with an existing
-kernel-doc directive in miscellaneous.rst.
+I've done some testing and I don't really see this code kfree'ing a valid
+fscrypt_auth here.  However, I guess it is possible to fix this issue here
+too, but in a different way, by changing that 'if' condition to:
 
-Remove the latter directive and resolve the duplicates.
+	if (iinfo->fscrypt_auth_len &&
+	    ((inode->i_state & I_NEW) || (ci->fscrypt_auth_len == 0))) {
+	...
+	}
 
-Signed-off-by: Akira Yokosawa <akiyks@gmail.com>
-Fixes: 607ca0f742b7 ("Merge tag 'tty-6.0-rc1' of git://git.kernel.org/pub/scm/linux/kernel/git/gregkh/tty")
-Cc: stable@vger.kernel.org # 6.0
-Cc: Jiri Slaby <jslaby@suse.cz>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
----
-Hi Jiri,
+I'm not really sure if this is sane though.  When we loose the 'Ax' caps
+(another client as accessed the directory we're encrypting), we also seem
+to loose the I_NEW state.  Using the above code seems to work for the
+testcase in my patch, but I'm not sure it won't break something else.
 
-I've seeing the increased warnings of duplicates from "make htmldocs"
-since the 6.0 merge window. They look like (partial):
-
-/linux/Documentation/driver-api/serial/driver.rst:111: WARNING: Duplicate C declaration, also defined at driver-api/miscellaneous:111.
-Declaration is '.. c:function:: void uart_write_wakeup(struct uart_port *port)'.
-/linux/Documentation/driver-api/serial/driver.rst:111: WARNING: Duplicate C declaration, also defined at driver-api/miscellaneous:111.
-Declaration is '.. c:None:: struct uart_port *port'.
-/linux/Documentation/driver-api/serial/driver.rst:343: WARNING: Duplicate C declaration, also defined at driver-api/miscellaneous:343.
-Declaration is '.. c:function:: void uart_update_timeout(struct uart_port *port, unsigned int cflag, unsigned int baud)'.
-/linux/Documentation/driver-api/serial/driver.rst:343: WARNING: Duplicate C declaration, also defined at driver-api/miscellaneous:343.
-Declaration is '.. c:None:: struct uart_port *port'.
-/linux/Documentation/driver-api/serial/driver.rst:343: WARNING: Duplicate C declaration, also defined at driver-api/miscellaneous:343.
-Declaration is '.. c:None:: unsigned int cflag'.
-/linux/Documentation/driver-api/serial/driver.rst:343: WARNING: Duplicate C declaration, also defined at driver-api/miscellaneous:343.
-Declaration is '.. c:None:: unsigned int baud'.
-/linux/Documentation/driver-api/serial/driver.rst:376: WARNING: Duplicate C declaration, also defined at driver-api/miscellaneous:376.
-
-These warning messages are not easy to track down, as there is an
-unresolved issue in Sphinx's C domain parser who can't handle a
-function and a struct of the same name and causes duplicates in a
-later stage of Sphinx processing.
-
-But the warnings shown above turned out to be true duplicates.
-
-There is a not-clearly-documented rule in including kernel-doc
-comments into .rst files. Any kernel-doc comment can be included
-at most once in the whole documentation tree. Otherwise, you can't
-be sure of which target a cross-reference points to.
-
-As I don't have full context of these kernel-doc comments, this is
-meant as a band-aide patch, especially the reference to
-serial/driver.rst added at the bottom.
-
-If I can get acks from you and/or Greg, I'd like Jon to take the
-fix, as this issue affects the -doc tree most.
-
-Thanks,
-Akira
-
+Cheers,
 --
- Documentation/driver-api/miscellaneous.rst | 5 ++---
- 1 file changed, 2 insertions(+), 3 deletions(-)
+Luís
 
-diff --git a/Documentation/driver-api/miscellaneous.rst b/Documentation/driver-api/miscellaneous.rst
-index 304ffb146cf9..4a5104a368ac 100644
---- a/Documentation/driver-api/miscellaneous.rst
-+++ b/Documentation/driver-api/miscellaneous.rst
-@@ -16,12 +16,11 @@ Parallel Port Devices
- 16x50 UART Driver
- =================
- 
--.. kernel-doc:: drivers/tty/serial/serial_core.c
--   :export:
--
- .. kernel-doc:: drivers/tty/serial/8250/8250_core.c
-    :export:
- 
-+See serial/driver.rst for related APIs.
-+
- Pulse-Width Modulation (PWM)
- ============================
- 
-
-base-commit: 30a0b95b1335e12efef89dd78518ed3e4a71a763
--- 
-2.25.1
+> If we fix it in handle_cap_grant() I am afraid this bug still exists. What
+> if there is no any new caps will be issued or revoked recently and then
+> access to the directory ?
+> 
+> Thanks
+> 
+> - Xiubo
+> 
+> > 
+> 
 
