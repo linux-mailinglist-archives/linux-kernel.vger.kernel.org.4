@@ -2,67 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCC026169F6
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:04:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C61616169F8
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:06:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230426AbiKBRES (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:04:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33192 "EHLO
+        id S230510AbiKBRGk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:06:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33602 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiKBREP (ORCPT
+        with ESMTP id S230187AbiKBRGh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:04:15 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F145911A32;
-        Wed,  2 Nov 2022 10:04:14 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A2H469x093702;
-        Wed, 2 Nov 2022 12:04:06 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1667408646;
-        bh=rl4c4YwFqiQVdsamqsJtbq5KyzgRfRYaj2DX1UVoJmU=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=l2B/1W2SoTmechaDRa5Idx+/k4Xc2NBSKcD+X22Oe+If1ZOSc8Z2wvaXqE4UKb0q5
-         YwExipL20RjTAIGkWMUFH7G7txM3orCKHwdfIx/DD+RN0HiBSGUxe4b7YNnF7iL/x/
-         AX3Esh54tuOSnuiIxjCBF6pQEUt6PhQma4UQIvJw=
-Received: from DLEE103.ent.ti.com (dlee103.ent.ti.com [157.170.170.33])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A2H46QH080418
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Wed, 2 Nov 2022 12:04:06 -0500
-Received: from DLEE113.ent.ti.com (157.170.170.24) by DLEE103.ent.ti.com
- (157.170.170.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Wed, 2 Nov
- 2022 12:04:06 -0500
-Received: from fllv0040.itg.ti.com (10.64.41.20) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Wed, 2 Nov 2022 12:04:06 -0500
-Received: from [10.249.33.217] (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0040.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A2H45Pj118344;
-        Wed, 2 Nov 2022 12:04:05 -0500
-Message-ID: <4f954c08-6a2e-93b5-6806-7b27b247496e@ti.com>
-Date:   Wed, 2 Nov 2022 12:04:04 -0500
+        Wed, 2 Nov 2022 13:06:37 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6D83312098
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 10:05:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667408742;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=8g+IU1SbconJtIJvE9qWH+h96tYel1GhCAQmvBe4qsI=;
+        b=XJPEDlVKiPnFSfbr173eMLO2awzmTbJGCHwX+JP0CCqPlylroMJ43d/aEVu2Pntqx4+A13
+        AOoV6h/kMJNrjRZ7cfG7ErElrozcvNB7HX0m2Hdo4N+c5lpZlCYkhWe7Vxn4xVWnGBYuQO
+        tOi0j/9SOyeyKthezao8AYXvdoBjTKM=
+Received: from mail-vs1-f69.google.com (mail-vs1-f69.google.com
+ [209.85.217.69]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-511-5sOtrS0DMVCGRQcarRjkyA-1; Wed, 02 Nov 2022 13:05:41 -0400
+X-MC-Unique: 5sOtrS0DMVCGRQcarRjkyA-1
+Received: by mail-vs1-f69.google.com with SMTP id t12-20020a05610210cc00b003ac8bb7b18fso2960378vsr.11
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 10:05:41 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8g+IU1SbconJtIJvE9qWH+h96tYel1GhCAQmvBe4qsI=;
+        b=Cmn8KQYqbZuT2lMLL1jb5VnUqlwgnOQ36Ty7f8Oqx/jXhS/Th1H5uLHJ3woPAQPqSU
+         OiFgJMtVSPOHSdvUv8d+wYl6JUtmp4wr+kaarhgfMzoW0xY3AG66+Nn6JGYSurKu5FSG
+         vlkKLRxThqzeDv9JMjcY8a6Jb6TmCEzKJX4Tp30z4H5eqFvxlrUozzxLyBxTPedpBXg+
+         qMvx/Nt+vcgnNztl5uKLIUcp/5G9YZVC9/2mHXibsGq7EdOX8eFf67UYOgYXjaHSZXRn
+         hCohH3MOy9dxHz6jtXVHWkrIuz0QqhUoAhdQtjixKWnIt9aCfNwIsFh8oL+pCZTdd9aU
+         skcw==
+X-Gm-Message-State: ACrzQf2YPwVH6zG9xL0JotFegAapglPP4oDYLvL196GFH8qNUiqUCzw9
+        N6jDLCwQaCzTs42ZG5kw52F01v4WKMcdPd0cE+y1aWWi/u3NlA44tfDI63sYwmdtPkqf1JQFzkX
+        Cl2GOfI9Kbp0D3FXUX2bttvo6f30jCDbw4xTY/nfV
+X-Received: by 2002:a67:dc0b:0:b0:3aa:304f:54bc with SMTP id x11-20020a67dc0b000000b003aa304f54bcmr12393814vsj.76.1667408740594;
+        Wed, 02 Nov 2022 10:05:40 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM7ZVn7Uq6fOScLt3XDDum0YUD0JH7ATLN68jBf8DzysLFYF3QjlN0LTcHgv3m8T/SZU2rTj+ahxYImgUAhPpRU=
+X-Received: by 2002:a67:dc0b:0:b0:3aa:304f:54bc with SMTP id
+ x11-20020a67dc0b000000b003aa304f54bcmr12393784vsj.76.1667408740326; Wed, 02
+ Nov 2022 10:05:40 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 1/3] arm64: dts: ti: k3-am65-main: drop RNG clock
-Content-Language: en-US
-To:     Nishanth Menon <nm@ti.com>, Jayesh Choudhary <j-choudhary@ti.com>
-CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <j-keerthy@ti.com>, <krzysztof.kozlowski+dt@linaro.org>,
-        <s-anna@ti.com>, <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20221031213237.52275-1-j-choudhary@ti.com>
- <20221031213237.52275-2-j-choudhary@ti.com>
- <20221102151706.krsi5lujydb4nswa@daybreak>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <20221102151706.krsi5lujydb4nswa@daybreak>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221102161542.30669-1-sven@svenpeter.dev>
+In-Reply-To: <20221102161542.30669-1-sven@svenpeter.dev>
+From:   Eric Curtin <ecurtin@redhat.com>
+Date:   Wed, 2 Nov 2022 17:05:24 +0000
+Message-ID: <CAOgh=FxPmg_xDq=5xW3=NpGXHBWAZ-E57SiqsbVfNc7UXtq5sA@mail.gmail.com>
+Subject: Re: [PATCH] usb: typec: tipd: Prevent uninitialized event{1,2} in IRQ handler
+To:     Sven Peter <sven@svenpeter.dev>
+Cc:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Hector Martin <marcan@marcan.st>,
+        =?UTF-8?Q?Guido_G=C3=BCnther?= <agx@sigxcpu.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -70,59 +77,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/2/22 10:17 AM, Nishanth Menon wrote:
-> On 03:02-20221101, Jayesh Choudhary wrote:
->> Drop RNG clock property as it is not controlled by rng-driver.
-> 
-> Does'nt tell me what is the alternative? why is the hardware description
-> not sufficient for control?
-> 
-> https://software-dl.ti.com/tisci/esd/latest/5_soc_doc/am65x_sr2/clocks.html#clocks-for-sa2-ul0-device
-> Looks like a perfectly valid description - do we have a bug and firmware
-> does'nt allow control here?
-> 
+On Wed, 2 Nov 2022 at 16:24, Sven Peter <sven@svenpeter.dev> wrote:
+>
+> If reading TPS_REG_INT_EVENT1/2 fails in the interrupt handler event1
+> and event2 may be uninitialized when they are used to determine
+> IRQ_HANDLED vs. IRQ_NONE in the error path.
+>
+> Fixes: c7260e29dd20 ("usb: typec: tipd: Add short-circuit for no irqs")
+> Fixes: 45188f27b3d0 ("usb: typec: tipd: Add support for Apple CD321X")
+> Signed-off-by: Sven Peter <sven@svenpeter.dev>
 
-We have three input clocks feeding the SA2UL module, x1, x2, pka. PKA goes
-to the PKA sub-module (isn't it nice when they make things simple). But x1 and
-x2 are miscellaneous and bus clocks respectively and route to several sub-modules.
+Reviewed-by: Eric Curtin <ecurtin@redhat.com>
 
-All we drop here is the clock handle in the RNG sub-module, as that sub-module is
-not the owner of that clock (the parent SA2UL is). The alternative we could implement
-is to move the clock node up to the parent SA2UL node.
+> ---
+>  drivers/usb/typec/tipd/core.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+>
+> diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+> index b637e8b378b3..2a77bab948f5 100644
+> --- a/drivers/usb/typec/tipd/core.c
+> +++ b/drivers/usb/typec/tipd/core.c
+> @@ -474,7 +474,7 @@ static void tps6598x_handle_plug_event(struct tps6598x *tps, u32 status)
+>  static irqreturn_t cd321x_interrupt(int irq, void *data)
+>  {
+>         struct tps6598x *tps = data;
+> -       u64 event;
+> +       u64 event = 0;
+>         u32 status;
+>         int ret;
+>
+> @@ -519,8 +519,8 @@ static irqreturn_t cd321x_interrupt(int irq, void *data)
+>  static irqreturn_t tps6598x_interrupt(int irq, void *data)
+>  {
+>         struct tps6598x *tps = data;
+> -       u64 event1;
+> -       u64 event2;
+> +       u64 event1 = 0;
+> +       u64 event2 = 0;
+>         u32 status;
+>         int ret;
+>
+> --
+> 2.25.1
+>
+>
 
->>
->> Fixes: b366b2409c97 ("arm64: dts: ti: k3-am6: Add crypto accelarator node")
->> Signed-off-by: Jayesh Choudhary <j-choudhary@ti.com>
->> ---
->>   arch/arm64/boot/dts/ti/k3-am65-main.dtsi | 1 -
->>   1 file changed, 1 deletion(-)
->>
->> diff --git a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
->> index 4005a73cfea9..e166d7b7e3a1 100644
->> --- a/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
->> +++ b/arch/arm64/boot/dts/ti/k3-am65-main.dtsi
->> @@ -126,7 +126,6 @@ rng: rng@4e10000 {
->>   			compatible = "inside-secure,safexcel-eip76";
->>   			reg = <0x0 0x4e10000 0x0 0x7d>;
->>   			interrupts = <GIC_SPI 24 IRQ_TYPE_LEVEL_HIGH>;
->> -			clocks = <&k3_clks 136 1>;
-> 
-> Does this mean that the crypto module's power-domains property should be
-> dropped as well?
-> 
-
-Why? the power-domains property is in the correct spot (up in the parent node).
-
-Now it is true we cant actually shut the SA2UL down since it is owned
-by the security processor, but since it is marked TI_SCI_PD_SHARED this
-should be fine.
-
-Andrew
-
->>   			status = "disabled"; /* Used by OP-TEE */
->>   		};
->>   	};
->> -- 
->> 2.25.1
->>
-> 
