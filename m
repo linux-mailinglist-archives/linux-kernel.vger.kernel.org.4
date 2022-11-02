@@ -2,125 +2,145 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4D8361613F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 11:52:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B472616142
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 11:53:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230136AbiKBKw0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 06:52:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40398 "EHLO
+        id S229993AbiKBKxC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 06:53:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40642 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229537AbiKBKwY (ORCPT
+        with ESMTP id S229496AbiKBKw6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 06:52:24 -0400
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58EC31E727
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 03:52:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1667386330; bh=HBAxfkznxamTqzTNEHmvj4QQ3boXDkszRA7TyMufuq4=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=cWJXc4V4qfbUVPGLu6mE47oBD9QRbElrw3I0kKg8BDZNTBleNWOl/y2EJYgR1wjP3
-         vk0ParN8XEg+0M3j8dV6c7U02sfNTR+hn5NHx48+JE5qyDCAFAJ7y0SlKcsdN6eSm8
-         iIh10ogOoy6dmBxf2fGs7+W2440zhW/9GIW5dLhA=
-Received: by b-4.in.mailobj.net [192.168.90.14] with ESMTP
-        via [213.182.55.206]
-        Wed,  2 Nov 2022 11:52:10 +0100 (CET)
-X-EA-Auth: PJtC4HxQft13dbgVhAl0/aTTrGgP7lIsT8Og5yMajDQuZp5MXOPamX2WHx0RWV2aLGFJ1/EA5M7L5TWW9ptoMFl+9NMrIxpJ
-Date:   Wed, 2 Nov 2022 16:22:06 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     outreachy@lists.linux.dev,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2] staging: r8188eu: remove unwanted variable
- implementation
-Message-ID: <Y2JL1i4AIgCa4iDT@lion2204>
-References: <Y2F/CtEnjWlHgw9f@ubunlion>
- <Y2IccKxNDyd/MEqY@kroah.com>
- <Y2IkFqxujKnZ/9MQ@ubunlion>
+        Wed, 2 Nov 2022 06:52:58 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 737371403C;
+        Wed,  2 Nov 2022 03:52:57 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 12DD5617F0;
+        Wed,  2 Nov 2022 10:52:57 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 65E06C433C1;
+        Wed,  2 Nov 2022 10:52:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667386376;
+        bh=NDOSDtF1moYJudFzXEU8Fr9+WFsHcE/xRnSi1+ZcO7c=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Na/BGUedFirgHaWPiyVX6ER5jxLKzRsnHS04v8ArlXi3JkKsB/MkA6Ku0a5LwoLb+
+         Dprv7i13JLcDhxy+iOP0LhPs//an9FpJoDmAgmfDxG6BetwzK+vivLBPCobjj19FEV
+         aweGk86xTmX1kj2fJVg0+2dK4TavfmqBzmV417uvcpPAar7D/czSTLme1Wm4OGaSHQ
+         qhzgURPCc3B4GQvVHW9Nte7PvR/QiIEu2vKD44OHHezyAIv+5LYWsMkPAIzyG9Lt8z
+         dOm+0GbTP/xoDc5T+TDeetUejclFfv+icFJ4LkGzyWVwntGPeeYp+s3x3w2UNfpI5R
+         8HKwfwX8j/zFA==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oqBMN-000123-Hg; Wed, 02 Nov 2022 11:52:40 +0100
+Date:   Wed, 2 Nov 2022 11:52:39 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, patches@lists.linux.dev,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Satya Priya <quic_c_skakit@quicinc.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: Re: [PATCH] clk: qcom: gdsc: Remove direct runtime PM calls
+Message-ID: <Y2JL9/HFrb3E+CYY@hovoldconsulting.com>
+References: <20221101233421.997149-1-swboyd@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y2IkFqxujKnZ/9MQ@ubunlion>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221101233421.997149-1-swboyd@chromium.org>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 01:32:30PM +0530, Deepak R Varma wrote:
-> On Wed, Nov 02, 2022 at 08:29:52AM +0100, Greg Kroah-Hartman wrote:
-> > On Wed, Nov 02, 2022 at 01:48:18AM +0530, Deepak R Varma wrote:
-> > > Local variables intended as the function return value are
-> > > initialized but their value does not change during function
-> > > execution. The initial value assigned to the variable is simply
-> > > returned to the caller. This makes the variable declaration
-> > > unnecessary and the initial value can be directly returned.
-> > >
-> > > Following table lists the initial commits when the variables were first
-> > > introduced but have not been used since inception:
-> > >
-> > > Variable  Function	File			     Inception Commit
-> > > ret	  rtw_sta_flush	r8188eu/core/rtw_ap.c	     [1]
-> > > ret	  amsdu_to_msdu r8188eu/core/rtw_recv.c	     [2]
-> > > ret	  rtw_p2p_set	r8188eu/os_dep/ioctl_linux.c [3]
-> > >
-> > > [1] 'commit 9a7fe54ddc3a ("staging: r8188eu: Add source files for new driver - part 1")'
-> > > [2] 'commit 1cc18a22b96b ("staging: r8188eu: Add files for new driver - part 5")'
-> > > [3] 'commit a2c60d42d97c ("staging: r8188eu: Add files for new driver - part 16")'
-> > >
-> > > However, local variable pull of the function update_txdesc from file
-> > > r8188eu/hal/rtl8188eu_xmit.c was in use prior to introduction of
-> > > commit ID [4] 7bdedfef085bb65. The clean-up associated with this
-> > > commit left the variable pull redundant.
-> > >
-> > > [4] 'commit 7bdedfef085b ("staging: r8188eu: Remove mp, a.k.a. manufacturing process, code")'
-> > >
-> > > The patch is produced using the following coccicheck options:
-> > >    COCCI=./scripts/coccinelle/misc/returnvar.cocci
-> > >    M=driver/staging/r8188eu/
-> > >    MODE=patch
-> > >
-> > > Signed-off-by: Deepak R Varma <drv@mailo.com>
-> > > ---
-> > >
-> > > Changes in v2:
-> > >    1. Include reason for why the variable declarations are not useful. Suggested
-> > >       by Julia Lawall <julia.lawall@inria.fr>
-> >
-> > Does not apply to my tree at all :(
-> >
-> > Please rebase and resubmit.
->
-> Hello Greg,
-> Looks like there was another patch effort in parallel to correct this coccicheck
-> complaint. I am checking if all the observations from my patch are resolved. If
-> not, I will rebase and send in revised patch.
+On Tue, Nov 01, 2022 at 04:34:21PM -0700, Stephen Boyd wrote:
+> We shouldn't be calling runtime PM APIs from within the genpd
+> enable/disable path for a couple reasons.
+> 
+> First, this causes an AA lockdep splat because genpd can call into genpd
+> code again while holding the genpd lock.
+> 
+> WARNING: possible recursive locking detected
+> 5.19.0-rc2-lockdep+ #7 Not tainted
+> --------------------------------------------
+> kworker/2:1/49 is trying to acquire lock:
+> ffffffeea0370788 (&genpd->mlock){+.+.}-{3:3}, at: genpd_lock_mtx+0x24/0x30
+> 
+> but task is already holding lock:
+> ffffffeea03710a8 (&genpd->mlock){+.+.}-{3:3}, at: genpd_lock_mtx+0x24/0x30
+> 
+> other info that might help us debug this:
+>  Possible unsafe locking scenario:
+> 
+>        CPU0
+>        ----
+>   lock(&genpd->mlock);
+>   lock(&genpd->mlock);
+> 
+>  *** DEADLOCK ***
+> 
+>  May be due to missing lock nesting notation
 
-Hello Greg,
-I verified and found that all the changes my patch proposed have been introduced
-by parallel patches from another developer. Hence this patch can be ignored.
+I've seen this splat on sc8280xp as well but haven't had time to look
+into it yet.
 
-Thank you.
-./drv
+> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Cc: Johan Hovold <johan+linaro@kernel.org>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Taniya Das <quic_tdas@quicinc.com>
+> Cc: Satya Priya <quic_c_skakit@quicinc.com>
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Cc: Matthias Kaehlcke <mka@chromium.org>
+> Reported-by: Stephen Boyd <swboyd@chromium.org>
 
->
-> Thank you.
-> ./drv
->
-> >
-> > thanks,
-> >
-> > greg k-h
-> >
-> >
->
->
->
+We typically don't add Reported-by tags for bugs we find and fix
+ourselves.
 
+> Fixes: 1b771839de05 ("clk: qcom: gdsc: enable optional power domain support")
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+>  drivers/clk/qcom/gdsc.c | 64 ++++++-----------------------------------
+>  1 file changed, 8 insertions(+), 56 deletions(-)
+> 
+> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+> index 7cf5e130e92f..a775ce1b7d8a 100644
+> --- a/drivers/clk/qcom/gdsc.c
+> +++ b/drivers/clk/qcom/gdsc.c
 
+> @@ -495,14 +451,11 @@ static int gdsc_init(struct gdsc *sc)
+>  		sc->pd.power_on = gdsc_enable;
+>  
+>  	ret = pm_genpd_init(&sc->pd, NULL, !on);
+> -	if (ret)
+> -		goto err_put_rpm;
+> +	if (!ret)
+> +		goto err_disable_supply;
+
+The logic should not be inverted here (and only happens to work
+currently when you have no regulator or the gdsc was off).
+
+>  	return 0;
+>  
+> -err_put_rpm:
+> -	if (on)
+> -		gdsc_pm_runtime_put(sc);
+>  err_disable_supply:
+>  	if (on && sc->rsupply)
+>  		regulator_disable(sc->rsupply);
+
+Johan
