@@ -2,60 +2,60 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6FE8E61574D
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 03:05:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3029D61574F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 03:05:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230187AbiKBCFG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 22:05:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34600 "EHLO
+        id S230283AbiKBCFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 22:05:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34640 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230122AbiKBCEy (ORCPT
+        with ESMTP id S230185AbiKBCE5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 22:04:54 -0400
+        Tue, 1 Nov 2022 22:04:57 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1FD6E6351
-        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 19:03:52 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BABF863DB
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 19:03:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667354631;
+        s=mimecast20190719; t=1667354636;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=9awyJRy6zbIYnxU2Cyp8GDi5vivjY8I9wO3N/Lj5YCI=;
-        b=FRgrnSxEw6MrXo8g7bVS2LwGLrnJ/DyTJ6aDxu52eO3jWNDdp75fa+yu8ZL3P+m1w9CZpy
-        dbE8JoyWEcsN+OeM6DQjn6rAMJT7f9obDeka0Zm4eHx4UzWMSXwXq7uMJeI14JgVSBhrXZ
-        OUGRv4w3Ih4I9vbH7D0ob5E4t7BHnuY=
-Received: from mail-oa1-f71.google.com (mail-oa1-f71.google.com
- [209.85.160.71]) by relay.mimecast.com with ESMTP with STARTTLS
+        bh=i2RYvVpIxnZB4mRhcfM8kpuAulQpsyxXS11J9gDFkxg=;
+        b=Zwzdmd6DfrLyphZlYUUq0lM/DoE0GLwAiWkYmwOq4W2QG/2jVAwrI97VRX2M6GDGQ0QL2e
+        smmMDj6UwOImmMZqm1vWfoekoH6A2gB8lguxmTKX+0/AFipCZ5oqHCPe9wtnTDoTBiyMed
+        +avQ5VVJ/e1YFQXTqblIR0arPqNNiXk=
+Received: from mail-oo1-f71.google.com (mail-oo1-f71.google.com
+ [209.85.161.71]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-548-y8dEA0X8PuaogSBUFbIpNw-1; Tue, 01 Nov 2022 22:03:49 -0400
-X-MC-Unique: y8dEA0X8PuaogSBUFbIpNw-1
-Received: by mail-oa1-f71.google.com with SMTP id 586e51a60fabf-13bf576ffa6so8095986fac.9
-        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 19:03:49 -0700 (PDT)
+ us-mta-246-kZgHHuwuMuK0uDK0MYwmmQ-1; Tue, 01 Nov 2022 22:03:55 -0400
+X-MC-Unique: kZgHHuwuMuK0uDK0MYwmmQ-1
+Received: by mail-oo1-f71.google.com with SMTP id g6-20020a4a6b06000000b0049d1e5cd0cfso59052ooc.4
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 19:03:54 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=9awyJRy6zbIYnxU2Cyp8GDi5vivjY8I9wO3N/Lj5YCI=;
-        b=FKliEiPpmxf2y01QRbKdhGdThKDeBZ7qlxKCH3x/YfncLKdulq2v+LDkaHlHpea5x1
-         /WTxGPPI4kgROHTX+YtWVjLoXjFU1P5qamc1muVLlqPp5loHtwJhmHeDxbxlMvL1ukqk
-         5lY1+9Aut9IuAVRUVPrGibA6dv4UM8b/IxmSPw/T1Kt/oRM62pT7MzNHwefrHpMJhrdE
-         7G4iTS+RRAsa0Zo3mh+GwW4FX31FlLozniEHEz22UsxseNT4xxOHq1YbPWawSTei2Fna
-         nMAr8zKHE14s+dIzR5YSi4v2REgdX/BpxKgWBYseTtWqRqM7AEF6s9uuWQyZB4PttDS+
-         2onQ==
-X-Gm-Message-State: ACrzQf2489St25aQCBKbbIkegZAqV4ff3a2PwDIrMDPpNZB3TRQR4hIu
-        40vPHe0FNjaJSEZFwBz7KI5KQ+lKPNrScMIf3fHGp23GyZWQvDrNVFIX1uIDxYnrK49U3zwPyCV
-        cruh1tuWUqdYbyRFF8IOj+UQS
-X-Received: by 2002:a05:6871:58b:b0:13c:be46:a02 with SMTP id u11-20020a056871058b00b0013cbe460a02mr11636093oan.8.1667354629098;
-        Tue, 01 Nov 2022 19:03:49 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5ltoJltHI6Z/nEB+eev0WW7uJWB140pg3Bn+RcqlseVCQsPXYU6LZG5IjvE4MMVOkxV19MIA==
-X-Received: by 2002:a05:6871:58b:b0:13c:be46:a02 with SMTP id u11-20020a056871058b00b0013cbe460a02mr11636072oan.8.1667354628892;
-        Tue, 01 Nov 2022 19:03:48 -0700 (PDT)
+        bh=i2RYvVpIxnZB4mRhcfM8kpuAulQpsyxXS11J9gDFkxg=;
+        b=daQWhjFCY87bRZwHaEI7uE8crvpGuzT+af2x5ho1/LQscqPAXt0E7a+tvAO3gTk1bc
+         RloW9fYfX9Csk7JzpU5wc4ROPR2lq0rTE3O46juYPjgLV+/5QlRdOdNKVYfaqQBMzyQR
+         7m9lWal2dPkxRiSZAxFyeuOSFTxcfsgm5r2NFMtow1WGZVXyo4eLgIMo+edLOQGGp1EP
+         g6Ycsxxp1nrjYgB2ZiRoL4JU2gbvp+rOAYhWtDuqlbgBkAn+a/7evM20jEBJnDM+9SPa
+         C8sYYMOH/kIs8FW3K8UHlGJv3sorwUS9bBq6rp/b4bnyhLrcCHSY0eJ9XPAqkX9bfZ3l
+         NQWA==
+X-Gm-Message-State: ACrzQf0als6DnJLnEs67IKfUKCBR1/UdT7djIbiZ1r3Z/+LC/1ywNmGN
+        qhrQq6FYyKwFzbq9id0w0Lbiar6WlYToKLaPyA1+OV6mI55CH6nUl6L0k0NcNORqJPtxqEA2CIZ
+        6tEqvb7cIGrwMTxUNSEO/qc4H
+X-Received: by 2002:a05:6870:4212:b0:13c:d544:8e2a with SMTP id u18-20020a056870421200b0013cd5448e2amr10233067oac.28.1667354634222;
+        Tue, 01 Nov 2022 19:03:54 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM5TucfJr70Pv/6ho03ND1IeMhGN5op58YZ9rbaUJ10xOKWU2YOlELtwuMUjwXZ9y/ol3qVj0Q==
+X-Received: by 2002:a05:6870:4212:b0:13c:d544:8e2a with SMTP id u18-20020a056870421200b0013cd5448e2amr10233044oac.28.1667354633998;
+        Tue, 01 Nov 2022 19:03:53 -0700 (PDT)
 Received: from LeoBras.redhat.com ([2804:1b3:a802:1099:7cb2:3a49:6197:5307])
-        by smtp.gmail.com with ESMTPSA id h15-20020a9d6f8f000000b00665919f7823sm4526624otq.8.2022.11.01.19.03.44
+        by smtp.gmail.com with ESMTPSA id h15-20020a9d6f8f000000b00665919f7823sm4526624otq.8.2022.11.01.19.03.49
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 01 Nov 2022 19:03:48 -0700 (PDT)
+        Tue, 01 Nov 2022 19:03:53 -0700 (PDT)
 From:   Leonardo Bras <leobras@redhat.com>
 To:     Ingo Molnar <mingo@redhat.com>,
         Peter Zijlstra <peterz@infradead.org>,
@@ -78,9 +78,9 @@ To:     Ingo Molnar <mingo@redhat.com>,
         Marcelo Tosatti <mtosatti@redhat.com>
 Cc:     linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
         linux-mm@kvack.org
-Subject: [PATCH v1 2/3] mm/memcontrol: Change stock_lock type from local_lock_t to spinlock_t
-Date:   Tue,  1 Nov 2022 23:02:42 -0300
-Message-Id: <20221102020243.522358-3-leobras@redhat.com>
+Subject: [PATCH v1 3/3] mm/memcontrol: Add drain_remote_stock(), avoid drain_stock on isolated cpus
+Date:   Tue,  1 Nov 2022 23:02:43 -0300
+Message-Id: <20221102020243.522358-4-leobras@redhat.com>
 X-Mailer: git-send-email 2.38.1
 In-Reply-To: <20221102020243.522358-1-leobras@redhat.com>
 References: <20221102020243.522358-1-leobras@redhat.com>
@@ -96,159 +96,136 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In this context, since it's using per-cpu variables, changing from
-local_lock to spinlock should not deal much impact in performance and can
-allow operations such as stock draining to happen in remote cpus.
+When drain_all_stock() is called, some CPUs will be required to have their
+per-CPU caches drained. This currently happens by scheduling a call to
+drain_local_stock() to run in each affected CPU.
 
-Why performance would probably not get impacted:
-1 - Since the lock is in the same cache line as the information that is
-    used next, there is no extra memory access for caching the lock.
-2 - Since it's a percpu struct, there should be no other cpu sharing this
-    cacheline, so there is no need for cacheline invalidation, and writing
-    to the lock should be as fast as the next struct members.
-3 - Even the write in (2) could be pipelined and batched with following
-    writes to the cacheline (such as nr_pages member), further decreasing
-    the impact of this change.
+This, as a consequence, may end up scheduling work to CPUs that are
+isolated, and therefore should have as little interruption as possible.
 
-Suggested-by: Marcelo Tosatti <mtosatti@redhat.com>
+In order to avoid this, make drain_all_stock() able to detect isolated CPUs
+and schedule draining the perCPU stock to happen in another non-isolated
+CPU.
+
+But since the current implementation only allows the drain to happen in
+local CPU, implement a function to drain stock on a remote CPU:
+drain_remote_stock().
+
+Given both drain_local_stock() and drain_remote_stock() do almost the same
+work, implement a inline drain_stock_helper() that is called by both.
+
+Also, since drain_stock() will be able to run on a remote CPU, protect
+memcg_hotplug_cpu_dead() with stock_lock.
+
 Signed-off-by: Leonardo Bras <leobras@redhat.com>
 ---
- mm/memcontrol.c | 38 ++++++++++++++++++++------------------
- 1 file changed, 20 insertions(+), 18 deletions(-)
+ mm/memcontrol.c | 47 ++++++++++++++++++++++++++++++++++++++---------
+ 1 file changed, 38 insertions(+), 9 deletions(-)
 
 diff --git a/mm/memcontrol.c b/mm/memcontrol.c
-index 2d8549ae1b300..add46da2e6df1 100644
+index add46da2e6df1..7ad6e4f4b79ef 100644
 --- a/mm/memcontrol.c
 +++ b/mm/memcontrol.c
-@@ -2167,7 +2167,7 @@ void unlock_page_memcg(struct page *page)
+@@ -30,6 +30,7 @@
+ #include <linux/cgroup.h>
+ #include <linux/pagewalk.h>
+ #include <linux/sched/mm.h>
++#include <linux/sched/isolation.h>
+ #include <linux/shmem_fs.h>
+ #include <linux/hugetlb.h>
+ #include <linux/pagemap.h>
+@@ -2263,7 +2264,7 @@ static void drain_stock(struct memcg_stock_pcp *stock)
+ 	stock->cached = NULL;
  }
  
- struct memcg_stock_pcp {
--	local_lock_t stock_lock;
-+	spinlock_t stock_lock; /* Protects the percpu struct */
- 	struct mem_cgroup *cached; /* this never be root cgroup */
- 	unsigned int nr_pages;
- 
-@@ -2184,7 +2184,7 @@ struct memcg_stock_pcp {
- #define FLUSHING_CACHED_CHARGE	0
- };
- static DEFINE_PER_CPU(struct memcg_stock_pcp, memcg_stock) = {
--	.stock_lock = INIT_LOCAL_LOCK(stock_lock),
-+	.stock_lock = __SPIN_LOCK_UNLOCKED(stock_lock),
- };
- static DEFINE_MUTEX(percpu_charge_mutex);
- 
-@@ -2229,15 +2229,15 @@ static bool consume_stock(struct mem_cgroup *memcg, unsigned int nr_pages)
- 	if (nr_pages > MEMCG_CHARGE_BATCH)
- 		return ret;
- 
--	local_lock_irqsave(&memcg_stock.stock_lock, flags);
--
- 	stock = this_cpu_ptr(&memcg_stock);
-+	spin_lock_irqsave(&stock->stock_lock, flags);
-+
- 	if (memcg == stock->cached && stock->nr_pages >= nr_pages) {
- 		stock->nr_pages -= nr_pages;
- 		ret = true;
- 	}
- 
--	local_unlock_irqrestore(&memcg_stock.stock_lock, flags);
-+	spin_unlock_irqrestore(&stock->stock_lock, flags);
- 
- 	return ret;
- }
-@@ -2274,14 +2274,14 @@ static void drain_local_stock(struct work_struct *dummy)
- 	 * drain_stock races is that we always operate on local CPU stock
- 	 * here with IRQ disabled
- 	 */
--	local_lock_irqsave(&memcg_stock.stock_lock, flags);
--
- 	stock = this_cpu_ptr(&memcg_stock);
-+	spin_lock_irqsave(&stock->stock_lock, flags);
-+
- 	old = drain_obj_stock(stock);
- 	drain_stock(stock);
- 	clear_bit(FLUSHING_CACHED_CHARGE, &stock->flags);
- 
--	local_unlock_irqrestore(&memcg_stock.stock_lock, flags);
-+	spin_unlock_irqrestore(&stock->stock_lock, flags);
- 	if (old)
- 		obj_cgroup_put(old);
- }
-@@ -2309,10 +2309,12 @@ static void __refill_stock(struct mem_cgroup *memcg, unsigned int nr_pages)
- static void refill_stock(struct mem_cgroup *memcg, unsigned int nr_pages)
+-static void drain_local_stock(struct work_struct *dummy)
++static inline void drain_stock_helper(int cpu)
  {
- 	unsigned long flags;
-+	struct memcg_stock_pcp *stock;
- 
--	local_lock_irqsave(&memcg_stock.stock_lock, flags);
-+	stock = this_cpu_ptr(&memcg_stock);
-+	spin_lock_irqsave(&stock->stock_lock, flags);
- 	__refill_stock(memcg, nr_pages);
--	local_unlock_irqrestore(&memcg_stock.stock_lock, flags);
-+	spin_unlock_irqrestore(&stock->stock_lock, flags);
- }
- 
- /*
-@@ -3157,8 +3159,8 @@ void mod_objcg_state(struct obj_cgroup *objcg, struct pglist_data *pgdat,
- 	unsigned long flags;
- 	int *bytes;
- 
--	local_lock_irqsave(&memcg_stock.stock_lock, flags);
- 	stock = this_cpu_ptr(&memcg_stock);
-+	spin_lock_irqsave(&stock->stock_lock, flags);
+ 	struct memcg_stock_pcp *stock;
+ 	struct obj_cgroup *old = NULL;
+@@ -2271,10 +2272,9 @@ static void drain_local_stock(struct work_struct *dummy)
  
  	/*
- 	 * Save vmstat data in stock and skip vmstat array update unless
-@@ -3210,7 +3212,7 @@ void mod_objcg_state(struct obj_cgroup *objcg, struct pglist_data *pgdat,
- 	if (nr)
- 		mod_objcg_mlstate(objcg, pgdat, idx, nr);
+ 	 * The only protection from cpu hotplug (memcg_hotplug_cpu_dead) vs.
+-	 * drain_stock races is that we always operate on local CPU stock
+-	 * here with IRQ disabled
++	 * drain_stock races is stock_lock, a percpu spinlock.
+ 	 */
+-	stock = this_cpu_ptr(&memcg_stock);
++	stock = per_cpu_ptr(&memcg_stock, cpu);
+ 	spin_lock_irqsave(&stock->stock_lock, flags);
  
--	local_unlock_irqrestore(&memcg_stock.stock_lock, flags);
-+	spin_unlock_irqrestore(&stock->stock_lock, flags);
- 	if (old)
+ 	old = drain_obj_stock(stock);
+@@ -2286,6 +2286,16 @@ static void drain_local_stock(struct work_struct *dummy)
  		obj_cgroup_put(old);
  }
-@@ -3221,15 +3223,15 @@ static bool consume_obj_stock(struct obj_cgroup *objcg, unsigned int nr_bytes)
- 	unsigned long flags;
- 	bool ret = false;
  
--	local_lock_irqsave(&memcg_stock.stock_lock, flags);
--
- 	stock = this_cpu_ptr(&memcg_stock);
-+	spin_lock_irqsave(&stock->stock_lock, flags);
++static void drain_remote_stock(struct work_struct *work)
++{
++	drain_stock_helper(atomic_long_read(&work->data));
++}
 +
- 	if (objcg == stock->cached_objcg && stock->nr_bytes >= nr_bytes) {
- 		stock->nr_bytes -= nr_bytes;
- 		ret = true;
++static void drain_local_stock(struct work_struct *dummy)
++{
++	drain_stock_helper(smp_processor_id());
++}
++
+ /*
+  * Cache charges(val) to local per_cpu area.
+  * This will be consumed by consume_stock() function, later.
+@@ -2352,10 +2362,16 @@ static void drain_all_stock(struct mem_cgroup *root_memcg)
+ 
+ 		if (flush &&
+ 		    !test_and_set_bit(FLUSHING_CACHED_CHARGE, &stock->flags)) {
+-			if (cpu == curcpu)
++			if (cpu == curcpu) {
+ 				drain_local_stock(&stock->work);
+-			else
++			} else if (housekeeping_cpu(cpu, HK_TYPE_WQ)) {
+ 				schedule_work_on(cpu, &stock->work);
++			} else {
++				int hkcpu = housekeeping_any_cpu_from(HK_TYPE_WQ, cpu);
++
++				atomic_long_set(&stock->work.data, cpu);
++				schedule_work_on(hkcpu, &stock->work);
++			}
+ 		}
  	}
+ 	migrate_enable();
+@@ -2367,7 +2383,9 @@ static int memcg_hotplug_cpu_dead(unsigned int cpu)
+ 	struct memcg_stock_pcp *stock;
  
--	local_unlock_irqrestore(&memcg_stock.stock_lock, flags);
-+	spin_unlock_irqrestore(&stock->stock_lock, flags);
+ 	stock = &per_cpu(memcg_stock, cpu);
++	spin_lock(&stock->stock_lock);
+ 	drain_stock(stock);
++	spin_unlock(&stock->stock_lock);
  
- 	return ret;
+ 	return 0;
  }
-@@ -3319,9 +3321,9 @@ static void refill_obj_stock(struct obj_cgroup *objcg, unsigned int nr_bytes,
- 	unsigned long flags;
- 	unsigned int nr_pages = 0;
+@@ -7272,9 +7290,20 @@ static int __init mem_cgroup_init(void)
+ 	cpuhp_setup_state_nocalls(CPUHP_MM_MEMCQ_DEAD, "mm/memctrl:dead", NULL,
+ 				  memcg_hotplug_cpu_dead);
  
--	local_lock_irqsave(&memcg_stock.stock_lock, flags);
--
- 	stock = this_cpu_ptr(&memcg_stock);
-+	spin_lock_irqsave(&stock->stock_lock, flags);
-+
- 	if (stock->cached_objcg != objcg) { /* reset if necessary */
- 		old = drain_obj_stock(stock);
- 		obj_cgroup_get(objcg);
-@@ -3337,7 +3339,7 @@ static void refill_obj_stock(struct obj_cgroup *objcg, unsigned int nr_bytes,
- 		stock->nr_bytes &= (PAGE_SIZE - 1);
- 	}
+-	for_each_possible_cpu(cpu)
+-		INIT_WORK(&per_cpu_ptr(&memcg_stock, cpu)->work,
+-			  drain_local_stock);
++	/*
++	 * CPUs that are isolated should not spend cpu time for stock draining,
++	 * so allow them to export this task to the nearest housekeeping enabled
++	 * cpu available.
++	 */
++	for_each_possible_cpu(cpu) {
++		if (housekeeping_cpu(cpu, HK_TYPE_WQ)) {
++			INIT_WORK(&per_cpu_ptr(&memcg_stock, cpu)->work,
++				  drain_local_stock);
++		} else {
++			INIT_WORK(&per_cpu_ptr(&memcg_stock, cpu)->work,
++				  drain_remote_stock);
++		}
++	}
  
--	local_unlock_irqrestore(&memcg_stock.stock_lock, flags);
-+	spin_unlock_irqrestore(&stock->stock_lock, flags);
- 	if (old)
- 		obj_cgroup_put(old);
- 
+ 	for_each_node(node) {
+ 		struct mem_cgroup_tree_per_node *rtpn;
 -- 
 2.38.1
 
