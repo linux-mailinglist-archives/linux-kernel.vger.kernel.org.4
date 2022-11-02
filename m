@@ -2,98 +2,91 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6560615F1E
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:12:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E828615F24
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:12:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231282AbiKBJMg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 05:12:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40730 "EHLO
+        id S231386AbiKBJMx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 05:12:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231375AbiKBJLv (ORCPT
+        with ESMTP id S231415AbiKBJL6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 05:11:51 -0400
-Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8936C27CDE
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 02:11:03 -0700 (PDT)
-Received: by mail-lf1-x136.google.com with SMTP id f37so27167049lfv.8
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 02:11:03 -0700 (PDT)
+        Wed, 2 Nov 2022 05:11:58 -0400
+Received: from mail-pj1-x1033.google.com (mail-pj1-x1033.google.com [IPv6:2607:f8b0:4864:20::1033])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 642F028716
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 02:11:17 -0700 (PDT)
+Received: by mail-pj1-x1033.google.com with SMTP id gw22so2708581pjb.3
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 02:11:17 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        d=linuxfoundation.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=epokCIiVNHGQ8fB3wg3FYwtGcEW+rWSyf21faKheRAI=;
-        b=juvIj5xOyOZA5nYwp/qGUTDwqBrtyAa7ARbpZcO3+I6Z9nI5LHF6TvZQvUpEkYctIb
-         0UeJXHtn/+oJaoJlM60N2nS6018jVI69MTD6u8RBJOKohbIxd5YQNK4ualeZ/vQYu7kD
-         C6ELe8M8+8HW9S5fuhyojh7gmMTfQcMcb1JbVdk/WFxn3c9zJM5Zu8QbOwFx6RShBpPS
-         h5VbcKFvCkTPq0QKU3fyJwDYwzaz8qPQP8wKJnwpwE3u5P7W63SAP2iwO0JClJp+a0el
-         BqxWIjFIl6N/Bd0+QK3eBc68x4WF3fOMANY5MbPQA1NMSnp2zsl7ZOTpyvTl7KaaiR3C
-         raVg==
+        bh=PhRLRA04sFsFRg1MijYPrVMq9mkoGl+A2EID9pMn6C0=;
+        b=ErPHybm+ZEvQ7ps9ny2DKUwzsGW3kGn0+Rigint7QJwJalC034kPl8+jxxsq+Yo9x5
+         /BGlUk707BAPVwhIgKwM9zLbBU3Bir+n6gzs5QcxJ5GU5ErlrSXBHap4cLk13JKKcb8S
+         3449vsqNhIyre6C4mdGhJmRVeFoOtckGU3SKg=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
          :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=epokCIiVNHGQ8fB3wg3FYwtGcEW+rWSyf21faKheRAI=;
-        b=j09QqxQieamRaDEWBfpnhOFVlDg+9qzBdCO7BkMUx2emH8Ep5eNpMxtJ0kzD1rLNBX
-         UobJDBKv5UQsCE62j/fNfr6T+O1ul4SVfDvKR1p2j/h53/9WQEh9pfjjG26NQdrl/4aH
-         +J5yh8o+e2+gwyU79E7gOuHOuZx1A6oZT34yufIcO+QjOU8sOEv7BLchowAeRD72ONKm
-         KfRiKbY6FDgPZrMwcVsMIKC0Xk0GwdhLGdUNzcIVwzXLlTimRXq6L21E/W/RhnaBK0CZ
-         SA4xiH062ysD4lvC+pmUX9lokICWb51daUghVWqqN290406vPOmjvwFZOJFBrTVHvKQa
-         LdjA==
-X-Gm-Message-State: ACrzQf2sLrfF2QODm+ZxixwTy50LQMcyAvR9sMQhnU0T79hG5morWnDu
-        rI1Shxx2h/KsgP+H1k83ZmbaFg==
-X-Google-Smtp-Source: AMsMyM5aw5oQ++WfXSz0qCxYQjVAmVhKmoo6hFujepwRTAbqFYrX3iatCFwE+HJHm4xUQOD1wGJT6g==
-X-Received: by 2002:a05:6512:3159:b0:492:d660:4dd7 with SMTP id s25-20020a056512315900b00492d6604dd7mr8157040lfi.204.1667380261947;
-        Wed, 02 Nov 2022 02:11:01 -0700 (PDT)
-Received: from [10.27.10.248] ([195.165.23.90])
-        by smtp.gmail.com with ESMTPSA id z6-20020a2e7e06000000b0026bca725cd0sm2075632ljc.39.2022.11.02.02.11.01
+        bh=PhRLRA04sFsFRg1MijYPrVMq9mkoGl+A2EID9pMn6C0=;
+        b=MWEGjyKjYQfb29ro/ygTKIUmqnx18YeXOmOlrTzLH7Caf3nM3zvmkAgUTH/v+oQa3J
+         GfQM/ckLExCb+b9W4HpUqTYsP3NFoYI2H/IVIfUoC8kCgU3vPWSo243OdUgBUP7aA1D+
+         1mnXIhgv54ewPgbclP8Pch2v3iMXw+Q5ew+RQ90dPc34Vrm5qtuZ+v5Jmio7u5mIsB7n
+         zGn1QAfOqnbUgkY8yo9OjvL8wd2t0o9gd2qDBS50Hsuv45NqouO127buRzKAuIsxCi1F
+         4D4BEmJC9icqEqeraN9UEV5pt0VgH3NwQitvQHh/LV92NivpxTjAHJ2rHyIZgK8qFrTk
+         C4lg==
+X-Gm-Message-State: ACrzQf0J7UBIcJVRr8+OeL9yNmOzVhHkzgdNsUwPr+SR0t7L8d16gjfm
+        dQPWpds8g3eTRObxuPccajgAyw==
+X-Google-Smtp-Source: AMsMyM5bF8I6zcvysOFcJ423OXS3yF376EoksI6rJr8C1u6Ar5A2wK2S0O2EAOimX9ooQxRrDQIKEw==
+X-Received: by 2002:a17:90a:6c21:b0:212:f53b:fe22 with SMTP id x30-20020a17090a6c2100b00212f53bfe22mr41845749pjj.27.1667380276860;
+        Wed, 02 Nov 2022 02:11:16 -0700 (PDT)
+Received: from [192.168.0.168] ([103.99.10.63])
+        by smtp.gmail.com with ESMTPSA id t17-20020a170902e1d100b00186ae540083sm7802875pla.91.2022.11.02.02.11.14
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 02:11:01 -0700 (PDT)
-Message-ID: <73a5f42a-232f-c543-1490-fcf3f4f84307@linaro.org>
-Date:   Wed, 2 Nov 2022 12:11:00 +0300
+        Wed, 02 Nov 2022 02:11:16 -0700 (PDT)
+Message-ID: <9dfa47ee-64a1-1215-eb82-a08bbb7f5ec3@linuxfoundation.org>
+Date:   Wed, 2 Nov 2022 03:11:12 -0600
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2 5/5] clk: qcom: dispcc-sm8250: Disable link_div_clk_src
- for sm8150
-Content-Language: en-GB
-To:     Robert Foss <robert.foss@linaro.org>, agross@kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Jonathan Marek <jonathan@marek.ca>
-References: <20221102090140.965450-1-robert.foss@linaro.org>
- <20221102090140.965450-6-robert.foss@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221102090140.965450-6-robert.foss@linaro.org>
+ Thunderbird/102.2.2
+Subject: Re: [PATCH -next] selftests/pidfd_test: Remove the erroneous ','
+Content-Language: en-US
+To:     Zhao Gongyi <zhaogongyi@huawei.com>, linux-kernel@vger.kernel.org,
+        linux-kselftest@vger.kernel.org
+Cc:     brauner@kernel.org, shuah@kernel.org, joel@joelfernandes.org,
+        Shuah Khan <skhan@linuxfoundation.org>
+References: <20221101035602.40623-1-zhaogongyi@huawei.com>
+From:   Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <20221101035602.40623-1-zhaogongyi@huawei.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/11/2022 12:01, Robert Foss wrote:
-> SM8150 does not have any of the link_div_clk_src clocks, so
-> let's disable them for this SoC.
+On 10/31/22 21:56, Zhao Gongyi wrote:
+> Remove the erroneous ',', otherwise it might result in wrong output
+> and report:
+>   ...
+>   Bail out! (errno %d)
+>    test: Unexpected epoll_wait result (c=4208480, events=2)
+>   ...
 > 
-> Signed-off-by: Robert Foss <robert.foss@linaro.org>
+> Fixes: 740378dc7834 ("pidfd: add polling selftests")
+> Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
 > ---
->   drivers/clk/qcom/dispcc-sm8250.c | 11 +++++++++++
->   1 file changed, 11 insertions(+)
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Applied to linux-kselftest next for the next rc.
 
--- 
-With best wishes
-Dmitry
+thanks,
+-- Shuah
 
