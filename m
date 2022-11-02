@@ -2,48 +2,76 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5D073616CAE
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:41:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 27012616CB3
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:42:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231321AbiKBSlK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 14:41:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35968 "EHLO
+        id S231435AbiKBSmq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 14:42:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231211AbiKBSlI (ORCPT
+        with ESMTP id S230086AbiKBSmo (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:41:08 -0400
-Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D97B7E0C8;
-        Wed,  2 Nov 2022 11:41:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=bombadil.20210309; h=Sender:In-Reply-To:Content-Type:
-        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=a0QsxHnHaVdr7Z/zTUS3MGyhibIGFKVlfjPe/j6Bv18=; b=FDUztCQqNhOyI6cGVyHvdapFKc
-        sp22jfxIEbeHnut8nwsxubwjNsuqV/UG4PoMCMcC5IxC5nU2S0yjzdvcqjazyh/3PBZB87dm/ApKT
-        10GK3hXzaZmAU0ICl7cg+UMcWrwL0MKkF7evcHjkT7E7EKiPdtU2NroepW52odmcrVi9SQp7ZpVp9
-        EcxbdWhHjvyVaPAkKPK/xpSLD8S6A+CECjdZuKXC+rrgUojTP9toiG9VR6DUMwKmlUag3NKarcQjN
-        dBAotbMFv0+MP7LCA+NWQ95GEoynflhyMU7oAOeUZisqB95dMiwawi1a5S/XXmVhzQdHtjiU5gC1h
-        zHi0PCCw==;
-Received: from mcgrof by bombadil.infradead.org with local (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oqIff-00DBqt-TK; Wed, 02 Nov 2022 18:41:03 +0000
-Date:   Wed, 2 Nov 2022 11:41:03 -0700
-From:   Luis Chamberlain <mcgrof@kernel.org>
-To:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     linux-kernel@vger.kernel.org, kernel-janitors@vger.kernel.org,
-        linux-modules@vger.kernel.org
-Subject: Re: [PATCH 18/30] module: Use kstrtobool() instead of strtobool()
-Message-ID: <Y2K5v08yIDNk7sNW@bombadil.infradead.org>
-References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
- <bb37ff26b0c748d0ca883d8f301190cd1177aad2.1667336095.git.christophe.jaillet@wanadoo.fr>
+        Wed, 2 Nov 2022 14:42:44 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AB32A657E;
+        Wed,  2 Nov 2022 11:42:43 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id k26so7862298qkg.2;
+        Wed, 02 Nov 2022 11:42:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=UnB/iiYCoj9JxhGUlWNmGFpgfzGIDKnr6BfjYADidfM=;
+        b=mgZDbBqMlbMh24yUr68+4lerWRJfeVoKfI2iv82gSDPWwx/LVdWnJStgX/Ka/iotY2
+         utIv4j7In63e5ngwgX3ylMqRBSG+ZlS2uXVPIOypL6hIdur3q9FL/OihkE+j6moRJWyp
+         h3mLySPrO/cH24MG6TlkusGDAER5WGvxtRfeBHKum718fAxuwjJSx5lUPMbCWhV1yl/R
+         sXf+BGqUaR7VNqRYG2vfmkcdEXg2fSDKOWx3l+BLeRhmJVTQqXsAY8M0uy2i3x0O0AsG
+         /bnqaJsxFW2IluthjPeY+0Uc0EfJwLkKPRg4lC/evCE73VNe0Lmkl/JUkd0C4Y+PskGz
+         CXaQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UnB/iiYCoj9JxhGUlWNmGFpgfzGIDKnr6BfjYADidfM=;
+        b=Zp8y5te4Df6eBvbEYvJPBALhI7tPfcfY6sUrDuGBpY3+HGu2xq5/89Ma9loMsbCjDU
+         Ocvf2j/HnMStcabFFuowGqAGOXuf1qgPHQ1s2KyXqCtw3+85ui+7oFlT+zIvd1ZzGg7t
+         prB9+gK6J4GsRs3sYNMWrkh0IAU8x92o8fnI3W2IQI1L1wRsvMlFiFLfesTJSaucCDdW
+         70akcmsdxi/CC77aGVHEkRe8HD5abw9ZvdV5oM7QlorfHHA8xgXOahkWa3Gv21ZJY4Hb
+         dYmgB2cfCqV+bYKeDceM8Jo3wMfXkjTxASQUhX4Qzf2xmwa1pl7StQhV36YgPM9+cnOw
+         byoQ==
+X-Gm-Message-State: ACrzQf3Nv0o0VTEuIgzOdHZ6YkfYAWFT43L7PT7A1KLwy7G0wUwz3V4A
+        0/fs9+LnxFdVlkZrBTO1/ZQ=
+X-Google-Smtp-Source: AMsMyM4yYZQoPSoricm6jRD97DoXPAV8DxOXgAY0RZ6i0gSA3F4L+U9CDZ/vSWBUORa0fdRnenQX6Q==
+X-Received: by 2002:a37:5e41:0:b0:6ce:79e2:68af with SMTP id s62-20020a375e41000000b006ce79e268afmr18698594qkb.239.1667414562785;
+        Wed, 02 Nov 2022 11:42:42 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id w10-20020a05620a444a00b006cfc01b4461sm9189729qkp.118.2022.11.02.11.42.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 11:42:42 -0700 (PDT)
+Message-ID: <2bf50933-802b-8340-4146-cc6c409d372c@gmail.com>
+Date:   Wed, 2 Nov 2022 11:42:36 -0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <bb37ff26b0c748d0ca883d8f301190cd1177aad2.1667336095.git.christophe.jaillet@wanadoo.fr>
-Sender: Luis Chamberlain <mcgrof@infradead.org>
-X-Spam-Status: No, score=-4.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH 6.0 000/240] 6.0.7-rc1 review
+Content-Language: en-US
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org
+Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
+        torvalds@linux-foundation.org, akpm@linux-foundation.org,
+        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
+        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
+References: <20221102022111.398283374@linuxfoundation.org>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221102022111.398283374@linuxfoundation.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -51,17 +79,29 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 01, 2022 at 10:14:06PM +0100, Christophe JAILLET wrote:
-> strtobool() is the same as kstrtobool().
-> However, the latter is more used within the kernel.
+On 11/1/22 19:29, Greg Kroah-Hartman wrote:
+> This is the start of the stable review cycle for the 6.0.7 release.
+> There are 240 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
 > 
-> In order to remove strtobool() and slightly simplify kstrtox.h, switch to
-> the other function name.
+> Responses should be made by Fri, 04 Nov 2022 02:20:38 +0000.
+> Anything received after that time might be too late.
 > 
-> While at it, include the corresponding header file (<linux/kstrtox.h>)
+> The whole patch series can be found in one patch at:
+> 	https://www.kernel.org/pub/linux/kernel/v6.x/stable-review/patch-6.0.7-rc1.gz
+> or in the git tree and branch at:
+> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-6.0.y
+> and the diffstat can be found below.
 > 
-> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> thanks,
+> 
+> greg k-h
 
-Reviewed-by: Luis Chamberlain <mcgrof@kernel.org>
+On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
+BMIPS_GENERIC:
 
-  Luis
+Tested-by: Florian Fainelli <f.fainelli@gmail.com>
+-- 
+Florian
+
