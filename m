@@ -2,60 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DDFB5616948
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:38:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 59425616952
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:40:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231789AbiKBQig (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 12:38:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59188 "EHLO
+        id S231244AbiKBQj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 12:39:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231408AbiKBQiK (ORCPT
+        with ESMTP id S231866AbiKBQje (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 12:38:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2860A31ECC;
-        Wed,  2 Nov 2022 09:33:13 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id E7F9EB821A3;
-        Wed,  2 Nov 2022 16:33:10 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id ADFACC433D6;
-        Wed,  2 Nov 2022 16:33:08 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667406789;
-        bh=ZaNRk9XsK/SEJ/1Ji5JmKKMuERlYmmNZ5RDlsKv/yN8=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=YkVMEabLh2tHVOFpCHakFtCLP59LlHSUfhdMWu4i1Q1oy/ymN30vFMERBTMkgdtTp
-         ymq2lbFxZGBSxqGhAKdJ2eIb4EQmAYcd2YP66adzMbb7iCa7xd3wZjEnRTetrxt732
-         1gxaC0PL4fvKZG0KVkxYTKo37/SVTYmmtxQG7DgvSBddVORZ/ccgUDj+RlitrmfmAo
-         Yly3QDywW6xb+a1xY8w3fAhNkO4EwxTL/FQRrz0rQ6Cc0Z0ZP3fpn926O/J6pn/hl3
-         n8M/jPLP8WOu/JqkrFOqqhX49MQiUi7MZHrGzLzVb74m6Uo+LNodiPWEj0a3ZitXaH
-         0MvTDIz3zA8rA==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Alexandra Winter <wintera@linux.ibm.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>
-Cc:     Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH 3/3] s390/lcs: Fix return type of lcs_start_xmit()
-Date:   Wed,  2 Nov 2022 09:32:52 -0700
-Message-Id: <20221102163252.49175-3-nathan@kernel.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221102163252.49175-1-nathan@kernel.org>
-References: <20221102163252.49175-1-nathan@kernel.org>
+        Wed, 2 Nov 2022 12:39:34 -0400
+Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E196832067
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 09:34:01 -0700 (PDT)
+Received: by mail-qt1-x833.google.com with SMTP id l2so6965167qtq.11
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 09:34:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=QDxuOmZwLuYcD+cc4tzL4paE9YkxJAoVZjE1yHXXoiI=;
+        b=NbqOXxFZzBhGaS+tdTOH/lJMlHvuSFxwd6lNdC0Xod4th3g0Aeb3bgcfTL0XO0nStC
+         lXGpjUwpO/xGNqutsOjxsR4/MDogFW9xR/a+Ye5TRyl/W3gPX7helPafFAKKK3WCbb/3
+         BosxAGetdMEVi2nOzvBLefpIAcwUp/yDRnZjjdsb8O9145FHuGP2xdJQmduy0odmO9Za
+         i0vC1gdgJNEArnsAPq00UERiyuRzJHK2SsLwGpxA3koqRcA2xzX2VPSrFEbefbnn7TBH
+         9VxcbmYF5S/pP2oOWkByIN351P5lEpNJowB4cNFqkXPsTa3WaUUWoFI7QQ+onoD/kTLf
+         1CgQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QDxuOmZwLuYcD+cc4tzL4paE9YkxJAoVZjE1yHXXoiI=;
+        b=HCJ7cRlvBlIBplV8ChspumANVe3gGjrG4Ak2DAn1vVvG5mLj1Rs3y3JVVTufXFEtLB
+         xJXhus8sCCFuSTVbeYkVlwHHOeUDSjZQUqItd+l4rSnIq47ySBSjiYyGw3xInMNa7ULL
+         j+LxaD0BRC0Er9wJGYohKRlk7mbzwj2ScsNHfBzneq9ZdHLXda81ima1qkvNp0YH+Oz6
+         BBhOe5293IHSkIlN3LdzViaFr6eCQYCwvWyNxgr2TdyuqCo5Q7x+IJhE6Irxx52YWcUi
+         eU21GaHyYq+nYaBzWLCJ/MrSiW45oFNXkSPEAW01e34VR/BLa09LeqKtjqQFBytX3FDh
+         6nEw==
+X-Gm-Message-State: ACrzQf2DeEgAVVDNgIQ+F4YQ7ZVJiksEbuWFl2s6hkhIoG8nodQ4Nt5T
+        PKnwa+jOeYYtJK11j08DDNpLmQ==
+X-Google-Smtp-Source: AMsMyM68vZkJx0W7eXxAb94Zjjlvos7EBZ6NwidNbQyyCFcbALsnrufsb1zE1n6gEKo+ZMNkGGyMBw==
+X-Received: by 2002:ac8:5e4a:0:b0:3a5:1fc:3a04 with SMTP id i10-20020ac85e4a000000b003a501fc3a04mr20165429qtx.132.1667406841054;
+        Wed, 02 Nov 2022 09:34:01 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
+        by smtp.gmail.com with ESMTPSA id bp6-20020a05620a458600b006cf9084f7d0sm8726229qkb.4.2022.11.02.09.33.59
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 09:34:00 -0700 (PDT)
+Message-ID: <30ce6ed4-cbea-7b82-cca5-8920fc1eddad@linaro.org>
+Date:   Wed, 2 Nov 2022 12:33:58 -0400
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v6 1/2] dt-bindings: it6505: add properties to restrict
+ output bandwidth
+Content-Language: en-US
+To:     allen.chen@ite.com.tw
+Cc:     treapking@chromium.org, Jau-Chih.Tseng@ite.com.tw,
+        Hermes.Wu@ite.com.tw, Kenneth.Hung@ite.com.tw,
+        andrzej.hajda@intel.com, narmstrong@baylibre.com,
+        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
+        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@linux.ie,
+        daniel@ffwll.ch, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, dri-devel@lists.freedesktop.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221027030155.59238-1-allen.chen@ite.com.tw>
+ <20221027030155.59238-2-allen.chen@ite.com.tw>
+ <d6f14e09-0c24-e19a-0951-bb3ca2219e79@linaro.org>
+ <18659f5a5b2c4fd7b76731836aeb713d@ite.com.tw>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <18659f5a5b2c4fd7b76731836aeb713d@ite.com.tw>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -63,54 +84,26 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-indirect call targets are validated against the expected function
-pointer prototype to make sure the call target is valid to help mitigate
-ROP attacks. If they are not identical, there is a failure at run time,
-which manifests as either a kernel panic or thread getting killed. A
-proposed warning in clang aims to catch these at compile time, which
-reveals:
+On 02/11/2022 02:54, allen.chen@ite.com.tw wrote:
+> On 26/10/2022 23:01, allen wrote:
+>> From: allen chen <allen.chen@ite.com.tw>
+>>
+>> Add properties to restrict dp output data-lanes and clock.
+> 
+> This is a friendly reminder during the review process.
+> 
+> It seems my previous comments were not fully addressed. Maybe my feedback got lost between the quotes, maybe you just forgot to apply it.
+> Please go back to the previous discussion and either implement all requested changes or keep discussing them.
+> 
+> Thank you.
+> 
+> ==> I am sorry I didn't find the missing advice you said. Could you explain it again?
+> 
+> Rob asked - Commit msg should explain reason for breaking users.
 
-  drivers/s390/net/lcs.c:2090:21: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-          .ndo_start_xmit         = lcs_start_xmit,
-                                    ^~~~~~~~~~~~~~
-  drivers/s390/net/lcs.c:2097:21: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-          .ndo_start_xmit         = lcs_start_xmit,
-                                    ^~~~~~~~~~~~~~
+And where is the reason? I saw only one sentence "Add properties to
+restrict dp output data-lanes and clock."
 
-->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
-'netdev_tx_t', not 'int'. Adjust the return type of lcs_start_xmit() to
-match the prototype's to resolve the warning and potential CFI failure,
-should s390 select ARCH_SUPPORTS_CFI_CLANG in the future.
-
-Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
----
- drivers/s390/net/lcs.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/s390/net/lcs.c b/drivers/s390/net/lcs.c
-index 84c8981317b4..4cbb9802bf22 100644
---- a/drivers/s390/net/lcs.c
-+++ b/drivers/s390/net/lcs.c
-@@ -1519,7 +1519,7 @@ lcs_txbuffer_cb(struct lcs_channel *channel, struct lcs_buffer *buffer)
- /*
-  * Packet transmit function called by network stack
-  */
--static int
-+static netdev_tx_t
- __lcs_start_xmit(struct lcs_card *card, struct sk_buff *skb,
- 		 struct net_device *dev)
- {
-@@ -1582,7 +1582,7 @@ __lcs_start_xmit(struct lcs_card *card, struct sk_buff *skb,
- 	return rc;
- }
- 
--static int
-+static netdev_tx_t
- lcs_start_xmit(struct sk_buff *skb, struct net_device *dev)
- {
- 	struct lcs_card *card;
--- 
-2.38.1
+Best regards,
+Krzysztof
 
