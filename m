@@ -2,271 +2,323 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C6E83615E6F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 09:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7787615E71
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 09:55:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230155AbiKBIzH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 04:55:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57870 "EHLO
+        id S230450AbiKBIzX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 04:55:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58046 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229459AbiKBIzD (ORCPT
+        with ESMTP id S230365AbiKBIzQ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 04:55:03 -0400
-Received: from mail-io1-xd36.google.com (mail-io1-xd36.google.com [IPv6:2607:f8b0:4864:20::d36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 93B2A24969
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 01:55:02 -0700 (PDT)
-Received: by mail-io1-xd36.google.com with SMTP id p141so14465924iod.6
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 01:55:02 -0700 (PDT)
+        Wed, 2 Nov 2022 04:55:16 -0400
+Received: from mail-ua1-x92e.google.com (mail-ua1-x92e.google.com [IPv6:2607:f8b0:4864:20::92e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C768824969;
+        Wed,  2 Nov 2022 01:55:14 -0700 (PDT)
+Received: by mail-ua1-x92e.google.com with SMTP id t26so7319373uaj.9;
+        Wed, 02 Nov 2022 01:55:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
+        d=gmail.com; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZcE47X74p4ZLI+MbkADionKujrI2BX7HQN2GnbMJo5M=;
-        b=p+Ol3h8/vz/XfFARtEJbA6eZnO6+Y5xsaobJk0lFGDbdAGtMWkliUSfmubQIUHD6DQ
-         eG9EDgYg4HrqgaKcSlicxDaZ9uLE0YIRBS2NSPrf1dPWWYKHSMmaloSyT9/d8hee9VHG
-         1bYHvHdWWGxjoWVFfB+26yOV0eckW0fI/J5gqq+XzEWMNgaXcJ2SxRDgXYZMjet1WEC/
-         /K8WqUyF0siVy6R2mMr/tOF27vks4Ow2sO38PxItQzdGbkDM9U7AMT/BTjf8s+kzl3Bl
-         ulTpM4ReJ+HUrXwAuzXdpfDdHR1jmOHurslDK0L278MHhUy1Atf6nJ6Qk0M+ZtadJaP0
-         stdA==
+        bh=8u/qv2jL7ReMKujRrkoVq2CcT03zgxq0ws72lCTuzcE=;
+        b=cigxBDHVD5ZANzyZnqhwPRfDQXKs7vIPENgo4sVS15AuaCwDJwd0xTEFSWPfe1MiM4
+         mRMmzPFIV6PP9bFMV6hxloONA7XZpxxbvD3cjkHDblo/AfO5Bedv9jk6T0R0U1bGX5l5
+         yJfDujMpQf7TsXpnxPWrBPF9U0JyPwl7FUexm8H1D8c3buhOwOBh8dt4EcDXIocZSSAc
+         dWSQEL+N8gsVjMWxdTb0U75SKji7qcn77qTAsSOF/FV5crfAo1mmBPOY1+FaMfQhbBZl
+         QuIBjq1ZQqMcZyOxhbtPSthpAWwz6eT/lrXi9Y+ThHxG+ZymU/smOXqM9Hjw4+GztF4X
+         n8xw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=ZcE47X74p4ZLI+MbkADionKujrI2BX7HQN2GnbMJo5M=;
-        b=wJpXN8gnw3evoTlvRPYWYftvFY6ht8PT2Ra1qQ4e/B/lE/phyRD8EwtB29TUo+Tcyb
-         lqy6kq7Yb44f8WQvus77l5jBE/b0qk5g0/CSC1yK0Kp7sUsXmpxlmF+txtRafLoPYlCu
-         BQ4YdzIrPom05dVsQnlrzIUT92yaCCNoox9ttBo2WYPzQudpOAXofxNBDN41VnIkllBb
-         mjQsndPp7IPWIhda5arEkRbPI+2u53QNB4QCP4cjDv+gcCXoZbHvro3sojWoePP2pTZ7
-         42SS1GUPnbNOQYRzKQ02sUVWUY9pdcoLL8Jc23ZhIplVuLa6Kj+8624fL+DL8/JAYJSO
-         F96A==
-X-Gm-Message-State: ACrzQf1/i8Rrt/yS6lAemAQJl1MDcwwg7rJShPJ3sZ6c4Ze19ERgATBv
-        0Ad07k41ND6U9r7z++fyovMNHgmOt684b+AbtGqIUA==
-X-Google-Smtp-Source: AMsMyM7ej56+xne29skg2szA+CTcxkTmPIeEtUAGt3HFdcFDHgGJ9SFe5tdP7dtH/s687K83x1fl7Gioc4yEVqB7fis=
-X-Received: by 2002:a05:6602:2f02:b0:6a4:5b5d:9dbb with SMTP id
- q2-20020a0566022f0200b006a45b5d9dbbmr15221603iow.32.1667379301818; Wed, 02
- Nov 2022 01:55:01 -0700 (PDT)
+        bh=8u/qv2jL7ReMKujRrkoVq2CcT03zgxq0ws72lCTuzcE=;
+        b=4mtNhFploAQyQWBWYKp7T6wfLEJ6VgwpbSFDvMlzv9JhCcel+kA8tdHcA4pgNua/yN
+         2CLFX3IJb4rCT2Ys3miZ/qnfc6lHDpzWRPNzTcwzWr8uYNGidKR3yd8Pb/0/Ppv9aLKF
+         GxTgd2U22duhqD0xiQsB57SOeHZg9MYRNI3/GqCNucHPPhoGVxciHTB22wqW/JnBVkcn
+         mxHeA6YpymRzmgyeU2AoMOjhYrv+G/RGuU6av43QTJ1ORPieIzL2TvQ1GLpj3iyzlTi3
+         skiQVVCKJiEIJYjpRk3oht4xUS6HnQOg/hkA4bImrNOXe+gleo1MW+D18bNH+cGoCgl2
+         kGcA==
+X-Gm-Message-State: ACrzQf20sP9mT8RF0Dwu9IsU7VMfCx3akdnxWFMhijasLSqS90HsQc16
+        trm7LKfL2oEm0GVsjveeJZglkgbWlB4g29uoniMljMEr0ws=
+X-Google-Smtp-Source: AMsMyM7IW3PUzanzE/XszM1Kht1BLGAqcgq7lkq1MuFp3giWdOfX7MBmSPXP2W/0Kqy9aW5bHIuuxHmmJXCNxL5GX2E=
+X-Received: by 2002:ab0:7395:0:b0:40d:644c:a884 with SMTP id
+ l21-20020ab07395000000b0040d644ca884mr8199900uap.9.1667379313761; Wed, 02 Nov
+ 2022 01:55:13 -0700 (PDT)
 MIME-Version: 1.0
-References: <20221019204626.3813043-1-cristian.marussi@arm.com>
- <CAKfTPtBJy4SdbYUNHFn2ZXEO_pnaMPYibfjXWNBnXy49P2h78Q@mail.gmail.com>
- <Y1vvPBw4xB7m23wY@e120937-lin> <CAKfTPtAfuqtCee7f4bREsLqb5KJcLWw1Y=-0Y+2t+3XfX_YctQ@mail.gmail.com>
- <Y1wKHoxcWTz6VXyh@e120937-lin>
-In-Reply-To: <Y1wKHoxcWTz6VXyh@e120937-lin>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Wed, 2 Nov 2022 09:54:50 +0100
-Message-ID: <CAKfTPtAcEiqBDr5BXBS8Q9HzBWg544YR0eZkkaF3u_9EowZJcQ@mail.gmail.com>
-Subject: Re: [PATCH v4 0/11] Introduce a unified API for SCMI Server testing
-To:     Cristian Marussi <cristian.marussi@arm.com>
-Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        sudeep.holla@arm.com, james.quinlan@broadcom.com,
-        Jonathan.Cameron@huawei.com, f.fainelli@gmail.com,
-        etienne.carriere@linaro.org, souvik.chakravarty@arm.com,
-        wleavitt@marvell.com, peter.hilber@opensynergy.com,
-        nicola.mazzucato@arm.com, tarek.el-sherbiny@arm.com,
-        quic_kshivnan@quicinc.com
-Content-Type: text/plain; charset="UTF-8"
+References: <20221021010310.29521-1-stephen.s.brennan@oracle.com>
+ <20221028001016.332663-1-stephen.s.brennan@oracle.com> <20221101175144.yu3l5qo5gfwfpatt@quack3>
+ <877d0eh03t.fsf@oracle.com>
+In-Reply-To: <877d0eh03t.fsf@oracle.com>
+From:   Amir Goldstein <amir73il@gmail.com>
+Date:   Wed, 2 Nov 2022 10:55:01 +0200
+Message-ID: <CAOQ4uxgG=E+3CwpQAE__YGt7vdW77n0nTe6cExPTERBNUN0a0g@mail.gmail.com>
+Subject: Re: [PATCH v3 0/3] fsnotify: fix softlockups iterating over d_subdirs
+To:     Stephen Brennan <stephen.s.brennan@oracle.com>
+Cc:     Jan Kara <jack@suse.cz>, linux-fsdevel@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Al Viro <viro@zeniv.linux.org.uk>
+Content-Type: multipart/mixed; boundary="000000000000b3fafc05ec78ff3b"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Oct 2022 at 18:58, Cristian Marussi <cristian.marussi@arm.com> wrote:
->
-> On Fri, Oct 28, 2022 at 06:18:52PM +0200, Vincent Guittot wrote:
-> > On Fri, 28 Oct 2022 at 17:04, Cristian Marussi <cristian.marussi@arm.com> wrote:
-> > >
-> > > On Fri, Oct 28, 2022 at 04:40:02PM +0200, Vincent Guittot wrote:
-> > > > On Wed, 19 Oct 2022 at 22:46, Cristian Marussi <cristian.marussi@arm.com> wrote:
-> > > > >
-> > > > > Hi all,
-> > > > >
-> > >
-> > > Hi Vincent,
-> > >
-> > > > > This series aims to introduce a new SCMI unified userspace interface meant
-> > > > > to ease testing an SCMI Server implementation for compliance, fuzzing etc.,
-> > > > > from the perspective of the OSPM agent (non-secure world only ...)
-> > > > >
-> >
-> > [ snip]
-> >
-> > > > Hi Cristian,
-> > > >
-> > > > I have tested your series with an optee message transport layer and
-> > > > been able to send raw messages to the scmi server PTA
-> > > >
-> > > > FWIW
-> > > >
-> > > > Tested-by: Vincent Guittot <vincent.guittot@linaro.org>
-> > > >
-> > >
-> > > Thanks a lot for your test and feedback !
-> > >
-> > > ... but I was going to reply to this saying that I spotted another issue
-> > > with the current SCMI Raw implementation (NOT related to optee/smc) so
-> > > that I'll post a V5 next week :P
-> > >
-> > > Anyway, the issue is much related to the debugfs root used by SCMI Raw,
-> > > i.e.:
-> > >
-> > >         /sys/kernel/debug/scmi_raw/
-> > >
-> > > ..this works fine unless you run it on a system sporting multiple DT-defined
-> > > server instances ...that is not officially supported but....ehm...a little
-> > > bird told these system with multiple servers do exists :D
-> >
-> > ;-)
-> >
-> > >
-> > > In such a case the SCMI core stack is probed multiuple times and so it
-> > > will try to register multiple debugfs Raw roots: there is no chanche to
-> > > root the SCMI Raw entries at the same point clearly ... and then anyway
-> > > there is the issue of recognizing which server is rooted where ... with
-> > > the additional pain that a server CANNOT be recognized by querying...cause
-> > > there is only one by teh spec with agentID ZERO ... in theory :D...
-> > >
-> > > So my tentaive solution for V5 would be:
-> > >
-> > > - change the Raw root debugfs as:
-> > >
-> > >         /sys/kernel/debug/scmi_raw/0/... (first server defined)
-> > >
-> > >         /sys/kernel/debug/scmi_raw/1/... (possible additional server(s)..)
-> > >
-> > > - expose the DT scmi-server root-node name of the server somewhere under
-> > >   that debugfs root like:
-> > >
-> > >         ..../scmi_raw/0/transport_name -> 'scmi-mbx'
-> > >
-> > >         ..../scmi_raw/1/transport_name -> 'scmi-virtio'
-> >
-> > I was about to say that you would display the server name but that
-> > means that you have send a request to the server which probably
-> > defeats the purpose of the raw mode
-> >
-> > >
-> > >   so that if you know HOW you have configured your own system in the DT
-> > >   (maybe multiple servers with different kind of transports ?), you can
-> > >   easily select programmatically which one is which, and so decide
-> > >   which Raw debugfs fs to use...
-> > >
-> > > ... I plan to leave the SCMI ACS suite use by default the first system
-> > > rooted at /sys/kernel/debug/scmi_raw/0/...maybe adding a commandline
-> > > option to choose an alternative path for SCMI Raw.
-> > >
-> > > Does all of this sound reasonable ?
-> >
-> > Yes, adding an index looks good to me.
->
-> Ok, I'll rework accordingly.
->
-> >
-> > As we are there, should we consider adding a per channel entry in the
-> > tree when there are several channels shared with the same server ?
-> >
->
-> So, I was thinking about this and, even though, it seems not strictly
-> needed for Compliance testing (as discussed offline) I do think that
-> could be a sensible option to have as an additional mean to stress the
-> server transport implementation (as you wish).
+--000000000000b3fafc05ec78ff3b
+Content-Type: text/plain; charset="UTF-8"
 
-Thanks
+On Tue, Nov 1, 2022 at 10:49 PM Stephen Brennan
+<stephen.s.brennan@oracle.com> wrote:
+>
+> Hi Jan,
+>
+> Jan Kara <jack@suse.cz> writes:
+> > Hi Stephen!
+> >
+> > On Thu 27-10-22 17:10:13, Stephen Brennan wrote:
+> >> Here is v3 of the patch series. I've taken all of the feedback,
+> >> thanks Amir, Christian, Hilf, et al. Differences are noted in each
+> >> patch.
+> >>
+> >> I caught an obvious and silly dentry reference leak: d_find_any_alias()
+> >> returns a reference, which I never called dput() on. With that change, I
+> >> no longer see the rpc_pipefs issue, but I do think I need more testing
+> >> and thinking through the third patch. Al, I'd love your feedback on that
+> >> one especially.
+> >>
+> >> Thanks,
+> >> Stephen
+> >>
+> >> Stephen Brennan (3):
+> >>   fsnotify: Use d_find_any_alias to get dentry associated with inode
+> >>   fsnotify: Protect i_fsnotify_mask and child flags with inode rwsem
+> >>   fsnotify: allow sleepable child flag update
+> >
+> > Thanks for the patches Stephen and I'm sorry for replying somewhat late.
+>
+> Absolutely no worries, these things take time. Thanks for taking a look!
+>
+> > The first patch is a nobrainer. The other two patches ... complicate things
+> > somewhat more complicated than I'd like. I guess I can live with them if we
+> > don't find a better solution but I'd like to discuss a bit more about
+> > alternatives.
+>
+> Understood!
+>
+> > So what would happen if we just clear DCACHE_FSNOTIFY_PARENT_WATCHED in
+> > __fsnotify_parent() for the dentry which triggered the event and does not
+> > have watched parent anymore and never bother with full children walk? I
+> > suppose your contention problems will be gone, we'll just pay the price of
+> > dget_parent() + fsnotify_inode_watches_children() for each child that
+> > falsely triggers instead of for only one. Maybe that's not too bad? After
+> > all any event upto this moment triggered this overhead as well...
+>
+> This is an interesting idea. It came across my mind but I don't think I
+> considered it seriously because I assumed that it was too big a change.
+> But I suppose in the process I created an even bigger change :P
+>
+> The false positive dget_parent() + fsnotify_inode_watches_children()
+> shouldn't be too bad. I could see a situation where there's a lot of
+> random accesses within a directory, where the dget_parent() could cause
+> some contention over the parent dentry. But to be fair, the performance
+> would have been the same or worse while fsnotify was active in that
+> case, and the contention would go away as most of the dentries get their
+> flags cleared. So I don't think this is a problem.
+>
 
->
-> Having said that, this week, I was reasoning about an alternative
-> interface to do this, i.e. to avoid to add even more debugfs entries
-> for this chosen-channel config or possibly in the future to ask for
-> transport polling mode (if supported by the underlying transport)
->
-> My idea (not thought fully through as of now eh..) would be as follows:
->
-> since the current Raw implementation enforces a minimum size of 4 bytes
-> for the injected message (more on this later down below in NOTE), I was
-> thinking about using less-than-4-bytes-sized messages to sort of
-> pre-configure the Raw stack.
->
-> IOW, instead of having a number of new additional entries like
->
->         ../message_ch10
->         ../message_ch13
->         ../message_poll
->
-> we could design a sort of API (in the API :D) that defines how
-> 3-bytes message payload are to be interpreted, so that in normal usage
-> everything will go on as it is now, while if a 3-bytes message is
-> injected by a specially crafted testcase, it would be used to configure
-> the behaviour stack for the subsequent set of Raw transactions
-> (i.e. for the currently opened fd...) like:
->
-> - open message fd
->
-> - send a configure message:
->
->         | proto_chan_#  |     flags (polling..)  |
->         ------------------------------------------
->         0               7                       21
->
-> - send/receive your test messages
->
-> - repeat or close (then the config will vanish...)
->
-> This would mean adding some sort entry under scmi_raw to expose the
-> configured available channels on the system though.
->
-> [maybe the flags above could also include an async flag and avoid
->  also to add the message_async entries...]
->
-> I discarded the idea to run the above config process via IOCTLs since
-> it seemed to me even more frowned upon to use IOCTLs on a debugfs entry
-> :P...but I maybe wrong ah...
->
-> All of this is still to be explored anyway, any thoughts ? or evident
-> drawbacks ? (beside having to clearly define an API for these message
-> config machinery)
+I also don't think that is a problem.
 
-TBH, I'm not a fan of adding a protocol on top of the SCMI one. This
-interface aims to test the SCMI servers and their channels so we
-should focus on this and make it simple to use. IMHO, adding some
-special bytes before the real scmi message is prone to create
-complexity and error in the use of this debug interface.
+> > Am I missing something?
+>
+> I think there's one thing missed here. I understand you'd like to get
+> rid of the extra flag in the connector. But the advantage of the flag is
+> avoiding duplicate work by saving a bit of state. Suppose that a mark is
+> added to a connector, which causes fsnotify_inode_watches_children() to
+> become true. Then, any subsequent call to fsnotify_recalc_mask() must
+> call __fsnotify_update_child_dentry_flags(), even though the child
+> dentry flags don't need to be updated: they're already set. For (very)
+> large directories, this can take a few seconds, which means that we're
+> doing a few extra seconds of work each time a new mark is added to or
+> removed from a connector in that case. I can't imagine that's a super
+> common workload though, and I don't know if my customers do that (my
+> guess would be no).
+>
+> For an example of a test workload where this would make a difference:
+> one of my test cases is to create a directory with millions of negative
+> dentries, and then run "for i in {1..20}; do inotifywait $DIR & done".
+> With the series as-is, only the first task needs to do the child flag
+> update. With your proposed alternative, each task would re-do the
+> update.
+>
+> If we were to manage to get __fsnotify_update_child_dentry_flags() to
+> work correctly, and safely, with the ability to drop the d_lock and
+> sleep, then I think that wouldn't be too much of a problem, because then
+> other spinlock users of the directory will get a chance to grab it, and
+> so we don't risk softlockups. Without the sleepable iterations, it would
+> be marginally worse than the current solution, but I can't really
+> comment _how_ much worse because like I said, it doesn't sound like a
+> frequent usage pattern.
+>
+> I think I have a _slight_ preference for the current design, but I see
+> the appeal of simpler code, and your design would still improve things a
+> lot! Maybe Amir has an opinion too, but of course I'll defer to what you
+> want.
+>
 
->
-> Anyway, whatever direction we'll choose (additional entries vs 3-bytes
-> config msg), I would prefer to add this per-channel (or polling)
-> capabilities with separate series to post on top of this in teh next
-> cycle.
+IIUC, patches #1+#3 fix a reproducible softlock, so if Al approves them,
+I see no reason to withhold.
 
-Ok
+With patches #1+#3 applied, the penalty is restricted to adding or
+removing/destroying multiple marks on very large dirs or dirs with
+many negative dentries.
 
->
-> ..too many words even this time :P
+I think that fixing the synthetic test case of multiple added marks
+is rather easy even without DCACHE_FSNOTIFY_PARENT_WATCHED.
+Something like the attached patch is what Jan had suggested in the
+first place.
 
-Thanks
-Vincent
+The synthetic test case of concurrent add/remove watch on the same
+dir may still result in multiple children iterations, but that will usually
+not be avoided even with DCACHE_FSNOTIFY_PARENT_WATCHED
+and probably not worth optimizing for.
 
->
-> Thanks,
-> Cristian
->
->
-> P.S: NOTE min_injected_msg_size:
-> --------------------------------
-> Thinking about all of the above, at first, I was a bit dubious if
-> instead I should not allow, in Raw mode, the injection of shorter than
-> 4 bytes messages (i.e. shorter than a SCMI header) for the purpose of
-> fuzzing: then I realized that even though I should allow the injection
-> of smaller messages, the underlying transports, as they are defined, both
-> sides (platform and agent) will anyway carry out a 4bytes transaction,
-> it's just that all the other non-provided bytes will be zeroed in the
-> memory layout; this is just how the transports itself (shmem or msg
-> based) are designed to work both sides. (and again would be transport
-> layer testing more than SCMI spec verification..)
->
-> So at the end I thought this kind of less-than-4-bytes transmissions
-> gave no benefit and I came up with the above trick to use such tiny
-> message for configuration.
->
+Thoughts?
+
+Thanks,
+Amir.
+
+--000000000000b3fafc05ec78ff3b
+Content-Type: text/x-patch; charset="US-ASCII"; 
+	name="fsnotify-clear-PARENT_WATCHED-flags-lazily.patch"
+Content-Disposition: attachment; 
+	filename="fsnotify-clear-PARENT_WATCHED-flags-lazily.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_l9ze346c0>
+X-Attachment-Id: f_l9ze346c0
+
+RnJvbSBjOGVhMWQ4NDM5N2MyNmNlMzM0YmZmOWQ5ZjcyMTQwMGNlYmI4OGRkIE1vbiBTZXAgMTcg
+MDA6MDA6MDAgMjAwMQpGcm9tOiBBbWlyIEdvbGRzdGVpbiA8YW1pcjczaWxAZ21haWwuY29tPgpE
+YXRlOiBXZWQsIDIgTm92IDIwMjIgMTA6Mjg6MDEgKzAyMDAKU3ViamVjdDogW1BBVENIXSBmc25v
+dGlmeTogY2xlYXIgUEFSRU5UX1dBVENIRUQgZmxhZ3MgbGF6aWx5CgpDYWxsIGZzbm90aWZ5X3Vw
+ZGF0ZV9jaGlsZHJlbl9kZW50cnlfZmxhZ3MoKSB0byBzZXQgUEFSRU5UX1dBVENIRUQgZmxhZ3MK
+b25seSB3aGVuIHBhcmVudCBzdGFydHMgd2F0Y2hpbmcgY2hpbGRyZW4uCgpXaGVuIHBhcmVudCBz
+dG9wcyB3YXRjaGluZyBjaGlsZHJlbiwgY2xlYXIgZmFsc2UgcG9zaXRpdmUgUEFSRU5UX1dBVENI
+RUQKZmxhZ3MgbGF6aWx5IGluIF9fZnNub3RpZnlfcGFyZW50KCkgZm9yIGVhY2ggYWNjZXNzZWQg
+Y2hpbGQuCgpTdWdnZXN0ZWQtYnk6IEphbiBLYXJhIDxqYWNrQHN1c2UuY3o+ClNpZ25lZC1vZmYt
+Ynk6IEFtaXIgR29sZHN0ZWluIDxhbWlyNzNpbEBnbWFpbC5jb20+Ci0tLQogZnMvbm90aWZ5L2Zz
+bm90aWZ5LmMgICAgICAgICAgICAgfCAyNiArKysrKysrKysrKysrKysrKysrKy0tLS0tLQogZnMv
+bm90aWZ5L2Zzbm90aWZ5LmggICAgICAgICAgICAgfCAgMyArKy0KIGZzL25vdGlmeS9tYXJrLmMg
+ICAgICAgICAgICAgICAgIHwgMzIgKysrKysrKysrKysrKysrKysrKysrKysrKysrKystLS0KIGlu
+Y2x1ZGUvbGludXgvZnNub3RpZnlfYmFja2VuZC5oIHwgIDggKysrKystLS0KIDQgZmlsZXMgY2hh
+bmdlZCwgNTYgaW5zZXJ0aW9ucygrKSwgMTMgZGVsZXRpb25zKC0pCgpkaWZmIC0tZ2l0IGEvZnMv
+bm90aWZ5L2Zzbm90aWZ5LmMgYi9mcy9ub3RpZnkvZnNub3RpZnkuYwppbmRleCAxZTU0MWE5YmQx
+MmIuLmY2MDA3OGQ2YmI5NyAxMDA2NDQKLS0tIGEvZnMvbm90aWZ5L2Zzbm90aWZ5LmMKKysrIGIv
+ZnMvbm90aWZ5L2Zzbm90aWZ5LmMKQEAgLTEwMywxNyArMTAzLDEzIEBAIHZvaWQgZnNub3RpZnlf
+c2JfZGVsZXRlKHN0cnVjdCBzdXBlcl9ibG9jayAqc2IpCiAgKiBwYXJlbnQgY2FyZXMuICBUaHVz
+IHdoZW4gYW4gZXZlbnQgaGFwcGVucyBvbiBhIGNoaWxkIGl0IGNhbiBxdWlja2x5IHRlbGwKICAq
+IGlmIHRoZXJlIGlzIGEgbmVlZCB0byBmaW5kIGEgcGFyZW50IGFuZCBzZW5kIHRoZSBldmVudCB0
+byB0aGUgcGFyZW50LgogICovCi12b2lkIF9fZnNub3RpZnlfdXBkYXRlX2NoaWxkX2RlbnRyeV9m
+bGFncyhzdHJ1Y3QgaW5vZGUgKmlub2RlKQordm9pZCBmc25vdGlmeV91cGRhdGVfY2hpbGRyZW5f
+ZGVudHJ5X2ZsYWdzKHN0cnVjdCBpbm9kZSAqaW5vZGUsIGJvb2wgd2F0Y2hlZCkKIHsKIAlzdHJ1
+Y3QgZGVudHJ5ICphbGlhczsKLQlpbnQgd2F0Y2hlZDsKIAogCWlmICghU19JU0RJUihpbm9kZS0+
+aV9tb2RlKSkKIAkJcmV0dXJuOwogCi0JLyogZGV0ZXJtaW5lIGlmIHRoZSBjaGlsZHJlbiBzaG91
+bGQgdGVsbCBpbm9kZSBhYm91dCB0aGVpciBldmVudHMgKi8KLQl3YXRjaGVkID0gZnNub3RpZnlf
+aW5vZGVfd2F0Y2hlc19jaGlsZHJlbihpbm9kZSk7Ci0KIAlzcGluX2xvY2soJmlub2RlLT5pX2xv
+Y2spOwogCS8qIHJ1biBhbGwgb2YgdGhlIGRlbnRyaWVzIGFzc29jaWF0ZWQgd2l0aCB0aGlzIGlu
+b2RlLiAgU2luY2UgdGhpcyBpcyBhCiAJICogZGlyZWN0b3J5LCB0aGVyZSBkYW1uIHdlbGwgYmV0
+dGVyIG9ubHkgYmUgb25lIGl0ZW0gb24gdGhpcyBsaXN0ICovCkBAIC0xNDAsNiArMTM2LDI0IEBA
+IHZvaWQgX19mc25vdGlmeV91cGRhdGVfY2hpbGRfZGVudHJ5X2ZsYWdzKHN0cnVjdCBpbm9kZSAq
+aW5vZGUpCiAJc3Bpbl91bmxvY2soJmlub2RlLT5pX2xvY2spOwogfQogCisvKgorICogTGF6aWx5
+IGNsZWFyIGZhbHNlIHBvc2l0aXZlIFBBUkVOVF9XQVRDSEVEIGZsYWcgZm9yIGNoaWxkIHdob3Nl
+IHBhcmVudCBoYWQKKyAqIHN0b3BwZWQgd2FjdGhpbmcgY2hpbGRyZW4uCisgKi8KK3N0YXRpYyB2
+b2lkIGZzbm90aWZ5X3VwZGF0ZV9jaGlsZF9kZW50cnlfZmxhZ3Moc3RydWN0IGlub2RlICppbm9k
+ZSwKKwkJCQkJICAgICAgIHN0cnVjdCBkZW50cnkgKmRlbnRyeSkKK3sKKwlzcGluX2xvY2soJmRl
+bnRyeS0+ZF9sb2NrKTsKKwkvKgorCSAqIGRfbG9jayBpcyBhIHN1ZmZpY2llbnQgYmFycmllciB0
+byBwcmV2ZW50IG9ic2VydmluZyBhIG5vbi13YXRjaGVkCisJICogcGFyZW50IHN0YXRlIGZyb20g
+YmVmb3JlIHRoZSBmc25vdGlmeV91cGRhdGVfY2hpbGRyZW5fZGVudHJ5X2ZsYWdzKCkKKwkgKiBv
+ciBmc25vdGlmeV91cGRhdGVfZmxhZ3MoKSBjYWxsIHRoYXQgaGFkIHNldCBQQVJFTlRfV0FUQ0hF
+RC4KKwkgKi8KKwlpZiAoIWZzbm90aWZ5X2lub2RlX3dhdGNoZXNfY2hpbGRyZW4oaW5vZGUpKQor
+CQlkZW50cnktPmRfZmxhZ3MgJj0gfkRDQUNIRV9GU05PVElGWV9QQVJFTlRfV0FUQ0hFRDsKKwlz
+cGluX3VubG9jaygmZGVudHJ5LT5kX2xvY2spOworfQorCiAvKiBBcmUgaW5vZGUvc2IvbW91bnQg
+aW50ZXJlc3RlZCBpbiBwYXJlbnQgYW5kIG5hbWUgaW5mbyB3aXRoIHRoaXMgZXZlbnQ/ICovCiBz
+dGF0aWMgYm9vbCBmc25vdGlmeV9ldmVudF9uZWVkc19wYXJlbnQoc3RydWN0IGlub2RlICppbm9k
+ZSwgc3RydWN0IG1vdW50ICptbnQsCiAJCQkJCV9fdTMyIG1hc2spCkBAIC0yMDgsNyArMjIyLDcg
+QEAgaW50IF9fZnNub3RpZnlfcGFyZW50KHN0cnVjdCBkZW50cnkgKmRlbnRyeSwgX191MzIgbWFz
+aywgY29uc3Qgdm9pZCAqZGF0YSwKIAlwX2lub2RlID0gcGFyZW50LT5kX2lub2RlOwogCXBfbWFz
+ayA9IGZzbm90aWZ5X2lub2RlX3dhdGNoZXNfY2hpbGRyZW4ocF9pbm9kZSk7CiAJaWYgKHVubGlr
+ZWx5KHBhcmVudF93YXRjaGVkICYmICFwX21hc2spKQotCQlfX2Zzbm90aWZ5X3VwZGF0ZV9jaGls
+ZF9kZW50cnlfZmxhZ3MocF9pbm9kZSk7CisJCWZzbm90aWZ5X3VwZGF0ZV9jaGlsZF9kZW50cnlf
+ZmxhZ3MocF9pbm9kZSwgZGVudHJ5KTsKIAogCS8qCiAJICogSW5jbHVkZSBwYXJlbnQvbmFtZSBp
+biBub3RpZmljYXRpb24gZWl0aGVyIGlmIHNvbWUgbm90aWZpY2F0aW9uCmRpZmYgLS1naXQgYS9m
+cy9ub3RpZnkvZnNub3RpZnkuaCBiL2ZzL25vdGlmeS9mc25vdGlmeS5oCmluZGV4IGZkZTc0ZWIz
+MzNjYy4uYmNlOWJlMzZkMDZiIDEwMDY0NAotLS0gYS9mcy9ub3RpZnkvZnNub3RpZnkuaAorKysg
+Yi9mcy9ub3RpZnkvZnNub3RpZnkuaApAQCAtNzQsNyArNzQsOCBAQCBzdGF0aWMgaW5saW5lIHZv
+aWQgZnNub3RpZnlfY2xlYXJfbWFya3NfYnlfc2Ioc3RydWN0IHN1cGVyX2Jsb2NrICpzYikKICAq
+IHVwZGF0ZSB0aGUgZGVudHJ5LT5kX2ZsYWdzIG9mIGFsbCBvZiBpbm9kZSdzIGNoaWxkcmVuIHRv
+IGluZGljYXRlIGlmIGlub2RlIGNhcmVzCiAgKiBhYm91dCBldmVudHMgdGhhdCBoYXBwZW4gdG8g
+aXRzIGNoaWxkcmVuLgogICovCi1leHRlcm4gdm9pZCBfX2Zzbm90aWZ5X3VwZGF0ZV9jaGlsZF9k
+ZW50cnlfZmxhZ3Moc3RydWN0IGlub2RlICppbm9kZSk7CitleHRlcm4gdm9pZCBmc25vdGlmeV91
+cGRhdGVfY2hpbGRyZW5fZGVudHJ5X2ZsYWdzKHN0cnVjdCBpbm9kZSAqaW5vZGUsCisJCQkJCQkg
+IGJvb2wgd2F0Y2hlZCk7CiAKIGV4dGVybiBzdHJ1Y3Qga21lbV9jYWNoZSAqZnNub3RpZnlfbWFy
+a19jb25uZWN0b3JfY2FjaGVwOwogCmRpZmYgLS1naXQgYS9mcy9ub3RpZnkvbWFyay5jIGIvZnMv
+bm90aWZ5L21hcmsuYwppbmRleCBmY2M2OGI4YTQwZmQuLjYxNGJjZTBlNzI2MSAxMDA2NDQKLS0t
+IGEvZnMvbm90aWZ5L21hcmsuYworKysgYi9mcy9ub3RpZnkvbWFyay5jCkBAIC0xNzYsNiArMTc2
+LDI0IEBAIHN0YXRpYyB2b2lkICpfX2Zzbm90aWZ5X3JlY2FsY19tYXNrKHN0cnVjdCBmc25vdGlm
+eV9tYXJrX2Nvbm5lY3RvciAqY29ubikKIAlyZXR1cm4gZnNub3RpZnlfdXBkYXRlX2lyZWYoY29u
+biwgd2FudF9pcmVmKTsKIH0KIAorc3RhdGljIGJvb2wgZnNub3RpZnlfY29ubl93YXRjaGVzX2No
+aWxkcmVuKAorCQkJCQlzdHJ1Y3QgZnNub3RpZnlfbWFya19jb25uZWN0b3IgKmNvbm4pCit7CisJ
+aWYgKGNvbm4tPnR5cGUgIT0gRlNOT1RJRllfT0JKX1RZUEVfSU5PREUpCisJCXJldHVybiBmYWxz
+ZTsKKworCXJldHVybiBmc25vdGlmeV9pbm9kZV93YXRjaGVzX2NoaWxkcmVuKGZzbm90aWZ5X2Nv
+bm5faW5vZGUoY29ubikpOworfQorCitzdGF0aWMgdm9pZCBmc25vdGlmeV9jb25uX3NldF9jaGls
+ZHJlbl9kZW50cnlfZmxhZ3MoCisJCQkJCXN0cnVjdCBmc25vdGlmeV9tYXJrX2Nvbm5lY3RvciAq
+Y29ubikKK3sKKwlpZiAoY29ubi0+dHlwZSAhPSBGU05PVElGWV9PQkpfVFlQRV9JTk9ERSkKKwkJ
+cmV0dXJuOworCisJZnNub3RpZnlfdXBkYXRlX2NoaWxkcmVuX2RlbnRyeV9mbGFncyhmc25vdGlm
+eV9jb25uX2lub2RlKGNvbm4pLCB0cnVlKTsKK30KKwogLyoKICAqIENhbGN1bGF0ZSBtYXNrIG9m
+IGV2ZW50cyBmb3IgYSBsaXN0IG9mIG1hcmtzLiBUaGUgY2FsbGVyIG11c3QgbWFrZSBzdXJlCiAg
+KiBjb25uZWN0b3IgYW5kIGNvbm5lY3Rvci0+b2JqIGNhbm5vdCBkaXNhcHBlYXIgdW5kZXIgdXMu
+ICBDYWxsZXJzIGFjaGlldmUKQEAgLTE4NCwxNSArMjAyLDIzIEBAIHN0YXRpYyB2b2lkICpfX2Zz
+bm90aWZ5X3JlY2FsY19tYXNrKHN0cnVjdCBmc25vdGlmeV9tYXJrX2Nvbm5lY3RvciAqY29ubikK
+ICAqLwogdm9pZCBmc25vdGlmeV9yZWNhbGNfbWFzayhzdHJ1Y3QgZnNub3RpZnlfbWFya19jb25u
+ZWN0b3IgKmNvbm4pCiB7CisJYm9vbCB1cGRhdGVfY2hpbGRyZW47CisKIAlpZiAoIWNvbm4pCiAJ
+CXJldHVybjsKIAogCXNwaW5fbG9jaygmY29ubi0+bG9jayk7CisJdXBkYXRlX2NoaWxkcmVuID0g
+IWZzbm90aWZ5X2Nvbm5fd2F0Y2hlc19jaGlsZHJlbihjb25uKTsKIAlfX2Zzbm90aWZ5X3JlY2Fs
+Y19tYXNrKGNvbm4pOworCXVwZGF0ZV9jaGlsZHJlbiAmPSBmc25vdGlmeV9jb25uX3dhdGNoZXNf
+Y2hpbGRyZW4oY29ubik7CiAJc3Bpbl91bmxvY2soJmNvbm4tPmxvY2spOwotCWlmIChjb25uLT50
+eXBlID09IEZTTk9USUZZX09CSl9UWVBFX0lOT0RFKQotCQlfX2Zzbm90aWZ5X3VwZGF0ZV9jaGls
+ZF9kZW50cnlfZmxhZ3MoCi0JCQkJCWZzbm90aWZ5X2Nvbm5faW5vZGUoY29ubikpOworCS8qCisJ
+ICogU2V0IGNoaWxkcmVuJ3MgUEFSRU5UX1dBVENIRUQgZmxhZ3Mgb25seSBpZiBwYXJlbnQgc3Rh
+cnRlZCB3YXRjaGluZy4KKwkgKiBXaGVuIHBhcmVudCBzdG9wcyB3YXRjaGluZywgd2UgY2xlYXIg
+ZmFsc2UgcG9zaXRpdmUgUEFSRU5UX1dBVENIRUQKKwkgKiBmbGFncyBsYXppbHkgaW4gX19mc25v
+dGlmeV9wYXJlbnQoKS4KKwkgKi8KKwlpZiAodXBkYXRlX2NoaWxkcmVuKQorCQlmc25vdGlmeV9j
+b25uX3NldF9jaGlsZHJlbl9kZW50cnlfZmxhZ3MoY29ubik7CiB9CiAKIC8qIEZyZWUgYWxsIGNv
+bm5lY3RvcnMgcXVldWVkIGZvciBmcmVlaW5nIG9uY2UgU1JDVSBwZXJpb2QgZW5kcyAqLwpkaWZm
+IC0tZ2l0IGEvaW5jbHVkZS9saW51eC9mc25vdGlmeV9iYWNrZW5kLmggYi9pbmNsdWRlL2xpbnV4
+L2Zzbm90aWZ5X2JhY2tlbmQuaAppbmRleCBhMzE0MjNjMzc2YTcuLmJkOTBiY2Y2YzNiMCAxMDA2
+NDQKLS0tIGEvaW5jbHVkZS9saW51eC9mc25vdGlmeV9iYWNrZW5kLmgKKysrIGIvaW5jbHVkZS9s
+aW51eC9mc25vdGlmeV9iYWNrZW5kLmgKQEAgLTU4NiwxMiArNTg2LDE0IEBAIHN0YXRpYyBpbmxp
+bmUgX191MzIgZnNub3RpZnlfcGFyZW50X25lZWRlZF9tYXNrKF9fdTMyIG1hc2spCiAKIHN0YXRp
+YyBpbmxpbmUgaW50IGZzbm90aWZ5X2lub2RlX3dhdGNoZXNfY2hpbGRyZW4oc3RydWN0IGlub2Rl
+ICppbm9kZSkKIHsKKwlfX3UzMiBwYXJlbnRfbWFzayA9IFJFQURfT05DRShpbm9kZS0+aV9mc25v
+dGlmeV9tYXNrKTsKKwogCS8qIEZTX0VWRU5UX09OX0NISUxEIGlzIHNldCBpZiB0aGUgaW5vZGUg
+bWF5IGNhcmUgKi8KLQlpZiAoIShpbm9kZS0+aV9mc25vdGlmeV9tYXNrICYgRlNfRVZFTlRfT05f
+Q0hJTEQpKQorCWlmICghKHBhcmVudF9tYXNrICYgRlNfRVZFTlRfT05fQ0hJTEQpKQogCQlyZXR1
+cm4gMDsKIAkvKiB0aGlzIGlub2RlIG1pZ2h0IGNhcmUgYWJvdXQgY2hpbGQgZXZlbnRzLCBkb2Vz
+IGl0IGNhcmUgYWJvdXQgdGhlCiAJICogc3BlY2lmaWMgc2V0IG9mIGV2ZW50cyB0aGF0IGNhbiBo
+YXBwZW4gb24gYSBjaGlsZD8gKi8KLQlyZXR1cm4gaW5vZGUtPmlfZnNub3RpZnlfbWFzayAmIEZT
+X0VWRU5UU19QT1NTX09OX0NISUxEOworCXJldHVybiBwYXJlbnRfbWFzayAmIEZTX0VWRU5UU19Q
+T1NTX09OX0NISUxEOwogfQogCiAvKgpAQCAtNjA1LDcgKzYwNyw3IEBAIHN0YXRpYyBpbmxpbmUg
+dm9pZCBmc25vdGlmeV91cGRhdGVfZmxhZ3Moc3RydWN0IGRlbnRyeSAqZGVudHJ5KQogCS8qCiAJ
+ICogU2VyaWFsaXNhdGlvbiBvZiBzZXR0aW5nIFBBUkVOVF9XQVRDSEVEIG9uIHRoZSBkZW50cmll
+cyBpcyBwcm92aWRlZAogCSAqIGJ5IGRfbG9jay4gSWYgaW5vdGlmeV9pbm9kZV93YXRjaGVkIGNo
+YW5nZXMgYWZ0ZXIgd2UgaGF2ZSB0YWtlbgotCSAqIGRfbG9jaywgdGhlIGZvbGxvd2luZyBfX2Zz
+bm90aWZ5X3VwZGF0ZV9jaGlsZF9kZW50cnlfZmxhZ3MgY2FsbCB3aWxsCisJICogZF9sb2NrLCB0
+aGUgZm9sbG93aW5nIGZzbm90aWZ5X3VwZGF0ZV9jaGlsZHJlbl9kZW50cnlfZmxhZ3MgY2FsbCB3
+aWxsCiAJICogZmluZCBvdXIgZW50cnksIHNvIGl0IHdpbGwgc3BpbiB1bnRpbCB3ZSBjb21wbGV0
+ZSBoZXJlLCBhbmQgdXBkYXRlCiAJICogdXMgd2l0aCB0aGUgbmV3IHN0YXRlLgogCSAqLwotLSAK
+Mi4yNS4xCgo=
+--000000000000b3fafc05ec78ff3b--
