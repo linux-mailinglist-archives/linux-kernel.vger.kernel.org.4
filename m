@@ -2,152 +2,62 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 339816158DE
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 04:00:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 081386158F7
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 04:02:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231276AbiKBC75 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 22:59:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49106 "EHLO
+        id S230366AbiKBDC2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 23:02:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51152 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231253AbiKBC7x (ORCPT
+        with ESMTP id S231336AbiKBDCF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 22:59:53 -0400
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 635D622B31;
-        Tue,  1 Nov 2022 19:59:47 -0700 (PDT)
-Received: from canpemm500005.china.huawei.com (unknown [172.30.72.56])
-        by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4N2BSZ5f6Vz15MHd;
-        Wed,  2 Nov 2022 10:59:42 +0800 (CST)
-Received: from [10.174.178.197] (10.174.178.197) by
- canpemm500005.china.huawei.com (7.192.104.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Wed, 2 Nov 2022 10:59:44 +0800
-Message-ID: <ca6253bd-dcf4-2625-bc41-4b9a7774d895@huawei.com>
-Date:   Wed, 2 Nov 2022 10:59:44 +0800
+        Tue, 1 Nov 2022 23:02:05 -0400
+Received: from zju.edu.cn (mail.zju.edu.cn [61.164.42.155])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E33D023171;
+        Tue,  1 Nov 2022 20:01:39 -0700 (PDT)
+Received: by ajax-webmail-mail-app2 (Coremail) ; Wed, 2 Nov 2022 11:01:33
+ +0800 (GMT+08:00)
+X-Originating-IP: [10.14.30.50]
+Date:   Wed, 2 Nov 2022 11:01:33 +0800 (GMT+08:00)
+X-CM-HeaderCharset: UTF-8
+From:   "Jinlong Chen" <nickyc975@zju.edu.cn>
+To:     axboe@kernel.dk
+Cc:     hch@lst.de, chaitanyak@nvidia.com, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 0/2] some random cleanups for blk-mq.c
+X-Priority: 3
+X-Mailer: Coremail Webmail Server Version XT5.0.13 build 20210104(ab8c30b6)
+ Copyright (c) 2002-2022 www.mailtech.cn zju.edu.cn
+In-Reply-To: <cover.1667356813.git.nickyc975@zju.edu.cn>
+References: <cover.1667356813.git.nickyc975@zju.edu.cn>
+Content-Transfer-Encoding: base64
+Content-Type: text/plain; charset=UTF-8
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH -next] bpf, test_run: fix alignment problem in
- bpf_prog_test_run_skb()
-To:     Daniel Borkmann <daniel@iogearbox.net>, <edumazet@google.com>,
-        <davem@davemloft.net>, <kuba@kernel.org>, <pabeni@redhat.com>
-CC:     <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <ast@kernel.org>, <song@kernel.org>,
-        <yhs@fb.com>, <haoluo@google.com>,
-        Alexander Potapenko <glider@google.com>,
-        Marco Elver <elver@google.com>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Linux MM <linux-mm@kvack.org>, <kasan-dev@googlegroups.com>,
-        <elver@google.com>, <glider@google.com>, <dvyukov@google.com>
-References: <20221101040440.3637007-1-zhongbaisong@huawei.com>
- <eca17bfb-c75f-5db1-f194-5b00c2a0c6f2@iogearbox.net>
-From:   zhongbaisong <zhongbaisong@huawei.com>
-Organization: huawei
-In-Reply-To: <eca17bfb-c75f-5db1-f194-5b00c2a0c6f2@iogearbox.net>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Originating-IP: [10.174.178.197]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500005.china.huawei.com (7.192.104.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Message-ID: <3458f1ab.163b5a.184364970c8.Coremail.nickyc975@zju.edu.cn>
+X-Coremail-Locale: zh_CN
+X-CM-TRANSID: by_KCgBHC7GN3WFjJvpcBw--.54326W
+X-CM-SenderInfo: qssqjiaqqzq6lmxovvfxof0/1tbiAgoCB1ZdtcNVXAAJsw
+X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
+        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
+        daVFxhVjvjDU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 2022/11/2 0:45, Daniel Borkmann wrote:
-> [ +kfence folks ]
-
-+ cc: Alexander Potapenko, Marco Elver, Dmitry Vyukov
-
-Do you have any suggestions about this problem?
-
-Thanks,
-
-.
-
-> 
-> On 11/1/22 5:04 AM, Baisong Zhong wrote:
->> Recently, we got a syzkaller problem because of aarch64
->> alignment fault if KFENCE enabled.
->>
->> When the size from user bpf program is an odd number, like
->> 399, 407, etc, it will cause skb shard info's alignment access,
->> as seen below:
->>
->> BUG: KFENCE: use-after-free read in __skb_clone+0x23c/0x2a0 
->> net/core/skbuff.c:1032
->>
->> Use-after-free read at 0xffff6254fffac077 (in kfence-#213):
->>   __lse_atomic_add arch/arm64/include/asm/atomic_lse.h:26 [inline]
->>   arch_atomic_add arch/arm64/include/asm/atomic.h:28 [inline]
->>   arch_atomic_inc include/linux/atomic-arch-fallback.h:270 [inline]
->>   atomic_inc include/asm-generic/atomic-instrumented.h:241 [inline]
->>   __skb_clone+0x23c/0x2a0 net/core/skbuff.c:1032
->>   skb_clone+0xf4/0x214 net/core/skbuff.c:1481
->>   ____bpf_clone_redirect net/core/filter.c:2433 [inline]
->>   bpf_clone_redirect+0x78/0x1c0 net/core/filter.c:2420
->>   bpf_prog_d3839dd9068ceb51+0x80/0x330
->>   bpf_dispatcher_nop_func include/linux/bpf.h:728 [inline]
->>   bpf_test_run+0x3c0/0x6c0 net/bpf/test_run.c:53
->>   bpf_prog_test_run_skb+0x638/0xa7c net/bpf/test_run.c:594
->>   bpf_prog_test_run kernel/bpf/syscall.c:3148 [inline]
->>   __do_sys_bpf kernel/bpf/syscall.c:4441 [inline]
->>   __se_sys_bpf+0xad0/0x1634 kernel/bpf/syscall.c:4381
->>
->> kfence-#213: 0xffff6254fffac000-0xffff6254fffac196, size=407, 
->> cache=kmalloc-512
->>
->> allocated by task 15074 on cpu 0 at 1342.585390s:
->>   kmalloc include/linux/slab.h:568 [inline]
->>   kzalloc include/linux/slab.h:675 [inline]
->>   bpf_test_init.isra.0+0xac/0x290 net/bpf/test_run.c:191
->>   bpf_prog_test_run_skb+0x11c/0xa7c net/bpf/test_run.c:512
->>   bpf_prog_test_run kernel/bpf/syscall.c:3148 [inline]
->>   __do_sys_bpf kernel/bpf/syscall.c:4441 [inline]
->>   __se_sys_bpf+0xad0/0x1634 kernel/bpf/syscall.c:4381
->>   __arm64_sys_bpf+0x50/0x60 kernel/bpf/syscall.c:4381
->>
->> To fix the problem, we round up allocations with kmalloc_size_roundup()
->> so that build_skb()'s use of kize() is always alignment and no special
->> handling of the memory is needed by KFENCE.
->>
->> Fixes: 1cf1cae963c2 ("bpf: introduce BPF_PROG_TEST_RUN command")
->> Signed-off-by: Baisong Zhong <zhongbaisong@huawei.com>
->> ---
->>   net/bpf/test_run.c | 1 +
->>   1 file changed, 1 insertion(+)
->>
->> diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
->> index 13d578ce2a09..058b67108873 100644
->> --- a/net/bpf/test_run.c
->> +++ b/net/bpf/test_run.c
->> @@ -774,6 +774,7 @@ static void *bpf_test_init(const union bpf_attr 
->> *kattr, u32 user_size,
->>       if (user_size > size)
->>           return ERR_PTR(-EMSGSIZE);
->> +    size = kmalloc_size_roundup(size);
->>       data = kzalloc(size + headroom + tailroom, GFP_USER);
-> 
-> The fact that you need to do this roundup on call sites feels broken, no?
-> Was there some discussion / consensus that now all k*alloc() call sites
-> would need to be fixed up? Couldn't this be done transparently in k*alloc()
-> when KFENCE is enabled? I presume there may be lots of other such occasions
-> in the kernel where similar issue triggers, fixing up all call-sites feels
-> like ton of churn compared to api-internal, generic fix.
-> 
->>       if (!data)
->>           return ERR_PTR(-ENOMEM);
->>
-> 
-> Thanks,
-> Daniel
->
-
-
+PiBQYXRjaCAxIGltcHJvdmVzIHRoZSBlcnJvciBoYW5kbGluZyBibGtfbXFfYWxsb2NfcnFfbWFw
+KCkuIFBhdGNoIDIKPiBpbXByb3ZlcyByZWFkYWJpbGl0eSBvZiBibGtfbXFfYWxsb2NfY2FjaGVk
+X3JlcXVlc3QoKS4KPiAKPiBDaGFuZ2VzIGluIHYyOgo+IC0gZHJvcCB3cm9uZyBhbmQgd29ydGhs
+ZXNzIHBhdGNoZXMsIHN1Z2dlc3RlZCBieSBDaHJpc3RvcGgsIEplbnMgYW5kCj4gICBDaGFpdGFu
+eWEKPiAtIHJlbW92ZSBzaWxseSBnb3RvLXJldHVybi1OVUxMIGluIHBhdGNoIDEgKHBhdGNoIDIg
+b3JpZ2luYWxseSksIHN1Z2dlc3RlZAo+ICAgYnkgQ2hyaXN0b3BoIGFuZCBKZW5zCj4gCj4gSmlu
+bG9uZyBDaGVuICgyKToKPiAgIGJsay1tcTogaW1wcm92ZSBlcnJvciBoYW5kbGluZyBpbiBibGtf
+bXFfYWxsb2NfcnFfbWFwKCkKPiAgIGJsay1tcTogdXNlIGlmLWVsc2UgaW5zdGVhZCBvZiBnb3Rv
+IGluIGJsa19tcV9hbGxvY19jYWNoZWRfcmVxdWVzdCgpCj4gCj4gIGJsb2NrL2Jsay1tcS5jIHwg
+NDYgKysrKysrKysrKysrKysrKysrKysrKysrLS0tLS0tLS0tLS0tLS0tLS0tLS0tLQo+ICAxIGZp
+bGUgY2hhbmdlZCwgMjQgaW5zZXJ0aW9ucygrKSwgMjIgZGVsZXRpb25zKC0pCgoKT29wcywgSSBm
+b3Jnb3QgdGhlIHJldmlld2VkIHRhZyBieSBDaHJpc3RvcGghCgpTb3JyeSEKSmlubG9uZyBDaGVu
+Cg==
