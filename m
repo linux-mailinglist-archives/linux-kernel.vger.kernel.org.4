@@ -2,86 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8BDD5615837
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 03:47:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A9424615853
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 03:49:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230433AbiKBCrU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Tue, 1 Nov 2022 22:47:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37010 "EHLO
+        id S230463AbiKBCth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Tue, 1 Nov 2022 22:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230370AbiKBCrR (ORCPT
+        with ESMTP id S230448AbiKBCte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Tue, 1 Nov 2022 22:47:17 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 58EC021812;
-        Tue,  1 Nov 2022 19:47:16 -0700 (PDT)
+        Tue, 1 Nov 2022 22:49:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 882D31FFA7;
+        Tue,  1 Nov 2022 19:49:33 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id C5583617C8;
-        Wed,  2 Nov 2022 02:47:15 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1B6FC433B5;
-        Wed,  2 Nov 2022 02:47:14 +0000 (UTC)
-Authentication-Results: smtp.kernel.org;
-        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="AG+tgG+y"
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
-        t=1667357233;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=r6a6dTW6KKeFFiifYxWa6q1oeaoI/6g0vF1UUpf+QGw=;
-        b=AG+tgG+yXzo86A0MZsAxzh0ausmHZB2jwBmcvool7ZPF3PoCAJd517xOeV74Bx6aTkWpGL
-        2Dbp+l8DfdGJ1J2SKvJMsYPQLVwGqxjXCKCMa2gNFgbRuvD+ZtOU7mNcFSV4Jz7QKBK0OR
-        +MZdyshTHq3+egaKTAyVQ3zMvTKoOMc=
-Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 8968a0d6 (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
-        Wed, 2 Nov 2022 02:47:12 +0000 (UTC)
-Received: by mail-vs1-f50.google.com with SMTP id t5so7803924vsh.8;
-        Tue, 01 Nov 2022 19:47:12 -0700 (PDT)
-X-Gm-Message-State: ACrzQf0oBJI+snvWlVw9rdDiY+EphwvN97/7Fg+4Ie9nZ7Voi4iD/PlY
-        sOY0Xe6U4+8XhusgJLESyQFHuUO2D/tgZWFhEeQ=
-X-Google-Smtp-Source: AMsMyM4s6R6+3wPjXr5ORpTViCSnm6NfuCxPssIJ65iEFLryiOGriyJ16OI2hKJZ/tKgr7D0wi4QNEivOxsE1PlmTHI=
-X-Received: by 2002:a67:c297:0:b0:3aa:3cac:97b6 with SMTP id
- k23-20020a67c297000000b003aa3cac97b6mr10810553vsj.76.1667357231942; Tue, 01
- Nov 2022 19:47:11 -0700 (PDT)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 070D9B82072;
+        Wed,  2 Nov 2022 02:49:32 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7F206C433C1;
+        Wed,  2 Nov 2022 02:49:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667357370;
+        bh=W4fAhnKbB727M/BBd7ZkvwyarygTC85F2EeJtyYUMec=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=hvbtbU6E38Y8CQ1GJX/u7/GDZTJHDaRxGZPkNR8g/2SDCyeCVX2JhV/PzMO5LTcJa
+         rTDRkc0lPxIVjIGfpF38bwThUYCS4wiUpyE37ZHDX2IzapaZWA5dXmhiQWX3WzXbAI
+         kBKRIHR6Nz+qy4gjr/ZFmsu++QCrzvGVU6lT/uPNPrlBjrYnjhfTiMG4/faK0wSP3w
+         nyr4VXFUxqyirIXSv5uyfCOKJLluzF5a9pTbsaJaEIGG4+hS2qSrfSymwNfeHlcLtR
+         SyldkVAXhNW98BRCwZSZjBZDh3IhqnEUoEvxmWz6wkEsvb6X7xOTpx85uaRdELQffi
+         6RNvz62EWserA==
+Date:   Tue, 1 Nov 2022 21:49:27 -0500
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, patches@lists.linux.dev,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Satya Priya <quic_c_skakit@quicinc.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: Re: [PATCH] clk: qcom: gdsc: Remove direct runtime PM calls
+Message-ID: <20221102024927.n5mjyzyqyapveapa@builder.lan>
+References: <20221101233421.997149-1-swboyd@chromium.org>
 MIME-Version: 1.0
-References: <20221024162756.535776-1-Jason@zx2c4.com>
-In-Reply-To: <20221024162756.535776-1-Jason@zx2c4.com>
-From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
-Date:   Wed, 2 Nov 2022 03:47:01 +0100
-X-Gmail-Original-Message-ID: <CAHmME9qMqUyNp2bdoY1YH14yvhZAwE_oAC5tav9jbTGp0jeUpA@mail.gmail.com>
-Message-ID: <CAHmME9qMqUyNp2bdoY1YH14yvhZAwE_oAC5tav9jbTGp0jeUpA@mail.gmail.com>
-Subject: Re: [PATCH] media: stv0288: use explicitly signed char
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>
-Cc:     linux-media@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221101233421.997149-1-swboyd@chromium.org>
+X-Spam-Status: No, score=-8.2 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Mauro,
+On Tue, Nov 01, 2022 at 04:34:21PM -0700, Stephen Boyd wrote:
+> We shouldn't be calling runtime PM APIs from within the genpd
+> enable/disable path for a couple reasons.
+[..][
+> Upon closer inspection, calling runtime PM APIs like this in the GDSC
+> driver doesn't make sense. It was intended to make sure the GDSC for the
+> clock controller providing other GDSCs was enabled, specifically the
+> MMCX GDSC for the display clk controller on SM8250 (sm8250-dispcc), so
+> that GDSC register accesses succeeded. That will already happen because
+> we make the 'dev->pm_domain' a parent domain of each GDSC we register in
+> gdsc_register() via pm_genpd_add_subdomain(). When any of these GDSCs
+> are accessed, we'll enable the parent domain (in this specific case
+> MMCX).
+> 
 
-On Mon, Oct 24, 2022 at 6:28 PM Jason A. Donenfeld <Jason@zx2c4.com> wrote:
->
-> With char becoming unsigned by default, and with `char` alone being
-> ambiguous and based on architecture, signed chars need to be marked
-> explicitly as such. Use `s8` and `u8` types here, since that's what
-> surrounding code does. This fixes:
->
-> drivers/media/dvb-frontends/stv0288.c:471 stv0288_set_frontend() warn: assigning (-9) to unsigned variable 'tm'
-> drivers/media/dvb-frontends/stv0288.c:471 stv0288_set_frontend() warn: we never enter this loop
->
-> Cc: Mauro Carvalho Chehab <mchehab@kernel.org>
-> Cc: linux-media@vger.kernel.org
-> Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+It's correct that adding the GDSCs as subdomains for the device's
+parent-domain will ensure that enabling a GDSC will propagate up and
+turn on the (typically) rpmhpd resource.
 
-Was wondering whether you planned on taking this into your tree as a
-6.1 fix for Linus for rc4?
+But the purpose for the explicit calls was to ensure that the clock
+controller itself is accessible. It's been a while since I looked at
+this, but iirc letting MMCX to turn off would cause the register access
+during dispcc probing to fail - similar to how
+clk_pm_runtime_get()/put() ensures the clock registers are accessible.
 
-Thanks,
-Jason
+
+Perhaps I misunderstood something in the process, or lost track of the
+actual issues?
+
+Regards,
+Bjorn
