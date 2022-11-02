@@ -2,74 +2,81 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B71D5616889
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:22:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F57761688F
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:23:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231444AbiKBQW4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 12:22:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35780 "EHLO
+        id S231679AbiKBQW6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 12:22:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35338 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231503AbiKBQVr (ORCPT
+        with ESMTP id S232068AbiKBQWX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 12:21:47 -0400
-Received: from mail-oa1-x2b.google.com (mail-oa1-x2b.google.com [IPv6:2001:4860:4864:20::2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1899A31F86
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 09:15:32 -0700 (PDT)
-Received: by mail-oa1-x2b.google.com with SMTP id 586e51a60fabf-13c2cfd1126so20805995fac.10
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 09:15:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=JgdHlgFUL52ZSlgJoR2BWxLy/c2ChtXsX4iM/BXcyqc=;
-        b=ho8Lt6cCmihgvDFQsW1Yod9zxSYinMTGeBkJpi7Z9kRRm94PktrqsKojXGwz8PTa22
-         ylgX6D5aVmt463Z5uEMjQ5mYf/FrjayBb94syCzgDLnttyg9Ph9Kzd6ZYgx9PNQ4B5+Z
-         RKEflZvPevS8Y+vjindMbLmh3ku4RuY64NutN+HMb/lgzYK42JB9eRsb2SEilvLnPsmx
-         sdBBL5lC/5ObFeW4jhfOQMtHraKfShq/EVfFhYdVFGx02ndLkGcbwxOtEsfttViwAh4g
-         c5JHz3n4NrKqr5Vy+UmIcpuBZmX/zi8dcyXea4Jyn8WdzlRpzz7xFuFQzB+xOnp+wL3n
-         2Drw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=JgdHlgFUL52ZSlgJoR2BWxLy/c2ChtXsX4iM/BXcyqc=;
-        b=Fjy2v8hRnW+fz3lvzawTxZ4dOWLZpczbw03EF5UvC5MTjapEVGRByVz2bjYar/x49n
-         6i7KrRMdKWpXi01Of8iwq2VpFrerLgw6sBby5iItF2k8U+fbkeHLXPUjJZzc2veLJGcd
-         9KwOZugTwusQIErZpvG8MW8L8G/rNMWjvwzGoGHyIcfd/IS3kDkub5P0fG2w0/OKLih8
-         IliRP4v685uhMiw6p6VimII2kBYdH4EwdIdEj6avwyRVjlYeTjhfcf7UCXWubsvEWpIz
-         4TH0M4lJOZ8tUqyaXrfnbKl5N9YGobeFkuUz8CRcdDBY9avne+Sf/LUOxG3ln/2NUNP3
-         HfeA==
-X-Gm-Message-State: ACrzQf2G185BocogaO+Gb+XYNaECMxfcAqJMQ70ZHQl6KgcYos8z4bZO
-        PKU3/wtp1a26qPzQQ/YzjC3WIVC7h5oyrfhMmU3t4k+Y
-X-Google-Smtp-Source: AMsMyM4e5KRS5+wtnu+5IMwyVsDM0J1Z9m0fl9VvwJLdX+CyYgyy3luD7SpqwqGASkuDfYCIT1DxBn+1OauaueJkz1Y=
-X-Received: by 2002:a05:6870:a7a4:b0:136:7c39:979e with SMTP id
- x36-20020a056870a7a400b001367c39979emr15352738oao.96.1667405731170; Wed, 02
- Nov 2022 09:15:31 -0700 (PDT)
+        Wed, 2 Nov 2022 12:22:23 -0400
+Received: from wout1-smtp.messagingengine.com (wout1-smtp.messagingengine.com [64.147.123.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A8FC0326FA;
+        Wed,  2 Nov 2022 09:16:06 -0700 (PDT)
+Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
+        by mailout.west.internal (Postfix) with ESMTP id AEF2432005C1;
+        Wed,  2 Nov 2022 12:16:03 -0400 (EDT)
+Received: from mailfrontend2 ([10.202.2.163])
+  by compute4.internal (MEProxy); Wed, 02 Nov 2022 12:16:04 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=svenpeter.dev;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1667405763; x=1667492163; bh=vjsW9AucU8
+        8T88HijQ2DrXg0E5k9G26I+ZgoZYsnzAI=; b=p7Be0evCxVzL9WsdOQE4XYZ+IN
+        fE/97l2ihtQ1rXMk4iqSOBAq8BsukeckaHXigDSbz1F+xQ4OJ7M7BzRNJHOz4i1f
+        Rg5pUXmQ0h+luQXk5iDZuwHt9OJkSE9tEEWf8pktnQ0oDTjsd219fJWQtwXOmfly
+        VxUXn8GoEVjahMbW5xheoI8mKp8uSLr5SSDmmNFvjmN1OCvTUM6hqEoo8XG7V4AU
+        TpkzIq4kRYvw641pcjFf/LFT94vpOcFPuex2rXseTYaP5FxcsjaVTxPDpf2EUffI
+        CFzEEW4VnitwTwsDbn3ELwGo/n2CHSe+NgOJ3xfuHKQRk97ry3vzx+vAPUvg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1667405763; x=1667492163; bh=vjsW9AucU88T88HijQ2DrXg0E5k9G26I+Zg
+        oZYsnzAI=; b=tJYHxDZW6rW4pPnCLpsIta4NrRsfO1HsHdhpmYM7x39dx1b9V34
+        ube4P7qlGDjt3p3xx0FlTOamj8PoQ7GzpWEMiBe+Yy3Xdbb5Omb8mKZ20+3sjz8y
+        XTHTFX9/wdwsTJn7jZHTd94PCGyvidlwa/YwVJQBItyFfqVNU6tqHHh8jL9YhLGa
+        /hoAsCKKsEGhlyV1uO5nmLQGlph7I0/Co9d24rHaWSqhWa7G5Lx7964B24s8vdXO
+        iw2V2n/fSt3ZQwafBaxq3hmAUZShG7tC68SlSeNWovBusHZutNAQvWNt3eTbYBG3
+        Rg6LscQAoyVvh2HO86Q/7q8Dm5mbOqDInVw==
+X-ME-Sender: <xms:wpdiY6HvLI4jQjbUwyrqCQc-xXX3gU4cKUZoWMsX1IaWtIXghsPIWQ>
+    <xme:wpdiY7XJzrb7SjRTev8FnzZPqH6JOoPyJHHvP-BETWm2FR6O0OKQvmvpCfb5hSA4k
+    LGDfII561qe29I0WFw>
+X-ME-Received: <xmr:wpdiY0LYgH9ZUU3TrefF0JiHfLxE90cLtdTq5wBRzM1tizIrKx9XO2a_3_uuMKqyhc9qNvDv0n5n9lmopl9A5h5cazK9bmL9oH3BHVqmMJ0PzyulkOD1QOnYn1Afig>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudejgdekhecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpefuvhgvnhcurfgv
+    thgvrhcuoehsvhgvnhesshhvvghnphgvthgvrhdruggvvheqnecuggftrfgrthhtvghrnh
+    epleduffeiheeuvedtffevtdeuleeljeduudfgtedtvefhfeffvdfghfejhefgleelnecu
+    vehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepshhvvghnse
+    hsvhgvnhhpvghtvghrrdguvghv
+X-ME-Proxy: <xmx:wpdiY0HM4ukHeVnwrAjU32g6S62a2t6rCnh4FpmkzLZoTPYESoni5w>
+    <xmx:wpdiYwUiQz-oHg0vNUOEo5d0lxHmtjS0y5JM9AcJTzht7tpAAviybw>
+    <xmx:wpdiY3OWqHNP_2qA_ksAARSYCiVVL6rrDMZ2Ed13NCsbr9pJlQXSdw>
+    <xmx:w5diYyJ_qRPDhwydtkyvKeyfzAPFiDu3ixePL4pwB8_Cxv18jT3YRg>
+Feedback-ID: i51094778:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 2 Nov 2022 12:16:01 -0400 (EDT)
+From:   Sven Peter <sven@svenpeter.dev>
+To:     Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     Sven Peter <sven@svenpeter.dev>, Hector Martin <marcan@marcan.st>,
+        =?UTF-8?q?Guido=20G=C3=BCnther?= <agx@sigxcpu.org>,
+        linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        asahi@lists.linux.dev
+Subject: [PATCH] usb: typec: tipd: Prevent uninitialized event{1,2} in IRQ handler
+Date:   Wed,  2 Nov 2022 17:15:42 +0100
+Message-Id: <20221102161542.30669-1-sven@svenpeter.dev>
+X-Mailer: git-send-email 2.30.1 (Apple Git-130)
 MIME-Version: 1.0
-References: <20221102152540.2389891-1-nathan@kernel.org> <20221102152540.2389891-2-nathan@kernel.org>
- <202211020842.8B8E29F8@keescook>
-In-Reply-To: <202211020842.8B8E29F8@keescook>
-From:   Alex Deucher <alexdeucher@gmail.com>
-Date:   Wed, 2 Nov 2022 12:15:20 -0400
-Message-ID: <CADnq5_NFtZHzOC2o1yq6VjqT8DYB+q200R_xjf+b1qZonRh4=Q@mail.gmail.com>
-Subject: Re: [PATCH 2/2] drm/amdgpu: Fix type of second parameter in
- odn_edit_dpm_table() callback
-To:     Kees Cook <keescook@chromium.org>
-Cc:     Nathan Chancellor <nathan@kernel.org>, llvm@lists.linux.dev,
-        Tom Rix <trix@redhat.com>, "Pan, Xinhui" <Xinhui.Pan@amd.com>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        linux-kernel@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        patches@lists.linux.dev, amd-gfx@lists.freedesktop.org,
-        Sami Tolvanen <samitolvanen@google.com>,
-        Alex Deucher <alexander.deucher@amd.com>,
-        =?UTF-8?Q?Christian_K=C3=B6nig?= <christian.koenig@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -77,51 +84,41 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Applied the series.  Thanks!
+If reading TPS_REG_INT_EVENT1/2 fails in the interrupt handler event1
+and event2 may be uninitialized when they are used to determine
+IRQ_HANDLED vs. IRQ_NONE in the error path.
 
-Alex
+Fixes: c7260e29dd20 ("usb: typec: tipd: Add short-circuit for no irqs")
+Fixes: 45188f27b3d0 ("usb: typec: tipd: Add support for Apple CD321X")
+Signed-off-by: Sven Peter <sven@svenpeter.dev>
+---
+ drivers/usb/typec/tipd/core.c | 6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-On Wed, Nov 2, 2022 at 11:43 AM Kees Cook <keescook@chromium.org> wrote:
->
-> On Wed, Nov 02, 2022 at 08:25:40AM -0700, Nathan Chancellor wrote:
-> > With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-> > indirect call targets are validated against the expected function
-> > pointer prototype to make sure the call target is valid to help mitigat=
-e
-> > ROP attacks. If they are not identical, there is a failure at run time,
-> > which manifests as either a kernel panic or thread getting killed. A
-> > proposed warning in clang aims to catch these at compile time, which
-> > reveals:
-> >
-> >   drivers/gpu/drm/amd/amdgpu/../pm/swsmu/amdgpu_smu.c:3008:29: error: i=
-ncompatible function pointer types initializing 'int (*)(void *, uint32_t, =
-long *, uint32_t)' (aka 'int (*)(void *, unsigned int, long *, unsigned int=
-)') with an expression of type 'int (void *, enum PP_OD_DPM_TABLE_COMMAND, =
-long *, uint32_t)' (aka 'int (void *, enum PP_OD_DPM_TABLE_COMMAND, long *,=
- unsigned int)') [-Werror,-Wincompatible-function-pointer-types-strict]
-> >           .odn_edit_dpm_table      =3D smu_od_edit_dpm_table,
-> >                                      ^~~~~~~~~~~~~~~~~~~~~
-> >   1 error generated.
-> >
-> > There are only two implementations of ->odn_edit_dpm_table() in 'struct
-> > amd_pm_funcs': smu_od_edit_dpm_table() and pp_odn_edit_dpm_table(). One
-> > has a second parameter type of 'enum PP_OD_DPM_TABLE_COMMAND' and the
-> > other uses 'u32'. Ultimately, smu_od_edit_dpm_table() calls
-> > ->od_edit_dpm_table() from 'struct pptable_funcs' and
-> > pp_odn_edit_dpm_table() calls ->odn_edit_dpm_table() from 'struct
-> > pp_hwmgr_func', which both have a second parameter type of 'enum
-> > PP_OD_DPM_TABLE_COMMAND'.
-> >
-> > Update the type parameter in both the prototype in 'struct amd_pm_funcs=
-'
-> > and pp_odn_edit_dpm_table() to 'enum PP_OD_DPM_TABLE_COMMAND', which
-> > cleans up the warning.
-> >
-> > Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-> > Reported-by: Sami Tolvanen <samitolvanen@google.com>
-> > Signed-off-by: Nathan Chancellor <nathan@kernel.org>
->
-> Reviewed-by: Kees Cook <keescook@chromium.org>
->
-> --
-> Kees Cook
+diff --git a/drivers/usb/typec/tipd/core.c b/drivers/usb/typec/tipd/core.c
+index b637e8b378b3..2a77bab948f5 100644
+--- a/drivers/usb/typec/tipd/core.c
++++ b/drivers/usb/typec/tipd/core.c
+@@ -474,7 +474,7 @@ static void tps6598x_handle_plug_event(struct tps6598x *tps, u32 status)
+ static irqreturn_t cd321x_interrupt(int irq, void *data)
+ {
+ 	struct tps6598x *tps = data;
+-	u64 event;
++	u64 event = 0;
+ 	u32 status;
+ 	int ret;
+ 
+@@ -519,8 +519,8 @@ static irqreturn_t cd321x_interrupt(int irq, void *data)
+ static irqreturn_t tps6598x_interrupt(int irq, void *data)
+ {
+ 	struct tps6598x *tps = data;
+-	u64 event1;
+-	u64 event2;
++	u64 event1 = 0;
++	u64 event2 = 0;
+ 	u32 status;
+ 	int ret;
+ 
+-- 
+2.25.1
+
