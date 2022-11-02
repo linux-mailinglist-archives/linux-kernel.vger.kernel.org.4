@@ -2,348 +2,470 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08DB1615E82
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 09:57:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E22615E8B
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 09:58:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231192AbiKBI5u (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 04:57:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59846 "EHLO
+        id S231209AbiKBI6f (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 04:58:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60040 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231180AbiKBI5q (ORCPT
+        with ESMTP id S231182AbiKBI6R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 04:57:46 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E5CF24F24
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 01:57:44 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id r186-20020a1c44c3000000b003cf4d389c41so819953wma.3
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 01:57:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=9elements.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TC/S8fegbzAu0hQykhV2xCdnvqKdkE9Dz0YGKKQfFpI=;
-        b=NJnkpx/pAyV3kBpNUZBRdcCBdAF0zpHjde4ac3gdrPoGE1ygiRCiWU6jxrv84w6vGu
-         AYYoV0J5IUiow1fOxTBTZb8eEGVdzAHA/sKsd5DCgH9Psak5nVeIfT4hBtbLyy54uyYm
-         6GhND54MY+PvDDn4P9o/uwkNMRh7kR0SnBkbzZf0VZykp7QwwE9GwEH/AMj4h4FUPTCT
-         v1xGbwgTZiFg2ysC2gH3cAV1mS1H88eR5CFieK9AZepx5V5m7z24EY7jWiROXD9liRXs
-         yJScoTeLLyMTWeLQTtBXvEvh6WXJzKgOUgSill9f5HRkF2fCJlJG0OHiILw9Ox1DHFA+
-         uHcA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=TC/S8fegbzAu0hQykhV2xCdnvqKdkE9Dz0YGKKQfFpI=;
-        b=C6a9CvUubRO9Dxsx0PGLAXqk/AEtppbvSu6Wbyg701SmJKsCk8SSNGALwvLfLRZYxu
-         M9tFcA299fAdJayLzOMAUKuzExVnZ06dNvYxbSskkpqCSa4BjUNW9asSF3vfwQDrHvbq
-         /zekcQmJzaugbfou4lggnXWpKZWgOeYFGP3OtXjgew1xtvvOJNSPesc9uCbItQFf4muk
-         7zJwvEIZHuT7bhN1V3P8YyBSSb744YB5DYx7PCaEPRokYc6diSz8qccbcgvsfcJ5Y3YP
-         1259u5ETsZr7+YECzik2Qujh/ZnRvtEOrfiFirytHbt1shx1Bc6nGmskM1kpDeIWq1aG
-         XiIQ==
-X-Gm-Message-State: ACrzQf0zpHzk/r8mq7Q4PSzIVQUtJhscN1GSDKuNYeA/5susfVN158DF
-        Ijhct5nvz5GhIqUXb9ByGnGGWQ4llyZHZoK8
-X-Google-Smtp-Source: AMsMyM5hvLYeueYlaOBb5ondUQf0n7CbryMyxdU6XF4y5RxMiM7mToMWnJnrqxNGItnPvvOjXQVokQ==
-X-Received: by 2002:a7b:c7d5:0:b0:3c6:b874:a0d9 with SMTP id z21-20020a7bc7d5000000b003c6b874a0d9mr14400029wmk.157.1667379462851;
-        Wed, 02 Nov 2022 01:57:42 -0700 (PDT)
-Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
-        by smtp.gmail.com with ESMTPSA id j39-20020a05600c48a700b003b95ed78275sm1290176wmp.20.2022.11.02.01.57.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 01:57:42 -0700 (PDT)
-From:   Naresh Solanki <naresh.solanki@9elements.com>
-X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
-To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Lee Jones <lee@kernel.org>
-Cc:     Patrick Rudolph <patrick.rudolph@9elements.com>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>
-Subject: [PATCH v5 2/2] mfd: max597x: Add support for MAX5970 and MAX5978
-Date:   Wed,  2 Nov 2022 09:57:37 +0100
-Message-Id: <20221102085737.599100-3-Naresh.Solanki@9elements.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221102085737.599100-1-Naresh.Solanki@9elements.com>
-References: <20221102085737.599100-1-Naresh.Solanki@9elements.com>
+        Wed, 2 Nov 2022 04:58:17 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 1C22B27FD8;
+        Wed,  2 Nov 2022 01:58:14 -0700 (PDT)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8CxfbYlMWJjpPgDAA--.2295S3;
+        Wed, 02 Nov 2022 16:58:13 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxtuMeMWJjkssJAA--.29815S2;
+        Wed, 02 Nov 2022 16:58:12 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Linus Walleij <linus.walleij@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-gpio@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        zhanghongchen <zhanghongchen@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v6 1/2] pinctrl: pinctrl-loongson2: add pinctrl driver support
+Date:   Wed,  2 Nov 2022 16:57:59 +0800
+Message-Id: <20221102085800.28910-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-CM-TRANSID: AQAAf8BxtuMeMWJjkssJAA--.29815S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvAXoW3Zr13JFyrArWDJr47ArWDArb_yoW8Gr45uo
+        WS9Fn8Xw4fJr18XFZ8Zrn8GrW7ZFs7Cr1DA397Zrs8u3y2vrnFgr9rtr4xGFy8trs5tF17
+        ZasagFWrJa1Iqwn5n29KB7ZKAUJUUUU8529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
+        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
+        UUkF1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_JrI_Jryl8cAvFV
+        AK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2
+        z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr
+        1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1le2I262IYc4CY6c8Ij28IcVAaY2xG
+        8wAqjxCEc2xF0cIa020Ex4CE44I27wAqx4xG64xvF2IEw4CE5I8CrVC2j2WlYx0E2Ix0cI
+        8IcVAFwI0_JrI_JrylYx0Ex4A2jsIE14v26F4j6r4UJwAm72CE4IkC6x0Yz7v_Jr0_Gr1l
+        F7xvr2IYc2Ij64vIr41l42xK82IYc2Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s
+        026xCaFVCjc4AY6r1j6r4UMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_
+        JrI_JrWlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14
+        v26r1j6r1xMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xva
+        j40_Jr0_JF4lIxAIcVC2z280aVAFwI0_Cr0_Gr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr
+        0_Gr1UYxBIdaVFxhVjvjDU0xZFpf9x07UH6wAUUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Patrick Rudolph <patrick.rudolph@9elements.com>
+The Loongson-2 SoC has a few pins that can be used as GPIOs or take
+multiple other functions. Add a driver for the pinmuxing.
 
-Implement a regulator driver with IRQ support for fault management.
-Written against documentation [1] and [2] and tested on real hardware.
+There is currently no support for GPIO pin pull-up and pull-down.
 
-Every channel has its own regulator supplies nammed 'vss1-supply' and
-'vss2-supply'. The regulator supply is used to determine the output
-voltage, as the smart switch provides no output regulation.
-The driver requires the 'shunt-resistor-micro-ohms' property to be
-present in Device Tree to properly calculate current related
-values.
-
-Datasheet links:
-1: https://datasheets.maximintegrated.com/en/ds/MAX5970.pdf
-2: https://datasheets.maximintegrated.com/en/ds/MAX5978.pdf
-
-Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 ---
- drivers/mfd/Kconfig         |  12 +++++
- drivers/mfd/Makefile        |   1 +
- drivers/mfd/max597x.c       |  92 ++++++++++++++++++++++++++++++++
- include/linux/mfd/max597x.h | 103 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 208 insertions(+)
- create mode 100644 drivers/mfd/max597x.c
- create mode 100644 include/linux/mfd/max597x.h
+Change in v6:
+		1. Add #include <asm-generic/io.h>.
 
-diff --git a/drivers/mfd/Kconfig b/drivers/mfd/Kconfig
-index 8b93856de432..416fe7986b7b 100644
---- a/drivers/mfd/Kconfig
-+++ b/drivers/mfd/Kconfig
-@@ -253,6 +253,18 @@ config MFD_MADERA_SPI
- 	  Support for the Cirrus Logic Madera platform audio SoC
- 	  core functionality controlled via SPI.
+ MAINTAINERS                         |   7 +
+ drivers/pinctrl/Kconfig             |  11 +
+ drivers/pinctrl/Makefile            |   1 +
+ drivers/pinctrl/pinctrl-loongson2.c | 329 ++++++++++++++++++++++++++++
+ 4 files changed, 348 insertions(+)
+ create mode 100644 drivers/pinctrl/pinctrl-loongson2.c
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 939af260fe0f..f75464dadaaa 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12033,6 +12033,13 @@ S:	Maintained
+ F:	Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
+ F:	drivers/clocksource/loongson2_hpet.c
  
-+config MFD_MAX597X
-+	tristate "Maxim 597x Power Switch and Monitor"
-+	depends on I2C
-+	depends on OF
-+	select MFD_CORE
-+	select REGMAP_I2C
-+	help
-+	  This driver controls a Maxim 5970/5978 switch via I2C bus.
-+	  The MAX5970/5978 is a smart switch with no output regulation, but
-+	  fault protection and voltage and current monitoring capabilities.
-+	  Also it supports upto 4 indication LEDs.
++LOONGSON-2 SOC SERIES PINCTRL DRIVER
++M:	zhanghongchen <zhanghongchen@loongson.cn>
++M:	Yinbo Zhu <zhuyinbo@loongson.cn>
++L:	linux-gpio@vger.kernel.org
++S:	Maintained
++F:	drivers/pinctrl/pinctrl-loongson2.c
 +
- config MFD_CS47L15
- 	bool "Cirrus Logic CS47L15"
- 	select PINCTRL_CS47L15
-diff --git a/drivers/mfd/Makefile b/drivers/mfd/Makefile
-index 7ed3ef4a698c..819d711fa748 100644
---- a/drivers/mfd/Makefile
-+++ b/drivers/mfd/Makefile
-@@ -161,6 +161,7 @@ obj-$(CONFIG_MFD_DA9063)	+= da9063.o
- obj-$(CONFIG_MFD_DA9150)	+= da9150-core.o
+ LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+ M:	Sathya Prakash <sathya.prakash@broadcom.com>
+ M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+diff --git a/drivers/pinctrl/Kconfig b/drivers/pinctrl/Kconfig
+index f71fefff400f..a053952e2482 100644
+--- a/drivers/pinctrl/Kconfig
++++ b/drivers/pinctrl/Kconfig
+@@ -512,6 +512,17 @@ config PINCTRL_ZYNQMP
+ 	  This driver can also be built as a module. If so, the module
+ 	  will be called pinctrl-zynqmp.
  
- obj-$(CONFIG_MFD_MAX14577)	+= max14577.o
-+obj-$(CONFIG_MFD_MAX597X)	+= max597x.o
- obj-$(CONFIG_MFD_MAX77620)	+= max77620.o
- obj-$(CONFIG_MFD_MAX77650)	+= max77650.o
- obj-$(CONFIG_MFD_MAX77686)	+= max77686.o
-diff --git a/drivers/mfd/max597x.c b/drivers/mfd/max597x.c
++config PINCTRL_LOONGSON2
++	tristate "Pinctrl driver for the Loongson-2 SoC"
++	depends on LOONGARCH || COMPILE_TEST
++	select PINMUX
++	select GENERIC_PINCONF
++	help
++	  This selects pin control driver for the Loongson-2 SoC. It
++	  provides pin config functions multiplexing.  GPIO pin pull-up,
++	  pull-down functions are not supported. Say yes to enable
++	  pinctrl for Loongson-2 SoC.
++
+ source "drivers/pinctrl/actions/Kconfig"
+ source "drivers/pinctrl/aspeed/Kconfig"
+ source "drivers/pinctrl/bcm/Kconfig"
+diff --git a/drivers/pinctrl/Makefile b/drivers/pinctrl/Makefile
+index 89bfa01b5231..37b1f9bb85e5 100644
+--- a/drivers/pinctrl/Makefile
++++ b/drivers/pinctrl/Makefile
+@@ -29,6 +29,7 @@ obj-$(CONFIG_PINCTRL_KEEMBAY)	+= pinctrl-keembay.o
+ obj-$(CONFIG_PINCTRL_LANTIQ)	+= pinctrl-lantiq.o
+ obj-$(CONFIG_PINCTRL_FALCON)	+= pinctrl-falcon.o
+ obj-$(CONFIG_PINCTRL_XWAY)	+= pinctrl-xway.o
++obj-$(CONFIG_PINCTRL_LOONGSON2) += pinctrl-loongson2.o
+ obj-$(CONFIG_PINCTRL_LPC18XX)	+= pinctrl-lpc18xx.o
+ obj-$(CONFIG_PINCTRL_MAX77620)	+= pinctrl-max77620.o
+ obj-$(CONFIG_PINCTRL_MCP23S08_I2C)	+= pinctrl-mcp23s08_i2c.o
+diff --git a/drivers/pinctrl/pinctrl-loongson2.c b/drivers/pinctrl/pinctrl-loongson2.c
 new file mode 100644
-index 000000000000..2c64edb6b6dd
+index 000000000000..c1b649ab7281
 --- /dev/null
-+++ b/drivers/mfd/max597x.c
-@@ -0,0 +1,92 @@
-+// SPDX-License-Identifier: GPL-2.0
++++ b/drivers/pinctrl/pinctrl-loongson2.c
+@@ -0,0 +1,329 @@
++// SPDX-License-Identifier: GPL-2.0+
 +/*
-+ * Maxim MAX5970/MAX5978 MFD Driver
-+ *
-+ * Copyright (c) 2022 9elements GmbH
-+ *
-+ * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
++ * Author: zhanghongchen <zhanghongchen@loongson.cn>
++ *         Yinbo Zhu <zhuyinbo@loongson.cn>
++ * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
 + */
 +
-+#include <linux/i2c.h>
-+#include <linux/mfd/core.h>
-+#include <linux/mfd/max597x.h>
-+#include <linux/regmap.h>
++#include <linux/init.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/of.h>
++#include <linux/pinctrl/pinmux.h>
++#include <linux/pinctrl/pinconf-generic.h>
++#include <asm-generic/io.h>
++#include "core.h"
++#include "pinctrl-utils.h"
 +
-+static const struct regmap_config max597x_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = MAX_REGISTERS,
++#define PMX_GROUP(grp, offset, bitv)					\
++	{								\
++		.name = #grp,						\
++		.pins = grp ## _pins,					\
++		.num_pins = ARRAY_SIZE(grp ## _pins),			\
++		.reg = offset,						\
++		.bit = bitv,						\
++	}
++
++#define SPECIFIC_GROUP(group)						\
++	static const char * const group##_groups[] = {			\
++		#group							\
++	}
++
++#define FUNCTION(fn)							\
++	{								\
++		.name = #fn,						\
++		.groups = fn ## _groups,				\
++		.num_groups = ARRAY_SIZE(fn ## _groups),		\
++	}
++
++struct loongson2_pinctrl {
++	struct device *dev;
++	struct pinctrl_dev *pcdev;
++	struct pinctrl_desc desc;
++	struct device_node *of_node;
++	spinlock_t lock;
++	void * __iomem reg_base;
 +};
 +
-+static const struct mfd_cell max597x_cells[] = {
-+	{ .name = "max597x-regulator", },
-+	{ .name = "max597x-iio", },
-+	{ .name = "max597x-led", },
++struct loongson2_pmx_group {
++	const char *name;
++	const unsigned int *pins;
++	unsigned int num_pins;
++	unsigned int reg;
++	unsigned int bit;
 +};
 +
-+static int max597x_probe(struct i2c_client *i2c, const struct i2c_device_id *id)
++struct loongson2_pmx_func {
++	const char *name;
++	const char * const *groups;
++	unsigned int num_groups;
++};
++
++#define LOONGSON2_PIN(x) PINCTRL_PIN(x, "gpio"#x)
++static const struct pinctrl_pin_desc loongson2_pctrl_pins[] = {
++	LOONGSON2_PIN(0),  LOONGSON2_PIN(1),  LOONGSON2_PIN(2),  LOONGSON2_PIN(3),
++	LOONGSON2_PIN(4),  LOONGSON2_PIN(5),  LOONGSON2_PIN(6),  LOONGSON2_PIN(7),
++	LOONGSON2_PIN(8),  LOONGSON2_PIN(9),  LOONGSON2_PIN(10), LOONGSON2_PIN(11),
++	LOONGSON2_PIN(12), LOONGSON2_PIN(13), LOONGSON2_PIN(14),
++	LOONGSON2_PIN(16), LOONGSON2_PIN(17), LOONGSON2_PIN(18), LOONGSON2_PIN(19),
++	LOONGSON2_PIN(20), LOONGSON2_PIN(21), LOONGSON2_PIN(22), LOONGSON2_PIN(23),
++	LOONGSON2_PIN(24), LOONGSON2_PIN(25), LOONGSON2_PIN(26), LOONGSON2_PIN(27),
++	LOONGSON2_PIN(28), LOONGSON2_PIN(29), LOONGSON2_PIN(30),
++	LOONGSON2_PIN(32), LOONGSON2_PIN(33), LOONGSON2_PIN(34), LOONGSON2_PIN(35),
++	LOONGSON2_PIN(36), LOONGSON2_PIN(37), LOONGSON2_PIN(38), LOONGSON2_PIN(39),
++	LOONGSON2_PIN(40), LOONGSON2_PIN(41),
++	LOONGSON2_PIN(44), LOONGSON2_PIN(45), LOONGSON2_PIN(46), LOONGSON2_PIN(47),
++	LOONGSON2_PIN(48), LOONGSON2_PIN(49), LOONGSON2_PIN(50), LOONGSON2_PIN(51),
++	LOONGSON2_PIN(52), LOONGSON2_PIN(53), LOONGSON2_PIN(54), LOONGSON2_PIN(55),
++	LOONGSON2_PIN(56), LOONGSON2_PIN(57), LOONGSON2_PIN(58), LOONGSON2_PIN(59),
++	LOONGSON2_PIN(60), LOONGSON2_PIN(61), LOONGSON2_PIN(62), LOONGSON2_PIN(63),
++};
++
++static const unsigned int gpio_pins[] = {0, 1, 2, 3, 4, 5, 6, 7,
++					 8, 9, 10, 11, 12, 13, 14,
++					 16, 17, 18, 19, 20, 21, 22, 23,
++					 24, 25, 26, 27, 28, 29, 30,
++					 32, 33, 34, 35, 36, 37, 38, 39,
++					 40,         43, 44, 45, 46, 47,
++					 48, 49, 50, 51, 52, 53, 46, 55,
++					 56, 57, 58, 59, 60, 61, 62, 63};
++static const unsigned int sdio_pins[] = {36, 37, 38, 39, 40, 41};
++static const unsigned int can1_pins[] = {34, 35};
++static const unsigned int can0_pins[] = {32, 33};
++static const unsigned int pwm3_pins[] = {23};
++static const unsigned int pwm2_pins[] = {22};
++static const unsigned int pwm1_pins[] = {21};
++static const unsigned int pwm0_pins[] = {20};
++static const unsigned int i2c1_pins[] = {18, 19};
++static const unsigned int i2c0_pins[] = {16, 17};
++static const unsigned int nand_pins[] = {44, 45, 46, 47, 48, 49, 50, 51,
++					 52, 53, 54, 55, 56, 57, 58, 59, 60,
++					 61, 62, 63};
++static const unsigned int sata_led_pins[] = {14};
++static const unsigned int lio_pins[]    = {};
++static const unsigned int i2s_pins[]    = {24, 25, 26, 27, 28};
++static const unsigned int hda_pins[]    = {24, 25, 26, 27, 28, 29, 30};
++static const unsigned int uart2_pins[]  = {};
++static const unsigned int uart1_pins[]  = {};
++static const unsigned int camera_pins[] = {};
++static const unsigned int dvo1_pins[]   = {};
++static const unsigned int dvo0_pins[]   = {};
++
++static struct loongson2_pmx_group loongson2_pmx_groups[] = {
++	PMX_GROUP(gpio, 0x0, 64),
++	PMX_GROUP(sdio, 0x0, 20),
++	PMX_GROUP(can1, 0x0, 17),
++	PMX_GROUP(can0, 0x0, 16),
++	PMX_GROUP(pwm3, 0x0, 15),
++	PMX_GROUP(pwm2, 0x0, 14),
++	PMX_GROUP(pwm1, 0x0, 13),
++	PMX_GROUP(pwm0, 0x0, 12),
++	PMX_GROUP(i2c1, 0x0, 11),
++	PMX_GROUP(i2c0, 0x0, 10),
++	PMX_GROUP(nand, 0x0, 9),
++	PMX_GROUP(sata_led, 0x0, 8),
++	PMX_GROUP(lio, 0x0, 7),
++	PMX_GROUP(i2s, 0x0, 6),
++	PMX_GROUP(hda, 0x0, 4),
++	PMX_GROUP(uart2, 0x8, 13),
++	PMX_GROUP(uart1, 0x8, 12),
++	PMX_GROUP(camera, 0x10, 5),
++	PMX_GROUP(dvo1, 0x10, 4),
++	PMX_GROUP(dvo0, 0x10, 1),
++
++};
++
++SPECIFIC_GROUP(sdio);
++SPECIFIC_GROUP(can1);
++SPECIFIC_GROUP(can0);
++SPECIFIC_GROUP(pwm3);
++SPECIFIC_GROUP(pwm2);
++SPECIFIC_GROUP(pwm1);
++SPECIFIC_GROUP(pwm0);
++SPECIFIC_GROUP(i2c1);
++SPECIFIC_GROUP(i2c0);
++SPECIFIC_GROUP(nand);
++SPECIFIC_GROUP(sata_led);
++SPECIFIC_GROUP(lio);
++SPECIFIC_GROUP(i2s);
++SPECIFIC_GROUP(hda);
++SPECIFIC_GROUP(uart2);
++SPECIFIC_GROUP(uart1);
++SPECIFIC_GROUP(camera);
++SPECIFIC_GROUP(dvo1);
++SPECIFIC_GROUP(dvo0);
++
++static const char * const gpio_groups[] = {
++	"sdio", "can1", "can0", "pwm3", "pwm2", "pwm1", "pwm0", "i2c1",
++	"i2c0", "nand", "sata_led", "lio", "i2s", "hda", "uart2", "uart1",
++	"camera", "dvo1", "dvo0"
++};
++
++static const struct loongson2_pmx_func loongson2_pmx_functions[] = {
++	FUNCTION(gpio),
++	FUNCTION(sdio),
++	FUNCTION(can1),
++	FUNCTION(can0),
++	FUNCTION(pwm3),
++	FUNCTION(pwm2),
++	FUNCTION(pwm1),
++	FUNCTION(pwm0),
++	FUNCTION(i2c1),
++	FUNCTION(i2c0),
++	FUNCTION(nand),
++	FUNCTION(sata_led),
++	FUNCTION(lio),
++	FUNCTION(i2s),
++	FUNCTION(hda),
++	FUNCTION(uart2),
++	FUNCTION(uart1),
++	FUNCTION(camera),
++	FUNCTION(dvo1),
++	FUNCTION(dvo0),
++};
++
++static int loongson2_get_groups_count(struct pinctrl_dev *pcdev)
 +{
-+	struct max597x_data *ddata;
-+	enum max597x_chip_type chip = id->driver_data;
-+
-+	ddata = devm_kzalloc(&i2c->dev, sizeof(*ddata),	GFP_KERNEL);
-+	if (!ddata)
-+		return -ENOMEM;
-+
-+	/* Initialize num of switch based on chip type for later use by regulator
-+	 * & iio cells
-+	 */
-+	switch (chip) {
-+	case MAX597x_TYPE_MAX5970:
-+		ddata->num_switches = MAX5970_NUM_SWITCHES;
-+		break;
-+	case MAX597x_TYPE_MAX5978:
-+		ddata->num_switches = MAX5978_NUM_SWITCHES;
-+		break;
-+	}
-+
-+	ddata->regmap = devm_regmap_init_i2c(i2c, &max597x_regmap_config);
-+	if (IS_ERR(ddata->regmap)) {
-+		dev_err(&i2c->dev, "Failed to initialise regmap");
-+		return -EINVAL;
-+	}
-+
-+	/* IRQ used by regulator cell */
-+	ddata->irq = i2c->irq;
-+	ddata->dev = &i2c->dev;
-+	i2c_set_clientdata(i2c, ddata);
-+
-+	return devm_mfd_add_devices(ddata->dev, PLATFORM_DEVID_AUTO,
-+				    max597x_cells, ARRAY_SIZE(max597x_cells),
-+				    NULL, 0, NULL);
++	return ARRAY_SIZE(loongson2_pmx_groups);
 +}
 +
-+static const struct i2c_device_id max597x_table[] = {
-+	{ .name = "max5970", MAX597x_TYPE_MAX5970 },
-+	{ .name = "max5978", MAX597x_TYPE_MAX5978 },
++static const char *loongson2_get_group_name(struct pinctrl_dev *pcdev,
++					unsigned int selector)
++{
++	return loongson2_pmx_groups[selector].name;
++}
++
++static int loongson2_get_group_pins(struct pinctrl_dev *pcdev, unsigned int selector,
++			const unsigned int **pins, unsigned int *num_pins)
++{
++	*pins = loongson2_pmx_groups[selector].pins;
++	*num_pins = loongson2_pmx_groups[selector].num_pins;
++
++	return 0;
++}
++
++static void loongson2_pin_dbg_show(struct pinctrl_dev *pcdev, struct seq_file *s,
++			       unsigned int offset)
++{
++	seq_printf(s, " %s", dev_name(pcdev->dev));
++}
++
++static const struct pinctrl_ops loongson2_pctrl_ops = {
++	.get_groups_count	= loongson2_get_groups_count,
++	.get_group_name		= loongson2_get_group_name,
++	.get_group_pins		= loongson2_get_group_pins,
++	.dt_node_to_map		= pinconf_generic_dt_node_to_map_all,
++	.dt_free_map		= pinctrl_utils_free_map,
++	.pin_dbg_show		= loongson2_pin_dbg_show,
 +};
 +
-+MODULE_DEVICE_TABLE(i2c, max597x_table);
++static int loongson2_pmx_set_mux(struct pinctrl_dev *pcdev, unsigned int func_num,
++			      unsigned int group_num)
++{
++	struct loongson2_pinctrl *pctrl = pinctrl_dev_get_drvdata(pcdev);
++	unsigned long reg = (unsigned long)pctrl->reg_base +
++				loongson2_pmx_groups[group_num].reg;
++	unsigned int mux_bit = loongson2_pmx_groups[group_num].bit;
++	unsigned int val;
++	unsigned long flags;
 +
-+static const struct of_device_id max597x_of_match[] = {
-+	{ .compatible = "maxim,max5970", .data = (void *)MAX597x_TYPE_MAX5970 },
-+	{ .compatible = "maxim,max5978", .data = (void *)MAX597x_TYPE_MAX5978 },
-+	{ /* sentinel */ }
++	spin_lock_irqsave(&pctrl->lock, flags);
++	val = readl((void *)reg);
++	if (func_num == 0)
++		val &= ~(1<<mux_bit);
++	else
++		val |= (1<<mux_bit);
++	writel(val, (void *)reg);
++	spin_unlock_irqrestore(&pctrl->lock, flags);
++
++	return 0;
++}
++
++static int loongson2_pmx_get_funcs_count(struct pinctrl_dev *pcdev)
++{
++	return ARRAY_SIZE(loongson2_pmx_functions);
++}
++
++static const char *loongson2_pmx_get_func_name(struct pinctrl_dev *pcdev,
++				    unsigned int selector)
++{
++	return loongson2_pmx_functions[selector].name;
++}
++
++static int loongson2_pmx_get_groups(struct pinctrl_dev *pcdev,
++			 unsigned int selector,
++			 const char * const **groups,
++			 unsigned int * const num_groups)
++{
++	*groups = loongson2_pmx_functions[selector].groups;
++	*num_groups = loongson2_pmx_functions[selector].num_groups;
++
++	return 0;
++}
++
++static const struct pinmux_ops loongson2_pmx_ops = {
++	.set_mux = loongson2_pmx_set_mux,
++	.get_functions_count = loongson2_pmx_get_funcs_count,
++	.get_function_name = loongson2_pmx_get_func_name,
++	.get_function_groups = loongson2_pmx_get_groups,
 +};
 +
-+MODULE_DEVICE_TABLE(of, max597x_of_match);
++static int loongson2_pinctrl_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct loongson2_pinctrl *pctrl;
 +
-+static struct i2c_driver max597x_driver = {
-+	.id_table = max597x_table,
++	pctrl = devm_kzalloc(dev, sizeof(*pctrl), GFP_KERNEL);
++	if (!pctrl)
++		return -ENOMEM;
++
++	pctrl->reg_base = devm_platform_ioremap_resource(pdev, 0);
++	if (IS_ERR(pctrl->reg_base))
++		return dev_err_probe(pctrl->dev, PTR_ERR(pctrl->reg_base),
++				     "unable to map I/O memory");
++
++	spin_lock_init(&pctrl->lock);
++
++	pctrl->dev = dev;
++	pctrl->desc.name	= "pinctrl-loongson2";
++	pctrl->desc.owner	= THIS_MODULE;
++	pctrl->desc.pctlops	= &loongson2_pctrl_ops;
++	pctrl->desc.pmxops	= &loongson2_pmx_ops;
++	pctrl->desc.confops	= NULL;
++	pctrl->desc.pins	= loongson2_pctrl_pins;
++	pctrl->desc.npins	= ARRAY_SIZE(loongson2_pctrl_pins);
++
++	pctrl->pcdev = devm_pinctrl_register(pctrl->dev, &pctrl->desc, pctrl);
++	if (IS_ERR(pctrl->pcdev))
++		return dev_err_probe(pctrl->dev, PTR_ERR(pctrl->pcdev),
++				     "can't register pinctrl device");
++
++	return 0;
++}
++
++static const struct of_device_id loongson2_pinctrl_dt_match[] = {
++	{
++		.compatible = "loongson,ls2k-pinctrl",
++	},
++	{ },
++};
++
++static struct platform_driver loongson2_pinctrl_driver = {
++	.probe		= loongson2_pinctrl_probe,
 +	.driver = {
-+		.name = "max597x",
-+		.of_match_table = of_match_ptr(max597x_of_match),
-+		},
-+	.probe = max597x_probe,
++		.name	= "loongson2-pinctrl",
++		.of_match_table = loongson2_pinctrl_dt_match,
++	},
 +};
 +
-+module_i2c_driver(max597x_driver);
++static int __init loongson2_pinctrl_init(void)
++{
++	return platform_driver_register(&loongson2_pinctrl_driver);
++}
++arch_initcall(loongson2_pinctrl_init);
 +
-+MODULE_AUTHOR("Patrick Rudolph <patrick.rudolph@9elements.com>");
-+MODULE_DESCRIPTION("MAX597X Power Switch and Monitor");
-+MODULE_LICENSE("GPL v2");
-diff --git a/include/linux/mfd/max597x.h b/include/linux/mfd/max597x.h
-new file mode 100644
-index 000000000000..f88a57f0e4f2
---- /dev/null
-+++ b/include/linux/mfd/max597x.h
-@@ -0,0 +1,103 @@
-+/* SPDX-License-Identifier: GPL-2.0 */
-+/*
-+ * Maxim MAX5970/MAX5978 MFD Driver
-+ *
-+ * Copyright (c) 2022 9elements GmbH
-+ *
-+ * Author: Patrick Rudolph <patrick.rudolph@9elements.com>
-+ */
-+
-+#ifndef MFD_MAX597X_H
-+#define MFD_MAX597X_H
-+
-+#include <linux/device.h>
-+#include <linux/regmap.h>
-+
-+/* Number of switch based on chip variant */
-+#define MAX5970_NUM_SWITCHES 2
-+#define MAX5978_NUM_SWITCHES 1
-+/* Both chip variant have 4 indication LEDs used by LED cell */
-+#define MAX597X_NUM_LEDS     4
-+
-+enum max597x_chip_type {
-+	MAX597x_TYPE_MAX5978 = 1,
-+	MAX597x_TYPE_MAX5970,
-+};
-+
-+#define MAX5970_REG_CURRENT_L(ch)		(0x01 + (ch) * 4)
-+#define MAX5970_REG_CURRENT_H(ch)		(0x00 + (ch) * 4)
-+#define MAX5970_REG_VOLTAGE_L(ch)		(0x03 + (ch) * 4)
-+#define MAX5970_REG_VOLTAGE_H(ch)		(0x02 + (ch) * 4)
-+#define MAX5970_REG_MON_RANGE			0x18
-+#define  MAX5970_MON_MASK				0x3
-+#define  MAX5970_MON(reg, ch)		(((reg) >> ((ch) * 2)) & MAX5970_MON_MASK)
-+#define  MAX5970_MON_MAX_RANGE_UV		16000000
-+
-+#define MAX5970_REG_CH_UV_WARN_H(ch)	(0x1A + (ch) * 10)
-+#define MAX5970_REG_CH_UV_WARN_L(ch)	(0x1B + (ch) * 10)
-+#define MAX5970_REG_CH_UV_CRIT_H(ch)	(0x1C + (ch) * 10)
-+#define MAX5970_REG_CH_UV_CRIT_L(ch)	(0x1D + (ch) * 10)
-+#define MAX5970_REG_CH_OV_WARN_H(ch)	(0x1E + (ch) * 10)
-+#define MAX5970_REG_CH_OV_WARN_L(ch)	(0x1F + (ch) * 10)
-+#define MAX5970_REG_CH_OV_CRIT_H(ch)	(0x20 + (ch) * 10)
-+#define MAX5970_REG_CH_OV_CRIT_L(ch)	(0x21 + (ch) * 10)
-+
-+#define  MAX5970_VAL2REG_H(x)			(((x) >> 2) & 0xFF)
-+#define  MAX5970_VAL2REG_L(x)			((x) & 0x3)
-+
-+#define MAX5970_REG_DAC_FAST(ch)		(0x2E + (ch))
-+
-+#define MAX5970_FAST2SLOW_RATIO			200
-+
-+#define MAX5970_REG_STATUS0				0x31
-+#define  MAX5970_CB_IFAULTF(ch)			(1 << (ch))
-+#define  MAX5970_CB_IFAULTS(ch)			(1 << ((ch) + 4))
-+
-+#define MAX5970_REG_STATUS1				0x32
-+#define  STATUS1_PROT_MASK				0x3
-+#define  STATUS1_PROT(reg) \
-+	(((reg) >> 6) & STATUS1_PROT_MASK)
-+#define  STATUS1_PROT_SHUTDOWN			0
-+#define  STATUS1_PROT_CLEAR_PG			1
-+#define  STATUS1_PROT_ALERT_ONLY		2
-+
-+#define MAX5970_REG_STATUS2				0x33
-+#define  MAX5970_IRNG_MASK				0x3
-+#define  MAX5970_IRNG(reg, ch)	\
-+						(((reg) >> ((ch) * 2)) & MAX5970_IRNG_MASK)
-+
-+#define MAX5970_REG_STATUS3				0x34
-+#define  MAX5970_STATUS3_ALERT			BIT(4)
-+#define  MAX5970_STATUS3_PG(ch)			BIT(ch)
-+
-+#define MAX5970_REG_FAULT0				0x35
-+#define  UV_STATUS_WARN(ch)				BIT(ch)
-+#define  UV_STATUS_CRIT(ch)				BIT(ch + 4)
-+
-+#define MAX5970_REG_FAULT1				0x36
-+#define  OV_STATUS_WARN(ch)				BIT(ch)
-+#define  OV_STATUS_CRIT(ch)				BIT(ch + 4)
-+
-+#define MAX5970_REG_FAULT2				0x37
-+#define  OC_STATUS_WARN(ch)				BIT(ch)
-+
-+#define MAX5970_REG_CHXEN				0x3b
-+#define  CHXEN(ch)						(3 << (ch * 2))
-+
-+#define MAX5970_REG_LED_FLASH			0x43
-+
-+#define MAX_REGISTERS					0x49
-+#define ADC_MASK						0x3FF
-+
-+struct max597x_data {
-+	struct device *dev;
-+	int irq;
-+	int num_switches;
-+	struct regmap *regmap;
-+	/* Chip specific parameters needed by regulator & iio cells */
-+	u32 irng[MAX5970_NUM_SWITCHES];
-+	u32 mon_rng[MAX5970_NUM_SWITCHES];
-+	u32 shunt_micro_ohms[MAX5970_NUM_SWITCHES];
-+};
-+
-+#endif				/* _MAX597X_H */
++static void __exit loongson2_pinctrl_exit(void)
++{
++	platform_driver_unregister(&loongson2_pinctrl_driver);
++}
++module_exit(loongson2_pinctrl_exit);
 -- 
-2.37.3
+2.31.1
 
