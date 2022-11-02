@@ -2,89 +2,320 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84149615C24
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 07:18:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 209A1615C29
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 07:18:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230064AbiKBGSJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 02:18:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36956 "EHLO
+        id S230136AbiKBGS0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 02:18:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37362 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229929AbiKBGSE (ORCPT
+        with ESMTP id S230103AbiKBGSY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 02:18:04 -0400
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD15225C64;
-        Tue,  1 Nov 2022 23:18:03 -0700 (PDT)
-Received: by mail-wr1-f44.google.com with SMTP id cl5so11362498wrb.9;
-        Tue, 01 Nov 2022 23:18:03 -0700 (PDT)
+        Wed, 2 Nov 2022 02:18:24 -0400
+Received: from mail-pj1-x102f.google.com (mail-pj1-x102f.google.com [IPv6:2607:f8b0:4864:20::102f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 55F4A25C7B
+        for <linux-kernel@vger.kernel.org>; Tue,  1 Nov 2022 23:18:22 -0700 (PDT)
+Received: by mail-pj1-x102f.google.com with SMTP id l6so15328152pjj.0
+        for <linux-kernel@vger.kernel.org>; Tue, 01 Nov 2022 23:18:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=h0d5aCVPRTVrfRa+Qu4ZFoByM5Lhhf9AZF5J+3bpC/M=;
+        b=Ny0gpAJSShyPpcJLqRwRbmw/0WJGjqpn49vntdcZHq0u3pzx/+RdHFQceVu20fS8nx
+         tinZ6IROpAZf7Za60oNA0P6u3bnXF4qH7i992xR6iRShZx34GoVp34iaS7DRD2IAyA0Z
+         9ZcJtm2ElTzRurp4D3yNxJ3so5ql3vgeoZ8f0AhOcc8UYcWqXbuww3eFhDFV4qe8ZAvr
+         caoWdfjuzhzdPwXtJc0y1Pb5SmsJTlUjWSvwjBPltx3qwSqh/X4ZJ/f8eF3lp+o86e4x
+         yDkU4jJXb1tYVJjffaT7scKPIN4IYyWgDmBFLBMt5gLNWL4pFQrQqcFCNMyyIMeGHXeR
+         bfjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TyoiXD+lZAYyIq5A3unxJbUvSr0umu7gv7mLSuqlSJ4=;
-        b=I/Zy5t0JCiZ7ddN+RFSrntl9sEe/07pscujEFvTKoQS5ZFv6NA456HRmg0+JR/INL0
-         FU1VXyFUa6ngvXRo+jE6p49cr0KSvqWOKWyhYGhhQyiLGBIjMlDyk1iOKEwHeCpqBagy
-         RuwJYCHHjU90z3O/6B2G4j5MnDLvMcqRqQWjrRrR3b635SBD4AYtnXFeok7Fy+M7yeK7
-         pQNFJQUKdpLCs/sZSGlpMa768rhRFlGTKSEPzEaATD0tX8r7m0hVKrxogzILEAXBNzt1
-         /BhuNGPuphqSZvj+pZRrc0z3hMHxFtY1epsy3K+df9O/j+HBngCfzZMBXk+b+rLHmrbA
-         Kkiw==
-X-Gm-Message-State: ACrzQf2tZTi4rMHWSiEXKeaoNcNk5l08D0yy1RkvowyOw0pQxjX6YPHA
-        RRBP1IE0yslf/b8vj/bN23k=
-X-Google-Smtp-Source: AMsMyM6NJ/87OZvYBlrVbXokU9DQLIfp/f10lKRDGr1BCob0gnkUi2pHO6BeN0qKMkHIYSEF8xWWvw==
-X-Received: by 2002:a05:6000:3c3:b0:236:b2ce:593e with SMTP id b3-20020a05600003c300b00236b2ce593emr12638679wrg.580.1667369882322;
-        Tue, 01 Nov 2022 23:18:02 -0700 (PDT)
-Received: from ?IPV6:2a0b:e7c0:0:107::70f? ([2a0b:e7c0:0:107::70f])
-        by smtp.gmail.com with ESMTPSA id 7-20020a056000154700b00236644228besm12830609wry.40.2022.11.01.23.18.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 01 Nov 2022 23:18:01 -0700 (PDT)
-Message-ID: <eeac01aa-5c3d-da4f-3acb-0698de23b2b4@kernel.org>
-Date:   Wed, 2 Nov 2022 07:18:00 +0100
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=h0d5aCVPRTVrfRa+Qu4ZFoByM5Lhhf9AZF5J+3bpC/M=;
+        b=HK30yOzAhtnx20Ni0mNszFyZ262ofBfZqnRPCGxxy8kHpH/nh3p7LvtyE5eC2rplUd
+         AD6Nq4zQ/irKyGNYN3EIJcOjQMCzjAi9XcYz5hnbYHSXDz4pMAya/yFAS2LgK/GgpaaM
+         y0VCiCpbngLEpzMJXdshsPpNeF6YeXO319faZLDKLnx5B9WDaw/13sCwNbova3pdQJSY
+         P8QSJ5Pa2i36ua0tMGW+BQdl6AjYsRoG0LyYBxBvN91aB1TYbYixwhEh0xmP7SII6gA+
+         gw5wPs2ewDxXr8TlTSP0JcUTgJoIQ1k6FZug9tEGxz2CduKN6tAQB1VGJ08zsgf1tdYm
+         3bbA==
+X-Gm-Message-State: ACrzQf0N3gFi5PxGoY0+FIe4UC938QLcgWUFEqLsHyo6dc4lw6FXwsod
+        uKMTPt/zLBgEt/S5W6t/TWr+CQ==
+X-Google-Smtp-Source: AMsMyM7tdx3msXcDSRjzengMv7BnjG3CokZXlPZh9RQr5YedHUAgqS+vzQiPxXN9ulEJ1GVtVzG0qA==
+X-Received: by 2002:a17:903:444:b0:187:428:1317 with SMTP id iw4-20020a170903044400b0018704281317mr23080646plb.151.1667369901803;
+        Tue, 01 Nov 2022 23:18:21 -0700 (PDT)
+Received: from localhost ([122.172.84.80])
+        by smtp.gmail.com with ESMTPSA id c12-20020a170902d48c00b00186a6b63525sm7401974plg.120.2022.11.01.23.18.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 01 Nov 2022 23:18:21 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 11:48:19 +0530
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     Hector Martin <marcan@marcan.st>
+Cc:     "Rafael J. Wysocki" <rafael@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Sven Peter <sven@svenpeter.dev>,
+        Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Stephen Boyd <sboyd@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Marc Zyngier <maz@kernel.org>,
+        Mark Kettenis <mark.kettenis@xs4all.nl>, asahi@lists.linux.dev,
+        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v3 4/5] cpufreq: apple-soc: Add new driver to control
+ Apple SoC CPU P-states
+Message-ID: <20221102061819.dyl5ah6qffntqieh@vireshk-i7>
+References: <20221024043925.25379-1-marcan@marcan.st>
+ <20221024043925.25379-5-marcan@marcan.st>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH] ath11k (gcc13): synchronize
- ath11k_mac_he_gi_to_nl80211_he_gi()'s return type
-Content-Language: en-US
-To:     Kalle Valo <kvalo@kernel.org>, Randy Dunlap <rdunlap@infradead.org>
-Cc:     Jeff Johnson <quic_jjohnson@quicinc.com>,
-        linux-kernel@vger.kernel.org, Martin Liska <mliska@suse.cz>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-References: <20221031114341.10377-1-jirislaby@kernel.org>
- <55c4d139-0f22-e7ba-398a-e3e0d8919220@quicinc.com>
- <833c7f2f-c140-5a0b-1efc-b858348206ec@kernel.org> <87bkprgj0b.fsf@kernel.org>
- <503a3b36-2256-a9ce-cffe-5c0ed51f6f62@infradead.org>
- <87tu3ifv8z.fsf@kernel.org>
-From:   Jiri Slaby <jirislaby@kernel.org>
-In-Reply-To: <87tu3ifv8z.fsf@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221024043925.25379-5-marcan@marcan.st>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 01. 11. 22, 18:19, Kalle Valo wrote:
-> I did assume it will take at least a year or two before people get used
-> to the new prefix, but my patchwork script has a check for this and it's
-> trivial to fix the subject before I commit the patch. So hopefully the
-> switch goes smoothly.
+On 24-10-22, 13:39, Hector Martin wrote:
+> diff --git a/drivers/cpufreq/apple-soc-cpufreq.c b/drivers/cpufreq/apple-soc-cpufreq.c
+> +struct apple_soc_cpufreq_info {
+> +	u64 max_pstate;
+> +	u64 cur_pstate_mask;
+> +	u64 cur_pstate_shift;
+> +};
+> +
+> +struct apple_cpu_priv {
+> +	struct device *cpu_dev;
+> +	void __iomem *reg_base;
+> +	const struct apple_soc_cpufreq_info *info;
+> +};
+> +
+> +static struct cpufreq_driver apple_soc_cpufreq_driver;
+> +
+> +const struct apple_soc_cpufreq_info soc_t8103_info = {
 
-I think so. It will take some turnarounds for you before this starts 
-appearing in git log output for every wireless driver. Then, people will 
-start picking the prefix up from there ;).
+static ? For other instances too.
 
-thanks,
+> +	.max_pstate = 15,
+> +	.cur_pstate_mask = APPLE_DVFS_STATUS_CUR_PS_T8103,
+> +	.cur_pstate_shift = APPLE_DVFS_STATUS_CUR_PS_SHIFT_T8103,
+> +};
+> +
+> +const struct apple_soc_cpufreq_info soc_t8112_info = {
+> +	.max_pstate = 31,
+> +	.cur_pstate_mask = APPLE_DVFS_STATUS_CUR_PS_T8112,
+> +	.cur_pstate_shift = APPLE_DVFS_STATUS_CUR_PS_SHIFT_T8112,
+> +};
+> +
+> +const struct apple_soc_cpufreq_info soc_default_info = {
+> +	.max_pstate = 15,
+> +	.cur_pstate_mask = 0, /* fallback */
+> +};
+> +
+> +static const struct of_device_id apple_soc_cpufreq_of_match[] = {
+> +	{
+> +		.compatible = "apple,t8103-cluster-cpufreq",
+> +		.data = &soc_t8103_info,
+> +	},
+> +	{
+
+Isn't the preferred way for this is "}, {" instead ?
+
+I couldn't find this in Coding Guidelines, but somehow remember that
+to be the preferred format.
+
+> +		.compatible = "apple,t8112-cluster-cpufreq",
+> +		.data = &soc_t8112_info,
+> +	},
+> +	{
+> +		.compatible = "apple,cluster-cpufreq",
+> +		.data = &soc_default_info,
+> +	},
+> +	{}
+> +};
+> +
+> +static unsigned int apple_soc_cpufreq_get_rate(unsigned int cpu)
+> +{
+> +	struct cpufreq_policy *policy = cpufreq_cpu_get_raw(cpu);
+> +	struct apple_cpu_priv *priv = policy->driver_data;
+> +	unsigned int pstate;
+> +	unsigned int i;
+
+Merge these two ?
+
+> +
+> +	if (priv->info->cur_pstate_mask) {
+> +		u64 reg = readq_relaxed(priv->reg_base + APPLE_DVFS_STATUS);
+> +
+> +		pstate = (reg & priv->info->cur_pstate_mask) >>  priv->info->cur_pstate_shift;
+> +	} else {
+> +		/*
+> +		 * For the fallback case we might not know the layout of DVFS_STATUS,
+> +		 * so just use the command register value (which ignores boost limitations).
+> +		 */
+> +		u64 reg = readq_relaxed(priv->reg_base + APPLE_DVFS_CMD);
+> +
+> +		pstate = FIELD_GET(APPLE_DVFS_CMD_PS1, reg);
+> +	}
+> +
+> +	for (i = 0; policy->freq_table[i].frequency != CPUFREQ_TABLE_END; i++)
+
+You may want to use, cpufreq_for_each_valid_entry(), or some other
+generic iterator here.
+
+> +		if (policy->freq_table[i].driver_data == pstate)
+> +			return policy->freq_table[i].frequency;
+> +
+> +	dev_err(priv->cpu_dev, "could not find frequency for pstate %d\n",
+> +		pstate);
+> +	return 0;
+> +}
+> +
+> +static int apple_soc_cpufreq_set_target(struct cpufreq_policy *policy,
+> +					unsigned int index)
+> +{
+> +	struct apple_cpu_priv *priv = policy->driver_data;
+> +	unsigned int pstate = policy->freq_table[index].driver_data;
+> +	u64 reg;
+> +
+> +	/* Fallback for newer SoCs */
+> +	if (index > priv->info->max_pstate)
+> +		index = priv->info->max_pstate;
+> +
+> +	if (readq_poll_timeout_atomic(priv->reg_base + APPLE_DVFS_CMD, reg,
+> +				      !(reg & APPLE_DVFS_CMD_BUSY), 2,
+> +				      APPLE_DVFS_TRANSITION_TIMEOUT)) {
+> +		return -EIO;
+> +	}
+> +
+> +	reg &= ~(APPLE_DVFS_CMD_PS1 | APPLE_DVFS_CMD_PS2);
+> +	reg |= FIELD_PREP(APPLE_DVFS_CMD_PS1, pstate);
+> +	reg |= FIELD_PREP(APPLE_DVFS_CMD_PS2, pstate);
+> +	reg |= APPLE_DVFS_CMD_SET;
+> +
+> +	writeq_relaxed(reg, priv->reg_base + APPLE_DVFS_CMD);
+> +
+> +	return 0;
+> +}
+> +
+> +static unsigned int apple_soc_cpufreq_fast_switch(struct cpufreq_policy *policy,
+> +						  unsigned int target_freq)
+> +{
+> +	if (apple_soc_cpufreq_set_target(policy, policy->cached_resolved_idx) < 0)
+> +		return 0;
+> +
+> +	return policy->freq_table[policy->cached_resolved_idx].frequency;
+> +}
+> +
+> +static int apple_soc_cpufreq_find_cluster(struct cpufreq_policy *policy,
+> +					  void __iomem **reg_base,
+> +					  const struct apple_soc_cpufreq_info **info)
+> +{
+> +	struct of_phandle_args args;
+> +	const struct of_device_id *match;
+> +	int ret = 0;
+> +
+> +	ret = of_perf_domain_get_sharing_cpumask(policy->cpu, "performance-domains",
+> +						 "#performance-domain-cells",
+> +						 policy->cpus, &args);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	match = of_match_node(apple_soc_cpufreq_of_match, args.np);
+> +	of_node_put(args.np);
+> +	if (!match)
+> +		return -ENODEV;
+> +
+> +	*info = match->data;
+> +
+> +	*reg_base = of_iomap(args.np, 0);
+> +	if (IS_ERR(*reg_base))
+> +		return PTR_ERR(*reg_base);
+> +
+> +	return 0;
+> +}
+> +
+> +static struct freq_attr *apple_soc_cpufreq_hw_attr[] = {
+> +	&cpufreq_freq_attr_scaling_available_freqs,
+> +	NULL,
+> +	NULL,
+> +};
+> +
+> +static int apple_soc_cpufreq_init(struct cpufreq_policy *policy)
+> +{
+> +	int ret, i;
+> +	unsigned int transition_latency;
+> +	void __iomem *reg_base;
+> +	struct device *cpu_dev;
+> +	struct apple_cpu_priv *priv;
+> +	const struct apple_soc_cpufreq_info *info;
+> +	struct cpufreq_frequency_table *freq_table;
+> +
+> +	cpu_dev = get_cpu_device(policy->cpu);
+> +	if (!cpu_dev) {
+> +		pr_err("failed to get cpu%d device\n", policy->cpu);
+> +		return -ENODEV;
+> +	}
+> +
+> +	ret = dev_pm_opp_of_add_table(cpu_dev);
+> +	if (ret < 0) {
+> +		dev_err(cpu_dev, "%s: failed to add OPP table: %d\n", __func__, ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = apple_soc_cpufreq_find_cluster(policy, &reg_base, &info);
+> +	if (ret) {
+> +		dev_err(cpu_dev, "%s: failed to get cluster info: %d\n", __func__, ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = dev_pm_opp_set_sharing_cpus(cpu_dev, policy->cpus);
+
+Why do you need this ? The OPP core should be able to find this
+information by itself in your case AFAIU. The OPP core will refer
+"operating-points-v2 = <&pcluster_opp>" and find that the cores are
+related.
+
+> +	if (ret) {
+> +		dev_err(cpu_dev, "%s: failed to mark OPPs as shared: %d\n", __func__, ret);
+> +		goto out_iounmap;
+> +	}
+> +
+> +	ret = dev_pm_opp_get_opp_count(cpu_dev);
+> +	if (ret <= 0) {
+> +		dev_dbg(cpu_dev, "OPP table is not ready, deferring probe\n");
+
+Why would this happen in your case ?
+
+> +		ret = -EPROBE_DEFER;
+> +		goto out_free_opp;
+> +	}
+> +
+> +	priv = kzalloc(sizeof(*priv), GFP_KERNEL);
+> +	if (!priv) {
+> +		ret = -ENOMEM;
+> +		goto out_free_opp;
+> +	}
+> +
+> +	ret = dev_pm_opp_init_cpufreq_table(cpu_dev, &freq_table);
+> +	if (ret) {
+> +		dev_err(cpu_dev, "failed to init cpufreq table: %d\n", ret);
+> +		goto out_free_priv;
+> +	}
+> +
+> +	/* Get OPP levels (p-state indexes) and stash them in driver_data */
+> +	for (i = 0; freq_table[i].frequency != CPUFREQ_TABLE_END; i++) {
+> +		unsigned long rate = freq_table[i].frequency * 1000;
+> +		struct dev_pm_opp *opp = dev_pm_opp_find_freq_floor(cpu_dev, &rate);
+
+Shouldn't you use dev_pm_opp_find_freq_exact() here ?
+
 -- 
-js
-suse labs
-
+viresh
