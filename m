@@ -2,87 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A5062616B0F
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:40:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C30A616B11
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 18:40:57 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230193AbiKBRks (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 13:40:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35144 "EHLO
+        id S231331AbiKBRky (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 13:40:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36232 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230189AbiKBRk3 (ORCPT
+        with ESMTP id S230261AbiKBRki (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 13:40:29 -0400
-Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6E839248C3;
-        Wed,  2 Nov 2022 10:40:17 -0700 (PDT)
-Received: by mail-oi1-f169.google.com with SMTP id s206so19953443oie.3;
-        Wed, 02 Nov 2022 10:40:17 -0700 (PDT)
+        Wed, 2 Nov 2022 13:40:38 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 924CDE0B8
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 10:40:35 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id o4so25622885wrq.6
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 10:40:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3AmOaNKj9n4rah80wv2WlbMnKprd9ZeBs5crd0e6tQc=;
+        b=W94sUZoG7KhzjFn386rOmrDaRK7nI1ygMHwpBtMGc4KPQzubcQl8TjzyPv9puWoZk7
+         D+jeb3N3GTTIkMPPYqLOeJUkkaa+lX6jrVAC0DhMV1R5IOmemT2O/73f8T3qzO6TBse1
+         AYvXBbbQDgG16j3/5CnsutUNFnkHSKpxvvCgxZs0RmyirGI7lSqg7AH0RGF+051dOylr
+         Xjl5pfG8AHjhE/vkVjJgvJT3cLiASyFnqyMP4IE0JqkL7Me6u0Vk2jQ2MhwJPMassHOk
+         6OxVvTig4hdIVmadcgUcNqmzLQcb5COFlrByDzDHuDVjNVLfR1AcsvpMV1n93RtFgFHW
+         Rzlg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hn3Md3DDfmwu7mRJMxtw1Zqk7ZmyZ+wVWjGzjR5XqhI=;
-        b=x+G0g5Lbi7NceqZRMOCeOocvRsBsOPx1/CJu2Y+SCeOhibgXuiyxmXTQRXjNmSnBo1
-         n8WEs4Yb8iGXbyXvM99vvlXw3Syhl+8gwDIEq7N7KGzcOCv/wUg0uQg/wzrVH5ODnDMc
-         Bi/h8kk/A5Icx86VK7O3fscjdARTRIkhu35ZSKDJyrJQufu5vq5eDCXsmtnV7JCTpW4t
-         9IUmYpBfKMBMty3wmt0fbjOdwH3psydWBQ3jpx/4PfSSXyvaFcacJ4XW6DLUjxXFLAks
-         TZv2/0uRSJZxhkwg0kB1wREg11VhtySKt/9SN1xAyj03jqrCsxG+J0MltThz1+Hw5Ke+
-         UFeA==
-X-Gm-Message-State: ACrzQf0NYfPuZ7V0gyrv0Bcs/Qnz+duGLH+hvmhc8wvY/JUiaH3EVT5s
-        Saq2q0eX9ZYlq8qfoN5/Hw==
-X-Google-Smtp-Source: AMsMyM7oXYtc9f6PWQYuC20JPF3XtzpncveMbbhlpWcpJrh6XWLEekXVe/HHbdZiH/n3hyzjxANQjQ==
-X-Received: by 2002:a05:6808:1582:b0:359:dc30:d716 with SMTP id t2-20020a056808158200b00359dc30d716mr14210554oiw.104.1667410816627;
-        Wed, 02 Nov 2022 10:40:16 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id g93-20020a9d2de6000000b00666fdab9da7sm5145036otb.78.2022.11.02.10.40.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 10:40:16 -0700 (PDT)
-Received: (nullmailer pid 11369 invoked by uid 1000);
-        Wed, 02 Nov 2022 17:40:17 -0000
-Date:   Wed, 2 Nov 2022 12:40:17 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh+dt@kernel.org>,
-        Hector Martin <marcan@marcan.st>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Sven Peter <sven@svenpeter.dev>, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Brian Norris <briannorris@chromium.org>,
-        Lubomir Rintel <lkundrak@v3.sk>, loongarch@lists.linux.dev,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Subject: Re: [PATCH v4 2/2] dt-bindings: soc: add loongson-2 chipid
-Message-ID: <166741081722.11313.14449505612000016628.robh@kernel.org>
-References: <20221102035511.19972-1-zhuyinbo@loongson.cn>
- <20221102035511.19972-2-zhuyinbo@loongson.cn>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3AmOaNKj9n4rah80wv2WlbMnKprd9ZeBs5crd0e6tQc=;
+        b=gGEbbumRn8JldEbI/gTtSLA0YKLGX1hfdr8VQmXzmHqLRkn6l8ZYVtQdYNsfDPK0lh
+         8nDiAvMNQAqCTGUEFrn2vx79xm9Py1zwX1APZv7l1Hbd9c1px47C7yiIcAmbmI/aOGNP
+         Lzq1dggvcFre5zo3GWp9m+aX5tFI6kaHaPAYSkl71gb+QN3piyTODg8gX8D+Qq4NoTss
+         QiNax7IK1bT64i7ws52t6WbZW4kzJZe9srufMykwjU8SHz3M8tAHo9VeB2HgEn/bICiv
+         YUgVajCbux/mLDTJxlcmLhIG11BX57YnYC24BFsnQ5iXSsoSjH+vwI2XdYD/t/HfGUYn
+         J72A==
+X-Gm-Message-State: ACrzQf2FdzQVGm3bHw3TFraFdjSXfppLNAWY4tQa0H2taJxj8oVrQbMI
+        i/Tuc1uV3p5OEjY8LZa8iZRRpQIA+DX0IVxjtIN96A==
+X-Google-Smtp-Source: AMsMyM6g1HDpFNiQWEW4SG59uf5BYHt/jrEe19S9vIuvW6m1cOpkYBN+wFZaJSmqSvb/uCn4JesL+kPgDErPCt/rFqk=
+X-Received: by 2002:adf:e241:0:b0:238:3c64:decc with SMTP id
+ bl1-20020adfe241000000b002383c64deccmr364071wrb.698.1667410834538; Wed, 02
+ Nov 2022 10:40:34 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221102035511.19972-2-zhuyinbo@loongson.cn>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221102111410.38737-1-peng.fan@oss.nxp.com>
+In-Reply-To: <20221102111410.38737-1-peng.fan@oss.nxp.com>
+From:   Mathieu Poirier <mathieu.poirier@linaro.org>
+Date:   Wed, 2 Nov 2022 11:40:23 -0600
+Message-ID: <CANLsYky+FPNi82kDwgJBzdoxS5=SBXBqiRRFNCvt4ihUpJS+9w@mail.gmail.com>
+Subject: Re: [PATCH] remoteproc: imx_rproc: correct i.MX93 DRAM mapping
+To:     "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc:     andersson@kernel.org, shawnguo@kernel.org, s.hauer@pengutronix.de,
+        kernel@pengutronix.de, festevam@gmail.com, linux-imx@nxp.com,
+        linux-remoteproc@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        Peng Fan <peng.fan@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-On Wed, 02 Nov 2022 11:55:11 +0800, Yinbo Zhu wrote:
-> Add the Loongson-2 SoC chipid binding with DT schema format using
-> json-schema.
-> 
-> Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+On Wed, 2 Nov 2022 at 05:12, Peng Fan (OSS) <peng.fan@oss.nxp.com> wrote:
+>
+> From: Peng Fan <peng.fan@nxp.com>
+>
+> According to updated reference mannual, the M33 DRAM view of
+> 0x[C,D]0000000 maps to A55 0xC0000000, so correct it.
+>
+> Fixes: 9222fabf0e39 ("remoteproc: imx_rproc: Support i.MX93")
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 > ---
->  .../bindings/hwinfo/loongson,ls2k-chipid.yaml | 38 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 39 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/hwinfo/loongson,ls2k-chipid.yaml
-> 
+>  drivers/remoteproc/imx_rproc.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/drivers/remoteproc/imx_rproc.c b/drivers/remoteproc/imx_rproc.c
+> index 2c471e46f4ca..9fc978e0393c 100644
+> --- a/drivers/remoteproc/imx_rproc.c
+> +++ b/drivers/remoteproc/imx_rproc.c
+> @@ -134,8 +134,8 @@ static const struct imx_rproc_att imx_rproc_att_imx93[] = {
+>         { 0x80000000, 0x80000000, 0x10000000, 0 },
+>         { 0x90000000, 0x80000000, 0x10000000, 0 },
+>
+> -       { 0xC0000000, 0xa0000000, 0x10000000, 0 },
+> -       { 0xD0000000, 0xa0000000, 0x10000000, 0 },
+> +       { 0xC0000000, 0xC0000000, 0x10000000, 0 },
+> +       { 0xD0000000, 0xC0000000, 0x10000000, 0 },
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+But how did this work before?  Were some SoC released with the old mapping?
+
+>  };
+>
+>  static const struct imx_rproc_att imx_rproc_att_imx8qm[] = {
+> --
+> 2.37.1
+>
