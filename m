@@ -2,76 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 93EFA616B88
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:06:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5315A616B8D
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 19:06:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230077AbiKBSGF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 14:06:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35152 "EHLO
+        id S230366AbiKBSGf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 14:06:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35462 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiKBSGD (ORCPT
+        with ESMTP id S230292AbiKBSGb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 14:06:03 -0400
-Received: from mail-qk1-x72f.google.com (mail-qk1-x72f.google.com [IPv6:2607:f8b0:4864:20::72f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 236EC101C5;
-        Wed,  2 Nov 2022 11:06:02 -0700 (PDT)
-Received: by mail-qk1-x72f.google.com with SMTP id s20so5876141qkg.5;
-        Wed, 02 Nov 2022 11:06:02 -0700 (PDT)
+        Wed, 2 Nov 2022 14:06:31 -0400
+Received: from mail-yw1-x1136.google.com (mail-yw1-x1136.google.com [IPv6:2607:f8b0:4864:20::1136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EED3A2EF49
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 11:06:29 -0700 (PDT)
+Received: by mail-yw1-x1136.google.com with SMTP id 00721157ae682-3691e040abaso173741887b3.9
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 11:06:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=1FawLtOj3OntSQ6QbcXv3/K+wWEttHo6aOUD/Uwg2LI=;
-        b=XfWJXgkUlMrJAd2mpR41r38BryqiLS3BYDO779aPv70Flf9UUe6KA6S9lNhTa1pjeL
-         X78SMV3BdG6ZQZxuT4OZ9bHEC+b1C+9dOcGo3y5MDGxB7C6wBGGMmW8ppZd5Ome+44Wz
-         AJCEX3W8EweLwpt1sksw5jdUczFQhC5bgAHH8y6+Hi2eaFylnCODbJ9261pUzhurBd+I
-         +9A9wo+OymhuZ6Cy9ujXN6I8qo0xWKYzCdJjs9mD/qiXC8KYFWgwanfE8z3Q4GwiIhb6
-         dYG3e8M+/9vXpPQdJBprNDvFx/JD6rSjZkD2DBBf3HaddxmlUCYGm/+zqjoSh4hPMUps
-         d7uQ==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=o0CEgw9X5vfyuwIxQqcN7xcNuir05YO/amlYwdnAC9g=;
+        b=jd3KIXC0Wu2EC6lt2E6e8osyw7VO19Sg2LkwuZAQ4qagtKZhYV2I4zssMwNkNTol5k
+         Wu9tOb4gUJ/jNMJm3GR7wIbmBeOJpPqXEoAgok3s6e5o52CRzVN3HGbHdLNoSoQ+hY7r
+         /tBV1B4SisUltG+1QjMwwPIYNPJUqVsLkaU4BmA87QHkySjts5hHQsZ8lIx557FG7Z/u
+         Rwa3bmI2f4IhIQfKNggcaKO6rKqU6i7BXc/jKiA7oVgl1XPy5SRIZzfiNF5QhWcNxvh6
+         uNjecfOsEL/JXfKjPWiIM3rwP+yuKZ1Is5ZKBgYNR5ZmLmI7yyB7g1MWzJaC/WfiEoIH
+         bJ+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=1FawLtOj3OntSQ6QbcXv3/K+wWEttHo6aOUD/Uwg2LI=;
-        b=vzmVmsg/W3k1fD39ndyrAMy6anGD3WOZRak0QAuHTuO3JzBC40DB8Nw/B7ppUZnx/4
-         vrPFoi4tFukGBeXGdHtoueSbIS5HUWWugADrCRfYCj6oUfwY6z/MSV0qBcTI8fCVlOb7
-         yaBAPEdfSN7Y9k8AzkmP+8Tcn2xBmhaVEC4msE81FdLVE5t96jSxwesLRWvZ5ewK3/ot
-         oH4G8hbnXeBJV0do4Uld9wmvAIQY3rpNvBbdjnfxGacePRD0yjELI0L4zoNkbpdkATr+
-         sN3Bi8t7efMBLEE4q3NeFdKI8uvhaZ43aPFrzFpIICCa2ddF7DQh98HgULBj2uxbOx+/
-         zEYg==
-X-Gm-Message-State: ACrzQf0BRSIzx3DeAavvVk8JK2I7waPgeizCZ82lQ50UUopFxUG0wh8g
-        OT3HNXh1ZSoBiGIRdLJQ79hHu2KMCazbTA==
-X-Google-Smtp-Source: AMsMyM6AMMLW+lcABqDIB+62scV3no2yZto2ebOt91rO0ggQRfxWchR8vF2G0Bke20MUiNmKiysvog==
-X-Received: by 2002:a37:312:0:b0:6fa:1585:3fdc with SMTP id 18-20020a370312000000b006fa15853fdcmr17766688qkd.467.1667412361202;
-        Wed, 02 Nov 2022 11:06:01 -0700 (PDT)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.googlemail.com with ESMTPSA id bm8-20020a05620a198800b006ed138e89f2sm8951793qkb.123.2022.11.02.11.05.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 11:06:00 -0700 (PDT)
-Message-ID: <8ab6171c-5336-2f99-cfcc-4e29d42e594a@gmail.com>
-Date:   Wed, 2 Nov 2022 11:05:55 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=o0CEgw9X5vfyuwIxQqcN7xcNuir05YO/amlYwdnAC9g=;
+        b=wkiUDuyjdUsr807WbGqGeAqKuB8gotciAtEMLy+kqxqeUvmd3HXy2KXwNCuhhnYQ7I
+         Ngy2dvK51jEt3wyyakF2XK3TsIVVKxDFQDF+aQEZl4iVpkD6lSY6M1kuO5m8mgP3M+xk
+         PO8wTNhzTHUZGPYQ4kgVgTZlJJs0KQD7k4zm+a9f4L91bmOWct4rlhYEKLyjywbEhxDK
+         h0hEu5dBhY8Qo6SeS1WNxor/Vd9/fXBYX92X+yzYlYVw9TL79o7E40+pneiWcz3gO6E9
+         R6GaHu9wdVeY0G+vW/p+IXDh4AP8541DrxIvy1gV5XAi1yPPsqLeW76i53BOOydgHxcE
+         j41Q==
+X-Gm-Message-State: ACrzQf1DNJL8P73rEAQaum4uUXhBQH1286oEExcuDNmtVRFE9CTdqwbr
+        x3I8wJ11Esdob++379xf4QPMeQZKxgPaBoc8G0bodw==
+X-Google-Smtp-Source: AMsMyM5bBk2ioGe0NmqvZ65KgqUjR5BrZT6NnVCCub3vHX+oK4glVSvyGeBEXDTV1x6ppQboIsconfbATdm+J444dcw=
+X-Received: by 2002:a81:8945:0:b0:373:5c0c:9b4a with SMTP id
+ z66-20020a818945000000b003735c0c9b4amr3242958ywf.490.1667412389003; Wed, 02
+ Nov 2022 11:06:29 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH 5.10 00/91] 5.10.153-rc1 review
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org
-Cc:     patches@lists.linux.dev, linux-kernel@vger.kernel.org,
-        torvalds@linux-foundation.org, akpm@linux-foundation.org,
-        linux@roeck-us.net, shuah@kernel.org, patches@kernelci.org,
-        lkft-triage@lists.linaro.org, pavel@denx.de, jonathanh@nvidia.com,
-        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
-References: <20221102022055.039689234@linuxfoundation.org>
-From:   Florian Fainelli <f.fainelli@gmail.com>
-In-Reply-To: <20221102022055.039689234@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221030212929.335473-1-peterx@redhat.com> <20221030212929.335473-5-peterx@redhat.com>
+In-Reply-To: <20221030212929.335473-5-peterx@redhat.com>
+From:   James Houghton <jthoughton@google.com>
+Date:   Wed, 2 Nov 2022 11:06:16 -0700
+Message-ID: <CADrL8HWpvAozbfqGyr0=4M6bu-ecQ7mQXb3xzvMTjpCPH3OVcg@mail.gmail.com>
+Subject: Re: [PATCH RFC 04/10] mm/hugetlb: Make userfaultfd_huge_must_wait() RCU-safe
+To:     Peter Xu <peterx@redhat.com>
+Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
+        Andrew Morton <akpm@linux-foundation.org>,
+        Miaohe Lin <linmiaohe@huawei.com>,
+        David Hildenbrand <david@redhat.com>,
+        Muchun Song <songmuchun@bytedance.com>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Mike Kravetz <mike.kravetz@oracle.com>,
+        Rik van Riel <riel@surriel.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -79,29 +75,47 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/1/22 19:32, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 5.10.153 release.
-> There are 91 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
-> 
-> Responses should be made by Fri, 04 Nov 2022 02:20:38 +0000.
-> Anything received after that time might be too late.
-> 
-> The whole patch series can be found in one patch at:
-> 	https://www.kernel.org/pub/linux/kernel/v5.x/stable-review/patch-5.10.153-rc1.gz
-> or in the git tree and branch at:
-> 	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable-rc.git linux-5.10.y
-> and the diffstat can be found below.
-> 
-> thanks,
-> 
-> greg k-h
+On Sun, Oct 30, 2022 at 2:29 PM Peter Xu <peterx@redhat.com> wrote:
+>
+> RCU makes sure the pte_t* won't go away from under us.  Please refer to the
+> comment above huge_pte_offset() for more information.
+>
+> Signed-off-by: Peter Xu <peterx@redhat.com>
+> ---
+>  fs/userfaultfd.c | 4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> diff --git a/fs/userfaultfd.c b/fs/userfaultfd.c
+> index 07c81ab3fd4d..4e813e68e4f8 100644
+> --- a/fs/userfaultfd.c
+> +++ b/fs/userfaultfd.c
+> @@ -243,6 +243,9 @@ static inline bool userfaultfd_huge_must_wait(struct userfaultfd_ctx *ctx,
+>
+>         mmap_assert_locked(mm);
+>
+> +       /* For huge_pte_offset() */
+> +       rcu_read_lock();
 
-On ARCH_BRCMSTB using 32-bit and 64-bit ARM kernels, build tested on 
-BMIPS_GENERIC:
+userfaultfd_huge_must_wait is called after we set the task's state to
+blocking. Is it always safe to call rcu_read_lock (and
+rcu_read_unlock) in this case? (With my basic understanding of RCU,
+this seems like it should be safe, but I'm not sure.)
 
-Tested-by: Florian Fainelli <f.fainelli@gmail.com>
--- 
-Florian
+- James
 
+
+> +
+>         ptep = huge_pte_offset(mm, address, vma_mmu_pagesize(vma));
+>
+>         if (!ptep)
+> @@ -261,6 +264,7 @@ static inline bool userfaultfd_huge_must_wait(struct userfaultfd_ctx *ctx,
+>         if (!huge_pte_write(pte) && (reason & VM_UFFD_WP))
+>                 ret = true;
+>  out:
+> +       rcu_read_unlock();
+>         return ret;
+>  }
+>  #else
+> --
+> 2.37.3
+>
