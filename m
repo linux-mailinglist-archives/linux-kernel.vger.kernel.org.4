@@ -2,98 +2,121 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3EAE5615F27
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:12:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 671FD615F2D
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 10:13:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231405AbiKBJM5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 05:12:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39838 "EHLO
+        id S231434AbiKBJNZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 05:13:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41034 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231422AbiKBJL7 (ORCPT
+        with ESMTP id S231292AbiKBJMi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 05:11:59 -0400
-Received: from mail-lf1-x12f.google.com (mail-lf1-x12f.google.com [IPv6:2a00:1450:4864:20::12f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBFE128723
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 02:11:19 -0700 (PDT)
-Received: by mail-lf1-x12f.google.com with SMTP id b2so27185755lfp.6
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 02:11:19 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gKuPjdWLjmuOURV2Y/juGKCDch+E7gH5+a1ecFUi7wc=;
-        b=yrRN4yGxnRVU/qumQdRHUjulC2bB243hbcXg92j0SvuzPfxsPUmMhIXJcSY6Qv7/Zr
-         KrelyH+vCKrpgv+rnpMQbvkMorzgIvyv0eV8YT9tbx0G1MY4BO4hd9N+PslAlLa6MtCM
-         9jJK+q9RcG8OXDaO4AgdU0dHI3MFNZEY/wfRXFileEDtOdpPb+b2U0nLBaAWs3jy4aHB
-         Ko4zlZU+gaKQciYVTySKbwqY6rJQU9KH1uqVIXGAyfdI2eos/Uy32p8t4X30lG/jfKVQ
-         ogz2UJ8pHjnbMKhsHcIGvU+qA5sC5W7PKGoGb+iuLUvLznhQRkR6GoG2vhISschcg4JZ
-         vUkg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=gKuPjdWLjmuOURV2Y/juGKCDch+E7gH5+a1ecFUi7wc=;
-        b=y7E2qkrKQNt76O8THEg8xmOLYHCSrJPXgXYsTpGwLb/Mdzmp438bGMJCBXnFGx6UnV
-         Acg4Ezy9ooMCgSYCCbqICZBRuYx1rAKafejH/bEu+HuamPQTEF67d/bcXRpkzt3jDc2q
-         tz52EQddo8yIt9cgCWIMp/QtkehyOnWmpC4lrnguj0Qp7J+cY3Qmz+c2d3ZD7JBygwhL
-         widfb7Og2Dk7lFMZEbWxkUqRqr63aPSEZxz5EUBPl6cZUxVNhFmeiT14KkXPLlZUiutA
-         LDH4JmyppAWr6UhZt9mlqg8NZfhMibe7vEbM1T/iI9nCzu12QvS8jXuPOwU+wpjJnof3
-         CwxQ==
-X-Gm-Message-State: ACrzQf1xJg+0vWUKVnbq68rrYGsXwo7ojjbKGaR/Fau3d93UUc4xwz4C
-        9Ad8M7OdzxIlBq0m/sIdjnd/5Q==
-X-Google-Smtp-Source: AMsMyM7z+0HcM3cE/rFtdLEKXxPZLNKW1MeUqcGmFCzjRwS6uSNWuXjkEHKhQq6N6vSCBdDNaeNowg==
-X-Received: by 2002:a05:6512:2350:b0:4a2:4523:cd08 with SMTP id p16-20020a056512235000b004a24523cd08mr9653986lfu.231.1667380278272;
-        Wed, 02 Nov 2022 02:11:18 -0700 (PDT)
-Received: from [10.27.10.248] ([195.165.23.90])
-        by smtp.gmail.com with ESMTPSA id q17-20020ac25fd1000000b004a2ae643b99sm1924375lfg.170.2022.11.02.02.11.17
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 02:11:17 -0700 (PDT)
-Message-ID: <6b0e9539-864e-77e0-0010-66d5053c9730@linaro.org>
-Date:   Wed, 2 Nov 2022 12:11:17 +0300
+        Wed, 2 Nov 2022 05:12:38 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 49E5027FDD;
+        Wed,  2 Nov 2022 02:12:36 -0700 (PDT)
+Date:   Wed, 02 Nov 2022 09:12:31 -0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020; t=1667380354;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uMR68Zmfoe0UqY0wLe0yKioBQ7nzb4jjELk2y2smSJc=;
+        b=oWA10aC7L21CM687n9M00pX9BU5J27hHyj5odgNTQmHXQLYDHPDrp7nybWf8N7kXKSpvwM
+        nwpCYM8fOnVkMIT/n1ZRXFcW2X4DlkWBv22tFf7MICosQQni+cJ9IQAcIQq5sCwzucmz47
+        YlG0Id1XyM5PbOfZqkXtDsFv8Xpe9rPnalqlpAiUsizifREHLyemf9aq9N0766qaJ0XauE
+        m8UQTaYwKFJ0dzq/2p8CJv+B5yKSRIvlpFwoAwMyAK8NYpGgm1QjlyY+fc7tY9aNP71lap
+        er+q/RWffrLow8qvl8qbZq/kvyr0rIdbCIJ3rokCireiyImBaiAtYTlDJ5ADNQ==
+DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
+        s=2020e; t=1667380354;
+        h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
+         message-id:message-id:to:to:cc:cc:mime-version:mime-version:
+         content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=uMR68Zmfoe0UqY0wLe0yKioBQ7nzb4jjELk2y2smSJc=;
+        b=G7sggtNUHAg+JecF4dfLb2k7B7mFg954jTYuxTs41s0AQm8Kf0O2yyJdOAp+tNeIZedpnq
+        +h/7Pslit5BpLeDw==
+From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
+Sender: tip-bot2@linutronix.de
+Reply-to: linux-kernel@vger.kernel.org
+To:     linux-tip-commits@vger.kernel.org
+Subject: [tip: x86/mm] mm: Convert __HAVE_ARCH_P..P_GET to the new style
+Cc:     Linus Torvalds <torvalds@linux-foundation.org>,
+        "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
+        linux-kernel@vger.kernel.org
+In-Reply-To: <Y2EUEBlQXNgaJgoI@hirez.programming.kicks-ass.net>
+References: <Y2EUEBlQXNgaJgoI@hirez.programming.kicks-ass.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2 4/5] clk: qcom: dispcc-sm8250: Add missing EDP clocks
- for sm8350
-Content-Language: en-GB
-To:     Robert Foss <robert.foss@linaro.org>, agross@kernel.org,
-        bjorn.andersson@linaro.org, konrad.dybcio@somainline.org,
-        mturquette@baylibre.com, sboyd@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, linux-arm-msm@vger.kernel.org,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        devicetree@vger.kernel.org,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Jonathan Marek <jonathan@marek.ca>
-References: <20221102090140.965450-1-robert.foss@linaro.org>
- <20221102090140.965450-5-robert.foss@linaro.org>
-From:   Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-In-Reply-To: <20221102090140.965450-5-robert.foss@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Message-ID: <166738035184.7716.3554709284674678643.tip-bot2@tip-bot2>
+Robot-ID: <tip-bot2@linutronix.de>
+Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/11/2022 12:01, Robert Foss wrote:
-> SM8350 supports embedded displayport, but the clocks for this
-> were previously not accounted for.
-> 
-> Signed-off-by: Robert Foss <robert.foss@linaro.org>
-> ---
->   drivers/clk/qcom/dispcc-sm8250.c | 22 +++++++++++++++++++++-
->   1 file changed, 21 insertions(+), 1 deletion(-)
+The following commit has been merged into the x86/mm branch of tip:
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Commit-ID:     0daf48b9e44674fb5ffc33cd41a3a17326e26cca
+Gitweb:        https://git.kernel.org/tip/0daf48b9e44674fb5ffc33cd41a3a17326e26cca
+Author:        Peter Zijlstra <peterz@infradead.org>
+AuthorDate:    Tue, 01 Nov 2022 12:53:18 +01:00
+Committer:     Peter Zijlstra <peterz@infradead.org>
+CommitterDate: Tue, 01 Nov 2022 13:44:05 +01:00
 
--- 
-With best wishes
-Dmitry
+mm: Convert __HAVE_ARCH_P..P_GET to the new style
 
+Since __HAVE_ARCH_* style guards have been depricated in favour of
+defining the function name onto itself, convert pxxp_get().
+
+Suggested-by: Linus Torvalds <torvalds@linux-foundation.org>
+Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+Link: https://lkml.kernel.org/r/Y2EUEBlQXNgaJgoI@hirez.programming.kicks-ass.net
+---
+ arch/powerpc/include/asm/nohash/32/pgtable.h | 2 +-
+ include/linux/pgtable.h                      | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+
+diff --git a/arch/powerpc/include/asm/nohash/32/pgtable.h b/arch/powerpc/include/asm/nohash/32/pgtable.h
+index 0d40b33..cb1ac02 100644
+--- a/arch/powerpc/include/asm/nohash/32/pgtable.h
++++ b/arch/powerpc/include/asm/nohash/32/pgtable.h
+@@ -263,7 +263,7 @@ static inline pte_basic_t pte_update(struct mm_struct *mm, unsigned long addr, p
+ }
+ 
+ #ifdef CONFIG_PPC_16K_PAGES
+-#define __HAVE_ARCH_PTEP_GET
++#define ptep_get ptep_get
+ static inline pte_t ptep_get(pte_t *ptep)
+ {
+ 	pte_basic_t val = READ_ONCE(ptep->pte);
+diff --git a/include/linux/pgtable.h b/include/linux/pgtable.h
+index 2334852..70e2a7e 100644
+--- a/include/linux/pgtable.h
++++ b/include/linux/pgtable.h
+@@ -291,14 +291,14 @@ static inline void ptep_clear(struct mm_struct *mm, unsigned long addr,
+ 	ptep_get_and_clear(mm, addr, ptep);
+ }
+ 
+-#ifndef __HAVE_ARCH_PTEP_GET
++#ifndef ptep_get
+ static inline pte_t ptep_get(pte_t *ptep)
+ {
+ 	return READ_ONCE(*ptep);
+ }
+ #endif
+ 
+-#ifndef __HAVE_ARCH_PMDP_GET
++#ifndef pmdp_get
+ static inline pmd_t pmdp_get(pmd_t *pmdp)
+ {
+ 	return READ_ONCE(*pmdp);
