@@ -2,96 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 309E1616DCB
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 20:26:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E321B616DCE
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 20:28:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbiKBT0H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 15:26:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49218 "EHLO
+        id S231273AbiKBT2N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 15:28:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49616 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229561AbiKBT0D (ORCPT
+        with ESMTP id S231259AbiKBT2J (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 15:26:03 -0400
-Received: from mail-qv1-xf33.google.com (mail-qv1-xf33.google.com [IPv6:2607:f8b0:4864:20::f33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A0E32BB
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 12:26:02 -0700 (PDT)
-Received: by mail-qv1-xf33.google.com with SMTP id e15so13167296qvo.4
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 12:26:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=bZ0c9n3S/7R/juAKL/MuQmyZ52QEpr04qFxA/MunVX4=;
-        b=MY+dEW0wPbHYY6f/JC/JnMp+6uroYZomjMRscKoUq6BxwMFbFjj+DOp2TcG48TQidw
-         ++iqOOnhC5OtFyrEjofDZKkOqYkoP8GaxYNkpxR48rDubtqxit4hIpQsEy3pjeFVVBqx
-         DoGJgbrM0Y3zd9UoHaLDbeCzblFurOhmg0UXnUiYYjRCp/6alURNVgqkxPG/wmIu00Dh
-         mdbyaTI05vnqPLZuyw3IiBslvc2GcBUjLsIq0oIa/f8A3TcrOhhi3mzl5Gg6rdqlX1KG
-         aTKuu+l0MZ3yvNtvgN0RQKvPpndgwPRyNv3/MQMN4BbEE0OjX72E5QRvXygjJ0OFNkM/
-         edMg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bZ0c9n3S/7R/juAKL/MuQmyZ52QEpr04qFxA/MunVX4=;
-        b=fjTYLWXg7l7zLF35aHm36F4NJGjzNETwqhLqxQCUKeJmmSeElxFeGg8IkldOusTg23
-         SwTF3g2ysm39LA+n3D8HS2GUKKSJm6k6v+8uJex6dr3PHwwGYws0SgR7J+tqZs1iPHeI
-         iD1K+53HAnhEg79ZleCT1G9c8Sf5cexmdkPCmxPv5fXcrlnbYobpiuY/WGb/mfTe74Pk
-         XeooE+fy8LWP5RIqVKDYgCUL1jxXqzty7pUrzrbG4rKLdwW6L6dJZjuCqN5x846jx47j
-         uycz3Y95F4RD+QlmA1Bg/1MK4PtDLeVL0qGm4BblCL13UhxRCDE27KfaqQadKfephQxe
-         VylQ==
-X-Gm-Message-State: ACrzQf32mTyv0JL96BBUgPGSW4/laHDVHCd7QhOt/wDWSWK1tLaGs3ek
-        FTBg4mQJ97uk11KazEQlKjgzuQ==
-X-Google-Smtp-Source: AMsMyM5vSN7AXGv7p2SjYikwAFRsnviWIYWPLTa+O5bLfxdrMR2RwAa4LE6i3kp35nDNdEbhEELSiQ==
-X-Received: by 2002:a05:6214:d6e:b0:4b9:692d:c486 with SMTP id 14-20020a0562140d6e00b004b9692dc486mr23080087qvs.104.1667417161687;
-        Wed, 02 Nov 2022 12:26:01 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
-        by smtp.gmail.com with ESMTPSA id r17-20020a05620a03d100b006eee3a09ff3sm8872607qkm.69.2022.11.02.12.25.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 12:26:00 -0700 (PDT)
-Message-ID: <e1233b16-4289-f193-2084-40ea0e587ef8@linaro.org>
-Date:   Wed, 2 Nov 2022 15:25:59 -0400
+        Wed, 2 Nov 2022 15:28:09 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D808E9;
+        Wed,  2 Nov 2022 12:28:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id E4DC7CE22F3;
+        Wed,  2 Nov 2022 19:28:02 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6EE96C433C1;
+        Wed,  2 Nov 2022 19:28:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667417281;
+        bh=V99NLxJ1CDCsDjWVw5q4vkveJIgk3tjkI5VceymN/co=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=ue9CFnS8VoJ6tE2L4PugKig1jik6FLf1TPSy6ukmoIcd4SGDw/xJxpfndt8isuMLz
+         0SEYkArxfClPVmQr/5nrjAxBscJZG5jdke9prS736gnUDwCTm87EAV6Q1mKWbpWkHn
+         xVBlONl1r1sBHrPHgy0BcuOKdm//X7MUHZy3or0ywjhzy3ul7Cbv8w6X+ET1z0Hjs/
+         dYU+h7K04Dx38NhV8RBStlzaZzInMw2NpbYzcEtZUPOMaFoabxlcI4/nKpttT37VTF
+         /N1VnRXvE8gndLvs+4DTCsoh6R7avGfydive79lfFVHAb3EfCrNic3BvFllDKEiBya
+         KqygYaMs2qMOw==
+Date:   Wed, 2 Nov 2022 12:27:58 -0700
+From:   Nathan Chancellor <nathan@kernel.org>
+To:     Rongwei Zhang <pudh4418@gmail.com>
+Cc:     Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Ralf Baechle <ralf@linux-mips.org>,
+        Maxim Uvarov <muvarov@gmail.com>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        Tom Rix <trix@redhat.com>, linux-mips@vger.kernel.org,
+        linux-kernel@vger.kernel.org, llvm@lists.linux.dev
+Subject: Re: [PATCH] MIPS: fix duplicate definitions for exported symbols
+Message-ID: <Y2LEvg5PEdbAtQ3e@dev-arch.thelio-3990X>
+References: <Y2JiO+67E1NyFgca@pudh-loong.localdomain>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v2 1/2] dt-bindings: clock: qcom,gcc-ipq8074: Use common
- GCC schema
-Content-Language: en-US
-To:     Stephen Boyd <sboyd@kernel.org>, Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Christian Marangi <ansuelsmth@gmail.com>,
-        Del Regno <angelogioacchino.delregno@somainline.org>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Govind Singh <govinds@codeaurora.org>,
-        Iskren Chernev <iskren.chernev@gmail.com>,
-        Jeffrey Hugo <quic_jhugo@quicinc.com>,
-        Jonathan Marek <jonathan@marek.ca>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Loic Poulain <loic.poulain@linaro.org>,
-        Manivannan Sadhasivam <mani@kernel.org>,
-        Martin Botka <martin.botka@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Rob Herring <robh+dt@kernel.org>,
-        Robert Foss <robert.foss@linaro.org>,
-        Shawn Guo <shawn.guo@linaro.org>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Stephan Gerhold <stephan@gerhold.net>,
-        Taniya Das <tdas@codeaurora.org>,
-        Vinod Koul <vkoul@kernel.org>, devicetree@vger.kernel.org,
-        krishna Lanka <quic_vamslank@quicinc.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Cc:     Rob Herring <robh@kernel.org>
-References: <20221102163153.55460-1-krzysztof.kozlowski@linaro.org>
- <20221102191441.5EE6EC433D6@smtp.kernel.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221102191441.5EE6EC433D6@smtp.kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2JiO+67E1NyFgca@pudh-loong.localdomain>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,24 +57,83 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/11/2022 15:14, Stephen Boyd wrote:
-> Quoting Krzysztof Kozlowski (2022-11-02 09:31:52)
->> Reference common Qualcomm GCC schema to remove common pieces.
->>
->> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
->> Acked-by: Rob Herring <robh@kernel.org>
->>
->> ---
+On Wed, Nov 02, 2022 at 08:27:39PM +0800, Rongwei Zhang wrote:
+> Building with clang-14 fails with:
 > 
-> Acked-by: Stephen Boyd <sboyd@kernel.org>
+> AS      arch/mips/kernel/relocate_kernel.o
+> <unknown>:0: error: symbol 'kexec_args' is already defined
+> <unknown>:0: error: symbol 'secondary_kexec_args' is already defined
+> <unknown>:0: error: symbol 'kexec_start_address' is already defined
+> <unknown>:0: error: symbol 'kexec_indirection_page' is already defined
+> <unknown>:0: error: symbol 'relocate_new_kernel_size' is already defined
 > 
-> I figure Bjorn will apply them with other qcom clk patches.
+> It turns out EXPORT defined in asm/asm.h expands to a symbol definition,
+> so there is no need to define these symbols again. Remove duplicated
+> symbol definitions.
+> 
+> Fixes: 7aa1c8f47e7e ("MIPS: kdump: Add support")
+> Signed-off-by: Rongwei Zhang <pudh4418@gmail.com>
 
-Bjorn,
+Indeed. I had a similar diff when I looked into this late last year but
+I never got around to sending that diff.
 
-I think you need to update your scripts:
-https://patchwork.ozlabs.org/project/devicetree-bindings/list/?series=325924
+https://github.com/ClangBuiltLinux/linux/issues/1528#issuecomment-988235109
 
-Best regards,
-Krzysztof
+Reviewed-by: Nathan Chancellor <nathan@kernel.org>
 
+Thanks for the patch!
+
+> ---
+>  arch/mips/kernel/relocate_kernel.S | 15 +++++----------
+>  1 file changed, 5 insertions(+), 10 deletions(-)
+> 
+> diff --git a/arch/mips/kernel/relocate_kernel.S b/arch/mips/kernel/relocate_kernel.S
+> index cfde14b48fd8..f5b2ef979b43 100644
+> --- a/arch/mips/kernel/relocate_kernel.S
+> +++ b/arch/mips/kernel/relocate_kernel.S
+> @@ -145,8 +145,7 @@ LEAF(kexec_smp_wait)
+>   * kexec_args[0..3] are used to prepare register values.
+>   */
+>  
+> -kexec_args:
+> -	EXPORT(kexec_args)
+> +EXPORT(kexec_args)
+>  arg0:	PTR_WD		0x0
+>  arg1:	PTR_WD		0x0
+>  arg2:	PTR_WD		0x0
+> @@ -159,8 +158,7 @@ arg3:	PTR_WD		0x0
+>   * their registers a0-a3. secondary_kexec_args[0..3] are used
+>   * to prepare register values.
+>   */
+> -secondary_kexec_args:
+> -	EXPORT(secondary_kexec_args)
+> +EXPORT(secondary_kexec_args)
+>  s_arg0: PTR_WD		0x0
+>  s_arg1: PTR_WD		0x0
+>  s_arg2: PTR_WD		0x0
+> @@ -171,19 +169,16 @@ kexec_flag:
+>  
+>  #endif
+>  
+> -kexec_start_address:
+> -	EXPORT(kexec_start_address)
+> +EXPORT(kexec_start_address)
+>  	PTR_WD		0x0
+>  	.size		kexec_start_address, PTRSIZE
+>  
+> -kexec_indirection_page:
+> -	EXPORT(kexec_indirection_page)
+> +EXPORT(kexec_indirection_page)
+>  	PTR_WD		0
+>  	.size		kexec_indirection_page, PTRSIZE
+>  
+>  relocate_new_kernel_end:
+>  
+> -relocate_new_kernel_size:
+> -	EXPORT(relocate_new_kernel_size)
+> +EXPORT(relocate_new_kernel_size)
+>  	PTR_WD		relocate_new_kernel_end - relocate_new_kernel
+>  	.size		relocate_new_kernel_size, PTRSIZE
+> -- 
+> 2.38.1
+> 
