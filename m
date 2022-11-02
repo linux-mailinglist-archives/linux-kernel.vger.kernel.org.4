@@ -2,81 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59425616952
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:40:04 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3134B616957
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 17:41:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231244AbiKBQj7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 12:39:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37192 "EHLO
+        id S231715AbiKBQlI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 12:41:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40426 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231866AbiKBQje (ORCPT
+        with ESMTP id S230229AbiKBQks (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 12:39:34 -0400
-Received: from mail-qt1-x833.google.com (mail-qt1-x833.google.com [IPv6:2607:f8b0:4864:20::833])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E196832067
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 09:34:01 -0700 (PDT)
-Received: by mail-qt1-x833.google.com with SMTP id l2so6965167qtq.11
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 09:34:01 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=QDxuOmZwLuYcD+cc4tzL4paE9YkxJAoVZjE1yHXXoiI=;
-        b=NbqOXxFZzBhGaS+tdTOH/lJMlHvuSFxwd6lNdC0Xod4th3g0Aeb3bgcfTL0XO0nStC
-         lXGpjUwpO/xGNqutsOjxsR4/MDogFW9xR/a+Ye5TRyl/W3gPX7helPafFAKKK3WCbb/3
-         BosxAGetdMEVi2nOzvBLefpIAcwUp/yDRnZjjdsb8O9145FHuGP2xdJQmduy0odmO9Za
-         i0vC1gdgJNEArnsAPq00UERiyuRzJHK2SsLwGpxA3koqRcA2xzX2VPSrFEbefbnn7TBH
-         9VxcbmYF5S/pP2oOWkByIN351P5lEpNJowB4cNFqkXPsTa3WaUUWoFI7QQ+onoD/kTLf
-         1CgQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=QDxuOmZwLuYcD+cc4tzL4paE9YkxJAoVZjE1yHXXoiI=;
-        b=HCJ7cRlvBlIBplV8ChspumANVe3gGjrG4Ak2DAn1vVvG5mLj1Rs3y3JVVTufXFEtLB
-         xJXhus8sCCFuSTVbeYkVlwHHOeUDSjZQUqItd+l4rSnIq47ySBSjiYyGw3xInMNa7ULL
-         j+LxaD0BRC0Er9wJGYohKRlk7mbzwj2ScsNHfBzneq9ZdHLXda81ima1qkvNp0YH+Oz6
-         BBhOe5293IHSkIlN3LdzViaFr6eCQYCwvWyNxgr2TdyuqCo5Q7x+IJhE6Irxx52YWcUi
-         eU21GaHyYq+nYaBzWLCJ/MrSiW45oFNXkSPEAW01e34VR/BLa09LeqKtjqQFBytX3FDh
-         6nEw==
-X-Gm-Message-State: ACrzQf2DeEgAVVDNgIQ+F4YQ7ZVJiksEbuWFl2s6hkhIoG8nodQ4Nt5T
-        PKnwa+jOeYYtJK11j08DDNpLmQ==
-X-Google-Smtp-Source: AMsMyM68vZkJx0W7eXxAb94Zjjlvos7EBZ6NwidNbQyyCFcbALsnrufsb1zE1n6gEKo+ZMNkGGyMBw==
-X-Received: by 2002:ac8:5e4a:0:b0:3a5:1fc:3a04 with SMTP id i10-20020ac85e4a000000b003a501fc3a04mr20165429qtx.132.1667406841054;
-        Wed, 02 Nov 2022 09:34:01 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:28d9:4790:bc16:cc93? ([2601:586:5000:570:28d9:4790:bc16:cc93])
-        by smtp.gmail.com with ESMTPSA id bp6-20020a05620a458600b006cf9084f7d0sm8726229qkb.4.2022.11.02.09.33.59
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 02 Nov 2022 09:34:00 -0700 (PDT)
-Message-ID: <30ce6ed4-cbea-7b82-cca5-8920fc1eddad@linaro.org>
-Date:   Wed, 2 Nov 2022 12:33:58 -0400
+        Wed, 2 Nov 2022 12:40:48 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AD771C43B;
+        Wed,  2 Nov 2022 09:35:46 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id DFC346144F;
+        Wed,  2 Nov 2022 16:35:45 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4876DC433D6;
+        Wed,  2 Nov 2022 16:35:45 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667406945;
+        bh=6Dub98gUvW8R+kNkzvlI6CqMN0EtxuMR/XWvTyJOPu0=;
+        h=Date:From:To:Cc:Subject:Reply-To:References:In-Reply-To:From;
+        b=Aa2sBnnHljXiPFtN+0yyPh20OV1zqqN6DHESaEyBeZbn3frECnfbXwLHxUqlDZs/s
+         QgoHHeZvGL0q00bnknFaaPD9VyUEOnAGUlty2ubuZKEtsZJhyAEa24rW+rfhdBCjPN
+         me5ND3ipbli0GpSrZFnf50jek4Y6G7OOqouMxCuzCH96LKA8z+j1SFMkPsvERrLnS1
+         Z3D+objzYLbZxhSL9rJv5Hpx0mTW8YmSOdgH5wOed+c5fGGTHEYiD+zZxYaQ5kCeG3
+         9dciJgcl3AFsB+t9J6PC5mA9eOXMo3ctFnqCH1sFjKPGonD5EzlCjD/nHDAgB09TTB
+         3BNMQvgWOVa9g==
+Received: by paulmck-ThinkPad-P17-Gen-1.home (Postfix, from userid 1000)
+        id E6CEE5C1813; Wed,  2 Nov 2022 09:35:44 -0700 (PDT)
+Date:   Wed, 2 Nov 2022 09:35:44 -0700
+From:   "Paul E. McKenney" <paulmck@kernel.org>
+To:     Joel Fernandes <joel@joelfernandes.org>
+Cc:     Uladzislau Rezki <urezki@gmail.com>, rcu@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RFC] rcu/kfree: Do not request RCU when not needed
+Message-ID: <20221102163544.GM5600@paulmck-ThinkPad-P17-Gen-1>
+Reply-To: paulmck@kernel.org
+References: <20221029132856.3752018-1-joel@joelfernandes.org>
+ <Y2JkoVV3jaVS4y0Q@pc636>
+ <CAEXW_YRZO086TUJCFzuGpAWRpQ-uKD1S5wDipJ9hR9=XddNFSw@mail.gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v6 1/2] dt-bindings: it6505: add properties to restrict
- output bandwidth
-Content-Language: en-US
-To:     allen.chen@ite.com.tw
-Cc:     treapking@chromium.org, Jau-Chih.Tseng@ite.com.tw,
-        Hermes.Wu@ite.com.tw, Kenneth.Hung@ite.com.tw,
-        andrzej.hajda@intel.com, narmstrong@baylibre.com,
-        robert.foss@linaro.org, Laurent.pinchart@ideasonboard.com,
-        jonas@kwiboo.se, jernej.skrabec@gmail.com, airlied@linux.ie,
-        daniel@ffwll.ch, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, dri-devel@lists.freedesktop.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221027030155.59238-1-allen.chen@ite.com.tw>
- <20221027030155.59238-2-allen.chen@ite.com.tw>
- <d6f14e09-0c24-e19a-0951-bb3ca2219e79@linaro.org>
- <18659f5a5b2c4fd7b76731836aeb713d@ite.com.tw>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <18659f5a5b2c4fd7b76731836aeb713d@ite.com.tw>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAEXW_YRZO086TUJCFzuGpAWRpQ-uKD1S5wDipJ9hR9=XddNFSw@mail.gmail.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -84,26 +58,80 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/11/2022 02:54, allen.chen@ite.com.tw wrote:
-> On 26/10/2022 23:01, allen wrote:
->> From: allen chen <allen.chen@ite.com.tw>
->>
->> Add properties to restrict dp output data-lanes and clock.
+On Wed, Nov 02, 2022 at 12:13:17PM -0400, Joel Fernandes wrote:
+> On Wed, Nov 2, 2022 at 8:37 AM Uladzislau Rezki <urezki@gmail.com> wrote:
+> >
+> > On Sat, Oct 29, 2022 at 01:28:56PM +0000, Joel Fernandes (Google) wrote:
+> > > On ChromeOS, I am (almost) always seeing the optimization trigger.
+> > > Tested boot up and trace_printk'ing how often it triggers.
+> > >
+> > > Signed-off-by: Joel Fernandes (Google) <joel@joelfernandes.org>
+> > > ---
+> > >  kernel/rcu/tree.c | 18 +++++++++++++++++-
+> > >  1 file changed, 17 insertions(+), 1 deletion(-)
+> > >
+> > > diff --git a/kernel/rcu/tree.c b/kernel/rcu/tree.c
+> > > index 591187b6352e..3e4c50b9fd33 100644
+> > > --- a/kernel/rcu/tree.c
+> > > +++ b/kernel/rcu/tree.c
+> > > @@ -2935,6 +2935,7 @@ struct kfree_rcu_cpu_work {
+> > >
+> > >  /**
+> > >   * struct kfree_rcu_cpu - batch up kfree_rcu() requests for RCU grace period
+> > > + * @rdp: The rdp of the CPU that this kfree_rcu corresponds to.
+> > >   * @head: List of kfree_rcu() objects not yet waiting for a grace period
+> > >   * @bkvhead: Bulk-List of kvfree_rcu() objects not yet waiting for a grace period
+> > >   * @krw_arr: Array of batches of kfree_rcu() objects waiting for a grace period
+> > > @@ -2964,6 +2965,8 @@ struct kfree_rcu_cpu {
+> > >       struct kfree_rcu_cpu_work krw_arr[KFREE_N_BATCHES];
+> > >       raw_spinlock_t lock;
+> > >       struct delayed_work monitor_work;
+> > > +     struct rcu_data *rdp;
+> > > +     unsigned long last_gp_seq;
+> > >       bool initialized;
+> > >       int count;
+> > >
+> > > @@ -3167,6 +3170,7 @@ schedule_delayed_monitor_work(struct kfree_rcu_cpu *krcp)
+> > >                       mod_delayed_work(system_wq, &krcp->monitor_work, delay);
+> > >               return;
+> > >       }
+> > > +     krcp->last_gp_seq = krcp->rdp->gp_seq;
+> > >       queue_delayed_work(system_wq, &krcp->monitor_work, delay);
+> > >  }
+> > >
+> > > @@ -3217,7 +3221,17 @@ static void kfree_rcu_monitor(struct work_struct *work)
+> > >                       // be that the work is in the pending state when
+> > >                       // channels have been detached following by each
+> > >                       // other.
+> > > -                     queue_rcu_work(system_wq, &krwp->rcu_work);
+> > > +                     //
+> > > +                     // NOTE about gp_seq wrap: In case of gp_seq overflow,
+> > > +                     // it is possible for rdp->gp_seq to be less than
+> > > +                     // krcp->last_gp_seq even though a GP might be over. In
+> > > +                     // this rare case, we would just have one extra GP.
+> > > +                     if (krcp->last_gp_seq &&
+> > >
+> > This check can be eliminated i think. A kfree_rcu_cpu is defined as
+> > static so by default the last_gp_set is set to zero.
 > 
-> This is a friendly reminder during the review process.
+> Ack.
 > 
-> It seems my previous comments were not fully addressed. Maybe my feedback got lost between the quotes, maybe you just forgot to apply it.
-> Please go back to the previous discussion and either implement all requested changes or keep discussing them.
+> > > @@ -4802,6 +4816,8 @@ static void __init kfree_rcu_batch_init(void)
+> > >       for_each_possible_cpu(cpu) {
+> > >               struct kfree_rcu_cpu *krcp = per_cpu_ptr(&krc, cpu);
+> > >
+> > > +             krcp->rdp = per_cpu_ptr(&rcu_data, cpu);
+> > > +             krcp->last_gp_seq = 0;
+> > >
+> > Yep. This one can be just dropped.
+> >
+> > But all the rest looks good :) I will give it a try from test point of
+> > view. It is interested from the memory footprint point of view.
 > 
-> Thank you.
-> 
-> ==> I am sorry I didn't find the missing advice you said. Could you explain it again?
-> 
-> Rob asked - Commit msg should explain reason for breaking users.
+> Ack. Thanks. Even though we should not sample rdp->gp_seq, I think it
+> is still worth a test.
 
-And where is the reason? I saw only one sentence "Add properties to
-restrict dp output data-lanes and clock."
+Just for completeness, the main purpose of rdp->gp_seq is to reject
+quiescent states that were seen during already-completed grace periods.
 
-Best regards,
-Krzysztof
-
+							Thanx, Paul
