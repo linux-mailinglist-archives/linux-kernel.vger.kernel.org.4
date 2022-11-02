@@ -2,101 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2017B616475
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:07:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2184661647C
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 15:08:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231274AbiKBOHO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 10:07:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58922 "EHLO
+        id S231300AbiKBOIn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 10:08:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60538 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231332AbiKBOHC (ORCPT
+        with ESMTP id S231292AbiKBOIf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 10:07:02 -0400
-Received: from mail-oa1-f51.google.com (mail-oa1-f51.google.com [209.85.160.51])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id ABE0D97;
-        Wed,  2 Nov 2022 07:07:00 -0700 (PDT)
-Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-13b103a3e5dso20430479fac.2;
-        Wed, 02 Nov 2022 07:07:00 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9er61rLTBDnFyJZShqMJ3LkA0GzgHcLhxyQpRM+ciNU=;
-        b=Pr6JuBqUw3+xSHfL6WftUM29q1N684kb6jkWWGcp6smwzJUEaoZ+L29XRiLYcQlREN
-         PHzpMg73PMX3QbfHMvQa0U8sBJ/kXgOJNbMn05gIKOM0HBR8uzIp52wvkMpzD326cgyx
-         Vb/EAzO2pCNarHtauvemx39P42LJASqp9vpuXumvuvu+cuxfK9XS62PeQxRnxv8J62KA
-         xPR3iLlBEKIipV640mLA4bIoe1FKZBOuGkPOB9+AdS4Pu0v/Veuor5DaUZERXLXSoqp+
-         fQjigdlJyiQbXCgwU33gFCnU+wwaLPgPAHZ+LTcA2Ex9nRR/cF0Bnd7O+qnZpA+tY9T8
-         ffqw==
-X-Gm-Message-State: ACrzQf2PKizsN74NJsUfRuOcNpkCQu2y+er8XHvtdhEhyKKLcWpISSfp
-        hqllTivljsXnF9l27f2/zk1UTC4lzA==
-X-Google-Smtp-Source: AMsMyM6AH/1vUSOk369DDFflviS2CfUE+qkgVnv2XYW9rWojMI8/NlFnXDrPIDmDMtvADWJMW6yYnQ==
-X-Received: by 2002:a05:6870:6593:b0:13b:c1a:e8ac with SMTP id fp19-20020a056870659300b0013b0c1ae8acmr14833081oab.271.1667398019920;
-        Wed, 02 Nov 2022 07:06:59 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id r24-20020a056870179800b00132f141ef2dsm6010170oae.56.2022.11.02.07.06.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 07:06:59 -0700 (PDT)
-Received: (nullmailer pid 3724848 invoked by uid 1000);
-        Wed, 02 Nov 2022 14:07:01 -0000
-Date:   Wed, 2 Nov 2022 09:07:01 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     cy_huang <u0084500@gmail.com>
-Cc:     krzysztof.kozlowski+dt@linaro.org, broonie@kernel.org,
-        lgirdwood@gmail.com, cy_huang@richtek.com,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v3 1/2] dt-bindings: regulator: Add bindings for Richtek
- RT6190 regulator
-Message-ID: <20221102140701.GA3704610-robh@kernel.org>
-References: <1667183334-16511-1-git-send-email-u0084500@gmail.com>
- <1667183334-16511-2-git-send-email-u0084500@gmail.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1667183334-16511-2-git-send-email-u0084500@gmail.com>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        Wed, 2 Nov 2022 10:08:35 -0400
+X-Greylist: delayed 1312 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 02 Nov 2022 07:08:33 PDT
+Received: from mxct.zte.com.cn (mxct.zte.com.cn [183.62.165.209])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A36B65F1
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 07:08:31 -0700 (PDT)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxct.zte.com.cn (FangMail) with ESMTPS id 4N2TJF3w9Wz4y3Zl;
+        Wed,  2 Nov 2022 22:08:29 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl1.zte.com.cn with SMTP id 2A2E8NHA021607;
+        Wed, 2 Nov 2022 22:08:23 +0800 (+08)
+        (envelope-from zhang.songyi@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Wed, 2 Nov 2022 22:08:27 +0800 (CST)
+Date:   Wed, 2 Nov 2022 22:08:27 +0800 (CST)
+X-Zmail-TransId: 2af9636279db19c123a6
+X-Mailer: Zmail v1.0
+Message-ID: <202211022208274530566@zte.com.cn>
+Mime-Version: 1.0
+From:   <zhang.songyi@zte.com.cn>
+To:     <agross@kernel.org>
+Cc:     <andersson@kernel.org>, <konrad.dybcio@somainline.org>,
+        <vkoul@kernel.org>, <yung-chuan.liao@linux.intel.com>,
+        <pierre-louis.bossart@linux.intel.com>, <sanyog.r.kale@intel.com>,
+        <linux-arm-msm@vger.kernel.org>, <alsa-devel@alsa-project.org>,
+        <linux-kernel@vger.kernel.org>, <jiang.xuexin@zte.com.cn>,
+        <xue.zhihong@zte.com.cn>, <zhang.songyi@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIHNvdW5kd2lyZTogcWNvbTogcmVtb3ZlIHJlZHVuZGFudCByZXQgdmFyaWFibGU=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 2A2E8NHA021607
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.251.13.novalocal with ID 636279DD.005 by FangMail milter!
+X-FangMail-Envelope: 1667398109/4N2TJF3w9Wz4y3Zl/636279DD.005/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<zhang.songyi@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 636279DD.005/4N2TJF3w9Wz4y3Zl
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 31, 2022 at 10:28:53AM +0800, cy_huang wrote:
-> From: ChiYuan Huang <cy_huang@richtek.com>
-> 
-> Add devicetree binding for Richtek RT6190 4-Switch buckboost controller.
-> 
-> Signed-off-by: ChiYuan Huang <cy_huang@richtek.com>
-> ---
-> Hi, Rob:
-> 
-> Since I didn't got any reply from the v2 dt-binding question.
-> https://lore.kernel.org/lkml/CADiBU3_WUeyYdnmnG0Ff2pH+b3u1zOtP1z44LcA53Ba5c9nrEw@mail.gmail.com/
-> In v3, I aleady fixed it following by your comment.
-> 
-> I'm just wondering the corrent usage.
-> As I know, 'enable-gpios' comes from 'gpio-consumer-common.yaml'.
-> In the common yaml file, it's already declared 'enable-gpios' maxItems as '1'.
-> That's why I just declared it as 'true'.
+From ebc0be30e0c49d2d54a9aaa064c7f742e99e8eb2 Mon Sep 17 00:00:00 2001
+From: zhang songyi <zhang.songyi@zte.com.cn>
+Date: Wed, 2 Nov 2022 22:08:48 +0800
+Subject: [PATCH linux-next] soundwire: qcom: remove redundant ret variable
 
-Yes, you are right. Either way is fine then.
+Return value from swrm_get_packed_reg_val() directly instead of taking
+this in another redundant variable.
 
-> Since v3:
-> - Fix the typo 'upply' to 'supply'.
-> - Declare 'enable-gpios' maxItems as 1.
-> - Declare the 'maxItems' for the property 'regulator-allowed-modes'.
-> 
-> Since v2:
-> - Rename binding filename to 'richtek,rt6190.yaml'
-> 
-> ---
->  .../bindings/regulator/richtek,rt6190.yaml         | 79 ++++++++++++++++++++++
->  1 file changed, 79 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/regulator/richtek,rt6190.yaml
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
+---
+ drivers/soundwire/qcom.c | 4 +---
+ 1 file changed, 1 insertion(+), 3 deletions(-)
 
-Reviewed-by: Rob Herring <robh@kernel.org>
+diff --git a/drivers/soundwire/qcom.c b/drivers/soundwire/qcom.c
+index 335424870290..d92f421d38c8 100644
+--- a/drivers/soundwire/qcom.c
++++ b/drivers/soundwire/qcom.c
+@@ -260,7 +260,6 @@ static int qcom_swrm_cpu_reg_write(struct qcom_swrm_ctrl *ctrl, int reg,
+ static u32 swrm_get_packed_reg_val(u8 *cmd_id, u8 cmd_data,
+                   u8 dev_addr, u16 reg_addr)
+ {
+-   u32 val;
+    u8 id = *cmd_id;
+
+    if (id != SWR_BROADCAST_CMD_ID) {
+@@ -270,9 +269,8 @@ static u32 swrm_get_packed_reg_val(u8 *cmd_id, u8 cmd_data,
+            id = 0;
+        *cmd_id = id;
+    }
+-   val = SWRM_REG_VAL_PACK(cmd_data, dev_addr, id, reg_addr);
+
+-   return val;
++   return SWRM_REG_VAL_PACK(cmd_data, dev_addr, id, reg_addr);
+ }
+
+ static int swrm_wait_for_rd_fifo_avail(struct qcom_swrm_ctrl *swrm)
+--
+2.15.2
