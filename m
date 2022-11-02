@@ -2,279 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55D3D6165AB
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:02:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0BB496165B4
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:03:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbiKBPCr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 11:02:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45484 "EHLO
+        id S230414AbiKBPDP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 11:03:15 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45496 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230394AbiKBPCf (ORCPT
+        with ESMTP id S231154AbiKBPCz (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 11:02:35 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EC78F2B254;
-        Wed,  2 Nov 2022 08:02:22 -0700 (PDT)
-Received: from pps.filterd (m0098420.ppops.net [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A2EKw1M008753;
-        Wed, 2 Nov 2022 15:02:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=from : to : cc : subject
- : date : message-id : in-reply-to : references : mime-version :
- content-transfer-encoding; s=pp1;
- bh=T9DwRqRIYhEqWprAOuRr32HVuBzm/ky5Kijkg98qyLY=;
- b=j01n7UUiTDUmQK9bE4Io8loNROjrufmpLyeZjda8hrji0Q3YInOYHx4z1EBETod7v18p
- b3FKHZGuzjqSaK0h4qsIICCdDUjmKejnoSI2r3dOgC5P4ftSPfL10Rb6XhEerasMXLwV
- gJXUi5Oq5Syr7kK5+nH8ML/cHEHZZ08p3yruNmOX8HQQuoLkw5l+2KCQN33ZMh8wnpoH
- VauSE7IhIvsBWwV8qdOUSHBm3LD60N34AHpBayLwfj+UZ4coyo2LiOHxIF/k46zDDD0B
- X8H7DKrkXQdDk9vr4zWwqv7RcUFZL8JBz7zpb5aRjMPXAPwKWajh0ollmzl2I1FgHoME bQ== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kks22mpq0-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Nov 2022 15:02:00 +0000
-Received: from m0098420.ppops.net (m0098420.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A2Dm1GF025293;
-        Wed, 2 Nov 2022 15:01:59 GMT
-Received: from ppma04ams.nl.ibm.com (63.31.33a9.ip4.static.sl-reverse.com [169.51.49.99])
-        by mx0b-001b2d01.pphosted.com (PPS) with ESMTPS id 3kks22mpnn-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Nov 2022 15:01:59 +0000
-Received: from pps.filterd (ppma04ams.nl.ibm.com [127.0.0.1])
-        by ppma04ams.nl.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A2Eoiv2017384;
-        Wed, 2 Nov 2022 15:01:57 GMT
-Received: from b06cxnps4076.portsmouth.uk.ibm.com (d06relay13.portsmouth.uk.ibm.com [9.149.109.198])
-        by ppma04ams.nl.ibm.com with ESMTP id 3kgut9706e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Wed, 02 Nov 2022 15:01:57 +0000
-Received: from d06av24.portsmouth.uk.ibm.com (d06av24.portsmouth.uk.ibm.com [9.149.105.60])
-        by b06cxnps4076.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A2F1sHK1573460
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Wed, 2 Nov 2022 15:01:54 GMT
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 8302B4203F;
-        Wed,  2 Nov 2022 15:01:54 +0000 (GMT)
-Received: from d06av24.portsmouth.uk.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 6640142041;
-        Wed,  2 Nov 2022 15:01:54 +0000 (GMT)
-Received: from tuxmaker.boeblingen.de.ibm.com (unknown [9.152.85.9])
-        by d06av24.portsmouth.uk.ibm.com (Postfix) with ESMTPS;
-        Wed,  2 Nov 2022 15:01:54 +0000 (GMT)
-Received: by tuxmaker.boeblingen.de.ibm.com (Postfix, from userid 4958)
-        id 028D7E2119; Wed,  2 Nov 2022 16:01:53 +0100 (CET)
-From:   Eric Farman <farman@linux.ibm.com>
-To:     Matthew Rosato <mjrosato@linux.ibm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Kevin Tian <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>
-Cc:     Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Tony Krowiak <akrowiak@linux.ibm.com>,
-        Jason Herne <jjherne@linux.ibm.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Kirti Wankhede <kwankhede@nvidia.com>,
-        Abhishek Sahu <abhsahu@nvidia.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org, Eric Farman <farman@linux.ibm.com>
-Subject: [PATCH v2 6/7] vfio/ccw: replace vfio_init_device with _alloc_
-Date:   Wed,  2 Nov 2022 16:01:51 +0100
-Message-Id: <20221102150152.2521475-7-farman@linux.ibm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221102150152.2521475-1-farman@linux.ibm.com>
-References: <20221102150152.2521475-1-farman@linux.ibm.com>
+        Wed, 2 Nov 2022 11:02:55 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D041D2B610;
+        Wed,  2 Nov 2022 08:02:47 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 6EF10619F7;
+        Wed,  2 Nov 2022 15:02:47 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 18473C433D6;
+        Wed,  2 Nov 2022 15:02:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667401366;
+        bh=ySDnWLtgKmB4MsWkDhRm3ekTNs1QeMnC8N/ulBhv1O4=;
+        h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+        b=uFAgba06loLQK4xeCO8L6yA1xDpNGCVUqS0F6XDlPaNvRw47cvnlE0yTRg1aWmZJX
+         Fu+xOO+Rj99idT4VZ7z2PAkz9tqY7QppEk4mvh3BXh7SkYcM9BhU/YaPjmpvMB+lct
+         3N2V/glp6DGf0z7z0CsXxXIKXVakb3R7tAJjp+ETSbZIwm3jY0HqvMuS3aMO6greDd
+         fuYl11+ZtPng1WsxcnpQg9sfLkQpxyCMztoaSHT1HBco9e+ClOV3t2WC0TK/HNh54j
+         QzJdE9l8NlIC0G+ZwRxhslXH8bBuF1JytES2U4t84R0lcOj/XtI0is46ful6PrRMiY
+         fYl3Vt481po1g==
+From:   Mark Brown <broonie@kernel.org>
+To:     Jerome Brunet <jbrunet@baylibre.com>,
+        Neil Armstrong <neil.armstrong@linaro.org>,
+        Kevin Hilman <khilman@baylibre.com>
+Cc:     linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+        linux-amlogic@lists.infradead.org,
+        Martin Blumenstingl <martin.blumenstingl@googlemail.com>
+In-Reply-To: <20221027-b4-spicc-burst-delay-fix-v2-0-8cc2bab3417a@linaro.org>
+References: <20221027-b4-spicc-burst-delay-fix-v2-0-8cc2bab3417a@linaro.org>
+Subject: Re: [PATCH v2] spi: meson-spicc: fix do_div build error on non-arm64
+Message-Id: <166740136480.261515.18042223753301117319.b4-ty@kernel.org>
+Date:   Wed, 02 Nov 2022 15:02:44 +0000
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: -t9_IOBueq8-4zQVzU7DMEBqUZ-hg9jx
-X-Proofpoint-ORIG-GUID: U5oPa27uHEQ72OS1ltajBUDAlwipYu1E
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-02_11,2022-11-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- adultscore=0 mlxscore=0 phishscore=0 clxscore=1015 malwarescore=0
- lowpriorityscore=0 impostorscore=0 bulkscore=0 suspectscore=0
- mlxlogscore=999 spamscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.12.0-2210170000 definitions=main-2211020093
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Mailer: b4 0.10.0-dev-fc921
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Now that we have a reasonable separation of structs that follow
-the subchannel and mdev lifecycles, there's no reason we can't
-call the official vfio_alloc_device routine for our private data,
-and behave like everyone else.
+On Wed, 02 Nov 2022 09:46:01 +0100, Neil Armstrong wrote:
+> This fixes :
+> error: passing argument 1 of '__div64_32' from incompatible pointer type
+> 
+> By passing an uint64_t as first variable to do_div().
+> 
+> 
 
-Signed-off-by: Eric Farman <farman@linux.ibm.com>
-Reviewed-by: Kevin Tian <kevin.tian@intel.com>
----
- drivers/s390/cio/vfio_ccw_drv.c     | 18 ------------------
- drivers/s390/cio/vfio_ccw_ops.c     | 28 ++++++++++++++++++----------
- drivers/s390/cio/vfio_ccw_private.h |  2 --
- drivers/vfio/vfio_main.c            | 10 +++++-----
- include/linux/vfio.h                |  2 --
- 5 files changed, 23 insertions(+), 37 deletions(-)
+Applied to
 
-diff --git a/drivers/s390/cio/vfio_ccw_drv.c b/drivers/s390/cio/vfio_ccw_drv.c
-index 041cc0860f0e..fd58c0f4f8cc 100644
---- a/drivers/s390/cio/vfio_ccw_drv.c
-+++ b/drivers/s390/cio/vfio_ccw_drv.c
-@@ -151,24 +151,6 @@ static void vfio_ccw_sch_irq(struct subchannel *sch)
- 	vfio_ccw_fsm_event(private, VFIO_CCW_EVENT_INTERRUPT);
- }
- 
--void vfio_ccw_free_private(struct vfio_ccw_private *private)
--{
--	struct vfio_ccw_crw *crw, *temp;
--
--	list_for_each_entry_safe(crw, temp, &private->crw, next) {
--		list_del(&crw->next);
--		kfree(crw);
--	}
--
--	kmem_cache_free(vfio_ccw_crw_region, private->crw_region);
--	kmem_cache_free(vfio_ccw_schib_region, private->schib_region);
--	kmem_cache_free(vfio_ccw_cmd_region, private->cmd_region);
--	kmem_cache_free(vfio_ccw_io_region, private->io_region);
--	kfree(private->cp.guest_cp);
--	mutex_destroy(&private->io_mutex);
--	kfree(private);
--}
--
- static void vfio_ccw_free_parent(struct device *dev)
- {
- 	struct vfio_ccw_parent *parent = container_of(dev, struct vfio_ccw_parent, dev);
-diff --git a/drivers/s390/cio/vfio_ccw_ops.c b/drivers/s390/cio/vfio_ccw_ops.c
-index 8a929a9cf3c6..1155f8bcedd9 100644
---- a/drivers/s390/cio/vfio_ccw_ops.c
-+++ b/drivers/s390/cio/vfio_ccw_ops.c
-@@ -102,15 +102,10 @@ static int vfio_ccw_mdev_probe(struct mdev_device *mdev)
- 	struct vfio_ccw_private *private;
- 	int ret;
- 
--	private = kzalloc(sizeof(*private), GFP_KERNEL);
--	if (!private)
--		return -ENOMEM;
--
--	ret = vfio_init_device(&private->vdev, &mdev->dev, &vfio_ccw_dev_ops);
--	if (ret) {
--		kfree(private);
--		return ret;
--	}
-+	private = vfio_alloc_device(vfio_ccw_private, vdev, &mdev->dev,
-+				    &vfio_ccw_dev_ops);
-+	if (IS_ERR(private))
-+		return PTR_ERR(private);
- 
- 	dev_set_drvdata(&parent->dev, private);
- 
-@@ -135,8 +130,21 @@ static void vfio_ccw_mdev_release_dev(struct vfio_device *vdev)
- {
- 	struct vfio_ccw_private *private =
- 		container_of(vdev, struct vfio_ccw_private, vdev);
-+	struct vfio_ccw_crw *crw, *temp;
-+
-+	list_for_each_entry_safe(crw, temp, &private->crw, next) {
-+		list_del(&crw->next);
-+		kfree(crw);
-+	}
-+
-+	kmem_cache_free(vfio_ccw_crw_region, private->crw_region);
-+	kmem_cache_free(vfio_ccw_schib_region, private->schib_region);
-+	kmem_cache_free(vfio_ccw_cmd_region, private->cmd_region);
-+	kmem_cache_free(vfio_ccw_io_region, private->io_region);
-+	kfree(private->cp.guest_cp);
-+	mutex_destroy(&private->io_mutex);
- 
--	vfio_ccw_free_private(private);
-+	vfio_free_device(vdev);
- }
- 
- static void vfio_ccw_mdev_remove(struct mdev_device *mdev)
-diff --git a/drivers/s390/cio/vfio_ccw_private.h b/drivers/s390/cio/vfio_ccw_private.h
-index 2278fd38d34e..b441ae6700fd 100644
---- a/drivers/s390/cio/vfio_ccw_private.h
-+++ b/drivers/s390/cio/vfio_ccw_private.h
-@@ -131,8 +131,6 @@ int vfio_ccw_sch_quiesce(struct subchannel *sch);
- void vfio_ccw_sch_io_todo(struct work_struct *work);
- void vfio_ccw_crw_todo(struct work_struct *work);
- 
--void vfio_ccw_free_private(struct vfio_ccw_private *private);
--
- extern struct mdev_driver vfio_ccw_mdev_driver;
- 
- /*
-diff --git a/drivers/vfio/vfio_main.c b/drivers/vfio/vfio_main.c
-index 2d168793d4e1..2901b8ad5be9 100644
---- a/drivers/vfio/vfio_main.c
-+++ b/drivers/vfio/vfio_main.c
-@@ -348,6 +348,9 @@ static void vfio_device_release(struct device *dev)
- 	device->ops->release(device);
- }
- 
-+static int vfio_init_device(struct vfio_device *device, struct device *dev,
-+			    const struct vfio_device_ops *ops);
-+
- /*
-  * Allocate and initialize vfio_device so it can be registered to vfio
-  * core.
-@@ -386,11 +389,9 @@ EXPORT_SYMBOL_GPL(_vfio_alloc_device);
- 
- /*
-  * Initialize a vfio_device so it can be registered to vfio core.
-- *
-- * Only vfio-ccw driver should call this interface.
-  */
--int vfio_init_device(struct vfio_device *device, struct device *dev,
--		     const struct vfio_device_ops *ops)
-+static int vfio_init_device(struct vfio_device *device, struct device *dev,
-+			    const struct vfio_device_ops *ops)
- {
- 	int ret;
- 
-@@ -422,7 +423,6 @@ int vfio_init_device(struct vfio_device *device, struct device *dev,
- 	ida_free(&vfio.device_ida, device->index);
- 	return ret;
- }
--EXPORT_SYMBOL_GPL(vfio_init_device);
- 
- /*
-  * The helper called by driver @release callback to free the device
-diff --git a/include/linux/vfio.h b/include/linux/vfio.h
-index e7cebeb875dd..ba809268a48e 100644
---- a/include/linux/vfio.h
-+++ b/include/linux/vfio.h
-@@ -176,8 +176,6 @@ struct vfio_device *_vfio_alloc_device(size_t size, struct device *dev,
- 					dev, ops),				\
- 		     struct dev_struct, member)
- 
--int vfio_init_device(struct vfio_device *device, struct device *dev,
--		     const struct vfio_device_ops *ops);
- void vfio_free_device(struct vfio_device *device);
- static inline void vfio_put_device(struct vfio_device *device)
- {
--- 
-2.34.1
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
 
+Thanks!
+
+[1/1] spi: meson-spicc: fix do_div build error on non-arm64
+      commit: 134af9aa88453aeb9224e407092530ebba366c6c
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
