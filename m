@@ -2,102 +2,170 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E6038616609
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:25:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5BD7B61661A
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 16:28:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230189AbiKBPZo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 11:25:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38690 "EHLO
+        id S229971AbiKBP2M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 11:28:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39848 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiKBPZk (ORCPT
+        with ESMTP id S230311AbiKBP2H (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 11:25:40 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0D2EF015;
-        Wed,  2 Nov 2022 08:25:39 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id 21so27021218edv.3;
-        Wed, 02 Nov 2022 08:25:39 -0700 (PDT)
+        Wed, 2 Nov 2022 11:28:07 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9E68824BD9
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 08:28:01 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id d59-20020a17090a6f4100b00213202d77e1so2441937pjk.2
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 08:28:01 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:to:from:subject:message-id:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hD7I2teCJc+7/W1eRwiXGEi3Z7l5CqlZVQDOMVcFO8A=;
-        b=kT7qsjHDVUf9C7CJD1siF5mfXIb3FiBYOtqGgeQJ3I27JZEqXFr2byiHwySQU0onqu
-         +DigtCuRydKlIDp4vg+yFtCRCoWRhaDSQrMXhW083Z+y9md6+Q+HVGpzt/F2MccEaA7n
-         CKOla7ph4nA2C+KIA3PuuDu27/qcEjauwV5iNeMMXLgCwDmJ6ACgbvrD1pH/hQ909U40
-         bGMII+eZ42v1ww0865llvLQwZSQ92iGlOFbl+fjiZr0oRo3f2VK9JieKgQBemE8+XKpu
-         zdKk7nPoyay0I3Oe/x4uQnjf4L82qz1PDn6swxiyBb4FLEgcA1icSVUXM2Dkc3HXwDzL
-         Pxkw==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=wP12hBLI/UjYflAvChPOlEUP0Fe9bcRv3GNq3jXeE+o=;
+        b=oPg7EAxfhFVgkL5qNGfY4856C1CuYDrQT15DtL6CAfeFLX8YI4d839KNXQ4S+gqr3a
+         jl0GyG/hjPYCfH8CFQOTECwjEjyDtxI5jMIWrIYga5TRq0kXfOXd9WDHC1Z//WkJKr9M
+         Ad+DCW+vZTRC+nxDpNFkhVnFxaBoD0sK2hhdLLaaFhIVjXBbWRZtsm8j4QbOW5urUEsh
+         QUwujKODHa/k883wtb2V2C6ovbNxfQKuOLJapf96fLqGvubzOHHsh3bsNDZTFiesw3Fj
+         JKrcUe8+Fk9VgsGaOAMngyH68+2DM3jdLTjfELiAs3+3Jh7pfmiTrYtJePw+hvcxFtNv
+         JbAg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:to:from:subject:message-id:x-gm-message-state:from
-         :to:cc:subject:date:message-id:reply-to;
-        bh=hD7I2teCJc+7/W1eRwiXGEi3Z7l5CqlZVQDOMVcFO8A=;
-        b=gwcnQvf4/WmYHQiIVPXa8E6sKpaW4FoenJKBau7hqWL0Y9riGIPaWaPZsRUOb0sbkj
-         d/yfVTCTcHS/iy3JboMjNfuSJYiMJbW3GqCdJvWl3UJZlhneyBITGLT+XHrZlaWydg4O
-         viLYRXKCB5GJJdrDd02rcz8mXo7yVKOEklcDfutaamDvgit1lGV5i3l/7JymFz9ZpTxf
-         R2j6C1GztUIad94Rux/HJdiZFo6eOaqGmm1tKllxpaOSSgTCDCEgM4EJ+77vhCbUOyNq
-         aB0u9KT8cGHU8ztiUCtDPEol1OoADjdnGQMIdyTD0L/VVVDW3TzwCGd41u2min8aGkwg
-         2KHQ==
-X-Gm-Message-State: ACrzQf3xTheL8jcs5nbeB4kWjdA71EsQt10XnWWL5+meZIb/zVKDVuBq
-        lOV5Bv275bkwb0nLUtAAzAs=
-X-Google-Smtp-Source: AMsMyM6hmIxmUsvGLVAoH6dfEI0EEZsGhFcW2HJ9QxxT+O/10FO9Bt1nswkOJauSYQBaDYv3VFNQOQ==
-X-Received: by 2002:a05:6402:27cf:b0:462:75b3:a277 with SMTP id c15-20020a05640227cf00b0046275b3a277mr26270160ede.175.1667402738262;
-        Wed, 02 Nov 2022 08:25:38 -0700 (PDT)
-Received: from p200300f6ef036f005de6a4d0d791ed01.dip0.t-ipconnect.de (p200300f6ef036f005de6a4d0d791ed01.dip0.t-ipconnect.de. [2003:f6:ef03:6f00:5de6:a4d0:d791:ed01])
-        by smtp.gmail.com with ESMTPSA id e28-20020a170906845c00b00731803d4d04sm5467377ejy.82.2022.11.02.08.25.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 08:25:37 -0700 (PDT)
-Message-ID: <20ea4d6a3cd2a01fe0c5a5a6db1b2ed05548cf8f.camel@gmail.com>
-Subject: Re: [PATCH 0/8] Remove adis_initial_startup usage
-From:   Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To:     Ramona Bolboaca <ramona.bolboaca@analog.com>, jic23@kernel.org,
-        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org
-Date:   Wed, 02 Nov 2022 16:27:06 +0100
-In-Reply-To: <20221102141843.122182-1-ramona.bolboaca@analog.com>
-References: <20221102141843.122182-1-ramona.bolboaca@analog.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.44.4 
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wP12hBLI/UjYflAvChPOlEUP0Fe9bcRv3GNq3jXeE+o=;
+        b=ZlHkbqWd6V4Al276dIt9k2YIY6+NvBYNrLoH2q2KlPJShuox2T347zOBFcYZ7pjBLa
+         CGchD3HYC7RiIgaIeXdPJSQw1dl+VfvgE+7jfffpqslJBxOLi2y4lPhvNmfTmJfGpeuM
+         f6ProzzJKuIk7lJd+QPX1Ha9cg+Fi8Yu1XppVo/20Jq0PBSz8sVxBhaMbj14S0ZwB8at
+         /x/Z5cosVmi6wNRThteh4B0xWj68BHr2Hm6QZi0HnBYv3Kwp6Zfrd+0p/OJqeR99rJD2
+         hkoeyhKxWNGwEVmk90GrptH/l/FHWDZUl2LSb4vg/wWGDUnKSDn0zfUMcXTUQft9lVyJ
+         hMCw==
+X-Gm-Message-State: ACrzQf1Bi2EWGvyeE92E3l5IWohhAygdBWofvdQTesHLTlXpEy3Sp8wd
+        Z/3gywj/3oVgY1EmOAbAMHsoR829hATUL1PDgimTVQ==
+X-Google-Smtp-Source: AMsMyM6A7lrylJay1xhevhaxJCaktaXQTaOKnMRfNs50tK6THAHyXvK0B1iPkGpZmNSeU8H+Mxp5/cQp8C9UHnx/UTU=
+X-Received: by 2002:a17:902:b78b:b0:187:1623:827f with SMTP id
+ e11-20020a170902b78b00b001871623827fmr18869518pls.165.1667402881129; Wed, 02
+ Nov 2022 08:28:01 -0700 (PDT)
 MIME-Version: 1.0
+References: <CAPDyKFpG9ZjVTiK3HEqioDN8ksGpRYiXL_SLSmOfm9fjJfcrsw@mail.gmail.com>
+ <20221028130242.20900-1-pshete@nvidia.com>
+In-Reply-To: <20221028130242.20900-1-pshete@nvidia.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Wed, 2 Nov 2022 16:27:24 +0100
+Message-ID: <CAPDyKFqJdiCDkAfrONfnBVKw1v8=jZ+hEJiKGK70EQ4o7BSxaQ@mail.gmail.com>
+Subject: Re: [PATCH v9 1/4] iommu: Add dummy dev_iommu_fwspec_get() helper
+To:     Prathamesh Shete <pshete@nvidia.com>
+Cc:     joro@8bytes.org, adrian.hunter@intel.com, thierry.reding@gmail.com,
+        jonathanh@nvidia.com, p.zabel@pengutronix.de,
+        linux-mmc@vger.kernel.org, linux-tegra@vger.kernel.org,
+        linux-kernel@vger.kernel.org, will@kernel.org,
+        iommu@lists.linux.dev, robin.murphy@arm.com, anrao@nvidia.com,
+        smangipudi@nvidia.com, kyarlagadda@nvidia.com,
+        Thierry Reding <treding@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2022-11-02 at 16:18 +0200, Ramona Bolboaca wrote:
-> Remove adis_initial_startup usage due to the fact that it leads to a
-> deadlock.
-> The same mutex is acquired twice, without releasing it, once inside
-> adis_initial_startup and once inside adis_enable_irq.
-> Instead of adis_initial_startup, use __adis_initial_startup.
->=20
+On Fri, 28 Oct 2022 at 15:02, Prathamesh Shete <pshete@nvidia.com> wrote:
+>
+> This dummy implementation is useful to avoid a dependency on the
+> IOMMU_API Kconfig symbol in drivers that can optionally use the IOMMU
+> API.
+>
+> In order to fully use this, also move the struct iommu_fwspec definition
+> out of the IOMMU_API protected region.
+>
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Auchhhh!!! Thanks for catching this... However, the Fixes tag is
-pointing to the wrong place. I'm fairly sure I introduced this bug in=C2=A0
+It seems like you claimed authorship of the patch [1], that was
+authored by Thierry and updated the commit message header.
 
-commit b600bd7eb3335 ("iio: adis: do not disabe IRQs in 'adis_init()'")
+Can you please restore the patch to its original that was posted by Thierry?
 
-This was where the call to adis_enable_irq() was moved to
-__adis_initial_startup() and effectively creating the deadlock for some
-devices (adis->data->unmasked_drdy is not set)...
+Kind regards
+Uffe
+
+[1]
+https://lore.kernel.org/linux-mmc/20221018105149.820062-1-thierry.reding@gmail.com/
 
 
-I guess I did not saw this when bringing in the change because I
-probably tested the full series on some device supported by adis16475.c
-where this won't trigger.
 
-From a quick look I think it's safe to drop adis_initial_startup() as
-it is always called during probe() before registering the IIO device.
-We could also just create an unlocked version of adis_enable_irq()
-(since we don't need to grab the lock in this path) but likely not
-worth the trouble.
-
-- Nuno S=C3=A1
+> ---
+>  include/linux/iommu.h | 39 +++++++++++++++++++--------------------
+>  1 file changed, 19 insertions(+), 20 deletions(-)
+>
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index ea30f00dc145..afa829bc4356 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -173,6 +173,25 @@ enum iommu_dev_features {
+>
+>  #define IOMMU_PASID_INVALID    (-1U)
+>
+> +/**
+> + * struct iommu_fwspec - per-device IOMMU instance data
+> + * @ops: ops for this device's IOMMU
+> + * @iommu_fwnode: firmware handle for this device's IOMMU
+> + * @flags: IOMMU_FWSPEC_* flags
+> + * @num_ids: number of associated device IDs
+> + * @ids: IDs which this device may present to the IOMMU
+> + */
+> +struct iommu_fwspec {
+> +       const struct iommu_ops  *ops;
+> +       struct fwnode_handle    *iommu_fwnode;
+> +       u32                     flags;
+> +       unsigned int            num_ids;
+> +       u32                     ids[];
+> +};
+> +
+> +/* ATS is supported */
+> +#define IOMMU_FWSPEC_PCI_RC_ATS                        (1 << 0)
+> +
+>  #ifdef CONFIG_IOMMU_API
+>
+>  /**
+> @@ -600,25 +619,6 @@ extern struct iommu_group *generic_device_group(struct device *dev);
+>  /* FSL-MC device grouping function */
+>  struct iommu_group *fsl_mc_device_group(struct device *dev);
+>
+> -/**
+> - * struct iommu_fwspec - per-device IOMMU instance data
+> - * @ops: ops for this device's IOMMU
+> - * @iommu_fwnode: firmware handle for this device's IOMMU
+> - * @flags: IOMMU_FWSPEC_* flags
+> - * @num_ids: number of associated device IDs
+> - * @ids: IDs which this device may present to the IOMMU
+> - */
+> -struct iommu_fwspec {
+> -       const struct iommu_ops  *ops;
+> -       struct fwnode_handle    *iommu_fwnode;
+> -       u32                     flags;
+> -       unsigned int            num_ids;
+> -       u32                     ids[];
+> -};
+> -
+> -/* ATS is supported */
+> -#define IOMMU_FWSPEC_PCI_RC_ATS                        (1 << 0)
+> -
+>  /**
+>   * struct iommu_sva - handle to a device-mm bond
+>   */
+> @@ -682,7 +682,6 @@ bool iommu_group_dma_owner_claimed(struct iommu_group *group);
+>
+>  struct iommu_ops {};
+>  struct iommu_group {};
+> -struct iommu_fwspec {};
+>  struct iommu_device {};
+>  struct iommu_fault_param {};
+>  struct iommu_iotlb_gather {};
+> --
+> 2.17.1
+>
