@@ -2,100 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 090AF6161A5
-	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:22:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EDAF96161AA
+	for <lists+linux-kernel@lfdr.de>; Wed,  2 Nov 2022 12:23:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230472AbiKBLVx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 07:21:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55784 "EHLO
+        id S229637AbiKBLWk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 07:22:40 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56350 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230464AbiKBLVu (ORCPT
+        with ESMTP id S230499AbiKBLWe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 07:21:50 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [139.178.84.217])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BF68D15A1C;
-        Wed,  2 Nov 2022 04:21:49 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        Wed, 2 Nov 2022 07:22:34 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F4ED13FA6;
+        Wed,  2 Nov 2022 04:22:28 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e741329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e741:329c:23ff:fea6:a903])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 5AF0B618FE;
-        Wed,  2 Nov 2022 11:21:49 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B853AC4347C;
-        Wed,  2 Nov 2022 11:21:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667388108;
-        bh=y6jA1qc/WukXbdnJwL8P127OXjOsKWmTp8cHhQGAsss=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=XUJ1ZKx0yghv6TKuKMouii1GOMY5H1esec69h2OTdYkHDrwTsv45wrMCdHtBMpbC4
-         L/gF3GtO2pLeF9bOWhUF8w4jfjJiymYEll94AxxfIx9ZZj39CmgUpyOtG/cOGpzq5X
-         STcVXik+2IgXMdHGXMfHjOdIiuruA+eUT8qBdcVT8ovkDkZGgr/DAS72RehXCnASq/
-         AOC78AnIVxPT8wpQF6vFHD5gpQUJB4d5Bkl37J1dzwcmiPNKCwMyvX/R91zPYuIziE
-         1hd4N4o8lttwLBU0f27YvCQxebpcTX4DGYtVNFLWJhsaggf53XLy5gAXnwfYuVwdzx
-         2q/AJoScGmi/g==
-Received: by mail-lf1-f50.google.com with SMTP id g7so27711454lfv.5;
-        Wed, 02 Nov 2022 04:21:48 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3cEWrHBmi6GUklz6sHoyBKUOZSVXgjyBnmwT94cdA/ysjAkcGB
-        v2G3oC77uO0ebgYS/joj53+rEJtCRr+u66+RsQ==
-X-Google-Smtp-Source: AMsMyM7n4p9mPcI4wH0CR8GOhTrHwa9Qm734EamjzWOPQhZCF4pM+Opa28ho7vRj6nl3H4gpCETQNqI02fcLXr7e3Lw=
-X-Received: by 2002:a05:6512:3e10:b0:4a2:48c1:8794 with SMTP id
- i16-20020a0565123e1000b004a248c18794mr8821466lfv.17.1667388106632; Wed, 02
- Nov 2022 04:21:46 -0700 (PDT)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id D08081EC0567;
+        Wed,  2 Nov 2022 12:22:26 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1667388146;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=stsEyPM3yshEwkVJFTjMEf1n3jksEvxwTfKS4NKFQ3M=;
+        b=bicSDEWqpmnYKra+kbGFh+j8MDU2fk8a81eXZBfoDvBd+piFoqJo7Zv/4XE6hgDQX1Kmi9
+        v7PXwWK8cAJrg2sSoRzHUsSxDumVASpNo323yy/TwAmtZGL7Zojtyj57cLIicAfpzlK84g
+        53QASmyBfQKtIAUiHL83CfI0vJvHUfk=
+Date:   Wed, 2 Nov 2022 12:22:22 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     "Kalra, Ashish" <ashish.kalra@amd.com>
+Cc:     vbabka@suse.cz, x86@kernel.org, linux-kernel@vger.kernel.org,
+        kvm@vger.kernel.org, linux-coco@lists.linux.dev,
+        linux-mm@kvack.org, linux-crypto@vger.kernel.org,
+        tglx@linutronix.de, mingo@redhat.com, jroedel@suse.de,
+        thomas.lendacky@amd.com, hpa@zytor.com, ardb@kernel.org,
+        pbonzini@redhat.com, seanjc@google.com, vkuznets@redhat.com,
+        jmattson@google.com, luto@kernel.org, dave.hansen@linux.intel.com,
+        slp@redhat.com, pgonda@google.com, peterz@infradead.org,
+        srinivas.pandruvada@linux.intel.com, rientjes@google.com,
+        dovmurik@linux.ibm.com, tobin@ibm.com, michael.roth@amd.com,
+        kirill@shutemov.name, ak@linux.intel.com, tony.luck@intel.com,
+        marcorr@google.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        alpergun@google.com, dgilbert@redhat.com, jarkko@kernel.org,
+        "Kaplan, David" <David.Kaplan@amd.com>
+Subject: Re: [PATCH Part2 v6 14/49] crypto: ccp: Handle the legacy TMR
+ allocation when SNP is enabled
+Message-ID: <Y2JS7kn8Q9P4rXso@zn.tnic>
+References: <cover.1655761627.git.ashish.kalra@amd.com>
+ <3a51840f6a80c87b39632dc728dbd9b5dd444cd7.1655761627.git.ashish.kalra@amd.com>
+ <Y0grhk1sq2tf/tUl@zn.tnic>
+ <380c9748-1c86-4763-ea18-b884280a3b60@amd.com>
+ <Y1e5oC9QyDlKpxZ9@zn.tnic>
+ <6511c122-d5cc-3f8d-9651-7c2cd67dc5af@amd.com>
+ <Y2A6/ZwvKhpNBTMP@zn.tnic>
+ <dc89b2f4-1053-91ac-aeac-bb3b25f9ebc7@amd.com>
 MIME-Version: 1.0
-References: <20221102035249.19776-1-zhuyinbo@loongson.cn> <20221102035249.19776-2-zhuyinbo@loongson.cn>
- <166738767754.3460253.533656720238446457.robh@kernel.org>
-In-Reply-To: <166738767754.3460253.533656720238446457.robh@kernel.org>
-From:   Rob Herring <robh+dt@kernel.org>
-Date:   Wed, 2 Nov 2022 06:21:37 -0500
-X-Gmail-Original-Message-ID: <CAL_Jsq+H6dgdQJJ0t=3N7q-VYbmO5cJq1VfLOu2mrm+fbg37jw@mail.gmail.com>
-Message-ID: <CAL_Jsq+H6dgdQJJ0t=3N7q-VYbmO5cJq1VfLOu2mrm+fbg37jw@mail.gmail.com>
-Subject: Re: [PATCH v7 2/2] dt-bindings: hpet: add loongson-2 hpet
-To:     Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Yun Liu <liuyun@loongson.cn>, linux-kernel@vger.kernel.org,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        devicetree@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-        loongarch@lists.linux.dev, Huacai Chen <chenhuacai@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <dc89b2f4-1053-91ac-aeac-bb3b25f9ebc7@amd.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 2, 2022 at 6:16 AM Rob Herring <robh@kernel.org> wrote:
->
->
-> On Wed, 02 Nov 2022 11:52:49 +0800, Yinbo Zhu wrote:
-> > Add the Loongson-2 High Precision Event Timer (HPET) binding
-> > with DT schema format using json-schema.
-> >
-> > Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-> > ---
-> >  .../bindings/timer/loongson,ls2k-hpet.yaml    | 50 +++++++++++++++++++
-> >  MAINTAINERS                                   |  1 +
-> >  2 files changed, 51 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
-> >
->
-> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
-> on your patch (DT_CHECKER_FLAGS is new in v5.13):
->
-> yamllint warnings/errors:
->
-> dtschema/dtc warnings/errors:
-> Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.example.dts:21:18: fatal error: dt-bindings/clock/loongson,ls2k-clk.h: No such file or directory
->    21 |         #include <dt-bindings/clock/loongson,ls2k-clk.h>
+On Mon, Oct 31, 2022 at 04:58:38PM -0500, Kalra, Ashish wrote:
+>      if (snp_lookup_rmpentry(pfn, &rmp_level)) {
+>             do_sigbus(regs, error_code, address, VM_FAULT_SIGBUS);
+>             return RMP_PF_RETRY;
 
-I assume this header is available somewhere else, but I have no idea.
-Please describe dependencies below the '---' or no one can apply this.
+Does this issue some halfway understandable error message why the
+process got killed?
 
-Rob
+> Will look at adding our own recovery function for the same, but that will
+> again mark the pages as poisoned, right ?
+
+Well, not poisoned but PG_offlimits or whatever the mm folks agree upon.
+Semantically, it'll be handled the same way, ofc.
+
+> Still waiting for some/more feedback from mm folks on the same.
+
+Just send the patch and they'll give it.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
