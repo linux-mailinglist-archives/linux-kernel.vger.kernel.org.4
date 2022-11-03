@@ -2,282 +2,293 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C684561807A
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:04:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B2851618069
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:02:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232032AbiKCPEs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 11:04:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43832 "EHLO
+        id S230494AbiKCPCs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 11:02:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231941AbiKCPDJ (ORCPT
+        with ESMTP id S231824AbiKCPCe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 11:03:09 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0B9271900A
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:02:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667487726;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=NQfBuXDOrH1Yycxs8u+vcZb8jI8Lwx8edK3ZcCfcDBg=;
-        b=YrJiATz6zie9jzcC40lGlSVZUz9LaW0kbA/9OCG47R8/PwWtTQIa9AYyxdo/5kWct6Q9jb
-        GgJN2YBifV9UPkx4aBch3eDSEneTf2cLWg91SbhO7tzupUrOTZcEVqRIZs3y8271VwbfHm
-        OD3BmrFJp1kO0HwVN6i82rxfgAd5nh8=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-29-5urxHFDhNc25cYgOjomTUw-1; Thu, 03 Nov 2022 11:02:04 -0400
-X-MC-Unique: 5urxHFDhNc25cYgOjomTUw-1
-Received: from smtp.corp.redhat.com (int-mx04.intmail.prod.int.rdu2.redhat.com [10.11.54.4])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        Thu, 3 Nov 2022 11:02:34 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8F3601A201;
+        Thu,  3 Nov 2022 08:02:20 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 676D61064B5E;
-        Thu,  3 Nov 2022 15:01:52 +0000 (UTC)
-Received: from virtlab701.virt.lab.eng.bos.redhat.com (virtlab701.virt.lab.eng.bos.redhat.com [10.19.152.228])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 5019A200BA7A;
-        Thu,  3 Nov 2022 15:01:52 +0000 (UTC)
-From:   Paolo Bonzini <pbonzini@redhat.com>
-To:     linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Subject: [PATCH] KVM: replace direct irq.h inclusion
-Date:   Thu,  3 Nov 2022 11:01:51 -0400
-Message-Id: <20221103150151.4057338-1-pbonzini@redhat.com>
+        by ams.source.kernel.org (Postfix) with ESMTPS id 137E7B828DA;
+        Thu,  3 Nov 2022 15:02:19 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6E24BC433D7;
+        Thu,  3 Nov 2022 15:02:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667487737;
+        bh=CJXyvU8E5EM3tvdKl5OR6zfXAyE3CSzyRgcD4QleVVE=;
+        h=From:To:Cc:Subject:Date:From;
+        b=Le851wEsULDWu3Zri84YQENGBMPbEsZRPq/tU15snZybwzY8UJA9y2i15Ws0Kudq8
+         VbjfQk40xG7lX7jOzINneSfOO1hzckmiJUIlpfvZTLCJo+/xCsviPH3v0GCBdhjDzq
+         uvG7TgdGgYR24sDhobFv9Cy8z3VQwnbFn/nYsegA=
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     linux-kernel@vger.kernel.org, akpm@linux-foundation.org,
+        torvalds@linux-foundation.org, stable@vger.kernel.org
+Cc:     lwn@lwn.net, jslaby@suse.cz,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Linux 4.14.298
+Date:   Fri,  4 Nov 2022 00:02:50 +0900
+Message-Id: <1667487770167141@kroah.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.4
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-virt/kvm/irqchip.c is including "irq.h" from the arch-specific KVM source
-directory (i.e. not from arch/*/include) for the sole purpose of retrieving
-irqchip_in_kernel.
+I'm announcing the release of the 4.14.298 kernel.
 
-Making the function inline in a header that is already included,
-such as asm/kvm_host.h, is not possible because it needs to look at
-struct kvm which is defined after asm/kvm_host.h is included.  So add a
-kvm_arch_irqchip_in_kernel non-inline function; irqchip_in_kernel() is
-only performance critical on arm64 and x86, and the non-inline function
-is enough on all other architectures.
+All users of the 4.14 kernel series must upgrade.
 
-irq.h can then be deleted from all architectures except x86.
+The updated 4.14.y git tree can be found at:
+	git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable.git linux-4.14.y
+and can be browsed at the normal kernel.org git web browser:
+	https://git.kernel.org/?p=linux/kernel/git/stable/linux-stable.git;a=summary
 
-Signed-off-by: Paolo Bonzini <pbonzini@redhat.com>
----
- arch/arm64/kvm/arm.c       |  5 +++++
- arch/arm64/kvm/irq.h       | 16 ----------------
- arch/powerpc/kvm/irq.h     | 22 ----------------------
- arch/powerpc/kvm/powerpc.c | 18 ++++++++++++++++--
- arch/s390/kvm/irq.h        | 19 -------------------
- arch/s390/kvm/kvm-s390.c   |  5 +++++
- arch/x86/kvm/irq.c         |  5 +++++
- include/linux/kvm_host.h   |  2 ++
- virt/kvm/irqchip.c         |  3 +--
- 9 files changed, 34 insertions(+), 61 deletions(-)
- delete mode 100644 arch/arm64/kvm/irq.h
- delete mode 100644 arch/powerpc/kvm/irq.h
- delete mode 100644 arch/s390/kvm/irq.h
+thanks,
 
-diff --git a/arch/arm64/kvm/arm.c b/arch/arm64/kvm/arm.c
-index 94d33e296e10..7b107fa540fa 100644
---- a/arch/arm64/kvm/arm.c
-+++ b/arch/arm64/kvm/arm.c
-@@ -2130,6 +2130,11 @@ struct kvm_vcpu *kvm_mpidr_to_vcpu(struct kvm *kvm, unsigned long mpidr)
- 	return NULL;
- }
- 
-+bool kvm_arch_irqchip_in_kernel(struct kvm *kvm)
-+{
-+	return irqchip_in_kernel(kvm);
-+}
-+
- bool kvm_arch_has_irq_bypass(void)
- {
- 	return true;
-diff --git a/arch/arm64/kvm/irq.h b/arch/arm64/kvm/irq.h
-deleted file mode 100644
-index 0d257de42c10..000000000000
---- a/arch/arm64/kvm/irq.h
-+++ /dev/null
-@@ -1,16 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * irq.h: in kernel interrupt controller related definitions
-- * Copyright (c) 2016 Red Hat, Inc.
-- *
-- * This header is included by irqchip.c. However, on ARM, interrupt
-- * controller declarations are located in include/kvm/arm_vgic.h since
-- * they are mostly shared between arm and arm64.
-- */
--
--#ifndef __IRQ_H
--#define __IRQ_H
--
--#include <kvm/arm_vgic.h>
--
--#endif
-diff --git a/arch/powerpc/kvm/irq.h b/arch/powerpc/kvm/irq.h
-deleted file mode 100644
-index e6463f866abc..000000000000
---- a/arch/powerpc/kvm/irq.h
-+++ /dev/null
-@@ -1,22 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--#ifndef __IRQ_H
--#define __IRQ_H
--
--#include <linux/kvm_host.h>
--
--static inline int irqchip_in_kernel(struct kvm *kvm)
--{
--	int ret = 0;
--
--#ifdef CONFIG_KVM_MPIC
--	ret = ret || (kvm->arch.mpic != NULL);
--#endif
--#ifdef CONFIG_KVM_XICS
--	ret = ret || (kvm->arch.xics != NULL);
--	ret = ret || (kvm->arch.xive != NULL);
--#endif
--	smp_rmb();
--	return ret;
--}
--
--#endif
-diff --git a/arch/powerpc/kvm/powerpc.c b/arch/powerpc/kvm/powerpc.c
-index b850b0efa201..04494a4fb37a 100644
---- a/arch/powerpc/kvm/powerpc.c
-+++ b/arch/powerpc/kvm/powerpc.c
-@@ -36,7 +36,6 @@
- #include <asm/setup.h>
- 
- #include "timing.h"
--#include "irq.h"
- #include "../mm/mmu_decl.h"
- 
- #define CREATE_TRACE_POINTS
-@@ -2165,10 +2164,25 @@ static int kvm_vm_ioctl_get_pvinfo(struct kvm_ppc_pvinfo *pvinfo)
- 	return 0;
- }
- 
-+bool kvm_arch_irqchip_in_kernel(struct kvm *kvm)
-+{
-+	int ret = 0;
-+
-+#ifdef CONFIG_KVM_MPIC
-+	ret = ret || (kvm->arch.mpic != NULL);
-+#endif
-+#ifdef CONFIG_KVM_XICS
-+	ret = ret || (kvm->arch.xics != NULL);
-+	ret = ret || (kvm->arch.xive != NULL);
-+#endif
-+	smp_rmb();
-+	return ret;
-+}
-+
- int kvm_vm_ioctl_irq_line(struct kvm *kvm, struct kvm_irq_level *irq_event,
- 			  bool line_status)
- {
--	if (!irqchip_in_kernel(kvm))
-+	if (!kvm_arch_irqchip_in_kernel(kvm))
- 		return -ENXIO;
- 
- 	irq_event->status = kvm_set_irq(kvm, KVM_USERSPACE_IRQ_SOURCE_ID,
-diff --git a/arch/s390/kvm/irq.h b/arch/s390/kvm/irq.h
-deleted file mode 100644
-index 484608c71dd0..000000000000
---- a/arch/s390/kvm/irq.h
-+++ /dev/null
-@@ -1,19 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0 */
--/*
-- * s390 irqchip routines
-- *
-- * Copyright IBM Corp. 2014
-- *
-- *    Author(s): Cornelia Huck <cornelia.huck@de.ibm.com>
-- */
--#ifndef __KVM_IRQ_H
--#define __KVM_IRQ_H
--
--#include <linux/kvm_host.h>
--
--static inline int irqchip_in_kernel(struct kvm *kvm)
--{
--	return 1;
--}
--
--#endif
-diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
-index 45d4b8182b07..b08586bebf78 100644
---- a/arch/s390/kvm/kvm-s390.c
-+++ b/arch/s390/kvm/kvm-s390.c
-@@ -5559,6 +5559,11 @@ vm_fault_t kvm_arch_vcpu_fault(struct kvm_vcpu *vcpu, struct vm_fault *vmf)
- 	return VM_FAULT_SIGBUS;
- }
- 
-+bool kvm_arch_irqchip_in_kernel(struct kvm *kvm)
-+{
-+	return true;
-+}
-+
- /* Section: memory related */
- int kvm_arch_prepare_memory_region(struct kvm *kvm,
- 				   const struct kvm_memory_slot *old,
-diff --git a/arch/x86/kvm/irq.c b/arch/x86/kvm/irq.c
-index f371f1292ca3..d8d50558f165 100644
---- a/arch/x86/kvm/irq.c
-+++ b/arch/x86/kvm/irq.c
-@@ -165,3 +165,8 @@ bool kvm_arch_irqfd_allowed(struct kvm *kvm, struct kvm_irqfd *args)
- 
- 	return resample ? irqchip_kernel(kvm) : irqchip_in_kernel(kvm);
- }
-+
-+bool kvm_arch_irqchip_in_kernel(struct kvm *kvm)
-+{
-+	return irqchip_in_kernel(kvm);
-+}
-diff --git a/include/linux/kvm_host.h b/include/linux/kvm_host.h
-index 18592bdf4c1b..12cfc935a9f1 100644
---- a/include/linux/kvm_host.h
-+++ b/include/linux/kvm_host.h
-@@ -653,6 +653,8 @@ struct kvm_irq_routing_table {
- 	 */
- 	struct hlist_head map[];
- };
-+
-+bool kvm_arch_irqchip_in_kernel(struct kvm *kvm);
- #endif
- 
- #ifndef KVM_INTERNAL_MEM_SLOTS
-diff --git a/virt/kvm/irqchip.c b/virt/kvm/irqchip.c
-index 58e4f88b2b9f..1e567d1f6d3d 100644
---- a/virt/kvm/irqchip.c
-+++ b/virt/kvm/irqchip.c
-@@ -17,7 +17,6 @@
- #include <linux/srcu.h>
- #include <linux/export.h>
- #include <trace/events/kvm.h>
--#include "irq.h"
- 
- int kvm_irq_map_gsi(struct kvm *kvm,
- 		    struct kvm_kernel_irq_routing_entry *entries, int gsi)
-@@ -50,7 +49,7 @@ int kvm_send_userspace_msi(struct kvm *kvm, struct kvm_msi *msi)
- {
- 	struct kvm_kernel_irq_routing_entry route;
- 
--	if (!irqchip_in_kernel(kvm) || (msi->flags & ~KVM_MSI_VALID_DEVID))
-+	if (!kvm_arch_irqchip_in_kernel(kvm) || (msi->flags & ~KVM_MSI_VALID_DEVID))
- 		return -EINVAL;
- 
- 	route.msi.address_lo = msi->address_lo;
--- 
-2.31.1
+greg k-h
+
+------------
+
+ Documentation/arm64/silicon-errata.txt             |    2 
+ Makefile                                           |    2 
+ arch/arc/include/asm/io.h                          |    2 
+ arch/arc/mm/ioremap.c                              |    2 
+ arch/arm64/Kconfig                                 |   16 +++
+ arch/arm64/include/asm/cpucaps.h                   |    3 
+ arch/arm64/kernel/cpu_errata.c                     |   16 +++
+ arch/arm64/kernel/cpufeature.c                     |   13 ++
+ arch/s390/include/asm/futex.h                      |    3 
+ arch/x86/kernel/cpu/microcode/amd.c                |   16 ++-
+ arch/x86/kernel/unwind_orc.c                       |    2 
+ drivers/acpi/acpi_extlog.c                         |   33 ++++--
+ drivers/acpi/video_detect.c                        |   64 +++++++++++++
+ drivers/ata/ahci.h                                 |    2 
+ drivers/ata/ahci_imx.c                             |    2 
+ drivers/base/power/domain.c                        |    4 
+ drivers/gpu/drm/msm/hdmi/hdmi.c                    |    5 +
+ drivers/gpu/drm/msm/mdp/mdp4/mdp4_lvds_connector.c |    5 -
+ drivers/hid/hid-magicmouse.c                       |    2 
+ drivers/iio/light/tsl2583.c                        |    2 
+ drivers/iommu/intel-iommu.c                        |    5 +
+ drivers/media/platform/vivid/vivid-core.c          |   22 ++++
+ drivers/media/platform/vivid/vivid-core.h          |    2 
+ drivers/media/platform/vivid/vivid-vid-cap.c       |   27 ++++-
+ drivers/media/v4l2-core/v4l2-dv-timings.c          |   14 ++
+ drivers/media/v4l2-core/v4l2-mem2mem.c             |   62 +++++++++----
+ drivers/mmc/core/sdio_bus.c                        |    3 
+ drivers/net/can/mscan/mpc5xxx_can.c                |    8 +
+ drivers/net/can/rcar/rcar_canfd.c                  |    6 -
+ drivers/net/ethernet/amd/xgbe/xgbe-phy-v2.c        |   17 ++-
+ drivers/net/ethernet/hisilicon/hns/hnae.c          |    4 
+ drivers/net/ethernet/ibm/ehea/ehea_main.c          |    1 
+ drivers/net/ethernet/intel/i40e/i40e_ethtool.c     |  100 ++++++++++++---------
+ drivers/net/ethernet/intel/i40e/i40e_type.h        |    4 
+ drivers/net/ethernet/lantiq_etop.c                 |    1 
+ drivers/net/ethernet/micrel/ksz884x.c              |    2 
+ drivers/net/usb/cdc_ether.c                        |    7 +
+ drivers/net/usb/r8152.c                            |    1 
+ drivers/usb/core/quirks.c                          |    9 +
+ drivers/usb/dwc3/gadget.c                          |    4 
+ drivers/usb/gadget/udc/bdc/bdc_udc.c               |    1 
+ drivers/usb/host/xhci-mem.c                        |   20 ++--
+ drivers/usb/host/xhci-pci.c                        |    8 +
+ drivers/video/fbdev/smscufx.c                      |   55 ++++++-----
+ drivers/xen/gntdev.c                               |   30 +++++-
+ fs/btrfs/backref.c                                 |   33 +++++-
+ fs/kernfs/dir.c                                    |    5 -
+ fs/ocfs2/namei.c                                   |   23 ++--
+ include/uapi/linux/videodev2.h                     |    3 
+ kernel/power/hibernate.c                           |    2 
+ mm/hugetlb.c                                       |    2 
+ net/atm/mpoa_proc.c                                |    3 
+ net/ieee802154/socket.c                            |    4 
+ net/ipv4/tcp_input.c                               |    3 
+ net/kcm/kcmsock.c                                  |   23 +++-
+ net/mac802154/rx.c                                 |    5 -
+ net/openvswitch/datapath.c                         |    3 
+ sound/aoa/soundbus/i2sbus/core.c                   |    7 +
+ sound/pci/ac97/ac97_codec.c                        |    1 
+ sound/pci/au88x0/au88x0.h                          |    6 -
+ sound/pci/au88x0/au88x0_core.c                     |    2 
+ sound/synth/emux/emux.c                            |    7 -
+ tools/iio/iio_utils.c                              |    4 
+ virt/kvm/arm/vgic/vgic-its.c                       |    5 -
+ 64 files changed, 552 insertions(+), 198 deletions(-)
+
+Aaron Conole (1):
+      openvswitch: switch from WARN to pr_warn
+
+Alexander Stein (1):
+      ata: ahci-imx: Fix MODULE_ALIAS
+
+Biju Das (1):
+      can: rcar_canfd: rcar_canfd_handle_global_receive(): fix IRQ storm on global FIFO receive
+
+Borislav Petkov (1):
+      x86/microcode/AMD: Apply the patch early on every logical thread
+
+Chen Zhongjin (1):
+      x86/unwind/orc: Fix unreliable stack dump with gcov
+
+Chen-Yu Tsai (1):
+      media: v4l2-mem2mem: Apply DST_QUEUE_OFF_BASE on MMAP buffers across ioctls
+
+Christian A. Ehrhardt (1):
+      kernfs: fix use-after-free in __kernfs_remove
+
+Dongliang Mu (1):
+      can: mscan: mpc5xxx: mpc5xxx_can_probe(): add missing put_clock() in error path
+
+Eric Dumazet (2):
+      kcm: annotate data-races around kcm->rx_psock
+      kcm: annotate data-races around kcm->rx_wait
+
+Eric Ren (1):
+      KVM: arm64: vgic: Fix exit condition in scan_its_table()
+
+Filipe Manana (1):
+      btrfs: fix processing of delayed data refs during backref walking
+
+Greg Kroah-Hartman (1):
+      Linux 4.14.298
+
+Hannu Hartikainen (1):
+      USB: add RESET_RESUME quirk for NVIDIA Jetson devices in RCM
+
+Hans Verkuil (4):
+      media: vivid: s_fbuf: add more sanity checks
+      media: vivid: dev->bitmap_cap wasn't freed in all cases
+      media: v4l2-dv-timings: add sanity checks for blanking values
+      media: videodev2.h: V4L2_DV_BT_BLANKING_HEIGHT should check 'interlaced'
+
+Heiko Carstens (1):
+      s390/futex: add missing EX_TABLE entry to __futex_atomic_op()
+
+Hyunwoo Kim (1):
+      fbdev: smscufx: Fix several use-after-free bugs
+
+James Morse (1):
+      arm64: errata: Remove AES hwcap for COMPAT tasks
+
+Jan Beulich (1):
+      Xen/gntdev: don't ignore kernel unmapping error
+
+Jason A. Donenfeld (1):
+      ALSA: au88x0: use explicitly signed char
+
+Jean-Francois Le Fillatre (1):
+      r8152: add PID for the Lenovo OneLink+ Dock
+
+Jens Glathe (1):
+      usb: xhci: add XHCI_SPURIOUS_SUCCESS to ASM1042 despite being a V0.96 controller
+
+Jerry Snitselaar (1):
+      iommu/vt-d: Clean up si_domain in the init_dmars() error path
+
+Johan Hovold (1):
+      drm/msm/hdmi: fix memory corruption with too many bridges
+
+Joseph Qi (2):
+      ocfs2: clear dinode links count in case of error
+      ocfs2: fix BUG when iput after ocfs2_mknod fails
+
+José Expósito (1):
+      HID: magicmouse: Do not set BTN_MOUSE on double report
+
+Justin Chen (1):
+      usb: bdc: change state when port disconnected
+
+Kai-Heng Feng (1):
+      ata: ahci: Match EM_MAX_SLOTS with SATA_PMP_MAX_PORTS
+
+M. Vefa Bicakci (1):
+      xen/gntdev: Prevent leaking grants
+
+Mario Limonciello (1):
+      PM: hibernate: Allow hybrid sleep to work with s2idle
+
+Mathias Nyman (1):
+      xhci: Remove device endpoints from bandwidth list when freeing the device
+
+Matthew Ma (1):
+      mmc: core: Fix kernel panic when remove non-standard SDIO card
+
+Matti Vaittinen (1):
+      tools: iio: iio_utils: fix digit calculation
+
+Miquel Raynal (1):
+      mac802154: Fix LQI recording
+
+Nathan Huckleberry (1):
+      drm/msm: Fix return type of mdp4_lvds_connector_mode_valid
+
+Neal Cardwell (1):
+      tcp: fix indefinite deferral of RTO with SACK reneging
+
+Raju Rangoju (2):
+      amd-xgbe: fix the SFP compliance codes check for DAC cables
+      amd-xgbe: add the bit rate quirk for Molex cables
+
+Randy Dunlap (1):
+      arc: iounmap() arg is volatile
+
+Rik van Riel (1):
+      mm,hugetlb: take hugetlb_lock before decrementing h->resv_huge_pages
+
+Shreeya Patel (1):
+      iio: light: tsl2583: Fix module unloading
+
+Slawomir Laba (2):
+      i40e: Fix ethtool rx-flow-hash setting for X722
+      i40e: Fix flow-type by setting GL_HASH_INSET registers
+
+Steven Rostedt (Google) (1):
+      ALSA: Use del_timer_sync() before freeing timer
+
+Sudeep Holla (1):
+      PM: domains: Fix handling of unavailable/disabled idle states
+
+Takashi Iwai (1):
+      ALSA: aoa: Fix I2S device accounting
+
+Thinh Nguyen (1):
+      usb: dwc3: gadget: Don't set IMI for no_interrupt
+
+Tony Luck (1):
+      ACPI: extlog: Handle multiple records
+
+Wei Yongjun (1):
+      net: ieee802154: fix error return code in dgram_bind()
+
+Werner Sembach (1):
+      ACPI: video: Force backlight native for more TongFang devices
+
+Xiaobo Liu (1):
+      net/atm: fix proc_mpc_write incorrect return value
+
+Yang Yingliang (5):
+      net: hns: fix possible memory leak in hnae_ae_register()
+      ALSA: ac97: fix possible memory leak in snd_ac97_dev_register()
+      net: ksz884x: fix missing pci_disable_device() on error in pcidev_init()
+      ALSA: aoa: i2sbus: fix possible memory leak in i2sbus_add_dev()
+      net: ehea: fix possible memory leak in ehea_register_port()
+
+Zhang Changzhong (1):
+      net: lantiq_etop: don't free skb when returning NETDEV_TX_BUSY
 
