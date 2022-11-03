@@ -2,162 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 45B5F618AC8
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 22:44:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 344A2618AC9
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 22:47:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231316AbiKCVo0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 17:44:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54974 "EHLO
+        id S229823AbiKCVr0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 17:47:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55576 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229487AbiKCVoX (ORCPT
+        with ESMTP id S229487AbiKCVrX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 17:44:23 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10AB320187;
-        Thu,  3 Nov 2022 14:44:22 -0700 (PDT)
-Received: from [192.168.2.125] (unknown [109.252.117.140])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: dmitry.osipenko)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 7D6846602962;
-        Thu,  3 Nov 2022 21:44:19 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667511860;
-        bh=pPa/YSAVPL1N6jGFwvkkOusm5GGYIeJDDbcOgexGCEk=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=gfAzxu1Nz6i6XLCESRGtK2/omO1gKkqJpeReusnIZTkacUXJbT8AWmAW1zrBlZBbq
-         XsVuStpH7qS52LB7O+woOgODc/cDLFHtXMCVQ972MOz4s3K+HtVj2JB1iWeM5ni117
-         eisa1WIJ+MGtEJ4AN/LqS1lX+KXUTc13WIAvQv6z0WUadrQD0V4eATUBRnhlWkNUVA
-         4Cw8SzE0GqiZGYo0ZcDX+Q7zTXX0syCUhnu/TQKKCYNXGuuDmzLsNHZKlC+McxHYyf
-         ajSdKptZHXMKZwzLceUIvLl2ELT0nlq9R202ZysmvrqlxKfXESJBOCQVDHeR7yKA4e
-         pBS8bQ9N34QUw==
-Message-ID: <0e002130-868e-ca51-a1dd-091c269dba5d@collabora.com>
-Date:   Fri, 4 Nov 2022 00:44:16 +0300
+        Thu, 3 Nov 2022 17:47:23 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 446D8F54
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 14:47:19 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A3LkmoK056405;
+        Thu, 3 Nov 2022 16:46:48 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1667512008;
+        bh=FWacM2sbzPjsFYMqoJCH9ZDMuzq/lQzaJwz953tdOQA=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=XnGd0+hmMJzJvxslDl+pvUL4JgdkX54FtzZPutCnyTMhg1/hFg6lYZoeQieeoUdN4
+         gwKDM3b77WFdpBaYLq6HG13V2qSZvDKAKZrXW16OIOeEP3Lyf5Ypq3CQ8psq+XIqe2
+         +oPhgfn6v/VKkiZVbwEw6Pca9WzlMKwL8zcDmRSY=
+Received: from DLEE100.ent.ti.com (dlee100.ent.ti.com [157.170.170.30])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A3LkmQE123361
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 3 Nov 2022 16:46:48 -0500
+Received: from DLEE111.ent.ti.com (157.170.170.22) by DLEE100.ent.ti.com
+ (157.170.170.30) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 3 Nov
+ 2022 16:46:48 -0500
+Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE111.ent.ti.com
+ (157.170.170.22) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Thu, 3 Nov 2022 16:46:47 -0500
+Received: from localhost (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A3LklxF027007;
+        Thu, 3 Nov 2022 16:46:47 -0500
+Date:   Thu, 3 Nov 2022 16:46:47 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Arnd Bergmann <arnd@arndb.de>
+CC:     Rahul T R <r-ravikumar@ti.com>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Will Deacon <will@kernel.org>, <bjorn.andersson@linaro.org>,
+        Shawn Guo <shawnguo@kernel.org>,
+        Krzysztof Kozlowski <krzk@kernel.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Marcel Ziswiler <marcel.ziswiler@toradex.com>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Biju Das <biju.das.jz@bp.renesas.com>,
+        Vinod Koul <vkoul@kernel.org>, <enric.balletbo@collabora.com>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>,
+        Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
+        <laurent.pinchart@ideasonboard.com>
+Subject: Re: [PATCH] arm64: defconfig: Enable TI_TFP410 DVI bridge
+Message-ID: <20221103214647.57kamxks74yvd2qq@certify>
+References: <20221103180845.17076-1-r-ravikumar@ti.com>
+ <fd442f5d-68c4-4d4e-b913-d7c6b79bb0a4@app.fastmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] clk: tegra: fix HOST1X clock divider on Tegra20 and
- Tegra30
-To:     Luca Ceresoli <luca.ceresoli@bootlin.com>
-Cc:     linux-tegra@vger.kernel.org,
-        Peter De Schrijver <pdeschrijver@nvidia.com>,
-        Prashant Gaikwad <pgaikwad@nvidia.com>,
-        Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>,
-        Thierry Reding <thierry.reding@gmail.com>,
-        Jonathan Hunter <jonathanh@nvidia.com>,
-        linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Thomas Petazzoni <thomas.petazzoni@bootlin.com>,
-        stable@vger.kernel.org, Ben Dooks <ben.dooks@codethink.co.uk>
-References: <20221028074826.2317640-1-luca.ceresoli@bootlin.com>
- <603a0227-7d25-b9da-6dc3-fa9fe1b951e7@collabora.com>
- <20221102093255.0b5ba7d6@booty>
-Content-Language: en-US
-From:   Dmitry Osipenko <dmitry.osipenko@collabora.com>
-In-Reply-To: <20221102093255.0b5ba7d6@booty>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <fd442f5d-68c4-4d4e-b913-d7c6b79bb0a4@app.fastmail.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/2/22 11:32, Luca Ceresoli wrote:
-> Hello Dmitry,
+On 19:22-20221103, Arnd Bergmann wrote:
+> On Thu, Nov 3, 2022, at 19:08, Rahul T R wrote:
+> > Enable TI_TFP410 DPI to DVI bridge. This is
+> > required to enable HDMI output on j721e-sk
+> > platform
+> >
+> > Signed-off-by: Rahul T R <r-ravikumar@ti.com>
 > 
-> On Mon, 31 Oct 2022 03:34:07 +0300
-> Dmitry Osipenko <dmitry.osipenko@collabora.com> wrote:
+> The patch looks ok to me, but you have too many recipients
+> in Cc, so it's unclear who you expect to pick it up.
 > 
->> On 10/28/22 10:48, luca.ceresoli@bootlin.com wrote:
->>> From: Luca Ceresoli <luca.ceresoli@bootlin.com>
->>>
->>> On Tegra20 and Tegra30 the HOST1X clock is a fractional clock divider with
->>> 7 integer bits + 1 decimal bit. This has been verified on both
->>> documentation and real hardware for Tegra20 an on the documentation I was
->>> able to find for Tegra30.
->>>
->>> However in the kernel code this clock is declared as an integer divider. A
->>> consequence of this is that requesting 144 MHz for HOST1X which is fed by
->>> pll_p running at 216 MHz would result in 108 MHz (216 / 2) instead of 144
->>> MHz (216 / 1.5).
->>>
->>> Fix by replacing the INT() macro with the MUX() macro which, despite the
->>> name, defines a fractional divider. The only difference between the two
->>> macros is the former does not have the TEGRA_DIVIDER_INT flag.
->>>
->>> Also move the line together with the other MUX*() ones to keep the existing
->>> file organization.
->>>
->>> Fixes: 76ebc134d45d ("clk: tegra: move periph clocks to common file")
->>> Cc: stable@vger.kernel.org
->>> Cc: Peter De Schrijver <pdeschrijver@nvidia.com>
->>> Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
->>> ---
->>>  drivers/clk/tegra/clk-tegra-periph.c | 2 +-
->>>  1 file changed, 1 insertion(+), 1 deletion(-)
->>>
->>> diff --git a/drivers/clk/tegra/clk-tegra-periph.c b/drivers/clk/tegra/clk-tegra-periph.c
->>> index 4dcf7f7cb8a0..806d835ca0d2 100644
->>> --- a/drivers/clk/tegra/clk-tegra-periph.c
->>> +++ b/drivers/clk/tegra/clk-tegra-periph.c
->>> @@ -615,7 +615,6 @@ static struct tegra_periph_init_data periph_clks[] = {
->>>  	INT("vde", mux_pllp_pllc_pllm_clkm, CLK_SOURCE_VDE, 61, 0, tegra_clk_vde),
->>>  	INT("vi", mux_pllm_pllc_pllp_plla, CLK_SOURCE_VI, 20, 0, tegra_clk_vi),
->>>  	INT("epp", mux_pllm_pllc_pllp_plla, CLK_SOURCE_EPP, 19, 0, tegra_clk_epp),
->>> -	INT("host1x", mux_pllm_pllc_pllp_plla, CLK_SOURCE_HOST1X, 28, 0, tegra_clk_host1x),
->>>  	INT("mpe", mux_pllm_pllc_pllp_plla, CLK_SOURCE_MPE, 60, 0, tegra_clk_mpe),
->>>  	INT("2d", mux_pllm_pllc_pllp_plla, CLK_SOURCE_2D, 21, 0, tegra_clk_gr2d),
->>>  	INT("3d", mux_pllm_pllc_pllp_plla, CLK_SOURCE_3D, 24, 0, tegra_clk_gr3d),
->>> @@ -664,6 +663,7 @@ static struct tegra_periph_init_data periph_clks[] = {
->>>  	MUX("owr", mux_pllp_pllc_clkm, CLK_SOURCE_OWR, 71, TEGRA_PERIPH_ON_APB, tegra_clk_owr_8),
->>>  	MUX("nor", mux_pllp_pllc_pllm_clkm, CLK_SOURCE_NOR, 42, 0, tegra_clk_nor),
->>>  	MUX("mipi", mux_pllp_pllc_pllm_clkm, CLK_SOURCE_MIPI, 50, TEGRA_PERIPH_ON_APB, tegra_clk_mipi),
->>> +	MUX("host1x", mux_pllm_pllc_pllp_plla, CLK_SOURCE_HOST1X, 28, 0, tegra_clk_host1x),
->>>  	MUX("vi_sensor", mux_pllm_pllc_pllp_plla, CLK_SOURCE_VI_SENSOR, 20, TEGRA_PERIPH_NO_RESET, tegra_clk_vi_sensor),
->>>  	MUX("vi_sensor", mux_pllc_pllp_plla, CLK_SOURCE_VI_SENSOR, 20, TEGRA_PERIPH_NO_RESET, tegra_clk_vi_sensor_9),
->>>  	MUX("cilab", mux_pllp_pllc_clkm, CLK_SOURCE_CILAB, 144, 0, tegra_clk_cilab),  
->>
->> This was attempted in the past
->> https://lore.kernel.org/all/20180723085010.GK1636@tbergstrom-lnx.Nvidia.com/
->>
->> I assume here you're also porting the downstream patches to upstream.
->> This one is too questionable. The host1x clock shouldn't affect overall
->> performance to begin with. It doesn't make sense to use fractional clock
->> just for getting extra KHz.
-> 
-> Thank you for the review and for the pointer!
-> 
-> Indeed I'm not sure this patch brings an actual improvement to my use
-> case, however I reached it by trying to replicate the configuration on
-> a known-working kernel 3.1, which uses a 1.5 divider. This seems to be
-> the same reason that led to the 2018 patch that also got rejected.
-> 
-> I'll be OK with dropping this patch after I have a 100% working setup
-> with an integer divider, which is very likely given your reply. But it
-> took time before I found the root cause of this issue, and I would like
-> to avoid other people waste time in the future, so what about adding a
-> comment there?
-> 
-> What about:
-> 
->   /*
->    * The host1x clock shouldn't affect overall performance. It doesn't
->    * make sense to use fractional clock just for getting extra KHz, so
->    * let's pretend it's an integer divider
->    */
+> I expect Nishanth Menon will merge it into the k3 tree and
+> forward my it way along with the other 6.2 material.
 
-If host1x isn't the only clock like that, then comment shouldn't be
-directed to host1x. Have you checked other clocks?
 
-I'm curious who made that change originally in your downstream, was it
-coming from NVIDIA?
+Yup, will take it after review.
 
 -- 
-Best regards,
-Dmitry
-
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
