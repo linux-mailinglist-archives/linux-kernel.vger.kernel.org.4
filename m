@@ -2,102 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6805D6182E4
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:31:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2C426182E2
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:30:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229882AbiKCPa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 11:30:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36982 "EHLO
+        id S230465AbiKCPaw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 11:30:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37692 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231491AbiKCPae (ORCPT
+        with ESMTP id S232151AbiKCPac (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 11:30:34 -0400
-Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90581C43B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:30:02 -0700 (PDT)
-Received: by mail-pg1-x52c.google.com with SMTP id q1so1946271pgl.11
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 08:30:02 -0700 (PDT)
+        Thu, 3 Nov 2022 11:30:32 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 10E4E1C433;
+        Thu,  3 Nov 2022 08:30:01 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id w14so3301491wru.8;
+        Thu, 03 Nov 2022 08:30:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=UyUe+HbRzSrTdJquQCMiaXWC2coZG28I37xguDaJaYg=;
-        b=JxP3em5mMEo8M/seyYjwqQClKWueZhrkefM7iopEbtJ9U0ARhXsBBlBaHvB0YZ+mCq
-         7I2lDIbzgsTnUJXXFFd+Mf2MRkvMQ3d/mi120+0k+co+feliF2fGnlDGLipP3oo4jHIs
-         yhCQnzB0LNdLsoCiyP2ThdGCDug/wevVBzx4ZCIoRVJzM62ULFanZrMyKnrfoLhgGw7L
-         LE3NJVvLI80qGdb5QUdNBUYtcEfD6sTxNonp/rLGuh5no7R8ACiBwreWQkoFJnyoE1Nq
-         joZ/uzznkWHqO7mwwbSR52gm1kYa+vf+hliw2Y9f1o05+cN6N5swUWJ7vJszMr5BEKoW
-         HTcg==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=jTNF+TBMvTriQtS+AA9+C2dKsWuCfeavpCHVTcjD0eY=;
+        b=out7CxP4vZ5XMhp9mDv7Ofatpr7fpv6fDwjoCTilq7jVigf/gyDt96koz/LT1/kL8z
+         0sU0E8IpYZ1guwovwiHfWsmY/RGkWdo9Q0nQw6D++1ZG4TTQAewqH/KWERHkVVuVt2Go
+         0Tmz4Ta4jr3ClB52+puwbKMbwf+BEMtcBJuT+5D6PjwHTvFfQTFrj7JqiEYd06mvVlY3
+         5hmHnxZ39oGNAvJbrAv3R8b9r5xc7pln7zH1imayfH9EPrV4IYqMjdkjTEyZlBxFIXdm
+         in7k8+PIcRU3EQ3Q4ubgyvX0wNX22hKkxllEhdPR3vqQUGV3d7o0UZzp9bm0b9+TEmML
+         wBPw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UyUe+HbRzSrTdJquQCMiaXWC2coZG28I37xguDaJaYg=;
-        b=0XKmf2yWKqvEV7/KwfkZmUBOc7XUtBY+RVQviavtZS7IlDBV+iuE4v55OZ2X/OpS/3
-         zVTgby9qRGw66KBobMhIoBE4UmbKNyWKlBww7Kny9bun2nMNpTyVvXgnEjCxBkaSRm50
-         1k6xclwpqTqfYa3aCACbU9+BewLOQOxqoBSV/jz6TGEgVXRI3GDEpsXe6PpwEmLcNbRe
-         icPsIvaUZsbTb7V7Hm4GaTYq0jmw7APNT33HicYokmiE1ApcfJR6Etj+QoMQOuReLBrT
-         AHVsBKbIgMEpIkiK4iBsrWDf6y7I9cexGhc0WQLcOYsWgaWV4NWWBZxwumLnKf5/H2cA
-         dc2g==
-X-Gm-Message-State: ACrzQf0bBXfRjkCVYYn6oOLOeUNMfITi1rGF3QQKDCyinyzLmTqQcbJ2
-        5ssLXaAgAL9Lsfn4H2QiAj2IHg==
-X-Google-Smtp-Source: AMsMyM6by5WQXi0G4lBZGaavWsGrxKC8DeWyAUbAtvZsM8BboB9ucyemIyMYLKoI4FadI1MlyxYOPw==
-X-Received: by 2002:a05:6a00:1996:b0:56d:a845:5789 with SMTP id d22-20020a056a00199600b0056da8455789mr17697890pfl.59.1667489402026;
-        Thu, 03 Nov 2022 08:30:02 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id f3-20020a170902f38300b0017a018221e2sm835452ple.70.2022.11.03.08.30.01
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=jTNF+TBMvTriQtS+AA9+C2dKsWuCfeavpCHVTcjD0eY=;
+        b=x+aLrXlbszX8Zhqt6EqfxknaP+g1y8Tzd8yNP0zD52G4QBt3LDST8GJhEJqfNnVasz
+         yuYH/fPCyglAPdgiodSvCQh61iCST696u8oHf0tAwuldcNnH7YxsVuMhq1rslZH1n6Io
+         Yy23fH//mjiUWc2463TUcLMLe66amLCdxzNZh6Vo3eCVIAjjbB3eKzeIL8tj81Cs1kBk
+         zKqDfvNyvK9aC0QBsQl780MHRt3TRjxXaAeOgwCB74ognDlohH7sk9wmRXHR/kv4C5tJ
+         Nb9zH4d0DwGN+GOyk+WqTnf+sfEOsuptzgK2W2H1onrzpqXu0KNWCsGC+Xw10dChqvEv
+         ra0A==
+X-Gm-Message-State: ACrzQf1bQO4hY6JIW1GZ3KMRsU2XpGeNjp59s+VQ46gga+7q6c9olYi8
+        V6JDSJpnAP64lwIdQgKS9qU416CAVwuhebvx
+X-Google-Smtp-Source: AMsMyM5Nyyy/q4Kn3ydmHt5dCYT4Mg7RkCP01fJ7CYK5rm31bepO9+UNSqvjytTa3KpN6DC4tX4HTA==
+X-Received: by 2002:adf:d4d2:0:b0:236:594f:4a2c with SMTP id w18-20020adfd4d2000000b00236594f4a2cmr18912381wrk.705.1667489399525;
+        Thu, 03 Nov 2022 08:29:59 -0700 (PDT)
+Received: from localhost (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.gmail.com with ESMTPSA id q12-20020a05600c46cc00b003b4ac05a8a4sm183699wmo.27.2022.11.03.08.29.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 08:30:01 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 15:29:58 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>
-Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>
-Subject: Re: [PATCH 17/44] KVM: arm64: Do arm/arch initialiation without
- bouncing through kvm_init()
-Message-ID: <Y2Pedr1MYt/P1uL0@google.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-18-seanjc@google.com>
- <dd59d579-4a4e-6db2-eac4-6c5c3ab71fd3@linaro.org>
+        Thu, 03 Nov 2022 08:29:58 -0700 (PDT)
+From:   Colin Ian King <colin.i.king@gmail.com>
+To:     Alain Volmat <alain.volmat@foss.st.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        dri-devel@lists.freedesktop.org
+Cc:     kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH] drm: sti: Make array en_di static const
+Date:   Thu,  3 Nov 2022 15:29:58 +0000
+Message-Id: <20221103152958.89865-1-colin.i.king@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <dd59d579-4a4e-6db2-eac4-6c5c3ab71fd3@linaro.org>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -105,80 +72,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022, Philippe Mathieu-Daudé wrote:
-> Hi Sean,
-> 
-> On 3/11/22 00:18, Sean Christopherson wrote:
-> > Move arm/arch specific initialization directly in arm's module_init(),
-> > now called kvm_arm_init(), instead of bouncing through kvm_init() to
-> > reach kvm_arch_init().  Invoking kvm_arch_init() is the very first action
-> > performed by kvm_init(), i.e. this is a glorified nop.
-> > 
-> > Making kvm_arch_init() a nop will allow dropping it entirely once all
-> > other architectures follow suit.
-> > 
-> > No functional change intended.
-> > 
-> > Signed-off-by: Sean Christopherson <seanjc@google.com>
-> > ---
-> >   arch/arm64/kvm/arm.c | 25 ++++++++++++++++---------
-> >   1 file changed, 16 insertions(+), 9 deletions(-)
-> 
-> >   /* NOP: Compiling as a module not supported */
-> >   void kvm_arch_exit(void)
-> >   {
-> > -	kvm_unregister_perf_callbacks();
-> 
-> Doesn't this belong to the previous patch?
+Don't populate the read-only array en_di on the stack but instead
+make it static. Also makes the object code a little smaller.
 
-No, but the above changelog is a lie, there is very much a functional change here.
+Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+---
+ drivers/gpu/drm/sti/sti_hdmi.c | 10 ++++++----
+ 1 file changed, 6 insertions(+), 4 deletions(-)
 
-The goal of the previous patch is to fix the error paths in kvm_arch_init(), a.k.a.
-kvm_arm_init().  After fixing kvm_arch_init(), there are still bugs in the sequence
-as a whole because kvm_arch_exit() doesn't unwind other state, e.g. kvm_arch_exit()
-should really look something like:
+diff --git a/drivers/gpu/drm/sti/sti_hdmi.c b/drivers/gpu/drm/sti/sti_hdmi.c
+index cb82622877d2..9de8cd171c25 100644
+--- a/drivers/gpu/drm/sti/sti_hdmi.c
++++ b/drivers/gpu/drm/sti/sti_hdmi.c
+@@ -641,10 +641,12 @@ static void hdmi_dbg_sta(struct seq_file *s, int val)
+ static void hdmi_dbg_sw_di_cfg(struct seq_file *s, int val)
+ {
+ 	int tmp;
+-	char *const en_di[] = {"no transmission",
+-			       "single transmission",
+-			       "once every field",
+-			       "once every frame"};
++	static const char * const en_di[] = {
++		"no transmission",
++		"single transmission",
++		"once every field",
++		"once every frame"
++	};
+ 
+ 	seq_putc(s, '\t');
+ 	tmp = (val & HDMI_IFRAME_CFG_DI_N(HDMI_IFRAME_MASK, 1));
+-- 
+2.38.1
 
-  void kvm_arch_exit(void)
-  {
-	teardown_subsystems();
-
-	if (!is_kernel_in_hyp_mode())
-		teardown_hyp_mode();
-
-	kvm_arm_vmid_alloc_free();
-
-	if (is_protected_kvm_enabled())
-		???	
-  }
-
-Becuase although the comment "NOP: Compiling as a module not supported" is correct
-about KVM ARM always having to be built into the kernel, kvm_arch_exit() can still
-be called if a later stage of kvm_init() fails.
-
-But rather than add a patch to fix kvm_arch_exit(), I chose to fix the bug by
-moving code out of kvm_arch_init() so that the unwind sequence established in the
-previous patch could be reused.
-
-Except I managed to forget those details when writing the changelog.  The changelog
-should instead be:
-
-  KVM: arm64: Do arm/arch initialization without bouncing through kvm_init()
-  
-  Do arm/arch specific initialization directly in arm's module_init(), now
-  called kvm_arm_init(), instead of bouncing through kvm_init() to reach
-  kvm_arch_init().  Invoking kvm_arch_init() is the very first action
-  performed by kvm_init(), so from a initialization perspective this is a
-  glorified nop.
-  
-  Avoiding kvm_arch_init() also fixes a mostly benign bug as kvm_arch_exit()
-  doesn't properly unwind if a later stage of kvm_init() fails.  While the
-  soon-to-be-deleted comment about compiling as a module being unsupported
-  is correct, kvm_arch_exit() can still be called by kvm_init() if any step
-  after the call to kvm_arch_init() succeeds.
-
-  Add a FIXME to call out that pKVM initialization isn't unwound if
-  kvm_init() fails, which is a pre-existing problem inherited from
-  kvm_arch_exit().
-
-  Making kvm_arch_init() a nop will also allow dropping kvm_arch_init() and
-  kvm_arch_exit() entirely once all other architectures follow suit.
