@@ -2,96 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8797A618560
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:55:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 35ADB61855F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:55:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231792AbiKCQzE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 12:55:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53410 "EHLO
+        id S231398AbiKCQzB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 12:55:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53942 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230333AbiKCQy4 (ORCPT
+        with ESMTP id S231611AbiKCQy6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 12:54:56 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4540B627F
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 09:53:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667494430;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=gERfL0EPpR1L5+55Qs7xdMhql2jPX0zv2LAyPLcrgS0=;
-        b=NOvzsyTOL9/m03zGpn9TcNxUpu0m6AJ8niIZjyE6F+59k1PrecIeNOlw2mCGnS/YSqibPw
-        xffgxMWn+Gm9welz7SO5QRPrSIBDeqLLR71I3fhFctaAwQ/fx6N2rWqkHuaubNIi1P+9UR
-        k21uC6jrIFZtZNCQbysK3CcOnR6J074=
-Received: from mail-ot1-f69.google.com (mail-ot1-f69.google.com
- [209.85.210.69]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-279-RHuMU2smNr-F9sdjC3KV4w-1; Thu, 03 Nov 2022 12:53:49 -0400
-X-MC-Unique: RHuMU2smNr-F9sdjC3KV4w-1
-Received: by mail-ot1-f69.google.com with SMTP id l31-20020a9d1b22000000b0066c48e9249fso915800otl.5
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 09:53:49 -0700 (PDT)
+        Thu, 3 Nov 2022 12:54:58 -0400
+Received: from mail-qk1-x729.google.com (mail-qk1-x729.google.com [IPv6:2607:f8b0:4864:20::729])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A79ADD
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 09:54:57 -0700 (PDT)
+Received: by mail-qk1-x729.google.com with SMTP id f8so1536588qkg.3
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 09:54:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=qFBunyBEOrah4lD4FZnX/dUVHIoDPQeAQMemRAIrS28=;
+        b=DcgTC4GNRUJ+jLqwHMrWKkezqjnj33/pc7lu3nI3p3LFiqXOQEaEPQr5QNj7mD4mHR
+         CAd27kZiZM6f6R9EGBGiyRQf55N2SN/io3tVSTaWT0mHHeA8T3cuIDCnW9PTW5VZBHSm
+         mZTuMvMxjdI8bktfKo8f6t9re4Iux8AmNyEM4=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=gERfL0EPpR1L5+55Qs7xdMhql2jPX0zv2LAyPLcrgS0=;
-        b=7s/hpdONF/GDj35aGCEp0Z6q7XLLBb2y4WZ+bN2YctSCuMDA2QaZ0N5e8C6duI4j1H
-         3rHzZAaYSZoqN9xAx9JNkRpRYAt6x0AkEvn/rY2Nen0g5cfmLCa4vLcP1el4CN2zl8LS
-         bf6/4PITSS4XUsA2hORZhQx+/a1GXdqz9PH3zfEQzn4gBnsq1f28uM6L6anXWMa0LwyB
-         PUUvPpfsLfQV1xchBQNos7B4oPO42QPL8F32KEmuiDbFq8VR5V2GPkw4alrTEguNLc7f
-         JJwiIUgOsrYQEFf61py+3d4yzb962XOetJT4pPAjWawxkP+l+vf0A/SRCuHLsAZ+18IV
-         fmMw==
-X-Gm-Message-State: ACrzQf015duTqoVSBTL3MshMdTg4o2y7/Epl2/MCK8AMJVcnWVgowgzk
-        h+MaiQr0tVt34Jxs8ZXHy6Bcle3snvL5R8SM2g/WMIV/JIF6np4EqBC5seNMpnknsnfc5Ph/qVY
-        CWldi86CuVhvOKSg3BY6pwgN1
-X-Received: by 2002:a05:6870:b029:b0:13b:9097:6764 with SMTP id y41-20020a056870b02900b0013b90976764mr27632608oae.98.1667494428583;
-        Thu, 03 Nov 2022 09:53:48 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7yjXFdmgY0WpH5o7ZQGlBv7lPO2P5kT/y3cFxqJ0WqkLHJHC7P6j8VDosoFcC2xmCLRGEVGQ==
-X-Received: by 2002:a05:6870:b029:b0:13b:9097:6764 with SMTP id y41-20020a056870b02900b0013b90976764mr27632591oae.98.1667494428325;
-        Thu, 03 Nov 2022 09:53:48 -0700 (PDT)
-Received: from ?IPv6:2804:1b3:a802:1099:7cb2:3a49:6197:5307? ([2804:1b3:a802:1099:7cb2:3a49:6197:5307])
-        by smtp.gmail.com with ESMTPSA id kv43-20020a056870fbab00b0011bde9f5745sm612757oab.23.2022.11.03.09.53.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 09:53:47 -0700 (PDT)
-Message-ID: <0183b60e79cda3a0f992d14b4db5a818cd096e33.camel@redhat.com>
-Subject: Re: [PATCH v1 0/3] Avoid scheduling cache draining to isolated cpus
-From:   Leonardo =?ISO-8859-1?Q?Br=E1s?= <leobras@redhat.com>
-To:     Michal Hocko <mhocko@suse.com>
-Cc:     Ingo Molnar <mingo@redhat.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Juri Lelli <juri.lelli@redhat.com>,
-        Vincent Guittot <vincent.guittot@linaro.org>,
-        Dietmar Eggemann <dietmar.eggemann@arm.com>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-        Daniel Bristot de Oliveira <bristot@redhat.com>,
-        Valentin Schneider <vschneid@redhat.com>,
-        Johannes Weiner <hannes@cmpxchg.org>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Shakeel Butt <shakeelb@google.com>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Frederic Weisbecker <frederic@kernel.org>,
-        Phil Auld <pauld@redhat.com>,
-        Marcelo Tosatti <mtosatti@redhat.com>,
-        linux-kernel@vger.kernel.org, cgroups@vger.kernel.org,
-        linux-mm@kvack.org
-Date:   Thu, 03 Nov 2022 13:53:41 -0300
-In-Reply-To: <Y2Pe45LHANFxxD7B@dhcp22.suse.cz>
-References: <20221102020243.522358-1-leobras@redhat.com>
-         <Y2IwHVdgAJ6wfOVH@dhcp22.suse.cz>
-         <07810c49ef326b26c971008fb03adf9dc533a178.camel@redhat.com>
-         <Y2Pe45LHANFxxD7B@dhcp22.suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.1 
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=qFBunyBEOrah4lD4FZnX/dUVHIoDPQeAQMemRAIrS28=;
+        b=R5emPCTsU4HgilsL+VBHraNsYm+YcQsG/t6KV1FHKiTkYnuBPbESe6gcVUTs+DYdyX
+         ab9kLClip5JVNN6qyg/pohlJUy9yrKgkSkRmeTazjCCYG3TtgPDZtJOJkrlMh82h3cwK
+         pJ3bTTMumUSfY+Tj1Q6JlZ4OPLWLCrCH+9Qow6HQdTkAr8jU8/KvIELqqdA7+tZXwHHA
+         8Xv8TV0tWwzb55xArS1YNB2q8m8UEb2DkwppenelZxmEp85WwC8cC6yC8ROHRM8+8SAj
+         Vs9GPU3wov8Lmd/E20OXHjBEog3dVIHkXLg/kRlZhGQ5WMYZZS8puGadK46uD4XnYwnO
+         udqQ==
+X-Gm-Message-State: ACrzQf0KkkEtLJgiDGxxqP9b8lUNGv3Ry3i/Es6wbxXrfQr76zfkYB92
+        rwmCUbelJZNeOO7Z2J7GuVwW504e/zOAyQ==
+X-Google-Smtp-Source: AMsMyM6FRaJO07/BEnm7uUj4p5nboVzseWiT4HXbzYKC6cNtj65YtLFWqnIR/MQPcKM07mnE3u1sXQ==
+X-Received: by 2002:a05:620a:990:b0:6fa:134e:5c27 with SMTP id x16-20020a05620a099000b006fa134e5c27mr21119983qkx.204.1667494496265;
+        Thu, 03 Nov 2022 09:54:56 -0700 (PDT)
+Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com. [209.85.219.171])
+        by smtp.gmail.com with ESMTPSA id bi11-20020a05620a318b00b006eeca296c00sm1013664qkb.104.2022.11.03.09.54.53
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 09:54:54 -0700 (PDT)
+Received: by mail-yb1-f171.google.com with SMTP id z192so3010166yba.0
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 09:54:53 -0700 (PDT)
+X-Received: by 2002:a05:6902:702:b0:6ca:a588:2904 with SMTP id
+ k2-20020a056902070200b006caa5882904mr29621526ybt.571.1667494493431; Thu, 03
+ Nov 2022 09:54:53 -0700 (PDT)
 MIME-Version: 1.0
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+References: <B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com>
+ <CAHk-=wgzT1QsSCF-zN+eS06WGVTBg4sf=6oTMg95+AEq7QrSCQ@mail.gmail.com>
+ <47678198-C502-47E1-B7C8-8A12352CDA95@gmail.com> <CAHk-=wjzngbbwHw4nAsqo_RpyOtUDk5G+Wus=O0w0A6goHvBWA@mail.gmail.com>
+ <CAHk-=wijU_YHSZq5N7vYK+qHPX0aPkaePaGOyWk4aqMvvSXxJA@mail.gmail.com>
+ <140B437E-B994-45B7-8DAC-E9B66885BEEF@gmail.com> <CAHk-=wjX_P78xoNcGDTjhkgffs-Bhzcwp-mdsE1maeF57Sh0MA@mail.gmail.com>
+ <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
+ <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
+ <CAHk-=wiwt4LC-VmqvYrphraF0=yQV=CQimDCb0XhtXwk8oKCCA@mail.gmail.com>
+ <Y1+XCALog8bW7Hgl@hirez.programming.kicks-ass.net> <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
+ <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com> <4f6d8fb5-6be5-a7a8-de8e-644da66b5a3d@redhat.com>
+In-Reply-To: <4f6d8fb5-6be5-a7a8-de8e-644da66b5a3d@redhat.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 3 Nov 2022 09:54:37 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wiDg_1up8K4PhK4+kzPN7xJG297=nw+tvgrGn7aVgZdqw@mail.gmail.com>
+Message-ID: <CAHk-=wiDg_1up8K4PhK4+kzPN7xJG297=nw+tvgrGn7aVgZdqw@mail.gmail.com>
+Subject: Re: mm: delay rmap removal until after TLB flush
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Jann Horn <jannh@google.com>,
+        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -99,185 +103,89 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 2022-11-03 at 16:31 +0100, Michal Hocko wrote:
-> On Thu 03-11-22 11:59:20, Leonardo Br=C3=A1s wrote:
-> > On Wed, 2022-11-02 at 09:53 +0100, Michal Hocko wrote:
-> > > On Tue 01-11-22 23:02:40, Leonardo Bras wrote:
-> > > > Patch #1 expands housekeep=C3=ADng_any_cpu() so we can find houseke=
-eping cpus
-> > > > closer (NUMA) to any desired CPU, instead of only the current CPU.
-> > > >=20
-> > > > ### Performance argument that motivated the change:
-> > > > There could be an argument of why would that be needed, since the c=
-urrent
-> > > > CPU is probably acessing the current cacheline, and so having a CPU=
- closer
-> > > > to the current one is always the best choice since the cache invali=
-dation
-> > > > will take less time. OTOH, there could be cases like this which use=
-s
-> > > > perCPU variables, and we can have up to 3 different CPUs touching t=
-he
-> > > > cacheline:
-> > > >=20
-> > > > C1 - Isolated CPU: The perCPU data 'belongs' to this one
-> > > > C2 - Scheduling CPU: Schedule some work to be done elsewhere, curre=
-nt cpu
-> > > > C3 - Housekeeping CPU: This one will do the work
-> > > >=20
-> > > > Most of the times the cacheline is touched, it should be by C1. Som=
-e times
-> > > > a C2 will schedule work to run on C3, since C1 is isolated.
-> > > >=20
-> > > > If C1 and C2 are in different NUMA nodes, we could have C3 either i=
-n
-> > > > C2 NUMA node (housekeeping_any_cpu()) or in C1 NUMA node=20
-> > > > (housekeeping_any_cpu_from(C1).=20
-> > > >=20
-> > > > If C3 is in C2 NUMA node, there will be a faster invalidation when =
-C3
-> > > > tries to get cacheline exclusivity, and then a slower invalidation =
-when
-> > > > this happens in C1, when it's working in its data.
-> > > >=20
-> > > > If C3 is in C1 NUMA node, there will be a slower invalidation when =
-C3
-> > > > tries to get cacheline exclusivity, and then a faster invalidation =
-when
-> > > > this happens in C1.
-> > > >=20
-> > > > The thing is: it should be better to wait less when doing kernel wo=
-rk
-> > > > on an isolated CPU, even at the cost of some housekeeping CPU waiti=
-ng
-> > > > a few more cycles.
-> > > > ###
-> > > >=20
-> > > > Patch #2 changes the locking strategy of memcg_stock_pcp->stock_loc=
-k from
-> > > > local_lock to spinlocks, so it can be later used to do remote percp=
-u
-> > > > cache draining on patch #3. Most performance concerns should be poi=
-nted
-> > > > in the commit log.
-> > > >=20
-> > > > Patch #3 implements the remote per-CPU cache drain, making use of b=
-oth=20
-> > > > patches #2 and #3. Performance-wise, in non-isolated scenarios, it =
-should
-> > > > introduce an extra function call and a single test to check if the =
-CPU is
-> > > > isolated.=20
-> > > >=20
-> > > > On scenarios with isolation enabled on boot, it will also introduce=
- an
-> > > > extra test to check in the cpumask if the CPU is isolated. If it is=
-,
-> > > > there will also be an extra read of the cpumask to look for a
-> > > > housekeeping CPU.
-> > >=20
-> >=20
-> > Hello Michael, thanks for reviewing!
-> >=20
-> > > This is a rather deep dive in the cache line usage but the most
-> > > important thing is really missing. Why do we want this change? From t=
-he
-> > > context it seems that this is an actual fix for isolcpu=3D setup when
-> > > remote (aka non isolated activity) interferes with isolated cpus by
-> > > scheduling pcp charge caches on those cpus.
-> > >=20
-> > > Is this understanding correct?
-> >=20
-> > That's correct! The idea is to avoid scheduling work to isolated CPUs.
-> >=20
-> > > If yes, how big of a problem that is?
-> >=20
-> > The use case I have been following requires both isolcpus=3D and PREEMP=
-T_RT, since
-> > the isolated CPUs will be running a real-time workload. In this scenari=
-o,
-> > getting any work done instead of the real-time workload may cause the s=
-ystem to
-> > miss a deadline, which can be bad.=20
->=20
-> OK, I see. But is memcg charging actually a RT friendly operation in the
-> first place? Please note that this path can trigger memory reclaim and
-> that is when any RT expectations are simply going down the drain.
+On Thu, Nov 3, 2022 at 2:52 AM David Hildenbrand <david@redhat.com> wrote:
+>
+> Happy to see that we're still decrementing the mapcount before
+> decrementingthe refcount, I was briefly concerned.
 
-I understand the spent time for charging is unpredictable as you said, sinc=
-e a
-lot of slow stuff may or may not happen.=20
+Oh, that would have been horribly wrong.
 
->=20
-> > >  If you want a remote draining then
-> > > you need some sort of locking (currently we rely on local lock). How
-> > > come this locking is not going to cause a different form of disturban=
-ce?
-> >=20
-> > If I did everything right, most of the extra work should be done either=
- in non-
-> > isolated (housekeeping) CPUs, or during a syscall. I mean, the pcp char=
-ge caches
-> > will be happening on a housekeeping CPU, and the locking cost should be=
- paid
-> > there as we want to avoid doing that in the isolated CPUs.=20
+> I was not able to come up quickly with something that would be
+> fundamentally wrong here, but devil is in the detail.
 
-Sorry, I think this caused a misunderstanding: I meant "the pcp charge cach=
-e
-drain will be happening on a housekeeping CPU, ..."
+So I tried to be very careful.
 
-> >=20
-> > I understand there will be a locking cost being paid in the isolated CP=
-Us when:
-> > a) The isolated CPU is requesting the stock drain,
-> > b) When the isolated CPUs do a syscall and end up using the protected s=
-tructure
-> > the first time after a remote drain.
->=20
-> And anytime the charging path (consume_stock resp. refill_stock)
-> contends with the remote draining which is out of control of the RT
-> task. It is true that the RT kernel will turn that spin lock into a
-> sleeping RT lock and that could help with potential priority inversions
-> but still quite costly thing I would expect.
->=20
-> > Both (a) and (b) should happen during a syscall, and IIUC the a rt work=
-load
-> > should not expect the syscalls to be have a predictable time, so it sho=
-uld be
-> > fine.
->=20
-> Now I am not sure I understand. If you do not consider charging path to
-> be RT sensitive then why is this needed in the first place? What else
-> would be populating the pcp cache on the isolated cpu? IRQs?
+The biggest change in the whole series (visible in last patch, but
+there in the prep-patches too) is how it narrows down some lock
+coverage.
 
-I am mostly trying to deal with drain_all_stock() calling schedule_work_on(=
-) at
-isolated_cpus. Since the scheduled drain_local_stock() will be competing fo=
-r cpu
-time with the RT workload, we can have preemption of the RT workload, which=
- is a
-problem for meeting the deadlines.
+Now, that locking didn't *do* anything valid, but I did try to point
+it out when it happens - how first the mapcount is decremented outside
+the memcg lock (in preparatory patches), and then later on the
+__dec_lruvec_page_state() turns into a dec_lruvec_page_state() because
+it's then done outside the page table lock.
 
-One way I thought to solve that was introducing a remote drain, which would
-require a different strategy for locking, since not all accesses to the pcp
-caches would happen on a local CPU.=20
+The locking in the second case did do something - not locking-wise,
+but simply the "running under the spinlock means we are not
+preemptable without RT".
 
-Then I tried to weight the costs of this, so the solution would introduce a=
-s
-little overhead as possible on no-isolation scenarios. Also, for isolation
-scenarios, I tried to put most of the overheads into the housekeeping CPUs,=
- and
-the remaining on the syscalls, which are also expected to be non-predictabl=
-e.
+And in the memcg case it was just plain overly wide lock regions.
 
-Not sure if I could answer your question, though. Please let me know in cas=
-e I
-missed anything.
+None of the other changes should have any real semantic meaning
+*apart* from just keeping ->_mapcount elevated slightly longer.
 
-Thanks for helping me make it more clear!
-Best regards,
-Leo
+> Some minor things could be improved IMHO (ENCODE_PAGE_BITS naming is
+> unfortunate, TLB_ZAP_RMAP could be a __bitwise type, using VM_WARN_ON
+> instead of VM_BUG_ON).
 
+That VM_BUG_ON() is a case of "what to do if this ever triggers?" So a
+WARN_ON() would be fatal too, it's some seriously bogus stuff to try
+to put bits in that won't fit.
 
+It probably should be removed, since the value should always be pretty
+much a simple constant. It was more of a "let's be careful with new
+code, not for production".
 
+Probably like pretty much all VM_BUG_ON's are - test code that just
+got left around.
 
+I considered just getting rid of ENCODE_PAGE_BITS entirely, since
+there is only one bit. But it was always "let's keep the option open
+for dirty bits etc", so I kept it, but I agree that the name isn't
+wonderful.
+
+And in fact I wanted the encoding to really be done by the caller (so
+that TLB_ZAP_RMAP wouldn't be a new argument, but the 'page' argument
+to __tlb_remove_page_*() would simply be an 'encoded page' pointer,
+but that would have caused the patch to be much bigger (and expanded
+the s390 side too). Which I didn't want to do.
+
+Long-term that's probably still the right thing to do, including
+passing the encoded pointers all the way to
+free_pages_and_swap_cache().
+
+Because it's pretty disgusting how it cleans up that array in place
+and then does that cast to a new array type, but it is also disgusting
+how it traverses that array multiple times (ie
+free_pages_and_swap_cache() will just have *another* loop).
+
+But again, those changes would have made the patch bigger, which I
+didn't want at this point (and 'release_pages()' would need that
+clean-in-place anyway, unless we changed *that* too and made the whole
+page encoding be something widely available).
+
+That's also why I then went with that fairly generic
+"ENCODE_PAGE_BITS" name. The *use* of it right now is very very
+specific to just the TLB gather, and the TLB_ZAP_RMAP bit shows that
+in the name. But then I went for a fairly generic "encode extra bits
+in the page pointer" name because it felt like it might expand beyond
+the initial intentionally small patch in the long run.
+
+So it's a combination of "we might want to expand on this in the
+future" and yet also "I really want to keep the changes localized in
+this patch".
+
+And the two are kind of inverses of each other, which hopefully
+explains the seemingly disparate naming logic.
+
+                 Linus
