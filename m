@@ -2,66 +2,75 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4CF366183B4
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:07:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DE1C86183B5
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:07:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231476AbiKCQHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 12:07:07 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
+        id S231654AbiKCQHL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 12:07:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231707AbiKCQGb (ORCPT
+        with ESMTP id S231844AbiKCQGf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 12:06:31 -0400
-Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BB91BEBE
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 09:04:32 -0700 (PDT)
-Received: by mail-qk1-x730.google.com with SMTP id z1so1417299qkl.9
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 09:04:32 -0700 (PDT)
+        Thu, 3 Nov 2022 12:06:35 -0400
+Received: from mail-wr1-x433.google.com (mail-wr1-x433.google.com [IPv6:2a00:1450:4864:20::433])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 376611BEA0
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 09:05:04 -0700 (PDT)
+Received: by mail-wr1-x433.google.com with SMTP id bk15so3424110wrb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 09:05:04 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=9/87SyahHYbwSlH02JkGLaqw/hD9Qaz9v7IraDvo2ww=;
-        b=ELoiMFdakhbNbTC1cHNfG45HwjrFEEjem7lpCB2r9zq6dXhS1OcQWWkrEhklosjeVT
-         CgH3WQQKCRJkHDSY4bbmiFJ+Ggn+BAbh5vHqQYHtZRmZBOIq+AZHBAmbMAurPUS4Sn8k
-         qM79nmY2V8E+K57rJPtl3W8FmoWtgxa0lr6DCplfFXf9ndtrm7OAwlN2c+b4ea6+uszg
-         N5lbbEp0igCMNWKAIxyspSN+wHxtDKDSguubPgkFRCu4Fj88u26vnlh9sZ2ZCCtRnhdS
-         yXrvF5lFJ+A2aJLaddDZxNlzg1/CGbhmPGk7BexEFywdoG/OXFJrLYMh5x/WLqQl2AEY
-         01RA==
+        d=google.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=5bE8gvgD+2CCW16QhdR/C9Tp3/1YBHbwrBZ657evZ5Y=;
+        b=F1TCMOc2gM4JBh0MBoUOVi99cQwxmFYb93bNL2AuobLpA6CQZnI2wv20FpdiIW1z4O
+         ElrcKIn4T3moqZK6tIvDlU1rjn5yq3+E5rrz9U8TJ8q/Gg+dkyFclY7bMFXgyGkE4AE1
+         etxECpvWXiLAeKknhmyxim+kAuHw71s6Nq+BB4Eal7iAL69tfHRtoaItQ1P0m6B1YdCg
+         AwWnUzWuyEKmk9gSlLbKPHz4jtzts8Aq4Zfo2rk316da+inBaaCLHk3VW+KGqa/vpA2F
+         czcqZhNstTnL5tisz3Ee1p7wJR8cjhjuZOxVmemReEXB/3mZz1XZKGZVMGzKx1teK6E4
+         9eig==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9/87SyahHYbwSlH02JkGLaqw/hD9Qaz9v7IraDvo2ww=;
-        b=0v/d8w7SganKF4acX0aDbi6YMVC9BASNZJDqGr+tP7G/ieXWu5IsfwUcCBoLOdbp8U
-         9xZ51gBYxyp41p1vukrzxy0rggFqFx03Hi7NKk+rgjCk9LCuSuKMQ+Nk8orC/JxGFOYT
-         PXqG5GtxNcW5djMymH0ecK/qX1BAyxzSdHGXb0jkLqyxKEloC4Cl6EbvPgyz/Cvv4Odu
-         toVQwXdK90XVSAPjzMj9goAi4X+e2CAtMhMcHzRoeFlun02J8kvyd0h7NeevEvUdAkcM
-         IWDFKYNdnkZWyYpsPLEfDecb6IX+xhwWHtJBOr72vBb4MNtZLeybLa4NXJQIXS/+3OyQ
-         kD6A==
-X-Gm-Message-State: ACrzQf1UJLmTXo2HKm7mmBBbEhz2BSRuY+aKDOkxTVEQBibVsu9wd4Bf
-        HgXzj4J3ItbHwZz2+FmwyDNRwSN6r/O2DExqWVE=
-X-Google-Smtp-Source: AMsMyM6oRvykHakM/P+2nGCwq8RlP2uIkk28WR2QG88XNSPxT6pMfLOrWp3E+jx0X4MZpBQECLAkCPtce/rBfUVJQVk=
-X-Received: by 2002:a05:620a:22c3:b0:6ec:53bb:d296 with SMTP id
- o3-20020a05620a22c300b006ec53bbd296mr22615839qki.158.1667491471546; Thu, 03
- Nov 2022 09:04:31 -0700 (PDT)
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5bE8gvgD+2CCW16QhdR/C9Tp3/1YBHbwrBZ657evZ5Y=;
+        b=7/hLdTB9oJPrBu49BzgSOwsDBPA1qMBcfCPA+KzEm5xsudkDsSLEsde71D0tYdhfMV
+         T4/Gq+o1eJmydwYzmXBhquos1AhgFf5ey3al6rLXEiBhgOJEqsyZgQs0m8fUVrFL8BhK
+         N9iT9cZmcBr5f49IUqZ6/5yW7s6WOOmRYwH2H6TnWG+9MgTZ9ehNXap/152uGyQgpe4+
+         cfQy+XF5nNJBEVUWIblvsmHzChQHFGp8yLeS4NR/Zwd8HLxFSqwo1TzjpK7xgGG2Jk9n
+         ru3unQvmJWXMx42Rwvn8TgVLMKhs8Oc9bUhJZUqv5d3aXWncf8ObdCH1vRwRSevwR6oY
+         K45Q==
+X-Gm-Message-State: ACrzQf0Ma/RblE8quz6ankyNKZ9zV03ay0kQZuCOur2PoEnGfvFDNnl+
+        KXcbsDbiMIcnhGDDXYH1WHfQV4otw+NtsnF0OltbskQo41o=
+X-Google-Smtp-Source: AMsMyM7KGjzWxsn9UIlOy5zupS8mkGqY+lpsgwhZ4+kB961c8ksKJG+519bRWFK0ps8avU81e13cyeIrXLbAv3qbc3M=
+X-Received: by 2002:a05:6000:1817:b0:236:77f0:ef60 with SMTP id
+ m23-20020a056000181700b0023677f0ef60mr18849090wrh.343.1667491502407; Thu, 03
+ Nov 2022 09:05:02 -0700 (PDT)
 MIME-Version: 1.0
-References: <Y2OPStg4jXtWpJcd@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
- <d0d6d613-174b-f7dd-7d45-45eecd26a850@inria.fr> <CAHJEyKUA4FG468S5bMsx+XGUR3pB3kKm_bx=LNPNJ6n9yPxCrQ@mail.gmail.com>
- <612f7cf-43db-a684-7a98-8469275b43fd@inria.fr>
-In-Reply-To: <612f7cf-43db-a684-7a98-8469275b43fd@inria.fr>
-From:   Tanju Brunostar <tanjubrunostar0@gmail.com>
-Date:   Thu, 3 Nov 2022 17:04:18 +0100
-Message-ID: <CAHJEyKXL=u=7tH2O3tdeSBZHyXLAdP9JcfzKHy6-bc7Bju5NMQ@mail.gmail.com>
-Subject: Re: [PATCH] staging: vt6655: change the function name s_vFillRTSHead
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+References: <20221103045437.163510-1-irogers@google.com> <20221103045437.163510-7-irogers@google.com>
+ <Y2PgBPeZsd9+YWB4@kernel.org> <Y2Pgz7luG77Wr+Ci@kernel.org> <Y2Pj0KVbbw9rMcPH@kernel.org>
+In-Reply-To: <Y2Pj0KVbbw9rMcPH@kernel.org>
+From:   Ian Rogers <irogers@google.com>
+Date:   Thu, 3 Nov 2022 09:04:49 -0700
+Message-ID: <CAP-5=fXkM52E5VvX9s2CfvF8ckQvcbSm8N_7BCfhW3dyuH7YUg@mail.gmail.com>
+Subject: Re: [PATCH v1 6/7] perf trace: 5sec fix libbpf 1.0+ compatibility
+To:     Arnaldo Carvalho de Melo <acme@kernel.org>
+Cc:     Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -69,153 +78,177 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 3, 2022 at 4:58 PM Julia Lawall <julia.lawall@inria.fr> wrote:
+On Thu, Nov 3, 2022 at 8:52 AM Arnaldo Carvalho de Melo <acme@kernel.org> w=
+rote:
 >
->
->
-> On Thu, 3 Nov 2022, Tanju Brunostar wrote:
->
-> > On Thu, Nov 3, 2022 at 1:38 PM Julia Lawall <julia.lawall@inria.fr> wrote:
+> Em Thu, Nov 03, 2022 at 12:39:59PM -0300, Arnaldo Carvalho de Melo escrev=
+eu:
+> > Em Thu, Nov 03, 2022 at 12:36:36PM -0300, Arnaldo Carvalho de Melo escr=
+eveu:
+> > > [root@quaco ~]# perf trace -e /home/acme/git/perf/tools/perf/examples=
+/bpf/5sec.c
+> > > /home/acme/git/perf/tools/perf/examples/bpf/5sec.c:42:10: fatal error=
+: 'bpf/bpf_helpers.h' file not found
+> > > #include <bpf/bpf_helpers.h>
+> > >          ^~~~~~~~~~~~~~~~~~~
+> > > 1 error generated.
+> > > ERROR:      unable to compile /home/acme/git/perf/tools/perf/examples=
+/bpf/5sec.c
+> > > Hint:       Check error message shown above.
+> > > Hint:       You can also pre-compile it into .o using:
+> > >                     clang -target bpf -O2 -c /home/acme/git/perf/tool=
+s/perf/examples/bpf/5sec.c
+> > >             with proper -I and -D options.
+> > > event syntax error: '/home/acme/git/perf/tools/perf/examples/bpf/5sec=
+.c'
+> > >                      \___ Failed to load /home/acme/git/perf/tools/pe=
+rf/examples/bpf/5sec.c from source: Error when compiling BPF scriptlet
 > > >
+> > > (add -v to see detail)
+> > > Run 'perf list' for a list of valid events
 > > >
+> > >  Usage: perf trace [<options>] [<command>]
+> > >     or: perf trace [<options>] -- <command> [<options>]
+> > >     or: perf trace record [<options>] [<command>]
+> > >     or: perf trace record [<options>] -- <command> [<options>]
 > > >
-> > > On Thu, 3 Nov 2022, Tanjuate Brunostar wrote:
+> > >     -e, --event <event>   event/syscall selector. use 'perf list' to =
+list available events
+> > > [root@quaco ~]#
 > > >
-> > > > Remove the use of Hungarian notation, which is not used in the Linux
-> > > > kernel. Reported by checkpatch
-> > > >
-> > > > Fix checkpatch error related to code line ends with a '(', by joining
-> > > > some lines and indenting correctly. This improves visibility
+> > > It is not even finding it, in this machine I have libbpf 0.7.0, so th=
+ere
+> > > is a /usr/include/bpf/bpf_helpers.h, but probably that isn't in the
+> > > include path set up to build the tools/perf/examples/bpf/ files, perh=
+aps
+> > > it should use:
 > > >
-> > > I don't think it will be appreciated to do two things at once.
+> > > -Itools/lib/  so that it gets tools/lib/bpf_helpers.h?
 > > >
+> > > Trying to get this tested...
 > >
-> > I sent it earlier as two patches but it seemed to break and fix the
-> > kernel which was not appreciated by one of the mentors
->
-> OK, then it is a presentation problem.  You have presented the changes as
-> unrelated.  Rewrite the message to make clear what is being done.
->
-> julia
->
-okay
+> > Running with -v:
 > >
-> > > >
-> > > > Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-> > > > ---
-> > > >  drivers/staging/vt6655/rxtx.c | 48 ++++++++++++++++-------------------
-> > > >  1 file changed, 22 insertions(+), 26 deletions(-)
-> > > >
-> > > > diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
-> > > > index 31ae99b3cb35..debc5d5daede 100644
-> > > > --- a/drivers/staging/vt6655/rxtx.c
-> > > > +++ b/drivers/staging/vt6655/rxtx.c
-> > > > @@ -23,7 +23,7 @@
-> > > >   *      s_uGetTxRsvTime- get frame reserved time
-> > > >   *      s_vFillCTSHead- fulfill CTS ctl header
-> > > >   *      s_vFillFragParameter- Set fragment ctl parameter.
-> > > > - *      s_vFillRTSHead- fulfill RTS ctl header
-> > > > + *      fill_rts_header- fulfill RTS ctl header
-> > > >   *      s_vFillTxKey- fulfill tx encrypt key
-> > > >   *      s_vSWencryption- Software encrypt header
-> > > >   *      vDMA0_tx_80211- tx 802.11 frame via dma0
-> > > > @@ -85,15 +85,15 @@ static const unsigned short fb_opt1[2][5] = {
-> > > >  #define DATADUR_A_F1    13
-> > > >
-> > > >  /*---------------------  Static Functions  --------------------------*/
-> > > > -static void s_vFillRTSHead(struct vnt_private *pDevice,
-> > > > -                        unsigned char byPktType,
-> > > > -                        void *pvRTS,
-> > > > -                        unsigned int cbFrameLength,
-> > > > -                        bool bNeedAck,
-> > > > -                        bool bDisCRC,
-> > > > -                        struct ieee80211_hdr *hdr,
-> > > > -                        unsigned short wCurrentRate,
-> > > > -                        unsigned char byFBOption);
-> > > > +static void fill_rts_header(struct vnt_private *pDevice,
-> > > > +                         unsigned char byPktType,
-> > > > +                         void *pvRTS,
-> > > > +                         unsigned int        cbFrameLength,
-> > >
-> > > Strange spacing in the above parameter declaration.  Maybe there is a tab
-> > > that should be a space?
-> > >
-> > > julia
-> > >
+> > llvm compiling command : /usr/lib64/ccache/clang -D__KERNEL__ -D__NR_CP=
+US__=3D8 -DLINUX_VERSION_CODE=3D0x51310 -g -I/home/acme/lib/perf/include/bp=
+f -nostdinc -I./arch/x86/include -I./arch/x86/include/generated  -I./includ=
+e -I./arch/x86/include/uapi -I./arch/x86/include/generated/uapi -I./include=
+/uapi -I./include/generated/uapi -include ./include/linux/compiler-version.=
+h -include ./include/linux/kconfig.h  -Wno-unused-value -Wno-pointer-sign -=
+working-directory /lib/modules/5.19.16-200.fc36.x86_64/build -c /home/acme/=
+git/perf/tools/perf/examples/bpf/5sec.c -target bpf  -g -O2 -o -
+> > /home/acme/git/perf/tools/perf/examples/bpf/5sec.c:42:10: fatal error: =
+'bpf/bpf_helpers.h' file not found
 > >
-> > I was also shocked when I noticed that. It seemed like a tab but when
-> > I removed the space, the two words were joined and when I added the
-> > space, it became this lage space once again. checkpatch does not
-> > complain about it though
-> >
-> > > > +                         bool bNeedAck,
-> > > > +                         bool bDisCRC,
-> > > > +                         struct ieee80211_hdr *hdr,
-> > > > +                         unsigned short wCurrentRate,
-> > > > +                         unsigned char byFBOption);
-> > > >
-> > > >  static void s_vGenerateTxParameter(struct vnt_private *pDevice,
-> > > >                                  unsigned char byPktType,
-> > > > @@ -555,19 +555,15 @@ s_uFillDataHead(
-> > > >       return buf->duration;
-> > > >  }
-> > > >
-> > > > -static
-> > > > -void
-> > > > -s_vFillRTSHead(
-> > > > -     struct vnt_private *pDevice,
-> > > > -     unsigned char byPktType,
-> > > > -     void *pvRTS,
-> > > > -     unsigned int cbFrameLength,
-> > > > -     bool bNeedAck,
-> > > > -     bool bDisCRC,
-> > > > -     struct ieee80211_hdr *hdr,
-> > > > -     unsigned short wCurrentRate,
-> > > > -     unsigned char byFBOption
-> > > > -)
-> > > > +static void fill_rts_header(struct vnt_private *pDevice,
-> > > > +                         unsigned char byPktType,
-> > > > +                         void *pvRTS,
-> > > > +                         unsigned int cbFrameLength,
-> > > > +                         bool bNeedAck,
-> > > > +                         bool bDisCRC,
-> > > > +                         struct ieee80211_hdr *hdr,
-> > > > +                         unsigned short wCurrentRate,
-> > > > +                         unsigned char byFBOption)
-> > > >  {
-> > > >       unsigned int uRTSFrameLen = 20;
-> > > >
-> > > > @@ -912,7 +908,7 @@ s_vGenerateTxParameter(
-> > > >                       buf->rrv_time_a = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
-> > > >                       buf->rrv_time_b = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, pDevice->byTopCCKBasicRate, bNeedACK);
-> > > >
-> > > > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-> > > > +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-> > > >               } else {/* RTS_needless, PCF mode */
-> > > >                       struct vnt_rrv_time_cts *buf = pvRrvTime;
-> > > >
-> > > > @@ -931,7 +927,7 @@ s_vGenerateTxParameter(
-> > > >                       buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
-> > > >
-> > > >                       /* Fill RTS */
-> > > > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-> > > > +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-> > > >               } else if (!pvRTS) {/* RTS_needless, non PCF mode */
-> > > >                       struct vnt_rrv_time_ab *buf = pvRrvTime;
-> > > >
-> > > > @@ -945,7 +941,7 @@ s_vGenerateTxParameter(
-> > > >                       buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, wCurrentRate, bNeedACK);
-> > > >
-> > > >                       /* Fill RTS */
-> > > > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-> > > > +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-> > > >               } else { /* RTS_needless, non PCF mode */
-> > > >                       struct vnt_rrv_time_ab *buf = pvRrvTime;
-> > > >
-> > > > --
-> > > > 2.34.1
-> > > >
-> > > >
-> > > >
-> >
+> > There is still that -I/home/acme/lib/perf/include/bpf, I'll remove it
+> > from the include path and try to replace it with the libbpf path...
 >
+> Ok, works with the patch below, that needs some more renaming from "perf_=
+" to
+> "libbpf_", etc:
+>
+> [root@quaco ~]# perf trace -e /home/acme/git/perf/tools/perf/examples/bpf=
+/5sec.c  sleep 5
+>      0.000 sleep/160828 perf_bpf_probe:hrtimer_nanosleep(__probe_ip: -147=
+4734416, rqtp: 5000000000)
+> [root@quaco ~]#
+>
+> Since I have:
+>
+> [root@quaco ~]# cat ~/.perfconfig
+> [llvm]
+>         dump-obj =3D true
+>         clang-opt =3D -g
+> #
+>
+> I end up with:
+>
+> [root@quaco ~]# ls -la /home/acme/git/perf/tools/perf/examples/bpf/5sec.o
+> -rw-r--r--. 1 root root 3696 Nov  3 12:47 /home/acme/git/perf/tools/perf/=
+examples/bpf/5sec.o
+> [root@quaco ~]# file /home/acme/git/perf/tools/perf/examples/bpf/5sec.o
+> /home/acme/git/perf/tools/perf/examples/bpf/5sec.o: ELF 64-bit LSB reloca=
+table, eBPF, version 1 (SYSV), with debug_info, not stripped
+> [root@quaco ~]#
+>
+> and can test with the pre-built .o eBPF bytecode + capped backtrace:
+>
+> [root@quaco ~]# perf trace -e /home/acme/git/perf/tools/perf/examples/bpf=
+/5sec.o/max-stack=3D6/  sleep 5
+>      0.000 sleep/161037 perf_bpf_probe:hrtimer_nanosleep(__probe_ip: -147=
+4734416, rqtp: 5000000000)
+>                                        hrtimer_nanosleep ([kernel.kallsym=
+s])
+>                                        common_nsleep ([kernel.kallsyms])
+>                                        __x64_sys_clock_nanosleep ([kernel=
+.kallsyms])
+>                                        do_syscall_64 ([kernel.kallsyms])
+>                                        entry_SYSCALL_64_after_hwframe ([k=
+ernel.kallsyms])
+>                                        __GI___clock_nanosleep (/usr/lib64=
+/libc.so.6)
+> [root@quaco ~]#
+>
+> I'll test the other examples with these changes after I drive Pedro to
+> school and get back to the office.
+
+Thanks, I was somewhat coding in the dark with this as I was using a
+bpf object file and clearly there's been some attention missed for a
+while in these code paths. I couldn't get the hello variant to do
+anything with the openat tracing it was set up for, for example, the
+change puts the call on the sys_enter raw syscall. I suspect you
+remember how these things should be and I'm happy to roll a v2, have
+you fix it, etc.
+
+Fwiw, two things I'd like to see further here is somehow the augmented
+code to be the default (with a BPF skeleton possibly) and an ability
+for perf_event_open tracing to dump the perf_event_attr. I'm unclear
+on the advantages of having different augmenters. Perhaps we could
+just drop support for different augmenters, use BPF skeletons for the
+raw syscall version and keep the BPF logic in parse events for adding
+filters - the process of doing augmentation isn't clear to me even
+after having produced these changes. There is quite a bit of plumbing
+necessary to remove the notion that the BPF object comes from event
+parsing and I suspect to achieve this in the current code there is
+some overhead that the skeleton could remove - like the empty
+sys_enter functions I added.
+
+Anyway, fixing libbpf 1.0+ and removing a header file called bpf.h
+were what I was after achieving here :-)
+
+Thanks,
+Ian
+
+
+> - Arnaldo
+>
+> diff --git a/tools/perf/Makefile.config b/tools/perf/Makefile.config
+> index d3d3c13a9f25b55c..067a6e56eeacc9fc 100644
+> --- a/tools/perf/Makefile.config
+> +++ b/tools/perf/Makefile.config
+> @@ -1239,7 +1239,7 @@ includedir =3D $(abspath $(prefix)/$(includedir_rel=
+ative))
+>  mandir =3D share/man
+>  infodir =3D share/info
+>  perfexecdir =3D libexec/perf-core
+> -perf_include_dir =3D lib/perf/include
+> +perf_include_dir =3D /usr/include
+>  perf_examples_dir =3D lib/perf/examples
+>  sharedir =3D $(prefix)/share
+>  template_dir =3D share/perf-core/templates
+> diff --git a/tools/perf/util/llvm-utils.c b/tools/perf/util/llvm-utils.c
+> index 2dc7970074196ca8..a5cac85783d8711f 100644
+> --- a/tools/perf/util/llvm-utils.c
+> +++ b/tools/perf/util/llvm-utils.c
+> @@ -495,7 +495,7 @@ int llvm__compile_bpf(const char *path, void **p_obj_=
+buf,
+>
+>         snprintf(linux_version_code_str, sizeof(linux_version_code_str),
+>                  "0x%x", kernel_version);
+> -       if (asprintf(&perf_bpf_include_opts, "-I%s/bpf", perf_include_dir=
+) < 0)
+> +       if (asprintf(&perf_bpf_include_opts, "-I%s/", perf_include_dir) <=
+ 0)
+>                 goto errout;
+>         force_set_env("NR_CPUS", nr_cpus_avail_str);
+>         force_set_env("LINUX_VERSION_CODE", linux_version_code_str);
