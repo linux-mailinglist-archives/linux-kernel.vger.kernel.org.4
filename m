@@ -2,156 +2,95 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6A57618471
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:30:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8A6E7618476
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:30:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231684AbiKCQa0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 12:30:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54692 "EHLO
+        id S232049AbiKCQax (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 12:30:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55466 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbiKCQaV (ORCPT
+        with ESMTP id S231854AbiKCQas (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 12:30:21 -0400
-Received: from new4-smtp.messagingengine.com (new4-smtp.messagingengine.com [66.111.4.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3A039E68;
-        Thu,  3 Nov 2022 09:30:20 -0700 (PDT)
-Received: from compute4.internal (compute4.nyi.internal [10.202.2.44])
-        by mailnew.nyi.internal (Postfix) with ESMTP id B39505802BB;
-        Thu,  3 Nov 2022 12:30:17 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute4.internal (MEProxy); Thu, 03 Nov 2022 12:30:17 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=shutemov.name;
-         h=cc:cc:content-type:date:date:from:from:in-reply-to
-        :in-reply-to:message-id:mime-version:references:reply-to:sender
-        :subject:subject:to:to; s=fm2; t=1667493017; x=1667500217; bh=z/
-        C3hpsaAUauBg1lNZ7x2lDFowPPF1DONENeXdvNlHg=; b=cJt3hR7v7SCNla7eXQ
-        i90372/VJvPGU+ek4EklPY7Z1h9eNHAS6q98C2Pkp/Ks5TkT/I6+O+oiLSzUi3qG
-        YQMXVCqPCd853tICbc9Ot5iuYoTcY9sDj153nfGnceQroa51z/zyStTVx6kKk+qk
-        swy2GVse/rzWnvNiZyrkq9+QKIkMO6c+HBDbcT5815ZqaSg+CqMieNF+suoTkG9q
-        d35+VbbvhhxHny0REo2fqtAFKjWH69jfafARLlrDEkwPR5G+OeeWexyMY69xWTQs
-        9hG31aLQZ1NBst4OsgmoFm7sgmmNccS27ItzTJewBOjAI1mf3W5sYVfz7O2QQkH2
-        KECw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
-        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
-        :mime-version:references:reply-to:sender:subject:subject:to:to
-        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
-        fm3; t=1667493017; x=1667500217; bh=z/C3hpsaAUauBg1lNZ7x2lDFowPP
-        F1DONENeXdvNlHg=; b=Xp/UUWwX3MA3A3FhOL+uUmo98+p/mBAOVE6y3oteimnp
-        BGsyKhPGyDalEGVnTkf9KbzLLGczmkIRzvTCBCbaWYaYtZJ7s5wGS5ox4pse97E8
-        ItmT6KnFilBemeBsPjQnDXYjjEjoHoULHaLQ5ONvcVTOm++bj/0zi0P2ns0QvcPP
-        cS23hOm5hfOhMomcRE7PFy4MEYmjfnQ+MjemMLurvahmVpbBGyjQ/6JonkxsSyqd
-        mpJ1O2FcOAHrD7eaBmcAr7R0mLw53nA40XEYmYrMS73USeELLLLl1ODQZhSxynXT
-        atH9QYZog6S+m644Se0gu6hLvqJpioy/eHJRfVxNzQ==
-X-ME-Sender: <xms:l-xjY2y2hvIUc2gnuKmrrWWgeYya4CvqS9xJWrYD_Y-xuI4mNmjJSA>
-    <xme:l-xjYyTQxmaFzyvy445bumuVSyUrIFPKtLq4mk5xop0IdzEhsisFjkoKABFLZueIJ
-    _ZKaVY9Hldx5BNRbsI>
-X-ME-Received: <xmr:l-xjY4VPN3ITYs_DHTBDcn0JNGi4bFeXCmQaCWWhWxcF7179z9Avu7Aj4w18LzVT5te7CQ>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudelgdekfecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpeffhffvvefukfhfgggtuggjsehttddttddttddvnecuhfhrohhmpedfmfhirhhi
-    lhhlucetrdcuufhhuhhtvghmohhvfdcuoehkihhrihhllhesshhhuhhtvghmohhvrdhnrg
-    hmvgeqnecuggftrfgrthhtvghrnhephffgffehieelieefveeukeevtdevvdfhtdduvdet
-    vdffhffhfffgieehfeehvdelnecuffhomhgrihhnpegrmhgurdgtohhmnecuvehluhhsth
-    gvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepkhhirhhilhhlsehshhhu
-    thgvmhhovhdrnhgrmhgv
-X-ME-Proxy: <xmx:l-xjY8jFfTy07E1c7ongwMhBptl1nbLk6rZYXP8u8pvzK_kobDzp7A>
-    <xmx:l-xjY4Cq4sEeo9PzVqE0bdOqfmBEOuz9ttBC1q_GaEfz2uCOh3GTHA>
-    <xmx:l-xjY9I0mOHHOewyM90VoMTKjcRtGwCR02bJND_jqEDOfMUVKD57NA>
-    <xmx:mexjY98KrJllNKgIt3jvB18QJ7eC1KSYIZeGELfE3xb7jcLc6UHJNQ>
-Feedback-ID: ie3994620:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 3 Nov 2022 12:30:15 -0400 (EDT)
-Received: by box.shutemov.name (Postfix, from userid 1000)
-        id 1EC92104769; Thu,  3 Nov 2022 19:30:12 +0300 (+03)
-Date:   Thu, 3 Nov 2022 19:30:12 +0300
-From:   "Kirill A. Shutemov" <kirill@shutemov.name>
-To:     Michael Roth <michael.roth@amd.com>
-Cc:     Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-arch@vger.kernel.org,
-        linux-api@vger.kernel.org, linux-doc@vger.kernel.org,
-        qemu-devel@nongnu.org, Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Sean Christopherson <seanjc@google.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        mhocko@suse.com, Muchun Song <songmuchun@bytedance.com>,
-        wei.w.wang@intel.com
-Subject: Re: [PATCH v9 1/8] mm: Introduce memfd_restricted system call to
- create restricted user memory
-Message-ID: <20221103163012.25zof5lyxvizltwl@box.shutemov.name>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-2-chao.p.peng@linux.intel.com>
- <20221031174738.fklhlia5fmaiinpe@amd.com>
- <20221102211404.l5whyif3j3k67fv2@box.shutemov.name>
- <20221102220700.5u4mj7fm37m6ust2@amd.com>
+        Thu, 3 Nov 2022 12:30:48 -0400
+Received: from mail-qk1-x735.google.com (mail-qk1-x735.google.com [IPv6:2607:f8b0:4864:20::735])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B40421B9DE
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 09:30:29 -0700 (PDT)
+Received: by mail-qk1-x735.google.com with SMTP id k4so1474225qkj.8
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 09:30:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uHNMJF8XWCG/HlS4+eCjG2CgBguyze4jH3mOvZx8Epg=;
+        b=G1ZhYVb8T+FZ4BgBVxLLoQE87vgaX58qMUgd9tNRxudHWdFqHOrOjKyy0axzacXM3h
+         CMVDYWUjAiBjxwOf4AjBnim4hN7N1AWbe/75vpEDULus3YNRtuRHfZiuwCRo4m1xoTBu
+         RbL8LgY8u+AJRiYxQmobQILA2kh5LvcPbwh2G0xNL2P3mCklSd2LLTaGuUjujZ4X4YSo
+         jI2yuU4BvCFJ1V/a3SSQahnPPPqmdLJMTaeXPAFCXLsO5Kb9wn1HQ1O4kQFWM+fLMJY3
+         VaGxwtYwQwsVuEPcnRa34oMzIBC245hOYz97SulJ7vsQSTlAzxQi0PhouSyeaOzxVRtk
+         zosA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uHNMJF8XWCG/HlS4+eCjG2CgBguyze4jH3mOvZx8Epg=;
+        b=Zegk8SEQQm4b68kzChQ/j93V8dUEkgLfNRN/82DnmOmoukscBJjWA8QClBq0wxY/t5
+         PDOL9214I9UqfvcvU11H92ZaSgzkDU7ShWIbjJQLtcOGypyK2exjl+wO4VFPwNkBvKXl
+         9OCPYD63gN27LrMJDO4sazlv6ZvrHJ4fX1e2BI4dT3nTe2E0ndmzzvU4NjNM5HEK9z5r
+         ageqAwHXrI5kSgXl7BV2F2n6r0KIixVF2JMKDlb9xu4PuEn4+p87bJQOXLuhaNDOyFvS
+         rtvrLEf3+T0LqaD1U/bvcBnOJtfzVgt3ILOyfHd2fSijMrvkwzMC6NkO3JTRUYtRfvko
+         +r8Q==
+X-Gm-Message-State: ACrzQf2artPaOHxtKavFTZ/j+Z65ymnYeIiHNsQBbW1j1nx8t11QfHgj
+        7RuxTXMr9GY+OjdvrVPyfbz+CQ==
+X-Google-Smtp-Source: AMsMyM44aLhA23EfLSlswOnvlGa6pp5mgrDyi2ujgIpGR2aSX5ZTJXEBlIpP7pSqO/tnkk5hNMUObw==
+X-Received: by 2002:a05:620a:56b:b0:6fa:3110:5aa8 with SMTP id p11-20020a05620a056b00b006fa31105aa8mr15586230qkp.343.1667493028896;
+        Thu, 03 Nov 2022 09:30:28 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
+        by smtp.gmail.com with ESMTPSA id g10-20020a05620a40ca00b006f9ddaaf01esm1006172qko.102.2022.11.03.09.30.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 09:30:28 -0700 (PDT)
+Message-ID: <08f88129-23db-ff29-4ad4-07adfe3bae9d@linaro.org>
+Date:   Thu, 3 Nov 2022 12:30:27 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221102220700.5u4mj7fm37m6ust2@amd.com>
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v1 3/7] dt-bindings: usb: hpe,gxp-udcg: Add binding for
+ gxp gadget group
+Content-Language: en-US
+To:     richard.yu@hpe.com, verdun@hpe.com, nick.hawkins@hpe.com,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk,
+        balbi@kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20221103160625.15574-1-richard.yu@hpe.com>
+ <20221103160625.15574-4-richard.yu@hpe.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221103160625.15574-4-richard.yu@hpe.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 05:07:00PM -0500, Michael Roth wrote:
-> On Thu, Nov 03, 2022 at 12:14:04AM +0300, Kirill A. Shutemov wrote:
-> > On Mon, Oct 31, 2022 at 12:47:38PM -0500, Michael Roth wrote:
-> > > 
-> > > In v8 there was some discussion about potentially passing the page/folio
-> > > and order as part of the invalidation callback, I ended up needing
-> > > something similar for SEV-SNP, and think it might make sense for other
-> > > platforms. This main reasoning is:
-> > > 
-> > >   1) restoring kernel directmap:
-> > > 
-> > >      Currently SNP (and I believe TDX) need to either split or remove kernel
-> > >      direct mappings for restricted PFNs, since there is no guarantee that
-> > >      other PFNs within a 2MB range won't be used for non-restricted
-> > >      (which will cause an RMP #PF in the case of SNP since the 2MB
-> > >      mapping overlaps with guest-owned pages)
-> > 
-> > That's news to me. Where the restriction for SNP comes from?
+On 03/11/2022 12:06, richard.yu@hpe.com wrote:
+> From: Richard Yu <richard.yu@hpe.com>
 > 
-> Sorry, missed your first question.
+> Create documentation for the hpe,gxp-udcg binding to support access to
+> the gxp USB gadget group.
 > 
-> For SNP at least, the restriction is documented in APM Volume 2, Section
-> 15.36.10, First row of Table 15-36 (preceeding paragraph has more
-> context). I forgot to mention this is only pertaining to writes by the
-> host to 2MB pages that contain guest-owned subpages, for reads it's
-> not an issue, but I think the implementation requirements end up being
-> the same either way:
-> 
->   https://www.amd.com/system/files/TechDocs/24593.pdf
+> Signed-off-by: Richard Yu <richard.yu@hpe.com>
+> ---
 
-Looks like you wanted restricted memfd to be backed by secretmem rather
-then normal memfd. It would help preserve directmap.
 
--- 
-  Kiryl Shutsemau / Kirill A. Shutemov
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
