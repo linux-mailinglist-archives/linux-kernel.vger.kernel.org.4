@@ -2,133 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D39F7618B4B
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 23:20:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0EE34618B53
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 23:22:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231465AbiKCWUy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 18:20:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42606 "EHLO
+        id S231553AbiKCWWZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 18:22:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43668 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231714AbiKCWUt (ORCPT
+        with ESMTP id S229985AbiKCWWW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 18:20:49 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9D77220D8
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 15:20:42 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id w4so2183186qts.0
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 15:20:42 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jLQxMqZeSjx3t7d42CWl5RcAbFY//1FJaI4cAmerqIM=;
-        b=Y5gxiSNoc0mcvBtK7drkUAI9qNJu8OFLvo7mVi2WzZfGnfvhED0EqpqNAOcccvCY1m
-         JENlL6Q3HqYbgyk4QmHDfzGe1jeXmBQ23NWZBxWgyxNVZxfGbyR2dNMybBBaviwKo6lP
-         VGl/CaMn6HlzQNvKUJciwHthNg0V/f3bUhy6OrkZxNQn5o6pu1uDBpxH6jyXKr1AKgVa
-         oEHqALA+YY5NcJBSFSpTKWjYLAskJOSP2WXL7JYBlDXGWqb2yfL6AtgylOSVmJjFHeU/
-         MtKaGx2C2VMEkytnLPuXLZFsnGN1wzOonBU+n0/NEhW4QarjWnF6MQXNdf5OeJpnH97B
-         0Bwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jLQxMqZeSjx3t7d42CWl5RcAbFY//1FJaI4cAmerqIM=;
-        b=mthyWC8D03E1XoL90uyd/C41Zaf5/3PX0n/noVUe7tKU0qCEW4CFbvE7ROPmooMwDY
-         Sh2rYloJteSPAOsmUYqpfL8Il8bPHop7fBCfz5bDDanOzft9mjLpwFLnv0sY0UjGQCE1
-         yrKHE1Fz4Y/gAD8mENuc7ZNEiXpIv9JWXsBzH2ZE14eda8DqhfeHhMej/3ezYJqWY6Uw
-         02dY+8eHq/Je4Bj7D0Lh/9COy16oC7ZV2cUp7MyDupXdRzbfPT2SwA/b9ZOr4uVzNDa+
-         Ci+eKICP0PNGYeg7I7OeSYi1/529r+zoMIYy8Uy/wizU8gVCAZzwcAMMwTTI9kBoaGRl
-         6wSw==
-X-Gm-Message-State: ACrzQf2rYXb1UKiTRNUQ21gIfVLiZ8HqfpD8hwL9jXKNl/3VbCl1D5Vf
-        b3veIx9RAsH5L5rFOexqe+qltA==
-X-Google-Smtp-Source: AMsMyM4kjXr8XPqH1mcvbytz7yHrxD33ODexAHSYNycgk1HoKAatWrQRdoUJ8cJnr+OczKAfBF3Bsg==
-X-Received: by 2002:a05:622a:1d0:b0:39c:fc19:b580 with SMTP id t16-20020a05622a01d000b0039cfc19b580mr27435489qtw.238.1667514041955;
-        Thu, 03 Nov 2022 15:20:41 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
-        by smtp.gmail.com with ESMTPSA id p20-20020a05620a15f400b006b953a7929csm1529020qkm.73.2022.11.03.15.20.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 15:20:41 -0700 (PDT)
-Message-ID: <780253cd-960f-ee29-247f-22b9c899c035@linaro.org>
-Date:   Thu, 3 Nov 2022 18:20:40 -0400
+        Thu, 3 Nov 2022 18:22:22 -0400
+Received: from m12-14.163.com (m12-14.163.com [220.181.12.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id C11411F2FC
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 15:22:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=163.com;
+        s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=dAvGo
+        8hUVnCJdOaOHwloI5JQG/uqE/A2irutxgEtJ8c=; b=OV3Xnbb6nUIdXSokE6oN9
+        lip5QPVy2fijo9pjyjm3UtwYrIqar5X1+K4XjI6+XFjkB9gJAabjzO50uySICzbQ
+        RW4x/D225ulsj9UVOeRpQU6wS8KVU5nY7C+g7F3oT0q65dZ9oKfcLT83Ozsi47H5
+        /5Ms7VIZJuimlv4tF/Rmks=
+Received: from localhost.localdomain (unknown [171.221.150.41])
+        by smtp10 (Coremail) with SMTP id DsCowABnmznpPmRjRFnrKg--.58971S4;
+        Fri, 04 Nov 2022 06:21:44 +0800 (CST)
+From:   Chen Lin <chen45464546@163.com>
+To:     will@kernel.org
+Cc:     robin.murphy@arm.com, joro@8bytes.org, treding@nvidia.com,
+        linux-arm-kernel@lists.infradead.org, iommu@lists.linux.dev,
+        linux-kernel@vger.kernel.org, Chen Lin <chen45464546@163.com>
+Subject: [PATCH] iommu/arm-smmu: Warn once when the perfetcher errata patch fails to apply
+Date:   Fri,  4 Nov 2022 06:21:21 +0800
+Message-Id: <20221103222121.3051-1-chen45464546@163.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v1 1/2] arm64: dts: qcom: msm8916-alcatel-idol347: add
- GPIO torch LED
-Content-Language: en-US
-To:     Vincent Knecht <vincent.knecht@mailoo.org>,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-References: <20221029145557.106920-1-vincent.knecht@mailoo.org>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221029145557.106920-1-vincent.knecht@mailoo.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: DsCowABnmznpPmRjRFnrKg--.58971S4
+X-Coremail-Antispam: 1Uf129KBjvdXoWrtw45XF4fKr43WF1xXrW3Awb_yoWkCrcEv3
+        Wru3srA34rArW7Ww1Yq3Way3s2kr47Zrn7Wr4Sq3s3JrnrXFyrAan2qF95Kw4xGFy0vFy2
+        qF1Yg3yxJry7WjkaLaAFLSUrUUUUUb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
+        9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xRNBTYUUUUUU==
+X-Originating-IP: [171.221.150.41]
+X-CM-SenderInfo: hfkh0kqvuwkkiuw6il2tof0z/xtbB2A+unmBHMc4a7wAAsK
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 29/10/2022 10:55, Vincent Knecht wrote:
-> Add support for torch LED on GPIO 32.
-> 
-> Signed-off-by: Vincent Knecht <vincent.knecht@mailoo.org>
-> ---
->  .../boot/dts/qcom/msm8916-alcatel-idol347.dts | 22 +++++++++++++++++++
->  1 file changed, 22 insertions(+)
-> 
-> diff --git a/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts b/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts
-> index 3dc9619fde6e..3a0a593899ae 100644
-> --- a/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts
-> +++ b/arch/arm64/boot/dts/qcom/msm8916-alcatel-idol347.dts
-> @@ -5,6 +5,7 @@
->  #include "msm8916-pm8916.dtsi"
->  #include <dt-bindings/gpio/gpio.h>
->  #include <dt-bindings/input/input.h>
-> +#include <dt-bindings/leds/common.h>
->  
->  / {
->  	model = "Alcatel OneTouch Idol 3 (4.7)";
-> @@ -34,6 +35,19 @@ button-volume-up {
->  		};
->  	};
->  
-> +	gpio-leds {
-> +		compatible = "gpio-leds";
-> +
-> +		pinctrl-names = "default";
-> +		pinctrl-0 = <&gpio_leds_default>;
-> +
-> +		led-0 {
-> +			gpios = <&msmgpio 32 GPIO_ACTIVE_HIGH>;
-> +			linux,default-trigger = "torch";
-> +			function = LED_FUNCTION_TORCH;
-> +		};
-> +	};
-> +
->  	usb_id: usb-id {
->  		compatible = "linux,extcon-usb-gpio";
->  		id-gpio = <&msmgpio 69 GPIO_ACTIVE_HIGH>;
-> @@ -276,6 +290,14 @@ gpio_keys_default: gpio-keys-default {
->  		bias-pull-up;
->  	};
->  
-> +	gpio_leds_default: gpio-leds-default {
+Default reset value of secure banked register SMMU_sACR.cache_lock is 1.
+If it is not been set to 0 by secure software(eg: atf), the non-secure 
+linux cannot clear ARM_MMU500_ACTLR_CPRE bit. In this situation,
+the prefetcher errata is not applied successfully, warn once.
 
-Node name: gpio-leds-default-state
+Signed-off-by: Chen Lin <chen45464546@163.com>
+---
+ drivers/iommu/arm/arm-smmu/arm-smmu-impl.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Best regards,
-Krzysztof
+diff --git a/drivers/iommu/arm/arm-smmu/arm-smmu-impl.c b/drivers/iommu/arm/arm-smmu/arm-smmu-impl.c
+index 658f3cc83278..2d2252b3e518 100644
+--- a/drivers/iommu/arm/arm-smmu/arm-smmu-impl.c
++++ b/drivers/iommu/arm/arm-smmu/arm-smmu-impl.c
+@@ -136,6 +136,9 @@ int arm_mmu500_reset(struct arm_smmu_device *smmu)
+ 		reg = arm_smmu_cb_read(smmu, i, ARM_SMMU_CB_ACTLR);
+ 		reg &= ~ARM_MMU500_ACTLR_CPRE;
+ 		arm_smmu_cb_write(smmu, i, ARM_SMMU_CB_ACTLR, reg);
++		reg = arm_smmu_cb_read(smmu, i, ARM_SMMU_CB_ACTLR);
++		if (reg & ARM_MMU500_ACTLR_CPRE)
++			dev_warn_once(smmu->dev, "Failed to alpply prefetcher errata patch, check SMMU_sACR.cache_lock\n");
+ 	}
+ 
+ 	return 0;
+-- 
+2.25.1
 
