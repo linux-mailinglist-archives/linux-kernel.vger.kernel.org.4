@@ -2,167 +2,105 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C0903617690
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 07:06:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 71914617692
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 07:06:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229591AbiKCGG1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 02:06:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43552 "EHLO
+        id S229811AbiKCGGy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 02:06:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43916 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiKCGGU (ORCPT
+        with ESMTP id S229825AbiKCGGw (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 02:06:20 -0400
-Received: from mx0b-0016f401.pphosted.com (mx0a-0016f401.pphosted.com [67.231.148.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DA2B3192B8;
-        Wed,  2 Nov 2022 23:06:18 -0700 (PDT)
-Received: from pps.filterd (m0045849.ppops.net [127.0.0.1])
-        by mx0a-0016f401.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A35Jk7l028197;
-        Wed, 2 Nov 2022 23:06:04 -0700
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=marvell.com; h=from : to : cc :
- subject : date : message-id : mime-version : content-transfer-encoding :
- content-type; s=pfpt0220; bh=aUwPKMHMtxeBcSQnf7JFwYu10iJp0Z7AtIcoHeJlaZA=;
- b=DP28xSZ3/UoG+0VaSJtdWzeNL0A0VX8iG272KUXbgoCfcJLznlm5M6vBI5effajt5k72
- Dfp3I5dJ3uJGzZDTsdmDNhIa554gYcoCd6laOr8p/FLQz//PWkB/34ZAfkJawBJceKjU
- FNbDbuUM7l+qsfkdlSd4Lgbbfad9J8nZg0GMM6HT3l3wf3nQGZkLsKYWQyF3TZ/1loVh
- 2GBXCJiyUIk6HGOyJfAaDwJNAUvzvOZ/+aj6nqGMm8/lX1RtWK2AhJ+ycNhe9leUJ6ny
- trBgXxH9prurLPkx/CiXCiasODprkINSNSu4IGL+Erm9wFF3YOgSFv4Dy2PRAGo37iR5 EQ== 
-Received: from dc5-exch02.marvell.com ([199.233.59.182])
-        by mx0a-0016f401.pphosted.com (PPS) with ESMTPS id 3km7da05g3-4
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-SHA384 bits=256 verify=NOT);
-        Wed, 02 Nov 2022 23:06:03 -0700
-Received: from DC5-EXCH02.marvell.com (10.69.176.39) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server (TLS) id 15.0.1497.18; Wed, 2 Nov
- 2022 23:06:02 -0700
-Received: from maili.marvell.com (10.69.176.80) by DC5-EXCH02.marvell.com
- (10.69.176.39) with Microsoft SMTP Server id 15.0.1497.18 via Frontend
- Transport; Wed, 2 Nov 2022 23:06:02 -0700
-Received: from sburla-PowerEdge-T630.caveonetworks.com (unknown [10.106.27.217])
-        by maili.marvell.com (Postfix) with ESMTP id 3179A3F70FA;
-        Wed,  2 Nov 2022 23:06:02 -0700 (PDT)
-From:   Veerasenareddy Burru <vburru@marvell.com>
-To:     <netdev@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <lironh@marvell.com>, <aayarekar@marvell.com>,
-        <sedara@marvell.com>, <sburla@marvell.com>
-CC:     <linux-doc@vger.kernel.org>,
-        Veerasenareddy Burru <vburru@marvell.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        "Jonathan Corbet" <corbet@lwn.net>
-Subject: [PATCH net-next v4] octeon_ep: support Octeon device CNF95N
-Date:   Wed, 2 Nov 2022 23:05:57 -0700
-Message-ID: <20221103060600.1858-1-vburru@marvell.com>
-X-Mailer: git-send-email 2.36.0
+        Thu, 3 Nov 2022 02:06:52 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BD600193E6;
+        Wed,  2 Nov 2022 23:06:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=0smtlWd4HGnf6GjxBBNVPyZdRbAeNRzlEzj9TPQNMMk=; b=if61U6QEgvQm9kJwy7xXOTydGC
+        wvSEX+Sc65lQ6DaGdxNDpqVT3O9Ii3+vzX8iwt53dq/VCkPFgqovdHAXVLvZZb7YpOaVl2J5sIrz3
+        XHR+pa7Uyr1xgWxZdPvWDIhfzeuMSi2n6w5TyQ/FkvnM8LYh0IqmrSpdUD1FF5HdM3jxGpYrXhXFo
+        LM4JynT99eU5y9Znj2/QC3tfMiAOujsISggWXubVt/JG5WIf32+VRfrudTKqT38sHTxpvgHxqRABj
+        5/d+2lddCn0yQc2znpmC0kfTOapiqm+25R9bALANRqOYqi1oWSXRtvHzAnveMatnwpImW9sbgLrJX
+        P1kJX6sA==;
+Received: from [2601:1c2:d80:3110:e65e:37ff:febd:ee53]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oqTNJ-00GGEk-BK; Thu, 03 Nov 2022 06:06:49 +0000
+Message-ID: <a68a24a0-eda3-8711-21c1-334289eca0d3@infradead.org>
+Date:   Wed, 2 Nov 2022 23:06:45 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: pwUKfBp_NGNOlz2YE4KrArP1yccwGy2H
-X-Proofpoint-GUID: pwUKfBp_NGNOlz2YE4KrArP1yccwGy2H
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-02_15,2022-11-02_01,2022-06-22_01
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] drm: rcar_du: DRM_RCAR_DU optionally depends on
+ RCAR_MIPI_DSI
+Content-Language: en-US
+To:     linux-kernel@vger.kernel.org
+Cc:     Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
+        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        LUU HOAI <hoai.luu.ub@renesas.com>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>
+References: <20221018181828.19528-1-rdunlap@infradead.org>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20221018181828.19528-1-rdunlap@infradead.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add support for Octeon device CNF95N.
-CNF95N is a Octeon Fusion family product with same PCI NIC
-characteristics as CN93 which is currently supported by the driver.
+ping. I have verified (on linux-next-20221103) that this is still needed.
+Thanks.
 
-update supported device list in Documentation.
+On 10/18/22 11:18, Randy Dunlap wrote:
+> When CONFIG_DRM_RCAR_DU=y and CONFIG_DRM_RCAR_MIPI_DSI=m, calls
+> from the builtin driver to the mipi driver fail due to linker
+> errors.
+> Since the RCAR_MIPI_DSI driver is not always required, fix the
+> build error by making DRM_RCAR_DU optionally depend on the
+> RCAR_MIPI_DSI Kconfig symbol. This prevents the problematic
+> kconfig combination without requiring that RCAR_MIPI_DSI always
+> be enabled.
+> 
+> aarch64-linux-ld: drivers/gpu/drm/rcar-du/rcar_du_crtc.o: in function `rcar_du_crtc_atomic_enable':
+> rcar_du_crtc.c:(.text+0x3a18): undefined reference to `rcar_mipi_dsi_pclk_enable'
+> aarch64-linux-ld: drivers/gpu/drm/rcar-du/rcar_du_crtc.o: in function `rcar_du_crtc_atomic_disable':
+> rcar_du_crtc.c:(.text+0x47cc): undefined reference to `rcar_mipi_dsi_pclk_disable'
+> 
+> Fixes: 957fe62d7d15 ("drm: rcar-du: Fix DSI enable & disable sequence")
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+> Cc: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+> Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+> Cc: LUU HOAI <hoai.luu.ub@renesas.com>
+> Cc: dri-devel@lists.freedesktop.org
+> Cc: linux-renesas-soc@vger.kernel.org
+> Cc: David Airlie <airlied@gmail.com>
+> Cc: Daniel Vetter <daniel@ffwll.ch>
+> ---
+>  drivers/gpu/drm/rcar-du/Kconfig |    1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff -- a/drivers/gpu/drm/rcar-du/Kconfig b/drivers/gpu/drm/rcar-du/Kconfig
+> --- a/drivers/gpu/drm/rcar-du/Kconfig
+> +++ b/drivers/gpu/drm/rcar-du/Kconfig
+> @@ -4,6 +4,7 @@ config DRM_RCAR_DU
+>  	depends on DRM && OF
+>  	depends on ARM || ARM64
+>  	depends on ARCH_RENESAS || COMPILE_TEST
+> +	depends on DRM_RCAR_MIPI_DSI || DRM_RCAR_MIPI_DSI=n
+>  	select DRM_KMS_HELPER
+>  	select DRM_GEM_DMA_HELPER
+>  	select VIDEOMODE_HELPERS
 
-Signed-off-by: Veerasenareddy Burru <vburru@marvell.com>
----
-V3 -> V4:
-  - fix the lines exceeding 80 columns
-V2 -> V3:
-  - fixed the prefix in subject: "net-next PATCH" to "PATCH net-next".
-V1 -> V2:
-  - update supported device list in Documentation.
-
- .../ethernet/marvell/octeon_ep.rst            |  1 +
- .../ethernet/marvell/octeon_ep/octep_main.c   | 20 ++++++++++++++++---
- .../ethernet/marvell/octeon_ep/octep_main.h   |  2 ++
- 3 files changed, 20 insertions(+), 3 deletions(-)
-
-diff --git a/Documentation/networking/device_drivers/ethernet/marvell/octeon_ep.rst b/Documentation/networking/device_drivers/ethernet/marvell/octeon_ep.rst
-index bc562c49011b..cad96c8d1f97 100644
---- a/Documentation/networking/device_drivers/ethernet/marvell/octeon_ep.rst
-+++ b/Documentation/networking/device_drivers/ethernet/marvell/octeon_ep.rst
-@@ -23,6 +23,7 @@ Supported Devices
- =================
- Currently, this driver support following devices:
-  * Network controller: Cavium, Inc. Device b200
-+ * Network controller: Cavium, Inc. Device b400
- 
- Interface Control
- =================
-diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-index 9089adcb75f9..1cbfa800a8af 100644
---- a/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-+++ b/drivers/net/ethernet/marvell/octeon_ep/octep_main.c
-@@ -23,6 +23,7 @@ struct workqueue_struct *octep_wq;
- /* Supported Devices */
- static const struct pci_device_id octep_pci_id_tbl[] = {
- 	{PCI_DEVICE(PCI_VENDOR_ID_CAVIUM, OCTEP_PCI_DEVICE_ID_CN93_PF)},
-+	{PCI_DEVICE(PCI_VENDOR_ID_CAVIUM, OCTEP_PCI_DEVICE_ID_CNF95N_PF)},
- 	{0, },
- };
- MODULE_DEVICE_TABLE(pci, octep_pci_id_tbl);
-@@ -907,6 +908,18 @@ static void octep_ctrl_mbox_task(struct work_struct *work)
- 	}
- }
- 
-+static const char *octep_devid_to_str(struct octep_device *oct)
-+{
-+	switch (oct->chip_id) {
-+	case OCTEP_PCI_DEVICE_ID_CN93_PF:
-+		return "CN93XX";
-+	case OCTEP_PCI_DEVICE_ID_CNF95N_PF:
-+		return "CNF95N";
-+	default:
-+		return "Unsupported";
-+	}
-+}
-+
- /**
-  * octep_device_setup() - Setup Octeon Device.
-  *
-@@ -939,9 +952,10 @@ int octep_device_setup(struct octep_device *oct)
- 
- 	switch (oct->chip_id) {
- 	case OCTEP_PCI_DEVICE_ID_CN93_PF:
--		dev_info(&pdev->dev,
--			 "Setting up OCTEON CN93XX PF PASS%d.%d\n",
--			 OCTEP_MAJOR_REV(oct), OCTEP_MINOR_REV(oct));
-+	case OCTEP_PCI_DEVICE_ID_CNF95N_PF:
-+		dev_info(&pdev->dev, "Setting up OCTEON %s PF PASS%d.%d\n",
-+			 octep_devid_to_str(oct), OCTEP_MAJOR_REV(oct),
-+			 OCTEP_MINOR_REV(oct));
- 		octep_device_setup_cn93_pf(oct);
- 		break;
- 	default:
-diff --git a/drivers/net/ethernet/marvell/octeon_ep/octep_main.h b/drivers/net/ethernet/marvell/octeon_ep/octep_main.h
-index 025626a61383..123ffc13754d 100644
---- a/drivers/net/ethernet/marvell/octeon_ep/octep_main.h
-+++ b/drivers/net/ethernet/marvell/octeon_ep/octep_main.h
-@@ -21,6 +21,8 @@
- #define  OCTEP_PCI_DEVICE_ID_CN93_PF 0xB200
- #define  OCTEP_PCI_DEVICE_ID_CN93_VF 0xB203
- 
-+#define  OCTEP_PCI_DEVICE_ID_CNF95N_PF 0xB400    //95N PF
-+
- #define  OCTEP_MAX_QUEUES   63
- #define  OCTEP_MAX_IQ       OCTEP_MAX_QUEUES
- #define  OCTEP_MAX_OQ       OCTEP_MAX_QUEUES
-
-base-commit: d3a4706339da26633316357efe7ab9a92ff29b2a
 -- 
-2.36.0
-
+~Randy
