@@ -2,114 +2,149 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ADFC7617729
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 08:08:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ACDC061772D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 08:09:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230267AbiKCHIp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 03:08:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43912 "EHLO
+        id S229539AbiKCHJg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 03:09:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44592 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiKCHIj (ORCPT
+        with ESMTP id S229493AbiKCHJc (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 03:08:39 -0400
-Received: from mga07.intel.com (mga07.intel.com [134.134.136.100])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 219592A2;
-        Thu,  3 Nov 2022 00:08:38 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667459318; x=1698995318;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=LXwetU0S7aYaZDcutvKvsebukj29ZZswoUgMeL94BnU=;
-  b=FJTYB8AkFFyFakF8Bb05NrIE8vr9rnka8d9fUUooimQGgfla6Ri/c4LK
-   F0ZtniMMN1lYvQx3ApTpHx/s62EGDIP1us/ny/0ijpr+5u8nCdWcrBOo7
-   4G553Qy14yUjSMbC7UHdcQeDws+CtrhMtxYCX0osY+y8Qmt3ab9bHtBaK
-   UX5dmIxCB6km0ioLIti4i0OZPOU26EVUjEKA0RvbdTV+pwS8icc7TPJua
-   xl5YSdSD1G6YSH9M4UVF3WZWmG9M0ZeOO7FOv72tgzu/sDSIoNry6YFK0
-   7hZjvit6MrEmXPLSY3xtypr+9amh53wg3PYQxGfrJTKy0t+e+3txd71B/
-   w==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="373834109"
-X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
-   d="scan'208";a="373834109"
-Received: from fmsmga003.fm.intel.com ([10.253.24.29])
-  by orsmga105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 00:08:37 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="723835987"
-X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
-   d="scan'208";a="723835987"
-Received: from ojoledo-mobl2.amr.corp.intel.com (HELO [10.0.2.15]) ([10.252.32.25])
-  by fmsmga003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 00:08:36 -0700
-Message-ID: <ea7fba87-6132-5f05-6c1c-7afc8d576b89@intel.com>
-Date:   Thu, 3 Nov 2022 09:08:32 +0200
+        Thu, 3 Nov 2022 03:09:32 -0400
+Received: from mail-pf1-x42d.google.com (mail-pf1-x42d.google.com [IPv6:2607:f8b0:4864:20::42d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6F49B2A2
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 00:09:30 -0700 (PDT)
+Received: by mail-pf1-x42d.google.com with SMTP id v28so821810pfi.12
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 00:09:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=LkHnq8wlBfVlfriOmpPxlarX6Xf3b38smcgL/6sjikk=;
+        b=wS2uOLCGL26kIPInJbuPEphCBlVt9LYrHO5YFaJZW8jNi1oRmOIMF5llWI+ea7hIHh
+         Qs6+HZ5pGkKYGqCgNuGhsN5lYxkOaWY+L8GFuVR6reQ6ZkgUCUCcmENSuWq9BWtosvJc
+         BJwPqF3DwiWgrVlkjgG6CE7j6hUgtuRQdmbyEzyAoNVtOezBhvn5TE6po5uKLxluSsiM
+         Dx2Bc7WHqcG6Cefat8nuFFg6hYpPC2VNPLTezH1IuLY1lxKbmlJR9v+58iCkKjVosWLS
+         iqKMWYcCOWZ5KvNsFKYLfucvu7W3L2pwYBsgFyLXZcm/SzDRpOFWLZiJVQbjI4YZJDtT
+         wOog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=LkHnq8wlBfVlfriOmpPxlarX6Xf3b38smcgL/6sjikk=;
+        b=LYhyQ5WWHTehnIIlIT41nbcpHSsowhZhg7nEYSLeNY5NABA4icHwRz1HNT2ICHzXtk
+         ZcqSB9w10JfS51ekJ/hAEPapzgl/L2HGQW+d8luEN3ie/KMjZLSpQ3M8VhNPV0vHurvJ
+         k4Sx5WMUXz9dqEGd5/gqcJgaEUkleb4maZzbO6tZi4HaK1d2TBxAQaKW69TlGeY7UdnM
+         w0miq0b8vWP6WzdPnYX8uITeks3QD7qNZai8d+slG8TJySWPEd+I+rDWkjyDUJClb5Fj
+         3X7HyGRZF8xCQFC90wfpEnAY/yr5WWuXb+4gx8GgIwt6AisDNIFen5mbuQZNNBmm/7A+
+         WWdQ==
+X-Gm-Message-State: ACrzQf1AL05UgdnEpW3ZdStqmjvDbjYmYpXwmJmw7TSejVYoCv6EWUVk
+        N0gpR5rElNDuDaAGG2EIAoSU
+X-Google-Smtp-Source: AMsMyM7jg3itAXy7IHb+R1SjQ46Pz5fBBfKvaFnZurczcTzD3RIEfyMsxzGdTcAzH6bE2QZ5QTPK4g==
+X-Received: by 2002:a63:5853:0:b0:46f:fdfc:a651 with SMTP id i19-20020a635853000000b0046ffdfca651mr8243896pgm.385.1667459369822;
+        Thu, 03 Nov 2022 00:09:29 -0700 (PDT)
+Received: from localhost.localdomain ([117.193.208.64])
+        by smtp.gmail.com with ESMTPSA id s9-20020a170903214900b00186748fe6ccsm9451244ple.214.2022.11.03.00.09.24
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 00:09:28 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     andersson@kernel.org
+Cc:     konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, johan+linaro@kernel.org,
+        quic_jprakash@quicinc.com, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        steev@kali.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v3 00/12] sc8280xp-pmic updates and X13s thermal zone support
+Date:   Thu,  3 Nov 2022 12:38:59 +0530
+Message-Id: <20221103070911.20019-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Firefox/102.0 Thunderbird/102.4.1
-Subject: Re: [PATCH] perf tools: exclude the include/perf/ directory
-To:     Donglin Peng <dolinux.peng@gmail.com>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Cc:     linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
-        peterz@infradead.org
-References: <20221103040321.56233-1-dolinux.peng@gmail.com>
-Content-Language: en-US
-From:   Adrian Hunter <adrian.hunter@intel.com>
-Organization: Intel Finland Oy, Registered Address: PL 281, 00181 Helsinki,
- Business Identity Code: 0357606 - 4, Domiciled in Helsinki
-In-Reply-To: <20221103040321.56233-1-dolinux.peng@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/11/22 06:03, Donglin Peng wrote:
-> Commit 3af1dfdd51e0 ("perf build: Move perf_dlfilters.h in the
-> source tree") moved perf_dlfilters.h to the include/perf/ directory
-> without updating the .gitignore file, causing new files in the
-> include/perf/ directory will be ignored.
+Hello,
 
-Note:
+This series adds below updates to sc8280xp-pmics:
 
-include/perf is ignored because it has 'perf' in the name
+PM8280_{1/2}:
+- Temp alarm
+- Thermal zones
+- VADC channels
+- ADC_TM5 channels
 
-Can check:
+PMK8280:
+- ADC7 block
+- VADC channels
+- TM5 block
 
- Before:
- $ touch tools/perf/include/perf/junk
- $ git status | grep junk
- $ git check-ignore -v tools/perf/include/perf/junk
- tools/perf/.gitignore:6:perf    tools/perf/include/perf/junk
+PMR735A:
+- VADC channels
 
- After:
- $ git status | grep junk
-         tools/perf/include/perf/junk
- $ git check-ignore -v tools/perf/include/perf/junk
+Also adds the thermal zone support to Lenovo X13s based on the thermistor
+SYS_THERM6 that provides the laptop skin temperature.
 
-> 
-> Add !include/perf/ to perf's .gitignore file.
-> 
-> Signed-off-by: Donglin Peng <dolinux.peng@gmail.com>
+The sc8280xp-pmics is based on the new PMIC7 architecture. In this, all the
+ADC/TM5 measurements are collected by the primary PMIC PMK8280 from other
+slave PMICs PM8280_{1/2}, PMR735A using the Programmable Boot Sequence (PBS)
+and exposed them over the individual channels.
 
-Acked-by: Adrian Hunter <adrian.hunter@intel.com>
+PMK8280 uses the Slave ID (SID) for identifying each slave PMICs in a system.
+This ID is not static for each PMIC but rather set for each platform by the
+hardware designers. So this series allows the configurable SID by modifying the
+binding to accept SID values instead of hardcoding them.
 
-> ---
->  tools/perf/.gitignore | 1 +
->  1 file changed, 1 insertion(+)
-> 
-> diff --git a/tools/perf/.gitignore b/tools/perf/.gitignore
-> index a653311d9693..fd7a6ff9e7aa 100644
-> --- a/tools/perf/.gitignore
-> +++ b/tools/perf/.gitignore
-> @@ -4,6 +4,7 @@ PERF-GUI-VARS
->  PERF-VERSION-FILE
->  FEATURE-DUMP
->  perf
-> +!include/perf/
->  perf-read-vdso32
->  perf-read-vdsox32
->  perf-help
+This series is tested on Lenovo X13s laptop by monitoring the temperature of
+the 8 on-board thermistors through IIO interface. The thermal zone support is
+validated by adding loads to the CPUs and making sure the skin temperature stays
+below the threshold provided in DT.
+
+Thanks,
+Mani
+
+Changes in v3:
+
+* Used thermistor index in node names for VADC channels. This is required by IIO
+* Collected reviews
+* Rearranged the dt properties (Konrad)
+
+Changes in v2:
+
+* Fixed issues reported by Krzysztof and "make dtbs_check"
+* Collected reviews from Krzysztof
+* Added the Lenovo X13s thermal zone patch
+
+Manivannan Sadhasivam (12):
+  dt-bindings: iio: qcom: adc7-pm8350: Allow specifying SID for channels
+  arm64: dts: qcom: sc8280xp-pmics: Add temp alarm for PM8280_{1/2}
+    PMICs
+  arm64: dts: qcom: sc8280xp-pmics: Add thermal zones for PM8280_{1/2}
+    PMICs
+  arm64: dts: qcom: sc8280xp-pmics: Add support for PMK8280 RESIN input
+  arm64: dts: qcom: sc8280xp-pmics: Add PMK8280 ADC7 block
+  arm64: dts: qcom: sc8280xp-pmics: Add support for TM5 block in PMK8280
+  arm64: dts: qcom: sc8280xp-x13s: Enable PMK8280 RESIN input
+  arm64: dts: qcom: sc8280xp-x13s: Add PMK8280 VADC channels
+  arm64: dts: qcom: sc8280xp-x13s: Add PM8280_{1/2} VADC channels
+  arm64: dts: qcom: sc8280xp-x13s: Add PMR735A VADC channel
+  arm64: dts: qcom: sc8280xp-x13s: Add PM8280_{1/2} ADC_TM5 channels
+  arm64: dts: qcom: sc8280xp-x13s: Add thermal zone support
+
+ .../bindings/thermal/qcom-spmi-adc-tm5.yaml   |   6 +-
+ .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 204 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi  |  84 ++++++++
+ .../dt-bindings/iio/qcom,spmi-adc7-pm8350.h   |  90 ++++----
+ 4 files changed, 334 insertions(+), 50 deletions(-)
+
+-- 
+2.25.1
 
