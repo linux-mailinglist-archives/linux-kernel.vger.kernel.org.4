@@ -2,148 +2,152 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 50754618303
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:40:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A1A65618304
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:40:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231587AbiKCPkI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 11:40:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48426 "EHLO
+        id S231664AbiKCPkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 11:40:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48610 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229805AbiKCPkF (ORCPT
+        with ESMTP id S231355AbiKCPkG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 11:40:05 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EEC2DF4
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:39:09 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667489948;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=FCO0eVFO3uvEok1cguH8xZ0emQ98va1B5hUX7PNPCwA=;
-        b=TdukN2kV6i2qTTnT2WFd2cVs5IhgxNnIiP9qbsgOyzGZbuU5U6ZI9u9L5Y8Z+xxYg8BEZK
-        7uBzr8fLETW1EwZ90jEdfsqAXK83vFir3gQVO+moWfAbVW89hiheoyTxPI3zPxgUx/JzPJ
-        4o78kHfZrpv1bXvWeHpd7w6VusFF+1E=
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com
- [209.85.160.198]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-396-OKEIMvUZMNqKATXH1I6Wig-1; Thu, 03 Nov 2022 11:39:07 -0400
-X-MC-Unique: OKEIMvUZMNqKATXH1I6Wig-1
-Received: by mail-qt1-f198.google.com with SMTP id b20-20020ac844d4000000b003a542f9de3dso2059097qto.7
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 08:39:07 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=FCO0eVFO3uvEok1cguH8xZ0emQ98va1B5hUX7PNPCwA=;
-        b=ttEEYpvO2sEVt5s8UId5I23sb2dlo86zcZngEUErUPsCDelRCHgqL7m0tCggjZwtLG
-         1al5RSHOKDJCX4MqWXPw7iAHEh/qypMFw+yi+c+/psBZuFNkoCEGr1qL6rMO4SUvcoqo
-         v0QhfwCXhwUgjqe1QOtIT1D0JQmcnFcff0BY45PzvPKIVozwJqFWTRbNsdaq0ZseBwDU
-         s4CCKY3mjDnCRhoLgLrbJTmo43dj9lzGM2Di89iTmc1FKmwyWbuOwsFGTdQDs7Gcw0aB
-         SRHkuk9BQe5LHakkNdMot58RqjHsYTRCdVIUye5fnlzkhjGaYhdtxoTHyuzypdO0dnbw
-         qsow==
-X-Gm-Message-State: ACrzQf2VydHA6LB01+Jt3oN8+KVE3SmDRbvN2o+wPAG1rhLoWKh0Am+A
-        ruNmK4O8vb9EbFX2qQy9BjMsGFUjvOY1UGAIxtpmYj5LEFHejMEkYG5Q7Lra8wa1WCtGZB7COI+
-        Any6R7Go1BDMnfaYEytRSw+SF
-X-Received: by 2002:a05:620a:1a14:b0:6ce:a65b:8e6 with SMTP id bk20-20020a05620a1a1400b006cea65b08e6mr22646411qkb.145.1667489946737;
-        Thu, 03 Nov 2022 08:39:06 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM5Bes9+1WNllEELeLCD5AFB3zKvZwG1Ig3CdThVFvTsMP3GaaDsEqnyg3zz0l+66R5s+diOoA==
-X-Received: by 2002:a05:620a:1a14:b0:6ce:a65b:8e6 with SMTP id bk20-20020a05620a1a1400b006cea65b08e6mr22646383qkb.145.1667489946469;
-        Thu, 03 Nov 2022 08:39:06 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id u22-20020a05620a431600b006cdd0939ffbsm936018qko.86.2022.11.03.08.39.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 08:39:05 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 11:39:04 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     James Houghton <jthoughton@google.com>
-Cc:     linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        Mike Kravetz <mike.kravetz@oracle.com>,
-        David Hildenbrand <david@redhat.com>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        Rik van Riel <riel@surriel.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Muchun Song <songmuchun@bytedance.com>,
-        Miaohe Lin <linmiaohe@huawei.com>,
-        Nadav Amit <nadav.amit@gmail.com>
-Subject: Re: [PATCH RFC 09/10] mm/hugetlb: Make hugetlb_fault() RCU-safe
-Message-ID: <Y2PgmMs5q5jOEN0K@x1n>
-References: <20221030212929.335473-1-peterx@redhat.com>
- <20221030213043.335669-1-peterx@redhat.com>
- <CADrL8HUrCkjnBuD7=NJZ5gOBYWBbu=pa0sKp4FMnDH7OhtKvSA@mail.gmail.com>
+        Thu, 3 Nov 2022 11:40:06 -0400
+Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EC01BC94;
+        Thu,  3 Nov 2022 08:40:04 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by dfw.source.kernel.org (Postfix) with ESMTPS id 36C7261F37;
+        Thu,  3 Nov 2022 15:40:04 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 648C4C433C1;
+        Thu,  3 Nov 2022 15:40:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667490003;
+        bh=7cNJ3eImJN9ggcpVDNFcQ1cXwlPLaUGnXqZBgd/8k9Q=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=fRILNxQcN5dT9cnjWyrxeHJUgZbPQXB5o++XUXdWDnmQBR0fKvgY4nFIaP7Y+xQlY
+         lzrblDkmdS7FCE5aLmyitObJvc6/R2hBR+3qWMd3Y5d1wJzrW+Au4lYQ8ThyHXU5OS
+         O9YgtQ23TTw+gRmlu/vRk5dc+6uNovHr+vZnYkRx4bNdySxHfUiCVQQgdenmDyGR22
+         DcqQbb8E2EZCi+jXIZ7HPIHyIL4ynH5QInIRPMYSV9Zz1Pfv/eu3Db8ri1f+pyAno5
+         5Lt7aPtH1TVQzXCx6soMErAkQEGbBQkkFKd+5DqO4XX4CQr3WzCHTRnr6E/PAfRTmM
+         CNLQyWNrscAgg==
+Received: by quaco.ghostprotocols.net (Postfix, from userid 1000)
+        id DD9864034E; Thu,  3 Nov 2022 12:39:59 -0300 (-03)
+Date:   Thu, 3 Nov 2022 12:39:59 -0300
+From:   Arnaldo Carvalho de Melo <acme@kernel.org>
+To:     Ian Rogers <irogers@google.com>
+Cc:     Leo Yan <leo.yan@linaro.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        Ingo Molnar <mingo@redhat.com>,
+        Mark Rutland <mark.rutland@arm.com>,
+        Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+        Jiri Olsa <jolsa@kernel.org>,
+        Namhyung Kim <namhyung@kernel.org>,
+        linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Stephane Eranian <eranian@google.com>
+Subject: Re: [PATCH v1 6/7] perf trace: 5sec fix libbpf 1.0+ compatibility
+Message-ID: <Y2Pgz7luG77Wr+Ci@kernel.org>
+References: <20221103045437.163510-1-irogers@google.com>
+ <20221103045437.163510-7-irogers@google.com>
+ <Y2PgBPeZsd9+YWB4@kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CADrL8HUrCkjnBuD7=NJZ5gOBYWBbu=pa0sKp4FMnDH7OhtKvSA@mail.gmail.com>
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <Y2PgBPeZsd9+YWB4@kernel.org>
+X-Url:  http://acmel.wordpress.com
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 11:04:01AM -0700, James Houghton wrote:
-> On Sun, Oct 30, 2022 at 2:30 PM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > RCU makes sure the pte_t* won't go away from under us.  Please refer to the
-> > comment above huge_pte_offset() for more information.
+Em Thu, Nov 03, 2022 at 12:36:36PM -0300, Arnaldo Carvalho de Melo escreveu:
+> Em Wed, Nov 02, 2022 at 09:54:36PM -0700, Ian Rogers escreveu:
+> > Avoid use of tools/perf/include/bpf/bpf.h and use the more regular BPF
+> > headers.
+> > 
+> > Note, on testing the probe was unable to attach and the program failed.
 > 
-> Thanks for this series, Peter! :)
-
-Thanks for reviewing, James!
-
+> Humm, trying to test:
 > 
-> >
-> > Signed-off-by: Peter Xu <peterx@redhat.com>
-> > ---
-> >  mm/hugetlb.c | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/mm/hugetlb.c b/mm/hugetlb.c
-> > index 5dc87e4e6780..6d336d286394 100644
-> > --- a/mm/hugetlb.c
-> > +++ b/mm/hugetlb.c
-> > @@ -5822,6 +5822,8 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
-> >         int need_wait_lock = 0;
-> >         unsigned long haddr = address & huge_page_mask(h);
-> >
-> > +       /* For huge_pte_offset() */
-> > +       rcu_read_lock();
-> >         ptep = huge_pte_offset(mm, haddr, huge_page_size(h));
-> >         if (ptep) {
-> >                 /*
-> > @@ -5830,13 +5832,15 @@ vm_fault_t hugetlb_fault(struct mm_struct *mm, struct vm_area_struct *vma,
-> >                  * not actually modifying content here.
-> >                  */
-> >                 entry = huge_ptep_get(ptep);
-> > +               rcu_read_unlock();
-> >                 if (unlikely(is_hugetlb_entry_migration(entry))) {
-> >                         migration_entry_wait_huge(vma, ptep);
+> [root@quaco ~]# perf trace -e /home/acme/git/perf/tools/perf/examples/bpf/5sec.c |& head -15
+> In file included from /home/acme/git/perf/tools/perf/examples/bpf/5sec.c:42:
+> In file included from /lib/modules/5.19.16-200.fc36.x86_64/build/./include/linux/bpf.h:9:
+> In file included from /lib/modules/5.19.16-200.fc36.x86_64/build/./include/linux/workqueue.h:9:
+> In file included from /lib/modules/5.19.16-200.fc36.x86_64/build/./include/linux/timer.h:6:
+> In file included from /lib/modules/5.19.16-200.fc36.x86_64/build/./include/linux/ktime.h:24:
+> In file included from /lib/modules/5.19.16-200.fc36.x86_64/build/./include/linux/time.h:6:
+> In file included from /lib/modules/5.19.16-200.fc36.x86_64/build/./include/linux/math64.h:6:
+> In file included from /lib/modules/5.19.16-200.fc36.x86_64/build/./include/linux/math.h:6:
+> /lib/modules/5.19.16-200.fc36.x86_64/build/./arch/x86/include/asm/div64.h:85:28: error: invalid output constraint '=a' in asm
+>         asm ("mulq %2; divq %3" : "=a" (q)
+>                                   ^
+> In file included from /home/acme/git/perf/tools/perf/examples/bpf/5sec.c:42:
+> In file included from /lib/modules/5.19.16-200.fc36.x86_64/build/./include/linux/bpf.h:9:
+> In file included from /lib/modules/5.19.16-200.fc36.x86_64/build/./include/linux/workqueue.h:9:
+> In file included from /lib/modules/5.19.16-200.fc36.x86_64/build/./include/linux/timer.h:6:
+> [root@quaco ~]#
 > 
-> ptep is used here (and we dereference it in
-> `__migration_entry_wait_huge`), so this looks unsafe to me. A simple
-> way to fix this would be to move the migration entry check after the
-> huge_pte_alloc call.
+> So I go and try to remove that <linux/bpf.h>:
+> 
+> [acme@quaco perf]$ git diff
+> diff --git a/tools/perf/examples/bpf/5sec.c b/tools/perf/examples/bpf/5sec.c
+> index 3bd7fc17631f0440..e0d5525c6a1374ae 100644
+> --- a/tools/perf/examples/bpf/5sec.c
+> +++ b/tools/perf/examples/bpf/5sec.c
+> @@ -39,7 +39,6 @@
+>     Copyright (C) 2018 Red Hat, Inc., Arnaldo Carvalho de Melo <acme@redhat.com>
+>  */
+> 
+> -#include <linux/bpf.h>
+>  #include <bpf/bpf_helpers.h>
+> 
+>  #define NSEC_PER_SEC   1000000000L
+> [acme@quaco perf]$
+> 
+> [root@quaco ~]# perf trace -e /home/acme/git/perf/tools/perf/examples/bpf/5sec.c
+> /home/acme/git/perf/tools/perf/examples/bpf/5sec.c:42:10: fatal error: 'bpf/bpf_helpers.h' file not found
+> #include <bpf/bpf_helpers.h>
+>          ^~~~~~~~~~~~~~~~~~~
+> 1 error generated.
+> ERROR:	unable to compile /home/acme/git/perf/tools/perf/examples/bpf/5sec.c
+> Hint:	Check error message shown above.
+> Hint:	You can also pre-compile it into .o using:
+>      		clang -target bpf -O2 -c /home/acme/git/perf/tools/perf/examples/bpf/5sec.c
+>      	with proper -I and -D options.
+> event syntax error: '/home/acme/git/perf/tools/perf/examples/bpf/5sec.c'
+>                      \___ Failed to load /home/acme/git/perf/tools/perf/examples/bpf/5sec.c from source: Error when compiling BPF scriptlet
+> 
+> (add -v to see detail)
+> Run 'perf list' for a list of valid events
+> 
+>  Usage: perf trace [<options>] [<command>]
+>     or: perf trace [<options>] -- <command> [<options>]
+>     or: perf trace record [<options>] [<command>]
+>     or: perf trace record [<options>] -- <command> [<options>]
+> 
+>     -e, --event <event>   event/syscall selector. use 'perf list' to list available events
+> [root@quaco ~]#
+> 
+> It is not even finding it, in this machine I have libbpf 0.7.0, so there
+> is a /usr/include/bpf/bpf_helpers.h, but probably that isn't in the
+> include path set up to build the tools/perf/examples/bpf/ files, perhaps
+> it should use:
+> 
+> -Itools/lib/  so that it gets tools/lib/bpf_helpers.h?
+> 
+> Trying to get this tested...
 
-Right, I definitely overlooked the migration entries in both patches
-(including the previous one that you commented), thanks for pointing that
-out.
+Running with -v:
 
-Though moving that after huge_pte_alloc() may have similar problem, iiuc.
-The thing is we need either the vma lock or rcu to protect accessing the
-pte*, while the pte* page and its pgtable lock can be accessed very deep
-into the migration core (e.g., migration_entry_wait_on_locked()) as the
-lock cannot be released before the thread queues itself into the waitqueue.
+llvm compiling command : /usr/lib64/ccache/clang -D__KERNEL__ -D__NR_CPUS__=8 -DLINUX_VERSION_CODE=0x51310 -g -I/home/acme/lib/perf/include/bpf -nostdinc -I./arch/x86/include -I./arch/x86/include/generated  -I./include -I./arch/x86/include/uapi -I./arch/x86/include/generated/uapi -I./include/uapi -I./include/generated/uapi -include ./include/linux/compiler-version.h -include ./include/linux/kconfig.h  -Wno-unused-value -Wno-pointer-sign -working-directory /lib/modules/5.19.16-200.fc36.x86_64/build -c /home/acme/git/perf/tools/perf/examples/bpf/5sec.c -target bpf  -g -O2 -o -
+/home/acme/git/perf/tools/perf/examples/bpf/5sec.c:42:10: fatal error: 'bpf/bpf_helpers.h' file not found
 
-So far I don't see a good way to achieve this but add a hook to
-migration_entry_wait_on_locked() so that any lock held for huge migrations
-can be properly released after the pgtable lock released but before the
-thread yields itself.
+There is still that -I/home/acme/lib/perf/include/bpf, I'll remove it
+from the include path and try to replace it with the libbpf path...
 
--- 
-Peter Xu
-
+- Arnaldo
