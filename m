@@ -2,101 +2,135 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9C47A618797
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:33:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB39F61879E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:35:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232141AbiKCSd2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 14:33:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60266 "EHLO
+        id S229882AbiKCSfO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 14:35:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35320 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231477AbiKCSdD (ORCPT
+        with ESMTP id S230096AbiKCSfK (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 14:33:03 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFD9B6448
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 11:32:51 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 8A38D61F8D
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 18:32:51 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB7F0C433C1;
-        Thu,  3 Nov 2022 18:32:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667500371;
-        bh=Hck8cjJ+4R3//xB7Q8qTKGJ9aassQ5/yidi0JVA2cWo=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=ejOx1hr62Urb3MPgwsvwVgy8/5u4h4hzChkyJEo5u06oUX+ssYAcJqI6cInVX1LhP
-         hOpUu/zXdK9PWCBk+zBXwdNLgiA1YuPzZDawmP11vMRnXpbNoaTCdPoVmeRIn5cNEm
-         TFxYWFocut+w26Wm6BgeI8uWEG0Pbin78DGlZU2cNKWl6MdEbuIOxkNHn3TRvraDeF
-         HTDIGeYUPnSikE4nctDrqWgR89VPqaMOENOFCyzY7ZGnY6qgXXhXWqgDTrFDdxLB9Z
-         zDjBOyxgEBIO/UY5LOuaP1JF7s44fL2UW7JNOJBbbGKR9XUY29oi/ss+9HvRJ7kOmm
-         MuTW6+RXC/ECw==
-Date:   Thu, 3 Nov 2022 18:32:43 +0000
-From:   Mark Brown <broonie@kernel.org>
-To:     Sean Anderson <sean.anderson@seco.com>
-Cc:     David Airlie <airlied@gmail.com>, Daniel Vetter <daniel@ffwll.ch>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Maxime Ripard <mripard@kernel.org>,
-        Thomas Zimmermann <tzimmermann@suse.de>,
-        dri-devel@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        Jaroslav Kysela <perex@perex.cz>,
-        Joerg Roedel <joro@8bytes.org>,
-        Liam Girdwood <lgirdwood@gmail.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Takashi Iwai <tiwai@suse.com>, Will Deacon <will@kernel.org>,
-        Yong Wu <yong.wu@mediatek.com>, alsa-devel@alsa-project.org,
-        iommu@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org
-Subject: Re: [PATCH 1/2] component: Add helper for device nodes
-Message-ID: <Y2QJS+M1xX2RaK1v@sirena.org.uk>
-References: <20221103182222.2247724-1-sean.anderson@seco.com>
- <20221103182222.2247724-2-sean.anderson@seco.com>
+        Thu, 3 Nov 2022 14:35:10 -0400
+Received: from mail-pj1-x1031.google.com (mail-pj1-x1031.google.com [IPv6:2607:f8b0:4864:20::1031])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3BA5F14
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 11:35:09 -0700 (PDT)
+Received: by mail-pj1-x1031.google.com with SMTP id u8-20020a17090a5e4800b002106dcdd4a0so6096765pji.1
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 11:35:09 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=dgoOqWPJe20h3F3t+kWJTAR37+M7sNOsPG89iz5Bulk=;
+        b=Pm4Lr3kAm7G9yhV3E+texinWexF8/BykknHnX+41QMhdAJg8Q6KGdsZlwDR9KsaQ03
+         q0oiA6QGnfMNaCLi6FwippomEY2Gxx8DIbtsls7Wm3K9Y5ntAz6T/fo5rOOGqR0XZexV
+         IMpIarVZKtd2r4wbd6pBH2HWWgUKLdmEcjKjz7hr2eZWqilU2ZOjSL0LQYBIbuLk+an3
+         F080UdTs/Pl//2c4Y7M3MC5aXIj0L8ze9uKQnOS3RTfUxOdNjPBYkRT7wM2xznbkkPNf
+         k6rWzEiCMkA6YZikO6kTaZUjEx2R8QJERpkjNDf1cNtL0uRiWX1pfQEgD4PMO8IN1GPi
+         cqnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=dgoOqWPJe20h3F3t+kWJTAR37+M7sNOsPG89iz5Bulk=;
+        b=YRDfLzgcEZiGUXVXi14kzP7MLzc+wKj5SbLgt30MbIHJ/owkkfmzhW1c5DIyqSfePl
+         4Uu+MZq/jobJcUn4kauSeU6sG9ne9rbNDw8A4PJNEDdscxQ+orN7sw+tQlRCaRQGx120
+         doIWOgWtBZ3ySN/bwKujcrYO2T+YccdqXFgMOWMZ9GeHgynf0XMHo5dG3XfUVgClFWwu
+         JyMZ+vjVZmx51fIvFWBA3+HGe3jiJmE4Q1JSbBZnOEEcSVaD8a35N7WWJU4/iZik3gEQ
+         XaAxCsZJEYtJpT16WWI7Wpz6qjqwQvJPTXeBdCW7Konr2vzeDt5Io2C7JqiX9Ok1sDb+
+         4FTg==
+X-Gm-Message-State: ACrzQf2kTASm5+zQBB2ZAHfxb/zo4PSYzlOuIYDW0q3BIvNygIsA5Jp3
+        V/6Wr1SnZNUpCZB91oAXrxnLTg==
+X-Google-Smtp-Source: AMsMyM7An2PKDpytAFzn8oRI/SQJomdGS1nTfx9CsrnDxhHyyoY4AD/5FsaR2YoYMTMl2oHfbxu0kQ==
+X-Received: by 2002:a17:903:1250:b0:185:40c6:3c2c with SMTP id u16-20020a170903125000b0018540c63c2cmr31387342plh.64.1667500509087;
+        Thu, 03 Nov 2022 11:35:09 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id z4-20020a1709027e8400b0017da2798025sm914686pla.295.2022.11.03.11.35.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 11:35:08 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 18:35:05 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>
+Subject: Re: [PATCH 33/44] KVM: x86: Do VMX/SVM support checks directly in
+ vendor code
+Message-ID: <Y2QJ2TuyZImbFFvi@google.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+ <20221102231911.3107438-34-seanjc@google.com>
+ <bfa98587-3b36-3834-a4b9-585a0e0aa56a@redhat.com>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-        protocol="application/pgp-signature"; boundary="ZW7Ag/fXdrbtoky8"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221103182222.2247724-2-sean.anderson@seco.com>
-X-Cookie: Dead? No excuse for laying off work.
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <bfa98587-3b36-3834-a4b9-585a0e0aa56a@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Thu, Nov 03, 2022, Paolo Bonzini wrote:
+> On 11/3/22 00:19, Sean Christopherson wrote:
+> > +	if (!boot_cpu_has(X86_FEATURE_MSR_IA32_FEAT_CTL) ||
+> > +	    !boot_cpu_has(X86_FEATURE_VMX)) {
+> > +		pr_err("VMX not enabled in MSR_IA32_FEAT_CTL\n");
+> > +		return false;
+> 
+> I think the reference to the BIOS should remain in these messages and in
+> svm.c (even though these days it's much less common for vendors to default
+> to disabled virtualization in the system setup).
 
---ZW7Ag/fXdrbtoky8
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Ya, I'll figure out a way to mention BIOS/firmware.
 
-On Thu, Nov 03, 2022 at 02:22:21PM -0400, Sean Anderson wrote:
+> The check for X86_FEATURE_MSR_IA32_FEAT_CTL is not needed because
+> init_ia32_feat_ctl() will clear X86_FEATURE_VMX if the rdmsr fail (and not
+> set X86_FEATURE_MSR_IA32_FEAT_CTL).
 
-> There is a common case where component_patch_add_release is called with
-> component_release_of/component_compare_of and a device node. Add a
-> helper and convert existing users.
+It's technically required.  IA32_FEAT_CTL and thus KVM_INTEL depends on any of
+CPU_SUP_{INTEL,CENATUR,ZHAOXIN}, but init_ia32_feat_ctl() is invoked if and only
+if the actual CPU type matches one of the aforementioned CPU_SUP_*.
 
-The usual pattern here would be to split adding the helper from updating
-to use the helper - it makes things easier to merge.
+E.g. running a kernel built with
 
-Acked-by: Mark Brown <broonie@kernel.org>
+  CONFIG_CPU_SUP_INTEL=y
+  CONFIG_CPU_SUP_AMD=y
+  # CONFIG_CPU_SUP_HYGON is not set
+  # CONFIG_CPU_SUP_CENTAUR is not set
+  # CONFIG_CPU_SUP_ZHAOXIN is not set
 
---ZW7Ag/fXdrbtoky8
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNkCUoACgkQJNaLcl1U
-h9DfiAf/fccSbdTPcf/MR3+HytglBkaO/HlwepPSW582YcQ2/3q5mNX8QDYVAtq5
-4LQR5pjemiBDY+lWTqufmKlDBjw8h9NY0L6v/NApr7x+PK1ZUEW2Ecqc6zcZ8LRT
-FzBdTQMO00sV3mkJywGQBQGuqyvZrHYNL1RWP0ZDYoRU+27RZn7zOmnNuiA1g8IQ
-AoMLzEGkIxhXEF1cmblJ7JuiB1p694k+nltDrbjqc0FsuGMVbfwOG2sTbHYYZJF2
-EcaVTqEpCkwmxU2XAY8lgt4SXVO9m26QvgAFqyHSXOvag/H3HaSPNmNPWpUamabu
-UWfwTYDmTIOxKFZxy+b7VIfdb/ZWrg==
-=igBE
------END PGP SIGNATURE-----
-
---ZW7Ag/fXdrbtoky8--
+on a Cenatur or Zhaoxin CPU will leave X86_FEATURE_VMX set but not set
+X86_FEATURE_MSR_IA32_FEAT_CTL.  If VMX isn't enabled in MSR_IA32_FEAT_CTL, KVM
+will get unexpected #UDs when trying to enable VMX.
