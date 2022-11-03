@@ -2,100 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1617A6185E7
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:12:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3FD156185EB
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:12:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231817AbiKCRMZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 13:12:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38496 "EHLO
+        id S232099AbiKCRMc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 13:12:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37590 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231724AbiKCRLn (ORCPT
+        with ESMTP id S232269AbiKCRMD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:11:43 -0400
-Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2D20B1E3C8
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:11:13 -0700 (PDT)
-Received: by mail-pl1-x62f.google.com with SMTP id y4so2547777plb.2
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:11:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=EyEaiXYwGZ66+eMx05Q+3jfcs0ljEUn1snD5FexMKL8=;
-        b=A8fXGXXAcSb8wP6STdb3cm24s8EfdklK5O49e41+AWr+xMmeIcMh3Fa3jgTVN1ZXks
-         hLpfF1BKpLP3StIca1AM4j41UaEAXPWH7qMdzzQHXmYG0qFT+nPAYWw4L0bKuJ1B+kNP
-         voWIeMOvv7SwoFqzlGJDm0efaNkKZcmRr+Zk98VfWoV8zzRW9yiLUZ1/rzBVcI68bVDc
-         fznnlq1+dPNdvGjSexG/PsOZAxivX5KtC3EBe3KQ5HWIs1uQfKMhFwZOPXC8qrVVvrLl
-         eyodCLe2TpOK3nLQDX0vITvS4WIPpkUlhCDOfzI56DXe2zURNZmMZ3aNjl8i2yHlZ8tS
-         t04A==
+        Thu, 3 Nov 2022 13:12:03 -0400
+Received: from mail-qk1-f170.google.com (mail-qk1-f170.google.com [209.85.222.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6D310F4;
+        Thu,  3 Nov 2022 10:11:33 -0700 (PDT)
+Received: by mail-qk1-f170.google.com with SMTP id f8so1570963qkg.3;
+        Thu, 03 Nov 2022 10:11:33 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=EyEaiXYwGZ66+eMx05Q+3jfcs0ljEUn1snD5FexMKL8=;
-        b=TDbTyUJpo8TOpZUB57XshemwBD1TEv+JKy7JlWS8gIYFR1LMNEN1RDdbkLxDndN/Et
-         /eueoE61rQgkrJF0FJK84BA6FWj0EqQW29S1sPrERYWEHqN8pZ7HxFTT45GiSehrTTl5
-         tq300TrzjcziI6r4Nn76xLsbRhnPVTnqx05+UXNDh+6rpwfNM6gy3UHc1Vm+UOPXp4Kb
-         JeqeXF4Rd4DBKLI7YxVctOW8Aq8vjtLreclNjkodRONIDQ4EdM3HUzFzLRVf9/cYvqdI
-         axlWPygf1Vjk/EZHomclsSp3hRzgRunBeBIPsQCzjLsKTtvjFwzWILISMP+sm+D5xc2D
-         Epcg==
-X-Gm-Message-State: ACrzQf3DB+uISb2dDk/x1MaVPZ/hNb0lN/1ev+npC6+QozyVjUySRIsp
-        tHtpCeZl+kiRQjtaYnNVR9c=
-X-Google-Smtp-Source: AMsMyM5Nr6JzpD4MArJro/efIP53SmH1+6Ydpi9jLmS/lV1d1RhxHIShehkJYiPGH0xwvWHOVjouMg==
-X-Received: by 2002:a17:903:292:b0:186:dae9:c089 with SMTP id j18-20020a170903029200b00186dae9c089mr30644140plr.31.1667495472577;
-        Thu, 03 Nov 2022 10:11:12 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:3d65:7dc2:c62a:5d98])
-        by smtp.gmail.com with ESMTPSA id j36-20020a635524000000b0046ec7beb53esm1040263pgb.8.2022.11.03.10.11.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 10:11:12 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Thu, 3 Nov 2022 10:11:10 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Sergey Senozhatsky <senozhatsky@chromium.org>
-Cc:     Andrew Morton <akpm@linux-foundation.org>,
-        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCHv4 2/9] zram: Add recompression algorithm sysfs knob
-Message-ID: <Y2P2LqG5nzxBvIEi@google.com>
-References: <20221018045533.2396670-1-senozhatsky@chromium.org>
- <20221018045533.2396670-3-senozhatsky@chromium.org>
- <Y2LP0OWF/WTnkSne@google.com>
- <Y2Mv4l+V9iCv9EMg@google.com>
- <Y2M/DeLwab0o7btv@google.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FmNP3uoYCzkfLKfdvSNP8vmEQ9HQi+Gv2smq8ORE26I=;
+        b=lJ0rfpe70ZdQ7IoLsjcUFjjps9k55NQeKReYbakfGX90hljAJ+NoY3BnurUS9f8xS/
+         i7E9NFcnF+p/t8Y4pAdViKA2jddV5nzKdrBcvZW+nzkTdQOgqoDDopxC303e3It0iIkR
+         EWA09ZVIwoCUjVu17hgmAOFpxs5LTo23zDkSxUTpKAMsd2taaQQlDJDFAwCNB5TqLays
+         7MBDSxJhCh3LId89ftLRdGbDrkKl4T4hsZNsY8gTwNc4Cv7hslU0B1abUJh1PD47x+su
+         AAK/4o49BtfpHHsrb4yKuqhitRMGvixDvCyMctcoLylHBY+v8Wp9+XFXURycCDbGPbs7
+         SPWQ==
+X-Gm-Message-State: ACrzQf0HhJ/D4DyIZ0PVjHkCuWe8dilg8oU2bcfTLrRWDrPeV4z2MLXq
+        avEsLuVNOU26IXOPQCP/wF1rmJwIUKhe43C0VbE=
+X-Google-Smtp-Source: AMsMyM5eMLeKCzeXzgK2daRJrdAyD7SYnj03/JEE2uZJrtWBHJW8NrHuSIJvhUAObKxVgJmvPRJf3hW3UsoKs+xz1Zw=
+X-Received: by 2002:a05:620a:d89:b0:6cf:c98b:744c with SMTP id
+ q9-20020a05620a0d8900b006cfc98b744cmr22344544qkl.443.1667495492970; Thu, 03
+ Nov 2022 10:11:32 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2M/DeLwab0o7btv@google.com>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221101022840.1351163-1-tgsp002@gmail.com> <20221101022840.1351163-3-tgsp002@gmail.com>
+In-Reply-To: <20221101022840.1351163-3-tgsp002@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 3 Nov 2022 18:11:22 +0100
+Message-ID: <CAJZ5v0gWBfL4y6RAhDHMx2tbGDFppLJdjb2TFU1aEPn3d+FJqQ@mail.gmail.com>
+Subject: Re: [PATCH -next 2/2] PM: hibernate: add check of preallocate mem for
+ image size pages
+To:     TGSP <tgsp002@gmail.com>
+Cc:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
+        huanglei@kylinos.cn, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xiongxin <xiongxin@kylinos.cn>,
+        stable@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 01:09:49PM +0900, Sergey Senozhatsky wrote:
-> On (22/11/03 12:05), Sergey Senozhatsky wrote:
-> > What is the use case for removal of a secondary algorithm?
-> > 
-> > > My point is that we don't need to implement it atm but makes the
-> > > interface to open the possibility for future extension.
-> > > 
-> > > What do you think?
-> > 
-> > So, as far as I understand, we don't have reason to add remove_recomp_algo
-> > right now. And existing recomp_algo does not enforce any particular format,
-> > it can be extended. Right now we accept "$name" but can do something like
-> > "$name:$priority".
-> 
-> Or with keywords:
-> 
-> 	name=STRING priority=INT
-> 
-> and the only legal priority for now is 1.
+On Tue, Nov 1, 2022 at 3:28 AM TGSP <tgsp002@gmail.com> wrote:
+>
+> From: xiongxin <xiongxin@kylinos.cn>
+>
+> Added a check on the return value of preallocate_image_highmem(). If
+> memory preallocate is insufficient, S4 cannot be done;
+>
+> I am playing 4K video on a machine with AMD or other graphics card and
+> only 8GiB memory, and the kernel is not configured with CONFIG_HIGHMEM.
+> When doing the S4 test, the analysis found that when the pages get from
+> minimum_image_size() is large enough, The preallocate_image_memory() and
+> preallocate_image_highmem() calls failed to obtain enough memory. Add
+> the judgment that memory preallocate is insufficient;
 
-I like it.
+So I'm not sure what the problem is.  Can you please explain it in more detail?
+
+The if (pages < alloc) appears to be false in your case, so there
+should be enough free pages to create an image.
+
+Maybe reserved_size is too low?
