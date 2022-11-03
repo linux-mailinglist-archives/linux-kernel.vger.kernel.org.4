@@ -2,87 +2,84 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C3B25617B7E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 12:30:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BD822617B82
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 12:30:46 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230297AbiKCLaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 07:30:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44270 "EHLO
+        id S230376AbiKCLao (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 07:30:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44572 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229666AbiKCLaW (ORCPT
+        with ESMTP id S230165AbiKCLal (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 07:30:22 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2BD11A19;
-        Thu,  3 Nov 2022 04:30:18 -0700 (PDT)
+        Thu, 3 Nov 2022 07:30:41 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [145.40.73.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA92C11A19;
+        Thu,  3 Nov 2022 04:30:37 -0700 (PDT)
 Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
         (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 58C73B826F0;
-        Thu,  3 Nov 2022 11:30:16 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPS id EF911C433C1;
-        Thu,  3 Nov 2022 11:30:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667475015;
-        bh=9u70mGjOAD1g0Chwx79K2kSsz8HLuYRGmzPc5JQrNbU=;
-        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-        b=E1jwbxiS+YjMo+t4OE7fXIlKDVcJNYRYgb4UD3ha/VpS42iGmCEgYCuM59hQTyABu
-         0/cYQhlIQ4jFPjIwyn1PP4NB/eX5QkyyDZpnQCVC2HdOkc30bFQ3idrB+5UcMUV7Pn
-         gr0Ocd814KRrKpr+mg5PXve2C6W4Rx0fZmFYNQnWCFbnIUTThIeDTr72fKVTlkqu5a
-         ghKmXuTkvHteGRQUcl3CVha4vWhz9zc7FeflPCrqQvL6nrKIGYmoQbz0UaHHHijAkP
-         XO5WFlSiBFNMv/bW0gJrkoivyU7okEAX7ekUeI4zN6PX/uLcqoco026V/aQLLmgswI
-         UfcZLObahznag==
-Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
-        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D2C3FE29F4C;
-        Thu,  3 Nov 2022 11:30:14 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+        by sin.source.kernel.org (Postfix) with ESMTPS id 65A42CE257D;
+        Thu,  3 Nov 2022 11:30:36 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 379EEC433C1;
+        Thu,  3 Nov 2022 11:30:34 +0000 (UTC)
+Authentication-Results: smtp.kernel.org;
+        dkim=pass (1024-bit key) header.d=zx2c4.com header.i=@zx2c4.com header.b="U/4SZCYC"
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=zx2c4.com; s=20210105;
+        t=1667475031;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=7/f6o/OYDOQ7Q6RyE0PpCRk4Xe1H3AuP3tWnYOWByfg=;
+        b=U/4SZCYCZvDqix+wIfum5CLK1MUA0V56pTQQQJAsVBiJvVG2Brr/3lUiUrzq0HQg3mP8Jy
+        DrfmTWK9yt3w2qmDr3qnWeKNp0kwIQ3W/TyWMc3f/0qqXGJZD01jXP0yzuQk+c24zuTdJ0
+        VfYDtW0FEra3VizP/cmNrokhL2w2xXU=
+Received: by mail.zx2c4.com (ZX2C4 Mail Server) with ESMTPSA id 1665c81f (TLSv1.3:TLS_AES_256_GCM_SHA384:256:NO);
+        Thu, 3 Nov 2022 11:30:31 +0000 (UTC)
+From:   "Jason A. Donenfeld" <Jason@zx2c4.com>
+To:     linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        krisman@collabora.com, jirislaby@kernel.org
+Cc:     "Jason A. Donenfeld" <Jason@zx2c4.com>, stable@vger.kernel.org
+Subject: [PATCH v2] unicode: don't write -1 after NUL terminator
+Date:   Thu,  3 Nov 2022 12:30:21 +0100
+Message-Id: <20221103113021.3271-1-Jason@zx2c4.com>
+In-Reply-To: <79db9616-a2ee-9a1a-9a35-b82f65b6d15e@kernel.org>
+References: <79db9616-a2ee-9a1a-9a35-b82f65b6d15e@kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH] net: mana: Assign interrupts to CPUs based on NUMA nodes
-From:   patchwork-bot+netdevbpf@kernel.org
-Message-Id: <166747501485.8781.10763947245396462930.git-patchwork-notify@kernel.org>
-Date:   Thu, 03 Nov 2022 11:30:14 +0000
-References: <1667282761-11547-1-git-send-email-ssengar@linux.microsoft.com>
-In-Reply-To: <1667282761-11547-1-git-send-email-ssengar@linux.microsoft.com>
-To:     Saurabh Sengar <ssengar@linux.microsoft.com>
-Cc:     ssengar@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
-        wei.liu@kernel.org, decui@microsoft.com, davem@davemloft.net,
-        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
-        colin.i.king@googlemail.com, vkuznets@redhat.com,
-        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org, mikelley@microsoft.com
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-6.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_HI,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello:
+If the intention is to overwrite the first NUL with a -1, s[strlen(s)]
+is the first NUL, not s[strlen(s)+1].
 
-This patch was applied to netdev/net-next.git (master)
-by Paolo Abeni <pabeni@redhat.com>:
+Cc: Gabriel Krisman Bertazi <krisman@collabora.com>
+Cc: stable@vger.kernel.org
+Signed-off-by: Jason A. Donenfeld <Jason@zx2c4.com>
+---
+ fs/unicode/mkutf8data.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-On Mon, 31 Oct 2022 23:06:01 -0700 you wrote:
-> In large VMs with multiple NUMA nodes, network performance is usually
-> best if network interrupts are all assigned to the same virtual NUMA
-> node. This patch assigns online CPU according to a numa aware policy,
-> local cpus are returned first, followed by non-local ones, then it wraps
-> around.
-> 
-> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
-> 
-> [...]
-
-Here is the summary with links:
-  - net: mana: Assign interrupts to CPUs based on NUMA nodes
-    https://git.kernel.org/netdev/net-next/c/71fa6887eeca
-
-You are awesome, thank you!
+diff --git a/fs/unicode/mkutf8data.c b/fs/unicode/mkutf8data.c
+index bc1a7c8b5c8d..61800e0d3226 100644
+--- a/fs/unicode/mkutf8data.c
++++ b/fs/unicode/mkutf8data.c
+@@ -3194,7 +3194,7 @@ static int normalize_line(struct tree *tree)
+ 	/* Second test: length-limited string. */
+ 	s = buf2;
+ 	/* Replace NUL with a value that will cause an error if seen. */
+-	s[strlen(s) + 1] = -1;
++	s[strlen(s)] = -1;
+ 	t = buf3;
+ 	if (utf8cursor(&u8c, tree, s))
+ 		return -1;
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
-
+2.38.1
 
