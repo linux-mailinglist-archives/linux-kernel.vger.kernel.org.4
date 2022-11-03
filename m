@@ -2,184 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F183E6189AD
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 21:39:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BB6F3618998
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 21:32:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231128AbiKCUjs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 16:39:48 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44960 "EHLO
+        id S230089AbiKCUct (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 16:32:49 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiKCUjq (ORCPT
+        with ESMTP id S229461AbiKCUcr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 16:39:46 -0400
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D0FD1209B9;
-        Thu,  3 Nov 2022 13:39:44 -0700 (PDT)
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-        by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A3Kdfbk052060;
-        Thu, 3 Nov 2022 15:39:41 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1667507981;
-        bh=Te3maA9q1oBAmqEE7eTdUyjAvosJePhk5cDGiOG+13E=;
-        h=From:To:CC:Subject:Date;
-        b=KTEh/Tr2tWeakV5fPSalx3wpThLRR913UKufJrYSy140VRu6q3lc4yNqYAGDJBGm8
-         MwvAkqPAJSX/nK4MAAa645FpJTQUjEYD4AMYfrKYkLP27Tu0IT/kiEMwDmDp6lsVsj
-         GmKkvUCKgzCk5N/gooQtVr6W8Xoo0EExYHjdg3ss=
-Received: from DLEE113.ent.ti.com (dlee113.ent.ti.com [157.170.170.24])
-        by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A3KdfIg054992
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 3 Nov 2022 15:39:41 -0500
-Received: from DLEE115.ent.ti.com (157.170.170.26) by DLEE113.ent.ti.com
- (157.170.170.24) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 3 Nov
- 2022 15:39:41 -0500
-Received: from lelv0326.itg.ti.com (10.180.67.84) by DLEE115.ent.ti.com
- (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Thu, 3 Nov 2022 15:39:41 -0500
-Received: from jti.ent.ti.com (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by lelv0326.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A3KdY2p002296;
-        Thu, 3 Nov 2022 15:39:36 -0500
-From:   Georgi Vlaev <g-vlaev@ti.com>
-To:     Peter Ujfalusi <peter.ujfalusi@gmail.com>,
-        Vinod Koul <vkoul@kernel.org>
-CC:     Nishanth Menon <nm@ti.com>, <dmaengine@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Georgi Vlaev <g-vlaev@ti.com>
-Subject: [PATCH v2] dmaengine: k3-udma: Add system suspend/resume support
-Date:   Thu, 3 Nov 2022 22:30:21 +0200
-Message-ID: <20221103203021.83929-1-g-vlaev@ti.com>
-X-Mailer: git-send-email 2.30.2
+        Thu, 3 Nov 2022 16:32:47 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [IPv6:2a00:1098:0:82:1000:25:2eeb:e5ab])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C32AEB0E;
+        Thu,  3 Nov 2022 13:32:46 -0700 (PDT)
+Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: nfraprado)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id 9F0FD660295F;
+        Thu,  3 Nov 2022 20:32:42 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667507565;
+        bh=s7VMS6sqPzrxI8wodWazep6RmdDGQpqaH/k/O9pHKSU=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=PyWTvoWWaPdngbDHe6Uw6YzacdFUVXdkGMEna87bwd7WXTwo7FBZlufZIkMHJJLEy
+         GHf4bVNU4VLMlQxhB+3hMwsKv/szkmIh8atjChM7QikeF3pQtpDvUT1TUh1ix3GyTA
+         Gt7Z0cqtZBPgBqcAf9onCOHOEoFlN6S4b/fC75qKhqu9oavCf0T3HMfqEkRisS1odX
+         WsAA1nTCMG5qF0aWuNAnC0fDyeCP9H0TaOEFwOJLFFqxyMdPg5pdbDPEeoavSrKRAQ
+         y1KhleAdaAeC1pxVT7LIbZ9gfHjNfp0eOXLf10t8XwpJhV6d28jeOFloLW1rRwnUKJ
+         RBu8+uxv8tkHA==
+Date:   Thu, 3 Nov 2022 16:32:38 -0400
+From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
+        <nfraprado@collabora.com>
+To:     "Nancy.Lin" <nancy.lin@mediatek.com>
+Cc:     Rob Herring <robh+dt@kernel.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>,
+        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
+        Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>, linux@roeck-us.net,
+        David Airlie <airlied@linux.ie>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Nathan Chancellor <nathan@kernel.org>,
+        Nick Desaulniers <ndesaulniers@google.com>,
+        "jason-jh . lin" <jason-jh.lin@mediatek.com>,
+        Yongqiang Niu <yongqiang.niu@mediatek.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        linux-mediatek@lists.infradead.org,
+        dri-devel@lists.freedesktop.org, llvm@lists.linux.dev,
+        singo.chang@mediatek.com,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+Subject: Re: [PATCH v27 05/11] soc: mediatek: refine code to use
+ mtk_mmsys_update_bits API
+Message-ID: <20221103203238.fryjwpgjtwccnjwu@notapiano>
+References: <20221103032512.9144-1-nancy.lin@mediatek.com>
+ <20221103032512.9144-6-nancy.lin@mediatek.com>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221103032512.9144-6-nancy.lin@mediatek.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Vignesh Raghavendra <vigneshr@ti.com>
+On Thu, Nov 03, 2022 at 11:25:06AM +0800, Nancy.Lin wrote:
+[..]
+> --- a/drivers/soc/mediatek/mtk-mmsys.c
+> +++ b/drivers/soc/mediatek/mtk-mmsys.c
+[..]
+> +static void mtk_mmsys_update_bits(struct mtk_mmsys *mmsys, u32 offset, u32 mask, u32 val)
+> +{
+> +	u32 tmp;
+> +
+> +	tmp = readl_relaxed(mmsys->regs + offset);
+> +	tmp = (tmp & ~mask) | val;
 
-The K3 platforms configure the DMA resources with the
-help of the TI's System Firmware's Device Manager(DM)
-over TISCI. The group of DMA related Resource Manager[1]
-TISCI messages includes: INTA, RINGACC, UDMAP, and PSI-L.
-This configuration however, does not persist in the DM
-after leaving from Suspend-to-RAM state. We have to restore
-the DMA channel configuration over TISCI for all configured
-channels when returning from suspend.
+You should mask the value before writing to prevent bad values from overwriting
+bits outside the mask.
 
-The TISCI resource management calls for each DMA type (UDMA,
-PKTDMA, BCDMA) happen in device_free_chan_resources() and
-device_alloc_chan_resources(). In pm_suspend() we store
-the current udma_chan_config for channels that still have
-attached clients and call device_free_chan_resources().
-In pm_resume() restore the udma_channel_config from backup
-and call device_alloc_chan_resources() for those channels.
-Drivers like CPSW can do their own DMA resource management,
-so use the late system suspend/resume hooks.
+	tmp = (tmp & ~mask) | (val & mask);
 
-[1] https://software-dl.ti.com/tisci/esd/latest/2_tisci_msgs/index.html#resource-management-rm
+With that,
 
-Signed-off-by: Vignesh Raghavendra <vigneshr@ti.com>
-[g-vlaev@ti.com: Add patch description and config backup]
-[g-vlaev@ti.com: Supend only channels with clients]
-Signed-off-by: Georgi Vlaev <g-vlaev@ti.com>
----
-Changes:
+Reviewed-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-v2:
-* Update the commit message
-* Use list_for_each_entry() to iterate over the channel list.
-
- drivers/dma/ti/k3-udma.c | 54 ++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 54 insertions(+)
-
-diff --git a/drivers/dma/ti/k3-udma.c b/drivers/dma/ti/k3-udma.c
-index ce8b80bb34d7..29844044132c 100644
---- a/drivers/dma/ti/k3-udma.c
-+++ b/drivers/dma/ti/k3-udma.c
-@@ -304,6 +304,8 @@ struct udma_chan {
- 
- 	/* Channel configuration parameters */
- 	struct udma_chan_config config;
-+	/* Channel configuration parameters (backup) */
-+	struct udma_chan_config backup_config;
- 
- 	/* dmapool for packet mode descriptors */
- 	bool use_dma_pool;
-@@ -5491,11 +5493,63 @@ static int udma_probe(struct platform_device *pdev)
- 	return ret;
- }
- 
-+static int udma_pm_suspend(struct device *dev)
-+{
-+	struct udma_dev *ud = dev_get_drvdata(dev);
-+	struct dma_device *dma_dev = &ud->ddev;
-+	struct dma_chan *chan;
-+	struct udma_chan *uc;
-+
-+	list_for_each_entry(chan, &dma_dev->channels, device_node) {
-+		if (chan->client_count) {
-+			uc = to_udma_chan(chan);
-+			/* backup the channel configuration */
-+			memcpy(&uc->backup_config, &uc->config,
-+			       sizeof(struct udma_chan_config));
-+			dev_dbg(dev, "Suspending channel %s\n",
-+				dma_chan_name(chan));
-+			ud->ddev.device_free_chan_resources(chan);
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static int udma_pm_resume(struct device *dev)
-+{
-+	struct udma_dev *ud = dev_get_drvdata(dev);
-+	struct dma_device *dma_dev = &ud->ddev;
-+	struct dma_chan *chan;
-+	struct udma_chan *uc;
-+	int ret;
-+
-+	list_for_each_entry(chan, &dma_dev->channels, device_node) {
-+		if (chan->client_count) {
-+			uc = to_udma_chan(chan);
-+			/* restore the channel configuration */
-+			memcpy(&uc->config, &uc->backup_config,
-+			       sizeof(struct udma_chan_config));
-+			dev_dbg(dev, "Resuming channel %s\n",
-+				dma_chan_name(chan));
-+			ret = ud->ddev.device_alloc_chan_resources(chan);
-+			if (ret)
-+				return ret;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
-+static const struct dev_pm_ops udma_pm_ops = {
-+	SET_LATE_SYSTEM_SLEEP_PM_OPS(udma_pm_suspend, udma_pm_resume)
-+};
-+
- static struct platform_driver udma_driver = {
- 	.driver = {
- 		.name	= "ti-udma",
- 		.of_match_table = udma_of_match,
- 		.suppress_bind_attrs = true,
-+		.pm = &udma_pm_ops,
- 	},
- 	.probe		= udma_probe,
- };
-
-base-commit: 81214a573d19ae2fa5b528286ba23cd1cb17feec
--- 
-2.30.2
-
+Thanks,
+Nícolas
