@@ -2,86 +2,49 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDDF0618306
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:40:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A2663618308
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:41:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231683AbiKCPk0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 11:40:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48824 "EHLO
+        id S231807AbiKCPlZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 11:41:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49598 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231694AbiKCPkU (ORCPT
+        with ESMTP id S231312AbiKCPlX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 11:40:20 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE92817592
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:40:14 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id i5-20020a1c3b05000000b003cf47dcd316so3627200wma.4
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 08:40:14 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=arista.com; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=heCsF5+oksMkKllVhJuNqNh9mZu8ZtuLSZhGNPkuZUU=;
-        b=awPwB40AqRzdI+kaKO27twDciZZUa4wRghMQ5H/0a2587mmwsT8ce5/+TwRPtir9qb
-         Ue4YnZR0stUuot+GTLmCKAQphR/mSEXhy+ubpz8KJfPCEJzJVhMRNMXQCXLb6NJpUHTL
-         UetbKMthucTcZE/68dqbYKFRtCiOee/L6nb3Ze3h2kWMdIE0zcxUoR/hGw/N9NFbiGxh
-         pzv6WKvTAziZPBzbuivwaweJUDDVw3um7ka3zOz4dyEpmzTL/4Yn6NxxO0srkyX8p2W+
-         NS7wLNG8qRLep0Q7rjQQ9JHVAvJWTrOGOAAgfs6Ly7geOJFMcz0P1WxaVFbFyAgd1EZi
-         CAPA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=heCsF5+oksMkKllVhJuNqNh9mZu8ZtuLSZhGNPkuZUU=;
-        b=hzTXLMWHFb712YaFOif9h+00pTPY7U95ei577QhoK8fQvLVs5mVH4XK10AkBxuw3/k
-         yTxi7xejTQdRcXNunnkOURdR4fElvgKQpdnuBa/MR383ddX0i88za70abETit2E9wGdS
-         r2u9Phkcz5trcy3AtOV6xhyhDKA3pQb+p9BHE9JVfhJRZUX0fI83HfLvQMxcJw7JGHqH
-         XFI/9XESDkJRVjSa7aXZ3+7yABJqG74jbnv5BDVZ3rBD7/WivYN6ju1IEXeuxteMlL3o
-         FPSQIVELv5BMZK0HMqdbq4ZS6s5lqbAD4FF7lt2m2JiPdyHQIVKwMyl6isiS5Gxyn4gL
-         TR/g==
-X-Gm-Message-State: ACrzQf3jv2iH9OTFrhszpSfCeVDvhSogDnbVHjmmJfto8GsFRPCPHCXy
-        DB58fMc3TXhSj2UZFOhqrjc7YQ==
-X-Google-Smtp-Source: AMsMyM5W3IK+XSPxncETUlmZfWRiaYwnj6m0Q7dFp4g0bufxPolS3y/IKY4/UkTiEiUWOM8xAdLSvw==
-X-Received: by 2002:a05:600c:35cf:b0:3c6:e957:b403 with SMTP id r15-20020a05600c35cf00b003c6e957b403mr31542271wmq.162.1667490013382;
-        Thu, 03 Nov 2022 08:40:13 -0700 (PDT)
-Received: from [10.83.37.24] ([217.173.96.166])
-        by smtp.gmail.com with ESMTPSA id v20-20020adfa1d4000000b002238ea5750csm1459001wrv.72.2022.11.03.08.40.12
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 08:40:12 -0700 (PDT)
-Message-ID: <ad9be7ae-aeec-b208-8252-7a566534ded4@arista.com>
-Date:   Thu, 3 Nov 2022 15:40:11 +0000
+        Thu, 3 Nov 2022 11:41:23 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8A16713DD2;
+        Thu,  3 Nov 2022 08:41:22 -0700 (PDT)
+Received: from relay2.suse.de (relay2.suse.de [149.44.160.134])
+        by smtp-out1.suse.de (Postfix) with ESMTP id 4A83821BF7;
+        Thu,  3 Nov 2022 15:41:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1667490081; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=lzXRoelaQpNOfPdsnWnywvovJbNUkTrxeUd8JkHPQyc=;
+        b=HxFR8w2SepoxpGj57ONoePwAN74s58hiAl1o2dKnOQFbC7VIyRJKiI9xIIQdJnDIhOvHNH
+        mpOeMPYpGCme6gFcWDZCt16CvK/JfPHnSnF4Rq3MTA5dk1xlZWUTghWU1slYIgzQdFk0oW
+        JB0cfuw7hbdUrh9AMMofzkX1GQ9MF2U=
+Received: from ds.suse.cz (ds.suse.cz [10.100.12.205])
+        by relay2.suse.de (Postfix) with ESMTP id 3CACD2C141;
+        Thu,  3 Nov 2022 15:41:21 +0000 (UTC)
+Received: by ds.suse.cz (Postfix, from userid 10065)
+        id 8FBA1DA79D; Thu,  3 Nov 2022 16:41:02 +0100 (CET)
+From:   David Sterba <dsterba@suse.com>
+To:     torvalds@linux-foundation.org
+Cc:     David Sterba <dsterba@suse.com>, linux-btrfs@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [GIT PULL] Btrfs fixes for 6.1-rc4, part 2
+Date:   Thu,  3 Nov 2022 16:41:00 +0100
+Message-Id: <cover.1667488810.git.dsterba@suse.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH 2/2] net/tcp: Disable TCP-MD5 static key on
- tcp_md5sig_info destruction
-Content-Language: en-US
-To:     Eric Dumazet <edumazet@google.com>
-Cc:     linux-kernel@vger.kernel.org, David Ahern <dsahern@kernel.org>,
-        Bob Gilligan <gilligan@arista.com>,
-        "David S. Miller" <davem@davemloft.net>,
-        Dmitry Safonov <0x7f454c46@gmail.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        netdev@vger.kernel.org
-References: <20221102211350.625011-1-dima@arista.com>
- <20221102211350.625011-3-dima@arista.com>
- <CANn89iLbOikuG9+Tna9M0Gr-diF2vFpfMV8MDP8rBuN49+Mwrg@mail.gmail.com>
- <483848f5-8807-fd97-babc-44740db96db4@arista.com>
- <CANn89i+XyQhh0eNMJWNn6NNLDaMtrzX3sq9Atu-ic7P5uqDODg@mail.gmail.com>
- <CANn89i+UxgHwm9apzBXV-afpcfXfuX2S+6i4vPzF2ec4Dr6X0A@mail.gmail.com>
-From:   Dmitry Safonov <dima@arista.com>
-In-Reply-To: <CANn89i+UxgHwm9apzBXV-afpcfXfuX2S+6i4vPzF2ec4Dr6X0A@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-3.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -89,33 +52,52 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/2/22 21:53, Eric Dumazet wrote:
-> On Wed, Nov 2, 2022 at 2:49 PM Eric Dumazet <edumazet@google.com> wrote:
-> 
->>
->> Are you sure ?
->>
->> static_branch_inc() is what we want here, it is a nice wrapper around
->> the correct internal details,
->> and ultimately boils to an atomic_inc(). It is safe for all contexts.
->>
->> But if/when jump labels get refcount_t one day, we will not have to
->> change TCP stack because
->> it made some implementation assumptions.
-> 
-> Oh, I think I understand this better now.
-> 
-> Please provide a helper like
-> 
-> static inline void static_key_fast_inc(struct static_key *key)
-> {
->        atomic_inc(&key->enabled);
-> }
-> 
-> Something like that.
+Hi,
 
-Sure, that sounds like a better thing to do, rather than the hack I had.
+a batch of error handling fixes for resource leaks, fixes for nowait
+mode in combination with direct and buffered IO.  Please pull, thanks.
 
-Thanks, will send v2 soon,
-          Dmitry
+- direct IO + dsync + nowait could miss a sync of the file after write,
+  add handling for this combination
 
+- buffered IO + nowait should not fail with ENOSPC, only blocking IO
+  could determine that
+
+- error handling fixes
+  - fix inode reserve space leak due to nowait buffered write
+  - check the correct variable after allocation (direct IO submit)
+  - fix inode list leak during backref walking
+  - fix ulist freeing in self tests
+
+----------------------------------------------------------------
+The following changes since commit 76a66ba101329316a5d7f4275070be22eb85fdf2:
+
+  btrfs: don't use btrfs_chunk::sub_stripes from disk (2022-10-25 10:17:33 +0200)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/kdave/linux.git for-6.1-rc3-tag
+
+for you to fetch changes up to eb81b682b131642405a05c627ab08cf0967b3dd8:
+
+  btrfs: fix inode reserve space leak due to nowait buffered write (2022-11-02 17:44:45 +0100)
+
+----------------------------------------------------------------
+Christophe JAILLET (1):
+      btrfs: fix a memory allocation failure test in btrfs_submit_direct
+
+Filipe Manana (7):
+      btrfs: fix lost file sync on direct IO write with nowait and dsync iocb
+      btrfs: fix inode list leak during backref walking at resolve_indirect_refs()
+      btrfs: fix inode list leak during backref walking at find_parent_nodes()
+      btrfs: fix ulist leaks in error paths of qgroup self tests
+      btrfs: remove pointless and double ulist frees in error paths of qgroup tests
+      btrfs: fix nowait buffered write returning -ENOSPC
+      btrfs: fix inode reserve space leak due to nowait buffered write
+
+ fs/btrfs/backref.c            | 54 +++++++++++++++++++++++++++----------------
+ fs/btrfs/ctree.h              |  5 +++-
+ fs/btrfs/file.c               | 29 +++++++++++++++++------
+ fs/btrfs/inode.c              | 16 +++++++++----
+ fs/btrfs/tests/qgroup-tests.c | 36 +++++++++++++++--------------
+ 5 files changed, 91 insertions(+), 49 deletions(-)
