@@ -2,124 +2,204 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6CD39618340
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:48:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1B254618343
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:49:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232017AbiKCPsp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 11:48:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55706 "EHLO
+        id S231801AbiKCPta (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 11:49:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56058 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231359AbiKCPsg (ORCPT
+        with ESMTP id S230333AbiKCPt1 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 11:48:36 -0400
-Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 17D0664D1;
-        Thu,  3 Nov 2022 08:48:36 -0700 (PDT)
-Received: by mail-wr1-f44.google.com with SMTP id h9so3462838wrt.0;
-        Thu, 03 Nov 2022 08:48:36 -0700 (PDT)
+        Thu, 3 Nov 2022 11:49:27 -0400
+Received: from mail-qk1-x72d.google.com (mail-qk1-x72d.google.com [IPv6:2607:f8b0:4864:20::72d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92DAE65C7
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:49:26 -0700 (PDT)
+Received: by mail-qk1-x72d.google.com with SMTP id s20so1395575qkg.5
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 08:49:26 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=higXkm0LW2zoWVjTq5AcZkAGIoBPdyEY88hywSDs37E=;
+        b=myh6yFbKgW0McggPRfiRwH82aL4jGPjgRZe39ke8oFWtpxWlI2cDaR5ABXRX6O0/gR
+         vCpK55jRyIuu7dxa0sj4GvU89oWESlA9YI57OxcEZxCbnvRNoN5vhVRHfvQm56KvMVA9
+         DGEep7wc1gYnkWfykkw7AL3zBL3vKs05vQ25BsCfoK7HyQg4iwqib3soxIevdgVbvnsu
+         7r1TG3e/nlSvogmtqoLY6ok1FwJVPCLw9zQrPY86GLGfs3Z7YcobceYUiwd00tAJR+Xs
+         0kjptNj/b5MdiDyBLfids37nZsUY+ZKuC5lSA6pMuh7svpDc/+js/9ynRjQoAoc3rDgh
+         sMOA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=39Wq79lyITbkFUX8I3WqtfNpU9PWy7SSBeSmagRdmwc=;
-        b=lGc0RW+F45Dx4VwI4Hh+cJtFjAg/aIehzH/gh3PsPXxFWC3R7FOUnh6dyv5WwspLT7
-         jRflXjqj0RFm7Tdql1mgbnN0A9HQ7tGeLI/CruXg8Ug2AWxn/62DPWkN6CpNQk6q+K2V
-         5ZFGT6PA8v1wGIwj5YfnssxXJCGSWS9GgA/buuFdi2X0w0++r3LnDIpoD1EBZhHmM9EL
-         UAF2v0+Huj+xCcYLbg5OdQmznc2bUm/gllQ3TEip8IfI12/79xTgMboSqeceHwK/+OPL
-         C9HOW8GT3DTRnEx76fxy7nE9nqoCbi7R1wPognEkL1i09Eu87Eu2XFIJ8jjFBX3s3w4L
-         VEyg==
-X-Gm-Message-State: ACrzQf1GOIE31z+GLUeNdcGqZD5CXdVNiTVOJ2z+G8akxT5+/KCJwVBw
-        r010lIrhKarAayvZ5foMriQ5YUfGYzA=
-X-Google-Smtp-Source: AMsMyM5Uq6UmrhMKDeWRCDF2skQQM8Ji0jpIAZssD6nSNCqorFkAwkUOI8IvRyVilyJVMf1m+kKbwQ==
-X-Received: by 2002:a5d:6ac7:0:b0:236:b281:150 with SMTP id u7-20020a5d6ac7000000b00236b2810150mr18593143wrw.29.1667490514597;
-        Thu, 03 Nov 2022 08:48:34 -0700 (PDT)
-Received: from liuwe-devbox-debian-v2 ([51.145.34.42])
-        by smtp.gmail.com with ESMTPSA id o3-20020a05600c510300b003b3307fb98fsm314938wms.24.2022.11.03.08.48.33
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 08:48:34 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 15:48:24 +0000
-From:   Wei Liu <wei.liu@kernel.org>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        "mail@anirudhrb.com" <mail@anirudhrb.com>,
-        "kumarpraveen@linux.microsoft.com" <kumarpraveen@linux.microsoft.com>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] clocksource/drivers/hyperv: use Hyper-V's page size to
- calculate PFN
-Message-ID: <Y2PiyAEJZitd3LS8@liuwe-devbox-debian-v2>
-References: <20221103152338.2926983-1-anrayabh@linux.microsoft.com>
- <BYAPR21MB1688743DD4507008D33499B0D7389@BYAPR21MB1688.namprd21.prod.outlook.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=higXkm0LW2zoWVjTq5AcZkAGIoBPdyEY88hywSDs37E=;
+        b=Hi+qZF9K+/s+jPA5AaDLGr0GbCXG+cJDMGbz9gFGGIPFgbl/C9wBtnuEFWW/UBecfm
+         OWZJuTskRX0JLpEF6Qd7j9SSd3pysyCIRFpIt2CN+o40PZ3VhE3379V2epmB4G7ROGeS
+         oSPur99+0tMTbgXM7mvfyOX3/XFOqzyIaqQiI/7Oo0KVHyDiNYhpUEFsj1T7VxX/DOiX
+         k4tUJFClCF+9JLWJjk4cqwB1Jgw6uEFGcjt++EZuMQYFNYzIxeSJ54+GxYZbiWVyHHDv
+         Lk0HPTM5azWb2WyAMz4lYaD64QCpWap4UfkVbKu8w9jSBmzbEitfrcrxFxVFRsqHQ3Sz
+         KCew==
+X-Gm-Message-State: ACrzQf2TMOeCHrIr8kX+RmuhXCQdEVoTvWRUNKZk5k5DT88CDunY2gM7
+        iffay8MlY8GNf4oLxkZLXN+c1+8/3OfJ6W4lrzU=
+X-Google-Smtp-Source: AMsMyM4/XXWSFfT2Hn4Ndhk+5JrHpvdYzm44hC5Qlc2PLOoG12so+jZedVFCF3CSejoYP2LFps0I13nJZzUYPMkTpy0=
+X-Received: by 2002:a37:b5c2:0:b0:6fa:67fd:a2d5 with SMTP id
+ e185-20020a37b5c2000000b006fa67fda2d5mr6197584qkf.29.1667490565565; Thu, 03
+ Nov 2022 08:49:25 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR21MB1688743DD4507008D33499B0D7389@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+References: <Y2OPStg4jXtWpJcd@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+ <d0d6d613-174b-f7dd-7d45-45eecd26a850@inria.fr>
+In-Reply-To: <d0d6d613-174b-f7dd-7d45-45eecd26a850@inria.fr>
+From:   Tanju Brunostar <tanjubrunostar0@gmail.com>
+Date:   Thu, 3 Nov 2022 16:49:13 +0100
+Message-ID: <CAHJEyKUA4FG468S5bMsx+XGUR3pB3kKm_bx=LNPNJ6n9yPxCrQ@mail.gmail.com>
+Subject: Re: [PATCH] staging: vt6655: change the function name s_vFillRTSHead
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 03:34:23PM +0000, Michael Kelley (LINUX) wrote:
-> From: Anirudh Rayabharam <anrayabh@linux.microsoft.com> Sent: Thursday, November 3, 2022 8:24 AM
-> > 
-> > __phys_to_pfn() will return a PFN based on the guest page size, which might
-> > be different from Hyper-V's page size that is always 4K. The PFN for the
-> > TSC page always needs to be a Hyper-V PFN.
-> > 
-> > Use HVPFN_DOWN() to calculate the PFN of the TSC page from the physical
-> > address.
-> > 
-> > Reported-by: Michael Kelley (LINUX) <mikelley@microsoft.com>
-> > Signed-off-by: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
+On Thu, Nov 3, 2022 at 1:38 PM Julia Lawall <julia.lawall@inria.fr> wrote:
+>
+>
+>
+> On Thu, 3 Nov 2022, Tanjuate Brunostar wrote:
+>
+> > Remove the use of Hungarian notation, which is not used in the Linux
+> > kernel. Reported by checkpatch
+> >
+> > Fix checkpatch error related to code line ends with a '(', by joining
+> > some lines and indenting correctly. This improves visibility
+>
+> I don't think it will be appreciated to do two things at once.
+>
+
+I sent it earlier as two patches but it seemed to break and fix the
+kernel which was not appreciated by one of the mentors
+
+> >
+> > Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
 > > ---
-> >  drivers/clocksource/hyperv_timer.c | 5 +++--
-> >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > 
-> > diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
-> > index 11332c82d1af..18de1f439ffd 100644
-> > --- a/drivers/clocksource/hyperv_timer.c
-> > +++ b/drivers/clocksource/hyperv_timer.c
-> > @@ -21,6 +21,7 @@
-> >  #include <linux/interrupt.h>
-> >  #include <linux/irq.h>
-> >  #include <linux/acpi.h>
-> > +#include <linux/hyperv.h>
-> >  #include <clocksource/hyperv_timer.h>
-> >  #include <asm/hyperv-tlfs.h>
-> >  #include <asm/mshyperv.h>
-> > @@ -412,7 +413,7 @@ static void resume_hv_clock_tsc(struct clocksource *arg)
-> >  	/* Re-enable the TSC page */
-> >  	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
-> >  	tsc_msr.enable = 1;
-> > -	tsc_msr.pfn = __phys_to_pfn(phys_addr);
-> > +	tsc_msr.pfn = HVPFN_DOWN(phys_addr);
-> >  	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
+> >  drivers/staging/vt6655/rxtx.c | 48 ++++++++++++++++-------------------
+> >  1 file changed, 22 insertions(+), 26 deletions(-)
+> >
+> > diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+> > index 31ae99b3cb35..debc5d5daede 100644
+> > --- a/drivers/staging/vt6655/rxtx.c
+> > +++ b/drivers/staging/vt6655/rxtx.c
+> > @@ -23,7 +23,7 @@
+> >   *      s_uGetTxRsvTime- get frame reserved time
+> >   *      s_vFillCTSHead- fulfill CTS ctl header
+> >   *      s_vFillFragParameter- Set fragment ctl parameter.
+> > - *      s_vFillRTSHead- fulfill RTS ctl header
+> > + *      fill_rts_header- fulfill RTS ctl header
+> >   *      s_vFillTxKey- fulfill tx encrypt key
+> >   *      s_vSWencryption- Software encrypt header
+> >   *      vDMA0_tx_80211- tx 802.11 frame via dma0
+> > @@ -85,15 +85,15 @@ static const unsigned short fb_opt1[2][5] = {
+> >  #define DATADUR_A_F1    13
+> >
+> >  /*---------------------  Static Functions  --------------------------*/
+> > -static void s_vFillRTSHead(struct vnt_private *pDevice,
+> > -                        unsigned char byPktType,
+> > -                        void *pvRTS,
+> > -                        unsigned int cbFrameLength,
+> > -                        bool bNeedAck,
+> > -                        bool bDisCRC,
+> > -                        struct ieee80211_hdr *hdr,
+> > -                        unsigned short wCurrentRate,
+> > -                        unsigned char byFBOption);
+> > +static void fill_rts_header(struct vnt_private *pDevice,
+> > +                         unsigned char byPktType,
+> > +                         void *pvRTS,
+> > +                         unsigned int        cbFrameLength,
+>
+> Strange spacing in the above parameter declaration.  Maybe there is a tab
+> that should be a space?
+>
+> julia
+>
+
+I was also shocked when I noticed that. It seemed like a tab but when
+I removed the space, the two words were joined and when I added the
+space, it became this lage space once again. checkpatch does not
+complain about it though
+
+> > +                         bool bNeedAck,
+> > +                         bool bDisCRC,
+> > +                         struct ieee80211_hdr *hdr,
+> > +                         unsigned short wCurrentRate,
+> > +                         unsigned char byFBOption);
+> >
+> >  static void s_vGenerateTxParameter(struct vnt_private *pDevice,
+> >                                  unsigned char byPktType,
+> > @@ -555,19 +555,15 @@ s_uFillDataHead(
+> >       return buf->duration;
 > >  }
-> > 
-> > @@ -532,7 +533,7 @@ static bool __init hv_init_tsc_clocksource(void)
-> >  	 */
-> >  	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
-> >  	tsc_msr.enable = 1;
-> > -	tsc_msr.pfn = __phys_to_pfn(phys_addr);
-> > +	tsc_msr.pfn = HVPFN_DOWN(phys_addr);
-> >  	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
-> > 
-> >  	clocksource_register_hz(&hyperv_cs_tsc, NSEC_PER_SEC/100);
+> >
+> > -static
+> > -void
+> > -s_vFillRTSHead(
+> > -     struct vnt_private *pDevice,
+> > -     unsigned char byPktType,
+> > -     void *pvRTS,
+> > -     unsigned int cbFrameLength,
+> > -     bool bNeedAck,
+> > -     bool bDisCRC,
+> > -     struct ieee80211_hdr *hdr,
+> > -     unsigned short wCurrentRate,
+> > -     unsigned char byFBOption
+> > -)
+> > +static void fill_rts_header(struct vnt_private *pDevice,
+> > +                         unsigned char byPktType,
+> > +                         void *pvRTS,
+> > +                         unsigned int cbFrameLength,
+> > +                         bool bNeedAck,
+> > +                         bool bDisCRC,
+> > +                         struct ieee80211_hdr *hdr,
+> > +                         unsigned short wCurrentRate,
+> > +                         unsigned char byFBOption)
+> >  {
+> >       unsigned int uRTSFrameLen = 20;
+> >
+> > @@ -912,7 +908,7 @@ s_vGenerateTxParameter(
+> >                       buf->rrv_time_a = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+> >                       buf->rrv_time_b = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, pDevice->byTopCCKBasicRate, bNeedACK);
+> >
+> > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> >               } else {/* RTS_needless, PCF mode */
+> >                       struct vnt_rrv_time_cts *buf = pvRrvTime;
+> >
+> > @@ -931,7 +927,7 @@ s_vGenerateTxParameter(
+> >                       buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+> >
+> >                       /* Fill RTS */
+> > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> >               } else if (!pvRTS) {/* RTS_needless, non PCF mode */
+> >                       struct vnt_rrv_time_ab *buf = pvRrvTime;
+> >
+> > @@ -945,7 +941,7 @@ s_vGenerateTxParameter(
+> >                       buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, wCurrentRate, bNeedACK);
+> >
+> >                       /* Fill RTS */
+> > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> >               } else { /* RTS_needless, non PCF mode */
+> >                       struct vnt_rrv_time_ab *buf = pvRrvTime;
+> >
 > > --
 > > 2.34.1
-> 
-> Reviewed-by: Michael Kelley <mikelley@microsoft.com>
-
-Thank you both for the quick turnaround. I will just squash this patch
-into the previous one.
+> >
+> >
+> >
