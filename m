@@ -2,136 +2,90 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 65AE661755D
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 05:08:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A989161755E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 05:10:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiKCEIF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 00:08:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50100 "EHLO
+        id S229771AbiKCEJ6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 00:09:58 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51004 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229600AbiKCEIA (ORCPT
+        with ESMTP id S229643AbiKCEJy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 00:08:00 -0400
-Received: from mail-ej1-x62b.google.com (mail-ej1-x62b.google.com [IPv6:2a00:1450:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AD1A013D2F;
-        Wed,  2 Nov 2022 21:07:59 -0700 (PDT)
-Received: by mail-ej1-x62b.google.com with SMTP id ud5so2149910ejc.4;
-        Wed, 02 Nov 2022 21:07:59 -0700 (PDT)
+        Thu, 3 Nov 2022 00:09:54 -0400
+Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18A2713F0A
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 21:09:54 -0700 (PDT)
+Received: by mail-pg1-x52f.google.com with SMTP id b62so664518pgc.0
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 21:09:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=UIsWfbCkFTerxLO9Jkep5pwZTiDKcyfBXjgU1iksCT0=;
-        b=ElwEESMhEGa2sw4P2gh53qMCeCRPfmgPXbU9M69JbGY880u+E3ik20+IB/sUqw/sYK
-         W5IkrCG02DljO77dN4iUv5ziQ4IT22z3CRKxvb3+1KKrwA1Gsd3hL5XkCY4HIcCWPD32
-         dN7u350I5+xpoZmJOfrMMhI53eMTetNwJwYajTdKIpw1UGMlIttnDYwg8szgZ2lJtQwf
-         nXQ8tKq1mFjCo88jSZoBG2ZoeJ8HS8hkTYQwOydtAStSTGdOTrUrzgYppp8NPtcZUXHc
-         uWSOi5PRc38/gmILf1Vdhz8tgmv8+ivSQU7bLoTwBKkHO6CDH4G9JZ0Bo6UM2AyW57zh
-         3www==
+        d=chromium.org; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=CjgiL2MLpB7k2dv0Fav14nQzud4nvz81K/5lxqZhfgU=;
+        b=Ie7RO6PLa858Ia9kdyuyUiMlAvM8UZsnPeP1mn7nTLR9ZwGRt+Kf1PdHW6o9D6J93i
+         iT0YgS4DJRhMaAXuP4oeyfXlk1/V48NlsRuAd56nHsHXGPJLz4XaBnYB/2O5sxCG0EX3
+         2L0kSSpJmwIsjmUndUp2oFhaYc2BJkJA4Gf08=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UIsWfbCkFTerxLO9Jkep5pwZTiDKcyfBXjgU1iksCT0=;
-        b=h3Qp1bvxK0btjzRo4qSVCwCKs7Q4rXjUJveK/U+RiRpY5KjfRDDb0aKAMmmvYMe4xw
-         Ci86QSlxeVqMJryDUkUgTqfkQ/xfClgehrNo9IwrTirCJanXstpWhV8iQRaF8/YVT4nE
-         +sDbWFnWHFzXDJbmjo5aFOz3dzpF6MZovRNlI0gsFa6r4RRtbWKj2I1YSUSnuNp6y6KI
-         mtwvxGHJpL9nlqT8nuzUaiLEZCarFq1WQ5lJJlAXs6CO+SCnJ3BjZfurwGepuNqjs45E
-         SOBU3+Y0x+qElzzO7EHsqb5xcck80RREapmLmcWVdAkHGOmlKLqYXl9OVVOb3JGlB+Ai
-         KkNg==
-X-Gm-Message-State: ACrzQf1L/8KwaxyVZkYqEGDoY1E00BiAIp80mfU1EyAYdz2LEJL5cK6W
-        etpc8tH9vShB/hu6v5kQxX9P0a8Q7hjJpT9WJwA=
-X-Google-Smtp-Source: AMsMyM7EowHw/EYtUWBQy6Ou2EamJtzjAwCj+H/BxB5HHl8BGO95RvQ24cnciHOsrjoktw7pTSU2r97iFOyBXW8cDFk=
-X-Received: by 2002:a17:907:c08:b0:7ad:f758:2899 with SMTP id
- ga8-20020a1709070c0800b007adf7582899mr9247589ejc.671.1667448478023; Wed, 02
- Nov 2022 21:07:58 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CjgiL2MLpB7k2dv0Fav14nQzud4nvz81K/5lxqZhfgU=;
+        b=Z/2m2KT+MwoJ1AWz1BHUYd4VENi8ra+FUrbFb7bTnX6m1hNi3gstF2MvwBQao5pEFF
+         ZF7YDsQ2lM4l60+vHEwBunO6gD/Puz/VrsX2V59DtG30oZtm0l6YNTDLPR3RMWPFw1vf
+         PkcQ6x0A3mGzobv4Y6lNPMLDiZMk5YMDndpSn8gj5iO6xN2LPO9C7EQPYwt4UIK0Dpu7
+         JgBuCssbU4QIMwjsrpVHKnUaN0mQ02kK0WJI5b35C6XWHgV+6EHjxeN498vPJcR8x3mn
+         3I7izGW/jNqvI/S3xhjM2LwYstIqeu/urjGEMnMrSYsD2LIGuyTLGCWU0E2od9HPR8Ee
+         q5Yg==
+X-Gm-Message-State: ACrzQf0ajQjntSef6mu3pHKQu4UD3UFbQgvRT4Si0HnRNiweDwgTBIFe
+        MxvQIlmiXsk7hHks8c3U/arlLw==
+X-Google-Smtp-Source: AMsMyM5csRwutJPzmf7vWy9aYKQhU2w+QRsF3X/nPdTWHybfb4qKRtzaGxW3B8Dnnvp+dRF5jUvcUg==
+X-Received: by 2002:a05:6a00:2446:b0:528:5da9:cc7 with SMTP id d6-20020a056a00244600b005285da90cc7mr28855537pfj.51.1667448593611;
+        Wed, 02 Nov 2022 21:09:53 -0700 (PDT)
+Received: from google.com ([240f:75:7537:3187:f22:e30:374d:5a2b])
+        by smtp.gmail.com with ESMTPSA id z5-20020a170903018500b00186ff402525sm3599016plg.213.2022.11.02.21.09.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 02 Nov 2022 21:09:53 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 13:09:49 +0900
+From:   Sergey Senozhatsky <senozhatsky@chromium.org>
+To:     Minchan Kim <minchan@kernel.org>
+Cc:     Andrew Morton <akpm@linux-foundation.org>,
+        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, Sergey Senozhatsky <senozhatsky@chromium.org>
+Subject: Re: [PATCHv4 2/9] zram: Add recompression algorithm sysfs knob
+Message-ID: <Y2M/DeLwab0o7btv@google.com>
+References: <20221018045533.2396670-1-senozhatsky@chromium.org>
+ <20221018045533.2396670-3-senozhatsky@chromium.org>
+ <Y2LP0OWF/WTnkSne@google.com>
+ <Y2Mv4l+V9iCv9EMg@google.com>
 MIME-Version: 1.0
-References: <20221101215804.16262-1-afd@ti.com> <20221101215804.16262-8-afd@ti.com>
-In-Reply-To: <20221101215804.16262-8-afd@ti.com>
-From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Date:   Wed, 2 Nov 2022 21:07:45 -0700
-Message-ID: <CAKdAkRTQ2bjQEn1HM=ZMHdC8Goyf1rUDNfMkNK3jMA2CR-t4eg@mail.gmail.com>
-Subject: Re: [PATCH v4 7/9] ARM: dts: nspire: Use MATRIX_KEY macro for linux,keymap
-To:     Andrew Davis <afd@ti.com>
-Cc:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Daniel Tang <dt.tangr@gmail.com>,
-        Fabian Vogt <fabian@ritter-vogt.de>,
-        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2Mv4l+V9iCv9EMg@google.com>
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Andrew,
+On (22/11/03 12:05), Sergey Senozhatsky wrote:
+> What is the use case for removal of a secondary algorithm?
+> 
+> > My point is that we don't need to implement it atm but makes the
+> > interface to open the possibility for future extension.
+> > 
+> > What do you think?
+> 
+> So, as far as I understand, we don't have reason to add remove_recomp_algo
+> right now. And existing recomp_algo does not enforce any particular format,
+> it can be extended. Right now we accept "$name" but can do something like
+> "$name:$priority".
 
-On Tue, Nov 1, 2022 at 2:59 PM Andrew Davis <afd@ti.com> wrote:
->
-> This looks better and allows us to see the row and column numbers
-> more easily. Switch to this macro here.
->
-> Signed-off-by: Andrew Davis <afd@ti.com>
-> ---
->  arch/arm/boot/dts/nspire-clp.dts | 90 ++++++++++++++++++++++++--------
->  arch/arm/boot/dts/nspire-cx.dts  | 90 ++++++++++++++++++++++++--------
->  arch/arm/boot/dts/nspire-tp.dts  | 90 ++++++++++++++++++++++++--------
->  3 files changed, 204 insertions(+), 66 deletions(-)
->
-> diff --git a/arch/arm/boot/dts/nspire-clp.dts b/arch/arm/boot/dts/nspire-clp.dts
-> index f52f38c615886..916ede0c2499c 100644
-> --- a/arch/arm/boot/dts/nspire-clp.dts
-> +++ b/arch/arm/boot/dts/nspire-clp.dts
-> @@ -6,32 +6,78 @@
->   */
->  /dts-v1/;
->
-> +#include <dt-bindings/input/input.h>
-> +
->  /include/ "nspire-classic.dtsi"
->
->  &keypad {
->         linux,keymap = <
-> -       0x0000001c      0x0001001c      0x00020039
-> -       0x0004002c      0x00050034      0x00060015
-> -       0x0007000b      0x0008002d      0x01000033
-> -       0x0101004e      0x01020011      0x01030004
-> -       0x0104002f      0x01050003      0x01060016
-> -       0x01070002      0x01080014      0x02000062
-> -       0x0201000c      0x0202001f      0x02030007
-> -       0x02040013      0x02050006      0x02060010
-> -       0x02070005      0x02080019      0x03000027
-> -       0x03010037      0x03020018      0x0303000a
-> -       0x03040031      0x03050009      0x03060032
-> -       0x03070008      0x03080026      0x04000028
-> -       0x04010035      0x04020025      0x04040024
-> -       0x04060017      0x04080023      0x05000028
-> -       0x05020022      0x0503001b      0x05040021
-> -       0x0505001a      0x05060012      0x0507006f
-> -       0x05080020      0x0509002a      0x0601001c
-> -       0x0602002e      0x06030068      0x06040030
-> -       0x0605006d      0x0606001e      0x06070001
-> -       0x0608002b      0x0609000f      0x07000067
-> -       0x0702006a      0x0704006c      0x07060069
-> -       0x0707000e      0x0708001d      0x070a000d
-> +               MATRIX_KEY(0,  0, 0x1c)
-> +               MATRIX_KEY(0,  1, 0x1c)
-> +               MATRIX_KEY(0,  2, 0x39)
+Or with keywords:
 
-Can this also be switched over to using KEY_* macros to describe the
-keycodes emitted?
+	name=STRING priority=INT
 
-Thanks.
-
--- 
-Dmitry
+and the only legal priority for now is 1.
