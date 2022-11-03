@@ -2,121 +2,100 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE39A6185F4
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:13:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 143FF6185FD
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:14:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231736AbiKCRNx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 13:13:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37578 "EHLO
+        id S230521AbiKCROp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 13:14:45 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231482AbiKCRNe (ORCPT
+        with ESMTP id S232085AbiKCROU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:13:34 -0400
-Received: from mga03.intel.com (mga03.intel.com [134.134.136.65])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4F8981EEC6;
-        Thu,  3 Nov 2022 10:12:57 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667495577; x=1699031577;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=7YpyRAArYVbF9WNy66xCFId6MSUjEg0Z+IBgztnk6pE=;
-  b=OP2WWRVrzCQUsW25oYzoM1bPLb/DH5cvAgGftZdTKFTf38AY12WbVody
-   0ur29kF0xe53bTfiA+U6YrXxetSRAv7QmOe/mockPigLckHzLV+LkPaXy
-   M4m0uGtvBGYT/F2KdB/18qFP1MRSrquyBKUvQVPtDoAXgmButYnQUoDS3
-   HAgb5jTUu7aXbTx/DM3e1DciDXThbxAC6/fzsz6dyqNVCDvREoN6OdQr7
-   7n8hILlG0oKlLFiHSPkArh70Ut8mxDmke1f+woq8JLBKzz263i0YsMBe7
-   s5BmSbrcuI2y+rPgaGkzVufEdrYxPlNSISVSm9cqIhBgslMfcKr8qOX92
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="311480553"
-X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
-   d="scan'208";a="311480553"
-Received: from orsmga008.jf.intel.com ([10.7.209.65])
-  by orsmga103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 10:12:56 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="666046647"
-X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
-   d="scan'208";a="666046647"
-Received: from smile.fi.intel.com ([10.237.72.54])
-  by orsmga008.jf.intel.com with ESMTP; 03 Nov 2022 10:12:50 -0700
-Received: from andy by smile.fi.intel.com with local (Exim 4.96)
-        (envelope-from <andriy.shevchenko@linux.intel.com>)
-        id 1oqdlm-006wiw-0o;
-        Thu, 03 Nov 2022 19:12:46 +0200
-Date:   Thu, 3 Nov 2022 19:12:45 +0200
-From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To:     Dominik Brodowski <linux@dominikbrodowski.net>
-Cc:     =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
-        Mika Westerberg <mika.westerberg@linux.intel.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Helgaas <helgaas@kernel.org>,
-        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-        Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
-        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
-        xen-devel@lists.xenproject.org, Miguel Ojeda <ojeda@kernel.org>,
-        Richard Henderson <richard.henderson@linaro.org>,
-        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
-        Matt Turner <mattst88@gmail.com>,
-        Russell King <linux@armlinux.org.uk>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Nicholas Piggin <npiggin@gmail.com>,
-        Christophe Leroy <christophe.leroy@csgroup.eu>,
-        "David S. Miller" <davem@davemloft.net>,
-        Bjorn Helgaas <bhelgaas@google.com>,
-        Stefano Stabellini <sstabellini@kernel.org>,
-        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
-Subject: Re: [PATCH v2 4/4] pcmcia: Convert to use
- pci_bus_for_each_resource_p()
-Message-ID: <Y2P2ja26ikNecTsv@smile.fi.intel.com>
-References: <20221103164644.70554-1-andriy.shevchenko@linux.intel.com>
- <20221103164644.70554-5-andriy.shevchenko@linux.intel.com>
- <Y2P0XCNJvTVuziO7@owl.dominikbrodowski.net>
+        Thu, 3 Nov 2022 13:14:20 -0400
+Received: from mail-pl1-x62f.google.com (mail-pl1-x62f.google.com [IPv6:2607:f8b0:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4786D10E2
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:14:07 -0700 (PDT)
+Received: by mail-pl1-x62f.google.com with SMTP id p21so2535053plr.7
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:14:07 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=38PbifJ82siOWP93EOR7nWjQvXdjLMHLCirjt79C52Y=;
+        b=nBhmOboQE7UtoVHovVd+g9wJf2OqjOgsAYJ8dO0/Bqta4VQW1Yxv6X5VtZb8gdYx6Y
+         df/AB3UlUgcySW2Mx8iZjVxzuYSy0hd4qF3anpFaS2s2EHvovwQ/tziVoNE6aC8bTLPc
+         rpLEnmZCBnNvb8SC4uyu/IMdM3mdAQ2EVPRMyT8jdVCVhBfc18hAU4JUK2hdIRUHu3ld
+         Yj8DFWhtMoE6esL1DWUfJJgFhTq45luEB/oJ4ujzAZ95OYrA9ReUR3D10TCQPqZqIVeQ
+         wAHrxd9i8NWpCJ8dDgEp2u2OL1+7nYO7VBx8Y/oKVsIOewYdkC7YCzJv5rVhvx80c0hd
+         TL2w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=38PbifJ82siOWP93EOR7nWjQvXdjLMHLCirjt79C52Y=;
+        b=0M4Q3h9Ry8qytIp76IxBip8qKffbeEdn5aeg7+JAs3V4yRmpfytJCoTq9+Qa+3sXi1
+         MLe/ceg/18kIts6Ed2h/1Hr+WZDwNXe6vUFX5Lb+drlc86rRp8QJ6WimhcH4FsBYAkKF
+         2C4nmM6pQ+K1xPleyxk39GUpVizDWO8NkhlREeK7uOT5qzN364E8iWygAfrkshP4nE4q
+         aqwttkIx4k6Tk86nxfQTDTLJlT6z1yVpneh2LETI6gNfJ6IGbZ3nqWOiaNfz9OWgQ2ur
+         A3K5kBeAL6XMcN0Fk5Kk+GhCkB4MzjiXr4AcTucIgIVENk++UNRWKcPKclXDvzRL1yqS
+         QGLA==
+X-Gm-Message-State: ACrzQf343cIzq1qWjj5R2aPXJlewbSu0piSzS8kQWFByfJ7GwsOybL5e
+        vkVZh0+OmxWMZd3LimtBiJsOUKrLRnBYxpwN9Dg=
+X-Google-Smtp-Source: AMsMyM5SFGmJQcKgV8VOyIegxXexsNHSW5jZFAzrpn8N1iAPMuHPcnEq83AZESGEVpJCuxBG58eMBvq5pNDn0CiK3mI=
+X-Received: by 2002:a17:903:41ca:b0:186:a68e:c06d with SMTP id
+ u10-20020a17090341ca00b00186a68ec06dmr30249533ple.61.1667495646749; Thu, 03
+ Nov 2022 10:14:06 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2P0XCNJvTVuziO7@owl.dominikbrodowski.net>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
-X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <CAHbLzkonsnr4yxUOpMpoch1eCVNgR5hC9YaMkPR=fSV2Uszc6g@mail.gmail.com>
+ <CAAa6QmRe1zMp8P-gZjR63Fg6KhOw+fP-v7SQWLNKuc2Y9ZxvyA@mail.gmail.com>
+ <Y2IerOXJ+ZoRTHcs@dhcp22.suse.cz> <CAHbLzkrBNzsorc9oCq1=ri0uq1xbQ+m+u2gQX5GYrb=Z7n4siA@mail.gmail.com>
+ <Y2KXkVmRWOpPT/MI@dhcp22.suse.cz> <CAHbLzkosQf8OoL+u+gkfO5-fvCNUuDxEa08FUfks1M4AS7tmjw@mail.gmail.com>
+ <Y2KtKVpR69P+E0xT@dhcp22.suse.cz> <CAHbLzkpirnzJSu0SHGRbhFMsH7ZzHtL5ZMXjrBoy8r=UywVhMg@mail.gmail.com>
+ <CAAa6QmQ+4XndbtE_=mcaC5OaeK4g42dKYfY5FmYoRDTKGO-3nA@mail.gmail.com>
+ <CAHbLzkouJkixT0X_uGTrFj_qCyYikpr2j3LOo50rsY_P9OS8Xw@mail.gmail.com> <Y2NzvfCjd0X4g4p4@dhcp22.suse.cz>
+In-Reply-To: <Y2NzvfCjd0X4g4p4@dhcp22.suse.cz>
+From:   Yang Shi <shy828301@gmail.com>
+Date:   Thu, 3 Nov 2022 10:13:54 -0700
+Message-ID: <CAHbLzkqXRLaAYsD+f5B5hgoE+STGat1syzpCUFH3f6W=HtMULA@mail.gmail.com>
+Subject: Re: [PATCH] mm: don't warn if the node is offlined
+To:     Michal Hocko <mhocko@suse.com>
+Cc:     "Zach O'Keefe" <zokeefe@google.com>, akpm@linux-foundation.org,
+        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
+        Andrew Davidoff <davidoff@qedmf.net>,
+        Bob Liu <lliubbo@gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 06:03:24PM +0100, Dominik Brodowski wrote:
-> Am Thu, Nov 03, 2022 at 06:46:44PM +0200 schrieb Andy Shevchenko:
+On Thu, Nov 3, 2022 at 12:54 AM Michal Hocko <mhocko@suse.com> wrote:
+>
+> On Wed 02-11-22 13:08:08, Yang Shi wrote:
+> [...]
+> > So I think we narrowed down to two options:
+> > 1. Preserve the interleave behavior but bail out if the target node is
+> > not online (it is also racy, but doesn't hurt)
+>
+> I do not think there is merit in the interleave patch is dubious to say
+> the least.
+>
+> > 2. Remove the node balance code entirely
+>
+> Yes, removing the balancing makes sense but I would still hope that we
+> do not fail too easily if the range is populated on multiple nodes
+> equally. In practice it will likely not matter much I guess but setting
+> up all nodes with top score is just easy to achieve.
 
-...
+OK, thanks. I will come up with a patch to allow fallback between the
+nodes, it should be largely based on the change suggested by you.
 
-> > -
-> > -	for (i = 0; i < PCI_BRIDGE_RESOURCE_NUM; i++) {
-> > -		res = s->cb_dev->bus->resource[i];
-> > -#else
-> > -	pci_bus_for_each_resource(s->cb_dev->bus, res, i) {
-> >  #endif
-> > +
-> > +	pci_bus_for_each_resource_p(s->cb_dev->bus, res) {
-> >  		if (!res)
-> >  			continue;
-> 
-> Doesn't this remove the proper iterator for X86? Even if that is the right
-> thing to do, it needs an explict explanation.
-
-I dunno what was in 2010, but reading code now I have found no differences in
-the logic on how resources are being iterated in these two pieces of code.
-
-But fine, I will add a line to a commit message about this change.
-
-Considering this is done, can you issue your conditional tag so I will
-incorporate it in v3?
-
--- 
-With Best Regards,
-Andy Shevchenko
-
-
+> --
+> Michal Hocko
+> SUSE Labs
