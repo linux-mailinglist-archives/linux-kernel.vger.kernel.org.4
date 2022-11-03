@@ -2,115 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E9A8617CF5
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:46:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 97280617D01
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:47:52 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231395AbiKCMqS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 08:46:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33140 "EHLO
+        id S231537AbiKCMrs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 08:47:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33900 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230244AbiKCMqN (ORCPT
+        with ESMTP id S231134AbiKCMrf (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 08:46:13 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B06310FCC
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 05:46:13 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id c15so1084292qtw.8
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 05:46:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yGm7wbTciWDJS7qmpqQ3ufS50mFVa2yb9x+7BoqLpII=;
-        b=qDuHKKPzpdz33t7ixNmaA5Jq4D6VNL+K147HV/FEkQB+NvN2GLYXD3q+G1n/EhyydT
-         mc+amok9gUlQCoub6CBSQucIgTAMH7XVSeOD8nnKS8+U9dHbXKKTpgn2q829hOucW2qW
-         boslcXZcvJmnXbE40+x56mqW3z78ORvK2F3/8T3Vn0GRYP0Hcy/w+5HiYLc0HfWWj/DG
-         4rwXkQCdXw2Fz5I+J5HsqkVrs+oN2sixOEnI21i36bWG8Kd/rkumxLY4+VYH0FH264Dg
-         yUTzSrN9RwMVBWY2IAgvqS0rMaL2sITwou3TZAeGG7D2q/YFQqiawwA/jAEb4S41JsZT
-         93bw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yGm7wbTciWDJS7qmpqQ3ufS50mFVa2yb9x+7BoqLpII=;
-        b=U8o9jZBgfjJdWFJ6mdAe9OWeF8Tkh7VyJ6I50HKo7p7h5knAoLS8UUvF9e8eBHt7C4
-         9WSlW2hwSxOgqf1NeZ+mpk9yUsCDOL/LJHD0Oywi2UE7ae9AlQSnvRNTHu+zw3moT+Bv
-         Yk456XalLtmgRvf1lVW/RXtxAX50LPWQq6/ahPuwLxWlpVjmdO6KdhRQiaJaHZ3r2RL+
-         91rdpTFclYW8txGHCEdwrOumII/06OwZo/GSe+YwvyGCaqDKfGZD9u5ZN5ZN4m6tPKCy
-         OjHt+NpquFxPsn9t27OHGQYA9gIHhlccKd1ALO2a8HOwbQv+YfUkK6Qr1yduQwXYwXY8
-         jsfg==
-X-Gm-Message-State: ACrzQf28UcIlnPQTHkt0X+DJdjZzRRlSqlNr4OWar3FPRxnna/0TLm0n
-        XvC1f5ZdtoeBE0t/2qubvTq5zg==
-X-Google-Smtp-Source: AMsMyM7qSGREB3yZtzh4NB3yiFrMVNwRE3iO2Jdqd329JikQegHzwdbB8mxPOwlUSvCzLS9OKhKiww==
-X-Received: by 2002:a05:622a:181:b0:3a5:492b:c3af with SMTP id s1-20020a05622a018100b003a5492bc3afmr6142031qtw.383.1667479572295;
-        Thu, 03 Nov 2022 05:46:12 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
-        by smtp.gmail.com with ESMTPSA id fc11-20020a05622a488b00b00399d5d564b7sm454947qtb.56.2022.11.03.05.46.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 05:46:11 -0700 (PDT)
-Message-ID: <f4ca26c6-6c03-b7e7-3d5e-f6bc42c3a785@linaro.org>
-Date:   Thu, 3 Nov 2022 08:46:10 -0400
+        Thu, 3 Nov 2022 08:47:35 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 083D613FA0
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 05:46:36 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667479596;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references;
+        bh=6Lh+aq0KrT7YT7zq9EYFKfpsO05/wse1gFPTUN4LGR8=;
+        b=GMSdX3cPDluh9oLoXHYm4jnRKUMGsO1JxQ1RIlWNUCTDrhb2RDcDXjld3MvCGqGEJOSKNO
+        bsyphQZedinPg2D8t7gMXtB/BOgcWvZCZAyAGRvlWACH6nVhj5yXlm1X2/0aCzQaDifBps
+        L1DLZ9j9RVXu835mLTmENv78MlIXgn8=
+Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
+ [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-425-rDTZzCaNMfqkeMoeZ1x5EQ-1; Thu, 03 Nov 2022 08:46:33 -0400
+X-MC-Unique: rDTZzCaNMfqkeMoeZ1x5EQ-1
+Received: from smtp.corp.redhat.com (int-mx10.intmail.prod.int.rdu2.redhat.com [10.11.54.10])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 145AE823F77;
+        Thu,  3 Nov 2022 12:46:31 +0000 (UTC)
+Received: from localhost (unknown [10.39.193.104])
+        by smtp.corp.redhat.com (Postfix) with ESMTPS id 5E6A2492B06;
+        Thu,  3 Nov 2022 12:46:30 +0000 (UTC)
+From:   Cornelia Huck <cohuck@redhat.com>
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Sean Christopherson <seanjc@google.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>
+Subject: Re: [PATCH 04/44] KVM: Teardown VFIO ops earlier in kvm_exit()
+In-Reply-To: <20221102231911.3107438-5-seanjc@google.com>
+Organization: Red Hat GmbH
+References: <20221102231911.3107438-1-seanjc@google.com>
+ <20221102231911.3107438-5-seanjc@google.com>
+User-Agent: Notmuch/0.37 (https://notmuchmail.org)
+Date:   Thu, 03 Nov 2022 13:46:28 +0100
+Message-ID: <87edukxl23.fsf@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 2/3] media: s5p-mfc:Add variant data for MFC v7 hardware
- for Exynos 3250 SOC
-Content-Language: en-US
-To:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Aakarsh Jain <aakarsh.jain@samsung.com>,
-        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     andrzej.hajda@intel.com, mchehab@kernel.org,
-        hverkuil-cisco@xs4all.nl, ezequiel@vanguardiasur.com.ar,
-        jernej.skrabec@gmail.com, benjamin.gaignard@collabora.com,
-        krzysztof.kozlowski+dt@linaro.org, stanimir.varbanov@linaro.org,
-        dillon.minfei@gmail.com, david.plowman@raspberrypi.com,
-        mark.rutland@arm.com, robh+dt@kernel.org, krzk+dt@kernel.org,
-        andi@etezian.org, alim.akhtar@samsung.com,
-        aswani.reddy@samsung.com, pankaj.dubey@samsung.com,
-        smitha.t@samsung.com
-References: <20221102130602.48969-1-aakarsh.jain@samsung.com>
- <CGME20221102125813epcas5p40a38f17a267276ff8b2bc5861b5d450d@epcas5p4.samsung.com>
- <20221102130602.48969-2-aakarsh.jain@samsung.com>
- <c55d29d2-a70a-f2ae-b605-1c63051202bf@linaro.org>
- <aadbb452-506d-89cc-28d9-497369c0018e@samsung.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <aadbb452-506d-89cc-28d9-497369c0018e@samsung.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.10
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/11/2022 08:44, Marek Szyprowski wrote:
-> On 03.11.2022 13:35, Krzysztof Kozlowski wrote:
->> On 02/11/2022 09:06, Aakarsh Jain wrote:
->>> commit "5441e9dafdfc6dc40fa" which adds mfc v7 support for
->> Please run scripts/checkpatch.pl and fix reported warnings.
->>
->>> Exynos3250 and used the same compatible string as used by
->>> Exynos5240 but both the IPs are a bit different in terms of
->>> IP clock.
->>> Lets add variant driver data based on the new compatible string
->>> "samsung,exynos3250-mfc" for Exynos3250 SoC.
->> Aren't you just missing the clock on Exynos3250?
-> 
-> Nope, the Exynos3250 variant indeed has only one clock and the driver 
-> code simply ignored the -ENOENT error while getting the clocks, see the 
-> code in drivers/media/platform/samsung/s5p-mfc/s5p_mfc_pm.c, so it 
-> worked fine even without it.
-> 
-> IMHO it is a good idea to clean this up.
+On Wed, Nov 02 2022, Sean Christopherson <seanjc@google.com> wrote:
 
-OK, then please make the new compatible followed by old.
+> Move the call to kvm_vfio_ops_exit() further up kvm_exit() to try and
+> bring some amount of symmetry to the setup order in kvm_init(), and more
+> importantly so that the arch hooks are invoked dead last by kvm_exit().
+> This will allow arch code to move away from the arch hooks without any
+> change in ordering between arch code and common code in kvm_exit().
+>
+> That kvm_vfio_ops_exit() is called last appears to be 100% arbitrary.  It
+> was bolted on after the fact by commit 571ee1b68598 ("kvm: vfio: fix
+> unregister kvm_device_ops of vfio").  The nullified kvm_device_ops_table
+> is also local to kvm_main.c and is used only when there are active VMs,
+> so unless arch code is doing something truly bizarre, nullifying the
+> table earlier in kvm_exit() is little more than a nop.
+>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  virt/kvm/kvm_main.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 
-Best regards,
-Krzysztof
+Looks safe to me.
+
+Reviewed-by: Cornelia Huck <cohuck@redhat.com>
 
