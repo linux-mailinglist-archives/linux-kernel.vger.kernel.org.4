@@ -2,436 +2,436 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D82676178BB
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 09:34:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 29E206178C1
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 09:34:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230368AbiKCIeM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 04:34:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40928 "EHLO
+        id S231136AbiKCIe1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 04:34:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiKCIeJ (ORCPT
+        with ESMTP id S230402AbiKCIeV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 04:34:09 -0400
-Received: from mail-io1-xd35.google.com (mail-io1-xd35.google.com [IPv6:2607:f8b0:4864:20::d35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4B6F9B7A
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 01:34:08 -0700 (PDT)
-Received: by mail-io1-xd35.google.com with SMTP id e189so782947iof.1
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 01:34:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=6Oq+O6Y47SDFAKlhB0chB1Q+ihH1iVVVwZ1Mnyqq/3c=;
-        b=RCMa416sd+N+H7/6zfSu9DcS7tvcqYyTk7thNsfqy1OUnzywMYOG3khagDoQrEyxd1
-         HkSV8bQMKfA4+ptP5biWvTwcXM9/RKjttya06encqfAhIwh74Plb5TF7PMXhdiLusdMT
-         JkUOiTjn10IsxhSf1FgoRxYQEtfIGiKHCRuT0yOoql1wYQCssujoVV1WvB+4UF2yzrqr
-         gd6JNepfwkI/K0VwiHgUfLOW67wM5rQmoVjOy2k6F3uq6PhBWsnKmVRzontb40N1lGoR
-         RPt3vXJ3/vG91Bga+sqgCzGNF88abe651nR4T77h3gliXf3crSLA5DQfwXPfv1cni1yF
-         t5/g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6Oq+O6Y47SDFAKlhB0chB1Q+ihH1iVVVwZ1Mnyqq/3c=;
-        b=LiBWjb4FaA8gdIEOg8zW9jXwc1i9Ey623hJRrp1mjiH449CJGEPDIHCFtyIaXft57J
-         FdysLytjYrj+S/0hgY3k8tae7q1ZbQhSbnzSxkWpztUMsgyS1HnT1ESHD8Ih6f4gCy1r
-         r0OeAxQa79TxgCU3kkEkqD3c5kx37kZP1t+Uix9MlAldkrf2pHy62b+C8+bBJ2GuTTQj
-         s1pi1R5k/yNFgv+y10ebUy91z8sdHd5my5c7leG5DE+yzt9NHvq+787cN4MaUJvUNbL9
-         yNnS9thUGCCxq6zsSyxb9/QcQQ62R2HSV9qt0W1tYZE77FBh2kCGTLPP9PU1+31ZGa08
-         mgVg==
-X-Gm-Message-State: ACrzQf3CimRTdOCaAHjjq0roHj4ko5vTKlT5+haNrdGmBPi9yS54qehX
-        jKLmwck3q1ftJ85xap8DgcEIgnJU3mPy4CvHln76cA==
-X-Google-Smtp-Source: AMsMyM4RlfafqvelIHRzdV01sypmXD0mWkZass0TYEGiW7YygSgr7RDmb4wBHXm+0MIwNr3E+8faEsfgR0t99I2bWXc=
-X-Received: by 2002:a02:aa91:0:b0:375:4ccf:cf52 with SMTP id
- u17-20020a02aa91000000b003754ccfcf52mr14345528jai.55.1667464447514; Thu, 03
- Nov 2022 01:34:07 -0700 (PDT)
+        Thu, 3 Nov 2022 04:34:21 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id DE42026FA;
+        Thu,  3 Nov 2022 01:34:13 -0700 (PDT)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8BxLLYEfWNjyy8EAA--.2866S3;
+        Thu, 03 Nov 2022 16:34:12 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8BxV1cAfWNjsYcLAA--.15570S2;
+        Thu, 03 Nov 2022 16:34:11 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Amit Kucheria <amitk@kernel.org>,
+        Zhang Rui <rui.zhang@intel.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Cc:     zhanghongchen <zhanghongchen@loongson.cn>,
+        Liu Peibao <liupeibao@loongson.cn>,
+        Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v10 1/2] thermal: loongson-2: add thermal management support
+Date:   Thu,  3 Nov 2022 16:34:06 +0800
+Message-Id: <20221103083407.4039-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-References: <20221102035301.512892-1-zhangsong34@huawei.com>
- <CAKfTPtCcYySw2ZC_pr8=3KFPmAAVN=1h8=5jWkW5YXyy11sehg@mail.gmail.com> <b45f96b6-e0b2-22bb-eda1-2468d6fbe104@huawei.com>
-In-Reply-To: <b45f96b6-e0b2-22bb-eda1-2468d6fbe104@huawei.com>
-From:   Vincent Guittot <vincent.guittot@linaro.org>
-Date:   Thu, 3 Nov 2022 09:33:55 +0100
-Message-ID: <CAKfTPtDrWCenxtVcunjS3pGD81TdLf2EkhO_YcdfxnUHXpVF3w@mail.gmail.com>
-Subject: Re: [PATCH] sched/fair: Introduce priority load balance for CFS
-To:     Song Zhang <zhangsong34@huawei.com>
-Cc:     mingo@redhat.com, peterz@infradead.org, juri.lelli@redhat.com,
-        mcgrof@kernel.org, keescook@chromium.org, yzaikin@google.com,
-        dietmar.eggemann@arm.com, rostedt@goodmis.org, bsegall@google.com,
-        mgorman@suse.de, bristot@redhat.com, vschneid@redhat.com,
-        linux-kernel@vger.kernel.org, linux-fsdevel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8BxV1cAfWNjsYcLAA--.15570S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvJXoW3uw4DJw1fAFy7Kw4xuF4UArb_yoWkGw1rpF
+        y3C3y5GrsrGFsruwn8Ar1UZFs0vwnIyFy3ZFWxGw1Y9rZxJ343Wry8JFy8ZrWSkryDGF15
+        ZFZ8KFWUCFWDX3DanT9S1TB71UUUUUDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
+        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
+        b28Fc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
+        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r1I6r4UM28E
+        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Gr1j6F4UJw
+        A2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_Gr1j6F4UJwAS0I0E0xvYzxvE52x082IY62kv0487
+        Mc804VCY07AIYIkI8VC2zVCFFI0UMc02F40EFcxC0VAKzVAqx4xG6I80ewAv7VC0I7IYx2
+        IY67AKxVWUXVWUAwAv7VC2z280aVAFwI0_Cr0_Gr1UMcvjeVCFs4IE7xkEbVWUJVW8JwAC
+        jcxG0xvY0x0EwIxGrwCF04k20xvY0x0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I
+        0E4IkC6x0Yz7v_Jr0_Gr1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWU
+        GVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI
+        0_Jr0_JF4lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI8IcIk0
+        rVWUJVWUCwCI42IY6I8E87Iv67AKxVWxJVW8Jr1lIxAIcVC2z280aVCY1x0267AKxVW8Jr
+        0_Cr1UYxBIdaVFxhVjvjDU0xZFpf9x07UWlk3UUUUU=
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 3 Nov 2022 at 04:01, Song Zhang <zhangsong34@huawei.com> wrote:
->
-> Thanks for your reply!
->
-> On 2022/11/3 2:01, Vincent Guittot wrote:
-> > On Wed, 2 Nov 2022 at 04:54, Song Zhang <zhangsong34@huawei.com> wrote:
-> >>
-> >
-> > This really looks like a v3 of
-> > https://lore.kernel.org/all/20220810015636.3865248-1-zhangsong34@huawei.com/
-> >
-> > Please keep versioning.
-> >
-> >> Add a new sysctl interface:
-> >> /proc/sys/kernel/sched_prio_load_balance_enabled
-> >
-> > We don't want to add more sysctl knobs for the scheduler, we even
-> > removed some. Knob usually means that you want to fix your use case
-> > but the solution doesn't make sense for all cases.
-> >
->
-> OK, I will remove this knobs later.
->
-> >>
-> >> 0: default behavior
-> >> 1: enable priority load balance for CFS
-> >>
-> >> For co-location with idle and non-idle tasks, when CFS do load balance,
-> >> it is reasonable to prefer migrating non-idle tasks and migrating idle
-> >> tasks lastly. This will reduce the interference by SCHED_IDLE tasks
-> >> as much as possible.
-> >
-> > I don't agree that it's always the best choice to migrate a non-idle task 1st.
-> >
-> > CPU0 has 1 non idle task and CPU1 has 1 non idle task and hundreds of
-> > idle task and there is an imbalance between the 2 CPUS: migrating the
-> > non idle task from CPU1 to CPU0 is not the best choice
-> >
->
-> If the non idle task on CPU1 is running or cache hot, it cannot be
-> migrated and idle tasks can also be migrated from CPU1 to CPU0. So I
-> think it does not matter.
+This patch adds the support for Loongson-2 thermal sensor controller,
+which can support maximum 4 sensors.
 
-What I mean is that migrating non idle tasks first is not a universal
-win and not always what we want.
+It's based on thermal of framework:
+ - Trip points defined in device tree.
+ - Cpufreq as cooling device registered in Loongson-2 cpufreq driver.
+ - Pwm fan as cooling device registered in hwmon pwm-fan driver.
 
->
-> >>
-> >> Testcase:
-> >> - Spawn large number of idle(SCHED_IDLE) tasks occupy CPUs
-> >
-> > What do you mean by a large number ?
-> >
-> >> - Let non-idle tasks compete with idle tasks for CPU time.
-> >>
-> >> Using schbench to test non-idle tasks latency:
-> >> $ ./schbench -m 1 -t 10 -r 30 -R 200
-> >
-> > How many CPUs do you have ?
-> >
->
-> OK, some details may not be mentioned.
-> My virtual machine has 8 CPUs running with a schbench process and 5000
-> idle tasks. The idle task is a while dead loop process below:
+Signed-off-by: zhanghongchen <zhanghongchen@loongson.cn>
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
+---
+Change in v10:
+		1. Add all history change log information.
+Change in v9:
+		1. Switch new API that use devm_thermal_of_zone_register
+		   to replace previous interfaces.
+		2. Add depend on LOONGARCH || COMPILE_TEST.
+Change in v8:
+                1. Replace string loongson2/Loongson2/LOONGSON2 with loongson-2/
+                   Loongson-2/LOONGSON-2 in Kconfig and commit log and MAINTAINERS
+		   files.
+Change in v7:
+		1. Split the modification of patch 3 and merge it into this patch.
+		2. Remove the unless code annotation to fix the compile warning
+		   when compile C code with W=1.
+Change in v6:
+		1. NO change, but other patch in this series of patches set has
+		   changes.
+Change in v5:
+		1. NO change, but other patch in this series of patches set has
+		   changes.
+Change in v4:
+		1. Fixup the compatible.
+Change in v3:
+		1. Add a function to gain sensor id an remove dts id.
+Change in v2:
+		1. Remove error msg printing when addr ioremap has error.
+		2. Make loongson2 thermal driver was built-in by default.
+		3. Replace ls2k with loongson2.
+		4. Remove CONFIG_PM_SLEEP and set pm function type was
+		   __maybe_unused.
 
-How can you care about latency when you start 10 workers on 8 vCPUs
-with 5000 non idle threads ?
+ MAINTAINERS                         |   7 +
+ drivers/thermal/Kconfig             |  10 ++
+ drivers/thermal/Makefile            |   1 +
+ drivers/thermal/loongson2_thermal.c | 266 ++++++++++++++++++++++++++++
+ 4 files changed, 284 insertions(+)
+ create mode 100644 drivers/thermal/loongson2_thermal.c
 
->
-> $ cat idle_process.c
-> int main()
-> {
->          int i = 0;
->          while(1) {
->                  usleep(500);
->                  for(i = 0; i < 1000000; i++);
->          }
-> }
->
-> You can compile and spawn 5000 idle(SCHED_IDLE) tasks occupying 8 CPUs
-> and execute schbench command to test it.
->
-> >>
-> >> Test result:
-> >> 1.Default behavior
-> >> Latency percentiles (usec) runtime 30 (s) (4562 total samples)
-> >>          50.0th: 62528 (2281 samples)
-> >>          75.0th: 623616 (1141 samples)
-> >>          90.0th: 764928 (687 samples)
-> >>          95.0th: 824320 (225 samples)
-> >>          *99.0th: 920576 (183 samples)
-> >>          99.5th: 953344 (23 samples)
-> >>          99.9th: 1008640 (18 samples)
-> >>          min=9, max=1074466
-> >>
-> >> 2.Enable priority load balance
-> >> Latency percentiles (usec) runtime 30 (s) (4391 total samples)
-> >>          50.0th: 22624 (2204 samples)
-> >>          75.0th: 48832 (1092 samples)
-> >>          90.0th: 85376 (657 samples)
-> >>          95.0th: 113280 (220 samples)
-> >>          *99.0th: 182528 (175 samples)
-> >>          99.5th: 206592 (22 samples)
-> >>          99.9th: 290304 (17 samples)
-> >>          min=6, max=351815
-> >>
-> >>  From percentile details, we see the benefit of priority load balance
-> >> that 95% of non-idle tasks latencies stays no more than 113ms, while
-> >
-> > But even 113ms seems quite a large number if there is anything else
-> > but 10 schbench workers and a bunch of idle threads that are running.
-> >
-> >> non-idle tasks latencies has got almost 50% over 600ms if priority
-> >> load balance not enabled.
-> >
-> > Als have you considered enabling sched_feature LB_MIN ?
-> >
->
-> I have tried to echo LB_MIN > /sys/kernel/debug/sched/features, but this
-> feature seems make no sense.
->
-> >>
-> >> Signed-off-by: Song Zhang <zhangsong34@huawei.com>
-> >> ---
-> >>   include/linux/sched/sysctl.h |  4 +++
-> >>   init/Kconfig                 | 10 ++++++
-> >>   kernel/sched/core.c          |  3 ++
-> >>   kernel/sched/fair.c          | 61 +++++++++++++++++++++++++++++++++++-
-> >>   kernel/sched/sched.h         |  3 ++
-> >>   kernel/sysctl.c              | 11 +++++++
-> >>   6 files changed, 91 insertions(+), 1 deletion(-)
-> >>
-> >> diff --git a/include/linux/sched/sysctl.h b/include/linux/sched/sysctl.h
-> >> index 303ee7dd0c7e..9b3673269ecc 100644
-> >> --- a/include/linux/sched/sysctl.h
-> >> +++ b/include/linux/sched/sysctl.h
-> >> @@ -32,6 +32,10 @@ extern unsigned int sysctl_numa_balancing_promote_rate_limit;
-> >>   #define sysctl_numa_balancing_mode     0
-> >>   #endif
-> >>
-> >> +#ifdef CONFIG_SCHED_PRIO_LB
-> >> +extern unsigned int sysctl_sched_prio_load_balance_enabled;
-> >> +#endif
-> >> +
-> >>   int sysctl_numa_balancing(struct ctl_table *table, int write, void *buffer,
-> >>                  size_t *lenp, loff_t *ppos);
-> >>
-> >> diff --git a/init/Kconfig b/init/Kconfig
-> >> index 694f7c160c9c..b0dfe6701218 100644
-> >> --- a/init/Kconfig
-> >> +++ b/init/Kconfig
-> >> @@ -1026,6 +1026,16 @@ config CFS_BANDWIDTH
-> >>            restriction.
-> >>            See Documentation/scheduler/sched-bwc.rst for more information.
-> >>
-> >> +config SCHED_PRIO_LB
-> >> +       bool "Priority load balance for CFS"
-> >> +       depends on SMP
-> >> +       default n
-> >> +       help
-> >> +         This feature enable CFS priority load balance to reduce
-> >> +         non-idle tasks latency interferenced by SCHED_IDLE tasks.
-> >> +         It prefer migrating non-idle tasks firstly and
-> >> +         migrating SCHED_IDLE tasks lastly.
-> >> +
-> >>   config RT_GROUP_SCHED
-> >>          bool "Group scheduling for SCHED_RR/FIFO"
-> >>          depends on CGROUP_SCHED
-> >> diff --git a/kernel/sched/core.c b/kernel/sched/core.c
-> >> index 5800b0623ff3..9be35431fdd5 100644
-> >> --- a/kernel/sched/core.c
-> >> +++ b/kernel/sched/core.c
-> >> @@ -9731,6 +9731,9 @@ void __init sched_init(void)
-> >>                  rq->max_idle_balance_cost = sysctl_sched_migration_cost;
-> >>
-> >>                  INIT_LIST_HEAD(&rq->cfs_tasks);
-> >> +#ifdef CONFIG_SCHED_PRIO_LB
-> >> +               INIT_LIST_HEAD(&rq->cfs_idle_tasks);
-> >> +#endif
-> >>
-> >>                  rq_attach_root(rq, &def_root_domain);
-> >>   #ifdef CONFIG_NO_HZ_COMMON
-> >> diff --git a/kernel/sched/fair.c b/kernel/sched/fair.c
-> >> index e4a0b8bd941c..bdeb04324f0c 100644
-> >> --- a/kernel/sched/fair.c
-> >> +++ b/kernel/sched/fair.c
-> >> @@ -139,6 +139,10 @@ static int __init setup_sched_thermal_decay_shift(char *str)
-> >>   }
-> >>   __setup("sched_thermal_decay_shift=", setup_sched_thermal_decay_shift);
-> >>
-> >> +#ifdef CONFIG_SCHED_PRIO_LB
-> >> +unsigned int sysctl_sched_prio_load_balance_enabled;
-> >> +#endif
-> >> +
-> >>   #ifdef CONFIG_SMP
-> >>   /*
-> >>    * For asym packing, by default the lower numbered CPU has higher priority.
-> >> @@ -3199,6 +3203,21 @@ static inline void update_scan_period(struct task_struct *p, int new_cpu)
-> >>
-> >>   #endif /* CONFIG_NUMA_BALANCING */
-> >>
-> >> +#ifdef CONFIG_SCHED_PRIO_LB
-> >> +static void
-> >> +adjust_rq_cfs_tasks(
-> >> +       void (*list_op)(struct list_head *, struct list_head *),
-> >> +       struct rq *rq,
-> >> +       struct sched_entity *se)
-> >> +{
-> >> +       if (sysctl_sched_prio_load_balance_enabled &&
-> >> +               task_has_idle_policy(task_of(se)))
-> >> +               (*list_op)(&se->group_node, &rq->cfs_idle_tasks);
-> >> +       else
-> >> +               (*list_op)(&se->group_node, &rq->cfs_tasks);
-> >> +}
-> >> +#endif
-> >> +
-> >>   static void
-> >>   account_entity_enqueue(struct cfs_rq *cfs_rq, struct sched_entity *se)
-> >>   {
-> >> @@ -3208,7 +3227,11 @@ account_entity_enqueue(struct cfs_rq *cfs_rq, struct sched_entity *se)
-> >>                  struct rq *rq = rq_of(cfs_rq);
-> >>
-> >>                  account_numa_enqueue(rq, task_of(se));
-> >> +#ifdef CONFIG_SCHED_PRIO_LB
-> >> +               adjust_rq_cfs_tasks(list_add, rq, se);
-> >> +#else
-> >>                  list_add(&se->group_node, &rq->cfs_tasks);
-> >> +#endif
-> >>          }
-> >>   #endif
-> >>          cfs_rq->nr_running++;
-> >> @@ -7631,7 +7654,11 @@ done: __maybe_unused;
-> >>           * the list, so our cfs_tasks list becomes MRU
-> >>           * one.
-> >>           */
-> >> +#ifdef CONFIG_SCHED_PRIO_LB
-> >> +       adjust_rq_cfs_tasks(list_move, rq, &p->se);
-> >> +#else
-> >>          list_move(&p->se.group_node, &rq->cfs_tasks);
-> >> +#endif
-> >>   #endif
-> >>
-> >>          if (hrtick_enabled_fair(rq))
-> >> @@ -8156,11 +8183,18 @@ static void detach_task(struct task_struct *p, struct lb_env *env)
-> >>   static struct task_struct *detach_one_task(struct lb_env *env)
-> >>   {
-> >>          struct task_struct *p;
-> >> +       struct list_head *tasks = &env->src_rq->cfs_tasks;
-> >> +#ifdef CONFIG_SCHED_PRIO_LB
-> >> +       bool has_detach_idle_tasks = false;
-> >> +#endif
-> >>
-> >>          lockdep_assert_rq_held(env->src_rq);
-> >>
-> >> +#ifdef CONFIG_SCHED_PRIO_LB
-> >> +again:
-> >> +#endif
-> >>          list_for_each_entry_reverse(p,
-> >> -                       &env->src_rq->cfs_tasks, se.group_node) {
-> >> +                       tasks, se.group_node) {
-> >>                  if (!can_migrate_task(p, env))
-> >>                          continue;
-> >>
-> >> @@ -8175,6 +8209,13 @@ static struct task_struct *detach_one_task(struct lb_env *env)
-> >>                  schedstat_inc(env->sd->lb_gained[env->idle]);
-> >>                  return p;
-> >>          }
-> >> +#ifdef CONFIG_SCHED_PRIO_LB
-> >> +       if (sysctl_sched_prio_load_balance_enabled && !has_detach_idle_tasks) {
-> >> +               has_detach_idle_tasks = true;
-> >> +               tasks = &env->src_rq->cfs_idle_tasks;
-> >> +               goto again;
-> >> +       }
-> >> +#endif
-> >>          return NULL;
-> >>   }
-> >>
-> >> @@ -8190,6 +8231,9 @@ static int detach_tasks(struct lb_env *env)
-> >>          unsigned long util, load;
-> >>          struct task_struct *p;
-> >>          int detached = 0;
-> >> +#ifdef CONFIG_SCHED_PRIO_LB
-> >> +       bool has_detach_idle_tasks = false;
-> >> +#endif
-> >>
-> >>          lockdep_assert_rq_held(env->src_rq);
-> >>
-> >> @@ -8205,6 +8249,9 @@ static int detach_tasks(struct lb_env *env)
-> >>          if (env->imbalance <= 0)
-> >>                  return 0;
-> >>
-> >> +#ifdef CONFIG_SCHED_PRIO_LB
-> >> +again:
-> >> +#endif
-> >>          while (!list_empty(tasks)) {
-> >>                  /*
-> >>                   * We don't want to steal all, otherwise we may be treated likewise,
-> >> @@ -8310,6 +8357,14 @@ static int detach_tasks(struct lb_env *env)
-> >>                  list_move(&p->se.group_node, tasks);
-> >>          }
-> >>
-> >> +#ifdef CONFIG_SCHED_PRIO_LB
-> >> +       if (sysctl_sched_prio_load_balance_enabled &&
-> >> +               !has_detach_idle_tasks && env->imbalance > 0) {
-> >> +               has_detach_idle_tasks = true;
-> >> +               tasks = &env->src_rq->cfs_idle_tasks;
-> >> +               goto again;
-> >> +       }
-> >> +#endif
-> >>          /*
-> >>           * Right now, this is one of only two places we collect this stat
-> >>           * so we can safely collect detach_one_task() stats here rather
-> >> @@ -11814,7 +11869,11 @@ static void set_next_task_fair(struct rq *rq, struct task_struct *p, bool first)
-> >>                   * Move the next running task to the front of the list, so our
-> >>                   * cfs_tasks list becomes MRU one.
-> >>                   */
-> >> +#ifdef CONFIG_SCHED_PRIO_LB
-> >> +               adjust_rq_cfs_tasks(list_move, rq, se);
-> >> +#else
-> >>                  list_move(&se->group_node, &rq->cfs_tasks);
-> >> +#endif
-> >>          }
-> >>   #endif
-> >>
-> >> diff --git a/kernel/sched/sched.h b/kernel/sched/sched.h
-> >> index 1644242ecd11..1b831c05ba30 100644
-> >> --- a/kernel/sched/sched.h
-> >> +++ b/kernel/sched/sched.h
-> >> @@ -1053,6 +1053,9 @@ struct rq {
-> >>          int                     online;
-> >>
-> >>          struct list_head cfs_tasks;
-> >> +#ifdef CONFIG_SCHED_PRIO_LB
-> >> +       struct list_head cfs_idle_tasks;
-> >> +#endif
-> >>
-> >>          struct sched_avg        avg_rt;
-> >>          struct sched_avg        avg_dl;
-> >> diff --git a/kernel/sysctl.c b/kernel/sysctl.c
-> >> index 188c305aeb8b..5fc0f9ffb675 100644
-> >> --- a/kernel/sysctl.c
-> >> +++ b/kernel/sysctl.c
-> >> @@ -2090,6 +2090,17 @@ static struct ctl_table kern_table[] = {
-> >>                  .extra1         = SYSCTL_ONE,
-> >>                  .extra2         = SYSCTL_INT_MAX,
-> >>          },
-> >> +#endif
-> >> +#ifdef CONFIG_SCHED_PRIO_LB
-> >> +       {
-> >> +               .procname       = "sched_prio_load_balance_enabled",
-> >> +               .data           = &sysctl_sched_prio_load_balance_enabled,
-> >> +               .maxlen         = sizeof(unsigned int),
-> >> +               .mode           = 0644,
-> >> +               .proc_handler   = proc_dointvec_minmax,
-> >> +               .extra1         = SYSCTL_ZERO,
-> >> +               .extra2         = SYSCTL_ONE,
-> >> +       },
-> >>   #endif
-> >>          { }
-> >>   };
-> >> --
-> >> 2.27.0
-> >>
-> > .
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 379945f82a64..37ab451d9258 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12010,6 +12010,13 @@ F:	drivers/*/*loongarch*
+ F:	Documentation/loongarch/
+ F:	Documentation/translations/zh_CN/loongarch/
+ 
++LOONGSON-2 SOC SERIES THERMAL DRIVER
++M:	zhanghongchen <zhanghongchen@loongson.cn>
++M:	Yinbo Zhu <zhuyinbo@loongson.cn>
++L:	linux-pm@vger.kernel.org
++S:	Maintained
++F:	drivers/thermal/loongson2_thermal.c
++
+ LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+ M:	Sathya Prakash <sathya.prakash@broadcom.com>
+ M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+index e052dae614eb..93d84bcb16dd 100644
+--- a/drivers/thermal/Kconfig
++++ b/drivers/thermal/Kconfig
+@@ -504,4 +504,14 @@ config KHADAS_MCU_FAN_THERMAL
+ 	  If you say yes here you get support for the FAN controlled
+ 	  by the Microcontroller found on the Khadas VIM boards.
+ 
++config LOONGSON2_THERMAL
++	tristate "Loongson-2 SoC series thermal driver"
++	depends on LOONGARCH || COMPILE_TEST
++	depends on OF
++	help
++	  Support for Thermal driver found on Loongson-2 SoC series platforms.
++	  It supports one critical trip point and one passive trip point. The
++	  cpufreq and the pwm fan is used as the cooling device to throttle
++	  CPUs when the passive trip is crossed.
++
+ endif
+diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+index 2506c6c8ca83..02f3db809858 100644
+--- a/drivers/thermal/Makefile
++++ b/drivers/thermal/Makefile
+@@ -61,3 +61,4 @@ obj-$(CONFIG_UNIPHIER_THERMAL)	+= uniphier_thermal.o
+ obj-$(CONFIG_AMLOGIC_THERMAL)     += amlogic_thermal.o
+ obj-$(CONFIG_SPRD_THERMAL)	+= sprd_thermal.o
+ obj-$(CONFIG_KHADAS_MCU_FAN_THERMAL)	+= khadas_mcu_fan.o
++obj-$(CONFIG_LOONGSON2_THERMAL)	+= loongson2_thermal.o
+diff --git a/drivers/thermal/loongson2_thermal.c b/drivers/thermal/loongson2_thermal.c
+new file mode 100644
+index 000000000000..87b07731f17e
+--- /dev/null
++++ b/drivers/thermal/loongson2_thermal.c
+@@ -0,0 +1,266 @@
++// SPDX-License-Identifier: GPL-2.0+
++/*
++ * Author: zhanghongchen <zhanghongchen@loongson.cn>
++ *         Yinbo Zhu <zhuyinbo@loongson.cn>
++ * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
++ */
++
++#include <linux/cpufreq.h>
++#include <linux/delay.h>
++#include <linux/interrupt.h>
++#include <linux/module.h>
++#include <linux/platform_device.h>
++#include <linux/io.h>
++#include <linux/of_device.h>
++#include <linux/thermal.h>
++#include "thermal_hwmon.h"
++
++#define LOONGSON2_SOC_MAX_SENSOR_NUM			4
++
++#define LOONGSON2_TSENSOR_CTRL_HI			0x0
++#define LOONGSON2_TSENSOR_CTRL_LO			0x8
++#define LOONGSON2_TSENSOR_STATUS			0x10
++#define LOONGSON2_TSENSOR_OUT				0x14
++
++struct loongson2_thermal_data {
++	struct thermal_zone_device *tzd;
++	int irq;
++	int id;
++	void __iomem *regs;
++	struct platform_device *pdev;
++	u16 ctrl_low_val;
++	u16 ctrl_hi_val;
++};
++
++static int loongson2_thermal_set(struct loongson2_thermal_data *data,
++					int low, int high, bool enable)
++{
++	u64 reg_ctrl = 0;
++	int reg_off = data->id * 2;
++
++	if (low > high)
++		return -EINVAL;
++
++	low = low < -100 ? -100 : low;
++	high = high > 155 ? 155 : high;
++
++	low += 100;
++	high += 100;
++
++	reg_ctrl |= low;
++	reg_ctrl |= enable ? 0x100 : 0;
++	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
++
++	reg_ctrl = 0;
++	reg_ctrl |= high;
++	reg_ctrl |= enable ? 0x100 : 0;
++	writew(reg_ctrl, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
++
++	return 0;
++}
++
++static int loongson2_thermal_get_temp(struct thermal_zone_device *tz, int *temp)
++{
++	u32 reg_val;
++	struct loongson2_thermal_data *data = tz->devdata;
++
++	reg_val = readl(data->regs + LOONGSON2_TSENSOR_OUT);
++	*temp = ((reg_val & 0xff) - 100) * 1000;
++
++	return 0;
++}
++
++static int loongson2_thermal_get_sensor_id(void)
++{
++	int ret, id;
++	struct of_phandle_args sensor_specs;
++	struct device_node *np, *sensor_np;
++
++	np = of_find_node_by_name(NULL, "thermal-zones");
++	if (!np)
++		return -ENODEV;
++
++	sensor_np = of_get_next_child(np, NULL);
++	ret = of_parse_phandle_with_args(sensor_np, "thermal-sensors",
++			"#thermal-sensor-cells",
++			0, &sensor_specs);
++	if (ret) {
++		of_node_put(np);
++		of_node_put(sensor_np);
++		return ret;
++	}
++
++	if (sensor_specs.args_count >= 1) {
++		id = sensor_specs.args[0];
++		WARN(sensor_specs.args_count > 1,
++				"%s: too many cells in sensor specifier %d\n",
++				sensor_specs.np->name, sensor_specs.args_count);
++	} else {
++		id = 0;
++	}
++
++	of_node_put(np);
++	of_node_put(sensor_np);
++
++	return id;
++}
++
++static irqreturn_t loongson2_thermal_alarm_irq(int irq, void *dev)
++{
++	struct loongson2_thermal_data *data = dev;
++
++	/* clear interrupt */
++	writeb(0x3, data->regs + LOONGSON2_TSENSOR_STATUS);
++
++	disable_irq_nosync(irq);
++
++	return IRQ_WAKE_THREAD;
++}
++
++static irqreturn_t loongson2_thermal_irq_thread(int irq, void *dev)
++{
++	struct loongson2_thermal_data *data = dev;
++
++	thermal_zone_device_update(data->tzd,
++				   THERMAL_EVENT_UNSPECIFIED);
++	enable_irq(data->irq);
++
++	return IRQ_HANDLED;
++}
++
++static int loongson2_thermal_set_trips(struct thermal_zone_device *tz, int low, int high)
++{
++	struct loongson2_thermal_data *data = tz->devdata;
++
++	return loongson2_thermal_set(data, low/1000, high/1000, true);
++}
++
++static const struct thermal_zone_device_ops loongson2_of_thermal_ops = {
++	.get_temp = loongson2_thermal_get_temp,
++	.set_trips = loongson2_thermal_set_trips,
++};
++
++static int loongson2_thermal_probe(struct platform_device *pdev)
++{
++	struct device *dev = &pdev->dev;
++	struct resource *res;
++	struct loongson2_thermal_data *data;
++	int ret;
++
++	data = devm_kzalloc(dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	data->pdev = pdev;
++	platform_set_drvdata(pdev, data);
++
++	res = platform_get_resource(pdev, IORESOURCE_MEM, 0);
++	data->regs = devm_ioremap(dev, res->start, resource_size(res));
++	if (IS_ERR(data->regs))
++		return PTR_ERR(data->regs);
++
++	/* get irq */
++	data->irq = platform_get_irq(pdev, 0);
++	if (data->irq < 0)
++		return data->irq;
++
++	/* get id */
++	data->id = loongson2_thermal_get_sensor_id();
++	if (data->id > LOONGSON2_SOC_MAX_SENSOR_NUM - 1 || data->id < 0) {
++		dev_err(dev, "sensor id error,must be in <0 ~ %d>\n",
++				LOONGSON2_SOC_MAX_SENSOR_NUM - 1);
++		return -EINVAL;
++	}
++
++	writeb(0xff, data->regs + LOONGSON2_TSENSOR_STATUS);
++
++	loongson2_thermal_set(data, 0, 0, false);
++
++	data->tzd = devm_thermal_of_zone_register(&pdev->dev,
++							   data->id, data,
++							   &loongson2_of_thermal_ops);
++	if (IS_ERR(data->tzd)) {
++		ret = PTR_ERR(data->tzd);
++		data->tzd = NULL;
++		dev_err(&pdev->dev, "failed to register %d\n", ret);
++		return ret;
++	}
++
++	ret = devm_request_threaded_irq(dev, data->irq,
++			loongson2_thermal_alarm_irq, loongson2_thermal_irq_thread,
++			IRQF_ONESHOT, "loongson2_thermal", data);
++	if (ret < 0) {
++		dev_err(dev, "failed to request alarm irq: %d\n", ret);
++		return ret;
++	}
++
++	/*
++	 * Thermal_zone doesn't enable hwmon as default,
++	 * enable it here
++	 */
++	data->tzd->tzp->no_hwmon = false;
++	ret = thermal_add_hwmon_sysfs(data->tzd);
++	if (ret) {
++		dev_err(dev, "failed to add hwmon sysfs interface %d\n", ret);
++		return ret;
++	}
++
++	return 0;
++}
++
++static int loongson2_thermal_remove(struct platform_device *pdev)
++{
++	struct loongson2_thermal_data *data = platform_get_drvdata(pdev);
++	int reg_off = data->id * 2;
++
++	/* disable interrupt */
++	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
++	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
++
++	return 0;
++}
++
++static const struct of_device_id of_loongson2_thermal_match[] = {
++	{ .compatible = "loongson,ls2k-thermal",},
++	{ /* end */ }
++};
++MODULE_DEVICE_TABLE(of, of_loongson2_thermal_match);
++
++static int __maybe_unused loongson2_thermal_suspend(struct device *dev)
++{
++	struct loongson2_thermal_data *data = dev_get_drvdata(dev);
++	int reg_off = data->id * 2;
++
++	data->ctrl_low_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
++	data->ctrl_hi_val = readw(data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
++
++	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
++	writew(0, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
++
++	return 0;
++}
++
++static int __maybe_unused loongson2_thermal_resume(struct device *dev)
++{
++	struct loongson2_thermal_data *data = dev_get_drvdata(dev);
++	int reg_off = data->id * 2;
++
++	writew(data->ctrl_low_val, data->regs + LOONGSON2_TSENSOR_CTRL_LO + reg_off);
++	writew(data->ctrl_hi_val, data->regs + LOONGSON2_TSENSOR_CTRL_HI + reg_off);
++
++	return 0;
++}
++
++static SIMPLE_DEV_PM_OPS(loongson2_thermal_pm_ops,
++			 loongson2_thermal_suspend, loongson2_thermal_resume);
++
++static struct platform_driver loongson2_thermal_driver = {
++	.driver = {
++		.name		= "loongson2_thermal",
++		.pm = &loongson2_thermal_pm_ops,
++		.of_match_table = of_loongson2_thermal_match,
++	},
++	.probe	= loongson2_thermal_probe,
++	.remove	= loongson2_thermal_remove,
++};
++module_platform_driver(loongson2_thermal_driver);
+-- 
+2.33.0
+
