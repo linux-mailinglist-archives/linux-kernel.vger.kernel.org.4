@@ -2,186 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 324FC617D92
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:12:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC232617D9F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:13:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230510AbiKCNMd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 09:12:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51194 "EHLO
+        id S231655AbiKCNNI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 09:13:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229745AbiKCNM1 (ORCPT
+        with ESMTP id S231355AbiKCNM6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 09:12:27 -0400
-Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 668FD6269;
-        Thu,  3 Nov 2022 06:12:26 -0700 (PDT)
-Received: from loongson.cn (unknown [10.180.13.64])
-        by gateway (Coremail) with SMTP id _____8Axjrc5vmNj1zwEAA--.9714S3;
-        Thu, 03 Nov 2022 21:12:25 +0800 (CST)
-Received: from localhost.localdomain (unknown [10.180.13.64])
-        by localhost.localdomain (Coremail) with SMTP id AQAAf8CxZ1ctvmNjswcMAA--.16743S3;
-        Thu, 03 Nov 2022 21:12:23 +0800 (CST)
-From:   Yinbo Zhu <zhuyinbo@loongson.cn>
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        WANG Xuerui <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Jianmin Lv <lvjianmin@loongson.cn>,
-        Yun Liu <liuyun@loongson.cn>,
-        Yang Li <yang.lee@linux.alibaba.com>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        loongarch@lists.linux.dev, Yinbo Zhu <zhuyinbo@loongson.cn>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v10 2/2] dt-bindings: hpet: add loongson-2 hpet
-Date:   Thu,  3 Nov 2022 21:12:02 +0800
-Message-Id: <20221103131202.12481-2-zhuyinbo@loongson.cn>
-X-Mailer: git-send-email 2.20.1
-In-Reply-To: <20221103131202.12481-1-zhuyinbo@loongson.cn>
-References: <20221103131202.12481-1-zhuyinbo@loongson.cn>
+        Thu, 3 Nov 2022 09:12:58 -0400
+Received: from mail-wr1-x42c.google.com (mail-wr1-x42c.google.com [IPv6:2a00:1450:4864:20::42c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5728140F2
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 06:12:56 -0700 (PDT)
+Received: by mail-wr1-x42c.google.com with SMTP id v1so2676155wrt.11
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 06:12:56 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=bytedance-com.20210112.gappssmtp.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DMCevN2t3u4efqzCq1N5+13ZhEiTNq+v0n0oSnn+yyc=;
+        b=a+kjRi4JO19KMObVrE9NrlM7N8rOXaA0DSi+sAFEBct1LRvXh2vtZaN4eos5JRwjfc
+         GIh69g8n6LAGXk+tUPgoRDFmEXEPYOLuQHgtgkiCjW1m5Pesq8BZKhdOQmG9nJMeq+D+
+         /7KpbvasuXFi/kH1C7BHHQt0vZ24VZ7TeZpED+ekjXso09V+OpK6f7F7/M/N3vFaio3r
+         oW2xS5NydmXQRUQY+F49uQmDdnZRk1KCb95ZleeMBuMVJRsDGlh56WwpAxETFGcsSgGW
+         2xh3n8NYRRrT32HpycNiYfYoe1a/uTukXsDpDDwbTTKMnb5XkTz8yTrAglduh/gX7vtJ
+         h9TA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DMCevN2t3u4efqzCq1N5+13ZhEiTNq+v0n0oSnn+yyc=;
+        b=SxIZWf4sT3mjEFVBBck8+b3XkutGfv82Lr97AAmv+wiy8xazOOrZ8RFlYNw4XY4bj9
+         5FsCtpIMqle0/BBm+Z5q4RfVBCdc/ngQYdqo7tqm3DX5yjKPLhBxcmdDcQz/Lo1bkjJZ
+         /4X2V8fQyv1eBdaBInadO/wMibW7ALsxIUy4boD3OiYOiExsibDCtucRcYHn1SLw6XBE
+         wbgFVmg5/QsK18bzlgBOGxRbcX4l1Bu15Fnz1QjnrNlJ8Tz2CJtulfU3HWiSUo51Te+I
+         C36ymnpEJxz8l9SruJlu/ayt8HKf1z9yBX26xUI+cOKaFWyDeyzFyMm+Ec42JgbZy8kt
+         SZyQ==
+X-Gm-Message-State: ACrzQf3ftgRuO25LpXRKKQJ9L2Z4eQEG3R9FUvetQqHfoNB7LML0hYSZ
+        IYDMg05qYPGLqudIhaiUMPebLTA382PghF+c
+X-Google-Smtp-Source: AMsMyM4FLskXFFfmgc8C4mbNPem7m0JVrbmyMOJf4JYBCDCqX67gaH3asI2ftJOlpRErjLr2R76NSQ==
+X-Received: by 2002:a05:6000:1ac7:b0:232:8c6c:6c4a with SMTP id i7-20020a0560001ac700b002328c6c6c4amr18775577wry.455.1667481175055;
+        Thu, 03 Nov 2022 06:12:55 -0700 (PDT)
+Received: from usaari01.cust.communityfibre.co.uk ([2a02:6b6a:b4d7:0:e42f:dffe:32d3:8bf2])
+        by smtp.gmail.com with ESMTPSA id z8-20020a056000110800b002383e977920sm765813wrw.110.2022.11.03.06.12.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 06:12:54 -0700 (PDT)
+From:   Usama Arif <usama.arif@bytedance.com>
+To:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, linux@armlinux.org.uk,
+        yezengruan@huawei.com, catalin.marinas@arm.com, will@kernel.org,
+        maz@kernel.org, steven.price@arm.com, mark.rutland@arm.com,
+        bagasdotme@gmail.com
+Cc:     fam.zheng@bytedance.com, liangma@liangbit.com,
+        punit.agrawal@bytedance.com, Usama Arif <usama.arif@bytedance.com>
+Subject: [PATCH] kvm/arm: Fix pvtime documentation
+Date:   Thu,  3 Nov 2022 13:12:10 +0000
+Message-Id: <20221103131210.3603385-1-usama.arif@bytedance.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-CM-TRANSID: AQAAf8CxZ1ctvmNjswcMAA--.16743S3
-X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
-X-Coremail-Antispam: 1Uk129KBjvJXoWxXF47tF4fWFWxJr1UAw1DKFg_yoW5KFy7pF
-        s7CF93Jr47tF13u39xKFyI93Z5Zas5AF9rWr17tw1UAF98X3W5XF1xKa4DZ3y3GrWxWay7
-        XFySkw18Ka1j9r7anT9S1TB71UUUUjDqnTZGkaVYY2UrUUUUj1kv1TuYvTs0mT0YCTnIWj
-        qI5I8CrVACY4xI64kE6c02F40Ex7xfYxn0WfASr-VFAUDa7-sFnT9fnUUIcSsGvfJTRUUU
-        bSxFc2x0x2IEx4CE42xK8VAvwI8IcIk0rVWrJVCq3wAFIxvE14AKwVWUXVWUAwA2ocxC64
-        kIII0Yj41l84x0c7CEw4AK67xGY2AK021l84ACjcxK6xIIjxv20xvE14v26r4j6ryUM28E
-        F7xvwVC0I7IYx2IY6xkF7I0E14v26r4j6F4UM28EF7xvwVC2z280aVAFwI0_Cr1j6rxdM2
-        8EF7xvwVC2z280aVCY1x0267AKxVWxJr0_GcWln4kS14v26r126r1DM2AIxVAIcxkEcVAq
-        07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7
-        xfMcIj6xIIjxv20xvE14v26r1q6rW5McIj6I8E87Iv67AKxVW8Jr0_Cr1UMcvjeVCFs4IE
-        7xkEbVWUJVW8JwACjcxG0xvY0x0EwIxGrwCY1x0262kKe7AKxVWUtVW8ZwCF04k20xvY0x
-        0EwIxGrwCF04k20xvE74AGY7Cv6cx26rWl4I8I3I0E4IkC6x0Yz7v_Jr0_Gr1l4IxYO2xF
-        xVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67AKxVWUGVWUWw
-        C2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8IcVAFwI0_Gr0_
-        Xr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r4j6F4UMIIF0xvE42xK8VAvwI8IcIk0rVWUJV
-        WUCwCI42IY6I8E87Iv67AKxVW8Jr0_Cr1UMIIF0xvEx4A2jsIEc7CjxVAFwI0_Gr1j6F4U
-        JbIYCTnIWIevJa73UjIFyTuYvjxU7w0eDUUUU
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add the Loongson-2 High Precision Event Timer (HPET) binding
-with DT schema format using json-schema.
+This includes table format and using reST labels for
+cross-referencing to vcpu.rst.
 
-Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Suggested-by:  Bagas Sanjaya <bagasdotme@gmail.com>
+Signed-off-by: Usama Arif <usama.arif@bytedance.com>
 ---
-Change in v10:
-		1. NO change, but other patch in this series of patches set
-		   has changes.
-                2. This patch need rely on clock patch, which patchwork  
-		   link was "https://patchwork.kernel.org/project/linux-clk/list/?series=691497".
-Change in v9:
-                1. This patch need rely on clock patch, which patchwork  
-		   link was "https://patchwork.kernel.org/project/linux-clk/list/?series=691497".
-		2. NO change, but other patch in this series of patches set
-		   has changes.
-Change in v8:
-                1. This patch need rely on clock patch, which patchwork  
-		   link was "https://patchwork.kernel.org/project/linux-clk/list/?series=691497".
-		2. Add all history change log information.
-Change in v7:
-		1. NO change, but other patch in this series of patches set
-		   has changes.
-Change in v6:
-		1. NO change, but other patch in this series of patches set
-		   has changes.
-Change in v5:
-		1. Replace string loongson2/Loongson2 with Loongson-2/loongson-2.
-		2. Add the patch review information.
-Change in v4: 
-                1. Fixup the clock-names that replace apb-clk with apb.
-                2. This patch need rely on clock patch, which patchwork  
-                   link was "https://patchwork.kernel.org/project/linux-clk/list/?series=688892".
-Change in v3:
-		1. Update dts that base on common clock framework.
-Change in v2:
-		1. Drop the  "hpet0" label.
-		2. Modify the hpet node name to timer.
+ Documentation/virt/kvm/arm/pvtime.rst   | 14 ++++++++------
+ Documentation/virt/kvm/devices/vcpu.rst |  2 ++
+ 2 files changed, 10 insertions(+), 6 deletions(-)
 
- .../bindings/timer/loongson,ls2k-hpet.yaml    | 50 +++++++++++++++++++
- MAINTAINERS                                   |  1 +
- 2 files changed, 51 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
-
-diff --git a/Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml b/Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
-new file mode 100644
-index 000000000000..30685c8fbead
---- /dev/null
-+++ b/Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
-@@ -0,0 +1,50 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/timer/loongson,ls2k-hpet.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: Loongson-2 High Precision Event Timer (HPET)
-+
-+maintainers:
-+  - Yinbo Zhu <zhuyinbo@loongson.cn>
-+
-+properties:
-+  compatible:
-+    const: loongson,ls2k-hpet
-+
-+  reg:
-+    maxItems: 1
-+
-+  clocks:
-+    items:
-+      - description: SoC apb clock
-+
-+  clock-names:
-+    items:
-+      - const: apb
-+
-+  interrupts:
-+    maxItems: 1
-+
-+required:
-+  - compatible
-+  - reg
-+  - clocks
-+  - clock-names
-+  - interrupts
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/clock/loongson,ls2k-clk.h>
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+    timer@1fe24000 {
-+        compatible = "loongson,ls2k-hpet";
-+        reg = <0x1fe24000 0x15f>;
-+        clocks = <&clk LOONGSON2_APB_CLK>;
-+        clock-names = "apb";
-+        interrupt-parent = <&liointc0>;
-+        interrupts = <21 IRQ_TYPE_LEVEL_LOW>;
-+    };
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 52519695a458..939af260fe0f 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -12030,6 +12030,7 @@ LOONGSON-2 SOC SERIES HPET DRIVER
- M:	Yinbo Zhu <zhuyinbo@loongson.cn>
- L:	linux-kernel@vger.kernel.org
- S:	Maintained
-+F:	Documentation/devicetree/bindings/timer/loongson,ls2k-hpet.yaml
- F:	drivers/clocksource/loongson2_hpet.c
+diff --git a/Documentation/virt/kvm/arm/pvtime.rst b/Documentation/virt/kvm/arm/pvtime.rst
+index 392521af7c90..e88b34e586be 100644
+--- a/Documentation/virt/kvm/arm/pvtime.rst
++++ b/Documentation/virt/kvm/arm/pvtime.rst
+@@ -23,21 +23,23 @@ the PV_TIME_FEATURES hypercall should be probed using the SMCCC 1.1
+ ARCH_FEATURES mechanism before calling it.
  
- LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+ PV_TIME_FEATURES
+-    ============= ========    ==========
++
++    ============= ========    =================================================
+     Function ID:  (uint32)    0xC5000020
+     PV_call_id:   (uint32)    The function to query for support.
+                               Currently only PV_TIME_ST is supported.
+     Return value: (int64)     NOT_SUPPORTED (-1) or SUCCESS (0) if the relevant
+                               PV-time feature is supported by the hypervisor.
+-    ============= ========    ==========
++    ============= ========    =================================================
+ 
+ PV_TIME_ST
+-    ============= ========    ==========
++
++    ============= ========    ==============================================
+     Function ID:  (uint32)    0xC5000021
+     Return value: (int64)     IPA of the stolen time data structure for this
+                               VCPU. On failure:
+                               NOT_SUPPORTED (-1)
+-    ============= ========    ==========
++    ============= ========    ==============================================
+ 
+ The IPA returned by PV_TIME_ST should be mapped by the guest as normal memory
+ with inner and outer write back caching attributes, in the inner shareable
+@@ -76,5 +78,5 @@ It is advisable that one or more 64k pages are set aside for the purpose of
+ these structures and not used for other purposes, this enables the guest to map
+ the region using 64k pages and avoids conflicting attributes with other memory.
+ 
+-For the user space interface see Documentation/virt/kvm/devices/vcpu.rst
+-section "3. GROUP: KVM_ARM_VCPU_PVTIME_CTRL".
++For the user space interface see
++:ref:`Documentation/virt/kvm/devices/vcpu.rst <kvm_arm_vcpu_pvtime_ctrl>`.
+\ No newline at end of file
+diff --git a/Documentation/virt/kvm/devices/vcpu.rst b/Documentation/virt/kvm/devices/vcpu.rst
+index 716aa3edae14..31f14ec4a65b 100644
+--- a/Documentation/virt/kvm/devices/vcpu.rst
++++ b/Documentation/virt/kvm/devices/vcpu.rst
+@@ -171,6 +171,8 @@ configured values on other VCPUs.  Userspace should configure the interrupt
+ numbers on at least one VCPU after creating all VCPUs and before running any
+ VCPUs.
+ 
++.. _kvm_arm_vcpu_pvtime_ctrl:
++
+ 3. GROUP: KVM_ARM_VCPU_PVTIME_CTRL
+ ==================================
+ 
 -- 
-2.20.1
+2.25.1
 
