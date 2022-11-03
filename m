@@ -2,121 +2,99 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 55BE5618B5F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 23:25:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 08CBC618B62
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 23:26:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231704AbiKCWZk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 18:25:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45416 "EHLO
+        id S230522AbiKCW0b (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 18:26:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45824 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbiKCWZh (ORCPT
+        with ESMTP id S229666AbiKCW01 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 18:25:37 -0400
-Received: from mail-pl1-x631.google.com (mail-pl1-x631.google.com [IPv6:2607:f8b0:4864:20::631])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 31DEE140E6
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 15:25:37 -0700 (PDT)
-Received: by mail-pl1-x631.google.com with SMTP id k7so3260094pll.6
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 15:25:37 -0700 (PDT)
+        Thu, 3 Nov 2022 18:26:27 -0400
+Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B19E321274
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 15:26:26 -0700 (PDT)
+Received: by mail-qv1-xf36.google.com with SMTP id u7so2102897qvn.13
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 15:26:26 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=PO6xlmxvka0CVGc5nO1Kud7KkxoU59ZTMUWaXaIsCuU=;
-        b=b9tUlcxIEtOZfXUQNLUzylQxZJ6cIokU+gy0w+a+x5jfcDQZxyD/+L7ft0n4KmSSOP
-         UgoR/NIvpT31Zrc1i9HIoGAx02lJTRZosFC3UfwuxRwDeh6k32j14kjfL7MkfEM6vSyu
-         +JRQ9SRZXxwYLr2Bb42boUmTG7Ol9QvH3/sxOjSO+LMLQxnNVwxZAQyG9NAgUPnkuJtL
-         PrHtehXJfAkInlWF8gfMdsmk7yjtqX2LX0gX4SZJxqBp16STqiRyTzf9XsLspr3GlPLk
-         ZuZWwuFkTYc0j+1Fve0J+HhbfA7/tXKVgicAOqUZB3s6teQWv7u0Gz6Aa+rNRoHtv8Ot
-         j6EQ==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pm4RXMLMyayJrb7lXI9IxGRtGOHJZv7BC9yPVfB+mM8=;
+        b=GL8m1CzuwZwzNpYIUHbow5Fvi19Ye6qn7FHPSJkUDGa7SGHl1NmnmwTIE2RPPSwVZC
+         +Av/sCDTctqtN8YgL186XiH7W6YP6hsYEpbhZdHJuowuM4OzherwAPIIudwEzTghx8J3
+         pg0HumM2LiB77w2KM6FvRoalcwXjQntGVF7Htyqr0NQyRAbJw7lXeUmcqpONMu1T+ZkS
+         +/F5TMgZipWfMcHQlmvX6gxruNsOnQ3ck5ELgEkEU/QxhxPc5Prud9xndNiAqSKUQobQ
+         1JsXNU8GtkuCt7tM1DwiWXLALlBmN5XU60R9tjo3umqEnXW0R+MoC5xnC+IFt9saIjX/
+         PrOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=PO6xlmxvka0CVGc5nO1Kud7KkxoU59ZTMUWaXaIsCuU=;
-        b=1o/vAPlXpzc4jp6glromWi6u3XLpACUy0k512EdeA0eOU2Mzs69poE/dMMGeCAlYgz
-         bTE8X8DC92eTpo0IEIYlRax8c3I1ynQBAMht7P5km+JWjZ9qw8+vuQbz3iqQBkQUJ+ub
-         0/Y/wFMZnP01SzxbqLWopGbfejY7f3RYqU8pW4EA7ISyVAP7JczyntrjtZQJ+S2w/Esj
-         U06JtsjYkrfJ/ZYRxNO1Brm8dMjy9+5wJuCmUHSqChmPWfsP9qzGeqEwrgX7JHIogtn2
-         PJF8gi293Sy/q1mAAhHx1uozoSJvmxhR1xSVicBTqjOkFagGg9bSV0MQa5ruANBZTvUu
-         4s6g==
-X-Gm-Message-State: ACrzQf3fsf710EVUHSsm5GaPfsi6DWRKSMz6YzJ3JHn18wd+v40T5lxs
-        Za/j5RwYXLjY0Gcuz6BxfwYtdA==
-X-Google-Smtp-Source: AMsMyM68njOrKyWTO4YrkdUs2xYcRNgqXrvH8bSZ6MYrY73blOQTr3+/xBM64zpqs7VbDcKa//4mpQ==
-X-Received: by 2002:a17:902:ef43:b0:186:99be:2ee9 with SMTP id e3-20020a170902ef4300b0018699be2ee9mr32322793plx.148.1667514336592;
-        Thu, 03 Nov 2022 15:25:36 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id 3-20020a621703000000b0056ba02feda1sm1288792pfx.94.2022.11.03.15.25.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 15:25:36 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 22:25:32 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Peter Gonda <pgonda@google.com>
-Cc:     jarkko@kernel.org, Harald Hoyer <harald@profian.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] KVM: SVM: Only dump VSMA to klog for debugging
-Message-ID: <Y2Q/3A1DSzSJkRAy@google.com>
-References: <20221103210421.359837-1-pgonda@google.com>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pm4RXMLMyayJrb7lXI9IxGRtGOHJZv7BC9yPVfB+mM8=;
+        b=XlBWT3bs6ZjyLoppHzKdFwIo75z2S4YDBO74C3cI5HHToJ8aLNdIWHaSaCACeZYrJy
+         dBihkjfWd47KgPhpHbKOxiAE6caWTABab/MJW2rWBtcltYDUdpWg6ob89ZyKaaLMlwWM
+         leWF9+pucnrl1NYjkGAzmSzYeDn2s5atho7v9b+qQ3FvZ3HCabeXursleeCfVKMpd0P1
+         pLAkUDOdMMrx5s5V7lzBDyGbaEQt5AprbxCLlksxyUyf4FU9RFRyUjP+M5ctl0hVhjBz
+         Kqo3r5bbccK/WoRHlXGPoOUacQ5lL6EX5w2NmCS2TVgquSgg0RvhwBj3ax0x2cwfkmZ4
+         SQOg==
+X-Gm-Message-State: ACrzQf2ZtR36vOCfKWWvZU+2bJS2AWuP+9S/b8dvlnLxPk0WnIfZLmD0
+        qYqAqYK/0LSncomzdsTBPAzCGA==
+X-Google-Smtp-Source: AMsMyM7hZ5+D9gSJ6uhU8oVvFrzmk6OCUfAr9KAFklUH9XwGX9WRYuM+AJbJfAXlFjMU2GCStm9RBQ==
+X-Received: by 2002:a05:6214:d0a:b0:4bb:e1a9:4c84 with SMTP id 10-20020a0562140d0a00b004bbe1a94c84mr24798897qvh.27.1667514385906;
+        Thu, 03 Nov 2022 15:26:25 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
+        by smtp.gmail.com with ESMTPSA id b18-20020a05620a127200b006eeb51bb33dsm1532153qkl.78.2022.11.03.15.26.24
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 15:26:25 -0700 (PDT)
+Message-ID: <1b1aba4b-e260-8bee-a8f6-761946361b11@linaro.org>
+Date:   Thu, 3 Nov 2022 18:26:24 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221103210421.359837-1-pgonda@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 2/8] ASoC: dt-bindings: realtek,rt5682s: Add dbvdd and
+ ldo1-in supplies
+Content-Language: en-US
+To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
+        <nfraprado@collabora.com>, Mark Brown <broonie@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>
+Cc:     kernel@collabora.com,
+        AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>,
+        Derek Fang <derek.fang@realtek.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Liam Girdwood <lgirdwood@gmail.com>,
+        Rob Herring <robh+dt@kernel.org>, alsa-devel@alsa-project.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221028205540.3197304-1-nfraprado@collabora.com>
+ <20221028205540.3197304-3-nfraprado@collabora.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221028205540.3197304-3-nfraprado@collabora.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022, Peter Gonda wrote:
-> The KERN_CONT documentation says it defaults back to KERNL_DEFAULT if the
-
-State what actually happens.  Documentation is sometimes wrong, and just saying
-"the docs say XYZ" makes it sound like this is a fix based on code inspection,
-whereas you encountered a real problem.  E.g.
-
-  Explicitly print the VMSA dump at KERN_DEBUG log level, KERN_CONT uses
-  KERNEL_DEFAULT if the previous log line has a newline, i.e. if there's
-  nothing to continuing, and as a result the VMSA gets dumped when it
-  shouldn't.
-
-> previous log line has a newline. So switch from KERN_CONT to
-> print_hex_dump_debug().
-
-Jarkko pointed this out in the original submission, but the buggy patch got queued
-without the fixup.  This is a good opportunity to throw in a link so that it's
-clear that the change is aligned with the original intent.
-
-  Link: https://lore.kernel.org/all/YuPMeWX4uuR1Tz3M@kernel.org
-
-> Cc: Jarkko Sakkinen <jarkko@kernel.org>
-> Cc: Harald Hoyer <harald@profian.com>
-> Cc: Paolo Bonzini <pbonzini@redhat.com>
-> Cc: Sean Christopherson <seanjc@google.com>
-> Cc: Thomas Gleixner <tglx@linutronix.de>
-> Cc: Ingo Molnar <mingo@redhat.com>
-> Cc: Borislav Petkov <bp@alien8.de>
-> Cc: Dave Hansen <dave.hansen@linux.intel.com>
-> Cc: x86@kernel.org
-> Cc: "H. Peter Anvin" <hpa@zytor.com>
-> Cc: kvm@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: Peter Gonda <pgonda@google.com>
+On 28/10/2022 16:55, Nícolas F. R. A. Prado wrote:
+> The rt5682s codec has two additional power supply pins, DBVDD and
+> LDO1_IN, that aren't currently described in the binding. Add them.
 > 
-> Fixes: 6fac42f127b8 ("KVM: SVM: Dump Virtual Machine Save Area (VMSA) to klog")
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> ---
 
-Fixes: usually goes before everything else, and this should probably Cc stable@
-as well.
 
-With the above tweaks,
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+Best regards,
+Krzysztof
+
