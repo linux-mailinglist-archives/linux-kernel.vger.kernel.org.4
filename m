@@ -2,158 +2,228 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id BCE8C6174DD
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 04:21:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2D5076174E1
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 04:22:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230427AbiKCDVD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 23:21:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58890 "EHLO
+        id S229457AbiKCDWB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 23:22:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59246 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229457AbiKCDUw (ORCPT
+        with ESMTP id S230466AbiKCDVx (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 23:20:52 -0400
-Received: from mail-oi1-f176.google.com (mail-oi1-f176.google.com [209.85.167.176])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E7A6013F74;
-        Wed,  2 Nov 2022 20:20:51 -0700 (PDT)
-Received: by mail-oi1-f176.google.com with SMTP id n186so743188oih.7;
-        Wed, 02 Nov 2022 20:20:51 -0700 (PDT)
+        Wed, 2 Nov 2022 23:21:53 -0400
+Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC0D914D2E;
+        Wed,  2 Nov 2022 20:21:51 -0700 (PDT)
+Received: by mail-ed1-x536.google.com with SMTP id f7so1156648edc.6;
+        Wed, 02 Nov 2022 20:21:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=3mJ1M1GCa29hKoerTifDSh6zyzpsImb+52pEFvSJf6k=;
+        b=SqxPLb37gwUzlh0M2OCmLT3oshNTX2u7ZDnwnsLBGMw+2hzrjm6H6qVneSZ2JRG7ad
+         RKiQCmfVy/LwMrC4GGlPmWe4n1VN+tOdt7Ec/A3lOUs0teu08X0hUfJqw0pqAVWz9a6S
+         OBaBfZQ1F4jdSUk1XyQfZegrANC4EX4EGTs+tpsRpkxPDI6zneQs5wrsCrlFnMV9tcIe
+         O62MGSmazs952yy/io8OtJPPORD4inDvrc8dFCzFjPezL8uKfHbEJuZsEYTcX5oAeDsK
+         wQCIFJ6DdBY6dhNV+e4msBR4tYEJvv6NUHbumbMH596G34oFlWLJbM/bmStZk3954W2g
+         H7lg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L9LEoUWJvpUFOWNZZSHLTT8Vj3FE8ZbDHe08yAKC0s8=;
-        b=wJivIGi4u9AcDsQVrpKZgZWwy7gb6N/17rLjUiOrVJXHXtf7/jdPCAGwvHQlCFPuhX
-         PihmDQ8jqs53U3JhKCVYMmEcg6fZ2DA1iX5+YKaMIL7WOez2JS3M35TWWhT+8Fx5KP4x
-         1B4MA0WGb87ZYKxYsE+NJMMrfK7BvDIiH93eARjrAe4Hn/BcNZt1MtynkI+VByIHk/FY
-         nbQHNRuB6LERhCJOgBM/I2wYaH9NrKrXciAVg164W5HpvQlqPYfLxj8Zle2RveNEEANb
-         hSP2875WmyHbz/XNGNpK8ZptOvVjprPXZu8+yTKMnYnKqbMrSyHbJs+ZoMxsWK8olWuh
-         S6oQ==
-X-Gm-Message-State: ACrzQf2/JhGxUanNS9t8ue9EZkYDVx9lLB0Zo5a4un0i9hQl/bYHKRxx
-        M4h/CH1s6sMRUY0KSIzS5g==
-X-Google-Smtp-Source: AMsMyM4x9J/gNXs66sXJG0Hy26y6zYfJGYKLSTEOTu+BoRTCA1i0xSYSWxYDuz+zEQkxansG7DLxNA==
-X-Received: by 2002:a05:6808:2082:b0:35a:224:983b with SMTP id s2-20020a056808208200b0035a0224983bmr11413143oiw.179.1667445651094;
-        Wed, 02 Nov 2022 20:20:51 -0700 (PDT)
-Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id c14-20020a4ad20e000000b004982f2d3c03sm5059059oos.25.2022.11.02.20.20.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 20:20:50 -0700 (PDT)
-Received: (nullmailer pid 1058925 invoked by uid 1000);
-        Thu, 03 Nov 2022 03:20:51 -0000
-Date:   Wed, 2 Nov 2022 22:20:51 -0500
-From:   Rob Herring <robh@kernel.org>
-To:     Conor Dooley <conor@kernel.org>
-Cc:     "Lad, Prabhakar" <prabhakar.csengg@gmail.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Heiko Stuebner <heiko@sntech.de>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Guo Ren <guoren@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Atish Patra <atishp@rivosinc.com>,
-        Anup Patel <anup@brainfault.org>,
-        Andrew Jones <ajones@ventanamicro.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-riscv@lists.infradead.org, linux-renesas-soc@vger.kernel.org,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-Subject: Re: [RFC PATCH v3 2/2] soc: renesas: Add L2 cache management for
- RZ/Five SoC
-Message-ID: <20221103032051.GD459441-robh@kernel.org>
-References: <20221019220242.4746-1-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221019220242.4746-3-prabhakar.mahadev-lad.rj@bp.renesas.com>
- <20221021020500.GA2157489-robh@kernel.org>
- <CA+V-a8v0jEFj+XKAtyAaTBFmX3bObBZgGd6n1LB3OnTU_W002w@mail.gmail.com>
- <Y1Md4bMYJHI34HuJ@spud>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3mJ1M1GCa29hKoerTifDSh6zyzpsImb+52pEFvSJf6k=;
+        b=7nsxTNaFvprYu2zh1StnMYIQJUnMedGE+UUoCgCSUdjSoRsnFWlWihUXELN1KTVHPV
+         DAReOtiPHKzGBIsfAMkva1JUdTEUy8vzoJUJNVyY9NmrqJiSJuv4CwCaY3aU0RN0Kx3j
+         gi/2YNHW3IULGkojpNxmcOJRFeK7O5nsfBMaVZjFVMIU3viu/EtEwVbR/6VWzSqJUW26
+         gPA24Zy2x2o8eO5KnhJCcZyMe4C1Rza0jCyR1MiPKTuIiGJup6jBZEJR5miViXxaUCw4
+         P5+PAGgvioOLyq+KVK17UZhTLZuKKYqBo82+bmTCHNDYKTQBHfDPbyHUwqU7jOeX7fWH
+         Lxow==
+X-Gm-Message-State: ACrzQf3a1g69PfJl4cEcYxTozNNyF/P8fZkAqk0rRkGjlVGqoitNJbDS
+        t08bBwPK+w1ZySUjNwRMc+0BQJlrZbfPTUP2e8A=
+X-Google-Smtp-Source: AMsMyM6kKs8VptkJDrUguJRraGRylo14qt/1lsP7wua44fsE/ep67/0MdoOlKkkmkz/BVyRXfkdfHy9iRMu5SfKNflU=
+X-Received: by 2002:a05:6402:1d4e:b0:461:c7bd:7d9c with SMTP id
+ dz14-20020a0564021d4e00b00461c7bd7d9cmr27654272edb.284.1667445710302; Wed, 02
+ Nov 2022 20:21:50 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y1Md4bMYJHI34HuJ@spud>
-X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
-        FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221026185846.3983888-1-quic_eberman@quicinc.com>
+ <20221026185846.3983888-3-quic_eberman@quicinc.com> <CABb+yY3JVNPG3dcyHNFxEeGEu3MN_pAOh3+cwexPPe2YG6SNUg@mail.gmail.com>
+ <fb7e101f-8de0-d77e-30e1-74b882b19583@quicinc.com> <CABb+yY08jP+Q5xvzLf=7F1tULP6-eZz5EDiK9mBj2fAv=iZa_A@mail.gmail.com>
+ <4cb58489-cd42-1868-9add-0c360065de23@quicinc.com> <CABb+yY2GA90RLazHZL7sLtC+ka-P8y6s00V2BVF4OMPTDi-rKg@mail.gmail.com>
+ <62f7402d-f0e7-8e8a-e1a4-958ddbcf8d8b@quicinc.com> <CABb+yY0-rtt5CfzGA_D3THnfTO1pgstmVo2_1McEJ=JMdTcD2Q@mail.gmail.com>
+ <840d876c-6a09-59cf-fc66-c5752ad22d7e@quicinc.com> <CABb+yY1rd2mzNz-ovaO2Di=9qeAKp4XeUUE+6yPbBiv7YjTCfw@mail.gmail.com>
+ <10525d0d-b887-6960-5fbc-933b91e2e97c@quicinc.com>
+In-Reply-To: <10525d0d-b887-6960-5fbc-933b91e2e97c@quicinc.com>
+From:   Jassi Brar <jassisinghbrar@gmail.com>
+Date:   Wed, 2 Nov 2022 22:21:38 -0500
+Message-ID: <CABb+yY2fBa3up8Byu8axagwTEoidW+mbwene1qFyh=qJxPLJ=Q@mail.gmail.com>
+Subject: Re: [PATCH v6 02/21] dt-bindings: Add binding for gunyah hypervisor
+To:     Elliot Berman <quic_eberman@quicinc.com>
+Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
+        Murali Nalajala <quic_mnalajal@quicinc.com>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Trilok Soni <quic_tsoni@quicinc.com>,
+        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
+        Carl van Schaik <quic_cvanscha@quicinc.com>,
+        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
+        Andy Gross <agross@kernel.org>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        linux-arm-kernel@lists.infradead.org,
+        Mark Rutland <mark.rutland@arm.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Sudeep Holla <sudeep.holla@arm.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>,
+        Will Deacon <will@kernel.org>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        Amol Maheshwari <amahesh@qti.qualcomm.com>,
+        Kalle Valo <kvalo@kernel.org>, devicetree@vger.kernel.org,
+        linux-doc@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 21, 2022 at 11:32:01PM +0100, Conor Dooley wrote:
-> On Fri, Oct 21, 2022 at 11:05:40PM +0100, Lad, Prabhakar wrote:
-> > Hi Rob,
-> > 
-> > Thank you for the review.
-> > 
-> > On Fri, Oct 21, 2022 at 3:05 AM Rob Herring <robh@kernel.org> wrote:
-> > >
-> > > On Wed, Oct 19, 2022 at 11:02:42PM +0100, Prabhakar wrote:
-> > > > From: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > >
-> > > > On the AX45MP core, cache coherency is a specification option so it may
-> > > > not be supported. In this case DMA will fail. As a workaround, firstly we
-> > > > allocate a global dma coherent pool from which DMA allocations are taken
-> > > > and marked as non-cacheable + bufferable using the PMA region as specified
-> > > > in the device tree. Synchronization callbacks are implemented to
-> > > > synchronize when doing DMA transactions.
-> > > >
-> > > > The Andes AX45MP core has a Programmable Physical Memory Attributes (PMA)
-> > > > block that allows dynamic adjustment of memory attributes in the runtime.
-> > > > It contains a configurable amount of PMA entries implemented as CSR
-> > > > registers to control the attributes of memory locations in interest.
-> > > >
-> > > > Below are the memory attributes supported:
-> > > > * Device, Non-bufferable
-> > > > * Device, bufferable
-> > > > * Memory, Non-cacheable, Non-bufferable
-> > > > * Memory, Non-cacheable, Bufferable
-> > > > * Memory, Write-back, No-allocate
-> > > > * Memory, Write-back, Read-allocate
-> > > > * Memory, Write-back, Write-allocate
-> > > > * Memory, Write-back, Read and Write-allocate
-> > > >
-> > > > This patch adds support to configure the memory attributes of the memory
-> > > > regions as passed from the l2 cache node and exposes the cache management
-> > > > ops.
-> > > >
-> > > > More info about PMA (section 10.3):
-> > > > http://www.andestech.com/wp-content/uploads/AX45MP-1C-Rev.-5.0.0-Datasheet.pdf
-> > > >
-> > > > This feature is based on the work posted [0] by Vincent Chen
-> > > > <vincentc@andestech.com> for the Andes AndeStart RISC-V CPU.
-> > > >
-> > > > [0] https://lore.kernel.org/lkml/1540982130-28248-1-git-send-email-vincentc@andestech.com/
-> > > >
-> > > > Signed-off-by: Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>
-> > > > ---
-> > > >  arch/riscv/include/asm/cacheflush.h    |   8 +
-> > > >  arch/riscv/include/asm/errata_list.h   |   2 +
-> > > >  arch/riscv/mm/dma-noncoherent.c        |  20 ++
-> > > >  drivers/soc/renesas/Kconfig            |   5 +
-> > > >  drivers/soc/renesas/Makefile           |   4 +
-> > > >  drivers/soc/renesas/rzf/Kconfig        |   6 +
-> > > >  drivers/soc/renesas/rzf/Makefile       |   3 +
-> > > >  drivers/soc/renesas/rzf/ax45mp_cache.c | 431 +++++++++++++++++++++++++
-> > >
-> > > How many cache drivers do we have around now? I've seen a few bindings
-> > > go by. I'm guessing it is time to stop putting the drivers in the
-> > > drivers/soc/ dumping ground.
-> > >
-> > The main reason this driver is not in arch/riscv is that it has vendor
-> > specific extensions. Due to this reason it was agreed during the LPC
-> > that vendor specific extension should be maintained by SoC vendors and
-> > was agreed that this can go into drivers/soc/renesas folder instead.
-> 
-> Does not in drivers/soc mean they need to go into arch/riscv?
-> The outcome of the chat at the LPC BoF was more that the cache drivers
-> themselves should not be be routed via the arch maintainers, no?
+On Wed, Nov 2, 2022 at 6:23 PM Elliot Berman <quic_eberman@quicinc.com> wrote:
+>
+>
+>
+> On 11/2/2022 11:24 AM, Jassi Brar wrote:
+> > On Wed, Nov 2, 2022 at 1:06 PM Elliot Berman <quic_eberman@quicinc.com> wrote:
+> >>
+> >> Hi Jassi,
+> >>
+> >> On 11/1/2022 7:01 PM, Jassi Brar wrote:
+> >>> On Tue, Nov 1, 2022 at 7:12 PM Elliot Berman <quic_eberman@quicinc.com> wrote:
+> >>>>
+> >>>>
+> >>>>
+> >>>> On 11/1/2022 2:58 PM, Jassi Brar wrote:
+> >>>>> On Tue, Nov 1, 2022 at 3:35 PM Elliot Berman <quic_eberman@quicinc.com> wrote:
+> >>>>>>
+> >>>>>>
+> >>>>>>
+> >>>>>> On 11/1/2022 9:23 AM, Jassi Brar wrote:
+> >>>>>>> On Mon, Oct 31, 2022 at 10:20 PM Elliot Berman <quic_eberman@quicinc.com> wrote:
+> >>>>>>>>
+> >>>>>>>> Hi Jassi,
+> >>>>>>>>
+> >>>>>>>> On 10/27/2022 7:33 PM, Jassi Brar wrote:
+> >>>>>>>>      > On Wed, Oct 26, 2022 at 1:59 PM Elliot Berman
+> >>>>>>>> <quic_eberman@quicinc.com> wrote:
+> >>>>>>>>      > .....
+> >>>>>>>>      >> +
+> >>>>>>>>      >> +        gunyah-resource-mgr@0 {
+> >>>>>>>>      >> +            compatible = "gunyah-resource-manager-1-0",
+> >>>>>>>> "gunyah-resource-manager";
+> >>>>>>>>      >> +            interrupts = <GIC_SPI 3 IRQ_TYPE_EDGE_RISING>, /* TX
+> >>>>>>>> full IRQ */
+> >>>>>>>>      >> +                         <GIC_SPI 4 IRQ_TYPE_EDGE_RISING>; /* RX
+> >>>>>>>> empty IRQ */
+> >>>>>>>>      >> +            reg = <0x00000000 0x00000000>, <0x00000000 0x00000001>;
+> >>>>>>>>      >> +                  /* TX, RX cap ids */
+> >>>>>>>>      >> +        };
+> >>>>>>>>      >>
+> >>>>>>>>      > All these resources are used only by the mailbox controller driver.
+> >>>>>>>>      > So, this should be the mailbox controller node, rather than the
+> >>>>>>>>      > mailbox user.> One option is to load gunyah-resource-manager as a
+> >>>>>>>> module that relies
+> >>>>>>>>      > on the gunyah-mailbox provider. That would also avoid the "Allow
+> >>>>>>>>      > direct registration to a channel" hack patch.
+> >>>>>>>>
+> >>>>>>>> A message queue to another guest VM wouldn't be known at boot time and
+> >>>>>>>> thus couldn't be described on the devicetree.
+> >>>>>>>>
+> >>>>>>> I think you need to implement of_xlate() ... or please tell me what
+> >>>>>>> exactly you need to specify in the dt.
+> >>>>>>
+> >>>>>> Dynamically created virtual machines can't be known on the dt, so there
+> >>>>>> is nothing to specify in the DT. There couldn't be a devicetree node for
+> >>>>>> the message queue client because that client is only exists once the VM
+> >>>>>> is created by userspace.
+> >>>>>>
+> >>>>> The underlying "physical channel" is the synchronous SMC instruction,
+> >>>>> which remains 1 irrespective of the number of mailbox instances
+> >>>>> created.
+> >>>>
+> >>>> I disagree that the physical channel is the SMC instruction. Regardless
+> >>>> though, there are num_online_cpus() "physical channels" with this
+> >>>> perspective.
+> >>>>
+> >>>>> So basically you are sharing one resource among users. Why doesn't the
+> >>>>> RM request the "smc instruction" channel once and share it among
+> >>>>> users?
+> >>>>
+> >>>> I suppose in this scenario, a single mailbox channel would represent all
+> >>>> message queues? This would cause Linux to serialize *all* message queue
+> >>>> hypercalls. Sorry, I can only think negative implications.
+> >>>>
+> >>>> Error handling needs to move into clients: if a TX message queue becomes
+> >>>> full or an RX message queue becomes empty, then we'll need to return
+> >>>> error back to the client right away. The clients would need to register
+> >>>> for the RTS/RTR interrupts to know when to send/receive messages and
+> >>>> have retry error handling. If the mailbox controller retried for the
+> >>>> clients as currently proposed, then we could get into a scenario where a
+> >>>> message queue could never be ready to send/receive and thus stuck
+> >>>> forever trying to process that message. The effect here would be that
+> >>>> the mailbox controller becomes a wrapper to some SMC instructions that
+> >>>> aren't related at the SMC instruction level.
+> >>>>
+> >>>> A single channel would limit performance of SMP systems because only one
+> >>>> core could send/receive a message. There is no such limitation for
+> >>>> message queues to behave like this.
+> >>>>
+> >>> This is just an illusion. If Gunyah can handle multiple calls from a
+> >>> VM parallely, even with the "bind-client-to-channel" hack you can't
+> >>> make sure different channels run on different cpu cores.  If you are
+> >>> ok with that, you could simply populate a mailbox controller with N
+> >>> channels and allocate them in any order the clients ask.
+> >>
+> >> I wanted to make sure I understood the ask here completely. On what
+> >> basis is N chosen? Who would be the mailbox clients?
+> >>
+> > A channel structure is cheap, so any number that is not likely to run
+> > out. Say you have 10 possible users in a VM, set N=16. I know ideally
+> > it should be precise and flexible but the gain in simplicity makes the
+> > trade-off very acceptable.
+>
+> I think I get the direction you are thinking now. N is chosen based off
+> of how many clients there might be. One mailbox controller will
+> represent all message queues and each channel will be one message queue.
+> There are some limitations that might make it more complex to implement
+> than having 1 message queue per controller like I have now.
+>
+> My interpretation is that mailbox controller knows the configuration of
+> its channels before being bound to a client. For dynamically created
+> message queues, the client would need tell the controller about the
+> message queue configuration. I didn't find example where client is
+> providing information about a channel to the controller.
+>
+>   1. need a mechanism to allow the client to provide the
+> gunyah_resources for the channel (i.e. the irqs and cap ids).
+>
+IIUC there is exactly one resource-manager in a VM. Right?
+Looking at your code, TX and RX irq are used only by the mailbox
+driver and are the same for all clients/users. So that should be a
+property under the mailbox controller node. Not sure what cap ids are.
 
-drivers/cache/ or something is what I'm suggesting starting. The first 
-thing is probably making an inventory of how many we already have.
+>   2. Still need to have bind-client-to-channel patch since clients
+> aren't real devices and so shouldn't be on DT.
+>
+the clients may be virtual (serial, gpio etc) but the resource-manager
+requires some mailbox hardware to communicate, so the resource-manager
+should be the mailbox client (that further spawns virtual devices)
 
-Rob
+thnx.
