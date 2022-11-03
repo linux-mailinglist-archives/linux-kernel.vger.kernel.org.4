@@ -2,184 +2,227 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A6EC9617DB9
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:20:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B1DAD617DCA
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:22:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231571AbiKCNUw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 09:20:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57814 "EHLO
+        id S231721AbiKCNWX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 09:22:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229539AbiKCNUs (ORCPT
+        with ESMTP id S231725AbiKCNWP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 09:20:48 -0400
-Received: from EUR04-VI1-obe.outbound.protection.outlook.com (mail-eopbgr80083.outbound.protection.outlook.com [40.107.8.83])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F1D896546;
-        Thu,  3 Nov 2022 06:20:46 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=bX36UEan3FddEaroEw9pxLQLZPLtgk7X9JjPO0w92837gDKo5NOaJ15fDXIXXxTxbgsa/DYGlnmcQwQSaiSmF8s0U8hnWhYyv4MVylNRgaQGYRAswGCPeemfgBsoQxVimifpYbB1Mbjwchjbo82W3RwEsiNTQzUXNjpGej1gAwh7LFI9wre1lTgCjwPxhoLDZBGQUr3me590jg+2qkFtVfbpYHnDDkkUVe49F6CVRaRQtNf24JvmS3lMmZjtOJOICalAoCAva3YECgOMCYTAvp8E4qDRoW7U0+xojrBbGK0cbrDziPWS7+sR8J7dzzyWwuK6vAxqTK4UdqEzMTMqDQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=NhORwKUSMm6rm0T/lmL77q3kwYcGB8pDsQM1xwzwcvM=;
- b=EEoi7SbEXnud2UixYsaqkLVaq1a7FN236ocjZtlXJ2Lll5oQ9j/bfzlhCnuoh39xuYuQh3Lu/EgojZSIntapF6mbz52Bvvh6SnEXzzf6rfHYCf9O7Ua4jAz+rjwLeRZfsfe59x0N9xuT13os06P//14Nx0skJQJP9sM7SFLJfdPR7yoY3/VnlPuDwc556/MWjJ5TxI0AG5HGmLKVuy5yVUrUQbKwBTm91a276Wa8i3lskn8uO/S7UF+NyIdv7Oka1UWaXv+NdXyVYzaquAIS/CFIXp+5wchY6x3mp0SPvDNGUnxSOlWJ3+NolfR/a27rsNB+N7QpE8PNAfVxxz32+g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=siemens.com; dmarc=pass action=none header.from=siemens.com;
- dkim=pass header.d=siemens.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=siemens.com;
- s=selector2;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=NhORwKUSMm6rm0T/lmL77q3kwYcGB8pDsQM1xwzwcvM=;
- b=SElmZrroW6h82szI+LTeJ7SzcsGZGfbXC2cMM9pwsiv/Z30Eaiiiv/i47tJCqqPbbAG0++JGEffyStvl/eZiQva0iROLtrs36ZxmFgkdHjf2HkaMkbqclBDjpU/inHgGOth15MFOYqYIuhqsbkVuCobudefFFr3DBZXPSIsMDSsqEi6M+UEQXcidrhAZu+le+/XdYvm2EUswwW8aJ64t2SUBZqSkyfe+GlKKoXbFuhlGP6I7/coqtV26GB0crcSeQLI4OTEUoD1tW8K+HZq+8kopB0bMmI38TqxwkLkh41totEsKziEcoBzuI1+ZVHuElaKK9xLpxzPB0AUGP1Nizw==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=siemens.com;
-Received: from GV2PR10MB6186.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:150:76::15)
- by PAXPR10MB5184.EURPRD10.PROD.OUTLOOK.COM (2603:10a6:102:287::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.19; Thu, 3 Nov
- 2022 13:20:44 +0000
-Received: from GV2PR10MB6186.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::84b7:f886:9bed:1fb7]) by GV2PR10MB6186.EURPRD10.PROD.OUTLOOK.COM
- ([fe80::84b7:f886:9bed:1fb7%9]) with mapi id 15.20.5791.020; Thu, 3 Nov 2022
- 13:20:44 +0000
-Message-ID: <8a8c7b5f-22f0-02f1-b34e-672da5630610@siemens.com>
-Date:   Thu, 3 Nov 2022 14:20:24 +0100
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH 00/11] AM65x Disable Incomplete DT Nodes
-Content-Language: en-US
-To:     Andrew Davis <afd@ti.com>, Nishanth Menon <nm@ti.com>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Bryan Brattlof <bb@ti.com>, Le Jin <le.jin@siemens.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221028142417.10642-1-afd@ti.com>
-From:   Jan Kiszka <jan.kiszka@siemens.com>
-In-Reply-To: <20221028142417.10642-1-afd@ti.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: CH2PR04CA0026.namprd04.prod.outlook.com
- (2603:10b6:610:52::36) To GV2PR10MB6186.EURPRD10.PROD.OUTLOOK.COM
- (2603:10a6:150:76::15)
+        Thu, 3 Nov 2022 09:22:15 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4DABC13EA3;
+        Thu,  3 Nov 2022 06:22:14 -0700 (PDT)
+Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A3CJrRq005056;
+        Thu, 3 Nov 2022 13:21:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=date : from : to : cc :
+ subject : message-id : in-reply-to : references : mime-version :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=aFkGVTo1XJsI6iGGvAkxQhjQYKM9aG4FMgppl4Mi3V4=;
+ b=oJ1AASijW3z94yCNGRZiFICP24fGSesVBCEC8Xqh2VdcOSvNxBynHuTHaQTYP/QuJhIZ
+ NxmeS6rFalfFqEImPhHnqx7l9m0DRnvCkPUBJEJD82t6dDaoo74fFkT92fc23c1D2lHW
+ z3uDhJrunZQbC1UjLKk4TC5rJ1OSHSJJw8YRacyK/Fc/6hpMYwSVOCBV4liDhrkRX+s3
+ 4vcis021UkJZus/SW5ZDm+zV40sIbdWd/kkCVxmMhKqN9jOyylEeC6toF69LcrW9uRf0
+ uYVKNSAlaqCYvq0CZRK55lKcF6VETT9NWK/9cu1NIH0e/BdZ3BvQqVhZ5qiRT66SJqWa IQ== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kmcabmsme-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Nov 2022 13:21:27 +0000
+Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A3AtXV6006838;
+        Thu, 3 Nov 2022 13:21:26 GMT
+Received: from ppma03fra.de.ibm.com (6b.4a.5195.ip4.static.sl-reverse.com [149.81.74.107])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kmcabmsjq-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Nov 2022 13:21:25 +0000
+Received: from pps.filterd (ppma03fra.de.ibm.com [127.0.0.1])
+        by ppma03fra.de.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A3D5ZwC024560;
+        Thu, 3 Nov 2022 13:21:23 GMT
+Received: from b06cxnps3075.portsmouth.uk.ibm.com (d06relay10.portsmouth.uk.ibm.com [9.149.109.195])
+        by ppma03fra.de.ibm.com with ESMTP id 3kgut8pkgt-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Nov 2022 13:21:23 +0000
+Received: from d06av22.portsmouth.uk.ibm.com (d06av22.portsmouth.uk.ibm.com [9.149.105.58])
+        by b06cxnps3075.portsmouth.uk.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A3DLJlt63635926
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 3 Nov 2022 13:21:19 GMT
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id BB3664C04A;
+        Thu,  3 Nov 2022 13:21:19 +0000 (GMT)
+Received: from d06av22.portsmouth.uk.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id C63864C044;
+        Thu,  3 Nov 2022 13:21:18 +0000 (GMT)
+Received: from p-imbrenda (unknown [9.152.224.56])
+        by d06av22.portsmouth.uk.ibm.com (Postfix) with ESMTP;
+        Thu,  3 Nov 2022 13:21:18 +0000 (GMT)
+Date:   Thu, 3 Nov 2022 14:21:17 +0100
+From:   Claudio Imbrenda <imbrenda@linux.ibm.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>
+Subject: Re: [PATCH 25/44] KVM: s390: Do s390 specific init without bouncing
+ through kvm_init()
+Message-ID: <20221103142117.4e27c80c@p-imbrenda>
+In-Reply-To: <20221103134415.5b277ce9@p-imbrenda>
+References: <20221102231911.3107438-1-seanjc@google.com>
+        <20221102231911.3107438-26-seanjc@google.com>
+        <20221103134415.5b277ce9@p-imbrenda>
+Organization: IBM
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: GV2PR10MB6186:EE_|PAXPR10MB5184:EE_
-X-MS-Office365-Filtering-Correlation-Id: a3372b87-07b8-4d67-fa6f-08dabd9e3678
-X-LD-Processed: 38ae3bcd-9579-4fd4-adda-b42e1495d55a,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;
-X-Microsoft-Antispam-Message-Info: KQ8iMn9KigkhZA7fhlX3ZSnvXX5zeZ22Tk7WQzPVp8siQOcChmah7hSXBdiWkRvPXsH2232M9/eeZkf2Di3cLh6XptgsGitmAIk0C6p6tzMlzqBRwwUPN8YmsFxFFWlaH6xitJ9R0SQ6A5CH5L9/8o+ly64E8uqhzE+nA5eydgAZK9KeMvE7HrC54KKgZQ40OKyt4+HqockdK8XxG79h94yuv64tYVrS6os/olSUnjsZ1jJCdxvh/rywp7Z+Kb4wG751iobFLX72CxU9Qo5bs4v/Gs92wzvWF70xK00PuVQpp1DgLAC/MqmjKZcLDlntfv3Ikb5GpPLZaPqLDA5e+7LjBWX6zdFhcgeCXckj1x0TBqvLuGjhQKcIMA6OqpMzpuLRNGkjSR/nKhVhHTrifN9P8y6+37VzwYto555T5ru87/M52VoldFwHbLQ+CzhOmae8iZ89CrIqBu9w0q0n23zB0KwHZrqRro2D0vNBYdCZ0nkal9HnHPr9saK+aYkIgp++NvWqADOfOzhvEcI0r4jnNrgPyg8XisQa9b3b2acvhXm9qnkfRlYuJNmB8LHLm9reRmfG9zLyUHyf7yNZReziCYmX7QrreBCJaligKyZMdofmLIrMFhQlqgb5uXvD5Q1jxYLA6bKsRkLUbzUBUC4vsOzePNFCLLnotaWLWqrm+1JBpQfqQK8LqY7Aii1bBAfC0Nxx+p5jE6sb33zAOPkUVnR+k4NeN798oYXXnNCCxBBwyjVQbezWzGGmdoZbfYrYkxyACPACIQDj0H0rgf3CCjHdVMYkJjEoXW4tLGRMAjxLUyQdYj0mt7/n6DsPXYzO8PwNTQEMFI8fQERtwg==
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:GV2PR10MB6186.EURPRD10.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(366004)(39860400002)(346002)(136003)(376002)(451199015)(186003)(66899015)(36756003)(31696002)(86362001)(31686004)(82960400001)(38100700002)(44832011)(2906002)(6512007)(6506007)(110136005)(26005)(83380400001)(2616005)(53546011)(6666004)(41300700001)(66556008)(478600001)(66946007)(4326008)(5660300002)(7416002)(316002)(8676002)(8936002)(66476007)(966005)(6486002)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Sm1xemMzWWg4L2dqaFZDS09iaEpXMnVFZ2FseVdsSDh0M2NEYm9iRUxQMEZN?=
- =?utf-8?B?Y2hsRDU0RFVxMVQ3MGpLNzZIRTM4ZmhCbys3dVZQTERiS0ExSTc0bmRZY2RM?=
- =?utf-8?B?eVJyWnJMdmhoNUx1dk11VEpQVTYrMWVaaTk1NFkxa2RKQUdLMXlqNkJwVmhB?=
- =?utf-8?B?eGhWVVR1dElqZkhZc0FwN3oySWRERXpadkw4ckp4ci9hdVVLV21ObE92VDg2?=
- =?utf-8?B?bnhTU3E1TzRlUWliN0s3NWQwVGk5M1RobmdTbnJjL3lGSHc2OFJlRWExTFUy?=
- =?utf-8?B?QVc1Z3paTlpWSlY5UVJoeU5CMVlVa0ZHcGR2aS81Ulp0WWNKbTM1cHdWUm1j?=
- =?utf-8?B?QzZkUUxUMXBpKzRyek01d2VDbVNJUkYvc3pGcDBZc3RiVjVLV1hUckRRc2lz?=
- =?utf-8?B?dHhwbTBLOFg0TnV6MW9LN044TkZhL3B4RER6eG16bVFwcjZzOVRWYVBiY0JI?=
- =?utf-8?B?MDd0LzNOYm8zbzdVREFYdXFFZjV3bUhQTEdDRExSZjJBay9XRnphS2JSOUw4?=
- =?utf-8?B?d01qOFdNc25pd2NGMW9VeTJiRklqOW16Z0MzaWsvMGNpTzZXMVlETGRxQWxO?=
- =?utf-8?B?L3hmQzdyeitrUUUvQzdVRkF3MzNMc2RVODlDT2JDM1l0TXJSdVp1em9TRmE2?=
- =?utf-8?B?T2wyQWlxR0x2algrSnpITWhRdEEyWXBNY2NHaEREbEc1MXpRQ2pMODNqOEIr?=
- =?utf-8?B?ZTM2ajU5MHFCWlowN29BUUxsU09ZN3ppUlpYOTRCY0FUWnRDdzhnSGpLakI2?=
- =?utf-8?B?Y1orYmR2OHhjWUF1UkhNdnJXT29VUDhweTRCNjhXZkFUNHh5c2JtSlIwd2cr?=
- =?utf-8?B?TTJ4dlpRSUZnczJnaDA1Ykc1VG5icnBqb1R6OW00VEE1by9zV1ZNaldsbG1E?=
- =?utf-8?B?K2pScEFtaitCNm44M0lYd1UwMFhYdm5OdDN6b2FEV0N0VzNhMWFTeDIvWHpv?=
- =?utf-8?B?amxhUEQrYmRBUG5PM2lwQUFVejRsZk8vVExaVXBCNTRRemR1WUxZYldzR05s?=
- =?utf-8?B?QVZJVG5zeTZSYVUzeWplc1JTemgyU1hDdGVVcVVpT3Bud0xwdkJHcUtZWjB2?=
- =?utf-8?B?T0RIUDVxQzNNOTg2cHlzd2FOaVRGcFg1ZS8wbVlZb1Q4U0gzMUE1ZjhZSlQw?=
- =?utf-8?B?VkRjZU93bGNSNEpDV2x6bHBRQi9kbHdZSGhtMVloOTVZeVcxb3YyVWJLNEQ1?=
- =?utf-8?B?aXRQY2oxdEg0ZkJIZ3FLWURiR2gxMUNZTjVDVWxpTUZ0SGtVUE9IaS9RTFlC?=
- =?utf-8?B?Yy9haEJ6S1ZCaWdJTU5DTUQzNmRJcDU4M0ttT3dyTDJuZFlUdG1KM2VJbGQ2?=
- =?utf-8?B?aEVBWTY1K2JlL1hLL2V5K1prTk95M2ViTEFPZlhXMXJSR1VPZHozSHcvR0NK?=
- =?utf-8?B?d0syaHFzRDNZcjdmdWI3cTNhSzBtVFpCczFFYkREYk9LQmhGbFI2REVUb2V4?=
- =?utf-8?B?eXhwbUZnZ0laQ1p1Zzd5bk5BSWhaS2NKdU5aYk1TZzlqYXE2USt1Rzdvalhh?=
- =?utf-8?B?eTNRdGpranYyVmhmc0diVExJbVhhOVFhRmNzUGl6d0dTYkU3RWdzQzllZGVR?=
- =?utf-8?B?V3FldU13cVFNWVphd1pIb3VnM0lSVnBjWkE1Ky9iMFNNMU5LU2RFQkFtcTNx?=
- =?utf-8?B?WWhUNTlvbVhTVFlDV3drTHNySFc5WVVXalYvTS9RdnZtSGRvZnc3RmI2V2sr?=
- =?utf-8?B?anhWVW1ndTlYT1RESEF5b0RQQUdINGNqSXBDWTBla3N5TmVjaVk3QXlXN1FM?=
- =?utf-8?B?T3FxakxyVW1NbU1PNk80U0xRWnVNcEZ5SXFlYXZML0pLdk1qbVJXcm1Hdi9E?=
- =?utf-8?B?aWNQdDJRRkEzOWNZbkY3anNkTWR0S0crcmtuWnZBMlhXTDJwVXJmaEp0bGU5?=
- =?utf-8?B?TTY0UnVKVms0a1pZTk1PMVVxcTY1eVNxaldDaGZMdG5PeG5CKzUzRE9Uemw5?=
- =?utf-8?B?SEtpYlVYSW9yUkMwdGtiUkZLSFdLbHhRL2RmME11enJyajIraTVLQ0ZCVEtW?=
- =?utf-8?B?ZEdXTjRqQ0FvTnAydUNlWW5rTThKWGh4UWV6ODFXNTVydFFQOE53MndKWGVC?=
- =?utf-8?B?ckMzbDh3ZnpiMjBGYjd1VW9QdHUyR2NKekNLSVd5M2p2QVc4UHdhYWYwT29B?=
- =?utf-8?B?d3RVTUZKUWV6MEc3Rm5UektPL1dqVDhIckM5NEZZUHprdkRqYTZadHByR3Ba?=
- =?utf-8?B?MHc9PQ==?=
-X-OriginatorOrg: siemens.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: a3372b87-07b8-4d67-fa6f-08dabd9e3678
-X-MS-Exchange-CrossTenant-AuthSource: GV2PR10MB6186.EURPRD10.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Nov 2022 13:20:44.3520
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 38ae3bcd-9579-4fd4-adda-b42e1495d55a
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: WpqjTcS+rjXZUqoPIxdVIKhMvDfpW43RL11ET19gmoL0HfFoSARdmFllv5LwLbNAv/WxAUk8z8cDk6s+1/hPhw==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAXPR10MB5184
-X-Spam-Status: No, score=-1.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FORGED_SPF_HELO,
-        NICE_REPLY_A,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,
-        SPF_NONE autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: qBPHBsV6cFHEd8MUfp3luW546x7XEBtX
+X-Proofpoint-GUID: PZHd2NjudsBQn9w2kOd6Znv6byrMRJIu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-03_04,2022-11-03_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 malwarescore=0 lowpriorityscore=0 suspectscore=0
+ phishscore=0 impostorscore=0 adultscore=0 mlxscore=0 mlxlogscore=826
+ spamscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211030090
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 28.10.22 16:24, Andrew Davis wrote:
-> Hello all,
-> 
-> Same story as for AM64x[0], AM62x[1], and J7x[2].
-> 
-> Last round for AM65x, but there are some boards that I do not have
-> (Simatic IOT2050), so testing very welcome!
-> 
-> Thanks,
-> Andrew
-> 
-> [0] https://www.spinics.net/lists/arm-kernel/msg1018532.html
-> [1] https://www.spinics.net/lists/arm-kernel/msg1018864.html
-> [2] https://www.spinics.net/lists/arm-kernel/msg1019544.html
-> 
-> Andrew Davis (11):
->   arm64: dts: ti: k3-am65: Enable UART nodes at the board level
->   arm64: dts: ti: k3-am65: Enable I2C nodes at the board level
->   arm64: dts: ti: k3-am65: Enable SPI nodes at the board level
->   arm64: dts: ti: k3-am65: Enable EPWM nodes at the board level
->   arm64: dts: ti: k3-am65: Enable ECAP nodes at the board level
->   arm64: dts: ti: k3-am65: MDIO pinmux should belong to the MDIO node
->   arm64: dts: ti: k3-am65: Enable MDIO nodes at the board level
->   arm64: dts: ti: k3-am65: Enable MCAN nodes at the board level
->   arm64: dts: ti: k3-am65: Enable PCIe nodes at the board level
->   arm64: dts: ti: k3-am65: Enable Mailbox nodes at the board level
->   arm64: dts: ti: k3-am65: Enable McASP nodes at the board level
-> 
->  .../boot/dts/ti/k3-am65-iot2050-common.dtsi   | 101 ++--------------
->  arch/arm64/boot/dts/ti/k3-am65-main.dtsi      |  41 +++++++
->  arch/arm64/boot/dts/ti/k3-am65-mcu.dtsi       |  18 ++-
->  arch/arm64/boot/dts/ti/k3-am65-wakeup.dtsi    |   2 +
->  .../ti/k3-am6528-iot2050-basic-common.dtsi    |   1 +
->  .../arm64/boot/dts/ti/k3-am654-base-board.dts | 113 ++++--------------
->  .../ti/k3-am6548-iot2050-advanced-common.dtsi |   4 -
->  7 files changed, 94 insertions(+), 186 deletions(-)
-> 
+On Thu, 3 Nov 2022 13:44:15 +0100
+Claudio Imbrenda <imbrenda@linux.ibm.com> wrote:
 
-(widely)
-Tested-by: Jan Kiszka <jan.kiszka@siemens.com>
+> On Wed,  2 Nov 2022 23:18:52 +0000
+> Sean Christopherson <seanjc@google.com> wrote:
+> 
+> > Move the guts of kvm_arch_init() into a new helper, __kvm_s390_init(),
+> > and invoke the new helper directly from kvm_s390_init() instead of
+> > bouncing through kvm_init().  Invoking kvm_arch_init() is the very
+> > first action performed by kvm_init(), i.e. this is a glorified nop.
+> > 
+> > Moving setup to __kvm_s390_init() will allow tagging more functions as
+> > __init, and emptying kvm_arch_init() will allow dropping the hook
+> > entirely once all architecture implementations are nops.
+> > 
+> > No functional change intended.
+> > 
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > ---
+> >  arch/s390/kvm/kvm-s390.c | 29 +++++++++++++++++++++++++----
+> >  1 file changed, 25 insertions(+), 4 deletions(-)
+> > 
+> > diff --git a/arch/s390/kvm/kvm-s390.c b/arch/s390/kvm/kvm-s390.c
+> > index 7fcd2d3b3558..e1c9980aae78 100644
+> > --- a/arch/s390/kvm/kvm-s390.c
+> > +++ b/arch/s390/kvm/kvm-s390.c
+> > @@ -461,7 +461,7 @@ static void kvm_s390_cpu_feat_init(void)
+> >  	 */
+> >  }
+> >  
+> > -int kvm_arch_init(void *opaque)
+> > +static int __kvm_s390_init(void)
+> >  {
+> >  	int rc = -ENOMEM;
+> >  
+> > @@ -519,7 +519,7 @@ int kvm_arch_init(void *opaque)
+> >  	return rc;
+> >  }
+> >  
+> > -void kvm_arch_exit(void)
+> > +static void __kvm_s390_exit(void)
+> >  {
+> >  	gmap_unregister_pte_notifier(&gmap_notifier);
+> >  	gmap_unregister_pte_notifier(&vsie_gmap_notifier);
+> > @@ -533,6 +533,16 @@ void kvm_arch_exit(void)
+> >  	debug_unregister(kvm_s390_dbf_uv);
+> >  }
+> >  
+> > +int kvm_arch_init(void *opaque)
+> > +{
+> > +	return 0;
+> > +}
+> > +
+> > +void kvm_arch_exit(void)
+> > +{
+> > +
+> > +}
+> > +  
+> 
+> I wonder at this point if it's possible to define kvm_arch_init and
+> kvm_arch_exit directly in kvm_main.c with __weak
 
-We are still seeing some likely unrelated issue on our latest board with
-mainline. Not all aspects could be tested for that reason, but I
-strongly suspect that this series won't break those.
+ah, nevermind, you get rid of them completely in the next patch
 
-Jan
-
--- 
-Siemens AG, Technology
-Competence Center Embedded Linux
+> 
+> >  /* Section: device related */
+> >  long kvm_arch_dev_ioctl(struct file *filp,
+> >  			unsigned int ioctl, unsigned long arg)
+> > @@ -5634,7 +5644,7 @@ static inline unsigned long nonhyp_mask(int i)
+> >  
+> >  static int __init kvm_s390_init(void)
+> >  {
+> > -	int i;
+> > +	int i, r;
+> >  
+> >  	if (!sclp.has_sief2) {
+> >  		pr_info("SIE is not available\n");
+> > @@ -5650,12 +5660,23 @@ static int __init kvm_s390_init(void)
+> >  		kvm_s390_fac_base[i] |=
+> >  			stfle_fac_list[i] & nonhyp_mask(i);
+> >  
+> > -	return kvm_init(NULL, sizeof(struct kvm_vcpu), 0, THIS_MODULE);
+> > +	r = __kvm_s390_init();
+> > +	if (r)
+> > +		return r;
+> > +
+> > +	r = kvm_init(NULL, sizeof(struct kvm_vcpu), 0, THIS_MODULE);
+> > +	if (r) {
+> > +		__kvm_s390_exit();
+> > +		return r;
+> > +	}
+> > +	return 0;
+> >  }
+> >  
+> >  static void __exit kvm_s390_exit(void)
+> >  {
+> >  	kvm_exit();
+> > +
+> > +	__kvm_s390_exit();
+> >  }
+> >  
+> >  module_init(kvm_s390_init);  
+> 
 
