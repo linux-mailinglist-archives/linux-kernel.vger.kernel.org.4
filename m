@@ -2,128 +2,155 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7EE8D617A84
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 11:02:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 488ED617A85
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 11:03:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbiKCKCd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 06:02:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36820 "EHLO
+        id S231283AbiKCKCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 06:02:43 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40600 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231318AbiKCKCS (ORCPT
+        with ESMTP id S230487AbiKCKCi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 06:02:18 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 36EC325F7;
-        Thu,  3 Nov 2022 03:02:14 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        Thu, 3 Nov 2022 06:02:38 -0400
+Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [5.144.164.170])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B4E26F0
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 03:02:37 -0700 (PDT)
+Received: from [192.168.31.208] (unknown [194.29.137.22])
         (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 10CF56602910;
-        Thu,  3 Nov 2022 10:02:12 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667469733;
-        bh=cJ7/RbB6T0ABdRfkEHmG42usHctHRiTqhYQyfhjHJMI=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=VvdeKyjARZCCL/SdvIIIfp++2uEa4iuO5NcBoZaStwwkIIX21PZoX5wF8gpW+u8Ax
-         xJEDis3rirygwyq53jDEAWaj2lTGxq+wgTkynVabwtR6PudpEjUJLp6cadg8A+1oY6
-         9WgwLhMf/FSOh5lop5mkzMdzTooiVTpBMoaxtGMM4ttxyjcbbACWmx4Fw7bwb/jvDq
-         q+v7pZDCMSGKvxNfFil79es3XPExbPKWqVz7KkZgTV+Q6XjJS5EbstUWU/q1I8NTI9
-         BFIDtkVHr9QUfIBZlHvw1tftEmnrD/PqQRIMtPA+uDZ+3KulOAm4nGTKs+ZkaP838O
-         WIVTgQD4If87w==
-Message-ID: <bb439583-9963-b705-9239-b8cedc71b5db@collabora.com>
-Date:   Thu, 3 Nov 2022 11:02:09 +0100
+        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id C26BA20240;
+        Thu,  3 Nov 2022 11:02:29 +0100 (CET)
+Message-ID: <e46c817b-1a3b-d20c-22e7-a67b7684f17b@somainline.org>
+Date:   Thu, 3 Nov 2022 11:02:30 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v3 10/10] media: platform: mtk-mdp3: decompose
- hardware-related information in shared memory
-Content-Language: en-US
-To:     Moudy Ho <moudy.ho@mediatek.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-Cc:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        linux-media@vger.kernel.org, linux-mediatek@lists.infradead.org,
-        linux-kernel@vger.kernel.org,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-References: <20221103064842.12042-1-moudy.ho@mediatek.com>
- <20221103064842.12042-11-moudy.ho@mediatek.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221103064842.12042-11-moudy.ho@mediatek.com>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH v2 12/12] arm64: dts: qcom: sc8280xp-x13s: Add thermal
+ zone support
+To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc:     andersson@kernel.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, johan+linaro@kernel.org,
+        quic_jprakash@quicinc.com, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        steev@kali.org
+References: <20221029051449.30678-1-manivannan.sadhasivam@linaro.org>
+ <20221029051449.30678-13-manivannan.sadhasivam@linaro.org>
+ <90b7e0e0-a354-f64d-8c53-aa80df684a3a@somainline.org>
+ <20221103055014.GA8434@thinkpad>
+From:   Konrad Dybcio <konrad.dybcio@somainline.org>
+In-Reply-To: <20221103055014.GA8434@thinkpad>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 03/11/22 07:48, Moudy Ho ha scritto:
-> The communication between the MDP3 kernel driver and SCP is to
-> pass a shared memory through the cooperation of "mtk-mdp3-vpu.c" and
-> remoteproc driver.
-> The data structure of this shared memory is defined in "mtk-img-ipi.h",
-> as shown below:
-> 
-> vpu->work_addr -> +-----------------------------------------+
->                    |                                         |
->                    | To SCP : Input frame parameters         |
->                    |          (struct img_ipi_frameparam)    |
->                    |                                         |
->       vpu->pool -> +-----------------------------------------+
->                    |                                         |
->                    | From SCP : Output component config pool |
->                    |            (struct img_config)          |
->                    |                                         |
->                    |           *struct img_confg 1           |
->                    |                    |                    |
->                    |                    |                    |
->                    |                    v                    |
->                    |           *struct img_config N          |
->                    |            (N = MDP_CONFIG_POOL_SIZE)   |
->                    +-----------------------------------------+
-> 
-> One output component configuration contains the components
-> currently used by the pipeline, and has the register settings
-> that each component needs to set.
-> 
-> Since the quantity, type and function of components on each chip
-> will vary, the effect is that the size of the "struct img_config"
-> and its substructures will be different on each chip.
-> In addition, all chips will have to update their SCP firmware for
-> every change if the output component config structure is defined
-> and shared by a common header.
-> 
-> Therefore, all functions that operate on "struct img_config" and
-> its substructures must be separated by chips and so are the
-> relevant definations.
-> 
-> Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
 
-Hi Moudy,
-thanks for this much needed rework of the IMG-IPI parameter passing architecture!
+On 03/11/2022 06:50, Manivannan Sadhasivam wrote:
+> On Sat, Oct 29, 2022 at 04:29:05PM +0200, Konrad Dybcio wrote:
+>>
+>> On 29.10.2022 07:14, Manivannan Sadhasivam wrote:
+>>> Add thermal zone support by making use of the thermistor SYS_THERM6.
+>>> Based on experiments, this thermistor seems to reflect the actual
+>>> surface temperature of the laptop.
+>>>
+>>> For the cooling device, all BIG CPU cores are throttle down to keep the
+>> s/throttle/throttled
+>>
+>> Is it okay to let the 4xA78C run at full throttle in thermal emergencies though?
+> I don't get it. Can you elaborate?
 
-I can for sure go for a review of the code that you've currently pushed, but I
-would prefer that you also push support for MT8192 and/or MT8195 (requiring the
-different IPI structures and alignment), as previously discussed.
+8280xp has 4xA78C and 4xX1C. You only added the latter ones to the 
+cooling map.
 
-That will make us able to actually perform validation and will make us able to
-give you a better code review.
 
-Since this series is definitely big (hence, a bit difficult to review, but that's
-fine, as there are no alternatives!), you can push support for the new chip(s) in
-a separate series, dependent on this one, so that we also won't block this rework
-for SoC-specific implementation code reviews.
+>
+>>> temperature at a sane level.
+>>>
+>>> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+>>> ---
+>>>   .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 46 +++++++++++++++++++
+>>>   1 file changed, 46 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+>>> index ca77c19c6d0d..96e2fa72f782 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+>>> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
+>>> @@ -29,6 +29,52 @@ backlight {
+>>>   		pinctrl-0 = <&edp_bl_en>, <&edp_bl_pwm>;
+>>>   	};
+>>>   
+>>> +	thermal-zones {
+>>> +		skin-temp-thermal {
+>>> +			polling-delay-passive = <250>;
+>>> +			polling-delay = <0>;
+>>> +			thermal-sensors = <&pmk8280_adc_tm 5>;
+>>> +
+>>> +			trips {
+>>> +				skin_temp_alert0: trip-point0 {
+>>> +					temperature = <55000>;
+>>> +					hysteresis = <1000>;
+>>> +					type = "passive";
+>>> +				};
+>>> +
+>>> +				skin_temp_alert1: trip-point1 {
+>>> +					temperature = <58000>;
+>>> +					hysteresis = <1000>;
+>>> +					type = "passive";
+>>> +				};
+>>> +
+>>> +				skin-temp-crit {
+>>> +					temperature = <73000>;
+>> Ouch, I didn't know we were serving burnt fingers at the cafeteria today :D
+>>
+>> Or maybe this just looks scary.. The laptop looks plastic, so maybe it won't cause instant
+>> burns?
+>>
+> 73c is what the reasonable number I came up with after some experiments. At
+> this point the temperature won't burn your finger but crossing this surely
+> would (that's what happening without this series).
 
-Many thanks again!
+Ok, then I suppose it's fine. Thanks!
 
-P.S.: There's a typo in this commit message `*struct img_confg` :-)
 
-Cheers,
-Angelo
+Konrad
+
+>
+> Thanks,
+> Mani
+>
+>> Konrad
+>>> +					hysteresis = <1000>;
+>>> +					type = "critical";
+>>> +				};
+>>> +			};
+>>> +
+>>> +			cooling-maps {
+>>> +				map0 {
+>>> +					trip = <&skin_temp_alert0>;
+>>> +					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+>>> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+>>> +							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+>>> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+>>> +				};
+>>> +
+>>> +				map1 {
+>>> +					trip = <&skin_temp_alert1>;
+>>> +					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+>>> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+>>> +							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
+>>> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
+>>> +				};
+>>> +			};
+>>> +		};
+>>> +	};
+>>> +
+>>>   	vreg_edp_bl: regulator-edp-bl {
+>>>   		compatible = "regulator-fixed";
+>>>   
