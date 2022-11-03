@@ -2,122 +2,158 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 84049617B2E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 11:59:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 72B37617B32
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 12:00:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229567AbiKCK7P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 06:59:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33942 "EHLO
+        id S231294AbiKCK7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 06:59:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34498 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231339AbiKCK7K (ORCPT
+        with ESMTP id S230017AbiKCK7u (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 06:59:10 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E35D2F0E;
-        Thu,  3 Nov 2022 03:59:08 -0700 (PDT)
-Received: from pendragon.ideasonboard.com (cpc89244-aztw30-2-0-cust3082.18-1.cable.virginm.net [86.31.172.11])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 2DDE4589;
-        Thu,  3 Nov 2022 11:59:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1667473147;
-        bh=fsK27h8kbSA/i0+lhbJgLA1FCVaIX2x7inLddU1g7Bs=;
-        h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
-        b=k3TMnj4WfTAH8YFeBcA6f2is+yng+J1K2iBlUpXeNs2HKa+uQpx8OvT/nbh0elHmA
-         wxBcRZT/F2D9h1wQbgd+CcmjiZVr3+z83eoFCqhbEYUZNLaf8r+MKrwf8JJNW3aNhT
-         HQiqPUB2qyAnAzClPBYfLd2VNpLff/aHTD15ew20=
-Content-Type: text/plain; charset="utf-8"
+        Thu, 3 Nov 2022 06:59:50 -0400
+Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08EB7109B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 03:59:50 -0700 (PDT)
+Received: by mail-pf1-x434.google.com with SMTP id y13so1243506pfp.7
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 03:59:50 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=tl6gvrKJpq1c2SMRIQkixJ9RHyBaATDZDYadUE36ADo=;
+        b=bGNCz6BI/X3dSE94R0ba6QyEEWxSsYixsiRVc3eqYT+xOJrJYnFPcQEuOt5Xcx7/C+
+         mXoyvj4knRHD2V8e2AhNKO2ehdnVWW5DGzf0i7GLopJLbJCzB1IOa4LxKlE03jL31aeP
+         lGYxws+DjOh22jTEPQ1PPK7ijJbVvZDFRuR+IbRcPPfawZ/duXNrnhtdNbPKvaos5Qmh
+         wQi/gL+CWGshJzmVyNXzucywYJE5kYvkx1+pPAlfVcHHLbDLMBZyyoIx7ygkZNIYkdet
+         w6fnn1JgkShaj3tpsQZ/7Pje2xXci6FBs1QMXDnlHvJFRON8KWk4jFt2OTNdAkO1eGRW
+         AqIQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=tl6gvrKJpq1c2SMRIQkixJ9RHyBaATDZDYadUE36ADo=;
+        b=Xo/zQ4uOaxl3xZ0N53rnHrqyzCvoa97qV0gfBysWaYgZvJzKcmf3H8zQVez0WA8axr
+         RjAg6hHQgZrNbccTxZPmA/lWNs1/D7INQEnjeHkCX9v3vl3qBOV12pIZ4iWg8kkX1Pjj
+         fLjG13Vc2MJ5+373DAtiyKq4EJb88IMItzZR1tmfeT6imFI2j2S8HhZZYPPwvPa3x5aU
+         zarsoUjk/NZbzu3cvpkAHAKkJ3+x3zXBf+3Cy4dfNKIVUqpOBLlSgvEiLiIDnywlJcWS
+         uc/kGtRDB2HmTTICpOvNrb97RXCCZvVBGUz9QcBe9qG+70U0quNzca47HwhYQXHjiA60
+         Ypfg==
+X-Gm-Message-State: ACrzQf17/M6UzA0hmvqlzdikoOTHZ+sAvtLKwzgeGJ/x7ioU8iE634mS
+        bgaaG35V0U4AiOy3qmhxTva8USfpC9N0+CWn5dPKmg==
+X-Google-Smtp-Source: AMsMyM5mH9Kbc/UTomJNMiJt8u9MMUAkTK5EumQHhGigQ8uemLyjJRlEChWmswJsa5eXfWYYXRrGMuDgD1V0RHHk1iM=
+X-Received: by 2002:a63:9049:0:b0:46f:59b9:1645 with SMTP id
+ a70-20020a639049000000b0046f59b91645mr25122160pge.541.1667473189454; Thu, 03
+ Nov 2022 03:59:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-In-Reply-To: <a68a24a0-eda3-8711-21c1-334289eca0d3@infradead.org>
-References: <20221018181828.19528-1-rdunlap@infradead.org> <a68a24a0-eda3-8711-21c1-334289eca0d3@infradead.org>
-Subject: Re: [PATCH] drm: rcar_du: DRM_RCAR_DU optionally depends on RCAR_MIPI_DSI
-From:   Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-Cc:     Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
-        LUU HOAI <hoai.luu.ub@renesas.com>,
-        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>
-To:     Randy Dunlap <rdunlap@infradead.org>, linux-kernel@vger.kernel.org
-Date:   Thu, 03 Nov 2022 10:59:04 +0000
-Message-ID: <166747314442.3962897.9754510086268412956@Monstersaurus>
-User-Agent: alot/0.10
+References: <CAPDyKFqJdiCDkAfrONfnBVKw1v8=jZ+hEJiKGK70EQ4o7BSxaQ@mail.gmail.com>
+ <20221103043852.24718-1-pshete@nvidia.com>
+In-Reply-To: <20221103043852.24718-1-pshete@nvidia.com>
+From:   Ulf Hansson <ulf.hansson@linaro.org>
+Date:   Thu, 3 Nov 2022 11:59:12 +0100
+Message-ID: <CAPDyKFrT46SXxiHw5=q8HwK5PMJCsp+iE8Wm4CsEqfBf6EWicA@mail.gmail.com>
+Subject: Re: [PATCH v10 1/4] iommu: Always define struct iommu_fwspec
+To:     joro@8bytes.org, robin.murphy@arm.com, will@kernel.org
+Cc:     Prathamesh Shete <pshete@nvidia.com>, adrian.hunter@intel.com,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        p.zabel@pengutronix.de, linux-mmc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
+        iommu@lists.linux.dev, anrao@nvidia.com, smangipudi@nvidia.com,
+        kyarlagadda@nvidia.com, Thierry Reding <treding@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Randy,
+On Thu, 3 Nov 2022 at 05:39, Prathamesh Shete <pshete@nvidia.com> wrote:
+>
+> In order to fully make use of the !IOMMU_API stub functions, make the
+> struct iommu_fwspec always available so that users of the stubs can keep
+> using the structure's internals without causing compile failures.
+>
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Quoting Randy Dunlap (2022-11-03 06:06:45)
-> ping. I have verified (on linux-next-20221103) that this is still needed.
-> Thanks.
->=20
-> On 10/18/22 11:18, Randy Dunlap wrote:
-> > When CONFIG_DRM_RCAR_DU=3Dy and CONFIG_DRM_RCAR_MIPI_DSI=3Dm, calls
-> > from the builtin driver to the mipi driver fail due to linker
-> > errors.
-> > Since the RCAR_MIPI_DSI driver is not always required, fix the
-> > build error by making DRM_RCAR_DU optionally depend on the
-> > RCAR_MIPI_DSI Kconfig symbol. This prevents the problematic
-> > kconfig combination without requiring that RCAR_MIPI_DSI always
-> > be enabled.
-> >=20
-> > aarch64-linux-ld: drivers/gpu/drm/rcar-du/rcar_du_crtc.o: in function `=
-rcar_du_crtc_atomic_enable':
-> > rcar_du_crtc.c:(.text+0x3a18): undefined reference to `rcar_mipi_dsi_pc=
-lk_enable'
-> > aarch64-linux-ld: drivers/gpu/drm/rcar-du/rcar_du_crtc.o: in function `=
-rcar_du_crtc_atomic_disable':
-> > rcar_du_crtc.c:(.text+0x47cc): undefined reference to `rcar_mipi_dsi_pc=
-lk_disable'
-> >=20
-> > Fixes: 957fe62d7d15 ("drm: rcar-du: Fix DSI enable & disable sequence")
-> > Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
-> > Cc: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
-> > Cc: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
-> > Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
-> > Cc: LUU HOAI <hoai.luu.ub@renesas.com>
-> > Cc: dri-devel@lists.freedesktop.org
-> > Cc: linux-renesas-soc@vger.kernel.org
-> > Cc: David Airlie <airlied@gmail.com>
-> > Cc: Daniel Vetter <daniel@ffwll.ch>
-> > ---
-> >  drivers/gpu/drm/rcar-du/Kconfig |    1 +
-> >  1 file changed, 1 insertion(+)
-> >=20
-> > diff -- a/drivers/gpu/drm/rcar-du/Kconfig b/drivers/gpu/drm/rcar-du/Kco=
-nfig
-> > --- a/drivers/gpu/drm/rcar-du/Kconfig
-> > +++ b/drivers/gpu/drm/rcar-du/Kconfig
-> > @@ -4,6 +4,7 @@ config DRM_RCAR_DU
-> >       depends on DRM && OF
-> >       depends on ARM || ARM64
-> >       depends on ARCH_RENESAS || COMPILE_TEST
-> > +     depends on DRM_RCAR_MIPI_DSI || DRM_RCAR_MIPI_DSI=3Dn
+Joerg, Will, Robin - may I have an ack from some of you for $subject
+patch, so I can funnel it via my mmc tree for v6.2?
 
-Please forgive my ignorance, but I don't understand how this works.
-Could you explain what this is doing please?
+Kind regards
+Uffe
 
-I know you've explained above that it fixes it to optionally depend on
-DRM_RCAR_MIPI_DSI ... but it's not making sense to me.
-
-To me - this is saying we depend on DRM_RCAR_MIPI_DSI being enabled, or
-not being enabled ... ? Which is like saying if (0 || 1) ?
-
-I'm guessing I'm missing something obvious :-S
-
---
-Kieran
-
-
-> >       select DRM_KMS_HELPER
-> >       select DRM_GEM_DMA_HELPER
-> >       select VIDEOMODE_HELPERS
->=20
-> --=20
-> ~Randy
+> ---
+>  include/linux/iommu.h | 39 +++++++++++++++++++--------------------
+>  1 file changed, 19 insertions(+), 20 deletions(-)
+>
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index ea30f00dc145..afa829bc4356 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -173,6 +173,25 @@ enum iommu_dev_features {
+>
+>  #define IOMMU_PASID_INVALID    (-1U)
+>
+> +/**
+> + * struct iommu_fwspec - per-device IOMMU instance data
+> + * @ops: ops for this device's IOMMU
+> + * @iommu_fwnode: firmware handle for this device's IOMMU
+> + * @flags: IOMMU_FWSPEC_* flags
+> + * @num_ids: number of associated device IDs
+> + * @ids: IDs which this device may present to the IOMMU
+> + */
+> +struct iommu_fwspec {
+> +       const struct iommu_ops  *ops;
+> +       struct fwnode_handle    *iommu_fwnode;
+> +       u32                     flags;
+> +       unsigned int            num_ids;
+> +       u32                     ids[];
+> +};
+> +
+> +/* ATS is supported */
+> +#define IOMMU_FWSPEC_PCI_RC_ATS                        (1 << 0)
+> +
+>  #ifdef CONFIG_IOMMU_API
+>
+>  /**
+> @@ -600,25 +619,6 @@ extern struct iommu_group *generic_device_group(struct device *dev);
+>  /* FSL-MC device grouping function */
+>  struct iommu_group *fsl_mc_device_group(struct device *dev);
+>
+> -/**
+> - * struct iommu_fwspec - per-device IOMMU instance data
+> - * @ops: ops for this device's IOMMU
+> - * @iommu_fwnode: firmware handle for this device's IOMMU
+> - * @flags: IOMMU_FWSPEC_* flags
+> - * @num_ids: number of associated device IDs
+> - * @ids: IDs which this device may present to the IOMMU
+> - */
+> -struct iommu_fwspec {
+> -       const struct iommu_ops  *ops;
+> -       struct fwnode_handle    *iommu_fwnode;
+> -       u32                     flags;
+> -       unsigned int            num_ids;
+> -       u32                     ids[];
+> -};
+> -
+> -/* ATS is supported */
+> -#define IOMMU_FWSPEC_PCI_RC_ATS                        (1 << 0)
+> -
+>  /**
+>   * struct iommu_sva - handle to a device-mm bond
+>   */
+> @@ -682,7 +682,6 @@ bool iommu_group_dma_owner_claimed(struct iommu_group *group);
+>
+>  struct iommu_ops {};
+>  struct iommu_group {};
+> -struct iommu_fwspec {};
+>  struct iommu_device {};
+>  struct iommu_fault_param {};
+>  struct iommu_iotlb_gather {};
+> --
+> 2.17.1
+>
