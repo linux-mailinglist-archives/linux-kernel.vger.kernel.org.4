@@ -2,194 +2,144 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CB96B617C3D
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:12:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41FED617C40
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:13:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231519AbiKCMMl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 08:12:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40832 "EHLO
+        id S231524AbiKCMNl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 08:13:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41512 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229882AbiKCMMh (ORCPT
+        with ESMTP id S229850AbiKCMNh (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 08:12:37 -0400
-Received: from mail-pf1-x429.google.com (mail-pf1-x429.google.com [IPv6:2607:f8b0:4864:20::429])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D113FDDF
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 05:12:35 -0700 (PDT)
-Received: by mail-pf1-x429.google.com with SMTP id v28so1387957pfi.12
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 05:12:35 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=rieV2SdG8Mne1lxC+rYgGfokYn80pf6/u2BwWRn0Sa8=;
-        b=c0tT0ytkIGnqZS9md6cRj/skv0p3s9o9YUJ12rIVp0tf5XWrqoZpQ5jyc2bASunn08
-         avIYT7RBqtT9KBIrhIYDT8tiJuJwPppPNvui1v3S3QQXNz6k3Vd1rObtd6IgQ6AEumgH
-         I6P+N/0tDH6AVwNnv3ICutpmT4ETirJ404d5S3vEdysntZgqLcR5Io8DX3NIM/BVhRQA
-         ekjvNUflGxsTbQLgqH3dkh8BF9lOPk+dgSk5bdmTugtnNmfcbBsksse1sZTW9aEsaoGA
-         QKMUmTdvBmruOuLf4sCwi4ndNH9krFSE147UDQcYr/dJKYEbYfPlc2rgh9btp4sK/eib
-         gIcg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rieV2SdG8Mne1lxC+rYgGfokYn80pf6/u2BwWRn0Sa8=;
-        b=HHQ2UlQK6YnfqlPdoRJ/8IG4ASRxmtzO4wVICW55Uho0VoxFo/yNa3nia7AjSHHTLC
-         GshJzeAEMcFruYDwa5SGrPGkGY9o+yWVuHHM5utM6zVumcTxMuc7xnXGNmHgPyybrcBM
-         7RRdIIXCaSTklletEfGoi+xaGmPlLd3KY+/aHJbZMeHqSOzOQW1tep9fs+RRLcT2TC8/
-         2deHbV4lL0gNYgLh2tbksQLH1vhErbfLX66sglrAVMNSmHKU9IpjQKLB5ARCk5k++pXz
-         3/QEvm3CeFQKzHewSa8mHYyAdDgDkGHPC167KNMqV/RJropyV5I6VJCpeaFb7PKd6N93
-         tc/A==
-X-Gm-Message-State: ACrzQf0dNBmziANjFVBdaFvNjxymxDTOSHKbPCxbuG8cy+MitWx4xHW3
-        1smlm5CPQCGXKgomb5lQx5s0
-X-Google-Smtp-Source: AMsMyM5MvSMm8DZRRoUBG8baRgK1tsDVj6xLuyNJi/jpppTIwzgYHsAlA4LC9r7rDPe2PErVWX/yCQ==
-X-Received: by 2002:a05:6a00:cd4:b0:56c:b47:a743 with SMTP id b20-20020a056a000cd400b0056c0b47a743mr29723853pfv.25.1667477555333;
-        Thu, 03 Nov 2022 05:12:35 -0700 (PDT)
-Received: from thinkpad ([59.92.102.81])
-        by smtp.gmail.com with ESMTPSA id d1-20020a17090a114100b0021358bd24b9sm3240468pje.21.2022.11.03.05.12.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 05:12:34 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 17:42:28 +0530
-From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To:     Konrad Dybcio <konrad.dybcio@somainline.org>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, johan+linaro@kernel.org,
-        quic_jprakash@quicinc.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        steev@kali.org
-Subject: Re: [PATCH v2 12/12] arm64: dts: qcom: sc8280xp-x13s: Add thermal
- zone support
-Message-ID: <20221103121228.GB8434@thinkpad>
-References: <20221029051449.30678-1-manivannan.sadhasivam@linaro.org>
- <20221029051449.30678-13-manivannan.sadhasivam@linaro.org>
- <90b7e0e0-a354-f64d-8c53-aa80df684a3a@somainline.org>
- <20221103055014.GA8434@thinkpad>
- <e46c817b-1a3b-d20c-22e7-a67b7684f17b@somainline.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+        Thu, 3 Nov 2022 08:13:37 -0400
+Received: from AUS01-SY4-obe.outbound.protection.outlook.com (mail-sy4aus01olkn2150.outbound.protection.outlook.com [40.92.62.150])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D7A0C103B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 05:13:36 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=mLAEh8vq3SnzS6IUUoag8PPFtSjXm4N0dI5ZfkbjLEmuGb9nDPxRkxCz/ZNqwCQyopbemawv+s36LL2PaL0stBA6KdlALgdMlKMAbHRmiOnDQNjyZeZtgbgR7j+GuVdCSOf1hhM3M0xpmM0NOFYsTKbru2jbnp3lFFdWJAtbUfXe2/0W1UnLbB6s0O/wJLE1wzHUBYywG13Ky3SWXkn72hsKxu8iJQyTza9zbMgWfuyxmYWL3SKr9eaNI+jNC6EuTYeqiANSzJAeuprfyT5O50/0GzO/zdOQ2NzfMqzk06FAtzMRjEL04y9qKN4wNAUCGaPOA+QwY5gUr9uUwr7ecA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=tPC8DSSjzaUDc1d0LQe3616OCJpMBf721vuenp4E/bs=;
+ b=nhaB1ojwpO+wxllEwXx57Z5WvoVb7W8i/F/0qAsy6DssjIqJrZiDzDGcM0C+Y2VASD6e7MWk6pK97vrPHNjwcSZ4nXonbqi8i9VIggoIqvs73kCExlTxZPkdJMVKSUXhOsD1b9UtAD09B9+8u+KXCnLjetY4boXjTfdvjdSbM7qsZJElAYIpv03hvKu9s7CLwmoiTs+P1m/hhrcv6B4iWlRScV5z5rysOsPjOGNNKNy8iH37HsIgCqz8SfRCYVhShdkeQ6LNm3aV58cka3PHh0IMBTYPGvGmfyorXVZGveJn8xo6x86cunRbHpyQ1r0eirXA2r99lAQz6sTYWtm8bA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=tPC8DSSjzaUDc1d0LQe3616OCJpMBf721vuenp4E/bs=;
+ b=Ko0+XaoCy44ADQ0VLIQsi6P1Rp4+oSKJ3akAyg724xGJRb1gkJzlpW0XzKFxHkt7ohq5FJvsOz+I6Neuf+0eYkBu9m7EnWswU9z3yZXSDBQfBmXWNCMaX1zY+nLYay/3FiYpwMfSUkC9ojPv/S6bMceF4DM2kI7jQqQSy6F4QL7W62lSVR9dWSE/14rhKmfq1SsBYhDeeI92qk6IrZ9BYI/oA+PXyAvBYfYlJfPZS2I1zWPbBRH/6UPmvQSFhYrs++goF0udy1/lUXwaGyBCYWmNZH+yWG/iPeH/Ej9+QlEkmaWTcNneynnjuzbUTjb0QpeYASDuo1tNE6X2oovYNw==
+Received: from MEYP282MB4026.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:172::10)
+ by ME3P282MB1587.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:ab::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.22; Thu, 3 Nov
+ 2022 12:13:32 +0000
+Received: from MEYP282MB4026.AUSP282.PROD.OUTLOOK.COM
+ ([fe80::8e6c:7cd7:be5d:66da]) by MEYP282MB4026.AUSP282.PROD.OUTLOOK.COM
+ ([fe80::8e6c:7cd7:be5d:66da%8]) with mapi id 15.20.5791.022; Thu, 3 Nov 2022
+ 12:13:32 +0000
+From:   johnnyaiai <arafatms@outlook.com>
+To:     jgross@suse.com
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, hpa@zytor.com,
+        linux-kernel@vger.kernel.org,
+        virtualization@lists.linux-foundation.org,
+        johnnyaiai <johnnyaiai@tencent.com>
+Subject: [PATCH] locking/paravirt: Fix performance regression on core bonded vCPU
+Date:   Thu,  3 Nov 2022 20:13:19 +0800
+Message-ID: <MEYP282MB402614DB5A4625255B689F06C3389@MEYP282MB4026.AUSP282.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.27.0
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <e46c817b-1a3b-d20c-22e7-a67b7684f17b@somainline.org>
-X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-TMN:  [eVk9YxkbenbI9qG9HEKGEWSKQTydVAZ5]
+X-ClientProxiedBy: SG2PR04CA0214.apcprd04.prod.outlook.com
+ (2603:1096:4:187::17) To MEYP282MB4026.AUSP282.PROD.OUTLOOK.COM
+ (2603:10c6:220:172::10)
+X-Microsoft-Original-Message-ID: <20221103121319.3390542-1-arafatms@outlook.com>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MEYP282MB4026:EE_|ME3P282MB1587:EE_
+X-MS-Office365-Filtering-Correlation-Id: 2fa08f63-312d-4773-eef4-08dabd94d2f7
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: HpGjtO34Z5sByMYWxnXhck/TgnghaaqlSrakbim+CTG+LJtmKkA+jQuDonX6cEouYLNY69jYa3mI3c/n6bl/CZiCcwePXL7jT9AsVTLt0jmeaJySXpxcd6TI3LS+LKs3YA/v+sQnqBu6cwb5VF9+bDmHOTth18zUwRnJkSlvcCGoB5tp18e6p284p58XqsNOjK2woSq5CVafmBJb4MG2zhdzMlyp9crmzUQ2mursqtulAxsgbh42eL1rGLYOyag4Swqj2Qkfi7KIhS21/z8YF6BEGvvTDkXleRDHVCtUpONcQBnoo5iLXtXum3gXkOAsRseo/wQ7NP3Js/kZgkWFf1Nowdi3yUqNdRBbie8O3OC9Vyis7Iv9kf8KHWuUTFeg5eY4vyi8RJmFuGW2KAnCeCmKORirnqKxVuax+4oYeccaj7P9jOnjF5KJ2BfLLB430iFqnxQv/oxjBsXEZXixW1HzkjlRc35D+T/CjpwhpAdei4T3xJls142yHU2i2lV6pl71xisUt3M5TIce/JwjCq8AYCPuKg9gaaz3SaVZawoTTgBixpgttDr5B+hjX5grim8Dieixdl+9NUHMw6ZeWJehG4WOS8ens1GlUX9fsNhZxFdGiXmEz3wgQOLEI+deDWAzb5awwxBOuLA01QYx4g==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?GOr9jNWEE3xIPdHnormDGq19ZMjIgVSqno5LYT3TDvx9t2FLYzOK7EBx1Obt?=
+ =?us-ascii?Q?6K4ll9S7GbU3a5lDpLl7U/QWGrcVpPz8Np6/Dq05i0Db2LOnuQYFEcOUESbs?=
+ =?us-ascii?Q?4eEa3CSp/PGMAk6MoWULX6UPNCZgRnd1rI6PqL8gjVClTKaFBWCaB15xF+gj?=
+ =?us-ascii?Q?6JAi7kMc1o7jMx1DRd3/fYADmTD5tewQI9u5Vqop6z0lkuLUkP8iZlBV0GT6?=
+ =?us-ascii?Q?4ZS/SHGF03kQViU3Ky10LCsZJ+9hPU732nk4GBSkQWI2BwNmNwk8R9JuXznk?=
+ =?us-ascii?Q?GLMAvksyi+HtE3Y9HnHE7h/422RBXDgyq6lPFLOJ+PdUp/FPSxjAzn9KJZTZ?=
+ =?us-ascii?Q?XbdIzSBvTHQuUoCVmqudubTfyKHiNteYq70SprJvdFaHC+7uHxMvNgl0Oz8Z?=
+ =?us-ascii?Q?0NKuZ64y9z2hoYzkc84zsZobOOdGX3mVKk4GCmEcgPEfqJ/fJdQLa/2ER1tR?=
+ =?us-ascii?Q?thmYvfWD9/utMyJ+Yz1bE6nFfUb70pL+AA5UVmsZguZxNGeX3gSAjVKZpQEf?=
+ =?us-ascii?Q?MK6zkCfPO8s40hx65P1Qs1IzIV5+xY72QQfc3Xkj5FZaHB19sODYcYmMCdpE?=
+ =?us-ascii?Q?5/+HMw/8lwH3AQxOkxhHaI106ZEHdCuMi3PDaqmxqFvDbHCCxWvqmRl0smQ7?=
+ =?us-ascii?Q?7WhCYqzQy+98wxTr+45VUJmemc/+rIFMj4Kqv8BkYmIP/OMQunJeYKzQTNNm?=
+ =?us-ascii?Q?fdQjNfwp5a1coJeatKtFv9Jsa4oibDRslOI+oCeaMNNH8M3CDHhe3ey27o2z?=
+ =?us-ascii?Q?ausJw1bscYP719N3h4iz6Qp2/GtYiKFnqFmSt1+d/nb9pv1jpl6CydHZjSRx?=
+ =?us-ascii?Q?MqdY5Amo+RXaRj3vDECz4nYR2BYYUlo2XuGBUwX/+TJpspISYDsOeOrVVXd+?=
+ =?us-ascii?Q?iI4wN0otiz94XUlher6W9VRGsvc5N3mbpvdKCvvlpfZy+EEzahGoJsaSltIm?=
+ =?us-ascii?Q?1scjBgpBYsbfFNa9BGtWeZHj1EqIDW9CIobD5+6xvXewBNZ+TWSQq37XfxRi?=
+ =?us-ascii?Q?Q9ngjmOkCichJD5K5UlKn/IaS9RmLU3XcUc2vuypynfctDVYdP7gkx/y0i4A?=
+ =?us-ascii?Q?7JHHySHa0R6ZoweTrDLwbGVq+taLVE39vGN/No1E0kIE39EcVfOVpPNdHa4o?=
+ =?us-ascii?Q?JBeV6QTfPe3lLLgi6rMfcvZiW+swGjrmI8XzxQ3LKCSH7dNr5B8fcLik3g2L?=
+ =?us-ascii?Q?qCH2do6AsOnjsZs/WaERIVomKwRzY2+oOFU8TELJS/rnsPfSTYARu9iXOkAq?=
+ =?us-ascii?Q?q+wZM2lk9v70KMybv719W8E2f+GBoZwZC03HVRizYQ=3D=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 2fa08f63-312d-4773-eef4-08dabd94d2f7
+X-MS-Exchange-CrossTenant-AuthSource: MEYP282MB4026.AUSP282.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Nov 2022 12:13:32.2382
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: ME3P282MB1587
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 11:02:30AM +0100, Konrad Dybcio wrote:
-> 
-> On 03/11/2022 06:50, Manivannan Sadhasivam wrote:
-> > On Sat, Oct 29, 2022 at 04:29:05PM +0200, Konrad Dybcio wrote:
-> > > 
-> > > On 29.10.2022 07:14, Manivannan Sadhasivam wrote:
-> > > > Add thermal zone support by making use of the thermistor SYS_THERM6.
-> > > > Based on experiments, this thermistor seems to reflect the actual
-> > > > surface temperature of the laptop.
-> > > > 
-> > > > For the cooling device, all BIG CPU cores are throttle down to keep the
-> > > s/throttle/throttled
-> > > 
-> > > Is it okay to let the 4xA78C run at full throttle in thermal emergencies though?
-> > I don't get it. Can you elaborate?
-> 
-> 8280xp has 4xA78C and 4xX1C. You only added the latter ones to the cooling
-> map.
-> 
+From: johnnyaiai <johnnyaiai@tencent.com>
 
-Right, that's because the first 4 cores doesn't contribute to thermal much and
-thottling them doesn't yield any thermal gain.
+virt_spin_lock() is preferred over native qspinlock when
+vCPU is preempted. But brings a lot of regression while
+vCPU is not preempted. Provide a early param 'novirtlock'
+to choose would be better.
 
-Thanks,
-Mani
+will-it-scale/lock2_threads -s 10 -t 64
+baseline    afterpatch
+559938       2166135
 
-> 
-> > 
-> > > > temperature at a sane level.
-> > > > 
-> > > > Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > > > ---
-> > > >   .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 46 +++++++++++++++++++
-> > > >   1 file changed, 46 insertions(+)
-> > > > 
-> > > > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> > > > index ca77c19c6d0d..96e2fa72f782 100644
-> > > > --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> > > > +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
-> > > > @@ -29,6 +29,52 @@ backlight {
-> > > >   		pinctrl-0 = <&edp_bl_en>, <&edp_bl_pwm>;
-> > > >   	};
-> > > > +	thermal-zones {
-> > > > +		skin-temp-thermal {
-> > > > +			polling-delay-passive = <250>;
-> > > > +			polling-delay = <0>;
-> > > > +			thermal-sensors = <&pmk8280_adc_tm 5>;
-> > > > +
-> > > > +			trips {
-> > > > +				skin_temp_alert0: trip-point0 {
-> > > > +					temperature = <55000>;
-> > > > +					hysteresis = <1000>;
-> > > > +					type = "passive";
-> > > > +				};
-> > > > +
-> > > > +				skin_temp_alert1: trip-point1 {
-> > > > +					temperature = <58000>;
-> > > > +					hysteresis = <1000>;
-> > > > +					type = "passive";
-> > > > +				};
-> > > > +
-> > > > +				skin-temp-crit {
-> > > > +					temperature = <73000>;
-> > > Ouch, I didn't know we were serving burnt fingers at the cafeteria today :D
-> > > 
-> > > Or maybe this just looks scary.. The laptop looks plastic, so maybe it won't cause instant
-> > > burns?
-> > > 
-> > 73c is what the reasonable number I came up with after some experiments. At
-> > this point the temperature won't burn your finger but crossing this surely
-> > would (that's what happening without this series).
-> 
-> Ok, then I suppose it's fine. Thanks!
-> 
-> 
-> Konrad
-> 
-> > 
-> > Thanks,
-> > Mani
-> > 
-> > > Konrad
-> > > > +					hysteresis = <1000>;
-> > > > +					type = "critical";
-> > > > +				};
-> > > > +			};
-> > > > +
-> > > > +			cooling-maps {
-> > > > +				map0 {
-> > > > +					trip = <&skin_temp_alert0>;
-> > > > +					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> > > > +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> > > > +							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> > > > +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-> > > > +				};
-> > > > +
-> > > > +				map1 {
-> > > > +					trip = <&skin_temp_alert1>;
-> > > > +					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> > > > +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> > > > +							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
-> > > > +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
-> > > > +				};
-> > > > +			};
-> > > > +		};
-> > > > +	};
-> > > > +
-> > > >   	vreg_edp_bl: regulator-edp-bl {
-> > > >   		compatible = "regulator-fixed";
+Signed-off-by: johnnyaiai <johnnyaiai@tencent.com>
+---
+ arch/x86/kernel/paravirt.c | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
+diff --git a/arch/x86/kernel/paravirt.c b/arch/x86/kernel/paravirt.c
+index 59d3d2763..529cf23fe 100644
+--- a/arch/x86/kernel/paravirt.c
++++ b/arch/x86/kernel/paravirt.c
+@@ -107,6 +107,13 @@ static unsigned paravirt_patch_jmp(void *insn_buff, const void *target,
+ 
+ DEFINE_STATIC_KEY_TRUE(virt_spin_lock_key);
+ 
++static __init int parse_novirtspin(char *arg)
++{
++	static_branch_disable(&virt_spin_lock_key);
++	return 0;
++}
++early_param("novirtspin", parse_novirtspin);
++
+ void __init native_pv_lock_init(void)
+ {
+ 	if (!boot_cpu_has(X86_FEATURE_HYPERVISOR))
 -- 
-மணிவண்ணன் சதாசிவம்
+2.27.0
+
