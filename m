@@ -2,156 +2,108 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5438661834C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:53:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0843A61834E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:54:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232158AbiKCPxf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 11:53:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57600 "EHLO
+        id S229655AbiKCPyR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 11:54:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57880 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231770AbiKCPxd (ORCPT
+        with ESMTP id S231983AbiKCPyP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 11:53:33 -0400
-Received: from mail-pg1-x52d.google.com (mail-pg1-x52d.google.com [IPv6:2607:f8b0:4864:20::52d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8854D167DA
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:53:32 -0700 (PDT)
-Received: by mail-pg1-x52d.google.com with SMTP id s196so2032162pgs.3
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 08:53:32 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=iefhXYcFca+HyMrTaCiWzQ24fHFIs/brIYiJSEqSUcQ=;
-        b=mnEgPRYk2PPB666Mwc6QMzwxTKX+rHctMioHYBKj2e0+U0kbTQLPG0Vk5U7nmSb9wV
-         PISe2i9oNNIXplC90+WVjOWIs8l49/kPSfcN5II4Ot73q+9bAJawAHd55MYPSnkXs/qj
-         FIRWz0djKi2SgpHLqSCp3pK9HC57ylPOzHGkWmSRlY6zO929FS1SFMnoj31Gdvi6PF9V
-         JSPUHze4LGYGvzrfdncqMAS65bVQF/8vr7ji42neU0tBUIHYsKx7ATT+TXTyhdDxBW6g
-         OIvvRJPvZqzRKqXvqCisKq8OrHP5H5/DI8tUlmMMR+ZE8FtbzYgWXqDHgm6CsU4OuH85
-         VXIQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=iefhXYcFca+HyMrTaCiWzQ24fHFIs/brIYiJSEqSUcQ=;
-        b=T1/SHSAjDqMDRdf55d4/koayv4KiaKaFIAOW3WF+7Cx0l2xtElhnG8vKSE6NkIiT0b
-         ULDYL30Y1fYDzweGplZEgZO1RtsU5Wm01FhqsBcyWY309atEHytCYjiY80PpEV5btlUn
-         C4sGeZvXkesgjROL76Cm25lhWLRdsB3lJuZ5ovKWGi3ev3qnbJd+b8dxOdLX1ZI+mdVl
-         FnJ6lDQH0EfBbC5IbbzU1u8DCQm6WyCFwg7luLQeI3t8JrSrZ3qVYO28qJuIz6WqAHJ3
-         hwL8MNQ0aoqIoWXCiqExNFPFMuisahioHfjx+7u8jRPpShKzGWgxTWTAURmaDxPZtysw
-         c//w==
-X-Gm-Message-State: ACrzQf0046LuXWdvWX7GRss15uZ1IWfVku+G3yoU32UhcLUlNIchcwQA
-        bgwCkyv1l1KqFSwxLcnGU6ZFFi0+W8c=
-X-Google-Smtp-Source: AMsMyM4fr0j5T3py3yG/3/HWamAEHR9CXTW4h3U6KJORTNzMY9j5TYUF1eC9OhTEn2s6p+YvKd5f9w==
-X-Received: by 2002:a63:e007:0:b0:46f:d715:3704 with SMTP id e7-20020a63e007000000b0046fd7153704mr15322741pgh.108.1667490811941;
-        Thu, 03 Nov 2022 08:53:31 -0700 (PDT)
-Received: from google.com ([2620:15c:211:201:3d65:7dc2:c62a:5d98])
-        by smtp.gmail.com with ESMTPSA id k9-20020a17090a3cc900b00212d9a06edcsm125728pjd.42.2022.11.03.08.53.30
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 08:53:31 -0700 (PDT)
-Sender: Minchan Kim <minchan.kim@gmail.com>
-Date:   Thu, 3 Nov 2022 08:53:29 -0700
-From:   Minchan Kim <minchan@kernel.org>
-To:     Johannes Weiner <hannes@cmpxchg.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        ngupta@vflare.org, sjenning@redhat.com, ddstreet@ieee.org,
-        vitaly.wool@konsulko.com
-Subject: Re: [PATCH 2/5] zsmalloc: Consolidate zs_pool's migrate_lock and
- size_class's locks
-Message-ID: <Y2Pj+fuON8lTMcmn@google.com>
-References: <20221026200613.1031261-1-nphamcs@gmail.com>
- <20221026200613.1031261-3-nphamcs@gmail.com>
- <Y2Hj+H4VzlN/fcmR@google.com>
- <Y2Li412OGB6g8ARA@google.com>
- <Y2PbrOqRMLDsYev0@cmpxchg.org>
+        Thu, 3 Nov 2022 11:54:15 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [5.9.137.197])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 09072DF06;
+        Thu,  3 Nov 2022 08:54:15 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e7e7329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7e7:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 9076F1EC0559;
+        Thu,  3 Nov 2022 16:54:13 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1667490853;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=rA76MiReFYdyzzFnwVP8TI+Yl5vD+IAy50wE2e/pB5o=;
+        b=Q/42eQoMNEpt6v+yMF7SaTCBQyI5cOTWZsxTCcL6g3/hzbNlTitjCnWQ88xqkhu/FWRymK
+        Yb1zoedOXZSjiEJ4AC2A3WoEtNnflcCGCJIWEEJYCYhIhHV/xToo/DQ+YOqFZtP5ofOS+H
+        YnzBPdUv7j4yAJ9/0NbUyRp3pBDX/x4=
+Date:   Thu, 3 Nov 2022 16:54:09 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     Andrew Jones <ajones@ventanamicro.com>
+Cc:     Yury Norov <yury.norov@gmail.com>, x86@kernel.org,
+        linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        openrisc@lists.librecores.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "open list:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] x86: Fix /proc/cpuinfo cpumask warning
+Message-ID: <Y2PkIUZDS8/qMRWq@zn.tnic>
+References: <Y1vvMlwf/4EA/8WW@zn.tnic>
+ <CAAH8bW_DkvPCH0-q2Bfe0OJ72r63mRM3GP7NKOFrhe3zMO2gbQ@mail.gmail.com>
+ <Y1v+Ed6mRN9gisJS@zn.tnic>
+ <20221031080604.6xei6c4e3ckhsvmy@kamzik>
+ <Y1+OUawGJDjh4DOJ@zn.tnic>
+ <20221031100327.r7tswmpszvs5ot5n@kamzik>
+ <Y2K6clNJBn0SbWU+@zn.tnic>
+ <20221103125945.lrr5oxxmylwpam53@kamzik>
+ <Y2PX9GfxWYh6+XGT@zn.tnic>
+ <20221103153404.uh77nrdkowrxj6cr@kamzik>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Y2PbrOqRMLDsYev0@cmpxchg.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        FSL_HELO_FAKE,HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+In-Reply-To: <20221103153404.uh77nrdkowrxj6cr@kamzik>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 11:18:04AM -0400, Johannes Weiner wrote:
-> On Wed, Nov 02, 2022 at 02:36:35PM -0700, Minchan Kim wrote:
-> > On Wed, Nov 02, 2022 at 12:28:56PM +0900, Sergey Senozhatsky wrote:
-> > > On (22/10/26 13:06), Nhat Pham wrote:
-> > > >  struct size_class {
-> > > > -	spinlock_t lock;
-> > > >  	struct list_head fullness_list[NR_ZS_FULLNESS];
-> > > >  	/*
-> > > >  	 * Size of objects stored in this class. Must be multiple
-> > > > @@ -247,8 +245,7 @@ struct zs_pool {
-> > > >  #ifdef CONFIG_COMPACTION
-> > > >  	struct work_struct free_work;
-> > > >  #endif
-> > > > -	/* protect page/zspage migration */
-> > > > -	rwlock_t migrate_lock;
-> > > > +	spinlock_t lock;
-> > > >  };
-> > > 
-> > > I'm not in love with this, to be honest. One big pool lock instead
-> > > of 255 per-class locks doesn't look attractive, as one big pool lock
-> > > is going to be hammered quite a lot when zram is used, e.g. as a regular
-> > > block device with a file system and is under heavy parallel writes/reads.
-> 
-> TBH the class always struck me as an odd scope to split the lock. Lock
-> contention depends on how variable the compression rate is of the
-> hottest incoming data, which is unpredictable from a user POV.
-> 
-> My understanding is that the primary usecase for zram is swapping, and
-> the pool lock is the same granularity as the swap locking.
+On Thu, Nov 03, 2022 at 04:34:04PM +0100, Andrew Jones wrote:
+> Indeed, but that's less of an issue with cpumask_next() than with
+> the way cpuinfo implements its start and next seq ops (next
+> unconditionally increments *pos and then calls start and start
+> must use *pos - 1 since the first time its called it needs to use
+> -1).
 
-People uses the zram to store caching object files in build server.
+Maybe because those are done wrongly...
 
-> 
-> Regardless, we'll do some benchmarks with filesystems to understand
-> what a reasonable tradeoff would be between overhead and complexity.
+A ->next() function should not call the ->start() function. A ->start()
+function should, well, only start and nothing else.
 
-Thanks.
+And a ->stop() function should maybe check *pos and say whether one
+should stop or not.
 
-> Do you have a particular one in mind? (I'm thinking journaled ones are
-> not of much interest, since their IO tends to be fairly serialized.)
-> 
-> btrfs?
+But I haven't looked at seq_ops at least in a decade and I have no clue
+whether that would work.
 
-I am not sure what FSes others are using but at least for me, just
-plain ext4.
+I'm just looking at the function pointers and am trying to spell out
+what looks most natural IMO.
 
-> 
-> > I am also worry about that LRU stuff should be part of allocator
-> > instead of higher level.
-> 
-> I'm sorry, but that's not a reasonable objection.
-> 
-> These patches implement a core feature of being a zswap backend, using
-> standard LRU and locking techniques established by the other backends.
-> 
-> I don't disagree that it would nicer if zswap had a strong abstraction
-> for backend pages and a generalized LRU. But that is major surgery on
-> a codebase of over 6,500 lines. It's not a reasonable ask to change
-> all that first before implementing a basic feature that's useful now.
+IOW, maybe this should be fixed "right" and not only "made to work".
 
-With same logic, folks added the LRU logic into their allocators
-without the effort considering moving the LRU into upper layer.
+Thx.
 
-And then trend is still going on since I have seen multiple times
-people are trying to add more allocators. So if it's not a reasonable
-ask to consier, we couldn't stop the trend in the end.
+-- 
+Regards/Gruss,
+    Boris.
 
-> 
-> I get that your main interest is zram, and so this feature isn't of
-> interest to you. But zram isn't the only user, nor is it the primary
-
-I am interest to the feature but my interest is more of general swap
-layer to manage the LRU so that it could support any hierarchy among
-swap devices, not only zswap.
+https://people.kernel.org/tglx/notes-about-netiquette
