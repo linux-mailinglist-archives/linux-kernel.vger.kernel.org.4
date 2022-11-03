@@ -2,119 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 98D08617902
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 09:45:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 37024617904
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 09:46:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230139AbiKCIpj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 04:45:39 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49538 "EHLO
+        id S231290AbiKCIqZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 04:46:25 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49924 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230150AbiKCIpe (ORCPT
+        with ESMTP id S229461AbiKCIqW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 04:45:34 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4819BD2C3;
-        Thu,  3 Nov 2022 01:45:31 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e7e7329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7e7:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8F6C01EC0430;
-        Thu,  3 Nov 2022 09:45:29 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1667465129;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=c898KIGelhJvkdpvAe824zz9JVE4JsvxtNQOJVhneDk=;
-        b=coiU0KV+DNLXrhEPzsEaDFDApoUM1klnQ/Yw/kOXj+uuNXyVis3In4kkvY4kQT7wXbfF6U
-        QqMvaxzEaWcLWs6708tq3XKB312LUqDG8/WQ6BMi7vigpa+JRfdKTbO0N+W2Hy14F4Tsuj
-        3mOHw5Ndb/nqd6Wmrjv3LwI7OAabl0Q=
-Date:   Thu, 3 Nov 2022 09:45:25 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Jiaxi Chen <jiaxi.chen@linux.intel.com>
-Cc:     kvm@vger.kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        seanjc@google.com, pbonzini@redhat.com, ndesaulniers@google.com,
-        alexandre.belloni@bootlin.com, peterz@infradead.org,
-        jpoimboe@kernel.org, chang.seok.bae@intel.com,
-        pawan.kumar.gupta@linux.intel.com, babu.moger@amd.com,
-        jmattson@google.com, sandipan.das@amd.com, tony.luck@intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com, fenghua.yu@intel.com,
-        keescook@chromium.org, nathan@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v2 1/8] x86: KVM: Move existing x86 CPUID leaf
- [CPUID_7_1_EAX] to kvm-only leaf
-Message-ID: <Y2N/peaVRIjTMyrw@zn.tnic>
-References: <20221103025030.78371-1-jiaxi.chen@linux.intel.com>
- <20221103025030.78371-2-jiaxi.chen@linux.intel.com>
+        Thu, 3 Nov 2022 04:46:22 -0400
+Received: from casper.infradead.org (casper.infradead.org [IPv6:2001:8b0:10b:1236::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8A1765E9
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 01:46:21 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
+        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description;
+        bh=oAqvFyQrajNwHbafj8fvIr3muUNPcNRav0TRZTTSIk8=; b=X+7has0oFSb6giM000j7OHQhdU
+        PCoXtZYtForGNRH94B5/H/1KXG31otH6VwwtdkWbyLAjlFojAC/auquDESERab2VSbvnFv7IF+ekv
+        YIMpusB+L4XUPogzVnfXFItfqERKjqmYrXROPw5mC6ZLhDhBclSX9t/EGJN9HQFq7Wj0dpbrRnb9l
+        fxqy0wKZD7vI7pOWxXEeFm9pPQZB4tHWx6zp2Tqx3hRB8hp//M2LPOpte2anZ+VzLvVE5APDyobki
+        m/eX8xTG2m09GiH2ngiGsb5+LaVUVtPZlgq/7/Z44V26hpoc50R9vMgH+VZIQva0Ot8N8I61Rt97b
+        KazyevXA==;
+Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
+        by casper.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oqVrb-006JXn-HX; Thu, 03 Nov 2022 08:46:15 +0000
+Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (Client did not present a certificate)
+        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id 99B0F3003E1;
+        Thu,  3 Nov 2022 09:46:09 +0100 (CET)
+Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
+        id 7D09A203E2FCB; Thu,  3 Nov 2022 09:46:09 +0100 (CET)
+Date:   Thu, 3 Nov 2022 09:46:09 +0100
+From:   Peter Zijlstra <peterz@infradead.org>
+To:     Josh Poimboeuf <jpoimboe@kernel.org>
+Cc:     x86@kernel.org, linux-kernel@vger.kernel.org, djwong@kernel.org,
+        yujie.liu@intel.com, tglx@linutronix.de, joao.moreira@intel.com,
+        samitolvanen@google.com
+Subject: Re: [PATCH 3/5] objtool: Avoid O(bloody terrible) behaviour -- an
+ ode to libelf
+Message-ID: <Y2N/0YarDv6yeuuw@hirez.programming.kicks-ass.net>
+References: <20221028194022.388521751@infradead.org>
+ <20221028194453.461658986@infradead.org>
+ <20221102222222.r4xkj6uynlj6n2t6@treble>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221103025030.78371-2-jiaxi.chen@linux.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221102222222.r4xkj6uynlj6n2t6@treble>
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 10:50:23AM +0800, Jiaxi Chen wrote:
-> diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
-> index 1a85e1fb0922..fbb4e7bd2288 100644
-> --- a/arch/x86/include/asm/cpufeature.h
-> +++ b/arch/x86/include/asm/cpufeature.h
-> @@ -24,7 +24,7 @@ enum cpuid_leafs
->  	CPUID_7_0_EBX,
->  	CPUID_D_1_EAX,
->  	CPUID_LNX_4,
-> -	CPUID_7_1_EAX,
-> +	CPUID_DUMMY,
->  	CPUID_8000_0008_EBX,
->  	CPUID_6_EAX,
->  	CPUID_8000_000A_EDX,
+On Wed, Nov 02, 2022 at 03:22:22PM -0700, Josh Poimboeuf wrote:
+> On Fri, Oct 28, 2022 at 09:40:25PM +0200, Peter Zijlstra wrote:
+> > Due to how gelf_update_sym*() requires an Elf_Data pointer, and how
+> > libelf keeps Elf_Data in a linked list per section,
+> > elf_update_symbol() ends up having to iterate this list on each
+> > update to find the correct Elf_Data for the index'ed symbol.
+> > 
+> > By allocating one Elf_Data per new symbol, the list grows per new
+> > symbol, giving an effective O(n^2) insertion time. This is obviously
+> > bloody terrible.
+> > 
+> > Therefore over-allocate the Elf_Data when an extention is needed.
+> > Except it turns out libelf disregards Elf_Scn::sh_size in favour of
+> > the sum of Elf_Data::d_size. IOW it will happily write out all the
+> > unused space and fill it with:
+> > 
+> >   0000000000000000     0 NOTYPE  LOCAL  DEFAULT  UND
+> > 
+> > entries (aka zeros). Which obviously violates the STB_LOCAL placement
+> > rule, and is a general pain in the backside for not being the desired
+> > behaviour.
+> > 
+> > Manually fix-up the Elf_Data size to avoid this problem before calling
+> > elf_update().
+> > 
+> > This significantly improves performance when adding a significant
+> > number of symbols.
+> > 
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> 
+> Instead of going through libelf to add each symbol, and
+> adjusting/shifting/reallocating the d_buf one symbol at a time, it would
+> probably be a lot easier (and faster) to just manually do all that at
+> the end, just before writing the file.
 
-No, do this (diff ontop):
+Yeah, I've been >< close to doing that at least twice now. The only
+consideration is that we then also must rewrite all relocs but I think
+we end up doing that anyway.
 
-diff --git a/arch/x86/include/asm/cpufeature.h b/arch/x86/include/asm/cpufeature.h
-index fbb4e7bd2288..b2905ddd7ab4 100644
---- a/arch/x86/include/asm/cpufeature.h
-+++ b/arch/x86/include/asm/cpufeature.h
-@@ -24,7 +24,7 @@ enum cpuid_leafs
- 	CPUID_7_0_EBX,
- 	CPUID_D_1_EAX,
- 	CPUID_LNX_4,
--	CPUID_DUMMY,
-+	CPUID_LNX_5,
- 	CPUID_8000_0008_EBX,
- 	CPUID_6_EAX,
- 	CPUID_8000_000A_EDX,
-diff --git a/arch/x86/include/asm/cpufeatures.h b/arch/x86/include/asm/cpufeatures.h
-index 91acf8b8e493..5c9023438e57 100644
---- a/arch/x86/include/asm/cpufeatures.h
-+++ b/arch/x86/include/asm/cpufeatures.h
-@@ -306,6 +306,8 @@
- #define X86_FEATURE_RSB_VMEXIT_LITE	(11*32+17) /* "" Fill RSB on VM exit when EIBRS is enabled */
- #define X86_FEATURE_CALL_DEPTH		(11*32+18) /* "" Call depth tracking for RSB stuffing */
- 
-+/* Linux-defined mapping, word 12 */
-+
- /* AMD-defined CPU features, CPUID level 0x80000008 (EBX), word 13 */
- #define X86_FEATURE_CLZERO		(13*32+ 0) /* CLZERO instruction */
- #define X86_FEATURE_IRPERF		(13*32+ 1) /* Instructions Retired Count */
-
----
-
-I'm pretty sure we'll need new bits soon so let's reuse that one for
-Linux-defined flags.
-
-Then you can drop patch 2.
-
-Thx.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
+I'll go do the patch to see what it looks like.
