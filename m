@@ -2,90 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEFD16179AD
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:19:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6DEED6179B9
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:22:08 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229575AbiKCJTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 05:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39352 "EHLO
+        id S230056AbiKCJV4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 05:21:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231567AbiKCJSj (ORCPT
+        with ESMTP id S229688AbiKCJVS (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 05:18:39 -0400
-Received: from mail-qv1-xf36.google.com (mail-qv1-xf36.google.com [IPv6:2607:f8b0:4864:20::f36])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 68520DF6D
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 02:17:37 -0700 (PDT)
-Received: by mail-qv1-xf36.google.com with SMTP id i12so726206qvs.2
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 02:17:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=S27rf3kqtxPFXY27Pis05ywWuW6Og2HFmNiBpLHzMEw=;
-        b=UCAeBUMO3aUcMiCHOkkum/+gUdMFLZHG0lTSPjNC6VodHeS1weOjt+8XYkTaveoIQP
-         J0nM33wjeRHMcj0P3N4QMMBRv4uAT3EpPVkM73Y3zJVZ63oqJV0TfnmlQQtEA/hgvNaO
-         SLv/3oxGdvQj7S9OYC7snzo9XnaDv0ECc6wQzRcL1OmfufmqfMSj1GC+2Inh75qRxUKO
-         XBAd3DWA9KdL39StkCN3q05Ejp/zfXZt06jQfzqa8JE9dbCBdLjuRu6g4BxJstz0N6L3
-         2erYzwxuTq1CBSv3E8IHTAt6XqUdySll7AsiXFdA1nWc2VCh1jJPh3cRLDlqIdhap82a
-         kreA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=S27rf3kqtxPFXY27Pis05ywWuW6Og2HFmNiBpLHzMEw=;
-        b=ROC7Uva/mtvZ2xt4omE6kQAvKP1quy4VJUKoadmOIaIBW/f2nSUXzrIroC+HNdnUV+
-         2avp2+Yp04nj6GJw1gGl5H3zLgTeWd5IQKxFxICIo0eI840HEJJllZz6VU+/JYDdMxkX
-         2vILozm24bVVAMh2OqD5Wh/y+4wMl0Mf5hl7gNU1VJchUOrL5Kh2fok/eaWG5EqOUdzH
-         kZngU141I4ZImH8oKdljEePgD5qkI1WQpm7SgZWp8uHbro+aFm9BGpm+rPkITU+d20lE
-         aMR3KKCuhR5UKCYWJUJQTuP+U9Xb6fFUD6DeVnkrVqi9ku8FXW2jDX1qNTClgeLq5WI8
-         dkDw==
-X-Gm-Message-State: ACrzQf2qwkxqV1CiV04xIsoh3z1rvu6DyuZtC4KpI/pgB/WYAw0P0bTK
-        si8SSZabyg5fyEZDD9lY0an2ueRQtqYdOoFBEbqbiq+FN4U/n5r4
-X-Google-Smtp-Source: AMsMyM5Oj6gFJGt+vv1xABt2GvnCRYvT3lh97M+rZ/HIwYczm9bdVU2DEbSLEDSndFW2q6XByLsn7mEzHBnG1gfBTfs=
-X-Received: by 2002:a0c:e547:0:b0:4bb:66d2:2d58 with SMTP id
- n7-20020a0ce547000000b004bb66d22d58mr25788188qvm.69.1667467056490; Thu, 03
- Nov 2022 02:17:36 -0700 (PDT)
+        Thu, 3 Nov 2022 05:21:18 -0400
+X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 03 Nov 2022 02:21:15 PDT
+Received: from mta-65-225.siemens.flowmailer.net (mta-65-225.siemens.flowmailer.net [185.136.65.225])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30062DEAD
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 02:21:15 -0700 (PDT)
+Received: by mta-65-225.siemens.flowmailer.net with ESMTPSA id 2022110309200924e90a3c9e57b9dbd6
+        for <linux-kernel@vger.kernel.org>;
+        Thu, 03 Nov 2022 10:20:10 +0100
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; s=fm1;
+ d=siemens.com; i=daniel.starke@siemens.com;
+ h=Date:From:Subject:To:Message-ID:MIME-Version:Content-Type:Content-Transfer-Encoding:Cc;
+ bh=ymHU3X/qr6+q1iY2LysQF2vzhHX/JM5cmkF/ZciRuKw=;
+ b=m3Y1LgnTK9GD/M6e5Eesa6/4c5nbgngUeunmNE09fE8Jngw2IcNfHQOIwiOQjzdM+DF0Q/
+ oWKAxlzd5ix83MOzbIGM18o4xWGek2qQp6GXbS5y5DBPuXB1mP5T/Pey+OH7RCxWCy2aVoUj
+ +GACObHy4uk5QZ0zWvqC8kmm+Hwjc=;
+From:   "D. Starke" <daniel.starke@siemens.com>
+To:     linux-serial@vger.kernel.org, gregkh@linuxfoundation.org,
+        jirislaby@kernel.org, ilpo.jarvinen@linux.intel.com
+Cc:     linux-kernel@vger.kernel.org,
+        Daniel Starke <daniel.starke@siemens.com>
+Subject: [PATCH v3 1/3] tty: n_gsm: introduce macro for minimal unit size
+Date:   Thu,  3 Nov 2022 10:17:41 +0100
+Message-Id: <20221103091743.2119-1-daniel.starke@siemens.com>
 MIME-Version: 1.0
-References: <cover.1667397591.git.tanjubrunostar0@gmail.com>
- <5a0649c6019f1717cb2e2e8fc4e262f3747d73a5.1667397591.git.tanjubrunostar0@gmail.com>
- <bfc8e714fbe80a16428a447768def5764083526d.camel@perches.com>
- <CAHJEyKV75q90E1OU2YOGK70EBLm8dQe181m_nS_qmPRsPaB8TQ@mail.gmail.com> <Y2OExzH0QJqHEfNf@kadam>
-In-Reply-To: <Y2OExzH0QJqHEfNf@kadam>
-From:   Tanju Brunostar <tanjubrunostar0@gmail.com>
-Date:   Thu, 3 Nov 2022 10:17:24 +0100
-Message-ID: <CAHJEyKVP9ZvO-EbzGgi+Hu_XoBq18dvpnOjs886gjgvwuAdv_g@mail.gmail.com>
-Subject: Re: [PATCH V4 1/2] staging: vt6655: change the function name s_vFillRTSHead
-To:     Dan Carpenter <error27@gmail.com>
-Cc:     Joe Perches <joe@perches.com>, gregkh@linuxfoundation.org,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org,
-        outreachy@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Flowmailer-Platform: Siemens
+Feedback-ID: 519:519-314044:519-21489:flowmailer
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 3, 2022 at 10:07 AM Dan Carpenter <error27@gmail.com> wrote:
->
-> On Thu, Nov 03, 2022 at 09:48:59AM +0100, Tanju Brunostar wrote:
-> > The second commit under this patchset resolves this. please take a
-> > look at it and let me know if I should change anything
-> >
->
-> Please don't top post on email.
-> http://www.catb.org/jargon/html/T/top-post.html
->
-Oh my mistake. sorry
-> Don't break the kernel and then fix it in a later patch.  Just fix it
-> without first breaking it.
->
-> regards,
-> dan carpenter
->
-I see. So I should send the changes in one patch right?
+From: Daniel Starke <daniel.starke@siemens.com>
+
+n_gsm has a minimal protocol overhead of 7 bytes. The current code already
+checks whether the configured MRU/MTU size is at least one byte more than
+this.
+
+Introduce the macro MIN_MTU to make this value more obvious.
+
+Signed-off-by: Daniel Starke <daniel.starke@siemens.com>
+---
+ drivers/tty/n_gsm.c | 7 +++++--
+ 1 file changed, 5 insertions(+), 2 deletions(-)
+
+v2 -> v3:
+No changes.
+
+Link: https://lore.kernel.org/all/20221024130114.2070-1-daniel.starke@siemens.com/
+
+diff --git a/drivers/tty/n_gsm.c b/drivers/tty/n_gsm.c
+index 5e516f5cac5a..570c40a3d78f 100644
+--- a/drivers/tty/n_gsm.c
++++ b/drivers/tty/n_gsm.c
+@@ -89,6 +89,7 @@ module_param(debug, int, 0600);
+  */
+ #define MAX_MRU 1500
+ #define MAX_MTU 1500
++#define MIN_MTU (PROT_OVERHEAD + 1)
+ /* SOF, ADDR, CTRL, LEN1, LEN2, ..., FCS, EOF */
+ #define PROT_OVERHEAD 7
+ #define	GSM_NET_TX_TIMEOUT (HZ*10)
+@@ -2712,7 +2713,9 @@ static int gsm_config(struct gsm_mux *gsm, struct gsm_config *c)
+ 	if ((c->adaption != 1 && c->adaption != 2) || c->k)
+ 		return -EOPNOTSUPP;
+ 	/* Check the MRU/MTU range looks sane */
+-	if (c->mru > MAX_MRU || c->mtu > MAX_MTU || c->mru < 8 || c->mtu < 8)
++	if (c->mru < MIN_MTU || c->mtu < MIN_MTU)
++		return -EINVAL;
++	if (c->mru > MAX_MRU || c->mtu > MAX_MTU)
+ 		return -EINVAL;
+ 	if (c->n2 > 255)
+ 		return -EINVAL;
+@@ -3296,7 +3299,7 @@ static int gsm_create_network(struct gsm_dlci *dlci, struct gsm_netconfig *nc)
+ 		return -ENOMEM;
+ 	}
+ 	net->mtu = dlci->gsm->mtu;
+-	net->min_mtu = 8;
++	net->min_mtu = MIN_MTU;
+ 	net->max_mtu = dlci->gsm->mtu;
+ 	mux_net = netdev_priv(net);
+ 	mux_net->dlci = dlci;
+-- 
+2.34.1
+
