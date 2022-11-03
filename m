@@ -2,43 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 75BB7617A05
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:34:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D76A8617A0B
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:35:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229770AbiKCJdr (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 05:33:47 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50664 "EHLO
+        id S230301AbiKCJfs (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 05:35:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51192 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiKCJdp (ORCPT
+        with ESMTP id S229591AbiKCJfn (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 05:33:45 -0400
-Received: from msg-1.mailo.com (msg-1.mailo.com [213.182.54.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B9DF22AD4
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 02:33:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1667468017; bh=u4ZMyCJTtwT9XM0J3JSr+5jhaUWlQ9C7oJqTqy8JPvU=;
-        h=X-EA-Auth:Date:From:To:Subject:Message-ID:MIME-Version:
-         Content-Type;
-        b=P48xDqiYtixEd4xMotP9apBBx9fXFI+Q3FCAS+DxRKaF6v1+m8U1nw2J+TO8WbGJZ
-         DyY7ASx9Vlk5OX29eAyRWaLefK4O0tTX7hf7H8cY6y0fW6aTKbxz5Xc5QpLz6XhEoH
-         2TP8bUaRlUYHQR+MBoW9bDdYd+/BR8lpopI4FPjU=
-Received: by b-5.in.mailobj.net [192.168.90.15] with ESMTP
-        via [213.182.55.206]
-        Thu,  3 Nov 2022 10:33:37 +0100 (CET)
-X-EA-Auth: hF2FJLaDPFT0hZmNHvh6y/Itb5Izeetu6Xp6eqBJ5RVBeGH4W2bLWnm02z/QsIonphbvwWNdqcVqTMIMy6QTHSVvpmEoNdsX
-Date:   Thu, 3 Nov 2022 15:03:29 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     outreachy@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: [PATCH v2] staging: rtl8723bs: Use min/max macros for variable
- comparison
-Message-ID: <Y2OK6fcIkH3S2/1f@qemulion>
+        Thu, 3 Nov 2022 05:35:43 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1005F2AD3;
+        Thu,  3 Nov 2022 02:35:41 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N2zBx69SBz4xHV;
+        Thu,  3 Nov 2022 20:35:37 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1667468137;
+        bh=3UpxhbKKGBzORlH6T6FFqXj4UhETFfNxDFVHQGuz6uA=;
+        h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
+        b=lh9fwvI4+lWUEUlvEm/teesbaj94J+t5ewaa3653xAPHMKlYT0c5/AdjzB4Ul229h
+         bUMRYtctuYZE3cm+3CVc48UfH0swBHkyZntXUhqc3ClN0aiQlOgSUwr8aui9j2opwL
+         XluAaKjg5U1JSsnSZ7yQ6bn0olfo5czaBYVQRoUWxZ6cSB7MMTaBvKmL6VTfUixvgz
+         7xeE+uGLlLAjGKmxE4WCbSfgxybtgmpS6nK5TPr/wymDoHqnKIb1FcoJoArWyAm6RY
+         Kd3/AzbIgF9XivVDa/d0S2g/J1mPzCeiygOH+z/FGzpPF3aF37x/xuREaGg1EkWuos
+         dCo5IBpJCYyfQ==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Luis Chamberlain <mcgrof@kernel.org>,
+        Nicholas Piggin <npiggin@gmail.com>
+Cc:     linux-modules@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        linux-kernel@vger.kernel.org, Jessica Yu <jeyu@kernel.org>
+Subject: Re: [PATCH v5 0/2] powerpc module arch checks
+In-Reply-To: <Y2MEw6BruH3FnYL/@bombadil.infradead.org>
+References: <20221031120733.3956781-1-npiggin@gmail.com>
+ <Y2MEw6BruH3FnYL/@bombadil.infradead.org>
+Date:   Thu, 03 Nov 2022 20:35:32 +1100
+Message-ID: <87leoss7mj.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
         autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -46,74 +53,19 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simplify code by using min and max helper macros in place of lengthy
-if/else block oriented logical evaluation and value assignment. This
-issue is identified by coccicheck using the minmax.cocci file.
+Luis Chamberlain <mcgrof@kernel.org> writes:
+> On Mon, Oct 31, 2022 at 10:07:31PM +1000, Nicholas Piggin wrote:
+>> Luis if you would be okay for patch 1 to be merged via powerpc or
+>> prefer to take it in the module tree (or maybe you object to the
+>> code in the first place).
+>
+> Looks good to me, and nothing on my radar which would cause a conflict
+> so happy for you to take it via powerpc or I can take it and apply it
+> right away to tricke / get tested on linux-next by tomorrow.
+>
+> Let me know.
 
-Signed-off-by: Deepak R Varma <drv@mailo.com>
----
+Thanks. I guess it's mostly a nop on other architectures, so probably
+makes sense for me to take it.
 
-Changes in v2:
-   1. Remove unnecessary parenthesis around the min/max macro arguments as
-      suggested by julia.lawall@inria.fr
-
-Please note:
-   1. Using min for max_AMPDU_len computation warning was NOT auto generated by
-      the coccicheck command. This was caught while surround code review and
-      was manually changed.
-   2. Checkpatch script continues to complaint about min_MPDU_spacing
-      computation line being more than 100 character in length. I did not find a
-      better formatting that will address this checkpatch warning. Any
-      suggestions are most welcome.
-   3. Proposed changes are compile tested only on my x86 based VM.
-
-
- drivers/staging/rtl8723bs/core/rtw_wlan_util.c | 12 ++++--------
- drivers/staging/rtl8723bs/hal/odm_DIG.c        |  5 +----
- 2 files changed, 5 insertions(+), 12 deletions(-)
-
-diff --git a/drivers/staging/rtl8723bs/core/rtw_wlan_util.c b/drivers/staging/rtl8723bs/core/rtw_wlan_util.c
-index 18ba846c0b7b..ba39c8b1a9ae 100644
---- a/drivers/staging/rtl8723bs/core/rtw_wlan_util.c
-+++ b/drivers/staging/rtl8723bs/core/rtw_wlan_util.c
-@@ -986,15 +986,11 @@ void HT_caps_handler(struct adapter *padapter, struct ndis_80211_var_ie *pIE)
- 			pmlmeinfo->HT_caps.u.HT_cap[i] &= (pIE->data[i]);
- 		} else {
- 			/* modify from  fw by Thomas 2010/11/17 */
--			if ((pmlmeinfo->HT_caps.u.HT_cap_element.AMPDU_para & 0x3) > (pIE->data[i] & 0x3))
--				max_AMPDU_len = (pIE->data[i] & 0x3);
--			else
--				max_AMPDU_len = (pmlmeinfo->HT_caps.u.HT_cap_element.AMPDU_para & 0x3);
-+			max_AMPDU_len = min(pmlmeinfo->HT_caps.u.HT_cap_element.AMPDU_para & 0x3,
-+					    pIE->data[i] & 0x3);
-
--			if ((pmlmeinfo->HT_caps.u.HT_cap_element.AMPDU_para & 0x1c) > (pIE->data[i] & 0x1c))
--				min_MPDU_spacing = (pmlmeinfo->HT_caps.u.HT_cap_element.AMPDU_para & 0x1c);
--			else
--				min_MPDU_spacing = (pIE->data[i] & 0x1c);
-+			min_MPDU_spacing = max(pmlmeinfo->HT_caps.u.HT_cap_element.AMPDU_para & 0x1c,
-+					       pIE->data[i] & 0x1c);
-
- 			pmlmeinfo->HT_caps.u.HT_cap_element.AMPDU_para = max_AMPDU_len | min_MPDU_spacing;
- 		}
-diff --git a/drivers/staging/rtl8723bs/hal/odm_DIG.c b/drivers/staging/rtl8723bs/hal/odm_DIG.c
-index 07edf74ccfe5..97a51546463a 100644
---- a/drivers/staging/rtl8723bs/hal/odm_DIG.c
-+++ b/drivers/staging/rtl8723bs/hal/odm_DIG.c
-@@ -598,10 +598,7 @@ void odm_DIGbyRSSI_LPS(void *pDM_VOID)
- 	/* Lower bound checking */
-
- 	/* RSSI Lower bound check */
--	if ((pDM_Odm->RSSI_Min-10) > DM_DIG_MIN_NIC)
--		RSSI_Lower = pDM_Odm->RSSI_Min-10;
--	else
--		RSSI_Lower = DM_DIG_MIN_NIC;
-+	RSSI_Lower = max(pDM_Odm->RSSI_Min - 10, DM_DIG_MIN_NIC);
-
- 	/* Upper and Lower Bound checking */
- 	if (CurrentIGI > DM_DIG_MAX_NIC)
---
-2.34.1
-
-
-
+cheers
