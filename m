@@ -2,138 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E4096618CDE
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 00:34:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CC3B0618CE3
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 00:41:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230527AbiKCXe3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 19:34:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55976 "EHLO
+        id S230209AbiKCXlW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 19:41:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58026 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230261AbiKCXeZ (ORCPT
+        with ESMTP id S229548AbiKCXlT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 19:34:25 -0400
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5C5A42182D;
-        Thu,  3 Nov 2022 16:34:25 -0700 (PDT)
-Received: from pps.filterd (m0098410.ppops.net [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A3Mfv1A016506;
-        Thu, 3 Nov 2022 23:34:19 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=pp1;
- bh=e2YtRtcv00QA3VMD6/NiGd3rTfVXWoJoDthWJy2wGMw=;
- b=KHPXALBtDhTkPETF8EFIA6wO4L/wOF0EqFc8K4y9jQoq/8X3d+AyNjq4qT4Qu3qHf5Zj
- T1Rws7+3VcGiON8u6GGxQPwdG9WWPDjF/6qZAURNim/1MJaL6ILfB508en5sSkkIPTLe
- AzusSyb2NanVTdAZplhUjyMP6iIw6OPYMzlFA6mM2zt3OrHy9tYcjHMGVz5Ruehb2T+d
- 07Jx6eB+PT4j7J1XYe4l8WWvfi/4enr4dKRSY1vkbbA1EtBvKcrq4XcPgIqK0hQqb2GC
- 1ACgzQmyu6g+qGyULxOve4EaaF+X0DHsIv2AotV3z6PYsbm1PC8oU5ZQRFTWvRqk5z8W +A== 
-Received: from pps.reinject (localhost [127.0.0.1])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kmphjsb0e-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Nov 2022 23:34:18 +0000
-Received: from m0098410.ppops.net (m0098410.ppops.net [127.0.0.1])
-        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A3NYHbE025695;
-        Thu, 3 Nov 2022 23:34:17 GMT
-Received: from ppma02wdc.us.ibm.com (aa.5b.37a9.ip4.static.sl-reverse.com [169.55.91.170])
-        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kmphjsayx-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Nov 2022 23:34:17 +0000
-Received: from pps.filterd (ppma02wdc.us.ibm.com [127.0.0.1])
-        by ppma02wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A3NJpnN032583;
-        Thu, 3 Nov 2022 23:34:16 GMT
-Received: from b01cxnp22034.gho.pok.ibm.com (b01cxnp22034.gho.pok.ibm.com [9.57.198.24])
-        by ppma02wdc.us.ibm.com with ESMTP id 3kgutammh9-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Nov 2022 23:34:16 +0000
-Received: from smtpav03.wdc07v.mail.ibm.com ([9.208.128.112])
-        by b01cxnp22034.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A3NYE6N7865054
-        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-        Thu, 3 Nov 2022 23:34:15 GMT
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 7A87358054;
-        Thu,  3 Nov 2022 23:34:14 +0000 (GMT)
-Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-        by IMSVA (Postfix) with ESMTP id 04B4058058;
-        Thu,  3 Nov 2022 23:34:07 +0000 (GMT)
-Received: from [9.65.206.126] (unknown [9.65.206.126])
-        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-        Thu,  3 Nov 2022 23:34:06 +0000 (GMT)
-Message-ID: <c4285d52-4886-a243-d641-1006e0b23994@linux.ibm.com>
-Date:   Thu, 3 Nov 2022 19:34:06 -0400
+        Thu, 3 Nov 2022 19:41:19 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 274D817888;
+        Thu,  3 Nov 2022 16:41:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id CEE94B82A82;
+        Thu,  3 Nov 2022 23:41:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0D302C433D7;
+        Thu,  3 Nov 2022 23:41:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667518875;
+        bh=KUDx7ONoN3ko06OzZmixvulJITlwhp2I5+/A5L6H2hc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=LoRsHuDHqV6kBH8fulg5STsgC8v6T41Mwn26zrvKxBm1lkR1cjiwu4SK7vOu23sD/
+         mtpShtln8tvrddmvsPl6Coyz8ZYq+dRHMex885ssnxmoIif8gMHkawnRpw+aIGMlHT
+         hDFrQXw03KrM/2YGFORP9KtLkf/MCZqSgh8BRkpAwIGnRNWacCk+uWaKeZ78Zusskw
+         QsI5urwP+Rl+Gkb7EORACTN+tmUd3q7RlIR5ts66V/wVqpRw9nxh4vVLcolgjLfYds
+         7ObXA2kXs03zk0w29MXTxpdo5YUNHvp14EOarMdDVwUMKe0lUebvlZE7wA7RAszZlm
+         GCIEX5z3nCZ3g==
+Received: by pali.im (Postfix)
+        id E24A387A; Fri,  4 Nov 2022 00:41:11 +0100 (CET)
+Date:   Fri, 4 Nov 2022 00:41:11 +0100
+From:   Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>
+To:     Bjorn Helgaas <helgaas@kernel.org>
+Cc:     "Maciej W. Rozycki" <macro@orcam.me.uk>,
+        Bjorn Helgaas <bhelgaas@google.com>, Stefan Roese <sr@denx.de>,
+        Jim Wilson <wilson@tuliptree.org>,
+        David Abdurachmanov <david.abdurachmanov@gmail.com>,
+        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v5 5/5] PCI: Work around PCIe link training failures
+Message-ID: <20221103234111.ykexx733fty7g3da@pali>
+References: <alpine.DEB.2.21.2209130050380.60554@angie.orcam.me.uk>
+ <20221103231335.GA51625@bhelgaas>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v2 7/7] vfio: Remove vfio_free_device
-Content-Language: en-US
-To:     Eric Farman <farman@linux.ibm.com>,
-        Alex Williamson <alex.williamson@redhat.com>,
-        Cornelia Huck <cohuck@redhat.com>,
-        Jason Gunthorpe <jgg@nvidia.com>,
-        Kevin Tian <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>
-Cc:     Zhenyu Wang <zhenyuw@linux.intel.com>,
-        Zhi Wang <zhi.a.wang@intel.com>,
-        Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Halil Pasic <pasic@linux.ibm.com>,
-        Vineeth Vijayan <vneethv@linux.ibm.com>,
-        Peter Oberparleiter <oberpar@linux.ibm.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Tony Krowiak <akrowiak@linux.ibm.com>,
-        Jason Herne <jjherne@linux.ibm.com>,
-        Harald Freudenberger <freude@linux.ibm.com>,
-        Diana Craciun <diana.craciun@oss.nxp.com>,
-        Eric Auger <eric.auger@redhat.com>,
-        Kirti Wankhede <kwankhede@nvidia.com>,
-        Abhishek Sahu <abhsahu@nvidia.com>,
-        Yishai Hadas <yishaih@nvidia.com>,
-        intel-gvt-dev@lists.freedesktop.org,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
-        kvm@vger.kernel.org
-References: <20221102150152.2521475-1-farman@linux.ibm.com>
- <20221102150152.2521475-8-farman@linux.ibm.com>
-From:   Matthew Rosato <mjrosato@linux.ibm.com>
-In-Reply-To: <20221102150152.2521475-8-farman@linux.ibm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: MEv8iFkDuzR_598RYz20f1sckapX54K5
-X-Proofpoint-GUID: mwX7xaEAcnKaJAimpUOkrctyTnDjPKAH
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-03_04,2022-11-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 mlxlogscore=999 phishscore=0 spamscore=0 clxscore=1015
- bulkscore=0 priorityscore=1501 impostorscore=0 mlxscore=0 suspectscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211030161
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221103231335.GA51625@bhelgaas>
+User-Agent: NeoMutt/20180716
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/2/22 11:01 AM, Eric Farman wrote:
-> With the "mess" sorted out, we should be able to inline the
-> vfio_free_device call introduced by commit cb9ff3f3b84c
-> ("vfio: Add helpers for unifying vfio_device life cycle")
-> and remove them from driver release callbacks.
+On Thursday 03 November 2022 18:13:35 Bjorn Helgaas wrote:
+> [+cc Pali]
 > 
-> Signed-off-by: Eric Farman <farman@linux.ibm.com>
-> Reviewed-by: Jason Gunthorpe <jgg@nvidia.com>
-> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+> On Sat, Sep 17, 2022 at 01:03:38PM +0100, Maciej W. Rozycki wrote:
+> > Attempt to handle cases such as with a downstream port of the ASMedia 
+> > ASM2824 PCIe switch where link training never completes and the link 
+> > continues switching between speeds indefinitely with the data link layer 
+> > never reaching the active state.
+> > 
+> > It has been observed with a downstream port of the ASMedia ASM2824 Gen 3 
+> > switch wired to the upstream port of the Pericom PI7C9X2G304 Gen 2 
+> > switch, using a Delock Riser Card PCI Express x1 > 2 x PCIe x1 device, 
+> > P/N 41433, wired to a SiFive HiFive Unmatched board.  In this setup the 
+> > switches are supposed to negotiate the link speed of preferably 5.0GT/s, 
+> > falling back to 2.5GT/s.
+> > 
+> > Instead the link continues oscillating between the two speeds, at the 
+> > rate of 34-35 times per second, with link training reported repeatedly 
+> > active ~84% of the time.  Forcibly limiting the target link speed to 
+> > 2.5GT/s with the upstream ASM2824 device however makes the two switches 
+> > communicate correctly.  Removing the speed restriction afterwards makes 
+> > the two devices switch to 5.0GT/s then.
+> > 
+> > Make use of these observations then and detect the inability to train 
+> > the link, by checking for the Data Link Layer Link Active status bit 
+> > being off while the Link Bandwidth Management Status indicating that 
+> > hardware has changed the link speed or width in an attempt to correct 
+> > unreliable link operation.
+> > 
+> > Restrict the speed to 2.5GT/s then with the Target Link Speed field, 
+> > request a retrain and wait 200ms for the data link to go up.  If this 
+> > turns out successful, then lift the restriction, letting the devices 
+> > negotiate a higher speed.
+> > 
+> > Also check for a 2.5GT/s speed restriction the firmware may have already 
+> > arranged and lift it too with ports of devices known to continue working 
+> > afterwards, currently the ASM2824 only, that already report their data 
+> > link being up.
+> 
+> This quirk is run at boot-time and resume-time.  What happens after a
+> Secondary Bus Reset, as is done by pci_reset_secondary_bus()?
 
-Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
+Flipping SBR bit can be done on any PCI-to-PCI bridge device and in this
+topology there are following: PCIe Root Port, ASMedia PCIe Switch
+Upstream Port, ASMedia PCIe Switch Downstream Port, Pericom PCIe Switch
+Upstream Port, Pericom PCIe Switch Downstream Port.
+(Maciej, I hope that this is whole topology and there is not some other
+device of PCI-to-PCI bridge type in your setup; please correct me)
 
+Bjorn, to make it clear, on which device you mean to issue secondary bus
+reset?
 
+Because I would not be surprised if different things happen when issuing
+bus reset on different parts of that topology.
+
+> PCIe r6.0, sec 7.5.1.3.13, says "setting Secondary Bus Reset triggers
+> a hot reset on the corresponding PCI Express Port".  Sec 4.2.7 says
+> LinkUp is 0 in the LTSSM Hot Reset state, and the Hot Reset state
+> leads to Detect, so it looks like this reset would cause the link to
+> go down and come back up.
+> 
+> Can you tell if that's what happens?  Does the link negotiation fail
+> then, too?
+> 
+> If it does fail then, I don't know how hard we need to work to fix it.
+> Maybe we just accept it?  Or maybe we need a "quirk-after-reset" phase
+> or something?
+> 
+> Bjorn
+> 
+> > Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
+> > Link: https://lore.kernel.org/lkml/alpine.DEB.2.21.2203022037020.56670@angie.orcam.me.uk/
+> > Link: https://source.denx.de/u-boot/u-boot/-/commit/a398a51ccc68
+> > ---
+> > Changes from v4:
+> > 
+> > - Remove <linux/bug.h> inclusion no longer needed.
+> > 
+> > - Make the quirk generic based on probing device features rather than 
+> >   specific to the ASM2824 part only; take the Retrain Link bit erratum 
+> >   into account.
+> > 
+> > - Still lift the 2.5GT/s speed restriction with the ASM2824 only.
+> > 
+> > - Increase retrain timeout from 200ms to 1s (PCIE_LINK_RETRAIN_TIMEOUT).
+> > 
+> > - Remove retrain success notification.
+> > 
+> > - Use PCIe helpers rather than generic PCI functions throughout.
+> > 
+> > - Trim down and update the wording of the change description for the 
+> >   switch from an ASM2824-specific to a generic fixup.
+> > 
+> > Changes from v3:
+> > 
+> > - Remove the <linux/pci_ids.h> entry for the ASM2824.
+> > 
+> > Changes from v2:
+> > 
+> > - Regenerate for 5.17-rc2 for a merge conflict.
+> > 
+> > - Replace BUG_ON for a missing PCI Express capability with WARN_ON and an
+> >   early return.
+> > 
+> > Changes from v1:
+> > 
+> > - Regenerate for a merge conflict.
+> > ---
+> >  drivers/pci/quirks.c |  118 +++++++++++++++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 118 insertions(+)
+> > 
+> > linux-pcie-asm2824-manual-retrain.diff
+> > Index: linux-macro/drivers/pci/quirks.c
+> > ===================================================================
+> > --- linux-macro.orig/drivers/pci/quirks.c
+> > +++ linux-macro/drivers/pci/quirks.c
+> > @@ -5956,3 +5956,121 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_I
+> >  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c0, aspm_l1_acceptable_latency);
+> >  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c1, aspm_l1_acceptable_latency);
+> >  #endif
+> > +
+> > +/*
+> > + * Retrain the link of a downstream PCIe port by hand if necessary.
+> > + *
+> > + * This is needed at least where a downstream port of the ASMedia ASM2824
+> > + * Gen 3 switch is wired to the upstream port of the Pericom PI7C9X2G304
+> > + * Gen 2 switch, and observed with the Delock Riser Card PCI Express x1 >
+> > + * 2 x PCIe x1 device, P/N 41433, plugged into the SiFive HiFive Unmatched
+> > + * board.
+> > + *
+> > + * In such a configuration the switches are supposed to negotiate the link
+> > + * speed of preferably 5.0GT/s, falling back to 2.5GT/s.  However the link
+> > + * continues switching between the two speeds indefinitely and the data
+> > + * link layer never reaches the active state, with link training reported
+> > + * repeatedly active ~84% of the time.  Forcing the target link speed to
+> > + * 2.5GT/s with the upstream ASM2824 device makes the two switches talk to
+> > + * each other correctly however.  And more interestingly retraining with a
+> > + * higher target link speed afterwards lets the two successfully negotiate
+> > + * 5.0GT/s.
+> > + *
+> > + * With the ASM2824 we can rely on the otherwise optional Data Link Layer
+> > + * Link Active status bit and in the failed link training scenario it will
+> > + * be off along with the Link Bandwidth Management Status indicating that
+> > + * hardware has changed the link speed or width in an attempt to correct
+> > + * unreliable link operation.  For a port that has been left unconnected
+> > + * both bits will be clear.  So use this information to detect the problem
+> > + * rather than polling the Link Training bit and watching out for flips or
+> > + * at least the active status.
+> > + *
+> > + * Since the exact nature of the problem isn't known and in principle this
+> > + * could trigger where an ASM2824 device is downstream rather upstream,
+> > + * apply this erratum workaround to any downstream ports as long as they
+> > + * support Link Active reporting and have the Link Control 2 register.
+> > + * Restrict the speed to 2.5GT/s then with the Target Link Speed field,
+> > + * request a retrain and wait 200ms for the data link to go up.
+> > + *
+> > + * If this turns out successful and we know by the Vendor:Device ID it is
+> > + * safe to do so, then lift the restriction, letting the devices negotiate
+> > + * a higher speed.  Also check for a similar 2.5GT/s speed restriction the
+> > + * firmware may have already arranged and lift it with ports that already
+> > + * report their data link being up.
+> > + */
+> > +static void pcie_downstream_link_retrain(struct pci_dev *dev)
+> > +{
+> > +	static const struct pci_device_id ids[] = {
+> > +		{ PCI_VDEVICE(ASMEDIA, 0x2824) }, /* ASMedia ASM2824 */
+> > +		{}
+> > +	};
+> > +	u16 lnksta, lnkctl2;
+> > +	u32 lnkcap;
+> > +
+> > +	if (!pci_is_pcie(dev) || !pcie_downstream_port(dev)
+> > +	    || !pcie_cap_has_lnkctl2(dev))
+> > +		return;
+> > +
+> > +	/* It's too early yet to use `dev->link_active_reporting'.  */
+> > +	pcie_capability_read_dword(dev, PCI_EXP_LNKCAP, &lnkcap);
+> > +	if (!(lnkcap & PCI_EXP_LNKCAP_DLLLARC))
+> > +		return;
+> > +
+> > +	pcie_capability_read_word(dev, PCI_EXP_LNKCTL2, &lnkctl2);
+> > +	pcie_capability_read_word(dev, PCI_EXP_LNKSTA, &lnksta);
+> > +	if ((lnksta & (PCI_EXP_LNKSTA_LBMS | PCI_EXP_LNKSTA_DLLLA)) ==
+> > +	    PCI_EXP_LNKSTA_LBMS) {
+> > +		unsigned long timeout;
+> > +		u16 lnkctl;
+> > +
+> > +		pci_info(dev, "broken device, retraining non-functional downstream link at 2.5GT/s\n");
+> > +
+> > +		pcie_capability_read_word(dev, PCI_EXP_LNKCTL, &lnkctl);
+> > +		lnkctl |= PCI_EXP_LNKCTL_RL;
+> > +		lnkctl2 &= ~PCI_EXP_LNKCTL2_TLS;
+> > +		lnkctl2 |= PCI_EXP_LNKCTL2_TLS_2_5GT;
+> > +		pcie_capability_write_word(dev, PCI_EXP_LNKCTL2, lnkctl2);
+> > +		pcie_capability_write_word(dev, PCI_EXP_LNKCTL, lnkctl);
+> > +		/*
+> > +		 * Due to an erratum in some devices the Retrain Link bit
+> > +		 * needs to be cleared again manually to allow the link
+> > +		 * training to succeed.
+> > +		 */
+> > +		lnkctl &= ~PCI_EXP_LNKCTL_RL;
+> > +		if (dev->clear_retrain_link)
+> > +			pcie_capability_write_word(dev, PCI_EXP_LNKCTL,
+> > +						   lnkctl);
+> > +
+> > +		timeout = jiffies + PCIE_LINK_RETRAIN_TIMEOUT;
+> > +		do {
+> > +			pcie_capability_read_word(dev, PCI_EXP_LNKSTA,
+> > +					     &lnksta);
+> > +			if (lnksta & PCI_EXP_LNKSTA_DLLLA)
+> > +				break;
+> > +			usleep_range(10000, 20000);
+> > +		} while (time_before(jiffies, timeout));
+> > +
+> > +		if (!(lnksta & PCI_EXP_LNKSTA_DLLLA)) {
+> > +			pci_info(dev, "retraining failed\n");
+> > +			return;
+> > +		}
+> > +	}
+> > +
+> > +	if ((lnksta & PCI_EXP_LNKSTA_DLLLA) &&
+> > +	    (lnkctl2 & PCI_EXP_LNKCTL2_TLS) == PCI_EXP_LNKCTL2_TLS_2_5GT &&
+> > +	    pci_match_id(ids, dev)) {
+> > +		u16 lnkctl;
+> > +
+> > +		pci_info(dev, "removing 2.5GT/s downstream link speed restriction\n");
+> > +		pcie_capability_read_word(dev, PCI_EXP_LNKCTL, &lnkctl);
+> > +		lnkctl |= PCI_EXP_LNKCTL_RL;
+> > +		lnkctl2 &= ~PCI_EXP_LNKCTL2_TLS;
+> > +		lnkctl2 |= lnkcap & PCI_EXP_LNKCAP_SLS;
+> > +		pcie_capability_write_word(dev, PCI_EXP_LNKCTL2, lnkctl2);
+> > +		pcie_capability_write_word(dev, PCI_EXP_LNKCTL, lnkctl);
+> > +	}
+> > +}
+> > +DECLARE_PCI_FIXUP_HEADER(PCI_ANY_ID, PCI_ANY_ID,
+> > +			 pcie_downstream_link_retrain);
+> > +DECLARE_PCI_FIXUP_RESUME_EARLY(PCI_ANY_ID, PCI_ANY_ID,
+> > +			       pcie_downstream_link_retrain);
