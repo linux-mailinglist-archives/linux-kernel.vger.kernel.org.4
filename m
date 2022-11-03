@@ -2,127 +2,134 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1630B618591
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:02:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7AB4F6185A0
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:03:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231831AbiKCRCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 13:02:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57826 "EHLO
+        id S232016AbiKCRC7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 13:02:59 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58006 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231956AbiKCRB6 (ORCPT
+        with ESMTP id S231732AbiKCRCV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:01:58 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB9C9396;
-        Thu,  3 Nov 2022 10:01:57 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id A5CE1B82962;
-        Thu,  3 Nov 2022 17:01:56 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54C8DC433D7;
-        Thu,  3 Nov 2022 17:01:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667494915;
-        bh=D6/fRtPSM2LL/1pNEu7S9mDvRcvLO6bXEXGfxKCxLfk=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=XMDIuoDVdszuwgtpet7Zhut7+sLQ3lCO+sIwchaG0nneXIBaKXTtNveI6/Ed4b2Pt
-         dcsH02Dfwofx3dgr6jxvcTPCCZjiS7qJGFcBa7gdRajTjVyL1dpFbLZqrqjKUgA8Vk
-         qnPsDUOxD1tl1JsrA73L4wCeH/fVZVPpecXhCXR8j0RNb2dwlfpsL288P3+FHFWIgw
-         wN4rACbk21wqlBUqmyJI/4GKab1pyUhx8u3zGw3NlgUOQVRuqiaaPoHyTuVA8x87KD
-         nkQt1apI4lSBd0jku12nocowT0xOsKZy5cYO560fkLb6ttyU/3iIHOcyGOjn1zjhxU
-         efVmAj/18PjJg==
-From:   Nathan Chancellor <nathan@kernel.org>
-To:     Alexandra Winter <wintera@linux.ibm.com>,
-        Wenjia Zhang <wenjia@linux.ibm.com>
-Cc:     Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        linux-s390@vger.kernel.org, netdev@vger.kernel.org,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        Tom Rix <trix@redhat.com>, Kees Cook <keescook@chromium.org>,
-        Sami Tolvanen <samitolvanen@google.com>, llvm@lists.linux.dev,
-        linux-kernel@vger.kernel.org, patches@lists.linux.dev,
-        Nathan Chancellor <nathan@kernel.org>
-Subject: [PATCH v2 3/3] s390/lcs: Fix return type of lcs_start_xmit()
-Date:   Thu,  3 Nov 2022 10:01:30 -0700
-Message-Id: <20221103170130.1727408-3-nathan@kernel.org>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221103170130.1727408-1-nathan@kernel.org>
-References: <20221103170130.1727408-1-nathan@kernel.org>
+        Thu, 3 Nov 2022 13:02:21 -0400
+Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5671910B64
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:02:19 -0700 (PDT)
+Received: by mail-wm1-x334.google.com with SMTP id m29-20020a05600c3b1d00b003c6bf423c71so3833330wms.0
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:02:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=F2qRvwVUVIRjIeHt35WXksU2jyggEsNFCmKZPYDREH0=;
+        b=Pmd1ZWzYe+9SBpCupib/Vm+0gUhLu8QSGX/WqY3HSwPPcz/YftVTkl2CwTIsYVb2Hx
+         iRxgZBzpaLdzKE/udwF49ml/0ZOmV8GOKe5cRb3RCVRE301p8jITcfGm9WjywIF2g8Xe
+         MS6trBTW1PmNZdD0n+5BgFXLdJi4vJOhUJewZepcExh858lg/tAnC5mZ/FzGESnoAx39
+         SJc5IQEC3TBkHm8T93+qRVKTEUQfZyr2TcS0Afxpukqt78dlah6VmkALLMAJ724Whi8k
+         z9gRB5ylFALOFIvbVwditPZkNd+WnVAr9vAP+gQP40+vcngbYtGlIDsrQz2dI7qnkGTw
+         A4FA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F2qRvwVUVIRjIeHt35WXksU2jyggEsNFCmKZPYDREH0=;
+        b=5yX40MX8eMBBh5baYjVgOJNmm1+85H8AXcg76QdtCDqV7EoyDJSQZK2/OgmdPcnizG
+         Cq0E4qDDQ78bd0T67+SpjbJYH0YQhyguY3+jGYG9aeqbYBhLEPRJte3SK7YjqodiXf3Y
+         5h6f7FEU0OFTCMKPySuXbgR56DTQgI0v4QfQTZWX/ZC+PwXui7E3kSh0DKYWlOG9K4O9
+         LuFlwItLDZu8/ETUi/Y7hToM9IPzYdNN4suy7wWp2PcWUiKK64MB4u8pj03rayDE9o1F
+         ViUkBhD6cIllkNHmOZ7OQN7BkP/58123QGEjOmLU3+OfZJtDq9AXuLZKWp1RQC5F5ZHd
+         7oxg==
+X-Gm-Message-State: ACrzQf0+itQSReFhtxd0bDiuuOKaqWpA0vzZ4drOICOsa8oUJf5ZEcI2
+        HTbIKlEzNklUrmUUJ4aCshNDfw==
+X-Google-Smtp-Source: AMsMyM4+lDbFeMavFHov8ficnEgR3S1GzKaz2JGhFH/Khbt/MtSp6mpNbtemn0R9Nx3Ih2ByL4LE9g==
+X-Received: by 2002:a1c:440b:0:b0:3cf:4db1:d741 with SMTP id r11-20020a1c440b000000b003cf4db1d741mr20754947wma.197.1667494934967;
+        Thu, 03 Nov 2022 10:02:14 -0700 (PDT)
+Received: from ryzen.lan (79-73-69-252.dynamic.dsl.as9105.com. [79.73.69.252])
+        by smtp.gmail.com with ESMTPSA id i15-20020adfa50f000000b002366c3eefccsm1286342wrb.109.2022.11.03.10.02.14
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 10:02:14 -0700 (PDT)
+From:   Peter Griffin <peter.griffin@linaro.org>
+Cc:     Peter Griffin <peter.griffin@linaro.org>,
+        Alexander Viro <viro@zeniv.linux.org.uk>,
+        Miklos Szeredi <mszeredi@redhat.com>, stable@vger.kernel.org,
+        linux-fsdevel@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Will McVicker <willmcvicker@google.com>,
+        Peter Griffin <gpeter@google.com>
+Subject: [PATCH] vfs: vfs_tmpfile: ensure O_EXCL flag is enforced
+Date:   Thu,  3 Nov 2022 17:02:10 +0000
+Message-Id: <20221103170210.464155-1-peter.griffin@linaro.org>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
+To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With clang's kernel control flow integrity (kCFI, CONFIG_CFI_CLANG),
-indirect call targets are validated against the expected function
-pointer prototype to make sure the call target is valid to help mitigate
-ROP attacks. If they are not identical, there is a failure at run time,
-which manifests as either a kernel panic or thread getting killed. A
-proposed warning in clang aims to catch these at compile time, which
-reveals:
+If O_EXCL is *not* specified, then linkat() can be
+used to link the temporary file into the filesystem.
+If O_EXCL is specified then linkat() should fail (-1).
 
-  drivers/s390/net/lcs.c:2090:21: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-          .ndo_start_xmit         = lcs_start_xmit,
-                                    ^~~~~~~~~~~~~~
-  drivers/s390/net/lcs.c:2097:21: error: incompatible function pointer types initializing 'netdev_tx_t (*)(struct sk_buff *, struct net_device *)' (aka 'enum netdev_tx (*)(struct sk_buff *, struct net_device *)') with an expression of type 'int (struct sk_buff *, struct net_device *)' [-Werror,-Wincompatible-function-pointer-types-strict]
-          .ndo_start_xmit         = lcs_start_xmit,
-                                    ^~~~~~~~~~~~~~
+After commit 863f144f12ad ("vfs: open inside ->tmpfile()")
+the O_EXCL flag is no longer honored by the vfs layer for
+tmpfile, which means the file can be linked even if O_EXCL
+flag is specified, which is a change in behaviour for
+userspace!
 
-->ndo_start_xmit() in 'struct net_device_ops' expects a return type of
-'netdev_tx_t', not 'int'. Adjust the return type of lcs_start_xmit() to
-match the prototype's to resolve the warning and potential CFI failure,
-should s390 select ARCH_SUPPORTS_CFI_CLANG in the future.
+The open flags was previously passed as a parameter, so it
+was uneffected by the changes to file->f_flags caused by
+finish_open(). This patch fixes the issue by storing
+file->f_flags in a local variable so the O_EXCL test
+logic is restored.
 
-Link: https://github.com/ClangBuiltLinux/linux/issues/1750
-Reviewed-by: Alexandra Winter <wintera@linux.ibm.com>
-Reviewed-by: Kees Cook <keescook@chromium.org>
-Signed-off-by: Nathan Chancellor <nathan@kernel.org>
+This regression was detected by Android CTS Bionic fcntl()
+tests running on android-mainline [1].
+
+[1] https://android.googlesource.com/platform/bionic/+/
+    refs/heads/master/tests/fcntl_test.cpp#352
+
+Fixes: 863f144f12ad ("vfs: open inside ->tmpfile()")
+To: lkml <linux-kernel@vger.kernel.org>
+Cc: Alexander Viro <viro@zeniv.linux.org.uk>
+Cc: Miklos Szeredi <mszeredi@redhat.com>
+Cc: stable@vger.kernel.org
+Cc: linux-fsdevel@vger.kernel.org
+Cc: linux-kernel@vger.kernel.org
+Cc: Will McVicker <willmcvicker@google.com>
+Cc: Peter Griffin <gpeter@google.com>
+Signed-off-by: Peter Griffin <peter.griffin@linaro.org>
 ---
-v2:
-  - Pick up tags from Alexandra and Kees.
-  - Adjust indentation of modified lines, as they can fit within the
-    line limit (Alexandra).
-v1: https://lore.kernel.org/20221102163252.49175-3-nathan@kernel.org/
----
- drivers/s390/net/lcs.c | 8 +++-----
- 1 file changed, 3 insertions(+), 5 deletions(-)
+ fs/namei.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/s390/net/lcs.c b/drivers/s390/net/lcs.c
-index 84c8981317b4..38f312664ce7 100644
---- a/drivers/s390/net/lcs.c
-+++ b/drivers/s390/net/lcs.c
-@@ -1519,9 +1519,8 @@ lcs_txbuffer_cb(struct lcs_channel *channel, struct lcs_buffer *buffer)
- /*
-  * Packet transmit function called by network stack
-  */
--static int
--__lcs_start_xmit(struct lcs_card *card, struct sk_buff *skb,
--		 struct net_device *dev)
-+static netdev_tx_t __lcs_start_xmit(struct lcs_card *card, struct sk_buff *skb,
-+				    struct net_device *dev)
- {
- 	struct lcs_header *header;
- 	int rc = NETDEV_TX_OK;
-@@ -1582,8 +1581,7 @@ __lcs_start_xmit(struct lcs_card *card, struct sk_buff *skb,
- 	return rc;
- }
+diff --git a/fs/namei.c b/fs/namei.c
+index 578c2110df02..9155ecb547ce 100644
+--- a/fs/namei.c
++++ b/fs/namei.c
+@@ -3591,6 +3591,7 @@ static int vfs_tmpfile(struct user_namespace *mnt_userns,
+ 	struct inode *dir = d_inode(parentpath->dentry);
+ 	struct inode *inode;
+ 	int error;
++	int open_flag = file->f_flags;
  
--static int
--lcs_start_xmit(struct sk_buff *skb, struct net_device *dev)
-+static netdev_tx_t lcs_start_xmit(struct sk_buff *skb, struct net_device *dev)
- {
- 	struct lcs_card *card;
- 	int rc;
+ 	/* we want directory to be writable */
+ 	error = inode_permission(mnt_userns, dir, MAY_WRITE | MAY_EXEC);
+@@ -3613,7 +3614,7 @@ static int vfs_tmpfile(struct user_namespace *mnt_userns,
+ 	if (error)
+ 		return error;
+ 	inode = file_inode(file);
+-	if (!(file->f_flags & O_EXCL)) {
++	if (!(open_flag & O_EXCL)) {
+ 		spin_lock(&inode->i_lock);
+ 		inode->i_state |= I_LINKABLE;
+ 		spin_unlock(&inode->i_lock);
 -- 
-2.38.1
+2.34.1
 
