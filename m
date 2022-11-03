@@ -2,304 +2,115 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C50DA618AA5
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 22:35:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7D8B1618AA0
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 22:34:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231515AbiKCVf0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 17:35:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49844 "EHLO
+        id S229485AbiKCVef (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 17:34:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49002 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231688AbiKCVfL (ORCPT
+        with ESMTP id S231185AbiKCVeb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 17:35:11 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BE94220E8
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 14:35:04 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1667511277; bh=kzvI8y8uyM4os1o1QQC1oIapo3BRq4VS8eS4U1rhvTM=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=ZtddkZuh3XHgOl8eSNEbAUrcTmwId+LG15klWehfO/WrvqNzcGNYuxdd4RYAeP6AR
-         /vKBkDajkJXj8BXobe+5IwaRLF9/8gMCZ8ZDT1WsEdGFumuR/JATy/w4KPPoKr37iB
-         xygbQff1BJdmbXhA0Zobt1biFtHk/INF8xs9mK3z3GhyP38RyAQuZZ2AsMX8SHA4r7
-         wCg5uBCtS+TbyPHonG73e8U0o9iEkiPKSwg3NgX80wJf72jGe2iG2zu1qvDIYP8Q0S
-         JkRUVSUQ0BeqfEnKWytcnMR4ff3PupAVkyd6+G67YHGMSFXVStt06dJyAiw+FZXAwA
-         amOnh5rktfkuw==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([78.34.126.36]) by mail.gmx.net (mrgmx104
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1Mzyuc-1pCLTm3q0U-00x6sK; Thu, 03
- Nov 2022 22:34:37 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     openbmc@lists.ozlabs.org, Joel Stanley <joel@jms.id.au>,
-        Tomer Maimon <tmaimon77@gmail.com>
-Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        Paul Menzel <pmenzel@molgen.mpg.de>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Conor Dooley <conor.dooley@microchip.com>,
-        Hector Martin <marcan@marcan.st>,
-        Robert Jarzmik <robert.jarzmik@free.fr>,
-        Nicolas Ferre <nicolas.ferre@microchip.com>,
-        Brian Norris <briannorris@chromium.org>,
-        Sven Peter <sven@svenpeter.dev>, linux-kernel@vger.kernel.org
-Subject: [PATCH v6] soc: nuvoton: Add SoC info driver for WPCM450
-Date:   Thu,  3 Nov 2022 22:34:15 +0100
-Message-Id: <20221103213420.1395507-1-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.35.1
+        Thu, 3 Nov 2022 17:34:31 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9BFF205CD
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 14:34:30 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id a14so4626155wru.5
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 14:34:30 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FU1biKPNaMrVrfMfS/cMbDD3VDogi7+hixB8NxqtjUU=;
+        b=aez89FowVGLmljMWoxs9uY4bYW5Evns1l2erpjLe8kCpR2+MI9j+F6U1+i9gmvWLWV
+         QWUl8RcJJwFsVJx/mc3RfEC0sevE0JUCZB2dJvT/SkdHn2thxqiQuWILNRtZATE+IGu4
+         AextxmVxtdQ2Xt6vbFVlkpdAJ6Oa3nJsuT8QjKUovga1CjyYGtTN1kkOnL6/CeieAR7a
+         lVIXDiUstuh4zW0jYO9kXAYrjGKzYh2Ao1gbQknLkqRj+J14TEsUx4foErM+ZPEmMnqo
+         Y+3e/gC6KpWGGTbX2M8eXiyh2XaZfjtVTENAkbG4lmkFi6sV9OV46A76fKUM0/thrAXo
+         LRJg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FU1biKPNaMrVrfMfS/cMbDD3VDogi7+hixB8NxqtjUU=;
+        b=tlk2QDkt6IJFYg/qENPZkNTGeKQdhNEwmeSROjpz87WJy1ockIE9VL1HGF4cRHIBtX
+         frItcu7bKVMtejxNanSj9ueqw0i7ZX0HvGBli3aWe7mDlSEWnUoeZeqWANt7LN1Mc94g
+         6AOfNo/xKKVhanNSfKR8GO9lVx7Xw3M/eJjagD6DlaDAuz3HgrRYPRkniKxC5JfSj5hj
+         InD6gK/ZY3nyIh93cD7MPSHrRH/+z6GYUUICUt3H44usiaKU8VPwGtjnCYLT3tKs7Da2
+         V7yuMnUoe7/PnOIVDGH49gF2ZhMZ8n/pooF7TCv1ScsRbnxRVdWkKD757ddXPHoRw0KB
+         SeKA==
+X-Gm-Message-State: ACrzQf2w+lR4Ecu6IJ869E9sh32ZyBovJLvARVRso4ljm764KhsYDe0x
+        KEXoRe8jQ/WQ8/94teylee/rJk7d0uUcyU0x
+X-Google-Smtp-Source: AMsMyM5onYk+70UofaWQtrMixi6I+de28mPZhvbEba/xUcxjEaSXtjZuvLTkP2c+cGobgRTdQe4HHA==
+X-Received: by 2002:adf:e84f:0:b0:235:d53a:2d7f with SMTP id d15-20020adfe84f000000b00235d53a2d7fmr20719446wrn.334.1667511269190;
+        Thu, 03 Nov 2022 14:34:29 -0700 (PDT)
+Received: from stroh80.sec.9e.network (ip-078-094-000-051.um19.pools.vodafone-ip.de. [78.94.0.51])
+        by smtp.gmail.com with ESMTPSA id bq7-20020a5d5a07000000b0022e035a4e93sm1757027wrb.87.2022.11.03.14.34.28
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 14:34:28 -0700 (PDT)
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+X-Google-Original-From: Naresh Solanki <Naresh.Solanki@9elements.com>
+To:     linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     Naresh Solanki <Naresh.Solanki@9elements.com>
+Subject: [PATCH v8 0/2] mfd: max597x: Add support for max597x
+Date:   Thu,  3 Nov 2022 22:34:23 +0100
+Message-Id: <20221103213425.2474772-1-Naresh.Solanki@9elements.com>
+X-Mailer: git-send-email 2.37.3
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:w29psqiulMSZj+SLdxY1H/PPfAOFhgD1+jy8eUUJFMbeDpzEN8m
- NIarEjQq2taE5HjOnkez9yoDksjdqN6slxeWdk70XzwxtMg8BJM0Jly3+7bxqzzl8bhWtoC
- Jj0oKAnBjZsv0B6MX/HyXcLJm3DYvRksuEXaw0psGlkX7rjYdvSsuSYCvQfTIfDzcMLcatq
- 3XkqucMeXkuXeb3G4eLDg==
-UI-OutboundReport: notjunk:1;M01:P0:VPgmaCQTlTI=;iCu9aIj7cBcl8adXrHitFBPYnjm
- vm7s+PsxP824T1iTmcLDdsC/yxVqKnPyy3QqLDoWJY8guUey76BZbn4mYDdY9u0QR+7eBzmhu
- pQ23b/viv7/NLCG8PHq9/aQeIRTZg4pa/nV1yrRdQ4WZGXRH0OI8FYG4zAV2zfibc7zbUWzL4
- oOle8slvDST8OZIKjullfAHd7cVbHtL1JEWqV9aYi/IPumnyvoRWDUxiS1Ts0ng81oenn/hgA
- BvkoavxAPCAuzp6pdSSk7lCigRqnnxieYxP9mpe4fhQJsMUbrzLJiRNuFdytSdzau6cYog19P
- g3DHtjQik1VF5GLvB3/ND/sg4QHtSzC0+ozGfipZauSzLDXfWdvqmzf0++HSBo6195qsIuI6t
- 7TULPM0waQOAqLuB3f/iTkpaBfjIHTKk+QVD4qWJL36Uw8NvAksf0RMYVXPtLD/JzPCduwfvo
- G2c0R7jsj7sLg7hh7QGaWrRsozHumyfbDJr77W8wQGQAWBTrMbxhuIxkb6jxHjrP+FqqtRQzW
- qRfh6qv4eIxp8m5jrP8x7SlPMFXLdq7GUTlVqGIdThidgCtQCtv6Yt8XenoI/psmv+UFLiAax
- YcHc1OqnAxBZhWG8DKLXd0lKTVVeScPu+RsTWq3KiQzl18heJzjStYmHs9HVfxZwzXV8Iqx75
- 2hAGStN9pkqrcIe9aNHHULOzuN3L2v5GtOWA7MIoYwn3aLAXpW4Sgj03LXt9wuaal3FV8TNZT
- dR840+RuzWYXvlkaskqoeIs5Vi7VyX12RY8C47w7a06trBzaOvKfAvMgZ/3DZkXRUP5j0xwZL
- 7ll2nQuKS3Gx56q6WC9R1A6ZihYPoKKA8kC5ObgH97GcBPDnm9JDbFOeZQN8EagmS9nRoK/jB
- XR5ZSErZnz04HIiqI1lKymGfyH4+5g+d1sv0FrLltuhieLKwBgyMED0+2Ok6YOanLifcTlZxI
- SKezQw==
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Add a SoC information driver for Nuvoton WPCM450 SoCs. It provides
-information such as the SoC revision.
+max597x is multifunction device with hot swap controller, fault
+protection & upto four indication leds.
 
-Usage example:
+max5978 has single hot swap controller whereas max5970 has two hot swap
+controllers.
 
-  # grep . /sys/devices/soc0/*
-  /sys/devices/soc0/family:Nuvoton NPCM
-  /sys/devices/soc0/revision:A3
-  /sys/devices/soc0/soc_id:WPCM450
+Change in V8:
+- Set additionalproperties to false
+Change in V7:
+- Update id
+- Remove empty line
+Changes in V6:
+- Update missing vendor prefix
+- Update indentation in example
+Changes in V5:
+- Fix dt schema error
+Changes in V4:
+- Add NULL entry for of_device_id
+- Memory allocation check
+Changes in V3:
+- Address code review comment
+Changes in V2:
+- Update depends in Kconfig.
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-Reviewed-by: Joel Stanley <joel@jms.id.au>
-Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
-=2D--
-v6:
-- Select REGMAP
-- Rearrange Kconfig structure a bit
+Marcello Sylvester Bauer (1):
+  dt-bindings: mfd: Add bindings for MAX5970 and MAX5978
 
-v5:
-- Change Kconfig option from bool to tristate
+Patrick Rudolph (1):
+  mfd: max597x: Add support for MAX5970 and MAX5978
 
-v4:
-- rebase on 5.19-rc1
+ .../bindings/mfd/maxim,max5970.yaml           | 170 ++++++++++++++++++
+ drivers/mfd/Kconfig                           |  12 ++
+ drivers/mfd/Makefile                          |   1 +
+ drivers/mfd/max597x.c                         |  92 ++++++++++
+ include/linux/mfd/max597x.h                   | 103 +++++++++++
+ 5 files changed, 378 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max5970.yaml
+ create mode 100644 drivers/mfd/max597x.c
+ create mode 100644 include/linux/mfd/max597x.h
 
-v3:
-- Declare revisions array as static
-- Change get_revision parameter to `unsigned int`
-- Add Paul's R-b tag
-- Add usage example
-- Sort includes
 
-v2:
-- https://lore.kernel.org/lkml/20220409173319.2491196-1-j.neuschaefer@gmx.=
-net/
-- Add R-b tag
-- rebase on 5.18-rc1
-
-v1:
-- https://lore.kernel.org/lkml/20220129143316.2321460-1-j.neuschaefer@gmx.=
-net/
-=2D--
- drivers/soc/Kconfig               |   1 +
- drivers/soc/Makefile              |   1 +
- drivers/soc/nuvoton/Kconfig       |  17 +++++
- drivers/soc/nuvoton/Makefile      |   2 +
- drivers/soc/nuvoton/wpcm450-soc.c | 109 ++++++++++++++++++++++++++++++
- 5 files changed, 130 insertions(+)
- create mode 100644 drivers/soc/nuvoton/Kconfig
- create mode 100644 drivers/soc/nuvoton/Makefile
- create mode 100644 drivers/soc/nuvoton/wpcm450-soc.c
-
-diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
-index e461c071189b4..f17764a7e5884 100644
-=2D-- a/drivers/soc/Kconfig
-+++ b/drivers/soc/Kconfig
-@@ -15,6 +15,7 @@ source "drivers/soc/ixp4xx/Kconfig"
- source "drivers/soc/litex/Kconfig"
- source "drivers/soc/mediatek/Kconfig"
- source "drivers/soc/microchip/Kconfig"
-+source "drivers/soc/nuvoton/Kconfig"
- source "drivers/soc/pxa/Kconfig"
- source "drivers/soc/qcom/Kconfig"
- source "drivers/soc/renesas/Kconfig"
-diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
-index 69ba6508cf2c1..9f92506854852 100644
-=2D-- a/drivers/soc/Makefile
-+++ b/drivers/soc/Makefile
-@@ -20,6 +20,7 @@ obj-$(CONFIG_SOC_XWAY)		+=3D lantiq/
- obj-$(CONFIG_LITEX_SOC_CONTROLLER) +=3D litex/
- obj-y				+=3D mediatek/
- obj-y				+=3D microchip/
-+obj-y				+=3D nuvoton/
- obj-y				+=3D pxa/
- obj-y				+=3D amlogic/
- obj-y				+=3D qcom/
-diff --git a/drivers/soc/nuvoton/Kconfig b/drivers/soc/nuvoton/Kconfig
-new file mode 100644
-index 0000000000000..2167d3d739d84
-=2D-- /dev/null
-+++ b/drivers/soc/nuvoton/Kconfig
-@@ -0,0 +1,17 @@
-+# SPDX-License-Identifier: GPL-2.0
-+menu "Nuvoton SoC drivers"
-+	depends on ARCH_NPCM || COMPILE_TEST
-+
-+config WPCM450_SOC
-+	tristate "Nuvoton WPCM450 SoC driver"
-+	default y if ARCH_WPCM450
-+	select SOC_BUS
-+	select REGMAP
-+	help
-+	  Say Y here to compile the SoC information driver for Nuvoton
-+	  WPCM450 SoCs.
-+
-+	  This driver provides information such as the SoC model and
-+	  revision.
-+
-+endmenu
-diff --git a/drivers/soc/nuvoton/Makefile b/drivers/soc/nuvoton/Makefile
-new file mode 100644
-index 0000000000000..e30317b4e8290
-=2D-- /dev/null
-+++ b/drivers/soc/nuvoton/Makefile
-@@ -0,0 +1,2 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+obj-$(CONFIG_WPCM450_SOC)	+=3D wpcm450-soc.o
-diff --git a/drivers/soc/nuvoton/wpcm450-soc.c b/drivers/soc/nuvoton/wpcm4=
-50-soc.c
-new file mode 100644
-index 0000000000000..c5e0d11c383b1
-=2D-- /dev/null
-+++ b/drivers/soc/nuvoton/wpcm450-soc.c
-@@ -0,0 +1,109 @@
-+// SPDX-License-Identifier: GPL-2.0
-+/*
-+ * Nuvoton WPCM450 SoC Identification
-+ *
-+ * Copyright (C) 2022 Jonathan Neusch=C3=A4fer
-+ */
-+
-+#include <linux/mfd/syscon.h>
-+#include <linux/of.h>
-+#include <linux/regmap.h>
-+#include <linux/slab.h>
-+#include <linux/sys_soc.h>
-+
-+#define GCR_PDID	0
-+#define PDID_CHIP(x)	((x) & 0x00ffffff)
-+#define CHIP_WPCM450	0x926450
-+#define PDID_REV(x)	((x) >> 24)
-+
-+struct revision {
-+	u8 number;
-+	const char *name;
-+};
-+
-+static const struct revision revisions[] __initconst =3D {
-+	{ 0x00, "Z1" },
-+	{ 0x03, "Z2" },
-+	{ 0x04, "Z21" },
-+	{ 0x08, "A1" },
-+	{ 0x09, "A2" },
-+	{ 0x0a, "A3" },
-+	{}
-+};
-+
-+static const char * __init get_revision(unsigned int rev)
-+{
-+	int i;
-+
-+	for (i =3D 0; revisions[i].name; i++)
-+		if (revisions[i].number =3D=3D rev)
-+			return revisions[i].name;
-+	return NULL;
-+}
-+
-+static struct soc_device_attribute *wpcm450_attr;
-+static struct soc_device *wpcm450_soc;
-+
-+static int __init wpcm450_soc_init(void)
-+{
-+	struct soc_device_attribute *attr;
-+	struct soc_device *soc;
-+	const char *revision;
-+	struct regmap *gcr;
-+	u32 pdid;
-+	int ret;
-+
-+	if (!of_machine_is_compatible("nuvoton,wpcm450"))
-+		return 0;
-+
-+	gcr =3D syscon_regmap_lookup_by_compatible("nuvoton,wpcm450-gcr");
-+	if (IS_ERR(gcr))
-+		return PTR_ERR(gcr);
-+	ret =3D regmap_read(gcr, GCR_PDID, &pdid);
-+	if (ret)
-+		return ret;
-+
-+	if (PDID_CHIP(pdid) !=3D CHIP_WPCM450) {
-+		pr_warn("Unknown chip ID in GCR.PDID: 0x%06x\n", PDID_CHIP(pdid));
-+		return -ENODEV;
-+	}
-+
-+	revision =3D get_revision(PDID_REV(pdid));
-+	if (!revision) {
-+		pr_warn("Unknown chip revision in GCR.PDID: 0x%02x\n", PDID_REV(pdid));
-+		return -ENODEV;
-+	}
-+
-+	attr =3D kzalloc(sizeof(*attr), GFP_KERNEL);
-+	if (!attr)
-+		return -ENOMEM;
-+
-+	attr->family =3D "Nuvoton NPCM";
-+	attr->soc_id =3D "WPCM450";
-+	attr->revision =3D revision;
-+	soc =3D soc_device_register(attr);
-+	if (IS_ERR(soc)) {
-+		kfree(attr);
-+		pr_warn("Could not register SoC device\n");
-+		return PTR_ERR(soc);
-+	}
-+
-+	wpcm450_soc =3D soc;
-+	wpcm450_attr =3D attr;
-+	return 0;
-+}
-+module_init(wpcm450_soc_init);
-+
-+static void __exit wpcm450_soc_exit(void)
-+{
-+	if (wpcm450_soc) {
-+		soc_device_unregister(wpcm450_soc);
-+		wpcm450_soc =3D NULL;
-+		kfree(wpcm450_attr);
-+	}
-+}
-+module_exit(wpcm450_soc_exit);
-+
-+MODULE_LICENSE("GPL");
-+MODULE_AUTHOR("Jonathan Neusch=C3=A4fer");
-+MODULE_DESCRIPTION("Nuvoton WPCM450 SoC Identification driver");
-=2D-
-2.35.1
+base-commit: 6b780408be034213edfb5946889882cb29f8f159
+-- 
+2.37.3
 
