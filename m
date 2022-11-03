@@ -2,72 +2,98 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3A244618655
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:44:37 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D54C961865B
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:45:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231346AbiKCRoe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 13:44:34 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52894 "EHLO
+        id S230096AbiKCRpA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 13:45:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53170 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229708AbiKCRob (ORCPT
+        with ESMTP id S231226AbiKCRo5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:44:31 -0400
-Received: from mail-qt1-x82c.google.com (mail-qt1-x82c.google.com [IPv6:2607:f8b0:4864:20::82c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DC51B1A813
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:44:30 -0700 (PDT)
-Received: by mail-qt1-x82c.google.com with SMTP id e15so1714416qts.1
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:44:30 -0700 (PDT)
+        Thu, 3 Nov 2022 13:44:57 -0400
+Received: from mail-pj1-x102d.google.com (mail-pj1-x102d.google.com [IPv6:2607:f8b0:4864:20::102d])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E69D21A813
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:44:56 -0700 (PDT)
+Received: by mail-pj1-x102d.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso2485482pjc.5
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:44:56 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linux-foundation.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=mA1Z7Cm83w+Vyx+oBgGwMaOfCfLAZylXYXAtJ1Raiz8=;
-        b=dod+VUiBUEq1hk72lAssa/ES6lzBPt/3grGL93+x6xqazqzSesxF5gOoKjy5hsuBii
-         dpyo6KG7QmoqhIT3bctyKBZuOrbntQ/3KSRaUa+QlclegAP50WUv80YibEtoQqHjPJB6
-         Uu61/FFf2iArbTLONCqSdQPP9r8phlQw2FnrQ=
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=cK19xZ8r/JxZ6zrZk59CGRO4XALiFfw/k+DEo690ifc=;
+        b=AMXkMgBJe864E9ylH4eLhcV4DnnmpnUZQciwStcW/fWfVy8vl8xbyLHXqWoh/4n8QF
+         bRAhsfNtOcglKLMhK6Nb/v5AF7HvdYNYuPv80cwXOHPX5E9n4f4rIwmSH2XAdpFIqhuj
+         sSsx/7sAKHM3fmeDS7xyNpoxOPMcbkwOVVWM5XBPQcjHKuBxYoH5JxFh6oDyEgClSLr4
+         VePL27iqi0rk5/s+JivkXFUi7OtMXJLNacJQMnJ3M4obYSjfplMj8jxI5D4RNhWTNCit
+         VmDRgbq4Pt+ph415Zp0hH77zR2JN9eVpsj1xI6CTZrVgir1QKlQnpGg6QTPI6wKdJ0ls
+         3hyg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=mA1Z7Cm83w+Vyx+oBgGwMaOfCfLAZylXYXAtJ1Raiz8=;
-        b=IjOl7b5jwy58qNWA/+++xRwppZ7Jktxq3r2nOIbwJHrFopuHupI7dkxUk4Bx4fs8mC
-         SyqI/aBWTwN43jGZbjcN7tzrwDy7Fopn+wwd06AwM6aLswB/esuG/HlNFm55psu60079
-         lUOT+TWFmHHvWM/4GhY7Q7w/WPWEi8FvScuiyolJqtZGrLFVB61S0C4yj3BavoOH/+2k
-         ZJcpHgHYA5SufGvYKr2eqTrlaHp8rBp1tUI1W/zgcLkrutLbhd6qZNrbcA7e0dBgNM8D
-         bJM1s33iw8T7Y0cZYRg8fj5qiQLdont8E2DUyGp/8vGwcIGG1aEQIPNWPf4pa4yYVHH2
-         HOPw==
-X-Gm-Message-State: ACrzQf0ozMSNBFDghmcnDTHvVW2o1PXYXQdqGxe3OPVlceHK6hmQMuTS
-        Qq+TPp6idW43y2AAkEFGd7z7gKFfy2D/9Q==
-X-Google-Smtp-Source: AMsMyM5ExIaEf8/OjZnh2cN/CW1niCKANrmSTW9XFQENKWh7voKGb9QRditgHvc78ZWPsfgDKHcGjA==
-X-Received: by 2002:ac8:6f08:0:b0:3a5:45a4:ab59 with SMTP id bs8-20020ac86f08000000b003a545a4ab59mr8346448qtb.167.1667497469776;
-        Thu, 03 Nov 2022 10:44:29 -0700 (PDT)
-Received: from mail-yw1-f172.google.com (mail-yw1-f172.google.com. [209.85.128.172])
-        by smtp.gmail.com with ESMTPSA id k3-20020a05620a414300b006ce0733caebsm1142713qko.14.2022.11.03.10.44.28
-        for <linux-kernel@vger.kernel.org>
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 10:44:28 -0700 (PDT)
-Received: by mail-yw1-f172.google.com with SMTP id 00721157ae682-3321c2a8d4cso22503337b3.5
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:44:28 -0700 (PDT)
-X-Received: by 2002:a81:8241:0:b0:370:5fad:47f0 with SMTP id
- s62-20020a818241000000b003705fad47f0mr22362989ywf.441.1667497468069; Thu, 03
- Nov 2022 10:44:28 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=cK19xZ8r/JxZ6zrZk59CGRO4XALiFfw/k+DEo690ifc=;
+        b=SrsfYff/55c6OmLmoTYxW8w/APpd/4Vx6SxU/mhf164MTQU7z117FyWnrqVh8mugaa
+         L/vO3fdlmw2AtE9jquAC1FLCWJPxlddC4g5w+bhkMRnNfAZb1QIrpT02KuxxUUpIGE+6
+         +7gb7POJZY3DmUkKDYs3PYhLMB/c7i6IzjzQeEynaXIUALI8cbVYxuTEUJp/WTY8HR8u
+         R+L9D6GsdhwPGmcTpTICtTYyt8LVLThPd30A8JJjwVcfU/FM6A6gvA+XUi4czxmw/Hoe
+         Ur3v7z2Q5eXcuf9oEFMBmSlbh46DXNuLnuszIAYQgOKlBHdNH0pnzC2ylNTOETvxGDyv
+         khUA==
+X-Gm-Message-State: ACrzQf3DmOAzjPyjy0UsWbLwD1Ne1zpekECTpknoswMQ72a7I2bEdkJY
+        lEDWMDX7avXViKbJEx//5Oapew==
+X-Google-Smtp-Source: AMsMyM7Vi7ErqJmqrzHt1bwsO7Jfw+kVc4w4lCdxf/cK5b8KZHYV39XlOvASF4Eye8GSeC7ZJ2rbFQ==
+X-Received: by 2002:a17:90a:d24d:b0:213:d3e4:677a with SMTP id o13-20020a17090ad24d00b00213d3e4677amr24629292pjw.101.1667497496277;
+        Thu, 03 Nov 2022 10:44:56 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id i7-20020a17090332c700b00178aaf6247bsm1004862plr.21.2022.11.03.10.44.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 10:44:55 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 17:44:51 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Paolo Bonzini <pbonzini@redhat.com>
+Cc:     Marc Zyngier <maz@kernel.org>, Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>
+Subject: Re: [PATCH 36/44] KVM: x86: Do compatibility checks when onlining CPU
+Message-ID: <Y2P+E+631c0TNcK7@google.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+ <20221102231911.3107438-37-seanjc@google.com>
+ <23bfd709-f99a-5a74-e4b9-1381b88453f1@redhat.com>
 MIME-Version: 1.0
-References: <87o7tossaa.fsf@mpe.ellerman.id.au>
-In-Reply-To: <87o7tossaa.fsf@mpe.ellerman.id.au>
-From:   Linus Torvalds <torvalds@linux-foundation.org>
-Date:   Thu, 3 Nov 2022 10:44:12 -0700
-X-Gmail-Original-Message-ID: <CAHk-=wh87aGtg3eJPkA31V0Pn22hah0DWRc8oWsQ__5P2SXaTw@mail.gmail.com>
-Message-ID: <CAHk-=wh87aGtg3eJPkA31V0Pn22hah0DWRc8oWsQ__5P2SXaTw@mail.gmail.com>
-Subject: Re: [GIT PULL] Please pull powerpc/linux.git powerpc-6.1-4 tag
-To:     Michael Ellerman <mpe@ellerman.id.au>
-Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
-        schwab@linux-m68k.org, palmer@dabbelt.com,
-        linux-riscv@lists.infradead.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <23bfd709-f99a-5a74-e4b9-1381b88453f1@redhat.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,26 +101,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 2, 2022 at 7:09 PM Michael Ellerman <mpe@ellerman.id.au> wrote:
->
->  - Fix an endian thinko in the asm-generic compat_arg_u64() which led to syscall arguments
->    being swapped for some compat syscalls.
+On Thu, Nov 03, 2022, Paolo Bonzini wrote:
+> On 11/3/22 00:19, Sean Christopherson wrote:
+> > From: Chao Gao<chao.gao@intel.com>
+> > 
+> > Do compatibility checks when enabling hardware to effectively add
+> > compatibility checks when onlining a CPU.  Abort enabling, i.e. the
+> > online process, if the (hotplugged) CPU is incompatible with the known
+> > good setup.
+> 
+> This paragraph is not true with this patch being before "KVM: Rename and
+> move CPUHP_AP_KVM_STARTING to ONLINE section".
 
-Am I mis-reading this, or did this bug (introduced in this merge
-window by commit 43d5de2b67d7 "asm-generic: compat: Support BE for
-long long args in 32-bit ABIs") break *every* architecture?
+Argh, good eyes.  Getting the ordering correct in this series has been quite the
+struggle.  Assuming there are no subtle dependencies between x86 and common KVM,
+the ordering should be something like this:
 
-And people just didn't scream, because 32-bit code has just become so rare?
-
-Or is it just because those compat macros are effectively not used
-elsewhere, and x86 has its own versions? Looks like possibly mainly
-RISC-V?
-
-Side note: why is it doing
-
-        #ifndef compat_arg_u64
-
-at all? That macro is not actually defined anywhere else, so that
-#ifdef seems to be just confused.
-
-                 Linus
+  KVM: Opt out of generic hardware enabling on s390 and PPC
+  KVM: Register syscore (suspend/resume) ops early in kvm_init()
+  KVM: x86: Do compatibility checks when onlining CPU
+  KVM: SVM: Check for SVM support in CPU compatibility checks
+  KVM: VMX: Shuffle support checks and hardware enabling code around
+  KVM: x86: Do VMX/SVM support checks directly in vendor code
+  KVM: x86: Unify pr_fmt to use module name for all KVM modules
+  KVM: x86: Use KBUILD_MODNAME to specify vendor module name
+  KVM: Make hardware_enable_failed a local variable in the "enable all" path
+  KVM: Use a per-CPU variable to track which CPUs have enabled virtualization
+  KVM: Remove on_each_cpu(hardware_disable_nolock) in kvm_exit()
+  KVM: Drop kvm_count_lock and instead protect kvm_usage_count with kvm_lock
+  KVM: Disable CPU hotplug during hardware enabling
+  KVM: Rename and move CPUHP_AP_KVM_STARTING to ONLINE section
+  KVM: Drop kvm_arch_check_processor_compat() hook
