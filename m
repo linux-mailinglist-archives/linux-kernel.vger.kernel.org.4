@@ -2,131 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6A6D66178C6
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 09:35:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 448106178E1
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 09:38:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231169AbiKCIfP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 04:35:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41560 "EHLO
+        id S231221AbiKCIix (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 04:38:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46314 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbiKCIfN (ORCPT
+        with ESMTP id S231124AbiKCIiu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 04:35:13 -0400
-Received: from FRA01-PR2-obe.outbound.protection.outlook.com (mail-eopbgr120047.outbound.protection.outlook.com [40.107.12.47])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 106C8194;
-        Thu,  3 Nov 2022 01:35:12 -0700 (PDT)
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
- b=gooRMgRinuDhDC8Hxe5aRP3UTKMzDJamvwzCyUBY4D+QPbyrj4+r75A9nA+1uj9Mm2DAgDsgCDH21bmUNATzjrIW/nVnJc91kDmXahmOiZtaza+Htp95ivSCGEoJj9JA0/i/9MHzXRWPmlcg97a8Uhfganml8kc5rq2FkWIXMYnNENM5436TXmDuP2eD0YRP6kwa0H6oWOA44U3gfLFNV22l9MSbtazbcPI529sXNK+zV8VniCIAqtTuuPIUOrzrVkCbzLUsLdQk52a+zQhDAeCnfKRiu7ifZvF7/TzSrIQc5L/KA7UAIbAEZ/X1rNvJ/kxvRPBhynB6NcYNf+qufg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector9901;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=gqgrrBynTpVKstNLANA12SDZl75rhVI6jsYQgax9UPM=;
- b=eAApkjPefJySGhNCjjHnKTwTo0wXp7r1A8oLWjFCtRnrQzdpI5WT7r8g0Liysx1Bz3sp6adgA4IN6YEaRPbqpccBkIR8gkCx8vrMosl45fy9OjIbU0RW/cZQDjgNXXH3t3BnZ2pxSJiDAY3QdO2FIrQRU679GIIHsJXVU6XGR3Q7KSUuMfEivD//vtZvmgYGmQ7LuXXSaFfnw3iaS1STF+/olYW1nIYBa8P0/24+VAR9t2XMeVrhlt4L2FlwE55m8MNgzu5ntG7fll/70Ql4usWCtK4utNWXltI7DBKgn3EchbJsnjM6TR0LdEilAER6ZEj50gIRnT6mdeNq1mjvFg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=csgroup.eu; dmarc=pass action=none header.from=csgroup.eu;
- dkim=pass header.d=csgroup.eu; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=csgroup.eu;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=gqgrrBynTpVKstNLANA12SDZl75rhVI6jsYQgax9UPM=;
- b=rLRDc6j/OuofDIF8wTLwMk95WMapxfOYuiF5mHd2x9if4CiHwxHYa2AeTBulZT5/7DMSNFBSo+3+Din/r7e1fL3bzNk2/U40ELFU6164n4dZWWBOlDJL+sofWbnTR/y0Pq4GAUIMq6N+v8Hpr92olngLeMS/P9XNSkFhVlUmpALz5mRn9EKSQfn7nJ8sJw1DwMYgoKSO1u0ydLQ1OYzDnLWVgNVqCEXhgdhoypDfwpQzfAlo0TwTFUtmW3SpyBqCB2bKDWYICORVi/BNuzslXr2QH3dmvOrxa7BZiBqeK17va33J7UxwIgkiDRcPFHGJXIV15XVM0CdLz1AyEkn6MQ==
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM (2603:10a6:501:31::15)
- by PAZP264MB3072.FRAP264.PROD.OUTLOOK.COM (2603:10a6:102:1e7::13) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.22; Thu, 3 Nov
- 2022 08:35:09 +0000
-Received: from MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::8bbc:32cb:956d:88e8]) by MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
- ([fe80::8bbc:32cb:956d:88e8%2]) with mapi id 15.20.5769.021; Thu, 3 Nov 2022
- 08:35:09 +0000
-From:   Christophe Leroy <christophe.leroy@csgroup.eu>
-To:     Nicholas Piggin <npiggin@gmail.com>,
-        "linux-modules@vger.kernel.org" <linux-modules@vger.kernel.org>,
-        "linuxppc-dev@lists.ozlabs.org" <linuxppc-dev@lists.ozlabs.org>
-CC:     "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Jessica Yu <jeyu@kernel.org>,
-        Luis Chamberlain <mcgrof@kernel.org>
-Subject: Re: [PATCH v5 2/2] powerpc/64: Add module check for ELF ABI version
-Thread-Topic: [PATCH v5 2/2] powerpc/64: Add module check for ELF ABI version
-Thread-Index: AQHY7SFuQ3YDvt40Qkm2SePGxQaP6a4s5BWA
-Date:   Thu, 3 Nov 2022 08:35:09 +0000
-Message-ID: <513e1973-a1d4-c698-1441-9c7d0f5205ed@csgroup.eu>
-References: <20221031120733.3956781-1-npiggin@gmail.com>
- <20221031120733.3956781-3-npiggin@gmail.com>
-In-Reply-To: <20221031120733.3956781-3-npiggin@gmail.com>
-Accept-Language: fr-FR, en-US
-Content-Language: en-US
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-user-agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=csgroup.eu;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: MRZP264MB2988:EE_|PAZP264MB3072:EE_
-x-ms-office365-filtering-correlation-id: 3c41d88f-24e1-446b-541a-08dabd765130
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;
-x-microsoft-antispam-message-info: 74cAy01cyAa5ax4HtrOfhx8S74m8it1XwC0/qShryRPgUhSrL+HMyfwqSQp2uJ8YEB3BTugGPmcAcbwsBONrHZTLwZQUpIRO8DSaXHIKAEPxiSfXtFpC5EkMGVHV+YpRXNCDBQxSMRuYko0opDeYchTpbdAgC7RwHkl3UH6YPBO7/a0RllHzEe+SvD8g+cW0fUj86k1IFAmX7Te4LrQQaDiLkIds4vDy7rdwGk1GYJCxvQl4o54iuZOQN4EfRoibizi30NwXtzvm/qToPBGYIU0rKo2ojYw0i/BqwBKhGhgT4Uh46pT7CSB2tPByY7Htab8ezR7+nbrkcX6U+YRkvIwwvqYhVCsSGT4lGRXLVyrbPZq2cJSewj92pMqWbW9Q22UUovaicIXYekeBBVA/VyS6Nr08PohMLieh0C8ILjDc6jspqy3vqmCTSPJLakuX3LOqKyXO7MkdwHvdGBU770B9eemTxrNEhqE6RSPYk3P+pr7S+6w5wK7hAwElrlq0L/3InCfkqnZxqEX4illHvCKpTs7ln3vhwk6aCjOZdJixgVGb6chDQgpJVYk6c4Sek8K+5Jv9NSy76cpGZX5Gcx2fx47g7ajmRP2y/KB/8BEeZK/A1D/fBwc3OPVC01kHEoWL3YIirgG+w8L8fkzNb43TFkHXKJ6WbSVlmGKtSnyZshVj0fvtfhyM456W1Gg5vkFZkAjzvNoMIJuVRrHwlYL9raMWvvEt6uF+V02dg/AcpRvvfpatqh8elsbJRssbTs4FOw6ny9AYKVyNNxKUSvgLQUzVXmvCdHaZU5MCj7kAZ2E+q4dLZbwvfWMcOCuvLwi1J+btwPMz8Fu5fed+zQ==
-x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230022)(4636009)(396003)(39850400004)(346002)(376002)(136003)(366004)(451199015)(64756008)(76116006)(66946007)(41300700001)(4326008)(66446008)(66476007)(66556008)(8676002)(91956017)(2906002)(5660300002)(44832011)(316002)(6512007)(8936002)(54906003)(26005)(6506007)(2616005)(186003)(71200400001)(6486002)(110136005)(478600001)(66574015)(36756003)(122000001)(31696002)(38100700002)(86362001)(38070700005)(31686004)(45980500001)(43740500002);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0: =?utf-8?B?RmRubjhFa0puM1ZhZnVxTERIK2lBTkkzWTROYUZuUm1ER21qd25FUGlTVWJa?=
- =?utf-8?B?RHdGcjV0ZUNobnBxSUwvZHNWcmZ4UWdQL0FmWXdVL2pIQVpWZGNXRG9KQW9o?=
- =?utf-8?B?WU8xNE50VDNNTnU2M3FTazlhd0VYVy93OG05YjVTdkd2QmE1U042WUw3UHhW?=
- =?utf-8?B?TUpyUnhETW5EQ3M5TUpIcUd2czVMaWk4Wmw0OEpGVDRDNktOcjUvclRGVkll?=
- =?utf-8?B?N080bi8yTGtSVXpvdk9WQ2hXd2RxQXplelhoVm44QjlpRmd4ejB2Y2hOenJM?=
- =?utf-8?B?bU1MdmtZTjNJOHM1M21jdnU3K25BTmo3bllKcWRERWpxYytPak5iakZYRXJK?=
- =?utf-8?B?RC8walRBUExTRjhIZHJPMjUwYTNtR3FCVGNYTmY4WlBwcnkvSGJET3VjZ05u?=
- =?utf-8?B?YlpFSWhDVGYxMWt0RjlwMEJSNkU0bE1kS01LWGs0ZXdZczRESU4xYm02YXIz?=
- =?utf-8?B?bERaNEJQNFlBRkhRcU9vRmdVOWdJbWFaZ0Y1eVNGZFBjNUs5YlJuMzNwdVly?=
- =?utf-8?B?eXFrb2ZvTERFTTR1YTR6YUZYWDRRK2gwQ2xocmU1cHNXaWVmWTNjV0VIMDZp?=
- =?utf-8?B?eXV5RUs1TG1GWUVpRjVld0JmVENFUGh0NzlvQkNYSDQyUXhYWEpjVy9DcnRN?=
- =?utf-8?B?VUY2cWhtOXdLMWg1N2Q4VWZGVytybXdTbTlFbTk2V1kxS01OL1kyWWhHWEd2?=
- =?utf-8?B?QTR2QzgyTzc2YjVIVHJSNFBFbFNYd3RIdUdISmtRWXYxZldGN2l3c3QyY0E5?=
- =?utf-8?B?UHd3L0dYRTZSTEc5RXdiMFozQ3FIeTVHSFE5VlhOSUNWYnhnbUszQkJDNFJo?=
- =?utf-8?B?cCtvdTM5Z3J1TGhjNjVNSVpJRWlKb0NuRXhyendSVzdTM3dDYjkxTEhpYTdp?=
- =?utf-8?B?ay94Z1lvbXNXWGtjTU8rdUl2WG9aZHdlRFJ2MnQ5dXVWSlI2Nm5Wd0hNcHFk?=
- =?utf-8?B?d3h6WDFxRk92U2djdGJCRWxQY1hGMTBkc0tFdkJXcStlMkxQMXBzSSttRk95?=
- =?utf-8?B?ZHZWSEcvSTVqT05aNFo3OHdlaCtoLzhVbHRjM3N6UFZoTythZjF3SW1uRXNB?=
- =?utf-8?B?VTdTWjJEVldDT0VhVFptamdqVzcybXFYUkpRRm9lbm1JeG5vWXU3RnVWYUxD?=
- =?utf-8?B?MVJPR0VHeVRnbWhocXZMbFBDSWlocUVGRVQ4QlZpSXB4VTBxbnpsZDc0NVJ1?=
- =?utf-8?B?dkltbXZxZzFNRnRmY1J3V3ZKbDhoc0hRZEp4clk4RTVJWVgxMHRrZitPTmt1?=
- =?utf-8?B?MFFRdW52QXJwZ2c5ZWhxV1RzYlpQcXo5Y0N3TlpHSmFXVG5KREpmMmt5ekpX?=
- =?utf-8?B?cFl4bTd1K2RRQzlwMVp3bzFta2k2bXBmK0Z0TVVzQXRiaFgrdXRYQm8xd2RQ?=
- =?utf-8?B?bTdFKzN0ZkZoWjR3Skp4RDVTNHpJWm5HZDdWSVQyd0xwaTdWNXRDakgzeVlT?=
- =?utf-8?B?ZHc4UEp5V2NML2M4a3JWb3dRWUZsb3dLbFlicXFmOEhzQ3VSUGJhWlI4RjUr?=
- =?utf-8?B?dDFoUURGMjRHeWlHcHhLRWNkMVZGNS9tL3FpZ1BLZmxOTmZMeW5HTkdLYWxU?=
- =?utf-8?B?bjJiY05DNHdzc0cwRlIzaGlySVlTRHJZR2tHUWpMTjBVaU5YdHBZeXo5TkNj?=
- =?utf-8?B?MHk1QWgzNnJrVjVwQmZ0TUVBdEgrWVFCSFIzN1ZrdTlBbE55aUtaQ3BuSDNJ?=
- =?utf-8?B?VW9qZWFNZ3F6aVMzTmkxMGoyZmJBV05Yb1YwK1VsZ3RCaXhtcWU4eWdJMWY2?=
- =?utf-8?B?RkFLSFpGdkpjbVdYRVBGaFZnR2N2cFIvK1ZFUmg3VkhxUmsrTzZtTmVmcitQ?=
- =?utf-8?B?MVBwbi9SWkptZnRJQnBmbm0wWlhKeVB1c2Y2bTJPK3RJWG56NjlodVc3RGNu?=
- =?utf-8?B?RklzQ1NoNnZxWjB1NkxGZE5QWEwvenkxK2VOQVpTRlFoam1yWkNDRDd0VFIw?=
- =?utf-8?B?Znluc29td21WenJoZWdQaFBFVkN6a1Y0QVl3dGFQRThyRU5tNHVCTU5KZlJN?=
- =?utf-8?B?OVJPQ2hrZWtQdjNSVXlOaEtUaHNESnY5cFd6eVZ6M3E4UjVFK0Z3TStXdThS?=
- =?utf-8?B?bXVrSmxNNG1HVkxTMFJvV21MOW1vN0JRb2hmY2p4Q1BNR3U5ZFF3MVBiK1pO?=
- =?utf-8?B?VmJBWUVHQk1PZDJuNnpNTnF4OWV5eDgzU0lzOWc5WFBIUlhZRm1ScEpuWDhH?=
- =?utf-8?Q?OipfWQWlY+7RUqL/C8mI/+Q=3D?=
-Content-Type: text/plain; charset="utf-8"
-Content-ID: <AC173E3E2FFD7B47A1A2C3F250DF8373@FRAP264.PROD.OUTLOOK.COM>
-Content-Transfer-Encoding: base64
+        Thu, 3 Nov 2022 04:38:50 -0400
+Received: from egress-ip33a.ess.de.barracuda.com (egress-ip33a.ess.de.barracuda.com [18.185.115.192])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 677F3F43
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 01:38:47 -0700 (PDT)
+Received: from mail-lj1-f200.google.com (mail-lj1-f200.google.com [209.85.208.200]) by mx-outbound45-120.eu-central-1c.ess.aws.cudaops.com (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO); Thu, 03 Nov 2022 08:38:43 +0000
+Received: by mail-lj1-f200.google.com with SMTP id t8-20020a2e9548000000b0027702e8a5b2so433839ljh.20
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 01:38:43 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=mistralsolutions.com; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=unGhO75KNj5F0H5HYdUSY/HSB5t1NyvgLXBVFy7qw9A=;
+        b=nXE3GBOIaAyTMlR5PK4M500jWWXvkYflqSs3gRNfemucWWvMug9fpuqMQTBexPZfYO
+         2fVaxjbsBUyxzKBRraCNXI2mu5qWyJKXynK5PH/VAyU5HHzHO5CIPeotaDTpNjBZ3KaS
+         SujQaLgUPpg1jTPyUW9D1tCTcRnS3kaepmv58=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=unGhO75KNj5F0H5HYdUSY/HSB5t1NyvgLXBVFy7qw9A=;
+        b=n7KePsMbWfDCKNdatb+3j8lbudP4yv4PBGQXr7pyLmsv3yS5wrhYYomOGDEt0cg1S5
+         /FXLh8fC6kgpAJlbFcMRu2paDgjCQ3oGG2vn0DhR4u+UknibA73s+++ziOaVLXAYA0rH
+         UtXDb8N03iY+bhsw/YZ9hwaDT/Mrpl9kiq6rT0VzacYIQoT1e4qeKc0d1kbr9obRUhvp
+         5P4jrqD74bnT93QBryEkEVeiRmD2KDX6/YwaQjG+L+YBphU0Y7lDIg+y+thc6mD3UMDi
+         bWD4RD5BNDZuPZa0zDc0eB1U9Qdlosd1IGeJx/HAMTJgR0C/I4JDy2wzBGi8/tx7C+ke
+         yzJg==
+X-Gm-Message-State: ACrzQf0L9+X/jF4Z7ckGdf9Trwoqrch/jQo0YoNLLN/5DB/U5S4E/CLt
+        tPiT2/upYNBM8YCvFnX5O/DPhYgKREIFKub6sb4PinQEi8MWnU3rEdsfnoO3SQDIznVJFY/PNGK
+        mW5iBDtDOgTB924QgsGbsE+Xn6iwpcomn7OfX2NGDJpMUixQbW4XK5Fcow1cXiB/97iKanNK7GH
+        I0
+X-Received: by 2002:a05:6512:503:b0:4af:1cbe:1ac6 with SMTP id o3-20020a056512050300b004af1cbe1ac6mr10126545lfb.651.1667464722795;
+        Thu, 03 Nov 2022 01:38:42 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM4ZyFMVq5uHecpJAHlwx4mG7Qoyx4MnhULZRvHxykMYE79HFvEHbflsZJ5RaemrbjWPWVouUofspQQIlIXuwuc=
+X-Received: by 2002:a05:6512:503:b0:4af:1cbe:1ac6 with SMTP id
+ o3-20020a056512050300b004af1cbe1ac6mr10126533lfb.651.1667464722470; Thu, 03
+ Nov 2022 01:38:42 -0700 (PDT)
 MIME-Version: 1.0
-X-OriginatorOrg: csgroup.eu
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: MRZP264MB2988.FRAP264.PROD.OUTLOOK.COM
-X-MS-Exchange-CrossTenant-Network-Message-Id: 3c41d88f-24e1-446b-541a-08dabd765130
-X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Nov 2022 08:35:09.1946
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 9914def7-b676-4fda-8815-5d49fb3b45c8
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: VCIYrlxm3tmyitGVSplBOqi+TFb3dWwemiYWTKu2kt66YeFK1hMd8L2pBrQ3XJU6vczy3+7bGGwuQ2fk7JVpDWGC1ItAL1rO+xlBrQtivg4=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PAZP264MB3072
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+References: <20221018123849.23695-1-sinthu.raja@ti.com> <20221018123849.23695-4-sinthu.raja@ti.com>
+ <3f1afad0-1e93-4843-defd-ca32c308cc9e@linaro.org>
+In-Reply-To: <3f1afad0-1e93-4843-defd-ca32c308cc9e@linaro.org>
+From:   Sinthu Raja M <sinthu.raja@mistralsolutions.com>
+Date:   Thu, 3 Nov 2022 14:08:30 +0530
+Message-ID: <CAEd-yTTtQhhECw7jSQb38ThaOT_CtFmHy0dJt3SaKxn1KzSgKg@mail.gmail.com>
+Subject: Re: [PATCH 3/3] arch: arm64: ti: Add support for AM68 SK base board
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sinthu Raja <sinthu.raja@ti.com>
+Content-Type: text/plain; charset="UTF-8"
+X-BESS-ID: 1667464723-311640-5376-4967-1
+X-BESS-VER: 2019.1_20221024.2147
+X-BESS-Apparent-Source-IP: 209.85.208.200
+X-BESS-Outbound-Spam-Score: 0.50
+X-BESS-Outbound-Spam-Report: Code version 3.2, rules version 3.2.2.243897 [from 
+        cloudscan15-16.eu-central-1a.ess.aws.cudaops.com]
+        Rule breakdown below
+         pts rule name              description
+        ---- ---------------------- --------------------------------
+        0.00 BSF_SC0_MISMATCH_TO    META: Envelope rcpt doesn't match header 
+        0.50 BSF_RULE7568M          META: Custom Rule 7568M 
+        0.00 BSF_BESS_OUTBOUND      META: BESS Outbound 
+X-BESS-Outbound-Spam-Status: SCORE=0.50 using account:ESS91090 scores of KILL_LEVEL=7.0 tests=BSF_SC0_MISMATCH_TO, BSF_RULE7568M, BSF_BESS_OUTBOUND
+X-BESS-BRTS-Status: 1
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -134,30 +88,352 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-DQoNCkxlIDMxLzEwLzIwMjIgw6AgMTM6MDcsIE5pY2hvbGFzIFBpZ2dpbiBhIMOpY3JpdMKgOg0K
-PiBPdmVycmlkZSB0aGUgZ2VuZXJpYyBtb2R1bGUgRUxGIGNoZWNrIHRvIHByb3ZpZGUgYSBjaGVj
-ayBmb3IgdGhlIEVMRiBBQkkNCj4gdmVyc2lvbi4gVGhpcyBiZWNvbWVzIGltcG9ydGFudCBpZiB3
-ZSBhbGxvdyBiaWctZW5kaWFuIEVMRiBBQkkgVjIgYnVpbGRzDQo+IGJ1dCBpdCBkb2Vzbid0IGh1
-cnQgdG8gY2hlY2sgbm93Lg0KPiANCj4gQ2M6IEplc3NpY2EgWXUgPGpleXVAa2VybmVsLm9yZz4N
-Cj4gU2lnbmVkLW9mZi1ieTogTWljaGFlbCBFbGxlcm1hbiA8bXBlQGVsbGVybWFuLmlkLmF1Pg0K
-PiBbbnA6IHNwbGl0IHBhdGNoLCBhZGRlZCBjaGFuZ2Vsb2csIGFkanVzdCB0byBKZXNzaWNhJ3Mg
-cHJvcG9zYWxdDQo+IFNpZ25lZC1vZmYtYnk6IE5pY2hvbGFzIFBpZ2dpbiA8bnBpZ2dpbkBnbWFp
-bC5jb20+DQo+IC0tLQ0KPiAgIGFyY2gvcG93ZXJwYy9rZXJuZWwvbW9kdWxlLmMgfCAxNyArKysr
-KysrKysrKysrKysrKw0KPiAgIDEgZmlsZSBjaGFuZ2VkLCAxNyBpbnNlcnRpb25zKCspDQo+IA0K
-PiBkaWZmIC0tZ2l0IGEvYXJjaC9wb3dlcnBjL2tlcm5lbC9tb2R1bGUuYyBiL2FyY2gvcG93ZXJw
-Yy9rZXJuZWwvbW9kdWxlLmMNCj4gaW5kZXggZjZkNmFlMGExNjkyLi5kNDZiZjliZmRhMjYgMTAw
-NjQ0DQo+IC0tLSBhL2FyY2gvcG93ZXJwYy9rZXJuZWwvbW9kdWxlLmMNCj4gKysrIGIvYXJjaC9w
-b3dlcnBjL2tlcm5lbC9tb2R1bGUuYw0KPiBAQCAtMTksNiArMTksMjMgQEANCj4gICANCj4gICBz
-dGF0aWMgTElTVF9IRUFEKG1vZHVsZV9idWdfbGlzdCk7DQo+ICAgDQo+ICsjaWZkZWYgQ09ORklH
-X1BQQzY0DQoNCkNhbiBpdCBnbyBpbiBhcmNoL3Bvd2VycGMva2VybmVsL21vZHVsZV82NC5jIGlu
-c3RlYWQgPw0KDQo+ICtib29sIG1vZHVsZV9lbGZfY2hlY2tfYXJjaChFbGZfRWhkciAqaGRyKQ0K
-PiArew0KPiArCXVuc2lnbmVkIGxvbmcgYWJpX2xldmVsID0gaGRyLT5lX2ZsYWdzICYgMHgzOw0K
-PiArDQo+ICsJaWYgKElTX0VOQUJMRUQoQ09ORklHX1BQQzY0X0VMRl9BQklfVjIpKSB7DQo+ICsJ
-CWlmIChhYmlfbGV2ZWwgIT0gMikNCj4gKwkJCXJldHVybiBmYWxzZTsNCj4gKwl9IGVsc2Ugew0K
-PiArCQlpZiAoYWJpX2xldmVsID49IDIpDQo+ICsJCQlyZXR1cm4gZmFsc2U7DQo+ICsJfQ0KPiAr
-DQo+ICsJcmV0dXJuIHRydWU7DQoNCkNhbiBiZSBzaW1wbGVyOg0KDQoJaWYgKElTX0VOQUJMRUQo
-Q09ORklHX1BQQzY0X0VMRl9BQklfVjIpKQ0KCQlyZXR1cm4gYWJpX2xldmVsID09IDI7DQoJZWxz
-ZQ0KCQlyZXR1cm4gYWJpX2xldmVsIDwgMjsNCg0KDQo+ICt9DQo+ICsjZW5kaWYNCj4gKw0KPiAg
-IHN0YXRpYyBjb25zdCBFbGZfU2hkciAqZmluZF9zZWN0aW9uKGNvbnN0IEVsZl9FaGRyICpoZHIs
-DQo+ICAgCQkJCSAgICBjb25zdCBFbGZfU2hkciAqc2VjaGRycywNCj4gICAJCQkJICAgIGNvbnN0
-IGNoYXIgKm5hbWUp
+On Tue, Oct 18, 2022 at 6:33 PM Krzysztof Kozlowski
+<krzysztof.kozlowski@linaro.org> wrote:
+>
+> On 18/10/2022 08:38, Sinthu Raja wrote:
+> > From: Sinthu Raja <sinthu.raja@ti.com>
+> >
+> > The SK architecture comprises of baseboard and a SOM board. It is
+> > as follows,
+> >
+> >        +--------------------------------------+---+
+> >        |                                      |   |<--Connectors
+> >        |                                      +---|
+> >        |      +---------------------------+   |   |
+> >        |      | SOM                       |   +---|
+> >        |      |                           |   |   |
+> >        |      |                           |   +---| Power Supply
+> >        |      |                           |       |   |
+> >        |      +---------------------------+       |   |
+> >        |                                          |<--+
+> >        |           BASE BOARD                     |
+> >        +------------------------------------------+
+>
+> This is pretty straightforward for SoM, I am not sure what's the benefit
+> to add it.
+>
+> >
+> > AM68 Starter Kit's baseboard contains most of the actual connectors,
+> > power supply etc. The System on Module (SoM) is plugged on to the base
+> > board. Therefore, add support for peripherals brought out in the base
+> > board.
+> >
+> > Schematics: https://www.ti.com/lit/zip/SPRR463
+> >
+> > Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
+> > ---
+> >  arch/arm64/boot/dts/ti/Makefile               |   2 +
+> >  .../boot/dts/ti/k3-am68-sk-base-board.dts     | 459 ++++++++++++++++++
+> >  2 files changed, 461 insertions(+)
+> >  create mode 100644 arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
+> >
+> > diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
+> > index 4555a5be2257..498b089d96f8 100644
+> > --- a/arch/arm64/boot/dts/ti/Makefile
+> > +++ b/arch/arm64/boot/dts/ti/Makefile
+> > @@ -19,6 +19,8 @@ dtb-$(CONFIG_ARCH_K3) += k3-j7200-common-proc-board.dtb
+> >
+> >  dtb-$(CONFIG_ARCH_K3) += k3-j721s2-common-proc-board.dtb
+> >
+> > +dtb-$(CONFIG_ARCH_K3) += k3-am68-sk-base-board.dtb
+> > +
+>
+> Alphabetical order, although does not look like other entries are ordered...
+>
+> >  dtb-$(CONFIG_ARCH_K3) += k3-am642-evm.dtb
+> >  dtb-$(CONFIG_ARCH_K3) += k3-am642-sk.dtb
+> >
+> > diff --git a/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts b/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
+> > new file mode 100644
+> > index 000000000000..f51cbd2e3b72
+> > --- /dev/null
+> > +++ b/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
+> > @@ -0,0 +1,459 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
+> > + *
+> > + * Base Board: https://www.ti.com/lit/zip/SPRR463
+> > + */
+> > +
+> > +/dts-v1/;
+> > +
+> > +#include "k3-am68-sk-som.dtsi"
+> > +#include <dt-bindings/net/ti-dp83867.h>
+> > +#include <dt-bindings/phy/phy-cadence.h>
+> > +#include <dt-bindings/phy/phy.h>
+> > +#include <dt-bindings/mux/ti-serdes.h>
+> > +
+> > +/ {
+> > +     compatible = "ti,am68-sk", "ti,j721s2";
+> > +     model = "Texas Instruments AM68 SK";
+> > +
+> > +     chosen {
+> > +             stdout-path = "serial2:115200n8";
+> > +             bootargs = "console=ttyS2,115200n8 earlycon=ns16550a,mmio32,0x2880000";
+>
+> None of these bootargs are suitable for mainline. earlycon for sure - it
+> is pure debug option.
+Krzysztof,
+In AM68 SK the Linux console is on main_uart8, so to be consistent
+with other J7 families of devices aliasing the serial port to ttyS2. I
+am quite confused why these bootargs are not suitable for mainline. I
+check the below documentation section 2.3, as mentioned it can be used
+as kernel parameters. Please correct me if I am wrong.
+https://www.kernel.org/doc/html/latest/devicetree/usage-model.html?highlight=bootargs
+
+>
+> > +     };
+> > +
+> > +     aliases {
+> > +             serial2 = &main_uart8;
+> > +             mmc1 = &main_sdhci1;
+> > +             can0 = &mcu_mcan0;
+> > +             can1 = &mcu_mcan1;
+> > +             can2 = &main_mcan6;
+> > +             can3 = &main_mcan7;
+> > +     };
+> > +
+> > +     vusb_main: fixedregulator-vusb-main5v0 {
+>
+> Not "fixedregulator-" but just "regulator-"
+>
+> Same in other places.
+>
+> > +             /* USB MAIN INPUT 5V DC */
+> > +             compatible = "regulator-fixed";
+> > +             regulator-name = "vusb-main5v0";
+> > +             regulator-min-microvolt = <5000000>;
+> > +             regulator-max-microvolt = <5000000>;
+> > +             regulator-always-on;
+> > +             regulator-boot-on;
+> > +     };
+> > +
+> > +     vsys_3v3: fixedregulator-vsys3v3 {
+> > +             /* Output of LM5141 */
+> > +             compatible = "regulator-fixed";
+> > +             regulator-name = "vsys_3v3";
+> > +             regulator-min-microvolt = <3300000>;
+> > +             regulator-max-microvolt = <3300000>;
+> > +             vin-supply = <&vusb_main>;
+> > +             regulator-always-on;
+> > +             regulator-boot-on;
+> > +     };
+> > +
+> > +     vdd_mmc1: fixedregulator-sd {
+> > +             /* Output of TPS22918 */
+> > +             compatible = "regulator-fixed";
+> > +             regulator-name = "vdd_mmc1";
+> > +             regulator-min-microvolt = <3300000>;
+> > +             regulator-max-microvolt = <3300000>;
+> > +             regulator-boot-on;
+> > +             enable-active-high;
+> > +             vin-supply = <&vsys_3v3>;
+> > +             gpio = <&exp1 10 GPIO_ACTIVE_HIGH>;
+> > +     };
+> > +
+> > +     vdd_sd_dv: gpio-regulator-TLV71033 {
+>
+> 1. regulator-xxxxxx
+> 2. lowercase node name
+>
+> > +             /* Output of TLV71033 */
+> > +             compatible = "regulator-gpio";
+> > +             regulator-name = "tlv71033";
+> > +             pinctrl-names = "default";
+> > +             pinctrl-0 = <&vdd_sd_dv_pins_default>;
+> > +             regulator-min-microvolt = <1800000>;
+> > +             regulator-max-microvolt = <3300000>;
+> > +             regulator-boot-on;
+> > +             vin-supply = <&vsys_3v3>;
+> > +             gpios = <&main_gpio0 49 GPIO_ACTIVE_HIGH>;> +           states = <1800000 0x0>,
+> > +                      <3300000 0x1>;
+> > +     };
+> > +
+> > +     vsys_io_1v8: regulator-vsys-io-1v8 {
+> > +             compatible = "regulator-fixed";
+> > +             regulator-name = "vsys_io_1v8";
+> > +             regulator-min-microvolt = <1800000>;
+> > +             regulator-max-microvolt = <1800000>;
+> > +             regulator-always-on;
+> > +             regulator-boot-on;
+> > +     };
+> > +
+> > +     vsys_io_1v2: regulator-vsys-io-1v2 {
+> > +             compatible = "regulator-fixed";
+> > +             regulator-name = "vsys_io_1v2";
+> > +             regulator-min-microvolt = <1200000>;
+> > +             regulator-max-microvolt = <1200000>;
+> > +             regulator-always-on;
+> > +             regulator-boot-on;
+> > +     };
+> > +
+> > +     transceiver1: can-phy0 {
+> > +             compatible = "ti,tcan1042";
+> > +             #phy-cells = <0>;
+> > +             max-bitrate = <5000000>;
+> > +             pinctrl-names = "default";
+> > +             pinctrl-0 = <&mcu_mcan0_pins_default>;
+> > +             standby-gpios = <&exp1 6 GPIO_ACTIVE_HIGH>;
+> > +     };
+> > +
+> > +     transceiver2: can-phy1 {
+> > +             compatible = "ti,tcan1042";
+> > +             #phy-cells = <0>;
+> > +             max-bitrate = <5000000>;
+> > +             pinctrl-names = "default";
+> > +             pinctrl-0 = <&mcu_mcan1_pins_default>;
+> > +             standby-gpios = <&exp1 6 GPIO_ACTIVE_HIGH>;
+> > +     };
+> > +
+> > +     transceiver3: can-phy2 {
+> > +             compatible = "ti,tcan1042";
+> > +             #phy-cells = <0>;
+> > +             max-bitrate = <5000000>;
+> > +             pinctrl-names = "default";
+> > +             pinctrl-0 = <&main_mcan6_pins_default>;
+> > +             standby-gpios = <&exp1 6 GPIO_ACTIVE_HIGH>;
+> > +     };
+> > +
+> > +     transceiver4: can-phy3 {
+> > +             compatible = "ti,tcan1042";
+> > +             #phy-cells = <0>;
+> > +             max-bitrate = <5000000>;
+> > +             pinctrl-names = "default";
+> > +             pinctrl-0 = <&main_mcan7_pins_default>;
+> > +             standby-gpios = <&exp1 6 GPIO_ACTIVE_HIGH>;
+> > +     };
+> > +};
+> > +
+> > +&main_pmx0 {
+> > +
+>
+> No need for blank line.
+>
+> > +     main_uart8_pins_default: main-uart8-pins-default {
+> > +             pinctrl-single,pins = <
+> > +                     J721S2_IOPAD(0x0d0, PIN_INPUT, 11) /* (AF26) SPI0_CS1.UART8_RXD */
+> > +                     J721S2_IOPAD(0x0d4, PIN_OUTPUT, 11) /* (AH27) SPI0_CLK.UART8_TXD */
+> > +             >;
+> > +     };
+> > +
+> > +     main_i2c0_pins_default: i2c0_pins_default {
+>
+> No underscores in node names. Why do you use here different style than
+> in other places?
+>
+> > +             pinctrl-single,pins = <
+> > +                     J721S2_IOPAD(0x0e0, PIN_INPUT, 0) /* (AH25) I2C0_SCL */
+> > +                     J721S2_IOPAD(0x0e4, PIN_INPUT, 0) /* (AE24) I2C0_SDA */
+> > +             >;
+> > +     };
+> > +
+> > +     main_mmc1_pins_default: main-mmc1-pins-default {
+> > +             pinctrl-single,pins = <
+> > +                     J721S2_IOPAD(0x104, PIN_INPUT, 0) /* (P23) MMC1_CLK */
+> > +                     J721S2_IOPAD(0x108, PIN_INPUT, 0) /* (N24) MMC1_CMD */
+> > +                     J721S2_IOPAD(0x0fc, PIN_INPUT, 0) /* (M23) MMC1_DAT0 */
+> > +                     J721S2_IOPAD(0x0f8, PIN_INPUT, 0) /* (P24) MMC1_DAT1 */
+> > +                     J721S2_IOPAD(0x0f4, PIN_INPUT, 0) /* (R24) MMC1_DAT2 */
+> > +                     J721S2_IOPAD(0x0f0, PIN_INPUT, 0) /* (R22) MMC1_DAT3 */
+> > +                     J721S2_IOPAD(0x0e8, PIN_INPUT, 8) /* (AE25) TIMER_IO0.MMC1_SDCD */
+> > +             >;
+> > +     };
+> > +
+> > +     vdd_sd_dv_pins_default: vdd-sd-dv-pins-default {
+> > +             pinctrl-single,pins = <
+> > +                     J721S2_IOPAD(0x0c4, PIN_INPUT, 7) /* (AB26) ECAP0_IN_APWM_OUT.GPIO0_49 */
+> > +             >;
+> > +     };
+> > +
+> > +     main_usbss0_pins_default: main-usbss0-pins-default {
+> > +             pinctrl-single,pins = <
+> > +                     J721S2_IOPAD(0x0ec, PIN_OUTPUT, 6) /* (AG25) TIMER_IO1.USB0_DRVVBUS */
+> > +             >;
+> > +     };
+> > +
+> > +     main_mcan6_pins_default: mcan6_pins_default {
+>
+> Be sure you tested the DTS against bindings. Please run `make
+> dtbs_check` (see Documentation/devicetree/bindings/writing-schema.rst
+> for instructions).
+>
+> > +             pinctrl-single,pins = <
+> > +                     J721S2_IOPAD(0x098, PIN_INPUT, 0) /* (V25) MCASP0_AXR10.MCAN6_RX */
+> > +                     J721S2_IOPAD(0x094, PIN_INPUT, 0) /* (AA25) MCASP0_AXR9.MCAN6_TX */
+> > +             >;
+> > +     };
+> > +
+> > +     main_mcan7_pins_default: mcan7_pins_default {
+> > +             pinctrl-single,pins = <
+> > +                     J721S2_IOPAD(0x0a0, PIN_INPUT, 0) /* (AB25) MCASP0_AXR12.MCAN7_RX */
+> > +                     J721S2_IOPAD(0x09c, PIN_INPUT, 0) /* (T24) MCASP0_AXR11.MCAN7_TX */
+> > +             >;
+> > +     };
+> > +
+> > +};
+> > +
+> > +&wkup_pmx0 {
+> > +     mcu_cpsw_pins_default: mcu-cpsw-pins-default {
+> > +             pinctrl-single,pins = <
+> > +                     J721S2_WKUP_IOPAD(0x094, PIN_INPUT, 0) /* (B22) MCU_RGMII1_RD0 */
+> > +                     J721S2_WKUP_IOPAD(0x090, PIN_INPUT, 0) /* (B21) MCU_RGMII1_RD1 */
+> > +                     J721S2_WKUP_IOPAD(0x08c, PIN_INPUT, 0) /* (C22) MCU_RGMII1_RD2 */
+> > +                     J721S2_WKUP_IOPAD(0x088, PIN_INPUT, 0) /* (D23) MCU_RGMII1_RD3 */
+> > +                     J721S2_WKUP_IOPAD(0x084, PIN_INPUT, 0) /* (D22) MCU_RGMII1_RXC */
+> > +                     J721S2_WKUP_IOPAD(0x06c, PIN_INPUT, 0) /* (E23) MCU_RGMII1_RX_CTL */
+> > +                     J721S2_WKUP_IOPAD(0x07c, PIN_OUTPUT, 0) /* (F23) MCU_RGMII1_TD0 */
+> > +                     J721S2_WKUP_IOPAD(0x078, PIN_OUTPUT, 0) /* (G22) MCU_RGMII1_TD1 */
+> > +                     J721S2_WKUP_IOPAD(0x074, PIN_OUTPUT, 0) /* (E21) MCU_RGMII1_TD2 */
+> > +                     J721S2_WKUP_IOPAD(0x070, PIN_OUTPUT, 0) /* (E22) MCU_RGMII1_TD3 */
+> > +                     J721S2_WKUP_IOPAD(0x080, PIN_OUTPUT, 0) /* (F21) MCU_RGMII1_TXC */
+> > +                     J721S2_WKUP_IOPAD(0x068, PIN_OUTPUT, 0) /* (F22) MCU_RGMII1_TX_CTL */
+> > +             >;
+> > +     };
+> > +
+> > +     mcu_mdio_pins_default: mcu-mdio-pins-default {
+> > +             pinctrl-single,pins = <
+> > +                     J721S2_WKUP_IOPAD(0x09c, PIN_OUTPUT, 0) /* (A21) MCU_MDIO0_MDC */
+> > +                     J721S2_WKUP_IOPAD(0x098, PIN_INPUT, 0) /* (A22) MCU_MDIO0_MDIO */
+> > +             >;
+> > +     };
+> > +
+> > +     mcu_mcan0_pins_default: mcu-mcan0-pins-default {
+> > +             pinctrl-single,pins = <
+> > +                     J721S2_WKUP_IOPAD(0x0bc, PIN_INPUT, 0) /* (E28) MCU_MCAN0_RX */
+> > +                     J721S2_WKUP_IOPAD(0x0b8, PIN_OUTPUT, 0) /* (E27) MCU_MCAN0_TX */
+> > +             >;
+> > +     };
+> > +
+> > +     mcu_mcan1_pins_default: mcu-mcan1-pins-default {
+> > +             pinctrl-single,pins = <
+> > +                     J721S2_WKUP_IOPAD(0x0d4, PIN_INPUT, 0) /* (F26) WKUP_GPIO0_5.MCU_MCAN1_RX */
+> > +                     J721S2_WKUP_IOPAD(0x0d0, PIN_OUTPUT, 0) /* (C23) WKUP_GPIO0_4.MCU_MCAN1_TX*/
+> > +             >;
+> > +     };
+> > +
+> > +     mcu_i2c1_pins_default: mcu_i2c1_pins_default {
+> > +             pinctrl-single,pins = <
+> > +                     J721S2_WKUP_IOPAD(0x0e0, PIN_INPUT, 0) /* (F24) WKUP_GPIO0_8.MCU_I2C1_SCL */
+> > +                     J721S2_WKUP_IOPAD(0x0e4, PIN_INPUT, 0) /* (H26) WKUP_GPIO0_9.MCU_I2C1_SDA */
+> > +             >;
+> > +     };
+> > +
+>
+> Drop line
+>
+> > +};
+> > +
+> > +&main_gpio2 {
+> > +     status = "disabled";
+> > +};
+> > +
+> Best regards,
+> Krzysztof
+>
+
+
+-- 
+With Regards
+Sinthu Raja
