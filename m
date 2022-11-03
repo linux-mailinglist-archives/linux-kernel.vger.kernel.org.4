@@ -2,336 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A06FB617F85
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:29:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 49B36617F7F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:28:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231555AbiKCO3i (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 10:29:38 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48176 "EHLO
+        id S231444AbiKCO2x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 10:28:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49520 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231553AbiKCO3Z (ORCPT
+        with ESMTP id S229496AbiKCO2o (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 10:29:25 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 342B21CB
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 07:28:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667485706;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=xJXDTOdlX1XyIcsWYcqglWBdRZQ9xmr4YB2PW91lUtk=;
-        b=Y8o9aQnZ3G3tLMJAZhZOeEpVNqHwShtj8XyuSqKyvSHEtYaovx5MipVGXOSFwKPYMiPHbR
-        OGiMYMs2835Og8eywbo9aF8e/jeJTsYjzGGzqZSUHJo0uulT43/vrmIR0A0AIc92xJmNrJ
-        Z7W7qs5oLWx+iOyBPtrtly30VAio/IE=
-Received: from mail-ej1-f72.google.com (mail-ej1-f72.google.com
- [209.85.218.72]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-104-Vt0Xg8d2Pk2KTnknoFQypg-1; Thu, 03 Nov 2022 10:28:25 -0400
-X-MC-Unique: Vt0Xg8d2Pk2KTnknoFQypg-1
-Received: by mail-ej1-f72.google.com with SMTP id ho8-20020a1709070e8800b0078db5e53032so1360922ejc.9
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 07:28:24 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=mime-version:message-id:date:references:in-reply-to:subject:cc:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=xJXDTOdlX1XyIcsWYcqglWBdRZQ9xmr4YB2PW91lUtk=;
-        b=BQH8zOE7X8DsHGQvBVzZg7N+jm/wnbxFoJjiS/4LnWj6RO7hljINylXsqq+xqY110R
-         AddO83nF5rJSZMRhJEwcfSUQEGJvWTAAv7Abc+mnU4OkuxlKFwbxsJB69G8MXGn6dH0Q
-         CDzYC/4N89yepYjf3Mp0bsmcyuSGGo5r/ymxcV6TkjX/PeYpoY9ZQw5dLXTZHj3uKhRC
-         m9lMm56ABgz3KcyLUUHPWbEos1C3XNUcBVTpfMaOVELeUZQVFITZFdmE2OyFdNmpCB1P
-         pSEcTuQVKHIRfncNlvu+MKRVV2tey0LSo+KcnxJrofcIDJzC4McppFO0ZWbXiAXmcNVE
-         jMtg==
-X-Gm-Message-State: ACrzQf1ac4KtmolNVOJJhOz7XYaQEsEqaHcrN9i2HJ6RUPA8Km3Icrhm
-        iBKauaKBu7z36XGA8g0l6f2c47bi936HMl11lciXSMacDrUv16MQ3vfJTVKlm/R4Tt8QNKp44RX
-        UnatuNJQ7VI5/al73BJhkCljH
-X-Received: by 2002:a17:907:6da3:b0:78e:2a5f:5aaf with SMTP id sb35-20020a1709076da300b0078e2a5f5aafmr29209474ejc.554.1667485703909;
-        Thu, 03 Nov 2022 07:28:23 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM4/BLSlzeBmBH2wK2ozHzek7JvfdOrTUEgVR1Jkq3btzgsJIv9L2s0vi2zOnPRlcAj1lu9eWg==
-X-Received: by 2002:a17:907:6da3:b0:78e:2a5f:5aaf with SMTP id sb35-20020a1709076da300b0078e2a5f5aafmr29209446ejc.554.1667485703617;
-        Thu, 03 Nov 2022 07:28:23 -0700 (PDT)
-Received: from ovpn-194-252.brq.redhat.com (nat-2.ign.cz. [91.219.240.2])
-        by smtp.gmail.com with ESMTPSA id r18-20020a1709061bb200b0073d7bef38e3sm558528ejg.45.2022.11.03.07.28.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 07:28:22 -0700 (PDT)
-From:   Vitaly Kuznetsov <vkuznets@redhat.com>
-To:     Sean Christopherson <seanjc@google.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>
-Subject: Re: [PATCH 10/44] KVM: VMX: Clean up eVMCS enabling if KVM
- initialization fails
-In-Reply-To: <20221102231911.3107438-11-seanjc@google.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-11-seanjc@google.com>
-Date:   Thu, 03 Nov 2022 15:28:21 +0100
-Message-ID: <87mt98qfi2.fsf@ovpn-194-252.brq.redhat.com>
+        Thu, 3 Nov 2022 10:28:44 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDC27BBF
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 07:28:42 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 963AFB8284F
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 14:28:41 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 00A0FC433C1;
+        Thu,  3 Nov 2022 14:28:37 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667485720;
+        bh=DN2U+zHMYnYDwgy2AjoN9CxQeyhHUhZQ799Av3LTZss=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=QT0qCEuzToqRdOi78UsQP4nWmCj9Qg/ZpOsbe5z5B5rPFYhTlSTu7csMVb+eL9Ppz
+         iauBwEJLckJoDceYW0lB+sSR9EmKfPjdL1xd3jv9bLot8voUNe3DS+KQlFq0Q4h9/e
+         LaHKlAk+u3oYrkqslNspUzd0qwb3owSqj5jvbFXQMzVLXaE3s9gXfB/thvpnVgVzZU
+         YLMJDI8TwJCYLTHCx+yxfh988i9Km7rcBDqOO3EykIAicySG7pPldFieOXkf2w3Z3p
+         Dpt99/1YqATgzW8JJpzwOuoxSBno9RdoaKsGXY7c2fSZVR57MMy19RWFGFM1xg51bg
+         5YWuToDNhH9ZA==
+Date:   Thu, 3 Nov 2022 14:28:34 +0000
+From:   Mark Brown <broonie@kernel.org>
+To:     Juan Alfonso Reyes Ajenjo <jareyes@gmv.com>
+Cc:     Liam Girdwood <lgirdwood@gmail.com>,
+        Jaroslav Kysela <perex@perex.cz>,
+        Takashi Iwai <tiwai@suse.com>,
+        =?utf-8?B?Ik1hcnRpbiBQb3ZpxaFlciI=?= <povik+lin@cutebit.org>,
+        Charles Keepax <ckeepax@opensource.cirrus.com>,
+        Fabio Estevam <festevam@denx.de>,
+        "alsa-devel@alsa-project.org" <alsa-devel@alsa-project.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Gustavo Plaza Roma <gplaza@gmv.com>
+Subject: Re: [PATCH] Fix tas2562 volume table values
+Message-ID: <Y2PQEvY5Iu7jzVVv@sirena.org.uk>
+References: <VI1PR07MB5839C95198DD090316E87B78BA389@VI1PR07MB5839.eurprd07.prod.outlook.com>
+ <Y2PA8Bo59YDKvlRG@sirena.org.uk>
+ <VI1PR07MB583938C86519E34431A248F2BA389@VI1PR07MB5839.eurprd07.prod.outlook.com>
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; micalg=pgp-sha512;
+        protocol="application/pgp-signature"; boundary="AoDXkSSXIdUF6v5A"
+Content-Disposition: inline
+In-Reply-To: <VI1PR07MB583938C86519E34431A248F2BA389@VI1PR07MB5839.eurprd07.prod.outlook.com>
+X-Cookie: Dead? No excuse for laying off work.
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Sean Christopherson <seanjc@google.com> writes:
 
-> To make it obvious that KVM doesn't have a lurking bug, cleanup eVMCS
-> enabling if kvm_init() fails even though the enabling doesn't strictly
-> need to be unwound.  eVMCS enabling only toggles values that are fully
-> contained in the VMX module, i.e. it's technically ok to leave the values
-> as-is since they'll disappear entirely when the module is unloaded, but
-> doing proper cleanup is relatively simple, and having a chunk of code
-> that isn't unwound is confusing.
->
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->  arch/x86/kvm/vmx/vmx.c | 137 +++++++++++++++++++++++------------------
->  1 file changed, 78 insertions(+), 59 deletions(-)
->
-> diff --git a/arch/x86/kvm/vmx/vmx.c b/arch/x86/kvm/vmx/vmx.c
-> index 05a747c9a9ff..b3fd4049de01 100644
-> --- a/arch/x86/kvm/vmx/vmx.c
-> +++ b/arch/x86/kvm/vmx/vmx.c
-> @@ -524,6 +524,8 @@ static inline void vmx_segment_cache_clear(struct vcpu_vmx *vmx)
->  static unsigned long host_idt_base;
->  
->  #if IS_ENABLED(CONFIG_HYPERV)
-> +static struct kvm_x86_ops vmx_x86_ops __initdata;
-> +
->  static bool __read_mostly enlightened_vmcs = true;
->  module_param(enlightened_vmcs, bool, 0444);
->  
-> @@ -552,6 +554,71 @@ static int hv_enable_direct_tlbflush(struct kvm_vcpu *vcpu)
->  	return 0;
->  }
->  
-> +static __init void hv_setup_evmcs(void)
-> +{
-> +	int cpu;
-> +
-> +	if (!enlightened_vmcs)
-> +		return;
-> +
-> +	/*
-> +	 * Enlightened VMCS usage should be recommended and the host needs
-> +	 * to support eVMCS v1 or above.
-> +	 */
-> +	if (ms_hyperv.hints & HV_X64_ENLIGHTENED_VMCS_RECOMMENDED &&
-> +	    (ms_hyperv.nested_features & HV_X64_ENLIGHTENED_VMCS_VERSION) >=
-> +	     KVM_EVMCS_VERSION) {
-> +
-> +		/* Check that we have assist pages on all online CPUs */
-> +		for_each_online_cpu(cpu) {
-> +			if (!hv_get_vp_assist_page(cpu)) {
-> +				enlightened_vmcs = false;
-> +				break;
-> +			}
-> +		}
-> +
-> +		if (enlightened_vmcs) {
-> +			pr_info("KVM: vmx: using Hyper-V Enlightened VMCS\n");
-> +			static_branch_enable(&enable_evmcs);
-> +		}
-> +
-> +		if (ms_hyperv.nested_features & HV_X64_NESTED_DIRECT_FLUSH)
-> +			vmx_x86_ops.enable_direct_tlbflush
-> +				= hv_enable_direct_tlbflush;
-> +
-> +	} else {
-> +		enlightened_vmcs = false;
-> +	}
-> +}
-> +static void hv_cleanup_evmcs(void)
-> +{
-> +	struct hv_vp_assist_page *vp_ap;
-> +	int cpu;
-> +
-> +	if (!static_branch_unlikely(&enable_evmcs))
-> +		return;
-> +
-> +	/*
-> +	 * Reset everything to support using non-enlightened VMCS access later
-> +	 * (e.g. when we reload the module with enlightened_vmcs=0)
-> +	 */
-> +	for_each_online_cpu(cpu) {
-> +		vp_ap =	hv_get_vp_assist_page(cpu);
-> +
-> +		if (!vp_ap)
-> +			continue;
-> +
-> +		vp_ap->nested_control.features.directhypercall = 0;
-> +		vp_ap->current_nested_vmcs = 0;
-> +		vp_ap->enlighten_vmentry = 0;
-> +	}
+--AoDXkSSXIdUF6v5A
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-Unrelated to your patch but while looking at this code I got curious
-about why don't we need a protection against CPU offlining here. Turns
-out that even when we offline a CPU, its VP assist page remains
-allocated (see hv_cpu_die()), we just write '0' to the MSR and thus
-accessing the page is safe. The consequent hv_cpu_init(), however, does
-not restore VP assist page when it's already allocated:
+On Thu, Nov 03, 2022 at 02:22:52PM +0000, Juan Alfonso Reyes Ajenjo wrote:
+> Sorry,
+> maybe outlook is doing some weird things. I will try again with send-email as suggested.
 
-# rdmsr -p 24 0x40000073
-10212f001
-# echo 0 > /sys/devices/system/cpu/cpu24/online 
-# echo 1 > /sys/devices/system/cpu/cpu24/online 
-# rdmsr -p 24 0x40000073
-0
+Yeah, I'm not sure Outlook is able to cope with sending patches without
+mangling things - I'm not aware of anyone using it successfully.  The
+nearest it gets is sending as an attachment but that's really not good.
 
-The culprit is commit e5d9b714fe402 ("x86/hyperv: fix root partition
-faults when writing to VP assist page MSR"). A patch is inbound.
+--AoDXkSSXIdUF6v5A
+Content-Type: application/pgp-signature; name="signature.asc"
 
-'hv_root_partition' case is different though. We do memunmap() and reset
-VP assist page to zero so it is theoretically possible we're going to
-clash. Unless I'm missing some obvious reason why module unload can't
-coincide with CPU offlining, we may be better off surrounding this with
-cpus_read_lock()/cpus_read_unlock(). 
+-----BEGIN PGP SIGNATURE-----
 
-> +
-> +	static_branch_disable(&enable_evmcs);
-> +}
-> +
-> +#else /* IS_ENABLED(CONFIG_HYPERV) */
-> +static void hv_setup_evmcs(void) {}
-> +static void hv_cleanup_evmcs(void) {}
->  #endif /* IS_ENABLED(CONFIG_HYPERV) */
->  
->  /*
-> @@ -8435,29 +8502,8 @@ static void vmx_exit(void)
->  
->  	kvm_exit();
->  
-> -#if IS_ENABLED(CONFIG_HYPERV)
-> -	if (static_branch_unlikely(&enable_evmcs)) {
-> -		int cpu;
-> -		struct hv_vp_assist_page *vp_ap;
-> -		/*
-> -		 * Reset everything to support using non-enlightened VMCS
-> -		 * access later (e.g. when we reload the module with
-> -		 * enlightened_vmcs=0)
-> -		 */
-> -		for_each_online_cpu(cpu) {
-> -			vp_ap =	hv_get_vp_assist_page(cpu);
-> +	hv_cleanup_evmcs();
->  
-> -			if (!vp_ap)
-> -				continue;
-> -
-> -			vp_ap->nested_control.features.directhypercall = 0;
-> -			vp_ap->current_nested_vmcs = 0;
-> -			vp_ap->enlighten_vmentry = 0;
-> -		}
-> -
-> -		static_branch_disable(&enable_evmcs);
-> -	}
-> -#endif
->  	vmx_cleanup_l1d_flush();
->  
->  	allow_smaller_maxphyaddr = false;
-> @@ -8468,43 +8514,12 @@ static int __init vmx_init(void)
->  {
->  	int r, cpu;
->  
-> -#if IS_ENABLED(CONFIG_HYPERV)
-> -	/*
-> -	 * Enlightened VMCS usage should be recommended and the host needs
-> -	 * to support eVMCS v1 or above. We can also disable eVMCS support
-> -	 * with module parameter.
-> -	 */
-> -	if (enlightened_vmcs &&
-> -	    ms_hyperv.hints & HV_X64_ENLIGHTENED_VMCS_RECOMMENDED &&
-> -	    (ms_hyperv.nested_features & HV_X64_ENLIGHTENED_VMCS_VERSION) >=
-> -	    KVM_EVMCS_VERSION) {
-> -
-> -		/* Check that we have assist pages on all online CPUs */
-> -		for_each_online_cpu(cpu) {
-> -			if (!hv_get_vp_assist_page(cpu)) {
-> -				enlightened_vmcs = false;
-> -				break;
-> -			}
-> -		}
-> -
-> -		if (enlightened_vmcs) {
-> -			pr_info("KVM: vmx: using Hyper-V Enlightened VMCS\n");
-> -			static_branch_enable(&enable_evmcs);
-> -		}
-> -
-> -		if (ms_hyperv.nested_features & HV_X64_NESTED_DIRECT_FLUSH)
-> -			vmx_x86_ops.enable_direct_tlbflush
-> -				= hv_enable_direct_tlbflush;
-> -
-> -	} else {
-> -		enlightened_vmcs = false;
-> -	}
-> -#endif
-> +	hv_setup_evmcs();
->  
->  	r = kvm_init(&vmx_init_ops, sizeof(struct vcpu_vmx),
->  		     __alignof__(struct vcpu_vmx), THIS_MODULE);
->  	if (r)
-> -		return r;
-> +		goto err_kvm_init;
->  
->  	/*
->  	 * Must be called after kvm_init() so enable_ept is properly set
-> @@ -8514,10 +8529,8 @@ static int __init vmx_init(void)
->  	 * mitigation mode.
->  	 */
->  	r = vmx_setup_l1d_flush(vmentry_l1d_flush_param);
-> -	if (r) {
-> -		vmx_exit();
-> -		return r;
-> -	}
-> +	if (r)
-> +		goto err_l1d_flush;
->  
->  	vmx_setup_fb_clear_ctrl();
->  
-> @@ -8542,5 +8555,11 @@ static int __init vmx_init(void)
->  		allow_smaller_maxphyaddr = true;
->  
->  	return 0;
-> +
-> +err_l1d_flush:
-> +	vmx_exit();
-> +err_kvm_init:
-> +	hv_cleanup_evmcs();
-> +	return r;
->  }
->  module_init(vmx_init);
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmNj0BEACgkQJNaLcl1U
+h9ARaQf9EqgOpZ/hYoHse/LAeK93F8o6OEPruckRCah5nJmt/BRqorRmIlH3mSU9
+r0p3/OrJbm0dkYUyC0MMyE2lXS2TxfpekAYDqR/uIgnKCIPzeRZvWCT/EtRjL5he
+yWo60S7jEsDutDTEZ0F7QIvVxFtvRD7d5lS4anSEGfJM0mIAz+YYmT0VOteCvv1A
+SdoWGvXO6wXbpWsekyLWD/8d1Ex9IerJfstJHdvC9C9gllOs0X+GpkNuUqYUGeGY
+MLa2Zq7emBYR5Vg2gwFDi8jbK/kzbnDDvjhOk9La8F56VtLi4URwEayApac5IBMH
+LrHBpcLsgQEkfc1XNT4dzjViKLEG/A==
+=4mnn
+-----END PGP SIGNATURE-----
 
--- 
-Vitaly
-
+--AoDXkSSXIdUF6v5A--
