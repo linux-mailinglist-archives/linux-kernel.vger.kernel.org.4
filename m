@@ -2,91 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 92B72617B6E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 12:19:24 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D6176617B6F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 12:21:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230387AbiKCLTC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 07:19:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41484 "EHLO
+        id S229993AbiKCLV0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 07:21:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41954 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiKCLTA (ORCPT
+        with ESMTP id S229379AbiKCLVX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 07:19:00 -0400
-Received: from desiato.infradead.org (desiato.infradead.org [IPv6:2001:8b0:10b:1:d65d:64ff:fe57:4e05])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 81FC8CE39
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 04:18:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-        d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-        References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-        Content-Transfer-Encoding:Content-ID:Content-Description;
-        bh=Hy3vS+2ditbsS3Mm+JaviChR3PX6CrD9PjMpbxfhzKw=; b=b0NSnWv3NFvikrWqpnsogGD7LG
-        thYHDDiOkzPbCw3YfB8jDdmCbljkQRqvSyb+VepL7xJfoPxQkcGKksBjRXmzARf1u7o7C7Sp9Vxo3
-        yJ5AuviNzUExDAf3MOBBoJ/JFdS2gwOiOuY1yKld7MVh4qa9R+l3tYtQoQNTU3/O0Me+4xXjFAhT8
-        jakrRivL42x4E0Qyy1wp368NkygA1N1CzZXX4euuVe9jHBLjPC2qXSNWpKMWJqRt9XUdz5Dm6ko53
-        /21DFbzF/w26EQEnLKHaIuLBvNSu8edEXFKF2duPMg+nkEZVFFQK+zEXej1MVz6LGQRxo/Ed3EvLI
-        E4mgohOw==;
-Received: from j130084.upc-j.chello.nl ([24.132.130.84] helo=noisy.programming.kicks-ass.net)
-        by desiato.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oqYF9-008fOB-RI; Thu, 03 Nov 2022 11:18:44 +0000
-Received: from hirez.programming.kicks-ass.net (hirez.programming.kicks-ass.net [192.168.1.225])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (Client did not present a certificate)
-        by noisy.programming.kicks-ass.net (Postfix) with ESMTPS id B3E9230026A;
-        Thu,  3 Nov 2022 12:18:41 +0100 (CET)
-Received: by hirez.programming.kicks-ass.net (Postfix, from userid 1000)
-        id A409120B250A8; Thu,  3 Nov 2022 12:18:41 +0100 (CET)
-Date:   Thu, 3 Nov 2022 12:18:41 +0100
-From:   Peter Zijlstra <peterz@infradead.org>
-To:     Alexander Potapenko <glider@google.com>
-Cc:     linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Ingo Molnar <mingo@redhat.com>,
-        Thomas Gleixner <tglx@linutronix.de>, x86@kernel.org
-Subject: Re: [PATCH 5/5] x86/traps: avoid KMSAN bugs originating from
- handle_bug()
-Message-ID: <Y2OjkZTOoDa+mQrS@hirez.programming.kicks-ass.net>
-References: <20221102110611.1085175-1-glider@google.com>
- <20221102110611.1085175-5-glider@google.com>
- <Y2JnsG5QZoO4iazD@hirez.programming.kicks-ass.net>
- <CAG_fn=X_92f1w9=Xuj6eYcF9Za3rbpeGe+P79fJ8mkgEQO1XYA@mail.gmail.com>
+        Thu, 3 Nov 2022 07:21:23 -0400
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com [209.85.166.70])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D4B5610FCC
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 04:21:22 -0700 (PDT)
+Received: by mail-io1-f70.google.com with SMTP id i6-20020a5d88c6000000b006d088a0e518so829443iol.19
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 04:21:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rHnXEf0M9YsxOsLvkyf2QDTjUwvP7IxH0p7vNmDb/q0=;
+        b=eV3iZwzf7L81QJSoe2HySjsEM9JQ23QnYLhSdGywuhN/oxGmjO36M/VxhIZ8g2M477
+         Tg22QNTKNRiHI+jY4DwcgGOg0b5v4gl5pkfonqkdPl4aaVQlwgHBdJfMnZ65p4Pc0zJt
+         9syySDpD9C2fdDU1X9Yt/YmxQ8EWk4un4NxSbE+8nn7GoBKLxFkSZ7kYqFf9sV9Xsoak
+         sHpeJF+uaPNLaEdDcXWBK0yoEmBAUpsLx1L0WABeKVL2ZaJVOSDnCeSL8gF6lYeySjxz
+         aD2Lb1nIULVSnCJTu5OpiiZbXWmSNyXpX6DfHTOSQ95Id808qpoTgSDe9tGyiCvZH47J
+         zTgw==
+X-Gm-Message-State: ACrzQf0cFhibbYa/BjkyZALh1rJIYHV6b4NfGrxjfwGiTlL7DbNUiBfT
+        lDC/VouSuzkVhTakOdJaBjWFQsBpQrha+n5rnHiRm2CRBJdS
+X-Google-Smtp-Source: AMsMyM4NgnZoi5ORikvhzVJB/yNelYixw83omSUCIaLsic73GYFHOVcw1J1rtrHVc3Jcsp/leA9a4PGLokFVwq6F8NwaCbamX4I2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAG_fn=X_92f1w9=Xuj6eYcF9Za3rbpeGe+P79fJ8mkgEQO1XYA@mail.gmail.com>
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
-        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:b07:0:b0:300:e141:40cc with SMTP id
+ b7-20020a920b07000000b00300e14140ccmr828785ilf.309.1667474482198; Thu, 03 Nov
+ 2022 04:21:22 -0700 (PDT)
+Date:   Thu, 03 Nov 2022 04:21:22 -0700
+In-Reply-To: <20221103001520.4011-1-hdanton@sina.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <0000000000002f013b05ec8f28bd@google.com>
+Subject: Re: [syzbot] possible deadlock in static_key_slow_inc (2)
+From:   syzbot <syzbot+c39682e86c9d84152f93@syzkaller.appspotmail.com>
+To:     hdanton@sina.com, linux-kernel@vger.kernel.org,
+        syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 02:37:19PM +0100, Alexander Potapenko wrote:
-> On Wed, Nov 2, 2022 at 1:51 PM Peter Zijlstra <peterz@infradead.org> wrote:
-> >
-> > On Wed, Nov 02, 2022 at 12:06:11PM +0100, Alexander Potapenko wrote:
-> > > There is a case in exc_invalid_op handler that is executed outside the
-> > > irqentry_enter()/irqentry_exit() region when an UD2 instruction is used
-> > > to encode a call to __warn().
-> > >
-> > > In that case the `struct pt_regs` passed to the interrupt handler is
-> > > never unpoisoned by KMSAN (this is normally done in irqentry_enter()),
-> > > which leads to false positives inside handle_bug().
-> > >
-> > > Use kmsan_unpoison_entry_regs() to explicitly unpoison those registers
-> > > before using them.
-> >
-> > As does poke_int3_handler(); does that need fixing up too? OTOH look
-> > *very very* carefully at the contraints there.
-> 
-> Fortunately poke_int3_handler() is a noinstr function, so KMSAN
-> doesn't add any checks to it.
-> It also does not pass regs to other instrumented functions, at least
-> for now, so we're good.
+Hello,
 
-Ah indeed; because it is fully noinstr, nothing will trigger the lack of
-annotation.
+syzbot tried to test the proposed patch but the build/boot failed:
+
+kernel/cgroup/legacy_freezer.c:355:35: error: passing argument 1 of 'static_key_slow_inc_cpuslocked' from incompatible pointer type [-Werror=incompatible-pointer-types]
+kernel/cgroup/legacy_freezer.c:366:36: error: passing argument 1 of 'static_key_slow_dec_cpuslocked' from incompatible pointer type [-Werror=incompatible-pointer-types]
+
+
+Tested on:
+
+commit:         a2c65a9d net: dsa: fall back to default tagger if we c..
+git tree:       https://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git
+dashboard link: https://syzkaller.appspot.com/bug?extid=c39682e86c9d84152f93
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+patch:          https://syzkaller.appspot.com/x/patch.diff?x=140c7046880000
+
