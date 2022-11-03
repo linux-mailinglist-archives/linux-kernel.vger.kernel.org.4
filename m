@@ -2,106 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 35BCF617D66
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:05:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4EB52617D6B
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:05:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229598AbiKCNFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 09:05:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43780 "EHLO
+        id S231295AbiKCNFa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 09:05:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230307AbiKCNEn (ORCPT
+        with ESMTP id S231161AbiKCNFJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 09:04:43 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDD1BCEC
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 06:03:20 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id v4-20020a17090a088400b00212cb0ed97eso1717699pjc.5
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 06:03:20 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=sCUBB08PoVZ26bcT4Cxprl0+CgnyFaSro8o/etFxILQ=;
-        b=NMOF7LMrwGZkM4Tpc29C7h3cTqZFKOVJ3vIia5vjFEJJ4H7B5PBOcPyzkq455HN7gk
-         FTmv3c9jmCde5kxbFdR10ZoLz4a0JGb7Znsy/G7IW3aeadZOKKCIwmKa6neDPb/+PMlQ
-         G5q3pQ/DzKlFHkwEqE1EWRBb8h1BN/hw2oOsWTTcIxbTC8Rbh0h6JO5zsVlRMtfDcPmG
-         EwsBA48uyosKZ2jbVe5iAc8agQJkePiVass7YVRzKWxPROkBwJrrtbt0YtPlspLlftVk
-         CaAE3bU5N7T2BznUtAq+AbzJjt2hmk0sVJOfygsa2zvm6OklRDJ4p1kusTQunUxAS2Uc
-         +2fg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=sCUBB08PoVZ26bcT4Cxprl0+CgnyFaSro8o/etFxILQ=;
-        b=tetYgbxqwt3vS7IkYBQG9zyC9UGgUj4nM36kwSPi0cMZQvDNZbcfR2AUmX4xBXhs1o
-         i3Er6mNcFQeGYnpZza7NthOux6asAi3q52kNGrzGViYWoOZcJJAX78REXSVaxwmgofgP
-         i7CGHeyphsTva1cLuiyoaiUtFGs+JAiW597ECbU/zIvXTVi9WK6mv0dbfunVhdJp/IzP
-         Hr1UIpMxPNCUXhr22rE9y7UVRhhbuAJCYttj2eJz9pJCHFDfHO/ImSeL2bu4p21w5EYU
-         ubBNw5S0QMz/J8bPe/AIG5oDinObITPnzCTh919DTZMb1LIbj7mLvdChBl1UNbl0oBeW
-         pGnA==
-X-Gm-Message-State: ACrzQf3TSMMcTgtQ3Omn2Wo1Yr4RPDbq4S/yzxH3QvMwA6SLzjHgLPse
-        6uTYH4dlzwjX/+T9+1bRChzJ8dc+iDZmXjpT0OcyUA==
-X-Google-Smtp-Source: AMsMyM7FZiZCLkFDkx1bnVpjXpomckekbyKXpexKWDuVwHGpOCtLDD7blXzZ7m7RqCbEnHJAeDZqypgjZcrJQy4UliA=
-X-Received: by 2002:a17:903:41cc:b0:186:b756:a5f0 with SMTP id
- u12-20020a17090341cc00b00186b756a5f0mr30145351ple.132.1667480600358; Thu, 03
- Nov 2022 06:03:20 -0700 (PDT)
+        Thu, 3 Nov 2022 09:05:09 -0400
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 915EB178BF;
+        Thu,  3 Nov 2022 06:04:13 -0700 (PDT)
+Received: from jinankjain-dranzer.zrrkmle5drku1h0apvxbr2u2ee.ix.internal.cloudapp.net (unknown [20.188.121.5])
+        by linux.microsoft.com (Postfix) with ESMTPSA id 1A66B20B9F81;
+        Thu,  3 Nov 2022 06:04:08 -0700 (PDT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1A66B20B9F81
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+        s=default; t=1667480653;
+        bh=AN7mmvGxBvUuf9Ip8jEZg4kDB3svnoriD2HrczLSwDg=;
+        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+        b=S0dCEIZ/u+kEPxD2IdDHWcQrGjvD1xZJor3tAKzbqw+1lT6+otiotEiXBjfhy45jU
+         OCV+zq2NyTO24z2rOzZdp1FY/aYZMRwidSNsFU9vtacLg5u0S9SKLPaiZVYfoWDI+L
+         VYafYJ0kJDTG15QXMLlkMFHD6n/XJUFHnSSqZFOU=
+From:   Jinank Jain <jinankjain@linux.microsoft.com>
+To:     jinankjain@microsoft.com
+Cc:     kys@microsoft.com, haiyangz@microsoft.com, wei.liu@kernel.org,
+        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
+        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
+        hpa@zytor.com, arnd@arndb.de, peterz@infradead.org,
+        jpoimboe@kernel.org, jinankjain@linux.microsoft.com,
+        seanjc@google.com, kirill.shutemov@linux.intel.com,
+        ak@linux.intel.com, sathyanarayanan.kuppuswamy@linux.intel.com,
+        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arch@vger.kernel.org, anrayabh@linux.microsoft.com,
+        mikelley@microsoft.com
+Subject: [PATCH v3 0/5]  Add support running nested Microsoft Hypervisor
+Date:   Thu,  3 Nov 2022 13:04:02 +0000
+Message-Id: <cover.1667480257.git.jinankjain@linux.microsoft.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <https://lore.kernel.org/linux-hyperv/cover.1667406350.git.jinankjain@linux.microsoft.com/T/#t>
+References: <https://lore.kernel.org/linux-hyperv/cover.1667406350.git.jinankjain@linux.microsoft.com/T/#t>
 MIME-Version: 1.0
-References: <20221028191243.31721-1-semen.protsenko@linaro.org>
- <CGME20221028191256eucas1p1a4fd95cbcc44959fa968956a92738f03@eucas1p1.samsung.com>
- <20221028191243.31721-4-semen.protsenko@linaro.org> <7ed8c884-cee1-7cb0-f2ce-f7ec156cd841@samsung.com>
-In-Reply-To: <7ed8c884-cee1-7cb0-f2ce-f7ec156cd841@samsung.com>
-From:   Sam Protsenko <semen.protsenko@linaro.org>
-Date:   Thu, 3 Nov 2022 14:03:08 +0100
-Message-ID: <CAPLW+4nrns9BovWCTOsi3F7=2FWLi2sK0+Cid4Cva2Vs2ZWdqQ@mail.gmail.com>
-Subject: Re: [PATCH 3/4] iommu/exynos: Modularize the driver
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>,
-        Sumit Semwal <sumit.semwal@linaro.org>,
-        Alim Akhtar <alim.akhtar@samsung.com>,
-        Janghyuck Kim <janghyuck.kim@samsung.com>,
-        Cho KyongHo <pullip.cho@samsung.com>,
-        Daniel Mentz <danielmentz@google.com>,
-        David Virag <virag.david003@gmail.com>, iommu@lists.linux.dev,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        linux-samsung-soc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
+        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Marek,
+This patch series plans to add support for running nested Microsoft
+Hypervisor. In case of nested Microsoft Hypervisor there are few
+privileged hypercalls which need to go L0 Hypervisor instead of L1
+Hypervisor. This patches series basically identifies such hypercalls and
+replace them with nested hypercalls.
 
-[snip]
+Jinank Jain (5):
+  x86/hyperv: Add support for detecting nested hypervisor
+  Drivers: hv: Setup synic registers in case of nested root partition
+  x86/hyperv: Add an interface to do nested hypercalls
+  Drivers: hv: Enable vmbus driver for nested root partition
+  x86/hyperv: Change interrupt vector for nested root partition
 
-> MODULE_DEVICE_TABLE(of, sysmmu_of_match); is missing, so the driver
-> won't be automatically loaded, what breaks its operation if compiled as
-> module.
->
+ arch/x86/include/asm/hyperv-tlfs.h | 17 +++++++-
+ arch/x86/include/asm/idtentry.h    |  2 +
+ arch/x86/include/asm/irq_vectors.h |  6 +++
+ arch/x86/include/asm/mshyperv.h    | 68 ++++++++++++++++++++++++++++--
+ arch/x86/kernel/cpu/mshyperv.c     | 22 ++++++++++
+ arch/x86/kernel/idt.c              |  9 ++++
+ drivers/hv/hv.c                    | 18 +++++---
+ drivers/hv/hv_common.c             |  7 ++-
+ drivers/hv/vmbus_drv.c             |  5 ++-
+ include/asm-generic/hyperv-tlfs.h  |  1 +
+ 10 files changed, 141 insertions(+), 14 deletions(-)
 
-Right, didn't think about hot-plug case. Will add
-MODULE_DEVICE_TABLE() along with MODULE_ALIAS() in v2, thanks.
+-- 
+2.25.1
 
-> Also Exynos DRM and S5P-MFC drivers rely on the Exynos IOMMU being
-> built-in, so they need to be adjusted for modularized builds too imho,
-> at least in the Kconfig dependency.
->
-
-Sure, I'll check all Kconfigs and defconfigs before sending out v2.
-
-Btw, can you please also check my most recent reply [1] for the
-"[PATCH 1/2] iommu/exynos: Abstract getting the fault info"?
-
-[1] https://lore.kernel.org/lkml/CAPLW+4n-Lf6je61rxdJ9nJnX9h9F8F-y+qikG7eFF0avQpMV9Q@mail.gmail.com/
-
-Thanks!
-
-[snip]
