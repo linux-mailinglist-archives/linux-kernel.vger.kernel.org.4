@@ -2,231 +2,251 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A06BA6186D6
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:00:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9347D6186CA
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:59:48 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232144AbiKCSAt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 14:00:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37112 "EHLO
+        id S231897AbiKCR7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 13:59:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37038 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231962AbiKCR7a (ORCPT
+        with ESMTP id S232023AbiKCR7P (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:59:30 -0400
-Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F15185FE5
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:59:22 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667498362; x=1699034362;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=bF+UOfIOr6mZm7+jXKRYrpF9ErB2atj/R0xUVsOO12A=;
-  b=MdAV8qxCZkaqxWw08eNDBP3AJVhC6xVEUJxWMyqgjvMWNWI777zFn3ZT
-   X8mnqSRu0Jvx/hwxh+pH2usyrvP6/iaUITaBqKvdxwoUhuOoz9QSJJEcl
-   GzZOHQPpsvOv80tGPlAXty9hQWvJo8mSwYNlTvVLMUQlTKCAhczL2RHw+
-   XSzDfkgP+0pEd7wkP/QBm3N77HD3gdgaowF9bbySwEpUh0RVoTAGWLElf
-   wDkJrD3B1v8KV7UKbuqP8i/x37i+wbCVyMLDy5Vp9b/GyZySBOYla3cXa
-   kje14kPnaJx1wenz2if+OdOA2gYp6XupqDsnu80PxQNI0SueZRXTMwq1K
-   g==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="308476973"
-X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
-   d="scan'208";a="308476973"
-Received: from orsmga005.jf.intel.com ([10.7.209.41])
-  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 10:59:18 -0700
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="809762565"
-X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
-   d="scan'208";a="809762565"
-Received: from araj-dh-work.jf.intel.com ([10.165.157.158])
-  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 10:59:18 -0700
-From:   Ashok Raj <ashok.raj@intel.com>
-To:     Borislav Petkov <bp@alien8.de>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     "LKML Mailing List" <linux-kernel@vger.kernel.org>,
-        X86-kernel <x86@kernel.org>, Tony Luck <tony.luck@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>,
-        Arjan van de Ven <arjan.van.de.ven@intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Jacon Jun Pan <jacob.jun.pan@intel.com>,
-        Tom Lendacky <thomas.lendacky@amd.com>,
-        Kai Huang <kai.huang@intel.com>,
-        Andrew Cooper <andrew.cooper3@citrix.com>,
-        Ashok Raj <ashok.raj@intel.com>
-Subject: [v2 09/13] x86/microcode/intel: Add minimum required revision to microcode header
-Date:   Thu,  3 Nov 2022 17:58:57 +0000
-Message-Id: <20221103175901.164783-10-ashok.raj@intel.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221103175901.164783-1-ashok.raj@intel.com>
-References: <20221103175901.164783-1-ashok.raj@intel.com>
+        Thu, 3 Nov 2022 13:59:15 -0400
+Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B95110B5
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:59:11 -0700 (PDT)
+Received: by mail-qk1-x733.google.com with SMTP id f8so1666044qkg.3
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:59:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=vznSjJD3MTC22UgiEIgEwBQISg4telMt7r/lvGWOTAY=;
+        b=fum8epZ95c2vcvotsLw2zD4mgCXfMySrmnE0sL66rC0pypUuDddVvwbSlshdfTRGDJ
+         ebL0RHQrm061ppipmeSKzu98oguhEBcZlBXVzedYvY2jHTGnVdFYV2mwbn4UwmIkppY9
+         3ahOSqVsYvv2mR5ziUzUKDU4rtxSPr5oJVfuBYXDRl9ftcgOT5N5RRo3/tYDtvyZUXt3
+         dv7u4o44bhpPTIdMIJxmRlcgRr7f1vWqvizrN+SfFKnQN4ltsa70rJTo5r6N1aL8Yjsx
+         9GPZLyXmjHkM4UEA6qImCApxz+Is4iWki0oxMON9hfLLJzS0mx3C6lcUe1/S28C49bZu
+         5hWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=vznSjJD3MTC22UgiEIgEwBQISg4telMt7r/lvGWOTAY=;
+        b=TK569IR/QEwAZVCTGCA3nmmdSTmKZFDWZLjpIc4TcXQwtehHQKkSKaY9lNRd76mpaQ
+         iNaywWjiI4VBbwBo4b8+QB6veIgeIfyO7Kb6CyRqKJZinq9sOZyA65a6G3sxCJAZIDp+
+         JN65YfGbXkKm3DNV5DZ/S+jNrOTKGQgfMOyS+MgJs47sMwbranpdgNWooWPpcdObNNpk
+         knHFxlNBdGSJADdf4RyHsMfkwQmLxbjLDi9fgoGqah5gUtVqakwYO42WXynxtumdm9Zh
+         wkaI63PTOcA2yQRpQBdQP2t3DMV/DrxBrU2Da024YVba9+IGAwowBCnwaurha1L9F+FW
+         k7UQ==
+X-Gm-Message-State: ACrzQf2EcU6T8xCNo4sY91FYB3FdDlx6MEiVyzmqSsvLeIPsm/TDJedI
+        ZmqV/aGYm2jSJWPem9PNCG/kbTaV6YXo0kKSj/yohXIrtnVq4b5u
+X-Google-Smtp-Source: AMsMyM4ZegQ8e26KA/txCZfvLTUZRpJOAs3TJIkQyyG4c32VOP83OJzOi+4gkQQj/vb6zBmLxLw+E1nPFLShoiSbAjU=
+X-Received: by 2002:a05:620a:22c3:b0:6ec:53bb:d296 with SMTP id
+ o3-20020a05620a22c300b006ec53bbd296mr23058155qki.158.1667498351065; Thu, 03
+ Nov 2022 10:59:11 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <Y2OPStg4jXtWpJcd@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+ <d0d6d613-174b-f7dd-7d45-45eecd26a850@inria.fr> <CAHJEyKUA4FG468S5bMsx+XGUR3pB3kKm_bx=LNPNJ6n9yPxCrQ@mail.gmail.com>
+ <612f7cf-43db-a684-7a98-8469275b43fd@inria.fr> <CAHJEyKXL=u=7tH2O3tdeSBZHyXLAdP9JcfzKHy6-bc7Bju5NMQ@mail.gmail.com>
+ <CAHJEyKWBTxvP_mkSaWw7duhm1_-_AE27FhrnZYOXsTy1Qt_c=g@mail.gmail.com> <9eef21fa-c7bc-9fba-67ae-2a532ee6c3fa@inria.fr>
+In-Reply-To: <9eef21fa-c7bc-9fba-67ae-2a532ee6c3fa@inria.fr>
+From:   Tanju Brunostar <tanjubrunostar0@gmail.com>
+Date:   Thu, 3 Nov 2022 18:58:58 +0100
+Message-ID: <CAHJEyKWsFQ4RW6O+Xq6=LEc7-+LxW6Dx+Pc-neSZZUMKQ80CkQ@mail.gmail.com>
+Subject: Re: [PATCH] staging: vt6655: change the function name s_vFillRTSHead
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-In general users don't have the necessary information to determine
-whether a late loading of a new microcode version has removed any feature
-(MSR, CPUID etc) between what is currently loaded and this new microcode.
-To address this issue, Intel has added a "minimum required version" field
-to a previously reserved field in the file header. Microcode updates
-should only be applied if the current microcode version is equal
-to, or greater than this minimum required version.
+On Thu, Nov 3, 2022 at 6:51 PM Julia Lawall <julia.lawall@inria.fr> wrote:
+>
+>
+>
+> On Thu, 3 Nov 2022, Tanju Brunostar wrote:
+>
+> > On Thu, Nov 3, 2022 at 5:04 PM Tanju Brunostar
+> > <tanjubrunostar0@gmail.com> wrote:
+> > >
+> > > On Thu, Nov 3, 2022 at 4:58 PM Julia Lawall <julia.lawall@inria.fr> wrote:
+> > > >
+> > > >
+> > > >
+> > > > On Thu, 3 Nov 2022, Tanju Brunostar wrote:
+> > > >
+> > > > > On Thu, Nov 3, 2022 at 1:38 PM Julia Lawall <julia.lawall@inria.fr> wrote:
+> > > > > >
+> > > > > >
+> > > > > >
+> > > > > > On Thu, 3 Nov 2022, Tanjuate Brunostar wrote:
+> > > > > >
+> > > > > > > Remove the use of Hungarian notation, which is not used in the Linux
+> > > > > > > kernel. Reported by checkpatch
+> > > > > > >
+> > > > > > > Fix checkpatch error related to code line ends with a '(', by joining
+> > > > > > > some lines and indenting correctly. This improves visibility
+> > > > > >
+> > > > > > I don't think it will be appreciated to do two things at once.
+> > > > > >
+> > > > >
+> > > > > I sent it earlier as two patches but it seemed to break and fix the
+> > > > > kernel which was not appreciated by one of the mentors
+> > > >
+> > > > OK, then it is a presentation problem.  You have presented the changes as
+> > > > unrelated.  Rewrite the message to make clear what is being done.
+> > > >
+> > > > julia
+> > > >
+> >
+> > Hi Julia,
+> > I am having a hard time figuring out exactly how to write this, since
+> > I made both changes in one patch and there is no way to send them in
+> > separate patches. should I just report just one change and leave the
+> > other? I would appreciate your help here
+>
+> Add indentation to the affected function headers to follow the Linux
+> kernel coding style?
+>
+> julia
+>
 
-Thomas made some suggestions[1] on how meta-data in the microcode file
-could provide Linux with information to decide if the new microcode is
-suitable candidate for late loading. But even the "simpler" option#1
-requires a lot of metadata and corresponding kernel code to parse it.
+Thank you
 
-The proposal here is an even simpler option. Simply "OS visible features"
-such as CPUID and MSRs are the only two examples. The microcode must not
-change these OS visible features because they cause problems after late
-loading. When microcode changes features, microcode will change the min_rev
-to prevent such microcodes from being late loaded.
-
-Pseudo code for late loading is as follows:
-
-if header.min_required_id == 0
-        This is old format microcode, block late loading
-else if current_ucode_version < header.min_required_id
-        Current version is too old, block late loading of this microcode.
-else
-        OK to proceed with late loading.
-
-Any microcode that modifies the interface to an OS-visible feature
-will set the min_version to itself. This will enforce this microcode is
-not suitable for late loading unless the currently loaded revision is
-greater or equal to the new microcode affecting the change.
-
-The enforcement is not in hardware and limited to kernel loader enforcing
-the requirement. It is not required for early loading of microcode to
-enforce this requirement, since the new features are only
-evaluated after early loading in the boot process.
-
-
-Test cases covered:
-
-1. With new kernel, attempting to load an older format microcode with the
-   min_rev=0 should be blocked by kernel.
-
-   [  210.541802] Late loading denied: Microcode header does not specify a
-   required min version.
-
-2. New microcode with a non-zero min_rev in the header, but the specified
-   min_rev is greater than what is currently loaded in the CPU should be
-   blocked by kernel.
-
-   245.139828] microcode: Late loading denied: Current revision 0x8f685300 is too old to update, must be at 0xaa000050 version or higher. Use early loading instead.
-
-3. New microcode with a min_rev < currently loaded should allow loading the
-   microcode
-
-4. Build initrd with microcode that has min_rev=0, or min_rev > currently
-   loaded should permit early loading microcode from initrd.
-
-[1] https://lore.kernel.org/linux-kernel/alpine.DEB.2.21.1909062237580.1902@nanos.tec.linutronix.de/
-
-
-Tested-by: William Xie <william.xie@intel.com>
-Reviewed-by: Tony Luck <tony.luck@intel.com>
-Signed-off-by: Ashok Raj <ashok.raj@intel.com>
----
- arch/x86/include/asm/microcode_intel.h |  4 +++-
- arch/x86/kernel/cpu/microcode/intel.c  | 29 +++++++++++++++++++++++---
- 2 files changed, 29 insertions(+), 4 deletions(-)
-
-diff --git a/arch/x86/include/asm/microcode_intel.h b/arch/x86/include/asm/microcode_intel.h
-index 4c92cea7e4b5..bc893dd68b82 100644
---- a/arch/x86/include/asm/microcode_intel.h
-+++ b/arch/x86/include/asm/microcode_intel.h
-@@ -14,7 +14,9 @@ struct microcode_header_intel {
- 	unsigned int            pf;
- 	unsigned int            datasize;
- 	unsigned int            totalsize;
--	unsigned int            reserved[3];
-+	unsigned int            reserved1;
-+	unsigned int		min_req_ver;
-+	unsigned int		reserved3;
- };
- 
- struct microcode_intel {
-diff --git a/arch/x86/kernel/cpu/microcode/intel.c b/arch/x86/kernel/cpu/microcode/intel.c
-index 8ef04447fcf0..020d0feed3cc 100644
---- a/arch/x86/kernel/cpu/microcode/intel.c
-+++ b/arch/x86/kernel/cpu/microcode/intel.c
-@@ -163,13 +163,14 @@ static void save_microcode_patch(struct ucode_cpu_info *uci, void *data, unsigne
- 		intel_ucode_patch = p->data;
- }
- 
--static int microcode_sanity_check(void *mc, int print_err)
-+static int microcode_sanity_check(void *mc, int print_err, bool late_loading)
- {
- 	unsigned long total_size, data_size, ext_table_size;
- 	struct microcode_header_intel *mc_header = mc;
- 	struct extended_sigtable *ext_header = NULL;
- 	u32 sum, orig_sum, ext_sigcount = 0, i;
- 	struct extended_signature *ext_sig;
-+	struct ucode_cpu_info uci;
- 
- 	total_size = get_totalsize(mc_header);
- 	data_size = get_datasize(mc_header);
-@@ -240,6 +241,24 @@ static int microcode_sanity_check(void *mc, int print_err)
- 		return -EINVAL;
- 	}
- 
-+	/*
-+	 * When late-loading, enforce that the current revision loaded on
-+	 * the CPU is equal or greater than the value specified in the
-+	 * new microcode header
-+	 */
-+	if (late_loading) {
-+		if (!mc_header->min_req_ver) {
-+			pr_warn("Late loading denied: Microcode header does not specify a required min version\n");
-+			return -EINVAL;
-+		}
-+		intel_cpu_collect_info(&uci);
-+		if (uci.cpu_sig.rev < mc_header->min_req_ver) {
-+			pr_warn("Late loading denied: Current revision 0x%x too old to update, must be at 0x%x or higher. Use early loading instead\n",
-+				uci.cpu_sig.rev, mc_header->min_req_ver);
-+			return -EINVAL;
-+		}
-+	}
-+
- 	if (!ext_table_size)
- 		return 0;
- 
-@@ -281,7 +300,7 @@ scan_microcode(void *data, size_t size, struct ucode_cpu_info *uci, bool save)
- 		mc_size = get_totalsize(mc_header);
- 		if (!mc_size ||
- 		    mc_size > size ||
--		    microcode_sanity_check(data, 0) < 0)
-+		    microcode_sanity_check(data, 0, false) < 0)
- 			break;
- 
- 		size -= mc_size;
-@@ -838,7 +857,8 @@ static enum ucode_state generic_load_microcode(int cpu, struct iov_iter *iter)
- 		memcpy(mc, &mc_header, sizeof(mc_header));
- 		data = mc + sizeof(mc_header);
- 		if (!copy_from_iter_full(data, data_size, iter) ||
--		    microcode_sanity_check(mc, 1) < 0) {
-+		    microcode_sanity_check(mc, 1, true) < 0) {
-+			ret = UCODE_ERROR;
- 			break;
- 		}
- 
-@@ -861,6 +881,9 @@ static enum ucode_state generic_load_microcode(int cpu, struct iov_iter *iter)
- 		return UCODE_ERROR;
- 	}
- 
-+	if (ret == UCODE_ERROR)
-+		return ret;
-+
- 	if (!new_mc)
- 		return UCODE_NFOUND;
- 
--- 
-2.34.1
-
+>
+> > Thanks
+> >
+> > tanju
+> >
+> > > okay
+> > > > >
+> > > > > > >
+> > > > > > > Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+> > > > > > > ---
+> > > > > > >  drivers/staging/vt6655/rxtx.c | 48 ++++++++++++++++-------------------
+> > > > > > >  1 file changed, 22 insertions(+), 26 deletions(-)
+> > > > > > >
+> > > > > > > diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+> > > > > > > index 31ae99b3cb35..debc5d5daede 100644
+> > > > > > > --- a/drivers/staging/vt6655/rxtx.c
+> > > > > > > +++ b/drivers/staging/vt6655/rxtx.c
+> > > > > > > @@ -23,7 +23,7 @@
+> > > > > > >   *      s_uGetTxRsvTime- get frame reserved time
+> > > > > > >   *      s_vFillCTSHead- fulfill CTS ctl header
+> > > > > > >   *      s_vFillFragParameter- Set fragment ctl parameter.
+> > > > > > > - *      s_vFillRTSHead- fulfill RTS ctl header
+> > > > > > > + *      fill_rts_header- fulfill RTS ctl header
+> > > > > > >   *      s_vFillTxKey- fulfill tx encrypt key
+> > > > > > >   *      s_vSWencryption- Software encrypt header
+> > > > > > >   *      vDMA0_tx_80211- tx 802.11 frame via dma0
+> > > > > > > @@ -85,15 +85,15 @@ static const unsigned short fb_opt1[2][5] = {
+> > > > > > >  #define DATADUR_A_F1    13
+> > > > > > >
+> > > > > > >  /*---------------------  Static Functions  --------------------------*/
+> > > > > > > -static void s_vFillRTSHead(struct vnt_private *pDevice,
+> > > > > > > -                        unsigned char byPktType,
+> > > > > > > -                        void *pvRTS,
+> > > > > > > -                        unsigned int cbFrameLength,
+> > > > > > > -                        bool bNeedAck,
+> > > > > > > -                        bool bDisCRC,
+> > > > > > > -                        struct ieee80211_hdr *hdr,
+> > > > > > > -                        unsigned short wCurrentRate,
+> > > > > > > -                        unsigned char byFBOption);
+> > > > > > > +static void fill_rts_header(struct vnt_private *pDevice,
+> > > > > > > +                         unsigned char byPktType,
+> > > > > > > +                         void *pvRTS,
+> > > > > > > +                         unsigned int        cbFrameLength,
+> > > > > >
+> > > > > > Strange spacing in the above parameter declaration.  Maybe there is a tab
+> > > > > > that should be a space?
+> > > > > >
+> > > > > > julia
+> > > > > >
+> > > > >
+> > > > > I was also shocked when I noticed that. It seemed like a tab but when
+> > > > > I removed the space, the two words were joined and when I added the
+> > > > > space, it became this lage space once again. checkpatch does not
+> > > > > complain about it though
+> > > > >
+> > > > > > > +                         bool bNeedAck,
+> > > > > > > +                         bool bDisCRC,
+> > > > > > > +                         struct ieee80211_hdr *hdr,
+> > > > > > > +                         unsigned short wCurrentRate,
+> > > > > > > +                         unsigned char byFBOption);
+> > > > > > >
+> > > > > > >  static void s_vGenerateTxParameter(struct vnt_private *pDevice,
+> > > > > > >                                  unsigned char byPktType,
+> > > > > > > @@ -555,19 +555,15 @@ s_uFillDataHead(
+> > > > > > >       return buf->duration;
+> > > > > > >  }
+> > > > > > >
+> > > > > > > -static
+> > > > > > > -void
+> > > > > > > -s_vFillRTSHead(
+> > > > > > > -     struct vnt_private *pDevice,
+> > > > > > > -     unsigned char byPktType,
+> > > > > > > -     void *pvRTS,
+> > > > > > > -     unsigned int cbFrameLength,
+> > > > > > > -     bool bNeedAck,
+> > > > > > > -     bool bDisCRC,
+> > > > > > > -     struct ieee80211_hdr *hdr,
+> > > > > > > -     unsigned short wCurrentRate,
+> > > > > > > -     unsigned char byFBOption
+> > > > > > > -)
+> > > > > > > +static void fill_rts_header(struct vnt_private *pDevice,
+> > > > > > > +                         unsigned char byPktType,
+> > > > > > > +                         void *pvRTS,
+> > > > > > > +                         unsigned int cbFrameLength,
+> > > > > > > +                         bool bNeedAck,
+> > > > > > > +                         bool bDisCRC,
+> > > > > > > +                         struct ieee80211_hdr *hdr,
+> > > > > > > +                         unsigned short wCurrentRate,
+> > > > > > > +                         unsigned char byFBOption)
+> > > > > > >  {
+> > > > > > >       unsigned int uRTSFrameLen = 20;
+> > > > > > >
+> > > > > > > @@ -912,7 +908,7 @@ s_vGenerateTxParameter(
+> > > > > > >                       buf->rrv_time_a = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+> > > > > > >                       buf->rrv_time_b = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, pDevice->byTopCCKBasicRate, bNeedACK);
+> > > > > > >
+> > > > > > > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > > > > > > +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > > > > > >               } else {/* RTS_needless, PCF mode */
+> > > > > > >                       struct vnt_rrv_time_cts *buf = pvRrvTime;
+> > > > > > >
+> > > > > > > @@ -931,7 +927,7 @@ s_vGenerateTxParameter(
+> > > > > > >                       buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+> > > > > > >
+> > > > > > >                       /* Fill RTS */
+> > > > > > > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > > > > > > +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > > > > > >               } else if (!pvRTS) {/* RTS_needless, non PCF mode */
+> > > > > > >                       struct vnt_rrv_time_ab *buf = pvRrvTime;
+> > > > > > >
+> > > > > > > @@ -945,7 +941,7 @@ s_vGenerateTxParameter(
+> > > > > > >                       buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, wCurrentRate, bNeedACK);
+> > > > > > >
+> > > > > > >                       /* Fill RTS */
+> > > > > > > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > > > > > > +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > > > > > >               } else { /* RTS_needless, non PCF mode */
+> > > > > > >                       struct vnt_rrv_time_ab *buf = pvRrvTime;
+> > > > > > >
+> > > > > > > --
+> > > > > > > 2.34.1
+> > > > > > >
+> > > > > > >
+> > > > > > >
+> > > > >
+> > > >
+> >
