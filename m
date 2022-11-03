@@ -2,119 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C2FD617469
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 03:50:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EC216617471
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 03:50:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230258AbiKCCuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 22:50:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41854 "EHLO
+        id S230314AbiKCCuq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 22:50:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42372 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230077AbiKCCuA (ORCPT
+        with ESMTP id S230254AbiKCCug (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 22:50:00 -0400
-Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CAD64D8;
-        Wed,  2 Nov 2022 19:49:55 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by sin.source.kernel.org (Postfix) with ESMTPS id 2C1AECE24A0;
-        Thu,  3 Nov 2022 02:49:54 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D23BDC433C1;
-        Thu,  3 Nov 2022 02:49:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667443792;
-        bh=WyKwDvRZwnwe8d8BZAX+ibnlZ7XBzwl/srOk424MBBs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=p7PWe6V07dCQyz8C6ULuahnVIvB6fXcjzFN8UeE99X8szfwc7nazBbq6ufFNbkb2w
-         tbIJrxJW/29aSrILSQumm7mLuAXp04ineRfUwBJo0tmeJGPw4SO313lKFXi2qcbBBt
-         f3XmgKz9+D4DvMi3YxZN1gis4JRhid5/rz/5Z+6GsGupSre+9e1VZIH/J7Ud9otvtX
-         hg8sArZCMAlMVllKNvOi9okzso7c9BCTuv27E2lv3IKdN1UZrvY61/w4iHB0tXu8PY
-         R+RZgnVNP32sN3hq8A+Sxsqup5NZAf7/MZHGNaUbgfxn1EzUv64WyefHqc4v1ky50w
-         tnwCKG8zdBfVQ==
-Date:   Wed, 2 Nov 2022 21:49:49 -0500
-From:   Bjorn Andersson <andersson@kernel.org>
-To:     Johan Hovold <johan@kernel.org>,
-        Shazad Hussain <quic_shazhuss@quicinc.com>
-Cc:     Stephen Boyd <sboyd@kernel.org>, bmasney@redhat.com,
-        Andy Gross <agross@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Michael Turquette <mturquette@baylibre.com>,
-        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        Wed, 2 Nov 2022 22:50:36 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 904BD13EB9;
+        Wed,  2 Nov 2022 19:50:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667443835; x=1698979835;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=umHqhN8ACTaJ0k/HEQLPWAnfJ+IKe345eO8X82qRkhM=;
+  b=GoFAO1piP2/rtGgJdNB80x7J0g9PlF3Torzj2TOGivFihNDJbguAQnmn
+   RPlODUYX7lMet7PTJh+Itq64HJqJIcB4kLPlTrIhQYnSbfI9ITIiymI+p
+   jZYcIEFQTuu7JiGHa7MO9KYNVUugA9Y+RUbNug6TYvueur2OozD+RItUm
+   wqRemChYFC9xAwj94ASCMw4RK3jQDqJJhoPGj2XYIJ70CkofSYK+N9Uvd
+   kgKJPA2S8Ihaq2B82nX7wAhEeWdtGJG8/E0gRL4zJ9spnxQ8XCO6it3xh
+   ro/EIBs500fHMDHqjoxiu1NZsRhXSrRY9NWXQV51LDBnXMfhtAvWCGzgn
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="308289812"
+X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
+   d="scan'208";a="308289812"
+Received: from fmsmga008.fm.intel.com ([10.253.24.58])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 19:50:35 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="698047804"
+X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
+   d="scan'208";a="698047804"
+Received: from jiaxichen-precision-3650-tower.sh.intel.com ([10.239.159.75])
+  by fmsmga008.fm.intel.com with ESMTP; 02 Nov 2022 19:50:30 -0700
+From:   Jiaxi Chen <jiaxi.chen@linux.intel.com>
+To:     kvm@vger.kernel.org
+Cc:     tglx@linutronix.de, mingo@redhat.com, bp@alien8.de,
+        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
+        seanjc@google.com, pbonzini@redhat.com, ndesaulniers@google.com,
+        alexandre.belloni@bootlin.com, peterz@infradead.org,
+        jpoimboe@kernel.org, chang.seok.bae@intel.com,
+        pawan.kumar.gupta@linux.intel.com, babu.moger@amd.com,
+        jmattson@google.com, sandipan.das@amd.com, tony.luck@intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, fenghua.yu@intel.com,
+        keescook@chromium.org, nathan@kernel.org,
         linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1] clk: qcom: gcc-sc8280xp: add cxo as parent for
- gcc_ufs_ref_clkref_clk
-Message-ID: <20221103024949.lw4g2tavk7uw5xt4@builder.lan>
-References: <20221030142333.31019-1-quic_shazhuss@quicinc.com>
- <20221101182402.32CE5C433C1@smtp.kernel.org>
- <Y2IZaxukERXNcPGR@hovoldconsulting.com>
- <c96304da-f57e-4926-2f3f-665c2054fb00@quicinc.com>
- <Y2Imnf1+v5j5CH9r@hovoldconsulting.com>
- <bb590bfb-07a4-97c1-e5c0-d00d840e2e11@quicinc.com>
- <Y2I3tekSAO42r0xR@hovoldconsulting.com>
+Subject: [PATCH v2 0/8] x86: KVM: Advertise CPUID of new Intel platform instructions to user space
+Date:   Thu,  3 Nov 2022 10:50:22 +0800
+Message-Id: <20221103025030.78371-1-jiaxi.chen@linux.intel.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2I3tekSAO42r0xR@hovoldconsulting.com>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.3 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 10:26:13AM +0100, Johan Hovold wrote:
-> On Wed, Nov 02, 2022 at 02:15:26PM +0530, Shazad Hussain wrote:
-> > On 11/2/2022 1:43 PM, Johan Hovold wrote:
-> 
-> > > Right, but if the PHYs really requires CX and it is not an ancestor of
-> > > the refclk then this should be described by the binding (and not be
-> > > hidden away in the clock driver).
-> 
-> > This makes sense, will be posting v2 post for the same.
-> > I assume this should use the Fixes tag then !
-> 
-> Yeah, I guess to you can add a fixes tag for the commits adding support
-> for sc8280xp to the UFS PHY binding and driver.
-> 
-> But please do check with the hardware documentation first so we get this
-> right this time.
-> 
-> I've already asked Bjorn to see what he can dig out as it is still not
-> clear how the two "card" refclocks (GCC_UFS_CARD_CLKREF_CLK and
-> GCC_UFS_1_CARD_CLKREF_CLK) are supposed to be used.
-> 
+Latest Intel platform Granite Rapids/Sierra Forest has introduced below
+new instructions and CPUIDs:
 
-We've come full circle and Shazad's patch came from that discussion :)
+ - CMPccXADD CPUID.(EAX=7,ECX=1):EAX[bit 7]
+ - AMX-FP16 CPUID.(EAX=7,ECX=1):EAX[bit 21]
+ - AVX-IFMA CPUID.(EAX=7,ECX=1):EAX[bit 23]
+ - AVX-VNNI-INT8 CPUID.(EAX=7,ECX=1):EDX[bit 4]
+ - AVX-NE-CONVERT CPUID.(EAX=7,ECX=1):EDX[bit 5]
+ - PREFETCHITI CPUID.(EAX=7,ECX=1):EDX[bit 14]
 
-In line with the downstream dts, we have GCC_UFS{,_1}_CARD_CLKREF_CLK
-providing a reference clock to the two phys. Then GCC_UFS_REF_CLKREF_CLK
-feeds the UFS refclock pads (both of them), which connect to the memory
-device(s).
+Details can be found in recent Intel ISE (Instruction Set
+Extensions)[1].
 
-In other words, GCC_UFS{,_1}_CARD_CLKREF_CLK should be "ref" in
-respective phy.
+This patch series advertises KVM support of these CPUIDs to host
+userspace.
 
-GCC_UFS_REF_CLKREF_CLK is the clock to the devices, but as we don't
-represent the memory device explicitly it seems suitable to use as
-"ref_clk" in the ufshc nodes - which would then match the special
-handling of the "link clock" in the UFS driver.
+[1] Intel ISE: https://cdrdv2.intel.com/v1/dl/getContent/671368
+
+v2:
+ - Remove vague descriptions in the changelogs, including pronouns and
+   "this patch" kind of things.
+ - Move the two CPUIDs of cpuid_leaf[12] CPUID_7_1_EAX to kvm-only
+   subleaves.
+ - Replace cpuid_leaf[12] CPUID_7_1_EAX with the last leaf
+   CPUID_8000_001F_EAX to shorten array length.
+ - Change the newly-added CPUID leaf [CPUID_7_1_EDX] in v1 into kvm-only
+   subleaves. 
+ 
+v1:
+https://lore.kernel.org/all/20221019084734.3590760-1-jiaxi.chen@linux.intel.com/
+
+Jiaxi Chen (8):
+  x86: KVM: Move existing x86 CPUID leaf [CPUID_7_1_EAX] to kvm-only
+    leaf
+  x86/cpufeatures: Replace [CPUID_DUMMY] in cpuid_leafs[] with the last
+    leaf
+  x86: KVM: Advertise CMPccXADD CPUID to user space
+  x86: KVM: Advertise AMX-FP16 CPUID to user space
+  x86: KVM: Advertise AVX-IFMA CPUID to user space
+  x86: KVM: Advertise AVX-VNNI-INT8 CPUID to user space
+  x86: KVM: Advertise AVX-NE-CONVERT CPUID to user space
+  x86: KVM: Advertise PREFETCHIT0/1 CPUID to user space
+
+ arch/x86/include/asm/cpufeature.h        |  9 +++------
+ arch/x86/include/asm/cpufeatures.h       | 20 ++++++++------------
+ arch/x86/include/asm/disabled-features.h |  3 +--
+ arch/x86/include/asm/required-features.h |  3 +--
+ arch/x86/kernel/cpu/common.c             |  6 ------
+ arch/x86/kernel/cpu/cpuid-deps.c         |  1 -
+ arch/x86/kvm/cpuid.c                     | 11 ++++++++---
+ arch/x86/kvm/reverse_cpuid.h             | 15 +++++++++++++++
+ 8 files changed, 36 insertions(+), 32 deletions(-)
 
 
+base-commit: e18d6152ff0f41b7f01f9817372022df04e0d354
+-- 
+2.27.0
 
-
-All three clocks are sourced off the CXO pad, so I would like this patch
-to cover at least all of these. And
-
-Fixes: d65d005f9a6c ("clk: qcom: add sc8280xp GCC driver")
-
-seems to be in order for such patch.
-
-
-@Johan, would you mind writing a dts patch flipping the clocks around
-and Shazad can update this patch?
-
-Regards,
-Bjorn
