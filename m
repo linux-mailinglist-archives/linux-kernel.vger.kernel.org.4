@@ -2,114 +2,133 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A3A24617B23
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 11:55:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8B253617B26
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 11:56:47 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231304AbiKCKzc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 06:55:32 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58756 "EHLO
+        id S230165AbiKCK42 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 06:56:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59098 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231415AbiKCKzJ (ORCPT
+        with ESMTP id S230301AbiKCK4V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 06:55:09 -0400
-Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA7A11172;
-        Thu,  3 Nov 2022 03:55:01 -0700 (PDT)
-Received: by mail-qt1-x82b.google.com with SMTP id e15so955154qts.1;
-        Thu, 03 Nov 2022 03:55:01 -0700 (PDT)
+        Thu, 3 Nov 2022 06:56:21 -0400
+Received: from mail-ej1-x62a.google.com (mail-ej1-x62a.google.com [IPv6:2a00:1450:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1901810FD5
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 03:56:20 -0700 (PDT)
+Received: by mail-ej1-x62a.google.com with SMTP id f27so4187605eje.1
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 03:56:20 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AxCfvK9F2HThh2W2Xp3je+aG6Hjdmf1tZ0bHKXB3Kes=;
-        b=cl5jX+mpkbBsC/BK8H1TagMbrvQqLrh96Jj+Zrw1zmpLEfzQvojfxWxdfXDLgRcv5I
-         MFnQ82NOWLxqGaPh8I/v3thVDCGmjC0lICIb0V7XNdGUx0p1bY1JRirzuN44E59kL92x
-         HVWCzxhRlutrZlrMcFLtDxMuPOhiJJdDYluVtZ8UV1X9hBcf3Um9jl2Lshn+aL/c0rPI
-         t6ezk35AHLA8lAo9MOlKMFUpwo4rDG71CjapUdECSQDS+EdC9/k/BbAu5Y4Fi+WLDpBO
-         iUXtwfannQhJEMH1QXsyHH8FCl51FvKeIHtSPOqRncMwRX5PD3I735TuDGe31wur6GPM
-         0/PA==
+        d=amarulasolutions.com; s=google;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=MHoEFEUHiiMBa/cPnqMwuahiYHL+HcOZn1fqIz2cIPY=;
+        b=kfPnWSmd0FTeX/avQZ1E61I0IPizlm1im7utoUJ4EyeHUR18MZPX5soFls0MRAPal5
+         g3OETyVycWiVOZIDhFnNt59wv1G3P3BeIn1Tk9faYvMLZgXT3bFHsgSYQml0FHyW//2F
+         epUzyDa2UxY6fEkSPXGB/wrbFw34DZYJBIPtk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AxCfvK9F2HThh2W2Xp3je+aG6Hjdmf1tZ0bHKXB3Kes=;
-        b=yeeXckbVMFjLHcS6/K1BL2c8IQrE1Au/FxtrirsJX305q01xystIdH4nPKGK0TCIMs
-         RfSZQInMn7ZAMRh9qpUf1apBKAbUxrPorAOJcCpDZWxYHqubtxClpK+i70ONWlPnC/qy
-         efS3ZfEy3R4qwEF+FKmb2N5TghsU1TCdOiQrdbWfhwok2KlBmhWP7Ns4SpAEhpM3mmxX
-         VJnuh/WTlqKk8RDuJeq96+fQQt4uJ5s8f1yZDGXa2IfDtldROrWhXRp1BKKpQyWNUFsS
-         dy6x+rJOQzqhaWMWBipgcVOzcCLJm6etGUUHhIma8b2vVwTawY0vGnLVUGB+MVi3BmDp
-         Txdg==
-X-Gm-Message-State: ACrzQf3K570i5WSuXkofCN8G/gicfIkYzLuZ1FBlaIREvlkquDZuo5KO
-        sZguYrR/4ehgX+waraQQ7sse6M1JcE7cDNOxNVRUtk/CRJMhNudZ
-X-Google-Smtp-Source: AMsMyM7T54w+5Irb0QStrHCnYXmnkwvVqdeMy6UQV0NjN3Om8lGlCy9go33LOKO0WGsNQKx1AIs5J6Zfqk5mr3Ub1oo=
-X-Received: by 2002:ac8:5751:0:b0:39c:b848:198f with SMTP id
- 17-20020ac85751000000b0039cb848198fmr23931962qtx.429.1667472900226; Thu, 03
- Nov 2022 03:55:00 -0700 (PDT)
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=MHoEFEUHiiMBa/cPnqMwuahiYHL+HcOZn1fqIz2cIPY=;
+        b=KkZ3HLh6Mb4f2d2XcSg/yvCauZLTKPEhQGKT33pJUMmZiPm3r0Otp3w3o1MwLinY+4
+         VgrisLR60fbqD/MgPWOUhiHraLGeWYfazynx6vc9NN9hZ/re3Ia+1CHhGW/JGxEa0So+
+         xwAUucEnvYpVVcNwxpdPAiBLPNPHyEtwTAKvbl4vARQJGrZ9pvDSwuS4j7CSnZZ7dl56
+         bBSLbOtGq2t2GBcAI/D3IYQ3BizStlOuoIvqSMqUrwF2KFau2xVXHfJqeiqaOdjJDY1H
+         J2cRysdnGzFCrlt9O441nC8dmyBUdyBH8W0bxv60TSpRYWBMYeS8KLC98R8Wk+BFOfDT
+         Nqrw==
+X-Gm-Message-State: ACrzQf3DvAMGqvSbe8zy8gDUjSkZhT8w8UVm4wtfJZM3PoQHjEAyukJ9
+        reHU9uP9yY3LOYM3RQb1YPiiGQ==
+X-Google-Smtp-Source: AMsMyM6gH60Gp0hF7v+cWs5gMtyaaKikxH25CGAGUgJOX5bFKeigen6f+TEUg/6vRtCX7ElEDpUFWw==
+X-Received: by 2002:a17:906:4795:b0:794:8b93:2e43 with SMTP id cw21-20020a170906479500b007948b932e43mr28527661ejc.184.1667472978651;
+        Thu, 03 Nov 2022 03:56:18 -0700 (PDT)
+Received: from tom-ThinkPad-T14s-Gen-2i (net-188-217-54-207.cust.vodafonedsl.it. [188.217.54.207])
+        by smtp.gmail.com with ESMTPSA id 2-20020a170906200200b007acbac07f07sm361368ejo.51.2022.11.03.03.56.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 03:56:18 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 11:56:15 +0100
+From:   Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
+To:     Aakarsh Jain <aakarsh.jain@samsung.com>
+Cc:     linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        m.szyprowski@samsung.com, andrzej.hajda@intel.com,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
+        benjamin.gaignard@collabora.com, krzysztof.kozlowski+dt@linaro.org,
+        stanimir.varbanov@linaro.org, dillon.minfei@gmail.com,
+        david.plowman@raspberrypi.com, mark.rutland@arm.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org, andi@etezian.org,
+        alim.akhtar@samsung.com, aswani.reddy@samsung.com,
+        pankaj.dubey@samsung.com, smitha.t@samsung.com
+Subject: Re: [PATCH 3/3] arm64: dts: exynos: Rename compatible string
+ property from version to SOC specific
+Message-ID: <20221103105615.GC4937@tom-ThinkPad-T14s-Gen-2i>
+References: <20221102130602.48969-1-aakarsh.jain@samsung.com>
+ <CGME20221102125816epcas5p23e16fefd6b820e7dd7d9a93f0d48f40d@epcas5p2.samsung.com>
+ <20221102130602.48969-3-aakarsh.jain@samsung.com>
 MIME-Version: 1.0
-References: <20221102152915.22995-1-andriy.shevchenko@linux.intel.com> <Y2NtQgRwkUlU5bMw@black.fi.intel.com>
-In-Reply-To: <Y2NtQgRwkUlU5bMw@black.fi.intel.com>
-From:   Andy Shevchenko <andy.shevchenko@gmail.com>
-Date:   Thu, 3 Nov 2022 12:54:23 +0200
-Message-ID: <CAHp75Vd520HKL8_JQrDr7JBEVf1rDzJC=T=mceZvovq8AwrUVg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] pinctrl: intel: Use temporary variable for struct device
-To:     Mika Westerberg <mika.westerberg@linux.intel.com>
-Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andy@kernel.org>,
-        Linus Walleij <linus.walleij@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221102130602.48969-3-aakarsh.jain@samsung.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 3, 2022 at 9:26 AM Mika Westerberg
-<mika.westerberg@linux.intel.com> wrote:
-> On Wed, Nov 02, 2022 at 05:29:14PM +0200, Andy Shevchenko wrote:
-> > Use temporary variable for struct device to make code neater.
-> >
-> > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-> > ---
-> >  drivers/pinctrl/intel/pinctrl-intel.c | 23 ++++++++++++-----------
-> >  1 file changed, 12 insertions(+), 11 deletions(-)
-> >
-> > diff --git a/drivers/pinctrl/intel/pinctrl-intel.c b/drivers/pinctrl/intel/pinctrl-intel.c
-> > index fe5bf2184cbf..e15629348cb5 100644
-> > --- a/drivers/pinctrl/intel/pinctrl-intel.c
-> > +++ b/drivers/pinctrl/intel/pinctrl-intel.c
-> > @@ -1522,14 +1522,15 @@ static int intel_pinctrl_probe_pwm(struct intel_pinctrl *pctrl,
-> >  int intel_pinctrl_probe(struct platform_device *pdev,
-> >                       const struct intel_pinctrl_soc_data *soc_data)
-> >  {
-> > +     struct device *dev = &pdev->dev;
-> >       struct intel_pinctrl *pctrl;
-> >       int i, ret, irq;
-> >
-> > -     pctrl = devm_kzalloc(&pdev->dev, sizeof(*pctrl), GFP_KERNEL);
-> > +     pctrl = devm_kzalloc(dev, sizeof(*pctrl), GFP_KERNEL);
->
-> IMHO &pdev->dev is neater and saves an extra line. I would agree if this
-> would be something like &foo->bar->baz->dev but it is not.
+Hi Aakarsh,
 
-I have no strong opinion, but one thing which may play in favour of
-the patches is that all other drivers, that have their custom
-->probe() implemented, are using temporary variable. That said, let's
-consider this as unification among Intel pin control drivers.
+On Wed, Nov 02, 2022 at 06:36:02PM +0530, Aakarsh Jain wrote:
+> commit "752d3a23d1f68de87e3c" which adds MFC codec device node
+> for exynos3250 SOC. Since exynos3250.dtsi and exynos5420.dtsi are
+> using same compatible string as "samsung,mfc-v7" but their
+> node properties are different.As both SoCs have MFC v7 hardware
+> module but with different clock hierarchy and complexity.
+> So renaming compatible string from version specific to SOC based.
+> 
+> Suggested-by: Alim Akhtar <alim.akhtar@samsung.com>
+> Fixes: 752d3a23d1f6 ("ARM: dts: add MFC codec device node for exynos3250")
+> Signed-off-by: Aakarsh Jain <aakarsh.jain@samsung.com>
+> ---
+>  arch/arm/boot/dts/exynos3250.dtsi | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/boot/dts/exynos3250.dtsi b/arch/arm/boot/dts/exynos3250.dtsi
+> index 326b9e0ed8d3..98105c64f7d9 100644
+> --- a/arch/arm/boot/dts/exynos3250.dtsi
+> +++ b/arch/arm/boot/dts/exynos3250.dtsi
+> @@ -485,7 +485,7 @@
+>  		};
+>  
+>  		mfc: codec@13400000 {
+> -			compatible = "samsung,mfc-v7";
+> +			compatible = "samsung,exynos3250-mfc";
+>  			reg = <0x13400000 0x10000>;
+>  			interrupts = <GIC_SPI 102 IRQ_TYPE_LEVEL_HIGH>;
+>  			clock-names = "mfc", "sclk_mfc";
+> -- 
+> 2.17.1
+> 
 
-> Anyway, no feelings about this so feel free to add,
->
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
->
-> for both patches.
+Looks good to me.
+Reviewed-by: Tommaso Merciai <tommaso.merciai@amarulasolutions.com>
 
-Thank you!
+
+Regards,
+Tommaso
 
 -- 
-With Best Regards,
-Andy Shevchenko
+Tommaso Merciai
+Embedded Linux Engineer
+tommaso.merciai@amarulasolutions.com
+__________________________________
+
+Amarula Solutions SRL
+Via Le Canevare 30, 31100 Treviso, Veneto, IT
+T. +39 042 243 5310
+info@amarulasolutions.com
+www.amarulasolutions.com
