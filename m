@@ -2,277 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 29D8C6188BB
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 20:25:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9D7D36188BA
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 20:25:16 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231679AbiKCTZQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 15:25:16 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
+        id S231313AbiKCTZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 15:25:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36706 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231824AbiKCTYu (ORCPT
+        with ESMTP id S231823AbiKCTYu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 3 Nov 2022 15:24:50 -0400
-Received: from mail-wr1-x431.google.com (mail-wr1-x431.google.com [IPv6:2a00:1450:4864:20::431])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AF71A1DA5A
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 12:23:32 -0700 (PDT)
-Received: by mail-wr1-x431.google.com with SMTP id l14so4241381wrw.2
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 12:23:32 -0700 (PDT)
+Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FAD2613
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 12:23:29 -0700 (PDT)
+Received: by mail-oi1-x22b.google.com with SMTP id v81so3048954oie.5
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 12:23:29 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3m0KzeGVRJqkHgME9q6g41LMbVGzdpdIUljwNu1VCAM=;
-        b=MmobAuiIsCg6FtEKS3o19tHzMPFMz+NW/PvA6ns99yzqiKfXsi8twAUP/rchnNTAWa
-         Yy7Xt/ZE+FX8ncb0cMnjFavKwMn5LEDKrgyY4AK2FcsSLBp45t1u37fDz1dunOOZgmlz
-         h6KjU0zCLafLkrFmta7QD7iVPWaCrN1Tx/iLYiZMJkDEQ7Ihjxarlo4ao/2tL1l1fvlv
-         NvL6j+Rl/h1E1w3BV6viZPe/BH53a9Xf243146bZdhmDPeeIhK/WrpY4XSWyp6CojWfA
-         LvYwHhr6gQaEquLx3Nq/rmia/PpxCH6AWMlgKsAxLXo8jolX/Jnof03VG62QeZdP3pIS
-         Lnaw==
+        h=in-reply-to:from:references:cc:to:content-language:subject
+         :user-agent:mime-version:date:message-id:sender:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=BqziTjxfdQl0fNRtQ4I0OSYSj/ru4qxDbXBeei7oy4s=;
+        b=BnyE+BDM7GHsEAGM5bYv3B7xOcr4hDUpNNIG/ujmPbCwgopB8ytsNW48mYGReHAjuO
+         2z+ZmXr3SuxLQGENZljdN9QXqxdbyJ7e3PzTyOVtBQWeGfZjfsDEY4JOb+UFx9/iwPuD
+         lp0dXMt4zkSopM8MYmpcJHUTts45+pRIhommyG5fzFdtomjRUJlkAuGNVRyaFAx2DS5r
+         5Z4VyY0NFmzDDnRToUdHfgdSZXSVKtxaoyHAQQDWX1HQCdKeywVSoRKgFhm5rIy0JAHl
+         hiPMOW8I+NEKBVzIno/dGEaBd8bXdmuZWXivk3my0fevn5hNDrL2WweH4LRR0k6Yw+wr
+         grYA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3m0KzeGVRJqkHgME9q6g41LMbVGzdpdIUljwNu1VCAM=;
-        b=7tfgFc0jeyV8XKUv9WNDt48kmkBcwVlZfLw11k2/fIDcLdDRElqHd1SyHACOH95pdn
-         Vvi7iwyfRcgZVG1dMW/HO2yHVp7kJ/DiFupukYeXEplSmHr6LudGOXU12E7jCgW+kFtd
-         KVug1uTdI/Fg0ocy4JnIuUscqHcDEocLcfZP4b2ycIS2TI+RE4KdWTTfJjoTKjhoKcaK
-         6Cledn875c0mRFIb4O1yjCLY1ypjSqBI5HGX9WIxCciaKo/DAeHW6KD7BZqOl7E69k6Z
-         yC2SK5vgVbQeGWGBn4iX4zN4fFxWuJaa4T7uoBT3PxK1q07GOpSGkP09s9E9yvUGao+Z
-         7beA==
-X-Gm-Message-State: ACrzQf2bnnAPUHhHnjTGfiE1g71KF9sbFYTVj+GPQ0muP3w1uWtIQPms
-        E2T9p1zqXmIihcL/LvMmff8=
-X-Google-Smtp-Source: AMsMyM4z++AaY4MsPyc15QLkkuLA+NnTR1l5SkeySkn5l3o5OpCbUie8PaChAQUdrOr11A9y7pPfZA==
-X-Received: by 2002:adf:db0c:0:b0:236:c23f:c15c with SMTP id s12-20020adfdb0c000000b00236c23fc15cmr16960494wri.90.1667503411101;
-        Thu, 03 Nov 2022 12:23:31 -0700 (PDT)
-Received: from suse.localnet (host-79-43-11-206.retail.telecomitalia.it. [79.43.11.206])
-        by smtp.gmail.com with ESMTPSA id h19-20020a1ccc13000000b003b49ab8ff53sm780145wmb.8.2022.11.03.12.23.28
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 12:23:30 -0700 (PDT)
-From:   "Fabio M. De Francesco" <fmdefrancesco@gmail.com>
-To:     Ira Weiny <ira.weiny@intel.com>,
-        Zhao Liu <zhao1.liu@linux.intel.com>
-Cc:     Jani Nikula <jani.nikula@linux.intel.com>,
-        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
-        Rodrigo Vivi <rodrigo.vivi@intel.com>,
-        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
-        David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Matthew Auld <matthew.auld@intel.com>,
-        Thomas =?ISO-8859-1?Q?Hellstr=F6m?= 
-        <thomas.hellstrom@linux.intel.com>,
-        Nirmoy Das <nirmoy.das@intel.com>,
-        Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-        Chris Wilson <chris@chris-wilson.co.uk>,
-        Christian =?ISO-8859-1?Q?K=F6nig?= <christian.koenig@amd.com>,
-        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
-        linux-kernel@vger.kernel.org,
-        Zhenyu Wang <zhenyu.z.wang@intel.com>,
-        Zhao Liu <zhao1.liu@intel.com>,
-        Dave Hansen <dave.hansen@intel.com>
-Subject: Re: [PATCH 1/9] drm/i915: Use kmap_local_page() in gem/i915_gem_object.c
-Date:   Thu, 03 Nov 2022 20:22:04 +0100
-Message-ID: <12087538.O9o76ZdvQC@suse>
-In-Reply-To: <Y2Pxi9FsdeULhHKI@iweiny-desk3>
-References: <20221017093726.2070674-1-zhao1.liu@linux.intel.com> <2541717.Lt9SDvczpP@suse> <Y2Pxi9FsdeULhHKI@iweiny-desk3>
+        h=in-reply-to:from:references:cc:to:content-language:subject
+         :user-agent:mime-version:date:message-id:sender:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BqziTjxfdQl0fNRtQ4I0OSYSj/ru4qxDbXBeei7oy4s=;
+        b=rEuZjXKwPFTnav4sd8/NVv2CA2tho4n65GxwKagC5Do9NQN7NgFwQKbvxbJyvIz7Ia
+         fbJqNooyoqzCc/kr6dFv98KJSaFZJPKn80oJf+vwZJaBFvjU+MsLPTYERk7d4mhdk/g6
+         3FGPZf+e97mX87tNeSVA+6XhuKAE7hx0W2/g3GgIX0WG083yeljOTlWUnmRj46xgrD7L
+         fUA4YVX3ocWR0SDi2fZgnfPD+3TpFyy8D25vpWETFbhCJctysZrd3wCigJTgtxlB7Aqi
+         DxN+CWYCGVZVWrE3nlrGtA5vrn8fbNmw+waSMG7/ibaa6NcJvI8yv/hFmFEdZUGFp/nb
+         62uw==
+X-Gm-Message-State: ACrzQf1QWqYy1ha4cKYBEFk1wkjcU0KA+LIEo+Yy4Or82AOpRBhBxby8
+        BEFmtGAFuOJYjFeMjG17NtPofX6FXaY=
+X-Google-Smtp-Source: AMsMyM6QCfO3tdz6iQo6iPdNduV07dDacddY1xQyOJNkK+T5SSqWUKtlCDMdf1uJAiHhiMSCAGypBw==
+X-Received: by 2002:a05:6808:181e:b0:35a:5959:5909 with SMTP id bh30-20020a056808181e00b0035a59595909mr238097oib.35.1667503408758;
+        Thu, 03 Nov 2022 12:23:28 -0700 (PDT)
+Received: from [192.168.0.158] ([216.130.59.33])
+        by smtp.gmail.com with ESMTPSA id r3-20020a056870e98300b0013bc40b09dasm790796oao.17.2022.11.03.12.23.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 12:23:28 -0700 (PDT)
+Sender: Larry Finger <larry.finger@gmail.com>
+Content-Type: multipart/mixed; boundary="------------jEpg7InBUcZ4C7rHTIpvDrTk"
+Message-ID: <fdbd7d7b-7e3f-8343-1dd9-8fd5c167d91d@lwfinger.net>
+Date:   Thu, 3 Nov 2022 14:23:27 -0500
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: staging: rtl8192e: build warning on HZ
+Content-Language: en-US
+To:     Randy Dunlap <rdunlap@infradead.org>,
+        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Cc:     wlanfae@realtek.com,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+References: <a916c06e-a9b5-1cd2-2da7-ac8e46b512c9@infradead.org>
+From:   Larry Finger <Larry.Finger@lwfinger.net>
+In-Reply-To: <a916c06e-a9b5-1cd2-2da7-ac8e46b512c9@infradead.org>
+X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
+        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On gioved=EC 3 novembre 2022 17:51:23 CET Ira Weiny wrote:
-> On Sat, Oct 29, 2022 at 01:17:03PM +0200, Fabio M. De Francesco wrote:
-> > On luned=EC 17 ottobre 2022 11:37:17 CEST Zhao Liu wrote:
-> > > From: Zhao Liu <zhao1.liu@intel.com>
-> > >=20
-> > > The use of kmap_atomic() is being deprecated in favor of
-> > > kmap_local_page()[1].
-> > >=20
-> > > The main difference between atomic and local mappings is that local
-> > > mappings doesn't disable page faults or preemption.
-> >=20
-> > You are right about about page faults which are never disabled by
-> > kmap_local_page(). However kmap_atomic might not disable preemption. It
-> > depends on CONFIG_PREEMPT_RT.
-> >=20
-> > Please refer to how kmap_atomic_prot() works (this function is called by
-> > kmap_atomic() when kernels have HIGHMEM enabled).
-> >=20
-> > > There're 2 reasons why i915_gem_object_read_from_page_kmap() doesn't
-> > > need to disable pagefaults and preemption for mapping:
-> > >=20
-> > > 1. The flush operation is safe for CPU hotplug when preemption is not
-> > > disabled.
-> >=20
-> > I'm confused here. Why are you talking about CPU hotplug?
->=20
-> I agree with Fabio here.  I'm not making the connection between cpu hotpl=
-ug=20
-and
-> this code path.
->=20
-> Ira
+This is a multi-part message in MIME format.
+--------------jEpg7InBUcZ4C7rHTIpvDrTk
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-@Zhao,
+On 11/3/22 13:07, Randy Dunlap wrote:
+> FYI:
+> 
+> When CONFIG_HZ=24 (arch/mips/):
+> 
+> ../drivers/staging/rtl8192e/rtllib_wx.c: In function 'rtl819x_translate_scan':
+> ../drivers/staging/rtl8192e/rtllib_wx.c:220:57: warning: division by zero [-Wdiv-by-zero]
+>    220 |                       (jiffies - network->last_scanned) / (HZ / 100));
+>        |                                                         ^
+> In file included from ../include/linux/skbuff.h:45,
+>                   from ../include/linux/if_ether.h:19,
+>                   from ../include/linux/etherdevice.h:20,
+>                   from ../drivers/staging/rtl8192e/rtllib_wx.c:18:
+> ../drivers/staging/rtl8192e/rtllib_wx.c: In function 'rtllib_wx_get_scan':
+> ../drivers/staging/rtl8192e/rtllib_wx.c:261:70: warning: division by zero [-Wdiv-by-zero]
+>    261 |                                    (jiffies - network->last_scanned) /
+>        |
 
-I'd like to add that I was about to put my reviewed-by tag. The other thing=
-s I=20
-objected are minor nits. Please just clarify this connection.
-
-Your code is good and deserves to be applied.
-
-=46abio
-
->=20
-> > In any case, developers should never rely on implicit calls of
-> > preempt_disable() for the reasons said above. Therefore, flush operatio=
-ns
-> > should be allowed regardless that kmap_atomic() potential side effect.
-> >=20
-> > > In drm/i915/gem/i915_gem_object.c, the function
-> > > i915_gem_object_read_from_page_kmap() calls drm_clflush_virt_range()
-> >=20
-> > If I recall correctly, drm_clflush_virt_range() can always be called wi=
-th=20
-page
-> > faults and preemption enabled. If so, this is enough to say that the
-> > conversion is safe.
-> >=20
-> > Is this code explicitly related to flushing the cache lines before=20
-removing /
-> > adding CPUs? If I recall correctly, there are several other reasons beh=
-ind=20
-the
-> > need to issue cache lines flushes. Am I wrong about this?
-> >=20
-> > Can you please say more about what I'm missing here?
-> >=20
-> > > to
-> > > use CLFLUSHOPT or WBINVD to flush. Since CLFLUSHOPT is global on x86
-> > > and WBINVD is called on each cpu in drm_clflush_virt_range(), the flu=
-sh
-> > > operation is global and any issue with cpu's being added or removed
-> > > can be handled safely.
-> >=20
-> > Again your main concern is about CPU hotplug.
-> >=20
-> > Even if I'm missing something, do we really need all these details abou=
-t=20
-the
-> > inner workings of drm_clflush_virt_range()?
-> >=20
-> > I'm not an expert, so may be that I'm wrong about all I wrote above.
-> >=20
-> > Therefore, can you please elaborate a little more for readers with very=
-=20
-little
-> > knowledge of these kinds of things (like me and perhaps others)?
-> >=20
-> > > 2. Any context switch caused by preemption or sleep (pagefault may
-> > > cause sleep) doesn't affect the validity of local mapping.
-> >=20
-> > I'd replace "preemption or sleep" with "preemption and page faults" sin=
-ce
-> > yourself then added that page faults lead to tasks being put to sleep.
-> >=20
-> > > Therefore, i915_gem_object_read_from_page_kmap() is a function where
-> > > the use of kmap_local_page() in place of kmap_atomic() is correctly
-> > > suited.
-> > >=20
-> > > Convert the calls of kmap_atomic() / kunmap_atomic() to
-> > > kmap_local_page() / kunmap_local().
-> > >=20
-> > > And remove the redundant variable that stores the address of the mapp=
-ed
-> > > page since kunmap_local() can accept any pointer within the page.
-> > >=20
-> > > [1]: https://lore.kernel.org/all/20220813220034.806698-1-ira.weiny@in=
-tel.com
-> > >=20
-> > > Suggested-by: Dave Hansen <dave.hansen@intel.com>
-> > > Suggested-by: Ira Weiny <ira.weiny@intel.com>
-> > > Suggested-by: Fabio M. De Francesco <fmdefrancesco@gmail.com>
-> > > Signed-off-by: Zhao Liu <zhao1.liu@intel.com>
-> > > ---
-> > >=20
-> > > Suggested by credits:
-> > >   Dave: Referred to his explanation about cache flush.
-> > >   Ira: Referred to his task document, review comments and explanation=
-=20
-about
-> > >  =20
-> > >        cache flush.
-> > >  =20
-> > >   Fabio: Referred to his boiler plate commit message.
-> > >=20
-> > > ---
-> > >=20
-> > >  drivers/gpu/drm/i915/gem/i915_gem_object.c | 8 +++-----
-> > >  1 file changed, 3 insertions(+), 5 deletions(-)
-> > >=20
-> > > diff --git a/drivers/gpu/drm/i915/gem/i915_gem_object.c
-> > > b/drivers/gpu/drm/i915/gem/i915_gem_object.c index
-> >=20
-> > 369006c5317f..a0072abed75e 100644
-> >=20
-> > > --- a/drivers/gpu/drm/i915/gem/i915_gem_object.c
-> > > +++ b/drivers/gpu/drm/i915/gem/i915_gem_object.c
-> > > @@ -413,17 +413,15 @@ void=20
-__i915_gem_object_invalidate_frontbuffer(struct
-> > > drm_i915_gem_object *obj, static void
-> > >=20
-> > >  i915_gem_object_read_from_page_kmap(struct drm_i915_gem_object *obj,=
-=20
-u64
-> >=20
-> > offset, void
-> >=20
-> > > *dst, int size) {
-> > > -	void *src_map;
-> > >=20
-> > >  	void *src_ptr;
-> > >=20
-> > > -	src_map =3D kmap_atomic(i915_gem_object_get_page(obj, offset >>
-> >=20
-> > PAGE_SHIFT));
-> >=20
-> > > -
-> > > -	src_ptr =3D src_map + offset_in_page(offset);
-> > > +	src_ptr =3D kmap_local_page(i915_gem_object_get_page(obj, offset >>
-> >=20
-> > PAGE_SHIFT))
-> >=20
-> > > +	          + offset_in_page(offset);
-> > >=20
-> > >  	if (!(obj->cache_coherent & I915_BO_CACHE_COHERENT_FOR_READ))
-> > >  =09
-> > >  		drm_clflush_virt_range(src_ptr, size);
-> > >  =09
-> > >  	memcpy(dst, src_ptr, size);
-> > >=20
-> > > -	kunmap_atomic(src_map);
-> > > +	kunmap_local(src_ptr);
-> > >=20
-> > >  }
-> > > =20
-> > >  static void
-> >=20
-> > The changes look good, but I'd like to better understand the commit=20
-message.
-> >=20
-> > Thanks,
-> >=20
-> > Fabio
+That statement is messed up. Does the attached patch fix it?
 
 
+Larry
 
+--------------jEpg7InBUcZ4C7rHTIpvDrTk
+Content-Type: text/x-patch; charset=UTF-8; name="test_patch_fr_rtl8192e.patch"
+Content-Disposition: attachment; filename="test_patch_fr_rtl8192e.patch"
+Content-Transfer-Encoding: base64
 
+ZGlmZiAtLWdpdCBhL2RyaXZlcnMvc3RhZ2luZy9ydGw4MTkyZS9ydGxsaWJfd3guYyBiL2Ry
+aXZlcnMvc3RhZ2luZy9ydGw4MTkyZS9ydGxsaWJfd3guYwppbmRleCBkYTJjNDFjOWI5MmYu
+LjBhMDA3ZjU1Zjk4OCAxMDA2NDQKLS0tIGEvZHJpdmVycy9zdGFnaW5nL3J0bDgxOTJlL3J0
+bGxpYl93eC5jCisrKyBiL2RyaXZlcnMvc3RhZ2luZy9ydGw4MTkyZS9ydGxsaWJfd3guYwpA
+QCAtMjE2LDggKzIxNiw4IEBAIHN0YXRpYyBpbmxpbmUgY2hhciAqcnRsODE5eF90cmFuc2xh
+dGVfc2NhbihzdHJ1Y3QgcnRsbGliX2RldmljZSAqaWVlZSwKIAlpd2UuY21kID0gSVdFVkNV
+U1RPTTsKIAlwID0gY3VzdG9tOwogCXAgKz0gc2NucHJpbnRmKHAsIE1BWF9DVVNUT01fTEVO
+IC0gKHAgLSBjdXN0b20pLAotCQkgICAgICAiIExhc3QgYmVhY29uOiAlbHVtcyBhZ28iLAot
+CQkgICAgICAoamlmZmllcyAtIG5ldHdvcmstPmxhc3Rfc2Nhbm5lZCkgLyAoSFogLyAxMDAp
+KTsKKwkJICAgICAgIiBMYXN0IGJlYWNvbjogJWx1cyBhZ28iLAorCQkgICAgICAoamlmZmll
+cyAtIG5ldHdvcmstPmxhc3Rfc2Nhbm5lZCkgLyBIWik7CiAJaXdlLnUuZGF0YS5sZW5ndGgg
+PSBwIC0gY3VzdG9tOwogCWlmIChpd2UudS5kYXRhLmxlbmd0aCkKIAkJc3RhcnQgPSBpd2Vf
+c3RyZWFtX2FkZF9wb2ludF9yc2woaW5mbywgc3RhcnQsIHN0b3AsCg==
+
+--------------jEpg7InBUcZ4C7rHTIpvDrTk--
