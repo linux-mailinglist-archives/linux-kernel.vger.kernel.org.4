@@ -2,99 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 048C4618297
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:24:21 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D2B17618293
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:24:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232151AbiKCPYQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 11:24:16 -0400
+        id S231993AbiKCPYH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 11:24:07 -0400
 Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33408 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiKCPYM (ORCPT
+        with ESMTP id S232161AbiKCPYC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 11:24:12 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 0DF0515827;
-        Thu,  3 Nov 2022 08:24:12 -0700 (PDT)
-Received: from anrayabh-desk.corp.microsoft.com (unknown [167.220.238.193])
-        by linux.microsoft.com (Postfix) with ESMTPSA id B9FFF20C3338;
-        Thu,  3 Nov 2022 08:24:08 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com B9FFF20C3338
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1667489051;
-        bh=B+nihbaQ/cnO5MxH1a/EyI4K5Rm5LqSQzIW/65Ge7UA=;
-        h=From:To:Cc:Subject:Date:From;
-        b=cM3AdOan+ajzCyLXooGLGKHwUEZIAU5YSidnAn8uAj9qdv3Ry2lJzGgf6ttx8JbTS
-         MChjTJhNln27fqvWY8o9qk/GZg0h3Pt2EMb/ZIpvC28LjcWjO9TDWAkd2BnOTwoMeb
-         BmpVrkawEqJ/kO2M6/zC7PcA0OozgXcUTkanBgfs=
-From:   Anirudh Rayabharam <anrayabh@linux.microsoft.com>
-To:     "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>
-Cc:     mail@anirudhrb.com, kumarpraveen@linux.microsoft.com,
-        Anirudh Rayabharam <anrayabh@linux.microsoft.com>,
-        Michael Kelley <mikelley@microsoft.com>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] clocksource/drivers/hyperv: use Hyper-V's page size to calculate PFN
-Date:   Thu,  3 Nov 2022 20:53:37 +0530
-Message-Id: <20221103152338.2926983-1-anrayabh@linux.microsoft.com>
-X-Mailer: git-send-email 2.34.1
+        Thu, 3 Nov 2022 11:24:02 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 309CA11162;
+        Thu,  3 Nov 2022 08:24:01 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id DA425B828E9;
+        Thu,  3 Nov 2022 15:23:59 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C9223C433D6;
+        Thu,  3 Nov 2022 15:23:57 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667489038;
+        bh=fg7hNvJiWPNnBMDzywvHNR7sYaua2ncK141ddfpOrdo=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=EQZzYkkUo2mOJJMcmlIl6A+bPZI4PMPBAwR7yQcBCWcvLZd8GR0o3rMY7/jG6yWab
+         OAh94msJVke3pTVCe0e+GmvKKr2oX54eoqO3aeVtEPy3OQ4TFDxx1lCJRAo3lQF1ys
+         /N9IrOe1t+3YlM2/XyBVq3xZLAOEK+XtdRH8XBRQEEU7+BPmrg3NM1nPGa4z+qeJgU
+         TnvsuyC890esfZn1ylZE8aig0/cGtbqiiD+HsKlBcGe9NXQ5IUd0IBpYroOWSMtaXr
+         sueqLf5HrHsArx9rZJuy1ojtPSi3ZcEueKhzEjAWlIdiXv/0kngawtnNlBthRZnOdz
+         v1+9XAS+x7rYw==
+Date:   Thu, 3 Nov 2022 10:23:55 -0500
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Shazad Hussain <quic_shazhuss@quicinc.com>,
+        Stephen Boyd <sboyd@kernel.org>, bmasney@redhat.com,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] clk: qcom: gcc-sc8280xp: add cxo as parent for
+ gcc_ufs_ref_clkref_clk
+Message-ID: <20221103152355.5sfbkpsfvjzgeixi@builder.lan>
+References: <20221030142333.31019-1-quic_shazhuss@quicinc.com>
+ <20221101182402.32CE5C433C1@smtp.kernel.org>
+ <Y2IZaxukERXNcPGR@hovoldconsulting.com>
+ <c96304da-f57e-4926-2f3f-665c2054fb00@quicinc.com>
+ <Y2Imnf1+v5j5CH9r@hovoldconsulting.com>
+ <bb590bfb-07a4-97c1-e5c0-d00d840e2e11@quicinc.com>
+ <Y2I3tekSAO42r0xR@hovoldconsulting.com>
+ <20221103024949.lw4g2tavk7uw5xt4@builder.lan>
+ <Y2OEjNAPXg5BfOxH@hovoldconsulting.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2OEjNAPXg5BfOxH@hovoldconsulting.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-__phys_to_pfn() will return a PFN based on the guest page size, which might
-be different from Hyper-V's page size that is always 4K. The PFN for the
-TSC page always needs to be a Hyper-V PFN.
+On Thu, Nov 03, 2022 at 10:06:20AM +0100, Johan Hovold wrote:
+> On Wed, Nov 02, 2022 at 09:49:49PM -0500, Bjorn Andersson wrote:
+> > On Wed, Nov 02, 2022 at 10:26:13AM +0100, Johan Hovold wrote:
+> > > On Wed, Nov 02, 2022 at 02:15:26PM +0530, Shazad Hussain wrote:
+> > > > On 11/2/2022 1:43 PM, Johan Hovold wrote:
+> > > 
+> > > > > Right, but if the PHYs really requires CX and it is not an ancestor of
+> > > > > the refclk then this should be described by the binding (and not be
+> > > > > hidden away in the clock driver).
+> > > 
+> > > > This makes sense, will be posting v2 post for the same.
+> > > > I assume this should use the Fixes tag then !
+> > > 
+> > > Yeah, I guess to you can add a fixes tag for the commits adding support
+> > > for sc8280xp to the UFS PHY binding and driver.
+> > > 
+> > > But please do check with the hardware documentation first so we get this
+> > > right this time.
+> > > 
+> > > I've already asked Bjorn to see what he can dig out as it is still not
+> > > clear how the two "card" refclocks (GCC_UFS_CARD_CLKREF_CLK and
+> > > GCC_UFS_1_CARD_CLKREF_CLK) are supposed to be used.
+> > > 
+> > 
+> > We've come full circle and Shazad's patch came from that discussion :)
+> 
+> Ah, good. :)
+> 
+> > In line with the downstream dts, we have GCC_UFS{,_1}_CARD_CLKREF_CLK
+> > providing a reference clock to the two phys. Then GCC_UFS_REF_CLKREF_CLK
+> > feeds the UFS refclock pads (both of them), which connect to the memory
+> > device(s).
+> > 
+> > In other words, GCC_UFS{,_1}_CARD_CLKREF_CLK should be "ref" in
+> > respective phy.
+> > 
+> > GCC_UFS_REF_CLKREF_CLK is the clock to the devices, but as we don't
+> > represent the memory device explicitly it seems suitable to use as
+> > "ref_clk" in the ufshc nodes - which would then match the special
+> > handling of the "link clock" in the UFS driver.
+> 
+> Thanks for clearing that up. Using GCC_UFS_REF_CLKREF_CLK as ref_clk for
+> the controller sounds reasonable.
+> 
+> I guess the only missing piece is which "card" ref clock is used by
+> which PHY.
+> 
+> The ADP dts uses:
+> 
+> 	phy			ref clock
+> 
+> 	phy@1d87000 (UFS_PHY)	GCC_UFS_CARD_CLKREF_CLK
+> 	phy@1da7000 (UFS_CARD)	GCC_UFS_1_CARD_CLKREF_CLK
+> 
 
-Use HVPFN_DOWN() to calculate the PFN of the TSC page from the physical
-address.
+This matches the documentation.
 
-Reported-by: Michael Kelley (LINUX) <mikelley@microsoft.com>
-Signed-off-by: Anirudh Rayabharam <anrayabh@linux.microsoft.com>
----
- drivers/clocksource/hyperv_timer.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+Regards,
+Bjorn
 
-diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
-index 11332c82d1af..18de1f439ffd 100644
---- a/drivers/clocksource/hyperv_timer.c
-+++ b/drivers/clocksource/hyperv_timer.c
-@@ -21,6 +21,7 @@
- #include <linux/interrupt.h>
- #include <linux/irq.h>
- #include <linux/acpi.h>
-+#include <linux/hyperv.h>
- #include <clocksource/hyperv_timer.h>
- #include <asm/hyperv-tlfs.h>
- #include <asm/mshyperv.h>
-@@ -412,7 +413,7 @@ static void resume_hv_clock_tsc(struct clocksource *arg)
- 	/* Re-enable the TSC page */
- 	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
- 	tsc_msr.enable = 1;
--	tsc_msr.pfn = __phys_to_pfn(phys_addr);
-+	tsc_msr.pfn = HVPFN_DOWN(phys_addr);
- 	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
- }
- 
-@@ -532,7 +533,7 @@ static bool __init hv_init_tsc_clocksource(void)
- 	 */
- 	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
- 	tsc_msr.enable = 1;
--	tsc_msr.pfn = __phys_to_pfn(phys_addr);
-+	tsc_msr.pfn = HVPFN_DOWN(phys_addr);
- 	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
- 
- 	clocksource_register_hz(&hyperv_cs_tsc, NSEC_PER_SEC/100);
--- 
-2.34.1
-
+> but that is not what the firmware on ADP and CRD seem to enable.
+> 
+> Both the ADP and CRD fw leaves GCC_UFS_1_CARD_CLKREF_CLK enabled, while
+> GCC_UFS_CARD_CLKREF_CLK is only enabled on ADP (which unlike the CRD
+> also uses the UFS_CARD controller).
+> 
+> Does the ADP dts have these clocks switched or is the firmware confused?
+> 
+> (Also note that experiments suggest that neither refclock appears to
+> has to be explicitly enabled for the controllers to function.)
+> 
+> > All three clocks are sourced off the CXO pad, so I would like this patch
+> > to cover at least all of these. And
+> > 
+> > Fixes: d65d005f9a6c ("clk: qcom: add sc8280xp GCC driver")
+> > 
+> > seems to be in order for such patch.
+> > 
+> > 
+> > @Johan, would you mind writing a dts patch flipping the clocks around
+> > and Shazad can update this patch?
+> 
+> I'll do so, but I'll wait with posting until you can confirm which
+> clkref is which.
+> 
+> Johan
