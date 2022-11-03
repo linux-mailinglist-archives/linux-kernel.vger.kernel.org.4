@@ -2,1311 +2,517 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D60C46176EF
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 07:49:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 8622F6176F3
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 07:54:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230262AbiKCGtn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 02:49:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60188 "EHLO
+        id S229553AbiKCGyI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 02:54:08 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230011AbiKCGtA (ORCPT
+        with ESMTP id S229481AbiKCGyE (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 02:49:00 -0400
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C7AAFB84B;
-        Wed,  2 Nov 2022 23:48:54 -0700 (PDT)
-X-UUID: f35dbd609f79423f99b1147a918842be-20221103
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-        h=Content-Type:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=mYN/ambJAALuLeOcITnsqW8kjVK1ZaIAfZl2s4MSpAY=;
-        b=S1kgK8trk2UozOTzhfOCcY9J8GXaqUR/Eia3rxcAwYMB5N/gcYFAYvrltHVkZln+ivRzpL2ZQmnd+Ux7vfhB+aBS7ZANVwKte7jSFBYfAFpJdIUq6bmdsZFCuXVD4j6dH3RNZNhts1K1hH8SikChUIewqK5KNOgJ0YxqVLz916c=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.12,REQID:90a257f1-8a44-4bb5-a11f-ea8e86c033d8,IP:0,U
-        RL:0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Release_Ham,ACTIO
-        N:release,TS:90
-X-CID-INFO: VERSION:1.1.12,REQID:90a257f1-8a44-4bb5-a11f-ea8e86c033d8,IP:0,URL
-        :0,TC:0,Content:-5,EDM:0,RT:0,SF:95,FILE:0,BULK:0,RULE:Spam_GS981B3D,ACTIO
-        N:quarantine,TS:90
-X-CID-META: VersionHash:62cd327,CLOUDID:97cf7d81-3116-4fbc-b86b-83475c3df513,B
-        ulkID:22110314485016Y8I186,BulkQuantity:0,Recheck:0,SF:38|28|17|19|48,TC:n
-        il,Content:0,EDM:-3,IP:nil,URL:11|1,File:nil,Bulk:nil,QS:nil,BEC:nil,COL:0
-X-UUID: f35dbd609f79423f99b1147a918842be-20221103
-Received: from mtkmbs13n1.mediatek.inc [(172.21.101.193)] by mailgw01.mediatek.com
-        (envelope-from <moudy.ho@mediatek.com>)
-        (Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-        with ESMTP id 431970614; Thu, 03 Nov 2022 14:48:47 +0800
-Received: from mtkmbs11n2.mediatek.inc (172.21.101.187) by
- mtkmbs11n1.mediatek.inc (172.21.101.185) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.792.15; Thu, 3 Nov 2022 14:48:45 +0800
-Received: from mtksdccf07.mediatek.inc (172.21.84.99) by
- mtkmbs11n2.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.792.15 via Frontend Transport; Thu, 3 Nov 2022 14:48:45 +0800
-From:   Moudy Ho <moudy.ho@mediatek.com>
-To:     Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>
-CC:     Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        <linux-media@vger.kernel.org>,
-        <linux-mediatek@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>,
-        <Project_Global_Chrome_Upstream_Group@mediatek.com>,
-        Moudy Ho <moudy.ho@mediatek.com>
-Subject: [PATCH v3 10/10] media: platform: mtk-mdp3: decompose hardware-related information in shared memory
-Date:   Thu, 3 Nov 2022 14:48:42 +0800
-Message-ID: <20221103064842.12042-11-moudy.ho@mediatek.com>
-X-Mailer: git-send-email 2.18.0
-In-Reply-To: <20221103064842.12042-1-moudy.ho@mediatek.com>
-References: <20221103064842.12042-1-moudy.ho@mediatek.com>
+        Thu, 3 Nov 2022 02:54:04 -0400
+Received: from loongson.cn (mail.loongson.cn [114.242.206.163])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 10D28FD2;
+        Wed,  2 Nov 2022 23:54:01 -0700 (PDT)
+Received: from loongson.cn (unknown [10.180.13.64])
+        by gateway (Coremail) with SMTP id _____8CxfbaIZWNjAiwEAA--.2790S3;
+        Thu, 03 Nov 2022 14:54:00 +0800 (CST)
+Received: from localhost.localdomain (unknown [10.180.13.64])
+        by localhost.localdomain (Coremail) with SMTP id AQAAf8Axf+CBZWNjXHQLAA--.33644S2;
+        Thu, 03 Nov 2022 14:53:58 +0800 (CST)
+From:   Yinbo Zhu <zhuyinbo@loongson.cn>
+To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        WANG Xuerui <kernel@xen0n.name>,
+        Jiaxun Yang <jiaxun.yang@flygoat.com>,
+        Jianmin Lv <lvjianmin@loongson.cn>,
+        Yun Liu <liuyun@loongson.cn>,
+        Yang Li <yang.lee@linux.alibaba.com>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        loongarch@lists.linux.dev, Yinbo Zhu <zhuyinbo@loongson.cn>
+Subject: [PATCH v8 1/2] clocksource: loongson2_hpet: add hpet driver support
+Date:   Thu,  3 Nov 2022 14:53:50 +0800
+Message-Id: <20221103065351.32603-1-zhuyinbo@loongson.cn>
+X-Mailer: git-send-email 2.20.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-MTK:  N
-X-Spam-Status: No, score=-0.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,PDS_OTHER_BAD_TLD,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS,UNPARSEABLE_RELAY
-        autolearn=no autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID: AQAAf8Axf+CBZWNjXHQLAA--.33644S2
+X-CM-SenderInfo: 52kx5xhqerqz5rrqw2lrqou0/
+X-Coremail-Antispam: 1Uk129KBjvAXoWfJFyxZFyDZFy5JFyUAw1fZwb_yoW8Jr47Jo
+        WrCFZIvr1rXryjvayvgw1UtFWaqFykGFWYyrs8Zwn5J3WDKr15Wry7G3sxJa47A3WrCFyv
+        v39Iqan3CF43t3Z3n29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXasCq-sGcSsGvf
+        J3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU0xBIdaVrnRJU
+        UUBY1xkIjI8I6I8E6xAIw20EY4v20xvaj40_Wr0E3s1l1IIY67AEw4v_Jrv_JF1l8cAvFV
+        AK0II2c7xJM28CjxkF64kEwVA0rcxSw2x7M28EF7xvwVC0I7IYx2IY67AKxVWUCVW8JwA2
+        z4x0Y4vE2Ix0cI8IcVCY1x0267AKxVW8JVWxJwA2z4x0Y4vEx4A2jsIE14v26r4UJVWxJr
+        1l84ACjcxK6I8E87Iv6xkF7I0E14v26r4UJVWxJr1ln4kS14v26r126r1DM2AIxVAIcxkE
+        cVAq07x20xvEncxIr21l57IF6xkI12xvs2x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F4
+        0Ex7xfMcIj6xIIjxv20xvE14v26r126r1DMcIj6I8E87Iv67AKxVW8JVWxJwAm72CE4IkC
+        6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr41lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2
+        Ij64vIr41l42xK82IY6x8ErcxFaVAv8VWrMxC20s026xCaFVCjc4AY6r1j6r4UMxCIbckI
+        1I0E14v26r126r1DMI8I3I0E5I8CrVAFwI0_Jr0_Jr4lx2IqxVCjr7xvwVAFwI0_JrI_Jr
+        Wlx4CE17CEb7AF67AKxVWUtVW8ZwCIc40Y0x0EwIxGrwCI42IY6xIIjxv20xvE14v26r1I
+        6r4UMIIF0xvE2Ix0cI8IcVCY1x0267AKxVWUJVW8JwCI42IY6xAIw20EY4v20xvaj40_Jr
+        0_JF4lIxAIcVC2z280aVAFwI0_Gr0_Cr1lIxAIcVC2z280aVCY1x0267AKxVW8JVW8JrUv
+        cSsGvfC2KfnxnUUI43ZEXa7IU8k-BtUUUUU==
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The communication between the MDP3 kernel driver and SCP is to
-pass a shared memory through the cooperation of "mtk-mdp3-vpu.c" and
-remoteproc driver.
-The data structure of this shared memory is defined in "mtk-img-ipi.h",
-as shown below:
+HPET (High Precision Event Timer) defines a new set of timers, which
+are used by the operating system to schedule threads, interrupt the
+kernel and interrupt the multimedia timer server. The operating
+system can assign different timers to different applications. By
+configuration, each timer can generate interrupt independently.
 
-vpu->work_addr -> +-----------------------------------------+
-                  |                                         |
-                  | To SCP : Input frame parameters         |
-                  |          (struct img_ipi_frameparam)    |
-                  |                                         |
-     vpu->pool -> +-----------------------------------------+
-                  |                                         |
-                  | From SCP : Output component config pool |
-                  |            (struct img_config)          |
-                  |                                         |
-                  |           *struct img_confg 1           |
-                  |                    |                    |
-                  |                    |                    |
-                  |                    v                    |
-                  |           *struct img_config N          |
-                  |            (N = MDP_CONFIG_POOL_SIZE)   |
-                  +-----------------------------------------+
+The Loongson-2 HPET module includes a main count and three comparators,
+all of which are 32 bits wide. Among the three comparators, only
+one comparator supports periodic interrupt, all three comparators
+support non periodic interrupts.
 
-One output component configuration contains the components
-currently used by the pipeline, and has the register settings
-that each component needs to set.
-
-Since the quantity, type and function of components on each chip
-will vary, the effect is that the size of the "struct img_config"
-and its substructures will be different on each chip.
-In addition, all chips will have to update their SCP firmware for
-every change if the output component config structure is defined
-and shared by a common header.
-
-Therefore, all functions that operate on "struct img_config" and
-its substructures must be separated by chips and so are the
-relevant definations.
-
-Signed-off-by: Moudy Ho <moudy.ho@mediatek.com>
+Signed-off-by: Yinbo Zhu <zhuyinbo@loongson.cn>
 ---
- .../mediatek/mdp3/mt8183/mdp3-comp-mt8183.h   | 144 +++++++++
- .../platform/mediatek/mdp3/mtk-img-ipi.h      | 149 ++--------
- .../platform/mediatek/mdp3/mtk-mdp3-cmdq.c    |  94 +++---
- .../platform/mediatek/mdp3/mtk-mdp3-comp.c    | 277 ++++++++++++------
- .../platform/mediatek/mdp3/mtk-mdp3-core.c    |   1 +
- .../platform/mediatek/mdp3/mtk-mdp3-core.h    |   5 +
- 6 files changed, 415 insertions(+), 255 deletions(-)
- create mode 100644 drivers/media/platform/mediatek/mdp3/mt8183/mdp3-comp-mt8183.h
+Change in v8:
+		1. Add all history change log information.
+Change in v7:
+		1. Replace setup_irq with request_irq.
+Change in v6:
+		1. Move comma to the end of the previous line if that comma at
+		   the beginning of the line.
+Change in v5:
+		1. Replace string loongson2 with Loongson-2 in commit message
+		   and Kconfig file.
+		2. Replace string LOONGSON2 with LOONGSON-2 in MAINTAINERS.
+		3. Make include asm headers after all linux headers.
+		4. Add blank place before comma if comma when the comma is at
+		   the beginning of the line.
+Change in v4: 
+                1. Use common clock framework ops to gain apb clock.
+                2. This patch need rely on clock patch, which patchwork  
+                   link was "https://patchwork.kernel.org/project/linux-clk/list/?series=688892".
+Change in v3: 
+		1. NO change, but other patch in this series of patches set
+		   has changes
+Change in v2: 
+		1. NO change, but other patch in this series of patches set
+		   has changes
 
-diff --git a/drivers/media/platform/mediatek/mdp3/mt8183/mdp3-comp-mt8183.h b/drivers/media/platform/mediatek/mdp3/mt8183/mdp3-comp-mt8183.h
+ MAINTAINERS                          |   6 +
+ arch/loongarch/kernel/time.c         |   4 +-
+ drivers/clocksource/Kconfig          |   9 +
+ drivers/clocksource/Makefile         |   1 +
+ drivers/clocksource/loongson2_hpet.c | 335 +++++++++++++++++++++++++++
+ 5 files changed, 354 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/clocksource/loongson2_hpet.c
+
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7afaf6d72800..52519695a458 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -12026,6 +12026,12 @@ F:	Documentation/devicetree/bindings/clock/loongson,ls2k-clk.yaml
+ F:	drivers/clk/clk-loongson2.c
+ F:	include/dt-bindings/clock/loongson,ls2k-clk.h
+ 
++LOONGSON-2 SOC SERIES HPET DRIVER
++M:	Yinbo Zhu <zhuyinbo@loongson.cn>
++L:	linux-kernel@vger.kernel.org
++S:	Maintained
++F:	drivers/clocksource/loongson2_hpet.c
++
+ LSILOGIC MPT FUSION DRIVERS (FC/SAS/SPI)
+ M:	Sathya Prakash <sathya.prakash@broadcom.com>
+ M:	Sreekanth Reddy <sreekanth.reddy@broadcom.com>
+diff --git a/arch/loongarch/kernel/time.c b/arch/loongarch/kernel/time.c
+index 09f20bc81798..0d8b37763086 100644
+--- a/arch/loongarch/kernel/time.c
++++ b/arch/loongarch/kernel/time.c
+@@ -216,7 +216,9 @@ int __init constant_clocksource_init(void)
+ void __init time_init(void)
+ {
+ 	of_clk_init(NULL);
+-
++#ifdef CONFIG_TIMER_PROBE
++	timer_probe();
++#endif
+ 	if (!cpu_has_cpucfg)
+ 		const_clock_freq = cpu_clock_freq;
+ 	else
+diff --git a/drivers/clocksource/Kconfig b/drivers/clocksource/Kconfig
+index 4469e7f555e9..f114ee47e6f7 100644
+--- a/drivers/clocksource/Kconfig
++++ b/drivers/clocksource/Kconfig
+@@ -721,4 +721,13 @@ config GOLDFISH_TIMER
+ 	help
+ 	  Support for the timer/counter of goldfish-rtc
+ 
++config LOONGSON2_HPET
++	bool "Loongson-2 High Precision Event Timer (HPET)"
++	select TIMER_PROBE
++	select TIMER_OF
++	help
++	  This option enables Loongson-2 High Precision Event Timer
++	  (HPET) module driver. It supports the oneshot, the periodic
++	  modes and high resolution. It is used as a clocksource and
++	  a clockevent.
+ endmenu
+diff --git a/drivers/clocksource/Makefile b/drivers/clocksource/Makefile
+index 64ab547de97b..1a3abb770f11 100644
+--- a/drivers/clocksource/Makefile
++++ b/drivers/clocksource/Makefile
+@@ -88,3 +88,4 @@ obj-$(CONFIG_MICROCHIP_PIT64B)		+= timer-microchip-pit64b.o
+ obj-$(CONFIG_MSC313E_TIMER)		+= timer-msc313e.o
+ obj-$(CONFIG_GOLDFISH_TIMER)		+= timer-goldfish.o
+ obj-$(CONFIG_GXP_TIMER)			+= timer-gxp.o
++obj-$(CONFIG_LOONGSON2_HPET)		+= loongson2_hpet.o
+diff --git a/drivers/clocksource/loongson2_hpet.c b/drivers/clocksource/loongson2_hpet.c
 new file mode 100644
-index 000000000000..f6db24060403
+index 000000000000..ed1451202bcd
 --- /dev/null
-+++ b/drivers/media/platform/mediatek/mdp3/mt8183/mdp3-comp-mt8183.h
-@@ -0,0 +1,144 @@
-+/* SPDX-License-Identifier: GPL-2.0-only */
++++ b/drivers/clocksource/loongson2_hpet.c
+@@ -0,0 +1,335 @@
++// SPDX-License-Identifier: GPL-2.0+
 +/*
-+ * Copyright (c) 2022 MediaTek Inc.
-+ * Author: Ping-Hsun Wu <ping-hsun.wu@mediatek.com>
++ * Author: Yinbo Zhu <zhuyinbo@loongson.cn>
++ * Copyright (C) 2022-2023 Loongson Technology Corporation Limited
 + */
 +
-+#ifndef __MDP3_COMP_MT8183_H__
-+#define __MDP3_COMP_MT8183_H__
++#include <linux/init.h>
++#include <linux/percpu.h>
++#include <linux/delay.h>
++#include <linux/spinlock.h>
++#include <linux/interrupt.h>
++#include <linux/of_irq.h>
++#include <linux/of_address.h>
++#include <linux/clk.h>
++#include <asm/time.h>
 +
-+#include "mtk-mdp3-type.h"
++/* HPET regs */
++#define HPET_CFG                0x010
++#define HPET_STATUS             0x020
++#define HPET_COUNTER            0x0f0
++#define HPET_T0_IRS             0x001
++#define HPET_T0_CFG             0x100
++#define HPET_T0_CMP             0x108
++#define HPET_CFG_ENABLE         0x001
++#define HPET_TN_LEVEL           0x0002
++#define HPET_TN_ENABLE          0x0004
++#define HPET_TN_PERIODIC        0x0008
++#define HPET_TN_SETVAL          0x0040
++#define HPET_TN_32BIT           0x0100
++
++#define HPET_MIN_CYCLES		16
++#define HPET_MIN_PROG_DELTA	(HPET_MIN_CYCLES * 12)
++#define HPET_COMPARE_VAL	((hpet_freq + HZ / 2) / HZ)
++
++void __iomem			*hpet_mmio_base;
++unsigned int			hpet_freq;
++unsigned int			hpet_t0_irq;
++unsigned int			hpet_irq_flags;
++unsigned int			hpet_t0_cfg;
++
++static DEFINE_SPINLOCK(hpet_lock);
++DEFINE_PER_CPU(struct clock_event_device, hpet_clockevent_device);
++
++static int hpet_read(int offset)
++{
++	return readl(hpet_mmio_base + offset);
++}
++
++static void hpet_write(int offset, int data)
++{
++	writel(data, hpet_mmio_base + offset);
++}
++
++static void hpet_start_counter(void)
++{
++	unsigned int cfg = hpet_read(HPET_CFG);
++
++	cfg |= HPET_CFG_ENABLE;
++	hpet_write(HPET_CFG, cfg);
++}
++
++static void hpet_stop_counter(void)
++{
++	unsigned int cfg = hpet_read(HPET_CFG);
++
++	cfg &= ~HPET_CFG_ENABLE;
++	hpet_write(HPET_CFG, cfg);
++}
++
++static void hpet_reset_counter(void)
++{
++	hpet_write(HPET_COUNTER, 0);
++	hpet_write(HPET_COUNTER + 4, 0);
++}
++
++static void hpet_restart_counter(void)
++{
++	hpet_stop_counter();
++	hpet_reset_counter();
++	hpet_start_counter();
++}
++
++static void hpet_enable_legacy_int(void)
++{
++	/* Do nothing on Loongson2 */
++}
++
++static int hpet_set_state_periodic(struct clock_event_device *evt)
++{
++	int cfg;
++
++	spin_lock(&hpet_lock);
++
++	pr_info("set clock event to periodic mode!\n");
++	/* stop counter */
++	hpet_stop_counter();
++	hpet_reset_counter();
++	hpet_write(HPET_T0_CMP, 0);
++
++	/* enables the timer0 to generate a periodic interrupt */
++	cfg = hpet_read(HPET_T0_CFG);
++	cfg &= ~HPET_TN_LEVEL;
++	cfg |= HPET_TN_ENABLE | HPET_TN_PERIODIC | HPET_TN_SETVAL |
++		HPET_TN_32BIT | hpet_irq_flags;
++	hpet_write(HPET_T0_CFG, cfg);
++
++	/* set the comparator */
++	hpet_write(HPET_T0_CMP, HPET_COMPARE_VAL);
++	udelay(1);
++	hpet_write(HPET_T0_CMP, HPET_COMPARE_VAL);
++
++	/* start counter */
++	hpet_start_counter();
++
++	spin_unlock(&hpet_lock);
++	return 0;
++}
++
++static int hpet_set_state_shutdown(struct clock_event_device *evt)
++{
++	int cfg;
++
++	spin_lock(&hpet_lock);
++
++	cfg = hpet_read(HPET_T0_CFG);
++	cfg &= ~HPET_TN_ENABLE;
++	hpet_write(HPET_T0_CFG, cfg);
++
++	spin_unlock(&hpet_lock);
++	return 0;
++}
++
++static int hpet_set_state_oneshot(struct clock_event_device *evt)
++{
++	int cfg;
++
++	spin_lock(&hpet_lock);
++
++	pr_info("set clock event to one shot mode!\n");
++	cfg = hpet_read(HPET_T0_CFG);
++	/*
++	 * set timer0 type
++	 * 1 : periodic interrupt
++	 * 0 : non-periodic(oneshot) interrupt
++	 */
++	cfg &= ~HPET_TN_PERIODIC;
++	cfg |= HPET_TN_ENABLE | HPET_TN_32BIT |
++		hpet_irq_flags;
++	hpet_write(HPET_T0_CFG, cfg);
++
++	/* start counter */
++	hpet_start_counter();
++
++	spin_unlock(&hpet_lock);
++	return 0;
++}
++
++static int hpet_tick_resume(struct clock_event_device *evt)
++{
++	spin_lock(&hpet_lock);
++	hpet_enable_legacy_int();
++	spin_unlock(&hpet_lock);
++
++	return 0;
++}
++
++static int hpet_next_event(unsigned long delta,
++		struct clock_event_device *evt)
++{
++	u32 cnt;
++	s32 res;
++
++	cnt = hpet_read(HPET_COUNTER);
++	cnt += (u32) delta;
++	hpet_write(HPET_T0_CMP, cnt);
++
++	res = (s32)(cnt - hpet_read(HPET_COUNTER));
++
++	return res < HPET_MIN_CYCLES ? -ETIME : 0;
++}
++
++static irqreturn_t hpet_irq_handler(int irq, void *data)
++{
++	int is_irq;
++	struct clock_event_device *cd;
++	unsigned int cpu = smp_processor_id();
++
++	is_irq = hpet_read(HPET_STATUS);
++	if (is_irq & HPET_T0_IRS) {
++		/* clear the TIMER0 irq status register */
++		hpet_write(HPET_STATUS, HPET_T0_IRS);
++		cd = &per_cpu(hpet_clockevent_device, cpu);
++		cd->event_handler(cd);
++		return IRQ_HANDLED;
++	}
++	return IRQ_NONE;
++}
 +
 +/*
-+ * ISP-MDP generic output information
-+ * MD5 of the target SCP blob:
-+ *     6da52bdcf4bf76a0983b313e1d4745d6
++ * HPET address assignation and irq setting should be done in bios.
++ * But, sometimes bios don't do this, we just setup here directly.
 + */
++static void hpet_setup(void)
++{
++	hpet_enable_legacy_int();
++}
 +
-+#define IMG_MAX_SUBFRAMES_8183      14
++static int hpet_request_irq(struct clock_event_device *cd)
++{
++	unsigned long flags = IRQD_NO_BALANCING | IRQF_TIMER;
 +
-+struct img_comp_frame_8183 {
-+	u32 output_disable:1;
-+	u32 bypass:1;
-+	u16 in_width;
-+	u16 in_height;
-+	u16 out_width;
-+	u16 out_height;
-+	struct img_crop crop;
-+	u16 in_total_width;
-+	u16 out_total_width;
-+} __packed;
-+
-+struct img_comp_subfrm_8183 {
-+	u32 tile_disable:1;
-+	struct img_region in;
-+	struct img_region out;
-+	struct img_offset luma;
-+	struct img_offset chroma;
-+	s16 out_vertical; /* Output vertical index */
-+	s16 out_horizontal; /* Output horizontal index */
-+} __packed;
-+
-+struct mdp_rdma_subfrm_8183 {
-+	u32 offset[IMG_MAX_PLANES];
-+	u32 offset_0_p;
-+	u32 src;
-+	u32 clip;
-+	u32 clip_ofst;
-+} __packed;
-+
-+struct mdp_rdma_data_8183 {
-+	u32 src_ctrl;
-+	u32 control;
-+	u32 iova[IMG_MAX_PLANES];
-+	u32 iova_end[IMG_MAX_PLANES];
-+	u32 mf_bkgd;
-+	u32 mf_bkgd_in_pxl;
-+	u32 sf_bkgd;
-+	u32 ufo_dec_y;
-+	u32 ufo_dec_c;
-+	u32 transform;
-+	struct mdp_rdma_subfrm_8183 subfrms[IMG_MAX_SUBFRAMES_8183];
-+} __packed;
-+
-+struct mdp_rsz_subfrm_8183 {
-+	u32 control2;
-+	u32 src;
-+	u32 clip;
-+} __packed;
-+
-+struct mdp_rsz_data_8183 {
-+	u32 coeff_step_x;
-+	u32 coeff_step_y;
-+	u32 control1;
-+	u32 control2;
-+	struct mdp_rsz_subfrm_8183 subfrms[IMG_MAX_SUBFRAMES_8183];
-+} __packed;
-+
-+struct mdp_wrot_subfrm_8183 {
-+	u32 offset[IMG_MAX_PLANES];
-+	u32 src;
-+	u32 clip;
-+	u32 clip_ofst;
-+	u32 main_buf;
-+} __packed;
-+
-+struct mdp_wrot_data_8183 {
-+	u32 iova[IMG_MAX_PLANES];
-+	u32 control;
-+	u32 stride[IMG_MAX_PLANES];
-+	u32 mat_ctrl;
-+	u32 fifo_test;
-+	u32 filter;
-+	struct mdp_wrot_subfrm_8183 subfrms[IMG_MAX_SUBFRAMES_8183];
-+} __packed;
-+
-+struct mdp_wdma_subfrm_8183 {
-+	u32 offset[IMG_MAX_PLANES];
-+	u32 src;
-+	u32 clip;
-+	u32 clip_ofst;
-+} __packed;
-+
-+struct mdp_wdma_data_8183 {
-+	u32 wdma_cfg;
-+	u32 iova[IMG_MAX_PLANES];
-+	u32 w_in_byte;
-+	u32 uv_stride;
-+	struct mdp_wdma_subfrm_8183 subfrms[IMG_MAX_SUBFRAMES_8183];
-+} __packed;
-+
-+struct isp_data_8183 {
-+	u64 dl_flags; /* 1 << (enum mdp_comp_type) */
-+	u32 smxi_iova[4];
-+	u32 cq_idx;
-+	u32 cq_iova;
-+	u32 tpipe_iova[IMG_MAX_SUBFRAMES_8183];
-+} __packed;
-+
-+struct img_compparam_8183 {
-+	u16 type; /* enum mdp_comp_id */
-+	u16 id; /* engine alias_id */
-+	u32 input;
-+	u32 outputs[IMG_MAX_HW_OUTPUTS];
-+	u32 num_outputs;
-+	struct img_comp_frame_8183 frame;
-+	struct img_comp_subfrm_8183 subfrms[IMG_MAX_SUBFRAMES_8183];
-+	u32 num_subfrms;
-+	union {
-+		struct mdp_rdma_data_8183 rdma;
-+		struct mdp_rsz_data_8183 rsz;
-+		struct mdp_wrot_data_8183 wrot;
-+		struct mdp_wdma_data_8183 wdma;
-+		struct isp_data_8183 isp;
-+	};
-+} __packed;
-+
-+struct img_config_8183 {
-+	struct img_compparam_8183 components[IMG_MAX_COMPONENTS];
-+	u32 num_components;
-+	struct img_mmsys_ctrl ctrls[IMG_MAX_SUBFRAMES_8183];
-+	u32 num_subfrms;
-+} __packed;
-+
-+#endif  /* __MDP3_COMP_MT8183_H__ */
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h b/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h
-index 7078f997e3cb..7872db94e737 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-img-ipi.h
-@@ -9,13 +9,11 @@
- #define __MTK_IMG_IPI_H__
- 
- #include <linux/types.h>
-+#include <linux/err.h>
- #include "mtk-mdp3-type.h"
-+#include "mt8183/mdp3-comp-mt8183.h"
- 
--/*
-- * ISP-MDP generic input information
-- * MD5 of the target SCP blob:
-- *     6da52bdcf4bf76a0983b313e1d4745d6
-- */
-+/* ISP-MDP generic input information */
- 
- #define IMG_IPI_INIT    1
- #define IMG_IPI_DEINIT  2
-@@ -116,132 +114,37 @@ struct img_frameparam {
- 	struct img_ipi_frameparam frameparam;
- } __packed;
- 
--/* ISP-MDP generic output information */
--
--struct img_comp_frame {
--	u32 output_disable:1;
--	u32 bypass:1;
--	u16 in_width;
--	u16 in_height;
--	u16 out_width;
--	u16 out_height;
--	struct img_crop crop;
--	u16 in_total_width;
--	u16 out_total_width;
--} __packed;
--
--struct img_comp_subfrm {
--	u32 tile_disable:1;
--	struct img_region in;
--	struct img_region out;
--	struct img_offset luma;
--	struct img_offset chroma;
--	s16 out_vertical; /* Output vertical index */
--	s16 out_horizontal; /* Output horizontal index */
--} __packed;
--
--#define IMG_MAX_SUBFRAMES	14
--
--struct mdp_rdma_subfrm {
--	u32 offset[IMG_MAX_PLANES];
--	u32 offset_0_p;
--	u32 src;
--	u32 clip;
--	u32 clip_ofst;
--} __packed;
--
--struct mdp_rdma_data {
--	u32 src_ctrl;
--	u32 control;
--	u32 iova[IMG_MAX_PLANES];
--	u32 iova_end[IMG_MAX_PLANES];
--	u32 mf_bkgd;
--	u32 mf_bkgd_in_pxl;
--	u32 sf_bkgd;
--	u32 ufo_dec_y;
--	u32 ufo_dec_c;
--	u32 transform;
--	struct mdp_rdma_subfrm subfrms[IMG_MAX_SUBFRAMES];
--} __packed;
--
--struct mdp_rsz_subfrm {
--	u32 control2;
--	u32 src;
--	u32 clip;
--} __packed;
--
--struct mdp_rsz_data {
--	u32 coeff_step_x;
--	u32 coeff_step_y;
--	u32 control1;
--	u32 control2;
--	struct mdp_rsz_subfrm subfrms[IMG_MAX_SUBFRAMES];
--} __packed;
--
--struct mdp_wrot_subfrm {
--	u32 offset[IMG_MAX_PLANES];
--	u32 src;
--	u32 clip;
--	u32 clip_ofst;
--	u32 main_buf;
--} __packed;
--
--struct mdp_wrot_data {
--	u32 iova[IMG_MAX_PLANES];
--	u32 control;
--	u32 stride[IMG_MAX_PLANES];
--	u32 mat_ctrl;
--	u32 fifo_test;
--	u32 filter;
--	struct mdp_wrot_subfrm subfrms[IMG_MAX_SUBFRAMES];
--} __packed;
-+#define CFG_CTX_ADDR_8183(cfg, addr) (						\
-+	IS_ERR_OR_NULL(cfg) ? NULL : (&(cfg->config_8183.addr)))
-+#define CFG_CTX_ADDR(plat, cfg, addr) (						\
-+	IS_ERR_OR_NULL(cfg) ? NULL :						\
-+	((plat == MDP_PLAT_MT8183) ? CFG_CTX_ADDR_8183(cfg, addr) : NULL)	\
-+	)
- 
--struct mdp_wdma_subfrm {
--	u32 offset[IMG_MAX_PLANES];
--	u32 src;
--	u32 clip;
--	u32 clip_ofst;
--} __packed;
-+#define CFG_CTX_8183(cfg, mem) (						\
-+	IS_ERR_OR_NULL(cfg) ? 0 : ((&(cfg->config_8183))->mem))
-+#define CFG_CTX(plat, cfg, mem) (						\
-+	IS_ERR_OR_NULL(cfg) ? 0 :						\
-+	((plat == MDP_PLAT_MT8183) ? CFG_CTX_8183(cfg, mem) : 0)		\
-+	)
- 
--struct mdp_wdma_data {
--	u32 wdma_cfg;
--	u32 iova[IMG_MAX_PLANES];
--	u32 w_in_byte;
--	u32 uv_stride;
--	struct mdp_wdma_subfrm subfrms[IMG_MAX_SUBFRAMES];
--} __packed;
-+#define COMP_CTX_8183(comp, mem) (						\
-+	IS_ERR_OR_NULL(comp) ? 0 : ((&(comp->comp_8183))->mem))
-+#define COMP_CTX(plat, comp, mem) (						\
-+	IS_ERR_OR_NULL(comp) ? 0 :						\
-+	((plat == MDP_PLAT_MT8183) ? COMP_CTX_8183(comp, mem) : 0)		\
-+	)
- 
--struct isp_data {
--	u64 dl_flags; /* 1 << (enum mdp_comp_type) */
--	u32 smxi_iova[4];
--	u32 cq_idx;
--	u32 cq_iova;
--	u32 tpipe_iova[IMG_MAX_SUBFRAMES];
-+struct img_config {
-+	union {
-+		struct img_config_8183 config_8183;
-+	};
- } __packed;
- 
- struct img_compparam {
--	u16 type; /* enum mdp_comp_type */
--	u16 id; /* enum mtk_mdp_comp_id */
--	u32 input;
--	u32 outputs[IMG_MAX_HW_OUTPUTS];
--	u32 num_outputs;
--	struct img_comp_frame frame;
--	struct img_comp_subfrm subfrms[IMG_MAX_SUBFRAMES];
--	u32 num_subfrms;
- 	union {
--		struct mdp_rdma_data rdma;
--		struct mdp_rsz_data rsz;
--		struct mdp_wrot_data wrot;
--		struct mdp_wdma_data wdma;
--		struct isp_data isp;
-+		struct img_compparam_8183 comp_8183;
- 	};
- } __packed;
- 
--struct img_config {
--	struct img_compparam components[IMG_MAX_COMPONENTS];
--	u32 num_components;
--	struct img_mmsys_ctrl ctrls[IMG_MAX_SUBFRAMES];
--	u32 num_subfrms;
--} __packed;
--
- #endif  /* __MTK_IMG_IPI_H__ */
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c
-index 0ce291760acb..5d66aeaa1a34 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-cmdq.c
-@@ -10,6 +10,7 @@
- #include "mtk-mdp3-comp.h"
- #include "mtk-mdp3-core.h"
- #include "mtk-mdp3-m2m.h"
-+#include "mtk-img-ipi.h"
- 
- #define MDP_PATH_MAX_COMPS	IMG_MAX_COMPONENTS
- 
-@@ -28,11 +29,12 @@ struct mdp_path {
-  #define call_op(ctx, op, ...) \
- 	(has_op(ctx, op) ? (ctx)->comp->ops->op(ctx, ##__VA_ARGS__) : 0)
- 
--static bool is_output_disabled(const struct img_compparam *param, u32 count)
-+static bool is_output_disabled(const enum mdp_platform_id id,
-+			       const struct img_compparam *param, u32 count)
- {
--	return (count < param->num_subfrms) ?
--		(param->frame.output_disable ||
--		param->subfrms[count].tile_disable) :
-+	return (count < COMP_CTX(id, param, num_subfrms)) ?
-+		COMP_CTX(id, param, frame.output_disable) ||
-+		COMP_CTX(id, param, subfrms[count].tile_disable) :
- 		true;
- }
- 
-@@ -52,12 +54,14 @@ static int mdp_path_subfrm_require(const struct mdp_path *path,
- 				   struct mdp_cmdq_cmd *cmd,
- 				   s32 *mutex_id, u32 count)
- {
--	const struct img_config *config = path->config;
-+	const enum mdp_platform_id plat_id = path->mdp_dev->mdp_data->mdp_plat_id;
- 	const struct mdp_comp_ctx *ctx;
- 	const struct mtk_mdp_driver_data *data = path->mdp_dev->mdp_data;
- 	struct device *dev = &path->mdp_dev->pdev->dev;
- 	struct mtk_mutex **mutex = path->mdp_dev->mdp_mutex;
--	int id, index;
-+	int id, index, num_comp;
-+
-+	num_comp = CFG_CTX(plat_id, path->config, num_components);
- 
- 	/* Decide which mutex to use based on the current pipeline */
- 	switch (path->comps[0].comp->public_id) {
-@@ -83,9 +87,9 @@ static int mdp_path_subfrm_require(const struct mdp_path *path,
- 	}
- 
- 	/* Set mutex mod */
--	for (index = 0; index < config->num_components; index++) {
-+	for (index = 0; index < num_comp; index++) {
- 		ctx = &path->comps[index];
--		if (is_output_disabled(ctx->param, count))
-+		if (is_output_disabled(plat_id, ctx->param, count))
- 			continue;
- 		id = ctx->comp->public_id;
- 		mtk_mutex_write_mod(mutex[*mutex_id],
-@@ -102,11 +106,11 @@ static int mdp_path_subfrm_run(const struct mdp_path *path,
- 			       struct mdp_cmdq_cmd *cmd,
- 			       s32 *mutex_id, u32 count)
- {
--	const struct img_config *config = path->config;
-+	const enum mdp_platform_id id = path->mdp_dev->mdp_data->mdp_plat_id;
- 	const struct mdp_comp_ctx *ctx;
- 	struct device *dev = &path->mdp_dev->pdev->dev;
- 	struct mtk_mutex **mutex = path->mdp_dev->mdp_mutex;
--	int index;
-+	int index, num_comp;
- 	s32 event;
- 
- 	if (-1 == *mutex_id) {
-@@ -114,11 +118,13 @@ static int mdp_path_subfrm_run(const struct mdp_path *path,
- 		return -EINVAL;
- 	}
- 
-+	num_comp = CFG_CTX(id, path->config, num_components);
-+
- 	/* Wait WROT SRAM shared to DISP RDMA */
- 	/* Clear SOF event for each engine */
--	for (index = 0; index < config->num_components; index++) {
-+	for (index = 0; index < num_comp; index++) {
- 		ctx = &path->comps[index];
--		if (is_output_disabled(ctx->param, count))
-+		if (is_output_disabled(id, ctx->param, count))
- 			continue;
- 		event = ctx->comp->gce_event[MDP_GCE_EVENT_SOF];
- 		if (event != MDP_GCE_NO_EVENT)
-@@ -129,9 +135,9 @@ static int mdp_path_subfrm_run(const struct mdp_path *path,
- 	mtk_mutex_enable_by_cmdq(mutex[*mutex_id], (void *)&cmd->pkt);
- 
- 	/* Wait SOF events and clear mutex modules (optional) */
--	for (index = 0; index < config->num_components; index++) {
-+	for (index = 0; index < num_comp; index++) {
- 		ctx = &path->comps[index];
--		if (is_output_disabled(ctx->param, count))
-+		if (is_output_disabled(id, ctx->param, count))
- 			continue;
- 		event = ctx->comp->gce_event[MDP_GCE_EVENT_SOF];
- 		if (event != MDP_GCE_NO_EVENT)
-@@ -143,16 +149,18 @@ static int mdp_path_subfrm_run(const struct mdp_path *path,
- 
- static int mdp_path_ctx_init(struct mdp_dev *mdp, struct mdp_path *path)
- {
--	const struct img_config *config = path->config;
--	int index, ret;
-+	const enum mdp_platform_id id = mdp->mdp_data->mdp_plat_id;
-+	void *param;
-+	int index, ret, num_comp;
- 
--	if (config->num_components < 1)
-+	num_comp = CFG_CTX(id, path->config, num_components);
-+	if (num_comp < 1)
- 		return -EINVAL;
- 
--	for (index = 0; index < config->num_components; index++) {
-+	for (index = 0; index < num_comp; index++) {
-+		param = (void *)CFG_CTX_ADDR(id, path->config, components[index]);
- 		ret = mdp_comp_ctx_config(mdp, &path->comps[index],
--					  &config->components[index],
--					  path->param);
-+					  param, path->param);
- 		if (ret)
- 			return ret;
- 	}
-@@ -163,12 +171,15 @@ static int mdp_path_ctx_init(struct mdp_dev *mdp, struct mdp_path *path)
- static int mdp_path_config_subfrm(struct mdp_cmdq_cmd *cmd,
- 				  struct mdp_path *path, u32 count)
- {
--	const struct img_config *config = path->config;
--	const struct img_mmsys_ctrl *ctrl = &config->ctrls[count];
-+	const enum mdp_platform_id id = path->mdp_dev->mdp_data->mdp_plat_id;
-+	const struct img_mmsys_ctrl *ctrl;
- 	const struct img_mux *set;
- 	struct mdp_comp_ctx *ctx;
- 	s32 mutex_id;
--	int index, ret;
-+	int index, ret, num_comp;
-+
-+	num_comp = CFG_CTX(id, path->config, num_components);
-+	ctrl = CFG_CTX_ADDR(id, path->config, ctrls[count]);
- 
- 	/* Acquire components */
- 	ret = mdp_path_subfrm_require(path, cmd, &mutex_id, count);
-@@ -181,9 +192,9 @@ static int mdp_path_config_subfrm(struct mdp_cmdq_cmd *cmd,
- 				    set->value, 0xFFFFFFFF);
- 	}
- 	/* Config sub-frame information */
--	for (index = (config->num_components - 1); index >= 0; index--) {
-+	for (index = (num_comp - 1); index >= 0; index--) {
- 		ctx = &path->comps[index];
--		if (is_output_disabled(ctx->param, count))
-+		if (is_output_disabled(id, ctx->param, count))
- 			continue;
- 		ret = call_op(ctx, config_subfrm, cmd, count);
- 		if (ret)
-@@ -194,16 +205,16 @@ static int mdp_path_config_subfrm(struct mdp_cmdq_cmd *cmd,
- 	if (ret)
- 		return ret;
- 	/* Wait components done */
--	for (index = 0; index < config->num_components; index++) {
-+	for (index = 0; index < num_comp; index++) {
- 		ctx = &path->comps[index];
--		if (is_output_disabled(ctx->param, count))
-+		if (is_output_disabled(id, ctx->param, count))
- 			continue;
- 		ret = call_op(ctx, wait_comp_event, cmd);
- 		if (ret)
- 			return ret;
- 	}
- 	/* Advance to the next sub-frame */
--	for (index = 0; index < config->num_components; index++) {
-+	for (index = 0; index < num_comp; index++) {
- 		ctx = &path->comps[index];
- 		ret = call_op(ctx, advance_subfrm, cmd, count);
- 		if (ret)
-@@ -222,22 +233,25 @@ static int mdp_path_config_subfrm(struct mdp_cmdq_cmd *cmd,
- static int mdp_path_config(struct mdp_dev *mdp, struct mdp_cmdq_cmd *cmd,
- 			   struct mdp_path *path)
- {
--	const struct img_config *config = path->config;
-+	const enum mdp_platform_id id = mdp->mdp_data->mdp_plat_id;
- 	struct mdp_comp_ctx *ctx;
--	int index, count, ret;
-+	int index, count, ret, num_comp, num_sub;
-+
-+	num_comp = CFG_CTX(id, path->config, num_components);
-+	num_sub = CFG_CTX(id, path->config, num_subfrms);
- 
- 	/* Config path frame */
- 	/* Reset components */
--	for (index = 0; index < config->num_components; index++) {
-+	for (index = 0; index < num_comp; index++) {
- 		ctx = &path->comps[index];
- 		ret = call_op(ctx, init_comp, cmd);
- 		if (ret)
- 			return ret;
- 	}
- 	/* Config frame mode */
--	for (index = 0; index < config->num_components; index++) {
-+	for (index = 0; index < num_comp; index++) {
- 		const struct v4l2_rect *compose =
--			path->composes[ctx->param->outputs[0]];
-+			path->composes[COMP_CTX(id, ctx->param, outputs[0])];
- 
- 		ctx = &path->comps[index];
- 		ret = call_op(ctx, config_frame, cmd, compose);
-@@ -246,13 +260,13 @@ static int mdp_path_config(struct mdp_dev *mdp, struct mdp_cmdq_cmd *cmd,
- 	}
- 
- 	/* Config path sub-frames */
--	for (count = 0; count < config->num_subfrms; count++) {
-+	for (count = 0; count < num_sub; count++) {
- 		ret = mdp_path_config_subfrm(cmd, path, count);
- 		if (ret)
- 			return ret;
- 	}
- 	/* Post processing information */
--	for (index = 0; index < config->num_components; index++) {
-+	for (index = 0; index < num_comp; index++) {
- 		ctx = &path->comps[index];
- 		ret = call_op(ctx, post_process, cmd);
- 		if (ret)
-@@ -376,7 +390,7 @@ int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
- 	struct mdp_cmdq_cmd *cmd = NULL;
- 	struct mdp_comp *comps = NULL;
- 	struct device *dev = &mdp->pdev->dev;
--	int i, ret;
-+	int i, ret, num_comp;
- 
- 	atomic_inc(&mdp->job_count);
- 	if (atomic_read(&mdp->suspended)) {
-@@ -394,8 +408,8 @@ int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
- 	if (ret)
- 		goto err_free_cmd;
- 
--	comps = kcalloc(param->config->num_components, sizeof(*comps),
--			GFP_KERNEL);
-+	num_comp = CFG_CTX(mdp->mdp_data->mdp_plat_id, param->config, num_components);
-+	comps = kcalloc(num_comp, sizeof(*comps), GFP_KERNEL);
- 	if (!comps) {
- 		ret = -ENOMEM;
- 		goto err_destroy_pkt;
-@@ -441,7 +455,7 @@ int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
- 	}
- 	cmdq_pkt_finalize(&cmd->pkt);
- 
--	for (i = 0; i < param->config->num_components; i++)
-+	for (i = 0; i < num_comp; i++)
- 		memcpy(&comps[i], path->comps[i].comp,
- 		       sizeof(struct mdp_comp));
- 
-@@ -450,7 +464,7 @@ int mdp_cmdq_send(struct mdp_dev *mdp, struct mdp_cmdq_param *param)
- 	cmd->user_cmdq_cb = param->cmdq_cb;
- 	cmd->user_cb_data = param->cb_data;
- 	cmd->comps = comps;
--	cmd->num_comps = param->config->num_components;
-+	cmd->num_comps = num_comp;
- 	cmd->mdp_ctx = param->mdp_ctx;
- 
- 	ret = mdp_comp_clocks_on(&mdp->pdev->dev, cmd->comps, cmd->num_comps);
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-index 8f4786cc4416..5e8b6fc7b686 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-comp.c
-@@ -19,6 +19,7 @@
- #include "mdp_reg_wdma.h"
- 
- static u32 mdp_comp_alias_id[MDP_COMP_TYPE_COUNT];
-+enum mdp_platform_id p_id;
- 
- static inline const struct mdp_platform_config *
- __get_plat_cfg(const struct mdp_comp_ctx *ctx)
-@@ -107,13 +108,13 @@ static int config_rdma_frame(struct mdp_comp_ctx *ctx,
- 			     struct mdp_cmdq_cmd *cmd,
- 			     const struct v4l2_rect *compose)
- {
--	const struct mdp_rdma_data *rdma = &ctx->param->rdma;
- 	const struct mdp_platform_config *mdp_cfg = __get_plat_cfg(ctx);
- 	u32 colorformat = ctx->input->buffer.format.colorformat;
- 	bool block10bit = MDP_COLOR_IS_10BIT_PACKED(colorformat);
- 	bool en_ufo = MDP_COLOR_IS_UFP(colorformat);
- 	phys_addr_t base = ctx->comp->reg_base;
- 	u8 subsys_id = ctx->comp->subsys_id;
-+	u32 reg;
- 
- 	if (mdp_cfg && mdp_cfg->rdma_support_10bit) {
- 		if (block10bit)
-@@ -131,49 +132,64 @@ static int config_rdma_frame(struct mdp_comp_ctx *ctx,
- 		     0x00030071);
- 
- 	/* Setup source frame info */
--	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_CON, rdma->src_ctrl,
-+	reg = COMP_CTX(p_id, ctx->param, rdma.src_ctrl);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_CON, reg,
- 		     0x03C8FE0F);
- 
- 	if (mdp_cfg)
- 		if (mdp_cfg->rdma_support_10bit && en_ufo) {
- 			/* Setup source buffer base */
-+			reg = COMP_CTX(p_id, ctx->param, rdma.ufo_dec_y);
- 			MM_REG_WRITE(cmd, subsys_id,
- 				     base, MDP_RDMA_UFO_DEC_LENGTH_BASE_Y,
--				     rdma->ufo_dec_y, 0xFFFFFFFF);
-+				     reg, 0xFFFFFFFF);
-+			reg = COMP_CTX(p_id, ctx->param, rdma.ufo_dec_c);
- 			MM_REG_WRITE(cmd, subsys_id,
- 				     base, MDP_RDMA_UFO_DEC_LENGTH_BASE_C,
--				     rdma->ufo_dec_c, 0xFFFFFFFF);
-+				     reg, 0xFFFFFFFF);
- 			/* Set 10bit source frame pitch */
--			if (block10bit)
-+			if (block10bit) {
-+				reg = COMP_CTX(p_id, ctx->param, rdma.mf_bkgd_in_pxl);
- 				MM_REG_WRITE(cmd, subsys_id,
- 					     base, MDP_RDMA_MF_BKGD_SIZE_IN_PXL,
--					     rdma->mf_bkgd_in_pxl, 0x001FFFFF);
-+					     reg, 0x001FFFFF);
-+			}
- 		}
- 
--	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_CON, rdma->control,
-+	reg = COMP_CTX(p_id, ctx->param, rdma.control);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_CON, reg,
- 		     0x1110);
- 	/* Setup source buffer base */
--	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_BASE_0, rdma->iova[0],
-+	reg = COMP_CTX(p_id, ctx->param, rdma.iova[0]);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_BASE_0, reg,
- 		     0xFFFFFFFF);
--	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_BASE_1, rdma->iova[1],
-+	reg = COMP_CTX(p_id, ctx->param, rdma.iova[1]);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_BASE_1, reg,
- 		     0xFFFFFFFF);
--	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_BASE_2, rdma->iova[2],
-+	reg = COMP_CTX(p_id, ctx->param, rdma.iova[2]);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_BASE_2, reg,
- 		     0xFFFFFFFF);
- 	/* Setup source buffer end */
-+	reg = COMP_CTX(p_id, ctx->param, rdma.iova_end[0]);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_END_0,
--		     rdma->iova_end[0], 0xFFFFFFFF);
-+		     reg, 0xFFFFFFFF);
-+	reg = COMP_CTX(p_id, ctx->param, rdma.iova_end[1]);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_END_1,
--		     rdma->iova_end[1], 0xFFFFFFFF);
-+		     reg, 0xFFFFFFFF);
-+	reg = COMP_CTX(p_id, ctx->param, rdma.iova_end[2]);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_END_2,
--		     rdma->iova_end[2], 0xFFFFFFFF);
-+		     reg, 0xFFFFFFFF);
- 	/* Setup source frame pitch */
-+	reg = COMP_CTX(p_id, ctx->param, rdma.mf_bkgd);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_MF_BKGD_SIZE_IN_BYTE,
--		     rdma->mf_bkgd, 0x001FFFFF);
-+		     reg, 0x001FFFFF);
-+	reg = COMP_CTX(p_id, ctx->param, rdma.sf_bkgd);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SF_BKGD_SIZE_IN_BYTE,
--		     rdma->sf_bkgd, 0x001FFFFF);
-+		     reg, 0x001FFFFF);
- 	/* Setup color transform */
-+	reg = COMP_CTX(p_id, ctx->param, rdma.transform);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_TRANSFORM_0,
--		     rdma->transform, 0x0F110000);
-+		     reg, 0x0F110000);
- 
- 	return 0;
- }
-@@ -181,47 +197,58 @@ static int config_rdma_frame(struct mdp_comp_ctx *ctx,
- static int config_rdma_subfrm(struct mdp_comp_ctx *ctx,
- 			      struct mdp_cmdq_cmd *cmd, u32 index)
- {
--	const struct mdp_rdma_subfrm *subfrm = &ctx->param->rdma.subfrms[index];
--	const struct img_comp_subfrm *csf = &ctx->param->subfrms[index];
- 	const struct mdp_platform_config *mdp_cfg = __get_plat_cfg(ctx);
- 	u32 colorformat = ctx->input->buffer.format.colorformat;
- 	bool block10bit = MDP_COLOR_IS_10BIT_PACKED(colorformat);
- 	bool en_ufo = MDP_COLOR_IS_UFP(colorformat);
- 	phys_addr_t base = ctx->comp->reg_base;
- 	u8 subsys_id = ctx->comp->subsys_id;
-+	u32 csf_l, csf_r;
-+	u32 reg;
- 
- 	/* Enable RDMA */
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_EN, BIT(0), BIT(0));
- 
- 	/* Set Y pixel offset */
-+	reg = COMP_CTX(p_id, ctx->param, rdma.subfrms[index].offset[0]);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_OFFSET_0,
--		     subfrm->offset[0], 0xFFFFFFFF);
-+		     reg, 0xFFFFFFFF);
- 
- 	/* Set 10bit UFO mode */
--	if (mdp_cfg)
--		if (mdp_cfg->rdma_support_10bit && block10bit && en_ufo)
-+	if (mdp_cfg) {
-+		if (mdp_cfg->rdma_support_10bit && block10bit && en_ufo) {
-+			reg = COMP_CTX(p_id, ctx->param, rdma.subfrms[index].offset_0_p);
- 			MM_REG_WRITE(cmd, subsys_id, base,
- 				     MDP_RDMA_SRC_OFFSET_0_P,
--				     subfrm->offset_0_p, 0xFFFFFFFF);
-+				     reg, 0xFFFFFFFF);
-+		}
++	if (request_irq(cd->irq, hpet_irq_handler, flags, "hpet", NULL)) {
++		pr_err("Failed to register hpet interrupt\n");
++		return -1;
 +	}
- 
- 	/* Set U pixel offset */
-+	reg = COMP_CTX(p_id, ctx->param, rdma.subfrms[index].offset[1]);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_OFFSET_1,
--		     subfrm->offset[1], 0xFFFFFFFF);
-+		     reg, 0xFFFFFFFF);
- 	/* Set V pixel offset */
-+	reg = COMP_CTX(p_id, ctx->param, rdma.subfrms[index].offset[2]);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_SRC_OFFSET_2,
--		     subfrm->offset[2], 0xFFFFFFFF);
-+		     reg, 0xFFFFFFFF);
- 	/* Set source size */
--	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_MF_SRC_SIZE, subfrm->src,
-+	reg = COMP_CTX(p_id, ctx->param, rdma.subfrms[index].src);
-+	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_MF_SRC_SIZE, reg,
- 		     0x1FFF1FFF);
- 	/* Set target size */
-+	reg = COMP_CTX(p_id, ctx->param, rdma.subfrms[index].clip);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_MF_CLIP_SIZE,
--		     subfrm->clip, 0x1FFF1FFF);
-+		     reg, 0x1FFF1FFF);
- 	/* Set crop offset */
-+	reg = COMP_CTX(p_id, ctx->param, rdma.subfrms[index].clip_ofst);
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_RDMA_MF_OFFSET_1,
--		     subfrm->clip_ofst, 0x003F001F);
-+		     reg, 0x003F001F);
- 
-+	csf_l = COMP_CTX(p_id, ctx->param, subfrms[index].in.left);
-+	csf_r = COMP_CTX(p_id, ctx->param, subfrms[index].in.right);
- 	if (mdp_cfg && mdp_cfg->rdma_upsample_repeat_only)
--		if ((csf->in.right - csf->in.left + 1) > 320)
-+		if ((csf_r - csf_l + 1) > 320)
- 			MM_REG_WRITE(cmd, subsys_id, base,
- 				     MDP_RDMA_RESV_DUMMY_0, BIT(2), BIT(2));
- 
-@@ -269,63 +296,78 @@ static int config_rsz_frame(struct mdp_comp_ctx *ctx,
- 			    struct mdp_cmdq_cmd *cmd,
- 			    const struct v4l2_rect *compose)
- {
--	const struct mdp_rsz_data *rsz = &ctx->param->rsz;
- 	phys_addr_t base = ctx->comp->reg_base;
- 	u8 subsys_id = ctx->comp->subsys_id;
-+	u32 reg;
- 
--	if (ctx->param->frame.bypass) {
-+	if (COMP_CTX(p_id, ctx->param, frame.bypass)) {
- 		/* Disable RSZ */
- 		MM_REG_WRITE(cmd, subsys_id, base, PRZ_ENABLE, 0x0, BIT(0));
- 		return 0;
- 	}
- 
--	MM_REG_WRITE(cmd, subsys_id, base, PRZ_CONTROL_1, rsz->control1,
-+	reg = COMP_CTX(p_id, ctx->param, rsz.control1);
-+	MM_REG_WRITE(cmd, subsys_id, base, PRZ_CONTROL_1, reg,
- 		     0x03FFFDF3);
--	MM_REG_WRITE(cmd, subsys_id, base, PRZ_CONTROL_2, rsz->control2,
-+	reg = COMP_CTX(p_id, ctx->param, rsz.control2);
-+	MM_REG_WRITE(cmd, subsys_id, base, PRZ_CONTROL_2, reg,
- 		     0x0FFFC290);
-+	reg = COMP_CTX(p_id, ctx->param, rsz.coeff_step_x);
- 	MM_REG_WRITE(cmd, subsys_id, base, PRZ_HORIZONTAL_COEFF_STEP,
--		     rsz->coeff_step_x, 0x007FFFFF);
-+		     reg, 0x007FFFFF);
-+	reg = COMP_CTX(p_id, ctx->param, rsz.coeff_step_y);
- 	MM_REG_WRITE(cmd, subsys_id, base, PRZ_VERTICAL_COEFF_STEP,
--		     rsz->coeff_step_y, 0x007FFFFF);
-+		     reg, 0x007FFFFF);
- 	return 0;
- }
- 
- static int config_rsz_subfrm(struct mdp_comp_ctx *ctx,
- 			     struct mdp_cmdq_cmd *cmd, u32 index)
- {
--	const struct mdp_rsz_subfrm *subfrm = &ctx->param->rsz.subfrms[index];
--	const struct img_comp_subfrm *csf = &ctx->param->subfrms[index];
- 	const struct mdp_platform_config *mdp_cfg = __get_plat_cfg(ctx);
- 	phys_addr_t base = ctx->comp->reg_base;
- 	u8 subsys_id = ctx->comp->subsys_id;
-+	u32 reg;
-+	u32 csf_l, csf_r;
- 
--	MM_REG_WRITE(cmd, subsys_id, base, PRZ_CONTROL_2, subfrm->control2,
-+	reg = COMP_CTX(p_id, ctx->param, rsz.subfrms[index].control2);
-+	MM_REG_WRITE(cmd, subsys_id, base, PRZ_CONTROL_2, reg,
- 		     0x00003800);
--	MM_REG_WRITE(cmd, subsys_id, base, PRZ_INPUT_IMAGE, subfrm->src,
-+	reg = COMP_CTX(p_id, ctx->param, rsz.subfrms[index].src);
-+	MM_REG_WRITE(cmd, subsys_id, base, PRZ_INPUT_IMAGE, reg,
- 		     0xFFFFFFFF);
- 
-+	csf_l = COMP_CTX(p_id, ctx->param, subfrms[index].in.left);
-+	csf_r = COMP_CTX(p_id, ctx->param, subfrms[index].in.right);
- 	if (mdp_cfg && mdp_cfg->rsz_disable_dcm_small_sample)
--		if ((csf->in.right - csf->in.left + 1) <= 16)
-+		if ((csf_r - csf_l + 1) <= 16)
- 			MM_REG_WRITE(cmd, subsys_id, base, PRZ_CONTROL_1,
- 				     BIT(27), BIT(27));
- 
-+	reg = COMP_CTX(p_id, ctx->param, subfrms[index].luma.left);
- 	MM_REG_WRITE(cmd, subsys_id, base, PRZ_LUMA_HORIZONTAL_INTEGER_OFFSET,
--		     csf->luma.left, 0xFFFF);
-+		     reg, 0xFFFF);
-+	reg = COMP_CTX(p_id, ctx->param, subfrms[index].luma.left_subpix);
- 	MM_REG_WRITE(cmd, subsys_id,
- 		     base, PRZ_LUMA_HORIZONTAL_SUBPIXEL_OFFSET,
--		     csf->luma.left_subpix, 0x1FFFFF);
-+		     reg, 0x1FFFFF);
-+	reg = COMP_CTX(p_id, ctx->param, subfrms[index].luma.top);
- 	MM_REG_WRITE(cmd, subsys_id, base, PRZ_LUMA_VERTICAL_INTEGER_OFFSET,
--		     csf->luma.top, 0xFFFF);
-+		     reg, 0xFFFF);
-+	reg = COMP_CTX(p_id, ctx->param, subfrms[index].luma.top_subpix);
- 	MM_REG_WRITE(cmd, subsys_id, base, PRZ_LUMA_VERTICAL_SUBPIXEL_OFFSET,
--		     csf->luma.top_subpix, 0x1FFFFF);
-+		     reg, 0x1FFFFF);
-+	reg = COMP_CTX(p_id, ctx->param, subfrms[index].chroma.left);
- 	MM_REG_WRITE(cmd, subsys_id,
- 		     base, PRZ_CHROMA_HORIZONTAL_INTEGER_OFFSET,
--		     csf->chroma.left, 0xFFFF);
-+		     reg, 0xFFFF);
-+	reg = COMP_CTX(p_id, ctx->param, subfrms[index].chroma.left_subpix);
- 	MM_REG_WRITE(cmd, subsys_id,
- 		     base, PRZ_CHROMA_HORIZONTAL_SUBPIXEL_OFFSET,
--		     csf->chroma.left_subpix, 0x1FFFFF);
-+		     reg, 0x1FFFFF);
- 
--	MM_REG_WRITE(cmd, subsys_id, base, PRZ_OUTPUT_IMAGE, subfrm->clip,
-+	reg = COMP_CTX(p_id, ctx->param, rsz.subfrms[index].clip);
-+	MM_REG_WRITE(cmd, subsys_id, base, PRZ_OUTPUT_IMAGE, reg,
- 		     0xFFFFFFFF);
- 
- 	return 0;
-@@ -337,11 +379,14 @@ static int advance_rsz_subfrm(struct mdp_comp_ctx *ctx,
- 	const struct mdp_platform_config *mdp_cfg = __get_plat_cfg(ctx);
- 
- 	if (mdp_cfg && mdp_cfg->rsz_disable_dcm_small_sample) {
--		const struct img_comp_subfrm *csf = &ctx->param->subfrms[index];
- 		phys_addr_t base = ctx->comp->reg_base;
- 		u8 subsys_id = ctx->comp->subsys_id;
-+		u32 csf_l, csf_r;
- 
--		if ((csf->in.right - csf->in.left + 1) <= 16)
-+		csf_l = COMP_CTX(p_id, ctx->param, subfrms[index].in.left);
-+		csf_r = COMP_CTX(p_id, ctx->param, subfrms[index].in.right);
 +
-+		if ((csf_r - csf_l + 1) <= 16)
- 			MM_REG_WRITE(cmd, subsys_id, base, PRZ_CONTROL_1, 0x0,
- 				     BIT(27));
- 	}
-@@ -374,31 +419,39 @@ static int config_wrot_frame(struct mdp_comp_ctx *ctx,
- 			     struct mdp_cmdq_cmd *cmd,
- 			     const struct v4l2_rect *compose)
- {
--	const struct mdp_wrot_data *wrot = &ctx->param->wrot;
- 	const struct mdp_platform_config *mdp_cfg = __get_plat_cfg(ctx);
- 	phys_addr_t base = ctx->comp->reg_base;
- 	u8 subsys_id = ctx->comp->subsys_id;
-+	u32 reg;
- 
- 	/* Write frame base address */
--	MM_REG_WRITE(cmd, subsys_id, base, VIDO_BASE_ADDR, wrot->iova[0],
-+	reg = COMP_CTX(p_id, ctx->param, wrot.iova[0]);
-+	MM_REG_WRITE(cmd, subsys_id, base, VIDO_BASE_ADDR, reg,
- 		     0xFFFFFFFF);
--	MM_REG_WRITE(cmd, subsys_id, base, VIDO_BASE_ADDR_C, wrot->iova[1],
-+	reg = COMP_CTX(p_id, ctx->param, wrot.iova[1]);
-+	MM_REG_WRITE(cmd, subsys_id, base, VIDO_BASE_ADDR_C, reg,
- 		     0xFFFFFFFF);
--	MM_REG_WRITE(cmd, subsys_id, base, VIDO_BASE_ADDR_V, wrot->iova[2],
-+	reg = COMP_CTX(p_id, ctx->param, wrot.iova[2]);
-+	MM_REG_WRITE(cmd, subsys_id, base, VIDO_BASE_ADDR_V, reg,
- 		     0xFFFFFFFF);
- 	/* Write frame related registers */
--	MM_REG_WRITE(cmd, subsys_id, base, VIDO_CTRL, wrot->control,
-+	reg = COMP_CTX(p_id, ctx->param, wrot.control);
-+	MM_REG_WRITE(cmd, subsys_id, base, VIDO_CTRL, reg,
- 		     0xF131510F);
- 	/* Write frame Y pitch */
--	MM_REG_WRITE(cmd, subsys_id, base, VIDO_STRIDE, wrot->stride[0],
-+	reg = COMP_CTX(p_id, ctx->param, wrot.stride[0]);
-+	MM_REG_WRITE(cmd, subsys_id, base, VIDO_STRIDE, reg,
- 		     0x0000FFFF);
- 	/* Write frame UV pitch */
--	MM_REG_WRITE(cmd, subsys_id, base, VIDO_STRIDE_C, wrot->stride[1],
-+	reg = COMP_CTX(p_id, ctx->param, wrot.stride[1]);
-+	MM_REG_WRITE(cmd, subsys_id, base, VIDO_STRIDE_C, reg,
- 		     0xFFFF);
--	MM_REG_WRITE(cmd, subsys_id, base, VIDO_STRIDE_V, wrot->stride[2],
-+	reg = COMP_CTX(p_id, ctx->param, wrot.stride[2]);
-+	MM_REG_WRITE(cmd, subsys_id, base, VIDO_STRIDE_V, reg,
- 		     0xFFFF);
- 	/* Write matrix control */
--	MM_REG_WRITE(cmd, subsys_id, base, VIDO_MAT_CTRL, wrot->mat_ctrl, 0xF3);
-+	reg = COMP_CTX(p_id, ctx->param, wrot.mat_ctrl);
-+	MM_REG_WRITE(cmd, subsys_id, base, VIDO_MAT_CTRL, reg, 0xF3);
- 
- 	/* Set the fixed ALPHA as 0xFF */
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_DITHER, 0xFF000000,
-@@ -406,13 +459,16 @@ static int config_wrot_frame(struct mdp_comp_ctx *ctx,
- 	/* Set VIDO_EOL_SEL */
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_RSV_1, BIT(31), BIT(31));
- 	/* Set VIDO_FIFO_TEST */
--	if (wrot->fifo_test != 0)
-+	reg = COMP_CTX(p_id, ctx->param, wrot.fifo_test);
-+	if (reg != 0)
- 		MM_REG_WRITE(cmd, subsys_id, base, VIDO_FIFO_TEST,
--			     wrot->fifo_test, 0xFFF);
-+			     reg, 0xFFF);
- 	/* Filter enable */
--	if (mdp_cfg && mdp_cfg->wrot_filter_constraint)
-+	if (mdp_cfg && mdp_cfg->wrot_filter_constraint) {
-+		reg = COMP_CTX(p_id, ctx->param, wrot.filter);
- 		MM_REG_WRITE(cmd, subsys_id, base, VIDO_MAIN_BUF_SIZE,
--			     wrot->filter, 0x77);
-+			     reg, 0x77);
-+	}
- 
- 	return 0;
- }
-@@ -420,30 +476,37 @@ static int config_wrot_frame(struct mdp_comp_ctx *ctx,
- static int config_wrot_subfrm(struct mdp_comp_ctx *ctx,
- 			      struct mdp_cmdq_cmd *cmd, u32 index)
- {
--	const struct mdp_wrot_subfrm *subfrm = &ctx->param->wrot.subfrms[index];
- 	phys_addr_t base = ctx->comp->reg_base;
- 	u8 subsys_id = ctx->comp->subsys_id;
-+	u32 reg;
- 
- 	/* Write Y pixel offset */
-+	reg = COMP_CTX(p_id, ctx->param, wrot.subfrms[index].offset[0]);
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_OFST_ADDR,
--		     subfrm->offset[0], 0x0FFFFFFF);
-+		     reg, 0x0FFFFFFF);
- 	/* Write U pixel offset */
-+	reg = COMP_CTX(p_id, ctx->param, wrot.subfrms[index].offset[1]);
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_OFST_ADDR_C,
--		     subfrm->offset[1], 0x0FFFFFFF);
-+		     reg, 0x0FFFFFFF);
- 	/* Write V pixel offset */
-+	reg = COMP_CTX(p_id, ctx->param, wrot.subfrms[index].offset[2]);
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_OFST_ADDR_V,
--		     subfrm->offset[2], 0x0FFFFFFF);
-+		     reg, 0x0FFFFFFF);
- 	/* Write source size */
--	MM_REG_WRITE(cmd, subsys_id, base, VIDO_IN_SIZE, subfrm->src,
-+	reg = COMP_CTX(p_id, ctx->param, wrot.subfrms[index].src);
-+	MM_REG_WRITE(cmd, subsys_id, base, VIDO_IN_SIZE, reg,
- 		     0x1FFF1FFF);
- 	/* Write target size */
--	MM_REG_WRITE(cmd, subsys_id, base, VIDO_TAR_SIZE, subfrm->clip,
-+	reg = COMP_CTX(p_id, ctx->param, wrot.subfrms[index].clip);
-+	MM_REG_WRITE(cmd, subsys_id, base, VIDO_TAR_SIZE, reg,
- 		     0x1FFF1FFF);
--	MM_REG_WRITE(cmd, subsys_id, base, VIDO_CROP_OFST, subfrm->clip_ofst,
-+	reg = COMP_CTX(p_id, ctx->param, wrot.subfrms[index].clip_ofst);
-+	MM_REG_WRITE(cmd, subsys_id, base, VIDO_CROP_OFST, reg,
- 		     0x1FFF1FFF);
- 
-+	reg = COMP_CTX(p_id, ctx->param, wrot.subfrms[index].main_buf);
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_MAIN_BUF_SIZE,
--		     subfrm->main_buf, 0x1FFF7F00);
-+		     reg, 0x1FFF7F00);
- 
- 	/* Enable WROT */
- 	MM_REG_WRITE(cmd, subsys_id, base, VIDO_ROT_EN, BIT(0), BIT(0));
-@@ -497,29 +560,35 @@ static int config_wdma_frame(struct mdp_comp_ctx *ctx,
- 			     struct mdp_cmdq_cmd *cmd,
- 			     const struct v4l2_rect *compose)
- {
--	const struct mdp_wdma_data *wdma = &ctx->param->wdma;
- 	phys_addr_t base = ctx->comp->reg_base;
- 	u8 subsys_id = ctx->comp->subsys_id;
-+	u32 reg;
- 
- 	MM_REG_WRITE(cmd, subsys_id, base, WDMA_BUF_CON2, 0x10101050,
- 		     0xFFFFFFFF);
- 
- 	/* Setup frame information */
--	MM_REG_WRITE(cmd, subsys_id, base, WDMA_CFG, wdma->wdma_cfg,
-+	reg = COMP_CTX(p_id, ctx->param, wdma.wdma_cfg);
-+	MM_REG_WRITE(cmd, subsys_id, base, WDMA_CFG, reg,
- 		     0x0F01B8F0);
- 	/* Setup frame base address */
--	MM_REG_WRITE(cmd, subsys_id, base, WDMA_DST_ADDR,   wdma->iova[0],
-+	reg = COMP_CTX(p_id, ctx->param, wdma.iova[0]);
-+	MM_REG_WRITE(cmd, subsys_id, base, WDMA_DST_ADDR, reg,
- 		     0xFFFFFFFF);
--	MM_REG_WRITE(cmd, subsys_id, base, WDMA_DST_U_ADDR, wdma->iova[1],
-+	reg = COMP_CTX(p_id, ctx->param, wdma.iova[1]);
-+	MM_REG_WRITE(cmd, subsys_id, base, WDMA_DST_U_ADDR, reg,
- 		     0xFFFFFFFF);
--	MM_REG_WRITE(cmd, subsys_id, base, WDMA_DST_V_ADDR, wdma->iova[2],
-+	reg = COMP_CTX(p_id, ctx->param, wdma.iova[2]);
-+	MM_REG_WRITE(cmd, subsys_id, base, WDMA_DST_V_ADDR, reg,
- 		     0xFFFFFFFF);
- 	/* Setup Y pitch */
-+	reg = COMP_CTX(p_id, ctx->param, wdma.w_in_byte);
- 	MM_REG_WRITE(cmd, subsys_id, base, WDMA_DST_W_IN_BYTE,
--		     wdma->w_in_byte, 0x0000FFFF);
-+		     reg, 0x0000FFFF);
- 	/* Setup UV pitch */
-+	reg = COMP_CTX(p_id, ctx->param, wdma.uv_stride);
- 	MM_REG_WRITE(cmd, subsys_id, base, WDMA_DST_UV_PITCH,
--		     wdma->uv_stride, 0x0000FFFF);
-+		     reg, 0x0000FFFF);
- 	/* Set the fixed ALPHA as 0xFF */
- 	MM_REG_WRITE(cmd, subsys_id, base, WDMA_ALPHA, 0x800000FF,
- 		     0x800000FF);
-@@ -530,27 +599,34 @@ static int config_wdma_frame(struct mdp_comp_ctx *ctx,
- static int config_wdma_subfrm(struct mdp_comp_ctx *ctx,
- 			      struct mdp_cmdq_cmd *cmd, u32 index)
- {
--	const struct mdp_wdma_subfrm *subfrm = &ctx->param->wdma.subfrms[index];
-+	//const struct mdp_wdma_subfrm *subfrm = &ctx->param->wdma.subfrms[index];
- 	phys_addr_t base = ctx->comp->reg_base;
- 	u8 subsys_id = ctx->comp->subsys_id;
-+	u32 reg;
- 
- 	/* Write Y pixel offset */
-+	reg = COMP_CTX(p_id, ctx->param, wdma.subfrms[index].offset[0]);
- 	MM_REG_WRITE(cmd, subsys_id, base, WDMA_DST_ADDR_OFFSET,
--		     subfrm->offset[0], 0x0FFFFFFF);
-+		     reg, 0x0FFFFFFF);
- 	/* Write U pixel offset */
-+	reg = COMP_CTX(p_id, ctx->param, wdma.subfrms[index].offset[1]);
- 	MM_REG_WRITE(cmd, subsys_id, base, WDMA_DST_U_ADDR_OFFSET,
--		     subfrm->offset[1], 0x0FFFFFFF);
-+		     reg, 0x0FFFFFFF);
- 	/* Write V pixel offset */
-+	reg = COMP_CTX(p_id, ctx->param, wdma.subfrms[index].offset[2]);
- 	MM_REG_WRITE(cmd, subsys_id, base, WDMA_DST_V_ADDR_OFFSET,
--		     subfrm->offset[2], 0x0FFFFFFF);
-+		     reg, 0x0FFFFFFF);
- 	/* Write source size */
--	MM_REG_WRITE(cmd, subsys_id, base, WDMA_SRC_SIZE, subfrm->src,
-+	reg = COMP_CTX(p_id, ctx->param, wdma.subfrms[index].src);
-+	MM_REG_WRITE(cmd, subsys_id, base, WDMA_SRC_SIZE, reg,
- 		     0x3FFF3FFF);
- 	/* Write target size */
--	MM_REG_WRITE(cmd, subsys_id, base, WDMA_CLIP_SIZE, subfrm->clip,
-+	reg = COMP_CTX(p_id, ctx->param, wdma.subfrms[index].clip);
-+	MM_REG_WRITE(cmd, subsys_id, base, WDMA_CLIP_SIZE, reg,
- 		     0x3FFF3FFF);
- 	/* Write clip offset */
--	MM_REG_WRITE(cmd, subsys_id, base, WDMA_CLIP_COORD, subfrm->clip_ofst,
-+	reg = COMP_CTX(p_id, ctx->param, wdma.subfrms[index].clip_ofst);
-+	MM_REG_WRITE(cmd, subsys_id, base, WDMA_CLIP_COORD, reg,
- 		     0x3FFF3FFF);
- 
- 	/* Enable WDMA */
-@@ -593,13 +669,18 @@ static int init_ccorr(struct mdp_comp_ctx *ctx, struct mdp_cmdq_cmd *cmd)
- static int config_ccorr_subfrm(struct mdp_comp_ctx *ctx,
- 			       struct mdp_cmdq_cmd *cmd, u32 index)
- {
--	const struct img_comp_subfrm *csf = &ctx->param->subfrms[index];
- 	phys_addr_t base = ctx->comp->reg_base;
- 	u8 subsys_id = ctx->comp->subsys_id;
-+	u32 csf_l, csf_r, csf_t, csf_b;
- 	u32 hsize, vsize;
- 
--	hsize = csf->in.right - csf->in.left + 1;
--	vsize = csf->in.bottom - csf->in.top + 1;
-+	csf_l = COMP_CTX(p_id, ctx->param, subfrms[index].in.left);
-+	csf_r = COMP_CTX(p_id, ctx->param, subfrms[index].in.right);
-+	csf_t = COMP_CTX(p_id, ctx->param, subfrms[index].in.top);
-+	csf_b = COMP_CTX(p_id, ctx->param, subfrms[index].in.bottom);
++	disable_irq(cd->irq);
++	irq_set_affinity(cd->irq, cd->cpumask);
++	enable_irq(cd->irq);
 +
-+	hsize = csf_r - csf_l + 1;
-+	vsize = csf_b - csf_t + 1;
- 	MM_REG_WRITE(cmd, subsys_id, base, MDP_CCORR_SIZE,
- 		     (hsize << 16) + (vsize <<  0), 0x1FFF1FFF);
- 	return 0;
-@@ -949,6 +1030,7 @@ int mdp_comp_config(struct mdp_dev *mdp)
- 	int ret;
- 
- 	memset(mdp_comp_alias_id, 0, sizeof(mdp_comp_alias_id));
-+	p_id = mdp->mdp_data->mdp_plat_id;
- 
- 	parent = dev->of_node->parent;
- 	/* Iterate over sibling MDP function blocks */
-@@ -1018,9 +1100,16 @@ int mdp_comp_ctx_config(struct mdp_dev *mdp, struct mdp_comp_ctx *ctx,
- {
- 	struct device *dev = &mdp->pdev->dev;
- 	enum mtk_mdp_comp_id public_id = MDP_COMP_NONE;
--	int i;
-+	u32 arg;
-+	int i, idx;
++	return 0;
++}
 +
-+	if (!param) {
-+		dev_err(dev, "Invalid component param");
-+		return -EINVAL;
-+	}
- 
--	public_id = get_comp_public_id(mdp, param->type);
-+	arg = COMP_CTX(p_id, param, type);
-+	public_id = get_comp_public_id(mdp, arg);
- 	if (public_id < 0) {
- 		dev_err(dev, "Invalid component id %d", public_id);
- 		return -EINVAL;
-@@ -1028,13 +1117,17 @@ int mdp_comp_ctx_config(struct mdp_dev *mdp, struct mdp_comp_ctx *ctx,
- 
- 	ctx->comp = mdp->comp[public_id];
- 	if (!ctx->comp) {
--		dev_err(dev, "Uninit component inner id %d", param->type);
-+		dev_err(dev, "Uninit component inner id %d", arg);
- 		return -EINVAL;
- 	}
- 
- 	ctx->param = param;
--	ctx->input = &frame->inputs[param->input];
--	for (i = 0; i < param->num_outputs; i++)
--		ctx->outputs[i] = &frame->outputs[param->outputs[i]];
-+	arg = COMP_CTX(p_id, param, input);
-+	ctx->input = &frame->inputs[arg];
-+	idx = COMP_CTX(p_id, param, num_outputs);
-+	for (i = 0; i < idx; i++) {
-+		arg = COMP_CTX(p_id, param, outputs[i]);
-+		ctx->outputs[i] = &frame->outputs[arg];
-+	}
- 	return 0;
- }
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-index 79acdccd0b60..7c0aa103e839 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.c
-@@ -18,6 +18,7 @@
- #include "mt8183/mdp3-plat-mt8183.h"
- 
- static const struct mtk_mdp_driver_data mt8183_mdp_driver_data = {
-+	.mdp_plat_id = MDP_PLAT_MT8183,
- 	.mdp_probe_infra = mt8183_mdp_probe_infra,
- 	.mdp_sub_comp_dt_ids = mt8183_sub_comp_dt_ids,
- 	.mdp_cfg = &mt8183_plat_cfg,
-diff --git a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
-index 30f22bee89e6..d733b90c5fe3 100644
---- a/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
-+++ b/drivers/media/platform/mediatek/mdp3/mtk-mdp3-core.h
-@@ -18,6 +18,10 @@
- #define MDP_DEVICE_NAME		"MediaTek MDP3"
- #define MDP_PHANDLE_NAME	"mediatek,mdp3"
- 
-+enum mdp_platform_id {
-+	MDP_PLAT_MT8183,
++static int __init loongson2_hpet_clockevent_init(void)
++{
++	unsigned int cpu = smp_processor_id();
++	struct clock_event_device *cd;
++
++	hpet_setup();
++
++	cd = &per_cpu(hpet_clockevent_device, cpu);
++	cd->name = "hpet";
++	cd->rating = 300;
++	cd->features = CLOCK_EVT_FEAT_PERIODIC | CLOCK_EVT_FEAT_ONESHOT;
++	cd->set_state_shutdown = hpet_set_state_shutdown;
++	cd->set_state_periodic = hpet_set_state_periodic;
++	cd->set_state_oneshot = hpet_set_state_oneshot;
++	cd->tick_resume = hpet_tick_resume;
++	cd->set_next_event = hpet_next_event;
++	cd->irq = hpet_t0_irq;
++	cd->cpumask = cpumask_of(cpu);
++	clockevent_set_clock(cd, hpet_freq);
++	cd->max_delta_ns = clockevent_delta2ns(0x7fffffff, cd);
++	cd->max_delta_ticks = 0x7fffffff;
++	cd->min_delta_ns = clockevent_delta2ns(HPET_MIN_PROG_DELTA, cd);
++	cd->min_delta_ticks = HPET_MIN_PROG_DELTA;
++
++	clockevents_register_device(cd);
++	if (hpet_request_irq(cd))
++		return -1;
++
++	pr_info("hpet clock event device register\n");
++
++	return 0;
++}
++
++static u64 hpet_read_counter(struct clocksource *cs)
++{
++	return (u64)hpet_read(HPET_COUNTER);
++}
++
++static void hpet_suspend(struct clocksource *cs)
++{
++	hpet_t0_cfg = hpet_read(HPET_T0_CFG);
++}
++
++static void hpet_resume(struct clocksource *cs)
++{
++	hpet_write(HPET_T0_CFG, hpet_t0_cfg);
++	hpet_setup();
++	hpet_restart_counter();
++}
++
++struct clocksource csrc_hpet = {
++	.name = "hpet",
++	.rating = 300,
++	.read = hpet_read_counter,
++	.mask = CLOCKSOURCE_MASK(32),
++	/* oneshot mode work normal with this flag */
++	.flags = CLOCK_SOURCE_IS_CONTINUOUS,
++	.suspend = hpet_suspend,
++	.resume = hpet_resume,
++	.mult = 0,
++	.shift = 10,
 +};
 +
- enum mdp_infra_id {
- 	MDP_INFRA_MMSYS,
- 	MDP_INFRA_MUTEX,
-@@ -51,6 +55,7 @@ enum mdp_pipe_id {
- };
- 
- struct mtk_mdp_driver_data {
-+	const enum mdp_platform_id mdp_plat_id;
- 	const struct of_device_id *mdp_probe_infra;
- 	const struct of_device_id *mdp_sub_comp_dt_ids;
- 	const struct mdp_platform_config *mdp_cfg;
++static int __init loongson2_hpet_clocksource_init(void)
++{
++	csrc_hpet.mult = clocksource_hz2mult(hpet_freq, csrc_hpet.shift);
++
++	/* start counter */
++	hpet_start_counter();
++
++	return clocksource_register_hz(&csrc_hpet, hpet_freq);
++}
++
++static int __init loongson2_hpet_init(struct device_node *np)
++{
++	int ret;
++	struct clk *clk;
++
++	hpet_mmio_base = of_iomap(np, 0);
++	if (!hpet_mmio_base) {
++		pr_err("hpet: unable to map loongson2 hpet registers\n");
++		goto err;
++	}
++
++	ret = -EINVAL;
++	hpet_t0_irq = irq_of_parse_and_map(np, 0);
++	if (hpet_t0_irq <= 0) {
++		pr_err("hpet: unable to get IRQ from DT, %d\n", hpet_t0_irq);
++		goto err;
++	}
++
++	clk = of_clk_get(np, 0);
++	if (!IS_ERR(clk)) {
++		hpet_freq = clk_get_rate(clk);
++		clk_put(clk);
++	} else
++		goto err;
++
++	hpet_irq_flags = HPET_TN_LEVEL;
++
++	loongson2_hpet_clocksource_init();
++
++	loongson2_hpet_clockevent_init();
++
++	return 0;
++
++err:
++	iounmap(hpet_mmio_base);
++	return ret;
++}
++
++TIMER_OF_DECLARE(loongson2_hpet, "loongson,ls2k-hpet", loongson2_hpet_init);
 -- 
-2.18.0
+2.33.0
 
