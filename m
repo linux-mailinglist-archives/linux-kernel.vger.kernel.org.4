@@ -2,107 +2,183 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 126366182E6
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:31:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6805D6182E4
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:31:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230521AbiKCPbA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 11:31:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38696 "EHLO
+        id S229882AbiKCPa4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 11:30:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231320AbiKCPad (ORCPT
+        with ESMTP id S231491AbiKCPae (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 11:30:33 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CE89C110B;
-        Thu,  3 Nov 2022 08:30:02 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id 660CB61F2D;
-        Thu,  3 Nov 2022 15:30:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BB804C433D6;
-        Thu,  3 Nov 2022 15:30:01 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667489401;
-        bh=6e8ruPJPD4sSHdabvzka5nsqzYWSReJCia4VC8DZ9CM=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=nOVFgG2pxHS9Fg7mzPDyqbmvyepYWB3Y3X2N8+EBwUlijrMPVpLJoiJVMBdgRwIXX
-         4HlUO6GU3oDEA8CwPGikMMybTagUvLONlIkaMjNb4pfwti5A7CgmB83C0VgDGLGQ04
-         sLfDc/20/O1uyAoz6AA6rYUmebq7/dyFlO0VSbNMa9/LUzSpMzOPBJShHu7PIUHJR9
-         oc64zKZqnKMHvD5Hd8VNlefEKteotP4zD1oYVGGlA+UpsmMMxYd/WDi/t5SbEvXppc
-         W72EuztIQUVG3z/pImAUg3kHwDydmv+jo3keWGktKNrlYeV68tvsEnKyr/HdlULtQ5
-         ie6sLLiYT9Ztg==
-Received: from johan by xi.lan with local (Exim 4.94.2)
-        (envelope-from <johan@kernel.org>)
-        id 1oqcA4-0004AX-C3; Thu, 03 Nov 2022 16:29:44 +0100
-Date:   Thu, 3 Nov 2022 16:29:44 +0100
-From:   Johan Hovold <johan@kernel.org>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Stefan Agner <stefan@agner.ch>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Matthias Kaehlcke <mka@chromium.org>,
-        stable <stable@kernel.org>, regressions@lists.linux.dev,
-        krzk@kernel.org
-Subject: Re: [PATCH stable-5.15 3/3] usb: dwc3: disable USB core PHY
- management
-Message-ID: <Y2PeaP/dcaklXW+x@hovoldconsulting.com>
-References: <20220906120702.19219-4-johan@kernel.org>
- <808bdba846bb60456adf10a3016911ee@agner.ch>
- <Y0+8dKESygFunXOu@hovoldconsulting.com>
- <86c0f1ee8ffc94f9a53690dda6a83fbb@agner.ch>
- <Y1JCIKT80P9IysKD@hovoldconsulting.com>
- <b2a1e70bda64cb741efe81c5b7e56707@agner.ch>
- <Y1p9Wy9w5umMBC4V@hovoldconsulting.com>
- <CGME20221103145022eucas1p2218e78d51500c85b3cda59cc533a3631@eucas1p2.samsung.com>
- <Y2PVF/IJoKvSu3SM@hovoldconsulting.com>
- <53e543e8-f895-d4f1-da94-d0baca528e79@samsung.com>
+        Thu, 3 Nov 2022 11:30:34 -0400
+Received: from mail-pg1-x52c.google.com (mail-pg1-x52c.google.com [IPv6:2607:f8b0:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B90581C43B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:30:02 -0700 (PDT)
+Received: by mail-pg1-x52c.google.com with SMTP id q1so1946271pgl.11
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 08:30:02 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=UyUe+HbRzSrTdJquQCMiaXWC2coZG28I37xguDaJaYg=;
+        b=JxP3em5mMEo8M/seyYjwqQClKWueZhrkefM7iopEbtJ9U0ARhXsBBlBaHvB0YZ+mCq
+         7I2lDIbzgsTnUJXXFFd+Mf2MRkvMQ3d/mi120+0k+co+feliF2fGnlDGLipP3oo4jHIs
+         yhCQnzB0LNdLsoCiyP2ThdGCDug/wevVBzx4ZCIoRVJzM62ULFanZrMyKnrfoLhgGw7L
+         LE3NJVvLI80qGdb5QUdNBUYtcEfD6sTxNonp/rLGuh5no7R8ACiBwreWQkoFJnyoE1Nq
+         joZ/uzznkWHqO7mwwbSR52gm1kYa+vf+hliw2Y9f1o05+cN6N5swUWJ7vJszMr5BEKoW
+         HTcg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=UyUe+HbRzSrTdJquQCMiaXWC2coZG28I37xguDaJaYg=;
+        b=0XKmf2yWKqvEV7/KwfkZmUBOc7XUtBY+RVQviavtZS7IlDBV+iuE4v55OZ2X/OpS/3
+         zVTgby9qRGw66KBobMhIoBE4UmbKNyWKlBww7Kny9bun2nMNpTyVvXgnEjCxBkaSRm50
+         1k6xclwpqTqfYa3aCACbU9+BewLOQOxqoBSV/jz6TGEgVXRI3GDEpsXe6PpwEmLcNbRe
+         icPsIvaUZsbTb7V7Hm4GaTYq0jmw7APNT33HicYokmiE1ApcfJR6Etj+QoMQOuReLBrT
+         AHVsBKbIgMEpIkiK4iBsrWDf6y7I9cexGhc0WQLcOYsWgaWV4NWWBZxwumLnKf5/H2cA
+         dc2g==
+X-Gm-Message-State: ACrzQf0bBXfRjkCVYYn6oOLOeUNMfITi1rGF3QQKDCyinyzLmTqQcbJ2
+        5ssLXaAgAL9Lsfn4H2QiAj2IHg==
+X-Google-Smtp-Source: AMsMyM6by5WQXi0G4lBZGaavWsGrxKC8DeWyAUbAtvZsM8BboB9ucyemIyMYLKoI4FadI1MlyxYOPw==
+X-Received: by 2002:a05:6a00:1996:b0:56d:a845:5789 with SMTP id d22-20020a056a00199600b0056da8455789mr17697890pfl.59.1667489402026;
+        Thu, 03 Nov 2022 08:30:02 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id f3-20020a170902f38300b0017a018221e2sm835452ple.70.2022.11.03.08.30.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 08:30:01 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 15:29:58 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Philippe =?iso-8859-1?Q?Mathieu-Daud=E9?= <philmd@linaro.org>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>
+Subject: Re: [PATCH 17/44] KVM: arm64: Do arm/arch initialiation without
+ bouncing through kvm_init()
+Message-ID: <Y2Pedr1MYt/P1uL0@google.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+ <20221102231911.3107438-18-seanjc@google.com>
+ <dd59d579-4a4e-6db2-eac4-6c5c3ab71fd3@linaro.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <53e543e8-f895-d4f1-da94-d0baca528e79@samsung.com>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <dd59d579-4a4e-6db2-eac4-6c5c3ab71fd3@linaro.org>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 04:18:12PM +0100, Marek Szyprowski wrote:
-> Hi Johan,
+On Thu, Nov 03, 2022, Philippe Mathieu-Daudé wrote:
+> Hi Sean,
 > 
-> On 03.11.2022 15:49, Johan Hovold wrote:
-> > On Thu, Oct 27, 2022 at 02:45:15PM +0200, Johan Hovold wrote:
-> >> On Wed, Oct 26, 2022 at 03:11:00PM +0200, Stefan Agner wrote:
-> >>> The user reports the S-ATA disk is *not* recognized with that patch
-> >>> applied.
-> >> I just noticed a mistake in the instrumentation patch I sent you. Could
-> >> you try moving the calibrations calls after dwc3_host_init() (e.g. as in
-> >> the second chunk in the diff below)?
-> >>
-> >> As mentioned in the commit message for a0a465569b45 ("usb: dwc3: remove
-> >> generic PHY calibrate() calls"), this may not work if the xhci-plat
-> >> driver is built as a module and there are some corner cases that it does
-> >> not cover.
-> >>
-> >> It seems we should revert the offending commit and then try to find some
-> >> time to untangle this mess, but please check if the below addresses the
-> >> issue first so we know what the problem is.
-> >>
-> >> I'll prepare a revert in the meantime.
-> > I've now posted the revert, but please do check if the below patch was
-> > enough to resolve the immediate issue.
+> On 3/11/22 00:18, Sean Christopherson wrote:
+> > Move arm/arch specific initialization directly in arm's module_init(),
+> > now called kvm_arm_init(), instead of bouncing through kvm_init() to
+> > reach kvm_arch_init().  Invoking kvm_arch_init() is the very first action
+> > performed by kvm_init(), i.e. this is a glorified nop.
+> > 
+> > Making kvm_arch_init() a nop will allow dropping it entirely once all
+> > other architectures follow suit.
+> > 
+> > No functional change intended.
+> > 
+> > Signed-off-by: Sean Christopherson <seanjc@google.com>
+> > ---
+> >   arch/arm64/kvm/arm.c | 25 ++++++++++++++++---------
+> >   1 file changed, 16 insertions(+), 9 deletions(-)
 > 
-> The below patch was a half-fix. It worked only if both dwc3 and 
-> xhci_plat_hcd were compiled into the kernel. Afair Debian-based distros 
-> used xhci compiled as a module, so this didn't work for that case due to 
-> timing issues.
+> >   /* NOP: Compiling as a module not supported */
+> >   void kvm_arch_exit(void)
+> >   {
+> > -	kvm_unregister_perf_callbacks();
+> 
+> Doesn't this belong to the previous patch?
 
-Yeah, I mentioned that above too. The intention here was just to confirm
-the hypothesis that the regression was due to the missing calibration
-calls.
+No, but the above changelog is a lie, there is very much a functional change here.
 
-Johan
+The goal of the previous patch is to fix the error paths in kvm_arch_init(), a.k.a.
+kvm_arm_init().  After fixing kvm_arch_init(), there are still bugs in the sequence
+as a whole because kvm_arch_exit() doesn't unwind other state, e.g. kvm_arch_exit()
+should really look something like:
+
+  void kvm_arch_exit(void)
+  {
+	teardown_subsystems();
+
+	if (!is_kernel_in_hyp_mode())
+		teardown_hyp_mode();
+
+	kvm_arm_vmid_alloc_free();
+
+	if (is_protected_kvm_enabled())
+		???	
+  }
+
+Becuase although the comment "NOP: Compiling as a module not supported" is correct
+about KVM ARM always having to be built into the kernel, kvm_arch_exit() can still
+be called if a later stage of kvm_init() fails.
+
+But rather than add a patch to fix kvm_arch_exit(), I chose to fix the bug by
+moving code out of kvm_arch_init() so that the unwind sequence established in the
+previous patch could be reused.
+
+Except I managed to forget those details when writing the changelog.  The changelog
+should instead be:
+
+  KVM: arm64: Do arm/arch initialization without bouncing through kvm_init()
+  
+  Do arm/arch specific initialization directly in arm's module_init(), now
+  called kvm_arm_init(), instead of bouncing through kvm_init() to reach
+  kvm_arch_init().  Invoking kvm_arch_init() is the very first action
+  performed by kvm_init(), so from a initialization perspective this is a
+  glorified nop.
+  
+  Avoiding kvm_arch_init() also fixes a mostly benign bug as kvm_arch_exit()
+  doesn't properly unwind if a later stage of kvm_init() fails.  While the
+  soon-to-be-deleted comment about compiling as a module being unsupported
+  is correct, kvm_arch_exit() can still be called by kvm_init() if any step
+  after the call to kvm_arch_init() succeeds.
+
+  Add a FIXME to call out that pKVM initialization isn't unwound if
+  kvm_init() fails, which is a pre-existing problem inherited from
+  kvm_arch_exit().
+
+  Making kvm_arch_init() a nop will also allow dropping kvm_arch_init() and
+  kvm_arch_exit() entirely once all other architectures follow suit.
