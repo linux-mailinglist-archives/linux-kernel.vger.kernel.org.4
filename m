@@ -2,75 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D9B15617731
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 08:09:51 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4AAF961775E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 08:12:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230366AbiKCHJt (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 03:09:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44666 "EHLO
+        id S231372AbiKCHMf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 03:12:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230271AbiKCHJj (ORCPT
+        with ESMTP id S231319AbiKCHMO (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 03:09:39 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 12A522A2
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 00:09:38 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id CA0701FB;
-        Thu,  3 Nov 2022 00:09:43 -0700 (PDT)
-Received: from usa.arm.com (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id AD5543F703;
-        Thu,  3 Nov 2022 00:09:36 -0700 (PDT)
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     linux-kernel@vger.kernel.org,
-        Cristian Marussi <cristian.marussi@arm.com>,
-        linux-arm-kernel@lists.infradead.org
-Cc:     Sudeep Holla <sudeep.holla@arm.com>,
-        =?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= 
-        <u.kleine-koenig@pengutronix.de>
-Subject: Re: [PATCH 1/8] firmware: arm_scmi: Cleanup core driver removal callback
-Date:   Thu,  3 Nov 2022 07:09:29 +0000
-Message-Id: <166745927905.2971610.390378642784084844.b4-ty@arm.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221028140833.280091-1-cristian.marussi@arm.com>
-References: <20221028140833.280091-1-cristian.marussi@arm.com>
+        Thu, 3 Nov 2022 03:12:14 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 94170B7F7
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 00:11:19 -0700 (PDT)
+Received: from dggpemm500021.china.huawei.com (unknown [172.30.72.55])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N2w0J3cNWzmV7c;
+        Thu,  3 Nov 2022 15:11:12 +0800 (CST)
+Received: from dggpemm500007.china.huawei.com (7.185.36.183) by
+ dggpemm500021.china.huawei.com (7.185.36.109) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 3 Nov 2022 15:11:17 +0800
+Received: from huawei.com (10.175.103.91) by dggpemm500007.china.huawei.com
+ (7.185.36.183) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 3 Nov
+ 2022 15:11:17 +0800
+From:   Yang Yingliang <yangyingliang@huawei.com>
+To:     <linux-kernel@vger.kernel.org>, <dinguyen@kernel.org>,
+        <richard.gong@intel.com>, <atull@kernel.org>,
+        <tien.sung.ang@intel.com>
+Subject: [PATCH 0/2] firmware: stratix10-svc: fix error handle in stratix10_svc_drv_probe()
+Date:   Thu, 3 Nov 2022 15:09:49 +0800
+Message-ID: <20221103070951.1496435-1-yangyingliang@huawei.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.175.103.91]
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ dggpemm500007.china.huawei.com (7.185.36.183)
+X-CFilter-Loop: Reflected
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, 28 Oct 2022 15:08:26 +0100, Cristian Marussi wrote:
-> Platform drivers .remove callbacks are not supposed to fail and report
-> errors: such errors are indeed ignored by the core platform drivers stack
-> and the driver unbind process is anyway completed.
-> 
-> The SCMI core platform driver as it is now, instead, bails out reporting
-> an error in case of an explicit unbind request.
-> 
-> [...]
+This patchset fixes two error handle problems in error path in
+stratix10_svc_drv_probe(). They are introduced by different commits.
 
-Applied 1-6/8 to sudeep.holla/linux (for-next/scmi), thanks!
+Yang Yingliang (2):
+  firmware: stratix10-svc: add missing gen_pool_destroy() in
+    stratix10_svc_drv_probe()
+  firmware: stratix10-svc: fix error handle while alloc/add device
+    failed
 
-[1/8] firmware: arm_scmi: Cleanup core driver removal callback
-      https://git.kernel.org/sudeep.holla/c/3f4071cbd206
-[2/8] firmware: arm_scmi: Suppress bind attributes
-      https://git.kernel.org/sudeep.holla/c/fd96fbc8fad3
-[3/8] firmware: arm_scmi: Make tx_prepare time out eventually
-      https://git.kernel.org/sudeep.holla/c/59172b212ec0
-[4/8] firmware: arm_scmi: Make RX chan_setup fail on memory errors
-      https://git.kernel.org/sudeep.holla/c/be9ba1f7f9e0
-[5/8] firmware: arm_scmi: Fix devres allocation device in virtio
-      https://git.kernel.org/sudeep.holla/c/5ffc1c4cb896
-[6/8] firmware: arm_scmi: Fix deferred_tx_wq release on error paths
-      https://git.kernel.org/sudeep.holla/c/1eff6929aff5
+ drivers/firmware/stratix10-svc.c | 25 +++++++++++++++++--------
+ 1 file changed, 17 insertions(+), 8 deletions(-)
 
---
-Regards,
-Sudeep
+-- 
+2.25.1
 
