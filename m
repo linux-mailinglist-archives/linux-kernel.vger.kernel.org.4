@@ -2,173 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C39B61864A
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:37:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C1561864E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:38:51 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231549AbiKCRhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 13:37:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
+        id S231391AbiKCRis (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 13:38:48 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51410 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230333AbiKCRhN (ORCPT
+        with ESMTP id S230333AbiKCRip (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:37:13 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB3426C2
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:36:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667496974;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=wqHDCfVM36OPNbloym/8DLeITW3uuDn/ofViGZw+9QU=;
-        b=SH/G1phmFNnPBezQWLEXBC8Du32QWja8MjyTbMagOQKpkXZpf8lQkei0RTI3ubrJUcJM25
-        NCOYowp5lpoDNX8dihUbJcbnNkJ6zvM9j1eAXi6caPX3asSDRRpqBJ55x+BlwoZ8u4aKNu
-        QCbbwhcPK1IPLVyA1X3SRb4jU5kehuQ=
-Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
- [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-28-BLUf1PFaPjqy07aspd6EsA-1; Thu, 03 Nov 2022 13:36:13 -0400
-X-MC-Unique: BLUf1PFaPjqy07aspd6EsA-1
-Received: by mail-wm1-f71.google.com with SMTP id v23-20020a1cf717000000b003bff630f31aso769911wmh.5
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:36:13 -0700 (PDT)
+        Thu, 3 Nov 2022 13:38:45 -0400
+Received: from mail-qt1-x82b.google.com (mail-qt1-x82b.google.com [IPv6:2607:f8b0:4864:20::82b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9FB3D260E
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:38:44 -0700 (PDT)
+Received: by mail-qt1-x82b.google.com with SMTP id a27so1676042qtw.10
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:38:44 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=ZDKGNUL62Hmp7TO+80EI0t8/5fmkoGs0W5GjhbEg7Ak=;
+        b=R+/jni/tECFejnbeSf8ovTZ/MmCDfZB+T8D3a1hCW/IkQSpJkpkn1ei4qBFRh37Iad
+         bRazMNBta9jmU4DF1NKLyZbXhYFmI3n+4SxPXQykRk8divLF3ZvPhfFl+nfO3r9Mw0Hs
+         RP4TPF13nFKLdnCL8tO8uxywSd5Du7ngg4UvcLG/bI9ku/234zmdhntB9VO3sBx79KG7
+         ZdhiPuUAwDsnk8rBQ82vgVOWeq9rOPKHSoXuwPtJ1w81OF2D4jNt6r+JqS5W9s4ARc2f
+         SpmeHn8CEkCeyjnl1WUEAkhkX7egqM79y3r0dpT9FLsf0EXV2Nx7xGwHeabdcustk+FP
+         tx9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:organization:from:references
-         :cc:to:content-language:subject:user-agent:mime-version:date
-         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=wqHDCfVM36OPNbloym/8DLeITW3uuDn/ofViGZw+9QU=;
-        b=G7+yrW6Pajz1Un9NmXBdK2nhrPS51YdlNErq6OpqWe0fUypdDDB+SG0Zf0S8lFBgaA
-         Vxn6700fj/IwLJYHr0kHjNiSwMn9+/L+zjdXRmRT3CrktqNUofmTUmH9pel/rKYshnjy
-         kMdqOXq46GQZ9J01DUGpsJ75oAPDTRShPWtZ1qVc4qGgfKk+jZiqN9jXjO/6eZMdAW9q
-         H/U//OxRD/u2qDWyCDLBA3KbYTZm+yVwlRaNB3jg9mp+E8+OzPzlYZepIoJVm7u73OVq
-         oJpTKNoZOzV2f39g1i/q9wrRBI0+1iTLo16dZ0RYSUAdvITXyW+h3TcJAeMBluiV34WO
-         F/cA==
-X-Gm-Message-State: ACrzQf3TnTmxxyXLVW67l6I8Q27EHI1hWfpx0DwSdC6aORoEK4Xuazpr
-        DY++HhK3aM9s+dosyVrSb/vduG7it3qxsBdlcQdulc/lE04soUrtlTXsE8ORpiGwGgsMxQSUTAQ
-        fCw/z9012tEZbYByXlpCqZT3y
-X-Received: by 2002:a5d:4c43:0:b0:236:547f:bd3c with SMTP id n3-20020a5d4c43000000b00236547fbd3cmr20124907wrt.380.1667496972001;
-        Thu, 03 Nov 2022 10:36:12 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM54lgh3dosJh+SDteCIDf+oND5iNc6bun/TfT30kj1hNLHlkbIfHxe0Djb4bu9ZHb48FSA7qw==
-X-Received: by 2002:a5d:4c43:0:b0:236:547f:bd3c with SMTP id n3-20020a5d4c43000000b00236547fbd3cmr20124874wrt.380.1667496971580;
-        Thu, 03 Nov 2022 10:36:11 -0700 (PDT)
-Received: from ?IPV6:2003:cb:c707:a400:e2d7:3ee3:8d35:ac8? (p200300cbc707a400e2d73ee38d350ac8.dip0.t-ipconnect.de. [2003:cb:c707:a400:e2d7:3ee3:8d35:ac8])
-        by smtp.gmail.com with ESMTPSA id bq7-20020a5d5a07000000b0022e035a4e93sm1379834wrb.87.2022.11.03.10.36.10
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 10:36:11 -0700 (PDT)
-Message-ID: <3259ad30-c129-84fc-9643-0aeaeeb3c806@redhat.com>
-Date:   Thu, 3 Nov 2022 18:36:09 +0100
+        bh=ZDKGNUL62Hmp7TO+80EI0t8/5fmkoGs0W5GjhbEg7Ak=;
+        b=tK7TFPWufu0QWM3l5OY+/bzHOciJhQbgHQiLAIZcCf26a2wBUZWJr5GUmkSSNhJmdl
+         ioVsIoIZB/+SJoj47mb570t1E3GPWcqSUJrRuR6FLO23kKFBHWT7neDyhnc/5dYduRJZ
+         KEMM9oI8+1IPH9dm/Lvi6DURGwcanAlGYK18YDqclRFVDEIht0z8jJe+3e+Zs7O4batm
+         o/gQu6AUtNB/GL21c3UT2ggsY2+4vmTOYuYFHw0oUAX6gsijadZoHApyhJa5daGFmnkM
+         zB/LtVgtP7kX0QiNFVkyRQTHNz7OsLZmLjvBgjIcswc85yW5HDKrA0kEiCPTKZonr6lW
+         1daw==
+X-Gm-Message-State: ACrzQf0QxD9yve0XIS712YjAz9mnVT9MMR6H7bmu3FkgJU2OIHNFNqkI
+        wNdiodasPEtUSwB+9Q5RopvooA7DQnZWfWOcHGC7cNsCqxkOjgAs
+X-Google-Smtp-Source: AMsMyM5Mqnw5541HEzedFBWf4iB4Sg2nht4t3zf1zNKf7ZZ4XhdBaeGEAHHS8vgMpapBPKGC2zrMz/IqNY+71nF7EqE=
+X-Received: by 2002:a05:622a:147:b0:39c:dc0d:7d0f with SMTP id
+ v7-20020a05622a014700b0039cdc0d7d0fmr24886331qtw.281.1667497123725; Thu, 03
+ Nov 2022 10:38:43 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: mm: delay rmap removal until after TLB flush
-Content-Language: en-US
-To:     Linus Torvalds <torvalds@linux-foundation.org>
-Cc:     Peter Zijlstra <peterz@infradead.org>,
-        Will Deacon <will@kernel.org>,
-        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
-        Nick Piggin <npiggin@gmail.com>,
-        Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Sven Schnelle <svens@linux.ibm.com>,
-        Nadav Amit <nadav.amit@gmail.com>,
-        Jann Horn <jannh@google.com>,
-        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
-        Matthew Wilcox <willy@infradead.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        kernel list <linux-kernel@vger.kernel.org>,
-        Linux-MM <linux-mm@kvack.org>,
-        Andrea Arcangeli <aarcange@redhat.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        Joerg Roedel <jroedel@suse.de>,
-        Uros Bizjak <ubizjak@gmail.com>,
-        Alistair Popple <apopple@nvidia.com>,
-        linux-arch <linux-arch@vger.kernel.org>
-References: <B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com>
- <47678198-C502-47E1-B7C8-8A12352CDA95@gmail.com>
- <CAHk-=wjzngbbwHw4nAsqo_RpyOtUDk5G+Wus=O0w0A6goHvBWA@mail.gmail.com>
- <CAHk-=wijU_YHSZq5N7vYK+qHPX0aPkaePaGOyWk4aqMvvSXxJA@mail.gmail.com>
- <140B437E-B994-45B7-8DAC-E9B66885BEEF@gmail.com>
- <CAHk-=wjX_P78xoNcGDTjhkgffs-Bhzcwp-mdsE1maeF57Sh0MA@mail.gmail.com>
- <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
- <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
- <CAHk-=wiwt4LC-VmqvYrphraF0=yQV=CQimDCb0XhtXwk8oKCCA@mail.gmail.com>
- <Y1+XCALog8bW7Hgl@hirez.programming.kicks-ass.net>
- <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
- <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com>
- <4f6d8fb5-6be5-a7a8-de8e-644da66b5a3d@redhat.com>
- <CAHk-=wiDg_1up8K4PhK4+kzPN7xJG297=nw+tvgrGn7aVgZdqw@mail.gmail.com>
- <CAHk-=wgReY6koZTKT97NsCczzr4uYAA66iePv=S_RL-_D-9mmQ@mail.gmail.com>
-From:   David Hildenbrand <david@redhat.com>
-Organization: Red Hat
-In-Reply-To: <CAHk-=wgReY6koZTKT97NsCczzr4uYAA66iePv=S_RL-_D-9mmQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <Y2OPStg4jXtWpJcd@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+ <d0d6d613-174b-f7dd-7d45-45eecd26a850@inria.fr> <CAHJEyKUA4FG468S5bMsx+XGUR3pB3kKm_bx=LNPNJ6n9yPxCrQ@mail.gmail.com>
+ <612f7cf-43db-a684-7a98-8469275b43fd@inria.fr> <CAHJEyKXL=u=7tH2O3tdeSBZHyXLAdP9JcfzKHy6-bc7Bju5NMQ@mail.gmail.com>
+In-Reply-To: <CAHJEyKXL=u=7tH2O3tdeSBZHyXLAdP9JcfzKHy6-bc7Bju5NMQ@mail.gmail.com>
+From:   Tanju Brunostar <tanjubrunostar0@gmail.com>
+Date:   Thu, 3 Nov 2022 18:38:31 +0100
+Message-ID: <CAHJEyKWBTxvP_mkSaWw7duhm1_-_AE27FhrnZYOXsTy1Qt_c=g@mail.gmail.com>
+Subject: Re: [PATCH] staging: vt6655: change the function name s_vFillRTSHead
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03.11.22 18:09, Linus Torvalds wrote:
-> On Thu, Nov 3, 2022 at 9:54 AM Linus Torvalds
-> <torvalds@linux-foundation.org> wrote:
->>
->> But again, those changes would have made the patch bigger, which I
->> didn't want at this point (and 'release_pages()' would need that
->> clean-in-place anyway, unless we changed *that* too and made the whole
->> page encoding be something widely available).
-> 
-> And just to clarify: this is not just me trying to expand the reach of my patch.
-> 
-> I'd suggest people look at mlock_pagevec(), and realize that LRU_PAGE
-> and NEW_PAGE are both *exactly* the same kind of "encoded_page" bits
-> that TLB_ZAP_RMAP is.
-> 
-> Except the mlock code does *not* show that in the type system, and
-> instead just passes a "struct page **" array around in pvec->pages,
-> and then you'd just better know that "oh, it's not *really* just a
-> page pointer".
-> 
-> So I really think that the "array of encoded page pointers" thing is a
-> generic notion that we *already* have.
-> 
-> It's just that we've done it disgustingly in the past, and I didn't
-> want to do that disgusting thing again.
-> 
-> So I would hope that the nasty things that the mlock code would some
-> day use the same page pointer encoding logic to actually make the
-> whole "this is not a page pointer that you can use directly, it has
-> low bits set for flags" very explicit.
-> 
-> I am *not* sure if then the actual encoded bits would be unified.
-> Probably not - you might have very different and distinct uses of the
-> encode_page() thing where the bits mean different things in different
-> contexts.
-> 
-> Anyway, this is me just explaining the thinking behind it all. The
-> page bit encoding is a very generic thing (well, "very generic" in
-> this case means "has at least one other independent user"), explaining
-> the very generic naming.
-> 
-> But at the same time, the particular _patch_ was meant to be very targeted.
-> 
-> So slightly schizophrenic name choices as a result.
+On Thu, Nov 3, 2022 at 5:04 PM Tanju Brunostar
+<tanjubrunostar0@gmail.com> wrote:
+>
+> On Thu, Nov 3, 2022 at 4:58 PM Julia Lawall <julia.lawall@inria.fr> wrote:
+> >
+> >
+> >
+> > On Thu, 3 Nov 2022, Tanju Brunostar wrote:
+> >
+> > > On Thu, Nov 3, 2022 at 1:38 PM Julia Lawall <julia.lawall@inria.fr> wrote:
+> > > >
+> > > >
+> > > >
+> > > > On Thu, 3 Nov 2022, Tanjuate Brunostar wrote:
+> > > >
+> > > > > Remove the use of Hungarian notation, which is not used in the Linux
+> > > > > kernel. Reported by checkpatch
+> > > > >
+> > > > > Fix checkpatch error related to code line ends with a '(', by joining
+> > > > > some lines and indenting correctly. This improves visibility
+> > > >
+> > > > I don't think it will be appreciated to do two things at once.
+> > > >
+> > >
+> > > I sent it earlier as two patches but it seemed to break and fix the
+> > > kernel which was not appreciated by one of the mentors
+> >
+> > OK, then it is a presentation problem.  You have presented the changes as
+> > unrelated.  Rewrite the message to make clear what is being done.
+> >
+> > julia
+> >
 
-Thanks for the explanation. I brought it up because the generic name 
-somehow felt weird in include/asm-generic/tlb.h. Skimming over the code 
-I'd have expected something like TLB_ENCODE_PAGE_BITS, so making the 
-"very generic" things "very specific" as long as it lives in tlb.h :)
+Hi Julia,
+I am having a hard time figuring out exactly how to write this, since
+I made both changes in one patch and there is no way to send them in
+separate patches. should I just report just one change and leave the
+other? I would appreciate your help here
+Thanks
 
--- 
-Thanks,
+tanju
 
-David / dhildenb
-
+> okay
+> > >
+> > > > >
+> > > > > Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+> > > > > ---
+> > > > >  drivers/staging/vt6655/rxtx.c | 48 ++++++++++++++++-------------------
+> > > > >  1 file changed, 22 insertions(+), 26 deletions(-)
+> > > > >
+> > > > > diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+> > > > > index 31ae99b3cb35..debc5d5daede 100644
+> > > > > --- a/drivers/staging/vt6655/rxtx.c
+> > > > > +++ b/drivers/staging/vt6655/rxtx.c
+> > > > > @@ -23,7 +23,7 @@
+> > > > >   *      s_uGetTxRsvTime- get frame reserved time
+> > > > >   *      s_vFillCTSHead- fulfill CTS ctl header
+> > > > >   *      s_vFillFragParameter- Set fragment ctl parameter.
+> > > > > - *      s_vFillRTSHead- fulfill RTS ctl header
+> > > > > + *      fill_rts_header- fulfill RTS ctl header
+> > > > >   *      s_vFillTxKey- fulfill tx encrypt key
+> > > > >   *      s_vSWencryption- Software encrypt header
+> > > > >   *      vDMA0_tx_80211- tx 802.11 frame via dma0
+> > > > > @@ -85,15 +85,15 @@ static const unsigned short fb_opt1[2][5] = {
+> > > > >  #define DATADUR_A_F1    13
+> > > > >
+> > > > >  /*---------------------  Static Functions  --------------------------*/
+> > > > > -static void s_vFillRTSHead(struct vnt_private *pDevice,
+> > > > > -                        unsigned char byPktType,
+> > > > > -                        void *pvRTS,
+> > > > > -                        unsigned int cbFrameLength,
+> > > > > -                        bool bNeedAck,
+> > > > > -                        bool bDisCRC,
+> > > > > -                        struct ieee80211_hdr *hdr,
+> > > > > -                        unsigned short wCurrentRate,
+> > > > > -                        unsigned char byFBOption);
+> > > > > +static void fill_rts_header(struct vnt_private *pDevice,
+> > > > > +                         unsigned char byPktType,
+> > > > > +                         void *pvRTS,
+> > > > > +                         unsigned int        cbFrameLength,
+> > > >
+> > > > Strange spacing in the above parameter declaration.  Maybe there is a tab
+> > > > that should be a space?
+> > > >
+> > > > julia
+> > > >
+> > >
+> > > I was also shocked when I noticed that. It seemed like a tab but when
+> > > I removed the space, the two words were joined and when I added the
+> > > space, it became this lage space once again. checkpatch does not
+> > > complain about it though
+> > >
+> > > > > +                         bool bNeedAck,
+> > > > > +                         bool bDisCRC,
+> > > > > +                         struct ieee80211_hdr *hdr,
+> > > > > +                         unsigned short wCurrentRate,
+> > > > > +                         unsigned char byFBOption);
+> > > > >
+> > > > >  static void s_vGenerateTxParameter(struct vnt_private *pDevice,
+> > > > >                                  unsigned char byPktType,
+> > > > > @@ -555,19 +555,15 @@ s_uFillDataHead(
+> > > > >       return buf->duration;
+> > > > >  }
+> > > > >
+> > > > > -static
+> > > > > -void
+> > > > > -s_vFillRTSHead(
+> > > > > -     struct vnt_private *pDevice,
+> > > > > -     unsigned char byPktType,
+> > > > > -     void *pvRTS,
+> > > > > -     unsigned int cbFrameLength,
+> > > > > -     bool bNeedAck,
+> > > > > -     bool bDisCRC,
+> > > > > -     struct ieee80211_hdr *hdr,
+> > > > > -     unsigned short wCurrentRate,
+> > > > > -     unsigned char byFBOption
+> > > > > -)
+> > > > > +static void fill_rts_header(struct vnt_private *pDevice,
+> > > > > +                         unsigned char byPktType,
+> > > > > +                         void *pvRTS,
+> > > > > +                         unsigned int cbFrameLength,
+> > > > > +                         bool bNeedAck,
+> > > > > +                         bool bDisCRC,
+> > > > > +                         struct ieee80211_hdr *hdr,
+> > > > > +                         unsigned short wCurrentRate,
+> > > > > +                         unsigned char byFBOption)
+> > > > >  {
+> > > > >       unsigned int uRTSFrameLen = 20;
+> > > > >
+> > > > > @@ -912,7 +908,7 @@ s_vGenerateTxParameter(
+> > > > >                       buf->rrv_time_a = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+> > > > >                       buf->rrv_time_b = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, pDevice->byTopCCKBasicRate, bNeedACK);
+> > > > >
+> > > > > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > > > > +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > > > >               } else {/* RTS_needless, PCF mode */
+> > > > >                       struct vnt_rrv_time_cts *buf = pvRrvTime;
+> > > > >
+> > > > > @@ -931,7 +927,7 @@ s_vGenerateTxParameter(
+> > > > >                       buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+> > > > >
+> > > > >                       /* Fill RTS */
+> > > > > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > > > > +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > > > >               } else if (!pvRTS) {/* RTS_needless, non PCF mode */
+> > > > >                       struct vnt_rrv_time_ab *buf = pvRrvTime;
+> > > > >
+> > > > > @@ -945,7 +941,7 @@ s_vGenerateTxParameter(
+> > > > >                       buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, wCurrentRate, bNeedACK);
+> > > > >
+> > > > >                       /* Fill RTS */
+> > > > > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > > > > +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > > > >               } else { /* RTS_needless, non PCF mode */
+> > > > >                       struct vnt_rrv_time_ab *buf = pvRrvTime;
+> > > > >
+> > > > > --
+> > > > > 2.34.1
+> > > > >
+> > > > >
+> > > > >
+> > >
+> >
