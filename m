@@ -2,137 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 534906174C3
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 04:10:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0B8F86174CE
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 04:14:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbiKCDKE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 23:10:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56016 "EHLO
+        id S231185AbiKCDN5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 23:13:57 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57118 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230353AbiKCDJr (ORCPT
+        with ESMTP id S231226AbiKCDNd (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 23:09:47 -0400
-Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AB0D14009
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 20:09:41 -0700 (PDT)
-Received: by mail-pl1-x62b.google.com with SMTP id y4so702215plb.2
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 20:09:41 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=BdWhTXBxXiysd2poPDnV59IYfoHF6Yvsi7EDbvrcVKE=;
-        b=gYbvK43L1DZqFx+ncvrgw/oZ6CiqmHTE5VXqD3ed95nY7yH3kULTt25HQtXLklnJaB
-         tgtwTvK906H+5ij8UMm2GcH5+gE1/axheql6d5qiYQXIUI7OkBd8aDXwPJ3pGNo+SzKI
-         6vjBAhPqgRSNZaaaGYlpjeAnJ8RLRoB4rW6cUWEjufDq7lP2SB2uv/PcMP5NoCcti8cU
-         94Wh1hJUdzBwdlUhPD50yHQArO9HJG77bepaWCd04enO5PUAu6rsZV2giYlMWRg8s6RA
-         PqbBmJ/bS4WQhFMgbyQboPxkvbpdkk/R/IeAv+lUTDBo8t/cdpyfmQVROOJyAgRYZjDP
-         7DQw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=BdWhTXBxXiysd2poPDnV59IYfoHF6Yvsi7EDbvrcVKE=;
-        b=8SVFoAyNH4U1g2mn1pj55onNRCfywUUOCeR6vBKOLDvMougJjmQxST31vSrAtGd8XQ
-         4mybaj45YKuq45tpDQern1+CW5JfuME9ShU1kC2vA8KcCjBK1g4tKf/Hs5odTag5W4i8
-         cDxJ2X/1Bdo8MXKCrYphNV85TQuFW+9j0aC4XfqjQiRLMgkuRjWW5Sv27eQp/kzVCdyp
-         zR+GXWwtAUyt4BBpVxnxkX48Q7Z1MKU9ih+GizDI7wZ8mRGi61NPIlYIon4H/6zSknLt
-         Wg2E9pwo/DCFkBnZY8WCxqafQ2d7nNmvw6YK7FOjXDxhYXpoSdWxXRIsGuxmSCUjBrwc
-         WlFA==
-X-Gm-Message-State: ACrzQf2Q+gTGUctNjgrsg85zh7fN65JrnxPlOMr9s97F1bcj3k4nUALz
-        bjLvIntSQCnLpbMuAshSS19PllrNb/LBlA==
-X-Google-Smtp-Source: AMsMyM7uSuuhKoGAPzmNJmbUvpb56rIIwES06581l3wkuah03l/sMXRHXkXz6UQjsGmmrvzxEbwaMA==
-X-Received: by 2002:a17:90b:3886:b0:213:5ccc:973b with SMTP id mu6-20020a17090b388600b002135ccc973bmr45301295pjb.193.1667444980508;
-        Wed, 02 Nov 2022 20:09:40 -0700 (PDT)
-Received: from localhost.localdomain (l3b2w1.cn. [159.138.1.25])
-        by smtp.gmail.com with ESMTPSA id q1-20020a17090a7a8100b0020d67a726easm2177563pjf.10.2022.11.02.20.09.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 20:09:40 -0700 (PDT)
-From:   Binglei Wang <l3b2w1@gmail.com>
-X-Google-Original-From: Binglei Wang
-To:     tj@kernel.org, jiangshanlai@gmail.com
-Cc:     linux-kernel@vger.kernel.org, Binglei Wang <l3b2w1@gmail.com>
-Subject: [PATCH] workqueue: make workers threads stick to HK_TYPE_KTHREAD cpumask
-Date:   Thu,  3 Nov 2022 11:09:33 +0800
-Message-Id: <20221103030933.840989-1-l3b2w1@gmail.com>
-X-Mailer: git-send-email 2.27.0
+        Wed, 2 Nov 2022 23:13:33 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B69C01035;
+        Wed,  2 Nov 2022 20:13:28 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N2pjs43DQzmVFC;
+        Thu,  3 Nov 2022 11:13:21 +0800 (CST)
+Received: from kwepemm600010.china.huawei.com (7.193.23.86) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 3 Nov 2022 11:13:26 +0800
+Received: from ubuntu1804.huawei.com (10.67.174.174) by
+ kwepemm600010.china.huawei.com (7.193.23.86) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 3 Nov 2022 11:13:25 +0800
+From:   Li Huafei <lihuafei1@huawei.com>
+To:     <rostedt@goodmis.org>
+CC:     <mhiramat@kernel.org>, <mark.rutland@arm.com>,
+        <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>, <lihuafei1@huawei.com>
+Subject: [PATCH v2] ftrace: Fix use-after-free for dynamic ftrace_ops
+Date:   Thu, 3 Nov 2022 11:10:10 +0800
+Message-ID: <20221103031010.166498-1-lihuafei1@huawei.com>
+X-Mailer: git-send-email 2.17.1
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-Originating-IP: [10.67.174.174]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600010.china.huawei.com (7.193.23.86)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Binglei Wang <l3b2w1@gmail.com>
+KASAN reported a use-after-free with ftrace ops [1]. It was found from
+vmcore that perf had registered two ops with the same content
+successively, both dynamic. After unregistering the second ops, a
+use-after-free occurred.
 
-When new worker thread created, set its affinity to HK_TYPE_KTHREAD
-cpumask.
-When hotplug cpu online, rebind workers's affinity to HK_TYPE_KTHREAD
-cpumask.
-Make workers threads stick to HK_TYPE_KTHREAD cpumask all the time.
+In ftrace_shutdown(), when the second ops is unregistered, the
+FTRACE_UPDATE_CALLS command is not set because there is another enabled
+ops with the same content.  Also, both ops are dynamic and the ftrace
+callback function is ftrace_ops_list_func, so the
+FTRACE_UPDATE_TRACE_FUNC command will not be set. Eventually the value
+of 'command' will be 0 and ftrace_shutdown() will skip the rcu
+synchronization.
 
-Signed-off-by: Binglei Wang <l3b2w1@gmail.com>
+However, ftrace may be activated. When the ops is released, another CPU
+may be accessing the ops.  Add the missing synchronization to fix this
+problem.
+
+[1]
+BUG: KASAN: use-after-free in __ftrace_ops_list_func kernel/trace/ftrace.c:7020 [inline]
+BUG: KASAN: use-after-free in ftrace_ops_list_func+0x2b0/0x31c kernel/trace/ftrace.c:7049
+Read of size 8 at addr ffff56551965bbc8 by task syz-executor.2/14468
+
+CPU: 1 PID: 14468 Comm: syz-executor.2 Not tainted 5.10.0 #7
+Hardware name: linux,dummy-virt (DT)
+Call trace:
+ dump_backtrace+0x0/0x40c arch/arm64/kernel/stacktrace.c:132
+ show_stack+0x30/0x40 arch/arm64/kernel/stacktrace.c:196
+ __dump_stack lib/dump_stack.c:77 [inline]
+ dump_stack+0x1b4/0x248 lib/dump_stack.c:118
+ print_address_description.constprop.0+0x28/0x48c mm/kasan/report.c:387
+ __kasan_report mm/kasan/report.c:547 [inline]
+ kasan_report+0x118/0x210 mm/kasan/report.c:564
+ check_memory_region_inline mm/kasan/generic.c:187 [inline]
+ __asan_load8+0x98/0xc0 mm/kasan/generic.c:253
+ __ftrace_ops_list_func kernel/trace/ftrace.c:7020 [inline]
+ ftrace_ops_list_func+0x2b0/0x31c kernel/trace/ftrace.c:7049
+ ftrace_graph_call+0x0/0x4
+ __might_sleep+0x8/0x100 include/linux/perf_event.h:1170
+ __might_fault mm/memory.c:5183 [inline]
+ __might_fault+0x58/0x70 mm/memory.c:5171
+ do_strncpy_from_user lib/strncpy_from_user.c:41 [inline]
+ strncpy_from_user+0x1f4/0x4b0 lib/strncpy_from_user.c:139
+ getname_flags+0xb0/0x31c fs/namei.c:149
+ getname+0x2c/0x40 fs/namei.c:209
+ [...]
+
+Allocated by task 14445:
+ kasan_save_stack+0x24/0x50 mm/kasan/common.c:48
+ kasan_set_track mm/kasan/common.c:56 [inline]
+ __kasan_kmalloc mm/kasan/common.c:479 [inline]
+ __kasan_kmalloc.constprop.0+0x110/0x13c mm/kasan/common.c:449
+ kasan_kmalloc+0xc/0x14 mm/kasan/common.c:493
+ kmem_cache_alloc_trace+0x440/0x924 mm/slub.c:2950
+ kmalloc include/linux/slab.h:563 [inline]
+ kzalloc include/linux/slab.h:675 [inline]
+ perf_event_alloc.part.0+0xb4/0x1350 kernel/events/core.c:11230
+ perf_event_alloc kernel/events/core.c:11733 [inline]
+ __do_sys_perf_event_open kernel/events/core.c:11831 [inline]
+ __se_sys_perf_event_open+0x550/0x15f4 kernel/events/core.c:11723
+ __arm64_sys_perf_event_open+0x6c/0x80 kernel/events/core.c:11723
+ [...]
+
+Freed by task 14445:
+ kasan_save_stack+0x24/0x50 mm/kasan/common.c:48
+ kasan_set_track+0x24/0x34 mm/kasan/common.c:56
+ kasan_set_free_info+0x20/0x40 mm/kasan/generic.c:358
+ __kasan_slab_free.part.0+0x11c/0x1b0 mm/kasan/common.c:437
+ __kasan_slab_free mm/kasan/common.c:445 [inline]
+ kasan_slab_free+0x2c/0x40 mm/kasan/common.c:446
+ slab_free_hook mm/slub.c:1569 [inline]
+ slab_free_freelist_hook mm/slub.c:1608 [inline]
+ slab_free mm/slub.c:3179 [inline]
+ kfree+0x12c/0xc10 mm/slub.c:4176
+ perf_event_alloc.part.0+0xa0c/0x1350 kernel/events/core.c:11434
+ perf_event_alloc kernel/events/core.c:11733 [inline]
+ __do_sys_perf_event_open kernel/events/core.c:11831 [inline]
+ __se_sys_perf_event_open+0x550/0x15f4 kernel/events/core.c:11723
+ [...]
+
+Fixes: edb096e00724f ("ftrace: Fix memleak when unregistering dynamic ops when tracing disabled")
+Cc: stable@vger.kernel.org
+Suggested-by: Steven Rostedt <rostedt@goodmis.org>
+Signed-off-by: Li Huafei <lihuafei1@huawei.com>
 ---
- kernel/workqueue.c | 14 ++++++++++++--
- 1 file changed, 12 insertions(+), 2 deletions(-)
+v1: https://lore.kernel.org/lkml/20221101064146.69551-1-lihuafei1@huawei.com/
 
-diff --git a/kernel/workqueue.c b/kernel/workqueue.c
-index 7cd5f5e7e..77b303f5e 100644
---- a/kernel/workqueue.c
-+++ b/kernel/workqueue.c
-@@ -1928,6 +1928,7 @@ static struct worker *create_worker(struct worker_pool *pool)
- 	struct worker *worker;
- 	int id;
- 	char id_buf[16];
-+	const struct cupmask *cpumask = NULL;
- 
- 	/* ID is needed to determine kthread name */
- 	id = ida_alloc(&pool->worker_ida, GFP_KERNEL);
-@@ -1952,7 +1953,10 @@ static struct worker *create_worker(struct worker_pool *pool)
- 		goto fail;
- 
- 	set_user_nice(worker->task, pool->attrs->nice);
--	kthread_bind_mask(worker->task, pool->attrs->cpumask);
-+
-+	if (housekeeping_enabled(HK_TYPE_KTHREAD))
-+		cpumask = housekeeping_cpumask(HK_TYPE_KTHREAD);
-+	kthread_bind_mask(worker->task, cpumask ? cpumask : pool->attrs->cpumask);
- 
- 	/* successful, attach the worker to the pool */
- 	worker_attach_to_pool(worker, pool);
-@@ -5027,20 +5031,26 @@ static void unbind_workers(int cpu)
- static void rebind_workers(struct worker_pool *pool)
- {
- 	struct worker *worker;
-+	const struct cpumask *cpumask = NULL;
- 
- 	lockdep_assert_held(&wq_pool_attach_mutex);
- 
-+	if (housekeeping_enabled(HK_TYPE_KTHREAD))
-+		cpumask = housekeeping_cpumask(HK_TYPE_KTHREAD);
-+
- 	/*
- 	 * Restore CPU affinity of all workers.  As all idle workers should
- 	 * be on the run-queue of the associated CPU before any local
- 	 * wake-ups for concurrency management happen, restore CPU affinity
- 	 * of all workers first and then clear UNBOUND.  As we're called
- 	 * from CPU_ONLINE, the following shouldn't fail.
-+	 *
-+	 * Also consider the housekeeping HK_TYPE_KTHREAD cpumask.
- 	 */
- 	for_each_pool_worker(worker, pool) {
- 		kthread_set_per_cpu(worker->task, pool->cpu);
- 		WARN_ON_ONCE(set_cpus_allowed_ptr(worker->task,
--						  pool->attrs->cpumask) < 0);
-+						  cpumask ? cpumask : pool->attrs->cpumask) < 0);
+Changlog in v1 -> v2:
+ - Cc the stable list as suggested by Masami. I did not add Masami's
+   Review-by due to some differences from v1. If the new changes are
+   still okay, please let me know. Thanks to Masami!
+ - Add Fixes tag as suggested by Steve.
+ - Remove the 'ftrace_enabled' check.
+
+ kernel/trace/ftrace.c | 16 +++-------------
+ 1 file changed, 3 insertions(+), 13 deletions(-)
+
+diff --git a/kernel/trace/ftrace.c b/kernel/trace/ftrace.c
+index fbf2543111c0..7dc023641bf1 100644
+--- a/kernel/trace/ftrace.c
++++ b/kernel/trace/ftrace.c
+@@ -3028,18 +3028,8 @@ int ftrace_shutdown(struct ftrace_ops *ops, int command)
+ 		command |= FTRACE_UPDATE_TRACE_FUNC;
  	}
  
- 	raw_spin_lock_irq(&pool->lock);
+-	if (!command || !ftrace_enabled) {
+-		/*
+-		 * If these are dynamic or per_cpu ops, they still
+-		 * need their data freed. Since, function tracing is
+-		 * not currently active, we can just free them
+-		 * without synchronizing all CPUs.
+-		 */
+-		if (ops->flags & FTRACE_OPS_FL_DYNAMIC)
+-			goto free_ops;
+-
+-		return 0;
+-	}
++	if (!command || !ftrace_enabled)
++		goto out;
+ 
+ 	/*
+ 	 * If the ops uses a trampoline, then it needs to be
+@@ -3076,6 +3066,7 @@ int ftrace_shutdown(struct ftrace_ops *ops, int command)
+ 	removed_ops = NULL;
+ 	ops->flags &= ~FTRACE_OPS_FL_REMOVING;
+ 
++out:
+ 	/*
+ 	 * Dynamic ops may be freed, we must make sure that all
+ 	 * callers are done before leaving this function.
+@@ -3103,7 +3094,6 @@ int ftrace_shutdown(struct ftrace_ops *ops, int command)
+ 		if (IS_ENABLED(CONFIG_PREEMPTION))
+ 			synchronize_rcu_tasks();
+ 
+- free_ops:
+ 		ftrace_trampoline_free(ops);
+ 	}
+ 
 -- 
-2.27.0
+2.17.1
 
