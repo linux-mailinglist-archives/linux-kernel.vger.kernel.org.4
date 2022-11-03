@@ -2,130 +2,189 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9393061823D
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:18:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 049DF618249
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:18:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232063AbiKCPSF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 11:18:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58360 "EHLO
+        id S232055AbiKCPSU (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 11:18:20 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58488 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230377AbiKCPSD (ORCPT
+        with ESMTP id S231991AbiKCPSR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 11:18:03 -0400
-Received: from mail-qv1-xf29.google.com (mail-qv1-xf29.google.com [IPv6:2607:f8b0:4864:20::f29])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B8D731759F
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:18:02 -0700 (PDT)
-Received: by mail-qv1-xf29.google.com with SMTP id i12so1335901qvs.2
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 08:18:02 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=cmpxchg-org.20210112.gappssmtp.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1Y91EMmWkKaDNLHulFaIVLlw/0EjJtCCjHihzz5PhWk=;
-        b=PccX6QjizeOvlnpoTObOI84VoFlp0uZB37fB7rBt93+yxAolIIErLnWuBNu4i0hxwg
-         dPVH6YwiBblIu/66nxf0sR77eazM57ZGbKjYGBmrS4mRy3K3NaTeWNq+c0aptUG/DjDD
-         DyqUVvJIRrE/Ag34h5nuo6Ra/NFHTK730c1F7k2HlhR1NUZWflyGwtN2ciIT1kSS5VaJ
-         l5OyLyfUqPVv0dEaBAF4/cPhru2PuwuMxMknIKL7k+SN4uvNRVG8Po0/N2cHlC0IDxWO
-         Dr8ZqnSY5fryvhMDwPsW/P3OPvQ+jXM5EKNUnmno5pgAElKzQx4TzFUtVa9efERk/5+J
-         MKwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1Y91EMmWkKaDNLHulFaIVLlw/0EjJtCCjHihzz5PhWk=;
-        b=fbWqHaFRHThfiOo0qRkVYVgdWSaYTQMCiISQBuS/6ycJoJF4IwuVSfCgqGF6kT0Ips
-         nXHpAv+oDsS1IEKSkMswaa3pEXwEfg6n4B50EU6dNpXyDreI6+ndHGbdYdLt3XIK3PIc
-         rhvajgdF1driTSuN8k6dg1riU4Ls4wpOoADdB5PtYEZ4J2wKnAMKlAzFqLLqTf3iO0Iu
-         +aL1VAMAaT9JXAM/9rmQOsAUpNQhI2GChYezIwNiyyHd1i7scER2j2BizAfaCRe+Q2TT
-         TcRV8fpIKsOrYE9IMDwlmIuWfoyAsunNMr3dyDebJGpbU/RRWi+o8lUNkOcIoDORO+f/
-         cdzQ==
-X-Gm-Message-State: ACrzQf1GncV3IIRTjJI99Vekoa+/81dCQqYPQshamCyi3M7G8cT3xNRl
-        MmCO5gy4iark56HXBZVu7yS2XQ==
-X-Google-Smtp-Source: AMsMyM7JB/Ih4o4p/NED8dCLrDKvYU2z10bZku6KhZ0Ar6O6VgXOvhFZQiWItlhqzX+Q37kYlFpJHg==
-X-Received: by 2002:a05:6214:3016:b0:4bb:9e66:1100 with SMTP id ke22-20020a056214301600b004bb9e661100mr27182644qvb.23.1667488681877;
-        Thu, 03 Nov 2022 08:18:01 -0700 (PDT)
-Received: from localhost ([2620:10d:c091:480::25f1])
-        by smtp.gmail.com with ESMTPSA id bk14-20020a05620a1a0e00b006f3e6933bacsm881844qkb.113.2022.11.03.08.18.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 08:18:01 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 11:18:04 -0400
-From:   Johannes Weiner <hannes@cmpxchg.org>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Nhat Pham <nphamcs@gmail.com>, akpm@linux-foundation.org,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        ngupta@vflare.org, sjenning@redhat.com, ddstreet@ieee.org,
-        vitaly.wool@konsulko.com
-Subject: Re: [PATCH 2/5] zsmalloc: Consolidate zs_pool's migrate_lock and
- size_class's locks
-Message-ID: <Y2PbrOqRMLDsYev0@cmpxchg.org>
-References: <20221026200613.1031261-1-nphamcs@gmail.com>
- <20221026200613.1031261-3-nphamcs@gmail.com>
- <Y2Hj+H4VzlN/fcmR@google.com>
- <Y2Li412OGB6g8ARA@google.com>
+        Thu, 3 Nov 2022 11:18:17 -0400
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A6A1193CD
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:18:16 -0700 (PDT)
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20221103151814euoutp01bfc5ce2880b43f3aca1fed76acaa0fb1~kHCH0mPQr3243132431euoutp01x
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 15:18:14 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20221103151814euoutp01bfc5ce2880b43f3aca1fed76acaa0fb1~kHCH0mPQr3243132431euoutp01x
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1667488694;
+        bh=rbUMn6HqqS28Y3UuFN/O9DUfkW3PyC6du2nvuOus6QI=;
+        h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+        b=kfC2PtOwv7WPM5S8+tPZwGDD1OvE+/JozBYn+1hhgvwTuWH4UVDiXmkvzol6emS08
+         D5+ZXYcNrkuzoh5rSj9YH/VgeugNTIrvqK/cn+sr5n3XsbuZAOByw5mFuBmlEy9uAQ
+         7aKv20s6ckxxn5tikEVqOyMpVewQzXYlYtR0Mw1I=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+        20221103151813eucas1p16cbb9fafd44f569dc22b07dfdb65a8d9~kHCHY8P2o2075520755eucas1p1s;
+        Thu,  3 Nov 2022 15:18:13 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+        eusmges1new.samsung.com (EUCPMTA) with SMTP id AF.8B.29727.5BBD3636; Thu,  3
+        Nov 2022 15:18:13 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+        eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20221103151813eucas1p23d0fcda856fb48133a8a724f835b6665~kHCHANL7o1831318313eucas1p2P;
+        Thu,  3 Nov 2022 15:18:13 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+        eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221103151813eusmtrp161e2d75364bb8d19ebb5ed0ecbd8b543~kHCG-apS70504605046eusmtrp1J;
+        Thu,  3 Nov 2022 15:18:13 +0000 (GMT)
+X-AuditID: cbfec7f2-205ff7000001741f-78-6363dbb58b96
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+        eusmgms1.samsung.com (EUCPMTA) with SMTP id 90.E1.07473.5BBD3636; Thu,  3
+        Nov 2022 15:18:13 +0000 (GMT)
+Received: from [106.210.134.192] (unknown [106.210.134.192]) by
+        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+        20221103151812eusmtip23de54a39b28d6be6dda5601291548f1f~kHCGaHvPd2294822948eusmtip2W;
+        Thu,  3 Nov 2022 15:18:12 +0000 (GMT)
+Message-ID: <53e543e8-f895-d4f1-da94-d0baca528e79@samsung.com>
+Date:   Thu, 3 Nov 2022 16:18:12 +0100
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2Li412OGB6g8ARA@google.com>
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0)
+        Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH stable-5.15 3/3] usb: dwc3: disable USB core PHY
+ management
+Content-Language: en-US
+To:     Johan Hovold <johan@kernel.org>, Stefan Agner <stefan@agner.ch>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        stable <stable@kernel.org>, regressions@lists.linux.dev,
+        krzk@kernel.org
+From:   Marek Szyprowski <m.szyprowski@samsung.com>
+In-Reply-To: <Y2PVF/IJoKvSu3SM@hovoldconsulting.com>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFtrAKsWRmVeSWpSXmKPExsWy7djPc7pbbycnG2z9rWrRvHg9m8WKSoum
+        Gz2sFufPb2C3uLxrDpvF5w2PGS02vu1gt/h0/gKbxYKNjxgtNq9rZ3fg8lj8/R6zx+yGiywe
+        m1Z1snnsn7uG3ePF5pmMHp83yQWwRXHZpKTmZJalFunbJXBl9B74zFawQ7Ri6WzzBsa9/F2M
+        nBwSAiYSu5atZO5i5OIQEljBKHFqzwRGCOcLo8SehglQmc+MEhMaFrDAtDTdeAtVtZxRYtGE
+        oywQzkdGiQM73zOBVPEK2El8vrkTqJ2Dg0VAReL33UqIsKDEyZlPwAaJCqRI7O7eBmYLCwRK
+        TNr/CqyVWUBc4taT+WC2iICzxNVlZ8GuYBZoZ5LY/mgeI0iCTcBQouttFxuIzQl00Yqd1xkh
+        muUltr+dA9YgIfCDQ6LlyU1WiLNdJKZcaoR6QVji1fEt7BC2jMTpyT0sEA3tjBILft9ngnAm
+        MEo0PL/FCFFlLXHn3C82kHeYBTQl1u/Shwg7Skz5OosdJCwhwCdx460gxBF8EpO2TWeGCPNK
+        dLQJQVSrScw6vg5u7cELl5gnMCrNQgqXWUj+n4XknVkIexcwsqxiFE8tLc5NTy02zEst1ytO
+        zC0uzUvXS87P3cQITFSn/x3/tINx7quPeocYmTgYDzFKcDArifB+2pacLMSbklhZlVqUH19U
+        mpNafIhRmoNFSZyXbYZWspBAemJJanZqakFqEUyWiYNTqoFJ+q5m1Avn3ye3Xng99UzN1eB/
+        17nvKEmfifVxFSy/4qzLvUgoL1FLWiSE40pHu9hOI5WmrxlSHOntDPx/Ju4L6lL49Ed19QXz
+        LR4ZzSdT2rZe+fbo9jG/tCfffuhr/oz89K/kdarHxfldCfdio3yrFpYI9m4ofDuxapJkd+cf
+        tfDf4p2y7h+m7lwaXLBF5Wrig10rUm7IrBDyjb9oNuNTv+HNGwfddV3FYr5N/aq2Tit5wheT
+        xQ8b8tx8fDkcjFSEwyN0VaaFz3NV61MNmbvvMku2hMYO9YUnWA/JVZ1/3bGDff5Sg1en/s5O
+        CL+xM89WZsGWpWtjDm1c8GBmS3/LWpnP2q6LPuhkijwS0ZZRYinOSDTUYi4qTgQAEHyKo8MD
+        AAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrAIsWRmVeSWpSXmKPExsVy+t/xe7pbbycnG6w+ymPRvHg9m8WKSoum
+        Gz2sFufPb2C3uLxrDpvF5w2PGS02vu1gt/h0/gKbxYKNjxgtNq9rZ3fg8lj8/R6zx+yGiywe
+        m1Z1snnsn7uG3ePF5pmMHp83yQWwRenZFOWXlqQqZOQXl9gqRRtaGOkZWlroGZlY6hkam8da
+        GZkq6dvZpKTmZJalFunbJehl9B74zFawQ7Ri6WzzBsa9/F2MnBwSAiYSTTfeMoLYQgJLGSWa
+        HotAxGUkTk5rYIWwhSX+XOti62LkAqp5zyhx43MfG0iCV8BO4vPNncxdjBwcLAIqEr/vVkKE
+        BSVOznzCAhIWFUiR+HauDiQsLBAoMWn/KyYQm1lAXOLWk/lgtoiAs8TVZWeZQcYzC7QzSTx+
+        toIFYtdzZol//5+AHcEmYCjR9bYLbC8n0NErdl5nhJhkJtG1tQvKlpfY/nYO8wRGoVlI7piF
+        ZOEsJC2zkLQsYGRZxSiSWlqcm55bbKhXnJhbXJqXrpecn7uJERiV24793LyDcd6rj3qHGJk4
+        GA8xSnAwK4nwftqWnCzEm5JYWZValB9fVJqTWnyI0RQYFhOZpUST84FpIa8k3tDMwNTQxMzS
+        wNTSzFhJnNezoCNRSCA9sSQ1OzW1ILUIpo+Jg1Oqganhw/2JdrPurvjbyN0yteIkR2eeXJv6
+        79ryPdVLrBu35AuInC46VbVkvsDOi1+PdBx2YN8+60jdo3khstPKd85+KjHPW1NiUePZ0HUG
+        3zafZxbLfZpyObfUz2Xu5BdVOVPWzLlwJk9RMTvuAmPmum7PuRv0r2nx+Z5WaV0xWWAJp/b0
+        1BmlMg+qVsTrbjrHfmfNzwszKt49buBRzjyw/OFvyZMffiX2hSQssNnf9ZpryqaM7/bFQTG5
+        v/jPzlLtn/F7wuzpE5a1n3Rs7t42bdn/q0smVGspb6v497thqonzsnM6O2INz814tveSpH2H
+        qNvZjUWzp/ceO//j0Wvv2nVhf/wrvz7pi2PfzfaiqabrvhJLcUaioRZzUXEiAEaY6SVTAwAA
+X-CMS-MailID: 20221103151813eucas1p23d0fcda856fb48133a8a724f835b6665
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20221103145022eucas1p2218e78d51500c85b3cda59cc533a3631
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20221103145022eucas1p2218e78d51500c85b3cda59cc533a3631
+References: <20220906120702.19219-1-johan@kernel.org>
+        <20220906120702.19219-4-johan@kernel.org>
+        <808bdba846bb60456adf10a3016911ee@agner.ch>
+        <Y0+8dKESygFunXOu@hovoldconsulting.com>
+        <86c0f1ee8ffc94f9a53690dda6a83fbb@agner.ch>
+        <Y1JCIKT80P9IysKD@hovoldconsulting.com>
+        <b2a1e70bda64cb741efe81c5b7e56707@agner.ch>
+        <Y1p9Wy9w5umMBC4V@hovoldconsulting.com>
+        <CGME20221103145022eucas1p2218e78d51500c85b3cda59cc533a3631@eucas1p2.samsung.com>
+        <Y2PVF/IJoKvSu3SM@hovoldconsulting.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_HI,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 02:36:35PM -0700, Minchan Kim wrote:
-> On Wed, Nov 02, 2022 at 12:28:56PM +0900, Sergey Senozhatsky wrote:
-> > On (22/10/26 13:06), Nhat Pham wrote:
-> > >  struct size_class {
-> > > -	spinlock_t lock;
-> > >  	struct list_head fullness_list[NR_ZS_FULLNESS];
-> > >  	/*
-> > >  	 * Size of objects stored in this class. Must be multiple
-> > > @@ -247,8 +245,7 @@ struct zs_pool {
-> > >  #ifdef CONFIG_COMPACTION
-> > >  	struct work_struct free_work;
-> > >  #endif
-> > > -	/* protect page/zspage migration */
-> > > -	rwlock_t migrate_lock;
-> > > +	spinlock_t lock;
-> > >  };
-> > 
-> > I'm not in love with this, to be honest. One big pool lock instead
-> > of 255 per-class locks doesn't look attractive, as one big pool lock
-> > is going to be hammered quite a lot when zram is used, e.g. as a regular
-> > block device with a file system and is under heavy parallel writes/reads.
+Hi Johan,
 
-TBH the class always struck me as an odd scope to split the lock. Lock
-contention depends on how variable the compression rate is of the
-hottest incoming data, which is unpredictable from a user POV.
+On 03.11.2022 15:49, Johan Hovold wrote:
+> On Thu, Oct 27, 2022 at 02:45:15PM +0200, Johan Hovold wrote:
+>> On Wed, Oct 26, 2022 at 03:11:00PM +0200, Stefan Agner wrote:
+>>> The user reports the S-ATA disk is *not* recognized with that patch
+>>> applied.
+>> I just noticed a mistake in the instrumentation patch I sent you. Could
+>> you try moving the calibrations calls after dwc3_host_init() (e.g. as in
+>> the second chunk in the diff below)?
+>>
+>> As mentioned in the commit message for a0a465569b45 ("usb: dwc3: remove
+>> generic PHY calibrate() calls"), this may not work if the xhci-plat
+>> driver is built as a module and there are some corner cases that it does
+>> not cover.
+>>
+>> It seems we should revert the offending commit and then try to find some
+>> time to untangle this mess, but please check if the below addresses the
+>> issue first so we know what the problem is.
+>>
+>> I'll prepare a revert in the meantime.
+> I've now posted the revert, but please do check if the below patch was
+> enough to resolve the immediate issue.
 
-My understanding is that the primary usecase for zram is swapping, and
-the pool lock is the same granularity as the swap locking.
+The below patch was a half-fix. It worked only if both dwc3 and 
+xhci_plat_hcd were compiled into the kernel. Afair Debian-based distros 
+used xhci compiled as a module, so this didn't work for that case due to 
+timing issues.
 
-Regardless, we'll do some benchmarks with filesystems to understand
-what a reasonable tradeoff would be between overhead and complexity.
-Do you have a particular one in mind? (I'm thinking journaled ones are
-not of much interest, since their IO tends to be fairly serialized.)
 
-btrfs?
+>
+> Johan
+>
+>> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+>> index 31156d4dec9f..37d49a394912 100644
+>> --- a/drivers/usb/dwc3/core.c
+>> +++ b/drivers/usb/dwc3/core.c
+>> @@ -197,6 +197,8 @@ static void __dwc3_set_mode(struct work_struct *work)
+>>                                  otg_set_vbus(dwc->usb2_phy->otg, true);
+>>                          phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
+>>                          phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
+>> +                       phy_calibrate(dwc->usb2_generic_phy);
+>> +                       phy_calibrate(dwc->usb3_generic_phy);
+>>                          if (dwc->dis_split_quirk) {
+>>                                  reg = dwc3_readl(dwc->regs, DWC3_GUCTL3);
+>>                                  reg |= DWC3_GUCTL3_SPLITDISABLE;
+>> @@ -1391,6 +1393,9 @@ static int dwc3_core_init_mode(struct dwc3 *dwc)
+>>                  ret = dwc3_host_init(dwc);
+>>                  if (ret)
+>>                          return dev_err_probe(dev, ret, "failed to initialize host\n");
+>> +
+>> +               phy_calibrate(dwc->usb2_generic_phy);
+>> +               phy_calibrate(dwc->usb3_generic_phy);
+>>                  break;
+>>          case USB_DR_MODE_OTG:
+>>                  INIT_WORK(&dwc->drd_work, __dwc3_set_mode);
 
-> I am also worry about that LRU stuff should be part of allocator
-> instead of higher level.
+Best regards
+-- 
+Marek Szyprowski, PhD
+Samsung R&D Institute Poland
 
-I'm sorry, but that's not a reasonable objection.
-
-These patches implement a core feature of being a zswap backend, using
-standard LRU and locking techniques established by the other backends.
-
-I don't disagree that it would nicer if zswap had a strong abstraction
-for backend pages and a generalized LRU. But that is major surgery on
-a codebase of over 6,500 lines. It's not a reasonable ask to change
-all that first before implementing a basic feature that's useful now.
-
-I get that your main interest is zram, and so this feature isn't of
-interest to you. But zram isn't the only user, nor is it the primary
-user, of zsmalloc.
