@@ -2,224 +2,151 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 31956617420
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 03:18:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D418617421
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 03:19:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230520AbiKCCSq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 22:18:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56188 "EHLO
+        id S230449AbiKCCTf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 22:19:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57260 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiKCCS2 (ORCPT
+        with ESMTP id S229436AbiKCCTb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 22:18:28 -0400
-Received: from mga18.intel.com (mga18.intel.com [134.134.136.126])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 119BE13D48;
-        Wed,  2 Nov 2022 19:18:27 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667441907; x=1698977907;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=aEiHMG/t7yyno42B1YTG/JN48w91eX/H9maLsZ24Sp0=;
-  b=mMsfE7DPPMYcfi/Ii0kcUlolsfkUNNfdpDmA7EcRKiHEqsMbCdeVtIRk
-   Qs5CyXpnBkA+g4c0G+x9fNEu1vWUsI+KTzOrr8z1OZz/DMq0WfHO+gKcz
-   mdEZ75Y2AE4aUxEYeyqsGTU6FpnZ+WdR3jBbPoVBp1AcyA58dVZwMkSjs
-   UB3PQfdysXnrfSdgMTzZMlsBsSmohnLAtn1BeKgdZtH2AHPxO6wsv9TPY
-   NhcRZKWd2tVPfq77Qol0XDRGQZUdWXPFZfJHQ2b2GXkeCJ75rrHeEHVvU
-   Rfh+HEb7GDuHamdtXYPnlkaA183sJycUDR+Vv8rYICq0j7o7a6krxEExc
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="292886417"
-X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
-   d="scan'208";a="292886417"
-Received: from orsmga003.jf.intel.com ([10.7.209.27])
-  by orsmga106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 19:18:24 -0700
-X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="585619408"
-X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
-   d="scan'208";a="585619408"
-Received: from linux.intel.com ([10.54.29.200])
-  by orsmga003.jf.intel.com with ESMTP; 02 Nov 2022 19:18:24 -0700
-Received: from debox1-desk4.intel.com (unknown [10.212.195.54])
-        by linux.intel.com (Postfix) with ESMTP id B46F4580DBD;
-        Wed,  2 Nov 2022 19:18:23 -0700 (PDT)
-From:   "David E. Box" <david.e.box@linux.intel.com>
-To:     nirmal.patel@linux.intel.com, jonathan.derrick@linux.dev,
-        lorenzo.pieralisi@arm.com, hch@infradead.org, kw@linux.com,
-        robh@kernel.org, bhelgaas@google.com, david.e.box@linux.intel.com,
-        michael.a.bottini@intel.com, rafael@kernel.org, me@adhityamohan.in
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH V8 4/4] PCI: vmd: Add quirk to configure PCIe ASPM and LTR
-Date:   Wed,  2 Nov 2022 19:18:22 -0700
-Message-Id: <20221103021822.308586-5-david.e.box@linux.intel.com>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221103021822.308586-1-david.e.box@linux.intel.com>
-References: <20221103021822.308586-1-david.e.box@linux.intel.com>
-MIME-Version: 1.0
+        Wed, 2 Nov 2022 22:19:31 -0400
+Received: from AUS01-ME3-obe.outbound.protection.outlook.com (mail-me3aus01olkn2158.outbound.protection.outlook.com [40.92.63.158])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9EA72E81
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 19:19:30 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=agcA5GtaCmmnf/YuFNSqeNKtapEcZsGrYEUv6p3uBYCfDpmZ9njiqsB4+8a3oAnloYUJP2mu5psiCOwvO9btdceF7V0Eg1uAEi/hy5ZkZ5vi+rr8WnW2bk7JGX0sLqSWAdJWtygjKoQ4nbDo1LOVlXrQSi5uC7y96s7O7Pt0tPvAdfEfMFkcxqJf6XG0u/rmS48B7vWHZoZ8gD0cbrpmwxjrfCwmGouTVqxNJOS3PfyTVZROaFDUI0wTc4s/Em43eh1PZKqAz+tzaVVLNClJ9Ow3qvDpSe/bwYKcTtwxCJFtPROuuuTaHrKVMmZj7IA8sf2oM3jNSJFwySqyzrWujQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=b4zbF4xJ11BqP0i2f8tk+o7TGuST9k/dTH0bwJRGXcA=;
+ b=VaAtz4YJ+T/vsm+eQNaXNgkapr4RQ+Xon1NcfmeblrMdxFtTzAm/dVfor/MfCU3bSPjlrTgG6q8eBcO43SRz7b2aNLyg8j1qSVPXBeZvd79HQla1q50kC2IuDJyQq0myGzwJp4Cyx6jcEmJl2Zfky8MDOAGvUq9GCnWjaI6fOWVHSpx2OWxm9e7nS731FbA9q7qRCh40hUEb7hTcsQPxM0+893ljeqv3ASK/wFVYywN6YCOdeFaabry8z6JNDELFdLksUFt8OgqnyusZTImyXf76r+TLcxI7+IMsavolmGSu0XaiuOAWg3/TxeCqviDCN0CFrUCg2d8DZ+WW7SaafA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=b4zbF4xJ11BqP0i2f8tk+o7TGuST9k/dTH0bwJRGXcA=;
+ b=S/7wk97XhV0kJSxqYnbzLZydQxNO2goO2mpc9fVIbTbfNQFkV3b0vHDYqJYEPiKH1Od/95ps0NGK0u0BYnm/eCRc8Op4Ntzda1OLExtzbGKYglYFOt2cnMIf4iK1Z2Nwqh7CCbogUe2NSV2NLMkQ/Q5mnipU1NmSeGWSGycKV1guNhO4Sx5L0c6TuK68JyfKFmFcvLMRsLmQ3BUID0kvNozP4Bp53Y/WMkq1H/4VGq004hG96hx4aBKUzyNLEghw7ToGJK368oMyIAxbhjzbee3W5dAS86SN189lp+eFWm7hmcCs1BuLJIdGKTjEGsyUxm7le9DlDmoqWRT+Ia1XYA==
+Received: from MEYP282MB4026.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:172::10)
+ by SY4P282MB2058.AUSP282.PROD.OUTLOOK.COM (2603:10c6:10:c9::11) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.21; Thu, 3 Nov
+ 2022 02:19:26 +0000
+Received: from MEYP282MB4026.AUSP282.PROD.OUTLOOK.COM
+ ([fe80::8e6c:7cd7:be5d:66da]) by MEYP282MB4026.AUSP282.PROD.OUTLOOK.COM
+ ([fe80::8e6c:7cd7:be5d:66da%6]) with mapi id 15.20.5769.021; Thu, 3 Nov 2022
+ 02:19:26 +0000
+From:   johnnyaiai <arafatms@outlook.com>
+To:     akpm@linux-foudation.org
+Cc:     mcgrof@kernel.org, wuchi.zero@gmail.com, liaohua4@huawei.com,
+        linux-kernel@vger.kernel.org, johnnyaiai <johnnyaiai@tencent.com>
+Subject: [PATCH] latencytop: Remove clear operations from copy_process
+Date:   Thu,  3 Nov 2022 10:18:38 +0800
+Message-ID: <MEYP282MB4026EFAAF1DEBD5EE8EBE072C3389@MEYP282MB4026.AUSP282.PROD.OUTLOOK.COM>
+X-Mailer: git-send-email 2.27.0
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-3.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain
+X-TMN:  [YsMGbl9h/oUSE0UIQEPnU8QUFBXsqQ4Z]
+X-ClientProxiedBy: SGBP274CA0002.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::14)
+ To MEYP282MB4026.AUSP282.PROD.OUTLOOK.COM (2603:10c6:220:172::10)
+X-Microsoft-Original-Message-ID: <20221103021838.3153043-1-arafatms@outlook.com>
+MIME-Version: 1.0
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MEYP282MB4026:EE_|SY4P282MB2058:EE_
+X-MS-Office365-Filtering-Correlation-Id: 8ca14112-f105-4ade-8c61-08dabd41d46e
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: mWpSf8kDLYdk2lh6rgwtyYorONpJbsrB/Y1jwDgdJ1pIzPdGbQjVwFS4V/bakH7mSkYF4JqzQnhGJhOFpcbRSraO1Z49CcnnpdElsEgI8HKYsHQknyE4ZFaR+BBVs6iIQ0zaaTEiQ3eb33wbJoLWLhBqQOQ1lSlH3xv7QcWoZzqrbdlXH/TpYT+e8A9M1fbvjzoYx0Br0ewE4Rzf6BM8Z44uQMMGyeetHb1gy+dHfr2FCrwCWWhOga6dNljgvKuD/DLl7ZzZZwvnXwqxchS7+mgbdGnPgBdpQFlFSI5jXcC7RxG6fUwKpMZ6rcWBUALTpRlLq9uGaX4D7aM5SnfIL8F8amzjbMkVg8SZg4b2FvLH6txQnKVnX6sVKP+ptG6aqP43JpawsY+9hYBY/f/PBlWqP21oamUBQUqBsjW7l26DMIaaqcfRqaX+vcXahbh594MUWz1LwyS0r1e7gGVcYlvKq+puiLY1PNG9w34g7v/Pn0I1mmC8UwF+/NOk8KiQp/mV9Jo8l3eOOgmS7JSdoLI2OQrE+V7r6S81fJfDk+Ue/p837uP8aJkFIuT6xblP7YTlJHCHzcXmb6s/bBfu1/zfV2SETbAM941HWmWk6H3JRitQ2tcIN+SDy/5gQwsYQ1CYpUuazn+ARBqxx6Zx8w==
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?kv/u4Ey6SlKjFOfFivgZvqwZl9yCahNhj9NlpgQkZRXwthkb1SoUODLB151w?=
+ =?us-ascii?Q?wIKcxfH262k2p2357iZa63bOpkdSGC7fxl3X+kcZg3GHNJRLQ04d2t9FufWa?=
+ =?us-ascii?Q?MtxxRVFAW/V4giy3KO+/WY17WtfGhQkYnpXWYNI847UvOUC9hhTZza9mMQxs?=
+ =?us-ascii?Q?imFR7flmW/f1ilIxIiyGrootffAk03p5vMJq0NAkmpcFs1fCIMLzy08fwqJg?=
+ =?us-ascii?Q?iK8ZKu58K0PuK8jNEY6NLMZgu5wE0kSqr4XsvYhhl7m0baQYHkwHrYtJiTDy?=
+ =?us-ascii?Q?/eg0GtqcW0/TGcqbZNpVK/pE+NuBUVsT4cy3u72VI7zEvoxZ0vEeD9DMWFkd?=
+ =?us-ascii?Q?9rH/rlGXrQPBKENy5QbNJ/tYI32HhISraC0lb+qxZk2f466vqvNecjR8rJ2W?=
+ =?us-ascii?Q?Tog4492mjf6TfuiRVIZwT9ALJ5Xz0VsBmxNmgo3zhrrYe8GISb03DkQVMkom?=
+ =?us-ascii?Q?WRpJFBbWfybVXRNNffvo4VdPdgDqhzp5yO9XWpCnd8FvGq+kuOUdCiV9GHtb?=
+ =?us-ascii?Q?KnMSU7S7UTDs/92B+SisUmuReojT9Iue1EL+BGMc9RNdppf/0UeAcwUrwqN1?=
+ =?us-ascii?Q?Jz4PlDmzZMjyM9Ft8+RyfpuQBuPPzZjcXhWdLcIova85c3SJn3/1msxjnKkk?=
+ =?us-ascii?Q?4WOa9d7CWxuQ2XhV1SQ/eBkutbpskgOuzRHunodjAEpGx4VsH45K3bRGOOYc?=
+ =?us-ascii?Q?eH+m/2QrTnULm1n+jgEInIW9JzJyh/5nsFLrzxWv2c40n7chhZ9Mp0zER4O3?=
+ =?us-ascii?Q?Uh5iwBOrKwmOshNc32KRWnr2+mrweX4Ke3HfLUNBmfOm36lq1tzPUao/b3Et?=
+ =?us-ascii?Q?qtZUKE/R1IlETntJMhfkuFjZJ3YHto4PJQH81Y19d5UhZUGa8Xw5ADGlI+0/?=
+ =?us-ascii?Q?/JIuTUEps6AnRGWXEUc6fc60SCir2t3vvhUGWmqSeRZW0DB0jLi3P7FWWLUa?=
+ =?us-ascii?Q?zwwCOAEK4kuSPNDjYCtZ4+IWqNzSgWz9shjREjx6nBL54IMJK/fPQd5/Q/XM?=
+ =?us-ascii?Q?BlZBekGJjwteYas8x3JeZfgypV6C0sGYeINUFz/nNgk3sn9eszua7NYwjm2t?=
+ =?us-ascii?Q?PXsO3fHnQWWZXyOd+o8eEuuM1odjqw8PQso8nO5kh2fu01GuXQugUeir9s2G?=
+ =?us-ascii?Q?EstLiPAhlr1kHMObw4mnRD2CQLscoTtLJmY+sSdjByMLZcAfwPUkwmgV97qp?=
+ =?us-ascii?Q?Jqnp/HoBDLwPNAKhe7j079yA/X/g3PJOH5BMjZXYz+Qfr13dJIVbUIMDn8oT?=
+ =?us-ascii?Q?zXcovqvNL8dbF2igNpwSVDp6rcIO8mKh6I9GlTqqcA=3D=3D?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 8ca14112-f105-4ade-8c61-08dabd41d46e
+X-MS-Exchange-CrossTenant-AuthSource: MEYP282MB4026.AUSP282.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Nov 2022 02:19:26.3540
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg: 00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SY4P282MB2058
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-PCIe ports reserved for VMD use are not visible to BIOS and therefore not
-configured to enable PCIe ASPM or LTR values (which BIOS will configure if
-they are not set). Lack of this programming results in high power
-consumption on laptops as reported in bugzilla.  For affected products use
-pci_enable_link_state to set the allowed link states for devices on the
-root ports. Also set the LTR value to the maximum value needed for the SoC.
+From: johnnyaiai <johnnyaiai@tencent.com>
 
-This is a workaround for products from Rocket Lake through Alder Lake.
-Raptor Lake, the latest product at this time, has already implemented LTR
-configuring in BIOS. Future products will move ASPM configuration back to
-BIOS as well.  As this solution is intended for laptops, support is not
-added for hotplug or for devices downstream of a switch on the root port.
+clear_tsk_latency_tracing will called wheather latencytop_enabled
+set or not. this bring unnecessary overhead.
 
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=212355
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=215063
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=213717
-
-Signed-off-by: Michael Bottini <michael.a.bottini@linux.intel.com>
-Signed-off-by: David E. Box <david.e.box@linux.intel.com>
-Reviewed-by: Jon Derrick <jonathan.derrick@linux.dev>
-Reviewed-by: Nirmal Patel <nirmal.patel@linux.intel.com>
+Signed-off-by: johnnyaiai <johnnyaiai@tencent.com>
 ---
- V8
-  - Removed struct vmd_device_data patch. Instead use #define for the LTR
-    value which is the same across all products needing the quirk.
- V7
-  - No change
- V6
-  - Set ASPM first before setting LTR. This is needed because some
-    devices may only have LTR set by BIOS and not ASPM
-  - Skip setting the LTR if the current LTR in non-zero.
- V5
-  - Provide the LTR value as driver data.
-  - Use DWORD for the config space write to avoid PCI WORD access bug.
-  - Set ASPM links firsts, enabling all link states, before setting a
-    default LTR if the capability is present
-  - Add kernel message that VMD is setting the device LTR.
- V4
-  - Refactor vmd_enable_apsm() to exit early, making the lines shorter
-    and more readable. Suggested by Christoph.
- V3
-  - No changes
- V2
-  - Use return status to print pci_info message if ASPM cannot be enabled.
-  - Add missing static declaration, caught by lkp@intel.com
- drivers/pci/controller/vmd.c | 64 ++++++++++++++++++++++++++++++++----
- 1 file changed, 58 insertions(+), 6 deletions(-)
+ kernel/latencytop.c | 14 +++++++++-----
+ 1 file changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/drivers/pci/controller/vmd.c b/drivers/pci/controller/vmd.c
-index 86f3085db014..cba57e3091f6 100644
---- a/drivers/pci/controller/vmd.c
-+++ b/drivers/pci/controller/vmd.c
-@@ -66,12 +66,22 @@ enum vmd_features {
- 	 * interrupt handling.
- 	 */
- 	VMD_FEAT_CAN_BYPASS_MSI_REMAP		= (1 << 4),
-+
-+	/*
-+	 * Enable ASPM on the PCIE root ports and set the default LTR of the
-+	 * storage devices on platforms where these values are not configured by
-+	 * BIOS. This is needed for laptops, which require these settings for
-+	 * proper power management of the SoC.
-+	 */
-+	VMD_FEAT_BIOS_PM_QUIRK		= (1 << 5),
- };
+diff --git a/kernel/latencytop.c b/kernel/latencytop.c
+index e3acead00..daa65b313 100644
+--- a/kernel/latencytop.c
++++ b/kernel/latencytop.c
+@@ -63,14 +63,15 @@ static struct latency_record latency_record[MAXLR];
  
- #define VMD_FEATS_CLIENT	(VMD_FEAT_HAS_MEMBAR_SHADOW_VSCAP |	\
- 				 VMD_FEAT_HAS_BUS_RESTRICTIONS |	\
- 				 VMD_FEAT_OFFSET_FIRST_VECTOR)
+ int latencytop_enabled;
  
-+#define VMD_BIOS_PM_QUIRK_LTR	0x1003	/* 3145728 ns */
-+
- static DEFINE_IDA(vmd_instance_ida);
- 
- /*
-@@ -713,6 +723,46 @@ static void vmd_copy_host_bridge_flags(struct pci_host_bridge *root_bridge,
- 	vmd_bridge->native_dpc = root_bridge->native_dpc;
- }
- 
-+/*
-+ * Enable ASPM and LTR settings on devices that aren't configured by BIOS.
-+ */
-+static int vmd_pm_enable_quirk(struct pci_dev *pdev, void *userdata)
-+{
-+	unsigned long features = *(unsigned long *)userdata;
-+	u16 ltr = VMD_BIOS_PM_QUIRK_LTR;
-+	u32 ltr_reg;
-+	int pos;
-+
-+	if (!(features & VMD_FEAT_BIOS_PM_QUIRK))
-+		return 0;
-+
-+	pci_enable_link_state(pdev, PCIE_LINK_STATE_ALL);
-+
-+	pos = pci_find_ext_capability(pdev, PCI_EXT_CAP_ID_LTR);
-+	if (!pos)
-+		return 0;
-+
-+	/*
-+	 * Skip if the max snoop LTR is non-zero, indicating BIOS has set it
-+	 * so the LTR quirk is not needed.
-+	 */
-+	pci_read_config_dword(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, &ltr_reg);
-+	if (!!(ltr_reg & (PCI_LTR_VALUE_MASK | PCI_LTR_SCALE_MASK)))
-+		return 0;
-+
-+	/*
-+	 * Set the default values to the maximum required by the platform to
-+	 * allow the deepest power management savings. Write as a DWORD where
-+	 * the lower word is the max snoop latency and the upper word is the
-+	 * max non-snoop latency.
-+	 */
-+	ltr_reg = (ltr << 16) | ltr;
-+	pci_write_config_dword(pdev, pos + PCI_LTR_MAX_SNOOP_LAT, ltr_reg);
-+	pci_info(pdev, "VMD: Default LTR value set by driver\n");
-+
-+	return 0;
+-void clear_tsk_latency_tracing(struct task_struct *p)
++static void _clear_tsk_latency_tracing(struct task_struct *p)
+ {
+-	unsigned long flags;
+-
+-	raw_spin_lock_irqsave(&latency_lock, flags);
+ 	memset(&p->latency_record, 0, sizeof(p->latency_record));
+ 	p->latency_record_count = 0;
+-	raw_spin_unlock_irqrestore(&latency_lock, flags);
 +}
 +
- static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
- {
- 	struct pci_sysdata *sd = &vmd->sysdata;
-@@ -867,6 +917,8 @@ static int vmd_enable_domain(struct vmd_dev *vmd, unsigned long features)
- 		pci_reset_bus(child->self);
- 	pci_assign_unassigned_bus_resources(vmd->bus);
++void clear_tsk_latency_tracing(struct task_struct *p)
++{
++	p->latency_record_count = LT_SAVECOUNT + 1;
+ }
  
-+	pci_walk_bus(vmd->bus, vmd_pm_enable_quirk, &features);
+ static void clear_global_latency_tracing(void)
+@@ -172,6 +173,9 @@ __account_scheduler_latency(struct task_struct *tsk, int usecs, int inter)
+ 
+ 	raw_spin_lock_irqsave(&latency_lock, flags);
+ 
++	if (unlikely(tsk->latency_record_count == (LT_SAVECOUNT + 1)))
++		_clear_tsk_latency_tracing(tsk);
 +
- 	/*
- 	 * VMD root buses are virtual and don't return true on pci_is_pcie()
- 	 * and will fail pcie_bus_configure_settings() early. It can instead be
-@@ -1005,17 +1057,17 @@ static const struct pci_device_id vmd_ids[] = {
- 				VMD_FEAT_HAS_BUS_RESTRICTIONS |
- 				VMD_FEAT_CAN_BYPASS_MSI_REMAP,},
- 	{PCI_VDEVICE(INTEL, 0x467f),
--		.driver_data = VMD_FEATS_CLIENT,},
-+		.driver_data = VMD_FEATS_CLIENT | VMD_FEAT_BIOS_PM_QUIRK,},
- 	{PCI_VDEVICE(INTEL, 0x4c3d),
--		.driver_data = VMD_FEATS_CLIENT,},
-+		.driver_data = VMD_FEATS_CLIENT | VMD_FEAT_BIOS_PM_QUIRK,},
- 	{PCI_VDEVICE(INTEL, 0xa77f),
--		.driver_data = VMD_FEATS_CLIENT,},
-+		.driver_data = VMD_FEATS_CLIENT | VMD_FEAT_BIOS_PM_QUIRK,},
- 	{PCI_VDEVICE(INTEL, 0x7d0b),
--		.driver_data = VMD_FEATS_CLIENT,},
-+		.driver_data = VMD_FEATS_CLIENT | VMD_FEAT_BIOS_PM_QUIRK,},
- 	{PCI_VDEVICE(INTEL, 0xad0b),
--		.driver_data = VMD_FEATS_CLIENT,},
-+		.driver_data = VMD_FEATS_CLIENT | VMD_FEAT_BIOS_PM_QUIRK,},
- 	{PCI_VDEVICE(INTEL, PCI_DEVICE_ID_INTEL_VMD_9A0B),
--		.driver_data = VMD_FEATS_CLIENT,},
-+		.driver_data = VMD_FEATS_CLIENT | VMD_FEAT_BIOS_PM_QUIRK,},
- 	{0,}
- };
- MODULE_DEVICE_TABLE(pci, vmd_ids);
+ 	account_global_scheduler_latency(tsk, &lat);
+ 
+ 	for (i = 0; i < tsk->latency_record_count; i++) {
 -- 
-2.25.1
+2.27.0
 
