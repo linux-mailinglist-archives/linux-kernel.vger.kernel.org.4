@@ -2,135 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9107F617F69
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:25:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CE88617F62
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:24:55 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231431AbiKCOZO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 10:25:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46008 "EHLO
+        id S231304AbiKCOYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 10:24:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231312AbiKCOZJ (ORCPT
+        with ESMTP id S229667AbiKCOYv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 10:25:09 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 97D0415A25
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 07:25:08 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id bk15so2975895wrb.13
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 07:25:08 -0700 (PDT)
+        Thu, 3 Nov 2022 10:24:51 -0400
+Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF2726DC;
+        Thu,  3 Nov 2022 07:24:50 -0700 (PDT)
+Received: by mail-oo1-xc35.google.com with SMTP id v7-20020a4aa507000000b00496e843fdfeso281177ook.7;
+        Thu, 03 Nov 2022 07:24:50 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=ventanamicro.com; s=google;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=fj/ZFbn3Zm8rxzcKsJGd6yFucy8YocyT0mV+oXpe7Do=;
-        b=jMtJfzvsVyM2XNkO7dOnrzsj5bFsNMWPr9qRIuRvfNs1tOIvR8I1IP8JVx8tLG7Dep
-         v7Un2NZW58xBtWmwuCjYH772AaiwgcpVC21xqkhn0o/tmaNi7buIljvNSAt6F+cUJUMm
-         ty0TFwUWGldw91R8cET10BSTY/z5J4prX7tkwNyHo6zddMYQimrfEvNM/sLXJ4IbkhDZ
-         m9cFvv72Li0sU8oIZulB0WLbKf4nulNrh7pWjefMCTf4HMlXuiYiEY3FH49w0tZgWXlu
-         BN1Vbu6K5RGrqIIVUiu2VYCjwuaaGz/52VTavOGbRx053ikoFEVXHhj2bCgUlI2OBbQL
-         U+mg==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=u/xSN01Y9d0jDzJ8OY9Uml07yt5pXMZDHAA6O3LIwM4=;
+        b=NNfn/U3u6fGUpwAIsw3QI8vNRnfExdw5AISKpSm4hA6ez4yskkICLV8O8q13vBNKGy
+         LBoq/BR7pVxnBdmFGt3N2K+QjSb67MZKOkjy/6Cpcp6i0HveRrVB87dbnQpHrpRVp5CA
+         VGRXD5zRtwfjbHGuS01PUBwws170k6uz3M7FF45R1A2x3CYKOpYY9fQYmV4vyxg3cUFu
+         uMkh4HmUbnTHjukHQ5YYvKPAqXRMwLy6pw/asV0tJBah6yMnfKUGyvEjznb1A6P62YX9
+         5s9pr6+zOe7WD8wmYtuovrLYL6CjXWg1i6hiFt0Yqovv681rh6t0OqM/LQXQElYc5sGI
+         FUlQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=fj/ZFbn3Zm8rxzcKsJGd6yFucy8YocyT0mV+oXpe7Do=;
-        b=KIQasUEjboue3/+fAgEZdOZKh7WQH4f2eGkd3uviJXLJcn22aCQCAChClFmc+AiSRW
-         9Q7R7A/CBfcaVBUBlBoptL34evKi2YUf4JCoXFtc7LXx4i5JnaBDpRH+5HJ0mzVCrbj9
-         vedCISS4CGuCJ7hAwgnn5HDppyXPrrLwTz4bMKxkJlvr1T/XhB9YHrlfrZJzvkOp2fFv
-         xIPERHpb1IhLPcIH23V93eoLnt7auNNzx2De42KmNxW2JBlQo5Qof+h1QnSjXS1P8lMj
-         AMAHcD53E1qUF0RoDBfE/QJH5OXHnI8EZmrBlydA6ChGIxsT+rh5QuavptQgCaBRAxF0
-         g+Sg==
-X-Gm-Message-State: ACrzQf39Za01vA0zzgBSeFDoVgitJIpje/tBbtARBoP94VLNACLowDlR
-        T0GdvMhAJoywmaScTu5U57D9Sg==
-X-Google-Smtp-Source: AMsMyM7Fd10uROzTNx7lsAW66oPjI1uph9DNvAe559a3qkiRN8acm3Iyt5ChbLPnm5wfe14jlQcTjQ==
-X-Received: by 2002:a05:6000:170d:b0:236:6aa1:8a56 with SMTP id n13-20020a056000170d00b002366aa18a56mr18858226wrc.302.1667485507181;
-        Thu, 03 Nov 2022 07:25:07 -0700 (PDT)
-Received: from localhost (2001-1ae9-1c2-4c00-748-2a9a-a2a6-1362.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:748:2a9a:a2a6:1362])
-        by smtp.gmail.com with ESMTPSA id c19-20020a05600c0a5300b003c21ba7d7d6sm1348138wmq.44.2022.11.03.07.25.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 07:25:06 -0700 (PDT)
-From:   Andrew Jones <ajones@ventanamicro.com>
-To:     x86@kernel.org, linux-riscv@lists.infradead.org,
-        linux-kernel@vger.kernel.org
-Cc:     Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Yury Norov <yury.norov@gmail.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Jonas Bonn <jonas@southpole.se>,
-        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
-        Stafford Horne <shorne@gmail.com>,
-        openrisc@lists.librecores.org,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        linuxppc-dev@lists.ozlabs.org, Heiko Carstens <hca@linux.ibm.com>,
-        Vasily Gorbik <gor@linux.ibm.com>,
-        Alexander Gordeev <agordeev@linux.ibm.com>,
-        linux-s390@vger.kernel.org
-Subject: [PATCH v4 1/1] x86: cpuinfo: Ensure inputs to cpumask_next are valid
-Date:   Thu,  3 Nov 2022 15:25:04 +0100
-Message-Id: <20221103142504.278543-2-ajones@ventanamicro.com>
-X-Mailer: git-send-email 2.37.3
-In-Reply-To: <20221103142504.278543-1-ajones@ventanamicro.com>
-References: <20221103142504.278543-1-ajones@ventanamicro.com>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=u/xSN01Y9d0jDzJ8OY9Uml07yt5pXMZDHAA6O3LIwM4=;
+        b=8RQIHLAEFG9ncEQANCddvXBa9jGL3gYJaAzMjacrOJxDCpVzELbISKSj2v0QZJYrmY
+         yY/eWrNao9z4x0njFID/QmlUOr+JCPpgn56/H9TofYfVOMTkZim6aASIMiu9Xotezb8I
+         vEyBqCrzb2fhNggDjgyo7mAHLbrVhP9MZiValesyUb7V89J8uq7/Ne8D2+SF9g7mc/Ad
+         DiuOfES3wx6sbkQA4PW+jsAnh7qoyavnlsYD84lmiYV1OWy9qpOyzIYp54L04AJz+76I
+         XP2x1Nj4eCYrrtKG54ViINg4AewAZtFyBK1dMe4CSNJDj0KHl6hs3OImTKQlD6IpPlcQ
+         Wi3g==
+X-Gm-Message-State: ACrzQf3QcmL6U9PwLpZztw4NPliyYjp/fMBvFIQ9Z+xBj9bChGM5plBm
+        ambj7lGwIP3aJxXWsbhcm+YWx3LpOjh8bkTeiGE=
+X-Google-Smtp-Source: AMsMyM6J5QRMxRp64kRAdhF5yjjfT9WHNQctflNk+E6Xp1u2gW/bCaFAXyDhIRKAHdTzy+3zP3AgCHbpg71s/ISYB+o=
+X-Received: by 2002:a4a:a68b:0:b0:496:2521:c81d with SMTP id
+ f11-20020a4aa68b000000b004962521c81dmr12952579oom.80.1667485489693; Thu, 03
+ Nov 2022 07:24:49 -0700 (PDT)
 MIME-Version: 1.0
-Content-type: text/plain
-Content-Transfer-Encoding: 8bit
+References: <20221101223319.165493-1-robdclark@gmail.com> <20221101223319.165493-3-robdclark@gmail.com>
+ <bf5fb954-c71b-f02f-5300-4e030b10811a@linaro.org>
+In-Reply-To: <bf5fb954-c71b-f02f-5300-4e030b10811a@linaro.org>
+From:   Rob Clark <robdclark@gmail.com>
+Date:   Thu, 3 Nov 2022 07:25:07 -0700
+Message-ID: <CAF6AEGtzfoxKLi7FrHRgdp-ft32rFH1XzEeu11SeH3c0Lodj0w@mail.gmail.com>
+Subject: Re: [PATCH v2 2/2] drm/msm: Hangcheck progress detection
+To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+        linux-arm-msm@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Vladimir Lypak <vladimir.lypak@gmail.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Chia-I Wu <olvaffe@gmail.com>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        open list <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The valid cpumask range is [0, nr_cpu_ids) and cpumask_next()
-currently calls find_next_bit() with its input CPU ID number plus one
-for the bit number, giving cpumask_next() the range [-1, nr_cpu_ids - 1).
-seq_read_iter() and cpuinfo's start and next seq operations implement a
-pattern like
+On Wed, Nov 2, 2022 at 4:26 PM Dmitry Baryshkov
+<dmitry.baryshkov@linaro.org> wrote:
+>
+> On 02/11/2022 01:33, Rob Clark wrote:
+> > From: Rob Clark <robdclark@chromium.org>
+> >
+> > If the hangcheck timer expires, check if the fw's position in the
+> > cmdstream has advanced (changed) since last timer expiration, and
+> > allow it up to three additional "extensions" to it's alotted time.
+> > The intention is to continue to catch "shader stuck in a loop" type
+> > hangs quickly, but allow more time for things that are actually
+> > making forward progress.
+>
+> Just out of curiosity: wouldn't position also change for a 'shader stuck
+> in a loop'?
 
-  n = cpumask_next(n - 1, mask);
-  show(n);
-  while (1) {
-      ++n;
-      n = cpumask_next(n - 1, mask);
-      if (n >= nr_cpu_ids)
-          break;
-      show(n);
-  }
+There is some pipelining, in that there can be a couple draws in
+flight at the same time, and SQE is running ahead of that, but with a
+shader stuck in a loop the associated draw will not complete, and that
+will halt forward progress through the cmdstream.  Basically what this
+is doing is detecting that forward progress through the cmdstream has
+stopped.
 
-which will eventually result in cpumask_next() being called with
-nr_cpu_ids - 1. A kernel compiled with commit 78e5a3399421 ("cpumask:
-fix checking valid cpu range"), but not its revert, commit
-80493877d7d0 ("Revert "cpumask: fix checking valid cpu range"."),
-will generate a warning when DEBUG_PER_CPU_MAPS is enabled each time
-/proc/cpuinfo is read. Future-proof cpuinfo by checking its input to
-cpumask_next() is valid.
+BR,
+-R
 
-Signed-off-by: Andrew Jones <ajones@ventanamicro.com>
-Cc: Yury Norov <yury.norov@gmail.com>
----
- arch/x86/kernel/cpu/proc.c | 3 +++
- 1 file changed, 3 insertions(+)
-
-diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
-index 099b6f0d96bd..de3f93ac6e49 100644
---- a/arch/x86/kernel/cpu/proc.c
-+++ b/arch/x86/kernel/cpu/proc.c
-@@ -153,6 +153,9 @@ static int show_cpuinfo(struct seq_file *m, void *v)
- 
- static void *c_start(struct seq_file *m, loff_t *pos)
- {
-+	if (*pos == nr_cpu_ids)
-+		return NULL;
-+
- 	*pos = cpumask_next(*pos - 1, cpu_online_mask);
- 	if ((*pos) < nr_cpu_ids)
- 		return &cpu_data(*pos);
--- 
-2.37.3
-
+>
+> > Because we need to sample the CP state twice to detect if there has
+> > not been progress, this also cuts the the timer's duration in half.
+> >
+> > v2: Fix typo (REG_A6XX_CP_CSQ_IB2_STAT), add comment
+> >
+> > Signed-off-by: Rob Clark <robdclark@chromium.org>
+> > Reviewed-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+>
+>
+>
+> --
+> With best wishes
+> Dmitry
+>
