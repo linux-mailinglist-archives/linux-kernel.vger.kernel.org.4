@@ -2,122 +2,232 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 666B6617880
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 09:16:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1E66161784C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 09:05:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230341AbiKCIQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 04:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33128 "EHLO
+        id S231339AbiKCIFv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 04:05:51 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53808 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiKCIP7 (ORCPT
+        with ESMTP id S231364AbiKCIFq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 04:15:59 -0400
-X-Greylist: delayed 617 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 03 Nov 2022 01:15:55 PDT
-Received: from smtp-out-01.comm2000.it (smtp-out-01.comm2000.it [212.97.32.64])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CDA45E14;
-        Thu,  3 Nov 2022 01:15:55 -0700 (PDT)
-Received: from francesco-nb.int.toradex.com (93-49-2-63.ip317.fastwebnet.it [93.49.2.63])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        (Authenticated sender: francesco@dolcini.it)
-        by smtp-out-01.comm2000.it (Postfix) with ESMTPSA id 70F61842C87;
-        Thu,  3 Nov 2022 09:04:58 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailserver.it;
-        s=mailsrv; t=1667462730;
-        bh=yOfY9eB7qu7TqUunKx7AkuCRtrNlolkJbCg5vWbHkSs=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To;
-        b=1OFovVjhXynjTKz/QW5UZoWQeetj8oiaI3Qc1kqnpKvDr25wLL5QwyrCi35/fbQKD
-         4+aJPG2bT56xfXOD/9Dof7Xb6ydNoQ4nkAY/HnnHbu/HRd5vdubBSX58iLor9IONTC
-         aLc+/qmXD9PqlEqT6J7q56QpiG/uO4e3EWV3a0U4KTCKPyGnKCRUdCPjImeZmH6pJZ
-         HSOGCq+5m6O7khYqTk5kXPWaO6tCJj1LMiuewHdzeFF6WleviNas6qdpte9GOBpH6+
-         WOEk/0AKfpqVAmDDkLAv6FiqITLmeo8pbALt6YZYotqt/URIL/Xkcph4e/ZPupaga+
-         zCsJaUxK7xn0A==
-Date:   Thu, 3 Nov 2022 09:04:53 +0100
-From:   Francesco Dolcini <francesco@dolcini.it>
-To:     Alexander Stein <alexander.stein@ew.tq-group.com>
-Cc:     Philippe Schenker <philippe.schenker@toradex.com>,
-        Shawn Guo <shawnguo@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Fabio Estevam <festevam@gmail.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        NXP Linux Team <linux-imx@nxp.com>,
-        Pengutronix Kernel Team <kernel@pengutronix.de>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sascha Hauer <s.hauer@pengutronix.de>,
-        linux-kernel@vger.kernel.org, Philippe Schenker <dev@pschenker.ch>
-Subject: Re: [PATCH] ARM: dts: colibri-imx6ull: Enable dual-role switching
-Message-ID: <Y2N2JYGvmzLjpGUq@francesco-nb.int.toradex.com>
-References: <20221102155226.51587-1-dev@pschenker.ch>
- <4964263.31r3eYUQgx@steina-w>
+        Thu, 3 Nov 2022 04:05:46 -0400
+Received: from out0.migadu.com (out0.migadu.com [94.23.1.103])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E4F245FBC;
+        Thu,  3 Nov 2022 01:05:37 -0700 (PDT)
+X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
+        t=1667462735;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=fS4DJahcVA2UhQt/JNGie83+2z6izS1F4W13/rxGNm4=;
+        b=InuQdXLNdJEbwbOizXDL3/qF1pQ/iPdwCCTgkGMGrshmAoKY/UcBvtgSO37qh1NxUaJ5jw
+        iC+bznIjEmrB+mXVxFGnoFnhUbHbKGQ8rWfIkyZQzL+rvnAjTVWrMKskgpKS1zqEvWUagz
+        5MZfU9d3bLS8c4UhhXeN0B7QEGW+ofI=
+From:   Cai Huoqing <cai.huoqing@linux.dev>
+To:     kuba@kernel.org
+Cc:     Cai Huoqing <cai.huoqing@linux.dev>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Zhengchao Shao <shaozhengchao@huawei.com>,
+        Qiao Ma <mqaio@linux.alibaba.com>,
+        Bin Chen <bin.chen@corigine.com>, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH net-next v4 1/3] net: hinic: Convert the cmd code from decimal to hex to be more readable
+Date:   Thu,  3 Nov 2022 16:05:09 +0800
+Message-Id: <20221103080525.26885-1-cai.huoqing@linux.dev>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4964263.31r3eYUQgx@steina-w>
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Migadu-Flow: FLOW_OUT
+X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
+        SPF_PASS,UPPERCASE_50_75 autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 08:46:58AM +0100, Alexander Stein wrote:
-> Hi Philippe,
-> 
-> Am Mittwoch, 2. November 2022, 16:52:26 CET schrieb Philippe Schenker:
-> > From: Philippe Schenker <philippe.schenker@toradex.com>
-> > 
-> > The Colibri standard provides a GPIO called USBC_DET to switch from
-> > USB Host to USB Device and back. The Colibri iMX6ULL does have the SoC
-> > ball USB_OTG1_VBUS connected in series with a capacitor to ground.
-> > 
-> > This means that we need to provide to the extcon framework VBUS and ID
-> > events using the single GPIO we have. The Extcon USB GPIO driver does
-> > use id-gpio also for VBUS event, as in our case where vbus-gpio is
-> > absent.
-> > 
-> > Signed-off-by: Philippe Schenker <philippe.schenker@toradex.com>
-> > 
-> > ---
-> > 
-> >  arch/arm/boot/dts/imx6ull-colibri.dtsi | 8 ++++++++
-> >  1 file changed, 8 insertions(+)
-> > 
-> > diff --git a/arch/arm/boot/dts/imx6ull-colibri.dtsi
-> > b/arch/arm/boot/dts/imx6ull-colibri.dtsi index 577a424b0e1d..feb1fcd9a684
-> > 100644
-> > --- a/arch/arm/boot/dts/imx6ull-colibri.dtsi
-> > +++ b/arch/arm/boot/dts/imx6ull-colibri.dtsi
-> > @@ -24,6 +24,13 @@ backlight: backlight {
-> >  		status = "okay";
-> >  	};
-> > 
-> > +	extcon_usbc_det: usbc-det {
-> > +		compatible = "linux,extcon-usb-gpio";
-> > +		id-gpio = <&gpio5 2 GPIO_ACTIVE_HIGH>; /* SODIMM 137 / 
-> USBC_DET */
-> > +		pinctrl-names = "default";
-> > +		pinctrl-0 = <&pinctrl_snvs_usbc_det>;
-> > +	};
-> > +
-> >  	gpio-keys {
-> >  		compatible = "gpio-keys";
-> >  		pinctrl-names = "default";
-> > @@ -275,6 +282,7 @@ &uart5 {
-> >  /* Colibri USBC */
-> >  &usbotg1 {
-> >  	dr_mode = "otg";
-> > +	extcon = <&extcon_usbc_det>, <&extcon_usbc_det>;
-> 
-> How came you up with this double entries? Is there some documentation you need 
-> two phandles?
+The print cmd code is in hex, so using hex cmd code intead of
+decimal is easy to check the value with print info.
 
-extcon-usb-gpio provides both vbus/otg_id with a single handle, however
-the integration in chipidea is somehow weird, the first entry is supposed to be
-used to read the vbus, the second one to read the otg_id.
+Signed-off-by: Cai Huoqing <cai.huoqing@linux.dev>
+---
+v1->v2:
+	1.Add net-next prefix.
+	The comments link: https://lore.kernel.org/lkml/20221027110241.0340abdf@kernel.org/
+v2->v3:
+	1.Merge PATCH 3/3 to this series.
+v3->v4:
+	1.Revert the empty lines.
+	The comments link: https://lore.kernel.org/lkml/20221102203640.1bda5d74@kernel.org/
 
-So if you need to read both you really need to have the handle twice ...
+ .../net/ethernet/huawei/hinic/hinic_hw_dev.h  | 104 +++++++++---------
+ 1 file changed, 52 insertions(+), 52 deletions(-)
 
-Francesco
+diff --git a/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.h b/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.h
+index d2d89b0a5ef0..6dae116a11f8 100644
+--- a/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.h
++++ b/drivers/net/ethernet/huawei/hinic/hinic_hw_dev.h
+@@ -46,104 +46,104 @@ enum hinic_port_cmd {
+ 	HINIC_PORT_CMD_VF_REGISTER = 0x0,
+ 	HINIC_PORT_CMD_VF_UNREGISTER = 0x1,
+ 
+-	HINIC_PORT_CMD_CHANGE_MTU       = 2,
++	HINIC_PORT_CMD_CHANGE_MTU = 0x2,
+ 
+-	HINIC_PORT_CMD_ADD_VLAN         = 3,
+-	HINIC_PORT_CMD_DEL_VLAN         = 4,
++	HINIC_PORT_CMD_ADD_VLAN = 0x3,
++	HINIC_PORT_CMD_DEL_VLAN = 0x4,
+ 
+-	HINIC_PORT_CMD_SET_PFC		= 5,
++	HINIC_PORT_CMD_SET_PFC = 0x5,
+ 
+-	HINIC_PORT_CMD_SET_MAC          = 9,
+-	HINIC_PORT_CMD_GET_MAC          = 10,
+-	HINIC_PORT_CMD_DEL_MAC          = 11,
++	HINIC_PORT_CMD_SET_MAC = 0x9,
++	HINIC_PORT_CMD_GET_MAC = 0xA,
++	HINIC_PORT_CMD_DEL_MAC = 0xB,
+ 
+-	HINIC_PORT_CMD_SET_RX_MODE      = 12,
++	HINIC_PORT_CMD_SET_RX_MODE = 0xC,
+ 
+-	HINIC_PORT_CMD_GET_PAUSE_INFO	= 20,
+-	HINIC_PORT_CMD_SET_PAUSE_INFO	= 21,
++	HINIC_PORT_CMD_GET_PAUSE_INFO = 0x14,
++	HINIC_PORT_CMD_SET_PAUSE_INFO = 0x15,
+ 
+-	HINIC_PORT_CMD_GET_LINK_STATE   = 24,
++	HINIC_PORT_CMD_GET_LINK_STATE = 0x18,
+ 
+-	HINIC_PORT_CMD_SET_LRO		= 25,
++	HINIC_PORT_CMD_SET_LRO = 0x19,
+ 
+-	HINIC_PORT_CMD_SET_RX_CSUM	= 26,
++	HINIC_PORT_CMD_SET_RX_CSUM = 0x1A,
+ 
+-	HINIC_PORT_CMD_SET_RX_VLAN_OFFLOAD = 27,
++	HINIC_PORT_CMD_SET_RX_VLAN_OFFLOAD = 0x1B,
+ 
+-	HINIC_PORT_CMD_GET_PORT_STATISTICS = 28,
++	HINIC_PORT_CMD_GET_PORT_STATISTICS = 0x1C,
+ 
+-	HINIC_PORT_CMD_CLEAR_PORT_STATISTICS = 29,
++	HINIC_PORT_CMD_CLEAR_PORT_STATISTICS = 0x1D,
+ 
+-	HINIC_PORT_CMD_GET_VPORT_STAT	= 30,
++	HINIC_PORT_CMD_GET_VPORT_STAT = 0x1E,
+ 
+-	HINIC_PORT_CMD_CLEAN_VPORT_STAT	= 31,
++	HINIC_PORT_CMD_CLEAN_VPORT_STAT	= 0x1F,
+ 
+-	HINIC_PORT_CMD_GET_RSS_TEMPLATE_INDIR_TBL = 37,
++	HINIC_PORT_CMD_GET_RSS_TEMPLATE_INDIR_TBL = 0x25,
+ 
+-	HINIC_PORT_CMD_SET_PORT_STATE   = 41,
++	HINIC_PORT_CMD_SET_PORT_STATE = 0x29,
+ 
+-	HINIC_PORT_CMD_SET_RSS_TEMPLATE_TBL = 43,
++	HINIC_PORT_CMD_SET_RSS_TEMPLATE_TBL = 0x2B,
+ 
+-	HINIC_PORT_CMD_GET_RSS_TEMPLATE_TBL = 44,
++	HINIC_PORT_CMD_GET_RSS_TEMPLATE_TBL = 0x2C,
+ 
+-	HINIC_PORT_CMD_SET_RSS_HASH_ENGINE = 45,
++	HINIC_PORT_CMD_SET_RSS_HASH_ENGINE = 0x2D,
+ 
+-	HINIC_PORT_CMD_GET_RSS_HASH_ENGINE = 46,
++	HINIC_PORT_CMD_GET_RSS_HASH_ENGINE = 0x2E,
+ 
+-	HINIC_PORT_CMD_GET_RSS_CTX_TBL  = 47,
++	HINIC_PORT_CMD_GET_RSS_CTX_TBL = 0x2F,
+ 
+-	HINIC_PORT_CMD_SET_RSS_CTX_TBL  = 48,
++	HINIC_PORT_CMD_SET_RSS_CTX_TBL = 0x30,
+ 
+-	HINIC_PORT_CMD_RSS_TEMP_MGR	= 49,
++	HINIC_PORT_CMD_RSS_TEMP_MGR	= 0x31,
+ 
+-	HINIC_PORT_CMD_RD_LINE_TBL	= 57,
++	HINIC_PORT_CMD_RD_LINE_TBL = 0x39,
+ 
+-	HINIC_PORT_CMD_RSS_CFG		= 66,
++	HINIC_PORT_CMD_RSS_CFG = 0x42,
+ 
+-	HINIC_PORT_CMD_FWCTXT_INIT      = 69,
++	HINIC_PORT_CMD_FWCTXT_INIT = 0x45,
+ 
+-	HINIC_PORT_CMD_GET_LOOPBACK_MODE = 72,
+-	HINIC_PORT_CMD_SET_LOOPBACK_MODE,
++	HINIC_PORT_CMD_GET_LOOPBACK_MODE = 0x48,
++	HINIC_PORT_CMD_SET_LOOPBACK_MODE = 0x49,
+ 
+-	HINIC_PORT_CMD_ENABLE_SPOOFCHK = 78,
++	HINIC_PORT_CMD_ENABLE_SPOOFCHK = 0x4E,
+ 
+-	HINIC_PORT_CMD_GET_MGMT_VERSION = 88,
++	HINIC_PORT_CMD_GET_MGMT_VERSION = 0x58,
+ 
+-	HINIC_PORT_CMD_SET_FUNC_STATE   = 93,
++	HINIC_PORT_CMD_SET_FUNC_STATE = 0x5D,
+ 
+-	HINIC_PORT_CMD_GET_GLOBAL_QPN   = 102,
++	HINIC_PORT_CMD_GET_GLOBAL_QPN = 0x66,
+ 
+-	HINIC_PORT_CMD_SET_VF_RATE = 105,
++	HINIC_PORT_CMD_SET_VF_RATE = 0x69,
+ 
+-	HINIC_PORT_CMD_SET_VF_VLAN	= 106,
++	HINIC_PORT_CMD_SET_VF_VLAN = 0x6A,
+ 
+-	HINIC_PORT_CMD_CLR_VF_VLAN,
++	HINIC_PORT_CMD_CLR_VF_VLAN = 0x6B,
+ 
+-	HINIC_PORT_CMD_SET_TSO          = 112,
++	HINIC_PORT_CMD_SET_TSO = 0x70,
+ 
+-	HINIC_PORT_CMD_UPDATE_FW	= 114,
++	HINIC_PORT_CMD_UPDATE_FW = 0x72,
+ 
+-	HINIC_PORT_CMD_SET_RQ_IQ_MAP	= 115,
++	HINIC_PORT_CMD_SET_RQ_IQ_MAP = 0x73,
+ 
+-	HINIC_PORT_CMD_LINK_STATUS_REPORT = 160,
++	HINIC_PORT_CMD_LINK_STATUS_REPORT = 0xA0,
+ 
+-	HINIC_PORT_CMD_UPDATE_MAC = 164,
++	HINIC_PORT_CMD_UPDATE_MAC = 0xA4,
+ 
+-	HINIC_PORT_CMD_GET_CAP          = 170,
++	HINIC_PORT_CMD_GET_CAP = 0xAA,
+ 
+-	HINIC_PORT_CMD_GET_LINK_MODE	= 217,
++	HINIC_PORT_CMD_GET_LINK_MODE = 0xD9,
+ 
+-	HINIC_PORT_CMD_SET_SPEED	= 218,
++	HINIC_PORT_CMD_SET_SPEED = 0xDA,
+ 
+-	HINIC_PORT_CMD_SET_AUTONEG	= 219,
++	HINIC_PORT_CMD_SET_AUTONEG = 0xDB,
+ 
+-	HINIC_PORT_CMD_GET_STD_SFP_INFO = 240,
++	HINIC_PORT_CMD_GET_STD_SFP_INFO = 0xF0,
+ 
+-	HINIC_PORT_CMD_SET_LRO_TIMER	= 244,
++	HINIC_PORT_CMD_SET_LRO_TIMER = 0xF4,
+ 
+-	HINIC_PORT_CMD_SET_VF_MAX_MIN_RATE = 249,
++	HINIC_PORT_CMD_SET_VF_MAX_MIN_RATE = 0xF9,
+ 
+-	HINIC_PORT_CMD_GET_SFP_ABS	= 251,
++	HINIC_PORT_CMD_GET_SFP_ABS = 0xFB,
+ };
+ 
+ /* cmd of mgmt CPU message for HILINK module */
+-- 
+2.25.1
 
