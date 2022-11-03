@@ -2,40 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EFE18617C18
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:02:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C7E08617C0F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 12:59:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231379AbiKCMB7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 08:01:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33620 "EHLO
+        id S231394AbiKCL70 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 07:59:26 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60816 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231462AbiKCMB4 (ORCPT
+        with ESMTP id S229733AbiKCL7V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 08:01:56 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DFFC812A87;
-        Thu,  3 Nov 2022 05:01:54 -0700 (PDT)
-Received: from canpemm500005.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N32MZ654kzpWB0;
-        Thu,  3 Nov 2022 19:58:18 +0800 (CST)
-Received: from ubuntu1804.huawei.com (10.67.174.63) by
- canpemm500005.china.huawei.com (7.192.104.229) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 20:01:52 +0800
-From:   Zhao Gongyi <zhaogongyi@huawei.com>
-To:     <linux-kselftest@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC:     <shuah@kernel.org>, Zhao Gongyi <zhaogongyi@huawei.com>
-Subject: [PATCH -next] selftests: Add color to keywords of results report
-Date:   Thu, 3 Nov 2022 19:58:28 +0800
-Message-ID: <20221103115828.49391-1-zhaogongyi@huawei.com>
-X-Mailer: git-send-email 2.17.1
+        Thu, 3 Nov 2022 07:59:21 -0400
+Received: from mail-ej1-x62f.google.com (mail-ej1-x62f.google.com [IPv6:2a00:1450:4864:20::62f])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3B2D7DF6D
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 04:59:20 -0700 (PDT)
+Received: by mail-ej1-x62f.google.com with SMTP id b2so4547637eja.6
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 04:59:20 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/8w955riB/tcF9oZ9i2EQ/eH2CtH8tAwB/HB+myWj6A=;
+        b=lWvl6dAoDcGn47aiSbz3qf8R++AIGSDL08VlpzBoFKyZwhscX87RjWKA305ioh0QW2
+         /0+Uaexp1UyHSjq+rEgrM4VWKZMWLqYI7ANsgSHDaDXEbI9rtfHgzJLsdELNXRfXEAYI
+         zZlgSsIDZ586sqLtcMih5D2qotnnwU+Rcirmr9AfX1e5TjgF2MYH5HprCiohY1phLzYr
+         tEBhQRyIrSHk/BoauId7kn+dsPBVFJjejzNkkNGH0X2knO028XyFEzj80ufcOyh6bIij
+         jDMIC4Yi4coi6wYLzvYoBd9Y1G6jfiFKOJjc5YeS1rJ94vOamfsonhYBqeXTntVUnoZR
+         xRbw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/8w955riB/tcF9oZ9i2EQ/eH2CtH8tAwB/HB+myWj6A=;
+        b=WuBRXWJEOD/Is6w4Bb0SsLcOduGpSHzRRc0Q0u4hX7nq+XrFAe31bVm9Vhsp61lxcT
+         k8r06B2eWcvTmgaBzHYPJRymlpTHdHi7tEzQ+mYyBXbJ1d2itHB8eLDqJuVm0rRkxZII
+         YMHyOns3eKsFkQwaVOX8b9ifTqFqjGh8kuDLwwgzdPbhT7NrIyVGB9ux+OXC4Sdxn5Hk
+         zIX+gJOogmVAyjFAvE+G8sfG+GOY4ecjU1OfOMNdTmljSuWLrsqNVeExBLOs1YGS1qA3
+         BninYH4t1zv5zBQIyvWaKVkqXVyoSpALPHG0apIQJCfZDMB8TWhg2igJxbnyuuJAXtlq
+         f1Uw==
+X-Gm-Message-State: ACrzQf0NhNJpGlDqQxEu1zNoTSVz8ngO916voS0VtXSeRsVmnjSxXLCf
+        j1j5rx9R2QcT5RuX1+t+gCUT6KQOaJqt2dGFelQzVg==
+X-Google-Smtp-Source: AMsMyM7i9DdanFA+qCIw2y5Eez4pQmHNmR842CXxzAYBfZevSXWhKE7MPnea6hEtBDqLAdvBGQ9RjfhFRnnvA8MWjwk=
+X-Received: by 2002:a17:907:6e1b:b0:78e:15a3:5be6 with SMTP id
+ sd27-20020a1709076e1b00b0078e15a35be6mr28678837ejc.750.1667476758617; Thu, 03
+ Nov 2022 04:59:18 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Originating-IP: [10.67.174.63]
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- canpemm500005.china.huawei.com (7.192.104.229)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+References: <20221102022049.017479464@linuxfoundation.org>
+In-Reply-To: <20221102022049.017479464@linuxfoundation.org>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 3 Nov 2022 17:29:06 +0530
+Message-ID: <CA+G9fYvZ+FWg7bhng3NyQkZBeu45++5ma3AZumqsK1Jiv1+0GQ@mail.gmail.com>
+Subject: Re: [PATCH 4.9 00/44] 4.9.332-rc1 review
+To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
+        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
+        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
+        jonathanh@nvidia.com, f.fainelli@gmail.com,
+        sudipm.mukherjee@gmail.com, srw@sladewatkins.net
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -43,111 +72,167 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-For ksft_test_result_*()/ksft_exit_*(), we could add color to some
-keywords like:
+On Wed, 2 Nov 2022 at 09:16, Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+>
+> This is the start of the stable review cycle for the 4.9.332 release.
+> There are 44 patches in this series, all will be posted as a response
+> to this one.  If anyone has any issues with these being applied, please
+> let me know.
+>
+> Responses should be made by Fri, 04 Nov 2022 02:20:38 +0000.
+> Anything received after that time might be too late.
+>
+> The whole patch series can be found in one patch at:
+>         https://www.kernel.org/pub/linux/kernel/v4.x/stable-review/patch-=
+4.9.332-rc1.gz
+> or in the git tree and branch at:
+>         git://git.kernel.org/pub/scm/linux/kernel/git/stable/linux-stable=
+-rc.git linux-4.9.y
+> and the diffstat can be found below.
+>
+> thanks,
+>
+> greg k-h
 
-function	color
-*pass*		green
-*fail*		red
-*skip*		yellow
-*error*		magenta
+Results from Linaro=E2=80=99s test farm.
+No regressions on arm64, arm, x86_64, and i386.
 
-And it is hoped to improve the readability of the output.
+Tested-by: Linux Kernel Functional Testing <lkft@linaro.org>
 
-Signed-off-by: Zhao Gongyi <zhaogongyi@huawei.com>
----
- tools/testing/selftests/kselftest.h | 28 ++++++++++++++++++++--------
- 1 file changed, 20 insertions(+), 8 deletions(-)
+## Build
+* kernel: 4.9.332-rc1
+* git: https://gitlab.com/Linaro/lkft/mirrors/stable/linux-stable-rc
+* git branch: linux-4.9.y
+* git commit: c8644fcd30082db200dd0663c60b1f5e01734ee8
+* git describe: v4.9.331-45-gc8644fcd3008
+* test details:
+https://qa-reports.linaro.org/lkft/linux-stable-rc-linux-4.9.y/build/v4.9.3=
+31-45-gc8644fcd3008
 
-diff --git a/tools/testing/selftests/kselftest.h b/tools/testing/selftests/kselftest.h
-index 33a0dbd26bd3..8c53a7520578 100644
---- a/tools/testing/selftests/kselftest.h
-+++ b/tools/testing/selftests/kselftest.h
-@@ -75,6 +75,18 @@
- #define KSFT_XPASS 3
- #define KSFT_SKIP  4
+## No Test Regressions (compared to v4.9.331)
 
-+#define COLOR_RED	"\033[1;31m"
-+#define COLOR_GREEN	"\033[1;32m"
-+#define COLOR_YELLOW	"\033[1;33m"
-+#define COLOR_MAGENTA	"\033[1;35m"
-+
-+#define RESET		"\033[0m"
-+
-+#define RED(msg) COLOR_RED msg RESET
-+#define GREEN(msg) COLOR_GREEN msg RESET
-+#define YELLOW(msg) COLOR_YELLOW msg RESET
-+#define MAGENTA(msg) COLOR_MAGENTA msg RESET
-+
- /* counters */
- struct ksft_count {
- 	unsigned int ksft_pass;
-@@ -152,7 +164,7 @@ static inline void ksft_test_result_pass(const char *msg, ...)
- 	ksft_cnt.ksft_pass++;
+## No Metric Regressions (compared to v4.9.331)
 
- 	va_start(args, msg);
--	printf("ok %d ", ksft_test_num());
-+	printf(GREEN("ok %d "), ksft_test_num());
- 	errno = saved_errno;
- 	vprintf(msg, args);
- 	va_end(args);
-@@ -166,7 +178,7 @@ static inline void ksft_test_result_fail(const char *msg, ...)
- 	ksft_cnt.ksft_fail++;
+## No Test Fixes (compared to v4.9.331)
 
- 	va_start(args, msg);
--	printf("not ok %d ", ksft_test_num());
-+	printf(RED("not ok %d "), ksft_test_num());
- 	errno = saved_errno;
- 	vprintf(msg, args);
- 	va_end(args);
-@@ -192,7 +204,7 @@ static inline void ksft_test_result_xfail(const char *msg, ...)
- 	ksft_cnt.ksft_xfail++;
+## No Metric Fixes (compared to v4.9.331)
 
- 	va_start(args, msg);
--	printf("ok %d # XFAIL ", ksft_test_num());
-+	printf(RED("ok %d # XFAIL "), ksft_test_num());
- 	errno = saved_errno;
- 	vprintf(msg, args);
- 	va_end(args);
-@@ -206,7 +218,7 @@ static inline void ksft_test_result_skip(const char *msg, ...)
- 	ksft_cnt.ksft_xskip++;
+## Test result summary
+total: 109694, pass: 91889, fail: 1834, skip: 15080, xfail: 891
 
- 	va_start(args, msg);
--	printf("ok %d # SKIP ", ksft_test_num());
-+	printf(YELLOW("ok %d # SKIP "), ksft_test_num());
- 	errno = saved_errno;
- 	vprintf(msg, args);
- 	va_end(args);
-@@ -221,7 +233,7 @@ static inline void ksft_test_result_error(const char *msg, ...)
- 	ksft_cnt.ksft_error++;
+## Build Summary
+* arc: 10 total, 10 passed, 0 failed
+* arm: 282 total, 277 passed, 5 failed
+* arm64: 53 total, 46 passed, 7 failed
+* i386: 29 total, 28 passed, 1 failed
+* mips: 41 total, 40 passed, 1 failed
+* parisc: 12 total, 0 passed, 12 failed
+* powerpc: 45 total, 19 passed, 26 failed
+* s390: 15 total, 11 passed, 4 failed
+* sh: 24 total, 24 passed, 0 failed
+* sparc: 12 total, 12 passed, 0 failed
+* x86_64: 48 total, 47 passed, 1 failed
 
- 	va_start(args, msg);
--	printf("not ok %d # error ", ksft_test_num());
-+	printf(MAGENTA("not ok %d # error "), ksft_test_num());
- 	errno = saved_errno;
- 	vprintf(msg, args);
- 	va_end(args);
-@@ -266,7 +278,7 @@ static inline int ksft_exit_fail_msg(const char *msg, ...)
- 	va_list args;
+## Test suites summary
+* fwts
+* igt-gpu-tools
+* kselftest-android
+* kselftest-arm64
+* kselftest-arm64/arm64.btitest.bti_c_func
+* kselftest-arm64/arm64.btitest.bti_j_func
+* kselftest-arm64/arm64.btitest.bti_jc_func
+* kselftest-arm64/arm64.btitest.bti_none_func
+* kselftest-arm64/arm64.btitest.nohint_func
+* kselftest-arm64/arm64.btitest.paciasp_func
+* kselftest-arm64/arm64.nobtitest.bti_c_func
+* kselftest-arm64/arm64.nobtitest.bti_j_func
+* kselftest-arm64/arm64.nobtitest.bti_jc_func
+* kselftest-arm64/arm64.nobtitest.bti_none_func
+* kselftest-arm64/arm64.nobtitest.nohint_func
+* kselftest-arm64/arm64.nobtitest.paciasp_func
+* kselftest-breakpoints
+* kselftest-capabilities
+* kselftest-drivers-dma-buf
+* kselftest-efivarfs
+* kselftest-filesystems
+* kselftest-filesystems-binderfs
+* kselftest-firmware
+* kselftest-fpu
+* kselftest-futex
+* kselftest-gpio
+* kselftest-intel_pstate
+* kselftest-ipc
+* kselftest-ir
+* kselftest-kcmp
+* kselftest-kexec
+* kselftest-kvm
+* kselftest-lib
+* kselftest-livepatch
+* kselftest-membarrier
+* kselftest-net-forwarding
+* kselftest-netfilter
+* kselftest-nsfs
+* kselftest-openat2
+* kselftest-pid_namespace
+* kselftest-pidfd
+* kselftest-proc
+* kselftest-pstore
+* kselftest-ptrace
+* kselftest-seccomp
+* kselftest-sigaltstack
+* kselftest-size
+* kselftest-splice
+* kselftest-static_keys
+* kselftest-sync
+* kselftest-sysctl
+* kselftest-tc-testing
+* kselftest-timens
+* kselftest-timers
+* kselftest-tmpfs
+* kselftest-tpm2
+* kselftest-user
+* kselftest-vm
+* kselftest-x86
+* kselftest-zram
+* kunit
+* kvm-unit-tests
+* libhugetlbfs
+* log-parser-boot
+* log-parser-test
+* ltp-cap_bounds
+* ltp-commands
+* ltp-containers
+* ltp-controllers
+* ltp-cpuhotplug
+* ltp-crypto
+* ltp-cve
+* ltp-dio
+* ltp-fcntl-locktests
+* ltp-filecaps
+* ltp-fs
+* ltp-fs_bind
+* ltp-fs_perms_simple
+* ltp-fsx
+* ltp-hugetlb
+* ltp-io
+* ltp-ipc
+* ltp-math
+* ltp-mm
+* ltp-nptl
+* ltp-open-posix-tests
+* ltp-pty
+* ltp-sched
+* ltp-securebits
+* ltp-smoke
+* ltp-syscalls
+* ltp-tracing
+* network-basic-tests
+* packetdrill
+* rcutorture
+* v4l2-compliance
+* vdso
 
- 	va_start(args, msg);
--	printf("Bail out! ");
-+	printf(RED("Bail out! "));
- 	errno = saved_errno;
- 	vprintf(msg, args);
- 	va_end(args);
-@@ -302,9 +314,9 @@ static inline int ksft_exit_skip(const char *msg, ...)
- 	 */
- 	if (ksft_plan || ksft_test_num()) {
- 		ksft_cnt.ksft_xskip++;
--		printf("ok %d # SKIP ", 1 + ksft_test_num());
-+		printf(YELLOW("ok %d # SKIP "), 1 + ksft_test_num());
- 	} else {
--		printf("1..0 # SKIP ");
-+		printf(YELLOW("1..0 # SKIP "));
- 	}
- 	if (msg) {
- 		errno = saved_errno;
 --
-2.17.1
-
+Linaro LKFT
+https://lkft.linaro.org
