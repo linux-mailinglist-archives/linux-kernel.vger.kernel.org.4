@@ -2,117 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C7774617AA8
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 11:13:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 395B8617A57
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:58:36 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229481AbiKCKND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 06:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45834 "EHLO
+        id S230171AbiKCJ61 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 05:58:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35764 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiKCKNA (ORCPT
+        with ESMTP id S229481AbiKCJ6Z (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 06:13:00 -0400
-Received: from esa3.hgst.iphmx.com (esa3.hgst.iphmx.com [216.71.153.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1EA4310F;
-        Thu,  3 Nov 2022 03:12:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple;
-  d=wdc.com; i=@wdc.com; q=dns/txt; s=dkim.wdc.com;
-  t=1667470379; x=1699006379;
-  h=references:from:to:cc:subject:date:in-reply-to:
-   message-id:mime-version;
-  bh=KQ5MZxmzMqipMNv3LipYIyEv8lFKRPZyn9ap+tlMmH8=;
-  b=GRwW1sP2xukiObUGYg0ULrg1CnFalpNExoLCxtsJNo54iEjzSdmV6Poc
-   2dfTpmQgOxwiV5DDKnO0DckAyRQFQNGrWMUMUryTWuemIwABZxx7Ei80h
-   eRNVCv04sOIY6gC0b56fbvWZ0Dd8WDGtVWpiCPSFw/8iFV4lx1jd4Q64H
-   65rQuaXCFdUQmL/R0kNF0JRMB/Hnxd4UpGLvU2DFcdkHIpc29L1urGCpn
-   zLMud9xF+cAd+adELugNTXug6m6ogTurqPirI2zipF3w4bT9p7TFY2OpG
-   cbBDMsYL4ckV5IJlJeSKiEYFSdNAEUjimAqLgtgFtFftPafgWLV9ehu8w
-   A==;
-X-IronPort-AV: E=Sophos;i="5.95,235,1661788800"; 
-   d="scan'208";a="220544914"
-Received: from uls-op-cesaip02.wdc.com (HELO uls-op-cesaep02.wdc.com) ([199.255.45.15])
-  by ob1.hgst.iphmx.com with ESMTP; 03 Nov 2022 18:12:58 +0800
-IronPort-SDR: Xw0G43gBpyR8BKiUAPqAZfXrNwaiLWS6IHXL99+BiENo54ee5Q6UjQYbGO08Sz8P3r9VSjrAlA
- zBmf7+m/OpC8r6jH5mBiBnvNgrH+EE0FezfPXPQFMYjoIazb1Jv+ODO3sr3LA9L0lr9WRSQmC8
- 6ikO7wr3MvNIwk6/SEpJHrR5gSE9PcMKm5Q6biOUTC/Ahag5vc2/q4KDnwNR0ToDfI8CVz6Hkl
- QbqriPnazHFpRjYEtbNJf7V9Pe0rLyzwnQD9a35xDrIanEEsSOtGvI25wxXz+oqreNJLXlRcWs
- YWw=
-Received: from uls-op-cesaip02.wdc.com ([10.248.3.37])
-  by uls-op-cesaep02.wdc.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 03 Nov 2022 02:26:26 -0700
-IronPort-SDR: CRgbyRFKkYNc5Hf/NNABsDUDm9hBPHBMdvH9y3tjpTGOC2R4SbVuUX2z1x2wUAidd5Q+XsowoR
- kcyU1OtOx4InTVT5r5S4P9wV7rSYsknkv/ASc2a9eWBheN0xhEMVUwZbTA538dzNmo/A51FSJp
- 4Fsk0Liw1ZNwmjnde72aXUfE+c24jr6Tnv1QYSUDw4k0egXMORxbl/gamsfsS4Tn9h9wLT1EHD
- XXWbCUrvm/87nizd5r9T4DjQBRX/agEj4Icip+jt3GEVfadASfnjhwTizp0EfFKpRhPB86CJvZ
- TwI=
-WDCIronportException: Internal
-Received: from dellx5.wdc.com (HELO localhost) ([10.200.210.81])
-  by uls-op-cesaip02.wdc.com with ESMTP; 03 Nov 2022 03:12:57 -0700
-References: <CACMswuMVERF_+R3Qxb0xGHCBQUCuxtBLA+eDo__Coed3BoVC3A@mail.gmail.com>
-User-agent: mu4e 1.8.11; emacs 28.2.50
-From:   Andreas Hindborg <andreas.hindborg@wdc.com>
-To:     Dennis Dai <dzy.0424thu@gmail.com>
-Cc:     Andreas Hindborg <andreas.hindborg@wdc.com>,
-        Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Wedson Almeida Filho <wedsonaf@google.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?utf-8?Q?Bj=C3=B6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: rust nvme driver: potential sleep-in-atomic-context
-Date:   Thu, 03 Nov 2022 10:57:16 +0100
-In-reply-to: <CACMswuMVERF_+R3Qxb0xGHCBQUCuxtBLA+eDo__Coed3BoVC3A@mail.gmail.com>
-Message-ID: <87r0ykny6w.fsf@wdc.com>
+        Thu, 3 Nov 2022 05:58:25 -0400
+Received: from mail-pl1-x635.google.com (mail-pl1-x635.google.com [IPv6:2607:f8b0:4864:20::635])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5B37E1098
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 02:58:23 -0700 (PDT)
+Received: by mail-pl1-x635.google.com with SMTP id y4so1441644plb.2
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 02:58:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FblFuHeX62O54gDte9P0+RFishu5673s8IE4V3s7Dek=;
+        b=fQ/Bijpbz3QnQ6t7UgDN/8gHpBG5kkdUczACNrcYD2MInKuesA/4z5R1+cAVIU/dqo
+         aCJXdDlbKNQTr0mni0dzEViSJOMwRURg4f4HxCHZs4vtCGCLB/nnwPq1fIU40OVArKqu
+         kO0GmvHbLaMYyzcPaoNKb6ovb5hvvyfKZNuyPAI/Z7LcfbPxvZxTLTjk2+53Z5TmGh3R
+         Z5TurYqhFb77aF+myL18WIrLtvHlkyorKbXMFIhB+H7mWpkC9Eh9cAStzoJc8xuRwKMK
+         34NfI/zO2/EjqwZWL7aIp1bm3ke2B0ArEbWK02DuggGfSqfSRSP0+IzbHvOyfuKN+Fa2
+         GCEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FblFuHeX62O54gDte9P0+RFishu5673s8IE4V3s7Dek=;
+        b=lMnooxZgyBSsq8t9o0ru3bhUHkbBUMhi/xsY6vL77KzbwduLUiH6oQksZ14BVO9Jjf
+         b7eBnctRc16bCuZXans/E6Ry6svUBu6BtXOZ0EylGFVWC7mY0eiJUH7Gw50uIpB+bWTS
+         C82SKf3z5nALwQCIJ08TNUuqFg5Kx9NQCb8N0wXCRojxZxgaxSAipJmXwOjkbraMe5uP
+         2rNJq3lf1+ra7Tmw/9TVDPC4sgxpFCR9w0wCfXrE8/oPZ/dKd22djpd6X1rSrfPi9reC
+         VBYbJKsclzScOK8zeMRQFmNH+FgHnknJAhpViAtslfC2PeUOX7nNqZ5+cfXj1En/7Yed
+         XWkg==
+X-Gm-Message-State: ACrzQf1AqxBUVgBaq9W8xBMfgPSzhnO/U/xTAE5tNbP8KM4JTXi9Qsa/
+        ziyyzEqaFoDDKunR8D5isP6JGhkWzG+a
+X-Google-Smtp-Source: AMsMyM5VVQeEhBGZzXmlQGDmk7tapy7IRVyUm5w6rqKsuXwgBueFhXsgiMcHmMGtKLxqF4BGbWwHRA==
+X-Received: by 2002:a17:902:690a:b0:17a:32d:7acc with SMTP id j10-20020a170902690a00b0017a032d7accmr29703452plk.18.1667469502831;
+        Thu, 03 Nov 2022 02:58:22 -0700 (PDT)
+Received: from localhost.localdomain ([117.193.208.64])
+        by smtp.gmail.com with ESMTPSA id n6-20020a170902e54600b00186c54188b4sm161670plf.240.2022.11.03.02.58.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 02:58:21 -0700 (PDT)
+From:   Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To:     andersson@kernel.org
+Cc:     konrad.dybcio@somainline.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, johan+linaro@kernel.org,
+        quic_jprakash@quicinc.com, linux-arm-msm@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        steev@kali.org,
+        Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Subject: [PATCH v4 00/12] sc8280xp-pmic updates and X13s thermal zone support
+Date:   Thu,  3 Nov 2022 15:27:58 +0530
+Message-Id: <20221103095810.64606-1-manivannan.sadhasivam@linaro.org>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain
-X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,SPF_HELO_PASS,
-        SPF_NONE,WEIRD_PORT autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-Hi Dennis,
+This series adds below updates to sc8280xp-pmics:
 
-Dennis Dai <dzy.0424thu@gmail.com> writes:
+PM8280_{1/2}:
+- Temp alarm
+- Thermal zones
+- VADC channels
+- ADC_TM5 channels
 
-> The rust nvme driver [1] (which is still pending to be merged into
-> mainline [2]) has a potential sleep-in-atomic-context bug.
->
-> The potential buggy code is below
->
->     // drivers/block/nvme.rs:192
->     dev.queues.lock().io.try_reserve(nr_io_queues as _)?;
->     // drivers/block/nvme.rs:227
->     dev.queues.lock().io.try_push(io_queue.clone())?;
->
-> The queues field is wrapped in SpinLock, which means that we cannot
-> sleep (or indirectly call any function that may sleep) when the lock
-> is held.
-> However try_reserve function may indirectly call krealloc with a
-> sleepable flag GFP_KERNEL (that's default behaviour of the global rust
-> allocator).
-> The the case is similar for try_push.
->
-> I wonder if the bug could be confirmed.
+PMK8280:
+- ADC7 block
+- VADC channels
+- TM5 block
 
-Nice catch, I was not aware of that one. I will add a TODO. Did you
-manage to trigger this bug or did you find it by review?
+PMR735A:
+- VADC channels
 
-I am not sure if it has been decided how to pass flags to allocations
-yet. There is a discussion about the interface for Box here [1] and
-there is also some discussion on the list [2]. For reference, I use an
-atomic box allocation here [3].
+Also adds the thermal zone support to Lenovo X13s based on the thermistor
+SYS_THERM6 that provides the laptop skin temperature.
 
-The NVMe driver is very much a prototype and I expect there are many
-bugs like this still in it. So while I am not surprised, really I
-appreciate the report :)
+The sc8280xp-pmics is based on the new PMIC7 architecture. In this, all the
+ADC/TM5 measurements are collected by the primary PMIC PMK8280 from other
+slave PMICs PM8280_{1/2}, PMR735A using the Programmable Boot Sequence (PBS)
+and exposed them over the individual channels.
 
-[1] https://github.com/Rust-for-Linux/linux/pull/815
-[2] https://lore.kernel.org/rust-for-linux/Yyr5pKpjib%2Fyqk5e@kroah.com/T/#mb55cf54067002d503ca63c5ad0688d55c6184cca
-[3] https://github.com/metaspace/rust-linux/blob/nvme/drivers/block/nvme_mq.rs#L261
+PMK8280 uses the Slave ID (SID) for identifying each slave PMICs in a system.
+This ID is not static for each PMIC but rather set for each platform by the
+hardware designers. So this series allows the configurable SID by modifying the
+binding to accept SID values instead of hardcoding them.
 
-Best regards,
-Andreas Hindborg
+This series is tested on Lenovo X13s laptop by monitoring the temperature of
+the 8 on-board thermistors through IIO interface. The thermal zone support is
+validated by adding loads to the CPUs and making sure the skin temperature stays
+below the threshold provided in DT.
+
+NOTE: This series requires fwnode support to QCOM_SPMI_ADC5 driver [1] for making
+use of the full node name for IIO channels. Since the support is already in
+mainline, it should just work. But for older kernels, the IIO channels and
+thus the SPMI_ADC5 driver will fail to probe.
+
+Thanks,
+Mani
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/commit/drivers/iio/adc/qcom-spmi-adc5.c?id=4f47a236a23d9f18d018a2f6639daad476d2a3f2
+
+Changes in v4:
+
+* Got rid of "label" properties from ADC nodes and used common node names. The
+  ADC5 driver in mainline now uses the full node name for registering the IIO
+  channels. So "label" or unique node name is not required.
+
+Changes in v3:
+
+* Used thermistor index in node names for VADC channels. This is required by IIO
+* Collected reviews
+* Rearranged the dt properties (Konrad)
+
+Changes in v2:
+
+* Fixed issues reported by Krzysztof and "make dtbs_check"
+* Collected reviews from Krzysztof
+* Added the Lenovo X13s thermal zone patch
+
+Manivannan Sadhasivam (12):
+  dt-bindings: iio: qcom: adc7-pm8350: Allow specifying SID for channels
+  arm64: dts: qcom: sc8280xp-pmics: Add temp alarm for PM8280_{1/2}
+    PMICs
+  arm64: dts: qcom: sc8280xp-pmics: Add thermal zones for PM8280_{1/2}
+    PMICs
+  arm64: dts: qcom: sc8280xp-pmics: Add support for PMK8280 RESIN input
+  arm64: dts: qcom: sc8280xp-pmics: Add PMK8280 ADC7 block
+  arm64: dts: qcom: sc8280xp-pmics: Add support for TM5 block in PMK8280
+  arm64: dts: qcom: sc8280xp-x13s: Enable PMK8280 RESIN input
+  arm64: dts: qcom: sc8280xp-x13s: Add PMK8280 VADC channels
+  arm64: dts: qcom: sc8280xp-x13s: Add PM8280_{1/2} VADC channels
+  arm64: dts: qcom: sc8280xp-x13s: Add PMR735A VADC channel
+  arm64: dts: qcom: sc8280xp-x13s: Add PM8280_{1/2} ADC_TM5 channels
+  arm64: dts: qcom: sc8280xp-x13s: Add thermal zone support
+
+ .../bindings/thermal/qcom-spmi-adc-tm5.yaml   |   6 +-
+ .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 199 ++++++++++++++++++
+ arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi  |  84 ++++++++
+ .../dt-bindings/iio/qcom,spmi-adc7-pm8350.h   |  90 ++++----
+ 4 files changed, 329 insertions(+), 50 deletions(-)
+
+-- 
+2.25.1
+
