@@ -2,142 +2,142 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B032F6187A8
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:38:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0F4E36187F2
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:50:21 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229704AbiKCSiS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 14:38:18 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36120 "EHLO
+        id S231185AbiKCSuR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 14:50:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42866 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229445AbiKCSiQ (ORCPT
+        with ESMTP id S229445AbiKCSuM (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 14:38:16 -0400
-Received: from mail-ej1-x635.google.com (mail-ej1-x635.google.com [IPv6:2a00:1450:4864:20::635])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9E17F61;
-        Thu,  3 Nov 2022 11:38:15 -0700 (PDT)
-Received: by mail-ej1-x635.google.com with SMTP id y14so7652583ejd.9;
-        Thu, 03 Nov 2022 11:38:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=AdV60lwYNZHd1nY0aYC1vThK2Pv8MfHSq31cC6uqLnw=;
-        b=K6vifuN+hyYqYGS7hup35yInLj34OLtWGhie3fL1HWrzRYZ4Pyw9WrQv+zwR9xaNvt
-         EQ/QV8Tu02cnUS7kOoYiJ8+Psk5gXl8Sk64sAhIx+GY/zybTEVo/IRR/81CloH0b9wE1
-         OLzqDx4+HvQZISclU1rYRlrM78nXlORNZmXv8+eEQ7kilblLpBXkwMKtlGEnYkSup7t5
-         piWM6x7cY2cZxmZpLSZ+X6frGzhVWImwhujiiilkigtUmqvamsO9oBOY3IDOKOCtdtln
-         mqi7dqAbTEfQrhRueb4ulqrYAcEt1QI9CeR6Lnx/cfIqbPS46tLdxRk2A/IrdfjYIwM+
-         DkuA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=AdV60lwYNZHd1nY0aYC1vThK2Pv8MfHSq31cC6uqLnw=;
-        b=uo17gIli8GldREKM/FwNOMOakvPMYMZPuMjDokjeyqe+yuY3eMM27NNJ2lBajRweSi
-         SQ+zxpKJV7/Mx2iYn+lCWYEO+Vbm8beM3xa8L5k3kqhtEkPSFeOdp69MrRi/94+3+2Xi
-         g7WBcN5QpeeDqMX8e8FrXd1n92enk6xyxageWMF0d9+v/O0f+fTOATuWqUiTHM3ejzvh
-         mCw/AWjhZYas0d7z8A2flC8Vg/a3Tm+ec7DfZNPZ/aHVTZV2Afz1hisHq5iU4r7at49R
-         PEgqDW/F99BbICQsLpHTWhhwJV1RbSd0Mk/kat4DKSq4lggZuSf8xG25H4TXXOZ/bdfW
-         e6LA==
-X-Gm-Message-State: ACrzQf2W2LSMexcokwdJBTyl7FdzE0WjiLeFDJxpu2PElrtMTQyhFqjX
-        eO+ET9bbJiDl+OQUXCwmpSG+kBS+vbCFlGqx2mM=
-X-Google-Smtp-Source: AMsMyM6XqiSWJ8DfS6sbyPWxEdSJArp5SzDs76W8V+EpEBHcscgbmz7pW++nxedhmpvnNK8Kf4GsEvKzAh5nbg775xc=
-X-Received: by 2002:a17:907:7214:b0:7ad:94cf:4a36 with SMTP id
- dr20-20020a170907721400b007ad94cf4a36mr30312331ejc.226.1667500694357; Thu, 03
- Nov 2022 11:38:14 -0700 (PDT)
+        Thu, 3 Nov 2022 14:50:12 -0400
+Received: from isilmar-4.linta.de (isilmar-4.linta.de [136.243.71.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9523F7E;
+        Thu,  3 Nov 2022 11:50:10 -0700 (PDT)
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+X-isilmar-external: YES
+Received: from owl.dominikbrodowski.net (owl.brodo.linta [10.2.0.111])
+        by isilmar-4.linta.de (Postfix) with ESMTPSA id A7E69201457;
+        Thu,  3 Nov 2022 18:50:07 +0000 (UTC)
+Received: by owl.dominikbrodowski.net (Postfix, from userid 1000)
+        id 564FF801F1; Thu,  3 Nov 2022 19:38:07 +0100 (CET)
+Date:   Thu, 3 Nov 2022 19:38:07 +0100
+From:   Dominik Brodowski <linux@dominikbrodowski.net>
+To:     Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+Cc:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
+        xen-devel@lists.xenproject.org, Miguel Ojeda <ojeda@kernel.org>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Subject: Re: [PATCH v2 4/4] pcmcia: Convert to use
+ pci_bus_for_each_resource_p()
+Message-ID: <Y2QKjzL+nH6Zabg7@owl.dominikbrodowski.net>
+References: <20221103164644.70554-1-andriy.shevchenko@linux.intel.com>
+ <20221103164644.70554-5-andriy.shevchenko@linux.intel.com>
+ <Y2P0XCNJvTVuziO7@owl.dominikbrodowski.net>
+ <Y2P2ja26ikNecTsv@smile.fi.intel.com>
+ <Y2QImB0OLakzz1+F@rocinante>
 MIME-Version: 1.0
-References: <CAEf4Bza_6qND8iOuiur+xX0cBVkKJfKoJAOjihnVYRjoB3tWqw@mail.gmail.com>
- <tencent_7DD02046A8398BE3324F85E0F56ED41EB105@qq.com>
-In-Reply-To: <tencent_7DD02046A8398BE3324F85E0F56ED41EB105@qq.com>
-From:   Andrii Nakryiko <andrii.nakryiko@gmail.com>
-Date:   Thu, 3 Nov 2022 11:38:02 -0700
-Message-ID: <CAEf4BzbvCABmSB3UqKyka=txTiCUdBpTtQg4X6XOa_qVVXW+hw@mail.gmail.com>
-Subject: Re: [PATCH bpf-next] samples/bpf: Fix sockex3: missing BPF prog type
-To:     Rong Tao <rtoax@foxmail.com>
-Cc:     andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org,
-        daniel@iogearbox.net, haoluo@google.com, john.fastabend@gmail.com,
-        jolsa@kernel.org, kpsingh@kernel.org, linux-kernel@vger.kernel.org,
-        martin.lau@linux.dev, rongtao@cestc.cn, sdf@google.com,
-        song@kernel.org, yhs@fb.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y2QImB0OLakzz1+F@rocinante>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Sat, Oct 29, 2022 at 12:53 AM Rong Tao <rtoax@foxmail.com> wrote:
->
-> From: Rong Tao <rongtao@cestc.cn>
->
-> since commit 450b167fb9be("libbpf: clean up SEC() handling"),
-> sec_def_matches() does not recognize "socket/xxx" as "socket", therefore,
-> the BPF program type is not recognized, set "socket/xxx" to SOCKET_FILTER
-> solves this error.
->
->  $ cd samples/bpf
->  $ sudo ./sockex3
->  libbpf: prog 'bpf_func_PARSE_IP': missing BPF prog type, check ELF section name 'socket/3'
->  libbpf: prog 'bpf_func_PARSE_IP': failed to load: -22
->  libbpf: failed to load object './sockex3_kern.o'
->  ERROR: loading BPF object file failed
->
-> Signed-off-by: Rong Tao <rongtao@cestc.cn>
-> ---
+Am Fri, Nov 04, 2022 at 03:29:44AM +0900 schrieb Krzysztof Wilczyński:
+> Hello,
+> 
+> [...]
+> > > > -
+> > > > -	for (i = 0; i < PCI_BRIDGE_RESOURCE_NUM; i++) {
+> > > > -		res = s->cb_dev->bus->resource[i];
+> > > > -#else
+> > > > -	pci_bus_for_each_resource(s->cb_dev->bus, res, i) {
+> > > >  #endif
+> > > > +
+> > > > +	pci_bus_for_each_resource_p(s->cb_dev->bus, res) {
+> > > >  		if (!res)
+> > > >  			continue;
+> > > 
+> > > Doesn't this remove the proper iterator for X86? Even if that is the right
+> > > thing to do, it needs an explict explanation.
+> > 
+> > I dunno what was in 2010, but reading code now I have found no differences in
+> > the logic on how resources are being iterated in these two pieces of code.
+> 
+> This code is over a decade old (13 years old to be precise) and there was
+> something odd between Bjorn's and Jesse's patches, as per:
+> 
+>   89a74ecccd1f ("PCI: add pci_bus_for_each_resource(), remove direct bus->resource[] refs")
+>   cf26e8dc4194 ("pcmcia: do not autoadd root PCI bus resources")
+> 
+> > But fine, I will add a line to a commit message about this change.
+> 
+> I wouldn't, personally.  The change you are proposing is self-explanatory
+> and somewhat in-line with what is there already - unless I am also reading
+> the current implementation wrong.
+> 
+> That said, Dominik is the maintainer of PCMCIA driver, so his is the last
+> word, so to speak. :)
+> 
+> > Considering this is done, can you issue your conditional tag so I will
+> > incorporate it in v3?
+> 
+> No need, really.  Again, unless Dominik thinks otherwise.
 
-You need to do changes like this:
+Ah, thanks for the correction. Then v2 is perfectly fine.
 
-diff --git a/samples/bpf/sockex3_kern.c b/samples/bpf/sockex3_kern.c
-index b363503357e5..db6a93e7ec53 100644
---- a/samples/bpf/sockex3_kern.c
-+++ b/samples/bpf/sockex3_kern.c
-@@ -17,7 +17,7 @@
- #define IP_MF          0x2000
- #define IP_OFFSET      0x1FFF
-
--#define PROG(F) SEC("socket/"__stringify(F)) int bpf_func_##F
-+#define PROG(F) SEC("socket_filter") int bpf_func_##F
-
- struct {
-        __uint(type, BPF_MAP_TYPE_PROG_ARRAY);
-@@ -279,7 +279,7 @@ PROG(PARSE_MPLS)(struct __sk_buff *skb)
-        return 0;
- }
-
--SEC("socket/0")
-+SEC("socket_filter")
- int main_prog(struct __sk_buff *skb)
- {
-        __u32 nhoff = ETH_HLEN;
-
-
-Why fixing up after the fact at runtime, if you can just make those
-BPF programs conform to libbpf rules?
-
-
-
->  samples/bpf/sockex3_user.c | 3 +++
->  1 file changed, 3 insertions(+)
->
-> diff --git a/samples/bpf/sockex3_user.c b/samples/bpf/sockex3_user.c
-> index cd6fa79df900..dc79c17ad195 100644
-> --- a/samples/bpf/sockex3_user.c
-> +++ b/samples/bpf/sockex3_user.c
-> @@ -39,6 +39,9 @@ int main(int argc, char **argv)
->                 return 0;
->         }
->
-> +       bpf_object__for_each_program(prog, obj)
-> +               bpf_program__set_type(prog, BPF_PROG_TYPE_SOCKET_FILTER);
-> +
->         /* load BPF program */
->         if (bpf_object__load(obj)) {
->                 fprintf(stderr, "ERROR: loading BPF object file failed\n");
-> --
-> 2.31.1
->
+Thanks,
+	Dominik
