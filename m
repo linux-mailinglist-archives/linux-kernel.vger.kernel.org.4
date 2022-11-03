@@ -2,97 +2,97 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0729761787E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 09:15:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 229C9617863
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 09:09:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230261AbiKCIP0 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 04:15:26 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:32830 "EHLO
+        id S231354AbiKCIJO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 04:09:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57302 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiKCIPX (ORCPT
+        with ESMTP id S230171AbiKCIJJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 04:15:23 -0400
-X-Greylist: delayed 437 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 03 Nov 2022 01:15:20 PDT
-Received: from mxus.zte.com.cn (mxus.zte.com.cn [20.112.44.237])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D66C61BC;
-        Thu,  3 Nov 2022 01:15:20 -0700 (PDT)
-Received: from mxhk.zte.com.cn (unknown [192.168.250.137])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mxus.zte.com.cn (FangMail) with ESMTPS id 4N2xFs4kncz9tyW5;
-        Thu,  3 Nov 2022 16:08:01 +0800 (CST)
-Received: from mse-fl2.zte.com.cn (unknown [10.5.228.133])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4N2xFp2Rk2z8QrkZ;
-        Thu,  3 Nov 2022 16:07:58 +0800 (CST)
-Received: from xaxapp01.zte.com.cn ([10.88.40.50])
-        by mse-fl2.zte.com.cn with SMTP id 2A387iG9057025;
-        Thu, 3 Nov 2022 16:07:44 +0800 (+08)
-        (envelope-from zhang.songyi@zte.com.cn)
-Received: from mapi (xaxapp01[null])
-        by mapi (Zmail) with MAPI id mid31;
-        Thu, 3 Nov 2022 16:07:46 +0800 (CST)
-Date:   Thu, 3 Nov 2022 16:07:46 +0800 (CST)
-X-Zmail-TransId: 2af9636376d27d692465
-X-Mailer: Zmail v1.0
-Message-ID: <202211031607462393505@zte.com.cn>
-Mime-Version: 1.0
-From:   <zhang.songyi@zte.com.cn>
-To:     <avifishman70@gmail.com>
-Cc:     <tmaimon77@gmail.com>, <tali.perry1@gmail.com>,
-        <venture@google.com>, <yuenn@google.com>,
-        <benjaminfair@google.com>, <openbmc@lists.ozlabs.org>,
-        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <zhang.songyi@zte.com.cn>
-Subject: =?UTF-8?B?U3ViamVjdDogW1BBVENIIGxpbnV4LW5leHRdIGkyYzogbnBjbTd4eDogcmVtb3ZlIHJlZHVuZGFudCByZXQgdmFyaWFibGU=?=
-Content-Type: text/plain;
-        charset="UTF-8"
-X-MAIL: mse-fl2.zte.com.cn 2A387iG9057025
-X-Fangmail-Gw-Spam-Type: 0
-X-FangMail-Miltered: at 10-207-168-7 with ID 636376E0.000 by FangMail milter!
-X-FangMail-Envelope: 1667462881/4N2xFs4kncz9tyW5/636376E0.000/192.168.250.137/[192.168.250.137]/mxhk.zte.com.cn/<zhang.songyi@zte.com.cn>
-X-Fangmail-Anti-Spam-Filtered: true
-X-Fangmail-MID-QID: 636376E0.000/4N2xFs4kncz9tyW5
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
-        version=3.4.6
+        Thu, 3 Nov 2022 04:09:09 -0400
+Received: from mx0a-00128a01.pphosted.com (mx0a-00128a01.pphosted.com [148.163.135.77])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 744B0B1;
+        Thu,  3 Nov 2022 01:09:07 -0700 (PDT)
+Received: from pps.filterd (m0167089.ppops.net [127.0.0.1])
+        by mx0a-00128a01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A347R6s008154;
+        Thu, 3 Nov 2022 04:09:04 -0400
+Received: from nwd2mta3.analog.com ([137.71.173.56])
+        by mx0a-00128a01.pphosted.com (PPS) with ESMTPS id 3kjn9u0rqe-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Nov 2022 04:09:04 -0400
+Received: from ASHBMBX9.ad.analog.com (ASHBMBX9.ad.analog.com [10.64.17.10])
+        by nwd2mta3.analog.com (8.14.7/8.14.7) with ESMTP id 2A3892hg004108
+        (version=TLSv1/SSLv3 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 3 Nov 2022 04:09:02 -0400
+Received: from ASHBMBX9.ad.analog.com (10.64.17.10) by ASHBMBX9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.14; Thu, 3 Nov 2022
+ 04:09:01 -0400
+Received: from zeus.spd.analog.com (10.66.68.11) by ashbmbx9.ad.analog.com
+ (10.64.17.10) with Microsoft SMTP Server id 15.2.986.14 via Frontend
+ Transport; Thu, 3 Nov 2022 04:09:01 -0400
+Received: from rbolboac.ad.analog.com ([10.48.65.139])
+        by zeus.spd.analog.com (8.15.1/8.15.1) with ESMTP id 2A388q0I009844;
+        Thu, 3 Nov 2022 04:08:54 -0400
+From:   Ramona Bolboaca <ramona.bolboaca@analog.com>
+To:     <jic23@kernel.org>, <linux-iio@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+CC:     Ramona Bolboaca <ramona.bolboaca@analog.com>
+Subject: [PATCH v2 0/8] Remove adis_initial_startup usage
+Date:   Thu, 3 Nov 2022 10:08:39 +0200
+Message-ID: <20221103080847.162509-1-ramona.bolboaca@analog.com>
+X-Mailer: git-send-email 2.25.1
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-ADIRuleOP-NewSCL: Rule Triggered
+X-Proofpoint-GUID: TacEA3Zes1yu2OZk2HRN9MZHYQwQbh7v
+X-Proofpoint-ORIG-GUID: TacEA3Zes1yu2OZk2HRN9MZHYQwQbh7v
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-02_15,2022-11-02_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 bulkscore=0
+ priorityscore=1501 lowpriorityscore=0 mlxscore=0 spamscore=0
+ impostorscore=0 clxscore=1015 suspectscore=0 mlxlogscore=999 phishscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211030057
+X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_LOW,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: zhang songyi <zhang.songyi@zte.com.cn>
+Remove 'adis_initial_startup()' usage due to the fact that it leads to a 
+deadlock.
+The same mutex is acquired twice, without releasing it, once inside
+'adis_initial_startup()' and once inside 'adis_enable_irq()'.
+Instead of 'adis_initial_startup()', use '__adis_initial_startup()'.
 
-Return value from npcm_i2c_get_slave_addr() directly instead of taking
-this in another redundant variable.
+Ramona Bolboaca (8):
+  iio: accel: adis16201: Fix deadlock in probe
+  iio: accel: adis16209: Fix deadlock in probe
+  iio: gyro: adis16136: Fix deadlock in probe
+  iio: gyro: adis16260: Fix deadlock in probe
+  iio: imu: adis16400: Fix deadlock in probe
+  staging: iio: accel: adis16203: Fix deadlock in probe
+  staging: iio: accel: adis16240: Fix deadlock in probe
+  iio: imu: adis: Remove adis_initial_startup function
 
-Reported-by: Zeal Robot <zealci@zte.com.cn>
-Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
----
- drivers/i2c/busses/i2c-npcm7xx.c | 6 +-----
- 1 file changed, 1 insertion(+), 5 deletions(-)
+ drivers/iio/accel/adis16201.c         |  2 +-
+ drivers/iio/accel/adis16209.c         |  2 +-
+ drivers/iio/gyro/adis16136.c          |  2 +-
+ drivers/iio/gyro/adis16260.c          |  2 +-
+ drivers/iio/imu/adis16400.c           |  2 +-
+ drivers/staging/iio/accel/adis16203.c |  2 +-
+ drivers/staging/iio/accel/adis16240.c |  2 +-
+ include/linux/iio/imu/adis.h          | 12 ------------
+ 8 files changed, 7 insertions(+), 19 deletions(-)
 
-diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
-index bbc7359e67f7..772967862003 100644
---- a/drivers/i2c/busses/i2c-npcm7xx.c
-+++ b/drivers/i2c/busses/i2c-npcm7xx.c
-@@ -858,14 +858,10 @@ static void npcm_i2c_master_abort(struct npcm_i2c *bus)
- #if IS_ENABLED(CONFIG_I2C_SLAVE)
- static u8 npcm_i2c_get_slave_addr(struct npcm_i2c *bus, enum i2c_addr addr_type)
- {
--   u8 slave_add;
--
-    if (addr_type > I2C_SLAVE_ADDR2 && addr_type <= I2C_SLAVE_ADDR10)
-        dev_err(bus->dev, "get slave: try to use more than 2 SA not supported\n");
+-- 
+2.25.1
 
--   slave_add = ioread8(bus->reg + npcm_i2caddr[(int)addr_type]);
--
--   return slave_add;
-+   return ioread8(bus->reg + npcm_i2caddr[(int)addr_type]);
- }
-
- static int npcm_i2c_remove_slave_addr(struct npcm_i2c *bus, u8 slave_add)
---
-2.15.2
