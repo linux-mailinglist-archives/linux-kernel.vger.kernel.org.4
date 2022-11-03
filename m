@@ -2,126 +2,132 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 111BE617C90
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:32:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AC4D8617C95
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:32:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230194AbiKCMcN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 08:32:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50112 "EHLO
+        id S229873AbiKCMcc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 08:32:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231599AbiKCMcK (ORCPT
+        with ESMTP id S231658AbiKCMcZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 08:32:10 -0400
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [IPv6:2001:4b98:dc2:55:216:3eff:fef7:d647])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A475D2C2;
-        Thu,  3 Nov 2022 05:32:09 -0700 (PDT)
-Received: from [192.168.1.15] (91-154-32-225.elisa-laajakaista.fi [91.154.32.225])
-        by perceval.ideasonboard.com (Postfix) with ESMTPSA id 52556589;
-        Thu,  3 Nov 2022 13:32:05 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-        s=mail; t=1667478726;
-        bh=FZxcUfj1FmCWOBQW7K09YPCKFrtHQ2cMQSFNaoj6FhU=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=fF+7EjKN0Av9s26q97YDm4yoKHJQ/b2KSUv1HNYppzCjQndL7NG8rqpqAbu44t1Eu
-         q77HPEAbiynZzKAeVrrX4kBF8wYC3zJHpBiY2fSno6/UznCwqHDM+wr+tSnLs+mDHl
-         otr+xHruNmFQfH5w/zH+WJtnUsj1nwaiuDD1oYhI=
-Message-ID: <8360ac8f-64aa-9edd-a110-903e734739f3@ideasonboard.com>
-Date:   Thu, 3 Nov 2022 14:32:02 +0200
+        Thu, 3 Nov 2022 08:32:25 -0400
+Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15940101EF
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 05:32:22 -0700 (PDT)
+Received: by mail-qk1-x72b.google.com with SMTP id z30so942482qkz.13
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 05:32:22 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=89rx9VoTuC7g0qdb+V9KXopipeQYjCJGbZv00TdzOE0=;
+        b=o5XhGT3dISsj0AhS0b8oU+q8yJWUjiD72PhTzij8ETk1QUUINlo6rvo8zmajQJGfo+
+         zw6P6xP6WrXb3robzpR0tTKmrWWsIKPkAUAYt8KNBf0QMt8XJ/wAew8nk2YEkzz0Ddc+
+         cx+lqnvGPpUEJwspAMnxEDd/i7SwSTC4eND6ks7RF1dTo7x1eDxgVrLfHhTGRhoT8xEX
+         LPgHAhnHd6tLdJjnFXlre+9s5AQ7OUl4qwXGt/1X9ofKUQ420k8icdNc5gy6q/zkhJNM
+         YBbSSEiITM/KxP65d9YzXQjV51o9iMAeWNAYN9T2vMZfPM4FXdoDWdTmnLOODPS+GaB2
+         KC3g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=89rx9VoTuC7g0qdb+V9KXopipeQYjCJGbZv00TdzOE0=;
+        b=aEKm1s2ialcjQqDjAMQKojRssVK98ugcOo4C7sC6uXt/KH18pu/kryc/b7mbveA9J+
+         /TjrgbBgzyF/vc8Oh7xI2V8mEmh9Ug/kMYlB8E0h6tuZqIGV0I0S31kqfxgg2bojksLP
+         7c01aX7tmVtmvKZoBXW5MDGCeuXbilgsf5lWvDZ0mMWLTI5JHcTtGu99ZOyRZHUyLzas
+         G/L6FdZEG1nTiaNBrb4ctP7GZaOCG8hTK767/tyzDjfzJCLccNv421pljdxPZhEJLtmJ
+         sZBUM5AR1j+U9WsYfN8vQR3jCz9++NSSYvgwHm9G1fwM/pilD0YsNEEXMJ3TtY8L5TuH
+         kWmg==
+X-Gm-Message-State: ACrzQf1p/B05hFFHmvjGxJE3NFoYOVQ2NL5GJ5mAuN214PuY9uXmpvqx
+        zTqWGKtThkSCE9m+zyR/Wm3ezg==
+X-Google-Smtp-Source: AMsMyM7hhWYMwJIM/iYR0o/zA8dGOdK9n2c0soG1TcplmfzHJ5MkF8+DyVZ18OIDEmGq/K2JbY6Wtg==
+X-Received: by 2002:a05:620a:4146:b0:6fa:c8e:b60 with SMTP id k6-20020a05620a414600b006fa0c8e0b60mr22054168qko.454.1667478741073;
+        Thu, 03 Nov 2022 05:32:21 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
+        by smtp.gmail.com with ESMTPSA id cn6-20020a05622a248600b0035cd6a4ba3csm450573qtb.39.2022.11.03.05.32.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 05:32:20 -0700 (PDT)
+Message-ID: <372b6da1-62a7-6204-5d02-8a4abb22c4ab@linaro.org>
+Date:   Thu, 3 Nov 2022 08:32:18 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v4 3/8] dt-bindings: media: add bindings for TI DS90UB960
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 1/3] arm64: exynos: Add new compatible string for
+ Exynos3250 SoC.
+To:     Aakarsh Jain <aakarsh.jain@samsung.com>,
+        linux-arm-kernel@lists.infradead.org, linux-media@vger.kernel.org,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org
+Cc:     m.szyprowski@samsung.com, andrzej.hajda@intel.com,
+        mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
+        ezequiel@vanguardiasur.com.ar, jernej.skrabec@gmail.com,
+        benjamin.gaignard@collabora.com, krzysztof.kozlowski+dt@linaro.org,
+        stanimir.varbanov@linaro.org, dillon.minfei@gmail.com,
+        david.plowman@raspberrypi.com, mark.rutland@arm.com,
+        robh+dt@kernel.org, krzk+dt@kernel.org, andi@etezian.org,
+        alim.akhtar@samsung.com, aswani.reddy@samsung.com,
+        pankaj.dubey@samsung.com, smitha.t@samsung.com
+References: <CGME20221102125810epcas5p36e6caf41f602debe17f25f13969fd6dc@epcas5p3.samsung.com>
+ <20221102130602.48969-1-aakarsh.jain@samsung.com>
 Content-Language: en-US
-To:     "Vaittinen, Matti" <Matti.Vaittinen@fi.rohmeurope.com>,
-        Rob Herring <robh@kernel.org>
-Cc:     "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-i2c@vger.kernel.org" <linux-i2c@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-media@vger.kernel.org" <linux-media@vger.kernel.org>,
-        Hans Verkuil <hverkuil-cisco@xs4all.nl>,
-        Jacopo Mondi <jacopo@jmondi.org>,
-        Kieran Bingham <kieran.bingham@ideasonboard.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Luca Ceresoli <luca@lucaceresoli.net>,
-        Mark Rutland <mark.rutland@arm.com>,
-        Mauro Carvalho Chehab <mchehab@kernel.org>,
-        Peter Rosin <peda@axentia.se>,
-        Sakari Ailus <sakari.ailus@linux.intel.com>,
-        Vladimir Zapolskiy <vz@mleia.com>,
-        Wolfram Sang <wsa@the-dreams.de>,
-        "satish.nagireddy@getcruise.com" <satish.nagireddy@getcruise.com>
-References: <20221101132032.1542416-1-tomi.valkeinen@ideasonboard.com>
- <20221101132032.1542416-4-tomi.valkeinen@ideasonboard.com>
- <20221102172630.GA4140587-robh@kernel.org>
- <6c254d5f-9fa1-b06a-4edb-7e58e4b33101@ideasonboard.com>
- <fb9e9d5e-9c8b-1ce2-5723-efa498d1ba93@fi.rohmeurope.com>
-From:   Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>
-In-Reply-To: <fb9e9d5e-9c8b-1ce2-5723-efa498d1ba93@fi.rohmeurope.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221102130602.48969-1-aakarsh.jain@samsung.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/11/2022 14:13, Vaittinen, Matti wrote:
-> On 11/3/22 13:50, Tomi Valkeinen wrote:
->> Hi Rob,
->>
->> On 02/11/2022 19:26, Rob Herring wrote:
->>> On Tue, Nov 01, 2022 at 03:20:27PM +0200, Tomi Valkeinen wrote:
->>>> +
->>>> +  i2c-alias-pool:
->>>
->>> Something common or could be? If not, then needs a vendor prefix.
->>
->> I'll have to think about this. It is related to the i2c-atr, so I think
->> it might be a common thing.
+On 02/11/2022 09:06, Aakarsh Jain wrote:
+> Exynos3250 uses the same compatible as Exynos5420, but both
+> the MFC IPs found in these SoC are different interms of clock
+> property. So using same compatible for both SoC is not correct.
+> Lets have a separate compatible for Exynos3250 and Exynos5420
+> to differentiate these SoCs.
 > 
-> I'd say this should be common. Where the i2c-atr properties should live
-> is another question though. If the I2C-atr stays as a genericly usable
-> component - then these bindings should be in a file that can be
-> referenced by other I2C-atr users (like the UB960 here).
+> Suggested-by: Alim Akhtar <alim.akhtar@samsung.com> 
+> Signed-off-by: Aakarsh Jain <aakarsh.jain@samsung.com>
+> ---
+>  Documentation/devicetree/bindings/media/s5p-mfc.txt | 7 ++++---
+>  1 file changed, 4 insertions(+), 3 deletions(-)
 
-Yep. All the links, link, serializer and alias nodes/properties are new 
-things here, and I guess these could be used by other deser-ser systems. 
-That said, I don't have any experience with other systems.
+Use subject prefixes matching the subsystem (git log --oneline -- ...).
 
-> // snip
 > 
->>>> +
->>>> +          i2c-alias:
->>>
->>> Vendor prefix.
->>>
->>>> +            description: |
->>>> +              The i2c address used for the serializer. Transactions
->>>> to this
->>>> +              address on the i2c bus where the deserializer resides are
->>>> +              forwarded to the serializer.
->>>> +
->>>> +          rx-mode:
->>>
->>> Vendor prefix. And so on... >
->> Yes, I totally missed these.
+> We are already in process of converting this txt file to yaml.
+> https://patchwork.kernel.org/project/linux-media/patch/
+> 20221011122516.32135-2-aakarsh.jain@samsung.com/
+> modifying this txt binding for completeness.
 > 
-> 
-> I think the i2c-alias might need to be common as well?
+> diff --git a/Documentation/devicetree/bindings/media/s5p-mfc.txt b/Documentation/devicetree/bindings/media/s5p-mfc.txt
+> index aa54c8159d9f..4ff1898e5a51 100644
+> --- a/Documentation/devicetree/bindings/media/s5p-mfc.txt
+> +++ b/Documentation/devicetree/bindings/media/s5p-mfc.txt
+> @@ -11,9 +11,10 @@ Required properties:
+>  	(a) "samsung,mfc-v5" for MFC v5 present in Exynos4 SoCs
+>  	(b) "samsung,mfc-v6" for MFC v6 present in Exynos5 SoCs
+>  	(c) "samsung,mfc-v7" for MFC v7 present in Exynos5420 SoC
+> -	(d) "samsung,mfc-v8" for MFC v8 present in Exynos5800 SoC
+> -	(e) "samsung,exynos5433-mfc" for MFC v8 present in Exynos5433 SoC
+> -	(f) "samsung,mfc-v10" for MFC v10 present in Exynos7880 SoC
+> +	(d) "samsung,exynos3250-mfc" for MFC v7 present in Exynos3250 SoC
 
-Perhaps...
+This should be followed by mfc-v7 fallback.
 
-I was also thinking that the serializer addresses could be taken from 
-the i2c-alias-pool. But maybe that's not a good idea, as the 
-serializer-access and remote-peripheral-access are a bit different (e.g. 
-no ATR when accessing the serializer).
+> +	(e) "samsung,mfc-v8" for MFC v8 present in Exynos5800 SoC
+> +	(f) "samsung,exynos5433-mfc" for MFC v8 present in Exynos5433 SoC
+> +	(g) "samsung,mfc-v10" for MFC v10 present in Exynos7880 SoC
+>  
+>    - reg : Physical base address of the IP registers and length of memory
+>  	  mapped region.
 
-And I was thinking that, at least here, the alias addresses can be 
-"anything", so they could be reserved dynamically at runtime, without 
-any predefined aliases. But that might be a bit confusing to the user.
-
-  Tomi
+Best regards,
+Krzysztof
 
