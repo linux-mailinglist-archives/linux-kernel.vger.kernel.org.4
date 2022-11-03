@@ -2,111 +2,141 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CE9CE618443
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:26:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 40C8C618448
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:26:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231278AbiKCQ0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 12:26:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
+        id S231367AbiKCQ0Q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 12:26:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50444 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229950AbiKCQZ5 (ORCPT
+        with ESMTP id S230381AbiKCQ0N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 12:25:57 -0400
-Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF431B1C4;
-        Thu,  3 Nov 2022 09:25:56 -0700 (PDT)
-Received: by mail-qt1-f179.google.com with SMTP id x15so1535671qtv.9;
-        Thu, 03 Nov 2022 09:25:56 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=9gjhCPJCfzSZsQpHkvf5XJYJR8ZLs4RZeQXTnmRRfgU=;
-        b=G8hD1+eDOrKbp+hZ3UFufAsDD6Cwi4hJcSjuVPN3uRYnMNfWIY50wHicl6cIHrZK1T
-         iHqsWEUFRIfwp93Wc6FVjEOr0TcMFjWkPGi6A6ZDnRmUafoM2vIWGSg3QOcVjWTDb8+9
-         sh0DPsw7smWQ/WVvdkU8Xm51lIW1MssdsmuzCl6aHcmk914XaRJsG6/etVNtX0c0UQJX
-         w6xKPHIVchsLGJizoupL6w6/JqkGGG3RhBZLNBliXk4CfHB1/2Rpuml6dPsObyZuXtsi
-         GF6rq0XaU7JKUtAs3RdCjuVMVsmvhCiVP7r9A0zgU/FGhEA7Kt/vMUx156KNMj0CbGzj
-         MgVQ==
-X-Gm-Message-State: ACrzQf0PFtznfS1FJU41Zl5RSAZFfAD0aPaTCnT5FOUO37YmcUbb8okX
-        sNIUqCZR43WoMjVUES3IdQZjrEXMcIV8iKGzJY8=
-X-Google-Smtp-Source: AMsMyM6yvyrZ7NWy3i/4QUBAU6erlkf78B3kudKRnMAKNl0LLgW+Ajz9l40UDOVpEhNMaKNsm+H+05C8uzvenP/Nm24=
-X-Received: by 2002:ac8:7d15:0:b0:3a5:449:87c3 with SMTP id
- g21-20020ac87d15000000b003a5044987c3mr25275935qtb.357.1667492755456; Thu, 03
- Nov 2022 09:25:55 -0700 (PDT)
+        Thu, 3 Nov 2022 12:26:13 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 60727DEDC;
+        Thu,  3 Nov 2022 09:26:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=LuUlqEzo0OPo2OKzfkX6TrEu4UYR2Ri7Y6DcewzJiDo=; b=vBdSLQm2ScrC/F19qfTghg8m4Z
+        yB3h906OykABRfgw8Tx/gJkEUKwe9fIMVXnbdPplZ+fYHObjhnP0ok4TVKxGv05iZCuI0gQDH3Fen
+        3tV+Pw6TIQDa9EExDJCRVTWjKaHS8k+iIuNN/Q3BGHjGKGYEOuePucFze6TiLdLOkAPpubSLu6krZ
+        98Gp323cPmkk2iQrMt2L7REeAFO9dXIqFLuL92U18PPXrDfflJsgfblKJUbL43PAcd6L0jeTJdSzu
+        KoheCz7X6bmokwq640ljKET1LxpDhff/pmvR92p07J+lce7v6IYHgy5pRoy8oMfQZxg9ImMD7b6no
+        Wg7kgJZg==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oqd2f-000g7r-L4; Thu, 03 Nov 2022 16:26:09 +0000
+Message-ID: <f5a46aef-780e-6fec-85b4-82549fb7a7a1@infradead.org>
+Date:   Thu, 3 Nov 2022 09:26:09 -0700
 MIME-Version: 1.0
-References: <20221101022840.1351163-1-tgsp002@gmail.com> <20221101022840.1351163-2-tgsp002@gmail.com>
-In-Reply-To: <20221101022840.1351163-2-tgsp002@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 3 Nov 2022 17:25:43 +0100
-Message-ID: <CAJZ5v0iPFPbbconOoQ7x_4X5yJ31pP7aduLqG4dq6KgAsprKbA@mail.gmail.com>
-Subject: Re: [PATCH -next 1/2] PM: hibernate: fix spelling mistake for annotation
-To:     TGSP <tgsp002@gmail.com>
-Cc:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        huanglei@kylinos.cn, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xiongxin <xiongxin@kylinos.cn>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] drm: rcar_du: DRM_RCAR_DU optionally depends on
+ RCAR_MIPI_DSI
+Content-Language: en-US
+To:     Javier Martinez Canillas <javierm@redhat.com>,
+        Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>,
+        linux-kernel@vger.kernel.org
+Cc:     Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>,
+        dri-devel@lists.freedesktop.org, linux-renesas-soc@vger.kernel.org,
+        Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>,
+        LUU HOAI <hoai.luu.ub@renesas.com>
+References: <20221018181828.19528-1-rdunlap@infradead.org>
+ <a68a24a0-eda3-8711-21c1-334289eca0d3@infradead.org>
+ <166747314442.3962897.9754510086268412956@Monstersaurus>
+ <c9064cc6-2a9d-1094-53fb-cf56f9cbf191@redhat.com>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <c9064cc6-2a9d-1094-53fb-cf56f9cbf191@redhat.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 1, 2022 at 3:28 AM TGSP <tgsp002@gmail.com> wrote:
->
-> From: xiongxin <xiongxin@kylinos.cn>
->
-> The actual calculation formula in the code below is:
->
-> max_size = (count - (size + PAGES_FOR_IO)) / 2
->             - 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE);
->
-> But function comments are written differently, the comment is wrong?
+Hi,
 
-It is, and it is more serious than just a spelling mistake.
+On 11/3/22 04:53, Javier Martinez Canillas wrote:
+> Hello Kieran,
+> 
+> On 11/3/22 11:59, Kieran Bingham wrote:
+>> Hi Randy,
+>>
+>> Quoting Randy Dunlap (2022-11-03 06:06:45)
+>>> ping. I have verified (on linux-next-20221103) that this is still needed.
+>>> Thanks.
+>>>
+>>> On 10/18/22 11:18, Randy Dunlap wrote:
+>>>> When CONFIG_DRM_RCAR_DU=y and CONFIG_DRM_RCAR_MIPI_DSI=m, calls
+>>>> from the builtin driver to the mipi driver fail due to linker
+>>>> errors.
+>>>> Since the RCAR_MIPI_DSI driver is not always required, fix the
+>>>> build error by making DRM_RCAR_DU optionally depend on the
+>>>> RCAR_MIPI_DSI Kconfig symbol. This prevents the problematic
+>>>> kconfig combination without requiring that RCAR_MIPI_DSI always
+>>>> be enabled.
+>>>>
+>>>> aarch64-linux-ld: drivers/gpu/drm/rcar-du/rcar_du_crtc.o: in function `rcar_du_crtc_atomic_enable':
+>>>> rcar_du_crtc.c:(.text+0x3a18): undefined reference to `rcar_mipi_dsi_pclk_enable'
+>>>> aarch64-linux-ld: drivers/gpu/drm/rcar-du/rcar_du_crtc.o: in function `rcar_du_crtc_atomic_disable':
+>>>> rcar_du_crtc.c:(.text+0x47cc): undefined reference to `rcar_mipi_dsi_pclk_disable'
+>>>>
+>>>> Fixes: 957fe62d7d15 ("drm: rcar-du: Fix DSI enable & disable sequence")
+>>>> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+>>>> Cc: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>
+>>>> Cc: Laurent Pinchart <laurent.pinchart+renesas@ideasonboard.com>
+>>>> Cc: Kieran Bingham <kieran.bingham+renesas@ideasonboard.com>
+>>>> Cc: LUU HOAI <hoai.luu.ub@renesas.com>
+>>>> Cc: dri-devel@lists.freedesktop.org
+>>>> Cc: linux-renesas-soc@vger.kernel.org
+>>>> Cc: David Airlie <airlied@gmail.com>
+>>>> Cc: Daniel Vetter <daniel@ffwll.ch>
+>>>> ---
+>>>>  drivers/gpu/drm/rcar-du/Kconfig |    1 +
+>>>>  1 file changed, 1 insertion(+)
+>>>>
+>>>> diff -- a/drivers/gpu/drm/rcar-du/Kconfig b/drivers/gpu/drm/rcar-du/Kconfig
+>>>> --- a/drivers/gpu/drm/rcar-du/Kconfig
+>>>> +++ b/drivers/gpu/drm/rcar-du/Kconfig
+>>>> @@ -4,6 +4,7 @@ config DRM_RCAR_DU
+>>>>       depends on DRM && OF
+>>>>       depends on ARM || ARM64
+>>>>       depends on ARCH_RENESAS || COMPILE_TEST
+>>>> +     depends on DRM_RCAR_MIPI_DSI || DRM_RCAR_MIPI_DSI=n
+>>
+>> Please forgive my ignorance, but I don't understand how this works.
+>> Could you explain what this is doing please?
+>>
+>> I know you've explained above that it fixes it to optionally depend on
+>> DRM_RCAR_MIPI_DSI ... but it's not making sense to me.
+>>
+>> To me - this is saying we depend on DRM_RCAR_MIPI_DSI being enabled, or
+>> not being enabled ... ? Which is like saying if (0 || 1) ?
+>>
+>> I'm guessing I'm missing something obvious :-S
 
-> By the way, what exactly do the "/ 2" and "2 *" mean?
+It's kconfig tristate symbols (y/n/m), not boolean. :)
 
-Every page in the image is a copy of an existing allocated page, so
-room needs to be made for the two, except for the "IO pages" and
-metadata pages that are not copied.  Hence, the division by 2.
+> What this Kconfig expression is saying is that it depends on DRM_RCAR_MIPI_DSI=y
+> if DRM_RCAR_DU=y and DRM_RCAR_MIPI_DSI=m if DRM_RCAR_DU=m. But that the it can
+> also be satisfied if is not set DRM_RCAR_MIPI_DSI.
+> 
+> This is usually used to make sure that you don't end with a configuration where
+> DRM_RCAR_MIPI_DSI=y and DRM_RCAR_DU=m or DRM_RCAR_MIPI_DSI=m and DRM_RCAR_DU=y.
+> 
+> Randy, I think that it's more idiomatic though to it express as following:
+> 
+> depends on DRM_RCAR_MIPI_DSI || !DRM_RCAR_MIPI_DSI
 
-Now, the "reserved_size" pages will be allocated right before creating
-the image and there will be a copy of each of them in the image, so
-there needs to be room for twice as many.
+I count just over 200 of each idiom (but my grep strings could be
+too crude). I guess that you want a v2 with that change?
 
-I'll adjust the changelog and queue up the path for 6.2.
-
-> Cc: stable@vger.kernel.org
-
-I'll add a Fixes tag instead.
-
-> Signed-off-by: xiongxin <xiongxin@kylinos.cn>
-> ---
->  kernel/power/snapshot.c | 4 ++--
->  1 file changed, 2 insertions(+), 2 deletions(-)
->
-> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-> index 2a406753af90..c20ca5fb9adc 100644
-> --- a/kernel/power/snapshot.c
-> +++ b/kernel/power/snapshot.c
-> @@ -1723,8 +1723,8 @@ static unsigned long minimum_image_size(unsigned long saveable)
->   * /sys/power/reserved_size, respectively).  To make this happen, we compute the
->   * total number of available page frames and allocate at least
->   *
-> - * ([page frames total] + PAGES_FOR_IO + [metadata pages]) / 2
-> - *  + 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE)
-> + * ([page frames total] - PAGES_FOR_IO - [metadata pages]) / 2
-> + *  - 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE)
->   *
->   * of them, which corresponds to the maximum size of a hibernation image.
->   *
-> --
-> 2.25.1
->
+Thanks.
+-- 
+~Randy
