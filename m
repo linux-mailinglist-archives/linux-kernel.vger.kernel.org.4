@@ -2,66 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C47A9617457
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 03:40:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 869BD61745E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 03:44:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231205AbiKCCkk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 22:40:40 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37564 "EHLO
+        id S230353AbiKCCoH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 22:44:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38346 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229823AbiKCCki (ORCPT
+        with ESMTP id S229823AbiKCCoD (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 22:40:38 -0400
-Received: from mail-pj1-x1032.google.com (mail-pj1-x1032.google.com [IPv6:2607:f8b0:4864:20::1032])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7704312AE2
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 19:40:37 -0700 (PDT)
-Received: by mail-pj1-x1032.google.com with SMTP id p15-20020a17090a348f00b002141615576dso3888577pjb.4
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 19:40:37 -0700 (PDT)
+        Wed, 2 Nov 2022 22:44:03 -0400
+Received: from mail-pl1-x629.google.com (mail-pl1-x629.google.com [IPv6:2607:f8b0:4864:20::629])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D5E4312AE2
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 19:44:02 -0700 (PDT)
+Received: by mail-pl1-x629.google.com with SMTP id y4so660051plb.2
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 19:44:02 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=1CzhzdOGNk13VZOPHqdFQ974H6LQTp0JJL8W4fRoN5g=;
-        b=PMyXnCNlzvObOAbZcR73hloc5uKhp2Amt6NbgXVUhwlFycH6Niqq+RfJcl6/7t8uKd
-         RFtt2F2mJ2SEw3Rm4bqTzOqMLQtIm3PwgOHH2+dqtpP8Oe+TTy+LDcOwClLpcC92VVhR
-         c3zwLx1lt1kTYo8yZCpa1DyQ/dvScj7HtilDQ=
+        bh=bj1OXM86++Ax5WK9NQpXE8onmLsfEj10gyUi+TO3JfE=;
+        b=ROLVFzyL5oaa51yfOrh3XK/kCTxN0hPymFWPR3PKxJnXkCAX0o6mTw6kJ3TcfIvztf
+         G+Z9C5gJr3mVzv8rtbVtGHhvr4Px83/zMQ8VKbOhbEo1+x4vWdAG2CvE1ytt1MJtR/Io
+         UoLUAPfhJMtiwLBIwi0KIOH6ZXSixbLexAT9o=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=1CzhzdOGNk13VZOPHqdFQ974H6LQTp0JJL8W4fRoN5g=;
-        b=Do+M9jYfvx057Qnnybgu4/YeR4KuAyXKZC+GYfVQaacdmBgeGeayXzLgclg+hxeI4R
-         WghSDTVtShJVIMOiLs5BQkeb0JzKe1gx3DZiHTlgcxXJlF+sMIOyPb8ThILUpklVamzl
-         1fIxQz3tHR7JJ+Ysq+BiRrmjwbfKWNN3e79NylFS1k2JQdp0xnsP2b12M7hZ3+feDm8q
-         zXlnaKLh1PMpZwgNWmL0zsHgBsgHd9UATllj2Qryy17F2wmXFDlpqQ47PBpkaTl3fa9p
-         kySxzdaaRtBcQCl59BiVHPilgs3GyQjJWcI9mFi6Kcbe0Oq9gcguynh2jVZllUvwKukh
-         gAcQ==
-X-Gm-Message-State: ACrzQf3XCNxWHsmYdggUxNp18nl/bkRBXuY4WCzYyVMDs+dmwS9bYolZ
-        E568LuwpKAbm4wLnYNxfYu1bIQ==
-X-Google-Smtp-Source: AMsMyM6c2ziFWR9wmPwV8A7mix313F2P4V67TFhErnUDnURE5Xxou/a6n8C+ZqXlV9njPP5XK5yq3g==
-X-Received: by 2002:a17:902:b10d:b0:187:29fe:bda0 with SMTP id q13-20020a170902b10d00b0018729febda0mr15989343plr.16.1667443236924;
-        Wed, 02 Nov 2022 19:40:36 -0700 (PDT)
+        bh=bj1OXM86++Ax5WK9NQpXE8onmLsfEj10gyUi+TO3JfE=;
+        b=vhbuWU4AS3HoUCKqZYN3HdZGCdMaEMykAyQ49KHqAVfVHugahJO1EzdCG7GvbJiq/l
+         BWggFV04VlryNlvMpKorihfBRycu/95OfuPzh6PE1tYlT01cnmDgdyqgCQ/Ll/0Fo8Ck
+         ubAi+35ZElvN5tj7ID1o0qpiiz6LT54/mAz3WoXrm65UPsXEHalPwvw217PjrI3qC+jO
+         NW3fEg3xRx8tnJkP3tYHf/rqqyZtoat7Sxo2LVpDGMq2f4kwki3S4CsgPhgaY8LE6K4A
+         yqlAhQcYQ+HxPzVX38gW/o6OUPqmpqag/DyjtIH4zbDp/d/gxe9VdSbWVsexNdMDJP24
+         FPww==
+X-Gm-Message-State: ACrzQf2Cz1g1fCu/ymPPROo509RWp9p2BI1JczvCbHleHakZdtJzJ7Ls
+        QsasFaG/i1qIKLm5f9Gpq42mGA==
+X-Google-Smtp-Source: AMsMyM7HkYl3D9Gi70kLV6hQTPnEikEh/jsu9Z67wnN9zuwHwNyPp7zjL2gw3L8jRdkl8Nx3hPmDDQ==
+X-Received: by 2002:a17:902:7294:b0:187:146c:316f with SMTP id d20-20020a170902729400b00187146c316fmr22170504pll.149.1667443442354;
+        Wed, 02 Nov 2022 19:44:02 -0700 (PDT)
 Received: from google.com ([240f:75:7537:3187:f22:e30:374d:5a2b])
-        by smtp.gmail.com with ESMTPSA id k3-20020a170902ce0300b00176b63535adsm8984925plg.260.2022.11.02.19.40.34
+        by smtp.gmail.com with ESMTPSA id i7-20020aa796e7000000b0056b2e70c2f5sm9103526pfq.25.2022.11.02.19.44.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 19:40:36 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 11:40:31 +0900
+        Wed, 02 Nov 2022 19:44:02 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 11:43:58 +0900
 From:   Sergey Senozhatsky <senozhatsky@chromium.org>
 To:     Minchan Kim <minchan@kernel.org>
 Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
         Andrew Morton <akpm@linux-foundation.org>,
         Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
         linux-mm@kvack.org
-Subject: Re: [PATCHv4 1/9] zram: Preparation for multi-zcomp support
-Message-ID: <Y2MqH+EdN7wX1vcl@google.com>
+Subject: Re: [PATCHv4 3/9] zram: Factor out WB and non-WB zram read functions
+Message-ID: <Y2Mq7t+eMpXv2hD/@google.com>
 References: <20221018045533.2396670-1-senozhatsky@chromium.org>
- <20221018045533.2396670-2-senozhatsky@chromium.org>
- <Y2LPUlircv6a74mJ@google.com>
+ <20221018045533.2396670-4-senozhatsky@chromium.org>
+ <Y2LQ+Wv/3xQmrfmL@google.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Y2LPUlircv6a74mJ@google.com>
+In-Reply-To: <Y2LQ+Wv/3xQmrfmL@google.com>
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -71,25 +71,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/11/02 13:13), Minchan Kim wrote:
-[..]
+On (22/11/02 13:20), Minchan Kim wrote:
+> On Tue, Oct 18, 2022 at 01:55:27PM +0900, Sergey Senozhatsky wrote:
+> > We will use non-WB variant in ZRAM page recompression path.
+> > 
+> > Signed-off-by: Sergey Senozhatsky <senozhatsky@chromium.org>
+> > ---
+> >  drivers/block/zram/zram_drv.c | 73 ++++++++++++++++++++++++-----------
+> >  1 file changed, 50 insertions(+), 23 deletions(-)
+> > 
+> > diff --git a/drivers/block/zram/zram_drv.c b/drivers/block/zram/zram_drv.c
+> > index a8ef3c0c3dae..94c62d7ea818 100644
+> > --- a/drivers/block/zram/zram_drv.c
+> > +++ b/drivers/block/zram/zram_drv.c
+> > @@ -1314,8 +1314,30 @@ static void zram_free_page(struct zram *zram, size_t index)
+> >  		~(1UL << ZRAM_LOCK | 1UL << ZRAM_UNDER_WB));
+> >  }
 > >  
-> > +static void zram_destroy_comps(struct zram *zram)
-> > +{
-> > +	u32 idx;
-> > +
-> > +	for (idx = 0; idx < ZRAM_MAX_ZCOMPS; idx++) {
-> > +		struct zcomp *comp = zram->comps[idx];
-> > +
-> > +		zram->comps[idx] = NULL;
-> > +		if (IS_ERR_OR_NULL(comp))
+> > -static int __zram_bvec_read(struct zram *zram, struct page *page, u32 index,
+> > -				struct bio *bio, bool partial_io)
+> > +/*
+> > + * Reads a page from the writeback devices. Corresponding ZRAM slot
+> > + * should be unlocked.
+> > + */
+> > +static int zram_read_from_writeback(struct zram *zram, struct page *page,
 > 
-> nit:
-> 
-> Why don't you use just NULL check? I don't see any error setting
-> for zram->comps(Maybe later patch? Will keep check)?
+> How about zram_read_from_bdev?
 
-A defense measure. zcomp_create() returns err pointer, so here
-I check for err and nil just in case (if somehow someday we
-accidentally have err values stored in comps). It's cheap and
-safer than NULL.
+As far as I can see, we already have that one, so that name is already taken.
+
+We have read_from_bdev, read_from_bdev_sync, read_from_bdev_async, and
+probably some more.
