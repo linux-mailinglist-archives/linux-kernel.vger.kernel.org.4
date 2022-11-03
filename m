@@ -2,251 +2,200 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9347D6186CA
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:59:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B6ADA6186D8
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:01:04 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231897AbiKCR7q (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 13:59:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37038 "EHLO
+        id S232152AbiKCSBA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 14:01:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36174 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232023AbiKCR7P (ORCPT
+        with ESMTP id S231774AbiKCR7b (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:59:15 -0400
-Received: from mail-qk1-x733.google.com (mail-qk1-x733.google.com [IPv6:2607:f8b0:4864:20::733])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1B95110B5
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:59:11 -0700 (PDT)
-Received: by mail-qk1-x733.google.com with SMTP id f8so1666044qkg.3
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:59:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vznSjJD3MTC22UgiEIgEwBQISg4telMt7r/lvGWOTAY=;
-        b=fum8epZ95c2vcvotsLw2zD4mgCXfMySrmnE0sL66rC0pypUuDddVvwbSlshdfTRGDJ
-         ebL0RHQrm061ppipmeSKzu98oguhEBcZlBXVzedYvY2jHTGnVdFYV2mwbn4UwmIkppY9
-         3ahOSqVsYvv2mR5ziUzUKDU4rtxSPr5oJVfuBYXDRl9ftcgOT5N5RRo3/tYDtvyZUXt3
-         dv7u4o44bhpPTIdMIJxmRlcgRr7f1vWqvizrN+SfFKnQN4ltsa70rJTo5r6N1aL8Yjsx
-         9GPZLyXmjHkM4UEA6qImCApxz+Is4iWki0oxMON9hfLLJzS0mx3C6lcUe1/S28C49bZu
-         5hWw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=vznSjJD3MTC22UgiEIgEwBQISg4telMt7r/lvGWOTAY=;
-        b=TK569IR/QEwAZVCTGCA3nmmdSTmKZFDWZLjpIc4TcXQwtehHQKkSKaY9lNRd76mpaQ
-         iNaywWjiI4VBbwBo4b8+QB6veIgeIfyO7Kb6CyRqKJZinq9sOZyA65a6G3sxCJAZIDp+
-         JN65YfGbXkKm3DNV5DZ/S+jNrOTKGQgfMOyS+MgJs47sMwbranpdgNWooWPpcdObNNpk
-         knHFxlNBdGSJADdf4RyHsMfkwQmLxbjLDi9fgoGqah5gUtVqakwYO42WXynxtumdm9Zh
-         wkaI63PTOcA2yQRpQBdQP2t3DMV/DrxBrU2Da024YVba9+IGAwowBCnwaurha1L9F+FW
-         k7UQ==
-X-Gm-Message-State: ACrzQf2EcU6T8xCNo4sY91FYB3FdDlx6MEiVyzmqSsvLeIPsm/TDJedI
-        ZmqV/aGYm2jSJWPem9PNCG/kbTaV6YXo0kKSj/yohXIrtnVq4b5u
-X-Google-Smtp-Source: AMsMyM4ZegQ8e26KA/txCZfvLTUZRpJOAs3TJIkQyyG4c32VOP83OJzOi+4gkQQj/vb6zBmLxLw+E1nPFLShoiSbAjU=
-X-Received: by 2002:a05:620a:22c3:b0:6ec:53bb:d296 with SMTP id
- o3-20020a05620a22c300b006ec53bbd296mr23058155qki.158.1667498351065; Thu, 03
- Nov 2022 10:59:11 -0700 (PDT)
+        Thu, 3 Nov 2022 13:59:31 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2AB72BEB
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:59:23 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667498363; x=1699034363;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=R6mbf+XQukOLH0HwR/RFX95V03exlKMqldLbjsezTU0=;
+  b=TpVF8ONV/NqmFCRuw1KRWTbXePZgr7Ls59h1x33l4riKVeW6K4X1mftW
+   0eCdMAXQwMwVfQGmb03lcBJee8WH5N1mYY7u8K3loZDd32lJX/4hs5XLF
+   VEDULS+uTn936FBOfjPI8H6Ztw/9tEyJoPTdX9DrgfWnSVPq0leZ3EG4T
+   eCrbAtQI4oRnkH+ghkdeh5FlMsD5jU4jSjPpMFsBUZziq4PeqBOxbpl9E
+   Ow3ZNY/XqNj7IFZ6e7Zy04MDPShe60x4ME/uYoxqTOfkQrdIIi9BKucey
+   TZiCwHtnKLa5ZjTl5rBdPJ70irkxXmi4AOkCrPXvqWAuxJ4UNDiMxcAgZ
+   g==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="308476974"
+X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
+   d="scan'208";a="308476974"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 10:59:19 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="809762568"
+X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
+   d="scan'208";a="809762568"
+Received: from araj-dh-work.jf.intel.com ([10.165.157.158])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 10:59:18 -0700
+From:   Ashok Raj <ashok.raj@intel.com>
+To:     Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     "LKML Mailing List" <linux-kernel@vger.kernel.org>,
+        X86-kernel <x86@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Arjan van de Ven <arjan.van.de.ven@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jacon Jun Pan <jacob.jun.pan@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Ashok Raj <ashok.raj@intel.com>
+Subject: [v2 10/13] x86/microcode: Add a generic mechanism to declare support for minrev
+Date:   Thu,  3 Nov 2022 17:58:58 +0000
+Message-Id: <20221103175901.164783-11-ashok.raj@intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221103175901.164783-1-ashok.raj@intel.com>
+References: <20221103175901.164783-1-ashok.raj@intel.com>
 MIME-Version: 1.0
-References: <Y2OPStg4jXtWpJcd@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
- <d0d6d613-174b-f7dd-7d45-45eecd26a850@inria.fr> <CAHJEyKUA4FG468S5bMsx+XGUR3pB3kKm_bx=LNPNJ6n9yPxCrQ@mail.gmail.com>
- <612f7cf-43db-a684-7a98-8469275b43fd@inria.fr> <CAHJEyKXL=u=7tH2O3tdeSBZHyXLAdP9JcfzKHy6-bc7Bju5NMQ@mail.gmail.com>
- <CAHJEyKWBTxvP_mkSaWw7duhm1_-_AE27FhrnZYOXsTy1Qt_c=g@mail.gmail.com> <9eef21fa-c7bc-9fba-67ae-2a532ee6c3fa@inria.fr>
-In-Reply-To: <9eef21fa-c7bc-9fba-67ae-2a532ee6c3fa@inria.fr>
-From:   Tanju Brunostar <tanjubrunostar0@gmail.com>
-Date:   Thu, 3 Nov 2022 18:58:58 +0100
-Message-ID: <CAHJEyKWsFQ4RW6O+Xq6=LEc7-+LxW6Dx+Pc-neSZZUMKQ80CkQ@mail.gmail.com>
-Subject: Re: [PATCH] staging: vt6655: change the function name s_vFillRTSHead
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 3, 2022 at 6:51 PM Julia Lawall <julia.lawall@inria.fr> wrote:
->
->
->
-> On Thu, 3 Nov 2022, Tanju Brunostar wrote:
->
-> > On Thu, Nov 3, 2022 at 5:04 PM Tanju Brunostar
-> > <tanjubrunostar0@gmail.com> wrote:
-> > >
-> > > On Thu, Nov 3, 2022 at 4:58 PM Julia Lawall <julia.lawall@inria.fr> wrote:
-> > > >
-> > > >
-> > > >
-> > > > On Thu, 3 Nov 2022, Tanju Brunostar wrote:
-> > > >
-> > > > > On Thu, Nov 3, 2022 at 1:38 PM Julia Lawall <julia.lawall@inria.fr> wrote:
-> > > > > >
-> > > > > >
-> > > > > >
-> > > > > > On Thu, 3 Nov 2022, Tanjuate Brunostar wrote:
-> > > > > >
-> > > > > > > Remove the use of Hungarian notation, which is not used in the Linux
-> > > > > > > kernel. Reported by checkpatch
-> > > > > > >
-> > > > > > > Fix checkpatch error related to code line ends with a '(', by joining
-> > > > > > > some lines and indenting correctly. This improves visibility
-> > > > > >
-> > > > > > I don't think it will be appreciated to do two things at once.
-> > > > > >
-> > > > >
-> > > > > I sent it earlier as two patches but it seemed to break and fix the
-> > > > > kernel which was not appreciated by one of the mentors
-> > > >
-> > > > OK, then it is a presentation problem.  You have presented the changes as
-> > > > unrelated.  Rewrite the message to make clear what is being done.
-> > > >
-> > > > julia
-> > > >
-> >
-> > Hi Julia,
-> > I am having a hard time figuring out exactly how to write this, since
-> > I made both changes in one patch and there is no way to send them in
-> > separate patches. should I just report just one change and leave the
-> > other? I would appreciate your help here
->
-> Add indentation to the affected function headers to follow the Linux
-> kernel coding style?
->
-> julia
->
+Intel microcode adds some meta-data to report a minimum required revision
+before this new microcode can be late-loaded. There are no generic mechanism
+to declare support for all vendors.
 
-Thank you
+Add generic support to microcode to declare support, so the tainting and
+late-loading can be permitted in those architectures that support reporting
+a minrev in some form.
 
->
-> > Thanks
-> >
-> > tanju
-> >
-> > > okay
-> > > > >
-> > > > > > >
-> > > > > > > Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-> > > > > > > ---
-> > > > > > >  drivers/staging/vt6655/rxtx.c | 48 ++++++++++++++++-------------------
-> > > > > > >  1 file changed, 22 insertions(+), 26 deletions(-)
-> > > > > > >
-> > > > > > > diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
-> > > > > > > index 31ae99b3cb35..debc5d5daede 100644
-> > > > > > > --- a/drivers/staging/vt6655/rxtx.c
-> > > > > > > +++ b/drivers/staging/vt6655/rxtx.c
-> > > > > > > @@ -23,7 +23,7 @@
-> > > > > > >   *      s_uGetTxRsvTime- get frame reserved time
-> > > > > > >   *      s_vFillCTSHead- fulfill CTS ctl header
-> > > > > > >   *      s_vFillFragParameter- Set fragment ctl parameter.
-> > > > > > > - *      s_vFillRTSHead- fulfill RTS ctl header
-> > > > > > > + *      fill_rts_header- fulfill RTS ctl header
-> > > > > > >   *      s_vFillTxKey- fulfill tx encrypt key
-> > > > > > >   *      s_vSWencryption- Software encrypt header
-> > > > > > >   *      vDMA0_tx_80211- tx 802.11 frame via dma0
-> > > > > > > @@ -85,15 +85,15 @@ static const unsigned short fb_opt1[2][5] = {
-> > > > > > >  #define DATADUR_A_F1    13
-> > > > > > >
-> > > > > > >  /*---------------------  Static Functions  --------------------------*/
-> > > > > > > -static void s_vFillRTSHead(struct vnt_private *pDevice,
-> > > > > > > -                        unsigned char byPktType,
-> > > > > > > -                        void *pvRTS,
-> > > > > > > -                        unsigned int cbFrameLength,
-> > > > > > > -                        bool bNeedAck,
-> > > > > > > -                        bool bDisCRC,
-> > > > > > > -                        struct ieee80211_hdr *hdr,
-> > > > > > > -                        unsigned short wCurrentRate,
-> > > > > > > -                        unsigned char byFBOption);
-> > > > > > > +static void fill_rts_header(struct vnt_private *pDevice,
-> > > > > > > +                         unsigned char byPktType,
-> > > > > > > +                         void *pvRTS,
-> > > > > > > +                         unsigned int        cbFrameLength,
-> > > > > >
-> > > > > > Strange spacing in the above parameter declaration.  Maybe there is a tab
-> > > > > > that should be a space?
-> > > > > >
-> > > > > > julia
-> > > > > >
-> > > > >
-> > > > > I was also shocked when I noticed that. It seemed like a tab but when
-> > > > > I removed the space, the two words were joined and when I added the
-> > > > > space, it became this lage space once again. checkpatch does not
-> > > > > complain about it though
-> > > > >
-> > > > > > > +                         bool bNeedAck,
-> > > > > > > +                         bool bDisCRC,
-> > > > > > > +                         struct ieee80211_hdr *hdr,
-> > > > > > > +                         unsigned short wCurrentRate,
-> > > > > > > +                         unsigned char byFBOption);
-> > > > > > >
-> > > > > > >  static void s_vGenerateTxParameter(struct vnt_private *pDevice,
-> > > > > > >                                  unsigned char byPktType,
-> > > > > > > @@ -555,19 +555,15 @@ s_uFillDataHead(
-> > > > > > >       return buf->duration;
-> > > > > > >  }
-> > > > > > >
-> > > > > > > -static
-> > > > > > > -void
-> > > > > > > -s_vFillRTSHead(
-> > > > > > > -     struct vnt_private *pDevice,
-> > > > > > > -     unsigned char byPktType,
-> > > > > > > -     void *pvRTS,
-> > > > > > > -     unsigned int cbFrameLength,
-> > > > > > > -     bool bNeedAck,
-> > > > > > > -     bool bDisCRC,
-> > > > > > > -     struct ieee80211_hdr *hdr,
-> > > > > > > -     unsigned short wCurrentRate,
-> > > > > > > -     unsigned char byFBOption
-> > > > > > > -)
-> > > > > > > +static void fill_rts_header(struct vnt_private *pDevice,
-> > > > > > > +                         unsigned char byPktType,
-> > > > > > > +                         void *pvRTS,
-> > > > > > > +                         unsigned int cbFrameLength,
-> > > > > > > +                         bool bNeedAck,
-> > > > > > > +                         bool bDisCRC,
-> > > > > > > +                         struct ieee80211_hdr *hdr,
-> > > > > > > +                         unsigned short wCurrentRate,
-> > > > > > > +                         unsigned char byFBOption)
-> > > > > > >  {
-> > > > > > >       unsigned int uRTSFrameLen = 20;
-> > > > > > >
-> > > > > > > @@ -912,7 +908,7 @@ s_vGenerateTxParameter(
-> > > > > > >                       buf->rrv_time_a = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
-> > > > > > >                       buf->rrv_time_b = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, pDevice->byTopCCKBasicRate, bNeedACK);
-> > > > > > >
-> > > > > > > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-> > > > > > > +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-> > > > > > >               } else {/* RTS_needless, PCF mode */
-> > > > > > >                       struct vnt_rrv_time_cts *buf = pvRrvTime;
-> > > > > > >
-> > > > > > > @@ -931,7 +927,7 @@ s_vGenerateTxParameter(
-> > > > > > >                       buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
-> > > > > > >
-> > > > > > >                       /* Fill RTS */
-> > > > > > > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-> > > > > > > +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-> > > > > > >               } else if (!pvRTS) {/* RTS_needless, non PCF mode */
-> > > > > > >                       struct vnt_rrv_time_ab *buf = pvRrvTime;
-> > > > > > >
-> > > > > > > @@ -945,7 +941,7 @@ s_vGenerateTxParameter(
-> > > > > > >                       buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, wCurrentRate, bNeedACK);
-> > > > > > >
-> > > > > > >                       /* Fill RTS */
-> > > > > > > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-> > > > > > > +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
-> > > > > > >               } else { /* RTS_needless, non PCF mode */
-> > > > > > >                       struct vnt_rrv_time_ab *buf = pvRrvTime;
-> > > > > > >
-> > > > > > > --
-> > > > > > > 2.34.1
-> > > > > > >
-> > > > > > >
-> > > > > > >
-> > > > >
-> > > >
-> >
+Late loading has added support for
+
+- New images declaring a required minimum base version before a late-load
+  is performed.
+- Improved NMI handling during update to avoid sibling threads taking NMI's
+  while primary is still not complete with the microcode update.
+
+With these changes, late-loading can be re-enabled. Tainting only happens
+on architectures that don't support minimum required version reporting.
+
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Signed-off-by: Ashok Raj <ashok.raj@intel.com>
+---
+v2: (Kai) Add missing initialization local variable minrev
+
+ arch/x86/include/asm/microcode.h      |  2 ++
+ arch/x86/kernel/cpu/microcode/core.c  | 15 +++++++++++----
+ arch/x86/kernel/cpu/microcode/intel.c |  6 ++++++
+ arch/x86/Kconfig                      |  7 ++++---
+ 4 files changed, 23 insertions(+), 7 deletions(-)
+
+diff --git a/arch/x86/include/asm/microcode.h b/arch/x86/include/asm/microcode.h
+index f16973fb7330..6286b4056792 100644
+--- a/arch/x86/include/asm/microcode.h
++++ b/arch/x86/include/asm/microcode.h
+@@ -64,6 +64,8 @@ enum ucode_state {
+ };
+ 
+ struct microcode_ops {
++	int (*check_minrev) (void);
++
+ 	enum ucode_state (*request_microcode_fw) (int cpu, struct device *);
+ 
+ 	void (*microcode_fini_cpu) (int cpu);
+diff --git a/arch/x86/kernel/cpu/microcode/core.c b/arch/x86/kernel/cpu/microcode/core.c
+index 6f59ffdf2881..17dba13d397d 100644
+--- a/arch/x86/kernel/cpu/microcode/core.c
++++ b/arch/x86/kernel/cpu/microcode/core.c
+@@ -607,6 +607,7 @@ static ssize_t reload_store(struct device *dev,
+ 	enum ucode_state tmp_ret = UCODE_OK;
+ 	int bsp = boot_cpu_data.cpu_index;
+ 	unsigned long val;
++	int minrev = 0;
+ 	ssize_t ret = 0;
+ 
+ 	ret = kstrtoul(buf, 0, &val);
+@@ -622,13 +623,18 @@ static ssize_t reload_store(struct device *dev,
+ 	if (ret)
+ 		goto put;
+ 
++	if (microcode_ops->check_minrev)
++		minrev = microcode_ops->check_minrev();
++
++	if (!minrev) {
++		pr_err("Attempting late microcode loading - it is dangerous and taints the kernel.\n");
++		pr_err("You should switch to early loading, if possible.\n");
++	}
++
+ 	tmp_ret = microcode_ops->request_microcode_fw(bsp, &microcode_pdev->dev);
+ 	if (tmp_ret != UCODE_NEW)
+ 		goto put;
+ 
+-	pr_err("Attempting late microcode loading - it is dangerous and taints the kernel.\n");
+-	pr_err("You should switch to early loading, if possible.\n");
+-
+ 	mutex_lock(&microcode_mutex);
+ 	ret = microcode_reload_late();
+ 	mutex_unlock(&microcode_mutex);
+@@ -639,7 +645,8 @@ static ssize_t reload_store(struct device *dev,
+ 	if (ret == 0)
+ 		ret = size;
+ 
+-	add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
++	if (!minrev)
++		add_taint(TAINT_CPU_OUT_OF_SPEC, LOCKDEP_STILL_OK);
+ 
+ 	return ret;
+ }
+diff --git a/arch/x86/kernel/cpu/microcode/intel.c b/arch/x86/kernel/cpu/microcode/intel.c
+index 020d0feed3cc..5d2ee76cd36c 100644
+--- a/arch/x86/kernel/cpu/microcode/intel.c
++++ b/arch/x86/kernel/cpu/microcode/intel.c
+@@ -956,7 +956,13 @@ static enum ucode_state request_microcode_fw(int cpu, struct device *device)
+ 	return ret;
+ }
+ 
++static int intel_check_minrev(void)
++{
++	return 1;
++}
++
+ static struct microcode_ops microcode_intel_ops = {
++	.check_minrev			  = intel_check_minrev,
+ 	.request_microcode_fw             = request_microcode_fw,
+ 	.collect_cpu_info                 = collect_cpu_info,
+ 	.apply_microcode                  = apply_microcode_intel,
+diff --git a/arch/x86/Kconfig b/arch/x86/Kconfig
+index 6d1879ef933a..b53626bff5f7 100644
+--- a/arch/x86/Kconfig
++++ b/arch/x86/Kconfig
+@@ -1353,15 +1353,16 @@ config MICROCODE_AMD
+ 	  processors will be enabled.
+ 
+ config MICROCODE_LATE_LOADING
+-	bool "Late microcode loading (DANGEROUS)"
+-	default n
++	bool "Late microcode loading"
++	default y
+ 	depends on MICROCODE
+ 	help
+ 	  Loading microcode late, when the system is up and executing instructions
+ 	  is a tricky business and should be avoided if possible. Just the sequence
+ 	  of synchronizing all cores and SMT threads is one fragile dance which does
+ 	  not guarantee that cores might not softlock after the loading. Therefore,
+-	  use this at your own risk. Late loading taints the kernel too.
++	  use this at your own risk. Late loading taints the kernel, if it
++	  doesn't support a minimum required base version before an update.
+ 
+ config X86_MSR
+ 	tristate "/dev/cpu/*/msr - Model-specific register support"
+-- 
+2.34.1
+
