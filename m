@@ -2,71 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C909E618290
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:23:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 57C6E61828E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:23:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232149AbiKCPXq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 11:23:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33272 "EHLO
-        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbiKCPXk (ORCPT
-        <rfc822;linux-kernel@vger.kernel.org>);
+        id S232129AbiKCPXk (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
         Thu, 3 Nov 2022 11:23:40 -0400
-Received: from mail-yw1-x1149.google.com (mail-yw1-x1149.google.com [IPv6:2607:f8b0:4864:20::1149])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BE16211162
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:23:39 -0700 (PDT)
-Received: by mail-yw1-x1149.google.com with SMTP id 00721157ae682-36bf9c132f9so21371557b3.8
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 08:23:39 -0700 (PDT)
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33402 "EHLO
+        lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
+        with ESMTP id S232137AbiKCPXg (ORCPT
+        <rfc822;linux-kernel@vger.kernel.org>);
+        Thu, 3 Nov 2022 11:23:36 -0400
+Received: from mail-pj1-x1034.google.com (mail-pj1-x1034.google.com [IPv6:2607:f8b0:4864:20::1034])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2E1181A395;
+        Thu,  3 Nov 2022 08:23:31 -0700 (PDT)
+Received: by mail-pj1-x1034.google.com with SMTP id l22-20020a17090a3f1600b00212fbbcfb78so5503598pjc.3;
+        Thu, 03 Nov 2022 08:23:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=oeNg4z267iM9Zx5yS0UWNTo3rYVAuTWAXrfPBVxf4R4=;
-        b=PEcbtMjSEpct3ISlRGfD5Usz5v9gvLcAkHWc+leHqWL65D/RJ/nw8ZUigyhvb/sg56
-         FNYo/fF63wzGdDcDF665iXxt2w40s7kD08p3FuM1UQxKILkrPx7Jc5ZSfPrlBBMFnFtJ
-         bcmWr1NDag/UsYE/hZZBx9gY1pPqUG13pr/tbfj7gCCrPzKNhUF7EYE+no6xPsjWeAQ+
-         LcrosaSPPIHvgsZevmgnljMWdRcTKFXd2NZnPRzbiwvE/ardt1G8d+Pe8EE+oP+Sl/3e
-         Lz3/dU/twWNJwaNe1gEYDDnTZYpIZ4OUH8xuDgSlTYEtMflMY4Si7iZn/CXmNS/g5l3J
-         CzAQ==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=vSr+j5NVKiaQKfyexBjniTj+hsGjZmECfoeuhtqx5oY=;
+        b=nl4hwAxgDCnkbT375+YvDFPmdZC3EW9i3B3Jg+zGv4ZoeuK62Hh/mB12NqYbf8eEdm
+         sp/ZzZNFUfNvOvfY4XkHngC/Hbx8vbax8DZG43MXeB2Ueo9CULssj+KMJ1eXrGN7w0EZ
+         URG+n8Rw8YzN4f2hqbk2bg0Vj2J8TWcNw59Aw1LDU8p/DvScQExJv35AXd3u31w8HRow
+         zaXC3oK1DRUc6wfQ9W9Gdnkr6xH6HtR52g5lKsgMtedJZ2SFNDeN3iZb0DT9vaqkl+Tp
+         Oq5e3YCMw4TikRBCR5lT83eDrocswsyYA49q8X0nEzGMdLwwEqf3SvbTd0moaql5MgCZ
+         wU8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:mime-version:message-id:date:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=oeNg4z267iM9Zx5yS0UWNTo3rYVAuTWAXrfPBVxf4R4=;
-        b=30uwzWia9DavpGHUbjHOtKCul7qA/TGLQGFf68wx1DluXqzQPYmaw6cZ4ehnx4zXN1
-         2+ttSqB0EvQohATRKGcBiM/rZYf8liyugSW234c9Mmy3g+6V+WAjPU+YYZddhFY5wmDd
-         4vGCXZ1R/cuYGu3djcxMLI1EOaoz+Qcz0pGHD6DjSXJ/8aWW6mKL1zLkdRQX+KfbcWpy
-         HjA9JypPoL3D1MPV7uTsTSu0+27fg26jO190hO59fddVRBK3co4a1ghlaloVbfr3MOUt
-         SIoxWfC6lGWEpyMReUb2QgooHAUTCPLOlXCOo14PWCu4oVSn+dXrhXjTuwOCM29pvvmk
-         fdag==
-X-Gm-Message-State: ACrzQf2aKsn3h4745iqTj1xkG6xvvtREoznK0vv8ayZ2P1f5IkSDVSak
-        Tm9BrILEW7YbbkbRETkWx+gwKoVzYGE=
-X-Google-Smtp-Source: AMsMyM6EsKBy8ZJIbMUXt4DHhPw3ke3RtfupzS9jQfwQs3pGBHdShKfVyutJkq+z9keUp9VU0VJT0+/gq9E=
-X-Received: from pgonda1.kir.corp.google.com ([2620:0:1008:11:45e5:86a8:76c:1f1c])
- (user=pgonda job=sendgmr) by 2002:a81:48ca:0:b0:368:117c:1308 with SMTP id
- v193-20020a8148ca000000b00368117c1308mr185325ywa.216.1667489018530; Thu, 03
- Nov 2022 08:23:38 -0700 (PDT)
-Date:   Thu,  3 Nov 2022 08:23:18 -0700
-Message-Id: <20221103152318.88354-1-pgonda@google.com>
-Mime-Version: 1.0
-X-Mailer: git-send-email 2.38.1.273.g43a17bfeac-goog
-Subject: [PATCH V4] virt: sev: Prevent IV reuse in SNP guest driver
-From:   Peter Gonda <pgonda@google.com>
-To:     thomas.lendacky@amd.com
-Cc:     Peter Gonda <pgonda@google.com>,
-        Dionna Glaze <dionnaglaze@google.com>,
-        Borislav Petkov <bp@suse.de>,
-        Michael Roth <michael.roth@amd.com>,
-        Haowen Bai <baihaowen@meizu.com>,
-        Yang Yingliang <yangyingliang@huawei.com>,
-        Marc Orr <marcorr@google.com>,
-        David Rientjes <rientjes@google.com>,
-        Ashish Kalra <Ashish.Kalra@amd.com>,
-        linux-kernel@vger.kernel.org, kvm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=vSr+j5NVKiaQKfyexBjniTj+hsGjZmECfoeuhtqx5oY=;
+        b=URyDnNf0CsCH47v7ltXOBeFNweZYdsxD+S/40dvTuFYG6mPGDFV2Qd45yDQGh0DjtR
+         FN/1N9LcZZbkGx5hnOppG2owmcOwh5rsx+mA1FSQru1tPS4vnd2hK2frlVzohuCcq9Hf
+         8fPY0IVG5UV2VIRcg0a013C/xbQXWb9xYQTSRJ/4ncFVeav4h6PDlSBbLiqgmcpcuKLn
+         EUpR1MWtuuAoOF7CYu69U09KrlneD2yOiho82PRqF2VjyVG5qgaL6JdlVdEq/BbYAnu1
+         ld6NsPW7lDY1Lr+RgZR0jBdF71f6asA+diBcaQoHfKbrCXZElCMZbsZ3D62s1y3emjzH
+         Qlcg==
+X-Gm-Message-State: ACrzQf1pDKKwNm24voqK1G6T2MBoqGxy9iu9YHbgcZhYHcKoJRrWeVUB
+        Zlli5QMFtVOKLnfzeUZjYsU=
+X-Google-Smtp-Source: AMsMyM5I+SJHyEfsA9JyQvfO3UG5gWSJHG5UY+Z7kQeoQVxrmr9aFErvU7YiNHQuhbutt6gOGAxS8A==
+X-Received: by 2002:a17:902:da8a:b0:187:3d6:4c60 with SMTP id j10-20020a170902da8a00b0018703d64c60mr30669393plx.117.1667489010643;
+        Thu, 03 Nov 2022 08:23:30 -0700 (PDT)
+Received: from makoto.localnet (2403-580a-80ed--ccac-899b.ip6.aussiebb.net. [2403:580a:80ed::ccac:899b])
+        by smtp.gmail.com with ESMTPSA id p28-20020aa79e9c000000b00562f6df42f1sm856729pfq.152.2022.11.03.08.23.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 08:23:30 -0700 (PDT)
+From:   James Calligeros <jcalligeros99@gmail.com>
+To:     James Calligeros <jcalligeros99@gmail.com>,
+        Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, nm@ti.com,
+        rafael@kernel.org, sboyd@kernel.org, vincent.guittot@linaro.org,
+        vireshk@kernel.org
+Subject: Re: [PATCH V2 5/5] OPP: decouple dt properties in opp_parse_supplies()
+Date:   Fri, 04 Nov 2022 01:23:23 +1000
+Message-ID: <2379445.NG923GbCHz@makoto>
+In-Reply-To: <20221103131051.2ivkhibbsdarbewt@vireshk-i7>
+References: <cover.1667473008.git.viresh.kumar@linaro.org> <3519763.iIbC2pHGDl@makoto> <20221103131051.2ivkhibbsdarbewt@vireshk-i7>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="us-ascii"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,180 +74,58 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The ASP and an SNP guest use a series of AES-GCM keys called VMPCKs to
-communicate securely with each other. The IV to this scheme is a
-sequence number that both the ASP and the guest track. Currently this
-sequence number in a guest request must exactly match the sequence
-number tracked by the ASP. This means that if the guest sees an error
-from the host during a request it can only retry that exact request or
-disable the VMPCK to prevent an IV reuse. AES-GCM cannot tolerate IV
-reuse see:
-https://csrc.nist.gov/csrc/media/projects/block-cipher-techniques/documents/bcm/comments/800-38-series-drafts/gcm/joux_comments.pdf
+On Thursday, 3 November 2022 11:10:51 PM AEST Viresh Kumar wrote:
+> On 03-11-22, 22:24, James Calligeros wrote:
+> > On Thursday, 3 November 2022 9:01:08 PM AEST Viresh Kumar wrote:
+> > 
+> > > @@ -674,7 +677,7 @@ static int opp_parse_supplies(struct dev_pm_opp *opp, struct device *dev,
+> > >  	bool triplet;
+> > >  
+> > >  	microvolt = opp_parse_microvolt(opp, dev, opp_table, &triplet);
+> > > -	if (IS_ERR_OR_NULL(microvolt))
+> > > +	if (IS_ERR(microvolt))
+> > >  		return PTR_ERR(microvolt);
+> >  
+> > Erroring out here will still block EM registration on platforms without 
+> > the opp-microvolt prop so we're back to square one, which means the 
+> > patch does not do what the description says it does. It behaves
+> > almost identically to the current code.
+> 
+> I am confused.
+> 
+> With the current code, the following will work:
+> - all three available
+> - microvolt available and nothing else.
+> - only microamp available
+> - only microwatt available
+> - both microamp and microwatt available but no microvolt
+> - and other combinations
+> 
+> Isn't this all we want ?
 
-To handle userspace querying the cert_data length handle_guest_request()
-now: saves the number of pages required by the host, retries the request
-without requesting the extended data, then returns the number of pages
-required.
+You're right, I misinterpreted an error. Details as below.
 
-Fixes: fce96cf044308 ("virt: Add SEV-SNP guest driver")
-Signed-off-by: Peter Gonda <pgonda@google.com>
-Reported-by: Peter Gonda <pgonda@google.com>
-Cc: Dionna Glaze <dionnaglaze@google.com>
-Cc: Borislav Petkov <bp@suse.de>
-Cc: Tom Lendacky <thomas.lendacky@amd.com>
-Cc: Michael Roth <michael.roth@amd.com>
-Cc: Haowen Bai <baihaowen@meizu.com>
-Cc: Yang Yingliang <yangyingliang@huawei.com>
-Cc: Marc Orr <marcorr@google.com>
-Cc: David Rientjes <rientjes@google.com>
-Cc: Ashish Kalra <Ashish.Kalra@amd.com>
-Cc: linux-kernel@vger.kernel.org
-Cc: kvm@vger.kernel.org
----
-Tested by placing each of the guest requests: attestation quote,
-extended attestation quote, and get key. Then tested the extended
-attestation quote certificate length querying.
+> What did you test exactly ? As I thought you will be testing the only microwatt
+> case here and you say it won't work.
+> 
+> Sorry, I just got a little bit confused :(
+> 
 
-V4
- * As suggested by Dionna moved the extended request retry logic into
-   the driver.
- * Due to big change in patch dropped any reviewed-by tags.
+I did test on the Apple machine with only opp-microwatt, but I misinterpreted
+the error. We end up here upon parsing the second OPP:
 
----
- drivers/virt/coco/sev-guest/sev-guest.c | 70 +++++++++++++++++++------
- 1 file changed, 53 insertions(+), 17 deletions(-)
+>if (list_empty(&opp_table->opp_list) &&
+>    opp_table->regulator_count > 0) {
+>	dev_err(dev, "%s: opp-microvolt missing although OPP managing regulators\n",
+>		__func__);
+>	return ERR_PTR(-EINVAL);
+>}
 
-diff --git a/drivers/virt/coco/sev-guest/sev-guest.c b/drivers/virt/coco/sev-guest/sev-guest.c
-index f422f9c58ba79..7dd6337ebdd5b 100644
---- a/drivers/virt/coco/sev-guest/sev-guest.c
-+++ b/drivers/virt/coco/sev-guest/sev-guest.c
-@@ -41,7 +41,7 @@ struct snp_guest_dev {
- 	struct device *dev;
- 	struct miscdevice misc;
- 
--	void *certs_data;
-+	u8 (*certs_data)[SEV_FW_BLOB_MAX_SIZE];
- 	struct snp_guest_crypto *crypto;
- 	struct snp_guest_msg *request, *response;
- 	struct snp_secrets_page_layout *layout;
-@@ -67,8 +67,27 @@ static bool is_vmpck_empty(struct snp_guest_dev *snp_dev)
- 	return true;
- }
- 
-+/*
-+ * If we receive an error from the host or ASP we have two options. We can
-+ * either retry the exact same encrypted request or we can discontinue using the
-+ * VMPCK.
-+ *
-+ * This is because in the current encryption scheme GHCB v2 uses AES-GCM to
-+ * encrypt the requests. The IV for this scheme is the sequence number. GCM
-+ * cannot tolerate IV reuse.
-+ *
-+ * The ASP FW v1.51 only increments the sequence numbers on a successful
-+ * guest<->ASP back and forth and only accepts messages at its exact sequence
-+ * number.
-+ *
-+ * So if we were to reuse the sequence number the encryption scheme is
-+ * vulnerable. If we encrypt the sequence number for a fresh IV the ASP will
-+ * reject our request.
-+ */
- static void snp_disable_vmpck(struct snp_guest_dev *snp_dev)
- {
-+	dev_alert(snp_dev->dev, "Disabling vmpck_id: %d to prevent IV reuse.\n",
-+		  vmpck_id);
- 	memzero_explicit(snp_dev->vmpck, VMPCK_KEY_LEN);
- 	snp_dev->vmpck = NULL;
- }
-@@ -323,32 +342,49 @@ static int handle_guest_request(struct snp_guest_dev *snp_dev, u64 exit_code, in
- 
- 	/* Call firmware to process the request */
- 	rc = snp_issue_guest_request(exit_code, &snp_dev->input, &err);
-+
-+	/*
-+	 * If the extended guest request fails due to having to small of a
-+	 * certificate data buffer retry the same guest request without the
-+	 * extended data request.
-+	 */
-+	if (exit_code == SVM_VMGEXIT_EXT_GUEST_REQUEST &&
-+	    err == SNP_GUEST_REQ_INVALID_LEN) {
-+		const unsigned int certs_npages = snp_dev->input.data_npages;
-+
-+		exit_code = SVM_VMGEXIT_GUEST_REQUEST;
-+		rc = snp_issue_guest_request(exit_code, &snp_dev->input, &err);
-+
-+		err = SNP_GUEST_REQ_INVALID_LEN;
-+		snp_dev->input.data_npages = certs_npages;
-+	}
-+
- 	if (fw_err)
- 		*fw_err = err;
- 
--	if (rc)
--		return rc;
-+	if (rc) {
-+		dev_alert(snp_dev->dev,
-+			  "Detected error from ASP request. rc: %d, fw_err: %llu\n",
-+			  rc, *fw_err);
-+		goto disable_vmpck;
-+	}
- 
--	/*
--	 * The verify_and_dec_payload() will fail only if the hypervisor is
--	 * actively modifying the message header or corrupting the encrypted payload.
--	 * This hints that hypervisor is acting in a bad faith. Disable the VMPCK so that
--	 * the key cannot be used for any communication. The key is disabled to ensure
--	 * that AES-GCM does not use the same IV while encrypting the request payload.
--	 */
- 	rc = verify_and_dec_payload(snp_dev, resp_buf, resp_sz);
- 	if (rc) {
- 		dev_alert(snp_dev->dev,
--			  "Detected unexpected decode failure, disabling the vmpck_id %d\n",
--			  vmpck_id);
--		snp_disable_vmpck(snp_dev);
--		return rc;
-+			  "Detected unexpected decode failure from ASP. rc: %d\n",
-+			  rc);
-+		goto disable_vmpck;
- 	}
- 
- 	/* Increment to new message sequence after payload decryption was successful. */
- 	snp_inc_msg_seqno(snp_dev);
- 
- 	return 0;
-+
-+disable_vmpck:
-+	snp_disable_vmpck(snp_dev);
-+	return rc;
- }
- 
- static int get_report(struct snp_guest_dev *snp_dev, struct snp_guest_request_ioctl *arg)
-@@ -676,7 +712,7 @@ static int __init sev_guest_probe(struct platform_device *pdev)
- 	if (!snp_dev->response)
- 		goto e_free_request;
- 
--	snp_dev->certs_data = alloc_shared_pages(dev, SEV_FW_BLOB_MAX_SIZE);
-+	snp_dev->certs_data = alloc_shared_pages(dev, sizeof(*snp_dev->certs_data));
- 	if (!snp_dev->certs_data)
- 		goto e_free_response;
- 
-@@ -703,7 +739,7 @@ static int __init sev_guest_probe(struct platform_device *pdev)
- 	return 0;
- 
- e_free_cert_data:
--	free_shared_pages(snp_dev->certs_data, SEV_FW_BLOB_MAX_SIZE);
-+	free_shared_pages(snp_dev->certs_data, sizeof(*snp_dev->certs_data));
- e_free_response:
- 	free_shared_pages(snp_dev->response, sizeof(struct snp_guest_msg));
- e_free_request:
-@@ -717,7 +753,7 @@ static int __exit sev_guest_remove(struct platform_device *pdev)
- {
- 	struct snp_guest_dev *snp_dev = platform_get_drvdata(pdev);
- 
--	free_shared_pages(snp_dev->certs_data, SEV_FW_BLOB_MAX_SIZE);
-+	free_shared_pages(snp_dev->certs_data, sizeof(*snp_dev->certs_data));
- 	free_shared_pages(snp_dev->response, sizeof(struct snp_guest_msg));
- 	free_shared_pages(snp_dev->request, sizeof(struct snp_guest_msg));
- 	deinit_crypto(snp_dev->crypto);
--- 
-2.38.1.273.g43a17bfeac-goog
+When this path is removed, things work as expected. Could it be that opp_list has
+not been updated by the time we're parsing the next OPP? Seems unlikely, but
+at the same time if we're ending up taking this branch then there's not much else
+that could have gone wrong.
+
+- James
+
 
