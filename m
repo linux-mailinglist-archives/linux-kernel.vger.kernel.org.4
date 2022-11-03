@@ -2,68 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 6AF70617FBC
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:40:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 651E3617FBB
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:39:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231620AbiKCOkN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 10:40:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57306 "EHLO
+        id S231576AbiKCOjj (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 10:39:39 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:56894 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229637AbiKCOkK (ORCPT
+        with ESMTP id S229667AbiKCOjg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 10:40:10 -0400
-X-Greylist: delayed 3253 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 03 Nov 2022 07:40:09 PDT
-Received: from mail.8bytes.org (mail.8bytes.org [85.214.250.239])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 87E431580B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 07:40:09 -0700 (PDT)
-Received: from 8bytes.org (p5b00664c.dip0.t-ipconnect.de [91.0.102.76])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        Thu, 3 Nov 2022 10:39:36 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 44B431126;
+        Thu,  3 Nov 2022 07:39:35 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
         (No client certificate requested)
-        by mail.8bytes.org (Postfix) with ESMTPSA id 25EC3260071;
-        Thu,  3 Nov 2022 15:40:08 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=8bytes.org;
-        s=default; t=1667486408;
-        bh=mf7OaYDXqcld8wWiThewtp/HY8K7iFfmoq1U0fGzWYo=;
+        by ams.source.kernel.org (Postfix) with ESMTPS id C4FD9B825E5;
+        Thu,  3 Nov 2022 14:39:33 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0369EC433C1;
+        Thu,  3 Nov 2022 14:39:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+        s=korg; t=1667486372;
+        bh=mjK0TvF5WgfZ7bhhx8ze1rsPxF3bhUFuKxm8G+Vxj4k=;
         h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=RA9UJnn49z7YdSAgp2I3/ITuIe6U3r/qp5fYYYQl9uSVuXJ0oXXKPVvXwFIIP7hof
-         T+soRndeNz7S6wfdPlU1l8xvCdOa8XEe7++RJ45KApiY5K44K7bGxAHVysyURjIEK4
-         9/ce/q8sba0zIYjDXm5qu044uLR5yFUnQRQr+8VgUJ8ApsSGQ76WZTnUITRlUtD/h4
-         MG6QOT9yNBG13JSBCvEeIE9bIEpebJzigzTjvFM/PR0/S/7N7jhS5uEYKXQ3SEEtmp
-         Qj+fpFbC7cBGsGVG5+K5aVwPskLhhXc7pj94xXvDhImSYs/NeeY/KH+yKSMwkVkdIQ
-         A0kywvgTobOLA==
-Date:   Thu, 3 Nov 2022 15:40:06 +0100
-From:   Joerg Roedel <joro@8bytes.org>
-To:     Colin Ian King <colin.i.king@gmail.com>
-Cc:     Suravee Suthikulpanit <suravee.suthikulpanit@amd.com>,
-        Will Deacon <will@kernel.org>,
-        Robin Murphy <robin.murphy@arm.com>, iommu@lists.linux.dev,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] iommu: remove variable cnt
-Message-ID: <Y2PSxkHG2X1Vc+vN@8bytes.org>
-References: <20221024134301.2158939-1-colin.i.king@gmail.com>
+        b=r3xOJrFwzx0HBHoGykDBvpELDGkqLTR9mvcBSBQRqX4IXQBcgpku+jl1XDboLnxsu
+         Mu0gC4VRDjOq3qmoLKYdaZ+1z5nk18Kg+wsZxxDvkH9yJE+LSfgchzE1swnAkQjcLQ
+         VINk/gp+mWc7hM7jeJlPN9D/AUlMTb6BaQ920hD8=
+Date:   Thu, 3 Nov 2022 23:40:12 +0900
+From:   Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+To:     Marek Szyprowski <m.szyprowski@samsung.com>
+Cc:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org,
+        Stefan Agner <stefan@agner.ch>,
+        Johan Hovold <johan@kernel.org>,
+        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Frank Rowand <frowand.list@gmail.com>
+Subject: Re: [PATCH 2/2] of: export of_device_add()
+Message-ID: <Y2PSzCEr2c2g9ZJp@kroah.com>
+References: <20221103141233.20179-1-m.szyprowski@samsung.com>
+ <CGME20221103141239eucas1p167f44609369010a20293d5123214426d@eucas1p1.samsung.com>
+ <20221103141233.20179-2-m.szyprowski@samsung.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221024134301.2158939-1-colin.i.king@gmail.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221103141233.20179-2-m.szyprowski@samsung.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 02:43:01PM +0100, Colin Ian King wrote:
-> Variable cnt is just being incremented and it's never used
-> anywhere else. The variable and the increment are redundant so
-> remove it.
+On Thu, Nov 03, 2022 at 03:12:33PM +0100, Marek Szyprowski wrote:
+> Export of_device_add() function to let DWC3 driver (Exynos variant) to
+> instantiate DWC3 core device from the respective child OF-node with a
+> custom, addtional properties added.
 > 
-> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+> Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
 > ---
->  drivers/iommu/amd/iommu.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
+>  drivers/of/device.c | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/of/device.c b/drivers/of/device.c
+> index 8cefe5a7d04e..bc60c9b6863c 100644
+> --- a/drivers/of/device.c
+> +++ b/drivers/of/device.c
+> @@ -52,6 +52,7 @@ int of_device_add(struct platform_device *ofdev)
+>  
+>  	return device_add(&ofdev->dev);
+>  }
+> +EXPORT_SYMBOL(of_device_add);
 
-Adjusted subject and applied to x86/amd branch, thanks.
+I do not see any user of this symbol after this patch (no 3/2?)
 
+So why is it needed?  No driver should ever be calling this function
+directly.
+
+thanks,
+
+greg k-h
