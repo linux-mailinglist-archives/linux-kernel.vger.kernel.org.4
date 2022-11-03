@@ -2,162 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 76CB5618788
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:32:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3BC9618780
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:31:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231887AbiKCScM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 14:32:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58650 "EHLO
+        id S231728AbiKCSbB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 14:31:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58654 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231805AbiKCSbn (ORCPT
+        with ESMTP id S231395AbiKCSaq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 14:31:43 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8948265DD
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 11:29:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667500191;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=fs9hdEnSlUloTwUQc2bLSSOzYbdrDiXiodQGEMzW6HM=;
-        b=TIkAx75Om3g/2yjvD4PvJgt19GTFMFyyM/x9zoljXKhkVqXiRL94p/UlggAwJE7Lo815p9
-        9q40CApCbLMRwXa72B5sXEzkBo+gI42MFaVW1uoy9DwdLk8MwtLPw0jG9S/+Qs3Y6o7oRZ
-        /0T9mnpLqLVUXH55AYcvM+t4BxhyPZ0=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-668-DW_knKuvPDiczMYT1b9sUw-1; Thu, 03 Nov 2022 14:29:46 -0400
-X-MC-Unique: DW_knKuvPDiczMYT1b9sUw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 23DE68027EC;
-        Thu,  3 Nov 2022 18:29:46 +0000 (UTC)
-Received: from llong.com (unknown [10.22.33.38])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id B32481121325;
-        Thu,  3 Nov 2022 18:29:45 +0000 (UTC)
-From:   Waiman Long <longman@redhat.com>
-To:     Peter Zijlstra <peterz@infradead.org>,
-        Ingo Molnar <mingo@redhat.com>, Will Deacon <will@kernel.org>,
-        Boqun Feng <boqun.feng@gmail.com>
-Cc:     linux-kernel@vger.kernel.org, john.p.donnelly@oracle.com,
-        Hillf Danton <hdanton@sina.com>,
-        Mukesh Ojha <quic_mojha@quicinc.com>,
-        =?UTF-8?q?Ting11=20Wang=20=E7=8E=8B=E5=A9=B7?= 
-        <wangting11@xiaomi.com>, Waiman Long <longman@redhat.com>
-Subject: [PATCH v5 6/6] locking/rwsem: Update handoff lock events tracking
-Date:   Thu,  3 Nov 2022 14:29:36 -0400
-Message-Id: <20221103182936.217120-7-longman@redhat.com>
-In-Reply-To: <20221103182936.217120-1-longman@redhat.com>
-References: <20221103182936.217120-1-longman@redhat.com>
+        Thu, 3 Nov 2022 14:30:46 -0400
+Received: from mail-pf1-f171.google.com (mail-pf1-f171.google.com [209.85.210.171])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A492AE42;
+        Thu,  3 Nov 2022 11:29:53 -0700 (PDT)
+Received: by mail-pf1-f171.google.com with SMTP id b185so2400986pfb.9;
+        Thu, 03 Nov 2022 11:29:53 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=pZjEyPGh7N/ck24vh/VKMs5s50UIlOa2pgI4ml3dqpA=;
+        b=wBIG6peM6DO5VkovFmK5TgeyvBa7jO8i95AVxC7AtHb7w6gbuyIVitJya39P0iaTJu
+         0sT6wJ6o5hrKmNgXieS+gzsrfy5btgpKT6RZ2nSrQgaYhFueAGWUyUmm4pYpUFvbsiPn
+         7oY6sqqszRlqiSokONWdNzFxaCSIc2FNrRUGQ7cCDsbMzfsGB791jzVb+LyoHWF36yoK
+         2TrOYBVCI2uJxj7oZe3gEUTXw/Rl59c8yO59nawy3Xsh/YPXHqATxcpUZtOmF5C2qQIm
+         d3+Ra3gi/m/RggvdOLbYJ/bpD4AHpoa2ao5th4mbUqIqD3J+HACVkCz5DRhVVTeNcERI
+         z7qQ==
+X-Gm-Message-State: ACrzQf3EhY2IWYhRFKNYyvinf1CSPHo9OLMWzdjT9rya749d8zsmYHdq
+        YaY05A38KU+b5JFp2N8rNLs=
+X-Google-Smtp-Source: AMsMyM4MMb94EAGz1kO2Q0DRDyjidkdmznJiyzQZ8JfQK1Y1FbZfy+aOFpE2yYDeDmYpBxRHuxCHKQ==
+X-Received: by 2002:aa7:8c15:0:b0:56b:ead2:3950 with SMTP id c21-20020aa78c15000000b0056bead23950mr32086578pfd.77.1667500192405;
+        Thu, 03 Nov 2022 11:29:52 -0700 (PDT)
+Received: from rocinante (fpd11144dd.ap.nuro.jp. [209.17.68.221])
+        by smtp.gmail.com with ESMTPSA id o14-20020a170902d4ce00b0018157b415dbsm1034089plg.63.2022.11.03.11.29.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 11:29:51 -0700 (PDT)
+Date:   Fri, 4 Nov 2022 03:29:44 +0900
+From:   Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>
+To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc:     Dominik Brodowski <linux@dominikbrodowski.net>,
+        =?utf-8?Q?Micka=C3=ABl_Sala=C3=BCn?= <mic@digikod.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
+        xen-devel@lists.xenproject.org, Miguel Ojeda <ojeda@kernel.org>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Subject: Re: [PATCH v2 4/4] pcmcia: Convert to use
+ pci_bus_for_each_resource_p()
+Message-ID: <Y2QImB0OLakzz1+F@rocinante>
+References: <20221103164644.70554-1-andriy.shevchenko@linux.intel.com>
+ <20221103164644.70554-5-andriy.shevchenko@linux.intel.com>
+ <Y2P0XCNJvTVuziO7@owl.dominikbrodowski.net>
+ <Y2P2ja26ikNecTsv@smile.fi.intel.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y2P2ja26ikNecTsv@smile.fi.intel.com>
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-With the new direct rwsem lock handoff, the corresponding handoff lock
-events are updated to also track the number of secondary lock handoffs
-in rwsem_down_read_slowpath() to see how prevalent those handoff
-events are. The number of primary lock handoffs in the unlock paths is
-(rwsem_handoff_read + rwsem_handoff_write - rwsem_handoff_rslow).
+Hello,
 
-After running a 96-thread rwsem microbenchmark with equal number
-of readers and writers on a 2-socket 96-thread system for 40s, the
-following handoff stats were obtained:
+[...]
+> > > -
+> > > -	for (i = 0; i < PCI_BRIDGE_RESOURCE_NUM; i++) {
+> > > -		res = s->cb_dev->bus->resource[i];
+> > > -#else
+> > > -	pci_bus_for_each_resource(s->cb_dev->bus, res, i) {
+> > >  #endif
+> > > +
+> > > +	pci_bus_for_each_resource_p(s->cb_dev->bus, res) {
+> > >  		if (!res)
+> > >  			continue;
+> > 
+> > Doesn't this remove the proper iterator for X86? Even if that is the right
+> > thing to do, it needs an explict explanation.
+> 
+> I dunno what was in 2010, but reading code now I have found no differences in
+> the logic on how resources are being iterated in these two pieces of code.
 
-  rwsem_handoff_read=189
-  rwsem_handoff_rslow=1
-  rwsem_handoff_write=6678
-  rwsem_handoff_wspin=6681
+This code is over a decade old (13 years old to be precise) and there was
+something odd between Bjorn's and Jesse's patches, as per:
 
-The number of primary handoffs was 6866, whereas there was only one
-secondary handoff for this test run.
+  89a74ecccd1f ("PCI: add pci_bus_for_each_resource(), remove direct bus->resource[] refs")
+  cf26e8dc4194 ("pcmcia: do not autoadd root PCI bus resources")
 
-Signed-off-by: Waiman Long <longman@redhat.com>
----
- kernel/locking/lock_events_list.h | 6 ++++--
- kernel/locking/rwsem.c            | 9 +++++----
- 2 files changed, 9 insertions(+), 6 deletions(-)
+> But fine, I will add a line to a commit message about this change.
 
-diff --git a/kernel/locking/lock_events_list.h b/kernel/locking/lock_events_list.h
-index 97fb6f3f840a..04d101767c2c 100644
---- a/kernel/locking/lock_events_list.h
-+++ b/kernel/locking/lock_events_list.h
-@@ -63,7 +63,9 @@ LOCK_EVENT(rwsem_rlock)		/* # of read locks acquired		*/
- LOCK_EVENT(rwsem_rlock_steal)	/* # of read locks by lock stealing	*/
- LOCK_EVENT(rwsem_rlock_fast)	/* # of fast read locks acquired	*/
- LOCK_EVENT(rwsem_rlock_fail)	/* # of failed read lock acquisitions	*/
--LOCK_EVENT(rwsem_rlock_handoff)	/* # of read lock handoffs		*/
- LOCK_EVENT(rwsem_wlock)		/* # of write locks acquired		*/
- LOCK_EVENT(rwsem_wlock_fail)	/* # of failed write lock acquisitions	*/
--LOCK_EVENT(rwsem_wlock_handoff)	/* # of write lock handoffs		*/
-+LOCK_EVENT(rwsem_handoff_read)	/* # of read lock handoffs		*/
-+LOCK_EVENT(rwsem_handoff_write)	/* # of write lock handoffs		*/
-+LOCK_EVENT(rwsem_handoff_rslow)	/* # of handoffs in read slowpath	*/
-+LOCK_EVENT(rwsem_handoff_wspin)	/* # of handoff spins in write slowpath	*/
-diff --git a/kernel/locking/rwsem.c b/kernel/locking/rwsem.c
-index c9f24ed8757d..84bdb4fd18c3 100644
---- a/kernel/locking/rwsem.c
-+++ b/kernel/locking/rwsem.c
-@@ -469,10 +469,8 @@ static void rwsem_mark_wake(struct rw_semaphore *sem,
- 			 * force the issue.
- 			 */
- 			if (time_after(jiffies, waiter->timeout)) {
--				if (!(oldcount & RWSEM_FLAG_HANDOFF)) {
-+				if (!(oldcount & RWSEM_FLAG_HANDOFF))
- 					adjustment -= RWSEM_FLAG_HANDOFF;
--					lockevent_inc(rwsem_rlock_handoff);
--				}
- 				WRITE_ONCE(waiter->handoff_state, HANDOFF_REQUESTED);
- 			}
- 
-@@ -677,7 +675,6 @@ static inline bool rwsem_try_write_lock(struct rw_semaphore *sem,
- 	 */
- 	if (new & RWSEM_FLAG_HANDOFF) {
- 		WRITE_ONCE(first->handoff_state, HANDOFF_REQUESTED);
--		lockevent_inc(rwsem_wlock_handoff);
- 		return false;
- 	}
- 
-@@ -1011,10 +1008,12 @@ static void rwsem_handoff(struct rw_semaphore *sem, long adj,
- 		wake_type = RWSEM_WAKE_ANY;
- 		adj += RWSEM_WRITER_LOCKED;
- 		atomic_long_set(&sem->owner, (long)waiter->task);
-+		lockevent_inc(rwsem_handoff_write);
- 	} else {
- 		wake_type = RWSEM_WAKE_READ_OWNED;
- 		adj += RWSEM_READER_BIAS;
- 		__rwsem_set_reader_owned(sem, waiter->task);
-+		lockevent_inc(rwsem_handoff_read);
- 	}
- 	atomic_long_add(adj, &sem->count);
- 	rwsem_mark_wake(sem, wake_type, wake_q);
-@@ -1123,6 +1122,7 @@ rwsem_down_read_slowpath(struct rw_semaphore *sem, long count, unsigned int stat
- 		if (rwsem_first_waiter(sem)->type == RWSEM_WAITING_FOR_READ)
- 			adjustment = 0;
- 		rwsem_handoff(sem, adjustment, &wake_q);
-+		lockevent_inc(rwsem_handoff_rslow);
- 
- 		if (!adjustment) {
- 			raw_spin_unlock_irq(&sem->wait_lock);
-@@ -1253,6 +1253,7 @@ rwsem_down_write_slowpath(struct rw_semaphore *sem, int state)
- 			if (handoff == HANDOFF_REQUESTED) {
- 				rwsem_spin_on_owner(sem);
- 				handoff = READ_ONCE(waiter.handoff_state);
-+				lockevent_inc(rwsem_handoff_wspin);
- 			}
- 
- 			if (handoff == HANDOFF_GRANTED)
--- 
-2.31.1
+I wouldn't, personally.  The change you are proposing is self-explanatory
+and somewhat in-line with what is there already - unless I am also reading
+the current implementation wrong.
 
+That said, Dominik is the maintainer of PCMCIA driver, so his is the last
+word, so to speak. :)
+
+> Considering this is done, can you issue your conditional tag so I will
+> incorporate it in v3?
+
+No need, really.  Again, unless Dominik thinks otherwise.
+
+	Krzysztof
