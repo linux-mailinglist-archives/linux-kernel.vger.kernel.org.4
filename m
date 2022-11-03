@@ -2,98 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AE07617997
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:15:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2CFCD617973
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:12:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231330AbiKCJPG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 05:15:06 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34656 "EHLO
+        id S230013AbiKCJLq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 05:11:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34084 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230194AbiKCJOY (ORCPT
+        with ESMTP id S229485AbiKCJLl (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 05:14:24 -0400
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EA918E019;
-        Thu,  3 Nov 2022 02:14:17 -0700 (PDT)
-Received: from dggemv703-chm.china.huawei.com (unknown [172.30.72.53])
-        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N2ycX64r7zRp1N;
-        Thu,  3 Nov 2022 17:09:16 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv703-chm.china.huawei.com (10.3.19.46) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 17:14:15 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.61) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 17:14:15 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <davem@davemloft.net>, <edumazet@google.com>, <kuba@kernel.org>,
-        <pabeni@redhat.com>, <keescook@chromium.org>,
-        <gustavoars@kernel.org>, <netdev@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <bpf@vger.kernel.org>,
-        <acme@kernel.org>
-CC:     <yangjihong1@huawei.com>
-Subject: [PATCH net v2] uapi: Add missing linux/stddef.h header file to in.h
-Date:   Thu, 3 Nov 2022 17:11:00 +0800
-Message-ID: <20221103091100.246115-1-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
+        Thu, 3 Nov 2022 05:11:41 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EE95C10DF
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 02:11:40 -0700 (PDT)
+Received: from gallifrey.ext.pengutronix.de ([2001:67c:670:201:5054:ff:fe8d:eefb] helo=[IPv6:::1])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <l.stach@pengutronix.de>)
+        id 1oqWG6-0004Sh-Fm; Thu, 03 Nov 2022 10:11:34 +0100
+Message-ID: <8561d5ac952d39bf3d1923ca9e3fa651ab1bb531.camel@pengutronix.de>
+Subject: Re: [PATCH v1] PCI: imx6: Keep the GPIO regulator always on
+From:   Lucas Stach <l.stach@pengutronix.de>
+To:     Richard Zhu <hongxing.zhu@nxp.com>, bhelgaas@google.com,
+        lorenzo.pieralisi@arm.com
+Cc:     linux-pci@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-kernel@vger.kernel.org, kernel@pengutronix.de,
+        linux-imx@nxp.com
+Date:   Thu, 03 Nov 2022 10:11:33 +0100
+In-Reply-To: <1667455698-14578-1-git-send-email-hongxing.zhu@nxp.com>
+References: <1667455698-14578-1-git-send-email-hongxing.zhu@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.40.4 (3.40.4-1.fc34) 
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.61]
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
+Content-Transfer-Encoding: 7bit
+X-SA-Exim-Connect-IP: 2001:67c:670:201:5054:ff:fe8d:eefb
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
 X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 5854a09b4957 ("net/ipv4: Use __DECLARE_FLEX_ARRAY() helper") does
-not include "linux/stddef.h" header file, and tools headers update
-linux/in.h copy, BPF prog fails to be compiled:
+Am Donnerstag, dem 03.11.2022 um 14:08 +0800 schrieb Richard Zhu:
+> Since vpcie regulator is one GPIO regulator, used to control the
+> VPCIe_3V3 and power up remote PCIe EP device.
+> 
+> Some WIFI modules load their firmware once in probe, and can't be
+> powered off during suspend. Otherwise, these WIFI modules wouldn't be
+> functional anymore after resume back.
 
-    CLNG-BPF [test_maps] bpf_flow.bpf.o
-    CLNG-BPF [test_maps] cgroup_skb_sk_lookup_kern.bpf.o
-  In file included from progs/cgroup_skb_sk_lookup_kern.c:9:
-  /root/linux/tools/include/uapi/linux/in.h:199:3: error: type name requires a specifier or qualifier
-                  __DECLARE_FLEX_ARRAY(__be32, imsf_slist_flex);
-                  ^
-  /root/linux/tools/include/uapi/linux/in.h:199:32: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-                  __DECLARE_FLEX_ARRAY(__be32, imsf_slist_flex);
-                                               ^
-  2 errors generated.
+I would call this a bug in the WiFi driver.
 
-To maintain consistency, add missing header file to kernel.
+I think we need to walk down the PCIe hierarchy to see if it is safe to
+disable the PCIe regulator. When all devices in the hierarchy are in
+D3hot state, we can safely put the whole hierarchy into D3cold by
+removing power. When any of the devices connected to the  RC are in a
+state other than D3hot, we need to keep the regulator enabled, as those
+devices may need power in suspend to implement wakeups or other
+functionality that should be available during suspend.
 
-Fixes: 5854a09b4957 ("net/ipv4: Use __DECLARE_FLEX_ARRAY() helper")
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
----
+Regards,
+Lucas
 
-Changes since v1:
- - 'Fixes' tag separates by the commit message by a blank line
- - Remove the empty line between 'Fixes' and SoB.
- - Specify the target tree to "net" in title
- - Wrap the commit message text to 75 chars per line (except build output)
+> 
+> So, keep this regulator always on in the probe.
+> 
+> Fixes: a4bb720eeb1e ("PCI: imx6: Turn off regulator when system is in suspend mode")
+> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
+> ---
+>  drivers/pci/controller/dwc/pci-imx6.c | 24 ++++++++----------------
+>  1 file changed, 8 insertions(+), 16 deletions(-)
+> 
+> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
+> index 2616585ca5f8..94a89bbf381d 100644
+> --- a/drivers/pci/controller/dwc/pci-imx6.c
+> +++ b/drivers/pci/controller/dwc/pci-imx6.c
+> @@ -926,22 +926,13 @@ static int imx6_pcie_host_init(struct dw_pcie_rp *pp)
+>  	struct imx6_pcie *imx6_pcie = to_imx6_pcie(pci);
+>  	int ret;
+>  
+> -	if (imx6_pcie->vpcie) {
+> -		ret = regulator_enable(imx6_pcie->vpcie);
+> -		if (ret) {
+> -			dev_err(dev, "failed to enable vpcie regulator: %d\n",
+> -				ret);
+> -			return ret;
+> -		}
+> -	}
+> -
+>  	imx6_pcie_assert_core_reset(imx6_pcie);
+>  	imx6_pcie_init_phy(imx6_pcie);
+>  
+>  	ret = imx6_pcie_clk_enable(imx6_pcie);
+>  	if (ret) {
+>  		dev_err(dev, "unable to enable pcie clocks: %d\n", ret);
+> -		goto err_reg_disable;
+> +		return ret;
+>  	}
+>  
+>  	if (imx6_pcie->phy) {
+> @@ -974,9 +965,6 @@ static int imx6_pcie_host_init(struct dw_pcie_rp *pp)
+>  		phy_exit(imx6_pcie->phy);
+>  err_clk_disable:
+>  	imx6_pcie_clk_disable(imx6_pcie);
+> -err_reg_disable:
+> -	if (imx6_pcie->vpcie)
+> -		regulator_disable(imx6_pcie->vpcie);
+>  	return ret;
+>  }
+>  
+> @@ -991,9 +979,6 @@ static void imx6_pcie_host_exit(struct dw_pcie_rp *pp)
+>  		phy_exit(imx6_pcie->phy);
+>  	}
+>  	imx6_pcie_clk_disable(imx6_pcie);
+> -
+> -	if (imx6_pcie->vpcie)
+> -		regulator_disable(imx6_pcie->vpcie);
+>  }
+>  
+>  static const struct dw_pcie_host_ops imx6_pcie_host_ops = {
+> @@ -1263,6 +1248,13 @@ static int imx6_pcie_probe(struct platform_device *pdev)
+>  		if (PTR_ERR(imx6_pcie->vpcie) != -ENODEV)
+>  			return PTR_ERR(imx6_pcie->vpcie);
+>  		imx6_pcie->vpcie = NULL;
+> +	} else {
+> +		ret = regulator_enable(imx6_pcie->vpcie);
+> +		if (ret) {
+> +			dev_err(dev, "failed to enable vpcie regulator: %d\n",
+> +				ret);
+> +			return ret;
+> +		}
+>  	}
+>  
+>  	imx6_pcie->vph = devm_regulator_get_optional(&pdev->dev, "vph");
 
- include/uapi/linux/in.h | 1 +
- 1 file changed, 1 insertion(+)
-
-diff --git a/include/uapi/linux/in.h b/include/uapi/linux/in.h
-index f243ce665f74..79015665daf1 100644
---- a/include/uapi/linux/in.h
-+++ b/include/uapi/linux/in.h
-@@ -22,6 +22,7 @@
- #include <linux/types.h>
- #include <linux/libc-compat.h>
- #include <linux/socket.h>
-+#include <linux/stddef.h>
- 
- #if __UAPI_DEF_IN_IPPROTO
- /* Standard well-defined IP protocols.  */
--- 
-2.30.GIT
 
