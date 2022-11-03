@@ -2,95 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 17C7B617403
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 03:09:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8AE8617404
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 03:09:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbiKCCJL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 22:09:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53038 "EHLO
+        id S230312AbiKCCJ3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 22:09:29 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53158 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229553AbiKCCJJ (ORCPT
+        with ESMTP id S230267AbiKCCJX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 22:09:09 -0400
-Received: from mail-oi1-x22f.google.com (mail-oi1-x22f.google.com [IPv6:2607:f8b0:4864:20::22f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AAB3F5FB0
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 19:09:08 -0700 (PDT)
-Received: by mail-oi1-x22f.google.com with SMTP id l127so623577oia.8
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 19:09:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=e3kav229FcT5RedMgRM0xVlY6MwQlOtEuSw3Vkef24s=;
-        b=i7tJTcqPQiVG7CjFubgr+q0cSlwolDBd/uusG/bli2fmChQcyMaGs/LWbT4SKjUVvP
-         r7L2PyK5IWY5mv9qP6Iryb3SHmxrPXvLLXUN5hecCIq+ZgMB3rP/aTZETCsD2/CU9DiI
-         Jr+gOHq4GsdeQI3kiFFN0ZUYO5Xa4ba3zxP3uqf23RtLHEUpIEOmt+ny1ffdyGxogk/b
-         pYHZKdQI/QddMywEAJjaZ+Iu4uVhx15qZ9ENDdTVo34fUOWtsSeowZ0j1ZLzwAixTM5W
-         zMbePGbpyapOcvRgwbzQGKdFkkA4oJXffuhaKtAO9yD3Z/IsipNBaB1b3+HyPWCcJ7+L
-         wpjg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=e3kav229FcT5RedMgRM0xVlY6MwQlOtEuSw3Vkef24s=;
-        b=WkMvGpUYFRVR8CQZrj8WRvR5E3TjC091ejwxl8+bZ+Dpput4kNtH+6EBqDCSTg20Z1
-         ix/cd2ALX/YEyWoSRNMUzLH3d4St7eJuHCgEj7IX6XodsRTaPqyQ02w32BSG4CQhkw7O
-         Vrnjm6HK1PhPyEoNDI3E/7ihH+5TrTCgL3PiXvzuOc/2JEiI6Y7zH/IOX+1v7fU7lWng
-         Up1OwGSwq59gzs58fEIRotsb5VuE4MZEJyC5qZIBomTOQq9QHG8SYhkxhXFJIhMA8P9t
-         ijUz9CTagekLPf6DNXQFuIvyEewcmtxL9j5l+xTnWrudCEr+wjHIFDAf7thMQr8esEul
-         rWMQ==
-X-Gm-Message-State: ACrzQf06XFD7Z6PNXcfcTrL8njn5Nv41KXR7MdABN3ASpr/xHiGZFE2p
-        udKoKXqbI5qbnl9pxDTRA1ZM8IJOfeA=
-X-Google-Smtp-Source: AMsMyM6846gxhFUay6O2hAHELEIReuFZUAuTe+61N3WUm4IQQEdUea3FDWvB9TTRwLsKAZmmrkTMKg==
-X-Received: by 2002:a05:6808:ecc:b0:353:2f37:5527 with SMTP id q12-20020a0568080ecc00b003532f375527mr15177180oiv.259.1667441347743;
-        Wed, 02 Nov 2022 19:09:07 -0700 (PDT)
-Received: from localhost ([12.97.180.36])
-        by smtp.gmail.com with ESMTPSA id o37-20020a05687096a500b00131c3d4d38fsm6849327oaq.39.2022.11.02.19.09.07
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 19:09:07 -0700 (PDT)
-Date:   Wed, 2 Nov 2022 19:09:06 -0700
-From:   Yury Norov <yury.norov@gmail.com>
-To:     linux-kernel@vger.kernel.org,
-        Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
-        Rasmus Villemoes <linux@rasmusvillemoes.dk>
-Subject: Re: [PATCH 0/6] bitmap: remove _reg_op()
-Message-ID: <Y2MiwgtCbT3f4onw@yury-laptop>
-References: <20221028014834.572819-1-yury.norov@gmail.com>
+        Wed, 2 Nov 2022 22:09:23 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0119B5FB0
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 19:09:20 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+        (No client certificate requested)
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N2nHx68XCz4xP9;
+        Thu,  3 Nov 2022 13:09:17 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+        s=201909; t=1667441358;
+        bh=JSSHWTvGDMu8HB+pnn2yZCR+yhgFgEaVO6lUyM6ufbM=;
+        h=From:To:Cc:Subject:Date:From;
+        b=JqFl1QRgpdWHWNhPGycVaNAkX9qbOPeoyD0gMuMZw1F/V1Be4OIcf/C+kxclB+DMP
+         /iSqo0cS/Zib0IsDwY1K02NQ1fDg+6XHgwKPWLFO/7xmviCYYQ5F8frpN1Flrf+JSq
+         7P/cb6bRf2IIRIiyWncjSAEuKn1xEumX1GG/z06GnwU04jvPvm4aa6Wh17lDoKhJDh
+         EyAYuwEcsQ61m9wozPo3jfOn/emN6A292VvR9Qf7LQJ51DV6Z1N7E5SsDCGAg6mack
+         GIDS64bmJRhbeA7p9Viyx/pIrpU90vQhbBTdXxx3OUPIOTZnyV3jDw8KIN/eGFWABX
+         fIvqKBkKwnSlA==
+From:   Michael Ellerman <mpe@ellerman.id.au>
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        schwab@linux-m68k.org, palmer@dabbelt.com,
+        linux-riscv@lists.infradead.org
+Subject: [GIT PULL] Please pull powerpc/linux.git powerpc-6.1-4 tag
+Date:   Thu, 03 Nov 2022 13:09:17 +1100
+Message-ID: <87o7tossaa.fsf@mpe.ellerman.id.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221028014834.572819-1-yury.norov@gmail.com>
+Content-Type: text/plain
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Any comments guys?
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA256
 
-On Thu, Oct 27, 2022 at 06:48:28PM -0700, Yury Norov wrote:
-> _reg_op() duplicates functionality of other bitmap functions.
-> This series removes it.
-> 
-> On top of this:
-> https://lore.kernel.org/lkml/20221027043810.350460-1-yury.norov@gmail.com/
-> 
-> Yury Norov (6):
->   bitmap: add bitmap_empty_from()
->   bitmap: replace _reg_op(REG_OP_ALLOC) with bitmap_set()
->   bitmap: replace _reg_op(REG_OP_RELEASE) with bitmap_clear()
->   bitmap: replace _reg_op(REG_OP_ISFREE) with bitmap_empty_from()
->   bitmap: fix opencoded bitmap_allocate_region()
->   bitmap: drop _reg_op()
-> 
->  include/linux/bitmap.h | 11 ++++++
->  lib/bitmap.c           | 89 +++---------------------------------------
->  2 files changed, 17 insertions(+), 83 deletions(-)
-> 
-> -- 
-> 2.34.1
+Hi Linus,
+
+Please pull some more powerpc fixes for 6.1.
+
+We had a few bad bugs on 32-bit and compat due to the introduction of syscall wrappers,
+which caused syscall arguments to be handled incorrectly for some syscalls. I have at
+least one report of it causing someone's root partition to fill up, presumably due to a
+bad fallocate.
+
+The asm-generic change affects RISC-V too, although Palmer didn't think there were likely
+to be many compat users on RISC-V.
+
+cheers
+
+
+The following changes since commit 65722736c3baf29e02e964a09e85c9ef71c48e8d:
+
+  powerpc/64s/interrupt: Fix clear of PACA_IRQS_HARD_DIS when returning to soft-masked context (2022-10-27 00:38:35 +1100)
+
+are available in the git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/powerpc/linux.git tags/powerpc-6.1-4
+
+for you to fetch changes up to 02a771c9a68a9f08cce4ec5e324fb1bc4dce7202:
+
+  powerpc/32: Select ARCH_SPLIT_ARG64 (2022-11-01 15:27:12 +1100)
+
+- ------------------------------------------------------------------
+powerpc fixes for 6.1 #4
+
+ - Fix an endian thinko in the asm-generic compat_arg_u64() which led to syscall arguments
+   being swapped for some compat syscalls.
+
+ - Fix syscall wrapper handling of syscalls with 64-bit arguments on 32-bit kernels, which
+   led to syscall arguments being misplaced.
+
+ - A build fix for amdgpu on Book3E with AltiVec disabled.
+
+Thanks to: Andreas Schwab, Christian Zigotzky, Arnd Bergmann.
+
+- ------------------------------------------------------------------
+Andreas Schwab (2):
+      asm-generic: compat: fix compat_arg_u64() and compat_arg_u64_dual()
+      powerpc/32: fix syscall wrappers with 64-bit arguments
+
+Michael Ellerman (3):
+      Merge tag 'v6.1-rc2' into fixes
+      powerpc/64e: Fix amdgpu build on Book3E w/o AltiVec
+      powerpc/32: Select ARCH_SPLIT_ARG64
+
+
+ arch/powerpc/Kconfig                     |  3 ++-
+ arch/powerpc/include/asm/syscalls.h      |  7 +++++++
+ arch/powerpc/kernel/sys_ppc32.c          | 13 ++++++++++++-
+ arch/powerpc/kernel/syscalls/syscall.tbl |  7 +++++--
+ include/asm-generic/compat.h             |  2 +-
+ 5 files changed, 27 insertions(+), 5 deletions(-)
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAEBCAAdFiEEJFGtCPCthwEv2Y/bUevqPMjhpYAFAmNjINoACgkQUevqPMjh
+pYCh1A//cDma7NOr7AgBcSCDjifYW+k7zSDgo/kELK126zsWa1mEeBBMNqbLVbRM
+PPYjZUT8wcAjfKRm1V50Y5AoLjk+Me0IyNswKmWJQGUvQgwTt67GI90Z5eR3NiDl
+niIfJYCccV2dqL+8SvEAWqCnXK/ViVFeTQfqf11SahS4Ste+vHW91sFrnew7gHb9
+2sChygEsGq03iOOaVjXy0NArcCKWonAkzoxGtlTp1EWzfXNg5ApiydLfonlxofQk
+t6DE3EGHq6fKaFy+fyTuIuKsqbfn2ucQ/yTXPxtnNThOIxTqj8VjMmfYgbiyMWHG
+LIZ36o5sOblL1eFFYed+Dokg89hI5lJm6CCwc9/8WeTddX9wEZnRylgF9wSelQ+9
+6PZrdfK7IqWC3Ugu+mI+xl0VjUj9jEdDMZNeus65xC7+3qRabOTsQxIIHDk4lM7J
+DNxfVU2NNjM4Qh1FEC0JSVMlabW3Xk72OFilKf/OKJCxPAQUccjrI146yd1Ygqsc
+diwzE94nkEeggYH1uPSfDeFT4t5l+jL0pSdVhjrMcnJBwVI/PjsR47a2YnrFqKUz
+FQAKAbr/tJOM9sTsqaiZmMGh2lcMW8/pKZOwZoaA6YIM14jkchzNIpOyb/GRop9w
+zf2VsG5UU5C4paW8yZ0sj5YyC+Ts2breiZJFNZzCmPsZzAH8wg8=
+=rvku
+-----END PGP SIGNATURE-----
