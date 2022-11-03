@@ -2,146 +2,123 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0C7E3617889
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 09:20:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1DE93617891
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 09:21:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230521AbiKCIUA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 04:20:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34548 "EHLO
+        id S230233AbiKCIUo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 04:20:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229551AbiKCIT5 (ORCPT
+        with ESMTP id S230394AbiKCIUg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 04:19:57 -0400
-Received: from msg-4.mailo.com (msg-4.mailo.com [213.182.54.15])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A8EF6387
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 01:19:56 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=mailo.com; s=mailo;
-        t=1667463587; bh=Q1gtZhNcPAX6xPcOwW6C1nKDG54ohaBKBclCqQEXMWk=;
-        h=X-EA-Auth:Date:From:To:Cc:Subject:Message-ID:References:
-         MIME-Version:Content-Type:In-Reply-To;
-        b=XfiMZgjzTJCbMdf2XBXxvyuOpQLjeHMnDB6uR+0SgX2SkvgmOFfaqVKH16vgzfuin
-         tEXqanqbE4eI+Vz4I8thlwW94GnLWJntlvnBlA/WZ6X8x7JQFQBfa1lNgLU3r0DPG+
-         +vRa1NZeTx2B7+zDmuR+istc/O8UKzzArDh/y3y4=
-Received: by b-1.in.mailobj.net [192.168.90.11] with ESMTP
-        via [213.182.55.206]
-        Thu,  3 Nov 2022 09:19:47 +0100 (CET)
-X-EA-Auth: fvalj0XVWmHSXWkNpFkJL08fpLTtLNaG1NjteZ/jLJzTnmY2SmvlE1rmcvDFi8TXOF516L1c6KrAqLYXA9LD+P6zPCocubVs
-Date:   Thu, 3 Nov 2022 13:49:42 +0530
-From:   Deepak R Varma <drv@mailo.com>
-To:     Julia Lawall <julia.lawall@inria.fr>
-Cc:     outreachy@lists.linux.dev,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] staging: rtl8723bs: Use min/max macros for variable
- comparison
-Message-ID: <Y2N5nuF9a62KPN3s@qemulion>
-References: <Y2NncTaRJhLvJ4fV@qemulion>
- <alpine.DEB.2.22.394.2211030854260.17767@hadrien>
+        Thu, 3 Nov 2022 04:20:36 -0400
+Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.220.28])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB8786401;
+        Thu,  3 Nov 2022 01:20:34 -0700 (PDT)
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by smtp-out1.suse.de (Postfix) with ESMTPS id 7B603220CC;
+        Thu,  3 Nov 2022 08:20:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.com; s=susede1;
+        t=1667463633; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
+         mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=ouZNBMNvvrnkZSRBeuTvoKMw9UcQXO1wNpACVbg3cbo=;
+        b=FHIiUHpq8kqmiBvbiZIzQZcHVVijmK/UpBmXYgGDDpKMjhoes0eoyBDNsIOT+feaqkxFxg
+        YaUrdak8yGX8ckWchrmP7gtE+g+RW3hVqzIizF+UtLlNdv0/3dRac3hSUr2TMFwMX+wv1A
+        EpaQKNqflIpCrvhc/yLew8VCMAP9ZTE=
+Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
+        (No client certificate requested)
+        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id 25B3C13AAF;
+        Thu,  3 Nov 2022 08:20:33 +0000 (UTC)
+Received: from dovecot-director2.suse.de ([192.168.254.65])
+        by imap2.suse-dmz.suse.de with ESMTPSA
+        id lweEBtF5Y2NYNgAAMHmgww
+        (envelope-from <nborisov@suse.com>); Thu, 03 Nov 2022 08:20:33 +0000
+Message-ID: <357d9e4e-a975-7198-a496-1832d1ade3e9@suse.com>
+Date:   Thu, 3 Nov 2022 10:20:32 +0200
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.22.394.2211030854260.17767@hadrien>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH] btrfs: fix match incorrectly in dev_args_match_device
+Content-Language: en-US
+To:     Liu Shixin <liushixin2@huawei.com>, Chris Mason <clm@fb.com>,
+        Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>
+Cc:     linux-btrfs@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221103083301.626561-1-liushixin2@huawei.com>
+From:   Nikolay Borisov <nborisov@suse.com>
+In-Reply-To: <20221103083301.626561-1-liushixin2@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 08:55:32AM +0100, Julia Lawall wrote:
->
->
-> On Thu, 3 Nov 2022, Deepak R Varma wrote:
->
-> > Simplify code by using min and max helper macros in place of lengthy
-> > if/else block oriented logical evaluation and value assignment. This
-> > issue is identified by coccicheck using the minmax.cocci file.
-> >
-> > Signed-off-by: Deepak R Varma <drv@mailo.com>
-> > ---
-> >
-> > Please note:
-> >    1. Using min for max_AMPDU_len computation warning was NOT auto generated by
-> >       the cocciecheck command. This was caught while surround code review and
-> >       was manually changed.
-> >    2. Checkpatch script continues to complaint about min_MPDU_spacing
-> >       computation line being more than 100 character in length. I did not find a
-> >       better formatting that will address this checkpatch warning. Any
-> >       suggestions are most welcome.
-> >    3. Proposed changes are compile tested only on my x86 based VM.
-> >
-> >
-> >  drivers/staging/rtl8723bs/core/rtw_wlan_util.c | 12 ++++--------
-> >  drivers/staging/rtl8723bs/hal/odm_DIG.c        |  5 +----
-> >  2 files changed, 5 insertions(+), 12 deletions(-)
-> >
-> > diff --git a/drivers/staging/rtl8723bs/core/rtw_wlan_util.c b/drivers/staging/rtl8723bs/core/rtw_wlan_util.c
-> > index 18ba846c0b7b..dcda587b84bc 100644
-> > --- a/drivers/staging/rtl8723bs/core/rtw_wlan_util.c
-> > +++ b/drivers/staging/rtl8723bs/core/rtw_wlan_util.c
-> > @@ -986,15 +986,11 @@ void HT_caps_handler(struct adapter *padapter, struct ndis_80211_var_ie *pIE)
-> >  			pmlmeinfo->HT_caps.u.HT_cap[i] &= (pIE->data[i]);
-> >  		} else {
-> >  			/* modify from  fw by Thomas 2010/11/17 */
-> > -			if ((pmlmeinfo->HT_caps.u.HT_cap_element.AMPDU_para & 0x3) > (pIE->data[i] & 0x3))
-> > -				max_AMPDU_len = (pIE->data[i] & 0x3);
-> > -			else
-> > -				max_AMPDU_len = (pmlmeinfo->HT_caps.u.HT_cap_element.AMPDU_para & 0x3);
-> > +			max_AMPDU_len = min((pmlmeinfo->HT_caps.u.HT_cap_element.AMPDU_para & 0x3),
-> > +					    (pIE->data[i] & 0x3));
-> >
-> > -			if ((pmlmeinfo->HT_caps.u.HT_cap_element.AMPDU_para & 0x1c) > (pIE->data[i] & 0x1c))
-> > -				min_MPDU_spacing = (pmlmeinfo->HT_caps.u.HT_cap_element.AMPDU_para & 0x1c);
-> > -			else
-> > -				min_MPDU_spacing = (pIE->data[i] & 0x1c);
-> > +			min_MPDU_spacing = max((pmlmeinfo->HT_caps.u.HT_cap_element.AMPDU_para & 0x1c),
-> > +					       (pIE->data[i] & 0x1c));
->
-> There seem to be a lot of unnecessary parentheses.  Admittedly they were
-> there before, but since you are creating the max call from scratch in this
-> patch, perhaps the parentheses around the arguments could be dropped at
-> the same time.
-
-Sounds good. I will improve further and send in a revision.
-
-Also, do you have a comment on why coccicheck did not catch the min opportunity
-for max_AMPDU_len computation? I am not seeing anything different with the
-if/else blocks here.
-
-Thank you,
-./drv
-
->
-> julia
->
-> >
-> >  			pmlmeinfo->HT_caps.u.HT_cap_element.AMPDU_para = max_AMPDU_len | min_MPDU_spacing;
-> >  		}
-> > diff --git a/drivers/staging/rtl8723bs/hal/odm_DIG.c b/drivers/staging/rtl8723bs/hal/odm_DIG.c
-> > index 07edf74ccfe5..97a51546463a 100644
-> > --- a/drivers/staging/rtl8723bs/hal/odm_DIG.c
-> > +++ b/drivers/staging/rtl8723bs/hal/odm_DIG.c
-> > @@ -598,10 +598,7 @@ void odm_DIGbyRSSI_LPS(void *pDM_VOID)
-> >  	/* Lower bound checking */
-> >
-> >  	/* RSSI Lower bound check */
-> > -	if ((pDM_Odm->RSSI_Min-10) > DM_DIG_MIN_NIC)
-> > -		RSSI_Lower = pDM_Odm->RSSI_Min-10;
-> > -	else
-> > -		RSSI_Lower = DM_DIG_MIN_NIC;
-> > +	RSSI_Lower = max(pDM_Odm->RSSI_Min - 10, DM_DIG_MIN_NIC);
-> >
-> >  	/* Upper and Lower Bound checking */
-> >  	if (CurrentIGI > DM_DIG_MAX_NIC)
-> > --
-> > 2.34.1
-> >
-> >
-> >
-> >
-> >
->
 
 
+On 3.11.22 г. 10:33 ч., Liu Shixin wrote:
+> syzkaller found an assert failed:
+> 
+>   assertion failed: (args->devid != (u64)-1) || args->missing, in fs/btrfs/volumes.c:6921
+> 
+> This can be trigger when we set devid to (u64)-1) by ioctl. In this case,
+> the match of devid will be skipped and the match of device may be succeed
+> incorrectly.
+> 
+> Patch 562d7b1512f7 introduced this function which is used to match device.
+> This function contaions two matching scenarios, we can distinguish them by
+> checking the value of args->missing rather than check whether args->devid
+> and args->uuid is default value.
+> 
+> Reported-by: syzbot+031687116258450f9853@syzkaller.appspotmail.com
+> Fixes: 562d7b1512f7 ("btrfs: handle device lookup with btrfs_dev_lookup_args")
+> Signed-off-by: Liu Shixin <liushixin2@huawei.com>
+
+Reviewed-by: Nikolay Borisov <nborisov@suse.com>
+
+> ---
+>   fs/btrfs/volumes.c | 16 ++++++++--------
+>   1 file changed, 8 insertions(+), 8 deletions(-)
+> 
+> diff --git a/fs/btrfs/volumes.c b/fs/btrfs/volumes.c
+> index 94ba46d57920..bf2d886cfb4b 100644
+> --- a/fs/btrfs/volumes.c
+> +++ b/fs/btrfs/volumes.c
+> @@ -6918,18 +6918,18 @@ static bool dev_args_match_fs_devices(const struct btrfs_dev_lookup_args *args,
+>   static bool dev_args_match_device(const struct btrfs_dev_lookup_args *args,
+>   				  const struct btrfs_device *device)
+>   {
+> -	ASSERT((args->devid != (u64)-1) || args->missing);
+> +	if (args->missing) {
+> +		if (test_bit(BTRFS_DEV_STATE_IN_FS_METADATA, &device->dev_state) &&
+> +		    !device->bdev)
+> +			return true;
+> +		return false;
+> +	}
+>   
+> -	if ((args->devid != (u64)-1) && device->devid != args->devid)
+> +	if (device->devid != args->devid)
+>   		return false;
+>   	if (args->uuid && memcmp(device->uuid, args->uuid, BTRFS_UUID_SIZE) != 0)
+>   		return false;
+> -	if (!args->missing)
+> -		return true;
+> -	if (test_bit(BTRFS_DEV_STATE_IN_FS_METADATA, &device->dev_state) &&
+> -	    !device->bdev)
+> -		return true;
+> -	return false;
+> +	return true;
+>   }
+>   
+>   /*
