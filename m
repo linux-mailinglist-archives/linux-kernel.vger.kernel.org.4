@@ -2,153 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2E6A661843A
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:22:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CE9CE618443
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:26:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231718AbiKCQWq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 12:22:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48506 "EHLO
+        id S231278AbiKCQ0C (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 12:26:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50296 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230408AbiKCQWn (ORCPT
+        with ESMTP id S229950AbiKCQZ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 12:22:43 -0400
-Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5E5021ADB3
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 09:22:42 -0700 (PDT)
-Received: by mail-il1-f199.google.com with SMTP id j20-20020a056e02219400b00300a22a7fe0so1932302ila.3
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 09:22:42 -0700 (PDT)
+        Thu, 3 Nov 2022 12:25:57 -0400
+Received: from mail-qt1-f179.google.com (mail-qt1-f179.google.com [209.85.160.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4EF431B1C4;
+        Thu,  3 Nov 2022 09:25:56 -0700 (PDT)
+Received: by mail-qt1-f179.google.com with SMTP id x15so1535671qtv.9;
+        Thu, 03 Nov 2022 09:25:56 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=PdS+lEEBebiSo5ay5p6Fn4AnE2FMKU6iakE+zDZEfZ4=;
-        b=j8tLJEDuxQr6gh6xr8c6HKE9+jT6FjZqoJw24fsuGlqfu/y0itTSM42204RUiuEVPK
-         DN+k06ude9GSvp5MKGxWfr6GHhPOBwEXwwNM1qW9f54Nd2hUi0CjDr+uPDyedgNpCIMe
-         JsLpoR1gf4zHN2A6cO8HuP71kwAC4pQfkMgY3d7o7cyo2EyhDu6mX0JPYO5LKymEgGmd
-         dz51IX7HW7oV3cLEJrsow/oO5htogm4mhyerKQ9fovO/N24UCoh+HJv4MdP7+k+7LvUY
-         Vpi53HfhDRIBVxvLdBnHHKPJmYAC2zXfZ0hofkB11Ul3utKRfTExJnqllXUkLBHGKdwR
-         dm6w==
-X-Gm-Message-State: ACrzQf1b6PU7xdjKOToeAbekSgPs4nktYxhEgmqWMA/tjB5+/18FyV3d
-        t5XwGbyopZ1N0BCi5YREC8diEMMKdPdOSwo4DTxpTKT22XuI
-X-Google-Smtp-Source: AMsMyM4oyov1l3/KEhHs4Ya1tY2AXI4A2VcOLdnqwyIjxJKU4caA9EI+Pqbn+kpLgAfmrhu0dW6pCBUZPAl8QRlY7P/uVzJe3KCe
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9gjhCPJCfzSZsQpHkvf5XJYJR8ZLs4RZeQXTnmRRfgU=;
+        b=G8hD1+eDOrKbp+hZ3UFufAsDD6Cwi4hJcSjuVPN3uRYnMNfWIY50wHicl6cIHrZK1T
+         iHqsWEUFRIfwp93Wc6FVjEOr0TcMFjWkPGi6A6ZDnRmUafoM2vIWGSg3QOcVjWTDb8+9
+         sh0DPsw7smWQ/WVvdkU8Xm51lIW1MssdsmuzCl6aHcmk914XaRJsG6/etVNtX0c0UQJX
+         w6xKPHIVchsLGJizoupL6w6/JqkGGG3RhBZLNBliXk4CfHB1/2Rpuml6dPsObyZuXtsi
+         GF6rq0XaU7JKUtAs3RdCjuVMVsmvhCiVP7r9A0zgU/FGhEA7Kt/vMUx156KNMj0CbGzj
+         MgVQ==
+X-Gm-Message-State: ACrzQf0PFtznfS1FJU41Zl5RSAZFfAD0aPaTCnT5FOUO37YmcUbb8okX
+        sNIUqCZR43WoMjVUES3IdQZjrEXMcIV8iKGzJY8=
+X-Google-Smtp-Source: AMsMyM6yvyrZ7NWy3i/4QUBAU6erlkf78B3kudKRnMAKNl0LLgW+Ajz9l40UDOVpEhNMaKNsm+H+05C8uzvenP/Nm24=
+X-Received: by 2002:ac8:7d15:0:b0:3a5:449:87c3 with SMTP id
+ g21-20020ac87d15000000b003a5044987c3mr25275935qtb.357.1667492755456; Thu, 03
+ Nov 2022 09:25:55 -0700 (PDT)
 MIME-Version: 1.0
-X-Received: by 2002:a02:ccab:0:b0:375:4a9b:1804 with SMTP id
- t11-20020a02ccab000000b003754a9b1804mr18559482jap.145.1667492561757; Thu, 03
- Nov 2022 09:22:41 -0700 (PDT)
-Date:   Thu, 03 Nov 2022 09:22:41 -0700
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <000000000000cf2ce705ec935d80@google.com>
-Subject: [syzbot] KMSAN: uninit-value in can_send
-From:   syzbot <syzbot+d168ec0caca4697e03b1@syzkaller.appspotmail.com>
-To:     davem@davemloft.net, edumazet@google.com, glider@google.com,
-        kernel@pengutronix.de, kuba@kernel.org, linux-can@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux@rempel-privat.de,
-        mkl@pengutronix.de, netdev@vger.kernel.org, pabeni@redhat.com,
-        robin@protonic.nl, socketcan@hartkopp.net,
-        syzkaller-bugs@googlegroups.com
+References: <20221101022840.1351163-1-tgsp002@gmail.com> <20221101022840.1351163-2-tgsp002@gmail.com>
+In-Reply-To: <20221101022840.1351163-2-tgsp002@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 3 Nov 2022 17:25:43 +0100
+Message-ID: <CAJZ5v0iPFPbbconOoQ7x_4X5yJ31pP7aduLqG4dq6KgAsprKbA@mail.gmail.com>
+Subject: Re: [PATCH -next 1/2] PM: hibernate: fix spelling mistake for annotation
+To:     TGSP <tgsp002@gmail.com>
+Cc:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
+        huanglei@kylinos.cn, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, xiongxin <xiongxin@kylinos.cn>,
+        stable@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
+        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello,
+On Tue, Nov 1, 2022 at 3:28 AM TGSP <tgsp002@gmail.com> wrote:
+>
+> From: xiongxin <xiongxin@kylinos.cn>
+>
+> The actual calculation formula in the code below is:
+>
+> max_size = (count - (size + PAGES_FOR_IO)) / 2
+>             - 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE);
+>
+> But function comments are written differently, the comment is wrong?
 
-syzbot found the following issue on:
+It is, and it is more serious than just a spelling mistake.
 
-HEAD commit:    4a3e741a3d6a x86: fortify: kmsan: fix KMSAN fortify builds
-git tree:       https://github.com/google/kmsan.git master
-console+strace: https://syzkaller.appspot.com/x/log.txt?x=14247636880000
-kernel config:  https://syzkaller.appspot.com/x/.config?x=c19210a0c25eebb
-dashboard link: https://syzkaller.appspot.com/bug?extid=d168ec0caca4697e03b1
-compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian) 2.35.2
-syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13e16e86880000
-C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1535a2f6880000
+> By the way, what exactly do the "/ 2" and "2 *" mean?
 
-Downloadable assets:
-disk image: https://storage.googleapis.com/syzbot-assets/fbb1997bc1e0/disk-4a3e741a.raw.xz
-vmlinux: https://storage.googleapis.com/syzbot-assets/d5dd2e1efaa4/vmlinux-4a3e741a.xz
+Every page in the image is a copy of an existing allocated page, so
+room needs to be made for the two, except for the "IO pages" and
+metadata pages that are not copied.  Hence, the division by 2.
 
-IMPORTANT: if you fix the issue, please add the following tag to the commit:
-Reported-by: syzbot+d168ec0caca4697e03b1@syzkaller.appspotmail.com
+Now, the "reserved_size" pages will be allocated right before creating
+the image and there will be a copy of each of them in the image, so
+there needs to be room for twice as many.
 
-=====================================================
-BUG: KMSAN: uninit-value in can_is_canxl_skb include/linux/can/skb.h:128 [inline]
-BUG: KMSAN: uninit-value in can_send+0x269/0x1100 net/can/af_can.c:205
- can_is_canxl_skb include/linux/can/skb.h:128 [inline]
- can_send+0x269/0x1100 net/can/af_can.c:205
- j1939_send_one+0x40f/0x4d0 net/can/j1939/main.c:352
- j1939_xtp_do_tx_ctl+0x69f/0x9e0 net/can/j1939/transport.c:664
- j1939_tp_tx_ctl net/can/j1939/transport.c:672 [inline]
- j1939_session_tx_rts net/can/j1939/transport.c:740 [inline]
- j1939_xtp_txnext_transmiter net/can/j1939/transport.c:880 [inline]
- j1939_tp_txtimer+0x35bb/0x4520 net/can/j1939/transport.c:1158
- __run_hrtimer+0x298/0x910 kernel/time/hrtimer.c:1685
- __hrtimer_run_queues kernel/time/hrtimer.c:1749 [inline]
- hrtimer_run_softirq+0x4b0/0x870 kernel/time/hrtimer.c:1766
- __do_softirq+0x1c5/0x7b9 kernel/softirq.c:571
- invoke_softirq+0x8f/0x100 kernel/softirq.c:445
- __irq_exit_rcu+0x5a/0x110 kernel/softirq.c:650
- irq_exit_rcu+0xe/0x10 kernel/softirq.c:662
- sysvec_apic_timer_interrupt+0x9a/0xc0 arch/x86/kernel/apic/apic.c:1107
- asm_sysvec_apic_timer_interrupt+0x1b/0x20 arch/x86/include/asm/idtentry.h:649
- __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:152 [inline]
- _raw_spin_unlock_irqrestore+0x2f/0x50 kernel/locking/spinlock.c:194
- unlock_hrtimer_base kernel/time/hrtimer.c:1017 [inline]
- hrtimer_start_range_ns+0xaba/0xb50 kernel/time/hrtimer.c:1301
- hrtimer_start include/linux/hrtimer.h:418 [inline]
- j1939_tp_schedule_txtimer+0xbe/0x100 net/can/j1939/transport.c:697
- j1939_sk_send_loop net/can/j1939/socket.c:1143 [inline]
- j1939_sk_sendmsg+0x1c2c/0x25d0 net/can/j1939/socket.c:1256
- sock_sendmsg_nosec net/socket.c:714 [inline]
- sock_sendmsg net/socket.c:734 [inline]
- ____sys_sendmsg+0xa8e/0xe70 net/socket.c:2482
- ___sys_sendmsg+0x2a1/0x3f0 net/socket.c:2536
- __sys_sendmsg net/socket.c:2565 [inline]
- __do_sys_sendmsg net/socket.c:2574 [inline]
- __se_sys_sendmsg net/socket.c:2572 [inline]
- __x64_sys_sendmsg+0x367/0x540 net/socket.c:2572
- do_syscall_x64 arch/x86/entry/common.c:50 [inline]
- do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
- entry_SYSCALL_64_after_hwframe+0x63/0xcd
+I'll adjust the changelog and queue up the path for 6.2.
 
-Uninit was created at:
- slab_post_alloc_hook mm/slab.h:742 [inline]
- slab_alloc_node mm/slub.c:3398 [inline]
- __kmem_cache_alloc_node+0x6ee/0xc90 mm/slub.c:3437
- __do_kmalloc_node mm/slab_common.c:954 [inline]
- __kmalloc_node_track_caller+0x117/0x3d0 mm/slab_common.c:975
- kmalloc_reserve net/core/skbuff.c:437 [inline]
- __alloc_skb+0x34a/0xca0 net/core/skbuff.c:509
- alloc_skb include/linux/skbuff.h:1267 [inline]
- j1939_tp_tx_dat_new net/can/j1939/transport.c:593 [inline]
- j1939_xtp_do_tx_ctl+0xa3/0x9e0 net/can/j1939/transport.c:654
- j1939_tp_tx_ctl net/can/j1939/transport.c:672 [inline]
- j1939_session_tx_rts net/can/j1939/transport.c:740 [inline]
- j1939_xtp_txnext_transmiter net/can/j1939/transport.c:880 [inline]
- j1939_tp_txtimer+0x35bb/0x4520 net/can/j1939/transport.c:1158
- __run_hrtimer+0x298/0x910 kernel/time/hrtimer.c:1685
- __hrtimer_run_queues kernel/time/hrtimer.c:1749 [inline]
- hrtimer_run_softirq+0x4b0/0x870 kernel/time/hrtimer.c:1766
- __do_softirq+0x1c5/0x7b9 kernel/softirq.c:571
+> Cc: stable@vger.kernel.org
 
-CPU: 0 PID: 3506 Comm: syz-executor289 Not tainted 6.1.0-rc2-syzkaller-61955-g4a3e741a3d6a #0
-Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
-=====================================================
+I'll add a Fixes tag instead.
 
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-syzbot will keep track of this issue. See:
-https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
-syzbot can test patches for this issue, for details see:
-https://goo.gl/tpsmEJ#testing-patches
+> Signed-off-by: xiongxin <xiongxin@kylinos.cn>
+> ---
+>  kernel/power/snapshot.c | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
+>
+> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
+> index 2a406753af90..c20ca5fb9adc 100644
+> --- a/kernel/power/snapshot.c
+> +++ b/kernel/power/snapshot.c
+> @@ -1723,8 +1723,8 @@ static unsigned long minimum_image_size(unsigned long saveable)
+>   * /sys/power/reserved_size, respectively).  To make this happen, we compute the
+>   * total number of available page frames and allocate at least
+>   *
+> - * ([page frames total] + PAGES_FOR_IO + [metadata pages]) / 2
+> - *  + 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE)
+> + * ([page frames total] - PAGES_FOR_IO - [metadata pages]) / 2
+> + *  - 2 * DIV_ROUND_UP(reserved_size, PAGE_SIZE)
+>   *
+>   * of them, which corresponds to the maximum size of a hibernation image.
+>   *
+> --
+> 2.25.1
+>
