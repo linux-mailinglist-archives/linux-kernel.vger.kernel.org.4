@@ -2,77 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 34BD4618A6D
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 22:19:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C1097618A74
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 22:21:38 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231220AbiKCVTO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 17:19:14 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40578 "EHLO
+        id S230205AbiKCVVf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 17:21:35 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiKCVTJ (ORCPT
+        with ESMTP id S230489AbiKCVVb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 17:19:09 -0400
-Received: from mail-ej1-x633.google.com (mail-ej1-x633.google.com [IPv6:2a00:1450:4864:20::633])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50D9D1A04C
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 14:19:08 -0700 (PDT)
-Received: by mail-ej1-x633.google.com with SMTP id n12so8613379eja.11
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 14:19:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=ImDG//sNXg/oy5XZPOuBFIhl7k6YK/gX5hImljVQwNU=;
-        b=i7qVVi6QJzHOHsEyF2H3U4f5BeR1vqQ/kDwBUG+qLwh2CKBdbxFvjlU1NDRlZWCCpv
-         of5a1WNQfehJN8bsNpyjehVNs9eSgIztGtu/hL+pmDwe1CTX6Co8eJvifN63coVyARjd
-         SvBBi6iH8toGKC6+4APYxAACJDaW316sIqWQbSQPa7XWYx8xgXYXzzH2RpjY8zu0WEPU
-         TMdY43lbQ8a1wJBk1yHYHzPpIYe+c/DnyU+nVSH/su1e/aAEsZ4miSYLzLffNjRTAqNe
-         m3xv4eVf22zWK86RAjEKJfL8/v9GtOInlGlmel9QLoO0pjS1mpub40YrpTl2TmfuBkvu
-         azpQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=ImDG//sNXg/oy5XZPOuBFIhl7k6YK/gX5hImljVQwNU=;
-        b=N//VjMTHSceQujV7p0lN9nBj6z0X4WOEXU1UiTFHpxqVkHWoRBKwOmYjjGsrL+qjNB
-         /2inrvoe2kZ57/CquyTjuIecwB8hhakPX5KpAz0FLqR3BtuTtm8RYthxLrz1FdC06pwv
-         brNYOhOa1+ABP5eWqYxsWsBEdqZTJwX0E/zyhXppe+C+vZfsK8wUSTTXWTYoWSGsavr5
-         AhicAbPeBVZMm2+T7OJbDKEgMQPgyX8A7PtY208pfkJDwwr6X34po4H78iQZJFVvp4uR
-         q4Zj1l1QZmBOyV/MJX5xc0Yi1+8QcrLFhbjGxrbPa9qcQcxrP06h0ZkNeMatf/BwDQIX
-         osJg==
-X-Gm-Message-State: ACrzQf1fxe15hXX+ZW0C58SWMFx4xsM6CjN5o352cM+nophU5XozMhsf
-        lcXWPEPiTmxihmFUyh+PBKY=
-X-Google-Smtp-Source: AMsMyM7Kh4e60noIwDR139plI/hWSD9OSNgFT8xfKVvgoTo9o2S/R19CkOOAEcIyeni3GZNwo9ShVA==
-X-Received: by 2002:a17:906:6a17:b0:794:f0e8:1918 with SMTP id qw23-20020a1709066a1700b00794f0e81918mr31466676ejc.474.1667510346827;
-        Thu, 03 Nov 2022 14:19:06 -0700 (PDT)
-Received: from ?IPV6:2003:c7:8f2a:b895:1d95:7d32:5509:657e? (p200300c78f2ab8951d957d325509657e.dip0.t-ipconnect.de. [2003:c7:8f2a:b895:1d95:7d32:5509:657e])
-        by smtp.gmail.com with ESMTPSA id td11-20020a1709078c8b00b00773f3ccd989sm964617ejc.68.2022.11.03.14.19.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 14:19:06 -0700 (PDT)
-Message-ID: <2aeb10bc-178f-836e-eecd-c77f3eb2f0b5@gmail.com>
-Date:   Thu, 3 Nov 2022 22:19:05 +0100
+        Thu, 3 Nov 2022 17:21:31 -0400
+Received: from mo4-p01-ob.smtp.rzone.de (mo4-p01-ob.smtp.rzone.de [85.215.255.51])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7F0111A04C;
+        Thu,  3 Nov 2022 14:21:29 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1667510482;
+    s=strato-dkim-0002; d=hartkopp.net;
+    h=In-Reply-To:From:Cc:References:To:Subject:Date:Message-ID:Cc:Date:
+    From:Subject:Sender;
+    bh=T6LgdNziiLAcLXgv0LQG8gtLNjq1GOoP1yxWXg/6qyo=;
+    b=A52QsnMLfW6U4c2O/m+T9wYLv871vi/l4MzT16MfP2gkDbvqMJ/MFW3vBrSDthxKtg
+    V3rG4SzxZ9X12SMvHBQ6mfWS5AHNQyv0+OfUUlYe83HrOllBmlS6TEXa0CMJKf2mD/cq
+    OXlNOBegoqgWfcLKu3OyjxHvhL+8MDZYtaupjprJHEZ5xTAL4wnGzJu6TSR1yN414F2r
+    ruAdJaWb4a++1ana0qYBy09Fb98HCIsO1bnHIoNdX4q7Q5HCJ+i6aS1wLZ53MPIB//44
+    PDBGrtD39MTsimgk6KLVgwCtc4eNbjrZXMwb0r+0lt/H2yfhJr7lz6r3qzKxkGnOU/h3
+    CMkw==
+Authentication-Results: strato.com;
+    dkim=none
+X-RZG-AUTH: ":P2MHfkW8eP4Mre39l357AZT/I7AY/7nT2yrDxb8mjG14FZxedJy6qgO1qCHSa1GLptZHusx3hdIrpKytISr6hZqJAw=="
+X-RZG-CLASS-ID: mo00
+Received: from [IPV6:2a00:6020:1cfd:d104::923]
+    by smtp.strato.de (RZmta 48.2.1 AUTH)
+    with ESMTPSA id Dde783yA3LLLObr
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256 bits))
+        (Client did not present a certificate);
+    Thu, 3 Nov 2022 22:21:21 +0100 (CET)
+Message-ID: <cc1a0240-2b51-0d97-3606-02e29d0346c1@hartkopp.net>
+Date:   Thu, 3 Nov 2022 22:21:15 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:91.0) Gecko/20100101
- Thunderbird/91.11.0
-Subject: Re: [PATCH] staging: r8188eu: remove unused struct declarations
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [syzbot] KMSAN: uninit-value in can_send
+To:     linux@rempel-privat.de,
+        syzbot <syzbot+d168ec0caca4697e03b1@syzkaller.appspotmail.com>
+References: <000000000000cf2ce705ec935d80@google.com>
 Content-Language: en-US
-To:     Deepak R Varma <drv@mailo.com>
-Cc:     outreachy@lists.linux.dev,
-        Larry Finger <Larry.Finger@lwfinger.net>,
-        Phillip Potter <phil@philpotter.co.uk>,
-        Pavel Skripkin <paskripkin@gmail.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        linux-staging@lists.linux.dev, linux-kernel@vger.kernel.org
-References: <Y2LYvhr74ng+xFbz@qemulion>
- <e76c5fd4-442b-0f0e-73e8-c17acf11b471@gmail.com> <Y2OOM8g0Qj1o6dRI@qemulion>
-From:   Philipp Hortmann <philipp.g.hortmann@gmail.com>
-In-Reply-To: <Y2OOM8g0Qj1o6dRI@qemulion>
+Cc:     syzbot <syzbot+d168ec0caca4697e03b1@syzkaller.appspotmail.com>,
+        davem@davemloft.net, edumazet@google.com, glider@google.com,
+        kernel@pengutronix.de, kuba@kernel.org, linux-can@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mkl@pengutronix.de,
+        netdev@vger.kernel.org, pabeni@redhat.com, robin@protonic.nl,
+        syzkaller-bugs@googlegroups.com
+From:   Oliver Hartkopp <socketcan@hartkopp.net>
+In-Reply-To: <000000000000cf2ce705ec935d80@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -80,38 +66,113 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/3/22 10:47, Deepak R Varma wrote:
-> Hello Philipp,
-> Thank you for testing the changes.
+Good catch!
+
+That's a correct issue caused by only filling the CAN frame header with 
+can_id and len in j1939_send_one():
+
+https://elixir.bootlin.com/linux/v6.0.6/source/net/can/j1939/main.c#L345
+
+@Oleksij: Can you please (zero)initialize the unused elements in struct 
+can_frame (namely __pad, __res0, len8_dlc) in j1939_send_one()?
+
+Or do you want me to create a patch for it?
+
+Thanks and best regards,
+Oliver
+
+On 03.11.22 17:22, syzbot wrote:
+> Hello,
 > 
-> Request (not urgent):
-> Can you please help me understand how do you
-> test such changes? Do we need specific hardware for functional tests? Is there a
-> documentation available to know more about the testing? I am interested in
-> attaching a physical device to my machine and be able to debug and test the
-> changes. Can you please provide details when you have time?
+> syzbot found the following issue on:
 > 
-> Thank you in advance!
-> ./drv
-
-Hi Deepak,
-
-I do have one device for the following drivers:
-
-vt6656
-vt6655
-r8188eu
-r8192e_pci
-r8712u
-
-Minimum test is to measure the transfer speed and see if that is as 
-expected.
-
-When I doubt that the changed code is used I use ftrace to see if the 
-code is used. But of course I do not test every possibility.
-
-I hope you have the money to be able to buy hardware. Without it is not fun.
-
-I would choose r8188eu (USB) or r8192e_pci.
-
-Bye Philipp
+> HEAD commit:    4a3e741a3d6a x86: fortify: kmsan: fix KMSAN fortify builds
+> git tree:       https://github.com/google/kmsan.git master
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=14247636880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=c19210a0c25eebb
+> dashboard link: https://syzkaller.appspot.com/bug?extid=d168ec0caca4697e03b1
+> compiler:       clang version 15.0.0 (https://github.com/llvm/llvm-project.git 610139d2d9ce6746b3c617fb3e2f7886272d26ff), GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=13e16e86880000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=1535a2f6880000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/fbb1997bc1e0/disk-4a3e741a.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/d5dd2e1efaa4/vmlinux-4a3e741a.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+d168ec0caca4697e03b1@syzkaller.appspotmail.com
+> 
+> =====================================================
+> BUG: KMSAN: uninit-value in can_is_canxl_skb include/linux/can/skb.h:128 [inline]
+> BUG: KMSAN: uninit-value in can_send+0x269/0x1100 net/can/af_can.c:205
+>   can_is_canxl_skb include/linux/can/skb.h:128 [inline]
+>   can_send+0x269/0x1100 net/can/af_can.c:205
+>   j1939_send_one+0x40f/0x4d0 net/can/j1939/main.c:352
+>   j1939_xtp_do_tx_ctl+0x69f/0x9e0 net/can/j1939/transport.c:664
+>   j1939_tp_tx_ctl net/can/j1939/transport.c:672 [inline]
+>   j1939_session_tx_rts net/can/j1939/transport.c:740 [inline]
+>   j1939_xtp_txnext_transmiter net/can/j1939/transport.c:880 [inline]
+>   j1939_tp_txtimer+0x35bb/0x4520 net/can/j1939/transport.c:1158
+>   __run_hrtimer+0x298/0x910 kernel/time/hrtimer.c:1685
+>   __hrtimer_run_queues kernel/time/hrtimer.c:1749 [inline]
+>   hrtimer_run_softirq+0x4b0/0x870 kernel/time/hrtimer.c:1766
+>   __do_softirq+0x1c5/0x7b9 kernel/softirq.c:571
+>   invoke_softirq+0x8f/0x100 kernel/softirq.c:445
+>   __irq_exit_rcu+0x5a/0x110 kernel/softirq.c:650
+>   irq_exit_rcu+0xe/0x10 kernel/softirq.c:662
+>   sysvec_apic_timer_interrupt+0x9a/0xc0 arch/x86/kernel/apic/apic.c:1107
+>   asm_sysvec_apic_timer_interrupt+0x1b/0x20 arch/x86/include/asm/idtentry.h:649
+>   __raw_spin_unlock_irqrestore include/linux/spinlock_api_smp.h:152 [inline]
+>   _raw_spin_unlock_irqrestore+0x2f/0x50 kernel/locking/spinlock.c:194
+>   unlock_hrtimer_base kernel/time/hrtimer.c:1017 [inline]
+>   hrtimer_start_range_ns+0xaba/0xb50 kernel/time/hrtimer.c:1301
+>   hrtimer_start include/linux/hrtimer.h:418 [inline]
+>   j1939_tp_schedule_txtimer+0xbe/0x100 net/can/j1939/transport.c:697
+>   j1939_sk_send_loop net/can/j1939/socket.c:1143 [inline]
+>   j1939_sk_sendmsg+0x1c2c/0x25d0 net/can/j1939/socket.c:1256
+>   sock_sendmsg_nosec net/socket.c:714 [inline]
+>   sock_sendmsg net/socket.c:734 [inline]
+>   ____sys_sendmsg+0xa8e/0xe70 net/socket.c:2482
+>   ___sys_sendmsg+0x2a1/0x3f0 net/socket.c:2536
+>   __sys_sendmsg net/socket.c:2565 [inline]
+>   __do_sys_sendmsg net/socket.c:2574 [inline]
+>   __se_sys_sendmsg net/socket.c:2572 [inline]
+>   __x64_sys_sendmsg+0x367/0x540 net/socket.c:2572
+>   do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+>   do_syscall_64+0x3d/0xb0 arch/x86/entry/common.c:80
+>   entry_SYSCALL_64_after_hwframe+0x63/0xcd
+> 
+> Uninit was created at:
+>   slab_post_alloc_hook mm/slab.h:742 [inline]
+>   slab_alloc_node mm/slub.c:3398 [inline]
+>   __kmem_cache_alloc_node+0x6ee/0xc90 mm/slub.c:3437
+>   __do_kmalloc_node mm/slab_common.c:954 [inline]
+>   __kmalloc_node_track_caller+0x117/0x3d0 mm/slab_common.c:975
+>   kmalloc_reserve net/core/skbuff.c:437 [inline]
+>   __alloc_skb+0x34a/0xca0 net/core/skbuff.c:509
+>   alloc_skb include/linux/skbuff.h:1267 [inline]
+>   j1939_tp_tx_dat_new net/can/j1939/transport.c:593 [inline]
+>   j1939_xtp_do_tx_ctl+0xa3/0x9e0 net/can/j1939/transport.c:654
+>   j1939_tp_tx_ctl net/can/j1939/transport.c:672 [inline]
+>   j1939_session_tx_rts net/can/j1939/transport.c:740 [inline]
+>   j1939_xtp_txnext_transmiter net/can/j1939/transport.c:880 [inline]
+>   j1939_tp_txtimer+0x35bb/0x4520 net/can/j1939/transport.c:1158
+>   __run_hrtimer+0x298/0x910 kernel/time/hrtimer.c:1685
+>   __hrtimer_run_queues kernel/time/hrtimer.c:1749 [inline]
+>   hrtimer_run_softirq+0x4b0/0x870 kernel/time/hrtimer.c:1766
+>   __do_softirq+0x1c5/0x7b9 kernel/softirq.c:571
+> 
+> CPU: 0 PID: 3506 Comm: syz-executor289 Not tainted 6.1.0-rc2-syzkaller-61955-g4a3e741a3d6a #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+> =====================================================
+> 
+> 
+> ---
+> This report is generated by a bot. It may contain errors.
+> See https://goo.gl/tpsmEJ for more information about syzbot.
+> syzbot engineers can be reached at syzkaller@googlegroups.com.
+> 
+> syzbot will keep track of this issue. See:
+> https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
+> syzbot can test patches for this issue, for details see:
+> https://goo.gl/tpsmEJ#testing-patches
