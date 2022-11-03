@@ -2,54 +2,54 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 917BB6188F1
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 20:52:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5B4626188F4
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 20:52:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230522AbiKCTwE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 15:52:04 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45016 "EHLO
+        id S231174AbiKCTwJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 15:52:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45030 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiKCTwA (ORCPT
+        with ESMTP id S230153AbiKCTwC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 15:52:00 -0400
-Received: from mail-ed1-x536.google.com (mail-ed1-x536.google.com [IPv6:2a00:1450:4864:20::536])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0850A20183
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 12:51:59 -0700 (PDT)
-Received: by mail-ed1-x536.google.com with SMTP id l11so4692470edb.4
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 12:51:58 -0700 (PDT)
+        Thu, 3 Nov 2022 15:52:02 -0400
+Received: from mail-ed1-x52c.google.com (mail-ed1-x52c.google.com [IPv6:2a00:1450:4864:20::52c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8C0C91E3D8
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 12:52:00 -0700 (PDT)
+Received: by mail-ed1-x52c.google.com with SMTP id z18so4668891edb.9
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 12:52:00 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=h+MC8kK4zWQiBOS9TmUZzl813e7Kce9jFI4colJBhao=;
-        b=qA13inhD1EP6l24EPFrU95U+zViK6UVln1wnFLBXMzU3guuv5XL87mQ657GGlBJDv5
-         Ynobk1ef/cexQULn5sXQz2W0DyjHLeN7af3yGWh1e+lEc2Ci2EuKhObBAOHiQw202pbb
-         R0A9SrGxiRDi2/BfD0GbOpeSesGZlhz1/w/9u3MExoFW2+fBs9XPOktTxlaIj5vZ3DA9
-         wAsSWuQhV1ShmHc74HtGrM/RnLpTzmFNT3bIBaR/+Ty0SC55iaEr0ywSRpT1ZiP9Lele
-         IsDff9Xm4w6mcr2mzhB53onaIFRvURcJExNk1TF372aT5uZ6RbcwgSWVohvYMIrkep41
-         GRNw==
+        bh=C88yKCopssymOAMe7KHFSlCl2Lylr4sF9uZV7UHC95E=;
+        b=JNnSWiaLPu25KnAyCNpaAD7Ly2+4NcVx1V6Eugxf+ijwsUjrFE9ecgyeuEgPFSEyxz
+         FKf4DWokPxTymvXIRFJCPn0ZpWILr52tu/S0yEzdyMAff5tTSxtHw8Z8xhoPjTDU9tfD
+         bBq9y1xE4YfD8UQu5ZFgRhYzuUzOytWCb9pbu4MovgFkctkLmV/L9dBwQ8vu1/YzszeC
+         qDTCvEwTaxg5dBDp0D1xq8KrSAN8FLdNejgZRNeJu2qKXC7eNNhAdG7mQpbpyk3hnWKF
+         BkgxrumY+6mwjvxtqef2jQAZ7+SHEv/MoZgYdsJWgK7ZznhFuWS87Nv3WmzoQd6o3Z4b
+         Nx5Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=h+MC8kK4zWQiBOS9TmUZzl813e7Kce9jFI4colJBhao=;
-        b=LXSxCud5lsmnooufqA1MfmDMTx7SVPrPRKnFnI0JpKi0YOWaE5lhXBd+5HIkoSAW0J
-         xR/BwqWSZ/quLdxgcY4s+pTKf8BCoP5DfHVWchCDye2rfEjsanyGzdneB1THWTEof2qz
-         tACu+vW6G//3/RCzfXZw8ViChaPfa0l1fW68Egj6hoieKmqWEAqVJpczZoqLiRW///xm
-         R9zMOO7n9uEc1sh3UnfrtDS3VsCLAszd82+Wm75J2IxcHCK2gbt/oxt63h52F+chWYOw
-         r+W1YzaKuNQCQ2Y7lYrs2OLLTAENm6Zr9UPYJ4TOozJ0faNZPBosXqHV29JwtK2Keol3
-         q/1A==
-X-Gm-Message-State: ACrzQf0VhvEjTXwe/DXjPEkrggvd1soehFC2Rfy4+I/7CgVa2liJBu5M
-        +HmqAA4gAZqUGBru4+jhCNCrEg==
-X-Google-Smtp-Source: AMsMyM4XDFAXZNyMtBoTJ07WXs5ANJcqdCknrHoZzRGrPrQdaq9x5LBRX5LsVLVT4RaHWxBqe5ZMeA==
-X-Received: by 2002:aa7:c1d9:0:b0:463:aeaf:3383 with SMTP id d25-20020aa7c1d9000000b00463aeaf3383mr16737337edp.253.1667505117553;
-        Thu, 03 Nov 2022 12:51:57 -0700 (PDT)
+        bh=C88yKCopssymOAMe7KHFSlCl2Lylr4sF9uZV7UHC95E=;
+        b=Hptflq5L5lLHxWN9/xuCl46Aokkbd1xRyMIzAqbCzmlAIuz/LDshFl9CS/bPsUgnDO
+         4BfrRzmy/FgMnhdTjUnyyHia8gHSeqWapAo/klxRTUQDEgw6hgGGByoaSSpwNLMnHmj4
+         YqdGGfDG5j6qsjhN3Ip4WGcizzSKu+2lJWz7YMS+a3YsVK4TzRpfV1Z2xF+gQ+NvKYBA
+         qDweLvdDTaXHCWjzHzhgyc6dr0HvfzmwX2VE9wAs/FzP5y+nLmEFRN6nvIiBBtEzQaJE
+         Ix3qnJ5MtBCBHR6M7wkvhgl3dcYBvjjcbvbGMqGER/KFNLZkFAqwJ5U3iAl1VtFy0eni
+         nH4Q==
+X-Gm-Message-State: ACrzQf04wUCZFWUtU30o/oZb6zvdQ6DjrWheAKmEo2VlZjbdvt1+M5sV
+        MWOf8IYS7bDrDbgiQjujcPHizw==
+X-Google-Smtp-Source: AMsMyM6Y55R2EylxgpVkhefZzzu5RD8DbeFh1wK3GdXxJzvb2ejuoWCID5I4EuKnM999UShBLermFA==
+X-Received: by 2002:aa7:de0a:0:b0:462:d2a0:93a with SMTP id h10-20020aa7de0a000000b00462d2a0093amr30786059edv.275.1667505119162;
+        Thu, 03 Nov 2022 12:51:59 -0700 (PDT)
 Received: from localhost (cgw.msart-bajzova4.ke.cust.o2bs.sk. [90.176.4.227])
-        by smtp.gmail.com with ESMTPSA id j1-20020a17090623e100b007030c97ae62sm847433ejg.191.2022.11.03.12.51.56
+        by smtp.gmail.com with ESMTPSA id tz14-20020a170907c78e00b0078ddb518a90sm834227ejc.223.2022.11.03.12.51.58
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 12:51:57 -0700 (PDT)
+        Thu, 03 Nov 2022 12:51:58 -0700 (PDT)
 From:   Sam Protsenko <semen.protsenko@linaro.org>
 To:     Marek Szyprowski <m.szyprowski@samsung.com>,
         Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
@@ -63,9 +63,9 @@ Cc:     Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
         David Virag <virag.david003@gmail.com>, iommu@lists.linux.dev,
         linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
         linux-samsung-soc@vger.kernel.org
-Subject: [PATCH v2 1/6] iommu: Export iommu_group_default_domain() API
-Date:   Thu,  3 Nov 2022 20:51:49 +0100
-Message-Id: <20221103195154.21495-2-semen.protsenko@linaro.org>
+Subject: [PATCH v2 2/6] iommu/exynos: Fix retval on getting clocks in probe
+Date:   Thu,  3 Nov 2022 20:51:50 +0100
+Message-Id: <20221103195154.21495-3-semen.protsenko@linaro.org>
 X-Mailer: git-send-email 2.35.1
 In-Reply-To: <20221103195154.21495-1-semen.protsenko@linaro.org>
 References: <20221103195154.21495-1-semen.protsenko@linaro.org>
@@ -73,37 +73,42 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-iommu_group_default_domain() may be needed for module users. E.g.
-exynos-iommu driver is using it right now, and it's going to be
-converted to a module soon.
+checkpatch reports next warning for clock getting code in probe
+function:
+
+    WARNING: ENOSYS means 'invalid syscall nr' and nothing else
+
+Replace it with -ENOINT to make checkpatch happy.
 
 Signed-off-by: Sam Protsenko <semen.protsenko@linaro.org>
 ---
 Changes in v2:
   - (none)
 
- drivers/iommu/iommu.c | 1 +
- 1 file changed, 1 insertion(+)
+ drivers/iommu/exynos-iommu.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-diff --git a/drivers/iommu/iommu.c b/drivers/iommu/iommu.c
-index 6ca377f4fbf9..006a65411a28 100644
---- a/drivers/iommu/iommu.c
-+++ b/drivers/iommu/iommu.c
-@@ -1675,6 +1675,7 @@ struct iommu_domain *iommu_group_default_domain(struct iommu_group *group)
- {
- 	return group->default_domain;
- }
-+EXPORT_SYMBOL_GPL(iommu_group_default_domain);
+diff --git a/drivers/iommu/exynos-iommu.c b/drivers/iommu/exynos-iommu.c
+index 45fd4850bacb..0d150b383d04 100644
+--- a/drivers/iommu/exynos-iommu.c
++++ b/drivers/iommu/exynos-iommu.c
+@@ -689,7 +689,7 @@ static int exynos_sysmmu_probe(struct platform_device *pdev)
  
- static int probe_iommu_group(struct device *dev, void *data)
- {
+ 	if (!data->clk && (!data->aclk || !data->pclk)) {
+ 		dev_err(dev, "Failed to get device clock(s)!\n");
+-		return -ENOSYS;
++		return -ENOENT;
+ 	}
+ 
+ 	data->clk_master = devm_clk_get(dev, "master");
 -- 
 2.35.1
 
