@@ -2,131 +2,122 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7605D618537
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:49:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E3AF1618545
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:50:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232017AbiKCQtL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 12:49:11 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:49124 "EHLO
+        id S231611AbiKCQuL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 12:50:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231272AbiKCQsr (ORCPT
+        with ESMTP id S231991AbiKCQtv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 12:48:47 -0400
-Received: from mail-qt1-f174.google.com (mail-qt1-f174.google.com [209.85.160.174])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B7B211C42B;
-        Thu,  3 Nov 2022 09:47:55 -0700 (PDT)
-Received: by mail-qt1-f174.google.com with SMTP id s4so1594486qtx.6;
-        Thu, 03 Nov 2022 09:47:55 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=E404s4tFf1UMhY1Ot8ZmocAjE/Hn6H6Pg5Qfx1UrAuk=;
-        b=KN/ximEywLQ5p4hcwJW4NY8HSpyygPIDXV+She6iVafsTWHe4JO2KtpAdoXreoCuar
-         NhD0nKporggtZnrP67/Gfx+lSPpZGsGqbhloebF0JnZSIBZ5WMdQf7Rn9CuAZlatp/yS
-         ixCJkijuocOWUzjswGBgNJiESBUFMzMXvylUuZjuyqHjAZcDD/U88T6TyPKWXiLin20g
-         ZzBu4yV/7Q5tZOl12nYfof7XCmxQGS6Tpb2T/4ga6gcHRP5+TCXlcHluLTxrBaUkawBl
-         wMSZGo9TArSCB41yiHW1UiI8oqmEhdyxuWJ2JFpW5cmo3bYcEkyzsKXRW+6ukd7JHSf/
-         S7Qw==
-X-Gm-Message-State: ACrzQf3Y+SrQuj2BppX9DvttVncusYtoeFP0vEqjE+0han53wvdGrCyM
-        J+vgLBsgyW/oz1SYeHjBUtQ1MaYTTCnmKYeGaXE=
-X-Google-Smtp-Source: AMsMyM7xB1jHhynK53kTB4IA4LssmMOTgXhMosPDJMUg6dIwUxkHpR2Obq61cDOfD8xzwnyJJCBBKwsO9F66ipFs0zQ=
-X-Received: by 2002:a05:622a:1a25:b0:39c:b862:7318 with SMTP id
- f37-20020a05622a1a2500b0039cb8627318mr25620524qtb.147.1667494074873; Thu, 03
- Nov 2022 09:47:54 -0700 (PDT)
+        Thu, 3 Nov 2022 12:49:51 -0400
+Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF3832739;
+        Thu,  3 Nov 2022 09:49:11 -0700 (PDT)
+Received: from zn.tnic (p200300ea9733e7e7329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e7e7:329c:23ff:fea6:a903])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id E3F291EC04F0;
+        Thu,  3 Nov 2022 17:49:09 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
+        t=1667494150;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
+        bh=2ASRoXT4dNz3rsz3g7wk4DQzgAno9/V5MAy7ltfZSS0=;
+        b=GEBGVYysxzMU6LGJTmZd7M+/R/6mbCD6zp4ZSzgggbaUSAV0SVqDm2Gc6AAhFjue3w91tt
+        IAhvE9D7fZ+NRgIf5TsYL8evNAQClXdM104Vgktn6WclPvN36r3al1OF9AVLqkFvz+Oj+i
+        92QAmiYx47vWftNfKrMeen4/XGStEic=
+Date:   Thu, 3 Nov 2022 17:49:06 +0100
+From:   Borislav Petkov <bp@alien8.de>
+To:     yury.norov@gmail.com
+Cc:     x86@kernel.org, linux-riscv <linux-riscv@lists.infradead.org>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Ingo Molnar <mingo@redhat.com>,
+        Dave Hansen <dave.hansen@linux.intel.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Jonas Bonn <jonas@southpole.se>,
+        Stefan Kristiansson <stefan.kristiansson@saunalahti.fi>,
+        Stafford Horne <shorne@gmail.com>,
+        openrisc@lists.librecores.org,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        "open list:LINUX FOR POWERPC PA SEMI PWRFICIENT" 
+        <linuxppc-dev@lists.ozlabs.org>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        linux-s390@vger.kernel.org
+Subject: Re: [PATCH v3 2/2] x86: Fix /proc/cpuinfo cpumask warning
+Message-ID: <Y2PxAiJ1yNzcUSgs@zn.tnic>
+References: <CAAH8bW_DkvPCH0-q2Bfe0OJ72r63mRM3GP7NKOFrhe3zMO2gbQ@mail.gmail.com>
+ <Y1v+Ed6mRN9gisJS@zn.tnic>
+ <20221031080604.6xei6c4e3ckhsvmy@kamzik>
+ <Y1+OUawGJDjh4DOJ@zn.tnic>
+ <20221031100327.r7tswmpszvs5ot5n@kamzik>
+ <Y2K6clNJBn0SbWU+@zn.tnic>
+ <20221103125945.lrr5oxxmylwpam53@kamzik>
+ <Y2PX9GfxWYh6+XGT@zn.tnic>
+ <20221103153404.uh77nrdkowrxj6cr@kamzik>
+ <Y2PsvvOWVs9ZLBsp@yury-laptop>
 MIME-Version: 1.0
-References: <20221101022840.1351163-1-tgsp002@gmail.com> <20221101022840.1351163-3-tgsp002@gmail.com>
-In-Reply-To: <20221101022840.1351163-3-tgsp002@gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 3 Nov 2022 17:47:43 +0100
-Message-ID: <CAJZ5v0hXSnx0NqPwTRm=5ewg+P08-HaYc0ERQ6Uebrop8BfkdA@mail.gmail.com>
-Subject: Re: [PATCH -next 2/2] PM: hibernate: add check of preallocate mem for
- image size pages
-To:     TGSP <tgsp002@gmail.com>
-Cc:     rafael@kernel.org, len.brown@intel.com, pavel@ucw.cz,
-        huanglei@kylinos.cn, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, xiongxin <xiongxin@kylinos.cn>,
-        stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <Y2PsvvOWVs9ZLBsp@yury-laptop>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Nov 1, 2022 at 3:28 AM TGSP <tgsp002@gmail.com> wrote:
->
-> From: xiongxin <xiongxin@kylinos.cn>
->
-> Added a check on the return value of preallocate_image_highmem(). If
-> memory preallocate is insufficient, S4 cannot be done;
->
-> I am playing 4K video on a machine with AMD or other graphics card and
-> only 8GiB memory, and the kernel is not configured with CONFIG_HIGHMEM.
-> When doing the S4 test, the analysis found that when the pages get from
-> minimum_image_size() is large enough, The preallocate_image_memory() and
-> preallocate_image_highmem() calls failed to obtain enough memory. Add
-> the judgment that memory preallocate is insufficient;
->
-> "pages -= free_unnecessary_pages()" below will let pages to drop a lot,
-> so I wonder if it makes sense to add a judgment here.
->
-> Cc: stable@vger.kernel.org
-> Signed-off-by: xiongxin <xiongxin@kylinos.cn>
-> Signed-off-by: huanglei <huanglei@kylinos.cn>
-> ---
->  kernel/power/snapshot.c | 9 ++++++++-
->  1 file changed, 8 insertions(+), 1 deletion(-)
->
-> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-> index c20ca5fb9adc..670abf89cf31 100644
-> --- a/kernel/power/snapshot.c
-> +++ b/kernel/power/snapshot.c
-> @@ -1738,6 +1738,7 @@ int hibernate_preallocate_memory(void)
->         struct zone *zone;
->         unsigned long saveable, size, max_size, count, highmem, pages = 0;
->         unsigned long alloc, save_highmem, pages_highmem, avail_normal;
-> +       unsigned long size_highmem;
+On Thu, Nov 03, 2022 at 09:30:54AM -0700, yury.norov@gmail.com wrote:a
+> Callers should pass sane arguments into internal functions if they
+> expect sane output.
 
-Please define this in the block where it will be used.
+What internal function? It's in a global header.
 
->         ktime_t start, stop;
->         int error;
->
-> @@ -1863,7 +1864,13 @@ int hibernate_preallocate_memory(void)
->                 pages_highmem += size;
+> The API not exported to userspace shouldn't sanity-check all inputs
+> arguments.
 
-The line above can be dropped.
+That doesn't have anything to do with userspace at all.
 
->                 alloc -= size;
->                 size = preallocate_image_memory(alloc, avail_normal);
-> -               pages_highmem += preallocate_image_highmem(alloc - size);
-> +               size_highmem += preallocate_image_highmem(alloc - size);
+APIs exported to the rest of the kernel should very well check their
+inputs. Otherwise they're not APIs - just some random functions which
+are visible to the compiler.
 
-Did you mean "="?
+> So, the portable code shouldn't expect from cpumasks more than
+> documentation said: for a _valid_ offset cpumask_next() returns next
+> set bit or >= nr_cpu_ids.
 
-Assuming you did, this could be
+Lemme quote from my previous mail:
 
-        size_highmem = size + preallocate_image_highmem(alloc - size);
-        if (size_highmem < alloc) {
+"First make sure cpumask_next()'s valid accepted range has been settled
+upon, has been explicitly documented"
 
-> +               if (size_highmem < (alloc - size)) {
+So where is that valid range documented?
 
-The inner parens were not necessary.
+> cpumask_check() has been broken for years. Attempting to fix it faced
+> so much resistance, that I had to revert the patch.
 
-> +                       pr_err("Image allocation is %lu pages short, exit\n",
-> +                               alloc - size - pages_highmem);
-> +                       goto err_out;
-> +               }
-> +               pages_highmem += size_highmem;
->                 pages += pages_highmem + size;
->         }
->
-> --
+The suggestion on that thread made sense: you first fix the callers and
+then the interface. Just like any other "broken" kernel API.
 
-But overall it would be better to avoid bailing out.
+Nothing's stopping you from fixing it properly - it'll just take a while
+and if it is such a widely used interface, you probably should come up
+with a strategy first how to fix it without impacting current use.
+
+Interfaces and their in-kernel users get refactored constantly.
+
+Thx.
+
+-- 
+Regards/Gruss,
+    Boris.
+
+https://people.kernel.org/tglx/notes-about-netiquette
