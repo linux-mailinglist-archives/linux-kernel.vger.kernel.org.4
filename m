@@ -2,86 +2,154 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99275617A10
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:37:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 283B2617A1F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:41:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230183AbiKCJhu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 05:37:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51736 "EHLO
+        id S230150AbiKCJlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 05:41:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53516 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229591AbiKCJhp (ORCPT
+        with ESMTP id S229523AbiKCJlV (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 05:37:45 -0400
-Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C1762AD3;
-        Thu,  3 Nov 2022 02:37:45 -0700 (PDT)
-Received: by mail-yb1-xb2b.google.com with SMTP id 129so1500621ybb.12;
-        Thu, 03 Nov 2022 02:37:45 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rEQaoZvjRMsJ4e/mV6mD21ZtiZswBVNuNIWwQ2LBDZg=;
-        b=bVVcWIYmbU9WsKE1HYi8uk3fZqESbYCzHy7/i8i1qKDWZ5fmB+bzyRx140gNkqvwwv
-         c66WPry7a35/iAh/HdoNfHErwFUIjdefyMI8f78kLzrojEktkcIRxx8XJ5q17BD9kj2t
-         vLaUYepgxP+0/pCcn8ZzXDnnNNVdPmeK60rfgHbK+ru2F9yeCG2QTyVRjTLrcNOCCDbc
-         vRVBD2qz7glLT0S1Hl5sUdRZVK2v3JpqtmM/4G125vPmdyFFQawUo5ODhjdElEzQ7fo7
-         y1GyM+fOMIGBjjX77ufMKckS4LjpK28l6F2yMh5JuDMvGC52pembXCyv6F0EIu2Xn0Q9
-         SNmg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rEQaoZvjRMsJ4e/mV6mD21ZtiZswBVNuNIWwQ2LBDZg=;
-        b=a59XpDn0n17UQBLnNlVCiYBWcLqjrLWeEV0quEp1dRTqnY8JaRx/MZqGIQlEPuNZKQ
-         24BfUpvo+rFkzWnIC34UCZSJAWPPeNKaLfLbtS1gXN8NaLZ+RtMA4KxCeQQuv01qwYrb
-         gpDnea57vD+u2d6qLbS/4dKkLXhsVnktWjMoHdshvdVzZZvpavwGKgBGKBW56Y925Uac
-         vVuBauyqGnfWTA/x+xIKVabk377PrV1pP++jEJWoFrFaRYCHfXjUBpspsusfD73+2Ioa
-         +LOShpt8MbY69cIccCIta4c7n3wyiPZ63i+9iIeHUmWhhla5xDk+NlBj6zGSM1d8MLx4
-         mmVQ==
-X-Gm-Message-State: ACrzQf1hs1+cR85KtZ7p+9ZqjQ1ScHmw4UaQNk/J5rYHaJNhuvt0s1cc
-        xIMb7MXc7i5Hu7zshNx3a9k/E52Po6lvGlL6Kyw=
-X-Google-Smtp-Source: AMsMyM5hX8jicN+wTGB5+I4+aFH3DyjzOT7OuiMnlaG62SIjA9qwbp+eKeF/NNTRGFAjdzj0trgU1UXVNErMwXsXCXA=
-X-Received: by 2002:a25:76c2:0:b0:6ca:6604:4928 with SMTP id
- r185-20020a2576c2000000b006ca66044928mr27520549ybc.323.1667468264527; Thu, 03
- Nov 2022 02:37:44 -0700 (PDT)
+        Thu, 3 Nov 2022 05:41:21 -0400
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2B064E0;
+        Thu,  3 Nov 2022 02:41:19 -0700 (PDT)
+Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
+        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N2zFM6dN3zpW5X;
+        Thu,  3 Nov 2022 17:37:43 +0800 (CST)
+Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
+ dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 3 Nov 2022 17:41:12 +0800
+Received: from ubuntu1804.huawei.com (10.67.174.61) by
+ kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 3 Nov 2022 17:41:12 +0800
+From:   Yang Jihong <yangjihong1@huawei.com>
+To:     <acme@redhat.com>, <pabeni@redhat.com>, <adrian.hunter@intel.com>,
+        <wojciech.drewek@intel.com>, <davem@davemloft.net>,
+        <gustavoars@kernel.org>, <tadeusz.struk@linaro.org>,
+        <keescook@chromium.org>, <linux-kernel@vger.kernel.org>,
+        <bpf@vger.kernel.org>
+CC:     <yangjihong1@huawei.com>
+Subject: [PATCH bpf RESEND v2] tools headers UAPI: Sync linux/stddef.h with the kernel sources
+Date:   Thu, 3 Nov 2022 17:37:57 +0800
+Message-ID: <20221103093757.252390-1-yangjihong1@huawei.com>
+X-Mailer: git-send-email 2.30.GIT
 MIME-Version: 1.0
-References: <CACMswuMVERF_+R3Qxb0xGHCBQUCuxtBLA+eDo__Coed3BoVC3A@mail.gmail.com>
-In-Reply-To: <CACMswuMVERF_+R3Qxb0xGHCBQUCuxtBLA+eDo__Coed3BoVC3A@mail.gmail.com>
-From:   Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date:   Thu, 3 Nov 2022 10:37:33 +0100
-Message-ID: <CANiq72n1eo4AX2mHdWkYUmLSy2WOHCGG+X6ZTmtPft7JC+t2jA@mail.gmail.com>
-Subject: Re: rust nvme driver: potential sleep-in-atomic-context
-To:     Dennis Dai <dzy.0424thu@gmail.com>
-Cc:     Miguel Ojeda <ojeda@kernel.org>,
-        Alex Gaynor <alex.gaynor@gmail.com>,
-        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-        =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
-        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Wedson Almeida Filho <wedsonaf@gmail.com>,
-        Andreas Hindborg <andreas@metaspace.dk>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.61]
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemm600003.china.huawei.com (7.193.23.202)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 3, 2022 at 7:12 AM Dennis Dai <dzy.0424thu@gmail.com> wrote:
->
-> The rust nvme driver [1] (which is still pending to be merged into
-> mainline [2]) has a potential sleep-in-atomic-context bug.
->
->     dev.queues.lock().io.try_reserve(nr_io_queues as _)?;
+commit 036b8f5b8970 ("tools headers uapi: Update linux/in.h copy") modify
+tools/include/uapi/linux/in.h, and __DECLARE_FLEX_ARRAY is introduced.
+Macro is not defined in tools/include, compilation fails:
 
-Cc'ing Andreas and fixing Wedson's email. Note that this was written
-when it wasn't decided how the `try_*` methods would know about the
-flags.
+    CLNG-BPF [test_maps] bind4_prog.bpf.o
+  In file included from progs/bind4_prog.c:7:
+  /root/linux-mainline-new/linux/tools/include/uapi/linux/in.h:199:3: error: type name requires a specifier or qualifier
+                  __DECLARE_FLEX_ARRAY(__be32, imsf_slist_flex);
+                  ^
+  /root/linux-mainline-new/linux/tools/include/uapi/linux/in.h:199:32: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
+                  __DECLARE_FLEX_ARRAY(__be32, imsf_slist_flex);
+                                               ^
+  2 errors generated.
 
-Cheers,
-Miguel
+Synchronize include/uapi/linux/stddef.h to tools headers directory,
+and delete the line "#include <linux/compiler_types.h>":
+
+  # cp ./include/uapi/linux/stddef.h tools/include/uapi/linux/stddef.h
+  # sed -i '/#include <linux\/compiler_types.h>/,+1d' tools/include/uapi/linux/stddef.h
+
+And add missed <linux/stddef.h> header in tools/include/uapi/linux/in.h.
+
+Fixes: 036b8f5b8970 ("tools headers uapi: Update linux/in.h copy")
+Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
+---
+
+Changes since v1:
+ - Specify the target tree to "bpf" in title.
+ - Add more reviewers.
+
+ tools/include/uapi/linux/in.h     |  1 +
+ tools/include/uapi/linux/stddef.h | 45 +++++++++++++++++++++++++++++++
+ 2 files changed, 46 insertions(+)
+ create mode 100644 tools/include/uapi/linux/stddef.h
+
+diff --git a/tools/include/uapi/linux/in.h b/tools/include/uapi/linux/in.h
+index f243ce665f74..79015665daf1 100644
+--- a/tools/include/uapi/linux/in.h
++++ b/tools/include/uapi/linux/in.h
+@@ -22,6 +22,7 @@
+ #include <linux/types.h>
+ #include <linux/libc-compat.h>
+ #include <linux/socket.h>
++#include <linux/stddef.h>
+ 
+ #if __UAPI_DEF_IN_IPPROTO
+ /* Standard well-defined IP protocols.  */
+diff --git a/tools/include/uapi/linux/stddef.h b/tools/include/uapi/linux/stddef.h
+new file mode 100644
+index 000000000000..72bcdf96999f
+--- /dev/null
++++ b/tools/include/uapi/linux/stddef.h
+@@ -0,0 +1,45 @@
++/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
++#ifndef _UAPI_LINUX_STDDEF_H
++#define _UAPI_LINUX_STDDEF_H
++
++#ifndef __always_inline
++#define __always_inline inline
++#endif
++
++/**
++ * __struct_group() - Create a mirrored named and anonyomous struct
++ *
++ * @TAG: The tag name for the named sub-struct (usually empty)
++ * @NAME: The identifier name of the mirrored sub-struct
++ * @ATTRS: Any struct attributes (usually empty)
++ * @MEMBERS: The member declarations for the mirrored structs
++ *
++ * Used to create an anonymous union of two structs with identical layout
++ * and size: one anonymous and one named. The former's members can be used
++ * normally without sub-struct naming, and the latter can be used to
++ * reason about the start, end, and size of the group of struct members.
++ * The named struct can also be explicitly tagged for layer reuse, as well
++ * as both having struct attributes appended.
++ */
++#define __struct_group(TAG, NAME, ATTRS, MEMBERS...) \
++	union { \
++		struct { MEMBERS } ATTRS; \
++		struct TAG { MEMBERS } ATTRS NAME; \
++	}
++
++/**
++ * __DECLARE_FLEX_ARRAY() - Declare a flexible array usable in a union
++ *
++ * @TYPE: The type of each flexible array element
++ * @NAME: The name of the flexible array member
++ *
++ * In order to have a flexible array member in a union or alone in a
++ * struct, it needs to be wrapped in an anonymous struct with at least 1
++ * named member, but that member can be empty.
++ */
++#define __DECLARE_FLEX_ARRAY(TYPE, NAME)	\
++	struct { \
++		struct { } __empty_ ## NAME; \
++		TYPE NAME[]; \
++	}
++#endif
+-- 
+2.30.GIT
+
