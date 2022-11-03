@@ -2,203 +2,222 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0428161798E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:14:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F355E617996
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:15:19 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230513AbiKCJOT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 05:14:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34306 "EHLO
+        id S230254AbiKCJOe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 05:14:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231295AbiKCJNh (ORCPT
+        with ESMTP id S230231AbiKCJNs (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 05:13:37 -0400
-Received: from ironport.ite.com.tw (60-251-196-230.hinet-ip.hinet.net [60.251.196.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50346DFA3
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 02:13:04 -0700 (PDT)
-Received: from unknown (HELO mse.ite.com.tw) ([192.168.35.30])
-  by ironport.ite.com.tw with ESMTP; 03 Nov 2022 17:13:00 +0800
-Received: from CSBMAIL1.internal.ite.com.tw (CSBMAIL1.internal.ite.com.tw [192.168.65.58])
-        by mse.ite.com.tw with ESMTP id 2A39CvIb002434;
-        Thu, 3 Nov 2022 17:12:57 +0800 (GMT-8)
-        (envelope-from allen.chen@ite.com.tw)
-Received: from VirtualBox.internal.ite.com.tw (192.168.70.46) by
- CSBMAIL1.internal.ite.com.tw (192.168.65.58) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.14; Thu, 3 Nov 2022 17:12:58 +0800
-From:   allen <allen.chen@ite.com.tw>
-CC:     Allen Chen <allen.chen@ite.com.tw>,
-        Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
-        Hermes Wu <Hermes.Wu@ite.com.tw>,
-        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
-        Pin-yen Lin <treapking@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        open list <linux-kernel@vger.kernel.org>
-Subject: [PATCH v7 2/2] drm/bridge: add it6505 driver to read data-lanes and link-frequencies from dt
-Date:   Thu, 3 Nov 2022 17:12:43 +0800
-Message-ID: <20221103091243.96036-3-allen.chen@ite.com.tw>
-X-Mailer: git-send-email 2.25.1
-In-Reply-To: <20221103091243.96036-1-allen.chen@ite.com.tw>
-References: <20221103091243.96036-1-allen.chen@ite.com.tw>
+        Thu, 3 Nov 2022 05:13:48 -0400
+Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 39237E014
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 02:13:17 -0700 (PDT)
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+        by metis.ext.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+        (Exim 4.92)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oqWHa-0004jI-CN; Thu, 03 Nov 2022 10:13:06 +0100
+Received: from [2a0a:edc0:0:1101:1d::ac] (helo=dude04.red.stw.pengutronix.de)
+        by drehscheibe.grey.stw.pengutronix.de with esmtp (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oqWHY-0022Wt-Od; Thu, 03 Nov 2022 10:13:03 +0100
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.94.2)
+        (envelope-from <ore@pengutronix.de>)
+        id 1oqWHX-0076Tw-7h; Thu, 03 Nov 2022 10:13:03 +0100
+From:   Oleksij Rempel <o.rempel@pengutronix.de>
+To:     Woojung Huh <woojung.huh@microchip.com>,
+        UNGLinuxDriver@microchip.com, Andrew Lunn <andrew@lunn.ch>,
+        Vivien Didelot <vivien.didelot@gmail.com>,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Vladimir Oltean <olteanv@gmail.com>,
+        "David S. Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>
+Cc:     Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
+        Arun.Ramadoss@microchip.com
+Subject: [PATCH net-next v1 1/1] net: dsa: microchip: ksz8: add MTU configuration support
+Date:   Thu,  3 Nov 2022 10:13:02 +0100
+Message-Id: <20221103091302.1693161-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.30.2
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [192.168.70.46]
-X-ClientProxiedBy: CSBMAIL1.internal.ite.com.tw (192.168.65.58) To
- CSBMAIL1.internal.ite.com.tw (192.168.65.58)
-X-TM-SNTS-SMTP: DC6DF12C906380A61B005FFE94DED121D09F7991A61E8A1C2B14214CD306F8A22002:8
-X-MAIL: mse.ite.com.tw 2A39CvIb002434
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
-        version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: allen chen <allen.chen@ite.com.tw>
+Make MTU configurable on KSZ87xx and KSZ88xx series of switches.
 
-Add driver to read data-lanes and link-frequencies from dt property to
-restrict output bandwidth.
+Before this patch, pre-configured behavior was different on different
+switch series, due to opposite meaning of the same bit:
+- KSZ87xx: Reg 4, Bit 1 - if 1, max frame size is 1532; if 0 - 1514
+- KSZ88xx: Reg 4, Bit 1 - if 1, max frame size is 1514; if 0 - 1532
 
-Signed-off-by: Allen chen <allen.chen@ite.com.tw>
-Signed-off-by: Pin-yen Lin <treapking@chromium.org>
+Since the code was telling "... SW_LEGAL_PACKET_DISABLE, true)", I
+assume, the idea was to set max frame size to 1532.
+
+With this patch, by setting MTU size 1500, both switch series will be
+configured to the 1532 frame limit.
+
+This patch was tested on KSZ8873.
+
+Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
 ---
- drivers/gpu/drm/bridge/ite-it6505.c | 80 +++++++++++++++++++++++++++--
- 1 file changed, 77 insertions(+), 3 deletions(-)
+ drivers/net/dsa/microchip/ksz8.h        |  2 +
+ drivers/net/dsa/microchip/ksz8795.c     | 74 ++++++++++++++++++++++++-
+ drivers/net/dsa/microchip/ksz8795_reg.h |  9 +++
+ drivers/net/dsa/microchip/ksz_common.c  |  2 +
+ 4 files changed, 85 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/gpu/drm/bridge/ite-it6505.c b/drivers/gpu/drm/bridge/ite-it6505.c
-index a4302492cf8df..ed4536cde3140 100644
---- a/drivers/gpu/drm/bridge/ite-it6505.c
-+++ b/drivers/gpu/drm/bridge/ite-it6505.c
-@@ -437,6 +437,8 @@ struct it6505 {
- 	bool powered;
- 	bool hpd_state;
- 	u32 afe_setting;
-+	u32 max_dpi_pixel_clock;
-+	u32 max_lane_count;
- 	enum hdcp_state hdcp_status;
- 	struct delayed_work hdcp_work;
- 	struct work_struct hdcp_wait_ksv_list;
-@@ -1476,7 +1478,8 @@ static void it6505_parse_link_capabilities(struct it6505 *it6505)
- 	it6505->lane_count = link->num_lanes;
- 	DRM_DEV_DEBUG_DRIVER(dev, "Sink support %d lanes training",
- 			     it6505->lane_count);
--	it6505->lane_count = min_t(int, it6505->lane_count, MAX_LANE_COUNT);
-+	it6505->lane_count = min_t(int, it6505->lane_count,
-+				   it6505->max_lane_count);
+diff --git a/drivers/net/dsa/microchip/ksz8.h b/drivers/net/dsa/microchip/ksz8.h
+index 8582b4b67d98..027b92f5fa73 100644
+--- a/drivers/net/dsa/microchip/ksz8.h
++++ b/drivers/net/dsa/microchip/ksz8.h
+@@ -57,5 +57,7 @@ int ksz8_reset_switch(struct ksz_device *dev);
+ int ksz8_switch_detect(struct ksz_device *dev);
+ int ksz8_switch_init(struct ksz_device *dev);
+ void ksz8_switch_exit(struct ksz_device *dev);
++int ksz8_change_mtu(struct ksz_device *dev, int port, int mtu);
++int ksz8_max_mtu(struct ksz_device *dev, int port);
  
- 	it6505->branch_device = drm_dp_is_branch(it6505->dpcd);
- 	DRM_DEV_DEBUG_DRIVER(dev, "Sink %sbranch device",
-@@ -2912,7 +2915,7 @@ it6505_bridge_mode_valid(struct drm_bridge *bridge,
- 	if (mode->flags & DRM_MODE_FLAG_INTERLACE)
- 		return MODE_NO_INTERLACE;
- 
--	if (mode->clock > DPI_PIXEL_CLK_MAX)
-+	if (mode->clock > it6505->max_dpi_pixel_clock)
- 		return MODE_CLOCK_HIGH;
- 
- 	it6505->video_info.clock = mode->clock;
-@@ -3099,10 +3102,32 @@ static int it6505_init_pdata(struct it6505 *it6505)
+ #endif
+diff --git a/drivers/net/dsa/microchip/ksz8795.c b/drivers/net/dsa/microchip/ksz8795.c
+index bd3b133e7085..fd2539aabb2c 100644
+--- a/drivers/net/dsa/microchip/ksz8795.c
++++ b/drivers/net/dsa/microchip/ksz8795.c
+@@ -76,6 +76,78 @@ int ksz8_reset_switch(struct ksz_device *dev)
  	return 0;
  }
  
-+static int it6505_get_data_lanes_count(const struct device_node *endpoint,
-+				       const unsigned int min,
-+				       const unsigned int max)
++static int ksz8863_change_mtu(struct ksz_device *dev, int port, int max_frame)
 +{
-+	int ret;
++	u8 ctrl2 = 0;
 +
-+	ret = of_property_count_u32_elems(endpoint, "data-lanes");
-+	if (ret < 0)
-+		return ret;
++	if (max_frame <= KSZ8863_LEGAL_PACKET_SIZE)
++		ctrl2 |= KSZ8863_LEGAL_PACKET_ENABLE;
++	else if (max_frame > KSZ8863_NORMAL_PACKET_SIZE)
++		ctrl2 |= KSZ8863_HUGE_PACKET_ENABLE;
 +
-+	if (ret < min || ret > max)
-+		return -EINVAL;
-+
-+	return ret;
++	return regmap_update_bits(dev->regmap[0], REG_SW_CTRL_2,
++				  KSZ8863_LEGAL_PACKET_ENABLE
++				  | KSZ8863_HUGE_PACKET_ENABLE, ctrl2);
 +}
 +
- static void it6505_parse_dt(struct it6505 *it6505)
++static int ksz8795_change_mtu(struct ksz_device *dev, int port, int max_frame)
++{
++	u8 ctrl1 = 0, ctrl2 = 0;
++	int ret;
++
++	if (max_frame > KSZ8863_LEGAL_PACKET_SIZE)
++		ctrl2 |= SW_LEGAL_PACKET_DISABLE;
++	else if (max_frame > KSZ8863_NORMAL_PACKET_SIZE)
++		ctrl1 |= SW_HUGE_PACKET;
++
++	ret = regmap_update_bits(dev->regmap[0], REG_SW_CTRL_1,
++				 SW_HUGE_PACKET, ctrl1);
++	if (ret)
++		return ret;
++
++	return regmap_update_bits(dev->regmap[0], REG_SW_CTRL_2,
++				 SW_LEGAL_PACKET_DISABLE, ctrl2);
++}
++
++int ksz8_change_mtu(struct ksz_device *dev, int port, int mtu)
++{
++	u16 frame_size, max_frame = 0;
++	int i;
++
++	frame_size = mtu + VLAN_ETH_HLEN + ETH_FCS_LEN;
++
++	/* Cache the per-port MTU setting */
++	dev->ports[port].max_frame = frame_size;
++
++	for (i = 0; i < dev->info->port_cnt; i++)
++		max_frame = max(max_frame, dev->ports[i].max_frame);
++
++	switch (dev->chip_id) {
++	case KSZ8795_CHIP_ID:
++	case KSZ8794_CHIP_ID:
++	case KSZ8765_CHIP_ID:
++		return ksz8795_change_mtu(dev, port, max_frame);
++	case KSZ8830_CHIP_ID:
++		return ksz8863_change_mtu(dev, port, max_frame);
++	}
++
++	return -EOPNOTSUPP;
++}
++
++int ksz8_max_mtu(struct ksz_device *dev, int port)
++{
++	switch (dev->chip_id) {
++	case KSZ8795_CHIP_ID:
++	case KSZ8794_CHIP_ID:
++	case KSZ8765_CHIP_ID:
++		return KSZ8795_HUGE_PACKET_SIZE - VLAN_ETH_HLEN - ETH_FCS_LEN;
++	case KSZ8830_CHIP_ID:
++		return KSZ8863_HUGE_PACKET_SIZE - VLAN_ETH_HLEN - ETH_FCS_LEN;
++	}
++
++	return -EOPNOTSUPP;
++}
++
+ static void ksz8795_set_prio_queue(struct ksz_device *dev, int port, int queue)
  {
- 	struct device *dev = &it6505->client->dev;
-+	struct device_node *np = dev->of_node, *ep = NULL;
-+	int len;
-+	u64 link_frequencies;
-+	u32 data_lanes[4];
- 	u32 *afe_setting = &it6505->afe_setting;
-+	u32 *max_lane_count = &it6505->max_lane_count;
-+	u32 *max_dpi_pixel_clock = &it6505->max_dpi_pixel_clock;
+ 	u8 hi, lo;
+@@ -1233,8 +1305,6 @@ void ksz8_config_cpu_port(struct dsa_switch *ds)
+ 	masks = dev->info->masks;
+ 	regs = dev->info->regs;
  
- 	it6505->lane_swap_disabled =
- 		device_property_read_bool(dev, "no-laneswap");
-@@ -3118,7 +3143,56 @@ static void it6505_parse_dt(struct it6505 *it6505)
- 	} else {
- 		*afe_setting = 0;
- 	}
--	DRM_DEV_DEBUG_DRIVER(dev, "using afe_setting: %d", *afe_setting);
-+
-+	ep = of_graph_get_endpoint_by_regs(np, 1, 0);
-+	of_node_put(ep);
-+
-+	if (ep) {
-+		len = it6505_get_data_lanes_count(ep, 1, 4);
-+
-+		if (len > 0 && len != 3) {
-+			of_property_read_u32_array(ep, "data-lanes",
-+						   data_lanes, len);
-+			*max_lane_count = len;
-+		} else {
-+			*max_lane_count = MAX_LANE_COUNT;
-+			dev_err(dev, "error data-lanes, use default");
-+		}
-+	} else {
-+		*max_lane_count = MAX_LANE_COUNT;
-+		dev_err(dev, "error endpoint, use default");
-+	}
-+
-+	ep = of_graph_get_endpoint_by_regs(np, 0, 0);
-+	of_node_put(ep);
-+
-+	if (ep) {
-+		len = of_property_read_variable_u64_array(ep,
-+							  "link-frequencies",
-+							  &link_frequencies, 0,
-+							  1);
-+		if (len >= 0) {
-+			do_div(link_frequencies, 1000);
-+			if (link_frequencies > 297000) {
-+				dev_err(dev,
-+					"max pixel clock error, use default");
-+				*max_dpi_pixel_clock = DPI_PIXEL_CLK_MAX;
-+			} else {
-+				*max_dpi_pixel_clock = link_frequencies;
-+			}
-+		} else {
-+			dev_err(dev, "error link frequencies, use default");
-+			*max_dpi_pixel_clock = DPI_PIXEL_CLK_MAX;
-+		}
-+	} else {
-+		dev_err(dev, "error endpoint, use default");
-+		*max_dpi_pixel_clock = DPI_PIXEL_CLK_MAX;
-+	}
-+
-+	DRM_DEV_DEBUG_DRIVER(dev, "using afe_setting: %u, max_lane_count: %u",
-+			     it6505->afe_setting, it6505->max_lane_count);
-+	DRM_DEV_DEBUG_DRIVER(dev, "using max_dpi_pixel_clock: %u kHz",
-+			     it6505->max_dpi_pixel_clock);
- }
+-	/* Switch marks the maximum frame with extra byte as oversize. */
+-	ksz_cfg(dev, REG_SW_CTRL_2, SW_LEGAL_PACKET_DISABLE, true);
+ 	ksz_cfg(dev, regs[S_TAIL_TAG_CTRL], masks[SW_TAIL_TAG_ENABLE], true);
  
- static ssize_t receive_timing_debugfs_show(struct file *file, char __user *buf,
+ 	p = &dev->ports[dev->cpu_port];
+diff --git a/drivers/net/dsa/microchip/ksz8795_reg.h b/drivers/net/dsa/microchip/ksz8795_reg.h
+index 77487d611824..1419091ef622 100644
+--- a/drivers/net/dsa/microchip/ksz8795_reg.h
++++ b/drivers/net/dsa/microchip/ksz8795_reg.h
+@@ -48,6 +48,15 @@
+ #define NO_EXC_COLLISION_DROP		BIT(3)
+ #define SW_LEGAL_PACKET_DISABLE		BIT(1)
+ 
++#define KSZ8863_HUGE_PACKET_ENABLE	BIT(2)
++#define KSZ8863_LEGAL_PACKET_ENABLE	BIT(1)
++
++#define KSZ8795_HUGE_PACKET_SIZE	2000
++
++#define KSZ8863_HUGE_PACKET_SIZE	1916
++#define KSZ8863_NORMAL_PACKET_SIZE	1536
++#define KSZ8863_LEGAL_PACKET_SIZE	1518
++
+ #define REG_SW_CTRL_3			0x05
+  #define WEIGHTED_FAIR_QUEUE_ENABLE	BIT(3)
+ 
+diff --git a/drivers/net/dsa/microchip/ksz_common.c b/drivers/net/dsa/microchip/ksz_common.c
+index d612181b3226..40fd78951bf8 100644
+--- a/drivers/net/dsa/microchip/ksz_common.c
++++ b/drivers/net/dsa/microchip/ksz_common.c
+@@ -171,6 +171,8 @@ static const struct ksz_dev_ops ksz8_dev_ops = {
+ 	.reset = ksz8_reset_switch,
+ 	.init = ksz8_switch_init,
+ 	.exit = ksz8_switch_exit,
++	.change_mtu = ksz8_change_mtu,
++	.max_mtu = ksz8_max_mtu,
+ };
+ 
+ static void ksz9477_phylink_mac_link_up(struct ksz_device *dev, int port,
 -- 
-2.25.1
+2.30.2
 
