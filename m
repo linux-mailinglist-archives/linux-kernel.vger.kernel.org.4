@@ -2,165 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1D79F617E7E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:56:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 22838617E83
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:56:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231591AbiKCN4F (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 09:56:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50658 "EHLO
+        id S231629AbiKCN4g (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 09:56:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50722 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231499AbiKCN4A (ORCPT
+        with ESMTP id S229539AbiKCN4d (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 09:56:00 -0400
-Received: from out30-132.freemail.mail.aliyun.com (out30-132.freemail.mail.aliyun.com [115.124.30.132])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8528515717;
-        Thu,  3 Nov 2022 06:55:58 -0700 (PDT)
-X-Alimail-AntiSpam: AC=PASS;BC=-1|-1;BR=01201311R141e4;CH=green;DM=||false|;DS=||;FP=0|-1|-1|-1|0|-1|-1|-1;HT=ay29a033018045168;MF=hsiangkao@linux.alibaba.com;NM=1;PH=DS;RN=6;SR=0;TI=SMTPD_---0VTt9LJG_1667483754;
-Received: from B-P7TQMD6M-0146.local(mailfrom:hsiangkao@linux.alibaba.com fp:SMTPD_---0VTt9LJG_1667483754)
-          by smtp.aliyun-inc.com;
-          Thu, 03 Nov 2022 21:55:56 +0800
-Date:   Thu, 3 Nov 2022 21:55:51 +0800
-From:   Gao Xiang <hsiangkao@linux.alibaba.com>
-To:     linux-xfs@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        Brian Foster <bfoster@redhat.com>
-Cc:     LKML <linux-kernel@vger.kernel.org>, Zirong Lang <zlang@redhat.com>
-Subject: Re: [PATCH v2] xfs: extend the freelist before available space check
-Message-ID: <Y2PIZ6AFJoSk+9SQ@B-P7TQMD6M-0146.local>
-Mail-Followup-To: linux-xfs@vger.kernel.org,
-        "Darrick J. Wong" <djwong@kernel.org>,
-        Dave Chinner <dchinner@redhat.com>,
-        Brian Foster <bfoster@redhat.com>,
-        LKML <linux-kernel@vger.kernel.org>, Zirong Lang <zlang@redhat.com>
-References: <20221103094639.39984-1-hsiangkao@linux.alibaba.com>
- <20221103131025.40064-1-hsiangkao@linux.alibaba.com>
+        Thu, 3 Nov 2022 09:56:33 -0400
+Received: from mail-pl1-x62a.google.com (mail-pl1-x62a.google.com [IPv6:2607:f8b0:4864:20::62a])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7266B13D7A;
+        Thu,  3 Nov 2022 06:56:32 -0700 (PDT)
+Received: by mail-pl1-x62a.google.com with SMTP id io19so1990154plb.8;
+        Thu, 03 Nov 2022 06:56:32 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=ign6P2397IfFIK8m+Wt90gPlj7W1vvnJv9kawkVb51E=;
+        b=HI60mlPg8m4ViBKO0Ko7cuIw5CWkpo8OHY1k84Ajd5UAw+zDBFvmBRD4QqqhAkWjrN
+         lNmUO5a0U0c9OsgC2lnIcjG0iXaXQwj1Rjdhdq3CWXM3n20R6+lqm1pCRuvrf7JrLUxY
+         ty8hjsDXeWQExDcegMa7fgsxIufgE5FGrldncF2oy/UlSjaix/bMMutFDFEgSiuDnZQO
+         0DgEIpgx/XfW3tmQMZa/NUd6jvrjEc1L14YPWBE1ZcnUtLREdMF8hBrirywpkLkCcwtx
+         B38Pd5TkQTOi5rbP8ECHzsFmcft2lugGBX2bI3whqkTYnqsAwTPuWQomeqr5pzoOSuec
+         9FCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=ign6P2397IfFIK8m+Wt90gPlj7W1vvnJv9kawkVb51E=;
+        b=OMTMIziAe3R9XIwA4OSkxc4H44Z0tTRt7WZJ4eM6zcnFln10CpSnoVq1Xo73eYEfUN
+         dxkDCPrNZgaKQt84tqT+rqczvIHQHOULMpGtOdYLQZ7xY9K0d+ZbGcMZk87v6CJicfqi
+         /C9vOnLnv1n1fW4YSkJlhQiRPU5LeSJ6udbkxEH1oMcAMd5JsHNJ9w/HdfGzkiRkJIHK
+         HFZkp3CUHdXavM+DhuiGWJLYIA9617omZ9fzg4CHJvhJigfD4iXPgbwLFa0+74nRkwAN
+         4jWzuOHJw0BLNF4OeCG5S8Af02TXxmjGdoTsEYKrPxz+GQdKVnMOuI26dt8/iwxUN3LW
+         /L7g==
+X-Gm-Message-State: ACrzQf2DIuv5/JmZdxq/JqDh0FfFv2L0LR5LIly7iJgc1LWbS1VuYpqm
+        JCJgZKP9LSotyR/bibg6upE=
+X-Google-Smtp-Source: AMsMyM4vIEMLHQ7RSu1HWrdVM/SWZEWnhtUUleBmGwGYurtfIHzBYGeVcxvcjRtNSl0mHNh1iLLDqg==
+X-Received: by 2002:a17:90b:1c8d:b0:203:cc25:4eb5 with SMTP id oo13-20020a17090b1c8d00b00203cc254eb5mr31460357pjb.132.1667483791949;
+        Thu, 03 Nov 2022 06:56:31 -0700 (PDT)
+Received: from [192.168.43.80] (subs02-180-214-232-12.three.co.id. [180.214.232.12])
+        by smtp.gmail.com with ESMTPSA id b6-20020a170903228600b00187033cac81sm689757plh.145.2022.11.03.06.56.27
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 06:56:31 -0700 (PDT)
+Message-ID: <5636b9a1-dbb8-5ab3-8b56-05f6faaccded@gmail.com>
+Date:   Thu, 3 Nov 2022 20:56:25 +0700
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20221103131025.40064-1-hsiangkao@linux.alibaba.com>
-X-Spam-Status: No, score=-9.9 required=5.0 tests=BAYES_00,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
-        SPF_HELO_NONE,SPF_PASS,UNPARSEABLE_RELAY,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [External] Re: [RFC 1/6] KVM: arm64: Document PV-lock interface
+Content-Language: en-US
+To:     Usama Arif <usama.arif@bytedance.com>
+Cc:     linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        kvmarm@lists.cs.columbia.edu, kvm@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        virtualization@lists.linux-foundation.org, linux@armlinux.org.uk,
+        yezengruan@huawei.com, catalin.marinas@arm.com, will@kernel.org,
+        maz@kernel.org, steven.price@arm.com, mark.rutland@arm.com,
+        fam.zheng@bytedance.com, liangma@liangbit.com,
+        punit.agrawal@bytedance.com
+References: <20221102161340.2982090-1-usama.arif@bytedance.com>
+ <20221102161340.2982090-2-usama.arif@bytedance.com>
+ <Y2M6eU6xW7jjVQNx@debian.me>
+ <61800b69-5f6a-d173-fc42-628ee3db15d8@bytedance.com>
+From:   Bagas Sanjaya <bagasdotme@gmail.com>
+In-Reply-To: <61800b69-5f6a-d173-fc42-628ee3db15d8@bytedance.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-0.6 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_SORBS_WEB,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi,
-
-On Thu, Nov 03, 2022 at 09:10:25PM +0800, Gao Xiang wrote:
-> There is a long standing issue which could cause fs shutdown due to
-> inode extent to btree conversion failure right after an extent
-> allocation in the same AG, which is absolutely unexpected due to the
-> proper minleft reservation in the previous allocation.  Brian once
-> addressed one of the root cause [1], however, such symptom can still
-> occur after the commit is merged as reported [2], and our cloud
-> environment is also suffering from this issue.
+On 11/3/22 20:15, Usama Arif wrote:
+> Hi,
 > 
-> From the description of the commit [1], I found that Zirong has an
-> in-house stress test reproducer for this issue, therefore I asked him
-> to reproduce again and he confirmed that such issue can still be
-> reproducable on RHEL 9.
+> Thanks for the review. I will include the changes in the next version I send for pvlock. I have sent a patch to fix pvtime here https://lore.kernel.org/all/20221103131210.3603385-1-usama.arif@bytedance.com/.
 > 
-> Thanks to him, after dumping the transaction log items, I think
-> the root cause is as below:
->  1. Allocate space with the following condition:
->     freeblks: 18304 pagf_flcount: 6
->     reservation: 18276 need (min_free): 6
->     args->minleft: 1
->     available = freeblks + agflcount - reservation - need - minleft
->               = 18304 + min(6, 6) - 18276 - 6 - 1 = 27
-> 
->     The first allocation check itself is ok;
-> 
->  2. At that time, the AG state is
->     AGF Buffer: (XAGF)
->         ver:1  seq#:3  len:2621424
->         root BNO:9  CNT:7
->         level BNO:2  CNT:2
->         1st:64  last:69  cnt:6  freeblks:18277  longest:6395
-> 
->     agfl (flfirst = 64, fllast = 69, flcount = 6)
->     64:547 65:167 66:1651 67:2040807 68:783 69:604
-> 
->  3. Then, cntbt needs a new btree block (so take one block
->     from agfl), and then the log records a new AGF:
->     blkno 62914177, len 1, map_size 1
->     00000000: 58 41 47 46 00 00 00 01 00 00 00 03 00 27 ff f0  XAGF.........'..
->     00000010: 00 00 00 09 00 00 00 07 00 00 00 00 00 00 00 02  ................
->     00000020: 00 00 00 02 00 00 00 00 00 00 00 41 00 00 00 45  ...........A...E
->     00000030: 00 00 00 05 00 00 47 65 00 00 18 fb 00 00 00 09  ......Ge........
->     00000040: 75 dc c1 b5 1a 45 40 2a 80 50 72 f0 59 6e 62 66  u....E@*.Pr.Ynbf
->     agf 3  flfirst: 65 (0x41) fllast: 69 (0x45) cnt: 5
->     freeblks 18277
-> 
->  4. agfl 64 (daddr 62918552) was then written as a cntbt block
->     log item:
->       type#011= 0x123c
->       flags#011= 0x8
->     blkno 62918552, len 8, map_size 1
->     00000000: 41 42 33 43 00 00 00 fd 00 1f 23 e4 ff ff ff ff  AB3C......#.....
->     00000010: 00 00 00 00 03 c0 0f 98 00 00 00 00 00 00 00 00  ................
->     00000020: 75 dc c1 b5 1a 45 40 2a 80 50 72 f0 59 6e 62 66  u....E@*.Pr.Ynbf
-> 
->  5. Finally, the following inode extent to btree allocation fails:
->     Nov  1 07:56:09 dell-per750-08 kernel: ------------[ cut here ]------------
->     Nov  1 07:56:09 dell-per750-08 kernel: WARNING: CPU: 15 PID: 49290 at fs/xfs/libxfs/xfs_bmap.c:717 xfs_bmap_extents_to_btree+0xc51/0x1050 [xfs]
->     ...
->     Nov  1 07:56:10 dell-per750-08 kernel: XFS (sda2): agno 3 agflcount 5 freeblks 18277 reservation 18276 6
-> 
->     since
-> 
->     available = freeblks + agflcount - reservation - need - minleft
->               = 18277 + min(5, 6) - 18276 - 6 - 0 = 0   < 1
->     kaboom.
->
 
-Perhaps it's still not a correct fix since the second conversion
-allocation will fail as:
+Please please please *DON'T* top-post; reply inline instead.
 
-      available = freeblks + agflcount - reservation - need - minleft
-                = 18276 + min(6, 6) - 18276 - 6 - 0 = 0   < 1
+-- 
+An old man doll... just what I always wanted! - Clara
 
-If we don't want to use the last blocks of the AG, we should shorten
-args->maxlen to avoid touch these agfl blocks, thoughts?
-
-2300 static bool
-2301 xfs_alloc_space_available(
-2302         struct xfs_alloc_arg    *args,
-2303         xfs_extlen_t            min_free,
-2304         int                     flags)
-2305 {
-
-...
-
-2329         available = (int)(pag->pagf_freeblks + agflcount -
-2330                           reservation - min_free - args->minleft);
-
-             ^ here available = 27
-
-2331         if (available < (int)max(args->total, alloc_len))
-2332                 return false;
-2333
-2334         /*
-2335          * Clamp maxlen to the amount of free space available for the actual
-2336          * extent allocation.
-2337          */
-2338         if (available < (int)args->maxlen && !(flags & XFS_ALLOC_FLAG_CHECK)) {
-2339                 args->maxlen = available;
-
-             ^ so args->maxlen = 27 here
-
-and then freeblks from 18304 - 27 = 18277, but with another agfl block
-allocated (pagf_flcount from 6 to 5), the inequality will not satisfy:
-
-     available = freeblks + agflcount - reservation - need - minleft
-               = 18277 + min(5, 6) - 18276 - 6 - 0 = 0   < 1
-
-I think one of the correct fix is to fix args->maxlen above though, or
-some better preferred idea to fix this?
-
-Thanks,
-Gao Xiang
