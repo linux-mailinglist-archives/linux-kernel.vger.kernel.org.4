@@ -2,42 +2,42 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4AD43617E9F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:59:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D50DC617EAF
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:59:59 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231679AbiKCN7o (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 09:59:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52378 "EHLO
+        id S231361AbiKCN7z (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 09:59:55 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52420 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231757AbiKCN7K (ORCPT
+        with ESMTP id S231222AbiKCN7R (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 09:59:10 -0400
+        Thu, 3 Nov 2022 09:59:17 -0400
 Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2CBC51572A
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 06:58:04 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2ECC317407
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 06:58:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667483884;
+        s=mimecast20190719; t=1667483887;
         h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
          to:to:cc:cc:mime-version:mime-version:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=ZJCktf5q7jZ9/undR/aqzDAHm9J60Hmp1ceVzBBD+a0=;
-        b=V7j0EaPS5p2xb0UD5rdmSIbAINGSIXGs8b0nvB6m2XU6vQnkOkKw/Uum4g4VenJNUHSDuE
-        kpLChPX5zV9Aq9QyweX84v1GsKKN9acexQ7jVZ4NTgYJlYNkTL6P2AC/UWkH3oYtB2s3D9
-        4aRwVoQwqOUmVXW56SHSNm6j2F8+CPA=
+        bh=Wtyj4st2IPLZIWbkO/WxtNaf/mHZkAY+PB7RWK3OD5M=;
+        b=BgSE0D/CO/kIShkbNWoQaOFh47HZg6YWv8lmA0ZgXdj/BtTonoCwAae2Qlz1VWfjerfAKf
+        sKrx7R9VM/LHoG803zI3vE3lOai/BHSIsc+VTKuvMGf+kv22IzoC/NArTm7aLEDfa9uRZe
+        B7vwXV/J5KKjL74fatUg6EJ1794pdZg=
 Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
  [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
  (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-306-_DK-PyTPOtS6QuwQ90BdBQ-1; Thu, 03 Nov 2022 09:58:01 -0400
-X-MC-Unique: _DK-PyTPOtS6QuwQ90BdBQ-1
+ us-mta-340-XFwhDOxkPSmjBoMFEz27IQ-1; Thu, 03 Nov 2022 09:58:04 -0400
+X-MC-Unique: XFwhDOxkPSmjBoMFEz27IQ-1
 Received: from smtp.corp.redhat.com (int-mx01.intmail.prod.int.rdu2.redhat.com [10.11.54.1])
         (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
         (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 2E92B3C0DDD0;
-        Thu,  3 Nov 2022 13:58:00 +0000 (UTC)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id BA5222A2AD79;
+        Thu,  3 Nov 2022 13:58:03 +0000 (UTC)
 Received: from amdlaptop.tlv.redhat.com (dhcp-4-238.tlv.redhat.com [10.35.4.238])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id D832040C83AD;
-        Thu,  3 Nov 2022 13:57:56 +0000 (UTC)
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 7813540C2140;
+        Thu,  3 Nov 2022 13:58:00 +0000 (UTC)
 From:   Maxim Levitsky <mlevitsk@redhat.com>
 To:     kvm@vger.kernel.org
 Cc:     Paolo Bonzini <pbonzini@redhat.com>,
@@ -56,9 +56,9 @@ Cc:     Paolo Bonzini <pbonzini@redhat.com>,
         Peter Xu <peterx@redhat.com>,
         Maxim Levitsky <mlevitsk@redhat.com>,
         linux-kselftest@vger.kernel.org
-Subject: [PATCH 5/9] KVM: selftests: move idt_entry to header
-Date:   Thu,  3 Nov 2022 15:57:32 +0200
-Message-Id: <20221103135736.42295-6-mlevitsk@redhat.com>
+Subject: [PATCH 6/9] kvm: selftests: add svm nested shutdown test
+Date:   Thu,  3 Nov 2022 15:57:33 +0200
+Message-Id: <20221103135736.42295-7-mlevitsk@redhat.com>
 In-Reply-To: <20221103135736.42295-1-mlevitsk@redhat.com>
 References: <20221103135736.42295-1-mlevitsk@redhat.com>
 MIME-Version: 1.0
@@ -66,7 +66,7 @@ Content-Transfer-Encoding: 8bit
 X-Scanned-By: MIMEDefang 3.1 on 10.11.54.1
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,62 +74,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-struct idt_entry will be used for a test which will break IDT on purpose.
+Add test that tests that on SVM if L1 doesn't intercept SHUTDOWN,
+then L2 crashes L1 and doesn't crash L2
 
 Signed-off-by: Maxim Levitsky <mlevitsk@redhat.com>
 ---
- .../selftests/kvm/include/x86_64/processor.h        | 13 +++++++++++++
- tools/testing/selftests/kvm/lib/x86_64/processor.c  | 13 -------------
- 2 files changed, 13 insertions(+), 13 deletions(-)
+ tools/testing/selftests/kvm/.gitignore        |  1 +
+ tools/testing/selftests/kvm/Makefile          |  1 +
+ .../kvm/x86_64/svm_nested_shutdown_test.c     | 71 +++++++++++++++++++
+ 3 files changed, 73 insertions(+)
+ create mode 100644 tools/testing/selftests/kvm/x86_64/svm_nested_shutdown_test.c
 
-diff --git a/tools/testing/selftests/kvm/include/x86_64/processor.h b/tools/testing/selftests/kvm/include/x86_64/processor.h
-index e8ca0d8a6a7e0a..5da0c5e2a7afc4 100644
---- a/tools/testing/selftests/kvm/include/x86_64/processor.h
-+++ b/tools/testing/selftests/kvm/include/x86_64/processor.h
-@@ -748,6 +748,19 @@ struct ex_regs {
- 	uint64_t rflags;
- };
- 
-+struct idt_entry {
-+	uint16_t offset0;
-+	uint16_t selector;
-+	uint16_t ist : 3;
-+	uint16_t : 5;
-+	uint16_t type : 4;
-+	uint16_t : 1;
-+	uint16_t dpl : 2;
-+	uint16_t p : 1;
-+	uint16_t offset1;
-+	uint32_t offset2; uint32_t reserved;
-+};
+diff --git a/tools/testing/selftests/kvm/.gitignore b/tools/testing/selftests/kvm/.gitignore
+index 2f0d705db9dba5..05d980fb083d17 100644
+--- a/tools/testing/selftests/kvm/.gitignore
++++ b/tools/testing/selftests/kvm/.gitignore
+@@ -41,6 +41,7 @@
+ /x86_64/svm_vmcall_test
+ /x86_64/svm_int_ctl_test
+ /x86_64/svm_nested_soft_inject_test
++/x86_64/svm_nested_shutdown_test
+ /x86_64/sync_regs_test
+ /x86_64/tsc_msrs_test
+ /x86_64/tsc_scaling_sync
+diff --git a/tools/testing/selftests/kvm/Makefile b/tools/testing/selftests/kvm/Makefile
+index 0172eb6cb6eee2..4a2caef2c9396f 100644
+--- a/tools/testing/selftests/kvm/Makefile
++++ b/tools/testing/selftests/kvm/Makefile
+@@ -101,6 +101,7 @@ TEST_GEN_PROGS_x86_64 += x86_64/state_test
+ TEST_GEN_PROGS_x86_64 += x86_64/vmx_preemption_timer_test
+ TEST_GEN_PROGS_x86_64 += x86_64/svm_vmcall_test
+ TEST_GEN_PROGS_x86_64 += x86_64/svm_int_ctl_test
++TEST_GEN_PROGS_x86_64 += x86_64/svm_nested_shutdown_test
+ TEST_GEN_PROGS_x86_64 += x86_64/svm_nested_soft_inject_test
+ TEST_GEN_PROGS_x86_64 += x86_64/tsc_scaling_sync
+ TEST_GEN_PROGS_x86_64 += x86_64/sync_regs_test
+diff --git a/tools/testing/selftests/kvm/x86_64/svm_nested_shutdown_test.c b/tools/testing/selftests/kvm/x86_64/svm_nested_shutdown_test.c
+new file mode 100644
+index 00000000000000..3155edf81f5474
+--- /dev/null
++++ b/tools/testing/selftests/kvm/x86_64/svm_nested_shutdown_test.c
+@@ -0,0 +1,71 @@
++// SPDX-License-Identifier: GPL-2.0-only
++/*
++ * svm_nested_shutdown_test
++ *
++ * Copyright (C) 2022, Red Hat, Inc.
++ *
++ * Nested SVM testing: test that unintercepted shutdown in L2 doesn't crash the host
++ */
 +
- void vm_init_descriptor_tables(struct kvm_vm *vm);
- void vcpu_init_descriptor_tables(struct kvm_vcpu *vcpu);
- void vm_install_exception_handler(struct kvm_vm *vm, int vector,
-diff --git a/tools/testing/selftests/kvm/lib/x86_64/processor.c b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-index 39c4409ef56a6a..41c1c73c464d48 100644
---- a/tools/testing/selftests/kvm/lib/x86_64/processor.c
-+++ b/tools/testing/selftests/kvm/lib/x86_64/processor.c
-@@ -1074,19 +1074,6 @@ void kvm_get_cpu_address_width(unsigned int *pa_bits, unsigned int *va_bits)
- 	}
- }
- 
--struct idt_entry {
--	uint16_t offset0;
--	uint16_t selector;
--	uint16_t ist : 3;
--	uint16_t : 5;
--	uint16_t type : 4;
--	uint16_t : 1;
--	uint16_t dpl : 2;
--	uint16_t p : 1;
--	uint16_t offset1;
--	uint32_t offset2; uint32_t reserved;
--};
--
- static void set_idt_entry(struct kvm_vm *vm, int vector, unsigned long addr,
- 			  int dpl, unsigned short selector)
- {
++#include "test_util.h"
++#include "kvm_util.h"
++#include "processor.h"
++#include "svm_util.h"
++
++
++static void l2_guest_code(struct svm_test_data *svm)
++{
++	__asm__ __volatile__("ud2");
++}
++
++static void l1_guest_code(struct svm_test_data *svm, struct idt_entry * idt)
++{
++	#define L2_GUEST_STACK_SIZE 64
++	unsigned long l2_guest_stack[L2_GUEST_STACK_SIZE];
++	struct vmcb *vmcb = svm->vmcb;
++
++	generic_svm_setup(svm, l2_guest_code,
++			  &l2_guest_stack[L2_GUEST_STACK_SIZE]);
++
++	vmcb->control.intercept &= ~(BIT(INTERCEPT_SHUTDOWN));
++
++	idt[6].p   = 0; // #UD is intercepted but its injection will cause #NP
++	idt[11].p  = 0; // #NP is not intercepted and will cause another #NP will be be converted to #DF
++	idt[8].p   = 0; // #DF will cause #NP which will cause SHUTDOWN
++
++	run_guest(vmcb, svm->vmcb_gpa);
++
++	/* should not reach here */
++	GUEST_ASSERT(0);
++}
++
++void test_run(bool emulated_shutdown)
++{
++}
++
++int main(int argc, char *argv[])
++{
++	struct kvm_vcpu *vcpu;
++	struct kvm_run *run;
++	vm_vaddr_t svm_gva;
++	struct kvm_vm *vm;
++
++	TEST_REQUIRE(kvm_cpu_has(X86_FEATURE_SVM));
++
++	vm = vm_create_with_one_vcpu(&vcpu, l1_guest_code);
++	vm_init_descriptor_tables(vm);
++	vcpu_init_descriptor_tables(vcpu);
++
++	vcpu_alloc_svm(vm, &svm_gva);
++
++	vcpu_args_set(vcpu, 2, svm_gva, vm->idt);
++	run = vcpu->run;
++
++	vcpu_run(vcpu);
++	TEST_ASSERT(run->exit_reason == KVM_EXIT_SHUTDOWN,
++		    "Got exit_reason other than KVM_EXIT_SHUTDOWN: %u (%s)\n",
++		    run->exit_reason,
++		    exit_reason_str(run->exit_reason));
++
++	kvm_vm_free(vm);
++}
 -- 
 2.34.3
 
