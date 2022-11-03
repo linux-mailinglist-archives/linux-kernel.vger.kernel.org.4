@@ -2,151 +2,299 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1DAD3617D12
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:50:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 82675617D15
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:51:17 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbiKCMuf (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 08:50:35 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37192 "EHLO
+        id S231280AbiKCMvN (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 08:51:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37582 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230006AbiKCMuZ (ORCPT
+        with ESMTP id S230006AbiKCMvJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 08:50:25 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C5D3812AE9;
-        Thu,  3 Nov 2022 05:50:24 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7F8BBB823C1;
-        Thu,  3 Nov 2022 12:50:23 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EA41DC433D6;
-        Thu,  3 Nov 2022 12:50:16 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667479822;
-        bh=u7zq92KkM1JW1e0MCT8+S4MFg2O1zjgM8MB9fFopD8c=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=rSnmaYrDBsjZq7ystKjIGqwH8CVbvgrMmgBThb/n4nmK36N0h3l6dGYHgG0GDEXia
-         5ECVzS0xx046NaD4aWleJcymEwsKCesAjmz/z2TkL0uen0VavmCFPoxknyTFzls41F
-         B6wdQ+XggSmUN4UoJjzq+jHC6MEDXY3l4druYSg3Ej34x9T8+xKCdKd5Qh+j06vE9K
-         H2HHNmIlpFc45ZbVXuWgjs7nXn/e2rYPZo2XaDy1oq08nKfh47/4Gu/H3DlJ4ByEpf
-         kQg1nrNwIjb91wyve2rWTLhqkb/IkYtPy8CHNuHF1mprwtyQgDh8x//LitWZnAWGM8
-         pO9dn/d20znZw==
-Date:   Thu, 3 Nov 2022 18:20:09 +0530
-From:   Manivannan Sadhasivam <mani@kernel.org>
-To:     Slark Xiao <slark_xiao@163.com>
-Cc:     gregkh@linuxfoundation.org, loic.poulain@linaro.org,
-        dnlplm@gmail.com, yonglin.tan@outlook.com,
-        fabio.porcedda@gmail.com, mhi@lists.linux.dev,
-        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] bus: mhi: host: pci_generic: Add macro for some vids
-Message-ID: <20221103125009.GH8434@thinkpad>
-References: <20221102024437.15248-1-slark_xiao@163.com>
+        Thu, 3 Nov 2022 08:51:09 -0400
+Received: from mailout4.samsung.com (mailout4.samsung.com [203.254.224.34])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3333411A2F
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 05:51:08 -0700 (PDT)
+Received: from epcas1p1.samsung.com (unknown [182.195.41.45])
+        by mailout4.samsung.com (KnoxPortal) with ESMTP id 20221103125106epoutp045427262ad116a79bf435c8464f3dbc1a~kFBqm7CNJ2100121001epoutp04r
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 12:51:06 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout4.samsung.com 20221103125106epoutp045427262ad116a79bf435c8464f3dbc1a~kFBqm7CNJ2100121001epoutp04r
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+        s=mail20170921; t=1667479866;
+        bh=dgtRx1SgXG71NCP0VLB8ykwpSVh812d4TvZZZJsXTeU=;
+        h=From:To:Cc:In-Reply-To:Subject:Date:References:From;
+        b=ZDNtqsnO0HxmgkQrGkFGr2tY6yI04/h90myN/Jp2e1zlcrwYWex73K/nuu4TxRMVM
+         HNWH4GKjjZIfVMu7BzIC35dzyFS03VcsG8RZRAsh/5EESOopZFIrxduNcT9w+1jlSa
+         3C0eLsH3vAPF/cNFOZ/CfUv8QW2MrVy10+kbn+q8=
+Received: from epsnrtp1.localdomain (unknown [182.195.42.162]) by
+        epcas1p4.samsung.com (KnoxPortal) with ESMTP id
+        20221103125105epcas1p4c48fbcce3f5f9f04ba79b2c9e2e16650~kFBpxW0Cb1415814158epcas1p4X;
+        Thu,  3 Nov 2022 12:51:05 +0000 (GMT)
+Received: from epsmges1p5.samsung.com (unknown [182.195.36.224]) by
+        epsnrtp1.localdomain (Postfix) with ESMTP id 4N33XT3MWgz4x9Py; Thu,  3 Nov
+        2022 12:51:05 +0000 (GMT)
+Received: from epcas1p3.samsung.com ( [182.195.41.47]) by
+        epsmges1p5.samsung.com (Symantec Messaging Gateway) with SMTP id
+        90.A7.20046.939B3636; Thu,  3 Nov 2022 21:51:05 +0900 (KST)
+Received: from epsmtrp1.samsung.com (unknown [182.195.40.13]) by
+        epcas1p2.samsung.com (KnoxPortal) with ESMTPA id
+        20221103125104epcas1p26523c136cab92e8d9903ec64aaacd765~kFBoj4yTZ1547715477epcas1p2q;
+        Thu,  3 Nov 2022 12:51:04 +0000 (GMT)
+Received: from epsmgms1p1new.samsung.com (unknown [182.195.42.41]) by
+        epsmtrp1.samsung.com (KnoxPortal) with ESMTP id
+        20221103125104epsmtrp187b2787f1f0923e892a5a133d85f371e~kFBojNFAZ1787017870epsmtrp1B;
+        Thu,  3 Nov 2022 12:51:04 +0000 (GMT)
+X-AuditID: b6c32a39-35fff70000004e4e-38-6363b939200b
+Received: from epsmtip1.samsung.com ( [182.195.34.30]) by
+        epsmgms1p1new.samsung.com (Symantec Messaging Gateway) with SMTP id
+        53.CC.14392.839B3636; Thu,  3 Nov 2022 21:51:04 +0900 (KST)
+Received: from W10PB11329 (unknown [10.253.152.129]) by epsmtip1.samsung.com
+        (KnoxPortal) with ESMTPA id
+        20221103125104epsmtip1fdae7b1cb28364146a5fed9e20ac06f7~kFBoZc9dl2497524975epsmtip1m;
+        Thu,  3 Nov 2022 12:51:04 +0000 (GMT)
+From:   "Sungjong Seo" <sj1557.seo@samsung.com>
+To:     "'Namjae Jeon'" <linkinjeon@kernel.org>
+Cc:     "'linux-kernel'" <linux-kernel@vger.kernel.org>,
+        "'linux-fsdevel'" <linux-fsdevel@vger.kernel.org>,
+        <sj1557.seo@samsung.com>
+In-Reply-To: <PUZPR04MB6316A41FC40A84059E60BAB481399@PUZPR04MB6316.apcprd04.prod.outlook.com>
+Subject: RE: [PATCH v2 2/2] exfat: hint the empty entry which at the end of
+ cluster chain
+Date:   Thu, 3 Nov 2022 21:51:04 +0900
+Message-ID: <4eaa01d8ef82$ef0f1680$cd2d4380$@samsung.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221102024437.15248-1-slark_xiao@163.com>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Mailer: Microsoft Outlook 15.0
+Thread-Index: AQGcCjGLLgLtQ0s1lVkCZdVnEZTYcAGvYgVvrpl2KGA=
+Content-Language: ko
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrKJsWRmVeSWpSXmKPExsWy7bCmvq7lzuRkg6P7xC0mTlvKbLFn70kW
+        i8u75rBZbPl3hNWBxWPTqk42j74tqxg9Pm+SC2COamC0SSxKzsgsS1VIzUvOT8nMS7dVCg1x
+        07VQUsjILy6xVYo2NDTSMzQw1zMyMtIztoy1MjJVUshLzE21VarQhepVUihKLgCqza0sBhqQ
+        k6oHFdcrTs1LccjKLwU5Ua84Mbe4NC9dLzk/V0mhLDGnFGiEkn7CN8aMZ90fmAr+6FTsW3mX
+        sYGxW7mLkZNDQsBEYsb+BexdjFwcQgI7GCUeL1gN5XxilHh0oYURwvnGKPHk3nMmmJZnXauh
+        EnsZJe7OOAflvGSUWP3lHhtIFZuArsSTGz+Zuxg5OEQEtCXuv0gHqWEWaGKUuPr7BNgkToFY
+        iR87L7CD2MIC0RIPNm8Ai7MIqEjMedgHNodXwFLi1LRjLBC2oMTJmU/AbGYBeYntb+cwQ1yk
+        ILH701FWEFtEwEri68apjBA1IhKzO9uYQRZLCHxklzix5AtUg4vE5K9PoWxhiVfHt7BD2FIS
+        L/vboOxuRok/53ghmicwSrTcOcsKkTCW+PT5MyPIZ8wCmhLrd+lDhBUldv6eywhhC0qcvtbN
+        DHEEn8S7rz2sIOUSArwSHW1CECUqEt8/7GSZwKg8C8lrs5C8NgvJC7MQli1gZFnFKJZaUJyb
+        nlpsWGCKHOObGMEpVMtyB+P0tx/0DjEycTAeYpTgYFYS4f20LTlZiDclsbIqtSg/vqg0J7X4
+        EGMyMLAnMkuJJucDk3heSbyhibGBgREwIZpbmhsTIWxpYGJmZGJhbGlspiTO2zBDK1lIID2x
+        JDU7NbUgtQhmCxMHp1QDU5JtdgHnZcE7yjFbtt/VfdwTxz6v/8ahU/vDFe40/PNXfyus9Uh3
+        b5LMTqe/adfvxdzd+yRrisYe5UcKm+dn9s2TM2u1Z55yazZHp+fjK3PTfMXnv+UK5HizJvtx
+        6oO49CWb7v95djCAJ2SRPOcT5tM/xFccen9iYiqveAXf2ndl9vNvrX4T/rXFY++FryflhZ+o
+        J+1eeP/bv/fZFgrSAjl9zN/ctzzJndhauOFa+gGu2PtdUi1LzZ/q+G+d///A0tuqVodf5by8
+        lnqrMzrd+HjxtBnn7yfIrP0YU+zo/E5fRt/x3rXp0R4r7z/Ys2X6Qc7SwqyA7KsmT/+blbdt
+        yJ682l9ZOHtdzKWGuRHSimFKLMUZiYZazEXFiQBSQYB3WAQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFnrJLMWRmVeSWpSXmKPExsWy7bCSnK7FzuRkgxVrpS0mTlvKbLFn70kW
+        i8u75rBZbPl3hNWBxWPTqk42j74tqxg9Pm+SC2CO4rJJSc3JLEst0rdL4Mp41v2BqeCPTsW+
+        lXcZGxi7lbsYOTkkBEwknnWtZuxi5OIQEtjNKHFtz1EghwMoISVxcJ8mhCkscfhwMUTJc0aJ
+        exeOsoP0sgnoSjy58ZMZpEZEQFvi/ot0kBpmgRZGiVmNz9ggGtYxSvw/8JAZpIFTIFbix84L
+        YM3CApES7959ZAGxWQRUJOY87GMDsXkFLCVOTTvGAmELSpyc+QTMZgZa0PuwlRHClpfY/nYO
+        M8QDChK7Px1lBbFFBKwkvm6cClUjIjG7s415AqPwLCSjZiEZNQvJqFlIWhYwsqxilEwtKM5N
+        zy02LDDMSy3XK07MLS7NS9dLzs/dxAiODS3NHYzbV33QO8TIxMF4iFGCg1lJhPfTtuRkId6U
+        xMqq1KL8+KLSnNTiQ4zSHCxK4rwXuk7GCwmkJ5akZqemFqQWwWSZODilGphyGe5rfBaSEDF9
+        x1fSO5XPySDziN2f2HM8BqeFrVvMdPTYG1cxXm4uFWxNzHmjt+jWjoC2mUuuRveHvI7bZdk8
+        +XxzZXfinoKZTty1Ya+VWBYb2yYxhM1Yuffq2rRF/dq5d/qv6av/enpG2tX6/Qr3KQav7GoP
+        +99R9XAptC8++uNSspmv2cUXH92KGW2YWFsrTT8sZN+x31HF6NvE2YqH5LhEGvM7+/lWXpJ9
+        pP7i960wfuePdya0aRpKTKo7zTH9Z/qvprM5vAviOSLzFr7JrJSc7mZu3r4uQlOg+a6xf9/b
+        k5dfzrCZ9mbuhnPp7kt1G2PrvbdzmSxSzRZiYGxjtvGVW6V3TcR13kwbJZbijERDLeai4kQA
+        bisUzfwCAAA=
+X-CMS-MailID: 20221103125104epcas1p26523c136cab92e8d9903ec64aaacd765
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-Sendblock-Type: SVC_REQ_APPROVE
+X-ArchiveUser: EV
+CMS-TYPE: 101P
+DLP-Filter: Pass
+X-CFilter-Loop: Reflected
+X-CMS-RootMailID: 20221102071138epcas1p198e20ca74ae4df32b6f754a382b9c2ba
+References: <CGME20221102071138epcas1p198e20ca74ae4df32b6f754a382b9c2ba@epcas1p1.samsung.com>
+        <PUZPR04MB6316A41FC40A84059E60BAB481399@PUZPR04MB6316.apcprd04.prod.outlook.com>
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 10:44:37AM +0800, Slark Xiao wrote:
-> To make code neat and for convenience purpose, using macro for
-> some vids.
+> After traversing all directory entries, hint the empty directory
+> entry no matter whether or not there are enough empty directory
+> entries.
+> 
+> After this commit, hint the empty directory entries like this:
+> 
+> 1. Hint the deleted directory entries if enough;
+> 2. Hint the deleted and unused directory entries which at the
+>    end of the cluster chain no matter whether enough or not(Add
+>    by this commit);
+> 3. If no any empty directory entries, hint the empty directory
+>    entries in the new cluster(Add by this commit).
+> 
+> This avoids repeated traversal of directory entries, reduces CPU
+> usage, and improves the performance of creating files and
+> directories(especially on low-performance CPUs).
+> 
+> Test create 5000 files in a class 4 SD card on imx6q-sabrelite
+> with:
+> 
+> for ((i=0;i<5;i++)); do
+>    sync
+>    time (for ((j=1;j<=1000;j++)); do touch file$((i*1000+j)); done)
+> done
+> 
+> The more files, the more performance improvements.
+> 
+>             Before   After    Improvement
+>    1~1000   25.360s  22.168s  14.40%
+> 1001~2000   38.242s  28.72ss  33.15%
+> 2001~3000   49.134s  35.037s  40.23%
+> 3001~4000   62.042s  41.624s  49.05%
+> 4001~5000   73.629s  46.772s  57.42%
+> 
+> Signed-off-by: Yuezhang Mo <Yuezhang.Mo@sony.com>
+> Reviewed-by: Andy Wu <Andy.Wu@sony.com>
+> Reviewed-by: Aoyama Wataru <wataru.aoyama@sony.com>
 
-s/using/use
-s/vids/VIDs
+Reviewed-by: Sungjong Seo <sj1557.seo@samsung.com>
 
-> Refer to previous patch in pci_ids.h side, they are
-> not allowed to add new entries of single driver needed. So we
-> add it in our local file.
->
+Looks good. Thanks!
 
-Reference to the previous patch has no relationship with this commit once
-merged. How about,
-
-"These macros are supposed to be added to pci_ids.h. But until the macros are
-used in multiple places, it is not recommended. So adding it locally for now."
- 
-> Signed-off-by: Slark Xiao <slark_xiao@163.com>
 > ---
->  drivers/bus/mhi/host/pci_generic.c | 18 +++++++++++-------
->  1 file changed, 11 insertions(+), 7 deletions(-)
+>  fs/exfat/dir.c   | 26 ++++++++++++++++++++++----
+>  fs/exfat/namei.c | 33 +++++++++++++++++++++------------
+>  2 files changed, 43 insertions(+), 16 deletions(-)
 > 
-> diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
-> index c4259cb2d289..5abc778a5290 100644
-> --- a/drivers/bus/mhi/host/pci_generic.c
-> +++ b/drivers/bus/mhi/host/pci_generic.c
-> @@ -24,6 +24,10 @@
->  
->  #define HEALTH_CHECK_PERIOD (HZ * 2)
->  
-
-Add a comment,
-
-/* PCI VID definitions */
-
-> +#define PCI_VENDOR_ID_THALES	0x1269
-> +
-
-No need of newline
-
-> +#define PCI_VENDOR_ID_QUECTEL	0x1eac
-> +
-
-Just use a space after PCI_VENDOR_ID_QUECTEL like above.
-
-Thanks,
-Mani
-
->  /**
->   * struct mhi_pci_dev_info - MHI PCI device specific information
->   * @config: MHI controller configuration
-> @@ -557,11 +561,11 @@ static const struct pci_device_id mhi_pci_id_table[] = {
->  		.driver_data = (kernel_ulong_t) &mhi_telit_fn990_info },
->  	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0308),
->  		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx65_info },
-> -	{ PCI_DEVICE(0x1eac, 0x1001), /* EM120R-GL (sdx24) */
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_QUECTEL, 0x1001), /* EM120R-GL (sdx24) */
->  		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
-> -	{ PCI_DEVICE(0x1eac, 0x1002), /* EM160R-GL (sdx24) */
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_QUECTEL, 0x1002), /* EM160R-GL (sdx24) */
->  		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
-> -	{ PCI_DEVICE(0x1eac, 0x2001), /* EM120R-GL for FCCL (sdx24) */
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_QUECTEL, 0x2001), /* EM120R-GL for FCCL (sdx24) */
->  		.driver_data = (kernel_ulong_t) &mhi_quectel_em1xx_info },
->  	/* T99W175 (sdx55), Both for eSIM and Non-eSIM */
->  	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0ab),
-> @@ -585,16 +589,16 @@ static const struct pci_device_id mhi_pci_id_table[] = {
->  	{ PCI_DEVICE(PCI_VENDOR_ID_FOXCONN, 0xe0d9),
->  		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx65_info },
->  	/* MV31-W (Cinterion) */
-> -	{ PCI_DEVICE(0x1269, 0x00b3),
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_THALES, 0x00b3),
->  		.driver_data = (kernel_ulong_t) &mhi_mv31_info },
->  	/* MV31-W (Cinterion), based on new baseline */
-> -	{ PCI_DEVICE(0x1269, 0x00b4),
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_THALES, 0x00b4),
->  		.driver_data = (kernel_ulong_t) &mhi_mv31_info },
->  	/* MV32-WA (Cinterion) */
-> -	{ PCI_DEVICE(0x1269, 0x00ba),
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_THALES, 0x00ba),
->  		.driver_data = (kernel_ulong_t) &mhi_mv32_info },
->  	/* MV32-WB (Cinterion) */
-> -	{ PCI_DEVICE(0x1269, 0x00bb),
-> +	{ PCI_DEVICE(PCI_VENDOR_ID_THALES, 0x00bb),
->  		.driver_data = (kernel_ulong_t) &mhi_mv32_info },
->  	{  }
->  };
-> -- 
-> 2.17.1
+> diff --git a/fs/exfat/dir.c b/fs/exfat/dir.c
+> index 9f9b8435baca..5497a610808d 100644
+> --- a/fs/exfat/dir.c
+> +++ b/fs/exfat/dir.c
+> @@ -905,17 +905,24 @@ static inline void exfat_reset_empty_hint(struct
+> exfat_hint_femp *hint_femp)
 > 
+>  static inline void exfat_set_empty_hint(struct exfat_inode_info *ei,
+>  		struct exfat_hint_femp *candi_empty, struct exfat_chain *clu,
+> -		int dentry, int num_entries)
+> +		int dentry, int num_entries, int entry_type)
+>  {
+>  	if (ei->hint_femp.eidx == EXFAT_HINT_NONE ||
+>  	    ei->hint_femp.eidx > dentry) {
+> +		int total_entries = EXFAT_B_TO_DEN(i_size_read(&ei-
+> >vfs_inode));
+> +
+>  		if (candi_empty->count == 0) {
+>  			candi_empty->cur = *clu;
+>  			candi_empty->eidx = dentry;
+>  		}
+> 
+> -		candi_empty->count++;
+> -		if (candi_empty->count == num_entries)
+> +		if (entry_type == TYPE_UNUSED)
+> +			candi_empty->count += total_entries - dentry;
+> +		else
+> +			candi_empty->count++;
+> +
+> +		if (candi_empty->count == num_entries ||
+> +		    candi_empty->count + candi_empty->eidx == total_entries)
+>  			ei->hint_femp = *candi_empty;
+>  	}
+>  }
+> @@ -989,7 +996,8 @@ int exfat_find_dir_entry(struct super_block *sb,
+> struct exfat_inode_info *ei,
+>  				step = DIRENT_STEP_FILE;
+> 
+>  				exfat_set_empty_hint(ei, &candi_empty, &clu,
+> -						dentry, num_entries);
+> +						dentry, num_entries,
+> +						entry_type);
+> 
+>  				brelse(bh);
+>  				if (entry_type == TYPE_UNUSED)
+> @@ -1100,6 +1108,16 @@ int exfat_find_dir_entry(struct super_block *sb,
+> struct exfat_inode_info *ei,
+>  		goto rewind;
+>  	}
+> 
+> +	/*
+> +	 * set the EXFAT_EOF_CLUSTER flag to avoid search
+> +	 * from the beginning again when allocated a new cluster
+> +	 */
+> +	if (ei->hint_femp.eidx == EXFAT_HINT_NONE) {
+> +		ei->hint_femp.cur.dir = EXFAT_EOF_CLUSTER;
+> +		ei->hint_femp.eidx = p_dir->size * dentries_per_clu;
+> +		ei->hint_femp.count = 0;
+> +	}
+> +
+>  	/* initialized hint_stat */
+>  	hint_stat->clu = p_dir->dir;
+>  	hint_stat->eidx = 0;
+> diff --git a/fs/exfat/namei.c b/fs/exfat/namei.c
+> index b617bebc3d0f..add4893711d3 100644
+> --- a/fs/exfat/namei.c
+> +++ b/fs/exfat/namei.c
+> @@ -224,11 +224,18 @@ static int exfat_search_empty_slot(struct
+> super_block *sb,
+> 
+>  	if (hint_femp->eidx != EXFAT_HINT_NONE) {
+>  		dentry = hint_femp->eidx;
+> -		if (num_entries <= hint_femp->count) {
+> -			hint_femp->eidx = EXFAT_HINT_NONE;
+> -			return dentry;
+> -		}
+> 
+> +		/*
+> +		 * If hint_femp->count is enough, it is needed to check if
+> +		 * there are actual empty entries.
+> +		 * Otherwise, and if "dentry + hint_famp->count" is also
+> equal
+> +		 * to "p_dir->size * dentries_per_clu", it means ENOSPC.
+> +		 */
+> +		if (dentry + hint_femp->count == p_dir->size *
+> dentries_per_clu
+> +		    && num_entries > hint_femp->count)
+> +			return -ENOSPC;
+> +
+> +		hint_femp->eidx = EXFAT_HINT_NONE;
+>  		exfat_chain_dup(&clu, &hint_femp->cur);
+>  	} else {
+>  		exfat_chain_dup(&clu, p_dir);
+> @@ -293,6 +300,12 @@ static int exfat_search_empty_slot(struct super_block
+> *sb,
+>  		}
+>  	}
+> 
+> +	hint_femp->eidx = p_dir->size * dentries_per_clu - num_empty;
+> +	hint_femp->count = num_empty;
+> +	if (num_empty == 0)
+> +		exfat_chain_set(&hint_femp->cur, EXFAT_EOF_CLUSTER, 0,
+> +				clu.flags);
+> +
+>  	return -ENOSPC;
+>  }
+> 
+> @@ -369,15 +382,11 @@ static int exfat_find_empty_entry(struct inode
+> *inode,
+>  			if (exfat_ent_set(sb, last_clu, clu.dir))
+>  				return -EIO;
+> 
+> -		if (hint_femp.eidx == EXFAT_HINT_NONE) {
+> -			/* the special case that new dentry
+> -			 * should be allocated from the start of new cluster
+> -			 */
+> -			hint_femp.eidx = EXFAT_B_TO_DEN_IDX(p_dir->size, sbi);
+> -			hint_femp.count = sbi->dentries_per_clu;
+> -
+> +		if (hint_femp.cur.dir == EXFAT_EOF_CLUSTER)
+>  			exfat_chain_set(&hint_femp.cur, clu.dir, 0, clu.flags);
+> -		}
+> +
+> +		hint_femp.count += sbi->dentries_per_clu;
+> +
+>  		hint_femp.cur.size++;
+>  		p_dir->size++;
+>  		size = EXFAT_CLU_TO_B(p_dir->size, sbi);
+> --
+> 2.25.1
 
--- 
-மணிவண்ணன் சதாசிவம்
