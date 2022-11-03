@@ -2,93 +2,74 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4F7B2618465
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:28:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0D3DC618472
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:30:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231959AbiKCQ2U (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 12:28:20 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51810 "EHLO
+        id S231827AbiKCQag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 12:30:36 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54856 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231789AbiKCQ1t (ORCPT
+        with ESMTP id S231324AbiKCQaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 12:27:49 -0400
-Received: from mail-pf1-x42b.google.com (mail-pf1-x42b.google.com [IPv6:2607:f8b0:4864:20::42b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5AC221CB2B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 09:27:23 -0700 (PDT)
-Received: by mail-pf1-x42b.google.com with SMTP id i3so2075285pfc.11
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 09:27:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=Qbc9/7qEOtavwLw8LQp9XE09/9bhelNZbWmBfVDGw/4=;
-        b=nRKfJ4QQ3+p6c+xIQjyLkoMwJvMnwYkAuaPcWumPlxJnVKcvToJsNiOAGYenmja0Sy
-         0RoJkXdIm/TX+G8gnDZ+obkXWdspQdCFRI8jyQ0Jbs1WkCbaBSCKMFWUKWu6G3aYiNf+
-         UQS/IMoncWgX6OOaPRMaCTiHd4UobAg5+BLo68MES2g/g2g52drNelqM/o5S6rL276vQ
-         59B9YcfdRSBbO8RH0qvr4sgiqXAKyJqC46UCoo6fS3cz6SnqinDkZiU40iLNXr90+JsU
-         JTENrIEpqr75AzmQXB9iCQJUqbZTKhHGlXw36gDu1kRfRLSYiBKX6y1lz/w+ys/ieg8s
-         2YFA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Qbc9/7qEOtavwLw8LQp9XE09/9bhelNZbWmBfVDGw/4=;
-        b=3PCOkPwtIuJFooQwWbdr/M6P0w2+6lYkvNEkxcQVwbzgfM0WCciGJ/Sid0FMwG9697
-         4ewwu3s4C3AMsyORTdhwISXyx0YoYJkBGwMcsbCH6EZyiHPk9CDD6W6+UQh5LG5vrC7M
-         5ip27yC/M+8HTItfHWlBxB1ZI2MnLU8XXHIMDqPJzy5WKuabZnzvhzCjfzpg962YZbgY
-         OagowY86OJFWNDm7Qi7aqTYxDLEuj/Yt2T6qCRUsLvfvW4BZCyi3IS/GpzHwQH6yzW7D
-         Ls1vMa52ll/CPXcinjF5m679hd5174M4orI5LbsFLpV602G+Wujz0Dt7LAZR33QGVzLa
-         lI7g==
-X-Gm-Message-State: ACrzQf1s6DCXcC0K158NrrPVIbRf4u71iLae1+oTG6eTcicDYS9q9bGp
-        K7DHyBX+VCajGMkwgar8mOg9a0bIVdZVLylfxqXOww==
-X-Google-Smtp-Source: AMsMyM7LsxnGFqh+M0E5h18/S54Hm40LIPJDB0peNXRc06g8NnvtmJDyMzFqlwvdks3WF/JqPmHtsXk2TpzQtF/OoJ8=
-X-Received: by 2002:a63:c4c:0:b0:46f:e243:503a with SMTP id
- 12-20020a630c4c000000b0046fe243503amr14314192pgm.483.1667492842447; Thu, 03
- Nov 2022 09:27:22 -0700 (PDT)
+        Thu, 3 Nov 2022 12:30:22 -0400
+Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98694B92;
+        Thu,  3 Nov 2022 09:30:20 -0700 (PDT)
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A3GToek119565;
+        Thu, 3 Nov 2022 11:29:50 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1667492990;
+        bh=tku/OEvVMYCVyJUwEFWbSTgXMuBEfZMv78bmcEijKEU=;
+        h=Date:Subject:To:CC:References:From:In-Reply-To;
+        b=NI9urWluRQ1mAozq+guJV0WCseYHWaz89rZOHQku5axa2KGRwPtoY4XRk7RoRWeuO
+         Z/WYOnoY/Oho88F4rkakWLjh2voQYoM8ihJl8I0SX6Mf4QR8UjnQ+83fce1TkajChi
+         goB8VhRG2859EkhvsRTDnQIxkmlnTTjfIadXe+pY=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A3GToL9072450
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 3 Nov 2022 11:29:50 -0500
+Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 3 Nov
+ 2022 11:29:50 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Thu, 3 Nov 2022 11:29:50 -0500
+Received: from [10.250.32.80] (ileaxei01-snat.itg.ti.com [10.180.69.5])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A3GTnWQ003709;
+        Thu, 3 Nov 2022 11:29:49 -0500
+Message-ID: <67f9ce4b-1ed6-fc41-c133-1fbafb743830@ti.com>
+Date:   Thu, 3 Nov 2022 11:29:49 -0500
 MIME-Version: 1.0
-References: <20220915142913.2213336-1-chao.p.peng@linux.intel.com>
- <20220915142913.2213336-2-chao.p.peng@linux.intel.com> <CAGtprH_MiCxT2xSxD2UrM4M+ghL0V=XEZzEX4Fo5wQKV4fAL4w@mail.gmail.com>
- <20221021134711.GA3607894@chaop.bj.intel.com> <Y1LGRvVaWwHS+Zna@google.com> <20221024145928.66uehsokp7bpa2st@box.shutemov.name>
-In-Reply-To: <20221024145928.66uehsokp7bpa2st@box.shutemov.name>
-From:   Vishal Annapurve <vannapurve@google.com>
-Date:   Thu, 3 Nov 2022 21:57:11 +0530
-Message-ID: <CAGtprH95A_1Xwaf9uCS6VX6Vi8jTTeewS1WYOwC6bFk5kq9G+g@mail.gmail.com>
-Subject: Re: [PATCH v8 1/8] mm/memfd: Introduce userspace inaccessible memfd
-To:     "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>
-Cc:     Sean Christopherson <seanjc@google.com>,
-        Chao Peng <chao.p.peng@linux.intel.com>, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-mm@kvack.org,
-        linux-fsdevel@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>, luto@kernel.org,
-        jun.nakajima@intel.com, dave.hansen@intel.com, ak@linux.intel.com,
-        david@redhat.com, aarcange@redhat.com, ddutile@redhat.com,
-        dhildenb@redhat.com, Quentin Perret <qperret@google.com>,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v4 7/9] ARM: dts: nspire: Use MATRIX_KEY macro for
+ linux,keymap
+Content-Language: en-US
+To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
+CC:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        Geert Uytterhoeven <geert+renesas@glider.be>,
+        Daniel Tang <dt.tangr@gmail.com>,
+        Fabian Vogt <fabian@ritter-vogt.de>,
+        <devicetree@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20221101215804.16262-1-afd@ti.com>
+ <20221101215804.16262-8-afd@ti.com>
+ <CAKdAkRTQ2bjQEn1HM=ZMHdC8Goyf1rUDNfMkNK3jMA2CR-t4eg@mail.gmail.com>
+From:   Andrew Davis <afd@ti.com>
+In-Reply-To: <CAKdAkRTQ2bjQEn1HM=ZMHdC8Goyf1rUDNfMkNK3jMA2CR-t4eg@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -96,59 +77,69 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Mon, Oct 24, 2022 at 8:30 PM Kirill A . Shutemov
-<kirill.shutemov@linux.intel.com> wrote:
->
-> On Fri, Oct 21, 2022 at 04:18:14PM +0000, Sean Christopherson wrote:
-> > On Fri, Oct 21, 2022, Chao Peng wrote:
-> > > >
-> > > > In the context of userspace inaccessible memfd, what would be a
-> > > > suggested way to enforce NUMA memory policy for physical memory
-> > > > allocation? mbind[1] won't work here in absence of virtual address
-> > > > range.
-> > >
-> > > How about set_mempolicy():
-> > > https://www.man7.org/linux/man-pages/man2/set_mempolicy.2.html
-> >
-> > Andy Lutomirski brought this up in an off-list discussion way back when the whole
-> > private-fd thing was first being proposed.
-> >
-> >   : The current Linux NUMA APIs (mbind, move_pages) work on virtual addresses.  If
-> >   : we want to support them for TDX private memory, we either need TDX private
-> >   : memory to have an HVA or we need file-based equivalents. Arguably we should add
-> >   : fmove_pages and fbind syscalls anyway, since the current API is quite awkward
-> >   : even for tools like numactl.
->
-> Yeah, we definitely have gaps in API wrt NUMA, but I don't think it be
-> addressed in the initial submission.
->
-> BTW, it is not regression comparing to old KVM slots, if the memory is
-> backed by memfd or other file:
->
-> MBIND(2)
->        The  specified policy will be ignored for any MAP_SHARED mappings in the
->        specified memory range.  Rather the pages will be allocated according to
->        the  memory  policy  of the thread that caused the page to be allocated.
->        Again, this may not be the thread that called mbind().
->
-> It is not clear how to define fbind(2) semantics, considering that multiple
-> processes may compete for the same region of page cache.
->
-> Should it be per-inode or per-fd? Or maybe per-range in inode/fd?
->
+On 11/2/22 11:07 PM, Dmitry Torokhov wrote:
+> Hi Andrew,
+> 
+> On Tue, Nov 1, 2022 at 2:59 PM Andrew Davis <afd@ti.com> wrote:
+>>
+>> This looks better and allows us to see the row and column numbers
+>> more easily. Switch to this macro here.
+>>
+>> Signed-off-by: Andrew Davis <afd@ti.com>
+>> ---
+>>   arch/arm/boot/dts/nspire-clp.dts | 90 ++++++++++++++++++++++++--------
+>>   arch/arm/boot/dts/nspire-cx.dts  | 90 ++++++++++++++++++++++++--------
+>>   arch/arm/boot/dts/nspire-tp.dts  | 90 ++++++++++++++++++++++++--------
+>>   3 files changed, 204 insertions(+), 66 deletions(-)
+>>
+>> diff --git a/arch/arm/boot/dts/nspire-clp.dts b/arch/arm/boot/dts/nspire-clp.dts
+>> index f52f38c615886..916ede0c2499c 100644
+>> --- a/arch/arm/boot/dts/nspire-clp.dts
+>> +++ b/arch/arm/boot/dts/nspire-clp.dts
+>> @@ -6,32 +6,78 @@
+>>    */
+>>   /dts-v1/;
+>>
+>> +#include <dt-bindings/input/input.h>
+>> +
+>>   /include/ "nspire-classic.dtsi"
+>>
+>>   &keypad {
+>>          linux,keymap = <
+>> -       0x0000001c      0x0001001c      0x00020039
+>> -       0x0004002c      0x00050034      0x00060015
+>> -       0x0007000b      0x0008002d      0x01000033
+>> -       0x0101004e      0x01020011      0x01030004
+>> -       0x0104002f      0x01050003      0x01060016
+>> -       0x01070002      0x01080014      0x02000062
+>> -       0x0201000c      0x0202001f      0x02030007
+>> -       0x02040013      0x02050006      0x02060010
+>> -       0x02070005      0x02080019      0x03000027
+>> -       0x03010037      0x03020018      0x0303000a
+>> -       0x03040031      0x03050009      0x03060032
+>> -       0x03070008      0x03080026      0x04000028
+>> -       0x04010035      0x04020025      0x04040024
+>> -       0x04060017      0x04080023      0x05000028
+>> -       0x05020022      0x0503001b      0x05040021
+>> -       0x0505001a      0x05060012      0x0507006f
+>> -       0x05080020      0x0509002a      0x0601001c
+>> -       0x0602002e      0x06030068      0x06040030
+>> -       0x0605006d      0x0606001e      0x06070001
+>> -       0x0608002b      0x0609000f      0x07000067
+>> -       0x0702006a      0x0704006c      0x07060069
+>> -       0x0707000e      0x0708001d      0x070a000d
+>> +               MATRIX_KEY(0,  0, 0x1c)
+>> +               MATRIX_KEY(0,  1, 0x1c)
+>> +               MATRIX_KEY(0,  2, 0x39)
+> 
+> Can this also be switched over to using KEY_* macros to describe the
+> keycodes emitted?
+> 
 
-David's analysis on mempolicy with shmem seems to be right. set_policy
-on virtual address range does seem to change the shared policy for the
-inode irrespective of the mapping type.
+That's going to be done in a follow up patch. This change here was
+done mechanically, but moving to KEY_* might need to be double
+checked by hand since some of these do not seem to map how one
+would expect to the function on the keypad.
 
-Maybe having a way to set numa policy per-range in the inode would be
-at par with what we can do today via mbind on virtual address ranges.
-
-
-
-> fmove_pages(2) should be relatively straight forward, since it is
-> best-effort and does not guarantee that the page will note be moved
-> somewhare else just after return from the syscall.
->
-> --
->   Kiryl Shutsemau / Kirill A. Shutemov
+Thanks,
+Andrew
