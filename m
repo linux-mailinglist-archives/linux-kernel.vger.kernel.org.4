@@ -2,83 +2,176 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 94E9B617A3E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:50:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id DCC7D617A41
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:52:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231246AbiKCJuF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 05:50:05 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60292 "EHLO
+        id S230487AbiKCJwR (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 05:52:17 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:60922 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230394AbiKCJuA (ORCPT
+        with ESMTP id S229551AbiKCJwN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 05:50:00 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 00A5FF20;
-        Thu,  3 Nov 2022 02:49:59 -0700 (PDT)
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (4096 bits))
-        (No client certificate requested)
-        (Authenticated sender: kholk11)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 30DF56602910;
-        Thu,  3 Nov 2022 09:49:58 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667468998;
-        bh=4CpuV+XdMGlw8IhY60YU6dU/4TY7hgL/Dy2jeBCaZis=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=NO+0Sni1GND37CMVheasUORCY5dOko3seUNX6BnzeVMjaaCQPvGQVAuaxg7fJ/HpD
-         t/sZhatvKR7Ny+tcUfNxdJswJQJ3CNb+d2zGnkFH+XI+9VdXV3ftkfAOkZaU/21G8x
-         v3wTS0lrLw0bNbxMfr3yRfR1WXLSHYQK8GBfcKZQW6O+FCs4KW44H2WN1Rpt4lcOIY
-         CLZRCrfjcnQk9rUHv/K1mVjf3fRNJ2SLaL3lDZAWRD1zZ9rLyR/lHIAEJ/OAxIJ/9W
-         qVBgV0++lH8h0DGSk45FOO9CEXacxc2dAYPXzN/pYDPFpRS1hMPdNKgeKqizB+dzmb
-         hnVx3c2dlebgA==
-Message-ID: <e219b620-a119-74ba-34d7-e678a08b83df@collabora.com>
-Date:   Thu, 3 Nov 2022 10:49:55 +0100
+        Thu, 3 Nov 2022 05:52:13 -0400
+Received: from mail-lf1-x136.google.com (mail-lf1-x136.google.com [IPv6:2a00:1450:4864:20::136])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DBCDF64E3
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 02:52:12 -0700 (PDT)
+Received: by mail-lf1-x136.google.com with SMTP id b3so1934749lfv.2
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 02:52:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=dwDKMymvmRecMVv+Yu1YP/lKTyHvR7o4RJWcrXGZQkU=;
+        b=Fsb+tFo1Mh+LJNBrbfqJfBMoJ5E9/H6dHJ4VWiP8OZYHAgHW/s6QawW3a/J9EvVHaP
+         r3qGufzumL2LpzHJdti2X0Eg+3hSfVMOSa9cBj2ajbJA4zU2cSYlxoyLl9UnaRTZ5LGt
+         dMKVobvn7TiN51VHTZDTOnRnqBcHHcIndH2R5tnNc8fmPAth5AgPCXHa0NbMJUxhtSxR
+         hl1cuC4Q0I7NAevpiGBHvTXMj8RUvIStA9cO8uYSfKCRAvjIRtpvUsP1+mKEx5TcxsnA
+         KDZfDYnSomVE04Zfq0+18s43vbM8/6yW471A6x4ZU3IFNpd+/liAErS3eVkGH4nEdFgi
+         H9nQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-disposition:mime-version:message-id:subject:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dwDKMymvmRecMVv+Yu1YP/lKTyHvR7o4RJWcrXGZQkU=;
+        b=VfUuCTGPMZ7byyHMrwsNQucjOo9GDsDcC4cfJ59TDDBz9Opqbl9b/4ABzLsnnfAzbX
+         npdZ5ynyVAB6JDcyWWC2P15oVro1tlhgYWc2PIiToqNMHcKNRhFh36DrSrb01gM+Oqy5
+         SvjjkIfWZDQhyBnzx2Avzh8qdMbaBDUsbSmiFZiOID9N3tvLFTDnH/fHhUJWsFPoZdoX
+         NHzQ1NUAHLPX/96ybm+V+luFz0f8s7TKB4pSVobBgM8bV+UGPEPi94Ot3z74+jfQGR0j
+         LJ289Tl7F4MFBjdWThjegZzjwlyBWVlt0UAlqtXx2L7wIxF0tWVazqpWh/OGEjz4ji8+
+         hBbg==
+X-Gm-Message-State: ACrzQf0yp73dQx8dYx3tsGTWjkm1eQfwu3j/tmX3+SJluSX4oBOVmx+x
+        J1UVZ/TQrGd4LwtkS/vtYfoyi8LbgznMQw==
+X-Google-Smtp-Source: AMsMyM7d99LemBFqXDxntepB+7QSAXMsS8Pfy69BL364aDonu9tJKmxPkwjshE8Dw5sA2cEYGpBjvQ==
+X-Received: by 2002:a05:6512:1108:b0:4a2:504f:b3f with SMTP id l8-20020a056512110800b004a2504f0b3fmr10980794lfg.169.1667469131064;
+        Thu, 03 Nov 2022 02:52:11 -0700 (PDT)
+Received: from elroy-temp-vm ([20.240.130.248])
+        by smtp.gmail.com with ESMTPSA id x26-20020a05651c105a00b002770eafaafbsm30792ljm.99.2022.11.03.02.52.10
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 02:52:10 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 09:52:10 +0000
+From:   Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+To:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Subject: [PATCH] staging: vt6655: change the function name s_vFillRTSHead
+Message-ID: <Y2OPStg4jXtWpJcd@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v3 4/5] arm64: dts: mediatek: asurada: Enable audio
- support
-Content-Language: en-US
-To:     =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= 
-        <nfraprado@collabora.com>,
-        Matthias Brugger <matthias.bgg@gmail.com>
-Cc:     kernel@collabora.com, Chen-Yu Tsai <wenst@chromium.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>, devicetree@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
-        linux-mediatek@lists.infradead.org
-References: <20221102190611.283546-1-nfraprado@collabora.com>
- <20221102190611.283546-5-nfraprado@collabora.com>
-From:   AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>
-In-Reply-To: <20221102190611.283546-5-nfraprado@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Il 02/11/22 20:06, Nícolas F. R. A. Prado ha scritto:
-> Enable audio support for the Asurada platform. This consists of the
-> machine sound card, the rt1015p codec for the speakers, the rt5682 codec
-> for the headset, and the dmic codec for the internal microphone.
-> 
-> Newer revisions of spherion and hayato use the rt5682s codec for the
-> headset instead, so the codecs and card compatible are added through
-> separate dtsi files to prepare for that.
-> 
-> HDMI audio support is left out for now since the DisplayPort chip
-> required isn't enabled yet.
-> 
-> Tested-by: Chen-Yu Tsai <wenst@chromium.org>
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Remove the use of Hungarian notation, which is not used in the Linux
+kernel. Reported by checkpatch
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Fix checkpatch error related to code line ends with a '(', by joining
+some lines and indenting correctly. This improves visibility
 
+Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+---
+ drivers/staging/vt6655/rxtx.c | 48 ++++++++++++++++-------------------
+ 1 file changed, 22 insertions(+), 26 deletions(-)
+
+diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+index 31ae99b3cb35..debc5d5daede 100644
+--- a/drivers/staging/vt6655/rxtx.c
++++ b/drivers/staging/vt6655/rxtx.c
+@@ -23,7 +23,7 @@
+  *      s_uGetTxRsvTime- get frame reserved time
+  *      s_vFillCTSHead- fulfill CTS ctl header
+  *      s_vFillFragParameter- Set fragment ctl parameter.
+- *      s_vFillRTSHead- fulfill RTS ctl header
++ *      fill_rts_header- fulfill RTS ctl header
+  *      s_vFillTxKey- fulfill tx encrypt key
+  *      s_vSWencryption- Software encrypt header
+  *      vDMA0_tx_80211- tx 802.11 frame via dma0
+@@ -85,15 +85,15 @@ static const unsigned short fb_opt1[2][5] = {
+ #define DATADUR_A_F1    13
+ 
+ /*---------------------  Static Functions  --------------------------*/
+-static void s_vFillRTSHead(struct vnt_private *pDevice,
+-			   unsigned char byPktType,
+-			   void *pvRTS,
+-			   unsigned int	cbFrameLength,
+-			   bool bNeedAck,
+-			   bool bDisCRC,
+-			   struct ieee80211_hdr *hdr,
+-			   unsigned short wCurrentRate,
+-			   unsigned char byFBOption);
++static void fill_rts_header(struct vnt_private *pDevice,
++			    unsigned char byPktType,
++			    void *pvRTS,
++			    unsigned int	cbFrameLength,
++			    bool bNeedAck,
++			    bool bDisCRC,
++			    struct ieee80211_hdr *hdr,
++			    unsigned short wCurrentRate,
++			    unsigned char byFBOption);
+ 
+ static void s_vGenerateTxParameter(struct vnt_private *pDevice,
+ 				   unsigned char byPktType,
+@@ -555,19 +555,15 @@ s_uFillDataHead(
+ 	return buf->duration;
+ }
+ 
+-static
+-void
+-s_vFillRTSHead(
+-	struct vnt_private *pDevice,
+-	unsigned char byPktType,
+-	void *pvRTS,
+-	unsigned int cbFrameLength,
+-	bool bNeedAck,
+-	bool bDisCRC,
+-	struct ieee80211_hdr *hdr,
+-	unsigned short wCurrentRate,
+-	unsigned char byFBOption
+-)
++static void fill_rts_header(struct vnt_private *pDevice,
++			    unsigned char byPktType,
++			    void *pvRTS,
++			    unsigned int cbFrameLength,
++			    bool bNeedAck,
++			    bool bDisCRC,
++			    struct ieee80211_hdr *hdr,
++			    unsigned short wCurrentRate,
++			    unsigned char byFBOption)
+ {
+ 	unsigned int uRTSFrameLen = 20;
+ 
+@@ -912,7 +908,7 @@ s_vGenerateTxParameter(
+ 			buf->rrv_time_a = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+ 			buf->rrv_time_b = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, pDevice->byTopCCKBasicRate, bNeedACK);
+ 
+-			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
++			fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+ 		} else {/* RTS_needless, PCF mode */
+ 			struct vnt_rrv_time_cts *buf = pvRrvTime;
+ 
+@@ -931,7 +927,7 @@ s_vGenerateTxParameter(
+ 			buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+ 
+ 			/* Fill RTS */
+-			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
++			fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+ 		} else if (!pvRTS) {/* RTS_needless, non PCF mode */
+ 			struct vnt_rrv_time_ab *buf = pvRrvTime;
+ 
+@@ -945,7 +941,7 @@ s_vGenerateTxParameter(
+ 			buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, wCurrentRate, bNeedACK);
+ 
+ 			/* Fill RTS */
+-			s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
++			fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+ 		} else { /* RTS_needless, non PCF mode */
+ 			struct vnt_rrv_time_ab *buf = pvRrvTime;
+ 
+-- 
+2.34.1
 
