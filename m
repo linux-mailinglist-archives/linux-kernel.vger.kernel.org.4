@@ -2,97 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2B8E4618692
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:48:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4F49D618693
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:49:01 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231955AbiKCRsx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 13:48:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55320 "EHLO
+        id S231996AbiKCRs4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 13:48:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55336 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231715AbiKCRsU (ORCPT
+        with ESMTP id S231570AbiKCRsY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:48:20 -0400
-Received: from mail-pf1-x449.google.com (mail-pf1-x449.google.com [IPv6:2607:f8b0:4864:20::449])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9F0A1C13C
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:47:51 -0700 (PDT)
-Received: by mail-pf1-x449.google.com with SMTP id cw4-20020a056a00450400b00561ec04e77aso1059765pfb.12
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:47:51 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=8f8dJb7CmxUii0k7ReZbO/xecf8YvrxT0ueHHyma1BU=;
-        b=D28rs6T8OGKqTwv+0w2tiy+Wo2uFgszomXWqOdz4bK8oHd/bxnx+ygDF11Merktoeh
-         W0x/tTWAy+1K4R3PBvAmW6StBWEh4cu44wlQ5LyUHpThEqN8JyKhrY2ReJcTBvWxXctN
-         c7p7B7aknkrGsUM+sQ8VoC51Ja99SE9d0zKTb0LZRMMyqsZV+Hcc3tWGzdC8Cx4BaYXj
-         Q9CwKe+1CpuIX73dKrvuIkNUu0j8EPQ5Pg5VIsESR4Ixa3K6vFdcHCYbaKvgxXFV59jb
-         j2jy2YJh6CyY4ElDHkYBrbjJLVuqzKlskpFuivE9C34VpXsmDwdCPXTY88fXmz/gLC1t
-         qn0g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8f8dJb7CmxUii0k7ReZbO/xecf8YvrxT0ueHHyma1BU=;
-        b=kN7ojaO2P9aOiDsaJUU8rY0vAmrlWchd3/l5/MujteGT3y90MuMR61m+Rj5W6EOrTH
-         m3zKZOLy7YZpZp3dbRyYHvmvn5oeqZbxkipiV4bODLgD9UOcCJRCB5KQGvGa652X/dNK
-         /Z14/YVoR0rr1cXhwxRfu3ZOkAdXkZYKR2j4XBS0SIxa5bioUS9KOLfQhmaYrm+VU+eG
-         5DajP7SBMHwe+AqTYDbyCCWWaqJP2qbghu/+gmv94wnNDcATkjYh0V8g7pnNcWK+Mrwv
-         0KEMMW5U9G1fh6oBPzpLO0ZLb69ABA1FVmkyZNjFjZNVFTN3/qtWS4XVYM3mo+cBhB5L
-         tjvw==
-X-Gm-Message-State: ACrzQf01m6fXaWKZo8XGVMpZupnmVqCeNpsIHMTS3tmXdGR2mJu5r2pQ
-        lkFBcYRAuqu39kWv3JnACpmz8J+yS8S3jg==
-X-Google-Smtp-Source: AMsMyM4Ls8UcrKSslT8x5WlYpTRZIayBCz8AJvQ97WsPxMXWt4gyd0VthhQSDtdpv7NGJeGnmrzlzFFtJYNjTA==
-X-Received: from dlatypov-spec.c.googlers.com ([fda3:e722:ac3:cc00:24:72f4:c0a8:3f35])
- (user=dlatypov job=sendgmr) by 2002:a17:90b:4c8a:b0:214:2ed8:6501 with SMTP
- id my10-20020a17090b4c8a00b002142ed86501mr9877245pjb.70.1667497671335; Thu,
- 03 Nov 2022 10:47:51 -0700 (PDT)
-Date:   Thu,  3 Nov 2022 10:47:40 -0700
-In-Reply-To: <20221103174740.3492603-1-dlatypov@google.com>
-Mime-Version: 1.0
-References: <20221103174740.3492603-1-dlatypov@google.com>
-X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
-Message-ID: <20221103174740.3492603-3-dlatypov@google.com>
-Subject: [PATCH v2 3/3] kunit: tool: remove redundant file.close() call in
- unit test
-From:   Daniel Latypov <dlatypov@google.com>
-To:     brendanhiggins@google.com, davidgow@google.com
-Cc:     rmoar@google.com, linux-kernel@vger.kernel.org,
-        kunit-dev@googlegroups.com, linux-kselftest@vger.kernel.org,
-        skhan@linuxfoundation.org, Daniel Latypov <dlatypov@google.com>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 3 Nov 2022 13:48:24 -0400
+Received: from lelv0143.ext.ti.com (lelv0143.ext.ti.com [198.47.23.248])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 632281D665;
+        Thu,  3 Nov 2022 10:47:57 -0700 (PDT)
+Received: from fllv0034.itg.ti.com ([10.64.40.246])
+        by lelv0143.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A3HllGr092639;
+        Thu, 3 Nov 2022 12:47:47 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1667497667;
+        bh=SCFoXo6JQqijKivQIzRSBvFg0c19eJmk4BQWe5F8eOc=;
+        h=From:To:CC:Subject:Date;
+        b=oZ7gfnQNeMe3vTwsuWojiWsaY2NM7lOsk4/xKkx8OIkU1O3mi4n7Pbg2YfdhppAec
+         hxs7WPXzTET6bqR+vGmq7uD5kFHgldI2v41QZcZHacuXlO5tzZGM4uY4Z9gzRW6Kj8
+         w5FrdG8z8TBwzc8fkKikuP/rZexKu8Y0mZPlL3MY=
+Received: from DFLE104.ent.ti.com (dfle104.ent.ti.com [10.64.6.25])
+        by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A3HlloX000688
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 3 Nov 2022 12:47:47 -0500
+Received: from DFLE103.ent.ti.com (10.64.6.24) by DFLE104.ent.ti.com
+ (10.64.6.25) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 3 Nov
+ 2022 12:47:47 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE103.ent.ti.com
+ (10.64.6.24) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Thu, 3 Nov 2022 12:47:47 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A3Hlkir120221;
+        Thu, 3 Nov 2022 12:47:47 -0500
+From:   Rahul T R <r-ravikumar@ti.com>
+To:     <nm@ti.com>
+CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <r-ravikumar@ti.com>, <jkridner@gmail.com>
+Subject: [PATCH v7 0/2] Enable RPi header on j721e sk
+Date:   Thu, 3 Nov 2022 23:17:41 +0530
+Message-ID: <20221103174743.16827-1-r-ravikumar@ti.com>
+X-Mailer: git-send-email 2.38.0
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-We're using a `with` block above, so the file object is already closed.
+The following series of patches enables RPi header
+on j721e sk. It is a 40 pin io expasion header which
+brings out i2c5, ehrpwm 2,3 and some pins of gpio 0,1
 
-Signed-off-by: Daniel Latypov <dlatypov@google.com>
-Reviewed-by: David Gow <davidgow@google.com>
----
-v1 -> v2: just rebased onto linux-kselftest/kunit
----
- tools/testing/kunit/kunit_tool_test.py | 2 --
- 1 file changed, 2 deletions(-)
+v7:
+   - Rebased to next-20221103
+   - Move setting status diable to main dtsi
 
-diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
-index 5e3429a1202b..90c65b072be9 100755
---- a/tools/testing/kunit/kunit_tool_test.py
-+++ b/tools/testing/kunit/kunit_tool_test.py
-@@ -242,8 +242,6 @@ class KUnitParserTest(unittest.TestCase):
- 		self.assertEqual(
- 			"example",
- 			result.subtests[1].name)
--		file.close()
--
- 
- 	def test_ignores_prefix_printk_time(self):
- 		prefix_log = test_data_path('test_config_printk_time.log')
+v6:
+   - Rebased to 6.1-rc1
+
+v5:
+   - Enable only gpio's and i2c on the RPi Header
+     as per the discussion in the v4
+
+v4:
+   - Correct the node name in dt binding example
+
+v3:
+   - Change node name from clock to clock-controller
+   - Add correct description for clock-controller node
+
+v2:
+   - Add full path for clock property $ref
+   - Remove the discription for clock pattern property,
+     since $ref is added
+   - Remove the label in the example
+   - Fix the indentation in the example
+
+Rahul T R (1):
+  arm64: dts: ti: k3-j721e-sk: Add pinmux for RPi Header
+
+Vijay Pothukuchi (1):
+  arm64: dts: ti: k3-j721e-main: Add dts nodes for EHRPWMs
+
+ arch/arm64/boot/dts/ti/k3-j721e-main.dtsi | 68 ++++++++++++++++++++++-
+ arch/arm64/boot/dts/ti/k3-j721e-sk.dts    | 59 ++++++++++++++++++++
+ 2 files changed, 126 insertions(+), 1 deletion(-)
+
 -- 
-2.38.1.431.g37b22c650d-goog
+2.38.0
 
