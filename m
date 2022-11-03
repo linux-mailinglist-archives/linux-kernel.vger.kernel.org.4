@@ -2,109 +2,220 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5A8EE6183B2
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:06:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4CF366183B4
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:07:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231983AbiKCQGq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 12:06:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36702 "EHLO
+        id S231476AbiKCQHH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 12:07:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36656 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230421AbiKCQGX (ORCPT
+        with ESMTP id S231707AbiKCQGb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 12:06:23 -0400
-Received: from mail-qv1-xf35.google.com (mail-qv1-xf35.google.com [IPv6:2607:f8b0:4864:20::f35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0AE3F1B1D5
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 09:03:59 -0700 (PDT)
-Received: by mail-qv1-xf35.google.com with SMTP id c8so1413583qvn.10
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 09:03:58 -0700 (PDT)
+        Thu, 3 Nov 2022 12:06:31 -0400
+Received: from mail-qk1-x730.google.com (mail-qk1-x730.google.com [IPv6:2607:f8b0:4864:20::730])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 80BB91BEBE
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 09:04:32 -0700 (PDT)
+Received: by mail-qk1-x730.google.com with SMTP id z1so1417299qkl.9
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 09:04:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=yKMpDhiUu/M7O0O5bkHOuOa6eYOMJH/4iBj4qwPMl7Y=;
-        b=sbL6SBVeknWERt/ChyeC5xi8UZm/BhelfxrCWszU3t2KiEM9cN6xBZnpnE46zBJmCS
-         UOIO2RW9QmZd8roO1mgvZLXsSFEdfkbyswDEib/+g2dI1iOH5P5ueaKjHjVuB50gAO1h
-         6BdAbqyQUZI4/XXBikqYvTIDZNepjhPoKkPoKGLLhLpFtdM1saQf+Nd5b3w+gWMlWWDk
-         Guc6YdiFwLeTGog7HeKBuARVibkdAQBpxbZQ9AyhJBkzC9tmL70GxbXiqqajzJ7pYbU1
-         iwBbm4+jU0BHwEjMICJHU9+f6kYRY6kqujF1jvv3/aQLxPEINogM2Ms0s5iX8p/zC8Nc
-         q3cw==
+        d=gmail.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=9/87SyahHYbwSlH02JkGLaqw/hD9Qaz9v7IraDvo2ww=;
+        b=ELoiMFdakhbNbTC1cHNfG45HwjrFEEjem7lpCB2r9zq6dXhS1OcQWWkrEhklosjeVT
+         CgH3WQQKCRJkHDSY4bbmiFJ+Ggn+BAbh5vHqQYHtZRmZBOIq+AZHBAmbMAurPUS4Sn8k
+         qM79nmY2V8E+K57rJPtl3W8FmoWtgxa0lr6DCplfFXf9ndtrm7OAwlN2c+b4ea6+uszg
+         N5lbbEp0igCMNWKAIxyspSN+wHxtDKDSguubPgkFRCu4Fj88u26vnlh9sZ2ZCCtRnhdS
+         yXrvF5lFJ+A2aJLaddDZxNlzg1/CGbhmPGk7BexEFywdoG/OXFJrLYMh5x/WLqQl2AEY
+         01RA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=yKMpDhiUu/M7O0O5bkHOuOa6eYOMJH/4iBj4qwPMl7Y=;
-        b=yyIRg+k/IR965pKvBCfb9eopSnfU2EdBjJ96TFMc/ctg2+11SjhG11KsxJ+q+6PKKw
-         WP9QqtwxVXTztm35bjNcbMMY1strlEZgGSdLvtDCC6rdg597eb7a9qVxKTbj5BZW67Bg
-         aTD5/3+Cl6FOLkGy2JJTbHUUn2OgYjS19qH9tbLgRYJjTHnE+sAMZQvqGYT1AVy2nfDd
-         hWiPUBADPyvWZsVCbMQCrLFCGAbj52O8ccwxHSH+Wk3EJc4xNoUgPlJSbONAtx6VdEd6
-         h8oHiObUfR15SL5q8+HZ2Ba7k7XQHv/1XU/Z1eM462TNwJNdIyU1PBwd1VE84G44Jv/G
-         papA==
-X-Gm-Message-State: ACrzQf1SPQu3LwyNFyg/PqMMHupqCIPPYo8OcS/OmlCuJYeovNC27ZF+
-        RqqFZfZFWPn+IbDQque0Y1hLCQ==
-X-Google-Smtp-Source: AMsMyM69i5ab1Q7nhLqQaq5bDRNkS2UxjRukihuDyZW5o6eBPkvcCOM6zqEQyHBY8YcOZGQOBrctsQ==
-X-Received: by 2002:a05:6214:2b08:b0:4bb:bd9b:64e9 with SMTP id jx8-20020a0562142b0800b004bbbd9b64e9mr27475391qvb.53.1667491438075;
-        Thu, 03 Nov 2022 09:03:58 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
-        by smtp.gmail.com with ESMTPSA id d2-20020ac85442000000b003a526675c07sm718519qtq.52.2022.11.03.09.03.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 09:03:57 -0700 (PDT)
-Message-ID: <a4a52f69-81e9-c4a7-011b-8d79ac519cc8@linaro.org>
-Date:   Thu, 3 Nov 2022 12:03:56 -0400
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=9/87SyahHYbwSlH02JkGLaqw/hD9Qaz9v7IraDvo2ww=;
+        b=0v/d8w7SganKF4acX0aDbi6YMVC9BASNZJDqGr+tP7G/ieXWu5IsfwUcCBoLOdbp8U
+         9xZ51gBYxyp41p1vukrzxy0rggFqFx03Hi7NKk+rgjCk9LCuSuKMQ+Nk8orC/JxGFOYT
+         PXqG5GtxNcW5djMymH0ecK/qX1BAyxzSdHGXb0jkLqyxKEloC4Cl6EbvPgyz/Cvv4Odu
+         toVQwXdK90XVSAPjzMj9goAi4X+e2CAtMhMcHzRoeFlun02J8kvyd0h7NeevEvUdAkcM
+         IWDFKYNdnkZWyYpsPLEfDecb6IX+xhwWHtJBOr72vBb4MNtZLeybLa4NXJQIXS/+3OyQ
+         kD6A==
+X-Gm-Message-State: ACrzQf1UJLmTXo2HKm7mmBBbEhz2BSRuY+aKDOkxTVEQBibVsu9wd4Bf
+        HgXzj4J3ItbHwZz2+FmwyDNRwSN6r/O2DExqWVE=
+X-Google-Smtp-Source: AMsMyM6oRvykHakM/P+2nGCwq8RlP2uIkk28WR2QG88XNSPxT6pMfLOrWp3E+jx0X4MZpBQECLAkCPtce/rBfUVJQVk=
+X-Received: by 2002:a05:620a:22c3:b0:6ec:53bb:d296 with SMTP id
+ o3-20020a05620a22c300b006ec53bbd296mr22615839qki.158.1667491471546; Thu, 03
+ Nov 2022 09:04:31 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH v7 1/2] dt-bindings: it6505: add properties to restrict
- output bandwidth
-Content-Language: en-US
-To:     allen <allen.chen@ite.com.tw>
-Cc:     Jau-Chih Tseng <Jau-Chih.Tseng@ite.com.tw>,
-        Hermes Wu <Hermes.Wu@ite.com.tw>,
-        Kenneth Hung <Kenneth.Hung@ite.com.tw>,
-        Pin-yen Lin <treapking@chromium.org>,
-        Andrzej Hajda <andrzej.hajda@intel.com>,
-        Neil Armstrong <narmstrong@baylibre.com>,
-        Robert Foss <robert.foss@linaro.org>,
-        Laurent Pinchart <Laurent.pinchart@ideasonboard.com>,
-        Jonas Karlman <jonas@kwiboo.se>,
-        Jernej Skrabec <jernej.skrabec@gmail.com>,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        "open list:DRM DRIVERS" <dri-devel@lists.freedesktop.org>,
-        "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" 
-        <devicetree@vger.kernel.org>,
-        open list <linux-kernel@vger.kernel.org>
-References: <20221103091243.96036-1-allen.chen@ite.com.tw>
- <20221103091243.96036-2-allen.chen@ite.com.tw>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221103091243.96036-2-allen.chen@ite.com.tw>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+References: <Y2OPStg4jXtWpJcd@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+ <d0d6d613-174b-f7dd-7d45-45eecd26a850@inria.fr> <CAHJEyKUA4FG468S5bMsx+XGUR3pB3kKm_bx=LNPNJ6n9yPxCrQ@mail.gmail.com>
+ <612f7cf-43db-a684-7a98-8469275b43fd@inria.fr>
+In-Reply-To: <612f7cf-43db-a684-7a98-8469275b43fd@inria.fr>
+From:   Tanju Brunostar <tanjubrunostar0@gmail.com>
+Date:   Thu, 3 Nov 2022 17:04:18 +0100
+Message-ID: <CAHJEyKXL=u=7tH2O3tdeSBZHyXLAdP9JcfzKHy6-bc7Bju5NMQ@mail.gmail.com>
+Subject: Re: [PATCH] staging: vt6655: change the function name s_vFillRTSHead
+To:     Julia Lawall <julia.lawall@inria.fr>
+Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/11/2022 05:12, allen wrote:
-> From: allen chen <allen.chen@ite.com.tw>
-> 
-> Currently there are no "upstream" users. So, no existing users to break.
-> Add properties to restrict dp output data-lanes and clock.
-> 
-> Signed-off-by: Pin-Yen Lin <treapking@chromium.org>
-> Signed-off-by: Allen Chen <allen.chen@ite.com.tw>
-
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
-Best regards,
-Krzysztof
-
+On Thu, Nov 3, 2022 at 4:58 PM Julia Lawall <julia.lawall@inria.fr> wrote:
+>
+>
+>
+> On Thu, 3 Nov 2022, Tanju Brunostar wrote:
+>
+> > On Thu, Nov 3, 2022 at 1:38 PM Julia Lawall <julia.lawall@inria.fr> wrote:
+> > >
+> > >
+> > >
+> > > On Thu, 3 Nov 2022, Tanjuate Brunostar wrote:
+> > >
+> > > > Remove the use of Hungarian notation, which is not used in the Linux
+> > > > kernel. Reported by checkpatch
+> > > >
+> > > > Fix checkpatch error related to code line ends with a '(', by joining
+> > > > some lines and indenting correctly. This improves visibility
+> > >
+> > > I don't think it will be appreciated to do two things at once.
+> > >
+> >
+> > I sent it earlier as two patches but it seemed to break and fix the
+> > kernel which was not appreciated by one of the mentors
+>
+> OK, then it is a presentation problem.  You have presented the changes as
+> unrelated.  Rewrite the message to make clear what is being done.
+>
+> julia
+>
+okay
+> >
+> > > >
+> > > > Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+> > > > ---
+> > > >  drivers/staging/vt6655/rxtx.c | 48 ++++++++++++++++-------------------
+> > > >  1 file changed, 22 insertions(+), 26 deletions(-)
+> > > >
+> > > > diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
+> > > > index 31ae99b3cb35..debc5d5daede 100644
+> > > > --- a/drivers/staging/vt6655/rxtx.c
+> > > > +++ b/drivers/staging/vt6655/rxtx.c
+> > > > @@ -23,7 +23,7 @@
+> > > >   *      s_uGetTxRsvTime- get frame reserved time
+> > > >   *      s_vFillCTSHead- fulfill CTS ctl header
+> > > >   *      s_vFillFragParameter- Set fragment ctl parameter.
+> > > > - *      s_vFillRTSHead- fulfill RTS ctl header
+> > > > + *      fill_rts_header- fulfill RTS ctl header
+> > > >   *      s_vFillTxKey- fulfill tx encrypt key
+> > > >   *      s_vSWencryption- Software encrypt header
+> > > >   *      vDMA0_tx_80211- tx 802.11 frame via dma0
+> > > > @@ -85,15 +85,15 @@ static const unsigned short fb_opt1[2][5] = {
+> > > >  #define DATADUR_A_F1    13
+> > > >
+> > > >  /*---------------------  Static Functions  --------------------------*/
+> > > > -static void s_vFillRTSHead(struct vnt_private *pDevice,
+> > > > -                        unsigned char byPktType,
+> > > > -                        void *pvRTS,
+> > > > -                        unsigned int cbFrameLength,
+> > > > -                        bool bNeedAck,
+> > > > -                        bool bDisCRC,
+> > > > -                        struct ieee80211_hdr *hdr,
+> > > > -                        unsigned short wCurrentRate,
+> > > > -                        unsigned char byFBOption);
+> > > > +static void fill_rts_header(struct vnt_private *pDevice,
+> > > > +                         unsigned char byPktType,
+> > > > +                         void *pvRTS,
+> > > > +                         unsigned int        cbFrameLength,
+> > >
+> > > Strange spacing in the above parameter declaration.  Maybe there is a tab
+> > > that should be a space?
+> > >
+> > > julia
+> > >
+> >
+> > I was also shocked when I noticed that. It seemed like a tab but when
+> > I removed the space, the two words were joined and when I added the
+> > space, it became this lage space once again. checkpatch does not
+> > complain about it though
+> >
+> > > > +                         bool bNeedAck,
+> > > > +                         bool bDisCRC,
+> > > > +                         struct ieee80211_hdr *hdr,
+> > > > +                         unsigned short wCurrentRate,
+> > > > +                         unsigned char byFBOption);
+> > > >
+> > > >  static void s_vGenerateTxParameter(struct vnt_private *pDevice,
+> > > >                                  unsigned char byPktType,
+> > > > @@ -555,19 +555,15 @@ s_uFillDataHead(
+> > > >       return buf->duration;
+> > > >  }
+> > > >
+> > > > -static
+> > > > -void
+> > > > -s_vFillRTSHead(
+> > > > -     struct vnt_private *pDevice,
+> > > > -     unsigned char byPktType,
+> > > > -     void *pvRTS,
+> > > > -     unsigned int cbFrameLength,
+> > > > -     bool bNeedAck,
+> > > > -     bool bDisCRC,
+> > > > -     struct ieee80211_hdr *hdr,
+> > > > -     unsigned short wCurrentRate,
+> > > > -     unsigned char byFBOption
+> > > > -)
+> > > > +static void fill_rts_header(struct vnt_private *pDevice,
+> > > > +                         unsigned char byPktType,
+> > > > +                         void *pvRTS,
+> > > > +                         unsigned int cbFrameLength,
+> > > > +                         bool bNeedAck,
+> > > > +                         bool bDisCRC,
+> > > > +                         struct ieee80211_hdr *hdr,
+> > > > +                         unsigned short wCurrentRate,
+> > > > +                         unsigned char byFBOption)
+> > > >  {
+> > > >       unsigned int uRTSFrameLen = 20;
+> > > >
+> > > > @@ -912,7 +908,7 @@ s_vGenerateTxParameter(
+> > > >                       buf->rrv_time_a = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+> > > >                       buf->rrv_time_b = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, pDevice->byTopCCKBasicRate, bNeedACK);
+> > > >
+> > > > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > > > +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > > >               } else {/* RTS_needless, PCF mode */
+> > > >                       struct vnt_rrv_time_cts *buf = pvRrvTime;
+> > > >
+> > > > @@ -931,7 +927,7 @@ s_vGenerateTxParameter(
+> > > >                       buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, byPktType, cbFrameSize, wCurrentRate, bNeedACK);
+> > > >
+> > > >                       /* Fill RTS */
+> > > > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > > > +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > > >               } else if (!pvRTS) {/* RTS_needless, non PCF mode */
+> > > >                       struct vnt_rrv_time_ab *buf = pvRrvTime;
+> > > >
+> > > > @@ -945,7 +941,7 @@ s_vGenerateTxParameter(
+> > > >                       buf->rrv_time = vnt_rxtx_rsvtime_le16(pDevice, PK_TYPE_11B, cbFrameSize, wCurrentRate, bNeedACK);
+> > > >
+> > > >                       /* Fill RTS */
+> > > > -                     s_vFillRTSHead(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > > > +                     fill_rts_header(pDevice, byPktType, pvRTS, cbFrameSize, bNeedACK, bDisCRC, psEthHeader, wCurrentRate, byFBOption);
+> > > >               } else { /* RTS_needless, non PCF mode */
+> > > >                       struct vnt_rrv_time_ab *buf = pvRrvTime;
+> > > >
+> > > > --
+> > > > 2.34.1
+> > > >
+> > > >
+> > > >
+> >
+>
