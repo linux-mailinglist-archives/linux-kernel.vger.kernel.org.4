@@ -2,292 +2,243 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D2BCE617B63
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 12:14:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F223A617B67
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 12:16:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229863AbiKCLOu (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 07:14:50 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40270 "EHLO
+        id S229547AbiKCLQC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 07:16:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40630 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229450AbiKCLOr (ORCPT
+        with ESMTP id S229485AbiKCLP6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 07:14:47 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C409ECE1A
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 04:13:52 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667474032;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=grQuoVZO8/uFM5eFofAPEbGhKa2a6nKBUUr6rFmURGw=;
-        b=dMYQhFwwO3CF+88s3AX+fd4Qfwa6Un9p4AhUBLOm27YDpgyDYV57OZ70xwYic9FfIAkV39
-        60iznfXW3uGaWJU3YTE3vIyhv17I8kIKVKFEkwhBQXjOdqVtzrWrDaLLvf6/Js90lrS3sf
-        dSUGEKmiwkgrI7PIaiRrCZ+h0gwUlmI=
-Received: from mimecast-mx02.redhat.com (mimecast-mx02.redhat.com
- [66.187.233.88]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-119-H6DVQeL7PdCV2PIbFsJ0Vg-1; Thu, 03 Nov 2022 07:13:50 -0400
-X-MC-Unique: H6DVQeL7PdCV2PIbFsJ0Vg-1
-Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 7FEFA801231;
-        Thu,  3 Nov 2022 11:13:50 +0000 (UTC)
-Received: from gerbillo.redhat.com (unknown [10.39.192.246])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id 6D6044A9254;
-        Thu,  3 Nov 2022 11:13:49 +0000 (UTC)
-From:   Paolo Abeni <pabeni@redhat.com>
-To:     torvalds@linux-foundation.org
-Cc:     kuba@kernel.org, davem@davemloft.net, netdev@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [GIT PULL] Networking for 6.1-rc4
-Date:   Thu,  3 Nov 2022 12:13:03 +0100
-Message-Id: <20221103111303.57385-1-pabeni@redhat.com>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
-        autolearn_force=no version=3.4.6
+        Thu, 3 Nov 2022 07:15:58 -0400
+Received: from wout2-smtp.messagingengine.com (wout2-smtp.messagingengine.com [64.147.123.25])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A0BC0CE1A;
+        Thu,  3 Nov 2022 04:15:54 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 0CD713200A5F;
+        Thu,  3 Nov 2022 07:15:51 -0400 (EDT)
+Received: from imap46 ([10.202.2.96])
+  by compute5.internal (MEProxy); Thu, 03 Nov 2022 07:15:52 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com.au;
+         h=cc:cc:content-type:date:date:from:from:in-reply-to
+        :in-reply-to:message-id:mime-version:references:reply-to:sender
+        :subject:subject:to:to; s=fm3; t=1667474151; x=1667560551; bh=zy
+        B+zszBgBm3K/aStLXUgTea1eyb+dWbZii+A4olXKY=; b=F/Y15xVLvcPCmli2pd
+        HVBLbgUgtuKvTP+LIxpLQr1zKLf336lyMDijyPn//mHybphiZwmt7vBvrUjJPAb/
+        RF90k7pFRf8xD21xh4Oc7A6v9e9gVQ5bUIdO7A07YP3A225myR7kaApUUy/wIWZJ
+        x5A+Z0zItQHVrzfxgDjfE/pUX+RiDwNMrsocWet/wbFvU4aU96pHObRQELTULTXV
+        m2FKrWtRsBh6gpo24Jk9F1mO7veDMig60uOy2lsi2SvI0TdxtSlHnOwIpWGQzTKq
+        iHtAP2UJlwirQW6eDgR2bxPt02AArOXwkGuCeQwC1SsVDewv+qG+rQxs1q/kv7+S
+        +FtA==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-type:date:date:feedback-id
+        :feedback-id:from:from:in-reply-to:in-reply-to:message-id
+        :mime-version:references:reply-to:sender:subject:subject:to:to
+        :x-me-proxy:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+        fm3; t=1667474151; x=1667560551; bh=zyB+zszBgBm3K/aStLXUgTea1eyb
+        +dWbZii+A4olXKY=; b=KZG4NZKAnFhMpCQLvC4z5E4pqNzuYvLLYKMo8t9JZtb2
+        JIUoALZCT/NxTpYvUOx8nCsYXnuJsBYeYIOOV59nPFrIjBwm1W9VsyfmF0pRT/5k
+        YopuoUIoLSKrJfIEy2153aGBBwJ9+1qJhjPD12GzR30R1fSD7fxPP3GrrKD3Yv1r
+        4bBfuBS/zac7X5YU/t0JN0UPMfzpHpJBa4mWuuQqEVWCkLi2n47nw/PpxU/XDbFr
+        8/LC9YJgP98DnhWzcdv1e9ILDwyi77f693bob9//SHbNT9hP0oU6NpMPWJXd67CC
+        PZg1JHgNoqj5zEhMTj5hqTzjf52CIxLk7ccjM7xs7w==
+X-ME-Sender: <xms:56JjY6nVgRSiVTzlTBFLnDSq_sQTOH9R22JHyeP5rfe-dSqpdv4dyg>
+    <xme:56JjYx3r_y7wTk7enS-4u0_EF1w3jmMWzoojUxVyv8sx25Ewh7yPl-hW_FdYb5LpA
+    UKubtiqVJw3Swy2dw>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudelgddvtdcutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefofgggkfgjfhffhffvvefutgesthdtredtreertdenucfhrhhomhepfdflohhh
+    nhcuvfhhohhmshhonhdfuceolhhishhtshesjhhohhhnthhhohhmshhonhdrfhgrshhtmh
+    grihhlrdgtohhmrdgruheqnecuggftrfgrthhtvghrnhepjeejfeeilefgfedtkeekfeek
+    ffegleetlefhheekleeggfdttdevveduheettefgnecuffhomhgrihhnpehkvghrnhgvlh
+    drohhrghenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhm
+    pehlihhsthhssehjohhhnhhthhhomhhsohhnrdhfrghsthhmrghilhdrtghomhdrrghu
+X-ME-Proxy: <xmx:56JjY4qBT8yA0_LfG1RK9eHSreqrsHod4bzwzARSyVuQFNQqs3siFg>
+    <xmx:56JjY-mPV8gG3eO8CQsvZaL-5I3qQs7ctSsts-lmuXLdaTbVy9objA>
+    <xmx:56JjY41go-1wE6Oqwd2dNU_3zVUTYZrsrK201KLJ2wYeo0swzXfrEw>
+    <xmx:56JjY1wcwKrOad65IJFCtp1_hsAX03fQmaTK_FEvXLrxRRr0_fyEJg>
+Feedback-ID: if0294502:Fastmail
+Received: by mailuser.nyi.internal (Postfix, from userid 501)
+        id 2BC5C2A20080; Thu,  3 Nov 2022 07:15:51 -0400 (EDT)
+X-Mailer: MessagingEngine.com Webmail Interface
+User-Agent: Cyrus-JMAP/3.7.0-alpha0-1087-g968661d8e1-fm-20221021.001-g968661d8
+Mime-Version: 1.0
+Message-Id: <26ebbed1-0fe9-4af9-8466-65f841d0b382@app.fastmail.com>
+In-Reply-To: <20221103050538.1930758-4-git@johnthomson.fastmail.com.au>
+References: <20221103050538.1930758-1-git@johnthomson.fastmail.com.au>
+ <20221103050538.1930758-4-git@johnthomson.fastmail.com.au>
+Date:   Thu, 03 Nov 2022 11:15:01 +0000
+From:   "John Thomson" <lists@johnthomson.fastmail.com.au>
+To:     "Sergio Paracuellos" <sergio.paracuellos@gmail.com>,
+        =?UTF-8?Q?Ar=C4=B1n=C3=A7_=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        "John Crispin" <john@phrozen.org>,
+        "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [RFC PATCH 3/3] mips: ralink: mt7621: do not use kzalloc too early
+Content-Type: text/plain
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_PASS,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Linus!
+On Thu, 3 Nov 2022, at 05:05, John Thomson wrote:
+> Following commit 6edf2576a6cc ("mm/slub: enable debugging memory wasting
+> of kmalloc") mt7621 failed to boot very early, without showing any
+> console messages.
+> This exposed the pre-existing bug of mt7621.c using kzalloc before normal
+> memory management was available.
+> Prior to this slub change, there existed the unintended protection against
+> "kmem_cache *s" being NULL as slab_pre_alloc_hook() happened to
+> return NULL and bailed out of slab_alloc_node().
+> This allowed mt7621 prom_soc_init to fail in the soc_dev_init kzalloc,
+> but continue booting without this soc device.
+>
+> Console output from a DEBUG_ZBOOT vmlinuz kernel loading,
+> with mm/slub modified to warn on kmem_cache zero or null:
+>
+> zimage at:     80B842A0 810B4BC0
+> Uncompressing Linux at load address 80001000
+> Copy device tree to address  80B80EE0
+> Now, booting the kernel...
+>
+> [    0.000000] Linux version 6.1.0-rc3+ (john@john)
+> (mipsel-buildroot-linux-gnu-gcc.br_real (Buildroot
+> 2021.11-4428-g6b6741b) 12.2.0, GNU ld (GNU Binutils) 2.39) #73 SMP Wed
+>      Nov  2 05:10:01 AEST 2022
+> [    0.000000] ------------[ cut here ]------------
+> [    0.000000] WARNING: CPU: 0 PID: 0 at mm/slub.c:3416
+> kmem_cache_alloc+0x5a4/0x5e8
+> [    0.000000] Modules linked in:
+> [    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 6.1.0-rc3+ #73
+> [    0.000000] Stack : 810fff78 80084d98 00000000 00000004 00000000
+> 00000000 80889d04 80c90000
+> [    0.000000]         80920000 807bd328 8089d368 80923bd3 00000000
+> 00000001 80889cb0 00000000
+> [    0.000000]         00000000 00000000 807bd328 8084bcb1 00000002
+> 00000002 00000001 6d6f4320
+> [    0.000000]         00000000 80c97d3d 80c97d68 fffffffc 807bd328
+> 00000000 00000000 00000000
+> [    0.000000]         00000000 a0000000 80910000 8110a0b4 00000000
+> 00000020 80010000 80010000
+> [    0.000000]         ...
+> [    0.000000] Call Trace:
+> [    0.000000] [<80008260>] show_stack+0x28/0xf0
+> [    0.000000] [<8070c958>] dump_stack_lvl+0x60/0x80
+> [    0.000000] [<8002e184>] __warn+0xc4/0xf8
+> [    0.000000] [<8002e210>] warn_slowpath_fmt+0x58/0xa4
+> [    0.000000] [<801c0fac>] kmem_cache_alloc+0x5a4/0x5e8
+> [    0.000000] [<8092856c>] prom_soc_init+0x1fc/0x2b4
+> [    0.000000] [<80928060>] prom_init+0x44/0xf0
+> [    0.000000] [<80929214>] setup_arch+0x4c/0x6a8
+> [    0.000000] [<809257e0>] start_kernel+0x88/0x7c0
+> [    0.000000]
+> [    0.000000] ---[ end trace 0000000000000000 ]---
+> [    0.000000] SoC Type: MediaTek MT7621 ver:1 eco:3
+> [    0.000000] printk: bootconsole [early0] enabled
+>
+> This early kzalloc was introduced in commit 71b9b5e0130d ("MIPS: ralink:
+> mt7621: introduce 'soc_device' initialization")
+>
+> Link: 
+> https://lore.kernel.org/linux-mm/becf2ac3-2a90-4f3a-96d9-a70f67c66e4a@app.fastmail.com/
+> Signed-off-by: John Thomson <git@johnthomson.fastmail.com.au>
+> ---
+>  arch/mips/ralink/mt7621.c | 14 +++++++++-----
+>  1 file changed, 9 insertions(+), 5 deletions(-)
+>
+> diff --git a/arch/mips/ralink/mt7621.c b/arch/mips/ralink/mt7621.c
+> index f2443b833bc3..836965021d5c 100644
+> --- a/arch/mips/ralink/mt7621.c
+> +++ b/arch/mips/ralink/mt7621.c
+> @@ -25,6 +25,7 @@
+>  #define MT7621_MEM_TEST_PATTERN         0xaa5555aa
+> 
+>  static u32 detect_magic __initdata;
+> +struct ralink_soc_info *soc_info_ptr;
+> 
+>  int pcibios_root_bridge_prepare(struct pci_host_bridge *bridge)
+>  {
+> @@ -147,27 +148,30 @@ static const char __init *mt7621_get_soc_revision(void)
+>  		return "E1";
+>  }
+> 
+> -static void soc_dev_init(struct ralink_soc_info *soc_info)
+> +static int __init mt7621_soc_dev_init(void)
+>  {
+>  	struct soc_device *soc_dev;
+>  	struct soc_device_attribute *soc_dev_attr;
+> 
+>  	soc_dev_attr = kzalloc(sizeof(*soc_dev_attr), GFP_KERNEL);
+>  	if (!soc_dev_attr)
+> -		return;
+> +		return -ENOMEM;
+> 
+>  	soc_dev_attr->soc_id = "mt7621";
+>  	soc_dev_attr->family = "Ralink";
+>  	soc_dev_attr->revision = mt7621_get_soc_revision();
+> 
+> -	soc_dev_attr->data = soc_info;
+> +	soc_dev_attr->data = soc_info_ptr;
+> 
+>  	soc_dev = soc_device_register(soc_dev_attr);
+>  	if (IS_ERR(soc_dev)) {
+>  		kfree(soc_dev_attr);
+> -		return;
+> +		return PTR_ERR(soc_dev);
+>  	}
+> +
+> +	return 0;
+>  }
+> +device_initcall(mt7621_soc_dev_init);
+> 
+>  void __init prom_soc_init(struct ralink_soc_info *soc_info)
+>  {
+> @@ -209,7 +213,7 @@ void __init prom_soc_init(struct ralink_soc_info *soc_info)
+> 
+>  	soc_info->mem_detect = mt7621_memory_detect;
+> 
+> -	soc_dev_init(soc_info);
+> +	soc_info_ptr = soc_info;
+> 
+>  	if (!register_cps_smp_ops())
+>  		return;
+> -- 
+> 2.37.2
 
-The following changes since commit 23758867219c8d84c8363316e6dd2f9fd7ae3049:
+I backported this to kernel 5.10 as a test
+without it, there was no /sys/bus/soc
+with it, the drivers/staging/mt7621-pci-phy/pci-mt7621-phy.c driver
+panicked in soc_device_match_attr
+This was fixed with an added sentinel element in the quirk table:
+--- a/drivers/staging/mt7621-pci-phy/pci-mt7621-phy.c
++++ b/drivers/staging/mt7621-pci-phy/pci-mt7621-phy.c
+@@ -293,7 +293,8 @@ static struct phy *mt7621_pcie_phy_of_xlate(struct device *d
+ev,
+ }
+ 
+ static const struct soc_device_attribute mt7621_pci_quirks_match[] = {
+-       { .soc_id = "mt7621", .revision = "E2" }
++       { .soc_id = "mt7621", .revision = "E2" },
++       { /* sentinel */ }
+ };
+ 
+ static const struct regmap_config mt7621_pci_phy_regmap_config = {
 
-  Merge tag 'net-6.1-rc3-2' of git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net (2022-10-27 13:36:59 -0700)
+There is the same quirk table to kernel 5.15 in drivers/staging/mt7621-pci/pci-mt7621.c
+Should I add commits for these for the stable kernels?
 
-are available in the Git repository at:
+In master, these files are now
+drivers/pci/controller/pcie-mt7621.c
+drivers/phy/ralink/phy-mt7621-pci.c
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/netdev/net.git tags/net-6.1-rc4
+Should I add sentinels to the soc_device_attribute quirk tables in all of these files?
 
-for you to fetch changes up to 715aee0fde73d5ebac58e2339cef14f2da42e9e3:
-
-  Merge branch 'vsock-remove-an-unused-variable-and-fix-infinite-sleep' (2022-11-03 10:49:32 +0100)
-
-----------------------------------------------------------------
-Networking fixes for 6.1-rc4, including fixes from bluetooth and
-netfilter.
-
-Current release - regressions:
-
-  - net: several zerocopy flags fixes
-
-  - netfilter: fix possible memory leak in nf_nat_init()
-
-  - openvswitch: add missing .resv_start_op
-
-Previous releases - regressions:
-
-  - neigh: fix null-ptr-deref in neigh_table_clear()
-
-  - sched: fix use after free in red_enqueue()
-
-  - dsa: fall back to default tagger if we can't load the one from DT
-
-  - bluetooth: fix use-after-free in l2cap_conn_del()
-
-Previous releases - always broken:
-
-  - netfilter: netlink notifier might race to release objects
-
-  - nfc: fix potential memory leak of skb
-
-  - bluetooth: fix use-after-free caused by l2cap_reassemble_sdu
-
-  - bluetooth: use skb_put to set length
-
-  - eth: tun: fix bugs for oversize packet when napi frags enabled
-
-  - eth: lan966x: fixes for when MTU is changed
-
-  - eth: dwmac-loongson: fix invalid mdio_node
-
-----------------------------------------------------------------
-Alexandru Tachici (1):
-      net: ethernet: adi: adin1110: Fix notifiers
-
-Chen Zhongjin (4):
-      net: dsa: Fix possible memory leaks in dsa_loop_init()
-      netfilter: nf_nat: Fix possible memory leak in nf_nat_init()
-      net/smc: Fix possible leaked pernet namespace in smc_init()
-      net, neigh: Fix null-ptr-deref in neigh_table_clear()
-
-Christophe JAILLET (1):
-      sfc: Fix an error handling path in efx_pci_probe()
-
-Dan Carpenter (1):
-      net: sched: Fix use after free in red_enqueue()
-
-David S. Miller (2):
-      Merge branch 'nfc-skb-leaks'
-      Merge branch 'misdn-fixes'
-
-Dexuan Cui (2):
-      vsock: remove the unused 'wait' in vsock_connectible_recvmsg()
-      vsock: fix possible infinite sleep in vsock_connectible_wait_data()
-
-Florian Westphal (1):
-      netlink: introduce bigendian integer types
-
-Gaosheng Cui (1):
-      net: mdio: fix undefined behavior in bit shift for __mdiobus_register
-
-Govindarajulu Varadarajan (1):
-      enic: MAINTAINERS: Update enic maintainers
-
-Hawkins Jiawei (1):
-      Bluetooth: L2CAP: Fix memory leak in vhci_write
-
-Horatiu Vultur (4):
-      net: lan966x: Fix the MTU calculation
-      net: lan966x: Adjust maximum frame size when vlan is enabled/disabled
-      net: lan966x: Fix FDMA when MTU is changed
-      net: lan966x: Fix unmapping of received frames using FDMA
-
-Ido Schimmel (1):
-      bridge: Fix flushing of dynamic FDB entries
-
-Jakub Kicinski (6):
-      netlink: hide validation union fields from kdoc
-      net: openvswitch: add missing .resv_start_op
-      Merge branch 'a-few-corrections-for-sock_support_zc'
-      Merge branch 'net-lan966x-fixes-for-when-mtu-is-changed'
-      Merge tag 'for-net-2022-10-02' of git://git.kernel.org/pub/scm/linux/kernel/git/bluetooth/bluetooth
-      Merge git://git.kernel.org/pub/scm/linux/kernel/git/netfilter/nf
-
-Jason A. Donenfeld (1):
-      ipvs: use explicitly signed chars
-
-Jozsef Kadlecsik (1):
-      netfilter: ipset: enforce documented limit to prevent allocating huge memory
-
-Liu Peibao (1):
-      stmmac: dwmac-loongson: fix invalid mdio_node
-
-Luiz Augusto von Dentz (4):
-      Bluetooth: hci_conn: Fix not restoring ISO buffer count on disconnect
-      Bluetooth: L2CAP: Fix accepting connection request for invalid SPSM
-      Bluetooth: L2CAP: Fix l2cap_global_chan_by_psm
-      Bluetooth: L2CAP: Fix attempting to access uninitialized memory
-
-Maxim Mikityanskiy (1):
-      Bluetooth: L2CAP: Fix use-after-free caused by l2cap_reassemble_sdu
-
-Nick Child (1):
-      ibmvnic: Free rwi on reset success
-
-Pablo Neira Ayuso (2):
-      netfilter: nf_tables: netlink notifier might race to release objects
-      netfilter: nf_tables: release flow rule object from commit path
-
-Paolo Abeni (1):
-      Merge branch 'vsock-remove-an-unused-variable-and-fix-infinite-sleep'
-
-Pauli Virtanen (1):
-      Bluetooth: hci_conn: Fix CIS connection dst_type handling
-
-Pavel Begunkov (3):
-      udp: advertise ipv6 udp support for msghdr::ubuf_info
-      net: remove SOCK_SUPPORT_ZC from sockmap
-      net/ulp: remove SOCK_SUPPORT_ZC from tls sockets
-
-Radhey Shyam Pandey (1):
-      net: emaclite: update reset_lock member documentation
-
-Rick Lindsley (1):
-      ibmvnic: change maintainers for vnic driver
-
-Shang XiaoJing (4):
-      nfc: fdp: Fix potential memory leak in fdp_nci_send()
-      nfc: nxp-nci: Fix potential memory leak in nxp_nci_send()
-      nfc: s3fwrn5: Fix potential memory leak in s3fwrn5_nci_send()
-      nfc: nfcmrvl: Fix potential memory leak in nfcmrvl_i2c_nci_send()
-
-Soenke Huster (1):
-      Bluetooth: virtio_bt: Use skb_put to set length
-
-Stefan Metzmacher (1):
-      net: also flag accepted sockets supporting msghdr originated zerocopy
-
-Vladimir Oltean (1):
-      net: dsa: fall back to default tagger if we can't load the one from DT
-
-Yang Yingliang (2):
-      mISDN: fix possible memory leak in mISDN_register_device()
-      isdn: mISDN: netjet: fix wrong check of device registration
-
-Zhang Changzhong (1):
-      net: fec: fix improper use of NETDEV_TX_BUSY
-
-Zhang Qilong (1):
-      rose: Fix NULL pointer dereference in rose_send_frame()
-
-Zhengchao Shao (4):
-      ipvs: fix WARNING in __ip_vs_cleanup_batch()
-      ipvs: fix WARNING in ip_vs_app_net_cleanup()
-      Bluetooth: L2CAP: fix use-after-free in l2cap_conn_del()
-      ipv6: fix WARNING in ip6_route_net_exit_late()
-
-Ziyang Xuan (1):
-      net: tun: fix bugs for oversize packet when napi frags enabled
-
- MAINTAINERS                                        |  7 +-
- drivers/bluetooth/virtio_bt.c                      |  2 +-
- drivers/isdn/hardware/mISDN/netjet.c               |  2 +-
- drivers/isdn/mISDN/core.c                          |  5 +-
- drivers/net/dsa/dsa_loop.c                         | 25 +++++--
- drivers/net/ethernet/adi/adin1110.c                | 38 +++++++---
- drivers/net/ethernet/freescale/fec_main.c          |  4 +-
- drivers/net/ethernet/ibm/ibmvnic.c                 | 16 ++--
- .../net/ethernet/microchip/lan966x/lan966x_fdma.c  | 26 +++++--
- .../net/ethernet/microchip/lan966x/lan966x_main.c  |  4 +-
- .../net/ethernet/microchip/lan966x/lan966x_main.h  |  2 +
- .../net/ethernet/microchip/lan966x/lan966x_regs.h  | 15 ++++
- .../net/ethernet/microchip/lan966x/lan966x_vlan.c  |  6 ++
- drivers/net/ethernet/sfc/efx.c                     |  8 +-
- .../net/ethernet/stmicro/stmmac/dwmac-loongson.c   |  7 +-
- drivers/net/ethernet/xilinx/xilinx_emaclite.c      |  2 +-
- drivers/net/phy/mdio_bus.c                         |  2 +-
- drivers/net/tun.c                                  |  3 +-
- drivers/nfc/fdp/fdp.c                              | 10 ++-
- drivers/nfc/nfcmrvl/i2c.c                          |  7 +-
- drivers/nfc/nxp-nci/core.c                         |  7 +-
- drivers/nfc/s3fwrn5/core.c                         |  8 +-
- include/net/netlink.h                              | 48 ++++++------
- include/net/sock.h                                 |  7 ++
- lib/nlattr.c                                       | 41 ++++-------
- net/bluetooth/hci_conn.c                           | 18 +++--
- net/bluetooth/iso.c                                | 14 +++-
- net/bluetooth/l2cap_core.c                         | 86 ++++++++++++++++++----
- net/bridge/br_netlink.c                            |  2 +-
- net/bridge/br_sysfs_br.c                           |  2 +-
- net/core/neighbour.c                               |  2 +-
- net/dsa/dsa2.c                                     | 13 +++-
- net/ipv4/af_inet.c                                 |  2 +
- net/ipv4/tcp_bpf.c                                 |  4 +-
- net/ipv4/tcp_ulp.c                                 |  3 +
- net/ipv4/udp_bpf.c                                 |  4 +-
- net/ipv6/route.c                                   | 14 +++-
- net/ipv6/udp.c                                     |  1 +
- net/netfilter/ipset/ip_set_hash_gen.h              | 30 ++------
- net/netfilter/ipvs/ip_vs_app.c                     | 10 ++-
- net/netfilter/ipvs/ip_vs_conn.c                    | 30 ++++++--
- net/netfilter/nf_nat_core.c                        | 11 ++-
- net/netfilter/nf_tables_api.c                      |  8 +-
- net/netfilter/nft_payload.c                        |  6 +-
- net/openvswitch/datapath.c                         |  1 +
- net/rose/rose_link.c                               |  3 +
- net/sched/sch_red.c                                |  4 +-
- net/smc/af_smc.c                                   |  6 +-
- net/unix/unix_bpf.c                                |  8 +-
- net/vmw_vsock/af_vsock.c                           |  7 +-
- 50 files changed, 401 insertions(+), 190 deletions(-)
-
+Cheers,
+-- 
+  John Thomson
