@@ -2,210 +2,205 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3FDC8617600
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 06:06:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 41DC8617603
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 06:08:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230487AbiKCFGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 01:06:22 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45700 "EHLO
+        id S230073AbiKCFIY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 01:08:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46812 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230460AbiKCFGL (ORCPT
+        with ESMTP id S229459AbiKCFIT (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 01:06:11 -0400
-Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 285ED18B33;
-        Wed,  2 Nov 2022 22:06:08 -0700 (PDT)
-Received: from compute2.internal (compute2.nyi.internal [10.202.2.46])
-        by mailout.west.internal (Postfix) with ESMTP id 2A554320090D;
-        Thu,  3 Nov 2022 01:06:07 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute2.internal (MEProxy); Thu, 03 Nov 2022 01:06:07 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com.au;
-         h=cc:cc:content-transfer-encoding:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm3; t=1667451966; x=
-        1667538366; bh=QsRVga5tuWe80xx7wDivbwAHLsIWBnEEKFpLl7kgfAE=; b=k
-        FRXCcOi4q6XJqXled46FQOW4d6D/A1Y2h0+8V+qGQ0kv7CRK2hTor0cmf2Y2yqWX
-        UCu9w8kAfdwJGBErfLfLwEaaUpmRq/uQp2Kh27l3IIKbmo4zISSsc2/PnQs59Bk9
-        ypkfhWUnGJyqxcoUZKFO7aM7dGgCGiP38LpyKVYXVsyMEm2Cw8SNk/0VpwNj+g7l
-        CREXD74iD/x1gbI4veIi/f3d3WpZMJTuk7pTJEeXFxRzh7WuWceABR2PcMUEign6
-        /SqZZ1M9oUH5wYCAYLQVn8vFhBG8v+zV9YPu6nohbbwuLxQVZ9Bv0HPicQM5Rigu
-        xd/8tyGcE16oasJQ4oA/A==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
-        :feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-        :message-id:mime-version:references:reply-to:sender:subject
-        :subject:to:to:x-me-proxy:x-me-proxy:x-me-sender:x-me-sender
-        :x-sasl-enc; s=fm3; t=1667451966; x=1667538366; bh=QsRVga5tuWe80
-        xx7wDivbwAHLsIWBnEEKFpLl7kgfAE=; b=i5jHDt2JM2TQ+2lbBNoIQfq4wzhHM
-        SU8+rRRuFloLvKAYv+u9dvgy3Mh/bI5RMFHP60ePOI2tDQw/BxbfQTtfuA/PuCxu
-        sUHy7/qiyZ7qu1LxRc6UEWlVyPmwioQzS15uRMvpH4Oo1x7Zssh6Y5aaRD9OTIR+
-        AZCoTD8Kt6Bb1KRuujdNfuNseDZtFwPkd69RhSxWpDEW5R+U0IJZogObU3XdhMRS
-        NPpS6mzasf4iVjEMUJ7UuzjGbTMYicD2pibA7lDP8AU6MhD1mGXOn26U0ICcS6GN
-        WehJX4eDIMegxD4c5bqX+zHmi6JpCpwywuvOPS1tdqTCLJ/Ee4RP/SHdQ==
-X-ME-Sender: <xms:PkxjYxVjbhdmfSLydrAmr1VBhx6wH4Viehvy1r2B_5-1l2Ess3HsWA>
-    <xme:PkxjYxkqV_wzCphLg7BDAiflka1C3NntufjzSnM-p73sgvvs_GxTtrxNA3qJHK9zD
-    Cslnl9b2SzPidf-3Q>
-X-ME-Received: <xmr:PkxjY9a6WzWbLu4QZT-UmJYT9FJAJGDCGGTb0Q74t_am2F6LPcEE0KsLjKNoNekHzDvT-2_JvebeWgsrvMpBNb2ySW3MJU9_UyK40uEEaJFXUgjdbg0PBiUHzgA1qxHT>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudekgdejkecutefuodetggdotefrodftvf
-    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
-    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
-    fjughrpefhvfevufffkffojghfggfgsedtkeertdertddtnecuhfhrohhmpeflohhhnhcu
-    vfhhohhmshhonhcuoehgihhtsehjohhhnhhthhhomhhsohhnrdhfrghsthhmrghilhdrtg
-    homhdrrghuqeenucggtffrrghtthgvrhhnpeffteegtddtfedvvdfhieefvddvueevgeeh
-    vdeiffdugeduudduheduhfejkefhveenucffohhmrghinhepkhgvrhhnvghlrdhorhhgne
-    cuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhepghhithes
-    jhhohhhnthhhohhmshhonhdrfhgrshhtmhgrihhlrdgtohhmrdgruh
-X-ME-Proxy: <xmx:PkxjY0U9Fjh7uEWgSkp9mEnjltlnQycoPJLi_Vx22t2mvUG_uzA3Vw>
-    <xmx:PkxjY7nYY2qIm19YD9kTFrM8oFEtd6kQKNS5voGtoBmYDksa1lIBXQ>
-    <xmx:PkxjYxcZrLpHF22SDTZ6Vfri0e5DJUhcoZNeYacQvZtVFTVpqwsVIw>
-    <xmx:PkxjY2s7uUaSoEXSn2VfKXnkiQGWftsfwHBzNf-c0XnpWJJO9BIyUQ>
-Feedback-ID: ic081425d:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 3 Nov 2022 01:06:03 -0400 (EDT)
-From:   John Thomson <git@johnthomson.fastmail.com.au>
-To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
-        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
-        John Crispin <john@phrozen.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
-Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        John Thomson <git@johnthomson.fastmail.com.au>
-Subject: [RFC PATCH 3/3] mips: ralink: mt7621: do not use kzalloc too early
-Date:   Thu,  3 Nov 2022 15:05:38 +1000
-Message-Id: <20221103050538.1930758-4-git@johnthomson.fastmail.com.au>
-X-Mailer: git-send-email 2.37.2
-In-Reply-To: <20221103050538.1930758-1-git@johnthomson.fastmail.com.au>
-References: <20221103050538.1930758-1-git@johnthomson.fastmail.com.au>
+        Thu, 3 Nov 2022 01:08:19 -0400
+Received: from EUR02-VE1-obe.outbound.protection.outlook.com (mail-eopbgr20064.outbound.protection.outlook.com [40.107.2.64])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8ADCE18B01;
+        Wed,  2 Nov 2022 22:08:18 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=R0AVXTsM0mXxL/6SHkX4sj9BTzjnYWBo92YyAmBvfLCYsUAPHIatQblGJlO/MLrv84p2/9ekeBOvYF/BDBCQb6sgUcfW0RzPyW26zdZ6lNB9pUcohGz1d4HMtFXeDVSHOmn3e1JWsAC8hQCpuOg+6JGAGUkZ5uF9eOB1Ynn20M/OqiwJC4xwJ2JTCLyArxwHHN17t6KcKZGyoGvTxypge4dqPutlK/mXwAtm+f4OgY02zdqvt0ghfyV6FiVp1/uIQffXnAtCF8fiWC0vdwnUXzLijY0uKeg+TSoHlSS/Sv4ZFCjdjPFtdMYhTEuWfzg+Q+ycakrvdqEInkMwgVMOGg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ESU28PmRmNCz3CY3dTxtqSFw/NcI8402WVJeardR9aQ=;
+ b=dpgKsArP1kAGPqnkgBsRWxukfCGP9qvv95D8gXeMqzFJYD97QJOzltep4NeWQ39ECclG0b3B3/M/Cg+JEDHLX4EleVZwMU/UEKsQNhaIvdAU8eyO2Em3EZstdK/H1Ut/6KH6XQkL092MKe30XmavMRRiuh9Y4g4fRdmPR0IUpsL/Tx6+sjFYHTvEvTbN+WbvjeEpoa6adSfYvmefWOkm23CltivHz/SAkOUx3LVv1F0v/8BQIiXeXKyHUihZBVT1B/IAgFbY5o69NDmDeBeiazz+8iVPv5WaY60683RIWepPChOTZbr3F2MCzrqpOR3JuPUBbXVt2Yyu37amk3pzWw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
+ header.d=nxp.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector2;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ESU28PmRmNCz3CY3dTxtqSFw/NcI8402WVJeardR9aQ=;
+ b=sLdiod6myNqvZ//5Iv5IeCRrVv4rwElrWdp0w+hX7UH5PtFgJefzjYiBaGgndUofdRFd7PRucyLF0JXBKMvMGV0t86dJqXt/mS1XmSTniXicxAn1M5Fb14dzrr8OX1gr/z49i7GDnNQ/6AEr6wB+aCEoDQgKe5qryhgxEu/9YHU=
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com (2603:10a6:10:358::11)
+ by AM0PR04MB6834.eurprd04.prod.outlook.com (2603:10a6:208:17e::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5769.15; Thu, 3 Nov
+ 2022 05:08:15 +0000
+Received: from DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::36a4:e1fc:67a2:c701]) by DU0PR04MB9417.eurprd04.prod.outlook.com
+ ([fe80::36a4:e1fc:67a2:c701%7]) with mapi id 15.20.5791.020; Thu, 3 Nov 2022
+ 05:08:15 +0000
+From:   Peng Fan <peng.fan@nxp.com>
+To:     Mathieu Poirier <mathieu.poirier@linaro.org>,
+        "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+CC:     "andersson@kernel.org" <andersson@kernel.org>,
+        "shawnguo@kernel.org" <shawnguo@kernel.org>,
+        "s.hauer@pengutronix.de" <s.hauer@pengutronix.de>,
+        "robh+dt@kernel.org" <robh+dt@kernel.org>,
+        "krzysztof.kozlowski+dt@linaro.org" 
+        <krzysztof.kozlowski+dt@linaro.org>,
+        "kernel@pengutronix.de" <kernel@pengutronix.de>,
+        "festevam@gmail.com" <festevam@gmail.com>,
+        dl-linux-imx <linux-imx@nxp.com>,
+        "linux-remoteproc@vger.kernel.org" <linux-remoteproc@vger.kernel.org>,
+        "linux-arm-kernel@lists.infradead.org" 
+        <linux-arm-kernel@lists.infradead.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>
+Subject: RE: [PATCH V2 0/2] remoteproc: imx: add start up delay
+Thread-Topic: [PATCH V2 0/2] remoteproc: imx: add start up delay
+Thread-Index: AQHY7q2EQ7vW7H0K9kapWb8mOaD0564r5BSAgADBV2A=
+Date:   Thu, 3 Nov 2022 05:08:15 +0000
+Message-ID: <DU0PR04MB94170F02CF6BD02D7869A75388389@DU0PR04MB9417.eurprd04.prod.outlook.com>
+References: <20221102112451.128110-1-peng.fan@oss.nxp.com>
+ <CANLsYky1j_BMD-Dg1Lath4bftE-0qPEod7fxcaN3UkKUpjP7dw@mail.gmail.com>
+In-Reply-To: <CANLsYky1j_BMD-Dg1Lath4bftE-0qPEod7fxcaN3UkKUpjP7dw@mail.gmail.com>
+Accept-Language: en-US
+Content-Language: en-US
+X-MS-Has-Attach: 
+X-MS-TNEF-Correlator: 
+authentication-results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=nxp.com;
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: DU0PR04MB9417:EE_|AM0PR04MB6834:EE_
+x-ms-office365-filtering-correlation-id: a639903b-bef6-4d50-1db3-08dabd596a30
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam: BCL:0;
+x-microsoft-antispam-message-info: ypv5EnPjMppB6KOklj9Z0Tfd2JGuAqalaQX7SzcjTI/vmPHK10HMX7uaZc7UC/ygDwTXqg9+R3gdY/c2gQZI9wlKw5ol+QUyLhkmP/xOL1Sn8jsgiD7iMzH5c62o+hUiTRM8K+4ZTO8AkgDy3X/a+M74QPIHsSoi8o9ZegZZ48eHRzLY5/jQj0lBq2CNOuBCRhUMGLxIzVDE0tLw1zgK539n280iFEXjOvBeH+XGlG+jURwzhDdqilMLw6n5cnS5pw5VWV6FcHZSaU+n8Ky5Ultgk29EUBTTuGOSoKrij0D2S+WaehWqFRwFkXRhGI5GKUM8sOSrt1iy2nb+J1fNLFjb1kS34+6eGnjB/KUCDw7DenV4m4JaCcvcGVJZ9Xx5tU9GivOdtmcXuf4fZw18pMz/e6nc2Zi66ExdTsn+2UZFYZOXCUHFa34Tv6bXLz/wzypTQ5bEcyW7mLgaBQOXeaGzyYAuPsn8qbZ151OTHblxXoqY+ymKIn8FhHYU8cM7CdOUslVK1hiN4dNYtk2dicKrgJaGOc7GADT7unEZAQuUC0LUgAM2j84pttHRcQ55gyGQtK9ZStj9LPvL2YQAFEgAwq5MqdhdBNZ6lAiURHoNWRdrEdq+u1bFkBor+70nQNRmht8dtwpo9CLN5oGU+sBydCYghiYdRwFQX+XaUZHa2JnOX6VQlD+Ahbds+ngsq2J0r663acY2KYoz7LoaYFdc9uOQ1xO9E2xs5t25BzSbBaC+KbI9JNOkprnh4zoIojZNpeH8fHDbk+eg6RRnbzqljs43KFiq/2/m178ulHQ=
+x-forefront-antispam-report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DU0PR04MB9417.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(4636009)(346002)(396003)(366004)(39860400002)(376002)(136003)(451199015)(38070700005)(122000001)(38100700002)(55016003)(86362001)(33656002)(71200400001)(76116006)(966005)(2906002)(44832011)(8676002)(64756008)(5660300002)(4326008)(66556008)(41300700001)(66476007)(66946007)(9686003)(45080400002)(52536014)(8936002)(54906003)(316002)(7696005)(66446008)(110136005)(478600001)(7416002)(186003)(26005)(6506007)(83380400001);DIR:OUT;SFP:1101;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0: =?us-ascii?Q?t04DOPxBtSB/Y0uRzMuFmdg2KtQucBFM6tFRuKZC/NgFZCt+5QR6ytjas5yf?=
+ =?us-ascii?Q?UxBsfnBq/cjFa6zkxiWrEkUymWEo84x/IpllumrYXsThpOGm8r01Stzpc0Lq?=
+ =?us-ascii?Q?foyUkoyqBflmyQVIr/C07xbYH1IehfaJUh8o+YJz6+04XaIxtDtEIq+Nza0k?=
+ =?us-ascii?Q?85SZsU2u3hv2iMa3tdiLZ4tY2XEXGtTbfOCX1G/O/zYHacCu0S2FEftVIxaQ?=
+ =?us-ascii?Q?F/uHSEPwfGvKQNVnwp0bcnD6wvuD+/zdxvLTowE2wE+N3AeM14bR/mNG4QJd?=
+ =?us-ascii?Q?iltfAy7Kp+B54V41dkaxktf2XBULhtq4fTeGni28DoYduJGQa003dhc5oDOZ?=
+ =?us-ascii?Q?EFBRSEOiQkbx3Wgblesol7xT43WECP8KaRte83Z8S29XrUlAwxj2ovaNiTRL?=
+ =?us-ascii?Q?W/93WNgV/2NVjtzSovi/yXMAdz8Ozrka7zAsyRt6L6zrPrnmaoAEunrRwIr5?=
+ =?us-ascii?Q?iAYqrljQ2Nub/SuGMe7pnFrrwj3ZbvW+ydfxk6LhbOmlB6VRwnJ2m7s7LHj2?=
+ =?us-ascii?Q?iI7dMUy2f7RkOELfOty36mD+0k9ThJ5tg5LchRKjUJ0yuLu76ftxs2bHz1fQ?=
+ =?us-ascii?Q?qteZiduWnwZz//ylGEx67p2trgyc4oKfOE7CloOhIwQClYMByDNnPxES1aHs?=
+ =?us-ascii?Q?Ooq0njhni/bhDaDxw+SggA0GWs2bskTMFeUWxvY0PCEpbmu8xbat0dg8Y6gd?=
+ =?us-ascii?Q?50LKsTeW2wJIiCnV6iHKYT1wjUeR4wsC/bI2CfZUfsfN0eg0CvG26ge0UZbv?=
+ =?us-ascii?Q?M2n7BmTvalVqVfuL5XfRySp2VfJf18F1QtHLpeGr+HGVzQwyWVKVM3HG8d1K?=
+ =?us-ascii?Q?l4lN3AcsqV5PlumAeB3guElaXFfoI6diOxw+Mc6dgPinoZ6R+pp3WlgJTDH2?=
+ =?us-ascii?Q?9++JjSB0JUAn3XAvVctn0OfK72ngJxjJ0pPlFlTmc/e87gPWH8aSgQmuEOQn?=
+ =?us-ascii?Q?5+ue/MZgtqlpZLEKxbK30g4jsFj3bo8Q3cxQOSvppd1ld2LDbF4gbjrF7GCR?=
+ =?us-ascii?Q?sOt7xrLIgum9AKRTlsw3lMQjK6zUYYhfgk1lWech6TQQOnPS+Pocg6/0WVY3?=
+ =?us-ascii?Q?ECaS+UKX9mufy1E55cR8tVLy8zTCWw3mvqVju1xnLtnkuV0e1osj3H+S+0OP?=
+ =?us-ascii?Q?uT391x4dbM0mcd6lQUzqNXlvstkXT9I3/hi1ie4pA16MYgnDgavb4OE0MaQr?=
+ =?us-ascii?Q?ipF3YUfxjGnzalj7l2mDXRGyLW/FzTr/Uvu5LQO/HVl7/45bNoF2QlSGxY6I?=
+ =?us-ascii?Q?ZdIVz/ZIkMmLDhoyr46WEG7whjhHZR4NxkY1BD1eVAmHkhQKFJ2oWGDEQI7k?=
+ =?us-ascii?Q?KNOb7q/nT/ooRqeImRJUZ3YKDQxGhSxixWZJYQ+T236xN0ElPD1iocmNeD6i?=
+ =?us-ascii?Q?mlLgOi61YaaKipGSnJy+X7Avlxb47ImjrshEku2N2N6GpgAo7kFz05SZUz2h?=
+ =?us-ascii?Q?3MPz1jyvC8Hw0XB44uxh4YqROP+Cv14n2bdKXFQ1ApkHsmcFm+uSmQnInXnl?=
+ =?us-ascii?Q?os5y0zD3Z9trjH6EG86PfAxPxbNKv1+Jr1BqN0z9MZ0eUaO/5T0Fo7Vg0h3s?=
+ =?us-ascii?Q?Y5Ow0Jiz47ovt4HyxHc=3D?=
+Content-Type: text/plain; charset="us-ascii"
+Content-Transfer-Encoding: quoted-printable
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-OriginatorOrg: nxp.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: DU0PR04MB9417.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: a639903b-bef6-4d50-1db3-08dabd596a30
+X-MS-Exchange-CrossTenant-originalarrivaltime: 03 Nov 2022 05:08:15.7311
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: DhwJUvd7LWngUMlm3WDkok1+tHsAx86wQ12cQszSz2HBEVl9VkhI8WZ227ZJgbSIu9kysge+uL7ex0XFunnJcg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB6834
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Following commit 6edf2576a6cc ("mm/slub: enable debugging memory wasting
-of kmalloc") mt7621 failed to boot very early, without showing any
-console messages.
-This exposed the pre-existing bug of mt7621.c using kzalloc before normal
-memory management was available.
-Prior to this slub change, there existed the unintended protection against
-"kmem_cache *s" being NULL as slab_pre_alloc_hook() happened to
-return NULL and bailed out of slab_alloc_node().
-This allowed mt7621 prom_soc_init to fail in the soc_dev_init kzalloc,
-but continue booting without this soc device.
+> Subject: Re: [PATCH V2 0/2] remoteproc: imx: add start up delay
+>=20
+> On Wed, 2 Nov 2022 at 05:23, Peng Fan (OSS) <peng.fan@oss.nxp.com>
+> wrote:
+> >
+> > From: Peng Fan <peng.fan@nxp.com>
+> >
+> > V2:
+> >  Rebased on linux-next
+> >
+> > V1:
+> >
+> >
+> https://eur01.safelinks.protection.outlook.com/?url=3Dhttps%3A%2F%2Flore
+> > .kernel.org%2Flkml%2F20220609123500.3492475-1-
+> peng.fan%40oss.nxp.com%2
+> >
+> F&amp;data=3D05%7C01%7Cpeng.fan%40nxp.com%7Cf14584bdef9349e744ca
+> 08dabcf7
+> >
+> e1be%7C686ea1d3bc2b4c6fa92cd99c5c301635%7C0%7C0%7C63803007007
+> 2451509%7
+> >
+> CUnknown%7CTWFpbGZsb3d8eyJWIjoiMC4wLjAwMDAiLCJQIjoiV2luMzIiLCJ
+> BTiI6Ik1
+> >
+> haWwiLCJXVCI6Mn0%3D%7C3000%7C%7C%7C&amp;sdata=3DCk73gkOPpNVT
+> kcZL8olCZP8B
+> > %2BrIpZHV48uZBl2R8HdM%3D&amp;reserved=3D0
+> >
+> > There is case that after remoteproc start remote processor[M4], the M4
+> > runs slow and before M4 finish its own rpmsg framework initialization,
+> > linux sends out vring kick message, then M4 firmware drops the kick
+> > message. Some NXP released Cortex-M[x] images has such limitation that
+> > it requires linux sends out vring kick message after M4 firmware
+> > finish its rpmsg framework initialization.
+> >
+> > The best case is to use a method to let M4 notify Linux that M4 has
+> > finished initialization, but we could not patch released firmware,
+> > then update driver to detect notification.
+> >
+> > So add delay before linux send out vring kick message. It is not good
+> > to use a fixed time delay in driver, so I choose to get that from
+> > device tree.
+> >
+>=20
+> From where I stand this is a hack to hide the lack of motivation to enact=
+ the
+> real solution that is outlined above.  I also wonder how these problems
+> were not caught during the testing phase.  Either find a way to upgrade y=
+our
+> firmware or keep this in your internal tree.
+In the beginning, i.mx not migrated to use remoteproc, i.MX release only su=
+pport
+uboot kick Cortex-M core and use downstream imx_rpmsg driver to
+communicate with remote core. There is no runtime stop/start.
 
-Console output from a DEBUG_ZBOOT vmlinuz kernel loading,
-with mm/slub modified to warn on kmem_cache zero or null:
+After migrated to remoteproc, we do see some issue, but old firmware was
+there.
 
-zimage at:     80B842A0 810B4BC0
-Uncompressing Linux at load address 80001000
-Copy device tree to address  80B80EE0
-Now, booting the kernel...
+Thanks,
+Peng.
 
-[    0.000000] Linux version 6.1.0-rc3+ (john@john)
-(mipsel-buildroot-linux-gnu-gcc.br_real (Buildroot
-2021.11-4428-g6b6741b) 12.2.0, GNU ld (GNU Binutils) 2.39) #73 SMP Wed
-     Nov  2 05:10:01 AEST 2022
-[    0.000000] ------------[ cut here ]------------
-[    0.000000] WARNING: CPU: 0 PID: 0 at mm/slub.c:3416
-kmem_cache_alloc+0x5a4/0x5e8
-[    0.000000] Modules linked in:
-[    0.000000] CPU: 0 PID: 0 Comm: swapper Not tainted 6.1.0-rc3+ #73
-[    0.000000] Stack : 810fff78 80084d98 00000000 00000004 00000000
-00000000 80889d04 80c90000
-[    0.000000]         80920000 807bd328 8089d368 80923bd3 00000000
-00000001 80889cb0 00000000
-[    0.000000]         00000000 00000000 807bd328 8084bcb1 00000002
-00000002 00000001 6d6f4320
-[    0.000000]         00000000 80c97d3d 80c97d68 fffffffc 807bd328
-00000000 00000000 00000000
-[    0.000000]         00000000 a0000000 80910000 8110a0b4 00000000
-00000020 80010000 80010000
-[    0.000000]         ...
-[    0.000000] Call Trace:
-[    0.000000] [<80008260>] show_stack+0x28/0xf0
-[    0.000000] [<8070c958>] dump_stack_lvl+0x60/0x80
-[    0.000000] [<8002e184>] __warn+0xc4/0xf8
-[    0.000000] [<8002e210>] warn_slowpath_fmt+0x58/0xa4
-[    0.000000] [<801c0fac>] kmem_cache_alloc+0x5a4/0x5e8
-[    0.000000] [<8092856c>] prom_soc_init+0x1fc/0x2b4
-[    0.000000] [<80928060>] prom_init+0x44/0xf0
-[    0.000000] [<80929214>] setup_arch+0x4c/0x6a8
-[    0.000000] [<809257e0>] start_kernel+0x88/0x7c0
-[    0.000000]
-[    0.000000] ---[ end trace 0000000000000000 ]---
-[    0.000000] SoC Type: MediaTek MT7621 ver:1 eco:3
-[    0.000000] printk: bootconsole [early0] enabled
-
-This early kzalloc was introduced in commit 71b9b5e0130d ("MIPS: ralink:
-mt7621: introduce 'soc_device' initialization")
-
-Link: https://lore.kernel.org/linux-mm/becf2ac3-2a90-4f3a-96d9-a70f67c66e4a@app.fastmail.com/
-Signed-off-by: John Thomson <git@johnthomson.fastmail.com.au>
----
- arch/mips/ralink/mt7621.c | 14 +++++++++-----
- 1 file changed, 9 insertions(+), 5 deletions(-)
-
-diff --git a/arch/mips/ralink/mt7621.c b/arch/mips/ralink/mt7621.c
-index f2443b833bc3..836965021d5c 100644
---- a/arch/mips/ralink/mt7621.c
-+++ b/arch/mips/ralink/mt7621.c
-@@ -25,6 +25,7 @@
- #define MT7621_MEM_TEST_PATTERN         0xaa5555aa
- 
- static u32 detect_magic __initdata;
-+struct ralink_soc_info *soc_info_ptr;
- 
- int pcibios_root_bridge_prepare(struct pci_host_bridge *bridge)
- {
-@@ -147,27 +148,30 @@ static const char __init *mt7621_get_soc_revision(void)
- 		return "E1";
- }
- 
--static void soc_dev_init(struct ralink_soc_info *soc_info)
-+static int __init mt7621_soc_dev_init(void)
- {
- 	struct soc_device *soc_dev;
- 	struct soc_device_attribute *soc_dev_attr;
- 
- 	soc_dev_attr = kzalloc(sizeof(*soc_dev_attr), GFP_KERNEL);
- 	if (!soc_dev_attr)
--		return;
-+		return -ENOMEM;
- 
- 	soc_dev_attr->soc_id = "mt7621";
- 	soc_dev_attr->family = "Ralink";
- 	soc_dev_attr->revision = mt7621_get_soc_revision();
- 
--	soc_dev_attr->data = soc_info;
-+	soc_dev_attr->data = soc_info_ptr;
- 
- 	soc_dev = soc_device_register(soc_dev_attr);
- 	if (IS_ERR(soc_dev)) {
- 		kfree(soc_dev_attr);
--		return;
-+		return PTR_ERR(soc_dev);
- 	}
-+
-+	return 0;
- }
-+device_initcall(mt7621_soc_dev_init);
- 
- void __init prom_soc_init(struct ralink_soc_info *soc_info)
- {
-@@ -209,7 +213,7 @@ void __init prom_soc_init(struct ralink_soc_info *soc_info)
- 
- 	soc_info->mem_detect = mt7621_memory_detect;
- 
--	soc_dev_init(soc_info);
-+	soc_info_ptr = soc_info;
- 
- 	if (!register_cps_smp_ops())
- 		return;
--- 
-2.37.2
-
+>=20
+> > Peng Fan (2):
+> >   dt-bindings: remoteproc: imx_rproc: add fsl,startup-delay-ms
+> >   remoteproc: imx_rproc: delay after kick remote processor
+> >
+> >  .../devicetree/bindings/remoteproc/fsl,imx-rproc.yaml    | 4 ++++
+> >  drivers/remoteproc/imx_rproc.c                           | 9 +++++++++
+> >  2 files changed, 13 insertions(+)
+> >
+> > --
+> > 2.37.1
+> >
