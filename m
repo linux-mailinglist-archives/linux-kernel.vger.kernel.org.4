@@ -2,144 +2,164 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 5EA8761874E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:19:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 02A04618754
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:20:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231304AbiKCSTP (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 14:19:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53960 "EHLO
+        id S231419AbiKCSUJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 14:20:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54502 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230203AbiKCSTM (ORCPT
+        with ESMTP id S230423AbiKCSUA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 14:19:12 -0400
-Received: from mail-lf1-x12a.google.com (mail-lf1-x12a.google.com [IPv6:2a00:1450:4864:20::12a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 18F6913D57
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 11:19:11 -0700 (PDT)
-Received: by mail-lf1-x12a.google.com with SMTP id g7so4238506lfv.5
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 11:19:11 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=gkYzItvrSUXCjUZclqVlz4B1VRMJvcHSmP7Vz+/CqCc=;
-        b=Ql3Wst5IDeTBu02tDij8+8WotMSKPkvfwkpBGQrs5DCDmlReH9R39/cKMIGZ9nQTw4
-         CTNpSr+1rRsxJju1xOVWyv58dG7vruDtKj2QiyrwZZlt55RVpxRZMSd1GUviTtWFTlQt
-         bE6yo4OanX1qxxPqrtbBfkv3g2/e5P7r/JJ4c=
+        Thu, 3 Nov 2022 14:20:00 -0400
+Received: from mail-qk1-f179.google.com (mail-qk1-f179.google.com [209.85.222.179])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 959CF12633;
+        Thu,  3 Nov 2022 11:19:59 -0700 (PDT)
+Received: by mail-qk1-f179.google.com with SMTP id i9so1683479qki.10;
+        Thu, 03 Nov 2022 11:19:59 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:user-agent:from:references
-         :in-reply-to:mime-version:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=gkYzItvrSUXCjUZclqVlz4B1VRMJvcHSmP7Vz+/CqCc=;
-        b=6dNBdWQkeWbm2TXRkI9sA5jrvhvk18SvpvXeORY8gp+xLPFdlqgRbc/2jA682/eOyY
-         3RVxSNndjI2DygVhbYWNL2JY+XYbiJ+KQuwQwUIJEAOALx4Fp19SNEYFJ6wnYbE7hadQ
-         ydLFJXkiCxbtRRug0FFQrozRB2WXheXOgntfJzHltb9VYHTwqj5CP89YPQZ3yyn3bPpI
-         F8NLnbk+kmJvKgjjRSdr8jmj/UUcb+CAHR+sDxoD3dUo1MoiRvG0GsV+Q4aoprSSwSag
-         w72j1Sg8tU7Cc15SrbkLz7iFgSVtEHmM67lP6leH2OWVadgDb7kfoT2gr4urasvOb/Gt
-         0sSw==
-X-Gm-Message-State: ACrzQf2VQnmAPCmcReqq27SntnG4b0jnl8ZXyRg+BstwOWsvPwNT7g2U
-        Sh+HK1aWcxypmut/2dpdNp5romwh1SVsn9HWMHRwyw==
-X-Google-Smtp-Source: AMsMyM50DKyuqpFk3z0RRrS/jQXXsTcb+YgJ2uT1ZBFhUVkjX0OEggksGtq8mwZhheS/vIGyWyzlrWJVtBWPTzBnqNs=
-X-Received: by 2002:a05:6512:3403:b0:48c:9727:50b0 with SMTP id
- i3-20020a056512340300b0048c972750b0mr11849146lfr.309.1667499549321; Thu, 03
- Nov 2022 11:19:09 -0700 (PDT)
-Received: from 753933720722 named unknown by gmailapi.google.com with
- HTTPREST; Thu, 3 Nov 2022 11:19:08 -0700
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=3TLcpb+iCvLZOd/QMzRc0iBoGSARI75zWWPSuf5F76c=;
+        b=M9KCMo64TwyvQW/znAhmwF83eghX2V7oKeZq9VAU73c4+hBaBGxP+Tf4jJNS6aeTQH
+         9rl/bWi0a1hOUWQ4Hu85LjSYkGKFIJRp+3hsH1FF3Vy/AWxb/0z9Vyi7ynpG33PFyf5c
+         Au6LEMc4qI2GldL6KNjuj03jpFsWYovTNrIeopYs0pt2+aFwQ+uK3805pZFPPkHOT6D1
+         NURaEqG/xMkof33qOP+bjP1t/BWZa4qtaxQPcQz68O/Fp73JLHF+Y5nqHL4KYRNFPaxs
+         d2tCyWWvTlWU/sAjCbFW53qgoJ+FSKfDJJB6RZMSxTnNlWUPAjv3RPEXiZ2z2oZbpLAY
+         yLFg==
+X-Gm-Message-State: ACrzQf095cefVWSBSqp/oCV5z0jZ2jvW1SCTkfLskhpmwUENLCjb+TNJ
+        lZZb/0jakXGw2oWr6aN+UZ5Jgvau+LP+joVus6M=
+X-Google-Smtp-Source: AMsMyM4vqgEAH9OPc7S7MhURJsCmLThGF2sLAxVw6AfK5up6ttfDcphRecizCSKnQYPUVAvQNPAXCjJ3aeogAKA5lOM=
+X-Received: by 2002:a37:c4e:0:b0:6fa:c1c:6fc0 with SMTP id 75-20020a370c4e000000b006fa0c1c6fc0mr23461428qkm.501.1667499598727;
+ Thu, 03 Nov 2022 11:19:58 -0700 (PDT)
 MIME-Version: 1.0
-In-Reply-To: <Y2PAXX2oYL6iFTlB@hovoldconsulting.com>
-References: <20221101233421.997149-1-swboyd@chromium.org> <Y2JL9/HFrb3E+CYY@hovoldconsulting.com>
- <CAE-0n51Wuc6gVmsTOu4Nf4yx+6Wp-Oi3XZy06syhCMVmePWPEw@mail.gmail.com> <Y2PAXX2oYL6iFTlB@hovoldconsulting.com>
-From:   Stephen Boyd <swboyd@chromium.org>
-User-Agent: alot/0.10
-Date:   Thu, 3 Nov 2022 11:19:08 -0700
-Message-ID: <CAE-0n5319JSX16Z3H5vKQSL9UDetOdfb38zo_vp0C=uX1jddWQ@mail.gmail.com>
-Subject: Re: [PATCH] clk: qcom: gdsc: Remove direct runtime PM calls
-To:     Johan Hovold <johan@kernel.org>
-Cc:     Michael Turquette <mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
-        linux-clk@vger.kernel.org, patches@lists.linux.dev,
-        Andy Gross <agross@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        linux-arm-msm@vger.kernel.org,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        Satya Priya <quic_c_skakit@quicinc.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Matthias Kaehlcke <mka@chromium.org>
+References: <20221102195957.82871-1-stuart.w.hayes@gmail.com>
+In-Reply-To: <20221102195957.82871-1-stuart.w.hayes@gmail.com>
+From:   "Rafael J. Wysocki" <rafael@kernel.org>
+Date:   Thu, 3 Nov 2022 19:19:47 +0100
+Message-ID: <CAJZ5v0iM28y2YSWOv81VCB9vqh2xwJcz36wnR7PujDehvrkN-Q@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: acpi: Defer setting boost MSRs
+To:     Stuart Hayes <stuart.w.hayes@gmail.com>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>,
+        Viresh Kumar <viresh.kumar@linaro.org>,
+        Kyle Meyer <kyle.meyer@hpe.com>, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
+        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Quoting Johan Hovold (2022-11-03 06:21:33)
-> On Wed, Nov 02, 2022 at 09:53:49AM -0700, Stephen Boyd wrote:
-> > Quoting Johan Hovold (2022-11-02 03:52:39)
+On Wed, Nov 2, 2022 at 9:01 PM Stuart Hayes <stuart.w.hayes@gmail.com> wrote:
 >
-> > > > Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-> > > > Cc: Johan Hovold <johan+linaro@kernel.org>
-> > > > Cc: Ulf Hansson <ulf.hansson@linaro.org>
-> > > > Cc: Taniya Das <quic_tdas@quicinc.com>
-> > > > Cc: Satya Priya <quic_c_skakit@quicinc.com>
-> > > > Cc: Douglas Anderson <dianders@chromium.org>
-> > > > Cc: Matthias Kaehlcke <mka@chromium.org>
-> > > > Reported-by: Stephen Boyd <swboyd@chromium.org>
-> > >
-> > > We typically don't add Reported-by tags for bugs we find and fix
-> > > ourselves.
-> >
-> > Heh, I didn't see anything like that in Documentation/ so it seems fine.
-> > I debugged my problem and reported it.
+> When acpi-cpufreq is loaded, boost is enabled on every CPU (by setting an
+> MSR) before the driver is registered with cpufreq.  This can be very time
+> consuming, because it is done with a CPU hotplug startup callback, and
+> cpuhp_setup_state() schedules the callback (cpufreq_boost_online()) to run
+> on each CPU one at a time, waiting for each to run before calling the next.
 >
-> I'd say the documentation is pretty clear on this matter:
+> If cpufreq_register_driver() fails--if, for example, there are no ACPI
+> P-states present--this is wasted time.
 >
->   Reported-by: names a user who reported a problem which is fixed by this
->   patch; this tag is used to give credit to the (often underappreciated)
->   people who test our code and let us know when things do not work
->   correctly.
+> Since cpufreq already sets up a CPU hotplug startup callback if and when
+> acpi-cpufreq is registered, set the boost MSRs in acpi_cpufreq_cpu_init(),
+> which is called by the cpufreq cpuhp callback.  This allows acpi-cpufreq to
+> exit quickly if it is loaded but not needed.
 >
->   - Documentation/process/5.Posting.rst
+> On one system with 192 CPUs, this patch speeds up boot by about 30 seconds.
 >
->   The Reported-by tag gives credit to people who find bugs and report
->   them and it hopefully inspires them to help us again in the future.
->   Please note that if the bug was reported in private, then ask for
->   permission first before using the Reported-by tag.
+> Signed-off-by: Stuart Hayes <stuart.w.hayes@gmail.com>
+> ---
+>  drivers/cpufreq/acpi-cpufreq.c | 31 +++----------------------------
+>  1 file changed, 3 insertions(+), 28 deletions(-)
 >
->   - Documentation/process/submitting-patches.rst
+> diff --git a/drivers/cpufreq/acpi-cpufreq.c b/drivers/cpufreq/acpi-cpufreq.c
+> index 1bb2b90ebb21..cb167263de72 100644
+> --- a/drivers/cpufreq/acpi-cpufreq.c
+> +++ b/drivers/cpufreq/acpi-cpufreq.c
+> @@ -535,15 +535,6 @@ static void free_acpi_perf_data(void)
+>         free_percpu(acpi_perf_data);
+>  }
+>
+> -static int cpufreq_boost_online(unsigned int cpu)
+> -{
+> -       /*
+> -        * On the CPU_UP path we simply keep the boost-disable flag
+> -        * in sync with the current global state.
+> -        */
+> -       return boost_set_msr(acpi_cpufreq_driver.boost_enabled);
+> -}
+> -
+>  static int cpufreq_boost_down_prep(unsigned int cpu)
+>  {
+>         /*
+> @@ -897,6 +888,8 @@ static int acpi_cpufreq_cpu_init(struct cpufreq_policy *policy)
+>         if (perf->states[0].core_frequency * 1000 != freq_table[0].frequency)
+>                 pr_warn(FW_WARN "P-state 0 is not max freq\n");
+>
+> +       set_boost(policy, acpi_cpufreq_driver.boost_enabled);
+> +
+>         return result;
+>
+>  err_unreg:
+> @@ -916,6 +909,7 @@ static int acpi_cpufreq_cpu_exit(struct cpufreq_policy *policy)
+>
+>         pr_debug("%s\n", __func__);
+>
+> +       cpufreq_boost_down_prep(policy->cpu);
+>         policy->fast_switch_possible = false;
+>         policy->driver_data = NULL;
+>         acpi_processor_unregister_performance(data->acpi_perf_cpu);
+> @@ -972,25 +966,9 @@ static void __init acpi_cpufreq_boost_init(void)
+>         acpi_cpufreq_driver.set_boost = set_boost;
+>         acpi_cpufreq_driver.boost_enabled = boost_state(0);
+>
+> -       /*
+> -        * This calls the online callback on all online cpu and forces all
+> -        * MSRs to the same value.
+> -        */
+> -       ret = cpuhp_setup_state(CPUHP_AP_ONLINE_DYN, "cpufreq/acpi:online",
+> -                               cpufreq_boost_online, cpufreq_boost_down_prep);
+> -       if (ret < 0) {
+> -               pr_err("acpi_cpufreq: failed to register hotplug callbacks\n");
+> -               return;
+> -       }
+>         acpi_cpufreq_online = ret;
+>  }
+>
+> -static void acpi_cpufreq_boost_exit(void)
+> -{
+> -       if (acpi_cpufreq_online > 0)
+> -               cpuhp_remove_state_nocalls(acpi_cpufreq_online);
+> -}
+> -
+>  static int __init acpi_cpufreq_init(void)
+>  {
+>         int ret;
+> @@ -1032,7 +1010,6 @@ static int __init acpi_cpufreq_init(void)
+>         ret = cpufreq_register_driver(&acpi_cpufreq_driver);
+>         if (ret) {
+>                 free_acpi_perf_data();
+> -               acpi_cpufreq_boost_exit();
+>         }
+>         return ret;
+>  }
+> @@ -1041,8 +1018,6 @@ static void __exit acpi_cpufreq_exit(void)
+>  {
+>         pr_debug("%s\n", __func__);
+>
+> -       acpi_cpufreq_boost_exit();
+> -
+>         cpufreq_unregister_driver(&acpi_cpufreq_driver);
+>
+>         free_acpi_perf_data();
+> --
 
-I don't see anything above that says I can't add this tag if I reported
-(by sending an email about the problem to the list), debugged, and
-solved the problem by sending a patch.
-
->
-> Just like you don't add a Tested-by tag for every patch you submit, it
-> is implied that you found the issue you fix unless you explicitly
-> attribute that to a third party using Reported-by.
-
-I don't see how this is the same. It certainly is not explicit, as you
-say.
-
-I wouldn't have added the tag if I didn't send an email to the list with
-the lockdep splat and follow that up with a bisection report for
-suspend/resume being broken. Shouldn't we value those sorts of bug
-report emails? I will add a link to the report in the commit text to
-clarify.
-
->
-> This is the first time I see anyone trying to use Reported-by this way,
-> and even if you think the documentation isn't clear enough on this, our
-> praxis is.
->
-
-Ok, so is it just a shock to see this for the first time? What is the
-problem with the tag? Can you elaborate on your concerns? I would like
-to understand.
+Applied as 6.2 material, thanks!
