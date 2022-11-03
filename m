@@ -2,155 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B2BB9618C6E
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 00:05:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EBDD6618C7F
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 00:06:24 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbiKCXFD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 19:05:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40776 "EHLO
+        id S231643AbiKCXGW (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 19:06:22 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41588 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230513AbiKCXFA (ORCPT
+        with ESMTP id S231487AbiKCXFr (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 19:05:00 -0400
-Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9A7641A043
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 16:04:59 -0700 (PDT)
-Received: by mail-pj1-x1029.google.com with SMTP id o7so3051475pjj.1
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 16:04:59 -0700 (PDT)
+        Thu, 3 Nov 2022 19:05:47 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 95521209A1
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 16:05:46 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id y13so2995605pfp.7
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 16:05:46 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ty7NKEPl0IHHIKXvP+jXCaEpuJOC+fqTvmEMtCpQ/20=;
-        b=rQnp+SwB2zMSq0CxGruqys/HkI4BO0cs24vZcUtuIOAevup3Y78FQIob1VLtYPM4TW
-         cAdQKut1sAQnbM6RE4Nm9dOd/n1bzcGOEZ2ElA8ACLK+5DrOk66Qd9UjphJMHGodCVhB
-         suednwHwQu0747FO0ErJ6MskTw3c1IHuy97x4qT7qRTobrAjI2qqaQ9qrsYHObDuiLne
-         9nFHuZfBYQuomcslj83mRerOA09HO4FMwWxhwjluEXAf5450VKKTvi3I6AJxRsOgPMbS
-         0iZx3Y49cYnH4f0Dk4p0nvsEgI5F5O70XswxtMhuqEnZHAoYkQNfeej4jHze5fR+sQEe
-         eEWA==
+        bh=tJCllttmibhNCQwFie0bmyQKbcw2MJMVuYNYg2R4nSQ=;
+        b=qY3h4Wywx9Wo8pVZzQ7E5PW8geOq2iu8o+/eGAhHImnpweZIe9KY7MEgtyVLhiKa5i
+         fR4Tvnzhk50GT34N3gDB4Md3BLroyExtPxU1Q4pSc0OT6p3GD7BLfzNKg3CbZXEbDXW+
+         DOIifTvFBPBTvhrmh/AClhVvoyFafSyezQC4cgUN6e4az4p86l3iF5y02jqdzBrblAbs
+         Ccn7cS17Wy5chnfuI0FSWRoP6gHhfboK4sEi3eS9649Kr7xjTu6igXU31Ana0lcNi7JH
+         xpUSlDYcSrpzkRkQco/ZzklIdzEPQsCShPQoViGZqccdnyGFkl5uCtvswTdFWqQ1p4UX
+         LY+A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Ty7NKEPl0IHHIKXvP+jXCaEpuJOC+fqTvmEMtCpQ/20=;
-        b=My5mgE/eui6GmlgoBFu5vT3ZcbRuLHioKPB/buL/iaCyf6raGt3f9Cl0HFfm3+iL9s
-         onMj1vbAVjZhXZ0CEZMyrQHmk0vyjqgu0DPNvkDcixQJY3IQI8HB46Z/2knLItEEbT30
-         d7N1Iqp8pmpPMgt91jIYNb5VGA+5Mc/TeBhgMm6UGoRa6cBEoWtJjQTW4aYJkEIZ8fkL
-         TijeCSO0vvcvw2TZWHKJXEe4HV1LLeCea+Mt0d111nPbUY+baKIysq7mZKBfa2i8JaEz
-         E1J0Gp0pU8dy5P1ErQl9zk+7GqpOUAbh5aS+VYEO5TpE8HQNA8gVsRbL6AuM3TPdLPKn
-         D5Mg==
-X-Gm-Message-State: ACrzQf3mSOAllGq5nX/R+DY00aTEx2pbeL/G8rZAhjHeC0pPpnOn0z5q
-        Im9KvJCfl8HRnMh1Te2u9njv7A==
-X-Google-Smtp-Source: AMsMyM4SAC4AWjYSYyCN4S3X8KC1TnM1iyPSaM02SstCPPdhS3uGTSJeL2KSiB26C81hZIhFnQ7kZg==
-X-Received: by 2002:a17:902:d4ce:b0:188:5340:4a3a with SMTP id o14-20020a170902d4ce00b0018853404a3amr5770987plg.79.1667516698820;
-        Thu, 03 Nov 2022 16:04:58 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id x12-20020a62860c000000b0056281da3bcbsm1297475pfd.149.2022.11.03.16.04.57
+        bh=tJCllttmibhNCQwFie0bmyQKbcw2MJMVuYNYg2R4nSQ=;
+        b=0XDcxcg0gSDdFDPrbzKfl/gRcC+W9rDuIBKcE7VCT45qPfR2oPnedy/Bwuz+p77wqF
+         aW9swvGTd82i5GTAWnxFx+I2ZVZlpzcmTIj5K7uL1wZS8iIAVONd/gegP902BVdzJHTQ
+         vJobSKw2+RfUC1SazpAuh5eVlD93IKVFT6SRD6V8ADX+6j1GrJ5nRSjb8xVpg7jWwZ0T
+         p7xp0JZ+gwPBQkMZTTATmVNKZv1iwwehns2dD8ImHCYnWRf0fxQw4DVjyW542N6SI4QB
+         GAaprdDMg53nhE7vqJ34gu62woX8yQYgvxVuephZ48oYuZzCpCmlcBPGEihMo5rUGcW8
+         w7yw==
+X-Gm-Message-State: ACrzQf1acQt/xJs6RBvR3v5uYMrtTUspq+DrBzcItLMYqL6b172dyU28
+        sDURJUijR66GT/yWQP++/gmdyQ==
+X-Google-Smtp-Source: AMsMyM4qIElnDr/QXrW9Mu4E7RvNkDW74UaI2QPCWjYc+9r2+0hWK8p5CJ3N/cbcQvosAf5N6zyNGg==
+X-Received: by 2002:a63:ef48:0:b0:470:3fc:c475 with SMTP id c8-20020a63ef48000000b0047003fcc475mr10881922pgk.333.1667516746123;
+        Thu, 03 Nov 2022 16:05:46 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-106-210.pa.nsw.optusnet.com.au. [49.181.106.210])
+        by smtp.gmail.com with ESMTPSA id n7-20020a056a00212700b00561b3ee73f6sm1302502pfj.144.2022.11.03.16.05.45
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 16:04:57 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 23:04:53 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Chao Peng <chao.p.peng@linux.intel.com>
-Cc:     kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org, linux-fsdevel@vger.kernel.org,
-        linux-arch@vger.kernel.org, linux-api@vger.kernel.org,
-        linux-doc@vger.kernel.org, qemu-devel@nongnu.org,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>,
-        Wanpeng Li <wanpengli@tencent.com>,
-        Jim Mattson <jmattson@google.com>,
-        Joerg Roedel <joro@8bytes.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        x86@kernel.org, "H . Peter Anvin" <hpa@zytor.com>,
-        Hugh Dickins <hughd@google.com>,
-        Jeff Layton <jlayton@kernel.org>,
-        "J . Bruce Fields" <bfields@fieldses.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Shuah Khan <shuah@kernel.org>, Mike Rapoport <rppt@kernel.org>,
-        Steven Price <steven.price@arm.com>,
-        "Maciej S . Szmigiero" <mail@maciej.szmigiero.name>,
-        Vlastimil Babka <vbabka@suse.cz>,
-        Vishal Annapurve <vannapurve@google.com>,
-        Yu Zhang <yu.c.zhang@linux.intel.com>,
-        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
-        luto@kernel.org, jun.nakajima@intel.com, dave.hansen@intel.com,
-        ak@linux.intel.com, david@redhat.com, aarcange@redhat.com,
-        ddutile@redhat.com, dhildenb@redhat.com,
-        Quentin Perret <qperret@google.com>, tabba@google.com,
-        Michael Roth <michael.roth@amd.com>, mhocko@suse.com,
-        Muchun Song <songmuchun@bytedance.com>, wei.w.wang@intel.com
-Subject: Re: [PATCH v9 5/8] KVM: Register/unregister the guest private memory
- regions
-Message-ID: <Y2RJFWplouV2iF5E@google.com>
-References: <20221025151344.3784230-1-chao.p.peng@linux.intel.com>
- <20221025151344.3784230-6-chao.p.peng@linux.intel.com>
+        Thu, 03 Nov 2022 16:05:45 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1oqjHK-009wxE-Nq; Fri, 04 Nov 2022 10:05:42 +1100
+Date:   Fri, 4 Nov 2022 10:05:42 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     Gao Xiang <hsiangkao@linux.alibaba.com>
+Cc:     linux-xfs@vger.kernel.org, "Darrick J. Wong" <djwong@kernel.org>,
+        Dave Chinner <dchinner@redhat.com>,
+        Brian Foster <bfoster@redhat.com>,
+        LKML <linux-kernel@vger.kernel.org>,
+        Zirong Lang <zlang@redhat.com>
+Subject: Re: [PATCH v2] xfs: extend the freelist before available space check
+Message-ID: <20221103230542.GK3600936@dread.disaster.area>
+References: <20221103094639.39984-1-hsiangkao@linux.alibaba.com>
+ <20221103131025.40064-1-hsiangkao@linux.alibaba.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20221025151344.3784230-6-chao.p.peng@linux.intel.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
-        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221103131025.40064-1-hsiangkao@linux.alibaba.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Tue, Oct 25, 2022, Chao Peng wrote:
-> @@ -4708,6 +4802,24 @@ static long kvm_vm_ioctl(struct file *filp,
->  		r = kvm_vm_ioctl_set_memory_region(kvm, &mem);
->  		break;
->  	}
-> +#ifdef CONFIG_KVM_GENERIC_PRIVATE_MEM
-> +	case KVM_MEMORY_ENCRYPT_REG_REGION:
-> +	case KVM_MEMORY_ENCRYPT_UNREG_REGION: {
+On Thu, Nov 03, 2022 at 09:10:25PM +0800, Gao Xiang wrote:
+> There is a long standing issue which could cause fs shutdown due to
+> inode extent to btree conversion failure right after an extent
+> allocation in the same AG, which is absolutely unexpected due to the
+> proper minleft reservation in the previous allocation.  Brian once
+> addressed one of the root cause [1], however, such symptom can still
+> occur after the commit is merged as reported [2], and our cloud
+> environment is also suffering from this issue.
+> 
+> From the description of the commit [1], I found that Zirong has an
+> in-house stress test reproducer for this issue, therefore I asked him
+> to reproduce again and he confirmed that such issue can still be
+> reproducable on RHEL 9.
+> 
+> Thanks to him, after dumping the transaction log items, I think
+> the root cause is as below:
+>  1. Allocate space with the following condition:
+>     freeblks: 18304 pagf_flcount: 6
+>     reservation: 18276 need (min_free): 6
+>     args->minleft: 1
+>     available = freeblks + agflcount - reservation - need - minleft
+>               = 18304 + min(6, 6) - 18276 - 6 - 1 = 27
+> 
+>     The first allocation check itself is ok;
+> 
+>  2. At that time, the AG state is
+>     AGF Buffer: (XAGF)
+>         ver:1  seq#:3  len:2621424
+>         root BNO:9  CNT:7
+>         level BNO:2  CNT:2
+>         1st:64  last:69  cnt:6  freeblks:18277  longest:6395
+                                  ^^^^^^^^^^^^^^
 
-I'm having second thoughts about usurping KVM_MEMORY_ENCRYPT_(UN)REG_REGION.  Aside
-from the fact that restricted/protected memory may not be encrypted, there are
-other potential use cases for per-page memory attributes[*], e.g. to make memory
-read-only (or no-exec, or exec-only, etc...) without having to modify memslots.
+Hold on - pag->pagf_freeblks != agf->freeblks, and if we start with
+the agf freeblocks:
 
-Any paravirt use case where the attributes of a page are effectively dictated by
-the guest is going to run into the exact same performance problems with memslots,
-which isn't suprising in hindsight since shared vs. private is really just an
-attribute, albeit with extra special semantics.
+	available = 18277 + 6 - 18276 - 6 - 1 = 0
 
-And if we go with a brand new ioctl(), maybe someday in the very distant future
-we can deprecate and delete KVM_MEMORY_ENCRYPT_(UN)REG_REGION.
+IOWs, the allocation should never selected this AG in the first
+place.
 
-Switching to a new ioctl() should be a minor change, i.e. shouldn't throw too big
-of a wrench into things.
+So why is pag->pagf_freeblks not equal to agf->freeblks when this
+allocation was first checked? It's clearly not because the AGFL is
+unpopulated - both the perag and the agf indicate it has the minimum
+6 blocks already allocated....
 
-Something like:
+Cheers,
 
-  KVM_SET_MEMORY_ATTRIBUTES
-
-  struct kvm_memory_attributes {
-	__u64 address;
-	__u64 size;
-	__u64 flags;
-  }
-
-[*] https://lore.kernel.org/all/Y1a1i9vbJ%2FpVmV9r@google.com
-
-> +		struct kvm_enc_region region;
-> +		bool set = ioctl == KVM_MEMORY_ENCRYPT_REG_REGION;
-> +
-> +		if (!kvm_arch_has_private_mem(kvm))
-> +			goto arch_vm_ioctl;
-> +
-> +		r = -EFAULT;
-> +		if (copy_from_user(&region, argp, sizeof(region)))
-> +			goto out;
-> +
-> +		r = kvm_vm_ioctl_set_mem_attr(kvm, region.addr,
-> +					      region.size, set);
-> +		break;
-> +	}
-> +#endif
+Dave.
+-- 
+Dave Chinner
+david@fromorbit.com
