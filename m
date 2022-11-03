@@ -2,71 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B6D1E617C74
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:22:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D0AD1617C79
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:23:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231631AbiKCMWY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 08:22:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46964 "EHLO
+        id S231280AbiKCMXa (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 08:23:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47562 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231657AbiKCMWS (ORCPT
+        with ESMTP id S230205AbiKCMX2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 08:22:18 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC9D3BF44;
-        Thu,  3 Nov 2022 05:22:15 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id bs21so2515176wrb.4;
-        Thu, 03 Nov 2022 05:22:15 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=pSgf6jiYcfVtPWJQMVHTmOxF85M+YtjytNm5UST5O0k=;
-        b=izbaHHxtCFkvePT07BD1qfeuZBIWMdSM+hGVg49RzP/uKs+dO61RU5yF15Tg80cJoq
-         gaRYbkyeksP+CTqljNIUQ0b6AgBz92SuOMvC9RcHexPmGB+G9BDCy28SF/16XYIvUTjq
-         46UPaoUy4I8cpxmn/a5bk7+7IPvMgFQxUZOvIaX6BV4eGUsUbHKOb7MpLaBHuRFCx7O7
-         PTST+o5fKhtQZSgkTBqmGt8PlhMlJXbUCM3BwLoeu/8MunSi+4yO8K89IToJ6uvlhajS
-         6N9qAe2PRBx9xkrBYYwknkRCHm95OJpq9bIEvl8o+8uSabL2d44JDmYSooqWV70imV0e
-         xm7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pSgf6jiYcfVtPWJQMVHTmOxF85M+YtjytNm5UST5O0k=;
-        b=T8PxuMVePJwyloHNqKhWlTgJd/G8Cmf62luEVp3memYHaikydDKcT1aqZs0wZ7Bif9
-         1hDwI1wJDb8df1tbaahI5cRzL1SE2NRKDw8akoBm/FnchqgUlCzQAM1VhlWANz7f7cMZ
-         foN+DRk8oUW32AcKPkP6ODuObpqfol/IiGvMXfBH4PsAU9Xxq87reeOuZSxCLyzmQmzl
-         /l4akzaEFKSJstP0bVsPDlcyHPaOc6ztVzNukDctgiBbMEpJp1irEepRAkhJFW8qtvFW
-         aNjDYgMhXWs2KN1VNFxA/gWG/SRa2x75VHJANgiS0D9j3lyvzGWtmYtcnNbncazfyYVe
-         mVsw==
-X-Gm-Message-State: ACrzQf0mhuvjjgZyqw+X2s2q1xRFihS5eUAXSczM4p0MukEGtRJqaYSW
-        MmV9DWaINqwbs7b9lu94gKQ=
-X-Google-Smtp-Source: AMsMyM6fUf6Ip8ggD+ZWUZAq2zpubt3x556zczWNAjLLXW0IGOAdHI5bI99XkXh1Q+13mLb6xGThUQ==
-X-Received: by 2002:adf:e6ce:0:b0:236:76a2:fc80 with SMTP id y14-20020adfe6ce000000b0023676a2fc80mr18647287wrm.163.1667478134068;
-        Thu, 03 Nov 2022 05:22:14 -0700 (PDT)
-Received: from debian (host-78-150-37-98.as13285.net. [78.150.37.98])
-        by smtp.gmail.com with ESMTPSA id ay5-20020a5d6f05000000b0022e57e66824sm966032wrb.99.2022.11.03.05.22.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 05:22:13 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 12:22:12 +0000
-From:   Sudip Mukherjee <sudipm.mukherjee@gmail.com>
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc:     stable@vger.kernel.org, patches@lists.linux.dev,
-        linux-kernel@vger.kernel.org, torvalds@linux-foundation.org,
-        akpm@linux-foundation.org, linux@roeck-us.net, shuah@kernel.org,
-        patches@kernelci.org, lkft-triage@lists.linaro.org, pavel@denx.de,
-        jonathanh@nvidia.com, f.fainelli@gmail.com, srw@sladewatkins.net
-Subject: Re: [PATCH 4.19 00/78] 4.19.264-rc1 review
-Message-ID: <Y2OydDkyWRIWMu+t@debian>
-References: <20221102022052.895556444@linuxfoundation.org>
+        Thu, 3 Nov 2022 08:23:28 -0400
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 938CD6475;
+        Thu,  3 Nov 2022 05:23:27 -0700 (PDT)
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 60E501FB;
+        Thu,  3 Nov 2022 05:23:33 -0700 (PDT)
+Received: from [10.57.37.13] (unknown [10.57.37.13])
+        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 5742A3F703;
+        Thu,  3 Nov 2022 05:23:24 -0700 (PDT)
+Message-ID: <6be39bae-f325-12e0-374b-a27c9ee2ef2b@arm.com>
+Date:   Thu, 3 Nov 2022 12:23:20 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221102022052.895556444@linuxfoundation.org>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+User-Agent: Mozilla/5.0 (Windows NT 10.0; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v10 1/4] iommu: Always define struct iommu_fwspec
+Content-Language: en-GB
+To:     Prathamesh Shete <pshete@nvidia.com>, joro@8bytes.org,
+        adrian.hunter@intel.com, ulf.hansson@linaro.org,
+        thierry.reding@gmail.com, jonathanh@nvidia.com,
+        p.zabel@pengutronix.de, linux-mmc@vger.kernel.org,
+        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     will@kernel.org, iommu@lists.linux.dev, anrao@nvidia.com,
+        smangipudi@nvidia.com, kyarlagadda@nvidia.com,
+        Thierry Reding <treding@nvidia.com>
+References: <CAPDyKFqJdiCDkAfrONfnBVKw1v8=jZ+hEJiKGK70EQ4o7BSxaQ@mail.gmail.com>
+ <20221103043852.24718-1-pshete@nvidia.com>
+From:   Robin Murphy <robin.murphy@arm.com>
+In-Reply-To: <20221103043852.24718-1-pshete@nvidia.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
+        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_NONE autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -74,37 +51,97 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Greg,
+On 2022-11-03 04:38, Prathamesh Shete wrote:
+> In order to fully make use of the !IOMMU_API stub functions, make the
+> struct iommu_fwspec always available so that users of the stubs can keep
+> using the structure's internals without causing compile failures.
 
-On Wed, Nov 02, 2022 at 03:33:45AM +0100, Greg Kroah-Hartman wrote:
-> This is the start of the stable review cycle for the 4.19.264 release.
-> There are 78 patches in this series, all will be posted as a response
-> to this one.  If anyone has any issues with these being applied, please
-> let me know.
+I'm really in two minds about this... fwspecs are an internal detail of 
+the IOMMU API that are meant to be private between individual drivers 
+and firmware code, so anything poking at them arguably does and should 
+depend on CONFIG_IOMMU_API. It looks like the stub for 
+dev_iommu_fwspec_get() was only added for the sake of one driver that 
+was misusing it where it really wanted device_iommu_mapped(), and has 
+since been fixed, so if anything my preference would be to remove that 
+stub :/
+
+I don't technically have much objection to this patch in isolation, but 
+what I don't like is the direction of travel it implies. I see the 
+anti-pattern is only spread across Tegra drivers, making Tegra-specific 
+assumptions, so in my view the best answer would be to abstract that 
+fwpsec dependency into a single Tegra-specific helper, which would 
+better represent the nature of what's really going on here.
+
+Thanks,
+Robin.
+
+> Signed-off-by: Thierry Reding <treding@nvidia.com>
+> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+>   include/linux/iommu.h | 39 +++++++++++++++++++--------------------
+>   1 file changed, 19 insertions(+), 20 deletions(-)
 > 
-> Responses should be made by Fri, 04 Nov 2022 02:20:38 +0000.
-> Anything received after that time might be too late.
-
-Build test (gcc version 11.3.1 20221016):
-mips: 63 configs -> no  failure
-arm: 115 configs -> no failure
-arm64: 2 configs -> no failure
-x86_64: 4 configs -> no failure
-alpha allmodconfig -> no failure
-powerpc allmodconfig -> no failure
-riscv allmodconfig -> no failure
-s390 allmodconfig -> no failure
-xtensa allmodconfig -> no failure
-
-Boot test:
-x86_64: Booted on my test laptop. No regression.
-x86_64: Booted on qemu. No regression. [1]
-
-[1]. https://openqa.qa.codethink.co.uk/tests/2086
-
-
-Tested-by: Sudip Mukherjee <sudip.mukherjee@codethink.co.uk>
-
--- 
-Regards
-Sudip
+> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
+> index ea30f00dc145..afa829bc4356 100644
+> --- a/include/linux/iommu.h
+> +++ b/include/linux/iommu.h
+> @@ -173,6 +173,25 @@ enum iommu_dev_features {
+>   
+>   #define IOMMU_PASID_INVALID	(-1U)
+>   
+> +/**
+> + * struct iommu_fwspec - per-device IOMMU instance data
+> + * @ops: ops for this device's IOMMU
+> + * @iommu_fwnode: firmware handle for this device's IOMMU
+> + * @flags: IOMMU_FWSPEC_* flags
+> + * @num_ids: number of associated device IDs
+> + * @ids: IDs which this device may present to the IOMMU
+> + */
+> +struct iommu_fwspec {
+> +	const struct iommu_ops	*ops;
+> +	struct fwnode_handle	*iommu_fwnode;
+> +	u32			flags;
+> +	unsigned int		num_ids;
+> +	u32			ids[];
+> +};
+> +
+> +/* ATS is supported */
+> +#define IOMMU_FWSPEC_PCI_RC_ATS			(1 << 0)
+> +
+>   #ifdef CONFIG_IOMMU_API
+>   
+>   /**
+> @@ -600,25 +619,6 @@ extern struct iommu_group *generic_device_group(struct device *dev);
+>   /* FSL-MC device grouping function */
+>   struct iommu_group *fsl_mc_device_group(struct device *dev);
+>   
+> -/**
+> - * struct iommu_fwspec - per-device IOMMU instance data
+> - * @ops: ops for this device's IOMMU
+> - * @iommu_fwnode: firmware handle for this device's IOMMU
+> - * @flags: IOMMU_FWSPEC_* flags
+> - * @num_ids: number of associated device IDs
+> - * @ids: IDs which this device may present to the IOMMU
+> - */
+> -struct iommu_fwspec {
+> -	const struct iommu_ops	*ops;
+> -	struct fwnode_handle	*iommu_fwnode;
+> -	u32			flags;
+> -	unsigned int		num_ids;
+> -	u32			ids[];
+> -};
+> -
+> -/* ATS is supported */
+> -#define IOMMU_FWSPEC_PCI_RC_ATS			(1 << 0)
+> -
+>   /**
+>    * struct iommu_sva - handle to a device-mm bond
+>    */
+> @@ -682,7 +682,6 @@ bool iommu_group_dma_owner_claimed(struct iommu_group *group);
+>   
+>   struct iommu_ops {};
+>   struct iommu_group {};
+> -struct iommu_fwspec {};
+>   struct iommu_device {};
+>   struct iommu_fault_param {};
+>   struct iommu_iotlb_gather {};
