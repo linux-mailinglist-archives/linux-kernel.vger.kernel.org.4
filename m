@@ -2,48 +2,48 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 374E9618A63
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 22:16:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7441F618A64
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 22:16:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230096AbiKCVQA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 17:16:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38322 "EHLO
+        id S231346AbiKCVQD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 17:16:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38328 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230147AbiKCVPt (ORCPT
+        with ESMTP id S230370AbiKCVPu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 17:15:49 -0400
-Received: from galois.linutronix.de (Galois.linutronix.de [IPv6:2a0a:51c0:0:12e:550::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A2A4C175B4;
-        Thu,  3 Nov 2022 14:15:48 -0700 (PDT)
-Date:   Thu, 03 Nov 2022 21:15:45 -0000
+        Thu, 3 Nov 2022 17:15:50 -0400
+Received: from galois.linutronix.de (Galois.linutronix.de [193.142.43.55])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1880812AB2;
+        Thu,  3 Nov 2022 14:15:50 -0700 (PDT)
+Date:   Thu, 03 Nov 2022 21:15:47 -0000
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020; t=1667510147;
+        s=2020; t=1667510148;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=IB0W7xPNDOn8m/Tr14513bKXWH9z/teXun0sfGesIEA=;
-        b=lM5I3b+EcjGrF96EAAXO9Irf9g/x+yB1J3jLO3+Na9EmHo4lc5mF2Y/6eHndZRyh1tz5Dl
-        SdY3tHL9g6eLl5iN83vLYsrfTFg5Wycbbk0UxWuXvJ6hNBk2PEVrrqedKk9n4lH/7oKUxB
-        ajV0yG74lvkC5pkbhIu0gVMFwAAguPRPq3T6cxIzt1JT40oWTPF5Hg857oyfwfCTm7d25t
-        kEaWIaZNMckChfwpueUZLhy0iL8+u4ctXBdePY306zgEBDUT9rMrmtmfoFQDt6ZA0rsTbz
-        GSJOZN4UVIh6iAHVNUmLEk3yFdJ2HXBZRdsoV3sHTl3hI5XhByQqsGQunHLgfw==
+        bh=Ydd6tSAOcaMMkvF7w+hf2zH3SLaJ0ROCiNVI4cS3CsQ=;
+        b=lehQpgCC3OTO/H1lALypYRO3DALESVDm7NiackjaIUEpc5Io4ZfQL27dv6CrmJjeku+smM
+        Vh5OCysi3DQzB4jdskJ+kJEH/QgGS7/qpdNfR6TXLU8sdH+X4unUtwWlIG2bzrbtDAypE2
+        PZ+/C0jCqzdJ/h2GdgQGT+bE9Z6H5HD2jfLPCtPqi3IE1583n6PquK08wwRgnEYbbW1ylZ
+        fHqNsmw1cJld9/5/4o57esqNfZxH268ssOpY037WOzqsa0cAKV/CiSR+l0FAGQvBS/w8SR
+        FCxleA6QTOhzNGumuggB9OgD1VLJyMTPeCj9qfNB95dnWb/N/ycXBdRU+8W6bA==
 DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=linutronix.de;
-        s=2020e; t=1667510147;
+        s=2020e; t=1667510148;
         h=from:from:sender:sender:reply-to:reply-to:subject:subject:date:date:
          message-id:message-id:to:to:cc:cc:mime-version:mime-version:
          content-type:content-type:  content-transfer-encoding:content-transfer-encoding;
-        bh=IB0W7xPNDOn8m/Tr14513bKXWH9z/teXun0sfGesIEA=;
-        b=5sDccz53Uh/IG6LG7txpbt0Ul7961HxLXQfc6Vp7RXJpiRrRBTej5eQP8ZIYoNE4g0Gy3j
-        X0g/KbH5lVnIVyBQ==
+        bh=Ydd6tSAOcaMMkvF7w+hf2zH3SLaJ0ROCiNVI4cS3CsQ=;
+        b=AVNPMXk4T3fn1v5LZe3g+W7jdJNNQqYQvQdbVzfbqN6OEHb4MqyVxJk3ruRsU6BFLdIyVQ
+        8d+VqAptpIVmFuCw==
 From:   "tip-bot2 for Peter Zijlstra" <tip-bot2@linutronix.de>
 Sender: tip-bot2@linutronix.de
 Reply-to: linux-kernel@vger.kernel.org
 To:     linux-tip-commits@vger.kernel.org
-Subject: [tip: x86/mm] x86/mm/pae: Get rid of set_64bit()
+Subject: [tip: x86/mm] x86_64: Remove pointless set_64bit() usage
 Cc:     "Peter Zijlstra (Intel)" <peterz@infradead.org>, x86@kernel.org,
         linux-kernel@vger.kernel.org
 MIME-Version: 1.0
-Message-ID: <166751014599.6127.12396632902522246604.tip-bot2@tip-bot2>
+Message-ID: <166751014712.6127.16001540619046695046.tip-bot2@tip-bot2>
 Robot-ID: <tip-bot2@linutronix.de>
 Robot-Unsubscribe: Contact <mailto:tglx@linutronix.de> to get blacklisted from these emails
 Content-Type: text/plain; charset="utf-8"
@@ -59,120 +59,106 @@ X-Mailing-List: linux-kernel@vger.kernel.org
 
 The following commit has been merged into the x86/mm branch of tip:
 
-Commit-ID:     b6e3ea033d08b368fcac28556fa27bf20e8a1ba5
-Gitweb:        https://git.kernel.org/tip/b6e3ea033d08b368fcac28556fa27bf20e8a1ba5
+Commit-ID:     19404aeebbc18cc15ef440b4c17f9cc9f3005329
+Gitweb:        https://git.kernel.org/tip/19404aeebbc18cc15ef440b4c17f9cc9f3005329
 Author:        Peter Zijlstra <peterz@infradead.org>
-AuthorDate:    Fri, 21 Oct 2022 13:36:24 +02:00
+AuthorDate:    Fri, 21 Oct 2022 14:11:38 +02:00
 Committer:     Peter Zijlstra <peterz@infradead.org>
-CommitterDate: Thu, 03 Nov 2022 22:04:29 +01:00
+CommitterDate: Thu, 03 Nov 2022 22:04:28 +01:00
 
-x86/mm/pae: Get rid of set_64bit()
+x86_64: Remove pointless set_64bit() usage
 
-Recognise that set_64bit() is a special case of our previously
-introduced pxx_xchg64(), so use that and get rid of set_64bit().
+The use of set_64bit() in X86_64 only code is pretty pointless, seeing
+how it's a direct assignment. Remove all this nonsense.
 
+[nathanchance: unbreak irte]
 Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
-Link: https://lkml.kernel.org/r/20221022114425.233481884%40infradead.org
+Link: https://lkml.kernel.org/r/20221022114425.168036718%40infradead.org
 ---
- arch/x86/include/asm/cmpxchg_32.h     | 28 +--------------------------
- arch/x86/include/asm/pgtable-3level.h | 23 ++++++++++-----------
- 2 files changed, 12 insertions(+), 39 deletions(-)
+ arch/um/include/asm/pgtable-3level.h |  8 --------
+ arch/x86/include/asm/cmpxchg_64.h    |  5 -----
+ drivers/iommu/intel/irq_remapping.c  | 13 +++++--------
+ 3 files changed, 5 insertions(+), 21 deletions(-)
 
-diff --git a/arch/x86/include/asm/cmpxchg_32.h b/arch/x86/include/asm/cmpxchg_32.h
-index 215f5a6..6ba80ce 100644
---- a/arch/x86/include/asm/cmpxchg_32.h
-+++ b/arch/x86/include/asm/cmpxchg_32.h
-@@ -7,34 +7,6 @@
-  *       you need to test for the feature in boot_cpu_data.
-  */
+diff --git a/arch/um/include/asm/pgtable-3level.h b/arch/um/include/asm/pgtable-3level.h
+index cb896e6..8a5032e 100644
+--- a/arch/um/include/asm/pgtable-3level.h
++++ b/arch/um/include/asm/pgtable-3level.h
+@@ -58,11 +58,7 @@
+ #define pud_populate(mm, pud, pmd) \
+ 	set_pud(pud, __pud(_PAGE_TABLE + __pa(pmd)))
  
--/*
-- * CMPXCHG8B only writes to the target if we had the previous
-- * value in registers, otherwise it acts as a read and gives us the
-- * "new previous" value.  That is why there is a loop.  Preloading
-- * EDX:EAX is a performance optimization: in the common case it means
-- * we need only one locked operation.
-- *
-- * A SIMD/3DNOW!/MMX/FPU 64-bit store here would require at the very
-- * least an FPU save and/or %cr0.ts manipulation.
-- *
-- * cmpxchg8b must be used with the lock prefix here to allow the
-- * instruction to be executed atomically.  We need to have the reader
-- * side to see the coherent 64bit value.
-- */
--static inline void set_64bit(volatile u64 *ptr, u64 value)
+-#ifdef CONFIG_64BIT
+-#define set_pud(pudptr, pudval) set_64bit((u64 *) (pudptr), pud_val(pudval))
+-#else
+ #define set_pud(pudptr, pudval) (*(pudptr) = (pudval))
+-#endif
+ 
+ static inline int pgd_newpage(pgd_t pgd)
+ {
+@@ -71,11 +67,7 @@ static inline int pgd_newpage(pgd_t pgd)
+ 
+ static inline void pgd_mkuptodate(pgd_t pgd) { pgd_val(pgd) &= ~_PAGE_NEWPAGE; }
+ 
+-#ifdef CONFIG_64BIT
+-#define set_pmd(pmdptr, pmdval) set_64bit((u64 *) (pmdptr), pmd_val(pmdval))
+-#else
+ #define set_pmd(pmdptr, pmdval) (*(pmdptr) = (pmdval))
+-#endif
+ 
+ static inline void pud_clear (pud_t *pud)
+ {
+diff --git a/arch/x86/include/asm/cmpxchg_64.h b/arch/x86/include/asm/cmpxchg_64.h
+index 250187a..0d3beb2 100644
+--- a/arch/x86/include/asm/cmpxchg_64.h
++++ b/arch/x86/include/asm/cmpxchg_64.h
+@@ -2,11 +2,6 @@
+ #ifndef _ASM_X86_CMPXCHG_64_H
+ #define _ASM_X86_CMPXCHG_64_H
+ 
+-static inline void set_64bit(volatile u64 *ptr, u64 val)
 -{
--	u32 low  = value;
--	u32 high = value >> 32;
--	u64 prev = *ptr;
--
--	asm volatile("\n1:\t"
--		     LOCK_PREFIX "cmpxchg8b %0\n\t"
--		     "jnz 1b"
--		     : "=m" (*ptr), "+A" (prev)
--		     : "b" (low), "c" (high)
--		     : "memory");
+-	*ptr = val;
 -}
 -
- #ifdef CONFIG_X86_CMPXCHG64
  #define arch_cmpxchg64(ptr, o, n)					\
- 	((__typeof__(*(ptr)))__cmpxchg64((ptr), (unsigned long long)(o), \
-diff --git a/arch/x86/include/asm/pgtable-3level.h b/arch/x86/include/asm/pgtable-3level.h
-index 93c82c6..967b135 100644
---- a/arch/x86/include/asm/pgtable-3level.h
-+++ b/arch/x86/include/asm/pgtable-3level.h
-@@ -19,7 +19,15 @@
- 	pr_err("%s:%d: bad pgd %p(%016Lx)\n",				\
- 	       __FILE__, __LINE__, &(e), pgd_val(e))
+ ({									\
+ 	BUILD_BUG_ON(sizeof(*(ptr)) != 8);				\
+diff --git a/drivers/iommu/intel/irq_remapping.c b/drivers/iommu/intel/irq_remapping.c
+index 5962bb5..5d17616 100644
+--- a/drivers/iommu/intel/irq_remapping.c
++++ b/drivers/iommu/intel/irq_remapping.c
+@@ -173,7 +173,6 @@ static int modify_irte(struct irq_2_iommu *irq_iommu,
+ 	index = irq_iommu->irte_index + irq_iommu->sub_handle;
+ 	irte = &iommu->ir_table->base[index];
  
--/* Rules for using set_pte: the pte being assigned *must* be
-+#define pxx_xchg64(_pxx, _ptr, _val) ({					\
-+	_pxx##val_t *_p = (_pxx##val_t *)_ptr;				\
-+	_pxx##val_t _o = *_p;						\
-+	do { } while (!try_cmpxchg64(_p, &_o, (_val)));			\
-+	native_make_##_pxx(_o);						\
-+})
-+
-+/*
-+ * Rules for using set_pte: the pte being assigned *must* be
-  * either not present or in a state where the hardware will
-  * not attempt to update the pte.  In places where this is
-  * not possible, use pte_get_and_clear to obtain the old pte
-@@ -34,12 +42,12 @@ static inline void native_set_pte(pte_t *ptep, pte_t pte)
+-#if defined(CONFIG_HAVE_CMPXCHG_DOUBLE)
+ 	if ((irte->pst == 1) || (irte_modified->pst == 1)) {
+ 		bool ret;
  
- static inline void native_set_pte_atomic(pte_t *ptep, pte_t pte)
- {
--	set_64bit((unsigned long long *)(ptep), native_pte_val(pte));
-+	pxx_xchg64(pte, ptep, native_pte_val(pte));
- }
+@@ -187,11 +186,9 @@ static int modify_irte(struct irq_2_iommu *irq_iommu,
+ 		 * same as the old value.
+ 		 */
+ 		WARN_ON(!ret);
+-	} else
+-#endif
+-	{
+-		set_64bit(&irte->low, irte_modified->low);
+-		set_64bit(&irte->high, irte_modified->high);
++	} else {
++		WRITE_ONCE(irte->low, irte_modified->low);
++		WRITE_ONCE(irte->high, irte_modified->high);
+ 	}
+ 	__iommu_flush_cache(iommu, irte, sizeof(*irte));
  
- static inline void native_set_pmd(pmd_t *pmdp, pmd_t pmd)
- {
--	set_64bit((unsigned long long *)(pmdp), native_pmd_val(pmd));
-+	pxx_xchg64(pmd, pmdp, native_pmd_val(pmd));
- }
+@@ -249,8 +246,8 @@ static int clear_entries(struct irq_2_iommu *irq_iommu)
+ 	end = start + (1 << irq_iommu->irte_mask);
  
- static inline void native_set_pud(pud_t *pudp, pud_t pud)
-@@ -47,7 +55,7 @@ static inline void native_set_pud(pud_t *pudp, pud_t pud)
- #ifdef CONFIG_PAGE_TABLE_ISOLATION
- 	pud.p4d.pgd = pti_set_user_pgtbl(&pudp->p4d.pgd, pud.p4d.pgd);
- #endif
--	set_64bit((unsigned long long *)(pudp), native_pud_val(pud));
-+	pxx_xchg64(pud, pudp, native_pud_val(pud));
- }
- 
- /*
-@@ -91,13 +99,6 @@ static inline void pud_clear(pud_t *pudp)
- }
- 
- 
--#define pxx_xchg64(_pxx, _ptr, _val) ({					\
--	_pxx##val_t *_p = (_pxx##val_t *)_ptr;				\
--	_pxx##val_t _o = *_p;						\
--	do { } while (!try_cmpxchg64(_p, &_o, (_val)));			\
--	native_make_##_pxx(_o);						\
--})
--
- #ifdef CONFIG_SMP
- static inline pte_t native_ptep_get_and_clear(pte_t *ptep)
- {
+ 	for (entry = start; entry < end; entry++) {
+-		set_64bit(&entry->low, 0);
+-		set_64bit(&entry->high, 0);
++		WRITE_ONCE(entry->low, 0);
++		WRITE_ONCE(entry->high, 0);
+ 	}
+ 	bitmap_release_region(iommu->ir_table->bitmap, index,
+ 			      irq_iommu->irte_mask);
