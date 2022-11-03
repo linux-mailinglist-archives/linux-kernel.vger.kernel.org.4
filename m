@@ -2,92 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E3849617B70
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 12:22:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 80B46617B77
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 12:24:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230165AbiKCLVy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 07:21:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42190 "EHLO
+        id S230402AbiKCLX4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 07:23:56 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42694 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiKCLVw (ORCPT
+        with ESMTP id S229379AbiKCLXv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 07:21:52 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 99C8210FCC
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 04:21:51 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 981A01FB;
-        Thu,  3 Nov 2022 04:21:57 -0700 (PDT)
-Received: from bogus (e103737-lin.cambridge.arm.com [10.1.197.49])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 716973F5A1;
-        Thu,  3 Nov 2022 04:21:49 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 11:21:47 +0000
-From:   Sudeep Holla <sudeep.holla@arm.com>
-To:     Florian Fainelli <f.fainelli@gmail.com>
-Cc:     Cristian Marussi <cristian.marussi@arm.com>,
-        linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-        james.quinlan@broadcom.com, Jonathan.Cameron@Huawei.com,
-        etienne.carriere@linaro.org, vincent.guittot@linaro.org,
-        souvik.chakravarty@arm.com, wleavitt@marvell.com,
-        peter.hilber@opensynergy.com, nicola.mazzucato@arm.com,
-        tarek.el-sherbiny@arm.com, quic_kshivnan@quicinc.com,
-        Sudeep Holla <sudeep.holla@arm.com>
-Subject: Re: [PATCH v4 0/11] Introduce a unified API for SCMI Server testing
-Message-ID: <20221103112147.rq2v7dwte577kmb4@bogus>
-References: <20221019204626.3813043-1-cristian.marussi@arm.com>
- <fc09a68c-bd6d-0328-4052-88d40b50077d@gmail.com>
+        Thu, 3 Nov 2022 07:23:51 -0400
+Received: from pandora.armlinux.org.uk (pandora.armlinux.org.uk [IPv6:2001:4d48:ad52:32c8:5054:ff:fe00:142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 07EE910FD0;
+        Thu,  3 Nov 2022 04:23:49 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=armlinux.org.uk; s=pandora-2019; h=Sender:In-Reply-To:Content-Type:
+        MIME-Version:References:Message-ID:Subject:Cc:To:From:Date:Reply-To:
+        Content-Transfer-Encoding:Content-ID:Content-Description:Resent-Date:
+        Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:List-Id:
+        List-Help:List-Unsubscribe:List-Subscribe:List-Post:List-Owner:List-Archive;
+        bh=FhILi2yfvcxktek07eALVO1HW7rm9P9MDUCD3dvjgj4=; b=uEwHMbZ4rD8zck0Mz0UGcuvEQ0
+        y3D4aZVJrWTJL8/ieTRoUZ4LAYaO1SXm006oXFwKxXYC7rtchdOAeT0zejdtPc3rMGT7Zxr06VhQh
+        dnfHxX/4PkT5a9SykYNegtnQNMkRp5HzYq39vwkWYx9QnaTSNia7Qadskbjk3jYNwMnTjx1oi2LUD
+        vJDnphR7tjTZSpyHGZUcKl4PycinJt45wGcTM3UDC+FcEtm9Cc1jj+EALteqyfKG7kjV8AjBLtziS
+        wSIUcAm+dhJSAn3nA5a+ZegNJ87y9f1la1F6OMnc7wZwpSlzdhAm1V2j491M5JcqEnQFwawcZG1Xc
+        gWfnG6oA==;
+Received: from shell.armlinux.org.uk ([fd8f:7570:feb6:1:5054:ff:fe00:4ec]:35090)
+        by pandora.armlinux.org.uk with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+        (Exim 4.94.2)
+        (envelope-from <linux@armlinux.org.uk>)
+        id 1oqYJX-0006E1-8A; Thu, 03 Nov 2022 11:23:15 +0000
+Received: from linux by shell.armlinux.org.uk with local (Exim 4.94.2)
+        (envelope-from <linux@shell.armlinux.org.uk>)
+        id 1oqYJR-0008Jt-0G; Thu, 03 Nov 2022 11:23:09 +0000
+Date:   Thu, 3 Nov 2022 11:23:08 +0000
+From:   "Russell King (Oracle)" <linux@armlinux.org.uk>
+To:     Yang Jihong <yangjihong1@huawei.com>
+Cc:     ast@kernel.org, daniel@iogearbox.net, andrii@kernel.org,
+        martin.lau@linux.dev, song@kernel.org, yhs@fb.com,
+        john.fastabend@gmail.com, kpsingh@kernel.org, sdf@google.com,
+        haoluo@google.com, jolsa@kernel.org, illusionist.neo@gmail.com,
+        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
+        pabeni@redhat.com, mykolal@fb.com, shuah@kernel.org,
+        benjamin.tissoires@redhat.com, memxor@gmail.com, delyank@fb.com,
+        asavkov@redhat.com, bpf@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kselftest@vger.kernel.org
+Subject: Re: [PATCH bpf RESEND 2/4] bpf: Remove size check for sk in
+ bpf_skb_is_valid_access for 32-bit architecture
+Message-ID: <Y2OknBtLgqTHSrvy@shell.armlinux.org.uk>
+References: <20221103092118.248600-1-yangjihong1@huawei.com>
+ <20221103092118.248600-3-yangjihong1@huawei.com>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <fc09a68c-bd6d-0328-4052-88d40b50077d@gmail.com>
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+In-Reply-To: <20221103092118.248600-3-yangjihong1@huawei.com>
+Sender: Russell King (Oracle) <linux@armlinux.org.uk>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 07:38:25PM -0700, Florian Fainelli wrote:
-> Hi Christian,
+On Thu, Nov 03, 2022 at 05:21:16PM +0800, Yang Jihong wrote:
+> The error code -EACCES is returned when bpf prog is tested in 32-bit environment,
+> This is because bpf_object__relocate modifies the instruction to change memory
+> size to 4 bytes, as shown in the following messages:
 > 
-> On 10/19/2022 1:46 PM, Cristian Marussi wrote:
-> [snip]
+> libbpf: prog 'kfunc_call_test1': relo #2: matching candidate #0 <byte_off> [18342] struct __sk_buff.sk (0:30:0 @ offset 168)
+> libbpf: prog 'kfunc_call_test1': relo #2: patched insn #1 (LDX/ST/STX) off 168 -> 168
+> libbpf: prog 'kfunc_call_test1': relo #2: patched insn #1 (LDX/ST/STX) mem_sz 8 -> 4
 > 
-> > In V2 the runtime enable/disable switching capability has been removed
-> > (for now) since still not deemed to be stable/reliable enough: as a
-> > consequence when SCMI Raw support is compiled in, the regular SCMI stack
-> > drivers are now inhibited permanently for that Kernel.
-> 
-> For our platforms (ARCH_BRCMSTB) we would need to have the ability to start
-> with the regular SCMI stack to satisfy if nothing else, all clock consumers
-> otherwise it makes it fairly challenging for us to boot to a prompt as we
-> purposely turn off all unnecessary peripherals to conserve power. We could
-> introduce a "full on" mode to remove the clock provider dependency, but I
-> suspect others on "real" silicon may suffer from the same short comings.
->
+> As a result, the bpf_skb_is_valid_access check fails. For 32-bit architecture,
+> unnecessary checks need to be deleted.
 
-Fair enough. But if we are doing SCMI firmware testing or conformance via
-the $subject proposed way, can these drivers survive if the userspace do
-a random or a torture test changing the clock configurations ? Not sure
-how to deal with that as the intention here is to do the testing from the
-user-space and anything can happen. How do we avoid bring the entire system
-down while doing this testing. Can we unbind all the drivers using scmi on
-your platform ? I guess no. Let me know.
+Isn't the purpose of this check to ensure that the entire pointer is
+written, and BPF can't write half of it?
 
-> Once user-space is reached, I suppose we could find a way to unbind from all
-> SCMI consumers, and/or ensure that runtime PM is disabled, cpufreq is in a
-> governor that won't do any active frequency switching etc.
->
-> What do you think?
 
-Yes, Cristian always wanted to support that but I am the one trying to
-convince him not to unless there is a strong requirement for it. You seem
-to suggest that you have such a requirement, but that just opens loads of
-questions and how to we deal with that. Few of them are as stated above, I
-need to recall all the conversations I had with Cristian around that and why
-handling it may be bit complex.
+>  	case offsetof(struct __sk_buff, sk):
+> -		if (type == BPF_WRITE || size != sizeof(__u64))
+> -			return false;
 
---
-Regards,
-Sudeep
+Wouldn't "(size != sizeof(struct bpf_sock *) && size != sizeof(__u64))"
+be more appropriate here, so 32-bit can only write the 32-bit pointer
+or the full 64-bit value, and 64-bit can only write the 64-bit pointer?
+Or is there a reason not to? bpf folk?
+
+-- 
+RMK's Patch system: https://www.armlinux.org.uk/developer/patches/
+FTTP is here! 40Mbps down 10Mbps up. Decent connectivity at last!
