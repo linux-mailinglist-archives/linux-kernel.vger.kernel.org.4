@@ -2,144 +2,190 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0D3DC618472
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:30:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6C4BA61846A
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:30:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231827AbiKCQag (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 12:30:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54856 "EHLO
+        id S230153AbiKCQaF (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 12:30:05 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51156 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231324AbiKCQaW (ORCPT
+        with ESMTP id S229708AbiKCQ3x (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 12:30:22 -0400
-Received: from fllv0015.ext.ti.com (fllv0015.ext.ti.com [198.47.19.141])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 98694B92;
-        Thu,  3 Nov 2022 09:30:20 -0700 (PDT)
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-        by fllv0015.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A3GToek119565;
-        Thu, 3 Nov 2022 11:29:50 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1667492990;
-        bh=tku/OEvVMYCVyJUwEFWbSTgXMuBEfZMv78bmcEijKEU=;
-        h=Date:Subject:To:CC:References:From:In-Reply-To;
-        b=NI9urWluRQ1mAozq+guJV0WCseYHWaz89rZOHQku5axa2KGRwPtoY4XRk7RoRWeuO
-         Z/WYOnoY/Oho88F4rkakWLjh2voQYoM8ihJl8I0SX6Mf4QR8UjnQ+83fce1TkajChi
-         goB8VhRG2859EkhvsRTDnQIxkmlnTTjfIadXe+pY=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-        by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A3GToL9072450
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 3 Nov 2022 11:29:50 -0500
-Received: from DFLE106.ent.ti.com (10.64.6.27) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 3 Nov
- 2022 11:29:50 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Thu, 3 Nov 2022 11:29:50 -0500
-Received: from [10.250.32.80] (ileaxei01-snat.itg.ti.com [10.180.69.5])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A3GTnWQ003709;
-        Thu, 3 Nov 2022 11:29:49 -0500
-Message-ID: <67f9ce4b-1ed6-fc41-c133-1fbafb743830@ti.com>
-Date:   Thu, 3 Nov 2022 11:29:49 -0500
+        Thu, 3 Nov 2022 12:29:53 -0400
+Received: from mail-qt1-x836.google.com (mail-qt1-x836.google.com [IPv6:2607:f8b0:4864:20::836])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C481BB34
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 09:29:51 -0700 (PDT)
+Received: by mail-qt1-x836.google.com with SMTP id hh9so1528637qtb.13
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 09:29:51 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=WzI5WHDGOhILd2kGTGSG7qJD/oMtmbhddu8DVRjwYa8=;
+        b=iR4qWTvnQ9PK6KX3xLXJJOzYzuLeNPTJ5QqMlgdV6aYVyeuiPSztQohCxcwzupcZTM
+         f89PBCC8TnTlTF6PqvJjVqVcFJGCC/heuJ7SggeKGyIK5RBL/rhxsShENw67NTrptTjg
+         QcDX+40Neuew+11KbTD2vFZIwcfH/FmvMq6sgGHh5OJ3xzpc9gjHa+A3n0cuEFwlRPtB
+         eIFb0mZDmTmyvoo1ImX4gAi0P4jxR1GowJpiwwcfXsdRLYQe4do09L6uX8uk/P4DfjL3
+         9GbCQF8s+hNNU72F2ZUgombhRPuUhfYn6rLYDEKRDmW1rDNuv9uia1VJQJBe1WcLCgq8
+         ULiQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=WzI5WHDGOhILd2kGTGSG7qJD/oMtmbhddu8DVRjwYa8=;
+        b=ACgGR9isQI5qMopbS8DPFvhwU60Ove70prA4LhcEX/LPAxmELUcY5p74DuLBVL6ZNH
+         IzpLqlynwFAZAxuGM9eQoXZ5Tld5GONB0X2O7NmDUG1TLCtpsCuGayEgRefdYJvfgFh+
+         g1q2/alDm1p61/m5Sci5A4UKg+nQeXWKOWdbuQLjTSCgt3uxZcVBJiJW+itkh5//kZHM
+         iHNTD+7YLQg6ekEiBRR/r7VQz2gbu6aBWZ7aibE/pCX8vJsIgy+fHW+QQGcdhc3ym88f
+         lHvW9dyLo9jVHbvoAXXHhaowEsjSfTn0X3wOTbC6LlDSIWKRHkxVqYw8pdEgM1bF9B36
+         N0LQ==
+X-Gm-Message-State: ACrzQf01hB4C7WodtG/W9aGiQpp+f6FJaRekpvmBNgomRr6s2HOyFu5J
+        C3Xq9h1svOi5I8gktUFZaAKk+A==
+X-Google-Smtp-Source: AMsMyM6uaWdvy7fAoM8b3ziC+Hx3Fsa/5e0pLstybGOQYB7L/NfOxWftJpK5SmD4Fz4HdYXb6c01mA==
+X-Received: by 2002:a05:622a:10e:b0:398:d464:eefa with SMTP id u14-20020a05622a010e00b00398d464eefamr25748915qtw.172.1667492990935;
+        Thu, 03 Nov 2022 09:29:50 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
+        by smtp.gmail.com with ESMTPSA id h15-20020a05620a244f00b006fa468342a3sm1044435qkn.108.2022.11.03.09.29.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 09:29:50 -0700 (PDT)
+Message-ID: <b85230d4-8fce-ba49-0d6b-8c4d20132cda@linaro.org>
+Date:   Thu, 3 Nov 2022 12:29:49 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v4 7/9] ARM: dts: nspire: Use MATRIX_KEY macro for
- linux,keymap
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v1 2/7] dt-bindings: usb: hpe,gxp-udc: Add binding for gxp
+ gadget
+To:     richard.yu@hpe.com, verdun@hpe.com, nick.hawkins@hpe.com,
+        gregkh@linuxfoundation.org, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, linux@armlinux.org.uk,
+        balbi@kernel.org, linux-usb@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org
+References: <20221103160625.15574-1-richard.yu@hpe.com>
+ <20221103160625.15574-3-richard.yu@hpe.com>
 Content-Language: en-US
-To:     Dmitry Torokhov <dmitry.torokhov@gmail.com>
-CC:     Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Arnd Bergmann <arnd@arndb.de>,
-        Linus Walleij <linus.walleij@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>,
-        Daniel Tang <dt.tangr@gmail.com>,
-        Fabian Vogt <fabian@ritter-vogt.de>,
-        <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221101215804.16262-1-afd@ti.com>
- <20221101215804.16262-8-afd@ti.com>
- <CAKdAkRTQ2bjQEn1HM=ZMHdC8Goyf1rUDNfMkNK3jMA2CR-t4eg@mail.gmail.com>
-From:   Andrew Davis <afd@ti.com>
-In-Reply-To: <CAKdAkRTQ2bjQEn1HM=ZMHdC8Goyf1rUDNfMkNK3jMA2CR-t4eg@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20221103160625.15574-3-richard.yu@hpe.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/2/22 11:07 PM, Dmitry Torokhov wrote:
-> Hi Andrew,
-> 
-> On Tue, Nov 1, 2022 at 2:59 PM Andrew Davis <afd@ti.com> wrote:
->>
->> This looks better and allows us to see the row and column numbers
->> more easily. Switch to this macro here.
->>
->> Signed-off-by: Andrew Davis <afd@ti.com>
->> ---
->>   arch/arm/boot/dts/nspire-clp.dts | 90 ++++++++++++++++++++++++--------
->>   arch/arm/boot/dts/nspire-cx.dts  | 90 ++++++++++++++++++++++++--------
->>   arch/arm/boot/dts/nspire-tp.dts  | 90 ++++++++++++++++++++++++--------
->>   3 files changed, 204 insertions(+), 66 deletions(-)
->>
->> diff --git a/arch/arm/boot/dts/nspire-clp.dts b/arch/arm/boot/dts/nspire-clp.dts
->> index f52f38c615886..916ede0c2499c 100644
->> --- a/arch/arm/boot/dts/nspire-clp.dts
->> +++ b/arch/arm/boot/dts/nspire-clp.dts
->> @@ -6,32 +6,78 @@
->>    */
->>   /dts-v1/;
->>
->> +#include <dt-bindings/input/input.h>
->> +
->>   /include/ "nspire-classic.dtsi"
->>
->>   &keypad {
->>          linux,keymap = <
->> -       0x0000001c      0x0001001c      0x00020039
->> -       0x0004002c      0x00050034      0x00060015
->> -       0x0007000b      0x0008002d      0x01000033
->> -       0x0101004e      0x01020011      0x01030004
->> -       0x0104002f      0x01050003      0x01060016
->> -       0x01070002      0x01080014      0x02000062
->> -       0x0201000c      0x0202001f      0x02030007
->> -       0x02040013      0x02050006      0x02060010
->> -       0x02070005      0x02080019      0x03000027
->> -       0x03010037      0x03020018      0x0303000a
->> -       0x03040031      0x03050009      0x03060032
->> -       0x03070008      0x03080026      0x04000028
->> -       0x04010035      0x04020025      0x04040024
->> -       0x04060017      0x04080023      0x05000028
->> -       0x05020022      0x0503001b      0x05040021
->> -       0x0505001a      0x05060012      0x0507006f
->> -       0x05080020      0x0509002a      0x0601001c
->> -       0x0602002e      0x06030068      0x06040030
->> -       0x0605006d      0x0606001e      0x06070001
->> -       0x0608002b      0x0609000f      0x07000067
->> -       0x0702006a      0x0704006c      0x07060069
->> -       0x0707000e      0x0708001d      0x070a000d
->> +               MATRIX_KEY(0,  0, 0x1c)
->> +               MATRIX_KEY(0,  1, 0x1c)
->> +               MATRIX_KEY(0,  2, 0x39)
-> 
-> Can this also be switched over to using KEY_* macros to describe the
-> keycodes emitted?
+On 03/11/2022 12:06, richard.yu@hpe.com wrote:
+> From: Richard Yu <richard.yu@hpe.com>
 > 
 
-That's going to be done in a follow up patch. This change here was
-done mechanically, but moving to KEY_* might need to be double
-checked by hand since some of these do not seem to map how one
-would expect to the function on the keypad.
+Subject: Drop redundant second "binding" word.
 
-Thanks,
-Andrew
+> Create documentation for the hpe,gxp-udc binding to support access to
+> the virtual USB device.
+> 
+> Signed-off-by: Richard Yu <richard.yu@hpe.com>
+> ---
+>  .../devicetree/bindings/usb/hpe,gxp-udc.yaml  | 57 +++++++++++++++++++
+>  1 file changed, 57 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/usb/hpe,gxp-udc.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/usb/hpe,gxp-udc.yaml b/Documentation/devicetree/bindings/usb/hpe,gxp-udc.yaml
+> new file mode 100644
+> index 000000000000..f1ec4df8c3d3
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/usb/hpe,gxp-udc.yaml
+> @@ -0,0 +1,57 @@
+> +# SPDX-License-Identifier: GPL-2.0-only OR BSD-2-Clause
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/usb/hpe,gxp-udc.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: HPE GXP Gadget Universal Device Controller (UDC)
+> +
+> +maintainers:
+> +  - Richard Yu <richard.yu@hpe.com>
+> +  - Jean-Marie Verdun <verdun@hpe.com>
+> +  - Nick Hawkins <nick.hawkins@hpe.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: hpe,gxp-udc
+> +
+> +  reg:
+> +    maxItems: 1
+> +
+> +  interrupts:
+> +    maxItems: 1
+> +
+> +  vdevnum:
+> +    description:
+> +      virtual device number.
+
+That's unusual property... Why numbering devices is part of DT (hardware
+description)?
+
+> +
+> +  fepnum:
+> +    description:
+> +      number of the flexible end-points this device is needed.
+
+Similar question.
+
+BTW, if you end sentence with '.', it means it is an sentence, so you
+need to start it with capital letter.
+
+> +
+> +  hpe,syscon-phandle:
+
+phandle is redudant. You need rather specific name, so "hpe,ehci-syscon"
+or whatever it is.
+
+
+> +    $ref: '/schemas/types.yaml#/definitions/phandle'
+
+
+No quotes.
+
+> +    description:
+> +      Phandle to the gxp vEHCI controller access vDevice registers.
+
+Drop "Phandle to"
+
+Isn't "gxp" a GXP?
+
+> +
+> +required:
+> +  - compatible
+> +  - reg
+> +  - interrupts
+> +  - vdevnum
+> +  - fepnum
+> +  - hpe,syscon-phandle
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    udc@80401000 {
+
+Node name "usb", I think it is more popular for USB controllers.
+
+> +      compatible = "hpe,gxp-udc";
+> +      reg = <0x80401000 0x1000>;
+> +      interrupts = <13>;
+> +      interrupt-parent = <&vic1>;
+> +      vdevnum = <0>;
+> +      fepnum = <7>;
+> +      hpe,syscon-phandle = <&udc_system_controller>;
+> +    };
+
+Best regards,
+Krzysztof
+
