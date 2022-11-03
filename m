@@ -2,63 +2,63 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 453C9618BFF
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 23:48:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EF5E9618C01
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 23:48:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231811AbiKCWsZ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 18:48:25 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58630 "EHLO
+        id S231496AbiKCWsi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 18:48:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59316 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230139AbiKCWri (ORCPT
+        with ESMTP id S231356AbiKCWrk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 18:47:38 -0400
-Received: from mail-pj1-x102b.google.com (mail-pj1-x102b.google.com [IPv6:2607:f8b0:4864:20::102b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50B4B2098B;
-        Thu,  3 Nov 2022 15:47:37 -0700 (PDT)
-Received: by mail-pj1-x102b.google.com with SMTP id f5-20020a17090a4a8500b002131bb59d61so6342002pjh.1;
-        Thu, 03 Nov 2022 15:47:37 -0700 (PDT)
+        Thu, 3 Nov 2022 18:47:40 -0400
+Received: from mail-pg1-x530.google.com (mail-pg1-x530.google.com [IPv6:2607:f8b0:4864:20::530])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43093222B8;
+        Thu,  3 Nov 2022 15:47:39 -0700 (PDT)
+Received: by mail-pg1-x530.google.com with SMTP id v3so2921229pgh.4;
+        Thu, 03 Nov 2022 15:47:39 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=p1QS6c1ubJslyni/M0MzNlDBEaUKL9IFEtYjlcS9VxU=;
-        b=ky/2ICJ4Vfu+5Fdz5JuABjS8rlBaLcKAxbzw0SZC2D34+Txmhf0KOVhJtwqgv/6XOk
-         CnE6Ltk8PeZ1KMD6b6YFrBtaYzbwId1ccjnT0LniazU4vqUBZbaZ6VJPEGzbHq1FoQzs
-         Gq4q7bfdcvyHIvlp/ZqTkoeRTT/6iCU/lDUmDB6Yrb+U1v9/2y579zIjGWOKdpNnbgZJ
-         KNck/JrQ9af+Kdah+jsu66NeRnzyH25x28cbyP1y9nbv584UmrvrxVHcOtfxz97xr6PI
-         Xm+DnuGvdUpjcImHNoQ5M+iuPcSNVzgdGFLoDGFffaOo56W9b/C3DGiIIyW+01iQK7nf
-         AIpw==
+        bh=OpJqV269dmxPiy2x5jEutyBsbCSaPK9GSjGKfIXbXdk=;
+        b=dlZ/fdF2gWei4tdt6X230opQrrul11vKHrCLup5DzYbbg5GcNw3/lPEjHjhOchKC/0
+         bHwxsx8O6qfED5aPAFKzdFj8ovPJEnVwWdj9zZgqgPZKas8sTqKHWAz8Pr+bajJ4jnej
+         SctQAQ0C+hSDvrpkk97zUMEiu8tg7UagMtA+bTi+VU8dBH3X4M5ogWReLmOTbd052Bu/
+         vvmR8bHfjVNMIcJ0wHiBMsK6y7/cObovwhtcHIFsc71WpV2a6fm0VBloFXrM+rklTtuW
+         qPZeifL5e6FtggVnYQXL6ySO0ciWLGhNTimCHL2lOQLfuaXjxVlk8QX0Oxa7QUf6Xb59
+         2JCQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=p1QS6c1ubJslyni/M0MzNlDBEaUKL9IFEtYjlcS9VxU=;
-        b=WOddxYQTAbDHT+HgPZJbzj7VuUXYC34A291/J0QcISogrrC5af0NcPGvbGdyjO4lX+
-         M+I/bmFCOp6B+jL39DSSCAarXRdBBnp03WDRtU5Ghpuoq3x2MXY8FM/JHN0MmSmUG/lE
-         1oF5Cg2jdwe7X7/vtnY61C/91F+Jc8k2hmusiNrgTT9EkUAwS3Ras98gTMBiS7CtiNMi
-         rYLZkOKlHERQnhyEmww9kgyKoA45EgXSR6VvrHHhIYxTZIk4iJvtuKqj0inwy3ikW2K4
-         wlGKYoYxjcEZmit4ZnlZ5zG0LdaQAHdU57QLfjEN4DrEUWfxK1TF60zDuAApodYNdMqs
-         hyug==
-X-Gm-Message-State: ACrzQf3Kr2V5kAV1heuegfnyBEfg3+CwxWQ2zdY/MOmG1FzzHsR8RxFk
-        3U9SqwAxK4665cIhKcfeZz0=
-X-Google-Smtp-Source: AMsMyM4b2fcM9qthGWolUVjBnQCmaTmPTMhorzMS6m1FwpyODUIn3xZawlZGlfODpJmUwdrdcxue4g==
-X-Received: by 2002:a17:90a:19c8:b0:211:d22b:9f14 with SMTP id 8-20020a17090a19c800b00211d22b9f14mr203412pjj.68.1667515656617;
-        Thu, 03 Nov 2022 15:47:36 -0700 (PDT)
+        bh=OpJqV269dmxPiy2x5jEutyBsbCSaPK9GSjGKfIXbXdk=;
+        b=Lutl0v6OqHjJ9wJfZM+wcoF0fkmyY86sbR20t7LThqxaVLFY+8Jn3lk8f4HqQNJOnR
+         IGfnds+mV0IWOLT3Gex+clMU7gBIfk+8pPE1nNYg9xcx8HDnQ1k7wbFuY8R3AH8K4tEY
+         ph417cVt420Id2Cyj2p1GvKKLVECZ4TjdSw0akHpb4LB07kItNJ/NdrYnyDpi1OeaccX
+         yYFurO1NibW1cARU2sMWwW/WkCSu/d8vOP54i/z9PBQy8iaZId0aA0ylaDf1A9yiWN06
+         r+H32ftdwdbJFrv1Y+h/Q+wlaqu9DW90XwJMy9whCrjnIRpjt9lXoyivzCkwo+MTDzFC
+         A6Bw==
+X-Gm-Message-State: ACrzQf2Uz96QILzQCwrszUWXe5lggnTzUnWf56yfh3f9p35+AtmLFAem
+        SkRGpc+av6YPTQJltz/8GZY=
+X-Google-Smtp-Source: AMsMyM6fTrhxDrKHSq7wbNn6fd7B+7MO6dL15NJwk5BhAWfrbdpJVAwdXTG0v2iOTXgRO9RbqaKVAQ==
+X-Received: by 2002:a62:1544:0:b0:56d:6af0:c131 with SMTP id 65-20020a621544000000b0056d6af0c131mr23948193pfv.51.1667515658645;
+        Thu, 03 Nov 2022 15:47:38 -0700 (PDT)
 Received: from dtor-ws.mtv.corp.google.com ([2620:15c:9d:2:a6ae:11ff:fe11:fcc3])
-        by smtp.gmail.com with ESMTPSA id g13-20020aa796ad000000b0056be1d7d4a3sm1280421pfk.73.2022.11.03.15.47.34
+        by smtp.gmail.com with ESMTPSA id g13-20020aa796ad000000b0056be1d7d4a3sm1280421pfk.73.2022.11.03.15.47.36
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 15:47:35 -0700 (PDT)
+        Thu, 03 Nov 2022 15:47:37 -0700 (PDT)
 From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
 To:     Tomi Valkeinen <tomi.valkeinen@ideasonboard.com>,
         Helge Deller <deller@gmx.de>, Tony Lindgren <tony@atomide.com>,
         Sebastian Reichel <sre@kernel.org>
 Cc:     linux-kernel@vger.kernel.org, linux-fbdev@vger.kernel.org,
         linux-omap@vger.kernel.org, dri-devel@lists.freedesktop.org
-Subject: [PATCH 09/13] omapfb: connector-analog-tv: remove support for platform data
-Date:   Thu,  3 Nov 2022 15:46:52 -0700
-Message-Id: <20221103-omapfb-gpiod-v1-9-c3d53ca7988f@gmail.com>
+Subject: [PATCH 10/13] omapfb: encoder-opa362: fix included headers
+Date:   Thu,  3 Nov 2022 15:46:53 -0700
+Message-Id: <20221103-omapfb-gpiod-v1-10-c3d53ca7988f@gmail.com>
 X-Mailer: git-send-email 2.38.1.431.g37b22c650d-goog
 In-Reply-To: <20221103-omapfb-gpiod-v1-0-c3d53ca7988f@gmail.com>
 References: <20221103-omapfb-gpiod-v1-0-c3d53ca7988f@gmail.com>
@@ -76,146 +76,35 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-There are no users of connector_atv_platform_data in the mainline
-kernel so support for it can be removed from the panel driver.
+The driver has been switched to gpiod API, so it should include
+gpio/consumer.h instead of gpio.h and of_gpio.h.
+
+With of_gpio.h no longer included we need mod_devicetable.h for
+of_device_id definition.
 
 Signed-off-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 ---
- .../omap2/omapfb/displays/connector-analog-tv.c    | 60 +++-------------------
- include/video/omap-panel-data.h                    | 34 ------------
- 2 files changed, 8 insertions(+), 86 deletions(-)
+ drivers/video/fbdev/omap2/omapfb/displays/encoder-opa362.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/video/fbdev/omap2/omapfb/displays/connector-analog-tv.c b/drivers/video/fbdev/omap2/omapfb/displays/connector-analog-tv.c
-index a9fd732f8103..0daaf9f89bab 100644
---- a/drivers/video/fbdev/omap2/omapfb/displays/connector-analog-tv.c
-+++ b/drivers/video/fbdev/omap2/omapfb/displays/connector-analog-tv.c
-@@ -12,7 +12,6 @@
- #include <linux/of.h>
+diff --git a/drivers/video/fbdev/omap2/omapfb/displays/encoder-opa362.c b/drivers/video/fbdev/omap2/omapfb/displays/encoder-opa362.c
+index ba7ed4039f8a..dd29dc5c77ec 100644
+--- a/drivers/video/fbdev/omap2/omapfb/displays/encoder-opa362.c
++++ b/drivers/video/fbdev/omap2/omapfb/displays/encoder-opa362.c
+@@ -11,11 +11,11 @@
+  * Author: Tomi Valkeinen <tomi.valkeinen@ti.com>
+  */
+ 
+-#include <linux/gpio.h>
++#include <linux/gpio/consumer.h>
+ #include <linux/module.h>
++#include <linux/mod_devicetable.h>
+ #include <linux/platform_device.h>
+ #include <linux/slab.h>
+-#include <linux/of_gpio.h>
  
  #include <video/omapfb_dss.h>
--#include <video/omap-panel-data.h>
  
- struct panel_drv_data {
- 	struct omap_dss_device dssdev;
-@@ -178,53 +177,15 @@ static struct omap_dss_driver tvc_driver = {
- 	.set_wss		= tvc_set_wss,
- };
- 
--static int tvc_probe_pdata(struct platform_device *pdev)
--{
--	struct panel_drv_data *ddata = platform_get_drvdata(pdev);
--	struct connector_atv_platform_data *pdata;
--	struct omap_dss_device *in, *dssdev;
--
--	pdata = dev_get_platdata(&pdev->dev);
--
--	in = omap_dss_find_output(pdata->source);
--	if (in == NULL) {
--		dev_err(&pdev->dev, "Failed to find video source\n");
--		return -EPROBE_DEFER;
--	}
--
--	ddata->in = in;
--
--	ddata->invert_polarity = pdata->invert_polarity;
--
--	dssdev = &ddata->dssdev;
--	dssdev->name = pdata->name;
--
--	return 0;
--}
--
--static int tvc_probe_of(struct platform_device *pdev)
--{
--	struct panel_drv_data *ddata = platform_get_drvdata(pdev);
--	struct device_node *node = pdev->dev.of_node;
--	struct omap_dss_device *in;
--
--	in = omapdss_of_find_source_for_first_ep(node);
--	if (IS_ERR(in)) {
--		dev_err(&pdev->dev, "failed to find video source\n");
--		return PTR_ERR(in);
--	}
--
--	ddata->in = in;
--
--	return 0;
--}
--
- static int tvc_probe(struct platform_device *pdev)
- {
- 	struct panel_drv_data *ddata;
- 	struct omap_dss_device *dssdev;
- 	int r;
- 
-+	if (!pdev->dev.of_node)
-+		return -ENODEV;
-+
- 	ddata = devm_kzalloc(&pdev->dev, sizeof(*ddata), GFP_KERNEL);
- 	if (!ddata)
- 		return -ENOMEM;
-@@ -232,16 +193,11 @@ static int tvc_probe(struct platform_device *pdev)
- 	platform_set_drvdata(pdev, ddata);
- 	ddata->dev = &pdev->dev;
- 
--	if (dev_get_platdata(&pdev->dev)) {
--		r = tvc_probe_pdata(pdev);
--		if (r)
--			return r;
--	} else if (pdev->dev.of_node) {
--		r = tvc_probe_of(pdev);
--		if (r)
--			return r;
--	} else {
--		return -ENODEV;
-+	ddata->in = omapdss_of_find_source_for_first_ep(pdev->dev.of_node);
-+	r = PTR_ERR_OR_ZERO(ddata->in);
-+	if (r) {
-+		dev_err(&pdev->dev, "failed to find video source\n");
-+		return r;
- 	}
- 
- 	ddata->timings = tvc_pal_timings;
-diff --git a/include/video/omap-panel-data.h b/include/video/omap-panel-data.h
-deleted file mode 100644
-index 18172d7b97d0..000000000000
---- a/include/video/omap-panel-data.h
-+++ /dev/null
-@@ -1,34 +0,0 @@
--/* SPDX-License-Identifier: GPL-2.0-only */
--/*
-- * Header containing platform_data structs for omap panels
-- *
-- * Copyright (C) 2013 Texas Instruments
-- * Author: Tomi Valkeinen <tomi.valkeinen@ti.com>
-- *	   Archit Taneja <archit@ti.com>
-- *
-- * Copyright (C) 2011 Texas Instruments
-- * Author: Mayuresh Janorkar <mayur@ti.com>
-- *
-- * Copyright (C) 2010 Canonical Ltd.
-- * Author: Bryan Wu <bryan.wu@canonical.com>
-- */
--
--#ifndef __OMAP_PANEL_DATA_H
--#define __OMAP_PANEL_DATA_H
--
--#include <video/display_timing.h>
--
--/**
-- * connector_atv platform data
-- * @name: name for this display entity
-- * @source: name of the display entity used as a video source
-- * @invert_polarity: invert signal polarity
-- */
--struct connector_atv_platform_data {
--	const char *name;
--	const char *source;
--
--	bool invert_polarity;
--};
--
--#endif /* __OMAP_PANEL_DATA_H */
 
 -- 
 b4 0.11.0-dev-5166b
