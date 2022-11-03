@@ -2,88 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A1308618C8F
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 00:08:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 05287618C92
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 00:09:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231724AbiKCXIJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 19:08:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41364 "EHLO
+        id S230433AbiKCXJT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 19:09:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43442 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbiKCXHQ (ORCPT
+        with ESMTP id S231388AbiKCXI4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 19:07:16 -0400
-Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id E7E1822BF3;
-        Thu,  3 Nov 2022 16:07:14 -0700 (PDT)
-X-IronPort-AV: E=Sophos;i="5.96,135,1665414000"; 
-   d="scan'208";a="141406977"
-Received: from unknown (HELO relmlir5.idc.renesas.com) ([10.200.68.151])
-  by relmlie6.idc.renesas.com with ESMTP; 04 Nov 2022 08:07:14 +0900
-Received: from mulinux.home (unknown [10.226.92.174])
-        by relmlir5.idc.renesas.com (Postfix) with ESMTP id 7EC78400B9D5;
-        Fri,  4 Nov 2022 08:07:10 +0900 (JST)
-From:   Fabrizio Castro <fabrizio.castro.jz@renesas.com>
-To:     Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Geert Uytterhoeven <geert+renesas@glider.be>
-Cc:     Fabrizio Castro <fabrizio.castro.jz@renesas.com>,
-        Magnus Damm <magnus.damm@gmail.com>,
-        Biju Das <biju.das.jz@bp.renesas.com>,
-        Wolfram Sang <wsa@kernel.org>, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
-        Chris Paterson <Chris.Paterson2@renesas.com>,
-        Biju Das <biju.das@bp.renesas.com>,
-        Laurent Pinchart <laurent.pinchart@ideasonboard.com>,
-        Jacopo Mondi <jacopo@jmondi.org>
-Subject: [PATCH 3/3] arm64: dts: renesas: r9a09g011: Fix I2C SoC specific strings
-Date:   Thu,  3 Nov 2022 23:06:48 +0000
-Message-Id: <20221103230648.53748-4-fabrizio.castro.jz@renesas.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20221103230648.53748-1-fabrizio.castro.jz@renesas.com>
-References: <20221103230648.53748-1-fabrizio.castro.jz@renesas.com>
+        Thu, 3 Nov 2022 19:08:56 -0400
+Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DD1D248EA;
+        Thu,  3 Nov 2022 16:08:13 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+        d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+        Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
+        Message-ID:Sender:Reply-To:Content-ID:Content-Description;
+        bh=clKkeoKrdbqYUCowN689hiIMqlAcNW5umpiu0Sqmz2c=; b=E1EfVe1a3THuchRWxlk/PQPY4L
+        DjOuds0LKYgzZbJ7jBNpTzlupfw5xTi107KmdXmFEI4ipV90kN7tR9m5qu6XZy+RDq+twoHIYTJ5F
+        3irq8BoqhEhTV35E0Qa0M3NA0OuqrcRf7FuFasX6IZBydyRuYPcBGAw/Qhsa1IHYNa6iAq+cGBUp7
+        NJt4PFJppliDn2+RMmERJQxBDVIMLm+81DvhkyuzGG58QYiypON85116aenrk4JT9tWmCrmP5eAYy
+        QRpqB17siwEZnvohzvbnMZMAFVffUtDte19vKcCodIZMH1o0R7FSLK+8YTMGMqQRW7A+tF308G58R
+        knp5FIkw==;
+Received: from [2601:1c2:d80:3110::a2e7]
+        by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
+        id 1oqjJf-001wZi-20; Thu, 03 Nov 2022 23:08:07 +0000
+Message-ID: <c5ae56d9-e07c-2ca7-6f42-640c330b5d78@infradead.org>
+Date:   Thu, 3 Nov 2022 16:08:06 -0700
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH] staging: rtl8192e: Fix divide fault when calculating
+ beacon age
+Content-Language: en-US
+To:     Larry Finger <Larry.Finger@lwfinger.net>,
+        gregkh@linuxfoundation.org
+Cc:     phil@philpotter.co.uk, linux-staging@lists.linux.dev,
+        linux-kernel@vger.kernel.org, linux-wireless@vger.kernel.org
+References: <20221103200507.14304-1-Larry.Finger@lwfinger.net>
+From:   Randy Dunlap <rdunlap@infradead.org>
+In-Reply-To: <20221103200507.14304-1-Larry.Finger@lwfinger.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-s/renesas,i2c-r9a09g011/renesas,r9a09g011-i2c/g for consistency.
 
-renesas,i2c-r9a09g011 is not actually used by the driver, therefore
-changing this doesn't cause any harm.
 
-Fixes: 54ac6794df9d ("arm64: dts: renesas: r9a09g011: Add i2c nodes")
-Signed-off-by: Fabrizio Castro <fabrizio.castro.jz@renesas.com>
----
- arch/arm64/boot/dts/renesas/r9a09g011.dtsi | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+On 11/3/22 13:05, Larry Finger wrote:
+> When the configuration parameter CONFIG_HZ is less that 100, the compiler
+> generates an error as follows:
+> 
+> ../drivers/staging/rtl8192e/rtllib_wx.c: In function 'rtl819x_translate_scan':
+> ../drivers/staging/rtl8192e/rtllib_wx.c:220:57: warning: division by zero [-Wdiv-by-zero]
+>   220 |                       (jiffies - network->last_scanned) / (HZ / 100));
+>       |                                                         ^
+> In file included from ../include/linux/skbuff.h:45,
+>                  from ../include/linux/if_ether.h:19,
+>                  from ../include/linux/etherdevice.h:20,
+>                  from ../drivers/staging/rtl8192e/rtllib_wx.c:18:
+> ../drivers/staging/rtl8192e/rtllib_wx.c: In function 'rtllib_wx_get_scan':
+> ../drivers/staging/rtl8192e/rtllib_wx.c:261:70: warning: division by zero [-Wdiv-by-zero]
+>   261 |                                    (jiffies - network->last_scanned) /
+>       |
+> 
+> In fact, is HZ is not a multiple of 100, the calculation will be wrong, but it
+> will compile correctly.
+> 
+> The fix is to get rid of the (HZ / 100) portion. To decrease any round-off
+> errors, the compiler is forced to perform the 100 * jiffies-difference before
+> dividing by HX. This patch is only compile tested.
 
-diff --git a/arch/arm64/boot/dts/renesas/r9a09g011.dtsi b/arch/arm64/boot/dts/renesas/r9a09g011.dtsi
-index 1948d2e6bcae..2ccd48ee9880 100644
---- a/arch/arm64/boot/dts/renesas/r9a09g011.dtsi
-+++ b/arch/arm64/boot/dts/renesas/r9a09g011.dtsi
-@@ -126,7 +126,7 @@ cpg: clock-controller@a3500000 {
- 		i2c0: i2c@a4030000 {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
--			compatible = "renesas,i2c-r9a09g011", "renesas,rzv2m-i2c";
-+			compatible = "renesas,r9a09g011-i2c", "renesas,rzv2m-i2c";
- 			reg = <0 0xa4030000 0 0x80>;
- 			interrupts = <GIC_SPI 232 IRQ_TYPE_EDGE_RISING>,
- 				     <GIC_SPI 236 IRQ_TYPE_EDGE_RISING>;
-@@ -140,7 +140,7 @@ i2c0: i2c@a4030000 {
- 		i2c2: i2c@a4030100 {
- 			#address-cells = <1>;
- 			#size-cells = <0>;
--			compatible = "renesas,i2c-r9a09g011", "renesas,rzv2m-i2c";
-+			compatible = "renesas,r9a09g011-i2c", "renesas,rzv2m-i2c";
- 			reg = <0 0xa4030100 0 0x80>;
- 			interrupts = <GIC_SPI 234 IRQ_TYPE_EDGE_RISING>,
- 				     <GIC_SPI 238 IRQ_TYPE_EDGE_RISING>;
+              HZ.
+
+> 
+> Reported-by: Randy Dunlap <rdunlap@infradead.org>
+> Signed-off-by: Larry Finger <Larry.Finger@lwfinger.net>
+
+Acked-by: Randy Dunlap <rdunlap@infradead.org> # build-tested
+
+Thanks.
+
+> ---
+>  drivers/staging/rtl8192e/rtllib_wx.c | 6 +++---
+>  1 file changed, 3 insertions(+), 3 deletions(-)
+> 
+> diff --git a/drivers/staging/rtl8192e/rtllib_wx.c b/drivers/staging/rtl8192e/rtllib_wx.c
+> index da2c41c9b92f..7013425102dd 100644
+> --- a/drivers/staging/rtl8192e/rtllib_wx.c
+> +++ b/drivers/staging/rtl8192e/rtllib_wx.c
+> @@ -217,7 +217,7 @@ static inline char *rtl819x_translate_scan(struct rtllib_device *ieee,
+>  	p = custom;
+>  	p += scnprintf(p, MAX_CUSTOM_LEN - (p - custom),
+>  		      " Last beacon: %lums ago",
+> -		      (jiffies - network->last_scanned) / (HZ / 100));
+> +		      (100 *(jiffies - network->last_scanned)) / HZ);
+
+                      (100 * (jiffies ...
+
+>  	iwe.u.data.length = p - custom;
+>  	if (iwe.u.data.length)
+>  		start = iwe_stream_add_point_rsl(info, start, stop,
+> @@ -258,8 +258,8 @@ int rtllib_wx_get_scan(struct rtllib_device *ieee,
+>  				   escape_essid(network->ssid,
+>  						network->ssid_len),
+>  				   network->bssid,
+> -				   (jiffies - network->last_scanned) /
+> -				   (HZ / 100));
+> +				   (100 * (jiffies - network->last_scanned)) /
+> +				   HZ);
+>  	}
+>  
+>  	spin_unlock_irqrestore(&ieee->lock, flags);
+
 -- 
-2.34.1
-
+~Randy
