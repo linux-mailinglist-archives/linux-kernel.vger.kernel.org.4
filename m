@@ -2,124 +2,128 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 77BB1617C6F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:22:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B4E4E617C72
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:22:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230465AbiKCMV6 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 08:21:58 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46490 "EHLO
+        id S231620AbiKCMWK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 08:22:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46710 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230132AbiKCMVu (ORCPT
+        with ESMTP id S231629AbiKCMWI (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 08:21:50 -0400
-Received: from mail-qk1-x72b.google.com (mail-qk1-x72b.google.com [IPv6:2607:f8b0:4864:20::72b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 70AB11084
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 05:21:48 -0700 (PDT)
-Received: by mail-qk1-x72b.google.com with SMTP id f8so953742qkg.3
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 05:21:48 -0700 (PDT)
+        Thu, 3 Nov 2022 08:22:08 -0400
+Received: from mail-wm1-x32e.google.com (mail-wm1-x32e.google.com [IPv6:2a00:1450:4864:20::32e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3DB7EF69;
+        Thu,  3 Nov 2022 05:22:07 -0700 (PDT)
+Received: by mail-wm1-x32e.google.com with SMTP id p13-20020a05600c468d00b003cf8859ed1bso1076398wmo.1;
+        Thu, 03 Nov 2022 05:22:07 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=P+5YUCvZqbd7CB2bQQ6MOe7ruJKblRITAjPMVct4pI8=;
-        b=CO/f0A0UqCf3wCwPKnaBeTqdgR6dBumZAGDTOy0GPfBAk5+rSxhjYmofU5K1KyJHkp
-         bQyvFZSpUmpU7EU32AtkXmOH+YUqkO0wCQVAXj6hRkJlUlGjZyI1U1Juy+GHmBg5ztKs
-         CpFVbEqN3F0rO6soGDKfnafyjrgbVh7rwGF/DvRWV7EwaS87hgEqkKoZOEHbbntSFtvV
-         wX9fFHnuskwD2YM3PQX53UFKeGDcnv7gCWFo2ApNWPKd/6DHJm7u8Tz2L+ff2M4zdIWQ
-         8myc7gDWb3DMVbw62yk+cAxfoED7cJAZhrpKrLeoNIAoGIH9mQU9e7eoFWrdFGfi0Xb2
-         62GA==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=B3XxTo7IpX7TqdyYgvc//56G/3r2F5+mPbQZ0vMiEFo=;
+        b=Nr0ZeNZSad3dcoIAwU7msQDlzOl1I97puv+VDPnkBlQbiG+kOX94yfmGdj87/obumZ
+         R7A6nMlsf/xjhCxr9KFkttou0lWShCDRhVNC2hzK0SGdVX6iKDplzIzCim2Co7pEiQVR
+         raP/jnFYJQIPpBvbNNA5hsrYv1p5NtsIvqhnclWOvXS4RoLTMk9NAHTWQYV0dFnqeZlc
+         jIN1XDQE/VKl+qxk/BLal27IQdPFcWTncgIBztfkPD34B7bOnO48TWv0Pt9rCd528Qb7
+         cM0GktZ3IejdRkmgr/TKBiIWgyuLyJOeyVWHbv13MXr8lvvSq/fgluV5DS8qo4E4xIkZ
+         VNnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P+5YUCvZqbd7CB2bQQ6MOe7ruJKblRITAjPMVct4pI8=;
-        b=QFo8ZF0VCGVaWzdLGqX4pGoGZmqarmcqPK//IMgLdRvm4SHZW2OYK3Zp2gIroJKgwh
-         90FkEaI1/IvKLMzxSmMeuaXvyCYsl5qwT0ItCVIP6MzPD/oHjiHsVwbh+IwZmbkf9+yr
-         LxpOQ7mdSkWM27YpjasxW8FZK65Fxbr7BwKNNSN+my+ZfluMPucrJotyT9UEjtAC48HY
-         GIrG//O46IFjfiH4wraf9oLVq/OqGiD/Px/ncMQRlv8Dk9Yj/i9yJLgPiIPRZ1vSQYmm
-         Z4s5hCze6CKoqge/SeZQ6riZolzdmvRp8Oiy950Q33ESJ0NHmZatXmGpEiAm3tdPj/Tm
-         8sNw==
-X-Gm-Message-State: ACrzQf09U0cv1j1OAW0Kj9FfFUeCjA3sKYE/DdYMKfUEgxRMhJFLgeLQ
-        aMuDPSlUZkgY8CBUxWoaIKUgQw==
-X-Google-Smtp-Source: AMsMyM6SDfF7cMxptMVQxQuncXmO78QNH8O+ogTcFC6KAzOv0cS/F4ORrpJhJoSy97C4UYtYyZxdXQ==
-X-Received: by 2002:a37:5e41:0:b0:6ce:79e2:68af with SMTP id s62-20020a375e41000000b006ce79e268afmr21736389qkb.239.1667478107634;
-        Thu, 03 Nov 2022 05:21:47 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
-        by smtp.gmail.com with ESMTPSA id r23-20020ae9d617000000b006f474e6a715sm606366qkk.131.2022.11.03.05.21.46
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 05:21:46 -0700 (PDT)
-Message-ID: <10086127-c733-364c-25da-0332c2336925@linaro.org>
-Date:   Thu, 3 Nov 2022 08:21:45 -0400
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=B3XxTo7IpX7TqdyYgvc//56G/3r2F5+mPbQZ0vMiEFo=;
+        b=gW6gwc/fiZvqNdPbz6T3VR4bUPzetWILxABqwm7C+f+AxdP4OxuDvx6WSKNznhmaL/
+         oRjKRidW5sy96O2YVzQJbiwNTEF42wGl998hIKF96BBFIPxb7RuleBe3aQ/Rz7mCT5CB
+         y36oR0c5bS3kBNKTIl1hrjRTHExIyiqJiDoSWFB1aOMEYJRCgSSeSvk2dQwRNQ6dlSLf
+         Vs0j9OS//PIH9ys4qH8+8kjWo+kJPyfA2QivtomQKubJX3ba+xt6uskOk65xt+KUpyE6
+         r9Gbl/Vn6qvfn516GJvtWjXO1DZHKk8elaoGxsr+FQ/+hNaVjAHDL13AlAjPZAEEp27P
+         uvZQ==
+X-Gm-Message-State: ACrzQf3+xiC6DbIRtMki1lLFVPsThVOFRjYrL3BwyolIS/UV3okvhnVC
+        0L/jswM4VC7ckboedoSIE7ZoG1GQR6eH/A==
+X-Google-Smtp-Source: AMsMyM4ipe0FNeWek+zT8c1jYgA6h5Ce1S08+MIdAaSHFLq6BV1jiTufVPW+0EoFjKAPXeoObWYs3Q==
+X-Received: by 2002:a05:600c:3107:b0:3c6:ff0a:c42 with SMTP id g7-20020a05600c310700b003c6ff0a0c42mr28778299wmo.141.1667478125558;
+        Thu, 03 Nov 2022 05:22:05 -0700 (PDT)
+Received: from leonid-Inspiron-3421 (93-172-205-151.bb.netvision.net.il. [93.172.205.151])
+        by smtp.gmail.com with ESMTPSA id y10-20020a056000108a00b0022cd96b3ba6sm847289wrw.90.2022.11.03.05.22.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 05:22:04 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 14:22:01 +0200
+From:   Leonid Ravich <lravich@gmail.com>
+To:     Steven Rostedt <rostedt@goodmis.org>
+Cc:     Jason Gunthorpe <jgg@ziepe.ca>,
+        Leonid Ravich <leonid.ravich@toganetworks.com>,
+        "mingo@redhat.com" <mingo@redhat.com>,
+        "linux-rdma@vger.kernel.org" <linux-rdma@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        Yigal Korman <yigal.korman@toganetworks.com>,
+        "linux-trace-kernel@vger.kernel.org" 
+        <linux-trace-kernel@vger.kernel.org>
+Subject: Re: BUG:  ib_mad ftrace event unsupported migration
+Message-ID: <Y2OyaSe7CrhJ9COo@leonid-Inspiron-3421>
+References: <VI1PR02MB623706DA8A01842834FC191089399@VI1PR02MB6237.eurprd02.prod.outlook.com>
+ <20221102074457.08f538a8@rorschach.local.home>
+ <Y2JqX3vC1mG/JDex@ziepe.ca>
+ <VI1PR02MB623731066685B6E249F71A3189399@VI1PR02MB6237.eurprd02.prod.outlook.com>
+ <Y2J4/NQMhRORqnZ0@ziepe.ca>
+ <20221102101719.6cbcca6b@rorschach.local.home>
+ <Y2J9lAqBvjjPUmJf@ziepe.ca>
+ <20221102115947.000897fa@rorschach.local.home>
+ <Y2LMjYNAE5LwtcOp@leonid-Inspiron-3421>
+ <20221102181900.5bc9812f@rorschach.local.home>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 09/10] dt-bindings: interconnect: qcom,msm8998-bwmon: Add
- sc8280xp bwmon instances
-To:     Bjorn Andersson <quic_bjorande@quicinc.com>
-Cc:     Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mike Tipton <quic_mdtipton@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221028034155.5580-1-quic_bjorande@quicinc.com>
- <20221028034155.5580-10-quic_bjorande@quicinc.com>
- <0ada5a42-02f4-50ce-e65c-1a5fa9966900@linaro.org>
- <20221103033741.GA5525@core-thresher1.qualcomm.com>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221103033741.GA5525@core-thresher1.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221102181900.5bc9812f@rorschach.local.home>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
-        version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 02/11/2022 23:37, Bjorn Andersson wrote:
-> On Fri, Oct 28, 2022 at 06:15:50PM -0400, Krzysztof Kozlowski wrote:
->> On 27/10/2022 23:41, Bjorn Andersson wrote:
->>> The sc8280xp platform has two BWMON instances, one v4 and one v5. Extend
->>> the existing qcom,msm8998-bwmon and qcom,sc7280-llcc-bwmon to describe
->>> these.
->>>
->>> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
->>> ---
->>>  .../devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml | 5 +++++
->>>  1 file changed, 5 insertions(+)
->>>
->>> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
->>> index be29e0b80995..223cd6ecf279 100644
->>> --- a/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
->>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml
->>> @@ -25,9 +25,14 @@ properties:
->>>        - items:
->>>            - enum:
->>>                - qcom,sc7280-cpu-bwmon
->>> +              - qcom,sc8280xp-bwmon
->>
->> qcom,sc8280xp-cpu-bwmon
->> To match sc7280. I think it's better than my initial choice for
->> qcom,sdm845-bwmon without the cpu part.
->>
+On Wed, Nov 02, 2022 at 06:19:00PM -0400, Steven Rostedt wrote:
+> On Wed, 2 Nov 2022 22:01:17 +0200
+> Leonid Ravich <lravich@gmail.com> wrote:
 > 
-> As discussed back then, we omitted "cpu" because there where multiple instances
-> of the bwmon block. Would you prefer we give it the "cpu" compatible and
-> potentially us it for non-cpu measurements?
+> > disagree, without CONFIG_PREEMPTION (which is the default case in some
+> > destros) we will not get any warning, because there will not be
+> > preamption disable.
+> 
+> I test all for my code (NON_PREEMPT, VOLUNTEER_PREEMPT, PREEMPT) and
+> with and without lockdep enabled.
+> 
+> This would be a bug if you called kmalloc(X, GFP_KERNEL) in *any* non
+> preempt section.
+yes, but for NON_PREEMPT trace is not non preempt section,
+actualy the problem is with CONFIG_PREEMPT_COUNT not set. 
 
-I think yes, because we actually do not know whether measuring on
-non-cpu instances would work without some adjustments...
+ftrace uses preemot_enable/disable_notrace macro to "mark" it as non preempt section
+which do it only for CONFIG_PREEMPT_COUNT. 
 
-Best regards,
-Krzysztof
+from include/linux/preempt.h
+if !CONFIG_PREEMPT_COUNT
+#define preempt_enable_notrace()                barrier()
+
+this is why there is no any warning on my system.
+> 
+> > 
+> > second issue I see and maybe it is only me, is that the assuption of
+> > atomicity in trace is not a common knowledge for trace users.     
+> 
+> Well, I suppose we could add more documentation. Would that help? Where
+> would you see it? In the sample code?
+> 
+I think if we fix the first issue and make kernel cry for any miss
+behave it we do the job. 
+> I advise not even grabbing locks in trace events, because in most cases
+> lockdep will not catch any issues with them (it will be hidden unless
+> the trace event is enabled).
+> 
+
+-- Leonid 
 
