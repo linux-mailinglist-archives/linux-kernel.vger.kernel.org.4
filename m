@@ -2,158 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 72B37617B32
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 12:00:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9822F617B39
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 12:01:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231294AbiKCK7y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 06:59:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34498 "EHLO
+        id S231299AbiKCLBV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 07:01:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35042 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiKCK7u (ORCPT
+        with ESMTP id S229935AbiKCLBR (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 06:59:50 -0400
-Received: from mail-pf1-x434.google.com (mail-pf1-x434.google.com [IPv6:2607:f8b0:4864:20::434])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 08EB7109B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 03:59:50 -0700 (PDT)
-Received: by mail-pf1-x434.google.com with SMTP id y13so1243506pfp.7
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 03:59:50 -0700 (PDT)
+        Thu, 3 Nov 2022 07:01:17 -0400
+Received: from mail-pl1-x62b.google.com (mail-pl1-x62b.google.com [IPv6:2607:f8b0:4864:20::62b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DB657B7DB
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 04:01:16 -0700 (PDT)
+Received: by mail-pl1-x62b.google.com with SMTP id u6so1536441plq.12
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 04:01:16 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=linaro.org; s=google;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=tl6gvrKJpq1c2SMRIQkixJ9RHyBaATDZDYadUE36ADo=;
-        b=bGNCz6BI/X3dSE94R0ba6QyEEWxSsYixsiRVc3eqYT+xOJrJYnFPcQEuOt5Xcx7/C+
-         mXoyvj4knRHD2V8e2AhNKO2ehdnVWW5DGzf0i7GLopJLbJCzB1IOa4LxKlE03jL31aeP
-         lGYxws+DjOh22jTEPQ1PPK7ijJbVvZDFRuR+IbRcPPfawZ/duXNrnhtdNbPKvaos5Qmh
-         wQi/gL+CWGshJzmVyNXzucywYJE5kYvkx1+pPAlfVcHHLbDLMBZyyoIx7ygkZNIYkdet
-         w6fnn1JgkShaj3tpsQZ/7Pje2xXci6FBs1QMXDnlHvJFRON8KWk4jFt2OTNdAkO1eGRW
-         AqIQ==
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ay8rIDfAS1vKzFBT8OPzZHG4KC+WK17k+CTXHHbF524=;
+        b=F7u8vLHf3k4t6Ojxj0wPVNF0odVtSYGzJ7dal3LBHzOzk0NP6WfWAoqERZUf/n/lyy
+         ro+jSMxTAhkSGSq25iMQbPtlIPrwh3oCl6vTw9Lg95AeMQvH22HLht+fOW1U8GPlC6Si
+         6BNw7+oJJAFgCrFvGdwQ5mhW2G0tEk/+96qJngXj7L5JFjdWGtTwbQ2kHEBXWE1Qsh43
+         sO4FCbk8xnS/2ho9xjGjd7nk/hUpeKtlB2tiHqCLWBtebcRor8a9dvrffix9a1Pzj8fL
+         iaheCXDz7uZaNZF2o2ZdXErpkQCGNE1EsdiBp+vwpskuCQbp0UaqlNvsOif7TSOs0X6J
+         cmSQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=tl6gvrKJpq1c2SMRIQkixJ9RHyBaATDZDYadUE36ADo=;
-        b=Xo/zQ4uOaxl3xZ0N53rnHrqyzCvoa97qV0gfBysWaYgZvJzKcmf3H8zQVez0WA8axr
-         RjAg6hHQgZrNbccTxZPmA/lWNs1/D7INQEnjeHkCX9v3vl3qBOV12pIZ4iWg8kkX1Pjj
-         fLjG13Vc2MJ5+373DAtiyKq4EJb88IMItzZR1tmfeT6imFI2j2S8HhZZYPPwvPa3x5aU
-         zarsoUjk/NZbzu3cvpkAHAKkJ3+x3zXBf+3Cy4dfNKIVUqpOBLlSgvEiLiIDnywlJcWS
-         uc/kGtRDB2HmTTICpOvNrb97RXCCZvVBGUz9QcBe9qG+70U0quNzca47HwhYQXHjiA60
-         Ypfg==
-X-Gm-Message-State: ACrzQf17/M6UzA0hmvqlzdikoOTHZ+sAvtLKwzgeGJ/x7ioU8iE634mS
-        bgaaG35V0U4AiOy3qmhxTva8USfpC9N0+CWn5dPKmg==
-X-Google-Smtp-Source: AMsMyM5mH9Kbc/UTomJNMiJt8u9MMUAkTK5EumQHhGigQ8uemLyjJRlEChWmswJsa5eXfWYYXRrGMuDgD1V0RHHk1iM=
-X-Received: by 2002:a63:9049:0:b0:46f:59b9:1645 with SMTP id
- a70-20020a639049000000b0046f59b91645mr25122160pge.541.1667473189454; Thu, 03
- Nov 2022 03:59:49 -0700 (PDT)
+        bh=Ay8rIDfAS1vKzFBT8OPzZHG4KC+WK17k+CTXHHbF524=;
+        b=ktU96WY46GQUhe1EFHGd/KvE7ge2C7L6AvWcoTfFhDKyMoeAbtRi6URdYhauiNiO2b
+         znaNdO4vo3tiuYwgD8zOajR6UPS2U/GDdTwAEb2FtTQEZw2lN2yovmuSXV+zKwXazDgw
+         Eb1g5/e7Ap+T9MFwFSAvYdlZh1e46S56ccuuEJx1mt8pKK1OW1fjGa4lNUUChS1akNrb
+         6zoSYpLRMWPNvYL555E/lk4auwD+jiSwycCgat2faGXRXx+JEIr7kZVxpCZUH0G6Bade
+         31L3sPVDKoDQoLTwG1Ww+qJPQFg1+2hkvhNHjTg0Qhn6YsWmTSCdY9SDkrOOmIF2ILhx
+         5MCw==
+X-Gm-Message-State: ACrzQf23nropSqRGU+bQBeSHsxzMSTzh5Gyyr95AT5zHwVy5x9WGj/dd
+        Hums6r61PwwO6bgWZ+G+sjJCug==
+X-Google-Smtp-Source: AMsMyM6YB+L8bLYmn+hlc1I5brGQsvzfYouZ8a2S+xu0StVwOU25oSYcJOX2kxEwJeAgcOxQ9BS6WA==
+X-Received: by 2002:a17:903:cd:b0:186:878e:3b08 with SMTP id x13-20020a17090300cd00b00186878e3b08mr29228986plc.93.1667473276274;
+        Thu, 03 Nov 2022 04:01:16 -0700 (PDT)
+Received: from localhost ([122.172.84.80])
+        by smtp.gmail.com with ESMTPSA id x15-20020a170902ec8f00b001868bf6a7b8sm363976plg.146.2022.11.03.04.01.15
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 04:01:15 -0700 (PDT)
+From:   Viresh Kumar <viresh.kumar@linaro.org>
+To:     James Calligeros <jcalligeros99@gmail.com>,
+        Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+        Viresh Kumar <vireshk@kernel.org>
+Cc:     Viresh Kumar <viresh.kumar@linaro.org>, linux-pm@vger.kernel.org,
+        Vincent Guittot <vincent.guittot@linaro.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [PATCH 0/5] OPP: Allow power/current values without voltage
+Date:   Thu,  3 Nov 2022 16:31:03 +0530
+Message-Id: <cover.1667473008.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 MIME-Version: 1.0
-References: <CAPDyKFqJdiCDkAfrONfnBVKw1v8=jZ+hEJiKGK70EQ4o7BSxaQ@mail.gmail.com>
- <20221103043852.24718-1-pshete@nvidia.com>
-In-Reply-To: <20221103043852.24718-1-pshete@nvidia.com>
-From:   Ulf Hansson <ulf.hansson@linaro.org>
-Date:   Thu, 3 Nov 2022 11:59:12 +0100
-Message-ID: <CAPDyKFrT46SXxiHw5=q8HwK5PMJCsp+iE8Wm4CsEqfBf6EWicA@mail.gmail.com>
-Subject: Re: [PATCH v10 1/4] iommu: Always define struct iommu_fwspec
-To:     joro@8bytes.org, robin.murphy@arm.com, will@kernel.org
-Cc:     Prathamesh Shete <pshete@nvidia.com>, adrian.hunter@intel.com,
-        thierry.reding@gmail.com, jonathanh@nvidia.com,
-        p.zabel@pengutronix.de, linux-mmc@vger.kernel.org,
-        linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-        iommu@lists.linux.dev, anrao@nvidia.com, smangipudi@nvidia.com,
-        kyarlagadda@nvidia.com, Thierry Reding <treding@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
         DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, 3 Nov 2022 at 05:39, Prathamesh Shete <pshete@nvidia.com> wrote:
->
-> In order to fully make use of the !IOMMU_API stub functions, make the
-> struct iommu_fwspec always available so that users of the stubs can keep
-> using the structure's internals without causing compile failures.
->
-> Signed-off-by: Thierry Reding <treding@nvidia.com>
-> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+Hello,
 
-Joerg, Will, Robin - may I have an ack from some of you for $subject
-patch, so I can funnel it via my mmc tree for v6.2?
+Some platforms, such as Apple Silicon, do not describe their device's
+voltage regulators in the DT as they cannot be controlled by the kernel
+and/or rely on opaque firmware algorithms to control their voltage and
+current characteristics at runtime. They can, however, experimentally
+determine the power consumption of a given device at a given OPP, taking
+advantage of opp-microwatt to provide EAS on such devices as was initially
+intended.
 
-Kind regards
-Uffe
+But the OPP core currently doesn't parse the opp-microwatt property if
+opp-microvolt isn't present. This patch series targets to change this approach.
 
-> ---
->  include/linux/iommu.h | 39 +++++++++++++++++++--------------------
->  1 file changed, 19 insertions(+), 20 deletions(-)
->
-> diff --git a/include/linux/iommu.h b/include/linux/iommu.h
-> index ea30f00dc145..afa829bc4356 100644
-> --- a/include/linux/iommu.h
-> +++ b/include/linux/iommu.h
-> @@ -173,6 +173,25 @@ enum iommu_dev_features {
->
->  #define IOMMU_PASID_INVALID    (-1U)
->
-> +/**
-> + * struct iommu_fwspec - per-device IOMMU instance data
-> + * @ops: ops for this device's IOMMU
-> + * @iommu_fwnode: firmware handle for this device's IOMMU
-> + * @flags: IOMMU_FWSPEC_* flags
-> + * @num_ids: number of associated device IDs
-> + * @ids: IDs which this device may present to the IOMMU
-> + */
-> +struct iommu_fwspec {
-> +       const struct iommu_ops  *ops;
-> +       struct fwnode_handle    *iommu_fwnode;
-> +       u32                     flags;
-> +       unsigned int            num_ids;
-> +       u32                     ids[];
-> +};
-> +
-> +/* ATS is supported */
-> +#define IOMMU_FWSPEC_PCI_RC_ATS                        (1 << 0)
-> +
->  #ifdef CONFIG_IOMMU_API
->
->  /**
-> @@ -600,25 +619,6 @@ extern struct iommu_group *generic_device_group(struct device *dev);
->  /* FSL-MC device grouping function */
->  struct iommu_group *fsl_mc_device_group(struct device *dev);
->
-> -/**
-> - * struct iommu_fwspec - per-device IOMMU instance data
-> - * @ops: ops for this device's IOMMU
-> - * @iommu_fwnode: firmware handle for this device's IOMMU
-> - * @flags: IOMMU_FWSPEC_* flags
-> - * @num_ids: number of associated device IDs
-> - * @ids: IDs which this device may present to the IOMMU
-> - */
-> -struct iommu_fwspec {
-> -       const struct iommu_ops  *ops;
-> -       struct fwnode_handle    *iommu_fwnode;
-> -       u32                     flags;
-> -       unsigned int            num_ids;
-> -       u32                     ids[];
-> -};
-> -
-> -/* ATS is supported */
-> -#define IOMMU_FWSPEC_PCI_RC_ATS                        (1 << 0)
-> -
->  /**
->   * struct iommu_sva - handle to a device-mm bond
->   */
-> @@ -682,7 +682,6 @@ bool iommu_group_dma_owner_claimed(struct iommu_group *group);
->
->  struct iommu_ops {};
->  struct iommu_group {};
-> -struct iommu_fwspec {};
->  struct iommu_device {};
->  struct iommu_fault_param {};
->  struct iommu_iotlb_gather {};
-> --
-> 2.17.1
->
+This first fixes few mistakes in the DT bindings, followed by code
+reorganization. And the last commit, from James, fixes the problem at hand.
+
+I have tested all combinations on my Hikey board, hope it doesn't break
+anything.
+
+James Calligeros (1):
+  OPP: decouple dt properties in opp_parse_supplies()
+
+Viresh Kumar (4):
+  dt-bindings: opp: Fix usage of current in microwatt property
+  dt-bindings: opp: Fix named microwatt property
+  OPP: Parse named opp-microwatt property too
+  OPP: Simplify opp_parse_supplies() by restructuring it
+
+ .../devicetree/bindings/opp/opp-v2-base.yaml  |   6 +-
+ drivers/opp/of.c                              | 228 ++++++++----------
+ 2 files changed, 102 insertions(+), 132 deletions(-)
+
+-- 
+2.31.1.272.g89b43f80a514
+
