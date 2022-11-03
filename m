@@ -2,58 +2,50 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id F20A96176B1
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 07:21:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id F3E816176B4
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 07:23:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230353AbiKCGVK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 02:21:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51582 "EHLO
+        id S230435AbiKCGXT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 02:23:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52318 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229531AbiKCGVH (ORCPT
+        with ESMTP id S229531AbiKCGXP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 02:21:07 -0400
+        Thu, 3 Nov 2022 02:23:15 -0400
 Received: from bombadil.infradead.org (bombadil.infradead.org [IPv6:2607:7c80:54:3::133])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D811611A13;
-        Wed,  2 Nov 2022 23:21:06 -0700 (PDT)
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 12D78BC31;
+        Wed,  2 Nov 2022 23:23:14 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
         d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
         Content-Type:In-Reply-To:From:References:Cc:To:Subject:MIME-Version:Date:
         Message-ID:Sender:Reply-To:Content-ID:Content-Description;
-        bh=O6247AfvaUgQ4rTBCdd6tE2mIQfoQgtQipevCW2V8Gc=; b=b9/Cvzcw/DDnuJJ9vN3ipvsaju
-        4oQ6egvCVXOHGrJRyzLcqIzr62msYSqb1p31F4mewQMUowUDW1oPtTP/W4KtsPEukjnatcZjSgmqW
-        QpCKUK4mTlZt78BA9EjdLA6Z+MrJnq/kgPRMV54ZG5TW3gsHYN75WpJLs4jwNhJpRQFSKy31eLa/6
-        xZUR6N76Myq+Oc2qCEZBmn4VKAsUxIr8nvjHIYHCaQ0w6UQRt3ymgvpMlLcphCw7mNSHDQOwCpHE1
-        gAyTHnTsV+mg9hyv7w9yaGXLqEKQ7exlT381hJeOB1vMpuQElWndJ5yjZCF9mN+MKrQ0qLj8bN+Nh
-        y9a1WwiQ==;
+        bh=wWklh3V04M7tRN5I4El4kisW58/wtA96fy+VCrOUxBg=; b=BWCQyjGl9in3cyS9TZ/MJrSuc3
+        3BvAw0RvXXckw2UNM2jkZr7cupD+lmvsDdE7Wf6lgez5WQ+DDzUuaVKP/8jE93/kD4zN68pzCLKFh
+        XZoIoh53y7Sr4+DdyN8mtPkTMNZAdl/4o1kqIQAyz2wYjqmsP04LbHxmwiD1WohnxF8pQYVu/Xbah
+        ZGMlFV7wUVuAnbbKiAry0pBUSpNsxBhV7Hpm7j6CuFq7Akb941E6BYwjfwQeW5YOeMVjYxLJcyOYi
+        04qd1bHuwot5iBGcL0yt7X4sBB8tHDTVkpUKxhOF0mI/itU8qUMvsAZ/V7p99ZQBUpboAJKlmXaQz
+        GeJBZ59Q==;
 Received: from [2601:1c2:d80:3110:e65e:37ff:febd:ee53]
         by bombadil.infradead.org with esmtpsa (Exim 4.94.2 #2 (Red Hat Linux))
-        id 1oqTb6-00GHKc-C8; Thu, 03 Nov 2022 06:21:04 +0000
-Message-ID: <3efd119a-6814-7f39-3c7c-c17490adc876@infradead.org>
-Date:   Wed, 2 Nov 2022 23:21:03 -0700
+        id 1oqTdA-00GHXh-L0; Thu, 03 Nov 2022 06:23:12 +0000
+Message-ID: <ccefc0b7-528d-32a5-328c-e166b4821f76@infradead.org>
+Date:   Wed, 2 Nov 2022 23:23:10 -0700
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.0
-Subject: Re: [PATCH] ath11k (gcc13): synchronize
- ath11k_mac_he_gi_to_nl80211_he_gi()'s return type
+Subject: Re: [PATCH] virt: sev-guest: fix kconfig warnings
 Content-Language: en-US
-To:     Kalle Valo <kvalo@kernel.org>
-Cc:     Jiri Slaby <jirislaby@kernel.org>,
-        Jeff Johnson <quic_jjohnson@quicinc.com>,
-        linux-kernel@vger.kernel.org, Martin Liska <mliska@suse.cz>,
-        "David S. Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>, ath11k@lists.infradead.org,
-        linux-wireless@vger.kernel.org, netdev@vger.kernel.org
-References: <20221031114341.10377-1-jirislaby@kernel.org>
- <55c4d139-0f22-e7ba-398a-e3e0d8919220@quicinc.com>
- <833c7f2f-c140-5a0b-1efc-b858348206ec@kernel.org> <87bkprgj0b.fsf@kernel.org>
- <503a3b36-2256-a9ce-cffe-5c0ed51f6f62@infradead.org>
- <87tu3ifv8z.fsf@kernel.org>
- <1041acdb-2978-7413-5567-ae9c14471605@infradead.org>
- <87cza4ftkf.fsf@kernel.org>
+To:     linux-kernel@vger.kernel.org
+Cc:     kernel test robot <lkp@intel.com>, stable@vger.kernel.org,
+        Brijesh Singh <brijesh.singh@amd.com>,
+        Paul Gazzillo <paul@pgazz.com>,
+        Necip Fazil Yildiran <fazilyildiran@gmail.com>,
+        Borislav Petkov <bp@suse.de>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        linux-crypto@vger.kernel.org
+References: <20220828195234.6604-1-rdunlap@infradead.org>
 From:   Randy Dunlap <rdunlap@infradead.org>
-In-Reply-To: <87cza4ftkf.fsf@kernel.org>
+In-Reply-To: <20220828195234.6604-1-rdunlap@infradead.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-4.4 required=5.0 tests=BAYES_00,DKIM_SIGNED,
@@ -65,44 +57,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+ping. I have verified (on linux-next-20221103) that this
+patch is still needed.
+Thanks.
 
-
-On 11/2/22 23:20, Kalle Valo wrote:
-> Randy Dunlap <rdunlap@infradead.org> writes:
+On 8/28/22 12:52, Randy Dunlap wrote:
+> Fix the SEV_GUEST Kconfig block to eliminate kconfig unmet
+> dependency warnings:
 > 
->>>>> Yeah, using "wifi:" is a new prefix we started using with wireless
->>>>> patches this year.
->>>>>
->>>>
->>>> It would be nice if that was documented somewhere...
->>>
->>> It is mentioned on our wiki but I doubt anyone reads it :)
->>
->> I think that you are correct. ;)
->>
->>> https://wireless.wiki.kernel.org/en/developers/documentation/submittingpatches#subject
->>>
->>> Do let me know if there are other places which should have this info.
->>
->> Ideally it would be in the subsystem's profile document as described in the
->> MAINTAINERS file:
->>
->> 	P: Subsystem Profile document for more details submitting
->> 	   patches to the given subsystem. This is either an in-tree file,
->> 	   or a URI. See Documentation/maintainer/maintainer-entry-profile.rst
->> 	   for details.
->>
->> although that seems to be overkill IMHO just to add a prefix: setting.
->>
->> You could just clone some other maintainer's Profile document and then modify it
->> to anything that you would like to have in it as far as Maintaining and patching
->> are concerned.
+> WARNING: unmet direct dependencies detected for CRYPTO_GCM
+>   Depends on [n]: CRYPTO [=n]
+>   Selected by [y]:
+>   - SEV_GUEST [=y] && VIRT_DRIVERS [=y] && AMD_MEM_ENCRYPT [=y]
 > 
-> Ah, we should add that doc for wireless. Thanks for the idea, I added
-> that to my todo list.
+> WARNING: unmet direct dependencies detected for CRYPTO_AEAD2
+>   Depends on [n]: CRYPTO [=n]
+>   Selected by [y]:
+>   - SEV_GUEST [=y] && VIRT_DRIVERS [=y] && AMD_MEM_ENCRYPT [=y]
 > 
-
-Thank you. :)
+> Fixes: fce96cf04430 ("virt: Add SEV-SNP guest driver")
+> Reported-by: kernel test robot <lkp@intel.com>
+> Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+> Cc: stable@vger.kernel.org
+> Cc: Brijesh Singh <brijesh.singh@amd.com>
+> Cc: Paul Gazzillo <paul@pgazz.com>
+> Cc: Necip Fazil Yildiran <fazilyildiran@gmail.com>
+> Cc: Borislav Petkov <bp@suse.de>
+> Cc: Tom Lendacky <thomas.lendacky@amd.com>
+> Cc: linux-crypto@vger.kernel.org
+> ---
+>  drivers/virt/coco/sev-guest/Kconfig |    1 +
+>  1 file changed, 1 insertion(+)
+> 
+> --- a/drivers/virt/coco/sev-guest/Kconfig
+> +++ b/drivers/virt/coco/sev-guest/Kconfig
+> @@ -2,6 +2,7 @@ config SEV_GUEST
+>  	tristate "AMD SEV Guest driver"
+>  	default m
+>  	depends on AMD_MEM_ENCRYPT
+> +	select CRYPTO
+>  	select CRYPTO_AEAD2
+>  	select CRYPTO_GCM
+>  	help
 
 -- 
 ~Randy
