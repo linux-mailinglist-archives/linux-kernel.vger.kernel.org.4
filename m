@@ -2,167 +2,161 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3608861876F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:25:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FC41618772
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:28:56 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231304AbiKCSZy (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 14:25:54 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57532 "EHLO
+        id S231535AbiKCS2w (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 14:28:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58264 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229587AbiKCSZw (ORCPT
+        with ESMTP id S229587AbiKCS2q (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 14:25:52 -0400
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 099C31A203;
-        Thu,  3 Nov 2022 11:25:51 -0700 (PDT)
-Received: by mail-qt1-f182.google.com with SMTP id c15so1767243qtw.8;
-        Thu, 03 Nov 2022 11:25:50 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=5wqjlvfob7OA40NjGEU4olyxWzhDQZWGXkHy6aPsYtY=;
-        b=numkZY8r1Gb4hHtbjr+YvrX08pu8Ly+cU/fW+DI8/qJ7IytElnXIOH3vTKXe8KbhPx
-         drd4I2mqICLdVgyfQN7i0cu89GvHP/r7wkrBpdlKH+qtUdiea55TcEnHlMwkKpWAMXpt
-         Ex0hhiJoivzIxKvoKPH7cIBnlFZ5pENsK4iVbII9f3Tr3P00mdySqUFcxHWAxSGKHQz1
-         SFRXdugcerqjpJ45AUua+MXCBSUGmFAlrqYpOwzisNtTKeK0e4hHnL9Q5NbiXd2h3k6d
-         3op0BmhLhODUUY5KaY34dEcTWLUH/uZqj1ug+877Y906opn0e2bJ9Uw9CVlvS0mRqgyE
-         HcdQ==
-X-Gm-Message-State: ACrzQf3oTUoLWpYLh91RoiOUZ0Vrok2Dyc5h3d02WuPCOXIwY6izXzvG
-        Itj8qrzzSB9ST4JoAwB/xhSq1nbyNk1PLGpZ9Rg=
-X-Google-Smtp-Source: AMsMyM7ssy9s6uiXREhds9ukxe6eFdRWpC2c9GJHYElZSTMpxx2pXUVj8pKRa6hV1mlvx7P/I0c+tm4YOIBhYoxt8b0=
-X-Received: by 2002:a05:622a:1a25:b0:39c:b862:7318 with SMTP id
- f37-20020a05622a1a2500b0039cb8627318mr26026848qtb.147.1667499950150; Thu, 03
- Nov 2022 11:25:50 -0700 (PDT)
+        Thu, 3 Nov 2022 14:28:46 -0400
+Received: from EUR03-VI1-obe.outbound.protection.outlook.com (mail-vi1eur03on2065.outbound.protection.outlook.com [40.107.103.65])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15B0E63EB;
+        Thu,  3 Nov 2022 11:28:45 -0700 (PDT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=fqrFqOLaSEQ0OIK6wVx+ElZZVFawBvCyvqUAjvTd6wbI1Xq/I0y+pRZDjY92KssmVi+WHZCug9oKSFI5Um7B3EWNWsnAYmJQEz2rF222OzVmz53u22c9DnmhFZpVwlO83I0cerIEaLo+e9ct+EiupoZrI9d7u9kvQ7AMRQ9+NXRDZLE4skfWeANgHeX9+1HQPz96vQqZIox92uPiWU2F2YaawsibNFXmqlyXSp7Q572opea6CIMouRfwOfuL2r1/ZAbuS9TwbrOmo9pU5p3hu+/R3z7+CpvztDoLbyx3zZJ08ecUOKMt4uHdltI9j0AlcW4ndqkP1lTKNwiNT8I6Uw==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=p4CYqLGHryYO83NW9akO+nbIKsX/zBftgQnOPt3Geac=;
+ b=myCkFNq1xYlufsiv6tkaTtbjEX79gyJFMTtjfiop00ddLgz3ylkv3NZwyswN1t1zw1g/MINnFygIuNqo+d7Y7dfCnsFLHi5IJliLlgnhZbty6tg5BDJON/uHar+IFjbBPC3sTChpv7b5ouQmjQT5DnJ8qam4ShOShLjDfc41JNgwvM8cpIhDG5cs9tAQRL78SIAF3yji05SfDHcd0ov2irmyc93s1obFTLg1YitHiAsq4M7PvraW8aOnJVqSYp33XEtiXWM0WrUv0nL47HbqIbQxcLrfDg6AjBGUPKZjytOVDLBt9sKVXupXdSngVr4GiyZqFkVHnGsPNsIhBlsydw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=seco.com; dmarc=pass action=none header.from=seco.com;
+ dkim=pass header.d=seco.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=seco.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=p4CYqLGHryYO83NW9akO+nbIKsX/zBftgQnOPt3Geac=;
+ b=JVdFW96RCI/fu0KNJ+1VZ4fAFj+/SLLDR0WWI22G5D/vNadrs8qvMCA+VbGH3E50KLfaXvfxRab4NP29no/0Kv7bohhxIYzqw3p3XWhoaYPDfjPI0rwQNbx9EOWyhh5zncOnxIA/jXD0z6HipV0n5DE9gp1p4yUVV4yrlrtEOfzYJlzAMOnsCoOzkIFDNF5/qOyxB3VizjlQoSnJ+sboy9mrPNSoe8pTKiDUgSVmpf9XP9A8CXePWVP0YMbBlI6Nwk/i4vfMa3OHwNpris4B93d9mrk4Xe++0pyWLFf9LAw7VpwD0af805vCZIgucnmZVisDbdQukNafYGeDHh9E8Q==
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=seco.com;
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com (2603:10a6:10:7d::22)
+ by AM7PR03MB6369.eurprd03.prod.outlook.com (2603:10a6:20b:1b0::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.5791.20; Thu, 3 Nov
+ 2022 18:28:41 +0000
+Received: from DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::e9d6:22e1:489a:c23d]) by DB7PR03MB4972.eurprd03.prod.outlook.com
+ ([fe80::e9d6:22e1:489a:c23d%4]) with mapi id 15.20.5791.022; Thu, 3 Nov 2022
+ 18:28:41 +0000
+From:   Sean Anderson <sean.anderson@seco.com>
+To:     "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, netdev@vger.kernel.org
+Cc:     Madalin Bucur <madalin.bucur@nxp.com>,
+        linux-kernel@vger.kernel.org,
+        Sean Anderson <sean.anderson@seco.com>
+Subject: [PATCH] net: fman: Unregister ethernet device on removal
+Date:   Thu,  3 Nov 2022 14:28:30 -0400
+Message-Id: <20221103182831.2248833-1-sean.anderson@seco.com>
+X-Mailer: git-send-email 2.35.1.1320.gc452695387.dirty
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: BL1PR13CA0433.namprd13.prod.outlook.com
+ (2603:10b6:208:2c3::18) To DB7PR03MB4972.eurprd03.prod.outlook.com
+ (2603:10a6:10:7d::22)
 MIME-Version: 1.0
-References: <20221027220056.1534264-1-srinivas.pandruvada@linux.intel.com> <CAJZ5v0hVaO-j6PEZ0u+uz==0it3qvZ8XdkrXk4F2x692OfgBcQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hVaO-j6PEZ0u+uz==0it3qvZ8XdkrXk4F2x692OfgBcQ@mail.gmail.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 3 Nov 2022 19:25:38 +0100
-Message-ID: <CAJZ5v0gMgq+=WvzL8yiKr6AW9+dGb9w5uVOYjthC6a1HJRXMOQ@mail.gmail.com>
-Subject: Re: [PATCH] x86: intel_epb: Set Alder Lake N and Raptor Lake P normal EPB
-To:     dave.hansen@linux.intel.com, bp@alien8.de
-Cc:     Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-        tglx@linutronix.de, mingo@redhat.com, hpa@zytor.com,
-        rafael@kernel.org, len.brown@intel.com, peterz@infradead.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        x86@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,
-        SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DB7PR03MB4972:EE_|AM7PR03MB6369:EE_
+X-MS-Office365-Filtering-Correlation-Id: c570bbd4-06e4-43da-04ad-08dabdc93b98
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: SSADTmO9aEiV8oxAAwJyhjEG3LhJBr8V79xX5NT1UgpJLvXWuef1wf8Xws5YhpkfdZ3WPPYskQ2xt7WCXrCfVDfHOmpE3Agivd40ZWs1uKmGZu9bCKn/R17QtEOidMfQgAloktloEnykXE+9vgY7V8thOoRzDULwQK9rz8pdC75iOqqvTgdqEE7+DsNp9vaPeTnyzss+jU6n9ZpU5YtcNMBOGmk7FCcWInipNjTZdE+SKbC1f3yhkq5NSnzTYFz864ghJq5tjBRzKZnupQc16fjZ2ExGed3DwlhjgNwoHtur1CySeblA8OtnOaymV1byVxaF67Ujkb3gnMJQz4fQ5+CrQzCUkjlil7YRiCPfSNuYXOfydMPQfN+JU4V9UIVX8lFRIPYNwxTVEUuQkWo3fsUiO//JrDf027U4tob8rZrmiS52SVbXXwqEA1H8F1o5cdeHEBfAK07+Jadpl3TWYre+n45sxMGaoRyJOXtSIehaYoQ38iMhwp7v1rBLkGzRtM8Gm1uqJNS2cxBzCdPX6Flcmnyaf1wlKl8dbE4seehmFXKC68Qw22FuIYHuv+Afts9tsVrkKWFWuH1+X5mXFItvM4TL8/wUSCUFXdE2aA1bAYtUZ/q4Geq5Zw6PLw58HQbuy+yV9VjTyJvSlk6b5kXoI3iDPM7iN96kH5EYR7Laewin0YYl2SpX+/eBFqtc7PBWeA/wukpYcBIdaQCYjpLeOGUGxYh0F6BQvDXjooBQgrVyu/L+Ge3jQFj8k9N4
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DB7PR03MB4972.eurprd03.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(396003)(366004)(39840400004)(376002)(136003)(346002)(451199015)(38100700002)(52116002)(38350700002)(2616005)(6506007)(107886003)(6666004)(1076003)(186003)(2906002)(41300700001)(86362001)(6486002)(44832011)(478600001)(26005)(6512007)(110136005)(54906003)(8936002)(66946007)(66476007)(4326008)(66556008)(83380400001)(5660300002)(36756003)(8676002)(316002);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?c3J8RkD5zbB+nbr0T+BGFIY49T32peskSA28Edg7YhY+naw0FghXj5rmRWks?=
+ =?us-ascii?Q?KobxrO7EVCrL32Krjgb/EIbGnCrwvcJ2ywKmZZthG8nov9YcI+jQMINinmLg?=
+ =?us-ascii?Q?ObcR0O8pRBiUJqNvfUB/9r8gbUks6DmNog5dXv5DggWmYL/oX21IRHwFiw9C?=
+ =?us-ascii?Q?YGs5dHgSXeOzhKrJwDHx4LByr4VXj10wWDhwpscVKGpFfdiPRmKWdv+q62oV?=
+ =?us-ascii?Q?SKMNOrXAUSW+vSuJaZUCmVS/otWeeZ91t8VaADHchEI/ujAdf8s48rOWWbpX?=
+ =?us-ascii?Q?lZZ2DuITbTcuFxv6YOjbzErgS+m5qRazTh4DcETjf76LnlRlrT7+vDr5W57C?=
+ =?us-ascii?Q?0Uy9bcED/MI5u+OsEX5CtunZyjCGAFnaSCGWcS6qGwk4Ax5QbdnJc1VdP51z?=
+ =?us-ascii?Q?Z2EO81JtPFPQ2aqbcJafnISWJIyAnka8kedlHEDIbGSDaIHezysdoqPw3JIB?=
+ =?us-ascii?Q?1kgw1jZ+NwqnbE1jQipXsoA7VlY87eBi+9p7TLOdQbdP9WVzFohSqBvTYY+Q?=
+ =?us-ascii?Q?ytmeBneCpU01Re2JEeieccWhG/9oRINMRFyi5h8sx42pHiyEy4bZ+GVxvqDl?=
+ =?us-ascii?Q?8Eu+Brs1/1MM77AbLvd+tM2BkEQKD/P633iYmpfMcxkpqMSZwBo7NbMAXVtG?=
+ =?us-ascii?Q?cNhN5CYVdxzrXPGjWh965m9TCAyuljh6qSyxUpk7jEuJHk1UZEwq5WleUslt?=
+ =?us-ascii?Q?NZNZBcVoIlBYLPoUJFgGa6ZUK9EU+E0atWKDg29UYYUr5MUdHSIZa9VKvWGI?=
+ =?us-ascii?Q?sAKLCQgjxjYqmy66cfqBRg+8o3U5y6/6N543Dx/VLWPOSoeQCE48ErrXdhwJ?=
+ =?us-ascii?Q?Zv7YK2lu8ze6I+OziMIYfe9elyS4HZYDFssOhW8flhCbmCxDFTnWiLGSBJ2t?=
+ =?us-ascii?Q?OM+3ZZhpkaiq9H/qwxNmtHyhNOg1ThjFpyLrF1LtGy4PWljb+WXbUako43uq?=
+ =?us-ascii?Q?bDZOPxnOhNgyE/7N4J6yBgkP+ZIsRhqcNOnH9jKUrluiJbBKKlgM2bFDJzzs?=
+ =?us-ascii?Q?YsmLbek0NUiNg0y/pICNyDxN4i7KLw8W6hvni9WXPM9fi5XZeENWOzOfIBCu?=
+ =?us-ascii?Q?cZDBo8uN58Xdpn/pBiulwhd9YnR9XVS7L3wy/F3be/ytJmPN3rovWdnmihIi?=
+ =?us-ascii?Q?Qv0TIJG80Zzao7fdzWcevyJpd0EhUTdt04AFV27JjKiq2A4N1fkVF+S89iNq?=
+ =?us-ascii?Q?E3hmX7rMPFpjy+vd1llolWDCU+ICpSMmHn4WYbcsyyye+NVv0KwLEbjS4qRd?=
+ =?us-ascii?Q?PYr/kwpQgd3NoBDkyVIlRQAiLIyOmtmfEOhso/tl4N8dVvosvQzHGjuf9eM3?=
+ =?us-ascii?Q?esqsqS7Kk4OtlH3ZsVhL4/wvmHBUcapeCmmBVHoxiDeqMcq+ty0dpmYbIZhM?=
+ =?us-ascii?Q?VEqLOVOHRo0gY3jhmiqoZPo4T84nkj+bzwwNooEw6R1BYtae8IGIYNG3JbEJ?=
+ =?us-ascii?Q?82liv5oKhlE43W3V1bgig6bxiJHz3JeqGsSW9duHiwid02iIa9opWN0xBWcR?=
+ =?us-ascii?Q?4s06X+nEb5nMAOx33WN41CWC+P68XUINCBqpunWK/d9Q/hSLHeslOK/tmADJ?=
+ =?us-ascii?Q?NoYmzQGsoE0Q9g6BUItpd+0NJ2F0j6heHsdFgFkua9LwiFyHRSmD/5Z5Pj0Q?=
+ =?us-ascii?Q?VA=3D=3D?=
+X-OriginatorOrg: seco.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: c570bbd4-06e4-43da-04ad-08dabdc93b98
+X-MS-Exchange-CrossTenant-AuthSource: DB7PR03MB4972.eurprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Nov 2022 18:28:41.3022
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: bebe97c3-6438-442e-ade3-ff17aa50e733
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: hR/2DKNpE0cg08PpoheuA/mLLm469pQm4/BJd9DPUQpei6AV1rDyw3DXQrpbzJoRPNoG7m17FguRF9lKwQfbCA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM7PR03MB6369
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Fri, Oct 28, 2022 at 5:24 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Fri, Oct 28, 2022 at 12:01 AM Srinivas Pandruvada
-> <srinivas.pandruvada@linux.intel.com> wrote:
-> >
-> > Intel processors support additional software hint called EPB ("Energy
-> > Performance Bias") to guide the hardware heuristic of power management
-> > features to favor increasing dynamic performance or conserve energy
-> > consumption.
-> >
-> > Since this EPB hint is processor specific, the same value of hint can
-> > result in different behavior across generations of processors.
-> >
-> > commit 4ecc933b7d1f ("x86: intel_epb: Allow model specific normal EPB
-> > value")' introduced capability to update the default power up EPB
-> > based on the CPU model and updated the default EPB to 7 for Alder Lake
-> > mobile CPUs.
-> >
-> > The same change is required for other Alder Lake-N and Raptor Lake-P
-> > mobile CPUs as the current default of 6 results in higher uncore power
-> > consumption. This increase in power is related to memory clock
-> > frequency setting based on the EPB value.
-> >
-> > Depending on the EPB the minimum memory frequency is set by the
-> > firmware. At EPB = 7, the minimum memory frequency is 1/4th compared to
-> > EPB = 6. This results in significant power saving for idle and
-> > semi-idle workload on a Chrome platform.
-> >
-> > For example Change in power and performance from EPB change from 6 to 7
-> > on Alder Lake-N:
-> >
-> > Workload    Performance diff (%)    power diff
-> > ----------------------------------------------------
-> > VP9 FHD30       0 (FPS)         -218 mw
-> > Google meet     0 (FPS)         -385 mw
-> >
-> > This 200+ mw power saving is very significant for mobile platform for
-> > battery life and thermal reasons.
-> >
-> > But as the workload demands more memory bandwidth, the memory frequency
-> > will be increased very fast. There is no power savings for such busy
-> > workloads.
-> >
-> > For example:
-> >
-> > Workload                Performance diff (%) from EPB 6 to 7
-> > -------------------------------------------------------
-> > Speedometer 2.0         -0.8
-> > WebGL Aquarium 10K
-> > Fish                    -0.5
-> > Unity 3D 2018           0.2
-> > WebXPRT3                -0.5
-> >
-> > There are run to run variations for performance scores for
-> > such busy workloads. So the difference is not significant.
-> >
-> > Add a new define ENERGY_PERF_BIAS_NORMAL_POWERSAVE for EPB 7
-> > and use it for Alder Lake-N and Raptor Lake-P mobile CPUs.
-> >
-> > This modification is done originally by
-> > Jeremy Compostella <jeremy.compostella@intel.com>.
-> >
-> > Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
->
-> Reviewed-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+When the mac device gets removed, it leaves behind the ethernet device.
+This will result in a segfault next time the ethernet device accesses
+mac_dev. Remove the ethernet device when we get removed to prevent
+this. This is not completely reversible, since some resources aren't
+cleaned up properly, but that can be addressed later.
 
-I'm wondering if there are any plans to pick up this one into the x86
-tree?  If not, I can take care of it.
+Fixes: 3933961682a3 ("fsl/fman: Add FMan MAC driver")
+Signed-off-by: Sean Anderson <sean.anderson@seco.com>
+---
+So... why *do* we have a separate device for the ethernet interface?
+Can't the mac device just register the netdev itself?
 
-> > ---
-> >  arch/x86/include/asm/msr-index.h | 1 +
-> >  arch/x86/kernel/cpu/intel_epb.c  | 7 ++++++-
-> >  2 files changed, 7 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
-> > index 10ac52705892..a3eb4d3e70b8 100644
-> > --- a/arch/x86/include/asm/msr-index.h
-> > +++ b/arch/x86/include/asm/msr-index.h
-> > @@ -796,6 +796,7 @@
-> >  #define ENERGY_PERF_BIAS_PERFORMANCE           0
-> >  #define ENERGY_PERF_BIAS_BALANCE_PERFORMANCE   4
-> >  #define ENERGY_PERF_BIAS_NORMAL                        6
-> > +#define ENERGY_PERF_BIAS_NORMAL_POWERSAVE      7
-> >  #define ENERGY_PERF_BIAS_BALANCE_POWERSAVE     8
-> >  #define ENERGY_PERF_BIAS_POWERSAVE             15
-> >
-> > diff --git a/arch/x86/kernel/cpu/intel_epb.c b/arch/x86/kernel/cpu/intel_epb.c
-> > index fbaf12e43f41..3b8476158236 100644
-> > --- a/arch/x86/kernel/cpu/intel_epb.c
-> > +++ b/arch/x86/kernel/cpu/intel_epb.c
-> > @@ -204,7 +204,12 @@ static int intel_epb_offline(unsigned int cpu)
-> >  }
-> >
-> >  static const struct x86_cpu_id intel_epb_normal[] = {
-> > -       X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L, 7),
-> > +       X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,
-> > +                                  ENERGY_PERF_BIAS_NORMAL_POWERSAVE),
-> > +       X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_N,
-> > +                                  ENERGY_PERF_BIAS_NORMAL_POWERSAVE),
-> > +       X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,
-> > +                                  ENERGY_PERF_BIAS_NORMAL_POWERSAVE),
-> >         {}
-> >  };
-> >
-> > --
-> > 2.31.1
-> >
+ drivers/net/ethernet/freescale/fman/mac.c | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/drivers/net/ethernet/freescale/fman/mac.c b/drivers/net/ethernet/freescale/fman/mac.c
+index 65df308bad97..13e67f2864be 100644
+--- a/drivers/net/ethernet/freescale/fman/mac.c
++++ b/drivers/net/ethernet/freescale/fman/mac.c
+@@ -487,12 +487,21 @@ static int mac_probe(struct platform_device *_of_dev)
+ 	return err;
+ }
+ 
++static int mac_remove(struct platform_device *pdev)
++{
++	struct mac_device *mac_dev = platform_get_drvdata(pdev);
++
++	platform_device_unregister(mac_dev->priv->eth_dev);
++	return 0;
++}
++
+ static struct platform_driver mac_driver = {
+ 	.driver = {
+ 		.name		= KBUILD_MODNAME,
+ 		.of_match_table	= mac_match,
+ 	},
+ 	.probe		= mac_probe,
++	.remove		= mac_remove,
+ };
+ 
+ builtin_platform_driver(mac_driver);
+-- 
+2.35.1.1320.gc452695387.dirty
+
