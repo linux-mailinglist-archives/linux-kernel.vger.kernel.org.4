@@ -2,95 +2,117 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 96EAA61881C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 20:01:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 674B2618821
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 20:01:35 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231309AbiKCTBT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 15:01:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46666 "EHLO
+        id S230497AbiKCTBd (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 15:01:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46686 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229611AbiKCTBP (ORCPT
+        with ESMTP id S231316AbiKCTBU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 15:01:15 -0400
-Received: from mout.gmx.net (mout.gmx.net [212.227.17.21])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 189A8101FA;
-        Thu,  3 Nov 2022 12:01:13 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gmx.net; s=s31663417;
-        t=1667502057; bh=y6ODappL0YkTif+pCw4EY7reX6hNd03JrdnmL87+lL4=;
-        h=X-UI-Sender-Class:From:To:Cc:Subject:Date;
-        b=Jc0nWk4jEg6sqa6GeXS7N+oXnoifryG5QFEcrGKqSZgttSYU1oY0Wug+Fri79ir+Y
-         v509NPDu33TWPvh8cu5N4gWagqRs7+mOPKAL/msWnIB/7BF2YN0IFs6lUuHKkWKS0f
-         5LV4XtwPnHkNXTjMOypnQd5v5z3qNt7vPWbtJUkHGYuBvff0LZNYXedtZ/rtm5I1Jm
-         hBnnngKDWDsS1mI6NvcSEeru6sSU07Tz2fq3aQcQomljSF+tX81cAZT0jDWfNQEhbi
-         WCADjLODdudG3SUW+YbsnKHtJ/KXiafK5HNkGfgw/adYqml1x7AqnN58f8s1HM2PUW
-         Ls5Wa61OijmvQ==
-X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
-Received: from probook ([78.34.126.36]) by mail.gmx.net (mrgmx105
- [212.227.17.168]) with ESMTPSA (Nemesis) id 1MZTqg-1oUEUI3Zna-00WSce; Thu, 03
- Nov 2022 20:00:56 +0100
-From:   =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>
-To:     linux-spi@vger.kernel.org
-Cc:     =?UTF-8?q?Jonathan=20Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
-        John Garry <john.garry@huawei.com>,
-        Mark Brown <broonie@kernel.org>, linux-kernel@vger.kernel.org
-Subject: [PATCH] spi: hisi-sfc-v3xx: Fix a typo ("duall")
-Date:   Thu,  3 Nov 2022 20:00:52 +0100
-Message-Id: <20221103190052.915755-1-j.neuschaefer@gmx.net>
-X-Mailer: git-send-email 2.35.1
+        Thu, 3 Nov 2022 15:01:20 -0400
+Received: from mga01.intel.com (mga01.intel.com [192.55.52.88])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1D30C18349;
+        Thu,  3 Nov 2022 12:01:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667502079; x=1699038079;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=sNkpjDaE4wFtOA2SWrBA99Yi2yLtSUQQFYkHqzgZpY0=;
+  b=ZXt1L7pOhqi5WlmhDXsXmtPvPzFNWctwy1R7Q4Nq9odpGkclZS16RZoK
+   yr0pKTMTKNTuyGMD6FHVYJOdygkVad7sglNjs8Cr+jWptpVC3Xwwtk4+F
+   wO3FLNwQ/TLABvyu1b0tslvcUXYyVUlQkCnKntZMzTDTMWwE2/SceXpTY
+   7wCgLODK9awyPzQKPB8raMf32pF09qwtXXyOTcdW1z/qPCLfmMwO9lIoT
+   T2ELTsBsjnab3bY7pmSLFcT1xOCGowIq+91pOv0FIQn4SQz6OYOwB1JqE
+   +PiauyijoaYM/9M+J4/4FGsVZqfBSZXyX18MCHUPeBquk8DHiDMz6Kf9p
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="336475095"
+X-IronPort-AV: E=Sophos;i="5.96,135,1665471600"; 
+   d="scan'208";a="336475095"
+Received: from orsmga007.jf.intel.com ([10.7.209.58])
+  by fmsmga101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 12:01:18 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="629452994"
+X-IronPort-AV: E=Sophos;i="5.96,135,1665471600"; 
+   d="scan'208";a="629452994"
+Received: from smile.fi.intel.com ([10.237.72.54])
+  by orsmga007.jf.intel.com with ESMTP; 03 Nov 2022 12:01:11 -0700
+Received: from andy by smile.fi.intel.com with local (Exim 4.96)
+        (envelope-from <andriy.shevchenko@linux.intel.com>)
+        id 1oqfSd-006zXu-1O;
+        Thu, 03 Nov 2022 21:01:07 +0200
+Date:   Thu, 3 Nov 2022 21:01:07 +0200
+From:   Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To:     Dominik Brodowski <linux@dominikbrodowski.net>
+Cc:     Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+        =?iso-8859-1?Q?Micka=EBl_Sala=FCn?= <mic@digikod.net>,
+        Mika Westerberg <mika.westerberg@linux.intel.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Arnd Bergmann <arnd@arndb.de>,
+        Bjorn Helgaas <helgaas@kernel.org>,
+        "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+        Juergen Gross <jgross@suse.com>, linux-kernel@vger.kernel.org,
+        linux-alpha@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-mips@vger.kernel.org, linuxppc-dev@lists.ozlabs.org,
+        sparclinux@vger.kernel.org, linux-pci@vger.kernel.org,
+        xen-devel@lists.xenproject.org, Miguel Ojeda <ojeda@kernel.org>,
+        Richard Henderson <richard.henderson@linaro.org>,
+        Ivan Kokshaysky <ink@jurassic.park.msu.ru>,
+        Matt Turner <mattst88@gmail.com>,
+        Russell King <linux@armlinux.org.uk>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
+        Nicholas Piggin <npiggin@gmail.com>,
+        Christophe Leroy <christophe.leroy@csgroup.eu>,
+        "David S. Miller" <davem@davemloft.net>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Stefano Stabellini <sstabellini@kernel.org>,
+        Oleksandr Tyshchenko <oleksandr_tyshchenko@epam.com>
+Subject: Re: [PATCH v2 4/4] pcmcia: Convert to use
+ pci_bus_for_each_resource_p()
+Message-ID: <Y2QP8yrZ7/9fpUQQ@smile.fi.intel.com>
+References: <20221103164644.70554-1-andriy.shevchenko@linux.intel.com>
+ <20221103164644.70554-5-andriy.shevchenko@linux.intel.com>
+ <Y2P0XCNJvTVuziO7@owl.dominikbrodowski.net>
+ <Y2P2ja26ikNecTsv@smile.fi.intel.com>
+ <Y2QImB0OLakzz1+F@rocinante>
+ <Y2QKjzL+nH6Zabg7@owl.dominikbrodowski.net>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:jU2HSdldWdlFUnjmhwhye85P+6qlqbtaDZxZ8VGpSe/Zyjj74H/
- mOPTOjpB5UBGoBPYa1Rilbv2SLBLPo7+HvQrApx1OfLwf0w48Ima6UxXfKAcaA5VpP445uO
- t268UrgZvFTMtGyXjx9yhw93i329TXkyrmW/xNXVh5scrouWYv1+zkZbjNy+eGSKSnVogFm
- qLQLVjFzUy0Lwk1j2knpg==
-UI-OutboundReport: notjunk:1;M01:P0:cRPZfCxS86Q=;GutQ29mYsva/S7bZSWxjH8G/3Ej
- fvhULHZ/RkMdMSEaFKvTkgCkYeNfL5dVLzVMyt6KKRVVVs9YJvZM+nGTPCJw7xA4LkNWfRMwt
- rBRlGNVSHpKqAsvTYFioE2E0uuPPP5Xx9Fn8n5IftXXY62T1tSWOGBJG5w+WNQXx7YrifmxYK
- dIUgnBhsfaKVLVG0IWkX+2iR2qdLGv9sR4b247OgTQejAZdYdRvCLmjwZeg15Zi+IEJXdFLo6
- 839IZyv95XlmOKFtrqz4mX7jepOquW6iXN29PjtBMiiiZv88zUlcDDGKyYrRRS0VPjwV7JHp1
- oj9H0GzqVvNq0MPQqqYe8XYnZEZkOgxL0G94XiksZ/AnuDLDcRj1yh8cvuzv6n5R3TfEVHbGn
- qprYeUzHabEq5wBjQpZKvv3irv4Uz/kmBeVPfMqxUj9iU+V4jOOOgs5V1f309KMfwgZrs8xbX
- zCB42twW6hOKBM04dr/2AVs0AHWB0vXvpJ1B+IIs+2POk2C7LphFPobCyBpR+HVy73UFAE/sO
- DK7PTJR6lnrPhPyZMBjaEYmdhSHsgHhrQNiOAl5pR1qBWht5I9OKjL/Ibu3HjIox8DrZPcp5M
- kfM63ANd877m+Mm7flrROTtFAjMLq42pfWHBdVD/cs42A1GXdo/KqLFzGOK4FIqwsMgqlUAad
- 2FF994+WQ+sWBC3Dcerq4lnkaJbvUqsHaO+tzjALUw/4RxhQRhCJRPNLx/z/2yp7c6rlaz8VZ
- P1JAA06ngOaGFODdTexrJaxlxKq4Fs0QTg4P+5v+e+5PKnznmgN8hOfDl6LOyjk/ligIgVbaz
- mckIb9obOZpuPZ1/IiM4wEYwEZhtyk603WhEOKIponQV5f5tY2uVnHgzG4Uymz2Q3wlEV+DXk
- sqHRsp5HOglqpgrHWAj0x8NqYZa8ORy0mlX95NvCYocaFX4yF2KYhjN4qdV45yhcrHt8DzDQu
- QUHLU40PRznViyyn88p48R7XjUI=
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,RCVD_IN_DNSWL_LOW,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y2QKjzL+nH6Zabg7@owl.dominikbrodowski.net>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+X-Spam-Status: No, score=-8.0 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Simple typo, simple fix.
+On Thu, Nov 03, 2022 at 07:38:07PM +0100, Dominik Brodowski wrote:
+> Am Fri, Nov 04, 2022 at 03:29:44AM +0900 schrieb Krzysztof Wilczyński:
 
-Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
-=2D--
- drivers/spi/spi-hisi-sfc-v3xx.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+...
 
-diff --git a/drivers/spi/spi-hisi-sfc-v3xx.c b/drivers/spi/spi-hisi-sfc-v3=
-xx.c
-index d3a23b1c2a4c5..f07d1045a30a2 100644
-=2D-- a/drivers/spi/spi-hisi-sfc-v3xx.c
-+++ b/drivers/spi/spi-hisi-sfc-v3xx.c
-@@ -165,7 +165,7 @@ static int hisi_sfc_v3xx_adjust_op_size(struct spi_mem=
- *mem,
- }
+> > That said, Dominik is the maintainer of PCMCIA driver, so his is the last
+> > word, so to speak. :)
+> > 
+> > > Considering this is done, can you issue your conditional tag so I will
+> > > incorporate it in v3?
+> > 
+> > No need, really.  Again, unless Dominik thinks otherwise.
+> 
+> Ah, thanks for the correction. Then v2 is perfectly fine.
 
- /*
-- * The controller only supports Standard SPI mode, Duall mode and
-+ * The controller only supports Standard SPI mode, Dual mode and
-  * Quad mode. Double sanitize the ops here to avoid OOB access.
-  */
- static bool hisi_sfc_v3xx_supports_op(struct spi_mem *mem,
-=2D-
-2.35.1
+I'm fine with either, thanks!
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
 
