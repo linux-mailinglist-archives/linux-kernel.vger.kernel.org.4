@@ -2,327 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB3BE6183DC
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:11:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id CFE796183DE
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 17:12:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S232079AbiKCQKx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 12:10:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38912 "EHLO
+        id S231473AbiKCQLw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 12:11:52 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41736 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232033AbiKCQK2 (ORCPT
+        with ESMTP id S231255AbiKCQLq (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 12:10:28 -0400
-Received: from smtp-8faa.mail.infomaniak.ch (smtp-8faa.mail.infomaniak.ch [IPv6:2001:1600:4:17::8faa])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C523E1C13C
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 09:09:42 -0700 (PDT)
-Received: from smtp-3-0001.mail.infomaniak.ch (unknown [10.4.36.108])
-        by smtp-3-3000.mail.infomaniak.ch (Postfix) with ESMTPS id 4N37xc16zjzMpnTN;
-        Thu,  3 Nov 2022 17:09:40 +0100 (CET)
-Received: from ns3096276.ip-94-23-54.eu (unknown [23.97.221.149])
-        by smtp-3-0001.mail.infomaniak.ch (Postfix) with ESMTPA id 4N37xb0B4pzMpphG;
-        Thu,  3 Nov 2022 17:09:38 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=digikod.net;
-        s=20191114; t=1667491780;
-        bh=nAGLkQKdFqX2PHeLP/p0EHiQdszCz61dANsujoabcoE=;
-        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-        b=N7JAAHTsCzpwdAZCamgd480C38UUIhZj3IfHifZ6XxGhVbPNmHSl2t+xd5RM0pd4N
-         nysRkw+4JwMCVFCimEIVztaYcX+x8aVW6VVR32kJzfgONL7ANm79koMM6v/xpbXARF
-         YUybVOVwr/vVCprWG+Psou276VsbNqzCQODLb/cs=
-Message-ID: <1fe5c84d-6f85-9ee8-76d4-d184a47ebff2@digikod.net>
-Date:   Thu, 3 Nov 2022 17:09:38 +0100
+        Thu, 3 Nov 2022 12:11:46 -0400
+Received: from mail-io1-f72.google.com (mail-io1-f72.google.com [209.85.166.72])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1AB05E5D
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 09:11:44 -0700 (PDT)
+Received: by mail-io1-f72.google.com with SMTP id i21-20020a6bf415000000b006bc987bf9faso1325309iog.6
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 09:11:44 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=+Auj3vQKcwoQNezul/j4Pp/aHoO2hjUoalXp0Uezz5k=;
+        b=TpUi301nX8deOq3U7ZYOZ09kaRQqvaLwvQCyw78VR/bxVqsSZWxBGtYDsPcm84F7PT
+         teFpgma1ZHkA+O0//WLHsdJQBfEt2e4vvppFJKRq2otHUw4mz9UK8i8E/yELplUIeP8p
+         LKS5e6u1HNbbUcH9fOatxX6ZKSfszwnVAgNGlQDpxnVcSK7Ovt3+49ktjTTsiYH9xlb+
+         uyL2enrj/YLkFoVFEKTe/y+lnfbQX6sgb16SxpBpXWZ07KRIt/QSunfq74eAKPLl+4Hd
+         mNgr4ewW8aGywE7XqzuTjBnk5IZHI+ZLmTOFD41rfzVAmfxs491V4dJ4++8L9btucjiK
+         zy6w==
+X-Gm-Message-State: ACrzQf3KygNvDUkRDVBVbA/1shbnHaWlIsq9vJxa+yW+ZhOX+ZVUEE3B
+        A9CGGcywZAEMPvVJ4XAVuSreBIeFDzklcEe2v0Zi919XzVP2
+X-Google-Smtp-Source: AMsMyM6Cq+gQg8eyNqw4rYJ8YQP4nUd68IJMs2MKZpTHB9Z1Kmh1+J6eGzjJHMtAA/ETZBx0uNAOVioZc89X9VBHwL/pLJhr3PIA
 MIME-Version: 1.0
-User-Agent: 
-Subject: Re: [PATCH v2] LSM: Better reporting of actual LSMs at boot
-Content-Language: en-US
-To:     Kees Cook <keescook@chromium.org>, Paul Moore <paul@paul-moore.com>
-Cc:     James Morris <jmorris@namei.org>,
-        "Serge E. Hallyn" <serge@hallyn.com>,
-        linux-security-module@vger.kernel.org,
-        linux-kernel@vger.kernel.org, bpf@vger.kernel.org,
-        linux-hardening@vger.kernel.org
-References: <20221102000525.gonna.409-kees@kernel.org>
-From:   =?UTF-8?Q?Micka=c3=abl_Sala=c3=bcn?= <mic@digikod.net>
-In-Reply-To: <20221102000525.gonna.409-kees@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+X-Received: by 2002:a92:c26e:0:b0:2fc:1a4f:bfb with SMTP id
+ h14-20020a92c26e000000b002fc1a4f0bfbmr17311052ild.58.1667491903453; Thu, 03
+ Nov 2022 09:11:43 -0700 (PDT)
+Date:   Thu, 03 Nov 2022 09:11:43 -0700
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <00000000000092429f05ec933622@google.com>
+Subject: [syzbot] bpf-next boot error: WARNING in genl_register_family
+From:   syzbot <syzbot+7cc0a430776e7900c5e7@syzkaller.appspotmail.com>
+To:     ast@kernel.org, daniel@iogearbox.net, davem@davemloft.net,
+        edumazet@google.com, jacob.e.keller@intel.com, jiri@nvidia.com,
+        kuba@kernel.org, linux-kernel@vger.kernel.org,
+        netdev@vger.kernel.org, pabeni@redhat.com, paul@paul-moore.com,
+        razor@blackwall.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=0.9 required=5.0 tests=BAYES_00,FROM_LOCAL_HEX,
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SORTED_RECIPS,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+Hello,
 
-On 02/11/2022 01:05, Kees Cook wrote:
-> Enhance the details reported by "lsm.debug" in several ways:
-> 
-> - report contents of "security="
-> - report contents of "CONFIG_LSM"
-> - report contents of "lsm="
-> - report any early LSM details
-> - whitespace-align the output of similar phases for easier visual parsing
-> - change "disabled" to more accurate "skipped"
-> - explain what "skipped" and "ignored" mean in a parenthetical
-> 
-> Upgrade the "security= is ignored" warning from pr_info to pr_warn,
-> and include full arguments list to make the cause even more clear.
-> 
-> Replace static "Security Framework initializing" pr_info with specific
-> list of the resulting order of enabled LSMs.
-> 
-> For example, if the kernel is built with:
-> 
-> CONFIG_SECURITY_SELINUX=y
-> CONFIG_SECURITY_APPARMOR=y
-> CONFIG_SECURITY_LOADPIN=y
-> CONFIG_SECURITY_YAMA=y
-> CONFIG_SECURITY_SAFESETID=y
-> CONFIG_SECURITY_LOCKDOWN_LSM=y
-> CONFIG_SECURITY_LANDLOCK=y
-> CONFIG_INTEGRITY=y
-> CONFIG_BPF_LSM=y
-> CONFIG_DEFAULT_SECURITY_APPARMOR=y
-> CONFIG_LSM="landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf"
-> 
-> Booting without options will show:
-> 
-> LSM: initializing lsm=lockdown,capability,landlock,yama,loadpin,safesetid,integrity,selinux,bpf
-> landlock: Up and running.
-> Yama: becoming mindful.
-> LoadPin: ready to pin (currently not enforcing)
-> SELinux:  Initializing.
-> LSM support for eBPF active
-> 
-> Boot with "lsm.debug" will show:
-> 
-> LSM: legacy security= *unspecified*
-> LSM: CONFIG_LSM=landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf
-> LSM: boot arg lsm= *unspecified*
-> LSM:   early started: lockdown (enabled)
-> LSM:   first ordered: capability (enabled)
-> LSM: builtin ordered: landlock (enabled)
-> LSM: builtin ignored: lockdown (not built into kernel)
-> LSM: builtin ordered: yama (enabled)
-> LSM: builtin ordered: loadpin (enabled)
-> LSM: builtin ordered: safesetid (enabled)
-> LSM: builtin ordered: integrity (enabled)
-> LSM: builtin ordered: selinux (enabled)
-> LSM: builtin ignored: smack (not built into kernel)
-> LSM: builtin ignored: tomoyo (not built into kernel)
-> LSM: builtin ordered: apparmor (enabled)
-> LSM: builtin ordered: bpf (enabled)
-> LSM: exclusive chosen:   selinux
-> LSM: exclusive disabled: apparmor
-> LSM: initializing lsm=lockdown,capability,landlock,yama,loadpin,safesetid,integrity,selinux,bpf
-> LSM: cred blob size       = 32
-> LSM: file blob size       = 16
-> LSM: inode blob size      = 72
-> LSM: ipc blob size        = 8
-> LSM: msg_msg blob size    = 4
-> LSM: superblock blob size = 80
-> LSM: task blob size       = 8
-> LSM: initializing capability
-> LSM: initializing landlock
-> landlock: Up and running.
-> LSM: initializing yama
-> Yama: becoming mindful.
-> LSM: initializing loadpin
-> LoadPin: ready to pin (currently not enforcing)
-> LSM: initializing safesetid
-> LSM: initializing integrity
-> LSM: initializing selinux
-> SELinux:  Initializing.
-> LSM: initializing bpf
-> LSM support for eBPF active
-> 
-> And some examples of how the lsm.debug ordering report changes...
-> 
-> With "lsm.debug security=selinux":
-> 
-> LSM: legacy security=selinux
-> LSM: CONFIG_LSM=landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf
-> LSM: boot arg lsm= *unspecified*
-> LSM:   early started: lockdown (enabled)
-> LSM:   first ordered: capability (enabled)
-> LSM: security=selinux disabled: apparmor (only one legacy major LSM)
-> LSM: builtin ordered: landlock (enabled)
-> LSM: builtin ignored: lockdown (not built into kernel)
-> LSM: builtin ordered: yama (enabled)
-> LSM: builtin ordered: loadpin (enabled)
-> LSM: builtin ordered: safesetid (enabled)
-> LSM: builtin ordered: integrity (enabled)
-> LSM: builtin ordered: selinux (enabled)
-> LSM: builtin ignored: smack (not built into kernel)
-> LSM: builtin ignored: tomoyo (not built into kernel)
-> LSM: builtin ordered: apparmor (disabled)
-> LSM: builtin ordered: bpf (enabled)
-> LSM: exclusive chosen:   selinux
-> LSM: initializing lsm=lockdown,capability,landlock,yama,loadpin,safesetid,integrity,selinux,bpf
-> 
-> With "lsm.debug lsm=integrity,selinux,loadpin,crabability,bpf,loadpin,loadpin":
-> 
-> LSM: legacy security= *unspecified*
-> LSM: CONFIG_LSM=landlock,lockdown,yama,loadpin,safesetid,integrity,selinux,smack,tomoyo,apparmor,bpf
-> LSM: boot arg lsm=integrity,selinux,loadpin,capability,bpf,loadpin,loadpin
-> LSM:   early started: lockdown (enabled)
-> LSM:   first ordered: capability (enabled)
-> LSM: cmdline ordered: integrity (enabled)
-> LSM: cmdline ordered: selinux (enabled)
-> LSM: cmdline ordered: loadpin (enabled)
-> LSM: cmdline ignored: crabability (not built into kernel)
-> LSM: cmdline ordered: bpf (enabled)
-> LSM: cmdline skipped: apparmor (not in requested order)
-> LSM: cmdline skipped: yama (not in requested order)
-> LSM: cmdline skipped: safesetid (not in requested order)
-> LSM: cmdline skipped: landlock (not in requested order)
-> LSM: exclusive chosen:   selinux
-> LSM: initializing lsm=lockdown,capability,integrity,selinux,loadpin,bpf
-> 
-> Cc: Paul Moore <paul@paul-moore.com>
-> Cc: James Morris <jmorris@namei.org>
-> Cc: "Serge E. Hallyn" <serge@hallyn.com>
-> Cc: linux-security-module@vger.kernel.org
-> Signed-off-by: Kees Cook <keescook@chromium.org>
+syzbot found the following issue on:
 
-I think this change would be useful to help users debug their LSM 
-configuration. I'm not sure about the whitespace-aligned output though, 
-I guess it could break some scripts, but it is not part of the ABI and 
-only relevant for debug purpose.
+HEAD commit:    b54a0d4094f5 Merge tag 'for-netdev' of https://git.kernel...
+git tree:       bpf-next
+console output: https://syzkaller.appspot.com/x/log.txt?x=144ee346880000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=53cedb500b7b74c6
+dashboard link: https://syzkaller.appspot.com/bug?extid=7cc0a430776e7900c5e7
+compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
 
-Acked-by: Mickaël Salaün <mic@digikod.net>
+Downloadable assets:
+disk image: https://storage.googleapis.com/syzbot-assets/e00a07d34b58/disk-b54a0d40.raw.xz
+vmlinux: https://storage.googleapis.com/syzbot-assets/677c38c41b63/vmlinux-b54a0d40.xz
+kernel image: https://storage.googleapis.com/syzbot-assets/2433cd47d109/bzImage-b54a0d40.xz
+
+IMPORTANT: if you fix the issue, please add the following tag to the commit:
+Reported-by: syzbot+7cc0a430776e7900c5e7@syzkaller.appspotmail.com
+
+can: controller area network core
+NET: Registered PF_CAN protocol family
+can: raw protocol
+can: broadcast manager protocol
+can: netlink gateway - max_hops=1
+can: SAE J1939
+can: isotp protocol
+Bluetooth: RFCOMM TTY layer initialized
+Bluetooth: RFCOMM socket layer initialized
+Bluetooth: RFCOMM ver 1.11
+Bluetooth: BNEP (Ethernet Emulation) ver 1.3
+Bluetooth: BNEP filters: protocol multicast
+Bluetooth: BNEP socket layer initialized
+Bluetooth: CMTP (CAPI Emulation) ver 1.0
+Bluetooth: CMTP socket layer initialized
+Bluetooth: HIDP (Human Interface Emulation) ver 1.2
+Bluetooth: HIDP socket layer initialized
+NET: Registered PF_RXRPC protocol family
+Key type rxrpc registered
+Key type rxrpc_s registered
+NET: Registered PF_KCM protocol family
+lec:lane_module_init: lec.c: initialized
+mpoa:atm_mpoa_init: mpc.c: initialized
+l2tp_core: L2TP core driver, V2.0
+l2tp_ppp: PPPoL2TP kernel driver, V2.0
+l2tp_ip: L2TP IP encapsulation support (L2TPv3)
+l2tp_netlink: L2TP netlink interface
+l2tp_eth: L2TP ethernet pseudowire support (L2TPv3)
+l2tp_ip6: L2TP IP encapsulation support for IPv6 (L2TPv3)
+NET: Registered PF_PHONET protocol family
+8021q: 802.1Q VLAN Support v1.8
+DCCP: Activated CCID 2 (TCP-like)
+DCCP: Activated CCID 3 (TCP-Friendly Rate Control)
+sctp: Hash tables configured (bind 32/56)
+NET: Registered PF_RDS protocol family
+Registered RDS/infiniband transport
+Registered RDS/tcp transport
+tipc: Activated (version 2.0.0)
+NET: Registered PF_TIPC protocol family
+tipc: Started in single node mode
+NET: Registered PF_SMC protocol family
+9pnet: Installing 9P2000 support
+NET: Registered PF_CAIF protocol family
+NET: Registered PF_IEEE802154 protocol family
+Key type dns_resolver registered
+Key type ceph registered
+libceph: loaded (mon/osd proto 15/24)
+batman_adv: B.A.T.M.A.N. advanced 2022.3 (compatibility version 15) loaded
+openvswitch: Open vSwitch switching datapath
+------------[ cut here ]------------
+WARNING: CPU: 1 PID: 1 at net/netlink/genetlink.c:383 genl_validate_ops net/netlink/genetlink.c:383 [inline]
+WARNING: CPU: 1 PID: 1 at net/netlink/genetlink.c:383 genl_register_family+0x298/0x1450 net/netlink/genetlink.c:414
+Modules linked in:
+CPU: 1 PID: 1 Comm: swapper/0 Not tainted 6.1.0-rc2-syzkaller-10728-gb54a0d4094f5 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+RIP: 0010:genl_validate_ops net/netlink/genetlink.c:383 [inline]
+RIP: 0010:genl_register_family+0x298/0x1450 net/netlink/genetlink.c:414
+Code: dd 0f 82 b1 06 00 00 e8 e6 d0 e4 f9 0f b6 9c 24 b7 00 00 00 31 ff 89 de e8 65 cd e4 f9 84 db 0f 84 93 06 00 00 e8 c8 d0 e4 f9 <0f> 0b e8 c1 d0 e4 f9 41 bc ea ff ff ff e8 b6 d0 e4 f9 48 b8 00 00
+RSP: 0000:ffffc90000067c50 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000003 RCX: 0000000000000000
+RDX: ffff88813fe50000 RSI: ffffffff8797d148 RDI: 0000000000000001
+RBP: 0000000000000001 R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000003 R11: 0000000000000000 R12: 0000000000000000
+R13: ffffffff8b9a7a26 R14: ffffffff8b9a7a00 R15: 0000000000000000
+FS:  0000000000000000(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 0000000000000000 CR3: 000000000bc8e000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ dp_register_genl net/openvswitch/datapath.c:2578 [inline]
+ dp_init+0x148/0x25d net/openvswitch/datapath.c:2707
+ do_one_initcall+0x13d/0x780 init/main.c:1303
+ do_initcall_level init/main.c:1376 [inline]
+ do_initcalls init/main.c:1392 [inline]
+ do_basic_setup init/main.c:1411 [inline]
+ kernel_init_freeable+0x6ff/0x788 init/main.c:1631
+ kernel_init+0x1a/0x1d0 init/main.c:1519
+ ret_from_fork+0x1f/0x30 arch/x86/entry/entry_64.S:306
+ </TASK>
 
 
-> ---
-> v2: en/dis-enabled expanded, example output in commit log, use pr_cont.
-> v1: https://lore.kernel.org/lkml/20221018064825.never.323-kees@kernel.org/
-> ---
->   security/security.c | 45 ++++++++++++++++++++++++++++++++++++---------
->   1 file changed, 36 insertions(+), 9 deletions(-)
-> 
-> diff --git a/security/security.c b/security/security.c
-> index 79d82cb6e469..abceabda103d 100644
-> --- a/security/security.c
-> +++ b/security/security.c
-> @@ -161,8 +161,8 @@ static void __init append_ordered_lsm(struct lsm_info *lsm, const char *from)
->   		lsm->enabled = &lsm_enabled_true;
->   	ordered_lsms[last_lsm++] = lsm;
->   
-> -	init_debug("%s ordering: %s (%sabled)\n", from, lsm->name,
-> -		   is_enabled(lsm) ? "en" : "dis");
-> +	init_debug("%s ordered: %s (%s)\n", from, lsm->name,
-> +		   is_enabled(lsm) ? "enabled" : "disabled");
->   }
->   
->   /* Is an LSM allowed to be initialized? */
-> @@ -224,7 +224,7 @@ static void __init prepare_lsm(struct lsm_info *lsm)
->   	if (enabled) {
->   		if ((lsm->flags & LSM_FLAG_EXCLUSIVE) && !exclusive) {
->   			exclusive = lsm;
-> -			init_debug("exclusive chosen: %s\n", lsm->name);
-> +			init_debug("exclusive chosen:   %s\n", lsm->name);
->   		}
->   
->   		lsm_set_blob_sizes(lsm->blobs);
-> @@ -252,7 +252,7 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
->   	/* LSM_ORDER_FIRST is always first. */
->   	for (lsm = __start_lsm_info; lsm < __end_lsm_info; lsm++) {
->   		if (lsm->order == LSM_ORDER_FIRST)
-> -			append_ordered_lsm(lsm, "first");
-> +			append_ordered_lsm(lsm, "  first");
->   	}
->   
->   	/* Process "security=", if given. */
-> @@ -270,7 +270,7 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
->   			if ((major->flags & LSM_FLAG_LEGACY_MAJOR) &&
->   			    strcmp(major->name, chosen_major_lsm) != 0) {
->   				set_enabled(major, false);
-> -				init_debug("security=%s disabled: %s\n",
-> +				init_debug("security=%s disabled: %s (only one legacy major LSM)\n",
->   					   chosen_major_lsm, major->name);
->   			}
->   		}
-> @@ -291,7 +291,8 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
->   		}
->   
->   		if (!found)
-> -			init_debug("%s ignored: %s\n", origin, name);
-> +			init_debug("%s ignored: %s (not built into kernel)\n",
-> +				   origin, name);
->   	}
->   
->   	/* Process "security=", if given. */
-> @@ -309,7 +310,8 @@ static void __init ordered_lsm_parse(const char *order, const char *origin)
->   		if (exists_ordered_lsm(lsm))
->   			continue;
->   		set_enabled(lsm, false);
-> -		init_debug("%s disabled: %s\n", origin, lsm->name);
-> +		init_debug("%s skipped: %s (not in requested order)\n",
-> +			   origin, lsm->name);
->   	}
->   
->   	kfree(sep);
-> @@ -320,6 +322,24 @@ static void __init lsm_early_task(struct task_struct *task);
->   
->   static int lsm_append(const char *new, char **result);
->   
-> +static void __init report_lsm_order(void)
-> +{
-> +	struct lsm_info **lsm, *early;
-> +	int first = 0;
-> +
-> +	pr_info("initializing lsm=");
-> +
-> +	/* Report each enabled LSM name, comma separated. */
-> +	for (early = __start_early_lsm_info; early < __end_early_lsm_info; early++)
-> +		if (is_enabled(early))
-> +			pr_cont("%s%s", first++ == 0 ? "" : ",", early->name);
-> +	for (lsm = ordered_lsms; *lsm; lsm++)
-> +		if (is_enabled(*lsm))
-> +			pr_cont("%s%s", first++ == 0 ? "" : ",", (*lsm)->name);
-> +
-> +	pr_cont("\n");
-> +}
-> +
->   static void __init ordered_lsm_init(void)
->   {
->   	struct lsm_info **lsm;
-> @@ -329,7 +349,8 @@ static void __init ordered_lsm_init(void)
->   
->   	if (chosen_lsm_order) {
->   		if (chosen_major_lsm) {
-> -			pr_info("security= is ignored because it is superseded by lsm=\n");
-> +			pr_warn("security=%s is ignored because it is superseded by lsm=%s\n",
-> +				chosen_major_lsm, chosen_lsm_order);
->   			chosen_major_lsm = NULL;
->   		}
->   		ordered_lsm_parse(chosen_lsm_order, "cmdline");
-> @@ -339,6 +360,8 @@ static void __init ordered_lsm_init(void)
->   	for (lsm = ordered_lsms; *lsm; lsm++)
->   		prepare_lsm(*lsm);
->   
-> +	report_lsm_order();
-> +
->   	init_debug("cred blob size       = %d\n", blob_sizes.lbs_cred);
->   	init_debug("file blob size       = %d\n", blob_sizes.lbs_file);
->   	init_debug("inode blob size      = %d\n", blob_sizes.lbs_inode);
-> @@ -395,13 +418,17 @@ int __init security_init(void)
->   {
->   	struct lsm_info *lsm;
->   
-> -	pr_info("Security Framework initializing\n");
-> +	init_debug("legacy security=%s\n", chosen_major_lsm ?: " *unspecified*");
-> +	init_debug("  CONFIG_LSM=%s\n", builtin_lsm_order);
-> +	init_debug("boot arg lsm=%s\n", chosen_lsm_order ?: " *unspecified*");
->   
->   	/*
->   	 * Append the names of the early LSM modules now that kmalloc() is
->   	 * available
->   	 */
->   	for (lsm = __start_early_lsm_info; lsm < __end_early_lsm_info; lsm++) {
-> +		init_debug("  early started: %s (%s)\n", lsm->name,
-> +			   is_enabled(lsm) ? "enabled" : "disabled");
->   		if (lsm->enabled)
->   			lsm_append(lsm->name, &lsm_names);
->   	}
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+syzbot will keep track of this issue. See:
+https://goo.gl/tpsmEJ#status for how to communicate with syzbot.
