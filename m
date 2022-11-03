@@ -2,365 +2,150 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E87046185D1
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:11:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A69486185D2
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:11:14 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229826AbiKCRLI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 13:11:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37522 "EHLO
+        id S231986AbiKCRLL (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 13:11:11 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37540 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232049AbiKCRKe (ORCPT
+        with ESMTP id S231601AbiKCRKg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:10:34 -0400
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id F2A8AB33
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:09:22 -0700 (PDT)
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-        by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 01A2D12FC;
-        Thu,  3 Nov 2022 10:09:29 -0700 (PDT)
-Received: from lakrids.cambridge.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-        by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id A243A3F5A1;
-        Thu,  3 Nov 2022 10:09:21 -0700 (PDT)
-From:   Mark Rutland <mark.rutland@arm.com>
-To:     linux-kernel@vger.kernel.org
-Cc:     mark.rutland@arm.com, mhiramat@kernel.org, revest@chromium.org,
-        rostedt@goodmis.org
-Subject: [PATCH 3/3] ftrace: add sample with custom ops
-Date:   Thu,  3 Nov 2022 17:09:07 +0000
-Message-Id: <20221103170907.931465-4-mark.rutland@arm.com>
-X-Mailer: git-send-email 2.30.2
-In-Reply-To: <20221103170907.931465-1-mark.rutland@arm.com>
-References: <20221103170907.931465-1-mark.rutland@arm.com>
+        Thu, 3 Nov 2022 13:10:36 -0400
+Received: from mail-qt1-x834.google.com (mail-qt1-x834.google.com [IPv6:2607:f8b0:4864:20::834])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id DDAF11001
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:09:28 -0700 (PDT)
+Received: by mail-qt1-x834.google.com with SMTP id x15so1621040qtv.9
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:09:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linux-foundation.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=JxCfvbb+eoelACSav5gOVJGA8b7JZzX3u9t6lpOqhGc=;
+        b=c21oKw15OEDs7jPQQCx5/Q6jAakEjh4QCyHrqDrHmt1tZB5JiHbbDJmM+26GNCOUuA
+         n2GMHrJ6v80we2vb5tM+7RBrSn/OgbLvIvKDSypwoGrv+vFeYz+qEx5tgHNFD4SDuMUn
+         DyCZcKZmr8k62mDFGein3IhVz7jo4hs0ekZoI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JxCfvbb+eoelACSav5gOVJGA8b7JZzX3u9t6lpOqhGc=;
+        b=xs99gJIzTTVzl+h+lVLIMUrO24Lpg4eIUt4lRAZCC0QOiHDpvbe485nPRp+PL4HI05
+         2kg5+Zl3vUlIRmDeYi5vT+zEQ3aXbISVOpYon1UhQzXLbqRQYxGSHR7zzeSpQUluYp4I
+         asnoUQIu4tTuY5Zb5J2rhggjfCuRl6g2Ey/rHUP47QbbUoJrr7WhiiibfXWfjnQKabdF
+         W21ipoBUh/zSPhetJGaozAKFUeYeyr0fuLbQiT3WcDgGNkG/dDM5/d67FLblMVYQyhu/
+         +HEcmqjZ1XgmY1xACxfdGjPW9kwnlW/Q6N4p04vCzGSXgFmpdvX6MQeRrsfWa8W5F9pH
+         zl2A==
+X-Gm-Message-State: ACrzQf0+h35qP44e1EHt9pGsw4rTxx0r3fVo3aePFNy9ZI8B9t177Ccq
+        FKBrin3V4SBtT9mG4tr/jpYdUS25RqTasA==
+X-Google-Smtp-Source: AMsMyM4WFhKuXah0eQAh/vodnmRZIvQxQww3AWRoaRZp0jgZGQM6Xnrk3QwhG6OYflvGDGPVYEZLUQ==
+X-Received: by 2002:ac8:4b46:0:b0:3a5:1d94:751f with SMTP id e6-20020ac84b46000000b003a51d94751fmr21338157qts.102.1667495368053;
+        Thu, 03 Nov 2022 10:09:28 -0700 (PDT)
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com. [209.85.219.176])
+        by smtp.gmail.com with ESMTPSA id az18-20020a05620a171200b006bb87c4833asm1050203qkb.109.2022.11.03.10.09.27
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 10:09:27 -0700 (PDT)
+Received: by mail-yb1-f176.google.com with SMTP id 187so3031327ybe.1
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:09:27 -0700 (PDT)
+X-Received: by 2002:a25:5389:0:b0:6bc:f12c:5d36 with SMTP id
+ h131-20020a255389000000b006bcf12c5d36mr29702771ybb.184.1667495367212; Thu, 03
+ Nov 2022 10:09:27 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
+References: <B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com>
+ <CAHk-=wgzT1QsSCF-zN+eS06WGVTBg4sf=6oTMg95+AEq7QrSCQ@mail.gmail.com>
+ <47678198-C502-47E1-B7C8-8A12352CDA95@gmail.com> <CAHk-=wjzngbbwHw4nAsqo_RpyOtUDk5G+Wus=O0w0A6goHvBWA@mail.gmail.com>
+ <CAHk-=wijU_YHSZq5N7vYK+qHPX0aPkaePaGOyWk4aqMvvSXxJA@mail.gmail.com>
+ <140B437E-B994-45B7-8DAC-E9B66885BEEF@gmail.com> <CAHk-=wjX_P78xoNcGDTjhkgffs-Bhzcwp-mdsE1maeF57Sh0MA@mail.gmail.com>
+ <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
+ <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
+ <CAHk-=wiwt4LC-VmqvYrphraF0=yQV=CQimDCb0XhtXwk8oKCCA@mail.gmail.com>
+ <Y1+XCALog8bW7Hgl@hirez.programming.kicks-ass.net> <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
+ <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com>
+ <4f6d8fb5-6be5-a7a8-de8e-644da66b5a3d@redhat.com> <CAHk-=wiDg_1up8K4PhK4+kzPN7xJG297=nw+tvgrGn7aVgZdqw@mail.gmail.com>
+In-Reply-To: <CAHk-=wiDg_1up8K4PhK4+kzPN7xJG297=nw+tvgrGn7aVgZdqw@mail.gmail.com>
+From:   Linus Torvalds <torvalds@linux-foundation.org>
+Date:   Thu, 3 Nov 2022 10:09:11 -0700
+X-Gmail-Original-Message-ID: <CAHk-=wgReY6koZTKT97NsCczzr4uYAA66iePv=S_RL-_D-9mmQ@mail.gmail.com>
+Message-ID: <CAHk-=wgReY6koZTKT97NsCczzr4uYAA66iePv=S_RL-_D-9mmQ@mail.gmail.com>
+Subject: Re: mm: delay rmap removal until after TLB flush
+To:     David Hildenbrand <david@redhat.com>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Jann Horn <jannh@google.com>,
+        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
+        Andrew Morton <akpm@linux-foundation.org>,
+        kernel list <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        linux-arch <linux-arch@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,HEADER_FROM_DIFFERENT_DOMAINS,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-When reworking core ftrace code or architectural ftrace code, it's often
-necessary to test/analyse/benchmark a number of ftrace_ops
-configurations. This patch adds a module which can be used to explore
-some of those configurations.
+On Thu, Nov 3, 2022 at 9:54 AM Linus Torvalds
+<torvalds@linux-foundation.org> wrote:
+>
+> But again, those changes would have made the patch bigger, which I
+> didn't want at this point (and 'release_pages()' would need that
+> clean-in-place anyway, unless we changed *that* too and made the whole
+> page encoding be something widely available).
 
-I'm using this to benchmark various options for changing the way
-trampolines and handling of ftrace_ops work on arm64.
+And just to clarify: this is not just me trying to expand the reach of my patch.
 
-Signed-off-by: Mark Rutland <mark.rutland@arm.com>
-Cc: Florent Revest <revest@chromium.org>
-Cc: Masami Hiramatsu <mhiramat@kernel.org>
-Cc: Steven Rostedt <rostedt@goodmis.org>
----
- samples/Kconfig             |   7 +
- samples/Makefile            |   1 +
- samples/ftrace/Makefile     |   1 +
- samples/ftrace/ftrace-ops.c | 252 ++++++++++++++++++++++++++++++++++++
- 4 files changed, 261 insertions(+)
- create mode 100644 samples/ftrace/ftrace-ops.c
+I'd suggest people look at mlock_pagevec(), and realize that LRU_PAGE
+and NEW_PAGE are both *exactly* the same kind of "encoded_page" bits
+that TLB_ZAP_RMAP is.
 
-diff --git a/samples/Kconfig b/samples/Kconfig
-index 0d81c00289ee3..daf14c35f071d 100644
---- a/samples/Kconfig
-+++ b/samples/Kconfig
-@@ -46,6 +46,13 @@ config SAMPLE_FTRACE_DIRECT_MULTI
- 	  that hooks to wake_up_process and schedule, and prints
- 	  the function addresses.
- 
-+config SAMPLE_FTRACE_OPS
-+	tristate "Build custom ftrace ops example"
-+	depends on FUNCTION_TRACER
-+	help
-+	  This builds an ftrace ops example that hooks two functions and
-+	  measures the time taken to invoke one function a number of times.
-+
- config SAMPLE_TRACE_ARRAY
-         tristate "Build sample module for kernel access to Ftrace instancess"
- 	depends on EVENT_TRACING && m
-diff --git a/samples/Makefile b/samples/Makefile
-index 9832ef3f8fcba..7cb632ef88eeb 100644
---- a/samples/Makefile
-+++ b/samples/Makefile
-@@ -24,6 +24,7 @@ obj-$(CONFIG_SAMPLE_TRACE_CUSTOM_EVENTS) += trace_events/
- obj-$(CONFIG_SAMPLE_TRACE_PRINTK)	+= trace_printk/
- obj-$(CONFIG_SAMPLE_FTRACE_DIRECT)	+= ftrace/
- obj-$(CONFIG_SAMPLE_FTRACE_DIRECT_MULTI) += ftrace/
-+obj-$(CONFIG_SAMPLE_FTRACE_OPS)		+= ftrace/
- obj-$(CONFIG_SAMPLE_TRACE_ARRAY)	+= ftrace/
- subdir-$(CONFIG_SAMPLE_UHID)		+= uhid
- obj-$(CONFIG_VIDEO_PCI_SKELETON)	+= v4l/
-diff --git a/samples/ftrace/Makefile b/samples/ftrace/Makefile
-index faf8cdb79c5f4..589baf2ec4e3d 100644
---- a/samples/ftrace/Makefile
-+++ b/samples/ftrace/Makefile
-@@ -5,6 +5,7 @@ obj-$(CONFIG_SAMPLE_FTRACE_DIRECT) += ftrace-direct-too.o
- obj-$(CONFIG_SAMPLE_FTRACE_DIRECT) += ftrace-direct-modify.o
- obj-$(CONFIG_SAMPLE_FTRACE_DIRECT_MULTI) += ftrace-direct-multi.o
- obj-$(CONFIG_SAMPLE_FTRACE_DIRECT_MULTI) += ftrace-direct-multi-modify.o
-+obj-$(CONFIG_SAMPLE_FTRACE_OPS) += ftrace-ops.o
- 
- CFLAGS_sample-trace-array.o := -I$(src)
- obj-$(CONFIG_SAMPLE_TRACE_ARRAY) += sample-trace-array.o
-diff --git a/samples/ftrace/ftrace-ops.c b/samples/ftrace/ftrace-ops.c
-new file mode 100644
-index 0000000000000..aa883ad4fbe27
---- /dev/null
-+++ b/samples/ftrace/ftrace-ops.c
-@@ -0,0 +1,252 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+
-+#define pr_fmt(fmt)       KBUILD_MODNAME ": " fmt
-+
-+#include <linux/ftrace.h>
-+#include <linux/ktime.h>
-+#include <linux/module.h>
-+
-+#include <asm/barrier.h>
-+
-+/*
-+ * Arbitrary large value chosen to be sufficiently large to minimize noise but
-+ * sufficiently small to complete quickly.
-+ */
-+unsigned int nr_function_calls = 100000;
-+module_param(nr_function_calls, uint, 0);
-+MODULE_PARM_DESC(nr_function_calls, "How many times to call the relevant tracee");
-+
-+/*
-+ * The number of ops associated with a call site affects whether a tracer can
-+ * be called directly or whether it's necessary to go via the list func, which
-+ * can be significantly more expensive.
-+ */
-+unsigned int nr_ops_relevant = 1;
-+module_param(nr_ops_relevant, uint, 0);
-+MODULE_PARM_DESC(nr_ops_relevant, "How many ftrace_ops to associate with the relevant tracee");
-+
-+/*
-+ * On architectures where all call sites share the same trampoline, having
-+ * tracers enabled for distinct functions can force the use of the list func
-+ * and incur overhead for all call sites.
-+ */
-+unsigned int nr_ops_irrelevant = 0;
-+module_param(nr_ops_irrelevant, uint, 0);
-+MODULE_PARM_DESC(nr_ops_irrelevant, "How many ftrace_ops to associate with the irrelevant tracee");
-+
-+/*
-+ * On architectures with DYNAMIC_FTRACE_WITH_REGS, saving the full pt_regs can
-+ * be more expensive than only saving the minimal necessary regs.
-+ */
-+bool save_regs = false;
-+module_param(save_regs, bool, 0);
-+MODULE_PARM_DESC(regs, "Register ops with FTRACE_OPS_FL_SAVE_REGS (save all registers in the trampoline)");
-+
-+bool assist_recursion = false;
-+module_param(assist_recursion, bool, 0);
-+MODULE_PARM_DESC(assist_reursion, "Register ops with FTRACE_OPS_FL_RECURSION");
-+
-+bool assist_rcu = false;
-+module_param(assist_rcu, bool, 0);
-+MODULE_PARM_DESC(assist_reursion, "Register ops with FTRACE_OPS_FL_RCU");
-+
-+/*
-+ * By default, a trivial tracer is used which immediately returns to mimimize
-+ * overhead. Sometimes a consistency check using a more expensive tracer is
-+ * desireable.
-+ */
-+bool check_count = false;
-+module_param(check_count, bool, 0);
-+MODULE_PARM_DESC(check_count, "Check that tracers are called the expected number of times\n");
-+
-+/*
-+ * Usually it's not interesting to leave the ops registered after the test
-+ * runs, but sometimes it can be useful to leave them registered so that they
-+ * can be inspected through the tracefs 'enabled_functions' file.
-+ */
-+bool persist = false;
-+module_param(persist, bool, 0);
-+MODULE_PARM_DESC(persist, "Successfully load module and leave ftrace ops registered after test completes\n");
-+
-+/*
-+ * Marked as noinline to ensure that an out-of-line traceable copy is
-+ * generated by the compiler.
-+ *
-+ * The barrier() ensures the compiler won't elide calls by determining there
-+ * are no side-effects.
-+ */
-+static noinline void tracee_relevant(void)
-+{
-+	barrier();
-+}
-+
-+/*
-+ * Marked as noinline to ensure that an out-of-line traceable copy is
-+ * generated by the compiler.
-+ *
-+ * The barrier() ensures the compiler won't elide calls by determining there
-+ * are no side-effects.
-+ */
-+static noinline void tracee_irrelevant(void)
-+{
-+	barrier();
-+}
-+
-+struct sample_ops {
-+	struct ftrace_ops ops;
-+	unsigned int count;
-+};
-+
-+static void ops_func_nop(unsigned long ip, unsigned long parent_ip,
-+			 struct ftrace_ops *op,
-+			 struct ftrace_regs *fregs)
-+{
-+	/* do nothing */
-+}
-+
-+static void ops_func_count(unsigned long ip, unsigned long parent_ip,
-+			   struct ftrace_ops *op,
-+			   struct ftrace_regs *fregs)
-+{
-+	struct sample_ops *self;
-+
-+	self = container_of(op, struct sample_ops, ops);
-+	self->count++;
-+}
-+
-+struct sample_ops *ops_relevant;
-+struct sample_ops *ops_irrelevant;
-+
-+static struct sample_ops *ops_alloc_init(void *tracee, ftrace_func_t func,
-+					 unsigned long flags, int nr)
-+{
-+	struct sample_ops *ops;
-+
-+	ops = kcalloc(nr, sizeof(*ops), GFP_KERNEL);
-+	if (WARN_ON_ONCE(!ops))
-+		return NULL;
-+
-+	for (unsigned int i = 0; i < nr; i++) {
-+		ops[i].ops.func = func;
-+		ops[i].ops.flags = flags;
-+		WARN_ON_ONCE(ftrace_set_filter_ip(&ops[i].ops, (unsigned long)tracee, 0, 0));
-+		WARN_ON_ONCE(register_ftrace_function(&ops[i].ops));
-+	}
-+
-+	return ops;
-+}
-+
-+static void ops_destroy(struct sample_ops *ops, int nr)
-+{
-+	if (!ops)
-+		return;
-+
-+	for (unsigned int i = 0; i < nr; i++) {
-+		WARN_ON_ONCE(unregister_ftrace_function(&ops[i].ops));
-+		ftrace_free_filter(&ops[i].ops);
-+	}
-+
-+	kfree(ops);
-+}
-+
-+static void ops_check(struct sample_ops *ops, int nr,
-+		      unsigned int expected_count)
-+{
-+	if (!ops || !check_count)
-+		return;
-+
-+	for (unsigned int i = 0; i < nr; i++) {
-+		if (ops->count == expected_count)
-+			continue;
-+		pr_warn("Counter called %u times (expected %u)\n",
-+			ops->count, expected_count);
-+	}
-+}
-+
-+ftrace_func_t tracer_relevant = ops_func_nop;
-+ftrace_func_t tracer_irrelevant = ops_func_nop;
-+
-+static int __init ftrace_ops_sample_init(void)
-+{
-+	unsigned long flags = 0;
-+	ktime_t start, end;
-+	u64 period;
-+
-+	if (!IS_ENABLED(CONFIG_DYNAMIC_FTRACE_WITH_REGS) && save_regs) {
-+		pr_info("this kernel does not support saving registers\n");
-+		save_regs = false;
-+	} else if (save_regs) {
-+		flags |= FTRACE_OPS_FL_SAVE_REGS;
-+	}
-+
-+	if (assist_recursion)
-+		flags |= FTRACE_OPS_FL_RECURSION;
-+
-+	if (assist_rcu)
-+		flags |= FTRACE_OPS_FL_RCU;
-+
-+	if (check_count) {
-+		tracer_relevant = ops_func_count;
-+		tracer_irrelevant = ops_func_count;
-+	}
-+
-+	pr_info("registering:\n"
-+		"  relevant ops: %u\n"
-+		"    tracee: %ps\n"
-+		"    tracer: %ps\n"
-+		"  irrelevant ops: %u\n"
-+		"    tracee: %ps\n"
-+		"    tracer: %ps\n"
-+		"  saving registers: %s\n"
-+		"  assist recursion: %s\n"
-+		"  assist RCU: %s\n",
-+		nr_ops_relevant, tracee_relevant, tracer_relevant,
-+		nr_ops_irrelevant, tracee_irrelevant, tracer_irrelevant,
-+		save_regs ? "YES" : "NO",
-+		assist_recursion ? "YES" : "NO",
-+		assist_rcu ? "YES" : "NO");
-+
-+	ops_relevant = ops_alloc_init(tracee_relevant, tracer_relevant,
-+				      flags, nr_ops_relevant);
-+	ops_irrelevant = ops_alloc_init(tracee_irrelevant, tracer_irrelevant,
-+					flags, nr_ops_irrelevant);
-+
-+	start = ktime_get();
-+	for (unsigned int i = 0; i < nr_function_calls; i++)
-+		tracee_relevant();
-+	end = ktime_get();
-+
-+	ops_check(ops_relevant, nr_ops_relevant, nr_function_calls);
-+	ops_check(ops_irrelevant, nr_ops_irrelevant, 0);
-+
-+	period = ktime_to_ns(ktime_sub(end, start));
-+
-+	pr_info("Attempted %u calls to %ps in %lluns (%lluns / call)\n",
-+		nr_function_calls, tracee_relevant,
-+		period, period / nr_function_calls);
-+
-+	if (persist)
-+		return 0;
-+
-+	ops_destroy(ops_relevant, nr_ops_relevant);
-+	ops_destroy(ops_irrelevant, nr_ops_irrelevant);
-+
-+	/*
-+	 * The benchmark completed sucessfully, but there's no reason to keep
-+	 * the module around. Return an error do the user doesn't have to
-+	 * manually unload the module.
-+	 */
-+	return -EINVAL;
-+}
-+module_init(ftrace_ops_sample_init);
-+
-+static void __exit ftrace_ops_sample_exit(void)
-+{
-+	ops_destroy(ops_relevant, nr_ops_relevant);
-+	ops_destroy(ops_irrelevant, nr_ops_irrelevant);
-+}
-+module_exit(ftrace_ops_sample_exit);
-+
-+MODULE_AUTHOR("Mark Rutland");
-+MODULE_DESCRIPTION("Example of using custom ftrace_ops");
-+MODULE_LICENSE("GPL");
--- 
-2.30.2
+Except the mlock code does *not* show that in the type system, and
+instead just passes a "struct page **" array around in pvec->pages,
+and then you'd just better know that "oh, it's not *really* just a
+page pointer".
 
+So I really think that the "array of encoded page pointers" thing is a
+generic notion that we *already* have.
+
+It's just that we've done it disgustingly in the past, and I didn't
+want to do that disgusting thing again.
+
+So I would hope that the nasty things that the mlock code would some
+day use the same page pointer encoding logic to actually make the
+whole "this is not a page pointer that you can use directly, it has
+low bits set for flags" very explicit.
+
+I am *not* sure if then the actual encoded bits would be unified.
+Probably not - you might have very different and distinct uses of the
+encode_page() thing where the bits mean different things in different
+contexts.
+
+Anyway, this is me just explaining the thinking behind it all. The
+page bit encoding is a very generic thing (well, "very generic" in
+this case means "has at least one other independent user"), explaining
+the very generic naming.
+
+But at the same time, the particular _patch_ was meant to be very targeted.
+
+So slightly schizophrenic name choices as a result.
+
+             Linus
