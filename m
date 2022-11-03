@@ -2,73 +2,66 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D6EB1618AAF
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 22:36:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 745A5618AB0
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 22:37:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231605AbiKCVgp (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 17:36:45 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50856 "EHLO
+        id S231651AbiKCVhA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 17:37:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51138 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230435AbiKCVgl (ORCPT
+        with ESMTP id S231623AbiKCVgt (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 17:36:41 -0400
-Received: from mail-il1-x134.google.com (mail-il1-x134.google.com [IPv6:2607:f8b0:4864:20::134])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 62CF021E05
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 14:36:40 -0700 (PDT)
-Received: by mail-il1-x134.google.com with SMTP id i5so1306139ilc.12
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 14:36:40 -0700 (PDT)
+        Thu, 3 Nov 2022 17:36:49 -0400
+Received: from mail-pf1-x432.google.com (mail-pf1-x432.google.com [IPv6:2607:f8b0:4864:20::432])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1016521E08
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 14:36:45 -0700 (PDT)
+Received: by mail-pf1-x432.google.com with SMTP id b29so2805954pfp.13
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 14:36:45 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=T8kDk3Ehgf1gzFSlGbvkxEAeD+uNpPbTDTXM3slIxjc=;
-        b=G4s4ejetLbgpFsZdlVs+MoXrOedbrKOESJI7Vi9TtQANICEYbIG2T7ey2S2edzqbt0
-         3vH7X03WhPudcU7jZsnYZ7LzpNggJi3B8IGmVQWnwwOaEG+k3mkrg+dhfbHZvNwNkRmB
-         ZrHu1uPGwEorcBcnRONrpLqCs3Kee1TYp05mfs0dZS/gTPfi2cYxlZjVBQ9tqDapqG3a
-         zDsgvaYxFDPzoLbByjJuNXOh0X7o/KzVZ+nHcT5PxWPNTqpkwuzrkyc7rmgROzDT/DBe
-         fuBFbMjp/nRdWQZroqwv7Lvj4IfatMy4A6djXZ1OUeDu6f4SSc7UWR7Sm4H03J5t7gIr
-         fE6w==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=4ZwrDXqTUO/Z3/9PLna3CpJAKWFkXa6K2HPS+5CfcaY=;
+        b=nH83IxOzHsX4AtrR9QIG+/1piqcRF7V90jcpsb3UEC2rZIjFNb9/on78X4AFZb9dNj
+         4PlRO9Hl3zgKtU/KI/Ea7wXroHZF2siQIUoCsW3Y9FOa7Ndm2bNGFr8oGj70nNNs+rXa
+         64wqBLVHRX8ye8s5ScrBvry/WBpJGIcL6NS5ntRoJr6Q1/abvFaYHz6dqU0ag+EdF8iw
+         dUNEh7XrQtTfYJ+WCHjaCLLiPAuHBtp2Pnv3R2PkrRmfdT0qNqCvAhrGx5tEfecd1l7d
+         CbUqv8R+aARgwM94g6FOvDgE/uc/GOsWoPLm9kyQ713keHWw1qSXfCv+ufwFhFIr9b2V
+         zbgw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=T8kDk3Ehgf1gzFSlGbvkxEAeD+uNpPbTDTXM3slIxjc=;
-        b=dhSxmlZZEbOGCr1kMmbFByuRhRwawlas3GetpQ4u5HnrzSMUW3bYPBmqLOa+dFJF+g
-         VlYKVXDFjArBnLOqNlPaCI9S6m5VI6bxw4aFRYECp0R3A9VhH9tLrzoJFa7at8+bu1wN
-         am8eKdGcFIjE4f65UOHpt5dyxa0evMDCe/hQv7Lp4svecSxUB7yT+83ZEnLfDa27mbj3
-         J/Se6RGoD5QndsPdFJA9hN4rMSHwYNWgicABG9r4lN6CfPS3Yvx2HQksKSqj4cmdMfnQ
-         clKEAZxNoe4+nghpVfAjq6VQrJsadVRJqyMmMbaM7IOy3iMN3vDSTV/zh7ItAcF13UGN
-         bziQ==
-X-Gm-Message-State: ACrzQf2WCPO5xlwqNC19UMJmHLd28fCHHGmhSJDcYy57HW6tf1OJM7J/
-        j6htSVkFJ/QQnXAih/DikF6nd2es5RNHt0jin2cOlQ==
-X-Google-Smtp-Source: AMsMyM6BFQFqv9R9EjkEEJOdZt0wpbGudAfs35w4GJMsRY1C2CDMeIvVTZb3HQi2Yd7I8TFbWmpuntJY34zYG6WlRmM=
-X-Received: by 2002:a92:5204:0:b0:300:d0b8:5184 with SMTP id
- g4-20020a925204000000b00300d0b85184mr5617868ilb.118.1667511399568; Thu, 03
- Nov 2022 14:36:39 -0700 (PDT)
+        bh=4ZwrDXqTUO/Z3/9PLna3CpJAKWFkXa6K2HPS+5CfcaY=;
+        b=DWb45SgRgZklqL6QjNrYkTi3dUkHZVFdCR9/jDPmzCjBh/Oho4fNJQLi0xr/rRDQJd
+         XFUHqCc+1Z7vBaNAIg5SBdyU4j2HbFvbU1lf3DHovhcQ8sgVGDTzb8SW1e1IS66x5ltS
+         TippBBl3JI32/CjUnfjrMx8zH/XDBPDRFKxML82trw302RBRansDhvuG6Dc2TWx20GP2
+         QvucuUmmOEu4kX1Ugm9t+AJBBnCqyLBZMw7lhvJB04wU283Dzieo0PGRgTNvE6MKpUyu
+         gAbxa0HEjKmGnUS1idlS3xNXZirN6ovkn8vmwoN3N2RuZDHpwobxpCKnti7IvQPTHYIK
+         9/UA==
+X-Gm-Message-State: ACrzQf3jDjj9f/VQdkTLbknd6Nat0pKq8ehA8modVfhEpGRouba+kGTm
+        HS8MsOzxUMAdTQH/Cqz8xT0Nz0vT2GY=
+X-Google-Smtp-Source: AMsMyM61DneIJHyYPN7Ny0UB6XCSHJCONetltqWSH/2PvRCve/+P/G76deKPL8jNJbeRNbGVYKGncA==
+X-Received: by 2002:a05:6a00:cc6:b0:56d:3028:23ea with SMTP id b6-20020a056a000cc600b0056d302823eamr28528221pfv.19.1667511404455;
+        Thu, 03 Nov 2022 14:36:44 -0700 (PDT)
+Received: from localhost.localdomain (c-67-174-241-145.hsd1.ca.comcast.net. [67.174.241.145])
+        by smtp.gmail.com with ESMTPSA id f132-20020a62388a000000b0056da8c41bbasm1195438pfa.161.2022.11.03.14.36.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 14:36:43 -0700 (PDT)
+From:   Yang Shi <shy828301@gmail.com>
+To:     zokeefe@google.com, mhocko@suse.com, akpm@linux-foundation.org
+Cc:     shy828301@gmail.com, linux-mm@kvack.org,
+        linux-kernel@vger.kernel.org
+Subject: [v2 PATCH 1/2] mm: khugepaged: allow page allocation fallback to eligible nodes
+Date:   Thu,  3 Nov 2022 14:36:40 -0700
+Message-Id: <20221103213641.7296-1-shy828301@gmail.com>
+X-Mailer: git-send-email 2.26.3
 MIME-Version: 1.0
-References: <20220715115559.139691-1-shaozhengchao@huawei.com> <f0bb3cd6-6986-6ca1-aa40-7a10302c8586@linux.dev>
-In-Reply-To: <f0bb3cd6-6986-6ca1-aa40-7a10302c8586@linux.dev>
-From:   Stanislav Fomichev <sdf@google.com>
-Date:   Thu, 3 Nov 2022 14:36:28 -0700
-Message-ID: <CAKH8qBvLGaX_+ye5Wdmj1FS+p8K8gBsKUEDRb1x8KzxQE+oDuA@mail.gmail.com>
-Subject: Re: [PATCH v4,bpf-next] bpf: Don't redirect packets with invalid pkt_len
-To:     Martin KaFai Lau <martin.lau@linux.dev>
-Cc:     Zhengchao Shao <shaozhengchao@huawei.com>, ast@kernel.org,
-        daniel@iogearbox.net, andrii@kernel.org, song@kernel.org,
-        yhs@fb.com, john.fastabend@gmail.com, kpsingh@kernel.org,
-        bigeasy@linutronix.de, imagedong@tencent.com, petrm@nvidia.com,
-        arnd@arndb.de, dsahern@kernel.org, talalahmad@google.com,
-        keescook@chromium.org, haoluo@google.com, jolsa@kernel.org,
-        weiyongjun1@huawei.com, yuehaibing@huawei.com, bpf@vger.kernel.org,
-        netdev@vger.kernel.org, linux-kernel@vger.kernel.org,
-        davem@davemloft.net, edumazet@google.com, kuba@kernel.org,
-        pabeni@redhat.com, hawk@kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -76,103 +69,192 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 3, 2022 at 2:07 PM Martin KaFai Lau <martin.lau@linux.dev> wrote:
->
-> On 7/15/22 4:55 AM, Zhengchao Shao wrote:
-> > Syzbot found an issue [1]: fq_codel_drop() try to drop a flow whitout any
-> > skbs, that is, the flow->head is null.
-> > The root cause, as the [2] says, is because that bpf_prog_test_run_skb()
-> > run a bpf prog which redirects empty skbs.
-> > So we should determine whether the length of the packet modified by bpf
-> > prog or others like bpf_prog_test is valid before forwarding it directly.
-> >
-> > LINK: [1] https://syzkaller.appspot.com/bug?id=0b84da80c2917757915afa89f7738a9d16ec96c5
-> > LINK: [2] https://www.spinics.net/lists/netdev/msg777503.html
-> >
-> > Reported-by: syzbot+7a12909485b94426aceb@syzkaller.appspotmail.com
-> > Signed-off-by: Zhengchao Shao <shaozhengchao@huawei.com>
-> > ---
-> > v3: modify debug print
-> > v2: need move checking to convert___skb_to_skb and add debug info
-> > v1: should not check len in fast path
-> >
-> >   include/linux/skbuff.h | 8 ++++++++
-> >   net/bpf/test_run.c     | 3 +++
-> >   net/core/dev.c         | 1 +
-> >   3 files changed, 12 insertions(+)
-> >
-> > diff --git a/include/linux/skbuff.h b/include/linux/skbuff.h
-> > index f6a27ab19202..82e8368ba6e6 100644
-> > --- a/include/linux/skbuff.h
-> > +++ b/include/linux/skbuff.h
-> > @@ -2459,6 +2459,14 @@ static inline void skb_set_tail_pointer(struct sk_buff *skb, const int offset)
-> >
-> >   #endif /* NET_SKBUFF_DATA_USES_OFFSET */
-> >
-> > +static inline void skb_assert_len(struct sk_buff *skb)
-> > +{
-> > +#ifdef CONFIG_DEBUG_NET
-> > +     if (WARN_ONCE(!skb->len, "%s\n", __func__))
-> > +             DO_ONCE_LITE(skb_dump, KERN_ERR, skb, false);
-> > +#endif /* CONFIG_DEBUG_NET */
-> > +}
-> > +
-> >   /*
-> >    *  Add data to an sk_buff
-> >    */
-> > diff --git a/net/bpf/test_run.c b/net/bpf/test_run.c
-> > index 2ca96acbc50a..dc9dc0bedca0 100644
-> > --- a/net/bpf/test_run.c
-> > +++ b/net/bpf/test_run.c
-> > @@ -955,6 +955,9 @@ static int convert___skb_to_skb(struct sk_buff *skb, struct __sk_buff *__skb)
-> >   {
-> >       struct qdisc_skb_cb *cb = (struct qdisc_skb_cb *)skb->cb;
-> >
-> > +     if (!skb->len)
-> > +             return -EINVAL;
->
->  From another recent report [0], I don't think this change is fixing the report
-> from syzbot.  It probably makes sense to revert this patch.
->
-> afaict, This '!skb->len' test is done after
->         if (is_l2)
->                 __skb_push(skb, hh_len);
->
-> Hence, skb->len is not zero in convert___skb_to_skb().  The proper place to test
-> skb->len is before __skb_push() to ensure there is some network header after the
-> mac or may as well ensure "data_size_in > ETH_HLEN" at the beginning.
+Syzbot reported the below splat:
 
-When is_l2==true, __skb_push will result in non-zero skb->len, so we
-should be good, right?
-The only issue is when we do bpf_redirect into a tunneling device and
-do __skb_pull, but that's now fixed by [0].
+WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 __alloc_pages_node include/linux/gfp.h:221 [inline]
+WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
+WARNING: CPU: 1 PID: 3646 at include/linux/gfp.h:221 alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
+Modules linked in:
+CPU: 1 PID: 3646 Comm: syz-executor210 Not tainted 6.1.0-rc1-syzkaller-00454-ga70385240892 #0
+Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+RIP: 0010:__alloc_pages_node include/linux/gfp.h:221 [inline]
+RIP: 0010:hpage_collapse_alloc_page mm/khugepaged.c:807 [inline]
+RIP: 0010:alloc_charge_hpage+0x802/0xaa0 mm/khugepaged.c:963
+Code: e5 01 4c 89 ee e8 6e f9 ae ff 4d 85 ed 0f 84 28 fc ff ff e8 70 fc ae ff 48 8d 6b ff 4c 8d 63 07 e9 16 fc ff ff e8 5e fc ae ff <0f> 0b e9 96 fa ff ff 41 bc 1a 00 00 00 e9 86 fd ff ff e8 47 fc ae
+RSP: 0018:ffffc90003fdf7d8 EFLAGS: 00010293
+RAX: 0000000000000000 RBX: 0000000000000000 RCX: 0000000000000000
+RDX: ffff888077f457c0 RSI: ffffffff81cd8f42 RDI: 0000000000000001
+RBP: ffff888079388c0c R08: 0000000000000001 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000000 R12: 0000000000000000
+R13: dffffc0000000000 R14: 0000000000000000 R15: 0000000000000000
+FS:  00007f6b48ccf700(0000) GS:ffff8880b9b00000(0000) knlGS:0000000000000000
+CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+CR2: 00007f6b48a819f0 CR3: 00000000171e7000 CR4: 00000000003506e0
+DR0: 0000000000000000 DR1: 0000000000000000 DR2: 0000000000000000
+DR3: 0000000000000000 DR6: 00000000fffe0ff0 DR7: 0000000000000400
+Call Trace:
+ <TASK>
+ collapse_file+0x1ca/0x5780 mm/khugepaged.c:1715
+ hpage_collapse_scan_file+0xd6c/0x17a0 mm/khugepaged.c:2156
+ madvise_collapse+0x53a/0xb40 mm/khugepaged.c:2611
+ madvise_vma_behavior+0xd0a/0x1cc0 mm/madvise.c:1066
+ madvise_walk_vmas+0x1c7/0x2b0 mm/madvise.c:1240
+ do_madvise.part.0+0x24a/0x340 mm/madvise.c:1419
+ do_madvise mm/madvise.c:1432 [inline]
+ __do_sys_madvise mm/madvise.c:1432 [inline]
+ __se_sys_madvise mm/madvise.c:1430 [inline]
+ __x64_sys_madvise+0x113/0x150 mm/madvise.c:1430
+ do_syscall_x64 arch/x86/entry/common.c:50 [inline]
+ do_syscall_64+0x35/0xb0 arch/x86/entry/common.c:80
+ entry_SYSCALL_64_after_hwframe+0x63/0xcd
+RIP: 0033:0x7f6b48a4eef9
+Code: 28 00 00 00 75 05 48 83 c4 28 c3 e8 b1 15 00 00 90 48 89 f8 48 89 f7 48 89 d6 48 89 ca 4d 89 c2 4d 89 c8 4c 8b 4c 24 08 0f 05 <48> 3d 01 f0 ff ff 73 01 c3 48 c7 c1 b8 ff ff ff f7 d8 64 89 01 48
+RSP: 002b:00007f6b48ccf318 EFLAGS: 00000246 ORIG_RAX: 000000000000001c
+RAX: ffffffffffffffda RBX: 00007f6b48af0048 RCX: 00007f6b48a4eef9
+RDX: 0000000000000019 RSI: 0000000000600003 RDI: 0000000020000000
+RBP: 00007f6b48af0040 R08: 0000000000000000 R09: 0000000000000000
+R10: 0000000000000000 R11: 0000000000000246 R12: 00007f6b48aa53a4
+R13: 00007f6b48bffcbf R14: 00007f6b48ccf400 R15: 0000000000022000
+ </TASK>
 
-When is_l2==false, the existing check in convert___skb_to_skb will
-make sure there is something in the l3 headers.
+The khugepaged code would pick up the node with the most hit as the preferred
+node, and also tries to do some balance if several nodes have the same
+hit record.  Basically it does conceptually:
+    * If the target_node <= last_target_node, then iterate from
+last_target_node + 1 to MAX_NUMNODES (1024 on default config)
+    * If the max_value == node_load[nid], then target_node = nid
 
-So it seems like this patch is still needed. Or am I missing something?
+But there is a corner case, paritucularly for MADV_COLLAPSE, that the
+non-existing node may be returned as preferred node.
 
-> The fix in [0] is applied.  If it turns out there are other cases caused by the
-> skb generated by test_run that needs extra fixes in bpf_redirect_*,  it needs to
-> revisit an earlier !skb->len check mentioned above and the existing test cases
-> outside of test_progs would have to adjust accordingly.
->
-> [0]: https://lore.kernel.org/bpf/20221027225537.353077-1-sdf@google.com/
->
-> > +
-> >       if (!__skb)
-> >               return 0;
-> >
-> > diff --git a/net/core/dev.c b/net/core/dev.c
-> > index d588fd0a54ce..716df64fcfa5 100644
-> > --- a/net/core/dev.c
-> > +++ b/net/core/dev.c
-> > @@ -4168,6 +4168,7 @@ int __dev_queue_xmit(struct sk_buff *skb, struct net_device *sb_dev)
-> >       bool again = false;
-> >
-> >       skb_reset_mac_header(skb);
-> > +     skb_assert_len(skb);
-> >
-> >       if (unlikely(skb_shinfo(skb)->tx_flags & SKBTX_SCHED_TSTAMP))
-> >               __skb_tstamp_tx(skb, NULL, NULL, skb->sk, SCM_TSTAMP_SCHED);
->
+Assuming the system has 2 nodes, the target_node is 0 and the
+last_target_node is 1, if MADV_COLLAPSE path is hit, the max_value may
+be 0, then it may return 2 for target_node, but it is actually not
+existing (offline), so the warn is triggered.
+
+The node balance was introduced by commit 9f1b868a13ac ("mm: thp:
+khugepaged: add policy for finding target node") to satisfy
+"numactl --interleave=all".  But interleaving is a mere hint rather than
+something that has hard requirements.
+
+So use nodemask to record the nodes which have the same hit record, the
+hugepage allocation could fallback to those nodes.  And remove
+__GFP_THISNODE since it does disallow fallback.  And if nodemask is
+empty (no node is set), it means there is one single node has the most
+hist record, the nodemask approach actually behaves like __GFP_THISNODE.
+
+Reported-by: syzbot+0044b22d177870ee974f@syzkaller.appspotmail.com
+Suggested-by: Zach O'Keefe <zokeefe@google.com>
+Suggested-by: Michal Hocko <mhocko@suse.com>
+Signed-off-by: Yang Shi <shy828301@gmail.com>
+---
+ mm/khugepaged.c | 32 ++++++++++++++------------------
+ 1 file changed, 14 insertions(+), 18 deletions(-)
+
+diff --git a/mm/khugepaged.c b/mm/khugepaged.c
+index ea0d186bc9d4..572ce7dbf4b0 100644
+--- a/mm/khugepaged.c
++++ b/mm/khugepaged.c
+@@ -97,8 +97,8 @@ struct collapse_control {
+ 	/* Num pages scanned per node */
+ 	u32 node_load[MAX_NUMNODES];
+ 
+-	/* Last target selected in hpage_collapse_find_target_node() */
+-	int last_target_node;
++	/* nodemask for allocation fallback */
++	nodemask_t alloc_nmask;
+ };
+ 
+ /**
+@@ -734,7 +734,6 @@ static void khugepaged_alloc_sleep(void)
+ 
+ struct collapse_control khugepaged_collapse_control = {
+ 	.is_khugepaged = true,
+-	.last_target_node = NUMA_NO_NODE,
+ };
+ 
+ static bool hpage_collapse_scan_abort(int nid, struct collapse_control *cc)
+@@ -783,16 +782,11 @@ static int hpage_collapse_find_target_node(struct collapse_control *cc)
+ 			target_node = nid;
+ 		}
+ 
+-	/* do some balance if several nodes have the same hit record */
+-	if (target_node <= cc->last_target_node)
+-		for (nid = cc->last_target_node + 1; nid < MAX_NUMNODES;
+-		     nid++)
+-			if (max_value == cc->node_load[nid]) {
+-				target_node = nid;
+-				break;
+-			}
++	for_each_online_node(nid) {
++		if (max_value == cc->node_load[nid])
++			node_set(nid, cc->alloc_nmask);
++	}
+ 
+-	cc->last_target_node = target_node;
+ 	return target_node;
+ }
+ #else
+@@ -802,9 +796,10 @@ static int hpage_collapse_find_target_node(struct collapse_control *cc)
+ }
+ #endif
+ 
+-static bool hpage_collapse_alloc_page(struct page **hpage, gfp_t gfp, int node)
++static bool hpage_collapse_alloc_page(struct page **hpage, gfp_t gfp, int node,
++				      nodemask_t *nmask)
+ {
+-	*hpage = __alloc_pages_node(node, gfp, HPAGE_PMD_ORDER);
++	*hpage = __alloc_pages(gfp, HPAGE_PMD_ORDER, node, nmask);
+ 	if (unlikely(!*hpage)) {
+ 		count_vm_event(THP_COLLAPSE_ALLOC_FAILED);
+ 		return false;
+@@ -955,12 +950,11 @@ static int __collapse_huge_page_swapin(struct mm_struct *mm,
+ static int alloc_charge_hpage(struct page **hpage, struct mm_struct *mm,
+ 			      struct collapse_control *cc)
+ {
+-	/* Only allocate from the target node */
+ 	gfp_t gfp = (cc->is_khugepaged ? alloc_hugepage_khugepaged_gfpmask() :
+-		     GFP_TRANSHUGE) | __GFP_THISNODE;
++		     GFP_TRANSHUGE);
+ 	int node = hpage_collapse_find_target_node(cc);
+ 
+-	if (!hpage_collapse_alloc_page(hpage, gfp, node))
++	if (!hpage_collapse_alloc_page(hpage, gfp, node, &cc->alloc_nmask))
+ 		return SCAN_ALLOC_HUGE_PAGE_FAIL;
+ 	if (unlikely(mem_cgroup_charge(page_folio(*hpage), mm, gfp)))
+ 		return SCAN_CGROUP_CHARGE_FAIL;
+@@ -1144,6 +1138,7 @@ static int hpage_collapse_scan_pmd(struct mm_struct *mm,
+ 		goto out;
+ 
+ 	memset(cc->node_load, 0, sizeof(cc->node_load));
++	nodes_clear(cc->alloc_nmask);
+ 	pte = pte_offset_map_lock(mm, pmd, address, &ptl);
+ 	for (_address = address, _pte = pte; _pte < pte + HPAGE_PMD_NR;
+ 	     _pte++, _address += PAGE_SIZE) {
+@@ -2078,6 +2073,7 @@ static int hpage_collapse_scan_file(struct mm_struct *mm, unsigned long addr,
+ 	present = 0;
+ 	swap = 0;
+ 	memset(cc->node_load, 0, sizeof(cc->node_load));
++	nodes_clear(cc->alloc_nmask);
+ 	rcu_read_lock();
+ 	xas_for_each(&xas, page, start + HPAGE_PMD_NR - 1) {
+ 		if (xas_retry(&xas, page))
+@@ -2581,7 +2577,6 @@ int madvise_collapse(struct vm_area_struct *vma, struct vm_area_struct **prev,
+ 	if (!cc)
+ 		return -ENOMEM;
+ 	cc->is_khugepaged = false;
+-	cc->last_target_node = NUMA_NO_NODE;
+ 
+ 	mmgrab(mm);
+ 	lru_add_drain_all();
+@@ -2607,6 +2602,7 @@ int madvise_collapse(struct vm_area_struct *vma, struct vm_area_struct **prev,
+ 		}
+ 		mmap_assert_locked(mm);
+ 		memset(cc->node_load, 0, sizeof(cc->node_load));
++		nodes_clear(cc->alloc_nmask);
+ 		if (IS_ENABLED(CONFIG_SHMEM) && vma->vm_file) {
+ 			struct file *file = get_file(vma->vm_file);
+ 			pgoff_t pgoff = linear_page_index(vma, addr);
+-- 
+2.26.3
+
