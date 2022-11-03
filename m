@@ -2,280 +2,127 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 336A9618CA1
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 00:13:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E65DE618CA6
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 00:15:30 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbiKCXNo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 19:13:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47752 "EHLO
+        id S230445AbiKCXP2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 19:15:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229501AbiKCXNm (ORCPT
+        with ESMTP id S230402AbiKCXP0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 19:13:42 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4E37BFD;
-        Thu,  3 Nov 2022 16:13:40 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        Thu, 3 Nov 2022 19:15:26 -0400
+Received: from gandalf.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2824B1CFCA;
+        Thu,  3 Nov 2022 16:15:22 -0700 (PDT)
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
         (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id D6DB9B8298F;
-        Thu,  3 Nov 2022 23:13:38 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3723EC433C1;
-        Thu,  3 Nov 2022 23:13:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667517217;
-        bh=8CZON2C0IF5f0BOR8o+RFFGhy6gqE9zuBEcqSMfZ90o=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:From;
-        b=FGJkMxkYmdrkIAiua9tvgx2JjfBoaQNsNtEnft75DeMFuYfTZvyZWoEp2sCLhh0ff
-         HrX0tDBaQo99nc2OCGTIZ0P1LkfOthatW4QKOCHUmJyjOnl6ZAbfhUcSuJJ4oBNS3p
-         H/oycpUuk2mnYJnu+wSxJ8sHQVMb136QLIApHC6RZzTnj9kENuz/yfEJ2xaTan72oR
-         k4oFSGvCnHFWqpgqOhPIBPNEgxCXcgX6fWvFBARLTj2+CaJjde/yZZQJQRXJFqlujb
-         aiaCs413FqIIcIH0yrkQZ73pOXQR9tu5E4lijsYFK1k9p3MTX2+Afk05TYx9sGADUK
-         5HhQVbGb6TXAw==
-Date:   Thu, 3 Nov 2022 18:13:35 -0500
-From:   Bjorn Helgaas <helgaas@kernel.org>
-To:     "Maciej W. Rozycki" <macro@orcam.me.uk>
-Cc:     Bjorn Helgaas <bhelgaas@google.com>, Stefan Roese <sr@denx.de>,
-        Jim Wilson <wilson@tuliptree.org>,
-        David Abdurachmanov <david.abdurachmanov@gmail.com>,
-        Pali =?iso-8859-1?Q?Roh=E1r?= <pali@kernel.org>,
-        linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v5 5/5] PCI: Work around PCIe link training failures
-Message-ID: <20221103231335.GA51625@bhelgaas>
+        by mail.ozlabs.org (Postfix) with ESMTPSA id 4N3KNm1zvPz4xGQ;
+        Fri,  4 Nov 2022 10:15:20 +1100 (AEDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=canb.auug.org.au;
+        s=201702; t=1667517320;
+        bh=tM1MvXcfRBx2uPm9hhpVrMwKQf2k9tr/drdD63iQNfU=;
+        h=Date:From:To:Cc:Subject:From;
+        b=K4uh6ywNakRILCxgMKWHWpuhkXJELXpJf8gQCbflffySvh5IRmhSkBryXHRfp4TyI
+         tyU97ExysDFENluBp5qiSSpVDotqtmr8Kq3ohSkKJskxSbmkTll/dOPIf01R8p9og2
+         LMXNUPSPCn/UJfyk69AVvofEzJWoW3Ha5rWI7uG8XBIElCq8upUjetEbCMTVjCOkvD
+         6grOmFvDO9LmLzKFLypA3K3cF87oa1Nylw61ujG5cfvoZQPxAyQjFoVJlbPv8djpPy
+         /q0r58w7G9tnCFXHQtb3ymFSINiEwihGsw6BVQEMoTLZ2qN2Sb8x0Phseh1bM6OMSR
+         W4LyR9Y/ycH2A==
+Date:   Fri, 4 Nov 2022 10:15:03 +1100
+From:   Stephen Rothwell <sfr@canb.auug.org.au>
+To:     Daniel Vetter <daniel.vetter@ffwll.ch>,
+        Intel Graphics <intel-gfx@lists.freedesktop.org>,
+        DRI <dri-devel@lists.freedesktop.org>
+Cc:     Christian =?UTF-8?B?S8O2bmln?= <christian.koenig@amd.com>,
+        Linux Kernel Mailing List <linux-kernel@vger.kernel.org>,
+        Linux Next Mailing List <linux-next@vger.kernel.org>
+Subject: linux-next: manual merge of the drm-misc tree with Linus' tree
+Message-ID: <20221104101503.777fa92f@canb.auug.org.au>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <alpine.DEB.2.21.2209130050380.60554@angie.orcam.me.uk>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: multipart/signed; boundary="Sig_/mDKJXgG2m49_Fc0CtbeXI4i";
+ protocol="application/pgp-signature"; micalg=pgp-sha256
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,SPF_HELO_PASS,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-[+cc Pali]
+--Sig_/mDKJXgG2m49_Fc0CtbeXI4i
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: quoted-printable
 
-On Sat, Sep 17, 2022 at 01:03:38PM +0100, Maciej W. Rozycki wrote:
-> Attempt to handle cases such as with a downstream port of the ASMedia 
-> ASM2824 PCIe switch where link training never completes and the link 
-> continues switching between speeds indefinitely with the data link layer 
-> never reaching the active state.
-> 
-> It has been observed with a downstream port of the ASMedia ASM2824 Gen 3 
-> switch wired to the upstream port of the Pericom PI7C9X2G304 Gen 2 
-> switch, using a Delock Riser Card PCI Express x1 > 2 x PCIe x1 device, 
-> P/N 41433, wired to a SiFive HiFive Unmatched board.  In this setup the 
-> switches are supposed to negotiate the link speed of preferably 5.0GT/s, 
-> falling back to 2.5GT/s.
-> 
-> Instead the link continues oscillating between the two speeds, at the 
-> rate of 34-35 times per second, with link training reported repeatedly 
-> active ~84% of the time.  Forcibly limiting the target link speed to 
-> 2.5GT/s with the upstream ASM2824 device however makes the two switches 
-> communicate correctly.  Removing the speed restriction afterwards makes 
-> the two devices switch to 5.0GT/s then.
-> 
-> Make use of these observations then and detect the inability to train 
-> the link, by checking for the Data Link Layer Link Active status bit 
-> being off while the Link Bandwidth Management Status indicating that 
-> hardware has changed the link speed or width in an attempt to correct 
-> unreliable link operation.
-> 
-> Restrict the speed to 2.5GT/s then with the Target Link Speed field, 
-> request a retrain and wait 200ms for the data link to go up.  If this 
-> turns out successful, then lift the restriction, letting the devices 
-> negotiate a higher speed.
-> 
-> Also check for a 2.5GT/s speed restriction the firmware may have already 
-> arranged and lift it too with ports of devices known to continue working 
-> afterwards, currently the ASM2824 only, that already report their data 
-> link being up.
+Hi all,
 
-This quirk is run at boot-time and resume-time.  What happens after a
-Secondary Bus Reset, as is done by pci_reset_secondary_bus()?
+Today's linux-next merge of the drm-misc tree got a conflict in:
 
-PCIe r6.0, sec 7.5.1.3.13, says "setting Secondary Bus Reset triggers
-a hot reset on the corresponding PCI Express Port".  Sec 4.2.7 says
-LinkUp is 0 in the LTSSM Hot Reset state, and the Hot Reset state
-leads to Detect, so it looks like this reset would cause the link to
-go down and come back up.
+  include/drm/gpu_scheduler.h
 
-Can you tell if that's what happens?  Does the link negotiation fail
-then, too?
+between commit:
 
-If it does fail then, I don't know how hard we need to work to fix it.
-Maybe we just accept it?  Or maybe we need a "quirk-after-reset" phase
-or something?
+  7b476affcccf ("drm/sched: add DRM_SCHED_FENCE_DONT_PIPELINE flag")
 
-Bjorn
+from Linus' tree and commit:
 
-> Signed-off-by: Maciej W. Rozycki <macro@orcam.me.uk>
-> Link: https://lore.kernel.org/lkml/alpine.DEB.2.21.2203022037020.56670@angie.orcam.me.uk/
-> Link: https://source.denx.de/u-boot/u-boot/-/commit/a398a51ccc68
-> ---
-> Changes from v4:
-> 
-> - Remove <linux/bug.h> inclusion no longer needed.
-> 
-> - Make the quirk generic based on probing device features rather than 
->   specific to the ASM2824 part only; take the Retrain Link bit erratum 
->   into account.
-> 
-> - Still lift the 2.5GT/s speed restriction with the ASM2824 only.
-> 
-> - Increase retrain timeout from 200ms to 1s (PCIE_LINK_RETRAIN_TIMEOUT).
-> 
-> - Remove retrain success notification.
-> 
-> - Use PCIe helpers rather than generic PCI functions throughout.
-> 
-> - Trim down and update the wording of the change description for the 
->   switch from an ASM2824-specific to a generic fixup.
-> 
-> Changes from v3:
-> 
-> - Remove the <linux/pci_ids.h> entry for the ASM2824.
-> 
-> Changes from v2:
-> 
-> - Regenerate for 5.17-rc2 for a merge conflict.
-> 
-> - Replace BUG_ON for a missing PCI Express capability with WARN_ON and an
->   early return.
-> 
-> Changes from v1:
-> 
-> - Regenerate for a merge conflict.
-> ---
->  drivers/pci/quirks.c |  118 +++++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 118 insertions(+)
-> 
-> linux-pcie-asm2824-manual-retrain.diff
-> Index: linux-macro/drivers/pci/quirks.c
-> ===================================================================
-> --- linux-macro.orig/drivers/pci/quirks.c
-> +++ linux-macro/drivers/pci/quirks.c
-> @@ -5956,3 +5956,121 @@ DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_I
->  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c0, aspm_l1_acceptable_latency);
->  DECLARE_PCI_FIXUP_HEADER(PCI_VENDOR_ID_INTEL, 0x56c1, aspm_l1_acceptable_latency);
->  #endif
-> +
-> +/*
-> + * Retrain the link of a downstream PCIe port by hand if necessary.
-> + *
-> + * This is needed at least where a downstream port of the ASMedia ASM2824
-> + * Gen 3 switch is wired to the upstream port of the Pericom PI7C9X2G304
-> + * Gen 2 switch, and observed with the Delock Riser Card PCI Express x1 >
-> + * 2 x PCIe x1 device, P/N 41433, plugged into the SiFive HiFive Unmatched
-> + * board.
-> + *
-> + * In such a configuration the switches are supposed to negotiate the link
-> + * speed of preferably 5.0GT/s, falling back to 2.5GT/s.  However the link
-> + * continues switching between the two speeds indefinitely and the data
-> + * link layer never reaches the active state, with link training reported
-> + * repeatedly active ~84% of the time.  Forcing the target link speed to
-> + * 2.5GT/s with the upstream ASM2824 device makes the two switches talk to
-> + * each other correctly however.  And more interestingly retraining with a
-> + * higher target link speed afterwards lets the two successfully negotiate
-> + * 5.0GT/s.
-> + *
-> + * With the ASM2824 we can rely on the otherwise optional Data Link Layer
-> + * Link Active status bit and in the failed link training scenario it will
-> + * be off along with the Link Bandwidth Management Status indicating that
-> + * hardware has changed the link speed or width in an attempt to correct
-> + * unreliable link operation.  For a port that has been left unconnected
-> + * both bits will be clear.  So use this information to detect the problem
-> + * rather than polling the Link Training bit and watching out for flips or
-> + * at least the active status.
-> + *
-> + * Since the exact nature of the problem isn't known and in principle this
-> + * could trigger where an ASM2824 device is downstream rather upstream,
-> + * apply this erratum workaround to any downstream ports as long as they
-> + * support Link Active reporting and have the Link Control 2 register.
-> + * Restrict the speed to 2.5GT/s then with the Target Link Speed field,
-> + * request a retrain and wait 200ms for the data link to go up.
-> + *
-> + * If this turns out successful and we know by the Vendor:Device ID it is
-> + * safe to do so, then lift the restriction, letting the devices negotiate
-> + * a higher speed.  Also check for a similar 2.5GT/s speed restriction the
-> + * firmware may have already arranged and lift it with ports that already
-> + * report their data link being up.
-> + */
-> +static void pcie_downstream_link_retrain(struct pci_dev *dev)
-> +{
-> +	static const struct pci_device_id ids[] = {
-> +		{ PCI_VDEVICE(ASMEDIA, 0x2824) }, /* ASMedia ASM2824 */
-> +		{}
-> +	};
-> +	u16 lnksta, lnkctl2;
-> +	u32 lnkcap;
-> +
-> +	if (!pci_is_pcie(dev) || !pcie_downstream_port(dev)
-> +	    || !pcie_cap_has_lnkctl2(dev))
-> +		return;
-> +
-> +	/* It's too early yet to use `dev->link_active_reporting'.  */
-> +	pcie_capability_read_dword(dev, PCI_EXP_LNKCAP, &lnkcap);
-> +	if (!(lnkcap & PCI_EXP_LNKCAP_DLLLARC))
-> +		return;
-> +
-> +	pcie_capability_read_word(dev, PCI_EXP_LNKCTL2, &lnkctl2);
-> +	pcie_capability_read_word(dev, PCI_EXP_LNKSTA, &lnksta);
-> +	if ((lnksta & (PCI_EXP_LNKSTA_LBMS | PCI_EXP_LNKSTA_DLLLA)) ==
-> +	    PCI_EXP_LNKSTA_LBMS) {
-> +		unsigned long timeout;
-> +		u16 lnkctl;
-> +
-> +		pci_info(dev, "broken device, retraining non-functional downstream link at 2.5GT/s\n");
-> +
-> +		pcie_capability_read_word(dev, PCI_EXP_LNKCTL, &lnkctl);
-> +		lnkctl |= PCI_EXP_LNKCTL_RL;
-> +		lnkctl2 &= ~PCI_EXP_LNKCTL2_TLS;
-> +		lnkctl2 |= PCI_EXP_LNKCTL2_TLS_2_5GT;
-> +		pcie_capability_write_word(dev, PCI_EXP_LNKCTL2, lnkctl2);
-> +		pcie_capability_write_word(dev, PCI_EXP_LNKCTL, lnkctl);
-> +		/*
-> +		 * Due to an erratum in some devices the Retrain Link bit
-> +		 * needs to be cleared again manually to allow the link
-> +		 * training to succeed.
-> +		 */
-> +		lnkctl &= ~PCI_EXP_LNKCTL_RL;
-> +		if (dev->clear_retrain_link)
-> +			pcie_capability_write_word(dev, PCI_EXP_LNKCTL,
-> +						   lnkctl);
-> +
-> +		timeout = jiffies + PCIE_LINK_RETRAIN_TIMEOUT;
-> +		do {
-> +			pcie_capability_read_word(dev, PCI_EXP_LNKSTA,
-> +					     &lnksta);
-> +			if (lnksta & PCI_EXP_LNKSTA_DLLLA)
-> +				break;
-> +			usleep_range(10000, 20000);
-> +		} while (time_before(jiffies, timeout));
-> +
-> +		if (!(lnksta & PCI_EXP_LNKSTA_DLLLA)) {
-> +			pci_info(dev, "retraining failed\n");
-> +			return;
-> +		}
-> +	}
-> +
-> +	if ((lnksta & PCI_EXP_LNKSTA_DLLLA) &&
-> +	    (lnkctl2 & PCI_EXP_LNKCTL2_TLS) == PCI_EXP_LNKCTL2_TLS_2_5GT &&
-> +	    pci_match_id(ids, dev)) {
-> +		u16 lnkctl;
-> +
-> +		pci_info(dev, "removing 2.5GT/s downstream link speed restriction\n");
-> +		pcie_capability_read_word(dev, PCI_EXP_LNKCTL, &lnkctl);
-> +		lnkctl |= PCI_EXP_LNKCTL_RL;
-> +		lnkctl2 &= ~PCI_EXP_LNKCTL2_TLS;
-> +		lnkctl2 |= lnkcap & PCI_EXP_LNKCAP_SLS;
-> +		pcie_capability_write_word(dev, PCI_EXP_LNKCTL2, lnkctl2);
-> +		pcie_capability_write_word(dev, PCI_EXP_LNKCTL, lnkctl);
-> +	}
-> +}
-> +DECLARE_PCI_FIXUP_HEADER(PCI_ANY_ID, PCI_ANY_ID,
-> +			 pcie_downstream_link_retrain);
-> +DECLARE_PCI_FIXUP_RESUME_EARLY(PCI_ANY_ID, PCI_ANY_ID,
-> +			       pcie_downstream_link_retrain);
+  4d5230b50dd4 ("drm/scheduler: add drm_sched_job_add_resv_dependencies")
+
+from the drm-misc tree.
+
+I fixed it up (see below) and can carry the fix as necessary. This
+is now fixed as far as linux-next is concerned, but any non trivial
+conflicts should be mentioned to your upstream maintainer when your tree
+is submitted for merging.  You may also want to consider cooperating
+with the maintainer of the conflicting tree to minimise any particularly
+complex conflicts.
+
+--=20
+Cheers,
+Stephen Rothwell
+
+diff --cc include/drm/gpu_scheduler.h
+index ca11716d084a,e40baefadc3a..000000000000
+--- a/include/drm/gpu_scheduler.h
++++ b/include/drm/gpu_scheduler.h
+@@@ -32,15 -32,8 +32,17 @@@
+ =20
+  #define MAX_WAIT_SCHED_ENTITY_Q_EMPTY msecs_to_jiffies(1000)
+ =20
+ +/**
+ + * DRM_SCHED_FENCE_DONT_PIPELINE - Prefent dependency pipelining
+ + *
+ + * Setting this flag on a scheduler fence prevents pipelining of jobs dep=
+ending
+ + * on this fence. In other words we always insert a full CPU round trip b=
+efore
+ + * dependen jobs are pushed to the hw queue.
+ + */
+ +#define DRM_SCHED_FENCE_DONT_PIPELINE	DMA_FENCE_FLAG_USER_BITS
+ +
++ enum dma_resv_usage;
++ struct dma_resv;
+  struct drm_gem_object;
+ =20
+  struct drm_gpu_scheduler;
+
+--Sig_/mDKJXgG2m49_Fc0CtbeXI4i
+Content-Type: application/pgp-signature
+Content-Description: OpenPGP digital signature
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAEBCAAdFiEENIC96giZ81tWdLgKAVBC80lX0GwFAmNkS3cACgkQAVBC80lX
+0Gzoogf+PjKbLtC+rWkutwb/8LqNSr7RAmnRG4hhHsoDFLBPL+Rg49YffUffl1Ry
+pnWa6Hyrn096EHmEhxQbY+BaLua+QMYK7Xpnuj1EFozTR3pmCUbaoAg46DkurLZi
+Cx6Qg6Uyz8EGc0zGdk6SaJ1vBL5VLgtApSPlQGV34YQ6+KuaOjwOmn40JCX82Jt/
+HlpG25xghWi3mGW5fcVVQmDANCErKkYJFRYuuEdJI6lcK3mv4gvBaEp4+83kcoDz
+lQ5DDV+KJ1qMkzKiROe3dBaT+Xesj9idVFXnCI6sc0txOEmsDuDCxYEvf0MICxaR
+t0/alE3ohS5HE0G3IRevwKWxRTschA==
+=F7+Q
+-----END PGP SIGNATURE-----
+
+--Sig_/mDKJXgG2m49_Fc0CtbeXI4i--
