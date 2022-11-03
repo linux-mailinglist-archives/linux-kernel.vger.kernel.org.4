@@ -2,77 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A90906177A4
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 08:26:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id EE71A6177AD
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 08:27:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231180AbiKCH0P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 03:26:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58550 "EHLO
+        id S231355AbiKCH1d (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 03:27:33 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59258 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229994AbiKCH0K (ORCPT
+        with ESMTP id S231296AbiKCH1Y (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 03:26:10 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 693F6389F;
-        Thu,  3 Nov 2022 00:26:04 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id EF93DB82680;
-        Thu,  3 Nov 2022 07:26:02 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2EC15C433C1;
-        Thu,  3 Nov 2022 07:25:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667460361;
-        bh=6gSn24RE5tSW2tjjID0EiJ3LSBai5yjV2gtQ5QL4GTE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=JNvrJYnoHKTLj4chzreMntUuJ17kljGcge9mZdoSALAARQVJxwb2OxV4ql631y4Oq
-         JHsOWAQrQ7dnHfNlt3SDtjK0ju9fGiON8EwhoxXXIcI946Te1ghxsmkQPgBgbdW3iU
-         bQFW1A2FlEaXr02YFcA+7AJdWvXDfo2gGbdAepIlCOEjhdAj3pwA5FD9bhkng4wVHi
-         0DL2OLPWt3ecE0Zpd95qcZm1z3cxj0oa4WyOMom2TaWiFC3v5jNuhtLtzx9OR4/aPe
-         IEjV2NVT14XDZLDRB2/SsNdIJ/7QlsKNqzjAx8pavjz3yY5xtenfxM0/IpXZt8FV2Z
-         BCEW/LFN0Bj5w==
-Date:   Thu, 3 Nov 2022 08:25:57 +0100
-From:   Christian Brauner <brauner@kernel.org>
-To:     syzbot <syzbot+3f6ef1c4586bb6fd1f61@syzkaller.appspotmail.com>
-Cc:     linux-kernel@vger.kernel.org, linux-unionfs@vger.kernel.org,
-        miklos@szeredi.hu, syzkaller-bugs@googlegroups.com
-Subject: Re: [syzbot] BUG: unable to handle kernel paging request in
- ovl_set_acl
-Message-ID: <20221103072557.qc2hsowoaatstrbh@wittgenstein>
-References: <000000000000cb639605ec7f6e10@google.com>
- <000000000000452ed505ec87d0ad@google.com>
+        Thu, 3 Nov 2022 03:27:24 -0400
+Received: from mail-yb1-xb2b.google.com (mail-yb1-xb2b.google.com [IPv6:2607:f8b0:4864:20::b2b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 304CE26E9
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 00:27:24 -0700 (PDT)
+Received: by mail-yb1-xb2b.google.com with SMTP id 66so1213843ybl.11
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 00:27:24 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=6ly+G7+lyR2tgEVR1WMOK4EJ7N76yR8l41oUG1sHf9c=;
+        b=HrG2x4rNnb4SGZ4hQdH5OcFnrmKg4dnJ93AURRjRRNhh/t7Y5qGudWyzIHd8YDrtRa
+         DObcY/k3auLnQaAuraUBk82c/Wwpwgm+xk3l17J96W+F+acGu6yV4gei0zhQOC6O1R66
+         jWQaf1lExl1/9VVnmXSbJd4WpqqqIQie3+Sb9B1i/CyD6+momFmz2mYCMI3q094loyli
+         fDWk0RkkWEFNieHjdo73T4VNq71CAzD832G+/goGZxI/efxl9R7TGepZrtRN27fMHIo+
+         ZzcRFBpXAgam+vl+RSjHaefBGv00Mty/1OPE66QJwQdW65lYDVJhg3AsZ3zAOZMB9XAh
+         t/Jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=6ly+G7+lyR2tgEVR1WMOK4EJ7N76yR8l41oUG1sHf9c=;
+        b=DRiq5MM8QlKWzmKYUEu0rzMrBw1YbAtoEliijJ6V5d+7goz4Y+jfEYKDrINjGzLdzM
+         OhG6iWP+cPy+ucCHeruYfT6iwKWjLAxSk4oxYFuE4qWTtE/+3M72FK6hivHLRqX8gsxy
+         CLMhNFJWe12Al1tpnkE/3D5eZ7XJM3tpf8HnE1YHxRTSG605557HT9HFKVfU62kYDuuS
+         FRH58BCuYKSorXcy4jNtFEd8Eu4fixiuOvlNPLDN249gi8YQ/RKwTK+EHuviCkSGw97O
+         Bon7VzXiZSXgeccCkPPIjdd4zS7NMuS0HtVVdj5FVjLx76y5ft/KkDpw3T2WqNeQRc7c
+         U43g==
+X-Gm-Message-State: ACrzQf1gVdebIgpkXLJEWOVDPiK3UjBC5Ea6CqdlcHW+eaSv5WmSCt+s
+        oqs+iaMXmgZ3XcX7L3a3ruu3IFOnXxFozHW61VDeCQ==
+X-Google-Smtp-Source: AMsMyM707h3+vIMmk1iKOcN3+xAYZCYrZqaa6FBSFeXjdm/4+xJAoqfaOX6vvY2T22hmyCyRhvlXxzQ+GytACfWctBk=
+X-Received: by 2002:a25:7b42:0:b0:6ca:1d03:2254 with SMTP id
+ w63-20020a257b42000000b006ca1d032254mr26098678ybc.584.1667460443279; Thu, 03
+ Nov 2022 00:27:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <000000000000452ed505ec87d0ad@google.com>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+References: <000000000000e9df4305ec7a3fc7@google.com> <0000000000005912d405ec8a329c@google.com>
+In-Reply-To: <0000000000005912d405ec8a329c@google.com>
+From:   Marco Elver <elver@google.com>
+Date:   Thu, 3 Nov 2022 08:26:47 +0100
+Message-ID: <CANpmjNNwjCWa0TX4CYShB5KrErWEd-z0BgpZTrpofnJNx-MkvA@mail.gmail.com>
+Subject: Re: [syzbot] WARNING in __perf_event_overflow
+To:     syzbot <syzbot+589d998651a580e6135d@syzkaller.appspotmail.com>
+Cc:     acme@kernel.org, alex.williamson@redhat.com,
+        alexander.shishkin@linux.intel.com, bpf@vger.kernel.org,
+        cohuck@redhat.com, dvyukov@google.com, jgg@ziepe.ca,
+        jolsa@kernel.org, kevin.tian@intel.com, kvm@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-perf-users@vger.kernel.org,
+        mark.rutland@arm.com, mingo@redhat.com, namhyung@kernel.org,
+        netdev@vger.kernel.org, peterz@infradead.org,
+        shameerali.kolothum.thodi@huawei.com,
+        syzkaller-bugs@googlegroups.com, yishaih@nvidia.com
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,SPF_HELO_NONE,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=no
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 07:35:42PM -0700, syzbot wrote:
-> syzbot has found a reproducer for the following issue on:
-> 
-> HEAD commit:    61c3426aca2c Add linux-next specific files for 20221102
-> git tree:       linux-next
-> console+strace: https://syzkaller.appspot.com/x/log.txt?x=118e21de880000
-> kernel config:  https://syzkaller.appspot.com/x/.config?x=acb529cc910d907c
-> dashboard link: https://syzkaller.appspot.com/bug?extid=3f6ef1c4586bb6fd1f61
-> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
-> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=1620a689880000
-> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=153fb2a9880000
-> 
-> Downloadable assets:
-> disk image: https://storage.googleapis.com/syzbot-assets/cc56d88dd6a3/disk-61c3426a.raw.xz
-> vmlinux: https://storage.googleapis.com/syzbot-assets/5921b65b080f/vmlinux-61c3426a.xz
-> kernel image: https://storage.googleapis.com/syzbot-assets/39cbd355fedd/bzImage-61c3426a.xz
-> 
-> IMPORTANT: if you fix the issue, please add the following tag to the commit:
-> Reported-by: syzbot+3f6ef1c4586bb6fd1f61@syzkaller.appspotmail.com
+On Thu, 3 Nov 2022 at 06:26, syzbot
+<syzbot+589d998651a580e6135d@syzkaller.appspotmail.com> wrote:
+>
+> syzbot has bisected this issue to:
+>
+> commit c1d050b0d169fd60c8acef157db53bd4e3141799
+> Author: Yishai Hadas <yishaih@nvidia.com>
+> Date:   Thu Sep 8 18:34:45 2022 +0000
+>
+>     vfio/mlx5: Create and destroy page tracker object
+>
+> bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=136eb2da880000
+> start commit:   88619e77b33d net: stmmac: rk3588: Allow multiple gmac cont..
+> git tree:       bpf
+> final oops:     https://syzkaller.appspot.com/x/report.txt?x=10eeb2da880000
+> console output: https://syzkaller.appspot.com/x/log.txt?x=176eb2da880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=a66c6c673fb555e8
+> dashboard link: https://syzkaller.appspot.com/bug?extid=589d998651a580e6135d
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=11eabcea880000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=10f7e632880000
+>
+> Reported-by: syzbot+589d998651a580e6135d@syzkaller.appspotmail.com
+> Fixes: c1d050b0d169 ("vfio/mlx5: Create and destroy page tracker object")
+>
+> For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
-#syz test: https://git.kernel.org/pub/scm/linux/kernel/git/vfs/idmapping.git/ 5b52aebef8954cadff29918bb61d7fdc7be07837
+The bisection is wrong - see
+https://lore.kernel.org/all/20221031093513.3032814-1-elver@google.com/
