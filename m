@@ -2,436 +2,262 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0DD16617D61
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:02:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C2708617D64
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 14:04:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231840AbiKCNC4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 09:02:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43704 "EHLO
+        id S231667AbiKCNED (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 09:04:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42790 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231847AbiKCNCP (ORCPT
+        with ESMTP id S229770AbiKCNDi (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 09:02:15 -0400
-Received: from mail-ej1-x630.google.com (mail-ej1-x630.google.com [IPv6:2a00:1450:4864:20::630])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4364165B6;
-        Thu,  3 Nov 2022 06:01:44 -0700 (PDT)
-Received: by mail-ej1-x630.google.com with SMTP id bj12so4911509ejb.13;
-        Thu, 03 Nov 2022 06:01:44 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4d2UbvO3FSNARetdP9i+wj+MMgnS/Oph7AohVHZYBmU=;
-        b=ko+OdfHBGEDfcT16wi3KKd9Nqm9C9uoY9DbXU8/h9W62U4RWI6TOHcbteRZh2aE2oE
-         X/v3xnZlb/pa23EpK5moMP/XdPpKRRcUwPVc+9GB9wGz5K28up07E62K0UYV3NU7BpWS
-         TOsBhHPWYs5d0qNhbP2QSiuX1MKvhqYI+p9vUbflZD93HOan/EOqB6IhPgW3SwhhJ5wW
-         ISAtJp/YhkGbZ9zuv4CdFGIqL49RhTaBmgeN18EF+5N2UG2PDCaXwVPfs8mOFmajFNLU
-         464nDpHELa7UhBgFwf6tK6NlU6CnANqMx29Ce/dumZbeIPLhVI8Prbm1n9qNqnGOal8I
-         AIJw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=4d2UbvO3FSNARetdP9i+wj+MMgnS/Oph7AohVHZYBmU=;
-        b=3mp2KPJSjXCdLjWePLgZJTAkBsNaJ++a1A2HhQqJ/Nk+EYmSqNQDIVrfCf+NyQfDHM
-         E+BgtGfngBJPO1n3sogtp3I/rEq/ZMnHcoqqZlw3kWF//CGOQTbL9svNl93bOa4jJS2X
-         4fbx5YArBASuLOekygl6W+HuW98YZMeA5tOsMbI4mqvltkWEA4y1lMoYjCeCC+vyfZfD
-         +iSuSfXJ54HAiGJzxVETzZd3o2k0lY/vjbcTGUEcfzUx2zVW7cTOI8Kq9akfmKa1TbCs
-         EB2oHvjn/tMf1cVrlZSPlJ2wsN+NyJhXDkXFpaJlLsFxgmZcbkaQOHr2Ax3E6LyJAJ7I
-         iTug==
-X-Gm-Message-State: ACrzQf0T2OTDzD20Rz9/TIek/HDUaoOKZL9IH/1yvqRlg/bXSwWcOV9H
-        LOLLFaotVX4D26ECxwsXLFpx8CnYFhDDAQ==
-X-Google-Smtp-Source: AMsMyM74n72Nlci46iChnQXEwZxTnh0a9UwY3AYnPwRgJURrTplxidjvpmkSW8uDrbISzxG7T7H+DQ==
-X-Received: by 2002:a17:907:d2a:b0:7ad:e0c5:4bd7 with SMTP id gn42-20020a1709070d2a00b007ade0c54bd7mr17739808ejc.177.1667480500362;
-        Thu, 03 Nov 2022 06:01:40 -0700 (PDT)
-Received: from localhost.localdomain ([5.2.194.157])
-        by smtp.gmail.com with ESMTPSA id q12-20020a17090676cc00b00779a605c777sm451829ejn.192.2022.11.03.06.01.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 06:01:39 -0700 (PDT)
-From:   Cosmin Tanislav <demonsingur@gmail.com>
-Cc:     Lars-Peter Clausen <lars@metafoo.de>,
-        Michael Hennerich <Michael.Hennerich@analog.com>,
-        =?UTF-8?q?Nuno=20S=C3=A1?= <nuno.sa@analog.com>,
-        Jonathan Cameron <jic23@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-iio@vger.kernel.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org,
-        Cosmin Tanislav <cosmin.tanislav@analog.com>
-Subject: [PATCH v4 13/13] iio: temperature: ltc2983: support more parts
-Date:   Thu,  3 Nov 2022 15:00:41 +0200
-Message-Id: <20221103130041.2153295-14-demonsingur@gmail.com>
-X-Mailer: git-send-email 2.38.1
-In-Reply-To: <20221103130041.2153295-1-demonsingur@gmail.com>
-References: <20221103130041.2153295-1-demonsingur@gmail.com>
-MIME-Version: 1.0
+        Thu, 3 Nov 2022 09:03:38 -0400
+Received: from repost01.tmes.trendmicro.eu (repost01.tmes.trendmicro.eu [18.185.115.76])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65AEF18B27;
+        Thu,  3 Nov 2022 06:02:31 -0700 (PDT)
+Received: from 104.47.12.57_.trendmicro.com (unknown [172.21.205.29])
+        by repost01.tmes.trendmicro.eu (Postfix) with SMTP id 818D210000D17;
+        Thu,  3 Nov 2022 13:02:30 +0000 (UTC)
+X-TM-MAIL-RECEIVED-TIME: 1667480549.579000
+X-TM-MAIL-UUID: 33f0748b-1928-4232-831b-16e63baa28b7
+Received: from EUR04-DB3-obe.outbound.protection.outlook.com (unknown [104.47.12.57])
+        by repre01.tmes.trendmicro.eu (Trend Micro Email Security) with ESMTPS id 8D85E1000292E;
+        Thu,  3 Nov 2022 13:02:29 +0000 (UTC)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector9901; d=microsoft.com; cv=none;
+ b=NWoMrBIfKNX6He2uBf0ds6Edt9QHHmoR5285rqi5W2jSFsqmNru5Pk8tg1YaVCWce6VU84hGi9meugd/3oDEQp+DBg2os8kOTQ2aadA3emorlkxS0dXqH8nkIZlhsRPkgxYxDmIAe4I9dq2WaXVdOUjE/Mh9m8eb/yGw1gRjYQkyh/APc8ushFiG9u75kTUKSV2KsAY0Rqfmcpv00ndukHMdoH/hHb/dL9Jw9h2/NvFkTV3iP6eyJOPyaCm4v/uq1EtqsViR7w4Rv6XVW2uXcOAkxb5OGQ/+MCnECBEDVZmxn4ETJlwusDwAyo4GJ+IJywCodGNYkbB8fxNmnvoOtQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector9901;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=USwS0bGWZKzFY+ZeGxQEqezrpRvtbaRtCjDteX8O0tM=;
+ b=PTVxbVqmzwGUDCXVHW32tMnX3Ncw+G/lfA2VSeF7CamZizDKe+TQ1jNGYHmNzv/7hV58ptYHfTrQ15GJ6ZG5VLHETf3SNJwpu9jhsfg9FcQwqo7xfG3ef9FznhxiQ6H0N+x6Iu9V3JnwsIc+uQWDczBHtUz00qtr/fghfVXWIwwphc1NHJByN3GFCviFhnB5I3dd2cdAlFVI4kpQ23RFASY13vH7UOymlSh7uOh6xR2iz+e0AqL5RiiMJSJ0gGRxY9UQieHywuF0E9zCpYj6rpEFIxghSsAA2gaFZIZIZ8BB5fvAZzLtt6t6PEW4qwMRhC9ZeNjjnqotm7jJ0vutNA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=opensynergy.com; dmarc=pass action=none
+ header.from=opensynergy.com; dkim=pass header.d=opensynergy.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=opensynergy.com;
+Message-ID: <6eee6929-577b-2b26-605d-ff650c435d21@opensynergy.com>
+Date:   Thu, 3 Nov 2022 14:02:25 +0100
+Subject: Re: [RFC PATCH 1/1] can: virtio: Initial virtio CAN driver.
+Content-Language: en-US
+To:     Oliver Hartkopp <socketcan@hartkopp.net>,
+        Harald Mommer <harald.mommer@opensynergy.com>,
+        virtio-dev@lists.oasis-open.org, linux-can@vger.kernel.org,
+        netdev@vger.kernel.org, linux-kernel@vger.kernel.org
+Cc:     Wolfgang Grandegger <wg@grandegger.com>,
+        Marc Kleine-Budde <mkl@pengutronix.de>,
+        "David S . Miller" <davem@davemloft.net>,
+        Eric Dumazet <edumazet@google.com>,
+        Jakub Kicinski <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>,
+        Dariusz Stojaczyk <Dariusz.Stojaczyk@opensynergy.com>
+References: <20220825134449.18803-1-harald.mommer@opensynergy.com>
+ <b19f3d7e-9439-5c2b-c731-e5eaef37442d@hartkopp.net>
+From:   Harald Mommer <hmo@opensynergy.com>
+In-Reply-To: <b19f3d7e-9439-5c2b-c731-e5eaef37442d@hartkopp.net>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BE1P281CA0056.DEUP281.PROD.OUTLOOK.COM
+ (2603:10a6:b10:23::17) To VI1PR04MB4352.eurprd04.prod.outlook.com
+ (2603:10a6:803:4a::25)
+MIME-Version: 1.0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: VI1PR04MB4352:EE_|DU2PR04MB8853:EE_
+X-MS-Office365-Filtering-Correlation-Id: 0a3bfeaf-5c89-4c52-e5fc-08dabd9ba848
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;
+X-Microsoft-Antispam-Message-Info: np589N/3GU1YnImhxrY+/aZbjj7MnsQAd7Eg8+dbE4YO7pEqNrXRoo8kvpWQ9yG+LNmXbXudvaKWqMigyUco16H1/9qVr9raNapsVMWiXDSArjTzOyIcwRXtMJdc9ULu2JmAZv8KiRpGLIM3h+oAK8StyeB+CmNSJd/VoQPf0RDZU6KvNoRHBTWvW7lHyQHH9sqHuMSDgQnDNWNxd/CrSsuftinK/8PmDUQSGYT5aOwsk/6LtMRFW0DeeoAgaAITIhuNx2pyPCyhHvR1JEh6N6MfjugEsDHu/YBCIO8D5TWhvj+2maC5ha1+JlluZ2iN3DQf7CUnbGAXW1eWZ8MzswLubWbIa89aaGtxvWRwv5kzZfbLr+/DFzdRMzupTb/p8yuNe4o/hkhT9G/CNhrx1zmdB4sM0bsFbEhnLPBhwUg2iq7G4qY68IbOmf2rcfXdFyVcAZq6/7c4hzyuna8hQ4/yyXvynDKQ1OrVx0fb/AYCnxcLrJtE4OL5g1DiG33FU/B1kdoIO2ze6VZ8tdQrv2iXH1CU62x334qQxm/WIypIwJ0kKSwLVrhtxRfn2mbXanSoynKADoJlNRnPx3TGr5YzHcI5h9iXIvfcFYB0OmQs6LaVm/JVuLXf+Q+eTCNgrutPDZJt53SQuhhocfFgLaU/BrULbTaZIWdSZHItHnNx9ZS9cvWqd4Kx8rtKDSL3rnvm34kcFKkmC8KCG9K3B0fWpzGxTvsY/y+7uD0a4yE=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:VI1PR04MB4352.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230022)(376002)(39840400004)(396003)(346002)(366004)(136003)(451199015)(66574015)(53546011)(36756003)(38100700002)(15974865002)(107886003)(8676002)(5660300002)(2906002)(31696002)(110136005)(42186006)(41300700001)(66556008)(66476007)(7416002)(478600001)(54906003)(8936002)(66946007)(2616005)(186003)(316002)(4326008)(26005)(31686004)(83380400001);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?WUJ4cVIwREUrbGNDK3FlRjEzQUpFMUZoNEJWYk4rWGI5ZDg3eGlIWmpEbE9m?=
+ =?utf-8?B?bytlaTk0bTRwTEFOMGlBTmNPK250blMveDV1OUxPQ2gzbWJsV2toRm1vV0xP?=
+ =?utf-8?B?OWlSSEE1eWVINWR2REoyZFp4elJaeVVwUmFBaTgwazBRaFBRbmowSCt3Vldh?=
+ =?utf-8?B?MHhCWXduTGJGYUpXZG51VVdxbnh2ZFFXMjBMRUpNbUZUR1hxRVNrVzJIYkE2?=
+ =?utf-8?B?alVGOXFabCs5T1gwenlsN2FvOHROK0NzKzljN244SEN1WTBqUmUydzFMa1pV?=
+ =?utf-8?B?ZU4wcmU0dThJQVIxQjZEbE9pOHZoNGgwRkNnMENsd2xoQi83TkxETTlRZHB6?=
+ =?utf-8?B?a3d6eGw5cHlrRUtHQStHQVJKUTJIWWRZa0JqVXNRV0VQazUxWVVoK0NlUjZa?=
+ =?utf-8?B?cW9zMzFLeitRTW5LYVA5WmdMVHVUcndVeCtkSWVjYmNzS1Y1QUFpL1JpNjdW?=
+ =?utf-8?B?UXRWR0tlblhpQU9IUHhyYlJwbzJiekpENXJKS1lzSUN3UzNCNU1yZFFhU0dv?=
+ =?utf-8?B?VjNMRkk0U1pMWDliNmd5QUVDcTY4NUJlcGU4bHIzWDNDc1QwM3NKa0loUldq?=
+ =?utf-8?B?VnRvREJyUmxlQUlSMlUwektpVyttNEQ3aFlBeU0zM1htb05LSEp5NmxtQ0tK?=
+ =?utf-8?B?NjBKSG1TUkpXOXUvT0gzamZORXlsWTVVbFdNcXdTTDJXMm5RQkZuZXJQb3Nk?=
+ =?utf-8?B?OHZqR0N0NloxeDRJMjBVTjdOL0hwZk11a0F2RTZWQVdZa2JZTmtIMyszZ2xn?=
+ =?utf-8?B?YWwrc0JadkJsVXp3dGJXR29DcXJ6NUt4Q3VUdFNIQ29VQUpNaGhTcWp0bHZy?=
+ =?utf-8?B?Y3Nsa3JHblNOaFp4NWxBYWhHS1NnNm1Dbk4wTFlkdHZJeUZvZml3a1pkbEJk?=
+ =?utf-8?B?THh0czlXdjVITDlrbWFnZ1Vja3pPV21VbGx0S25MTFI5d1VWSEZsdHNjNTlC?=
+ =?utf-8?B?NDVnTDl4bG8wWTVlb0I4V3VDdWQ0QlBhMWdpdHdDV1RkOVR2RnI2MlBWbXFY?=
+ =?utf-8?B?KzZNVGFTT2sza29ZVGJRWnZRWTRIRDRtZlRLajlUWGdVV2R6ZVhLbmg4My9y?=
+ =?utf-8?B?blhiMkU0RDExOWwxcStmVlVYcmh4dWN1eDEva3NJaUdGZExXdFE3V3NHZXBj?=
+ =?utf-8?B?WEp2MGlNT2NXMnFwOEhzbnEyTEIxMTdva0R3Znd6MzZXRFdnUmdRdmF1SUY1?=
+ =?utf-8?B?d3EyOVY0c05sREh0OXZ4WHZVcTlsc1FCcTMxaG01NTNHYllkeVh3MW8rdUla?=
+ =?utf-8?B?OEo4SUhXeWlMTzY2ckNCb0h3dHpwWFpHSzV4d0JURE1uYm9yeUJORmtLajd0?=
+ =?utf-8?B?QjRtajR3YVVnbGNwMmJkRi9KeDRpc3lyN242UGxaYnZRZVFCaURzdHNGYWM5?=
+ =?utf-8?B?THpaSGQ3MFJIamc4RWRtN1M3WHIzVEdtTG5pMjJrTHFFVUYvY2R1eTRLV1R3?=
+ =?utf-8?B?S2ViQ21YKzNtaGpRU1lDWTdIMERVVkI4SzJTTC9kcnRSblJwNVYyOFpKQm1q?=
+ =?utf-8?B?RWoyMENOTjVOaWNDWUhTTHJlV05tVnloL2lIMk5YcCtlditla3hFcTRpejJq?=
+ =?utf-8?B?N2dUMEZpSWRmd2Z3SWh2ZkwyT0VTbzJic2ZNQ3pVcDJjK0J1OVNnY0t3Nkx6?=
+ =?utf-8?B?L3U4TWpiejhZQ3g0UnVRU1NnbmVEUTJrS3c3R0xybFBpbjE2YlNUQ2VINDFH?=
+ =?utf-8?B?Q1VLWktqVUQ0WEVKQW5VUFZyU0hza1dGQkVGdGV0a0ZOc0trV2VGdVRwZ2do?=
+ =?utf-8?B?eWR0bkY4bDBQK1ZoUlo1Z2U0RDFpK0VibW8wczVUTndSSE1SSnFadkdSTm55?=
+ =?utf-8?B?QlRZZVVDRGo0ckJGSld0NW8ya205eDAzYTNvNmFTOHNzeHBMdGd1WjdiZTBo?=
+ =?utf-8?B?YVRaMVI5dTduVVFKRm5XVmZqNTVlZ2l6MGl0eG5FZXpWZzYyazFpcUlZOWpQ?=
+ =?utf-8?B?OWNObEtoYVFQVncvUHpiTGNTaTl2ZFo0QVFyNTFwRk03Y3lTNFFlV1pBdi9K?=
+ =?utf-8?B?UkRZR25EVnI2a1hpR09TWWM0QzE1NTlXUk5qY2JMMjV1RlV5SWhWR3pxcVNp?=
+ =?utf-8?B?YUFvZU1wS0pHNTAxUDZoNnhLN05ka1hwQ3pjbjVobG5BKzc4aTZhWS9rcHNy?=
+ =?utf-8?Q?/Q4w35RLHqxLItPkSw7Fg6cNW?=
+X-OriginatorOrg: opensynergy.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 0a3bfeaf-5c89-4c52-e5fc-08dabd9ba848
+X-MS-Exchange-CrossTenant-AuthSource: VI1PR04MB4352.eurprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Nov 2022 13:02:26.9151
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 800fae25-9b1b-4edc-993d-c939c4e84a64
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Cxd+0jlDW0ifKNJNhgYqkLB12H/MaSvMqqa45FQuBqLvzTGiin5ZwkloIQXyEj93YhUbvrYM4EE5hxdBtPzQWw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DU2PR04MB8853
+X-TM-AS-ERS: 104.47.12.57-0.0.0.0
+X-TMASE-Version: StarCloud-1.3-9.0.1006-27240.007
+X-TMASE-Result: 10--17.586200-4.000000
+X-TMASE-MatchedRID: gzVbiXtWD9sMek0ClnpVp/HkpkyUphL982SgwNf6SK5/iZ1aNsYG7ndv
+        O8u+q1pdKYeaFKae6Lz3sQPKccofpQx5TL3qCTgEAD5jSg1rFtAEa8g1x8eqF3Eyvb3DXVhE5ax
+        aw7fIL5FGk4qcd9wxZw4qvtoDTIAKn6xXepMP3Wd1e7Xbb6Im2lK6+0HOVoSott4vFM+nzlMEvn
+        cM0Cy/pBk8ffVB7V0z6L+DGNlkhD9tVyxlb2HgKJd+vKkqem+eO8fk7n+zHAzDZ+9HI5nLbCYia
+        X7LCuq+1pTtLKMW2+mHNDPTxAgTr7gNNywta23k72Rb2bEJC+2X2rvknNYlE4yW3GQHxHDTTO2W
+        j/eDsouyjcZFbvUOyMz43V5/DvDfHChWHg5gjGqTeuX4xo2DEH2JWrzSHAwqa/+fqrgvoa2lKI4
+        pJ+G9PzAfmA9yk0/GVTMBhQGAIf7M7NyB96bxz5KIqFdDcBucSk785FRpncVJKYD1WhGOCaPFjJ
+        EFr+olA6QGdvwfwZanmxwscwVeE90H8LFZNFG7bkV4e2xSge6FK285nKzlbhPjWjcQtMf8viPoS
+        x8JaG3kaczgxHn/15RMZUCEHkRt
+X-TMASE-XGENCLOUD: 007a1e24-753a-4d60-a227-266addf4441e-0-0-200-0
+X-TM-Deliver-Signature: 1FCBC07859B3F9A7CF598DAFAC1DF543
+DKIM-Signature: v=1; a=rsa-sha256; c=simple/simple; d=opensynergy.com;
+        s=TM-DKIM-20210503141657; t=1667480550;
+        bh=P+7QFb6FHsANTY4xS15aLwAPUyCp3ktUInhOlTX5hck=; l=3765;
+        h=Date:To:From;
+        b=E/X98Im9jALayAW35F1dQccu/lSNLvkMRCkHeCR/QRmNFyDbUczDDJEgykbHmTdIT
+         TzQ0ukkadvrPosoIX/XNuw8P5O017JoMEADUIMXaMHlPU54Q490bbgiFQVozEx40Lx
+         z1y60Ge2mGe07IK3BagAh8hoF0zAYjT4v9eYvE8opsT/OZ7BrM/ulkNWI8TdDvEKsZ
+         HURxLbzHmyfkCza1nK+LtYiRWzDGYHPMCtMs3yRffaE3QdeTpB5mGP/zcZTbdrijxc
+         hoHbWVNH+9VNopez1P278U4TfJZF32KoaWbyRrafDJt1b3NnfLYU8f/hCuSr8zFzVx
+         CM8GaKchdP2+w==
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Cosmin Tanislav <cosmin.tanislav@analog.com>
+Hello,
 
-Add support for the following parts:
- * LTC2984
- * LTC2986
- * LTM2985
+On 27.08.22 11:02, Oliver Hartkopp wrote:
+>> +    if ((can_flags & ~CAN_KNOWN_FLAGS) != 0u) {
+>
+> For your entire patch:
+>
+> Please remove this pointless " != 0u)" stuff.
+>
+>     if (can_flags & ~CAN_KNOWN_FLAGS) {
+>
+> is just ok.
+Too much MISRA habit in my head which has no place here. Did so.
+>> +        if (can_id > CAN_EFF_MASK) {
+>
+> The MASK is not a number value.
+>
+> The check should be
+>
+> if (can_id & ~CAN_EFF_MASK) {
+>
+> or you simply mask the can_id value to be really sure without the 
+> netdev_warn() stuff.
+CAN_EFF_MASK is now treated as bitmask. And decided to remove this 
+netdev_warn() stuff as proposed, masked the values. So I will miss 
+invalid combinations from the virtio CAN device (may also be buggy) I 
+might still be interested in but this excessive netdev_warn() usage was 
+in the end also for my taste too much.
+>
+> Are you sure that you could get undefined CAN ID values here?
+>
+>> +            stats->rx_dropped++;
+>> +            netdev_warn(dev, "RX: CAN Ext Id 0x%08x too big\n",
 
-The LTC2984 is a variant of the LTC2983 with EEPROM.
-The LTC2986 is a variant of the LTC2983 with only 10 channels,
-EEPROM and support for active analog temperature sensors.
-The LTM2985 is software-compatible with the LTC2986.
+The proposed virtio CAN specification says: "The type of a CAN message 
+identifier is determined by flags. The 3 most significant bits of can_id 
+do not bear the information about the type of the CAN message identifier 
+and are 0."
 
-Signed-off-by: Cosmin Tanislav <cosmin.tanislav@analog.com>
----
- drivers/iio/temperature/ltc2983.c | 183 ++++++++++++++++++++++++++++--
- 1 file changed, 176 insertions(+), 7 deletions(-)
+=> This trace could have been seen when a buggy device wasn't obeying 
+the 2nd sentence.
 
-diff --git a/drivers/iio/temperature/ltc2983.c b/drivers/iio/temperature/ltc2983.c
-index ca1bb5f48988..72c052e4c7bc 100644
---- a/drivers/iio/temperature/ltc2983.c
-+++ b/drivers/iio/temperature/ltc2983.c
-@@ -25,9 +25,12 @@
- #define LTC2983_STATUS_REG			0x0000
- #define LTC2983_TEMP_RES_START_REG		0x0010
- #define LTC2983_TEMP_RES_END_REG		0x005F
-+#define LTC2983_EEPROM_KEY_REG			0x00B0
-+#define LTC2983_EEPROM_READ_STATUS_REG		0x00D0
- #define LTC2983_GLOBAL_CONFIG_REG		0x00F0
- #define LTC2983_MULT_CHANNEL_START_REG		0x00F4
- #define LTC2983_MULT_CHANNEL_END_REG		0x00F7
-+#define LTC2986_EEPROM_STATUS_REG		0x00F9
- #define LTC2983_MUX_CONFIG_REG			0x00FF
- #define LTC2983_CHAN_ASSIGN_START_REG		0x0200
- #define LTC2983_CHAN_ASSIGN_END_REG		0x024F
-@@ -35,13 +38,21 @@
- #define LTC2983_CUST_SENS_TBL_END_REG		0x03CF
- 
- #define LTC2983_DIFFERENTIAL_CHAN_MIN		2
--#define LTC2983_MAX_CHANNELS_NR			20
- #define LTC2983_MIN_CHANNELS_NR			1
- #define LTC2983_SLEEP				0x97
- #define LTC2983_CUSTOM_STEINHART_SIZE		24
- #define LTC2983_CUSTOM_SENSOR_ENTRY_SZ		6
- #define LTC2983_CUSTOM_STEINHART_ENTRY_SZ	4
- 
-+#define LTC2983_EEPROM_KEY			0xA53C0F5A
-+#define LTC2983_EEPROM_WRITE_CMD		0x15
-+#define LTC2983_EEPROM_READ_CMD			0x16
-+#define LTC2983_EEPROM_STATUS_FAILURE_MASK	GENMASK(3, 1)
-+#define LTC2983_EEPROM_READ_FAILURE_MASK	GENMASK(7, 0)
-+
-+#define LTC2983_EEPROM_WRITE_TIME_MS		2600
-+#define LTC2983_EEPROM_READ_TIME_MS		20
-+
- #define LTC2983_CHAN_START_ADDR(chan) \
- 			(((chan - 1) * 4) + LTC2983_CHAN_ASSIGN_START_REG)
- #define LTC2983_CHAN_RES_ADDR(chan) \
-@@ -171,6 +182,7 @@ enum {
- 	LTC2983_SENSOR_DIODE = 28,
- 	LTC2983_SENSOR_SENSE_RESISTOR = 29,
- 	LTC2983_SENSOR_DIRECT_ADC = 30,
-+	LTC2983_SENSOR_ACTIVE_TEMP = 31,
- };
- 
- #define to_thermocouple(_sensor) \
-@@ -191,7 +203,17 @@ enum {
- #define to_adc(_sensor) \
- 		container_of(_sensor, struct ltc2983_adc, sensor)
- 
-+#define to_temp(_sensor) \
-+		container_of(_sensor, struct ltc2983_temp, sensor)
-+
-+struct ltc2983_chip_info {
-+	unsigned int max_channels_nr;
-+	bool has_temp;
-+	bool has_eeprom;
-+};
-+
- struct ltc2983_data {
-+	const struct ltc2983_chip_info *info;
- 	struct regmap *regmap;
- 	struct spi_device *spi;
- 	struct mutex lock;
-@@ -210,6 +232,7 @@ struct ltc2983_data {
- 	 */
- 	__be32 temp __aligned(IIO_DMA_MINALIGN);
- 	__be32 chan_val;
-+	__be32 eeprom_key;
- };
- 
- struct ltc2983_sensor {
-@@ -272,6 +295,12 @@ struct ltc2983_adc {
- 	bool single_ended;
- };
- 
-+struct ltc2983_temp {
-+	struct ltc2983_sensor sensor;
-+	struct ltc2983_custom_sensor *custom;
-+	bool single_ended;
-+};
-+
- /*
-  * Convert to Q format numbers. These number's are integers where
-  * the number of integer and fractional bits are specified. The resolution
-@@ -606,6 +635,22 @@ static int ltc2983_adc_assign_chan(struct ltc2983_data *st,
- 	return __ltc2983_chan_assign_common(st, sensor, chan_val);
- }
- 
-+static int ltc2983_temp_assign_chan(struct ltc2983_data *st,
-+				    const struct ltc2983_sensor *sensor)
-+{
-+	struct ltc2983_temp *temp = to_temp(sensor);
-+	u32 chan_val;
-+	int ret;
-+
-+	chan_val = LTC2983_ADC_SINGLE_ENDED(temp->single_ended);
-+
-+	ret = __ltc2983_chan_custom_sensor_assign(st, temp->custom, &chan_val);
-+	if (ret)
-+		return ret;
-+
-+	return __ltc2983_chan_assign_common(st, sensor, chan_val);
-+}
-+
- static struct ltc2983_sensor *
- ltc2983_thermocouple_new(const struct fwnode_handle *child, struct ltc2983_data *st,
- 			 const struct ltc2983_sensor *sensor)
-@@ -771,10 +816,10 @@ ltc2983_rtd_new(const struct fwnode_handle *child, struct ltc2983_data *st,
- 	if (rtd->sensor_config & LTC2983_RTD_4_WIRE_MASK) {
- 		/* 4-wire */
- 		u8 min = LTC2983_DIFFERENTIAL_CHAN_MIN,
--			max = LTC2983_MAX_CHANNELS_NR;
-+			max = st->info->max_channels_nr;
- 
- 		if (rtd->sensor_config & LTC2983_RTD_ROTATION_MASK)
--			max = LTC2983_MAX_CHANNELS_NR - 1;
-+			max = st->info->max_channels_nr - 1;
- 
- 		if (((rtd->sensor_config & LTC2983_RTD_KELVIN_R_SENSE_MASK)
- 		     == LTC2983_RTD_KELVIN_R_SENSE_MASK) &&
-@@ -1143,6 +1188,38 @@ static struct ltc2983_sensor *ltc2983_adc_new(struct fwnode_handle *child,
- 	return &adc->sensor;
- }
- 
-+static struct ltc2983_sensor *ltc2983_temp_new(struct fwnode_handle *child,
-+					       struct ltc2983_data *st,
-+					       const struct ltc2983_sensor *sensor)
-+{
-+	struct ltc2983_temp *temp;
-+
-+	temp = devm_kzalloc(&st->spi->dev, sizeof(*temp), GFP_KERNEL);
-+	if (!temp)
-+		return ERR_PTR(-ENOMEM);
-+
-+	if (fwnode_property_read_bool(child, "adi,single-ended"))
-+		temp->single_ended = true;
-+
-+	if (!temp->single_ended &&
-+	    sensor->chan < LTC2983_DIFFERENTIAL_CHAN_MIN) {
-+		dev_err(&st->spi->dev, "Invalid chan:%d for differential temp\n",
-+			sensor->chan);
-+		return ERR_PTR(-EINVAL);
-+	}
-+
-+	temp->custom = __ltc2983_custom_sensor_new(st, child, "adi,custom-temp",
-+						   false, 4096, true);
-+	if (IS_ERR(temp->custom))
-+		return ERR_CAST(temp->custom);
-+
-+	/* set common parameters */
-+	temp->sensor.assign_chan = ltc2983_temp_assign_chan;
-+	temp->sensor.fault_handler = ltc2983_common_fault_handler;
-+
-+	return &temp->sensor;
-+}
-+
- static int ltc2983_chan_read(struct ltc2983_data *st,
- 			const struct ltc2983_sensor *sensor, int *val)
- {
-@@ -1302,10 +1379,10 @@ static int ltc2983_parse_dt(struct ltc2983_data *st)
- 
- 		/* check if we have a valid channel */
- 		if (sensor.chan < LTC2983_MIN_CHANNELS_NR ||
--		    sensor.chan > LTC2983_MAX_CHANNELS_NR) {
-+		    sensor.chan > st->info->max_channels_nr) {
- 			ret = -EINVAL;
- 			dev_err(dev, "chan:%d must be from %u to %u\n", sensor.chan,
--				LTC2983_MIN_CHANNELS_NR, LTC2983_MAX_CHANNELS_NR);
-+				LTC2983_MIN_CHANNELS_NR, st->info->max_channels_nr);
- 			goto put_child;
- 		} else if (channel_avail_mask & BIT(sensor.chan)) {
- 			ret = -EINVAL;
-@@ -1345,6 +1422,9 @@ static int ltc2983_parse_dt(struct ltc2983_data *st)
- 			st->iio_channels--;
- 		} else if (sensor.type == LTC2983_SENSOR_DIRECT_ADC) {
- 			st->sensors[chan] = ltc2983_adc_new(child, st, &sensor);
-+		} else if (st->info->has_temp &&
-+			   sensor.type == LTC2983_SENSOR_ACTIVE_TEMP) {
-+			st->sensors[chan] = ltc2983_temp_new(child, st, &sensor);
- 		} else {
- 			dev_err(dev, "Unknown sensor type %d\n", sensor.type);
- 			ret = -EINVAL;
-@@ -1371,6 +1451,45 @@ static int ltc2983_parse_dt(struct ltc2983_data *st)
- 	return ret;
- }
- 
-+static int ltc2983_eeprom_cmd(struct ltc2983_data *st, unsigned int cmd,
-+			      unsigned int wait_time, unsigned int status_reg,
-+			      unsigned long status_fail_mask)
-+{
-+	unsigned long time;
-+	unsigned int val;
-+	int ret;
-+
-+	ret = regmap_bulk_write(st->regmap, LTC2983_EEPROM_KEY_REG,
-+				&st->eeprom_key, sizeof(st->eeprom_key));
-+	if (ret)
-+		return ret;
-+
-+	reinit_completion(&st->completion);
-+
-+	ret = regmap_write(st->regmap, LTC2983_STATUS_REG,
-+			   LTC2983_STATUS_START(true) | cmd);
-+	if (ret)
-+		return ret;
-+
-+	time = wait_for_completion_timeout(&st->completion,
-+					   msecs_to_jiffies(wait_time));
-+	if (!time) {
-+		dev_err(&st->spi->dev, "EEPROM command timed out\n");
-+		return -ETIMEDOUT;
-+	}
-+
-+	ret = regmap_read(st->regmap, status_reg, &val);
-+	if (ret)
-+		return ret;
-+
-+	if (val & status_fail_mask) {
-+		dev_err(&st->spi->dev, "EEPROM command failed: 0x%02X\n", val);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
- static int ltc2983_setup(struct ltc2983_data *st, bool assign_iio)
- {
- 	u32 iio_chan_t = 0, iio_chan_v = 0, chan, iio_idx = 0, status;
-@@ -1403,6 +1522,15 @@ static int ltc2983_setup(struct ltc2983_data *st, bool assign_iio)
- 	if (ret)
- 		return ret;
- 
-+	if (st->info->has_eeprom && !assign_iio) {
-+		ret = ltc2983_eeprom_cmd(st, LTC2983_EEPROM_READ_CMD,
-+					 LTC2983_EEPROM_READ_TIME_MS,
-+					 LTC2983_EEPROM_READ_STATUS_REG,
-+					 LTC2983_EEPROM_READ_FAILURE_MASK);
-+		if (!ret)
-+			return 0;
-+	}
-+
- 	for (chan = 0; chan < st->num_channels; chan++) {
- 		u32 chan_type = 0, *iio_chan;
- 
-@@ -1442,9 +1570,13 @@ static int ltc2983_setup(struct ltc2983_data *st, bool assign_iio)
- static const struct regmap_range ltc2983_reg_ranges[] = {
- 	regmap_reg_range(LTC2983_STATUS_REG, LTC2983_STATUS_REG),
- 	regmap_reg_range(LTC2983_TEMP_RES_START_REG, LTC2983_TEMP_RES_END_REG),
-+	regmap_reg_range(LTC2983_EEPROM_KEY_REG, LTC2983_EEPROM_KEY_REG),
-+	regmap_reg_range(LTC2983_EEPROM_READ_STATUS_REG,
-+			 LTC2983_EEPROM_READ_STATUS_REG),
- 	regmap_reg_range(LTC2983_GLOBAL_CONFIG_REG, LTC2983_GLOBAL_CONFIG_REG),
- 	regmap_reg_range(LTC2983_MULT_CHANNEL_START_REG,
- 			 LTC2983_MULT_CHANNEL_END_REG),
-+	regmap_reg_range(LTC2986_EEPROM_STATUS_REG, LTC2986_EEPROM_STATUS_REG),
- 	regmap_reg_range(LTC2983_MUX_CONFIG_REG, LTC2983_MUX_CONFIG_REG),
- 	regmap_reg_range(LTC2983_CHAN_ASSIGN_START_REG,
- 			 LTC2983_CHAN_ASSIGN_END_REG),
-@@ -1489,6 +1621,12 @@ static int ltc2983_probe(struct spi_device *spi)
- 
- 	st = iio_priv(indio_dev);
- 
-+	st->info = device_get_match_data(&spi->dev);
-+	if (!st->info)
-+		st->info = (void *)spi_get_device_id(spi)->driver_data;
-+	if (!st->info)
-+		return -ENODEV;
-+
- 	st->regmap = devm_regmap_init_spi(spi, &ltc2983_regmap_config);
- 	if (IS_ERR(st->regmap)) {
- 		dev_err(&spi->dev, "Failed to initialize regmap\n");
-@@ -1498,6 +1636,7 @@ static int ltc2983_probe(struct spi_device *spi)
- 	mutex_init(&st->lock);
- 	init_completion(&st->completion);
- 	st->spi = spi;
-+	st->eeprom_key = cpu_to_be32(LTC2983_EEPROM_KEY);
- 	spi_set_drvdata(spi, st);
- 
- 	ret = ltc2983_parse_dt(st);
-@@ -1525,6 +1664,15 @@ static int ltc2983_probe(struct spi_device *spi)
- 		return ret;
- 	}
- 
-+	if (st->info->has_eeprom) {
-+		ret = ltc2983_eeprom_cmd(st, LTC2983_EEPROM_WRITE_CMD,
-+					 LTC2983_EEPROM_WRITE_TIME_MS,
-+					 LTC2986_EEPROM_STATUS_REG,
-+					 LTC2983_EEPROM_STATUS_FAILURE_MASK);
-+		if (ret)
-+			return ret;
-+	}
-+
- 	indio_dev->name = name;
- 	indio_dev->num_channels = st->iio_channels;
- 	indio_dev->channels = st->iio_chan;
-@@ -1555,14 +1703,35 @@ static int ltc2983_suspend(struct device *dev)
- static DEFINE_SIMPLE_DEV_PM_OPS(ltc2983_pm_ops, ltc2983_suspend,
- 				ltc2983_resume);
- 
-+static const struct ltc2983_chip_info ltc2983_chip_info_data = {
-+	.max_channels_nr = 20,
-+};
-+
-+static const struct ltc2983_chip_info ltc2984_chip_info_data = {
-+	.max_channels_nr = 20,
-+	.has_eeprom = true,
-+};
-+
-+static const struct ltc2983_chip_info ltc2986_chip_info_data = {
-+	.max_channels_nr = 10,
-+	.has_temp = true,
-+	.has_eeprom = true,
-+};
-+
- static const struct spi_device_id ltc2983_id_table[] = {
--	{ "ltc2983" },
-+	{ "ltc2983", (kernel_ulong_t)&ltc2983_chip_info_data },
-+	{ "ltc2984", (kernel_ulong_t)&ltc2984_chip_info_data },
-+	{ "ltc2986", (kernel_ulong_t)&ltc2986_chip_info_data },
-+	{ "ltm2985", (kernel_ulong_t)&ltc2986_chip_info_data },
- 	{},
- };
- MODULE_DEVICE_TABLE(spi, ltc2983_id_table);
- 
- static const struct of_device_id ltc2983_of_match[] = {
--	{ .compatible = "adi,ltc2983" },
-+	{ .compatible = "adi,ltc2983", .data = &ltc2983_chip_info_data },
-+	{ .compatible = "adi,ltc2984", .data = &ltc2984_chip_info_data },
-+	{ .compatible = "adi,ltc2986", .data = &ltc2986_chip_info_data },
-+	{ .compatible = "adi,ltm2985", .data = &ltc2986_chip_info_data },
- 	{},
- };
- MODULE_DEVICE_TABLE(of, ltc2983_of_match);
+>> +        if (len != 0u) {
+>> +            stats->rx_dropped++;
+>> +            netdev_warn(dev, "RX: CAN Id 0x%08x: RTR with len != 0\n",
+>> +                    can_id);
+>
+> This is not the right handling.
+>
+> Classical CAN frames with RTR bit set can have a DLC value from 0 .. F 
+> which is represented in
+>
+> can_frame.len (for values 0 .. 8)
+> can_frame.len8_dlc (values 9 .. F; len must be 8)
+>
+> With the RTR bit set, the CAN controller does not send CAN data, but 
+> the DLC value is set from 0 .. F.
+
+RTR frames! DLC values <> 0 but then no payload. This needed to be 
+reworked and fixed.
+
+> When you silently sanitize the length value here, you should do the 
+> same with the can_id checks above and simply do a masking like
+>
+> can_id &= CAN_SFF_MASK or can_id &= CAN_EFF_MASK
+>
+Did so. Too much netdev_warn() in the code, really. Too much is too much.
+>> +    (void)netif_receive_skb(skb);
+>
+> Why this "(void)" here and at other places in the patch? Please remove.
+> Is there no error handling needed when netif_receive_skb() fails? Or 
+> ar least some statistics rollback?
+Old MISRA habit to silence the warning when no error is expected to be 
+possible to occur. This has no place here and was replaced by some 
+better error handling evaluating the returned error not updating the 
+statistics as proposed. For the (void) below just omitted the (void), I 
+see no possible good error handling there and we're not going to run the 
+driver through the MISRA checker.
+>> +
+>> +putback:
+>> +    /* Put processed RX buffer back into avail queue */
+>> +    (void)virtio_can_add_inbuf(vq, can_rx, sizeof(struct 
+>> virtio_can_rx));
+>> +
+>> +    return 1; /* Queue was not emtpy so there may be more data */
+>> +}
+>
+> Best regards,
+> Oliver
+>
+Regards
+Harald
+
+(First answering all those review E-Mails, then will have to fight with 
+sending the changed code).
+
 -- 
-2.38.1
+Dipl.-Ing. Harald Mommer
+Senior Software Engineer
+
+OpenSynergy GmbH
+Rotherstr. 20, 10245 Berlin
+
+Phone:  +49 (30) 60 98 540-0 <== Zentrale
+Fax:    +49 (30) 60 98 540-99
+E-Mail: harald.mommer@opensynergy.com
+
+www.opensynergy.com
+
+Handelsregister: Amtsgericht Charlottenburg, HRB 108616B
+Geschäftsführer/Managing Director: Regis Adjamah
 
