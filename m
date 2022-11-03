@@ -2,143 +2,233 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0BC5D617F95
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:31:11 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B3FD2617F9F
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:31:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230410AbiKCObI (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 10:31:08 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52552 "EHLO
+        id S229742AbiKCObh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 10:31:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53082 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229935AbiKCObE (ORCPT
+        with ESMTP id S229935AbiKCObb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 10:31:04 -0400
-Received: from mail-oi1-x22c.google.com (mail-oi1-x22c.google.com [IPv6:2607:f8b0:4864:20::22c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EB6EFF5D;
-        Thu,  3 Nov 2022 07:31:03 -0700 (PDT)
-Received: by mail-oi1-x22c.google.com with SMTP id p127so2101156oih.9;
-        Thu, 03 Nov 2022 07:31:03 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=wTr6gc/qL3/cvufhP664wBsVqSVnACz7cyfjWA6pJ/A=;
-        b=inEVvhjX66DeMO1AjWgK9izci/93Si0haRH+O02Xndneum6cFm49kmaOrUGUUxKJqO
-         lGq+ITuxZHEN8pV5mQBAofz07U0AStDDR0AztGlLRFALigFRhIhtGWKlbjyefVCZpPU0
-         MlFVxEnlgqY8A2SoyoGcz1ToGr1SysyXMgHvr7f1quTkQokhds1LRRNaLZh2X3wofiPQ
-         HRPDK+iHw8/H/037UV2x+YJ6ijcgTQgrzxA0NHL22dOnnj9MkI3lVOZ/FV3wPX1teER3
-         mPtZNuEQzmGuhXoOeXzYARJFxID/jfhanw9oWrzFCJk9AjtxhFoIKisjmGZG7w5cP/mX
-         8Q4Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:sender:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wTr6gc/qL3/cvufhP664wBsVqSVnACz7cyfjWA6pJ/A=;
-        b=lDmg2AZDrq0CxtRaogRpl1EonEoOBz5h+auusZTydGklAJCUMXjyRwX2uMOfZmk/tH
-         bZ+2nTR18bLcg2NxH+bdOV30wPiBwKcT/Yxaab+bYcX2DlvOouwVuk3EAFEbRb9cFkmR
-         mtMN6VFGCC/HAcf3XR59xzYpWmcUoK6IcyxPeDkvvCz54EBSh96tGwBYxHbLmFX2RPi0
-         /gmw/CQYuRWt6qqG/dzDyHF3f4KxIauLPbrQKBSynfCNPSPlVRFG78cIjNRshffn+2zM
-         4o3rO3M5FSk6nskUBpcZP4kQx2SjWE0a1M8jNoWO0uGEu19KZk2IuMyvrL9NV5wCTbp8
-         VpUA==
-X-Gm-Message-State: ACrzQf1uhBvIP50GVbrIob1reG2r0s8xYqSGSuXup51qYczXFSa86rya
-        H/P7ZsoLGfAXGbe0mDOrZhw=
-X-Google-Smtp-Source: AMsMyM6kiE1p+72Nbb5v+BVoVNZhakWQwxVmLMnU2jpvd+wAruwzA58msN/e0z+ahu5+6GQaCdfr+A==
-X-Received: by 2002:a05:6808:19a6:b0:355:3ac8:8386 with SMTP id bj38-20020a05680819a600b003553ac88386mr23002209oib.229.1667485863264;
-        Thu, 03 Nov 2022 07:31:03 -0700 (PDT)
-Received: from server.roeck-us.net ([2600:1700:e321:62f0:329c:23ff:fee3:9d7c])
-        by smtp.gmail.com with ESMTPSA id w9-20020a9d6749000000b00660e833baddsm387598otm.29.2022.11.03.07.31.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 07:31:01 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Date:   Thu, 3 Nov 2022 07:30:59 -0700
-From:   Guenter Roeck <linux@roeck-us.net>
-To:     Billy Tsai <billy_tsai@aspeedtech.com>
-Cc:     "jdelvare@suse.com" <jdelvare@suse.com>,
-        "robh+dt@kernel.org" <robh+dt@kernel.org>,
-        "joel@jms.id.au" <joel@jms.id.au>,
-        "andrew@aj.id.au" <andrew@aj.id.au>,
-        "lee.jones@linaro.org" <lee.jones@linaro.org>,
-        "thierry.reding@gmail.com" <thierry.reding@gmail.com>,
-        "u.kleine-koenig@pengutronix.de" <u.kleine-koenig@pengutronix.de>,
-        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
-        "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
-        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-        "linux-arm-kernel@lists.infradead.org" 
-        <linux-arm-kernel@lists.infradead.org>,
-        "linux-aspeed@lists.ozlabs.org" <linux-aspeed@lists.ozlabs.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "linux-pwm@vger.kernel.org" <linux-pwm@vger.kernel.org>,
-        BMC-SW <BMC-SW@aspeedtech.com>,
-        "garnermic@meta.com" <garnermic@meta.com>
-Subject: Re: [v2 3/3] hwmon: Add Aspeed ast2600 TACH support
-Message-ID: <20221103143059.GB145042@roeck-us.net>
-References: <20221101095156.30591-1-billy_tsai@aspeedtech.com>
- <20221101095156.30591-4-billy_tsai@aspeedtech.com>
- <20221101131456.GA1310110@roeck-us.net>
- <271C521D-8F20-4C86-B3DA-9C0AD74242D4@aspeedtech.com>
- <20221102170138.GA2913353@roeck-us.net>
- <F1166366-99CC-4A36-A0A2-4965C787E60B@aspeedtech.com>
- <20221103043034.GA2113834@roeck-us.net>
- <E9E92BC7-CB1A-487F-9E5D-2A403A01CB17@aspeedtech.com>
+        Thu, 3 Nov 2022 10:31:31 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 3815A13D0D;
+        Thu,  3 Nov 2022 07:31:30 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id BA0C5B8286C;
+        Thu,  3 Nov 2022 14:31:28 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5D4E3C433C1;
+        Thu,  3 Nov 2022 14:31:27 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667485887;
+        bh=cV+KPyo1HQl6I0TSS6Fbc5Uo/+IhyGzcIW29pZoKBcc=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=Jr41Zc8YDx1Cj+LFsLPTp5IYwG1Re1+DvzBrPQIqRN/U5oYmxSA4oNrK/LInnYf4V
+         cWgQf22o/uwDyprHyHFmOMhQtrq9e9+uMbkM5Yx+2nPksMAOt0lEo7QAPy744im/w+
+         9tWXvBnG/B8z+cxERP3UVhPJEk0+srFYUchnOso65PmvBzc31ddrTosVdL8Q/RxZa7
+         y5zFATXwrkf6uH8aISo0wX2mq60fDuGUtjv4wEKg3Yr8E4fPhrUdl5UM37hIU+jFqE
+         T0Jen93iuCtldUiL7fX3rhMPnU0XBKrACdRA66C2EhAzViKJVVYUyav3M19ElRd0iu
+         ehYxWu1msl3Cg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oqbFN-0002UL-9F; Thu, 03 Nov 2022 15:31:10 +0100
+Date:   Thu, 3 Nov 2022 15:31:09 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Stephen Boyd <swboyd@chromium.org>
+Cc:     Michael Turquette <mturquette@baylibre.com>,
+        Stephen Boyd <sboyd@kernel.org>, linux-kernel@vger.kernel.org,
+        linux-clk@vger.kernel.org, patches@lists.linux.dev,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        linux-arm-msm@vger.kernel.org,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Ulf Hansson <ulf.hansson@linaro.org>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Satya Priya <quic_c_skakit@quicinc.com>,
+        Douglas Anderson <dianders@chromium.org>,
+        Matthias Kaehlcke <mka@chromium.org>
+Subject: Re: [PATCH v2] clk: qcom: gdsc: Remove direct runtime PM calls
+Message-ID: <Y2PQrRkGTEE40m4Q@hovoldconsulting.com>
+References: <20221102170717.1262547-1-swboyd@chromium.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <E9E92BC7-CB1A-487F-9E5D-2A403A01CB17@aspeedtech.com>
-X-Spam-Status: No, score=-1.5 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221102170717.1262547-1-swboyd@chromium.org>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 05:40:44AM +0000, Billy Tsai wrote:
-> On 2022/11/3, 12:30 PM, "Guenter Roeck" <groeck7@gmail.com on behalf of linux@roeck-us.net> wrote:
+On Wed, Nov 02, 2022 at 10:07:17AM -0700, Stephen Boyd wrote:
+> We shouldn't be calling runtime PM APIs from within the genpd
+> enable/disable path for a couple reasons.
 > 
->     On Thu, Nov 03, 2022 at 03:52:59AM +0000, Billy Tsai wrote:
->     > > 
->     > > Can't I use a min/max RPM to let the driver know a reasonable timeout/polling period when
->     > > the driver is trying to get RPM?
->     > > Beacause that our tach controller have the falg to indicates the hardware detected the change
->     > > in the input signal. I need the proper timout to rule out slow RPMs.
+> First, this causes an AA lockdep splat because genpd can call into genpd
+> code again while holding the genpd lock.
 > 
->     > If the chip measures the fan speed continuously, why would that ever be a
->     > problem, and why wait in the first place instead of just taking the most
->     > recent result ?
-> 
->     > Pretty much every other driver is doing that, so I really don't understand
->     > why that would not work here.
-> 
-> When the fan speed drop from a very fast RPM to a very slow RPM. Especially when it is close to stopping.
-> The most recent result will be no meaningful value. The slower RPM needs more time to sample it. E.g., If
-> we want to measure the fan with 600 RPM, the controller needs at least 100ms. During this time period, we
-> will always get the wrong value. So, our tach controller have the flag to avoid this problem:
-> TACH_ASPEED_VALUE_UPDATE: tach value updated since last read
-> This flag will be set when the controller detected the change of the signal and clear by read it.
-> In order to use this flag, the controller needs the proper timeout based on minimum RPM to avoid waiting forever.
-> 
+> WARNING: possible recursive locking detected
 
-I am not going to accept this patch as-is. If userspace wants to have
-values accurate down to ms, this kind of approach is just wrong. Users
-will have to live with the fact that measurements may be a bit (in the 
-< 1 second range) out of date. Many older drivers even implement code
-which avoids reading registers again for a second or longer. Older
-temperature sensors may take several seconds to provide new readings.
-That is not a reason to block userspace until a new value is available.
-I do not see that as a problem. In my opinion it is much more of a
-problem if the driver returns a completely bad value such as 0 or even
-an error code because its software parameters did not match reality and
-the driver didn't wait long enough for a new value. That would be _much_
-worse than providing a value which is a few 100 ms out of date, and your
-code is vulnerable to that problem.
+> Second, this confuses runtime PM on CoachZ for the camera devices by
+> causing the camera clock controller's runtime PM usage_count to go
+> negative after resuming from suspend. This is because runtime PM is
+> being used on the clock controller while runtime PM is disabled for the
+> device.
+> 
+> The reason for the negative count is because a GDSC is represented as a
+> genpd and each genpd that is attached to a device is resumed during the
+> noirq phase of system wide suspend/resume (see the noirq suspend ops
+> assignment in pm_genpd_init() for more details). The camera GDSCs are
+> attached to camera devices with the 'power-domains' property in DT.
+> Every device has runtime PM disabled in the late system suspend phase
+> via __device_suspend_late(). Runtime PM is not usable until runtime PM
+> is enabled in device_resume_early(). The noirq phases run after the
+> 'late' and before the 'early' phase of suspend/resume. When the genpds
+> are resumed in genpd_resume_noirq(), we call down into gdsc_enable()
+> that calls pm_runtime_resume_and_get() and that returns -EACCES to
+> indicate failure to resume because runtime PM is disabled for all
+> devices.
 
-Besides, for a fan to reduce its speed that quickly, it has to be manually
-stopped. Normally fans take several seconds to stop if power is taken away
-completely. Your code is adding a lot of complexity (and unnecessary
-attributes) for no good reason.
+Probably worth mentioning the fact that those runtime PM calls
+unconditionally failing during resume means that the GDSCs are never
+even enabled.
 
-Guenter
+Seems like the PM runtime usage counters would still be balanced after
+this though as they are decremented also on failure during suspend (i.e.
+domain remains off and no usage counter is incremented during resume).
+
+But this is clearly just very broken.
+
+> Upon closer inspection, calling runtime PM APIs like this in the GDSC
+> driver doesn't make sense. It was intended to make sure the GDSC for the
+> clock controller providing other GDSCs was enabled, specifically the
+> MMCX GDSC for the display clk controller on SM8250 (sm8250-dispcc), so
+> that GDSC register accesses succeeded. That will already happen because
+> we make the 'dev->pm_domain' a parent domain of each GDSC we register in
+> gdsc_register() via pm_genpd_add_subdomain(). When any of these GDSCs
+> are accessed, we'll enable the parent domain (in this specific case
+> MMCX).
+> 
+> We also remove any getting of runtime PM during registration, because
+> when a genpd is registered it increments the count on the parent if the
+> genpd itself is already enabled. And finally, the runtime PM state of
+> the clk controller registering the GDSC shouldn't matter to the
+> subdomain setup. Therefore we always assign 'dev' unconditionally so
+> when GDSCs are removed we properly unlink the GDSC from the clk
+> controller's pm_domain.
+
+This last bit makes no sense as 'dev' was only used for the runtime PM
+management and should be removed by this patch.
+
+> Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Cc: Johan Hovold <johan+linaro@kernel.org>
+> Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> Cc: Taniya Das <quic_tdas@quicinc.com>
+> Cc: Satya Priya <quic_c_skakit@quicinc.com>
+> Cc: Douglas Anderson <dianders@chromium.org>
+> Cc: Matthias Kaehlcke <mka@chromium.org>
+> Reported-by: Stephen Boyd <swboyd@chromium.org>
+> Fixes: 1b771839de05 ("clk: qcom: gdsc: enable optional power domain support")
+> Signed-off-by: Stephen Boyd <swboyd@chromium.org>
+> ---
+> 
+> Changes from v1 (https://lore.kernel.org/r/20221101233421.997149-1-swboyd@chromium.org):
+>  * Fix ret thinko
+>  * Update kerneldoc on 'dev' member
+
+No credit to reviewers (e.g. names in parentheses)?
+
+>  drivers/clk/qcom/gdsc.c | 62 +++++------------------------------------
+>  drivers/clk/qcom/gdsc.h |  2 +-
+>  2 files changed, 8 insertions(+), 56 deletions(-)
+> 
+> diff --git a/drivers/clk/qcom/gdsc.c b/drivers/clk/qcom/gdsc.c
+> index 7cf5e130e92f..36d44eec03b6 100644
+> --- a/drivers/clk/qcom/gdsc.c
+> +++ b/drivers/clk/qcom/gdsc.c
+
+> @@ -56,22 +55,6 @@ enum gdsc_status {
+>  	GDSC_ON
+>  };
+>  
+> -static int gdsc_pm_runtime_get(struct gdsc *sc)
+> -{
+> -	if (!sc->dev)
+> -		return 0;
+> -
+> -	return pm_runtime_resume_and_get(sc->dev);
+> -}
+> -
+> -static int gdsc_pm_runtime_put(struct gdsc *sc)
+> -{
+> -	if (!sc->dev)
+> -		return 0;
+> -
+> -	return pm_runtime_put_sync(sc->dev);
+> -}
+> -
+ 
+> -static int gdsc_enable(struct generic_pm_domain *domain)
+> +static int gdsc_disable(struct generic_pm_domain *domain)
+>  {
+>  	struct gdsc *sc = domain_to_gdsc(domain);
+>  	int ret;
+>  
+> -	ret = gdsc_pm_runtime_get(sc);
+> -	if (ret)
+> -		return ret;
+> -
+> -	return _gdsc_enable(sc);
+> -}
+ 
+> -static int gdsc_disable(struct generic_pm_domain *domain)
+> -{
+> -	struct gdsc *sc = domain_to_gdsc(domain);
+> -	int ret;
+> -
+> -	ret = _gdsc_disable(sc);
+> -
+> -	gdsc_pm_runtime_put(sc);
+> -
+> -	return ret;
+> -}
+
+> @@ -541,8 +494,7 @@ int gdsc_register(struct gdsc_desc *desc,
+>  	for (i = 0; i < num; i++) {
+>  		if (!scs[i])
+>  			continue;
+> -		if (pm_runtime_enabled(dev))
+> -			scs[i]->dev = dev;
+> +		scs[i]->dev = dev;
+
+As mentioned above, the gdsc dev pointer is now unused and should be
+removed.
+
+>  		scs[i]->regmap = regmap;
+>  		scs[i]->rcdev = rcdev;
+>  		ret = gdsc_init(scs[i]);
+> diff --git a/drivers/clk/qcom/gdsc.h b/drivers/clk/qcom/gdsc.h
+> index 981a12c8502d..47de72834a85 100644
+> --- a/drivers/clk/qcom/gdsc.h
+> +++ b/drivers/clk/qcom/gdsc.h
+> @@ -30,7 +30,7 @@ struct reset_controller_dev;
+>   * @resets: ids of resets associated with this gdsc
+>   * @reset_count: number of @resets
+>   * @rcdev: reset controller
+> - * @dev: the device holding the GDSC, used for pm_runtime calls
+> + * @dev: the device providing the GDSC
+>   */
+>  struct gdsc {
+>  	struct generic_pm_domain	pd;
+> 
+> base-commit: 9abf2313adc1ca1b6180c508c25f22f9395cc780
+
+Johan
