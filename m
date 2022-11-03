@@ -2,124 +2,354 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 68364617758
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 08:12:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 1307A617762
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 08:12:49 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231307AbiKCHMK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 03:12:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45810 "EHLO
+        id S231395AbiKCHMq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 03:12:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45230 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230389AbiKCHLu (ORCPT
+        with ESMTP id S230308AbiKCHMY (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 03:11:50 -0400
-Received: from mail-wm1-x334.google.com (mail-wm1-x334.google.com [IPv6:2a00:1450:4864:20::334])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 30DD62A2
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 00:11:03 -0700 (PDT)
-Received: by mail-wm1-x334.google.com with SMTP id fn7-20020a05600c688700b003b4fb113b86so557245wmb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 00:11:03 -0700 (PDT)
+        Thu, 3 Nov 2022 03:12:24 -0400
+Received: from mail-lj1-x230.google.com (mail-lj1-x230.google.com [IPv6:2a00:1450:4864:20::230])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D33B81583F
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 00:11:21 -0700 (PDT)
+Received: by mail-lj1-x230.google.com with SMTP id d20so1097559ljc.12
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 00:11:21 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=CvhsZshQWEcVMeUTUtOp+ihfqDRpu56SkXuVG8Len34=;
-        b=kHZDPyIo8df19dqlQHWniGoyDch8A+hISU8X6gd7fp1VbScHETGhbytjJYmkhLQHKf
-         fwi1nthEtQPwse9uctHll81mNdW31rmNNRadEcJOVs4CiYzIp2cFwfJ+eDzavRkFrV7o
-         df5jmaTAaQvLc9v1sSmbABx4C5Rzw1nTgw7iXi1sO9xpDPFNsNp3LKzpz90wTIQNwZ1t
-         Ho+YhWAPx1xMmOMWNMoEs/sIV1YU/vXuH0Fvy5rAwr8dsko79NvLMAybJkyUdKsceRMO
-         iXCBxeebKyqxkZinLCfgL7TweGZd1asuEGHKg2vBla0voczqpexKdljfuec7O93BtHaM
-         wjHw==
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rbwe7mRmEc0IICjEtCiWf5KXhVSnPQbj9lS4IvvBTuw=;
+        b=JFFZgnhjHouLTyfuza5wfxzwGlfCYEVN7rjNOd6ZoFTjiRp/FgJZBa4AbBKWQms1de
+         Uy79qciVd2BhrAD3o/fbOgA4iGAcgdY+zXejuoAca01/TRJN8pk3tEfChiaqA7NuDj0j
+         b6l6o70A2JYL6D7GSSzeDMgSCJnigCEkza8uhHDshrPQK3EXo1t1ccCI/Y510aAZVspH
+         1HYkaejIC/v42RcLSi+DWT60bSsZ3TExVYLP8DWb+hzIRgwMoAaxVdzH3y9R2Np39cKq
+         ElyMfxpwUe25RHs3mI26SYh76bwuUn2qO71iR/ROSjYFVj4TKlo2X9itroQ8eQXshHB3
+         4B+Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=CvhsZshQWEcVMeUTUtOp+ihfqDRpu56SkXuVG8Len34=;
-        b=4DAgU+9iqCUnZVgrxahheGARaQpp8/OpzQ25jDMX6ZmlWXCDmywRFL5Omind5enLya
-         Xzq/GxllvRKpaYKsTmXWSKzSDndYih1CvGJj1XV6PMMsVz7gWJxRm6jDXHNEQLL2p4fV
-         M2RKVa9xyBqe4qko/qbeTFuUxb4W5zOElaJwIaT8Xs608ah0PoQDWSUbtARJYcTlqbsm
-         gzqsDQIC1anjVjD3DUfT7KjFV+lwhqoVaQFxkBYBt3jfxycU+9dNXxsmy1689ByRVdBA
-         IyZ57iMHizdJZSMNNIbufZtjx6o/3zurLNL0Bo4wnesAeUxGu7zSCzfR7Oirl9qjwvmr
-         bQ3w==
-X-Gm-Message-State: ACrzQf0LgktYAEuUqEhoIhiqhri53D6XK9oBsRmsKsGHqXC39yNjCKn2
-        CB9sCgjIdomgatTQ71nPrf93cw==
-X-Google-Smtp-Source: AMsMyM6OzoP+QUJ8ptlTPBD8IHWudpkYNFjUBgo6cbOLfKoB/+Q6j9ksVTjQt2XeCIsVj6BjOQ3zrw==
-X-Received: by 2002:a05:600c:1:b0:3c6:c456:f07a with SMTP id g1-20020a05600c000100b003c6c456f07amr18797697wmc.158.1667459461681;
-        Thu, 03 Nov 2022 00:11:01 -0700 (PDT)
-Received: from [192.168.11.175] (216.red-88-29-181.dynamicip.rima-tde.net. [88.29.181.216])
-        by smtp.gmail.com with ESMTPSA id y16-20020adff6d0000000b0023647841c5bsm17017wrp.60.2022.11.03.00.10.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 00:11:01 -0700 (PDT)
-Message-ID: <e844905b-3775-b89d-8b19-0a1c2e916432@linaro.org>
-Date:   Thu, 3 Nov 2022 08:10:57 +0100
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rbwe7mRmEc0IICjEtCiWf5KXhVSnPQbj9lS4IvvBTuw=;
+        b=JhQwk92KDoMC0brXak3uDvnRp+xlo1NAvFvxMxjOnNRWjA/prEfDE2sOxI4mG8Zk8V
+         wMnUpqUsVAV0azBv+sdzV5lVLAxESH0yjLvEHzwQObTgXV5o8+arTF4BenMSgvaTVkTl
+         G2DwjvE6ke4d70mvMhDJp77kMInj7hYNWrputIhdjYvJJE1aCoJPPyBHJeEXxd5Ae7sh
+         5p8uQzHa/E9u26kJ+aFq/GbNuajDPAE13SgVuC//1WHxOy21sUd11WHBPr7wCfC5q+zJ
+         ziKHTLJqP3zkQ1ljIFMcm/VTlZmA5nlx2rxbghR99BLNmyCZY7148UztfA+RMy8ttdnL
+         h4fg==
+X-Gm-Message-State: ACrzQf2fNmmMdd+gTs2WMemDJzAEuTS8qF99bvIjd8E0xdje8/wAL3hR
+        8nB7utdfe9MB9wjrRqm+CsG4VJTQ6iixoHc0P5hTEhvHaRg=
+X-Google-Smtp-Source: AMsMyM4xn2uAofS0THbsX48hOPVp3zqwlN7+OaswZbmWZj4O2NaZoftQ4Tb4W7KC3f5FOw+hPaYYR3HrpmK6qrV1nXk=
+X-Received: by 2002:a05:651c:54b:b0:277:2f02:8da8 with SMTP id
+ q11-20020a05651c054b00b002772f028da8mr11437603ljp.73.1667459479937; Thu, 03
+ Nov 2022 00:11:19 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH 20/44] KVM: MIPS: Setup VZ emulation? directly from
- kvm_mips_init()
-Content-Language: en-US
-To:     Sean Christopherson <seanjc@google.com>,
-        Paolo Bonzini <pbonzini@redhat.com>,
-        Marc Zyngier <maz@kernel.org>,
-        Huacai Chen <chenhuacai@kernel.org>,
-        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
-        Anup Patel <anup@brainfault.org>,
-        Paul Walmsley <paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou <aou@eecs.berkeley.edu>,
-        Christian Borntraeger <borntraeger@linux.ibm.com>,
-        Janosch Frank <frankja@linux.ibm.com>,
-        Claudio Imbrenda <imbrenda@linux.ibm.com>,
-        Matthew Rosato <mjrosato@linux.ibm.com>,
-        Eric Farman <farman@linux.ibm.com>,
-        Vitaly Kuznetsov <vkuznets@redhat.com>
-Cc:     James Morse <james.morse@arm.com>,
-        Alexandru Elisei <alexandru.elisei@arm.com>,
-        Suzuki K Poulose <suzuki.poulose@arm.com>,
-        Oliver Upton <oliver.upton@linux.dev>,
-        Atish Patra <atishp@atishpatra.org>,
-        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
-        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
-        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+References: <20221031223926.241641-1-j.neuschaefer@gmx.net> <CACPK8Xfa=SPaYogqfUpCG61J7U-Z8pE2Oycicd_D=4vJsZcaSw@mail.gmail.com>
+In-Reply-To: <CACPK8Xfa=SPaYogqfUpCG61J7U-Z8pE2Oycicd_D=4vJsZcaSw@mail.gmail.com>
+From:   Tomer Maimon <tmaimon77@gmail.com>
+Date:   Thu, 3 Nov 2022 09:11:08 +0200
+Message-ID: <CAP6Zq1iHOm1sQTHshmVobzy9yX_REt6OL5qyFz+R77vYw=7yBg@mail.gmail.com>
+Subject: Re: [PATCH v5 RESEND] soc: nuvoton: Add SoC info driver for WPCM450
+To:     Joel Stanley <joel@jms.id.au>
+Cc:     =?UTF-8?Q?Jonathan_Neusch=C3=A4fer?= <j.neuschaefer@gmx.net>,
+        Hitomi Hasegawa <hasegawa-hitomi@fujitsu.com>,
+        Paul Menzel <pmenzel@molgen.mpg.de>,
+        Hector Martin <marcan@marcan.st>,
+        Arnd Bergmann <arnd@arndb.de>, Sven Peter <sven@svenpeter.dev>,
+        openbmc@lists.ozlabs.org, Brian Norris <briannorris@chromium.org>,
         linux-kernel@vger.kernel.org,
-        Isaku Yamahata <isaku.yamahata@intel.com>,
-        Fabiano Rosas <farosas@linux.ibm.com>,
-        Michael Ellerman <mpe@ellerman.id.au>,
-        Chao Gao <chao.gao@intel.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Yuan Yao <yuan.yao@intel.com>
-References: <20221102231911.3107438-1-seanjc@google.com>
- <20221102231911.3107438-21-seanjc@google.com>
-From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
-In-Reply-To: <20221102231911.3107438-21-seanjc@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Nicolas Ferre <nicolas.ferre@microchip.com>,
+        Lubomir Rintel <lkundrak@v3.sk>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Robert Jarzmik <robert.jarzmik@free.fr>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
+        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 3/11/22 00:18, Sean Christopherson wrote:
-> Invoke kvm_mips_emulation_init() directly from kvm_mips_init() instead
-> of bouncing through kvm_init()=>kvm_arch_init().  Functionally, this is
-> a glorified nop as invoking kvm_arch_init() is the very first action
-> performed by kvm_init().
-> 
-> Emptying kvm_arch_init() will allow dropping the hook entirely once all
-> architecture implementations are nops.
-> 
-> No functional change intended.
-> 
-> Signed-off-by: Sean Christopherson <seanjc@google.com>
-> ---
->   arch/mips/kvm/mips.c | 6 +++++-
->   1 file changed, 5 insertions(+), 1 deletion(-)
+Hi Jonathan,
 
-Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
+Thanks for your patch.
 
+On Thu, 3 Nov 2022 at 01:09, Joel Stanley <joel@jms.id.au> wrote:
+>
+> On Mon, 31 Oct 2022 at 22:40, Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx=
+.net> wrote:
+> >
+> > Add a SoC information driver for Nuvoton WPCM450 SoCs. It provides
+> > information such as the SoC revision.
+> >
+> > Usage example:
+> >
+> >   # grep . /sys/devices/soc0/*
+> >   /sys/devices/soc0/family:Nuvoton NPCM
+> >   /sys/devices/soc0/revision:A3
+> >   /sys/devices/soc0/soc_id:WPCM450
+> >
+> > Signed-off-by: Jonathan Neusch=C3=A4fer <j.neuschaefer@gmx.net>
+> > Reviewed-by: Joel Stanley <joel@jms.id.au>
+> > Reviewed-by: Paul Menzel <pmenzel@molgen.mpg.de>
+> > ---
+> > v5:
+> > - Change Kconfig option from bool to tristate
+> >
+> > v4:
+> > - rebase on 5.19-rc1
+> >
+> > v3:
+> > - Declare revisions array as static
+> > - Change get_revision parameter to `unsigned int`
+> > - Add Paul's R-b tag
+> > - Add usage example
+> > - Sort includes
+> >
+> > v2:
+> > - https://lore.kernel.org/lkml/20220409173319.2491196-1-j.neuschaefer@g=
+mx.net/
+> > - Add R-b tag
+> > - rebase on 5.18-rc1
+> >
+> > v1:
+> > - https://lore.kernel.org/lkml/20220129143316.2321460-1-j.neuschaefer@g=
+mx.net/
+> > ---
+> >  drivers/soc/Kconfig               |   1 +
+> >  drivers/soc/Makefile              |   1 +
+> >  drivers/soc/nuvoton/Kconfig       |  11 +++
+> >  drivers/soc/nuvoton/Makefile      |   2 +
+> >  drivers/soc/nuvoton/wpcm450-soc.c | 109 ++++++++++++++++++++++++++++++
+> >  5 files changed, 124 insertions(+)
+> >  create mode 100644 drivers/soc/nuvoton/Kconfig
+> >  create mode 100644 drivers/soc/nuvoton/Makefile
+> >  create mode 100644 drivers/soc/nuvoton/wpcm450-soc.c
+> >
+> > diff --git a/drivers/soc/Kconfig b/drivers/soc/Kconfig
+> > index 86ccf5970bc1b..cca3dfa5c6aea 100644
+> > --- a/drivers/soc/Kconfig
+> > +++ b/drivers/soc/Kconfig
+> > @@ -14,6 +14,7 @@ source "drivers/soc/ixp4xx/Kconfig"
+> >  source "drivers/soc/litex/Kconfig"
+> >  source "drivers/soc/mediatek/Kconfig"
+> >  source "drivers/soc/microchip/Kconfig"
+> > +source "drivers/soc/nuvoton/Kconfig"
+> >  source "drivers/soc/pxa/Kconfig"
+> >  source "drivers/soc/qcom/Kconfig"
+> >  source "drivers/soc/renesas/Kconfig"
+> > diff --git a/drivers/soc/Makefile b/drivers/soc/Makefile
+> > index 919716e0e7001..b9eb3c75e551a 100644
+> > --- a/drivers/soc/Makefile
+> > +++ b/drivers/soc/Makefile
+> > @@ -19,6 +19,7 @@ obj-$(CONFIG_SOC_XWAY)                +=3D lantiq/
+> >  obj-$(CONFIG_LITEX_SOC_CONTROLLER) +=3D litex/
+> >  obj-y                          +=3D mediatek/
+> >  obj-y                          +=3D microchip/
+> > +obj-y                          +=3D nuvoton/
+> >  obj-y                          +=3D pxa/
+> >  obj-y                          +=3D amlogic/
+> >  obj-y                          +=3D qcom/
+> > diff --git a/drivers/soc/nuvoton/Kconfig b/drivers/soc/nuvoton/Kconfig
+> > new file mode 100644
+> > index 0000000000000..df46182088ec2
+> > --- /dev/null
+> > +++ b/drivers/soc/nuvoton/Kconfig
+> > @@ -0,0 +1,11 @@
+> > +# SPDX-License-Identifier: GPL-2.0
+> > +menuconfig WPCM450_SOC
+> > +       tristate "Nuvoton WPCM450 SoC driver"
+> > +       default y if ARCH_WPCM450
+> > +       select SOC_BUS
+>
+> Sorry for not noticing this earlier. This is a bit confusing. If we
+> have a menu option, the soc driver should appear under it. Or we could
+> do without the menu all together, as there's only one driver so far.
+>
+> We also should select REGMAP, as you're using it, and hide the option
+> behind ARCH_WPCM450 || COMPILE_TEST.
+>
+> How about this:
+>
+> if ARCH_WPCM450 || COMPILE_TEST
+These days we working on LPC BPC driver for NPCM7xx and NPCM8xx that
+will be placed in nuvoton soc folder.
+we will use:
+
+if ARCH_NPCM || COMPILE_TEST
+
+menu "NPCM SoC drivers"
+
+Maybe you should remove
+if ARCH_WPCM450 || COMPILE_TEST
+
+and add ARCH_WPCM450 dependency in the WPCM450_SOCINFO driver configuration=
+.
+
+>
+> config WPCM450_SOCINFO
+>         tristate "Nuvoton WPCM450 SoC driver"
+>         default y if ARCH_WPCM450
+>         select SOC_BUS
+>         select REGMAP
+>         help
+>           Say Y here to compile the SoC information driver for Nuvoton
+>           WPCM450 SoCs.
+>
+>           This driver provides information such as the SoC model and
+>           revision.
+>
+> endif
+>
+>
+>
+>
+> > +       help
+> > +         Say Y here to compile the SoC information driver for Nuvoton
+> > +         WPCM450 SoCs.
+> > +
+> > +         This driver provides information such as the SoC model and
+> > +         revision.
+> > diff --git a/drivers/soc/nuvoton/Makefile b/drivers/soc/nuvoton/Makefil=
+e
+> > new file mode 100644
+> > index 0000000000000..e30317b4e8290
+> > --- /dev/null
+> > +++ b/drivers/soc/nuvoton/Makefile
+> > @@ -0,0 +1,2 @@
+> > +# SPDX-License-Identifier: GPL-2.0-only
+> > +obj-$(CONFIG_WPCM450_SOC)      +=3D wpcm450-soc.o
+> > diff --git a/drivers/soc/nuvoton/wpcm450-soc.c b/drivers/soc/nuvoton/wp=
+cm450-soc.c
+> > new file mode 100644
+> > index 0000000000000..c5e0d11c383b1
+> > --- /dev/null
+> > +++ b/drivers/soc/nuvoton/wpcm450-soc.c
+> > @@ -0,0 +1,109 @@
+> > +// SPDX-License-Identifier: GPL-2.0
+> > +/*
+> > + * Nuvoton WPCM450 SoC Identification
+> > + *
+> > + * Copyright (C) 2022 Jonathan Neusch=C3=A4fer
+> > + */
+> > +
+> > +#include <linux/mfd/syscon.h>
+> > +#include <linux/of.h>
+> > +#include <linux/regmap.h>
+> > +#include <linux/slab.h>
+> > +#include <linux/sys_soc.h>
+> > +
+> > +#define GCR_PDID       0
+> > +#define PDID_CHIP(x)   ((x) & 0x00ffffff)
+> > +#define CHIP_WPCM450   0x926450
+> > +#define PDID_REV(x)    ((x) >> 24)
+> > +
+> > +struct revision {
+> > +       u8 number;
+> > +       const char *name;
+> > +};
+> > +
+> > +static const struct revision revisions[] __initconst =3D {
+> > +       { 0x00, "Z1" },
+> > +       { 0x03, "Z2" },
+> > +       { 0x04, "Z21" },
+> > +       { 0x08, "A1" },
+> > +       { 0x09, "A2" },
+> > +       { 0x0a, "A3" },
+> > +       {}
+> > +};
+> > +
+> > +static const char * __init get_revision(unsigned int rev)
+> > +{
+> > +       int i;
+> > +
+> > +       for (i =3D 0; revisions[i].name; i++)
+> > +               if (revisions[i].number =3D=3D rev)
+> > +                       return revisions[i].name;
+> > +       return NULL;
+> > +}
+> > +
+> > +static struct soc_device_attribute *wpcm450_attr;
+> > +static struct soc_device *wpcm450_soc;
+> > +
+> > +static int __init wpcm450_soc_init(void)
+> > +{
+> > +       struct soc_device_attribute *attr;
+> > +       struct soc_device *soc;
+> > +       const char *revision;
+> > +       struct regmap *gcr;
+> > +       u32 pdid;
+> > +       int ret;
+> > +
+> > +       if (!of_machine_is_compatible("nuvoton,wpcm450"))
+> > +               return 0;
+> > +
+> > +       gcr =3D syscon_regmap_lookup_by_compatible("nuvoton,wpcm450-gcr=
+");
+> > +       if (IS_ERR(gcr))
+> > +               return PTR_ERR(gcr);
+> > +       ret =3D regmap_read(gcr, GCR_PDID, &pdid);
+> > +       if (ret)
+> > +               return ret;
+> > +
+> > +       if (PDID_CHIP(pdid) !=3D CHIP_WPCM450) {
+> > +               pr_warn("Unknown chip ID in GCR.PDID: 0x%06x\n", PDID_C=
+HIP(pdid));
+> > +               return -ENODEV;
+> > +       }
+> > +
+> > +       revision =3D get_revision(PDID_REV(pdid));
+> > +       if (!revision) {
+> > +               pr_warn("Unknown chip revision in GCR.PDID: 0x%02x\n", =
+PDID_REV(pdid));
+> > +               return -ENODEV;
+> > +       }
+> > +
+> > +       attr =3D kzalloc(sizeof(*attr), GFP_KERNEL);
+> > +       if (!attr)
+> > +               return -ENOMEM;
+> > +
+> > +       attr->family =3D "Nuvoton NPCM";
+> > +       attr->soc_id =3D "WPCM450";
+> > +       attr->revision =3D revision;
+> > +       soc =3D soc_device_register(attr);
+> > +       if (IS_ERR(soc)) {
+> > +               kfree(attr);
+> > +               pr_warn("Could not register SoC device\n");
+> > +               return PTR_ERR(soc);
+> > +       }
+> > +
+> > +       wpcm450_soc =3D soc;
+> > +       wpcm450_attr =3D attr;
+> > +       return 0;
+> > +}
+> > +module_init(wpcm450_soc_init);
+> > +
+> > +static void __exit wpcm450_soc_exit(void)
+> > +{
+> > +       if (wpcm450_soc) {
+> > +               soc_device_unregister(wpcm450_soc);
+> > +               wpcm450_soc =3D NULL;
+> > +               kfree(wpcm450_attr);
+> > +       }
+> > +}
+> > +module_exit(wpcm450_soc_exit);
+> > +
+> > +MODULE_LICENSE("GPL");
+> > +MODULE_AUTHOR("Jonathan Neusch=C3=A4fer");
+> > +MODULE_DESCRIPTION("Nuvoton WPCM450 SoC Identification driver");
+> > --
+> > 2.35.1
+> >
+
+Thanks,
+
+Tomer
