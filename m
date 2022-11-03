@@ -2,154 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 283B2617A1F
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:41:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7A867617A14
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 10:38:42 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230150AbiKCJlY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 05:41:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53516 "EHLO
+        id S230314AbiKCJi1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 05:38:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52366 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229523AbiKCJlV (ORCPT
+        with ESMTP id S229551AbiKCJi0 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 05:41:21 -0400
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BA2B064E0;
-        Thu,  3 Nov 2022 02:41:19 -0700 (PDT)
-Received: from dggemv711-chm.china.huawei.com (unknown [172.30.72.56])
-        by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4N2zFM6dN3zpW5X;
-        Thu,  3 Nov 2022 17:37:43 +0800 (CST)
-Received: from kwepemm600003.china.huawei.com (7.193.23.202) by
- dggemv711-chm.china.huawei.com (10.1.198.66) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 17:41:12 +0800
-Received: from ubuntu1804.huawei.com (10.67.174.61) by
- kwepemm600003.china.huawei.com (7.193.23.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2375.31; Thu, 3 Nov 2022 17:41:12 +0800
-From:   Yang Jihong <yangjihong1@huawei.com>
-To:     <acme@redhat.com>, <pabeni@redhat.com>, <adrian.hunter@intel.com>,
-        <wojciech.drewek@intel.com>, <davem@davemloft.net>,
-        <gustavoars@kernel.org>, <tadeusz.struk@linaro.org>,
-        <keescook@chromium.org>, <linux-kernel@vger.kernel.org>,
-        <bpf@vger.kernel.org>
-CC:     <yangjihong1@huawei.com>
-Subject: [PATCH bpf RESEND v2] tools headers UAPI: Sync linux/stddef.h with the kernel sources
-Date:   Thu, 3 Nov 2022 17:37:57 +0800
-Message-ID: <20221103093757.252390-1-yangjihong1@huawei.com>
-X-Mailer: git-send-email 2.30.GIT
+        Thu, 3 Nov 2022 05:38:26 -0400
+Received: from mail-0301.mail-europe.com (mail-0301.mail-europe.com [188.165.51.139])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E809A2BFA
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 02:38:24 -0700 (PDT)
+Date:   Thu, 03 Nov 2022 09:38:10 +0000
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=protonmail.com;
+        s=protonmail3; t=1667468300; x=1667727500;
+        bh=he9+l/70m2lr35cIAprLwH48TPFg7J4DOfr7a4QfBkQ=;
+        h=Date:To:From:Cc:Subject:Message-ID:In-Reply-To:References:
+         Feedback-ID:From:To:Cc:Date:Subject:Reply-To:Feedback-ID:
+         Message-ID:BIMI-Selector;
+        b=Is4ZCo3AzYEW6MQ4uobjGOIb4AUmYzrEgz1vB9kRIR0yZZAHQVi4dHpZzLTgx5m+t
+         3G/xk7Oo3lqcaLlp31qo07vk7jIBVhgBrMA5kv1NP4tSZDO+vV5W4C5MaKQA2hmtPr
+         xFOceBnTxi3a8QaK+h+lauZz4VcwFVfc54o5+jja2WDfMDQgf6iu+F2I5nqNqbHi37
+         A2SliPS8nMiGcz/6SB6GIwHXyC7TPVONi/mTfab8H98LpeM94dFDi14USiLFMQtQLy
+         mUXTlQK9qaFzxq5kW44Dz6b6WvwqW/BWt9V+56EcZOqR0fAI3y+zEAiOTM5dR+gDib
+         zrTlV8Vu3Ooag==
+To:     Dennis Dai <dzy.0424thu@gmail.com>
+From:   =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>
+Cc:     Miguel Ojeda <ojeda@kernel.org>,
+        Alex Gaynor <alex.gaynor@gmail.com>,
+        Wedson Almeida Filho <wedsonaf@google.com>,
+        Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+        rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: rust nvme driver: potential sleep-in-atomic-context
+Message-ID: <nyfz0H8A-5nGCgsAynqZyYtFlEcvPHDecY6c8MC840zNNdEWz2NSPPuZgE_VS7RnrTwFhd6aCDi2TXWh6YtqfUeUEWZvFCT7HjpO-Z_UPCk=@protonmail.com>
+In-Reply-To: <CACMswuMVERF_+R3Qxb0xGHCBQUCuxtBLA+eDo__Coed3BoVC3A@mail.gmail.com>
+References: <CACMswuMVERF_+R3Qxb0xGHCBQUCuxtBLA+eDo__Coed3BoVC3A@mail.gmail.com>
+Feedback-ID: 27884398:user:proton
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7BIT
-Content-Type:   text/plain; charset=US-ASCII
-X-Originating-IP: [10.67.174.61]
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemm600003.china.huawei.com (7.193.23.202)
-X-CFilter-Loop: Reflected
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,SPF_HELO_NONE,
+        SPF_PASS,WEIRD_PORT autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-commit 036b8f5b8970 ("tools headers uapi: Update linux/in.h copy") modify
-tools/include/uapi/linux/in.h, and __DECLARE_FLEX_ARRAY is introduced.
-Macro is not defined in tools/include, compilation fails:
+On Thursday, November 3rd, 2022 at 07:12, Dennis Dai <dzy.0424thu@gmail.com=
+> wrote:
 
-    CLNG-BPF [test_maps] bind4_prog.bpf.o
-  In file included from progs/bind4_prog.c:7:
-  /root/linux-mainline-new/linux/tools/include/uapi/linux/in.h:199:3: error: type name requires a specifier or qualifier
-                  __DECLARE_FLEX_ARRAY(__be32, imsf_slist_flex);
-                  ^
-  /root/linux-mainline-new/linux/tools/include/uapi/linux/in.h:199:32: error: type specifier missing, defaults to 'int' [-Werror,-Wimplicit-int]
-                  __DECLARE_FLEX_ARRAY(__be32, imsf_slist_flex);
-                                               ^
-  2 errors generated.
 
-Synchronize include/uapi/linux/stddef.h to tools headers directory,
-and delete the line "#include <linux/compiler_types.h>":
+> The rust nvme driver [1] (which is still pending to be merged into
+> mainline [2]) has a potential sleep-in-atomic-context bug.
+>=20
+> The potential buggy code is below
+>=20
+> // drivers/block/nvme.rs:192
+> dev.queues.lock().io.try_reserve(nr_io_queues as _)?;
+> // drivers/block/nvme.rs:227
+> dev.queues.lock().io.try_push(io_queue.clone())?;
+>=20
+> The queues field is wrapped in SpinLock, which means that we cannot
+> sleep (or indirectly call any function that may sleep) when the lock
+> is held.
+> However try_reserve function may indirectly call krealloc with a
+> sleepable flag GFP_KERNEL (that's default behaviour of the global rust
+> allocator).
+> The the case is similar for try_push.
+>=20
+> I wonder if the bug could be confirmed.
+>=20
+>=20
+> [1] https://github.com/metaspace/rust-linux/commit/d88c3744d6cbdf11767e08=
+bad56cbfb67c4c96d0
+> [2] https://lore.kernel.org/lkml/202210010816.1317F2C@keescook/
 
-  # cp ./include/uapi/linux/stddef.h tools/include/uapi/linux/stddef.h
-  # sed -i '/#include <linux\/compiler_types.h>/,+1d' tools/include/uapi/linux/stddef.h
+setup_io_queues is only called by dev_add which in turn is only called Nvme=
+Device::probe. This last function is responsible for creating the &Ref<Devi=
+ceData> that ends up being passed to setup_io_queues. It doesn't seem like =
+any reference is passed to another thread between &Ref<DeviceData>. As such=
+ no other thread can block on the current thread due to holding the lock. A=
+s far as I understand this means that sleeping while the lock is held is ha=
+rmless. I think it would be possible to replace the &Ref<DeviceData> argume=
+nt with an Pin<&mut DeviceData> argument by moving the add_dev call to befo=
+re Ref::<DeviceData>::from(data). This would make it clear that only the cu=
+rrent thread holds a reference and would also allow using a method like get=
+_mut [1] to get a reference to the protected data without actually locking =
+the spinlock as it is statically enforced that nobody can else can hold the=
+ lock. It seems that get_mut is missing from all of the locks offered in th=
+e kernel crate. I opened an issue for this. [2]
 
-And add missed <linux/stddef.h> header in tools/include/uapi/linux/in.h.
+[1]: https://doc.rust-lang.org/stable/std/sync/struct.Mutex.html#method.get=
+_mut
+[2]: https://github.com/Rust-for-Linux/linux/issues/924
 
-Fixes: 036b8f5b8970 ("tools headers uapi: Update linux/in.h copy")
-Signed-off-by: Yang Jihong <yangjihong1@huawei.com>
----
-
-Changes since v1:
- - Specify the target tree to "bpf" in title.
- - Add more reviewers.
-
- tools/include/uapi/linux/in.h     |  1 +
- tools/include/uapi/linux/stddef.h | 45 +++++++++++++++++++++++++++++++
- 2 files changed, 46 insertions(+)
- create mode 100644 tools/include/uapi/linux/stddef.h
-
-diff --git a/tools/include/uapi/linux/in.h b/tools/include/uapi/linux/in.h
-index f243ce665f74..79015665daf1 100644
---- a/tools/include/uapi/linux/in.h
-+++ b/tools/include/uapi/linux/in.h
-@@ -22,6 +22,7 @@
- #include <linux/types.h>
- #include <linux/libc-compat.h>
- #include <linux/socket.h>
-+#include <linux/stddef.h>
- 
- #if __UAPI_DEF_IN_IPPROTO
- /* Standard well-defined IP protocols.  */
-diff --git a/tools/include/uapi/linux/stddef.h b/tools/include/uapi/linux/stddef.h
-new file mode 100644
-index 000000000000..72bcdf96999f
---- /dev/null
-+++ b/tools/include/uapi/linux/stddef.h
-@@ -0,0 +1,45 @@
-+/* SPDX-License-Identifier: GPL-2.0 WITH Linux-syscall-note */
-+#ifndef _UAPI_LINUX_STDDEF_H
-+#define _UAPI_LINUX_STDDEF_H
-+
-+#ifndef __always_inline
-+#define __always_inline inline
-+#endif
-+
-+/**
-+ * __struct_group() - Create a mirrored named and anonyomous struct
-+ *
-+ * @TAG: The tag name for the named sub-struct (usually empty)
-+ * @NAME: The identifier name of the mirrored sub-struct
-+ * @ATTRS: Any struct attributes (usually empty)
-+ * @MEMBERS: The member declarations for the mirrored structs
-+ *
-+ * Used to create an anonymous union of two structs with identical layout
-+ * and size: one anonymous and one named. The former's members can be used
-+ * normally without sub-struct naming, and the latter can be used to
-+ * reason about the start, end, and size of the group of struct members.
-+ * The named struct can also be explicitly tagged for layer reuse, as well
-+ * as both having struct attributes appended.
-+ */
-+#define __struct_group(TAG, NAME, ATTRS, MEMBERS...) \
-+	union { \
-+		struct { MEMBERS } ATTRS; \
-+		struct TAG { MEMBERS } ATTRS NAME; \
-+	}
-+
-+/**
-+ * __DECLARE_FLEX_ARRAY() - Declare a flexible array usable in a union
-+ *
-+ * @TYPE: The type of each flexible array element
-+ * @NAME: The name of the flexible array member
-+ *
-+ * In order to have a flexible array member in a union or alone in a
-+ * struct, it needs to be wrapped in an anonymous struct with at least 1
-+ * named member, but that member can be empty.
-+ */
-+#define __DECLARE_FLEX_ARRAY(TYPE, NAME)	\
-+	struct { \
-+		struct { } __empty_ ## NAME; \
-+		TYPE NAME[]; \
-+	}
-+#endif
--- 
-2.30.GIT
-
+Cheers,
+Bj=C3=B6rn
