@@ -2,155 +2,109 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 488ED617A85
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 11:03:38 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4C287617A93
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 11:05:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231283AbiKCKCn (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 06:02:43 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40600 "EHLO
+        id S231429AbiKCKEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 06:04:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230487AbiKCKCi (ORCPT
+        with ESMTP id S230500AbiKCKE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 06:02:38 -0400
-Received: from m-r1.th.seeweb.it (m-r1.th.seeweb.it [5.144.164.170])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 74B4E26F0
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 03:02:37 -0700 (PDT)
-Received: from [192.168.31.208] (unknown [194.29.137.22])
-        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-         key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-        (No client certificate requested)
-        by m-r1.th.seeweb.it (Postfix) with ESMTPSA id C26BA20240;
-        Thu,  3 Nov 2022 11:02:29 +0100 (CET)
-Message-ID: <e46c817b-1a3b-d20c-22e7-a67b7684f17b@somainline.org>
-Date:   Thu, 3 Nov 2022 11:02:30 +0100
+        Thu, 3 Nov 2022 06:04:28 -0400
+Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0789394;
+        Thu,  3 Nov 2022 03:04:25 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
+        s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
+        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
+        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
+        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        List-Post:List-Owner:List-Archive;
+        bh=3I6cduE/0VLYX77KsgcKyS/YAJZf7qjM4jfGtEfeI/M=; b=mfql3DQCBqVXhPG5MwjUzLku6D
+        Yr8akr9e+8qulTiDKL1Gsd/rQ8+DUXTH7SnyAmd04LMW7/JHUwaQxvHm3dI+WlKOLYyfxZltMZuPK
+        NjDIEuE6mYsSF/YAPN6TSre0pM2N0XciY6yi1UOOZOO1VMbDvOiMK0wTF57aTpjPo8biBqo2rl7Fa
+        JUwIZczyWCrECSn70eok5mBEg5p319EOx1Sye6zebgq+vRGG/s3pjclIveQPKt9tHgoecsozbTBWv
+        qQ/Uv3fBYOM6TUSUW5UImHANT074A48HajbHRm7zbX2PJntJBJnIa42G75EJ7gvVZT2S2K55J132Q
+        zmd0cUYg==;
+Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:37996 helo=localhost.localdomain)
+        by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
+        (Exim 4.95)
+        (envelope-from <andrej.picej@norik.com>)
+        id 1oqX52-008HsM-9z;
+        Thu, 03 Nov 2022 11:04:20 +0100
+From:   Andrej Picej <andrej.picej@norik.com>
+To:     linux-watchdog@vger.kernel.org
+Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, Anson.Huang@nxp.com, devicetree@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/3] Suspending i.MX watchdog in WAIT mode
+Date:   Thu,  3 Nov 2022 11:03:55 +0100
+Message-Id: <20221103100358.176099-1-andrej.picej@norik.com>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
- Gecko/20100101 Thunderbird/102.4.1
-Subject: Re: [PATCH v2 12/12] arm64: dts: qcom: sc8280xp-x13s: Add thermal
- zone support
-To:     Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc:     andersson@kernel.org, robh+dt@kernel.org,
-        krzysztof.kozlowski+dt@linaro.org, johan+linaro@kernel.org,
-        quic_jprakash@quicinc.com, linux-arm-msm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        steev@kali.org
-References: <20221029051449.30678-1-manivannan.sadhasivam@linaro.org>
- <20221029051449.30678-13-manivannan.sadhasivam@linaro.org>
- <90b7e0e0-a354-f64d-8c53-aa80df684a3a@somainline.org>
- <20221103055014.GA8434@thinkpad>
-From:   Konrad Dybcio <konrad.dybcio@somainline.org>
-In-Reply-To: <20221103055014.GA8434@thinkpad>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.6 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,SPF_HELO_NONE,SPF_PASS autolearn=unavailable
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - cpanel.siel.si
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - norik.com
+X-Get-Message-Sender-Via: cpanel.siel.si: authenticated_id: andrej.picej@norik.com
+X-Authenticated-Sender: cpanel.siel.si: andrej.picej@norik.com
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_PASS,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+The i.MX6 watchdog can't be stopped once started. Additionally, watchdog
+hardware configuration needs to be able to handle low-power modes of the
+SoC. For low-power modes, there are two configuration bits in the TRM:
+- WDZST bit disables the watchdog timer in "deeper" low power modes and
+- WDW bit disables the watchdog timer in "WAIT" mode
 
-On 03/11/2022 06:50, Manivannan Sadhasivam wrote:
-> On Sat, Oct 29, 2022 at 04:29:05PM +0200, Konrad Dybcio wrote:
->>
->> On 29.10.2022 07:14, Manivannan Sadhasivam wrote:
->>> Add thermal zone support by making use of the thermistor SYS_THERM6.
->>> Based on experiments, this thermistor seems to reflect the actual
->>> surface temperature of the laptop.
->>>
->>> For the cooling device, all BIG CPU cores are throttle down to keep the
->> s/throttle/throttled
->>
->> Is it okay to let the 4xA78C run at full throttle in thermal emergencies though?
-> I don't get it. Can you elaborate?
+WDZST bit support is already in place since 1a9c5efa576e ("watchdog: imx2_wdt: disable watchdog timer during low power mode").
+On the other hand, handling of WDZST bit was omitted so far but now
+these patch series bring support for it.
 
-8280xp has 4xA78C and 4xX1C. You only added the latter ones to the 
-cooling map.
+SoC's "WAIT" low-power mode corresponds to Linux's freeze or
+Suspend-to-Idle (S0) mode which can be activated with:
 
+$ echo freeze > /sys/power/state
 
->
->>> temperature at a sane level.
->>>
->>> Signed-off-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
->>> ---
->>>   .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    | 46 +++++++++++++++++++
->>>   1 file changed, 46 insertions(+)
->>>
->>> diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
->>> index ca77c19c6d0d..96e2fa72f782 100644
->>> --- a/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
->>> +++ b/arch/arm64/boot/dts/qcom/sc8280xp-lenovo-thinkpad-x13s.dts
->>> @@ -29,6 +29,52 @@ backlight {
->>>   		pinctrl-0 = <&edp_bl_en>, <&edp_bl_pwm>;
->>>   	};
->>>   
->>> +	thermal-zones {
->>> +		skin-temp-thermal {
->>> +			polling-delay-passive = <250>;
->>> +			polling-delay = <0>;
->>> +			thermal-sensors = <&pmk8280_adc_tm 5>;
->>> +
->>> +			trips {
->>> +				skin_temp_alert0: trip-point0 {
->>> +					temperature = <55000>;
->>> +					hysteresis = <1000>;
->>> +					type = "passive";
->>> +				};
->>> +
->>> +				skin_temp_alert1: trip-point1 {
->>> +					temperature = <58000>;
->>> +					hysteresis = <1000>;
->>> +					type = "passive";
->>> +				};
->>> +
->>> +				skin-temp-crit {
->>> +					temperature = <73000>;
->> Ouch, I didn't know we were serving burnt fingers at the cafeteria today :D
->>
->> Or maybe this just looks scary.. The laptop looks plastic, so maybe it won't cause instant
->> burns?
->>
-> 73c is what the reasonable number I came up with after some experiments. At
-> this point the temperature won't burn your finger but crossing this surely
-> would (that's what happening without this series).
+Without these patches, board would be reset by the watchdog after
+timeout of 128 seconds since watchdog would not be stopped when SoC
+entered Suspend-to-Idle mode. With patches in place, boards using
+imx2-wdt are able to stay in Suspend-to-Idle mode indefinitely.
 
-Ok, then I suppose it's fine. Thanks!
+Last but not least, WDW bit is not found on all imx2-wdt supported i.MX
+devices, therefore a new device-tree property "fsl,suspend-in-wait" has
+been introduced for this.
 
+Here is v1: https://lore.kernel.org/lkml/20221019111714.1953262-1-andrej.picej@norik.com/
 
-Konrad
+Here is v2: https://lore.kernel.org/all/20221025072533.2980154-1-andrej.picej@norik.com/#t
 
->
-> Thanks,
-> Mani
->
->> Konrad
->>> +					hysteresis = <1000>;
->>> +					type = "critical";
->>> +				};
->>> +			};
->>> +
->>> +			cooling-maps {
->>> +				map0 {
->>> +					trip = <&skin_temp_alert0>;
->>> +					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>> +							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
->>> +				};
->>> +
->>> +				map1 {
->>> +					trip = <&skin_temp_alert1>;
->>> +					cooling-device = <&CPU4 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>> +							 <&CPU5 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>> +							 <&CPU6 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>,
->>> +							 <&CPU7 THERMAL_NO_LIMIT THERMAL_NO_LIMIT>;
->>> +				};
->>> +			};
->>> +		};
->>> +	};
->>> +
->>>   	vreg_edp_bl: regulator-edp-bl {
->>>   		compatible = "regulator-fixed";
->>>   
+Change log in the corresponding patches.
+
+Andrej Picej (3):
+  watchdog: imx2_wdg: suspend watchdog in WAIT mode
+  dt-bindings: watchdog: fsl-imx: document suspend in wait mode
+  ARM: dts: imx6ul/ull: suspend i.MX6UL watchdog in wait mode
+
+ .../bindings/watchdog/fsl-imx-wdt.yaml        | 33 +++++++++++
+ .../boot/dts/imx6ul-phytec-phycore-som.dtsi   |  4 ++
+ drivers/watchdog/imx2_wdt.c                   | 55 ++++++++++++++++++-
+ 3 files changed, 89 insertions(+), 3 deletions(-)
+
+-- 
+2.25.1
+
