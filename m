@@ -2,322 +2,107 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id E5EA5617F73
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:26:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2120D617F7D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:28:00 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231418AbiKCO0a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 10:26:30 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46982 "EHLO
+        id S231512AbiKCO1y (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 10:27:54 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229595AbiKCO02 (ORCPT
+        with ESMTP id S231294AbiKCO1l (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 10:26:28 -0400
-Received: from mail-wm1-x32d.google.com (mail-wm1-x32d.google.com [IPv6:2a00:1450:4864:20::32d])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C19EDF67
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 07:26:26 -0700 (PDT)
-Received: by mail-wm1-x32d.google.com with SMTP id ja4-20020a05600c556400b003cf6e77f89cso3929229wmb.0
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 07:26:25 -0700 (PDT)
+        Thu, 3 Nov 2022 10:27:41 -0400
+Received: from mail-pf1-x431.google.com (mail-pf1-x431.google.com [IPv6:2607:f8b0:4864:20::431])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF71F1705F;
+        Thu,  3 Nov 2022 07:27:40 -0700 (PDT)
+Received: by mail-pf1-x431.google.com with SMTP id y13so1753543pfp.7;
+        Thu, 03 Nov 2022 07:27:40 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=baylibre-com.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=aOw2yYZIUmeMvyTMDW5pPgN8uhLMpX4QdcL3N3+n7tk=;
-        b=XzHpUKCjxmhU4sAP6NZFb5YohU2VXZeJS/BB5aqo9r8McemMnFLwGyCv0gPi+n8Ykc
-         xwLmx86spwNbOLBLY0+XRw18D5mi1OT03dRWr9OicaZf+59z0t60T3fjyVyeO7TQXk+i
-         eoCRGrxzjjvGV+zRXNRSlSt7yy2lLHVvWFonIIl1QY7/GlaDbq2mSA5Es3K3I/XPky2M
-         XQMnn2ii1Aq01lJB6PSjFhFVcTQjkjazWmKfa770YiuxNwybPRAQ0rYqF3EI7NWdW+g+
-         sw1yyy2uHIeMvLSZPAu9saHbt4wemyBc2A7VfleIBtl0x/53OGKL9ouvbywC+xjPtS/h
-         /yPQ==
+        bh=IIuosJEuTIxTU4vgxtOOKlEeHtCDZ/WY4hzhdvsVb58=;
+        b=Ba26o1h0RwuZQrcVdQXGiWeePY+jTdQIWBBQKuQzaN7V42GxlZj2i1fdP1awb5nRYi
+         I+XlmteiHLFtd+YYOFakh8deA+ZTwe2sijmvTewpGEHDXDgiBdwKoZO8LVgkGNlkjUQg
+         ejex1GdrLJHlvKCDujXrlOUJYkLPMXbUlQ9kTKFZY3xU2PYafUzIzitV6KUUNFvgkb99
+         rcUp7UGzwyyAO2CAjupw4+6fZeuJTIOT2pe6EX1nDLTtAA2nMBUtjeOy7FAtVDtHUPbk
+         AJlpy/v/2QXPCaDVK9fBaIvova8EoGRWFJspfPqLri0gnzTKjruMX+Y7mYIzhiWKankj
+         9oMw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        h=content-transfer-encoding:in-reply-to:from:references:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=aOw2yYZIUmeMvyTMDW5pPgN8uhLMpX4QdcL3N3+n7tk=;
-        b=iKxV5hn52fizIi1321QdFAF234GjHuWhcnuwBOODgR7WSey3byKScrPCHSEYRVrs2Q
-         EZouAvQ5wfTsFAI7e/ceChuYIb0KhCUEMNNlcaWvgQwVeWSCyxPPkkuSzK17OOL3uxqd
-         kB1baZl5n/NSBWVHQRuqbVADzDweA+oYwFJ0Fqa1SwWZpjIEbZLBoeSXzRMLV7RU3o2h
-         Yw142aqNxfZ0ZS+x/Wd7MWwPrWfaqoz8AeUM3Rv7ALRD8Q8KSIkTl2dOVCT8Tnmth/kC
-         R+xySJWpKMmJCzCZDs1q1rLhal+4oBedRJbMvE00F07P3Lb1uMSCOIg+vwj11xtwzfxv
-         OGrQ==
-X-Gm-Message-State: ACrzQf3yekJ3eqpGveNrtzIhT95k00VgGq5KSpqLe0Bwr2/t6wD0m1HT
-        9if/14dPTHFSkvYp95hDoDAgVA==
-X-Google-Smtp-Source: AMsMyM5Kph4XeWfCOPPsaqtVaCMay3OuCBIbWh9FwN7TQsWfUQCxfg5LIpnNkUPTPB1IyLo0lz9bmQ==
-X-Received: by 2002:a05:600c:4fd2:b0:3c6:db8a:4d2a with SMTP id o18-20020a05600c4fd200b003c6db8a4d2amr19445068wmq.178.1667485584383;
-        Thu, 03 Nov 2022 07:26:24 -0700 (PDT)
-Received: from [192.168.0.20] (210.145.15.109.rev.sfr.net. [109.15.145.210])
-        by smtp.gmail.com with ESMTPSA id d19-20020adfa353000000b002366553eca7sm959539wrb.83.2022.11.03.07.26.23
+        bh=IIuosJEuTIxTU4vgxtOOKlEeHtCDZ/WY4hzhdvsVb58=;
+        b=2K0yo5aI9rGnVi28nYdWHN+5AdYUv5LSH1kFHLj1IJTM5tzE3V93YoU7i/FD9VDqvr
+         p2+iDiZ4LazMF2n30J+xEbceCKBkWtxQxquNF2A6QRYXyicDEvyxfT/L88Y5yOfmt/Nx
+         CToBwJ90pU7euETfIzP1AUh4LqIvsJP+GI/zKFJ/YGPtvVB+9sV80esVCaAfe7HSWxMP
+         jhuAl84etXoL2jZMuHdXADWac0wPEXhSzpcAhb25UUqnH6hvw88hn+byTaZno2KjmfnQ
+         YMGGSjmf6NiXCwxNCHtgmrq4dDp3P6sLxqOiE9mfG4EmZBz6odjC3cPl88IlrVeWrWDm
+         auPQ==
+X-Gm-Message-State: ACrzQf3alWIEHmyN13Q9o6zaTgUlsIVbWtaafcgkwFryX93AH482DqSz
+        5udLdxgK/WEriVbzIW3X6S4=
+X-Google-Smtp-Source: AMsMyM5wdqSY1H/m6g6FYCRAGcDeMB7vyoR6fpb0bzRrRGYER7iaHfadrE7m+/r3x3fwIfKhXP6/BQ==
+X-Received: by 2002:a63:f964:0:b0:46f:e243:fd8e with SMTP id q36-20020a63f964000000b0046fe243fd8emr13936135pgk.207.1667485660470;
+        Thu, 03 Nov 2022 07:27:40 -0700 (PDT)
+Received: from ?IPV6:2404:f801:0:5:8000::75b? ([2404:f801:9000:18:efec::75b])
+        by smtp.gmail.com with ESMTPSA id n184-20020a6227c1000000b0056b9df2a15esm825190pfn.62.2022.11.03.07.27.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 07:26:23 -0700 (PDT)
-Message-ID: <5eb0cdc2-e9f9-dd42-bf80-b7dcd8bcc196@baylibre.com>
-Date:   Thu, 3 Nov 2022 15:26:22 +0100
+        Thu, 03 Nov 2022 07:27:39 -0700 (PDT)
+Message-ID: <f295f2f4-b7c7-0faf-cc99-9a052a7bf7ef@gmail.com>
+Date:   Thu, 3 Nov 2022 22:27:28 +0800
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-Subject: Re: [PATCH v6 4/4] thermal: mediatek: add another get_temp ops for
- thermal sensors
-To:     Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Zhang Rui <rui.zhang@intel.com>,
-        Amit Kucheria <amitk@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        "Rafael J. Wysocki" <rafael@kernel.org>
-Cc:     Fabien Parent <fparent@baylibre.com>,
-        linux-mediatek@lists.infradead.org, Rob Herring <robh@kernel.org>,
-        Markus Schneider-Pargmann <msp@baylibre.com>,
-        linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>,
-        Michael Kao <michael.kao@mediatek.com>,
-        Hsin-Yi Wang <hsinyi@chromium.org>,
-        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
-        Matthias Brugger <matthias.bgg@gmail.com>
-References: <20221018-up-i350-thermal-bringup-v6-0-c87b9f75550b@baylibre.com>
- <20221018-up-i350-thermal-bringup-v6-4-c87b9f75550b@baylibre.com>
- <904faa39-9435-b8a8-fa6f-1ade8d5b61f4@linaro.org>
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 07/12] Drivers: hv: vmbus: Remove second mapping of VMBus
+ monitor pages
 Content-Language: en-US
-From:   Amjad Ouled-Ameur <aouledameur@baylibre.com>
-In-Reply-To: <904faa39-9435-b8a8-fa6f-1ade8d5b61f4@linaro.org>
+To:     Michael Kelley <mikelley@microsoft.com>, hpa@zytor.com,
+        kys@microsoft.com, haiyangz@microsoft.com, sthemmin@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, luto@kernel.org,
+        peterz@infradead.org, davem@davemloft.net, edumazet@google.com,
+        kuba@kernel.org, pabeni@redhat.com, lpieralisi@kernel.org,
+        robh@kernel.org, kw@linux.com, bhelgaas@google.com, arnd@arndb.de,
+        hch@infradead.org, m.szyprowski@samsung.com, robin.murphy@arm.com,
+        thomas.lendacky@amd.com, brijesh.singh@amd.com, tglx@linutronix.de,
+        mingo@redhat.com, bp@alien8.de, dave.hansen@linux.intel.com,
+        Tianyu.Lan@microsoft.com, kirill.shutemov@linux.intel.com,
+        sathyanarayanan.kuppuswamy@linux.intel.com, ak@linux.intel.com,
+        isaku.yamahata@intel.com, dan.j.williams@intel.com,
+        jane.chu@oracle.com, seanjc@google.com, tony.luck@intel.com,
+        x86@kernel.org, linux-kernel@vger.kernel.org,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-pci@vger.kernel.org, linux-arch@vger.kernel.org,
+        iommu@lists.linux.dev
+References: <1666288635-72591-1-git-send-email-mikelley@microsoft.com>
+ <1666288635-72591-8-git-send-email-mikelley@microsoft.com>
+From:   Tianyu Lan <ltykernel@gmail.com>
+In-Reply-To: <1666288635-72591-8-git-send-email-mikelley@microsoft.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Daniel,
+On 10/21/2022 1:57 AM, Michael Kelley wrote:
+> With changes to how Hyper-V guest VMs flip memory between private
+> (encrypted) and shared (decrypted), creating a second kernel virtual
+> mapping for shared memory is no longer necessary.  Everything needed
+> for the transition to shared is handled by set_memory_decrypted().
+> 
+> As such, remove the code to create and manage the second
+> mapping for VMBus monitor pages. Because set_memory_decrypted()
+> and set_memory_encrypted() are no-ops in normal VMs, it's
+> not even necessary to test for being in a Confidential VM
+> (a.k.a., "Isolation VM").
+> 
+> Signed-off-by: Michael Kelley<mikelley@microsoft.com>
 
-Thank you for the review.
-
-On 10/22/22 19:03, Daniel Lezcano wrote:
-> On 19/10/2022 16:17, Amjad Ouled-Ameur wrote:
->> Provide thermal zone to read thermal sensor in the SoC. We can read all the
->> thermal sensors value in the SoC by the node /sys/class/thermal/
->>
->> In mtk_thermal_bank_temperature, return -EAGAIN instead of -EACCESS
->> on the first read of sensor that often are bogus values.
->> This can avoid following warning on boot:
->>
->>    thermal thermal_zone6: failed to read out thermal zone (-13)
->>
->> Signed-off-by: Michael Kao <michael.kao@mediatek.com>
->> Signed-off-by: Hsin-Yi Wang <hsinyi@chromium.org>
->> Signed-off-by: Amjad Ouled-Ameur <aouledameur@baylibre.com>
->> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
->
-> Overall the series looks good to me, however there is a couple of things to fix. See below
->
->> ---
->>   drivers/thermal/mtk_thermal.c | 104 ++++++++++++++++++++++++++++++++----------
->>   1 file changed, 79 insertions(+), 25 deletions(-)
->>
->> diff --git a/drivers/thermal/mtk_thermal.c b/drivers/thermal/mtk_thermal.c
->> index 3a5df1440822..311ad611fdab 100644
->> --- a/drivers/thermal/mtk_thermal.c
->> +++ b/drivers/thermal/mtk_thermal.c
->> @@ -259,6 +259,11 @@ enum mtk_thermal_version {
->>     struct mtk_thermal;
->>   +struct mtk_thermal_zone {
->> +    struct mtk_thermal *mt;
->> +    int id;
->> +};
->
-> Do you really need to create a new structure for that ?
-
-We need to store the sensor index in the private data, along with mtk_thermal.
-
-Aside from having this new structure, I don't see how .get_temp() can tell which
-
-sensor index to read.
-
->
->>   struct thermal_bank_cfg {
->>       unsigned int num_sensors;
->>       const int *sensors;
->> @@ -307,6 +312,8 @@ struct mtk_thermal {
->>         const struct mtk_thermal_data *conf;
->>       struct mtk_thermal_bank banks[MAX_NUM_ZONES];
->> +
->> +    int (*raw_to_mcelsius)(struct mtk_thermal *mt, int sensno, s32 raw);
->>   };
->>     /* MT8183 thermal sensor data */
->> @@ -709,6 +716,29 @@ static void mtk_thermal_put_bank(struct mtk_thermal_bank *bank)
->>           mutex_unlock(&mt->lock);
->>   }
->>   +static int _get_sensor_temp(struct mtk_thermal *mt, int id)
->> +{
->> +    u32 raw;
->> +    int temp;
->> +
->> +    const struct mtk_thermal_data *conf = mt->conf;
->> +
->> +    raw = readl(mt->thermal_base + conf->msr[id]);
->> +
->> +    temp = mt->raw_to_mcelsius(mt, id, raw);
->> +
->> +    /*
->> +     * The first read of a sensor often contains very high bogus
->> +     * temperature value. Filter these out so that the system does
->> +     * not immediately shut down.
->> +     */
->> +
->> +    if (temp > 200000)
->> +        return -EAGAIN;
->> +    else
->> +        return temp;
->> +}
->> +
->>   /**
->>    * mtk_thermal_bank_temperature - get the temperature of a bank
->>    * @bank:    The bank
->> @@ -721,26 +751,9 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
->>       struct mtk_thermal *mt = bank->mt;
->>       const struct mtk_thermal_data *conf = mt->conf;
->>       int i, temp = INT_MIN, max = INT_MIN;
->> -    u32 raw;
->>         for (i = 0; i < conf->bank_data[bank->id].num_sensors; i++) {
->> -        raw = readl(mt->thermal_base + conf->msr[i]);
->> -
->> -        if (mt->conf->version == MTK_THERMAL_V1) {
->> -            temp = raw_to_mcelsius_v1(
->> -                mt, conf->bank_data[bank->id].sensors[i], raw);
->> -        } else {
->> -            temp = raw_to_mcelsius_v2(
->> -                mt, conf->bank_data[bank->id].sensors[i], raw);
->> -        }
->> -
->> -        /*
->> -         * The first read of a sensor often contains very high bogus
->> -         * temperature value. Filter these out so that the system does
->> -         * not immediately shut down.
->> -         */
->> -        if (temp > 200000)
->> -            temp = 0;
->> +        temp = _get_sensor_temp(mt, i);
->>             if (temp > max)
->>               max = temp;
->> @@ -749,9 +762,10 @@ static int mtk_thermal_bank_temperature(struct mtk_thermal_bank *bank)
->>       return max;
->>   }
->>   -static int mtk_read_temp(struct thermal_zone_device *tz, int *temperature)
->> +static int mtk_read_temp(struct thermal_zone_device *tzdev, int *temperature)
->>   {
->> -    struct mtk_thermal *mt = tz->devdata;
->> +    struct mtk_thermal_zone *tz = tzdev->devdata;
->> +    struct mtk_thermal *mt = tz->mt;
->>       int i;
->>       int tempmax = INT_MIN;
->>   @@ -770,10 +784,28 @@ static int mtk_read_temp(struct thermal_zone_device *tz, int *temperature)
->>       return 0;
->>   }
->>   +static int mtk_read_sensor_temp(struct thermal_zone_device *tzdev, int *temperature)
->> +{
->> +    struct mtk_thermal_zone *tz = tzdev->devdata;
->> +    struct mtk_thermal *mt = tz->mt;
->> +    int id = tz->id - 1;
->> +
->> +    if (id < 0)
->> +        return -EACCES;
->> +
->> +    *temperature = _get_sensor_temp(mt, id);
->> +
->> +    return 0;
->> +}
->> +
->>   static const struct thermal_zone_device_ops mtk_thermal_ops = {
->>       .get_temp = mtk_read_temp,
->>   };
->>   +static const struct thermal_zone_device_ops mtk_thermal_sensor_ops = {
->> +    .get_temp = mtk_read_sensor_temp,
->> +};
->> +
->>   static void mtk_thermal_init_bank(struct mtk_thermal *mt, int num,
->>                     u32 apmixed_phys_base, u32 auxadc_phys_base,
->>                     int ctrl_id)
->> @@ -1072,6 +1104,7 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->>       u64 auxadc_phys_base, apmixed_phys_base;
->>       struct thermal_zone_device *tzdev;
->>       void __iomem *apmixed_base, *auxadc_base;
->> +    struct mtk_thermal_zone *tz;
->>         mt = devm_kzalloc(&pdev->dev, sizeof(*mt), GFP_KERNEL);
->>       if (!mt)
->> @@ -1150,6 +1183,9 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->>         mtk_thermal_turn_on_buffer(mt, apmixed_base);
->>   +    mt->raw_to_mcelsius = (mt->conf->version == MTK_THERMAL_V1) ?
->> +                raw_to_mcelsius_v1 : raw_to_mcelsius_v2;
->> +
->>       if (mt->conf->version == MTK_THERMAL_V2) {
->>           mtk_thermal_release_periodic_ts(mt, auxadc_base);
->>       }
->> @@ -1161,11 +1197,29 @@ static int mtk_thermal_probe(struct platform_device *pdev)
->>         platform_set_drvdata(pdev, mt);
->>   -    tzdev = devm_thermal_of_zone_register(&pdev->dev, 0, mt,
->> -                          &mtk_thermal_ops);
->> -    if (IS_ERR(tzdev)) {
->> -        ret = PTR_ERR(tzdev);
->> -        goto err_disable_clk_peri_therm;
->> +    for (i = 0; i < mt->conf->num_sensors + 1; i++) {
->> +        tz = devm_kmalloc(&pdev->dev, sizeof(*tz), GFP_KERNEL);
->> +        if (!tz)
->> +            return -ENOMEM;
->> +
->> +        tz->mt = mt;
->> +        tz->id = i;
->> +
->> +        tzdev = devm_thermal_of_zone_register(&pdev->dev, i, tz, (i == 0) ?
->> +                                 &mtk_thermal_ops :
->> +                                 &mtk_thermal_sensor_ops);
->
-> We want to prevent the aggregation from the different sensors within a driver. I know there is already a function doing that for the previous sensor version but that is something we don't want to continue.
->
-> Using mtk_thermal_ops tries to overcome this.
->
-So would it be more proper to have to distinct thermal drivers for each sensor ? Or relatively to the above implementation,
-
-I think it might be better to have only one thermal_zone_device_ops, with storing the right get_temp callback in mtk_thermal_zone structure.
-
-
-> Also, the userspace needs to know to which device a thermal zone is related to. Here all the thermal zones have the same name so the userspace does not know if it is the GPU, the CPU, the chassis, the NPU, ...
-
-Which names are you referring to ? In case it is "sys/class/thermal/*/type", it is based on DT thermal nodes, the first sensor is marked as CPU-related,
-
-The others are used for debugging purposes only.
-
->
->
->> +
->> +        if (IS_ERR(tzdev)) {
->> +            if (PTR_ERR(tzdev) == -ENODEV) {
->> +                dev_warn(&pdev->dev,
->> +                     "sensor %d not registered in thermal zone in dt\n", i);
->
-> ENODEV is not considered an error, so the warning can be removed
-Agreed, will drop this.
->
->> +                continue;
->> +            }
->> +            if (PTR_ERR(tzdev) == -EACCES) {
->
-> When devm_thermal_of_zone_register() returns -EACCES ?
-
-Right, I verified the code, -EACCES is never returned by devm_thermal_of_zone_register().
-
-
-Regards,
-
-Amjad
-
->
->> +                ret = PTR_ERR(tzdev);
->> +                goto err_disable_clk_peri_therm;
->> +            }
->> +        }
->>       }
->>         ret = devm_thermal_add_hwmon_sysfs(tzdev);
->>
->
+Reviewed-by: Tianyu Lan <Tianyu.Lan@microsoft.com>
