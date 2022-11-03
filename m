@@ -2,146 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id C152C617CD9
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:42:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id ED5FD617CDB
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:42:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230300AbiKCMlv (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 08:41:51 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58620 "EHLO
+        id S231206AbiKCMmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 08:42:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58832 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229481AbiKCMls (ORCPT
+        with ESMTP id S230389AbiKCMmH (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 08:41:48 -0400
-Received: from mail-ej1-x629.google.com (mail-ej1-x629.google.com [IPv6:2a00:1450:4864:20::629])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B63D9F33;
-        Thu,  3 Nov 2022 05:41:47 -0700 (PDT)
-Received: by mail-ej1-x629.google.com with SMTP id k2so4887665ejr.2;
-        Thu, 03 Nov 2022 05:41:47 -0700 (PDT)
+        Thu, 3 Nov 2022 08:42:07 -0400
+Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625DDCE15
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 05:42:06 -0700 (PDT)
+Received: by mail-qk1-x72c.google.com with SMTP id z1so974611qkl.9
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 05:42:06 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=qfsJgMb1zmwLVHQMK7IZ5L7+ZwlTg8ws35b/LFsDTRU=;
-        b=iSjE1MZEvs/LFzNZiNtVc0n6rgnatuF1CPpEDUm17j65QsJPoreSJqOi7TrGWfRvKe
-         KO1x5ZH8+1lN95/OiUaj7UnUB9pcVlQxMgHn2w3L4dqn4rp5pOHXjFCqSG3YrxQrbkmI
-         FsQvb2q1vH+QCF2rJ1K1uJUsAnI+ZTl/r+qYe5PsjVvvWrZUwNJe5lnkQ3JTccHpCgrl
-         iTRJtZGUDGbLCZydxbbB7Pcuht/VlrzGWK3dUPvBjCCJA1uyv2SmCjn6g/0+MiXoJ2wu
-         UWfIYMOJ1omphrdPKNsKRzCC7J2WlhIwuKi5I3ipJs6sskJUo+ddPSVoE/O+FDqz2mgW
-         OS+w==
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=fFdGhL73S/+jHEKQ09FOVskOFKjEeT/ObTagmldOE64=;
+        b=UhmeO6dkRKxYTsnynk/YmKaLWxoLJBGfhdaWkpXQLT3rL/PT4GHc0w+oNEST+f5Wpu
+         5BdVJ8+j3f/X92lXb7YmGoivnrWQM4GlAlOC8rfVWGIn1/NtdDayvaqUmtvAOxavq3fA
+         Bx/fE3WzHSdqQx7S9U55JLVyoEmz5rhu7na071j9GRsVUcc5ZIhmE1zUIKzgoR8Gpflk
+         cITiBzoaDcwIL1FmZ5tw9ebS22dAO+Dz4AO3SD/1XpIlWDHCCru4v9iVwui2NBb7jORP
+         VgiKcuWXv22YucB5k33HTGfleht/wsklijLF6GMU/+0zM6c6iI6xJ0XjY5LuwPPs8fWI
+         yzTA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:date:from
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qfsJgMb1zmwLVHQMK7IZ5L7+ZwlTg8ws35b/LFsDTRU=;
-        b=M6avFVGaIClgK2OdgKB9zx4v3Tui5XE1eTgvXnd5mdRUfbuWV9DAMo+u5jbBo7jw7M
-         imX2lZ13/SB3i8LgNRYoaLErFQEmFpVw9I12JEhW1yui8Cx5G5ZsUaj/QJwU0fdlm9J0
-         QaipWA8zOJQ2KbfuR5bJyVRyczTn+WK9muCgdee3Hd5UDzocerCzYLnhrUHpqdnN3Bcp
-         15UwgXmc6P9FnfzBPNWRb7tKZfw1PrWVTHNu1+yRim83QVzjU+k+y8791B1dr/75tYQX
-         HZ6gQUm5GItF31w++7E+Oi5ZuQo4p3HJNJ9eXmSfcXG+gk6WDONS4m3r671mfyhWI8po
-         uFcA==
-X-Gm-Message-State: ACrzQf2oa7HBfGUWT6F+iaUMbr7CQOdtgjC6tqZrNBc9SoR2n/p1ioWY
-        79Tvy2NpzvigCgeV8y+2JLa7rQsETBg=
-X-Google-Smtp-Source: AMsMyM6yI9inxrSOA2Z1d8XiteyXGmJaGuDuB7s//Ul9lbo77Dh2GZaC3ZdoW3MZQetPrinPmoKd8A==
-X-Received: by 2002:a17:907:271b:b0:7ad:b748:63df with SMTP id w27-20020a170907271b00b007adb74863dfmr26140024ejk.639.1667479306111;
-        Thu, 03 Nov 2022 05:41:46 -0700 (PDT)
-Received: from pc638.lan ([155.137.26.201])
-        by smtp.gmail.com with ESMTPSA id es11-20020a056402380b00b00458898fe90asm487183edb.5.2022.11.03.05.41.45
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 05:41:45 -0700 (PDT)
-From:   Uladzislau Rezki <urezki@gmail.com>
-X-Google-Original-From: Uladzislau Rezki <urezki@pc638.lan>
-Date:   Thu, 3 Nov 2022 13:41:43 +0100
-To:     "Paul E. McKenney" <paulmck@kernel.org>,
-        Joel Fernandes <joel@joelfernandes.org>
-Cc:     Joel Fernandes <joel@joelfernandes.org>,
-        Uladzislau Rezki <urezki@gmail.com>, rcu@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RFC] rcu/kfree: Do not request RCU when not needed
-Message-ID: <Y2O3Bz0DMEBZF+83@pc638.lan>
-References: <20221102184911.GP5600@paulmck-ThinkPad-P17-Gen-1>
- <755B5ED1-653D-4E57-B114-77CDE10A9033@joelfernandes.org>
- <20221102202813.GR5600@paulmck-ThinkPad-P17-Gen-1>
+        bh=fFdGhL73S/+jHEKQ09FOVskOFKjEeT/ObTagmldOE64=;
+        b=EGyPW2NdV+C6jSkyNLDPSTNvPZOWoZKJMqigeo6uNp1/p8OQImSSKCK7VjI7vtJ8Rg
+         XTuv23ehcgH0QM/de3Nu1SZ/MPMRF5XmBv3WWjqfh9vGBhr5oipFriDIv6njT0iSsQZF
+         KqX0mSOjLHVExpXL3w5bblWo9NyOcbnFJzUqyj+iqi+jFR93+MMvFG/MAp/eMIvhr1Q8
+         gLaJhb5M8E5myFr/94y+0dINNEsgUTA7skekD65JVm8u6EaQZFmbu9e1WlzSkSGHbu6X
+         o9L3MtNAkysG0mSAQ35noqNBbp+skDrQDhoeVi4fhJnyH4OWRH6KNU7iUjaQ5BzmfnZC
+         RxJw==
+X-Gm-Message-State: ACrzQf1V3fSB1ZAYgrnxkG6jLHyGz1nZxeGS2J8uwIUBiM3ZmWJjJg/b
+        Gusfv9B4Lhbz4Pdv2lcqmfp1xw==
+X-Google-Smtp-Source: AMsMyM7R//pf51CVGfWXHj1GX9wXIzb+LdZphgfmS3saxxTdD1hymSha/Gf+R6TY1XxlbN54wUNd2w==
+X-Received: by 2002:a05:620a:430a:b0:6f6:589b:463d with SMTP id u10-20020a05620a430a00b006f6589b463dmr21155132qko.139.1667479325519;
+        Thu, 03 Nov 2022 05:42:05 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
+        by smtp.gmail.com with ESMTPSA id bm7-20020a05620a198700b006ed138e89f2sm648038qkb.123.2022.11.03.05.42.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 05:42:04 -0700 (PDT)
+Message-ID: <38e1762b-527f-e913-768b-1149486a9f72@linaro.org>
+Date:   Thu, 3 Nov 2022 08:42:03 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20221102202813.GR5600@paulmck-ThinkPad-P17-Gen-1>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH 3/3] arch: arm64: ti: Add support for AM68 SK base board
+Content-Language: en-US
+To:     Sinthu Raja M <sinthu.raja@mistralsolutions.com>
+Cc:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
+        Rob Herring <robh+dt@kernel.org>,
+        Vignesh Raghavendra <vigneshr@ti.com>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, Sinthu Raja <sinthu.raja@ti.com>
+References: <20221018123849.23695-1-sinthu.raja@ti.com>
+ <20221018123849.23695-4-sinthu.raja@ti.com>
+ <3f1afad0-1e93-4843-defd-ca32c308cc9e@linaro.org>
+ <CAEd-yTTtQhhECw7jSQb38ThaOT_CtFmHy0dJt3SaKxn1KzSgKg@mail.gmail.com>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <CAEd-yTTtQhhECw7jSQb38ThaOT_CtFmHy0dJt3SaKxn1KzSgKg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-> > >> /**
-> > >> @@ -3066,10 +3068,12 @@ static void kfree_rcu_work(struct work_struct *work)
-> > >>    struct kfree_rcu_cpu_work *krwp;
-> > >>    int i, j;
-> > >> 
-> > >> -    krwp = container_of(to_rcu_work(work),
-> > >> +    krwp = container_of(work,
-> > >>                struct kfree_rcu_cpu_work, rcu_work);
-> > >>    krcp = krwp->krcp;
-> > >> 
-> > >> +    cond_synchronize_rcu(krwp->gp_snap);
-> > > 
-> > > Might this provoke OOMs in case of callback flooding?
-> > > 
-> > > An alternative might be something like this:
-> > > 
-> > >    if (!poll_state_synchronize_rcu(krwp->gp_snap)) {
-> > >        queue_rcu_work(system_wq, &krwp->rcu_work);
-> > >        return;
-> > >    }
-> > > 
-> > > Either way gets you a non-lazy callback in the case where a grace
-> > > period has not yet elapsed.
-> > > Or am I missing something that prevents OOMs here?
-> > 
-> > The memory consumptions appears to be much less in his testing with the onslaught of kfree, which makes OOM probably less likely.
-> > 
-> > Though, was your reasoning that in case of a grace period not elapsing, we need a non lazy callback queued, so as to make the reclaim happen sooner?
-> > 
-> > If so, the cond_synchronize_rcu() should already be conditionally queueing non-lazy CB since we don’t make synchronous users wait for seconds. Or did I miss something?
-> 
-> My concern is that the synchronize_rcu() will block a kworker kthread
-> for some time, and that in callback-flood situations this might slow
-> things down due to exhausting the supply of kworkers.
-> 
-This concern works in both cases. I mean in default configuration and
-with a posted patch. The reclaim work, which name is kfree_rcu_work() only
-does a progress when a gp is passed so the rcu_work_rcufn() can queue
-our reclaim kworker.
+On 03/11/2022 04:38, Sinthu Raja M wrote:
+> On Tue, Oct 18, 2022 at 6:33 PM Krzysztof Kozlowski
+> <krzysztof.kozlowski@linaro.org> wrote:
+>>
+>> On 18/10/2022 08:38, Sinthu Raja wrote:
+>>> From: Sinthu Raja <sinthu.raja@ti.com>
+>>>
+>>> The SK architecture comprises of baseboard and a SOM board. It is
+>>> as follows,
+>>>
+>>>        +--------------------------------------+---+
+>>>        |                                      |   |<--Connectors
+>>>        |                                      +---|
+>>>        |      +---------------------------+   |   |
+>>>        |      | SOM                       |   +---|
+>>>        |      |                           |   |   |
+>>>        |      |                           |   +---| Power Supply
+>>>        |      |                           |       |   |
+>>>        |      +---------------------------+       |   |
+>>>        |                                          |<--+
+>>>        |           BASE BOARD                     |
+>>>        +------------------------------------------+
+>>
+>> This is pretty straightforward for SoM, I am not sure what's the benefit
+>> to add it.
+>>
+>>>
+>>> AM68 Starter Kit's baseboard contains most of the actual connectors,
+>>> power supply etc. The System on Module (SoM) is plugged on to the base
+>>> board. Therefore, add support for peripherals brought out in the base
+>>> board.
+>>>
+>>> Schematics: https://www.ti.com/lit/zip/SPRR463
+>>>
+>>> Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
+>>> ---
+>>>  arch/arm64/boot/dts/ti/Makefile               |   2 +
+>>>  .../boot/dts/ti/k3-am68-sk-base-board.dts     | 459 ++++++++++++++++++
+>>>  2 files changed, 461 insertions(+)
+>>>  create mode 100644 arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
+>>>
+>>> diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
+>>> index 4555a5be2257..498b089d96f8 100644
+>>> --- a/arch/arm64/boot/dts/ti/Makefile
+>>> +++ b/arch/arm64/boot/dts/ti/Makefile
+>>> @@ -19,6 +19,8 @@ dtb-$(CONFIG_ARCH_K3) += k3-j7200-common-proc-board.dtb
+>>>
+>>>  dtb-$(CONFIG_ARCH_K3) += k3-j721s2-common-proc-board.dtb
+>>>
+>>> +dtb-$(CONFIG_ARCH_K3) += k3-am68-sk-base-board.dtb
+>>> +
+>>
+>> Alphabetical order, although does not look like other entries are ordered...
+>>
+>>>  dtb-$(CONFIG_ARCH_K3) += k3-am642-evm.dtb
+>>>  dtb-$(CONFIG_ARCH_K3) += k3-am642-sk.dtb
+>>>
+>>> diff --git a/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts b/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
+>>> new file mode 100644
+>>> index 000000000000..f51cbd2e3b72
+>>> --- /dev/null
+>>> +++ b/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
+>>> @@ -0,0 +1,459 @@
+>>> +// SPDX-License-Identifier: GPL-2.0
+>>> +/*
+>>> + * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
+>>> + *
+>>> + * Base Board: https://www.ti.com/lit/zip/SPRR463
+>>> + */
+>>> +
+>>> +/dts-v1/;
+>>> +
+>>> +#include "k3-am68-sk-som.dtsi"
+>>> +#include <dt-bindings/net/ti-dp83867.h>
+>>> +#include <dt-bindings/phy/phy-cadence.h>
+>>> +#include <dt-bindings/phy/phy.h>
+>>> +#include <dt-bindings/mux/ti-serdes.h>
+>>> +
+>>> +/ {
+>>> +     compatible = "ti,am68-sk", "ti,j721s2";
+>>> +     model = "Texas Instruments AM68 SK";
+>>> +
+>>> +     chosen {
+>>> +             stdout-path = "serial2:115200n8";
+>>> +             bootargs = "console=ttyS2,115200n8 earlycon=ns16550a,mmio32,0x2880000";
+>>
+>> None of these bootargs are suitable for mainline. earlycon for sure - it
+>> is pure debug option.
+> Krzysztof,
+> In AM68 SK the Linux console is on main_uart8, so to be consistent
+> with other J7 families of devices aliasing the serial port to ttyS2. I
+> am quite confused why these bootargs are not suitable for mainline. I
+> check the below documentation section 2.3, as mentioned it can be used
+> as kernel parameters. Please correct me if I am wrong.
+> https://www.kernel.org/doc/html/latest/devicetree/usage-model.html?highlight=bootargs
 
-As it is now:
+Why? Console is defined by stdout path, so why do you need to redefine
+it? Bootargs are for debugging so why all users in entire world by
+default must debug?
 
-1. Collect pointers, then we decide to drop them we queue the
-   monitro_work() worker to the system_wq.
+Best regards,
+Krzysztof
 
-2. The monitor work, kfree_rcu_work(), tries to attach or saying
-it by another words bypass a "backlog" to "free" channels.
-
-3. It invokes the queue_rcu_work() that does call_rcu_flush() and
-in its turn it queues our worker from the handler. So the worker
-is run after GP is passed.
-
-With a patch: 
-
-[1] and [2] steps are the same. But on third step we do:
-
-1. Record the GP status for last in channel;
-2. Directly queue the drain work without any call_rcu() helpers;
-3. On the reclaim worker entry we check if GP is passed;
-4. If not it invokes synchronize_rcu().
-
-The patch eliminates extra steps by not going via RCU-core route
-instead it directly invokes the reclaim worker where it either
-proceed or wait a GP if needed.
-
---
-Uladzislau Rezki
