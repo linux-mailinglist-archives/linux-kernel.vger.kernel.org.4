@@ -2,194 +2,143 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id D615C618CE1
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 00:37:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D7221618C73
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 00:05:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229992AbiKCXhb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 19:37:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57184 "EHLO
+        id S231208AbiKCXFm (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 19:05:42 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41112 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229548AbiKCXh3 (ORCPT
+        with ESMTP id S231537AbiKCXFe (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 19:37:29 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 2A62B11834;
-        Thu,  3 Nov 2022 16:37:28 -0700 (PDT)
-Received: from skinsburskii.localdomain (c-67-170-100-148.hsd1.wa.comcast.net [67.170.100.148])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 885E020B929F;
-        Thu,  3 Nov 2022 16:37:27 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 885E020B929F
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1667518647;
-        bh=/rfJILvAT4i/EgTl3AmpD42cdDe9dV7YPr+q0fK0ydw=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=BJWI+qmY2K/Heu5Kedkp/BV3G8zE1b50oHWeOmdUbcK6P0aykR6yvlvBBpFT4lqPI
-         3gvjdeTlk/CNMxPpzdil1FHaAxiLoD8Qm+A3ENc9RRwTz3aGGhtSt/Al2LF1uM4opX
-         kfI7KfkX/L8J6y7Mwn7pbSYpoCjuktRM+qeHq38Y=
-Date:   Wed, 2 Nov 2022 18:37:05 -0700
-From:   Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-To:     "Michael Kelley (LINUX)" <mikelley@microsoft.com>
-Cc:     Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>,
-        KY Srinivasan <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        "x86@kernel.org" <x86@kernel.org>,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "linux-hyperv@vger.kernel.org" <linux-hyperv@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v3 4/4] drivers/clocksource/hyper-v: Add TSC page support
- for root partition
-Message-ID: <20221103013705.GA1922@skinsburskii.localdomain>
-References: <166749827889.218190.12775118554387271641.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
- <166749834466.218190.3482871684875422987.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
- <BYAPR21MB1688F63C2410904F92B1F75FD7389@BYAPR21MB1688.namprd21.prod.outlook.com>
+        Thu, 3 Nov 2022 19:05:34 -0400
+Received: from mail-il1-x12b.google.com (mail-il1-x12b.google.com [IPv6:2607:f8b0:4864:20::12b])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6398621812;
+        Thu,  3 Nov 2022 16:05:18 -0700 (PDT)
+Received: by mail-il1-x12b.google.com with SMTP id 7so1831768ilg.11;
+        Thu, 03 Nov 2022 16:05:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Q+RvqpG9zfUA2c8hwhB/7wUaM09GTn7GvC/dPddFhGY=;
+        b=Hnb1u5u++JZQarGtOFw2aD9XsD74zXfHdnJEJkllhJr1RmuIeDm54kvjOFo9pkASEU
+         PLPJCbfxZmfVuG45XUOaOybJQrL64z5DosIF/cg1rXRg2+ARVixguNR5mQ21bFRt5mmr
+         rIgxEm34cENKe8NZ7bNLPMog498jgD+dQRq3pxsBFqZVij4n5vG/kzqq9UPRyTQ/4ly+
+         Eft86R59cNQVCwskaTXpkvcpJM8EwL2n6LisZtkwp7lfYmg4+QfVuxn0EM8pjPcmkiPK
+         mGE8JtLmY5kkQv1VQIKtqGTEGL95OF6SBcXnQSGRTjlR/GxPcI8+adtvjkb4mrujqIF2
+         4tpg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Q+RvqpG9zfUA2c8hwhB/7wUaM09GTn7GvC/dPddFhGY=;
+        b=2KSrAeHh+AHL9xH3W59iu6VVtrAUFCC7bL/YO1GGzC/775ss0xiCiSB93wqLuhfejh
+         t0RxNWVz2v6rZICdE6J3HSgrCXajTeFjLgpJnE2KotK3HmDmvXg3Hph+qGSb2ytuFl+s
+         tHfnGVYo9Dqpr9yUsfX/Jbl5kfkyIWjjsKHcayswTsxnzSc49SVCbKQK6KlCnH9uVyFb
+         BoVMt+9kh5u5UC4gdxC+mgjPf0CX+LGLzuup/S9l95vA19FTi/wjEOf4rBbsdk3p6rqp
+         cJWlozoa3qHJXBiokzjitJ8kPOknImOAkWzC3+ZnPd8VSeBYKa+GYkHeHdIMG/Sx8IDA
+         ygmw==
+X-Gm-Message-State: ACrzQf2zOFb+YGubDG6u6Y2n5lNmPjS7AfKRlSJ7e5fyeUWvfibjIp3P
+        GZYzZ7v2iGx386McjYuRN9c=
+X-Google-Smtp-Source: AMsMyM6/I6rgKRPKzB98dviP8EI0Pb3JHR4TqFiCS1M9nMT+jXF3OjAbL+nQxWbyw1oY6gJisI5grA==
+X-Received: by 2002:a05:6e02:1a46:b0:300:e668:e8dc with SMTP id u6-20020a056e021a4600b00300e668e8dcmr1858419ilv.19.1667516717796;
+        Thu, 03 Nov 2022 16:05:17 -0700 (PDT)
+Received: from localhost ([2607:fea8:a2e2:2d00:f1f0:c4d7:e39e:e2f])
+        by smtp.gmail.com with ESMTPSA id n26-20020a02715a000000b003757ab96c08sm643552jaf.67.2022.11.03.16.05.16
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 16:05:17 -0700 (PDT)
+From:   Richard Acayan <mailingradian@gmail.com>
+To:     Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Andy Gross <agross@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Vinod Koul <vkoul@kernel.org>,
+        Robin Murphy <robin.murphy@arm.com>,
+        Chanho Park <chanho61.park@samsung.com>,
+        Thierry Reding <treding@nvidia.com>,
+        Stephan Gerhold <stephan.gerhold@kernkonzept.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        Robert Marko <robimarko@gmail.com>,
+        Das Srinagesh <quic_gurus@quicinc.com>,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-msm@vger.kernel.org
+Cc:     ~postmarketos/upstreaming@lists.sr.ht, phone-devel@vger.kernel.org,
+        Richard Acayan <mailingradian@gmail.com>
+Subject: [PATCH v2 0/4] Initial SDM670 and Pixel 3a support
+Date:   Thu,  3 Nov 2022 19:03:47 -0400
+Message-Id: <20221103230349.212861-1-mailingradian@gmail.com>
+X-Mailer: git-send-email 2.38.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <BYAPR21MB1688F63C2410904F92B1F75FD7389@BYAPR21MB1688.namprd21.prod.outlook.com>
-X-Spam-Status: No, score=-18.8 required=5.0 tests=BAYES_00,DATE_IN_PAST_12_24,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 08:33:40PM +0000, Michael Kelley (LINUX) wrote:
-> From: Stanislav Kinsburskii <skinsburskii@linux.microsoft.com> Sent: Thursday, November 3, 2022 10:59 AM
-> > 
-> > Microsoft Hypervisor root partition has to map the TSC page specified
-> > by the hypervisor, instead of providing the page to the hypervisor like
-> > it's done in the guest partitions.
-> > 
-> > However, it's too early to map the page when the clock is initialized, so, the
-> > actual mapping is happening later.
-> > 
-> > Signed-off-by: Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>
-> > CC: "K. Y. Srinivasan" <kys@microsoft.com>
-> > CC: Haiyang Zhang <haiyangz@microsoft.com>
-> > CC: Wei Liu <wei.liu@kernel.org>
-> > CC: Dexuan Cui <decui@microsoft.com>
-> > CC: Thomas Gleixner <tglx@linutronix.de>
-> > CC: Ingo Molnar <mingo@redhat.com>
-> > CC: Borislav Petkov <bp@alien8.de>
-> > CC: Dave Hansen <dave.hansen@linux.intel.com>
-> > CC: x86@kernel.org
-> > CC: "H. Peter Anvin" <hpa@zytor.com>
-> > CC: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > CC: linux-hyperv@vger.kernel.org
-> > CC: linux-kernel@vger.kernel.org
-> > ---
-> >  arch/x86/hyperv/hv_init.c          |    2 ++
-> >  drivers/clocksource/hyperv_timer.c |   38 +++++++++++++++++++++++++++---------
-> >  include/clocksource/hyperv_timer.h |    1 +
-> >  3 files changed, 32 insertions(+), 9 deletions(-)
-> > 
-> > diff --git a/arch/x86/hyperv/hv_init.c b/arch/x86/hyperv/hv_init.c
-> > index f49bc3ec76e6..89954490af93 100644
-> > --- a/arch/x86/hyperv/hv_init.c
-> > +++ b/arch/x86/hyperv/hv_init.c
-> > @@ -464,6 +464,8 @@ void __init hyperv_init(void)
-> >  		BUG_ON(!src);
-> >  		memcpy_to_page(pg, 0, src, HV_HYP_PAGE_SIZE);
-> >  		memunmap(src);
-> > +
-> > +		hv_remap_tsc_clocksource();
-> >  	} else {
-> >  		hypercall_msr.guest_physical_address =
-> > vmalloc_to_pfn(hv_hypercall_pg);
-> >  		wrmsrl(HV_X64_MSR_HYPERCALL, hypercall_msr.as_uint64);
-> > diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
-> > index 9445a1558fe9..dec7ad3b85ba 100644
-> > --- a/drivers/clocksource/hyperv_timer.c
-> > +++ b/drivers/clocksource/hyperv_timer.c
-> > @@ -509,9 +509,6 @@ static bool __init hv_init_tsc_clocksource(void)
-> >  	if (!(ms_hyperv.features & HV_MSR_REFERENCE_TSC_AVAILABLE))
-> >  		return false;
-> > 
-> > -	if (hv_root_partition)
-> > -		return false;
-> > -
-> >  	/*
-> >  	 * If Hyper-V offers TSC_INVARIANT, then the virtualized TSC correctly
-> >  	 * handles frequency and offset changes due to live migration,
-> > @@ -529,16 +526,22 @@ static bool __init hv_init_tsc_clocksource(void)
-> >  	}
-> > 
-> >  	hv_read_reference_counter = read_hv_clock_tsc;
-> > -	tsc_pfn = HVPFN_DOWN(virt_to_phys(tsc_page));
-> > 
-> >  	/*
-> > -	 * The Hyper-V TLFS specifies to preserve the value of reserved
-> > -	 * bits in registers. So read the existing value, preserve the
-> > -	 * low order 12 bits, and add in the guest physical address
-> > -	 * (which already has at least the low 12 bits set to zero since
-> > -	 * it is page aligned). Also set the "enable" bit, which is bit 0.
-> > +	 * TSC page mapping works differently in root compared to guest.
-> > +	 * - In guest partition the guest PFN has to be passed to the
-> > +	 *   hypervisor.
-> > +	 * - In root partition it's other way around: it has to map the PFN
-> > +	 *   provided by the hypervisor.
-> > +	 *   But it can't be mapped right here as it's too early and MMU isn't
-> > +	 *   ready yet. So, we only set the enable bit here and will remap the
-> > +	 *   page later in hv_remap_tsc_clocksource().
-> >  	 */
-> >  	tsc_msr.as_uint64 = hv_get_register(HV_REGISTER_REFERENCE_TSC);
-> > +	if (hv_root_partition)
-> > +		tsc_pfn = tsc_msr.pfn;
-> > +	else
-> > +		tsc_pfn = HVPFN_DOWN(virt_to_phys(tsc_page));
-> >  	tsc_msr.enable = 1;
-> >  	tsc_msr.pfn = tsc_pfn;
-> >  	hv_set_register(HV_REGISTER_REFERENCE_TSC, tsc_msr.as_uint64);
-> 
-> There's a subtlety here that was nagging me, and I think I see it now.
-> 
-> At this point, the code has enabled the Reference TSC, and if we're the root
-> partition, the Reference TSC Page is the page supplied by the hypervisor.
-> tsc_pfn has been updated to reflect that hypervisor supplied page.
-> 
-> But tsc_page has not been updated to be in sync with tsc_pfn because we
-> can't do the memremap() here.  tsc_page still points to tsc_pg, which is a
-> global variable in Linux.  tsc_page and tsc_pfn will be out-of- sync until
-> hv_remap_tsc_clocksource() is called later in the boot process.  During
-> this interval, calls to get the Hyper-V Reference TSC value will use tsc_pg,
-> not on the Reference TSC Page that the hypervisor is using.  Fortunately,
-> the function hv_read_tsc_page_tsc(), which actually reads the Reference
-> TSC Page, treats a zero value for tsc_sequence as a special case meaning
-> that the Reference TSC page isn't valid.  read_hv_clock_tsc() then falls
-> back to reading a hypervisor provided synthetic MSR to get the correct
-> Reference TSC value.  That fallback is fine -- it's just slower because it
-> traps to the hypervisor.  And the fallback will no longer be used once 
-> tsc_page is updated by hv_remap_tsc_clocksource().
-> 
-> So the code works. Presumably this subtlety was already understood, but
-> it really should be called out in a comment, as it is far from obvious.  I
-> know this code pretty well and I just figured it out. :-(
-> 
+Changes since v1:
+ - remove i2c interconnects (4/4)
+ - change regulator phandle names (4/4)
+ - change regulators node names (4/4)
+ - remove clock-output-names from xo-board (4/4)
+ - remove vdd-supply from touchscreen (4/4)
+ - move clocks to device dts (4/4)
+ - reorder pmic nodes, root nodes, and phandle references in dts (4/4)
+ - move status properties to bottom of nodes (4/4)
+ - accumulate commit message tags (1-3/4)
 
-You are absolutely right in everything above.
-Moreover, this imlementation will update the tsc_pfn early and will keep
-it the same regardless of the result of the memremap call in
-hv_remap_tsc_clocksource().
+Do not apply this series yet. It is only for review comments. It can be
+applied once the "qcom,sdm670-smmu-500" compatible string gets added (or
+now if you don't care about handling an unnecessary quirk).
 
-This in turn can lead to an interesting (although quite unprobable)
-situation: kernel fails to remap TSC page (and thus use MSR registers as
-fallback), while user space process can successfully map the TSC page
-and use it instead.
+This adds the device trees and bindings to support the Qualcomm
+Snapdragon 670 and Google Pixel 3a. This patch series, specifically the
+last patch, depends on:
 
-The code can be changed to be, I'd say, more evident (by assigning
-tsc_pfn to the hypervisor PFN only if remapping succeede), but the current
-implementation is the most efficient from the performance point of view,
-so I'd keep it as is (even so it's not very obvious).
+[PATCH v4 0/3] SDM670 Global Clocks
+  https://lore.kernel.org/all/20220914013922.198778-1-mailingradian@gmail.com/T/
+[PATCH v2 0/2] RPMh Support for PM660 and PM660L
+  https://lore.kernel.org/all/20220920223331.150635-1-mailingradian@gmail.com/T/
+[PATCH v2 0/2] SDM670 RPMh Clocks
+  https://lore.kernel.org/all/20220920223734.151135-1-mailingradian@gmail.com/T/
+[PATCH v2 0/2] SDM670 USB 2.0 support
+  https://lore.kernel.org/all/20220922024656.178529-1-mailingradian@gmail.com/T/
+[PATCH 0/2] SDM670 SDHCI support
+  https://lore.kernel.org/all/20220923014322.33620-1-mailingradian@gmail.com/T/
+[PATCH v2 0/2] SDM670 Power Domains
+  https://lore.kernel.org/all/20221004221130.14076-1-mailingradian@gmail.com/T/
+[PATCH v10 0/3] SDM670 Pin Control Driver
+  https://lore.kernel.org/all/20221014001934.4995-1-mailingradian@gmail.com/T/
+[PATCH v6 0/4] SDM670 GPI DMA support
+  https://lore.kernel.org/all/20221018005740.23952-1-mailingradian@gmail.com/T/
+[RFC PATCH 0/9] iommy/arm-smmu-qcom: Rework Qualcomm SMMU bindings and implementation
+  https://lore.kernel.org/linux-iommu/73eee2ed-f8ee-f136-2853-34b27c099644@quicinc.com/T/
 
-Stas
+Richard Acayan (4):
+  dt-bindings: arm: cpus: add qcom kryo 360 compatible
+  dt-bindings: arm: qcom: add sdm670 and pixel 3a compatible
+  dt-bindings: firmware: scm: add sdm670 compatible
+  arm64: dts: qcom: add sdm670 and pixel 3a device trees
 
-> Michael
-> 
+ .../devicetree/bindings/arm/cpus.yaml         |    1 +
+ .../devicetree/bindings/arm/qcom.yaml         |    6 +
+ .../bindings/firmware/qcom,scm.yaml           |    1 +
+ arch/arm64/boot/dts/qcom/Makefile             |    1 +
+ .../boot/dts/qcom/sdm670-google-sargo.dts     |  532 ++++++++
+ arch/arm64/boot/dts/qcom/sdm670.dtsi          | 1169 +++++++++++++++++
+ 6 files changed, 1710 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm670-google-sargo.dts
+ create mode 100644 arch/arm64/boot/dts/qcom/sdm670.dtsi
+
+P.S.: Thank you to all the maintainers and reviewers who went through
+everything and made helpful comments!
+-- 
+2.38.1
+
