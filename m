@@ -2,141 +2,103 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DEEE2617F09
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:13:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 3AC49617F0C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:13:28 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231653AbiKCOND (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 10:13:03 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34950 "EHLO
+        id S231376AbiKCONX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 10:13:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35252 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231386AbiKCOMt (ORCPT
+        with ESMTP id S231646AbiKCONC (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 10:12:49 -0400
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0A87E12D25
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 07:12:42 -0700 (PDT)
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-        by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20221103141240euoutp016c58532301181c0cd8e61d403f924254~kGI4qPuyJ2369623696euoutp01b
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 14:12:40 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20221103141240euoutp016c58532301181c0cd8e61d403f924254~kGI4qPuyJ2369623696euoutp01b
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-        s=mail20170921; t=1667484760;
-        bh=ikLgX5+rC6etpCFPJGJZsqRLbkT4hXzogxYFAeG3eE0=;
-        h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-        b=GxIlWX3o2pwr3Um5Mpb7mSuABrl94qylelYbiTvo/yfExwvIinGkADnzyiTW+x5qY
-         5UJ3VeLLlQKuYyGR1c6B2Lpmn0gH6+jh3DNAokUp6YjWww62ADPgxJY1PEduqJNhTz
-         HWB6wJ9QERmi9pONtTfa9Hn1ttevRoWhhWU8tm1E=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-        20221103141240eucas1p1214a82150536870f5d1392a3e326cc3b~kGI4O4Q_X1074310743eucas1p1X;
-        Thu,  3 Nov 2022 14:12:40 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-        eusmges1new.samsung.com (EUCPMTA) with SMTP id 9C.EB.29727.85CC3636; Thu,  3
-        Nov 2022 14:12:40 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-        eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-        20221103141239eucas1p167f44609369010a20293d5123214426d~kGI3lHwri2591525915eucas1p1L;
-        Thu,  3 Nov 2022 14:12:39 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-        eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-        20221103141239eusmtrp24f5d9beb1b97a2911cbd2c4e6abc37cc~kGI3hJchK2293622936eusmtrp2c;
-        Thu,  3 Nov 2022 14:12:39 +0000 (GMT)
-X-AuditID: cbfec7f2-205ff7000001741f-f8-6363cc585153
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-        eusmgms2.samsung.com (EUCPMTA) with SMTP id 11.ED.10862.75CC3636; Thu,  3
-        Nov 2022 14:12:39 +0000 (GMT)
-Received: from AMDC2765.digital.local (unknown [106.120.51.73]) by
-        eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-        20221103141238eusmtip2b65d8b299762ab3b9d2cc75c389d6a6d~kGI2387YI1617316173eusmtip2T;
-        Thu,  3 Nov 2022 14:12:38 +0000 (GMT)
-From:   Marek Szyprowski <m.szyprowski@samsung.com>
-To:     linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-samsung-soc@vger.kernel.org, devicetree@vger.kernel.org
-Cc:     Marek Szyprowski <m.szyprowski@samsung.com>,
-        Stefan Agner <stefan@agner.ch>,
-        Johan Hovold <johan@kernel.org>,
-        Thinh Nguyen <Thinh.Nguyen@synopsys.com>,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-        Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Frank Rowand <frowand.list@gmail.com>
-Subject: [PATCH 2/2] of: export of_device_add()
-Date:   Thu,  3 Nov 2022 15:12:33 +0100
-Message-Id: <20221103141233.20179-2-m.szyprowski@samsung.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20221103141233.20179-1-m.szyprowski@samsung.com>
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFprBKsWRmVeSWpSXmKPExsWy7djP87oRZ5KTDXov8VnMP3KO1WLmm/9s
-        Fs2L17NZNN3oYbXY+3oru8XlXXPYLGac38dksWhZK7PF2iN32S1a9x5ht9i8rp3dYtWCA+wO
-        PB6Lv99j9tg56y67x6ZVnWwed67tYfPYP3cNu0ffllWMHlv2f2b0+LxJLoAjissmJTUnsyy1
-        SN8ugStjzfb/zAXHWCt235zE1MB4naWLkZNDQsBE4s2DNYxdjFwcQgIrGCWuXZ0L5XxhlHj/
-        vYMFwvnMKHFhwxFmmJZLMx9CJZYzSsx+9YQdruXqsr3sIFVsAoYSXW+72EBsEYEaiZ0XN7OB
-        FDELXGGSmDOpnwkkISygL/H+9F9GEJtFQFVi78wtYDavgK3Evj1LodbJS6zecADI5uDgFLCT
-        eNvNBDJHQuAKh0TTghdQNS4S676/hPpIWOLV8S3sELaMxP+d86Ea2hklFvy+D+VMYJRoeH6L
-        EaLKWuLOuV9sIBuYBTQl1u/Shwg7Spz9C7KNA8jmk7jxVhAkzAxkTto2nRkizCvR0SYEUa0m
-        Mev4Ori1By9cgjrNQ2L+gilskACayCjRfeYtywRG+VkIyxYwMq5iFE8tLc5NTy02zEst1ytO
-        zC0uzUvXS87P3cQITDyn/x3/tINx7quPeocYmTgYDzFKcDArifB+2pacLMSbklhZlVqUH19U
-        mpNafIhRmoNFSZyXbYZWspBAemJJanZqakFqEUyWiYNTqoGp8IHyU0tHh8QLch1hGu8dvuZy
-        NGxVv31HV3j7q6Jq7xPfC8+LsGp/ZTlcJhLjE743aYsXW59Bmmvashu7eo+oZC1dMDnA7M0D
-        poNioYrHjW+Yt+ffidr74JHtlVa7Ip0Ned+/NU122bvu8G/Rc+svXfmSmKSYevnTydtKse8f
-        e2xlLrX8x1NXv8I//I4p35HmU0/DJ3BwPfM3/hf740DY6m035wva+m099J+t7uJsGdFzvtM8
-        Xh2MXO6poSr5Lie8brnO+7tz70/blbh6Mf9jTbVHsYvdvklW7N4b0TI7NPrxInNRlT8sL2I+
-        ZOyTehzwNDCLI3kPl0T959rlEYVuay76Wux4ub0qr0IyvcJViaU4I9FQi7moOBEAWvI9yKsD
-        AAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFvrOLMWRmVeSWpSXmKPExsVy+t/xe7rhZ5KTDc60qlnMP3KO1WLmm/9s
-        Fs2L17NZNN3oYbXY+3oru8XlXXPYLGac38dksWhZK7PF2iN32S1a9x5ht9i8rp3dYtWCA+wO
-        PB6Lv99j9tg56y67x6ZVnWwed67tYfPYP3cNu0ffllWMHlv2f2b0+LxJLoAjSs+mKL+0JFUh
-        I7+4xFYp2tDCSM/Q0kLPyMRSz9DYPNbKyFRJ384mJTUnsyy1SN8uQS9jzfb/zAXHWCt235zE
-        1MB4naWLkZNDQsBE4tLMh2C2kMBSRom+lRwQcRmJk9MaWCFsYYk/17rYuhi5gGo+MUocn3qC
-        DSTBJmAo0fUWIiEi0MAosWPyXyYQh1ngBpPEhLl9YFXCAvoS70//ZQSxWQRUJfbO3AJm8wrY
-        Suzbs5QZYoW8xOoNB4BsDg5OATuJt91MIKYQUMm1ndETGPkWMDKsYhRJLS3OTc8tNtIrTswt
-        Ls1L10vOz93ECIyBbcd+btnBuPLVR71DjEwcjIcYJTiYlUR4P21LThbiTUmsrEotyo8vKs1J
-        LT7EaAp0xURmKdHkfGAU5pXEG5oZmBqamFkamFqaGSuJ83oWdCQKCaQnlqRmp6YWpBbB9DFx
-        cEo1MC3U/WTBbOP/Skf2i1s5y9ub17Jkt34693QVZ0PiUen93r+LTRuv5z1mit/ix3h2CsPD
-        9weN7wjPmJA16a7z5K/cDz/sbNplv0idTa1+br6hbt4ZAc6w5yzfa3sW+0q2x8/RqvD0dtbg
-        9Xu2qu/2dr/G7jw9f/uQJU7nC9eG/dBKuh3WxMnqfNybxzTupsMy4SeRcQv186e1PLlv7DZL
-        W+2XUoOglWOcnsF14UUv7BI3LDj/7ZpF+KrMD3zdC+VVUua9n+NhWf8iIZJn0+QFClcC7t0X
-        vVxQuDzsE/uOGyvjJxtcPh/qxtZ+d8+MJ9881rB+uOc3ie/K0da8p9tXLjXbvfCU7cXHNyZt
-        /Bn6dKYSS3FGoqEWc1FxIgANDhUICgMAAA==
-X-CMS-MailID: 20221103141239eucas1p167f44609369010a20293d5123214426d
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20221103141239eucas1p167f44609369010a20293d5123214426d
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20221103141239eucas1p167f44609369010a20293d5123214426d
-References: <20221103141233.20179-1-m.szyprowski@samsung.com>
-        <CGME20221103141239eucas1p167f44609369010a20293d5123214426d@eucas1p1.samsung.com>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+        Thu, 3 Nov 2022 10:13:02 -0400
+Received: from mail-wr1-x434.google.com (mail-wr1-x434.google.com [IPv6:2a00:1450:4864:20::434])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4650517886
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 07:12:59 -0700 (PDT)
+Received: by mail-wr1-x434.google.com with SMTP id o4so2969711wrq.6
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 07:12:59 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=DW6qOLggUDgASb5BXWgCGBn6wiJ6RjTplDMM4RvHv1c=;
+        b=szGfA5+M7RAuJB1RtigO8OXQnPyhSSGas+YyiakeOYmPUpGUE0ADMCc2/g+DMiQggO
+         0awI303q89XBifILuOCdf9y2/b6mq6D6HrBD58ZICMYPRUkHL3/Iuct87QptioaXQiUb
+         8Bnt2+VIzshGlCDK3bwtpaht99yOc9iPNZi4fgtel3xBl9UAwO5yHoN1WMH5ATwSsb44
+         VO2EVWWE56QgaA+IQECwMT1S3tWfVRFdItFfj2HEkaR4JKShBPy+yIhnKzPpnq7zKjH/
+         vZCHDjKzarQ8jX6IQNG2aUcsbMLiQ+YOKtRC4Cf9bfQjQlvCDoz57weFZRHwHOpnqpsp
+         hkDg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DW6qOLggUDgASb5BXWgCGBn6wiJ6RjTplDMM4RvHv1c=;
+        b=U6pqekN2yhIKwK3JRepRZ0MPgqpcGWyk6l2cmSfys93eFnXK/NDcnt8cjfAPcxueLA
+         cIUAtW6n279/d4a8orSk0dajfN4uBscXTH3+pyV2C6nHO2xG64XrTYeM3XsVSaWiYSMl
+         DOgEmFSdnmZFfw8Px1jbCcpP6Ja9+JE4YDypm/6ZHvRioOOiEUpdFzyU8FLlqdj95pTP
+         HTXjsCvWN10coJD5uHR/UTEHpYHl8B28Cc5sQp0vg2BuvJeWUebunmqotC8jBgpHKsTo
+         cNqvLifJNT3JS6PQiqb6MeiM1sq/5+lnqR76sNsb1CkZdYcWLhILrGIYme+W1mK+cmcv
+         ZRBg==
+X-Gm-Message-State: ACrzQf0PrgwbbqhX3zoJn0bJ5WhPRGlUOSOg9zcUieVc6rVI2mTfOcTK
+        oQURzEGY5ofNajT06ArtoMdF5BQmGos2i4cKq7Sc2g==
+X-Google-Smtp-Source: AMsMyM5IngcZNcehorWq6IuX0vGpEwpnOakPgOR/8mDTynUw7/vFc41S411CVdIbzMmXMYIVD5Xcmk+c/RbP4ad4h/0=
+X-Received: by 2002:adf:db4d:0:b0:236:699b:be5e with SMTP id
+ f13-20020adfdb4d000000b00236699bbe5emr18209276wrj.147.1667484777461; Thu, 03
+ Nov 2022 07:12:57 -0700 (PDT)
+MIME-Version: 1.0
+References: <20221027004050.4192111-1-albertccwang@google.com>
+ <20221027004050.4192111-3-albertccwang@google.com> <Y1oj7TlC93oOKyB7@kroah.com>
+In-Reply-To: <Y1oj7TlC93oOKyB7@kroah.com>
+From:   Albert Wang <albertccwang@google.com>
+Date:   Thu, 3 Nov 2022 22:12:45 +0800
+Message-ID: <CANqn-rjNKJasYe4LxMcSNANCOVkGaiQ8=nwaMTjvBkyts=uG8w@mail.gmail.com>
+Subject: Re: [PATCH 2/3] usb: xhci-plat: add xhci_plat_priv_overwrite
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     mathias.nyman@intel.com, badhri@google.com, howardyen@google.com,
+        linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org,
+        Greg Kroah-Hartman <gregkh@google.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-15.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,HK_RANDOM_ENVFROM,HK_RANDOM_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,
+        USER_IN_DEF_SPF_WL autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Export of_device_add() function to let DWC3 driver (Exynos variant) to
-instantiate DWC3 core device from the respective child OF-node with a
-custom, addtional properties added.
+Understood, will fix and re-upload v2 patch set.
 
-Signed-off-by: Marek Szyprowski <m.szyprowski@samsung.com>
----
- drivers/of/device.c | 1 +
- 1 file changed, 1 insertion(+)
+Thanks,
+Albert
 
-diff --git a/drivers/of/device.c b/drivers/of/device.c
-index 8cefe5a7d04e..bc60c9b6863c 100644
---- a/drivers/of/device.c
-+++ b/drivers/of/device.c
-@@ -52,6 +52,7 @@ int of_device_add(struct platform_device *ofdev)
- 
- 	return device_add(&ofdev->dev);
- }
-+EXPORT_SYMBOL(of_device_add);
- 
- static void
- of_dma_set_restricted_buffer(struct device *dev, struct device_node *np)
--- 
-2.17.1
+Albert Wang | Pixel USB Software  | albertccwang@google.com | +886-918-695-245
 
+
+On Thu, Oct 27, 2022 at 2:22 PM Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Thu, Oct 27, 2022 at 08:40:49AM +0800, Albert Wang wrote:
+> > From: Howard Yen <howardyen@google.com>
+> >
+> > Add an overwrite to platform specific callback for setting up the
+> > xhci_offload_ops, allow vendor to store the xhci_offload_ops and
+> > overwrite them when xhci_plat_probe invoked.
+> >
+> > Signed-off-by: Howard Yen <howardyen@google.com>
+> > Link: https://lore.kernel.org/r/20210119101044.1637023-1-howardyen@google.com
+> > Signed-off-by: Greg Kroah-Hartman <gregkh@google.com>
+>
+> Again, no, I do NOT sign off on this submission.
+>
+> Also, you did not sign off on it, yet you forwarded it on.  That's not
+> allowed either, and makes this whole series not even able to be
+> accepted, if it were a valid set of changes :(
+>
+> Please fix.
+>
+> thanks,
+>
+> greg k-h
