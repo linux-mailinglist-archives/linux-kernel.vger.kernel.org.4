@@ -2,151 +2,94 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 89F2C618A9D
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 22:34:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C5B65618A9A
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 22:34:02 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231143AbiKCVeb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 17:34:31 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48688 "EHLO
+        id S230510AbiKCVeA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 17:34:00 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48746 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229579AbiKCVe1 (ORCPT
+        with ESMTP id S229496AbiKCVd4 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 17:34:27 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 22B696415
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 14:33:34 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667511213;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding;
-        bh=meSbCtcdhls8TiywckooFQyX4UhcYRP/sFZKWlTa6GQ=;
-        b=hYPxxuR9WK1MbsZ2N7oqQOTSDofUQo3HTxRmzAxiC0Iebn65qWORi6/h+EKcr8+Rmm/HTn
-        0ro8sGe9G5u9eH0dxhe6lagIACjA9u01SzwANwgLSHmxU+VKWJfKpSpOtmPfmdb3lQkVhD
-        9l6KQB8IkFsSU34CtuNtc2nST83Fa58=
-Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
- [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- us-mta-608-EbztDGetOYmouMU7AEhUXw-1; Thu, 03 Nov 2022 17:33:30 -0400
-X-MC-Unique: EbztDGetOYmouMU7AEhUXw-1
-Received: from smtp.corp.redhat.com (int-mx03.intmail.prod.int.rdu2.redhat.com [10.11.54.3])
-        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
-        (No client certificate requested)
-        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id CD7503C0D183;
-        Thu,  3 Nov 2022 21:33:29 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.33.37.22])
-        by smtp.corp.redhat.com (Postfix) with ESMTP id E94A8112131B;
-        Thu,  3 Nov 2022 21:33:28 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-        Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-        Kingdom.
-        Registered in England and Wales under Company Registration No. 3798903
-Subject: [PATCH] netfs: Fix missing xas_retry() calls in xarray iteration
-From:   David Howells <dhowells@redhat.com>
-To:     willy@infradead.org
-Cc:     George Law <glaw@redhat.com>, Jeff Layton <jlayton@kernel.org>,
-        linux-cachefs@redhat.com, linux-fsdevel@vger.kernel.org,
-        dhowells@redhat.com, linux-kernel@vger.kernel.org
-Date:   Thu, 03 Nov 2022 21:33:28 +0000
-Message-ID: <166751120808.117671.15797010154703575921.stgit@warthog.procyon.org.uk>
-User-Agent: StGit/1.5
+        Thu, 3 Nov 2022 17:33:56 -0400
+Received: from mail-pj1-x1029.google.com (mail-pj1-x1029.google.com [IPv6:2607:f8b0:4864:20::1029])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7E86718360
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 14:33:55 -0700 (PDT)
+Received: by mail-pj1-x1029.google.com with SMTP id o7so2892795pjj.1
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 14:33:55 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=9elements.com; s=google;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=uwWaeFPyUois+zOfqfyT5ohr4xM8T8g0qeP7AoVhxz8=;
+        b=L7Z7y+KThkCA7DWPiRRPAC+SFE9rBt9hgXNEz2xJhfmGVCC4AEH6ZMLdGT85/SEhGA
+         Gt1ZbCWnXSl0Osu0QYpI7O16omPV8VrW0dUXwqusFX4NeO429JI1A2ArXSHm/38j5KPh
+         m7zn9tEX2dYFEXMdBrM67fU9/u9Cs4jzXT+HHKYBg6jkP6qt7ISUwMVx4VvTIE7euex4
+         +K6tnLbvemkaSZ3nASPXVU05+dpOfjz8gcGFRfukFj9X4avUqFy4xOj+rXkFkdcP3beE
+         5WAAGyWLFMupSoxfP8o3n7y2FlmyPsqlM7wqMUWJDN/4W5wVzpYBGSCXU2k6hmEFNc3O
+         xZbg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=uwWaeFPyUois+zOfqfyT5ohr4xM8T8g0qeP7AoVhxz8=;
+        b=As2RGCeiBvk95EXaQCEzlUzyFkotwXnLlvuexL9iRfaDymQUpbWCITlAo+6EUYcnJ2
+         9hc9irty8TXz+O7khwcnb1D8M70+w/abISv/UHxpIa4BLM/W6SCBjgjrhSy84xZTAE4i
+         yGeAtvDwHKzkF+8Kcsu7SRZYtaJ8SqIZ90FihkxmFG1okMvma1dC/BK4xVcANwvOESuf
+         btWnqKwDQ/vbKWiaBwrSC+JOdjzXF4hh/EOLHr/04c5yZL96vwEv1IVrTjM+BJaSlAYQ
+         zeOTeI+6SUn+6aqArcVOe7YcqBNyG6u6ZjDc5iCqNr2PNeVuCh56u6PNz87cFNp8AEA8
+         /0FQ==
+X-Gm-Message-State: ACrzQf2P/j+VCsuEnlhZ3au3Rb93yUIjhkML+3qSwXb1cBQCq11U2mN8
+        Hfe6O//c3VM8kuYBbfqjlq3hIg==
+X-Google-Smtp-Source: AMsMyM5eVZsosy0zyPzcobjPSW87XTyKBh9meympQwj1J55lzNv7IMiQvOxzN4MwFjQ25bQ/jl9KuQ==
+X-Received: by 2002:a17:903:50b:b0:187:11e:5f1f with SMTP id jn11-20020a170903050b00b00187011e5f1fmr32604447plb.41.1667511235026;
+        Thu, 03 Nov 2022 14:33:55 -0700 (PDT)
+Received: from ?IPV6:2405:201:d02f:da6a:d4a2:1253:adfc:370? ([2405:201:d02f:da6a:d4a2:1253:adfc:370])
+        by smtp.gmail.com with ESMTPSA id z5-20020a17090a398500b0020647f279fbsm439153pjb.29.2022.11.03.14.33.52
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 14:33:54 -0700 (PDT)
+Message-ID: <47b13fed-2c31-f43e-8789-d120fce00dc3@9elements.com>
+Date:   Fri, 4 Nov 2022 03:03:50 +0530
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v6 1/2] dt-bindings: mfd: Add bindings for MAX5970 and
+ MAX5978
+To:     Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+        Lee Jones <lee@kernel.org>, Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Patrick Rudolph <patrick.rudolph@9elements.com>
+Cc:     Marcello Sylvester Bauer <sylv@sylv.io>
+References: <20221103080545.1400424-1-Naresh.Solanki@9elements.com>
+ <20221103080545.1400424-2-Naresh.Solanki@9elements.com>
+ <0c23e569-61e1-3eba-f9fc-4b42ed228b52@linaro.org>
+ <dc6c8f79-9830-dd1b-a064-3b25a3b74a35@9elements.com>
+ <613d7971-37d6-c8db-523e-cf3cbdcd5287@linaro.org>
+ <b9b77873-9004-425c-276d-ea5ef8ebf7dc@9elements.com>
+ <e3164343-3b0d-6672-e628-87347a03000f@linaro.org>
+Content-Language: en-US
+From:   Naresh Solanki <naresh.solanki@9elements.com>
+In-Reply-To: <e3164343-3b0d-6672-e628-87347a03000f@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Scanned-By: MIMEDefang 3.1 on 10.11.54.3
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
-        autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-netfslib has a number of places in which it performs iteration of an xarray
-whilst being under the RCU read lock.  It *should* call xas_retry() as the
-first thing inside of the loop and do "continue" if it returns true in case
-the xarray walker passed out a special value indicating that the walk needs
-to be redone from the root[*].
-
-Fix this by adding the missing retry checks.
-
-[*] I wonder if this should be done inside xas_find(), xas_next_node() and
-    suchlike, but I'm told that's not an simple change to effect.
-
-This can cause an oops like that below.  Note the faulting address - this
-is an internal value (|0x2) returned from xarray.
-
-BUG: kernel NULL pointer dereference, address: 0000000000000402
-...
-RIP: 0010:netfs_rreq_unlock+0xef/0x380 [netfs]
-...
-Call Trace:
- netfs_rreq_assess+0xa6/0x240 [netfs]
- netfs_readpage+0x173/0x3b0 [netfs]
- ? init_wait_var_entry+0x50/0x50
- filemap_read_page+0x33/0xf0
- filemap_get_pages+0x2f2/0x3f0
- filemap_read+0xaa/0x320
- ? do_filp_open+0xb2/0x150
- ? rmqueue+0x3be/0xe10
- ceph_read_iter+0x1fe/0x680 [ceph]
- ? new_sync_read+0x115/0x1a0
- new_sync_read+0x115/0x1a0
- vfs_read+0xf3/0x180
- ksys_read+0x5f/0xe0
- do_syscall_64+0x38/0x90
- entry_SYSCALL_64_after_hwframe+0x44/0xae
-
-Fixes: 3d3c95046742 ("netfs: Provide readahead and readpage netfs helpers")
-Reported-by: George Law <glaw@redhat.com>
-Signed-off-by: David Howells <dhowells@redhat.com>
-Reviewed-by: Jeff Layton <jlayton@kernel.org>
-cc: Matthew Wilcox <willy@infradead.org>
-cc: linux-cachefs@redhat.com
-cc: linux-fsdevel@vger.kernel.org
----
-
- fs/netfs/buffered_read.c |    9 +++++++--
- fs/netfs/io.c            |    3 +++
- 2 files changed, 10 insertions(+), 2 deletions(-)
-
-diff --git a/fs/netfs/buffered_read.c b/fs/netfs/buffered_read.c
-index 0ce535852151..baf668fb4315 100644
---- a/fs/netfs/buffered_read.c
-+++ b/fs/netfs/buffered_read.c
-@@ -46,10 +46,15 @@ void netfs_rreq_unlock_folios(struct netfs_io_request *rreq)
- 
- 	rcu_read_lock();
- 	xas_for_each(&xas, folio, last_page) {
--		unsigned int pgpos = (folio_index(folio) - start_page) * PAGE_SIZE;
--		unsigned int pgend = pgpos + folio_size(folio);
-+		unsigned int pgpos, pgend;
- 		bool pg_failed = false;
- 
-+		if (xas_retry(&xas, folio))
-+			continue;
-+
-+		pgpos = (folio_index(folio) - start_page) * PAGE_SIZE;
-+		pgend = pgpos + folio_size(folio);
-+
- 		for (;;) {
- 			if (!subreq) {
- 				pg_failed = true;
-diff --git a/fs/netfs/io.c b/fs/netfs/io.c
-index 428925899282..e374767d1b68 100644
---- a/fs/netfs/io.c
-+++ b/fs/netfs/io.c
-@@ -121,6 +121,9 @@ static void netfs_rreq_unmark_after_write(struct netfs_io_request *rreq,
- 		XA_STATE(xas, &rreq->mapping->i_pages, subreq->start / PAGE_SIZE);
- 
- 		xas_for_each(&xas, folio, (subreq->start + subreq->len - 1) / PAGE_SIZE) {
-+			if (xas_retry(&xas, folio))
-+				continue;
-+
- 			/* We might have multiple writes from the same huge
- 			 * folio, but we mustn't unlock a folio more than once.
- 			 */
 
 
+On 04-11-2022 01:56 am, Krzysztof Kozlowski wrote:
+> Eh, true, but you have there "additionalProperties: true" which are not
+> allowed. This must be false and about leds I commented. False must be in
+> all other places as well.
+Will fix in V8.
+
+Thanks
