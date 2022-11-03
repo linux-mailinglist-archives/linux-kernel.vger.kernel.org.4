@@ -2,170 +2,130 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 85399618B96
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 23:33:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E5F70618B9B
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 23:34:23 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230408AbiKCWdq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 18:33:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50872 "EHLO
+        id S231433AbiKCWeV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 18:34:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229863AbiKCWdm (ORCPT
+        with ESMTP id S231238AbiKCWeP (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 18:33:42 -0400
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6A2C61FCE7;
-        Thu,  3 Nov 2022 15:33:41 -0700 (PDT)
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-        by mx0a-0031df01.pphosted.com (8.17.1.19/8.17.1.19) with ESMTP id 2A3MWa4N020807;
-        Thu, 3 Nov 2022 22:33:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=message-id : date :
- mime-version : subject : to : cc : references : from : in-reply-to :
- content-type : content-transfer-encoding; s=qcppdkim1;
- bh=ojVz6+kfupsCAHfqd+jwQYHHjRd1Sj2lQ0/Cs05oazE=;
- b=LkdqzMfJ93AdRhxbWol/fmuJlpLghVdOFB3XzaescAeQX+LAUJ1igua1AjNnUpCQTwj/
- ljrVkFn25suqv+8wbm4uayIHIJtpfGDXEVquZnLf/wQuUiKxdFo/89x/eA7lWuCdSPiZ
- GqgpTxgJna40ta5gfUnO6tyKryK9YBWI9DH7Ul3V/u/KaOmC+K5th6rx96Wz71pEEe8T
- 8pI78PuMgjuuDcQ570Sz1op9QpfQ1283fdiBG8dqfKdE9Dqdb/7EAk5fjj6oZnsNmFAI
- wHyQ527MJMZnWRuIBEeiadMP6TD7sW9EcKNCZGjMXZwJK5vBqgGOt0InLHbAoAiAo6+S eA== 
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-        by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 3kmpgx803a-1
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Nov 2022 22:33:25 +0000
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-        by NASANPPMTA04.qualcomm.com (8.17.1.5/8.17.1.5) with ESMTPS id 2A3MXOVt006920
-        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 3 Nov 2022 22:33:24 GMT
-Received: from [10.110.42.219] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.986.29; Thu, 3 Nov 2022
- 15:33:23 -0700
-Message-ID: <ab7184f6-09e4-4b1c-bebe-30119b8da46c@quicinc.com>
-Date:   Thu, 3 Nov 2022 15:33:22 -0700
+        Thu, 3 Nov 2022 18:34:15 -0400
+Received: from mail-pl1-x630.google.com (mail-pl1-x630.google.com [IPv6:2607:f8b0:4864:20::630])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E834620BE7
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 15:34:14 -0700 (PDT)
+Received: by mail-pl1-x630.google.com with SMTP id j12so3278481plj.5
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 15:34:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ldFAJy69ux+7z8nNCEANq8kYxugZwXEN2GoxlipQK+E=;
+        b=mkCIQ7bnuqf5rnZcP6hp5JREtMJ78/S1f1OWtkJaTeRse5OVZRNDMID1AYpz+jBJzg
+         eTpW9c3Fpt1GJSjywJBWRecDimPLsqOLfN7Nt46XLz4VoW6wiMtnGP3QRSBmWb2Jy2Ue
+         XIrU3j6Zv6WjRE+wBsl7MInjLBoh0ETGKk290BPhyym2xqAHPTTSp2piVfBSnA5Xqpa6
+         3LkVfTkbpSA7y+3xQukW44oEvhoV3ll0HshYQg8WmMixLpenp+usLAkNlELtK9JmVVTO
+         f4CyPp1jxX+2aW0ZdvzjRbMLb0KbcueA1rrAX1kSu3aGK0UrE4ad6SuEvUCcApyckgBR
+         ztmg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ldFAJy69ux+7z8nNCEANq8kYxugZwXEN2GoxlipQK+E=;
+        b=kBVkpcwIhtfNYzM5x2TP5EUtHol9sPS3JTUuhuuIMSJsZEUZngwTjfUJpwSPJxCPSF
+         /ItoZSBTyQ948ObPPNbHRGgovntuzcgJVIE846Ucz+b2EF4LKJV4TgWxcM4hq9duChbV
+         KUsDOfcxvWRRC3P6ZKK8Y9IyCF9NCSKhplqq8zi9qLCwov8xGqTmy3B9Cz5pMqUma9ro
+         9diJFdGGZEOaiFz3LhD6HlRTB3rbaIOcmd8nsNKSLemYeDTMfLVX+ZM+DD+KPjNIioW/
+         QD7O5gePJ35RjTy4pCq4B+K+i5iB7aFO91Fn2jogPR68sPWDBXK/0l2eMnjdXB2uYvyw
+         /NFQ==
+X-Gm-Message-State: ACrzQf1Z6xOiy3008zLeieVuFacxy31BtilIFCDTI43fvHTsyZcxN14q
+        FUfH7UbIfPTDCSNZKQ9iuRQbrw==
+X-Google-Smtp-Source: AMsMyM4x/1h/4H3vdmKr9CnvGb6Osipgsi8YDrhqpMcYmjYNzerzqYc2UHi5AhKhfTxXN1DVaborYg==
+X-Received: by 2002:a17:90a:6045:b0:212:fe9a:5792 with SMTP id h5-20020a17090a604500b00212fe9a5792mr49415367pjm.178.1667514854306;
+        Thu, 03 Nov 2022 15:34:14 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id u10-20020a170902e80a00b00186ad73e2d5sm1151929plg.208.2022.11.03.15.34.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 15:34:13 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 22:34:10 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     Isaku Yamahata <isaku.yamahata@gmail.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>
+Subject: Re: [PATCH 36/44] KVM: x86: Do compatibility checks when onlining CPU
+Message-ID: <Y2RB4qT02EkhMjPL@google.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+ <20221102231911.3107438-37-seanjc@google.com>
+ <20221103210402.GB1063309@ls.amr.corp.intel.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [PATCH v6 13/21] gunyah: vm_mgr: Introduce basic VM Manager
-Content-Language: en-US
-To:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC:     Arnd Bergmann <arnd@arndb.de>,
-        Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Murali Nalajala <quic_mnalajal@quicinc.com>,
-        Trilok Soni <quic_tsoni@quicinc.com>,
-        Srivatsa Vaddagiri <quic_svaddagi@quicinc.com>,
-        Carl van Schaik <quic_cvanscha@quicinc.com>,
-        Prakruthi Deepak Heragu <quic_pheragu@quicinc.com>,
-        Andy Gross <agross@kernel.org>,
-        Jassi Brar <jassisinghbrar@gmail.com>,
-        <linux-arm-kernel@lists.infradead.org>,
-        "Mark Rutland" <mark.rutland@arm.com>,
-        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
-        Sudeep Holla <sudeep.holla@arm.com>,
-        "Marc Zyngier" <maz@kernel.org>, Rob Herring <robh+dt@kernel.org>,
-        "Krzysztof Kozlowski" <krzysztof.kozlowski+dt@linaro.org>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Will Deacon <will@kernel.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-        Amol Maheshwari <amahesh@qti.qualcomm.com>,
-        Kalle Valo <kvalo@kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-doc@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20221026185846.3983888-1-quic_eberman@quicinc.com>
- <20221026185846.3983888-14-quic_eberman@quicinc.com>
- <c1f86c53-1d9f-4faf-9313-de86d33e3739@app.fastmail.com>
- <7c59a115-36c5-c954-5610-ef5ef1dbb83e@quicinc.com>
- <Y2MJYEqnJONvH0fY@kroah.com>
-From:   Elliot Berman <quic_eberman@quicinc.com>
-In-Reply-To: <Y2MJYEqnJONvH0fY@kroah.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Originating-IP: [10.80.80.8]
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: bjBicJSDzvATZudAaAiSrBktCr4v1hol
-X-Proofpoint-ORIG-GUID: bjBicJSDzvATZudAaAiSrBktCr4v1hol
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
- definitions=2022-11-03_04,2022-11-03_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- mlxlogscore=909 impostorscore=0 bulkscore=0 spamscore=0 lowpriorityscore=0
- suspectscore=0 adultscore=0 clxscore=1015 mlxscore=0 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.12.0-2210170000 definitions=main-2211030154
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221103210402.GB1063309@ls.amr.corp.intel.com>
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,
+        SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 11/2/2022 5:20 PM, Greg Kroah-Hartman wrote:
-> On Wed, Nov 02, 2022 at 11:44:51AM -0700, Elliot Berman wrote:
->>
->>
->> On 11/2/2022 12:31 AM, Arnd Bergmann wrote:
->>> On Wed, Oct 26, 2022, at 20:58, Elliot Berman wrote:
->>>
->>>> +static const struct file_operations gh_vm_fops = {
->>>> +	.unlocked_ioctl = gh_vm_ioctl,
->>>> +	.release = gh_vm_release,
->>>> +	.llseek = noop_llseek,
->>>> +};
->>>
->>> There should be a .compat_ioctl entry here, otherwise it is
->>> impossible to use from 32-bit tasks. If all commands have
->>> arguments passed through a pointer to a properly defined
->>> structure, you can just set it to compat_ptr_ioctl.
->>>
->>
->> Ack.
->>
->>>> +static long gh_dev_ioctl_create_vm(unsigned long arg)
->>>> +{
->>>> +	struct gunyah_vm *ghvm;
->>>> +	struct file *file;
->>>> +	int fd, err;
->>>> +
->>>> +	/* arg reserved for future use. */
->>>> +	if (arg)
->>>> +		return -EINVAL;
->>>
->>> Do you have something specific in mind here? If 'create'
->>> is the only command you support, and it has no arguments,
->>> it would be easier to do it implicitly during open() and
->>> have each fd opened from /dev/gunyah represent a new VM.
->>>
->>
->> I'd like the argument here to support different types of virtual machines. I
->> want to leave open what "different types" can be in case something new comes
->> up in the future, but immediately "different type" would correspond to a few
->> different authentication mechanisms for virtual machines that Gunyah
->> supports.
+On Thu, Nov 03, 2022, Isaku Yamahata wrote:
+> On Wed, Nov 02, 2022 at 11:19:03PM +0000,
+> Sean Christopherson <seanjc@google.com> wrote:
+> > diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> > index f223c845ed6e..c99222b71fcc 100644
+> > --- a/arch/x86/include/asm/kvm_host.h
+> > +++ b/arch/x86/include/asm/kvm_host.h
+> > @@ -1666,7 +1666,7 @@ struct kvm_x86_nested_ops {
+> >  };
+> >  
+> >  struct kvm_x86_init_ops {
+> > -	int (*check_processor_compatibility)(void);
+> > +	int (*check_processor_compatibility)(int cpu);
 > 
-> Please don't add code that does not actually do something now, as that
-> makes it impossible to review properly, _AND_ no one knows what is going
-> to happen in the future.  In the future, you can just add a new ioctl
-> and all is good, no need to break working userspace by suddenly looking
-> at the arg value and doing something with it.
+> Is this cpu argument used only for error message to include cpu number
+> with avoiding repeating raw_smp_processor_id() in pr_err()?
+
+Yep.
+
+> The actual check is done on the current executing cpu.
 > 
+> If cpu != raw_smp_processor_id(), cpu is wrong. Although the function is called
+> in non-preemptive context, it's a bit confusing. So voting to remove it and
+> to use.
 
-I think the argument does something today and it's documented to need to 
-be 0. If a userspace from the future provides non-zero value, Linux will 
-correctly reject it because it doesn't know how to interpret the 
-different VM types.
-
-I can document it more clearly as the VM type field and support only the 
-one VM type today.
-
-Creating new ioctl for each VM type feels to me like I didn't design 
-CREATE_VM ioctl right in first place.
-
-Thanks,
-Elliot
+What if I rename the param is this_cpu?  I 100% agree the argument is confusing
+as-is, but forcing all the helpers to manually grab the cpu is quite annoying.
