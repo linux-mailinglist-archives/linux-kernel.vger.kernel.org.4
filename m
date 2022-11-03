@@ -2,66 +2,71 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DFF9A6174B9
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 04:05:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A4AB06174BB
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 04:05:39 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230363AbiKCDFT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 23:05:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54372 "EHLO
+        id S230047AbiKCDFh (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 23:05:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:54430 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229993AbiKCDFM (ORCPT
+        with ESMTP id S229993AbiKCDFX (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 23:05:12 -0400
-Received: from mail-pl1-x634.google.com (mail-pl1-x634.google.com [IPv6:2607:f8b0:4864:20::634])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 716E613F7F
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 20:05:11 -0700 (PDT)
-Received: by mail-pl1-x634.google.com with SMTP id p3so663061pld.10
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 20:05:11 -0700 (PDT)
+        Wed, 2 Nov 2022 23:05:23 -0400
+Received: from mail-qk1-x734.google.com (mail-qk1-x734.google.com [IPv6:2607:f8b0:4864:20::734])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 43DD713F7F
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 20:05:22 -0700 (PDT)
+Received: by mail-qk1-x734.google.com with SMTP id i9so377980qki.10
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 20:05:22 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=chromium.org; s=google;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=mvYVAnQWllCErBPy/YhOowEsw7eIAxS1iA2SHHv3UcY=;
-        b=KKihXx5Dop1yjXI4bddf4nkEdYbmFkavybw5mE6Tm3VuFTyzVCyP7BcJl8XlK+KNAw
-         iHoqRNp4sWj6jbuUKkCosavoZtSzj0mVEQWvNyNV3i8N+eZ7zjWhLyWe6OycGgme1xeW
-         30uIAsLapk5fWCSQV4BlaUMmOqH1y4BPuYVbg=
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R64KECUzDbqJo0RRKWL4JjLGKACzWeVJPV2fXxBJdHw=;
+        b=ju3Dknz07FXV4Eja1inVQbLV5EziVz/npKT2GwOg4qm60L2iFaIP9e04iZ9gYRFvIy
+         oLMsDFaAW7PVgBNfjby2i8fQZmp6MrvbXW7hJDHFovM3Vh8EV1cy5UAVhJbBGIOvh6T8
+         UcwlOuYb0iPCKfeXAhU54nmrjwFKxudH6BQFw=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mvYVAnQWllCErBPy/YhOowEsw7eIAxS1iA2SHHv3UcY=;
-        b=D0SJ2SKRBwzkl0XK/frXrtDofpnS+EG/C7UFDuC92L9VlGSVr5RhhQbr/i65nVIkgk
-         fYll65WeJncmdTF+gIvXJe1zD2qBPUx5+wcL5RmNsI8vT/mvYiBuUCNAvi+KhdG3CKc0
-         18Ju24Hlgb85xVft3fKqLLD7ore9ah6P6y4iHHYXnx23IWN1trW16BOH2s31FejtH76j
-         gaa0MIrzNlbZTnuNunmMF4OlZI6pkXo5PCJ0ga00hfV8ZCC731M5cfYMTX0AsMpczuOK
-         LkJCY3iiKzp2uOU7MpbRSMqPeu2mHfie1YfB2+WoMOBHm6A2MlBfVZNvX4mMD6IP6mkx
-         4zFQ==
-X-Gm-Message-State: ACrzQf0/XxBy2RzqOdAeJkInl024dsrAujVmBdf0WTu7CXq5QkChx7IH
-        FKyUXj0caFdTYcXMV0cKqdxefQ==
-X-Google-Smtp-Source: AMsMyM7+4grXkiF+n3bJ92y2tj6d1JBBBPr5kqsT5H0/sXvxRQDnIf1dXzgPeeIA4NkioXM1foqGWA==
-X-Received: by 2002:a17:90b:1e4b:b0:213:519a:ffdb with SMTP id pi11-20020a17090b1e4b00b00213519affdbmr45096420pjb.184.1667444710981;
-        Wed, 02 Nov 2022 20:05:10 -0700 (PDT)
-Received: from google.com ([240f:75:7537:3187:f22:e30:374d:5a2b])
-        by smtp.gmail.com with ESMTPSA id m6-20020a170902db0600b0017c19d7c89bsm9061848plx.269.2022.11.02.20.05.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 20:05:10 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 12:05:06 +0900
-From:   Sergey Senozhatsky <senozhatsky@chromium.org>
-To:     Minchan Kim <minchan@kernel.org>
-Cc:     Sergey Senozhatsky <senozhatsky@chromium.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nitin Gupta <ngupta@vflare.org>, linux-kernel@vger.kernel.org,
-        linux-mm@kvack.org
-Subject: Re: [PATCHv4 2/9] zram: Add recompression algorithm sysfs knob
-Message-ID: <Y2Mv4l+V9iCv9EMg@google.com>
-References: <20221018045533.2396670-1-senozhatsky@chromium.org>
- <20221018045533.2396670-3-senozhatsky@chromium.org>
- <Y2LP0OWF/WTnkSne@google.com>
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R64KECUzDbqJo0RRKWL4JjLGKACzWeVJPV2fXxBJdHw=;
+        b=j4dRzdeow/ud7K58PWn2tOJSyZlXjgSRKHiILZSA5FVQ3NvA8zeICBiPVeiMaMY06N
+         pGoddRo7z94+jAzir0pZz1CShS6QgS0myZ8Igky+1eESytxk1sGBFI6ziKKEbwDJ8M2I
+         3x1hHuKWcx2y/GOD/pPYLH59VP1UTigN5Kyl6NY/mCD++WcSNfoM4phzO3jfVmzcdbJx
+         rlP25xkZNe3FezR26WeKA6A2CgVhyTiWKvqvg8mrowWWKFl447mjWP8awNrb3sk8tGmu
+         e7XNruMAend/gqaxGJdBSVkbYiiahZYQh/e+5Sb9a4bOU251UttG4ZMQXboWRUhiJf71
+         DDuA==
+X-Gm-Message-State: ACrzQf0WHWrvMBgtz7fQLCA2q8mnMzoAwKKdQDafaHUHPQWvH6B8qzSL
+        FaSYsACWER05kjvoWSBSmz4Wpc1BLFQsXw==
+X-Google-Smtp-Source: AMsMyM7247K32oPk39ksBRRrgL+bTA9C/t1ztZFOpGHbiKJFyO6HxalE2mrdjyOHG//IJcbEu1eCKQ==
+X-Received: by 2002:ae9:e507:0:b0:6fa:3ae1:cef with SMTP id w7-20020ae9e507000000b006fa3ae10cefmr12375170qkf.717.1667444721237;
+        Wed, 02 Nov 2022 20:05:21 -0700 (PDT)
+Received: from mail-qv1-f54.google.com (mail-qv1-f54.google.com. [209.85.219.54])
+        by smtp.gmail.com with ESMTPSA id w128-20020a379486000000b006ce76811a07sm9679137qkd.75.2022.11.02.20.05.20
+        for <linux-kernel@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 02 Nov 2022 20:05:20 -0700 (PDT)
+Received: by mail-qv1-f54.google.com with SMTP id w10so344502qvr.3
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 20:05:20 -0700 (PDT)
+X-Received: by 2002:a05:6214:f23:b0:4bb:f5db:39b3 with SMTP id
+ iw3-20020a0562140f2300b004bbf5db39b3mr18157941qvb.117.1667444720007; Wed, 02
+ Nov 2022 20:05:20 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2LP0OWF/WTnkSne@google.com>
+References: <20221103013937.603626-1-khazhy@google.com> <3c0df3fa-8731-5863-ccc5-f2e60601dbf9@huaweicloud.com>
+In-Reply-To: <3c0df3fa-8731-5863-ccc5-f2e60601dbf9@huaweicloud.com>
+From:   Khazhy Kumykov <khazhy@chromium.org>
+Date:   Wed, 2 Nov 2022 20:05:08 -0700
+X-Gmail-Original-Message-ID: <CACGdZYJ0WH+Y9sdchXy30UVTQgPCEo=fW+W9atZh1Ki7Ov4_Gw@mail.gmail.com>
+Message-ID: <CACGdZYJ0WH+Y9sdchXy30UVTQgPCEo=fW+W9atZh1Ki7Ov4_Gw@mail.gmail.com>
+Subject: Re: [RFC PATCH] bfq: fix waker_bfqq inconsistency crash
+To:     Yu Kuai <yukuai1@huaweicloud.com>
+Cc:     Paolo Valente <paolo.valente@linaro.org>,
+        Jens Axboe <axboe@kernel.dk>, linux-block@vger.kernel.org,
+        linux-kernel@vger.kernel.org, "yukuai (C)" <yukuai3@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
@@ -71,96 +76,42 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On (22/11/02 13:15), Minchan Kim wrote:
-[..]
-> >  /* Module params (documentation at end) */
-> >  static unsigned int num_devices = 1;
-> > @@ -1000,31 +1005,37 @@ static ssize_t max_comp_streams_store(struct device *dev,
-> >  	return len;
-> >  }
-> >  
-> > -static ssize_t comp_algorithm_show(struct device *dev,
-> > -		struct device_attribute *attr, char *buf)
-> 
-> Do you have any reason to change show and set placement? Otherwise,
-> please keep the function order to reduce unnecesssary churns.
+On Wed, Nov 2, 2022 at 7:56 PM Yu Kuai <yukuai1@huaweicloud.com> wrote:
+>
+> Hi,
+>
+> =E5=9C=A8 2022/11/03 9:39, Khazhismel Kumykov =E5=86=99=E9=81=93:
+> > This fixes crashes in bfq_add_bfqq_busy due to waker_bfqq being NULL,
+> > but woken_list_node still being hashed. This would happen when
+> > bfq_init_rq() expects a brand new allocated queue to be returned from
+>
+>  From what I see, bfqq->waker_bfqq is updated in bfq_init_rq() only if
+> 'new_queue' is false, but if 'new_queue' is false, the returned 'bfqq'
+> from bfq_get_bfqq_handle_split() will never be oom_bfqq, so I'm confused
+> here...
+There's two calls for bfq_get_bfqq_handle_split in this function - the
+second one is after the check you mentioned, and is the problematic
+one.
+>
+> > bfq_get_bfqq_handle_split() and unconditionally updates waker_bfqq
+> > without resetting woken_list_node. Since we can always return oom_bfqq
+> > when attempting to allocate, we cannot assume waker_bfqq starts as NULL=
+.
+> > We must either reset woken_list_node, or avoid setting woken_list at al=
+l
+> > for oom_bfqq - opt to do the former.
+>
+> Once oom_bfqq is used, I think the io is treated as issued from root
+> group. Hence I don't think it's necessary to set woken_list or
+> waker_bfqq for oom_bfqq.
+Ack, I was wondering what's right here since, evidently, *someone* had
+already set oom_bfqq->waker_bfqq to *something* (although... maybe it
+was an earlier init_rq). But maybe it's better to do nothing if we
+*know* it's oom_bfqq.
 
-I don't change their placement. It's just show and store for primary and
-secondary algorithms use the same __store and __show functions, which
-are static and are placed ahead of store and show.
+Is it a correct interpretation here that setting waker_bfqq won't
+accomplish anything anyways on oom_bfqq, so better off not?
 
-[..]
-> Just open question(I might be too paranoid?)
-> 
-> I am thinking someone want to add third comp algorithm in future
-> to balance decompression and memory efficiency.
-> 
-> If it's not too crazy idea, let's think about the interface.
-> Maybe, could we make the recomp knobs works like list?
-> 
-> # A primary comp
-> echo "A" > /zram/comp_algo
-> 
-> # Multiple secondary comps
-> echo "B threshold" > /zram/add_recomp_algo
-> echo "C threshold" > /zram/add_recomp_algo
-> echo "D threshold" > /zram/add_recomp_algo
-
-What is the threshold here? My design approach is that ZRAM doesn't do
-recompression on its own, so no magic is happening automatically. It's
-the user-space that triggers recompression for selected pages when
-user-space thinks it's time to. This allows us to have various flexible
-policies and consider things that ZRAM is not even aware of: battery level,
-free memory, CPU load average, etc. E.g. no recompression when all CPUs
-are busy rendering video game, or when we are draining battery too fast,
-etc.
-
-> "cat /zram/recomp_algo" shows the list
-> 
-> echo "C" > /zram/remove_recomp_algo
-> will remove the C algorithm in stack.
-
-What is the use case for removal of a secondary algorithm?
-
-> My point is that we don't need to implement it atm but makes the
-> interface to open the possibility for future extension.
-> 
-> What do you think?
-
-So, as far as I understand, we don't have reason to add remove_recomp_algo
-right now. And existing recomp_algo does not enforce any particular format,
-it can be extended. Right now we accept "$name" but can do something like
-"$name:$priority". The only thing that we probably need to do is rename
-recomp_algo to either add_recomp_algo or register_recomp_algo?
-
-> > +static ssize_t recomp_algorithm_store(struct device *dev,
-> > +				      struct device_attribute *attr,
-> > +				      const char *buf,
-> > +				      size_t len)
-> > +{
-> > +	struct zram *zram = dev_to_zram(dev);
-> > +	int ret;
-> > +
-> > +	ret = __comp_algorithm_store(zram, ZRAM_SECONDARY_ZCOMP, buf);
-> > +	return ret ? ret : len;
-> > +}
-> > +#endif
-> > +
-> >  static ssize_t compact_store(struct device *dev,
-> >  		struct device_attribute *attr, const char *buf, size_t len)
-> >  {
-> > @@ -1762,7 +1817,11 @@ static void zram_reset_device(struct zram *zram)
-> >  	memset(&zram->stats, 0, sizeof(zram->stats));
-> >  	reset_bdev(zram);
-> >  
-> > -	comp_algorithm_set(zram, ZRAM_PRIMARY_ZCOMP, default_compressor);
-> > +	comp_algorithm_set(zram, ZRAM_PRIMARY_ZCOMP,
-> > +			   default_comp_algs[ZRAM_PRIMARY_ZCOMP]);
-> > +	if (IS_ENABLED(CONFIG_ZRAM_MULTI_COMP))
-> 
-> Dumb question:
-> 
-> Why do you use IS_ENABLED instead of ifdef?
-
-#ifdef-s are banned in the new C-code, as far as I know. IS_ENABLED is
-what we should use.
+>
+> Thanks,
+> Kuai
