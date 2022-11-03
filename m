@@ -2,104 +2,167 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 99C38618ADE
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 22:54:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 333AF618AE0
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 22:54:54 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbiKCVyJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 17:54:09 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58426 "EHLO
+        id S231185AbiKCVyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 17:54:53 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58708 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiKCVyG (ORCPT
+        with ESMTP id S229688AbiKCVyu (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 17:54:06 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ED7F72035B
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 14:54:04 -0700 (PDT)
-Received: from BRIANROB-L1.corp.microsoft.com (unknown [131.107.174.60])
-        by linux.microsoft.com (Postfix) with ESMTPSA id A9BCC20C28B1;
-        Thu,  3 Nov 2022 14:54:04 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com A9BCC20C28B1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1667512444;
-        bh=j7CAPnJQ6yORsfV2hVHDeUXOOBJzSel+8Y3+4Nb7FBY=;
-        h=From:To:Cc:Subject:Date:From;
-        b=p1StbKfWV/WnAJgyQJ3MnFQQfvZoBFbbARKbHxgYyZBdUpPYEzenUQdxvg1pmaORH
-         AJst0xV9BrI/JzWbSEPciHYJYCfZ5+NjLjKTzYsxGswW8IsVFwMfKLmJSWQj4gkq+Y
-         jsqhiQUSEbmxpohQ2KS8wRu64ddTf9YOjUwFYpkE=
-From:   Brian Robbins <brianrob@linux.microsoft.com>
-To:     stable@kernel.org
-Cc:     brianrob@linux.microsoft.com, acme@kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: [PATCH] perf inject jit: Ignore memfd and anonymous mmap events if jitdump present
-Date:   Thu,  3 Nov 2022 14:54:01 -0700
-Message-Id: <20221103215401.219892-1-brianrob@linux.microsoft.com>
-X-Mailer: git-send-email 2.25.1
+        Thu, 3 Nov 2022 17:54:50 -0400
+Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08AE2035B;
+        Thu,  3 Nov 2022 14:54:48 -0700 (PDT)
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A3LseqE072162;
+        Thu, 3 Nov 2022 16:54:40 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+        s=ti-com-17Q1; t=1667512480;
+        bh=B3drAa8Ekeyb8xbFgtevuL8Z5jc/FzVu1bejECepSzw=;
+        h=Date:From:To:CC:Subject:References:In-Reply-To;
+        b=d0ygL/mKjoZSZP33xEyUTdWIFLpm6d+Gv0m9En4eV41khzWghClO7TGlwCd3Jx0AG
+         317seopfsrLU1jcTXmYGzbXvXEG0cQLOl6JPChasacfosvbd4LoO7tDoiF/FOtQPkZ
+         JVQFYC/L6qnJSsfe59FbAR24p09n6MBQya1xSqgc=
+Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
+        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A3Lsesg020751
+        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+        Thu, 3 Nov 2022 16:54:40 -0500
+Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE106.ent.ti.com
+ (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 3 Nov
+ 2022 16:54:40 -0500
+Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE110.ent.ti.com
+ (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
+ Frontend Transport; Thu, 3 Nov 2022 16:54:40 -0500
+Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
+        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A3Lse0n062778;
+        Thu, 3 Nov 2022 16:54:40 -0500
+Date:   Thu, 3 Nov 2022 16:54:40 -0500
+From:   Nishanth Menon <nm@ti.com>
+To:     Rahul T R <r-ravikumar@ti.com>
+CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
+        <krzysztof.kozlowski+dt@linaro.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <jkridner@gmail.com>
+Subject: Re: [PATCH v7 2/2] arm64: dts: ti: k3-j721e-sk: Add pinmux for RPi
+ Header
+Message-ID: <20221103215440.7dmcvkmeni4xs2et@municipal>
+References: <20221103174743.16827-1-r-ravikumar@ti.com>
+ <20221103174743.16827-3-r-ravikumar@ti.com>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20221103174743.16827-3-r-ravikumar@ti.com>
+User-Agent: NeoMutt/20171215
+X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Requesting this be applied to all stable kernels where the commit in
-Fixes: tag is present.  It is already in 6.0 kernels with cset SHA
-46f7bd5e1b5732acb9b95037afd052a4d2eebb1a.
+On 23:17-20221103, Rahul T R wrote:
+> Add pinmux required to bring out i2c5 and gpios on
+> 40 pin RPi header on sk board
+> 
+> Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
+> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
+> ---
+>  arch/arm64/boot/dts/ti/k3-j721e-sk.dts | 59 ++++++++++++++++++++++++++
+>  1 file changed, 59 insertions(+)
+> 
+> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
+> index 78aa4aa4de57..4640d280c85c 100644
+> --- a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
+> +++ b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
+> @@ -400,6 +400,47 @@ ekey_reset_pins_default: ekey-reset-pns-pins-default {
+>  			J721E_IOPAD(0x124, PIN_INPUT, 7) /* (Y24) PRG0_PRU1_GPO9.GPIO0_72 */
+>  		>;
+>  	};
+> +
+> +	main_i2c5_pins_default: main-i2c5-pins-default {
+> +		pinctrl-single,pins = <
+> +			J721E_IOPAD(0x150, PIN_INPUT_PULLUP, 2) /* (Y26) PRG0_MDIO0_MDIO.I2C5_SCL */
+> +			J721E_IOPAD(0x154, PIN_INPUT_PULLUP, 2) /* (AA27) PRG0_MDIO0_MDC.I2C5_SDA */
+> +		>;
+> +	};
+> +
+> +	rpi_header_gpio0_pins_default: rpi-header-gpio0-pins-default {
+> +		pinctrl-single,pins = <
+> +			J721E_IOPAD(0x01C, PIN_INPUT, 7) /* (AD22) PRG1_PRU0_GPO6.GPIO0_7 */
+> +			J721E_IOPAD(0x120, PIN_INPUT, 7) /* (AA28) PRG0_PRU1_GPO8.GPIO0_71 */
+> +			J721E_IOPAD(0x14C, PIN_INPUT, 7) /* (AA29) PRG0_PRU1_GPO19.GPIO0_82 */
+> +			J721E_IOPAD(0x02C, PIN_INPUT, 7) /* (AD21) PRG1_PRU0_GPO10.GPIO0_11 */
+> +			J721E_IOPAD(0x198, PIN_INPUT, 7) /* (V25) RGMII6_TD1.GPIO0_101 */
+> +			J721E_IOPAD(0x1B0, PIN_INPUT, 7) /* (W24) RGMII6_RD1.GPIO0_107 */
+> +			J721E_IOPAD(0x1A0, PIN_INPUT, 7) /* (W29) RGMII6_TXC.GPIO0_103 */
+> +			J721E_IOPAD(0x008, PIN_INPUT, 7) /* (AG22) PRG1_PRU0_GPO1.GPIO0_2 */
+> +			J721E_IOPAD(0x1D0, PIN_INPUT, 7) /* (AA3) SPI0_D1.GPIO0_115 */
+> +			J721E_IOPAD(0x11C, PIN_INPUT, 7) /* (AA24) PRG0_PRU1_GPO7.GPIO0_70 */
+> +			J721E_IOPAD(0x148, PIN_INPUT, 7) /* (AA26) PRG0_PRU1_GPO18.GPIO0_81 */
+> +			J721E_IOPAD(0x004, PIN_INPUT, 7) /* (AC23) PRG1_PRU0_GPO0.GPIO0_1 */
+> +			J721E_IOPAD(0x014, PIN_INPUT, 7) /* (AH23) PRG1_PRU0_GPO4.GPIO0_5 */
+> +			J721E_IOPAD(0x020, PIN_INPUT, 7) /* (AE20) PRG1_PRU0_GPO7.GPIO0_8 */
+> +			J721E_IOPAD(0x19C, PIN_INPUT, 7) /* (W27) RGMII6_TD0.GPIO0_102 */
+> +			J721E_IOPAD(0x1B4, PIN_INPUT, 7) /* (W25) RGMII6_RD0.GPIO0_108 */
+> +			J721E_IOPAD(0x188, PIN_INPUT, 7) /* (Y28) RGMII6_TX_CTL.GPIO0_97 */
+> +			J721E_IOPAD(0x00C, PIN_INPUT, 7) /* (AF22) PRG1_PRU0_GPO2.GPIO0_3 */
+> +			J721E_IOPAD(0x010, PIN_INPUT, 7) /* (AJ23) PRG1_PRU0_GPO3.GPIO0_4 */
+> +			J721E_IOPAD(0x178, PIN_INPUT, 7) /* (U27) RGMII5_RD3.GPIO0_93 */
+> +			J721E_IOPAD(0x17C, PIN_INPUT, 7) /* (U24) RGMII5_RD2.GPIO0_94 */
+> +			J721E_IOPAD(0x190, PIN_INPUT, 7) /* (W23) RGMII6_TD3.GPIO0_99 */
+> +			J721E_IOPAD(0x18C, PIN_INPUT, 7) /* (V23) RGMII6_RX_CTL.GPIO0_98 */
+> +		>;
+> +	};
+> +
+> +	rpi_header_gpio1_pins_default: rpi-header-gpio1-pins-default {
+> +		pinctrl-single,pins = <
+> +			J721E_IOPAD(0x234, PIN_INPUT, 7) /* (U3) EXT_REFCLK1.GPIO1_12 */
+> +		>;
+> +	};
+>  };
+>  
+>  &wkup_pmx0 {
+> @@ -600,6 +641,24 @@ i2c@1 {
+>  	};
+>  };
+>  
+> +&main_i2c5 {
+> +	/* Brought out on RPi Header */
+> +	status = "okay";
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&main_i2c5_pins_default>;
+> +	clock-frequency = <400000>;
+> +};
+> +
+> +&main_gpio0 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&rpi_header_gpio0_pins_default>;
+> +};
+> +
+> +&main_gpio1 {
+> +	pinctrl-names = "default";
+> +	pinctrl-0 = <&rpi_header_gpio1_pins_default>;
+> +};
+> +
+>  &main_gpio2 {
+>  	status = "disabled";
+>  };
+> -- 
+> 2.38.0
+> 
 
-Some processes store jitted code in memfd mappings to avoid having rwx
-mappings.  These processes map the code with a writeable mapping and a
-read-execute mapping.  They write the code using the writeable mapping
-and then unmap the writeable mapping.  All subsequent execution is
-through the read-execute mapping.
+OK I am confused now. What about the pwm nodes? don't they need to be
+muxed?
 
-perf inject --jit ignores //anon* mappings for each process where a
-jitdump is present because it expects to inject mmap events for each
-jitted code range, and said jitted code ranges will overlap with the
-//anon* mappings.
-
-Ignore /memfd: and [anon:* mappings so that jitted code contained in
-/memfd: and [anon:* mappings is treated the same way as jitted code
-contained in //anon* mappings.
-
-Fixes: 46f7bd5e1b57 ("perf inject jit: Ignore memfd and anonymous mmap events if jitdump present")
-Signed-off-by: Brian Robbins <brianrob@linux.microsoft.com>
-Acked-by: Ian Rogers <irogers@google.com>
-Cc: Alexander Shishkin <alexander.shishkin@linux.intel.com>
-Cc: Ingo Molnar <mingo@redhat.com>
-Cc: Jiri Olsa <jolsa@kernel.org>
-Cc: Mark Rutland <mark.rutland@arm.com>
-Cc: Namhyung Kim <namhyung@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>
-Link: https://lore.kernel.org/r/20220805220645.95855-1-brianrob@linux.microsoft.com
-Signed-off-by: Arnaldo Carvalho de Melo <acme@redhat.com>
----
- tools/perf/util/jitdump.c | 9 +++++++--
- 1 file changed, 7 insertions(+), 2 deletions(-)
-
-diff --git a/tools/perf/util/jitdump.c b/tools/perf/util/jitdump.c
-index a23255773c60..4e6632203704 100644
---- a/tools/perf/util/jitdump.c
-+++ b/tools/perf/util/jitdump.c
-@@ -845,8 +845,13 @@ jit_process(struct perf_session *session,
- 	if (jit_detect(filename, pid, nsi)) {
- 		nsinfo__put(nsi);
- 
--		// Strip //anon* mmaps if we processed a jitdump for this pid
--		if (jit_has_pid(machine, pid) && (strncmp(filename, "//anon", 6) == 0))
-+		/*
-+		 * Strip //anon*, [anon:* and /memfd:* mmaps if we processed a jitdump for this pid
-+		 */
-+		if (jit_has_pid(machine, pid) &&
-+			((strncmp(filename, "//anon", 6) == 0) ||
-+			 (strncmp(filename, "[anon:", 6) == 0) ||
-+			 (strncmp(filename, "/memfd:", 7) == 0)))
- 			return 1;
- 
- 		return 0;
 -- 
-2.25.1
-
+Regards,
+Nishanth Menon
+Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
