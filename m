@@ -2,65 +2,78 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 0CE186185FE
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:15:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7C001618605
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:17:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231724AbiKCRO5 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 13:14:57 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42094 "EHLO
+        id S231320AbiKCRRM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 13:17:12 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43738 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S232207AbiKCROb (ORCPT
+        with ESMTP id S230473AbiKCRRJ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:14:31 -0400
-Received: from mail-yw1-x114a.google.com (mail-yw1-x114a.google.com [IPv6:2607:f8b0:4864:20::114a])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E10A91D0C4
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:14:11 -0700 (PDT)
-Received: by mail-yw1-x114a.google.com with SMTP id 00721157ae682-373569200ceso24062667b3.4
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:14:11 -0700 (PDT)
+        Thu, 3 Nov 2022 13:17:09 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EF22A2F4;
+        Thu,  3 Nov 2022 10:17:08 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id d59-20020a17090a6f4100b00213202d77e1so5875565pjk.2;
+        Thu, 03 Nov 2022 10:17:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=w4dPaNZUF+FLVyD4KDNkcedA4kyLOnqLhZHYhiV98ak=;
-        b=XO1QzccCzEHSaizdJ83Md7LFtvvRxyWNQHfG62OAa45yrTp9K6XxJ3Ra+brK0cKdYU
-         1SbetESIZMD4tYcwhwENH+u6njmTg4vOGG6KIL9351fkVep+FXOEwo8mZ2D5fbv8L8Wq
-         DzI8Jp8FyEd7dZ9ZMo2D0tm8/la9NU2L0S9OkLGLRzMFTpJ06e2JWSmF5NJuVUyFd5cG
-         ThuiUaHIG084PkuQn3c2hn5eVCmXY9QicYaasQSvLrhpAQEbyugdo2cvX274ahZphCAf
-         stXvXIjXfXB1xzzE6a8aQ7mveiBjccf57fxHcAd48c95XZHdFlVBn0w+LaCH0VeRkJ+K
-         oNHw==
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=jMLMgTZnXG3qE89gvGIdlg9xWS4kfSGRYT+JSAUdRFU=;
+        b=BgB2QdomzPzge4VbrqFYuwzmD3h1QhxfbsY4GqKYtF5a7n/NJTfmNYMPOXy/hbqOWI
+         UOogT5U8gyicW6RQR/+0gY1M5xA06FG71qdz5iPYkpXjkd8COGd6E2KRPV/wJhK/hn0T
+         91kPejzsqsK6/+/s8S3Ya4F6JXYNJCFwcE0RmL9LN4LgpLulk8sGgCby2gcfyRjPHGoe
+         dNGSpDbtye5tFxt1gNOkjao1EjHsmyUC3l2C0CqCKRCZwq9rWrfOQdV4Um3RsRQ6Lvq/
+         98nWPLYjLm7G2YQ3inoFWS4IrlRIm5o311J2uVLnqg75THYPSf2Ql8OZ0HAVZrMVTTcN
+         6ltw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=w4dPaNZUF+FLVyD4KDNkcedA4kyLOnqLhZHYhiV98ak=;
-        b=0CTnB1kWYkcWnK/cIN2kJRPu85Dv7rRkBUNVZyKiW27yxdIdTHBWB+bNzzouwaeMAU
-         bRMXC7SCp5JI4oPo5LFAHadNiuG8ngNt6Ki+Gyc3G8MARwwg0K2bTsJE5StYsEJ0nS13
-         JQmnpwKeF/vcaoBpAAL5bVPi1tgFGMUj3k/AaawpEVimFM/uxtCzXO2Cj7i1L9Wkil0I
-         kxGntCazXxlXh1LktEny931K5/R7kAWmb19DEdYEvwONUIaPnTUSswv7pGl5T+9vBJoN
-         V30/jnm5B+1Ymk+u1Uun8MKZjoxaQKp7digEiCoe8o9V23oLJYtkDL24vymbkJ53e7jt
-         izwg==
-X-Gm-Message-State: ACrzQf3tjpEgBKVYS1t5qp/pD0I48s9tlKnAKcmuC4uFXAzOCzgKU9Ht
-        ldyRZzFVLd+lR2H0ddwU8H7GGbhFiLprrA==
-X-Google-Smtp-Source: AMsMyM5LBrYoIRdr3ZeIZmYO9AkJTvHgSUQEWmasSB7+sJd5ifxB6H9vp5f0aNdYlI2gMz4DsYPjwkj9LzMQgQ==
-X-Received: from shakeelb.c.googlers.com ([fda3:e722:ac3:cc00:7f:e700:c0a8:262e])
- (user=shakeelb job=sendgmr) by 2002:a0d:f941:0:b0:35f:a7f3:a3da with SMTP id
- j62-20020a0df941000000b0035fa7f3a3damr185097ywf.69.1667495650844; Thu, 03 Nov
- 2022 10:14:10 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 17:14:07 +0000
-In-Reply-To: <fb370ccf-d22a-7885-1773-da85c9d7ea8c@samsung.com>
-Mime-Version: 1.0
-References: <20221024052841.3291983-1-shakeelb@google.com> <CGME20221102210957eucas1p2915f88d8b923ccf79f0e8770d208a1bd@eucas1p2.samsung.com>
- <fb370ccf-d22a-7885-1773-da85c9d7ea8c@samsung.com>
-Message-ID: <20221103171407.ydubp43x7tzahriq@google.com>
-Subject: Re: [PATCH] mm: convert mm's rss stats into percpu_counter
-From:   Shakeel Butt <shakeelb@google.com>
-To:     Marek Szyprowski <m.szyprowski@samsung.com>
-Cc:     Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="us-ascii"
-X-Spam-Status: No, score=-9.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL autolearn=ham
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=jMLMgTZnXG3qE89gvGIdlg9xWS4kfSGRYT+JSAUdRFU=;
+        b=2FgAn38WhSWWw+eHyrTO1A3zNlSOMLPNNLMvY2Fkg8zJ02J3VfSj0AOicpTAXfEdmd
+         rhwWmAPpz2sLhdI/OvI3TlUFD7xMuTmVxU2otZoLbIAJo5ZLApLizBaLp1o0pfpy4fGV
+         2qRIXXZChmOP34IvkhySQ081I6PzUonS3/2jWbar4kP//71G21o9B4nXeSVWCi8pKo5h
+         jfXDr86GNec6I9y2Hd+bMXOfSUNjywkxGQkUWnWKbn0nYLSnAfYmpSKQLB9M1Qntiw84
+         Bq4psa7VvK5C89nhGUjCcvpj+8UOm/0DuEKO6Ug8w34P+uBF/WvHCXq7+jkG9Fg4cHm5
+         1e0g==
+X-Gm-Message-State: ACrzQf3XUzLRveE5Lz8yZv5dPDOdWStjIstJWd5Ay8Jwb8bIEevlNgE3
+        z3SYNH5cNNg5+Txzp4PihCk=
+X-Google-Smtp-Source: AMsMyM4KXsk3pLBuAZJaQZE/nBZ7r1WJ0vPUvs2KpVzcs1jk2iH8wiq9zdv9D3GGG8xHFXhOLj6fbw==
+X-Received: by 2002:a17:90b:70a:b0:211:f163:ddff with SMTP id s10-20020a17090b070a00b00211f163ddffmr31949799pjz.202.1667495827938;
+        Thu, 03 Nov 2022 10:17:07 -0700 (PDT)
+Received: from google.com ([2620:15c:9d:2:a6ae:11ff:fe11:fcc3])
+        by smtp.gmail.com with ESMTPSA id d14-20020aa797ae000000b0056ddd2ac8f1sm960026pfq.211.2022.11.03.10.17.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 10:17:07 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 10:17:03 -0700
+From:   Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To:     Quentin Schulz <foss+kernel@0leil.net>
+Cc:     hadess@hadess.net, hdegoede@redhat.com, robh+dt@kernel.org,
+        krzysztof.kozlowski+dt@linaro.org, shawnguo@kernel.org,
+        s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
+        linux-imx@nxp.com, wens@csie.org, jernej.skrabec@gmail.com,
+        samuel@sholland.org, agross@kernel.org, andersson@kernel.org,
+        konrad.dybcio@somainline.org, heiko@sntech.de,
+        linux-input@vger.kernel.org, linux-kernel@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+        linux-sunxi@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+        linux-rockchip@lists.infradead.org,
+        Quentin Schulz <quentin.schulz@theobroma-systems.com>
+Subject: Re: [RFC PATCH 0/7] fix reset line polarity for Goodix touchscreen
+ controllers
+Message-ID: <Y2P3jyz1L0yKsCk8@google.com>
+References: <20221103-upstream-goodix-reset-v1-0-87b49ae589f1@theobroma-systems.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221103-upstream-goodix-reset-v1-0-87b49ae589f1@theobroma-systems.com>
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,FSL_HELO_FAKE,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -68,175 +81,48 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 10:09:57PM +0100, Marek Szyprowski wrote:
-> Hi
+Hi Quentin,
+
+On Thu, Nov 03, 2022 at 03:43:45PM +0100, Quentin Schulz wrote:
+> The Goodix touchscreen controller has a reset line active low. It happens to
+> also be used to configure its i2c address at runtime. If the reset line is
+> incorrectly asserted, the address will be wrongly configured. This cost me a few
+> hours yesterday, trying to figure out why the touchscreen wouldn't work.
 > 
-> On 24.10.2022 07:28, Shakeel Butt wrote:
-> > Currently mm_struct maintains rss_stats which are updated on page fault
-> > and the unmapping codepaths. For page fault codepath the updates are
-> > cached per thread with the batch of TASK_RSS_EVENTS_THRESH which is 64.
-> > The reason for caching is performance for multithreaded applications
-> > otherwise the rss_stats updates may become hotspot for such
-> > applications.
-> >
-> > However this optimization comes with the cost of error margin in the rss
-> > stats. The rss_stats for applications with large number of threads can
-> > be very skewed. At worst the error margin is (nr_threads * 64) and we
-> > have a lot of applications with 100s of threads, so the error margin can
-> > be very high. Internally we had to reduce TASK_RSS_EVENTS_THRESH to 32.
-> >
-> > Recently we started seeing the unbounded errors for rss_stats for
-> > specific applications which use TCP rx0cp. It seems like
-> > vm_insert_pages() codepath does not sync rss_stats at all.
-> >
-> > This patch converts the rss_stats into percpu_counter to convert the
-> > error margin from (nr_threads * 64) to approximately (nr_cpus ^ 2).
-> > However this conversion enable us to get the accurate stats for
-> > situations where accuracy is more important than the cpu cost. Though
-> > this patch does not make such tradeoffs.
-> >
-> > Signed-off-by: Shakeel Butt <shakeelb@google.com>
+> The driver is "asserting" this reset GPIO by setting its output to 0, probably
+> to reflect the physical state of the line. However, this relies on the fact that
+> the Device Tree node setting the reset line polarity to active high, which is
+> incorrect since the reset is active low in hardware.
 > 
-> This patch landed recently in linux-next as commit d59f19a7a068 ("mm: 
-> convert mm's rss stats into percpu_counter"). Unfortunately it causes a 
-> regression on my test systems. I've noticed that it triggers a 'BUG: Bad 
-> rss-counter state' warning from time to time for random processes. This 
-> is somehow related to CPU hot-plug and/or system suspend/resume. The 
-> easiest way to reproduce this issue (although not always) on my test 
-> systems (ARM or ARM64 based) is to run the following commands:
+> To fix this inconsistency, the polarity is inverted to not confuse the user
+> about the reset line polarity.
 > 
-> root@target:~# for i in /sys/devices/system/cpu/cpu[1-9]; do echo 0 
->  >$i/online;
-> BUG: Bad rss-counter state mm:f04c7160 type:MM_FILEPAGES val:1
-> BUG: Bad rss-counter state mm:50f1f502 type:MM_FILEPAGES val:2
-> BUG: Bad rss-counter state mm:50f1f502 type:MM_ANONPAGES val:15
-> BUG: Bad rss-counter state mm:63660fd0 type:MM_FILEPAGES val:2
-> BUG: Bad rss-counter state mm:63660fd0 type:MM_ANONPAGES val:15
+> This is marked as RFC because it breaks DT compatibility and also the Google
+> CoachZ device is the only one with an active low polarity for the reset GPIO
+> in DT, so not sure if it is a typo or its state is actually inverted (so GPIO
+> active high to drive the reset line low). Changing it anyways since the polarity
+> is changed in the driver so it needs to be changed in DT too.
+
+I would like to get gpio handling into a better shape, but the above is
+completely incorrect. "goodix,gt7375p" that is used in CoachZ and other
+Google designs is using i2c-hid compatible firmware and is not being
+driven by drivers/input/touchscreen/goodix.c driver, but rather by
+i2c-hid + hid-multitouch combo.
+
+You should not be touching arch/arm64/boot/dts/qcom/sc7180* at all.
+
 > 
-> Let me know if I can help debugging this somehow or testing a fix.
-> 
+> I'm all ears if there's a better way to handle this. We could document this in
+> the DT binding but this kinda breaks the promise we make that the DT is not
+> bound to the driver implementation.
 
-Hi Marek,
+I think Hans has already voiced concerns about x86 devices using these
+devices and having GPIO data encoded in the driver, so we need to
+accommodate them. On DT side we can add a quirk to gpiolib-of.c to
+[maybe temporary] override polarity of reset GPIO lines, then update DTS
+to match the reality.
 
-Thanks for the report. It seems like there is a race between
-for_each_online_cpu() in __percpu_counter_sum() and
-percpu_counter_cpu_dead()/cpu-offlining. Normally this race is fine for
-percpu_counter users but for check_mm() is not happy with this race. Can
-you please try the following patch:
+Thanks.
 
-
-From: Shakeel Butt <shakeelb@google.com>
-Date: Thu, 3 Nov 2022 06:05:13 +0000
-Subject: [PATCH] mm: percpu_counter: use race free percpu_counter sum
- interface
-
-percpu_counter_sum can race with cpu offlining. Add a new interface
-which does not race with it and use that for check_mm().
----
- include/linux/percpu_counter.h | 11 +++++++++++
- kernel/fork.c                  |  2 +-
- lib/percpu_counter.c           | 24 ++++++++++++++++++------
- 3 files changed, 30 insertions(+), 7 deletions(-)
-
-diff --git a/include/linux/percpu_counter.h b/include/linux/percpu_counter.h
-index bde6c4c1f405..3070c1043acf 100644
---- a/include/linux/percpu_counter.h
-+++ b/include/linux/percpu_counter.h
-@@ -45,6 +45,7 @@ void percpu_counter_set(struct percpu_counter *fbc, s64 amount);
- void percpu_counter_add_batch(struct percpu_counter *fbc, s64 amount,
- 			      s32 batch);
- s64 __percpu_counter_sum(struct percpu_counter *fbc);
-+s64 __percpu_counter_sum_all(struct percpu_counter *fbc);
- int __percpu_counter_compare(struct percpu_counter *fbc, s64 rhs, s32 batch);
- void percpu_counter_sync(struct percpu_counter *fbc);
- 
-@@ -85,6 +86,11 @@ static inline s64 percpu_counter_sum(struct percpu_counter *fbc)
- 	return __percpu_counter_sum(fbc);
- }
- 
-+static inline s64 percpu_counter_sum_all(struct percpu_counter *fbc)
-+{
-+	return __percpu_counter_sum_all(fbc);
-+}
-+
- static inline s64 percpu_counter_read(struct percpu_counter *fbc)
- {
- 	return fbc->count;
-@@ -193,6 +199,11 @@ static inline s64 percpu_counter_sum(struct percpu_counter *fbc)
- 	return percpu_counter_read(fbc);
- }
- 
-+static inline s64 percpu_counter_sum_all(struct percpu_counter *fbc)
-+{
-+	return percpu_counter_read(fbc);
-+}
-+
- static inline bool percpu_counter_initialized(struct percpu_counter *fbc)
- {
- 	return true;
-diff --git a/kernel/fork.c b/kernel/fork.c
-index 9c32f593ef11..7d6f510cf397 100644
---- a/kernel/fork.c
-+++ b/kernel/fork.c
-@@ -756,7 +756,7 @@ static void check_mm(struct mm_struct *mm)
- 			 "Please make sure 'struct resident_page_types[]' is updated as well");
- 
- 	for (i = 0; i < NR_MM_COUNTERS; i++) {
--		long x = percpu_counter_sum(&mm->rss_stat[i]);
-+		long x = percpu_counter_sum_all(&mm->rss_stat[i]);
- 
- 		if (unlikely(x))
- 			pr_alert("BUG: Bad rss-counter state mm:%p type:%s val:%ld\n",
-diff --git a/lib/percpu_counter.c b/lib/percpu_counter.c
-index ed610b75dc32..f26a1a5df399 100644
---- a/lib/percpu_counter.c
-+++ b/lib/percpu_counter.c
-@@ -117,11 +117,8 @@ void percpu_counter_sync(struct percpu_counter *fbc)
- }
- EXPORT_SYMBOL(percpu_counter_sync);
- 
--/*
-- * Add up all the per-cpu counts, return the result.  This is a more accurate
-- * but much slower version of percpu_counter_read_positive()
-- */
--s64 __percpu_counter_sum(struct percpu_counter *fbc)
-+static s64 __percpu_counter_sum_mask(struct percpu_counter *fbc,
-+			      const struct cpumask *cpu_mask)
- {
- 	s64 ret;
- 	int cpu;
-@@ -129,15 +126,30 @@ s64 __percpu_counter_sum(struct percpu_counter *fbc)
- 
- 	raw_spin_lock_irqsave(&fbc->lock, flags);
- 	ret = fbc->count;
--	for_each_online_cpu(cpu) {
-+	for_each_cpu(cpu, cpu_mask) {
- 		s32 *pcount = per_cpu_ptr(fbc->counters, cpu);
- 		ret += *pcount;
- 	}
- 	raw_spin_unlock_irqrestore(&fbc->lock, flags);
- 	return ret;
- }
-+
-+/*
-+ * Add up all the per-cpu counts, return the result.  This is a more accurate
-+ * but much slower version of percpu_counter_read_positive()
-+ */
-+s64 __percpu_counter_sum(struct percpu_counter *fbc)
-+{
-+	return __percpu_counter_sum_mask(fbc, cpu_online_mask);
-+}
- EXPORT_SYMBOL(__percpu_counter_sum);
- 
-+s64 __percpu_counter_sum_all(struct percpu_counter *fbc)
-+{
-+	return __percpu_counter_sum_mask(fbc, cpu_possible_mask);
-+}
-+EXPORT_SYMBOL(__percpu_counter_sum_all);
-+
- int __percpu_counter_init(struct percpu_counter *fbc, s64 amount, gfp_t gfp,
- 			  struct lock_class_key *key)
- {
 -- 
-2.38.1.431.g37b22c650d-goog
-
+Dmitry
