@@ -2,72 +2,102 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 43FAF61734A
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 01:18:44 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A759C617373
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 01:40:50 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230320AbiKCASl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 20:18:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44868 "EHLO
+        id S231136AbiKCAkq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 20:40:46 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53406 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiKCASh (ORCPT
+        with ESMTP id S229688AbiKCAko (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 20:18:37 -0400
-Received: from mail-pg1-x52f.google.com (mail-pg1-x52f.google.com [IPv6:2607:f8b0:4864:20::52f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CEED65FE
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 17:18:37 -0700 (PDT)
-Received: by mail-pg1-x52f.google.com with SMTP id q1so243812pgl.11
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 17:18:37 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bCQtxRI6S1jaqGbru2XthNpEAYm8+HAaLC9FoyL3iBk=;
-        b=ddOVPbUD4GyJ/5XxPS/mySuFr/TZqCDiPVo9GH5CMKvrTD9xTT6+UO4zrCBFKU6bEc
-         h7iFaz1TwgLyS1lmNKCKyVvbfdE94I1MqYrGDZWD5xWse9iRG12oTRrFTSlnK7t+GhU6
-         zsh6zFAlY0V5ufRSJ9y427zXuXwsiNHsdAcp7mSBeiJ+eAublCFO2nYPLvbP9Ci4wLaR
-         Kjr7sPZUB8dgqiJ9HRV1V8T013QNdf4icnegHPrhrCHIN6xAmB7ELa4AiEcQU/2cOeGv
-         xMbntHQBIPIAMM7tiJ7/z3GmESEUn3GTQ1PVUOy/jlzkf6m7c4vCDZRacouaktiLfoiQ
-         8+JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bCQtxRI6S1jaqGbru2XthNpEAYm8+HAaLC9FoyL3iBk=;
-        b=umXtDhmonBs90gJQxoMN3MtN63UoG3U89RyVwiZvyZxqHWMWVrVQETqkISS7aIY2VQ
-         NhikPEQlnw39O4zYQXtukfXYE6AWEKK6jSkg88x4pfIoiI5T3+RgDPtG94n53N9/t6wn
-         sX6FSPnqz5NCRIBLoN2yp6laZIKkMzdWN04PkBXBNqsQjsh5moc4OS+uBjgflbiLbc82
-         S/lC7NGaAVYzLyB1nFY1EcbRQLMtpnnL0nhzN6uaWRE2VDWS8WSf1FGRZu0OY5tY+m63
-         cxHBph8JoN2ywek0vynUIkn480mU4DCik0IjHlbZ7MfJFwXy9IBcxZKoy0G7wfF+u4G5
-         ymsw==
-X-Gm-Message-State: ACrzQf0UV86K6iB7nHLtn+zIy4BHEtWzZvTk3QUK6DtCkUAPPOXSNurT
-        80a461QGMvqFlZotETQaHnAdqQ==
-X-Google-Smtp-Source: AMsMyM7/LM4Pq2WKGmQ3w010goQWJD+Neqa+YUNygZhB9ScSJlfXq7noZEoeP9p4lqaKOsr0L4qEQw==
-X-Received: by 2002:a63:6905:0:b0:43c:d4:eef4 with SMTP id e5-20020a636905000000b0043c00d4eef4mr23204378pgc.126.1667434716555;
-        Wed, 02 Nov 2022 17:18:36 -0700 (PDT)
-Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
-        by smtp.gmail.com with ESMTPSA id 4-20020a621404000000b0056c704abca7sm9011808pfu.220.2022.11.02.17.18.36
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 17:18:36 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 00:18:32 +0000
-From:   Sean Christopherson <seanjc@google.com>
-To:     Vipin Sharma <vipinsh@google.com>
-Cc:     pbonzini@redhat.com, dmatlack@google.com, andrew.jones@linux.dev,
-        wei.w.wang@intel.com, kvm@vger.kernel.org,
-        linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8 3/7] KVM: selftests: Add atoi_paranoid() to catch
- errors missed by atoi()
-Message-ID: <Y2MI2EnjTiVDE0UB@google.com>
-References: <20221102232737.1351745-1-vipinsh@google.com>
- <20221102232737.1351745-4-vipinsh@google.com>
+        Wed, 2 Nov 2022 20:40:44 -0400
+Received: from bee.birch.relay.mailchannels.net (bee.birch.relay.mailchannels.net [23.83.209.14])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E319F2AEB;
+        Wed,  2 Nov 2022 17:40:41 -0700 (PDT)
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+Received: from relay.mailchannels.net (localhost [127.0.0.1])
+        by relay.mailchannels.net (Postfix) with ESMTP id 1341D101431;
+        Thu,  3 Nov 2022 00:40:41 +0000 (UTC)
+Received: from pdx1-sub0-mail-a225 (unknown [127.0.0.6])
+        (Authenticated sender: dreamhost)
+        by relay.mailchannels.net (Postfix) with ESMTPA id 51F5D100A93;
+        Thu,  3 Nov 2022 00:40:40 +0000 (UTC)
+ARC-Seal: i=1; s=arc-2022; d=mailchannels.net; t=1667436040; a=rsa-sha256;
+        cv=none;
+        b=KLHov2jTCTyUBkCa2qXhQ48uBHJI5X79hpj87ZHK3qDJCotpKIfKdJUrPNVEfmpQYOiZQt
+        zmSDYHLYEd4dbvJ7FzgVi4aDU/21vViqeQ92HbVpOOnE+Szn5ijE7TCELeDMcaOfp3RqR9
+        KM0gA3e46zfXUKL/MCt/uPS4/cNSx85CKtL//OFJx1M8aW6IaZdgEQnbflCh3fcnjGlGBC
+        HLGyujlOBLAvBgA3cMkvaYwDyugw3QCP5NCO3m3C4NVDHtXTB4s5xk4aIepP9QPR5rEW6f
+        2WoRrf5nhF9FodtRjZaBumGJn25JvoTybNUf02EN8OsniO4uYpustWvMYn2u/Q==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed;
+ d=mailchannels.net;
+        s=arc-2022; t=1667436040;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         in-reply-to:in-reply-to:references:references:dkim-signature;
+        bh=vpS3mhEue3M8RKX/+6FKbKKv5EcohCrOAR91cRsHCBI=;
+        b=WHpSlZUUoTyxvPG021boysiSRj+ZdlbyvHGwgjXcMVBGfbaeolft/0iK9jdLIiYZhTQbsJ
+        0Ycli5PNNg27mgQqLFxOMvH9tUVjK7fSw2qO+n1D+a6CUCixM01iaiK2TlIcojOB6U52ks
+        +lU+IFyEoqNofBjYLVscaMMRXdC7gCVMxszut3TYoXH+ApdH2c165YUXWDGTO0GM+pIP7S
+        TOe1qfutMFE7pQaQjDA38hclmYINJzl9arALhT49+ehLdj5KNp44VjhFTJVvXAMmqEEXyp
+        xwOEVyJ/VWvuPvDvhpQg83WCNFB8dZf0Bt4TjbT9KdfVeI9Z55Q39PAqakKrPA==
+ARC-Authentication-Results: i=1;
+        rspamd-7fb88f4dd5-b6m62;
+        auth=pass smtp.auth=dreamhost smtp.mailfrom=dave@stgolabs.net
+X-Sender-Id: dreamhost|x-authsender|dave@stgolabs.net
+X-MC-Relay: Neutral
+X-MailChannels-SenderId: dreamhost|x-authsender|dave@stgolabs.net
+X-MailChannels-Auth-Id: dreamhost
+X-Desert-Skirt: 2c4ff56e101fbf4a_1667436040713_4179043180
+X-MC-Loop-Signature: 1667436040713:2622216607
+X-MC-Ingress-Time: 1667436040713
+Received: from pdx1-sub0-mail-a225 (pop.dreamhost.com [64.90.62.162])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384)
+        by 100.103.24.77 (trex/6.7.1);
+        Thu, 03 Nov 2022 00:40:40 +0000
+Received: from offworld (ip72-199-50-187.sd.sd.cox.net [72.199.50.187])
+        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+         key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits) server-digest SHA256)
+        (No client certificate requested)
+        (Authenticated sender: dave@stgolabs.net)
+        by pdx1-sub0-mail-a225 (Postfix) with ESMTPSA id 4N2lKg0msgz3T;
+        Wed,  2 Nov 2022 17:40:39 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=stgolabs.net;
+        s=dreamhost; t=1667436040;
+        bh=vpS3mhEue3M8RKX/+6FKbKKv5EcohCrOAR91cRsHCBI=;
+        h=Date:From:To:Cc:Subject:Content-Type;
+        b=beRjdnFNqmKzYfnHS6fQulqGfsOIhHkx05NJiudJWN+QPO7VqLwXezQXIpie4vsXm
+         m90+TvBer2m1vrgX9IUnmUeQ02T9WIh/RbrNQO7zEQQA1dPbnKQGbTCmngJ5+txo1O
+         pbd3uGz38RyjmzQtaWUXay3qJ0sUZn0p0URHh+3uYwZ5vEHzP97zjJPSzXWT/Qeg5H
+         IATns+JFepomjGjvkxBes3mh8ssMmRMmuQlsNYdagNXKtpKmi/1zm5FViDIxNdTr69
+         ySNH5cv+ITNzLJm+P7SVj0QBW+N8ZSZF+QoDqPux+FMdNE5RL7dX/1c6fRV6DQaSpo
+         aAlk+ZUZD54FA==
+Date:   Wed, 2 Nov 2022 17:18:33 -0700
+From:   Davidlohr Bueso <dave@stgolabs.net>
+To:     Ira Weiny <ira.weiny@intel.com>
+Cc:     Bjorn Helgaas <helgaas@kernel.org>,
+        Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+        Dan Williams <dan.j.williams@intel.com>, dave.jiang@intel.com,
+        alison.schofield@intel.com, bwidawsk@kernel.org,
+        vishal.l.verma@intel.com, a.manzanares@samsung.com,
+        linux-cxl@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+        Christoph Hellwig <hch@lst.de>
+Subject: Re: [PATCH 1/2] cxl/pci: Add generic MSI-X/MSI irq support
+Message-ID: <20221103001833.n2gsoflnji3pcsfr@offworld>
+References: <20221024133633.00000467@huawei.com>
+ <20221025232535.GA579167@bhelgaas>
+ <20221102171524.thsz2kwtirhxn7ee@offworld>
+ <Y2MAdaCES+aUc2QH@iweiny-desk3>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=us-ascii; format=flowed
 Content-Disposition: inline
-In-Reply-To: <20221102232737.1351745-4-vipinsh@google.com>
-X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
-        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
-        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=unavailable
+In-Reply-To: <Y2MAdaCES+aUc2QH@iweiny-desk3>
+User-Agent: NeoMutt/20220429
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -75,16 +105,14 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022, Vipin Sharma wrote:
-> atoi() doesn't detect errors. There is no way to know that a 0 return
-> is correct conversion or due to an error.
-> 
-> Introduce atoi_paranoid() to detect errors and provide correct
-> conversion. Replace all atoi() calls with atoi_paranoid().
-> 
-> Signed-off-by: Vipin Sharma <vipinsh@google.com>
-> Suggested-by: David Matlack <dmatlack@google.com>
-> Suggested-by: Sean Christopherson <seanjc@google.com>
-> ---
+On Wed, 02 Nov 2022, Ira Weiny wrote:
 
-Reviewed-by: Sean Christopherson <seanjc@google.com>
+>On Wed, Nov 02, 2022 at 10:15:24AM -0700, Davidlohr Bueso wrote:
+>> Most CXL features that can have irqs will normally use only the first 16,
+>> with the exception of isolation (cxl 3.0), which per the spec is up to 32.
+>
+>Dan, Dave, and I were discussing this and we agree.  For now the only things
+>people are working on are within the first 16 so why not just request 16 as the
+>max for now?
+
+It is a fair compromise, yes.
