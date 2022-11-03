@@ -2,119 +2,80 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9CE88617F62
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:24:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6CF1E617F6D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:25:40 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231304AbiKCOYx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 10:24:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45780 "EHLO
+        id S231356AbiKCOZi (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 10:25:38 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:46348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229667AbiKCOYv (ORCPT
+        with ESMTP id S231312AbiKCOZb (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 10:24:51 -0400
-Received: from mail-oo1-xc35.google.com (mail-oo1-xc35.google.com [IPv6:2607:f8b0:4864:20::c35])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6EF2726DC;
-        Thu,  3 Nov 2022 07:24:50 -0700 (PDT)
-Received: by mail-oo1-xc35.google.com with SMTP id v7-20020a4aa507000000b00496e843fdfeso281177ook.7;
-        Thu, 03 Nov 2022 07:24:50 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=u/xSN01Y9d0jDzJ8OY9Uml07yt5pXMZDHAA6O3LIwM4=;
-        b=NNfn/U3u6fGUpwAIsw3QI8vNRnfExdw5AISKpSm4hA6ez4yskkICLV8O8q13vBNKGy
-         LBoq/BR7pVxnBdmFGt3N2K+QjSb67MZKOkjy/6Cpcp6i0HveRrVB87dbnQpHrpRVp5CA
-         VGRXD5zRtwfjbHGuS01PUBwws170k6uz3M7FF45R1A2x3CYKOpYY9fQYmV4vyxg3cUFu
-         uMkh4HmUbnTHjukHQ5YYvKPAqXRMwLy6pw/asV0tJBah6yMnfKUGyvEjznb1A6P62YX9
-         5s9pr6+zOe7WD8wmYtuovrLYL6CjXWg1i6hiFt0Yqovv681rh6t0OqM/LQXQElYc5sGI
-         FUlQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=u/xSN01Y9d0jDzJ8OY9Uml07yt5pXMZDHAA6O3LIwM4=;
-        b=8RQIHLAEFG9ncEQANCddvXBa9jGL3gYJaAzMjacrOJxDCpVzELbISKSj2v0QZJYrmY
-         yY/eWrNao9z4x0njFID/QmlUOr+JCPpgn56/H9TofYfVOMTkZim6aASIMiu9Xotezb8I
-         vEyBqCrzb2fhNggDjgyo7mAHLbrVhP9MZiValesyUb7V89J8uq7/Ne8D2+SF9g7mc/Ad
-         DiuOfES3wx6sbkQA4PW+jsAnh7qoyavnlsYD84lmiYV1OWy9qpOyzIYp54L04AJz+76I
-         XP2x1Nj4eCYrrtKG54ViINg4AewAZtFyBK1dMe4CSNJDj0KHl6hs3OImTKQlD6IpPlcQ
-         Wi3g==
-X-Gm-Message-State: ACrzQf3QcmL6U9PwLpZztw4NPliyYjp/fMBvFIQ9Z+xBj9bChGM5plBm
-        ambj7lGwIP3aJxXWsbhcm+YWx3LpOjh8bkTeiGE=
-X-Google-Smtp-Source: AMsMyM6J5QRMxRp64kRAdhF5yjjfT9WHNQctflNk+E6Xp1u2gW/bCaFAXyDhIRKAHdTzy+3zP3AgCHbpg71s/ISYB+o=
-X-Received: by 2002:a4a:a68b:0:b0:496:2521:c81d with SMTP id
- f11-20020a4aa68b000000b004962521c81dmr12952579oom.80.1667485489693; Thu, 03
- Nov 2022 07:24:49 -0700 (PDT)
+        Thu, 3 Nov 2022 10:25:31 -0400
+Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C554A26DC;
+        Thu,  3 Nov 2022 07:25:30 -0700 (PDT)
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+        (using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+         key-exchange X25519 server-signature RSA-PSS (4096 bits))
+        (No client certificate requested)
+        (Authenticated sender: kholk11)
+        by madras.collabora.co.uk (Postfix) with ESMTPSA id CE7B0660294D;
+        Thu,  3 Nov 2022 14:25:28 +0000 (GMT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+        s=mail; t=1667485529;
+        bh=V/lrvTevc4IJp5UcDZQsx+cZatS/QHb6/HH934WSbtk=;
+        h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+        b=apgnt2Fj0WevICWRfwwwzURMMEeLtibvGDP8URTDqPQCrugbAIbO9d37xWbX8fZ5p
+         82lWXBTUeNjSh2tH98SL1LZPV3g2jBfZn75Flue4TIOBuQbOEzad/EZPP+VIDx+OYw
+         SVbm7CVhdzN4rthu2L0kqH1okwLPCJRivCBCBGuWzIv+1eTCh1mlbvtCtWvQKbfXfU
+         ipJriuk+lmQcpZC/4AH50W0xvvowSXsDlzzur8NSZx0pkRHkH/t6Rmc5biB53WgZvA
+         FpBmLz5kWv3frBmlMqopUpPPlHL71WapWpLyT174RVHmYN3Vs+pkwATSEHcwBRilSR
+         G4dYzUCbKhv9A==
+Message-ID: <357eb6c1-b8ec-34eb-5333-3a98cc5d6841@collabora.com>
+Date:   Thu, 3 Nov 2022 15:25:26 +0100
 MIME-Version: 1.0
-References: <20221101223319.165493-1-robdclark@gmail.com> <20221101223319.165493-3-robdclark@gmail.com>
- <bf5fb954-c71b-f02f-5300-4e030b10811a@linaro.org>
-In-Reply-To: <bf5fb954-c71b-f02f-5300-4e030b10811a@linaro.org>
-From:   Rob Clark <robdclark@gmail.com>
-Date:   Thu, 3 Nov 2022 07:25:07 -0700
-Message-ID: <CAF6AEGtzfoxKLi7FrHRgdp-ft32rFH1XzEeu11SeH3c0Lodj0w@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] drm/msm: Hangcheck progress detection
-To:     Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc:     dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
-        linux-arm-msm@vger.kernel.org, Rob Clark <robdclark@chromium.org>,
-        Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Sean Paul <sean@poorly.run>, David Airlie <airlied@gmail.com>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Vladimir Lypak <vladimir.lypak@gmail.com>,
-        Douglas Anderson <dianders@chromium.org>,
-        Chia-I Wu <olvaffe@gmail.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.3
+Subject: Re: [PATCH v5 1/3] dt-bindings: PCI: mediatek-gen3: Support mt8195
+Content-Language: en-US
+To:     Tinghan Shen <tinghan.shen@mediatek.com>,
+        Ryder Lee <ryder.lee@mediatek.com>,
+        Jianjun Wang <jianjun.wang@mediatek.com>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Rob Herring <robh+dt@kernel.org>,
+        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
+        Matthias Brugger <matthias.bgg@gmail.com>
+Cc:     linux-pci@vger.kernel.org, linux-mediatek@lists.infradead.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org,
+        Project_Global_Chrome_Upstream_Group@mediatek.com
+References: <20221103025656.8714-1-tinghan.shen@mediatek.com>
+ <20221103025656.8714-2-tinghan.shen@mediatek.com>
+From:   AngeloGioacchino Del Regno 
+        <angelogioacchino.delregno@collabora.com>
+In-Reply-To: <20221103025656.8714-2-tinghan.shen@mediatek.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 2, 2022 at 4:26 PM Dmitry Baryshkov
-<dmitry.baryshkov@linaro.org> wrote:
->
-> On 02/11/2022 01:33, Rob Clark wrote:
-> > From: Rob Clark <robdclark@chromium.org>
-> >
-> > If the hangcheck timer expires, check if the fw's position in the
-> > cmdstream has advanced (changed) since last timer expiration, and
-> > allow it up to three additional "extensions" to it's alotted time.
-> > The intention is to continue to catch "shader stuck in a loop" type
-> > hangs quickly, but allow more time for things that are actually
-> > making forward progress.
->
-> Just out of curiosity: wouldn't position also change for a 'shader stuck
-> in a loop'?
+Il 03/11/22 03:56, Tinghan Shen ha scritto:
+> From: Jianjun Wang <jianjun.wang@mediatek.com>
+> 
+> In order to support mt8195 pcie node, update the yaml to support new
+> properties of iommu and power-domain, and update the reset-names
+> property to allow only one 'mac' name.
+> 
+> Signed-off-by: Jianjun Wang <jianjun.wang@mediatek.com>
+> Signed-off-by: TingHan Shen <tinghan.shen@mediatek.com>
 
-There is some pipelining, in that there can be a couple draws in
-flight at the same time, and SQE is running ahead of that, but with a
-shader stuck in a loop the associated draw will not complete, and that
-will halt forward progress through the cmdstream.  Basically what this
-is doing is detecting that forward progress through the cmdstream has
-stopped.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-BR,
--R
 
->
-> > Because we need to sample the CP state twice to detect if there has
-> > not been progress, this also cuts the the timer's duration in half.
-> >
-> > v2: Fix typo (REG_A6XX_CP_CSQ_IB2_STAT), add comment
-> >
-> > Signed-off-by: Rob Clark <robdclark@chromium.org>
-> > Reviewed-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
->
->
->
-> --
-> With best wishes
-> Dmitry
->
