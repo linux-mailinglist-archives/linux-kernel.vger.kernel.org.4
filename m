@@ -2,90 +2,156 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1C0FF618A1C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 22:03:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id BBB8E618A23
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 22:04:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230527AbiKCVD3 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 17:03:29 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57130 "EHLO
+        id S229985AbiKCVEJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 17:04:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57578 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230121AbiKCVD0 (ORCPT
+        with ESMTP id S229548AbiKCVEF (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 17:03:26 -0400
-Received: from madras.collabora.co.uk (madras.collabora.co.uk [46.235.227.172])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C9DC1F18;
-        Thu,  3 Nov 2022 14:03:23 -0700 (PDT)
-Received: from notapiano (unknown [IPv6:2600:4041:5b1a:cd00:524d:e95d:1a9c:492a])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange ECDHE (P-256) server-signature RSA-PSS (4096 bits) server-digest SHA256)
-        (No client certificate requested)
-        (Authenticated sender: nfraprado)
-        by madras.collabora.co.uk (Postfix) with ESMTPSA id 226E06602946;
-        Thu,  3 Nov 2022 21:03:19 +0000 (GMT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-        s=mail; t=1667509401;
-        bh=V56w4IKznjfuluhA6fSqo5+nAAWn0dApHy/TY9w79jE=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=NBDxFm4mr3csQUybIFz6G8NVG3xGYl5esnOpE/eqWpP9gCja7xQavnK4b5gi1XIUc
-         7NnK3ZmYRS8LblLRQQnY/MCmj6IT7TBhpaxZO0VOJTZGQYbNZsReicy0HO/YiPVM0f
-         BukU7YNF8lWGC4g97/IxrFWtMGj56uH4a+fLrRWddhmjcRrSTeFFiy4IJwUYlbUWaB
-         yPIQ/OUvDxt7PCkarmBvnKioNvpgUEXSGanRypyDIr1evtuXZmyZS0urJtkgmB0fkg
-         FvA9xFkb3m/2wZ5Nnr1YTYcktbMqqAE3Af66MWebop77thtljgybt5r2ATLu56Z7P/
-         f8A+qx4NTc1rw==
-Date:   Thu, 3 Nov 2022 17:03:15 -0400
-From:   =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado 
-        <nfraprado@collabora.com>
-To:     "Nancy.Lin" <nancy.lin@mediatek.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Matthias Brugger <matthias.bgg@gmail.com>,
-        Chun-Kuang Hu <chunkuang.hu@kernel.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>, wim@linux-watchdog.org,
-        AngeloGioacchino Del Regno 
-        <angelogioacchino.delregno@collabora.com>, linux@roeck-us.net,
-        David Airlie <airlied@linux.ie>,
-        Daniel Vetter <daniel@ffwll.ch>,
-        Nathan Chancellor <nathan@kernel.org>,
-        Nick Desaulniers <ndesaulniers@google.com>,
-        "jason-jh . lin" <jason-jh.lin@mediatek.com>,
-        Yongqiang Niu <yongqiang.niu@mediatek.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        linux-mediatek@lists.infradead.org,
-        dri-devel@lists.freedesktop.org, llvm@lists.linux.dev,
-        singo.chang@mediatek.com,
-        Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v27 2/7] drm/mediatek: add ETHDR support for MT8195
-Message-ID: <20221103210315.lm2d3n4uolra44no@notapiano>
-References: <20221103032610.9217-1-nancy.lin@mediatek.com>
- <20221103032610.9217-3-nancy.lin@mediatek.com>
+        Thu, 3 Nov 2022 17:04:05 -0400
+Received: from mail-pj1-x1030.google.com (mail-pj1-x1030.google.com [IPv6:2607:f8b0:4864:20::1030])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C172626E0;
+        Thu,  3 Nov 2022 14:04:04 -0700 (PDT)
+Received: by mail-pj1-x1030.google.com with SMTP id b11so2830024pjp.2;
+        Thu, 03 Nov 2022 14:04:04 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=RKpWMQos6VVD1S/I4lACLsmO/tYS5LRA7d2ENkEKbRo=;
+        b=W1jfdVvCiC74H1TrCZBHpy39zmLx6ZdDw7CTvEA3hQRy2SYEYEHpqHKEqbYIPLurIe
+         Y2whGNqDI5mui4w+1QXrkHh+GC9ATmNd8ps8PeHw3qaJpwgt1d7jvMCXqs25Zy8Lpx4o
+         BRkdqU5nSWSpkaBgaA/lV+5CSWVpabSirQHa1cejuentrhT/uERBbBImlSMJgf6A967J
+         fjOlpx3kn0dIaEHhhAKeVdXj4/EkPaL2dmbdM+AJdzuPv1TA2eEp2KkYLi7TVhEuAixL
+         VUk9wO+wTZMMnlMLn0pWY/lQ/5O1/2ysb54mA9Nupm245dVRVUlabq2dQWglwCNzBaAj
+         yq6Q==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RKpWMQos6VVD1S/I4lACLsmO/tYS5LRA7d2ENkEKbRo=;
+        b=x3iHn7CNvIqQQgDOGl/E3Ac5YwOnedUbymwRWwkPApkAWLBj8Pxmgnbpp4wfyJ5fdH
+         MKKiPCVG1xHFM5wygR7xKrxcoynlHkkZbVlh+txZBX4RE326uAUd7UnSOE5EfNIfebib
+         AUYt6TJNXkrwmSLVOifQV1xYBlWM5R7WJAm7a40eLtQuLTGzmZxYltaBIboM85ElhE3e
+         +u+O1WF3KrF2BBd3qgxRRNI4ZeM6hkwemxIZ6ubnfJQIq10gAPWm4sAPSj9sbCsXB1O3
+         tghyJKv12qKe0KcuK6HefQx4Or9afXil+HIbuxLp+c+koOcCQj95YwNwdIfoY91G8dyR
+         Ue4A==
+X-Gm-Message-State: ACrzQf1Ii/nW03dqtegu/Oqr9KADH78WXudIhISRktW7GhEWkW6Hrij/
+        yPRrmnX2nv2SBPjuffoz+RI=
+X-Google-Smtp-Source: AMsMyM4B7LXLMUo1WLny520SMeR1sIUEIak6LqJqMDk6N+6eScsWNFNrZpvHK/6RhT2SJsSNsCUIWw==
+X-Received: by 2002:a17:902:e5c5:b0:186:5f09:8468 with SMTP id u5-20020a170902e5c500b001865f098468mr32699741plf.122.1667509444114;
+        Thu, 03 Nov 2022 14:04:04 -0700 (PDT)
+Received: from localhost ([192.55.54.55])
+        by smtp.gmail.com with ESMTPSA id 27-20020a63125b000000b0046a1c832e9fsm1137383pgs.34.2022.11.03.14.04.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 14:04:03 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 14:04:02 -0700
+From:   Isaku Yamahata <isaku.yamahata@gmail.com>
+To:     Sean Christopherson <seanjc@google.com>
+Cc:     Paolo Bonzini <pbonzini@redhat.com>, Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>,
+        James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>, isaku.yamahata@gmail.com
+Subject: Re: [PATCH 36/44] KVM: x86: Do compatibility checks when onlining CPU
+Message-ID: <20221103210402.GB1063309@ls.amr.corp.intel.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+ <20221102231911.3107438-37-seanjc@google.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20221103032610.9217-3-nancy.lin@mediatek.com>
+In-Reply-To: <20221102231911.3107438-37-seanjc@google.com>
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 11:26:05AM +0800, Nancy.Lin wrote:
-[..]
-> --- /dev/null
-> +++ b/drivers/gpu/drm/mediatek/mtk_ethdr.h
-[..]
-> +void mtk_ethdr_unregister_vblank_cb(struct device *dev);
-> +void mtk_ethdr_enable_vblank(struct device *dev);
-> +void mtk_ethdr_disable_vblank(struct device *dev);
-> +#endif
-> +
+On Wed, Nov 02, 2022 at 11:19:03PM +0000,
+Sean Christopherson <seanjc@google.com> wrote:
 
-As warned by git when applying the patch, you have an extra new line at the end
-here.
+> From: Chao Gao <chao.gao@intel.com>
+> 
+> Do compatibility checks when enabling hardware to effectively add
+> compatibility checks when onlining a CPU.  Abort enabling, i.e. the
+> online process, if the (hotplugged) CPU is incompatible with the known
+> good setup.
+> 
+> At init time, KVM does compatibility checks to ensure that all online
+> CPUs support hardware virtualization and a common set of features. But
+> KVM uses hotplugged CPUs without such compatibility checks. On Intel
+> CPUs, this leads to #GP if the hotplugged CPU doesn't support VMX, or
+> VM-Entry failure if the hotplugged CPU doesn't support all features
+> enabled by KVM.
+> 
+> Note, this is little more than a NOP on SVM, as SVM already checks for
+> full SVM support during hardware enabling.
+> 
+> Opportunistically add a pr_err() if setup_vmcs_config() fails, and
+> tweak all error messages to output which CPU failed.
+> 
+> Signed-off-by: Chao Gao <chao.gao@intel.com>
+> Co-developed-by: Sean Christopherson <seanjc@google.com>
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
+> ---
+>  arch/x86/include/asm/kvm_host.h |  2 +-
+>  arch/x86/kvm/svm/svm.c          | 20 +++++++++++---------
+>  arch/x86/kvm/vmx/vmx.c          | 33 +++++++++++++++++++--------------
+>  arch/x86/kvm/x86.c              |  5 +++--
+>  4 files changed, 34 insertions(+), 26 deletions(-)
+> 
+> diff --git a/arch/x86/include/asm/kvm_host.h b/arch/x86/include/asm/kvm_host.h
+> index f223c845ed6e..c99222b71fcc 100644
+> --- a/arch/x86/include/asm/kvm_host.h
+> +++ b/arch/x86/include/asm/kvm_host.h
+> @@ -1666,7 +1666,7 @@ struct kvm_x86_nested_ops {
+>  };
+>  
+>  struct kvm_x86_init_ops {
+> -	int (*check_processor_compatibility)(void);
+> +	int (*check_processor_compatibility)(int cpu);
 
-Applying: drm/mediatek: add ETHDR support for MT8195
-.git/rebase-apply/patch:454: new blank line at EOF.
-+
-warning: 1 line adds whitespace errors.
+Is this cpu argument used only for error message to include cpu number
+with avoiding repeating raw_smp_processor_id() in pr_err()?
+The actual check is done on the current executing cpu.
+
+If cpu != raw_smp_processor_id(), cpu is wrong. Although the function is called
+in non-preemptive context, it's a bit confusing. So voting to remove it and
+to use.
+
+Thanks,
+-- 
+Isaku Yamahata <isaku.yamahata@gmail.com>
