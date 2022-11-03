@@ -2,153 +2,101 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1BD086175F7
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 06:05:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 2AB376175FB
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 06:06:05 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230336AbiKCFFK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 01:05:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45140 "EHLO
+        id S230348AbiKCFGC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 01:06:02 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:45522 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiKCFFG (ORCPT
+        with ESMTP id S230017AbiKCFGA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 01:05:06 -0400
-Received: from mail-wr1-x432.google.com (mail-wr1-x432.google.com [IPv6:2a00:1450:4864:20::432])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BDC0C1836E;
-        Wed,  2 Nov 2022 22:05:05 -0700 (PDT)
-Received: by mail-wr1-x432.google.com with SMTP id o4so1005303wrq.6;
-        Wed, 02 Nov 2022 22:05:05 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=rom:in-reply-to:content-disposition:mime-version:message-id:subject
-         :cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=1rISLR4fCir9Qo3kG4MmHWQffnyg0E3C9I6ZPdYWK9w=;
-        b=jDFOlwvSc4VgW9Cn1fok4tf84n1Zoc1XNswknecjG6szmDrX3himVRKGQEfehicZos
-         pQswasGK5TpH0KnL2YXgOY6LW8G4/0aguckorCvgXw7fC/xgLPkIPMpKBaXRywtqmYaf
-         ScnHmYHTaKI482GETt69Q/+q3/z78rhE6YU1Lqegc3WY5dGdraf33XB3SWWlSlFqMAD7
-         SRKQ79u4Do/7siHdUvgb3MdLxp8KDb//4ByCNctMhrCSUWuySN1T99ShB8ZiehdDGxr4
-         DDlPKBmm/x5tkl4eJyuff2eEJfSa0WYEqk22ZsZifBa2HL9SXBFQaf66MG5rAvkDJJwO
-         fbIA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=rom:in-reply-to:content-disposition:mime-version:message-id:subject
-         :cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=1rISLR4fCir9Qo3kG4MmHWQffnyg0E3C9I6ZPdYWK9w=;
-        b=coayfJWF5Sqfhr+4VopkTgh74HFkWdYc/mWbXa705vQbnlhP9SPLlkfBX56mSTbRFF
-         g06rWLTEbGb+qQ5Kbdc3bkDhF2T+BgokXGGS5Y/jygxxy8JKGjz/xppvgjy9h1m7Hj8S
-         L7F51cnfCz59micuZONcbkEajjAQiLmZTrtoZVeURUPSGfY0kmTIsUQm11z3HxaWsUC+
-         TlGtSfQsszPnb0M3eZSiU6v4VaVQSqkZ0XClEzimSgkiPNkC0PijCw+7vdN+ckoYFWWJ
-         VzAhO1bjmByZw0ZQR0AABXQ5CHPxpVFgkGaCC7HCh9kUcHaI8jwMD4CsLKiDFu8P2Hnc
-         f1Iw==
-X-Gm-Message-State: ACrzQf2UH32ckr9xfGiTAY5/v874XrBflGpkGD0G0RY2n5NY38XVlViV
-        S8Xisz/h5bJwgjkAbEQgvwE=
-X-Google-Smtp-Source: AMsMyM4UOOQbvay5N+xws8xCof0zFaHNmgxxOtRxaaz48CAHz2TdkWIxy2j2dvWMA4IKUS202c40Mg==
-X-Received: by 2002:adf:d226:0:b0:235:d9ae:1de9 with SMTP id k6-20020adfd226000000b00235d9ae1de9mr17736970wrh.599.1667451904103;
-        Wed, 02 Nov 2022 22:05:04 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id e12-20020adfe38c000000b0023655e51c14sm14241193wrm.32.2022.11.02.22.05.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 22:05:03 -0700 (PDT)
-From:   error27@gmail.com
-Date:   Thu, 3 Nov 2022 08:04:59 +0300
-To:     oe-kbuild@lists.linux.dev, Yihang Li <liyihang9@huawei.com>,
-        jejb@linux.ibm.com, martin.petersen@oracle.com
-Cc:     lkp@intel.com, oe-kbuild-all@lists.linux.dev, bvanassche@acm.org,
-        john.garry@huawei.com, chenxiang66@hisilicon.com,
-        daejun7.park@samsung.com, damien.lemoal@opensource.wdc.com,
-        yanaijie@huawei.com, duoming@zju.edu.cn,
-        linux-scsi@vger.kernel.org, linux-kernel@vger.kernel.org,
-        prime.zeng@hisilicon.com, yangxingui@huawei.com,
-        linuxarm@huawei.com, liyihang9@huawei.com
-Subject: Re: [PATCH] scsi: libsas: Check and update the link rate during
- discovery
-Message-ID: <202211030845.FLT5UqWU-lkp@intel.com>
+        Thu, 3 Nov 2022 01:06:00 -0400
+Received: from wout4-smtp.messagingengine.com (wout4-smtp.messagingengine.com [64.147.123.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 50DD818387;
+        Wed,  2 Nov 2022 22:05:58 -0700 (PDT)
+Received: from compute5.internal (compute5.nyi.internal [10.202.2.45])
+        by mailout.west.internal (Postfix) with ESMTP id 7462C32008FF;
+        Thu,  3 Nov 2022 01:05:54 -0400 (EDT)
+Received: from mailfrontend1 ([10.202.2.162])
+  by compute5.internal (MEProxy); Thu, 03 Nov 2022 01:05:55 -0400
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.com.au;
+         h=cc:cc:content-transfer-encoding:date:date:from:from
+        :in-reply-to:message-id:mime-version:reply-to:sender:subject
+        :subject:to:to; s=fm3; t=1667451954; x=1667538354; bh=RBxPaXEPLN
+        X4kZR/Tfbq6PM+htPjUpWoWE03QVW+h88=; b=MRJ5Cs1PR8XbKbls2o00CqQNxa
+        oHIW7WU43yk3ZSpsS6DZje2dbVAqIri0RVpnYsGUnRv9kM/iEPbZfMx/lraQiu78
+        f3R2zbVjt1EqSw8Gipeb8EHcvDhxXTcAacWSdShahVDjFfr9iCfdOQYu9udv2UEi
+        YCmfb83JEmyJqBME07gyaLLtckNG0WcZ25AUYX/GA67othMObU5eWmaY9SRJIj/4
+        6LQ0ey9aQJcVB10iiNNmFTcEqaEvxIb7hw1FpfudqE5mZibIyy/shKn+hC+A+T/G
+        /a9Bm4wZ+BJfOeolQPD7bI4k511v9DnBs01EK7CzCcyHn/6+za6L+pI6iFng==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+        messagingengine.com; h=cc:cc:content-transfer-encoding:date:date
+        :feedback-id:feedback-id:from:from:in-reply-to:message-id
+        :mime-version:reply-to:sender:subject:subject:to:to:x-me-proxy
+        :x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=
+        1667451954; x=1667538354; bh=RBxPaXEPLNX4kZR/Tfbq6PM+htPjUpWoWE0
+        3QVW+h88=; b=GnA7BnDg4JFLorf9t7Z+DZKT+swVpWFWHmSRjEBzEjAMmuUDGLe
+        GgVNm18d8ahMxwbXWRaYvhi1m+8EPZs6y4t59vR8gz9NC8SElpPG5skLd+IbqYWx
+        o6tGt7kop6sDmMoUscSaNLGt4F7IsSj8AomEFhnLV9unncuEWv8WeNvwE50HsLHR
+        FLatt52VDZ4FUi3LlB8WF+4ufHMy7M/OrDCq+NkgW9NcRvRwepGsdcDeP5G7xuF9
+        WKsBhXFjIB40IGyWNjxeUoRXjj1TX0vYVYkkLGN8WjEbO8RIQhSba+4dpqxHjERx
+        eNIdChenb+L5n7ShaFrd1z/qMpU8AWwZG3A==
+X-ME-Sender: <xms:MUxjY15tF3Dswo0sX3yjHt1eWEpj2TAZK7jthZmHXi4ZnO-xbwUkVg>
+    <xme:MUxjYy4h2mS8MdHXIVPnQqBn8P8ZywCsnICfBTpGw6zjIHise9O1BXE8XFml8dpGp
+    cCkNJWXD_6rn0i3kw>
+X-ME-Received: <xmr:MUxjY8fMd1wH7AxY4a8_6R1quwpZXx2YgfqwAH62cW435lS5E1_FzUwHP_ptCMRUtJbqKjB5MNl6KZzDVGHZcjvzDwyT8jr5jgGeODLdNjZ2Q6fe41joLNCaw5pKNkL7>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudekgdejjecutefuodetggdotefrodftvf
+    curfhrohhfihhlvgemucfhrghsthforghilhdpqfgfvfdpuffrtefokffrpgfnqfghnecu
+    uegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenuc
+    fjughrpefhvfevufffkffoggfgsedtkeertdertddtnecuhfhrohhmpeflohhhnhcuvfhh
+    ohhmshhonhcuoehgihhtsehjohhhnhhthhhomhhsohhnrdhfrghsthhmrghilhdrtghomh
+    drrghuqeenucggtffrrghtthgvrhhnpeetjeevgffggeekffduledthfevgfeugeelhfeu
+    veeiueekgfegffetudevhfdutdenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpehgihhtsehjohhhnhhthhhomhhsohhnrdhfrghsthhmrghilhdr
+    tghomhdrrghu
+X-ME-Proxy: <xmx:MUxjY-JmVJ_Ino7uMRoWCNnUKBPd1XlavCm6i2KVJbhMzvFMzndJkw>
+    <xmx:MUxjY5Ke-rt0Ot5czg81QzMOuT5SSK3p1IsFRPayWI7dTuC3ZKdUhQ>
+    <xmx:MUxjY3xMq3_ezCJ-5uVZP6OiJiEMxGEZ6SFgiU3m9-Wgeh_hxJFhcQ>
+    <xmx:MkxjY2FR2jSmdRmhgwH-t73SAEGh0rDjlGNl8l8Y5Xb1b-oIYGCo4g>
+Feedback-ID: ic081425d:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
+ 3 Nov 2022 01:05:51 -0400 (EDT)
+From:   John Thomson <git@johnthomson.fastmail.com.au>
+To:     Sergio Paracuellos <sergio.paracuellos@gmail.com>,
+        =?UTF-8?q?Ar=C4=B1n=C3=A7=20=C3=9CNAL?= <arinc.unal@arinc9.com>,
+        John Crispin <john@phrozen.org>,
+        Thomas Bogendoerfer <tsbogend@alpha.franken.de>
+Cc:     linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: [RFC PATCH 0/3] mips: ralink: mt7621: fix too-early kzalloc
+Date:   Thu,  3 Nov 2022 15:05:35 +1000
+Message-Id: <20221103050538.1930758-1-git@johnthomson.fastmail.com.au>
+X-Mailer: git-send-email 2.37.2
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221102100555.3537275-1-liyihang9@huawei.com>
-rom:    Dan Carpenter <error27@gmail.com>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-2.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,SPF_PASS
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hi Yihang,
+ralink mt7621 attempts to use kzalloc before normal memory management is
+available.
+Before v6.1-rc1, mt7621.c soc_dev_init silently failed to kzalloc and
+returned in soc_dev_init, but continued to boot without the soc device
+registered.
+After, kernel crashes before it outputs any console messages
 
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+This was bisected to an mm/slub change (detailed in patch 3)
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Yihang-Li/scsi-libsas-Check-and-update-the-link-rate-during-discovery/20221102-180734
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/mkp/scsi.git for-next
-patch link:    https://lore.kernel.org/r/20221102100555.3537275-1-liyihang9%40huawei.com
-patch subject: [PATCH] scsi: libsas: Check and update the link rate during discovery
-config: m68k-randconfig-m041-20221102
-compiler: m68k-linux-gcc (GCC) 12.1.0
+RFC due to
+- probably a (much) better way to do this
+- do not have mt7621 device with PCIe to test
+  drivers/phy/ralink/phy-mt7621-pci.c
+- should this reference a commit as Fixes?
 
-If you fix the issue, kindly add following tag where applicable
-| Reported-by: kernel test robot <lkp@intel.com>
-| Reported-by: Dan Carpenter <error27@gmail.com>
 
-New smatch warnings:
-drivers/scsi/libsas/sas_expander.c:1962 sas_ex_update_linkrate() warn: iterator used outside loop: 'child'
 
-Old smatch warnings:
-drivers/scsi/libsas/sas_expander.c:253 sas_set_ex_phy() error: potential null dereference 'phy->phy'.  (sas_phy_alloc returns null)
-drivers/scsi/libsas/sas_expander.c:253 sas_set_ex_phy() error: we previously assumed 'phy->phy' could be null (see line 189)
-drivers/scsi/libsas/sas_expander.c:1974 sas_ex_update_linkrate() warn: iterator used outside loop: 'child'
-
-vim +/child +1962 drivers/scsi/libsas/sas_expander.c
-
-39d64046e3dfc7 Yihang Li       2022-11-02  1947  static void sas_ex_update_linkrate(struct domain_device *parent)
-39d64046e3dfc7 Yihang Li       2022-11-02  1948  {
-39d64046e3dfc7 Yihang Li       2022-11-02  1949  	struct expander_device *ex = &parent->ex_dev;
-39d64046e3dfc7 Yihang Li       2022-11-02  1950  	int i = 0, end = ex->num_phys;
-39d64046e3dfc7 Yihang Li       2022-11-02  1951  
-39d64046e3dfc7 Yihang Li       2022-11-02  1952  	for ( ; i < end; i++) {
-39d64046e3dfc7 Yihang Li       2022-11-02  1953  		struct ex_phy *ex_phy = &ex->ex_phy[i];
-39d64046e3dfc7 Yihang Li       2022-11-02  1954  		struct domain_device *child;
-39d64046e3dfc7 Yihang Li       2022-11-02  1955  
-39d64046e3dfc7 Yihang Li       2022-11-02  1956  		list_for_each_entry(child, &parent->ex_dev.children, siblings)
-                                                                                    ^^^^^
-Imagine this loop exits without finding the correct child.
-
-39d64046e3dfc7 Yihang Li       2022-11-02  1957  			if (SAS_ADDR(child->sas_addr) ==
-39d64046e3dfc7 Yihang Li       2022-11-02  1958  			    SAS_ADDR(ex_phy->attached_sas_addr))
-39d64046e3dfc7 Yihang Li       2022-11-02  1959  				break;
-39d64046e3dfc7 Yihang Li       2022-11-02  1960  
-39d64046e3dfc7 Yihang Li       2022-11-02  1961  		if (dev_is_sata(child)) {
-                                                                                ^^^^^
-That means "child" is not a valid pointer.  Not sure why the warning is
-only triggered on the line below instead of here.
-
-39d64046e3dfc7 Yihang Li       2022-11-02 @1962  			if (child->linkrate > parent->min_linkrate) {
-39d64046e3dfc7 Yihang Li       2022-11-02  1963  				struct sas_phy_linkrates rates = {
-39d64046e3dfc7 Yihang Li       2022-11-02  1964  					.maximum_linkrate = parent->min_linkrate,
-39d64046e3dfc7 Yihang Li       2022-11-02  1965  					.minimum_linkrate = parent->min_linkrate,
-39d64046e3dfc7 Yihang Li       2022-11-02  1966  				};
-39d64046e3dfc7 Yihang Li       2022-11-02  1967  
-39d64046e3dfc7 Yihang Li       2022-11-02  1968  				sas_smp_phy_control(parent, i,
-39d64046e3dfc7 Yihang Li       2022-11-02  1969  						    PHY_FUNC_LINK_RESET, &rates);
-39d64046e3dfc7 Yihang Li       2022-11-02  1970  				ex_phy->phy_change_count = -1;
-39d64046e3dfc7 Yihang Li       2022-11-02  1971  			}
-39d64046e3dfc7 Yihang Li       2022-11-02  1972  		}
-39d64046e3dfc7 Yihang Li       2022-11-02  1973  
-39d64046e3dfc7 Yihang Li       2022-11-02  1974  		if (dev_is_expander(child->dev_type)) {
-39d64046e3dfc7 Yihang Li       2022-11-02  1975  			child->min_linkrate = min(parent->min_linkrate,
-39d64046e3dfc7 Yihang Li       2022-11-02  1976  						  ex_phy->linkrate);
-39d64046e3dfc7 Yihang Li       2022-11-02  1977  			child->max_linkrate = max(parent->max_linkrate,
-39d64046e3dfc7 Yihang Li       2022-11-02  1978  						  ex_phy->linkrate);
-39d64046e3dfc7 Yihang Li       2022-11-02  1979  			child->linkrate = min(ex_phy->linkrate,
-39d64046e3dfc7 Yihang Li       2022-11-02  1980  					      child->max_linkrate);
-39d64046e3dfc7 Yihang Li       2022-11-02  1981  			ex_phy->phy_change_count = -1;
-39d64046e3dfc7 Yihang Li       2022-11-02  1982  		}
-39d64046e3dfc7 Yihang Li       2022-11-02  1983  	}
-39d64046e3dfc7 Yihang Li       2022-11-02  1984  }
-
--- 
-0-DAY CI Kernel Test Service
-https://01.org/lkp
