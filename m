@@ -2,69 +2,69 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 59C41617588
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 05:29:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 299B561757D
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 05:28:33 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230293AbiKCE3M (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 00:29:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55662 "EHLO
+        id S229579AbiKCE2a (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 00:28:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:55106 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230017AbiKCE2l (ORCPT
+        with ESMTP id S229953AbiKCE2V (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 00:28:41 -0400
+        Thu, 3 Nov 2022 00:28:21 -0400
 Received: from mx0a-002e3701.pphosted.com (mx0a-002e3701.pphosted.com [148.163.147.86])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id F058B11A19;
-        Wed,  2 Nov 2022 21:28:26 -0700 (PDT)
-Received: from pps.filterd (m0148663.ppops.net [127.0.0.1])
-        by mx0a-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A33XbFW018445;
-        Thu, 3 Nov 2022 04:28:09 GMT
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 92EC3210;
+        Wed,  2 Nov 2022 21:28:20 -0700 (PDT)
+Received: from pps.filterd (m0150242.ppops.net [127.0.0.1])
+        by mx0a-002e3701.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A338Wpm012666;
+        Thu, 3 Nov 2022 04:28:11 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=hpe.com; h=from : to : cc : subject
  : date : message-id : in-reply-to : references : mime-version :
  content-transfer-encoding; s=pps0720;
- bh=ss9sDR8jLmNywXxXFXd8GvpjB1cWWA6qyQ+4h2f2Kdw=;
- b=Ms8MYH4768EoEP4FMefy2QpQg+JYDxMP2VNk95WR9EBmtUUahJEGfdn3IEZVETJilLBO
- lXmAhAyD6ilCzRFONxjAgfjbOS1XpM6OBbgKOnuqwUIn+H/ySlJLm7ZunkgMkRqQhNwz
- FyNt3QWSVbL3uuW+DKk0mlAeEvew2bbNc82fnHcLJxMmZSOyGgng5NIrQzvrksf6uIdX
- 1UhByvos3+wPFKRs3Ali5MliJ0tqW7t6G4ErwIWjV1MTrWP0vMcUqiXWwDKoB9oo/8sB
- 8EdwKbE6Nv9pic+4CLVwlx+kgveZua5GgdrNPFmv85+l0bLWbv9Qr487kbCsiFFndJ7w FQ== 
-Received: from p1lg14879.it.hpe.com (p1lg14879.it.hpe.com [16.230.97.200])
-        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3km5tn89xy-1
+ bh=kDCsigLBc4RiVTNQSgXraDq+QR2Ctzc5DZfvh4IK8G0=;
+ b=D5sARtk96vU0kMAXcZa/k38vmxhz4Nv8A8uIwRD6MLhHvWSQSkLL95eiAbbOgzDjkpQt
+ eBDcdTZnSUlsDtlSyT5H59sB5Dmk9JUGagQwaFLxi+Jm5u/Ymp3xcaB04Rw1ioHAzslJ
+ Nhkrtjv6eNF4CI1lVNt46v999hdb6xyTFiOXWBRcpgHWSaPPiKSOgmZxFYTEdxGFZCFs
+ MMqeVxoPcb00+AtFlyhGebHTzKgS7+C8sxvE23+mbc9DPQE28YsMDeC2mjhJs2u9MrM3
+ 1yxZepQwVp7ltBODjODCj7jLIOYZl+8tzHlyYmJVGm4hz7QZmnPMSC7y/ZXqCY2Ri6ZR 2w== 
+Received: from p1lg14878.it.hpe.com (p1lg14878.it.hpe.com [16.230.97.204])
+        by mx0a-002e3701.pphosted.com (PPS) with ESMTPS id 3km2pfhdey-1
         (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-        Thu, 03 Nov 2022 04:28:09 +0000
+        Thu, 03 Nov 2022 04:28:11 +0000
 Received: from p1lg14886.dc01.its.hpecorp.net (unknown [10.119.18.237])
         (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
          key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
         (No client certificate requested)
-        by p1lg14879.it.hpe.com (Postfix) with ESMTPS id E1C71295A0;
-        Thu,  3 Nov 2022 04:28:08 +0000 (UTC)
+        by p1lg14878.it.hpe.com (Postfix) with ESMTPS id BFB22D2AE;
+        Thu,  3 Nov 2022 04:28:10 +0000 (UTC)
 Received: from adevxp033-sys.us.rdlabs.hpecorp.net (unknown [16.231.227.36])
-        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 6A251808EAF;
-        Thu,  3 Nov 2022 04:28:08 +0000 (UTC)
+        by p1lg14886.dc01.its.hpecorp.net (Postfix) with ESMTP id 4DA1180A0FF;
+        Thu,  3 Nov 2022 04:28:10 +0000 (UTC)
 From:   Robert Elliott <elliott@hpe.com>
 To:     herbert@gondor.apana.org.au, davem@davemloft.net,
         tim.c.chen@linux.intel.com, ap420073@gmail.com, ardb@kernel.org,
         Jason@zx2c4.com, David.Laight@ACULAB.COM, ebiggers@kernel.org,
         linux-crypto@vger.kernel.org, linux-kernel@vger.kernel.org
 Cc:     Robert Elliott <elliott@hpe.com>
-Subject: [PATCH v3 04/17] crypto: x86/sha - limit FPU preemption
-Date:   Wed,  2 Nov 2022 23:27:27 -0500
-Message-Id: <20221103042740.6556-5-elliott@hpe.com>
+Subject: [PATCH v3 05/17] crypto: x86/crc - limit FPU preemption
+Date:   Wed,  2 Nov 2022 23:27:28 -0500
+Message-Id: <20221103042740.6556-6-elliott@hpe.com>
 X-Mailer: git-send-email 2.37.3
 In-Reply-To: <20221103042740.6556-1-elliott@hpe.com>
 References: <20221012215931.3896-1-elliott@hpe.com>
  <20221103042740.6556-1-elliott@hpe.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-GUID: DFDtqhIZwyImnMxDMwjKPmmiOdt9MeCV
-X-Proofpoint-ORIG-GUID: DFDtqhIZwyImnMxDMwjKPmmiOdt9MeCV
+X-Proofpoint-GUID: kuDi_pUWUsV-mfcQTfoU9DP58tPkJBJP
+X-Proofpoint-ORIG-GUID: kuDi_pUWUsV-mfcQTfoU9DP58tPkJBJP
 X-HPE-SCL: -1
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.205,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
  definitions=2022-11-02_15,2022-11-02_01,2022-06-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- suspectscore=0 impostorscore=0 phishscore=0 adultscore=0
- priorityscore=1501 clxscore=1015 mlxscore=0 spamscore=0 mlxlogscore=999
- bulkscore=0 malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 spamscore=0 impostorscore=0
+ bulkscore=0 adultscore=0 priorityscore=1501 lowpriorityscore=0
+ malwarescore=0 mlxlogscore=999 clxscore=1015 phishscore=0 suspectscore=0
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.12.0-2210170000 definitions=main-2211030031
 X-Spam-Status: No, score=-3.8 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
         DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,
@@ -79,449 +79,280 @@ Limit the number of bytes processed between kernel_fpu_begin() and
 kernel_fpu_end() calls.
 
 Those functions call preempt_disable() and preempt_enable(), so
-the CPU core is unavailable for scheduling while running.
-
-This leads to "rcu_preempt detected expedited stalls" with stack dumps
-pointing to the optimized hash function if the module is loaded and
-used a lot:
+the CPU core is unavailable for scheduling while running, leading to:
     rcu: INFO: rcu_preempt detected expedited stalls on CPUs/tasks: ...
 
-For example, that can occur during boot with the stack track pointing
-to the sha512-x86 function if the system set to use SHA-512 for
-module signing. The call trace includes:
-    module_sig_check
-    mod_verify_sig
-    pkcs7_verify
-    pkcs7_digest
-    sha512_finup
-    sha512_base_do_update
-
-Fixes: 66be89515888 ("crypto: sha1 - SSSE3 based SHA1 implementation for x86-64")
-Fixes: 8275d1aa6422 ("crypto: sha256 - Create module providing optimized SHA256 routines using SSSE3, AVX or AVX2 instructions.")
-Fixes: 87de4579f92d ("crypto: sha512 - Create module providing optimized SHA512 routines using SSSE3, AVX or AVX2 instructions.")
-Fixes: aa031b8f702e ("crypto: x86/sha512 - load based on CPU features")
+Fixes: 78c37d191dd6 ("crypto: crc32 - add crc32 pclmulqdq implementation and wrappers for table implementation")
+Fixes: 6a8ce1ef3940 ("crypto: crc32c - Optimize CRC32C calculation with PCLMULQDQ instruction")
+Fixes: 0b95a7f85718 ("crypto: crct10dif - Glue code to cast accelerated CRCT10DIF assembly as a crypto transform")
 Suggested-by: Herbert Xu <herbert@gondor.apana.org.au>
-Reviewed-by: Tim Chen <tim.c.chen@linux.intel.com>
 Signed-off-by: Robert Elliott <elliott@hpe.com>
 
 ---
-v3 simplify to while loops rather than do..while loops, avoid
-redundant checks for zero length, rename the limit macro and
-change into a const, vary the limit for each algo
+v3 use while loops and static int, simplify one of the loop structures,
+add algorithm-specific limits, use local stack variable in crc32 finup
+rather than the context pointer like update uses
 ---
- arch/x86/crypto/sha1_ssse3_glue.c   | 64 ++++++++++++++++++++++-------
- arch/x86/crypto/sha256_ssse3_glue.c | 64 ++++++++++++++++++++++-------
- arch/x86/crypto/sha512_ssse3_glue.c | 55 +++++++++++++++++++------
- 3 files changed, 140 insertions(+), 43 deletions(-)
+ arch/x86/crypto/crc32-pclmul_asm.S      |  6 +--
+ arch/x86/crypto/crc32-pclmul_glue.c     | 27 +++++++++----
+ arch/x86/crypto/crc32c-intel_glue.c     | 52 ++++++++++++++++++-------
+ arch/x86/crypto/crct10dif-pclmul_glue.c | 48 +++++++++++++++++------
+ 4 files changed, 99 insertions(+), 34 deletions(-)
 
-diff --git a/arch/x86/crypto/sha1_ssse3_glue.c b/arch/x86/crypto/sha1_ssse3_glue.c
-index 44340a1139e0..4bc77c84b0fb 100644
---- a/arch/x86/crypto/sha1_ssse3_glue.c
-+++ b/arch/x86/crypto/sha1_ssse3_glue.c
-@@ -26,8 +26,17 @@
- #include <crypto/sha1_base.h>
- #include <asm/simd.h>
+diff --git a/arch/x86/crypto/crc32-pclmul_asm.S b/arch/x86/crypto/crc32-pclmul_asm.S
+index ca53e96996ac..9abd861636c3 100644
+--- a/arch/x86/crypto/crc32-pclmul_asm.S
++++ b/arch/x86/crypto/crc32-pclmul_asm.S
+@@ -72,15 +72,15 @@
+ .text
+ /**
+  *      Calculate crc32
+- *      BUF - buffer (16 bytes aligned)
+- *      LEN - sizeof buffer (16 bytes aligned), LEN should be grater than 63
++ *      BUF - buffer - must be 16 bytes aligned
++ *      LEN - sizeof buffer - must be multiple of 16 bytes and greater than 63
+  *      CRC - initial crc32
+  *      return %eax crc32
+  *      uint crc32_pclmul_le_16(unsigned char const *buffer,
+  *	                     size_t len, uint crc32)
+  */
+ 
+-SYM_FUNC_START(crc32_pclmul_le_16) /* buffer and buffer size are 16 bytes aligned */
++SYM_FUNC_START(crc32_pclmul_le_16)
+ 	movdqa  (BUF), %xmm1
+ 	movdqa  0x10(BUF), %xmm2
+ 	movdqa  0x20(BUF), %xmm3
+diff --git a/arch/x86/crypto/crc32-pclmul_glue.c b/arch/x86/crypto/crc32-pclmul_glue.c
+index 98cf3b4e4c9f..df3dbc754818 100644
+--- a/arch/x86/crypto/crc32-pclmul_glue.c
++++ b/arch/x86/crypto/crc32-pclmul_glue.c
+@@ -46,6 +46,9 @@
+ #define SCALE_F			16L	/* size of xmm register */
+ #define SCALE_F_MASK		(SCALE_F - 1)
  
 +/* avoid kernel_fpu_begin/end scheduler/rcu stalls */
-+#ifdef CONFIG_AS_SHA1_NI
-+static const unsigned int bytes_per_fpu_shani = 34 * 1024;
-+#endif
-+static const unsigned int bytes_per_fpu_avx2 = 34 * 1024;
-+static const unsigned int bytes_per_fpu_avx = 30 * 1024;
-+static const unsigned int bytes_per_fpu_ssse3 = 26 * 1024;
++static const unsigned int bytes_per_fpu = 655 * 1024;
 +
- static int sha1_update(struct shash_desc *desc, const u8 *data,
--			     unsigned int len, sha1_block_fn *sha1_xform)
-+		       unsigned int len, unsigned int bytes_per_fpu,
-+		       sha1_block_fn *sha1_xform)
- {
- 	struct sha1_state *sctx = shash_desc_ctx(desc);
+ u32 crc32_pclmul_le_16(unsigned char const *buffer, size_t len, u32 crc32);
  
-@@ -41,22 +50,39 @@ static int sha1_update(struct shash_desc *desc, const u8 *data,
- 	 */
- 	BUILD_BUG_ON(offsetof(struct sha1_state, state) != 0);
+ static u32 __attribute__((pure))
+@@ -55,6 +58,9 @@ static u32 __attribute__((pure))
+ 	unsigned int iremainder;
+ 	unsigned int prealign;
+ 
++	BUILD_BUG_ON(bytes_per_fpu < PCLMUL_MIN_LEN);
++	BUILD_BUG_ON(bytes_per_fpu & SCALE_F_MASK);
++
+ 	if (len < PCLMUL_MIN_LEN + SCALE_F_MASK || !crypto_simd_usable())
+ 		return crc32_le(crc, p, len);
+ 
+@@ -70,12 +76,19 @@ static u32 __attribute__((pure))
+ 	iquotient = len & (~SCALE_F_MASK);
+ 	iremainder = len & SCALE_F_MASK;
  
 -	kernel_fpu_begin();
--	sha1_base_do_update(desc, data, len, sha1_xform);
+-	crc = crc32_pclmul_le_16(p, iquotient, crc);
 -	kernel_fpu_end();
-+	while (len) {
-+		unsigned int chunk = min(len, bytes_per_fpu);
++	while (iquotient >= PCLMUL_MIN_LEN) {
++		unsigned int chunk = min(iquotient, bytes_per_fpu);
 +
 +		kernel_fpu_begin();
-+		sha1_base_do_update(desc, data, chunk, sha1_xform);
++		crc = crc32_pclmul_le_16(p, chunk, crc);
 +		kernel_fpu_end();
 +
-+		len -= chunk;
-+		data += chunk;
++		iquotient -= chunk;
++		p += chunk;
 +	}
  
+-	if (iremainder)
+-		crc = crc32_le(crc, p + iquotient, iremainder);
++	if (iquotient || iremainder)
++		crc = crc32_le(crc, p, iquotient + iremainder);
+ 
+ 	return crc;
+ }
+@@ -120,8 +133,8 @@ static int crc32_pclmul_update(struct shash_desc *desc, const u8 *data,
+ }
+ 
+ /* No final XOR 0xFFFFFFFF, like crc32_le */
+-static int __crc32_pclmul_finup(u32 *crcp, const u8 *data, unsigned int len,
+-				u8 *out)
++static int __crc32_pclmul_finup(const u32 *crcp, const u8 *data,
++				unsigned int len, u8 *out)
+ {
+ 	*(__le32 *)out = cpu_to_le32(crc32_pclmul_le(*crcp, data, len));
+ 	return 0;
+diff --git a/arch/x86/crypto/crc32c-intel_glue.c b/arch/x86/crypto/crc32c-intel_glue.c
+index feccb5254c7e..f08ed68ec93d 100644
+--- a/arch/x86/crypto/crc32c-intel_glue.c
++++ b/arch/x86/crypto/crc32c-intel_glue.c
+@@ -45,7 +45,10 @@ asmlinkage unsigned int crc_pcl(const u8 *buffer, int len,
+ 				unsigned int crc_init);
+ #endif /* CONFIG_X86_64 */
+ 
+-static u32 crc32c_intel_le_hw_byte(u32 crc, unsigned char const *data, size_t length)
++/* avoid kernel_fpu_begin/end scheduler/rcu stalls */
++static const unsigned int bytes_per_fpu = 868 * 1024;
++
++static u32 crc32c_intel_le_hw_byte(u32 crc, const unsigned char *data, size_t length)
+ {
+ 	while (length--) {
+ 		asm("crc32b %1, %0"
+@@ -56,7 +59,7 @@ static u32 crc32c_intel_le_hw_byte(u32 crc, unsigned char const *data, size_t le
+ 	return crc;
+ }
+ 
+-static u32 __pure crc32c_intel_le_hw(u32 crc, unsigned char const *p, size_t len)
++static u32 __pure crc32c_intel_le_hw(u32 crc, const unsigned char *p, size_t len)
+ {
+ 	unsigned int iquotient = len / SCALE_F;
+ 	unsigned int iremainder = len % SCALE_F;
+@@ -110,8 +113,8 @@ static int crc32c_intel_update(struct shash_desc *desc, const u8 *data,
  	return 0;
  }
  
- static int sha1_finup(struct shash_desc *desc, const u8 *data,
--		      unsigned int len, u8 *out, sha1_block_fn *sha1_xform)
-+		      unsigned int len, unsigned int bytes_per_fpu,
-+		      u8 *out, sha1_block_fn *sha1_xform)
+-static int __crc32c_intel_finup(u32 *crcp, const u8 *data, unsigned int len,
+-				u8 *out)
++static int __crc32c_intel_finup(const u32 *crcp, const u8 *data,
++				unsigned int len, u8 *out)
  {
- 	if (!crypto_simd_usable())
- 		return crypto_sha1_finup(desc, data, len, out);
+ 	*(__le32 *)out = ~cpu_to_le32(crc32c_intel_le_hw(*crcp, data, len));
+ 	return 0;
+@@ -153,29 +156,52 @@ static int crc32c_pcl_intel_update(struct shash_desc *desc, const u8 *data,
+ {
+ 	u32 *crcp = shash_desc_ctx(desc);
  
-+	while (len) {
-+		unsigned int chunk = min(len, bytes_per_fpu);
++	BUILD_BUG_ON(bytes_per_fpu < CRC32C_PCL_BREAKEVEN);
++	BUILD_BUG_ON(bytes_per_fpu % SCALE_F);
 +
-+		kernel_fpu_begin();
-+		sha1_base_do_update(desc, data, chunk, sha1_xform);
-+		kernel_fpu_end();
-+
-+		len -= chunk;
-+		data += chunk;
-+	}
-+
- 	kernel_fpu_begin();
--	if (len)
--		sha1_base_do_update(desc, data, len, sha1_xform);
- 	sha1_base_do_finalize(desc, sha1_xform);
- 	kernel_fpu_end();
- 
-@@ -69,13 +95,15 @@ asmlinkage void sha1_transform_ssse3(struct sha1_state *state,
- static int sha1_ssse3_update(struct shash_desc *desc, const u8 *data,
- 			     unsigned int len)
- {
--	return sha1_update(desc, data, len, sha1_transform_ssse3);
-+	return sha1_update(desc, data, len, bytes_per_fpu_ssse3,
-+			   sha1_transform_ssse3);
- }
- 
- static int sha1_ssse3_finup(struct shash_desc *desc, const u8 *data,
- 			      unsigned int len, u8 *out)
- {
--	return sha1_finup(desc, data, len, out, sha1_transform_ssse3);
-+	return sha1_finup(desc, data, len, bytes_per_fpu_ssse3, out,
-+			  sha1_transform_ssse3);
- }
- 
- /* Add padding and return the message digest. */
-@@ -119,13 +147,15 @@ asmlinkage void sha1_transform_avx(struct sha1_state *state,
- static int sha1_avx_update(struct shash_desc *desc, const u8 *data,
- 			     unsigned int len)
- {
--	return sha1_update(desc, data, len, sha1_transform_avx);
-+	return sha1_update(desc, data, len, bytes_per_fpu_avx,
-+			   sha1_transform_avx);
- }
- 
- static int sha1_avx_finup(struct shash_desc *desc, const u8 *data,
- 			      unsigned int len, u8 *out)
- {
--	return sha1_finup(desc, data, len, out, sha1_transform_avx);
-+	return sha1_finup(desc, data, len, bytes_per_fpu_avx, out,
-+			  sha1_transform_avx);
- }
- 
- static int sha1_avx_final(struct shash_desc *desc, u8 *out)
-@@ -201,13 +231,15 @@ static void sha1_apply_transform_avx2(struct sha1_state *state,
- static int sha1_avx2_update(struct shash_desc *desc, const u8 *data,
- 			     unsigned int len)
- {
--	return sha1_update(desc, data, len, sha1_apply_transform_avx2);
-+	return sha1_update(desc, data, len, bytes_per_fpu_avx2,
-+			   sha1_apply_transform_avx2);
- }
- 
- static int sha1_avx2_finup(struct shash_desc *desc, const u8 *data,
- 			      unsigned int len, u8 *out)
- {
--	return sha1_finup(desc, data, len, out, sha1_apply_transform_avx2);
-+	return sha1_finup(desc, data, len, bytes_per_fpu_avx2, out,
-+			  sha1_apply_transform_avx2);
- }
- 
- static int sha1_avx2_final(struct shash_desc *desc, u8 *out)
-@@ -251,13 +283,15 @@ asmlinkage void sha1_ni_transform(struct sha1_state *digest, const u8 *data,
- static int sha1_ni_update(struct shash_desc *desc, const u8 *data,
- 			     unsigned int len)
- {
--	return sha1_update(desc, data, len, sha1_ni_transform);
-+	return sha1_update(desc, data, len, bytes_per_fpu_shani,
-+			   sha1_ni_transform);
- }
- 
- static int sha1_ni_finup(struct shash_desc *desc, const u8 *data,
- 			      unsigned int len, u8 *out)
- {
--	return sha1_finup(desc, data, len, out, sha1_ni_transform);
-+	return sha1_finup(desc, data, len, bytes_per_fpu_shani, out,
-+			  sha1_ni_transform);
- }
- 
- static int sha1_ni_final(struct shash_desc *desc, u8 *out)
-diff --git a/arch/x86/crypto/sha256_ssse3_glue.c b/arch/x86/crypto/sha256_ssse3_glue.c
-index 3a5f6be7dbba..cdcdf5a80ffe 100644
---- a/arch/x86/crypto/sha256_ssse3_glue.c
-+++ b/arch/x86/crypto/sha256_ssse3_glue.c
-@@ -40,11 +40,20 @@
- #include <linux/string.h>
- #include <asm/simd.h>
- 
-+/* avoid kernel_fpu_begin/end scheduler/rcu stalls */
-+#ifdef CONFIG_AS_SHA256_NI
-+static const unsigned int bytes_per_fpu_shani = 13 * 1024;
-+#endif
-+static const unsigned int bytes_per_fpu_avx2 = 13 * 1024;
-+static const unsigned int bytes_per_fpu_avx = 11 * 1024;
-+static const unsigned int bytes_per_fpu_ssse3 = 11 * 1024;
-+
- asmlinkage void sha256_transform_ssse3(struct sha256_state *state,
- 				       const u8 *data, int blocks);
- 
- static int _sha256_update(struct shash_desc *desc, const u8 *data,
--			  unsigned int len, sha256_block_fn *sha256_xform)
-+			  unsigned int len, unsigned int bytes_per_fpu,
-+			  sha256_block_fn *sha256_xform)
- {
- 	struct sha256_state *sctx = shash_desc_ctx(desc);
- 
-@@ -58,22 +67,39 @@ static int _sha256_update(struct shash_desc *desc, const u8 *data,
+ 	/*
+ 	 * use faster PCL version if datasize is large enough to
+ 	 * overcome kernel fpu state save/restore overhead
  	 */
- 	BUILD_BUG_ON(offsetof(struct sha256_state, state) != 0);
- 
--	kernel_fpu_begin();
--	sha256_base_do_update(desc, data, len, sha256_xform);
--	kernel_fpu_end();
-+	while (len) {
-+		unsigned int chunk = min(len, bytes_per_fpu);
+ 	if (len >= CRC32C_PCL_BREAKEVEN && crypto_simd_usable()) {
+-		kernel_fpu_begin();
+-		*crcp = crc_pcl(data, len, *crcp);
+-		kernel_fpu_end();
++		while (len) {
++			unsigned int chunk = min(len, bytes_per_fpu);
 +
-+		kernel_fpu_begin();
-+		sha256_base_do_update(desc, data, chunk, sha256_xform);
-+		kernel_fpu_end();
++			kernel_fpu_begin();
++			*crcp = crc_pcl(data, chunk, *crcp);
++			kernel_fpu_end();
 +
-+		len -= chunk;
-+		data += chunk;
-+	}
- 
++			len -= chunk;
++			data += chunk;
++		}
+ 	} else
+ 		*crcp = crc32c_intel_le_hw(*crcp, data, len);
  	return 0;
  }
  
- static int sha256_finup(struct shash_desc *desc, const u8 *data,
--	      unsigned int len, u8 *out, sha256_block_fn *sha256_xform)
-+			unsigned int len, unsigned int bytes_per_fpu,
-+			u8 *out, sha256_block_fn *sha256_xform)
+-static int __crc32c_pcl_intel_finup(u32 *crcp, const u8 *data, unsigned int len,
+-				u8 *out)
++static int __crc32c_pcl_intel_finup(const u32 *crcp, const u8 *data,
++				    unsigned int len, u8 *out)
  {
- 	if (!crypto_simd_usable())
- 		return crypto_sha256_finup(desc, data, len, out);
- 
-+	while (len) {
-+		unsigned int chunk = min(len, bytes_per_fpu);
++	u32 crc = *crcp;
 +
-+		kernel_fpu_begin();
-+		sha256_base_do_update(desc, data, chunk, sha256_xform);
-+		kernel_fpu_end();
++	BUILD_BUG_ON(bytes_per_fpu < CRC32C_PCL_BREAKEVEN);
++	BUILD_BUG_ON(bytes_per_fpu % SCALE_F);
 +
-+		len -= chunk;
-+		data += chunk;
-+	}
+ 	if (len >= CRC32C_PCL_BREAKEVEN && crypto_simd_usable()) {
+-		kernel_fpu_begin();
+-		*(__le32 *)out = ~cpu_to_le32(crc_pcl(data, len, *crcp));
+-		kernel_fpu_end();
++		while (len) {
++			unsigned int chunk = min(len, bytes_per_fpu);
 +
- 	kernel_fpu_begin();
--	if (len)
--		sha256_base_do_update(desc, data, len, sha256_xform);
- 	sha256_base_do_finalize(desc, sha256_xform);
- 	kernel_fpu_end();
- 
-@@ -83,13 +109,15 @@ static int sha256_finup(struct shash_desc *desc, const u8 *data,
- static int sha256_ssse3_update(struct shash_desc *desc, const u8 *data,
- 			 unsigned int len)
- {
--	return _sha256_update(desc, data, len, sha256_transform_ssse3);
-+	return _sha256_update(desc, data, len, bytes_per_fpu_ssse3,
-+			      sha256_transform_ssse3);
++			kernel_fpu_begin();
++			crc = crc_pcl(data, chunk, crc);
++			kernel_fpu_end();
++
++			len -= chunk;
++			data += chunk;
++		}
++		*(__le32 *)out = ~cpu_to_le32(crc);
+ 	} else
+ 		*(__le32 *)out =
+-			~cpu_to_le32(crc32c_intel_le_hw(*crcp, data, len));
++			~cpu_to_le32(crc32c_intel_le_hw(crc, data, len));
+ 	return 0;
  }
  
- static int sha256_ssse3_finup(struct shash_desc *desc, const u8 *data,
- 	      unsigned int len, u8 *out)
- {
--	return sha256_finup(desc, data, len, out, sha256_transform_ssse3);
-+	return sha256_finup(desc, data, len, bytes_per_fpu_ssse3,
-+			    out, sha256_transform_ssse3);
- }
- 
- /* Add padding and return the message digest. */
-@@ -149,13 +177,15 @@ asmlinkage void sha256_transform_avx(struct sha256_state *state,
- static int sha256_avx_update(struct shash_desc *desc, const u8 *data,
- 			 unsigned int len)
- {
--	return _sha256_update(desc, data, len, sha256_transform_avx);
-+	return _sha256_update(desc, data, len, bytes_per_fpu_avx,
-+			      sha256_transform_avx);
- }
- 
- static int sha256_avx_finup(struct shash_desc *desc, const u8 *data,
- 		      unsigned int len, u8 *out)
- {
--	return sha256_finup(desc, data, len, out, sha256_transform_avx);
-+	return sha256_finup(desc, data, len, bytes_per_fpu_avx,
-+			    out, sha256_transform_avx);
- }
- 
- static int sha256_avx_final(struct shash_desc *desc, u8 *out)
-@@ -225,13 +255,15 @@ asmlinkage void sha256_transform_rorx(struct sha256_state *state,
- static int sha256_avx2_update(struct shash_desc *desc, const u8 *data,
- 			 unsigned int len)
- {
--	return _sha256_update(desc, data, len, sha256_transform_rorx);
-+	return _sha256_update(desc, data, len, bytes_per_fpu_avx2,
-+			      sha256_transform_rorx);
- }
- 
- static int sha256_avx2_finup(struct shash_desc *desc, const u8 *data,
- 		      unsigned int len, u8 *out)
- {
--	return sha256_finup(desc, data, len, out, sha256_transform_rorx);
-+	return sha256_finup(desc, data, len, bytes_per_fpu_avx2,
-+			    out, sha256_transform_rorx);
- }
- 
- static int sha256_avx2_final(struct shash_desc *desc, u8 *out)
-@@ -300,13 +332,15 @@ asmlinkage void sha256_ni_transform(struct sha256_state *digest,
- static int sha256_ni_update(struct shash_desc *desc, const u8 *data,
- 			 unsigned int len)
- {
--	return _sha256_update(desc, data, len, sha256_ni_transform);
-+	return _sha256_update(desc, data, len, bytes_per_fpu_shani,
-+			      sha256_ni_transform);
- }
- 
- static int sha256_ni_finup(struct shash_desc *desc, const u8 *data,
- 		      unsigned int len, u8 *out)
- {
--	return sha256_finup(desc, data, len, out, sha256_ni_transform);
-+	return sha256_finup(desc, data, len, bytes_per_fpu_shani,
-+			    out, sha256_ni_transform);
- }
- 
- static int sha256_ni_final(struct shash_desc *desc, u8 *out)
-diff --git a/arch/x86/crypto/sha512_ssse3_glue.c b/arch/x86/crypto/sha512_ssse3_glue.c
-index 6d3b85e53d0e..c7036cfe2a7e 100644
---- a/arch/x86/crypto/sha512_ssse3_glue.c
-+++ b/arch/x86/crypto/sha512_ssse3_glue.c
-@@ -39,11 +39,17 @@
+diff --git a/arch/x86/crypto/crct10dif-pclmul_glue.c b/arch/x86/crypto/crct10dif-pclmul_glue.c
+index 71291d5af9f4..4f6b8c727d88 100644
+--- a/arch/x86/crypto/crct10dif-pclmul_glue.c
++++ b/arch/x86/crypto/crct10dif-pclmul_glue.c
+@@ -34,6 +34,11 @@
  #include <asm/cpu_device_id.h>
  #include <asm/simd.h>
  
++#define PCLMUL_MIN_LEN 16U /* minimum size of buffer for crc_t10dif_pcl */
++
 +/* avoid kernel_fpu_begin/end scheduler/rcu stalls */
-+static const unsigned int bytes_per_fpu_avx2 = 20 * 1024;
-+static const unsigned int bytes_per_fpu_avx = 17 * 1024;
-+static const unsigned int bytes_per_fpu_ssse3 = 17 * 1024;
++static const unsigned int bytes_per_fpu = 614 * 1024;
 +
- asmlinkage void sha512_transform_ssse3(struct sha512_state *state,
- 				       const u8 *data, int blocks);
+ asmlinkage u16 crc_t10dif_pcl(u16 init_crc, const u8 *buf, size_t len);
  
- static int sha512_update(struct shash_desc *desc, const u8 *data,
--		       unsigned int len, sha512_block_fn *sha512_xform)
-+			 unsigned int len, unsigned int bytes_per_fpu,
-+			 sha512_block_fn *sha512_xform)
+ struct chksum_desc_ctx {
+@@ -54,11 +59,21 @@ static int chksum_update(struct shash_desc *desc, const u8 *data,
  {
- 	struct sha512_state *sctx = shash_desc_ctx(desc);
+ 	struct chksum_desc_ctx *ctx = shash_desc_ctx(desc);
  
-@@ -57,22 +63,39 @@ static int sha512_update(struct shash_desc *desc, const u8 *data,
- 	 */
- 	BUILD_BUG_ON(offsetof(struct sha512_state, state) != 0);
- 
--	kernel_fpu_begin();
--	sha512_base_do_update(desc, data, len, sha512_xform);
--	kernel_fpu_end();
-+	while (len) {
-+		unsigned int chunk = min(len, bytes_per_fpu);
+-	if (length >= 16 && crypto_simd_usable()) {
+-		kernel_fpu_begin();
+-		ctx->crc = crc_t10dif_pcl(ctx->crc, data, length);
+-		kernel_fpu_end();
+-	} else
++	BUILD_BUG_ON(bytes_per_fpu < PCLMUL_MIN_LEN);
 +
-+		kernel_fpu_begin();
-+		sha512_base_do_update(desc, data, chunk, sha512_xform);
-+		kernel_fpu_end();
++	if (length >= PCLMUL_MIN_LEN && crypto_simd_usable()) {
++		while (length >= PCLMUL_MIN_LEN) {
++			unsigned int chunk = min(length, bytes_per_fpu);
 +
-+		len -= chunk;
-+		data += chunk;
++			kernel_fpu_begin();
++			ctx->crc = crc_t10dif_pcl(ctx->crc, data, chunk);
++			kernel_fpu_end();
++
++			length -= chunk;
++			data += chunk;
++		}
 +	}
++	if (length)
+ 		ctx->crc = crc_t10dif_generic(ctx->crc, data, length);
+ 	return 0;
+ }
+@@ -73,12 +88,23 @@ static int chksum_final(struct shash_desc *desc, u8 *out)
  
+ static int __chksum_finup(__u16 crc, const u8 *data, unsigned int len, u8 *out)
+ {
+-	if (len >= 16 && crypto_simd_usable()) {
+-		kernel_fpu_begin();
+-		*(__u16 *)out = crc_t10dif_pcl(crc, data, len);
+-		kernel_fpu_end();
+-	} else
+-		*(__u16 *)out = crc_t10dif_generic(crc, data, len);
++	BUILD_BUG_ON(bytes_per_fpu < PCLMUL_MIN_LEN);
++
++	if (len >= PCLMUL_MIN_LEN && crypto_simd_usable()) {
++		while (len >= PCLMUL_MIN_LEN) {
++			unsigned int chunk = min(len, bytes_per_fpu);
++
++			kernel_fpu_begin();
++			crc = crc_t10dif_pcl(crc, data, chunk);
++			kernel_fpu_end();
++
++			len -= chunk;
++			data += chunk;
++		}
++	}
++	if (len)
++		crc = crc_t10dif_generic(crc, data, len);
++	*(__u16 *)out = crc;
  	return 0;
  }
  
- static int sha512_finup(struct shash_desc *desc, const u8 *data,
--	      unsigned int len, u8 *out, sha512_block_fn *sha512_xform)
-+			unsigned int len, unsigned int bytes_per_fpu,
-+			u8 *out, sha512_block_fn *sha512_xform)
- {
- 	if (!crypto_simd_usable())
- 		return crypto_sha512_finup(desc, data, len, out);
- 
-+	while (len) {
-+		unsigned int chunk = min(len, bytes_per_fpu);
-+
-+		kernel_fpu_begin();
-+		sha512_base_do_update(desc, data, chunk, sha512_xform);
-+		kernel_fpu_end();
-+
-+		len -= chunk;
-+		data += chunk;
-+	}
-+
- 	kernel_fpu_begin();
--	if (len)
--		sha512_base_do_update(desc, data, len, sha512_xform);
- 	sha512_base_do_finalize(desc, sha512_xform);
- 	kernel_fpu_end();
- 
-@@ -82,13 +105,15 @@ static int sha512_finup(struct shash_desc *desc, const u8 *data,
- static int sha512_ssse3_update(struct shash_desc *desc, const u8 *data,
- 		       unsigned int len)
- {
--	return sha512_update(desc, data, len, sha512_transform_ssse3);
-+	return sha512_update(desc, data, len, bytes_per_fpu_ssse3,
-+			     sha512_transform_ssse3);
- }
- 
- static int sha512_ssse3_finup(struct shash_desc *desc, const u8 *data,
- 	      unsigned int len, u8 *out)
- {
--	return sha512_finup(desc, data, len, out, sha512_transform_ssse3);
-+	return sha512_finup(desc, data, len, bytes_per_fpu_ssse3,
-+			    out, sha512_transform_ssse3);
- }
- 
- /* Add padding and return the message digest. */
-@@ -158,13 +183,15 @@ static bool avx_usable(void)
- static int sha512_avx_update(struct shash_desc *desc, const u8 *data,
- 		       unsigned int len)
- {
--	return sha512_update(desc, data, len, sha512_transform_avx);
-+	return sha512_update(desc, data, len, bytes_per_fpu_avx,
-+			     sha512_transform_avx);
- }
- 
- static int sha512_avx_finup(struct shash_desc *desc, const u8 *data,
- 	      unsigned int len, u8 *out)
- {
--	return sha512_finup(desc, data, len, out, sha512_transform_avx);
-+	return sha512_finup(desc, data, len, bytes_per_fpu_avx,
-+			    out, sha512_transform_avx);
- }
- 
- /* Add padding and return the message digest. */
-@@ -224,13 +251,15 @@ asmlinkage void sha512_transform_rorx(struct sha512_state *state,
- static int sha512_avx2_update(struct shash_desc *desc, const u8 *data,
- 		       unsigned int len)
- {
--	return sha512_update(desc, data, len, sha512_transform_rorx);
-+	return sha512_update(desc, data, len, bytes_per_fpu_avx2,
-+			     sha512_transform_rorx);
- }
- 
- static int sha512_avx2_finup(struct shash_desc *desc, const u8 *data,
- 	      unsigned int len, u8 *out)
- {
--	return sha512_finup(desc, data, len, out, sha512_transform_rorx);
-+	return sha512_finup(desc, data, len, bytes_per_fpu_avx2,
-+			    out, sha512_transform_rorx);
- }
- 
- /* Add padding and return the message digest. */
 -- 
 2.37.3
 
