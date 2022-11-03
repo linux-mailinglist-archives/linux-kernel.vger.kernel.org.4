@@ -2,114 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 104AE6187EB
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:48:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 600EB6187ED
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:49:18 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231208AbiKCSsg (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 14:48:36 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42168 "EHLO
+        id S230244AbiKCStQ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 14:49:16 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42454 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbiKCSsb (ORCPT
+        with ESMTP id S229445AbiKCStN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 14:48:31 -0400
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id AC4AE17048;
-        Thu,  3 Nov 2022 11:48:30 -0700 (PDT)
-Received: by mail-qv1-f50.google.com with SMTP id mi9so1752686qvb.8;
-        Thu, 03 Nov 2022 11:48:30 -0700 (PDT)
+        Thu, 3 Nov 2022 14:49:13 -0400
+Received: from mail-qv1-xf30.google.com (mail-qv1-xf30.google.com [IPv6:2607:f8b0:4864:20::f30])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 2572A5FCB;
+        Thu,  3 Nov 2022 11:49:11 -0700 (PDT)
+Received: by mail-qv1-xf30.google.com with SMTP id i12so1766246qvs.2;
+        Thu, 03 Nov 2022 11:49:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RgFweYo8BPv/simqwg3LitRGCnbkeK6PBgZnWlFwSt0=;
+        b=YfVj6TbmVYuK4sXs/J284r/DTNdatQdTQnYEdrpdPPb1Rd+uB3g4jXDJjcd0bOglOj
+         FcKnolF5l1VbZGm7mQDVQe1FeoFtcVj1dYIyfdqWn8PB78ZiOLH2GXIESIMRUr2r+QYg
+         Kp7T0PXMWJmhlzrAdNvmMOCxqLC1GPSHDtuJoiAUempt+gdRuWpyPb/lkWICxO8z2U7x
+         pT1qJ8Mydrdlo+02kXP96jrT00bqGKLiZmSfqtrC1sevb9eYZcoRRLJ7CSGccLw5RKWh
+         IMBlMYsOUiR/wuhxBiLJHUjzj1fNwHxgjO4ey0Tas3ZUnwJz0wpmSgdau9KqYwygThaU
+         sjag==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=qFFj0YnqgTVbsW45BjHNbWg4SjPrNwZE8AOD83zKJ74=;
-        b=Ue83nvM49wxmIJpeW0OdsHD3NSvihD3GyzcevI5S7uiJNIjY+Ud+7eAp3rb+X+S0PR
-         KcAdJrR6FtS+MFBh7QuRpQ4ouO1vEKlg3cLtlQNk8cGUntKbT9y7LMuJClvOeUWGOCQg
-         gVVwUKpUnES7wma6SAPNy3srUgd4nrtt3K/PiMttvc8+4HPNgqfVWwA0hkj4dhni+LQl
-         +83k2EoB0FHv6u7xFh6V886k5VYAZWS/SflmxWB44v3TGzi79KVetJrkTKSz4cRKlFZh
-         A900vMp3zMbR7BDjgRwiNDjbUsNBr+M47xlxrKfDpTtaHhcg60K21MXJjLimqFTNSjXx
-         6l1g==
-X-Gm-Message-State: ACrzQf2SAkYYZsOgrtVdRcAk5Dv+cpiFrsUlgo5ih+YVfDFl9WKJcrLp
-        Oirq8ExSKPB2JPAYMNadb1PLF2JrvRMB2va2Qhnfrcky
-X-Google-Smtp-Source: AMsMyM5ByWBOLNaWU6upUbPGJQZXvuckz/Axld8j4XIsJqWWxPKRr6T3ZjvryDDlHqoJOyOQI58Wmx/N/Sqtel0PzrE=
-X-Received: by 2002:a0c:c684:0:b0:4bb:fc53:5ad9 with SMTP id
- d4-20020a0cc684000000b004bbfc535ad9mr19725144qvj.3.1667501309876; Thu, 03 Nov
- 2022 11:48:29 -0700 (PDT)
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RgFweYo8BPv/simqwg3LitRGCnbkeK6PBgZnWlFwSt0=;
+        b=SBf9Ui8AC0ftax8JZ6nI+Da4sR721N6a56VU668lEcIxz6fC3/HP4FClY7Glc+dtNL
+         SMF2ehkjgoihE3Z63Liol3CDofRqxQDIUzdSCK8ceYHDtkiLMym6yR+MhcQFJWF8fAn6
+         /aoDzPkz7w2bnHvcizH22vTKvjmFbb+ctR0bdl16zXAQIjEgjU2p2xwYGvomYxYD16Jc
+         wv6yxWuHcO4WhrTRpR/ZPHAlxAZ/yQOHt8jJ5/7ugubxtDZXTa6epfmQna2+QG7HMsDT
+         hmb2rjmT+OXsQDT3rXih2nFoul8F+os/P/BACLHuMfg+gkb7M5gH4xFBB66JQt8I8gmM
+         MaDg==
+X-Gm-Message-State: ACrzQf3f6FYqOLeLtDhPoFO6nJpVRhIbBqj7C2iySTz3+ZDCLe4784S4
+        x0rqdAkz9uUztFSl6CvRoFk=
+X-Google-Smtp-Source: AMsMyM7H34w6zt9aB0ytsxTAd8VZba1ZEApMzwB9wYsRBodisO4s/uNaNVjJLHnbJXdZb1+CXDxpBw==
+X-Received: by 2002:ad4:5963:0:b0:4bc:1a6b:2011 with SMTP id eq3-20020ad45963000000b004bc1a6b2011mr11235383qvb.79.1667501350205;
+        Thu, 03 Nov 2022 11:49:10 -0700 (PDT)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.googlemail.com with ESMTPSA id bl12-20020a05620a1a8c00b006ed61f18651sm1280476qkb.16.2022.11.03.11.49.00
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 11:49:09 -0700 (PDT)
+Message-ID: <6535ae14-3b09-3b17-d121-b75f433045fb@gmail.com>
+Date:   Thu, 3 Nov 2022 11:48:56 -0700
 MIME-Version: 1.0
-References: <cover.1667336095.git.christophe.jaillet@wanadoo.fr>
- <57396f1eacfacdb589127499f8ff64225a39e110.1667336095.git.christophe.jaillet@wanadoo.fr>
- <Y2JVhffdmXkkrIRN@smile.fi.intel.com>
-In-Reply-To: <Y2JVhffdmXkkrIRN@smile.fi.intel.com>
-From:   "Rafael J. Wysocki" <rafael@kernel.org>
-Date:   Thu, 3 Nov 2022 19:48:19 +0100
-Message-ID: <CAJZ5v0hdzYuiKECEdXFB0vmz=6Z697DRp0Xx5jwyqHH4SGrLCA@mail.gmail.com>
-Subject: Re: [PATCH 09/30] ACPI: sysfs: Use kstrtobool() instead of strtobool()
-To:     Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc:     Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-        "Rafael J. Wysocki" <rafael@kernel.org>,
-        Len Brown <lenb@kernel.org>, linux-kernel@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-acpi@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-1.6 required=5.0 tests=BAYES_00,
-        FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,HEADER_FROM_DIFFERENT_DOMAINS,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS
-        autolearn=no autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.2.2
+Subject: Re: [PATCH v2 5/5] PCI: brcmstb: Set RCB_{MPS,64B}_MODE bits
+Content-Language: en-US
+To:     Bjorn Helgaas <helgaas@kernel.org>,
+        Jim Quinlan <james.quinlan@broadcom.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>
+Cc:     Jim Quinlan <jim2101024@gmail.com>, linux-pci@vger.kernel.org,
+        Nicolas Saenz Julienne <nsaenz@kernel.org>,
+        Bjorn Helgaas <bhelgaas@google.com>,
+        Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+        Cyril Brulebois <kibi@debian.org>,
+        bcm-kernel-feedback-list@broadcom.com,
+        Florian Fainelli <f.fainelli@gmail.com>,
+        Rob Herring <robh@kernel.org>,
+        =?UTF-8?Q?Krzysztof_Wilczy=c5=84ski?= <kw@linux.com>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-rpi-kernel@lists.infradead.org>,
+        "moderated list:BROADCOM BCM2711/BCM2835 ARM ARCHITECTURE" 
+        <linux-arm-kernel@lists.infradead.org>,
+        open list <linux-kernel@vger.kernel.org>
+References: <20221014192730.GA3488778@bhelgaas>
+From:   Florian Fainelli <f.fainelli@gmail.com>
+In-Reply-To: <20221014192730.GA3488778@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 2, 2022 at 12:33 PM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Tue, Nov 01, 2022 at 10:13:57PM +0100, Christophe JAILLET wrote:
-> > strtobool() is the same as kstrtobool().
-> > However, the latter is more used within the kernel.
-> >
-> > In order to remove strtobool() and slightly simplify kstrtox.h, switch to
-> > the other function name.
-> >
-> > While at it, include the corresponding header file (<linux/kstrtox.h>)
->
-> Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
->
-> > Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-> > ---
-> > This patch is part of a serie that axes all usages of strtobool().
-> > Each patch can be applied independently from the other ones.
-> >
-> > The last patch of the serie removes the definition of strtobool().
-> >
-> > You may not be in copy of the cover letter. So, if needed, it is available
-> > at [1].
-> >
-> > [1]: https://lore.kernel.org/all/cover.1667336095.git.christophe.jaillet@wanadoo.fr/
-> > ---
-> >  drivers/acpi/sysfs.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/acpi/sysfs.c b/drivers/acpi/sysfs.c
-> > index cc2fe0618178..2d81c742e4d2 100644
-> > --- a/drivers/acpi/sysfs.c
-> > +++ b/drivers/acpi/sysfs.c
-> > @@ -9,6 +9,7 @@
-> >  #include <linux/bitmap.h>
-> >  #include <linux/init.h>
-> >  #include <linux/kernel.h>
-> > +#include <linux/kstrtox.h>
-> >  #include <linux/moduleparam.h>
-> >
-> >  #include "internal.h"
-> > @@ -992,7 +993,7 @@ static ssize_t force_remove_store(struct kobject *kobj,
-> >       bool val;
-> >       int ret;
-> >
-> > -     ret = strtobool(buf, &val);
-> > +     ret = kstrtobool(buf, &val);
-> >       if (ret < 0)
-> >               return ret;
-> >
-> > --
+On 10/14/22 12:27, Bjorn Helgaas wrote:
+> On Fri, Oct 14, 2022 at 03:16:35PM -0400, Jim Quinlan wrote:
+>> On Thu, Oct 13, 2022 at 10:12 AM Bjorn Helgaas <helgaas@kernel.org> wrote:
+>>> On Tue, Oct 11, 2022 at 02:42:10PM -0400, Jim Quinlan wrote:
+>>>> Set RCB_MPS mode bit so that data for PCIe read requests up to the size of
+>>>> the Maximum Payload Size (MPS) are returned in one completion, and data for
+>>>> PCIe read requests greater than the MPS are split at the specified Read
+>>>> Completion Boundary setting.
+>>>>
+>>>> Set RCB_64B so that the Read Compeletion Boundary is 64B.
+>>>
+>>> s/Compeletion/Completion/
+>>
+>> Hi Bjorn,
+>>
+>> TIL that checkpatch.pl only flags misspelled words only if they match
+>> its list of misspelled words.
+>> I've modified my checkpatch.pl wrapper script to use aspell to better
+>> address my typos.
+>> At any rate, do you mind if I add some new commits for V3?
+> 
+> Fine with me, I think Lorenzo will look at these again after v6.1-rc1
+> is tagged this weekend.
 
-Applied as 6.2 material, thanks!
+Lorenzo, any chance to get those patches reviewed and/or merged? Thanks!
+-- 
+Florian
+
