@@ -2,167 +2,203 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 333AF618AE0
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 22:54:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 17CE3618AEA
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 22:57:15 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231185AbiKCVyx (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 17:54:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58708 "EHLO
+        id S231273AbiKCV5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 17:57:13 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59446 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229688AbiKCVyu (ORCPT
+        with ESMTP id S230047AbiKCV5L (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 17:54:50 -0400
-Received: from fllv0016.ext.ti.com (fllv0016.ext.ti.com [198.47.19.142])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C08AE2035B;
-        Thu,  3 Nov 2022 14:54:48 -0700 (PDT)
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-        by fllv0016.ext.ti.com (8.15.2/8.15.2) with ESMTP id 2A3LseqE072162;
-        Thu, 3 Nov 2022 16:54:40 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-        s=ti-com-17Q1; t=1667512480;
-        bh=B3drAa8Ekeyb8xbFgtevuL8Z5jc/FzVu1bejECepSzw=;
-        h=Date:From:To:CC:Subject:References:In-Reply-To;
-        b=d0ygL/mKjoZSZP33xEyUTdWIFLpm6d+Gv0m9En4eV41khzWghClO7TGlwCd3Jx0AG
-         317seopfsrLU1jcTXmYGzbXvXEG0cQLOl6JPChasacfosvbd4LoO7tDoiF/FOtQPkZ
-         JVQFYC/L6qnJSsfe59FbAR24p09n6MBQya1xSqgc=
-Received: from DFLE106.ent.ti.com (dfle106.ent.ti.com [10.64.6.27])
-        by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 2A3Lsesg020751
-        (version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-        Thu, 3 Nov 2022 16:54:40 -0500
-Received: from DFLE110.ent.ti.com (10.64.6.31) by DFLE106.ent.ti.com
- (10.64.6.27) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6; Thu, 3 Nov
- 2022 16:54:40 -0500
-Received: from fllv0039.itg.ti.com (10.64.41.19) by DFLE110.ent.ti.com
- (10.64.6.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.6 via
- Frontend Transport; Thu, 3 Nov 2022 16:54:40 -0500
-Received: from localhost (ileaxei01-snat2.itg.ti.com [10.180.69.6])
-        by fllv0039.itg.ti.com (8.15.2/8.15.2) with ESMTP id 2A3Lse0n062778;
-        Thu, 3 Nov 2022 16:54:40 -0500
-Date:   Thu, 3 Nov 2022 16:54:40 -0500
-From:   Nishanth Menon <nm@ti.com>
-To:     Rahul T R <r-ravikumar@ti.com>
-CC:     <vigneshr@ti.com>, <kristo@kernel.org>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <jkridner@gmail.com>
-Subject: Re: [PATCH v7 2/2] arm64: dts: ti: k3-j721e-sk: Add pinmux for RPi
- Header
-Message-ID: <20221103215440.7dmcvkmeni4xs2et@municipal>
-References: <20221103174743.16827-1-r-ravikumar@ti.com>
- <20221103174743.16827-3-r-ravikumar@ti.com>
+        Thu, 3 Nov 2022 17:57:11 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A354D2229F
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 14:56:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667512576;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=d+gPBLcj3yfcNxg3iZDolr/DLSZRZsYZJ+BZEPDd0k8=;
+        b=DpyiiCjoutuz5IZr2y51EINmY9i02n84pK3ZdkXXhu5UoJX5VLMSze9+aSzfQFTwbFzkr1
+        0nrAsIj/xWzAzYkxjUllbNsCKobuWkS20gosbB+4bY59cNNGwe3gu6fIanQEWIDUN6yYiL
+        et36X0d2KlFNK7wLzG+Df0ZhqM1p+8c=
+Received: from mail-io1-f70.google.com (mail-io1-f70.google.com
+ [209.85.166.70]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-374-uTfdqtbNNtySWdsRUEXoqQ-1; Thu, 03 Nov 2022 17:56:15 -0400
+X-MC-Unique: uTfdqtbNNtySWdsRUEXoqQ-1
+Received: by mail-io1-f70.google.com with SMTP id r197-20020a6b8fce000000b006c3fc33424dso1877697iod.5
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 14:56:15 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=d+gPBLcj3yfcNxg3iZDolr/DLSZRZsYZJ+BZEPDd0k8=;
+        b=cf216Fg9QNBXAtkFnrJqvtr/WMuYm11v4C0IR28cAiKIJM5DxgRMgKppdZPZn9tRJT
+         dTrixEwr2Vq1v0iX9EjKXR/Q3/3Pgtftd8f554y0oZFuz4zccZFASOXtCH+DCUVQSUOf
+         Js7X24ddfiQudiAtJdqsuXPN41pruGa7JIK9906lELB5e1nmS9VxUuLKdjQ25VvIUymM
+         wHNKxzP0GX6sTLOFDEE/9qSGJvvykr4tmTjswVSfZjPZx7wrQ0dGSrgzi9L2xTvD/U9W
+         Ht6KVNBcE8t+GOASC785BwA8N8tMQBVHAcNPgYnxb6YOUjkpr2/TLHfGu9oaXf0fDWv7
+         HSTw==
+X-Gm-Message-State: ACrzQf3CaAn2S/AnaufGpNthZ2vAsQA3gX6dSOzO5wFYb0NwTxhs0sXL
+        J9Un8MWKfm0hjP4AbJfrKLntxN0Lfllc6WICq2hhTMlUA7s68rDF37k07Wn/H66V9/GIzll8hKX
+        rBm9DRgdXuRNSLG/tpY2o6yLF
+X-Received: by 2002:a05:6602:2c09:b0:694:51c4:8282 with SMTP id w9-20020a0566022c0900b0069451c48282mr20182361iov.203.1667512574942;
+        Thu, 03 Nov 2022 14:56:14 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM6XXTGY/jAs7DgmNTFtcqCXPtF5Oitv5ZjT7vsZBKLSnzosYzEC5JgzfurqOGyquHSILSbftA==
+X-Received: by 2002:a05:6602:2c09:b0:694:51c4:8282 with SMTP id w9-20020a0566022c0900b0069451c48282mr20182338iov.203.1667512574697;
+        Thu, 03 Nov 2022 14:56:14 -0700 (PDT)
+Received: from redhat.com ([38.15.36.239])
+        by smtp.gmail.com with ESMTPSA id z27-20020a05663822bb00b00371caa7ef7csm598363jas.2.2022.11.03.14.56.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 14:56:14 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 15:56:11 -0600
+From:   Alex Williamson <alex.williamson@redhat.com>
+To:     Eric Farman <farman@linux.ibm.com>
+Cc:     Matthew Rosato <mjrosato@linux.ibm.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>,
+        Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org
+Subject: Re: [PATCH v2 0/7] vfio-ccw parent rework
+Message-ID: <20221103155611.0008075f.alex.williamson@redhat.com>
+In-Reply-To: <20221102150152.2521475-1-farman@linux.ibm.com>
+References: <20221102150152.2521475-1-farman@linux.ibm.com>
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.34; x86_64-redhat-linux-gnu)
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20221103174743.16827-3-r-ravikumar@ti.com>
-User-Agent: NeoMutt/20171215
-X-EXCLAIMER-MD-CONFIG: e1e8a2fd-e40a-4ac6-ac9b-f7e9cc9ee180
-X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 23:17-20221103, Rahul T R wrote:
-> Add pinmux required to bring out i2c5 and gpios on
-> 40 pin RPi header on sk board
+On Wed,  2 Nov 2022 16:01:45 +0100
+Eric Farman <farman@linux.ibm.com> wrote:
+
+> Hi all,
 > 
-> Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
-> Signed-off-by: Rahul T R <r-ravikumar@ti.com>
-> ---
->  arch/arm64/boot/dts/ti/k3-j721e-sk.dts | 59 ++++++++++++++++++++++++++
->  1 file changed, 59 insertions(+)
+> Here is an update to the vfio-ccw lifecycle changes that have been discussed
+> in various forms over the past year [1][2] or so, and which I dusted off
+> recently.
 > 
-> diff --git a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-> index 78aa4aa4de57..4640d280c85c 100644
-> --- a/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-> +++ b/arch/arm64/boot/dts/ti/k3-j721e-sk.dts
-> @@ -400,6 +400,47 @@ ekey_reset_pins_default: ekey-reset-pns-pins-default {
->  			J721E_IOPAD(0x124, PIN_INPUT, 7) /* (Y24) PRG0_PRU1_GPO9.GPIO0_72 */
->  		>;
->  	};
-> +
-> +	main_i2c5_pins_default: main-i2c5-pins-default {
-> +		pinctrl-single,pins = <
-> +			J721E_IOPAD(0x150, PIN_INPUT_PULLUP, 2) /* (Y26) PRG0_MDIO0_MDIO.I2C5_SCL */
-> +			J721E_IOPAD(0x154, PIN_INPUT_PULLUP, 2) /* (AA27) PRG0_MDIO0_MDC.I2C5_SDA */
-> +		>;
-> +	};
-> +
-> +	rpi_header_gpio0_pins_default: rpi-header-gpio0-pins-default {
-> +		pinctrl-single,pins = <
-> +			J721E_IOPAD(0x01C, PIN_INPUT, 7) /* (AD22) PRG1_PRU0_GPO6.GPIO0_7 */
-> +			J721E_IOPAD(0x120, PIN_INPUT, 7) /* (AA28) PRG0_PRU1_GPO8.GPIO0_71 */
-> +			J721E_IOPAD(0x14C, PIN_INPUT, 7) /* (AA29) PRG0_PRU1_GPO19.GPIO0_82 */
-> +			J721E_IOPAD(0x02C, PIN_INPUT, 7) /* (AD21) PRG1_PRU0_GPO10.GPIO0_11 */
-> +			J721E_IOPAD(0x198, PIN_INPUT, 7) /* (V25) RGMII6_TD1.GPIO0_101 */
-> +			J721E_IOPAD(0x1B0, PIN_INPUT, 7) /* (W24) RGMII6_RD1.GPIO0_107 */
-> +			J721E_IOPAD(0x1A0, PIN_INPUT, 7) /* (W29) RGMII6_TXC.GPIO0_103 */
-> +			J721E_IOPAD(0x008, PIN_INPUT, 7) /* (AG22) PRG1_PRU0_GPO1.GPIO0_2 */
-> +			J721E_IOPAD(0x1D0, PIN_INPUT, 7) /* (AA3) SPI0_D1.GPIO0_115 */
-> +			J721E_IOPAD(0x11C, PIN_INPUT, 7) /* (AA24) PRG0_PRU1_GPO7.GPIO0_70 */
-> +			J721E_IOPAD(0x148, PIN_INPUT, 7) /* (AA26) PRG0_PRU1_GPO18.GPIO0_81 */
-> +			J721E_IOPAD(0x004, PIN_INPUT, 7) /* (AC23) PRG1_PRU0_GPO0.GPIO0_1 */
-> +			J721E_IOPAD(0x014, PIN_INPUT, 7) /* (AH23) PRG1_PRU0_GPO4.GPIO0_5 */
-> +			J721E_IOPAD(0x020, PIN_INPUT, 7) /* (AE20) PRG1_PRU0_GPO7.GPIO0_8 */
-> +			J721E_IOPAD(0x19C, PIN_INPUT, 7) /* (W27) RGMII6_TD0.GPIO0_102 */
-> +			J721E_IOPAD(0x1B4, PIN_INPUT, 7) /* (W25) RGMII6_RD0.GPIO0_108 */
-> +			J721E_IOPAD(0x188, PIN_INPUT, 7) /* (Y28) RGMII6_TX_CTL.GPIO0_97 */
-> +			J721E_IOPAD(0x00C, PIN_INPUT, 7) /* (AF22) PRG1_PRU0_GPO2.GPIO0_3 */
-> +			J721E_IOPAD(0x010, PIN_INPUT, 7) /* (AJ23) PRG1_PRU0_GPO3.GPIO0_4 */
-> +			J721E_IOPAD(0x178, PIN_INPUT, 7) /* (U27) RGMII5_RD3.GPIO0_93 */
-> +			J721E_IOPAD(0x17C, PIN_INPUT, 7) /* (U24) RGMII5_RD2.GPIO0_94 */
-> +			J721E_IOPAD(0x190, PIN_INPUT, 7) /* (W23) RGMII6_TD3.GPIO0_99 */
-> +			J721E_IOPAD(0x18C, PIN_INPUT, 7) /* (V23) RGMII6_RX_CTL.GPIO0_98 */
-> +		>;
-> +	};
-> +
-> +	rpi_header_gpio1_pins_default: rpi-header-gpio1-pins-default {
-> +		pinctrl-single,pins = <
-> +			J721E_IOPAD(0x234, PIN_INPUT, 7) /* (U3) EXT_REFCLK1.GPIO1_12 */
-> +		>;
-> +	};
->  };
->  
->  &wkup_pmx0 {
-> @@ -600,6 +641,24 @@ i2c@1 {
->  	};
->  };
->  
-> +&main_i2c5 {
-> +	/* Brought out on RPi Header */
-> +	status = "okay";
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&main_i2c5_pins_default>;
-> +	clock-frequency = <400000>;
-> +};
-> +
-> +&main_gpio0 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&rpi_header_gpio0_pins_default>;
-> +};
-> +
-> +&main_gpio1 {
-> +	pinctrl-names = "default";
-> +	pinctrl-0 = <&rpi_header_gpio1_pins_default>;
-> +};
-> +
->  &main_gpio2 {
->  	status = "disabled";
->  };
-> -- 
-> 2.38.0
+> Patches 1-5 rework the behavior of the vfio-ccw driver's private struct.
+> In summary, the mdev pieces are split out of vfio_ccw_private and into a
+> new vfio_ccw_parent struct that will continue to follow today's lifecycle.
+> The remainder (bulk) of the private struct moves to follow the mdev
+> probe/remove pair. There's opportunity for further separation of the
+> things in the private struct, which would simplify some of the vfio-ccw
+> code, but it got too hairy as I started that. Once vfio-ccw is no longer
+> considered unique, those cleanups can happen at our leisure. 
+> 
+> Patch 6 removes the trickery where vfio-ccw uses vfio_init_device instead of
+> vfio_alloc_device, and thus removes vfio_init_device from the outside world.
+> 
+> Patch 7 removes vfio_free_device from vfio-ccw and the other drivers (hello,
+> CC list!), letting it be handled by vfio_device_release directly.
+
+Looks like another spin is pending, but the vfio core and collateral
+changes in 6 and 7 look good to me.  Would this go in through the vfio
+or s390 tree?  I'd be happy to merge or provide a branch, depending on
+the route.
+
+For 6 & 7:
+Acked-by: Alex Williamson <alex.williamson@redhat.com>
+
+Thanks,
+Alex
+
+
+> Looking forward to the feedback.
+> 
+> Thanks,
+> Eric
+> 
+> [1] https://lore.kernel.org/kvm/0-v3-57c1502c62fd+2190-ccw_mdev_jgg@nvidia.com/
+> [2] https://lore.kernel.org/kvm/20220602171948.2790690-1-farman@linux.ibm.com/
+> 
+> v1->v2:
+>  - Rebase to 6.1-rc3
+>  - Patch 1:
+>    [EF] s/device_initialize/device_register/ and associated adjustments
+>    [MR] Add WARN_ON(!private) in vfio_ccw_sch_quiesce()
+>    [MR] Move struct vfio_ccw_parent to _private.h, instead of standalone file
+>  - Patch 2:
+>    [MR] Added r-b (Thank you!)
+>  - Patch 3:
+>    [MR] Update commit message to point to introduction of private->release_comp
+>    [MR] Replace the remnants of vfio_ccw_alloc_private with a straight kzalloc
+>    [MR] Added r-b (Thank you!)
+>  - Patch 5:
+>    [KT] Added r-b (Thank you!)
+>  - Patch 6:
+>    [JG] Make vfio_init_device static
+>    [KT] Added r-b (Thank you!)
+>  - Patch 7:
+>    [JG, KT] Added r-b (Thank you!)
+> v1: https://lore.kernel.org/kvm/20221019162135.798901-1-farman@linux.ibm.com/
+> 
+> Eric Farman (7):
+>   vfio/ccw: create a parent struct
+>   vfio/ccw: remove private->sch
+>   vfio/ccw: move private initialization to callback
+>   vfio/ccw: move private to mdev lifecycle
+>   vfio/ccw: remove release completion
+>   vfio/ccw: replace vfio_init_device with _alloc_
+>   vfio: Remove vfio_free_device
+> 
+>  drivers/gpu/drm/i915/gvt/kvmgt.c      |   1 -
+>  drivers/s390/cio/vfio_ccw_chp.c       |   5 +-
+>  drivers/s390/cio/vfio_ccw_drv.c       | 174 +++++++++++---------------
+>  drivers/s390/cio/vfio_ccw_fsm.c       |  27 ++--
+>  drivers/s390/cio/vfio_ccw_ops.c       | 107 +++++++++++-----
+>  drivers/s390/cio/vfio_ccw_private.h   |  37 ++++--
+>  drivers/s390/crypto/vfio_ap_ops.c     |   6 -
+>  drivers/vfio/fsl-mc/vfio_fsl_mc.c     |   1 -
+>  drivers/vfio/pci/vfio_pci_core.c      |   1 -
+>  drivers/vfio/platform/vfio_amba.c     |   1 -
+>  drivers/vfio/platform/vfio_platform.c |   1 -
+>  drivers/vfio/vfio_main.c              |  32 ++---
+>  include/linux/vfio.h                  |   3 -
+>  samples/vfio-mdev/mbochs.c            |   1 -
+>  samples/vfio-mdev/mdpy.c              |   1 -
+>  samples/vfio-mdev/mtty.c              |   1 -
+>  16 files changed, 197 insertions(+), 202 deletions(-)
 > 
 
-OK I am confused now. What about the pwm nodes? don't they need to be
-muxed?
-
--- 
-Regards,
-Nishanth Menon
-Key (0xDDB5849D1736249D) / Fingerprint: F8A2 8693 54EB 8232 17A3  1A34 DDB5 849D 1736 249D
