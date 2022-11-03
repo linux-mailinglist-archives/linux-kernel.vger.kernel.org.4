@@ -2,78 +2,56 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id ED5FD617CDB
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:42:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0E867617CDD
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:42:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231206AbiKCMmM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 08:42:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58832 "EHLO
+        id S231238AbiKCMml (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 08:42:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59184 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230389AbiKCMmH (ORCPT
+        with ESMTP id S230338AbiKCMmk (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 08:42:07 -0400
-Received: from mail-qk1-x72c.google.com (mail-qk1-x72c.google.com [IPv6:2607:f8b0:4864:20::72c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 625DDCE15
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 05:42:06 -0700 (PDT)
-Received: by mail-qk1-x72c.google.com with SMTP id z1so974611qkl.9
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 05:42:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=fFdGhL73S/+jHEKQ09FOVskOFKjEeT/ObTagmldOE64=;
-        b=UhmeO6dkRKxYTsnynk/YmKaLWxoLJBGfhdaWkpXQLT3rL/PT4GHc0w+oNEST+f5Wpu
-         5BdVJ8+j3f/X92lXb7YmGoivnrWQM4GlAlOC8rfVWGIn1/NtdDayvaqUmtvAOxavq3fA
-         Bx/fE3WzHSdqQx7S9U55JLVyoEmz5rhu7na071j9GRsVUcc5ZIhmE1zUIKzgoR8Gpflk
-         cITiBzoaDcwIL1FmZ5tw9ebS22dAO+Dz4AO3SD/1XpIlWDHCCru4v9iVwui2NBb7jORP
-         VgiKcuWXv22YucB5k33HTGfleht/wsklijLF6GMU/+0zM6c6iI6xJ0XjY5LuwPPs8fWI
-         yzTA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=fFdGhL73S/+jHEKQ09FOVskOFKjEeT/ObTagmldOE64=;
-        b=EGyPW2NdV+C6jSkyNLDPSTNvPZOWoZKJMqigeo6uNp1/p8OQImSSKCK7VjI7vtJ8Rg
-         XTuv23ehcgH0QM/de3Nu1SZ/MPMRF5XmBv3WWjqfh9vGBhr5oipFriDIv6njT0iSsQZF
-         KqX0mSOjLHVExpXL3w5bblWo9NyOcbnFJzUqyj+iqi+jFR93+MMvFG/MAp/eMIvhr1Q8
-         gLaJhb5M8E5myFr/94y+0dINNEsgUTA7skekD65JVm8u6EaQZFmbu9e1WlzSkSGHbu6X
-         o9L3MtNAkysG0mSAQ35noqNBbp+skDrQDhoeVi4fhJnyH4OWRH6KNU7iUjaQ5BzmfnZC
-         RxJw==
-X-Gm-Message-State: ACrzQf1V3fSB1ZAYgrnxkG6jLHyGz1nZxeGS2J8uwIUBiM3ZmWJjJg/b
-        Gusfv9B4Lhbz4Pdv2lcqmfp1xw==
-X-Google-Smtp-Source: AMsMyM7R//pf51CVGfWXHj1GX9wXIzb+LdZphgfmS3saxxTdD1hymSha/Gf+R6TY1XxlbN54wUNd2w==
-X-Received: by 2002:a05:620a:430a:b0:6f6:589b:463d with SMTP id u10-20020a05620a430a00b006f6589b463dmr21155132qko.139.1667479325519;
-        Thu, 03 Nov 2022 05:42:05 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
-        by smtp.gmail.com with ESMTPSA id bm7-20020a05620a198700b006ed138e89f2sm648038qkb.123.2022.11.03.05.42.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 05:42:04 -0700 (PDT)
-Message-ID: <38e1762b-527f-e913-768b-1149486a9f72@linaro.org>
-Date:   Thu, 3 Nov 2022 08:42:03 -0400
+        Thu, 3 Nov 2022 08:42:40 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 1CFC2F33;
+        Thu,  3 Nov 2022 05:42:39 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id B9B0AB823C1;
+        Thu,  3 Nov 2022 12:42:37 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D476DC433C1;
+        Thu,  3 Nov 2022 12:42:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667479356;
+        bh=W1nkZxNszhwNsoEA2MBJEvw/bRH0X3776BIDQFXqokQ=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=sFEr2kmPEzXraDtriYkdQG65Oubcpzetp8dV2XdVEv+YxEJXaxDvS65VB5NnqGka0
+         x+/dUWCGaXj3OpjOcjaAUJgwClI4YaK4iCg/ND/Ovwsg4DdajyUwz3Se0TKQze4HtT
+         3QFxtNQqNFv0QSZ3bBIF6/PeDiyCTE31gGU5ZHgNdAnvhOaziXbwDeFlUZLU1av88D
+         Gwxwll5+a23anF0/gFW8vozHlUvcU8CDLezw3KKg1pCQpZiUZsR5O8dlRmLoZpROU/
+         0WqeCzC2kY3rFconED+86Dz+5LJNZXbK6WQ0q+nX8jzgiOulY/oX1gRdcaOc7rVzXZ
+         EhZK7AWmaAbjw==
+Date:   Thu, 3 Nov 2022 18:12:29 +0530
+From:   Manivannan Sadhasivam <mani@kernel.org>
+To:     Johan Hovold <johan@kernel.org>
+Cc:     Manivannan Sadhasivam <mani@kernel.org>,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Hemant Kumar <quic_hemantk@quicinc.com>, mhi@lists.linux.dev,
+        linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] mhi: pci_generic: add support for sc8280xp-crd SDX55
+ variant
+Message-ID: <20221103124229.GF8434@thinkpad>
+References: <20221031083429.18971-1-johan+linaro@kernel.org>
+ <20221101114258.GB54667@thinkpad>
+ <Y2Jp/wNPmTrC6sEy@hovoldconsulting.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 3/3] arch: arm64: ti: Add support for AM68 SK base board
-Content-Language: en-US
-To:     Sinthu Raja M <sinthu.raja@mistralsolutions.com>
-Cc:     Nishanth Menon <nm@ti.com>, Tero Kristo <kristo@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Vignesh Raghavendra <vigneshr@ti.com>,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-        linux-kernel@vger.kernel.org, Sinthu Raja <sinthu.raja@ti.com>
-References: <20221018123849.23695-1-sinthu.raja@ti.com>
- <20221018123849.23695-4-sinthu.raja@ti.com>
- <3f1afad0-1e93-4843-defd-ca32c308cc9e@linaro.org>
- <CAEd-yTTtQhhECw7jSQb38ThaOT_CtFmHy0dJt3SaKxn1KzSgKg@mail.gmail.com>
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <CAEd-yTTtQhhECw7jSQb38ThaOT_CtFmHy0dJt3SaKxn1KzSgKg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Y2Jp/wNPmTrC6sEy@hovoldconsulting.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
         SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -81,106 +59,79 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/11/2022 04:38, Sinthu Raja M wrote:
-> On Tue, Oct 18, 2022 at 6:33 PM Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org> wrote:
->>
->> On 18/10/2022 08:38, Sinthu Raja wrote:
->>> From: Sinthu Raja <sinthu.raja@ti.com>
->>>
->>> The SK architecture comprises of baseboard and a SOM board. It is
->>> as follows,
->>>
->>>        +--------------------------------------+---+
->>>        |                                      |   |<--Connectors
->>>        |                                      +---|
->>>        |      +---------------------------+   |   |
->>>        |      | SOM                       |   +---|
->>>        |      |                           |   |   |
->>>        |      |                           |   +---| Power Supply
->>>        |      |                           |       |   |
->>>        |      +---------------------------+       |   |
->>>        |                                          |<--+
->>>        |           BASE BOARD                     |
->>>        +------------------------------------------+
->>
->> This is pretty straightforward for SoM, I am not sure what's the benefit
->> to add it.
->>
->>>
->>> AM68 Starter Kit's baseboard contains most of the actual connectors,
->>> power supply etc. The System on Module (SoM) is plugged on to the base
->>> board. Therefore, add support for peripherals brought out in the base
->>> board.
->>>
->>> Schematics: https://www.ti.com/lit/zip/SPRR463
->>>
->>> Signed-off-by: Sinthu Raja <sinthu.raja@ti.com>
->>> ---
->>>  arch/arm64/boot/dts/ti/Makefile               |   2 +
->>>  .../boot/dts/ti/k3-am68-sk-base-board.dts     | 459 ++++++++++++++++++
->>>  2 files changed, 461 insertions(+)
->>>  create mode 100644 arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
->>>
->>> diff --git a/arch/arm64/boot/dts/ti/Makefile b/arch/arm64/boot/dts/ti/Makefile
->>> index 4555a5be2257..498b089d96f8 100644
->>> --- a/arch/arm64/boot/dts/ti/Makefile
->>> +++ b/arch/arm64/boot/dts/ti/Makefile
->>> @@ -19,6 +19,8 @@ dtb-$(CONFIG_ARCH_K3) += k3-j7200-common-proc-board.dtb
->>>
->>>  dtb-$(CONFIG_ARCH_K3) += k3-j721s2-common-proc-board.dtb
->>>
->>> +dtb-$(CONFIG_ARCH_K3) += k3-am68-sk-base-board.dtb
->>> +
->>
->> Alphabetical order, although does not look like other entries are ordered...
->>
->>>  dtb-$(CONFIG_ARCH_K3) += k3-am642-evm.dtb
->>>  dtb-$(CONFIG_ARCH_K3) += k3-am642-sk.dtb
->>>
->>> diff --git a/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts b/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
->>> new file mode 100644
->>> index 000000000000..f51cbd2e3b72
->>> --- /dev/null
->>> +++ b/arch/arm64/boot/dts/ti/k3-am68-sk-base-board.dts
->>> @@ -0,0 +1,459 @@
->>> +// SPDX-License-Identifier: GPL-2.0
->>> +/*
->>> + * Copyright (C) 2022 Texas Instruments Incorporated - https://www.ti.com/
->>> + *
->>> + * Base Board: https://www.ti.com/lit/zip/SPRR463
->>> + */
->>> +
->>> +/dts-v1/;
->>> +
->>> +#include "k3-am68-sk-som.dtsi"
->>> +#include <dt-bindings/net/ti-dp83867.h>
->>> +#include <dt-bindings/phy/phy-cadence.h>
->>> +#include <dt-bindings/phy/phy.h>
->>> +#include <dt-bindings/mux/ti-serdes.h>
->>> +
->>> +/ {
->>> +     compatible = "ti,am68-sk", "ti,j721s2";
->>> +     model = "Texas Instruments AM68 SK";
->>> +
->>> +     chosen {
->>> +             stdout-path = "serial2:115200n8";
->>> +             bootargs = "console=ttyS2,115200n8 earlycon=ns16550a,mmio32,0x2880000";
->>
->> None of these bootargs are suitable for mainline. earlycon for sure - it
->> is pure debug option.
-> Krzysztof,
-> In AM68 SK the Linux console is on main_uart8, so to be consistent
-> with other J7 families of devices aliasing the serial port to ttyS2. I
-> am quite confused why these bootargs are not suitable for mainline. I
-> check the below documentation section 2.3, as mentioned it can be used
-> as kernel parameters. Please correct me if I am wrong.
-> https://www.kernel.org/doc/html/latest/devicetree/usage-model.html?highlight=bootargs
+On Wed, Nov 02, 2022 at 02:00:47PM +0100, Johan Hovold wrote:
+> On Tue, Nov 01, 2022 at 05:12:58PM +0530, Manivannan Sadhasivam wrote:
+> > On Mon, Oct 31, 2022 at 09:34:29AM +0100, Johan Hovold wrote:
+> > > The SC8280XP Compute Reference Design (CRD) has an on-PCB SDX55 modem
+> > > which uses MBIM.
+> > > 
+> > > The exact channel configuration is not known but the Foxconn SDX55
+> > > configuration allows the modem to be used so reuse that one for now.
+> > > 
+> > > Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> > > ---
+> > >  drivers/bus/mhi/host/pci_generic.c | 3 +++
+> > >  1 file changed, 3 insertions(+)
+> > > 
+> > > diff --git a/drivers/bus/mhi/host/pci_generic.c b/drivers/bus/mhi/host/pci_generic.c
+> > > index caa4ce28cf9e..f9f4345d472d 100644
+> > > --- a/drivers/bus/mhi/host/pci_generic.c
+> > > +++ b/drivers/bus/mhi/host/pci_generic.c
+> > > @@ -542,6 +542,9 @@ static const struct mhi_pci_dev_info mhi_telit_fn990_info = {
+> > >  static const struct pci_device_id mhi_pci_id_table[] = {
+> > >  	{ PCI_DEVICE(PCI_VENDOR_ID_QCOM, 0x0304),
+> > >  		.driver_data = (kernel_ulong_t) &mhi_qcom_sdx24_info },
+> > > +	/* SC8280XP-CRD (sdx55) */
+> > 
+> > Platform device name is not needed.
+> 
+> Ok, only added it because the other entries had a description.
+>  
 
-Why? Console is defined by stdout path, so why do you need to redefine
-it? Bootargs are for debugging so why all users in entire world by
-default must debug?
+Those descriptions are for the modems itself, like Telit FN980m. But
+SC8280XP-CRD is the platform that makes use of *some* sdx55 based modem. So it
+is not required.
 
-Best regards,
-Krzysztof
+> > > +	{ PCI_DEVICE_SUB(PCI_VENDOR_ID_QCOM, 0x0306, PCI_VENDOR_ID_QCOM, 0x010c),
+> > 
+> > Sub ID looks wierd. Did you test with mhi_qcom_sdx55_info? If it didn't
+> > work, what was the issue?
+> 
+> I obviously added the new entry because the default match did not work.
+> 
+> I haven't had time to look at this since before the summer, but based on
+> my notes and a quick test now it seems that the QMI channel is not
+> supported and ModemManager takes forever to enumerate with a bunch of
+> failed transactions every second:
+> 
+>   ModemManager[469]: [/dev/wwan0qmi0] Checking version info (45 retries)...
+>   ...
+>   ModemManager[469]: transaction 0x2 aborted, but message is not abortable
+>   ...
+>   ModemManager[469]: transaction 0x2e aborted, but message is not abortable
+>   ...
+>   ModemManager[469]: <warn>  [plugin/generic] could not grab port wwan0qmi0: Cannot add port 'wwan/wwan0qmi0', unhandled port type
+> 
+> According to my notes I could connect to the provider after the (~45 s)
+> timeout, but no data was coming through with the default config which I
+> attributed to the differences in the data channel configuration (i.e.
+> "IP_HW0" and "IP_HW0_MBIM" are handled by different drivers).
+>  
 
+Okay, this makes it clear.
+
+Thanks,
+Mani
+
+> > > +		.driver_data = (kernel_ulong_t) &mhi_foxconn_sdx55_info },
+> > >  	/* EM919x (sdx55), use the same vid:pid as qcom-sdx55m */
+> > >  	{ PCI_DEVICE_SUB(PCI_VENDOR_ID_QCOM, 0x0306, 0x18d7, 0x0200),
+> > >  		.driver_data = (kernel_ulong_t) &mhi_sierra_em919x_info },
+> > > -- 
+> > > 2.37.3
+> 
+> Johan
+> 
+
+-- 
+மணிவண்ணன் சதாசிவம்
