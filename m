@@ -2,151 +2,185 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 12F0A617569
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 05:13:27 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9CEEB617573
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 05:19:44 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229570AbiKCENY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 00:13:24 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51982 "EHLO
+        id S229964AbiKCETO (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 00:19:14 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53658 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbiKCENN (ORCPT
+        with ESMTP id S230045AbiKCETG (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 00:13:13 -0400
-Received: from mail-qv1-xf2c.google.com (mail-qv1-xf2c.google.com [IPv6:2607:f8b0:4864:20::f2c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B1FFB13F1A;
-        Wed,  2 Nov 2022 21:13:12 -0700 (PDT)
-Received: by mail-qv1-xf2c.google.com with SMTP id t16so397504qvm.9;
-        Wed, 02 Nov 2022 21:13:12 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=F+25QrJbrFzP445hxbERz2MlFDjVBgfsITwfv/Zbzww=;
-        b=Ck0fdPTnKcav/x3nHbHg8fjUSvMBOKipfGIyHC7Io6+DUUyJnO3ShH2fSOefd5UPo1
-         plv9fW0f3ZgR1ywrfvaCfedLakl+P7l0j8xcav9yQAG2lDkuwJRhJaYnC+4uTf8B9Sbs
-         SvIHhhJ9y0yHWX4KL+KfY65kXN+9NwFLXWV6/nJ4x+B9Kjot1R9XkD7OWWGgQiLBcocn
-         kbGvS16N3xnfa1JVIp3clTiQYOHrnb/iUO+1EzuxVdtTG8Aoaqn5bEuXXQIbNs/j0xkd
-         46ix9XU3LeauBNQuI9cauegx9TPSHRcH34K5Rx+9kIUFNulPSVCS3FCwMidJh3F+djPu
-         dwNQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=F+25QrJbrFzP445hxbERz2MlFDjVBgfsITwfv/Zbzww=;
-        b=eksX2BiqZQ2Lmpkf38LLROsggISgOq2Zw09tNWoBOeEu06c4KxXfVtDin7hXgj91uJ
-         0+U9f6PNwgMV+PQMpGpqwzwNe3xFYXNBQIl0AHF/uY86ntZwJ0GkqGUpHEQl7b5R2Zav
-         AOa/tqUUg1brUWhva7M9/RdAXtBjTEtBTid6sZz/GYEfjCXjXrodkSja1e/uTmw9mSA9
-         7TJKbGylaweh62mqzOW17WnLGYEwBRnBsaDuIXvK8nQxD3lNc6nAKfOhGtpUoFR1idyf
-         bl0H+SSkF8TUMB/HCwh549KHbBLkCPUCoufuSg6tvXd5jL6oVv7I+1l05vwv1nEpgYGe
-         cv6g==
-X-Gm-Message-State: ACrzQf0e+buhXSlMSjXjxx3H3e0s/RwHQTbLu+zdgGDKCV4xuj8QXUrk
-        Tm+DZ6n881JG+S5d3N8StXN05YIke4yQPVYGoC8=
-X-Google-Smtp-Source: AMsMyM62dWep4UxJRWKfeTJOcl6GQDKgVIgBCNwxYeko9+tLuMFIJBXzcGAM5B3maWI/O7YwCAsN3w2CIpGUxIG8934=
-X-Received: by 2002:a05:6214:3005:b0:4ad:8042:128a with SMTP id
- ke5-20020a056214300500b004ad8042128amr25151091qvb.66.1667448791800; Wed, 02
- Nov 2022 21:13:11 -0700 (PDT)
+        Thu, 3 Nov 2022 00:19:06 -0400
+Received: from mga02.intel.com (mga02.intel.com [134.134.136.20])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A1235CE14
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 21:19:05 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667449145; x=1698985145;
+  h=date:from:to:cc:subject:message-id:mime-version:
+   content-transfer-encoding;
+  bh=u/qWCBoPPmFB9n1TvhLYfx93A3h+7N0xfdd7MthDrcs=;
+  b=aSkc5bCpexCEfEoudRJtE6fF918vr1POCJsQB9UOhQPJTK2YfOiSSFhC
+   9PUneMNxXE2xi9LnELI7dMN3bUuH5Ue9EJD5DgHQj1RFDqbApDcdFXUEl
+   yBJK5iKiILDyjZabRv8s2nvexq0hpzyRFLTsYJ5rhQk8sgyRuAbN9Q1yZ
+   BTjJ4eUCwRiRI1628qJwMzqu3epIjUznnY5z/1ZLHB9ZG6JmrwSN0CFTN
+   ggawWiru5PQFXKUh2qTDjhje7v7KhMLALsP83QI1Ipt1M4gp6N0vZ2MqC
+   sGG9IN0r9bQc4XLuISjyK/9vO5yhgORRqyFedCgS25zn8QGQvW6ZZ+ctr
+   A==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="297037158"
+X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
+   d="scan'208";a="297037158"
+Received: from fmsmga003.fm.intel.com ([10.253.24.29])
+  by orsmga101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Nov 2022 21:19:05 -0700
+X-ExtLoop1: 1
+X-IronPort-AV: E=McAfee;i="6500,9779,10519"; a="723801828"
+X-IronPort-AV: E=Sophos;i="5.95,235,1661842800"; 
+   d="scan'208";a="723801828"
+Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
+  by FMSMGA003.fm.intel.com with ESMTP; 02 Nov 2022 21:19:04 -0700
+Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
+        (envelope-from <lkp@intel.com>)
+        id 1oqRh1-000FS9-1S;
+        Thu, 03 Nov 2022 04:19:03 +0000
+Date:   Thu, 03 Nov 2022 12:18:13 +0800
+From:   kernel test robot <lkp@intel.com>
+To:     "x86-ml" <x86@kernel.org>
+Cc:     linux-kernel@vger.kernel.org
+Subject: [tip:x86/microcode] BUILD SUCCESS
+ 254ed7cf4dd79a18bbc496ab53f6c82d45431c78
+Message-ID: <63634105.vBCDulsooubDEfrN%lkp@intel.com>
+User-Agent: Heirloom mailx 12.5 6/20/10
 MIME-Version: 1.0
-References: <20221028050736.151185-1-zyytlz.wz@163.com> <0ce67c60-7b55-6f29-2f97-9b17c1e175c0@gmail.com>
-In-Reply-To: <0ce67c60-7b55-6f29-2f97-9b17c1e175c0@gmail.com>
-From:   Zheng Hacker <hackerzheng666@gmail.com>
-Date:   Thu, 3 Nov 2022 12:12:59 +0800
-Message-ID: <CAJedcCzvkcnkntM6h3NAV6ct36RY-bKyHichQ4ecRop7wfHuhg@mail.gmail.com>
-Subject: Re: [PATCH] scsi: lpfc: fix double free bug in lpfc_bsg_write_ebuf_set
-To:     James Smart <jsmart2021@gmail.com>
-Cc:     Zheng Wang <zyytlz.wz@163.com>, james.smart@broadcom.com,
-        dick.kennedy@broadcom.com, jejb@linux.ibm.com,
-        martin.petersen@oracle.com, linux-scsi@vger.kernel.org,
-        alex000young@gmail.com, security@kernel.org,
-        linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Transfer-Encoding: 7bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-James Smart <jsmart2021@gmail.com> =E4=BA=8E2022=E5=B9=B411=E6=9C=883=E6=97=
-=A5=E5=91=A8=E5=9B=9B 00:37=E5=86=99=E9=81=93=EF=BC=9A
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git x86/microcode
+branch HEAD: 254ed7cf4dd79a18bbc496ab53f6c82d45431c78  x86/microcode: Drop struct ucode_cpu_info.valid
 
-> Minimally, just looking at this one snippet, by returning after the
-> mempool_alloc() failure, we are leaking the dd_data memory just allocated=
-.
->
+elapsed time: 727m
 
-Yes, this is a bad patch.
+configs tested: 102
+configs skipped: 68
 
-> > @@ -4480,8 +4478,7 @@ lpfc_bsg_write_ebuf_set(struct lpfc_hba *phba, st=
-ruct bsg_job *job,
-> >               lpfc_printf_log(phba, KERN_ERR, LOG_LIBDFC,
-> >                               "2970 Failed to issue SLI_CONFIG ext-buff=
-er "
-> >                               "mailbox command, rc:x%x\n", rc);
-> > -             rc =3D -EPIPE;
-> > -             goto job_error;
-> > +             return -EPIPE;
->
-> and this leaks both the dd_data and pmboxq memory.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-So Here it is.
+gcc tested configs:
+x86_64                          rhel-8.3-func
+x86_64                    rhel-8.3-kselftests
+x86_64                        randconfig-a002
+x86_64                           rhel-8.3-kvm
+i386                             allyesconfig
+i386                                defconfig
+x86_64                           rhel-8.3-syz
+ia64                             allmodconfig
+x86_64                         rhel-8.3-kunit
+x86_64                        randconfig-a004
+x86_64                        randconfig-a006
+um                           x86_64_defconfig
+um                             i386_defconfig
+arm64                            allyesconfig
+arm                                 defconfig
+arm                              allyesconfig
+x86_64                              defconfig
+x86_64                           allyesconfig
+x86_64                               rhel-8.3
+s390                                defconfig
+s390                             allmodconfig
+arc                                 defconfig
+alpha                               defconfig
+s390                             allyesconfig
+sh                             sh03_defconfig
+powerpc                   currituck_defconfig
+sh                           se7712_defconfig
+i386                          randconfig-a012
+i386                          randconfig-a014
+i386                          randconfig-a016
+powerpc                           allnoconfig
+mips                             allyesconfig
+powerpc                          allmodconfig
+sh                               allmodconfig
+arc                           tb10x_defconfig
+sh                 kfr2r09-romimage_defconfig
+mips                          rb532_defconfig
+sh                        sh7757lcr_defconfig
+nios2                            alldefconfig
+sh                        edosk7705_defconfig
+arm                        clps711x_defconfig
+csky                                defconfig
+powerpc                     stx_gp3_defconfig
+sh                      rts7751r2d1_defconfig
+mips                       bmips_be_defconfig
+m68k                             allyesconfig
+m68k                             allmodconfig
+arc                              allyesconfig
+alpha                            allyesconfig
+i386                          randconfig-c001
+m68k                       m5208evb_defconfig
+powerpc                         wii_defconfig
+m68k                       m5275evb_defconfig
+m68k                         apollo_defconfig
+mips                     decstation_defconfig
+sparc                       sparc32_defconfig
+m68k                          multi_defconfig
+arm                        multi_v7_defconfig
+arm                         s3c6400_defconfig
+sh                        apsh4ad0a_defconfig
+arm                           tegra_defconfig
+sh                          rsk7203_defconfig
+sh                        edosk7760_defconfig
+arm                       aspeed_g5_defconfig
+um                                  defconfig
+parisc64                            defconfig
+loongarch                           defconfig
+loongarch                         allnoconfig
+loongarch                        allmodconfig
+powerpc                   motionpro_defconfig
+parisc                generic-32bit_defconfig
+riscv             nommu_k210_sdcard_defconfig
+sh                               alldefconfig
+sh                                  defconfig
+arc                            hsdk_defconfig
+parisc                           allyesconfig
 
->
-> all of these errors should cause:
->    lpfc_bsg_write_ebuf_set() to return -Exxx
->    causing lpfc_bsg_handle_sli_cfg_ebuf() to return -Exxx
->    causing lpfc_bsg_handle_sli_cfg_ext() to return -Exxx
->    which causes lpfc_bsg_issue_mbox() to jump to job_done
->
+clang tested configs:
+x86_64                        randconfig-a001
+x86_64                        randconfig-a003
+x86_64                        randconfig-a005
+hexagon              randconfig-r041-20221102
+hexagon              randconfig-r045-20221102
+i386                          randconfig-a002
+i386                          randconfig-a006
+i386                          randconfig-a004
+x86_64                        randconfig-a012
+x86_64                        randconfig-a014
+x86_64                        randconfig-a016
+powerpc                 mpc832x_mds_defconfig
+arm                          pcm027_defconfig
+arm                       cns3420vb_defconfig
+riscv                randconfig-r042-20221103
+hexagon              randconfig-r041-20221103
+hexagon              randconfig-r045-20221103
+s390                 randconfig-r044-20221103
+mips                     loongson1c_defconfig
+mips                           mtx1_defconfig
+powerpc               mpc834x_itxgp_defconfig
+riscv                    nommu_virt_defconfig
+mips                       rbtx49xx_defconfig
+arm                         socfpga_defconfig
+powerpc                  mpc885_ads_defconfig
+powerpc                          g5_defconfig
 
-Hi James! Really apprecaite for your reply. I was not sure if it it a
-really issue. Sorry for the bad patch.
-
-> I understand the argument is that issue_mbox deletes them, but....
->
-> job_done:
->    checks/frees pmboxq is allocated after the jump so it will be NULL
->    frees dmabuf - which was allocated prior to the jump; is freed
->       in freedlpfc_bsg_handle_sli_cfg_ebuf() but only in a block
->       that returns SLI_CONFIG_HANDLED, which is not the block that
->       invokes lpfc_bsg_write_ebuf_set. So it's valid to delete.
->       Note: there's a special case for SLI_CONFIG_HANDLED which skips
->       over these deletes so it's ok.
->    frees dd_data - which is allocated after the jump so it too will
->       be NULL
-
-I understood your point. Here is a call chain :
- lpfc_bsg_issue_mbox->lpfc_bsg_handle_sli_cfg_ext->lpfc_bsg_handle_sli_cfg_=
-ebuf->lpfc_bsg_write_ebuf_set->lpfc_bsg_dma_page_free->kfree(dmabuf)
-It leads to another kfree in lpfc_bsg_mbox_cmd :
-job_done:
-    /* common exit for error or job completed inline */
-    if (pmboxq)
-        mempool_free(pmboxq, phba->mbox_mem_pool);
-    [7] lpfc_bsg_dma_page_free(phba, dmabuf);
-    kfree(dd_data);
-
-So the key point is whether phba->mbox_ext_buf_ctx.mboxType can be
-mbox_wr. If not, just as you illustrated, all is fine.
-It will get into SLI_CONFIG_HANDLED path and handle dmabuf as expected.
-
-But if not, it will have a chance to trigger a double-free bug. I
-found phda is assigned in lpfc_bsg_mbox_cmd. But I am still not sure
-about its value.
-Appreciate if you can help me to understand more about the key condition :)
-
-> So - the code is fine.  The SLI_CONFIG_HANDLED is a little weird, but
-> the logic is fine. If the patch were added it would leak memory.
->
-> I take it this was identified by some tool ?
->
-
-Yes, I found it using Codeql. I didn't have a poc to verify.
-
-Best Regards,
-Zheng Wang
+-- 
+0-DAY CI Kernel Test Service
+https://01.org/lkp
