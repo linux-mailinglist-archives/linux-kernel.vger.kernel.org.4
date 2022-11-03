@@ -2,82 +2,196 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id B573D618CC7
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 00:32:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 711CD618CCC
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 00:32:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229994AbiKCXcK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 19:32:10 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53734 "EHLO
+        id S230338AbiKCXcb (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 19:32:31 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53952 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229507AbiKCXcG (ORCPT
+        with ESMTP id S229461AbiKCXc3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 19:32:06 -0400
-Received: from mail.skyhub.de (mail.skyhub.de [IPv6:2a01:4f8:190:11c2::b:1457])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 016611F601;
-        Thu,  3 Nov 2022 16:32:05 -0700 (PDT)
-Received: from zn.tnic (p200300ea9733e72b329c23fffea6a903.dip0.t-ipconnect.de [IPv6:2003:ea:9733:e72b:329c:23ff:fea6:a903])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by mail.skyhub.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 8BD561EC04E2;
-        Fri,  4 Nov 2022 00:32:03 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=dkim;
-        t=1667518323;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:in-reply-to:in-reply-to:  references:references;
-        bh=eVWe2dv0SREgTL0EatF2jCJmMTOM/UpbhdkTrzmlVEE=;
-        b=CzItbvwL6ts3qGFTw2UTW8TnFYrTv4FduqBZaxs7lqIYrAe9hPRnopXl39HovJa1VvLOmD
-        QM6eU+EKhB8OZFw2RM6g369rOUSZarnToyR/f1AwDyHXgeO3O0QH5i7bT9XEoFcnykamCj
-        71L2ciDo0mbh69pu/fbucmiMGz+4SZw=
-Date:   Fri, 4 Nov 2022 00:32:03 +0100
-From:   Borislav Petkov <bp@alien8.de>
-To:     Ashok Raj <ashok.raj@intel.com>
-Cc:     Jithu Joseph <jithu.joseph@intel.com>, hdegoede@redhat.com,
-        markgross@kernel.org, tglx@linutronix.de, mingo@redhat.com,
-        dave.hansen@linux.intel.com, x86@kernel.org, hpa@zytor.com,
-        gregkh@linuxfoundation.org, tony.luck@intel.com,
-        linux-kernel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-        patches@lists.linux.dev, ravi.v.shankar@intel.com,
-        thiago.macieira@intel.com, athenas.jimenez.gonzalez@intel.com
-Subject: Re: [PATCH 07/14] x86/microcode/intel: Expose
- microcode_sanity_check()
-Message-ID: <Y2RPc7T0PCUubcjB@zn.tnic>
-References: <20221021203413.1220137-1-jithu.joseph@intel.com>
- <20221021203413.1220137-8-jithu.joseph@intel.com>
- <Y2OnHuSHgIMGxcUH@zn.tnic>
- <Y2QVrEGkfvpT/2KB@a4bf019067fa.jf.intel.com>
+        Thu, 3 Nov 2022 19:32:29 -0400
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 0C1B9201A0;
+        Thu,  3 Nov 2022 16:32:27 -0700 (PDT)
+Received: from pps.filterd (m0098399.ppops.net [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (8.17.1.5/8.17.1.5) with ESMTP id 2A3MfvV6013809;
+        Thu, 3 Nov 2022 23:32:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=message-id : date :
+ mime-version : subject : to : cc : references : from : in-reply-to :
+ content-type : content-transfer-encoding; s=pp1;
+ bh=Hd8lSwxwlK7HM4IzVeypMmGfqjcH+u9Jg5Zy3uC3Adk=;
+ b=gJo5g4kJk5v04at/s20eY4wLwJeSGjKEzo2lMxbUvpQ87WuAmeApBQCK0074YVYq59pD
+ AfdLKOYNitQvG8jSGA9jW06Xtl7Nnx8f8LA2sEgsMArBDM9wS4/bJwqplmeCL4KfUVlJ
+ +v2J4lpSr96xRo4CbVUENpu8twxqdRPEiQhlnjBm4yG8vCeb2J8U37Kz1HMLP6uiK4DX
+ 1jpC7r273GiVHobkEv6z8pr3gv0kf6OTglBebuIyJOjtufyDFXSr9NVsW2GgvGBkWFz/
+ i+V/4Il1lP90Ki0gpuYRFw2So3L0UUNzTr+8XZTVPVpbuNpl0dYSeXy8RxN5k7ymZVRB 8A== 
+Received: from pps.reinject (localhost [127.0.0.1])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kmphcse98-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Nov 2022 23:32:20 +0000
+Received: from m0098399.ppops.net (m0098399.ppops.net [127.0.0.1])
+        by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 2A3NMr2t019167;
+        Thu, 3 Nov 2022 23:32:20 GMT
+Received: from ppma05wdc.us.ibm.com (1b.90.2fa9.ip4.static.sl-reverse.com [169.47.144.27])
+        by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 3kmphcse8m-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Nov 2022 23:32:19 +0000
+Received: from pps.filterd (ppma05wdc.us.ibm.com [127.0.0.1])
+        by ppma05wdc.us.ibm.com (8.16.1.2/8.16.1.2) with SMTP id 2A3NKFeq013896;
+        Thu, 3 Nov 2022 23:32:18 GMT
+Received: from b01cxnp22035.gho.pok.ibm.com (b01cxnp22035.gho.pok.ibm.com [9.57.198.25])
+        by ppma05wdc.us.ibm.com with ESMTP id 3kguta4qmd-1
+        (version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+        Thu, 03 Nov 2022 23:32:18 +0000
+Received: from smtpav03.wdc07v.mail.ibm.com ([9.208.128.112])
+        by b01cxnp22035.gho.pok.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 2A3NWGkl7799416
+        (version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+        Thu, 3 Nov 2022 23:32:17 GMT
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id A01C458058;
+        Thu,  3 Nov 2022 23:32:16 +0000 (GMT)
+Received: from smtpav03.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+        by IMSVA (Postfix) with ESMTP id 5B7B95805D;
+        Thu,  3 Nov 2022 23:32:09 +0000 (GMT)
+Received: from [9.65.206.126] (unknown [9.65.206.126])
+        by smtpav03.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+        Thu,  3 Nov 2022 23:32:09 +0000 (GMT)
+Message-ID: <01901cda-ec1d-bdd2-4b0f-95ee372136b8@linux.ibm.com>
+Date:   Thu, 3 Nov 2022 19:32:08 -0400
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <Y2QVrEGkfvpT/2KB@a4bf019067fa.jf.intel.com>
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,SPF_HELO_NONE,SPF_PASS
-        autolearn=ham autolearn_force=no version=3.4.6
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.4.0
+Subject: Re: [PATCH v2 6/7] vfio/ccw: replace vfio_init_device with _alloc_
+Content-Language: en-US
+To:     Eric Farman <farman@linux.ibm.com>,
+        Alex Williamson <alex.williamson@redhat.com>,
+        Cornelia Huck <cohuck@redhat.com>,
+        Jason Gunthorpe <jgg@nvidia.com>,
+        Kevin Tian <kevin.tian@intel.com>, Yi Liu <yi.l.liu@intel.com>
+Cc:     Zhenyu Wang <zhenyuw@linux.intel.com>,
+        Zhi Wang <zhi.a.wang@intel.com>,
+        Jani Nikula <jani.nikula@linux.intel.com>,
+        Joonas Lahtinen <joonas.lahtinen@linux.intel.com>,
+        Rodrigo Vivi <rodrigo.vivi@intel.com>,
+        Tvrtko Ursulin <tvrtko.ursulin@linux.intel.com>,
+        David Airlie <airlied@gmail.com>,
+        Daniel Vetter <daniel@ffwll.ch>,
+        Halil Pasic <pasic@linux.ibm.com>,
+        Vineeth Vijayan <vneethv@linux.ibm.com>,
+        Peter Oberparleiter <oberpar@linux.ibm.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Tony Krowiak <akrowiak@linux.ibm.com>,
+        Jason Herne <jjherne@linux.ibm.com>,
+        Harald Freudenberger <freude@linux.ibm.com>,
+        Diana Craciun <diana.craciun@oss.nxp.com>,
+        Eric Auger <eric.auger@redhat.com>,
+        Kirti Wankhede <kwankhede@nvidia.com>,
+        Abhishek Sahu <abhsahu@nvidia.com>,
+        Yishai Hadas <yishaih@nvidia.com>,
+        intel-gvt-dev@lists.freedesktop.org,
+        intel-gfx@lists.freedesktop.org, dri-devel@lists.freedesktop.org,
+        linux-kernel@vger.kernel.org, linux-s390@vger.kernel.org,
+        kvm@vger.kernel.org
+References: <20221102150152.2521475-1-farman@linux.ibm.com>
+ <20221102150152.2521475-7-farman@linux.ibm.com>
+From:   Matthew Rosato <mjrosato@linux.ibm.com>
+In-Reply-To: <20221102150152.2521475-7-farman@linux.ibm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-TM-AS-GCONF: 00
+X-Proofpoint-GUID: VQwyVYCNSljC-7wAYhpPYTtdNnyaivAb
+X-Proofpoint-ORIG-GUID: -oovFYQTH-gFlxW1Bo6bX3QfSC7EXS1O
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.219,Aquarius:18.0.895,Hydra:6.0.545,FMLib:17.11.122.1
+ definitions=2022-11-03_04,2022-11-03_01,2022-06-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 impostorscore=0
+ lowpriorityscore=0 phishscore=0 mlxlogscore=999 suspectscore=0
+ malwarescore=0 spamscore=0 bulkscore=0 priorityscore=1501 clxscore=1015
+ mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.12.0-2210170000 definitions=main-2211030161
+X-Spam-Status: No, score=-2.0 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,
+        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 12:25:32PM -0700, Ashok Raj wrote:
-> CPU microcode has stayed the same for over 15 years roughly. Changing
-> formats isn't something that's done lightly especially since there is cost
-> of enabling in all OS's. 
+On 11/2/22 11:01 AM, Eric Farman wrote:
+> Now that we have a reasonable separation of structs that follow
+> the subchannel and mdev lifecycles, there's no reason we can't
+> call the official vfio_alloc_device routine for our private data,
+> and behave like everyone else.
+> 
+> Signed-off-by: Eric Farman <farman@linux.ibm.com>
+> Reviewed-by: Kevin Tian <kevin.tian@intel.com>
+> ---
+>  drivers/s390/cio/vfio_ccw_drv.c     | 18 ------------------
+>  drivers/s390/cio/vfio_ccw_ops.c     | 28 ++++++++++++++++++----------
+>  drivers/s390/cio/vfio_ccw_private.h |  2 --
+>  drivers/vfio/vfio_main.c            | 10 +++++-----
+>  include/linux/vfio.h                |  2 --
+>  5 files changed, 23 insertions(+), 37 deletions(-)
+> 
+> diff --git a/drivers/s390/cio/vfio_ccw_drv.c b/drivers/s390/cio/vfio_ccw_drv.c
+> index 041cc0860f0e..fd58c0f4f8cc 100644
+> --- a/drivers/s390/cio/vfio_ccw_drv.c
+> +++ b/drivers/s390/cio/vfio_ccw_drv.c
+> @@ -151,24 +151,6 @@ static void vfio_ccw_sch_irq(struct subchannel *sch)
+>  	vfio_ccw_fsm_event(private, VFIO_CCW_EVENT_INTERRUPT);
+>  }
+>  
+> -void vfio_ccw_free_private(struct vfio_ccw_private *private)
+> -{
+> -	struct vfio_ccw_crw *crw, *temp;
+> -
+> -	list_for_each_entry_safe(crw, temp, &private->crw, next) {
+> -		list_del(&crw->next);
+> -		kfree(crw);
+> -	}
+> -
+> -	kmem_cache_free(vfio_ccw_crw_region, private->crw_region);
+> -	kmem_cache_free(vfio_ccw_schib_region, private->schib_region);
+> -	kmem_cache_free(vfio_ccw_cmd_region, private->cmd_region);
+> -	kmem_cache_free(vfio_ccw_io_region, private->io_region);
+> -	kfree(private->cp.guest_cp);
+> -	mutex_destroy(&private->io_mutex);
+> -	kfree(private);
+> -}
+> -
+>  static void vfio_ccw_free_parent(struct device *dev)
+>  {
+>  	struct vfio_ccw_parent *parent = container_of(dev, struct vfio_ccw_parent, dev);
+> diff --git a/drivers/s390/cio/vfio_ccw_ops.c b/drivers/s390/cio/vfio_ccw_ops.c
+> index 8a929a9cf3c6..1155f8bcedd9 100644
+> --- a/drivers/s390/cio/vfio_ccw_ops.c
+> +++ b/drivers/s390/cio/vfio_ccw_ops.c
+> @@ -102,15 +102,10 @@ static int vfio_ccw_mdev_probe(struct mdev_device *mdev)
+>  	struct vfio_ccw_private *private;
+>  	int ret;
+>  
+> -	private = kzalloc(sizeof(*private), GFP_KERNEL);
+> -	if (!private)
+> -		return -ENOMEM;
+> -
+> -	ret = vfio_init_device(&private->vdev, &mdev->dev, &vfio_ccw_dev_ops);
+> -	if (ret) {
+> -		kfree(private);
+> -		return ret;
+> -	}
+> +	private = vfio_alloc_device(vfio_ccw_private, vdev, &mdev->dev,
+> +				    &vfio_ccw_dev_ops);
+> +	if (IS_ERR(private))
+> +		return PTR_ERR(private);
 
-Yeah, because it has been that way for the last 15 years and that means
-it'll not change in the future either. Yeah, right.
+OK, and now it makes sense to switch to IS_ERR since _vfio_alloc_device uses ERR_PTR.  
 
-> Even if its only a few hundred lines of code, it seems odd to simply
-> duplicate for the sake of fear of testing.
+Reviewed-by: Matthew Rosato <mjrosato@linux.ibm.com>
 
-I don't think I ever said "fear" but rather that it would be real hard
-to test. But it's not like you're reading my mails properly.
-
-But don't worry about it. We'll change the microcode loader and if we
-break the IFS thing in the process, then, oh well, sh*t happens.
-
--- 
-Regards/Gruss,
-    Boris.
-
-https://people.kernel.org/tglx/notes-about-netiquette
