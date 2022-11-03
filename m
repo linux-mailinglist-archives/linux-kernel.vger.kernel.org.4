@@ -2,88 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id EB5DD617466
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 03:49:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C2FD617469
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 03:50:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230073AbiKCCto (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 22:49:44 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41598 "EHLO
+        id S230258AbiKCCuD (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 22:50:03 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41854 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229570AbiKCCtj (ORCPT
+        with ESMTP id S230077AbiKCCuA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 22:49:39 -0400
-Received: from out2.migadu.com (out2.migadu.com [IPv6:2001:41d0:2:aacc::])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BAE596327;
-        Wed,  2 Nov 2022 19:49:37 -0700 (PDT)
-Content-Type: text/plain;
-        charset=utf-8
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.dev; s=key1;
-        t=1667443775;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=o9XdBdpdcG1/NkMU2aaMoc8QZfSgfsLLPXvYeGPTeUY=;
-        b=gd3IyuG/n82G0J624HScRl7Cu7uerzZIPzi0GblFWqs2cgvdf1IRZZrXl28hHno3iKYGkP
-        aKzHQUKDA6jjjFMdpUo9UwmVc/NXfUDTzfD24vdzdd4DNAGB8liwZ655wekHdp7A5Zob5i
-        qbNEmS2q1/4n2GYtiXg14HQcwxmfQ7U=
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3731.200.110.1.12\))
-Subject: Re: [PATCH V14 4/4] LoongArch: Enable
- ARCH_WANT_HUGETLB_PAGE_OPTIMIZE_VMEMMAP
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From:   Muchun Song <muchun.song@linux.dev>
-In-Reply-To: <20221027125253.3458989-5-chenhuacai@loongson.cn>
-Date:   Thu, 3 Nov 2022 10:49:17 +0800
-Cc:     Arnd Bergmann <arnd@arndb.de>, Huacai Chen <chenhuacai@kernel.org>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>,
-        Andy Lutomirski <luto@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Catalin Marinas <catalin.marinas@arm.com>,
-        Will Deacon <will@kernel.org>,
-        Dinh Nguyen <dinguyen@kernel.org>, loongarch@lists.linux.dev,
-        linux-arch@vger.kernel.org, Xuefeng Li <lixuefeng@loongson.cn>,
-        Guo Ren <guoren@kernel.org>, Xuerui Wang <kernel@xen0n.name>,
-        Jiaxun Yang <jiaxun.yang@flygoat.com>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Linux Memory Management List <linux-mm@kvack.org>,
-        linux-mips@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arm-kernel@lists.infradead.org,
-        Feiyang Chen <chenfeiyang@loongson.cn>,
-        =?utf-8?Q?Philippe_Mathieu-Daud=C3=A9?= <philmd@linaro.org>
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <F610957D-A6EE-4211-9E1A-BFB9389856AD@linux.dev>
-References: <20221027125253.3458989-1-chenhuacai@loongson.cn>
- <20221027125253.3458989-5-chenhuacai@loongson.cn>
-To:     Huacai Chen <chenhuacai@loongson.cn>
-X-Migadu-Flow: FLOW_OUT
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_LOW,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+        Wed, 2 Nov 2022 22:50:00 -0400
+Received: from sin.source.kernel.org (sin.source.kernel.org [IPv6:2604:1380:40e1:4800::1])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 15CAD64D8;
+        Wed,  2 Nov 2022 19:49:55 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by sin.source.kernel.org (Postfix) with ESMTPS id 2C1AECE24A0;
+        Thu,  3 Nov 2022 02:49:54 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D23BDC433C1;
+        Thu,  3 Nov 2022 02:49:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667443792;
+        bh=WyKwDvRZwnwe8d8BZAX+ibnlZ7XBzwl/srOk424MBBs=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=p7PWe6V07dCQyz8C6ULuahnVIvB6fXcjzFN8UeE99X8szfwc7nazBbq6ufFNbkb2w
+         tbIJrxJW/29aSrILSQumm7mLuAXp04ineRfUwBJo0tmeJGPw4SO313lKFXi2qcbBBt
+         f3XmgKz9+D4DvMi3YxZN1gis4JRhid5/rz/5Z+6GsGupSre+9e1VZIH/J7Ud9otvtX
+         hg8sArZCMAlMVllKNvOi9okzso7c9BCTuv27E2lv3IKdN1UZrvY61/w4iHB0tXu8PY
+         R+RZgnVNP32sN3hq8A+Sxsqup5NZAf7/MZHGNaUbgfxn1EzUv64WyefHqc4v1ky50w
+         tnwCKG8zdBfVQ==
+Date:   Wed, 2 Nov 2022 21:49:49 -0500
+From:   Bjorn Andersson <andersson@kernel.org>
+To:     Johan Hovold <johan@kernel.org>,
+        Shazad Hussain <quic_shazhuss@quicinc.com>
+Cc:     Stephen Boyd <sboyd@kernel.org>, bmasney@redhat.com,
+        Andy Gross <agross@kernel.org>,
+        Konrad Dybcio <konrad.dybcio@somainline.org>,
+        Michael Turquette <mturquette@baylibre.com>,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v1] clk: qcom: gcc-sc8280xp: add cxo as parent for
+ gcc_ufs_ref_clkref_clk
+Message-ID: <20221103024949.lw4g2tavk7uw5xt4@builder.lan>
+References: <20221030142333.31019-1-quic_shazhuss@quicinc.com>
+ <20221101182402.32CE5C433C1@smtp.kernel.org>
+ <Y2IZaxukERXNcPGR@hovoldconsulting.com>
+ <c96304da-f57e-4926-2f3f-665c2054fb00@quicinc.com>
+ <Y2Imnf1+v5j5CH9r@hovoldconsulting.com>
+ <bb590bfb-07a4-97c1-e5c0-d00d840e2e11@quicinc.com>
+ <Y2I3tekSAO42r0xR@hovoldconsulting.com>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y2I3tekSAO42r0xR@hovoldconsulting.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
+On Wed, Nov 02, 2022 at 10:26:13AM +0100, Johan Hovold wrote:
+> On Wed, Nov 02, 2022 at 02:15:26PM +0530, Shazad Hussain wrote:
+> > On 11/2/2022 1:43 PM, Johan Hovold wrote:
+> 
+> > > Right, but if the PHYs really requires CX and it is not an ancestor of
+> > > the refclk then this should be described by the binding (and not be
+> > > hidden away in the clock driver).
+> 
+> > This makes sense, will be posting v2 post for the same.
+> > I assume this should use the Fixes tag then !
+> 
+> Yeah, I guess to you can add a fixes tag for the commits adding support
+> for sc8280xp to the UFS PHY binding and driver.
+> 
+> But please do check with the hardware documentation first so we get this
+> right this time.
+> 
+> I've already asked Bjorn to see what he can dig out as it is still not
+> clear how the two "card" refclocks (GCC_UFS_CARD_CLKREF_CLK and
+> GCC_UFS_1_CARD_CLKREF_CLK) are supposed to be used.
+> 
+
+We've come full circle and Shazad's patch came from that discussion :)
+
+In line with the downstream dts, we have GCC_UFS{,_1}_CARD_CLKREF_CLK
+providing a reference clock to the two phys. Then GCC_UFS_REF_CLKREF_CLK
+feeds the UFS refclock pads (both of them), which connect to the memory
+device(s).
+
+In other words, GCC_UFS{,_1}_CARD_CLKREF_CLK should be "ref" in
+respective phy.
+
+GCC_UFS_REF_CLKREF_CLK is the clock to the devices, but as we don't
+represent the memory device explicitly it seems suitable to use as
+"ref_clk" in the ufshc nodes - which would then match the special
+handling of the "link clock" in the UFS driver.
 
 
-> On Oct 27, 2022, at 20:52, Huacai Chen <chenhuacai@loongson.cn> wrote:
->=20
-> From: Feiyang Chen <chenfeiyang@loongson.cn>
->=20
-> The feature of minimizing overhead of struct page associated with each
-> HugeTLB page is implemented on x86_64. However, the infrastructure of
 
-I'd like to refer to this feature as HVO (more simplified).
 
-> this feature is already there, so just select ARCH_WANT_HUGETLB_PAGE_
-> OPTIMIZE_VMEMMAP is enough to enable this feature for LoongArch.
->=20
-> Reviewed-by: Philippe Mathieu-Daud=C3=A9 <philmd@linaro.org>
-> Signed-off-by: Feiyang Chen <chenfeiyang@loongson.cn>
-> Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+All three clocks are sourced off the CXO pad, so I would like this patch
+to cover at least all of these. And
 
-Acked-by: Muchun Song <songmuchun@bytedance.com>
+Fixes: d65d005f9a6c ("clk: qcom: add sc8280xp GCC driver")
 
-Thanks.=
+seems to be in order for such patch.
+
+
+@Johan, would you mind writing a dts patch flipping the clocks around
+and Shazad can update this patch?
+
+Regards,
+Bjorn
