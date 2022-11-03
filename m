@@ -2,64 +2,162 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CDCA8617442
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 03:33:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9FFBE617433
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 03:29:09 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230159AbiKCCd4 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 22:33:56 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33462 "EHLO
+        id S230220AbiKCC3H (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 22:29:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59070 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229992AbiKCCdx (ORCPT
+        with ESMTP id S229587AbiKCC3E (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 22:33:53 -0400
-X-Greylist: delayed 63 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Wed, 02 Nov 2022 19:33:47 PDT
-Received: from jari.cn (unknown [218.92.28.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 8E59D12A98;
-        Wed,  2 Nov 2022 19:33:47 -0700 (PDT)
-Received: by ajax-webmail-localhost.localdomain (Coremail) ; Thu, 3 Nov 2022
- 10:27:56 +0800 (GMT+08:00)
-X-Originating-IP: [182.148.15.109]
-Date:   Thu, 3 Nov 2022 10:27:56 +0800 (GMT+08:00)
-X-CM-HeaderCharset: UTF-8
-From:   wangkailong@jari.cn
-To:     jdelvare@suse.com, linux@roeck-us.net
-Cc:     linux-hwmon@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: [PATCH] hwmon: (amc6821) Fix unsigned expression compared with zero
-X-Priority: 3
-X-Mailer: Coremail Webmail Server Version XT6.0.1 build 20210329(c53f3fee)
- Copyright (c) 2002-2022 www.mailtech.cn
- mispb-4e503810-ca60-4ec8-a188-7102c18937cf-zhkzyfz.cn
-Content-Transfer-Encoding: base64
-Content-Type: text/plain; charset=UTF-8
+        Wed, 2 Nov 2022 22:29:04 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 7A57513D47
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 19:28:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667442490;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+         content-transfer-encoding:content-transfer-encoding:
+         in-reply-to:in-reply-to:references:references;
+        bh=v5nZZgveC2PTuRPjJi9xjT+244TM4nAFvJacQmawNfo=;
+        b=fRTMkZ9tuYdTAw0LKEHipZzo3OSDgHaZVdr2CKdZzjBnfJK8Hobd4jIh3Q9KyVAR0jrJbM
+        jDh0eGpY1eS+Qokjl7yUUhi21NXQshV18mOdo9Ri/uYivKqKUvJUIZD1qaWCwX++7DL1d5
+        b2pvGl2Q1nuiw6GRDW/lRc+srS0Dscg=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-590-PPa-VNn5Mo6of6c8OMZf3A-1; Wed, 02 Nov 2022 22:28:06 -0400
+X-MC-Unique: PPa-VNn5Mo6of6c8OMZf3A-1
+Received: from smtp.corp.redhat.com (int-mx07.intmail.prod.int.rdu2.redhat.com [10.11.54.7])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 13FBF29AA3B9;
+        Thu,  3 Nov 2022 02:28:06 +0000 (UTC)
+Received: from [10.22.32.82] (unknown [10.22.32.82])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 80B36140EBF5;
+        Thu,  3 Nov 2022 02:28:05 +0000 (UTC)
+Message-ID: <1fdbdf78-cdca-975f-7f57-e391263d0aec@redhat.com>
+Date:   Wed, 2 Nov 2022 22:28:05 -0400
 MIME-Version: 1.0
-Message-ID: <1872639a.89.1843b5106aa.Coremail.wangkailong@jari.cn>
-X-Coremail-Locale: zh_CN
-X-CM-TRANSID: AQAAfwD3C+ItJ2NjvEEBAA--.41W
-X-CM-SenderInfo: 5zdqwypdlo00nj6mt2flof0/1tbiAQAOB2FEYx0BLQALs0
-X-Coremail-Antispam: 1Ur529EdanIXcx71UUUUU7IcSsGvfJ3iIAIbVAYjsxI4VWxJw
-        CS07vEb4IE77IF4wCS07vE1I0E4x80FVAKz4kxMIAIbVAFxVCaYxvI4VCIwcAKzIAtYxBI
-        daVFxhVjvjDU=
-X-Spam-Status: No, score=3.6 required=5.0 tests=BAYES_05,RCVD_IN_PBL,RDNS_NONE,
-        T_SPF_HELO_PERMERROR,T_SPF_PERMERROR,XPRIO autolearn=no
-        autolearn_force=no version=3.4.6
-X-Spam-Level: ***
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.0
+Subject: Re: [PATCH clocksource 2/2] clocksource: Exponential backoff for
+ load-induced bogus watchdog reads
+Content-Language: en-US
+To:     "Paul E. McKenney" <paulmck@kernel.org>, tglx@linutronix.de
+Cc:     linux-kernel@vger.kernel.org, john.stultz@linaro.org,
+        sboyd@kernel.org, corbet@lwn.net, Mark.Rutland@arm.com,
+        maz@kernel.org, kernel-team@meta.com, neeraju@codeaurora.org,
+        ak@linux.intel.com, feng.tang@intel.com, zhengjun.xing@intel.com,
+        John Stultz <jstultz@google.com>
+References: <20221102184001.GA1306489@paulmck-ThinkPad-P17-Gen-1>
+ <20221102184009.1306751-2-paulmck@kernel.org>
+From:   Waiman Long <longman@redhat.com>
+In-Reply-To: <20221102184009.1306751-2-paulmck@kernel.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.7
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Rml4IHRoZSBmb2xsb3dpbmcgY29jY2ljaGVjayB3YXJuaW5nOgoKZHJpdmVycy9od21vbi9hbWM2
-ODIxLmM6MjE1OiBXQVJOSU5HOiBVbnNpZ25lZCBleHByZXNzaW9uIGNvbXBhcmVkCndpdGggemVy
-bzogcmVnID4gMApkcml2ZXJzL2h3bW9uL2FtYzY4MjEuYzoyMjg6IFdBUk5JTkc6IFVuc2lnbmVk
-IGV4cHJlc3Npb24gY29tcGFyZWQKd2l0aCB6ZXJvOiByZWcgPiAwCgpTaWduZWQtb2ZmLWJ5OiBL
-YWlMb25nIFdhbmcgPHdhbmdrYWlsb25nQGphcmkuY24+Ci0tLQogZHJpdmVycy9od21vbi9hbWM2
-ODIxLmMgfCAyICstCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDEgZGVsZXRpb24o
-LSkKCmRpZmYgLS1naXQgYS9kcml2ZXJzL2h3bW9uL2FtYzY4MjEuYyBiL2RyaXZlcnMvaHdtb24v
-YW1jNjgyMS5jCmluZGV4IDNiZmQxMmZmNGIzYy4uMWY1MzgyZjhkNTJiIDEwMDY0NAotLS0gYS9k
-cml2ZXJzL2h3bW9uL2FtYzY4MjEuYworKysgYi9kcml2ZXJzL2h3bW9uL2FtYzY4MjEuYwpAQCAt
-MTY2LDcgKzE2Niw3IEBAIHN0YXRpYyBzdHJ1Y3QgYW1jNjgyMV9kYXRhICphbWM2ODIxX3VwZGF0
-ZV9kZXZpY2Uoc3RydWN0IGRldmljZSAqZGV2KQogCXN0cnVjdCBhbWM2ODIxX2RhdGEgKmRhdGEg
-PSBkZXZfZ2V0X2RydmRhdGEoZGV2KTsKIAlzdHJ1Y3QgaTJjX2NsaWVudCAqY2xpZW50ID0gZGF0
-YS0+Y2xpZW50OwogCWludCB0aW1lb3V0ID0gSFo7Ci0JdTggcmVnOworCWludCByZWc7CiAJaW50
-IGk7CiAKIAltdXRleF9sb2NrKCZkYXRhLT51cGRhdGVfbG9jayk7Ci0tIAoyLjI1LjEK
+On 11/2/22 14:40, Paul E. McKenney wrote:
+> The clocksource watchdog will reject measurements that are excessively
+> delayed, that is, by more than 1.5 seconds beyond the intended 0.5-second
+> watchdog interval.  On an extremely busy system, this can result in a
+> console message being printed every two seconds.  This is excessively
+> noisy for a non-error condition.
+>
+> Therefore, apply exponential backoff to these messages.  This exponential
+> backoff is capped at 1024 times the watchdog interval, which comes to
+> not quite one message per ten minutes.
+>
+> Please note that the bogus watchdog reads that occur when the watchdog
+> interval is less than 0.125 seconds are still printed unconditionally
+> because these likely correspond to a serious error condition in the
+> timer code or hardware.
+>
+> [ paulmck: Apply Feng Tang feedback. ]
+>
+> Reported-by: Waiman Long <longman@redhat.com>
+> Reported-by: Feng Tang <feng.tang@intel.com>
+> Signed-off-by: Paul E. McKenney <paulmck@kernel.org>
+> Cc: John Stultz <jstultz@google.com>
+> Cc: Thomas Gleixner <tglx@linutronix.de>
+> Cc: Stephen Boyd <sboyd@kernel.org>
+> Cc: Feng Tang <feng.tang@intel.com>
+> Cc: Waiman Long <longman@redhat.com>
+> ---
+>   include/linux/clocksource.h |  4 ++++
+>   kernel/time/clocksource.c   | 31 +++++++++++++++++++++++++------
+>   2 files changed, 29 insertions(+), 6 deletions(-)
+>
+> diff --git a/include/linux/clocksource.h b/include/linux/clocksource.h
+> index 1d42d4b173271..daac05aedf56a 100644
+> --- a/include/linux/clocksource.h
+> +++ b/include/linux/clocksource.h
+> @@ -125,6 +125,10 @@ struct clocksource {
+>   	struct list_head	wd_list;
+>   	u64			cs_last;
+>   	u64			wd_last;
+> +	u64			wd_last_bogus;
+> +	int			wd_bogus_shift;
+> +	unsigned long		wd_bogus_count;
+> +	unsigned long		wd_bogus_count_last;
+>   #endif
+>   	struct module		*owner;
+>   };
+> diff --git a/kernel/time/clocksource.c b/kernel/time/clocksource.c
+> index 3f5317faf891f..de8047b6720f5 100644
+> --- a/kernel/time/clocksource.c
+> +++ b/kernel/time/clocksource.c
+> @@ -442,14 +442,33 @@ static void clocksource_watchdog(struct timer_list *unused)
+>   
+>   		/* Check for bogus measurements. */
+>   		wdi = jiffies_to_nsecs(WATCHDOG_INTERVAL);
+> -		if (wd_nsec < (wdi >> 2)) {
+> -			/* This usually indicates broken timer code or hardware. */
+> -			pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced only %lld ns during %d-jiffy time interval, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL);
+> +		if (wd_nsec > (wdi << 2) || cs_nsec > (wdi << 2)) {
+> +			bool needwarn = false;
+> +			u64 wd_lb;
+> +
+> +			cs->wd_bogus_count++;
+> +			if (!cs->wd_bogus_shift) {
+> +				needwarn = true;
+> +			} else {
+> +				delta = clocksource_delta(wdnow, cs->wd_last_bogus, watchdog->mask);
+> +				wd_lb = clocksource_cyc2ns(delta, watchdog->mult, watchdog->shift);
+> +				if ((1 << cs->wd_bogus_shift) * wdi <= wd_lb)
+> +					needwarn = true;
+> +			}
+> +			if (needwarn) {
+> +				/* This can happen on busy systems, which can delay the watchdog. */
+> +				pr_warn("timekeeping watchdog on CPU%d: Watchdog clocksource '%s' advanced an excessive %lld ns during %d-jiffy time interval (%lu additional), probable CPU overutilization, skipping watchdog check.\n", smp_processor_id(), watchdog->name, wd_nsec, WATCHDOG_INTERVAL, cs->wd_bogus_count - cs->wd_bogus_count_last);
+> +				cs->wd_last_bogus = wdnow;
+> +				if (cs->wd_bogus_shift < 10)
+> +					cs->wd_bogus_shift++;
+> +				cs->wd_bogus_count_last = cs->wd_bogus_count;
+
+I don't think you need to keep 2 counters to store the number of skipped 
+warnings. How about just use a single wd_bogus_skip_count like
+
+If (needwarn) {
+     pr_warn("... %lu additonal ...", ... cs->wd_bogus_skip_count);
+     cs->wd_bogus_skip_count = 0:
+} else {
+     cs->wd_bogus_skip_count++;
+}
+
+Cheers,
+Longman
+
+
