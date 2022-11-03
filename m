@@ -2,107 +2,96 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 592E3617637
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 06:33:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id A38EC617636
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 06:33:06 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230305AbiKCFd1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 01:33:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58508 "EHLO
+        id S230183AbiKCFdE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 01:33:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58206 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229436AbiKCFdY (ORCPT
+        with ESMTP id S229436AbiKCFdA (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 01:33:24 -0400
-Received: from mail-pf1-x42f.google.com (mail-pf1-x42f.google.com [IPv6:2607:f8b0:4864:20::42f])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9B27118B37
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 22:33:18 -0700 (PDT)
-Received: by mail-pf1-x42f.google.com with SMTP id m6so726252pfb.0
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 22:33:18 -0700 (PDT)
+        Thu, 3 Nov 2022 01:33:00 -0400
+Received: from mail-ej1-x634.google.com (mail-ej1-x634.google.com [IPv6:2a00:1450:4864:20::634])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 57970B1C7
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 22:32:59 -0700 (PDT)
+Received: by mail-ej1-x634.google.com with SMTP id f5so2432099ejc.5
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 22:32:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=csie-ntu-edu-tw.20210112.gappssmtp.com; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Y0jwfzDPpiiIA6G13h9XyMG8TS+aWs3VsgaKFJG4r/Y=;
-        b=mxroxZXUMUkz4XhlkDgs8s8+7XrSh7WWJTclkV3qQTHFYNn2rr7B1rVc7FQ1vwg5rd
-         aeNnyDeufwx5om4LYQWB4eKUVZgU8A1BQSFYQ2aV9ergBjzRyamSGf7rr+4IudJT50tt
-         FcdfRX2xMd8Iy1p5KKi88ezGSZmzUzHdxpfAIGWws5w0Yej4kOFaki8PnHwh1PtwhBsS
-         Ob3p5kbpMuqjL5VdPdOtzazOwqx4gJSiup/Lj2Y+8DC+UvJMICJsmTnQtamiMSDhJa33
-         Jjfl97tazJ5vGcIPXll1dcMTjCD/02gBAxRz+HTn7Rb6TO+K7zCEGdHiAufdXzkP+ENJ
-         9AHg==
+        d=linaro.org; s=google;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=QxHwdNSRZxWkDQkg6uvUY0ujmFP08SAArZlQSADznoA=;
+        b=LICjpEJhenrB9iXeBKaktSOAa9LKw7Bcuk88goXAS2rIZYjDAJtvETrJ+FoanrXgAB
+         jDMd0lxbkdvDlDDFVGZIB1I+kzciAEHFftg7imFWmgora0eGPF77S8AemRQC0RMwgtvY
+         cC6pjvWylf9ocrry8Y7XIbMF2YHC2KD/L+PqX0FOppLS2bIIxDaL8+jQXn9Wr3zMqIZE
+         QD5p1/QV9VngYIimvpKq2ATIUALXnkJXkxlO/EmkubHSoM+rVx3OnaYtqfWijnYqEo2M
+         EPBoZPXWKeZ7VzLMTw0PhNR8G7khEbavKWyPu/Lcz7IfVs3V2k2NvOGfPQWfZscdAsec
+         Jqqw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=Y0jwfzDPpiiIA6G13h9XyMG8TS+aWs3VsgaKFJG4r/Y=;
-        b=E/5s5auBMuJh7EqdQ44EBeWz9MXdc5X81dfkw/wPr4oQGZKSJmmEPFI0cwwG6KZWNO
-         wfRp2spvhdE7DD88ELiXa5ASnIkU8CmSEHufhWGbXkoRTrMa/1OGzwmvgWXhEHRkqYbt
-         sBDmsiNZadUVoBzgbkTcaVcrVETSpF9nzExV9JT6uQfcIQQj65/Fn5KHEQpdNmHw09Wc
-         7odQUv5Lj82OlAry/WQE7HON0cJsK7Tsx2DthQEOONIPuMvgiCtxBJ+JZsvIEM66ra9b
-         EwxYX91uTQA/oZ/7CtB9lVB1W2Y9DgtGHtdHeDGzBadIGaV+ymzQpboMZniz1oN45y63
-         lNNg==
-X-Gm-Message-State: ACrzQf0pdjFH3dpZ/8/V4J2JsjOlMzhZlIcX0j/arxLTHV8kgk4srikR
-        vuvbrfXYjCap8K7SO1bz852KV7XReKYfvlOzdXYezKV5AZ0hwVRwcQ131KLx76sOp3ZM9TJtwAr
-        odgGK+spVLkRAAzbzMM/lTuJYp2FAZQ228XTWnu/Pil+p5dAijAYWnOnk5Dd+LeYL0EX1JS16ud
-        PHZDucFpXXTJ0jPHl1r9+lKifXO3E=
-X-Google-Smtp-Source: AMsMyM5YD3Kv+bRTItC2EnabSgqHnEdgAworw+tKJ/WaqkqybiIf2VNdq72dJjo7lmn9TaCyghDjcg==
-X-Received: by 2002:a63:6909:0:b0:41c:9f4f:a63c with SMTP id e9-20020a636909000000b0041c9f4fa63cmr25661260pgc.76.1667453597997;
-        Wed, 02 Nov 2022 22:33:17 -0700 (PDT)
-Received: from localhost.localdomain (2001-b011-3803-1d6f-4606-a53e-f8a5-75e1.dynamic-ip6.hinet.net. [2001:b011:3803:1d6f:4606:a53e:f8a5:75e1])
-        by smtp.gmail.com with ESMTPSA id n17-20020a17090ac69100b00212d4cbcbfdsm67368pjt.22.2022.11.02.22.33.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 22:33:16 -0700 (PDT)
-From:   Wei-Lin Chang <r09922117@csie.ntu.edu.tw>
-To:     maz@kernel.org
-Cc:     james.morse@arm.com, alexandru.elisei@arm.com,
-        suzuki.poulose@arm.com, oliver.upton@linux.dev,
-        catalin.marinas@arm.com, will@kernel.org,
-        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
-        kvmarm@lists.cs.columbia.edu, linux-kernel@vger.kernel.org,
-        Wei-Lin Chang <r09922117@csie.ntu.edu.tw>
-Subject: [PATCH] KVM: arm64: Update comment of create_hyp_mappings
-Date:   Thu,  3 Nov 2022 13:32:28 +0800
-Message-Id: <20221103053228.961591-1-r09922117@csie.ntu.edu.tw>
-X-Mailer: git-send-email 2.34.1
+        bh=QxHwdNSRZxWkDQkg6uvUY0ujmFP08SAArZlQSADznoA=;
+        b=k5X+E7WG7LKmm8JL6WQedtA/CXpAOdLmNwOb6pBqOMxgFr3N2OaPUllBSaIJ1fHYld
+         WvLSbedRxgEgHB60wQXowTQKHGM9gf3zfIzn15s7z6KATTJ0CyqxLNcWodH/ZCOrMa5D
+         JOCsXDjmITAWJ0u1eA4+esCrEGpMsIrmqKZtOqJrvJLLrIh1rzn2/Ard6W7z8eGMdfu2
+         3D7cJzKPBvs/4jhatBo4QXXFYmoXNX+H8v9CQkup6ttPIRMF115ZPM/W5e/K47jtBwjN
+         ltRvs0lk44mwlF20A2SoXWcvjTNCcHMkB+7nshjDMPAwOfDJZsaf8UTYohEQdEMDLorB
+         dDrw==
+X-Gm-Message-State: ACrzQf21rU4chEv1tC11rI4tp5dhRUmNSpehsJ3k9Rb5jirNvShtkqYi
+        TwPGggOMyGXZrZZRFZAKBMTI4Vv6YVV5ENG0LpWttg==
+X-Google-Smtp-Source: AMsMyM4NmLQqfXH0oBGob4NJPJ7/M23favSgwhq8c2XXT62hem2CFukSGO7O+5fEi9nnXj/gzUeTvplpU4Ba/D10EcQ=
+X-Received: by 2002:a17:907:7b93:b0:770:1d4f:4de9 with SMTP id
+ ne19-20020a1709077b9300b007701d4f4de9mr27740534ejc.201.1667453577739; Wed, 02
+ Nov 2022 22:32:57 -0700 (PDT)
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Gm-Spam: 0
-X-Gm-Phishy: 0
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,T_SPF_PERMERROR
-        autolearn=ham autolearn_force=no version=3.4.6
+References: <CA+G9fYsGFoC5TciCuijZXLx48TZnoTSkq=iUgb+vFdi9EYTucw@mail.gmail.com>
+ <Y2LgMYsgj8c7Aj1U@kroah.com>
+In-Reply-To: <Y2LgMYsgj8c7Aj1U@kroah.com>
+From:   Naresh Kamboju <naresh.kamboju@linaro.org>
+Date:   Thu, 3 Nov 2022 11:02:46 +0530
+Message-ID: <CA+G9fYunBonRypu0QruuH23H0chET=sZH7FfbK8nGabkCFd9sg@mail.gmail.com>
+Subject: Re: qemu-i386: perf: BUG: kernel NULL pointer dereference, address: 00000148
+To:     Greg KH <gregkh@linuxfoundation.org>
+Cc:     linux-perf-users@vger.kernel.org,
+        open list <linux-kernel@vger.kernel.org>,
+        Arnaldo Carvalho de Melo <acme@kernel.org>,
+        Peter Zijlstra <peterz@infradead.org>,
+        regressions@lists.linux.dev, lkft-triage@lists.linaro.org,
+        Marco Elver <elver@google.com>,
+        "Eric W. Biederman" <ebiederm@xmission.com>
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-HYP_PAGE_OFFSET is removed since 4.8, and the method for generating Hyp
-VAs has evolved. Update the functional description of
-create_hyp_mappings accordingly.
+On Thu, 3 Nov 2022 at 02:54, Greg KH <gregkh@linuxfoundation.org> wrote:
+>
+> On Wed, Nov 02, 2022 at 06:42:52PM +0530, Naresh Kamboju wrote:
+> > Following kernel BUG: noticed on qemu-i386 while running perf test suite
+> > on stable-rc 6.0.7-rc1 the image was built with gcc-11.
+> >
+> > The System did not recover after the crash.
+> >
+> > Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> What is this a regression from?  Does this happen on older stable
+> kernels?  Linus's tree?
 
-Signed-off-by: Wei-Lin Chang <r09922117@csie.ntu.edu.tw>
----
- arch/arm64/kvm/mmu.c | 7 ++++---
- 1 file changed, 4 insertions(+), 3 deletions(-)
+This looks like an intermittent problem.
+I have tested multiple times and found that it is an intermittent crash
+with qemu-i386 while running stable-rc 6.x. That is the one of the reasons
+for not including the stable list and not reporting this as a regression.
 
-diff --git a/arch/arm64/kvm/mmu.c b/arch/arm64/kvm/mmu.c
-index c9a13e487..a9ae4a3f9 100644
---- a/arch/arm64/kvm/mmu.c
-+++ b/arch/arm64/kvm/mmu.c
-@@ -424,9 +424,10 @@ void kvm_unshare_hyp(void *from, void *to)
-  * @to:		The virtual kernel end address of the range (exclusive)
-  * @prot:	The protection to be applied to this range
-  *
-- * The same virtual address as the kernel virtual address is also used
-- * in Hyp-mode mapping (modulo HYP_PAGE_OFFSET) to the same underlying
-- * physical pages.
-+ * The Hyp virtual address is generated by masking the kernel VA with
-+ * va_mask then inserting tag_val for the higher bits starting from
-+ * tag_lsb. See kvm_compute_layout() in va_layout.c for more info.
-+ * Both Hyp VA and kernel VA ranges map to the same underlying physical pages.
-  */
- int create_hyp_mappings(void *from, void *to, enum kvm_pgtable_prot prot)
- {
--- 
-2.34.1
+> How about 'git bisect'?
 
+Since it is an intermittent crash it is hard to bisect.
+
+- Naresh
