@@ -2,153 +2,114 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 595AF6186C7
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:59:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 256FE6186CC
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:00:07 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231664AbiKCR7T (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 13:59:19 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36478 "EHLO
+        id S231539AbiKCSAE (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 14:00:04 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35804 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231881AbiKCR7I (ORCPT
+        with ESMTP id S231942AbiKCR71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:59:08 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id CB82B2197;
-        Thu,  3 Nov 2022 10:58:59 -0700 (PDT)
-Received: from skinsburskii-cloud-desktop.internal.cloudapp.net (unknown [20.120.152.163])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 8B0A5205DA3E;
-        Thu,  3 Nov 2022 10:58:59 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 8B0A5205DA3E
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1667498339;
-        bh=Y5FIS1UinMZxnexhjB33RzhGI8ZZkhrWDexZaDMwgyw=;
-        h=Subject:From:Cc:Date:In-Reply-To:References:From;
-        b=LFRZUZTPZzXnmqxogF0vtBFfURfydGni/8XJCj3i6Dly0qcTr+ZmnBNAP/EoCqv6h
-         +ijRhkhZ74WTb0VIpahmR7TLT1lJ+4H/xug34Tg+QS6Qo/lsamBOsZvJHS+8BkGYZo
-         Pch+65CysJw0L85LGxwqrcXTMiY1bmZN/OmYsTCQ=
-Subject: [PATCH v3 3/4] drivers/clocksource/hyper-v: Use TSC PFN getter to map
- vvar page
-From:   Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-Cc:     Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>,
+        Thu, 3 Nov 2022 13:59:27 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CD6EC219B
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:59:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667498359; x=1699034359;
+  h=from:to:cc:subject:date:message-id:in-reply-to:
+   references:mime-version:content-transfer-encoding;
+  bh=0V5W1QoeZ7jgTpO6yb+rrh5iM/UlFsilbmyJNleFWWA=;
+  b=ar9go5MU9n8Up/U4gf0nzQpEQzOMzRgdQfWwkvQgxEdfI0JCIxnUUh+y
+   ytyrzLsBpQhk+CpOlxZCpfnMOdfZL8rK73Q0Gw4R26s6HWEh9F5KSDbZC
+   gZzpY6o2B9fzkNua25EucdxRVJZ3kZHYcIQZOERvCGxmQWXvdl3JHuW9I
+   pwr7pzHShrfILTGa5AebMSqo+zoBI5jErx1o86CxaYdSNWaeX46HnPdv4
+   n7SVpAzbPRHnU96ILYt6wwN1JHaCeJG6dtQwZRkb1IYts+qHzXf0ZjGa1
+   J1J3W28yKBeiEfTFSnMcEZ0ajZMJcK5uKyg34P6sKMLIfPcYZwAexKlD8
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="310878483"
+X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
+   d="scan'208";a="310878483"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 10:59:19 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="809762571"
+X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
+   d="scan'208";a="809762571"
+Received: from araj-dh-work.jf.intel.com ([10.165.157.158])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 10:59:18 -0700
+From:   Ashok Raj <ashok.raj@intel.com>
+To:     Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     "LKML Mailing List" <linux-kernel@vger.kernel.org>,
+        X86-kernel <x86@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Arjan van de Ven <arjan.van.de.ven@intel.com>,
         Andy Lutomirski <luto@kernel.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-        Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-        "H. Peter Anvin" <hpa@zytor.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        linux-kernel@vger.kernel.org, linux-hyperv@vger.kernel.org,
-        mikelley@microsoft.com
-Date:   Thu, 03 Nov 2022 17:58:59 +0000
-Message-ID: <166749833939.218190.14095015146003109462.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
-In-Reply-To: <166749827889.218190.12775118554387271641.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
-References: <166749827889.218190.12775118554387271641.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
-User-Agent: StGit/0.19
+        Jacon Jun Pan <jacob.jun.pan@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Ashok Raj <ashok.raj@intel.com>
+Subject: [v2 11/13] x86/microcode/intel: Drop wbinvd() from microcode loading
+Date:   Thu,  3 Nov 2022 17:58:59 +0000
+Message-Id: <20221103175901.164783-12-ashok.raj@intel.com>
+X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20221103175901.164783-1-ashok.raj@intel.com>
+References: <20221103175901.164783-1-ashok.raj@intel.com>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-18.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,MISSING_HEADERS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>
+Some older processors had a bad interaction when updating microcode if the
+caches were dirty causing machine checks. The wbinvd() was added to
+mitigate that before performing microcode updates. Now that Linux checks
+for the minimum version before performing an update, those microcode
+revisions can't be loaded. Remove calls to wbinvd().
 
-Instead of converting the virtual address to physical directly.
-
-This is a precursor patch for the upcoming support for TSC page mapping into
-Microsoft Hypervisor root partition, where TSC PFN will be defined by the
-hypervisor and thus can't be obtained by linear translation of the physical
-address.
-
-Signed-off-by: Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>
-CC: Andy Lutomirski <luto@kernel.org>
-CC: Thomas Gleixner <tglx@linutronix.de>
-CC: Ingo Molnar <mingo@redhat.com>
-CC: Borislav Petkov <bp@alien8.de>
-CC: Dave Hansen <dave.hansen@linux.intel.com>
-CC: x86@kernel.org
-CC: "H. Peter Anvin" <hpa@zytor.com>
-CC: "K. Y. Srinivasan" <kys@microsoft.com>
-CC: Haiyang Zhang <haiyangz@microsoft.com>
-CC: Wei Liu <wei.liu@kernel.org>
-CC: Dexuan Cui <decui@microsoft.com>
-CC: Daniel Lezcano <daniel.lezcano@linaro.org>
-CC: linux-kernel@vger.kernel.org
-CC: linux-hyperv@vger.kernel.org
+Reviewed-by: Tony Luck <tony.luck@intel.com>
+Signed-off-by: Ashok Raj <ashok.raj@intel.com>
 ---
- arch/x86/entry/vdso/vma.c          |    7 +++----
- drivers/clocksource/hyperv_timer.c |    3 ++-
- include/clocksource/hyperv_timer.h |    6 ++++++
- 3 files changed, 11 insertions(+), 5 deletions(-)
+ arch/x86/kernel/cpu/microcode/intel.c | 11 -----------
+ 1 file changed, 11 deletions(-)
 
-diff --git a/arch/x86/entry/vdso/vma.c b/arch/x86/entry/vdso/vma.c
-index 311eae30e089..6976416b2c9f 100644
---- a/arch/x86/entry/vdso/vma.c
-+++ b/arch/x86/entry/vdso/vma.c
-@@ -210,11 +210,10 @@ static vm_fault_t vvar_fault(const struct vm_special_mapping *sm,
- 					pgprot_decrypted(vma->vm_page_prot));
- 		}
- 	} else if (sym_offset == image->sym_hvclock_page) {
--		struct ms_hyperv_tsc_page *tsc_pg = hv_get_tsc_page();
-+		pfn = hv_get_tsc_pfn();
+diff --git a/arch/x86/kernel/cpu/microcode/intel.c b/arch/x86/kernel/cpu/microcode/intel.c
+index 5d2ee76cd36c..7086670da606 100644
+--- a/arch/x86/kernel/cpu/microcode/intel.c
++++ b/arch/x86/kernel/cpu/microcode/intel.c
+@@ -541,11 +541,6 @@ static int apply_microcode_early(struct ucode_cpu_info *uci, bool early)
+ 	}
  
--		if (tsc_pg && vclock_was_used(VDSO_CLOCKMODE_HVCLOCK))
--			return vmf_insert_pfn(vma, vmf->address,
--					virt_to_phys(tsc_pg) >> PAGE_SHIFT);
-+		if (pfn && vclock_was_used(VDSO_CLOCKMODE_HVCLOCK))
-+			return vmf_insert_pfn(vma, vmf->address, pfn);
- 	} else if (sym_offset == image->sym_timens_page) {
- 		struct page *timens_page = find_timens_vvar_page(vma);
+ 	old_rev = rev;
+-	/*
+-	 * Writeback and invalidate caches before updating microcode to avoid
+-	 * internal issues depending on what the microcode is updating.
+-	 */
+-	native_wbinvd();
  
-diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
-index b7af19d06b51..9445a1558fe9 100644
---- a/drivers/clocksource/hyperv_timer.c
-+++ b/drivers/clocksource/hyperv_timer.c
-@@ -370,10 +370,11 @@ static union {
- static struct ms_hyperv_tsc_page *tsc_page = &tsc_pg.page;
- static unsigned long tsc_pfn;
+ 	/* write microcode via MSR 0x79 */
+ 	native_wrmsrl(MSR_IA32_UCODE_WRITE, (unsigned long)mc->bits);
+@@ -776,12 +771,6 @@ static enum ucode_state apply_microcode_intel(int cpu)
+ 	if (!prev_rev)
+ 		prev_rev = rev;
  
--static unsigned long hv_get_tsc_pfn(void)
-+unsigned long hv_get_tsc_pfn(void)
- {
- 	return tsc_pfn;
- }
-+EXPORT_SYMBOL_GPL(hv_get_tsc_pfn);
+-	/*
+-	 * Writeback and invalidate caches before updating microcode to avoid
+-	 * internal issues depending on what the microcode is updating.
+-	 */
+-	native_wbinvd();
+-
+ 	/* write microcode via MSR 0x79 */
+ 	wrmsrl(MSR_IA32_UCODE_WRITE, (unsigned long)mc->bits);
  
- struct ms_hyperv_tsc_page *hv_get_tsc_page(void)
- {
-diff --git a/include/clocksource/hyperv_timer.h b/include/clocksource/hyperv_timer.h
-index b3f5d73ae1d6..3078d23faaea 100644
---- a/include/clocksource/hyperv_timer.h
-+++ b/include/clocksource/hyperv_timer.h
-@@ -32,6 +32,7 @@ extern void hv_stimer0_isr(void);
- 
- extern void hv_init_clocksource(void);
- 
-+extern unsigned long hv_get_tsc_pfn(void);
- extern struct ms_hyperv_tsc_page *hv_get_tsc_page(void);
- 
- static inline notrace u64
-@@ -90,6 +91,11 @@ hv_read_tsc_page(const struct ms_hyperv_tsc_page *tsc_pg)
- }
- 
- #else /* CONFIG_HYPERV_TIMER */
-+static inline unsigned long hv_get_tsc_pfn(void)
-+{
-+	return 0;
-+}
-+
- static inline struct ms_hyperv_tsc_page *hv_get_tsc_page(void)
- {
- 	return NULL;
-
+-- 
+2.34.1
 
