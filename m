@@ -2,236 +2,173 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 13AAD618648
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:36:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 0C39B61864A
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:37:22 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231482AbiKCRgA (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 13:36:00 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50150 "EHLO
+        id S231549AbiKCRhT (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 13:37:19 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:50348 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230494AbiKCRf5 (ORCPT
+        with ESMTP id S230333AbiKCRhN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:35:57 -0400
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [IPv6:2001:67c:2178:6::1c])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 9D6651055C;
-        Thu,  3 Nov 2022 10:35:55 -0700 (PDT)
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by smtp-out1.suse.de (Postfix) with ESMTPS id 457FF21C2D;
-        Thu,  3 Nov 2022 17:35:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.cz; s=susede2_rsa;
-        t=1667496954; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
+        Thu, 3 Nov 2022 13:37:13 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 6BB3426C2
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:36:15 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667496974;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
          content-transfer-encoding:content-transfer-encoding:
          in-reply-to:in-reply-to:references:references;
-        bh=x5fPxg74k9nDezbbPmuSdS/AXJ08qTd6qzUcL/CU6Ro=;
-        b=H8+o9jGinEvTXyMvKdY/MOr/QOA9IyPHEcroQaS5E7496M/0UbGUY/434Yu8elkwnJMpay
-        qrf+kz75fncrY1+aAR32xSOiSuD+24tApp3DnlhFAvZIHZVMkRkhjcet7kAgNR6xNvQrDn
-        xVd4V+KoeYluKekFU3+zzNGYNC8cAt0=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.cz;
-        s=susede2_ed25519; t=1667496954;
-        h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-         mime-version:mime-version:content-type:content-type:
-         content-transfer-encoding:content-transfer-encoding:
-         in-reply-to:in-reply-to:references:references;
-        bh=x5fPxg74k9nDezbbPmuSdS/AXJ08qTd6qzUcL/CU6Ro=;
-        b=j5ugOQvbPZRDgjTWM2BG03CEFvoB/cxFUGMdyVtWUOO6egPrpxaXFA3RO+T/RgFsc5DbPf
-        chTUB5Y9zRUlDNDA==
-Received: from imap2.suse-dmz.suse.de (imap2.suse-dmz.suse.de [192.168.254.74])
-        (using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-         key-exchange X25519 server-signature ECDSA (P-521) server-digest SHA512)
-        (No client certificate requested)
-        by imap2.suse-dmz.suse.de (Postfix) with ESMTPS id DFF1A13AAF;
-        Thu,  3 Nov 2022 17:35:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([192.168.254.65])
-        by imap2.suse-dmz.suse.de with ESMTPSA
-        id jLTXNfn7Y2NKZQAAMHmgww
-        (envelope-from <vbabka@suse.cz>); Thu, 03 Nov 2022 17:35:53 +0000
-Message-ID: <55ace2db-80b6-04db-e8b5-03bd3b5061cf@suse.cz>
-Date:   Thu, 3 Nov 2022 18:35:53 +0100
+        bh=wqHDCfVM36OPNbloym/8DLeITW3uuDn/ofViGZw+9QU=;
+        b=SH/G1phmFNnPBezQWLEXBC8Du32QWja8MjyTbMagOQKpkXZpf8lQkei0RTI3ubrJUcJM25
+        NCOYowp5lpoDNX8dihUbJcbnNkJ6zvM9j1eAXi6caPX3asSDRRpqBJ55x+BlwoZ8u4aKNu
+        QCbbwhcPK1IPLVyA1X3SRb4jU5kehuQ=
+Received: from mail-wm1-f71.google.com (mail-wm1-f71.google.com
+ [209.85.128.71]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
+ us-mta-28-BLUf1PFaPjqy07aspd6EsA-1; Thu, 03 Nov 2022 13:36:13 -0400
+X-MC-Unique: BLUf1PFaPjqy07aspd6EsA-1
+Received: by mail-wm1-f71.google.com with SMTP id v23-20020a1cf717000000b003bff630f31aso769911wmh.5
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:36:13 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:organization:from:references
+         :cc:to:content-language:subject:user-agent:mime-version:date
+         :message-id:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=wqHDCfVM36OPNbloym/8DLeITW3uuDn/ofViGZw+9QU=;
+        b=G7+yrW6Pajz1Un9NmXBdK2nhrPS51YdlNErq6OpqWe0fUypdDDB+SG0Zf0S8lFBgaA
+         Vxn6700fj/IwLJYHr0kHjNiSwMn9+/L+zjdXRmRT3CrktqNUofmTUmH9pel/rKYshnjy
+         kMdqOXq46GQZ9J01DUGpsJ75oAPDTRShPWtZ1qVc4qGgfKk+jZiqN9jXjO/6eZMdAW9q
+         H/U//OxRD/u2qDWyCDLBA3KbYTZm+yVwlRaNB3jg9mp+E8+OzPzlYZepIoJVm7u73OVq
+         oJpTKNoZOzV2f39g1i/q9wrRBI0+1iTLo16dZ0RYSUAdvITXyW+h3TcJAeMBluiV34WO
+         F/cA==
+X-Gm-Message-State: ACrzQf3TnTmxxyXLVW67l6I8Q27EHI1hWfpx0DwSdC6aORoEK4Xuazpr
+        DY++HhK3aM9s+dosyVrSb/vduG7it3qxsBdlcQdulc/lE04soUrtlTXsE8ORpiGwGgsMxQSUTAQ
+        fCw/z9012tEZbYByXlpCqZT3y
+X-Received: by 2002:a5d:4c43:0:b0:236:547f:bd3c with SMTP id n3-20020a5d4c43000000b00236547fbd3cmr20124907wrt.380.1667496972001;
+        Thu, 03 Nov 2022 10:36:12 -0700 (PDT)
+X-Google-Smtp-Source: AMsMyM54lgh3dosJh+SDteCIDf+oND5iNc6bun/TfT30kj1hNLHlkbIfHxe0Djb4bu9ZHb48FSA7qw==
+X-Received: by 2002:a5d:4c43:0:b0:236:547f:bd3c with SMTP id n3-20020a5d4c43000000b00236547fbd3cmr20124874wrt.380.1667496971580;
+        Thu, 03 Nov 2022 10:36:11 -0700 (PDT)
+Received: from ?IPV6:2003:cb:c707:a400:e2d7:3ee3:8d35:ac8? (p200300cbc707a400e2d73ee38d350ac8.dip0.t-ipconnect.de. [2003:cb:c707:a400:e2d7:3ee3:8d35:ac8])
+        by smtp.gmail.com with ESMTPSA id bq7-20020a5d5a07000000b0022e035a4e93sm1379834wrb.87.2022.11.03.10.36.10
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 10:36:11 -0700 (PDT)
+Message-ID: <3259ad30-c129-84fc-9643-0aeaeeb3c806@redhat.com>
+Date:   Thu, 3 Nov 2022 18:36:09 +0100
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
  Thunderbird/102.4.0
-Subject: Re: [PATCH v6 1/4] mm/slub: enable debugging memory wasting of
- kmalloc
+Subject: Re: mm: delay rmap removal until after TLB flush
 Content-Language: en-US
-From:   Vlastimil Babka <vbabka@suse.cz>
-To:     Hyeonggon Yoo <42.hyeyoo@gmail.com>,
-        Feng Tang <feng.tang@intel.com>
-Cc:     John Thomson <lists@johnthomson.fastmail.com.au>,
+To:     Linus Torvalds <torvalds@linux-foundation.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>,
+        Will Deacon <will@kernel.org>,
+        Aneesh Kumar <aneesh.kumar@linux.ibm.com>,
+        Nick Piggin <npiggin@gmail.com>,
+        Heiko Carstens <hca@linux.ibm.com>,
+        Vasily Gorbik <gor@linux.ibm.com>,
+        Alexander Gordeev <agordeev@linux.ibm.com>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Sven Schnelle <svens@linux.ibm.com>,
+        Nadav Amit <nadav.amit@gmail.com>,
+        Jann Horn <jannh@google.com>,
+        John Hubbard <jhubbard@nvidia.com>, X86 ML <x86@kernel.org>,
+        Matthew Wilcox <willy@infradead.org>,
         Andrew Morton <akpm@linux-foundation.org>,
-        Christoph Lameter <cl@linux.com>,
-        Pekka Enberg <penberg@kernel.org>,
-        David Rientjes <rientjes@google.com>,
-        Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-        Roman Gushchin <roman.gushchin@linux.dev>,
-        Dmitry Vyukov <dvyukov@google.com>,
-        Jonathan Corbet <corbet@lwn.net>,
-        Andrey Konovalov <andreyknvl@gmail.com>,
-        "Hansen, Dave" <dave.hansen@intel.com>,
-        "linux-mm@kvack.org" <linux-mm@kvack.org>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-        "kasan-dev@googlegroups.com" <kasan-dev@googlegroups.com>,
-        Robin Murphy <robin.murphy@arm.com>,
-        John Garry <john.garry@huawei.com>,
-        Kefeng Wang <wangkefeng.wang@huawei.com>,
-        Thomas Bogendoerfer <tsbogend@alpha.franken.de>,
-        "linux-mips@vger.kernel.org" <linux-mips@vger.kernel.org>,
-        Kees Cook <keescook@chromium.org>
-References: <Y1+0sbQ3R4DB46NX@feng-clx>
- <9b71ae3e-7f53-4c9e-90c4-79d3d649f94c@app.fastmail.com>
- <Y2DReuPHZungAGsU@feng-clx>
- <53b53476-bb1e-402e-9f65-fd7f0ecf94c2@app.fastmail.com>
- <Y2DngwUc7cLB0dG7@hyeyoo>
- <29271a2b-cf19-4af9-bfe5-5bcff8a23fda@app.fastmail.com>
- <097d8fba-bd10-a312-24a3-a4068c4f424c@suse.cz> <Y2NXiiAF6V2DnBrB@feng-clx>
- <f88a5d34-de05-25d7-832d-36b3a3eddd72@suse.cz> <Y2PNLENnxxpqZ74g@feng-clx>
- <Y2PR45BW2mgLLMwC@hyeyoo> <8f2cc14c-d8b3-728d-7d12-13f2c1b0d8a0@suse.cz>
-In-Reply-To: <8f2cc14c-d8b3-728d-7d12-13f2c1b0d8a0@suse.cz>
-Content-Type: text/plain; charset=UTF-8
+        kernel list <linux-kernel@vger.kernel.org>,
+        Linux-MM <linux-mm@kvack.org>,
+        Andrea Arcangeli <aarcange@redhat.com>,
+        "Kirill A . Shutemov" <kirill.shutemov@linux.intel.com>,
+        Joerg Roedel <jroedel@suse.de>,
+        Uros Bizjak <ubizjak@gmail.com>,
+        Alistair Popple <apopple@nvidia.com>,
+        linux-arch <linux-arch@vger.kernel.org>
+References: <B88D3073-440A-41C7-95F4-895D3F657EF2@gmail.com>
+ <47678198-C502-47E1-B7C8-8A12352CDA95@gmail.com>
+ <CAHk-=wjzngbbwHw4nAsqo_RpyOtUDk5G+Wus=O0w0A6goHvBWA@mail.gmail.com>
+ <CAHk-=wijU_YHSZq5N7vYK+qHPX0aPkaePaGOyWk4aqMvvSXxJA@mail.gmail.com>
+ <140B437E-B994-45B7-8DAC-E9B66885BEEF@gmail.com>
+ <CAHk-=wjX_P78xoNcGDTjhkgffs-Bhzcwp-mdsE1maeF57Sh0MA@mail.gmail.com>
+ <CAHk-=wio=UKK9fX4z+0CnyuZG7L+U9OB7t7Dcrg4FuFHpdSsfw@mail.gmail.com>
+ <CAHk-=wgz0QQd6KaRYQ8viwkZBt4xDGuZTFiTB8ifg7E3F2FxHg@mail.gmail.com>
+ <CAHk-=wiwt4LC-VmqvYrphraF0=yQV=CQimDCb0XhtXwk8oKCCA@mail.gmail.com>
+ <Y1+XCALog8bW7Hgl@hirez.programming.kicks-ass.net>
+ <CAHk-=wjnvPA7mi-E3jVEfCWXCNJNZEUjm6XODbbzGOh9c8mhgw@mail.gmail.com>
+ <CAHk-=wjjXQP7PTEXO4R76WPy1zfQad_DLKw1GKU_4yWW1N4n7w@mail.gmail.com>
+ <4f6d8fb5-6be5-a7a8-de8e-644da66b5a3d@redhat.com>
+ <CAHk-=wiDg_1up8K4PhK4+kzPN7xJG297=nw+tvgrGn7aVgZdqw@mail.gmail.com>
+ <CAHk-=wgReY6koZTKT97NsCczzr4uYAA66iePv=S_RL-_D-9mmQ@mail.gmail.com>
+From:   David Hildenbrand <david@redhat.com>
+Organization: Red Hat
+In-Reply-To: <CAHk-=wgReY6koZTKT97NsCczzr4uYAA66iePv=S_RL-_D-9mmQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-3.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_MED,
-        SPF_HELO_NONE,SPF_SOFTFAIL autolearn=ham autolearn_force=no
-        version=3.4.6
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,
+        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE
+        autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 11/3/22 17:57, Vlastimil Babka wrote:
-> On 11/3/22 15:36, Hyeonggon Yoo wrote:
->> On Thu, Nov 03, 2022 at 10:16:12PM +0800, Feng Tang wrote:
->>> On Thu, Nov 03, 2022 at 09:33:28AM +0100, Vlastimil Babka wrote:
->>> [...]
->>> > >> AFAICS before this patch, we "survive" "kmem_cache *s" being NULL as
->>> > >> slab_pre_alloc_hook() will happen to return NULL and we bail out from
->>> > >> slab_alloc_node(). But this is a side-effect, not an intended protection.
->>> > >> Also the CONFIG_TRACING variant of kmalloc_trace() would have called
->>> > >> trace_kmalloc dereferencing s->size anyway even before this patch.
->>> > >> 
->>> > >> I don't think we should add WARNS in the slab hot paths just to prevent this
->>> > >> rare error of using slab too early. At most VM_WARN... would be acceptable
->>> > >> but still not necessary as crashing immediately from a NULL pointer is
->>> > >> sufficient.
->>> > >> 
->>> > >> So IMHO mips should fix their soc init, 
->>> > > 
->>> > > Yes, for the mips fix, John has proposed to defer the calling of prom_soc_init(),
->>> > > which looks reasonable.
->>> > > 
->>> > >> and we should look into the
->>> > >> CONFIG_TRACING=n variant of kmalloc_trace(), to pass orig_size properly.
->>> > > 
->>> > > You mean check if the pointer is NULL and bail out early. 
->>> > 
->>> > No I mean here:
->>> > 
->>> > #else /* CONFIG_TRACING */
->>> > /* Save a function call when CONFIG_TRACING=n */
->>> > static __always_inline __alloc_size(3)                                   
->>> > void *kmalloc_trace(struct kmem_cache *s, gfp_t flags, size_t size)
->>> > {       
->>> >         void *ret = kmem_cache_alloc(s, flags);
->>> >                     
->>> >         ret = kasan_kmalloc(s, ret, size, flags);
->>> >         return ret;
->>> > }
->>> > 
->>> > we call kmem_cache_alloc() and discard the size parameter, so it will assume
->>> > s->object_size (and as the side-effect, crash if s is NULL). We shouldn't
->>> > add "s is NULL?" checks, but fix passing the size - probably switch to
->>> > __kmem_cache_alloc_node()? and in the following kmalloc_node_trace() analogically.
->>>  
->>> Got it, thanks! I might have missed it during some rebasing for the
->>> kmalloc wastage debug patch.
->> 
->> That was good catch and I missed too!
->> But FYI I'm suggesting to drop CONFIG_TRACING=n variant:
->> 
->> https://lore.kernel.org/linux-mm/20221101222520.never.109-kees@kernel.org/T/#m20ecf14390e406247bde0ea9cce368f469c539ed
->> 
->> Any thoughts?
+On 03.11.22 18:09, Linus Torvalds wrote:
+> On Thu, Nov 3, 2022 at 9:54 AM Linus Torvalds
+> <torvalds@linux-foundation.org> wrote:
+>>
+>> But again, those changes would have made the patch bigger, which I
+>> didn't want at this point (and 'release_pages()' would need that
+>> clean-in-place anyway, unless we changed *that* too and made the whole
+>> page encoding be something widely available).
 > 
-> I'll get to it, also I think we were pondering that within your series too,
-> but I wanted to postpone in case somebody objects to the extra function call
-> it creates.
-> But that would be for 6.2 anyway while I'll collect the fix here for 6.1.
-
-On second thought, the fix is making the inlined kmalloc_trace() expand to a
-call that had 2 parameters and now it has 5, which seems to me like a worse
-thing (code bloat) than the function call. With the other reasons to ditch
-the CONFIG_TRACING=n variant I'm inclined to just do it right now.
-
->>> 
->>> How about the following fix?
->>> 
->>> Thanks,
->>> Feng
->>> 
->>> ---
->>> From 9f9fa9da8946fd44625f873c0f51167357075be1 Mon Sep 17 00:00:00 2001
->>> From: Feng Tang <feng.tang@intel.com>
->>> Date: Thu, 3 Nov 2022 21:32:10 +0800
->>> Subject: [PATCH] mm/slub: Add missing orig_size parameter for wastage debug
->>> 
->>> commit 6edf2576a6cc ("mm/slub: enable debugging memory wasting of
->>> kmalloc") was introduced for debugging kmalloc memory wastage,
->>> and it missed to pass the original request size for kmalloc_trace()
->>> and kmalloc_node_trace() in CONFIG_TRACING=n path.
->>> 
->>> Fix it by using __kmem_cache_alloc_node() with correct original
->>> request size.
->>> 
->>> Fixes: 6edf2576a6cc ("mm/slub: enable debugging memory wasting of kmalloc")
->>> Suggested-by: Vlastimil Babka <vbabka@suse.cz>
->>> Signed-off-by: Feng Tang <feng.tang@intel.com>
->>> ---
->>>  include/linux/slab.h | 9 +++++++--
->>>  1 file changed, 7 insertions(+), 2 deletions(-)
->>> 
->>> diff --git a/include/linux/slab.h b/include/linux/slab.h
->>> index 90877fcde70b..9691afa569e1 100644
->>> --- a/include/linux/slab.h
->>> +++ b/include/linux/slab.h
->>> @@ -469,6 +469,9 @@ void *__kmalloc_node(size_t size, gfp_t flags, int node) __assume_kmalloc_alignm
->>>  							 __alloc_size(1);
->>>  void *kmem_cache_alloc_node(struct kmem_cache *s, gfp_t flags, int node) __assume_slab_alignment
->>>  									 __malloc;
->>> +void *__kmem_cache_alloc_node(struct kmem_cache *s, gfp_t flags, int node,
->>> +				size_t orig_size, unsigned long caller) __assume_slab_alignment
->>> +									 __malloc;
->>>  
->>>  #ifdef CONFIG_TRACING
->>>  void *kmalloc_trace(struct kmem_cache *s, gfp_t flags, size_t size)
->>> @@ -482,7 +485,8 @@ void *kmalloc_node_trace(struct kmem_cache *s, gfp_t gfpflags,
->>>  static __always_inline __alloc_size(3)
->>>  void *kmalloc_trace(struct kmem_cache *s, gfp_t flags, size_t size)
->>>  {
->>> -	void *ret = kmem_cache_alloc(s, flags);
->>> +	void *ret = __kmem_cache_alloc_node(s, flags, NUMA_NO_NODE,
->>> +					    size, _RET_IP_);
->>>  
->>>  	ret = kasan_kmalloc(s, ret, size, flags);
->>>  	return ret;
->>> @@ -492,7 +496,8 @@ static __always_inline __alloc_size(4)
->>>  void *kmalloc_node_trace(struct kmem_cache *s, gfp_t gfpflags,
->>>  			 int node, size_t size)
->>>  {
->>> -	void *ret = kmem_cache_alloc_node(s, gfpflags, node);
->>> +	void *ret = __kmem_cache_alloc_node(s, gfpflags, node,
->>> +					    size, _RET_IP_);
->>>  
->>>  	ret = kasan_kmalloc(s, ret, size, gfpflags);
->>>  	return ret;
->>> -- 
->>> 2.34.1
->>> 
->>> 
->>> 
->> 
+> And just to clarify: this is not just me trying to expand the reach of my patch.
 > 
+> I'd suggest people look at mlock_pagevec(), and realize that LRU_PAGE
+> and NEW_PAGE are both *exactly* the same kind of "encoded_page" bits
+> that TLB_ZAP_RMAP is.
+> 
+> Except the mlock code does *not* show that in the type system, and
+> instead just passes a "struct page **" array around in pvec->pages,
+> and then you'd just better know that "oh, it's not *really* just a
+> page pointer".
+> 
+> So I really think that the "array of encoded page pointers" thing is a
+> generic notion that we *already* have.
+> 
+> It's just that we've done it disgustingly in the past, and I didn't
+> want to do that disgusting thing again.
+> 
+> So I would hope that the nasty things that the mlock code would some
+> day use the same page pointer encoding logic to actually make the
+> whole "this is not a page pointer that you can use directly, it has
+> low bits set for flags" very explicit.
+> 
+> I am *not* sure if then the actual encoded bits would be unified.
+> Probably not - you might have very different and distinct uses of the
+> encode_page() thing where the bits mean different things in different
+> contexts.
+> 
+> Anyway, this is me just explaining the thinking behind it all. The
+> page bit encoding is a very generic thing (well, "very generic" in
+> this case means "has at least one other independent user"), explaining
+> the very generic naming.
+> 
+> But at the same time, the particular _patch_ was meant to be very targeted.
+> 
+> So slightly schizophrenic name choices as a result.
+
+Thanks for the explanation. I brought it up because the generic name 
+somehow felt weird in include/asm-generic/tlb.h. Skimming over the code 
+I'd have expected something like TLB_ENCODE_PAGE_BITS, so making the 
+"very generic" things "very specific" as long as it lives in tlb.h :)
+
+-- 
+Thanks,
+
+David / dhildenb
 
