@@ -2,140 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9EF3A618B81
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 23:29:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E8CC8618B85
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 23:30:12 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231805AbiKCW3P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 18:29:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:47454 "EHLO
+        id S231378AbiKCWaJ (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 18:30:09 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:48456 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231761AbiKCW2n (ORCPT
+        with ESMTP id S230338AbiKCW3h (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 18:28:43 -0400
-Received: from out4-smtp.messagingengine.com (out4-smtp.messagingengine.com [66.111.4.28])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id CC83A2229C;
-        Thu,  3 Nov 2022 15:28:33 -0700 (PDT)
-Received: from compute1.internal (compute1.nyi.internal [10.202.2.41])
-        by mailout.nyi.internal (Postfix) with ESMTP id 41F055C00B4;
-        Thu,  3 Nov 2022 18:28:33 -0400 (EDT)
-Received: from mailfrontend1 ([10.202.2.162])
-  by compute1.internal (MEProxy); Thu, 03 Nov 2022 18:28:33 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=fastmail.fm; h=
-        cc:cc:content-transfer-encoding:content-type:date:date:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to; s=fm1; t=1667514513; x=
-        1667600913; bh=r4LfooITf3nrWSMnfNB3pZa38Xa+sKbxYRKtKCOW6Os=; b=A
-        u4HkFYkD9K2yM9S4x/crbVwrJVxIdrWw9ItMx2xZbhoIoJo+3az8+kHU44lBfcbq
-        f2P/+Ny8ECj/v3A4cDHWciPyESQcfmJw7ftog+l+vq+SYCNKv9EmQHSYd/yXEede
-        Rae4/3rsSO2DR75rtReyG73/ndXBl2lMHfV+xJgn0RuqHwIrBZz8JhlOymaWgkUR
-        qKcSOAnqrevgtByKiWKtZJ2GOOYlqRH2U5GqcAJiloUxIgkArfFf2PjFztNnt3MU
-        lWYF9iEaXgovwmVTX9gkJ2PEwy1cMZdwR+QR4CqowP13Z+UJKoHYOQoM/qvJIpFY
-        aagiJKUeNAU+q/XGabf6Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-        messagingengine.com; h=cc:cc:content-transfer-encoding
-        :content-type:date:date:feedback-id:feedback-id:from:from
-        :in-reply-to:in-reply-to:message-id:mime-version:references
-        :reply-to:sender:subject:subject:to:to:x-me-proxy:x-me-proxy
-        :x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1667514513; x=
-        1667600913; bh=r4LfooITf3nrWSMnfNB3pZa38Xa+sKbxYRKtKCOW6Os=; b=p
-        CZyMb7rEklW13nCcpezstiy2rXbINw+KSA6ZCd7xFX0wRcu6ii9eOxTm4nQVi0rC
-        gc2ks2mIk4OFaaNmT+NPxbYK26EjxNJ3P/wnRW+9O/YmIGiFciGHLZx0H38Q6yOK
-        rGPPpN9HCZGPBLSXlHmj5Ln1V+moUrIFkMDY7vfnUdOOZJ7d2a/TQ6ho3GleNa2e
-        UBzThi1FiTJEUTNLaSATfLCAXTFgeuZxVrSxl0ovPlc+NeNy32b28pvRs08c3e00
-        2EeUvdJq41X8yAvDqcyz9j15T4uRD8OeKEsvZZgRf68ah1lr0S4WBN48TvBK0GPJ
-        iqeDhr0krhjuxdSQ1eGkw==
-X-ME-Sender: <xms:kEBkY39WMiGnBd3ZsVQ3iIgfYljLBG_qzEkiojX6MtkFALPjlND8Zg>
-    <xme:kEBkYzsKL4MXb-YTJUXhMe93QlyC15EM0ediuIFnA5UgZCxkKDmi7q4VejReCZ1FT
-    cAAmg2F0QeUsGKY>
-X-ME-Received: <xmr:kEBkY1C1_K1MQ6MBLGzCiGBMCBIrogjFPeEJXbZ86EpofDBkUx88kjdR4aUpjQhBNZyawVq2xRA3Y6JZbdoT6DtefeG8kehMtMrlFQ2KIfrlDQH778Cq>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgedvgedrudelgdduheeiucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdfqfgfvpdfurfetoffkrfgpnffqhgen
-    uceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnhhtshculddquddttddmne
-    cujfgurhepkfffgggfuffvvehfhfgjtgfgsehtjeertddtfeejnecuhfhrohhmpeeuvghr
-    nhguucfutghhuhgsvghrthcuoegsvghrnhgurdhstghhuhgsvghrthesfhgrshhtmhgrih
-    hlrdhfmheqnecuggftrfgrthhtvghrnhepuedukeehleekjeehvddvieeftdeuleeiiedu
-    tdelhfevueeludfgleejveeitdfgnecuffhomhgrihhnpehgihhthhhusgdrtghomhenuc
-    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegsvghrnhgu
-    rdhstghhuhgsvghrthesfhgrshhtmhgrihhlrdhfmh
-X-ME-Proxy: <xmx:kEBkYzd_IurK5rInNhTl-DBZWWqwiVMjVGKFQc1EFg3JxqPe6FXE6A>
-    <xmx:kEBkY8NY8-NDih9R83qahSomueK64wiuD8Nv8W0dz4LZBPPsq9oqFw>
-    <xmx:kEBkY1mZBh84Yt93DPWNC26zGqHGD3RZ1oDG7bskvGrMidQmFsGDDg>
-    <xmx:kUBkYzeZK2JT8WtCN28f7wOTs6sQP1FH53QY73otzSnqaENChHSUhw>
-Feedback-ID: id8a24192:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Thu,
- 3 Nov 2022 18:28:31 -0400 (EDT)
-Message-ID: <712cd802-f3bb-9840-e334-385cd42325f2@fastmail.fm>
-Date:   Thu, 3 Nov 2022 23:28:29 +0100
+        Thu, 3 Nov 2022 18:29:37 -0400
+Received: from mail-qt1-x830.google.com (mail-qt1-x830.google.com [IPv6:2607:f8b0:4864:20::830])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91B6B23391
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 15:29:31 -0700 (PDT)
+Received: by mail-qt1-x830.google.com with SMTP id z6so2160887qtv.5
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 15:29:31 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=eFOxZ2L9iDjGlamIRVaj5OB4U9Nq9AIrRETK9Gxb0MA=;
+        b=C2eJ4D13TM4gLwfosSXDaBenjkpGC0gdp7gU+braX8AzYACLUeO79uW/5jmzeKf+14
+         nwhJAvcBoJa+rTt69U7m3x+8Bw0HcrXxnDdjmYU+axkiTdxSii8jWY+f+YGl6+A3JPTG
+         lRldrmhsL1SU4fFHaOHli3OX9yu0c1rMzJOlqotoPEZLw/AOBZcbwlSzakmABo6WD2Pp
+         21RR4y9gUJpzVWQyz2I+tRuX4eBdhDqXHl4AQbGDU+njCug9phCcVZCBCbGs2N9OaQ8U
+         LWrGTSFhuxz0sHZCDOKm7GLSl0AqyaB/qCWrm7abrpXA4Dx90H/GgqycZvXoa6kyY/TI
+         H2Pg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=eFOxZ2L9iDjGlamIRVaj5OB4U9Nq9AIrRETK9Gxb0MA=;
+        b=yLBpe32x6ruEYLUcOc8z9xKtjEimXLCRpMrVW/gx+lvR+nPlj/RDsGfEVjgmSUNGqT
+         OQd12uzgppzPCGu0PZwnu4en1Y50Qh/xVpVWbPc1XkaQBg0GEcDeoxFtGtUiBmC93cNc
+         2ltOkA+YTEQSRtX0aWgzZjV8JOIb7RBvRYiXqNomfFvsbbpPxphiYaI1XmNi6oWk/d2I
+         wtJUyeSoXq9DVF/WJn/Bmfa3vXeNvi11VgNxPFyA73kH1JkmgmxbMbVgp38d4iTMa31I
+         Y+dYp6KfmyiCHF5ndIZfNfxDZ7F38kcsmYrDGuBfgRDN9YLP0NG3Veodd/3hMyWxMT94
+         t2Tg==
+X-Gm-Message-State: ACrzQf3F47SEGrBHe/+xnRk0CnP0YovGQ6PVo6kHeUz0RIvLBY38FPD3
+        3m2dC11C6ExdZTSdcNCZ/foSHA==
+X-Google-Smtp-Source: AMsMyM68M2Z8PFL9GK04hin6+rQ5xTzVtX5Wyu38D17D2UjoYrUpznFm6XdE1gdo7KfAjEIQ+ydNoA==
+X-Received: by 2002:ac8:6e86:0:b0:3a5:27f8:f3db with SMTP id c6-20020ac86e86000000b003a527f8f3dbmr18716646qtv.97.1667514570558;
+        Thu, 03 Nov 2022 15:29:30 -0700 (PDT)
+Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
+        by smtp.gmail.com with ESMTPSA id s9-20020a05620a29c900b006cec8001bf4sm1633961qkp.26.2022.11.03.15.29.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 15:29:29 -0700 (PDT)
+Message-ID: <d1061af4-cfd6-4c39-e23e-c18d6f2edeea@linaro.org>
+Date:   Thu, 3 Nov 2022 18:29:28 -0400
 MIME-Version: 1.0
 User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.3
-Subject: Re: [RFC PATCH 4/4] ublk_drv: support splice based read/write zero
- copy
-To:     Ming Lei <ming.lei@redhat.com>, Jens Axboe <axboe@kernel.dk>,
-        io-uring@vger.kernel.org
-Cc:     linux-block@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org,
-        Miklos Szeredi <mszeredi@redhat.com>,
-        Stefan Hajnoczi <stefanha@redhat.com>,
-        ZiyangZhang <ZiyangZhang@linux.alibaba.com>
-References: <20221103085004.1029763-1-ming.lei@redhat.com>
- <20221103085004.1029763-5-ming.lei@redhat.com>
+ Thunderbird/102.4.1
+Subject: Re: [PATCH v3 2/3] dt-bindings: watchdog: fsl-imx: document suspend
+ in wait mode
 Content-Language: en-US
-From:   Bernd Schubert <bernd.schubert@fastmail.fm>
-In-Reply-To: <20221103085004.1029763-5-ming.lei@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+To:     Rob Herring <robh@kernel.org>,
+        Andrej Picej <andrej.picej@norik.com>
+Cc:     linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, shawnguo@kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, festevam@gmail.com,
+        linux-kernel@vger.kernel.org, s.hauer@pengutronix.de,
+        wim@linux-watchdog.org, linux@roeck-us.net, kernel@pengutronix.de,
+        Anson.Huang@nxp.com, linux-imx@nxp.com
+References: <20221103100358.176099-1-andrej.picej@norik.com>
+ <20221103100358.176099-3-andrej.picej@norik.com>
+ <166747792333.2121983.3197860057328686578.robh@kernel.org>
+From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <166747792333.2121983.3197860057328686578.robh@kernel.org>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_LOW,RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_PASS,
-        SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-
-
-On 11/3/22 09:50, Ming Lei wrote:
-> Pass ublk block IO request pages to kernel backend IO handling code via
-> pipe, and request page copy can be avoided. So far, the existed
-> pipe/splice mechanism works for handling write request only.
+On 03/11/2022 08:35, Rob Herring wrote:
 > 
-> The initial idea of using splice for zero copy is from Miklos and Stefan.
+> On Thu, 03 Nov 2022 11:03:57 +0100, Andrej Picej wrote:
+>> Property "fsl,suspend-in-wait" suspends watchdog in "WAIT" mode which
+>> corresponds to Linux's Suspend-to-Idle S0 mode. If this property is not
+>> set and the device is put into Suspend-to-Idle mode, the watchdog
+>> triggers a reset after 128 seconds.
+>>
+>> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+>> Reviewed-by: Fabio Estevam <festevam@gmail.com>
+>> ---
+>> Changes in v3:
+>>  - disallow the property for devices which don't support WDW bit
+>>    functionality with .yaml DTS allOf:if:then scheme.
+>>
+>> Changes in v2:
+>>  - add a commit message,
+>>  - add a list of devices which support this functionality
+>> ---
+>>  .../bindings/watchdog/fsl-imx-wdt.yaml        | 33 +++++++++++++++++++
+>>  1 file changed, 33 insertions(+)
+>>
 > 
-> Read request's zero copy requires pipe's change to allow one read end to
-> produce buffers for another read end to consume. The added SPLICE_F_READ_TO_READ
-> flag is for supporting this feature.
+> My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
+> on your patch (DT_CHECKER_FLAGS is new in v5.13):
 > 
-> READ is handled by sending IORING_OP_SPLICE with SPLICE_F_DIRECT |
-> SPLICE_F_READ_TO_READ. WRITE is handled by sending IORING_OP_SPLICE with
-> SPLICE_F_DIRECT. Kernel internal pipe is used for simplifying userspace,
-> meantime potential info leak could be avoided.
+> yamllint warnings/errors:
+> ./Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml:71:1: [error] duplication of key "allOf" in mapping (key-duplicates)
+> 
 
+You already have there allOf, so:
+1. Move the existing allOf *above* unevaluatedProperties:false (like in
+example-schema).
+2. Drop the quotes around 'watchdog.yaml', when moving.
+3. Add your pieces.
 
-Sorry to ask, do you have an ublk branch that gives an example how to 
-use this?
+All above in one commit.
 
-I still have several things to fix in my branches, but I got basic fuse 
-uring with copies working. Adding back splice would be next after 
-posting rfc patches. My initial assumption was that I needed to 
-duplicate everything splice does into the fuse .uring_cmd handler - 
-obviously there is a better way with your patches.
+Best regards,
+Krzysztof
 
-This week I have a few days off, by end of next week or the week after I 
-might have patches in an rfc state (one thing I'm going to ask about is 
-how do I know what is the next CQE in the kernel handler - ublk does 
-this with tags through mq, but I don't understand yet where the tag is 
-increased and what the relation between tag and right CQE order is).
-
-This got modeled a bit after ublk, but then diverged a bit.
-
-https://github.com/aakefbs/linux/tree/fuse-uring
-https://github.com/aakefbs/libfuse/tree/uring
-
-(Again, the branches are not ready by any means for review yet).
-
-
-Thanks,
-Bernd
