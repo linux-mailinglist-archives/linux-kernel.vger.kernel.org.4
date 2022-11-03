@@ -2,108 +2,118 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 07EE8617FF7
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:49:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 4FE91617FFA
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:50:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231745AbiKCOth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 10:49:37 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
+        id S231774AbiKCOuX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 10:50:23 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35062 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231532AbiKCOte (ORCPT
+        with ESMTP id S231532AbiKCOuU (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 10:49:34 -0400
-Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9AED17E3A;
-        Thu,  3 Nov 2022 07:49:33 -0700 (PDT)
-Received: by mail-wm1-x331.google.com with SMTP id a11-20020a05600c2d4b00b003cf6f5fd9f1so1355533wmg.2;
-        Thu, 03 Nov 2022 07:49:33 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=S6XPo/k7heVDESQZpImoWUJDkxoQwwB8JDz0aFByags=;
-        b=Us9V1/BdKTxxamujzNwkkFGRkUmW6S1w1PpIaEgvlqlZvhm9uvWU3US37rCNWldORI
-         l/BL5me6PT+Zn6EUX4Y6SMU3U6hDoFbY5HdEVhpmZcCpKpk/AjLYvrqatab4OAsgdL6s
-         Kf8m8Sy+DOKs6z+Jq3u6NWEeH2yM9kp1tTH7jYrtMdzn8/AiAgNANShrUJ7dc+oDJG5k
-         sIYOlITsaZ3DBNyrXCXIHx9fw5+ZKoaNMGiC0PcJKNdcUhoiJTZCgr8VGvyRhDqdgsdr
-         sJe4t4BKzXjVlV9iqlUrZDYdP6BxGUrgId6aFrS16HMSYQu4dQ5B7JwJMVFpYc1qxZ3D
-         3DhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:references:cc:to
-         :content-language:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=S6XPo/k7heVDESQZpImoWUJDkxoQwwB8JDz0aFByags=;
-        b=KyY/yotgwyYA0xDzmUpNuqTSpdH76W80fnBENiMdeR7Q8J9quhvJsR11uu1ssX1UnS
-         Z4jOMp+YDxTNp8djOtTIO+CrpsDivR5eBrD+1cXIL2jqCl2CkWHr4A2IZkS3tG/Wb7Kr
-         k3tvNpqZSuT9xrdfu38SvgRzHMiN1WnBwz6FeUB3oFJUMNOV0hYnruVVweCE96q25/qV
-         IwdPAxSCEhzAmSn1/YLuD/PJNO8tcz6CiIub5iihYptPOGAJvuSOQ2wTyJ7fLnIJwGnN
-         vELNVNZSReazFyyRvkrOdxTWIAKW6ESWpiVrq9u2Z97H0qcET20j1wBpKaX9ma5w09/j
-         tEgg==
-X-Gm-Message-State: ACrzQf3g/x7/Cy3qhQRtoByKcD/7r0tw3gYANNASCtvZwDuKWKYJehzg
-        pY5Vd0YUbNbP3pwwU+OHOOk=
-X-Google-Smtp-Source: AMsMyM49js37BJfeTe2EkgqiIxd21xul39YrnWt496H015GdItEKOZqrMj4nHElwuJCkReajdwTYVg==
-X-Received: by 2002:a05:600c:4f05:b0:3cf:4818:1704 with SMTP id l5-20020a05600c4f0500b003cf48181704mr19781528wmq.181.1667486972492;
-        Thu, 03 Nov 2022 07:49:32 -0700 (PDT)
-Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
-        by smtp.googlemail.com with ESMTPSA id k4-20020a05600c168400b003c6f1732f65sm8044wmn.38.2022.11.03.07.49.31
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 07:49:32 -0700 (PDT)
-Message-ID: <ef637642-7d0f-66b8-2225-b6f8609f037e@gmail.com>
-Date:   Thu, 3 Nov 2022 14:49:31 +0000
+        Thu, 3 Nov 2022 10:50:20 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 91971178B6;
+        Thu,  3 Nov 2022 07:50:19 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 4478AB825E5;
+        Thu,  3 Nov 2022 14:50:18 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DDFC4C433C1;
+        Thu,  3 Nov 2022 14:50:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667487017;
+        bh=erGGAZzfipqS12h8LpJ0XkEJUQ4TTQ3kwJymttn8ZjI=;
+        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+        b=TWI+k+9duvC5cKwggaCdsGL+PwsmKeA6eTORr4x+hRJ/+0oM8gLhLjzt4b7K3KCxU
+         eZQnCQwipDuj3ksL2Jn5SeuIrPu2V9z4G7Kta+D7M8gGyzWw6TRBlorP7uuUBM1wjp
+         skBTY2iPp14RYibnIg6a4KnabbhxGv74tdsW+vckwnhu8f68md36Lo/gAPxQAeWSjE
+         dhmOFCecQNJr9m+zz6/eZaJms4t23EoeukTrmN4MY2niyamOMUDpHWtts0RpjKynTv
+         Wf4zyWPdMtYwflWbHUrEeHcFqqt77I/OQYEmTDumJVtlJ1B47Gao51/kWs7yttj0VB
+         tVcsvjAB/brDg==
+Received: from johan by xi.lan with local (Exim 4.94.2)
+        (envelope-from <johan@kernel.org>)
+        id 1oqbXb-0003jR-Od; Thu, 03 Nov 2022 15:49:59 +0100
+Date:   Thu, 3 Nov 2022 15:49:59 +0100
+From:   Johan Hovold <johan@kernel.org>
+To:     Stefan Agner <stefan@agner.ch>
+Cc:     Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        stable@vger.kernel.org, linux-kernel@vger.kernel.org,
+        Johan Hovold <johan+linaro@kernel.org>,
+        Matthias Kaehlcke <mka@chromium.org>,
+        stable <stable@kernel.org>, regressions@lists.linux.dev,
+        m.szyprowski@samsung.com, krzk@kernel.org
+Subject: Re: [PATCH stable-5.15 3/3] usb: dwc3: disable USB core PHY
+ management
+Message-ID: <Y2PVF/IJoKvSu3SM@hovoldconsulting.com>
+References: <20220906120702.19219-1-johan@kernel.org>
+ <20220906120702.19219-4-johan@kernel.org>
+ <808bdba846bb60456adf10a3016911ee@agner.ch>
+ <Y0+8dKESygFunXOu@hovoldconsulting.com>
+ <86c0f1ee8ffc94f9a53690dda6a83fbb@agner.ch>
+ <Y1JCIKT80P9IysKD@hovoldconsulting.com>
+ <b2a1e70bda64cb741efe81c5b7e56707@agner.ch>
+ <Y1p9Wy9w5umMBC4V@hovoldconsulting.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.3.1
-Subject: Re: [PATCH] cpufreq: SPEAr: Make read-only array sys_clk_src static
-Content-Language: en-US
-To:     Viresh Kumar <viresh.kumar@linaro.org>
-Cc:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221103143654.85275-1-colin.i.king@gmail.com>
- <20221103143807.tamhepos3cureoga@vireshk-i7>
-From:   "Colin King (gmail)" <colin.i.king@gmail.com>
-In-Reply-To: <20221103143807.tamhepos3cureoga@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Y1p9Wy9w5umMBC4V@hovoldconsulting.com>
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/11/2022 14:38, Viresh Kumar wrote:
-> On 03-11-22, 14:36, Colin Ian King wrote:
->> Don't populate the read-only array sys_clk_src on the stack but instead
->> make it static and add in a missing const. Also makes the object code a
->> little smaller.
->>
->> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
->> ---
->>   drivers/cpufreq/spear-cpufreq.c | 2 +-
->>   1 file changed, 1 insertion(+), 1 deletion(-)
->>
->> diff --git a/drivers/cpufreq/spear-cpufreq.c b/drivers/cpufreq/spear-cpufreq.c
->> index 7d0d62a06bf3..c6fdf019dbde 100644
->> --- a/drivers/cpufreq/spear-cpufreq.c
->> +++ b/drivers/cpufreq/spear-cpufreq.c
->> @@ -39,7 +39,7 @@ static struct clk *spear1340_cpu_get_possible_parent(unsigned long newfreq)
->>   	 * In SPEAr1340, cpu clk's parent sys clk can take input from
->>   	 * following sources
->>   	 */
->> -	const char *sys_clk_src[] = {
->> +	static const char * const sys_clk_src[] = {
->>   		"sys_syn_clk",
->>   		"pll1_clk",
->>   		"pll2_clk",
-> 
-> Same questions from longhaul patch apply here too.
-> 
-See answer in that patch :-)
+On Thu, Oct 27, 2022 at 02:45:15PM +0200, Johan Hovold wrote:
+> On Wed, Oct 26, 2022 at 03:11:00PM +0200, Stefan Agner wrote:
 
-But really, this is kind of basic C level stuff. I suggest reading K&R 
-2nd Edition, Section 4.6, last paragraph before exercise 4-11.
+> > The user reports the S-ATA disk is *not* recognized with that patch
+> > applied.
+> 
+> I just noticed a mistake in the instrumentation patch I sent you. Could
+> you try moving the calibrations calls after dwc3_host_init() (e.g. as in
+> the second chunk in the diff below)?
+> 
+> As mentioned in the commit message for a0a465569b45 ("usb: dwc3: remove
+> generic PHY calibrate() calls"), this may not work if the xhci-plat
+> driver is built as a module and there are some corner cases that it does
+> not cover.
+> 
+> It seems we should revert the offending commit and then try to find some
+> time to untangle this mess, but please check if the below addresses the
+> issue first so we know what the problem is.
+> 
+> I'll prepare a revert in the meantime.
+
+I've now posted the revert, but please do check if the below patch was
+enough to resolve the immediate issue.
+
+Johan
+
+> diff --git a/drivers/usb/dwc3/core.c b/drivers/usb/dwc3/core.c
+> index 31156d4dec9f..37d49a394912 100644
+> --- a/drivers/usb/dwc3/core.c
+> +++ b/drivers/usb/dwc3/core.c
+> @@ -197,6 +197,8 @@ static void __dwc3_set_mode(struct work_struct *work)
+>                                 otg_set_vbus(dwc->usb2_phy->otg, true);
+>                         phy_set_mode(dwc->usb2_generic_phy, PHY_MODE_USB_HOST);
+>                         phy_set_mode(dwc->usb3_generic_phy, PHY_MODE_USB_HOST);
+> +                       phy_calibrate(dwc->usb2_generic_phy);
+> +                       phy_calibrate(dwc->usb3_generic_phy);
+>                         if (dwc->dis_split_quirk) {
+>                                 reg = dwc3_readl(dwc->regs, DWC3_GUCTL3);
+>                                 reg |= DWC3_GUCTL3_SPLITDISABLE;
+> @@ -1391,6 +1393,9 @@ static int dwc3_core_init_mode(struct dwc3 *dwc)
+>                 ret = dwc3_host_init(dwc);
+>                 if (ret)
+>                         return dev_err_probe(dev, ret, "failed to initialize host\n");
+> +
+> +               phy_calibrate(dwc->usb2_generic_phy);
+> +               phy_calibrate(dwc->usb3_generic_phy);
+>                 break;
+>         case USB_DR_MODE_OTG:
+>                 INIT_WORK(&dwc->drd_work, __dwc3_set_mode);
