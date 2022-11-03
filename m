@@ -2,153 +2,126 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 3125E61776E
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 08:14:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 098D4617776
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 08:17:13 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230398AbiKCHOw (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 03:14:52 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:51338 "EHLO
+        id S229745AbiKCHRK (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 03:17:10 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:52472 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231204AbiKCHOo (ORCPT
+        with ESMTP id S230199AbiKCHQ5 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 03:14:44 -0400
-Received: from smtp.smtpout.orange.fr (smtp-12.smtpout.orange.fr [80.12.242.12])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 949ABB03
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 00:14:41 -0700 (PDT)
-Received: from [192.168.1.18] ([86.243.100.34])
-        by smtp.orange.fr with ESMTPA
-        id qUQtofbR69RnzqUQtoOzUF; Thu, 03 Nov 2022 08:14:39 +0100
-X-ME-Helo: [192.168.1.18]
-X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
-X-ME-Date: Thu, 03 Nov 2022 08:14:39 +0100
-X-ME-IP: 86.243.100.34
-Message-ID: <997182bc-f3de-71df-f241-dc6f52662f04@wanadoo.fr>
-Date:   Thu, 3 Nov 2022 08:14:35 +0100
+        Thu, 3 Nov 2022 03:16:57 -0400
+Received: from mail-wm1-x332.google.com (mail-wm1-x332.google.com [IPv6:2a00:1450:4864:20::332])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 13B18D62
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 00:16:54 -0700 (PDT)
+Received: by mail-wm1-x332.google.com with SMTP id v124-20020a1cac82000000b003cf7a4ea2caso2670750wme.5
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 00:16:54 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hhVVFU4gv+0KPdkJhZ6Bsgp0nMXVzSegBp2GVEhxHuI=;
+        b=h9I23FTp6GIOXmio03YkEg/XABkIyK7okfyOacacDCySEptlxLcYcKstMetIpqEjVI
+         AJxxtkE/wdXbgKxacBRTI0vKPMD7Lrwttr/WvlHH6ej0kR33MU05lAqiRuHOXS6eYgUi
+         5D/WB/7tpxiogfi3huBIVAcoj+aw5jR0iw+raivB9st+zpUrHhjUaefLK8xl1XeXGROT
+         jIYtNJVpBXb1lhi22kZeWS2z2s2scGKIObYA8G99yKRsKrD7Waw2HL3AJk86rNi+kcwk
+         ldYfFW2HEUS0Ngd3K7BW6C8SpUqOYnm44amyRmlRCLpiKmxp0dOvOZKAUgifFtw1/6bS
+         zu8w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hhVVFU4gv+0KPdkJhZ6Bsgp0nMXVzSegBp2GVEhxHuI=;
+        b=PZxmLRtIEYoA6HXhwtRSEGpNHH2W2gfUWUUcBK+TfvKlM/RcUiPfB13jI604goFM5D
+         ose/PPUiRFqHTL36LVznfPrtaEDubccVMZ33o1L87h7WRqr0dfUpo43ibw5hmnz4AiZV
+         3E2W66dkKipEkWbCJqDMjz/OTjrdXW6usIcvcI4vPbCjN5JMJAABcXCIAKTY4PMybSEF
+         5ez3yfHAUa6/x8UGEqw7hZmIVRhsopLD5TNYR7oqGnKkDDAjwXPMYLoUrS/oXAnBACCb
+         4eEY8WlENmQ8sKm9TjpWlsIgMUk8MPekuRM0hsAU4Ug/9SpEIVd5NHI8AcYpgyLlSyjA
+         xmow==
+X-Gm-Message-State: ACrzQf0wn7BEujW1H0tIT1eMy3Zgi20jTu9PaetTSXNASo24LMUvjGqm
+        cVxemkxaRBWeWs0/WqXld5kbKA==
+X-Google-Smtp-Source: AMsMyM5U5tWVDdkP8vx2CGlIc4Tyh8xELM0VfMzpr/hFq4D4kTE8+riEzXzUJzEDmk/itTcMkiPp1A==
+X-Received: by 2002:a05:600c:22c6:b0:3cf:88bb:3a95 with SMTP id 6-20020a05600c22c600b003cf88bb3a95mr4075812wmg.71.1667459812670;
+        Thu, 03 Nov 2022 00:16:52 -0700 (PDT)
+Received: from [192.168.11.175] (216.red-88-29-181.dynamicip.rima-tde.net. [88.29.181.216])
+        by smtp.gmail.com with ESMTPSA id p22-20020a05600c359600b003c6b9749505sm4601041wmq.30.2022.11.03.00.16.48
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 00:16:51 -0700 (PDT)
+Message-ID: <5aaa19b8-da75-9a3c-634b-d4c26f77943b@linaro.org>
+Date:   Thu, 3 Nov 2022 08:16:48 +0100
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.2.2
-Subject: Re: [PATCH v8 1/2] clocksource: loongson2_hpet: add hpet driver
- support
-To:     zhuyinbo@loongson.cn
-References: <20221103065351.32603-1-zhuyinbo@loongson.cn>
-Content-Language: fr, en-US
-From:   Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-Cc:     chenhuacai@kernel.org, daniel.lezcano@linaro.org,
-        devicetree@vger.kernel.org, jiaxun.yang@flygoat.com,
-        kernel@xen0n.name, krzysztof.kozlowski+dt@linaro.org,
-        linux-kernel@vger.kernel.org, liuyun@loongson.cn,
-        loongarch@lists.linux.dev, lvjianmin@loongson.cn,
-        robh+dt@kernel.org, tglx@linutronix.de, yang.lee@linux.alibaba.com
-In-Reply-To: <20221103065351.32603-1-zhuyinbo@loongson.cn>
+User-Agent: Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:102.0)
+ Gecko/20100101 Thunderbird/102.4.1
+Subject: Re: [PATCH 25/44] KVM: s390: Do s390 specific init without bouncing
+ through kvm_init()
+Content-Language: en-US
+To:     Sean Christopherson <seanjc@google.com>,
+        Paolo Bonzini <pbonzini@redhat.com>,
+        Marc Zyngier <maz@kernel.org>,
+        Huacai Chen <chenhuacai@kernel.org>,
+        Aleksandar Markovic <aleksandar.qemu.devel@gmail.com>,
+        Anup Patel <anup@brainfault.org>,
+        Paul Walmsley <paul.walmsley@sifive.com>,
+        Palmer Dabbelt <palmer@dabbelt.com>,
+        Albert Ou <aou@eecs.berkeley.edu>,
+        Christian Borntraeger <borntraeger@linux.ibm.com>,
+        Janosch Frank <frankja@linux.ibm.com>,
+        Claudio Imbrenda <imbrenda@linux.ibm.com>,
+        Matthew Rosato <mjrosato@linux.ibm.com>,
+        Eric Farman <farman@linux.ibm.com>,
+        Vitaly Kuznetsov <vkuznets@redhat.com>
+Cc:     James Morse <james.morse@arm.com>,
+        Alexandru Elisei <alexandru.elisei@arm.com>,
+        Suzuki K Poulose <suzuki.poulose@arm.com>,
+        Oliver Upton <oliver.upton@linux.dev>,
+        Atish Patra <atishp@atishpatra.org>,
+        David Hildenbrand <david@redhat.com>, kvm@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, kvmarm@lists.linux.dev,
+        kvmarm@lists.cs.columbia.edu, linux-mips@vger.kernel.org,
+        linuxppc-dev@lists.ozlabs.org, kvm-riscv@lists.infradead.org,
+        linux-riscv@lists.infradead.org, linux-s390@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Isaku Yamahata <isaku.yamahata@intel.com>,
+        Fabiano Rosas <farosas@linux.ibm.com>,
+        Michael Ellerman <mpe@ellerman.id.au>,
+        Chao Gao <chao.gao@intel.com>,
+        Thomas Gleixner <tglx@linutronix.de>,
+        Yuan Yao <yuan.yao@intel.com>
+References: <20221102231911.3107438-1-seanjc@google.com>
+ <20221102231911.3107438-26-seanjc@google.com>
+From:   =?UTF-8?Q?Philippe_Mathieu-Daud=c3=a9?= <philmd@linaro.org>
+In-Reply-To: <20221102231911.3107438-26-seanjc@google.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,SPF_HELO_PASS,SPF_PASS
-        autolearn=unavailable autolearn_force=no version=3.4.6
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
+        SPF_HELO_NONE,SPF_PASS autolearn=unavailable autolearn_force=no
+        version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Le 03/11/2022 à 07:53, Yinbo Zhu a écrit :
-> HPET (High Precision Event Timer) defines a new set of timers, which
-> are used by the operating system to schedule threads, interrupt the
-> kernel and interrupt the multimedia timer server. The operating
-> system can assign different timers to different applications. By
-> configuration, each timer can generate interrupt independently.
+On 3/11/22 00:18, Sean Christopherson wrote:
+> Move the guts of kvm_arch_init() into a new helper, __kvm_s390_init(),
+> and invoke the new helper directly from kvm_s390_init() instead of
+> bouncing through kvm_init().  Invoking kvm_arch_init() is the very
+> first action performed by kvm_init(), i.e. this is a glorified nop.
 > 
-> The Loongson-2 HPET module includes a main count and three comparators,
-> all of which are 32 bits wide. Among the three comparators, only
-> one comparator supports periodic interrupt, all three comparators
-> support non periodic interrupts.
+> Moving setup to __kvm_s390_init() will allow tagging more functions as
+> __init, and emptying kvm_arch_init() will allow dropping the hook
+> entirely once all architecture implementations are nops.
 > 
-> Signed-off-by: Yinbo Zhu <zhuyinbo-cXZgJK919ebM1kAEIRd3EQ@public.gmane.org>
+> No functional change intended.
+> 
+> Signed-off-by: Sean Christopherson <seanjc@google.com>
 > ---
+>   arch/s390/kvm/kvm-s390.c | 29 +++++++++++++++++++++++++----
+>   1 file changed, 25 insertions(+), 4 deletions(-)
 
-[...]
-
-Hi, a few nits below.
-
-> +static int hpet_request_irq(struct clock_event_device *cd)
-> +{
-> +	unsigned long flags = IRQD_NO_BALANCING | IRQF_TIMER;
-> +
-> +	if (request_irq(cd->irq, hpet_irq_handler, flags, "hpet", NULL)) {
-> +		pr_err("Failed to register hpet interrupt\n");
-
-Maybe s/register/request/ ?
-
-> +		return -1;
-> +	}
-> +
-> +	disable_irq(cd->irq);
-> +	irq_set_affinity(cd->irq, cd->cpumask);
-> +	enable_irq(cd->irq);
-> +
-> +	return 0;
-> +}
-> +
-
-[...]
-
-> +static int __init loongson2_hpet_init(struct device_node *np)
-> +{
-> +	int ret;
-> +	struct clk *clk;
-> +
-> +	hpet_mmio_base = of_iomap(np, 0);
-> +	if (!hpet_mmio_base) {
-> +		pr_err("hpet: unable to map loongson2 hpet registers\n");
-> +		goto err;
-
-'ret' is un-initialised at this point, and of_iomap() has failed, so 
-there is no need to undo it in the error handling path.
-
-> +	}
-> +
-> +	ret = -EINVAL;
-
-Could be done at declataion, a few lines above.
-
-> +	hpet_t0_irq = irq_of_parse_and_map(np, 0);
-> +	if (hpet_t0_irq <= 0) {
-> +		pr_err("hpet: unable to get IRQ from DT, %d\n", hpet_t0_irq);
-> +		goto err;
-> +	}
-> +
-> +	clk = of_clk_get(np, 0);
-> +	if (!IS_ERR(clk)) {
-> +		hpet_freq = clk_get_rate(clk);
-> +		clk_put(clk);
-> +	} else
-> +		goto err;
-
-Test for:
-	if (IS_ERR(clk))
-		goto err;
-
-and keep :
-	hpet_freq = clk_get_rate(clk);
-	clk_put(clk);
-
-with less indentation in the normal path?
-
-CJ
-
-> +
-> +	hpet_irq_flags = HPET_TN_LEVEL;
-> +
-> +	loongson2_hpet_clocksource_init();
-> +
-> +	loongson2_hpet_clockevent_init();
-> +
-> +	return 0;
-> +
-> +err:
-> +	iounmap(hpet_mmio_base);
-> +	return ret;
-> +}
-> +
-> +TIMER_OF_DECLARE(loongson2_hpet, "loongson,ls2k-hpet", loongson2_hpet_init);
+Reviewed-by: Philippe Mathieu-Daudé <philmd@linaro.org>
 
