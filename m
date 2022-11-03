@@ -2,125 +2,111 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 373896187CE
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:41:35 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id E1BD96187D0
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:42:34 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbiKCSld (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 14:41:33 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38280 "EHLO
+        id S229708AbiKCSmc (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 14:42:32 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38982 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230394AbiKCSl3 (ORCPT
+        with ESMTP id S229461AbiKCSm3 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 14:41:29 -0400
-Received: from ams.source.kernel.org (ams.source.kernel.org [IPv6:2604:1380:4601:e00::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BB55313DC4;
-        Thu,  3 Nov 2022 11:41:28 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by ams.source.kernel.org (Postfix) with ESMTPS id 7715FB81F9B;
-        Thu,  3 Nov 2022 18:41:27 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1E4F5C43144;
-        Thu,  3 Nov 2022 18:41:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667500886;
-        bh=+x0WEovETjX96nWQFwOLkbvYF0kQ4DTi71pRIT1th6o=;
-        h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-        b=sk/BhSI8QNzqciRrw9XBNYN9knhXD9DdOeneUlayCBRtzammb7jhAAzW6DfJns8DO
-         G2RQpa8pFrb80OQ9TNrZzaJxR0FNtvaNGzREmplYDIvGdT/G9wMDUkmBReIO4kibec
-         cqPzdRHmnXbzh1ndHNfqvgD8T7jSAbzafTLjByx5n8sI+RmfA6xB3zc8RN/9whgc9w
-         nQo2lCfzkda5pjhmCCcw0X3fcT9B4D8oTClXhbhHrzy37CX7/eEe5CYbJDQvAxAYrm
-         1ufC2U7Q1KNupRmJxVm1YRAvXzPDU/Cs5bIdy5gkz9kB4n+F1PP1o3748w+02tE6VQ
-         qUqCd3Sg2Ftog==
-Received: by mail-ej1-f47.google.com with SMTP id d26so7656421eje.10;
-        Thu, 03 Nov 2022 11:41:25 -0700 (PDT)
-X-Gm-Message-State: ACrzQf3OQDYQNusxAojeaPtxMFmbAXsJUnq6RqD4yPJ1/DoWiqECBeGT
-        iUbk2K8Qr7dXYpD/woMoJJ9/KPANRRsjaWJZVIg=
-X-Google-Smtp-Source: AMsMyM7kNiALwBf+N4zPiSLgTQINbawgVQLHjgjL/zWoVwnkkJZFP1vwl80lcs5vCupd7qkj0oC6t32XAe6s1eOZBx4=
-X-Received: by 2002:a17:907:b602:b0:7ad:e82c:3355 with SMTP id
- vl2-20020a170907b60200b007ade82c3355mr17171451ejc.3.1667500884319; Thu, 03
- Nov 2022 11:41:24 -0700 (PDT)
+        Thu, 3 Nov 2022 14:42:29 -0400
+Received: from mail-pj1-x1035.google.com (mail-pj1-x1035.google.com [IPv6:2607:f8b0:4864:20::1035])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8DB1F13DC4
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 11:42:28 -0700 (PDT)
+Received: by mail-pj1-x1035.google.com with SMTP id m14-20020a17090a3f8e00b00212dab39bcdso6149012pjc.0
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 11:42:28 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=hlOWEygp3Q3B0+hmRBdXcI5bVOc0fg9754HhvUHMgTw=;
+        b=QiJupiygbmmUc3WjLYoLwdEpXbkyqRluenMe5CSF0DZppRZqSR71rB5DfdVbzTydkA
+         9WXcIK9A4o5ZgIaf95HOS5pTs/H0xWwZ6UKEvWI1YP2aVbzK6louP6iTVs45EO2EiIgP
+         EITM80kAbyf5pcz7d1FoKX+p7uZJ7AKM3Z9+jFM0y8zoRSSwQLlyBZYCUflAZNSDt/P6
+         QTBs3aVSVdbTmodvMtdpz3hvFYHHT2QuPL0j81b0iFnpM0Jzv6bydaMV0zvDco5gbEVI
+         U1XyVRGbni9sq0HG7bw2m9WHKG+VYvJpgtncjTMnb8k0m8jA7yCBSOeQr5y5ELAqy4I5
+         bOFA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=hlOWEygp3Q3B0+hmRBdXcI5bVOc0fg9754HhvUHMgTw=;
+        b=U8aVuATs0+g1OtNHu8fNHbxdzZK/G6MJfQZZzuS1nGL/uWe79BhYgK7hGXNT9K6n8C
+         M7NmOHlSo4zOw9xoQL1oFY16W9WQMx4xPr91FteD2B/gUKi7zxKX9MN5duv5LEsKQhF/
+         /IOnpftoAHA6b4U+NTgn3wpfs4DTcqVZAfnZmT40nH4SQexBdLo5KkL8pEtv2sRYniMU
+         FNYnOc9wdAbuVczcDT0vRaPbkxCh4D0wYrHVeL77Aw2Mr4WNpctojGEXE+yH0VN7Vgbq
+         EQU2DwV31DmvLGw9x+SLBiRNPvfNMjT62AAhJiU1JkVAPJ8ZZEld75rqyrid0vwy8krP
+         eEiQ==
+X-Gm-Message-State: ACrzQf3/8kBRTbRIRuZZ1OVorkafQwcs0LC7oeQf6tIL+XTx22uU1j+9
+        MHOGWN6dYkNGsx1SYQ/XxiQioQ==
+X-Google-Smtp-Source: AMsMyM6EBJtnVX3JvYSOVeZ4k4i6dahkmGD1RbCqzPgmEs3qyieW8t/He9a9C295cUJNjbXSXVYMkg==
+X-Received: by 2002:a17:90b:4d07:b0:1ef:521c:f051 with SMTP id mw7-20020a17090b4d0700b001ef521cf051mr50938599pjb.164.1667500947963;
+        Thu, 03 Nov 2022 11:42:27 -0700 (PDT)
+Received: from google.com (7.104.168.34.bc.googleusercontent.com. [34.168.104.7])
+        by smtp.gmail.com with ESMTPSA id u15-20020a170903124f00b0016d9b101413sm973517plh.200.2022.11.03.11.42.27
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 11:42:27 -0700 (PDT)
+Date:   Thu, 3 Nov 2022 18:42:24 +0000
+From:   Sean Christopherson <seanjc@google.com>
+To:     syzbot <syzbot+8cdd16fd5a6c0565e227@syzkaller.appspotmail.com>
+Cc:     bp@alien8.de, dave.hansen@linux.intel.com, hpa@zytor.com,
+        kvm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        mingo@redhat.com, pbonzini@redhat.com,
+        syzkaller-bugs@googlegroups.com, tglx@linutronix.de, x86@kernel.org
+Subject: Re: [syzbot] BUG: unable to handle kernel paging request in
+ vmx_handle_exit_irqoff
+Message-ID: <Y2QLkI7Jqj8lNnlj@google.com>
+References: <000000000000a4496905ec7f35b7@google.com>
+ <0000000000004d244705ec88228c@google.com>
 MIME-Version: 1.0
-References: <20221101052340.1210239-1-namhyung@kernel.org> <20221101052340.1210239-3-namhyung@kernel.org>
- <Y2DuzmnUm6NIh25a@krava> <CAADnVQJ6+N6vQ=ZUgUjoB_M2RoTGGPXpLwz81mNDmLWrGYKetw@mail.gmail.com>
- <CAPhsuW6iuEZCCYJk-cra8DkEWNtdin8GyJDZ6Y8zd4ecfd1gQA@mail.gmail.com>
- <CAADnVQ+SYv5O+UxnGaBAvxptopWyANdbQRg=e2GXiRBPyJMGgA@mail.gmail.com>
- <CAPhsuW55zAYCipf1P4dM8Cu9QFewnyZE+SOquKhSbdqUWG_EKg@mail.gmail.com>
- <CAM9d7chKunyZX=-9gANZ2BKZTzQXuWYCgPQU46jCHkqsjsoGUg@mail.gmail.com>
- <CAPhsuW70GMFfzvgp__GOhebPu9bXnG7PzEby6xEExFgg+JmeTQ@mail.gmail.com> <CAM9d7chq+Y5M-4S1HWwxBkL+aRysGt8griGbo_jXG4g+EQK_gg@mail.gmail.com>
-In-Reply-To: <CAM9d7chq+Y5M-4S1HWwxBkL+aRysGt8griGbo_jXG4g+EQK_gg@mail.gmail.com>
-From:   Song Liu <song@kernel.org>
-Date:   Thu, 3 Nov 2022 11:41:12 -0700
-X-Gmail-Original-Message-ID: <CAPhsuW7ri8gUdhQkk=VWHRWvJGd3MjZk+PMfJ0d-hXFKb=Z8Eg@mail.gmail.com>
-Message-ID: <CAPhsuW7ri8gUdhQkk=VWHRWvJGd3MjZk+PMfJ0d-hXFKb=Z8Eg@mail.gmail.com>
-Subject: Re: [PATCH bpf-next 2/3] bpf: Add bpf_perf_event_read_sample() helper
-To:     Namhyung Kim <namhyung@kernel.org>
-Cc:     Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-        Jiri Olsa <olsajiri@gmail.com>,
-        Alexei Starovoitov <ast@kernel.org>,
-        Daniel Borkmann <daniel@iogearbox.net>,
-        Andrii Nakryiko <andrii@kernel.org>,
-        Song Liu <songliubraving@fb.com>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Martin KaFai Lau <kafai@fb.com>, Yonghong Song <yhs@fb.com>,
-        John Fastabend <john.fastabend@gmail.com>,
-        KP Singh <kpsingh@kernel.org>, Hao Luo <haoluo@google.com>,
-        Stanislav Fomichev <sdf@google.com>,
-        LKML <linux-kernel@vger.kernel.org>, bpf <bpf@vger.kernel.org>,
-        Steven Rostedt <rostedt@goodmis.org>,
-        Ingo Molnar <mingo@kernel.org>,
-        Arnaldo Carvalho de Melo <acme@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <0000000000004d244705ec88228c@google.com>
+X-Spam-Status: No, score=-15.1 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,FSL_HELO_FAKE,RCVD_IN_DNSWL_NONE,SORTED_RECIPS,
+        SPF_HELO_NONE,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
+        autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 2, 2022 at 3:18 PM Namhyung Kim <namhyung@kernel.org> wrote:
->
-> On Tue, Nov 1, 2022 at 5:13 PM Song Liu <song@kernel.org> wrote:
-> >
-> > On Tue, Nov 1, 2022 at 3:17 PM Namhyung Kim <namhyung@kernel.org> wrote:
-> > > IIUC we want something like below to access sample data directly,
-> > > right?
-> > >
-> > >   BPF_CORE_READ(ctx, data, ip);
-> > >
-> >
-> > I haven't tried this, but I guess we may need something like
-> >
-> > data = ctx->data;
-> > BPF_CORE_READ(data, ip);
->
-> Ok, will try.
->
-> >
-> > > Some fields like raw and callchains will have variable length data
-> > > so it'd be hard to check the boundary at load time.
-> >
-> > I think we are fine as long as we can check boundaries at run time.
->
-> Sure, that means it's the responsibility of BPF writers, right?
+On Wed, Nov 02, 2022, syzbot wrote:
+> syzbot has found a reproducer for the following issue on:
+> 
+> HEAD commit:    61c3426aca2c Add linux-next specific files for 20221102
+> git tree:       linux-next
+> console+strace: https://syzkaller.appspot.com/x/log.txt?x=13596541880000
+> kernel config:  https://syzkaller.appspot.com/x/.config?x=acb529cc910d907c
+> dashboard link: https://syzkaller.appspot.com/bug?extid=8cdd16fd5a6c0565e227
+> compiler:       gcc (Debian 10.2.1-6) 10.2.1 20210110, GNU ld (GNU Binutils for Debian) 2.35.2
+> syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=17d036de880000
+> C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=11d5e00a880000
+> 
+> Downloadable assets:
+> disk image: https://storage.googleapis.com/syzbot-assets/cc56d88dd6a3/disk-61c3426a.raw.xz
+> vmlinux: https://storage.googleapis.com/syzbot-assets/5921b65b080f/vmlinux-61c3426a.xz
+> kernel image: https://storage.googleapis.com/syzbot-assets/39cbd355fedd/bzImage-61c3426a.xz
+> 
+> IMPORTANT: if you fix the issue, please add the following tag to the commit:
+> Reported-by: syzbot+8cdd16fd5a6c0565e227@syzkaller.appspotmail.com
+> 
+> BUG: unable to handle page fault for address: fffffbc0000001d8
+> #PF: supervisor read access in kernel mode
+> #PF: error_code(0x0000) - not-present page
+> PGD 23ffe4067 P4D 23ffe4067 PUD 0 
+> Oops: 0000 [#1] PREEMPT SMP KASAN
+> CPU: 0 PID: 5404 Comm: syz-executor526 Not tainted 6.1.0-rc3-next-20221102-syzkaller #0
+> Hardware name: Google Google Compute Engine/Google Compute Engine, BIOS Google 10/11/2022
+> RIP: 0010:gate_offset arch/x86/include/asm/desc_defs.h:100 [inline]
 
-Right, the author of the BPF program could check whether the data
-is valid.
+Looks like a KASAN bug, the KVM side of things looks ok and that code hasn't been
+touched in quite some time.  The actual explosion is in kasan_check_range(), not
+KVM code.
 
-Song
-
->
-> >
-> > > Also it's possible
-> > > that some fields are not set (according to sample type), and it'd be
-> > > the user's (or programmer's) responsibility to check if the data is
-> > > valid.  If these are not the concerns, I think I'm good.
-> >
-> > So we still need 1/3 of the set to make sure the data is valid?
->
-> Of course, I'll keep it in the v2.
->
-> Thanks,
-> Namhyung
+I'll bisect, this repros very quickly for me.
