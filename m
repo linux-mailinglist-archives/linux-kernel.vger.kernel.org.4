@@ -2,68 +2,55 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id A13F86178AE
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 09:28:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 13A416178B0
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 09:28:31 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230301AbiKCI2P (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 04:28:15 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38620 "EHLO
+        id S231174AbiKCI22 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 04:28:28 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:38938 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229830AbiKCI2J (ORCPT
+        with ESMTP id S230366AbiKCI2W (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 04:28:09 -0400
-Received: from ironport.ite.com.tw (60-251-196-230.hinet-ip.hinet.net [60.251.196.230])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D81775F46;
-        Thu,  3 Nov 2022 01:28:06 -0700 (PDT)
-Received: from unknown (HELO mse.ite.com.tw) ([192.168.35.30])
-  by ironport.ite.com.tw with ESMTP; 03 Nov 2022 16:28:04 +0800
-Received: from CSBMAIL1.internal.ite.com.tw (CSBMAIL1.internal.ite.com.tw [192.168.65.58])
-        by mse.ite.com.tw with ESMTP id 2A38RwWI072844;
-        Thu, 3 Nov 2022 16:27:58 +0800 (GMT-8)
-        (envelope-from allen.chen@ite.com.tw)
-Received: from CSBMAIL1.internal.ite.com.tw (192.168.65.58) by
- CSBMAIL1.internal.ite.com.tw (192.168.65.58) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id
- 15.1.2176.14; Thu, 3 Nov 2022 16:27:58 +0800
-Received: from CSBMAIL1.internal.ite.com.tw ([fe80::dd22:b444:859b:61c7]) by
- CSBMAIL1.internal.ite.com.tw ([fe80::dd22:b444:859b:61c7%18]) with mapi id
- 15.01.2176.014; Thu, 3 Nov 2022 16:27:58 +0800
-From:   <allen.chen@ite.com.tw>
-To:     <krzysztof.kozlowski@linaro.org>
-CC:     <treapking@chromium.org>, <Jau-Chih.Tseng@ite.com.tw>,
-        <Hermes.Wu@ite.com.tw>, <Kenneth.Hung@ite.com.tw>,
-        <andrzej.hajda@intel.com>, <narmstrong@baylibre.com>,
-        <robert.foss@linaro.org>, <Laurent.pinchart@ideasonboard.com>,
-        <jonas@kwiboo.se>, <jernej.skrabec@gmail.com>, <airlied@linux.ie>,
-        <daniel@ffwll.ch>, <robh+dt@kernel.org>,
-        <krzysztof.kozlowski+dt@linaro.org>,
-        <dri-devel@lists.freedesktop.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: RE: [PATCH v6 1/2] dt-bindings: it6505: add properties to restrict
- output bandwidth
-Thread-Topic: [PATCH v6 1/2] dt-bindings: it6505: add properties to restrict
- output bandwidth
-Thread-Index: AQHY6nDorSjdzmskUUWkM7FpU3Wft64rCzswgABLlgCAAZBVsA==
-Date:   Thu, 3 Nov 2022 08:27:58 +0000
-Message-ID: <df7f841e07764433b87085eeaef5733f@ite.com.tw>
-References: <20221027030155.59238-1-allen.chen@ite.com.tw>
- <20221027030155.59238-2-allen.chen@ite.com.tw>
- <d6f14e09-0c24-e19a-0951-bb3ca2219e79@linaro.org>
- <18659f5a5b2c4fd7b76731836aeb713d@ite.com.tw>
- <30ce6ed4-cbea-7b82-cca5-8920fc1eddad@linaro.org>
-In-Reply-To: <30ce6ed4-cbea-7b82-cca5-8920fc1eddad@linaro.org>
-Accept-Language: en-US
-Content-Language: zh-TW
-X-MS-Has-Attach: 
-X-MS-TNEF-Correlator: 
-x-originating-ip: [192.168.70.46]
-x-tm-snts-smtp: 2BDF71C3B6F730D79AF473E1C57B57AB6758B3A083D2EB534B4436160364AF662002:8
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: base64
-MIME-Version: 1.0
-X-MAIL: mse.ite.com.tw 2A38RwWI072844
-X-Spam-Status: No, score=-0.9 required=5.0 tests=BAYES_00,PDS_RDNS_DYNAMIC_FP,
-        RDNS_DYNAMIC,SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no
+        Thu, 3 Nov 2022 04:28:22 -0400
+X-Greylist: delayed 1215 seconds by postgrey-1.37 at lindbergh.monkeyblade.net; Thu, 03 Nov 2022 01:28:14 PDT
+Received: from mxhk.zte.com.cn (mxhk.zte.com.cn [63.216.63.35])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B3653B484;
+        Thu,  3 Nov 2022 01:28:14 -0700 (PDT)
+Received: from mse-fl1.zte.com.cn (unknown [10.5.228.132])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by mxhk.zte.com.cn (FangMail) with ESMTPS id 4N2xj73PC0z4xVnd;
+        Thu,  3 Nov 2022 16:28:11 +0800 (CST)
+Received: from xaxapp01.zte.com.cn ([10.88.40.50])
+        by mse-fl1.zte.com.cn with SMTP id 2A38S1gO039712;
+        Thu, 3 Nov 2022 16:28:01 +0800 (+08)
+        (envelope-from zhang.songyi@zte.com.cn)
+Received: from mapi (xaxapp01[null])
+        by mapi (Zmail) with MAPI id mid31;
+        Thu, 3 Nov 2022 16:28:03 +0800 (CST)
+Date:   Thu, 3 Nov 2022 16:28:03 +0800 (CST)
+X-Zmail-TransId: 2af963637b9327ebcee2
+X-Mailer: Zmail v1.0
+Message-ID: <202211031628039654230@zte.com.cn>
+Mime-Version: 1.0
+From:   <zhang.songyi@zte.com.cn>
+To:     <avifishman70@gmail.com>
+Cc:     <tmaimon77@gmail.com>, <tali.perry1@gmail.com>,
+        <venture@google.com>, <yuenn@google.com>,
+        <benjaminfair@google.com>, <openbmc@lists.ozlabs.org>,
+        <linux-i2c@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <zhang.songyi@zte.com.cn>
+Subject: =?UTF-8?B?W1BBVENIIGxpbnV4LW5leHRdIGkyYzogbnBjbTd4eDogcmVtb3ZlIHJlZHVuZGFudCByZXQgdmFyaWFibGU=?=
+Content-Type: text/plain;
+        charset="UTF-8"
+X-MAIL: mse-fl1.zte.com.cn 2A38S1gO039712
+X-Fangmail-Gw-Spam-Type: 0
+X-FangMail-Miltered: at cgslv5.04-192.168.250.138.novalocal with ID 63637B9B.000 by FangMail milter!
+X-FangMail-Envelope: 1667464091/4N2xj73PC0z4xVnd/63637B9B.000/10.5.228.132/[10.5.228.132]/mse-fl1.zte.com.cn/<zhang.songyi@zte.com.cn>
+X-Fangmail-Anti-Spam-Filtered: true
+X-Fangmail-MID-QID: 63637B9B.000/4N2xj73PC0z4xVnd
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,SPF_HELO_NONE,
+        SPF_PASS,UNPARSEABLE_RELAY autolearn=ham autolearn_force=no
         version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -71,34 +58,36 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-aGkNCg0KLS0tLS1PcmlnaW5hbCBNZXNzYWdlLS0tLS0NCkZyb206IEtyenlzenRvZiBLb3psb3dz
-a2kgPGtyenlzenRvZi5rb3psb3dza2lAbGluYXJvLm9yZz4gDQpTZW50OiBUaHVyc2RheSwgTm92
-ZW1iZXIgMywgMjAyMiAxMjozNCBBTQ0KVG86IEFsbGVuIENoZW4gKOmZs+afj+WuhykgPGFsbGVu
-LmNoZW5AaXRlLmNvbS50dz4NCkNjOiB0cmVhcGtpbmdAY2hyb21pdW0ub3JnOyBKYXUtQ2hpaCBU
-c2VuZyAo5pu+5pit5pm6KSA8SmF1LUNoaWguVHNlbmdAaXRlLmNvbS50dz47IEhlcm1lcyBXdSAo
-5ZCz5L2z5a6PKSA8SGVybWVzLld1QGl0ZS5jb20udHc+OyBLZW5uZXRoIEh1bmcgKOa0quWutuWA
-qykgPEtlbm5ldGguSHVuZ0BpdGUuY29tLnR3PjsgYW5kcnplai5oYWpkYUBpbnRlbC5jb207IG5h
-cm1zdHJvbmdAYmF5bGlicmUuY29tOyByb2JlcnQuZm9zc0BsaW5hcm8ub3JnOyBMYXVyZW50LnBp
-bmNoYXJ0QGlkZWFzb25ib2FyZC5jb207IGpvbmFzQGt3aWJvby5zZTsgamVybmVqLnNrcmFiZWNA
-Z21haWwuY29tOyBhaXJsaWVkQGxpbnV4LmllOyBkYW5pZWxAZmZ3bGwuY2g7IHJvYmgrZHRAa2Vy
-bmVsLm9yZzsga3J6eXN6dG9mLmtvemxvd3NraStkdEBsaW5hcm8ub3JnOyBkcmktZGV2ZWxAbGlz
-dHMuZnJlZWRlc2t0b3Aub3JnOyBkZXZpY2V0cmVlQHZnZXIua2VybmVsLm9yZzsgbGludXgta2Vy
-bmVsQHZnZXIua2VybmVsLm9yZw0KU3ViamVjdDogUmU6IFtQQVRDSCB2NiAxLzJdIGR0LWJpbmRp
-bmdzOiBpdDY1MDU6IGFkZCBwcm9wZXJ0aWVzIHRvIHJlc3RyaWN0IG91dHB1dCBiYW5kd2lkdGgN
-Cg0KT24gMDIvMTEvMjAyMiAwMjo1NCwgYWxsZW4uY2hlbkBpdGUuY29tLnR3IHdyb3RlOg0KPiBP
-biAyNi8xMC8yMDIyIDIzOjAxLCBhbGxlbiB3cm90ZToNCj4+IEZyb206IGFsbGVuIGNoZW4gPGFs
-bGVuLmNoZW5AaXRlLmNvbS50dz4NCj4+DQo+PiBBZGQgcHJvcGVydGllcyB0byByZXN0cmljdCBk
-cCBvdXRwdXQgZGF0YS1sYW5lcyBhbmQgY2xvY2suDQo+IA0KPiBUaGlzIGlzIGEgZnJpZW5kbHkg
-cmVtaW5kZXIgZHVyaW5nIHRoZSByZXZpZXcgcHJvY2Vzcy4NCj4gDQo+IEl0IHNlZW1zIG15IHBy
-ZXZpb3VzIGNvbW1lbnRzIHdlcmUgbm90IGZ1bGx5IGFkZHJlc3NlZC4gTWF5YmUgbXkgZmVlZGJh
-Y2sgZ290IGxvc3QgYmV0d2VlbiB0aGUgcXVvdGVzLCBtYXliZSB5b3UganVzdCBmb3Jnb3QgdG8g
-YXBwbHkgaXQuDQo+IFBsZWFzZSBnbyBiYWNrIHRvIHRoZSBwcmV2aW91cyBkaXNjdXNzaW9uIGFu
-ZCBlaXRoZXIgaW1wbGVtZW50IGFsbCByZXF1ZXN0ZWQgY2hhbmdlcyBvciBrZWVwIGRpc2N1c3Np
-bmcgdGhlbS4NCj4gDQo+IFRoYW5rIHlvdS4NCj4gDQo+ID09PiBJIGFtIHNvcnJ5IEkgZGlkbid0
-IGZpbmQgdGhlIG1pc3NpbmcgYWR2aWNlIHlvdSBzYWlkLiBDb3VsZCB5b3UgZXhwbGFpbiBpdCBh
-Z2Fpbj8NCj4gDQo+IFJvYiBhc2tlZCAtIENvbW1pdCBtc2cgc2hvdWxkIGV4cGxhaW4gcmVhc29u
-IGZvciBicmVha2luZyB1c2Vycy4NCg0KQW5kIHdoZXJlIGlzIHRoZSByZWFzb24/IEkgc2F3IG9u
-bHkgb25lIHNlbnRlbmNlICJBZGQgcHJvcGVydGllcyB0byByZXN0cmljdCBkcCBvdXRwdXQgZGF0
-YS1sYW5lcyBhbmQgY2xvY2suIg0KPT0+IEkgd2lsbCBhZGQgdGhlIGNvbW1pdCBtc2cgaW4gdjcu
-IFRoYW5rcyBmb3IgdGhlIHN1Z2dlc3Rpb24uDQoNCkJlc3QgcmVnYXJkcywNCktyenlzenRvZg0K
-DQo=
+From: zhang songyi <zhang.songyi@zte.com.cn>
+
+Return value from npcm_i2c_get_slave_addr() directly instead of taking
+this in another redundant variable.
+
+Reported-by: Zeal Robot <zealci@zte.com.cn>
+Signed-off-by: zhang songyi <zhang.songyi@zte.com.cn>
+---
+ drivers/i2c/busses/i2c-npcm7xx.c | 6 +-----
+ 1 file changed, 1 insertion(+), 5 deletions(-)
+
+diff --git a/drivers/i2c/busses/i2c-npcm7xx.c b/drivers/i2c/busses/i2c-npcm7xx.c
+index bbc7359e67f7..772967862003 100644
+--- a/drivers/i2c/busses/i2c-npcm7xx.c
++++ b/drivers/i2c/busses/i2c-npcm7xx.c
+@@ -858,14 +858,10 @@ static void npcm_i2c_master_abort(struct npcm_i2c *bus)
+ #if IS_ENABLED(CONFIG_I2C_SLAVE)
+ static u8 npcm_i2c_get_slave_addr(struct npcm_i2c *bus, enum i2c_addr addr_type)
+ {
+-   u8 slave_add;
+-
+    if (addr_type > I2C_SLAVE_ADDR2 && addr_type <= I2C_SLAVE_ADDR10)
+        dev_err(bus->dev, "get slave: try to use more than 2 SA not supported\n");
+
+-   slave_add = ioread8(bus->reg + npcm_i2caddr[(int)addr_type]);
+-
+-   return slave_add;
++   return ioread8(bus->reg + npcm_i2caddr[(int)addr_type]);
+ }
+
+ static int npcm_i2c_remove_slave_addr(struct npcm_i2c *bus, u8 slave_add)
+--
+2.15.2
