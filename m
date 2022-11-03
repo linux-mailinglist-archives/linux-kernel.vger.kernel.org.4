@@ -2,69 +2,68 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 2438B6176D0
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 07:40:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id AB6D06176D2
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 07:41:29 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230348AbiKCGk2 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 02:40:28 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:57980 "EHLO
+        id S229548AbiKCGl1 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 02:41:27 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58382 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229985AbiKCGk0 (ORCPT
+        with ESMTP id S229805AbiKCGlZ (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 02:40:26 -0400
-Received: from mail-wr1-x435.google.com (mail-wr1-x435.google.com [IPv6:2a00:1450:4864:20::435])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A11B0EA5
-        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 23:40:24 -0700 (PDT)
-Received: by mail-wr1-x435.google.com with SMTP id g12so1177763wrs.10
-        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 23:40:24 -0700 (PDT)
+        Thu, 3 Nov 2022 02:41:25 -0400
+Received: from mail-vs1-xe33.google.com (mail-vs1-xe33.google.com [IPv6:2607:f8b0:4864:20::e33])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E02BBEA5
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 23:41:24 -0700 (PDT)
+Received: by mail-vs1-xe33.google.com with SMTP id z189so1031669vsb.4
+        for <linux-kernel@vger.kernel.org>; Wed, 02 Nov 2022 23:41:24 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ESHWUn7hNVM3hhfp0corAi9A6QZkBTRcaV/Qj5TdN2M=;
-        b=m8etF77RJYcU7J1sOVO1hLLRMjfj5Tf7qPlNpIPyaWyIHVdPjQspnr0Z9tyRdcsdoX
-         V4ZQJxuzny0UrPq0nxtj+ZXBkiaJjzbvXjieN43wSvdsP4oAGp9FSr7HXK5shYlXUUFo
-         poF5wJbHyCCQQf5LvWd3uaGeoyLCOlt05/4VwRq3n/ggLtCfygcow+k0xTvqFipf1Meq
-         ejRtVxrskaCTQ5VHYzOoAiDxxh8thuQ50etRTkalqsQs89Osn9w40d9O269UVWfjz4yA
-         4x4566vCnM6ZZVrFQd+MxZaG+PHHFciBmILdQLuHcgjTZmU8jRTpKDbuhXrQA2V4k6Xp
-         4KxA==
+        d=google.com; s=20210112;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=F3a3ZRERkf326bXyGj4/+jADVjwDIqWmOimL7HvMGsk=;
+        b=SiVlXSeUY5HZudNqy9UyqYUwCK2fkynTHKdA9k8qPXUIBZ1Bp4dubC3/5Pf1YIPQpe
+         HkMfrQGa/VIqxl8QBUEF915HqjfXxPdlY8thKCUIfo0w0/8ccQohZ0zY2B4TNq2Qbij/
+         fuWt0xnbJJlqev9sGQ2QMUmCn0YP2rXSuD1FyU9d7jHQxrF2KWaNsTuXkhelw1xnX60x
+         lMJcTfasu2MAAUjxP/NARJRT/2yqX6Ezjjdx57ugckvsjfa3GinXHwN3MAVhWWfMIImp
+         1G0WUvFGTMrFRbC6lIc6u+mfqnCNFH2mO3t7tXA9hecjIyxvwa/T7tHfM8R69A2tDSJZ
+         VEbg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ESHWUn7hNVM3hhfp0corAi9A6QZkBTRcaV/Qj5TdN2M=;
-        b=ABpOeITjPXHapcN0OyOqJ9PvL+KeDfe2aeTpxD7G78bijCJ8cqMTMMy6XUx5UZ63Ie
-         qALiu3Va6GJ81mlYR2zbvXRe7TRFfzvjwIm9CIsVWmhOL6sZ/1ke1qmvKfu6jvfUAztC
-         Xp6a4LETA4Hli9Nar2/s4HxV0yK0uoVbOraDgd/J/iexArMJpvO3x7WyE1ecGJYLdssf
-         sbFVX4wDaKvjrzT6q40jK5PZ2IlL4Q5TEVTVAdA20gUsFOu0k/oPrBPeY58ReRiPLWR6
-         cHx3TjubIOjXAtZS+QzcKZiCo7LIu4XOt8x5+n31CFFF9ORF/bl90P6ORQZnPeVanOYT
-         vzmQ==
-X-Gm-Message-State: ACrzQf26GdDuk2sxlC/3o/4650H7FHGkn9SuYCfEIiVrg/oThUitQFad
-        qhIk342308TC8cqqyNylQKOJcODwjsLy+A==
-X-Google-Smtp-Source: AMsMyM7BwKP/AL76bBxpVj+2Z8rQIC99KpoZS93KzfFkSfEZudsbo2+YXLYhQaWEbMIGw+fSyb0Eow==
-X-Received: by 2002:adf:f081:0:b0:236:5e7c:4ec2 with SMTP id n1-20020adff081000000b002365e7c4ec2mr17024440wro.641.1667457623087;
-        Wed, 02 Nov 2022 23:40:23 -0700 (PDT)
-Received: from localhost ([102.36.222.112])
-        by smtp.gmail.com with ESMTPSA id n18-20020a05600c4f9200b003c3a1d8c8e6sm249628wmq.19.2022.11.02.23.40.21
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 02 Nov 2022 23:40:22 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 09:40:19 +0300
-From:   Dan Carpenter <error27@gmail.com>
-To:     Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-Cc:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-Subject: Re: [RESEND PATCH v2] staging: vt6655: change 2 variable names
- wFB_Opt0 and wFB_Opt1
-Message-ID: <Y2NiUwrvFt1V6xdK@kadam>
-References: <Y2Ncr9fQ5P6OChuV@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=F3a3ZRERkf326bXyGj4/+jADVjwDIqWmOimL7HvMGsk=;
+        b=bOGMy0xaWmlLkNnbGBKX07WcfmZ5+nQWy2MeU/HBrsnsNaWUCIQyiQ8RbIMLKEIln1
+         nXgEnKC1aREohpHTBm2aqtuB/3LZF4pq1rwARos1NmK0ShIu2SAdS0A/XnAFE6nA8iXa
+         XZLOq6hRqZNzm9mLzIRW9jEpk4hw4YgGjJ80scbAydTzral4PiZ+Y27Qj04WKVATlEUU
+         RzbYFQVLwN+YfKe77lgUf7CjIF7M8vftea1raJwvkDdV5q03+JfEn6fBTcZMwgsn6XCx
+         AnAvpWL7pDJCjGbi2lDbIoms5alBNLb8b/nguyU9BdN9wguTrC1yiIqVrUCuMSHJNJA1
+         Kx2g==
+X-Gm-Message-State: ACrzQf16NiFEDWepKjUEz/KVFBdj1ezT9+gOcPl8kqJBDTp2Vvj4NJJC
+        AodqvM4weqp3mcG1SaUwnt09Xk8eP/a51iGMRrPDyg==
+X-Google-Smtp-Source: AMsMyM7JIRfImm+OtRTBDFwhHDU4V50bqwTWIh81IsrPFSKWqeWWf+nyg3aShSMuQbMOtEv7X6mfSqPqsL+HF3UnFXQ=
+X-Received: by 2002:a67:e085:0:b0:3aa:3fe2:64f1 with SMTP id
+ f5-20020a67e085000000b003aa3fe264f1mr16724103vsl.71.1667457683907; Wed, 02
+ Nov 2022 23:41:23 -0700 (PDT)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Y2Ncr9fQ5P6OChuV@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+References: <20221102164005.2516646-1-dlatypov@google.com> <20221102164005.2516646-3-dlatypov@google.com>
+In-Reply-To: <20221102164005.2516646-3-dlatypov@google.com>
+From:   David Gow <davidgow@google.com>
+Date:   Thu, 3 Nov 2022 14:41:12 +0800
+Message-ID: <CABVgOS=SGOALjWeine405u8YLU-HNakBcLU_ZeZKx+25+eA6Nw@mail.gmail.com>
+Subject: Re: [PATCH 3/3] kunit: tool: remove redundant file.close() call in
+ unit test
+To:     Daniel Latypov <dlatypov@google.com>
+Cc:     brendanhiggins@google.com, rmoar@google.com,
+        linux-kernel@vger.kernel.org, kunit-dev@googlegroups.com,
+        linux-kselftest@vger.kernel.org, skhan@linuxfoundation.org
+Content-Type: multipart/signed; protocol="application/pkcs7-signature"; micalg=sha-256;
+        boundary="000000000000f23ac805ec8b3eb2"
+X-Spam-Status: No, score=-17.6 required=5.0 tests=BAYES_00,DKIMWL_WL_MED,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,
+        ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS,
+        USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -72,21 +71,118 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 06:16:15AM +0000, Tanjuate Brunostar wrote:
-> These variables are named using Hungarian notation, which is not used
-> in the Linux kernel.
-> 
-> Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
+--000000000000f23ac805ec8b3eb2
+Content-Type: text/plain; charset="UTF-8"
+
+On Thu, Nov 3, 2022 at 12:40 AM Daniel Latypov <dlatypov@google.com> wrote:
+>
+> We're using a `with` block above, so the file object is already closed.
+>
+> Signed-off-by: Daniel Latypov <dlatypov@google.com>
 > ---
-> 
-> v2: corrected errors on the subject line of this patch
-> 
 
-Don't put RESEND in the title.  RESEND means that the first patch was
-perfect but the maintainer accidentally ignored it.  v2 means the
-maintainer wanted something changed.  RESEND v2 means that v2 was
-perfect and the MAINTAINER ignored it.
+Nice catch.
 
-regards,
-dan carpenter
+Reviewed-by: David Gow <davidgow@google.com>
 
+Cheers,
+-- David
+
+>  tools/testing/kunit/kunit_tool_test.py | 2 --
+>  1 file changed, 2 deletions(-)
+>
+> diff --git a/tools/testing/kunit/kunit_tool_test.py b/tools/testing/kunit/kunit_tool_test.py
+> index 0063773c0fc4..c41567eaf3c3 100755
+> --- a/tools/testing/kunit/kunit_tool_test.py
+> +++ b/tools/testing/kunit/kunit_tool_test.py
+> @@ -239,8 +239,6 @@ class KUnitParserTest(unittest.TestCase):
+>                 self.assertEqual(
+>                         "example",
+>                         result.subtests[1].name)
+> -               file.close()
+> -
+>
+>         def test_ignores_prefix_printk_time(self):
+>                 prefix_log = test_data_path('test_config_printk_time.log')
+> --
+> 2.38.1.273.g43a17bfeac-goog
+>
+
+--000000000000f23ac805ec8b3eb2
+Content-Type: application/pkcs7-signature; name="smime.p7s"
+Content-Transfer-Encoding: base64
+Content-Disposition: attachment; filename="smime.p7s"
+Content-Description: S/MIME Cryptographic Signature
+
+MIIPnwYJKoZIhvcNAQcCoIIPkDCCD4wCAQExDzANBglghkgBZQMEAgEFADALBgkqhkiG9w0BBwGg
+ggz5MIIEtjCCA56gAwIBAgIQeAMYYHb81ngUVR0WyMTzqzANBgkqhkiG9w0BAQsFADBMMSAwHgYD
+VQQLExdHbG9iYWxTaWduIFJvb3QgQ0EgLSBSMzETMBEGA1UEChMKR2xvYmFsU2lnbjETMBEGA1UE
+AxMKR2xvYmFsU2lnbjAeFw0yMDA3MjgwMDAwMDBaFw0yOTAzMTgwMDAwMDBaMFQxCzAJBgNVBAYT
+AkJFMRkwFwYDVQQKExBHbG9iYWxTaWduIG52LXNhMSowKAYDVQQDEyFHbG9iYWxTaWduIEF0bGFz
+IFIzIFNNSU1FIENBIDIwMjAwggEiMA0GCSqGSIb3DQEBAQUAA4IBDwAwggEKAoIBAQCvLe9xPU9W
+dpiHLAvX7kFnaFZPuJLey7LYaMO8P/xSngB9IN73mVc7YiLov12Fekdtn5kL8PjmDBEvTYmWsuQS
+6VBo3vdlqqXZ0M9eMkjcKqijrmDRleudEoPDzTumwQ18VB/3I+vbN039HIaRQ5x+NHGiPHVfk6Rx
+c6KAbYceyeqqfuJEcq23vhTdium/Bf5hHqYUhuJwnBQ+dAUcFndUKMJrth6lHeoifkbw2bv81zxJ
+I9cvIy516+oUekqiSFGfzAqByv41OrgLV4fLGCDH3yRh1tj7EtV3l2TngqtrDLUs5R+sWIItPa/4
+AJXB1Q3nGNl2tNjVpcSn0uJ7aFPbAgMBAAGjggGKMIIBhjAOBgNVHQ8BAf8EBAMCAYYwHQYDVR0l
+BBYwFAYIKwYBBQUHAwIGCCsGAQUFBwMEMBIGA1UdEwEB/wQIMAYBAf8CAQAwHQYDVR0OBBYEFHzM
+CmjXouseLHIb0c1dlW+N+/JjMB8GA1UdIwQYMBaAFI/wS3+oLkUkrk1Q+mOai97i3Ru8MHsGCCsG
+AQUFBwEBBG8wbTAuBggrBgEFBQcwAYYiaHR0cDovL29jc3AyLmdsb2JhbHNpZ24uY29tL3Jvb3Ry
+MzA7BggrBgEFBQcwAoYvaHR0cDovL3NlY3VyZS5nbG9iYWxzaWduLmNvbS9jYWNlcnQvcm9vdC1y
+My5jcnQwNgYDVR0fBC8wLTAroCmgJ4YlaHR0cDovL2NybC5nbG9iYWxzaWduLmNvbS9yb290LXIz
+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
+N0A3bgltvER3q1cGraQJMEwGA1UdIARFMEMwQQYJKwYBBAGgMgEoMDQwMgYIKwYBBQUHAgEWJmh0
+dHBzOi8vd3d3Lmdsb2JhbHNpZ24uY29tL3JlcG9zaXRvcnkvMAwGA1UdEwEB/wQCMAAwgZoGCCsG
+AQUFBwEBBIGNMIGKMD4GCCsGAQUFBzABhjJodHRwOi8vb2NzcC5nbG9iYWxzaWduLmNvbS9jYS9n
+c2F0bGFzcjNzbWltZWNhMjAyMDBIBggrBgEFBQcwAoY8aHR0cDovL3NlY3VyZS5nbG9iYWxzaWdu
+LmNvbS9jYWNlcnQvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3J0MB8GA1UdIwQYMBaAFHzMCmjXouse
+LHIb0c1dlW+N+/JjMEYGA1UdHwQ/MD0wO6A5oDeGNWh0dHA6Ly9jcmwuZ2xvYmFsc2lnbi5jb20v
+Y2EvZ3NhdGxhc3Izc21pbWVjYTIwMjAuY3JsMA0GCSqGSIb3DQEBCwUAA4IBAQAxS21FdvRtCQVc
+jgEj+xxSnUr0N9reJlI5J9zRiBCWGxm5yhz965IDka3XVFEbj+beJj/gyHoxbaTGf2AjOufpcMqy
+p4mtqc2l4Csudl8QeiBaOUDx4VKADbgxqpjvwD5zRpSKVj4S9y3BJi9xrRdPOm1Z2ZZYxRUxUz7d
+2MXoxQsFucGJO5a4CwDBaGgJAqvwCXU5Q64rKVIUBk6mtcd3cDwX+PXqx4QrhHFGq6b6oi37YQ8B
++bhlXqlkLrbPlPFk+4Rh4EaW92iD5g8kvtXCOwvIIvs+15Io0dbpIe2W5UKo2OcyDDFvrOACmUOE
+/GuEkhENcyDVyEs/4/N2u9WYMYICajCCAmYCAQEwaDBUMQswCQYDVQQGEwJCRTEZMBcGA1UEChMQ
+R2xvYmFsU2lnbiBudi1zYTEqMCgGA1UEAxMhR2xvYmFsU2lnbiBBdGxhcyBSMyBTTUlNRSBDQSAy
+MDIwAhABj4peqtakTCOMXLZ2mEqRMA0GCWCGSAFlAwQCAQUAoIHUMC8GCSqGSIb3DQEJBDEiBCBX
+1mpCnS4xjqubcgZwBrKLlyfFAhcMND3mO38iRXgEdzAYBgkqhkiG9w0BCQMxCwYJKoZIhvcNAQcB
+MBwGCSqGSIb3DQEJBTEPFw0yMjExMDMwNjQxMjRaMGkGCSqGSIb3DQEJDzFcMFowCwYJYIZIAWUD
+BAEqMAsGCWCGSAFlAwQBFjALBglghkgBZQMEAQIwCgYIKoZIhvcNAwcwCwYJKoZIhvcNAQEKMAsG
+CSqGSIb3DQEBBzALBglghkgBZQMEAgEwDQYJKoZIhvcNAQEBBQAEggEAsbrFPuIGxFO4Q3xuZHHj
+cDD3k7Q1AsA+/MM2CcAGgGouobkvU2/EkmA9cviYsZ5UARQHeT1NQDxrW01M/2nBPDKr1CzV3+Ql
+P6TzxPExfp6QFKJQ275oZSTKZse1NGwX4tEjPX/k34ljfPx73Y5EO9tEbzUz4Ruxt9FUXhpxbqeY
+y+S+fqSRAEts01gPP3NA3tBDb2iWmfuZ9OuTEcppOMYVU/4T7XXy3NdpJcBwB+pJQgt/PBHAJ5hu
+y9ed0fshWTJp7Rq+S4eLJ0W96jQsYaV5P9vGxbNBfbCA9RVjNi14BwJM2Ld4lREUxNHgnFAYYOQi
+yHriqn+uqrKAYg/tsQ==
+--000000000000f23ac805ec8b3eb2--
