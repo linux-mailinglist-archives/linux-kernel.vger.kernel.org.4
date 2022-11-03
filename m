@@ -2,84 +2,57 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 200356186B1
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:57:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 5C8A76186B3
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:57:20 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231140AbiKCR5N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 13:57:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:33906 "EHLO
+        id S231550AbiKCR5S (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 13:57:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34018 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230222AbiKCR5K (ORCPT
+        with ESMTP id S230222AbiKCR5N (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:57:10 -0400
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id A599B1DA53
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:56:06 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-        s=mimecast20190719; t=1667498165;
-        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-         to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-         in-reply-to:in-reply-to:references:references;
-        bh=iJJR4iR5+ugKjLbbYIb6Y9N5cv7dB2LX1UeXmZJCzLg=;
-        b=F2WPrHEBlEtxXycesFomP1/XXdJJQtFegWeUnPGAKSqGLYUrTeAoKUIrufJzShWlWRBXHg
-        LgUluSdVcTbvOtqRyAjgEQHmCPpKmi24OvpbL+2VaORm6MfHpLDkcF8Qx7i8ohCt4w4wxl
-        W2jP1zxVvqfOXUK6wkGS6PmVeYHA3dQ=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_128_GCM_SHA256) id
- us-mta-163-eLYlH0zlMhqKqSs8Y6B6eQ-1; Thu, 03 Nov 2022 13:56:04 -0400
-X-MC-Unique: eLYlH0zlMhqKqSs8Y6B6eQ-1
-Received: by mail-qt1-f197.google.com with SMTP id cp8-20020a05622a420800b003a4f4f7b621so2322919qtb.6
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 10:56:04 -0700 (PDT)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=iJJR4iR5+ugKjLbbYIb6Y9N5cv7dB2LX1UeXmZJCzLg=;
-        b=P/NB4CDKGO8m0PPntWESPhCPzU0zj1bKuraadMKFzfRneu9/13wX7l1LlvxACUTieb
-         fE4Tvs+Kivj9BbVWUCaEKTYMnb5PI6nMFRNDAy9S1eqWkM0wCQHJ19MBTu9daDp3K/Vq
-         9Q5EwKhAmCqzppXtxC1hv6TRf7CNKybm4nBDazeJZeO4XG/8RK+Sy77j/o3Iji3dbNH/
-         ZdBuwmieSluVGJnQ31DcfFGbzf0zsL6VWysl7OCS3imisE0TksaG5GfEhk2FeIZWsfxw
-         js2bP/I5+HU+powIYTmHa0MgLiqPQuC5o10enlMAxNkngH0mu0Wrtj0bjd+FlcYtLZ6O
-         l5kw==
-X-Gm-Message-State: ACrzQf1aRBjpyks85jm3XNKXqJwJ7r/5HvTxI+hZHMox6ipSMKzJml7C
-        eM/FNxxWfKVi2NJmnrZAP81v8YKwraMShaQCWAFkzflV2sU2CsMjzCnj8XmWW5bzVC7rEsyqZ/D
-        xUquGIzBujYtzkqbMWr/vfgLJ
-X-Received: by 2002:ae9:ec19:0:b0:6ea:d0cd:a4ed with SMTP id h25-20020ae9ec19000000b006ead0cda4edmr22930153qkg.472.1667498164238;
-        Thu, 03 Nov 2022 10:56:04 -0700 (PDT)
-X-Google-Smtp-Source: AMsMyM7iPvcgAu3eL/1xePl7SgFmQ4Hn6DrpgbAeo3IVHTl3ixTcvbJc/N/GDydkySQ5WUcCJFrC6w==
-X-Received: by 2002:ae9:ec19:0:b0:6ea:d0cd:a4ed with SMTP id h25-20020ae9ec19000000b006ead0cda4edmr22930137qkg.472.1667498163990;
-        Thu, 03 Nov 2022 10:56:03 -0700 (PDT)
-Received: from x1n (bras-base-aurron9127w-grc-46-70-31-27-79.dsl.bell.ca. [70.31.27.79])
-        by smtp.gmail.com with ESMTPSA id t10-20020a05620a450a00b006cbc6e1478csm1230727qkp.57.2022.11.03.10.56.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 10:56:03 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 13:56:02 -0400
-From:   Peter Xu <peterx@redhat.com>
-To:     Axel Rasmussen <axelrasmussen@google.com>
-Cc:     Matthew Wilcox <willy@infradead.org>,
-        "Vishal Moola (Oracle)" <vishal.moola@gmail.com>,
-        linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-        linux-fsdevel@vger.kernel.org, akpm@linux-foundation.org,
-        Hugh Dickins <hughd@google.com>
-Subject: Re: [PATCH 3/5] userfualtfd: Replace lru_cache functions with
- folio_add functions
-Message-ID: <Y2QAsrDRBAg6bJet@x1n>
-References: <20221101175326.13265-1-vishal.moola@gmail.com>
- <20221101175326.13265-4-vishal.moola@gmail.com>
- <Y2Fl/pZyLSw/ddZY@casper.infradead.org>
- <Y2K+y7wnhC4vbnP2@x1n>
- <Y2LDL8zjgxDPCzH9@casper.infradead.org>
- <Y2LWonzCdWkDwyyr@x1n>
- <CAJHvVcj-j6EWm5vQ74Uv1YWHbmg6-BP0hOEO2L9jRADJPEwb1A@mail.gmail.com>
+        Thu, 3 Nov 2022 13:57:13 -0400
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D22581B9F2;
+        Thu,  3 Nov 2022 10:57:12 -0700 (PDT)
+Received: from frapeml500008.china.huawei.com (unknown [172.18.147.226])
+        by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4N3BHD2x4tz67M3B;
+        Fri,  4 Nov 2022 01:55:04 +0800 (CST)
+Received: from lhrpeml500005.china.huawei.com (7.191.163.240) by
+ frapeml500008.china.huawei.com (7.182.85.71) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 3 Nov 2022 18:57:10 +0100
+Received: from localhost (10.202.227.76) by lhrpeml500005.china.huawei.com
+ (7.191.163.240) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 3 Nov
+ 2022 17:57:10 +0000
+Date:   Thu, 3 Nov 2022 17:57:09 +0000
+From:   Jonathan Cameron <Jonathan.Cameron@Huawei.com>
+To:     Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+CC:     <linux-efi@vger.kernel.org>, <linux-cxl@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, Ard Biesheuvel <ardb@kernel.org>,
+        "Alison Schofield" <alison.schofield@intel.com>,
+        Vishal Verma <vishal.l.verma@intel.com>,
+        Ira Weiny <ira.weiny@intel.com>,
+        Ben Widawsky <bwidawsk@kernel.org>,
+        Dan Williams <dan.j.williams@intel.com>,
+        "Yazen Ghannam" <yazen.ghannam@amd.com>
+Subject: Re: [PATCH v2 2/2] efi/cper, cxl: Decode CXL Error Log
+Message-ID: <20221103175709.00000591@Huawei.com>
+In-Reply-To: <20221028200950.67505-3-Smita.KoralahalliChannabasappa@amd.com>
+References: <20221028200950.67505-1-Smita.KoralahalliChannabasappa@amd.com>
+        <20221028200950.67505-3-Smita.KoralahalliChannabasappa@amd.com>
+Organization: Huawei Technologies Research and Development (UK) Ltd.
+X-Mailer: Claws Mail 4.1.0 (GTK 3.24.33; x86_64-w64-mingw32)
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <CAJHvVcj-j6EWm5vQ74Uv1YWHbmg6-BP0hOEO2L9jRADJPEwb1A@mail.gmail.com>
-X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
-        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=ham
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-Originating-IP: [10.202.227.76]
+X-ClientProxiedBy: lhrpeml100006.china.huawei.com (7.191.160.224) To
+ lhrpeml500005.china.huawei.com (7.191.163.240)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
@@ -87,75 +60,114 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 10:34:38AM -0700, Axel Rasmussen wrote:
-> On Wed, Nov 2, 2022 at 1:44 PM Peter Xu <peterx@redhat.com> wrote:
-> >
-> > On Wed, Nov 02, 2022 at 07:21:19PM +0000, Matthew Wilcox wrote:
-> > > On Wed, Nov 02, 2022 at 03:02:35PM -0400, Peter Xu wrote:
-> > > > Does the patch attached look reasonable to you?
-> > >
-> > > Mmm, no.  If the page is in the swap cache, this will be "true".
-> >
-> > It will not happen in practise, right?
-> >
-> > I mean, shmem_get_folio() should have done the swap-in, and we should have
-> > the page lock held at the meantime.
-> >
-> > For anon, mcopy_atomic_pte() is the only user and it's passing in a newly
-> > allocated page here.
-> >
-> > >
-> > > > diff --git a/mm/userfaultfd.c b/mm/userfaultfd.c
-> > > > index 3d0fef3980b3..650ab6cfd5f4 100644
-> > > > --- a/mm/userfaultfd.c
-> > > > +++ b/mm/userfaultfd.c
-> > > > @@ -64,7 +64,7 @@ int mfill_atomic_install_pte(struct mm_struct *dst_mm, pmd_t *dst_pmd,
-> > > >     pte_t _dst_pte, *dst_pte;
-> > > >     bool writable = dst_vma->vm_flags & VM_WRITE;
-> > > >     bool vm_shared = dst_vma->vm_flags & VM_SHARED;
-> > > > -   bool page_in_cache = page->mapping;
-> > > > +   bool page_in_cache = page_mapping(page);
-> > >
-> > > We could do:
-> > >
-> > >       struct page *head = compound_head(page);
-> > >       bool page_in_cache = head->mapping && !PageMappingFlags(head);
-> >
-> > Sounds good to me, but it just gets a bit complicated.
-> >
-> > If page_mapping() doesn't sound good, how about we just pass that over from
-> > callers?  We only have three, so quite doable too.
+On Fri, 28 Oct 2022 20:09:50 +0000
+Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com> wrote:
+
+> Print the CXL Error Log field as found in CXL Protocol Error Section.
 > 
-> For what it's worth, I think I like Matthew's version better than the
-> original patch. This is because, although page_mapping() looks simpler
-> here, looking into the definition of page_mapping() I feel it's
-> handling several cases, not all of which are relevant here (or, as
-> Matthew points out, would actually be wrong if it were possible to
-> reach those cases here).
+> The CXL RAS Capability structure will be reused by OS First Handling
+> and the duplication/appropriate placement will be addressed eventually.
 > 
-> It's not clear to me what is meant by "pass that over from callers"?
-> Do you mean, have callers pass in true/false for page_in_cache
-> directly?
+> Signed-off-by: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+Hi Smita,
 
-Yes.
+Ah.  Now I see why stuff wasn't in patch 1 that I expected to be there.
 
+LGTM
+
+Reviewed-by: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+
+
+
+
+> ---
+> v2:
+> 	Printed all fields separately.
+> 	Printed cap_control.
+> 	Prefix cxl_.
+> 	Provided the reference.
+> ---
+>  drivers/firmware/efi/cper_cxl.c | 27 +++++++++++++++++++++++++++
+>  include/linux/cxl_err.h         | 22 ++++++++++++++++++++++
+>  2 files changed, 49 insertions(+)
+>  create mode 100644 include/linux/cxl_err.h
 > 
-> That could work, but I still think I prefer Matthew's version slightly
-> better, if only because this function already takes a lot of
-> arguments.
-
-IMHO that's not an issue, we can merge them into flags, cleaning things
-alongside.
-
-The simplest so far is still just to use page_mapping() to me, but no
-strong opinion here.
-
-If to go with Matthew's patch, it'll be great if we can add a comment
-showing what we're doing (something like "Unwrapped page_mapping() but
-avoid looking into swap cache" would be good enough to me).
-
-Thanks,
-
--- 
-Peter Xu
+> diff --git a/drivers/firmware/efi/cper_cxl.c b/drivers/firmware/efi/cper_cxl.c
+> index 6c94af234be9..53e435c4f310 100644
+> --- a/drivers/firmware/efi/cper_cxl.c
+> +++ b/drivers/firmware/efi/cper_cxl.c
+> @@ -9,6 +9,7 @@
+>  
+>  #include <linux/cper.h>
+>  #include "cper_cxl.h"
+> +#include <linux/cxl_err.h>
+>  
+>  #define PROT_ERR_VALID_AGENT_TYPE		BIT_ULL(0)
+>  #define PROT_ERR_VALID_AGENT_ADDRESS		BIT_ULL(1)
+> @@ -16,6 +17,7 @@
+>  #define PROT_ERR_VALID_SERIAL_NUMBER		BIT_ULL(3)
+>  #define PROT_ERR_VALID_CAPABILITY		BIT_ULL(4)
+>  #define PROT_ERR_VALID_DVSEC			BIT_ULL(5)
+> +#define PROT_ERR_VALID_ERROR_LOG		BIT_ULL(6)
+>  
+>  static const char * const prot_err_agent_type_strs[] = {
+>  	"Restricted CXL Device",
+> @@ -149,4 +151,29 @@ void cper_print_prot_err(const char *pfx, const struct cper_sec_prot_err *prot_e
+>  		print_hex_dump(pfx, "", DUMP_PREFIX_OFFSET, 16, 4, (prot_err + 1),
+>  			       prot_err->dvsec_len, 0);
+>  	}
+> +
+> +	if (prot_err->valid_bits & PROT_ERR_VALID_ERROR_LOG) {
+> +		size_t size = sizeof(*prot_err) + prot_err->dvsec_len;
+> +		struct cxl_ras_capability_regs *cxl_ras;
+> +
+> +		pr_info("%s Error log length: 0x%04x\n", pfx, prot_err->err_len);
+> +
+> +		pr_info("%s CXL Error Log:\n", pfx);
+> +		cxl_ras = (struct cxl_ras_capability_regs *)((long)prot_err + size);
+> +		pr_info("%s cxl_ras_uncor_status: 0x%08x", pfx,
+> +			cxl_ras->uncor_status);
+> +		pr_info("%s cxl_ras_uncor_mask: 0x%08x\n", pfx,
+> +			cxl_ras->uncor_mask);
+> +		pr_info("%s cxl_ras_uncor_severity: 0x%08x\n", pfx,
+> +			cxl_ras->uncor_severity);
+> +		pr_info("%s cxl_ras_cor_status: 0x%08x", pfx,
+> +			cxl_ras->cor_status);
+> +		pr_info("%s cxl_ras_cor_mask: 0x%08x\n", pfx,
+> +			cxl_ras->cor_mask);
+> +		pr_info("%s cap_control: 0x%08x\n", pfx,
+> +			cxl_ras->cap_control);
+> +		pr_info("%s Header Log Registers:\n", pfx);
+> +		print_hex_dump(pfx, "", DUMP_PREFIX_OFFSET, 16, 4, cxl_ras->header_log,
+> +			       sizeof(cxl_ras->header_log), 0);
+> +	}
+>  }
+> diff --git a/include/linux/cxl_err.h b/include/linux/cxl_err.h
+> new file mode 100644
+> index 000000000000..629e1bdeda44
+> --- /dev/null
+> +++ b/include/linux/cxl_err.h
+> @@ -0,0 +1,22 @@
+> +/* SPDX-License-Identifier: GPL-2.0-only */
+> +/*
+> + * Copyright (C) 2022 Advanced Micro Devices, Inc.
+> + *
+> + * Author: Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>
+> + */
+> +
+> +#ifndef LINUX_CXL_ERR_H
+> +#define LINUX_CXL_ERR_H
+> +
+> +/* CXL RAS Capability Structure, CXL v3.1 sec 8.2.4.16 */
+> +struct cxl_ras_capability_regs {
+> +	u32 uncor_status;
+> +	u32 uncor_mask;
+> +	u32 uncor_severity;
+> +	u32 cor_status;
+> +	u32 cor_mask;
+> +	u32 cap_control;
+> +	u32 header_log[16];
+> +};
+> +
+> +#endif //__CXL_ERR_
 
