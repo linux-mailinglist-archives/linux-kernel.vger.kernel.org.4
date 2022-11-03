@@ -2,126 +2,217 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7D36188BA
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 20:25:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 709A46188BC
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 20:25:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231313AbiKCTZM (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 15:25:12 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36706 "EHLO
+        id S231838AbiKCTZe (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 15:25:34 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:36624 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231823AbiKCTYu (ORCPT
+        with ESMTP id S231776AbiKCTYv (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 15:24:50 -0400
-Received: from mail-oi1-x22b.google.com (mail-oi1-x22b.google.com [IPv6:2607:f8b0:4864:20::22b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 77FAD2613
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 12:23:29 -0700 (PDT)
-Received: by mail-oi1-x22b.google.com with SMTP id v81so3048954oie.5
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 12:23:29 -0700 (PDT)
+        Thu, 3 Nov 2022 15:24:51 -0400
+Received: from mail-yw1-x1134.google.com (mail-yw1-x1134.google.com [IPv6:2607:f8b0:4864:20::1134])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8D2C020982
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 12:23:53 -0700 (PDT)
+Received: by mail-yw1-x1134.google.com with SMTP id 00721157ae682-36a4b86a0abso24948897b3.7
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 12:23:53 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:from:references:cc:to:content-language:subject
-         :user-agent:mime-version:date:message-id:sender:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=BqziTjxfdQl0fNRtQ4I0OSYSj/ru4qxDbXBeei7oy4s=;
-        b=BnyE+BDM7GHsEAGM5bYv3B7xOcr4hDUpNNIG/ujmPbCwgopB8ytsNW48mYGReHAjuO
-         2z+ZmXr3SuxLQGENZljdN9QXqxdbyJ7e3PzTyOVtBQWeGfZjfsDEY4JOb+UFx9/iwPuD
-         lp0dXMt4zkSopM8MYmpcJHUTts45+pRIhommyG5fzFdtomjRUJlkAuGNVRyaFAx2DS5r
-         5Z4VyY0NFmzDDnRToUdHfgdSZXSVKtxaoyHAQQDWX1HQCdKeywVSoRKgFhm5rIy0JAHl
-         hiPMOW8I+NEKBVzIno/dGEaBd8bXdmuZWXivk3my0fevn5hNDrL2WweH4LRR0k6Yw+wr
-         grYA==
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=yU3dHrfzlZTRrynwrL8hn2T2Z/e1QE5N8cyG0mwHNLI=;
+        b=Vj+sNBSdlOsMkqoAJ7/QpQ85+OG5G1A7tWOVzRq6glTPahG+CWF81VC/ujZHBUg2xB
+         A5Dpbi+tMWsMvEJwZWD2BA3KCeIoVctBEeBNf0PK42eUQRtu4FWqf09Vbd2xxCHcQbVZ
+         yV1N5l6pSDJMvxPXB6BTK6JA2dE3b34SBUs1L+HvkRR9X2YWgNs01IXBeGdbi2NY9RKA
+         kbF2pVCOC2aFMym8dj3+0Xd4JYNe4l2lhudU/zXz8IqcDhQTTHryzueCghLP8g7vh7HU
+         +YgyRD4F9jBoaCW5lxGJ0pdMEckLIQQ/4DyPXGOqzMaxW8BrICEk2BcFlG//Kvyn8sib
+         2I1w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:from:references:cc:to:content-language:subject
-         :user-agent:mime-version:date:message-id:sender:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=BqziTjxfdQl0fNRtQ4I0OSYSj/ru4qxDbXBeei7oy4s=;
-        b=rEuZjXKwPFTnav4sd8/NVv2CA2tho4n65GxwKagC5Do9NQN7NgFwQKbvxbJyvIz7Ia
-         fbJqNooyoqzCc/kr6dFv98KJSaFZJPKn80oJf+vwZJaBFvjU+MsLPTYERk7d4mhdk/g6
-         3FGPZf+e97mX87tNeSVA+6XhuKAE7hx0W2/g3GgIX0WG083yeljOTlWUnmRj46xgrD7L
-         fUA4YVX3ocWR0SDi2fZgnfPD+3TpFyy8D25vpWETFbhCJctysZrd3wCigJTgtxlB7Aqi
-         DxN+CWYCGVZVWrE3nlrGtA5vrn8fbNmw+waSMG7/ibaa6NcJvI8yv/hFmFEdZUGFp/nb
-         62uw==
-X-Gm-Message-State: ACrzQf1QWqYy1ha4cKYBEFk1wkjcU0KA+LIEo+Yy4Or82AOpRBhBxby8
-        BEFmtGAFuOJYjFeMjG17NtPofX6FXaY=
-X-Google-Smtp-Source: AMsMyM6QCfO3tdz6iQo6iPdNduV07dDacddY1xQyOJNkK+T5SSqWUKtlCDMdf1uJAiHhiMSCAGypBw==
-X-Received: by 2002:a05:6808:181e:b0:35a:5959:5909 with SMTP id bh30-20020a056808181e00b0035a59595909mr238097oib.35.1667503408758;
-        Thu, 03 Nov 2022 12:23:28 -0700 (PDT)
-Received: from [192.168.0.158] ([216.130.59.33])
-        by smtp.gmail.com with ESMTPSA id r3-20020a056870e98300b0013bc40b09dasm790796oao.17.2022.11.03.12.23.27
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 12:23:28 -0700 (PDT)
-Sender: Larry Finger <larry.finger@gmail.com>
-Content-Type: multipart/mixed; boundary="------------jEpg7InBUcZ4C7rHTIpvDrTk"
-Message-ID: <fdbd7d7b-7e3f-8343-1dd9-8fd5c167d91d@lwfinger.net>
-Date:   Thu, 3 Nov 2022 14:23:27 -0500
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yU3dHrfzlZTRrynwrL8hn2T2Z/e1QE5N8cyG0mwHNLI=;
+        b=24Y0ho+3GWvKjyxULtam1zEW2nGhwk6hhKP1bn6xjmRakNgNgKI/pw9mFwMDIRUgB2
+         U6H0jfvUOfIrMfYETgoAoKqlOVWHADHPjNEz7oOwcB1Tbs7gJiC8/rcT1z+k/Dmn6IcB
+         Q5Kis/SvyXxEsXKTFQ4SLRiuLHcIUxoyoF4hTKqSU4ZYpCiub6712PcwvWb17k9Xe+0E
+         Tj/4RFOC4EXL90mmESmQThF3vbHbmsupkfOLLqbhfPP/DOxznwf+ae1nugyiCh1Qd4Rb
+         XiVT3Yrqnum1wCw3t4+W5Xr8Z+S4RS6f2RE4PjGh+Reer7nl0WnSEqxtJnLQdW5qnaWU
+         wMtg==
+X-Gm-Message-State: ACrzQf3Gxlbh1HHJZ6EAzZ6nTQ++75nejj2fUdCY+pn4XzZMDOpE3J7S
+        MCxsAwgXaUslt/kP1XJ73qRXCp3vwDveGa3vlYU=
+X-Google-Smtp-Source: AMsMyM4k8UYyCsXgEr/fhI/wppFUn//Rah/ooUDq8R/yMylYaMnQPJYjpnobxofr4HKoRfRA6IM/2b66NZB3N31xUu4=
+X-Received: by 2002:a81:3d2:0:b0:36b:6772:75a3 with SMTP id
+ 201-20020a8103d2000000b0036b677275a3mr29995737ywd.383.1667503432720; Thu, 03
+ Nov 2022 12:23:52 -0700 (PDT)
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: staging: rtl8192e: build warning on HZ
-Content-Language: en-US
-To:     Randy Dunlap <rdunlap@infradead.org>,
-        "linux-staging@lists.linux.dev" <linux-staging@lists.linux.dev>,
-        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc:     wlanfae@realtek.com,
-        Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-References: <a916c06e-a9b5-1cd2-2da7-ac8e46b512c9@infradead.org>
-From:   Larry Finger <Larry.Finger@lwfinger.net>
-In-Reply-To: <a916c06e-a9b5-1cd2-2da7-ac8e46b512c9@infradead.org>
-X-Spam-Status: No, score=-1.7 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_EF,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
+References: <20221022111403.531902164@infradead.org> <20221022114425.168036718@infradead.org>
+ <Y2QR/BRHjjYUNszh@dev-arch.thelio-3990X>
+In-Reply-To: <Y2QR/BRHjjYUNszh@dev-arch.thelio-3990X>
+From:   Uros Bizjak <ubizjak@gmail.com>
+Date:   Thu, 3 Nov 2022 20:23:41 +0100
+Message-ID: <CAFULd4bkn3i0ds1ywhxAZBQH+1O-zbPWscUqjoEcv4xvnxOnSw@mail.gmail.com>
+Subject: Re: [PATCH 11/13] x86_64: Remove pointless set_64bit() usage
+To:     Nathan Chancellor <nathan@kernel.org>
+Cc:     Peter Zijlstra <peterz@infradead.org>, x86@kernel.org,
+        willy@infradead.org, torvalds@linux-foundation.org,
+        akpm@linux-foundation.org, linux-kernel@vger.kernel.org,
+        linux-mm@kvack.org, aarcange@redhat.com,
+        kirill.shutemov@linux.intel.com, jroedel@suse.de
+Content-Type: text/plain; charset="UTF-8"
+X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-This is a multi-part message in MIME format.
---------------jEpg7InBUcZ4C7rHTIpvDrTk
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+On Thu, Nov 3, 2022 at 8:09 PM Nathan Chancellor <nathan@kernel.org> wrote:
+>
+> Hi Peter,
+>
+> On Sat, Oct 22, 2022 at 01:14:14PM +0200, Peter Zijlstra wrote:
+> > The use of set_64bit() in X86_64 only code is pretty pointless, seeing
+> > how it's a direct assignment. Remove all this nonsense.
+> >
+> > Additionally, since x86_64 unconditionally has HAVE_CMPXCHG_DOUBLE,
+> > there is no point in even having that fallback.
+> >
+> > Signed-off-by: Peter Zijlstra (Intel) <peterz@infradead.org>
+> > ---
+> >  arch/um/include/asm/pgtable-3level.h |    8 --------
+> >  arch/x86/include/asm/cmpxchg_64.h    |    5 -----
+> >  drivers/iommu/intel/irq_remapping.c  |   10 ++--------
+> >  3 files changed, 2 insertions(+), 21 deletions(-)
+> >
+> > --- a/arch/um/include/asm/pgtable-3level.h
+> > +++ b/arch/um/include/asm/pgtable-3level.h
+> > @@ -58,11 +58,7 @@
+> >  #define pud_populate(mm, pud, pmd) \
+> >       set_pud(pud, __pud(_PAGE_TABLE + __pa(pmd)))
+> >
+> > -#ifdef CONFIG_64BIT
+> > -#define set_pud(pudptr, pudval) set_64bit((u64 *) (pudptr), pud_val(pudval))
+> > -#else
+> >  #define set_pud(pudptr, pudval) (*(pudptr) = (pudval))
+> > -#endif
+> >
+> >  static inline int pgd_newpage(pgd_t pgd)
+> >  {
+> > @@ -71,11 +67,7 @@ static inline int pgd_newpage(pgd_t pgd)
+> >
+> >  static inline void pgd_mkuptodate(pgd_t pgd) { pgd_val(pgd) &= ~_PAGE_NEWPAGE; }
+> >
+> > -#ifdef CONFIG_64BIT
+> > -#define set_pmd(pmdptr, pmdval) set_64bit((u64 *) (pmdptr), pmd_val(pmdval))
+> > -#else
+> >  #define set_pmd(pmdptr, pmdval) (*(pmdptr) = (pmdval))
+> > -#endif
+> >
+> >  static inline void pud_clear (pud_t *pud)
+> >  {
+> > --- a/arch/x86/include/asm/cmpxchg_64.h
+> > +++ b/arch/x86/include/asm/cmpxchg_64.h
+> > @@ -2,11 +2,6 @@
+> >  #ifndef _ASM_X86_CMPXCHG_64_H
+> >  #define _ASM_X86_CMPXCHG_64_H
+> >
+> > -static inline void set_64bit(volatile u64 *ptr, u64 val)
+> > -{
+> > -     *ptr = val;
+> > -}
+> > -
+> >  #define arch_cmpxchg64(ptr, o, n)                                    \
+> >  ({                                                                   \
+> >       BUILD_BUG_ON(sizeof(*(ptr)) != 8);                              \
+> > --- a/drivers/iommu/intel/irq_remapping.c
+> > +++ b/drivers/iommu/intel/irq_remapping.c
+> > @@ -173,7 +173,6 @@ static int modify_irte(struct irq_2_iomm
+> >       index = irq_iommu->irte_index + irq_iommu->sub_handle;
+> >       irte = &iommu->ir_table->base[index];
+> >
+> > -#if defined(CONFIG_HAVE_CMPXCHG_DOUBLE)
+> >       if ((irte->pst == 1) || (irte_modified->pst == 1)) {
+> >               bool ret;
+> >
+> > @@ -187,11 +186,6 @@ static int modify_irte(struct irq_2_iomm
+> >                * same as the old value.
+> >                */
+> >               WARN_ON(!ret);
+> > -     } else
+> > -#endif
+> > -     {
+> > -             set_64bit(&irte->low, irte_modified->low);
+> > -             set_64bit(&irte->high, irte_modified->high);
+> >       }
+> >       __iommu_flush_cache(iommu, irte, sizeof(*irte));
 
-On 11/3/22 13:07, Randy Dunlap wrote:
-> FYI:
-> 
-> When CONFIG_HZ=24 (arch/mips/):
-> 
-> ../drivers/staging/rtl8192e/rtllib_wx.c: In function 'rtl819x_translate_scan':
-> ../drivers/staging/rtl8192e/rtllib_wx.c:220:57: warning: division by zero [-Wdiv-by-zero]
->    220 |                       (jiffies - network->last_scanned) / (HZ / 100));
->        |                                                         ^
-> In file included from ../include/linux/skbuff.h:45,
->                   from ../include/linux/if_ether.h:19,
->                   from ../include/linux/etherdevice.h:20,
->                   from ../drivers/staging/rtl8192e/rtllib_wx.c:18:
-> ../drivers/staging/rtl8192e/rtllib_wx.c: In function 'rtllib_wx_get_scan':
-> ../drivers/staging/rtl8192e/rtllib_wx.c:261:70: warning: division by zero [-Wdiv-by-zero]
->    261 |                                    (jiffies - network->last_scanned) /
->        |
+It looks to me that the above part should not be removed, but
+set_64bit should be substituted with WRITE_ONCE. Only #if/#endif lines
+should be removed.
 
-That statement is messed up. Does the attached patch fix it?
+Uros.
 
-
-Larry
-
---------------jEpg7InBUcZ4C7rHTIpvDrTk
-Content-Type: text/x-patch; charset=UTF-8; name="test_patch_fr_rtl8192e.patch"
-Content-Disposition: attachment; filename="test_patch_fr_rtl8192e.patch"
-Content-Transfer-Encoding: base64
-
-ZGlmZiAtLWdpdCBhL2RyaXZlcnMvc3RhZ2luZy9ydGw4MTkyZS9ydGxsaWJfd3guYyBiL2Ry
-aXZlcnMvc3RhZ2luZy9ydGw4MTkyZS9ydGxsaWJfd3guYwppbmRleCBkYTJjNDFjOWI5MmYu
-LjBhMDA3ZjU1Zjk4OCAxMDA2NDQKLS0tIGEvZHJpdmVycy9zdGFnaW5nL3J0bDgxOTJlL3J0
-bGxpYl93eC5jCisrKyBiL2RyaXZlcnMvc3RhZ2luZy9ydGw4MTkyZS9ydGxsaWJfd3guYwpA
-QCAtMjE2LDggKzIxNiw4IEBAIHN0YXRpYyBpbmxpbmUgY2hhciAqcnRsODE5eF90cmFuc2xh
-dGVfc2NhbihzdHJ1Y3QgcnRsbGliX2RldmljZSAqaWVlZSwKIAlpd2UuY21kID0gSVdFVkNV
-U1RPTTsKIAlwID0gY3VzdG9tOwogCXAgKz0gc2NucHJpbnRmKHAsIE1BWF9DVVNUT01fTEVO
-IC0gKHAgLSBjdXN0b20pLAotCQkgICAgICAiIExhc3QgYmVhY29uOiAlbHVtcyBhZ28iLAot
-CQkgICAgICAoamlmZmllcyAtIG5ldHdvcmstPmxhc3Rfc2Nhbm5lZCkgLyAoSFogLyAxMDAp
-KTsKKwkJICAgICAgIiBMYXN0IGJlYWNvbjogJWx1cyBhZ28iLAorCQkgICAgICAoamlmZmll
-cyAtIG5ldHdvcmstPmxhc3Rfc2Nhbm5lZCkgLyBIWik7CiAJaXdlLnUuZGF0YS5sZW5ndGgg
-PSBwIC0gY3VzdG9tOwogCWlmIChpd2UudS5kYXRhLmxlbmd0aCkKIAkJc3RhcnQgPSBpd2Vf
-c3RyZWFtX2FkZF9wb2ludF9yc2woaW5mbywgc3RhcnQsIHN0b3AsCg==
-
---------------jEpg7InBUcZ4C7rHTIpvDrTk--
+> >
+> > @@ -249,8 +243,8 @@ static int clear_entries(struct irq_2_io
+> >       end = start + (1 << irq_iommu->irte_mask);
+> >
+> >       for (entry = start; entry < end; entry++) {
+> > -             set_64bit(&entry->low, 0);
+> > -             set_64bit(&entry->high, 0);
+> > +             WRITE_ONCE(entry->low, 0);
+> > +             WRITE_ONCE(entry->high, 0);
+> >       }
+> >       bitmap_release_region(iommu->ir_table->bitmap, index,
+> >                             irq_iommu->irte_mask);
+> >
+> >
+>
+> This commit is now in -next as commit 0475a2d10fc7 ("x86_64: Remove
+> pointless set_64bit() usage") and I just bisect a boot failure on my
+> Intel test desktop to it.
+>
+> # bad: [81214a573d19ae2fa5b528286ba23cd1cb17feec] Add linux-next specific files for 20221103
+> # good: [8e5423e991e8cd0988d0c4a3f4ac4ca1af7d148a] Merge tag 'parisc-for-6.1-2' of git://git.kernel.org/pub/scm/linux/kernel/git/deller/parisc-linux
+> git bisect start '81214a573d19ae2fa5b528286ba23cd1cb17feec' '8e5423e991e8cd0988d0c4a3f4ac4ca1af7d148a'
+> # good: [8c13089d26d070fef87a64b48191cb7ae6dfbdb2] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/herbert/cryptodev-2.6.git
+> git bisect good 8c13089d26d070fef87a64b48191cb7ae6dfbdb2
+> # bad: [1bba8e9d15551d2f1c304d8f9d5c647a5b54bfc0] Merge branch 'master' of git://git.kernel.org/pub/scm/linux/kernel/git/tip/tip.git
+> git bisect bad 1bba8e9d15551d2f1c304d8f9d5c647a5b54bfc0
+> # good: [748c419c7ade509684ce5bcf74f50e13e0447afd] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/broonie/sound.git
+> git bisect good 748c419c7ade509684ce5bcf74f50e13e0447afd
+> # good: [0acc81a3bf9f875c5ef03037ff5431d37f536f05] Merge branch 'for-next' of git://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git
+> git bisect good 0acc81a3bf9f875c5ef03037ff5431d37f536f05
+> # bad: [c0fb84e0698d2ce57f9391c7f4112f6e17676f99] Merge branch into tip/master: 'x86/cleanups'
+> git bisect bad c0fb84e0698d2ce57f9391c7f4112f6e17676f99
+> # good: [7212c34aac1ec6abadf8b439824c8307ef0dd338] Merge branch 'x86/core' into x86/paravirt, to resolve conflicts
+> git bisect good 7212c34aac1ec6abadf8b439824c8307ef0dd338
+> # good: [e1f2ac1d285d963a783a027a1b109420b07f30c1] Merge branch into tip/master: 'x86/cpu'
+> git bisect good e1f2ac1d285d963a783a027a1b109420b07f30c1
+> # good: [306b75edbf25b86fe8189a4f96c217e49483f8ae] Merge branch into tip/master: 'x86/cleanups'
+> git bisect good 306b75edbf25b86fe8189a4f96c217e49483f8ae
+> # good: [8f28b415703e1935457a4bf0be7f03dc5471d09f] mm: Rename GUP_GET_PTE_LOW_HIGH
+> git bisect good 8f28b415703e1935457a4bf0be7f03dc5471d09f
+> # bad: [0475a2d10fc7ced3268cd0f0551390b5858f90cd] x86_64: Remove pointless set_64bit() usage
+> git bisect bad 0475a2d10fc7ced3268cd0f0551390b5858f90cd
+> # good: [a677802d5b0258f93f54620e1cd181b56547c36c] x86/mm/pae: Don't (ab)use atomic64
+> git bisect good a677802d5b0258f93f54620e1cd181b56547c36c
+> # good: [533627610ae7709572a4fac1393fb61153e2a5b3] x86/mm/pae: Be consistent with pXXp_get_and_clear()
+> git bisect good 533627610ae7709572a4fac1393fb61153e2a5b3
+> # first bad commit: [0475a2d10fc7ced3268cd0f0551390b5858f90cd] x86_64: Remove pointless set_64bit() usage
+> # good: [533627610ae7709572a4fac1393fb61153e2a5b3] x86/mm/pae: Be consistent with pXXp_get_and_clear()
+> git bisect good 533627610ae7709572a4fac1393fb61153e2a5b3
+> # first bad commit: [0475a2d10fc7ced3268cd0f0551390b5858f90cd] x86_64: Remove pointless set_64bit() usage
+>
+> Unfortunately, I see no output on the screen it is attached to so I
+> assume it is happening pretty early during the boot sequence, which will
+> probably make getting logs somewhat hard. I can provide information
+> about the system if that would help reveal anything. If there is
+> anything I can test, I am more than happy to do so.
+>
+> Cheers,
+> Nathan
