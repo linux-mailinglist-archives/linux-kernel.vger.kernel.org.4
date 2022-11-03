@@ -2,155 +2,104 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id CA29F61771C
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 08:05:23 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 7E60A617726
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 08:08:27 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230231AbiKCHFV (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 03:05:21 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42300 "EHLO
+        id S229764AbiKCHIS (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 03:08:18 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43304 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230182AbiKCHFQ (ORCPT
+        with ESMTP id S229704AbiKCHIN (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 03:05:16 -0400
-Received: from metis.ext.pengutronix.de (metis.ext.pengutronix.de [IPv6:2001:67c:670:201:290:27ff:fe1d:cc33])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 4C32F12088
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 00:05:11 -0700 (PDT)
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-        by metis.ext.pengutronix.de with esmtp (Exim 4.92)
-        (envelope-from <a.fatoum@pengutronix.de>)
-        id 1oqUHi-0004a5-Ur; Thu, 03 Nov 2022 08:05:07 +0100
-Message-ID: <ff2f43f9-b04e-a224-02c2-d446a68c5337@pengutronix.de>
-Date:   Thu, 3 Nov 2022 08:05:04 +0100
+        Thu, 3 Nov 2022 03:08:13 -0400
+Received: from mail-pl1-x62e.google.com (mail-pl1-x62e.google.com [IPv6:2607:f8b0:4864:20::62e])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C4C9663E7
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 00:08:12 -0700 (PDT)
+Received: by mail-pl1-x62e.google.com with SMTP id d20so25166plr.10
+        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 00:08:12 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=fromorbit-com.20210112.gappssmtp.com; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=UCGx+I//h802HOEchXeQ4l9Uif7TwqahE8c/QVCmorA=;
+        b=Qo0pCYgx3Qq1H7gtsjTo9ahtaWGAPbAqpUUP7w83R+hioFcvnb/Vum4t6njrIqmCbQ
+         9oglIFHFznb8HWDOhJ8VqGBZno5DvMa/i9rWqzvIS3F1Qe6lSOVMpDruWh58G2ZJDVRR
+         +irGuRxsC3szEMLHnbBdSVWy+8gAtIi3/dsdlKShS4dWGsFcwevGYm9bbQNs76cqEy+l
+         a7aTzEEQgFxLLhP1XqsxI1o93xRoLeyOkLszg3jyihUg4tqsI4qRKCp463KDJruVxcER
+         uahSco4O56I/ia+N+pdnGxKbS5y4Jn6JIOipSvnU+FLMXl5F+IFO/pgiKOzrTt8rdoYE
+         jcgA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20210112;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=UCGx+I//h802HOEchXeQ4l9Uif7TwqahE8c/QVCmorA=;
+        b=lVYj0o2rl27E1jvEqj6r1MZe+4qTMZPzgX8bXccFqxLmio0zgzrnSuujw9ANNteSUr
+         2VNJ3V+cQicnp4HPkNlnPE9k9zdXfP8CMjAjX4h4ElkfSPQ6VfJSs7NeVNTgF/Nsk5u/
+         /exOJ0GbG+V9HJJhussyHxljkjbZ9nX8cqljwqLOQxQDKeAe/yJ+mxjbGD+J2RvInyiQ
+         Oeg9VbydUaF1ynyDaKp5VUYnuQ0E5AI36CK9Ju48uNk7MtbnMX5Ql0EkYMLYzLRG9zoV
+         CD47rR8lLtFA63BZuzu8ju/zy1jJvCaz2PXDdkohoAC8wlr5jholnKhIRzgmykKrVT0u
+         DsFw==
+X-Gm-Message-State: ACrzQf3izp1Cs3ViN1yCf8iI4NX8LSeNOBM9SAy3dJ+t8yGtnIqYLp4F
+        J/CdpboWK1IEbseTKyuQu0bEqg==
+X-Google-Smtp-Source: AMsMyM7EbTGuTativfwuYw+G5QrvaMpsSoYHAtMTN9boWfI/C7HSKjfDJIybcNCOqaRH/jY3hHhBSg==
+X-Received: by 2002:a17:902:ed8e:b0:187:1c78:80c2 with SMTP id e14-20020a170902ed8e00b001871c7880c2mr21606400plj.38.1667459292279;
+        Thu, 03 Nov 2022 00:08:12 -0700 (PDT)
+Received: from dread.disaster.area (pa49-181-106-210.pa.nsw.optusnet.com.au. [49.181.106.210])
+        by smtp.gmail.com with ESMTPSA id s7-20020a170902988700b00179e1f08634sm9438901plp.222.2022.11.03.00.08.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 03 Nov 2022 00:08:11 -0700 (PDT)
+Received: from dave by dread.disaster.area with local (Exim 4.92.3)
+        (envelope-from <david@fromorbit.com>)
+        id 1oqUKd-009gYz-VX; Thu, 03 Nov 2022 18:08:08 +1100
+Date:   Thu, 3 Nov 2022 18:08:07 +1100
+From:   Dave Chinner <david@fromorbit.com>
+To:     "Vishal Moola (Oracle)" <vishal.moola@gmail.com>
+Cc:     linux-fsdevel@vger.kernel.org, linux-afs@lists.infradead.org,
+        linux-kernel@vger.kernel.org, linux-btrfs@vger.kernel.org,
+        ceph-devel@vger.kernel.org, linux-cifs@vger.kernel.org,
+        linux-ext4@vger.kernel.org, linux-f2fs-devel@lists.sourceforge.net,
+        cluster-devel@redhat.com, linux-nilfs@vger.kernel.org,
+        linux-mm@kvack.org
+Subject: Re: [PATCH v4 00/23] Convert to filemap_get_folios_tag()
+Message-ID: <20221103070807.GX2703033@dread.disaster.area>
+References: <20221102161031.5820-1-vishal.moola@gmail.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.0
-From:   Ahmad Fatoum <a.fatoum@pengutronix.de>
-Subject: Re: [PATCH v1] PCI: imx6: Keep the GPIO regulator always on
-To:     Richard Zhu <hongxing.zhu@nxp.com>, l.stach@pengutronix.de,
-        bhelgaas@google.com, lorenzo.pieralisi@arm.com
-Cc:     linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-imx@nxp.com, kernel@pengutronix.de,
-        linux-arm-kernel@lists.infradead.org
-References: <1667455698-14578-1-git-send-email-hongxing.zhu@nxp.com>
-Content-Language: en-US
-In-Reply-To: <1667455698-14578-1-git-send-email-hongxing.zhu@nxp.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.ext.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-kernel@vger.kernel.org
-X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,NICE_REPLY_A,
-        RCVD_IN_DNSWL_MED,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20221102161031.5820-1-vishal.moola@gmail.com>
+X-Spam-Status: No, score=-1.9 required=5.0 tests=BAYES_00,DKIM_SIGNED,
+        DKIM_VALID,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_NONE
+        autolearn=unavailable autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Hello Richard,
-
-On 03.11.22 07:08, Richard Zhu wrote:
-> Since vpcie regulator is one GPIO regulator, used to control the
-> VPCIe_3V3 and power up remote PCIe EP device.
-
-Regulator need not be a GPIO regulator. I'd drop this from the
-title.
-
-> Some WIFI modules load their firmware once in probe, and can't be
-> powered off during suspend. Otherwise, these WIFI modules wouldn't be
-> functional anymore after resume back.
-
-The brcmfmac OTOH, reprobes when resuming from suspend. Before this patch,
-AFAIU, it should've been possible for the EP to go into D3cold during suspend.
-This may no longer be possible when we keep vpcie powered.
-
-> So, keep this regulator always on in the probe.
+On Wed, Nov 02, 2022 at 09:10:08AM -0700, Vishal Moola (Oracle) wrote:
+> This patch series replaces find_get_pages_range_tag() with
+> filemap_get_folios_tag(). This also allows the removal of multiple
+> calls to compound_head() throughout.
+> It also makes a good chunk of the straightforward conversions to folios,
+> and takes the opportunity to introduce a function that grabs a folio
+> from the pagecache.
 > 
-> Fixes: a4bb720eeb1e ("PCI: imx6: Turn off regulator when system is in suspend mode")
-
-Prior to a4bb720eeb1e, vpcie was briefly toggled during PCIe core reset sequence,
-so aforementioned WiFi modules that don't reprobe over resume should've been broken
-by that too? If so, I don't see how it fixes that commit as everything that is broken
-now was broken before that commit as well. After this patch however, modules that can
-accept vpcie being toggled can't benefit from some of the power saving.
-
-Why can't users with this issue use a regulator-always-on regulator instead?
-
-> Signed-off-by: Richard Zhu <hongxing.zhu@nxp.com>
-> ---
->  drivers/pci/controller/dwc/pci-imx6.c | 24 ++++++++----------------
->  1 file changed, 8 insertions(+), 16 deletions(-)
+> F2fs and Ceph have quite a lot of work to be done regarding folios, so
+> for now those patches only have the changes necessary for the removal of
+> find_get_pages_range_tag(), and only support folios of size 1 (which is
+> all they use right now anyways).
 > 
-> diff --git a/drivers/pci/controller/dwc/pci-imx6.c b/drivers/pci/controller/dwc/pci-imx6.c
-> index 2616585ca5f8..94a89bbf381d 100644
-> --- a/drivers/pci/controller/dwc/pci-imx6.c
-> +++ b/drivers/pci/controller/dwc/pci-imx6.c
-> @@ -926,22 +926,13 @@ static int imx6_pcie_host_init(struct dw_pcie_rp *pp)
->  	struct imx6_pcie *imx6_pcie = to_imx6_pcie(pci);
->  	int ret;
->  
-> -	if (imx6_pcie->vpcie) {
-> -		ret = regulator_enable(imx6_pcie->vpcie);
-> -		if (ret) {
-> -			dev_err(dev, "failed to enable vpcie regulator: %d\n",
-> -				ret);
-> -			return ret;
-> -		}
-> -	}
-> -
->  	imx6_pcie_assert_core_reset(imx6_pcie);
->  	imx6_pcie_init_phy(imx6_pcie);
->  
->  	ret = imx6_pcie_clk_enable(imx6_pcie);
->  	if (ret) {
->  		dev_err(dev, "unable to enable pcie clocks: %d\n", ret);
-> -		goto err_reg_disable;
-> +		return ret;
->  	}
->  
->  	if (imx6_pcie->phy) {
-> @@ -974,9 +965,6 @@ static int imx6_pcie_host_init(struct dw_pcie_rp *pp)
->  		phy_exit(imx6_pcie->phy);
->  err_clk_disable:
->  	imx6_pcie_clk_disable(imx6_pcie);
-> -err_reg_disable:
-> -	if (imx6_pcie->vpcie)
-> -		regulator_disable(imx6_pcie->vpcie);
->  	return ret;
->  }
->  
-> @@ -991,9 +979,6 @@ static void imx6_pcie_host_exit(struct dw_pcie_rp *pp)
->  		phy_exit(imx6_pcie->phy);
->  	}
->  	imx6_pcie_clk_disable(imx6_pcie);
-> -
-> -	if (imx6_pcie->vpcie)
-> -		regulator_disable(imx6_pcie->vpcie);
->  }
->  
->  static const struct dw_pcie_host_ops imx6_pcie_host_ops = {
-> @@ -1263,6 +1248,13 @@ static int imx6_pcie_probe(struct platform_device *pdev)
->  		if (PTR_ERR(imx6_pcie->vpcie) != -ENODEV)
->  			return PTR_ERR(imx6_pcie->vpcie);
->  		imx6_pcie->vpcie = NULL;
-> +	} else {
-> +		ret = regulator_enable(imx6_pcie->vpcie);
-> +		if (ret) {
-> +			dev_err(dev, "failed to enable vpcie regulator: %d\n",
-> +				ret);
-> +			return ret;
-> +		}
+> I've run xfstests on btrfs, ext4, f2fs, and nilfs2, but more testing may be
+> beneficial. The page-writeback and filemap changes implicitly work. Testing
+> and review of the other changes (afs, ceph, cifs, gfs2) would be appreciated.
 
-Shouldn't the regulator enable be undone if the probe later fails?
+Same question as last time: have you tested this with multipage
+folios enabled? If you haven't tested XFS, then I'm guessing the
+answer is no, and you haven't fixed the bug I pointed out in
+the write_cache_pages() implementation....
 
-Cheers,
-Ahmad
-
+-Dave.
 -- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
-
+Dave Chinner
+david@fromorbit.com
