@@ -2,36 +2,36 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 4C287617A93
+	by mail.lfdr.de (Postfix) with ESMTP id A2BA4617A94
 	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 11:05:43 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231429AbiKCKEl (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 06:04:41 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41684 "EHLO
+        id S231479AbiKCKEo (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 06:04:44 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:41688 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230500AbiKCKE2 (ORCPT
+        with ESMTP id S230487AbiKCKE2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
         Thu, 3 Nov 2022 06:04:28 -0400
 Received: from cpanel.siel.si (cpanel.siel.si [46.19.9.99])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C0789394;
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 99D8395A6;
         Thu,  3 Nov 2022 03:04:25 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=norik.com;
-        s=default; h=Content-Transfer-Encoding:MIME-Version:Message-Id:Date:Subject:
-        Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:Content-Description:
-        Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc:Resent-Message-ID:
-        In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
+        s=default; h=Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:
+        Message-Id:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:Content-ID:
+        Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+        :Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:List-Subscribe:
         List-Post:List-Owner:List-Archive;
-        bh=3I6cduE/0VLYX77KsgcKyS/YAJZf7qjM4jfGtEfeI/M=; b=mfql3DQCBqVXhPG5MwjUzLku6D
-        Yr8akr9e+8qulTiDKL1Gsd/rQ8+DUXTH7SnyAmd04LMW7/JHUwaQxvHm3dI+WlKOLYyfxZltMZuPK
-        NjDIEuE6mYsSF/YAPN6TSre0pM2N0XciY6yi1UOOZOO1VMbDvOiMK0wTF57aTpjPo8biBqo2rl7Fa
-        JUwIZczyWCrECSn70eok5mBEg5p319EOx1Sye6zebgq+vRGG/s3pjclIveQPKt9tHgoecsozbTBWv
-        qQ/Uv3fBYOM6TUSUW5UImHANT074A48HajbHRm7zbX2PJntJBJnIa42G75EJ7gvVZT2S2K55J132Q
-        zmd0cUYg==;
+        bh=NnQjsHw3karaEVg8yqQW13MZUVIfBcINkYj+1ykkMFo=; b=BR5UXEcFhjV+Ljo6a9dJtWqg/9
+        lIqm0h4S8eeRIKH1nsyoEwCDrGDL3oYXnDTl28PK1ap6r+4ilwqcOJ9ILzrUqO20AKadyeRupC2fg
+        /FebavclfzWEsP76UZqmwhELbPx6VPKmIVAq+nTTz4yN1S6qAh/GzUKeTIW8IzJOJO8TdcAPfnBYh
+        jGVocAls/Ur2JDo4m7MZj3uE6YzjNeIXCD3z4e2BmhcZgV4xk7W+eNDcnE2bIVu8RfIijVwtP7YmQ
+        cT/OiwYAHk1R8smPgSS4qvU79bVaIxeumpO2dTJ3L5s0+4T+tZJq0CbfzsY9XGSGWv2wth1YtgugH
+        CfXsNoWg==;
 Received: from 89-212-21-243.static.t-2.net ([89.212.21.243]:37996 helo=localhost.localdomain)
         by cpanel.siel.si with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256
         (Exim 4.95)
         (envelope-from <andrej.picej@norik.com>)
-        id 1oqX52-008HsM-9z;
+        id 1oqX52-008HsM-E1;
         Thu, 03 Nov 2022 11:04:20 +0100
 From:   Andrej Picej <andrej.picej@norik.com>
 To:     linux-watchdog@vger.kernel.org
@@ -40,10 +40,12 @@ Cc:     wim@linux-watchdog.org, linux@roeck-us.net, robh+dt@kernel.org,
         s.hauer@pengutronix.de, kernel@pengutronix.de, festevam@gmail.com,
         linux-imx@nxp.com, Anson.Huang@nxp.com, devicetree@vger.kernel.org,
         linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: [PATCH v3 0/3] Suspending i.MX watchdog in WAIT mode
-Date:   Thu,  3 Nov 2022 11:03:55 +0100
-Message-Id: <20221103100358.176099-1-andrej.picej@norik.com>
+Subject: [PATCH v3 1/3] watchdog: imx2_wdg: suspend watchdog in WAIT mode
+Date:   Thu,  3 Nov 2022 11:03:56 +0100
+Message-Id: <20221103100358.176099-2-andrej.picej@norik.com>
 X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20221103100358.176099-1-andrej.picej@norik.com>
+References: <20221103100358.176099-1-andrej.picej@norik.com>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
@@ -65,46 +67,150 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-The i.MX6 watchdog can't be stopped once started. Additionally, watchdog
-hardware configuration needs to be able to handle low-power modes of the
-SoC. For low-power modes, there are two configuration bits in the TRM:
-- WDZST bit disables the watchdog timer in "deeper" low power modes and
-- WDW bit disables the watchdog timer in "WAIT" mode
+Putting device into the "Suspend-To-Idle" mode causes watchdog to
+trigger and resets the board after set watchdog timeout period elapses.
 
-WDZST bit support is already in place since 1a9c5efa576e ("watchdog: imx2_wdt: disable watchdog timer during low power mode").
-On the other hand, handling of WDZST bit was omitted so far but now
-these patch series bring support for it.
+Introduce new device-tree property "fsl,suspend-in-wait" which suspends
+watchdog in WAIT mode. This is done by setting WDW bit in WCR
+(Watchdog Control Register). Watchdog operation is restored after
+exiting WAIT mode as expected. WAIT mode corresponds with Linux's
+"Suspend-To-Idle".
 
-SoC's "WAIT" low-power mode corresponds to Linux's freeze or
-Suspend-to-Idle (S0) mode which can be activated with:
+Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+Reviewed-by: Fabio Estevam <festevam@gmail.com>
+---
+Changes in v3:
+ - fix spelling in commit message,
+ - fix and simplify property handling in probe,
+ - add a comment about unknown interaction between imx7d no-ping
+   functionality and "fsl,suspend-in-wait",
+ - property support handled by of_device_id data pointer.
 
-$ echo freeze > /sys/power/state
+Changes in v2:
+ - validate the property with compatible string, as this functionality
+   is not supported by all devices.
+---
+ drivers/watchdog/imx2_wdt.c | 55 +++++++++++++++++++++++++++++++++++--
+ 1 file changed, 52 insertions(+), 3 deletions(-)
 
-Without these patches, board would be reset by the watchdog after
-timeout of 128 seconds since watchdog would not be stopped when SoC
-entered Suspend-to-Idle mode. With patches in place, boards using
-imx2-wdt are able to stay in Suspend-to-Idle mode indefinitely.
-
-Last but not least, WDW bit is not found on all imx2-wdt supported i.MX
-devices, therefore a new device-tree property "fsl,suspend-in-wait" has
-been introduced for this.
-
-Here is v1: https://lore.kernel.org/lkml/20221019111714.1953262-1-andrej.picej@norik.com/
-
-Here is v2: https://lore.kernel.org/all/20221025072533.2980154-1-andrej.picej@norik.com/#t
-
-Change log in the corresponding patches.
-
-Andrej Picej (3):
-  watchdog: imx2_wdg: suspend watchdog in WAIT mode
-  dt-bindings: watchdog: fsl-imx: document suspend in wait mode
-  ARM: dts: imx6ul/ull: suspend i.MX6UL watchdog in wait mode
-
- .../bindings/watchdog/fsl-imx-wdt.yaml        | 33 +++++++++++
- .../boot/dts/imx6ul-phytec-phycore-som.dtsi   |  4 ++
- drivers/watchdog/imx2_wdt.c                   | 55 ++++++++++++++++++-
- 3 files changed, 89 insertions(+), 3 deletions(-)
-
+diff --git a/drivers/watchdog/imx2_wdt.c b/drivers/watchdog/imx2_wdt.c
+index d0c5d47ddede..19ab7b3d286b 100644
+--- a/drivers/watchdog/imx2_wdt.c
++++ b/drivers/watchdog/imx2_wdt.c
+@@ -27,6 +27,7 @@
+ #include <linux/module.h>
+ #include <linux/moduleparam.h>
+ #include <linux/of_address.h>
++#include <linux/of_device.h>
+ #include <linux/platform_device.h>
+ #include <linux/regmap.h>
+ #include <linux/watchdog.h>
+@@ -35,6 +36,7 @@
+ 
+ #define IMX2_WDT_WCR		0x00		/* Control Register */
+ #define IMX2_WDT_WCR_WT		(0xFF << 8)	/* -> Watchdog Timeout Field */
++#define IMX2_WDT_WCR_WDW	BIT(7)		/* -> Watchdog disable for WAIT */
+ #define IMX2_WDT_WCR_WDA	BIT(5)		/* -> External Reset WDOG_B */
+ #define IMX2_WDT_WCR_SRS	BIT(4)		/* -> Software Reset Signal */
+ #define IMX2_WDT_WCR_WRE	BIT(3)		/* -> WDOG Reset Enable */
+@@ -60,13 +62,19 @@
+ 
+ #define WDOG_SEC_TO_COUNT(s)	((s * 2 - 1) << 8)
+ 
++struct imx2_wdt_data {
++	bool wdw_supported;
++};
++
+ struct imx2_wdt_device {
+ 	struct clk *clk;
+ 	struct regmap *regmap;
+ 	struct watchdog_device wdog;
++	const struct imx2_wdt_data *data;
+ 	bool ext_reset;
+ 	bool clk_is_on;
+ 	bool no_ping;
++	bool sleep_wait;
+ };
+ 
+ static bool nowayout = WATCHDOG_NOWAYOUT;
+@@ -129,6 +137,9 @@ static inline void imx2_wdt_setup(struct watchdog_device *wdog)
+ 
+ 	/* Suspend timer in low power mode, write once-only */
+ 	val |= IMX2_WDT_WCR_WDZST;
++	/* Suspend timer in low power WAIT mode, write once-only */
++	if (wdev->sleep_wait)
++		val |= IMX2_WDT_WCR_WDW;
+ 	/* Strip the old watchdog Time-Out value */
+ 	val &= ~IMX2_WDT_WCR_WT;
+ 	/* Generate internal chip-level reset if WDOG times out */
+@@ -292,6 +303,8 @@ static int __init imx2_wdt_probe(struct platform_device *pdev)
+ 	wdog->max_hw_heartbeat_ms = IMX2_WDT_MAX_TIME * 1000;
+ 	wdog->parent		= dev;
+ 
++	wdev->data = of_device_get_match_data(dev);
++
+ 	ret = platform_get_irq(pdev, 0);
+ 	if (ret > 0)
+ 		if (!devm_request_irq(dev, ret, imx2_wdt_isr, 0,
+@@ -313,9 +326,18 @@ static int __init imx2_wdt_probe(struct platform_device *pdev)
+ 
+ 	wdev->ext_reset = of_property_read_bool(dev->of_node,
+ 						"fsl,ext-reset-output");
++
++	if (of_property_read_bool(dev->of_node, "fsl,suspend-in-wait")) {
++		if (!wdev->data->wdw_supported) {
++			dev_err(dev, "suspend-in-wait not supported\n");
++			return -EINVAL;
++		}
++		wdev->sleep_wait = true;
++	}
++
+ 	/*
+ 	 * The i.MX7D doesn't support low power mode, so we need to ping the watchdog
+-	 * during suspend.
++	 * during suspend. Interaction with "fsl,suspend-in-wait" is unknown!
+ 	 */
+ 	wdev->no_ping = !of_device_is_compatible(dev->of_node, "fsl,imx7d-wdt");
+ 	platform_set_drvdata(pdev, wdog);
+@@ -417,9 +439,36 @@ static int __maybe_unused imx2_wdt_resume(struct device *dev)
+ static SIMPLE_DEV_PM_OPS(imx2_wdt_pm_ops, imx2_wdt_suspend,
+ 			 imx2_wdt_resume);
+ 
++struct imx2_wdt_data imx_wdt = {
++	.wdw_supported = true,
++};
++
++struct imx2_wdt_data imx_wdt_legacy = {
++	.wdw_supported = false,
++};
++
+ static const struct of_device_id imx2_wdt_dt_ids[] = {
+-	{ .compatible = "fsl,imx21-wdt", },
+-	{ .compatible = "fsl,imx7d-wdt", },
++	{ .compatible = "fsl,imx21-wdt", .data = &imx_wdt_legacy },
++	{ .compatible = "fsl,imx25-wdt", .data = &imx_wdt },
++	{ .compatible = "fsl,imx27-wdt", .data = &imx_wdt_legacy },
++	{ .compatible = "fsl,imx31-wdt", .data = &imx_wdt_legacy },
++	{ .compatible = "fsl,imx35-wdt", .data = &imx_wdt },
++	{ .compatible = "fsl,imx50-wdt", .data = &imx_wdt },
++	{ .compatible = "fsl,imx51-wdt", .data = &imx_wdt },
++	{ .compatible = "fsl,imx53-wdt", .data = &imx_wdt },
++	{ .compatible = "fsl,imx6q-wdt", .data = &imx_wdt },
++	{ .compatible = "fsl,imx6sl-wdt", .data = &imx_wdt },
++	{ .compatible = "fsl,imx6sll-wdt", .data = &imx_wdt },
++	{ .compatible = "fsl,imx6sx-wdt", .data = &imx_wdt },
++	{ .compatible = "fsl,imx6ul-wdt", .data = &imx_wdt },
++	{ .compatible = "fsl,imx7d-wdt", .data = &imx_wdt },
++	{ .compatible = "fsl,imx8mm-wdt", .data = &imx_wdt },
++	{ .compatible = "fsl,imx8mn-wdt", .data = &imx_wdt },
++	{ .compatible = "fsl,imx8mp-wdt", .data = &imx_wdt },
++	{ .compatible = "fsl,imx8mq-wdt", .data = &imx_wdt },
++	{ .compatible = "fsl,ls1012a-wdt", .data = &imx_wdt_legacy },
++	{ .compatible = "fsl,ls1043a-wdt", .data = &imx_wdt_legacy },
++	{ .compatible = "fsl,vf610-wdt", .data = &imx_wdt },
+ 	{ /* sentinel */ }
+ };
+ MODULE_DEVICE_TABLE(of, imx2_wdt_dt_ids);
 -- 
 2.25.1
 
