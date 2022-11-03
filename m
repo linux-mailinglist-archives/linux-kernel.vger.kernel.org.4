@@ -2,71 +2,72 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 9D7ED617FF3
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:49:06 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 07EE8617FF7
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 15:49:41 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231749AbiKCOtC (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 10:49:02 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34054 "EHLO
+        id S231745AbiKCOth (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 10:49:37 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:34546 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231757AbiKCOs4 (ORCPT
+        with ESMTP id S231532AbiKCOte (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 10:48:56 -0400
-Received: from mail-wr1-x430.google.com (mail-wr1-x430.google.com [IPv6:2a00:1450:4864:20::430])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8E4F118B15;
-        Thu,  3 Nov 2022 07:48:55 -0700 (PDT)
-Received: by mail-wr1-x430.google.com with SMTP id bs21so3145786wrb.4;
-        Thu, 03 Nov 2022 07:48:55 -0700 (PDT)
+        Thu, 3 Nov 2022 10:49:34 -0400
+Received: from mail-wm1-x331.google.com (mail-wm1-x331.google.com [IPv6:2a00:1450:4864:20::331])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D9AED17E3A;
+        Thu,  3 Nov 2022 07:49:33 -0700 (PDT)
+Received: by mail-wm1-x331.google.com with SMTP id a11-20020a05600c2d4b00b003cf6f5fd9f1so1355533wmg.2;
+        Thu, 03 Nov 2022 07:49:33 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=gmail.com; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OyyRFN6o9cSPSQOmcN/1EM+CmiHfqIcoRrnXjizSh5k=;
-        b=UiD6Sw+BCc8/v2kAxBpA4XlTQDkFfgJLJVlGwLZvxlPlnD5+ynC6Eq8DbPlt3NW9h0
-         bAD0JrWxYpZyk+g5EL9zTxmBD11V4eHsfrpY9GQ+5UfPRnbePRyzxV5OEA/zcUhujJDC
-         Gy/COKqcAtQUFIeQ2Eo3dlOvoUYxm4Dbu87s45v+vvUNU5352mEb7lfuIpX/V4Re5rhz
-         n+oHq03FKxelkwBIr7lr2YsKRfX3+6J3GhjH7PAw1a790wpPGH90M0pVryi1iA2ObvPO
-         cih1QQKeW350S+iC7phkiyqumk3RQOxihOSnl3wQH8CyC4VMH4VixE5QRKtHMfFCumYF
-         xscQ==
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=S6XPo/k7heVDESQZpImoWUJDkxoQwwB8JDz0aFByags=;
+        b=Us9V1/BdKTxxamujzNwkkFGRkUmW6S1w1PpIaEgvlqlZvhm9uvWU3US37rCNWldORI
+         l/BL5me6PT+Zn6EUX4Y6SMU3U6hDoFbY5HdEVhpmZcCpKpk/AjLYvrqatab4OAsgdL6s
+         Kf8m8Sy+DOKs6z+Jq3u6NWEeH2yM9kp1tTH7jYrtMdzn8/AiAgNANShrUJ7dc+oDJG5k
+         sIYOlITsaZ3DBNyrXCXIHx9fw5+ZKoaNMGiC0PcJKNdcUhoiJTZCgr8VGvyRhDqdgsdr
+         sJe4t4BKzXjVlV9iqlUrZDYdP6BxGUrgId6aFrS16HMSYQu4dQ5B7JwJMVFpYc1qxZ3D
+         3DhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:date:from:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OyyRFN6o9cSPSQOmcN/1EM+CmiHfqIcoRrnXjizSh5k=;
-        b=GxIz5prZ/YlGxQ5hY8NrIhraw7SyW9sCXtLMaTPizmWYhS8DvTmhPtsMl2F7UMRlhP
-         /Ez4tjByWTRpKHiuB3bZ2ATwzLHXx2y+klywaT8jo5Wdt3pMoOCrXbdQc+HIPS+7eH1n
-         hV6abGqE8VVVRFYYg1oVKCx+FmrClFBSn0pWFc+AVKIEn7zgYB4rfHQ6X+olvvTH6X2O
-         HwJtdUGuFK0Oml5NZxoelGwy3JgGprU/ytb+E5Q186zm8eOhU6j4NpBmMONJdgtdD1Ma
-         qGEMdqBbI4WZX5qVfos50sdpbtFV5JPWCJ60+UGs2ufpeS+aY9ta2iZiDF4FwWq0kSnt
-         mohQ==
-X-Gm-Message-State: ACrzQf1M5FpuPrJeeQsqPeU4X6G8lkCvKFD+BAPdkzwv2p5xOLbVJgyj
-        bT6mDOGSUswzrwXS1RcOP9E5Ff3V38Er4A==
-X-Google-Smtp-Source: AMsMyM4K/tdvIzFule6PjRafCbDb6HsmdP5OBU7nmsT0oVnHvqtXJEI3fBPFQ1oYPtFAPthl+pvllg==
-X-Received: by 2002:adf:f687:0:b0:236:481f:83a6 with SMTP id v7-20020adff687000000b00236481f83a6mr19368811wrp.342.1667486933978;
-        Thu, 03 Nov 2022 07:48:53 -0700 (PDT)
-Received: from krava (2001-1ae9-1c2-4c00-726e-c10f-8833-ff22.ip6.tmcz.cz. [2001:1ae9:1c2:4c00:726e:c10f:8833:ff22])
-        by smtp.gmail.com with ESMTPSA id y16-20020adff6d0000000b0023647841c5bsm1038753wrp.60.2022.11.03.07.48.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 07:48:53 -0700 (PDT)
-From:   Jiri Olsa <olsajiri@gmail.com>
-X-Google-Original-From: Jiri Olsa <jolsa@kernel.org>
-Date:   Thu, 3 Nov 2022 15:48:51 +0100
-To:     Peter Zijlstra <peterz@infradead.org>
-Cc:     olsajiri@gmail.com, ast@kernel.org, daniel@iogearbox.net,
-        linux-kernel@vger.kernel.org, netdev@vger.kernel.org,
-        bpf@vger.kernel.org, bjorn@kernel.org, toke@redhat.com,
-        David.Laight@aculab.com, rostedt@goodmis.org
-Subject: Re: [PATCH 0/2] bpf: Yet another approach to fix the BPF dispatcher
- thing
-Message-ID: <Y2PU01h0hy+6dI0J@krava>
-References: <20221103120012.717020618@infradead.org>
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=S6XPo/k7heVDESQZpImoWUJDkxoQwwB8JDz0aFByags=;
+        b=KyY/yotgwyYA0xDzmUpNuqTSpdH76W80fnBENiMdeR7Q8J9quhvJsR11uu1ssX1UnS
+         Z4jOMp+YDxTNp8djOtTIO+CrpsDivR5eBrD+1cXIL2jqCl2CkWHr4A2IZkS3tG/Wb7Kr
+         k3tvNpqZSuT9xrdfu38SvgRzHMiN1WnBwz6FeUB3oFJUMNOV0hYnruVVweCE96q25/qV
+         IwdPAxSCEhzAmSn1/YLuD/PJNO8tcz6CiIub5iihYptPOGAJvuSOQ2wTyJ7fLnIJwGnN
+         vELNVNZSReazFyyRvkrOdxTWIAKW6ESWpiVrq9u2Z97H0qcET20j1wBpKaX9ma5w09/j
+         tEgg==
+X-Gm-Message-State: ACrzQf3g/x7/Cy3qhQRtoByKcD/7r0tw3gYANNASCtvZwDuKWKYJehzg
+        pY5Vd0YUbNbP3pwwU+OHOOk=
+X-Google-Smtp-Source: AMsMyM49js37BJfeTe2EkgqiIxd21xul39YrnWt496H015GdItEKOZqrMj4nHElwuJCkReajdwTYVg==
+X-Received: by 2002:a05:600c:4f05:b0:3cf:4818:1704 with SMTP id l5-20020a05600c4f0500b003cf48181704mr19781528wmq.181.1667486972492;
+        Thu, 03 Nov 2022 07:49:32 -0700 (PDT)
+Received: from [192.168.0.210] (cpc154979-craw9-2-0-cust193.16-3.cable.virginm.net. [80.193.200.194])
+        by smtp.googlemail.com with ESMTPSA id k4-20020a05600c168400b003c6f1732f65sm8044wmn.38.2022.11.03.07.49.31
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 03 Nov 2022 07:49:32 -0700 (PDT)
+Message-ID: <ef637642-7d0f-66b8-2225-b6f8609f037e@gmail.com>
+Date:   Thu, 3 Nov 2022 14:49:31 +0000
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20221103120012.717020618@infradead.org>
+User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.1
+Subject: Re: [PATCH] cpufreq: SPEAr: Make read-only array sys_clk_src static
+Content-Language: en-US
+To:     Viresh Kumar <viresh.kumar@linaro.org>
+Cc:     "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+        kernel-janitors@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <20221103143654.85275-1-colin.i.king@gmail.com>
+ <20221103143807.tamhepos3cureoga@vireshk-i7>
+From:   "Colin King (gmail)" <colin.i.king@gmail.com>
+In-Reply-To: <20221103143807.tamhepos3cureoga@vireshk-i7>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,
+        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_FROM,NICE_REPLY_A,
         RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
         autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
@@ -75,29 +76,34 @@ Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Thu, Nov 03, 2022 at 01:00:12PM +0100, Peter Zijlstra wrote:
-> Hi!
+On 03/11/2022 14:38, Viresh Kumar wrote:
+> On 03-11-22, 14:36, Colin Ian King wrote:
+>> Don't populate the read-only array sys_clk_src on the stack but instead
+>> make it static and add in a missing const. Also makes the object code a
+>> little smaller.
+>>
+>> Signed-off-by: Colin Ian King <colin.i.king@gmail.com>
+>> ---
+>>   drivers/cpufreq/spear-cpufreq.c | 2 +-
+>>   1 file changed, 1 insertion(+), 1 deletion(-)
+>>
+>> diff --git a/drivers/cpufreq/spear-cpufreq.c b/drivers/cpufreq/spear-cpufreq.c
+>> index 7d0d62a06bf3..c6fdf019dbde 100644
+>> --- a/drivers/cpufreq/spear-cpufreq.c
+>> +++ b/drivers/cpufreq/spear-cpufreq.c
+>> @@ -39,7 +39,7 @@ static struct clk *spear1340_cpu_get_possible_parent(unsigned long newfreq)
+>>   	 * In SPEAr1340, cpu clk's parent sys clk can take input from
+>>   	 * following sources
+>>   	 */
+>> -	const char *sys_clk_src[] = {
+>> +	static const char * const sys_clk_src[] = {
+>>   		"sys_syn_clk",
+>>   		"pll1_clk",
+>>   		"pll2_clk",
 > 
-> Even thought the __attribute__((patchable_function_entry())) solution to the
-> BPF dispatcher woes works, it turns out to not be supported by the whole range
-> of ageing compilers we support. Specifically this attribute seems to be GCC-8
-> and later.
+> Same questions from longhaul patch apply here too.
 > 
-> This is another approach -- using static_call() to rewrite the dispatcher
-> function. I've compile tested this on:
-> 
->   x86_64  (inline static-call support)
->   i386    (out-of-line static-call support)
->   aargh64 (no static-call support)
-> 
-> A previous version was tested and found working by Bjorn.
-> 
-> It is split in two patches; first reverting the current approach and then
-> introducing the new for ease of review.
-> 
+See answer in that patch :-)
 
-Acked-by: Jiri Olsa <jolsa@kernel.org>
-Tested-by: Jiri Olsa <jolsa@kernel.org>
-
-thanks,
-jirka
+But really, this is kind of basic C level stuff. I suggest reading K&R 
+2nd Edition, Section 4.6, last paragraph before exercise 4-11.
