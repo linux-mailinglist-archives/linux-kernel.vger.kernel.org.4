@@ -2,75 +2,65 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id DB5AF618CF7
-	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 00:46:47 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 834D5618CF3
+	for <lists+linux-kernel@lfdr.de>; Fri,  4 Nov 2022 00:46:45 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231228AbiKCXqq (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 19:46:46 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59742 "EHLO
+        id S229770AbiKCXql (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 19:46:41 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59740 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230348AbiKCXqj (ORCPT
+        with ESMTP id S229481AbiKCXqg (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 19:46:39 -0400
-Received: from mga14.intel.com (mga14.intel.com [192.55.52.115])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id EFA151F2EE;
-        Thu,  3 Nov 2022 16:46:34 -0700 (PDT)
+        Thu, 3 Nov 2022 19:46:36 -0400
+Received: from mga09.intel.com (mga09.intel.com [134.134.136.24])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id D266A1F2DD;
+        Thu,  3 Nov 2022 16:46:32 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1667519194; x=1699055194;
+  t=1667519192; x=1699055192;
   h=date:from:to:cc:subject:message-id:references:
    mime-version:in-reply-to;
-  bh=iH6dYRChRIrySaLBww1fHlIPjKjJWcRfHkqDO9HKThg=;
-  b=nIzK4Y0sVjzFkiwd/GH9fjUvAEqTfN2iBC2C03cKhgqnLcIujbuOg1bp
-   94Ws5zX1oQ5bnn8zNgVRDA+sacdp97obQ01y27SM6GCkY4h5sZy2k1Qlo
-   3Nm76ViU7FrKuLD0eOBXx3FJlzlJ0uM6F61BJPcECc4gNJkeqA+k66Sev
-   Ko0isZ07kBg3AEllXbAtfG5sPus5E0bKDDTfmV3aB/eDUWGRZxIOfLhY4
-   SxmmXw/HEgFoy7Aw+kEDFtBrxBItt0HtGrVFS0Wv8Apy1Xzj4hC+ZQCvK
-   bUVUcdBLnQOq0KbWhcycpcJWJyGzjfnCdTr/Uu1ymGktRolwovnr/mZGp
-   A==;
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="309827569"
+  bh=oEN1fdeiw5xOjlkFsY9zOtwteEqxgtKU/F0nBKrgjQc=;
+  b=AhGLtsJDcxQApyOLTfrzuu+CNT5261GcbYbnkSF1V5+A+W1rF2m+YtEF
+   xuDBovmUvFa9pN8UJ1ShjKRnyqS18Gsjvfd9nz70g9YsuhgTOnFdfzQfw
+   twKoxGLvODcAU2wPzFuJKXHZGfPNXO79JSA1Gwew+Tr24ALsyTSwHJhZ2
+   SJYAU2sW0J8CCzK43nn5cMzatZmFUHH2erIzPuc2gGdxJAv+ABNQvEg6E
+   pi5QoZD+3S8mP39pboTLneFhCYjzRBGUIGeX3lrumgpu5/Dca48qhsqRA
+   LwhSRM6iR7m6LmiHbxDq4+scA34rhFFWq3SkUDMEExVF6TXVg0GDtxR7Y
+   Q==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="310952041"
 X-IronPort-AV: E=Sophos;i="5.96,135,1665471600"; 
-   d="scan'208";a="309827569"
-Received: from fmsmga006.fm.intel.com ([10.253.24.20])
-  by fmsmga103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 16:46:33 -0700
+   d="scan'208";a="310952041"
+Received: from fmsmga004.fm.intel.com ([10.253.24.48])
+  by orsmga102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 16:46:32 -0700
 X-ExtLoop1: 1
-X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="880085876"
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="703874361"
 X-IronPort-AV: E=Sophos;i="5.96,135,1665471600"; 
-   d="scan'208";a="880085876"
+   d="scan'208";a="703874361"
 Received: from lkp-server02.sh.intel.com (HELO b6d29c1a0365) ([10.239.97.151])
-  by fmsmga006.fm.intel.com with ESMTP; 03 Nov 2022 16:46:29 -0700
+  by fmsmga004.fm.intel.com with ESMTP; 03 Nov 2022 16:46:29 -0700
 Received: from kbuild by b6d29c1a0365 with local (Exim 4.96)
         (envelope-from <lkp@intel.com>)
-        id 1oqjum-000GRR-2X;
+        id 1oqjum-000GRL-2G;
         Thu, 03 Nov 2022 23:46:28 +0000
-Date:   Fri, 4 Nov 2022 07:46:11 +0800
+Date:   Fri, 4 Nov 2022 07:46:13 +0800
 From:   kernel test robot <lkp@intel.com>
-To:     Dmitry Safonov <dima@arista.com>, linux-kernel@vger.kernel.org,
-        David Ahern <dsahern@kernel.org>,
-        Eric Dumazet <edumazet@google.com>
-Cc:     oe-kbuild-all@lists.linux.dev, Dmitry Safonov <dima@arista.com>,
-        Bob Gilligan <gilligan@arista.com>,
-        Francesco Ruggeri <fruggeri@arista.com>,
-        Hideaki YOSHIFUJI <yoshfuji@linux-ipv6.org>,
-        Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni <pabeni@redhat.com>,
-        Salam Noureddine <noureddine@arista.com>,
-        netdev@vger.kernel.org, Ard Biesheuvel <ardb@kernel.org>,
-        Jason Baron <jbaron@akamai.com>,
-        Josh Poimboeuf <jpoimboe@kernel.org>,
-        Peter Zijlstra <peterz@infradead.org>,
-        Steven Rostedt <rostedt@goodmis.org>
-Subject: Re: [PATCH v2 1/3] jump_label: Add static_key_fast_inc()
-Message-ID: <202211040725.MK3qidyE-lkp@intel.com>
-References: <20221103212524.865762-2-dima@arista.com>
+To:     Youghandhar Chintala <quic_youghand@quicinc.com>,
+        ath11k@lists.infradead.org
+Cc:     oe-kbuild-all@lists.linux.dev, linux-wireless@vger.kernel.org,
+        linux-kernel@vger.kernel.org, quic_mpubbise@quicinc.com,
+        Youghandhar Chintala <quic_youghand@quicinc.com>
+Subject: Re: [PATCH] wifi: ath11k: Trigger sta disconnect on hardware restart
+Message-ID: <202211040704.Uc3uBdl4-lkp@intel.com>
+References: <20221102061423.1032-1-quic_youghand@quicinc.com>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="55MInWFxiUYGiTHW"
+Content-Type: multipart/mixed; boundary="NPiX1BH7IpE2GrqP"
 Content-Disposition: inline
-In-Reply-To: <20221103212524.865762-2-dima@arista.com>
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_NONE,UPPERCASE_50_75 autolearn=ham
-        autolearn_force=no version=3.4.6
+In-Reply-To: <20221102061423.1032-1-quic_youghand@quicinc.com>
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        RCVD_IN_MSPIKE_H3,RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_NONE,
+        UPPERCASE_75_100 autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -78,256 +68,141 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
---55MInWFxiUYGiTHW
+--NPiX1BH7IpE2GrqP
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
 
-Hi Dmitry,
+Hi Youghandhar,
 
 Thank you for the patch! Yet something to improve:
 
-[auto build test ERROR on f2f32f8af2b0ca9d619e5183eae3eed431793baf]
+[auto build test ERROR on kvalo-ath/ath-next]
+[also build test ERROR on wireless/main wireless-next/main linus/master v6.1-rc3 next-20221103]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Dmitry-Safonov/net-tcp-Dynamically-disable-TCP-MD5-static-key/20221104-052738
-base:   f2f32f8af2b0ca9d619e5183eae3eed431793baf
-patch link:    https://lore.kernel.org/r/20221103212524.865762-2-dima%40arista.com
-patch subject: [PATCH v2 1/3] jump_label: Add static_key_fast_inc()
-config: mips-allyesconfig
-compiler: mips-linux-gcc (GCC) 12.1.0
+url:    https://github.com/intel-lab-lkp/linux/commits/Youghandhar-Chintala/wifi-ath11k-Trigger-sta-disconnect-on-hardware-restart/20221102-141609
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/kvalo/ath.git ath-next
+patch link:    https://lore.kernel.org/r/20221102061423.1032-1-quic_youghand%40quicinc.com
+patch subject: [PATCH] wifi: ath11k: Trigger sta disconnect on hardware restart
+config: arc-allyesconfig
+compiler: arceb-elf-gcc (GCC) 12.1.0
 reproduce (this is a W=1 build):
         wget https://raw.githubusercontent.com/intel/lkp-tests/master/sbin/make.cross -O ~/bin/make.cross
         chmod +x ~/bin/make.cross
-        # https://github.com/intel-lab-lkp/linux/commit/bff5ecacd7c0f1e5d610c025726a6c5cb992e828
+        # https://github.com/intel-lab-lkp/linux/commit/17ed0b3e46925de2951aacc9b244c6024eb1f1ea
         git remote add linux-review https://github.com/intel-lab-lkp/linux
-        git fetch --no-tags linux-review Dmitry-Safonov/net-tcp-Dynamically-disable-TCP-MD5-static-key/20221104-052738
-        git checkout bff5ecacd7c0f1e5d610c025726a6c5cb992e828
+        git fetch --no-tags linux-review Youghandhar-Chintala/wifi-ath11k-Trigger-sta-disconnect-on-hardware-restart/20221102-141609
+        git checkout 17ed0b3e46925de2951aacc9b244c6024eb1f1ea
         # save the config file
         mkdir build_dir && cp config build_dir/.config
-        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=mips prepare
+        COMPILER_INSTALL_PATH=$HOME/0day COMPILER=gcc-12.1.0 make.cross W=1 O=build_dir ARCH=arc SHELL=/bin/bash
 
 If you fix the issue, kindly add following tag where applicable
 | Reported-by: kernel test robot <lkp@intel.com>
 
 All errors (new ones prefixed by >>):
 
-   In file included from include/linux/dynamic_debug.h:6,
-                    from include/linux/printk.h:566,
+   In file included from include/linux/wait.h:7,
+                    from include/linux/wait_bit.h:8,
+                    from include/linux/fs.h:6,
+                    from include/linux/highmem.h:5,
+                    from include/linux/bvec.h:10,
+                    from include/linux/skbuff.h:17,
+                    from include/linux/if_ether.h:19,
+                    from include/net/mac80211.h:18,
+                    from drivers/net/wireless/ath/ath11k/mac.c:7:
+   drivers/net/wireless/ath/ath11k/mac.c: In function 'ath11k_mac_op_reconfig_complete':
+   drivers/net/wireless/ath/ath11k/mac.c:8049:45: error: 'arvif' undeclared (first use in this function)
+    8049 |                         list_for_each_entry(arvif, &ar->arvifs, list) {
+         |                                             ^~~~~
+   include/linux/list.h:674:14: note: in definition of macro 'list_for_each_entry'
+     674 |         for (pos = list_first_entry(head, typeof(*pos), member);        \
+         |              ^~~
+   drivers/net/wireless/ath/ath11k/mac.c:8049:45: note: each undeclared identifier is reported only once for each function it appears in
+    8049 |                         list_for_each_entry(arvif, &ar->arvifs, list) {
+         |                                             ^~~~~
+   include/linux/list.h:674:14: note: in definition of macro 'list_for_each_entry'
+     674 |         for (pos = list_first_entry(head, typeof(*pos), member);        \
+         |              ^~~
+   In file included from include/linux/bits.h:22,
+                    from include/linux/ratelimit_types.h:5,
+                    from include/linux/printk.h:9,
                     from include/asm-generic/bug.h:22,
-                    from arch/mips/include/asm/bug.h:42,
+                    from arch/arc/include/asm/bug.h:30,
                     from include/linux/bug.h:5,
-                    from include/linux/fortify-string.h:5,
-                    from include/linux/string.h:253,
-                    from include/linux/uuid.h:12,
-                    from include/linux/mod_devicetable.h:13,
-                    from scripts/mod/devicetable-offsets.c:3:
-   include/linux/jump_label.h: In function 'static_key_fast_inc':
->> include/linux/jump_label.h:83:35: error: implicit declaration of function 'WARN' [-Werror=implicit-function-declaration]
-      83 | #define STATIC_KEY_CHECK_USE(key) WARN(!static_key_initialized,               \
-         |                                   ^~~~
-   include/linux/jump_label.h:250:9: note: in expansion of macro 'STATIC_KEY_CHECK_USE'
-     250 |         STATIC_KEY_CHECK_USE(key);
-         |         ^~~~~~~~~~~~~~~~~~~~
->> include/linux/jump_label.h:251:9: error: implicit declaration of function 'WARN_ON_ONCE' [-Werror=implicit-function-declaration]
-     251 |         WARN_ON_ONCE(atomic_read(&key->enabled) < 1);
+                    from include/net/mac80211.h:16:
+>> include/linux/compiler_types.h:298:27: error: expression in static assertion is not an integer
+     298 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ^~~~~~~~~~~~~
+   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                       ^~~~~~~~~~~
+   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+     520 |         container_of(ptr, type, member)
          |         ^~~~~~~~~~~~
-   cc1: some warnings being treated as errors
-   make[2]: *** [scripts/Makefile.build:118: scripts/mod/devicetable-offsets.s] Error 1
-   make[2]: Target 'scripts/mod/' not remade because of errors.
-   make[1]: *** [Makefile:1269: prepare0] Error 2
-   make[1]: Target 'prepare' not remade because of errors.
-   make: *** [Makefile:231: __sub-make] Error 2
-   make: Target 'prepare' not remade because of errors.
+   include/linux/list.h:531:9: note: in expansion of macro 'list_entry'
+     531 |         list_entry((ptr)->next, type, member)
+         |         ^~~~~~~~~~
+   include/linux/list.h:674:20: note: in expansion of macro 'list_first_entry'
+     674 |         for (pos = list_first_entry(head, typeof(*pos), member);        \
+         |                    ^~~~~~~~~~~~~~~~
+   drivers/net/wireless/ath/ath11k/mac.c:8049:25: note: in expansion of macro 'list_for_each_entry'
+    8049 |                         list_for_each_entry(arvif, &ar->arvifs, list) {
+         |                         ^~~~~~~~~~~~~~~~~~~
+>> include/linux/compiler_types.h:298:27: error: expression in static assertion is not an integer
+     298 | #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+         |                           ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/build_bug.h:78:56: note: in definition of macro '__static_assert'
+      78 | #define __static_assert(expr, msg, ...) _Static_assert(expr, msg)
+         |                                                        ^~~~
+   include/linux/container_of.h:19:9: note: in expansion of macro 'static_assert'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |         ^~~~~~~~~~~~~
+   include/linux/container_of.h:19:23: note: in expansion of macro '__same_type'
+      19 |         static_assert(__same_type(*(ptr), ((type *)0)->member) ||       \
+         |                       ^~~~~~~~~~~
+   include/linux/list.h:520:9: note: in expansion of macro 'container_of'
+     520 |         container_of(ptr, type, member)
+         |         ^~~~~~~~~~~~
+   include/linux/list.h:564:9: note: in expansion of macro 'list_entry'
+     564 |         list_entry((pos)->member.next, typeof(*(pos)), member)
+         |         ^~~~~~~~~~
+   include/linux/list.h:676:20: note: in expansion of macro 'list_next_entry'
+     676 |              pos = list_next_entry(pos, member))
+         |                    ^~~~~~~~~~~~~~~
+   drivers/net/wireless/ath/ath11k/mac.c:8049:25: note: in expansion of macro 'list_for_each_entry'
+    8049 |                         list_for_each_entry(arvif, &ar->arvifs, list) {
+         |                         ^~~~~~~~~~~~~~~~~~~
 
 
-vim +/WARN +83 include/linux/jump_label.h
+vim +298 include/linux/compiler_types.h
 
-c4b2c0c5f647aa Hannes Frederic Sowa       2013-10-19   82  
-5cdda5117e125e Borislav Petkov            2017-10-18  @83  #define STATIC_KEY_CHECK_USE(key) WARN(!static_key_initialized,		      \
-5cdda5117e125e Borislav Petkov            2017-10-18   84  				    "%s(): static key '%pS' used before call to jump_label_init()", \
-5cdda5117e125e Borislav Petkov            2017-10-18   85  				    __func__, (key))
-d430d3d7e646eb Jason Baron                2011-03-16   86  
-c5905afb0ee655 Ingo Molnar                2012-02-24   87  struct static_key {
-d430d3d7e646eb Jason Baron                2011-03-16   88  	atomic_t enabled;
-cd27ccfc727e99 Masahiro Yamada            2022-02-14   89  #ifdef CONFIG_JUMP_LABEL
-3821fd35b58dba Jason Baron                2017-02-03   90  /*
-b17ef2ed624aa7 Steven Rostedt (VMware     2017-03-02   91)  * Note:
-b17ef2ed624aa7 Steven Rostedt (VMware     2017-03-02   92)  *   To make anonymous unions work with old compilers, the static
-b17ef2ed624aa7 Steven Rostedt (VMware     2017-03-02   93)  *   initialization of them requires brackets. This creates a dependency
-b17ef2ed624aa7 Steven Rostedt (VMware     2017-03-02   94)  *   on the order of the struct with the initializers. If any fields
-b17ef2ed624aa7 Steven Rostedt (VMware     2017-03-02   95)  *   are added, STATIC_KEY_INIT_TRUE and STATIC_KEY_INIT_FALSE may need
-b17ef2ed624aa7 Steven Rostedt (VMware     2017-03-02   96)  *   to be modified.
-b17ef2ed624aa7 Steven Rostedt (VMware     2017-03-02   97)  *
-3821fd35b58dba Jason Baron                2017-02-03   98   * bit 0 => 1 if key is initially true
-3821fd35b58dba Jason Baron                2017-02-03   99   *	    0 if initially false
-3821fd35b58dba Jason Baron                2017-02-03  100   * bit 1 => 1 if points to struct static_key_mod
-3821fd35b58dba Jason Baron                2017-02-03  101   *	    0 if points to struct jump_entry
-3821fd35b58dba Jason Baron                2017-02-03  102   */
-3821fd35b58dba Jason Baron                2017-02-03  103  	union {
-3821fd35b58dba Jason Baron                2017-02-03  104  		unsigned long type;
-d430d3d7e646eb Jason Baron                2011-03-16  105  		struct jump_entry *entries;
-c5905afb0ee655 Ingo Molnar                2012-02-24  106  		struct static_key_mod *next;
-3821fd35b58dba Jason Baron                2017-02-03  107  	};
-cd27ccfc727e99 Masahiro Yamada            2022-02-14  108  #endif	/* CONFIG_JUMP_LABEL */
-d430d3d7e646eb Jason Baron                2011-03-16  109  };
-d430d3d7e646eb Jason Baron                2011-03-16  110  
-c0ccf6f99e3a43 Anton Blanchard            2015-04-09  111  #endif /* __ASSEMBLY__ */
-c0ccf6f99e3a43 Anton Blanchard            2015-04-09  112  
-e9666d10a5677a Masahiro Yamada            2018-12-31  113  #ifdef CONFIG_JUMP_LABEL
-c0ccf6f99e3a43 Anton Blanchard            2015-04-09  114  #include <asm/jump_label.h>
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  115  
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  116  #ifndef __ASSEMBLY__
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  117  #ifdef CONFIG_HAVE_ARCH_JUMP_LABEL_RELATIVE
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  118  
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  119  struct jump_entry {
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  120  	s32 code;
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  121  	s32 target;
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  122  	long key;	// key may be far away from the core kernel under KASLR
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  123  };
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  124  
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  125  static inline unsigned long jump_entry_code(const struct jump_entry *entry)
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  126  {
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  127  	return (unsigned long)&entry->code + entry->code;
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  128  }
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  129  
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  130  static inline unsigned long jump_entry_target(const struct jump_entry *entry)
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  131  {
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  132  	return (unsigned long)&entry->target + entry->target;
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  133  }
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  134  
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  135  static inline struct static_key *jump_entry_key(const struct jump_entry *entry)
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  136  {
-19483677684b6c Ard Biesheuvel             2018-09-18  137  	long offset = entry->key & ~3L;
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  138  
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  139  	return (struct static_key *)((unsigned long)&entry->key + offset);
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  140  }
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  141  
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  142  #else
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  143  
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  144  static inline unsigned long jump_entry_code(const struct jump_entry *entry)
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  145  {
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  146  	return entry->code;
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  147  }
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  148  
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  149  static inline unsigned long jump_entry_target(const struct jump_entry *entry)
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  150  {
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  151  	return entry->target;
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  152  }
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  153  
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  154  static inline struct static_key *jump_entry_key(const struct jump_entry *entry)
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  155  {
-19483677684b6c Ard Biesheuvel             2018-09-18  156  	return (struct static_key *)((unsigned long)entry->key & ~3UL);
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  157  }
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  158  
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  159  #endif
-50ff18ab497aa2 Ard Biesheuvel             2018-09-18  160  
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  161  static inline bool jump_entry_is_branch(const struct jump_entry *entry)
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  162  {
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  163  	return (unsigned long)entry->key & 1UL;
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  164  }
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  165  
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  166  static inline bool jump_entry_is_init(const struct jump_entry *entry)
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  167  {
-19483677684b6c Ard Biesheuvel             2018-09-18  168  	return (unsigned long)entry->key & 2UL;
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  169  }
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  170  
-5af0ea293d78c8 Peter Zijlstra             2021-05-06  171  static inline void jump_entry_set_init(struct jump_entry *entry, bool set)
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  172  {
-5af0ea293d78c8 Peter Zijlstra             2021-05-06  173  	if (set)
-19483677684b6c Ard Biesheuvel             2018-09-18  174  		entry->key |= 2;
-5af0ea293d78c8 Peter Zijlstra             2021-05-06  175  	else
-5af0ea293d78c8 Peter Zijlstra             2021-05-06  176  		entry->key &= ~2;
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  177  }
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  178  
-fa5e5dc39669b4 Peter Zijlstra             2021-05-06  179  static inline int jump_entry_size(struct jump_entry *entry)
-fa5e5dc39669b4 Peter Zijlstra             2021-05-06  180  {
-fa5e5dc39669b4 Peter Zijlstra             2021-05-06  181  #ifdef JUMP_LABEL_NOP_SIZE
-fa5e5dc39669b4 Peter Zijlstra             2021-05-06  182  	return JUMP_LABEL_NOP_SIZE;
-fa5e5dc39669b4 Peter Zijlstra             2021-05-06  183  #else
-fa5e5dc39669b4 Peter Zijlstra             2021-05-06  184  	return arch_jump_entry_size(entry);
-fa5e5dc39669b4 Peter Zijlstra             2021-05-06  185  #endif
-fa5e5dc39669b4 Peter Zijlstra             2021-05-06  186  }
-fa5e5dc39669b4 Peter Zijlstra             2021-05-06  187  
-9ae033aca8d600 Ard Biesheuvel             2018-09-18  188  #endif
-c0ccf6f99e3a43 Anton Blanchard            2015-04-09  189  #endif
-c0ccf6f99e3a43 Anton Blanchard            2015-04-09  190  
-c0ccf6f99e3a43 Anton Blanchard            2015-04-09  191  #ifndef __ASSEMBLY__
-bf5438fca2950b Jason Baron                2010-09-17  192  
-bf5438fca2950b Jason Baron                2010-09-17  193  enum jump_label_type {
-76b235c6bcb160 Peter Zijlstra             2015-07-24  194  	JUMP_LABEL_NOP = 0,
-76b235c6bcb160 Peter Zijlstra             2015-07-24  195  	JUMP_LABEL_JMP,
-bf5438fca2950b Jason Baron                2010-09-17  196  };
-bf5438fca2950b Jason Baron                2010-09-17  197  
-bf5438fca2950b Jason Baron                2010-09-17  198  struct module;
-bf5438fca2950b Jason Baron                2010-09-17  199  
-e9666d10a5677a Masahiro Yamada            2018-12-31  200  #ifdef CONFIG_JUMP_LABEL
-4c5ea0a9cd02d6 Paolo Bonzini              2016-06-21  201  
-a1efb01feca597 Peter Zijlstra             2015-07-24  202  #define JUMP_TYPE_FALSE		0UL
-a1efb01feca597 Peter Zijlstra             2015-07-24  203  #define JUMP_TYPE_TRUE		1UL
-3821fd35b58dba Jason Baron                2017-02-03  204  #define JUMP_TYPE_LINKED	2UL
-3821fd35b58dba Jason Baron                2017-02-03  205  #define JUMP_TYPE_MASK		3UL
-c5905afb0ee655 Ingo Molnar                2012-02-24  206  
-c5905afb0ee655 Ingo Molnar                2012-02-24  207  static __always_inline bool static_key_false(struct static_key *key)
-c5905afb0ee655 Ingo Molnar                2012-02-24  208  {
-11276d5306b8e5 Peter Zijlstra             2015-07-24  209  	return arch_static_branch(key, false);
-c5905afb0ee655 Ingo Molnar                2012-02-24  210  }
-d430d3d7e646eb Jason Baron                2011-03-16  211  
-c5905afb0ee655 Ingo Molnar                2012-02-24  212  static __always_inline bool static_key_true(struct static_key *key)
-c5905afb0ee655 Ingo Molnar                2012-02-24  213  {
-11276d5306b8e5 Peter Zijlstra             2015-07-24  214  	return !arch_static_branch(key, true);
-c5905afb0ee655 Ingo Molnar                2012-02-24  215  }
-c5905afb0ee655 Ingo Molnar                2012-02-24  216  
-bf5438fca2950b Jason Baron                2010-09-17  217  extern struct jump_entry __start___jump_table[];
-bf5438fca2950b Jason Baron                2010-09-17  218  extern struct jump_entry __stop___jump_table[];
-bf5438fca2950b Jason Baron                2010-09-17  219  
-97ce2c88f9ad42 Jeremy Fitzhardinge        2011-10-12  220  extern void jump_label_init(void);
-91bad2f8d30574 Jason Baron                2010-10-01  221  extern void jump_label_lock(void);
-91bad2f8d30574 Jason Baron                2010-10-01  222  extern void jump_label_unlock(void);
-bf5438fca2950b Jason Baron                2010-09-17  223  extern void arch_jump_label_transform(struct jump_entry *entry,
-bf5438fca2950b Jason Baron                2010-09-17  224  				      enum jump_label_type type);
-c2ba8a15f310d9 Daniel Bristot de Oliveira 2019-06-12  225  extern bool arch_jump_label_transform_queue(struct jump_entry *entry,
-c2ba8a15f310d9 Daniel Bristot de Oliveira 2019-06-12  226  					    enum jump_label_type type);
-c2ba8a15f310d9 Daniel Bristot de Oliveira 2019-06-12  227  extern void arch_jump_label_transform_apply(void);
-4c3ef6d79328c0 Jason Baron                2010-09-17  228  extern int jump_label_text_reserved(void *start, void *end);
-c5905afb0ee655 Ingo Molnar                2012-02-24  229  extern void static_key_slow_inc(struct static_key *key);
-c5905afb0ee655 Ingo Molnar                2012-02-24  230  extern void static_key_slow_dec(struct static_key *key);
-ce48c146495a1a Peter Zijlstra             2018-01-22  231  extern void static_key_slow_inc_cpuslocked(struct static_key *key);
-ce48c146495a1a Peter Zijlstra             2018-01-22  232  extern void static_key_slow_dec_cpuslocked(struct static_key *key);
-1f69bf9c613760 Jason Baron                2016-08-03  233  extern int static_key_count(struct static_key *key);
-1f69bf9c613760 Jason Baron                2016-08-03  234  extern void static_key_enable(struct static_key *key);
-1f69bf9c613760 Jason Baron                2016-08-03  235  extern void static_key_disable(struct static_key *key);
-5a40527f8f0798 Marc Zyngier               2017-08-01  236  extern void static_key_enable_cpuslocked(struct static_key *key);
-5a40527f8f0798 Marc Zyngier               2017-08-01  237  extern void static_key_disable_cpuslocked(struct static_key *key);
-fdfd42892f311e Ard Biesheuvel             2022-06-15  238  extern enum jump_label_type jump_label_init_type(struct jump_entry *entry);
-c5905afb0ee655 Ingo Molnar                2012-02-24  239  
-bff5ecacd7c0f1 Dmitry Safonov             2022-11-03  240  /***
-bff5ecacd7c0f1 Dmitry Safonov             2022-11-03  241   * static_key_fast_inc - adds a user for a static key
-bff5ecacd7c0f1 Dmitry Safonov             2022-11-03  242   * @key: static key that must be already enabled
-bff5ecacd7c0f1 Dmitry Safonov             2022-11-03  243   *
-bff5ecacd7c0f1 Dmitry Safonov             2022-11-03  244   * The caller must make sure that the static key can't get disabled while
-bff5ecacd7c0f1 Dmitry Safonov             2022-11-03  245   * in this function. It doesn't patch jump labels, only adds a user to
-bff5ecacd7c0f1 Dmitry Safonov             2022-11-03  246   * an already enabled static key.
-bff5ecacd7c0f1 Dmitry Safonov             2022-11-03  247   */
-bff5ecacd7c0f1 Dmitry Safonov             2022-11-03  248  static inline void static_key_fast_inc(struct static_key *key)
-bff5ecacd7c0f1 Dmitry Safonov             2022-11-03  249  {
-bff5ecacd7c0f1 Dmitry Safonov             2022-11-03  250  	STATIC_KEY_CHECK_USE(key);
-bff5ecacd7c0f1 Dmitry Safonov             2022-11-03 @251  	WARN_ON_ONCE(atomic_read(&key->enabled) < 1);
-bff5ecacd7c0f1 Dmitry Safonov             2022-11-03  252  	atomic_inc(&key->enabled);
-bff5ecacd7c0f1 Dmitry Safonov             2022-11-03  253  }
-bff5ecacd7c0f1 Dmitry Safonov             2022-11-03  254  
+eb111869301e15 Rasmus Villemoes 2019-09-13  296  
+d15155824c5014 Will Deacon      2017-10-24  297  /* Are two types/vars the same type (ignoring qualifiers)? */
+d15155824c5014 Will Deacon      2017-10-24 @298  #define __same_type(a, b) __builtin_types_compatible_p(typeof(a), typeof(b))
+d15155824c5014 Will Deacon      2017-10-24  299  
 
 -- 
 0-DAY CI Kernel Test Service
 https://01.org/lkp
 
---55MInWFxiUYGiTHW
+--NPiX1BH7IpE2GrqP
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: attachment; filename=config
 
 #
 # Automatically generated file; DO NOT EDIT.
-# Linux/mips 6.1.0-rc3 Kernel Configuration
+# Linux/arc 6.1.0-rc2 Kernel Configuration
 #
-CONFIG_CC_VERSION_TEXT="mips-linux-gcc (GCC) 12.1.0"
+CONFIG_CC_VERSION_TEXT="arceb-elf-gcc (GCC) 12.1.0"
 CONFIG_CC_IS_GCC=y
 CONFIG_GCC_VERSION=120100
 CONFIG_CLANG_VERSION=0
@@ -353,19 +228,9 @@ CONFIG_COMPILE_TEST=y
 CONFIG_LOCALVERSION=""
 CONFIG_BUILD_SALT=""
 CONFIG_HAVE_KERNEL_GZIP=y
-CONFIG_HAVE_KERNEL_BZIP2=y
 CONFIG_HAVE_KERNEL_LZMA=y
-CONFIG_HAVE_KERNEL_XZ=y
-CONFIG_HAVE_KERNEL_LZO=y
-CONFIG_HAVE_KERNEL_LZ4=y
-CONFIG_HAVE_KERNEL_ZSTD=y
 CONFIG_KERNEL_GZIP=y
-# CONFIG_KERNEL_BZIP2 is not set
 # CONFIG_KERNEL_LZMA is not set
-# CONFIG_KERNEL_XZ is not set
-# CONFIG_KERNEL_LZO is not set
-# CONFIG_KERNEL_LZ4 is not set
-# CONFIG_KERNEL_ZSTD is not set
 CONFIG_DEFAULT_INIT=""
 CONFIG_DEFAULT_HOSTNAME="(none)"
 CONFIG_SYSVIPC=y
@@ -380,29 +245,20 @@ CONFIG_AUDIT=y
 #
 # IRQ subsystem
 #
-CONFIG_GENERIC_IRQ_PROBE=y
 CONFIG_GENERIC_IRQ_SHOW=y
-CONFIG_GENERIC_IRQ_EFFECTIVE_AFF_MASK=y
-CONFIG_GENERIC_IRQ_MIGRATION=y
+CONFIG_GENERIC_PENDING_IRQ=y
 CONFIG_GENERIC_IRQ_INJECTION=y
 CONFIG_GENERIC_IRQ_CHIP=y
 CONFIG_IRQ_DOMAIN=y
 CONFIG_IRQ_SIM=y
 CONFIG_IRQ_DOMAIN_HIERARCHY=y
 CONFIG_IRQ_FASTEOI_HIERARCHY_HANDLERS=y
-CONFIG_GENERIC_IRQ_IPI=y
 CONFIG_GENERIC_MSI_IRQ=y
 CONFIG_GENERIC_MSI_IRQ_DOMAIN=y
-CONFIG_IRQ_FORCED_THREADING=y
 CONFIG_GENERIC_IRQ_DEBUGFS=y
 # end of IRQ subsystem
 
-CONFIG_CLOCKSOURCE_WATCHDOG=y
-CONFIG_GENERIC_TIME_VSYSCALL=y
 CONFIG_GENERIC_CLOCKEVENTS=y
-CONFIG_ARCH_HAS_TICK_BROADCAST=y
-CONFIG_GENERIC_CLOCKEVENTS_BROADCAST=y
-CONFIG_GENERIC_CMOS_UPDATE=y
 CONFIG_TIME_KUNIT_TEST=y
 CONFIG_CONTEXT_TRACKING=y
 CONFIG_CONTEXT_TRACKING_IDLE=y
@@ -416,22 +272,16 @@ CONFIG_NO_HZ_COMMON=y
 CONFIG_NO_HZ_IDLE=y
 CONFIG_NO_HZ=y
 CONFIG_HIGH_RES_TIMERS=y
-CONFIG_CLOCKSOURCE_WATCHDOG_MAX_SKEW_US=100
 # end of Timers subsystem
 
 CONFIG_BPF=y
-CONFIG_HAVE_EBPF_JIT=y
 
 #
 # BPF subsystem
 #
 CONFIG_BPF_SYSCALL=y
-CONFIG_BPF_JIT=y
-CONFIG_BPF_JIT_ALWAYS_ON=y
-CONFIG_BPF_JIT_DEFAULT_ON=y
 CONFIG_BPF_UNPRIV_DEFAULT_OFF=y
 CONFIG_USERMODE_DRIVER=y
-CONFIG_BPF_LSM=y
 # end of BPF subsystem
 
 CONFIG_PREEMPT_NONE_BUILD=y
@@ -439,14 +289,11 @@ CONFIG_PREEMPT_NONE=y
 # CONFIG_PREEMPT_VOLUNTARY is not set
 # CONFIG_PREEMPT is not set
 CONFIG_PREEMPT_COUNT=y
-CONFIG_SCHED_CORE=y
 
 #
 # CPU/Task time and stats accounting
 #
 CONFIG_TICK_CPU_ACCOUNTING=y
-CONFIG_IRQ_TIME_ACCOUNTING=y
-CONFIG_HAVE_SCHED_AVG_IRQ=y
 CONFIG_BSD_PROCESS_ACCT=y
 CONFIG_BSD_PROCESS_ACCT_V3=y
 CONFIG_TASKSTATS=y
@@ -495,8 +342,6 @@ CONFIG_GENERIC_SCHED_CLOCK=y
 #
 # Scheduler features
 #
-CONFIG_UCLAMP_TASK=y
-CONFIG_UCLAMP_BUCKETS_COUNT=5
 # end of Scheduler features
 
 CONFIG_CC_IMPLICIT_FALLTHROUGH="-Wimplicit-fallthrough=5"
@@ -513,7 +358,6 @@ CONFIG_CGROUP_SCHED=y
 CONFIG_FAIR_GROUP_SCHED=y
 CONFIG_CFS_BANDWIDTH=y
 CONFIG_RT_GROUP_SCHED=y
-CONFIG_UCLAMP_TASK_GROUP=y
 CONFIG_CGROUP_PIDS=y
 CONFIG_CGROUP_RDMA=y
 CONFIG_CGROUP_FREEZER=y
@@ -552,11 +396,7 @@ CONFIG_BOOT_CONFIG_EMBED_FILE=""
 CONFIG_INITRAMFS_PRESERVE_MTIME=y
 CONFIG_CC_OPTIMIZE_FOR_PERFORMANCE=y
 # CONFIG_CC_OPTIMIZE_FOR_SIZE is not set
-CONFIG_HAVE_LD_DEAD_CODE_DATA_ELIMINATION=y
-CONFIG_LD_DEAD_CODE_DATA_ELIMINATION=y
-CONFIG_LD_ORPHAN_WARN=y
 CONFIG_SYSCTL=y
-CONFIG_SYSCTL_EXCEPTION_TRACE=y
 CONFIG_EXPERT=y
 CONFIG_MULTIUSER=y
 CONFIG_SGETMASK_SYSCALL=y
@@ -582,8 +422,6 @@ CONFIG_KALLSYMS=y
 CONFIG_KALLSYMS_ALL=y
 CONFIG_KALLSYMS_BASE_RELATIVE=y
 CONFIG_KCMP=y
-CONFIG_RSEQ=y
-CONFIG_DEBUG_RSEQ=y
 CONFIG_EMBEDDED=y
 CONFIG_HAVE_PERF_EVENTS=y
 CONFIG_PERF_USE_VMALLOC=y
@@ -601,388 +439,135 @@ CONFIG_PROFILING=y
 CONFIG_TRACEPOINTS=y
 # end of General setup
 
-CONFIG_MIPS=y
-CONFIG_MIPS_GENERIC=y
-CONFIG_MACH_INGENIC=y
-
-#
-# Machine selection
-#
-CONFIG_MIPS_GENERIC_KERNEL=y
-# CONFIG_MIPS_ALCHEMY is not set
-# CONFIG_AR7 is not set
-# CONFIG_ATH25 is not set
-# CONFIG_ATH79 is not set
-# CONFIG_BMIPS_GENERIC is not set
-# CONFIG_BCM47XX is not set
-# CONFIG_BCM63XX is not set
-# CONFIG_MIPS_COBALT is not set
-# CONFIG_MACH_DECSTATION is not set
-# CONFIG_MACH_JAZZ is not set
-# CONFIG_MACH_INGENIC_SOC is not set
-# CONFIG_LANTIQ is not set
-# CONFIG_MACH_LOONGSON32 is not set
-# CONFIG_MACH_LOONGSON2EF is not set
-# CONFIG_MACH_LOONGSON64 is not set
-# CONFIG_MIPS_MALTA is not set
-# CONFIG_MACH_PIC32 is not set
-# CONFIG_MACH_NINTENDO64 is not set
-# CONFIG_RALINK is not set
-# CONFIG_MACH_REALTEK_RTL is not set
-# CONFIG_SGI_IP22 is not set
-# CONFIG_SGI_IP27 is not set
-# CONFIG_SGI_IP28 is not set
-# CONFIG_SGI_IP30 is not set
-# CONFIG_SGI_IP32 is not set
-# CONFIG_SIBYTE_CRHINE is not set
-# CONFIG_SIBYTE_CARMEL is not set
-# CONFIG_SIBYTE_CRHONE is not set
-# CONFIG_SIBYTE_RHONE is not set
-# CONFIG_SIBYTE_SWARM is not set
-# CONFIG_SIBYTE_LITTLESUR is not set
-# CONFIG_SIBYTE_SENTOSA is not set
-# CONFIG_SIBYTE_BIGSUR is not set
-# CONFIG_SNI_RM is not set
-# CONFIG_MACH_TX49XX is not set
-# CONFIG_MIKROTIK_RB532 is not set
-# CONFIG_CAVIUM_OCTEON_SOC is not set
-CONFIG_LEGACY_BOARDS=y
-CONFIG_YAMON_DT_SHIM=y
-
-#
-# Legacy (non-UHI/non-FIT) Boards
-#
-CONFIG_LEGACY_BOARD_SEAD3=y
-
-#
-# MSCC Ocelot doesn't work with SEAD3 enabled
-#
-CONFIG_SOC_VCOREIII=y
-CONFIG_MSCC_OCELOT=y
-
-#
-# FIT/UHI Boards
-#
-CONFIG_FIT_IMAGE_FDT_BOSTON=y
-CONFIG_FIT_IMAGE_FDT_MARDUK=y
-CONFIG_FIT_IMAGE_FDT_NI169445=y
-CONFIG_FIT_IMAGE_FDT_XILFPGA=y
-CONFIG_FIT_IMAGE_FDT_OCELOT=y
-CONFIG_FIT_IMAGE_FDT_LUTON=y
-CONFIG_FIT_IMAGE_FDT_JAGUAR2=y
-CONFIG_FIT_IMAGE_FDT_SERVAL=y
-CONFIG_BOARD_INGENIC=y
-CONFIG_VIRT_BOARD_RANCHU=y
-CONFIG_MACH_INGENIC_GENERIC=y
-CONFIG_MACH_JZ4725B=y
-CONFIG_MACH_JZ4740=y
-CONFIG_MACH_JZ4770=y
-CONFIG_MACH_JZ4780=y
-CONFIG_MACH_X1000=y
-CONFIG_MACH_X1830=y
-# end of Machine selection
-
-CONFIG_GENERIC_HWEIGHT=y
-CONFIG_GENERIC_CALIBRATE_DELAY=y
-CONFIG_SCHED_OMIT_FRAME_POINTER=y
-CONFIG_BOOT_RAW=y
-CONFIG_CEVT_R4K=y
-CONFIG_CSRC_R4K=y
-CONFIG_MIPS_CLOCK_VSYSCALL=y
-CONFIG_ARCH_SUPPORTS_UPROBES=y
-CONFIG_DMA_NONCOHERENT=y
-CONFIG_SYS_SUPPORTS_HOTPLUG_CPU=y
-CONFIG_SYNC_R4K=y
-CONFIG_SYS_SUPPORTS_RELOCATABLE=y
-CONFIG_CPU_BIG_ENDIAN=y
-# CONFIG_CPU_LITTLE_ENDIAN is not set
-CONFIG_SYS_SUPPORTS_BIG_ENDIAN=y
-CONFIG_SYS_SUPPORTS_LITTLE_ENDIAN=y
-CONFIG_NO_EXCEPT_FILL=y
-CONFIG_SWAP_IO_SPACE=y
-CONFIG_MIPS_L1_CACHE_SHIFT_7=y
-CONFIG_MIPS_L1_CACHE_SHIFT=7
-
-#
-# CPU selection
-#
-CONFIG_CPU_MIPS32_R1=y
-# CONFIG_CPU_MIPS32_R2 is not set
-# CONFIG_CPU_MIPS32_R6 is not set
-# CONFIG_CPU_MIPS64_R1 is not set
-# CONFIG_CPU_MIPS64_R2 is not set
-# CONFIG_CPU_MIPS64_R6 is not set
-CONFIG_SYS_SUPPORTS_ZBOOT=y
-CONFIG_SYS_HAS_CPU_MIPS32_R1=y
-CONFIG_SYS_HAS_CPU_MIPS32_R2=y
-CONFIG_SYS_HAS_CPU_MIPS32_R6=y
-CONFIG_SYS_HAS_CPU_MIPS64_R1=y
-CONFIG_SYS_HAS_CPU_MIPS64_R2=y
-CONFIG_SYS_HAS_CPU_MIPS64_R6=y
-CONFIG_WEAK_ORDERING=y
-# end of CPU selection
-
-CONFIG_CPU_MIPS32=y
-CONFIG_CPU_MIPSR1=y
-CONFIG_TARGET_ISA_REV=1
-CONFIG_SYS_SUPPORTS_32BIT_KERNEL=y
-CONFIG_SYS_SUPPORTS_64BIT_KERNEL=y
-CONFIG_CPU_SUPPORTS_32BIT_KERNEL=y
-CONFIG_CPU_SUPPORTS_CPUFREQ=y
-CONFIG_HARDWARE_WATCHPOINTS=y
-
-#
-# Kernel type
-#
-CONFIG_32BIT=y
-CONFIG_ZBOOT_LOAD_ADDRESS=0x0
-CONFIG_PAGE_SIZE_4KB=y
-# CONFIG_PAGE_SIZE_16KB is not set
-# CONFIG_PAGE_SIZE_64KB is not set
-CONFIG_ARCH_FORCE_MAX_ORDER=11
-CONFIG_BOARD_SCACHE=y
-CONFIG_MIPS_CPU_SCACHE=y
-CONFIG_CPU_HAS_PREFETCH=y
-CONFIG_CPU_GENERIC_DUMP_TLB=y
-CONFIG_MIPS_FP_SUPPORT=y
-CONFIG_CPU_R4K_FPU=y
-CONFIG_CPU_R4K_CACHE_TLB=y
-CONFIG_MIPS_MT_SMP=y
-CONFIG_MIPS_MT=y
-CONFIG_SCHED_SMT=y
-CONFIG_SYS_SUPPORTS_SCHED_SMT=y
-CONFIG_SYS_SUPPORTS_MULTITHREADING=y
-CONFIG_MIPS_MT_FPAFF=y
-CONFIG_MIPS_CPS=y
-CONFIG_MIPS_CPS_PM=y
-CONFIG_MIPS_CM=y
-CONFIG_MIPS_CPC=y
-CONFIG_CPU_NEEDS_NO_SMARTMIPS_OR_MICROMIPS=y
-# CONFIG_CPU_HAS_SMARTMIPS is not set
-# CONFIG_CPU_MICROMIPS is not set
-CONFIG_CPU_MIPSR2_IRQ_VI=y
-CONFIG_CPU_MIPSR2_IRQ_EI=y
-CONFIG_CPU_HAS_SYNC=y
-CONFIG_MIPS_ASID_SHIFT=0
-CONFIG_MIPS_ASID_BITS=8
-CONFIG_HIGHMEM=y
-CONFIG_CPU_SUPPORTS_HIGHMEM=y
-CONFIG_SYS_SUPPORTS_HIGHMEM=y
-CONFIG_SYS_SUPPORTS_SMARTMIPS=y
-CONFIG_SYS_SUPPORTS_MICROMIPS=y
-CONFIG_SYS_SUPPORTS_MIPS16=y
-CONFIG_ARCH_FLATMEM_ENABLE=y
-CONFIG_HW_PERF_EVENTS=y
-CONFIG_SMP=y
-CONFIG_HOTPLUG_CPU=y
-CONFIG_SMP_UP=y
-CONFIG_SYS_SUPPORTS_MIPS_CPS=y
-CONFIG_SYS_SUPPORTS_SMP=y
-CONFIG_NR_CPUS=2
-CONFIG_MIPS_PERF_SHARED_TC_COUNTERS=y
-CONFIG_MIPS_NR_CPU_NR_MAP=2
-# CONFIG_HZ_24 is not set
-# CONFIG_HZ_48 is not set
-# CONFIG_HZ_100 is not set
-# CONFIG_HZ_128 is not set
-CONFIG_HZ_250=y
-# CONFIG_HZ_256 is not set
-# CONFIG_HZ_1000 is not set
-# CONFIG_HZ_1024 is not set
-CONFIG_SYS_SUPPORTS_ARBIT_HZ=y
-CONFIG_HZ=250
-CONFIG_SCHED_HRTICK=y
-CONFIG_KEXEC=y
-CONFIG_CRASH_DUMP=y
-CONFIG_PHYSICAL_START=0xffffffff84000000
-CONFIG_MIPS_O32_FP64_SUPPORT=y
-CONFIG_USE_OF=y
-CONFIG_UHI_BOOT=y
-CONFIG_BUILTIN_DTB=y
-CONFIG_MIPS_NO_APPENDED_DTB=y
-# CONFIG_MIPS_ELF_APPENDED_DTB is not set
-# CONFIG_MIPS_RAW_APPENDED_DTB is not set
-# end of Kernel type
-
+CONFIG_ARC=y
 CONFIG_LOCKDEP_SUPPORT=y
-CONFIG_STACKTRACE_SUPPORT=y
-CONFIG_PGTABLE_LEVELS=2
-CONFIG_MIPS_AUTO_PFN_OFFSET=y
-
-#
-# Bus options (PCI, PCMCIA, EISA, ISA, TC)
-#
-CONFIG_PCI_DRIVERS_GENERIC=y
+CONFIG_SCHED_OMIT_FRAME_POINTER=y
+CONFIG_GENERIC_CSUM=y
+CONFIG_ARCH_FLATMEM_ENABLE=y
 CONFIG_MMU=y
-CONFIG_ARCH_MMAP_RND_BITS_MIN=8
-CONFIG_ARCH_MMAP_RND_BITS_MAX=15
-CONFIG_ARCH_MMAP_RND_COMPAT_BITS_MIN=8
-CONFIG_ARCH_MMAP_RND_COMPAT_BITS_MAX=15
-# end of Bus options (PCI, PCMCIA, EISA, ISA, TC)
-
-CONFIG_TRAD_SIGNALS=y
-CONFIG_CC_HAS_MNO_BRANCH_LIKELY=y
+CONFIG_NO_IOPORT_MAP=y
+CONFIG_GENERIC_CALIBRATE_DELAY=y
+CONFIG_GENERIC_HWEIGHT=y
+CONFIG_STACKTRACE_SUPPORT=y
 
 #
-# Power management options
+# ARC Architecture Configuration
 #
-CONFIG_ARCH_HIBERNATION_POSSIBLE=y
-CONFIG_ARCH_SUSPEND_POSSIBLE=y
-CONFIG_SUSPEND=y
-CONFIG_SUSPEND_FREEZER=y
-CONFIG_SUSPEND_SKIP_SYNC=y
-CONFIG_HIBERNATE_CALLBACKS=y
-CONFIG_HIBERNATION=y
-CONFIG_HIBERNATION_SNAPSHOT_DEV=y
-CONFIG_PM_STD_PARTITION=""
-CONFIG_PM_SLEEP=y
-CONFIG_PM_SLEEP_SMP=y
-CONFIG_PM_AUTOSLEEP=y
-CONFIG_PM_USERSPACE_AUTOSLEEP=y
-CONFIG_PM_WAKELOCKS=y
-CONFIG_PM_WAKELOCKS_LIMIT=100
-CONFIG_PM_WAKELOCKS_GC=y
+
+#
+# ARC Platform/SoC/Board
+#
+CONFIG_ARC_PLAT_TB10X=y
+CONFIG_ARC_PLAT_AXS10X=y
+CONFIG_AXS103=y
+CONFIG_ARC_SOC_HSDK=y
+# end of ARC Platform/SoC/Board
+
+# CONFIG_ISA_ARCOMPACT is not set
+CONFIG_ISA_ARCV2=y
+
+#
+# ARC CPU Configuration
+#
+CONFIG_ARC_CPU_HS=y
+CONFIG_ARC_TUNE_MCPU=""
+CONFIG_CPU_BIG_ENDIAN=y
+CONFIG_SMP=y
+CONFIG_NR_CPUS=4
+CONFIG_ARC_SMP_HALT_ON_RESET=y
+CONFIG_ARC_MCIP=y
+CONFIG_ARC_CACHE=y
+CONFIG_ARC_CACHE_LINE_SHIFT=6
+CONFIG_ARC_HAS_ICACHE=y
+CONFIG_ARC_HAS_DCACHE=y
+CONFIG_ARC_CACHE_PAGES=y
+CONFIG_ARC_HAS_ICCM=y
+CONFIG_ARC_ICCM_SZ=64
+CONFIG_ARC_HAS_DCCM=y
+CONFIG_ARC_DCCM_SZ=64
+CONFIG_ARC_DCCM_BASE=0xA0000000
+CONFIG_ARC_MMU_V4=y
+CONFIG_ARC_PAGE_SIZE_8K=y
+# CONFIG_ARC_PAGE_SIZE_16K is not set
+# CONFIG_ARC_PAGE_SIZE_4K is not set
+CONFIG_ARC_HUGEPAGE_2M=y
+# CONFIG_ARC_HUGEPAGE_16M is not set
+CONFIG_PGTABLE_LEVELS=2
+CONFIG_ARC_FPU_SAVE_RESTORE=y
+CONFIG_ARC_HAS_LLSC=y
+CONFIG_ARC_HAS_SWAPE=y
+CONFIG_ARC_USE_UNALIGNED_MEM_ACCESS=y
+CONFIG_ARC_HAS_LL64=y
+CONFIG_ARC_HAS_DIV_REM=y
+CONFIG_ARC_HAS_ACCL_REGS=y
+CONFIG_ARC_DSP_NONE=y
+# CONFIG_ARC_DSP_KERNEL is not set
+# CONFIG_ARC_DSP_USERSPACE is not set
+# CONFIG_ARC_DSP_AGU_USERSPACE is not set
+CONFIG_ARC_IRQ_NO_AUTOSAVE=y
+CONFIG_ARC_LPB_DISABLE=y
+# end of ARC CPU Configuration
+
+CONFIG_LINUX_LINK_BASE=0x80000000
+CONFIG_LINUX_RAM_BASE=0x80000000
+CONFIG_HIGHMEM=y
+CONFIG_ARC_HAS_PAE40=y
+CONFIG_ARC_KVADDR_SIZE=256
+CONFIG_ARC_CURR_IN_REG=y
+CONFIG_HZ=100
+CONFIG_ARC_METAWARE_HLINK=y
+CONFIG_ARC_DBG=y
+CONFIG_ARC_DW2_UNWIND=y
+CONFIG_ARC_DBG_JUMP_LABEL=y
+CONFIG_ARC_BUILTIN_DTB_NAME=""
+# end of ARC Architecture Configuration
+
+CONFIG_ARCH_FORCE_MAX_ORDER=11
 CONFIG_PM=y
 CONFIG_PM_DEBUG=y
 CONFIG_PM_ADVANCED_DEBUG=y
-CONFIG_PM_TEST_SUSPEND=y
-CONFIG_PM_SLEEP_DEBUG=y
 CONFIG_DPM_WATCHDOG=y
 CONFIG_DPM_WATCHDOG_TIMEOUT=120
 CONFIG_PM_CLK=y
 CONFIG_PM_GENERIC_DOMAINS=y
 CONFIG_WQ_POWER_EFFICIENT_DEFAULT=y
-CONFIG_PM_GENERIC_DOMAINS_SLEEP=y
 CONFIG_PM_GENERIC_DOMAINS_OF=y
-CONFIG_CPU_PM=y
-CONFIG_ENERGY_MODEL=y
-# end of Power management options
-
-CONFIG_MIPS_EXTERNAL_TIMER=y
-
-#
-# CPU Power Management
-#
-
-#
-# CPU Frequency scaling
-#
-CONFIG_CPU_FREQ=y
-CONFIG_CPU_FREQ_GOV_ATTR_SET=y
-CONFIG_CPU_FREQ_GOV_COMMON=y
-CONFIG_CPU_FREQ_STAT=y
-CONFIG_CPU_FREQ_DEFAULT_GOV_PERFORMANCE=y
-# CONFIG_CPU_FREQ_DEFAULT_GOV_POWERSAVE is not set
-# CONFIG_CPU_FREQ_DEFAULT_GOV_USERSPACE is not set
-# CONFIG_CPU_FREQ_DEFAULT_GOV_ONDEMAND is not set
-# CONFIG_CPU_FREQ_DEFAULT_GOV_CONSERVATIVE is not set
-# CONFIG_CPU_FREQ_DEFAULT_GOV_SCHEDUTIL is not set
-CONFIG_CPU_FREQ_GOV_PERFORMANCE=y
-CONFIG_CPU_FREQ_GOV_POWERSAVE=y
-CONFIG_CPU_FREQ_GOV_USERSPACE=y
-CONFIG_CPU_FREQ_GOV_ONDEMAND=y
-CONFIG_CPU_FREQ_GOV_CONSERVATIVE=y
-CONFIG_CPU_FREQ_GOV_SCHEDUTIL=y
-
-#
-# CPU frequency scaling drivers
-#
-CONFIG_CPUFREQ_DT=y
-CONFIG_CPUFREQ_DT_PLATDEV=y
-CONFIG_BMIPS_CPUFREQ=y
-CONFIG_QORIQ_CPUFREQ=y
-# end of CPU Frequency scaling
-
-#
-# CPU Idle
-#
-CONFIG_CPU_IDLE=y
-CONFIG_CPU_IDLE_GOV_LADDER=y
-CONFIG_CPU_IDLE_GOV_MENU=y
-CONFIG_CPU_IDLE_GOV_TEO=y
-
-#
-# MIPS CPU Idle Drivers
-#
-CONFIG_MIPS_CPS_CPUIDLE=y
-# end of MIPS CPU Idle Drivers
-
-CONFIG_ARCH_NEEDS_CPU_IDLE_COUPLED=y
-# end of CPU Idle
-# end of CPU Power Management
-
-CONFIG_VIRTUALIZATION=y
-CONFIG_MIPS_LD_CAN_LINK_VDSO=y
 
 #
 # General architecture-dependent options
 #
 CONFIG_CRASH_CORE=y
-CONFIG_KEXEC_CORE=y
 CONFIG_KPROBES=y
 CONFIG_JUMP_LABEL=y
 CONFIG_STATIC_KEYS_SELFTEST=y
-CONFIG_UPROBES=y
-CONFIG_ARCH_USE_BUILTIN_BSWAP=y
+CONFIG_HAVE_EFFICIENT_UNALIGNED_ACCESS=y
 CONFIG_KRETPROBES=y
 CONFIG_HAVE_IOREMAP_PROT=y
 CONFIG_HAVE_KPROBES=y
 CONFIG_HAVE_KRETPROBES=y
-CONFIG_HAVE_NMI=y
 CONFIG_TRACE_IRQFLAGS_SUPPORT=y
 CONFIG_HAVE_ARCH_TRACEHOOK=y
-CONFIG_HAVE_DMA_CONTIGUOUS=y
 CONFIG_GENERIC_SMP_IDLE_THREAD=y
-CONFIG_ARCH_HAS_FORTIFY_SOURCE=y
-CONFIG_ARCH_HAS_DMA_SET_UNCACHED=y
 CONFIG_ARCH_32BIT_OFF_T=y
-CONFIG_HAVE_ASM_MODVERSIONS=y
 CONFIG_HAVE_REGS_AND_STACK_ACCESS_API=y
-CONFIG_HAVE_RSEQ=y
-CONFIG_HAVE_PERF_REGS=y
-CONFIG_HAVE_PERF_USER_STACK_DUMP=y
 CONFIG_HAVE_ARCH_JUMP_LABEL=y
-CONFIG_ARCH_WANT_IPC_PARSE_VERSION=y
-CONFIG_HAVE_ARCH_SECCOMP=y
-CONFIG_HAVE_ARCH_SECCOMP_FILTER=y
-CONFIG_SECCOMP=y
-CONFIG_SECCOMP_FILTER=y
-CONFIG_HAVE_STACKPROTECTOR=y
-CONFIG_STACKPROTECTOR=y
-CONFIG_STACKPROTECTOR_STRONG=y
 CONFIG_LTO_NONE=y
-CONFIG_HAVE_CONTEXT_TRACKING_USER=y
-CONFIG_HAVE_TIF_NOHZ=y
-CONFIG_HAVE_IRQ_TIME_ACCOUNTING=y
+CONFIG_HAVE_ARCH_TRANSPARENT_HUGEPAGE=y
 CONFIG_HAVE_MOD_ARCH_SPECIFIC=y
-CONFIG_MODULES_USE_ELF_REL=y
-CONFIG_HAVE_IRQ_EXIT_ON_IRQ_STACK=y
-CONFIG_ARCH_HAS_ELF_RANDOMIZE=y
-CONFIG_HAVE_ARCH_MMAP_RND_BITS=y
-CONFIG_HAVE_EXIT_THREAD=y
-CONFIG_ARCH_MMAP_RND_BITS=8
+CONFIG_MODULES_USE_ELF_RELA=y
 CONFIG_PAGE_SIZE_LESS_THAN_64KB=y
 CONFIG_PAGE_SIZE_LESS_THAN_256KB=y
-CONFIG_ARCH_WANT_DEFAULT_TOPDOWN_MMAP_LAYOUT=y
 CONFIG_ISA_BUS_API=y
 CONFIG_CLONE_BACKWARDS=y
 CONFIG_COMPAT_32BIT_TIME=y
-CONFIG_HAVE_ARCH_COMPILER_H=y
 CONFIG_LOCK_EVENT_COUNTS=y
-CONFIG_HAVE_SPARSE_SYSCALL_NR=y
-CONFIG_ARCH_WANT_LD_ORPHAN_WARN=y
-CONFIG_ARCH_HAS_ELFCORE_COMPAT=y
+CONFIG_HAVE_ARCH_PFN_VALID=y
 
 #
 # GCOV-based kernel profiling
 #
 CONFIG_GCOV_KERNEL=y
-CONFIG_ARCH_HAS_GCOV_PROFILE_ALL=y
 # end of GCOV-based kernel profiling
-
-CONFIG_HAVE_GCC_PLUGINS=y
-CONFIG_GCC_PLUGINS=y
-CONFIG_GCC_PLUGIN_LATENT_ENTROPY=y
 # end of General architecture-dependent options
 
 CONFIG_RT_MUTEXES=y
@@ -994,7 +579,6 @@ CONFIG_MODULE_UNLOAD=y
 CONFIG_MODULE_FORCE_UNLOAD=y
 CONFIG_MODULE_UNLOAD_TAINT_TRACKING=y
 CONFIG_MODVERSIONS=y
-CONFIG_ASM_MODVERSIONS=y
 CONFIG_MODULE_SRCVERSION_ALL=y
 CONFIG_MODULE_SIG=y
 CONFIG_MODULE_SIG_FORCE=y
@@ -1088,11 +672,10 @@ CONFIG_BFQ_CGROUP_DEBUG=y
 CONFIG_PADATA=y
 CONFIG_ASN1=y
 CONFIG_UNINLINE_SPIN_UNLOCK=y
-CONFIG_ARCH_USE_QUEUED_SPINLOCKS=y
-CONFIG_QUEUED_SPINLOCKS=y
-CONFIG_ARCH_USE_QUEUED_RWLOCKS=y
-CONFIG_QUEUED_RWLOCKS=y
-CONFIG_ARCH_HAS_NON_OVERLAPPING_ADDRESS_SPACE=y
+CONFIG_ARCH_SUPPORTS_ATOMIC_RMW=y
+CONFIG_MUTEX_SPIN_ON_OWNER=y
+CONFIG_RWSEM_SPIN_ON_OWNER=y
+CONFIG_LOCK_SPIN_ON_OWNER=y
 CONFIG_FREEZER=y
 
 #
@@ -1100,7 +683,6 @@ CONFIG_FREEZER=y
 #
 CONFIG_BINFMT_ELF=y
 CONFIG_BINFMT_ELF_KUNIT_TEST=y
-CONFIG_ARCH_BINFMT_ELF_STATE=y
 CONFIG_ELFCORE=y
 CONFIG_CORE_DUMP_DEFAULT_ELF_HEADERS=y
 CONFIG_BINFMT_SCRIPT=y
@@ -1147,8 +729,6 @@ CONFIG_SLUB_CPU_PARTIAL=y
 CONFIG_SHUFFLE_PAGE_ALLOCATOR=y
 CONFIG_COMPAT_BRK=y
 CONFIG_FLATMEM=y
-CONFIG_HAVE_FAST_GUP=y
-CONFIG_ARCH_KEEP_MEMBLOCK=y
 CONFIG_MEMORY_ISOLATION=y
 CONFIG_SPLIT_PTLOCK_CPUS=4
 CONFIG_MEMORY_BALLOON=y
@@ -1158,10 +738,15 @@ CONFIG_COMPACT_UNEVICTABLE_DEFAULT=1
 CONFIG_PAGE_REPORTING=y
 CONFIG_MIGRATION=y
 CONFIG_CONTIG_ALLOC=y
+CONFIG_PHYS_ADDR_T_64BIT=y
 CONFIG_BOUNCE=y
 CONFIG_MMU_NOTIFIER=y
 CONFIG_KSM=y
 CONFIG_DEFAULT_MMAP_MIN_ADDR=4096
+CONFIG_TRANSPARENT_HUGEPAGE=y
+CONFIG_TRANSPARENT_HUGEPAGE_ALWAYS=y
+# CONFIG_TRANSPARENT_HUGEPAGE_MADVISE is not set
+CONFIG_READ_ONLY_THP_FOR_FS=y
 CONFIG_FRONTSWAP=y
 CONFIG_CMA=y
 CONFIG_CMA_DEBUG=y
@@ -1170,7 +755,7 @@ CONFIG_CMA_SYSFS=y
 CONFIG_CMA_AREAS=7
 CONFIG_PAGE_IDLE_FLAG=y
 CONFIG_IDLE_PAGE_TRACKING=y
-CONFIG_ARCH_HAS_CURRENT_STACK_POINTER=y
+CONFIG_ARCH_HAS_CACHE_LINE_SIZE=y
 CONFIG_HMM_MIRROR=y
 CONFIG_VM_EVENT_COUNTERS=y
 CONFIG_PERCPU_STATS=y
@@ -1413,7 +998,6 @@ CONFIG_NFT_MASQ=y
 CONFIG_NFT_REDIR=y
 CONFIG_NFT_NAT=y
 CONFIG_NFT_TUNNEL=y
-CONFIG_NFT_OBJREF=y
 CONFIG_NFT_QUEUE=y
 CONFIG_NFT_QUOTA=y
 CONFIG_NFT_REJECT=y
@@ -2203,8 +1787,7 @@ CONFIG_NETDEV_ADDR_LIST_TEST=y
 #
 CONFIG_HAVE_PCI=y
 CONFIG_PCI=y
-CONFIG_PCI_DOMAINS=y
-CONFIG_PCI_DOMAINS_GENERIC=y
+CONFIG_PCI_SYSCALL=y
 CONFIG_PCIEPORTBUS=y
 CONFIG_HOTPLUG_PCI_PCIE=y
 CONFIG_PCIEAER=y
@@ -2220,7 +1803,6 @@ CONFIG_PCIE_DPC=y
 CONFIG_PCIE_PTM=y
 CONFIG_PCI_MSI=y
 CONFIG_PCI_MSI_IRQ_DOMAIN=y
-CONFIG_PCI_MSI_ARCH_FALLBACKS=y
 CONFIG_PCI_QUIRKS=y
 CONFIG_PCI_DEBUG=y
 CONFIG_PCI_REALLOC_ENABLE_AUTO=y
@@ -2365,9 +1947,9 @@ CONFIG_PCI_SW_SWITCHTEC=y
 CONFIG_CXL_BUS=y
 CONFIG_CXL_PCI=y
 CONFIG_CXL_MEM_RAW_COMMANDS=y
+CONFIG_CXL_PMEM=y
 CONFIG_CXL_MEM=y
 CONFIG_CXL_PORT=y
-CONFIG_CXL_SUSPEND=y
 CONFIG_PCCARD=y
 CONFIG_PCMCIA=y
 CONFIG_PCMCIA_LOAD_CIS=y
@@ -2427,7 +2009,6 @@ CONFIG_FW_LOADER_USER_HELPER_FALLBACK=y
 CONFIG_FW_LOADER_COMPRESS=y
 CONFIG_FW_LOADER_COMPRESS_XZ=y
 CONFIG_FW_LOADER_COMPRESS_ZSTD=y
-CONFIG_FW_CACHE=y
 CONFIG_FW_UPLOAD=y
 # end of Firmware loader
 
@@ -2440,7 +2021,6 @@ CONFIG_DEBUG_TEST_DRIVER_REMOVE=y
 CONFIG_PM_QOS_KUNIT_TEST=y
 CONFIG_TEST_ASYNC_DRIVER_PROBE=m
 CONFIG_DRIVER_PE_KUNIT_TEST=y
-CONFIG_GENERIC_CPU_AUTOPROBE=y
 CONFIG_SOC_BUS=y
 CONFIG_REGMAP=y
 CONFIG_REGMAP_AC97=y
@@ -2464,7 +2044,6 @@ CONFIG_DMA_FENCE_TRACE=y
 # Bus devices
 #
 CONFIG_ARM_INTEGRATOR_LM=y
-CONFIG_BRCMSTB_GISB_ARB=y
 CONFIG_BT1_APB=y
 CONFIG_BT1_AXI=y
 CONFIG_MOXTET=y
@@ -2643,7 +2222,6 @@ CONFIG_MTD_MCHP23K256=y
 CONFIG_MTD_MCHP48L640=y
 CONFIG_MTD_SPEAR_SMI=y
 CONFIG_MTD_SST25L=y
-CONFIG_MTD_BCM47XXSFLASH=y
 CONFIG_MTD_SLRAM=y
 CONFIG_MTD_PHRAM=y
 CONFIG_MTD_MTDRAM=y
@@ -3081,8 +2659,6 @@ CONFIG_TCM_QLA2XXX_DEBUG=y
 CONFIG_SCSI_QLA_ISCSI=y
 CONFIG_QEDI=y
 CONFIG_QEDF=y
-CONFIG_SCSI_LPFC=y
-CONFIG_SCSI_LPFC_DEBUG_FS=y
 CONFIG_SCSI_EFCT=y
 CONFIG_SCSI_DC395x=y
 CONFIG_SCSI_AM53C974=y
@@ -3458,7 +3034,6 @@ CONFIG_MDIO=y
 CONFIG_NET_VENDOR_3COM=y
 CONFIG_PCMCIA_3C574=y
 CONFIG_PCMCIA_3C589=y
-CONFIG_VORTEX=y
 CONFIG_TYPHOON=y
 CONFIG_NET_VENDOR_ACTIONS=y
 CONFIG_OWL_EMAC=y
@@ -3499,6 +3074,9 @@ CONFIG_ALX=y
 CONFIG_CX_ECAT=y
 CONFIG_NET_VENDOR_BROADCOM=y
 CONFIG_B44=y
+CONFIG_B44_PCI_AUTOSELECT=y
+CONFIG_B44_PCICORE_AUTOSELECT=y
+CONFIG_B44_PCI=y
 CONFIG_BCM4908_ENET=y
 CONFIG_BCMGENET=y
 CONFIG_BNX2=y
@@ -3637,6 +3215,7 @@ CONFIG_ICE_SWITCHDEV=y
 CONFIG_FM10K=y
 CONFIG_IGC=y
 CONFIG_NET_VENDOR_WANGXUN=y
+CONFIG_LIBWX=y
 CONFIG_NGBE=y
 CONFIG_TXGBE=y
 CONFIG_JME=y
@@ -3712,13 +3291,14 @@ CONFIG_ENCX24J600=y
 CONFIG_LAN743X=y
 CONFIG_LAN966X_SWITCH=y
 CONFIG_SPARX5_SWITCH=y
+CONFIG_VCAP=y
+CONFIG_VCAP_KUNIT_TEST=y
 CONFIG_NET_VENDOR_MICROSEMI=y
 CONFIG_MSCC_OCELOT_SWITCH_LIB=y
 CONFIG_MSCC_OCELOT_SWITCH=y
 CONFIG_NET_VENDOR_MICROSOFT=y
 CONFIG_NET_VENDOR_MYRI=y
 CONFIG_MYRI10GE=y
-CONFIG_FEALNX=y
 CONFIG_NET_VENDOR_NI=y
 CONFIG_NI_XGE_MANAGEMENT_ENET=y
 CONFIG_NET_VENDOR_NATSEMI=y
@@ -3809,7 +3389,6 @@ CONFIG_NET_VENDOR_SMSC=y
 CONFIG_SMC91X=y
 CONFIG_PCMCIA_SMC91C92=y
 CONFIG_EPIC100=y
-CONFIG_SMC911X=y
 CONFIG_SMSC911X=y
 CONFIG_SMSC9420=y
 CONFIG_NET_VENDOR_SOCIONEXT=y
@@ -3860,8 +3439,6 @@ CONFIG_TI_CPSW=y
 CONFIG_TI_CPSW_SWITCHDEV=y
 CONFIG_TI_CPTS=y
 CONFIG_TLAN=y
-CONFIG_NET_VENDOR_TOSHIBA=y
-CONFIG_TC35815=y
 CONFIG_NET_VENDOR_VERTEXCOM=y
 CONFIG_MSE102X=y
 CONFIG_NET_VENDOR_VIA=y
@@ -3967,7 +3544,6 @@ CONFIG_CAN_KVASER_PCIEFD=y
 CONFIG_CAN_SLCAN=y
 CONFIG_CAN_SUN4I=y
 CONFIG_CAN_XILINXCAN=y
-CONFIG_PCH_CAN=y
 CONFIG_CAN_C_CAN=y
 CONFIG_CAN_C_CAN_PLATFORM=y
 CONFIG_CAN_C_CAN_PCI=y
@@ -3992,7 +3568,6 @@ CONFIG_CAN_F81601=y
 CONFIG_CAN_KVASER_PCI=y
 CONFIG_CAN_PEAK_PCI=y
 CONFIG_CAN_PEAK_PCIEC=y
-CONFIG_CAN_PEAK_PCMCIA=y
 CONFIG_CAN_PLX_PCI=y
 CONFIG_CAN_SJA1000_ISA=y
 CONFIG_CAN_SJA1000_PLATFORM=y
@@ -4222,6 +3797,8 @@ CONFIG_B43_SSB=y
 CONFIG_B43_BUSES_BCMA_AND_SSB=y
 # CONFIG_B43_BUSES_BCMA is not set
 # CONFIG_B43_BUSES_SSB is not set
+CONFIG_B43_PCI_AUTOSELECT=y
+CONFIG_B43_PCICORE_AUTOSELECT=y
 CONFIG_B43_SDIO=y
 CONFIG_B43_BCMA_PIO=y
 CONFIG_B43_PIO=y
@@ -4233,6 +3810,8 @@ CONFIG_B43_LEDS=y
 CONFIG_B43_HWRNG=y
 CONFIG_B43_DEBUG=y
 CONFIG_B43LEGACY=y
+CONFIG_B43LEGACY_PCI_AUTOSELECT=y
+CONFIG_B43LEGACY_PCICORE_AUTOSELECT=y
 CONFIG_B43LEGACY_LEDS=y
 CONFIG_B43LEGACY_HWRNG=y
 CONFIG_B43LEGACY_DEBUG=y
@@ -4304,8 +3883,6 @@ CONFIG_PLX_HERMES=y
 CONFIG_TMD_HERMES=y
 CONFIG_NORTEL_HERMES=y
 CONFIG_PCI_HERMES=y
-CONFIG_PCMCIA_HERMES=y
-CONFIG_PCMCIA_SPECTRUM=y
 CONFIG_ORINOCO_USB=y
 CONFIG_P54_COMMON=y
 CONFIG_P54_USB=y
@@ -4316,7 +3893,6 @@ CONFIG_P54_LEDS=y
 CONFIG_WLAN_VENDOR_MARVELL=y
 CONFIG_LIBERTAS=y
 CONFIG_LIBERTAS_USB=y
-CONFIG_LIBERTAS_CS=y
 CONFIG_LIBERTAS_SDIO=y
 CONFIG_LIBERTAS_SPI=y
 CONFIG_LIBERTAS_DEBUG=y
@@ -4434,8 +4010,10 @@ CONFIG_RTW89=y
 CONFIG_RTW89_CORE=y
 CONFIG_RTW89_PCI=y
 CONFIG_RTW89_8852A=y
+CONFIG_RTW89_8852B=y
 CONFIG_RTW89_8852C=y
 CONFIG_RTW89_8852AE=y
+CONFIG_RTW89_8852BE=y
 CONFIG_RTW89_8852CE=y
 CONFIG_RTW89_DEBUG=y
 CONFIG_RTW89_DEBUGMSG=y
@@ -4920,7 +4498,6 @@ CONFIG_TTY=y
 CONFIG_VT=y
 CONFIG_CONSOLE_TRANSLATIONS=y
 CONFIG_VT_CONSOLE=y
-CONFIG_VT_CONSOLE_SLEEP=y
 CONFIG_HW_CONSOLE=y
 CONFIG_VT_HW_CONSOLE_BINDING=y
 CONFIG_UNIX98_PTYS=y
@@ -5010,8 +4587,6 @@ CONFIG_SERIAL_HS_LPC32XX_CONSOLE=y
 CONFIG_SERIAL_CORE=y
 CONFIG_SERIAL_CORE_CONSOLE=y
 CONFIG_CONSOLE_POLL=y
-CONFIG_SERIAL_PIC32=y
-CONFIG_SERIAL_PIC32_CONSOLE=y
 CONFIG_SERIAL_ICOM=y
 CONFIG_SERIAL_JSM=y
 CONFIG_SERIAL_MSM=y
@@ -5049,9 +4624,6 @@ CONFIG_SERIAL_MXS_AUART=y
 CONFIG_SERIAL_MXS_AUART_CONSOLE=y
 CONFIG_SERIAL_XILINX_PS_UART=y
 CONFIG_SERIAL_XILINX_PS_UART_CONSOLE=y
-CONFIG_SERIAL_AR933X=y
-CONFIG_SERIAL_AR933X_CONSOLE=y
-CONFIG_SERIAL_AR933X_NR_UARTS=2
 CONFIG_SERIAL_MPS2_UART_CONSOLE=y
 CONFIG_SERIAL_MPS2_UART=y
 CONFIG_SERIAL_ARC=y
@@ -5137,8 +4709,6 @@ CONFIG_HW_RANDOM_OMAP=y
 CONFIG_HW_RANDOM_OMAP3_ROM=y
 CONFIG_HW_RANDOM_VIRTIO=y
 CONFIG_HW_RANDOM_IMX_RNGC=y
-CONFIG_HW_RANDOM_INGENIC_RNG=y
-CONFIG_HW_RANDOM_INGENIC_TRNG=y
 CONFIG_HW_RANDOM_NOMADIK=y
 CONFIG_HW_RANDOM_STM32=y
 CONFIG_HW_RANDOM_POLARFIRE_SOC=y
@@ -5175,7 +4745,6 @@ CONFIG_TCG_TIS_I2C_CR50=y
 CONFIG_TCG_TIS_I2C_ATMEL=y
 CONFIG_TCG_TIS_I2C_INFINEON=y
 CONFIG_TCG_TIS_I2C_NUVOTON=y
-CONFIG_TCG_ATMEL=y
 CONFIG_TCG_VTPM_PROXY=y
 CONFIG_TCG_TIS_ST33ZP24=y
 CONFIG_TCG_TIS_ST33ZP24_I2C=y
@@ -5307,6 +4876,7 @@ CONFIG_I2C_STM32F4=y
 CONFIG_I2C_STM32F7=y
 CONFIG_I2C_SUN6I_P2WI=y
 CONFIG_I2C_SYNQUACER=y
+CONFIG_I2C_TEGRA=y
 CONFIG_I2C_TEGRA_BPMP=y
 CONFIG_I2C_UNIPHIER=y
 CONFIG_I2C_UNIPHIER_F=y
@@ -5558,6 +5128,7 @@ CONFIG_PINCTRL_ROCKCHIP=y
 CONFIG_PINCTRL_SINGLE=y
 CONFIG_PINCTRL_STMFX=y
 CONFIG_PINCTRL_SX150X=y
+CONFIG_PINCTRL_TB10X=y
 CONFIG_PINCTRL_OWL=y
 CONFIG_PINCTRL_S500=y
 CONFIG_PINCTRL_S700=y
@@ -5834,6 +5405,7 @@ CONFIG_GPIO_SNPS_CREG=y
 CONFIG_GPIO_SPRD=y
 CONFIG_GPIO_STP_XWAY=y
 CONFIG_GPIO_SYSCON=y
+CONFIG_GPIO_TB10X=y
 CONFIG_GPIO_TEGRA=y
 CONFIG_GPIO_TEGRA186=y
 CONFIG_GPIO_TS4800=y
@@ -5895,7 +5467,6 @@ CONFIG_GPIO_TPS65218=y
 CONFIG_GPIO_TPS6586X=y
 CONFIG_GPIO_TPS65910=y
 CONFIG_GPIO_TPS65912=y
-CONFIG_GPIO_TQMX86=y
 CONFIG_GPIO_TWL4030=y
 CONFIG_GPIO_TWL6040=y
 CONFIG_GPIO_UCB1400=y
@@ -5907,7 +5478,6 @@ CONFIG_GPIO_WM8994=y
 #
 # PCI GPIO expanders
 #
-CONFIG_GPIO_AMD8111=y
 CONFIG_GPIO_ML_IOH=y
 CONFIG_GPIO_PCH=y
 CONFIG_GPIO_PCI_IDIO_16=y
@@ -6352,15 +5922,11 @@ CONFIG_THERMAL_WRITABLE_TRIPS=y
 CONFIG_THERMAL_DEFAULT_GOV_STEP_WISE=y
 # CONFIG_THERMAL_DEFAULT_GOV_FAIR_SHARE is not set
 # CONFIG_THERMAL_DEFAULT_GOV_USER_SPACE is not set
-# CONFIG_THERMAL_DEFAULT_GOV_POWER_ALLOCATOR is not set
 CONFIG_THERMAL_GOV_FAIR_SHARE=y
 CONFIG_THERMAL_GOV_STEP_WISE=y
 CONFIG_THERMAL_GOV_BANG_BANG=y
 CONFIG_THERMAL_GOV_USER_SPACE=y
-CONFIG_THERMAL_GOV_POWER_ALLOCATOR=y
 CONFIG_CPU_THERMAL=y
-CONFIG_CPU_FREQ_THERMAL=y
-CONFIG_CPU_IDLE_THERMAL=y
 CONFIG_DEVFREQ_THERMAL=y
 CONFIG_THERMAL_EMULATION=y
 CONFIG_THERMAL_MMIO=y
@@ -6536,17 +6102,11 @@ CONFIG_I6300ESB_WDT=y
 CONFIG_KEMPLD_WDT=y
 CONFIG_RDC321X_WDT=y
 CONFIG_BCM47XX_WDT=y
-CONFIG_JZ4740_WDT=y
-CONFIG_WDT_MTX1=y
-CONFIG_AR7_WDT=y
-CONFIG_TXX9_WDT=y
 CONFIG_BCM2835_WDT=y
 CONFIG_BCM_KONA_WDT=y
 CONFIG_BCM_KONA_WDT_DEBUG=y
 CONFIG_BCM7038_WDT=y
 CONFIG_IMGPDC_WDT=y
-CONFIG_PIC32_WDT=y
-CONFIG_PIC32_DMT=y
 CONFIG_MPC5200_WDT=y
 CONFIG_MEN_A21_WDT=y
 CONFIG_UML_WATCHDOG=y
@@ -6565,15 +6125,16 @@ CONFIG_SSB_POSSIBLE=y
 CONFIG_SSB=y
 CONFIG_SSB_SPROM=y
 CONFIG_SSB_BLOCKIO=y
+CONFIG_SSB_PCIHOST_POSSIBLE=y
+CONFIG_SSB_PCIHOST=y
+CONFIG_SSB_B43_PCI_BRIDGE=y
 CONFIG_SSB_PCMCIAHOST_POSSIBLE=y
 CONFIG_SSB_PCMCIAHOST=y
 CONFIG_SSB_SDIOHOST_POSSIBLE=y
 CONFIG_SSB_SDIOHOST=y
 CONFIG_SSB_HOST_SOC=y
-CONFIG_SSB_SERIAL=y
-CONFIG_SSB_DRIVER_MIPS=y
-CONFIG_SSB_SFLASH=y
-CONFIG_SSB_DRIVER_EXTIF=y
+CONFIG_SSB_DRIVER_PCICORE_POSSIBLE=y
+CONFIG_SSB_DRIVER_PCICORE=y
 CONFIG_SSB_DRIVER_GPIO=y
 CONFIG_BCMA_POSSIBLE=y
 CONFIG_BCMA=y
@@ -6639,7 +6200,7 @@ CONFIG_MFD_HI6421_PMIC=y
 CONFIG_MFD_HI6421_SPMI=y
 CONFIG_MFD_HI655X_PMIC=y
 CONFIG_HTC_PASIC3=y
-CONFIG_HTC_I2CPLD=y
+# CONFIG_HTC_I2CPLD is not set
 CONFIG_LPC_ICH=y
 CONFIG_LPC_SCH=y
 CONFIG_INTEL_SOC_PMIC=y
@@ -8325,7 +7886,6 @@ CONFIG_DRM_IMX_LDB=y
 CONFIG_DRM_IMX_HDMI=y
 CONFIG_DRM_INGENIC=y
 CONFIG_DRM_INGENIC_IPU=y
-CONFIG_DRM_INGENIC_DW_HDMI=y
 CONFIG_DRM_V3D=y
 CONFIG_DRM_VC4=y
 CONFIG_DRM_VC4_HDMI_CEC=y
@@ -8354,6 +7914,7 @@ CONFIG_TINYDRM_ST7735R=y
 CONFIG_DRM_PL111=y
 CONFIG_DRM_TVE200=y
 CONFIG_DRM_LIMA=y
+CONFIG_DRM_PANFROST=y
 CONFIG_DRM_ASPEED_GFX=y
 CONFIG_DRM_MCDE=y
 CONFIG_DRM_TIDSS=y
@@ -8592,7 +8153,6 @@ CONFIG_HDMI=y
 #
 # Console display driver support
 #
-CONFIG_VGA_CONSOLE=y
 CONFIG_DUMMY_CONSOLE=y
 CONFIG_DUMMY_CONSOLE_COLUMNS=80
 CONFIG_DUMMY_CONSOLE_ROWS=25
@@ -8718,7 +8278,6 @@ CONFIG_SND_INTEL8X0=y
 CONFIG_SND_INTEL8X0M=y
 CONFIG_SND_KORG1212=y
 CONFIG_SND_LOLA=y
-CONFIG_SND_LX6464ES=y
 CONFIG_SND_MIXART=y
 CONFIG_SND_NM256=y
 CONFIG_SND_PCXHR=y
@@ -8771,7 +8330,6 @@ CONFIG_SND_PXA2XX_LIB=y
 CONFIG_SND_SPI=y
 CONFIG_SND_AT73C213=y
 CONFIG_SND_AT73C213_TARGET_BITRATE=48000
-CONFIG_SND_MIPS=y
 CONFIG_SND_USB=y
 CONFIG_SND_USB_AUDIO=y
 CONFIG_SND_USB_AUDIO_USE_MEDIA_CONTROLLER=y
@@ -9744,13 +9302,7 @@ CONFIG_AMD_SFH_HID=y
 # end of AMD SFH HID Support
 # end of HID support
 
-CONFIG_USB_OHCI_BIG_ENDIAN_DESC=y
-CONFIG_USB_OHCI_BIG_ENDIAN_MMIO=y
 CONFIG_USB_OHCI_LITTLE_ENDIAN=y
-CONFIG_USB_EHCI_BIG_ENDIAN_MMIO=y
-CONFIG_USB_EHCI_BIG_ENDIAN_DESC=y
-CONFIG_USB_UHCI_BIG_ENDIAN_MMIO=y
-CONFIG_USB_UHCI_BIG_ENDIAN_DESC=y
 CONFIG_USB_SUPPORT=y
 CONFIG_USB_COMMON=y
 CONFIG_USB_LED_TRIG=y
@@ -10091,7 +9643,6 @@ CONFIG_U_SERIAL_CONSOLE=y
 # USB Peripheral Controller
 #
 CONFIG_USB_LPC32XX=y
-CONFIG_USB_FUSB300=y
 CONFIG_USB_FOTG210_UDC=y
 CONFIG_USB_GR_UDC=y
 CONFIG_USB_R8A66597=y
@@ -10303,7 +9854,6 @@ CONFIG_MMC_DW_HI3798CV200=y
 CONFIG_MMC_DW_K3=y
 CONFIG_MMC_DW_PCI=y
 CONFIG_MMC_SH_MMCIF=y
-CONFIG_MMC_JZ4740=y
 CONFIG_MMC_VUB300=y
 CONFIG_MMC_USHC=y
 CONFIG_MMC_USDHI6ROL0=y
@@ -10541,7 +10091,6 @@ CONFIG_INFINIBAND_RTRS=y
 CONFIG_INFINIBAND_RTRS_CLIENT=y
 CONFIG_INFINIBAND_RTRS_SERVER=y
 CONFIG_RTC_LIB=y
-CONFIG_RTC_MC146818_LIB=y
 CONFIG_RTC_CLASS=y
 CONFIG_RTC_HCTOSYS=y
 CONFIG_RTC_HCTOSYS_DEVICE="rtc0"
@@ -10649,7 +10198,6 @@ CONFIG_RTC_DRV_RX6110=y
 #
 # Platform RTC drivers
 #
-CONFIG_RTC_DRV_CMOS=y
 CONFIG_RTC_DRV_DS1286=y
 CONFIG_RTC_DRV_DS1511=y
 CONFIG_RTC_DRV_DS1553=y
@@ -10758,7 +10306,7 @@ CONFIG_FSL_EDMA=y
 CONFIG_HISI_DMA=y
 CONFIG_IMG_MDC_DMA=y
 CONFIG_INTEL_IDMA64=y
-CONFIG_INTEL_IOP_ADMA=y
+# CONFIG_INTEL_IOP_ADMA is not set
 CONFIG_K3_DMA=y
 CONFIG_MCF_EDMA=y
 CONFIG_MILBEAUT_HDMAC=y
@@ -10775,6 +10323,7 @@ CONFIG_STM32_DMAMUX=y
 CONFIG_STM32_MDMA=y
 CONFIG_SPRD_DMA=y
 CONFIG_S3C24XX_DMAC=y
+CONFIG_TEGRA186_GPC_DMA=y
 CONFIG_TEGRA20_APB_DMA=y
 CONFIG_TEGRA210_ADMA=y
 CONFIG_TIMB_DMA=y
@@ -10786,7 +10335,6 @@ CONFIG_XILINX_ZYNQMP_DPDMA=y
 CONFIG_MTK_HSDMA=y
 CONFIG_MTK_CQDMA=y
 CONFIG_MTK_UART_APDMA=y
-CONFIG_QCOM_ADM=y
 CONFIG_QCOM_HIDMA_MGMT=y
 CONFIG_QCOM_HIDMA=y
 CONFIG_DW_DMAC_CORE=y
@@ -10827,7 +10375,6 @@ CONFIG_DMABUF_SELFTESTS=y
 CONFIG_DMABUF_HEAPS=y
 CONFIG_DMABUF_SYSFS_STATS=y
 CONFIG_DMABUF_HEAPS_SYSTEM=y
-CONFIG_DMABUF_HEAPS_CMA=y
 # end of DMABUF options
 
 CONFIG_AUXDISPLAY=y
@@ -10885,6 +10432,7 @@ CONFIG_VIRTIO_MENU=y
 CONFIG_VIRTIO_PCI=y
 CONFIG_VIRTIO_PCI_LEGACY=y
 CONFIG_VIRTIO_VDPA=y
+CONFIG_VIRTIO_PMEM=y
 CONFIG_VIRTIO_BALLOON=y
 CONFIG_VIRTIO_INPUT=y
 CONFIG_VIRTIO_MMIO=y
@@ -11253,9 +10801,6 @@ CONFIG_VME_FAKE=y
 # VME Device Drivers
 #
 CONFIG_VME_USER=y
-CONFIG_MIPS_PLATFORM_DEVICES=y
-CONFIG_RS780E_ACPI=y
-CONFIG_LS2K_RESET=y
 CONFIG_GOLDFISH=y
 CONFIG_GOLDFISH_PIPE=y
 CONFIG_CHROME_PLATFORMS=y
@@ -11781,7 +11326,6 @@ CONFIG_RENESAS_OSTM=y
 CONFIG_SH_TIMER_TMU=y
 CONFIG_EM_TIMER_STI=y
 CONFIG_CLKSRC_VERSATILE=y
-CONFIG_CLKSRC_MIPS_GIC=y
 CONFIG_CLKSRC_PXA=y
 CONFIG_TIMER_IMX_SYS_CTR=y
 CONFIG_CLKSRC_ST_LPC=y
@@ -11820,8 +11364,11 @@ CONFIG_IOMMU_SUPPORT=y
 # Generic IOMMU Pagetable Support
 #
 CONFIG_IOMMU_IO_PGTABLE=y
+CONFIG_IOMMU_IO_PGTABLE_LPAE=y
+CONFIG_IOMMU_IO_PGTABLE_LPAE_SELFTEST=y
 CONFIG_IOMMU_IO_PGTABLE_ARMV7S=y
 CONFIG_IOMMU_IO_PGTABLE_ARMV7S_SELFTEST=y
+CONFIG_IOMMU_IO_PGTABLE_DART=y
 # end of Generic IOMMU Pagetable Support
 
 CONFIG_IOMMU_DEBUGFS=y
@@ -11833,9 +11380,15 @@ CONFIG_OMAP_IOMMU=y
 CONFIG_OMAP_IOMMU_DEBUG=y
 CONFIG_ROCKCHIP_IOMMU=y
 CONFIG_SUN50I_IOMMU=y
+CONFIG_IPMMU_VMSA=y
+CONFIG_APPLE_DART=y
+CONFIG_ARM_SMMU=y
+CONFIG_ARM_SMMU_LEGACY_DT_BINDINGS=y
+CONFIG_ARM_SMMU_DISABLE_BYPASS_BY_DEFAULT=y
 CONFIG_S390_CCW_IOMMU=y
 CONFIG_S390_AP_IOMMU=y
 CONFIG_MTK_IOMMU=y
+CONFIG_QCOM_IOMMU=y
 CONFIG_SPRD_IOMMU=y
 
 #
@@ -12861,23 +12414,20 @@ CONFIG_PWM_XILINX=y
 #
 CONFIG_IRQCHIP=y
 CONFIG_AL_FIC=y
+CONFIG_DW_APB_ICTL=y
 CONFIG_MADERA_IRQ=y
-CONFIG_IRQ_MIPS_CPU=y
 CONFIG_JCORE_AIC=y
 CONFIG_RENESAS_INTC_IRQPIN=y
 CONFIG_RENESAS_IRQC=y
 CONFIG_RENESAS_RZA1_IRQC=y
 CONFIG_RENESAS_RZG2L_IRQC=y
 CONFIG_SL28CPLD_INTC=y
+CONFIG_TB10X_IRQC=y
 CONFIG_TS4800_IRQ=y
 CONFIG_XILINX_INTC=y
-CONFIG_MIPS_GIC=y
-CONFIG_INGENIC_IRQ=y
 CONFIG_INGENIC_TCU_IRQ=y
-CONFIG_MSCC_OCELOT_IRQ=y
 CONFIG_IRQ_UNIPHIER_AIDET=y
 CONFIG_MESON_IRQ_GPIO=y
-CONFIG_GOLDFISH_PIC=y
 CONFIG_IMX_IRQSTEER=y
 CONFIG_IMX_INTMUX=y
 CONFIG_IMX_MU_MSI=y
@@ -13069,10 +12619,7 @@ CONFIG_PHY_XILINX_ZYNQMP=y
 # end of PHY Subsystem
 
 CONFIG_POWERCAP=y
-CONFIG_IDLE_INJECT=y
 CONFIG_DTPM=y
-CONFIG_DTPM_CPU=y
-CONFIG_DTPM_DEVFREQ=y
 CONFIG_MCB=y
 CONFIG_MCB_PCI=y
 CONFIG_MCB_LPC=y
@@ -13104,7 +12651,15 @@ CONFIG_ANDROID_BINDER_DEVICES="binder,hwbinder,vndbinder"
 CONFIG_ANDROID_BINDER_IPC_SELFTEST=y
 # end of Android
 
+CONFIG_LIBNVDIMM=y
+CONFIG_BLK_DEV_PMEM=y
+CONFIG_ND_CLAIM=y
+CONFIG_ND_BTT=y
+CONFIG_BTT=y
+CONFIG_OF_PMEM=y
+CONFIG_NVDIMM_KEYS=y
 CONFIG_DAX=y
+CONFIG_DEV_DAX=y
 CONFIG_NVMEM=y
 CONFIG_NVMEM_SYSFS=y
 CONFIG_NVMEM_APPLE_EFUSES=y
@@ -13394,8 +12949,6 @@ CONFIG_NTFS3_FS_POSIX_ACL=y
 #
 CONFIG_PROC_FS=y
 CONFIG_PROC_KCORE=y
-CONFIG_PROC_VMCORE=y
-CONFIG_PROC_VMCORE_DEVICE_DUMP=y
 CONFIG_PROC_SYSCTL=y
 CONFIG_PROC_PAGE_MONITOR=y
 CONFIG_PROC_CHILDREN=y
@@ -13453,9 +13006,9 @@ CONFIG_CRAMFS_MTD=y
 CONFIG_SQUASHFS=y
 CONFIG_SQUASHFS_FILE_CACHE=y
 # CONFIG_SQUASHFS_FILE_DIRECT is not set
-CONFIG_SQUASHFS_DECOMP_SINGLE=y
+# CONFIG_SQUASHFS_DECOMP_SINGLE is not set
 # CONFIG_SQUASHFS_DECOMP_MULTI is not set
-# CONFIG_SQUASHFS_DECOMP_MULTI_PERCPU is not set
+CONFIG_SQUASHFS_DECOMP_MULTI_PERCPU=y
 CONFIG_SQUASHFS_XATTR=y
 CONFIG_SQUASHFS_ZLIB=y
 CONFIG_SQUASHFS_LZ4=y
@@ -13467,7 +13020,6 @@ CONFIG_SQUASHFS_EMBEDDED=y
 CONFIG_SQUASHFS_FRAGMENT_CACHE_SIZE=3
 CONFIG_VXFS_FS=y
 CONFIG_MINIX_FS=y
-CONFIG_MINIX_FS_NATIVE_ENDIAN=y
 CONFIG_OMFS_FS=y
 CONFIG_HPFS_FS=y
 CONFIG_QNX4FS_FS=y
@@ -13496,7 +13048,6 @@ CONFIG_PSTORE_DEFLATE_COMPRESS_DEFAULT=y
 CONFIG_PSTORE_COMPRESS_DEFAULT="deflate"
 CONFIG_PSTORE_CONSOLE=y
 CONFIG_PSTORE_PMSG=y
-CONFIG_PSTORE_FTRACE=y
 CONFIG_PSTORE_RAM=y
 CONFIG_PSTORE_ZONE=y
 CONFIG_PSTORE_BLK=y
@@ -13505,7 +13056,6 @@ CONFIG_PSTORE_BLK_KMSG_SIZE=64
 CONFIG_PSTORE_BLK_MAX_REASON=2
 CONFIG_PSTORE_BLK_PMSG_SIZE=64
 CONFIG_PSTORE_BLK_CONSOLE_SIZE=64
-CONFIG_PSTORE_BLK_FTRACE_SIZE=64
 CONFIG_SYSV_FS=y
 CONFIG_UFS_FS=y
 CONFIG_UFS_FS_WRITE=y
@@ -13679,7 +13229,6 @@ CONFIG_SECURITY_PATH=y
 CONFIG_LSM_MMAP_MIN_ADDR=65536
 CONFIG_HAVE_HARDENED_USERCOPY_ALLOCATOR=y
 CONFIG_HARDENED_USERCOPY=y
-CONFIG_FORTIFY_SOURCE=y
 CONFIG_STATIC_USERMODEHELPER=y
 CONFIG_STATIC_USERMODEHELPER_PATH="/sbin/usermode-helper"
 CONFIG_SECURITY_SELINUX=y
@@ -13790,11 +13339,7 @@ CONFIG_CC_HAS_ZERO_CALL_USED_REGS=y
 CONFIG_ZERO_CALL_USED_REGS=y
 # end of Memory initialization
 
-# CONFIG_RANDSTRUCT_NONE is not set
-CONFIG_RANDSTRUCT_FULL=y
-# CONFIG_RANDSTRUCT_PERFORMANCE is not set
-CONFIG_RANDSTRUCT=y
-CONFIG_GCC_PLUGIN_RANDSTRUCT=y
+CONFIG_RANDSTRUCT_NONE=y
 # end of Kernel hardening options
 # end of Security options
 
@@ -13986,13 +13531,6 @@ CONFIG_CRYPTO_STATS=y
 # end of Userspace interface
 
 CONFIG_CRYPTO_HASH_INFO=y
-
-#
-# Accelerated Cryptographic Algorithms for CPU (mips)
-#
-CONFIG_CRYPTO_POLY1305_MIPS=y
-# end of Accelerated Cryptographic Algorithms for CPU (mips)
-
 CONFIG_CRYPTO_HW=y
 CONFIG_CRYPTO_DEV_ALLWINNER=y
 CONFIG_CRYPTO_DEV_SUN8I_CE=y
@@ -14006,8 +13544,6 @@ CONFIG_CRYPTO_DEV_SUN8I_SS_PRNG=y
 CONFIG_CRYPTO_DEV_SUN8I_SS_HASH=y
 CONFIG_CRYPTO_DEV_SL3516=y
 CONFIG_CRYPTO_DEV_SL3516_DEBUG=y
-CONFIG_CRYPTO_DEV_HIFN_795X=y
-CONFIG_CRYPTO_DEV_HIFN_795X_RNG=y
 CONFIG_CRYPTO_DEV_EXYNOS_RNG=y
 CONFIG_CRYPTO_DEV_S5P=y
 CONFIG_CRYPTO_DEV_ATMEL_AUTHENC=y
@@ -14093,14 +13629,13 @@ CONFIG_RAID6_PQ_BENCHMARK=y
 CONFIG_LINEAR_RANGES=y
 CONFIG_PACKING=y
 CONFIG_BITREVERSE=y
-CONFIG_ARCH_HAS_STRNCPY_FROM_USER=y
-CONFIG_ARCH_HAS_STRNLEN_USER=y
+CONFIG_GENERIC_STRNCPY_FROM_USER=y
+CONFIG_GENERIC_STRNLEN_USER=y
 CONFIG_GENERIC_NET_UTILS=y
 CONFIG_CORDIC=y
 CONFIG_PRIME_NUMBERS=y
 CONFIG_RATIONAL=y
 CONFIG_GENERIC_PCI_IOMAP=y
-CONFIG_GENERIC_IOMAP=y
 CONFIG_STMP_DEVICE=y
 
 #
@@ -14115,8 +13650,7 @@ CONFIG_CRYPTO_LIB_CHACHA=y
 CONFIG_CRYPTO_LIB_CURVE25519_GENERIC=y
 CONFIG_CRYPTO_LIB_CURVE25519=y
 CONFIG_CRYPTO_LIB_DES=y
-CONFIG_CRYPTO_LIB_POLY1305_RSIZE=2
-CONFIG_CRYPTO_ARCH_HAVE_LIB_POLY1305=y
+CONFIG_CRYPTO_LIB_POLY1305_RSIZE=1
 CONFIG_CRYPTO_LIB_POLY1305_GENERIC=y
 CONFIG_CRYPTO_LIB_POLY1305=y
 CONFIG_CRYPTO_LIB_CHACHA20POLY1305=y
@@ -14188,42 +13722,30 @@ CONFIG_INTERVAL_TREE=y
 CONFIG_XARRAY_MULTI=y
 CONFIG_ASSOCIATIVE_ARRAY=y
 CONFIG_HAS_IOMEM=y
-CONFIG_HAS_IOPORT_MAP=y
 CONFIG_HAS_DMA=y
 CONFIG_DMA_OPS=y
 CONFIG_NEED_DMA_MAP_STATE=y
-CONFIG_ARCH_HAS_DMA_WRITE_COMBINE=y
+CONFIG_ARCH_DMA_ADDR_T_64BIT=y
 CONFIG_DMA_DECLARE_COHERENT=y
 CONFIG_ARCH_HAS_SETUP_DMA_OPS=y
 CONFIG_ARCH_HAS_SYNC_DMA_FOR_DEVICE=y
 CONFIG_ARCH_HAS_SYNC_DMA_FOR_CPU=y
 CONFIG_ARCH_HAS_DMA_PREP_COHERENT=y
 CONFIG_DMA_NONCOHERENT_MMAP=y
-CONFIG_DMA_CMA=y
-CONFIG_DMA_PERNUMA_CMA=y
-
-#
-# Default contiguous memory area size:
-#
-CONFIG_CMA_SIZE_MBYTES=16
-CONFIG_CMA_SIZE_SEL_MBYTES=y
-# CONFIG_CMA_SIZE_SEL_PERCENTAGE is not set
-# CONFIG_CMA_SIZE_SEL_MIN is not set
-# CONFIG_CMA_SIZE_SEL_MAX is not set
-CONFIG_CMA_ALIGNMENT=8
+CONFIG_DMA_COHERENT_POOL=y
+CONFIG_DMA_DIRECT_REMAP=y
 CONFIG_DMA_API_DEBUG=y
 CONFIG_DMA_API_DEBUG_SG=y
 CONFIG_DMA_MAP_BENCHMARK=y
 CONFIG_SGL_ALLOC=y
 CONFIG_CHECK_SIGNATURE=y
 CONFIG_CPUMASK_OFFSTACK=y
-CONFIG_FORCE_NR_CPUS=y
+# CONFIG_FORCE_NR_CPUS is not set
 CONFIG_CPU_RMAP=y
 CONFIG_DQL=y
 CONFIG_GLOB=y
 CONFIG_GLOB_SELFTEST=y
 CONFIG_NLATTR=y
-CONFIG_GENERIC_ATOMIC64=y
 CONFIG_LRU_CACHE=y
 CONFIG_CLZ_TAB=y
 CONFIG_IRQ_POLL=y
@@ -14232,8 +13754,6 @@ CONFIG_SIGNATURE=y
 CONFIG_DIMLIB=y
 CONFIG_LIBFDT=y
 CONFIG_OID_REGISTRY=y
-CONFIG_HAVE_GENERIC_VDSO=y
-CONFIG_GENERIC_GETTIMEOFDAY=y
 CONFIG_FONT_SUPPORT=y
 CONFIG_FONTS=y
 CONFIG_FONT_8x8=y
@@ -14251,6 +13771,7 @@ CONFIG_FONT_TER16x32=y
 CONFIG_FONT_6x8=y
 CONFIG_SG_SPLIT=y
 CONFIG_SG_POOL=y
+CONFIG_MEMREGION=y
 CONFIG_STACKDEPOT=y
 CONFIG_STACKDEPOT_ALWAYS_INIT=y
 CONFIG_REF_TRACKER=y
@@ -14259,11 +13780,6 @@ CONFIG_PARMAN=y
 CONFIG_OBJAGG=y
 # end of Library routines
 
-CONFIG_GENERIC_LIB_ASHLDI3=y
-CONFIG_GENERIC_LIB_ASHRDI3=y
-CONFIG_GENERIC_LIB_LSHRDI3=y
-CONFIG_GENERIC_LIB_CMPDI2=y
-CONFIG_GENERIC_LIB_UCMPDI2=y
 CONFIG_PLDMFW=y
 CONFIG_ASN1_ENCODER=y
 CONFIG_POLYNOMIAL=y
@@ -14298,12 +13814,13 @@ CONFIG_DEBUG_INFO_NONE=y
 # CONFIG_DEBUG_INFO_DWARF_TOOLCHAIN_DEFAULT is not set
 # CONFIG_DEBUG_INFO_DWARF4 is not set
 # CONFIG_DEBUG_INFO_DWARF5 is not set
-CONFIG_FRAME_WARN=2048
+CONFIG_FRAME_WARN=1024
 CONFIG_STRIP_ASM_SYMS=y
 CONFIG_READABLE_ASM=y
 CONFIG_HEADERS_INSTALL=y
 CONFIG_DEBUG_SECTION_MISMATCH=y
 CONFIG_SECTION_MISMATCH_WARN_ONLY=y
+CONFIG_DEBUG_FORCE_FUNCTION_ALIGN_64B=y
 CONFIG_VMLINUX_MAP=y
 CONFIG_DEBUG_FORCE_WEAK_PER_CPU=y
 # end of Compile-time checks and compiler options
@@ -14326,12 +13843,10 @@ CONFIG_KGDB_SERIAL_CONSOLE=y
 CONFIG_KGDB_TESTS=y
 CONFIG_KGDB_TESTS_ON_BOOT=y
 CONFIG_KGDB_TESTS_BOOT_STRING="V1F100"
-CONFIG_KGDB_LOW_LEVEL_TRAP=y
 CONFIG_KGDB_KDB=y
 CONFIG_KDB_DEFAULT_ENABLE=0x1
 CONFIG_KDB_KEYBOARD=y
 CONFIG_KDB_CONTINUE_CATASTROPHIC=0
-CONFIG_ARCH_HAS_UBSAN_SANITIZE_ALL=y
 CONFIG_UBSAN=y
 CONFIG_CC_HAS_UBSAN_BOUNDS=y
 CONFIG_UBSAN_BOUNDS=y
@@ -14341,7 +13856,6 @@ CONFIG_UBSAN_DIV_ZERO=y
 CONFIG_UBSAN_UNREACHABLE=y
 CONFIG_UBSAN_BOOL=y
 CONFIG_UBSAN_ENUM=y
-CONFIG_UBSAN_SANITIZE_ALL=y
 CONFIG_TEST_UBSAN=m
 CONFIG_HAVE_KCSAN_COMPILER=y
 # end of Generic Kernel Debugging Instruments
@@ -14358,6 +13872,8 @@ CONFIG_DEBUG_NET=y
 # Memory Debugging
 #
 CONFIG_PAGE_EXTENSION=y
+CONFIG_DEBUG_PAGEALLOC=y
+CONFIG_DEBUG_PAGEALLOC_ENABLE_DEFAULT=y
 CONFIG_SLUB_DEBUG=y
 CONFIG_SLUB_DEBUG_ON=y
 CONFIG_PAGE_OWNER=y
@@ -14380,20 +13896,19 @@ CONFIG_DEBUG_KMEMLEAK_DEFAULT_OFF=y
 CONFIG_DEBUG_KMEMLEAK_AUTO_SCAN=y
 CONFIG_DEBUG_STACK_USAGE=y
 CONFIG_SCHED_STACK_END_CHECK=y
+CONFIG_ARCH_HAS_DEBUG_VM_PGTABLE=y
 CONFIG_DEBUG_VM_IRQSOFF=y
 CONFIG_DEBUG_VM=y
 CONFIG_DEBUG_VM_MAPLE_TREE=y
 CONFIG_DEBUG_VM_RB=y
 CONFIG_DEBUG_VM_PGFLAGS=y
-CONFIG_ARCH_HAS_DEBUG_VIRTUAL=y
-CONFIG_DEBUG_VIRTUAL=y
+CONFIG_DEBUG_VM_PGTABLE=y
 CONFIG_DEBUG_MEMORY_INIT=y
 CONFIG_DEBUG_PER_CPU_MAPS=y
 CONFIG_DEBUG_KMAP_LOCAL=y
 CONFIG_DEBUG_HIGHMEM=y
 CONFIG_HAVE_DEBUG_STACKOVERFLOW=y
 CONFIG_DEBUG_STACKOVERFLOW=y
-CONFIG_CC_HAS_KASAN_GENERIC=y
 CONFIG_CC_HAS_WORKING_NOSANITIZE_ADDRESS=y
 # end of Memory Debugging
 
@@ -14489,15 +14004,9 @@ CONFIG_RCU_STRICT_GRACE_PERIOD=y
 # end of RCU Debugging
 
 CONFIG_DEBUG_WQ_FORCE_RR_CPU=y
-CONFIG_CPU_HOTPLUG_STATE_CONTROL=y
 CONFIG_LATENCYTOP=y
 CONFIG_NOP_TRACER=y
-CONFIG_HAVE_FUNCTION_TRACER=y
-CONFIG_HAVE_FUNCTION_GRAPH_TRACER=y
-CONFIG_HAVE_DYNAMIC_FTRACE=y
-CONFIG_HAVE_FTRACE_MCOUNT_RECORD=y
 CONFIG_HAVE_SYSCALL_TRACEPOINTS=y
-CONFIG_HAVE_C_RECORDMCOUNT=y
 CONFIG_TRACER_MAX_TRACE=y
 CONFIG_TRACE_CLOCK=y
 CONFIG_RING_BUFFER=y
@@ -14510,11 +14019,6 @@ CONFIG_GENERIC_TRACER=y
 CONFIG_TRACING_SUPPORT=y
 CONFIG_FTRACE=y
 CONFIG_BOOTTIME_TRACING=y
-CONFIG_FUNCTION_TRACER=y
-CONFIG_FUNCTION_GRAPH_TRACER=y
-CONFIG_DYNAMIC_FTRACE=y
-CONFIG_FUNCTION_PROFILER=y
-CONFIG_STACK_TRACER=y
 CONFIG_IRQSOFF_TRACER=y
 CONFIG_SCHED_TRACER=y
 CONFIG_HWLAT_TRACER=y
@@ -14525,24 +14029,18 @@ CONFIG_TRACER_SNAPSHOT=y
 CONFIG_TRACER_SNAPSHOT_PER_CPU_SWAP=y
 CONFIG_BRANCH_PROFILE_NONE=y
 # CONFIG_PROFILE_ANNOTATED_BRANCHES is not set
+# CONFIG_PROFILE_ALL_BRANCHES is not set
 CONFIG_BLK_DEV_IO_TRACE=y
 CONFIG_KPROBE_EVENTS=y
-CONFIG_KPROBE_EVENTS_ON_NOTRACE=y
-CONFIG_UPROBE_EVENTS=y
 CONFIG_BPF_EVENTS=y
 CONFIG_DYNAMIC_EVENTS=y
 CONFIG_PROBE_EVENTS=y
-CONFIG_FTRACE_MCOUNT_RECORD=y
-CONFIG_FTRACE_MCOUNT_USE_RECORDMCOUNT=y
 CONFIG_SYNTH_EVENTS=y
 CONFIG_USER_EVENTS=y
 CONFIG_TRACE_EVENT_INJECT=y
 CONFIG_TRACEPOINT_BENCHMARK=y
 CONFIG_RING_BUFFER_BENCHMARK=y
 CONFIG_TRACE_EVAL_MAP_FILE=y
-CONFIG_FTRACE_RECORD_RECURSION=y
-CONFIG_FTRACE_RECORD_RECURSION_SIZE=128
-CONFIG_RING_BUFFER_RECORD_RECURSION=y
 CONFIG_GCOV_PROFILE_FTRACE=y
 CONFIG_FTRACE_SELFTEST=y
 CONFIG_FTRACE_STARTUP_TEST=y
@@ -14564,19 +14062,10 @@ CONFIG_RV_REACT_PANIC=y
 # CONFIG_STRICT_DEVMEM is not set
 
 #
-# mips Debugging
+# arc Debugging
 #
-CONFIG_CMDLINE_BOOL=y
-CONFIG_CMDLINE=""
-CONFIG_CMDLINE_OVERRIDE=y
-CONFIG_DEBUG_ZBOOT=y
-CONFIG_SPINLOCK_TEST=y
-CONFIG_SCACHE_DEBUGFS=y
-CONFIG_MIPS_CPS_NS16550_BOOL=y
-CONFIG_MIPS_CPS_NS16550_BASE=0
-CONFIG_MIPS_CPS_NS16550_SHIFT=0
-CONFIG_MIPS_CPS_NS16550_WIDTH=1
-# end of mips Debugging
+CONFIG_16KSTACKS=y
+# end of arc Debugging
 
 #
 # Kernel Testing and Coverage
@@ -14602,12 +14091,7 @@ CONFIG_FAULT_INJECTION_DEBUG_FS=y
 CONFIG_FAIL_MMC_REQUEST=y
 CONFIG_FAIL_SUNRPC=y
 CONFIG_FAULT_INJECTION_STACKTRACE_FILTER=y
-CONFIG_ARCH_HAS_KCOV=y
 CONFIG_CC_HAS_SANCOV_TRACE_PC=y
-CONFIG_KCOV=y
-CONFIG_KCOV_ENABLE_COMPARISONS=y
-CONFIG_KCOV_INSTRUMENT_ALL=y
-CONFIG_KCOV_IRQ_AREA_SIZE=0x40000
 CONFIG_RUNTIME_TESTING_MENU=y
 CONFIG_LKDTM=y
 CONFIG_CPUMASK_KUNIT_TEST=y
@@ -14627,7 +14111,7 @@ CONFIG_ASYNC_RAID6_TEST=y
 CONFIG_TEST_HEXDUMP=y
 CONFIG_STRING_SELFTEST=y
 CONFIG_TEST_STRING_HELPERS=y
-CONFIG_TEST_STRSCPY=y
+# CONFIG_TEST_STRSCPY is not set
 CONFIG_TEST_KSTRTOX=y
 CONFIG_TEST_PRINTF=y
 CONFIG_TEST_SCANF=y
@@ -14635,7 +14119,7 @@ CONFIG_TEST_BITMAP=y
 CONFIG_TEST_UUID=y
 CONFIG_TEST_XARRAY=y
 CONFIG_TEST_RHASHTABLE=y
-CONFIG_TEST_SIPHASH=y
+# CONFIG_TEST_SIPHASH is not set
 CONFIG_TEST_IDA=y
 CONFIG_TEST_PARMAN=y
 CONFIG_TEST_LKM=m
@@ -14661,19 +14145,14 @@ CONFIG_MEMCPY_KUNIT_TEST=y
 CONFIG_IS_SIGNED_TYPE_KUNIT_TEST=y
 CONFIG_OVERFLOW_KUNIT_TEST=y
 CONFIG_STACKINIT_KUNIT_TEST=y
-CONFIG_FORTIFY_KUNIT_TEST=y
 CONFIG_TEST_UDELAY=y
 CONFIG_TEST_STATIC_KEYS=m
 CONFIG_TEST_DYNAMIC_DEBUG=y
 CONFIG_TEST_KMOD=m
-CONFIG_TEST_DEBUG_VIRTUAL=y
 CONFIG_TEST_MEMCAT_P=y
 CONFIG_TEST_OBJAGG=y
 CONFIG_TEST_MEMINIT=y
 CONFIG_TEST_FREE_PAGES=y
-CONFIG_TEST_CLOCKSOURCE_WATCHDOG=y
-CONFIG_ARCH_USE_MEMTEST=y
-CONFIG_MEMTEST=y
 # end of Kernel Testing and Coverage
 
 #
@@ -14685,4 +14164,4 @@ CONFIG_WARN_MISSING_DOCUMENTS=y
 CONFIG_WARN_ABI_ERRORS=y
 # end of Kernel hacking
 
---55MInWFxiUYGiTHW--
+--NPiX1BH7IpE2GrqP--
