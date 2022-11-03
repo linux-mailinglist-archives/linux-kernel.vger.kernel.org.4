@@ -2,189 +2,168 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 08F0E618355
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:56:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 6564461835C
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 16:59:37 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231803AbiKCP41 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 11:56:27 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:58560 "EHLO
+        id S231881AbiKCP7V (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 11:59:21 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:59090 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231648AbiKCP4Y (ORCPT
+        with ESMTP id S231684AbiKCP7S (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 11:56:24 -0400
-Received: from mail-qk1-x736.google.com (mail-qk1-x736.google.com [IPv6:2607:f8b0:4864:20::736])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8120213E29
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:56:23 -0700 (PDT)
-Received: by mail-qk1-x736.google.com with SMTP id 8so1420054qka.1
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 08:56:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=tEdlO2eJHCWVqpq9ZVmfFrHoK+b5oUGHwUErbKgRbJo=;
-        b=ehxT8BnUuWvvgFR/WyjOn0EeBKCALG1yZXrAqTz8QVo/bXbWOKQimZ7PSY02mWw3eR
-         6Gyd99eRGa1Ay7XFHF5zwJ4JKbJtqYcY2es1g8JbRs0H6VceGJqd89HZq8RLTN3a8pRC
-         aZAM2E+sh9MkRwyXCuO1zVngZotQEmRnkr6oZclSbcdxB1lG1+dVicvR0lDkjNrteQ1h
-         ODlv68plAFnp9sDypLOyy3KbFtrCEqIdLS62H2tdQR4rsb4haernYYt11LUnH7vfimht
-         3dGZJUx0NVimXDkQsJWV5xJR0RXfkaQ0QLf1E9ellUyKCsmJRGrKQWstv7TjA8/OuKBy
-         58/Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=tEdlO2eJHCWVqpq9ZVmfFrHoK+b5oUGHwUErbKgRbJo=;
-        b=i1gJrorCAvlecnVuhhcucxnS3QXUlyot/jvd8krurtFiEZusZgoLGu0DjZyCa43iep
-         tDRMu8mhztwt17w6U5aHRLfA5ccYwvB0hM4RII3HGMRZyLFyYiEhbT0ASQewboHv6B6h
-         pI+XAveGMIKjxluhybo0uzjMqcNfCPQmoTbxnYtDRpRX3ty3Lz8oh1To6P+nyWDKO5gb
-         Ite6Ujf0EepJ8inKt9pUuT4oAcp1/9K6Fvhv0fNZ3XBjQrpxRv55Z/UyVeu9KtK0TiGq
-         jbc9gJq6BGfxO2ql3E6mQ2cOo6WpKi4tNcO+6J2si4daHL/ezxbGeNUkFJn5DwFq3b9/
-         hc9A==
-X-Gm-Message-State: ACrzQf1hG8qvwD/liMqOGtwu3kJ4gCzAqgg8++CBV7ALCapbxgYT4MWF
-        0o4xU6ulZIDh22aBpHgpsgMKJGiqtBTTJw==
-X-Google-Smtp-Source: AMsMyM49ONOs/YLVOtSG+GQhfYXHOv4K5GNKWD8MYoE8uTvwxAimwbp/ySZ0z8Zm/a1vmY+uuIF0BA==
-X-Received: by 2002:a37:6588:0:b0:6fa:3046:7f8b with SMTP id z130-20020a376588000000b006fa30467f8bmr15690041qkb.752.1667490982649;
-        Thu, 03 Nov 2022 08:56:22 -0700 (PDT)
-Received: from ?IPV6:2601:586:5000:570:a35d:9f85:e3f7:d9fb? ([2601:586:5000:570:a35d:9f85:e3f7:d9fb])
-        by smtp.gmail.com with ESMTPSA id ey21-20020a05622a4c1500b003988b3d5280sm725662qtb.70.2022.11.03.08.56.21
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 03 Nov 2022 08:56:22 -0700 (PDT)
-Message-ID: <910c152d-5e1a-4667-2f0a-a1524f51958c@linaro.org>
-Date:   Thu, 3 Nov 2022 11:56:20 -0400
+        Thu, 3 Nov 2022 11:59:18 -0400
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C43F3140E6
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 08:58:19 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+        s=mimecast20190719; t=1667491099;
+        h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+         to:to:cc:cc:mime-version:mime-version:
+         content-transfer-encoding:content-transfer-encoding;
+        bh=q2b5W/w/tXDV6Z2W1azf8qIv49f0j543FW6H53v6JOY=;
+        b=a3wY5QzjASBAMGyLB2KvxONdMQHulF0yr/jD5eQKDMpJ+WDeI+vOlstLtySZRNUZG1cDEZ
+        d7gNEHhEQZ3OINJ/fj5ROMidoYd82DrSi7PONyVmWy7qFxUn5MZLyh4HEh0beOWCBL7yrm
+        J+Kp6D4Y1GGSvKwPQQFmuoS8l79SMUM=
+Received: from mimecast-mx02.redhat.com (mx3-rdu2.redhat.com
+ [66.187.233.73]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ us-mta-486-Y7vjV2S3ORCVQS0f2d6gdQ-1; Thu, 03 Nov 2022 11:58:13 -0400
+X-MC-Unique: Y7vjV2S3ORCVQS0f2d6gdQ-1
+Received: from smtp.corp.redhat.com (int-mx09.intmail.prod.int.rdu2.redhat.com [10.11.54.9])
+        (using TLSv1.2 with cipher AECDH-AES256-SHA (256/256 bits))
+        (No client certificate requested)
+        by mimecast-mx02.redhat.com (Postfix) with ESMTPS id 4FF633816EAD;
+        Thu,  3 Nov 2022 15:58:13 +0000 (UTC)
+Received: from plouf.redhat.com (unknown [10.39.192.98])
+        by smtp.corp.redhat.com (Postfix) with ESMTP id 8F9DB492CA5;
+        Thu,  3 Nov 2022 15:58:11 +0000 (UTC)
+From:   Benjamin Tissoires <benjamin.tissoires@redhat.com>
+To:     Greg KH <gregkh@linuxfoundation.org>,
+        Jiri Kosina <jikos@kernel.org>,
+        Jonathan Corbet <corbet@lwn.net>, Shuah Khan <shuah@kernel.org>
+Cc:     Tero Kristo <tero.kristo@linux.intel.com>,
+        linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+        bpf@vger.kernel.org, linux-kselftest@vger.kernel.org,
+        linux-doc@vger.kernel.org,
+        Benjamin Tissoires <benjamin.tissoires@redhat.com>
+Subject: [PATCH hid v12 00/15] Introduce eBPF support for HID devices
+Date:   Thu,  3 Nov 2022 16:57:41 +0100
+Message-Id: <20221103155756.687789-1-benjamin.tissoires@redhat.com>
 MIME-Version: 1.0
-User-Agent: Mozilla/5.0 (X11; Linux x86_64; rv:102.0) Gecko/20100101
- Thunderbird/102.4.1
-Subject: Re: [PATCH 05/10] dt-bindings: interconnect: Add sm8350, sc8280xp and
- generic OSM L3 compatibles
-To:     Bjorn Andersson <andersson@kernel.org>
-Cc:     Bjorn Andersson <quic_bjorande@quicinc.com>,
-        Georgi Djakov <djakov@kernel.org>,
-        Rob Herring <robh+dt@kernel.org>,
-        Sibi Sankar <quic_sibis@quicinc.com>,
-        Konrad Dybcio <konrad.dybcio@somainline.org>,
-        Mike Tipton <quic_mdtipton@quicinc.com>,
-        Johan Hovold <johan+linaro@kernel.org>,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20221028034155.5580-1-quic_bjorande@quicinc.com>
- <20221028034155.5580-6-quic_bjorande@quicinc.com>
- <a364b343-fa19-348c-bc38-e8b44061890b@linaro.org>
- <20221103034410.GB5525@core-thresher1.qualcomm.com>
- <f3882934-9f95-39f1-83e4-6ce9efeb089c@linaro.org>
- <20221103154653.67mgsey57uvdcvx3@builder.lan>
-Content-Language: en-US
-From:   Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-In-Reply-To: <20221103154653.67mgsey57uvdcvx3@builder.lan>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-2.1 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,NICE_REPLY_A,RCVD_IN_DNSWL_NONE,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.1 on 10.11.54.9
+X-Spam-Status: No, score=-3.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_NONE,
+        RCVD_IN_MSPIKE_H2,SPF_HELO_NONE,SPF_NONE autolearn=unavailable
+        autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On 03/11/2022 11:46, Bjorn Andersson wrote:
-> On Thu, Nov 03, 2022 at 08:25:17AM -0400, Krzysztof Kozlowski wrote:
->> On 02/11/2022 23:44, Bjorn Andersson wrote:
->>> On Fri, Oct 28, 2022 at 06:12:29PM -0400, Krzysztof Kozlowski wrote:
->>>> On 27/10/2022 23:41, Bjorn Andersson wrote:
->>>>> Add EPSS L3 compatibles for sm8350 and sc8280xp, but while at it also
->>>>> introduce generic compatible for both qcom,osm-l3 and qcom,epss-l3.
->>>>>
->>>>> Signed-off-by: Bjorn Andersson <quic_bjorande@quicinc.com>
->>>>> ---
->>>>>  .../bindings/interconnect/qcom,osm-l3.yaml    | 22 +++++++++++++------
->>>>>  1 file changed, 15 insertions(+), 7 deletions(-)
->>>>>
->>>>> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
->>>>> index bf538c0c5a81..ae0995341a78 100644
->>>>> --- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
->>>>> +++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
->>>>> @@ -16,13 +16,21 @@ description:
->>>>>  
->>>>>  properties:
->>>>>    compatible:
->>>>> -    enum:
->>>>> -      - qcom,sc7180-osm-l3
->>>>> -      - qcom,sc7280-epss-l3
->>>>> -      - qcom,sc8180x-osm-l3
->>>>> -      - qcom,sdm845-osm-l3
->>>>> -      - qcom,sm8150-osm-l3
->>>>> -      - qcom,sm8250-epss-l3
->>>>> +    oneOf:
->>>>> +      items:
->>>>
->>>> oneOf expects a list, so this should be "    - items"
->>>>
->>>
->>> Ahh, thanks. Must have missed running the dt_binding_check on this one.
->>>
->>>>> +        - enum:
->>>>> +            - qcom,sc7180-osm-l3
->>>>> +            - qcom,sc8180x-osm-l3
->>>>> +            - qcom,sdm845-osm-l3
->>>>> +            - qcom,sm8150-osm-l3
->>>>> +        - const: qcom,osm-l3
->>>>
->>>> The concept is good, but are you sure all SoCs will be compatible with
->>>> generic osm-l3?
->>>
->>> Per the current implementation yes, worst case if one or more of them isn't the
->>> more specific compatible can be used to alter the behavior of that platform.
->>>
->>>> Why not using dedicated compatible of one soc, e.g. the
->>>> oldest here? We already did like that for BWMON, DMA and few others.
->>>>
->>>
->>> Because if we say compatible = "qcom,sc8180x-osm-l3", "qcom,sdm845-osm-l3" and
->>> there is a quirk needed for "qcom,sdm845-osm-l3" we're forced to add a "special
->>> case" every other *-osm-l3 in the driver.
->>>
->>> This way we can have a generic implementation for the qcom,osm-l3 and if we
->>> realize that we need to quirk something for the oldest platform, we can do so
->>> without affecting the others.
->>
->> True. This also means we do not really know which one is the generic
->> implementation :)
->>
-> 
-> There currently is an implementation without platform specific quirks, I
-> call that the generic implementation and suggest that we refer to that
-> using "qcom,osm-l3".>
-> If we instead were to use sdm845 as the generic compatible, and there
-> turns out to be a need for a quirk for this platform, you:
-> 
-> 1) no longer have a generic implementation, but 4 platform-specific
->    implementations
+Hi,
 
-It's okay because there is no such thing anymore as "generic
-implementation". If this happened, your generic compatible is not
-specific enough. It does not represent any specific hardware.
+and here comes the v12 of the HID-BPF series.
 
-Adding generic compatibles just to make driver binding easier, is a bit
-in contrast with DT which should focus on hardware description.
+Again, for a full explanation of HID-BPF, please refer to the last patch
+in this series (15/15).
 
-> 
-> 2) have 3 platforms claiming to be compatible with the quirked (now
->    specialized) implementation, which they clearly aren't anymore
+This revision contains most notably few fixes from the various kernel CI
+bots. I also took Alexei's review into account, and we do not pollute
+tools/include with useless hid headers.
 
-Yes, that's the problem and this is why I mentioned that we do not know
-the generic implementation. If we knew that sdm845 is the generic, we
-would not expect specific quirks for it.
+I also removed most of the last checkpatch complains about adding
+external kfunc declarations in C files. And this led me to also show in
+samples/ how we can link together 2 BPF object files. Impressive how
+easy it is :)
 
-If you cannot make sdm845 generic because of unknown quirk, then you
-just do not know which one is generic implementation and that compatible
-is not specific enough... Or it is specific only to current Linux driver.
+Cheers,
+Benjamin
 
-> Therefor I favor using generic names for generic compatibles.
+Benjamin Tissoires (15):
+  HID: fix I2C_HID not selected when I2C_HID_OF_ELAN is
+  HID: Kconfig: split HID support and hid-core compilation
+  HID: initial BPF implementation
+  selftests: add tests for the HID-bpf initial implementation
+  HID: bpf jmp table: simplify the logic of cleaning up programs
+  HID: bpf: allocate data memory for device_event BPF programs
+  selftests/hid: add test to change the report size
+  HID: bpf: introduce hid_hw_request()
+  selftests/hid: add tests for bpf_hid_hw_request
+  HID: bpf: allow to change the report descriptor
+  selftests/hid: add report descriptor fixup tests
+  selftests/hid: Add a test for BPF_F_INSERT_HEAD
+  samples/hid: add new hid BPF example
+  samples/hid: add Surface Dial example
+  Documentation: add HID-BPF docs
 
-They make driver development easier but they hide the real match between
-hardware and compatible.
+ Documentation/hid/hid-bpf.rst                 | 512 +++++++++++
+ Documentation/hid/index.rst                   |   1 +
+ MAINTAINERS                                   |   3 +
+ drivers/Makefile                              |   2 +-
+ drivers/hid/Kconfig                           |  18 +-
+ drivers/hid/Makefile                          |   2 +
+ drivers/hid/amd-sfh-hid/Kconfig               |   2 +-
+ drivers/hid/bpf/Kconfig                       |  17 +
+ drivers/hid/bpf/Makefile                      |  11 +
+ drivers/hid/bpf/entrypoints/Makefile          |  93 ++
+ drivers/hid/bpf/entrypoints/README            |   4 +
+ drivers/hid/bpf/entrypoints/entrypoints.bpf.c |  34 +
+ .../hid/bpf/entrypoints/entrypoints.lskel.h   | 330 +++++++
+ drivers/hid/bpf/hid_bpf_dispatch.c            | 531 +++++++++++
+ drivers/hid/bpf/hid_bpf_dispatch.h            |  28 +
+ drivers/hid/bpf/hid_bpf_jmp_table.c           | 565 ++++++++++++
+ drivers/hid/hid-core.c                        |  34 +-
+ drivers/hid/i2c-hid/Kconfig                   |   4 +-
+ include/linux/hid.h                           |   5 +
+ include/linux/hid_bpf.h                       | 163 ++++
+ samples/hid/.gitignore                        |   8 +
+ samples/hid/Makefile                          | 250 ++++++
+ samples/hid/Makefile.target                   |  75 ++
+ samples/hid/hid_bpf_attach.bpf.c              |  18 +
+ samples/hid/hid_bpf_attach.h                  |  14 +
+ samples/hid/hid_bpf_helpers.h                 |  21 +
+ samples/hid/hid_mouse.bpf.c                   | 112 +++
+ samples/hid/hid_mouse.c                       | 155 ++++
+ samples/hid/hid_surface_dial.bpf.c            | 134 +++
+ samples/hid/hid_surface_dial.c                | 226 +++++
+ tools/testing/selftests/Makefile              |   1 +
+ tools/testing/selftests/hid/.gitignore        |   4 +
+ tools/testing/selftests/hid/Makefile          | 233 +++++
+ tools/testing/selftests/hid/config            |  20 +
+ tools/testing/selftests/hid/hid_bpf.c         | 845 ++++++++++++++++++
+ tools/testing/selftests/hid/progs/hid.c       | 196 ++++
+ .../selftests/hid/progs/hid_bpf_helpers.h     |  21 +
+ 37 files changed, 4682 insertions(+), 10 deletions(-)
+ create mode 100644 Documentation/hid/hid-bpf.rst
+ create mode 100644 drivers/hid/bpf/Kconfig
+ create mode 100644 drivers/hid/bpf/Makefile
+ create mode 100644 drivers/hid/bpf/entrypoints/Makefile
+ create mode 100644 drivers/hid/bpf/entrypoints/README
+ create mode 100644 drivers/hid/bpf/entrypoints/entrypoints.bpf.c
+ create mode 100644 drivers/hid/bpf/entrypoints/entrypoints.lskel.h
+ create mode 100644 drivers/hid/bpf/hid_bpf_dispatch.c
+ create mode 100644 drivers/hid/bpf/hid_bpf_dispatch.h
+ create mode 100644 drivers/hid/bpf/hid_bpf_jmp_table.c
+ create mode 100644 include/linux/hid_bpf.h
+ create mode 100644 samples/hid/.gitignore
+ create mode 100644 samples/hid/Makefile
+ create mode 100644 samples/hid/Makefile.target
+ create mode 100644 samples/hid/hid_bpf_attach.bpf.c
+ create mode 100644 samples/hid/hid_bpf_attach.h
+ create mode 100644 samples/hid/hid_bpf_helpers.h
+ create mode 100644 samples/hid/hid_mouse.bpf.c
+ create mode 100644 samples/hid/hid_mouse.c
+ create mode 100644 samples/hid/hid_surface_dial.bpf.c
+ create mode 100644 samples/hid/hid_surface_dial.c
+ create mode 100644 tools/testing/selftests/hid/.gitignore
+ create mode 100644 tools/testing/selftests/hid/Makefile
+ create mode 100644 tools/testing/selftests/hid/config
+ create mode 100644 tools/testing/selftests/hid/hid_bpf.c
+ create mode 100644 tools/testing/selftests/hid/progs/hid.c
+ create mode 100644 tools/testing/selftests/hid/progs/hid_bpf_helpers.h
 
-Best regards,
-Krzysztof
+-- 
+2.36.1
 
