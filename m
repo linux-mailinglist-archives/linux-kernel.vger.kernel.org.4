@@ -2,107 +2,85 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 7BFB76173C0
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 02:28:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 9DC116173C5
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 02:33:32 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230292AbiKCB2t (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Wed, 2 Nov 2022 21:28:49 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:39426 "EHLO
+        id S230293AbiKCBda (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Wed, 2 Nov 2022 21:33:30 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40612 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229485AbiKCB2q (ORCPT
+        with ESMTP id S229459AbiKCBd2 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Wed, 2 Nov 2022 21:28:46 -0400
-Received: from dfw.source.kernel.org (dfw.source.kernel.org [IPv6:2604:1380:4641:c500::1])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 65DD112D08;
-        Wed,  2 Nov 2022 18:28:46 -0700 (PDT)
-Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
-        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-        (No client certificate requested)
-        by dfw.source.kernel.org (Postfix) with ESMTPS id E812161AA9;
-        Thu,  3 Nov 2022 01:28:45 +0000 (UTC)
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 99B47C433D6;
-        Thu,  3 Nov 2022 01:28:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-        s=k20201202; t=1667438925;
-        bh=lX+ST3dTXyEaKiiwRst2GT7kC0z5eaEAXLnWNMvTMnc=;
-        h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-        b=XQbE9zfOjEEB4WZYgh7PjxGs+7Y2tRdTwpjhUbQpzU3ARuGu4N8xZ/OWorrbABlOV
-         6CZHfyUEwEPAufZg+kpNGDLCFxPF8+xzhPtn7DW6fxeaosNJl9NERVkcig7nRnxSii
-         QnSEULhwrBjo8tQrrAI4FJfc2+Le4kc2Dd5Mi1lV5D5Byisi8qK+FByVRU3U99hdGf
-         ZgbVLFZrR/48mGbFQmvIhvxO89081GAZNOE/bXoiLObNJ6Y+oatQKIFlS2U35560Io
-         ZlRT1bBY0VpzDIGM1esPVjqEAMN7q6CD/eftxYzVohVXu5h1kWg92ljt1P1u2SHKMp
-         Bu/bZOPLrAobA==
-Date:   Wed, 2 Nov 2022 18:28:43 -0700
-From:   Jakub Kicinski <kuba@kernel.org>
-To:     Steen Hegelund <steen.hegelund@microchip.com>
-Cc:     Casper Andersson <casper.casan@gmail.com>,
-        "David S . Miller" <davem@davemloft.net>,
-        Eric Dumazet <edumazet@google.com>,
-        Paolo Abeni <pabeni@redhat.com>,
-        <UNGLinuxDriver@microchip.com>,
-        Randy Dunlap <rdunlap@infradead.org>,
-        Russell King <rmk+kernel@armlinux.org.uk>,
-        "Wan Jiabing" <wanjiabing@vivo.com>,
-        Nathan Huckleberry <nhuck@google.com>,
-        <linux-kernel@vger.kernel.org>, <netdev@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>,
-        Daniel Machon <daniel.machon@microchip.com>,
-        Horatiu Vultur <horatiu.vultur@microchip.com>,
-        Lars Povlsen <lars.povlsen@microchip.com>,
-        Jiri Pirko <jiri@resnulli.us>
-Subject: Re: [PATCH net-next v2 2/5] net: microchip: sparx5: Adding more tc
- flower keys for the IS2 VCAP
-Message-ID: <20221102182843.6d14c7ed@kernel.org>
-In-Reply-To: <e9d662682b00a976ad1dedf361a18b5f28aac8fb.camel@microchip.com>
-References: <20221028144540.3344995-1-steen.hegelund@microchip.com>
-        <20221028144540.3344995-3-steen.hegelund@microchip.com>
-        <20221031103747.uk76tudphqdo6uto@wse-c0155>
-        <51622bfd3fe718139cece38493946c2860ebdf77.camel@microchip.com>
-        <20221031184128.1143d51e@kernel.org>
-        <741b628857168a6844b6c2e0482beb7df9b56520.camel@microchip.com>
-        <20221101084925.7d8b7641@kernel.org>
-        <e9d662682b00a976ad1dedf361a18b5f28aac8fb.camel@microchip.com>
+        Wed, 2 Nov 2022 21:33:28 -0400
+Received: from mailgw.kylinos.cn (unknown [124.126.103.232])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E2A9A60FF
+        for <linux-kernel@vger.kernel.org>; Wed,  2 Nov 2022 18:33:22 -0700 (PDT)
+X-UUID: 63241d4bb1804973853be90ccfa0acb7-20221103
+X-CPASD-INFO: 0ae3ba845421497eaf831dbfadd630ad@ebGfU4-TZmRhVHR9g3yCn4GXaGNikIK
+        1o56EaGFgjYSVhH5xTV5uYFV9fWtVYV9dYVR6eGxQY2BgZFJ4i3-XblBiXoZgUZB3f6OfU5SPaA==
+X-CLOUD-ID: 0ae3ba845421497eaf831dbfadd630ad
+X-CPASD-SUMMARY: SIP:-1,APTIP:-2.0,KEY:0.0,FROMBLOCK:1,OB:2.0,URL:-5,TVAL:185.
+        0,ESV:0.0,ECOM:-5.0,ML:0.0,FD:1.0,CUTS:136.0,IP:-2.0,MAL:-5.0,PHF:-5.0,PHC:-5
+        .0,SPF:4.0,EDMS:-5,IPLABEL:4480.0,FROMTO:0,AD:0,FFOB:2.0,CFOB:2.0,SPC:0,SIG:-
+        5,AUF:19,DUF:7304,ACD:129,DCD:129,SL:0,EISP:0,AG:0,CFC:0.447,CFSR:0.02,UAT:0,
+        RAF:0,IMG:-5.0,DFA:0,DTA:0,IBL:-2.0,ADI:-5,SBL:0,REDM:0,REIP:0,ESB:0,ATTNUM:0
+        ,EAF:0,CID:-5.0,VERSION:2.3.17
+X-CPASD-ID: 63241d4bb1804973853be90ccfa0acb7-20221103
+X-CPASD-BLOCK: 1001
+X-CPASD-STAGE: 1
+X-UUID: 63241d4bb1804973853be90ccfa0acb7-20221103
+X-User: chenzhang@kylinos.cn
+Received: from localhost.localdomain [(112.64.161.44)] by mailgw
+        (envelope-from <chenzhang@kylinos.cn>)
+        (Generic MTA)
+        with ESMTP id 171813269; Thu, 03 Nov 2022 09:33:24 +0800
+From:   chen zhang <chenzhang@kylinos.cn>
+To:     hdegoede@redhat.com, rdunlap@infradead.org, bagasdotme@gmail.com
+Cc:     linux-kernel@vger.kernel.org, chenzhang_0901@163.com,
+        chen zhang <chenzhang@kylinos.cn>, k2ci <kernel-bot@kylinos.cn>
+Subject: [PATCH v3] platform/x86: ISST: Fix typo in comments
+Date:   Thu,  3 Nov 2022 09:33:13 +0800
+Message-Id: <20221103013313.13278-1-chenzhang@kylinos.cn>
+X-Mailer: git-send-email 2.25.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
-        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
-        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-0.5 required=5.0 tests=BAYES_00,KHOP_HELO_FCRDNS,
+        PDS_RDNS_DYNAMIC_FP,RDNS_DYNAMIC,SPF_HELO_NONE,T_SPF_PERMERROR,
+        UNPARSEABLE_RELAY autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, 2 Nov 2022 14:11:37 +0100 Steen Hegelund wrote:
-> I have sent a version 4 of the series, but I realized after sending it, that I
-> was probably not understanding the implications of what you were saying
-> entirely.
-> 
-> As far as I understand it now, I need to have a matchall rule that does a goto
-> from chain 0 (as this is where all traffic processing starts) to my first IS2
-> VCAP chain and this rule activates the IS2 VCAP lookup.
-> 
-> Each of the rules in this VCAP chain need to point to the next chain etc.
-> 
-> If the matchall rule is deleted the IS2 VCAP lookups should be disabled as there
-> is no longer any way to reach the VCAP chains.
-> 
-> Does that sound OK?
+Fix spelling typo in comments.
 
-It does as far as I understand.
+Reported-by: k2ci <kernel-bot@kylinos.cn>
+Signed-off-by: chen zhang <chenzhang@kylinos.cn>
+---
+v3: Change "interace" to "interfaces", Change "share" to "shared"
+Thanks for your advice.
+v2: update the comments
+There is a bug with my company's mailbox with kylinos.cn, and sometimes 
+I can't receive reply emails. I cc my personal 163 mailbox, so that I can
+receive feedback from reviewer on time.
+---
+ drivers/platform/x86/intel/speed_select_if/isst_if_common.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-I haven't grasped what the purpose of using multiple chains is in 
-case of your design. IIRC correctly other drivers use it for instance
-to partition TCAMs with each chain having a different set of fields it
-can match on. But I don't see templates used in sparx5.
+diff --git a/drivers/platform/x86/intel/speed_select_if/isst_if_common.c b/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
+index fd102678c75f..a7e02b24a87a 100644
+--- a/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
++++ b/drivers/platform/x86/intel/speed_select_if/isst_if_common.c
+@@ -623,7 +623,7 @@ static long isst_if_def_ioctl(struct file *file, unsigned int cmd,
+ 
+ /* Lock to prevent module registration when already opened by user space */
+ static DEFINE_MUTEX(punit_misc_dev_open_lock);
+-/* Lock to allow one share misc device for all ISST interace */
++/* Lock to allow one shared misc device for all ISST interfaces */
+ static DEFINE_MUTEX(punit_misc_dev_reg_lock);
+ static int misc_usage_count;
+ static int misc_device_ret;
+-- 
+2.25.1
 
-In general in TC offloads you can reject any configuration you can't
-(or choose not to) support, and make up your own constraints (e.g. only
-specific priority or chain values are supported).
-
-But for a "target" ruleset, i.e. ruleset comprised fully of rules you
-do offload - the behavior of executing that ruleset in software and in
-the device must be the same.
-
-Dunno if that helps :)
