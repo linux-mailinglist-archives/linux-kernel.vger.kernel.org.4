@@ -2,67 +2,67 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 1E1DC617CB4
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:36:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id 62C5F617CB7
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 13:36:11 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231714AbiKCMf7 (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 08:35:59 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53214 "EHLO
+        id S231736AbiKCMgG (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 08:36:06 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:53294 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231688AbiKCMfu (ORCPT
+        with ESMTP id S231697AbiKCMfy (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 08:35:50 -0400
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id BCC82CE05;
-        Thu,  3 Nov 2022 05:35:46 -0700 (PDT)
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-13b6c1c89bdso1898329fac.13;
-        Thu, 03 Nov 2022 05:35:46 -0700 (PDT)
+        Thu, 3 Nov 2022 08:35:54 -0400
+Received: from mail-oa1-f43.google.com (mail-oa1-f43.google.com [209.85.160.43])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 5CEC9BF44;
+        Thu,  3 Nov 2022 05:35:48 -0700 (PDT)
+Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-13b23e29e36so1928774fac.8;
+        Thu, 03 Nov 2022 05:35:48 -0700 (PDT)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
         d=1e100.net; s=20210112;
         h=date:subject:message-id:references:in-reply-to:cc:to:from
          :mime-version:content-transfer-encoding:x-gm-message-state:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=cQZ3pBlIi0rpM5a6PfKlKhrsDTBhVGlbxomkgGlrwXA=;
-        b=0iYnD0eCqzz1iQ9xu2fEnIyODpwkK34BEYUrzoLSCBYvsVhkxCTNjLVaKC8ni1umTY
-         HLRXuQvtGdkljOmvhPiDJUP6HKN35SjBaHEUQ8twcAshTbwCNXcc4i4yw2v7cJLrYEyC
-         T8cIqlJtkmm7+8Gn+7lpOxT3nN2VFwK23ABXT8MEv8BmHWuP3UvdUJ135S7VdJUzH0mK
-         TcPGwR8kf1cwapPKanSG9sPxxQZxsVxfvmbGMgZ0A1UEMRYa8VL0RqNy231sc4DKDixT
-         wqHcqS7tYFwPm0Ut1fUamGXPWvXAitkZ1EZQIPKJAz8lgtBwcab8KFwYYSWMdQoxkFkE
-         wkuQ==
-X-Gm-Message-State: ACrzQf3Rdl3u6RDxzcX97x1ogRAD1e2im3O16PZrb16miZk3Piqj76uq
-        gMgBxA4a8PlB3VPhD8pFRfxrykT0DQ==
-X-Google-Smtp-Source: AMsMyM5WlQVuFfI3Hej6zl5+YtqKpPvfhlpNxJetQLlWzU3YMepE7Sxq8fKeSZ/kC1fuVSxpMI5JvQ==
-X-Received: by 2002:a05:6870:8999:b0:133:15f9:82fd with SMTP id f25-20020a056870899900b0013315f982fdmr17446407oaq.276.1667478946042;
-        Thu, 03 Nov 2022 05:35:46 -0700 (PDT)
+        bh=swk/OiKVstVSBR4f7TzyH2j5DF+ZMxXZNAXmMO2doNA=;
+        b=fUMVw4qIj3sGC2ASzbHPuM/ccCzMOWxIlkwayQcIJYpJs/YVSNh4ueXOUiGMZ3eEqQ
+         Xi0vhAE0EBoTgPv4Vb7G/b0qetbcHEX2G/RbDPPrt5wIbn6cKp34KUI6mjgGkV1TUqsv
+         U7Wn2CCzm3HpT/Zx1iUK9FfKg+SafnuWemkBWgByY2eYaWX9WU5taUCtprjYXmOTxaRf
+         7QJrd0vmuMEJfvIKZ1avku6hdEvwnvrrUnoHFsQ+vxrcHCSNMaitobBlSE4K2s/X5GnE
+         eJX0OnKFspA1ldEpas9YYeLt6jF5TJNddeUpgcBKC+Sk0m2l4zjbG+5kgc//fGaN1Rkb
+         FDEA==
+X-Gm-Message-State: ACrzQf0s4H6pEtxq1lP3bx5TdwWhh5z5CtAgPg21mb9i+L4GIOZXLhGa
+        ijdRc/P56EP96dNaG8gyXA==
+X-Google-Smtp-Source: AMsMyM7nAh3H/bFuoxY/59xmkSmzwYtWN6o+qSWjjQyX+E9MsKFooWl0HjQVtzKHj5HYXpng3FnHDA==
+X-Received: by 2002:a05:6870:3409:b0:13b:5dee:40d with SMTP id g9-20020a056870340900b0013b5dee040dmr28382119oah.121.1667478947553;
+        Thu, 03 Nov 2022 05:35:47 -0700 (PDT)
 Received: from robh_at_kernel.org (66-90-144-107.dyn.grandenetworks.net. [66.90.144.107])
-        by smtp.gmail.com with ESMTPSA id u11-20020a056871008b00b0013d7fffbc3csm261196oaa.58.2022.11.03.05.35.45
+        by smtp.gmail.com with ESMTPSA id j15-20020a056808056f00b0035956747d07sm338238oig.17.2022.11.03.05.35.46
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 05:35:45 -0700 (PDT)
-Received: (nullmailer pid 2140212 invoked by uid 1000);
+        Thu, 03 Nov 2022 05:35:47 -0700 (PDT)
+Received: (nullmailer pid 2140214 invoked by uid 1000);
         Thu, 03 Nov 2022 12:35:43 -0000
 Content-Type: text/plain; charset="us-ascii"
 Content-Transfer-Encoding: 7bit
 MIME-Version: 1.0
 From:   Rob Herring <robh@kernel.org>
-To:     Naresh Solanki <naresh.solanki@9elements.com>
-Cc:     Rob Herring <robh+dt@kernel.org>,
-        Marcello Sylvester Bauer <sylv@sylv.io>,
-        Lee Jones <lee@kernel.org>,
-        Naresh Solanki <Naresh.Solanki@9elements.com>,
-        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-        Krzysztof Kozlowski <krzysztof.kozlowski+dt@linaro.org>,
-        Patrick Rudolph <patrick.rudolph@9elements.com>
-In-Reply-To: <20221103080545.1400424-2-Naresh.Solanki@9elements.com>
-References: <20221103080545.1400424-1-Naresh.Solanki@9elements.com>
- <20221103080545.1400424-2-Naresh.Solanki@9elements.com>
-Message-Id: <166747792187.2121919.17636248726524785287.robh@kernel.org>
-Subject: Re: [PATCH v6 1/2] dt-bindings: mfd: Add bindings for MAX5970 and MAX5978
+To:     Andrej Picej <andrej.picej@norik.com>
+Cc:     linux-watchdog@vger.kernel.org,
+        linux-arm-kernel@lists.infradead.org, shawnguo@kernel.org,
+        devicetree@vger.kernel.org, krzysztof.kozlowski+dt@linaro.org,
+        robh+dt@kernel.org, festevam@gmail.com,
+        linux-kernel@vger.kernel.org, s.hauer@pengutronix.de,
+        wim@linux-watchdog.org, linux@roeck-us.net, kernel@pengutronix.de,
+        Anson.Huang@nxp.com, linux-imx@nxp.com
+In-Reply-To: <20221103100358.176099-3-andrej.picej@norik.com>
+References: <20221103100358.176099-1-andrej.picej@norik.com>
+ <20221103100358.176099-3-andrej.picej@norik.com>
+Message-Id: <166747792333.2121983.3197860057328686578.robh@kernel.org>
+Subject: Re: [PATCH v3 2/3] dt-bindings: watchdog: fsl-imx: document suspend
+ in wait mode
 Date:   Thu, 03 Nov 2022 07:35:43 -0500
 X-Spam-Status: No, score=-1.4 required=5.0 tests=BAYES_00,
         FREEMAIL_ENVFROM_END_DIGIT,FREEMAIL_FORGED_FROMDOMAIN,FREEMAIL_FROM,
-        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H3,
-        RCVD_IN_MSPIKE_WL,SPF_HELO_NONE,SPF_PASS autolearn=no
-        autolearn_force=no version=3.4.6
+        HEADER_FROM_DIFFERENT_DOMAINS,RCVD_IN_DNSWL_NONE,RCVD_IN_MSPIKE_H2,
+        SPF_HELO_NONE,SPF_PASS autolearn=no autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
@@ -70,29 +70,41 @@ List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
 
-On Thu, 03 Nov 2022 09:05:44 +0100, Naresh Solanki wrote:
-> From: Marcello Sylvester Bauer <sylv@sylv.io>
+On Thu, 03 Nov 2022 11:03:57 +0100, Andrej Picej wrote:
+> Property "fsl,suspend-in-wait" suspends watchdog in "WAIT" mode which
+> corresponds to Linux's Suspend-to-Idle S0 mode. If this property is not
+> set and the device is put into Suspend-to-Idle mode, the watchdog
+> triggers a reset after 128 seconds.
 > 
-> The MAX597x is a hot swap controller with configurable fault protection.
-> It also has 10bit ADC for current & voltage measurements.
-> 
-> Signed-off-by: Patrick Rudolph <patrick.rudolph@9elements.com>
-> Signed-off-by: Marcello Sylvester Bauer <sylv@sylv.io>
-> Signed-off-by: Naresh Solanki <Naresh.Solanki@9elements.com>
+> Signed-off-by: Andrej Picej <andrej.picej@norik.com>
+> Reviewed-by: Fabio Estevam <festevam@gmail.com>
 > ---
->  .../bindings/mfd/maxim,max5970.yaml           | 164 ++++++++++++++++++
->  1 file changed, 164 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/mfd/maxim,max5970.yaml
+> Changes in v3:
+>  - disallow the property for devices which don't support WDW bit
+>    functionality with .yaml DTS allOf:if:then scheme.
+> 
+> Changes in v2:
+>  - add a commit message,
+>  - add a list of devices which support this functionality
+> ---
+>  .../bindings/watchdog/fsl-imx-wdt.yaml        | 33 +++++++++++++++++++
+>  1 file changed, 33 insertions(+)
 > 
 
 My bot found errors running 'make DT_CHECKER_FLAGS=-m dt_binding_check'
 on your patch (DT_CHECKER_FLAGS is new in v5.13):
 
 yamllint warnings/errors:
+./Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml:71:1: [error] duplication of key "allOf" in mapping (key-duplicates)
 
 dtschema/dtc warnings/errors:
-./Documentation/devicetree/bindings/mfd/maxim,max5970.yaml: $id: relative path/filename doesn't match actual path or filename
-	expected: http://devicetree.org/schemas/mfd/maxim,max5970.yaml#
+make[1]: *** Deleting file 'Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.example.dts'
+Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml:71:1: found duplicate key "allOf" with value "[]" (original value: "[]")
+make[1]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.example.dts] Error 1
+make[1]: *** Waiting for unfinished jobs....
+./Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml:71:1: found duplicate key "allOf" with value "[]" (original value: "[]")
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/watchdog/fsl-imx-wdt.yaml: ignoring, error parsing file
+make: *** [Makefile:1492: dt_binding_check] Error 2
 
 doc reference errors (make refcheckdocs):
 
