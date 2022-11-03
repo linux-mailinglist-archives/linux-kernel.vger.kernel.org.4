@@ -2,87 +2,125 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 8CE8B617716
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 08:02:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id D8269617719
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 08:05:03 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S230012AbiKCHCX (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 03:02:23 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:40464 "EHLO
+        id S230078AbiKCHFB (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 03:05:01 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:42136 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S230072AbiKCHCS (ORCPT
+        with ESMTP id S229579AbiKCHE6 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 03:02:18 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id ADECDD2DA;
-        Thu,  3 Nov 2022 00:02:17 -0700 (PDT)
-Received: from anrayabh-desk (unknown [167.220.238.193])
-        by linux.microsoft.com (Postfix) with ESMTPSA id ACB98205DA28;
-        Thu,  3 Nov 2022 00:02:11 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com ACB98205DA28
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1667458937;
-        bh=RmEBOp1jxEl8jwEbvovgwfpLMRKzIAy0S5U6ohu6+bc=;
-        h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-        b=m9MMFzTo/nB7xnKk0cPXEyb6SJh2xqugsdtgatgmPxVViwL4Tlt4bItVcOcypcwxg
-         dcpIbBclhVerd3pZM43yQeML6souvDXMgHq/g26GoLejZGd6nhL70URh2Ivm6ILLWH
-         4mq1brUlVJv/5q8iLliIikEBN94bQ9iglF/ZBH+Q=
-Date:   Thu, 3 Nov 2022 12:32:06 +0530
-From:   Anirudh Rayabharam <anrayabh@linux.microsoft.com>
-To:     Jinank Jain <jinankjain@linux.microsoft.com>
-Cc:     jinankjain@microsoft.com, kys@microsoft.com,
-        haiyangz@microsoft.com, sthemmin@microsoft.com, wei.liu@kernel.org,
-        decui@microsoft.com, tglx@linutronix.de, mingo@redhat.com,
-        bp@alien8.de, dave.hansen@linux.intel.com, x86@kernel.org,
-        hpa@zytor.com, arnd@arndb.de, peterz@infradead.org,
-        jpoimboe@kernel.org, seanjc@google.com,
-        kirill.shutemov@linux.intel.com, ak@linux.intel.com,
-        sathyanarayanan.kuppuswamy@linux.intel.com,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linux-arch@vger.kernel.org
-Subject: Re: [PATCH v2 4/5] hv: Enable vmbus driver for nested root partition
-Message-ID: <Y2Nnbs7o7aRd/E07@anrayabh-desk>
-References: <cover.1667406350.git.jinankjain@linux.microsoft.com>
- <b5ea40f7e84e17a4338a313ab74292a293b1efa4.1667406350.git.jinankjain@linux.microsoft.com>
+        Thu, 3 Nov 2022 03:04:58 -0400
+Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id B530E264F
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 00:04:56 -0700 (PDT)
+Received: from dggpemm500022.china.huawei.com (unknown [172.30.72.53])
+        by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4N2vrg3XH7zHvWk;
+        Thu,  3 Nov 2022 15:04:35 +0800 (CST)
+Received: from dggpemm500001.china.huawei.com (7.185.36.107) by
+ dggpemm500022.china.huawei.com (7.185.36.162) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2375.31; Thu, 3 Nov 2022 15:04:54 +0800
+Received: from huawei.com (10.67.174.169) by dggpemm500001.china.huawei.com
+ (7.185.36.107) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2375.31; Thu, 3 Nov
+ 2022 15:04:54 +0800
+From:   Chen Lifu <chenlifu@huawei.com>
+To:     <benh@kernel.crashing.org>, <mpe@ellerman.id.au>,
+        <npiggin@gmail.com>, <christophe.leroy@csgroup.eu>,
+        <nick.child@ibm.com>, <zhengzucheng@huawei.com>,
+        <linuxppc-dev@lists.ozlabs.org>, <linux-kernel@vger.kernel.org>
+CC:     <chenlifu@huawei.com>
+Subject: [PATCH v3 -next] powerpc/powermac: Fix symbol not declared warnings
+Date:   Thu, 3 Nov 2022 15:01:22 +0800
+Message-ID: <20221103070122.340773-1-chenlifu@huawei.com>
+X-Mailer: git-send-email 2.37.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <b5ea40f7e84e17a4338a313ab74292a293b1efa4.1667406350.git.jinankjain@linux.microsoft.com>
-X-Spam-Status: No, score=-19.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,RCVD_IN_DNSWL_MED,
-        SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,USER_IN_DEF_SPF_WL
-        autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 7BIT
+Content-Type:   text/plain; charset=US-ASCII
+X-Originating-IP: [10.67.174.169]
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ dggpemm500001.china.huawei.com (7.185.36.107)
+X-CFilter-Loop: Reflected
+X-Spam-Status: No, score=-4.2 required=5.0 tests=BAYES_00,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-On Wed, Nov 02, 2022 at 04:36:01PM +0000, Jinank Jain wrote:
-> Currently VMBus driver is not initialized for root partition but we need
-> to enable the VMBus driver for nested root partition. This is required
-> to expose VMBus devices to the L2 guest in the nested setup.
+1. ppc_override_l2cr and ppc_override_l2cr_value are only used in
+    l2cr_init() function, remove them and used *l2cr directly.
+2. has_l2cache is not used outside of the file, so mark it static and
+    do not initialise statics to 0.
 
-Perhaps more importantly, this is required so that L2 _root_ can use the
-VMBus devices.
+Fixes the following warning:
 
-> 
-> Signed-off-by: Jinank Jain <jinankjain@linux.microsoft.com>
-> ---
->  drivers/hv/vmbus_drv.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/hv/vmbus_drv.c b/drivers/hv/vmbus_drv.c
-> index 8b2e413bf19c..2f0cf75e811b 100644
-> --- a/drivers/hv/vmbus_drv.c
-> +++ b/drivers/hv/vmbus_drv.c
-> @@ -2723,7 +2723,7 @@ static int __init hv_acpi_init(void)
->  	if (!hv_is_hyperv_initialized())
->  		return -ENODEV;
->  
-> -	if (hv_root_partition)
-> +	if (hv_root_partition && !hv_nested)
->  		return 0;
->  
->  	/*
-> -- 
-> 2.25.1
+arch/powerpc/platforms/powermac/setup.c:73:5: warning: symbol
+'ppc_override_l2cr' was not declared. Should it be static?
+arch/powerpc/platforms/powermac/setup.c:74:5: warning: symbol
+'ppc_override_l2cr_value' was not declared. Should it be static?
+arch/powerpc/platforms/powermac/setup.c:75:5: warning: symbol
+'has_l2cache' was not declared. Should it be static?
+
+Signed-off-by: Chen Lifu <chenlifu@huawei.com>
+---
+ arch/powerpc/platforms/powermac/setup.c | 19 ++++++-------------
+ 1 file changed, 6 insertions(+), 13 deletions(-)
+
+diff --git a/arch/powerpc/platforms/powermac/setup.c b/arch/powerpc/platforms/powermac/setup.c
+index 04daa7f0a03c..cb9a3290849a 100644
+--- a/arch/powerpc/platforms/powermac/setup.c
++++ b/arch/powerpc/platforms/powermac/setup.c
+@@ -68,13 +68,11 @@
+ 
+ #include "pmac.h"
+ 
+ #undef SHOW_GATWICK_IRQS
+ 
+-int ppc_override_l2cr = 0;
+-int ppc_override_l2cr_value;
+-int has_l2cache = 0;
++static int has_l2cache;
+ 
+ int pmac_newworld;
+ 
+ static int current_root_goodness = -1;
+ 
+@@ -234,26 +232,21 @@ static void __init l2cr_init(void)
+ 
+ 		for_each_of_cpu_node(np) {
+ 			const unsigned int *l2cr =
+ 				of_get_property(np, "l2cr-value", NULL);
+ 			if (l2cr) {
+-				ppc_override_l2cr = 1;
+-				ppc_override_l2cr_value = *l2cr;
+ 				_set_L2CR(0);
+-				_set_L2CR(ppc_override_l2cr_value);
++				_set_L2CR(*l2cr);
++				pr_info("L2CR overridden (0x%x), "
++					"backside cache is %s\n",
++					*l2cr, ((*l2cr) & 0x80000000) ?
++					"enabled" : "disabled");
+ 			}
+ 			of_node_put(np);
+ 			break;
+ 		}
+ 	}
+-
+-	if (ppc_override_l2cr)
+-		printk(KERN_INFO "L2CR overridden (0x%x), "
+-		       "backside cache is %s\n",
+-		       ppc_override_l2cr_value,
+-		       (ppc_override_l2cr_value & 0x80000000)
+-				? "enabled" : "disabled");
+ }
+ #endif
+ 
+ static void __init pmac_setup_arch(void)
+ {
+-- 
+2.37.1
+
