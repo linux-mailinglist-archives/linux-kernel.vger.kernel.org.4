@@ -2,104 +2,119 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 52F176186BC
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 18:58:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id B9BCB6186CD
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 19:00:10 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S231732AbiKCR6x (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 13:58:53 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:35804 "EHLO
+        id S231998AbiKCSAH (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 14:00:07 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:37076 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S231565AbiKCR6u (ORCPT
+        with ESMTP id S232043AbiKCR71 (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 13:58:50 -0400
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTP id 4CB9EE34;
-        Thu,  3 Nov 2022 10:58:49 -0700 (PDT)
-Received: from skinsburskii-cloud-desktop.internal.cloudapp.net (unknown [20.120.152.163])
-        by linux.microsoft.com (Postfix) with ESMTPSA id 1AE5E20C28B1;
-        Thu,  3 Nov 2022 10:58:49 -0700 (PDT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 1AE5E20C28B1
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-        s=default; t=1667498329;
-        bh=d2r8ZXf09V8uzug4END6ry4gGh3rPYlU3pv6NwpfdRE=;
-        h=Subject:From:Cc:Date:In-Reply-To:References:From;
-        b=BuTRr6tnaRl5ZUlXSNO6XGsV/dMn2Ht5Ei4eV3Ct2G3/TEDHXdYfDZzHZk4N9MVL8
-         fLU9cJOgE5JPuOl2n0VwK0sQhvsk/iVV+lFU8jwsUrTz0+SE+aVZLbc02Vbo9kIex9
-         VGcrWx8VBPiU1TyTzZajJR5S/gWSoRh+cu7+OhIg=
-Subject: [PATCH v3 1/4] drivers/clocksource/hyper-v: Introduce a pointer to
- TSC page
-From:   Stanislav Kinsburskii <skinsburskii@linux.microsoft.com>
-Cc:     Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>,
-        "K. Y. Srinivasan" <kys@microsoft.com>,
-        Haiyang Zhang <haiyangz@microsoft.com>,
-        Wei Liu <wei.liu@kernel.org>, Dexuan Cui <decui@microsoft.com>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Thomas Gleixner <tglx@linutronix.de>,
-        linux-hyperv@vger.kernel.org, linux-kernel@vger.kernel.org,
-        mikelley@microsoft.com
-Date:   Thu, 03 Nov 2022 17:58:48 +0000
-Message-ID: <166749832893.218190.16503272948154953294.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
-In-Reply-To: <166749827889.218190.12775118554387271641.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
-References: <166749827889.218190.12775118554387271641.stgit@skinsburskii-cloud-desktop.internal.cloudapp.net>
-User-Agent: StGit/0.19
+        Thu, 3 Nov 2022 13:59:27 -0400
+Received: from mga04.intel.com (mga04.intel.com [192.55.52.120])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id C2679272A
+        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 10:59:18 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1667498358; x=1699034358;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=NQ4E60fCi8s4w3s9Y4QOIThnoOsfGkUiX9/Gqm0HWwI=;
+  b=gwcQa7BeIlBl2XD27PYwtOdEdIl1Ccq/In7CzvGDOtkE48vtJDG4o+xn
+   ZJCQGLVd+Q2vUklJVKfhDxXnRx6kTi7qL+2D2T3TwkPDIdUA3ZjYl31aI
+   sS4x+ZTtLL4FjD8hlPr7YPSpEQ9NJrifRS/LZck2dP8OT29aPNW56TGHc
+   T0pAhEQ6VEkRr8bGw5j2TfuySrNjpxTAI++Nv5xoje8s8V2lp1WHpbh+8
+   lkpvaLN48juwsjWYH9XIB2TAs1yXE7flolWwy7JwqH/4Ni85LXnZASNI2
+   1RwQ+W9x+ppJEqGqQre40nr15zVjsHPkmVYAHfYs71i+0BUNCUAWFBJIj
+   w==;
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="308476961"
+X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
+   d="scan'208";a="308476961"
+Received: from orsmga005.jf.intel.com ([10.7.209.41])
+  by fmsmga104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 10:59:18 -0700
+X-IronPort-AV: E=McAfee;i="6500,9779,10520"; a="809762537"
+X-IronPort-AV: E=Sophos;i="5.96,134,1665471600"; 
+   d="scan'208";a="809762537"
+Received: from araj-dh-work.jf.intel.com ([10.165.157.158])
+  by orsmga005-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Nov 2022 10:59:17 -0700
+From:   Ashok Raj <ashok.raj@intel.com>
+To:     Borislav Petkov <bp@alien8.de>,
+        Thomas Gleixner <tglx@linutronix.de>
+Cc:     "LKML Mailing List" <linux-kernel@vger.kernel.org>,
+        X86-kernel <x86@kernel.org>, Tony Luck <tony.luck@intel.com>,
+        Dave Hansen <dave.hansen@intel.com>,
+        Arjan van de Ven <arjan.van.de.ven@intel.com>,
+        Andy Lutomirski <luto@kernel.org>,
+        Jacon Jun Pan <jacob.jun.pan@intel.com>,
+        Tom Lendacky <thomas.lendacky@amd.com>,
+        Kai Huang <kai.huang@intel.com>,
+        Andrew Cooper <andrew.cooper3@citrix.com>,
+        Ashok Raj <ashok.raj@intel.com>
+Subject: [v2 00/13] Make microcode late loading more robust
+Date:   Thu,  3 Nov 2022 17:58:48 +0000
+Message-Id: <20221103175901.164783-1-ashok.raj@intel.com>
+X-Mailer: git-send-email 2.34.1
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Spam-Status: No, score=-18.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,ENV_AND_HDR_SPF_MATCH,MISSING_HEADERS,
-        RCVD_IN_DNSWL_MED,SPF_HELO_PASS,SPF_PASS,USER_IN_DEF_DKIM_WL,
-        USER_IN_DEF_SPF_WL autolearn=ham autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+X-Spam-Status: No, score=-5.4 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_MED,
+        SPF_HELO_NONE,SPF_NONE autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
-To:     unlisted-recipients:; (no To-header on input)
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-From: Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>
+Hi Thomas & Boris
 
-Will be used later keep the address of the remapped page for the root
-partition as it will be Microsoft Hypervisor defined (and thus won't be a
-static address).
+This series is based on the recent cleanup series from Boris, here below:
 
-Signed-off-by: Stanislav Kinsburskiy <stanislav.kinsburskiy@gmail.com>
-CC: "K. Y. Srinivasan" <kys@microsoft.com>
-CC: Haiyang Zhang <haiyangz@microsoft.com>
-CC: Wei Liu <wei.liu@kernel.org>
-CC: Dexuan Cui <decui@microsoft.com>
-CC: Daniel Lezcano <daniel.lezcano@linaro.org>
-CC: Thomas Gleixner <tglx@linutronix.de>
-CC: linux-hyperv@vger.kernel.org
-CC: linux-kernel@vger.kernel.org
----
- drivers/clocksource/hyperv_timer.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
+https://lore.kernel.org/lkml/20221028142638.28498-1-bp@alien8.de/
 
-diff --git a/drivers/clocksource/hyperv_timer.c b/drivers/clocksource/hyperv_timer.c
-index 18de1f439ffd..b0b5df576e17 100644
---- a/drivers/clocksource/hyperv_timer.c
-+++ b/drivers/clocksource/hyperv_timer.c
-@@ -367,9 +367,11 @@ static union {
- 	u8 reserved[PAGE_SIZE];
- } tsc_pg __aligned(PAGE_SIZE);
- 
-+static struct ms_hyperv_tsc_page *tsc_page = &tsc_pg.page;
-+
- struct ms_hyperv_tsc_page *hv_get_tsc_page(void)
- {
--	return &tsc_pg.page;
-+	return tsc_page;
- }
- EXPORT_SYMBOL_GPL(hv_get_tsc_page);
- 
-@@ -407,7 +409,7 @@ static void suspend_hv_clock_tsc(struct clocksource *arg)
- 
- static void resume_hv_clock_tsc(struct clocksource *arg)
- {
--	phys_addr_t phys_addr = virt_to_phys(&tsc_pg);
-+	phys_addr_t phys_addr = virt_to_phys(tsc_page);
- 	union hv_reference_tsc_msr tsc_msr;
- 
- 	/* Re-enable the TSC page */
+Previous post here:
 
+https://lore.kernel.org/lkml/20221014200913.14644-1-ashok.raj@intel.com/
+
+Ashok Raj (12):
+  x86/microcode/intel: Prevent printing updated microcode rev multiple
+    times
+  x86/microcode/intel: Print old and new rev after early microcode
+    update
+  x86/microcode/intel: Fix a hang if early loading microcode fails
+  x86/microcode: Fix microcode_check() compare after a new uCode update
+  x86/microcode: Move late-load warning to earlier where kernel taint
+    happens
+  x86/microcode: Place siblings in NMI loop while update in progress
+  x86/mce: Warn of a microcode update is in progress when MCE arrives
+  x86/microcode/intel: Add minimum required revision to microcode header
+  x86/microcode: Add a generic mechanism to declare support for minrev
+  x86/microcode/intel: Drop wbinvd() from microcode loading
+  x86/microcode: Display revisions only when update is successful
+  x86/microcode/intel: Add ability to update microcode even if rev is
+    unchanged
+
+Jacob Pan (1):
+  x86/ipi: Support sending NMI_VECTOR as self ipi
+
+ arch/x86/include/asm/microcode.h       |  43 ++++++
+ arch/x86/include/asm/microcode_intel.h |   4 +-
+ arch/x86/include/asm/processor.h       |   1 -
+ arch/x86/kernel/apic/ipi.c             |   6 +-
+ arch/x86/kernel/apic/x2apic_phys.c     |   6 +-
+ arch/x86/kernel/cpu/common.c           |  32 ----
+ arch/x86/kernel/cpu/mce/core.c         |   5 +
+ arch/x86/kernel/cpu/microcode/amd.c    |   2 +-
+ arch/x86/kernel/cpu/microcode/core.c   | 200 +++++++++++++++++++++++--
+ arch/x86/kernel/cpu/microcode/intel.c  |  96 ++++++++----
+ arch/x86/kernel/cpu/microcode/nmi.c    |  71 +++++++++
+ arch/x86/kernel/nmi.c                  |   7 +
+ arch/x86/kernel/nmi_selftest.c         |  32 ++++
+ arch/x86/Kconfig                       |   7 +-
+ arch/x86/kernel/cpu/microcode/Makefile |   1 +
+ 15 files changed, 427 insertions(+), 86 deletions(-)
+ create mode 100644 arch/x86/kernel/cpu/microcode/nmi.c
+
+-- 
+2.34.1
 
