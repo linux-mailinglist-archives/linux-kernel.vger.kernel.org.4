@@ -2,167 +2,87 @@ Return-Path: <linux-kernel-owner@vger.kernel.org>
 X-Original-To: lists+linux-kernel@lfdr.de
 Delivered-To: lists+linux-kernel@lfdr.de
 Received: from out1.vger.email (out1.vger.email [IPv6:2620:137:e000::1:20])
-	by mail.lfdr.de (Postfix) with ESMTP id 566B4617B79
-	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 12:29:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTP id C3B25617B7E
+	for <lists+linux-kernel@lfdr.de>; Thu,  3 Nov 2022 12:30:26 +0100 (CET)
 Received: (majordomo@vger.kernel.org) by vger.kernel.org via listexpand
-        id S229850AbiKCL3N (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
-        Thu, 3 Nov 2022 07:29:13 -0400
-Received: from lindbergh.monkeyblade.net ([23.128.96.19]:43866 "EHLO
+        id S230297AbiKCLaY (ORCPT <rfc822;lists+linux-kernel@lfdr.de>);
+        Thu, 3 Nov 2022 07:30:24 -0400
+Received: from lindbergh.monkeyblade.net ([23.128.96.19]:44270 "EHLO
         lindbergh.monkeyblade.net" rhost-flags-OK-OK-OK-OK) by vger.kernel.org
-        with ESMTP id S229379AbiKCL3L (ORCPT
+        with ESMTP id S229666AbiKCLaW (ORCPT
         <rfc822;linux-kernel@vger.kernel.org>);
-        Thu, 3 Nov 2022 07:29:11 -0400
-Received: from mail-lf1-x12b.google.com (mail-lf1-x12b.google.com [IPv6:2a00:1450:4864:20::12b])
-        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id E035811811
-        for <linux-kernel@vger.kernel.org>; Thu,  3 Nov 2022 04:29:08 -0700 (PDT)
-Received: by mail-lf1-x12b.google.com with SMTP id c1so637010lfi.7
-        for <linux-kernel@vger.kernel.org>; Thu, 03 Nov 2022 04:29:08 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Ji8a4yG4RjSdG7BLCUtmcpBYrxK+oJyQ34/a2EhpGDc=;
-        b=i437q/kUp1uPQM4UD6FyTPNjz/1+HTAK5HrZQ45guWjdEBZMg1e4w8DTUZc44Mbix9
-         lsuLn29TKXwj3Emf47sO7JCc91PLpS8alu+6kbOWEcbyRoxQT2TPt3JyagDsK0R+uou4
-         iyOmjPVS+Q1r/0RIiXQ28XjFNMshPlsuer6oOPgPFSkEkG+c+ptVBs0oSSHgm2IqD3dv
-         XdYmreEpBMdSwY+9zZy2CvuZ6QryWhGoOJw+KI6cc1kS7UIcaBJ2R4qCEF9N4v8YWMbx
-         cnTY/RQ/eSJBmn6376Jh3p7WD8ACNyiVRmLI2uqdXje/66a4qdKCQ02n1rr1TvmkSDMq
-         bopA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20210112;
-        h=content-disposition:mime-version:message-id:subject:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ji8a4yG4RjSdG7BLCUtmcpBYrxK+oJyQ34/a2EhpGDc=;
-        b=EA+3nieOdQKSSjRjOo38G1QQpkd8j5BlFt2P1G1Lji7zgOrIgl/4i+6X4uL3fksLJV
-         GZ5XhBDoLBPwDFKhPKfW6EInJ3Yzxwor4/BtikRKZAdru/s+RyKzFMnyTrXBSXrFdcoT
-         xxNEWRwVhzSUwDBp+fKgZrBxNc0djFA7eV7s3hQ45qmdyclcKhvtVJL8qmJ3e6eOUgPV
-         LABo5seBsgkL9wT9i070QbmebpYozXVSf8W1Xf5YDe+Ra9N3hQ/hgbwmrnbLiSyDFuUE
-         d7sZDZKTdPdJ7xzy7Jlt72loApVngaLeJWpaEPP5iQLaoZRaKpGfJHRmq0evzpOHbYXG
-         r/uA==
-X-Gm-Message-State: ACrzQf35rWKpStQzRr0aOQfI5+pwl06af9P04mwE2CP1BURde2ffKsYc
-        ZpAG0UVZ3YgUtVZL/x7OPV2zKvL5RRUB7A==
-X-Google-Smtp-Source: AMsMyM4s9MpBhBrcnB17SSvGjjFfKFk+eOcyP84Lak/wUO1b/agDvBgCIiSwAt2FQLzagdQZmKObDA==
-X-Received: by 2002:a05:6512:3c8f:b0:4a2:5959:8b5e with SMTP id h15-20020a0565123c8f00b004a259598b5emr12323417lfv.647.1667474947037;
-        Thu, 03 Nov 2022 04:29:07 -0700 (PDT)
-Received: from elroy-temp-vm ([20.240.130.248])
-        by smtp.gmail.com with ESMTPSA id s17-20020a056512203100b004a2cd6d5ad6sm100308lfs.19.2022.11.03.04.29.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 03 Nov 2022 04:29:06 -0700 (PDT)
-Date:   Thu, 3 Nov 2022 11:29:06 +0000
-From:   Tanjuate Brunostar <tanjubrunostar0@gmail.com>
-To:     gregkh@linuxfoundation.org, linux-staging@lists.linux.dev,
-        linux-kernel@vger.kernel.org, outreachy@lists.linux.dev
-Subject: [PATCH] staging: vt6655: change the function name
- s_vGenerateTxParameter
-Message-ID: <Y2OmAuBswNbWFWRd@elroy-temp-vm.gaiao0uenmiufjlowqgp5yxwdh.gvxx.internal.cloudapp.net>
+        Thu, 3 Nov 2022 07:30:22 -0400
+Received: from ams.source.kernel.org (ams.source.kernel.org [145.40.68.75])
+        by lindbergh.monkeyblade.net (Postfix) with ESMTPS id 8B2BD11A19;
+        Thu,  3 Nov 2022 04:30:18 -0700 (PDT)
+Received: from smtp.kernel.org (relay.kernel.org [52.25.139.140])
+        (using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+        (No client certificate requested)
+        by ams.source.kernel.org (Postfix) with ESMTPS id 58C73B826F0;
+        Thu,  3 Nov 2022 11:30:16 +0000 (UTC)
+Received: by smtp.kernel.org (Postfix) with ESMTPS id EF911C433C1;
+        Thu,  3 Nov 2022 11:30:14 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+        s=k20201202; t=1667475015;
+        bh=9u70mGjOAD1g0Chwx79K2kSsz8HLuYRGmzPc5JQrNbU=;
+        h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+        b=E1jwbxiS+YjMo+t4OE7fXIlKDVcJNYRYgb4UD3ha/VpS42iGmCEgYCuM59hQTyABu
+         0/cYQhlIQ4jFPjIwyn1PP4NB/eX5QkyyDZpnQCVC2HdOkc30bFQ3idrB+5UcMUV7Pn
+         gr0Ocd814KRrKpr+mg5PXve2C6W4Rx0fZmFYNQnWCFbnIUTThIeDTr72fKVTlkqu5a
+         ghKmXuTkvHteGRQUcl3CVha4vWhz9zc7FeflPCrqQvL6nrKIGYmoQbz0UaHHHijAkP
+         XO5WFlSiBFNMv/bW0gJrkoivyU7okEAX7ekUeI4zN6PX/uLcqoco026V/aQLLmgswI
+         UfcZLObahznag==
+Received: from aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (localhost.localdomain [127.0.0.1])
+        by aws-us-west-2-korg-oddjob-1.ci.codeaurora.org (Postfix) with ESMTP id D2C3FE29F4C;
+        Thu,  3 Nov 2022 11:30:14 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-X-Spam-Status: No, score=-1.8 required=5.0 tests=BAYES_00,DKIM_SIGNED,
-        DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,FREEMAIL_ENVFROM_END_DIGIT,
-        FREEMAIL_FROM,RCVD_IN_DNSWL_NONE,SPF_HELO_NONE,SPF_PASS autolearn=ham
-        autolearn_force=no version=3.4.6
+Content-Transfer-Encoding: 8bit
+Subject: Re: [PATCH] net: mana: Assign interrupts to CPUs based on NUMA nodes
+From:   patchwork-bot+netdevbpf@kernel.org
+Message-Id: <166747501485.8781.10763947245396462930.git-patchwork-notify@kernel.org>
+Date:   Thu, 03 Nov 2022 11:30:14 +0000
+References: <1667282761-11547-1-git-send-email-ssengar@linux.microsoft.com>
+In-Reply-To: <1667282761-11547-1-git-send-email-ssengar@linux.microsoft.com>
+To:     Saurabh Sengar <ssengar@linux.microsoft.com>
+Cc:     ssengar@microsoft.com, kys@microsoft.com, haiyangz@microsoft.com,
+        wei.liu@kernel.org, decui@microsoft.com, davem@davemloft.net,
+        edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+        colin.i.king@googlemail.com, vkuznets@redhat.com,
+        linux-hyperv@vger.kernel.org, netdev@vger.kernel.org,
+        linux-kernel@vger.kernel.org, mikelley@microsoft.com
+X-Spam-Status: No, score=-8.1 required=5.0 tests=BAYES_00,DKIMWL_WL_HIGH,
+        DKIM_SIGNED,DKIM_VALID,DKIM_VALID_AU,DKIM_VALID_EF,RCVD_IN_DNSWL_HI,
+        SPF_HELO_NONE,SPF_PASS autolearn=ham autolearn_force=no version=3.4.6
 X-Spam-Checker-Version: SpamAssassin 3.4.6 (2021-04-09) on
         lindbergh.monkeyblade.net
 Precedence: bulk
 List-ID: <linux-kernel.vger.kernel.org>
 X-Mailing-List: linux-kernel@vger.kernel.org
 
-Remove the use of Hongarian notation which is not used in Linux kernel.
-Join some lines of code to avoid a line ending in a '('
-Reported by Checkpatch
+Hello:
 
-Signed-off-by: Tanjuate Brunostar <tanjubrunostar0@gmail.com>
----
- drivers/staging/vt6655/rxtx.c | 54 ++++++++++++++++-------------------
- 1 file changed, 25 insertions(+), 29 deletions(-)
+This patch was applied to netdev/net-next.git (master)
+by Paolo Abeni <pabeni@redhat.com>:
 
-diff --git a/drivers/staging/vt6655/rxtx.c b/drivers/staging/vt6655/rxtx.c
-index debc5d5daede..793a63b2ff46 100644
---- a/drivers/staging/vt6655/rxtx.c
-+++ b/drivers/staging/vt6655/rxtx.c
-@@ -10,7 +10,7 @@
-  * Date: May 20, 2003
-  *
-  * Functions:
-- *      s_vGenerateTxParameter - Generate tx dma required parameter.
-+ *      generate_tx_parameter - Generate tx dma required parameter.
-  *      vGenerateMACHeader - Translate 802.3 to 802.11 header
-  *      cbGetFragCount - Calculate fragment number count
-  *      csBeacon_xmit - beacon tx function
-@@ -95,17 +95,17 @@ static void fill_rts_header(struct vnt_private *pDevice,
- 			    unsigned short wCurrentRate,
- 			    unsigned char byFBOption);
- 
--static void s_vGenerateTxParameter(struct vnt_private *pDevice,
--				   unsigned char byPktType,
--				   struct vnt_tx_fifo_head *,
--				   void *pvRrvTime,
--				   void *pvRTS,
--				   void *pvCTS,
--				   unsigned int	cbFrameSize,
--				   bool bNeedACK,
--				   unsigned int	uDMAIdx,
--				   void *psEthHeader,
--				   unsigned short wCurrentRate);
-+static void generate_tx_parameter(struct vnt_private *pDevice,
-+				  unsigned char byPktType,
-+				  struct vnt_tx_fifo_head *,
-+				  void *pvRrvTime,
-+				  void *pvRTS,
-+				  void *pvCTS,
-+				  unsigned int	cbFrameSize,
-+				  bool bNeedACK,
-+				  unsigned int	uDMAIdx,
-+				  void *psEthHeader,
-+				  unsigned short wCurrentRate);
- 
- static unsigned int
- s_cbFillTxBufHead(struct vnt_private *pDevice, unsigned char byPktType,
-@@ -864,21 +864,17 @@ s_vFillCTSHead(
-  -
-  * unsigned int cbFrameSize, Hdr+Payload+FCS
-  */
--static
--void
--s_vGenerateTxParameter(
--	struct vnt_private *pDevice,
--	unsigned char byPktType,
--	struct vnt_tx_fifo_head *tx_buffer_head,
--	void *pvRrvTime,
--	void *pvRTS,
--	void *pvCTS,
--	unsigned int cbFrameSize,
--	bool bNeedACK,
--	unsigned int uDMAIdx,
--	void *psEthHeader,
--	unsigned short wCurrentRate
--)
-+static void generate_tx_parameter(struct vnt_private *pDevice,
-+				  unsigned char byPktType,
-+				  struct vnt_tx_fifo_head *tx_buffer_head,
-+				  void *pvRrvTime,
-+				  void *pvRTS,
-+				  void *pvCTS,
-+				  unsigned int cbFrameSize,
-+				  bool bNeedACK,
-+				  unsigned int uDMAIdx,
-+				  void *psEthHeader,
-+				  unsigned short wCurrentRate)
- {
- 	u16 fifo_ctl = le16_to_cpu(tx_buffer_head->fifo_ctl);
- 	bool bDisCRC = false;
-@@ -1107,8 +1103,8 @@ s_cbFillTxBufHead(struct vnt_private *pDevice, unsigned char byPktType,
- 	memset((void *)(pbyTxBufferAddr + wTxBufSize), 0, (cbHeaderLength - wTxBufSize));
- 
- 	/* Fill FIFO,RrvTime,RTS,and CTS */
--	s_vGenerateTxParameter(pDevice, byPktType, tx_buffer_head, pvRrvTime, pvRTS, pvCTS,
--			       cbFrameSize, bNeedACK, uDMAIdx, hdr, pDevice->wCurrentRate);
-+	generate_tx_parameter(pDevice, byPktType, tx_buffer_head, pvRrvTime, pvRTS, pvCTS,
-+			      cbFrameSize, bNeedACK, uDMAIdx, hdr, pDevice->wCurrentRate);
- 	/* Fill DataHead */
- 	uDuration = s_uFillDataHead(pDevice, byPktType, pvTxDataHd, cbFrameSize, uDMAIdx, bNeedACK,
- 				    0, 0, uMACfragNum, byFBOption, pDevice->wCurrentRate, is_pspoll);
+On Mon, 31 Oct 2022 23:06:01 -0700 you wrote:
+> In large VMs with multiple NUMA nodes, network performance is usually
+> best if network interrupts are all assigned to the same virtual NUMA
+> node. This patch assigns online CPU according to a numa aware policy,
+> local cpus are returned first, followed by non-local ones, then it wraps
+> around.
+> 
+> Signed-off-by: Saurabh Sengar <ssengar@linux.microsoft.com>
+> 
+> [...]
+
+Here is the summary with links:
+  - net: mana: Assign interrupts to CPUs based on NUMA nodes
+    https://git.kernel.org/netdev/net-next/c/71fa6887eeca
+
+You are awesome, thank you!
 -- 
-2.34.1
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
 
